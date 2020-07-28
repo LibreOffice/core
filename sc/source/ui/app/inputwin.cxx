@@ -860,7 +860,7 @@ void ScInputWindow::AutoSum( bool& bRangeFinder, bool& bSubTotal, OpCode eCode )
 ScInputBarGroup::ScInputBarGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
     : ScTextWndBase(pParent, WinBits(WB_HIDE | WB_TABSTOP)),
       maTextWndGroup(VclPtr<ScTextWndGroup>::Create(this, pViewSh)),
-      maButton(VclPtr<ImageButton>::Create(this, WB_TABSTOP | WB_FLATBUTTON | WB_SMALLSTYLE | WB_NOPOINTERFOCUS)),
+      maButton(VclPtr<PushButton>::Create(this, WB_TABSTOP | WB_FLATBUTTON | WB_SMALLSTYLE | WB_NOPOINTERFOCUS | WB_CENTER | WB_VCENTER)),
       mnVertOffset(0)
 {
     maTextWndGroup->Show();

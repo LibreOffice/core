@@ -251,7 +251,7 @@ private:
     void            TriggerToolboxLayout();
 
     VclPtr<ScTextWndGroup> maTextWndGroup;
-    VclPtr<ImageButton>    maButton;
+    VclPtr<PushButton>     maButton;
     long                   mnVertOffset;
 
     DECL_LINK(ClickHdl, Button*, void);
