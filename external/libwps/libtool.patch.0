@@ -5,7 +5,7 @@
        -t[45]*|-txscale*|-p|-pg|--coverage|-fprofile-*|-F*|@*|-tp=*|--sysroot=*| \
        -O*|-g*|-flto*|-fwhopr*|-fuse-linker-plugin|-fstack-protector*|-stdlib=*| \
 -      -fsanitize=*)
-+      -fsanitize=*|-fuse-ld=*)
++      -fsanitize=*|-fuse-ld=*|--ld-path=*)
          func_quote_for_eval "$arg"
  	arg=$func_quote_for_eval_result
          func_append compile_command " $arg"
