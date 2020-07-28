@@ -81,6 +81,34 @@ DECLARE_OOXMLEXPORT_TEST(testTdf98000_changePageStyle, "tdf98000_changePageStyle
     CPPUNIT_ASSERT_MESSAGE("Different page1/page2 styles", sPageOneStyle != sPageTwoStyle);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf135216_evenOddFooter, "tdf135216_evenOddFooter.odt")
+{
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+
+    // get LO page style for the first page (even page #2)
+    OUString pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    uno::Reference<container::XNameAccess> xPageStyles = getStyles("PageStyles");
+    uno::Reference<style::XStyle> xPageStyle(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+
+    xCursor->jumpToFirstPage();  // Even/Left page #2
+    uno::Reference<text::XText> xFooter = getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterTextLeft");
+    CPPUNIT_ASSERT_EQUAL(OUString("even page"), xFooter->getString());
+
+    xCursor->jumpToNextPage();
+    pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    xPageStyle.set(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+    xFooter.set(getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterTextRight"));
+    CPPUNIT_ASSERT_EQUAL(OUString("odd page - first footer"), xFooter->getString());
+
+    xCursor->jumpToNextPage();
+    pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    xPageStyle.set(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+    xFooter.set(getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterTextLeft"));
+    CPPUNIT_ASSERT_EQUAL(OUString("even page"), xFooter->getString());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf133370_columnBreak, "tdf133370_columnBreak.odt")
 {
     // Since non-DOCX formats ignores column breaks in non-column situations, don't export to docx.

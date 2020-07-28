@@ -1823,7 +1823,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
     sal_uInt8 nHeadFootFlags = 0;
 
     const SwFrameFormat* pPdLeftFormat = bLeftRightPgChain
-        ? &pPd->GetFollow()->GetMaster()
+        ? &pPd->GetFollow()->GetFirstLeft()
         : &pPd->GetLeft();
 
     // Ensure that headers are written if section is first paragraph
