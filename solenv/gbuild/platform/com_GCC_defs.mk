@@ -38,7 +38,7 @@ endif
 gb_COMPILER_SETUP :=
 
 ifneq ($(USE_LD),)
-gb_LinkTarget_LDFLAGS += -fuse-ld=$(USE_LD)
+gb_LinkTarget_LDFLAGS += $(USE_LD)
 endif
 
 ifeq ($(strip $(gb_COMPILEROPTFLAGS)),)

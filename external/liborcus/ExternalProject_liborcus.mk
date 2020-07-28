@@ -86,7 +86,7 @@ ifeq ($(ENABLE_GDB_INDEX),TRUE)
 liborcus_LDFLAGS+=-Wl,--gdb-index
 liborcus_CXXFLAGS+=-ggnu-pubnames
 ifneq ($(USE_LD),)
-liborcus_LDFLAGS += -fuse-ld=$(USE_LD)
+liborcus_LDFLAGS += $(USE_LD)
 endif
 endif
 

@@ -38,7 +38,7 @@ ifeq ($(ENABLE_GDB_INDEX),TRUE)
 libwps_LDFLAGS+=-Wl,--gdb-index
 libwps_CXXFLAGS+=-ggnu-pubnames
 ifneq ($(USE_LD),)
-libwps_LDFLAGS += -fuse-ld=$(USE_LD)
+libwps_LDFLAGS += $(USE_LD)
 endif
 endif
 

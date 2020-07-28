@@ -1418,7 +1418,10 @@ AC_ARG_ENABLE(icecream,
 AC_ARG_ENABLE(ld,
     AS_HELP_STRING([--enable-ld=<linker>],
         [Use the specified linker. Both 'gold' and 'lld' linkers generally use less memory and link faster.
-         By default tries to use the best linker possible, use --disable-ld to use the default linker.]),
+         By default tries to use the best linker possible, use --disable-ld to use the default linker.
+         If <linker> contains any ':', the part before the first ':' is used as the value of
+         -fuse-ld, while the part after the first ':' is used as the value of --ld-path (which is
+         needed for Clang 12).]),
 ,)
 
 libo_FUZZ_ARG_ENABLE(cups,
@@ -4006,12 +4009,16 @@ dnl All checks for linker features/options should come after this.
 dnl ===================================================================
 check_use_ld()
 {
-    use_ld=$1
+    use_ld=-fuse-ld=${1%%:*}
+    use_ld_path=${1#*:}
+    if test "$use_ld_path" != "$1"; then
+        use_ld="$use_ld --ld-path=$use_ld_path"
+    fi
     use_ld_fail_if_error=$2
     use_ld_ok=
-    AC_MSG_CHECKING([for -fuse-ld=$use_ld linker support])
+    AC_MSG_CHECKING([for $use_ld linker support])
     use_ld_ldflags_save="$LDFLAGS"
-    LDFLAGS="$LDFLAGS -fuse-ld=$use_ld"
+    LDFLAGS="$LDFLAGS $use_ld"
     AC_LINK_IFELSE([AC_LANG_PROGRAM([
 #include <stdio.h>
         ],[
