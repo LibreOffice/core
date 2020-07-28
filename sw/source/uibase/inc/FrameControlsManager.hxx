@@ -18,6 +18,8 @@
 
 class SwPageFrame;
 class SwEditWin;
+class SwContentFrame;
+class SwTextNode;
 
 typedef std::shared_ptr< SwFrameControl > SwFrameControlPtr;
 
@@ -30,6 +32,7 @@ class SwFrameControlsManager
     private:
         VclPtr<SwEditWin> m_pEditWin;
         std::map< FrameControlType, SwFrameControlPtrMap > m_aControls;
+        std::map<const SwTextNode*, const SwContentFrame*> m_aTextNodeContentFrameMap;
 
     public:
         SwFrameControlsManager( SwEditWin* pEditWin );
@@ -46,6 +49,8 @@ class SwFrameControlsManager
         void SetHeaderFooterControl( const SwPageFrame* pPageFrame, FrameControlType eType, Point aOffset );
         void SetPageBreakControl( const SwPageFrame* pPageFrame );
         void SetUnfloatTableButton( const SwFlyFrame* pFlyFrame, bool bShow, Point aTopRightPixel = Point() );
+        void SetOutlineContentVisibilityButton(const SwTextNode* pTextNd);
+        void SetOutlineContentVisibilityButtons();
 };
 
 #endif
