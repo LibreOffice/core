@@ -59,8 +59,14 @@ WriterInspectorTextPanel::WriterInspectorTextPanel(vcl::Window* pParent,
 {
     SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
     SwWrtShell* pShell = pDocSh->GetWrtShell();
+    Link<LinkParamNone*, void> curLink = LINK(this, WriterInspectorTextPanel, AttrChangedNotify);
     if (pShell)
-        pShell->SetChgLnk(LINK(this, WriterInspectorTextPanel, AttrChangedNotify));
+    {
+        pShell->SetChgLnk(curLink);
+        if (oldLink.IsSet())
+            pShell->SetChgLnk(oldLink);
+        oldLink = curLink;
+    }
 }
 
 static void InsertValues(const css::uno::Reference<css::uno::XInterface>& rSource,

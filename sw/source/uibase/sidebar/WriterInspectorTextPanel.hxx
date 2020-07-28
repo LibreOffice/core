@@ -21,6 +21,19 @@
 #include <sfx2/weldutils.hxx>
 #include <svx/sidebar/InspectorTextPanel.hxx>
 
+#include <doc.hxx>
+#include <ndtxt.hxx>
+#include <docsh.hxx>
+#include <wrtsh.hxx>
+#include <unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
+#include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/text/XTextCursor.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+
 namespace sw::sidebar
 {
 class WriterInspectorTextPanel final : public svx::sidebar::InspectorTextPanel
@@ -36,6 +49,9 @@ public:
 
     // attributes have changed
     DECL_LINK(AttrChangedNotify, LinkParamNone*, void);
+
+private:
+    Link<LinkParamNone*, void> oldLink;
 };
 
 } // end of namespace svx::sidebar
