@@ -803,6 +803,7 @@
 #define UNO_NAME_CHAR_OVERLINE "CharOverline"
 #define UNO_NAME_CHAR_OVERLINE_COLOR "CharOverlineColor"
 #define UNO_NAME_CHAR_OVERLINE_HAS_COLOR "CharOverlineHasColor"
+#define UNO_NAME_OUTLINE_CONTENT_VISIBLE "OutlineContentVisible"
 #define UNO_NAME_OUTLINE_LEVEL "OutlineLevel"
 #define UNO_NAME_DESCRIPTION "Description"
 #define UNO_NAME_META "InContentMetadata"

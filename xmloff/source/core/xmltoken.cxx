@@ -1392,6 +1392,7 @@ namespace xmloff::token {
         TOKEN( "orientation-portrait",            XML_ORIENTATION_PORTRAIT ),
         TOKEN( "origin",                          XML_ORIGIN ),
         TOKEN( "orphans",                         XML_ORPHANS ),
+        TOKEN( "outline-content-visible",         XML_OUTLINE_CONTENT_VISIBLE ),
         TOKEN( "outline-level",                   XML_OUTLINE_LEVEL ),
         TOKEN( "outline-level-style",             XML_OUTLINE_LEVEL_STYLE ),
         TOKEN( "outline-style",                   XML_OUTLINE_STYLE ),

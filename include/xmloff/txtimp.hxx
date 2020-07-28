@@ -245,6 +245,7 @@ enum XMLTextPAttrTokens
     XML_TOK_TEXT_P_TEXTID,
     XML_TOK_TEXT_P_STYLE_NAME,
     XML_TOK_TEXT_P_COND_STYLE_NAME,
+    XML_TOK_TEXT_P_OUTLINE_CONTENT_VISIBLE,
     XML_TOK_TEXT_P_LEVEL,
     XML_TOK_TEXT_P_IS_LIST_HEADER,
     XML_TOK_TEXT_P_RESTART_NUMBERING,
@@ -457,7 +458,8 @@ public:
             bool bPara,
             bool bOutlineLevelAttrFound = false,
             sal_Int8 nOutlineLevel = -1,
-            bool bSetListAttrs = true );
+            bool bSetListAttrs = true,
+            bool bOutlineContentVisible = true);
 
     /** Find a suitable name for the given outline level.
      *  If rStyleName is empty, change it to a previously used or default style
