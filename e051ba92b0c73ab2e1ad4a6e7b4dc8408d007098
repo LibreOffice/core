@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "53415724_760d2433",
+        "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1826,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-07-28T19:29:08Z",
+      "side": 1,
+      "message": "Umm, this is JUST for left page style.  It could also be for right page style, since this is bLeftRight....\nBut it seems like master is not always right? Perhaps it is also header?  Somewhere it suggested that GetLeft is always better than GetMaster.\nThis needs a bit more investigation...",
+      "range": {
+        "startLine": 1826,
+        "startChar": 29,
+        "endLine": 1826,
+        "endChar": 36
+      },
+      "revId": "e051ba92b0c73ab2e1ad4a6e7b4dc8408d007098",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
