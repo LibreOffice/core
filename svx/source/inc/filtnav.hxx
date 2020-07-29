@@ -32,26 +32,21 @@
 #include <sfx2/dockwin.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <vcl/image.hxx>
-#include <vcl/treelistbox.hxx>
 
 #include "fmexch.hxx"
 #include "sqlparserclient.hxx"
 
 class FmFormShell;
 
-
 namespace svxform
 {
-
 
 class FmFilterItem;
 class FmFilterItems;
 class FmParentData;
 class FmFilterAdapter;
 
-
 // data structure for the filter model
-
 class FmFilterData
 {
     FmParentData*    m_pParent;
@@ -68,9 +63,8 @@ public:
     const OUString& GetText() const { return m_aText; }
     FmParentData* GetParent() const {return m_pParent;}
 
-    virtual Image GetImage() const;
+    virtual OUString GetImage() const;
 };
-
 
 class FmParentData : public FmFilterData
 {
@@ -85,7 +79,6 @@ public:
 
     ::std::vector< std::unique_ptr<FmFilterData> >& GetChildren() { return m_aChildren; }
 };
-
 
 // Item representing the forms and subforms
 class FmFormItem : public FmParentData
@@ -110,9 +103,8 @@ public:
     const css::uno::Reference< css::form::runtime::XFilterController >&
         GetFilterController() const { return m_xFilterController; }
 
-    virtual Image GetImage() const override;
+    virtual OUString GetImage() const override;
 };
-
 
 class FmFilterItems : public FmParentData
 {
@@ -120,9 +112,8 @@ public:
     FmFilterItems(FmFormItem* pParent, const OUString& rText ) : FmParentData(pParent, rText) {}
 
     FmFilterItem* Find( const ::sal_Int32 _nFilterComponentIndex ) const;
-    virtual Image GetImage() const override;
+    virtual OUString GetImage() const override;
 };
-
 
 class FmFilterItem : public FmFilterData
 {
@@ -140,9 +131,8 @@ public:
     const OUString& GetFieldName() const {return m_aFieldName;}
     sal_Int32 GetComponentIndex() const { return m_nComponentIndex; }
 
-    virtual Image GetImage() const override;
+    virtual OUString GetImage() const override;
 };
-
 
 class FmFilterModel final : public FmParentData
                      ,public SfxBroadcaster
@@ -217,57 +207,77 @@ public:
     OFilterExchangeHelper() : OLocalExchangeHelper() { }
 
     OFilterItemExchange* operator->() const { return static_cast<OFilterItemExchange*>(m_xTransferable.get()); }
+    OFilterItemExchange& operator*() const { return *static_cast<OFilterItemExchange*>(m_xTransferable.get()); }
 
 protected:
     virtual OLocalExchange* createExchange() const override;
 };
 
+class FmFilterNavigator;
 
-class FmFilterNavigator final : public SvTreeListBox, public SfxListener
+class FmFilterNavigatorDropTarget : public DropTargetHelper
 {
-    enum DROP_ACTION{ DA_SCROLLUP, DA_SCROLLDOWN, DA_EXPANDNODE };
+private:
+    FmFilterNavigator& m_rTreeView;
 
-    std::unique_ptr<FmFilterModel> m_pModel;
-    SvTreeListEntry*            m_pEditingCurrently;
-    OFilterExchangeHelper   m_aControlExchange;
-
-
-    AutoTimer           m_aDropActionTimer;
-    unsigned short      m_aTimerCounter;
-    Point               m_aTimerTriggered;      // position, where DropTimer was started
-    DROP_ACTION         m_aDropActionType;
+    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
+    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
 
 public:
-    FmFilterNavigator( vcl::Window* pParent );
+    FmFilterNavigatorDropTarget(FmFilterNavigator& rTreeView);
+};
+
+class FmFilterNavigator final : public SfxListener
+{
+    VclPtr<vcl::Window> m_xTopLevel;
+    std::unique_ptr<weld::TreeView> m_xTreeView;
+    FmFilterNavigatorDropTarget m_aDropTargetHelper;
+
+    std::unique_ptr<FmFilterModel> m_pModel;
+    std::unique_ptr<weld::TreeIter> m_xEditingCurrently;
+    OFilterExchangeHelper   m_aControlExchange;
+
+    ImplSVEvent* m_nAsyncRemoveEvent;
+
+public:
+    FmFilterNavigator(vcl::Window* pTopLevel, std::unique_ptr<weld::TreeView> xTreeView);
     virtual ~FmFilterNavigator() override;
-    virtual void dispose() override;
+
+    void GrabFocus() { m_xTreeView->grab_focus(); }
+
+    void EndEditing();
 
     void UpdateContent(
             const css::uno::Reference< css::container::XIndexAccess > & xControllers,
             const css::uno::Reference< css::form::runtime::XFormController > & xCurrent
         );
 
+    weld::TreeView& get_widget() { return *m_xTreeView; }
+
+    sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt);
+    sal_Int8 ExecuteDrop(const ExecuteDropEvent& rEvt);
+
 private:
-
-    virtual void KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void Command( const CommandEvent& rEvt ) override;
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+    DECL_LINK(PopupMenuHdl, const CommandEvent&, bool);
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-    virtual void InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, const Image& rImg1, const Image& rImg2) override;
-    virtual bool Select( SvTreeListEntry* pEntry, bool bSelect=true ) override;
-    virtual bool EditingEntry( SvTreeListEntry* pEntry, Selection& rSelection ) override;
-    virtual bool EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) override;
 
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
-    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
+    DECL_STATIC_LINK(FmFilterNavigator, CustomGetSizeHdl, weld::TreeView::get_size_args, Size);
+    DECL_STATIC_LINK(FmFilterNavigator, CustomRenderHdl, weld::TreeView::render_args, void);
+
+    DECL_LINK(SelectHdl, weld::TreeView&, void);
+    DECL_LINK(EditingEntryHdl, const weld::TreeIter&, bool);
+    typedef std::pair<const weld::TreeIter&, OUString> IterString;
+    DECL_LINK(EditedEntryHdl, const IterString&, bool);
+
+    DECL_LINK(DragBeginHdl, bool&, bool);
 
     void DeleteSelection();
-    SvTreeListEntry* FindEntry(const FmFilterData* pItem) const;
-    void Insert(FmFilterData* pItem, sal_uLong nPos);
+    std::unique_ptr<weld::TreeIter> FindEntry(const FmFilterData* pItem) const;
+    void Insert(FmFilterData* pItem, int nPos);
     void Remove(FmFilterData const * pItem);
 
     DECL_LINK(OnRemove, void*, void);
-    DECL_LINK(OnDropActionTimer, Timer*, void);
 
     /** returns the first form item and the selected FilterItems in the vector
         @param  _rItemList
@@ -276,6 +286,7 @@ private:
             The first form item.
     */
     FmFormItem* getSelectedFilterItems(::std::vector<FmFilterItem*>& _rItemList);
+
     /**
      * inserts the filter items into the tree model and creates new FilterItems if needed.
      *    @param  _rFilterList
@@ -286,25 +297,23 @@ private:
      *        If <TRUE/> the items will not be removed from the model, otherwise they will.
      */
     void insertFilterItem(const ::std::vector<FmFilterItem*>& _rFilterList,FmFilterItems* _pTargetItems, bool _bCopy);
-    SvTreeListEntry* getPrevEntry(SvTreeListEntry* _pStartWith);
-    SvTreeListEntry* getNextEntry(SvTreeListEntry* _pStartWith);
 
-    using SvTreeListBox::Select;
-    using SvTreeListBox::ExecuteDrop;
-    using SvTreeListBox::Insert;
+    bool getPrevEntry(weld::TreeIter& rEntry);
+    bool getNextEntry(weld::TreeIter& rEntry);
 };
-
 
 class FmFilterNavigatorWin : public SfxDockingWindow, public SfxControllerItem
 {
 private:
-    VclPtr<FmFilterNavigator> m_pNavigator;
+    std::unique_ptr<FmFilterNavigator> m_xNavigatorTree;
 
 protected:
-    virtual void Resize() override;
     virtual bool Close() override;
+    virtual void GetFocus() override;
     virtual Size CalcDockingSize( SfxChildAlignment ) override;
     virtual SfxChildAlignment CheckAlignment( SfxChildAlignment, SfxChildAlignment ) override;
+
+    using SfxDockingWindow::StateChanged;
 
 public:
     FmFilterNavigatorWin( SfxBindings *pBindings, SfxChildWindow *pMgr,
@@ -315,12 +324,7 @@ public:
     void UpdateContent( FmFormShell const * pFormShell );
     void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
     void FillInfo( SfxChildWinInfo& rInfo ) const override;
-
-    using SfxDockingWindow::StateChanged;
-
-    virtual void GetFocus() override;
 };
-
 
 class FmFilterNavigatorWinMgr : public SfxChildWindow
 {
@@ -330,9 +334,7 @@ public:
     SFX_DECL_CHILDWINDOW( FmFilterNavigatorWinMgr );
 };
 
-
 }
-
 
 #endif // INCLUDED_SVX_SOURCE_INC_FILTNAV_HXX
 
