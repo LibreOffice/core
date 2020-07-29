@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "34a44341_236f38fe",
+        "filename": "sc/source/ui/dbgui/filtdlg.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1286,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-07-29T19:02:58Z",
+      "side": 1,
+      "message": "Rather than copying code please de-duplicate by factoring out the common code and call with individual arguments or reference parameters to fill (i.e. rItem and rValStr).",
+      "revId": "7eb87f5a63674f66bd41a275e787c1b1ec1ce279",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7715dd69_ec8e61bf",
+        "filename": "sc/uiconfig/scalc/ui/standardfilterdialog.ui",
+        "patchSetId": 6
+      },
+      "lineNbr": 655,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-07-29T19:02:58Z",
+      "side": 1,
+      "message": "sc/uiconfig/scalc/ui/standardfilterdialog.ui:655 WARNING: \u0027GtkLabel\u0027 \u0027label7\u0027 does not specify what it labels within \u0027GtkFrame\u0027 \u0027frame1\u0027",
+      "range": {
+        "startLine": 655,
+        "startChar": 63,
+        "endLine": 655,
+        "endChar": 69
+      },
+      "revId": "7eb87f5a63674f66bd41a275e787c1b1ec1ce279",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfd897c1_be3ebef6",
+        "filename": "sc/uiconfig/scalc/ui/standardfilterdialog.ui",
+        "patchSetId": 6
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-07-29T19:02:58Z",
+      "side": 1,
+      "message": "Should this be label7?",
+      "range": {
+        "startLine": 658,
+        "startChar": 108,
+        "endLine": 658,
+        "endChar": 114
+      },
+      "revId": "7eb87f5a63674f66bd41a275e787c1b1ec1ce279",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
