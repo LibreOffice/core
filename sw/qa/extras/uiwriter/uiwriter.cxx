@@ -1143,6 +1143,65 @@ void SwUiWriterTest::testWatermarkDOCX()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(50), pWatermark->GetTransparency());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf134252)
+{
+    load(DATA_DIRECTORY, "tdf134252.fodt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCursor(xTextViewCursorSupplier->getViewCursor());
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
+
+    // select all with section
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSections->getCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("bar" SAL_NEWLINE_STRING "baz" SAL_NEWLINE_STRING), xCursor->getString());
+
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), xCursor->getString());
+
+    // this would crash
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSections->getCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("bar" SAL_NEWLINE_STRING "baz" SAL_NEWLINE_STRING), xCursor->getString());
+
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), xCursor->getString());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSections->getCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("bar" SAL_NEWLINE_STRING "baz" SAL_NEWLINE_STRING), xCursor->getString());
+
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), xCursor->getString());
+}
+
 void SwUiWriterTest::testWatermarkPosition()
 {
     // tdf#108494 Watermark inserted in the document with page break was outside the first page
