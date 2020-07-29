@@ -78,16 +78,45 @@ public:
     SbModule* FindClass( const OUString& rClassName );
 };
 
+// Factory class to create user defined objects (type command)
+class SbTypeFactory : public SbxFactory
+{
+public:
+    virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 ) override;
+    virtual SbxObject* CreateObject( const OUString& ) override;
+};
+
+class SbFormFactory : public SbxFactory
+{
+public:
+    virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 ) override;
+    virtual SbxObject* CreateObject( const OUString& ) override;
+};
+
+// Factory class to create OLE objects
+class SbOLEFactory : public SbxFactory
+{
+public:
+    virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 ) override;
+    virtual SbxObject* CreateObject( const OUString& ) override;
+};
+
+
+
 struct SbiGlobals
 {
     static SbiGlobals* pGlobals;
     SbiInstance*    pInst;          // all active runtime instances
     std::unique_ptr<SbiFactory>   pSbFac;    // StarBASIC-Factory
     std::unique_ptr<SbUnoFactory> pUnoFac;   // Factory for Uno-Structs at DIM AS NEW
-    SbTypeFactory*  pTypeFac;       // Factory for user defined types
-    SbClassFactory* pClassFac;      // Factory for user defined classes (based on class modules)
-    SbOLEFactory*   pOLEFac;        // Factory for OLE types
-    SbFormFactory*  pFormFac;       // Factory for user forms
+    std::unique_ptr<SbTypeFactory>
+                    pTypeFac;       // Factory for user defined types
+    std::unique_ptr<SbClassFactory>
+                    pClassFac;      // Factory for user defined classes (based on class modules)
+    std::unique_ptr<SbOLEFactory>
+                    pOLEFac;        // Factory for OLE types
+    std::unique_ptr<SbFormFactory>
+                    pFormFac;       // Factory for user forms
     SbModule*       pMod;           // currently active module
     SbModule*       pCompMod;       // currently compiled module
     short           nInst;          // number of BASICs

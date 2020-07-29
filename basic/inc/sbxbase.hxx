@@ -38,9 +38,8 @@ struct SbxAppData
 {
     ErrCode             eErrCode;  // Error code
     SbxVariableRef      m_aGlobErr; // Global error object
-    std::vector<std::unique_ptr<SbxFactory>>
-                        m_Factories;
-    tools::SvRef<SvRefBase> mrImplRepository;
+    std::vector<SbxFactory*> m_Factories; // these are owned by
+    tools::SvRef<SvRefBase>  mrImplRepository;
 
     // Pointer to Format()-Command helper class
     std::unique_ptr<SbxBasicFormater>   pBasicFormater;
@@ -55,6 +54,8 @@ struct SbxAppData
 };
 
 SbxAppData& GetSbxData_Impl();
+/** returns true if the SbxAppData is still valid, used to check if we are in shutdown. */
+bool IsSbxData_Impl();
 
 #endif // INCLUDED_BASIC_INC_SBXBASE_HXX
 
