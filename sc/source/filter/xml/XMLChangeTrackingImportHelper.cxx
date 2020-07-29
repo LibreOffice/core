@@ -531,46 +531,46 @@ void ScXMLChangeTrackingImportHelper::SetDeletionDependencies(ScMyDelAction* pAc
             OSL_FAIL("no cut off insert action");
         }
     }
-    if (!pAction->aMoveCutOffs.empty())
+    if (pAction->aMoveCutOffs.empty())
+        return;
+
+    OSL_ENSURE(((pAction->nActionType == SC_CAT_DELETE_COLS) ||
+        (pAction->nActionType == SC_CAT_DELETE_ROWS) ||
+        (pAction->nActionType == SC_CAT_DELETE_TABS)), "wrong action type");
+    for (auto it = pAction->aMoveCutOffs.crbegin(); it != pAction->aMoveCutOffs.crend(); ++it)
     {
-        OSL_ENSURE(((pAction->nActionType == SC_CAT_DELETE_COLS) ||
-            (pAction->nActionType == SC_CAT_DELETE_ROWS) ||
-            (pAction->nActionType == SC_CAT_DELETE_TABS)), "wrong action type");
-        for (auto it = pAction->aMoveCutOffs.crbegin(); it != pAction->aMoveCutOffs.crend(); ++it)
+        const ScMyMoveCutOff & rCutOff  = *it;
+        ScChangeAction* pChangeAction = pTrack->GetAction(rCutOff.nID);
+        if (pChangeAction && (pChangeAction->GetType() == SC_CAT_MOVE))
         {
-            const ScMyMoveCutOff & rCutOff  = *it;
-            ScChangeAction* pChangeAction = pTrack->GetAction(rCutOff.nID);
-            if (pChangeAction && (pChangeAction->GetType() == SC_CAT_MOVE))
-            {
-                ScChangeActionMove* pMoveAction = static_cast<ScChangeActionMove*>(pChangeAction);
-                if (pDelAct)
-                    pDelAct->AddCutOffMove(pMoveAction, static_cast<sal_Int16>(rCutOff.nStartPosition),
-                                        static_cast<sal_Int16>(rCutOff.nEndPosition));
-            }
-            else
-            {
-                OSL_FAIL("no cut off move action");
-            }
+            ScChangeActionMove* pMoveAction = static_cast<ScChangeActionMove*>(pChangeAction);
+            if (pDelAct)
+                pDelAct->AddCutOffMove(pMoveAction, static_cast<sal_Int16>(rCutOff.nStartPosition),
+                                    static_cast<sal_Int16>(rCutOff.nEndPosition));
         }
-        pAction->aMoveCutOffs.clear();
+        else
+        {
+            OSL_FAIL("no cut off move action");
+        }
     }
+    pAction->aMoveCutOffs.clear();
 }
 
 void ScXMLChangeTrackingImportHelper::SetMovementDependencies(ScMyMoveAction* pAction, ScChangeActionMove* pMoveAct)
 {
-    if (!pAction->aGeneratedList.empty())
+    if (pAction->aGeneratedList.empty())
+        return;
+
+    if (pAction->nActionType == SC_CAT_MOVE)
     {
-        if (pAction->nActionType == SC_CAT_MOVE)
+        if (pMoveAct)
         {
-            if (pMoveAct)
+            for (const ScMyGenerated & rGenerated : pAction->aGeneratedList)
             {
-                for (const ScMyGenerated & rGenerated : pAction->aGeneratedList)
-                {
-                    OSL_ENSURE(rGenerated.nID, "a not inserted generated action");
-                    pMoveAct->SetDeletedInThis(rGenerated.nID, pTrack);
-                }
-                pAction->aGeneratedList.clear();
+                OSL_ENSURE(rGenerated.nID, "a not inserted generated action");
+                pMoveAct->SetDeletedInThis(rGenerated.nID, pTrack);
             }
+            pAction->aGeneratedList.clear();
         }
     }
 }
@@ -648,169 +648,169 @@ void ScXMLChangeTrackingImportHelper::SetDependencies(ScMyBaseAction* pAction)
 void ScXMLChangeTrackingImportHelper::SetNewCell(const ScMyContentAction* pAction)
 {
     ScChangeAction* pChangeAction = pTrack->GetAction(pAction->nActionNumber);
-    if (pChangeAction)
+    if (!pChangeAction)
+        return;
+
+    assert(dynamic_cast<ScChangeActionContent*>(pChangeAction));
+    ScChangeActionContent* pChangeActionContent = static_cast<ScChangeActionContent*>(pChangeAction);
+    if (!(pChangeActionContent->IsTopContent() && !pChangeActionContent->IsDeletedIn()))
+        return;
+
+    sal_Int32 nCol, nRow, nTab, nCol2, nRow2, nTab2;
+    pAction->aBigRange.GetVars(nCol, nRow, nTab, nCol2, nRow2, nTab2);
+    if ((nCol >= 0) && (nCol <= pDoc->MaxCol()) &&
+        (nRow >= 0) && (nRow <= pDoc->MaxRow()) &&
+        (nTab >= 0) && (nTab <= MAXTAB))
     {
-        assert(dynamic_cast<ScChangeActionContent*>(pChangeAction));
-        ScChangeActionContent* pChangeActionContent = static_cast<ScChangeActionContent*>(pChangeAction);
-        if (pChangeActionContent->IsTopContent() && !pChangeActionContent->IsDeletedIn())
+        ScAddress aAddress (static_cast<SCCOL>(nCol),
+                            static_cast<SCROW>(nRow),
+                            static_cast<SCTAB>(nTab));
+        ScCellValue aCell;
+        aCell.assign(*pDoc, aAddress);
+        if (!aCell.isEmpty())
         {
-            sal_Int32 nCol, nRow, nTab, nCol2, nRow2, nTab2;
-            pAction->aBigRange.GetVars(nCol, nRow, nTab, nCol2, nRow2, nTab2);
-            if ((nCol >= 0) && (nCol <= pDoc->MaxCol()) &&
-                (nRow >= 0) && (nRow <= pDoc->MaxRow()) &&
-                (nTab >= 0) && (nTab <= MAXTAB))
+            ScCellValue aNewCell;
+            if (aCell.meType != CELLTYPE_FORMULA)
             {
-                ScAddress aAddress (static_cast<SCCOL>(nCol),
-                                    static_cast<SCROW>(nRow),
-                                    static_cast<SCTAB>(nTab));
-                ScCellValue aCell;
-                aCell.assign(*pDoc, aAddress);
-                if (!aCell.isEmpty())
-                {
-                    ScCellValue aNewCell;
-                    if (aCell.meType != CELLTYPE_FORMULA)
-                    {
-                        aNewCell = aCell;
-                        pChangeActionContent->SetNewCell(aNewCell, pDoc, EMPTY_OUSTRING);
-                        pChangeActionContent->SetNewValue(aCell, pDoc);
-                    }
-                    else
-                    {
-                        ScMatrixMode nMatrixFlag = aCell.mpFormula->GetMatrixFlag();
-                        OUString sFormula;
-                        // With GRAM_ODFF reference detection is faster on compilation.
-                        /* FIXME: new cell should be created with a clone
-                         * of the token array instead. Any reason why this
-                         * wasn't done? */
-                        aCell.mpFormula->GetFormula(sFormula, formula::FormulaGrammar::GRAM_ODFF);
-
-                        // #i87826# [Collaboration] Rejected move destroys formulas
-                        // FIXME: adjust ScFormulaCell::GetFormula(), so that the right formula string
-                        //        is returned and no further string handling is necessary
-                        OUString sFormula2;
-                        if ( nMatrixFlag != ScMatrixMode::NONE )
-                        {
-                            sFormula2 = sFormula.copy( 2, sFormula.getLength() - 3 );
-                        }
-                        else
-                        {
-                            sFormula2 = sFormula.copy( 1 );
-                        }
-
-                        aNewCell.meType = CELLTYPE_FORMULA;
-                        aNewCell.mpFormula = new ScFormulaCell(pDoc, aAddress, sFormula2,formula::FormulaGrammar::GRAM_ODFF, nMatrixFlag);
-                        if (nMatrixFlag == ScMatrixMode::Formula)
-                        {
-                            SCCOL nCols;
-                            SCROW nRows;
-                            aCell.mpFormula->GetMatColsRows(nCols, nRows);
-                            aNewCell.mpFormula->SetMatColsRows(nCols, nRows);
-                        }
-                        aNewCell.mpFormula->SetInChangeTrack(true);
-                        pChangeActionContent->SetNewCell(aNewCell, pDoc, EMPTY_OUSTRING);
-                        // #i40704# don't overwrite the formula string via SetNewValue()
-                    }
-                }
+                aNewCell = aCell;
+                pChangeActionContent->SetNewCell(aNewCell, pDoc, EMPTY_OUSTRING);
+                pChangeActionContent->SetNewValue(aCell, pDoc);
             }
             else
             {
-                OSL_FAIL("wrong cell position");
+                ScMatrixMode nMatrixFlag = aCell.mpFormula->GetMatrixFlag();
+                OUString sFormula;
+                // With GRAM_ODFF reference detection is faster on compilation.
+                /* FIXME: new cell should be created with a clone
+                 * of the token array instead. Any reason why this
+                 * wasn't done? */
+                aCell.mpFormula->GetFormula(sFormula, formula::FormulaGrammar::GRAM_ODFF);
+
+                // #i87826# [Collaboration] Rejected move destroys formulas
+                // FIXME: adjust ScFormulaCell::GetFormula(), so that the right formula string
+                //        is returned and no further string handling is necessary
+                OUString sFormula2;
+                if ( nMatrixFlag != ScMatrixMode::NONE )
+                {
+                    sFormula2 = sFormula.copy( 2, sFormula.getLength() - 3 );
+                }
+                else
+                {
+                    sFormula2 = sFormula.copy( 1 );
+                }
+
+                aNewCell.meType = CELLTYPE_FORMULA;
+                aNewCell.mpFormula = new ScFormulaCell(pDoc, aAddress, sFormula2,formula::FormulaGrammar::GRAM_ODFF, nMatrixFlag);
+                if (nMatrixFlag == ScMatrixMode::Formula)
+                {
+                    SCCOL nCols;
+                    SCROW nRows;
+                    aCell.mpFormula->GetMatColsRows(nCols, nRows);
+                    aNewCell.mpFormula->SetMatColsRows(nCols, nRows);
+                }
+                aNewCell.mpFormula->SetInChangeTrack(true);
+                pChangeActionContent->SetNewCell(aNewCell, pDoc, EMPTY_OUSTRING);
+                // #i40704# don't overwrite the formula string via SetNewValue()
             }
         }
+    }
+    else
+    {
+        OSL_FAIL("wrong cell position");
     }
 }
 
 void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
 {
     pDoc = pTempDoc;
-    if (pDoc)
+    if (!pDoc)
+        return;
+
+    pTrack = new ScChangeTrack(pDoc, aUsers);
+    // old files didn't store nanoseconds, disable until encountered
+    pTrack->SetTimeNanoSeconds( false );
+
+    for (const auto & rAction : aActions)
     {
-        pTrack = new ScChangeTrack(pDoc, aUsers);
-        // old files didn't store nanoseconds, disable until encountered
-        pTrack->SetTimeNanoSeconds( false );
+        std::unique_ptr<ScChangeAction> pAction;
 
-        for (const auto & rAction : aActions)
+        switch (rAction->nActionType)
         {
-            std::unique_ptr<ScChangeAction> pAction;
-
-            switch (rAction->nActionType)
+            case SC_CAT_INSERT_COLS:
+            case SC_CAT_INSERT_ROWS:
+            case SC_CAT_INSERT_TABS:
             {
-                case SC_CAT_INSERT_COLS:
-                case SC_CAT_INSERT_ROWS:
-                case SC_CAT_INSERT_TABS:
-                {
-                    pAction = CreateInsertAction(static_cast<ScMyInsAction*>(rAction.get()));
-                }
-                break;
-                case SC_CAT_DELETE_COLS:
-                case SC_CAT_DELETE_ROWS:
-                case SC_CAT_DELETE_TABS:
-                {
-                    ScMyDelAction* pDelAct = static_cast<ScMyDelAction*>(rAction.get());
-                    pAction = CreateDeleteAction(pDelAct);
-                    CreateGeneratedActions(pDelAct->aGeneratedList);
-                }
-                break;
-                case SC_CAT_MOVE:
-                {
-                    ScMyMoveAction* pMovAct = static_cast<ScMyMoveAction*>(rAction.get());
-                    pAction = CreateMoveAction(pMovAct);
-                    CreateGeneratedActions(pMovAct->aGeneratedList);
-                }
-                break;
-                case SC_CAT_CONTENT:
-                {
-                    pAction = CreateContentAction(static_cast<ScMyContentAction*>(rAction.get()));
-                }
-                break;
-                case SC_CAT_REJECT:
-                {
-                    pAction = CreateRejectionAction(static_cast<ScMyRejAction*>(rAction.get()));
-                }
-                break;
-                default:
-                {
-                    // added to avoid warnings
-                }
+                pAction = CreateInsertAction(static_cast<ScMyInsAction*>(rAction.get()));
             }
-
-            if (pAction)
-                pTrack->AppendLoaded(std::move(pAction));
-            else
+            break;
+            case SC_CAT_DELETE_COLS:
+            case SC_CAT_DELETE_ROWS:
+            case SC_CAT_DELETE_TABS:
             {
-                OSL_FAIL("no action");
+                ScMyDelAction* pDelAct = static_cast<ScMyDelAction*>(rAction.get());
+                pAction = CreateDeleteAction(pDelAct);
+                CreateGeneratedActions(pDelAct->aGeneratedList);
+            }
+            break;
+            case SC_CAT_MOVE:
+            {
+                ScMyMoveAction* pMovAct = static_cast<ScMyMoveAction*>(rAction.get());
+                pAction = CreateMoveAction(pMovAct);
+                CreateGeneratedActions(pMovAct->aGeneratedList);
+            }
+            break;
+            case SC_CAT_CONTENT:
+            {
+                pAction = CreateContentAction(static_cast<ScMyContentAction*>(rAction.get()));
+            }
+            break;
+            case SC_CAT_REJECT:
+            {
+                pAction = CreateRejectionAction(static_cast<ScMyRejAction*>(rAction.get()));
+            }
+            break;
+            default:
+            {
+                // added to avoid warnings
             }
         }
-        if (pTrack->GetLast())
-            pTrack->SetActionMax(pTrack->GetLast()->GetActionNumber());
 
-        auto aItr = aActions.begin();
-        while (aItr != aActions.end())
+        if (pAction)
+            pTrack->AppendLoaded(std::move(pAction));
+        else
         {
-            SetDependencies(aItr->get());
-
-            if ((*aItr)->nActionType == SC_CAT_CONTENT)
-                ++aItr;
-            else
-                aItr = aActions.erase(aItr);
+            OSL_FAIL("no action");
         }
-
-        for (const auto& rxAction : aActions)
-        {
-            OSL_ENSURE(rxAction->nActionType == SC_CAT_CONTENT, "wrong action type");
-            SetNewCell(static_cast<ScMyContentAction*>(rxAction.get()));
-        }
-        aActions.clear();
-        if (aProtect.hasElements())
-            pTrack->SetProtection(aProtect);
-        else if (pDoc->GetChangeTrack() && pDoc->GetChangeTrack()->IsProtected())
-            pTrack->SetProtection(pDoc->GetChangeTrack()->GetProtection());
-
-        if ( pTrack->GetLast() )
-            pTrack->SetLastSavedActionNumber(pTrack->GetLast()->GetActionNumber());
-
-        pDoc->SetChangeTrack(std::unique_ptr<ScChangeTrack>(pTrack));
     }
+    if (pTrack->GetLast())
+        pTrack->SetActionMax(pTrack->GetLast()->GetActionNumber());
+
+    auto aItr = aActions.begin();
+    while (aItr != aActions.end())
+    {
+        SetDependencies(aItr->get());
+
+        if ((*aItr)->nActionType == SC_CAT_CONTENT)
+            ++aItr;
+        else
+            aItr = aActions.erase(aItr);
+    }
+
+    for (const auto& rxAction : aActions)
+    {
+        OSL_ENSURE(rxAction->nActionType == SC_CAT_CONTENT, "wrong action type");
+        SetNewCell(static_cast<ScMyContentAction*>(rxAction.get()));
+    }
+    aActions.clear();
+    if (aProtect.hasElements())
+        pTrack->SetProtection(aProtect);
+    else if (pDoc->GetChangeTrack() && pDoc->GetChangeTrack()->IsProtected())
+        pTrack->SetProtection(pDoc->GetChangeTrack()->GetProtection());
+
+    if ( pTrack->GetLast() )
+        pTrack->SetLastSavedActionNumber(pTrack->GetLast()->GetActionNumber());
+
+    pDoc->SetChangeTrack(std::unique_ptr<ScChangeTrack>(pTrack));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

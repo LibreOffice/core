@@ -85,25 +85,25 @@ void ScMyOLEFixer::CreateChartListener(ScDocument* pDoc,
     const sal_Unicode cSep = ScCompiler::GetNativeSymbolChar(ocSep);
     ScRefTokenHelper::compileRangeRepresentation(
         *pRefTokens, aRangeStr, pDoc, cSep, pDoc->GetGrammar());
-    if (!pRefTokens->empty())
+    if (pRefTokens->empty())
+        return;
+
+    ScChartListener* pCL(new ScChartListener(rName, pDoc, std::move(pRefTokens)));
+
+    //for loading binary files e.g.
+    //if we have the flat filter we need to set the dirty flag thus the visible charts get repainted
+    //otherwise the charts keep their first visual representation which was created at a moment where the calc itself was not loaded completely and is therefore incorrect
+    if( (rImport.getImportFlags() & SvXMLImportFlags::ALL) == SvXMLImportFlags::ALL )
+        pCL->SetDirty( true );
+    else
     {
-        ScChartListener* pCL(new ScChartListener(rName, pDoc, std::move(pRefTokens)));
-
-        //for loading binary files e.g.
-        //if we have the flat filter we need to set the dirty flag thus the visible charts get repainted
-        //otherwise the charts keep their first visual representation which was created at a moment where the calc itself was not loaded completely and is therefore incorrect
-        if( (rImport.getImportFlags() & SvXMLImportFlags::ALL) == SvXMLImportFlags::ALL )
-            pCL->SetDirty( true );
-        else
-        {
-            // #i104899# If a formula cell is already dirty, further changes aren't propagated.
-            // This can happen easily now that row heights aren't updated for all sheets.
-            pDoc->InterpretDirtyCells( *pCL->GetRangeList() );
-        }
-
-        pCollection->insert( pCL );
-        pCL->StartListeningTo();
+        // #i104899# If a formula cell is already dirty, further changes aren't propagated.
+        // This can happen easily now that row heights aren't updated for all sheets.
+        pDoc->InterpretDirtyCells( *pCL->GetRangeList() );
     }
+
+    pCollection->insert( pCL );
+    pCL->StartListeningTo();
 }
 
 void ScMyOLEFixer::AddOLE(const uno::Reference <drawing::XShape>& rShape,
@@ -117,32 +117,32 @@ void ScMyOLEFixer::AddOLE(const uno::Reference <drawing::XShape>& rShape,
 
 void ScMyOLEFixer::FixupOLEs()
 {
-    if (!aShapes.empty() && rImport.GetModel().is())
+    if (!(!aShapes.empty() && rImport.GetModel().is()))
+        return;
+
+    OUString sPersistName ("PersistName");
+    ScDocument* pDoc(rImport.GetDocument());
+
+    ScXMLImport::MutexGuard aGuard(rImport);
+
+    for (auto const& shape : aShapes)
     {
-        OUString sPersistName ("PersistName");
-        ScDocument* pDoc(rImport.GetDocument());
+        // #i78086# also call CreateChartListener for invalid position (anchored to sheet)
+        if (!IsOLE(shape.xShape))
+            OSL_FAIL("Only OLEs should be in here now");
 
-        ScXMLImport::MutexGuard aGuard(rImport);
-
-        for (auto const& shape : aShapes)
+        if (IsOLE(shape.xShape))
         {
-            // #i78086# also call CreateChartListener for invalid position (anchored to sheet)
-            if (!IsOLE(shape.xShape))
-                OSL_FAIL("Only OLEs should be in here now");
+            uno::Reference < beans::XPropertySet > xShapeProps ( shape.xShape, uno::UNO_QUERY );
+            uno::Reference < beans::XPropertySetInfo > xShapeInfo(xShapeProps->getPropertySetInfo());
 
-            if (IsOLE(shape.xShape))
-            {
-                uno::Reference < beans::XPropertySet > xShapeProps ( shape.xShape, uno::UNO_QUERY );
-                uno::Reference < beans::XPropertySetInfo > xShapeInfo(xShapeProps->getPropertySetInfo());
-
-                OUString sName;
-                if (pDoc && xShapeProps.is() && xShapeInfo.is() && xShapeInfo->hasPropertyByName(sPersistName) &&
-                    (xShapeProps->getPropertyValue(sPersistName) >>= sName))
-                    CreateChartListener(pDoc, sName, shape.sRangeList);
-            }
+            OUString sName;
+            if (pDoc && xShapeProps.is() && xShapeInfo.is() && xShapeInfo->hasPropertyByName(sPersistName) &&
+                (xShapeProps->getPropertyValue(sPersistName) >>= sName))
+                CreateChartListener(pDoc, sName, shape.sRangeList);
         }
-        aShapes.clear();
     }
+    aShapes.clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

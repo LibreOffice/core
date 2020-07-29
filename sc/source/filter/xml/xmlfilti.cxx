@@ -50,41 +50,41 @@ ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
 {
     ScDocument* pDoc(GetScImport().GetDocument());
 
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
+            case XML_ELEMENT( TABLE, XML_TARGET_RANGE_ADDRESS ):
             {
-                case XML_ELEMENT( TABLE, XML_TARGET_RANGE_ADDRESS ):
+                ScRange aScRange;
+                sal_Int32 nOffset(0);
+                if (ScRangeStringConverter::GetRangeFromString( aScRange, aIter.toString(), pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset ))
                 {
-                    ScRange aScRange;
-                    sal_Int32 nOffset(0);
-                    if (ScRangeStringConverter::GetRangeFromString( aScRange, aIter.toString(), pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset ))
-                    {
-                        aOutputPosition = aScRange.aStart;
-                        bCopyOutputData = true;
-                    }
+                    aOutputPosition = aScRange.aStart;
+                    bCopyOutputData = true;
                 }
-                break;
-                case XML_ELEMENT( TABLE, XML_CONDITION_SOURCE_RANGE_ADDRESS ):
-                {
-                    sal_Int32 nOffset(0);
-                    if (ScRangeStringConverter::GetRangeFromString( aConditionSourceRangeAddress, aIter.toString(), pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset ) )
-                        bConditionSourceRange = true;
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_CONDITION_SOURCE ):
-                {
-                    // not supported by StarOffice
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_DISPLAY_DUPLICATES ):
-                {
-                    bSkipDuplicates = !IsXMLToken(aIter, XML_TRUE);
-                }
-                break;
             }
+            break;
+            case XML_ELEMENT( TABLE, XML_CONDITION_SOURCE_RANGE_ADDRESS ):
+            {
+                sal_Int32 nOffset(0);
+                if (ScRangeStringConverter::GetRangeFromString( aConditionSourceRangeAddress, aIter.toString(), pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset ) )
+                    bConditionSourceRange = true;
+            }
+            break;
+            case XML_ELEMENT( TABLE, XML_CONDITION_SOURCE ):
+            {
+                // not supported by StarOffice
+            }
+            break;
+            case XML_ELEMENT( TABLE, XML_DISPLAY_DUPLICATES ):
+            {
+                bSkipDuplicates = !IsXMLToken(aIter, XML_TRUE);
+            }
+            break;
         }
     }
 }
@@ -285,38 +285,38 @@ ScXMLConditionContext::ScXMLConditionContext(
     bIsCaseSensitive(false)
 {
 
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
+            case XML_ELEMENT( TABLE, XML_FIELD_NUMBER ):
             {
-                case XML_ELEMENT( TABLE, XML_FIELD_NUMBER ):
-                {
-                    nField = aIter.toInt32();
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_CASE_SENSITIVE ):
-                {
-                    bIsCaseSensitive = IsXMLToken(aIter, XML_TRUE);
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_DATA_TYPE ):
-                {
-                    sDataType = aIter.toString();
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_VALUE ):
-                {
-                    sConditionValue = aIter.toString();
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_OPERATOR ):
-                {
-                    sOperator = aIter.toString();
-                }
-                break;
+                nField = aIter.toInt32();
             }
+            break;
+            case XML_ELEMENT( TABLE, XML_CASE_SENSITIVE ):
+            {
+                bIsCaseSensitive = IsXMLToken(aIter, XML_TRUE);
+            }
+            break;
+            case XML_ELEMENT( TABLE, XML_DATA_TYPE ):
+            {
+                sDataType = aIter.toString();
+            }
+            break;
+            case XML_ELEMENT( TABLE, XML_VALUE ):
+            {
+                sConditionValue = aIter.toString();
+            }
+            break;
+            case XML_ELEMENT( TABLE, XML_OPERATOR ):
+            {
+                sOperator = aIter.toString();
+            }
+            break;
         }
     }
 }
@@ -440,23 +440,23 @@ ScXMLSetItemContext::ScXMLSetItemContext(
     const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList, ScXMLConditionContext& rParent) :
     ScXMLImportContext(rImport)
 {
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
+            case XML_ELEMENT( TABLE, XML_VALUE ):
             {
-                case XML_ELEMENT( TABLE, XML_VALUE ):
-                {
-                    svl::SharedStringPool& rPool = GetScImport().GetDocument()->GetSharedStringPool();
-                    ScQueryEntry::Item aItem;
-                    aItem.maString = rPool.intern(aIter.toString());
-                    aItem.meType = ScQueryEntry::ByString;
-                    aItem.mfVal = 0.0;
-                    rParent.AddSetItem(aItem);
-                }
-                break;
+                svl::SharedStringPool& rPool = GetScImport().GetDocument()->GetSharedStringPool();
+                ScQueryEntry::Item aItem;
+                aItem.maString = rPool.intern(aIter.toString());
+                aItem.meType = ScQueryEntry::ByString;
+                aItem.mfVal = 0.0;
+                rParent.AddSetItem(aItem);
             }
+            break;
         }
     }
 }
@@ -478,34 +478,34 @@ ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
     bConnectionOr(true),
     bNextConnectionOr(true)
 {
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
+            case XML_ELEMENT( TABLE, XML_TARGET_RANGE_ADDRESS ):
             {
-                case XML_ELEMENT( TABLE, XML_TARGET_RANGE_ADDRESS ):
-                {
-                    // not supported
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_CONDITION_SOURCE_RANGE_ADDRESS ):
-                {
-                    // not supported
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_CONDITION_SOURCE ):
-                {
-                    // not supported by StarOffice
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_DISPLAY_DUPLICATES ):
-                {
-                    bSkipDuplicates = !IsXMLToken(aIter, XML_TRUE);
-                }
-                break;
-                }
-        }
+                // not supported
+            }
+            break;
+            case XML_ELEMENT( TABLE, XML_CONDITION_SOURCE_RANGE_ADDRESS ):
+            {
+                // not supported
+            }
+            break;
+            case XML_ELEMENT( TABLE, XML_CONDITION_SOURCE ):
+            {
+                // not supported by StarOffice
+            }
+            break;
+            case XML_ELEMENT( TABLE, XML_DISPLAY_DUPLICATES ):
+            {
+                bSkipDuplicates = !IsXMLToken(aIter, XML_TRUE);
+            }
+            break;
+            }
     }
 }
 
@@ -653,38 +653,38 @@ ScXMLDPConditionContext::ScXMLDPConditionContext( ScXMLImport& rImport,
     bIsCaseSensitive(false)
 {
 
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
+            case XML_ELEMENT( TABLE, XML_FIELD_NUMBER ):
             {
-                case XML_ELEMENT( TABLE, XML_FIELD_NUMBER ):
-                {
-                    nField = aIter.toInt32();
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_CASE_SENSITIVE ):
-                {
-                    bIsCaseSensitive = IsXMLToken(aIter, XML_TRUE);
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_DATA_TYPE ):
-                {
-                    sDataType = aIter.toString();
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_VALUE ):
-                {
-                    sConditionValue = aIter.toString();
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_OPERATOR ):
-                {
-                    sOperator = aIter.toString();
-                }
-                break;
+                nField = aIter.toInt32();
             }
+            break;
+            case XML_ELEMENT( TABLE, XML_CASE_SENSITIVE ):
+            {
+                bIsCaseSensitive = IsXMLToken(aIter, XML_TRUE);
+            }
+            break;
+            case XML_ELEMENT( TABLE, XML_DATA_TYPE ):
+            {
+                sDataType = aIter.toString();
+            }
+            break;
+            case XML_ELEMENT( TABLE, XML_VALUE ):
+            {
+                sConditionValue = aIter.toString();
+            }
+            break;
+            case XML_ELEMENT( TABLE, XML_OPERATOR ):
+            {
+                sOperator = aIter.toString();
+            }
+            break;
         }
     }
 }

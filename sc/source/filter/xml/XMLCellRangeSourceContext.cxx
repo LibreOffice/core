@@ -40,50 +40,50 @@ ScXMLCellRangeSourceContext::ScXMLCellRangeSourceContext(
         ScMyImpCellRangeSource* pCellRangeSource ) :
     ScXMLImportContext( rImport )
 {
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
+            case XML_ELEMENT( TABLE, XML_NAME ):
+                pCellRangeSource->sSourceStr = aIter.toString();
+            break;
+            case XML_ELEMENT( TABLE, XML_FILTER_NAME ):
+                pCellRangeSource->sFilterName = aIter.toString();
+            break;
+            case XML_ELEMENT( TABLE, XML_FILTER_OPTIONS ):
+                pCellRangeSource->sFilterOptions = aIter.toString();
+            break;
+            case XML_ELEMENT( XLINK, XML_HREF ):
+                pCellRangeSource->sURL = GetScImport().GetAbsoluteReference(aIter.toString());
+            break;
+            case XML_ELEMENT( TABLE, XML_LAST_COLUMN_SPANNED ):
             {
-                case XML_ELEMENT( TABLE, XML_NAME ):
-                    pCellRangeSource->sSourceStr = aIter.toString();
-                break;
-                case XML_ELEMENT( TABLE, XML_FILTER_NAME ):
-                    pCellRangeSource->sFilterName = aIter.toString();
-                break;
-                case XML_ELEMENT( TABLE, XML_FILTER_OPTIONS ):
-                    pCellRangeSource->sFilterOptions = aIter.toString();
-                break;
-                case XML_ELEMENT( XLINK, XML_HREF ):
-                    pCellRangeSource->sURL = GetScImport().GetAbsoluteReference(aIter.toString());
-                break;
-                case XML_ELEMENT( TABLE, XML_LAST_COLUMN_SPANNED ):
-                {
-                    sal_Int32 nValue;
-                    if (::sax::Converter::convertNumber( nValue, aIter.toString(), 1 ))
-                        pCellRangeSource->nColumns = nValue;
-                    else
-                        pCellRangeSource->nColumns = 1;
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_LAST_ROW_SPANNED ):
-                {
-                    sal_Int32 nValue;
-                    if (::sax::Converter::convertNumber( nValue, aIter.toString(), 1 ))
-                        pCellRangeSource->nRows = nValue;
-                    else
-                        pCellRangeSource->nRows = 1;
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_REFRESH_DELAY ):
-                {
-                    double fTime;
-                    if (::sax::Converter::convertDuration( fTime, aIter.toString() ))
-                        pCellRangeSource->nRefresh = std::max( static_cast<sal_Int32>(fTime * 86400.0), sal_Int32(0) );
-                }
-                break;
+                sal_Int32 nValue;
+                if (::sax::Converter::convertNumber( nValue, aIter.toString(), 1 ))
+                    pCellRangeSource->nColumns = nValue;
+                else
+                    pCellRangeSource->nColumns = 1;
             }
+            break;
+            case XML_ELEMENT( TABLE, XML_LAST_ROW_SPANNED ):
+            {
+                sal_Int32 nValue;
+                if (::sax::Converter::convertNumber( nValue, aIter.toString(), 1 ))
+                    pCellRangeSource->nRows = nValue;
+                else
+                    pCellRangeSource->nRows = 1;
+            }
+            break;
+            case XML_ELEMENT( TABLE, XML_REFRESH_DELAY ):
+            {
+                double fTime;
+                if (::sax::Converter::convertDuration( fTime, aIter.toString() ))
+                    pCellRangeSource->nRefresh = std::max( static_cast<sal_Int32>(fTime * 86400.0), sal_Int32(0) );
+            }
+            break;
         }
     }
 }

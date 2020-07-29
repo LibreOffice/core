@@ -97,32 +97,32 @@ ScXMLDetectiveHighlightedContext::ScXMLDetectiveHighlightedContext(
     aDetectiveObj(),
     bValid( false )
 {
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
+            case XML_ELEMENT( TABLE, XML_CELL_RANGE_ADDRESS ):
             {
-                case XML_ELEMENT( TABLE, XML_CELL_RANGE_ADDRESS ):
-                {
-                    sal_Int32 nOffset(0);
-                    ScXMLImport::MutexGuard aGuard(GetScImport());
-                    bValid = ScRangeStringConverter::GetRangeFromString( aDetectiveObj.aSourceRange, aIter.toString(), GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset );
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_DIRECTION ):
-                    aDetectiveObj.eObjType = ScXMLConverter::GetDetObjTypeFromString( aIter.toString() );
-                break;
-                case XML_ELEMENT( TABLE, XML_CONTAINS_ERROR ):
-                    aDetectiveObj.bHasError = IsXMLToken(aIter, XML_TRUE);
-                break;
-                case XML_ELEMENT( TABLE, XML_MARKED_INVALID ):
-                {
-                    if (IsXMLToken(aIter, XML_TRUE))
-                        aDetectiveObj.eObjType = SC_DETOBJ_CIRCLE;
-                }
-                break;
+                sal_Int32 nOffset(0);
+                ScXMLImport::MutexGuard aGuard(GetScImport());
+                bValid = ScRangeStringConverter::GetRangeFromString( aDetectiveObj.aSourceRange, aIter.toString(), GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset );
             }
+            break;
+            case XML_ELEMENT( TABLE, XML_DIRECTION ):
+                aDetectiveObj.eObjType = ScXMLConverter::GetDetObjTypeFromString( aIter.toString() );
+            break;
+            case XML_ELEMENT( TABLE, XML_CONTAINS_ERROR ):
+                aDetectiveObj.bHasError = IsXMLToken(aIter, XML_TRUE);
+            break;
+            case XML_ELEMENT( TABLE, XML_MARKED_INVALID ):
+            {
+                if (IsXMLToken(aIter, XML_TRUE))
+                    aDetectiveObj.eObjType = SC_DETOBJ_CIRCLE;
+            }
+            break;
         }
     }
 }

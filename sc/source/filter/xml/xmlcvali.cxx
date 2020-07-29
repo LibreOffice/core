@@ -171,45 +171,45 @@ ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImpo
     bDisplayHelp(false),
     bDisplayError(false)
 {
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
+        case XML_ELEMENT( TABLE, XML_NAME ):
+            sName = aIter.toString();
+            break;
+        case XML_ELEMENT( TABLE, XML_CONDITION ):
+            sCondition = aIter.toString();
+            break;
+        case XML_ELEMENT( TABLE, XML_BASE_CELL_ADDRESS ):
+            sBaseCellAddress = aIter.toString();
+            break;
+        case XML_ELEMENT( TABLE, XML_ALLOW_EMPTY_CELL ):
+            if (IsXMLToken(aIter, XML_FALSE))
+                bAllowEmptyCell = false;
+            break;
+        case XML_ELEMENT( TABLE, XML_DISPLAY_LIST ):
+            if (IsXMLToken(aIter, XML_NO))
             {
-            case XML_ELEMENT( TABLE, XML_NAME ):
-                sName = aIter.toString();
-                break;
-            case XML_ELEMENT( TABLE, XML_CONDITION ):
-                sCondition = aIter.toString();
-                break;
-            case XML_ELEMENT( TABLE, XML_BASE_CELL_ADDRESS ):
-                sBaseCellAddress = aIter.toString();
-                break;
-            case XML_ELEMENT( TABLE, XML_ALLOW_EMPTY_CELL ):
-                if (IsXMLToken(aIter, XML_FALSE))
-                    bAllowEmptyCell = false;
-                break;
-            case XML_ELEMENT( TABLE, XML_DISPLAY_LIST ):
-                if (IsXMLToken(aIter, XML_NO))
-                {
-                    nShowList = sheet::TableValidationVisibility::INVISIBLE;
-                }
-                else if (IsXMLToken(aIter, XML_UNSORTED))
-                {
-                    nShowList = sheet::TableValidationVisibility::UNSORTED;
-                }
-                else if (IsXMLToken(aIter, XML_SORT_ASCENDING))
-                {
-                    nShowList = sheet::TableValidationVisibility::SORTEDASCENDING;
-                }
-                else if (IsXMLToken(aIter, XML_SORTED_ASCENDING))
-                {
-                    // Read old wrong value, fdo#72548
-                    nShowList = sheet::TableValidationVisibility::SORTEDASCENDING;
-                }
-                break;
+                nShowList = sheet::TableValidationVisibility::INVISIBLE;
             }
+            else if (IsXMLToken(aIter, XML_UNSORTED))
+            {
+                nShowList = sheet::TableValidationVisibility::UNSORTED;
+            }
+            else if (IsXMLToken(aIter, XML_SORT_ASCENDING))
+            {
+                nShowList = sheet::TableValidationVisibility::SORTEDASCENDING;
+            }
+            else if (IsXMLToken(aIter, XML_SORTED_ASCENDING))
+            {
+                // Read old wrong value, fdo#72548
+                nShowList = sheet::TableValidationVisibility::SORTEDASCENDING;
+            }
+            break;
         }
     }
 }
@@ -279,77 +279,77 @@ void ScXMLContentValidationContext::GetCondition( ScMyImportValidation& rValidat
     rValidation.aValidationType = sheet::ValidationType_ANY;    // default if no condition is given
     rValidation.aOperator = sheet::ConditionOperator_NONE;
 
-    if( !sCondition.isEmpty() )
+    if( sCondition.isEmpty() )
+        return;
+
+    // extract leading namespace from condition string
+    OUString aCondition, aConditionNmsp;
+    FormulaGrammar::Grammar eGrammar = FormulaGrammar::GRAM_UNSPECIFIED;
+    GetScImport().ExtractFormulaNamespaceGrammar( aCondition, aConditionNmsp, eGrammar, sCondition );
+    bool bHasNmsp = aCondition.getLength() < sCondition.getLength();
+
+    // parse a condition from the attribute string
+    ScXMLConditionParseResult aParseResult;
+    ScXMLConditionHelper::parseCondition( aParseResult, aCondition, 0 );
+
+    /*  Check the result. A valid value in aParseResult.meToken implies
+        that the other members of aParseResult are filled with valid data
+        for that token. */
+    bool bSecondaryPart = false;
+    switch( aParseResult.meToken )
     {
-        // extract leading namespace from condition string
-        OUString aCondition, aConditionNmsp;
-        FormulaGrammar::Grammar eGrammar = FormulaGrammar::GRAM_UNSPECIFIED;
-        GetScImport().ExtractFormulaNamespaceGrammar( aCondition, aConditionNmsp, eGrammar, sCondition );
-        bool bHasNmsp = aCondition.getLength() < sCondition.getLength();
+        case XML_COND_TEXTLENGTH:               // condition is 'cell-content-text-length()<operator><expression>'
+        case XML_COND_TEXTLENGTH_ISBETWEEN:     // condition is 'cell-content-text-length-is-between(<expression1>,<expression2>)'
+        case XML_COND_TEXTLENGTH_ISNOTBETWEEN:  // condition is 'cell-content-text-length-is-not-between(<expression1>,<expression2>)'
+        case XML_COND_ISINLIST:                 // condition is 'cell-content-is-in-list(<expression>)'
+        case XML_COND_ISTRUEFORMULA:            // condition is 'is-true-formula(<expression>)'
+            rValidation.aValidationType = aParseResult.meValidation;
+            rValidation.aOperator = aParseResult.meOperator;
+        break;
 
-        // parse a condition from the attribute string
-        ScXMLConditionParseResult aParseResult;
-        ScXMLConditionHelper::parseCondition( aParseResult, aCondition, 0 );
+        case XML_COND_ISWHOLENUMBER:            // condition is 'cell-content-is-whole-number() and <condition>'
+        case XML_COND_ISDECIMALNUMBER:          // condition is 'cell-content-is-decimal-number() and <condition>'
+        case XML_COND_ISDATE:                   // condition is 'cell-content-is-date() and <condition>'
+        case XML_COND_ISTIME:                   // condition is 'cell-content-is-time() and <condition>'
+            rValidation.aValidationType = aParseResult.meValidation;
+            bSecondaryPart = true;
+        break;
 
-        /*  Check the result. A valid value in aParseResult.meToken implies
-            that the other members of aParseResult are filled with valid data
-            for that token. */
-        bool bSecondaryPart = false;
-        switch( aParseResult.meToken )
-        {
-            case XML_COND_TEXTLENGTH:               // condition is 'cell-content-text-length()<operator><expression>'
-            case XML_COND_TEXTLENGTH_ISBETWEEN:     // condition is 'cell-content-text-length-is-between(<expression1>,<expression2>)'
-            case XML_COND_TEXTLENGTH_ISNOTBETWEEN:  // condition is 'cell-content-text-length-is-not-between(<expression1>,<expression2>)'
-            case XML_COND_ISINLIST:                 // condition is 'cell-content-is-in-list(<expression>)'
-            case XML_COND_ISTRUEFORMULA:            // condition is 'is-true-formula(<expression>)'
-                rValidation.aValidationType = aParseResult.meValidation;
-                rValidation.aOperator = aParseResult.meOperator;
-            break;
+        default:;   // unacceptable or unknown condition
+    }
 
-            case XML_COND_ISWHOLENUMBER:            // condition is 'cell-content-is-whole-number() and <condition>'
-            case XML_COND_ISDECIMALNUMBER:          // condition is 'cell-content-is-decimal-number() and <condition>'
-            case XML_COND_ISDATE:                   // condition is 'cell-content-is-date() and <condition>'
-            case XML_COND_ISTIME:                   // condition is 'cell-content-is-time() and <condition>'
-                rValidation.aValidationType = aParseResult.meValidation;
-                bSecondaryPart = true;
-            break;
-
-            default:;   // unacceptable or unknown condition
-        }
-
-        /*  Parse the following 'and <condition>' part of some conditions. This
-            updates the members of aParseResult that will contain the operands
-            and comparison operator then. */
-        if( bSecondaryPart )
+    /*  Parse the following 'and <condition>' part of some conditions. This
+        updates the members of aParseResult that will contain the operands
+        and comparison operator then. */
+    if( bSecondaryPart )
+    {
+        ScXMLConditionHelper::parseCondition( aParseResult, aCondition, aParseResult.mnEndIndex );
+        if( aParseResult.meToken == XML_COND_AND )
         {
             ScXMLConditionHelper::parseCondition( aParseResult, aCondition, aParseResult.mnEndIndex );
-            if( aParseResult.meToken == XML_COND_AND )
+            switch( aParseResult.meToken )
             {
-                ScXMLConditionHelper::parseCondition( aParseResult, aCondition, aParseResult.mnEndIndex );
-                switch( aParseResult.meToken )
-                {
-                    case XML_COND_CELLCONTENT:  // condition is 'and cell-content()<operator><expression>'
-                    case XML_COND_ISBETWEEN:    // condition is 'and cell-content-is-between(<expression1>,<expression2>)'
-                    case XML_COND_ISNOTBETWEEN: // condition is 'and cell-content-is-not-between(<expression1>,<expression2>)'
-                        rValidation.aOperator = aParseResult.meOperator;
-                    break;
-                    default:;   // unacceptable or unknown condition
-                }
+                case XML_COND_CELLCONTENT:  // condition is 'and cell-content()<operator><expression>'
+                case XML_COND_ISBETWEEN:    // condition is 'and cell-content-is-between(<expression1>,<expression2>)'
+                case XML_COND_ISNOTBETWEEN: // condition is 'and cell-content-is-not-between(<expression1>,<expression2>)'
+                    rValidation.aOperator = aParseResult.meOperator;
+                break;
+                default:;   // unacceptable or unknown condition
             }
         }
+    }
 
-        // a validation type (date, integer) without a condition isn't possible
-        if( rValidation.aOperator == sheet::ConditionOperator_NONE )
-            rValidation.aValidationType = sheet::ValidationType_ANY;
+    // a validation type (date, integer) without a condition isn't possible
+    if( rValidation.aOperator == sheet::ConditionOperator_NONE )
+        rValidation.aValidationType = sheet::ValidationType_ANY;
 
-        // parse the formulas
-        if( rValidation.aValidationType != sheet::ValidationType_ANY )
-        {
-            SetFormula( rValidation.sFormula1, rValidation.sFormulaNmsp1, rValidation.eGrammar1,
-                aParseResult.maOperand1, aConditionNmsp, eGrammar, bHasNmsp );
-            SetFormula( rValidation.sFormula2, rValidation.sFormulaNmsp2, rValidation.eGrammar2,
-                aParseResult.maOperand2, aConditionNmsp, eGrammar, bHasNmsp );
-        }
+    // parse the formulas
+    if( rValidation.aValidationType != sheet::ValidationType_ANY )
+    {
+        SetFormula( rValidation.sFormula1, rValidation.sFormulaNmsp1, rValidation.eGrammar1,
+            aParseResult.maOperand1, aConditionNmsp, eGrammar, bHasNmsp );
+        SetFormula( rValidation.sFormula2, rValidation.sFormulaNmsp2, rValidation.eGrammar2,
+            aParseResult.maOperand2, aConditionNmsp, eGrammar, bHasNmsp );
     }
 }
 
@@ -419,19 +419,19 @@ ScXMLHelpMessageContext::ScXMLHelpMessageContext( ScXMLImport& rImport,
     bDisplay(false)
 {
     pValidationContext = pTempValidationContext;
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
-            {
-            case XML_ELEMENT( TABLE, XML_TITLE ):
-                sTitle = aIter.toString();
-                break;
-            case XML_ELEMENT( TABLE, XML_DISPLAY ):
-                bDisplay = IsXMLToken(aIter, XML_TRUE);
-                break;
-            }
+        case XML_ELEMENT( TABLE, XML_TITLE ):
+            sTitle = aIter.toString();
+            break;
+        case XML_ELEMENT( TABLE, XML_DISPLAY ):
+            bDisplay = IsXMLToken(aIter, XML_TRUE);
+            break;
         }
     }
 }
@@ -473,22 +473,22 @@ ScXMLErrorMessageContext::ScXMLErrorMessageContext( ScXMLImport& rImport,
     bDisplay(false)
 {
     pValidationContext = pTempValidationContext;
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
-            {
-            case XML_ELEMENT( TABLE, XML_TITLE ):
-                sTitle = aIter.toString();
-                break;
-            case XML_ELEMENT( TABLE, XML_MESSAGE_TYPE ):
-                sMessageType = aIter.toString();
-                break;
-            case XML_ELEMENT( TABLE, XML_DISPLAY ):
-                bDisplay = IsXMLToken(aIter, XML_TRUE);
-                break;
-            }
+        case XML_ELEMENT( TABLE, XML_TITLE ):
+            sTitle = aIter.toString();
+            break;
+        case XML_ELEMENT( TABLE, XML_MESSAGE_TYPE ):
+            sMessageType = aIter.toString();
+            break;
+        case XML_ELEMENT( TABLE, XML_DISPLAY ):
+            bDisplay = IsXMLToken(aIter, XML_TRUE);
+            break;
         }
     }
 }
@@ -526,18 +526,18 @@ ScXMLErrorMacroContext::ScXMLErrorMacroContext( ScXMLImport& rImport,
     bExecute(false)
 {
     pValidationContext = pTempValidationContext;
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
-            {
-            case XML_ELEMENT( TABLE, XML_NAME ):
-                break;
-            case XML_ELEMENT( TABLE, XML_EXECUTE ):
-                bExecute = IsXMLToken(aIter, XML_TRUE);
-                break;
-            }
+        case XML_ELEMENT( TABLE, XML_NAME ):
+            break;
+        case XML_ELEMENT( TABLE, XML_EXECUTE ):
+            bExecute = IsXMLToken(aIter, XML_TRUE);
+            break;
         }
     }
 }

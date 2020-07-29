@@ -343,24 +343,24 @@ void SAL_CALL ScXMLConditionalFormatContext::endFastElement( sal_Int32 /*nElemen
 
     mrParent.mvCondFormatData.push_back( { pInsertedFormat, nTab } );
 
-    if (bEligibleForCache)
+    if (!bEligibleForCache)
+        return;
+
+    // Not found in cache, replace oldest cache entry
+    sal_Int64 nOldestAge = -1;
+    size_t nIndexOfOldest = 0;
+    for (auto& aCacheEntry : mrParent.maCache)
     {
-        // Not found in cache, replace oldest cache entry
-        sal_Int64 nOldestAge = -1;
-        size_t nIndexOfOldest = 0;
-        for (auto& aCacheEntry : mrParent.maCache)
+        if (aCacheEntry.mnAge > nOldestAge)
         {
-            if (aCacheEntry.mnAge > nOldestAge)
-            {
-                nOldestAge = aCacheEntry.mnAge;
-                nIndexOfOldest = (&aCacheEntry - &mrParent.maCache.front());
-            }
+            nOldestAge = aCacheEntry.mnAge;
+            nIndexOfOldest = (&aCacheEntry - &mrParent.maCache.front());
         }
-        mrParent.maCache[nIndexOfOldest].mpFormat = pInsertedFormat;
-        mrParent.maCache[nIndexOfOldest].mbSingleRelativeReference = bSingleRelativeReference;
-        mrParent.maCache[nIndexOfOldest].mpTokens = std::move(pTokens);
-        mrParent.maCache[nIndexOfOldest].mnAge = 0;
     }
+    mrParent.maCache[nIndexOfOldest].mpFormat = pInsertedFormat;
+    mrParent.maCache[nIndexOfOldest].mbSingleRelativeReference = bSingleRelativeReference;
+    mrParent.maCache[nIndexOfOldest].mpTokens = std::move(pTokens);
+    mrParent.maCache[nIndexOfOldest].mnAge = 0;
 }
 
 ScXMLConditionalFormatContext::~ScXMLConditionalFormatContext()

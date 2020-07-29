@@ -44,59 +44,59 @@ ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
     bIsCaseSensitive(false),
     bEnabledUserList(false)
 {
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
+            case XML_ELEMENT( TABLE, XML_BIND_STYLES_TO_CONTENT ):
             {
-                case XML_ELEMENT( TABLE, XML_BIND_STYLES_TO_CONTENT ):
-                {
-                    bBindFormatsToContent = IsXMLToken(aIter, XML_TRUE);
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_TARGET_RANGE_ADDRESS ):
-                {
-                    ScRange aScRange;
-                    sal_Int32 nOffset(0);
-                    if (ScRangeStringConverter::GetRangeFromString( aScRange, aIter.toString(), GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset ))
-                    {
-                        ScUnoConversion::FillApiAddress( aOutputPosition, aScRange.aStart );
-                        bCopyOutputData = true;
-                    }
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_CASE_SENSITIVE ):
-                {
-                    bIsCaseSensitive = IsXMLToken(aIter, XML_TRUE);
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_RFC_LANGUAGE_TAG ):
-                {
-                    maLanguageTagODF.maRfcLanguageTag = aIter.toString();
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_LANGUAGE ):
-                {
-                    maLanguageTagODF.maLanguage = aIter.toString();
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_SCRIPT ):
-                {
-                    maLanguageTagODF.maScript = aIter.toString();
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_COUNTRY ):
-                {
-                    maLanguageTagODF.maCountry = aIter.toString();
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_ALGORITHM ):
-                {
-                    sAlgorithm = aIter.toString();
-                }
-                break;
+                bBindFormatsToContent = IsXMLToken(aIter, XML_TRUE);
             }
+            break;
+            case XML_ELEMENT( TABLE, XML_TARGET_RANGE_ADDRESS ):
+            {
+                ScRange aScRange;
+                sal_Int32 nOffset(0);
+                if (ScRangeStringConverter::GetRangeFromString( aScRange, aIter.toString(), GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset ))
+                {
+                    ScUnoConversion::FillApiAddress( aOutputPosition, aScRange.aStart );
+                    bCopyOutputData = true;
+                }
+            }
+            break;
+            case XML_ELEMENT( TABLE, XML_CASE_SENSITIVE ):
+            {
+                bIsCaseSensitive = IsXMLToken(aIter, XML_TRUE);
+            }
+            break;
+            case XML_ELEMENT( TABLE, XML_RFC_LANGUAGE_TAG ):
+            {
+                maLanguageTagODF.maRfcLanguageTag = aIter.toString();
+            }
+            break;
+            case XML_ELEMENT( TABLE, XML_LANGUAGE ):
+            {
+                maLanguageTagODF.maLanguage = aIter.toString();
+            }
+            break;
+            case XML_ELEMENT( TABLE, XML_SCRIPT ):
+            {
+                maLanguageTagODF.maScript = aIter.toString();
+            }
+            break;
+            case XML_ELEMENT( TABLE, XML_COUNTRY ):
+            {
+                maLanguageTagODF.maCountry = aIter.toString();
+            }
+            break;
+            case XML_ELEMENT( TABLE, XML_ALGORITHM ):
+            {
+                sAlgorithm = aIter.toString();
+            }
+            break;
         }
     }
 }
@@ -203,28 +203,28 @@ ScXMLSortByContext::ScXMLSortByContext( ScXMLImport& rImport,
     sDataType(GetXMLToken(XML_AUTOMATIC)),
     sOrder(GetXMLToken(XML_ASCENDING))
 {
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
+            case XML_ELEMENT( TABLE, XML_FIELD_NUMBER ):
             {
-                case XML_ELEMENT( TABLE, XML_FIELD_NUMBER ):
-                {
-                    sFieldNumber = aIter.toString();
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_DATA_TYPE ):
-                {
-                    sDataType = aIter.toString();
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_ORDER ):
-                {
-                    sOrder = aIter.toString();
-                }
-                break;
+                sFieldNumber = aIter.toString();
             }
+            break;
+            case XML_ELEMENT( TABLE, XML_DATA_TYPE ):
+            {
+                sDataType = aIter.toString();
+            }
+            break;
+            case XML_ELEMENT( TABLE, XML_ORDER ):
+            {
+                sOrder = aIter.toString();
+            }
+            break;
         }
     }
 }

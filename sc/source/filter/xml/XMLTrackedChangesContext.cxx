@@ -346,17 +346,17 @@ ScXMLTrackedChangesContext::ScXMLTrackedChangesContext( ScXMLImport& rImport,
 {
     rImport.LockSolarMutex();
 
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    auto aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_PROTECTION_KEY ) ) );
+    if (aIter != rAttrList->end())
     {
-        auto aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_PROTECTION_KEY ) ) );
-        if (aIter != rAttrList->end())
+        if( !aIter.isEmpty() )
         {
-            if( !aIter.isEmpty() )
-            {
-                uno::Sequence<sal_Int8> aPass;
-                ::comphelper::Base64::decode( aPass, aIter.toString() );
-                pChangeTrackingImportHelper->SetProtection(aPass);
-            }
+            uno::Sequence<sal_Int8> aPass;
+            ::comphelper::Base64::decode( aPass, aIter.toString() );
+            pChangeTrackingImportHelper->SetProtection(aPass);
         }
     }
 }
@@ -835,22 +835,22 @@ SvXMLImportContextRef ScXMLChangeCellContext::CreateChildContext( sal_uInt16 nPr
 
 void ScXMLChangeCellContext::CreateTextPContext(bool bIsNewParagraph)
 {
-    if (GetScImport().GetDocument())
+    if (!GetScImport().GetDocument())
+        return;
+
+    mpEditTextObj = new ScEditEngineTextObj();
+    mpEditTextObj->GetEditEngine()->SetEditTextObjectPool(GetScImport().GetDocument()->GetEditPool());
+    uno::Reference <text::XText> xText(mpEditTextObj.get());
+    if (xText.is())
     {
-        mpEditTextObj = new ScEditEngineTextObj();
-        mpEditTextObj->GetEditEngine()->SetEditTextObjectPool(GetScImport().GetDocument()->GetEditPool());
-        uno::Reference <text::XText> xText(mpEditTextObj.get());
-        if (xText.is())
+        uno::Reference<text::XTextCursor> xTextCursor(xText->createTextCursor());
+        if (bIsNewParagraph)
         {
-            uno::Reference<text::XTextCursor> xTextCursor(xText->createTextCursor());
-            if (bIsNewParagraph)
-            {
-                xText->setString(sText);
-                xTextCursor->gotoEnd(false);
-                xText->insertControlCharacter(xTextCursor, text::ControlCharacter::PARAGRAPH_BREAK, false);
-            }
-            GetScImport().GetTextImport()->SetCursor(xTextCursor);
+            xText->setString(sText);
+            xTextCursor->gotoEnd(false);
+            xText->insertControlCharacter(xTextCursor, text::ControlCharacter::PARAGRAPH_BREAK, false);
         }
+        GetScImport().GetTextImport()->SetCursor(xTextCursor);
     }
 }
 

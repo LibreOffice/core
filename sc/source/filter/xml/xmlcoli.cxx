@@ -43,34 +43,34 @@ ScXMLTableColContext::ScXMLTableColContext( ScXMLImport& rImport,
     nColCount(1),
     sVisibility(GetXMLToken(XML_VISIBLE))
 {
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
+        case XML_ELEMENT( TABLE, XML_NUMBER_COLUMNS_REPEATED ):
             {
-            case XML_ELEMENT( TABLE, XML_NUMBER_COLUMNS_REPEATED ):
-                {
-                    nColCount = std::max<sal_Int32>(aIter.toInt32(), 1);
-                    nColCount = std::min<sal_Int32>(nColCount, MAXCOLCOUNT);
-                }
-                break;
-            case XML_ELEMENT( TABLE, XML_STYLE_NAME ):
-                {
-                    sStyleName = aIter.toString();
-                }
-                break;
-            case XML_ELEMENT( TABLE, XML_VISIBILITY ):
-                {
-                    sVisibility = aIter.toString();
-                }
-                break;
-            case XML_ELEMENT( TABLE, XML_DEFAULT_CELL_STYLE_NAME ):
-                {
-                    sCellStyleName = aIter.toString();
-                }
-                break;
+                nColCount = std::max<sal_Int32>(aIter.toInt32(), 1);
+                nColCount = std::min<sal_Int32>(nColCount, MAXCOLCOUNT);
             }
+            break;
+        case XML_ELEMENT( TABLE, XML_STYLE_NAME ):
+            {
+                sStyleName = aIter.toString();
+            }
+            break;
+        case XML_ELEMENT( TABLE, XML_VISIBILITY ):
+            {
+                sVisibility = aIter.toString();
+            }
+            break;
+        case XML_ELEMENT( TABLE, XML_DEFAULT_CELL_STYLE_NAME ):
+            {
+                sCellStyleName = aIter.toString();
+            }
+            break;
         }
     }
 }

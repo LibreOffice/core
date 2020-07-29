@@ -37,32 +37,32 @@ ScXMLConsolidationContext::ScXMLConsolidationContext(
     bTargetAddr(false)
 {
     rImport.LockSolarMutex();
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
-            {
-                case XML_ELEMENT( TABLE, XML_FUNCTION ):
-                    eFunction = ScXMLConverter::GetSubTotalFuncFromString( aIter.toString() );
+            case XML_ELEMENT( TABLE, XML_FUNCTION ):
+                eFunction = ScXMLConverter::GetSubTotalFuncFromString( aIter.toString() );
+            break;
+            case XML_ELEMENT( TABLE, XML_SOURCE_CELL_RANGE_ADDRESSES ):
+                sSourceList = aIter.toString();
+            break;
+            case XML_ELEMENT( TABLE, XML_TARGET_CELL_ADDRESS ):
+                {
+                    sal_Int32 nOffset(0);
+                    bTargetAddr = ScRangeStringConverter::GetAddressFromString(
+                        aTargetAddr, aIter.toString(), GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset );
+                }
                 break;
-                case XML_ELEMENT( TABLE, XML_SOURCE_CELL_RANGE_ADDRESSES ):
-                    sSourceList = aIter.toString();
-                break;
-                case XML_ELEMENT( TABLE, XML_TARGET_CELL_ADDRESS ):
-                    {
-                        sal_Int32 nOffset(0);
-                        bTargetAddr = ScRangeStringConverter::GetAddressFromString(
-                            aTargetAddr, aIter.toString(), GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset );
-                    }
-                    break;
-                case XML_ELEMENT( TABLE, XML_USE_LABEL ):
-                    sUseLabel = aIter.toString();
-                break;
-                case XML_ELEMENT( TABLE, XML_LINK_TO_SOURCE_DATA ):
-                    bLinkToSource = IsXMLToken( aIter, XML_TRUE );
-                break;
-            }
+            case XML_ELEMENT( TABLE, XML_USE_LABEL ):
+                sUseLabel = aIter.toString();
+            break;
+            case XML_ELEMENT( TABLE, XML_LINK_TO_SOURCE_DATA ):
+                bLinkToSource = IsXMLToken( aIter, XML_TRUE );
+            break;
         }
     }
 }
@@ -74,46 +74,46 @@ ScXMLConsolidationContext::~ScXMLConsolidationContext()
 
 void SAL_CALL ScXMLConsolidationContext::endFastElement( sal_Int32 /*nElement*/ )
 {
-    if (bTargetAddr)
+    if (!bTargetAddr)
+        return;
+
+    std::unique_ptr<ScConsolidateParam> pConsParam(new ScConsolidateParam);
+    pConsParam->nCol = aTargetAddr.Col();
+    pConsParam->nRow = aTargetAddr.Row();
+    pConsParam->nTab = aTargetAddr.Tab();
+    pConsParam->eFunction = eFunction;
+
+    sal_uInt16 nCount = static_cast<sal_uInt16>(std::min( ScRangeStringConverter::GetTokenCount( sSourceList ), sal_Int32(0xFFFF) ));
+    if( nCount )
     {
-        std::unique_ptr<ScConsolidateParam> pConsParam(new ScConsolidateParam);
-        pConsParam->nCol = aTargetAddr.Col();
-        pConsParam->nRow = aTargetAddr.Row();
-        pConsParam->nTab = aTargetAddr.Tab();
-        pConsParam->eFunction = eFunction;
-
-        sal_uInt16 nCount = static_cast<sal_uInt16>(std::min( ScRangeStringConverter::GetTokenCount( sSourceList ), sal_Int32(0xFFFF) ));
-        if( nCount )
+        std::unique_ptr<ScArea[]> ppAreas(new ScArea[ nCount ]);
+        sal_Int32 nOffset = 0;
+        sal_uInt16 nIndex;
+        for( nIndex = 0; nIndex < nCount; ++nIndex )
         {
-            std::unique_ptr<ScArea[]> ppAreas(new ScArea[ nCount ]);
-            sal_Int32 nOffset = 0;
-            sal_uInt16 nIndex;
-            for( nIndex = 0; nIndex < nCount; ++nIndex )
+            if ( !ScRangeStringConverter::GetAreaFromString(
+                ppAreas[ nIndex ], sSourceList, GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset ) )
             {
-                if ( !ScRangeStringConverter::GetAreaFromString(
-                    ppAreas[ nIndex ], sSourceList, GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset ) )
-                {
-                    //! handle error
-                }
+                //! handle error
             }
-
-            pConsParam->SetAreas( std::move(ppAreas), nCount );
         }
 
-        pConsParam->bByCol = pConsParam->bByRow = false;
-        if( IsXMLToken(sUseLabel, XML_COLUMN ) )
-            pConsParam->bByCol = true;
-        else if( IsXMLToken( sUseLabel, XML_ROW ) )
-            pConsParam->bByRow = true;
-        else if( IsXMLToken( sUseLabel, XML_BOTH ) )
-            pConsParam->bByCol = pConsParam->bByRow = true;
-
-        pConsParam->bReferenceData = bLinkToSource;
-
-        ScDocument* pDoc = GetScImport().GetDocument();
-        if( pDoc )
-            pDoc->SetConsolidateDlgData( std::move(pConsParam) );
+        pConsParam->SetAreas( std::move(ppAreas), nCount );
     }
+
+    pConsParam->bByCol = pConsParam->bByRow = false;
+    if( IsXMLToken(sUseLabel, XML_COLUMN ) )
+        pConsParam->bByCol = true;
+    else if( IsXMLToken( sUseLabel, XML_ROW ) )
+        pConsParam->bByRow = true;
+    else if( IsXMLToken( sUseLabel, XML_BOTH ) )
+        pConsParam->bByCol = pConsParam->bByRow = true;
+
+    pConsParam->bReferenceData = bLinkToSource;
+
+    ScDocument* pDoc = GetScImport().GetDocument();
+    if( pDoc )
+        pDoc->SetConsolidateDlgData( std::move(pConsParam) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

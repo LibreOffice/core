@@ -615,22 +615,22 @@ ScXMLSubTotalRulesContext::ScXMLSubTotalRulesContext( ScXMLImport& rImport,
     ScXMLImportContext( rImport ),
     pDatabaseRangeContext(pTempDatabaseRangeContext)
 {
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
-            {
-                case XML_ELEMENT( TABLE, XML_BIND_STYLES_TO_CONTENT ):
-                    pDatabaseRangeContext->SetSubTotalsBindFormatsToContent(IsXMLToken(aIter, XML_TRUE));
-                    break;
-                case XML_ELEMENT( TABLE, XML_CASE_SENSITIVE ):
-                    pDatabaseRangeContext->SetSubTotalsIsCaseSensitive(IsXMLToken(aIter, XML_TRUE));
-                    break;
-                case XML_ELEMENT( TABLE, XML_PAGE_BREAKS_ON_GROUP_CHANGE ):
-                    pDatabaseRangeContext->SetSubTotalsInsertPageBreaks(IsXMLToken(aIter, XML_TRUE));
-                    break;
-            }
+            case XML_ELEMENT( TABLE, XML_BIND_STYLES_TO_CONTENT ):
+                pDatabaseRangeContext->SetSubTotalsBindFormatsToContent(IsXMLToken(aIter, XML_TRUE));
+                break;
+            case XML_ELEMENT( TABLE, XML_CASE_SENSITIVE ):
+                pDatabaseRangeContext->SetSubTotalsIsCaseSensitive(IsXMLToken(aIter, XML_TRUE));
+                break;
+            case XML_ELEMENT( TABLE, XML_PAGE_BREAKS_ON_GROUP_CHANGE ):
+                pDatabaseRangeContext->SetSubTotalsInsertPageBreaks(IsXMLToken(aIter, XML_TRUE));
+                break;
         }
     }
 }
@@ -669,51 +669,51 @@ ScXMLSortGroupsContext::ScXMLSortGroupsContext( ScXMLImport& rImport,
     ScXMLImportContext( rImport )
 {
     pDatabaseRangeContext->SetSubTotalsSortGroups(true);
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
+            case XML_ELEMENT( TABLE, XML_DATA_TYPE ):
             {
-                case XML_ELEMENT( TABLE, XML_DATA_TYPE ):
+                const OUString &sValue = aIter.toString();
+                if (sValue.getLength() > 8)
                 {
-                    const OUString &sValue = aIter.toString();
-                    if (sValue.getLength() > 8)
+                    OUString sTemp = sValue.copy(0, 8);
+                    if (sTemp == "UserList")
                     {
-                        OUString sTemp = sValue.copy(0, 8);
-                        if (sTemp == "UserList")
-                        {
-                            pDatabaseRangeContext->SetSubTotalsEnabledUserList(true);
-                            sTemp = sValue.copy(8);
-                            pDatabaseRangeContext->SetSubTotalsUserListIndex(static_cast<sal_Int16>(sTemp.toInt32()));
-                        }
-                        else
-                        {
-                            //if (IsXMLToken(aIter, XML_AUTOMATIC))
-                                //aSortField.FieldType = util::SortFieldType_AUTOMATIC;
-                                // is not supported by StarOffice
-                        }
+                        pDatabaseRangeContext->SetSubTotalsEnabledUserList(true);
+                        sTemp = sValue.copy(8);
+                        pDatabaseRangeContext->SetSubTotalsUserListIndex(static_cast<sal_Int16>(sTemp.toInt32()));
                     }
                     else
                     {
-                        //if (IsXMLToken(aIter, XML_TEXT))
-                            //aSortField.FieldType = util::SortFieldType_ALPHANUMERIC;
-                            // is not supported by StarOffice
-                        //else if (IsXMLToken(aIter, XML_NUMBER))
-                            //aSortField.FieldType = util::SortFieldType_NUMERIC;
+                        //if (IsXMLToken(aIter, XML_AUTOMATIC))
+                            //aSortField.FieldType = util::SortFieldType_AUTOMATIC;
                             // is not supported by StarOffice
                     }
                 }
-                break;
-                case XML_ELEMENT( TABLE, XML_ORDER ):
+                else
                 {
-                    if (IsXMLToken(aIter, XML_ASCENDING))
-                        pDatabaseRangeContext->SetSubTotalsAscending(true);
-                    else
-                        pDatabaseRangeContext->SetSubTotalsAscending(false);
+                    //if (IsXMLToken(aIter, XML_TEXT))
+                        //aSortField.FieldType = util::SortFieldType_ALPHANUMERIC;
+                        // is not supported by StarOffice
+                    //else if (IsXMLToken(aIter, XML_NUMBER))
+                        //aSortField.FieldType = util::SortFieldType_NUMERIC;
+                        // is not supported by StarOffice
                 }
-                break;
             }
+            break;
+            case XML_ELEMENT( TABLE, XML_ORDER ):
+            {
+                if (IsXMLToken(aIter, XML_ASCENDING))
+                    pDatabaseRangeContext->SetSubTotalsAscending(true);
+                else
+                    pDatabaseRangeContext->SetSubTotalsAscending(false);
+            }
+            break;
         }
     }
 }
@@ -777,19 +777,19 @@ ScXMLSubTotalFieldContext::ScXMLSubTotalFieldContext( ScXMLImport& rImport,
     ScXMLImportContext( rImport ),
     pSubTotalRuleContext(pTempSubTotalRuleContext)
 {
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
-            {
-                case XML_ELEMENT( TABLE, XML_FIELD_NUMBER ):
-                    sFieldNumber = aIter.toString();
-                    break;
-                case XML_ELEMENT( TABLE, XML_FUNCTION ):
-                    sFunction = aIter.toString();
-                    break;
-            }
+            case XML_ELEMENT( TABLE, XML_FIELD_NUMBER ):
+                sFieldNumber = aIter.toString();
+                break;
+            case XML_ELEMENT( TABLE, XML_FUNCTION ):
+                sFunction = aIter.toString();
+                break;
         }
     }
 }
