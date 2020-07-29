@@ -935,9 +935,9 @@ struct PPTCharPropSet
     //now,the bullet color should be set original hyperlink text's color
     //so  "mbHardHylinkOrigColor" hold the original hyperlink text's color.
     sal_uInt32  mnHylinkOrigColor;
-    //the bullet text weather has a hyperlink.
+    //the bullet text whether has a hyperlink.
     bool        mbIsHyperlink;
-    //the hyperlink text weather has a custom color.
+    //the hyperlink text whether has a custom color.
     bool        mbHardHylinkOrigColor;
 
     sal_uInt32          mnOriginalTextPos;
