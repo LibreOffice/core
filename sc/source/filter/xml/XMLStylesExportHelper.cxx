@@ -99,65 +99,65 @@ void ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
     sal_Int32& nValidationIndex)
 {
     uno::Reference<beans::XPropertySet> xPropertySet(aTempAny, uno::UNO_QUERY);
-    if (xPropertySet.is())
+    if (!xPropertySet.is())
+        return;
+
+    OUString sErrorMessage;
+    xPropertySet->getPropertyValue(gsERRMESS) >>= sErrorMessage;
+    OUString sErrorTitle;
+    xPropertySet->getPropertyValue(gsERRTITLE) >>= sErrorTitle;
+    OUString sImputMessage;
+    xPropertySet->getPropertyValue(gsINPMESS) >>= sImputMessage;
+    OUString sImputTitle;
+    xPropertySet->getPropertyValue(gsINPTITLE) >>= sImputTitle;
+    bool bShowErrorMessage = ::cppu::any2bool(xPropertySet->getPropertyValue(gsSHOWERR));
+    bool bShowImputMessage = ::cppu::any2bool(xPropertySet->getPropertyValue(gsSHOWINP));
+    sheet::ValidationType aValidationType;
+    xPropertySet->getPropertyValue(gsTYPE) >>= aValidationType;
+    if (!(bShowErrorMessage || bShowImputMessage || aValidationType != sheet::ValidationType_ANY ||
+        !sErrorMessage.isEmpty() || !sErrorTitle.isEmpty() || !sImputMessage.isEmpty() || !sImputTitle.isEmpty()))
+        return;
+
+    ScMyValidation aValidation;
+    aValidation.sErrorMessage = sErrorMessage;
+    aValidation.sErrorTitle = sErrorTitle;
+    aValidation.sImputMessage = sImputMessage;
+    aValidation.sImputTitle = sImputTitle;
+    aValidation.bShowErrorMessage = bShowErrorMessage;
+    aValidation.bShowImputMessage = bShowImputMessage;
+    aValidation.aValidationType = aValidationType;
+    aValidation.bIgnoreBlanks = ::cppu::any2bool(xPropertySet->getPropertyValue(gsIGNOREBL));
+    xPropertySet->getPropertyValue(gsSHOWLIST) >>= aValidation.nShowList;
+    xPropertySet->getPropertyValue(gsERRALSTY) >>= aValidation.aAlertStyle;
+    uno::Reference<sheet::XSheetCondition> xCondition(xPropertySet, uno::UNO_QUERY);
+    if (xCondition.is())
     {
-        OUString sErrorMessage;
-        xPropertySet->getPropertyValue(gsERRMESS) >>= sErrorMessage;
-        OUString sErrorTitle;
-        xPropertySet->getPropertyValue(gsERRTITLE) >>= sErrorTitle;
-        OUString sImputMessage;
-        xPropertySet->getPropertyValue(gsINPMESS) >>= sImputMessage;
-        OUString sImputTitle;
-        xPropertySet->getPropertyValue(gsINPTITLE) >>= sImputTitle;
-        bool bShowErrorMessage = ::cppu::any2bool(xPropertySet->getPropertyValue(gsSHOWERR));
-        bool bShowImputMessage = ::cppu::any2bool(xPropertySet->getPropertyValue(gsSHOWINP));
-        sheet::ValidationType aValidationType;
-        xPropertySet->getPropertyValue(gsTYPE) >>= aValidationType;
-        if (bShowErrorMessage || bShowImputMessage || aValidationType != sheet::ValidationType_ANY ||
-            !sErrorMessage.isEmpty() || !sErrorTitle.isEmpty() || !sImputMessage.isEmpty() || !sImputTitle.isEmpty())
-        {
-            ScMyValidation aValidation;
-            aValidation.sErrorMessage = sErrorMessage;
-            aValidation.sErrorTitle = sErrorTitle;
-            aValidation.sImputMessage = sImputMessage;
-            aValidation.sImputTitle = sImputTitle;
-            aValidation.bShowErrorMessage = bShowErrorMessage;
-            aValidation.bShowImputMessage = bShowImputMessage;
-            aValidation.aValidationType = aValidationType;
-            aValidation.bIgnoreBlanks = ::cppu::any2bool(xPropertySet->getPropertyValue(gsIGNOREBL));
-            xPropertySet->getPropertyValue(gsSHOWLIST) >>= aValidation.nShowList;
-            xPropertySet->getPropertyValue(gsERRALSTY) >>= aValidation.aAlertStyle;
-            uno::Reference<sheet::XSheetCondition> xCondition(xPropertySet, uno::UNO_QUERY);
-            if (xCondition.is())
-            {
-                aValidation.sFormula1 = xCondition->getFormula1();
-                aValidation.sFormula2 = xCondition->getFormula2();
-                aValidation.aOperator = xCondition->getOperator();
-                table::CellAddress aCellAddress= xCondition->getSourcePosition();
-                aValidation.aBaseCell = ScAddress( static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), aCellAddress.Sheet );
-            }
-            //ScMyValidationRange aValidationRange;
-            bool bEqualFound(false);
-            sal_Int32 i(0);
-            sal_Int32 nCount(aValidationVec.size());
-            while (i < nCount && !bEqualFound)
-            {
-                bEqualFound = aValidationVec[i].IsEqual(aValidation);
-                if (!bEqualFound)
-                    ++i;
-            }
-            if (bEqualFound)
-                nValidationIndex = i;
-            else
-            {
-                sal_Int32 nNameIndex(nCount + 1);
-                OUString sCount(OUString::number(nNameIndex));
-                aValidation.sName += "val";
-                aValidation.sName += sCount;
-                aValidationVec.push_back(aValidation);
-                nValidationIndex = nCount;
-            }
-        }
+        aValidation.sFormula1 = xCondition->getFormula1();
+        aValidation.sFormula2 = xCondition->getFormula2();
+        aValidation.aOperator = xCondition->getOperator();
+        table::CellAddress aCellAddress= xCondition->getSourcePosition();
+        aValidation.aBaseCell = ScAddress( static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), aCellAddress.Sheet );
+    }
+    //ScMyValidationRange aValidationRange;
+    bool bEqualFound(false);
+    sal_Int32 i(0);
+    sal_Int32 nCount(aValidationVec.size());
+    while (i < nCount && !bEqualFound)
+    {
+        bEqualFound = aValidationVec[i].IsEqual(aValidation);
+        if (!bEqualFound)
+            ++i;
+    }
+    if (bEqualFound)
+        nValidationIndex = i;
+    else
+    {
+        sal_Int32 nNameIndex(nCount + 1);
+        OUString sCount(OUString::number(nNameIndex));
+        aValidation.sName += "val";
+        aValidation.sName += sCount;
+        aValidationVec.push_back(aValidation);
+        nValidationIndex = nCount;
     }
 }
 
@@ -297,125 +297,125 @@ void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
         pMessage.reset(new SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, XML_HELP_MESSAGE, true, true));
     else
         pMessage.reset(new SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, XML_ERROR_MESSAGE, true, true));
-    if (!sOUMessage.isEmpty())
+    if (sOUMessage.isEmpty())
+        return;
+
+    sal_Int32 i(0);
+    OUStringBuffer sTemp;
+    OUString sText(convertLineEnd(sOUMessage, LINEEND_LF));
+    bool bPrevCharWasSpace(true);
+    while(i < sText.getLength())
     {
-        sal_Int32 i(0);
-        OUStringBuffer sTemp;
-        OUString sText(convertLineEnd(sOUMessage, LINEEND_LF));
-        bool bPrevCharWasSpace(true);
-        while(i < sText.getLength())
-        {
-            if( sText[i] == '\n')
-            {
-                SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, true, false);
-                rExport.GetTextParagraphExport()->exportCharacterData(sTemp.makeStringAndClear(), bPrevCharWasSpace);
-                bPrevCharWasSpace = true; // reset for start of next paragraph
-            }
-            else
-                sTemp.append(sText[i]);
-            ++i;
-        }
-        if (!sTemp.isEmpty())
+        if( sText[i] == '\n')
         {
             SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, true, false);
             rExport.GetTextParagraphExport()->exportCharacterData(sTemp.makeStringAndClear(), bPrevCharWasSpace);
+            bPrevCharWasSpace = true; // reset for start of next paragraph
         }
+        else
+            sTemp.append(sText[i]);
+        ++i;
+    }
+    if (!sTemp.isEmpty())
+    {
+        SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, true, false);
+        rExport.GetTextParagraphExport()->exportCharacterData(sTemp.makeStringAndClear(), bPrevCharWasSpace);
     }
 }
 
 void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
 {
-    if (!aValidationVec.empty())
+    if (aValidationVec.empty())
+        return;
+
+    SvXMLElementExport aElemVs(rExport, XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATIONS, true, true);
+    for (const auto& rValidation : aValidationVec)
     {
-        SvXMLElementExport aElemVs(rExport, XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATIONS, true, true);
-        for (const auto& rValidation : aValidationVec)
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, rValidation.sName);
+        OUString sCondition(GetCondition(rExport, rValidation));
+        if (!sCondition.isEmpty())
         {
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, rValidation.sName);
-            OUString sCondition(GetCondition(rExport, rValidation));
-            if (!sCondition.isEmpty())
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONDITION, sCondition);
+            if (rValidation.bIgnoreBlanks)
+                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ALLOW_EMPTY_CELL, XML_TRUE);
+            else
+                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ALLOW_EMPTY_CELL, XML_FALSE);
+            if (rValidation.aValidationType == sheet::ValidationType_LIST)
             {
-                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONDITION, sCondition);
-                if (rValidation.bIgnoreBlanks)
-                    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ALLOW_EMPTY_CELL, XML_TRUE);
-                else
-                    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ALLOW_EMPTY_CELL, XML_FALSE);
-                if (rValidation.aValidationType == sheet::ValidationType_LIST)
+                switch (rValidation.nShowList)
                 {
-                    switch (rValidation.nShowList)
-                    {
-                    case sheet::TableValidationVisibility::INVISIBLE:
-                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_LIST, XML_NO);
-                    break;
-                    case sheet::TableValidationVisibility::UNSORTED:
-                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_LIST, XML_UNSORTED);
-                    break;
-                    case sheet::TableValidationVisibility::SORTEDASCENDING:
-                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_LIST, XML_SORT_ASCENDING);
-                    break;
-                    default:
-                        OSL_FAIL("unknown ListType");
-                    }
+                case sheet::TableValidationVisibility::INVISIBLE:
+                    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_LIST, XML_NO);
+                break;
+                case sheet::TableValidationVisibility::UNSORTED:
+                    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_LIST, XML_UNSORTED);
+                break;
+                case sheet::TableValidationVisibility::SORTEDASCENDING:
+                    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_LIST, XML_SORT_ASCENDING);
+                break;
+                default:
+                    OSL_FAIL("unknown ListType");
                 }
             }
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS, GetBaseCellAddress(rExport.GetDocument(), rValidation.aBaseCell));
-            SvXMLElementExport aElemV(rExport, XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATION, true, true);
-            if (rValidation.bShowImputMessage || !rValidation.sImputMessage.isEmpty() || !rValidation.sImputTitle.isEmpty())
+        }
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS, GetBaseCellAddress(rExport.GetDocument(), rValidation.aBaseCell));
+        SvXMLElementExport aElemV(rExport, XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATION, true, true);
+        if (rValidation.bShowImputMessage || !rValidation.sImputMessage.isEmpty() || !rValidation.sImputTitle.isEmpty())
+        {
+            WriteMessage(rExport, rValidation.sImputTitle, rValidation.sImputMessage, rValidation.bShowImputMessage, true);
+        }
+        if (rValidation.bShowErrorMessage || !rValidation.sErrorMessage.isEmpty() || !rValidation.sErrorTitle.isEmpty())
+        {
+            switch (rValidation.aAlertStyle)
             {
-                WriteMessage(rExport, rValidation.sImputTitle, rValidation.sImputMessage, rValidation.bShowImputMessage, true);
-            }
-            if (rValidation.bShowErrorMessage || !rValidation.sErrorMessage.isEmpty() || !rValidation.sErrorTitle.isEmpty())
-            {
-                switch (rValidation.aAlertStyle)
+                case sheet::ValidationAlertStyle_INFO :
                 {
-                    case sheet::ValidationAlertStyle_INFO :
+                    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MESSAGE_TYPE, XML_INFORMATION);
+                    WriteMessage(rExport, rValidation.sErrorTitle, rValidation.sErrorMessage, rValidation.bShowErrorMessage, false);
+                }
+                break;
+                case sheet::ValidationAlertStyle_WARNING :
+                {
+                    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MESSAGE_TYPE, XML_WARNING);
+                    WriteMessage(rExport, rValidation.sErrorTitle, rValidation.sErrorMessage, rValidation.bShowErrorMessage, false);
+                }
+                break;
+                case sheet::ValidationAlertStyle_STOP :
+                {
+                    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MESSAGE_TYPE, XML_STOP);
+                    WriteMessage(rExport, rValidation.sErrorTitle, rValidation.sErrorMessage, rValidation.bShowErrorMessage, false);
+                }
+                break;
+                case sheet::ValidationAlertStyle_MACRO :
+                {
                     {
-                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MESSAGE_TYPE, XML_INFORMATION);
-                        WriteMessage(rExport, rValidation.sErrorTitle, rValidation.sErrorMessage, rValidation.bShowErrorMessage, false);
+                        //rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, aItr->sErrorTitle);
+                        if (rValidation.bShowErrorMessage)
+                            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_EXECUTE, XML_TRUE);
+                        else
+                            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_EXECUTE, XML_FALSE);
+                        SvXMLElementExport aEMElem(rExport, XML_NAMESPACE_TABLE, XML_ERROR_MACRO, true, true);
                     }
-                    break;
-                    case sheet::ValidationAlertStyle_WARNING :
                     {
-                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MESSAGE_TYPE, XML_WARNING);
-                        WriteMessage(rExport, rValidation.sErrorTitle, rValidation.sErrorMessage, rValidation.bShowErrorMessage, false);
-                    }
-                    break;
-                    case sheet::ValidationAlertStyle_STOP :
-                    {
-                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MESSAGE_TYPE, XML_STOP);
-                        WriteMessage(rExport, rValidation.sErrorTitle, rValidation.sErrorMessage, rValidation.bShowErrorMessage, false);
-                    }
-                    break;
-                    case sheet::ValidationAlertStyle_MACRO :
-                    {
-                        {
-                            //rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, aItr->sErrorTitle);
-                            if (rValidation.bShowErrorMessage)
-                                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_EXECUTE, XML_TRUE);
-                            else
-                                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_EXECUTE, XML_FALSE);
-                            SvXMLElementExport aEMElem(rExport, XML_NAMESPACE_TABLE, XML_ERROR_MACRO, true, true);
-                        }
-                        {
-                            // #i47525# for a script URL the type and the property name for the URL
-                            // are both "Script", for a simple macro name the type is "StarBasic"
-                            // and the property name is "MacroName".
-                            bool bScriptURL = SfxApplication::IsXScriptURL( rValidation.sErrorTitle );
+                        // #i47525# for a script URL the type and the property name for the URL
+                        // are both "Script", for a simple macro name the type is "StarBasic"
+                        // and the property name is "MacroName".
+                        bool bScriptURL = SfxApplication::IsXScriptURL( rValidation.sErrorTitle );
 
-                            const OUString sScript("Script");
-                            uno::Sequence<beans::PropertyValue> aSeq( comphelper::InitPropertySequence({
-                                    { "EventType", uno::Any(bScriptURL ? sScript : OUString("StarBasic")) },
-                                    { "Library", uno::Any(OUString()) },
-                                    { bScriptURL ? sScript : OUString("MacroName"), uno::Any(rValidation.sErrorTitle) }
-                                }));
-                            // 2) export the sequence
-                            rExport.GetEventExport().ExportSingleEvent( aSeq, "OnError");
-                        }
+                        const OUString sScript("Script");
+                        uno::Sequence<beans::PropertyValue> aSeq( comphelper::InitPropertySequence({
+                                { "EventType", uno::Any(bScriptURL ? sScript : OUString("StarBasic")) },
+                                { "Library", uno::Any(OUString()) },
+                                { bScriptURL ? sScript : OUString("MacroName"), uno::Any(rValidation.sErrorTitle) }
+                            }));
+                        // 2) export the sequence
+                        rExport.GetEventExport().ExportSingleEvent( aSeq, "OnError");
                     }
-                    break;
-                    default:
-                    {
-                        // added to avoid warnings
-                    }
+                }
+                break;
+                default:
+                {
+                    // added to avoid warnings
                 }
             }
         }

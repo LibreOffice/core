@@ -837,82 +837,82 @@ void ScXMLImport::ExamineDefaultStyle()
 
 void ScXMLImport::SetChangeTrackingViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& rChangeProps)
 {
-    if (pDoc)
+    if (!pDoc)
+        return;
+
+    if (!rChangeProps.hasElements())
+        return;
+
+    ScXMLImport::MutexGuard aGuard(*this);
+    sal_Int16 nTemp16(0);
+    std::unique_ptr<ScChangeViewSettings> pViewSettings(new ScChangeViewSettings());
+    for (const auto& rChangeProp : rChangeProps)
     {
-        if (rChangeProps.hasElements())
+        OUString sName(rChangeProp.Name);
+        if (sName == "ShowChanges")
+            pViewSettings->SetShowChanges(::cppu::any2bool(rChangeProp.Value));
+        else if (sName == "ShowAcceptedChanges")
+            pViewSettings->SetShowAccepted(::cppu::any2bool(rChangeProp.Value));
+        else if (sName == "ShowRejectedChanges")
+            pViewSettings->SetShowRejected(::cppu::any2bool(rChangeProp.Value));
+        else if (sName == "ShowChangesByDatetime")
+            pViewSettings->SetHasDate(::cppu::any2bool(rChangeProp.Value));
+        else if (sName == "ShowChangesByDatetimeMode")
         {
-            ScXMLImport::MutexGuard aGuard(*this);
-            sal_Int16 nTemp16(0);
-            std::unique_ptr<ScChangeViewSettings> pViewSettings(new ScChangeViewSettings());
-            for (const auto& rChangeProp : rChangeProps)
+            if (rChangeProp.Value >>= nTemp16)
+                pViewSettings->SetTheDateMode(static_cast<SvxRedlinDateMode>(nTemp16));
+        }
+        else if (sName == "ShowChangesByDatetimeFirstDatetime")
+        {
+            util::DateTime aDateTime;
+            if (rChangeProp.Value >>= aDateTime)
             {
-                OUString sName(rChangeProp.Name);
-                if (sName == "ShowChanges")
-                    pViewSettings->SetShowChanges(::cppu::any2bool(rChangeProp.Value));
-                else if (sName == "ShowAcceptedChanges")
-                    pViewSettings->SetShowAccepted(::cppu::any2bool(rChangeProp.Value));
-                else if (sName == "ShowRejectedChanges")
-                    pViewSettings->SetShowRejected(::cppu::any2bool(rChangeProp.Value));
-                else if (sName == "ShowChangesByDatetime")
-                    pViewSettings->SetHasDate(::cppu::any2bool(rChangeProp.Value));
-                else if (sName == "ShowChangesByDatetimeMode")
-                {
-                    if (rChangeProp.Value >>= nTemp16)
-                        pViewSettings->SetTheDateMode(static_cast<SvxRedlinDateMode>(nTemp16));
-                }
-                else if (sName == "ShowChangesByDatetimeFirstDatetime")
-                {
-                    util::DateTime aDateTime;
-                    if (rChangeProp.Value >>= aDateTime)
-                    {
-                        pViewSettings->SetTheFirstDateTime(::DateTime(aDateTime));
-                    }
-                }
-                else if (sName == "ShowChangesByDatetimeSecondDatetime")
-                {
-                    util::DateTime aDateTime;
-                    if (rChangeProp.Value >>= aDateTime)
-                    {
-                        pViewSettings->SetTheLastDateTime(::DateTime(aDateTime));
-                    }
-                }
-                else if (sName == "ShowChangesByAuthor")
-                    pViewSettings->SetHasAuthor(::cppu::any2bool(rChangeProp.Value));
-                else if (sName == "ShowChangesByAuthorName")
-                {
-                    OUString sOUName;
-                    if (rChangeProp.Value >>= sOUName)
-                    {
-                        pViewSettings->SetTheAuthorToShow(sOUName);
-                    }
-                }
-                else if (sName == "ShowChangesByComment")
-                    pViewSettings->SetHasComment(::cppu::any2bool(rChangeProp.Value));
-                else if (sName == "ShowChangesByCommentText")
-                {
-                    OUString sOUComment;
-                    if (rChangeProp.Value >>= sOUComment)
-                    {
-                        pViewSettings->SetTheComment(sOUComment);
-                    }
-                }
-                else if (sName == "ShowChangesByRanges")
-                    pViewSettings->SetHasRange(::cppu::any2bool(rChangeProp.Value));
-                else if (sName == "ShowChangesByRangesList")
-                {
-                    OUString sRanges;
-                    if ((rChangeProp.Value >>= sRanges) && !sRanges.isEmpty())
-                    {
-                        ScRangeList aRangeList;
-                        ScRangeStringConverter::GetRangeListFromString(
-                            aRangeList, sRanges, GetDocument(), FormulaGrammar::CONV_OOO);
-                        pViewSettings->SetTheRangeList(aRangeList);
-                    }
-                }
+                pViewSettings->SetTheFirstDateTime(::DateTime(aDateTime));
             }
-            pDoc->SetChangeViewSettings(*pViewSettings);
+        }
+        else if (sName == "ShowChangesByDatetimeSecondDatetime")
+        {
+            util::DateTime aDateTime;
+            if (rChangeProp.Value >>= aDateTime)
+            {
+                pViewSettings->SetTheLastDateTime(::DateTime(aDateTime));
+            }
+        }
+        else if (sName == "ShowChangesByAuthor")
+            pViewSettings->SetHasAuthor(::cppu::any2bool(rChangeProp.Value));
+        else if (sName == "ShowChangesByAuthorName")
+        {
+            OUString sOUName;
+            if (rChangeProp.Value >>= sOUName)
+            {
+                pViewSettings->SetTheAuthorToShow(sOUName);
+            }
+        }
+        else if (sName == "ShowChangesByComment")
+            pViewSettings->SetHasComment(::cppu::any2bool(rChangeProp.Value));
+        else if (sName == "ShowChangesByCommentText")
+        {
+            OUString sOUComment;
+            if (rChangeProp.Value >>= sOUComment)
+            {
+                pViewSettings->SetTheComment(sOUComment);
+            }
+        }
+        else if (sName == "ShowChangesByRanges")
+            pViewSettings->SetHasRange(::cppu::any2bool(rChangeProp.Value));
+        else if (sName == "ShowChangesByRangesList")
+        {
+            OUString sRanges;
+            if ((rChangeProp.Value >>= sRanges) && !sRanges.isEmpty())
+            {
+                ScRangeList aRangeList;
+                ScRangeStringConverter::GetRangeListFromString(
+                    aRangeList, sRanges, GetDocument(), FormulaGrammar::CONV_OOO);
+                pViewSettings->SetTheRangeList(aRangeList);
+            }
         }
     }
+    pDoc->SetChangeViewSettings(*pViewSettings);
 }
 
 void ScXMLImport::SetViewSettings(const uno::Sequence<beans::PropertyValue>& aViewProps)
@@ -939,81 +939,81 @@ void ScXMLImport::SetViewSettings(const uno::Sequence<beans::PropertyValue>& aVi
                 SetChangeTrackingViewSettings(aChangeProps);
         }
     }
-    if (nHeight && nWidth && GetModel().is())
+    if (!(nHeight && nWidth && GetModel().is()))
+        return;
+
+    ScModelObj* pDocObj(comphelper::getUnoTunnelImplementation<ScModelObj>( GetModel() ));
+    if (!pDocObj)
+        return;
+
+    SfxObjectShell* pEmbeddedObj = pDocObj->GetEmbeddedObject();
+    if (pEmbeddedObj)
     {
-        ScModelObj* pDocObj(comphelper::getUnoTunnelImplementation<ScModelObj>( GetModel() ));
-        if (pDocObj)
-        {
-            SfxObjectShell* pEmbeddedObj = pDocObj->GetEmbeddedObject();
-            if (pEmbeddedObj)
-            {
-                tools::Rectangle aRect;
-                aRect.setX( nLeft );
-                aRect.setY( nTop );
-                aRect.setWidth( nWidth );
-                aRect.setHeight( nHeight );
-                pEmbeddedObj->SetVisArea(aRect);
-            }
-        }
+        tools::Rectangle aRect;
+        aRect.setX( nLeft );
+        aRect.setY( nTop );
+        aRect.setWidth( nWidth );
+        aRect.setHeight( nHeight );
+        pEmbeddedObj->SetVisArea(aRect);
     }
 }
 
 void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyValue>& aConfigProps)
 {
-    if (GetModel().is())
+    if (!GetModel().is())
+        return;
+
+    uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
+    if (!xMultiServiceFactory.is())
+        return;
+
+    sal_Int32 nCount(aConfigProps.getLength());
+    css::uno::Sequence<css::beans::PropertyValue> aFilteredProps(nCount);
+    sal_Int32 nFilteredPropsLen = 0;
+    for (sal_Int32 i = nCount - 1; i >= 0; --i)
     {
-        uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
-        if (xMultiServiceFactory.is())
+        if (aConfigProps[i].Name == "TrackedChangesProtectionKey")
         {
-            sal_Int32 nCount(aConfigProps.getLength());
-            css::uno::Sequence<css::beans::PropertyValue> aFilteredProps(nCount);
-            sal_Int32 nFilteredPropsLen = 0;
-            for (sal_Int32 i = nCount - 1; i >= 0; --i)
+            OUString sKey;
+            if (aConfigProps[i].Value >>= sKey)
             {
-                if (aConfigProps[i].Name == "TrackedChangesProtectionKey")
+                uno::Sequence<sal_Int8> aPass;
+                ::comphelper::Base64::decode(aPass, sKey);
+                if (aPass.hasElements())
                 {
-                    OUString sKey;
-                    if (aConfigProps[i].Value >>= sKey)
+                    if (pDoc->GetChangeTrack())
+                        pDoc->GetChangeTrack()->SetProtection(aPass);
+                    else
                     {
-                        uno::Sequence<sal_Int8> aPass;
-                        ::comphelper::Base64::decode(aPass, sKey);
-                        if (aPass.hasElements())
-                        {
-                            if (pDoc->GetChangeTrack())
-                                pDoc->GetChangeTrack()->SetProtection(aPass);
-                            else
-                            {
-                                std::set<OUString> aUsers;
-                                std::unique_ptr<ScChangeTrack> pTrack( new ScChangeTrack(pDoc, aUsers) );
-                                pTrack->SetProtection(aPass);
-                                pDoc->SetChangeTrack(std::move(pTrack));
-                            }
-                        }
+                        std::set<OUString> aUsers;
+                        std::unique_ptr<ScChangeTrack> pTrack( new ScChangeTrack(pDoc, aUsers) );
+                        pTrack->SetProtection(aPass);
+                        pDoc->SetChangeTrack(std::move(pTrack));
                     }
-                }
-                // store the following items for later use (after document is loaded)
-                else if ((aConfigProps[i].Name == "VBACompatibilityMode") || (aConfigProps[i].Name == "ScriptConfiguration"))
-                {
-                    uno::Reference< beans::XPropertySet > xImportInfo = getImportInfo();
-                    if (xImportInfo.is())
-                    {
-                        uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = xImportInfo->getPropertySetInfo();
-                        if (xPropertySetInfo.is() && xPropertySetInfo->hasPropertyByName(aConfigProps[i].Name))
-                            xImportInfo->setPropertyValue( aConfigProps[i].Name, aConfigProps[i].Value );
-                    }
-                }
-                if (aConfigProps[i].Name != "LinkUpdateMode")
-                {
-                    aFilteredProps[nFilteredPropsLen++] = aConfigProps[i];
                 }
             }
-            aFilteredProps.realloc(nFilteredPropsLen);
-            uno::Reference <uno::XInterface> xInterface = xMultiServiceFactory->createInstance("com.sun.star.comp.SpreadsheetSettings");
-            uno::Reference <beans::XPropertySet> xProperties(xInterface, uno::UNO_QUERY);
-            if (xProperties.is())
-                SvXMLUnitConverter::convertPropertySet(xProperties, aFilteredProps);
+        }
+        // store the following items for later use (after document is loaded)
+        else if ((aConfigProps[i].Name == "VBACompatibilityMode") || (aConfigProps[i].Name == "ScriptConfiguration"))
+        {
+            uno::Reference< beans::XPropertySet > xImportInfo = getImportInfo();
+            if (xImportInfo.is())
+            {
+                uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = xImportInfo->getPropertySetInfo();
+                if (xPropertySetInfo.is() && xPropertySetInfo->hasPropertyByName(aConfigProps[i].Name))
+                    xImportInfo->setPropertyValue( aConfigProps[i].Name, aConfigProps[i].Value );
+            }
+        }
+        if (aConfigProps[i].Name != "LinkUpdateMode")
+        {
+            aFilteredProps[nFilteredPropsLen++] = aConfigProps[i];
         }
     }
+    aFilteredProps.realloc(nFilteredPropsLen);
+    uno::Reference <uno::XInterface> xInterface = xMultiServiceFactory->createInstance("com.sun.star.comp.SpreadsheetSettings");
+    uno::Reference <beans::XPropertySet> xProperties(xInterface, uno::UNO_QUERY);
+    if (xProperties.is())
+        SvXMLUnitConverter::convertPropertySet(xProperties, aFilteredProps);
 }
 
 sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, const OUString& rCurrency)
@@ -1127,73 +1127,73 @@ void ScXMLImport::SetType(const uno::Reference <beans::XPropertySet>& rPropertie
     if (!mbImportStyles)
         return;
 
-    if ((nCellType != util::NumberFormat::TEXT) && (nCellType != util::NumberFormat::UNDEFINED))
+    if ((nCellType == util::NumberFormat::TEXT) || (nCellType == util::NumberFormat::UNDEFINED))
+        return;
+
+    if (rNumberFormat == -1)
+        rProperties->getPropertyValue( gsNumberFormat ) >>= rNumberFormat;
+    OSL_ENSURE(rNumberFormat != -1, "no NumberFormat");
+    bool bIsStandard;
+    // sCurrentCurrency may be the ISO code abbreviation if the currency
+    // symbol matches such, or if no match found the symbol itself!
+    OUString sCurrentCurrency;
+    sal_Int32 nCurrentCellType(
+        GetNumberFormatAttributesExportHelper()->GetCellType(
+            rNumberFormat, sCurrentCurrency, bIsStandard) & ~util::NumberFormat::DEFINED);
+    // If the (numeric) cell type (number, currency, date, time, boolean)
+    // is different from the format type then for some combinations we may
+    // have to apply a format, e.g. in case the generator deduced format
+    // from type and did not apply a format but we don't keep a dedicated
+    // type internally. Specifically this is necessary if the cell type is
+    // not number but the format type is (i.e. General). Currency cells
+    // need extra attention, see calls of ScXMLImport::IsCurrencySymbol()
+    // and description within there and ScXMLImport::SetCurrencySymbol().
+    if ((nCellType != nCurrentCellType) &&
+            (nCellType != util::NumberFormat::NUMBER) &&
+            (bIsStandard || (nCellType == util::NumberFormat::CURRENCY)))
     {
-        if (rNumberFormat == -1)
-            rProperties->getPropertyValue( gsNumberFormat ) >>= rNumberFormat;
-        OSL_ENSURE(rNumberFormat != -1, "no NumberFormat");
-        bool bIsStandard;
-        // sCurrentCurrency may be the ISO code abbreviation if the currency
-        // symbol matches such, or if no match found the symbol itself!
-        OUString sCurrentCurrency;
-        sal_Int32 nCurrentCellType(
-            GetNumberFormatAttributesExportHelper()->GetCellType(
-                rNumberFormat, sCurrentCurrency, bIsStandard) & ~util::NumberFormat::DEFINED);
-        // If the (numeric) cell type (number, currency, date, time, boolean)
-        // is different from the format type then for some combinations we may
-        // have to apply a format, e.g. in case the generator deduced format
-        // from type and did not apply a format but we don't keep a dedicated
-        // type internally. Specifically this is necessary if the cell type is
-        // not number but the format type is (i.e. General). Currency cells
-        // need extra attention, see calls of ScXMLImport::IsCurrencySymbol()
-        // and description within there and ScXMLImport::SetCurrencySymbol().
-        if ((nCellType != nCurrentCellType) &&
-                (nCellType != util::NumberFormat::NUMBER) &&
-                (bIsStandard || (nCellType == util::NumberFormat::CURRENCY)))
+        if (!xNumberFormats.is())
         {
-            if (!xNumberFormats.is())
+            uno::Reference <util::XNumberFormatsSupplier> xNumberFormatsSupplier(GetNumberFormatsSupplier());
+            if (xNumberFormatsSupplier.is())
+                xNumberFormats.set(xNumberFormatsSupplier->getNumberFormats());
+        }
+        if (xNumberFormats.is())
+        {
+            try
             {
-                uno::Reference <util::XNumberFormatsSupplier> xNumberFormatsSupplier(GetNumberFormatsSupplier());
-                if (xNumberFormatsSupplier.is())
-                    xNumberFormats.set(xNumberFormatsSupplier->getNumberFormats());
-            }
-            if (xNumberFormats.is())
-            {
-                try
+                uno::Reference < beans::XPropertySet> xNumberFormatProperties(xNumberFormats->getByKey(rNumberFormat));
+                if (xNumberFormatProperties.is())
                 {
-                    uno::Reference < beans::XPropertySet> xNumberFormatProperties(xNumberFormats->getByKey(rNumberFormat));
-                    if (xNumberFormatProperties.is())
+                    if (nCellType != util::NumberFormat::CURRENCY)
                     {
-                        if (nCellType != util::NumberFormat::CURRENCY)
+                        lang::Locale aLocale;
+                        if ( xNumberFormatProperties->getPropertyValue(gsLocale) >>= aLocale )
                         {
-                            lang::Locale aLocale;
-                            if ( xNumberFormatProperties->getPropertyValue(gsLocale) >>= aLocale )
-                            {
-                                if (!xNumberFormatTypes.is())
-                                    xNumberFormatTypes.set(uno::Reference <util::XNumberFormatTypes>(xNumberFormats, uno::UNO_QUERY));
-                                rProperties->setPropertyValue( gsNumberFormat, uno::makeAny(xNumberFormatTypes->getStandardFormat(nCellType, aLocale)) );
-                            }
-                        }
-                        else if (!rCurrency.isEmpty() && !sCurrentCurrency.isEmpty())
-                        {
-                            if (sCurrentCurrency != rCurrency)
-                                if (!IsCurrencySymbol(rNumberFormat, sCurrentCurrency, rCurrency))
-                                    rProperties->setPropertyValue( gsNumberFormat, uno::makeAny(SetCurrencySymbol(rNumberFormat, rCurrency)));
+                            if (!xNumberFormatTypes.is())
+                                xNumberFormatTypes.set(uno::Reference <util::XNumberFormatTypes>(xNumberFormats, uno::UNO_QUERY));
+                            rProperties->setPropertyValue( gsNumberFormat, uno::makeAny(xNumberFormatTypes->getStandardFormat(nCellType, aLocale)) );
                         }
                     }
-                }
-                catch ( uno::Exception& )
-                {
-                    OSL_FAIL("Numberformat not found");
+                    else if (!rCurrency.isEmpty() && !sCurrentCurrency.isEmpty())
+                    {
+                        if (sCurrentCurrency != rCurrency)
+                            if (!IsCurrencySymbol(rNumberFormat, sCurrentCurrency, rCurrency))
+                                rProperties->setPropertyValue( gsNumberFormat, uno::makeAny(SetCurrencySymbol(rNumberFormat, rCurrency)));
+                    }
                 }
             }
+            catch ( uno::Exception& )
+            {
+                OSL_FAIL("Numberformat not found");
+            }
         }
-        else
-        {
-            if ((nCellType == util::NumberFormat::CURRENCY) && !rCurrency.isEmpty() && !sCurrentCurrency.isEmpty() &&
-                sCurrentCurrency != rCurrency && !IsCurrencySymbol(rNumberFormat, sCurrentCurrency, rCurrency))
-                rProperties->setPropertyValue( gsNumberFormat, uno::makeAny(SetCurrencySymbol(rNumberFormat, rCurrency)));
-        }
+    }
+    else
+    {
+        if ((nCellType == util::NumberFormat::CURRENCY) && !rCurrency.isEmpty() && !sCurrentCurrency.isEmpty() &&
+            sCurrentCurrency != rCurrency && !IsCurrencySymbol(rNumberFormat, sCurrentCurrency, rCurrency))
+            rProperties->setPropertyValue( gsNumberFormat, uno::makeAny(SetCurrencySymbol(rNumberFormat, rCurrency)));
     }
 }
 
@@ -1433,42 +1433,42 @@ sal_Int32 ScXMLImport::GetRangeType(const OUString& sRangeType)
 
 void ScXMLImport::SetLabelRanges()
 {
-    if (pMyLabelRanges)
+    if (!pMyLabelRanges)
+        return;
+
+    uno::Reference <beans::XPropertySet> xPropertySet (GetModel(), uno::UNO_QUERY);
+    if (!xPropertySet.is())
+        return;
+
+    uno::Any aColAny = xPropertySet->getPropertyValue(SC_UNO_COLLABELRNG);
+    uno::Any aRowAny = xPropertySet->getPropertyValue(SC_UNO_ROWLABELRNG);
+
+    uno::Reference< sheet::XLabelRanges > xColRanges;
+    uno::Reference< sheet::XLabelRanges > xRowRanges;
+
+    if ( !(( aColAny >>= xColRanges ) && ( aRowAny >>= xRowRanges )) )
+        return;
+
+    table::CellRangeAddress aLabelRange;
+    table::CellRangeAddress aDataRange;
+
+    for (const auto& rxLabelRange : *pMyLabelRanges)
     {
-        uno::Reference <beans::XPropertySet> xPropertySet (GetModel(), uno::UNO_QUERY);
-        if (xPropertySet.is())
+        sal_Int32 nOffset1(0);
+        sal_Int32 nOffset2(0);
+        FormulaGrammar::AddressConvention eConv = FormulaGrammar::CONV_OOO;
+
+        if (ScRangeStringConverter::GetRangeFromString( aLabelRange, rxLabelRange->sLabelRangeStr, GetDocument(), eConv, nOffset1 ) &&
+            ScRangeStringConverter::GetRangeFromString( aDataRange, rxLabelRange->sDataRangeStr, GetDocument(), eConv, nOffset2 ))
         {
-            uno::Any aColAny = xPropertySet->getPropertyValue(SC_UNO_COLLABELRNG);
-            uno::Any aRowAny = xPropertySet->getPropertyValue(SC_UNO_ROWLABELRNG);
-
-            uno::Reference< sheet::XLabelRanges > xColRanges;
-            uno::Reference< sheet::XLabelRanges > xRowRanges;
-
-            if ( ( aColAny >>= xColRanges ) && ( aRowAny >>= xRowRanges ) )
-            {
-                table::CellRangeAddress aLabelRange;
-                table::CellRangeAddress aDataRange;
-
-                for (const auto& rxLabelRange : *pMyLabelRanges)
-                {
-                    sal_Int32 nOffset1(0);
-                    sal_Int32 nOffset2(0);
-                    FormulaGrammar::AddressConvention eConv = FormulaGrammar::CONV_OOO;
-
-                    if (ScRangeStringConverter::GetRangeFromString( aLabelRange, rxLabelRange->sLabelRangeStr, GetDocument(), eConv, nOffset1 ) &&
-                        ScRangeStringConverter::GetRangeFromString( aDataRange, rxLabelRange->sDataRangeStr, GetDocument(), eConv, nOffset2 ))
-                    {
-                        if ( rxLabelRange->bColumnOrientation )
-                            xColRanges->addNew( aLabelRange, aDataRange );
-                        else
-                            xRowRanges->addNew( aLabelRange, aDataRange );
-                    }
-                }
-
-                pMyLabelRanges->clear();
-            }
+            if ( rxLabelRange->bColumnOrientation )
+                xColRanges->addNew( aLabelRange, aDataRange );
+            else
+                xRowRanges->addNew( aLabelRange, aDataRange );
         }
     }
+
+    pMyLabelRanges->clear();
 }
 
 namespace {
@@ -1495,24 +1495,24 @@ public:
         if ( nUnoType & sheet::NamedRangeFlag::COLUMN_HEADER )      nNewType |= ScRangeData::Type::ColHeader;
         if ( nUnoType & sheet::NamedRangeFlag::ROW_HEADER )         nNewType |= ScRangeData::Type::RowHeader;
 
-        if (mpDoc)
+        if (!mpDoc)
+            return;
+
+        // Insert a new name.
+        ScAddress aPos;
+        sal_Int32 nOffset = 0;
+        bool bSuccess = ScRangeStringConverter::GetAddressFromString(
+            aPos, p->sBaseCellAddress, mpDoc, FormulaGrammar::CONV_OOO, nOffset);
+
+        if (bSuccess)
         {
-            // Insert a new name.
-            ScAddress aPos;
-            sal_Int32 nOffset = 0;
-            bool bSuccess = ScRangeStringConverter::GetAddressFromString(
-                aPos, p->sBaseCellAddress, mpDoc, FormulaGrammar::CONV_OOO, nOffset);
+            OUString aContent = p->sContent;
+            if (!p->bIsExpression)
+                ScXMLConverter::ConvertCellRangeAddress(aContent);
 
-            if (bSuccess)
-            {
-                OUString aContent = p->sContent;
-                if (!p->bIsExpression)
-                    ScXMLConverter::ConvertCellRangeAddress(aContent);
-
-                ScRangeData* pData = new ScRangeData(
-                    mpDoc, p->sName, aContent, aPos, nNewType, p->eGrammar);
-                mrRangeName.insert(pData);
-            }
+            ScRangeData* pData = new ScRangeData(
+                mpDoc, p->sName, aContent, aPos, nNewType, p->eGrammar);
+            mrRangeName.insert(pData);
         }
     }
 };

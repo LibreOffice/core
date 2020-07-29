@@ -143,77 +143,77 @@ void SAL_CALL ScXMLTableRowContext::endFastElement(sal_Int32 /*nElement*/)
     SCTAB nSheet = rXMLImport.GetTables().GetCurrentSheet();
     sal_Int32 nCurrentRow(rXMLImport.GetTables().GetCurrentRow());
     uno::Reference<sheet::XSpreadsheet> xSheet(rXMLImport.GetTables().GetCurrentXSheet());
-    if(xSheet.is())
+    if(!xSheet.is())
+        return;
+
+    sal_Int32 nFirstRow(nCurrentRow - nRepeatedRows + 1);
+    if (nFirstRow > pDoc->MaxRow())
+        nFirstRow = pDoc->MaxRow();
+    if (nCurrentRow > pDoc->MaxRow())
+        nCurrentRow = pDoc->MaxRow();
+    uno::Reference <table::XCellRange> xCellRange(xSheet->getCellRangeByPosition(0, nFirstRow, 0, nCurrentRow));
+    if (!xCellRange.is())
+        return;
+
+    uno::Reference<table::XColumnRowRange> xColumnRowRange (xCellRange, uno::UNO_QUERY);
+    if (!xColumnRowRange.is())
+        return;
+
+    uno::Reference <beans::XPropertySet> xRowProperties(xColumnRowRange->getRows(), uno::UNO_QUERY);
+    if (!xRowProperties.is())
+        return;
+
+    if (!sStyleName.isEmpty())
     {
-        sal_Int32 nFirstRow(nCurrentRow - nRepeatedRows + 1);
-        if (nFirstRow > pDoc->MaxRow())
-            nFirstRow = pDoc->MaxRow();
-        if (nCurrentRow > pDoc->MaxRow())
-            nCurrentRow = pDoc->MaxRow();
-        uno::Reference <table::XCellRange> xCellRange(xSheet->getCellRangeByPosition(0, nFirstRow, 0, nCurrentRow));
-        if (xCellRange.is())
+        XMLTableStylesContext *pStyles(static_cast<XMLTableStylesContext *>(rXMLImport.GetAutoStyles()));
+        if ( pStyles )
         {
-            uno::Reference<table::XColumnRowRange> xColumnRowRange (xCellRange, uno::UNO_QUERY);
-            if (xColumnRowRange.is())
+            XMLTableStyleContext* pStyle(const_cast<XMLTableStyleContext*>(static_cast<const XMLTableStyleContext *>(pStyles->FindStyleChildContext(
+                XmlStyleFamily::TABLE_ROW, sStyleName, true))));
+            if (pStyle)
             {
-                uno::Reference <beans::XPropertySet> xRowProperties(xColumnRowRange->getRows(), uno::UNO_QUERY);
-                if (xRowProperties.is())
+                pStyle->FillPropertySet(xRowProperties);
+
+                if ( nSheet != pStyle->GetLastSheet() )
                 {
-                    if (!sStyleName.isEmpty())
-                    {
-                        XMLTableStylesContext *pStyles(static_cast<XMLTableStylesContext *>(rXMLImport.GetAutoStyles()));
-                        if ( pStyles )
-                        {
-                            XMLTableStyleContext* pStyle(const_cast<XMLTableStyleContext*>(static_cast<const XMLTableStyleContext *>(pStyles->FindStyleChildContext(
-                                XmlStyleFamily::TABLE_ROW, sStyleName, true))));
-                            if (pStyle)
-                            {
-                                pStyle->FillPropertySet(xRowProperties);
-
-                                if ( nSheet != pStyle->GetLastSheet() )
-                                {
-                                    ScSheetSaveData* pSheetData = comphelper::getUnoTunnelImplementation<ScModelObj>(rXMLImport.GetModel())->GetSheetSaveData();
-                                    pSheetData->AddRowStyle( sStyleName, ScAddress( 0, static_cast<SCROW>(nFirstRow), nSheet ) );
-                                    pStyle->SetLastSheet(nSheet);
-                                }
-                            }
-                        }
-                    }
-                    bool bVisible (true);
-                    bool bFiltered (false);
-                    if (IsXMLToken(sVisibility, XML_COLLAPSE))
-                    {
-                        bVisible = false;
-                    }
-                    else if (IsXMLToken(sVisibility, XML_FILTER))
-                    {
-                        bVisible = false;
-                        bFiltered = true;
-                    }
-                    if (!bVisible)
-                    {
-                        rXMLImport.GetDoc().setRowsVisible(nSheet, nFirstRow, nCurrentRow, false);
-                    }
-                    if (bFiltered)
-                        xRowProperties->setPropertyValue(SC_ISFILTERED, uno::makeAny(bFiltered));
-
-                    uno::Any any = xRowProperties->getPropertyValue(SC_UNONAME_OHEIGHT);
-                    bool bOptionalHeight = false;
-                    any >>= bOptionalHeight;
-                    if (bOptionalHeight)
-                    {
-                        // Save this row for later height update
-                        std::vector<ScDocRowHeightUpdater::TabRanges>& rRecalcRanges = rXMLImport.GetRecalcRowRanges();
-                        while (static_cast<SCTAB>(rRecalcRanges.size()) <= nSheet)
-                        {
-                            rRecalcRanges.emplace_back(0, pDoc->MaxRow());
-                        }
-                        rRecalcRanges.at(nSheet).mnTab = nSheet;
-                        rRecalcRanges.at(nSheet).maRanges.setTrue(nFirstRow, nCurrentRow);
-                    }
+                    ScSheetSaveData* pSheetData = comphelper::getUnoTunnelImplementation<ScModelObj>(rXMLImport.GetModel())->GetSheetSaveData();
+                    pSheetData->AddRowStyle( sStyleName, ScAddress( 0, static_cast<SCROW>(nFirstRow), nSheet ) );
+                    pStyle->SetLastSheet(nSheet);
                 }
             }
         }
+    }
+    bool bVisible (true);
+    bool bFiltered (false);
+    if (IsXMLToken(sVisibility, XML_COLLAPSE))
+    {
+        bVisible = false;
+    }
+    else if (IsXMLToken(sVisibility, XML_FILTER))
+    {
+        bVisible = false;
+        bFiltered = true;
+    }
+    if (!bVisible)
+    {
+        rXMLImport.GetDoc().setRowsVisible(nSheet, nFirstRow, nCurrentRow, false);
+    }
+    if (bFiltered)
+        xRowProperties->setPropertyValue(SC_ISFILTERED, uno::makeAny(bFiltered));
+
+    uno::Any any = xRowProperties->getPropertyValue(SC_UNONAME_OHEIGHT);
+    bool bOptionalHeight = false;
+    any >>= bOptionalHeight;
+    if (bOptionalHeight)
+    {
+        // Save this row for later height update
+        std::vector<ScDocRowHeightUpdater::TabRanges>& rRecalcRanges = rXMLImport.GetRecalcRowRanges();
+        while (static_cast<SCTAB>(rRecalcRanges.size()) <= nSheet)
+        {
+            rRecalcRanges.emplace_back(0, pDoc->MaxRow());
+        }
+        rRecalcRanges.at(nSheet).mnTab = nSheet;
+        rRecalcRanges.at(nSheet).maRanges.setTrue(nFirstRow, nCurrentRow);
     }
 }
 

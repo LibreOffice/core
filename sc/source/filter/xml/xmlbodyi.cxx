@@ -237,37 +237,37 @@ void SAL_CALL ScXMLBodyContext::endFastElement(sal_Int32 nElement)
     ScDocument*                 pDoc        = GetScImport().GetDocument();
     ScMyImpDetectiveOp          aDetOp;
 
-    if (pDoc && GetScImport().GetModel().is())
+    if (!(pDoc && GetScImport().GetModel().is()))
+        return;
+
+    if (pDetOpArray)
     {
-        if (pDetOpArray)
+        pDetOpArray->Sort();
+        while( pDetOpArray->GetFirstOp( aDetOp ) )
         {
-            pDetOpArray->Sort();
-            while( pDetOpArray->GetFirstOp( aDetOp ) )
-            {
-                ScDetOpData aOpData( aDetOp.aPosition, aDetOp.eOpType );
-                pDoc->AddDetectiveOperation( aOpData );
-            }
-        }
-
-        if (pChangeTrackingImportHelper)
-            pChangeTrackingImportHelper->CreateChangeTrack(GetScImport().GetDocument());
-
-        // #i37959# handle document protection after the sheet settings
-        if (bProtected)
-        {
-            std::unique_ptr<ScDocProtection> pProtection(new ScDocProtection);
-            pProtection->setProtected(true);
-
-            uno::Sequence<sal_Int8> aPass;
-            if (!sPassword.isEmpty())
-            {
-                ::comphelper::Base64::decode(aPass, sPassword);
-                pProtection->setPasswordHash(aPass, meHash1, meHash2);
-            }
-
-            pDoc->SetDocProtection(pProtection.get());
+            ScDetOpData aOpData( aDetOp.aPosition, aDetOp.eOpType );
+            pDoc->AddDetectiveOperation( aOpData );
         }
     }
+
+    if (pChangeTrackingImportHelper)
+        pChangeTrackingImportHelper->CreateChangeTrack(GetScImport().GetDocument());
+
+    // #i37959# handle document protection after the sheet settings
+    if (!bProtected)
+        return;
+
+    std::unique_ptr<ScDocProtection> pProtection(new ScDocProtection);
+    pProtection->setProtected(true);
+
+    uno::Sequence<sal_Int8> aPass;
+    if (!sPassword.isEmpty())
+    {
+        ::comphelper::Base64::decode(aPass, sPassword);
+        pProtection->setPasswordHash(aPass, meHash1, meHash2);
+    }
+
+    pDoc->SetDocProtection(pProtection.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

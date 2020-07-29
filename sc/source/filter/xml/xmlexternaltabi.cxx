@@ -47,21 +47,21 @@ ScXMLExternalRefTabSourceContext::ScXMLExternalRefTabSourceContext(
 {
     using namespace ::xmloff::token;
 
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &it : *rAttrList)
     {
-        for (auto &it : *rAttrList)
-        {
-            sal_Int32 nAttrToken = it.getToken();
-            if ( nAttrToken == XML_ELEMENT( XLINK, XML_HREF ) )
-                maRelativeUrl = it.toString();
-            else if ( nAttrToken == XML_ELEMENT( TABLE, XML_TABLE_NAME ) )
-                // todo
-                ;
-            else if ( nAttrToken == XML_ELEMENT( TABLE, XML_FILTER_NAME ) )
-                maFilterName = it.toString();
-            else if ( nAttrToken == XML_ELEMENT( TABLE, XML_FILTER_OPTIONS ) )
-                maFilterOptions = it.toString();
-        }
+        sal_Int32 nAttrToken = it.getToken();
+        if ( nAttrToken == XML_ELEMENT( XLINK, XML_HREF ) )
+            maRelativeUrl = it.toString();
+        else if ( nAttrToken == XML_ELEMENT( TABLE, XML_TABLE_NAME ) )
+            // todo
+            ;
+        else if ( nAttrToken == XML_ELEMENT( TABLE, XML_FILTER_NAME ) )
+            maFilterName = it.toString();
+        else if ( nAttrToken == XML_ELEMENT( TABLE, XML_FILTER_OPTIONS ) )
+            maFilterOptions = it.toString();
     }
 }
 
@@ -156,18 +156,18 @@ ScXMLExternalRefRowContext::ScXMLExternalRefRowContext(
     mrExternalRefInfo.mnCol = 0;
 
     const SvXMLTokenMap& rAttrTokenMap = mrScImport.GetTableRowAttrTokenMap();
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &it : *rAttrList)
     {
-        for (auto &it : *rAttrList)
+        switch ( rAttrTokenMap.Get( it.getToken() ) )
         {
-            switch ( rAttrTokenMap.Get( it.getToken() ) )
+            case XML_TOK_TABLE_ROW_ATTR_REPEATED:
             {
-                case XML_TOK_TABLE_ROW_ATTR_REPEATED:
-                {
-                    mnRepeatRowCount = std::max(it.toInt32(), static_cast<sal_Int32>(1));
-                }
-                break;
+                mnRepeatRowCount = std::max(it.toInt32(), static_cast<sal_Int32>(1));
             }
+            break;
         }
     }
 }
@@ -236,84 +236,84 @@ ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
     using namespace ::xmloff::token;
 
     const SvXMLTokenMap& rTokenMap = rImport.GetTableRowCellAttrTokenMap();
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &it : *rAttrList)
     {
-        for (auto &it : *rAttrList)
+        switch ( rTokenMap.Get( it.getToken() ) )
         {
-            switch ( rTokenMap.Get( it.getToken() ) )
+            case XML_TOK_TABLE_ROW_CELL_ATTR_STYLE_NAME:
             {
-                case XML_TOK_TABLE_ROW_CELL_ATTR_STYLE_NAME:
-                {
-                    XMLTableStylesContext* pStyles = static_cast<XMLTableStylesContext*>(mrScImport.GetAutoStyles());
-                    const XMLTableStyleContext* pStyle = static_cast<const XMLTableStyleContext*>(
-                        pStyles->FindStyleChildContext(XmlStyleFamily::TABLE_CELL, it.toString(), true));
-                    if (pStyle)
-                        mnNumberFormat = const_cast<XMLTableStyleContext*>(pStyle)->GetNumberFormat();
-                }
-                break;
-                case XML_TOK_TABLE_ROW_CELL_ATTR_REPEATED:
-                {
-                    mnRepeatCount = ::std::max( it.toInt32(), static_cast<sal_Int32>(1) );
-                }
-                break;
-                case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE_TYPE:
-                {
-                    mnCellType = ScXMLImport::GetCellType( it.toCString(), it.getLength() );
-                }
-                break;
-                case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE:
-                {
-                    if ( !it.isEmpty() )
-                    {
-                        mfCellValue = it.toDouble();
-                        mbIsNumeric = true;
-                        mbIsEmpty = false;
-                    }
-                }
-                break;
-                case XML_TOK_TABLE_ROW_CELL_ATTR_DATE_VALUE:
-                {
-                    if ( !it.isEmpty() && mrScImport.SetNullDateOnUnitConverter() )
-                    {
-                        mrScImport.GetMM100UnitConverter().convertDateTime( mfCellValue, it.toString() );
-                        mbIsNumeric = true;
-                        mbIsEmpty = false;
-                    }
-                }
-                break;
-                case XML_TOK_TABLE_ROW_CELL_ATTR_TIME_VALUE:
-                {
-                    if ( !it.isEmpty() )
-                    {
-                        ::sax::Converter::convertDuration( mfCellValue, it.toString() );
-                        mbIsNumeric = true;
-                        mbIsEmpty = false;
-                    }
-                }
-                break;
-                case XML_TOK_TABLE_ROW_CELL_ATTR_STRING_VALUE:
-                {
-                    if ( !it.isEmpty() )
-                    {
-                        maCellString = it.toString();
-                        mbIsNumeric = false;
-                        mbIsEmpty = false;
-                    }
-                }
-                break;
-                case XML_TOK_TABLE_ROW_CELL_ATTR_BOOLEAN_VALUE:
-                {
-                    if ( !it.isEmpty() )
-                    {
-                        mfCellValue = IsXMLToken( it, XML_TRUE ) ? 1.0 : 0.0;
-                        mbIsNumeric = true;
-                        mbIsEmpty = false;
-                    }
-                }
-                break;
-                default:
-                    ;
+                XMLTableStylesContext* pStyles = static_cast<XMLTableStylesContext*>(mrScImport.GetAutoStyles());
+                const XMLTableStyleContext* pStyle = static_cast<const XMLTableStyleContext*>(
+                    pStyles->FindStyleChildContext(XmlStyleFamily::TABLE_CELL, it.toString(), true));
+                if (pStyle)
+                    mnNumberFormat = const_cast<XMLTableStyleContext*>(pStyle)->GetNumberFormat();
             }
+            break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_REPEATED:
+            {
+                mnRepeatCount = ::std::max( it.toInt32(), static_cast<sal_Int32>(1) );
+            }
+            break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE_TYPE:
+            {
+                mnCellType = ScXMLImport::GetCellType( it.toCString(), it.getLength() );
+            }
+            break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE:
+            {
+                if ( !it.isEmpty() )
+                {
+                    mfCellValue = it.toDouble();
+                    mbIsNumeric = true;
+                    mbIsEmpty = false;
+                }
+            }
+            break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_DATE_VALUE:
+            {
+                if ( !it.isEmpty() && mrScImport.SetNullDateOnUnitConverter() )
+                {
+                    mrScImport.GetMM100UnitConverter().convertDateTime( mfCellValue, it.toString() );
+                    mbIsNumeric = true;
+                    mbIsEmpty = false;
+                }
+            }
+            break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_TIME_VALUE:
+            {
+                if ( !it.isEmpty() )
+                {
+                    ::sax::Converter::convertDuration( mfCellValue, it.toString() );
+                    mbIsNumeric = true;
+                    mbIsEmpty = false;
+                }
+            }
+            break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_STRING_VALUE:
+            {
+                if ( !it.isEmpty() )
+                {
+                    maCellString = it.toString();
+                    mbIsNumeric = false;
+                    mbIsEmpty = false;
+                }
+            }
+            break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_BOOLEAN_VALUE:
+            {
+                if ( !it.isEmpty() )
+                {
+                    mfCellValue = IsXMLToken( it, XML_TRUE ) ? 1.0 : 0.0;
+                    mbIsNumeric = true;
+                    mbIsEmpty = false;
+                }
+            }
+            break;
+            default:
+                ;
         }
     }
 }

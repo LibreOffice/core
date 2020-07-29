@@ -126,51 +126,51 @@ void ScXMLDDELinkContext::AddRowsToTable(const sal_Int32 nRowsP)
 void SAL_CALL ScXMLDDELinkContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     ScDocument* pDoc = GetScImport().GetDocument();
-    if (nPosition > -1 && nColumns && nRows)
+    if (!(nPosition > -1 && nColumns && nRows))
+        return;
+
+    bool bSizeMatch = (static_cast<size_t>(nColumns * nRows) == aDDELinkTable.size());
+    OSL_ENSURE( bSizeMatch, "ScXMLDDELinkContext::EndElement: matrix dimension doesn't match cells count");
+    // Excel writes bad ODF in that it does not write the
+    // table:number-columns-repeated attribute of the
+    // <table:table-column> element, but apparently uses the number of
+    // <table:table-cell> elements within a <table:table-row> element to
+    // determine the column count instead. Be lenient ...
+    if (!bSizeMatch && nColumns == 1)
     {
-        bool bSizeMatch = (static_cast<size_t>(nColumns * nRows) == aDDELinkTable.size());
-        OSL_ENSURE( bSizeMatch, "ScXMLDDELinkContext::EndElement: matrix dimension doesn't match cells count");
-        // Excel writes bad ODF in that it does not write the
-        // table:number-columns-repeated attribute of the
-        // <table:table-column> element, but apparently uses the number of
-        // <table:table-cell> elements within a <table:table-row> element to
-        // determine the column count instead. Be lenient ...
-        if (!bSizeMatch && nColumns == 1)
-        {
-            nColumns = aDDELinkTable.size() / nRows;
-            OSL_ENSURE( static_cast<size_t>(nColumns * nRows) == aDDELinkTable.size(),
-                    "ScXMLDDELinkContext::EndElement: adapted matrix dimension doesn't match either");
-        }
-        ScMatrixRef pMatrix = new ScMatrix(static_cast<SCSIZE>(nColumns), static_cast<SCSIZE>(nRows), 0.0);
-        sal_Int32 nCol(0);
-        sal_Int32 nRow(-1);
-        sal_Int32 nIndex(0);
-
-        svl::SharedStringPool& rPool = pDoc->GetSharedStringPool();
-        for (const auto& rDDELinkCell : aDDELinkTable)
-        {
-            if (nIndex % nColumns == 0)
-            {
-                ++nRow;
-                nCol = 0;
-            }
-            else
-                ++nCol;
-
-            SCSIZE nScCol( static_cast< SCSIZE >( nCol ) );
-            SCSIZE nScRow( static_cast< SCSIZE >( nRow ) );
-            if( rDDELinkCell.bEmpty )
-                pMatrix->PutEmpty( nScCol, nScRow );
-            else if( rDDELinkCell.bString )
-                pMatrix->PutString(rPool.intern(rDDELinkCell.sValue), nScCol, nScRow);
-            else
-                pMatrix->PutDouble( rDDELinkCell.fValue, nScCol, nScRow );
-
-            ++nIndex;
-        }
-
-        GetScImport().GetDocument()->SetDdeLinkResultMatrix( static_cast< sal_uInt16 >( nPosition ), pMatrix );
+        nColumns = aDDELinkTable.size() / nRows;
+        OSL_ENSURE( static_cast<size_t>(nColumns * nRows) == aDDELinkTable.size(),
+                "ScXMLDDELinkContext::EndElement: adapted matrix dimension doesn't match either");
     }
+    ScMatrixRef pMatrix = new ScMatrix(static_cast<SCSIZE>(nColumns), static_cast<SCSIZE>(nRows), 0.0);
+    sal_Int32 nCol(0);
+    sal_Int32 nRow(-1);
+    sal_Int32 nIndex(0);
+
+    svl::SharedStringPool& rPool = pDoc->GetSharedStringPool();
+    for (const auto& rDDELinkCell : aDDELinkTable)
+    {
+        if (nIndex % nColumns == 0)
+        {
+            ++nRow;
+            nCol = 0;
+        }
+        else
+            ++nCol;
+
+        SCSIZE nScCol( static_cast< SCSIZE >( nCol ) );
+        SCSIZE nScRow( static_cast< SCSIZE >( nRow ) );
+        if( rDDELinkCell.bEmpty )
+            pMatrix->PutEmpty( nScCol, nScRow );
+        else if( rDDELinkCell.bString )
+            pMatrix->PutString(rPool.intern(rDDELinkCell.sValue), nScCol, nScRow);
+        else
+            pMatrix->PutDouble( rDDELinkCell.fValue, nScCol, nScRow );
+
+        ++nIndex;
+    }
+
+    GetScImport().GetDocument()->SetDdeLinkResultMatrix( static_cast< sal_uInt16 >( nPosition ), pMatrix );
 }
 
 ScXMLDDESourceContext::ScXMLDDESourceContext( ScXMLImport& rImport,
@@ -179,30 +179,30 @@ ScXMLDDESourceContext::ScXMLDDESourceContext( ScXMLImport& rImport,
     ScXMLImportContext( rImport ),
     pDDELink(pTempDDELink)
 {
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
-            {
-                case XML_ELEMENT( OFFICE, XML_DDE_APPLICATION ):
-                    pDDELink->SetApplication(aIter.toString());
-                break;
-                case XML_ELEMENT( OFFICE, XML_DDE_TOPIC ):
-                    pDDELink->SetTopic(aIter.toString());
-                break;
-                case XML_ELEMENT( OFFICE, XML_DDE_ITEM ):
-                    pDDELink->SetItem(aIter.toString());
-                break;
-                case XML_ELEMENT( TABLE, XML_CONVERSION_MODE ):
-                    if (IsXMLToken(aIter, XML_INTO_ENGLISH_NUMBER))
-                        pDDELink->SetMode(SC_DDE_ENGLISH);
-                    else if (IsXMLToken(aIter, XML_KEEP_TEXT))
-                        pDDELink->SetMode(SC_DDE_TEXT);
-                    else
-                        pDDELink->SetMode(SC_DDE_DEFAULT);
-                break;
-            }
+            case XML_ELEMENT( OFFICE, XML_DDE_APPLICATION ):
+                pDDELink->SetApplication(aIter.toString());
+            break;
+            case XML_ELEMENT( OFFICE, XML_DDE_TOPIC ):
+                pDDELink->SetTopic(aIter.toString());
+            break;
+            case XML_ELEMENT( OFFICE, XML_DDE_ITEM ):
+                pDDELink->SetItem(aIter.toString());
+            break;
+            case XML_ELEMENT( TABLE, XML_CONVERSION_MODE ):
+                if (IsXMLToken(aIter, XML_INTO_ENGLISH_NUMBER))
+                    pDDELink->SetMode(SC_DDE_ENGLISH);
+                else if (IsXMLToken(aIter, XML_KEEP_TEXT))
+                    pDDELink->SetMode(SC_DDE_TEXT);
+                else
+                    pDDELink->SetMode(SC_DDE_DEFAULT);
+            break;
         }
     }
 }
@@ -319,32 +319,32 @@ ScXMLDDECellContext::ScXMLDDECellContext( ScXMLImport& rImport,
     bEmpty(true),
     pDDELink(pTempDDELink)
 {
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
-            {
-                case XML_ELEMENT( OFFICE, XML_VALUE_TYPE ):
-                    if (IsXMLToken(aIter, XML_STRING))
-                        bString = true;
-                    else
-                        bString = false;
-                break;
-                case XML_ELEMENT( OFFICE, XML_STRING_VALUE ):
-                    sValue = aIter.toString();
-                    bEmpty = false;
-                    bString2 = true;
-                break;
-                case XML_ELEMENT( OFFICE, XML_VALUE ):
-                    fValue = aIter.toDouble();
-                    bEmpty = false;
-                    bString2 = false;
-                break;
-                case XML_ELEMENT( TABLE, XML_NUMBER_COLUMNS_REPEATED ):
-                    nCells = aIter.toInt32();
-                break;
-            }
+            case XML_ELEMENT( OFFICE, XML_VALUE_TYPE ):
+                if (IsXMLToken(aIter, XML_STRING))
+                    bString = true;
+                else
+                    bString = false;
+            break;
+            case XML_ELEMENT( OFFICE, XML_STRING_VALUE ):
+                sValue = aIter.toString();
+                bEmpty = false;
+                bString2 = true;
+            break;
+            case XML_ELEMENT( OFFICE, XML_VALUE ):
+                fValue = aIter.toDouble();
+                bEmpty = false;
+                bString2 = false;
+            break;
+            case XML_ELEMENT( TABLE, XML_NUMBER_COLUMNS_REPEATED ):
+                nCells = aIter.toInt32();
+            break;
         }
     }
 }

@@ -60,22 +60,22 @@ ScXMLLabelRangeContext::ScXMLLabelRangeContext(
     ScXMLImportContext( rImport ),
     bColumnOrientation( false )
 {
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
-            {
-            case XML_ELEMENT( TABLE, XML_LABEL_CELL_RANGE_ADDRESS ):
-                sLabelRangeStr = aIter.toString();
-                break;
-            case XML_ELEMENT( TABLE, XML_DATA_CELL_RANGE_ADDRESS ):
-                sDataRangeStr = aIter.toString();
-                break;
-            case XML_ELEMENT( TABLE, XML_ORIENTATION ):
-                bColumnOrientation = IsXMLToken(aIter, XML_COLUMN );
-                break;
-            }
+        case XML_ELEMENT( TABLE, XML_LABEL_CELL_RANGE_ADDRESS ):
+            sLabelRangeStr = aIter.toString();
+            break;
+        case XML_ELEMENT( TABLE, XML_DATA_CELL_RANGE_ADDRESS ):
+            sDataRangeStr = aIter.toString();
+            break;
+        case XML_ELEMENT( TABLE, XML_ORIENTATION ):
+            bColumnOrientation = IsXMLToken(aIter, XML_COLUMN );
+            break;
         }
     }
 }

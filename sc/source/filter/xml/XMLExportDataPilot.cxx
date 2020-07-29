@@ -144,124 +144,124 @@ void ScXMLExportDataPilot::WriteDPCondition(const ScQueryEntry& aQueryEntry, boo
 void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
 {
     SCSIZE nQueryEntryCount = aQueryParam.GetEntryCount();
-    if (nQueryEntryCount > 0)
-    {
-        bool bAnd(false);
-        bool bOr(false);
-        bool bHasEntries(true);
-        SCSIZE nEntries(0);
-        SCSIZE j;
+    if (nQueryEntryCount <= 0)
+        return;
 
-        for ( j = 0; (j < nQueryEntryCount) && bHasEntries; ++j)
+    bool bAnd(false);
+    bool bOr(false);
+    bool bHasEntries(true);
+    SCSIZE nEntries(0);
+    SCSIZE j;
+
+    for ( j = 0; (j < nQueryEntryCount) && bHasEntries; ++j)
+    {
+        ScQueryEntry aEntry = aQueryParam.GetEntry(j);
+        if (aEntry.bDoQuery)
         {
-            ScQueryEntry aEntry = aQueryParam.GetEntry(j);
-            if (aEntry.bDoQuery)
+            if (nEntries > 0)
             {
-                if (nEntries > 0)
-                {
-                    if (aEntry.eConnect == SC_AND)
-                        bAnd = true;
-                    else
-                        bOr = true;
-                }
-                ++nEntries;
+                if (aEntry.eConnect == SC_AND)
+                    bAnd = true;
+                else
+                    bOr = true;
             }
-            else
-                bHasEntries = false;
+            ++nEntries;
         }
-        nQueryEntryCount = nEntries;
-        if (nQueryEntryCount)
+        else
+            bHasEntries = false;
+    }
+    nQueryEntryCount = nEntries;
+    if (!nQueryEntryCount)
+        return;
+
+    if(!((aQueryParam.nCol1 == aQueryParam.nCol2) && (aQueryParam.nRow1 == aQueryParam.nRow2) &&
+                (static_cast<SCCOLROW>(aQueryParam.nCol1) == static_cast<SCCOLROW>(aQueryParam.nRow1)) &&
+                (aQueryParam.nCol1 == 0) && (aQueryParam.nTab == SCTAB_MAX)))
+    {
+        ScRange aConditionRange(aQueryParam.nCol1, aQueryParam.nRow1, aQueryParam.nTab,
+            aQueryParam.nCol2, aQueryParam.nRow2, aQueryParam.nTab);
+        OUString sConditionRange;
+        ScRangeStringConverter::GetStringFromRange( sConditionRange, aConditionRange, pDoc, ::formula::FormulaGrammar::CONV_OOO );
+        if (!sConditionRange.isEmpty())
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONDITION_SOURCE_RANGE_ADDRESS, sConditionRange);
+    }
+    if (!aQueryParam.bDuplicate)
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_DUPLICATES, XML_FALSE);
+    SvXMLElementExport aElemDPF(rExport, XML_NAMESPACE_TABLE, XML_FILTER, true, true);
+    rExport.CheckAttrList();
+    if (nQueryEntryCount  == 1)
+    {
+            WriteDPCondition(aQueryParam.GetEntry(0), aQueryParam.bCaseSens, aQueryParam.eSearchType);
+    }
+    else if (bOr && !bAnd)
+    {
+        SvXMLElementExport aElemOr(rExport, XML_NAMESPACE_TABLE, XML_FILTER_OR, true, true);
+        for (j = 0; j < nQueryEntryCount; ++j)
         {
-            if(!((aQueryParam.nCol1 == aQueryParam.nCol2) && (aQueryParam.nRow1 == aQueryParam.nRow2) &&
-                        (static_cast<SCCOLROW>(aQueryParam.nCol1) == static_cast<SCCOLROW>(aQueryParam.nRow1)) &&
-                        (aQueryParam.nCol1 == 0) && (aQueryParam.nTab == SCTAB_MAX)))
+            WriteDPCondition(aQueryParam.GetEntry(j), aQueryParam.bCaseSens, aQueryParam.eSearchType);
+        }
+    }
+    else if (bAnd && !bOr)
+    {
+        SvXMLElementExport aElemAnd(rExport, XML_NAMESPACE_TABLE, XML_FILTER_AND, true, true);
+        for (j = 0; j < nQueryEntryCount; ++j)
+        {
+            WriteDPCondition(aQueryParam.GetEntry(j), aQueryParam.bCaseSens, aQueryParam.eSearchType);
+        }
+    }
+    else
+    {
+        SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_FILTER_OR, true, true);
+        ScQueryEntry aPrevFilterField(aQueryParam.GetEntry(0));
+        ScQueryConnect aConnection = aQueryParam.GetEntry(1).eConnect;
+        bool bOpenAndElement;
+        OUString aName(rExport.GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, GetXMLToken(XML_FILTER_AND)));
+        if (aConnection == SC_AND)
+        {
+            rExport.StartElement( aName, true );
+            bOpenAndElement = true;
+        }
+        else
+            bOpenAndElement = false;
+        for (j = 1; j < nQueryEntryCount; ++j)
+        {
+            if (aConnection != aQueryParam.GetEntry(j).eConnect)
             {
-                ScRange aConditionRange(aQueryParam.nCol1, aQueryParam.nRow1, aQueryParam.nTab,
-                    aQueryParam.nCol2, aQueryParam.nRow2, aQueryParam.nTab);
-                OUString sConditionRange;
-                ScRangeStringConverter::GetStringFromRange( sConditionRange, aConditionRange, pDoc, ::formula::FormulaGrammar::CONV_OOO );
-                if (!sConditionRange.isEmpty())
-                    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONDITION_SOURCE_RANGE_ADDRESS, sConditionRange);
-            }
-            if (!aQueryParam.bDuplicate)
-                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_DUPLICATES, XML_FALSE);
-            SvXMLElementExport aElemDPF(rExport, XML_NAMESPACE_TABLE, XML_FILTER, true, true);
-            rExport.CheckAttrList();
-            if (nQueryEntryCount  == 1)
-            {
-                    WriteDPCondition(aQueryParam.GetEntry(0), aQueryParam.bCaseSens, aQueryParam.eSearchType);
-            }
-            else if (bOr && !bAnd)
-            {
-                SvXMLElementExport aElemOr(rExport, XML_NAMESPACE_TABLE, XML_FILTER_OR, true, true);
-                for (j = 0; j < nQueryEntryCount; ++j)
-                {
-                    WriteDPCondition(aQueryParam.GetEntry(j), aQueryParam.bCaseSens, aQueryParam.eSearchType);
-                }
-            }
-            else if (bAnd && !bOr)
-            {
-                SvXMLElementExport aElemAnd(rExport, XML_NAMESPACE_TABLE, XML_FILTER_AND, true, true);
-                for (j = 0; j < nQueryEntryCount; ++j)
-                {
-                    WriteDPCondition(aQueryParam.GetEntry(j), aQueryParam.bCaseSens, aQueryParam.eSearchType);
-                }
-            }
-            else
-            {
-                SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_FILTER_OR, true, true);
-                ScQueryEntry aPrevFilterField(aQueryParam.GetEntry(0));
-                ScQueryConnect aConnection = aQueryParam.GetEntry(1).eConnect;
-                bool bOpenAndElement;
-                OUString aName(rExport.GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, GetXMLToken(XML_FILTER_AND)));
-                if (aConnection == SC_AND)
+                aConnection = aQueryParam.GetEntry(j).eConnect;
+                if (aQueryParam.GetEntry(j).eConnect == SC_AND)
                 {
                     rExport.StartElement( aName, true );
                     bOpenAndElement = true;
-                }
-                else
-                    bOpenAndElement = false;
-                for (j = 1; j < nQueryEntryCount; ++j)
-                {
-                    if (aConnection != aQueryParam.GetEntry(j).eConnect)
-                    {
-                        aConnection = aQueryParam.GetEntry(j).eConnect;
-                        if (aQueryParam.GetEntry(j).eConnect == SC_AND)
-                        {
-                            rExport.StartElement( aName, true );
-                            bOpenAndElement = true;
-                            WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.eSearchType);
-                            aPrevFilterField = aQueryParam.GetEntry(j);
-                            if (j == nQueryEntryCount - 1)
-                            {
-                                WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.eSearchType);
-                                rExport.EndElement(aName, true);
-                                bOpenAndElement = false;
-                            }
-                        }
-                        else
-                        {
-                            WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.eSearchType);
-                            aPrevFilterField = aQueryParam.GetEntry(j);
-                            if (bOpenAndElement)
-                            {
-                                rExport.EndElement(aName, true);
-                                bOpenAndElement = false;
-                            }
-                            if (j == nQueryEntryCount - 1)
-                            {
-                                WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.eSearchType);
-                            }
-                        }
-                    }
-                    else
+                    WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.eSearchType);
+                    aPrevFilterField = aQueryParam.GetEntry(j);
+                    if (j == nQueryEntryCount - 1)
                     {
                         WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.eSearchType);
-                        aPrevFilterField = aQueryParam.GetEntry(j);
-                        if (j == nQueryEntryCount - 1)
-                            WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.eSearchType);
+                        rExport.EndElement(aName, true);
+                        bOpenAndElement = false;
                     }
                 }
+                else
+                {
+                    WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.eSearchType);
+                    aPrevFilterField = aQueryParam.GetEntry(j);
+                    if (bOpenAndElement)
+                    {
+                        rExport.EndElement(aName, true);
+                        bOpenAndElement = false;
+                    }
+                    if (j == nQueryEntryCount - 1)
+                    {
+                        WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.eSearchType);
+                    }
+                }
+            }
+            else
+            {
+                WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.eSearchType);
+                aPrevFilterField = aQueryParam.GetEntry(j);
+                if (j == nQueryEntryCount - 1)
+                    WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.eSearchType);
             }
         }
     }
@@ -337,95 +337,95 @@ void ScXMLExportDataPilot::WriteFieldReference(const ScDPSaveDimension* pDim)
 void ScXMLExportDataPilot::WriteSortInfo(const ScDPSaveDimension* pDim)
 {
     const sheet::DataPilotFieldSortInfo* pSortInfo = pDim->GetSortInfo();
-    if (pSortInfo)
-    {
-        if (pSortInfo->IsAscending)
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORDER, XML_ASCENDING);
-        else
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORDER, XML_DESCENDING);
+    if (!pSortInfo)
+        return;
 
-        OUString sValueStr;
-        switch (pSortInfo->Mode)
-        {
-            case sheet::DataPilotFieldSortMode::NONE:
-            sValueStr = GetXMLToken(XML_NONE);
-            break;
-            case sheet::DataPilotFieldSortMode::MANUAL:
-            sValueStr = GetXMLToken(XML_MANUAL);
-            break;
-            case sheet::DataPilotFieldSortMode::NAME:
-            sValueStr = GetXMLToken(XML_NAME);
-            break;
-            case sheet::DataPilotFieldSortMode::DATA:
-            sValueStr = GetXMLToken(XML_DATA);
-            if (!pSortInfo->Field.isEmpty())
-                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_FIELD, pSortInfo->Field);
-            break;
-        }
-        if (!sValueStr.isEmpty())
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SORT_MODE, sValueStr);
-        SvXMLElementExport aElemDPLSI(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_SORT_INFO, true, true);
+    if (pSortInfo->IsAscending)
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORDER, XML_ASCENDING);
+    else
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORDER, XML_DESCENDING);
+
+    OUString sValueStr;
+    switch (pSortInfo->Mode)
+    {
+        case sheet::DataPilotFieldSortMode::NONE:
+        sValueStr = GetXMLToken(XML_NONE);
+        break;
+        case sheet::DataPilotFieldSortMode::MANUAL:
+        sValueStr = GetXMLToken(XML_MANUAL);
+        break;
+        case sheet::DataPilotFieldSortMode::NAME:
+        sValueStr = GetXMLToken(XML_NAME);
+        break;
+        case sheet::DataPilotFieldSortMode::DATA:
+        sValueStr = GetXMLToken(XML_DATA);
+        if (!pSortInfo->Field.isEmpty())
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_FIELD, pSortInfo->Field);
+        break;
     }
+    if (!sValueStr.isEmpty())
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SORT_MODE, sValueStr);
+    SvXMLElementExport aElemDPLSI(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_SORT_INFO, true, true);
 }
 
 void ScXMLExportDataPilot::WriteAutoShowInfo(const ScDPSaveDimension* pDim)
 {
     const sheet::DataPilotFieldAutoShowInfo* pAutoInfo = pDim->GetAutoShowInfo();
-    if (pAutoInfo)
+    if (!pAutoInfo)
+        return;
+
+    if (pAutoInfo->IsEnabled)
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ENABLED, XML_TRUE);
+    else
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ENABLED, XML_FALSE);
+
+    OUString sValueStr;
+    switch (pAutoInfo->ShowItemsMode)
     {
-        if (pAutoInfo->IsEnabled)
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ENABLED, XML_TRUE);
-        else
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ENABLED, XML_FALSE);
-
-        OUString sValueStr;
-        switch (pAutoInfo->ShowItemsMode)
-        {
-            case sheet::DataPilotFieldShowItemsMode::FROM_TOP:
-            sValueStr = GetXMLToken(XML_FROM_TOP);
-            break;
-            case sheet::DataPilotFieldShowItemsMode::FROM_BOTTOM:
-            sValueStr = GetXMLToken(XML_FROM_BOTTOM);
-            break;
-        }
-        if (!sValueStr.isEmpty())
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_MEMBER_MODE, sValueStr);
-
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MEMBER_COUNT, OUString::number(pAutoInfo->ItemCount));
-
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_FIELD, pAutoInfo->DataField);
-
-        SvXMLElementExport aElemDPLAI(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_DISPLAY_INFO, true, true);
+        case sheet::DataPilotFieldShowItemsMode::FROM_TOP:
+        sValueStr = GetXMLToken(XML_FROM_TOP);
+        break;
+        case sheet::DataPilotFieldShowItemsMode::FROM_BOTTOM:
+        sValueStr = GetXMLToken(XML_FROM_BOTTOM);
+        break;
     }
+    if (!sValueStr.isEmpty())
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_MEMBER_MODE, sValueStr);
+
+    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MEMBER_COUNT, OUString::number(pAutoInfo->ItemCount));
+
+    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_FIELD, pAutoInfo->DataField);
+
+    SvXMLElementExport aElemDPLAI(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_DISPLAY_INFO, true, true);
 }
 
 void ScXMLExportDataPilot::WriteLayoutInfo(const ScDPSaveDimension* pDim)
 {
     const sheet::DataPilotFieldLayoutInfo* pLayoutInfo = pDim->GetLayoutInfo();
-    if (pLayoutInfo)
-    {
-        if (pLayoutInfo->AddEmptyLines)
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ADD_EMPTY_LINES, XML_TRUE);
-        else
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ADD_EMPTY_LINES, XML_FALSE);
+    if (!pLayoutInfo)
+        return;
 
-        OUString sValueStr;
-        switch (pLayoutInfo->LayoutMode)
-        {
-            case sheet::DataPilotFieldLayoutMode::TABULAR_LAYOUT:
-            sValueStr = GetXMLToken(XML_TABULAR_LAYOUT);
-            break;
-            case sheet::DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_TOP:
-            sValueStr = GetXMLToken(XML_OUTLINE_SUBTOTALS_TOP);
-            break;
-            case sheet::DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_BOTTOM:
-            sValueStr = GetXMLToken(XML_OUTLINE_SUBTOTALS_BOTTOM);
-            break;
-        }
-        if (!sValueStr.isEmpty())
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_LAYOUT_MODE, sValueStr);
-        SvXMLElementExport aElemDPLLI(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_LAYOUT_INFO, true, true);
+    if (pLayoutInfo->AddEmptyLines)
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ADD_EMPTY_LINES, XML_TRUE);
+    else
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ADD_EMPTY_LINES, XML_FALSE);
+
+    OUString sValueStr;
+    switch (pLayoutInfo->LayoutMode)
+    {
+        case sheet::DataPilotFieldLayoutMode::TABULAR_LAYOUT:
+        sValueStr = GetXMLToken(XML_TABULAR_LAYOUT);
+        break;
+        case sheet::DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_TOP:
+        sValueStr = GetXMLToken(XML_OUTLINE_SUBTOTALS_TOP);
+        break;
+        case sheet::DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_BOTTOM:
+        sValueStr = GetXMLToken(XML_OUTLINE_SUBTOTALS_BOTTOM);
+        break;
     }
+    if (!sValueStr.isEmpty())
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_LAYOUT_MODE, sValueStr);
+    SvXMLElementExport aElemDPLLI(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_LAYOUT_INFO, true, true);
 }
 
 void ScXMLExportDataPilot::WriteSubTotals(const ScDPSaveDimension* pDim)
@@ -436,50 +436,50 @@ void ScXMLExportDataPilot::WriteSubTotals(const ScDPSaveDimension* pDim)
         // Export display names only for 1.2 extended or later.
         pLayoutName = pDim->GetSubtotalName();
 
-    if (nSubTotalCount > 0)
+    if (nSubTotalCount <= 0)
+        return;
+
+    SvXMLElementExport aElemSTs(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_SUBTOTALS, true, true);
+    rExport.CheckAttrList();
+    for (sal_Int32 nSubTotal = 0; nSubTotal < nSubTotalCount; nSubTotal++)
     {
-        SvXMLElementExport aElemSTs(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_SUBTOTALS, true, true);
-        rExport.CheckAttrList();
-        for (sal_Int32 nSubTotal = 0; nSubTotal < nSubTotalCount; nSubTotal++)
-        {
-            OUString sFunction;
-            sal_Int16 nFunc = static_cast<sal_Int16>(pDim->GetSubTotalFunc(nSubTotal));
-            ScXMLConverter::GetStringFromFunction( sFunction, nFunc);
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FUNCTION, sFunction);
-            if (pLayoutName && nFunc == sheet::GeneralFunction2::AUTO)
-                rExport.AddAttribute(XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, *pLayoutName);
-            SvXMLElementExport aElemST(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_SUBTOTAL, true, true);
-        }
+        OUString sFunction;
+        sal_Int16 nFunc = static_cast<sal_Int16>(pDim->GetSubTotalFunc(nSubTotal));
+        ScXMLConverter::GetStringFromFunction( sFunction, nFunc);
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FUNCTION, sFunction);
+        if (pLayoutName && nFunc == sheet::GeneralFunction2::AUTO)
+            rExport.AddAttribute(XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, *pLayoutName);
+        SvXMLElementExport aElemST(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_SUBTOTAL, true, true);
     }
 }
 
 void ScXMLExportDataPilot::WriteMembers(const ScDPSaveDimension* pDim)
 {
     const ScDPSaveDimension::MemberList &rMembers = pDim->GetMembers();
-    if (!rMembers.empty())
+    if (rMembers.empty())
+        return;
+
+    SvXMLElementExport aElemDPMs(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_MEMBERS, true, true);
+    rExport.CheckAttrList();
+    for (const auto& rpMember : rMembers)
     {
-        SvXMLElementExport aElemDPMs(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_MEMBERS, true, true);
-        rExport.CheckAttrList();
-        for (const auto& rpMember : rMembers)
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, rpMember->GetName());
+
+        if (rExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
         {
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, rpMember->GetName());
-
-            if (rExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
-            {
-                // Export display names only for ODF 1.2 extended or later.
-                const std::optional<OUString> & pLayoutName = rpMember->GetLayoutName();
-                if (pLayoutName)
-                    rExport.AddAttribute(XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, *pLayoutName);
-            }
-
-            OUStringBuffer sBuffer;
-            ::sax::Converter::convertBool(sBuffer, rpMember->GetIsVisible());
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY, sBuffer.makeStringAndClear());
-            ::sax::Converter::convertBool(sBuffer, rpMember->GetShowDetails());
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SHOW_DETAILS, sBuffer.makeStringAndClear());
-            SvXMLElementExport aElemDPM(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_MEMBER, true, true);
-            rExport.CheckAttrList();
+            // Export display names only for ODF 1.2 extended or later.
+            const std::optional<OUString> & pLayoutName = rpMember->GetLayoutName();
+            if (pLayoutName)
+                rExport.AddAttribute(XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, *pLayoutName);
         }
+
+        OUStringBuffer sBuffer;
+        ::sax::Converter::convertBool(sBuffer, rpMember->GetIsVisible());
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY, sBuffer.makeStringAndClear());
+        ::sax::Converter::convertBool(sBuffer, rpMember->GetShowDetails());
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SHOW_DETAILS, sBuffer.makeStringAndClear());
+        SvXMLElementExport aElemDPM(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_MEMBER, true, true);
+        rExport.CheckAttrList();
     }
 }
 
@@ -642,30 +642,30 @@ void ScXMLExportDataPilot::WriteGroupDimElements(const ScDPSaveDimension* pDim, 
 
         OSL_ENSURE((!pGroupDim || !pNumGroupDim), "there should be no NumGroup and Group at the same field");
     }
-    if (pGroupDim || pNumGroupDim)
+    if (!(pGroupDim || pNumGroupDim))
+        return;
+
+    SvXMLElementExport aElemDPGs(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_GROUPS, true, true);
+    if (!pGroupDim)
+        return;
+
+    if (pGroupDim->GetDatePart())
+        return;
+
+    sal_Int32 nCount = pGroupDim->GetGroupCount();
+    for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        SvXMLElementExport aElemDPGs(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_GROUPS, true, true);
-        if (pGroupDim)
+        const ScDPSaveGroupItem& rGroup = pGroupDim->GetGroupByIndex( i );
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, rGroup.GetGroupName());
+        SvXMLElementExport aElemDPG(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_GROUP, true, true);
+        sal_Int32 nElemCount = rGroup.GetElementCount();
+        for(sal_Int32 j = 0; j < nElemCount; ++j)
         {
-            if (!pGroupDim->GetDatePart())
+            const OUString* pElem = rGroup.GetElementByIndex(j);
+            if (pElem)
             {
-                sal_Int32 nCount = pGroupDim->GetGroupCount();
-                for (sal_Int32 i = 0; i < nCount; ++i)
-                {
-                    const ScDPSaveGroupItem& rGroup = pGroupDim->GetGroupByIndex( i );
-                    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, rGroup.GetGroupName());
-                    SvXMLElementExport aElemDPG(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_GROUP, true, true);
-                    sal_Int32 nElemCount = rGroup.GetElementCount();
-                    for(sal_Int32 j = 0; j < nElemCount; ++j)
-                    {
-                        const OUString* pElem = rGroup.GetElementByIndex(j);
-                        if (pElem)
-                        {
-                            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, *pElem);
-                            SvXMLElementExport aElemDPM(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_GROUP_MEMBER, true, true);
-                        }
-                    }
-                }
+                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, *pElem);
+                SvXMLElementExport aElemDPM(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_GROUP_MEMBER, true, true);
             }
         }
     }

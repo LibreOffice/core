@@ -65,45 +65,45 @@ void XMLTableMasterPageExport::exportHeaderFooter(const css::uno::Reference < cs
                                                     const XMLTokenEnum aName,
                                                     const bool bDisplay)
 {
-    if( xHeaderFooter.is() )
-    {
-        Reference < XText > xCenter(xHeaderFooter->getCenterText());
-        Reference < XText > xLeft(xHeaderFooter->getLeftText());
-        Reference < XText > xRight(xHeaderFooter->getRightText());
-        if (xCenter.is() && xLeft.is() && xRight.is())
-        {
-            OUString sCenter (xCenter->getString());
-            OUString sLeft (xLeft->getString());
-            OUString sRight (xRight->getString());
+    if( !xHeaderFooter.is() )
+        return;
 
-            if( !bDisplay )
-                GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                                XML_DISPLAY, XML_FALSE );
-            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                      aName, true, true );
-            if (!sCenter.isEmpty() && sLeft.isEmpty() && sRight.isEmpty())
-                exportHeaderFooterContent( xCenter, false, false );
-            else
-            {
-                if (!sLeft.isEmpty())
-                {
-                    SvXMLElementExport aSubElem( GetExport(), XML_NAMESPACE_STYLE,
-                                                XML_REGION_LEFT, true, true );
-                    exportHeaderFooterContent( xLeft, false, false );
-                }
-                if (!sCenter.isEmpty())
-                {
-                    SvXMLElementExport aSubElem( GetExport(), XML_NAMESPACE_STYLE,
-                                                XML_REGION_CENTER, true, true );
-                    exportHeaderFooterContent( xCenter, false, false );
-                }
-                if (!sRight.isEmpty())
-                {
-                    SvXMLElementExport aSubElem( GetExport(), XML_NAMESPACE_STYLE,
-                                                XML_REGION_RIGHT, true, true );
-                    exportHeaderFooterContent( xRight, false, false );
-                }
-            }
+    Reference < XText > xCenter(xHeaderFooter->getCenterText());
+    Reference < XText > xLeft(xHeaderFooter->getLeftText());
+    Reference < XText > xRight(xHeaderFooter->getRightText());
+    if (!(xCenter.is() && xLeft.is() && xRight.is()))
+        return;
+
+    OUString sCenter (xCenter->getString());
+    OUString sLeft (xLeft->getString());
+    OUString sRight (xRight->getString());
+
+    if( !bDisplay )
+        GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                        XML_DISPLAY, XML_FALSE );
+    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
+                              aName, true, true );
+    if (!sCenter.isEmpty() && sLeft.isEmpty() && sRight.isEmpty())
+        exportHeaderFooterContent( xCenter, false, false );
+    else
+    {
+        if (!sLeft.isEmpty())
+        {
+            SvXMLElementExport aSubElem( GetExport(), XML_NAMESPACE_STYLE,
+                                        XML_REGION_LEFT, true, true );
+            exportHeaderFooterContent( xLeft, false, false );
+        }
+        if (!sCenter.isEmpty())
+        {
+            SvXMLElementExport aSubElem( GetExport(), XML_NAMESPACE_STYLE,
+                                        XML_REGION_CENTER, true, true );
+            exportHeaderFooterContent( xCenter, false, false );
+        }
+        if (!sRight.isEmpty())
+        {
+            SvXMLElementExport aSubElem( GetExport(), XML_NAMESPACE_STYLE,
+                                        XML_REGION_RIGHT, true, true );
+            exportHeaderFooterContent( xRight, false, false );
         }
     }
 }

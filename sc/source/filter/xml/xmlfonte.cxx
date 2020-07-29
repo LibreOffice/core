@@ -93,50 +93,50 @@ ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(ScXMLExport& rExportP, 
     m_bEmbedAsianScript = rExportP.GetDocument()->IsEmbedFontScriptAsian();
     m_bEmbedComplexScript = rExportP.GetDocument()->IsEmbedFontScriptComplex();
 
-    if(pItr)
+    if(!pItr)
+        return;
+
+    SfxStyleSheetBase* pStyle(pItr->First());
+
+    if(!pStyle)
+        return;
+
+    // #i120077# remember the SfxItemPool in member variable before usage. The
+    // local EditEngine will not take over ownership of the pool.
+    mpEditEnginePool = EditEngine::CreatePool();
+    EditEngine aEditEngine(mpEditEnginePool);
+
+    while (pStyle)
     {
-        SfxStyleSheetBase* pStyle(pItr->First());
+        const SfxItemPool& rPagePool(pStyle->GetPool()->GetPool());
 
-        if(pStyle)
+        for (sal_uInt16 nPageWhichId : aPageWhichIds)
         {
-            // #i120077# remember the SfxItemPool in member variable before usage. The
-            // local EditEngine will not take over ownership of the pool.
-            mpEditEnginePool = EditEngine::CreatePool();
-            EditEngine aEditEngine(mpEditEnginePool);
-
-            while (pStyle)
+            for (const SfxPoolItem* pItem : rPagePool.GetItemSurrogates( nPageWhichId ))
             {
-                const SfxItemPool& rPagePool(pStyle->GetPool()->GetPool());
-
-                for (sal_uInt16 nPageWhichId : aPageWhichIds)
+                const ScPageHFItem* pPageItem = static_cast<const ScPageHFItem*>(pItem);
+                const EditTextObject* pLeftArea(pPageItem->GetLeftArea());
+                if (pLeftArea)
                 {
-                    for (const SfxPoolItem* pItem : rPagePool.GetItemSurrogates( nPageWhichId ))
-                    {
-                        const ScPageHFItem* pPageItem = static_cast<const ScPageHFItem*>(pItem);
-                        const EditTextObject* pLeftArea(pPageItem->GetLeftArea());
-                        if (pLeftArea)
-                        {
-                            aEditEngine.SetText(*pLeftArea);
-                            AddFontItems(aEditWhichIds, 3, mpEditEnginePool, false);
-                        }
-                        const EditTextObject* pCenterArea(pPageItem->GetCenterArea());
-                        if (pCenterArea)
-                        {
-                            aEditEngine.SetText(*pCenterArea);
-                            AddFontItems(aEditWhichIds, 3, mpEditEnginePool, false);
-                        }
-                        const EditTextObject* pRightArea(pPageItem->GetRightArea());
-                        if (pRightArea)
-                        {
-                            aEditEngine.SetText(*pRightArea);
-                            AddFontItems(aEditWhichIds, 3, mpEditEnginePool, false);
-                        }
-                    }
+                    aEditEngine.SetText(*pLeftArea);
+                    AddFontItems(aEditWhichIds, 3, mpEditEnginePool, false);
                 }
-
-                pStyle = pItr->Next();
+                const EditTextObject* pCenterArea(pPageItem->GetCenterArea());
+                if (pCenterArea)
+                {
+                    aEditEngine.SetText(*pCenterArea);
+                    AddFontItems(aEditWhichIds, 3, mpEditEnginePool, false);
+                }
+                const EditTextObject* pRightArea(pPageItem->GetRightArea());
+                if (pRightArea)
+                {
+                    aEditEngine.SetText(*pRightArea);
+                    AddFontItems(aEditWhichIds, 3, mpEditEnginePool, false);
+                }
             }
         }
+
+        pStyle = pItr->Next();
     }
 }
 

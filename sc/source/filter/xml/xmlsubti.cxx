@@ -95,32 +95,32 @@ uno::Reference<sheet::XSpreadsheet> getCurrentSheet(const uno::Reference<frame::
 void ScMyTables::NewSheet(const OUString& sTableName, const OUString& sStyleName,
                           const ScXMLTabProtectionData& rProtectData)
 {
-    if (rImport.GetModel().is())
+    if (!rImport.GetModel().is())
+        return;
+
+    nCurrentColCount = 0;
+    sCurrentSheetName = sTableName;
+    //reset cols and rows for new sheet, but increment tab
+    maCurrentCellPos.SetCol(-1);
+    maCurrentCellPos.SetRow(-1);
+    maCurrentCellPos.SetTab(maCurrentCellPos.Tab() + 1);
+
+    maProtectionData = rProtectData;
+    ScDocument *pDoc = ScXMLConverter::GetScDocument(rImport.GetModel());
+
+    // The document contains one sheet when created. So for the first
+    // sheet, we only need to set its name.
+    if (maCurrentCellPos.Tab() > 0)
+        pDoc->AppendTabOnLoad(sTableName);
+    else
+        pDoc->SetTabNameOnLoad(maCurrentCellPos.Tab(), sTableName);
+
+    xCurrentSheet = getCurrentSheet(rImport.GetModel(), maCurrentCellPos.Tab());
+    if (xCurrentSheet.is())
     {
-        nCurrentColCount = 0;
-        sCurrentSheetName = sTableName;
-        //reset cols and rows for new sheet, but increment tab
-        maCurrentCellPos.SetCol(-1);
-        maCurrentCellPos.SetRow(-1);
-        maCurrentCellPos.SetTab(maCurrentCellPos.Tab() + 1);
-
-        maProtectionData = rProtectData;
-        ScDocument *pDoc = ScXMLConverter::GetScDocument(rImport.GetModel());
-
-        // The document contains one sheet when created. So for the first
-        // sheet, we only need to set its name.
-        if (maCurrentCellPos.Tab() > 0)
-            pDoc->AppendTabOnLoad(sTableName);
-        else
-            pDoc->SetTabNameOnLoad(maCurrentCellPos.Tab(), sTableName);
-
-        xCurrentSheet = getCurrentSheet(rImport.GetModel(), maCurrentCellPos.Tab());
-        if (xCurrentSheet.is())
-        {
-            // We need to set the current cell range here regardless of
-            // presence of style name.
-            SetTableStyle(sStyleName);
-        }
+        // We need to set the current cell range here regardless of
+        // presence of style name.
+        SetTableStyle(sStyleName);
     }
 }
 
@@ -128,35 +128,35 @@ void ScMyTables::SetTableStyle(const OUString& sStyleName)
 {
     //these uno calls are a bit difficult to remove, XMLTableStyleContext::FillPropertySet uses
     //SvXMLImportPropertyMapper::FillPropertySet
-    if ( !sStyleName.isEmpty() )
+    if ( sStyleName.isEmpty() )
+        return;
+
+    // #i57869# All table style properties for all sheets are now applied here,
+    // before importing the contents.
+    // This is needed for the background color.
+    // Sheet visibility has special handling in ScDocFunc::SetTableVisible to
+    // allow hiding the first sheet.
+    // RTL layout is only remembered, not actually applied, so the shapes can
+    // be loaded before mirroring.
+
+    if ( !xCurrentSheet.is() )
+        return;
+
+    uno::Reference <beans::XPropertySet> xProperties(xCurrentSheet, uno::UNO_QUERY);
+    if ( !xProperties.is() )
+        return;
+
+    XMLTableStylesContext *pStyles = static_cast<XMLTableStylesContext *>(rImport.GetAutoStyles());
+    if ( pStyles )
     {
-        // #i57869# All table style properties for all sheets are now applied here,
-        // before importing the contents.
-        // This is needed for the background color.
-        // Sheet visibility has special handling in ScDocFunc::SetTableVisible to
-        // allow hiding the first sheet.
-        // RTL layout is only remembered, not actually applied, so the shapes can
-        // be loaded before mirroring.
-
-        if ( xCurrentSheet.is() )
+        XMLTableStyleContext* pStyle = const_cast<XMLTableStyleContext*>(static_cast<const XMLTableStyleContext *>(pStyles->FindStyleChildContext(
+                XmlStyleFamily::TABLE_TABLE, sStyleName, true)));
+        if ( pStyle )
         {
-            uno::Reference <beans::XPropertySet> xProperties(xCurrentSheet, uno::UNO_QUERY);
-            if ( xProperties.is() )
-            {
-                XMLTableStylesContext *pStyles = static_cast<XMLTableStylesContext *>(rImport.GetAutoStyles());
-                if ( pStyles )
-                {
-                    XMLTableStyleContext* pStyle = const_cast<XMLTableStyleContext*>(static_cast<const XMLTableStyleContext *>(pStyles->FindStyleChildContext(
-                            XmlStyleFamily::TABLE_TABLE, sStyleName, true)));
-                    if ( pStyle )
-                    {
-                        pStyle->FillPropertySet(xProperties);
+            pStyle->FillPropertySet(xProperties);
 
-                        ScSheetSaveData* pSheetData = comphelper::getUnoTunnelImplementation<ScModelObj>(rImport.GetModel())->GetSheetSaveData();
-                        pSheetData->AddTableStyle( sStyleName, ScAddress( 0, 0, maCurrentCellPos.Tab() ) );
-                    }
-                }
-            }
+            ScSheetSaveData* pSheetData = comphelper::getUnoTunnelImplementation<ScModelObj>(rImport.GetModel())->GetSheetSaveData();
+            pSheetData->AddTableStyle( sStyleName, ScAddress( 0, 0, maCurrentCellPos.Tab() ) );
         }
     }
 }
@@ -190,22 +190,22 @@ void ScMyTables::DeleteTable()
 
     maMatrixRangeList.RemoveAll();
 
-    if (rImport.GetDocument() && maProtectionData.mbProtected)
-    {
-        uno::Sequence<sal_Int8> aHash;
-        ::comphelper::Base64::decode(aHash, maProtectionData.maPassword);
+    if (!(rImport.GetDocument() && maProtectionData.mbProtected))
+        return;
 
-        std::unique_ptr<ScTableProtection> pProtect(new ScTableProtection);
-        pProtect->setProtected(maProtectionData.mbProtected);
-        pProtect->setPasswordHash(aHash, maProtectionData.meHash1, maProtectionData.meHash2);
-        pProtect->setOption(ScTableProtection::SELECT_LOCKED_CELLS,   maProtectionData.mbSelectProtectedCells);
-        pProtect->setOption(ScTableProtection::SELECT_UNLOCKED_CELLS, maProtectionData.mbSelectUnprotectedCells);
-        pProtect->setOption(ScTableProtection::INSERT_COLUMNS, maProtectionData.mbInsertColumns);
-        pProtect->setOption(ScTableProtection::INSERT_ROWS,    maProtectionData.mbInsertRows);
-        pProtect->setOption(ScTableProtection::DELETE_COLUMNS, maProtectionData.mbDeleteColumns);
-        pProtect->setOption(ScTableProtection::DELETE_ROWS,    maProtectionData.mbDeleteRows);
-        rImport.GetDocument()->SetTabProtection(maCurrentCellPos.Tab(), pProtect.get());
-    }
+    uno::Sequence<sal_Int8> aHash;
+    ::comphelper::Base64::decode(aHash, maProtectionData.maPassword);
+
+    std::unique_ptr<ScTableProtection> pProtect(new ScTableProtection);
+    pProtect->setProtected(maProtectionData.mbProtected);
+    pProtect->setPasswordHash(aHash, maProtectionData.meHash1, maProtectionData.meHash2);
+    pProtect->setOption(ScTableProtection::SELECT_LOCKED_CELLS,   maProtectionData.mbSelectProtectedCells);
+    pProtect->setOption(ScTableProtection::SELECT_UNLOCKED_CELLS, maProtectionData.mbSelectUnprotectedCells);
+    pProtect->setOption(ScTableProtection::INSERT_COLUMNS, maProtectionData.mbInsertColumns);
+    pProtect->setOption(ScTableProtection::INSERT_ROWS,    maProtectionData.mbInsertRows);
+    pProtect->setOption(ScTableProtection::DELETE_COLUMNS, maProtectionData.mbDeleteColumns);
+    pProtect->setOption(ScTableProtection::DELETE_ROWS,    maProtectionData.mbDeleteRows);
+    rImport.GetDocument()->SetTabProtection(maCurrentCellPos.Tab(), pProtect.get());
 }
 
 void ScMyTables::AddColStyle(const sal_Int32 nRepeat, const OUString& rCellStyleName)

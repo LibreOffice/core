@@ -26,35 +26,35 @@ ScXMLDataStreamContext::ScXMLDataStreamContext(
     mbRefreshOnEmpty(false),
     meInsertPos(sc::ImportPostProcessData::DataStream::InsertBottom)
 {
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch ( aIter.getToken() )
         {
-            switch ( aIter.getToken() )
+            case XML_ELEMENT( XLINK, XML_HREF ):
+                maURL = GetScImport().GetAbsoluteReference( aIter.toString() );
+            break;
+            case XML_ELEMENT( TABLE, XML_TARGET_RANGE_ADDRESS ):
             {
-                case XML_ELEMENT( XLINK, XML_HREF ):
-                    maURL = GetScImport().GetAbsoluteReference( aIter.toString() );
-                break;
-                case XML_ELEMENT( TABLE, XML_TARGET_RANGE_ADDRESS ):
-                {
-                    ScDocument* pDoc = GetScImport().GetDocument();
-                    sal_Int32 nOffset = 0;
-                    if (!ScRangeStringConverter::GetRangeFromString(
-                        maRange, aIter.toString(), pDoc, formula::FormulaGrammar::CONV_OOO, nOffset))
-                        maRange.SetInvalid();
-                }
-                break;
-                case XML_ELEMENT( CALC_EXT, XML_EMPTY_LINE_REFRESH ):
-                    mbRefreshOnEmpty = IsXMLToken( aIter, XML_TRUE );
-                break;
-                case XML_ELEMENT( CALC_EXT, XML_INSERTION_POSITION ):
-                    meInsertPos = IsXMLToken( aIter, XML_TOP ) ?
-                        sc::ImportPostProcessData::DataStream::InsertTop :
-                        sc::ImportPostProcessData::DataStream::InsertBottom;
-                break;
-                default:
-                    ;
+                ScDocument* pDoc = GetScImport().GetDocument();
+                sal_Int32 nOffset = 0;
+                if (!ScRangeStringConverter::GetRangeFromString(
+                    maRange, aIter.toString(), pDoc, formula::FormulaGrammar::CONV_OOO, nOffset))
+                    maRange.SetInvalid();
             }
+            break;
+            case XML_ELEMENT( CALC_EXT, XML_EMPTY_LINE_REFRESH ):
+                mbRefreshOnEmpty = IsXMLToken( aIter, XML_TRUE );
+            break;
+            case XML_ELEMENT( CALC_EXT, XML_INSERTION_POSITION ):
+                meInsertPos = IsXMLToken( aIter, XML_TOP ) ?
+                    sc::ImportPostProcessData::DataStream::InsertTop :
+                    sc::ImportPostProcessData::DataStream::InsertBottom;
+            break;
+            default:
+                ;
         }
     }
 }

@@ -104,83 +104,83 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
     bDrillDown(true),
     bHeaderGridLayout(false)
 {
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
+            case XML_ELEMENT( TABLE, XML_NAME ):
             {
-                case XML_ELEMENT( TABLE, XML_NAME ):
-                {
-                    sDataPilotTableName = aIter.toString();
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_APPLICATION_DATA ):
-                {
-                    sApplicationData = aIter.toString();
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_GRAND_TOTAL ):
-                {
-                    if (IsXMLToken(aIter, XML_BOTH))
-                    {
-                        maRowGrandTotal.mbVisible = true;
-                        maColGrandTotal.mbVisible = true;
-                    }
-                    else if (IsXMLToken(aIter, XML_ROW))
-                    {
-                        maRowGrandTotal.mbVisible = true;
-                        maColGrandTotal.mbVisible = false;
-                    }
-                    else if (IsXMLToken(aIter, XML_COLUMN))
-                    {
-                        maRowGrandTotal.mbVisible = false;
-                        maColGrandTotal.mbVisible = true;
-                    }
-                    else
-                    {
-                        maRowGrandTotal.mbVisible = false;
-                        maColGrandTotal.mbVisible = false;
-                    }
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_IGNORE_EMPTY_ROWS ):
-                {
-                    bIgnoreEmptyRows = IsXMLToken(aIter, XML_TRUE);
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_IDENTIFY_CATEGORIES ):
-                {
-                    bIdentifyCategories = IsXMLToken(aIter, XML_TRUE);
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_TARGET_RANGE_ADDRESS ):
-                {
-                    sal_Int32 nOffset(0);
-                    bTargetRangeAddress = ScRangeStringConverter::GetRangeFromString( aTargetRangeAddress, aIter.toString(), pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset );
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_BUTTONS ):
-                {
-                    sButtons = aIter.toString();
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_SHOW_FILTER_BUTTON ):
-                {
-                    bShowFilter = IsXMLToken(aIter, XML_TRUE);
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_DRILL_DOWN_ON_DOUBLE_CLICK ):
-                {
-                    bDrillDown = IsXMLToken(aIter, XML_TRUE);
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_HEADER_GRID_LAYOUT ):
-                {
-                    bHeaderGridLayout = IsXMLToken(aIter, XML_TRUE);
-                }
-                break;
+                sDataPilotTableName = aIter.toString();
             }
+            break;
+            case XML_ELEMENT( TABLE, XML_APPLICATION_DATA ):
+            {
+                sApplicationData = aIter.toString();
+            }
+            break;
+            case XML_ELEMENT( TABLE, XML_GRAND_TOTAL ):
+            {
+                if (IsXMLToken(aIter, XML_BOTH))
+                {
+                    maRowGrandTotal.mbVisible = true;
+                    maColGrandTotal.mbVisible = true;
+                }
+                else if (IsXMLToken(aIter, XML_ROW))
+                {
+                    maRowGrandTotal.mbVisible = true;
+                    maColGrandTotal.mbVisible = false;
+                }
+                else if (IsXMLToken(aIter, XML_COLUMN))
+                {
+                    maRowGrandTotal.mbVisible = false;
+                    maColGrandTotal.mbVisible = true;
+                }
+                else
+                {
+                    maRowGrandTotal.mbVisible = false;
+                    maColGrandTotal.mbVisible = false;
+                }
+            }
+            break;
+            case XML_ELEMENT( TABLE, XML_IGNORE_EMPTY_ROWS ):
+            {
+                bIgnoreEmptyRows = IsXMLToken(aIter, XML_TRUE);
+            }
+            break;
+            case XML_ELEMENT( TABLE, XML_IDENTIFY_CATEGORIES ):
+            {
+                bIdentifyCategories = IsXMLToken(aIter, XML_TRUE);
+            }
+            break;
+            case XML_ELEMENT( TABLE, XML_TARGET_RANGE_ADDRESS ):
+            {
+                sal_Int32 nOffset(0);
+                bTargetRangeAddress = ScRangeStringConverter::GetRangeFromString( aTargetRangeAddress, aIter.toString(), pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset );
+            }
+            break;
+            case XML_ELEMENT( TABLE, XML_BUTTONS ):
+            {
+                sButtons = aIter.toString();
+            }
+            break;
+            case XML_ELEMENT( TABLE, XML_SHOW_FILTER_BUTTON ):
+            {
+                bShowFilter = IsXMLToken(aIter, XML_TRUE);
+            }
+            break;
+            case XML_ELEMENT( TABLE, XML_DRILL_DOWN_ON_DOUBLE_CLICK ):
+            {
+                bDrillDown = IsXMLToken(aIter, XML_TRUE);
+            }
+            break;
+            case XML_ELEMENT( TABLE, XML_HEADER_GRID_LAYOUT ):
+            {
+                bHeaderGridLayout = IsXMLToken(aIter, XML_TRUE);
+            }
+            break;
         }
     }
 }
@@ -383,39 +383,39 @@ void ScXMLDataPilotTableContext::SetSelectedPage( const OUString& rDimName, cons
 
 void ScXMLDataPilotTableContext::AddDimension(ScDPSaveDimension* pDim)
 {
-    if (pDPSave)
+    if (!pDPSave)
+        return;
+
+    if (pDim->IsDataLayout())
+        mnDataLayoutType = pDim->GetOrientation();
+
+    //  if a dimension with that name has already been inserted,
+    //  mark the new one as duplicate
+    if ( !pDim->IsDataLayout() &&
+            pDPSave->GetExistingDimensionByName(pDim->GetName()) )
+        pDim->SetDupFlag(true);
+
+    switch (pDim->GetOrientation())
     {
-        if (pDim->IsDataLayout())
-            mnDataLayoutType = pDim->GetOrientation();
-
-        //  if a dimension with that name has already been inserted,
-        //  mark the new one as duplicate
-        if ( !pDim->IsDataLayout() &&
-                pDPSave->GetExistingDimensionByName(pDim->GetName()) )
-            pDim->SetDupFlag(true);
-
-        switch (pDim->GetOrientation())
-        {
-            case sheet::DataPilotFieldOrientation_ROW:
-                ++mnRowFieldCount;
+        case sheet::DataPilotFieldOrientation_ROW:
+            ++mnRowFieldCount;
+        break;
+        case sheet::DataPilotFieldOrientation_COLUMN:
+            ++mnColFieldCount;
+        break;
+        case sheet::DataPilotFieldOrientation_PAGE:
+            ++mnPageFieldCount;
+        break;
+        case sheet::DataPilotFieldOrientation_DATA:
+            ++mnDataFieldCount;
+        break;
+        case sheet::DataPilotFieldOrientation_HIDDEN:
             break;
-            case sheet::DataPilotFieldOrientation_COLUMN:
-                ++mnColFieldCount;
+        default:
             break;
-            case sheet::DataPilotFieldOrientation_PAGE:
-                ++mnPageFieldCount;
-            break;
-            case sheet::DataPilotFieldOrientation_DATA:
-                ++mnDataFieldCount;
-            break;
-            case sheet::DataPilotFieldOrientation_HIDDEN:
-                break;
-            default:
-                break;
-        }
-
-        pDPSave->AddDimension(pDim);
     }
+
+    pDPSave->AddDimension(pDim);
 }
 
 void ScXMLDataPilotTableContext::AddGroupDim(const ScDPSaveNumGroupDimension& aNumGroupDim)
@@ -557,22 +557,22 @@ ScXMLDPSourceSQLContext::ScXMLDPSourceSQLContext( ScXMLImport& rImport,
                                       ScXMLDataPilotTableContext* pDataPilotTable) :
     ScXMLImportContext( rImport )
 {
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
-            {
-                case XML_ELEMENT( TABLE, XML_DATABASE_NAME ):
-                    pDataPilotTable->SetDatabaseName(aIter.toString());
-                break;
-                case XML_ELEMENT( TABLE, XML_SQL_STATEMENT ):
-                    pDataPilotTable->SetSourceObject(aIter.toString());
-                break;
-                case XML_ELEMENT( TABLE, XML_PARSE_SQL_STATEMENT ):
-                    pDataPilotTable->SetNative(!IsXMLToken(aIter, XML_TRUE));
-                break;
-            }
+            case XML_ELEMENT( TABLE, XML_DATABASE_NAME ):
+                pDataPilotTable->SetDatabaseName(aIter.toString());
+            break;
+            case XML_ELEMENT( TABLE, XML_SQL_STATEMENT ):
+                pDataPilotTable->SetSourceObject(aIter.toString());
+            break;
+            case XML_ELEMENT( TABLE, XML_PARSE_SQL_STATEMENT ):
+                pDataPilotTable->SetNative(!IsXMLToken(aIter, XML_TRUE));
+            break;
         }
     }
 }
@@ -586,20 +586,20 @@ ScXMLDPSourceTableContext::ScXMLDPSourceTableContext( ScXMLImport& rImport,
                                       ScXMLDataPilotTableContext* pDataPilotTable) :
     ScXMLImportContext( rImport )
 {
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
-            {
-                case XML_ELEMENT( TABLE, XML_DATABASE_NAME ):
-                    pDataPilotTable->SetDatabaseName(aIter.toString());
-                break;
-                case XML_ELEMENT( TABLE, XML_TABLE_NAME ):
-                case XML_ELEMENT( TABLE, XML_DATABASE_TABLE_NAME ):
-                    pDataPilotTable->SetSourceObject(aIter.toString());
-                break;
-            }
+            case XML_ELEMENT( TABLE, XML_DATABASE_NAME ):
+                pDataPilotTable->SetDatabaseName(aIter.toString());
+            break;
+            case XML_ELEMENT( TABLE, XML_TABLE_NAME ):
+            case XML_ELEMENT( TABLE, XML_DATABASE_TABLE_NAME ):
+                pDataPilotTable->SetSourceObject(aIter.toString());
+            break;
         }
     }
 }
@@ -613,19 +613,19 @@ ScXMLDPSourceQueryContext::ScXMLDPSourceQueryContext( ScXMLImport& rImport,
                                       ScXMLDataPilotTableContext* pDataPilotTable) :
     ScXMLImportContext( rImport )
 {
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
-            {
-                case XML_ELEMENT( TABLE, XML_DATABASE_NAME ):
-                    pDataPilotTable->SetDatabaseName(aIter.toString());
-                break;
-                case XML_ELEMENT( TABLE, XML_QUERY_NAME ):
-                    pDataPilotTable->SetSourceObject(aIter.toString());
-                break;
-            }
+            case XML_ELEMENT( TABLE, XML_DATABASE_NAME ):
+                pDataPilotTable->SetDatabaseName(aIter.toString());
+            break;
+            case XML_ELEMENT( TABLE, XML_QUERY_NAME ):
+                pDataPilotTable->SetSourceObject(aIter.toString());
+            break;
         }
     }
 }
@@ -639,28 +639,28 @@ ScXMLSourceServiceContext::ScXMLSourceServiceContext( ScXMLImport& rImport,
                                       ScXMLDataPilotTableContext* pDataPilotTable) :
     ScXMLImportContext( rImport )
 {
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
-            {
-                case XML_ELEMENT( TABLE, XML_NAME ):
-                    pDataPilotTable->SetServiceName(aIter.toString());
-                break;
-                case XML_ELEMENT( TABLE, XML_SOURCE_NAME ):
-                    pDataPilotTable->SetServiceSourceName(aIter.toString());
-                break;
-                case XML_ELEMENT( TABLE, XML_OBJECT_NAME ):
-                    pDataPilotTable->SetServiceSourceObject(aIter.toString());
-                break;
-                case XML_ELEMENT( TABLE, XML_USER_NAME ):
-                    pDataPilotTable->SetServiceUsername(aIter.toString());
-                break;
-                case XML_ELEMENT( TABLE, XML_PASSWORD ):
-                    pDataPilotTable->SetServicePassword(aIter.toString());
-                break;
-            }
+            case XML_ELEMENT( TABLE, XML_NAME ):
+                pDataPilotTable->SetServiceName(aIter.toString());
+            break;
+            case XML_ELEMENT( TABLE, XML_SOURCE_NAME ):
+                pDataPilotTable->SetServiceSourceName(aIter.toString());
+            break;
+            case XML_ELEMENT( TABLE, XML_OBJECT_NAME ):
+                pDataPilotTable->SetServiceSourceObject(aIter.toString());
+            break;
+            case XML_ELEMENT( TABLE, XML_USER_NAME ):
+                pDataPilotTable->SetServiceUsername(aIter.toString());
+            break;
+            case XML_ELEMENT( TABLE, XML_PASSWORD ):
+                pDataPilotTable->SetServicePassword(aIter.toString());
+            break;
         }
     }
 }
@@ -677,30 +677,30 @@ ScXMLDataPilotGrandTotalContext::ScXMLDataPilotGrandTotalContext(
     meOrientation(NONE),
     mbVisible(false)
 {
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
-            {
-                case XML_ELEMENT( TABLE, XML_DISPLAY ):
-                    mbVisible = IsXMLToken(aIter, XML_TRUE);
+            case XML_ELEMENT( TABLE, XML_DISPLAY ):
+                mbVisible = IsXMLToken(aIter, XML_TRUE);
+            break;
+            case XML_ELEMENT( TABLE, XML_ORIENTATION ):
+                if (IsXMLToken(aIter, XML_BOTH))
+                    meOrientation = BOTH;
+                else if (IsXMLToken(aIter, XML_ROW))
+                    meOrientation = ROW;
+                else if (IsXMLToken(aIter, XML_COLUMN))
+                    meOrientation = COLUMN;
+            break;
+            case XML_ELEMENT( TABLE, XML_DISPLAY_NAME ):
+            case XML_ELEMENT( TABLE_EXT, XML_DISPLAY_NAME ):
+                maDisplayName = aIter.toString();
+            break;
+            default:
                 break;
-                case XML_ELEMENT( TABLE, XML_ORIENTATION ):
-                    if (IsXMLToken(aIter, XML_BOTH))
-                        meOrientation = BOTH;
-                    else if (IsXMLToken(aIter, XML_ROW))
-                        meOrientation = ROW;
-                    else if (IsXMLToken(aIter, XML_COLUMN))
-                        meOrientation = COLUMN;
-                break;
-                case XML_ELEMENT( TABLE, XML_DISPLAY_NAME ):
-                case XML_ELEMENT( TABLE_EXT, XML_DISPLAY_NAME ):
-                    maDisplayName = aIter.toString();
-                break;
-                default:
-                    break;
-            }
         }
     }
 }
@@ -735,24 +735,24 @@ ScXMLSourceCellRangeContext::ScXMLSourceCellRangeContext( ScXMLImport& rImport,
     ScXMLImportContext( rImport ),
     pDataPilotTable(pTempDataPilotTable)
 {
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
+            case XML_ELEMENT( TABLE, XML_CELL_RANGE_ADDRESS ):
             {
-                case XML_ELEMENT( TABLE, XML_CELL_RANGE_ADDRESS ):
-                {
-                    ScRange aSourceRangeAddress;
-                    sal_Int32 nOffset(0);
-                    if (ScRangeStringConverter::GetRangeFromString( aSourceRangeAddress, aIter.toString(), GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset ))
-                        pDataPilotTable->SetSourceCellRangeAddress(aSourceRangeAddress);
-                }
-                break;
-                case XML_ELEMENT( TABLE, XML_NAME ):
-                    pDataPilotTable->SetSourceRangeName(aIter.toString());
-                break;
+                ScRange aSourceRangeAddress;
+                sal_Int32 nOffset(0);
+                if (ScRangeStringConverter::GetRangeFromString( aSourceRangeAddress, aIter.toString(), GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset ))
+                    pDataPilotTable->SetSourceCellRangeAddress(aSourceRangeAddress);
             }
+            break;
+            case XML_ELEMENT( TABLE, XML_NAME ):
+                pDataPilotTable->SetSourceRangeName(aIter.toString());
+            break;
         }
     }
 }
@@ -906,53 +906,53 @@ void ScXMLDataPilotFieldContext::AddGroup(const ::std::vector<OUString>& rMember
 
 void SAL_CALL ScXMLDataPilotFieldContext::endFastElement( sal_Int32 /*nElement*/ )
 {
-    if (xDim)
+    if (!xDim)
+        return;
+
+    xDim->SetUsedHierarchy(nUsedHierarchy);
+    xDim->SetFunction(nFunction);
+    xDim->SetOrientation(nOrientation);
+    if (bSelectedPage)
     {
-        xDim->SetUsedHierarchy(nUsedHierarchy);
-        xDim->SetFunction(nFunction);
-        xDim->SetOrientation(nOrientation);
-        if (bSelectedPage)
+        pDataPilotTable->SetSelectedPage(xDim->GetName(), sSelectedPage);
+    }
+    pDataPilotTable->AddDimension(xDim.release());
+    if (!bIsGroupField)
+        return;
+
+    ScDPNumGroupInfo aInfo;
+    aInfo.mbEnable = true;
+    aInfo.mbDateValues = bDateValue;
+    aInfo.mbAutoStart = bAutoStart;
+    aInfo.mbAutoEnd = bAutoEnd;
+    aInfo.mfStart = fStart;
+    aInfo.mfEnd = fEnd;
+    aInfo.mfStep = fStep;
+    if (!sGroupSource.isEmpty())
+    {
+        ScDPSaveGroupDimension aGroupDim(sGroupSource, sName);
+        if (nGroupPart)
+            aGroupDim.SetDateInfo(aInfo, nGroupPart);
+        else
         {
-            pDataPilotTable->SetSelectedPage(xDim->GetName(), sSelectedPage);
-        }
-        pDataPilotTable->AddDimension(xDim.release());
-        if (bIsGroupField)
-        {
-            ScDPNumGroupInfo aInfo;
-            aInfo.mbEnable = true;
-            aInfo.mbDateValues = bDateValue;
-            aInfo.mbAutoStart = bAutoStart;
-            aInfo.mbAutoEnd = bAutoEnd;
-            aInfo.mfStart = fStart;
-            aInfo.mfEnd = fEnd;
-            aInfo.mfStep = fStep;
-            if (!sGroupSource.isEmpty())
+            for (const auto& rGroup : aGroups)
             {
-                ScDPSaveGroupDimension aGroupDim(sGroupSource, sName);
-                if (nGroupPart)
-                    aGroupDim.SetDateInfo(aInfo, nGroupPart);
-                else
+                ScDPSaveGroupItem aItem(rGroup.aName);
+                for (const auto& rMember : rGroup.aMembers)
                 {
-                    for (const auto& rGroup : aGroups)
-                    {
-                        ScDPSaveGroupItem aItem(rGroup.aName);
-                        for (const auto& rMember : rGroup.aMembers)
-                        {
-                            aItem.AddElement(rMember);
-                        }
-                        aGroupDim.AddGroupItem(aItem);
-                    }
+                    aItem.AddElement(rMember);
                 }
-                pDataPilotTable->AddGroupDim(aGroupDim);
-            }
-            else //NumGroup
-            {
-                ScDPSaveNumGroupDimension aNumGroupDim(sName, aInfo);
-                if (nGroupPart)
-                    aNumGroupDim.SetDateInfo(aInfo, nGroupPart);
-                pDataPilotTable->AddGroupDim(aNumGroupDim);
+                aGroupDim.AddGroupItem(aItem);
             }
         }
+        pDataPilotTable->AddGroupDim(aGroupDim);
+    }
+    else //NumGroup
+    {
+        ScDPSaveNumGroupDimension aNumGroupDim(sName, aInfo);
+        if (nGroupPart)
+            aNumGroupDim.SetDateInfo(aInfo, nGroupPart);
+        pDataPilotTable->AddGroupDim(aNumGroupDim);
     }
 }
 
@@ -1027,19 +1027,19 @@ ScXMLDataPilotLevelContext::ScXMLDataPilotLevelContext( ScXMLImport& rImport,
     ScXMLImportContext( rImport ),
     pDataPilotField(pTempDataPilotField)
 {
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
-            {
-                case XML_ELEMENT( TABLE, XML_SHOW_EMPTY ):
-                    pDataPilotField->SetShowEmpty(IsXMLToken(aIter, XML_TRUE));
-                break;
-                case XML_ELEMENT( CALC_EXT, XML_REPEAT_ITEM_LABELS ):
-                    pDataPilotField->SetRepeatItemLabels(IsXMLToken(aIter, XML_TRUE));
-                break;
-            }
+            case XML_ELEMENT( TABLE, XML_SHOW_EMPTY ):
+                pDataPilotField->SetShowEmpty(IsXMLToken(aIter, XML_TRUE));
+            break;
+            case XML_ELEMENT( CALC_EXT, XML_REPEAT_ITEM_LABELS ):
+                pDataPilotField->SetRepeatItemLabels(IsXMLToken(aIter, XML_TRUE));
+            break;
         }
     }
 }
@@ -1248,20 +1248,20 @@ ScXMLDataPilotSubTotalContext::ScXMLDataPilotSubTotalContext( ScXMLImport& rImpo
                                       ScXMLDataPilotSubTotalsContext* pDataPilotSubTotals) :
     ScXMLImportContext( rImport )
 {
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
-            {
-                case XML_ELEMENT( TABLE, XML_FUNCTION ):
-                    pDataPilotSubTotals->AddFunction( ScXMLConverter::GetFunctionFromString2( aIter.toString() ) );
-                break;
-                case XML_ELEMENT( TABLE, XML_DISPLAY_NAME ):
-                case XML_ELEMENT( TABLE_EXT, XML_DISPLAY_NAME ):
-                    pDataPilotSubTotals->SetDisplayName(aIter.toString());
-                break;
-            }
+            case XML_ELEMENT( TABLE, XML_FUNCTION ):
+                pDataPilotSubTotals->AddFunction( ScXMLConverter::GetFunctionFromString2( aIter.toString() ) );
+            break;
+            case XML_ELEMENT( TABLE, XML_DISPLAY_NAME ):
+            case XML_ELEMENT( TABLE_EXT, XML_DISPLAY_NAME ):
+                pDataPilotSubTotals->SetDisplayName(aIter.toString());
+            break;
         }
     }
 }
@@ -1308,27 +1308,27 @@ ScXMLDataPilotMemberContext::ScXMLDataPilotMemberContext( ScXMLImport& rImport,
     bDisplayDetails( true ),
     bHasName( false )
 {
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
-            {
-                case XML_ELEMENT( TABLE, XML_NAME ):
-                    sName = aIter.toString();
-                    bHasName = true;
-                break;
-                case XML_ELEMENT( TABLE, XML_DISPLAY_NAME ):
-                case XML_ELEMENT( TABLE_EXT, XML_DISPLAY_NAME ):
-                    maDisplayName = aIter.toString();
-                break;
-                case XML_ELEMENT( TABLE, XML_DISPLAY ):
-                    bDisplay = IsXMLToken(aIter, XML_TRUE);
-                break;
-                case XML_ELEMENT( TABLE, XML_SHOW_DETAILS ):
-                    bDisplayDetails = IsXMLToken(aIter, XML_TRUE);
-                break;
-            }
+            case XML_ELEMENT( TABLE, XML_NAME ):
+                sName = aIter.toString();
+                bHasName = true;
+            break;
+            case XML_ELEMENT( TABLE, XML_DISPLAY_NAME ):
+            case XML_ELEMENT( TABLE_EXT, XML_DISPLAY_NAME ):
+                maDisplayName = aIter.toString();
+            break;
+            case XML_ELEMENT( TABLE, XML_DISPLAY ):
+                bDisplay = IsXMLToken(aIter, XML_TRUE);
+            break;
+            case XML_ELEMENT( TABLE, XML_SHOW_DETAILS ):
+                bDisplayDetails = IsXMLToken(aIter, XML_TRUE);
+            break;
         }
     }
 }

@@ -45,41 +45,41 @@ ScXMLTableScenarioContext::ScXMLTableScenarioContext(
 {
     rImport.LockSolarMutex();
 
-    if ( rAttrList.is() )
+    if ( !rAttrList.is() )
+        return;
+
+    for (auto &aIter : *rAttrList)
     {
-        for (auto &aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
-            {
-            case XML_ELEMENT( TABLE, XML_DISPLAY_BORDER ):
-                bDisplayBorder = IsXMLToken(aIter, XML_TRUE);
-                break;
-            case XML_ELEMENT( TABLE, XML_BORDER_COLOR ):
-                ::sax::Converter::convertColor(aBorderColor, aIter.toString());
-                break;
-            case XML_ELEMENT( TABLE, XML_COPY_BACK ):
-                bCopyBack = IsXMLToken(aIter, XML_TRUE);
-                break;
-            case XML_ELEMENT( TABLE, XML_COPY_STYLES ):
-                bCopyStyles = IsXMLToken(aIter, XML_TRUE);
-                break;
-            case XML_ELEMENT( TABLE, XML_COPY_FORMULAS ):
-                bCopyFormulas = IsXMLToken(aIter, XML_TRUE);
-                break;
-            case XML_ELEMENT( TABLE, XML_IS_ACTIVE ):
-                bIsActive = IsXMLToken(aIter, XML_TRUE);
-                break;
-            case XML_ELEMENT( TABLE, XML_SCENARIO_RANGES ):
-                ScRangeStringConverter::GetRangeListFromString(
-                    aScenarioRanges, aIter.toString(), GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO );
-                break;
-            case XML_ELEMENT( TABLE, XML_COMMENT ):
-                sComment = aIter.toString();
-                break;
-            case XML_ELEMENT( TABLE, XML_PROTECTED ):
-                bProtected = IsXMLToken(aIter, XML_TRUE);
-                break;
-            }
+        case XML_ELEMENT( TABLE, XML_DISPLAY_BORDER ):
+            bDisplayBorder = IsXMLToken(aIter, XML_TRUE);
+            break;
+        case XML_ELEMENT( TABLE, XML_BORDER_COLOR ):
+            ::sax::Converter::convertColor(aBorderColor, aIter.toString());
+            break;
+        case XML_ELEMENT( TABLE, XML_COPY_BACK ):
+            bCopyBack = IsXMLToken(aIter, XML_TRUE);
+            break;
+        case XML_ELEMENT( TABLE, XML_COPY_STYLES ):
+            bCopyStyles = IsXMLToken(aIter, XML_TRUE);
+            break;
+        case XML_ELEMENT( TABLE, XML_COPY_FORMULAS ):
+            bCopyFormulas = IsXMLToken(aIter, XML_TRUE);
+            break;
+        case XML_ELEMENT( TABLE, XML_IS_ACTIVE ):
+            bIsActive = IsXMLToken(aIter, XML_TRUE);
+            break;
+        case XML_ELEMENT( TABLE, XML_SCENARIO_RANGES ):
+            ScRangeStringConverter::GetRangeListFromString(
+                aScenarioRanges, aIter.toString(), GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO );
+            break;
+        case XML_ELEMENT( TABLE, XML_COMMENT ):
+            sComment = aIter.toString();
+            break;
+        case XML_ELEMENT( TABLE, XML_PROTECTED ):
+            bProtected = IsXMLToken(aIter, XML_TRUE);
+            break;
         }
     }
 }
@@ -93,29 +93,29 @@ void SAL_CALL ScXMLTableScenarioContext::endFastElement( sal_Int32 /*nElement*/ 
 {
     SCTAB nCurrTable( GetScImport().GetTables().GetCurrentSheet() );
     ScDocument* pDoc(GetScImport().GetDocument());
-    if (pDoc)
+    if (!pDoc)
+        return;
+
+    pDoc->SetScenario( nCurrTable, true );
+    ScScenarioFlags nFlags( ScScenarioFlags::NONE );
+    if( bDisplayBorder )
+        nFlags |= ScScenarioFlags::ShowFrame;
+    if( bCopyBack )
+        nFlags |= ScScenarioFlags::TwoWay;
+    if( bCopyStyles )
+        nFlags |= ScScenarioFlags::Attrib;
+    if( !bCopyFormulas )
+        nFlags |= ScScenarioFlags::Value;
+    if( bProtected )
+        nFlags |= ScScenarioFlags::Protected;
+    pDoc->SetScenarioData( nCurrTable, sComment, aBorderColor, nFlags );
+    for( size_t i = 0; i < aScenarioRanges.size(); ++i )
     {
-        pDoc->SetScenario( nCurrTable, true );
-        ScScenarioFlags nFlags( ScScenarioFlags::NONE );
-        if( bDisplayBorder )
-            nFlags |= ScScenarioFlags::ShowFrame;
-        if( bCopyBack )
-            nFlags |= ScScenarioFlags::TwoWay;
-        if( bCopyStyles )
-            nFlags |= ScScenarioFlags::Attrib;
-        if( !bCopyFormulas )
-            nFlags |= ScScenarioFlags::Value;
-        if( bProtected )
-            nFlags |= ScScenarioFlags::Protected;
-        pDoc->SetScenarioData( nCurrTable, sComment, aBorderColor, nFlags );
-        for( size_t i = 0; i < aScenarioRanges.size(); ++i )
-        {
-            ScRange const & rRange = aScenarioRanges[ i ];
-            pDoc->ApplyFlagsTab( rRange.aStart.Col(), rRange.aStart.Row(),
-                rRange.aEnd.Col(), rRange.aEnd.Row(), nCurrTable, ScMF::Scenario );
-        }
-        pDoc->SetActiveScenario( nCurrTable, bIsActive );
+        ScRange const & rRange = aScenarioRanges[ i ];
+        pDoc->ApplyFlagsTab( rRange.aStart.Col(), rRange.aStart.Row(),
+            rRange.aEnd.Col(), rRange.aEnd.Row(), nCurrTable, ScMF::Scenario );
     }
+    pDoc->SetActiveScenario( nCurrTable, bIsActive );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

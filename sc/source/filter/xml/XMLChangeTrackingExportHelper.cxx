@@ -503,64 +503,64 @@ void ScChangeTrackingExportHelper::AddDeletionAttributes(const ScChangeActionDel
         break;
     }
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_POSITION, OUString::number(nPosition));
-    if (pDelAction->GetType() != SC_CAT_DELETE_TABS)
-    {
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE, OUString::number(nStartSheet));
-        if (pDelAction->IsMultiDelete() && !pDelAction->GetDx() && !pDelAction->GetDy())
-        {
-            const ScChangeAction* p = pDelAction->GetNext();
-            sal_Int32 nSlavesCount (1);
-            while (p)
-            {
-                if (p->GetType() != pDelAction->GetType())
-                    break;
-                else
-                {
-                    const ScChangeActionDel* pDel = static_cast<const ScChangeActionDel*>(p);
-                    if ( (pDel->GetDx() > pDelAction->GetDx() || pDel->GetDy() > pDelAction->GetDy()) &&
-                            pDel->GetBigRange() == pDelAction->GetBigRange() )
-                    {
-                        ++nSlavesCount;
-                        p = p->GetNext();
-                    }
-                    else
-                        break;
-                }
-            }
+    if (pDelAction->GetType() == SC_CAT_DELETE_TABS)
+        return;
 
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MULTI_DELETION_SPANNED, OUString::number(nSlavesCount));
+    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE, OUString::number(nStartSheet));
+    if (!(pDelAction->IsMultiDelete() && !pDelAction->GetDx() && !pDelAction->GetDy()))
+        return;
+
+    const ScChangeAction* p = pDelAction->GetNext();
+    sal_Int32 nSlavesCount (1);
+    while (p)
+    {
+        if (p->GetType() != pDelAction->GetType())
+            break;
+        else
+        {
+            const ScChangeActionDel* pDel = static_cast<const ScChangeActionDel*>(p);
+            if ( (pDel->GetDx() > pDelAction->GetDx() || pDel->GetDy() > pDelAction->GetDy()) &&
+                    pDel->GetBigRange() == pDelAction->GetBigRange() )
+            {
+                ++nSlavesCount;
+                p = p->GetNext();
+            }
+            else
+                break;
         }
     }
+
+    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MULTI_DELETION_SPANNED, OUString::number(nSlavesCount));
 }
 
 void ScChangeTrackingExportHelper::WriteCutOffs(const ScChangeActionDel* pAction)
 {
     const ScChangeActionIns* pCutOffIns = pAction->GetCutOffInsert();
     const ScChangeActionDelMoveEntry* pLinkMove = pAction->GetFirstMoveEntry();
-    if (pCutOffIns || pLinkMove)
+    if (!(pCutOffIns || pLinkMove))
+        return;
+
+    SvXMLElementExport aCutOffsElem (rExport, XML_NAMESPACE_TABLE, XML_CUT_OFFS, true, true);
+    if (pCutOffIns)
     {
-        SvXMLElementExport aCutOffsElem (rExport, XML_NAMESPACE_TABLE, XML_CUT_OFFS, true, true);
-        if (pCutOffIns)
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ID, GetChangeID(pCutOffIns->GetActionNumber()));
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_POSITION, OUString::number(pAction->GetCutOffCount()));
+        SvXMLElementExport aInsertCutOffElem (rExport, XML_NAMESPACE_TABLE, XML_INSERTION_CUT_OFF, true, true);
+    }
+    while (pLinkMove)
+    {
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ID, GetChangeID(pLinkMove->GetAction()->GetActionNumber()));
+        if (pLinkMove->GetCutOffFrom() == pLinkMove->GetCutOffTo())
         {
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ID, GetChangeID(pCutOffIns->GetActionNumber()));
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_POSITION, OUString::number(pAction->GetCutOffCount()));
-            SvXMLElementExport aInsertCutOffElem (rExport, XML_NAMESPACE_TABLE, XML_INSERTION_CUT_OFF, true, true);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_POSITION, OUString::number(pLinkMove->GetCutOffFrom()));
         }
-        while (pLinkMove)
+        else
         {
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ID, GetChangeID(pLinkMove->GetAction()->GetActionNumber()));
-            if (pLinkMove->GetCutOffFrom() == pLinkMove->GetCutOffTo())
-            {
-                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_POSITION, OUString::number(pLinkMove->GetCutOffFrom()));
-            }
-            else
-            {
-                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_START_POSITION, OUString::number(pLinkMove->GetCutOffFrom()));
-                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_END_POSITION, OUString::number(pLinkMove->GetCutOffTo()));
-            }
-            SvXMLElementExport aMoveCutOffElem (rExport, XML_NAMESPACE_TABLE, XML_MOVEMENT_CUT_OFF, true, true);
-            pLinkMove = pLinkMove->GetNext();
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_START_POSITION, OUString::number(pLinkMove->GetCutOffFrom()));
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_END_POSITION, OUString::number(pLinkMove->GetCutOffTo()));
         }
+        SvXMLElementExport aMoveCutOffElem (rExport, XML_NAMESPACE_TABLE, XML_MOVEMENT_CUT_OFF, true, true);
+        pLinkMove = pLinkMove->GetNext();
     }
 }
 
@@ -652,45 +652,45 @@ void ScChangeTrackingExportHelper::WorkWithChangeAction(ScChangeAction* pAction)
 
 void ScChangeTrackingExportHelper::CollectAutoStyles()
 {
-    if (pChangeTrack)
+    if (!pChangeTrack)
+        return;
+
+    sal_uInt32 nCount (pChangeTrack->GetActionMax());
+    if (!nCount)
+        return;
+
+    ScChangeAction* pAction = pChangeTrack->GetFirst();
+    CollectActionAutoStyles(pAction);
+    ScChangeAction* pLastAction = pChangeTrack->GetLast();
+    while (pAction != pLastAction)
     {
-        sal_uInt32 nCount (pChangeTrack->GetActionMax());
-        if (nCount)
-        {
-            ScChangeAction* pAction = pChangeTrack->GetFirst();
-            CollectActionAutoStyles(pAction);
-            ScChangeAction* pLastAction = pChangeTrack->GetLast();
-            while (pAction != pLastAction)
-            {
-                pAction = pAction->GetNext();
-                CollectActionAutoStyles(pAction);
-            }
-            pAction = pChangeTrack->GetFirstGenerated();
-            while (pAction)
-            {
-                CollectActionAutoStyles(pAction);
-                pAction = pAction->GetNext();
-            }
-        }
+        pAction = pAction->GetNext();
+        CollectActionAutoStyles(pAction);
+    }
+    pAction = pChangeTrack->GetFirstGenerated();
+    while (pAction)
+    {
+        CollectActionAutoStyles(pAction);
+        pAction = pAction->GetNext();
     }
 }
 
 void ScChangeTrackingExportHelper::CollectAndWriteChanges()
 {
-    if (pChangeTrack)
+    if (!pChangeTrack)
+        return;
+
+    SvXMLElementExport aCangeListElem(rExport, XML_NAMESPACE_TABLE, XML_TRACKED_CHANGES, true, true);
     {
-        SvXMLElementExport aCangeListElem(rExport, XML_NAMESPACE_TABLE, XML_TRACKED_CHANGES, true, true);
+        ScChangeAction* pAction = pChangeTrack->GetFirst();
+        if (pAction)
         {
-            ScChangeAction* pAction = pChangeTrack->GetFirst();
-            if (pAction)
+            WorkWithChangeAction(pAction);
+            ScChangeAction* pLastAction = pChangeTrack->GetLast();
+            while (pAction != pLastAction)
             {
+                pAction = pAction->GetNext();
                 WorkWithChangeAction(pAction);
-                ScChangeAction* pLastAction = pChangeTrack->GetLast();
-                while (pAction != pLastAction)
-                {
-                    pAction = pAction->GetNext();
-                    WorkWithChangeAction(pAction);
-                }
             }
         }
     }

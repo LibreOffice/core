@@ -177,18 +177,18 @@ ScXMLColumnMergeContext::ScXMLColumnMergeContext(
     ScXMLImport& rImport, const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList)
     : ScXMLImportContext(rImport)
 {
-    if (rAttrList.is())
+    if (!rAttrList.is())
+        return;
+
+    for (auto& aIter : *rAttrList)
     {
-        for (auto& aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
+            case XML_ELEMENT(CALC_EXT, XML_MERGE_STRING):
             {
-                case XML_ELEMENT(CALC_EXT, XML_MERGE_STRING):
-                {
-                    maMergeString = aIter.toString();
-                }
-                break;
+                maMergeString = aIter.toString();
             }
+            break;
         }
     }
 }
@@ -415,35 +415,35 @@ ScXMLColumnNumberContext::ScXMLColumnNumberContext(
         }
     }
 
-    if (!aType.isEmpty())
-    {
-        if (aType == "round")
-            maType = sc::NUMBER_TRANSFORM_TYPE::ROUND;
-        else if (aType == "round-up")
-            maType = sc::NUMBER_TRANSFORM_TYPE::ROUND_UP;
-        else if (aType == "round-down")
-            maType = sc::NUMBER_TRANSFORM_TYPE::ROUND_DOWN;
-        else if (aType == "abs")
-            maType = sc::NUMBER_TRANSFORM_TYPE::ABSOLUTE;
-        else if (aType == "log")
-            maType = sc::NUMBER_TRANSFORM_TYPE::LOG_E;
-        else if (aType == "log-base-10")
-            maType = sc::NUMBER_TRANSFORM_TYPE::LOG_10;
-        else if (aType == "cube")
-            maType = sc::NUMBER_TRANSFORM_TYPE::CUBE;
-        else if (aType == "number-square")
-            maType = sc::NUMBER_TRANSFORM_TYPE::SQUARE;
-        else if (aType == "square-root")
-            maType = sc::NUMBER_TRANSFORM_TYPE::SQUARE_ROOT;
-        else if (aType == "exponential")
-            maType = sc::NUMBER_TRANSFORM_TYPE::EXPONENT;
-        else if (aType == "even")
-            maType = sc::NUMBER_TRANSFORM_TYPE::IS_EVEN;
-        else if (aType == "odd")
-            maType = sc::NUMBER_TRANSFORM_TYPE::IS_ODD;
-        else if (aType == "sign")
-            maType = sc::NUMBER_TRANSFORM_TYPE::SIGN;
-    }
+    if (aType.isEmpty())
+        return;
+
+    if (aType == "round")
+        maType = sc::NUMBER_TRANSFORM_TYPE::ROUND;
+    else if (aType == "round-up")
+        maType = sc::NUMBER_TRANSFORM_TYPE::ROUND_UP;
+    else if (aType == "round-down")
+        maType = sc::NUMBER_TRANSFORM_TYPE::ROUND_DOWN;
+    else if (aType == "abs")
+        maType = sc::NUMBER_TRANSFORM_TYPE::ABSOLUTE;
+    else if (aType == "log")
+        maType = sc::NUMBER_TRANSFORM_TYPE::LOG_E;
+    else if (aType == "log-base-10")
+        maType = sc::NUMBER_TRANSFORM_TYPE::LOG_10;
+    else if (aType == "cube")
+        maType = sc::NUMBER_TRANSFORM_TYPE::CUBE;
+    else if (aType == "number-square")
+        maType = sc::NUMBER_TRANSFORM_TYPE::SQUARE;
+    else if (aType == "square-root")
+        maType = sc::NUMBER_TRANSFORM_TYPE::SQUARE_ROOT;
+    else if (aType == "exponential")
+        maType = sc::NUMBER_TRANSFORM_TYPE::EXPONENT;
+    else if (aType == "even")
+        maType = sc::NUMBER_TRANSFORM_TYPE::IS_EVEN;
+    else if (aType == "odd")
+        maType = sc::NUMBER_TRANSFORM_TYPE::IS_ODD;
+    else if (aType == "sign")
+        maType = sc::NUMBER_TRANSFORM_TYPE::SIGN;
 }
 
 ScXMLColumnNumberContext::~ScXMLColumnNumberContext()
@@ -486,18 +486,18 @@ ScXMLColumnRemoveNullContext::ScXMLColumnRemoveNullContext(
     ScXMLImport& rImport, const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList)
     : ScXMLImportContext(rImport)
 {
-    if (rAttrList.is())
+    if (!rAttrList.is())
+        return;
+
+    for (auto& aIter : *rAttrList)
     {
-        for (auto& aIter : *rAttrList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
+            case XML_ELEMENT(CALC_EXT, XML_REPLACE_STRING):
             {
-                case XML_ELEMENT(CALC_EXT, XML_REPLACE_STRING):
-                {
-                    maReplaceString = aIter.toString();
-                }
-                break;
+                maReplaceString = aIter.toString();
             }
+            break;
         }
     }
 }
@@ -558,45 +558,45 @@ ScXMLDateTimeContext::ScXMLDateTimeContext(
         }
     }
 
-    if (!aType.isEmpty())
-    {
-        if (aType == "date-string")
-            maType = sc::DATETIME_TRANSFORMATION_TYPE::DATE_STRING;
-        else if (aType == "year")
-            maType = sc::DATETIME_TRANSFORMATION_TYPE::YEAR;
-        else if (aType == "start-of-year")
-            maType = sc::DATETIME_TRANSFORMATION_TYPE::START_OF_YEAR;
-        else if (aType == "end-of-year")
-            maType = sc::DATETIME_TRANSFORMATION_TYPE::END_OF_YEAR;
-        else if (aType == "month")
-            maType = sc::DATETIME_TRANSFORMATION_TYPE::MONTH;
-        else if (aType == "month-name")
-            maType = sc::DATETIME_TRANSFORMATION_TYPE::MONTH_NAME;
-        else if (aType == "start-of-month")
-            maType = sc::DATETIME_TRANSFORMATION_TYPE::START_OF_MONTH;
-        else if (aType == "end-of-month")
-            maType = sc::DATETIME_TRANSFORMATION_TYPE::END_OF_MONTH;
-        else if (aType == "day")
-            maType = sc::DATETIME_TRANSFORMATION_TYPE::DAY;
-        else if (aType == "day-of-week")
-            maType = sc::DATETIME_TRANSFORMATION_TYPE::DAY_OF_WEEK;
-        else if (aType == "day-of-year")
-            maType = sc::DATETIME_TRANSFORMATION_TYPE::DAY_OF_YEAR;
-        else if (aType == "quarter")
-            maType = sc::DATETIME_TRANSFORMATION_TYPE::QUARTER;
-        else if (aType == "start-of-quarter")
-            maType = sc::DATETIME_TRANSFORMATION_TYPE::START_OF_QUARTER;
-        else if (aType == "end-of-quarter")
-            maType = sc::DATETIME_TRANSFORMATION_TYPE::END_OF_QUARTER;
-        else if (aType == "time")
-            maType = sc::DATETIME_TRANSFORMATION_TYPE::TIME;
-        else if (aType == "hour")
-            maType = sc::DATETIME_TRANSFORMATION_TYPE::HOUR;
-        else if (aType == "minute")
-            maType = sc::DATETIME_TRANSFORMATION_TYPE::MINUTE;
-        else if (aType == "seconds")
-            maType = sc::DATETIME_TRANSFORMATION_TYPE::SECOND;
-    }
+    if (aType.isEmpty())
+        return;
+
+    if (aType == "date-string")
+        maType = sc::DATETIME_TRANSFORMATION_TYPE::DATE_STRING;
+    else if (aType == "year")
+        maType = sc::DATETIME_TRANSFORMATION_TYPE::YEAR;
+    else if (aType == "start-of-year")
+        maType = sc::DATETIME_TRANSFORMATION_TYPE::START_OF_YEAR;
+    else if (aType == "end-of-year")
+        maType = sc::DATETIME_TRANSFORMATION_TYPE::END_OF_YEAR;
+    else if (aType == "month")
+        maType = sc::DATETIME_TRANSFORMATION_TYPE::MONTH;
+    else if (aType == "month-name")
+        maType = sc::DATETIME_TRANSFORMATION_TYPE::MONTH_NAME;
+    else if (aType == "start-of-month")
+        maType = sc::DATETIME_TRANSFORMATION_TYPE::START_OF_MONTH;
+    else if (aType == "end-of-month")
+        maType = sc::DATETIME_TRANSFORMATION_TYPE::END_OF_MONTH;
+    else if (aType == "day")
+        maType = sc::DATETIME_TRANSFORMATION_TYPE::DAY;
+    else if (aType == "day-of-week")
+        maType = sc::DATETIME_TRANSFORMATION_TYPE::DAY_OF_WEEK;
+    else if (aType == "day-of-year")
+        maType = sc::DATETIME_TRANSFORMATION_TYPE::DAY_OF_YEAR;
+    else if (aType == "quarter")
+        maType = sc::DATETIME_TRANSFORMATION_TYPE::QUARTER;
+    else if (aType == "start-of-quarter")
+        maType = sc::DATETIME_TRANSFORMATION_TYPE::START_OF_QUARTER;
+    else if (aType == "end-of-quarter")
+        maType = sc::DATETIME_TRANSFORMATION_TYPE::END_OF_QUARTER;
+    else if (aType == "time")
+        maType = sc::DATETIME_TRANSFORMATION_TYPE::TIME;
+    else if (aType == "hour")
+        maType = sc::DATETIME_TRANSFORMATION_TYPE::HOUR;
+    else if (aType == "minute")
+        maType = sc::DATETIME_TRANSFORMATION_TYPE::MINUTE;
+    else if (aType == "seconds")
+        maType = sc::DATETIME_TRANSFORMATION_TYPE::SECOND;
 }
 
 ScXMLDateTimeContext::~ScXMLDateTimeContext()

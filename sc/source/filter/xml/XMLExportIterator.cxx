@@ -210,24 +210,24 @@ void ScMyMergedRangesContainer::SetCellData( ScMyCell& rMyCell )
 {
     rMyCell.bIsMergedBase = rMyCell.bIsCovered = false;
     ScMyMergedRangeList::iterator aItr(aRangeList.begin());
-    if( aItr != aRangeList.end() )
+    if( aItr == aRangeList.end() )
+        return;
+
+    if( aItr->aCellRange.aStart != rMyCell.aCellAddress )
+        return;
+
+    rMyCell.aMergeRange = aItr->aCellRange;
+    if (aItr->bIsFirst)
+        rMyCell.aMergeRange.aEnd.SetRow( rMyCell.aMergeRange.aStart.Row() + aItr->nRows - 1 );
+    rMyCell.bIsMergedBase = aItr->bIsFirst;
+    rMyCell.bIsCovered = !aItr->bIsFirst;
+    if( aItr->aCellRange.aStart.Col() < aItr->aCellRange.aEnd.Col() )
     {
-        if( aItr->aCellRange.aStart == rMyCell.aCellAddress )
-        {
-            rMyCell.aMergeRange = aItr->aCellRange;
-            if (aItr->bIsFirst)
-                rMyCell.aMergeRange.aEnd.SetRow( rMyCell.aMergeRange.aStart.Row() + aItr->nRows - 1 );
-            rMyCell.bIsMergedBase = aItr->bIsFirst;
-            rMyCell.bIsCovered = !aItr->bIsFirst;
-            if( aItr->aCellRange.aStart.Col() < aItr->aCellRange.aEnd.Col() )
-            {
-                aItr->aCellRange.aStart.IncCol( 1 );
-                aItr->bIsFirst = false;
-            }
-            else
-                aRangeList.erase(aItr);
-        }
+        aItr->aCellRange.aStart.IncCol( 1 );
+        aItr->bIsFirst = false;
     }
+    else
+        aRangeList.erase(aItr);
 }
 
 void ScMyMergedRangesContainer::SkipTable(SCTAB nSkip)
@@ -280,25 +280,25 @@ void ScMyAreaLinksContainer::SetCellData( ScMyCell& rMyCell )
 {
     rMyCell.bHasAreaLink = false;
     ScMyAreaLinkList::iterator aItr(aAreaLinkList.begin());
-    if( aItr != aAreaLinkList.end() )
+    if( aItr == aAreaLinkList.end() )
+        return;
+
+    if( aItr->aDestRange.aStart != rMyCell.aCellAddress )
+        return;
+
+    rMyCell.bHasAreaLink = true;
+    rMyCell.aAreaLink = *aItr;
+    aItr = aAreaLinkList.erase( aItr );
+    bool bFound = true;
+    while (aItr != aAreaLinkList.end() && bFound)
     {
-        if( aItr->aDestRange.aStart == rMyCell.aCellAddress )
+        if ( aItr->aDestRange.aStart == rMyCell.aCellAddress )
         {
-            rMyCell.bHasAreaLink = true;
-            rMyCell.aAreaLink = *aItr;
+            OSL_FAIL("more than one linked range on one cell");
             aItr = aAreaLinkList.erase( aItr );
-            bool bFound = true;
-            while (aItr != aAreaLinkList.end() && bFound)
-            {
-                if ( aItr->aDestRange.aStart == rMyCell.aCellAddress )
-                {
-                    OSL_FAIL("more than one linked range on one cell");
-                    aItr = aAreaLinkList.erase( aItr );
-                }
-                else
-                    bFound = false;
-            }
         }
+        else
+            bFound = false;
     }
 }
 
@@ -395,32 +395,32 @@ void ScMyDetectiveObjContainer::AddObject( ScDetectiveObjType eObjType, const SC
                                             const ScAddress& rPosition, const ScRange& rSourceRange,
                                             bool bHasError )
 {
-    if( (eObjType == SC_DETOBJ_ARROW) ||
+    if( !((eObjType == SC_DETOBJ_ARROW) ||
         (eObjType == SC_DETOBJ_FROMOTHERTAB) ||
         (eObjType == SC_DETOBJ_TOOTHERTAB) ||
-        (eObjType == SC_DETOBJ_CIRCLE) )
+        (eObjType == SC_DETOBJ_CIRCLE)) )
+        return;
+
+    ScMyDetectiveObj aDetObj;
+    aDetObj.eObjType = eObjType;
+    if( eObjType == SC_DETOBJ_TOOTHERTAB )
+        aDetObj.aPosition = rSourceRange.aStart;
+    else
+        aDetObj.aPosition = rPosition;
+    aDetObj.aSourceRange = rSourceRange;
+
+    // #111064#; take the sheet where the object is found and not the sheet given in the ranges, because they are not always true
+    if (eObjType != SC_DETOBJ_FROMOTHERTAB)
     {
-        ScMyDetectiveObj aDetObj;
-        aDetObj.eObjType = eObjType;
-        if( eObjType == SC_DETOBJ_TOOTHERTAB )
-            aDetObj.aPosition = rSourceRange.aStart;
-        else
-            aDetObj.aPosition = rPosition;
-        aDetObj.aSourceRange = rSourceRange;
-
-        // #111064#; take the sheet where the object is found and not the sheet given in the ranges, because they are not always true
-        if (eObjType != SC_DETOBJ_FROMOTHERTAB)
-        {
-            // if the ObjType == SC_DETOBJ_FROMOTHERTAB then the SourceRange is not used and so it has not to be tested and changed
-            OSL_ENSURE(aDetObj.aPosition.Tab() == aDetObj.aSourceRange.aStart.Tab(), "It seems to be possible to have different sheets");
-            aDetObj.aSourceRange.aStart.SetTab( nSheet );
-            aDetObj.aSourceRange.aEnd.SetTab( nSheet );
-        }
-        aDetObj.aPosition.SetTab( nSheet );
-
-        aDetObj.bHasError = bHasError;
-        aDetectiveObjList.push_back( aDetObj );
+        // if the ObjType == SC_DETOBJ_FROMOTHERTAB then the SourceRange is not used and so it has not to be tested and changed
+        OSL_ENSURE(aDetObj.aPosition.Tab() == aDetObj.aSourceRange.aStart.Tab(), "It seems to be possible to have different sheets");
+        aDetObj.aSourceRange.aStart.SetTab( nSheet );
+        aDetObj.aSourceRange.aEnd.SetTab( nSheet );
     }
+    aDetObj.aPosition.SetTab( nSheet );
+
+    aDetObj.bHasError = bHasError;
+    aDetectiveObjList.push_back( aDetObj );
 }
 
 bool ScMyDetectiveObjContainer::GetFirstAddress( ScAddress& rCellAddress )
@@ -643,19 +643,19 @@ void ScMyNotEmptyCellsIterator::SetCurrentTable(const SCTAB nTable,
     aLastAddress.SetRow( 0 );
     aLastAddress.SetCol( 0 );
     aLastAddress.SetTab( nTable );
-    if (nCurrentTable != nTable)
-    {
-        nCurrentTable = nTable;
+    if (nCurrentTable == nTable)
+        return;
 
-        mpCellItr.reset(
-            new ScHorizontalCellIterator(
-                rExport.GetDocument(), nCurrentTable, 0, 0,
-                static_cast<SCCOL>(rExport.GetSharedData()->GetLastColumn(nCurrentTable)),
-                static_cast<SCROW>(rExport.GetSharedData()->GetLastRow(nCurrentTable))));
+    nCurrentTable = nTable;
 
-        xTable.set(rxTable);
-        xCellRange.set(xTable);
-    }
+    mpCellItr.reset(
+        new ScHorizontalCellIterator(
+            rExport.GetDocument(), nCurrentTable, 0, 0,
+            static_cast<SCCOL>(rExport.GetSharedData()->GetLastColumn(nCurrentTable)),
+            static_cast<SCROW>(rExport.GetSharedData()->GetLastRow(nCurrentTable))));
+
+    xTable.set(rxTable);
+    xCellRange.set(xTable);
 }
 
 void ScMyNotEmptyCellsIterator::SkipTable(SCTAB nSkip)
