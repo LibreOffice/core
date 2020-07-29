@@ -465,10 +465,10 @@
           <value xml:lang="en-US">Nickname</value>
         </prop>
         <prop oor:name="PrimaryEmail">
-          <value xml:lang="en-US">E-mail</value>
+          <value xml:lang="en-US">Email</value>
         </prop>
         <prop oor:name="SecondEmail">
-          <value xml:lang="en-US">E-mail (2)</value>
+          <value xml:lang="en-US">Email (2)</value>
         </prop>
         <prop oor:name="PreferMailFormat">
           <value xml:lang="en-US">Mail Format</value>
