@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-07-09 17:03:14 using:
+ Generated on 2020-07-29 16:22:56 using:
  ./bin/update_pch svtools svt --cutoff=4 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -108,7 +108,6 @@
 #include <vcl/dllapi.h>
 #include <vcl/dndhelp.hxx>
 #include <vcl/dockwin.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/event.hxx>
 #include <vcl/floatwin.hxx>
@@ -136,7 +135,6 @@
 #include <vcl/syswin.hxx>
 #include <vcl/task.hxx>
 #include <vcl/textfilter.hxx>
-#include <vcl/textview.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/vclenum.hxx>
@@ -320,6 +318,7 @@
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <salhelper/thread.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
