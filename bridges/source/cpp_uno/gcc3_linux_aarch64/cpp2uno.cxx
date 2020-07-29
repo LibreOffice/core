@@ -42,7 +42,7 @@
 
 #include "abi.hxx"
 
-extern "C" void vtableSlotCall_();
+extern "C" void vtableSlotCall();
 
 namespace {
 
@@ -303,64 +303,6 @@ extern "C" void vtableCall(
         assert(false);
     }
 }
-
-struct aarch64_va_list {
-    void * stack;
-    void * gr_top;
-    void * vr_top;
-    int gr_offs;
-    int vr_offs;
-};
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wuninitialized"
-#pragma GCC diagnostic ignored "-Wvolatile-register-var"
-extern "C" void vtableSlotCall(
-    unsigned long gpr0, unsigned long gpr1, unsigned long gpr2,
-    unsigned long gpr3, unsigned long gpr4, unsigned long gpr5,
-    unsigned long gpr6, unsigned long gpr7, double fpr0, double fpr1,
-    double fpr2, double fpr3, double fpr4, double fpr5, double fpr6,
-    double fpr7, ...)
-{
-    register void * volatile indirectRet asm ("x8");
-    register sal_Int32 volatile functionIndex asm ("x9");
-    register sal_Int32 volatile vtableOffset asm ("x10");
-    va_list ap;
-    va_start(ap, fpr7);
-    assert(sizeof (va_list) == sizeof (aarch64_va_list));
-    unsigned long gpr[8];
-    gpr[0] = gpr0;
-    gpr[1] = gpr1;
-    gpr[2] = gpr2;
-    gpr[3] = gpr3;
-    gpr[4] = gpr4;
-    gpr[5] = gpr5;
-    gpr[6] = gpr6;
-    gpr[7] = gpr7;
-    double fpr[8];
-    fpr[0] = fpr0;
-    fpr[1] = fpr1;
-    fpr[2] = fpr2;
-    fpr[3] = fpr3;
-    fpr[4] = fpr4;
-    fpr[5] = fpr5;
-    fpr[6] = fpr6;
-    fpr[7] = fpr7;
-    vtableCall(
-        functionIndex, vtableOffset, gpr,
-        reinterpret_cast<unsigned long *>(fpr),
-        static_cast<unsigned long *>(
-            reinterpret_cast<aarch64_va_list *>(&ap)->stack),
-        indirectRet);
-    asm volatile(
-        "ldp x0, x1, [%[gpr_]]\n\t"
-        "ldp d0, d1, [%[fpr_]]\n\t"
-        "ldp d2, d3, [%[fpr_], #16]\n\t"
-        :: [gpr_]"r" (gpr), [fpr_]"r" (fpr)
-        : "r0", "r1", "v0", "v1", "v2", "v3");
-    va_end(ap);
-}
-#pragma GCC diagnostic pop
 
 std::size_t const codeSnippetSize = 8 * 4;
 
