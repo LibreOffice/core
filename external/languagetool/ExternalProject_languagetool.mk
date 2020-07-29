@@ -23,6 +23,7 @@ $(eval $(call gb_ExternalProject_use_jars,languagetool,\
 $(call gb_ExternalProject_get_state_target,languagetool,build) : \
         $(call gb_Jar_get_target,libreoffice)
 	cd "$(call gb_UnpackedTarball_get_dir,languagetool)" && \
+	JAVA_HOME=$(JAVA_HOME_FOR_BUILD) \
 	$(ICECREAM_RUN) "$(ANT)" \
 		$(if $(verbose),-v,-q) \
 		-f build.xml \
