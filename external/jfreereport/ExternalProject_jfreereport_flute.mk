@@ -19,6 +19,7 @@ $(eval $(call gb_ExternalProject_register_targets,jfreereport_flute,\
 $(call gb_ExternalProject_get_state_target,jfreereport_flute,build) :
 	$(call gb_Trace_StartRange,jfreereport_flute,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
+		JAVA_HOME=$(JAVA_HOME_FOR_BUILD) \
 		$(ICECREAM_RUN) "$(ANT)" \
 			$(if $(verbose),-v,-q) \
 			-f build.xml \
