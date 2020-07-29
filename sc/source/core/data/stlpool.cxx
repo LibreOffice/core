@@ -129,49 +129,49 @@ void ScStyleSheetPool::CopyStyleFrom( ScStyleSheetPool* pSrcPool,
     //  this is the Dest-Pool
 
     SfxStyleSheetBase* pStyleSheet = pSrcPool->Find( rName, eFamily );
-    if (pStyleSheet)
+    if (!pStyleSheet)
+        return;
+
+    const SfxItemSet& rSourceSet = pStyleSheet->GetItemSet();
+    SfxStyleSheetBase* pDestSheet = Find( rName, eFamily );
+    if (!pDestSheet)
+        pDestSheet = &Make( rName, eFamily );
+    SfxItemSet& rDestSet = pDestSheet->GetItemSet();
+    rDestSet.PutExtended( rSourceSet, SfxItemState::DONTCARE, SfxItemState::DEFAULT );
+
+    const SfxPoolItem* pItem;
+    if ( eFamily == SfxStyleFamily::Page )
     {
-        const SfxItemSet& rSourceSet = pStyleSheet->GetItemSet();
-        SfxStyleSheetBase* pDestSheet = Find( rName, eFamily );
-        if (!pDestSheet)
-            pDestSheet = &Make( rName, eFamily );
-        SfxItemSet& rDestSet = pDestSheet->GetItemSet();
-        rDestSet.PutExtended( rSourceSet, SfxItemState::DONTCARE, SfxItemState::DEFAULT );
+        //  Set-Items
 
-        const SfxPoolItem* pItem;
-        if ( eFamily == SfxStyleFamily::Page )
+        if ( rSourceSet.GetItemState( ATTR_PAGE_HEADERSET, false, &pItem ) == SfxItemState::SET )
         {
-            //  Set-Items
-
-            if ( rSourceSet.GetItemState( ATTR_PAGE_HEADERSET, false, &pItem ) == SfxItemState::SET )
-            {
-                const SfxItemSet& rSrcSub = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
-                SfxItemSet aDestSub( *rDestSet.GetPool(), rSrcSub.GetRanges() );
-                aDestSub.PutExtended( rSrcSub, SfxItemState::DONTCARE, SfxItemState::DEFAULT );
-                rDestSet.Put( SvxSetItem( ATTR_PAGE_HEADERSET, aDestSub ) );
-            }
-            if ( rSourceSet.GetItemState( ATTR_PAGE_FOOTERSET, false, &pItem ) == SfxItemState::SET )
-            {
-                const SfxItemSet& rSrcSub = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
-                SfxItemSet aDestSub( *rDestSet.GetPool(), rSrcSub.GetRanges() );
-                aDestSub.PutExtended( rSrcSub, SfxItemState::DONTCARE, SfxItemState::DEFAULT );
-                rDestSet.Put( SvxSetItem( ATTR_PAGE_FOOTERSET, aDestSub ) );
-            }
+            const SfxItemSet& rSrcSub = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
+            SfxItemSet aDestSub( *rDestSet.GetPool(), rSrcSub.GetRanges() );
+            aDestSub.PutExtended( rSrcSub, SfxItemState::DONTCARE, SfxItemState::DEFAULT );
+            rDestSet.Put( SvxSetItem( ATTR_PAGE_HEADERSET, aDestSub ) );
         }
-        else    // cell styles
+        if ( rSourceSet.GetItemState( ATTR_PAGE_FOOTERSET, false, &pItem ) == SfxItemState::SET )
         {
-            // number format exchange list has to be handled here, too
+            const SfxItemSet& rSrcSub = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
+            SfxItemSet aDestSub( *rDestSet.GetPool(), rSrcSub.GetRanges() );
+            aDestSub.PutExtended( rSrcSub, SfxItemState::DONTCARE, SfxItemState::DEFAULT );
+            rDestSet.Put( SvxSetItem( ATTR_PAGE_FOOTERSET, aDestSub ) );
+        }
+    }
+    else    // cell styles
+    {
+        // number format exchange list has to be handled here, too
 
-            if ( pDoc && pDoc->GetFormatExchangeList() &&
-                 rSourceSet.GetItemState( ATTR_VALUE_FORMAT, false, &pItem ) == SfxItemState::SET )
+        if ( pDoc && pDoc->GetFormatExchangeList() &&
+             rSourceSet.GetItemState( ATTR_VALUE_FORMAT, false, &pItem ) == SfxItemState::SET )
+        {
+            sal_uLong nOldFormat = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
+            SvNumberFormatterIndexTable::const_iterator it = pDoc->GetFormatExchangeList()->find(nOldFormat);
+            if (it != pDoc->GetFormatExchangeList()->end())
             {
-                sal_uLong nOldFormat = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
-                SvNumberFormatterIndexTable::const_iterator it = pDoc->GetFormatExchangeList()->find(nOldFormat);
-                if (it != pDoc->GetFormatExchangeList()->end())
-                {
-                    sal_uInt32 nNewFormat = it->second;
-                    rDestSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ) );
-                }
+                sal_uInt32 nNewFormat = it->second;
+                rDestSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ) );
             }
         }
     }

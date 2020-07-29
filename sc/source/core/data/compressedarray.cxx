@@ -69,124 +69,124 @@ size_t ScCompressedArray<A,D>::Search( A nAccess ) const
 template< typename A, typename D >
 void ScCompressedArray<A,D>::SetValue( A nStart, A nEnd, const D& rValue )
 {
-    if (0 <= nStart && nStart <= nMaxAccess && 0 <= nEnd && nEnd <= nMaxAccess
-            && nStart <= nEnd)
+    if (!(0 <= nStart && nStart <= nMaxAccess && 0 <= nEnd && nEnd <= nMaxAccess
+            && nStart <= nEnd))
+        return;
+
+    if ((nStart == 0) && (nEnd == nMaxAccess))
+        Reset( rValue);
+    else
     {
-        if ((nStart == 0) && (nEnd == nMaxAccess))
-            Reset( rValue);
+        // Create a temporary copy in case we got a reference passed that
+        // points to a part of the array to be reallocated.
+        D aNewVal( rValue);
+        size_t nNeeded = nCount + 2;
+        if (nLimit < nNeeded)
+        {
+            nLimit *= 1.5;
+            if (nLimit < nNeeded)
+                nLimit = nNeeded;
+            std::unique_ptr<DataEntry[]> pNewData(new DataEntry[nLimit]);
+            memcpy( pNewData.get(), pData.get(), nCount*sizeof(DataEntry));
+            pData = std::move(pNewData);
+        }
+
+        size_t ni;          // number of leading entries
+        size_t nInsert;     // insert position (nMaxAccess+1 := no insert)
+        bool bCombined = false;
+        bool bSplit = false;
+        if (nStart > 0)
+        {
+            // skip leading
+            ni = this->Search( nStart);
+
+            nInsert = nMaxAccess+1;
+            if (!(pData[ni].aValue == aNewVal))
+            {
+                if (ni == 0 || (pData[ni-1].nEnd < nStart - 1))
+                {   // may be a split or a simple insert or just a shrink,
+                    // row adjustment is done further down
+                    if (pData[ni].nEnd > nEnd)
+                        bSplit = true;
+                    ni++;
+                    nInsert = ni;
+                }
+                else if (ni > 0 && pData[ni-1].nEnd == nStart - 1)
+                    nInsert = ni;
+            }
+            if (ni > 0 && pData[ni-1].aValue == aNewVal)
+            {   // combine
+                pData[ni-1].nEnd = nEnd;
+                nInsert = nMaxAccess+1;
+                bCombined = true;
+            }
+        }
         else
         {
-            // Create a temporary copy in case we got a reference passed that
-            // points to a part of the array to be reallocated.
-            D aNewVal( rValue);
-            size_t nNeeded = nCount + 2;
-            if (nLimit < nNeeded)
-            {
-                nLimit *= 1.5;
-                if (nLimit < nNeeded)
-                    nLimit = nNeeded;
-                std::unique_ptr<DataEntry[]> pNewData(new DataEntry[nLimit]);
-                memcpy( pNewData.get(), pData.get(), nCount*sizeof(DataEntry));
-                pData = std::move(pNewData);
-            }
+            nInsert = 0;
+            ni = 0;
+        }
 
-            size_t ni;          // number of leading entries
-            size_t nInsert;     // insert position (nMaxAccess+1 := no insert)
-            bool bCombined = false;
-            bool bSplit = false;
-            if (nStart > 0)
-            {
-                // skip leading
-                ni = this->Search( nStart);
-
-                nInsert = nMaxAccess+1;
-                if (!(pData[ni].aValue == aNewVal))
+        size_t nj = ni;     // stop position of range to replace
+        while (nj < nCount && pData[nj].nEnd <= nEnd)
+            nj++;
+        if (!bSplit)
+        {
+            if (nj < nCount && pData[nj].aValue == aNewVal)
+            {   // combine
+                if (ni > 0)
                 {
-                    if (ni == 0 || (pData[ni-1].nEnd < nStart - 1))
-                    {   // may be a split or a simple insert or just a shrink,
-                        // row adjustment is done further down
-                        if (pData[ni].nEnd > nEnd)
-                            bSplit = true;
-                        ni++;
-                        nInsert = ni;
+                    if (pData[ni-1].aValue == aNewVal)
+                    {   // adjacent entries
+                        pData[ni-1].nEnd = pData[nj].nEnd;
+                        nj++;
                     }
-                    else if (ni > 0 && pData[ni-1].nEnd == nStart - 1)
-                        nInsert = ni;
+                    else if (ni == nInsert)
+                        pData[ni-1].nEnd = nStart - 1;   // shrink
                 }
-                if (ni > 0 && pData[ni-1].aValue == aNewVal)
-                {   // combine
-                    pData[ni-1].nEnd = nEnd;
-                    nInsert = nMaxAccess+1;
-                    bCombined = true;
-                }
+                nInsert = nMaxAccess+1;
+                bCombined = true;
             }
-            else
-            {
-                nInsert = 0;
-                ni = 0;
-            }
-
-            size_t nj = ni;     // stop position of range to replace
-            while (nj < nCount && pData[nj].nEnd <= nEnd)
-                nj++;
-            if (!bSplit)
-            {
-                if (nj < nCount && pData[nj].aValue == aNewVal)
-                {   // combine
-                    if (ni > 0)
-                    {
-                        if (pData[ni-1].aValue == aNewVal)
-                        {   // adjacent entries
-                            pData[ni-1].nEnd = pData[nj].nEnd;
-                            nj++;
-                        }
-                        else if (ni == nInsert)
-                            pData[ni-1].nEnd = nStart - 1;   // shrink
-                    }
-                    nInsert = nMaxAccess+1;
-                    bCombined = true;
-                }
-                else if (ni > 0 && ni == nInsert)
-                    pData[ni-1].nEnd = nStart - 1;   // shrink
+            else if (ni > 0 && ni == nInsert)
+                pData[ni-1].nEnd = nStart - 1;   // shrink
+        }
+        if (ni < nj)
+        {   // remove middle entries
+            if (!bCombined)
+            {   // replace one entry
+                pData[ni].nEnd = nEnd;
+                pData[ni].aValue = aNewVal;
+                ni++;
+                nInsert = nMaxAccess+1;
             }
             if (ni < nj)
-            {   // remove middle entries
-                if (!bCombined)
-                {   // replace one entry
-                    pData[ni].nEnd = nEnd;
-                    pData[ni].aValue = aNewVal;
-                    ni++;
-                    nInsert = nMaxAccess+1;
-                }
-                if (ni < nj)
-                {   // remove entries
-                    memmove( pData.get() + ni, pData.get() + nj,
-                            (nCount - nj) * sizeof(DataEntry));
-                    nCount -= nj - ni;
-                }
+            {   // remove entries
+                memmove( pData.get() + ni, pData.get() + nj,
+                        (nCount - nj) * sizeof(DataEntry));
+                nCount -= nj - ni;
             }
+        }
 
-            if (nInsert < static_cast<size_t>(nMaxAccess+1))
-            {   // insert or append new entry
-                if (nInsert <= nCount)
+        if (nInsert < static_cast<size_t>(nMaxAccess+1))
+        {   // insert or append new entry
+            if (nInsert <= nCount)
+            {
+                if (!bSplit)
+                    memmove( pData.get() + nInsert + 1, pData.get() + nInsert,
+                            (nCount - nInsert) * sizeof(DataEntry));
+                else
                 {
-                    if (!bSplit)
-                        memmove( pData.get() + nInsert + 1, pData.get() + nInsert,
-                                (nCount - nInsert) * sizeof(DataEntry));
-                    else
-                    {
-                        memmove( pData.get() + nInsert + 2, pData.get() + nInsert,
-                                (nCount - nInsert) * sizeof(DataEntry));
-                        pData[nInsert+1] = pData[nInsert-1];
-                        nCount++;
-                    }
+                    memmove( pData.get() + nInsert + 2, pData.get() + nInsert,
+                            (nCount - nInsert) * sizeof(DataEntry));
+                    pData[nInsert+1] = pData[nInsert-1];
+                    nCount++;
                 }
-                if (nInsert)
-                    pData[nInsert-1].nEnd = nStart - 1;
-                pData[nInsert].nEnd = nEnd;
-                pData[nInsert].aValue = aNewVal;
-                nCount++;
             }
+            if (nInsert)
+                pData[nInsert-1].nEnd = nStart - 1;
+            pData[nInsert].nEnd = nEnd;
+            pData[nInsert].aValue = aNewVal;
+            nCount++;
         }
     }
 }

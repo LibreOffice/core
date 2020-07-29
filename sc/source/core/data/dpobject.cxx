@@ -521,36 +521,36 @@ uno::Reference<sheet::XDimensionsSupplier> const & ScDPObject::GetSource()
 void ScDPObject::CreateOutput()
 {
     CreateObjects();
-    if (!pOutput)
-    {
-        bool bFilterButton = IsSheetData() && pSaveData && pSaveData->GetFilterButton();
-        pOutput.reset( new ScDPOutput( pDoc, xSource, aOutRange.aStart, bFilterButton ) );
-        pOutput->SetHeaderLayout ( mbHeaderLayout );
+    if (pOutput)
+        return;
 
-        long nOldRows = nHeaderRows;
-        nHeaderRows = pOutput->GetHeaderRows();
+    bool bFilterButton = IsSheetData() && pSaveData && pSaveData->GetFilterButton();
+    pOutput.reset( new ScDPOutput( pDoc, xSource, aOutRange.aStart, bFilterButton ) );
+    pOutput->SetHeaderLayout ( mbHeaderLayout );
 
-        if ( bAllowMove && nHeaderRows != nOldRows )
-        {
-            long nDiff = nOldRows - nHeaderRows;
-            if ( nOldRows == 0 )
-                --nDiff;
-            if ( nHeaderRows == 0 )
-                ++nDiff;
+    long nOldRows = nHeaderRows;
+    nHeaderRows = pOutput->GetHeaderRows();
 
-            long nNewRow = aOutRange.aStart.Row() + nDiff;
-            if ( nNewRow < 0 )
-                nNewRow = 0;
+    if ( !(bAllowMove && nHeaderRows != nOldRows) )
+        return;
 
-            ScAddress aStart( aOutRange.aStart );
-            aStart.SetRow(nNewRow);
-            pOutput->SetPosition( aStart );
+    long nDiff = nOldRows - nHeaderRows;
+    if ( nOldRows == 0 )
+        --nDiff;
+    if ( nHeaderRows == 0 )
+        ++nDiff;
 
-            //TODO: modify aOutRange?
+    long nNewRow = aOutRange.aStart.Row() + nDiff;
+    if ( nNewRow < 0 )
+        nNewRow = 0;
 
-            bAllowMove = false;     // use only once
-        }
-    }
+    ScAddress aStart( aOutRange.aStart );
+    aStart.SetRow(nNewRow);
+    pOutput->SetPosition( aStart );
+
+    //TODO: modify aOutRange?
+
+    bAllowMove = false;     // use only once
 }
 
 namespace {
@@ -1065,44 +1065,44 @@ void ScDPObject::UpdateReference( UpdateRefMode eUpdateRefMode,
 
     // sheet source data
 
-    if ( pSheetDesc )
-    {
-        const OUString& rRangeName = pSheetDesc->GetRangeName();
-        if (!rRangeName.isEmpty())
-            // Source range is a named range.  No need to update.
-            return;
+    if ( !pSheetDesc )
+        return;
 
-        const ScRange& rSrcRange = pSheetDesc->GetSourceRange();
-        nCol1 = rSrcRange.aStart.Col();
-        nRow1 = rSrcRange.aStart.Row();
-        nTab1 = rSrcRange.aStart.Tab();
-        nCol2 = rSrcRange.aEnd.Col();
-        nRow2 = rSrcRange.aEnd.Row();
-        nTab2 = rSrcRange.aEnd.Tab();
+    const OUString& rRangeName = pSheetDesc->GetRangeName();
+    if (!rRangeName.isEmpty())
+        // Source range is a named range.  No need to update.
+        return;
 
-        eRes = ScRefUpdate::Update( pDoc, eUpdateRefMode,
-                rRange.aStart.Col(), rRange.aStart.Row(), rRange.aStart.Tab(),
-                rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aEnd.Tab(), nDx, nDy, nDz,
-                nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-        if ( eRes != UR_NOTHING )
-        {
-            SCCOL nDiffX = nCol1 - pSheetDesc->GetSourceRange().aStart.Col();
-            SCROW nDiffY = nRow1 - pSheetDesc->GetSourceRange().aStart.Row();
+    const ScRange& rSrcRange = pSheetDesc->GetSourceRange();
+    nCol1 = rSrcRange.aStart.Col();
+    nRow1 = rSrcRange.aStart.Row();
+    nTab1 = rSrcRange.aStart.Tab();
+    nCol2 = rSrcRange.aEnd.Col();
+    nRow2 = rSrcRange.aEnd.Row();
+    nTab2 = rSrcRange.aEnd.Tab();
 
-            ScQueryParam aParam = pSheetDesc->GetQueryParam();
-            aParam.nCol1 = sal::static_int_cast<SCCOL>( aParam.nCol1 + nDiffX );
-            aParam.nCol2 = sal::static_int_cast<SCCOL>( aParam.nCol2 + nDiffX );
-            aParam.nRow1 += nDiffY; //TODO: used?
-            aParam.nRow2 += nDiffY; //TODO: used?
-            SCSIZE nEC = aParam.GetEntryCount();
-            for (SCSIZE i=0; i<nEC; i++)
-                if (aParam.GetEntry(i).bDoQuery)
-                    aParam.GetEntry(i).nField += nDiffX;
+    eRes = ScRefUpdate::Update( pDoc, eUpdateRefMode,
+            rRange.aStart.Col(), rRange.aStart.Row(), rRange.aStart.Tab(),
+            rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aEnd.Tab(), nDx, nDy, nDz,
+            nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+    if ( eRes == UR_NOTHING )
+        return;
 
-            pSheetDesc->SetQueryParam(aParam);
-            pSheetDesc->SetSourceRange(ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
-        }
-    }
+    SCCOL nDiffX = nCol1 - pSheetDesc->GetSourceRange().aStart.Col();
+    SCROW nDiffY = nRow1 - pSheetDesc->GetSourceRange().aStart.Row();
+
+    ScQueryParam aParam = pSheetDesc->GetQueryParam();
+    aParam.nCol1 = sal::static_int_cast<SCCOL>( aParam.nCol1 + nDiffX );
+    aParam.nCol2 = sal::static_int_cast<SCCOL>( aParam.nCol2 + nDiffX );
+    aParam.nRow1 += nDiffY; //TODO: used?
+    aParam.nRow2 += nDiffY; //TODO: used?
+    SCSIZE nEC = aParam.GetEntryCount();
+    for (SCSIZE i=0; i<nEC; i++)
+        if (aParam.GetEntry(i).bDoQuery)
+            aParam.GetEntry(i).nField += nDiffX;
+
+    pSheetDesc->SetQueryParam(aParam);
+    pSheetDesc->SetSourceRange(ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
 }
 
 bool ScDPObject::RefsEqual( const ScDPObject& r ) const
@@ -2306,25 +2306,25 @@ void ScDPObject::FillOldParam(ScPivotParam& rParam) const
         rParam.maDataFields, xSource, sheet::DataPilotFieldOrientation_DATA, false);
 
     uno::Reference<beans::XPropertySet> xProp( xSource, uno::UNO_QUERY );
-    if (xProp.is())
-    {
-        try
-        {
-            rParam.bMakeTotalCol = ScUnoHelpFunctions::GetBoolProperty( xProp,
-                        SC_UNO_DP_COLGRAND, true );
-            rParam.bMakeTotalRow = ScUnoHelpFunctions::GetBoolProperty( xProp,
-                        SC_UNO_DP_ROWGRAND, true );
+    if (!xProp.is())
+        return;
 
-            // following properties may be missing for external sources
-            rParam.bIgnoreEmptyRows = ScUnoHelpFunctions::GetBoolProperty( xProp,
-                        SC_UNO_DP_IGNOREEMPTY );
-            rParam.bDetectCategories = ScUnoHelpFunctions::GetBoolProperty( xProp,
-                        SC_UNO_DP_REPEATEMPTY );
-        }
-        catch(uno::Exception&)
-        {
-            // no error
-        }
+    try
+    {
+        rParam.bMakeTotalCol = ScUnoHelpFunctions::GetBoolProperty( xProp,
+                    SC_UNO_DP_COLGRAND, true );
+        rParam.bMakeTotalRow = ScUnoHelpFunctions::GetBoolProperty( xProp,
+                    SC_UNO_DP_ROWGRAND, true );
+
+        // following properties may be missing for external sources
+        rParam.bIgnoreEmptyRows = ScUnoHelpFunctions::GetBoolProperty( xProp,
+                    SC_UNO_DP_IGNOREEMPTY );
+        rParam.bDetectCategories = ScUnoHelpFunctions::GetBoolProperty( xProp,
+                    SC_UNO_DP_REPEATEMPTY );
+    }
+    catch(uno::Exception&)
+    {
+        // no error
     }
 }
 
@@ -2417,20 +2417,20 @@ void ScDPObject::FillLabelDataForDimension(
     rLabelData.mbDataLayout = bData;
     rLabelData.mbIsValue = true; //TODO: check
 
-    if (!bData)
-    {
-        rLabelData.mnOriginalDim = static_cast<long>(nOrigPos);
-        rLabelData.maLayoutName = aLayoutName;
-        rLabelData.maSubtotalName = aSubtotalName;
-        if (nOrigPos >= 0)
-            // This is a duplicated dimension. Use the original dimension index.
-            nDim = nOrigPos;
-        GetHierarchies(nDim, rLabelData.maHiers);
-        GetMembers(nDim, GetUsedHierarchy(nDim), rLabelData.maMembers);
-        lcl_FillLabelData(rLabelData, xDimProp);
-        rLabelData.mnFlags = ScUnoHelpFunctions::GetLongProperty(
-            xDimProp, SC_UNO_DP_FLAGS );
-    }
+    if (bData)
+        return;
+
+    rLabelData.mnOriginalDim = static_cast<long>(nOrigPos);
+    rLabelData.maLayoutName = aLayoutName;
+    rLabelData.maSubtotalName = aSubtotalName;
+    if (nOrigPos >= 0)
+        // This is a duplicated dimension. Use the original dimension index.
+        nDim = nOrigPos;
+    GetHierarchies(nDim, rLabelData.maHiers);
+    GetMembers(nDim, GetUsedHierarchy(nDim), rLabelData.maMembers);
+    lcl_FillLabelData(rLabelData, xDimProp);
+    rLabelData.mnFlags = ScUnoHelpFunctions::GetLongProperty(
+        xDimProp, SC_UNO_DP_FLAGS );
 }
 
 void ScDPObject::FillLabelData(sal_Int32 nDim, ScDPLabelData& rLabels)

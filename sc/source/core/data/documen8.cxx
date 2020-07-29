@@ -162,20 +162,20 @@ void ScDocument::SetPrintOptions()
     if ( !mpPrinter ) GetPrinter(); // this sets mpPrinter
     OSL_ENSURE( mpPrinter, "Error in printer creation :-/" );
 
-    if ( mpPrinter )
-    {
-        SfxItemSet aOptSet( mpPrinter->GetOptions() );
+    if ( !mpPrinter )
+        return;
 
-        SfxPrinterChangeFlags nFlags = SfxPrinterChangeFlags::NONE;
-        if (officecfg::Office::Common::Print::Warning::PaperOrientation::get())
-            nFlags |= SfxPrinterChangeFlags::CHG_ORIENTATION;
-        if (officecfg::Office::Common::Print::Warning::PaperSize::get())
-            nFlags |= SfxPrinterChangeFlags::CHG_SIZE;
-        aOptSet.Put( SfxFlagItem( SID_PRINTER_CHANGESTODOC, static_cast<int>(nFlags) ) );
-        aOptSet.Put( SfxBoolItem( SID_PRINTER_NOTFOUND_WARN, officecfg::Office::Common::Print::Warning::NotFound::get() ) );
+    SfxItemSet aOptSet( mpPrinter->GetOptions() );
 
-        mpPrinter->SetOptions( aOptSet );
-    }
+    SfxPrinterChangeFlags nFlags = SfxPrinterChangeFlags::NONE;
+    if (officecfg::Office::Common::Print::Warning::PaperOrientation::get())
+        nFlags |= SfxPrinterChangeFlags::CHG_ORIENTATION;
+    if (officecfg::Office::Common::Print::Warning::PaperSize::get())
+        nFlags |= SfxPrinterChangeFlags::CHG_SIZE;
+    aOptSet.Put( SfxFlagItem( SID_PRINTER_CHANGESTODOC, static_cast<int>(nFlags) ) );
+    aOptSet.Put( SfxBoolItem( SID_PRINTER_NOTFOUND_WARN, officecfg::Office::Common::Print::Warning::NotFound::get() ) );
+
+    mpPrinter->SetOptions( aOptSet );
 }
 
 VirtualDevice* ScDocument::GetVirtualDevice_100th_mm()
@@ -842,21 +842,21 @@ void ScDocument::UpdateExternalRefLinks(weld::Window* pWin)
 
     pExternalRefMgr->enableDocTimer(true);
 
-    if (bAny)
-    {
-        TrackFormulas();
-        mpShell->Broadcast( SfxHint(SfxHintId::ScDataChanged) );
+    if (!bAny)
+        return;
 
-        // #i101960# set document modified, as in TrackTimeHdl for DDE links
-        if (!mpShell->IsModified())
+    TrackFormulas();
+    mpShell->Broadcast( SfxHint(SfxHintId::ScDataChanged) );
+
+    // #i101960# set document modified, as in TrackTimeHdl for DDE links
+    if (!mpShell->IsModified())
+    {
+        mpShell->SetModified();
+        SfxBindings* pBindings = GetViewBindings();
+        if (pBindings)
         {
-            mpShell->SetModified();
-            SfxBindings* pBindings = GetViewBindings();
-            if (pBindings)
-            {
-                pBindings->Invalidate( SID_SAVEDOC );
-                pBindings->Invalidate( SID_DOC_MODIFIED );
-            }
+            pBindings->Invalidate( SID_SAVEDOC );
+            pBindings->Invalidate( SID_DOC_MODIFIED );
         }
     }
 }
@@ -1116,36 +1116,36 @@ void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
         }
     }
 
-    if ( bAnyUpdate )
-    {
-        // #i52120# Look for duplicates (after updating all positions).
-        // If several links start at the same cell, the one with the lower index is removed
-        // (file format specifies only one link definition for a cell).
+    if ( !bAnyUpdate )
+        return;
 
-        sal_uInt16 nFirstIndex = 0;
-        while ( nFirstIndex < nCount )
+    // #i52120# Look for duplicates (after updating all positions).
+    // If several links start at the same cell, the one with the lower index is removed
+    // (file format specifies only one link definition for a cell).
+
+    sal_uInt16 nFirstIndex = 0;
+    while ( nFirstIndex < nCount )
+    {
+        bool bFound = false;
+        ::sfx2::SvBaseLink* pFirst = rLinks[nFirstIndex].get();
+        if (ScAreaLink* pFirstLink = dynamic_cast<ScAreaLink*>(pFirst))
         {
-            bool bFound = false;
-            ::sfx2::SvBaseLink* pFirst = rLinks[nFirstIndex].get();
-            if (ScAreaLink* pFirstLink = dynamic_cast<ScAreaLink*>(pFirst))
+            ScAddress aFirstPos = pFirstLink->GetDestArea().aStart;
+            for ( sal_uInt16 nSecondIndex = nFirstIndex + 1; nSecondIndex < nCount && !bFound; ++nSecondIndex )
             {
-                ScAddress aFirstPos = pFirstLink->GetDestArea().aStart;
-                for ( sal_uInt16 nSecondIndex = nFirstIndex + 1; nSecondIndex < nCount && !bFound; ++nSecondIndex )
+                ::sfx2::SvBaseLink* pSecond = rLinks[nSecondIndex].get();
+                ScAreaLink* pSecondLink = dynamic_cast<ScAreaLink*>(pSecond);
+                if (pSecondLink && pSecondLink->GetDestArea().aStart == aFirstPos)
                 {
-                    ::sfx2::SvBaseLink* pSecond = rLinks[nSecondIndex].get();
-                    ScAreaLink* pSecondLink = dynamic_cast<ScAreaLink*>(pSecond);
-                    if (pSecondLink && pSecondLink->GetDestArea().aStart == aFirstPos)
-                    {
-                        // remove the first link, exit the inner loop, don't increment nFirstIndex
-                        pMgr->Remove(pFirst);
-                        nCount = rLinks.size();
-                        bFound = true;
-                    }
+                    // remove the first link, exit the inner loop, don't increment nFirstIndex
+                    pMgr->Remove(pFirst);
+                    nCount = rLinks.size();
+                    bFound = true;
                 }
             }
-            if (!bFound)
-                ++nFirstIndex;
         }
+        if (!bFound)
+            ++nFirstIndex;
     }
 }
 

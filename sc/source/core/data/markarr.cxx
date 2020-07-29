@@ -107,107 +107,107 @@ bool ScMarkArray::GetMark( SCROW nRow ) const
 
 void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
 {
-    if (mrSheetLimits.ValidRow(nStartRow) && mrSheetLimits.ValidRow(nEndRow))
+    if (!(mrSheetLimits.ValidRow(nStartRow) && mrSheetLimits.ValidRow(nEndRow)))
+        return;
+
+    if ((nStartRow == 0) && (nEndRow == mrSheetLimits.mnMaxRow))
     {
-        if ((nStartRow == 0) && (nEndRow == mrSheetLimits.mnMaxRow))
+        Reset(bMarked);
+    }
+    else
+    {
+        SCSIZE ni;          // number of entries in beginning
+        SCSIZE nInsert;     // insert position (mnMaxRow+1 := no insert)
+        bool bCombined = false;
+        bool bSplit = false;
+        if ( nStartRow > 0 )
         {
-            Reset(bMarked);
+            // skip beginning
+            SCSIZE nIndex;
+            Search( nStartRow, nIndex );
+            ni = nIndex;
+
+            nInsert = mrSheetLimits.GetMaxRowCount();
+            if ( mvData[ni].bMarked != bMarked )
+            {
+                if ( ni == 0 || (mvData[ni-1].nRow < nStartRow - 1) )
+                {   // may be a split or a simple insert or just a shrink,
+                    // row adjustment is done further down
+                    if ( mvData[ni].nRow > nEndRow )
+                        bSplit = true;
+                    ni++;
+                    nInsert = ni;
+                }
+                else if ( ni > 0 && mvData[ni-1].nRow == nStartRow - 1 )
+                    nInsert = ni;
+            }
+            if ( ni > 0 && mvData[ni-1].bMarked == bMarked )
+            {   // combine
+                mvData[ni-1].nRow = nEndRow;
+                nInsert = mrSheetLimits.GetMaxRowCount();
+                bCombined = true;
+            }
         }
         else
         {
-            SCSIZE ni;          // number of entries in beginning
-            SCSIZE nInsert;     // insert position (mnMaxRow+1 := no insert)
-            bool bCombined = false;
-            bool bSplit = false;
-            if ( nStartRow > 0 )
-            {
-                // skip beginning
-                SCSIZE nIndex;
-                Search( nStartRow, nIndex );
-                ni = nIndex;
+            nInsert = 0;
+            ni = 0;
+        }
 
-                nInsert = mrSheetLimits.GetMaxRowCount();
-                if ( mvData[ni].bMarked != bMarked )
+        SCSIZE nj = ni;     // stop position of range to replace
+        while ( nj < mvData.size() && mvData[nj].nRow <= nEndRow )
+            nj++;
+        if ( !bSplit )
+        {
+            if ( nj < mvData.size() && mvData[nj].bMarked == bMarked )
+            {   // combine
+                if ( ni > 0 )
                 {
-                    if ( ni == 0 || (mvData[ni-1].nRow < nStartRow - 1) )
-                    {   // may be a split or a simple insert or just a shrink,
-                        // row adjustment is done further down
-                        if ( mvData[ni].nRow > nEndRow )
-                            bSplit = true;
-                        ni++;
-                        nInsert = ni;
+                    if ( mvData[ni-1].bMarked == bMarked )
+                    {   // adjacent entries
+                        mvData[ni-1].nRow = mvData[nj].nRow;
+                        nj++;
                     }
-                    else if ( ni > 0 && mvData[ni-1].nRow == nStartRow - 1 )
-                        nInsert = ni;
+                    else if ( ni == nInsert )
+                        mvData[ni-1].nRow = nStartRow - 1;   // shrink
                 }
-                if ( ni > 0 && mvData[ni-1].bMarked == bMarked )
-                {   // combine
-                    mvData[ni-1].nRow = nEndRow;
-                    nInsert = mrSheetLimits.GetMaxRowCount();
-                    bCombined = true;
+                nInsert = mrSheetLimits.GetMaxRowCount();
+                bCombined = true;
+            }
+            else if ( ni > 0 && ni == nInsert )
+                mvData[ni-1].nRow = nStartRow - 1;   // shrink
+        }
+        if ( ni < nj )
+        {   // remove middle entries
+            if ( !bCombined )
+            {   // replace one entry
+                mvData[ni].nRow = nEndRow;
+                mvData[ni].bMarked = bMarked;
+                ni++;
+                nInsert = mrSheetLimits.GetMaxRowCount();
+            }
+            if ( ni < nj )
+            {   // remove entries
+                mvData.erase(mvData.begin() + ni, mvData.begin() + nj);
+            }
+        }
+
+        if ( nInsert < sal::static_int_cast<SCSIZE>(mrSheetLimits.GetMaxRowCount()) )
+        {   // insert or append new entry
+            if ( nInsert <= mvData.size() )
+            {
+                if ( !bSplit )
+                    mvData.insert(mvData.begin() + nInsert, { nEndRow, bMarked });
+                else
+                {
+                    mvData.insert(mvData.begin() + nInsert, 2, { nEndRow, bMarked });
+                    mvData[nInsert+1] = mvData[nInsert-1];
                 }
             }
             else
-            {
-                nInsert = 0;
-                ni = 0;
-            }
-
-            SCSIZE nj = ni;     // stop position of range to replace
-            while ( nj < mvData.size() && mvData[nj].nRow <= nEndRow )
-                nj++;
-            if ( !bSplit )
-            {
-                if ( nj < mvData.size() && mvData[nj].bMarked == bMarked )
-                {   // combine
-                    if ( ni > 0 )
-                    {
-                        if ( mvData[ni-1].bMarked == bMarked )
-                        {   // adjacent entries
-                            mvData[ni-1].nRow = mvData[nj].nRow;
-                            nj++;
-                        }
-                        else if ( ni == nInsert )
-                            mvData[ni-1].nRow = nStartRow - 1;   // shrink
-                    }
-                    nInsert = mrSheetLimits.GetMaxRowCount();
-                    bCombined = true;
-                }
-                else if ( ni > 0 && ni == nInsert )
-                    mvData[ni-1].nRow = nStartRow - 1;   // shrink
-            }
-            if ( ni < nj )
-            {   // remove middle entries
-                if ( !bCombined )
-                {   // replace one entry
-                    mvData[ni].nRow = nEndRow;
-                    mvData[ni].bMarked = bMarked;
-                    ni++;
-                    nInsert = mrSheetLimits.GetMaxRowCount();
-                }
-                if ( ni < nj )
-                {   // remove entries
-                    mvData.erase(mvData.begin() + ni, mvData.begin() + nj);
-                }
-            }
-
-            if ( nInsert < sal::static_int_cast<SCSIZE>(mrSheetLimits.GetMaxRowCount()) )
-            {   // insert or append new entry
-                if ( nInsert <= mvData.size() )
-                {
-                    if ( !bSplit )
-                        mvData.insert(mvData.begin() + nInsert, { nEndRow, bMarked });
-                    else
-                    {
-                        mvData.insert(mvData.begin() + nInsert, 2, { nEndRow, bMarked });
-                        mvData[nInsert+1] = mvData[nInsert-1];
-                    }
-                }
-                else
-                    mvData.push_back(ScMarkEntry{ nEndRow, bMarked });
-                if ( nInsert )
-                    mvData[nInsert-1].nRow = nStartRow - 1;
-            }
+                mvData.push_back(ScMarkEntry{ nEndRow, bMarked });
+            if ( nInsert )
+                mvData[nInsert-1].nRow = nStartRow - 1;
         }
     }
 }

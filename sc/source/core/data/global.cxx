@@ -964,21 +964,21 @@ void ScGlobal::AddLanguage( SfxItemSet& rSet, const SvNumberFormatter& rFormatte
         "ScGlobal::AddLanguage - language already added");
 
     const SfxPoolItem* pHardItem;
-    if ( rSet.GetItemState( ATTR_VALUE_FORMAT, false, &pHardItem ) == SfxItemState::SET )
-    {
-        const SvNumberformat* pHardFormat = rFormatter.GetEntry(
-            static_cast<const SfxUInt32Item*>(pHardItem)->GetValue() );
+    if ( rSet.GetItemState( ATTR_VALUE_FORMAT, false, &pHardItem ) != SfxItemState::SET )
+        return;
 
-        sal_uInt32 nParentFmt = 0; // Pool default
-        const SfxItemSet* pParent = rSet.GetParent();
-        if ( pParent )
-            nParentFmt = pParent->Get( ATTR_VALUE_FORMAT ).GetValue();
-        const SvNumberformat* pParFormat = rFormatter.GetEntry( nParentFmt );
+    const SvNumberformat* pHardFormat = rFormatter.GetEntry(
+        static_cast<const SfxUInt32Item*>(pHardItem)->GetValue() );
 
-        if ( pHardFormat && pParFormat &&
-                (pHardFormat->GetLanguage() != pParFormat->GetLanguage()) )
-            rSet.Put( SvxLanguageItem( pHardFormat->GetLanguage(), ATTR_LANGUAGE_FORMAT ) );
-    }
+    sal_uInt32 nParentFmt = 0; // Pool default
+    const SfxItemSet* pParent = rSet.GetParent();
+    if ( pParent )
+        nParentFmt = pParent->Get( ATTR_VALUE_FORMAT ).GetValue();
+    const SvNumberformat* pParFormat = rFormatter.GetEntry( nParentFmt );
+
+    if ( pHardFormat && pParFormat &&
+            (pHardFormat->GetLanguage() != pParFormat->GetLanguage()) )
+        rSet.Put( SvxLanguageItem( pHardFormat->GetLanguage(), ATTR_LANGUAGE_FORMAT ) );
 }
 
 utl::TransliterationWrapper* ScGlobal::GetpTransliteration()
