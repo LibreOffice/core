@@ -215,6 +215,13 @@ protected:
     // helper method
     void AddToRecentlyUsedList();
 
+    // Parent class for actual guard objects that would do useful work
+    class LockAllViewsGuard
+    {
+    public:
+        virtual ~LockAllViewsGuard() {}
+    };
+
 public:
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXDOCSH)
 
@@ -746,6 +753,13 @@ public:
 
     /** override this if you have a XmlIdRegistry. */
     virtual const sfx2::IXmlIdRegistry* GetXmlIdRegistry() const { return nullptr; }
+
+    // Lock all unlocked views, and returns a guard object which unlocks those views when destructed
+    virtual std::unique_ptr<LockAllViewsGuard> LockAllViews()
+    {
+        return std::make_unique<LockAllViewsGuard>();
+    }
+
 };
 
 #define SFX_GLOBAL_CLASSID \
