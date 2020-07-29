@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cd6a2281_bcbf307c",
+        "filename": "sw/qa/inc/swmodeltestbase.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1044,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-07-29T19:50:34Z",
+      "side": 1,
+      "message": "this header looks like it desperately wants to have a real .cxx file :-)",
+      "revId": "4433a964d885769763e8784e441728d36111362b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
