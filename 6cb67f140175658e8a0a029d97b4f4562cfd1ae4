@@ -106,6 +106,24 @@
       "revId": "6cb67f140175658e8a0a029d97b4f4562cfd1ae4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bacf3ecb_325fe69c",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_aarch64/cpp2uno.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-07-29T07:13:17Z",
+      "side": 1,
+      "message": "\u003e I think it is time to replace vtableSlotCall with pure assembler code after all\n\n\u003chttps://gerrit.libreoffice.org/c/core/+/99660\u003e \"Replace brittle gcc3_linux_aarch64 vtableSlotCall with pure assembler code\"",
+      "parentUuid": "1acf0ce2_4b23d89c",
+      "revId": "6cb67f140175658e8a0a029d97b4f4562cfd1ae4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
