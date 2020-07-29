@@ -71,26 +71,28 @@ using namespace i18npool;
                                     new ImplName) );       \
 }
 
-#define IMPL_CREATEINSTANCE_CTX( ImplName )               \
-    static uno::Reference< uno::XInterface >              \
-        ImplName##_CreateInstance(               \
-            const uno::Reference<                         \
-                    lang::XMultiServiceFactory >& rxMSF ) \
-{                                                         \
-    return uno::Reference <                               \
-            uno::XInterface >( static_cast<cppu::OWeakObject*>(   \
-                                    new ImplName( comphelper::getComponentContext(rxMSF) )) );  \
-}
-
-typedef uno::Reference<
-        uno::XInterface > (*FN_CreateInstance)(
-            const uno::Reference<
-                lang::XMultiServiceFactory >& );
-
 #define IMPL_TRANSLITERATION_ITEM( implName ) \
     {       TRLT_SERVICELNAME_L10N, \
         TRLT_IMPLNAME_PREFIX  #implName, \
         &implName##_CreateInstance }
+
+#define IMPL_UNO_CONSTRUCTOR( ImplName ) \
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * \
+i18npool_##ImplName##_get_implementation( \
+    css::uno::XComponentContext *, \
+    css::uno::Sequence<css::uno::Any> const &) \
+{ \
+    return cppu::acquire(new ImplName()); \
+}
+
+#define IMPL_UNO_CONSTRUCTOR_CTX( ImplName ) \
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * \
+i18npool_##ImplName##_get_implementation( \
+    css::uno::XComponentContext * context, \
+    css::uno::Sequence<css::uno::Any> const &) \
+{ \
+    return cppu::acquire(new ImplName(context)); \
+}
 
 
 // At least for iOS it doesn't hurt if we have lots of functions here
@@ -102,35 +104,53 @@ typedef uno::Reference<
 // -Wl,--gc_sections. It's mainly for iOS and Android that the
 // --with-locales option is intended anyway.
 
-IMPL_CREATEINSTANCE_CTX( IndexEntrySupplier )
-IMPL_CREATEINSTANCE_CTX( IndexEntrySupplier_asian )
-IMPL_CREATEINSTANCE_CTX( IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_syllable )
-IMPL_CREATEINSTANCE_CTX( IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_consonant )
-IMPL_CREATEINSTANCE_CTX( IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_syllable )
-IMPL_CREATEINSTANCE_CTX( IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_consonant )
-IMPL_CREATEINSTANCE_CTX( IndexEntrySupplier_Unicode )
-IMPL_CREATEINSTANCE_CTX( CalendarImpl )
-IMPL_CREATEINSTANCE( Calendar_gregorian )
-IMPL_CREATEINSTANCE( Calendar_hanja )
-IMPL_CREATEINSTANCE( Calendar_gengou )
-IMPL_CREATEINSTANCE( Calendar_ROC )
-IMPL_CREATEINSTANCE( Calendar_dangi )
-IMPL_CREATEINSTANCE( Calendar_hijri )
-IMPL_CREATEINSTANCE( Calendar_jewish )
-IMPL_CREATEINSTANCE( Calendar_buddhist )
-IMPL_CREATEINSTANCE( BreakIterator_ja )
-IMPL_CREATEINSTANCE( BreakIterator_zh )
-IMPL_CREATEINSTANCE( BreakIterator_zh_TW )
-IMPL_CREATEINSTANCE( BreakIterator_ko )
-IMPL_CREATEINSTANCE( BreakIterator_th )
-IMPL_CREATEINSTANCE_CTX( ChapterCollator )
-IMPL_CREATEINSTANCE( Collator_Unicode )
+IMPL_UNO_CONSTRUCTOR_CTX( IndexEntrySupplier )
+IMPL_UNO_CONSTRUCTOR_CTX( IndexEntrySupplier_asian )
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja
+IMPL_UNO_CONSTRUCTOR_CTX( IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_syllable )
+IMPL_UNO_CONSTRUCTOR_CTX( IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_consonant )
+IMPL_UNO_CONSTRUCTOR_CTX( IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_syllable )
+IMPL_UNO_CONSTRUCTOR_CTX( IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_consonant )
+#endif
+IMPL_UNO_CONSTRUCTOR_CTX( IndexEntrySupplier_Unicode )
+IMPL_UNO_CONSTRUCTOR_CTX( CalendarImpl )
+IMPL_UNO_CONSTRUCTOR( Calendar_gregorian )
+IMPL_UNO_CONSTRUCTOR( Calendar_hanja )
+IMPL_UNO_CONSTRUCTOR( Calendar_hanja_yoil )
+IMPL_UNO_CONSTRUCTOR( Calendar_gengou )
+IMPL_UNO_CONSTRUCTOR( Calendar_ROC )
+IMPL_UNO_CONSTRUCTOR( Calendar_dangi )
+IMPL_UNO_CONSTRUCTOR( Calendar_hijri )
+IMPL_UNO_CONSTRUCTOR( Calendar_jewish )
+IMPL_UNO_CONSTRUCTOR( Calendar_buddhist )
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja
+    IMPL_UNO_CONSTRUCTOR( BreakIterator_ja )
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_zh
+IMPL_UNO_CONSTRUCTOR( BreakIterator_zh )
+IMPL_UNO_CONSTRUCTOR( BreakIterator_zh_TW )
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_ko
+IMPL_UNO_CONSTRUCTOR( BreakIterator_ko )
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_th
+IMPL_UNO_CONSTRUCTOR( BreakIterator_th )
+#endif
+IMPL_UNO_CONSTRUCTOR_CTX( ChapterCollator )
+IMPL_UNO_CONSTRUCTOR( Collator_Unicode )
 
-IMPL_CREATEINSTANCE( InputSequenceChecker_th )
-IMPL_CREATEINSTANCE( InputSequenceChecker_hi )
-
-IMPL_CREATEINSTANCE_CTX( TextConversion_ko )
-IMPL_CREATEINSTANCE_CTX( TextConversion_zh )
+#if WITH_LOCALE_ALL || WITH_LOCALE_th
+IMPL_UNO_CONSTRUCTOR( InputSequenceChecker_th )
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_hi
+IMPL_UNO_CONSTRUCTOR( InputSequenceChecker_hi )
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_ko
+IMPL_UNO_CONSTRUCTOR_CTX( TextConversion_ko )
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_zh
+IMPL_UNO_CONSTRUCTOR_CTX( TextConversion_zh )
+#endif
 
 IMPL_CREATEINSTANCE( Transliteration_u2l )
 IMPL_CREATEINSTANCE( Transliteration_l2u )
@@ -178,7 +198,7 @@ IMPL_CREATEINSTANCE( NumToCharHangul_ko )
 IMPL_CREATEINSTANCE( NumToCharLower_ko )
 IMPL_CREATEINSTANCE( NumToCharUpper_ko )
 IMPL_CREATEINSTANCE( NumToCharIndic_ar )
-IMPL_CREATEINSTANCE( NumToCharEastIndic_ar )
+IMPL_UNO_CONSTRUCTOR( NumToCharEastIndic_ar )
 IMPL_CREATEINSTANCE( NumToCharIndic_hi )
 IMPL_CREATEINSTANCE( NumToChar_th )
 
@@ -186,23 +206,33 @@ IMPL_CREATEINSTANCE( CharToNumLower_zh_CN )
 IMPL_CREATEINSTANCE( CharToNumUpper_zh_CN )
 IMPL_CREATEINSTANCE( CharToNumLower_zh_TW )
 IMPL_CREATEINSTANCE( CharToNumUpper_zh_TW )
-IMPL_CREATEINSTANCE( CharToNumFullwidth )
-IMPL_CREATEINSTANCE( CharToNumKanjiShort_ja_JP )
-IMPL_CREATEINSTANCE( CharToNumKanjiTraditional_ja_JP )
-IMPL_CREATEINSTANCE( CharToNumHangul_ko )
-IMPL_CREATEINSTANCE( CharToNumLower_ko )
-IMPL_CREATEINSTANCE( CharToNumUpper_ko )
-IMPL_CREATEINSTANCE( CharToNumIndic_ar )
-IMPL_CREATEINSTANCE( CharToNumEastIndic_ar )
-IMPL_CREATEINSTANCE( CharToNumIndic_hi )
-IMPL_CREATEINSTANCE( CharToNum_th )
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja
+IMPL_UNO_CONSTRUCTOR( CharToNumFullwidth )
+IMPL_UNO_CONSTRUCTOR( CharToNumKanjiShort_ja_JP )
+IMPL_UNO_CONSTRUCTOR( CharToNumKanjiTraditional_ja_JP )
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_ko
+IMPL_UNO_CONSTRUCTOR( CharToNumHangul_ko )
+IMPL_UNO_CONSTRUCTOR( CharToNumLower_ko )
+IMPL_UNO_CONSTRUCTOR( CharToNumUpper_ko )
+#endif
+IMPL_UNO_CONSTRUCTOR( CharToNumIndic_ar )
+IMPL_UNO_CONSTRUCTOR( CharToNumEastIndic_ar )
+#if WITH_LOCALE_ALL || WITH_LOCALE_hi
+IMPL_UNO_CONSTRUCTOR( CharToNumIndic_hi )
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_th
+IMPL_UNO_CONSTRUCTOR( CharToNum_th )
+#endif
 
-IMPL_CREATEINSTANCE( NumToTextLower_zh_CN )
-IMPL_CREATEINSTANCE( NumToTextUpper_zh_CN )
-IMPL_CREATEINSTANCE( NumToTextLower_zh_TW )
-IMPL_CREATEINSTANCE( NumToTextUpper_zh_TW )
-IMPL_CREATEINSTANCE( NumToTextFullwidth_zh_CN )
-IMPL_CREATEINSTANCE( NumToTextFullwidth_zh_TW )
+#if WITH_LOCALE_ALL || WITH_LOCALE_zh
+IMPL_UNO_CONSTRUCTOR( NumToTextLower_zh_CN )
+IMPL_UNO_CONSTRUCTOR( NumToTextUpper_zh_CN )
+IMPL_UNO_CONSTRUCTOR( NumToTextLower_zh_TW )
+IMPL_UNO_CONSTRUCTOR( NumToTextUpper_zh_TW )
+IMPL_UNO_CONSTRUCTOR( NumToTextFullwidth_zh_CN )
+IMPL_UNO_CONSTRUCTOR( NumToTextFullwidth_zh_TW )
+#endif
 IMPL_CREATEINSTANCE( NumToTextFullwidth_ja_JP )
 IMPL_CREATEINSTANCE( NumToTextFullwidth_ko )
 IMPL_CREATEINSTANCE( NumToTextKanjiLongModern_ja_JP )
@@ -249,6 +279,9 @@ IMPL_CREATEINSTANCE( halfwidthToFullwidthLikeJIS )
 
 namespace {
 
+typedef uno::Reference< uno::XInterface > (*FN_CreateInstance)(
+                const uno::Reference< lang::XMultiServiceFactory >& );
+
 struct InstancesArray {
         const char* pServiceNm;
         const char* pImplementationNm;
@@ -258,117 +291,6 @@ struct InstancesArray {
 }
 
 const InstancesArray aInstances[] = {
-    {   "com.sun.star.i18n.IndexEntrySupplier",
-        "com.sun.star.i18n.IndexEntrySupplier",
-        &IndexEntrySupplier_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_asian",
-        "com.sun.star.i18n.IndexEntrySupplier_asian",
-        &IndexEntrySupplier_asian_CreateInstance },
-#if WITH_LOCALE_ALL || WITH_LOCALE_ja
-    {   "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric first)",
-        "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric first)",
-        &IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_syllable_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric last)",
-        "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric last)",
-        &IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_syllable_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric first) (grouped by syllable)",
-        "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric first) (grouped by syllable)",
-        &IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_syllable_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric first) (grouped by consonant)",
-        "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric first) (grouped by consonant)",
-        &IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_consonant_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric last) (grouped by syllable)",
-        "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric last) (grouped by syllable)",
-        &IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_syllable_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric last) (grouped by consonant)",
-        "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric last) (grouped by consonant)",
-        &IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_consonant_CreateInstance },
-#endif
-    {       "com.sun.star.i18n.IndexEntrySupplier_Unicode",
-        "com.sun.star.i18n.IndexEntrySupplier_Unicode",
-        &IndexEntrySupplier_Unicode_CreateInstance },
-    {   "com.sun.star.i18n.LocaleCalendar",
-        "com.sun.star.i18n.CalendarImpl",
-        &CalendarImpl_CreateInstance },
-    {   "com.sun.star.i18n.LocaleCalendar2",
-        "com.sun.star.i18n.CalendarImpl",
-        &CalendarImpl_CreateInstance },
-    {   "com.sun.star.i18n.Calendar_gregorian",
-        "com.sun.star.i18n.Calendar_gregorian",
-        &Calendar_gregorian_CreateInstance },
-    {   "com.sun.star.i18n.Calendar_gengou",
-        "com.sun.star.i18n.Calendar_gengou",
-        &Calendar_gengou_CreateInstance },
-    {   "com.sun.star.i18n.Calendar_ROC",
-        "com.sun.star.i18n.Calendar_ROC",
-        &Calendar_ROC_CreateInstance },
-    {   "com.sun.star.i18n.Calendar_dangi",
-        "com.sun.star.i18n.Calendar_dangi",
-        &Calendar_dangi_CreateInstance },
-    {   "com.sun.star.i18n.Calendar_hanja_yoil",
-        "com.sun.star.i18n.Calendar_hanja_yoil",
-        &Calendar_hanja_CreateInstance },
-    {   "com.sun.star.i18n.Calendar_hanja",
-        "com.sun.star.i18n.Calendar_hanja",
-        &Calendar_hanja_CreateInstance },
-    {   "com.sun.star.i18n.Calendar_hijri",
-        "com.sun.star.i18n.Calendar_hijri",
-        &Calendar_hijri_CreateInstance },
-    {   "com.sun.star.i18n.Calendar_jewish",
-        "com.sun.star.i18n.Calendar_jewish",
-        &Calendar_jewish_CreateInstance },
-    {   "com.sun.star.i18n.Calendar_buddhist",
-        "com.sun.star.i18n.Calendar_buddhist",
-        &Calendar_buddhist_CreateInstance },
-#if WITH_LOCALE_ALL || WITH_LOCALE_ja
-    {   "com.sun.star.i18n.BreakIterator_ja",
-        "com.sun.star.i18n.BreakIterator_ja",
-        &BreakIterator_ja_CreateInstance },
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_zh
-    {   "com.sun.star.i18n.BreakIterator_zh",
-        "com.sun.star.i18n.BreakIterator_zh",
-        &BreakIterator_zh_CreateInstance },
-    {   "com.sun.star.i18n.BreakIterator_zh_TW",
-        "com.sun.star.i18n.BreakIterator_zh_TW",
-        &BreakIterator_zh_TW_CreateInstance },
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ko
-    {   "com.sun.star.i18n.BreakIterator_ko",
-        "com.sun.star.i18n.BreakIterator_ko",
-        &BreakIterator_ko_CreateInstance },
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_th
-    {   "com.sun.star.i18n.BreakIterator_th",
-        "com.sun.star.i18n.BreakIterator_th",
-        &BreakIterator_th_CreateInstance },
-#endif
-    {   "com.sun.star.i18n.ChapterCollator",
-        "com.sun.star.i18n.ChapterCollator",
-        &ChapterCollator_CreateInstance },
-    {   "com.sun.star.i18n.Collator_Unicode",
-        "com.sun.star.i18n.Collator_Unicode",
-        &Collator_Unicode_CreateInstance },
-#if WITH_LOCALE_ALL || WITH_LOCALE_th
-    {   "com.sun.star.i18n.InputSequenceChecker_th",
-        "com.sun.star.i18n.InputSequenceChecker_th",
-        &InputSequenceChecker_th_CreateInstance },
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_hi
-    {   "com.sun.star.i18n.InputSequenceChecker_hi",
-        "com.sun.star.i18n.InputSequenceChecker_hi",
-        &InputSequenceChecker_hi_CreateInstance },
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ko
-    {   "com.sun.star.i18n.TextConversion_ko",
-        "com.sun.star.i18n.TextConversion_ko",
-        &TextConversion_ko_CreateInstance },
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_zh
-    {   "com.sun.star.i18n.TextConversion_zh",
-        "com.sun.star.i18n.TextConversion_zh",
-        &TextConversion_zh_CreateInstance },
-#endif
     {   TRLT_SERVICELNAME_L10N,
         TRLT_IMPLNAME_PREFIX  "UPPERCASE_LOWERCASE",
         &Transliteration_u2l_CreateInstance },
@@ -443,7 +365,6 @@ const InstancesArray aInstances[] = {
     IMPL_TRANSLITERATION_ITEM (NumToCharHangul_ko),
 #endif
     IMPL_TRANSLITERATION_ITEM (NumToCharIndic_ar),
-    IMPL_TRANSLITERATION_ITEM (NumToCharEastIndic_ar),
 #if WITH_LOCALE_ALL || WITH_LOCALE_hi
     IMPL_TRANSLITERATION_ITEM (NumToCharIndic_hi),
 #endif
@@ -457,33 +378,7 @@ const InstancesArray aInstances[] = {
     IMPL_TRANSLITERATION_ITEM (CharToNumUpper_zh_TW),
     IMPL_TRANSLITERATION_ITEM (CharToNumLower_zh_TW),
 #endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ja
-    IMPL_TRANSLITERATION_ITEM (CharToNumFullwidth),
-    IMPL_TRANSLITERATION_ITEM (CharToNumKanjiShort_ja_JP),
-    IMPL_TRANSLITERATION_ITEM (CharToNumKanjiTraditional_ja_JP),
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ko
-    IMPL_TRANSLITERATION_ITEM (CharToNumLower_ko),
-    IMPL_TRANSLITERATION_ITEM (CharToNumUpper_ko),
-    IMPL_TRANSLITERATION_ITEM (CharToNumHangul_ko),
-#endif
-    IMPL_TRANSLITERATION_ITEM (CharToNumIndic_ar),
-    IMPL_TRANSLITERATION_ITEM (CharToNumEastIndic_ar),
-#if WITH_LOCALE_ALL || WITH_LOCALE_hi
-    IMPL_TRANSLITERATION_ITEM (CharToNumIndic_hi),
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_th
-    IMPL_TRANSLITERATION_ITEM (CharToNum_th),
-#endif
 
-#if WITH_LOCALE_ALL || WITH_LOCALE_zh
-    IMPL_TRANSLITERATION_ITEM (NumToTextUpper_zh_CN),
-    IMPL_TRANSLITERATION_ITEM (NumToTextLower_zh_CN),
-    IMPL_TRANSLITERATION_ITEM (NumToTextUpper_zh_TW),
-    IMPL_TRANSLITERATION_ITEM (NumToTextLower_zh_TW),
-    IMPL_TRANSLITERATION_ITEM (NumToTextFullwidth_zh_CN),
-    IMPL_TRANSLITERATION_ITEM (NumToTextFullwidth_zh_TW),
-#endif
 #if WITH_LOCALE_ALL || WITH_LOCALE_ja
     IMPL_TRANSLITERATION_ITEM (NumToTextFullwidth_ja_JP),
 #endif
