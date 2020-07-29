@@ -4881,7 +4881,14 @@ if test "$cross_compiling" = "yes"; then
     sub_conf_opts=""
     test -n "$enable_ccache" && sub_conf_opts="$sub_conf_opts --enable-ccache=$enable_ccache"
     test -n "$with_ant_home" && sub_conf_opts="$sub_conf_opts --with-ant-home=$with_ant_home"
-    test $with_junit = no && sub_conf_opts="$sub_conf_opts --without-junit"
+    test "$with_junit" = "no" && sub_conf_opts="$sub_conf_opts --without-junit"
+    if test -n "$ENABLE_JAVA"; then
+        if ! echo "$with_build_platform_configure_options" | grep -q -- '--with-jdk-home='; then
+            AC_MSG_ERROR([Missing build JDK (see --with-build-platform-configure-options, --with-jdk-home and use 'cygpath -ms' on Windows)!])
+        fi
+    else
+        sub_conf_opts="$sub_conf_opts --without-java"
+    fi
     test -n "$TARFILE_LOCATION" && sub_conf_opts="$sub_conf_opts --with-external-tar=$TARFILE_LOCATION"
     test "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force" && sub_conf_opts="$sub_conf_opts --with-system-icu"
     sub_conf_opts="$sub_conf_opts $with_build_platform_configure_options"
@@ -4901,7 +4908,6 @@ if test "$cross_compiling" = "yes"; then
         --disable-skia \
         --enable-icecream="$enable_icecream" \
         --without-doxygen \
-        --without-java \
         --without-webdav \
         --with-parallelism="$with_parallelism" \
         --with-theme="$with_theme" \
@@ -7661,7 +7667,7 @@ dnl ===================================================================
 # JAVA_HOME. Whether all the complexity here actually is needed any
 # more or not, no idea.
 
-if test "$ENABLE_JAVA" != ""; then
+if test "$ENABLE_JAVA" != "" -a "$cross_compiling" != "yes"; then
     _gij_longver=0
     AC_MSG_CHECKING([the installed JDK])
     if test -n "$JAVAINTERPRETER"; then
@@ -7703,9 +7709,11 @@ if test "$ENABLE_JAVA" != ""; then
         AC_MSG_ERROR([Java not found. You need at least JDK 9])
     fi
 else
-    dnl Java disabled
-    JAVA_HOME=
-    export JAVA_HOME
+    if test -z "$ENABLE_JAVA"; then
+        dnl Java disabled
+        JAVA_HOME=
+        export JAVA_HOME
+    fi
 fi
 
 dnl ===================================================================
@@ -12508,7 +12516,7 @@ dnl ===================================================================
 dnl Test for the presence of Ant and that it works
 dnl ===================================================================
 
-if test "$ENABLE_JAVA" != "" -a "$NEED_ANT" = "TRUE"; then
+if test "$ENABLE_JAVA" != "" -a "$NEED_ANT" = "TRUE" -a "$cross_compiling" != "yes"; then
     ANT_HOME=; export ANT_HOME
     WITH_ANT_HOME=; export WITH_ANT_HOME
     if test -z "$with_ant_home" -a -n "$LODE_HOME" ; then
@@ -12658,7 +12666,8 @@ EOF
 fi
 
 OOO_JUNIT_JAR=
-if test "$ENABLE_JAVA" != "" -a "$with_junit" != "no"; then
+HAMCREST_JAR=
+if test "$ENABLE_JAVA" != "" -a "$with_junit" != "no" -a "$cross_compiling" != "yes"; then
     AC_MSG_CHECKING([for JUnit 4])
     if test "$with_junit" = "yes"; then
         if test -n "$LODE_HOME" -a -e "$LODE_HOME/opt/share/java/junit.jar" ; then
@@ -12688,13 +12697,9 @@ if test "$ENABLE_JAVA" != "" -a "$with_junit" != "no"; then
     fi
     rm -f conftest.class conftest.java
     if test $OOO_JUNIT_JAR != ""; then
-    BUILD_TYPE="$BUILD_TYPE QADEVOOO"
+        BUILD_TYPE="$BUILD_TYPE QADEVOOO"
     fi
-fi
-AC_SUBST(OOO_JUNIT_JAR)
 
-HAMCREST_JAR=
-if test "$ENABLE_JAVA" != "" -a "$with_junit" != "no"; then
     AC_MSG_CHECKING([for included Hamcrest])
     printf 'import org.hamcrest.BaseDescription;' > conftest.java
     if "$JAVACOMPILER" -classpath "$OOO_JUNIT_JAR" conftest.java >&5 2>&5; then
@@ -12725,6 +12730,7 @@ if test "$ENABLE_JAVA" != "" -a "$with_junit" != "no"; then
     fi
     rm -f conftest.class conftest.java
 fi
+AC_SUBST(OOO_JUNIT_JAR)
 AC_SUBST(HAMCREST_JAR)
 
 
