@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5aee6f16_4b796aa4",
+        "filename": "basctl/source/basicide/macrodlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-07-29T12:48:37Z",
+      "side": 1,
+      "message": "This doesn\u0027t work outside of gtk3. You have to give an id to the submenu, and call set_active on it, instead of on the parent menu.",
+      "range": {
+        "startLine": 765,
+        "startChar": 4,
+        "endLine": 765,
+        "endChar": 16
+      },
+      "revId": "e0c2f904180040ae0b8625e75f69874ced2b4de7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a9a016b_d965353d",
+        "filename": "basctl/source/basicide/macrodlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-07-29T12:48:37Z",
+      "side": 1,
+      "message": "This always returns true under gtk3. I think under gtk3 this only indicates the kind of sorting (ascending).",
+      "range": {
+        "startLine": 766,
+        "startChar": 47,
+        "endLine": 766,
+        "endChar": 76
+      },
+      "revId": "e0c2f904180040ae0b8625e75f69874ced2b4de7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1f61d93_1747c867",
+        "filename": "basctl/uiconfig/basicide/ui/sortmenu.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-07-29T12:48:37Z",
+      "side": 1,
+      "message": "The context menu shows also for built-in macros, so I\u0027m not sure how well \"Document order\" fits here.",
+      "revId": "e0c2f904180040ae0b8625e75f69874ced2b4de7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
