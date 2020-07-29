@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <sal/log.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/currencytable.hxx>
 
@@ -37,8 +38,6 @@
 #include <com/sun/star/i18n/XNumberFormatCode.hpp>
 #include <com/sun/star/i18n/NumberFormatMapper.hpp>
 #include <comphelper/processfactory.hxx>
-#include <unotools/misccfg.hxx>
-
 
 #include <osl/mutex.hxx>
 
@@ -3488,7 +3487,7 @@ sal_uInt16 SvNumberFormatter::ExpandTwoDigitYear( sal_uInt16 nYear ) const
 sal_uInt16 SvNumberFormatter::GetYear2000Default()
 {
     if (!utl::ConfigManager::IsFuzzing())
-        return static_cast<sal_uInt16>(::utl::MiscCfg().GetYear2000());
+        return officecfg::Office::Common::DateFormat::TwoDigitYear::get();
     return 1930;
 }
 

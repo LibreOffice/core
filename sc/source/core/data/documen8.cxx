@@ -21,6 +21,7 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <tools/urlobj.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/frmdiritem.hxx>
@@ -35,7 +36,6 @@
 #include <svl/intitem.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
-#include <unotools/misccfg.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <sal/log.hxx>
 
@@ -121,14 +121,13 @@ SfxPrinter* ScDocument::GetPrinter(bool bCreateIfNotExist)
                             SID_PRINT_SELECTEDSHEET,    SID_PRINT_SELECTEDSHEET,
                             SID_SCPRINTOPTIONS,         SID_SCPRINTOPTIONS>{} );
 
-        ::utl::MiscCfg aMisc;
         SfxPrinterChangeFlags nFlags = SfxPrinterChangeFlags::NONE;
-        if ( aMisc.IsPaperOrientationWarning() )
+        if (officecfg::Office::Common::Print::Warning::PaperOrientation::get())
             nFlags |= SfxPrinterChangeFlags::CHG_ORIENTATION;
-        if ( aMisc.IsPaperSizeWarning() )
+        if (officecfg::Office::Common::Print::Warning::PaperSize::get())
             nFlags |= SfxPrinterChangeFlags::CHG_SIZE;
         pSet->Put( SfxFlagItem( SID_PRINTER_CHANGESTODOC, static_cast<int>(nFlags) ) );
-        pSet->Put( SfxBoolItem( SID_PRINTER_NOTFOUND_WARN, aMisc.IsNotFoundWarning() ) );
+        pSet->Put( SfxBoolItem( SID_PRINTER_NOTFOUND_WARN, officecfg::Office::Common::Print::Warning::NotFound::get() ) );
 
         mpPrinter = VclPtr<SfxPrinter>::Create( std::move(pSet) );
         mpPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
@@ -165,16 +164,15 @@ void ScDocument::SetPrintOptions()
 
     if ( mpPrinter )
     {
-        ::utl::MiscCfg aMisc;
         SfxItemSet aOptSet( mpPrinter->GetOptions() );
 
         SfxPrinterChangeFlags nFlags = SfxPrinterChangeFlags::NONE;
-        if ( aMisc.IsPaperOrientationWarning() )
+        if (officecfg::Office::Common::Print::Warning::PaperOrientation::get())
             nFlags |= SfxPrinterChangeFlags::CHG_ORIENTATION;
-        if ( aMisc.IsPaperSizeWarning() )
+        if (officecfg::Office::Common::Print::Warning::PaperSize::get())
             nFlags |= SfxPrinterChangeFlags::CHG_SIZE;
         aOptSet.Put( SfxFlagItem( SID_PRINTER_CHANGESTODOC, static_cast<int>(nFlags) ) );
-        aOptSet.Put( SfxBoolItem( SID_PRINTER_NOTFOUND_WARN, aMisc.IsNotFoundWarning() ) );
+        aOptSet.Put( SfxBoolItem( SID_PRINTER_NOTFOUND_WARN, officecfg::Office::Common::Print::Warning::NotFound::get() ) );
 
         mpPrinter->SetOptions( aOptSet );
     }

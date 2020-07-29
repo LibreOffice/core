@@ -21,7 +21,6 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
-#include <unotools/misccfg.hxx>
 
 #include <officecfg/Office/Common.hxx>
 
@@ -2819,7 +2818,9 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
                 nValue = static_cast<sal_uLong>(ImplW2I( aValueBuf ));
                 if ( (nValue > 1000) && (nValue < 10000) )
                 {
-                    utl::MiscCfg().SetYear2000( static_cast<sal_Int32>(nValue-99) );
+                    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+                    officecfg::Office::Common::DateFormat::TwoDigitYear::set(static_cast<sal_Int32>(nValue-99), batch);
+                    batch->commit();
                 }
             }
         }

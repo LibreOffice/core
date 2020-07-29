@@ -19,6 +19,7 @@
 
 #include <config_features.h>
 
+#include <officecfg/Office/Common.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
@@ -29,7 +30,6 @@
 #include <svl/stritem.hxx>
 #include <svl/PasswordHelper.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <unotools/misccfg.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -1081,7 +1081,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
                 rSet.Put( SfxUInt16Item( nWhich,
                         static_cast< sal_uInt16 >(
                         pFormatr ? pFormatr->GetYear2000()
-                              : ::utl::MiscCfg().GetYear2000() )));
+                              : officecfg::Office::Common::DateFormat::TwoDigitYear::get())) );
             }
             break;
         case SID_ATTR_CHAR_FONTLIST:
