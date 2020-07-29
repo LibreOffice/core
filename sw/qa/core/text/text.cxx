@@ -18,22 +18,11 @@ char const DATA_DIRECTORY[] = "/sw/qa/core/text/data/";
 /// Covers sw/source/core/text/ fixes.
 class SwCoreTextTest : public SwModelTestBase
 {
-public:
-    SwDoc* createDoc(const char* pName = nullptr);
 };
-
-SwDoc* SwCoreTextTest::createDoc(const char* pName)
-{
-    load(DATA_DIRECTORY, pName);
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    return pTextDoc->GetDocShell()->GetDoc();
-}
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testFootnoteConnect)
 {
-    SwDoc* pDoc = createDoc("footnote-connect.fodt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "footnote-connect.fodt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     // Jump to the start of the next page.
     pWrtShell->SttNxtPg();

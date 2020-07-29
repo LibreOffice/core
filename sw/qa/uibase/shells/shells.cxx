@@ -31,25 +31,11 @@ char const DATA_DIRECTORY[] = "/sw/qa/uibase/shells/data/";
 /// Covers sw/source/uibase/shells/ fixes.
 class SwUibaseShellsTest : public SwModelTestBase
 {
-public:
-    SwDoc* createDoc(const char* pName = nullptr);
 };
-
-SwDoc* SwUibaseShellsTest::createDoc(const char* pName)
-{
-    if (!pName)
-        loadURL("private:factory/swriter", nullptr);
-    else
-        load(DATA_DIRECTORY, pName);
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    return pTextDoc->GetDocShell()->GetDoc();
-}
 
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testTdf130179)
 {
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     IDocumentContentOperations& rIDCO = pDoc->getIDocumentContentOperations();
     SwCursorShell* pShell(pDoc->GetEditShell());
     SfxItemSet aFrameSet(pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>{});
@@ -80,7 +66,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testShapeTextAlignment)
 // FIXME find out why this fails on macOS/Windows
 #if !defined(MACOSX) && !defined(_WIN32)
     // Create a document with a rectangle in it.
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     Point aStartPos(1000, 1000);
     pWrtShell->BeginCreate(static_cast<sal_uInt16>(OBJ_RECT), aStartPos);
@@ -121,7 +107,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testOleSavePreviewUpdate)
 {
     // Load a document with 2 charts in it. The second is down enough that you have to scroll to
     // trigger its rendering. Previews are missing for both.
-    createDoc("ole-save-preview-update.odt");
+    load(DATA_DIRECTORY, "ole-save-preview-update.odt");
 
     // Explicitly update OLE previews, etc.
     dispatchCommand(mxComponent, ".uno:UpdateAll", {});

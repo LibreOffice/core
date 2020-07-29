@@ -1030,6 +1030,18 @@ protected:
         // reqif-xhtml
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("reqif-xhtml"), BAD_CAST("http://www.w3.org/1999/xhtml"));
     }
+
+    SwDoc* createSwDoc(const OUString& rDataDirectory = OUString(), const char* pName = nullptr)
+    {
+        if (rDataDirectory.isEmpty() || !pName)
+            loadURL("private:factory/swriter", nullptr);
+        else
+            load(rDataDirectory, pName);
+
+        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+        CPPUNIT_ASSERT(pTextDoc);
+        return pTextDoc->GetDocShell()->GetDoc();
+    }
 };
 
 /**

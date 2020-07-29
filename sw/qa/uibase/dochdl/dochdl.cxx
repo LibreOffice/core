@@ -17,23 +17,12 @@
 /// Covers sw/source/uibase/dochdl/ fixes.
 class SwUibaseDochdlTest : public SwModelTestBase
 {
-public:
-    SwDoc* createDoc();
 };
-
-SwDoc* SwUibaseDochdlTest::createDoc()
-{
-    loadURL("private:factory/swriter", nullptr);
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    return pTextDoc->GetDocShell()->GetDoc();
-}
 
 CPPUNIT_TEST_FIXTURE(SwUibaseDochdlTest, testSelectPasteFormat)
 {
     // Create a new document and cut a character.
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
     SwDocShell* pDocShell = pDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->Insert2("x");

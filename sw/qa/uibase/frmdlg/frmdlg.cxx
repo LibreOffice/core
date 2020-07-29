@@ -16,26 +16,12 @@ char const DATA_DIRECTORY[] = "/sw/qa/uibase/frmdlg/data/";
 /// Covers sw/source/uibase/frmdlg/ fixes.
 class SwUibaseFrmdlgTest : public SwModelTestBase
 {
-public:
-    void createDoc(const char* pName = nullptr);
 };
-
-void SwUibaseFrmdlgTest::createDoc(const char* pName)
-{
-    if (!pName)
-    {
-        loadURL("private:factory/swriter", nullptr);
-    }
-    else
-    {
-        load(DATA_DIRECTORY, pName);
-    }
-}
 
 CPPUNIT_TEST_FIXTURE(SwUibaseFrmdlgTest, testWrappedMathObject)
 {
     // The document includes a Math object with explicit wrapping.
-    createDoc("wrapped-math-object.docx");
+    load(DATA_DIRECTORY, "wrapped-math-object.docx");
     uno::Reference<drawing::XShape> xMath = getShape(1);
 
     // Without the accompanying fix in place, this test would have failed with:
