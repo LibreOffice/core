@@ -16266,7 +16266,6 @@ unotools/source/config/defaultoptions.cxx
 unotools/source/config/docinfohelper.cxx
 unotools/source/config/dynamicmenuoptions.cxx
 unotools/source/config/eventcfg.cxx
-unotools/source/config/extendedsecurityoptions.cxx
 unotools/source/config/fltrcfg.cxx
 unotools/source/config/fontcfg.cxx
 unotools/source/config/historyoptions.cxx

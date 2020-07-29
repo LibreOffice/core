@@ -21,6 +21,7 @@
 #include <vcl/weld.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <officecfg/Office/Security.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
 #include <editeng/unolingu.hxx>
@@ -870,7 +871,7 @@ SvxLinguTabPage::SvxLinguTabPage(weld::Container* pPage, weld::DialogController*
     m_xLinguOptionsCLB->connect_changed( LINK( this, SvxLinguTabPage, SelectHdl_Impl ));
     m_xLinguOptionsCLB->connect_row_activated(LINK(this, SvxLinguTabPage, BoxDoubleClickHdl_Impl));
 
-    if ( SvtExtendedSecurityOptions().GetOpenHyperlinkMode() == SvtExtendedSecurityOptions::OPEN_NEVER )
+    if (officecfg::Office::Security::Hyperlinks::Open::get() == SvtExtendedSecurityOptions::OPEN_NEVER)
         m_xMoreDictsLink->hide();
 
     xProp = LinguMgr::GetLinguPropertySet();
@@ -1527,8 +1528,7 @@ void SvxLinguTabPage::HideGroups( sal_uInt16 nGrp )
         m_xLinguModulesCLB->hide();
         m_xLinguModulesEditPB->hide();
 
-        if ( SvtExtendedSecurityOptions().GetOpenHyperlinkMode()
-                != SvtExtendedSecurityOptions::OPEN_NEVER )
+        if (officecfg::Office::Security::Hyperlinks::Open::get() != SvtExtendedSecurityOptions::OPEN_NEVER)
         {
             m_xMoreDictsLink->show();
         }
@@ -1568,7 +1568,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(weld::Window* pParent, SvxLinguData_Impl& r
     m_xPrioUpPB->set_sensitive( false );
     m_xPrioDownPB->set_sensitive( false );
 
-    if ( SvtExtendedSecurityOptions().GetOpenHyperlinkMode() == SvtExtendedSecurityOptions::OPEN_NEVER )
+    if (officecfg::Office::Security::Hyperlinks::Open::get() == SvtExtendedSecurityOptions::OPEN_NEVER)
         m_xMoreDictsLink->hide();
 
     // set that we want the checkbox shown if spellchecking is available

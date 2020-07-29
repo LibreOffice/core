@@ -86,6 +86,7 @@
 #include <openuriexternally.hxx>
 
 #include <officecfg/Office/ProtocolHandler.hxx>
+#include <officecfg/Office/Security.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -827,8 +828,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             xTrans->parseStrict( aURL );
 
             INetProtocol aINetProtocol = INetURLObject( aURL.Complete ).GetProtocol();
-            SvtExtendedSecurityOptions aExtendedSecurityOptions;
-            SvtExtendedSecurityOptions::OpenHyperlinkMode eMode = aExtendedSecurityOptions.GetOpenHyperlinkMode();
+            auto eMode = officecfg::Office::Security::Hyperlinks::Open::get();
 
             if ( eMode == SvtExtendedSecurityOptions::OPEN_NEVER && aINetProtocol != INetProtocol::VndSunStarHelp )
             {
