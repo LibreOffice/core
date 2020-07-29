@@ -123,4 +123,9 @@ SbxAppData& GetSbxData_Impl()
     return *BasicDLLImpl::BASIC_DLL->xSbxAppData;
 }
 
+bool IsSbxData_Impl()
+{
+    return BasicDLLImpl::BASIC_DLL && BasicDLLImpl::BASIC_DLL->xSbxAppData;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

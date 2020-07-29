@@ -463,14 +463,6 @@ SbxObject* SbiFactory::CreateObject( const OUString& rClass )
 }
 
 
-// Factory class to create OLE objects
-class SbOLEFactory : public SbxFactory
-{
-public:
-    virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 ) override;
-    virtual SbxObject* CreateObject( const OUString& ) override;
-};
-
 SbxBase* SbOLEFactory::Create( sal_uInt16, sal_uInt32 )
 {
     // Not supported
@@ -485,13 +477,6 @@ SbxObject* SbOLEFactory::CreateObject( const OUString& rClassName )
 
 
 // SbFormFactory, show user forms by: dim as new <user form name>
-
-class SbFormFactory : public SbxFactory
-{
-public:
-    virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 ) override;
-    virtual SbxObject* CreateObject( const OUString& ) override;
-};
 
 SbxBase* SbFormFactory::Create( sal_uInt16, sal_uInt32 )
 {
@@ -586,14 +571,6 @@ SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj )
     }
     return pRet;
 }
-
-// Factory class to create user defined objects (type command)
-class SbTypeFactory : public SbxFactory
-{
-public:
-    virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 ) override;
-    virtual SbxObject* CreateObject( const OUString& ) override;
-};
 
 SbxBase* SbTypeFactory::Create( sal_uInt16, sal_uInt32 )
 {
@@ -922,14 +899,14 @@ StarBASIC::StarBASIC( StarBASIC* p, bool bIsDocBasic  )
     {
         GetSbData()->pSbFac.reset( new SbiFactory );
         AddFactory( GetSbData()->pSbFac.get() );
-        GetSbData()->pTypeFac = new SbTypeFactory;
-        AddFactory( GetSbData()->pTypeFac );
-        GetSbData()->pClassFac = new SbClassFactory;
-        AddFactory( GetSbData()->pClassFac );
-        GetSbData()->pOLEFac = new SbOLEFactory;
-        AddFactory( GetSbData()->pOLEFac );
-        GetSbData()->pFormFac = new SbFormFactory;
-        AddFactory( GetSbData()->pFormFac );
+        GetSbData()->pTypeFac.reset(new SbTypeFactory);
+        AddFactory( GetSbData()->pTypeFac.get() );
+        GetSbData()->pClassFac.reset(new SbClassFactory);
+        AddFactory( GetSbData()->pClassFac.get() );
+        GetSbData()->pOLEFac.reset(new SbOLEFactory);
+        AddFactory( GetSbData()->pOLEFac.get() );
+        GetSbData()->pFormFac.reset(new SbFormFactory);
+        AddFactory( GetSbData()->pFormFac.get() );
         GetSbData()->pUnoFac.reset( new SbUnoFactory );
         AddFactory( GetSbData()->pUnoFac.get() );
     }
@@ -963,14 +940,14 @@ StarBASIC::~StarBASIC()
         GetSbData()->pSbFac.reset();
         RemoveFactory( GetSbData()->pUnoFac.get() );
         GetSbData()->pUnoFac.reset();
-        RemoveFactory( GetSbData()->pTypeFac );
-        delete GetSbData()->pTypeFac; GetSbData()->pTypeFac = nullptr;
-        RemoveFactory( GetSbData()->pClassFac );
-        delete GetSbData()->pClassFac; GetSbData()->pClassFac = nullptr;
-        RemoveFactory( GetSbData()->pOLEFac );
-        delete GetSbData()->pOLEFac; GetSbData()->pOLEFac = nullptr;
-        RemoveFactory( GetSbData()->pFormFac );
-        delete GetSbData()->pFormFac; GetSbData()->pFormFac = nullptr;
+        RemoveFactory( GetSbData()->pTypeFac.get() );
+        GetSbData()->pTypeFac.reset();
+        RemoveFactory( GetSbData()->pClassFac.get() );
+        GetSbData()->pClassFac.reset();
+        RemoveFactory( GetSbData()->pOLEFac.get() );
+        GetSbData()->pOLEFac.reset();
+        RemoveFactory( GetSbData()->pFormFac.get() );
+        GetSbData()->pFormFac.reset();
 
         if( SbiGlobals::pGlobals )
         {
