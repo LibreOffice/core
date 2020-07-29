@@ -303,6 +303,11 @@ namespace svt
     {
     }
 
+    void ControlBase::SetEditableReadOnly(bool /*bReadOnly*/)
+    {
+        // expected to be overridden for Entry, TextView or the editable entry part of a ComboBox
+    }
+
     EditControlBase::EditControlBase(BrowserDataWin* pParent)
         : ControlBase(pParent, "svt/ui/thineditcontrol.ui", "EditControl") // *thin*editcontrol has no frame/border
         , m_pEntry(nullptr) // inheritors are expected to call InitEditControlBase

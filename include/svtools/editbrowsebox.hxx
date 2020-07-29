@@ -169,6 +169,8 @@ namespace svt
     public:
         ControlBase(BrowserDataWin* pParent, const OUString& rUIXMLDescription, const OString& rID);
 
+        virtual void SetEditableReadOnly(bool bReadOnly);
+
         virtual bool ProcessKey(const KeyEvent& rKEvt);
     protected:
         DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
@@ -178,6 +180,11 @@ namespace svt
     {
     public:
         EditControlBase(BrowserDataWin* pParent);
+
+        virtual void SetEditableReadOnly(bool bReadOnly) override
+        {
+            m_pEntry->set_editable(!bReadOnly);
+        }
 
         virtual void dispose() override;
 
@@ -245,7 +252,7 @@ namespace svt
 
         virtual void SetReadOnly( bool bReadOnly ) override
         {
-            m_rEdit.get_widget().set_editable(!bReadOnly);
+            m_rEdit.SetEditableReadOnly(bReadOnly);
         }
 
         virtual sal_Int32 GetMaxTextLen() const override
@@ -332,6 +339,11 @@ namespace svt
     public:
         MultiLineTextCell(BrowserDataWin* pParent);
 
+        virtual void SetEditableReadOnly(bool bReadOnly) override
+        {
+            m_xWidget->set_editable(!bReadOnly);
+        }
+
         virtual void GetFocus() override;
 
         virtual void dispose() override;
@@ -382,7 +394,7 @@ namespace svt
 
         virtual void SetReadOnly( bool bReadOnly ) override
         {
-            m_rEdit.get_widget().set_editable(!bReadOnly);
+            m_rEdit.SetEditableReadOnly(bReadOnly);
         }
 
         virtual sal_Int32 GetMaxTextLen() const override
@@ -555,6 +567,11 @@ namespace svt
 
     public:
         ComboBoxControl(BrowserDataWin* pParent);
+
+        virtual void SetEditableReadOnly(bool bReadOnly) override
+        {
+            m_xWidget->set_entry_editable(!bReadOnly);
+        }
 
         weld::ComboBox& get_widget() { return *m_xWidget; }
 
