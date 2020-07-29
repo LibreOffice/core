@@ -47,31 +47,18 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
-#include <vcl/svlbitm.hxx>
-#include <vcl/treelistentry.hxx>
-#include <vcl/viewdataentry.hxx>
 #include <vcl/svapp.hxx>
 
 #include <bitmaps.hlst>
 
 #include <functional>
 
-#define DROP_ACTION_TIMER_INITIAL_TICKS     10
-    // it takes this long for the scrolling to begin
-#define DROP_ACTION_TIMER_SCROLL_TICKS      3
-    // a line is scrolled in these intervals
-#define DROP_ACTION_TIMER_TICK_BASE         10
-    // this is the basis for multiplying both figures (in ms)
-
 using namespace ::svxform;
 using namespace ::connectivity;
 using namespace ::dbtools;
 
-
 namespace svxform
 {
-
-
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::container::XIndexAccess;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -108,7 +95,6 @@ void OFilterItemExchange::AddSupportedFormats()
     AddFormat(getFormatId());
 }
 
-
 SotClipboardFormatId OFilterItemExchange::getFormatId()
 {
     static SotClipboardFormatId s_nFormat =
@@ -117,25 +103,23 @@ SotClipboardFormatId OFilterItemExchange::getFormatId()
     return s_nFormat;
 }
 
-
 OLocalExchange* OFilterExchangeHelper::createExchange() const
 {
     return new OFilterItemExchange;
 }
 
-
-Image FmFilterData::GetImage() const
+OUString FmFilterData::GetImage() const
 {
-    return Image();
+    return OUString();
 }
 
 FmParentData::~FmParentData()
 {
 }
 
-Image FmFormItem::GetImage() const
+OUString FmFormItem::GetImage() const
 {
-    return Image(StockImage::Yes, RID_SVXBMP_FORM);
+    return RID_SVXBMP_FORM;
 }
 
 FmFilterItem* FmFilterItems::Find( const ::sal_Int32 _nFilterComponentIndex ) const
@@ -149,9 +133,9 @@ FmFilterItem* FmFilterItems::Find( const ::sal_Int32 _nFilterComponentIndex ) co
     return nullptr;
 }
 
-Image FmFilterItems::GetImage() const
+OUString FmFilterItems::GetImage() const
 {
-    return Image(StockImage::Yes, RID_SVXBMP_FILTER);
+    return RID_SVXBMP_FILTER;
 }
 
 FmFilterItem::FmFilterItem( FmFilterItems* pParent,
@@ -164,9 +148,9 @@ FmFilterItem::FmFilterItem( FmFilterItems* pParent,
 {
 }
 
-Image FmFilterItem::GetImage() const
+OUString FmFilterItem::GetImage() const
 {
-    return Image(StockImage::Yes, RID_SVXBMP_FIELD);
+    return RID_SVXBMP_FIELD;
 }
 
 // Hints for communication between model and view
@@ -930,164 +914,170 @@ void FmFilterModel::EnsureEmptyFilterRows( FmParentData& _rItem )
     }
 }
 
-namespace {
-
-class FmFilterItemsString : public SvLBoxString
-{
-public:
-    explicit FmFilterItemsString(const OUString& rStr)
-        : SvLBoxString(rStr)
-    {
-    }
-
-    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
-    virtual void InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* pViewData = nullptr) override;
-};
-
-}
-
+const int nxD = 4;
 const int nxDBmp = 12;
 
-void FmFilterItemsString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                                const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)
+IMPL_STATIC_LINK(FmFilterNavigator, CustomGetSizeHdl, weld::TreeView::get_size_args, aPayload, Size)
 {
-    FmFilterItems* pRow = static_cast<FmFilterItems*>(rEntry.GetUserData());
-    FmFormItem* pForm = static_cast<FmFormItem*>(pRow->GetParent());
+    vcl::RenderContext& rRenderContext = aPayload.first;
+    const OUString& rId = aPayload.second;
 
-    // current filter is significant painted
-    const bool bIsCurrentFilter = pForm->GetChildren()[ pForm->GetFilterController()->getActiveTerm() ].get() == pRow;
-    if (bIsCurrentFilter)
+    Size aSize;
+
+    FmFilterData* pData = reinterpret_cast<FmFilterData*>(rId.toUInt64());
+    OUString sText = pData->GetText();
+
+    if (FmFilterItem* pItem = dynamic_cast<FmFilterItem*>(pData))
     {
-        rRenderContext.Push(PushFlags::LINECOLOR);
-        rRenderContext.SetLineColor(rRenderContext.GetTextColor());
+        rRenderContext.Push(PushFlags::FONT);
+        vcl::Font aFont(rRenderContext.GetFont());
+        aFont.SetWeight(WEIGHT_BOLD);
+        rRenderContext.SetFont(aFont);
 
-        Size aSize(GetWidth(&rDev, &rEntry), GetHeight(&rDev, &rEntry));
-        tools::Rectangle aRect(rPos, aSize);
-        Point aFirst(rPos.X(), aRect.Bottom() - 6);
-        Point aSecond(aFirst .X() + 2, aFirst.Y() + 3);
+        OUString sName = pItem->GetFieldName() + ": ";
+        aSize = Size(rRenderContext.GetTextWidth(sName), rRenderContext.GetTextHeight());
 
-        rRenderContext.DrawLine(aFirst, aSecond);
-
-        aFirst = aSecond;
-        aFirst.AdjustX(1 );
-        aSecond.AdjustX(6 );
-        aSecond.AdjustY( -5 );
-
-        rRenderContext.DrawLine(aFirst, aSecond);
         rRenderContext.Pop();
+
+        aSize.AdjustWidth(rRenderContext.GetTextWidth(sText) + nxD);
     }
-
-    rRenderContext.DrawText(Point(rPos.X() + nxDBmp, rPos.Y()), GetText());
-}
-
-
-void FmFilterItemsString::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* pViewData)
-{
-    if( !pViewData )
-        pViewData = pView->GetViewDataItem( pEntry, this );
-
-    Size aSize(pView->GetTextWidth(GetText()), pView->GetTextHeight());
-    aSize.AdjustWidth(nxDBmp );
-    pViewData->mnWidth = aSize.Width();
-    pViewData->mnHeight = aSize.Height();
-}
-
-namespace {
-
-class FmFilterString : public SvLBoxString
-{
-    OUString m_aName;
-
-public:
-    FmFilterString( const OUString& rStr, const OUString& aName)
-        : SvLBoxString(rStr)
-        , m_aName(aName)
+    else
     {
-        m_aName += ": ";
+        aSize = Size(rRenderContext.GetTextWidth(sText), rRenderContext.GetTextHeight());
+        if (dynamic_cast<FmFilterItems*>(pData))
+            aSize.AdjustWidth(nxDBmp);
     }
 
-    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
-    virtual void InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* pViewData = nullptr) override;
-};
-
+    return aSize;
 }
 
-const int nxD = 4;
-
-void FmFilterString::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* pViewData)
+IMPL_STATIC_LINK(FmFilterNavigator, CustomRenderHdl, weld::TreeView::render_args, aPayload, void)
 {
-    if( !pViewData )
-        pViewData = pView->GetViewDataItem( pEntry, this );
+    vcl::RenderContext& rRenderContext = std::get<0>(aPayload);
+    const ::tools::Rectangle& rRect = std::get<1>(aPayload);
+    ::tools::Rectangle aRect(rRect.TopLeft(), Size(rRenderContext.GetOutputSize().Width() - rRect.Left(), rRect.GetHeight()));
+    bool bSelected = std::get<2>(aPayload);
+    const OUString& rId = std::get<3>(aPayload);
 
-    vcl::Font aOldFont( pView->GetFont());
-    vcl::Font aFont( aOldFont );
-    aFont.SetWeight(WEIGHT_BOLD);
-    pView->Control::SetFont( aFont );
+    rRenderContext.Push(PushFlags::TEXTCOLOR);
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    if (bSelected)
+        rRenderContext.SetTextColor(rStyleSettings.GetHighlightTextColor());
+    else
+        rRenderContext.SetTextColor(rStyleSettings.GetDialogTextColor());
 
-    Size aSize(pView->GetTextWidth(m_aName), pView->GetTextHeight());
-    pView->Control::SetFont( aOldFont );
-    aSize.AdjustWidth(pView->GetTextWidth(GetText()) + nxD );
-    pViewData->mnWidth = aSize.Width();
-    pViewData->mnHeight = aSize.Height();
-}
+    FmFilterData* pData = reinterpret_cast<FmFilterData*>(rId.toUInt64());
+    OUString sText = pData->GetText();
+    Point aPos(aRect.TopLeft());
 
-void FmFilterString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                           const SvViewDataEntry* /*pView*/, const SvTreeListEntry& /*rEntry*/)
-{
-    rRenderContext.Push(PushFlags::FONT);
-    vcl::Font aFont(rRenderContext.GetFont());
-    aFont.SetWeight(WEIGHT_BOLD);
-    rRenderContext.SetFont(aFont);
+    if (FmFilterItem* pFilter = dynamic_cast<FmFilterItem*>(pData))
+    {
+        vcl::Font aFont(rRenderContext.GetFont());
+        aFont.SetWeight(WEIGHT_BOLD);
 
-    Point aPos(rPos);
-    rRenderContext.DrawText(aPos, m_aName);
+        rRenderContext.Push(PushFlags::FONT);
+        rRenderContext.SetFont(aFont);
 
-    // position for the second text
-    aPos.AdjustX(rDev.GetTextWidth(m_aName) + nxD );
+        OUString sName = pFilter->GetFieldName() + ": ";
+        rRenderContext.DrawText(aPos, sName);
+
+        // position for the second text
+        aPos.AdjustX(rRenderContext.GetTextWidth(sName) + nxD);
+        rRenderContext.Pop();
+
+        rRenderContext.DrawText(aPos, sText);
+    }
+    else if (FmFilterItems* pRow = dynamic_cast<FmFilterItems*>(pData))
+    {
+        FmFormItem* pForm = static_cast<FmFormItem*>(pRow->GetParent());
+
+        // current filter is significant painted
+        const bool bIsCurrentFilter = pForm->GetChildren()[ pForm->GetFilterController()->getActiveTerm() ].get() == pRow;
+        if (bIsCurrentFilter)
+        {
+            rRenderContext.Push(PushFlags::LINECOLOR);
+            rRenderContext.SetLineColor(rRenderContext.GetTextColor());
+
+            Point aFirst(aPos.X(), aRect.Bottom() - 6);
+            Point aSecond(aFirst .X() + 2, aFirst.Y() + 3);
+
+            rRenderContext.DrawLine(aFirst, aSecond);
+
+            aFirst = aSecond;
+            aFirst.AdjustX(1);
+            aSecond.AdjustX(6);
+            aSecond.AdjustY(-5);
+
+            rRenderContext.DrawLine(aFirst, aSecond);
+            rRenderContext.Pop();
+        }
+
+        rRenderContext.DrawText(Point(aPos.X() + nxDBmp, aPos.Y()), sText);
+    }
+    else
+        rRenderContext.DrawText(aPos, sText);
+
     rRenderContext.Pop();
-    rDev.DrawText(aPos, GetText());
 }
 
-FmFilterNavigator::FmFilterNavigator( vcl::Window* pParent )
-                  :SvTreeListBox( pParent, WB_HASBUTTONS|WB_HASLINES|WB_BORDER|WB_HASBUTTONSATROOT )
-                  ,m_pEditingCurrently( nullptr )
-                  ,m_aControlExchange()
-                  ,m_aTimerCounter( 0 )
-                  ,m_aDropActionType( DA_SCROLLUP )
+FmFilterNavigatorDropTarget::FmFilterNavigatorDropTarget(FmFilterNavigator& rTreeView)
+    : DropTargetHelper(rTreeView.get_widget().get_drop_target())
+    , m_rTreeView(rTreeView)
 {
-    SetHelpId( HID_FILTER_NAVIGATOR );
+}
 
-    SetNodeBitmaps(
-        Image(StockImage::Yes, RID_SVXBMP_COLLAPSEDNODE),
-        Image(StockImage::Yes, RID_SVXBMP_EXPANDEDNODE)
-    );
+sal_Int8 FmFilterNavigatorDropTarget::AcceptDrop(const AcceptDropEvent& rEvt)
+{
+    sal_Int8 nAccept = m_rTreeView.AcceptDrop(rEvt);
+
+    if (nAccept != DND_ACTION_NONE)
+    {
+        // to enable the autoscroll when we're close to the edges
+        weld::TreeView& rWidget = m_rTreeView.get_widget();
+        rWidget.get_dest_row_at_pos(rEvt.maPosPixel, nullptr, true);
+    }
+
+    return nAccept;
+}
+
+sal_Int8 FmFilterNavigatorDropTarget::ExecuteDrop(const ExecuteDropEvent& rEvt)
+{
+    return m_rTreeView.ExecuteDrop(rEvt);
+}
+
+FmFilterNavigator::FmFilterNavigator(vcl::Window* pTopLevel, std::unique_ptr<weld::TreeView> xTreeView)
+    : m_xTopLevel(pTopLevel)
+    , m_xTreeView(std::move(xTreeView))
+    , m_aDropTargetHelper(*this)
+    , m_aControlExchange()
+    , m_nAsyncRemoveEvent(nullptr)
+{
+    m_xTreeView->set_help_id(HID_FILTER_NAVIGATOR);
+
+    m_xTreeView->set_selection_mode(SelectionMode::Multiple);
 
     m_pModel.reset( new FmFilterModel() );
     StartListening( *m_pModel );
 
-    EnableInplaceEditing( true );
-    SetSelectionMode(SelectionMode::Multiple);
+    m_xTreeView->connect_custom_get_size(LINK(this, FmFilterNavigator, CustomGetSizeHdl));
+    m_xTreeView->connect_custom_render(LINK(this, FmFilterNavigator, CustomRenderHdl));
+    m_xTreeView->set_column_custom_renderer(0, true);
 
-    SetDragDropMode(DragDropMode::ALL);
-
-    m_aDropActionTimer.SetInvokeHandler(LINK(this, FmFilterNavigator, OnDropActionTimer));
+    m_xTreeView->connect_changed(LINK(this, FmFilterNavigator, SelectHdl));
+    m_xTreeView->connect_key_press(LINK(this, FmFilterNavigator, KeyInputHdl));
+    m_xTreeView->connect_popup_menu(LINK(this, FmFilterNavigator, PopupMenuHdl));
+    m_xTreeView->connect_editing(LINK(this, FmFilterNavigator, EditingEntryHdl),
+                                 LINK(this, FmFilterNavigator, EditedEntryHdl));
+    m_xTreeView->connect_drag_begin(LINK(this, FmFilterNavigator, DragBeginHdl));
 }
-
 
 FmFilterNavigator::~FmFilterNavigator()
 {
-    disposeOnce();
-}
-
-void FmFilterNavigator::dispose()
-{
-    EndListening( *m_pModel );
+    if (m_nAsyncRemoveEvent)
+        Application::RemoveUserEvent(m_nAsyncRemoveEvent);
+    EndListening(*m_pModel);
     m_pModel.reset();
-    SvTreeListBox::dispose();
 }
-
 
 void FmFilterNavigator::UpdateContent(const Reference< XIndexAccess > & xControllers, const Reference< XFormController > & xCurrent)
 {
@@ -1097,65 +1087,66 @@ void FmFilterNavigator::UpdateContent(const Reference< XIndexAccess > & xControl
     m_pModel->Update(xControllers, xCurrent);
 
     // expand the filters for the current controller
-    SvTreeListEntry* pEntry = FindEntry(m_pModel->GetCurrentForm());
-    if (pEntry && !IsExpanded(pEntry))
+    std::unique_ptr<weld::TreeIter> xEntry = FindEntry(m_pModel->GetCurrentForm());
+    if (xEntry && !m_xTreeView->get_row_expanded(*xEntry))
     {
-        SelectAll(false);
+        m_xTreeView->unselect_all();
 
-        if (!IsExpanded(pEntry))
-            Expand(pEntry);
+        m_xTreeView->expand_row(*xEntry);
 
-        pEntry = FindEntry(m_pModel->GetCurrentItems());
-        if (pEntry)
+        xEntry = FindEntry(m_pModel->GetCurrentItems());
+        if (xEntry)
         {
-            if (!IsExpanded(pEntry))
-                Expand(pEntry);
-            Select(pEntry);
+            if (!m_xTreeView->get_row_expanded(*xEntry))
+                m_xTreeView->expand_row(*xEntry);
+            m_xTreeView->select(*xEntry);
+            SelectHdl(*m_xTreeView);
         }
     }
 }
 
-
-bool FmFilterNavigator::EditingEntry( SvTreeListEntry* pEntry, Selection& rSelection )
+IMPL_LINK(FmFilterNavigator, EditingEntryHdl, const weld::TreeIter&, rIter, bool)
 {
-    m_pEditingCurrently = pEntry;
-    if (!SvTreeListBox::EditingEntry( pEntry, rSelection ))
-        return false;
-
-    return pEntry && dynamic_cast<const FmFilterItem*>(static_cast<FmFilterData*>(pEntry->GetUserData())) != nullptr;
+    // returns true to allow editing
+    if (dynamic_cast<const FmFilterItem*>(reinterpret_cast<FmFilterData*>(m_xTreeView->get_id(rIter).toUInt64())))
+    {
+        m_xEditingCurrently = m_xTreeView->make_iterator(&rIter);
+        return true;
+    }
+    m_xEditingCurrently.reset();
+    return false;
 }
 
-
-bool FmFilterNavigator::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
+IMPL_LINK(FmFilterNavigator, EditedEntryHdl, const IterString&, rIterString, bool)
 {
-    DBG_ASSERT(pEntry == m_pEditingCurrently, "FmFilterNavigator::EditedEntry: suspicious entry!");
-    m_pEditingCurrently = nullptr;
+    const weld::TreeIter& rIter = rIterString.first;
+    const OUString& rNewText = rIterString.second;
 
-    if (EditingCanceled())
-        return true;
+    assert(m_xEditingCurrently && m_xTreeView->iter_compare(rIter, *m_xEditingCurrently) == 0 &&
+               "FmFilterNavigator::EditedEntry: suspicious entry!");
+    m_xEditingCurrently.reset();
 
-    DBG_ASSERT(dynamic_cast<const FmFilterItem*>(static_cast<FmFilterData*>(pEntry->GetUserData())) != nullptr,
+    FmFilterData* pData = reinterpret_cast<FmFilterData*>(m_xTreeView->get_id(rIter).toUInt64());
+
+    DBG_ASSERT(dynamic_cast<const FmFilterItem*>(pData) != nullptr,
                     "FmFilterNavigator::EditedEntry() wrong entry");
 
     OUString aText(comphelper::string::strip(rNewText, ' '));
     if (aText.isEmpty())
     {
         // deleting the entry asynchron
-        PostUserEvent(LINK(this, FmFilterNavigator, OnRemove), pEntry, true);
+        m_nAsyncRemoveEvent = Application::PostUserEvent(LINK(this, FmFilterNavigator, OnRemove), pData);
     }
     else
     {
         OUString aErrorMsg;
 
-        if (m_pModel->ValidateText(static_cast<FmFilterItem*>(pEntry->GetUserData()), aText, aErrorMsg))
+        if (m_pModel->ValidateText(static_cast<FmFilterItem*>(pData), aText, aErrorMsg))
         {
-            GrabFocus();
             // this will set the text at the FmFilterItem, as well as update any filter controls
             // which are connected to this particular entry
-            m_pModel->SetTextForItem( static_cast< FmFilterItem* >( pEntry->GetUserData() ), aText );
-
-            SetCursor( pEntry, true );
-            SetEntryText( pEntry, aText );
+            m_pModel->SetTextForItem(static_cast<FmFilterItem*>(pData), aText);
+            m_xTreeView->set_text(rIter, aText);
         }
         else
         {
@@ -1163,7 +1154,7 @@ bool FmFilterNavigator::EditedEntry( SvTreeListEntry* pEntry, const OUString& rN
             SQLContext aError;
             aError.Message = SvxResId(RID_STR_SYNTAXERROR);
             aError.Details = aErrorMsg;
-            displayException(aError, this);
+            displayException(aError, m_xTopLevel);
 
             return false;
         }
@@ -1171,109 +1162,35 @@ bool FmFilterNavigator::EditedEntry( SvTreeListEntry* pEntry, const OUString& rN
     return true;
 }
 
-
 IMPL_LINK( FmFilterNavigator, OnRemove, void*, p, void )
 {
-    SvTreeListEntry* pEntry = static_cast<SvTreeListEntry*>(p);
+    m_nAsyncRemoveEvent = nullptr;
     // now remove the entry
-    m_pModel->Remove(static_cast<FmFilterData*>(pEntry->GetUserData()));
+    m_pModel->Remove(static_cast<FmFilterData*>(p));
 }
-
-
-IMPL_LINK_NOARG(FmFilterNavigator, OnDropActionTimer, Timer *, void)
-{
-    if (--m_aTimerCounter > 0)
-        return;
-
-    switch (m_aDropActionType)
-    {
-        case DA_SCROLLUP :
-            ScrollOutputArea(1);
-            m_aTimerCounter = DROP_ACTION_TIMER_SCROLL_TICKS;
-            break;
-        case DA_SCROLLDOWN :
-            ScrollOutputArea(-1);
-            m_aTimerCounter = DROP_ACTION_TIMER_SCROLL_TICKS;
-            break;
-        case DA_EXPANDNODE:
-        {
-            SvTreeListEntry* pToExpand = GetEntry(m_aTimerTriggered);
-            if (pToExpand && (GetChildCount(pToExpand) > 0) &&  !IsExpanded(pToExpand))
-                Expand(pToExpand);
-            m_aDropActionTimer.Stop();
-        }
-        break;
-    }
-}
-
 
 sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
 {
-    Point aDropPos = rEvt.maPosPixel;
-
-    // possible DropActions scroll and expand
-    if (rEvt.mbLeaving)
-    {
-        if (m_aDropActionTimer.IsActive())
-            m_aDropActionTimer.Stop();
-    }
-    else
-    {
-        bool bNeedTrigger = false;
-        // first entry ?
-        if ((aDropPos.Y() >= 0) && (aDropPos.Y() < GetEntryHeight()))
-        {
-            m_aDropActionType = DA_SCROLLUP;
-            bNeedTrigger = true;
-        }
-        else
-        {
-            if ((aDropPos.Y() < GetSizePixel().Height()) && (aDropPos.Y() >= GetSizePixel().Height() - GetEntryHeight()))
-            {
-                m_aDropActionType = DA_SCROLLDOWN;
-                bNeedTrigger = true;
-            }
-            else
-            {   // is it an entry with children, and not yet expanded?
-                SvTreeListEntry* pDroppedOn = GetEntry(aDropPos);
-                if (pDroppedOn && (GetChildCount(pDroppedOn) > 0) && !IsExpanded(pDroppedOn))
-                {
-                    // -> expand
-                    m_aDropActionType = DA_EXPANDNODE;
-                    bNeedTrigger = true;
-                }
-            }
-        }
-        if (bNeedTrigger && (m_aTimerTriggered != aDropPos))
-        {
-            m_aTimerCounter = DROP_ACTION_TIMER_INITIAL_TICKS;
-            // remember DropPos because there are QueryDrops even though the mouse was not moved
-            m_aTimerTriggered = aDropPos;
-            if (!m_aDropActionTimer.IsActive())
-            {
-                m_aDropActionTimer.SetTimeout(DROP_ACTION_TIMER_TICK_BASE);
-                m_aDropActionTimer.Start();
-            }
-        }
-        else if (!bNeedTrigger)
-            m_aDropActionTimer.Stop();
-    }
-
     if (!m_aControlExchange.isDragSource())
         return DND_ACTION_NONE;
 
-    if (!OFilterItemExchange::hasFormat(GetDataFlavorExVector()))
+    if (!OFilterItemExchange::hasFormat(m_aDropTargetHelper.GetDataFlavorExVector()))
         return DND_ACTION_NONE;
 
     // do we contain the formitem?
     if (!FindEntry(m_aControlExchange->getFormItem()))
         return DND_ACTION_NONE;
 
-    SvTreeListEntry* pDropTarget = GetEntry(aDropPos);
-    if (!pDropTarget)
+    Point aDropPos = rEvt.maPosPixel;
+    std::unique_ptr<weld::TreeIter> xDropTarget(m_xTreeView->make_iterator());
+    // get_dest_row_at_pos with false cause we must drop exactly "on" a node to paste a condition into it
+    if (!m_xTreeView->get_dest_row_at_pos(aDropPos, xDropTarget.get(), false))
+        xDropTarget.reset();
+
+    if (!xDropTarget)
         return DND_ACTION_NONE;
 
-    FmFilterData* pData = static_cast<FmFilterData*>(pDropTarget->GetUserData());
+    FmFilterData* pData = reinterpret_cast<FmFilterData*>(m_xTreeView->get_id(*xDropTarget).toUInt64());
     FmFormItem* pForm = nullptr;
     if (dynamic_cast<const FmFilterItem*>(pData) !=  nullptr)
     {
@@ -1295,9 +1212,9 @@ sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
 
 namespace
 {
-    FmFilterItems* getTargetItems(SvTreeListEntry const * _pTarget)
+    FmFilterItems* getTargetItems(weld::TreeView& rTreeView, weld::TreeIter& rTarget)
     {
-        FmFilterData*   pData = static_cast<FmFilterData*>(_pTarget->GetUserData());
+        FmFilterData* pData = reinterpret_cast<FmFilterData*>(rTreeView.get_id(rTarget).toUInt64());
         FmFilterItems*  pTargetItems = dynamic_cast<FmFilterItems*>(pData);
         if (!pTargetItems)
             pTargetItems = dynamic_cast<FmFilterItems*>(pData->GetParent());
@@ -1307,82 +1224,55 @@ namespace
 
 sal_Int8 FmFilterNavigator::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
-    // you can't scroll after dropping...
-    if (m_aDropActionTimer.IsActive())
-        m_aDropActionTimer.Stop();
-
     if (!m_aControlExchange.isDragSource())
         return DND_ACTION_NONE;
 
     Point aDropPos = rEvt.maPosPixel;
-    SvTreeListEntry* pDropTarget = GetEntry( aDropPos );
-    if (!pDropTarget)
+    std::unique_ptr<weld::TreeIter> xDropTarget(m_xTreeView->make_iterator());
+    // get_dest_row_at_pos with false cause we must drop exactly "on" a node to paste a condition into it
+    if (!m_xTreeView->get_dest_row_at_pos(aDropPos, xDropTarget.get(), false))
+        xDropTarget.reset();
+    if (!xDropTarget)
         return DND_ACTION_NONE;
 
     // search the container where to add the items
-    FmFilterItems*  pTargetItems = getTargetItems(pDropTarget);
-    SelectAll(false);
-    SvTreeListEntry* pEntry = FindEntry(pTargetItems);
-    Select(pEntry);
-    SetCurEntry(pEntry);
+    FmFilterItems* pTargetItems = getTargetItems(*m_xTreeView, *xDropTarget);
+    m_xTreeView->unselect_all();
+    std::unique_ptr<weld::TreeIter> xEntry = FindEntry(pTargetItems);
+    m_xTreeView->select(*xEntry);
+    m_xTreeView->set_cursor(*xEntry);
 
     insertFilterItem(m_aControlExchange->getDraggedEntries(),pTargetItems,DND_ACTION_COPY == rEvt.mnAction);
 
     return DND_ACTION_COPY;
 }
 
-
-void FmFilterNavigator::InitEntry(SvTreeListEntry* pEntry,
-                                  const OUString& rStr,
-                                  const Image& rImg1,
-                                  const Image& rImg2)
+IMPL_LINK_NOARG(FmFilterNavigator, SelectHdl, weld::TreeView&, void)
 {
-    SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2 );
-    std::unique_ptr<SvLBoxString> pString;
+    std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
+    if (!m_xTreeView->get_selected(xIter.get()))
+        return;
 
-    if (dynamic_cast<const FmFilterItem*>(static_cast<FmFilterData*>(pEntry->GetUserData())) != nullptr)
-        pString.reset(new FmFilterString(rStr,
-            static_cast<FmFilterItem*>(pEntry->GetUserData())->GetFieldName()));
-    else if (dynamic_cast<const FmFilterItems*>(static_cast<FmFilterData*>(pEntry->GetUserData())) != nullptr)
-        pString.reset(new FmFilterItemsString(rStr));
+    FmFilterData* pData = reinterpret_cast<FmFilterData*>(m_xTreeView->get_id(*xIter).toUInt64());
 
-    if (pString)
-        pEntry->ReplaceItem(std::move(pString), 1 );
-}
-
-
-bool FmFilterNavigator::Select( SvTreeListEntry* pEntry, bool bSelect )
-{
-    if (bSelect == IsSelected(pEntry))  // This happens sometimes. I think the basic class errs too much on the side of caution. ;)
-        return true;
-
-    if (SvTreeListBox::Select(pEntry, bSelect))
-    {
-        if (bSelect)
-        {
-            FmFormItem* pFormItem = nullptr;
-            if ( dynamic_cast<const FmFilterItem*>(static_cast<FmFilterData*>(pEntry->GetUserData())) != nullptr)
-                pFormItem = static_cast<FmFormItem*>(static_cast<FmFilterItem*>(pEntry->GetUserData())->GetParent()->GetParent());
-            else if (dynamic_cast<const FmFilterItems*>(static_cast<FmFilterData*>(pEntry->GetUserData())) != nullptr)
-                pFormItem = static_cast<FmFormItem*>(static_cast<FmFilterItem*>(pEntry->GetUserData())->GetParent()->GetParent());
-            else if (dynamic_cast<const FmFormItem*>(static_cast<FmFilterData*>(pEntry->GetUserData())) != nullptr)
-                pFormItem = static_cast<FmFormItem*>(pEntry->GetUserData());
-
-            if (pFormItem)
-            {
-                // will the controller be exchanged?
-                if (dynamic_cast<const FmFilterItem*>(static_cast<FmFilterData*>(pEntry->GetUserData())) != nullptr)
-                    m_pModel->SetCurrentItems(static_cast<FmFilterItems*>(static_cast<FmFilterItem*>(pEntry->GetUserData())->GetParent()));
-                else if (dynamic_cast<const FmFilterItems*>(static_cast<FmFilterData*>(pEntry->GetUserData())) != nullptr)
-                    m_pModel->SetCurrentItems(static_cast<FmFilterItems*>(pEntry->GetUserData()));
-                else if (dynamic_cast<const FmFormItem*>(static_cast<FmFilterData*>(pEntry->GetUserData())) != nullptr)
-                    m_pModel->SetCurrentController(static_cast<FmFormItem*>(pEntry->GetUserData())->GetController());
-            }
-        }
-        return true;
-    }
+    FmFormItem* pFormItem = nullptr;
+    if (FmFilterItem* pItem = dynamic_cast<FmFilterItem*>(pData))
+        pFormItem = static_cast<FmFormItem*>(pItem->GetParent()->GetParent());
+    else if (FmFilterItems* pItems = dynamic_cast<FmFilterItems*>(pData))
+        pFormItem = static_cast<FmFormItem*>(pItems->GetParent()->GetParent());
     else
-        return false;
+        pFormItem = dynamic_cast<FmFormItem*>(pData);
+
+    if (pFormItem)
+    {
+        // will the controller be exchanged?
+        if (FmFilterItem* pItem = dynamic_cast<FmFilterItem*>(pData))
+            m_pModel->SetCurrentItems(static_cast<FmFilterItems*>(pItem->GetParent()));
+        else if (FmFilterItems* pItems = dynamic_cast<FmFilterItems*>(pData))
+            m_pModel->SetCurrentItems(pItems);
+        else
+            m_pModel->SetCurrentController(pFormItem->GetController());
+    }
 }
 
 void FmFilterNavigator::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
@@ -1393,7 +1283,7 @@ void FmFilterNavigator::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
     else if( dynamic_cast<const FilterClearingHint*>(&rHint) )
     {
-        SvTreeListBox::Clear();
+        m_xTreeView->clear();
     }
     else if (const FmFilterRemovedHint* pRemoveHint = dynamic_cast<const FmFilterRemovedHint*>(&rHint))
     {
@@ -1401,58 +1291,73 @@ void FmFilterNavigator::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
     else if (const FmFilterTextChangedHint *pChangeHint = dynamic_cast<const FmFilterTextChangedHint*>(&rHint))
     {
-        SvTreeListEntry* pEntry = FindEntry(pChangeHint->GetData());
-        if (pEntry)
-            SetEntryText( pEntry, pChangeHint->GetData()->GetText());
+        std::unique_ptr<weld::TreeIter> xEntry = FindEntry(pChangeHint->GetData());
+        if (xEntry)
+            m_xTreeView->set_text(*xEntry, pChangeHint->GetData()->GetText());
     }
     else if( dynamic_cast<const FmFilterCurrentChangedHint*>(&rHint) )
     {
-        // invalidate the entries
-        for (SvTreeListEntry* pEntry = First(); pEntry != nullptr;
-             pEntry = Next(pEntry))
-            GetModel()->InvalidateEntry( pEntry );
+        m_xTreeView->queue_draw();
     }
 }
 
-SvTreeListEntry* FmFilterNavigator::FindEntry(const FmFilterData* pItem) const
+std::unique_ptr<weld::TreeIter> FmFilterNavigator::FindEntry(const FmFilterData* pItem) const
 {
-    SvTreeListEntry* pEntry = nullptr;
-    if (pItem)
+    if (!pItem)
+        return nullptr;
+    std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->make_iterator();
+    if (!m_xTreeView->get_iter_first(*xEntry))
+        return nullptr;
+    do
     {
-        for (pEntry = First(); pEntry != nullptr; pEntry = Next( pEntry ))
-        {
-            FmFilterData* pEntryItem = static_cast<FmFilterData*>(pEntry->GetUserData());
-            if (pEntryItem == pItem)
-                break;
-        }
+        FmFilterData* pEntryItem = reinterpret_cast<FmFilterData*>(m_xTreeView->get_id(*xEntry).toUInt64());
+        if (pEntryItem == pItem)
+            return xEntry;
     }
-    return pEntry;
+    while (m_xTreeView->iter_next(*xEntry));
+
+    return nullptr;
 }
 
-
-void FmFilterNavigator::Insert(FmFilterData* pItem, sal_uLong nPos)
+void FmFilterNavigator::Insert(FmFilterData* pItem, int nPos)
 {
     const FmParentData* pParent = pItem->GetParent() ? pItem->GetParent() : m_pModel.get();
 
     // insert the item
-    SvTreeListEntry* pParentEntry = FindEntry( pParent );
-    InsertEntry( pItem->GetText(), pItem->GetImage(), pItem->GetImage(), pParentEntry, false, nPos, pItem );
-    if ( pParentEntry )
-        Expand( pParentEntry );
+    std::unique_ptr<weld::TreeIter> xParentEntry = FindEntry(pParent);
+
+    OUString sId(OUString::number(reinterpret_cast<sal_uIntPtr>(pItem)));
+    std::unique_ptr<weld::TreeIter> xRet(m_xTreeView->make_iterator());
+    m_xTreeView->insert(xParentEntry.get(), nPos, &pItem->GetText(), &sId,
+                        nullptr, nullptr, false, xRet.get());
+    m_xTreeView->set_image(*xRet, pItem->GetImage());
+
+    if (!xParentEntry)
+        return;
+    m_xTreeView->expand_row(*xParentEntry);
 }
 
+void FmFilterNavigator::EndEditing()
+{
+    if (m_xEditingCurrently)
+    {
+        // end editing
+        m_xTreeView->end_editing();
+        m_xEditingCurrently.reset();
+    }
+}
 
 void FmFilterNavigator::Remove(FmFilterData const * pItem)
 {
     // the entry for the data
-    SvTreeListEntry* pEntry = FindEntry(pItem);
+    std::unique_ptr<weld::TreeIter> xEntry = FindEntry(pItem);
+    if (!xEntry)
+        return;
 
-    if (pEntry == m_pEditingCurrently)
-        // cancel editing
-        EndEditing(true);
+    if (m_xEditingCurrently && m_xTreeView->iter_compare(*xEntry, *m_xEditingCurrently) == 0)
+        EndEditing();
 
-    if (pEntry)
-        GetModel()->Remove( pEntry );
+    m_xTreeView->remove(*xEntry);
 }
 
 FmFormItem* FmFilterNavigator::getSelectedFilterItems(::std::vector<FmFilterItem*>& _rItemList)
@@ -1462,11 +1367,10 @@ FmFormItem* FmFilterNavigator::getSelectedFilterItems(::std::vector<FmFilterItem
 
     bool bHandled = true;
     bool bFoundSomething = false;
-    for (SvTreeListEntry* pEntry = FirstSelected();
-         bHandled && pEntry != nullptr;
-         pEntry = NextSelected(pEntry))
-    {
-        FmFilterItem* pFilter = dynamic_cast<FmFilterItem*>( static_cast<FmFilterData*>(pEntry->GetUserData()) );
+
+    m_xTreeView->selected_foreach([this, &bHandled, &bFoundSomething, &pFirstItem, &_rItemList](weld::TreeIter& rEntry) {
+        FmFilterData* pFilterEntry = reinterpret_cast<FmFilterData*>(m_xTreeView->get_id(rEntry).toInt64());
+        FmFilterItem* pFilter = dynamic_cast<FmFilterItem*>(pFilterEntry);
         if (pFilter)
         {
             FmFormItem* pForm = dynamic_cast<FmFormItem*>( pFilter->GetParent()->GetParent() );
@@ -1483,7 +1387,9 @@ FmFormItem* FmFilterNavigator::getSelectedFilterItems(::std::vector<FmFilterItem
                 bFoundSomething = true;
             }
         }
-    }
+        return !bHandled;
+    });
+
     if ( !bHandled || !bFoundSomething )
         pFirstItem = nullptr;
     return pFirstItem;
@@ -1514,23 +1420,30 @@ void FmFilterNavigator::insertFilterItem(const ::std::vector<FmFilterItem*>& _rF
     m_pModel->EnsureEmptyFilterRows( *_pTargetItems->GetParent() );
 }
 
-void FmFilterNavigator::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPixel*/ )
+IMPL_LINK(FmFilterNavigator, DragBeginHdl, bool&, rUnsetDragIcon, bool)
 {
-    EndSelection();
+    rUnsetDragIcon = false;
 
     // be sure that the data is only used within an only one form!
     m_aControlExchange.prepareDrag();
 
     ::std::vector<FmFilterItem*> aItemList;
-    if ( FmFormItem* pFirstItem = getSelectedFilterItems(aItemList) )
+    if (FmFormItem* pFirstItem = getSelectedFilterItems(aItemList))
     {
         m_aControlExchange->setDraggedEntries(aItemList);
         m_aControlExchange->setFormItem(pFirstItem);
-        m_aControlExchange.startDrag(this, DND_ACTION_COPYMOVE);
+
+        OFilterItemExchange& rExchange = *m_aControlExchange;
+        rtl::Reference<TransferDataContainer> xHelper(&rExchange);
+        m_xTreeView->enable_drag_source(xHelper, DND_ACTION_COPYMOVE);
+        rExchange.setDragging(true);
+
+        return false;
     }
+    return true;
 }
 
-void FmFilterNavigator::Command( const CommandEvent& rEvt )
+IMPL_LINK(FmFilterNavigator, PopupMenuHdl, const CommandEvent&, rEvt, bool)
 {
     bool bHandled = false;
     switch (rEvt.GetCommand())
@@ -1539,39 +1452,39 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
         {
             // the place where it was clicked
             Point aWhere;
-            SvTreeListEntry* pClicked = nullptr;
+            std::unique_ptr<weld::TreeIter> xClicked(m_xTreeView->make_iterator());
             if (rEvt.IsMouseEvent())
             {
                 aWhere = rEvt.GetMousePosPixel();
-                pClicked = GetEntry(aWhere);
-                if (pClicked == nullptr)
+                if (!m_xTreeView->get_dest_row_at_pos(aWhere, xClicked.get(), false))
                     break;
 
-                if (!IsSelected(pClicked))
+                if (!m_xTreeView->is_selected(*xClicked))
                 {
-                    SelectAll(false);
-                    Select(pClicked);
-                    SetCurEntry(pClicked);
+                    m_xTreeView->unselect_all();
+                    m_xTreeView->select(*xClicked);
+                    m_xTreeView->set_cursor(*xClicked);
                 }
             }
             else
             {
-                pClicked = GetCurEntry();
-                if (!pClicked)
+                if (!m_xTreeView->get_cursor(xClicked.get()))
                     break;
-                aWhere = GetEntryPosition( pClicked );
+                aWhere = m_xTreeView->get_row_area(*xClicked).Center();
             }
 
             ::std::vector<FmFilterData*> aSelectList;
-            for (SvTreeListEntry* pEntry = FirstSelected();
-                 pEntry != nullptr;
-                 pEntry = NextSelected(pEntry))
-            {
+            m_xTreeView->selected_foreach([this, &aSelectList](weld::TreeIter& rEntry) {
+                FmFilterData* pFilterEntry = reinterpret_cast<FmFilterData*>(m_xTreeView->get_id(rEntry).toInt64());
+
                 // don't delete forms
-                FmFormItem* pForm = dynamic_cast<FmFormItem*>( static_cast<FmFilterData*>(pEntry->GetUserData()) );
+                FmFormItem* pForm = dynamic_cast<FmFormItem*>(pFilterEntry);
                 if (!pForm)
-                    aSelectList.push_back(static_cast<FmFilterData*>(pEntry->GetUserData()));
-            }
+                    aSelectList.push_back(pFilterEntry);
+
+                return false;
+            });
+
             if (aSelectList.size() == 1)
             {
                 // don't delete the only empty row of a form
@@ -1581,41 +1494,55 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
                     aSelectList.clear();
             }
 
-            VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "svx/ui/filtermenu.ui", "");
-            VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xTreeView.get(), "svx/ui/filtermenu.ui"));
+            std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu("menu"));
 
             // every condition could be deleted except the first one if it's the only one
-            aContextMenu->EnableItem(aContextMenu->GetItemId("delete"), !aSelectList.empty());
+            bool bNoDelete = false;
+            if (aSelectList.empty())
+            {
+                bNoDelete = true;
+                xContextMenu->remove("delete");
+            }
 
+            FmFilterData* pFilterEntry = reinterpret_cast<FmFilterData*>(m_xTreeView->get_id(*xClicked).toInt64());
+            bool bEdit = dynamic_cast<FmFilterItem*>(pFilterEntry) != nullptr &&
+                m_xTreeView->is_selected(*xClicked) && m_xTreeView->count_selected_rows() == 1;
 
-            bool bEdit = dynamic_cast<FmFilterItem*>( static_cast<FmFilterData*>(pClicked->GetUserData()) ) != nullptr &&
-                IsSelected(pClicked) && GetSelectionCount() == 1;
+            if (bNoDelete && !bEdit)
+            {
+                // nothing is in the menu, don't bother
+                return true;
+            }
 
-            aContextMenu->EnableItem(aContextMenu->GetItemId("edit"), bEdit);
-            aContextMenu->EnableItem(aContextMenu->GetItemId("isnull"), bEdit);
-            aContextMenu->EnableItem(aContextMenu->GetItemId("isnotnull"), bEdit);
+            if (!bEdit)
+            {
+                xContextMenu->remove("edit");
+                xContextMenu->remove("isnull");
+                xContextMenu->remove("isnotnull");
+            }
 
-            aContextMenu->RemoveDisabledEntries(true, true);
-            aContextMenu->Execute(this, aWhere);
-            OString sIdent = aContextMenu->GetCurItemIdent();
+            OString sIdent = xContextMenu->popup_at_rect(m_xTreeView.get(), tools::Rectangle(aWhere, ::Size(1, 1)));
             if (sIdent == "edit")
-                EditEntry( pClicked );
+            {
+                m_xTreeView->start_editing(*xClicked);
+            }
             else if (sIdent == "isnull")
             {
                 OUString aErrorMsg;
                 OUString aText = "IS NULL";
-                m_pModel->ValidateText(static_cast<FmFilterItem*>(pClicked->GetUserData()),
+                m_pModel->ValidateText(static_cast<FmFilterItem*>(pFilterEntry),
                                         aText, aErrorMsg);
-                m_pModel->SetTextForItem(static_cast<FmFilterItem*>(pClicked->GetUserData()), aText);
+                m_pModel->SetTextForItem(static_cast<FmFilterItem*>(pFilterEntry), aText);
             }
             else if (sIdent == "isnotnull")
             {
                 OUString aErrorMsg;
                 OUString aText = "IS NOT NULL";
 
-                m_pModel->ValidateText(static_cast<FmFilterItem*>(pClicked->GetUserData()),
+                m_pModel->ValidateText(static_cast<FmFilterItem*>(pFilterEntry),
                                         aText, aErrorMsg);
-                m_pModel->SetTextForItem(static_cast<FmFilterItem*>(pClicked->GetUserData()), aText);
+                m_pModel->SetTextForItem(static_cast<FmFilterItem*>(pFilterEntry), aText);
             }
             else if (sIdent == "delete")
             {
@@ -1627,161 +1554,184 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
         default: break;
     }
 
-    if (!bHandled)
-        SvTreeListBox::Command( rEvt );
+    return bHandled;
 }
 
-SvTreeListEntry* FmFilterNavigator::getNextEntry(SvTreeListEntry* _pStartWith)
+typedef std::vector<std::unique_ptr<weld::TreeIter>> iter_vector;
+
+bool FmFilterNavigator::getNextEntry(weld::TreeIter& rEntry)
 {
-    SvTreeListEntry* pEntry = _pStartWith ? _pStartWith : LastSelected();
-    pEntry = Next(pEntry);
+    bool bEntry = m_xTreeView->iter_next(rEntry);
     // we need the next filter entry
-    while( pEntry && GetChildCount( pEntry ) == 0 && pEntry != Last() )
-        pEntry = Next(pEntry);
-    return pEntry;
-}
-
-SvTreeListEntry* FmFilterNavigator::getPrevEntry(SvTreeListEntry* _pStartWith)
-{
-    SvTreeListEntry* pEntry = _pStartWith ? _pStartWith : FirstSelected();
-    pEntry = Prev(pEntry);
-    // check if the previous entry is a filter, if so get the next prev
-    if ( pEntry && GetChildCount( pEntry ) != 0 )
+    if (bEntry)
     {
-        pEntry = Prev(pEntry);
-        // if the entry is still no leaf return
-        if ( pEntry && GetChildCount( pEntry ) != 0 )
-            pEntry = nullptr;
+        while (!m_xTreeView->iter_has_child(rEntry))
+        {
+            std::unique_ptr<weld::TreeIter> xNext = m_xTreeView->make_iterator(&rEntry);
+            if (!m_xTreeView->iter_next(*xNext))
+                break;
+            m_xTreeView->copy_iterator(*xNext, rEntry);
+        }
     }
-    return pEntry;
+    return bEntry;
 }
 
-void FmFilterNavigator::KeyInput(const KeyEvent& rKEvt)
+bool FmFilterNavigator::getPrevEntry(weld::TreeIter& rEntry)
+{
+    bool bEntry = m_xTreeView->iter_previous(rEntry);
+    // check if the previous entry is a filter, if so get the next prev
+    if (bEntry && m_xTreeView->iter_has_child(rEntry))
+    {
+        bEntry = m_xTreeView->iter_previous(rEntry);
+        // if the entry is still no leaf return
+        if (bEntry && m_xTreeView->iter_has_child(rEntry))
+            bEntry = false;
+    }
+    return bEntry;
+}
+IMPL_LINK(FmFilterNavigator, KeyInputHdl, const ::KeyEvent&, rKEvt, bool)
 {
     const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
 
     switch ( rKeyCode.GetCode() )
     {
-    case KEY_UP:
-    case KEY_DOWN:
-    {
-        if ( !rKeyCode.IsMod1() || !rKeyCode.IsMod2() || rKeyCode.IsShift() )
-            break;
-
-        ::std::vector<FmFilterItem*> aItemList;
-        if ( !getSelectedFilterItems( aItemList ) )
-            break;
-
-        ::std::function<SvTreeListEntry*(FmFilterNavigator *, SvTreeListEntry*)> getter = ::std::mem_fn(&FmFilterNavigator::getNextEntry);
-        if ( rKeyCode.GetCode() == KEY_UP )
-            getter = ::std::mem_fn(&FmFilterNavigator::getPrevEntry);
-
-        SvTreeListEntry* pTarget = getter( this, nullptr );
-        if ( !pTarget )
-            break;
-
-        FmFilterItems* pTargetItems = getTargetItems( pTarget );
-        if ( !pTargetItems )
-            break;
-
-        ::std::vector<FmFilterItem*>::const_iterator aEnd = aItemList.end();
-        bool bNextTargetItem = true;
-        while ( bNextTargetItem )
+        case KEY_UP:
+        case KEY_DOWN:
         {
-            ::std::vector<FmFilterItem*>::const_iterator i = aItemList.begin();
-            for (; i != aEnd; ++i)
-            {
-                if ( (*i)->GetParent() == pTargetItems )
-                {
-                    pTarget = getter(this,pTarget);
-                    if ( !pTarget )
-                        return;
-                    pTargetItems = getTargetItems( pTarget );
-                    break;
-                }
-                else
-                {
-                    FmFilterItem* pFilterItem = pTargetItems->Find( (*i)->GetComponentIndex() );
-                    // we found the text component so jump above
-                    if ( pFilterItem )
-                    {
-                        pTarget = getter( this, pTarget );
-                        if ( !pTarget )
-                            return;
+            if ( !rKeyCode.IsMod1() || !rKeyCode.IsMod2() || rKeyCode.IsShift() )
+                break;
 
-                        pTargetItems = getTargetItems( pTarget );
+            ::std::vector<FmFilterItem*> aItemList;
+            if ( !getSelectedFilterItems( aItemList ) )
+                break;
+
+
+            iter_vector aSelected;
+            m_xTreeView->selected_foreach([this, &aSelected](weld::TreeIter& rEntry){
+                aSelected.emplace_back(m_xTreeView->make_iterator(&rEntry));
+                return false;
+            });
+
+            std::unique_ptr<weld::TreeIter> xTarget;
+            ::std::function<bool(FmFilterNavigator*, weld::TreeIter&)> getter;
+
+            if (rKeyCode.GetCode() == KEY_UP)
+            {
+                xTarget = m_xTreeView->make_iterator(aSelected.front().get());
+                getter = ::std::mem_fn(&FmFilterNavigator::getPrevEntry);
+            }
+            else
+            {
+                xTarget = m_xTreeView->make_iterator(aSelected.back().get());
+                getter = ::std::mem_fn(&FmFilterNavigator::getNextEntry);
+            }
+
+            bool bTarget = getter(this, *xTarget);
+            if (!bTarget)
+                break;
+
+            FmFilterItems* pTargetItems = getTargetItems(*m_xTreeView, *xTarget);
+            if (!pTargetItems)
+                break;
+
+            ::std::vector<FmFilterItem*>::const_iterator aEnd = aItemList.end();
+            bool bNextTargetItem = true;
+            while ( bNextTargetItem )
+            {
+                ::std::vector<FmFilterItem*>::const_iterator i = aItemList.begin();
+                for (; i != aEnd; ++i)
+                {
+                    if ( (*i)->GetParent() == pTargetItems )
+                    {
+                        bTarget = getter(this, *xTarget);
+                        if (!bTarget)
+                            return true;
+                        pTargetItems = getTargetItems(*m_xTreeView, *xTarget);
                         break;
                     }
+                    else
+                    {
+                        FmFilterItem* pFilterItem = pTargetItems->Find( (*i)->GetComponentIndex() );
+                        // we found the text component so jump above
+                        if ( pFilterItem )
+                        {
+                            bTarget = getter(this, *xTarget);
+                            if (!bTarget)
+                                return true;
+
+                            pTargetItems = getTargetItems(*m_xTreeView, *xTarget);
+                            break;
+                        }
+                    }
                 }
+                bNextTargetItem = i != aEnd && pTargetItems;
             }
-            bNextTargetItem = i != aEnd && pTargetItems;
-        }
 
-        if ( pTargetItems )
+            if ( pTargetItems )
+            {
+                insertFilterItem( aItemList, pTargetItems, false );
+                return true;
+            }
+        }
+        break;
+
+        case KEY_DELETE:
         {
-            insertFilterItem( aItemList, pTargetItems, false );
-            return;
+            if ( rKeyCode.GetModifier() )
+                break;
+
+            std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->make_iterator();
+            if (m_xTreeView->get_iter_first(*xEntry) && !m_xTreeView->is_selected(*xEntry))
+                DeleteSelection();
+
+            return true;
         }
     }
-    break;
 
-    case KEY_DELETE:
-    {
-        if ( rKeyCode.GetModifier() )
-            break;
-
-        if ( !IsSelected( First() ) || GetEntryCount() > 1 )
-            DeleteSelection();
-        return;
-    }
-    }
-
-    SvTreeListBox::KeyInput(rKEvt);
+    return false;
 }
-
 
 void FmFilterNavigator::DeleteSelection()
 {
     // to avoid the deletion of an entry twice (e.g. deletion of a parent and afterward
     // the deletion of its child, I have to shrink the selection list
-    ::std::vector<SvTreeListEntry*> aEntryList;
-    for (SvTreeListEntry* pEntry = FirstSelected();
-         pEntry != nullptr;
-         pEntry = NextSelected(pEntry))
-    {
-        FmFilterItem* pFilterItem = dynamic_cast<FmFilterItem*>( static_cast<FmFilterData*>(pEntry->GetUserData()) );
-        if (pFilterItem && IsSelected(GetParent(pEntry)))
-            continue;
+    std::vector<FmFilterData*> aEntryList;
 
-        FmFormItem* pForm = dynamic_cast<FmFormItem*>( static_cast<FmFilterData*>(pEntry->GetUserData()) );
+    m_xTreeView->selected_foreach([this, &aEntryList](weld::TreeIter& rEntry) {
+        FmFilterData* pFilterEntry = reinterpret_cast<FmFilterData*>(m_xTreeView->get_id(rEntry).toInt64());
+
+        if (dynamic_cast<FmFilterItem*>(pFilterEntry))
+        {
+            std::unique_ptr<weld::TreeIter> xParent(m_xTreeView->make_iterator(&rEntry));
+            if (m_xTreeView->iter_parent(*xParent) && m_xTreeView->is_selected(*xParent))
+                return false;
+        }
+
+        FmFormItem* pForm = dynamic_cast<FmFormItem*>(pFilterEntry);
         if (!pForm)
-            aEntryList.push_back(pEntry);
-    }
+            aEntryList.emplace_back(pFilterEntry);
+
+        return false;
+    });
 
     // Remove the selection
-    SelectAll(false);
+    m_xTreeView->unselect_all();
 
-    for (::std::vector<SvTreeListEntry*>::reverse_iterator i = aEntryList.rbegin();
-        // link problems with operator ==
-        i.base() != aEntryList.rend().base(); ++i)
-    {
-        m_pModel->Remove(static_cast<FmFilterData*>((*i)->GetUserData()));
-    }
+    for (auto i = aEntryList.rbegin(); i != aEntryList.rend(); ++i)
+        m_pModel->Remove(*i);
 }
 
-FmFilterNavigatorWin::FmFilterNavigatorWin( SfxBindings* _pBindings, SfxChildWindow* _pMgr,
-                              vcl::Window* _pParent )
-                     :SfxDockingWindow( _pBindings, _pMgr, _pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_ROLLABLE|WB_3DLOOK|WB_DOCKABLE) )
-                     ,SfxControllerItem( SID_FM_FILTER_NAVIGATOR_CONTROL, *_pBindings )
+FmFilterNavigatorWin::FmFilterNavigatorWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr,
+                                           vcl::Window* _pParent)
+    : SfxDockingWindow(_pBindings, _pMgr, _pParent, "FilterNavigator", "svx/ui/filternavigator.ui")
+    , SfxControllerItem( SID_FM_FILTER_NAVIGATOR_CONTROL, *_pBindings )
+    , m_xNavigatorTree(new FmFilterNavigator(this, m_xBuilder->weld_tree_view("treeview")))
 {
     SetHelpId( HID_FILTER_NAVIGATOR_WIN );
 
-    m_pNavigator = VclPtr<FmFilterNavigator>::Create( this );
-    m_pNavigator->Show();
     SetText( SvxResId(RID_STR_FILTER_NAVIGATOR) );
     SfxDockingWindow::SetFloatingSize( Size(200,200) );
 }
-
 
 FmFilterNavigatorWin::~FmFilterNavigatorWin()
 {
@@ -1790,19 +1740,18 @@ FmFilterNavigatorWin::~FmFilterNavigatorWin()
 
 void FmFilterNavigatorWin::dispose()
 {
-    m_pNavigator.disposeAndClear();
+    m_xNavigatorTree.reset();
     ::SfxControllerItem::dispose();
     SfxDockingWindow::dispose();
 }
 
-
 void FmFilterNavigatorWin::UpdateContent(FmFormShell const * pFormShell)
 {
-    if (!m_pNavigator)
+    if (!m_xNavigatorTree)
         return;
 
     if (!pFormShell)
-        m_pNavigator->UpdateContent( nullptr, nullptr );
+        m_xNavigatorTree->UpdateContent( nullptr, nullptr );
     else
     {
         Reference<XFormController> const xController(pFormShell->GetImpl()->getActiveInternalController_Lock());
@@ -1818,10 +1767,9 @@ void FmFilterNavigatorWin::UpdateContent(FmFormShell const * pFormShell)
                 xChild.set(xParent, UNO_QUERY);
             }
         }
-        m_pNavigator->UpdateContent(xContainer, xController);
+        m_xNavigatorTree->UpdateContent(xContainer, xController);
     }
 }
-
 
 void FmFilterNavigatorWin::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
@@ -1837,27 +1785,20 @@ void FmFilterNavigatorWin::StateChanged( sal_uInt16 nSID, SfxItemState eState, c
         UpdateContent( nullptr );
 }
 
-
 bool FmFilterNavigatorWin::Close()
 {
-    if ( m_pNavigator && m_pNavigator->IsEditingActive() )
-        m_pNavigator->EndEditing();
-
-    if ( m_pNavigator && m_pNavigator->IsEditingActive() )
-        // the EndEditing was vetoed (perhaps of an syntax error or such)
-        return false;
+    if (m_xNavigatorTree)
+        m_xNavigatorTree->EndEditing();
 
     UpdateContent( nullptr );
     return SfxDockingWindow::Close();
 }
-
 
 void FmFilterNavigatorWin::FillInfo( SfxChildWinInfo& rInfo ) const
 {
     SfxDockingWindow::FillInfo( rInfo );
     rInfo.bVisible = false;
 }
-
 
 Size FmFilterNavigatorWin::CalcDockingSize( SfxChildAlignment eAlign )
 {
@@ -1866,7 +1807,6 @@ Size FmFilterNavigatorWin::CalcDockingSize( SfxChildAlignment eAlign )
 
     return SfxDockingWindow::CalcDockingSize( eAlign );
 }
-
 
 SfxChildAlignment FmFilterNavigatorWin::CheckAlignment( SfxChildAlignment eActAlign, SfxChildAlignment eAlign )
 {
@@ -1883,27 +1823,13 @@ SfxChildAlignment FmFilterNavigatorWin::CheckAlignment( SfxChildAlignment eActAl
     return eActAlign;
 }
 
-
-void FmFilterNavigatorWin::Resize()
-{
-    SfxDockingWindow::Resize();
-
-    Size aLogOutputSize = PixelToLogic(GetOutputSizePixel(), MapMode(MapUnit::MapAppFont));
-    Size aLogExplSize = aLogOutputSize;
-    aLogExplSize.AdjustWidth( -6 );
-    aLogExplSize.AdjustHeight( -6 );
-
-    Point aExplPos = LogicToPixel(Point(3,3), MapMode(MapUnit::MapAppFont));
-    Size aExplSize = LogicToPixel(aLogExplSize, MapMode(MapUnit::MapAppFont));
-
-    m_pNavigator->SetPosSizePixel( aExplPos, aExplSize );
-}
-
 void FmFilterNavigatorWin::GetFocus()
 {
     // oj #97405#
-    if ( m_pNavigator )
-        m_pNavigator->GrabFocus();
+    if (m_xNavigatorTree)
+        m_xNavigatorTree->GrabFocus();
+    else
+        SfxDockingWindow::GetFocus();
 }
 
 SFX_IMPL_DOCKINGWINDOW( FmFilterNavigatorWinMgr, SID_FM_FILTER_NAVIGATOR )
