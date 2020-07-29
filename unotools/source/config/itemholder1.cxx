@@ -34,7 +34,6 @@
 #include <unotools/lingucfg.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/pathoptions.hxx>
-#include <unotools/printwarningoptions.hxx>
 #include <unotools/optionsdlg.hxx>
 #include <unotools/securityoptions.hxx>
 #include <unotools/viewoptions.hxx>
@@ -162,10 +161,6 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
 
         case EItem::PathOptions :
             rItem.pItem.reset( new SvtPathOptions() );
-            break;
-
-        case EItem::PrintWarningOptions :
-            rItem.pItem.reset( new SvtPrintWarningOptions() );
             break;
 
         case EItem::MiscConfig :

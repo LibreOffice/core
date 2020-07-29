@@ -22,7 +22,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/view/XRenderable.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-
+#include <officecfg/Office/Common.hxx>
 #include <sal/log.hxx>
 #include <svl/itempool.hxx>
 #include <vcl/svapp.hxx>
@@ -33,7 +33,6 @@
 #include <svl/eitem.hxx>
 #include <sfx2/app.hxx>
 #include <unotools/useroptions.hxx>
-#include <unotools/printwarningoptions.hxx>
 #include <tools/datetime.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/objface.hxx>
@@ -303,7 +302,7 @@ void SfxPrinterController::jobStarted()
     m_bOrigStatus = mpObjectShell->IsEnableSetModified();
 
     // check configuration: shall update of printing information in DocInfo set the document to "modified"?
-    if ( m_bOrigStatus && !SvtPrintWarningOptions().IsModifyDocumentOnPrintingAllowed() )
+    if (m_bOrigStatus && !officecfg::Office::Common::Print::PrintingModifiesDocument::get())
     {
         mpObjectShell->EnableSetModified( false );
         m_bNeedsChange = true;

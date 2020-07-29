@@ -175,8 +175,6 @@ bool UnusedVariableMore::VisitVarDecl(VarDecl const* var)
         return true;
     if (dc.Class("SvtPathOptions").GlobalNamespace())
         return true;
-    if (dc.Class("SvtPrintWarningOptions").GlobalNamespace())
-        return true;
     if (dc.Class("SvtSysLocaleOptions").GlobalNamespace())
         return true;
 

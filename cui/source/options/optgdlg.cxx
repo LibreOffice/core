@@ -34,7 +34,6 @@
 #include <svtools/menuoptions.hxx>
 #include <svl/languageoptions.hxx>
 #include <svtools/miscopt.hxx>
-#include <unotools/printwarningoptions.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <sfx2/objsh.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -362,10 +361,9 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
         bModified = true;
     }
 
-    if ( m_xDocStatusCB->get_state_changed_from_saved() )
+    if (m_xDocStatusCB->get_state_changed_from_saved())
     {
-        SvtPrintWarningOptions aPrintOptions;
-        aPrintOptions.SetModifyDocumentOnPrintingAllowed( m_xDocStatusCB->get_active() );
+        officecfg::Office::Common::Print::PrintingModifiesDocument::set(m_xDocStatusCB->get_active(), batch);
         bModified = true;
     }
 
@@ -417,8 +415,7 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     m_xPrintDlgCB->set_active( !aMiscOpt.UseSystemPrintDialog() );
     m_xPrintDlgCB->save_state();
 
-    SvtPrintWarningOptions aPrintOptions;
-    m_xDocStatusCB->set_active(aPrintOptions.IsModifyDocumentOnPrintingAllowed());
+    m_xDocStatusCB->set_active(officecfg::Office::Common::Print::PrintingModifiesDocument::get());
     m_xDocStatusCB->save_state();
 
     const SfxPoolItem* pItem = nullptr;
