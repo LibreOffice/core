@@ -18,6 +18,7 @@
 #include <fmtanchr.hxx>
 #include <o3tl/safeint.hxx>
 #include <tools/json_writer.hxx>
+#include <IDocumentRedlineAccess.hxx>
 
 #include <wrtsh.hxx>
 
@@ -107,6 +108,75 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132321)
     dispatchCommand(mxComponent, ".uno:Undo", {});
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133967)
+{
+    load(DATA_DIRECTORY, "tdf133967.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    //turn on red-lining and hide changes
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE("redlines shouldn't be visible",
+                           !IDocumentRedlineAccess::IsShowChanges(
+                               pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCellA1(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCellB1(xTable->getCellByName("B1"), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Test"), xCellA1->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Test2"), xCellB1->getString());
+
+    CPPUNIT_ASSERT_EQUAL(OUString("P1"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("P2"), getParagraph(3)->getString());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString(""), xCellA1->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), xCellB1->getString());
+
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(3)->getString());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Test"), xCellA1->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Test2"), xCellB1->getString());
+
+    CPPUNIT_ASSERT_EQUAL(OUString("P1"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("P2"), getParagraph(3)->getString());
+
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString(""), xCellA1->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), xCellB1->getString());
+
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(3)->getString());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Test"), xCellA1->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Test2"), xCellB1->getString());
+
+    CPPUNIT_ASSERT_EQUAL(OUString("P1"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("P2"), getParagraph(3)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126626)
