@@ -535,32 +535,32 @@ void ScCondFormatDlg::SetReference(const ScRange& rRef, ScDocument&)
     if (!mpLastEdit)
         pEdit = mxEdRange.get();
 
-    if (pEdit->GetWidget()->get_sensitive())
+    if (!pEdit->GetWidget()->get_sensitive())
+        return;
+
+    if(rRef.aStart != rRef.aEnd)
+        RefInputStart(pEdit);
+
+    ScRefFlags nFlags;
+    if (mpLastEdit && mpLastEdit != mxEdRange.get())
+        nFlags = ScRefFlags::RANGE_ABS_3D;
+    else
+        nFlags = ScRefFlags::RANGE_ABS;
+
+    const ScDocument* pDoc = mpViewData->GetDocument();
+    OUString aRefStr(rRef.Format(*pDoc, nFlags,
+        ScAddress::Details(pDoc->GetAddressConvention(), 0, 0)));
+    if (pEdit != mxEdRange.get())
     {
-        if(rRef.aStart != rRef.aEnd)
-            RefInputStart(pEdit);
-
-        ScRefFlags nFlags;
-        if (mpLastEdit && mpLastEdit != mxEdRange.get())
-            nFlags = ScRefFlags::RANGE_ABS_3D;
-        else
-            nFlags = ScRefFlags::RANGE_ABS;
-
-        const ScDocument* pDoc = mpViewData->GetDocument();
-        OUString aRefStr(rRef.Format(*pDoc, nFlags,
-            ScAddress::Details(pDoc->GetAddressConvention(), 0, 0)));
-        if (pEdit != mxEdRange.get())
-        {
-            Selection sel = pEdit->GetSelection();
-            sel.Justify();            // in case of RTL selection
-            sel.Max() = sel.Min() + aRefStr.getLength();
-            pEdit->GetWidget()->replace_selection(aRefStr);
-            pEdit->SetSelection(sel); // to replace it again with next drag event
-        }
-        else
-            pEdit->SetRefString( aRefStr );
-        updateTitle();
+        Selection sel = pEdit->GetSelection();
+        sel.Justify();            // in case of RTL selection
+        sel.Max() = sel.Min() + aRefStr.getLength();
+        pEdit->GetWidget()->replace_selection(aRefStr);
+        pEdit->SetSelection(sel); // to replace it again with next drag event
     }
+    else
+        pEdit->SetRefString( aRefStr );
+    updateTitle();
 }
 
 std::unique_ptr<ScConditionalFormat> ScCondFormatDlg::GetConditionalFormat() const

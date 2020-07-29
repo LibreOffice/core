@@ -1833,32 +1833,32 @@ void initDocInCache(ScExternalRefCache& rRefCache, const ScDocument* pSrcDoc, sa
         return;
 
     SCTAB nTabCount = pSrcDoc->GetTableCount();
-    if (nTabCount)
+    if (!nTabCount)
+        return;
+
+    // Populate the cache with all table names in the source document.
+    vector<OUString> aTabNames;
+    aTabNames.reserve(nTabCount);
+    for (SCTAB i = 0; i < nTabCount; ++i)
     {
-        // Populate the cache with all table names in the source document.
-        vector<OUString> aTabNames;
-        aTabNames.reserve(nTabCount);
-        for (SCTAB i = 0; i < nTabCount; ++i)
-        {
-            OUString aName;
-            pSrcDoc->GetName(i, aName);
-            aTabNames.push_back(aName);
-        }
-
-        // Obtain the base name, don't bother if there are more than one sheets.
-        OUString aBaseName;
-        if (nTabCount == 1)
-        {
-            const SfxObjectShell* pShell = pSrcDoc->GetDocumentShell();
-            if (pShell && pShell->GetMedium())
-            {
-                OUString aName = pShell->GetMedium()->GetName();
-                aBaseName = INetURLObject( aName).GetBase();
-            }
-        }
-
-        rRefCache.initializeDoc(nFileId, aTabNames, aBaseName);
+        OUString aName;
+        pSrcDoc->GetName(i, aName);
+        aTabNames.push_back(aName);
     }
+
+    // Obtain the base name, don't bother if there are more than one sheets.
+    OUString aBaseName;
+    if (nTabCount == 1)
+    {
+        const SfxObjectShell* pShell = pSrcDoc->GetDocumentShell();
+        if (pShell && pShell->GetMedium())
+        {
+            OUString aName = pShell->GetMedium()->GetName();
+            aBaseName = INetURLObject( aName).GetBase();
+        }
+    }
+
+    rRefCache.initializeDoc(nFileId, aTabNames, aBaseName);
 }
 
 }
@@ -3172,29 +3172,29 @@ void ScExternalRefManager::transformUnsavedRefToSavedRef( SfxObjectShell* pShell
 void ScExternalRefManager::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     const SfxEventHint* pEventHint = dynamic_cast<const SfxEventHint*>(&rHint);
-    if ( pEventHint )
+    if ( !pEventHint )
+        return;
+
+    SfxEventHintId nEventId = pEventHint->GetEventId();
+    switch ( nEventId )
     {
-        SfxEventHintId nEventId = pEventHint->GetEventId();
-        switch ( nEventId )
-        {
-            case SfxEventHintId::PrepareCloseDoc:
-                {
-                    std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(ScDocShell::GetActiveDialogParent(),
-                                                               VclMessageType::Warning, VclButtonsType::Ok,
-                                                               ScResId(STR_CLOSE_WITH_UNSAVED_REFS)));
-                    xWarn->run();
-                }
-                break;
-            case SfxEventHintId::SaveDocDone:
-            case SfxEventHintId::SaveAsDocDone:
-                {
-                    SfxObjectShell* pObjShell = static_cast<const SfxEventHint&>( rHint ).GetObjShell();
-                    transformUnsavedRefToSavedRef(pObjShell);
-                }
-                break;
-            default:
-                break;
-        }
+        case SfxEventHintId::PrepareCloseDoc:
+            {
+                std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(ScDocShell::GetActiveDialogParent(),
+                                                           VclMessageType::Warning, VclButtonsType::Ok,
+                                                           ScResId(STR_CLOSE_WITH_UNSAVED_REFS)));
+                xWarn->run();
+            }
+            break;
+        case SfxEventHintId::SaveDocDone:
+        case SfxEventHintId::SaveAsDocDone:
+            {
+                SfxObjectShell* pObjShell = static_cast<const SfxEventHint&>( rHint ).GetObjShell();
+                transformUnsavedRefToSavedRef(pObjShell);
+            }
+            break;
+        default:
+            break;
     }
 }
 

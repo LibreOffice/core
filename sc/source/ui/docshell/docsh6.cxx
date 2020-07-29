@@ -129,19 +129,19 @@ void ScDocShell::SetVisAreaOrSize( const tools::Rectangle& rVisArea )
         }
     }
 
-    if (m_aDocument.IsEmbedded())
-    {
-        ScRange aOld;
-        m_aDocument.GetEmbedded( aOld);
-        m_aDocument.SetEmbedded( m_aDocument.GetVisibleTab(), aArea );
-        ScRange aNew;
-        m_aDocument.GetEmbedded( aNew);
-        if (aOld != aNew)
-            PostPaint(0,0,0,m_aDocument.MaxCol(),m_aDocument.MaxRow(),MAXTAB,PaintPartFlags::Grid);
+    if (!m_aDocument.IsEmbedded())
+        return;
 
-        //TODO/LATER: currently not implemented
-        //ViewChanged( ASPECT_CONTENT );          // show in the container as well
-    }
+    ScRange aOld;
+    m_aDocument.GetEmbedded( aOld);
+    m_aDocument.SetEmbedded( m_aDocument.GetVisibleTab(), aArea );
+    ScRange aNew;
+    m_aDocument.GetEmbedded( aNew);
+    if (aOld != aNew)
+        PostPaint(0,0,0,m_aDocument.MaxCol(),m_aDocument.MaxRow(),MAXTAB,PaintPartFlags::Grid);
+
+    //TODO/LATER: currently not implemented
+    //ViewChanged( ASPECT_CONTENT );          // show in the container as well
 }
 
 bool ScDocShell::IsOle() const

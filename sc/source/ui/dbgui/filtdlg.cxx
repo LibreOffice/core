@@ -634,57 +634,57 @@ bool ScFilterDlg::IsRefInputMode() const
 
 IMPL_LINK( ScFilterDlg, BtnClearHdl, weld::Button&, rBtn, void )
 {
-    if ( &rBtn == m_xBtnClear.get() )
+    if ( &rBtn != m_xBtnClear.get() )
+        return;
+
+    // scroll to the top
+    m_xScrollBar->vadjustment_set_value(0);
+    size_t nOffset = 0;
+    RefreshEditRow( nOffset);
+
+    // clear all conditions
+    m_xLbConnect1->set_active(-1);
+    m_xLbConnect2->set_active(-1);
+    m_xLbConnect3->set_active(-1);
+    m_xLbConnect4->set_active(-1);
+    m_xLbField1->set_active(0);
+    m_xLbField2->set_active(0);
+    m_xLbField3->set_active(0);
+    m_xLbField4->set_active(0);
+    m_xLbCond1->set_active(0);
+    m_xLbCond2->set_active(0);
+    m_xLbCond3->set_active(0);
+    m_xLbCond4->set_active(0);
+    ClearValueList( 1 );
+    ClearValueList( 2 );
+    ClearValueList( 3 );
+    ClearValueList( 4 );
+
+    // disable fields for second row onward
+    m_xLbConnect2->set_sensitive(false);
+    m_xLbConnect3->set_sensitive(false);
+    m_xLbConnect4->set_sensitive(false);
+    m_xLbField2->set_sensitive(false);
+    m_xLbField3->set_sensitive(false);
+    m_xLbField4->set_sensitive(false);
+    m_xLbCond2->set_sensitive(false);
+    m_xLbCond3->set_sensitive(false);
+    m_xLbCond4->set_sensitive(false);
+    m_xEdVal2->set_sensitive(false);
+    m_xEdVal3->set_sensitive(false);
+    m_xEdVal4->set_sensitive(false);
+
+    // clear query data objects
+    SCSIZE nCount = theQueryData.GetEntryCount();
+    if (maRefreshExceptQuery.size() < nCount + 1)
+        maRefreshExceptQuery.resize(nCount + 1, false);
+    for (SCSIZE i = 0; i < nCount; ++i)
     {
-        // scroll to the top
-        m_xScrollBar->vadjustment_set_value(0);
-        size_t nOffset = 0;
-        RefreshEditRow( nOffset);
-
-        // clear all conditions
-        m_xLbConnect1->set_active(-1);
-        m_xLbConnect2->set_active(-1);
-        m_xLbConnect3->set_active(-1);
-        m_xLbConnect4->set_active(-1);
-        m_xLbField1->set_active(0);
-        m_xLbField2->set_active(0);
-        m_xLbField3->set_active(0);
-        m_xLbField4->set_active(0);
-        m_xLbCond1->set_active(0);
-        m_xLbCond2->set_active(0);
-        m_xLbCond3->set_active(0);
-        m_xLbCond4->set_active(0);
-        ClearValueList( 1 );
-        ClearValueList( 2 );
-        ClearValueList( 3 );
-        ClearValueList( 4 );
-
-        // disable fields for second row onward
-        m_xLbConnect2->set_sensitive(false);
-        m_xLbConnect3->set_sensitive(false);
-        m_xLbConnect4->set_sensitive(false);
-        m_xLbField2->set_sensitive(false);
-        m_xLbField3->set_sensitive(false);
-        m_xLbField4->set_sensitive(false);
-        m_xLbCond2->set_sensitive(false);
-        m_xLbCond3->set_sensitive(false);
-        m_xLbCond4->set_sensitive(false);
-        m_xEdVal2->set_sensitive(false);
-        m_xEdVal3->set_sensitive(false);
-        m_xEdVal4->set_sensitive(false);
-
-        // clear query data objects
-        SCSIZE nCount = theQueryData.GetEntryCount();
-        if (maRefreshExceptQuery.size() < nCount + 1)
-            maRefreshExceptQuery.resize(nCount + 1, false);
-        for (SCSIZE i = 0; i < nCount; ++i)
-        {
-            theQueryData.GetEntry(i).bDoQuery = false;
-            maRefreshExceptQuery[i] = false;
-            theQueryData.GetEntry(i).nField = static_cast<SCCOL>(0);
-        }
-        maRefreshExceptQuery[0] = true;
+        theQueryData.GetEntry(i).bDoQuery = false;
+        maRefreshExceptQuery[i] = false;
+        theQueryData.GetEntry(i).nField = static_cast<SCCOL>(0);
     }
+    maRefreshExceptQuery[0] = true;
 }
 
 IMPL_LINK( ScFilterDlg, EndDlgHdl, weld::Button&, rBtn, void )
@@ -1083,39 +1083,39 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, weld::ComboBox&, rEd, void )
     bool bDoThis = (pLbField->get_active() != 0);
     rEntry.bDoQuery = bDoThis;
 
-    if ( rEntry.bDoQuery || maRefreshExceptQuery[nQE] )
+    if ( !(rEntry.bDoQuery || maRefreshExceptQuery[nQE]) )
+        return;
+
+    bool bByEmptyOrNotByEmpty = false;
+    if ( aStrEmpty == aStrVal )
     {
-        bool bByEmptyOrNotByEmpty = false;
-        if ( aStrEmpty == aStrVal )
-        {
-            bByEmptyOrNotByEmpty = true;
-            rEntry.SetQueryByEmpty();
-        }
-        else if ( aStrNotEmpty == aStrVal )
-        {
-            bByEmptyOrNotByEmpty = true;
-            rEntry.SetQueryByNonEmpty();
-        }
-        else
-        {
-            rItem.maString = pDoc->GetSharedStringPool().intern(aStrVal);
-            rItem.mfVal = 0.0;
-
-            sal_uInt32 nIndex = 0;
-            bool bNumber = pDoc->GetFormatTable()->IsNumberFormat(
-                rItem.maString.getString(), nIndex, rItem.mfVal);
-            rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
-        }
-
-        const sal_Int32 nField = pLbField->get_active();
-        rEntry.nField = nField ? (theQueryData.nCol1 +
-            static_cast<SCCOL>(nField) - 1) : static_cast<SCCOL>(0);
-
-        ScQueryOp eOp  = static_cast<ScQueryOp>(pLbCond->get_active());
-        rEntry.eOp     = eOp;
-        if (maHasDates[nQE] && !bByEmptyOrNotByEmpty)
-            rItem.meType = ScQueryEntry::ByDate;
+        bByEmptyOrNotByEmpty = true;
+        rEntry.SetQueryByEmpty();
     }
+    else if ( aStrNotEmpty == aStrVal )
+    {
+        bByEmptyOrNotByEmpty = true;
+        rEntry.SetQueryByNonEmpty();
+    }
+    else
+    {
+        rItem.maString = pDoc->GetSharedStringPool().intern(aStrVal);
+        rItem.mfVal = 0.0;
+
+        sal_uInt32 nIndex = 0;
+        bool bNumber = pDoc->GetFormatTable()->IsNumberFormat(
+            rItem.maString.getString(), nIndex, rItem.mfVal);
+        rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
+    }
+
+    const sal_Int32 nField = pLbField->get_active();
+    rEntry.nField = nField ? (theQueryData.nCol1 +
+        static_cast<SCCOL>(nField) - 1) : static_cast<SCCOL>(0);
+
+    ScQueryOp eOp  = static_cast<ScQueryOp>(pLbCond->get_active());
+    rEntry.eOp     = eOp;
+    if (maHasDates[nQE] && !bByEmptyOrNotByEmpty)
+        rItem.meType = ScQueryEntry::ByDate;
 }
 
 IMPL_LINK_NOARG(ScFilterDlg, ScrollHdl, weld::ScrolledWindow&, void)
