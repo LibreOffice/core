@@ -16,6 +16,24 @@
       "revId": "a2214aaed498ec6187e52b1a593b9943c3ab7ba0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c82ecf0_1dd3f110",
+        "filename": "sw/qa/core/layout/layout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2020-07-29T14:29:13Z",
+      "side": 1,
+      "message": "Thanks a lot!\nI\u0027m going other fixes for this!",
+      "parentUuid": "5340e1cf_36b9e20b",
+      "revId": "a2214aaed498ec6187e52b1a593b9943c3ab7ba0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
