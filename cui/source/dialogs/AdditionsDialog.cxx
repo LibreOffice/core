@@ -39,7 +39,6 @@
 
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
-#include <tools/diagnose_ex.h>
 #include <unotools/textsearch.hxx>
 
 #include <com/sun/star/task/InteractionHandler.hpp>
