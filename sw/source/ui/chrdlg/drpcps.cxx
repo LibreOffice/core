@@ -196,6 +196,9 @@ void SwDropCapsPict::UpdatePaintSettings()
     vcl::Font aFont;
     if (mpPage)
     {
+        // tdf#135244: preview generation should not jump document view
+        auto aLock(mpPage->rSh.GetView().GetDocShell()->LockAllViews());
+
         if (!mpPage->m_xTemplateBox->get_active())
         {
             // query the Font at paragraph's beginning
