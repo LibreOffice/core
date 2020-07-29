@@ -254,7 +254,7 @@ The current presentation contains no OLE objects.</value>
         <node oor:name="Templates">
             <node oor:name="template1" oor:op="replace">
                 <prop oor:name="Name">
-                    <value xml:lang="en-US">E-mail (96 DPI): minimize document size for sharing</value>
+                    <value xml:lang="en-US">Email (96 DPI): minimize document size for sharing</value>
                 </prop>
                 <prop oor:name="JPEGCompression">
                     <value>true</value>
