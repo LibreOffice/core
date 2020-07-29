@@ -19,6 +19,7 @@
 
 #include <libxml/xmlwriter.h>
 #include <cmdid.h>
+#include <officecfg/Office/Common.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/svapp.hxx>
@@ -27,7 +28,6 @@
 #include <sfx2/printer.hxx>
 #include <editeng/paperinf.hxx>
 #include <sfx2/dispatch.hxx>
-#include <unotools/misccfg.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <svl/eitem.hxx>
@@ -330,17 +330,17 @@ void SetAppPrintOptions( SwViewShell* pSh, bool bWeb )
                 SID_HTML_MODE, SID_HTML_MODE,
                 FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER>{});
 
-        utl::MiscCfg aMisc;
-
         if(bWeb)
             aSet.Put(SfxUInt16Item(SID_HTML_MODE,
                     ::GetHtmlMode(static_cast<SwWrtShell*>(pSh)->GetView().GetDocShell())));
         aSet.Put(SfxBoolItem(SID_PRINTER_NOTFOUND_WARN,
-                        aMisc.IsNotFoundWarning() ));
+                        officecfg::Office::Common::Print::Warning::NotFound::get() ));
         aSet.Put(aAddPrinterItem);
         aSet.Put( SfxFlagItem( SID_PRINTER_CHANGESTODOC,
-            static_cast<int>(aMisc.IsPaperSizeWarning() ? SfxPrinterChangeFlags::CHG_SIZE : SfxPrinterChangeFlags::NONE)   |
-            static_cast<int>(aMisc.IsPaperOrientationWarning()  ? SfxPrinterChangeFlags::CHG_ORIENTATION : SfxPrinterChangeFlags::NONE )));
+            static_cast<int>(officecfg::Office::Common::Print::Warning::PaperSize::get()
+                ? SfxPrinterChangeFlags::CHG_SIZE : SfxPrinterChangeFlags::NONE)   |
+            static_cast<int>(officecfg::Office::Common::Print::Warning::PaperOrientation::get()
+                ? SfxPrinterChangeFlags::CHG_ORIENTATION : SfxPrinterChangeFlags::NONE )));
 
         rIDDA.getPrinter( true )->SetOptions( aSet );
     }

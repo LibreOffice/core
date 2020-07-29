@@ -25,6 +25,7 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include <vcl/toolkit/field.hxx>
@@ -39,7 +40,6 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/charclass.hxx>
-#include <unotools/misccfg.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::comphelper;
@@ -1339,7 +1339,7 @@ bool DateFormatter::TextToDate(const OUString& rStr, Date& rDate, ExtDateFieldFo
         return false;
 
     Date aNewDate( nDay, nMonth, nYear );
-    DateFormatter::ExpandCentury( aNewDate, utl::MiscCfg().GetYear2000() );
+    DateFormatter::ExpandCentury( aNewDate, officecfg::Office::Common::DateFormat::TwoDigitYear::get() );
     if ( aNewDate.IsValidDate() )
     {
         rDate = aNewDate;
@@ -1411,7 +1411,7 @@ OUString DateFormatter::FormatDate(const Date& rDate, ExtDateFieldFormat eExtFor
     if ( !bShowCentury )
     {
         // Check if I have to use force showing the century
-        sal_uInt16 nTwoDigitYearStart = utl::MiscCfg().GetYear2000();
+        sal_uInt16 nTwoDigitYearStart = officecfg::Office::Common::DateFormat::TwoDigitYear::get();
         sal_uInt16 nYear = rDate.GetYearUnsigned();
 
         // If year is not in double digit range
@@ -1948,7 +1948,7 @@ void DateFormatter::Reformat()
 
 void DateFormatter::ExpandCentury( Date& rDate )
 {
-    ExpandCentury( rDate, utl::MiscCfg().GetYear2000() );
+    ExpandCentury(rDate, officecfg::Office::Common::DateFormat::TwoDigitYear::get());
 }
 
 void DateFormatter::ExpandCentury( Date& rDate, sal_uInt16 nTwoDigitYearStart )

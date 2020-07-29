@@ -74,7 +74,6 @@ $(eval $(call gb_Library_add_exception_objects,utl,\
     unotools/source/config/historyoptions \
     unotools/source/config/itemholder1 \
     unotools/source/config/lingucfg \
-    unotools/source/config/misccfg \
     unotools/source/config/moduleoptions \
     unotools/source/config/options \
     unotools/source/config/optionsdlg \

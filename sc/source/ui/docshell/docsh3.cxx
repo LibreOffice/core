@@ -25,6 +25,7 @@
 #include <editeng/flstitem.hxx>
 #include <editeng/paperinf.hxx>
 #include <editeng/sizeitem.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <sal/log.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/app.hxx>
@@ -33,7 +34,6 @@
 #include <svx/pageitem.hxx>
 #include <svx/postattr.hxx>
 #include <svx/svxids.hrc>
-#include <unotools/misccfg.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
@@ -413,7 +413,7 @@ void ScDocShell::InitOptions(bool bForLoading)      // called from InitNew and L
     aDocOpt.SetAutoSpell( bAutoSpell );
 
     // two-digit year entry from Tools->Options->General
-    aDocOpt.SetYear2000( sal::static_int_cast<sal_uInt16>( ::utl::MiscCfg().GetYear2000() ) );
+    aDocOpt.SetYear2000(officecfg::Office::Common::DateFormat::TwoDigitYear::get());
 
     if (bForLoading)
     {

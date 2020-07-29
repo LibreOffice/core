@@ -23,7 +23,6 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 
-#include <unotools/misccfg.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <unotools/compatibility.hxx>
@@ -161,10 +160,6 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
 
         case EItem::PathOptions :
             rItem.pItem.reset( new SvtPathOptions() );
-            break;
-
-        case EItem::MiscConfig :
-            rItem.pItem.reset( new ::utl::MiscCfg() );
             break;
 
         case EItem::SecurityOptions :

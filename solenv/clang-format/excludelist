@@ -7242,7 +7242,6 @@ include/unotools/linguprops.hxx
 include/unotools/localedatawrapper.hxx
 include/unotools/localfilehelper.hxx
 include/unotools/mediadescriptor.hxx
-include/unotools/misccfg.hxx
 include/unotools/moduleoptions.hxx
 include/unotools/nativenumberwrapper.hxx
 include/unotools/options.hxx
@@ -16274,7 +16273,6 @@ unotools/source/config/historyoptions.cxx
 unotools/source/config/itemholder1.cxx
 unotools/source/config/itemholder1.hxx
 unotools/source/config/lingucfg.cxx
-unotools/source/config/misccfg.cxx
 unotools/source/config/moduleoptions.cxx
 unotools/source/config/options.cxx
 unotools/source/config/optionsdlg.cxx
