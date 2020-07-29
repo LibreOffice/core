@@ -1111,6 +1111,15 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
     // create frames after SetSaveData has recreated redlines
     if (0 != m_nNode)
     {
+        if (m_nReplaceDummy != 0)
+        {
+            // tdf#134252 *first* create outer section frames
+            // note: text node m_nSttNode currently has frame with an upper;
+            // there's a hack in InsertCnt_() to move it below new section frame
+            SwNodeIndex const start(rDoc.GetNodes(), nSttNode - m_nReplaceDummy);
+            SwNodeIndex const end(rDoc.GetNodes(), nSttNode); // exclude m_nSttNode
+            ::MakeFrames(&rDoc, start, end);
+        }
         // tdf#121031 if the start node is a text node, it already has a frame;
         // if it's a table, it does not
         // tdf#109376 exception: end on non-text-node -> start node was inserted
