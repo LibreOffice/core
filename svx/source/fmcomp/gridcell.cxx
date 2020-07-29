@@ -813,7 +813,7 @@ void DbCellControl::implAdjustReadOnly( const Reference< XPropertySet >& _rxMode
             {
                 _rxModel->getPropertyValue( i_bReadOnly ? OUString(FM_PROP_READONLY) : OUString(FM_PROP_ISREADONLY)) >>= bReadOnly;
             }
-            static_cast< Edit* >( m_pWindow.get() )->SetReadOnly( bReadOnly );
+            pEditWindow->SetReadOnly(bReadOnly);
         }
     }
 }
