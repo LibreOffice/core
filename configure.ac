@@ -4903,7 +4903,18 @@ if test "$cross_compiling" = "yes"; then
     sub_conf_opts=""
     test -n "$enable_ccache" && sub_conf_opts="$sub_conf_opts --enable-ccache=$enable_ccache"
     test -n "$with_ant_home" && sub_conf_opts="$sub_conf_opts --with-ant-home=$with_ant_home"
-    test $with_junit = no && sub_conf_opts="$sub_conf_opts --without-junit"
+    test "$with_junit" = "no" && sub_conf_opts="$sub_conf_opts --without-junit"
+    if test -n "$ENABLE_JAVA"; then
+        if test "$_os" != "iOS" -a "$_os" != "Android"; then
+            if ! echo "$with_build_platform_configure_options" | grep -q -- '--with-jdk-home='; then
+                AC_MSG_ERROR([Missing build JDK (see --with-build-platform-configure-options, --with-jdk-home and use 'cygpath -ms' on Windows)!])
+            fi
+        else
+            test -n "$with_jdk_home" && sub_conf_opts="$sub_conf_opts --with-jdk-home=$with_jdk_home"
+        fi
+    else
+        sub_conf_opts="$sub_conf_opts --without-java"
+    fi
     test -n "$TARFILE_LOCATION" && sub_conf_opts="$sub_conf_opts --with-external-tar=$TARFILE_LOCATION"
     test "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force" && sub_conf_opts="$sub_conf_opts --with-system-icu"
     sub_conf_opts="$sub_conf_opts $with_build_platform_configure_options"
@@ -4923,7 +4934,6 @@ if test "$cross_compiling" = "yes"; then
         --disable-skia \
         --enable-icecream="$enable_icecream" \
         --without-doxygen \
-        --without-java \
         --without-webdav \
         --with-parallelism="$with_parallelism" \
         --with-theme="$with_theme" \
@@ -4975,19 +4985,66 @@ if test "$cross_compiling" = "yes"; then
     mkdir -p ../config_build
     mv config_host/*.h ../config_build
 
+    # all these will get a _FOR_BUILD postfix
+    DIRECT_FOR_BUILD_SETTINGS="
+        CC
+        CXX
+        ILIB
+        JAVA_HOME
+        JAVAIFLAGS
+        JDK
+        LIBO_BIN_FOLDER
+        LIBO_LIB_FOLDER
+        LIBO_URE_LIB_FOLDER
+        LIBO_URE_MISC_FOLDER
+        OS
+        SDKDIRNAME
+        SYSTEM_LIBXML
+        SYSTEM_LIBXSLT
+"
+    # these overwrite host config with build config
+    OVERWRITING_SETTINGS="
+        ANT
+        ANT_HOME
+        ANT_LIB
+        HSQLDB_USE_JDBC_4_1
+        JAVA_CLASSPATH_NOT_SET
+        JAVA_SOURCE_VER
+        JAVA_TARGET_VER
+        JAVACFLAGS
+        JAVACOMPILER
+        JAVADOC
+        JAVADOCISGJDOC
+"
+    # these need some special handling
+    EXTRA_HANDLED_SETTINGS="
+        INSTDIR
+        INSTROOT
+        PATH
+        WORKDIR
+"
     OLD_PATH=$PATH
-    . ./bin/get_config_variables CC CXX ILIB INSTDIR INSTROOT LIBO_BIN_FOLDER LIBO_LIB_FOLDER LIBO_URE_LIB_FOLDER LIBO_URE_MISC_FOLDER OS PATH SDKDIRNAME SYSTEM_LIBXML SYSTEM_LIBXSLT WORKDIR
+    . ./bin/get_config_variables $DIRECT_FOR_BUILD_SETTINGS $OVERWRITING_SETTINGS $EXTRA_HANDLED_SETTINGS
     BUILD_PATH=$PATH
     PATH=$OLD_PATH
 
     line=`echo "LO_PATH_FOR_BUILD='${BUILD_PATH}'" | sed -e 's,/CONF-FOR-BUILD,,g'`
     echo "$line" >>build-config
 
-    for V in CC CXX ILIB LIBO_BIN_FOLDER LIBO_LIB_FOLDER LIBO_URE_LIB_FOLDER LIBO_URE_MISC_FOLDER OS SDKDIRNAME SYSTEM_LIBXML SYSTEM_LIBXSLT; do
+    for V in $DIRECT_FOR_BUILD_SETTINGS; do
         VV='$'$V
         VV=`eval "echo $VV"`
         if test -n "$VV"; then
             line=${V}_FOR_BUILD='${'${V}_FOR_BUILD:-$VV'}'
+            echo "$line" >>build-config
+        fi
+    done
+
+    for V in $OVERWRITING_SETTINGS; do
+        VV='$'$V
+        VV=`eval "echo $VV"`
+        if test -n "$VV"; then
+            line=${V}='${'${V}:-$VV'}'
             echo "$line" >>build-config
         fi
     done
@@ -7678,11 +7735,9 @@ dnl ===================================================================
 dnl Checks for JDK.
 dnl ===================================================================
 
-# Note that JAVA_HOME as for now always means the *build* platform's
-# JAVA_HOME. Whether all the complexity here actually is needed any
-# more or not, no idea.
+# Whether all the complexity here actually is needed any more or not, no idea.
 
-if test "$ENABLE_JAVA" != ""; then
+if test "$ENABLE_JAVA" != "" -a "$cross_compiling" != "yes"; then
     _gij_longver=0
     AC_MSG_CHECKING([the installed JDK])
     if test -n "$JAVAINTERPRETER"; then
@@ -7718,21 +7773,27 @@ if test "$ENABLE_JAVA" != ""; then
             # set to limit VM usage for JunitTests
             JAVAIFLAGS=-Xmx64M
             # set to limit VM usage for javac
-            JAVAFLAGS=-J-Xmx128M
+            JAVACFLAGS=-J-Xmx128M
         fi
     else
         AC_MSG_ERROR([Java not found. You need at least JDK 9])
     fi
 else
-    dnl Java disabled
-    JAVA_HOME=
-    export JAVA_HOME
+    if test -z "$ENABLE_JAVA"; then
+        dnl Java disabled
+        JAVA_HOME=
+        export JAVA_HOME
+    elif test "$cross_compiling" = "yes"; then
+        # Just assume compatibility of build and host JDK
+        JDK=$JDK_FOR_BUILD
+        JAVAIFLAGS=$JAVAIFLAGS_FOR_BUILD
+    fi
 fi
 
 dnl ===================================================================
 dnl Checks for javac
 dnl ===================================================================
-if test "$ENABLE_JAVA" != ""; then
+if test "$ENABLE_JAVA" != "" -a "$cross_compiling" != "yes"; then
     javacompiler="javac"
     : ${JAVA_SOURCE_VER=8}
     : ${JAVA_TARGET_VER=8}
@@ -7759,7 +7820,7 @@ fi
 dnl ===================================================================
 dnl Checks for javadoc
 dnl ===================================================================
-if test "$ENABLE_JAVA" != ""; then
+if test "$ENABLE_JAVA" != "" -a "$cross_compiling" != "yes"; then
     if test -z "$with_jdk_home"; then
         AC_PATH_PROG(JAVADOC, javadoc)
     else
@@ -7785,6 +7846,7 @@ if test "$ENABLE_JAVA" != ""; then
     JAVADOCISGJDOC="yes"
     fi
 fi
+AC_SUBST(JAVADOC)
 AC_SUBST(JAVADOCISGJDOC)
 
 if test "$ENABLE_JAVA" != ""; then
@@ -8012,16 +8074,18 @@ if test -n "$ENABLE_JAVA" -a -z "$JAVAINC"; then
 fi
 SOLARINC="$SOLARINC $JAVAINC"
 
+AC_SUBST(JAVACFLAGS)
 AC_SUBST(JAVACOMPILER)
-AC_SUBST(JAVADOC)
 AC_SUBST(JAVAINTERPRETER)
 AC_SUBST(JAVAIFLAGS)
-AC_SUBST(JAVAFLAGS)
+AC_SUBST(JAVAIFLAGS_FOR_BUILD)
 AC_SUBST(JAVA_CLASSPATH_NOT_SET)
 AC_SUBST(JAVA_HOME)
+AC_SUBST(JAVA_HOME_FOR_BUILD)
+AC_SUBST(JDK)
+AC_SUBST(JDK_FOR_BUILD)
 AC_SUBST(JAVA_SOURCE_VER)
 AC_SUBST(JAVA_TARGET_VER)
-AC_SUBST(JDK)
 
 
 dnl ===================================================================
@@ -9239,7 +9303,7 @@ fi
 dnl ===================================================================
 dnl Check for system hsqldb
 dnl ===================================================================
-if test "$with_java" != "no"; then
+if test "$with_java" != "no" -a "$cross_compiling" != "yes"; then
     HSQLDB_USE_JDBC_4_1=
     AC_MSG_CHECKING([which hsqldb to use])
     if test "$with_system_hsqldb" = "yes"; then
@@ -9301,10 +9365,10 @@ if test "$with_java" != "no"; then
             AC_MSG_RESULT([no])
         fi
     fi
-    AC_SUBST(SYSTEM_HSQLDB)
-    AC_SUBST(HSQLDB_JAR)
-    AC_SUBST([HSQLDB_USE_JDBC_4_1])
 fi
+AC_SUBST(SYSTEM_HSQLDB)
+AC_SUBST(HSQLDB_JAR)
+AC_SUBST([HSQLDB_USE_JDBC_4_1])
 
 dnl ===================================================================
 dnl Check for PostgreSQL stuff
@@ -12578,7 +12642,7 @@ dnl ===================================================================
 dnl Test for the presence of Ant and that it works
 dnl ===================================================================
 
-if test "$ENABLE_JAVA" != "" -a "$NEED_ANT" = "TRUE"; then
+if test "$ENABLE_JAVA" != "" -a "$NEED_ANT" = "TRUE" -a "$cross_compiling" != "yes"; then
     ANT_HOME=; export ANT_HOME
     WITH_ANT_HOME=; export WITH_ANT_HOME
     if test -z "$with_ant_home" -a -n "$LODE_HOME" ; then
@@ -12669,8 +12733,6 @@ EOF
         PathFormat "$ANT"
         ANT="$formatted_path"
     fi
-    AC_SUBST(ANT_HOME)
-    AC_SUBST(ANT)
 
     dnl Checking for ant.jar
     if test "$ANT_HOME" != "NO_ANT_HOME"; then
@@ -12704,7 +12766,6 @@ EOF
         ANT_LIB="$formatted_path"
         AC_MSG_RESULT([Ant lib directory found.])
     fi
-    AC_SUBST(ANT_LIB)
 
     ant_minver=1.6.0
     ant_minminor1=`echo $ant_minver | cut -d"." -f2`
@@ -12726,9 +12787,13 @@ EOF
 
     rm -f conftest* core core.* *.core
 fi
+AC_SUBST(ANT)
+AC_SUBST(ANT_HOME)
+AC_SUBST(ANT_LIB)
 
 OOO_JUNIT_JAR=
-if test "$ENABLE_JAVA" != "" -a "$with_junit" != "no"; then
+HAMCREST_JAR=
+if test "$ENABLE_JAVA" != "" -a "$with_junit" != "no" -a "$cross_compiling" != "yes"; then
     AC_MSG_CHECKING([for JUnit 4])
     if test "$with_junit" = "yes"; then
         if test -n "$LODE_HOME" -a -e "$LODE_HOME/opt/share/java/junit.jar" ; then
@@ -12758,13 +12823,9 @@ if test "$ENABLE_JAVA" != "" -a "$with_junit" != "no"; then
     fi
     rm -f conftest.class conftest.java
     if test $OOO_JUNIT_JAR != ""; then
-    BUILD_TYPE="$BUILD_TYPE QADEVOOO"
+        BUILD_TYPE="$BUILD_TYPE QADEVOOO"
     fi
-fi
-AC_SUBST(OOO_JUNIT_JAR)
 
-HAMCREST_JAR=
-if test "$ENABLE_JAVA" != "" -a "$with_junit" != "no"; then
     AC_MSG_CHECKING([for included Hamcrest])
     printf 'import org.hamcrest.BaseDescription;' > conftest.java
     if "$JAVACOMPILER" -classpath "$OOO_JUNIT_JAR" conftest.java >&5 2>&5; then
@@ -12795,6 +12856,7 @@ if test "$ENABLE_JAVA" != "" -a "$with_junit" != "no"; then
     fi
     rm -f conftest.class conftest.java
 fi
+AC_SUBST(OOO_JUNIT_JAR)
 AC_SUBST(HAMCREST_JAR)
 
 
