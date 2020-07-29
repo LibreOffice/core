@@ -999,44 +999,44 @@ void ScDPSource::FillLevelList( sheet::DataPilotFieldOrientation nOrientation, s
 
 void ScDPSource::FillMemberResults()
 {
-    if ( !pColResults && !pRowResults )
+    if ( pColResults || pRowResults )
+        return;
+
+    CreateRes_Impl();
+
+    if ( bResultOverflow )      // set in CreateRes_Impl
     {
-        CreateRes_Impl();
+        //  no results available -> abort (leave empty)
+        //  exception is thrown in ScDPSource::getResults
+        return;
+    }
 
-        if ( bResultOverflow )      // set in CreateRes_Impl
-        {
-            //  no results available -> abort (leave empty)
-            //  exception is thrown in ScDPSource::getResults
-            return;
-        }
+    FillLevelList( sheet::DataPilotFieldOrientation_COLUMN, aColLevelList );
+    long nColLevelCount = aColLevelList.size();
+    if (nColLevelCount)
+    {
+        long nColDimSize = pColResRoot->GetSize(pResData->GetColStartMeasure());
+        pColResults.reset(new uno::Sequence<sheet::MemberResult>[nColLevelCount]);
+        for (long i=0; i<nColLevelCount; i++)
+            pColResults[i].realloc(nColDimSize);
 
-        FillLevelList( sheet::DataPilotFieldOrientation_COLUMN, aColLevelList );
-        long nColLevelCount = aColLevelList.size();
-        if (nColLevelCount)
-        {
-            long nColDimSize = pColResRoot->GetSize(pResData->GetColStartMeasure());
-            pColResults.reset(new uno::Sequence<sheet::MemberResult>[nColLevelCount]);
-            for (long i=0; i<nColLevelCount; i++)
-                pColResults[i].realloc(nColDimSize);
+        long nPos = 0;
+        pColResRoot->FillMemberResults( pColResults.get(), nPos, pResData->GetColStartMeasure(),
+                                        true, nullptr, nullptr );
+    }
 
-            long nPos = 0;
-            pColResRoot->FillMemberResults( pColResults.get(), nPos, pResData->GetColStartMeasure(),
-                                            true, nullptr, nullptr );
-        }
+    FillLevelList( sheet::DataPilotFieldOrientation_ROW, aRowLevelList );
+    long nRowLevelCount = aRowLevelList.size();
+    if (nRowLevelCount)
+    {
+        long nRowDimSize = pRowResRoot->GetSize(pResData->GetRowStartMeasure());
+        pRowResults.reset( new uno::Sequence<sheet::MemberResult>[nRowLevelCount] );
+        for (long i=0; i<nRowLevelCount; i++)
+            pRowResults[i].realloc(nRowDimSize);
 
-        FillLevelList( sheet::DataPilotFieldOrientation_ROW, aRowLevelList );
-        long nRowLevelCount = aRowLevelList.size();
-        if (nRowLevelCount)
-        {
-            long nRowDimSize = pRowResRoot->GetSize(pResData->GetRowStartMeasure());
-            pRowResults.reset( new uno::Sequence<sheet::MemberResult>[nRowLevelCount] );
-            for (long i=0; i<nRowLevelCount; i++)
-                pRowResults[i].realloc(nRowDimSize);
-
-            long nPos = 0;
-            pRowResRoot->FillMemberResults( pRowResults.get(), nPos, pResData->GetRowStartMeasure(),
-                                            true, nullptr, nullptr );
-        }
+        long nPos = 0;
+        pRowResRoot->FillMemberResults( pRowResults.get(), nPos, pResData->GetRowStartMeasure(),
+                                        true, nullptr, nullptr );
     }
 }
 
@@ -1942,22 +1942,22 @@ void ScDPLevel::EvaluateSortOrder()
             break;
     }
 
-    if ( aAutoShowInfo.IsEnabled )
+    if ( !aAutoShowInfo.IsEnabled )
+        return;
+
+    // find index of measure (index among data dimensions)
+
+    long nMeasureCount = pSource->GetDataDimensionCount();
+    for (long nMeasure=0; nMeasure<nMeasureCount; nMeasure++)
     {
-        // find index of measure (index among data dimensions)
-
-        long nMeasureCount = pSource->GetDataDimensionCount();
-        for (long nMeasure=0; nMeasure<nMeasureCount; nMeasure++)
+        if (pSource->GetDataDimName(nMeasure) == aAutoShowInfo.DataField)
         {
-            if (pSource->GetDataDimName(nMeasure) == aAutoShowInfo.DataField)
-            {
-                nAutoMeasure = nMeasure;
-                break;
-            }
+            nAutoMeasure = nMeasure;
+            break;
         }
-
-        //TODO: error if not found?
     }
+
+    //TODO: error if not found?
 }
 
 void ScDPLevel::SetEnableLayout(bool bSet)

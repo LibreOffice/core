@@ -340,25 +340,25 @@ void fillDateGroupDimension(
 void ScDPSaveGroupDimension::AddToData( ScDPGroupTableData& rData ) const
 {
     long nSourceIndex = rData.GetDimensionIndex( aSourceDim );
-    if ( nSourceIndex >= 0 )
+    if ( nSourceIndex < 0 )
+        return;
+
+    ScDPGroupDimension aDim( nSourceIndex, aGroupDimName );
+    if ( nDatePart )
     {
-        ScDPGroupDimension aDim( nSourceIndex, aGroupDimName );
-        if ( nDatePart )
-        {
-            // date grouping
+        // date grouping
 
-            aDim.SetDateDimension();
-        }
-        else
-        {
-            // normal (manual) grouping
-
-            for (const auto& rGroup : aGroups)
-                rGroup.AddToData(aDim);
-        }
-
-        rData.AddGroupDimension( aDim );
+        aDim.SetDateDimension();
     }
+    else
+    {
+        // normal (manual) grouping
+
+        for (const auto& rGroup : aGroups)
+            rGroup.AddToData(aDim);
+    }
+
+    rData.AddGroupDimension( aDim );
 }
 
 void ScDPSaveGroupDimension::AddToCache(ScDPCache& rCache) const

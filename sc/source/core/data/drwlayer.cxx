@@ -566,33 +566,33 @@ void ScDrawLayer::MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SC
 void ScDrawLayer::SetPageSize( sal_uInt16 nPageNo, const Size& rSize, bool bUpdateNoteCaptionPos )
 {
     SdrPage* pPage = GetPage(nPageNo);
-    if (pPage)
+    if (!pPage)
+        return;
+
+    if ( rSize != pPage->GetSize() )
     {
-        if ( rSize != pPage->GetSize() )
-        {
-            pPage->SetSize( rSize );
-            Broadcast( ScTabSizeChangedHint( static_cast<SCTAB>(nPageNo) ) );   // SetWorkArea() on the views
-        }
-
-        // Implement Detective lines (adjust to new heights / widths)
-        //  even if size is still the same
-        //  (individual rows/columns can have been changed))
-
-        bool bNegativePage = pDoc && pDoc->IsNegativePage( static_cast<SCTAB>(nPageNo) );
-
-        // Disable mass broadcasts from drawing objects' position changes.
-        bool bWasLocked = isLocked();
-        setLock(true);
-        const size_t nCount = pPage->GetObjCount();
-        for ( size_t i = 0; i < nCount; ++i )
-        {
-            SdrObject* pObj = pPage->GetObj( i );
-            ScDrawObjData* pData = GetObjDataTab( pObj, static_cast<SCTAB>(nPageNo) );
-            if( pData )
-                RecalcPos( pObj, *pData, bNegativePage, bUpdateNoteCaptionPos );
-        }
-        setLock(bWasLocked);
+        pPage->SetSize( rSize );
+        Broadcast( ScTabSizeChangedHint( static_cast<SCTAB>(nPageNo) ) );   // SetWorkArea() on the views
     }
+
+    // Implement Detective lines (adjust to new heights / widths)
+    //  even if size is still the same
+    //  (individual rows/columns can have been changed))
+
+    bool bNegativePage = pDoc && pDoc->IsNegativePage( static_cast<SCTAB>(nPageNo) );
+
+    // Disable mass broadcasts from drawing objects' position changes.
+    bool bWasLocked = isLocked();
+    setLock(true);
+    const size_t nCount = pPage->GetObjCount();
+    for ( size_t i = 0; i < nCount; ++i )
+    {
+        SdrObject* pObj = pPage->GetObj( i );
+        ScDrawObjData* pData = GetObjDataTab( pObj, static_cast<SCTAB>(nPageNo) );
+        if( pData )
+            RecalcPos( pObj, *pData, bNegativePage, bUpdateNoteCaptionPos );
+    }
+    setLock(bWasLocked);
 }
 
 namespace
@@ -1380,45 +1380,45 @@ void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
     pPage->RecalcObjOrdNums();
 
     const size_t nObjCount = pPage->GetObjCount();
-    if (nObjCount)
+    if (!nObjCount)
+        return;
+
+    size_t nDelCount = 0;
+    tools::Rectangle aDelRect = pDoc->GetMMRect( nCol1, nRow1, nCol2, nRow2, nTab );
+
+    std::unique_ptr<SdrObject*[]> ppObj(new SdrObject*[nObjCount]);
+
+    SdrObjListIter aIter( pPage, SdrIterMode::Flat );
+    SdrObject* pObject = aIter.Next();
+    while (pObject)
     {
-        size_t nDelCount = 0;
-        tools::Rectangle aDelRect = pDoc->GetMMRect( nCol1, nRow1, nCol2, nRow2, nTab );
-
-        std::unique_ptr<SdrObject*[]> ppObj(new SdrObject*[nObjCount]);
-
-        SdrObjListIter aIter( pPage, SdrIterMode::Flat );
-        SdrObject* pObject = aIter.Next();
-        while (pObject)
+        // do not delete note caption, they are always handled by the cell note
+        // TODO: detective objects are still deleted, is this desired?
+        if (!IsNoteCaption( pObject ))
         {
-            // do not delete note caption, they are always handled by the cell note
-            // TODO: detective objects are still deleted, is this desired?
-            if (!IsNoteCaption( pObject ))
+            tools::Rectangle aObjRect = pObject->GetCurrentBoundRect();
+            if (aDelRect.IsInside(aObjRect))
             {
-                tools::Rectangle aObjRect = pObject->GetCurrentBoundRect();
-                if (aDelRect.IsInside(aObjRect))
+                if (bAnchored)
                 {
-                    if (bAnchored)
-                    {
-                        ScAnchorType aAnchorType = ScDrawLayer::GetAnchorType(*pObject);
-                        if(aAnchorType == SCA_CELL || aAnchorType == SCA_CELL_RESIZE)
-                            ppObj[nDelCount++] = pObject;
-                    }
-                    else
+                    ScAnchorType aAnchorType = ScDrawLayer::GetAnchorType(*pObject);
+                    if(aAnchorType == SCA_CELL || aAnchorType == SCA_CELL_RESIZE)
                         ppObj[nDelCount++] = pObject;
                 }
+                else
+                    ppObj[nDelCount++] = pObject;
             }
-
-            pObject = aIter.Next();
         }
 
-        if (bRecording)
-            for (size_t i=1; i<=nDelCount; ++i)
-                AddCalcUndo( std::make_unique<SdrUndoRemoveObj>( *ppObj[nDelCount-i] ) );
-
-        for (size_t i=1; i<=nDelCount; ++i)
-            pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
+        pObject = aIter.Next();
     }
+
+    if (bRecording)
+        for (size_t i=1; i<=nDelCount; ++i)
+            AddCalcUndo( std::make_unique<SdrUndoRemoveObj>( *ppObj[nDelCount-i] ) );
+
+    for (size_t i=1; i<=nDelCount; ++i)
+        pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
 }
 
 void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
@@ -1503,61 +1503,61 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const tools::Rec
     //  copy everything in the specified range into the same page (sheet) in the clipboard doc
 
     SdrPage* pSrcPage = GetPage(static_cast<sal_uInt16>(nTab));
-    if (pSrcPage)
+    if (!pSrcPage)
+        return;
+
+    ScDrawLayer* pDestModel = nullptr;
+    SdrPage* pDestPage = nullptr;
+
+    SdrObjListIter aIter( pSrcPage, SdrIterMode::Flat );
+    SdrObject* pOldObject = aIter.Next();
+    while (pOldObject)
     {
-        ScDrawLayer* pDestModel = nullptr;
-        SdrPage* pDestPage = nullptr;
+        tools::Rectangle aObjRect = pOldObject->GetCurrentBoundRect();
 
-        SdrObjListIter aIter( pSrcPage, SdrIterMode::Flat );
-        SdrObject* pOldObject = aIter.Next();
-        while (pOldObject)
+        bool bObjectInArea = rRange.IsInside(aObjRect);
+        const ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pOldObject);
+        if (pObjData)
         {
-            tools::Rectangle aObjRect = pOldObject->GetCurrentBoundRect();
+            ScRange aClipRange = lcl_getClipRangeFromClipDoc(pClipDoc, nTab);
+            bObjectInArea = bObjectInArea || aClipRange.In(pObjData->maStart);
+        }
 
-            bool bObjectInArea = rRange.IsInside(aObjRect);
-            const ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pOldObject);
-            if (pObjData)
+        // do not copy internal objects (detective) and note captions
+        if (bObjectInArea && pOldObject->GetLayer() != SC_LAYER_INTERN
+            && !IsNoteCaption(pOldObject))
+        {
+            if ( !pDestModel )
             {
-                ScRange aClipRange = lcl_getClipRangeFromClipDoc(pClipDoc, nTab);
-                bObjectInArea = bObjectInArea || aClipRange.In(pObjData->maStart);
-            }
-
-            // do not copy internal objects (detective) and note captions
-            if (bObjectInArea && pOldObject->GetLayer() != SC_LAYER_INTERN
-                && !IsNoteCaption(pOldObject))
-            {
+                pDestModel = pClipDoc->GetDrawLayer();      // does the document already have a drawing layer?
                 if ( !pDestModel )
                 {
-                    pDestModel = pClipDoc->GetDrawLayer();      // does the document already have a drawing layer?
-                    if ( !pDestModel )
-                    {
-                        //  allocate drawing layer in clipboard document only if there are objects to copy
+                    //  allocate drawing layer in clipboard document only if there are objects to copy
 
-                        pClipDoc->InitDrawLayer();                  //TODO: create contiguous pages
-                        pDestModel = pClipDoc->GetDrawLayer();
-                    }
-                    if (pDestModel)
-                        pDestPage = pDestModel->GetPage( static_cast<sal_uInt16>(nTab) );
+                    pClipDoc->InitDrawLayer();                  //TODO: create contiguous pages
+                    pDestModel = pClipDoc->GetDrawLayer();
                 }
-
-                OSL_ENSURE( pDestPage, "no page" );
-                if (pDestPage)
-                {
-                    // Clone to target SdrModel
-                    SdrObject* pNewObject(pOldObject->CloneSdrObject(*pDestModel));
-
-                    uno::Reference< chart2::XChartDocument > xOldChart( ScChartHelper::GetChartFromSdrObject( pOldObject ) );
-                    if(!xOldChart.is())//#i110034# do not move charts as they lose all their data references otherwise
-                        pNewObject->NbcMove(Size(0,0));
-                    pDestPage->InsertObject( pNewObject );
-
-                    //  no undo needed in clipboard document
-                    //  charts are not updated
-                }
+                if (pDestModel)
+                    pDestPage = pDestModel->GetPage( static_cast<sal_uInt16>(nTab) );
             }
 
-            pOldObject = aIter.Next();
+            OSL_ENSURE( pDestPage, "no page" );
+            if (pDestPage)
+            {
+                // Clone to target SdrModel
+                SdrObject* pNewObject(pOldObject->CloneSdrObject(*pDestModel));
+
+                uno::Reference< chart2::XChartDocument > xOldChart( ScChartHelper::GetChartFromSdrObject( pOldObject ) );
+                if(!xOldChart.is())//#i110034# do not move charts as they lose all their data references otherwise
+                    pNewObject->NbcMove(Size(0,0));
+                pDestPage->InsertObject( pNewObject );
+
+                //  no undo needed in clipboard document
+                //  charts are not updated
+            }
         }
+
+        pOldObject = aIter.Next();
     }
 }
 
