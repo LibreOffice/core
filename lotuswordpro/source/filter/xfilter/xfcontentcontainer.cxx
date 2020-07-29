@@ -80,6 +80,24 @@ void XFContentContainer::Add(const OUString& text)
     Add(xTC.get());
 }
 
+bool XFContentContainer::HierarchyContains(const XFContent *pContent) const
+{
+    if (pContent == this)
+        return true;
+
+    for (int i = 0, nCount = GetCount(); i < nCount; i++)
+    {
+        rtl::Reference<XFContent> xContent = GetContent(i);
+        if (xContent.get() == pContent)
+            return true;
+        const XFContentContainer *pChildCont = dynamic_cast<const XFContentContainer*>(xContent.get());
+        if (pChildCont && pChildCont->HierarchyContains(pContent))
+            return true;
+    }
+
+    return false;
+}
+
 int XFContentContainer::GetCount() const
 {
     return m_aContents.size();

@@ -88,7 +88,7 @@ void XFTable::AddRow(rtl::Reference<XFRow> const & rRow)
     for (sal_Int32 i = 0; i < rRow->GetCellCount(); ++i)
     {
         XFCell* pFirstCell = rRow->GetCell(i + 1); //starts at 1, not 0
-        if (pFirstCell->GetSubTable() == this)
+        if (pFirstCell->GetSubTable() == this || pFirstCell->HierarchyContains(this))
             throw std::runtime_error("table is a subtable of itself");
     }
 

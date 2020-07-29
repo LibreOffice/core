@@ -125,6 +125,8 @@ public:
      */
     virtual void ToXml(IXFStream *pStrm) override;
 
+    bool HierarchyContains(const XFContent *pContent) const;
+
 private:
     std::vector< rtl::Reference<XFContent> >    m_aContents;
 };
