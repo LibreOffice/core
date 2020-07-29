@@ -1084,6 +1084,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf116883, "tdf116883.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf131420, "tdf131420.docx")
+{
+    xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:pBdr[2]");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
