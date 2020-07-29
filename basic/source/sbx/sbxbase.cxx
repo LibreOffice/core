@@ -48,7 +48,9 @@ SbxAppData::~SbxAppData()
     pBasicFormater.reset();
     // basic manager repository must be destroyed before factories
     mrImplRepository.clear();
-    m_Factories.clear();
+    // we need to move stuff out otherwise the destruction of the factories
+    // calls back into SbxBase::RemoveFactory and sees partially destructed data
+    std::move(m_Factories);
 }
 
 SbxBase::SbxBase()
@@ -121,15 +123,12 @@ void SbxBase::AddFactory( SbxFactory* pFac )
 
 void SbxBase::RemoveFactory( SbxFactory const * pFac )
 {
+    if (!IsSbxData_Impl())
+        return;
     SbxAppData& r = GetSbxData_Impl();
-    auto it = std::find_if(r.m_Factories.begin(), r.m_Factories.end(),
-        [&pFac](const std::unique_ptr<SbxFactory>& rxFactory) { return rxFactory.get() == pFac; });
+    auto it = std::find(r.m_Factories.begin(), r.m_Factories.end(), pFac);
     if (it != r.m_Factories.end())
-    {
-        std::unique_ptr<SbxFactory> tmp(std::move(*it));
         r.m_Factories.erase( it );
-        (void)tmp.release();
-    }
 }
 
 
