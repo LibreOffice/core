@@ -788,45 +788,45 @@ void ScDocument::CopyUpdated( ScDocument* pPosDoc, ScDocument* pDestDoc )
 
 void ScDocument::CopyScenario( SCTAB nSrcTab, SCTAB nDestTab, bool bNewScenario )
 {
-    if (ValidTab(nSrcTab) && ValidTab(nDestTab) && nSrcTab < static_cast<SCTAB>(maTabs.size())
-                && nDestTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nSrcTab] && maTabs[nDestTab])
-    {
-        // Set flags correctly for active scenarios
-        // and write current values back to recently active scenarios
-        ScRangeList aRanges = *maTabs[nSrcTab]->GetScenarioRanges();
+    if (!(ValidTab(nSrcTab) && ValidTab(nDestTab) && nSrcTab < static_cast<SCTAB>(maTabs.size())
+                && nDestTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nSrcTab] && maTabs[nDestTab]))
+        return;
 
-        // nDestTab is the target table
-        for ( SCTAB nTab = nDestTab+1;
-                nTab< static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->IsScenario();
-                nTab++ )
+    // Set flags correctly for active scenarios
+    // and write current values back to recently active scenarios
+    ScRangeList aRanges = *maTabs[nSrcTab]->GetScenarioRanges();
+
+    // nDestTab is the target table
+    for ( SCTAB nTab = nDestTab+1;
+            nTab< static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->IsScenario();
+            nTab++ )
+    {
+        if ( maTabs[nTab]->IsActiveScenario() ) // Even if it's the same scenario
         {
-            if ( maTabs[nTab]->IsActiveScenario() ) // Even if it's the same scenario
+            bool bTouched = false;
+            for ( size_t nR=0, nRangeCount = aRanges.size(); nR < nRangeCount && !bTouched; nR++ )
             {
-                bool bTouched = false;
-                for ( size_t nR=0, nRangeCount = aRanges.size(); nR < nRangeCount && !bTouched; nR++ )
-                {
-                    const ScRange& rRange = aRanges[ nR ];
-                    if ( maTabs[nTab]->HasScenarioRange( rRange ) )
-                        bTouched = true;
-                }
-                if (bTouched)
-                {
-                    maTabs[nTab]->SetActiveScenario(false);
-                    if ( maTabs[nTab]->GetScenarioFlags() & ScScenarioFlags::TwoWay )
-                        maTabs[nTab]->CopyScenarioFrom( maTabs[nDestTab].get() );
-                }
+                const ScRange& rRange = aRanges[ nR ];
+                if ( maTabs[nTab]->HasScenarioRange( rRange ) )
+                    bTouched = true;
+            }
+            if (bTouched)
+            {
+                maTabs[nTab]->SetActiveScenario(false);
+                if ( maTabs[nTab]->GetScenarioFlags() & ScScenarioFlags::TwoWay )
+                    maTabs[nTab]->CopyScenarioFrom( maTabs[nDestTab].get() );
             }
         }
+    }
 
-        maTabs[nSrcTab]->SetActiveScenario(true); // This is where it's from ...
-        if (!bNewScenario) // Copy data from the selected scenario
-        {
-            sc::AutoCalcSwitch aACSwitch(*this, false);
-            maTabs[nSrcTab]->CopyScenarioTo( maTabs[nDestTab].get() );
+    maTabs[nSrcTab]->SetActiveScenario(true); // This is where it's from ...
+    if (!bNewScenario) // Copy data from the selected scenario
+    {
+        sc::AutoCalcSwitch aACSwitch(*this, false);
+        maTabs[nSrcTab]->CopyScenarioTo( maTabs[nDestTab].get() );
 
-            sc::SetFormulaDirtyContext aCxt;
-            SetAllFormulasDirty(aCxt);
-        }
+        sc::SetFormulaDirtyContext aCxt;
+        SetAllFormulasDirty(aCxt);
     }
 }
 
@@ -929,29 +929,29 @@ void ScDocument::RemoveUnoObject( SfxListener& rObject )
 
 void ScDocument::BroadcastUno( const SfxHint &rHint )
 {
-    if (pUnoBroadcaster)
+    if (!pUnoBroadcaster)
+        return;
+
+    bInUnoBroadcast = true;
+    pUnoBroadcaster->Broadcast( rHint );
+    bInUnoBroadcast = false;
+
+    // During Broadcast notification, Uno objects can add to pUnoListenerCalls.
+    // The listener calls must be processed after completing the broadcast,
+    // because they can add or remove objects from pUnoBroadcaster.
+
+    if ( pUnoListenerCalls &&
+            rHint.GetId() == SfxHintId::DataChanged &&
+            !bInUnoListenerCall )
     {
-        bInUnoBroadcast = true;
-        pUnoBroadcaster->Broadcast( rHint );
-        bInUnoBroadcast = false;
+        // Listener calls may lead to BroadcastUno calls again. The listener calls
+        // are not nested, instead the calls are collected in the list, and the
+        // outermost call executes them all.
 
-        // During Broadcast notification, Uno objects can add to pUnoListenerCalls.
-        // The listener calls must be processed after completing the broadcast,
-        // because they can add or remove objects from pUnoBroadcaster.
-
-        if ( pUnoListenerCalls &&
-                rHint.GetId() == SfxHintId::DataChanged &&
-                !bInUnoListenerCall )
-        {
-            // Listener calls may lead to BroadcastUno calls again. The listener calls
-            // are not nested, instead the calls are collected in the list, and the
-            // outermost call executes them all.
-
-            ScChartLockGuard aChartLockGuard(this);
-            bInUnoListenerCall = true;
-            pUnoListenerCalls->ExecuteAndClear();
-            bInUnoListenerCall = false;
-        }
+        ScChartLockGuard aChartLockGuard(this);
+        bInUnoListenerCall = true;
+        pUnoListenerCalls->ExecuteAndClear();
+        bInUnoListenerCall = false;
     }
 }
 
@@ -1516,50 +1516,50 @@ void ScDocument::GetFilterSelCount( SCCOL nCol, SCROW nRow, SCTAB nTab, SCSIZE& 
 void ScDocument::GetFilterEntries(
     SCCOL nCol, SCROW nRow, SCTAB nTab, ScFilterEntries& rFilterEntries )
 {
-    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && pDBCollection )
+    if ( !(ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && pDBCollection) )
+        return;
+
+    ScDBData* pDBData = pDBCollection->GetDBAtCursor(nCol, nRow, nTab, ScDBDataPortion::AREA);  //!??
+    if (!pDBData)
+        return;
+
+    pDBData->ExtendDataArea(this);
+    SCTAB nAreaTab;
+    SCCOL nStartCol;
+    SCROW nStartRow;
+    SCCOL nEndCol;
+    SCROW nEndRow;
+    pDBData->GetArea( nAreaTab, nStartCol, nStartRow, nEndCol, nEndRow );
+
+    if (pDBData->HasHeader())
+        ++nStartRow;
+
+    ScQueryParam aParam;
+    pDBData->GetQueryParam( aParam );
+
+    // Return all filter entries, if a filter condition is connected with a boolean OR
+    bool bFilter = true;
+    SCSIZE nEntryCount = aParam.GetEntryCount();
+    for ( SCSIZE i = 0; i < nEntryCount && aParam.GetEntry(i).bDoQuery; ++i )
     {
-        ScDBData* pDBData = pDBCollection->GetDBAtCursor(nCol, nRow, nTab, ScDBDataPortion::AREA);  //!??
-        if (pDBData)
+        ScQueryEntry& rEntry = aParam.GetEntry(i);
+        if ( rEntry.eConnect != SC_AND )
         {
-            pDBData->ExtendDataArea(this);
-            SCTAB nAreaTab;
-            SCCOL nStartCol;
-            SCROW nStartRow;
-            SCCOL nEndCol;
-            SCROW nEndRow;
-            pDBData->GetArea( nAreaTab, nStartCol, nStartRow, nEndCol, nEndRow );
-
-            if (pDBData->HasHeader())
-                ++nStartRow;
-
-            ScQueryParam aParam;
-            pDBData->GetQueryParam( aParam );
-
-            // Return all filter entries, if a filter condition is connected with a boolean OR
-            bool bFilter = true;
-            SCSIZE nEntryCount = aParam.GetEntryCount();
-            for ( SCSIZE i = 0; i < nEntryCount && aParam.GetEntry(i).bDoQuery; ++i )
-            {
-                ScQueryEntry& rEntry = aParam.GetEntry(i);
-                if ( rEntry.eConnect != SC_AND )
-                {
-                    bFilter = false;
-                    break;
-                }
-            }
-
-            if ( bFilter )
-            {
-                maTabs[nTab]->GetFilteredFilterEntries( nCol, nStartRow, nEndRow, aParam, rFilterEntries );
-            }
-            else
-            {
-                maTabs[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rFilterEntries );
-            }
-
-            sortAndRemoveDuplicates( rFilterEntries.maStrData, aParam.bCaseSens);
+            bFilter = false;
+            break;
         }
     }
+
+    if ( bFilter )
+    {
+        maTabs[nTab]->GetFilteredFilterEntries( nCol, nStartRow, nEndRow, aParam, rFilterEntries );
+    }
+    else
+    {
+        maTabs[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rFilterEntries );
+    }
+
+    sortAndRemoveDuplicates( rFilterEntries.maStrData, aParam.bCaseSens);
 }
 
 /**

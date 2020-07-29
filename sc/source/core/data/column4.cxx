@@ -286,26 +286,26 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
     }
 
     const ScPostIt* pNote = rCxt.getSingleCellNote(nColOffset);
-    if (pNote && (nFlags & (InsertDeleteFlags::NOTE | InsertDeleteFlags::ADDNOTES)) != InsertDeleteFlags::NONE)
+    if (!(pNote && (nFlags & (InsertDeleteFlags::NOTE | InsertDeleteFlags::ADDNOTES)) != InsertDeleteFlags::NONE))
+        return;
+
+    // Duplicate the cell note over the whole pasted range.
+
+    ScDocument* pClipDoc = rCxt.getClipDoc();
+    const ScAddress aSrcPos = pClipDoc->GetClipParam().getWholeRange().aStart;
+    std::vector<ScPostIt*> aNotes;
+    ScAddress aDestPos(nCol, nRow1, nTab);
+    aNotes.reserve(nDestSize);
+    for (size_t i = 0; i < nDestSize; ++i)
     {
-        // Duplicate the cell note over the whole pasted range.
-
-        ScDocument* pClipDoc = rCxt.getClipDoc();
-        const ScAddress aSrcPos = pClipDoc->GetClipParam().getWholeRange().aStart;
-        std::vector<ScPostIt*> aNotes;
-        ScAddress aDestPos(nCol, nRow1, nTab);
-        aNotes.reserve(nDestSize);
-        for (size_t i = 0; i < nDestSize; ++i)
-        {
-            bool bCloneCaption = (nFlags & InsertDeleteFlags::NOCAPTIONS) == InsertDeleteFlags::NONE;
-            aNotes.push_back(pNote->Clone(aSrcPos, *pDocument, aDestPos, bCloneCaption).release());
-            aDestPos.IncRow();
-        }
-
-        pBlockPos->miCellNotePos =
-            maCellNotes.set(
-                pBlockPos->miCellNotePos, nRow1, aNotes.begin(), aNotes.end());
+        bool bCloneCaption = (nFlags & InsertDeleteFlags::NOCAPTIONS) == InsertDeleteFlags::NONE;
+        aNotes.push_back(pNote->Clone(aSrcPos, *pDocument, aDestPos, bCloneCaption).release());
+        aDestPos.IncRow();
     }
+
+    pBlockPos->miCellNotePos =
+        maCellNotes.set(
+            pBlockPos->miCellNotePos, nRow1, aNotes.begin(), aNotes.end());
 }
 
 void ScColumn::SetValues( const SCROW nRow, const std::vector<double>& rVals )
@@ -834,37 +834,37 @@ public:
         ScTokenArray* pCode = pTop->GetCode();
         bool bRecompile = pCode->HasOpCodes(mrOps);
 
-        if (bRecompile)
+        if (!bRecompile)
+            return;
+
+        // Get the formula string.
+        OUString aFormula = pTop->GetFormula(mrCompileFormulaCxt);
+        sal_Int32 n = aFormula.getLength();
+        if (pTop->GetMatrixFlag() != ScMatrixMode::NONE && n > 0)
         {
-            // Get the formula string.
-            OUString aFormula = pTop->GetFormula(mrCompileFormulaCxt);
-            sal_Int32 n = aFormula.getLength();
-            if (pTop->GetMatrixFlag() != ScMatrixMode::NONE && n > 0)
-            {
-                if (aFormula[0] == '{' && aFormula[n-1] == '}')
-                    aFormula = aFormula.copy(1, n-2);
-            }
-
-            if (rEntry.mbShared)
-            {
-                ScFormulaCell** pp = rEntry.mpCells;
-                ScFormulaCell** ppEnd = pp + rEntry.mnLength;
-                for (; pp != ppEnd; ++pp)
-                {
-                    ScFormulaCell* p = *pp;
-                    p->EndListeningTo(mrEndListenCxt);
-                    mpDoc->RemoveFromFormulaTree(p);
-                }
-            }
-            else
-            {
-                rEntry.mpCell->EndListeningTo(mrEndListenCxt);
-                mpDoc->RemoveFromFormulaTree(rEntry.mpCell);
-            }
-
-            pCode->Clear();
-            pTop->SetHybridFormula(aFormula, mpDoc->GetGrammar());
+            if (aFormula[0] == '{' && aFormula[n-1] == '}')
+                aFormula = aFormula.copy(1, n-2);
         }
+
+        if (rEntry.mbShared)
+        {
+            ScFormulaCell** pp = rEntry.mpCells;
+            ScFormulaCell** ppEnd = pp + rEntry.mnLength;
+            for (; pp != ppEnd; ++pp)
+            {
+                ScFormulaCell* p = *pp;
+                p->EndListeningTo(mrEndListenCxt);
+                mpDoc->RemoveFromFormulaTree(p);
+            }
+        }
+        else
+        {
+            rEntry.mpCell->EndListeningTo(mrEndListenCxt);
+            mpDoc->RemoveFromFormulaTree(rEntry.mpCell);
+        }
+
+        pCode->Clear();
+        pTop->SetHybridFormula(aFormula, mpDoc->GetGrammar());
     }
 };
 
@@ -1550,24 +1550,24 @@ void ScColumn::EndListeningIntersectedGroups(
 
     aPos = maCells.position(it, nRow2);
     it = aPos.first;
-    if (it->type == sc::element_type_formula)
-    {
-        ScFormulaCell* pFC = sc::formula_block::at(*it->data, aPos.second);
-        ScFormulaCellGroupRef xGroup = pFC->GetCellGroup();
-        if (xGroup)
-        {
-            if (!pFC->IsSharedTop())
-                // End listening.
-                pFC->EndListeningTo(rCxt);
+    if (it->type != sc::element_type_formula)
+        return;
 
-            if (pGroupPos)
-            {
-                // Record the position of the bottom cell of the group.
-                ScAddress aPosLast = xGroup->mpTopCell->aPos;
-                aPosLast.IncRow(xGroup->mnLength-1);
-                pGroupPos->push_back(aPosLast);
-            }
-        }
+    ScFormulaCell* pFC = sc::formula_block::at(*it->data, aPos.second);
+    ScFormulaCellGroupRef xGroup = pFC->GetCellGroup();
+    if (!xGroup)
+        return;
+
+    if (!pFC->IsSharedTop())
+        // End listening.
+        pFC->EndListeningTo(rCxt);
+
+    if (pGroupPos)
+    {
+        // Record the position of the bottom cell of the group.
+        ScAddress aPosLast = xGroup->mpTopCell->aPos;
+        aPosLast.IncRow(xGroup->mnLength-1);
+        pGroupPos->push_back(aPosLast);
     }
 }
 

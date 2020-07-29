@@ -329,24 +329,24 @@ void ScFuncDesc::initArgumentInfo()  const
     // get the full argument description
     // (add-in has to be instantiated to get the type information)
 
-    if ( bIncomplete && mxFuncName )
+    if ( !(bIncomplete && mxFuncName) )
+        return;
+
+    ScUnoAddInCollection& rAddIns = *ScGlobal::GetAddInCollection();
+    OUString aIntName(rAddIns.FindFunction( *mxFuncName, true ));         // pFuncName is upper-case
+
+    if ( !aIntName.isEmpty() )
     {
-        ScUnoAddInCollection& rAddIns = *ScGlobal::GetAddInCollection();
-        OUString aIntName(rAddIns.FindFunction( *mxFuncName, true ));         // pFuncName is upper-case
+        // GetFuncData with bComplete=true loads the component and updates
+        // the global function list if needed.
 
-        if ( !aIntName.isEmpty() )
-        {
-            // GetFuncData with bComplete=true loads the component and updates
-            // the global function list if needed.
+        rAddIns.GetFuncData( aIntName, true );
+    }
 
-            rAddIns.GetFuncData( aIntName, true );
-        }
-
-        if ( bIncomplete )
-        {
-            OSL_FAIL( "couldn't initialize add-in function" );
-            const_cast<ScFuncDesc*>(this)->bIncomplete = false;         // even if there was an error, don't try again
-        }
+    if ( bIncomplete )
+    {
+        OSL_FAIL( "couldn't initialize add-in function" );
+        const_cast<ScFuncDesc*>(this)->bIncomplete = false;         // even if there was an error, don't try again
     }
 }
 
@@ -1235,37 +1235,37 @@ static void ScFuncRes(const ScFuncDescCore &rEntry, ScFuncDesc* pDesc, bool& rbS
     pDesc->mxFuncName = ScCompiler::GetNativeSymbol(static_cast<OpCode>(nOpCode));
     pDesc->mxFuncDesc = ScResId(rEntry.pResource[0]);
 
-    if (nArgs)
+    if (!nArgs)
+        return;
+
+    pDesc->maDefArgNames.clear();
+    pDesc->maDefArgNames.resize(nArgs);
+    pDesc->maDefArgDescs.clear();
+    pDesc->maDefArgDescs.resize(nArgs);
+    for (sal_uInt16 i = 0; i < nArgs; ++i)
     {
-        pDesc->maDefArgNames.clear();
-        pDesc->maDefArgNames.resize(nArgs);
-        pDesc->maDefArgDescs.clear();
-        pDesc->maDefArgDescs.resize(nArgs);
-        for (sal_uInt16 i = 0; i < nArgs; ++i)
+        size_t nIndex = (i * 2) + 1;
+        if (nIndex < rEntry.nResourceLen)
+            pDesc->maDefArgNames[i] = ScResId(rEntry.pResource[nIndex]);
+        if (nIndex + 1 < rEntry.nResourceLen)
+            pDesc->maDefArgDescs[i] = ScResId(rEntry.pResource[nIndex + 1]);
+        // If empty and variable number of arguments and last parameter and
+        // parameter is optional and the previous is not optional, repeat
+        // previous parameter name and description.
+        if ((pDesc->maDefArgNames[i].isEmpty() || pDesc->maDefArgDescs[i].isEmpty()) &&
+                nVarArgsSet > 0 && i > nVarArgsSet && (i == nArgs-1 || i == nArgs-2) &&
+                pDesc->pDefArgFlags[i].bOptional)
         {
-            size_t nIndex = (i * 2) + 1;
-            if (nIndex < rEntry.nResourceLen)
-                pDesc->maDefArgNames[i] = ScResId(rEntry.pResource[nIndex]);
-            if (nIndex + 1 < rEntry.nResourceLen)
-                pDesc->maDefArgDescs[i] = ScResId(rEntry.pResource[nIndex + 1]);
-            // If empty and variable number of arguments and last parameter and
-            // parameter is optional and the previous is not optional, repeat
-            // previous parameter name and description.
-            if ((pDesc->maDefArgNames[i].isEmpty() || pDesc->maDefArgDescs[i].isEmpty()) &&
-                    nVarArgsSet > 0 && i > nVarArgsSet && (i == nArgs-1 || i == nArgs-2) &&
-                    pDesc->pDefArgFlags[i].bOptional)
+            sal_uInt16 nPrev = i - nVarArgsSet;
+            if (!pDesc->pDefArgFlags[nPrev].bOptional)
             {
-                sal_uInt16 nPrev = i - nVarArgsSet;
-                if (!pDesc->pDefArgFlags[nPrev].bOptional)
-                {
-                    if (pDesc->maDefArgNames[i].isEmpty())
-                        pDesc->maDefArgNames[i] = pDesc->maDefArgNames[nPrev];
-                    if (pDesc->maDefArgDescs[i].isEmpty())
-                        pDesc->maDefArgDescs[i] = pDesc->maDefArgDescs[nPrev];
-                    // This also means that variable arguments start one
-                    // parameter set earlier.
-                    pDesc->nVarArgsStart -= nVarArgsSet;
-                }
+                if (pDesc->maDefArgNames[i].isEmpty())
+                    pDesc->maDefArgNames[i] = pDesc->maDefArgNames[nPrev];
+                if (pDesc->maDefArgDescs[i].isEmpty())
+                    pDesc->maDefArgDescs[i] = pDesc->maDefArgDescs[nPrev];
+                // This also means that variable arguments start one
+                // parameter set earlier.
+                pDesc->nVarArgsStart -= nVarArgsSet;
             }
         }
     }

@@ -1273,85 +1273,85 @@ void ScDocument::GetCellChangeTrackNote( const ScAddress &aCellPos, OUString &aT
     //  Change-Tracking
     ScChangeTrack* pTrack = GetChangeTrack();
     ScChangeViewSettings* pSettings = GetChangeViewSettings();
-    if ( pTrack && pTrack->GetFirst() && pSettings && pSettings->ShowChanges())
+    if ( !(pTrack && pTrack->GetFirst() && pSettings && pSettings->ShowChanges()))
+        return;
+
+    const ScChangeAction* pFound = nullptr;
+    const ScChangeAction* pFoundContent = nullptr;
+    const ScChangeAction* pFoundMove = nullptr;
+    const ScChangeAction* pAction = pTrack->GetFirst();
+    while (pAction)
     {
-        const ScChangeAction* pFound = nullptr;
-        const ScChangeAction* pFoundContent = nullptr;
-        const ScChangeAction* pFoundMove = nullptr;
-        const ScChangeAction* pAction = pTrack->GetFirst();
-        while (pAction)
+        if ( pAction->IsVisible() &&
+             ScViewUtil::IsActionShown( *pAction, *pSettings, *this ) )
         {
-            if ( pAction->IsVisible() &&
-                 ScViewUtil::IsActionShown( *pAction, *pSettings, *this ) )
+            ScChangeActionType eType = pAction->GetType();
+            const ScBigRange& rBig = pAction->GetBigRange();
+            if ( rBig.aStart.Tab() == aCellPos.Tab())
             {
-                ScChangeActionType eType = pAction->GetType();
-                const ScBigRange& rBig = pAction->GetBigRange();
-                if ( rBig.aStart.Tab() == aCellPos.Tab())
+                ScRange aRange = rBig.MakeRange();
+                if ( eType == SC_CAT_DELETE_ROWS )
+                    aRange.aEnd.SetRow( aRange.aStart.Row() );
+                else if ( eType == SC_CAT_DELETE_COLS )
+                    aRange.aEnd.SetCol( aRange.aStart.Col() );
+                if ( aRange.In( aCellPos ) )
                 {
-                    ScRange aRange = rBig.MakeRange();
-                    if ( eType == SC_CAT_DELETE_ROWS )
-                        aRange.aEnd.SetRow( aRange.aStart.Row() );
-                    else if ( eType == SC_CAT_DELETE_COLS )
-                        aRange.aEnd.SetCol( aRange.aStart.Col() );
-                    if ( aRange.In( aCellPos ) )
+                    pFound = pAction;       // the last wins
+                    switch ( eType )
                     {
-                        pFound = pAction;       // the last wins
-                        switch ( eType )
-                        {
-                            case SC_CAT_CONTENT :
-                                pFoundContent = pAction;
+                        case SC_CAT_CONTENT :
+                            pFoundContent = pAction;
+                        break;
+                        case SC_CAT_MOVE :
+                            pFoundMove = pAction;
+                        break;
+                        default:
                             break;
-                            case SC_CAT_MOVE :
-                                pFoundMove = pAction;
-                            break;
-                            default:
-                                break;
-                        }
-                    }
-                }
-                if ( eType == SC_CAT_MOVE )
-                {
-                    ScRange aRange =
-                        static_cast<const ScChangeActionMove*>(pAction)->
-                        GetFromRange().MakeRange();
-                    if ( aRange.In( aCellPos ) )
-                    {
-                        pFound = pAction;
                     }
                 }
             }
-            pAction = pAction->GetNext();
-        }
-        if ( pFound )
-        {
-            if ( pFoundContent && pFound->GetType() != SC_CAT_CONTENT )
-                pFound = pFoundContent;     // Content wins
-            if ( pFoundMove && pFound->GetType() != SC_CAT_MOVE &&
-                    pFoundMove->GetActionNumber() >
-                    pFound->GetActionNumber() )
-                pFound = pFoundMove;        // Move wins
-            //  for deleted columns: arrow on left side of row
-            if ( pFound->GetType() == SC_CAT_DELETE_COLS )
-                bLeftEdge = true;
-            DateTime aDT = pFound->GetDateTime();
-            aTrackText  = pFound->GetUser();
-            aTrackText += ", ";
-            aTrackText += ScGlobal::getLocaleDataPtr()->getDate(aDT);
-            aTrackText += " ";
-            aTrackText += ScGlobal::getLocaleDataPtr()->getTime(aDT);
-            aTrackText += ":\n";
-            OUString aComStr = pFound->GetComment();
-            if(!aComStr.isEmpty())
+            if ( eType == SC_CAT_MOVE )
             {
-                aTrackText += aComStr;
-                aTrackText += "\n( ";
-            }
-            pFound->GetDescription( aTrackText, this );
-            if (!aComStr.isEmpty())
-            {
-                aTrackText += ")";
+                ScRange aRange =
+                    static_cast<const ScChangeActionMove*>(pAction)->
+                    GetFromRange().MakeRange();
+                if ( aRange.In( aCellPos ) )
+                {
+                    pFound = pAction;
+                }
             }
         }
+        pAction = pAction->GetNext();
+    }
+    if ( !pFound )
+        return;
+
+    if ( pFoundContent && pFound->GetType() != SC_CAT_CONTENT )
+        pFound = pFoundContent;     // Content wins
+    if ( pFoundMove && pFound->GetType() != SC_CAT_MOVE &&
+            pFoundMove->GetActionNumber() >
+            pFound->GetActionNumber() )
+        pFound = pFoundMove;        // Move wins
+    //  for deleted columns: arrow on left side of row
+    if ( pFound->GetType() == SC_CAT_DELETE_COLS )
+        bLeftEdge = true;
+    DateTime aDT = pFound->GetDateTime();
+    aTrackText  = pFound->GetUser();
+    aTrackText += ", ";
+    aTrackText += ScGlobal::getLocaleDataPtr()->getDate(aDT);
+    aTrackText += " ";
+    aTrackText += ScGlobal::getLocaleDataPtr()->getTime(aDT);
+    aTrackText += ":\n";
+    OUString aComStr = pFound->GetComment();
+    if(!aComStr.isEmpty())
+    {
+        aTrackText += aComStr;
+        aTrackText += "\n( ";
+    }
+    pFound->GetDescription( aTrackText, this );
+    if (!aComStr.isEmpty())
+    {
+        aTrackText += ")";
     }
 }
 

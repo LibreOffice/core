@@ -101,72 +101,72 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
         mpShell = pDocShell;
     }
 
-    if (!mpDrawLayer)
+    if (mpDrawLayer)
+        return;
+
+    ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
+    OUString aName;
+    if ( mpShell && !mpShell->IsLoading() )       // don't call GetTitle while loading
+        aName = mpShell->GetTitle();
+    mpDrawLayer.reset(new ScDrawLayer( this, aName ));
+
+    sfx2::LinkManager* pMgr = GetDocLinkManager().getLinkManager(bAutoCalc);
+    if (pMgr)
+        mpDrawLayer->SetLinkManager(pMgr);
+
+    // set DrawingLayer's SfxItemPool at Calc's SfxItemPool as
+    // secondary pool to support DrawingLayer FillStyle ranges (and similar)
+    // in SfxItemSets using the Calc SfxItemPool. This is e.g. needed when
+    // the PageStyle using SvxBrushItem is visualized and will be potentially
+    // used more intense in the future
+    if (mxPoolHelper.is() && !IsClipOrUndo()) //Using IsClipOrUndo as a proxy for SharePooledResources called
     {
-        ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
-        OUString aName;
-        if ( mpShell && !mpShell->IsLoading() )       // don't call GetTitle while loading
-            aName = mpShell->GetTitle();
-        mpDrawLayer.reset(new ScDrawLayer( this, aName ));
+        ScDocumentPool* pLocalPool = mxPoolHelper->GetDocPool();
 
-        sfx2::LinkManager* pMgr = GetDocLinkManager().getLinkManager(bAutoCalc);
-        if (pMgr)
-            mpDrawLayer->SetLinkManager(pMgr);
-
-        // set DrawingLayer's SfxItemPool at Calc's SfxItemPool as
-        // secondary pool to support DrawingLayer FillStyle ranges (and similar)
-        // in SfxItemSets using the Calc SfxItemPool. This is e.g. needed when
-        // the PageStyle using SvxBrushItem is visualized and will be potentially
-        // used more intense in the future
-        if (mxPoolHelper.is() && !IsClipOrUndo()) //Using IsClipOrUndo as a proxy for SharePooledResources called
+        if (pLocalPool)
         {
-            ScDocumentPool* pLocalPool = mxPoolHelper->GetDocPool();
-
-            if (pLocalPool)
-            {
-                OSL_ENSURE(!pLocalPool->GetSecondaryPool(), "OOps, already a secondary pool set where the DrawingLayer ItemPool is to be placed (!)");
-                pLocalPool->SetSecondaryPool(&mpDrawLayer->GetItemPool());
-            }
+            OSL_ENSURE(!pLocalPool->GetSecondaryPool(), "OOps, already a secondary pool set where the DrawingLayer ItemPool is to be placed (!)");
+            pLocalPool->SetSecondaryPool(&mpDrawLayer->GetItemPool());
         }
-
-        //  Drawing pages are accessed by table number, so they must also be present
-        //  for preceding table numbers, even if the tables aren't allocated
-        //  (important for clipboard documents).
-
-        SCTAB nDrawPages = 0;
-        SCTAB nTab;
-        for (nTab=0; nTab < static_cast<SCTAB>(maTabs.size()); nTab++)
-            if (maTabs[nTab])
-                nDrawPages = nTab + 1;          // needed number of pages
-
-        for (nTab=0; nTab<nDrawPages && nTab < static_cast<SCTAB>(maTabs.size()); nTab++)
-        {
-            mpDrawLayer->ScAddPage( nTab );     // always add page, with or without the table
-            if (maTabs[nTab])
-            {
-                OUString aTabName = maTabs[nTab]->GetName();
-                mpDrawLayer->ScRenamePage( nTab, aTabName );
-
-                maTabs[nTab]->SetDrawPageSize(false,false);     // set the right size immediately
-            }
-        }
-
-        mpDrawLayer->SetDefaultTabulator( GetDocOptions().GetTabDistance() );
-
-        UpdateDrawPrinter();
-
-        // set draw defaults directly
-        SfxItemPool& rDrawPool = mpDrawLayer->GetItemPool();
-        rDrawPool.SetPoolDefaultItem( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
-
-        UpdateDrawLanguages();
-        if (bImportingXML)
-            mpDrawLayer->EnableAdjust(false);
-
-        mpDrawLayer->SetForbiddenCharsTable( xForbiddenCharacters );
-        mpDrawLayer->SetCharCompressType( GetAsianCompression() );
-        mpDrawLayer->SetKernAsianPunctuation( GetAsianKerning() );
     }
+
+    //  Drawing pages are accessed by table number, so they must also be present
+    //  for preceding table numbers, even if the tables aren't allocated
+    //  (important for clipboard documents).
+
+    SCTAB nDrawPages = 0;
+    SCTAB nTab;
+    for (nTab=0; nTab < static_cast<SCTAB>(maTabs.size()); nTab++)
+        if (maTabs[nTab])
+            nDrawPages = nTab + 1;          // needed number of pages
+
+    for (nTab=0; nTab<nDrawPages && nTab < static_cast<SCTAB>(maTabs.size()); nTab++)
+    {
+        mpDrawLayer->ScAddPage( nTab );     // always add page, with or without the table
+        if (maTabs[nTab])
+        {
+            OUString aTabName = maTabs[nTab]->GetName();
+            mpDrawLayer->ScRenamePage( nTab, aTabName );
+
+            maTabs[nTab]->SetDrawPageSize(false,false);     // set the right size immediately
+        }
+    }
+
+    mpDrawLayer->SetDefaultTabulator( GetDocOptions().GetTabDistance() );
+
+    UpdateDrawPrinter();
+
+    // set draw defaults directly
+    SfxItemPool& rDrawPool = mpDrawLayer->GetItemPool();
+    rDrawPool.SetPoolDefaultItem( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
+
+    UpdateDrawLanguages();
+    if (bImportingXML)
+        mpDrawLayer->EnableAdjust(false);
+
+    mpDrawLayer->SetForbiddenCharsTable( xForbiddenCharacters );
+    mpDrawLayer->SetCharCompressType( GetAsianCompression() );
+    mpDrawLayer->SetKernAsianPunctuation( GetAsianKerning() );
 }
 
 void ScDocument::UpdateDrawLanguages()
@@ -550,27 +550,27 @@ void ScDocument::UpdateFontCharSet()
     bool bUpdateOld = ( nSrcVer < SC_FONTCHARSET );
 
     rtl_TextEncoding eSysSet = osl_getThreadTextEncoding();
-    if ( eSrcSet != eSysSet || bUpdateOld )
+    if ( !(eSrcSet != eSysSet || bUpdateOld) )
+        return;
+
+    ScDocumentPool* pPool = mxPoolHelper->GetDocPool();
+    for (const SfxPoolItem* pItem : pPool->GetItemSurrogates(ATTR_FONT))
     {
-        ScDocumentPool* pPool = mxPoolHelper->GetDocPool();
-        for (const SfxPoolItem* pItem : pPool->GetItemSurrogates(ATTR_FONT))
+        auto pFontItem = const_cast<SvxFontItem*>(dynamic_cast<const SvxFontItem*>(pItem));
+        if ( pFontItem && ( pFontItem->GetCharSet() == eSrcSet ||
+                           ( bUpdateOld && pFontItem->GetCharSet() != RTL_TEXTENCODING_SYMBOL ) ) )
+            pFontItem->SetCharSet(eSysSet);
+    }
+
+    if ( mpDrawLayer )
+    {
+        SfxItemPool& rDrawPool = mpDrawLayer->GetItemPool();
+        for (const SfxPoolItem* pItem : rDrawPool.GetItemSurrogates(EE_CHAR_FONTINFO))
         {
-            auto pFontItem = const_cast<SvxFontItem*>(dynamic_cast<const SvxFontItem*>(pItem));
+            SvxFontItem* pFontItem = const_cast<SvxFontItem*>(dynamic_cast<const SvxFontItem*>(pItem));
             if ( pFontItem && ( pFontItem->GetCharSet() == eSrcSet ||
                                ( bUpdateOld && pFontItem->GetCharSet() != RTL_TEXTENCODING_SYMBOL ) ) )
-                pFontItem->SetCharSet(eSysSet);
-        }
-
-        if ( mpDrawLayer )
-        {
-            SfxItemPool& rDrawPool = mpDrawLayer->GetItemPool();
-            for (const SfxPoolItem* pItem : rDrawPool.GetItemSurrogates(EE_CHAR_FONTINFO))
-            {
-                SvxFontItem* pFontItem = const_cast<SvxFontItem*>(dynamic_cast<const SvxFontItem*>(pItem));
-                if ( pFontItem && ( pFontItem->GetCharSet() == eSrcSet ||
-                                   ( bUpdateOld && pFontItem->GetCharSet() != RTL_TEXTENCODING_SYMBOL ) ) )
-                    pFontItem->SetCharSet( eSysSet );
-            }
+                pFontItem->SetCharSet( eSysSet );
         }
     }
 }

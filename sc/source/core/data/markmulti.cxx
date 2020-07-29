@@ -376,20 +376,20 @@ void ScMultiSel::ShiftCols(SCCOL nStartCol, long nColOffset)
     }
     aRowSel = aNewMultiSel.aRowSel;
 
-    if (nColOffset > 0 && nStartCol > 0 && nStartCol < static_cast<SCCOL>(aNewMultiSel.aMultiSelContainer.size()))
-    {
-        // insert nColOffset new columns, and select their cells if they are selected
-        // both in the old column at nStartPos and in the previous column
-        auto& rPrevPos = aNewMultiSel.aMultiSelContainer[nStartCol - 1];
-        auto& rStartPos = aNewMultiSel.aMultiSelContainer[nStartCol];
-        auto& rNewCol = aMultiSelContainer[nStartCol];
-        rNewCol = rStartPos;
-        rNewCol.Intersect(rPrevPos);
-        if (nStartCol + nColOffset >= static_cast<SCCOL>(aNewMultiSel.aMultiSelContainer.size()))
-            aNewMultiSel.aMultiSelContainer.resize(nStartCol + nColOffset, ScMarkArray(mrSheetLimits));
-        for (long i = 1; i < nColOffset; ++i)
-            aMultiSelContainer[nStartCol + i] = rNewCol;
-    }
+    if (!(nColOffset > 0 && nStartCol > 0 && nStartCol < static_cast<SCCOL>(aNewMultiSel.aMultiSelContainer.size())))
+        return;
+
+    // insert nColOffset new columns, and select their cells if they are selected
+    // both in the old column at nStartPos and in the previous column
+    auto& rPrevPos = aNewMultiSel.aMultiSelContainer[nStartCol - 1];
+    auto& rStartPos = aNewMultiSel.aMultiSelContainer[nStartCol];
+    auto& rNewCol = aMultiSelContainer[nStartCol];
+    rNewCol = rStartPos;
+    rNewCol.Intersect(rPrevPos);
+    if (nStartCol + nColOffset >= static_cast<SCCOL>(aNewMultiSel.aMultiSelContainer.size()))
+        aNewMultiSel.aMultiSelContainer.resize(nStartCol + nColOffset, ScMarkArray(mrSheetLimits));
+    for (long i = 1; i < nColOffset; ++i)
+        aMultiSelContainer[nStartCol + i] = rNewCol;
 }
 
 void ScMultiSel::ShiftRows(SCROW nStartRow, long nRowOffset)

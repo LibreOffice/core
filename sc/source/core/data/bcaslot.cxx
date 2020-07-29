@@ -1059,18 +1059,18 @@ void ScBroadcastAreaSlotMachine::EnterBulkBroadcast()
 
 void ScBroadcastAreaSlotMachine::LeaveBulkBroadcast( SfxHintId nHintId )
 {
-    if (nInBulkBroadcast > 0)
+    if (nInBulkBroadcast <= 0)
+        return;
+
+    if (--nInBulkBroadcast == 0)
     {
-        if (--nInBulkBroadcast == 0)
-        {
-            ScBroadcastAreasBulk().swap( aBulkBroadcastAreas);
-            bool bBroadcasted = BulkBroadcastGroupAreas( nHintId );
-            // Trigger the "final" tracking.
-            if (pDoc->IsTrackFormulasPending())
-                pDoc->FinalTrackFormulas( nHintId );
-            else if (bBroadcasted)
-                pDoc->TrackFormulas( nHintId );
-        }
+        ScBroadcastAreasBulk().swap( aBulkBroadcastAreas);
+        bool bBroadcasted = BulkBroadcastGroupAreas( nHintId );
+        // Trigger the "final" tracking.
+        if (pDoc->IsTrackFormulasPending())
+            pDoc->FinalTrackFormulas( nHintId );
+        else if (bBroadcasted)
+            pDoc->TrackFormulas( nHintId );
     }
 }
 

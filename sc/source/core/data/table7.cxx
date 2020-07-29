@@ -157,22 +157,22 @@ void ScTable::CopyOneCellFromClip(
     // Copy graphics over too
     bool bCopyGraphics
         = (rCxt.getInsertFlag() & InsertDeleteFlags::OBJECTS) != InsertDeleteFlags::NONE;
-    if (bCopyGraphics && rCxt.getClipDoc()->mpDrawLayer)
+    if (!(bCopyGraphics && rCxt.getClipDoc()->mpDrawLayer))
+        return;
+
+    ScDrawLayer* pDrawLayer = GetDoc().GetDrawLayer();
+    OSL_ENSURE(pDrawLayer, "No drawing layer");
+    if (pDrawLayer)
     {
-        ScDrawLayer* pDrawLayer = GetDoc().GetDrawLayer();
-        OSL_ENSURE(pDrawLayer, "No drawing layer");
-        if (pDrawLayer)
-        {
-            const ScAddress aSrcStartPos
-                = rCxt.getClipDoc()->GetClipParam().getWholeRange().aStart;
-            const ScAddress aSrcEndPos = rCxt.getClipDoc()->GetClipParam().getWholeRange().aEnd;
-            tools::Rectangle aSourceRect = rCxt.getClipDoc()->GetMMRect(
-                aSrcStartPos.Col(), aSrcStartPos.Row(), aSrcEndPos.Col(), aSrcEndPos.Row(),
-                aSrcStartPos.Tab());
-            tools::Rectangle aDestRect = GetDoc().GetMMRect(nCol1, nRow1, nCol2, nRow2, nTab);
-            pDrawLayer->CopyFromClip(rCxt.getClipDoc()->mpDrawLayer.get(), aSrcStartPos.Tab(),
-                                     aSourceRect, ScAddress(nCol1, nRow1, nTab), aDestRect);
-        }
+        const ScAddress aSrcStartPos
+            = rCxt.getClipDoc()->GetClipParam().getWholeRange().aStart;
+        const ScAddress aSrcEndPos = rCxt.getClipDoc()->GetClipParam().getWholeRange().aEnd;
+        tools::Rectangle aSourceRect = rCxt.getClipDoc()->GetMMRect(
+            aSrcStartPos.Col(), aSrcStartPos.Row(), aSrcEndPos.Col(), aSrcEndPos.Row(),
+            aSrcStartPos.Tab());
+        tools::Rectangle aDestRect = GetDoc().GetMMRect(nCol1, nRow1, nCol2, nRow2, nTab);
+        pDrawLayer->CopyFromClip(rCxt.getClipDoc()->mpDrawLayer.get(), aSrcStartPos.Tab(),
+                                 aSourceRect, ScAddress(nCol1, nRow1, nTab), aDestRect);
     }
 }
 

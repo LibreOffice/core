@@ -2343,46 +2343,46 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
 
 void ScFormulaCell::HandleStuffAfterParallelCalculation(ScInterpreter* pInterpreter)
 {
-    if( pCode->GetCodeLen() && pDocument )
+    if( !(pCode->GetCodeLen() && pDocument) )
+        return;
+
+    if ( !pCode->IsRecalcModeAlways() )
+        pDocument->RemoveFromFormulaTree( this );
+
+    std::unique_ptr<ScInterpreter> pScopedInterpreter;
+    if (pInterpreter)
+        pInterpreter->Init(this, aPos, *pCode);
+    else
     {
-        if ( !pCode->IsRecalcModeAlways() )
-            pDocument->RemoveFromFormulaTree( this );
+        pScopedInterpreter.reset(new ScInterpreter( this, pDocument, pDocument->GetNonThreadedContext(), aPos, *pCode ));
+        pInterpreter = pScopedInterpreter.get();
+    }
 
-        std::unique_ptr<ScInterpreter> pScopedInterpreter;
-        if (pInterpreter)
-            pInterpreter->Init(this, aPos, *pCode);
-        else
-        {
-            pScopedInterpreter.reset(new ScInterpreter( this, pDocument, pDocument->GetNonThreadedContext(), aPos, *pCode ));
-            pInterpreter = pScopedInterpreter.get();
-        }
-
-        switch (pInterpreter->GetVolatileType())
-        {
-            case ScInterpreter::VOLATILE_MACRO:
-                // The formula contains a volatile macro.
-                pCode->SetExclusiveRecalcModeAlways();
-                pDocument->PutInFormulaTree(this);
-                StartListeningTo(pDocument);
-            break;
-            case ScInterpreter::NOT_VOLATILE:
-                if (pCode->IsRecalcModeAlways())
-                {
-                    // The formula was previously volatile, but no more.
-                    EndListeningTo(pDocument);
-                    pCode->SetExclusiveRecalcModeNormal();
-                }
-                else
-                {
-                    // non-volatile formula.  End listening to the area in case
-                    // it's listening due to macro module change.
-                    pDocument->EndListeningArea(BCA_LISTEN_ALWAYS, false, this);
-                }
-                pDocument->RemoveFromFormulaTree(this);
-            break;
-            default:
-                ;
-        }
+    switch (pInterpreter->GetVolatileType())
+    {
+        case ScInterpreter::VOLATILE_MACRO:
+            // The formula contains a volatile macro.
+            pCode->SetExclusiveRecalcModeAlways();
+            pDocument->PutInFormulaTree(this);
+            StartListeningTo(pDocument);
+        break;
+        case ScInterpreter::NOT_VOLATILE:
+            if (pCode->IsRecalcModeAlways())
+            {
+                // The formula was previously volatile, but no more.
+                EndListeningTo(pDocument);
+                pCode->SetExclusiveRecalcModeNormal();
+            }
+            else
+            {
+                // non-volatile formula.  End listening to the area in case
+                // it's listening due to macro module change.
+                pDocument->EndListeningArea(BCA_LISTEN_ALWAYS, false, this);
+            }
+            pDocument->RemoveFromFormulaTree(this);
+        break;
+        default:
+            ;
     }
 }
 
@@ -2475,39 +2475,39 @@ void ScFormulaCell::Notify( const SfxHint& rHint )
         return;
     }
 
-    if ( pDocument->GetHardRecalcState() == ScDocument::HardRecalcState::OFF )
+    if ( pDocument->GetHardRecalcState() != ScDocument::HardRecalcState::OFF )
+        return;
+
+    if (!(nHint == SfxHintId::ScDataChanged || nHint == SfxHintId::ScTableOpDirty || (bSubTotal && nHint == SfxHintId::ScHiddenRowsChanged)))
+        return;
+
+    bool bForceTrack = false;
+    if ( nHint == SfxHintId::ScTableOpDirty )
     {
-        if (nHint == SfxHintId::ScDataChanged || nHint == SfxHintId::ScTableOpDirty || (bSubTotal && nHint == SfxHintId::ScHiddenRowsChanged))
+        bForceTrack = !bTableOpDirty;
+        if ( !bTableOpDirty )
         {
-            bool bForceTrack = false;
-            if ( nHint == SfxHintId::ScTableOpDirty )
-            {
-                bForceTrack = !bTableOpDirty;
-                if ( !bTableOpDirty )
-                {
-                    pDocument->AddTableOpFormulaCell( this );
-                    bTableOpDirty = true;
-                }
-            }
-            else
-            {
-                bForceTrack = !bDirty;
-                SetDirtyVar();
-            }
-            // Don't remove from FormulaTree to put in FormulaTrack to
-            // put in FormulaTree again and again, only if necessary.
-            // Any other means except ScRecalcMode::ALWAYS by which a cell could
-            // be in FormulaTree if it would notify other cells through
-            // FormulaTrack which weren't in FormulaTrack/FormulaTree before?!?
-            // Yes. The new TableOpDirty made it necessary to have a
-            // forced mode where formulas may still be in FormulaTree from
-            // TableOpDirty but have to notify dependents for normal dirty.
-            if ( (bForceTrack || !pDocument->IsInFormulaTree( this )
-                    || pCode->IsRecalcModeAlways())
-                    && !pDocument->IsInFormulaTrack( this ) )
-                pDocument->AppendToFormulaTrack( this );
+            pDocument->AddTableOpFormulaCell( this );
+            bTableOpDirty = true;
         }
     }
+    else
+    {
+        bForceTrack = !bDirty;
+        SetDirtyVar();
+    }
+    // Don't remove from FormulaTree to put in FormulaTrack to
+    // put in FormulaTree again and again, only if necessary.
+    // Any other means except ScRecalcMode::ALWAYS by which a cell could
+    // be in FormulaTree if it would notify other cells through
+    // FormulaTrack which weren't in FormulaTrack/FormulaTree before?!?
+    // Yes. The new TableOpDirty made it necessary to have a
+    // forced mode where formulas may still be in FormulaTree from
+    // TableOpDirty but have to notify dependents for normal dirty.
+    if ( (bForceTrack || !pDocument->IsInFormulaTree( this )
+            || pCode->IsRecalcModeAlways())
+            && !pDocument->IsInFormulaTrack( this ) )
+        pDocument->AppendToFormulaTrack( this );
 }
 
 void ScFormulaCell::Query( SvtListener::QueryBase& rQuery ) const
@@ -2589,22 +2589,22 @@ void ScFormulaCell::ResetTableOpDirtyVar()
 
 void ScFormulaCell::SetTableOpDirty()
 {
-    if ( !IsInChangeTrack() )
+    if ( IsInChangeTrack() )
+        return;
+
+    if ( pDocument->GetHardRecalcState() != ScDocument::HardRecalcState::OFF )
+        bTableOpDirty = true;
+    else
     {
-        if ( pDocument->GetHardRecalcState() != ScDocument::HardRecalcState::OFF )
-            bTableOpDirty = true;
-        else
+        if ( !bTableOpDirty || !pDocument->IsInFormulaTree( this ) )
         {
-            if ( !bTableOpDirty || !pDocument->IsInFormulaTree( this ) )
+            if ( !bTableOpDirty )
             {
-                if ( !bTableOpDirty )
-                {
-                    pDocument->AddTableOpFormulaCell( this );
-                    bTableOpDirty = true;
-                }
-                pDocument->AppendToFormulaTrack( this );
-                pDocument->TrackFormulas( SfxHintId::ScTableOpDirty );
+                pDocument->AddTableOpFormulaCell( this );
+                bTableOpDirty = true;
             }
+            pDocument->AppendToFormulaTrack( this );
+            pDocument->TrackFormulas( SfxHintId::ScTableOpDirty );
         }
     }
 }
@@ -5224,21 +5224,21 @@ void startListeningArea(
     const ScSingleRefData& rRef2 = *rToken.GetSingleRef2();
     ScAddress aCell1 = rRef1.toAbs(&rDoc, rPos);
     ScAddress aCell2 = rRef2.toAbs(&rDoc, rPos);
-    if (aCell1.IsValid() && aCell2.IsValid())
-    {
-        if (rToken.GetOpCode() == ocColRowNameAuto)
-        {   // automagically
-            if ( rRef1.IsColRel() )
-            {   // ColName
-                aCell2.SetRow(MAXROW);
-            }
-            else
-            {   // RowName
-                aCell2.SetCol(MAXCOL);
-            }
+    if (!(aCell1.IsValid() && aCell2.IsValid()))
+        return;
+
+    if (rToken.GetOpCode() == ocColRowNameAuto)
+    {   // automagically
+        if ( rRef1.IsColRel() )
+        {   // ColName
+            aCell2.SetRow(MAXROW);
         }
-        rDoc.StartListeningArea(ScRange(aCell1, aCell2), false, pCell);
+        else
+        {   // RowName
+            aCell2.SetCol(MAXCOL);
+        }
     }
+    rDoc.StartListeningArea(ScRange(aCell1, aCell2), false, pCell);
 }
 
 }
@@ -5336,22 +5336,22 @@ void endListeningArea(
     const ScSingleRefData& rRef2 = *rToken.GetSingleRef2();
     ScAddress aCell1 = rRef1.toAbs(&rDoc, rPos);
     ScAddress aCell2 = rRef2.toAbs(&rDoc, rPos);
-    if (aCell1.IsValid() && aCell2.IsValid())
-    {
-        if (rToken.GetOpCode() == ocColRowNameAuto)
-        {   // automagically
-            if ( rRef1.IsColRel() )
-            {   // ColName
-                aCell2.SetRow(MAXROW);
-            }
-            else
-            {   // RowName
-                aCell2.SetCol(MAXCOL);
-            }
-        }
+    if (!(aCell1.IsValid() && aCell2.IsValid()))
+        return;
 
-        rDoc.EndListeningArea(ScRange(aCell1, aCell2), false, pCell);
+    if (rToken.GetOpCode() == ocColRowNameAuto)
+    {   // automagically
+        if ( rRef1.IsColRel() )
+        {   // ColName
+            aCell2.SetRow(MAXROW);
+        }
+        else
+        {   // RowName
+            aCell2.SetCol(MAXCOL);
+        }
     }
+
+    rDoc.EndListeningArea(ScRange(aCell1, aCell2), false, pCell);
 }
 
 }

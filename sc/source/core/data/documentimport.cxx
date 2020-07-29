@@ -702,23 +702,23 @@ public:
         std::vector<sc::CellTextAttr> aDefaults(node.size, aDefault);
         mpImpl->miPos = mpImpl->maAttrs.set(mpImpl->miPos, node.position, aDefaults.begin(), aDefaults.end());
 
-        if (node.type == sc::element_type_formula)
+        if (node.type != sc::element_type_formula)
+            return;
+
+        // Have all formula cells start listening to the document.
+        ScFormulaCell** pp = &sc::formula_block::at(*node.data, 0);
+        ScFormulaCell** ppEnd = pp + node.size;
+        for (; pp != ppEnd; ++pp)
         {
-            // Have all formula cells start listening to the document.
-            ScFormulaCell** pp = &sc::formula_block::at(*node.data, 0);
-            ScFormulaCell** ppEnd = pp + node.size;
-            for (; pp != ppEnd; ++pp)
+            ScFormulaCell& rFC = **pp;
+            if (rFC.IsSharedTop())
             {
-                ScFormulaCell& rFC = **pp;
-                if (rFC.IsSharedTop())
-                {
-                    // Register formula cells as a group.
-                    sc::SharedFormulaUtil::startListeningAsGroup(mrDocImpl.maListenCxt, pp);
-                    pp += rFC.GetSharedLength() - 1; // Move to the last one in the group.
-                }
-                else
-                    rFC.StartListeningTo(mrDocImpl.maListenCxt);
+                // Register formula cells as a group.
+                sc::SharedFormulaUtil::startListeningAsGroup(mrDocImpl.maListenCxt, pp);
+                pp += rFC.GetSharedLength() - 1; // Move to the last one in the group.
             }
+            else
+                rFC.StartListeningTo(mrDocImpl.maListenCxt);
         }
     }
 

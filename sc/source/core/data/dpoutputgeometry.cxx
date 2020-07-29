@@ -184,22 +184,22 @@ void ScDPOutputGeometry::adjustFieldsForDataLayout(sal_uInt32& rColumnFields, sa
     rRowFields = mnRowFields;
     rColumnFields = mnColumnFields;
 
-    if (mnDataFields < 2)
+    if (mnDataFields >= 2)
+        return;
+
+    // Data layout field can be either row or column field, never page field.
+    switch (meDataLayoutType)
     {
-        // Data layout field can be either row or column field, never page field.
-        switch (meDataLayoutType)
-        {
-            case Column:
-                if (rColumnFields > 0)
-                    rColumnFields -= 1;
-            break;
-            case Row:
-                if (rRowFields > 0)
-                    rRowFields -= 1;
-            break;
-            default:
-                ;
-        }
+        case Column:
+            if (rColumnFields > 0)
+                rColumnFields -= 1;
+        break;
+        case Row:
+            if (rRowFields > 0)
+                rRowFields -= 1;
+        break;
+        default:
+            ;
     }
 }
 

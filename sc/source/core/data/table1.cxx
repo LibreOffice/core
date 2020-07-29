@@ -1690,21 +1690,21 @@ void ScTable::UpdateDrawRef( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nR
                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                     SCCOL nDx, SCROW nDy, SCTAB nDz, bool bUpdateNoteCaptionPos )
 {
-    if ( nTab >= nTab1 && nTab <= nTab2 && nDz == 0 )       // only within the table
+    if ( !(nTab >= nTab1 && nTab <= nTab2 && nDz == 0) )       // only within the table
+        return;
+
+    ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
+    if ( eUpdateRefMode != URM_COPY && pDrawLayer )
     {
-        ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
-        if ( eUpdateRefMode != URM_COPY && pDrawLayer )
-        {
-            if ( eUpdateRefMode == URM_MOVE )
-            {                                               // source range
-                nCol1 = sal::static_int_cast<SCCOL>( nCol1 - nDx );
-                nRow1 = sal::static_int_cast<SCROW>( nRow1 - nDy );
-                nCol2 = sal::static_int_cast<SCCOL>( nCol2 - nDx );
-                nRow2 = sal::static_int_cast<SCROW>( nRow2 - nDy );
-            }
-            pDrawLayer->MoveArea( nTab, nCol1,nRow1, nCol2,nRow2, nDx,nDy,
-                                    (eUpdateRefMode == URM_INSDEL), bUpdateNoteCaptionPos );
+        if ( eUpdateRefMode == URM_MOVE )
+        {                                               // source range
+            nCol1 = sal::static_int_cast<SCCOL>( nCol1 - nDx );
+            nRow1 = sal::static_int_cast<SCROW>( nRow1 - nDy );
+            nCol2 = sal::static_int_cast<SCCOL>( nCol2 - nDx );
+            nRow2 = sal::static_int_cast<SCROW>( nRow2 - nDy );
         }
+        pDrawLayer->MoveArea( nTab, nCol1,nRow1, nCol2,nRow2, nDx,nDy,
+                                (eUpdateRefMode == URM_INSDEL), bUpdateNoteCaptionPos );
     }
 }
 

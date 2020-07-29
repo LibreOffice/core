@@ -134,24 +134,24 @@ void ScDPSaveMember::WriteToSource( const uno::Reference<uno::XInterface>& xMemb
 {
     uno::Reference<beans::XPropertySet> xMembProp( xMember, uno::UNO_QUERY );
     OSL_ENSURE( xMembProp.is(), "no properties at member" );
-    if ( xMembProp.is() )
-    {
-        // exceptions are caught at ScDPSaveData::WriteToSource
+    if ( !xMembProp.is() )
+        return;
 
-        if ( nVisibleMode != SC_DPSAVEMODE_DONTKNOW )
-            lcl_SetBoolProperty( xMembProp,
-                    SC_UNO_DP_ISVISIBLE, static_cast<bool>(nVisibleMode) );
+    // exceptions are caught at ScDPSaveData::WriteToSource
 
-        if ( nShowDetailsMode != SC_DPSAVEMODE_DONTKNOW )
-            lcl_SetBoolProperty( xMembProp,
-                    SC_UNO_DP_SHOWDETAILS, static_cast<bool>(nShowDetailsMode) );
+    if ( nVisibleMode != SC_DPSAVEMODE_DONTKNOW )
+        lcl_SetBoolProperty( xMembProp,
+                SC_UNO_DP_ISVISIBLE, static_cast<bool>(nVisibleMode) );
 
-        if (mpLayoutName)
-            ScUnoHelpFunctions::SetOptionalPropertyValue(xMembProp, SC_UNO_DP_LAYOUTNAME, *mpLayoutName);
+    if ( nShowDetailsMode != SC_DPSAVEMODE_DONTKNOW )
+        lcl_SetBoolProperty( xMembProp,
+                SC_UNO_DP_SHOWDETAILS, static_cast<bool>(nShowDetailsMode) );
 
-        if ( nPosition >= 0 )
-            ScUnoHelpFunctions::SetOptionalPropertyValue(xMembProp, SC_UNO_DP_POSITION, nPosition);
-    }
+    if (mpLayoutName)
+        ScUnoHelpFunctions::SetOptionalPropertyValue(xMembProp, SC_UNO_DP_LAYOUTNAME, *mpLayoutName);
+
+    if ( nPosition >= 0 )
+        ScUnoHelpFunctions::SetOptionalPropertyValue(xMembProp, SC_UNO_DP_POSITION, nPosition);
 }
 
 #if DUMP_PIVOT_TABLE

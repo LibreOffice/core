@@ -53,23 +53,23 @@ static void lcl_GetChartParameters( const uno::Reference< chart2::XChartDocument
     uno::Reference< chart2::data::XDataSource > xDataSource = xReceiver->getUsedData();
     uno::Reference< chart2::data::XDataProvider > xProvider = xChartDoc->getDataProvider();
 
-    if ( xProvider.is() )
+    if ( !xProvider.is() )
+        return;
+
+    const uno::Sequence< beans::PropertyValue > aArgs( xProvider->detectArguments( xDataSource ) );
+
+    for (const beans::PropertyValue& rProp : aArgs)
     {
-        const uno::Sequence< beans::PropertyValue > aArgs( xProvider->detectArguments( xDataSource ) );
+        OUString aPropName(rProp.Name);
 
-        for (const beans::PropertyValue& rProp : aArgs)
-        {
-            OUString aPropName(rProp.Name);
-
-            if ( aPropName == "CellRangeRepresentation" )
-                rProp.Value >>= rRanges;
-            else if ( aPropName == "DataRowSource" )
-                rDataRowSource = static_cast<chart::ChartDataRowSource>(ScUnoHelpFunctions::GetEnumFromAny( rProp.Value ));
-            else if ( aPropName == "HasCategories" )
-                rHasCategories = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
-            else if ( aPropName == "FirstCellAsLabel" )
-                rFirstCellAsLabel = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
-        }
+        if ( aPropName == "CellRangeRepresentation" )
+            rProp.Value >>= rRanges;
+        else if ( aPropName == "DataRowSource" )
+            rDataRowSource = static_cast<chart::ChartDataRowSource>(ScUnoHelpFunctions::GetEnumFromAny( rProp.Value ));
+        else if ( aPropName == "HasCategories" )
+            rHasCategories = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
+        else if ( aPropName == "FirstCellAsLabel" )
+            rFirstCellAsLabel = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
     }
 }
 
@@ -77,23 +77,23 @@ static void lcl_SetChartParameters( const uno::Reference< chart2::data::XDataRec
             const OUString& rRanges, chart::ChartDataRowSource eDataRowSource,
             bool bHasCategories, bool bFirstCellAsLabel )
 {
-    if ( xReceiver.is() )
-    {
-        uno::Sequence< beans::PropertyValue > aArgs( 4 );
-        aArgs[0] = beans::PropertyValue(
-            "CellRangeRepresentation", -1,
-            uno::makeAny( rRanges ), beans::PropertyState_DIRECT_VALUE );
-        aArgs[1] = beans::PropertyValue(
-            "HasCategories", -1,
-            uno::makeAny( bHasCategories ), beans::PropertyState_DIRECT_VALUE );
-        aArgs[2] = beans::PropertyValue(
-            "FirstCellAsLabel", -1,
-            uno::makeAny( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE );
-        aArgs[3] = beans::PropertyValue(
-            "DataRowSource", -1,
-            uno::makeAny( eDataRowSource ), beans::PropertyState_DIRECT_VALUE );
-        xReceiver->setArguments( aArgs );
-    }
+    if ( !xReceiver.is() )
+        return;
+
+    uno::Sequence< beans::PropertyValue > aArgs( 4 );
+    aArgs[0] = beans::PropertyValue(
+        "CellRangeRepresentation", -1,
+        uno::makeAny( rRanges ), beans::PropertyState_DIRECT_VALUE );
+    aArgs[1] = beans::PropertyValue(
+        "HasCategories", -1,
+        uno::makeAny( bHasCategories ), beans::PropertyState_DIRECT_VALUE );
+    aArgs[2] = beans::PropertyValue(
+        "FirstCellAsLabel", -1,
+        uno::makeAny( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE );
+    aArgs[3] = beans::PropertyValue(
+        "DataRowSource", -1,
+        uno::makeAny( eDataRowSource ), beans::PropertyState_DIRECT_VALUE );
+    xReceiver->setArguments( aArgs );
 }
 
 bool ScDocument::HasChartAtPoint( SCTAB nTab, const Point& rPos, OUString& rName )
@@ -183,19 +183,19 @@ void ScDocument::GetChartRanges( const OUString& rChartName, ::std::vector< ScRa
 void ScDocument::SetChartRanges( const OUString& rChartName, const ::std::vector< ScRangeList >& rRangesVector )
 {
     uno::Reference< chart2::XChartDocument > xChartDoc( GetChartByName( rChartName ) );
-    if ( xChartDoc.is() )
+    if ( !xChartDoc.is() )
+        return;
+
+    sal_Int32 nCount = static_cast<sal_Int32>( rRangesVector.size() );
+    uno::Sequence< OUString > aRangeStrings(nCount);
+    for( sal_Int32 nN=0; nN<nCount; nN++ )
     {
-        sal_Int32 nCount = static_cast<sal_Int32>( rRangesVector.size() );
-        uno::Sequence< OUString > aRangeStrings(nCount);
-        for( sal_Int32 nN=0; nN<nCount; nN++ )
-        {
-            ScRangeList aScRangeList( rRangesVector[nN] );
-            OUString sRangeStr;
-            aScRangeList.Format( sRangeStr, ScRefFlags::RANGE_ABS_3D, *this, GetAddressConvention() );
-            aRangeStrings[nN]=sRangeStr;
-        }
-        ScChartHelper::SetChartRanges( xChartDoc, aRangeStrings );
+        ScRangeList aScRangeList( rRangesVector[nN] );
+        OUString sRangeStr;
+        aScRangeList.Format( sRangeStr, ScRefFlags::RANGE_ABS_3D, *this, GetAddressConvention() );
+        aRangeStrings[nN]=sRangeStr;
     }
+    ScChartHelper::SetChartRanges( xChartDoc, aRangeStrings );
 }
 
 void ScDocument::GetOldChartParameters( const OUString& rName,
@@ -365,26 +365,26 @@ void ScDocument::RestoreChartListener( const OUString& rName )
     // (called when a chart is saved, because then it might be swapped out and stop listening itself).
 
     uno::Reference< embed::XEmbeddedObject > xObject = FindOleObjectByName( rName );
-    if ( xObject.is() )
-    {
-        uno::Reference< util::XCloseable > xComponent = xObject->getComponent();
-        uno::Reference< chart2::XChartDocument > xChartDoc( xComponent, uno::UNO_QUERY );
-        uno::Reference< chart2::data::XDataReceiver > xReceiver( xComponent, uno::UNO_QUERY );
-        if ( xChartDoc.is() && xReceiver.is() && !xChartDoc->hasInternalDataProvider())
-        {
-            const uno::Sequence<OUString> aRepresentations( xReceiver->getUsedRangeRepresentations() );
-            ScRangeListRef aRanges = new ScRangeList;
-            for ( const auto& rRepresentation : aRepresentations )
-            {
-                ScRange aRange;
-                ScAddress::Details aDetails(GetAddressConvention(), 0, 0);
-                if ( aRange.ParseAny( rRepresentation, this, aDetails ) & ScRefFlags::VALID )
-                    aRanges->push_back( aRange );
-            }
+    if ( !xObject.is() )
+        return;
 
-            pChartListenerCollection->ChangeListening( rName, aRanges );
-        }
+    uno::Reference< util::XCloseable > xComponent = xObject->getComponent();
+    uno::Reference< chart2::XChartDocument > xChartDoc( xComponent, uno::UNO_QUERY );
+    uno::Reference< chart2::data::XDataReceiver > xReceiver( xComponent, uno::UNO_QUERY );
+    if ( !(xChartDoc.is() && xReceiver.is() && !xChartDoc->hasInternalDataProvider()))
+        return;
+
+    const uno::Sequence<OUString> aRepresentations( xReceiver->getUsedRangeRepresentations() );
+    ScRangeListRef aRanges = new ScRangeList;
+    for ( const auto& rRepresentation : aRepresentations )
+    {
+        ScRange aRange;
+        ScAddress::Details aDetails(GetAddressConvention(), 0, 0);
+        if ( aRange.ParseAny( rRepresentation, this, aDetails ) & ScRefFlags::VALID )
+            aRanges->push_back( aRange );
     }
+
+    pChartListenerCollection->ChangeListening( rName, aRanges );
 }
 
 void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,

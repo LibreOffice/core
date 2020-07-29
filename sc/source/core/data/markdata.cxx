@@ -242,43 +242,43 @@ void ScMarkData::MarkToSimple()
     if ( bMultiMarked && bMarked )
         MarkToMulti();                  // may result in bMarked and bMultiMarked reset
 
-    if ( bMultiMarked )
+    if ( !bMultiMarked )
+        return;
+
+    ScRange aNew = aMultiRange;
+
+    bool bOk = false;
+    SCCOL nStartCol = aNew.aStart.Col();
+    SCCOL nEndCol   = aNew.aEnd.Col();
+
+    while ( nStartCol < nEndCol && !aMultiSel.HasMarks( nStartCol ) )
+        ++nStartCol;
+    while ( nStartCol < nEndCol && !aMultiSel.HasMarks( nEndCol ) )
+        --nEndCol;
+
+    // Rows are only taken from MarkArray
+    SCROW nStartRow, nEndRow;
+    if ( aMultiSel.HasOneMark( nStartCol, nStartRow, nEndRow ) )
     {
-        ScRange aNew = aMultiRange;
+        bOk = true;
+        SCROW nCmpStart, nCmpEnd;
+        for (SCCOL nCol=nStartCol+1; nCol<=nEndCol && bOk; nCol++)
+            if ( !aMultiSel.HasOneMark( nCol, nCmpStart, nCmpEnd )
+                    || nCmpStart != nStartRow || nCmpEnd != nEndRow )
+                bOk = false;
+    }
 
-        bool bOk = false;
-        SCCOL nStartCol = aNew.aStart.Col();
-        SCCOL nEndCol   = aNew.aEnd.Col();
+    if (bOk)
+    {
+        aNew.aStart.SetCol(nStartCol);
+        aNew.aStart.SetRow(nStartRow);
+        aNew.aEnd.SetCol(nEndCol);
+        aNew.aEnd.SetRow(nEndRow);
 
-        while ( nStartCol < nEndCol && !aMultiSel.HasMarks( nStartCol ) )
-            ++nStartCol;
-        while ( nStartCol < nEndCol && !aMultiSel.HasMarks( nEndCol ) )
-            --nEndCol;
-
-        // Rows are only taken from MarkArray
-        SCROW nStartRow, nEndRow;
-        if ( aMultiSel.HasOneMark( nStartCol, nStartRow, nEndRow ) )
-        {
-            bOk = true;
-            SCROW nCmpStart, nCmpEnd;
-            for (SCCOL nCol=nStartCol+1; nCol<=nEndCol && bOk; nCol++)
-                if ( !aMultiSel.HasOneMark( nCol, nCmpStart, nCmpEnd )
-                        || nCmpStart != nStartRow || nCmpEnd != nEndRow )
-                    bOk = false;
-        }
-
-        if (bOk)
-        {
-            aNew.aStart.SetCol(nStartCol);
-            aNew.aStart.SetRow(nStartRow);
-            aNew.aEnd.SetCol(nEndCol);
-            aNew.aEnd.SetRow(nEndRow);
-
-            ResetMark();
-            aMarkRange = aNew;
-            bMarked = true;
-            bMarkIsNeg = false;
-        }
+        ResetMark();
+        aMarkRange = aNew;
+        bMarked = true;
+        bMarkIsNeg = false;
     }
 }
 

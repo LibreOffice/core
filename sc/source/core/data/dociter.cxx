@@ -80,21 +80,21 @@ static void ScAttrArray_IterGetNumberFormat( sal_uInt32& nFormat, const ScAttrAr
         SCROW& nAttrEndRow, const ScAttrArray* pNewArr, SCROW nRow,
         const ScDocument* pDoc, const ScInterpreterContext* pContext = nullptr )
 {
-    if ( rpArr != pNewArr || nAttrEndRow < nRow )
-    {
-        SCROW nRowStart = 0;
-        SCROW nRowEnd = pDoc->MaxRow();
-        const ScPatternAttr* pPattern = pNewArr->GetPatternRange( nRowStart, nRowEnd, nRow );
-        if( !pPattern )
-        {
-            pPattern = pDoc->GetDefPattern();
-            nRowEnd = pDoc->MaxRow();
-        }
+    if ( rpArr == pNewArr && nAttrEndRow >= nRow )
+        return;
 
-        nFormat = pPattern->GetNumberFormat( pContext ? pContext->GetFormatTable() : pDoc->GetFormatTable() );
-        rpArr = pNewArr;
-        nAttrEndRow = nRowEnd;
+    SCROW nRowStart = 0;
+    SCROW nRowEnd = pDoc->MaxRow();
+    const ScPatternAttr* pPattern = pNewArr->GetPatternRange( nRowStart, nRowEnd, nRow );
+    if( !pPattern )
+    {
+        pPattern = pDoc->GetDefPattern();
+        nRowEnd = pDoc->MaxRow();
     }
+
+    nFormat = pPattern->GetNumberFormat( pContext ? pContext->GetFormatTable() : pDoc->GetFormatTable() );
+    rpArr = pNewArr;
+    nAttrEndRow = nRowEnd;
 }
 
 ScValueIterator::ScValueIterator( ScDocument* pDocument, const ScRange& rRange,
@@ -1059,18 +1059,18 @@ ScQueryCellIterator::ScQueryCellIterator(ScDocument* pDocument, const ScInterpre
     nCol = maParam.nCol1;
     nRow = maParam.nRow1;
     SCSIZE i;
-    if (bMod) // Or else it's already inserted
+    if (!bMod) // Or else it's already inserted
+        return;
+
+    SCSIZE nCount = maParam.GetEntryCount();
+    for (i = 0; (i < nCount) && (maParam.GetEntry(i).bDoQuery); ++i)
     {
-        SCSIZE nCount = maParam.GetEntryCount();
-        for (i = 0; (i < nCount) && (maParam.GetEntry(i).bDoQuery); ++i)
-        {
-            ScQueryEntry& rEntry = maParam.GetEntry(i);
-            ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-            sal_uInt32 nIndex = 0;
-            bool bNumber = mrContext.GetFormatTable()->IsNumberFormat(
-                rItem.maString.getString(), nIndex, rItem.mfVal);
-            rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
-        }
+        ScQueryEntry& rEntry = maParam.GetEntry(i);
+        ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+        sal_uInt32 nIndex = 0;
+        bool bNumber = mrContext.GetFormatTable()->IsNumberFormat(
+            rItem.maString.getString(), nIndex, rItem.mfVal);
+        rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
     }
 }
 

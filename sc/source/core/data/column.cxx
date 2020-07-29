@@ -464,22 +464,22 @@ void ScColumn::ClearSelectionItems( const sal_uInt16* pWhich,const ScMarkData& r
     SCROW nTop;
     SCROW nBottom;
 
-    if (pAttrArray)
+    if (!pAttrArray)
+        return;
+
+    if (rMark.IsMultiMarked() )
     {
-        if (rMark.IsMultiMarked() )
+        ScMultiSelIter aMultiIter( rMark.GetMultiSelData(), nCol );
+        while (aMultiIter.Next( nTop, nBottom ))
+            pAttrArray->ClearItems(nTop, nBottom, pWhich);
+    }
+    else if (rMark.IsMarked())
+    {
+        ScRange aRange;
+        rMark.GetMarkArea(aRange);
+        if (aRange.aStart.Col() <= nCol && nCol <= aRange.aEnd.Col())
         {
-            ScMultiSelIter aMultiIter( rMark.GetMultiSelData(), nCol );
-            while (aMultiIter.Next( nTop, nBottom ))
-                pAttrArray->ClearItems(nTop, nBottom, pWhich);
-        }
-        else if (rMark.IsMarked())
-        {
-            ScRange aRange;
-            rMark.GetMarkArea(aRange);
-            if (aRange.aStart.Col() <= nCol && nCol <= aRange.aEnd.Col())
-            {
-                pAttrArray->ClearItems(aRange.aStart.Row(), aRange.aEnd.Row(), pWhich);
-            }
+            pAttrArray->ClearItems(aRange.aStart.Row(), aRange.aEnd.Row(), pWhich);
         }
     }
 }
@@ -1489,29 +1489,29 @@ class CopyByCloneHandler
             }
         }
 
-        if (bCloneString)
+        if (!bCloneString)
+            return;
+
+        svl::SharedString aStr = rSrcCell.GetString();
+        if (aStr.isEmpty())
+            // Don't create empty string cells.
+            return;
+
+        if (rSrcCell.IsMultilineResult())
         {
-            svl::SharedString aStr = rSrcCell.GetString();
-            if (aStr.isEmpty())
-                // Don't create empty string cells.
-                return;
-
-            if (rSrcCell.IsMultilineResult())
-            {
-                // Clone as an edit text object.
-                EditEngine& rEngine = mrDestCol.GetDoc()->GetEditEngine();
-                rEngine.SetText(aStr.getString());
-                maDestPos.miCellPos =
-                    mrDestCol.GetCellStore().set(maDestPos.miCellPos, nRow, rEngine.CreateTextObject().release());
-            }
-            else
-            {
-                maDestPos.miCellPos =
-                    mrDestCol.GetCellStore().set(maDestPos.miCellPos, nRow, aStr);
-            }
-
-            setDefaultAttrToDest(nRow);
+            // Clone as an edit text object.
+            EditEngine& rEngine = mrDestCol.GetDoc()->GetEditEngine();
+            rEngine.SetText(aStr.getString());
+            maDestPos.miCellPos =
+                mrDestCol.GetCellStore().set(maDestPos.miCellPos, nRow, rEngine.CreateTextObject().release());
         }
+        else
+        {
+            maDestPos.miCellPos =
+                mrDestCol.GetCellStore().set(maDestPos.miCellPos, nRow, aStr);
+        }
+
+        setDefaultAttrToDest(nRow);
     }
 
 public:
@@ -1531,28 +1531,28 @@ public:
 
     ~CopyByCloneHandler()
     {
-        if (mpDestPos)
+        if (!mpDestPos)
+            return;
+
+        // If broadcasters were setup in the same column,
+        // maDestPos.miBroadcasterPos doesn't match
+        // mrDestCol.maBroadcasters because it is never passed anywhere.
+        // Assign a corresponding iterator before copying all over.
+        // Otherwise this may result in wrongly copying a singular
+        // iterator.
+
         {
-            // If broadcasters were setup in the same column,
-            // maDestPos.miBroadcasterPos doesn't match
-            // mrDestCol.maBroadcasters because it is never passed anywhere.
-            // Assign a corresponding iterator before copying all over.
-            // Otherwise this may result in wrongly copying a singular
-            // iterator.
-
-            {
-                /* XXX Using a temporary ColumnBlockPosition just for
-                 * initializing from ScColumn::maBroadcasters.begin() is ugly,
-                 * on the other hand we don't want to expose
-                 * ScColumn::maBroadcasters to the outer world and have a
-                 * getter. */
-                sc::ColumnBlockPosition aTempBlock;
-                mrDestCol.InitBlockPosition(aTempBlock);
-                maDestPos.miBroadcasterPos = aTempBlock.miBroadcasterPos;
-            }
-
-            *mpDestPos = maDestPos;
+            /* XXX Using a temporary ColumnBlockPosition just for
+             * initializing from ScColumn::maBroadcasters.begin() is ugly,
+             * on the other hand we don't want to expose
+             * ScColumn::maBroadcasters to the outer world and have a
+             * getter. */
+            sc::ColumnBlockPosition aTempBlock;
+            mrDestCol.InitBlockPosition(aTempBlock);
+            maDestPos.miBroadcasterPos = aTempBlock.miBroadcasterPos;
         }
+
+        *mpDestPos = maDestPos;
     }
 
     void setStartListening( bool b )
@@ -1731,29 +1731,29 @@ void ScColumn::CopyToColumn(
             pAttrArray->CopyArea( nRow1, nRow2, 0, *rColumn.pAttrArray);
     }
 
-    if ((nFlags & InsertDeleteFlags::CONTENTS) != InsertDeleteFlags::NONE)
-    {
-        if (bAsLink)
-        {
-            CopyAsLinkHandler aFunc(*this, rColumn, rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol), nFlags);
-            aFunc.setStartListening(rCxt.isStartListening());
-            sc::ParseBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
-        }
-        else
-        {
-            // Compare the ScDocumentPool* to determine if we are copying
-            // within the same document. If not, re-intern shared strings.
-            svl::SharedStringPool* pSharedStringPool =
-                (GetDoc()->GetPool() != rColumn.GetDoc()->GetPool()) ?
-                &rColumn.GetDoc()->GetSharedStringPool() : nullptr;
-            CopyByCloneHandler aFunc(*this, rColumn, rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol), nFlags,
-                    pSharedStringPool, bGlobalNamesToLocal);
-            aFunc.setStartListening(rCxt.isStartListening());
-            sc::ParseBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
-        }
+    if ((nFlags & InsertDeleteFlags::CONTENTS) == InsertDeleteFlags::NONE)
+        return;
 
-        rColumn.CellStorageModified();
+    if (bAsLink)
+    {
+        CopyAsLinkHandler aFunc(*this, rColumn, rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol), nFlags);
+        aFunc.setStartListening(rCxt.isStartListening());
+        sc::ParseBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
     }
+    else
+    {
+        // Compare the ScDocumentPool* to determine if we are copying
+        // within the same document. If not, re-intern shared strings.
+        svl::SharedStringPool* pSharedStringPool =
+            (GetDoc()->GetPool() != rColumn.GetDoc()->GetPool()) ?
+            &rColumn.GetDoc()->GetSharedStringPool() : nullptr;
+        CopyByCloneHandler aFunc(*this, rColumn, rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol), nFlags,
+                pSharedStringPool, bGlobalNamesToLocal);
+        aFunc.setStartListening(rCxt.isStartListening());
+        sc::ParseBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
+    }
+
+    rColumn.CellStorageModified();
 }
 
 void ScColumn::UndoToColumn(
@@ -2281,41 +2281,41 @@ class UpdateRefOnNonCopy
 
         sc::RefUpdateResult aRes = pCode->AdjustReferenceOnMove(*mpCxt, aOldPos, aPos);
 
-        if (aRes.mbReferenceModified || aRes.mbNameModified || bRecalcOnMove)
+        if (!(aRes.mbReferenceModified || aRes.mbNameModified || bRecalcOnMove))
+            return;
+
+        sc::AutoCalcSwitch aACSwitch(mpCxt->mrDoc, false);
+
+        if (aRes.mbNameModified)
+            recompileTokenArray(*pTop);
+
+        // Perform end-listening, start-listening, and dirtying on all
+        // formula cells in the group.
+
+        // Make sure that the start and end listening contexts share the
+        // same block position set, else an invalid iterator may ensue.
+        auto pPosSet = std::make_shared<sc::ColumnBlockPositionSet>(mpCxt->mrDoc);
+
+        sc::StartListeningContext aStartCxt(mpCxt->mrDoc, pPosSet);
+        sc::EndListeningContext aEndCxt(mpCxt->mrDoc, pPosSet, pOldCode.get());
+
+        aEndCxt.setPositionDelta(
+            ScAddress(-mpCxt->mnColDelta, -mpCxt->mnRowDelta, -mpCxt->mnTabDelta));
+
+        for (; pp != ppEnd; ++pp)
         {
-            sc::AutoCalcSwitch aACSwitch(mpCxt->mrDoc, false);
-
-            if (aRes.mbNameModified)
-                recompileTokenArray(*pTop);
-
-            // Perform end-listening, start-listening, and dirtying on all
-            // formula cells in the group.
-
-            // Make sure that the start and end listening contexts share the
-            // same block position set, else an invalid iterator may ensue.
-            auto pPosSet = std::make_shared<sc::ColumnBlockPositionSet>(mpCxt->mrDoc);
-
-            sc::StartListeningContext aStartCxt(mpCxt->mrDoc, pPosSet);
-            sc::EndListeningContext aEndCxt(mpCxt->mrDoc, pPosSet, pOldCode.get());
-
-            aEndCxt.setPositionDelta(
-                ScAddress(-mpCxt->mnColDelta, -mpCxt->mnRowDelta, -mpCxt->mnTabDelta));
-
-            for (; pp != ppEnd; ++pp)
-            {
-                ScFormulaCell* p = *pp;
-                p->EndListeningTo(aEndCxt);
-                p->StartListeningTo(aStartCxt);
-                p->SetDirty();
-            }
-
-            mbUpdated = true;
-
-            // Move from clipboard is Cut&Paste, then do not copy the original
-            // positions' formula cells to the Undo document.
-            if (!mbClipboardSource || !bCellMoved)
-                fillUndoDoc(aOldPos, rGroup.mnLength, *pOldCode);
+            ScFormulaCell* p = *pp;
+            p->EndListeningTo(aEndCxt);
+            p->StartListeningTo(aStartCxt);
+            p->SetDirty();
         }
+
+        mbUpdated = true;
+
+        // Move from clipboard is Cut&Paste, then do not copy the original
+        // positions' formula cells to the Undo document.
+        if (!mbClipboardSource || !bCellMoved)
+            fillUndoDoc(aOldPos, rGroup.mnLength, *pOldCode);
     }
 
     void fillUndoDoc( const ScAddress& rOldPos, SCROW nLength, const ScTokenArray& rOldCode )

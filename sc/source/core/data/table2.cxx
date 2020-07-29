@@ -720,56 +720,56 @@ void ScTable::CopyFromClip(
     if (nRow2 > pDocument->MaxRow())
         nRow2 = pDocument->MaxRow();
 
-    if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
+    if (!(ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2)))
+        return;
+
+    CreateColumnIfNotExists(nCol2);
+    for ( SCCOL i = nCol1; i <= nCol2; i++)
     {
-        CreateColumnIfNotExists(nCol2);
-        for ( SCCOL i = nCol1; i <= nCol2; i++)
+        pTable->CreateColumnIfNotExists(i - nDx);
+        aCol[i].CopyFromClip(rCxt, nRow1, nRow2, nDy, pTable->aCol[i - nDx]); // notes are handles at column level
+    }
+
+    if (rCxt.getInsertFlag() & InsertDeleteFlags::ATTRIB)
+    {
+        // make sure that there are no old references to the cond formats
+        sal_uInt16 nWhichArray[2];
+        nWhichArray[0] = ATTR_CONDITIONAL;
+        nWhichArray[1] = 0;
+        for ( SCCOL i = nCol1; i <= nCol2; ++i)
+            aCol[i].ClearItems(nRow1, nRow2, nWhichArray);
+    }
+
+    if ((rCxt.getInsertFlag() & InsertDeleteFlags::ATTRIB) == InsertDeleteFlags::NONE)
+        return;
+
+    if (nRow1==0 && nRow2==pDocument->MaxRow() && mpColWidth && pTable->mpColWidth)
+        mpColWidth->CopyFrom(*pTable->mpColWidth, nCol1, nCol2, nCol1 - nDx);
+
+    if (nCol1==0 && nCol2==pDocument->MaxCol() && mpRowHeights && pTable->mpRowHeights &&
+                                     pRowFlags && pTable->pRowFlags)
+    {
+        CopyRowHeight(*pTable, nRow1, nRow2, -nDy);
+        // Must copy CRFlags::ManualSize bit too, otherwise pRowHeight doesn't make sense
+        for (SCROW j=nRow1; j<=nRow2; j++)
         {
-            pTable->CreateColumnIfNotExists(i - nDx);
-            aCol[i].CopyFromClip(rCxt, nRow1, nRow2, nDy, pTable->aCol[i - nDx]); // notes are handles at column level
-        }
-
-        if (rCxt.getInsertFlag() & InsertDeleteFlags::ATTRIB)
-        {
-            // make sure that there are no old references to the cond formats
-            sal_uInt16 nWhichArray[2];
-            nWhichArray[0] = ATTR_CONDITIONAL;
-            nWhichArray[1] = 0;
-            for ( SCCOL i = nCol1; i <= nCol2; ++i)
-                aCol[i].ClearItems(nRow1, nRow2, nWhichArray);
-        }
-
-        if ((rCxt.getInsertFlag() & InsertDeleteFlags::ATTRIB) != InsertDeleteFlags::NONE)
-        {
-            if (nRow1==0 && nRow2==pDocument->MaxRow() && mpColWidth && pTable->mpColWidth)
-                mpColWidth->CopyFrom(*pTable->mpColWidth, nCol1, nCol2, nCol1 - nDx);
-
-            if (nCol1==0 && nCol2==pDocument->MaxCol() && mpRowHeights && pTable->mpRowHeights &&
-                                             pRowFlags && pTable->pRowFlags)
-            {
-                CopyRowHeight(*pTable, nRow1, nRow2, -nDy);
-                // Must copy CRFlags::ManualSize bit too, otherwise pRowHeight doesn't make sense
-                for (SCROW j=nRow1; j<=nRow2; j++)
-                {
-                    if ( pTable->pRowFlags->GetValue(j-nDy) & CRFlags::ManualSize )
-                        pRowFlags->OrValue( j, CRFlags::ManualSize);
-                    else
-                        pRowFlags->AndValue( j, ~CRFlags::ManualSize);
-                }
-            }
-
-            // Do not set protected cell in a protected sheet
-            if (IsProtected() && (rCxt.getInsertFlag() & InsertDeleteFlags::ATTRIB))
-            {
-                ScPatternAttr aPattern(pDocument->GetPool());
-                aPattern.GetItemSet().Put( ScProtectionAttr( false ) );
-                ApplyPatternArea( nCol1, nRow1, nCol2, nRow2, aPattern );
-            }
-
-            // create deep copies for conditional formatting
-            CopyConditionalFormat( nCol1, nRow1, nCol2, nRow2, nDx, nDy, pTable);
+            if ( pTable->pRowFlags->GetValue(j-nDy) & CRFlags::ManualSize )
+                pRowFlags->OrValue( j, CRFlags::ManualSize);
+            else
+                pRowFlags->AndValue( j, ~CRFlags::ManualSize);
         }
     }
+
+    // Do not set protected cell in a protected sheet
+    if (IsProtected() && (rCxt.getInsertFlag() & InsertDeleteFlags::ATTRIB))
+    {
+        ScPatternAttr aPattern(pDocument->GetPool());
+        aPattern.GetItemSet().Put( ScProtectionAttr( false ) );
+        ApplyPatternArea( nCol1, nRow1, nCol2, nRow2, aPattern );
+    }
+
+    // create deep copies for conditional formatting
+    CopyConditionalFormat( nCol1, nRow1, nCol2, nRow2, nDx, nDy, pTable);
 }
 
 void ScTable::MixData(
@@ -1016,70 +1016,70 @@ void ScTable::TransposeColNotes(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SC
         }
     }
 
-    if (itBlk != itBlkEnd)
+    if (itBlk == itBlkEnd)
         // Specified range found
+        return;
+
+    nRowPos = static_cast<size_t>(nRow2); // End row position.
+
+    // Keep processing until we hit the end row position.
+    sc::cellnote_block::const_iterator itData, itDataEnd;
+    for (; itBlk != itBlkEnd; ++itBlk, nBlockStart = nBlockEnd, nOffsetInBlock = 0)
     {
-        nRowPos = static_cast<size_t>(nRow2); // End row position.
+        nBlockEnd = nBlockStart + itBlk->size;
 
-        // Keep processing until we hit the end row position.
-        sc::cellnote_block::const_iterator itData, itDataEnd;
-        for (; itBlk != itBlkEnd; ++itBlk, nBlockStart = nBlockEnd, nOffsetInBlock = 0)
+        if (itBlk->data)
         {
-            nBlockEnd = nBlockStart + itBlk->size;
+            itData = sc::cellnote_block::begin(*itBlk->data);
+            std::advance(itData, nOffsetInBlock);
 
-            if (itBlk->data)
+            if (nBlockStart <= nRowPos && nRowPos < nBlockEnd)
             {
-                itData = sc::cellnote_block::begin(*itBlk->data);
-                std::advance(itData, nOffsetInBlock);
-
-                if (nBlockStart <= nRowPos && nRowPos < nBlockEnd)
-                {
-                    // This block contains the end row. Only process partially.
-                    size_t nOffsetEnd = nRowPos - nBlockStart + 1;
-                    itDataEnd = sc::cellnote_block::begin(*itBlk->data);
-                    std::advance(itDataEnd, nOffsetEnd);
-                    size_t curRow = nBlockStart + nOffsetInBlock;
-                    for (; itData != itDataEnd; ++itData, ++curRow)
-                    {
-                        ScAddress aDestPos( static_cast<SCCOL>(curRow-nRow1), static_cast<SCROW>(nCol-nCol1), pTransClip->nTab );
-                        pTransClip->pDocument->ReleaseNote(aDestPos);
-                        ScPostIt* pNote = *itData;
-                        if (pNote)
-                        {
-                            std::unique_ptr<ScPostIt> pClonedNote = pNote->Clone( ScAddress(nCol, curRow, nTab), *pTransClip->pDocument, aDestPos, true );
-                            pTransClip->pDocument->SetNote(aDestPos, std::move(pClonedNote));
-                        }
-                    }
-                    break; // we reached the last valid block
-                }
-                else
-                {
-                    itDataEnd = sc::cellnote_block::end(*itBlk->data);
-                    size_t curRow = nBlockStart + nOffsetInBlock;
-                    for (; itData != itDataEnd; ++itData, ++curRow)
-                    {
-                        ScAddress aDestPos( static_cast<SCCOL>(curRow-nRow1), static_cast<SCROW>(nCol-nCol1), pTransClip->nTab );
-                        pTransClip->pDocument->ReleaseNote(aDestPos);
-                        ScPostIt* pNote = *itData;
-                        if (pNote)
-                        {
-                            std::unique_ptr<ScPostIt> pClonedNote = pNote->Clone( ScAddress(nCol, curRow, nTab), *pTransClip->pDocument, aDestPos, true );
-                            pTransClip->pDocument->SetNote(aDestPos, std::move(pClonedNote));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                size_t curRow;
-                for ( curRow = nBlockStart + nOffsetInBlock; curRow <= nBlockEnd && curRow <= nRowPos; ++curRow)
+                // This block contains the end row. Only process partially.
+                size_t nOffsetEnd = nRowPos - nBlockStart + 1;
+                itDataEnd = sc::cellnote_block::begin(*itBlk->data);
+                std::advance(itDataEnd, nOffsetEnd);
+                size_t curRow = nBlockStart + nOffsetInBlock;
+                for (; itData != itDataEnd; ++itData, ++curRow)
                 {
                     ScAddress aDestPos( static_cast<SCCOL>(curRow-nRow1), static_cast<SCROW>(nCol-nCol1), pTransClip->nTab );
                     pTransClip->pDocument->ReleaseNote(aDestPos);
+                    ScPostIt* pNote = *itData;
+                    if (pNote)
+                    {
+                        std::unique_ptr<ScPostIt> pClonedNote = pNote->Clone( ScAddress(nCol, curRow, nTab), *pTransClip->pDocument, aDestPos, true );
+                        pTransClip->pDocument->SetNote(aDestPos, std::move(pClonedNote));
+                    }
                 }
-                if (curRow == nRowPos)
-                    break;
+                break; // we reached the last valid block
             }
+            else
+            {
+                itDataEnd = sc::cellnote_block::end(*itBlk->data);
+                size_t curRow = nBlockStart + nOffsetInBlock;
+                for (; itData != itDataEnd; ++itData, ++curRow)
+                {
+                    ScAddress aDestPos( static_cast<SCCOL>(curRow-nRow1), static_cast<SCROW>(nCol-nCol1), pTransClip->nTab );
+                    pTransClip->pDocument->ReleaseNote(aDestPos);
+                    ScPostIt* pNote = *itData;
+                    if (pNote)
+                    {
+                        std::unique_ptr<ScPostIt> pClonedNote = pNote->Clone( ScAddress(nCol, curRow, nTab), *pTransClip->pDocument, aDestPos, true );
+                        pTransClip->pDocument->SetNote(aDestPos, std::move(pClonedNote));
+                    }
+                }
+            }
+        }
+        else
+        {
+            size_t curRow;
+            for ( curRow = nBlockStart + nOffsetInBlock; curRow <= nBlockEnd && curRow <= nRowPos; ++curRow)
+            {
+                ScAddress aDestPos( static_cast<SCCOL>(curRow-nRow1), static_cast<SCROW>(nCol-nCol1), pTransClip->nTab );
+                pTransClip->pDocument->ReleaseNote(aDestPos);
+            }
+            if (curRow == nRowPos)
+                break;
         }
     }
 }
@@ -1325,51 +1325,51 @@ void ScTable::UndoToTable(
     sc::CopyToDocContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     InsertDeleteFlags nFlags, bool bMarked, ScTable* pDestTab )
 {
-    if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
+    if (!(ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2)))
+        return;
+
+    bool bWidth  = (nRow1==0 && nRow2==pDocument->MaxRow() && mpColWidth && pDestTab->mpColWidth);
+    bool bHeight = (nCol1==0 && nCol2==pDocument->MaxCol() && mpRowHeights && pDestTab->mpRowHeights);
+
+    if ((nFlags & InsertDeleteFlags::CONTENTS) && mpRangeName)
     {
-        bool bWidth  = (nRow1==0 && nRow2==pDocument->MaxRow() && mpColWidth && pDestTab->mpColWidth);
-        bool bHeight = (nCol1==0 && nCol2==pDocument->MaxCol() && mpRowHeights && pDestTab->mpRowHeights);
-
-        if ((nFlags & InsertDeleteFlags::CONTENTS) && mpRangeName)
+        // Undo sheet-local named expressions created during copying
+        // formulas. If mpRangeName is not set then the Undo wasn't even
+        // set to an empty ScRangeName map so don't "undo" that.
+        pDestTab->SetRangeName( std::unique_ptr<ScRangeName>( new ScRangeName( *GetRangeName())));
+        if (!pDestTab->pDocument->IsClipOrUndo())
         {
-            // Undo sheet-local named expressions created during copying
-            // formulas. If mpRangeName is not set then the Undo wasn't even
-            // set to an empty ScRangeName map so don't "undo" that.
-            pDestTab->SetRangeName( std::unique_ptr<ScRangeName>( new ScRangeName( *GetRangeName())));
-            if (!pDestTab->pDocument->IsClipOrUndo())
-            {
-                ScDocShell* pDocSh = static_cast<ScDocShell*>(pDestTab->pDocument->GetDocumentShell());
-                if (pDocSh)
-                    pDocSh->SetAreasChangedNeedBroadcast();
-            }
-
+            ScDocShell* pDocSh = static_cast<ScDocShell*>(pDestTab->pDocument->GetDocumentShell());
+            if (pDocSh)
+                pDocSh->SetAreasChangedNeedBroadcast();
         }
 
-        for ( SCCOL i = 0; i < aCol.size(); i++)
-        {
-            auto& rDestCol = pDestTab->CreateColumnIfNotExists(i);
-            if ( i >= nCol1 && i <= nCol2 )
-                aCol[i].UndoToColumn(rCxt, nRow1, nRow2, nFlags, bMarked, rDestCol);
-            else
-                aCol[i].CopyToColumn(rCxt, 0, pDocument->MaxRow(), InsertDeleteFlags::FORMULA, false, rDestCol);
-        }
+    }
 
-        if (nFlags & InsertDeleteFlags::ATTRIB)
-            pDestTab->mpCondFormatList.reset(new ScConditionalFormatList(pDestTab->pDocument, *mpCondFormatList));
+    for ( SCCOL i = 0; i < aCol.size(); i++)
+    {
+        auto& rDestCol = pDestTab->CreateColumnIfNotExists(i);
+        if ( i >= nCol1 && i <= nCol2 )
+            aCol[i].UndoToColumn(rCxt, nRow1, nRow2, nFlags, bMarked, rDestCol);
+        else
+            aCol[i].CopyToColumn(rCxt, 0, pDocument->MaxRow(), InsertDeleteFlags::FORMULA, false, rDestCol);
+    }
 
-        if (bWidth||bHeight)
-        {
-            if (bWidth)
-            {
-                pDestTab->mpColWidth->CopyFrom(*mpColWidth, nCol1, nCol2);
-                pDestTab->SetColManualBreaks( maColManualBreaks);
-            }
-            if (bHeight)
-            {
-                pDestTab->CopyRowHeight(*this, nRow1, nRow2, 0);
-                pDestTab->SetRowManualBreaks( maRowManualBreaks);
-            }
-        }
+    if (nFlags & InsertDeleteFlags::ATTRIB)
+        pDestTab->mpCondFormatList.reset(new ScConditionalFormatList(pDestTab->pDocument, *mpCondFormatList));
+
+    if (!(bWidth||bHeight))
+        return;
+
+    if (bWidth)
+    {
+        pDestTab->mpColWidth->CopyFrom(*mpColWidth, nCol1, nCol2);
+        pDestTab->SetColManualBreaks( maColManualBreaks);
+    }
+    if (bHeight)
+    {
+        pDestTab->CopyRowHeight(*this, nRow1, nRow2, 0);
+        pDestTab->SetRowManualBreaks( maRowManualBreaks);
     }
 }
 
@@ -2732,32 +2732,32 @@ void ScTable::ApplyStyle( SCCOL nCol, SCROW nRow, const ScStyleSheet* rStyle )
 
 void ScTable::ApplyStyleArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, const ScStyleSheet& rStyle )
 {
-    if (ValidColRow(nStartCol, nStartRow) && ValidColRow(nEndCol, nEndRow))
+    if (!(ValidColRow(nStartCol, nStartRow) && ValidColRow(nEndCol, nEndRow)))
+        return;
+
+    PutInOrder(nStartCol, nEndCol);
+    PutInOrder(nStartRow, nEndRow);
+    if ( nEndCol == pDocument->MaxCol() )
     {
-        PutInOrder(nStartCol, nEndCol);
-        PutInOrder(nStartRow, nEndRow);
-        if ( nEndCol == pDocument->MaxCol() )
+        if ( nStartCol < aCol.size() )
         {
-            if ( nStartCol < aCol.size() )
-            {
-                // If we would like set all columns to specific style, then change only default style for not existing columns
-                nEndCol = aCol.size() - 1;
-                for (SCCOL i = nStartCol; i <= nEndCol; i++)
-                    aCol[i].ApplyStyleArea(nStartRow, nEndRow, rStyle);
-                aDefaultColAttrArray.ApplyStyleArea(nStartRow, nEndRow, rStyle );
-            }
-            else
-            {
-                CreateColumnIfNotExists( nStartCol - 1 );
-                aDefaultColAttrArray.ApplyStyleArea(nStartRow, nEndRow, rStyle );
-            }
+            // If we would like set all columns to specific style, then change only default style for not existing columns
+            nEndCol = aCol.size() - 1;
+            for (SCCOL i = nStartCol; i <= nEndCol; i++)
+                aCol[i].ApplyStyleArea(nStartRow, nEndRow, rStyle);
+            aDefaultColAttrArray.ApplyStyleArea(nStartRow, nEndRow, rStyle );
         }
         else
         {
-            CreateColumnIfNotExists( nEndCol );
-            for (SCCOL i = nStartCol; i <= nEndCol; i++)
-                aCol[i].ApplyStyleArea(nStartRow, nEndRow, rStyle);
+            CreateColumnIfNotExists( nStartCol - 1 );
+            aDefaultColAttrArray.ApplyStyleArea(nStartRow, nEndRow, rStyle );
         }
+    }
+    else
+    {
+        CreateColumnIfNotExists( nEndCol );
+        for (SCCOL i = nStartCol; i <= nEndCol; i++)
+            aCol[i].ApplyStyleArea(nStartRow, nEndRow, rStyle);
     }
 }
 

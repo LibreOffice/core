@@ -470,32 +470,32 @@ void ScDocument::RemoveFromFormulaTrack( ScFormulaCell* pCell )
     ScFormulaCell* pPrev = pCell->GetPreviousTrack();
     assert(pPrev != pCell);                     // pointing to itself?!?
     // if the cell is first or somewhere in chain
-    if ( pPrev || pFormulaTrack == pCell )
+    if ( !(pPrev || pFormulaTrack == pCell) )
+        return;
+
+    ScFormulaCell* pNext = pCell->GetNextTrack();
+    assert(pNext != pCell);                 // pointing to itself?!?
+    if ( pPrev )
     {
-        ScFormulaCell* pNext = pCell->GetNextTrack();
-        assert(pNext != pCell);                 // pointing to itself?!?
-        if ( pPrev )
-        {
-            assert(pFormulaTrack != pCell);     // if this cell is also head something's wrong
-            pPrev->SetNextTrack( pNext );       // predecessor exists, set successor
-        }
-        else
-        {
-            pFormulaTrack = pNext;              // this cell was first cell
-        }
-        if ( pNext )
-        {
-            assert(pEOFormulaTrack != pCell);   // if this cell is also tail something's wrong
-            pNext->SetPreviousTrack( pPrev );   // successor exists, set predecessor
-        }
-        else
-        {
-            pEOFormulaTrack = pPrev;            // this cell was last cell
-        }
-        pCell->SetPreviousTrack( nullptr );
-        pCell->SetNextTrack( nullptr );
-        --nFormulaTrackCount;
+        assert(pFormulaTrack != pCell);     // if this cell is also head something's wrong
+        pPrev->SetNextTrack( pNext );       // predecessor exists, set successor
     }
+    else
+    {
+        pFormulaTrack = pNext;              // this cell was first cell
+    }
+    if ( pNext )
+    {
+        assert(pEOFormulaTrack != pCell);   // if this cell is also tail something's wrong
+        pNext->SetPreviousTrack( pPrev );   // successor exists, set predecessor
+    }
+    else
+    {
+        pEOFormulaTrack = pPrev;            // this cell was last cell
+    }
+    pCell->SetPreviousTrack( nullptr );
+    pCell->SetNextTrack( nullptr );
+    --nFormulaTrackCount;
 }
 
 bool ScDocument::IsInFormulaTrack( const ScFormulaCell* pCell ) const

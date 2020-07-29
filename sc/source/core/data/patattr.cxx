@@ -855,37 +855,37 @@ void ScPatternAttr::GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& 
     if (rEditSet.GetItemState(EE_CHAR_LANGUAGE_CTL,true,&pItem) == SfxItemState::SET)
         rDestSet.Put( SvxLanguageItem(static_cast<const SvxLanguageItem*>(pItem)->GetValue(), ATTR_CTL_FONT_LANGUAGE) );
 
-    if (rEditSet.GetItemState(EE_PARA_JUST,true,&pItem) == SfxItemState::SET)
+    if (rEditSet.GetItemState(EE_PARA_JUST,true,&pItem) != SfxItemState::SET)
+        return;
+
+    SvxCellHorJustify eVal;
+    switch ( static_cast<const SvxAdjustItem*>(pItem)->GetAdjust() )
     {
-        SvxCellHorJustify eVal;
-        switch ( static_cast<const SvxAdjustItem*>(pItem)->GetAdjust() )
-        {
-            case SvxAdjust::Left:
-                // EditEngine Default is always set in the GetAttribs() ItemSet !
-                // whether left or right, is decided in text / number
-                eVal = SvxCellHorJustify::Standard;
-                break;
-            case SvxAdjust::Right:
-                eVal = SvxCellHorJustify::Right;
-                break;
-            case SvxAdjust::Block:
-                eVal = SvxCellHorJustify::Block;
-                break;
-            case SvxAdjust::Center:
-                eVal = SvxCellHorJustify::Center;
-                break;
-            case SvxAdjust::BlockLine:
-                eVal = SvxCellHorJustify::Block;
-                break;
-            case SvxAdjust::End:
-                eVal = SvxCellHorJustify::Right;
-                break;
-            default:
-                eVal = SvxCellHorJustify::Standard;
-        }
-        if ( eVal != SvxCellHorJustify::Standard )
-            rDestSet.Put( SvxHorJustifyItem( eVal, ATTR_HOR_JUSTIFY) );
+        case SvxAdjust::Left:
+            // EditEngine Default is always set in the GetAttribs() ItemSet !
+            // whether left or right, is decided in text / number
+            eVal = SvxCellHorJustify::Standard;
+            break;
+        case SvxAdjust::Right:
+            eVal = SvxCellHorJustify::Right;
+            break;
+        case SvxAdjust::Block:
+            eVal = SvxCellHorJustify::Block;
+            break;
+        case SvxAdjust::Center:
+            eVal = SvxCellHorJustify::Center;
+            break;
+        case SvxAdjust::BlockLine:
+            eVal = SvxCellHorJustify::Block;
+            break;
+        case SvxAdjust::End:
+            eVal = SvxCellHorJustify::Right;
+            break;
+        default:
+            eVal = SvxCellHorJustify::Standard;
     }
+    if ( eVal != SvxCellHorJustify::Standard )
+        rDestSet.Put( SvxHorJustifyItem( eVal, ATTR_HOR_JUSTIFY) );
 }
 
 void ScPatternAttr::GetFromEditItemSet( const SfxItemSet* pEditSet )

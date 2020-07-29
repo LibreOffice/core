@@ -343,21 +343,21 @@ void ScColumn::StartListeningUnshared( const std::vector<SCROW>& rNewSharedRows 
 {
     assert(rNewSharedRows.empty() || rNewSharedRows.size() == 2 || rNewSharedRows.size() == 4);
     ScDocument* pDoc = GetDoc();
-    if (!rNewSharedRows.empty() && !pDoc->IsDelayedFormulaGrouping())
+    if (rNewSharedRows.empty() || pDoc->IsDelayedFormulaGrouping())
+        return;
+
+    auto pPosSet = std::make_shared<sc::ColumnBlockPositionSet>(*pDoc);
+    sc::StartListeningContext aStartCxt(*pDoc, pPosSet);
+    sc::EndListeningContext aEndCxt(*pDoc, pPosSet);
+    if (rNewSharedRows.size() >= 2)
     {
-        auto pPosSet = std::make_shared<sc::ColumnBlockPositionSet>(*pDoc);
-        sc::StartListeningContext aStartCxt(*pDoc, pPosSet);
-        sc::EndListeningContext aEndCxt(*pDoc, pPosSet);
-        if (rNewSharedRows.size() >= 2)
-        {
-            if(!pDoc->CanDelayStartListeningFormulaCells( this, rNewSharedRows[0], rNewSharedRows[1]))
-                StartListeningFormulaCells(aStartCxt, aEndCxt, rNewSharedRows[0], rNewSharedRows[1]);
-        }
-        if (rNewSharedRows.size() >= 4)
-        {
-            if(!pDoc->CanDelayStartListeningFormulaCells( this, rNewSharedRows[2], rNewSharedRows[3]))
-                StartListeningFormulaCells(aStartCxt, aEndCxt, rNewSharedRows[2], rNewSharedRows[3]);
-        }
+        if(!pDoc->CanDelayStartListeningFormulaCells( this, rNewSharedRows[0], rNewSharedRows[1]))
+            StartListeningFormulaCells(aStartCxt, aEndCxt, rNewSharedRows[0], rNewSharedRows[1]);
+    }
+    if (rNewSharedRows.size() >= 4)
+    {
+        if(!pDoc->CanDelayStartListeningFormulaCells( this, rNewSharedRows[2], rNewSharedRows[3]))
+            StartListeningFormulaCells(aStartCxt, aEndCxt, rNewSharedRows[2], rNewSharedRows[3]);
     }
 }
 
@@ -693,53 +693,53 @@ void ScColumn::AttachNewFormulaCells( const sc::CellStoreType::position_type& aP
     JoinNewFormulaCell(aPosLast, *pCell2);
 
     ScDocument* pDocument = GetDoc();
-    if (!pDocument->IsClipOrUndo() && !pDocument->IsInsertingFromOtherDoc())
-    {
-        const bool bShared = pCell1->IsShared() || pCell2->IsShared();
-        if (bShared)
-        {
-            const SCROW nTopRow = (pCell1->IsShared() ? pCell1->GetSharedTopRow() : pCell1->aPos.Row());
-            const SCROW nBotRow = (pCell2->IsShared() ?
-                    pCell2->GetSharedTopRow() + pCell2->GetSharedLength() - 1 : pCell2->aPos.Row());
-            if (rNewSharedRows.empty())
-            {
-                rNewSharedRows.push_back( nTopRow);
-                rNewSharedRows.push_back( nBotRow);
-            }
-            else if (rNewSharedRows.size() == 2)
-            {
-                // Combine into one span.
-                if (rNewSharedRows[0] > nTopRow)
-                    rNewSharedRows[0] = nTopRow;
-                if (rNewSharedRows[1] < nBotRow)
-                    rNewSharedRows[1] = nBotRow;
-            }
-            else if (rNewSharedRows.size() == 4)
-            {
-                // Merge into one span.
-                // The original two spans are ordered from top to bottom.
-                std::vector<SCROW> aRows(2);
-                aRows[0] = std::min( rNewSharedRows[0], nTopRow);
-                aRows[1] = std::max( rNewSharedRows[3], nBotRow);
-                rNewSharedRows.swap( aRows);
-            }
-            else
-            {
-                assert(!"rNewSharedRows?");
-            }
-        }
-        StartListeningUnshared( rNewSharedRows);
+    if (pDocument->IsClipOrUndo() || pDocument->IsInsertingFromOtherDoc())
+        return;
 
-        sc::StartListeningContext aCxt(*pDocument);
-        ScFormulaCell** pp = &sc::formula_block::at(*aPos.first->data, aPos.second);
-        ScFormulaCell** ppEnd = pp + nLength;
-        for (; pp != ppEnd; ++pp)
+    const bool bShared = pCell1->IsShared() || pCell2->IsShared();
+    if (bShared)
+    {
+        const SCROW nTopRow = (pCell1->IsShared() ? pCell1->GetSharedTopRow() : pCell1->aPos.Row());
+        const SCROW nBotRow = (pCell2->IsShared() ?
+                pCell2->GetSharedTopRow() + pCell2->GetSharedLength() - 1 : pCell2->aPos.Row());
+        if (rNewSharedRows.empty())
         {
-            if (!bShared)
-                (*pp)->StartListeningTo(aCxt);
-            if (!pDocument->IsCalcingAfterLoad())
-                (*pp)->SetDirty();
+            rNewSharedRows.push_back( nTopRow);
+            rNewSharedRows.push_back( nBotRow);
         }
+        else if (rNewSharedRows.size() == 2)
+        {
+            // Combine into one span.
+            if (rNewSharedRows[0] > nTopRow)
+                rNewSharedRows[0] = nTopRow;
+            if (rNewSharedRows[1] < nBotRow)
+                rNewSharedRows[1] = nBotRow;
+        }
+        else if (rNewSharedRows.size() == 4)
+        {
+            // Merge into one span.
+            // The original two spans are ordered from top to bottom.
+            std::vector<SCROW> aRows(2);
+            aRows[0] = std::min( rNewSharedRows[0], nTopRow);
+            aRows[1] = std::max( rNewSharedRows[3], nBotRow);
+            rNewSharedRows.swap( aRows);
+        }
+        else
+        {
+            assert(!"rNewSharedRows?");
+        }
+    }
+    StartListeningUnshared( rNewSharedRows);
+
+    sc::StartListeningContext aCxt(*pDocument);
+    ScFormulaCell** pp = &sc::formula_block::at(*aPos.first->data, aPos.second);
+    ScFormulaCell** ppEnd = pp + nLength;
+    for (; pp != ppEnd; ++pp)
+    {
+        if (!bShared)
+            (*pp)->StartListeningTo(aCxt);
+        if (!pDocument->IsCalcingAfterLoad())
+            (*pp)->SetDirty();
     }
 }
 

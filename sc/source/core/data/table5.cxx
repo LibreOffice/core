@@ -1112,43 +1112,43 @@ void ScTable::EndListening( sc::EndListeningContext& rCxt, const ScAddress& rAdd
 
 void ScTable::SetPageStyle( const OUString& rName )
 {
-    if ( aPageStyle != rName )
+    if ( aPageStyle == rName )
+        return;
+
+    OUString           aStrNew    = rName;
+    SfxStyleSheetBasePool*  pStylePool = pDocument->GetStyleSheetPool();
+    SfxStyleSheetBase*      pNewStyle  = pStylePool->Find( aStrNew, SfxStyleFamily::Page );
+
+    if ( !pNewStyle )
     {
-        OUString           aStrNew    = rName;
-        SfxStyleSheetBasePool*  pStylePool = pDocument->GetStyleSheetPool();
-        SfxStyleSheetBase*      pNewStyle  = pStylePool->Find( aStrNew, SfxStyleFamily::Page );
-
-        if ( !pNewStyle )
-        {
-            aStrNew = ScResId(STR_STYLENAME_STANDARD_PAGE);
-            pNewStyle = pStylePool->Find( aStrNew, SfxStyleFamily::Page );
-        }
-
-        if ( aPageStyle != aStrNew )
-        {
-            SfxStyleSheetBase* pOldStyle = pStylePool->Find( aPageStyle, SfxStyleFamily::Page );
-            if ( pOldStyle && pNewStyle )
-            {
-                SfxItemSet&  rOldSet          = pOldStyle->GetItemSet();
-                SfxItemSet&  rNewSet          = pNewStyle->GetItemSet();
-                auto getScaleValue = [](const SfxItemSet& rSet, sal_uInt16 nId)
-                    { return static_cast<const SfxUInt16Item&>(rSet.Get(nId)).GetValue(); };
-
-                const sal_uInt16 nOldScale        = getScaleValue(rOldSet,ATTR_PAGE_SCALE);
-                const sal_uInt16 nOldScaleToPages = getScaleValue(rOldSet,ATTR_PAGE_SCALETOPAGES);
-                const sal_uInt16 nNewScale        = getScaleValue(rNewSet,ATTR_PAGE_SCALE);
-                const sal_uInt16 nNewScaleToPages = getScaleValue(rNewSet,ATTR_PAGE_SCALETOPAGES);
-
-                if ( (nOldScale != nNewScale) || (nOldScaleToPages != nNewScaleToPages) )
-                    InvalidateTextWidth(nullptr, nullptr, false, false);
-            }
-
-            if ( pNewStyle )            // also without the old one (for UpdateStdNames)
-                aPageStyle = aStrNew;
-
-            SetStreamValid(false);
-        }
+        aStrNew = ScResId(STR_STYLENAME_STANDARD_PAGE);
+        pNewStyle = pStylePool->Find( aStrNew, SfxStyleFamily::Page );
     }
+
+    if ( aPageStyle == aStrNew )
+        return;
+
+    SfxStyleSheetBase* pOldStyle = pStylePool->Find( aPageStyle, SfxStyleFamily::Page );
+    if ( pOldStyle && pNewStyle )
+    {
+        SfxItemSet&  rOldSet          = pOldStyle->GetItemSet();
+        SfxItemSet&  rNewSet          = pNewStyle->GetItemSet();
+        auto getScaleValue = [](const SfxItemSet& rSet, sal_uInt16 nId)
+            { return static_cast<const SfxUInt16Item&>(rSet.Get(nId)).GetValue(); };
+
+        const sal_uInt16 nOldScale        = getScaleValue(rOldSet,ATTR_PAGE_SCALE);
+        const sal_uInt16 nOldScaleToPages = getScaleValue(rOldSet,ATTR_PAGE_SCALETOPAGES);
+        const sal_uInt16 nNewScale        = getScaleValue(rNewSet,ATTR_PAGE_SCALE);
+        const sal_uInt16 nNewScaleToPages = getScaleValue(rNewSet,ATTR_PAGE_SCALETOPAGES);
+
+        if ( (nOldScale != nNewScale) || (nOldScaleToPages != nNewScaleToPages) )
+            InvalidateTextWidth(nullptr, nullptr, false, false);
+    }
+
+    if ( pNewStyle )            // also without the old one (for UpdateStdNames)
+        aPageStyle = aStrNew;
+
+    SetStreamValid(false);
 }
 
 void ScTable::PageStyleModified( const OUString& rNewName )

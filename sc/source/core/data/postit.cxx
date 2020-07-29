@@ -415,19 +415,19 @@ ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& r
 {
     SdrPage* pDrawPage = GetDrawPage();
     OSL_ENSURE( pDrawPage, "ScNoteCaptionCreator::ScNoteCaptionCreator - no drawing page" );
-    if( pDrawPage )
+    if( !pDrawPage )
+        return;
+
+    // create the caption drawing object
+    CreateCaption( rNoteData.mbShown, false );
+    rNoteData.mxCaption = GetCaption();
+    OSL_ENSURE( rNoteData.mxCaption, "ScNoteCaptionCreator::ScNoteCaptionCreator - missing caption object" );
+    if( rNoteData.mxCaption )
     {
-        // create the caption drawing object
-        CreateCaption( rNoteData.mbShown, false );
-        rNoteData.mxCaption = GetCaption();
-        OSL_ENSURE( rNoteData.mxCaption, "ScNoteCaptionCreator::ScNoteCaptionCreator - missing caption object" );
-        if( rNoteData.mxCaption )
-        {
-            // store note position in user data of caption object
-            ScCaptionUtil::SetCaptionUserData( *rNoteData.mxCaption, rPos );
-            // insert object into draw page
-            pDrawPage->InsertObject( rNoteData.mxCaption.get() );
-        }
+        // store note position in user data of caption object
+        ScCaptionUtil::SetCaptionUserData( *rNoteData.mxCaption, rPos );
+        // insert object into draw page
+        pDrawPage->InsertObject( rNoteData.mxCaption.get() );
     }
 }
 
@@ -697,41 +697,41 @@ bool ScCaptionPtr::decRef() const
 
 void ScCaptionPtr::decRefAndDestroy()
 {
-    if (decRef())
-    {
-        assert(mpHead->mpFirst == this);    // this must be one and only one
-        assert(!mpNext);                    // this must be one and only one
-        assert(mpCaption);
+    if (!decRef())
+        return;
+
+    assert(mpHead->mpFirst == this);    // this must be one and only one
+    assert(!mpNext);                    // this must be one and only one
+    assert(mpCaption);
 
 #if 0
-        // Quick workaround for when there are still cases where the caption
-        // pointer is dangling
+    // Quick workaround for when there are still cases where the caption
+    // pointer is dangling
+    mpCaption = nullptr;
+    mbNotOwner = false;
+#else
+    // Destroying Draw Undo and some other delete the SdrObject, don't
+    // attempt that twice.
+    if (mbNotOwner)
+    {
         mpCaption = nullptr;
         mbNotOwner = false;
-#else
-        // Destroying Draw Undo and some other delete the SdrObject, don't
-        // attempt that twice.
-        if (mbNotOwner)
-        {
-            mpCaption = nullptr;
-            mbNotOwner = false;
-        }
-        else
-        {
-            removeFromDrawPageAndFree( true );  // ignoring Undo
-            if (mpCaption)
-            {
-                // There's no draw page associated so removeFromDrawPageAndFree()
-                // didn't do anything, but still we want to delete the caption
-                // object. release()/dissolve() also resets mpCaption.
-                SdrObject* pObj = release();
-                SdrObject::Free( pObj );
-            }
-        }
-#endif
-        delete mpHead;
-        mpHead = nullptr;
     }
+    else
+    {
+        removeFromDrawPageAndFree( true );  // ignoring Undo
+        if (mpCaption)
+        {
+            // There's no draw page associated so removeFromDrawPageAndFree()
+            // didn't do anything, but still we want to delete the caption
+            // object. release()/dissolve() also resets mpCaption.
+            SdrObject* pObj = release();
+            SdrObject::Free( pObj );
+        }
+    }
+#endif
+    delete mpHead;
+    mpHead = nullptr;
 }
 
 void ScCaptionPtr::insertToDrawPage( SdrPage& rDrawPage )
@@ -753,28 +753,28 @@ void ScCaptionPtr::removeFromDrawPageAndFree( bool bIgnoreUndo )
     assert(mpHead && mpCaption);
     SdrPage* pDrawPage(mpCaption->getSdrPageFromSdrObject());
     SAL_WARN_IF( !pDrawPage, "sc.core", "ScCaptionPtr::removeFromDrawPageAndFree - object without drawing page");
-    if (pDrawPage)
+    if (!pDrawPage)
+        return;
+
+    pDrawPage->RecalcObjOrdNums();
+    bool bRecording = false;
+    if(!bIgnoreUndo)
     {
-        pDrawPage->RecalcObjOrdNums();
-        bool bRecording = false;
-        if(!bIgnoreUndo)
-        {
-            ScDrawLayer* pDrawLayer(dynamic_cast< ScDrawLayer* >(&mpCaption->getSdrModelFromSdrObject()));
-            SAL_WARN_IF( !pDrawLayer, "sc.core", "ScCaptionPtr::removeFromDrawPageAndFree - object without drawing layer");
-            // create drawing undo action (before removing the object to have valid draw page in undo action)
-            bRecording = (pDrawLayer && pDrawLayer->IsRecording());
-            if (bRecording)
-                pDrawLayer->AddCalcUndo( std::make_unique<SdrUndoDelObj>( *mpCaption ));
-        }
-        // remove the object from the drawing page, delete if undo is disabled
-        removeFromDrawPage( *pDrawPage );
-        // If called from outside mnRefs must be 1 to delete. If called from
-        // decRefAndDestroy() mnRefs is already 0.
-        if (!bRecording && getRefs() <= 1)
-        {
-            SdrObject* pObj = release();
-            SdrObject::Free( pObj );
-        }
+        ScDrawLayer* pDrawLayer(dynamic_cast< ScDrawLayer* >(&mpCaption->getSdrModelFromSdrObject()));
+        SAL_WARN_IF( !pDrawLayer, "sc.core", "ScCaptionPtr::removeFromDrawPageAndFree - object without drawing layer");
+        // create drawing undo action (before removing the object to have valid draw page in undo action)
+        bRecording = (pDrawLayer && pDrawLayer->IsRecording());
+        if (bRecording)
+            pDrawLayer->AddCalcUndo( std::make_unique<SdrUndoDelObj>( *mpCaption ));
+    }
+    // remove the object from the drawing page, delete if undo is disabled
+    removeFromDrawPage( *pDrawPage );
+    // If called from outside mnRefs must be 1 to delete. If called from
+    // decRefAndDestroy() mnRefs is already 0.
+    if (!bRecording && getRefs() <= 1)
+    {
+        SdrObject* pObj = release();
+        SdrObject::Free( pObj );
     }
 }
 
@@ -1101,35 +1101,35 @@ void ScPostIt::CreateCaption( const ScAddress& rPos, const SdrCaptionObj* pCapti
 
     // ScNoteCaptionCreator c'tor creates the caption and inserts it into the document and maNoteData
     ScNoteCaptionCreator aCreator( mrDoc, rPos, maNoteData );
-    if( maNoteData.mxCaption )
-    {
-        // clone settings of passed caption
-        if( pCaption )
-        {
-            // copy edit text object (object must be inserted into page already)
-            if( OutlinerParaObject* pOPO = pCaption->GetOutlinerParaObject() )
-                maNoteData.mxCaption->SetOutlinerParaObject( std::make_unique<OutlinerParaObject>( *pOPO ) );
-            // copy formatting items (after text has been copied to apply font formatting)
-            maNoteData.mxCaption->SetMergedItemSetAndBroadcast( pCaption->GetMergedItemSet() );
-            // move textbox position relative to new cell, copy textbox size
-            tools::Rectangle aCaptRect = pCaption->GetLogicRect();
-            Point aDist = maNoteData.mxCaption->GetTailPos() - pCaption->GetTailPos();
-            aCaptRect.Move( aDist.X(), aDist.Y() );
-            maNoteData.mxCaption->SetLogicRect( aCaptRect );
-            aCreator.FitCaptionToRect();
-        }
-        else
-        {
-            // set default formatting and default position
-            ScCaptionUtil::SetDefaultItems( *maNoteData.mxCaption, mrDoc, nullptr );
-            aCreator.AutoPlaceCaption();
-        }
+    if( !maNoteData.mxCaption )
+        return;
 
-        // create undo action
-        if( ScDrawLayer* pDrawLayer = mrDoc.GetDrawLayer() )
-            if( pDrawLayer->IsRecording() )
-                pDrawLayer->AddCalcUndo( std::make_unique<SdrUndoNewObj>( *maNoteData.mxCaption ) );
+    // clone settings of passed caption
+    if( pCaption )
+    {
+        // copy edit text object (object must be inserted into page already)
+        if( OutlinerParaObject* pOPO = pCaption->GetOutlinerParaObject() )
+            maNoteData.mxCaption->SetOutlinerParaObject( std::make_unique<OutlinerParaObject>( *pOPO ) );
+        // copy formatting items (after text has been copied to apply font formatting)
+        maNoteData.mxCaption->SetMergedItemSetAndBroadcast( pCaption->GetMergedItemSet() );
+        // move textbox position relative to new cell, copy textbox size
+        tools::Rectangle aCaptRect = pCaption->GetLogicRect();
+        Point aDist = maNoteData.mxCaption->GetTailPos() - pCaption->GetTailPos();
+        aCaptRect.Move( aDist.X(), aDist.Y() );
+        maNoteData.mxCaption->SetLogicRect( aCaptRect );
+        aCreator.FitCaptionToRect();
     }
+    else
+    {
+        // set default formatting and default position
+        ScCaptionUtil::SetDefaultItems( *maNoteData.mxCaption, mrDoc, nullptr );
+        aCreator.AutoPlaceCaption();
+    }
+
+    // create undo action
+    if( ScDrawLayer* pDrawLayer = mrDoc.GetDrawLayer() )
+        if( pDrawLayer->IsRecording() )
+            pDrawLayer->AddCalcUndo( std::make_unique<SdrUndoNewObj>( *maNoteData.mxCaption ) );
 }
 
 void ScPostIt::RemoveCaption()

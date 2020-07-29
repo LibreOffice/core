@@ -311,24 +311,24 @@ void ScConditionEntry::SimplifyCompiledFormula( std::unique_ptr<ScTokenArray>& r
                                                 bool& rIsStr,
                                                 OUString& rStrVal )
 {
-    if ( rFormula->GetLen() == 1 )
+    if ( rFormula->GetLen() != 1 )
+        return;
+
+    // Single (constant number)?
+    FormulaToken* pToken = rFormula->FirstToken();
+    if ( pToken->GetOpCode() != ocPush )
+        return;
+
+    if ( pToken->GetType() == svDouble )
     {
-        // Single (constant number)?
-        FormulaToken* pToken = rFormula->FirstToken();
-        if ( pToken->GetOpCode() == ocPush )
-        {
-            if ( pToken->GetType() == svDouble )
-            {
-                rVal = pToken->GetDouble();
-                rFormula.reset();             // Do not remember as formula
-            }
-            else if ( pToken->GetType() == svString )
-            {
-                rIsStr = true;
-                rStrVal = pToken->GetString().getString();
-                rFormula.reset();             // Do not remember as formula
-            }
-        }
+        rVal = pToken->GetDouble();
+        rFormula.reset();             // Do not remember as formula
+    }
+    else if ( pToken->GetType() == svString )
+    {
+        rIsStr = true;
+        rStrVal = pToken->GetString().getString();
+        rFormula.reset();             // Do not remember as formula
     }
 }
 
@@ -392,23 +392,23 @@ void ScConditionEntry::Compile( const OUString& rExpr1, const OUString& rExpr2,
  */
 void ScConditionEntry::MakeCells( const ScAddress& rPos )
 {
-    if ( !mpDoc->IsClipOrUndo() ) // Never calculate in the Clipboard!
-    {
-        if ( pFormula1 && !pFCell1 && !bRelRef1 )
-        {
-            // pFCell1 will hold a flat-copied ScTokenArray sharing ref-counted
-            // code tokens with pFormula1
-            pFCell1.reset( new ScFormulaCell(mpDoc, rPos, *pFormula1) );
-            pFCell1->StartListeningTo( mpDoc );
-        }
+    if ( mpDoc->IsClipOrUndo() ) // Never calculate in the Clipboard!
+        return;
 
-        if ( pFormula2 && !pFCell2 && !bRelRef2 )
-        {
-            // pFCell2 will hold a flat-copied ScTokenArray sharing ref-counted
-            // code tokens with pFormula2
-            pFCell2.reset( new ScFormulaCell(mpDoc, rPos, *pFormula2) );
-            pFCell2->StartListeningTo( mpDoc );
-        }
+    if ( pFormula1 && !pFCell1 && !bRelRef1 )
+    {
+        // pFCell1 will hold a flat-copied ScTokenArray sharing ref-counted
+        // code tokens with pFormula1
+        pFCell1.reset( new ScFormulaCell(mpDoc, rPos, *pFormula1) );
+        pFCell1->StartListeningTo( mpDoc );
+    }
+
+    if ( pFormula2 && !pFCell2 && !bRelRef2 )
+    {
+        // pFCell2 will hold a flat-copied ScTokenArray sharing ref-counted
+        // code tokens with pFormula2
+        pFCell2.reset( new ScFormulaCell(mpDoc, rPos, *pFormula2) );
+        pFCell2->StartListeningTo( mpDoc );
     }
 }
 
@@ -755,58 +755,58 @@ static bool lcl_GetCellContent( ScRefCellValue& rCell, bool bIsStr1, double& rAr
 
 void ScConditionEntry::FillCache() const
 {
-    if(!mpCache)
+    if(mpCache)
+        return;
+
+    const ScRangeList& rRanges = pCondFormat->GetRange();
+    mpCache.reset(new ScConditionEntryCache);
+    size_t nListCount = rRanges.size();
+    for( size_t i = 0; i < nListCount; i++ )
     {
-        const ScRangeList& rRanges = pCondFormat->GetRange();
-        mpCache.reset(new ScConditionEntryCache);
-        size_t nListCount = rRanges.size();
-        for( size_t i = 0; i < nListCount; i++ )
+        const ScRange & rRange = rRanges[i];
+        SCROW nRow = rRange.aEnd.Row();
+        SCCOL nCol = rRange.aEnd.Col();
+        SCCOL nColStart = rRange.aStart.Col();
+        SCROW nRowStart = rRange.aStart.Row();
+        SCTAB nTab = rRange.aStart.Tab();
+
+        // temporary fix to workaround slow duplicate entry
+        // conditions, prevent to use a whole row
+        if(nRow == MAXROW)
         {
-            const ScRange & rRange = rRanges[i];
-            SCROW nRow = rRange.aEnd.Row();
-            SCCOL nCol = rRange.aEnd.Col();
-            SCCOL nColStart = rRange.aStart.Col();
-            SCROW nRowStart = rRange.aStart.Row();
-            SCTAB nTab = rRange.aStart.Tab();
-
-            // temporary fix to workaround slow duplicate entry
-            // conditions, prevent to use a whole row
-            if(nRow == MAXROW)
-            {
-                bool bShrunk = false;
-                mpDoc->ShrinkToUsedDataArea(bShrunk, nTab, nColStart, nRowStart,
-                        nCol, nRow, false);
-            }
-
-            for( SCROW r = nRowStart; r <= nRow; r++ )
-                for( SCCOL c = nColStart; c <= nCol; c++ )
-                {
-                    ScRefCellValue aCell(*mpDoc, ScAddress(c, r, nTab));
-                    if (aCell.isEmpty())
-                        continue;
-
-                    double nVal = 0.0;
-                    OUString aStr;
-                    if (!lcl_GetCellContent(aCell, false, nVal, aStr, mpDoc))
-                    {
-                        std::pair<ScConditionEntryCache::StringCacheType::iterator, bool> aResult =
-                            mpCache->maStrings.emplace(aStr, 1);
-
-                        if(!aResult.second)
-                            aResult.first->second++;
-                    }
-                    else
-                    {
-                        std::pair<ScConditionEntryCache::ValueCacheType::iterator, bool> aResult =
-                            mpCache->maValues.emplace(nVal, 1);
-
-                        if(!aResult.second)
-                            aResult.first->second++;
-
-                        ++(mpCache->nValueItems);
-                    }
-                }
+            bool bShrunk = false;
+            mpDoc->ShrinkToUsedDataArea(bShrunk, nTab, nColStart, nRowStart,
+                    nCol, nRow, false);
         }
+
+        for( SCROW r = nRowStart; r <= nRow; r++ )
+            for( SCCOL c = nColStart; c <= nCol; c++ )
+            {
+                ScRefCellValue aCell(*mpDoc, ScAddress(c, r, nTab));
+                if (aCell.isEmpty())
+                    continue;
+
+                double nVal = 0.0;
+                OUString aStr;
+                if (!lcl_GetCellContent(aCell, false, nVal, aStr, mpDoc))
+                {
+                    std::pair<ScConditionEntryCache::StringCacheType::iterator, bool> aResult =
+                        mpCache->maStrings.emplace(aStr, 1);
+
+                    if(!aResult.second)
+                        aResult.first->second++;
+                }
+                else
+                {
+                    std::pair<ScConditionEntryCache::ValueCacheType::iterator, bool> aResult =
+                        mpCache->maValues.emplace(nVal, 1);
+
+                    if(!aResult.second)
+                        aResult.first->second++;
+
+                    ++(mpCache->nValueItems);
+                }
+            }
     }
 }
 

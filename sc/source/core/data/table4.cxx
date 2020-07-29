@@ -2061,137 +2061,137 @@ void ScTable::AutoFormatArea(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
 void ScTable::AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                             sal_uInt16 nFormatNo )
 {
-    if (ValidColRow(nStartCol, nStartRow) && ValidColRow(nEndCol, nEndRow))
-    {
-        ScAutoFormat& rFormat = *ScGlobal::GetOrCreateAutoFormat();
-        ScAutoFormatData* pData = rFormat.findByIndex(nFormatNo);
-        if (pData)
-        {
-            std::unique_ptr<ScPatternAttr> pPatternAttrs[16];
-            for (sal_uInt8 i = 0; i < 16; ++i)
-            {
-                pPatternAttrs[i].reset(new ScPatternAttr(pDocument->GetPool()));
-                pData->FillToItemSet(i, pPatternAttrs[i]->GetItemSet(), *pDocument);
-            }
+    if (!(ValidColRow(nStartCol, nStartRow) && ValidColRow(nEndCol, nEndRow)))
+        return;
 
-            SCCOL nCol = nStartCol;
-            SCROW nRow = nStartRow;
-            sal_uInt16 nIndex = 0;
-            // Left top corner
+    ScAutoFormat& rFormat = *ScGlobal::GetOrCreateAutoFormat();
+    ScAutoFormatData* pData = rFormat.findByIndex(nFormatNo);
+    if (!pData)
+        return;
+
+    std::unique_ptr<ScPatternAttr> pPatternAttrs[16];
+    for (sal_uInt8 i = 0; i < 16; ++i)
+    {
+        pPatternAttrs[i].reset(new ScPatternAttr(pDocument->GetPool()));
+        pData->FillToItemSet(i, pPatternAttrs[i]->GetItemSet(), *pDocument);
+    }
+
+    SCCOL nCol = nStartCol;
+    SCROW nRow = nStartRow;
+    sal_uInt16 nIndex = 0;
+    // Left top corner
+    AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
+    // Left column
+    if (pData->IsEqualData(4, 8))
+        AutoFormatArea(nStartCol, nStartRow + 1, nStartCol, nEndRow - 1, *pPatternAttrs[4], nFormatNo);
+    else
+    {
+        nIndex = 4;
+        for (nRow = nStartRow + 1; nRow < nEndRow; nRow++)
+        {
             AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
-            // Left column
-            if (pData->IsEqualData(4, 8))
-                AutoFormatArea(nStartCol, nStartRow + 1, nStartCol, nEndRow - 1, *pPatternAttrs[4], nFormatNo);
+            if (nIndex == 4)
+                nIndex = 8;
             else
-            {
                 nIndex = 4;
-                for (nRow = nStartRow + 1; nRow < nEndRow; nRow++)
-                {
-                    AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
-                    if (nIndex == 4)
-                        nIndex = 8;
-                    else
-                        nIndex = 4;
-                }
-            }
-            // Left bottom corner
-            nRow = nEndRow;
-            nIndex = 12;
+        }
+    }
+    // Left bottom corner
+    nRow = nEndRow;
+    nIndex = 12;
+    AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
+    // Right top corner
+    nCol = nEndCol;
+    nRow = nStartRow;
+    nIndex = 3;
+    AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
+    // Right column
+    if (pData->IsEqualData(7, 11))
+        AutoFormatArea(nEndCol, nStartRow + 1, nEndCol, nEndRow - 1, *pPatternAttrs[7], nFormatNo);
+    else
+    {
+        nIndex = 7;
+        for (nRow = nStartRow + 1; nRow < nEndRow; nRow++)
+        {
             AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
-            // Right top corner
-            nCol = nEndCol;
-            nRow = nStartRow;
-            nIndex = 3;
-            AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
-            // Right column
-            if (pData->IsEqualData(7, 11))
-                AutoFormatArea(nEndCol, nStartRow + 1, nEndCol, nEndRow - 1, *pPatternAttrs[7], nFormatNo);
+            if (nIndex == 7)
+                nIndex = 11;
             else
-            {
                 nIndex = 7;
+        }
+    }
+    // Right bottom corner
+    nRow = nEndRow;
+    nIndex = 15;
+    AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
+    nRow = nStartRow;
+    nIndex = 1;
+    for (nCol = nStartCol + 1; nCol < nEndCol; nCol++)
+    {
+        AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
+        if (nIndex == 1)
+            nIndex = 2;
+        else
+            nIndex = 1;
+    }
+    // Bottom row
+    nRow = nEndRow;
+    nIndex = 13;
+    for (nCol = nStartCol + 1; nCol < nEndCol; nCol++)
+    {
+        AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
+        if (nIndex == 13)
+            nIndex = 14;
+        else
+            nIndex = 13;
+    }
+    // Body
+    if ((pData->IsEqualData(5, 6)) && (pData->IsEqualData(9, 10)) && (pData->IsEqualData(5, 9)))
+        AutoFormatArea(nStartCol + 1, nStartRow + 1, nEndCol-1, nEndRow - 1, *pPatternAttrs[5], nFormatNo);
+    else
+    {
+        if ((pData->IsEqualData(5, 9)) && (pData->IsEqualData(6, 10)))
+        {
+            nIndex = 5;
+            for (nCol = nStartCol + 1; nCol < nEndCol; nCol++)
+            {
+                AutoFormatArea(nCol, nStartRow + 1, nCol, nEndRow - 1, *pPatternAttrs[nIndex], nFormatNo);
+                if (nIndex == 5)
+                    nIndex = 6;
+                else
+                    nIndex = 5;
+            }
+        }
+        else
+        {
+            nIndex = 5;
+            for (nCol = nStartCol + 1; nCol < nEndCol; nCol++)
+            {
                 for (nRow = nStartRow + 1; nRow < nEndRow; nRow++)
                 {
                     AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
-                    if (nIndex == 7)
-                        nIndex = 11;
-                    else
-                        nIndex = 7;
-                }
-            }
-            // Right bottom corner
-            nRow = nEndRow;
-            nIndex = 15;
-            AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
-            nRow = nStartRow;
-            nIndex = 1;
-            for (nCol = nStartCol + 1; nCol < nEndCol; nCol++)
-            {
-                AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
-                if (nIndex == 1)
-                    nIndex = 2;
-                else
-                    nIndex = 1;
-            }
-            // Bottom row
-            nRow = nEndRow;
-            nIndex = 13;
-            for (nCol = nStartCol + 1; nCol < nEndCol; nCol++)
-            {
-                AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
-                if (nIndex == 13)
-                    nIndex = 14;
-                else
-                    nIndex = 13;
-            }
-            // Body
-            if ((pData->IsEqualData(5, 6)) && (pData->IsEqualData(9, 10)) && (pData->IsEqualData(5, 9)))
-                AutoFormatArea(nStartCol + 1, nStartRow + 1, nEndCol-1, nEndRow - 1, *pPatternAttrs[5], nFormatNo);
-            else
-            {
-                if ((pData->IsEqualData(5, 9)) && (pData->IsEqualData(6, 10)))
-                {
-                    nIndex = 5;
-                    for (nCol = nStartCol + 1; nCol < nEndCol; nCol++)
+                    if ((nIndex == 5) || (nIndex == 9))
                     {
-                        AutoFormatArea(nCol, nStartRow + 1, nCol, nEndRow - 1, *pPatternAttrs[nIndex], nFormatNo);
                         if (nIndex == 5)
-                            nIndex = 6;
+                            nIndex = 9;
                         else
                             nIndex = 5;
                     }
-                }
-                else
-                {
-                    nIndex = 5;
-                    for (nCol = nStartCol + 1; nCol < nEndCol; nCol++)
+                    else
                     {
-                        for (nRow = nStartRow + 1; nRow < nEndRow; nRow++)
-                        {
-                            AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
-                            if ((nIndex == 5) || (nIndex == 9))
-                            {
-                                if (nIndex == 5)
-                                    nIndex = 9;
-                                else
-                                    nIndex = 5;
-                            }
-                            else
-                            {
-                                if (nIndex == 6)
-                                    nIndex = 10;
-                                else
-                                    nIndex = 6;
-                            }
-                        } // for nRow
-                        if ((nIndex == 5) || (nIndex == 9))
-                            nIndex = 6;
+                        if (nIndex == 6)
+                            nIndex = 10;
                         else
-                            nIndex = 5;
-                    } // for nCol
-                } // if not equal Column
-            } // if not all equal
-        } // if AutoFormatData != NULL
-    } // if ValidColRow
+                            nIndex = 6;
+                    }
+                } // for nRow
+                if ((nIndex == 5) || (nIndex == 9))
+                    nIndex = 6;
+                else
+                    nIndex = 5;
+            } // for nCol
+        } // if not equal Column
+    } // if not all equal
 }
 
 void ScTable::GetAutoFormatAttr(SCCOL nCol, SCROW nRow, sal_uInt16 nIndex, ScAutoFormatData& rData)
@@ -2269,73 +2269,73 @@ void ScTable::GetAutoFormatFrame(SCCOL nCol, SCROW nRow, sal_uInt16 nFlags, sal_
 
 void ScTable::GetAutoFormatData(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, ScAutoFormatData& rData)
 {
-    if (ValidColRow(nStartCol, nStartRow) && ValidColRow(nEndCol, nEndRow))
+    if (!(ValidColRow(nStartCol, nStartRow) && ValidColRow(nEndCol, nEndRow)))
+        return;
+
+    if ((nEndCol - nStartCol < 3) || (nEndRow - nStartRow < 3))
+        return;
+
+    // Left top corner
+    GetAutoFormatAttr(nStartCol, nStartRow, 0, rData);
+    GetAutoFormatFrame(nStartCol, nStartRow, LF_ALL, 0, rData);
+    // Left column
+    GetAutoFormatAttr(nStartCol, nStartRow + 1, 4, rData);
+    GetAutoFormatAttr(nStartCol, nStartRow + 2, 8, rData);
+    GetAutoFormatFrame(nStartCol, nStartRow + 1, LF_LEFT | LF_RIGHT | LF_BOTTOM, 4, rData);
+    if (nEndRow - nStartRow >= 4)
+        GetAutoFormatFrame(nStartCol, nStartRow + 2, LF_LEFT | LF_RIGHT | LF_BOTTOM, 8, rData);
+    else
+        rData.CopyItem( 8, 4, ATTR_BORDER );
+    // Left bottom corner
+    GetAutoFormatAttr(nStartCol, nEndRow, 12, rData);
+    GetAutoFormatFrame(nStartCol, nEndRow, LF_ALL, 12, rData);
+    // Right top corner
+    GetAutoFormatAttr(nEndCol, nStartRow, 3, rData);
+    GetAutoFormatFrame(nEndCol, nStartRow, LF_ALL, 3, rData);
+    // Right column
+    GetAutoFormatAttr(nEndCol, nStartRow + 1, 7, rData);
+    GetAutoFormatAttr(nEndCol, nStartRow + 2, 11, rData);
+    GetAutoFormatFrame(nEndCol, nStartRow + 1, LF_LEFT | LF_RIGHT | LF_BOTTOM, 7, rData);
+    if (nEndRow - nStartRow >= 4)
+        GetAutoFormatFrame(nEndCol, nStartRow + 2, LF_LEFT | LF_RIGHT | LF_BOTTOM, 11, rData);
+    else
+        rData.CopyItem( 11, 7, ATTR_BORDER );
+    // Right bottom corner
+    GetAutoFormatAttr(nEndCol, nEndRow, 15, rData);
+    GetAutoFormatFrame(nEndCol, nEndRow, LF_ALL, 15, rData);
+    // Top row
+    GetAutoFormatAttr(nStartCol + 1, nStartRow, 1, rData);
+    GetAutoFormatAttr(nStartCol + 2, nStartRow, 2, rData);
+    GetAutoFormatFrame(nStartCol + 1, nStartRow, LF_TOP | LF_BOTTOM | LF_RIGHT, 1, rData);
+    if (nEndCol - nStartCol >= 4)
+        GetAutoFormatFrame(nStartCol + 2, nStartRow, LF_TOP | LF_BOTTOM | LF_RIGHT, 2, rData);
+    else
+        rData.CopyItem( 2, 1, ATTR_BORDER );
+    // Bottom row
+    GetAutoFormatAttr(nStartCol + 1, nEndRow, 13, rData);
+    GetAutoFormatAttr(nStartCol + 2, nEndRow, 14, rData);
+    GetAutoFormatFrame(nStartCol + 1, nEndRow, LF_TOP | LF_BOTTOM | LF_RIGHT, 13, rData);
+    if (nEndCol - nStartCol >= 4)
+        GetAutoFormatFrame(nStartCol + 2, nEndRow, LF_TOP | LF_BOTTOM | LF_RIGHT, 14, rData);
+    else
+        rData.CopyItem( 14, 13, ATTR_BORDER );
+    // Body
+    GetAutoFormatAttr(nStartCol + 1, nStartRow + 1, 5, rData);
+    GetAutoFormatAttr(nStartCol + 2, nStartRow + 1, 6, rData);
+    GetAutoFormatAttr(nStartCol + 1, nStartRow + 2, 9, rData);
+    GetAutoFormatAttr(nStartCol + 2, nStartRow + 2, 10, rData);
+    GetAutoFormatFrame(nStartCol + 1, nStartRow + 1, LF_RIGHT | LF_BOTTOM, 5, rData);
+    if ((nEndCol - nStartCol >= 4) && (nEndRow - nStartRow >= 4))
     {
-        if ((nEndCol - nStartCol >= 3) && (nEndRow - nStartRow >= 3))
-        {
-            // Left top corner
-            GetAutoFormatAttr(nStartCol, nStartRow, 0, rData);
-            GetAutoFormatFrame(nStartCol, nStartRow, LF_ALL, 0, rData);
-            // Left column
-            GetAutoFormatAttr(nStartCol, nStartRow + 1, 4, rData);
-            GetAutoFormatAttr(nStartCol, nStartRow + 2, 8, rData);
-            GetAutoFormatFrame(nStartCol, nStartRow + 1, LF_LEFT | LF_RIGHT | LF_BOTTOM, 4, rData);
-            if (nEndRow - nStartRow >= 4)
-                GetAutoFormatFrame(nStartCol, nStartRow + 2, LF_LEFT | LF_RIGHT | LF_BOTTOM, 8, rData);
-            else
-                rData.CopyItem( 8, 4, ATTR_BORDER );
-            // Left bottom corner
-            GetAutoFormatAttr(nStartCol, nEndRow, 12, rData);
-            GetAutoFormatFrame(nStartCol, nEndRow, LF_ALL, 12, rData);
-            // Right top corner
-            GetAutoFormatAttr(nEndCol, nStartRow, 3, rData);
-            GetAutoFormatFrame(nEndCol, nStartRow, LF_ALL, 3, rData);
-            // Right column
-            GetAutoFormatAttr(nEndCol, nStartRow + 1, 7, rData);
-            GetAutoFormatAttr(nEndCol, nStartRow + 2, 11, rData);
-            GetAutoFormatFrame(nEndCol, nStartRow + 1, LF_LEFT | LF_RIGHT | LF_BOTTOM, 7, rData);
-            if (nEndRow - nStartRow >= 4)
-                GetAutoFormatFrame(nEndCol, nStartRow + 2, LF_LEFT | LF_RIGHT | LF_BOTTOM, 11, rData);
-            else
-                rData.CopyItem( 11, 7, ATTR_BORDER );
-            // Right bottom corner
-            GetAutoFormatAttr(nEndCol, nEndRow, 15, rData);
-            GetAutoFormatFrame(nEndCol, nEndRow, LF_ALL, 15, rData);
-            // Top row
-            GetAutoFormatAttr(nStartCol + 1, nStartRow, 1, rData);
-            GetAutoFormatAttr(nStartCol + 2, nStartRow, 2, rData);
-            GetAutoFormatFrame(nStartCol + 1, nStartRow, LF_TOP | LF_BOTTOM | LF_RIGHT, 1, rData);
-            if (nEndCol - nStartCol >= 4)
-                GetAutoFormatFrame(nStartCol + 2, nStartRow, LF_TOP | LF_BOTTOM | LF_RIGHT, 2, rData);
-            else
-                rData.CopyItem( 2, 1, ATTR_BORDER );
-            // Bottom row
-            GetAutoFormatAttr(nStartCol + 1, nEndRow, 13, rData);
-            GetAutoFormatAttr(nStartCol + 2, nEndRow, 14, rData);
-            GetAutoFormatFrame(nStartCol + 1, nEndRow, LF_TOP | LF_BOTTOM | LF_RIGHT, 13, rData);
-            if (nEndCol - nStartCol >= 4)
-                GetAutoFormatFrame(nStartCol + 2, nEndRow, LF_TOP | LF_BOTTOM | LF_RIGHT, 14, rData);
-            else
-                rData.CopyItem( 14, 13, ATTR_BORDER );
-            // Body
-            GetAutoFormatAttr(nStartCol + 1, nStartRow + 1, 5, rData);
-            GetAutoFormatAttr(nStartCol + 2, nStartRow + 1, 6, rData);
-            GetAutoFormatAttr(nStartCol + 1, nStartRow + 2, 9, rData);
-            GetAutoFormatAttr(nStartCol + 2, nStartRow + 2, 10, rData);
-            GetAutoFormatFrame(nStartCol + 1, nStartRow + 1, LF_RIGHT | LF_BOTTOM, 5, rData);
-            if ((nEndCol - nStartCol >= 4) && (nEndRow - nStartRow >= 4))
-            {
-                GetAutoFormatFrame(nStartCol + 2, nStartRow + 1, LF_RIGHT | LF_BOTTOM, 6, rData);
-                GetAutoFormatFrame(nStartCol + 1, nStartRow + 2, LF_RIGHT | LF_BOTTOM, 9, rData);
-                GetAutoFormatFrame(nStartCol + 2, nStartRow + 2, LF_RIGHT | LF_BOTTOM, 10, rData);
-            }
-            else
-            {
-                rData.CopyItem( 6, 5, ATTR_BORDER );
-                rData.CopyItem( 9, 5, ATTR_BORDER );
-                rData.CopyItem( 10, 5, ATTR_BORDER );
-            }
-        }
+        GetAutoFormatFrame(nStartCol + 2, nStartRow + 1, LF_RIGHT | LF_BOTTOM, 6, rData);
+        GetAutoFormatFrame(nStartCol + 1, nStartRow + 2, LF_RIGHT | LF_BOTTOM, 9, rData);
+        GetAutoFormatFrame(nStartCol + 2, nStartRow + 2, LF_RIGHT | LF_BOTTOM, 10, rData);
+    }
+    else
+    {
+        rData.CopyItem( 6, 5, ATTR_BORDER );
+        rData.CopyItem( 9, 5, ATTR_BORDER );
+        rData.CopyItem( 10, 5, ATTR_BORDER );
     }
 }
 
