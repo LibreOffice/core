@@ -16,6 +16,7 @@ $(eval $(call gb_ExternalProject_register_targets,apache_commons_logging,\
 $(call gb_ExternalProject_get_state_target,apache_commons_logging,build) :
 	$(call gb_Trace_StartRange,apache_commons_logging,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
+	JAVA_HOME=$(JAVA_HOME_FOR_BUILD) \
 	ANT_OPTS="$$ANT_OPTS -Dfile.encoding=ISO-8859-1" \
 	$(ICECREAM_RUN) "$(ANT)" \
 		$(if $(verbose),-v,-q) \

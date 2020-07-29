@@ -64,7 +64,7 @@ define gb_Jar__command
 	$(gb_Jar_JARCOMMAND) cfm $(2) $(call gb_Jar_get_manifest_target,$(1)) \
 		META-INF $(PACKAGEROOTS) $(PACKAGEFILES) \
 	$(foreach root,$(PACKAGEDIRS),&& cd $(dir $(root)) && $(gb_Jar_JARCOMMAND) uf $(2) $(notdir $(root))) \
-	|| (rm $(2); false) )
+	|| (rm -f $(2); false) )
 endef
 
 # clean target reuses clean target of ClassSet
