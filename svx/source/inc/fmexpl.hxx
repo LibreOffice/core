@@ -515,12 +515,10 @@ namespace svxform
         bool    doingKeyboardCut( ) const { return m_bKeyboardCut; }
     };
 
-
     class NavigatorFrame : public SfxDockingWindow, public SfxControllerItem
     {
     private:
         std::unique_ptr<NavigatorTree> m_xNavigatorTree;
-//        VclPtr< ::svxform::NavigatorTree> m_pNavigatorTree;
 
     protected:
         virtual bool Close() override;
@@ -540,7 +538,6 @@ namespace svxform
         void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
         void FillInfo( SfxChildWinInfo& rInfo ) const override;
     };
-
 
     class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) NavigatorFrameManager : public SfxChildWindow
     {
