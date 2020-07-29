@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "83200810_f996b2cf",
+        "filename": "sw/source/uibase/inc/edtwin.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-29T05:57:54Z",
+      "side": 1,
+      "message": "Likely a stub like (void) this; would be needed to silence the plugin; or really make it static in this patch, and change later.",
+      "range": {
+        "startLine": 291,
+        "startChar": 9,
+        "endLine": 291,
+        "endChar": 42
+      },
+      "revId": "41d72ee706daec93e4bf97145eeb8cd2d97655f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
