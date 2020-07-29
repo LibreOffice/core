@@ -2630,8 +2630,17 @@ void DbFilterField::PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect)
     switch (m_nControlClass)
     {
         case FormComponentType::CHECKBOX:
-            DbCellControl::PaintCell( rDev, rRect );
+        {
+            // center the checkbox within the space available
+            CheckBoxControl* pControl = static_cast<CheckBoxControl*>(m_pPainter.get());
+            Size aBoxSize = pControl->GetBox().get_preferred_size();
+            tools::Rectangle aRect(Point(rRect.Left() + ((rRect.GetWidth() - aBoxSize.Width()) / 2),
+                                         rRect.Top() + ((rRect.GetHeight() - aBoxSize.Height()) / 2)),
+                                   aBoxSize);
+
+            DbCellControl::PaintCell(rDev, aRect);
             break;
+        }
         case FormComponentType::LISTBOX:
             rDev.DrawText(rRect, static_cast<ListBoxControl*>(m_pWindow.get())->get_widget().get_active_text(), nStyle);
             break;
