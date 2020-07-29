@@ -2156,42 +2156,42 @@ static void lcl_ScRange_Format_XL_Header( OUStringBuffer& rString, const ScRange
                                           ScRefFlags nFlags, const ScDocument& rDoc,
                                           const ScAddress::Details& rDetails )
 {
-    if( nFlags & ScRefFlags::TAB_3D )
+    if( !(nFlags & ScRefFlags::TAB_3D) )
+        return;
+
+    OUString aTabName, aDocName;
+    lcl_Split_DocTab( rDoc, rRange.aStart.Tab(), rDetails, nFlags, aTabName, aDocName );
+    switch (rDetails.eConv)
     {
-        OUString aTabName, aDocName;
-        lcl_Split_DocTab( rDoc, rRange.aStart.Tab(), rDetails, nFlags, aTabName, aDocName );
-        switch (rDetails.eConv)
-        {
-            case formula::FormulaGrammar::CONV_XL_OOX:
-                if (!aTabName.isEmpty() && aTabName[0] == '\'')
-                {
-                    if (!aDocName.isEmpty())
-                    {
-                        rString.append("'[").append(aDocName).append("]").append(std::u16string_view(aTabName).substr(1));
-                    }
-                    else
-                    {
-                        rString.append(aTabName);
-                    }
-                    break;
-                }
-                [[fallthrough]];
-            default:
+        case formula::FormulaGrammar::CONV_XL_OOX:
+            if (!aTabName.isEmpty() && aTabName[0] == '\'')
+            {
                 if (!aDocName.isEmpty())
                 {
-                    rString.append("[").append(aDocName).append("]");
+                    rString.append("'[").append(aDocName).append("]").append(std::u16string_view(aTabName).substr(1));
                 }
-                rString.append(aTabName);
-            break;
-        }
-        if( nFlags & ScRefFlags::TAB2_3D )
-        {
-            lcl_Split_DocTab( rDoc, rRange.aEnd.Tab(), rDetails, nFlags, aTabName, aDocName );
-            rString.append(":");
+                else
+                {
+                    rString.append(aTabName);
+                }
+                break;
+            }
+            [[fallthrough]];
+        default:
+            if (!aDocName.isEmpty())
+            {
+                rString.append("[").append(aDocName).append("]");
+            }
             rString.append(aTabName);
-        }
-        rString.append("!");
+        break;
     }
+    if( nFlags & ScRefFlags::TAB2_3D )
+    {
+        lcl_Split_DocTab( rDoc, rRange.aEnd.Tab(), rDetails, nFlags, aTabName, aDocName );
+        rString.append(":");
+        rString.append(aTabName);
+    }
+    rString.append("!");
 }
 
 // helpers used in ScRange::Format

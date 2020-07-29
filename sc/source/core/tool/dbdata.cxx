@@ -897,27 +897,27 @@ void ScDBData::Notify( const SfxHint& rHint )
     if (!pScHint)
         return;
 
-    if (pScHint->GetId() == SfxHintId::ScDataChanged)
+    if (pScHint->GetId() != SfxHintId::ScDataChanged)
+        return;
+
+    mbTableColumnNamesDirty = true;
+    if (!mpContainer)
+        assert(!"ScDBData::Notify - how did we end up here without container?");
+    else
     {
-        mbTableColumnNamesDirty = true;
-        if (!mpContainer)
-            assert(!"ScDBData::Notify - how did we end up here without container?");
-        else
+        // Only one cell of a range is broadcasted per area listener if
+        // multiple cells are affected. Expand the range to what this is
+        // listening to. Broadcasted address outside should not happen,
+        // but... let it trigger a refresh if.
+        ScRange aHeaderRange( GetHeaderArea());
+        if (aHeaderRange.IsValid())
         {
-            // Only one cell of a range is broadcasted per area listener if
-            // multiple cells are affected. Expand the range to what this is
-            // listening to. Broadcasted address outside should not happen,
-            // but... let it trigger a refresh if.
-            ScRange aHeaderRange( GetHeaderArea());
-            if (aHeaderRange.IsValid())
-            {
-                mpContainer->GetDirtyTableColumnNames().Join( aHeaderRange);
-                if (!aHeaderRange.In( pScHint->GetAddress()))
-                    mpContainer->GetDirtyTableColumnNames().Join( pScHint->GetAddress());
-            }
-            else
+            mpContainer->GetDirtyTableColumnNames().Join( aHeaderRange);
+            if (!aHeaderRange.In( pScHint->GetAddress()))
                 mpContainer->GetDirtyTableColumnNames().Join( pScHint->GetAddress());
         }
+        else
+            mpContainer->GetDirtyTableColumnNames().Join( pScHint->GetAddress());
     }
 
     // Do not refresh column names here, which might trigger unwanted
@@ -1095,23 +1095,23 @@ ScDBCollection::NamedDBs::~NamedDBs()
 void ScDBCollection::NamedDBs::initInserted( ScDBData* p )
 {
     p->SetContainer( this);
-    if (!mrDoc.IsClipOrUndo())
+    if (mrDoc.IsClipOrUndo())
+        return;
+
+    p->StartTableColumnNamesListener(); // needs the container be set already
+    if (!p->AreTableColumnNamesDirty())
+        return;
+
+    if (p->HasHeader())
     {
-        p->StartTableColumnNamesListener(); // needs the container be set already
-        if (p->AreTableColumnNamesDirty())
-        {
-            if (p->HasHeader())
-            {
-                // Refresh table column names in next round.
-                maDirtyTableColumnNames.Join( p->GetHeaderArea());
-            }
-            else
-            {
-                // Header-less table can generate its column names
-                // already without accessing the document.
-                p->RefreshTableColumnNames( nullptr);
-            }
-        }
+        // Refresh table column names in next round.
+        maDirtyTableColumnNames.Join( p->GetHeaderArea());
+    }
+    else
+    {
+        // Header-less table can generate its column names
+        // already without accessing the document.
+        p->RefreshTableColumnNames( nullptr);
     }
 }
 

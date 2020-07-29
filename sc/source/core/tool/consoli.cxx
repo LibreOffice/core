@@ -186,20 +186,20 @@ void ScConsData::AddFields( const ScDocument* pSrcDoc, SCTAB nTab,
         }
     }
 
-    if (bRowByName)
+    if (!bRowByName)
+        return;
+
+    for (SCROW nRow=nStartRow; nRow<=nRow2; nRow++)
     {
-        for (SCROW nRow=nStartRow; nRow<=nRow2; nRow++)
+        aTitle = pSrcDoc->GetString(nCol1, nRow, nTab);
+        if (!aTitle.isEmpty())
         {
-            aTitle = pSrcDoc->GetString(nCol1, nRow, nTab);
-            if (!aTitle.isEmpty())
-            {
-                bool bFound = false;
-                for (SCSIZE i=0; i<nRowCount && !bFound; i++)
-                    if ( maRowHeaders[i] == aTitle )
-                        bFound = true;
-                if (!bFound)
-                    lcl_AddString( maRowHeaders, nRowCount, aTitle );
-            }
+            bool bFound = false;
+            for (SCSIZE i=0; i<nRowCount && !bFound; i++)
+                if ( maRowHeaders[i] == aTitle )
+                    bFound = true;
+            if (!bFound)
+                lcl_AddString( maRowHeaders, nRowCount, aTitle );
         }
     }
 }
@@ -209,31 +209,31 @@ void ScConsData::AddName( const OUString& rName )
     SCSIZE nArrX;
     SCSIZE nArrY;
 
-    if (bReference)
+    if (!bReference)
+        return;
+
+    maTitles.push_back( rName);
+    size_t nTitleCount = maTitles.size();
+
+    for (nArrY=0; nArrY<nRowCount; nArrY++)
     {
-        maTitles.push_back( rName);
-        size_t nTitleCount = maTitles.size();
+        //  set all data to same length
 
-        for (nArrY=0; nArrY<nRowCount; nArrY++)
+        SCSIZE nMax = 0;
+        for (nArrX=0; nArrX<nColCount; nArrX++)
+            nMax = std::max( nMax, ppRefs[nArrX][nArrY].size() );
+
+        for (nArrX=0; nArrX<nColCount; nArrX++)
         {
-            //  set all data to same length
-
-            SCSIZE nMax = 0;
-            for (nArrX=0; nArrX<nColCount; nArrX++)
-                nMax = std::max( nMax, ppRefs[nArrX][nArrY].size() );
-
-            for (nArrX=0; nArrX<nColCount; nArrX++)
-            {
-                ppUsed[nArrX][nArrY] = true;
-                ppRefs[nArrX][nArrY].resize( nMax, { SC_CONS_NOTFOUND, SC_CONS_NOTFOUND, SC_CONS_NOTFOUND });
-            }
-
-            //  store positions
-
-            if (ppTitlePos)
-                if (nTitleCount < nDataCount)
-                    ppTitlePos[nArrY][nTitleCount] = nMax;
+            ppUsed[nArrX][nArrY] = true;
+            ppRefs[nArrX][nArrY].resize( nMax, { SC_CONS_NOTFOUND, SC_CONS_NOTFOUND, SC_CONS_NOTFOUND });
         }
+
+        //  store positions
+
+        if (ppTitlePos)
+            if (nTitleCount < nDataCount)
+                ppTitlePos[nArrY][nTitleCount] = nMax;
     }
 }
 
@@ -437,108 +437,108 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                 }
     }
 
-    if ( ppRefs && ppUsed )     // insert Reference
+    if ( !(ppRefs && ppUsed) )     // insert Reference
+                                return;
+
+                            //TODO: differentiate, if split into categories
+    OUString aString;
+
+    ScSingleRefData aSRef;  // data for Reference formula cells
+    aSRef.InitFlags();      // this reference is absolute at all times
+    aSRef.SetFlag3D(true);
+
+    ScComplexRefData aCRef; // data for Sum cells
+    aCRef.InitFlags();
+    aCRef.Ref1.SetColRel(true); aCRef.Ref1.SetRowRel(true); aCRef.Ref1.SetTabRel(true);
+    aCRef.Ref2.SetColRel(true); aCRef.Ref2.SetRowRel(true); aCRef.Ref2.SetTabRel(true);
+
+    for (nArrY=0; nArrY<nRowCount; nArrY++)
     {
-                                //TODO: differentiate, if split into categories
-        OUString aString;
+        SCSIZE nNeeded = 0;
+        for (nArrX=0; nArrX<nColCount; nArrX++)
+            nNeeded = std::max( nNeeded, ppRefs[nArrX][nArrY].size() );
 
-        ScSingleRefData aSRef;  // data for Reference formula cells
-        aSRef.InitFlags();      // this reference is absolute at all times
-        aSRef.SetFlag3D(true);
-
-        ScComplexRefData aCRef; // data for Sum cells
-        aCRef.InitFlags();
-        aCRef.Ref1.SetColRel(true); aCRef.Ref1.SetRowRel(true); aCRef.Ref1.SetTabRel(true);
-        aCRef.Ref2.SetColRel(true); aCRef.Ref2.SetRowRel(true); aCRef.Ref2.SetTabRel(true);
-
-        for (nArrY=0; nArrY<nRowCount; nArrY++)
+        if (nNeeded)
         {
-            SCSIZE nNeeded = 0;
+            pDestDoc->InsertRow( 0,nTab, pDestDoc->MaxCol(),nTab, nRow+nArrY, nNeeded );
+
             for (nArrX=0; nArrX<nColCount; nArrX++)
-                nNeeded = std::max( nNeeded, ppRefs[nArrX][nArrY].size() );
-
-            if (nNeeded)
-            {
-                pDestDoc->InsertRow( 0,nTab, pDestDoc->MaxCol(),nTab, nRow+nArrY, nNeeded );
-
-                for (nArrX=0; nArrX<nColCount; nArrX++)
-                    if (ppUsed[nArrX][nArrY])
-                    {
-                        SCSIZE nCount = ppRefs[nArrX][nArrY].size();
-                        if (nCount)
-                        {
-                            for (SCSIZE nPos=0; nPos<nCount; nPos++)
-                            {
-                                ScReferenceEntry aRef = ppRefs[nArrX][nArrY][nPos];
-                                if (aRef.nTab != SC_CONS_NOTFOUND)
-                                {
-                                    // insert reference (absolute, 3d)
-
-                                    aSRef.SetAddress(pDestDoc->GetSheetLimits(), ScAddress(aRef.nCol,aRef.nRow,aRef.nTab), ScAddress());
-
-                                    ScTokenArray aRefArr(pDestDoc);
-                                    aRefArr.AddSingleReference(aSRef);
-                                    aRefArr.AddOpCode(ocStop);
-                                    ScAddress aDest( sal::static_int_cast<SCCOL>(nCol+nArrX),
-                                                     sal::static_int_cast<SCROW>(nRow+nArrY+nPos), nTab );
-                                    ScFormulaCell* pCell = new ScFormulaCell(pDestDoc, aDest, aRefArr);
-                                    pDestDoc->SetFormulaCell(aDest, pCell);
-                                }
-                            }
-
-                            // insert sum (relative, not 3d)
-
-                            ScAddress aDest( sal::static_int_cast<SCCOL>(nCol+nArrX),
-                                             sal::static_int_cast<SCROW>(nRow+nArrY+nNeeded), nTab );
-
-                            ScRange aRange(sal::static_int_cast<SCCOL>(nCol+nArrX), nRow+nArrY, nTab);
-                            aRange.aEnd.SetRow(nRow+nArrY+nNeeded-1);
-                            aCRef.SetRange(pDestDoc->GetSheetLimits(), aRange, aDest);
-
-                            ScTokenArray aArr(pDestDoc);
-                            aArr.AddOpCode(eOpCode);            // selected function
-                            aArr.AddOpCode(ocOpen);
-                            aArr.AddDoubleReference(aCRef);
-                            aArr.AddOpCode(ocClose);
-                            aArr.AddOpCode(ocStop);
-                            ScFormulaCell* pCell = new ScFormulaCell(pDestDoc, aDest, aArr);
-                            pDestDoc->SetFormulaCell(aDest, pCell);
-                        }
-                    }
-
-                // insert outline
-
-                ScOutlineArray& rOutArr = pDestDoc->GetOutlineTable( nTab, true )->GetRowArray();
-                SCROW nOutStart = nRow+nArrY;
-                SCROW nOutEnd = nRow+nArrY+nNeeded-1;
-                bool bSize = false;
-                rOutArr.Insert( nOutStart, nOutEnd, bSize );
-                for (SCROW nOutRow=nOutStart; nOutRow<=nOutEnd; nOutRow++)
-                    pDestDoc->ShowRow( nOutRow, nTab, false );
-                pDestDoc->SetDrawPageSize(nTab);
-                pDestDoc->UpdateOutlineRow( nOutStart, nOutEnd, nTab, false );
-
-                // sub title
-
-                if (ppTitlePos && !maTitles.empty() && !maRowHeaders.empty())
+                if (ppUsed[nArrX][nArrY])
                 {
-                    for (SCSIZE nPos=0; nPos<nDataCount; nPos++)
+                    SCSIZE nCount = ppRefs[nArrX][nArrY].size();
+                    if (nCount)
                     {
-                        SCSIZE nTPos = ppTitlePos[nArrY][nPos];
-                        bool bDo = true;
-                        if (nPos+1<nDataCount)
-                            if (ppTitlePos[nArrY][nPos+1] == nTPos)
-                                bDo = false;                                    // empty
-                        if ( bDo && nTPos < nNeeded )
+                        for (SCSIZE nPos=0; nPos<nCount; nPos++)
                         {
-                            aString = maRowHeaders[nArrY] + " / " + maTitles[nPos];
-                            pDestDoc->SetString( nCol-1, nRow+nArrY+nTPos, nTab, aString );
+                            ScReferenceEntry aRef = ppRefs[nArrX][nArrY][nPos];
+                            if (aRef.nTab != SC_CONS_NOTFOUND)
+                            {
+                                // insert reference (absolute, 3d)
+
+                                aSRef.SetAddress(pDestDoc->GetSheetLimits(), ScAddress(aRef.nCol,aRef.nRow,aRef.nTab), ScAddress());
+
+                                ScTokenArray aRefArr(pDestDoc);
+                                aRefArr.AddSingleReference(aSRef);
+                                aRefArr.AddOpCode(ocStop);
+                                ScAddress aDest( sal::static_int_cast<SCCOL>(nCol+nArrX),
+                                                 sal::static_int_cast<SCROW>(nRow+nArrY+nPos), nTab );
+                                ScFormulaCell* pCell = new ScFormulaCell(pDestDoc, aDest, aRefArr);
+                                pDestDoc->SetFormulaCell(aDest, pCell);
+                            }
                         }
+
+                        // insert sum (relative, not 3d)
+
+                        ScAddress aDest( sal::static_int_cast<SCCOL>(nCol+nArrX),
+                                         sal::static_int_cast<SCROW>(nRow+nArrY+nNeeded), nTab );
+
+                        ScRange aRange(sal::static_int_cast<SCCOL>(nCol+nArrX), nRow+nArrY, nTab);
+                        aRange.aEnd.SetRow(nRow+nArrY+nNeeded-1);
+                        aCRef.SetRange(pDestDoc->GetSheetLimits(), aRange, aDest);
+
+                        ScTokenArray aArr(pDestDoc);
+                        aArr.AddOpCode(eOpCode);            // selected function
+                        aArr.AddOpCode(ocOpen);
+                        aArr.AddDoubleReference(aCRef);
+                        aArr.AddOpCode(ocClose);
+                        aArr.AddOpCode(ocStop);
+                        ScFormulaCell* pCell = new ScFormulaCell(pDestDoc, aDest, aArr);
+                        pDestDoc->SetFormulaCell(aDest, pCell);
                     }
                 }
 
-                nRow += nNeeded;
+            // insert outline
+
+            ScOutlineArray& rOutArr = pDestDoc->GetOutlineTable( nTab, true )->GetRowArray();
+            SCROW nOutStart = nRow+nArrY;
+            SCROW nOutEnd = nRow+nArrY+nNeeded-1;
+            bool bSize = false;
+            rOutArr.Insert( nOutStart, nOutEnd, bSize );
+            for (SCROW nOutRow=nOutStart; nOutRow<=nOutEnd; nOutRow++)
+                pDestDoc->ShowRow( nOutRow, nTab, false );
+            pDestDoc->SetDrawPageSize(nTab);
+            pDestDoc->UpdateOutlineRow( nOutStart, nOutEnd, nTab, false );
+
+            // sub title
+
+            if (ppTitlePos && !maTitles.empty() && !maRowHeaders.empty())
+            {
+                for (SCSIZE nPos=0; nPos<nDataCount; nPos++)
+                {
+                    SCSIZE nTPos = ppTitlePos[nArrY][nPos];
+                    bool bDo = true;
+                    if (nPos+1<nDataCount)
+                        if (ppTitlePos[nArrY][nPos+1] == nTPos)
+                            bDo = false;                                    // empty
+                    if ( bDo && nTPos < nNeeded )
+                    {
+                        aString = maRowHeaders[nArrY] + " / " + maTitles[nPos];
+                        pDestDoc->SetString( nCol-1, nRow+nArrY+nTPos, nTab, aString );
+                    }
+                }
             }
+
+            nRow += nNeeded;
         }
     }
 }

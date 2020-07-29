@@ -155,25 +155,25 @@ void ScRangeData::CompileRangeData( const OUString& rSymbol, bool bSetError )
         aComp.SetExtendedErrorDetection( ScCompiler::EXTENDED_ERROR_DETECTION_NAME_NO_BREAK);
     pCode = aComp.CompileString( rSymbol );
     pCode->SetFromRangeName(true);
-    if( pCode->GetCodeError() == FormulaError::NONE )
+    if( pCode->GetCodeError() != FormulaError::NONE )
+        return;
+
+    FormulaTokenArrayPlainIterator aIter(*pCode);
+    FormulaToken* p = aIter.GetNextReference();
+    if( p )
     {
-        FormulaTokenArrayPlainIterator aIter(*pCode);
-        FormulaToken* p = aIter.GetNextReference();
-        if( p )
-        {
-            // first token is a reference
-            /* FIXME: wouldn't that need a check if it's exactly one reference? */
-            if( p->GetType() == svSingleRef )
-                eType = eType | Type::AbsPos;
-            else
-                eType = eType | Type::AbsArea;
-        }
-        // For manual input set an error for an incomplete formula.
-        if (!pDoc->IsImportingXML())
-        {
-            aComp.CompileTokenArray();
-            pCode->DelRPN();
-        }
+        // first token is a reference
+        /* FIXME: wouldn't that need a check if it's exactly one reference? */
+        if( p->GetType() == svSingleRef )
+            eType = eType | Type::AbsPos;
+        else
+            eType = eType | Type::AbsArea;
+    }
+    // For manual input set an error for an incomplete formula.
+    if (!pDoc->IsImportingXML())
+    {
+        aComp.CompileTokenArray();
+        pCode->DelRPN();
     }
 }
 
@@ -556,48 +556,48 @@ void ScRangeData::ValidateTabRefs()
     }
 
     SCTAB nTabCount = pDoc->GetTableCount();
-    if ( nMaxTab >= nTabCount && nMinTab > 0 )
+    if ( nMaxTab < nTabCount || nMinTab <= 0 )
+        return;
+
+    //  move position and relative tab refs
+    //  The formulas that use the name are not changed by this
+
+    SCTAB nMove = nMinTab;
+    ScAddress aOldPos = aPos;
+    aPos.SetTab( aPos.Tab() - nMove );
+
+    aIter.Reset();
+    while ( ( t = aIter.GetNextReference() ) != nullptr )
     {
-        //  move position and relative tab refs
-        //  The formulas that use the name are not changed by this
-
-        SCTAB nMove = nMinTab;
-        ScAddress aOldPos = aPos;
-        aPos.SetTab( aPos.Tab() - nMove );
-
-        aIter.Reset();
-        while ( ( t = aIter.GetNextReference() ) != nullptr )
+        switch (t->GetType())
         {
-            switch (t->GetType())
+            case svSingleRef:
             {
-                case svSingleRef:
+                ScSingleRefData& rRef = *t->GetSingleRef();
+                if (!rRef.IsTabDeleted())
                 {
-                    ScSingleRefData& rRef = *t->GetSingleRef();
-                    if (!rRef.IsTabDeleted())
-                    {
-                        ScAddress aAbs = rRef.toAbs(pDoc, aOldPos);
-                        rRef.SetAddress(pDoc->GetSheetLimits(), aAbs, aPos);
-                    }
+                    ScAddress aAbs = rRef.toAbs(pDoc, aOldPos);
+                    rRef.SetAddress(pDoc->GetSheetLimits(), aAbs, aPos);
                 }
-                break;
-                case svDoubleRef:
-                {
-                    ScComplexRefData& rRef = *t->GetDoubleRef();
-                    if (!rRef.Ref1.IsTabDeleted())
-                    {
-                        ScAddress aAbs = rRef.Ref1.toAbs(pDoc, aOldPos);
-                        rRef.Ref1.SetAddress(pDoc->GetSheetLimits(), aAbs, aPos);
-                    }
-                    if (!rRef.Ref2.IsTabDeleted())
-                    {
-                        ScAddress aAbs = rRef.Ref2.toAbs(pDoc, aOldPos);
-                        rRef.Ref2.SetAddress(pDoc->GetSheetLimits(), aAbs, aPos);
-                    }
-                }
-                break;
-                default:
-                    ;
             }
+            break;
+            case svDoubleRef:
+            {
+                ScComplexRefData& rRef = *t->GetDoubleRef();
+                if (!rRef.Ref1.IsTabDeleted())
+                {
+                    ScAddress aAbs = rRef.Ref1.toAbs(pDoc, aOldPos);
+                    rRef.Ref1.SetAddress(pDoc->GetSheetLimits(), aAbs, aPos);
+                }
+                if (!rRef.Ref2.IsTabDeleted())
+                {
+                    ScAddress aAbs = rRef.Ref2.toAbs(pDoc, aOldPos);
+                    rRef.Ref2.SetAddress(pDoc->GetSheetLimits(), aAbs, aPos);
+                }
+            }
+            break;
+            default:
+                ;
         }
     }
 }

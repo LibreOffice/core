@@ -276,22 +276,22 @@ void ScQueryParamBase::FillInExcelSyntax(
         }
     }
 
-    if (pFormatter)
-    {
-        sal_uInt32 nFormat = 0;
-        bool bNumber = pFormatter->IsNumberFormat( rItem.maString.getString(), nFormat, rItem.mfVal);
-        rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
+    if (!pFormatter)
+        return;
 
-        /* TODO: pFormatter currently is also used as a flag whether matching
-         * empty cells with an empty string is triggered from the interpreter.
-         * This could be handled independently if all queries should support
-         * it, needs to be evaluated if that actually is desired. */
+    sal_uInt32 nFormat = 0;
+    bool bNumber = pFormatter->IsNumberFormat( rItem.maString.getString(), nFormat, rItem.mfVal);
+    rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
 
-        // (empty = empty) is a match, and (empty <> not-empty) also is a
-        // match. (empty = 0) is not a match.
-        rItem.mbMatchEmpty = ((rEntry.eOp == SC_EQUAL && rItem.maString.isEmpty())
-                || (rEntry.eOp == SC_NOT_EQUAL && !rItem.maString.isEmpty()));
-    }
+    /* TODO: pFormatter currently is also used as a flag whether matching
+     * empty cells with an empty string is triggered from the interpreter.
+     * This could be handled independently if all queries should support
+     * it, needs to be evaluated if that actually is desired. */
+
+    // (empty = empty) is a match, and (empty <> not-empty) also is a
+    // match. (empty = 0) is not a match.
+    rItem.mbMatchEmpty = ((rEntry.eOp == SC_EQUAL && rItem.maString.isEmpty())
+            || (rEntry.eOp == SC_NOT_EQUAL && !rItem.maString.isEmpty()));
 }
 
 ScQueryParamTable::ScQueryParamTable() :

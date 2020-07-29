@@ -262,19 +262,19 @@ void ScCompiler::SetNumberFormatter( SvNumberFormatter* pFormatter )
 
 void ScCompiler::SetFormulaLanguage( const ScCompiler::OpCodeMapPtr & xMap )
 {
-    if (xMap)
+    if (!xMap)
+        return;
+
+    mxSymbols = xMap;
+    if (mxSymbols->isEnglish())
     {
-        mxSymbols = xMap;
-        if (mxSymbols->isEnglish())
-        {
-            if (!pCharClassEnglish)
-                InitCharClassEnglish();
-            pCharClass = pCharClassEnglish;
-        }
-        else
-            pCharClass = ScGlobal::getCharClassPtr();
-        SetGrammarAndRefConvention( mxSymbols->getGrammar(), GetGrammar());
+        if (!pCharClassEnglish)
+            InitCharClassEnglish();
+        pCharClass = pCharClassEnglish;
     }
+    else
+        pCharClass = ScGlobal::getCharClassPtr();
+    SetGrammarAndRefConvention( mxSymbols->getGrammar(), GetGrammar());
 }
 
 void ScCompiler::SetGrammarAndRefConvention(
@@ -409,8 +409,9 @@ ScCompiler::Convention::Convention( FormulaGrammar::AddressConvention eConv )
 /* ~ */     t[126] = ScCharFlags::Char;        // OOo specific
 /* 127 */   // FREE
 
-    if( FormulaGrammar::CONV_XL_A1 == meConv || FormulaGrammar::CONV_XL_R1C1 == meConv || FormulaGrammar::CONV_XL_OOX == meConv )
-    {
+    if( !(FormulaGrammar::CONV_XL_A1 == meConv || FormulaGrammar::CONV_XL_R1C1 == meConv || FormulaGrammar::CONV_XL_OOX == meConv) )
+return;
+
 /*   */     t[32] |=   ScCharFlags::Word;
 /* ! */     t[33] |=   ScCharFlags::Ident | ScCharFlags::Word;
 /* " */     t[34] |=   ScCharFlags::Word;
@@ -445,7 +446,6 @@ ScCompiler::Convention::Convention( FormulaGrammar::AddressConvention eConv )
 /* | */     t[124]|=   ScCharFlags::Word;
 /* } */     t[125]|=   ScCharFlags::Word;
 /* ~ */     t[126]|=   ScCharFlags::Word;
-    }
 }
 
 static bool lcl_isValidQuotedText( const OUString& rFormula, sal_Int32 nSrcPos, ParseResult& rRes )
@@ -1117,26 +1117,26 @@ struct ConventionXL
                             const ScComplexRefData& rRef,
                             bool bSingleRef )
     {
-        if( rRef.Ref1.IsFlag3D() )
+        if( !rRef.Ref1.IsFlag3D() )
+            return;
+
+        OUString aStartTabName, aEndTabName;
+
+        GetTab(rLimits, rPos, rTabNames, rRef.Ref1, aStartTabName);
+
+        if( !bSingleRef && rRef.Ref2.IsFlag3D() )
         {
-            OUString aStartTabName, aEndTabName;
-
-            GetTab(rLimits, rPos, rTabNames, rRef.Ref1, aStartTabName);
-
-            if( !bSingleRef && rRef.Ref2.IsFlag3D() )
-            {
-                GetTab(rLimits, rPos, rTabNames, rRef.Ref2, aEndTabName);
-            }
-
-            rBuf.append( aStartTabName );
-            if( !bSingleRef && rRef.Ref2.IsFlag3D() && aStartTabName != aEndTabName )
-            {
-                rBuf.append( ':' );
-                rBuf.append( aEndTabName );
-            }
-
-            rBuf.append( '!' );
+            GetTab(rLimits, rPos, rTabNames, rRef.Ref2, aEndTabName);
         }
+
+        rBuf.append( aStartTabName );
+        if( !bSingleRef && rRef.Ref2.IsFlag3D() && aStartTabName != aEndTabName )
+        {
+            rBuf.append( ':' );
+            rBuf.append( aEndTabName );
+        }
+
+        rBuf.append( '!' );
     }
 
     static sal_Unicode getSpecialSymbol( ScCompiler::Convention::SpecialSymbolType eSymType )
@@ -3975,183 +3975,183 @@ void ScCompiler::SetAutoCorrection( bool bVal )
 void ScCompiler::AutoCorrectParsedSymbol()
 {
     sal_Int32 nPos = aCorrectedSymbol.getLength();
-    if ( nPos )
-    {
-        nPos--;
-        const sal_Unicode cQuote = '\"';
-        const sal_Unicode cx = 'x';
-        const sal_Unicode cX = 'X';
-        sal_Unicode c1 = aCorrectedSymbol[0];
-        sal_Unicode c2 = aCorrectedSymbol[nPos];
-        sal_Unicode c2p = nPos > 0 ? aCorrectedSymbol[nPos-1] : 0;
-        if ( c1 == cQuote && c2 != cQuote  )
-        {   // "...
-            // What's not a word doesn't belong to it.
-            // Don't be pedantic: c < 128 should be sufficient here.
-            while ( nPos && ((aCorrectedSymbol[nPos] < 128) &&
-                    ((GetCharTableFlags(aCorrectedSymbol[nPos], aCorrectedSymbol[nPos-1]) &
-                    (ScCharFlags::Word | ScCharFlags::CharDontCare)) == ScCharFlags::NONE)) )
-                nPos--;
-            if ( nPos == MAXSTRLEN - 1 )
-                aCorrectedSymbol = aCorrectedSymbol.replaceAt( nPos, 1, OUString(cQuote) );   // '"' the MAXSTRLENth character
-            else
-                aCorrectedSymbol = aCorrectedSymbol.replaceAt( nPos + 1, 0, OUString(cQuote) );
-            bCorrected = true;
-        }
-        else if ( c1 != cQuote && c2 == cQuote )
-        {   // ..."
-            aCorrectedSymbol = OUStringChar(cQuote) + aCorrectedSymbol;
-            bCorrected = true;
-        }
-        else if ( nPos == 0 && (c1 == cx || c1 == cX) )
-        {   // x => *
-            aCorrectedSymbol = mxSymbols->getSymbol(ocMul);
-            bCorrected = true;
-        }
-        else if ( (GetCharTableFlags( c1, 0 ) & ScCharFlags::CharValue)
-               && (GetCharTableFlags( c2, c2p ) & ScCharFlags::CharValue) )
-        {
-            if ( aCorrectedSymbol.indexOf(cx) >= 0 ) // At least two tokens separated by cx
-            {   // x => *
-                sal_Unicode c = mxSymbols->getSymbolChar(ocMul);
-                aCorrectedSymbol = aCorrectedSymbol.replaceAll(OUStringChar(cx), OUStringChar(c));
-                bCorrected = true;
-            }
-            if ( aCorrectedSymbol.indexOf(cX) >= 0 ) // At least two tokens separated by cX
-            {   // X => *
-                sal_Unicode c = mxSymbols->getSymbolChar(ocMul);
-                aCorrectedSymbol = aCorrectedSymbol.replaceAll(OUStringChar(cX), OUStringChar(c));
-                bCorrected = true;
-            }
-        }
+    if ( !nPos )
+        return;
+
+    nPos--;
+    const sal_Unicode cQuote = '\"';
+    const sal_Unicode cx = 'x';
+    const sal_Unicode cX = 'X';
+    sal_Unicode c1 = aCorrectedSymbol[0];
+    sal_Unicode c2 = aCorrectedSymbol[nPos];
+    sal_Unicode c2p = nPos > 0 ? aCorrectedSymbol[nPos-1] : 0;
+    if ( c1 == cQuote && c2 != cQuote  )
+    {   // "...
+        // What's not a word doesn't belong to it.
+        // Don't be pedantic: c < 128 should be sufficient here.
+        while ( nPos && ((aCorrectedSymbol[nPos] < 128) &&
+                ((GetCharTableFlags(aCorrectedSymbol[nPos], aCorrectedSymbol[nPos-1]) &
+                (ScCharFlags::Word | ScCharFlags::CharDontCare)) == ScCharFlags::NONE)) )
+            nPos--;
+        if ( nPos == MAXSTRLEN - 1 )
+            aCorrectedSymbol = aCorrectedSymbol.replaceAt( nPos, 1, OUString(cQuote) );   // '"' the MAXSTRLENth character
         else
+            aCorrectedSymbol = aCorrectedSymbol.replaceAt( nPos + 1, 0, OUString(cQuote) );
+        bCorrected = true;
+    }
+    else if ( c1 != cQuote && c2 == cQuote )
+    {   // ..."
+        aCorrectedSymbol = OUStringChar(cQuote) + aCorrectedSymbol;
+        bCorrected = true;
+    }
+    else if ( nPos == 0 && (c1 == cx || c1 == cX) )
+    {   // x => *
+        aCorrectedSymbol = mxSymbols->getSymbol(ocMul);
+        bCorrected = true;
+    }
+    else if ( (GetCharTableFlags( c1, 0 ) & ScCharFlags::CharValue)
+           && (GetCharTableFlags( c2, c2p ) & ScCharFlags::CharValue) )
+    {
+        if ( aCorrectedSymbol.indexOf(cx) >= 0 ) // At least two tokens separated by cx
+        {   // x => *
+            sal_Unicode c = mxSymbols->getSymbolChar(ocMul);
+            aCorrectedSymbol = aCorrectedSymbol.replaceAll(OUStringChar(cx), OUStringChar(c));
+            bCorrected = true;
+        }
+        if ( aCorrectedSymbol.indexOf(cX) >= 0 ) // At least two tokens separated by cX
+        {   // X => *
+            sal_Unicode c = mxSymbols->getSymbolChar(ocMul);
+            aCorrectedSymbol = aCorrectedSymbol.replaceAll(OUStringChar(cX), OUStringChar(c));
+            bCorrected = true;
+        }
+    }
+    else
+    {
+        OUString aSymbol( aCorrectedSymbol );
+        OUString aDoc;
+        if ( aSymbol[0] == '\'' )
         {
-            OUString aSymbol( aCorrectedSymbol );
-            OUString aDoc;
-            if ( aSymbol[0] == '\'' )
-            {
-                sal_Int32 nPosition = aSymbol.indexOf( "'#" );
-                if (nPosition != -1)
-                {   // Split off 'Doc'#, may be d:\... or whatever
-                    aDoc = aSymbol.copy(0, nPosition + 2);
-                    aSymbol = aSymbol.copy(nPosition + 2);
-                }
+            sal_Int32 nPosition = aSymbol.indexOf( "'#" );
+            if (nPosition != -1)
+            {   // Split off 'Doc'#, may be d:\... or whatever
+                aDoc = aSymbol.copy(0, nPosition + 2);
+                aSymbol = aSymbol.copy(nPosition + 2);
             }
-            sal_Int32 nRefs = comphelper::string::getTokenCount(aSymbol, ':');
-            bool bColons;
-            if ( nRefs > 2 )
-            {   // duplicated or too many ':'? B:2::C10 => B2:C10
-                bColons = true;
-                sal_Int32 nIndex = 0;
-                OUString aTmp1( aSymbol.getToken( 0, ':', nIndex ) );
-                sal_Int32 nLen1 = aTmp1.getLength();
-                OUStringBuffer aSym;
-                OUString aTmp2;
-                bool bLastAlp = true;
-                sal_Int32 nStrip = 0;
-                sal_Int32 nCount = nRefs;
-                for ( sal_Int32 j=1; j<nCount; j++ )
+        }
+        sal_Int32 nRefs = comphelper::string::getTokenCount(aSymbol, ':');
+        bool bColons;
+        if ( nRefs > 2 )
+        {   // duplicated or too many ':'? B:2::C10 => B2:C10
+            bColons = true;
+            sal_Int32 nIndex = 0;
+            OUString aTmp1( aSymbol.getToken( 0, ':', nIndex ) );
+            sal_Int32 nLen1 = aTmp1.getLength();
+            OUStringBuffer aSym;
+            OUString aTmp2;
+            bool bLastAlp = true;
+            sal_Int32 nStrip = 0;
+            sal_Int32 nCount = nRefs;
+            for ( sal_Int32 j=1; j<nCount; j++ )
+            {
+                aTmp2 = aSymbol.getToken( 0, ':', nIndex );
+                sal_Int32 nLen2 = aTmp2.getLength();
+                if ( nLen1 || nLen2 )
                 {
-                    aTmp2 = aSymbol.getToken( 0, ':', nIndex );
-                    sal_Int32 nLen2 = aTmp2.getLength();
-                    if ( nLen1 || nLen2 )
+                    if ( nLen1 )
                     {
-                        if ( nLen1 )
+                        aSym.append(aTmp1);
+                        bLastAlp = CharClass::isAsciiAlpha( aTmp1 );
+                    }
+                    if ( nLen2 )
+                    {
+                        bool bNextNum = CharClass::isAsciiNumeric( aTmp2 );
+                        if ( bLastAlp == bNextNum && nStrip < 1 )
                         {
-                            aSym.append(aTmp1);
-                            bLastAlp = CharClass::isAsciiAlpha( aTmp1 );
-                        }
-                        if ( nLen2 )
-                        {
-                            bool bNextNum = CharClass::isAsciiNumeric( aTmp2 );
-                            if ( bLastAlp == bNextNum && nStrip < 1 )
-                            {
-                                // Must be alternating number/string, only
-                                // strip within a reference.
-                                nRefs--;
-                                nStrip++;
-                            }
-                            else
-                            {
-                                if ( !aSym.isEmpty() && aSym[aSym.getLength()-1] != ':')
-                                    aSym.append(":");
-                                nStrip = 0;
-                            }
-                            bLastAlp = !bNextNum;
+                            // Must be alternating number/string, only
+                            // strip within a reference.
+                            nRefs--;
+                            nStrip++;
                         }
                         else
-                        {   // ::
-                            nRefs--;
-                            if ( nLen1 )
-                            {   // B10::C10 ? append ':' on next round
-                                if ( !bLastAlp && !CharClass::isAsciiNumeric( aTmp1 ) )
-                                    nStrip++;
-                            }
+                        {
+                            if ( !aSym.isEmpty() && aSym[aSym.getLength()-1] != ':')
+                                aSym.append(":");
+                            nStrip = 0;
                         }
-                        aTmp1 = aTmp2;
-                        nLen1 = nLen2;
+                        bLastAlp = !bNextNum;
                     }
                     else
+                    {   // ::
                         nRefs--;
-                }
-                aSymbol = aSym.makeStringAndClear() + aTmp1;
-            }
-            else
-                bColons = false;
-            if ( nRefs && nRefs <= 2 )
-            {   // reference twisted? 4A => A4 etc.
-                OUString aTab[2], aRef[2];
-                const ScAddress::Details aDetails( pConv->meConv, aPos );
-                if ( nRefs == 2 )
-                {
-                    sal_Int32 nIdx{ 0 };
-                    aRef[0] = aSymbol.getToken( 0, ':', nIdx );
-                    aRef[1] = aSymbol.getToken( 0, ':', nIdx );
+                        if ( nLen1 )
+                        {   // B10::C10 ? append ':' on next round
+                            if ( !bLastAlp && !CharClass::isAsciiNumeric( aTmp1 ) )
+                                nStrip++;
+                        }
+                    }
+                    aTmp1 = aTmp2;
+                    nLen1 = nLen2;
                 }
                 else
-                    aRef[0] = aSymbol;
+                    nRefs--;
+            }
+            aSymbol = aSym.makeStringAndClear() + aTmp1;
+        }
+        else
+            bColons = false;
+        if ( nRefs && nRefs <= 2 )
+        {   // reference twisted? 4A => A4 etc.
+            OUString aTab[2], aRef[2];
+            const ScAddress::Details aDetails( pConv->meConv, aPos );
+            if ( nRefs == 2 )
+            {
+                sal_Int32 nIdx{ 0 };
+                aRef[0] = aSymbol.getToken( 0, ':', nIdx );
+                aRef[1] = aSymbol.getToken( 0, ':', nIdx );
+            }
+            else
+                aRef[0] = aSymbol;
 
-                bool bChanged = false;
-                bool bOk = true;
-                ScRefFlags nMask = ScRefFlags::VALID | ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID;
-                for ( int j=0; j<nRefs; j++ )
+            bool bChanged = false;
+            bool bOk = true;
+            ScRefFlags nMask = ScRefFlags::VALID | ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID;
+            for ( int j=0; j<nRefs; j++ )
+            {
+                sal_Int32 nTmp = 0;
+                sal_Int32 nDotPos = -1;
+                while ( (nTmp = aRef[j].indexOf( '.', nTmp )) != -1 )
+                    nDotPos = nTmp++;      // the last one counts
+                if ( nDotPos != -1 )
                 {
-                    sal_Int32 nTmp = 0;
-                    sal_Int32 nDotPos = -1;
-                    while ( (nTmp = aRef[j].indexOf( '.', nTmp )) != -1 )
-                        nDotPos = nTmp++;      // the last one counts
-                    if ( nDotPos != -1 )
-                    {
-                        aTab[j] = aRef[j].copy( 0, nDotPos + 1 );  // with '.'
-                        aRef[j] = aRef[j].copy( nDotPos + 1 );
-                    }
-                    OUString aOld( aRef[j] );
-                    OUStringBuffer aStr2;
-                    const sal_Unicode* p = aRef[j].getStr();
-                    while ( *p && rtl::isAsciiDigit( *p ) )
-                        aStr2.append(*p++);
-                    aRef[j] = OUString( p );
-                    aRef[j] += aStr2.makeStringAndClear();
-                    if ( bColons || aRef[j] != aOld )
-                    {
-                        bChanged = true;
-                        ScAddress aAdr;
-                        bOk &= ((aAdr.Parse( aRef[j], pDoc, aDetails ) & nMask) == nMask);
-                    }
+                    aTab[j] = aRef[j].copy( 0, nDotPos + 1 );  // with '.'
+                    aRef[j] = aRef[j].copy( nDotPos + 1 );
                 }
-                if ( bChanged && bOk )
+                OUString aOld( aRef[j] );
+                OUStringBuffer aStr2;
+                const sal_Unicode* p = aRef[j].getStr();
+                while ( *p && rtl::isAsciiDigit( *p ) )
+                    aStr2.append(*p++);
+                aRef[j] = OUString( p );
+                aRef[j] += aStr2.makeStringAndClear();
+                if ( bColons || aRef[j] != aOld )
                 {
-                    aCorrectedSymbol = aDoc;
-                    aCorrectedSymbol += aTab[0];
-                    aCorrectedSymbol += aRef[0];
-                    if ( nRefs == 2 )
-                    {
-                        aCorrectedSymbol += ":";
-                        aCorrectedSymbol += aTab[1];
-                        aCorrectedSymbol += aRef[1];
-                    }
-                    bCorrected = true;
+                    bChanged = true;
+                    ScAddress aAdr;
+                    bOk &= ((aAdr.Parse( aRef[j], pDoc, aDetails ) & nMask) == nMask);
                 }
+            }
+            if ( bChanged && bOk )
+            {
+                aCorrectedSymbol = aDoc;
+                aCorrectedSymbol += aTab[0];
+                aCorrectedSymbol += aRef[0];
+                if ( nRefs == 2 )
+                {
+                    aCorrectedSymbol += ":";
+                    aCorrectedSymbol += aTab[1];
+                    aCorrectedSymbol += aRef[1];
+                }
+                bCorrected = true;
             }
         }
     }

@@ -135,30 +135,30 @@ void ScJumpMatrix::GetResMatDimensions(SCSIZE& rCols, SCSIZE& rRows)
 
 void ScJumpMatrix::SetNewResMat(SCSIZE nNewCols, SCSIZE nNewRows)
 {
-    if (nNewCols > nResMatCols || nNewRows > nResMatRows)
+    if (nNewCols <= nResMatCols && nNewRows <= nResMatRows)
+        return;
+
+    FlushBufferOtherThan( BUFFER_NONE, 0, 0);
+    pMat = pMat->CloneAndExtend(nNewCols, nNewRows);
+    if (nResMatCols < nNewCols)
     {
-        FlushBufferOtherThan( BUFFER_NONE, 0, 0);
-        pMat = pMat->CloneAndExtend(nNewCols, nNewRows);
-        if (nResMatCols < nNewCols)
-        {
-            pMat->FillDouble(
-                CreateDoubleError(FormulaError::NotAvailable),
-                nResMatCols, 0, nNewCols - 1, nResMatRows - 1);
-        }
-        if (nResMatRows < nNewRows)
-        {
-            pMat->FillDouble(
-                CreateDoubleError(FormulaError::NotAvailable),
-                0, nResMatRows, nNewCols - 1, nNewRows - 1);
-        }
-        if (nRows == 1 && nCurCol != 0)
-        {
-            nCurCol = 0;
-            nCurRow = nResMatRows - 1;
-        }
-        nResMatCols = nNewCols;
-        nResMatRows = nNewRows;
+        pMat->FillDouble(
+            CreateDoubleError(FormulaError::NotAvailable),
+            nResMatCols, 0, nNewCols - 1, nResMatRows - 1);
     }
+    if (nResMatRows < nNewRows)
+    {
+        pMat->FillDouble(
+            CreateDoubleError(FormulaError::NotAvailable),
+            0, nResMatRows, nNewCols - 1, nNewRows - 1);
+    }
+    if (nRows == 1 && nCurCol != 0)
+    {
+        nCurCol = 0;
+        nCurRow = nResMatRows - 1;
+    }
+    nResMatCols = nNewCols;
+    nResMatRows = nNewRows;
 }
 
 bool ScJumpMatrix::HasResultMatrix() const
