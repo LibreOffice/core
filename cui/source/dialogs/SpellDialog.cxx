@@ -1669,8 +1669,17 @@ void SentenceEditWindow_Impl::MoveErrorMarkTo(sal_Int32 nStart, sal_Int32 nEnd, 
     aSet.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT_CTL));
 
     m_xEditEngine->QuickSetAttribs(aSet, ESelection(0, nStart, 0, nEnd));
-    // so the editview will autoscroll to make this visible
-    m_xEditView->SetSelection(ESelection(0, nStart));
+
+    // Set the selection so the editview will autoscroll to make this visible
+    // unless (tdf#133958) the selection already overlaps this range
+    ESelection aCurrentSelection = m_xEditView->GetSelection();
+    aCurrentSelection.Adjust();
+    bool bCurrentSelectionInRange = nStart <= aCurrentSelection.nEndPos && aCurrentSelection.nStartPos <= nEnd;
+    if (!bCurrentSelectionInRange)
+    {
+        m_xEditView->SetSelection(ESelection(0, nStart));
+    }
+
     Invalidate();
 
     m_nErrorStart = nStart;
