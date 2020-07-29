@@ -805,7 +805,7 @@ void DbCellControl::implAdjustReadOnly( const Reference< XPropertySet >& _rxMode
     DBG_ASSERT( _rxModel.is(), "DbCellControl::implAdjustReadOnly: invalid model!" );
     if ( m_pWindow && _rxModel.is() )
     {
-        Edit* pEditWindow = dynamic_cast< Edit* >( m_pWindow.get() );
+        ControlBase* pEditWindow = dynamic_cast<ControlBase*>(m_pWindow.get());
         if ( pEditWindow )
         {
             bool bReadOnly = m_rColumn.IsReadOnly();
@@ -813,7 +813,7 @@ void DbCellControl::implAdjustReadOnly( const Reference< XPropertySet >& _rxMode
             {
                 _rxModel->getPropertyValue( i_bReadOnly ? OUString(FM_PROP_READONLY) : OUString(FM_PROP_ISREADONLY)) >>= bReadOnly;
             }
-            pEditWindow->SetReadOnly(bReadOnly);
+            pEditWindow->SetEditableReadOnly(bReadOnly);
         }
     }
 }
@@ -2748,9 +2748,9 @@ void DbFilterField::Init(BrowserDataWin& rParent, const Reference< XRowSet >& xC
     DbCellControl::Init( rParent, xCursor );
 
     // filter cells are never readonly
-    Edit* pAsEdit = dynamic_cast< Edit* >( m_pWindow.get() );
-    if ( pAsEdit )
-        pAsEdit->SetReadOnly( false );
+    ControlBase* pAsEdit = dynamic_cast<ControlBase*>(m_pWindow.get());
+    if (pAsEdit)
+        pAsEdit->SetEditableReadOnly(false);
 }
 
 CellControllerRef DbFilterField::CreateController() const
