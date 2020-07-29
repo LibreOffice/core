@@ -216,7 +216,7 @@ typedef enum
     LOK_CALLBACK_GRAPHIC_SELECTION = 6,
 
     /**
-     * User clicked on an hyperlink that should be handled by other
+     * User clicked on a hyperlink that should be handled by other
      * applications accordingly.
      */
     LOK_CALLBACK_HYPERLINK_CLICKED = 7,
