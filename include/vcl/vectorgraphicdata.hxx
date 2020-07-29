@@ -112,6 +112,11 @@ public:
 
     sal_Int32 getPageIndex() const { return std::max(sal_Int32(0), mnPageIndex); }
 
+    void setPageIndex(sal_Int32 nPageIndex)
+    {
+        mnPageIndex = nPageIndex;
+    }
+
     bool isPrimitiveSequenceCreated() const { return mbSequenceCreated; }
 };
 
