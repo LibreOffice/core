@@ -22,7 +22,6 @@
 
 #include <memory>
 #include <svx/gridctrl.hxx>
-#include <vcl/edit.hxx>
 
 #include "sqlparserclient.hxx"
 
@@ -372,7 +371,7 @@ protected:
 protected:
     void implSetMaxTextLen( sal_Int16 _nMaxLen )
     {
-        implSetEffectiveMaxTextLen( _nMaxLen ? _nMaxLen : EDIT_NOLIMIT );
+        implSetEffectiveMaxTextLen(_nMaxLen);
     }
     virtual void implSetEffectiveMaxTextLen( sal_Int32 _nMaxLen );
 };

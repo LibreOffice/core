@@ -1180,7 +1180,7 @@ void DbTextField::updateFromModel( Reference< XPropertySet > _rxModel )
     _rxModel->getPropertyValue( FM_PROP_TEXT ) >>= sText;
 
     sal_Int32 nMaxTextLen = m_pEdit->GetMaxTextLen();
-    if ( EDIT_NOLIMIT != nMaxTextLen && sText.getLength() > nMaxTextLen )
+    if (nMaxTextLen != 0 && sText.getLength() > nMaxTextLen)
     {
         sal_Int32 nDiff = sText.getLength() - nMaxTextLen;
         sText = sText.replaceAt(sText.getLength() - nDiff,nDiff, OUString());
@@ -1196,7 +1196,7 @@ bool DbTextField::commitControl()
     OUString aText( m_pEdit->GetText( getModelLineEndSetting( m_rColumn.getModel() ) ) );
     // we have to check if the length before we can decide if the value was modified
     sal_Int32 nMaxTextLen = m_pEdit->GetMaxTextLen();
-    if ( EDIT_NOLIMIT != nMaxTextLen )
+    if (nMaxTextLen != 0)
     {
         OUString sOldValue;
         m_rColumn.getModel()->getPropertyValue( FM_PROP_TEXT ) >>= sOldValue;
