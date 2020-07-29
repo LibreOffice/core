@@ -799,7 +799,6 @@ void DbCellControl::ImplInitWindow( vcl::Window const & rParent, const InitWindo
     }
 }
 
-
 void DbCellControl::implAdjustReadOnly( const Reference< XPropertySet >& _rxModel,bool i_bReadOnly )
 {
     DBG_ASSERT( m_pWindow, "DbCellControl::implAdjustReadOnly: not to be called without window!" );
@@ -2705,7 +2704,7 @@ void DbFilterField::CreateControl(BrowserDataWin* pParent, const Reference< css:
         }   break;
         default:
         {
-            m_pWindow  = VclPtr<Edit>::Create(pParent, WB_LEFT);
+            m_pWindow  = VclPtr<EditControl>::Create(pParent);
             AllSettings     aSettings = m_pWindow->GetSettings();
             StyleSettings   aStyleSettings = aSettings.GetStyleSettings();
             aStyleSettings.SetSelectionOptions(
@@ -2715,7 +2714,6 @@ void DbFilterField::CreateControl(BrowserDataWin* pParent, const Reference< css:
         }
     }
 }
-
 
 void DbFilterField::Init(BrowserDataWin& rParent, const Reference< XRowSet >& xCursor)
 {
