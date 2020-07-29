@@ -21,24 +21,7 @@
   <info>
     <desc>Stores security related settings.</desc>
   </info>
-  <templates>
-    <group oor:name="SecureExtension">
-      <info>
-        <desc>Provides secure file extensions. Opening a secure file does not pose any risk.</desc>
-      </info>
-      <prop oor:name="Extension" oor:type="xs:string">
-        <info>
-          <desc>Provides a file extension that is not case-sensitive.</desc>
-        </info>
-      </prop>
-    </group>
-  </templates>
   <component>
-    <set oor:name="SecureExtensions" oor:node-type="SecureExtension">
-      <info>
-        <desc>Provides a list of secure file extensions. Opening a secure file does not pose any risk.</desc>
-      </info>
-    </set>
     <group oor:name="Hyperlinks">
       <info>
         <desc>Specifies how secure hyperlinks are processed.</desc>
