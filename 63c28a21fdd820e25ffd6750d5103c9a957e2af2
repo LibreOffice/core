@@ -34,6 +34,24 @@
       "revId": "63c28a21fdd820e25ffd6750d5103c9a957e2af2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b13ff0be_69fe2a93",
+        "filename": "i18npool/source/collator/data/ja_charset.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-07-29T19:17:06Z",
+      "side": 1,
+      "message": "Seems the by-character diff UI has its problems there with the long run. As long as the actual data is correct I wouldn\u0027t mind.",
+      "parentUuid": "502b06d7_02b7767b",
+      "revId": "63c28a21fdd820e25ffd6750d5103c9a957e2af2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
