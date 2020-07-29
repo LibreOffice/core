@@ -151,10 +151,16 @@ class Calendar_hanja final : public Calendar_gregorian
 public:
     // Constructors
     Calendar_hanja();
-    virtual void SAL_CALL loadCalendar(const OUString& uniqueID, const css::lang::Locale& rLocale) override;
     virtual OUString SAL_CALL getDisplayName(sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType) override;
 };
 
+class Calendar_hanja_yoil final : public Calendar_gregorian
+{
+public:
+    // Constructors
+    Calendar_hanja_yoil();
+    virtual OUString SAL_CALL getDisplayName(sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType) override;
+};
 
 
 class Calendar_gengou final : public Calendar_gregorian

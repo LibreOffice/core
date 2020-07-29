@@ -201,13 +201,26 @@ Calendar_hanja::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_Int16
         return Calendar_gregorian::getDisplayName( displayIndex, idx, nameType );
 }
 
-void SAL_CALL
-Calendar_hanja::loadCalendar( const OUString& /*uniqueID*/, const css::lang::Locale& rLocale )
+
+Calendar_hanja_yoil::Calendar_hanja_yoil()
 {
-    // Since this class could be called by service name 'hanja_yoil', we have to
-    // rename uniqueID to get right calendar defined in locale data.
-    Calendar_gregorian::loadCalendar("hanja", rLocale);
+    cCalendar = "com.sun.star.i18n.Calendar_Calendar_hanja_yoil";
 }
+
+OUString SAL_CALL
+Calendar_hanja_yoil::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_Int16 nameType )
+{
+    if ( displayIndex == CalendarDisplayIndex::AM_PM ) {
+        // Am/Pm string for Korean Hanja calendar will refer to Japanese locale
+        css::lang::Locale jaLocale("ja", OUString(), OUString());
+        if (idx == 0) return LocaleDataImpl::get()->getLocaleItem(jaLocale).timeAM;
+        else if (idx == 1) return LocaleDataImpl::get()->getLocaleItem(jaLocale).timePM;
+        else throw ERROR;
+    }
+    else
+        return Calendar_gregorian::getDisplayName( displayIndex, idx, nameType );
+}
+
 
 const Era gengou_eraArray[] = {
     {1868,  1,  1, 0},  // Meiji
