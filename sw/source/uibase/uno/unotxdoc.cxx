@@ -2951,6 +2951,11 @@ void SAL_CALL SwXTextDocument::render(
     if (0 > nRenderer)
         throw IllegalArgumentException();
 
+    // tdf#135244: prevent jumping to cursor at any temporary modification
+    decltype(pDocShell->LockAllViews()) aLock;
+    if (pDocShell)
+        aLock = pDocShell->LockAllViews();
+
     const bool bHasPDFExtOutDevData = lcl_SeqHasProperty( rxOptions, "HasPDFExtOutDevData" );
     const bool bIsPDFExport = !lcl_SeqHasProperty( rxOptions, "IsPrinter" ) || bHasPDFExtOutDevData;
     bool bIsSwSrcView = false;
