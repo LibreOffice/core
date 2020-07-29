@@ -1408,7 +1408,6 @@ IMPL_LINK_NOARG(FormController, OnToggleAutoFields, void*, void)
 }
 
 // XTextListener
-
 void SAL_CALL FormController::textChanged(const TextEvent& e)
 {
     // SYNCHRONIZED -->
@@ -1465,7 +1464,6 @@ void SAL_CALL FormController::textChanged(const TextEvent& e)
 }
 
 // XItemListener
-
 void SAL_CALL FormController::itemStateChanged(const ItemEvent& /*rEvent*/)
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
@@ -1473,14 +1471,12 @@ void SAL_CALL FormController::itemStateChanged(const ItemEvent& /*rEvent*/)
 }
 
 // XModificationBroadcaster
-
 void SAL_CALL FormController::addModifyListener(const Reference< XModifyListener > & l)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
     m_aModifyListeners.addInterface( l );
 }
-
 
 void FormController::removeModifyListener(const Reference< XModifyListener > & l)
 {
@@ -1490,7 +1486,6 @@ void FormController::removeModifyListener(const Reference< XModifyListener > & l
 }
 
 // XModificationListener
-
 void FormController::modified( const EventObject& _rEvent )
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
@@ -1517,13 +1512,11 @@ void FormController::modified( const EventObject& _rEvent )
     impl_onModify();
 }
 
-
 void FormController::impl_checkDisposed_throw() const
 {
     if ( impl_isDisposed_nofail() )
         throw DisposedException( OUString(), *const_cast< FormController* >( this ) );
 }
-
 
 void FormController::impl_onModify()
 {
@@ -1539,7 +1532,6 @@ void FormController::impl_onModify()
     m_aModifyListeners.notifyEach( &XModifyListener::modified, aEvt );
 }
 
-
 void FormController::impl_addFilterRow( const FmFilterRow& _row )
 {
     m_aFilterRows.push_back( _row );
@@ -1550,7 +1542,6 @@ void FormController::impl_addFilterRow( const FmFilterRow& _row )
         m_nCurrentFilterPosition = 0;
     }
 }
-
 
 void FormController::impl_appendEmptyFilterRow( ::osl::ClearableMutexGuard& _rClearBeforeNotify )
 {
@@ -1565,7 +1556,6 @@ void FormController::impl_appendEmptyFilterRow( ::osl::ClearableMutexGuard& _rCl
     // <-- SYNCHRONIZED
     m_aFilterListeners.notifyEach( &XFilterControllerListener::disjunctiveTermAdded, aEvent );
 }
-
 
 bool FormController::determineLockState() const
 {
@@ -1583,7 +1573,6 @@ bool FormController::determineLockState() const
 }
 
 //  FocusListener
-
 void FormController::focusGained(const FocusEvent& e)
 {
     // SYNCHRONIZED -->
