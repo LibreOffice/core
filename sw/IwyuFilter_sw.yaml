@@ -545,6 +545,7 @@ excludelist:
     sw/source/filter/ww8/wrtww8.cxx:
     # OSL_BIGENDIAN is being checked
     - osl/endian.h
+    - com/sun/star/frame/XModel.hpp
     sw/source/filter/xml/wrtxml.cxx:
     # Actually used
     - com/sun/star/task/XStatusIndicator.hpp
@@ -748,3 +749,15 @@ excludelist:
     - com/sun/star/frame/XModel.hpp
     sw/source/filter/ww8/rtfexport.cxx:
     - com/sun/star/frame/XModel.hpp
+    sw/qa/core/macros-test.cxx:
+    - comphelper/scopeguard.hxx
+    sw/source/filter/docx/swdocxreader.cxx:
+    - com/sun/star/frame/XModel.hpp
+    sw/source/core/fields/docufld.cxx:
+    - com/sun/star/frame/XModel.hpp
+    sw/source/filter/xml/xmltexti.cxx:
+    - com/sun/star/frame/XModel.hpp
+    sw/source/ui/fldui/fldtdlg.cxx:
+    - com/sun/star/frame/XModel.hpp
+    sw/source/uibase/uno/dlelstnr.cxx:
+    - com/sun/star/linguistic2/XProofreadingIterator.hpp

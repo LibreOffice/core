@@ -114,7 +114,6 @@
 #include <paratr.hxx>
 #include <proofreadingiterator.hxx>
 #include <editeng/editids.hrc>
-#include <svx/svxids.hrc>
 #include <rtl/instance.hxx>
 #include <svl/macitem.hxx>
 #include <svx/sdtaitm.hxx>

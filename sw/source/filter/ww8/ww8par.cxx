@@ -106,8 +106,6 @@
 #include <IDocumentSettingAccess.hxx>
 #include "sprmids.hxx"
 
-#include <fltini.hxx>
-
 #include "writerwordglue.hxx"
 
 #include <ndgrf.hxx>

@@ -43,7 +43,6 @@
 #include <globdoc.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <svl/visitem.hxx>

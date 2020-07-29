@@ -27,7 +27,6 @@
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <strings.hrc>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star::uno;

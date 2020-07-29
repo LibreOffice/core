@@ -29,7 +29,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>

@@ -27,8 +27,6 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 
-#include <comphelper/processfactory.hxx>
-
 using namespace css;
 
 namespace

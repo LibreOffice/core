@@ -23,7 +23,6 @@
 
 #include <stack>
 
-#include <officecfg/Office/Common.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <osl/mutex.hxx>
 #include <tools/urlobj.hxx>

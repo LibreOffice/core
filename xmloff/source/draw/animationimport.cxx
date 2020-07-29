@@ -19,7 +19,6 @@
 
 #include <memory>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/animations/AnimationTransformType.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
@@ -62,7 +61,6 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <osl/diagnose.h>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlprhdl.hxx>
 #include <xmlsdtypes.hxx>
 

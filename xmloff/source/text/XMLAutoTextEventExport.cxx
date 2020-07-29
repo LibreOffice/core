@@ -20,7 +20,6 @@
 #include "XMLAutoTextEventExport.hxx"
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

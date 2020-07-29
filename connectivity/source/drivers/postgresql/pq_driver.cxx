@@ -34,13 +34,8 @@
  *
  ************************************************************************/
 
-#include <comphelper/processfactory.hxx>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <rtl/ref.hxx>
 
 #include "pq_driver.hxx"

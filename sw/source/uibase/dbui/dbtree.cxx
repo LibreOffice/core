@@ -29,7 +29,6 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <svx/dbaexchange.hxx>
 
 #include <dbmgr.hxx>
 #include <wrtsh.hxx>

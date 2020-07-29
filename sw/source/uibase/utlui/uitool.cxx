@@ -57,7 +57,6 @@
 #include <frmatr.hxx>
 #include <paratr.hxx>
 #include <fmtcol.hxx>
-#include <poolfmt.hxx>
 #include <usrpref.hxx>
 
 #include <cmdid.h>

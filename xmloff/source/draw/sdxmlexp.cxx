@@ -59,7 +59,6 @@
 #include "sdpropls.hxx"
 #include <xmloff/xmlexppr.hxx>
 
-#include <comphelper/processfactory.hxx>
 #include <PropertySetMerger.hxx>
 #include "layerexp.hxx"
 

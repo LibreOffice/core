@@ -10,10 +10,6 @@
 #include <test/bootstrapfixture.hxx>
 #include <test/lang/xserviceinfo.hxx>
 #include <test/lang/xcomponent.hxx>
-#include <test/text/baseindex.hxx>
-#include <test/text/textdocumentindex.hxx>
-#include <test/text/xdocumentindex.hxx>
-#include <test/text/xtextcontent.hxx>
 #include <unotest/macros_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
@@ -26,8 +22,6 @@
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
-
-#include <comphelper/processfactory.hxx>
 
 using namespace css;
 

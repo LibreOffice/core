@@ -24,7 +24,6 @@
 #include <jvmfwk/framework.hxx>
 #include <strings.hrc>
 #include <resource/sharedresources.hxx>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <strings.hxx>
 

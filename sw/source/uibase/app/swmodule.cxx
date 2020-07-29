@@ -25,9 +25,6 @@
 #include <unotools/resmgr.hxx>
 #include <unotools/useroptions.hxx>
 #include <svl/ctloptions.hxx>
-#include <svx/ParaLineSpacingPopup.hxx>
-#include <svx/TextCharacterSpacingPopup.hxx>
-#include <svx/TextUnderlinePopup.hxx>
 #include <svx/ParaSpacingControl.hxx>
 #include <svx/pszctrl.hxx>
 #include <svx/insctrl.hxx>
@@ -35,22 +32,16 @@
 #include <svx/linectrl.hxx>
 #include <svx/tbxctl.hxx>
 #include <svx/fillctrl.hxx>
-#include <svx/tbcontrl.hxx>
-#include <svx/verttexttbxctrl.hxx>
 #include <svx/formatpaintbrushctrl.hxx>
 #include <svx/contdlg.hxx>
-#include <svx/layctrl.hxx>
 #include <svx/fontwork.hxx>
 #include <SwSpellDialogChildWindow.hxx>
 #include <svx/grafctrl.hxx>
 #include <svx/clipboardctl.hxx>
-#include <svx/lboxctrl.hxx>
 #include <svx/imapdlg.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/hyperdlg.hxx>
 #include <svx/modctrl.hxx>
-#include <sfx2/emojipopup.hxx>
-#include <sfx2/charmappopup.hxx>
 #include <com/sun/star/scanner/ScannerManager.hpp>
 #include <com/sun/star/linguistic2/LanguageGuessing.hpp>
 #include <ooo/vba/XSinkCaller.hpp>
@@ -105,10 +96,6 @@
 #include <barcfg.hxx>
 #include <svx/rubydialog.hxx>
 #include <svtools/colorcfg.hxx>
-#include <PageSizePopup.hxx>
-#include <PageMarginPopup.hxx>
-#include <PageOrientationPopup.hxx>
-#include <PageColumnPopup.hxx>
 
 #include <unotools/configmgr.hxx>
 #include <unotools/moduleoptions.hxx>

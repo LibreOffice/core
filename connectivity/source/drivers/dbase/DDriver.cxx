@@ -22,7 +22,6 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <connectivity/dbexception.hxx>
 #include <strings.hrc>
-#include <comphelper/processfactory.hxx>
 
 using namespace connectivity::dbase;
 using namespace connectivity::file;

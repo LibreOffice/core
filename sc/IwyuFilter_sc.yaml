@@ -1,8 +1,6 @@
 ---
 assumeFilename: sc/source/core/data/document.cxx
 excludelist:
-    # base class has to be a complete type
-    - com/sun/star/accessibility/XAccessibleStateSet.hpp
     sc/inc/addruno.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySet.hpp
