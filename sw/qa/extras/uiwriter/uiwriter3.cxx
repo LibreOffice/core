@@ -199,6 +199,34 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126626)
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133967)
+{
+    load(DATA_DIRECTORY, "tdf133967.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    CPPUNIT_ASSERT_EQUAL(6, getPages());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
+
+    for (sal_Int32 i = 0; i < 10; ++i)
+    {
+        dispatchCommand(mxComponent, ".uno:Undo", {});
+        Scheduler::ProcessEventsToIdle();
+
+        dispatchCommand(mxComponent, ".uno:Redo", {});
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    // Without the fix in place, this test would have failed with:
+    //- Expected: 1
+    //- Actual  : 45
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132187)
 {
     load(DATA_DIRECTORY, "tdf132187.odt");
