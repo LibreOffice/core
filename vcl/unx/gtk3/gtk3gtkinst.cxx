@@ -8551,6 +8551,9 @@ public:
 
     virtual void set_date(const Date& rDate) override
     {
+        if (!rDate.IsValidAndGregorian())
+            return;
+
         disable_notify_events();
         gtk_calendar_select_month(m_pCalendar, rDate.GetMonth() - 1, rDate.GetYear());
         gtk_calendar_select_day(m_pCalendar, rDate.GetDay());
