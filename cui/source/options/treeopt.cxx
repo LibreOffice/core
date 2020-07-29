@@ -23,6 +23,8 @@
 #include <config_feature_desktop.h>
 #include <config_gpgme.h>
 
+#include <officecfg/Office/Common.hxx>
+
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 
@@ -93,7 +95,6 @@
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/configmgr.hxx>
-#include <unotools/misccfg.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/optionsdlg.hxx>
 #include <unotools/viewoptions.hxx>
@@ -1018,7 +1019,6 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
             SfxGetpApp()->GetOptions(aOptSet);
             pRet->Put(aOptSet);
 
-            utl::MiscCfg    aMisc;
             SfxViewFrame* pViewFrame = SfxViewFrame::Current();
             if ( pViewFrame )
             {
@@ -1029,17 +1029,17 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
                 if( SfxItemState::DEFAULT <= pDispatch->QueryState( SID_ATTR_YEAR2000, pItem ) )
                     pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, static_cast<const SfxUInt16Item*>(pItem)->GetValue() ) );
                 else
-                    pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, static_cast<sal_uInt16>(aMisc.GetYear2000()) ) );
+                    pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, officecfg::Office::Common::DateFormat::TwoDigitYear::get() ) );
             }
             else
-                pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, static_cast<sal_uInt16>(aMisc.GetYear2000()) ) );
+                pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, officecfg::Office::Common::DateFormat::TwoDigitYear::get() ) );
 
 
             // miscellaneous - Tabulator
-            pRet->Put(SfxBoolItem(SID_PRINTER_NOTFOUND_WARN, aMisc.IsNotFoundWarning()));
+            pRet->Put(SfxBoolItem(SID_PRINTER_NOTFOUND_WARN, officecfg::Office::Common::Print::Warning::NotFound::get()));
 
-            SfxPrinterChangeFlags nFlag = aMisc.IsPaperSizeWarning() ? SfxPrinterChangeFlags::CHG_SIZE : SfxPrinterChangeFlags::NONE;
-            nFlag  |= aMisc.IsPaperOrientationWarning()  ? SfxPrinterChangeFlags::CHG_ORIENTATION : SfxPrinterChangeFlags::NONE;
+            SfxPrinterChangeFlags nFlag = officecfg::Office::Common::Print::Warning::PaperSize::get() ? SfxPrinterChangeFlags::CHG_SIZE : SfxPrinterChangeFlags::NONE;
+            nFlag  |= officecfg::Office::Common::Print::Warning::PaperOrientation::get() ? SfxPrinterChangeFlags::CHG_ORIENTATION : SfxPrinterChangeFlags::NONE;
             pRet->Put( SfxFlagItem( SID_PRINTER_CHANGESTODOC, static_cast<int>(nFlag) ));
 
         }
@@ -1156,7 +1156,8 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
     {
         case SID_GENERAL_OPTIONS:
         {
-            utl::MiscCfg    aMisc;
+            std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+
             const SfxPoolItem* pItem = nullptr;
             SfxItemSet aOptSet(SfxGetpApp()->GetPool(), svl::Items<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER>{} );
             aOptSet.Put(rSet);
@@ -1166,7 +1167,6 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
             SfxViewFrame *pViewFrame = SfxViewFrame::Current();
 
 //          evaluate Year2000
-
             sal_uInt16 nY2K = USHRT_MAX;
             if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_YEAR2000, false, &pItem ) )
                 nY2K = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
@@ -1178,28 +1178,29 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
                     pDispatch->ExecuteList(SID_ATTR_YEAR2000,
                             SfxCallMode::ASYNCHRON, { pItem });
                 }
-                aMisc.SetYear2000(nY2K);
+                officecfg::Office::Common::DateFormat::TwoDigitYear::set(nY2K, batch);
             }
 
-
 //          evaluate print
-
             if(SfxItemState::SET == rSet.GetItemState(SID_PRINTER_NOTFOUND_WARN, false, &pItem))
-                aMisc.SetNotFoundWarning(static_cast<const SfxBoolItem*>(pItem)->GetValue());
+                officecfg::Office::Common::Print::Warning::NotFound::set(static_cast<const SfxBoolItem*>(pItem)->GetValue(), batch);
 
             if(SfxItemState::SET == rSet.GetItemState(SID_PRINTER_CHANGESTODOC, false, &pItem))
             {
                 const SfxFlagItem* pFlag = static_cast<const SfxFlagItem*>(pItem);
-                aMisc.SetPaperSizeWarning(bool(static_cast<SfxPrinterChangeFlags>(pFlag->GetValue()) &  SfxPrinterChangeFlags::CHG_SIZE ));
-                aMisc.SetPaperOrientationWarning(bool(static_cast<SfxPrinterChangeFlags>(pFlag->GetValue()) & SfxPrinterChangeFlags::CHG_ORIENTATION ));
+                bool bPaperSizeWarning = bool(static_cast<SfxPrinterChangeFlags>(pFlag->GetValue()) &  SfxPrinterChangeFlags::CHG_SIZE);
+                officecfg::Office::Common::Print::Warning::PaperSize::set(bPaperSizeWarning, batch);
+                bool bPaperOrientationWarning = bool(static_cast<SfxPrinterChangeFlags>(pFlag->GetValue()) & SfxPrinterChangeFlags::CHG_ORIENTATION);
+                officecfg::Office::Common::Print::Warning::PaperOrientation::set(bPaperOrientationWarning, batch);
             }
 
 //          evaluate help options
-
             if ( SvtHelpOptions().IsHelpTips() != Help::IsQuickHelpEnabled() )
                 SvtHelpOptions().IsHelpTips() ? Help::EnableQuickHelp() : Help::DisableQuickHelp();
             if ( SvtHelpOptions().IsExtendedHelp() != Help::IsBalloonHelpEnabled() )
                 SvtHelpOptions().IsExtendedHelp() ? Help::EnableBalloonHelp() : Help::DisableBalloonHelp();
+
+            batch->commit();
         }
         break;
         case SID_LANGUAGE_OPTIONS :
