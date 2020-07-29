@@ -1050,44 +1050,35 @@ void FmFilterString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderCo
     rDev.DrawText(aPos, GetText());
 }
 
-FmFilterNavigator::FmFilterNavigator( vcl::Window* pParent )
-                  :SvTreeListBox( pParent, WB_HASBUTTONS|WB_HASLINES|WB_BORDER|WB_HASBUTTONSATROOT )
-                  ,m_pEditingCurrently( nullptr )
-                  ,m_aControlExchange()
-                  ,m_aTimerCounter( 0 )
-                  ,m_aDropActionType( DA_SCROLLUP )
+FmFilterNavigator::FmFilterNavigator(std::unique_ptr<weld::TreeView> xTreeView)
+    : m_xTreeView(std::move(xTreeView))
+#if 0
+    , m_pEditingCurrently( nullptr )
+#endif
+    , m_aControlExchange()
+    , m_aTimerCounter( 0 )
+    , m_aDropActionType( DA_SCROLLUP )
 {
-    SetHelpId( HID_FILTER_NAVIGATOR );
+    m_xTreeView->set_help_id(HID_FILTER_NAVIGATOR);
 
-    SetNodeBitmaps(
-        Image(StockImage::Yes, RID_SVXBMP_COLLAPSEDNODE),
-        Image(StockImage::Yes, RID_SVXBMP_EXPANDEDNODE)
-    );
+    m_xTreeView->set_selection_mode(SelectionMode::Multiple);
 
     m_pModel.reset( new FmFilterModel() );
     StartListening( *m_pModel );
 
+#if 0
     EnableInplaceEditing( true );
-    SetSelectionMode(SelectionMode::Multiple);
-
     SetDragDropMode(DragDropMode::ALL);
+#endif
 
     m_aDropActionTimer.SetInvokeHandler(LINK(this, FmFilterNavigator, OnDropActionTimer));
 }
 
-
 FmFilterNavigator::~FmFilterNavigator()
-{
-    disposeOnce();
-}
-
-void FmFilterNavigator::dispose()
 {
     EndListening( *m_pModel );
     m_pModel.reset();
-    SvTreeListBox::dispose();
 }
-
 
 void FmFilterNavigator::UpdateContent(const Reference< XIndexAccess > & xControllers, const Reference< XFormController > & xCurrent)
 {
@@ -1096,6 +1087,7 @@ void FmFilterNavigator::UpdateContent(const Reference< XIndexAccess > & xControl
 
     m_pModel->Update(xControllers, xCurrent);
 
+#if 0
     // expand the filters for the current controller
     SvTreeListEntry* pEntry = FindEntry(m_pModel->GetCurrentForm());
     if (pEntry && !IsExpanded(pEntry))
@@ -1113,9 +1105,10 @@ void FmFilterNavigator::UpdateContent(const Reference< XIndexAccess > & xControl
             Select(pEntry);
         }
     }
+#endif
 }
 
-
+#if 0
 bool FmFilterNavigator::EditingEntry( SvTreeListEntry* pEntry, Selection& rSelection )
 {
     m_pEditingCurrently = pEntry;
@@ -1124,7 +1117,6 @@ bool FmFilterNavigator::EditingEntry( SvTreeListEntry* pEntry, Selection& rSelec
 
     return pEntry && dynamic_cast<const FmFilterItem*>(static_cast<FmFilterData*>(pEntry->GetUserData())) != nullptr;
 }
-
 
 bool FmFilterNavigator::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
 {
@@ -1170,7 +1162,7 @@ bool FmFilterNavigator::EditedEntry( SvTreeListEntry* pEntry, const OUString& rN
     }
     return true;
 }
-
+#endif
 
 IMPL_LINK( FmFilterNavigator, OnRemove, void*, p, void )
 {
@@ -1179,12 +1171,12 @@ IMPL_LINK( FmFilterNavigator, OnRemove, void*, p, void )
     m_pModel->Remove(static_cast<FmFilterData*>(pEntry->GetUserData()));
 }
 
-
 IMPL_LINK_NOARG(FmFilterNavigator, OnDropActionTimer, Timer *, void)
 {
     if (--m_aTimerCounter > 0)
         return;
 
+#if 0
     switch (m_aDropActionType)
     {
         case DA_SCROLLUP :
@@ -1204,9 +1196,10 @@ IMPL_LINK_NOARG(FmFilterNavigator, OnDropActionTimer, Timer *, void)
         }
         break;
     }
+#endif
 }
 
-
+#if 0
 sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
 {
     Point aDropPos = rEvt.maPosPixel;
@@ -1331,7 +1324,6 @@ sal_Int8 FmFilterNavigator::ExecuteDrop( const ExecuteDropEvent& rEvt )
     return DND_ACTION_COPY;
 }
 
-
 void FmFilterNavigator::InitEntry(SvTreeListEntry* pEntry,
                                   const OUString& rStr,
                                   const Image& rImg1,
@@ -1349,7 +1341,6 @@ void FmFilterNavigator::InitEntry(SvTreeListEntry* pEntry,
     if (pString)
         pEntry->ReplaceItem(std::move(pString), 1 );
 }
-
 
 bool FmFilterNavigator::Select( SvTreeListEntry* pEntry, bool bSelect )
 {
@@ -1384,6 +1375,7 @@ bool FmFilterNavigator::Select( SvTreeListEntry* pEntry, bool bSelect )
     else
         return false;
 }
+#endif
 
 void FmFilterNavigator::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
@@ -1393,7 +1385,7 @@ void FmFilterNavigator::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
     else if( dynamic_cast<const FilterClearingHint*>(&rHint) )
     {
-        SvTreeListBox::Clear();
+        m_xTreeView->clear();
     }
     else if (const FmFilterRemovedHint* pRemoveHint = dynamic_cast<const FmFilterRemovedHint*>(&rHint))
     {
@@ -1401,49 +1393,57 @@ void FmFilterNavigator::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
     else if (const FmFilterTextChangedHint *pChangeHint = dynamic_cast<const FmFilterTextChangedHint*>(&rHint))
     {
+#if 0
         SvTreeListEntry* pEntry = FindEntry(pChangeHint->GetData());
         if (pEntry)
             SetEntryText( pEntry, pChangeHint->GetData()->GetText());
+#endif
     }
     else if( dynamic_cast<const FmFilterCurrentChangedHint*>(&rHint) )
     {
+#if 0
         // invalidate the entries
         for (SvTreeListEntry* pEntry = First(); pEntry != nullptr;
              pEntry = Next(pEntry))
             GetModel()->InvalidateEntry( pEntry );
+#endif
     }
 }
 
-SvTreeListEntry* FmFilterNavigator::FindEntry(const FmFilterData* pItem) const
+std::unique_ptr<weld::TreeIter> FmFilterNavigator::FindEntry(const FmFilterData* pItem) const
 {
-    SvTreeListEntry* pEntry = nullptr;
-    if (pItem)
+    if (!pItem)
+        return nullptr;
+    std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->make_iterator();
+    if (!m_xTreeView->get_iter_first(*xEntry))
+        return nullptr;
+    do
     {
-        for (pEntry = First(); pEntry != nullptr; pEntry = Next( pEntry ))
-        {
-            FmFilterData* pEntryItem = static_cast<FmFilterData*>(pEntry->GetUserData());
-            if (pEntryItem == pItem)
-                break;
-        }
+        FmFilterData* pEntryItem = reinterpret_cast<FmFilterData*>(m_xTreeView->get_id(*xEntry).toUInt64());
+        if (pEntryItem == pItem)
+            return xEntry;
     }
-    return pEntry;
-}
+    while (m_xTreeView->iter_next(*xEntry));
 
+    return nullptr;
+}
 
 void FmFilterNavigator::Insert(FmFilterData* pItem, sal_uLong nPos)
 {
     const FmParentData* pParent = pItem->GetParent() ? pItem->GetParent() : m_pModel.get();
 
+#if 0
     // insert the item
     SvTreeListEntry* pParentEntry = FindEntry( pParent );
     InsertEntry( pItem->GetText(), pItem->GetImage(), pItem->GetImage(), pParentEntry, false, nPos, pItem );
     if ( pParentEntry )
         Expand( pParentEntry );
+#endif
 }
-
 
 void FmFilterNavigator::Remove(FmFilterData const * pItem)
 {
+#if 0
     // the entry for the data
     SvTreeListEntry* pEntry = FindEntry(pItem);
 
@@ -1453,6 +1453,7 @@ void FmFilterNavigator::Remove(FmFilterData const * pItem)
 
     if (pEntry)
         GetModel()->Remove( pEntry );
+#endif
 }
 
 FmFormItem* FmFilterNavigator::getSelectedFilterItems(::std::vector<FmFilterItem*>& _rItemList)
@@ -1462,6 +1463,7 @@ FmFormItem* FmFilterNavigator::getSelectedFilterItems(::std::vector<FmFilterItem
 
     bool bHandled = true;
     bool bFoundSomething = false;
+#if 0
     for (SvTreeListEntry* pEntry = FirstSelected();
          bHandled && pEntry != nullptr;
          pEntry = NextSelected(pEntry))
@@ -1484,6 +1486,7 @@ FmFormItem* FmFilterNavigator::getSelectedFilterItems(::std::vector<FmFilterItem
             }
         }
     }
+#endif
     if ( !bHandled || !bFoundSomething )
         pFirstItem = nullptr;
     return pFirstItem;
@@ -1514,6 +1517,7 @@ void FmFilterNavigator::insertFilterItem(const ::std::vector<FmFilterItem*>& _rF
     m_pModel->EnsureEmptyFilterRows( *_pTargetItems->GetParent() );
 }
 
+#if 0
 void FmFilterNavigator::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPixel*/ )
 {
     EndSelection();
@@ -1738,10 +1742,11 @@ void FmFilterNavigator::KeyInput(const KeyEvent& rKEvt)
 
     SvTreeListBox::KeyInput(rKEvt);
 }
-
+#endif
 
 void FmFilterNavigator::DeleteSelection()
 {
+#if 0
     // to avoid the deletion of an entry twice (e.g. deletion of a parent and afterward
     // the deletion of its child, I have to shrink the selection list
     ::std::vector<SvTreeListEntry*> aEntryList;
@@ -1767,21 +1772,20 @@ void FmFilterNavigator::DeleteSelection()
     {
         m_pModel->Remove(static_cast<FmFilterData*>((*i)->GetUserData()));
     }
+#endif
 }
 
-FmFilterNavigatorWin::FmFilterNavigatorWin( SfxBindings* _pBindings, SfxChildWindow* _pMgr,
-                              vcl::Window* _pParent )
-                     :SfxDockingWindow( _pBindings, _pMgr, _pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_ROLLABLE|WB_3DLOOK|WB_DOCKABLE) )
-                     ,SfxControllerItem( SID_FM_FILTER_NAVIGATOR_CONTROL, *_pBindings )
+FmFilterNavigatorWin::FmFilterNavigatorWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr,
+                                           vcl::Window* _pParent)
+    : SfxDockingWindow(_pBindings, _pMgr, _pParent, "FilterNavigator", "svx/ui/filternavigator.ui")
+    , SfxControllerItem( SID_FM_FILTER_NAVIGATOR_CONTROL, *_pBindings )
+    , m_xNavigatorTree(new FmFilterNavigator(m_xBuilder->weld_tree_view("treeview")))
 {
     SetHelpId( HID_FILTER_NAVIGATOR_WIN );
 
-    m_pNavigator = VclPtr<FmFilterNavigator>::Create( this );
-    m_pNavigator->Show();
     SetText( SvxResId(RID_STR_FILTER_NAVIGATOR) );
     SfxDockingWindow::SetFloatingSize( Size(200,200) );
 }
-
 
 FmFilterNavigatorWin::~FmFilterNavigatorWin()
 {
@@ -1790,19 +1794,18 @@ FmFilterNavigatorWin::~FmFilterNavigatorWin()
 
 void FmFilterNavigatorWin::dispose()
 {
-    m_pNavigator.disposeAndClear();
+    m_xNavigatorTree.reset();
     ::SfxControllerItem::dispose();
     SfxDockingWindow::dispose();
 }
 
-
 void FmFilterNavigatorWin::UpdateContent(FmFormShell const * pFormShell)
 {
-    if (!m_pNavigator)
+    if (!m_xNavigatorTree)
         return;
 
     if (!pFormShell)
-        m_pNavigator->UpdateContent( nullptr, nullptr );
+        m_xNavigatorTree->UpdateContent( nullptr, nullptr );
     else
     {
         Reference<XFormController> const xController(pFormShell->GetImpl()->getActiveInternalController_Lock());
@@ -1818,10 +1821,9 @@ void FmFilterNavigatorWin::UpdateContent(FmFormShell const * pFormShell)
                 xChild.set(xParent, UNO_QUERY);
             }
         }
-        m_pNavigator->UpdateContent(xContainer, xController);
+        m_xNavigatorTree->UpdateContent(xContainer, xController);
     }
 }
-
 
 void FmFilterNavigatorWin::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
@@ -1837,27 +1839,26 @@ void FmFilterNavigatorWin::StateChanged( sal_uInt16 nSID, SfxItemState eState, c
         UpdateContent( nullptr );
 }
 
-
 bool FmFilterNavigatorWin::Close()
 {
-    if ( m_pNavigator && m_pNavigator->IsEditingActive() )
-        m_pNavigator->EndEditing();
+#if 0
+    if (m_xNavigatorTree && m_xNavigatorTree->IsEditingActive())
+        m_xNavigatorTree->EndEditing();
 
-    if ( m_pNavigator && m_pNavigator->IsEditingActive() )
+    if (m_xNavigatorTree && m_xNavigatorTree->IsEditingActive())
         // the EndEditing was vetoed (perhaps of an syntax error or such)
         return false;
+#endif
 
     UpdateContent( nullptr );
     return SfxDockingWindow::Close();
 }
-
 
 void FmFilterNavigatorWin::FillInfo( SfxChildWinInfo& rInfo ) const
 {
     SfxDockingWindow::FillInfo( rInfo );
     rInfo.bVisible = false;
 }
-
 
 Size FmFilterNavigatorWin::CalcDockingSize( SfxChildAlignment eAlign )
 {
@@ -1866,7 +1867,6 @@ Size FmFilterNavigatorWin::CalcDockingSize( SfxChildAlignment eAlign )
 
     return SfxDockingWindow::CalcDockingSize( eAlign );
 }
-
 
 SfxChildAlignment FmFilterNavigatorWin::CheckAlignment( SfxChildAlignment eActAlign, SfxChildAlignment eAlign )
 {
@@ -1883,27 +1883,13 @@ SfxChildAlignment FmFilterNavigatorWin::CheckAlignment( SfxChildAlignment eActAl
     return eActAlign;
 }
 
-
-void FmFilterNavigatorWin::Resize()
-{
-    SfxDockingWindow::Resize();
-
-    Size aLogOutputSize = PixelToLogic(GetOutputSizePixel(), MapMode(MapUnit::MapAppFont));
-    Size aLogExplSize = aLogOutputSize;
-    aLogExplSize.AdjustWidth( -6 );
-    aLogExplSize.AdjustHeight( -6 );
-
-    Point aExplPos = LogicToPixel(Point(3,3), MapMode(MapUnit::MapAppFont));
-    Size aExplSize = LogicToPixel(aLogExplSize, MapMode(MapUnit::MapAppFont));
-
-    m_pNavigator->SetPosSizePixel( aExplPos, aExplSize );
-}
-
 void FmFilterNavigatorWin::GetFocus()
 {
     // oj #97405#
-    if ( m_pNavigator )
-        m_pNavigator->GrabFocus();
+    if (m_xNavigatorTree)
+        m_xNavigatorTree->GrabFocus();
+    else
+        SfxDockingWindow::GetFocus();
 }
 
 SFX_IMPL_DOCKINGWINDOW( FmFilterNavigatorWinMgr, SID_FM_FILTER_NAVIGATOR )
