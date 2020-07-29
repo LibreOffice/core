@@ -137,9 +137,8 @@ private:
     void                        StartMouseTracking( sal_Int32 nPos );
     /** Moves tracking to a new position. */
     void                        MoveMouseTracking( sal_Int32 nPos );
-    /** Applies tracking action for the current tracking position.
-        @param bApply  sal_True = apply action, sal_False = cancel action. */
-    void                        EndMouseTracking( bool bApply );
+    /** Applies tracking action for the current tracking position */
+    void                        EndMouseTracking();
 
     // painting ---------------------------------------------------------------
 protected:
@@ -154,6 +153,8 @@ private:
     sal_Int32            GetWidth() const { return maWinSize.Width(); }
     /** Returns the height of the control. */
     sal_Int32            GetHeight() const { return maWinSize.Height(); }
+    /** Update the split size depending on the last width set by CSVCMD_SETCHARWIDTH */
+    void UpdateSplitSize();
 
     /** Draws the background and active area to maBackgrDev (only the given X range). */
     void                        ImplDrawArea( sal_Int32 nPosX, sal_Int32 nWidth );
