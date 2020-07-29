@@ -23,7 +23,6 @@
 #include <sal/log.hxx>
 #include <svl/style.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/edit.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -2563,7 +2562,6 @@ SwTokenWindow::SwTokenWindow(std::unique_ptr<weld::Container> xParent)
     , m_xRightScrollWin(m_xBuilder->weld_button("right"))
 {
     m_xScrollWin->connect_hadjustment_changed(LINK(this, SwTokenWindow, ScrollHdl));
-    m_xCtrlParentWin->set_size_request(-1, Edit::GetMinimumEditSize().Height());
     m_xCtrlParentWin->connect_size_allocate(LINK(this, SwTokenWindow, AdjustPositionsHdl));
 
     for (sal_uInt32 i = 0; i < TOKEN_END; ++i)
