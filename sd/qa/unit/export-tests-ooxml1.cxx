@@ -1198,7 +1198,7 @@ void SdOOXMLExportTest1::testTdf128345GradientRadial()
 
 void SdOOXMLExportTest1::testTdf128345GradientAxial()
 {
-    // Without the patch, symmtetric linear gradient with full transparence outside and
+    // Without the patch, symmetric linear gradient with full transparence outside and
     // full opak in the middle were imported as full transparent.
     ::sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/tdf128345_GradientAxial.odp"), ODP);

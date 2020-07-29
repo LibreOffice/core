@@ -148,7 +148,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testContinuousEndnotesMoveBackwards)
 
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testAnchorPositionBasedOnParagraph)
 {
-    // tdf#134783 check weather position of shape is good if it is achored to paragraph and
+    // tdf#134783 check whether position of shape is good if it is anchored to paragraph and
     // the "Don't add space between paragraphs of the same style" option is set
     load(DATA_DIRECTORY, "tdf134783_testAnchorPositionBasedOnParagraph.fodt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
