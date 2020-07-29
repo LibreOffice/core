@@ -49,8 +49,8 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf133701, "tdf133701.docx")
     if (!pXmlDocument)
         return;
 
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:framePr", "hSpace", "567");
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:framePr", "vSpace", "284");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "hSpace", "567");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "vSpace", "284");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testDmlShapeTitle, "dml-shape-title.docx")
@@ -978,7 +978,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133457, "tdf133457.docx")
     if (!pXmlDocument)
         return;
 
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[4]/w:pPr/w:framePr", "vAnchor", "text");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[3]/w:pPr/w:framePr", "vAnchor", "text");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf133924, "tdf133924.docx")
@@ -987,8 +987,8 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf133924, "tdf133924.docx")
     if (!pXmlDocument)
         return;
 
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:framePr", "wrap", "around");
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[3]/w:pPr/w:framePr", "wrap", "notBeside");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "wrap", "around");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:framePr", "wrap", "notBeside");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

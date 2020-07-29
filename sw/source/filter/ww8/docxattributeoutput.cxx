@@ -761,10 +761,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
         lcl_deleteAndResetTheLists( m_pParagraphSdtPrTokenChildren, m_pParagraphSdtPrDataBindingAttrs, m_aParagraphSdtPrAlias );
     }
 
-    //sdtcontent is written so Set m_bParagraphHasDrawing to false
-    m_rExport.SdrExporter().setParagraphHasDrawing( false );
-    m_bRunTextIsOn = false;
-    m_pSerializer->mergeTopMarks(Tag_StartParagraph_1);
+    m_pSerializer->mark(Tag_StartParagraph_2);
 
     // Write framePr
     for ( const auto & pFrame : aFramePrTextbox )
@@ -774,6 +771,14 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
         m_rExport.SdrExporter().writeOnlyTextOfFrame(pFrame.get());
         m_pCurrentFrame = nullptr;
     }
+
+    m_pSerializer->mergeTopMarks(Tag_StartParagraph_2, sax_fastparser::MergeMarks::PREPEND);
+
+    //sdtcontent is written so Set m_bParagraphHasDrawing to false
+    m_rExport.SdrExporter().setParagraphHasDrawing(false);
+    m_bRunTextIsOn = false;
+    m_pSerializer->mergeTopMarks(Tag_StartParagraph_1);
+
     aFramePrTextbox.clear();
     // Check for end of cell, rows, tables here
     FinishTableRowCell( pTextNodeInfoInner );

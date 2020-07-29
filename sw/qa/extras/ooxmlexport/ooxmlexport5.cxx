@@ -1322,7 +1322,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf112287, "tdf112287.docx")
 
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
 
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:framePr","vAnchor","margin");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr","vAnchor","margin");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testZOrderInHeader, "tdf120760_ZOrderInHeader.docx")
