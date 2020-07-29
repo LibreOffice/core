@@ -469,20 +469,20 @@ struct ScChildNew
 
 void ScNotesChildren::DataChanged(const tools::Rectangle& rVisRect)
 {
-    if (mpViewShell && mpAccDoc)
-    {
-        ScXAccVector aNewParas;
-        ScXAccVector aOldParas;
-        ScAccNotes aNewMarks;
-        mnParagraphs = CheckChanges(mpViewShell->GetLocationData(), rVisRect, true, maMarks, aNewMarks, aOldParas, aNewParas);
-        maMarks = aNewMarks;
-        ScAccNotes aNewNotes;
-        mnParagraphs += CheckChanges(mpViewShell->GetLocationData(), rVisRect, false, maNotes, aNewNotes, aOldParas, aNewParas);
-        maNotes = aNewNotes;
+    if (!(mpViewShell && mpAccDoc))
+        return;
 
-        std::for_each(aOldParas.begin(), aOldParas.end(), ScChildGone(mpAccDoc));
-        std::for_each(aNewParas.begin(), aNewParas.end(), ScChildNew(mpAccDoc));
-    }
+    ScXAccVector aNewParas;
+    ScXAccVector aOldParas;
+    ScAccNotes aNewMarks;
+    mnParagraphs = CheckChanges(mpViewShell->GetLocationData(), rVisRect, true, maMarks, aNewMarks, aOldParas, aNewParas);
+    maMarks = aNewMarks;
+    ScAccNotes aNewNotes;
+    mnParagraphs += CheckChanges(mpViewShell->GetLocationData(), rVisRect, false, maNotes, aNewNotes, aOldParas, aNewParas);
+    maNotes = aNewNotes;
+
+    std::for_each(aOldParas.begin(), aOldParas.end(), ScChildGone(mpAccDoc));
+    std::for_each(aNewParas.begin(), aNewParas.end(), ScChildNew(mpAccDoc));
 }
 
 inline ScDocument* ScNotesChildren::GetDocument() const
@@ -813,18 +813,18 @@ bool ScShapeChildren::ReplaceChild (::accessibility::AccessibleShape* /* pCurren
 
 void ScShapeChildren::Init()
 {
-    if(mpViewShell)
+    if(!mpViewShell)
+        return;
+
+    const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
+    MapMode aMapMode;
+    tools::Rectangle aPixelPaintRect;
+    sal_uInt8 nRangeId;
+    sal_uInt16 nCount(rData.GetDrawRanges());
+    for (sal_uInt16 i = 0; i < nCount; ++i)
     {
-        const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
-        MapMode aMapMode;
-        tools::Rectangle aPixelPaintRect;
-        sal_uInt8 nRangeId;
-        sal_uInt16 nCount(rData.GetDrawRanges());
-        for (sal_uInt16 i = 0; i < nCount; ++i)
-        {
-            rData.GetDrawRange(i, aPixelPaintRect, aMapMode, nRangeId);
-            FillShapes(aPixelPaintRect, aMapMode, nRangeId);
-        }
+        rData.GetDrawRange(i, aPixelPaintRect, aMapMode, nRangeId);
+        FillShapes(aPixelPaintRect, aMapMode, nRangeId);
     }
 }
 
@@ -999,64 +999,64 @@ void ScShapeChildren::FillShapes(const tools::Rectangle& aPixelPaintRect, const 
     OSL_ENSURE(nRangeId < maShapeRanges.size(), "this is not a valid range for draw objects");
     SdrPage* pPage = GetDrawPage();
     vcl::Window* pWin = mpViewShell->GetWindow();
-    if (pPage && pWin)
+    if (!(pPage && pWin))
+        return;
+
+    bool bForeAdded(false);
+    bool bBackAdded(false);
+    bool bControlAdded(false);
+    tools::Rectangle aClippedPixelPaintRect(aPixelPaintRect);
+    if (mpAccDoc)
     {
-        bool bForeAdded(false);
-        bool bBackAdded(false);
-        bool bControlAdded(false);
-        tools::Rectangle aClippedPixelPaintRect(aPixelPaintRect);
-        if (mpAccDoc)
+        tools::Rectangle aRect2(Point(0,0), mpAccDoc->GetBoundingBoxOnScreen().GetSize());
+        aClippedPixelPaintRect = aPixelPaintRect.GetIntersection(aRect2);
+    }
+    ScIAccessibleViewForwarder aViewForwarder(mpViewShell, mpAccDoc, aMapMode);
+    maShapeRanges[nRangeId].maViewForwarder = aViewForwarder;
+    const size_t nCount(pPage->GetObjCount());
+    for (size_t i = 0; i < nCount; ++i)
+    {
+        SdrObject* pObj = pPage->GetObj(i);
+        if (pObj)
         {
-            tools::Rectangle aRect2(Point(0,0), mpAccDoc->GetBoundingBoxOnScreen().GetSize());
-            aClippedPixelPaintRect = aPixelPaintRect.GetIntersection(aRect2);
-        }
-        ScIAccessibleViewForwarder aViewForwarder(mpViewShell, mpAccDoc, aMapMode);
-        maShapeRanges[nRangeId].maViewForwarder = aViewForwarder;
-        const size_t nCount(pPage->GetObjCount());
-        for (size_t i = 0; i < nCount; ++i)
-        {
-            SdrObject* pObj = pPage->GetObj(i);
-            if (pObj)
+            uno::Reference< drawing::XShape > xShape(pObj->getUnoShape(), uno::UNO_QUERY);
+            if (xShape.is())
             {
-                uno::Reference< drawing::XShape > xShape(pObj->getUnoShape(), uno::UNO_QUERY);
-                if (xShape.is())
+                tools::Rectangle aRect(pWin->LogicToPixel(VCLPoint(xShape->getPosition()), aMapMode), pWin->LogicToPixel(VCLSize(xShape->getSize()), aMapMode));
+                if(!aClippedPixelPaintRect.GetIntersection(aRect).IsEmpty())
                 {
-                    tools::Rectangle aRect(pWin->LogicToPixel(VCLPoint(xShape->getPosition()), aMapMode), pWin->LogicToPixel(VCLSize(xShape->getSize()), aMapMode));
-                    if(!aClippedPixelPaintRect.GetIntersection(aRect).IsEmpty())
+                    ScShapeChild aShape;
+                    aShape.mxShape = xShape;
+                    aShape.mnRangeId = nRangeId;
+                    if (pObj->GetLayer().anyOf(SC_LAYER_INTERN, SC_LAYER_FRONT))
                     {
-                        ScShapeChild aShape;
-                        aShape.mxShape = xShape;
-                        aShape.mnRangeId = nRangeId;
-                        if (pObj->GetLayer().anyOf(SC_LAYER_INTERN, SC_LAYER_FRONT))
-                        {
-                            maShapeRanges[nRangeId].maForeShapes.push_back(std::move(aShape));
-                            bForeAdded = true;
-                        }
-                        else if (pObj->GetLayer() == SC_LAYER_BACK)
-                        {
-                            maShapeRanges[nRangeId].maBackShapes.push_back(std::move(aShape));
-                            bBackAdded = true;
-                        }
-                        else if (pObj->GetLayer() == SC_LAYER_CONTROLS)
-                        {
-                            maShapeRanges[nRangeId].maControls.push_back(std::move(aShape));
-                            bControlAdded = true;
-                        }
-                        else
-                        {
-                            OSL_FAIL("I don't know this layer.");
-                        }
+                        maShapeRanges[nRangeId].maForeShapes.push_back(std::move(aShape));
+                        bForeAdded = true;
+                    }
+                    else if (pObj->GetLayer() == SC_LAYER_BACK)
+                    {
+                        maShapeRanges[nRangeId].maBackShapes.push_back(std::move(aShape));
+                        bBackAdded = true;
+                    }
+                    else if (pObj->GetLayer() == SC_LAYER_CONTROLS)
+                    {
+                        maShapeRanges[nRangeId].maControls.push_back(std::move(aShape));
+                        bControlAdded = true;
+                    }
+                    else
+                    {
+                        OSL_FAIL("I don't know this layer.");
                     }
                 }
             }
         }
-        if (bForeAdded)
-            std::sort(maShapeRanges[nRangeId].maForeShapes.begin(), maShapeRanges[nRangeId].maForeShapes.end(),ScShapeChildLess());
-        if (bBackAdded)
-            std::sort(maShapeRanges[nRangeId].maBackShapes.begin(), maShapeRanges[nRangeId].maBackShapes.end(),ScShapeChildLess());
-        if (bControlAdded)
-            std::sort(maShapeRanges[nRangeId].maControls.begin(), maShapeRanges[nRangeId].maControls.end(),ScShapeChildLess());
     }
+    if (bForeAdded)
+        std::sort(maShapeRanges[nRangeId].maForeShapes.begin(), maShapeRanges[nRangeId].maForeShapes.end(),ScShapeChildLess());
+    if (bBackAdded)
+        std::sort(maShapeRanges[nRangeId].maBackShapes.begin(), maShapeRanges[nRangeId].maBackShapes.end(),ScShapeChildLess());
+    if (bControlAdded)
+        std::sort(maShapeRanges[nRangeId].maControls.begin(), maShapeRanges[nRangeId].maControls.end(),ScShapeChildLess());
 }
 
 SdrPage* ScShapeChildren::GetDrawPage() const

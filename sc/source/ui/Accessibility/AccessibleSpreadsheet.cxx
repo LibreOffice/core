@@ -288,18 +288,18 @@ void ScAccessibleSpreadsheet::ConstructScAccessibleSpreadsheet(
     mnTab = nTab;
     mbDelIns = false;
     mbIsFocusSend = false;
-    if (mpViewShell)
-    {
-        mpViewShell->AddAccessibilityObject(*this);
+    if (!mpViewShell)
+        return;
 
-        const ScViewData& rViewData = mpViewShell->GetViewData();
-        maActiveCell = rViewData.GetCurPos();
-        mpAccCell = GetAccessibleCellAt(maActiveCell.Row(), maActiveCell.Col());
-        ScDocument* pScDoc= GetDocument(mpViewShell);
-        if (pScDoc)
-        {
-            pScDoc->GetName( maActiveCell.Tab(), m_strOldTabName );
-        }
+    mpViewShell->AddAccessibilityObject(*this);
+
+    const ScViewData& rViewData = mpViewShell->GetViewData();
+    maActiveCell = rViewData.GetCurPos();
+    mpAccCell = GetAccessibleCellAt(maActiveCell.Row(), maActiveCell.Col());
+    ScDocument* pScDoc= GetDocument(mpViewShell);
+    if (pScDoc)
+    {
+        pScDoc->GetName( maActiveCell.Tab(), m_strOldTabName );
     }
 }
 
@@ -1076,20 +1076,20 @@ void SAL_CALL ScAccessibleSpreadsheet::selectAllAccessibleChildren(  )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    if (mpViewShell)
+    if (!mpViewShell)
+        return;
+
+    if (IsFormulaMode())
     {
-        if (IsFormulaMode())
-        {
-            ScDocument* pDoc = GetDocument(mpViewShell);
-            ScViewData& rViewData = mpViewShell->GetViewData();
-            mpViewShell->InitRefMode( 0, 0, rViewData.GetTabNo(), SC_REFTYPE_REF );
-            rViewData.SetRefStart(0, 0, rViewData.GetTabNo());
-            rViewData.SetRefEnd(pDoc->MaxCol(), pDoc->MaxRow(), rViewData.GetTabNo());
-            mpViewShell->UpdateRef(pDoc->MaxCol(), pDoc->MaxRow(), rViewData.GetTabNo());
-        }
-        else
-            mpViewShell->SelectAll();
+        ScDocument* pDoc = GetDocument(mpViewShell);
+        ScViewData& rViewData = mpViewShell->GetViewData();
+        mpViewShell->InitRefMode( 0, 0, rViewData.GetTabNo(), SC_REFTYPE_REF );
+        rViewData.SetRefStart(0, 0, rViewData.GetTabNo());
+        rViewData.SetRefEnd(pDoc->MaxCol(), pDoc->MaxRow(), rViewData.GetTabNo());
+        mpViewShell->UpdateRef(pDoc->MaxCol(), pDoc->MaxRow(), rViewData.GetTabNo());
     }
+    else
+        mpViewShell->SelectAll();
 }
 
 sal_Int32 SAL_CALL
@@ -1167,24 +1167,24 @@ void SAL_CALL ScAccessibleSpreadsheet::deselectAccessibleChild( sal_Int32 nChild
     if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
         throw lang::IndexOutOfBoundsException();
 
-    if (mpViewShell)
-    {
-        sal_Int32 nCol(getAccessibleColumn(nChildIndex));
-        sal_Int32 nRow(getAccessibleRow(nChildIndex));
+    if (!mpViewShell)
+        return;
 
-        if (IsFormulaMode())
+    sal_Int32 nCol(getAccessibleColumn(nChildIndex));
+    sal_Int32 nRow(getAccessibleRow(nChildIndex));
+
+    if (IsFormulaMode())
+    {
+        if(IsScAddrFormulaSel(
+            ScAddress(static_cast<SCCOL>(nCol), nRow,mpViewShell->GetViewData().GetTabNo()))
+            )
         {
-            if(IsScAddrFormulaSel(
-                ScAddress(static_cast<SCCOL>(nCol), nRow,mpViewShell->GetViewData().GetTabNo()))
-                )
-            {
-                SelectCell(nRow, nCol, true);
-            }
-            return ;
-        }
-        if (mpViewShell->GetViewData().GetMarkData().IsCellMarked(static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow)))
             SelectCell(nRow, nCol, true);
+        }
+        return ;
     }
+    if (mpViewShell->GetViewData().GetMarkData().IsCellMarked(static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow)))
+        SelectCell(nRow, nCol, true);
 }
 
 void ScAccessibleSpreadsheet::SelectCell(sal_Int32 nRow, sal_Int32 nCol, bool bDeselect)

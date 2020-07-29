@@ -354,45 +354,45 @@ OutputDevice* ScAccessibleEditObject::GetOutputDeviceForView()
 
 void ScAccessibleEditObject::CreateTextHelper()
 {
-    if (!mpTextHelper)
+    if (mpTextHelper)
+        return;
+
+    ::std::unique_ptr < ScAccessibleTextData > pAccessibleTextData;
+    if (meObjectType == CellInEditMode || meObjectType == EditControl)
     {
-        ::std::unique_ptr < ScAccessibleTextData > pAccessibleTextData;
-        if (meObjectType == CellInEditMode || meObjectType == EditControl)
-        {
-            pAccessibleTextData.reset
-                (new ScAccessibleEditObjectTextData(mpEditView, GetOutputDeviceForView()));
-        }
-        else
-        {
-            pAccessibleTextData.reset
-                (new ScAccessibleEditLineTextData(nullptr, GetOutputDeviceForView()));
-        }
+        pAccessibleTextData.reset
+            (new ScAccessibleEditObjectTextData(mpEditView, GetOutputDeviceForView()));
+    }
+    else
+    {
+        pAccessibleTextData.reset
+            (new ScAccessibleEditLineTextData(nullptr, GetOutputDeviceForView()));
+    }
 
-        std::unique_ptr<ScAccessibilityEditSource> pEditSrc =
-            std::make_unique<ScAccessibilityEditSource>(std::move(pAccessibleTextData));
+    std::unique_ptr<ScAccessibilityEditSource> pEditSrc =
+        std::make_unique<ScAccessibilityEditSource>(std::move(pAccessibleTextData));
 
-        mpTextHelper = std::make_unique<::accessibility::AccessibleTextHelper>(std::move(pEditSrc));
-        mpTextHelper->SetEventSource(this);
+    mpTextHelper = std::make_unique<::accessibility::AccessibleTextHelper>(std::move(pEditSrc));
+    mpTextHelper->SetEventSource(this);
 
-        const ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
-        if ( pInputHdl && pInputHdl->IsEditMode() )
-        {
-            mpTextHelper->SetFocus();
-        }
-        else
-        {
-            mpTextHelper->SetFocus(mbHasFocus);
-        }
+    const ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
+    if ( pInputHdl && pInputHdl->IsEditMode() )
+    {
+        mpTextHelper->SetFocus();
+    }
+    else
+    {
+        mpTextHelper->SetFocus(mbHasFocus);
+    }
 
-        // #i54814# activate cell in edit mode
-        if( meObjectType == CellInEditMode )
+    // #i54814# activate cell in edit mode
+    if( meObjectType == CellInEditMode )
+    {
+        // do not activate cell object, if top edit line is active
+        if( pInputHdl && !pInputHdl->IsTopMode() )
         {
-            // do not activate cell object, if top edit line is active
-            if( pInputHdl && !pInputHdl->IsTopMode() )
-            {
-                SdrHint aHint( SdrHintKind::BeginEdit );
-                mpTextHelper->GetEditSource().GetBroadcaster().Broadcast( aHint );
-            }
+            SdrHint aHint( SdrHintKind::BeginEdit );
+            mpTextHelper->GetEditSource().GetBroadcaster().Broadcast( aHint );
         }
     }
 }

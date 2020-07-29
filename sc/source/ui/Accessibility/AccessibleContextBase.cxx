@@ -380,22 +380,22 @@ void SAL_CALL
        ScAccessibleContextBase::removeAccessibleEventListener(
         const uno::Reference<XAccessibleEventListener>& xListener)
 {
-    if (xListener.is())
+    if (!xListener.is())
+        return;
+
+    SolarMutexGuard aGuard;
+    if (!(!IsDefunc() && mnClientId))
+        return;
+
+    sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, xListener );
+    if ( !nListenerCount )
     {
-        SolarMutexGuard aGuard;
-        if (!IsDefunc() && mnClientId)
-        {
-            sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, xListener );
-            if ( !nListenerCount )
-            {
-                // no listeners anymore
-                // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-                // and at least to us not firing any events anymore, in case somebody calls
-                // NotifyAccessibleEvent, again
-                comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
-                mnClientId = 0;
-            }
-        }
+        // no listeners anymore
+        // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
+        // and at least to us not firing any events anymore, in case somebody calls
+        // NotifyAccessibleEvent, again
+        comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
+        mnClientId = 0;
     }
 }
 

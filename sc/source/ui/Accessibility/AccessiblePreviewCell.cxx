@@ -265,19 +265,19 @@ bool ScAccessiblePreviewCell::IsOpaque() const
 
 void ScAccessiblePreviewCell::CreateTextHelper()
 {
-    if (!mpTextHelper)
-    {
-        mpTextHelper.reset( new ::accessibility::AccessibleTextHelper(
-            std::make_unique<ScAccessibilityEditSource>(
-                std::make_unique<ScAccessiblePreviewCellTextData>(
-                    mpViewShell, maCellAddress))) );
-        mpTextHelper->SetEventSource( this );
+    if (mpTextHelper)
+        return;
 
-        // paragraphs in preview are transient
-        ::accessibility::AccessibleTextHelper::VectorOfStates aChildStates;
-        aChildStates.push_back( AccessibleStateType::TRANSIENT );
-        mpTextHelper->SetAdditionalChildStates( aChildStates );
-    }
+    mpTextHelper.reset( new ::accessibility::AccessibleTextHelper(
+        std::make_unique<ScAccessibilityEditSource>(
+            std::make_unique<ScAccessiblePreviewCellTextData>(
+                mpViewShell, maCellAddress))) );
+    mpTextHelper->SetEventSource( this );
+
+    // paragraphs in preview are transient
+    ::accessibility::AccessibleTextHelper::VectorOfStates aChildStates;
+    aChildStates.push_back( AccessibleStateType::TRANSIENT );
+    mpTextHelper->SetAdditionalChildStates( aChildStates );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
