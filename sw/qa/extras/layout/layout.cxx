@@ -2701,7 +2701,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf134146)
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump dumper;
-    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 14
