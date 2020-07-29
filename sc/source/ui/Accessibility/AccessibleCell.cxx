@@ -383,44 +383,44 @@ ScDocument* ScAccessibleCell::GetDocument(ScTabViewShell* pViewShell)
 
 void ScAccessibleCell::FillDependents(utl::AccessibleRelationSetHelper* pRelationSet)
 {
-    if (mpDoc)
-    {
-        ScRange aRange(0, 0, maCellAddress.Tab(), mpDoc->MaxCol(), mpDoc->MaxRow(), maCellAddress.Tab());
-        ScCellIterator aCellIter(mpDoc, aRange);
+    if (!mpDoc)
+        return;
 
-        for (bool bHasCell = aCellIter.first(); bHasCell; bHasCell = aCellIter.next())
+    ScRange aRange(0, 0, maCellAddress.Tab(), mpDoc->MaxCol(), mpDoc->MaxRow(), maCellAddress.Tab());
+    ScCellIterator aCellIter(mpDoc, aRange);
+
+    for (bool bHasCell = aCellIter.first(); bHasCell; bHasCell = aCellIter.next())
+    {
+        if (aCellIter.getType() == CELLTYPE_FORMULA)
         {
-            if (aCellIter.getType() == CELLTYPE_FORMULA)
+            bool bFound = false;
+            ScDetectiveRefIter aIter(mpDoc, aCellIter.getFormulaCell());
+            ScRange aRef;
+            while ( !bFound && aIter.GetNextRef( aRef ) )
             {
-                bool bFound = false;
-                ScDetectiveRefIter aIter(mpDoc, aCellIter.getFormulaCell());
-                ScRange aRef;
-                while ( !bFound && aIter.GetNextRef( aRef ) )
-                {
-                    if (aRef.In(maCellAddress))
-                        bFound = true;
-                }
-                if (bFound)
-                    AddRelation(aCellIter.GetPos(), AccessibleRelationType::CONTROLLER_FOR, pRelationSet);
+                if (aRef.In(maCellAddress))
+                    bFound = true;
             }
+            if (bFound)
+                AddRelation(aCellIter.GetPos(), AccessibleRelationType::CONTROLLER_FOR, pRelationSet);
         }
     }
 }
 
 void ScAccessibleCell::FillPrecedents(utl::AccessibleRelationSetHelper* pRelationSet)
 {
-    if (mpDoc)
+    if (!mpDoc)
+        return;
+
+    ScRefCellValue aCell(*mpDoc, maCellAddress);
+    if (aCell.meType == CELLTYPE_FORMULA)
     {
-        ScRefCellValue aCell(*mpDoc, maCellAddress);
-        if (aCell.meType == CELLTYPE_FORMULA)
+        ScFormulaCell* pCell = aCell.mpFormula;
+        ScDetectiveRefIter aIter(mpDoc, pCell);
+        ScRange aRef;
+        while ( aIter.GetNextRef( aRef ) )
         {
-            ScFormulaCell* pCell = aCell.mpFormula;
-            ScDetectiveRefIter aIter(mpDoc, pCell);
-            ScRange aRef;
-            while ( aIter.GetNextRef( aRef ) )
-            {
-                AddRelation( aRef, AccessibleRelationType::CONTROLLED_BY, pRelationSet);
-            }
+            AddRelation( aRef, AccessibleRelationType::CONTROLLED_BY, pRelationSet);
         }
     }
 }
@@ -437,28 +437,28 @@ void ScAccessibleCell::AddRelation(const ScRange& rRange,
     utl::AccessibleRelationSetHelper* pRelationSet)
 {
     uno::Reference < XAccessibleTable > xTable ( getAccessibleParent()->getAccessibleContext(), uno::UNO_QUERY );
-    if (xTable.is())
+    if (!xTable.is())
+        return;
+
+    const sal_uInt32 nCount(static_cast<sal_uInt32>(rRange.aEnd.Col() -
+                rRange.aStart.Col() + 1) * (rRange.aEnd.Row() -
+                rRange.aStart.Row() + 1));
+    uno::Sequence < uno::Reference < uno::XInterface > > aTargetSet( nCount );
+    uno::Reference < uno::XInterface >* pTargetSet = aTargetSet.getArray();
+    sal_uInt32 nPos(0);
+    for (sal_uInt32 nRow = rRange.aStart.Row(); nRow <= sal::static_int_cast<sal_uInt32>(rRange.aEnd.Row()); ++nRow)
     {
-        const sal_uInt32 nCount(static_cast<sal_uInt32>(rRange.aEnd.Col() -
-                    rRange.aStart.Col() + 1) * (rRange.aEnd.Row() -
-                    rRange.aStart.Row() + 1));
-        uno::Sequence < uno::Reference < uno::XInterface > > aTargetSet( nCount );
-        uno::Reference < uno::XInterface >* pTargetSet = aTargetSet.getArray();
-        sal_uInt32 nPos(0);
-        for (sal_uInt32 nRow = rRange.aStart.Row(); nRow <= sal::static_int_cast<sal_uInt32>(rRange.aEnd.Row()); ++nRow)
+        for (sal_uInt32 nCol = rRange.aStart.Col(); nCol <= sal::static_int_cast<sal_uInt32>(rRange.aEnd.Col()); ++nCol)
         {
-            for (sal_uInt32 nCol = rRange.aStart.Col(); nCol <= sal::static_int_cast<sal_uInt32>(rRange.aEnd.Col()); ++nCol)
-            {
-                pTargetSet[nPos] = xTable->getAccessibleCellAt(nRow, nCol);
-                ++nPos;
-            }
+            pTargetSet[nPos] = xTable->getAccessibleCellAt(nRow, nCol);
+            ++nPos;
         }
-        OSL_ENSURE(nCount == nPos, "something went wrong");
-        AccessibleRelation aRelation;
-        aRelation.RelationType = aRelationType;
-        aRelation.TargetSet = aTargetSet;
-        pRelationSet->AddRelation(aRelation);
     }
+    OSL_ENSURE(nCount == nPos, "something went wrong");
+    AccessibleRelation aRelation;
+    aRelation.RelationType = aRelationType;
+    aRelation.TargetSet = aTargetSet;
+    pRelationSet->AddRelation(aRelation);
 }
 
 static OUString ReplaceOneChar(const OUString& oldOUString, const OUString& replacedChar, const OUString& replaceStr)
