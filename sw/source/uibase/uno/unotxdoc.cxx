@@ -20,7 +20,7 @@
 #include <boost/property_tree/json_parser.hpp>
 
 #include <sal/config.h>
-
+#include <officecfg/Office/Common.hxx>
 #include <comphelper/string.hxx>
 #include <AnnotationWin.hxx>
 #include <o3tl/any.hxx>
@@ -79,7 +79,6 @@
 #include <unochart.hxx>
 #include <charatr.hxx>
 #include <svx/xmleohlp.hxx>
-#include <unotools/printwarningoptions.hxx>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -2588,7 +2587,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             // #122919# Force field update before PDF export, but after layout init (tdf#121962)
             bool bStateChanged = false;
             // check configuration: shall update of printing information in DocInfo set the document to "modified"?
-            if ( pRenderDocShell->IsEnableSetModified() && !SvtPrintWarningOptions().IsModifyDocumentOnPrintingAllowed() )
+            if (pRenderDocShell->IsEnableSetModified() && !officecfg::Office::Common::Print::PrintingModifiesDocument::get())
             {
                 pRenderDocShell->EnableSetModified( false );
                 bStateChanged = true;

@@ -7248,7 +7248,6 @@ include/unotools/nativenumberwrapper.hxx
 include/unotools/options.hxx
 include/unotools/optionsdlg.hxx
 include/unotools/pathoptions.hxx
-include/unotools/printwarningoptions.hxx
 include/unotools/progresshandlerwrap.hxx
 include/unotools/readwritemutexguard.hxx
 include/unotools/resmgr.hxx
@@ -16280,7 +16279,6 @@ unotools/source/config/moduleoptions.cxx
 unotools/source/config/options.cxx
 unotools/source/config/optionsdlg.cxx
 unotools/source/config/pathoptions.cxx
-unotools/source/config/printwarningoptions.cxx
 unotools/source/config/saveopt.cxx
 unotools/source/config/searchopt.cxx
 unotools/source/config/securityoptions.cxx

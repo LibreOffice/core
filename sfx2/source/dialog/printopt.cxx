@@ -19,7 +19,7 @@
 
 
 #include <sal/macros.h>
-#include <unotools/printwarningoptions.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <svtools/printoptions.hxx>
 #include <svtools/restartdialog.hxx>
 
@@ -91,17 +91,19 @@ std::unique_ptr<SfxTabPage> SfxCommonPrintOptionsTabPage::Create(weld::Container
 
 bool SfxCommonPrintOptionsTabPage::FillItemSet( SfxItemSet* /*rSet*/ )
 {
-    SvtPrintWarningOptions  aWarnOptions;
     SvtPrinterOptions       aPrinterOptions;
     SvtPrintFileOptions     aPrintFileOptions;
 
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
     if( m_xPaperSizeCB->get_state_changed_from_saved())
-        aWarnOptions.SetPaperSize(m_xPaperSizeCB->get_active());
+        officecfg::Office::Common::Print::Warning::PaperSize::set(m_xPaperSizeCB->get_active(), batch);
     if( m_xPaperOrientationCB->get_state_changed_from_saved() )
-        aWarnOptions.SetPaperOrientation(m_xPaperOrientationCB->get_active());
+        officecfg::Office::Common::Print::Warning::PaperOrientation::set(m_xPaperOrientationCB->get_active(), batch);
     if( m_xTransparencyCB->get_state_changed_from_saved() )
-        aWarnOptions.SetTransparency( m_xTransparencyCB->get_active() );
+        officecfg::Office::Common::Print::Warning::Transparency::set(m_xTransparencyCB->get_active(), batch);
+
+    batch->commit();
 
     ImplSaveControls( m_xPrinterOutputRB->get_active() ? &maPrinterOptions : &maPrintFileOptions );
 
@@ -113,12 +115,9 @@ bool SfxCommonPrintOptionsTabPage::FillItemSet( SfxItemSet* /*rSet*/ )
 
 void SfxCommonPrintOptionsTabPage::Reset( const SfxItemSet* /*rSet*/ )
 {
-    SvtPrintWarningOptions  aWarnOptions;
-
-    m_xPaperSizeCB->set_active( aWarnOptions.IsPaperSize() );
-    m_xPaperOrientationCB->set_active( aWarnOptions.IsPaperOrientation() );
-
-    m_xTransparencyCB->set_active( aWarnOptions.IsTransparency() );
+    m_xPaperSizeCB->set_active(officecfg::Office::Common::Print::Warning::PaperSize::get());
+    m_xPaperOrientationCB->set_active(officecfg::Office::Common::Print::Warning::PaperOrientation::get());
+    m_xTransparencyCB->set_active(officecfg::Office::Common::Print::Warning::Transparency::get());
 
     m_xPaperSizeCB->save_state();
     m_xPaperOrientationCB->save_state();
