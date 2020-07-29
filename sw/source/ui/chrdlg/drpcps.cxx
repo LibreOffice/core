@@ -574,6 +574,8 @@ void  SwDropCapsPage::Reset(const SfxItemSet *rSet)
         m_xTextText->set_sensitive(true);
     }
 
+    // tdf#135244: preview generation should not jump view
+    auto aLock(rSh.GetView().GetDocShell()->LockAllViews());
     // Preview
     m_aPict.SetValues(m_xTextEdit->get_text(),
                       sal_uInt8(m_xLinesField->get_value()),
