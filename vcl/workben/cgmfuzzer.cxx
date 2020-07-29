@@ -15,7 +15,6 @@
 #include <osl/detail/component-mapping.h>
 
 extern "C" {
-void * sd_component_getFactory( const char* , void* , void* );
 void * i18npool_component_getFactory( const char* , void* , void* );
 void * ucb_component_getFactory( const char* , void* , void* );
 
@@ -57,13 +56,25 @@ void * linguistic_DicList_get_implementation( void *, void * );
 void * linguistic_LinguProps_get_implementation( void *, void * );
 void * linguistic_LngSvcMgr_get_implementation( void *, void * );
 void * linguistic_GrammarCheckingIterator_get_implementation( void *, void * );
+void * sd_DrawingDocument_get_implementation( void *, void * );
+void * com_sun_star_comp_Draw_DrawingModule_get_implementation( void *, void * );
+void * sd_PresentationDocument_get_implementation( void *, void * );
+void * com_sun_star_comp_Draw_PresenterHelper_get_implementation( void *, void * );
+void * com_sun_star_comp_Draw_PresenterPreviewCache_get_implementation( void *, void * );
+void * com_sun_star_comp_Draw_PresenterTextView_get_implementation( void *, void * );
+void * com_sun_star_comp_Draw_SlideRenderer_get_implementation( void *, void * );
+void * com_sun_star_comp_Draw_SlideSorter_get_implementation( void *, void * );
+void * com_sun_star_comp_Draw_framework_configuration_Configuration_get_implementation( void *, void * );
+void * com_sun_star_comp_draw_SdHtmlOptionsDialog_get_implementation( void *, void * );
+void * com_sun_star_comp_sd_InsertSlideController_get_implementation( void *, void * );
+void * com_sun_star_comp_sd_SlideLayoutController_get_implementation( void *, void * );
+void * com_sun_star_comp_sd_DisplayModeController_get_implementation( void *, void * );
 }
 
 const lib_to_factory_mapping *
 lo_get_factory_map(void)
 {
     static lib_to_factory_mapping map[] = {
-        { "libsdlo.a", sd_component_getFactory },
         { "libi18npoollo.a", i18npool_component_getFactory },
         { "libucb1.a", ucb_component_getFactory },
         { 0, 0 }
@@ -114,6 +125,19 @@ lo_get_constructor_map(void)
         { "linguistic_LinguProps_get_implementation", linguistic_LinguProps_get_implementation },
         { "linguistic_LngSvcMgr_get_implementation", linguistic_LngSvcMgr_get_implementation },
         { "linguistic_GrammarCheckingIterator_get_implementation", linguistic_GrammarCheckingIterator_get_implementation },
+        { "sd_DrawingDocument_get_implementation", sd_DrawingDocument_get_implementation },
+        { "com_sun_star_comp_Draw_DrawingModule_get_implementation", com_sun_star_comp_Draw_DrawingModule_get_implementation },
+        { "sd_PresentationDocument_get_implementation", sd_PresentationDocument_get_implementation },
+        { "com_sun_star_comp_Draw_PresenterHelper_get_implementation", com_sun_star_comp_Draw_PresenterHelper_get_implementation },
+        { "com_sun_star_comp_Draw_PresenterPreviewCache_get_implementation", com_sun_star_comp_Draw_PresenterPreviewCache_get_implementation },
+        { "com_sun_star_comp_Draw_PresenterTextView_get_implementation", com_sun_star_comp_Draw_PresenterTextView_get_implementation },
+        { "com_sun_star_comp_Draw_SlideRenderer_get_implementation", com_sun_star_comp_Draw_SlideRenderer_get_implementation },
+        { "com_sun_star_comp_Draw_SlideSorter_get_implementation", com_sun_star_comp_Draw_SlideSorter_get_implementation },
+        { "com_sun_star_comp_Draw_framework_configuration_Configuration_get_implementation", com_sun_star_comp_Draw_framework_configuration_Configuration_get_implementation },
+        { "com_sun_star_comp_draw_SdHtmlOptionsDialog_get_implementation", com_sun_star_comp_draw_SdHtmlOptionsDialog_get_implementation },
+        { "com_sun_star_comp_sd_InsertSlideController_get_implementation", com_sun_star_comp_sd_InsertSlideController_get_implementation },
+        { "com_sun_star_comp_sd_SlideLayoutController_get_implementation", com_sun_star_comp_sd_SlideLayoutController_get_implementation },
+        { "com_sun_star_comp_sd_DisplayModeController_get_implementation", com_sun_star_comp_sd_DisplayModeController_get_implementation },
         { 0, 0 }
     };
 
