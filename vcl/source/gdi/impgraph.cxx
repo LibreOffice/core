@@ -396,6 +396,7 @@ void ImpGraphic::createSwapInfo()
     maSwapInfo.mbIsTransparent = ImplIsTransparent();
     maSwapInfo.mbIsAlpha = ImplIsAlpha();
     maSwapInfo.mnAnimationLoopCount = ImplGetAnimationLoopCount();
+    maSwapInfo.mnPageIndex = getPageNumber();
 }
 
 void ImpGraphic::ImplClearGraphics()
@@ -453,6 +454,9 @@ void ImpGraphic::ImplSetPrepared(bool bAnimated, const Size* pSizeHint)
     maSwapInfo.mnAnimationLoopCount = 0;
     maSwapInfo.mbIsEPS = false;
     maSwapInfo.mbIsAnimated = bAnimated;
+
+    if (maVectorGraphicData)
+        maSwapInfo.mnPageIndex = maVectorGraphicData->getPageIndex();
 }
 
 void ImpGraphic::ImplClear()
@@ -1148,6 +1152,7 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
     Size            aSize;
     sal_uInt32      nId;
     sal_Int32       nType;
+    sal_Int32       nPageIndex = -1;
     const SvStreamEndian nOldFormat = rIStm.GetEndian();
     bool            bRet = false;
 
@@ -1166,6 +1171,11 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
         TypeSerializer aSerializer(rIStm);
         aSerializer.readSize(aSize);
         ReadMapMode( rIStm, aMapMode );
+
+        if (aCompat.GetVersion() >= 2)
+        {
+            rIStm.ReadInt32(nPageIndex);
+        }
     }
     else
     {
@@ -1264,6 +1274,8 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
         {
             ImplSetPrefMapMode( aMapMode );
             ImplSetPrefSize( aSize );
+            if (maVectorGraphicData)
+                maVectorGraphicData->setPageIndex(nPageIndex);
         }
     }
     else
@@ -1295,7 +1307,7 @@ bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
         rOStm.WriteUInt32( GRAPHIC_FORMAT_50 );
 
         // write new style header
-        VersionCompat aCompat( rOStm, StreamMode::WRITE, 1 );
+        VersionCompat aCompat(rOStm, StreamMode::WRITE, 2);
 
         rOStm.WriteInt32( static_cast<sal_Int32>(meType) );
 
@@ -1307,6 +1319,9 @@ bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
         aSerializer.writeSize(aSize);
 
         WriteMapMode( rOStm, aMapMode );
+
+        // Version 2
+        rOStm.WriteInt32(getPageNumber());
     }
     else
     {
@@ -1613,6 +1628,9 @@ bool ImpGraphic::ImplExportNative( SvStream& rOStm ) const
 
 sal_Int32 ImpGraphic::getPageNumber() const
 {
+    if (isSwappedOut())
+        return maSwapInfo.mnPageIndex;
+
     if (maVectorGraphicData)
         return maVectorGraphicData->getPageIndex();
     return -1;
