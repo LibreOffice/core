@@ -50,7 +50,9 @@ case "$1" in
         echo "             submit-private [BRANCH] submit your change as private"
         echo "             submit-wip [BRANCH]     submit your change as work-in-progress"
         echo "             nextchange [BRANCH]     reset branch to the remote to start with the next change"
-        echo "             testfeature [BRANCH]    trigger a test of a feature branch on gerrit"
+        echo "             testfeature [BRANCH] [CHANGEID]"
+        echo "                                     trigger a test of a feature branch on gerrit"
+        echo
         echo "Note: private changes are only visibly to yourself and those that you explicitly add as reviewers."
         echo "For full documentation, see https://gerrit.libreoffice.org/Documentation/intro-user.html#private-changes"
         echo
@@ -213,6 +215,14 @@ case "$1" in
         ssh "${GERRITHOST?}" gerrit query project:core "${@@Q}"
     ;;
     testfeature)
+        CHANGEID=${3#I}
+        if test -n "$3" -a \( ${#3} -ne 41 -o -n "${CHANGEID//[0-9a-f]/}" \)
+        then
+            echo "${3} is not a valid Gerrit change id"
+            exit 1
+        fi
+        CHANGEID=$3
+
         BRANCH=$2
         if test -z "$BRANCH"
         then
@@ -234,20 +244,32 @@ case "$1" in
         fi
         echo "workdir at $WORKDIR"
         git clone -s "$(dirname "$0")" "$WORKDIR/core"
+
         pushd "$WORKDIR/core" || { echo "Changing directory failed."; exit 1; }
         echo "noop commit: trigger test build for branch feature/$BRANCH" > ../commitmsg
         echo >> ../commitmsg
         echo "branch is at:" >> ../commitmsg
+        echo >> ../commitmsg
         git log -1|sed -e "s/Change-Id:/XXXXXX:/" >> ../commitmsg
+        if test -n "$CHANGEID"
+        then
+            echo >> ../commitmsg
+            echo "Change-Id: $CHANGEID" >> ../commitmsg
+        fi
         git fetch https://git.libreoffice.org/core "feature/$BRANCH" && \
             git checkout -b featuretst FETCH_HEAD && \
-            cp -a .git-hooks/* .git/hooks
+            cp -a .git-hooks/* .git/hooks && \
             git commit --allow-empty -F ../commitmsg && \
             git push "$GERRITURL" "HEAD:refs/for/feature/$BRANCH"
         popd || { echo "Changing directory failed."; exit 1; }
+
         rm -rf "$WORKDIR/core"
+        rm -f "$WORKDIR/commitmsg"
+        rmdir "$WORKDIR"
     ;;
     *)
         ssh "${GERRITHOST?}" gerrit "${@@Q}"
     ;;
 esac
+
+# vim: set noet sw=4 ts=4:
