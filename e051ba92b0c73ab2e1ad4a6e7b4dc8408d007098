@@ -22,6 +22,30 @@
       "revId": "e051ba92b0c73ab2e1ad4a6e7b4dc8408d007098",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7c2405c_00759a96",
+        "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1826,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-07-29T12:26:28Z",
+      "side": 1,
+      "message": "Yes, this is just supposed to get the LEFT HF for either the right or left page style. No problem there.  But GetFirstLeft() is better - since we (almost) always show the first header in these circular page-follows. [Wow - this just bends the mind in knots.]\n\n(The exception is if the very first page is a left page (aka page 2) - at which point LO doesn\u0027t actually show the first page, but shows the Left() page.  Rather strange, and probably a bug in its own right.)",
+      "parentUuid": "53415724_760d2433",
+      "range": {
+        "startLine": 1826,
+        "startChar": 29,
+        "endLine": 1826,
+        "endChar": 36
+      },
+      "revId": "e051ba92b0c73ab2e1ad4a6e7b4dc8408d007098",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
