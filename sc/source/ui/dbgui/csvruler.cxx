@@ -106,7 +106,7 @@ void ScCsvRuler::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     ScCsvControl::SetDrawingArea(pDrawingArea);
 
-    mnSplitSize = (GetCharWidth() * 3 / 5) | 1; // make an odd number
+    UpdateSplitSize();
 
     Size aSize(1, GetTextHeight() + mnSplitSize + 2);
     pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
@@ -162,9 +162,16 @@ void ScCsvRuler::InitColors()
     InvalidateGfx();
 }
 
+void ScCsvRuler::UpdateSplitSize()
+{
+    mnSplitSize = (GetCharWidth() * 3 / 5) | 1; // make an odd number
+}
+
 void ScCsvRuler::InitSizeData()
 {
     maWinSize = GetOutputSizePixel();
+
+    UpdateSplitSize();
 
     sal_Int32 nActiveWidth = std::min( GetWidth() - GetHdrWidth(), GetPosCount() * GetCharWidth() );
     sal_Int32 nActiveHeight = GetTextHeight();
@@ -409,7 +416,11 @@ bool ScCsvRuler::MouseButtonDown( const MouseEvent& rMEvt )
 
 bool ScCsvRuler::MouseButtonUp( const MouseEvent& )
 {
-    mbTracking = false;
+    if (mbTracking)
+    {
+        EndMouseTracking();
+        mbTracking = false;
+    }
     return true;
 }
 
@@ -498,24 +509,11 @@ void ScCsvRuler::MoveMouseTracking( sal_Int32 nPos )
     }
 }
 
-void ScCsvRuler::EndMouseTracking( bool bApply )
+void ScCsvRuler::EndMouseTracking()
 {
-    if( bApply )    // tracking finished successfully
-    {
-        // remove on simple click on an existing split
-        if( (mnPosMTCurr == mnPosMTStart) && maOldSplits.HasSplit( mnPosMTCurr ) && !mbPosMTMoved )
-            Execute( CSVCMD_REMOVESPLIT, mnPosMTCurr );
-    }
-    else            // tracking cancelled
-    {
-        MoveCursor( mnPosMTStart );
-        // move split to origin
-        if( maOldSplits.HasSplit( mnPosMTStart ) )
-            MoveMouseTracking( mnPosMTStart );
-        // remove temporarily inserted split
-        else if( !maOldSplits.HasSplit( mnPosMTCurr ) )
-            Execute( CSVCMD_REMOVESPLIT, mnPosMTCurr );
-    }
+    // remove on simple click on an existing split
+    if( (mnPosMTCurr == mnPosMTStart) && maOldSplits.HasSplit( mnPosMTCurr ) && !mbPosMTMoved )
+        Execute( CSVCMD_REMOVESPLIT, mnPosMTCurr );
     mnPosMTStart = CSV_POS_INVALID;
 }
 
