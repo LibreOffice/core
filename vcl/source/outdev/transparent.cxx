@@ -695,10 +695,9 @@ void OutputDevice::DrawTransparent( const tools::PolyPolygon& rPolyPoly,
 
     // try hard to draw it directly, because the emulation layers are slower
     bDrawn = DrawTransparentNatively( rPolyPoly, nTransparencePercent );
-    if( bDrawn )
-        return;
 
-    EmulateDrawTransparent( rPolyPoly, nTransparencePercent );
+    if (!bDrawn)
+        EmulateDrawTransparent( rPolyPoly, nTransparencePercent );
 
     // #110958# Apply alpha value also to VDev alpha channel
     if( mpAlphaVDev )
