@@ -349,29 +349,29 @@ void ScCsvGrid::RemoveSplit( sal_Int32 nPos )
 void ScCsvGrid::MoveSplit( sal_Int32 nPos, sal_Int32 nNewPos )
 {
     sal_uInt32 nColIx = GetColumnFromPos( nPos );
-    if( nColIx != CSV_COLUMN_INVALID )
+    if( nColIx == CSV_COLUMN_INVALID )
+        return;
+
+    DisableRepaint();
+    if( (GetColumnPos( nColIx - 1 ) < nNewPos) && (nNewPos < GetColumnPos( nColIx + 1 )) )
     {
-        DisableRepaint();
-        if( (GetColumnPos( nColIx - 1 ) < nNewPos) && (nNewPos < GetColumnPos( nColIx + 1 )) )
-        {
-            // move a split in the range between 2 others -> keep selection state of both columns
-            maSplits.Remove( nPos );
-            maSplits.Insert( nNewPos );
-            Execute( CSVCMD_UPDATECELLTEXTS );
-            ImplDrawColumn( nColIx - 1 );
-            ImplDrawColumn( nColIx );
-            ValidateGfx();  // performance: do not redraw all columns
-            AccSendTableUpdateEvent( nColIx - 1, nColIx );
-        }
-        else
-        {
-            ImplRemoveSplit( nPos );
-            ImplInsertSplit( nNewPos );
-            Execute( CSVCMD_EXPORTCOLUMNTYPE );
-            Execute( CSVCMD_UPDATECELLTEXTS );
-        }
-        EnableRepaint();
+        // move a split in the range between 2 others -> keep selection state of both columns
+        maSplits.Remove( nPos );
+        maSplits.Insert( nNewPos );
+        Execute( CSVCMD_UPDATECELLTEXTS );
+        ImplDrawColumn( nColIx - 1 );
+        ImplDrawColumn( nColIx );
+        ValidateGfx();  // performance: do not redraw all columns
+        AccSendTableUpdateEvent( nColIx - 1, nColIx );
     }
+    else
+    {
+        ImplRemoveSplit( nPos );
+        ImplInsertSplit( nNewPos );
+        Execute( CSVCMD_EXPORTCOLUMNTYPE );
+        Execute( CSVCMD_UPDATECELLTEXTS );
+    }
+    EnableRepaint();
 }
 
 void ScCsvGrid::RemoveAllSplits()
@@ -712,28 +712,28 @@ void ScCsvGrid::MoveCursor( sal_uInt32 nColIndex )
 
 void ScCsvGrid::MoveCursorRel( ScMoveMode eDir )
 {
-    if( GetFocusColumn() != CSV_COLUMN_INVALID )
+    if( GetFocusColumn() == CSV_COLUMN_INVALID )
+        return;
+
+    switch( eDir )
     {
-        switch( eDir )
+        case MOVE_FIRST:
+            MoveCursor( 0 );
+        break;
+        case MOVE_LAST:
+            MoveCursor( GetColumnCount() - 1 );
+        break;
+        case MOVE_PREV:
+            if( GetFocusColumn() > 0 )
+                MoveCursor( GetFocusColumn() - 1 );
+        break;
+        case MOVE_NEXT:
+            if( GetFocusColumn() < GetColumnCount() - 1 )
+                MoveCursor( GetFocusColumn() + 1 );
+        break;
+        default:
         {
-            case MOVE_FIRST:
-                MoveCursor( 0 );
-            break;
-            case MOVE_LAST:
-                MoveCursor( GetColumnCount() - 1 );
-            break;
-            case MOVE_PREV:
-                if( GetFocusColumn() > 0 )
-                    MoveCursor( GetFocusColumn() - 1 );
-            break;
-            case MOVE_NEXT:
-                if( GetFocusColumn() < GetColumnCount() - 1 )
-                    MoveCursor( GetFocusColumn() + 1 );
-            break;
-            default:
-            {
-                // added to avoid warnings
-            }
+            // added to avoid warnings
         }
     }
 }

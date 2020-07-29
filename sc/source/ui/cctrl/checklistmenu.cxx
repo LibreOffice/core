@@ -332,22 +332,22 @@ void ScCheckListMenuControl::selectMenuItem(size_t nPos, bool bSubMenuTimer)
     }
 
 
-    if (nPos != MENU_NOT_SELECTED)
-    {
-        ScCheckListMenuWindow* pParentMenu = mxFrame->GetParentMenu();
-        if (pParentMenu)
-            pParentMenu->get_widget().setSubMenuFocused(this);
+    if (nPos == MENU_NOT_SELECTED)
+        return;
 
-        if (bSubMenuTimer)
+    ScCheckListMenuWindow* pParentMenu = mxFrame->GetParentMenu();
+    if (pParentMenu)
+        pParentMenu->get_widget().setSubMenuFocused(this);
+
+    if (bSubMenuTimer)
+    {
+        if (maMenuItems[nPos].mxSubMenuWin)
         {
-            if (maMenuItems[nPos].mxSubMenuWin)
-            {
-                ScCheckListMenuWindow* pSubMenu = maMenuItems[nPos].mxSubMenuWin.get();
-                queueLaunchSubMenu(nPos, pSubMenu);
-            }
-            else
-                queueCloseSubMenu();
+            ScCheckListMenuWindow* pSubMenu = maMenuItems[nPos].mxSubMenuWin.get();
+            queueLaunchSubMenu(nPos, pSubMenu);
         }
+        else
+            queueCloseSubMenu();
     }
 }
 
@@ -932,35 +932,35 @@ std::unique_ptr<weld::TreeIter> ScCheckListMenuControl::FindEntry(const weld::Tr
 void ScCheckListMenuControl::GetRecursiveChecked(const weld::TreeIter* pEntry, std::unordered_set<OUString>& vOut,
                                                  OUString& rLabel)
 {
-    if (mxChecks->get_toggle(*pEntry) == TRISTATE_TRUE)
-    {
-        // We have to hash parents and children together.
-        // Per convention for easy access in getResult()
-        // "child;parent;grandparent" while descending.
-        if (rLabel.isEmpty())
-            rLabel = mxChecks->get_text(*pEntry, 0);
-        else
-            rLabel = mxChecks->get_text(*pEntry, 0) + ";" + rLabel;
+    if (mxChecks->get_toggle(*pEntry) != TRISTATE_TRUE)
+        return;
 
-        // Prerequisite: the selection mechanism guarantees that if a child is
-        // selected then also the parent is selected, so we only have to
-        // inspect the children in case the parent is selected.
-        if (mxChecks->iter_has_child(*pEntry))
-        {
-            std::unique_ptr<weld::TreeIter> xChild(mxChecks->make_iterator(pEntry));
-            bool bChild = mxChecks->iter_children(*xChild);
-            while (bChild)
-            {
-                OUString aLabel = rLabel;
-                GetRecursiveChecked(xChild.get(), vOut, aLabel);
-                if (!aLabel.isEmpty() && aLabel != rLabel)
-                    vOut.insert(aLabel);
-                bChild = mxChecks->iter_next_sibling(*xChild);
-            }
-            // Let the caller not add the parent alone.
-            rLabel.clear();
-        }
+    // We have to hash parents and children together.
+    // Per convention for easy access in getResult()
+    // "child;parent;grandparent" while descending.
+    if (rLabel.isEmpty())
+        rLabel = mxChecks->get_text(*pEntry, 0);
+    else
+        rLabel = mxChecks->get_text(*pEntry, 0) + ";" + rLabel;
+
+    // Prerequisite: the selection mechanism guarantees that if a child is
+    // selected then also the parent is selected, so we only have to
+    // inspect the children in case the parent is selected.
+    if (!mxChecks->iter_has_child(*pEntry))
+        return;
+
+    std::unique_ptr<weld::TreeIter> xChild(mxChecks->make_iterator(pEntry));
+    bool bChild = mxChecks->iter_children(*xChild);
+    while (bChild)
+    {
+        OUString aLabel = rLabel;
+        GetRecursiveChecked(xChild.get(), vOut, aLabel);
+        if (!aLabel.isEmpty() && aLabel != rLabel)
+            vOut.insert(aLabel);
+        bChild = mxChecks->iter_next_sibling(*xChild);
     }
+    // Let the caller not add the parent alone.
+    rLabel.clear();
 }
 
 std::unordered_set<OUString> ScCheckListMenuControl::GetAllChecked()
@@ -1014,31 +1014,31 @@ void ScCheckListMenuControl::CheckEntry(const weld::TreeIter* pParent, bool bChe
     CheckAllChildren(pParent, bCheck);
     // checking pParent can affect ancestors, e.g. if ancestor is unchecked and pParent is
     // now checked then the ancestor needs to be checked also
-    if (pParent && mxChecks->get_iter_depth(*pParent))
-    {
-        std::unique_ptr<weld::TreeIter> xAncestor(mxChecks->make_iterator(pParent));
-        bool bAncestor = mxChecks->iter_parent(*xAncestor);
-        while (bAncestor)
-        {
-            // if any first level children checked then ancestor
-            // needs to be checked, similarly if no first level children
-            // checked then ancestor needs to be unchecked
-            std::unique_ptr<weld::TreeIter> xChild(mxChecks->make_iterator(xAncestor.get()));
-            bool bChild = mxChecks->iter_children(*xChild);
-            bool bChildChecked = false;
+    if (!(pParent && mxChecks->get_iter_depth(*pParent)))
+        return;
 
-            while (bChild)
+    std::unique_ptr<weld::TreeIter> xAncestor(mxChecks->make_iterator(pParent));
+    bool bAncestor = mxChecks->iter_parent(*xAncestor);
+    while (bAncestor)
+    {
+        // if any first level children checked then ancestor
+        // needs to be checked, similarly if no first level children
+        // checked then ancestor needs to be unchecked
+        std::unique_ptr<weld::TreeIter> xChild(mxChecks->make_iterator(xAncestor.get()));
+        bool bChild = mxChecks->iter_children(*xChild);
+        bool bChildChecked = false;
+
+        while (bChild)
+        {
+            if (mxChecks->get_toggle(*xChild) == TRISTATE_TRUE)
             {
-                if (mxChecks->get_toggle(*xChild) == TRISTATE_TRUE)
-                {
-                    bChildChecked = true;
-                    break;
-                }
-                bChild = mxChecks->iter_next_sibling(*xChild);
+                bChildChecked = true;
+                break;
             }
-            mxChecks->set_toggle(*xAncestor, bChildChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
-            bAncestor = mxChecks->iter_parent(*xAncestor);
+            bChild = mxChecks->iter_next_sibling(*xChild);
         }
+        mxChecks->set_toggle(*xAncestor, bChildChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
+        bAncestor = mxChecks->iter_parent(*xAncestor);
     }
 }
 

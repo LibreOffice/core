@@ -80,27 +80,27 @@ void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, const SfxViewFrame*
     uno::Reference<frame::XFrame> xBeamerFrame = xFrame->findFrame(
                                         "_beamer",
                                         frame::FrameSearchFlag::CHILDREN);
-    if (xBeamerFrame.is())
+    if (!xBeamerFrame.is())
+        return;
+
+    uno::Reference<frame::XController> xController = xBeamerFrame->getController();
+    uno::Reference<view::XSelectionSupplier> xControllerSelection(xController, uno::UNO_QUERY);
+    if (xControllerSelection.is())
     {
-        uno::Reference<frame::XController> xController = xBeamerFrame->getController();
-        uno::Reference<view::XSelectionSupplier> xControllerSelection(xController, uno::UNO_QUERY);
-        if (xControllerSelection.is())
-        {
-            sal_Int32 nType = rParam.bSql ? sdb::CommandType::COMMAND :
-                        ( (rParam.nType == ScDbQuery) ? sdb::CommandType::QUERY :
-                                                        sdb::CommandType::TABLE );
+        sal_Int32 nType = rParam.bSql ? sdb::CommandType::COMMAND :
+                    ( (rParam.nType == ScDbQuery) ? sdb::CommandType::QUERY :
+                                                    sdb::CommandType::TABLE );
 
-            svx::ODataAccessDescriptor aSelection;
-            aSelection.setDataSource(rParam.aDBName);
-            aSelection[svx::DataAccessDescriptorProperty::Command]      <<= rParam.aStatement;
-            aSelection[svx::DataAccessDescriptorProperty::CommandType]  <<= nType;
+        svx::ODataAccessDescriptor aSelection;
+        aSelection.setDataSource(rParam.aDBName);
+        aSelection[svx::DataAccessDescriptorProperty::Command]      <<= rParam.aStatement;
+        aSelection[svx::DataAccessDescriptorProperty::CommandType]  <<= nType;
 
-            xControllerSelection->select(uno::makeAny(aSelection.createPropertyValueSequence()));
-        }
-        else
-        {
-            OSL_FAIL("no selection supplier in the beamer!");
-        }
+        xControllerSelection->select(uno::makeAny(aSelection.createPropertyValueSequence()));
+    }
+    else
+    {
+        OSL_FAIL("no selection supplier in the beamer!");
     }
 }
 

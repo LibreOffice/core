@@ -139,28 +139,29 @@ void ScTPValidationValue:: SetActiveHdl()
 
 void ScTPValidationValue::RefInputStartPreHdl( formula::RefEdit* pEdit, const formula::RefButton* pButton )
 {
-    if (ScValidationDlg *pValidationDlg = GetValidationDlg())
+    ScValidationDlg *pValidationDlg = GetValidationDlg();
+    if (!pValidationDlg)
+        return;
+
+    weld::Container* pNewParent = pValidationDlg->get_refinput_shrink_parent();
+    if (pEdit == m_pRefEdit && pNewParent != m_pRefEditParent)
     {
-        weld::Container* pNewParent = pValidationDlg->get_refinput_shrink_parent();
-        if (pEdit == m_pRefEdit && pNewParent != m_pRefEditParent)
-        {
-            m_xRefGrid->move(m_pRefEdit->GetWidget(), pNewParent);
-            m_pRefEditParent = pNewParent;
-        }
-
-        if (pNewParent != m_pBtnRefParent)
-        {
-            // if Edit SetParent but button not, the tab order will be
-            // incorrect, so move button anyway, and restore
-            // parent later in order to restore the tab order. But
-            // hide it if it's moved but unwanted.
-            m_xRefGrid->move(m_xBtnRef->GetWidget(), pNewParent);
-            m_xBtnRef->GetWidget()->set_visible(pButton == m_xBtnRef.get());
-            m_pBtnRefParent = pNewParent;
-        }
-
-        pNewParent->show();
+        m_xRefGrid->move(m_pRefEdit->GetWidget(), pNewParent);
+        m_pRefEditParent = pNewParent;
     }
+
+    if (pNewParent != m_pBtnRefParent)
+    {
+        // if Edit SetParent but button not, the tab order will be
+        // incorrect, so move button anyway, and restore
+        // parent later in order to restore the tab order. But
+        // hide it if it's moved but unwanted.
+        m_xRefGrid->move(m_xBtnRef->GetWidget(), pNewParent);
+        m_xBtnRef->GetWidget()->set_visible(pButton == m_xBtnRef.get());
+        m_pBtnRefParent = pNewParent;
+    }
+
+    pNewParent->show();
 }
 
 void ScTPValidationValue::RefInputDonePostHdl()
@@ -530,59 +531,61 @@ ScValidationDlg * ScTPValidationValue::GetValidationDlg()
 
 void ScTPValidationValue::SetupRefDlg()
 {
-    if( ScValidationDlg *pValidationDlg = GetValidationDlg() )
+    ScValidationDlg *pValidationDlg = GetValidationDlg();
+    if( !pValidationDlg )
+        return;
+
+    if( !pValidationDlg->SetupRefDlg() )
+        return;
+
+    pValidationDlg->SetHandler( this );
+    pValidationDlg->SetSetRefHdl( static_cast<ScRefHandlerHelper::PFUNCSETREFHDLTYPE>( &ScTPValidationValue::SetReferenceHdl ) );
+    pValidationDlg->SetSetActHdl( static_cast<ScRefHandlerHelper::PCOMMONHDLTYPE>( &ScTPValidationValue::SetActiveHdl ) );
+    pValidationDlg->SetRefInputStartPreHdl( static_cast<ScRefHandlerHelper::PINPUTSTARTDLTYPE>( &ScTPValidationValue::RefInputStartPreHdl ) );
+    pValidationDlg->SetRefInputDonePostHdl( static_cast<ScRefHandlerHelper::PCOMMONHDLTYPE>( &ScTPValidationValue::RefInputDonePostHdl ) );
+
+    weld::Label* pLabel = nullptr;
+
+    if (m_xEdMax->GetWidget()->get_visible())
     {
-        if( pValidationDlg->SetupRefDlg() )
-        {
-            pValidationDlg->SetHandler( this );
-            pValidationDlg->SetSetRefHdl( static_cast<ScRefHandlerHelper::PFUNCSETREFHDLTYPE>( &ScTPValidationValue::SetReferenceHdl ) );
-            pValidationDlg->SetSetActHdl( static_cast<ScRefHandlerHelper::PCOMMONHDLTYPE>( &ScTPValidationValue::SetActiveHdl ) );
-            pValidationDlg->SetRefInputStartPreHdl( static_cast<ScRefHandlerHelper::PINPUTSTARTDLTYPE>( &ScTPValidationValue::RefInputStartPreHdl ) );
-            pValidationDlg->SetRefInputDonePostHdl( static_cast<ScRefHandlerHelper::PCOMMONHDLTYPE>( &ScTPValidationValue::RefInputDonePostHdl ) );
-
-            weld::Label* pLabel = nullptr;
-
-            if (m_xEdMax->GetWidget()->get_visible())
-            {
-                m_pRefEdit = m_xEdMax.get();
-                pLabel = m_xFtMax.get();
-            }
-            else if (m_xEdMin->GetWidget()->get_visible())
-            {
-                m_pRefEdit = m_xEdMin.get();
-                pLabel = m_xFtMin.get();
-            }
-
-            if (m_pRefEdit && !m_pRefEdit->GetWidget()->has_focus())
-                m_pRefEdit->GrabFocus();
-
-            if( m_pRefEdit )
-                m_pRefEdit->SetReferences( pValidationDlg, pLabel );
-
-            m_xBtnRef->SetReferences( pValidationDlg, m_pRefEdit );
-        }
+        m_pRefEdit = m_xEdMax.get();
+        pLabel = m_xFtMax.get();
     }
+    else if (m_xEdMin->GetWidget()->get_visible())
+    {
+        m_pRefEdit = m_xEdMin.get();
+        pLabel = m_xFtMin.get();
+    }
+
+    if (m_pRefEdit && !m_pRefEdit->GetWidget()->has_focus())
+        m_pRefEdit->GrabFocus();
+
+    if( m_pRefEdit )
+        m_pRefEdit->SetReferences( pValidationDlg, pLabel );
+
+    m_xBtnRef->SetReferences( pValidationDlg, m_pRefEdit );
 }
 
 void ScTPValidationValue::RemoveRefDlg(bool bRestoreModal)
 {
-    if( ScValidationDlg *pValidationDlg = GetValidationDlg() )
-    {
-        if( pValidationDlg->RemoveRefDlg(bRestoreModal) )
-        {
-            pValidationDlg->SetHandler( nullptr );
-            pValidationDlg->SetSetRefHdl( nullptr );
-            pValidationDlg->SetSetActHdl( nullptr );
-            pValidationDlg->SetRefInputStartPreHdl( nullptr );
-            pValidationDlg->SetRefInputDonePostHdl( nullptr );
+    ScValidationDlg *pValidationDlg = GetValidationDlg();
+    if( !pValidationDlg )
+        return;
 
-            if( m_pRefEdit )
-                m_pRefEdit->SetReferences( nullptr, nullptr );
-            m_pRefEdit = nullptr;
+    if( !pValidationDlg->RemoveRefDlg(bRestoreModal) )
+        return;
 
-            m_xBtnRef->SetReferences( nullptr, nullptr );
-        }
-    }
+    pValidationDlg->SetHandler( nullptr );
+    pValidationDlg->SetSetRefHdl( nullptr );
+    pValidationDlg->SetSetActHdl( nullptr );
+    pValidationDlg->SetRefInputStartPreHdl( nullptr );
+    pValidationDlg->SetRefInputDonePostHdl( nullptr );
+
+    if( m_pRefEdit )
+        m_pRefEdit->SetReferences( nullptr, nullptr );
+    m_pRefEdit = nullptr;
+
+    m_xBtnRef->SetReferences( nullptr, nullptr );
 }
 
 IMPL_LINK_NOARG(ScTPValidationValue, EditSetFocusHdl, formula::RefEdit&, void)

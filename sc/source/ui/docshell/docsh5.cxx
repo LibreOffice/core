@@ -370,33 +370,33 @@ void ScDocShell::CancelAutoDBRange()
 {
     // called when dialog is cancelled
 //moggi:TODO
-    if ( m_pOldAutoDBRange )
+    if ( !m_pOldAutoDBRange )
+        return;
+
+    SCTAB nTab = GetCurTab();
+    ScDBData* pDBData = m_aDocument.GetAnonymousDBData(nTab);
+    if ( pDBData )
     {
-        SCTAB nTab = GetCurTab();
-        ScDBData* pDBData = m_aDocument.GetAnonymousDBData(nTab);
-        if ( pDBData )
+        SCCOL nRangeX1;
+        SCROW nRangeY1;
+        SCCOL nRangeX2;
+        SCROW nRangeY2;
+        SCTAB nRangeTab;
+        pDBData->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
+        DBAreaDeleted( nRangeTab, nRangeX1, nRangeY1, nRangeX2 );
+
+        *pDBData = *m_pOldAutoDBRange;    // restore old settings
+
+        if ( m_pOldAutoDBRange->HasAutoFilter() )
         {
-            SCCOL nRangeX1;
-            SCROW nRangeY1;
-            SCCOL nRangeX2;
-            SCROW nRangeY2;
-            SCTAB nRangeTab;
-            pDBData->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
-            DBAreaDeleted( nRangeTab, nRangeX1, nRangeY1, nRangeX2 );
-
-            *pDBData = *m_pOldAutoDBRange;    // restore old settings
-
-            if ( m_pOldAutoDBRange->HasAutoFilter() )
-            {
-                // restore AutoFilter buttons
-                m_pOldAutoDBRange->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
-                m_aDocument.ApplyFlagsTab( nRangeX1, nRangeY1, nRangeX2, nRangeY1, nRangeTab, ScMF::Auto );
-                PostPaint( nRangeX1, nRangeY1, nRangeTab, nRangeX2, nRangeY1, nRangeTab, PaintPartFlags::Grid );
-            }
+            // restore AutoFilter buttons
+            m_pOldAutoDBRange->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
+            m_aDocument.ApplyFlagsTab( nRangeX1, nRangeY1, nRangeX2, nRangeY1, nRangeTab, ScMF::Auto );
+            PostPaint( nRangeX1, nRangeY1, nRangeTab, nRangeX2, nRangeY1, nRangeTab, PaintPartFlags::Grid );
         }
-
-        m_pOldAutoDBRange.reset();
     }
+
+    m_pOldAutoDBRange.reset();
 }
 
         //  adjust height

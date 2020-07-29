@@ -1106,19 +1106,19 @@ bool ScDocFunc::SetFormulaCells( const ScAddress& rPos, std::vector<ScFormulaCel
 void ScDocFunc::NotifyInputHandler( const ScAddress& rPos )
 {
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-    if ( pViewSh && pViewSh->GetViewData().GetDocShell() == &rDocShell )
-    {
-        ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
-        if ( pInputHdl && pInputHdl->GetCursorPos() == rPos )
-        {
-            bool bIsEditMode(pInputHdl->IsEditMode());
+    if ( !(pViewSh && pViewSh->GetViewData().GetDocShell() == &rDocShell) )
+        return;
 
-            // set modified if in editmode, because so the string is not set in the InputWindow like in the cell
-            // (the cell shows the same like the InputWindow)
-            if (bIsEditMode)
-                pInputHdl->SetModified();
-            pViewSh->UpdateInputHandler(false, !bIsEditMode);
-        }
+    ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
+    if ( pInputHdl && pInputHdl->GetCursorPos() == rPos )
+    {
+        bool bIsEditMode(pInputHdl->IsEditMode());
+
+        // set modified if in editmode, because so the string is not set in the InputWindow like in the cell
+        // (the cell shows the same like the InputWindow)
+        if (bIsEditMode)
+            pInputHdl->SetModified();
+        pViewSh->UpdateInputHandler(false, !bIsEditMode);
     }
 }
 
@@ -1200,20 +1200,20 @@ void ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, 
             bRet = SetStringCell(rPos, aText, !bApi);
     }
 
-    if ( bRet && aTester.NeedsCellAttr() )
+    if ( !(bRet && aTester.NeedsCellAttr()) )
+        return;
+
+    const SfxItemSet& rEditAttr = aTester.GetAttribs();
+    ScPatternAttr aPattern( rDoc.GetPool() );
+    aPattern.GetFromEditItemSet( &rEditAttr );
+    aPattern.DeleteUnchanged( rDoc.GetPattern( rPos.Col(), rPos.Row(), rPos.Tab() ) );
+    aPattern.GetItemSet().ClearItem( ATTR_HOR_JUSTIFY );    // wasn't removed above if no edit object
+    if ( aPattern.GetItemSet().Count() > 0 )
     {
-        const SfxItemSet& rEditAttr = aTester.GetAttribs();
-        ScPatternAttr aPattern( rDoc.GetPool() );
-        aPattern.GetFromEditItemSet( &rEditAttr );
-        aPattern.DeleteUnchanged( rDoc.GetPattern( rPos.Col(), rPos.Row(), rPos.Tab() ) );
-        aPattern.GetItemSet().ClearItem( ATTR_HOR_JUSTIFY );    // wasn't removed above if no edit object
-        if ( aPattern.GetItemSet().Count() > 0 )
-        {
-            ScMarkData aMark(rDoc.GetSheetLimits());
-            aMark.SelectTable( rPos.Tab(), true );
-            aMark.SetMarkArea( ScRange( rPos ) );
-            ApplyAttributes( aMark, aPattern, bApi );
-        }
+        ScMarkData aMark(rDoc.GetSheetLimits());
+        aMark.SelectTable( rPos.Tab(), true );
+        aMark.SetMarkArea( ScRange( rPos ) );
+        ApplyAttributes( aMark, aPattern, bApi );
     }
 }
 
@@ -3191,28 +3191,27 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const OUString& sSource )
         uno::Any aLibAny = xLibContainer->getByName( aLibName );
         aLibAny >>= xLib;
     }
-    if( xLib.is() )
+    if( !xLib.is() )
+        return;
+
+    // if the Module with codename exists then find a new name
+    sal_Int32 nNum = 1;
+    OUString genModuleName = "Sheet1";
+    while( xLib->hasByName( genModuleName ) )
+        genModuleName = "Sheet" + OUString::number( ++nNum );
+
+    uno::Any aSourceAny;
+    OUString sTmpSource = sSource;
+    if ( sTmpSource.isEmpty() )
+        sTmpSource = "Rem Attribute VBA_ModuleType=VBADocumentModule\nOption VBASupport 1\n";
+    aSourceAny <<= sTmpSource;
+    uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY );
+    if ( xVBAModuleInfo.is() )
     {
-        // if the Module with codename exists then find a new name
-        sal_Int32 nNum = 1;
-        OUString genModuleName = "Sheet1";
-        while( xLib->hasByName( genModuleName ) )
-            genModuleName = "Sheet" + OUString::number( ++nNum );
-
-        uno::Any aSourceAny;
-        OUString sTmpSource = sSource;
-        if ( sTmpSource.isEmpty() )
-            sTmpSource = "Rem Attribute VBA_ModuleType=VBADocumentModule\nOption VBASupport 1\n";
-        aSourceAny <<= sTmpSource;
-        uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY );
-        if ( xVBAModuleInfo.is() )
-        {
-            rDoc.SetCodeName( nTab, genModuleName );
-            script::ModuleInfo sModuleInfo = lcl_InitModuleInfo(  rDocSh, genModuleName );
-            xVBAModuleInfo->insertModuleInfo( genModuleName, sModuleInfo );
-            xLib->insertByName( genModuleName, aSourceAny );
-        }
-
+        rDoc.SetCodeName( nTab, genModuleName );
+        script::ModuleInfo sModuleInfo = lcl_InitModuleInfo(  rDocSh, genModuleName );
+        xVBAModuleInfo->insertModuleInfo( genModuleName, sModuleInfo );
+        xLib->insertByName( genModuleName, aSourceAny );
     }
 }
 
@@ -5205,58 +5204,58 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
         return;
 
     ScDocument& rDoc = rDocShell.GetDocument();
-    if (!rDoc.HasValueData( nPosX, nPosY, nTab ))
+    if (rDoc.HasValueData( nPosX, nPosY, nTab ))
+        return;
+
+    OUString aName = rDoc.GetString(nPosX, nPosY, nTab);
+    ScRangeData::MakeValidName(&rDoc, aName);
+    if (aName.isEmpty())
+        return;
+
+    OUString aContent(ScRange( nX1, nY1, nTab, nX2, nY2, nTab ).Format(rDoc, ScRefFlags::RANGE_ABS_3D));
+
+    bool bInsert = false;
+    ScRangeData* pOld = rList.findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aName));
+    if (pOld)
     {
-        OUString aName = rDoc.GetString(nPosX, nPosY, nTab);
-        ScRangeData::MakeValidName(&rDoc, aName);
-        if (!aName.isEmpty())
+        OUString aOldStr;
+        pOld->GetSymbol( aOldStr );
+        if (aOldStr != aContent)
         {
-            OUString aContent(ScRange( nX1, nY1, nTab, nX2, nY2, nTab ).Format(rDoc, ScRefFlags::RANGE_ABS_3D));
-
-            bool bInsert = false;
-            ScRangeData* pOld = rList.findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aName));
-            if (pOld)
-            {
-                OUString aOldStr;
-                pOld->GetSymbol( aOldStr );
-                if (aOldStr != aContent)
-                {
-                    if (bApi)
-                        bInsert = true;     // don't check via API
-                    else
-                    {
-                        OUString aTemplate = ScResId( STR_CREATENAME_REPLACE );
-                        OUString aMessage = aTemplate.getToken( 0, '#' ) + aName + aTemplate.getToken( 1, '#' );
-
-                        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(ScDocShell::GetActiveDialogParent(),
-                                                                       VclMessageType::Question, VclButtonsType::YesNo,
-                                                                       aMessage));
-                        xQueryBox->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
-                        xQueryBox->set_default_response(RET_YES);
-
-                        short nResult = xQueryBox->run();
-                        if ( nResult == RET_YES )
-                        {
-                            rList.erase(*pOld);
-                            bInsert = true;
-                        }
-                        else if ( nResult == RET_CANCEL )
-                            rCancel = true;
-                    }
-                }
-            }
+            if (bApi)
+                bInsert = true;     // don't check via API
             else
-                bInsert = true;
-
-            if (bInsert)
             {
-                ScRangeData* pData = new ScRangeData( &rDoc, aName, aContent,
-                        ScAddress( nPosX, nPosY, nTab));
-                if (!rList.insert(pData))
+                OUString aTemplate = ScResId( STR_CREATENAME_REPLACE );
+                OUString aMessage = aTemplate.getToken( 0, '#' ) + aName + aTemplate.getToken( 1, '#' );
+
+                std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(ScDocShell::GetActiveDialogParent(),
+                                                               VclMessageType::Question, VclButtonsType::YesNo,
+                                                               aMessage));
+                xQueryBox->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+                xQueryBox->set_default_response(RET_YES);
+
+                short nResult = xQueryBox->run();
+                if ( nResult == RET_YES )
                 {
-                    OSL_FAIL("nanu?");
+                    rList.erase(*pOld);
+                    bInsert = true;
                 }
+                else if ( nResult == RET_CANCEL )
+                    rCancel = true;
             }
+        }
+    }
+    else
+        bInsert = true;
+
+    if (bInsert)
+    {
+        ScRangeData* pData = new ScRangeData( &rDoc, aName, aContent,
+                ScAddress( nPosX, nPosY, nTab));
+        if (!rList.insert(pData))
+        {
+            OSL_FAIL("nanu?");
         }
     }
 }
@@ -5468,38 +5467,38 @@ void ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
 
     OUString aFormula;
     rDoc.GetFormula( nStartCol, nStartRow, nTab, aFormula );
-    if ( aFormula.startsWith("{") && aFormula.endsWith("}") )
+    if ( !(aFormula.startsWith("{") && aFormula.endsWith("}")) )
+        return;
+
+    OUString aUndo = ScResId( STR_UNDO_RESIZEMATRIX );
+    bool bUndo(rDoc.IsUndoEnabled());
+    if (bUndo)
     {
-        OUString aUndo = ScResId( STR_UNDO_RESIZEMATRIX );
-        bool bUndo(rDoc.IsUndoEnabled());
-        if (bUndo)
-        {
-            ViewShellId nViewShellId(1);
-            if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
-                nViewShellId = pViewSh->GetViewShellId();
-            rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo, 0, nViewShellId );
-        }
-
-        aFormula = aFormula.copy(1, aFormula.getLength()-2);
-
-        ScMarkData aMark(rDoc.GetSheetLimits());
-        aMark.SetMarkArea( rOldRange );
-        aMark.SelectTable( nTab, true );
-        ScRange aNewRange( rOldRange.aStart, rNewEnd );
-
-        if ( DeleteContents( aMark, InsertDeleteFlags::CONTENTS, true, false/*bApi*/ ) )
-        {
-            // GRAM_API for API compatibility.
-            if (!EnterMatrix( aNewRange, &aMark, nullptr, aFormula, false/*bApi*/, false, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_API ))
-            {
-                // try to restore the previous state
-                EnterMatrix( rOldRange, &aMark, nullptr, aFormula, false/*bApi*/, false, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_API );
-            }
-        }
-
-        if (bUndo)
-            rDocShell.GetUndoManager()->LeaveListAction();
+        ViewShellId nViewShellId(1);
+        if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
+            nViewShellId = pViewSh->GetViewShellId();
+        rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo, 0, nViewShellId );
     }
+
+    aFormula = aFormula.copy(1, aFormula.getLength()-2);
+
+    ScMarkData aMark(rDoc.GetSheetLimits());
+    aMark.SetMarkArea( rOldRange );
+    aMark.SelectTable( nTab, true );
+    ScRange aNewRange( rOldRange.aStart, rNewEnd );
+
+    if ( DeleteContents( aMark, InsertDeleteFlags::CONTENTS, true, false/*bApi*/ ) )
+    {
+        // GRAM_API for API compatibility.
+        if (!EnterMatrix( aNewRange, &aMark, nullptr, aFormula, false/*bApi*/, false, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_API ))
+        {
+            // try to restore the previous state
+            EnterMatrix( rOldRange, &aMark, nullptr, aFormula, false/*bApi*/, false, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_API );
+        }
+    }
+
+    if (bUndo)
+        rDocShell.GetUndoManager()->LeaveListAction();
 }
 
 void ScDocFunc::InsertAreaLink( const OUString& rFile, const OUString& rFilter,
