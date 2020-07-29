@@ -28,7 +28,6 @@
 #include <unotools/compatibility.hxx>
 #include <unotools/defaultoptions.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
-#include <unotools/extendedsecurityoptions.hxx>
 #include <unotools/historyoptions.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -136,10 +135,6 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
 
         case EItem::EventConfig :
             //rItem.pItem.reset( new GlobalEventConfig() );
-            break;
-
-        case EItem::ExtendedSecurityOptions :
-            rItem.pItem.reset( new SvtExtendedSecurityOptions() );
             break;
 
         case EItem::HistoryOptions :

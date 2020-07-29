@@ -43,7 +43,6 @@ enum class EItem
     DynamicMenuOptions            ,
 
     EventConfig                   ,
-    ExtendedSecurityOptions       ,
 
     HelpOptions                   ,   // 2
     HistoryOptions                ,
