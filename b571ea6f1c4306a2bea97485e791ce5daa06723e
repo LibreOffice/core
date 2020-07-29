@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6add7596_1e45e050",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-29T11:26:30Z",
+      "side": 1,
+      "message": "\"that breaks down ...\" part is needless, and will have no meaning when this will be merged (\"Patch 1/6\" is OK: it relates this to other patches though).",
+      "range": {
+        "startLine": 9,
+        "startChar": 10,
+        "endLine": 9,
+        "endChar": 72
+      },
+      "revId": "b571ea6f1c4306a2bea97485e791ce5daa06723e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
