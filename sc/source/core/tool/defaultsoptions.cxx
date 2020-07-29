@@ -89,28 +89,28 @@ ScDefaultsCfg::ScDefaultsCfg() :
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
     OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() == aNames.getLength())
+    if(aValues.getLength() != aNames.getLength())
+        return;
+
+    sal_Int32 nIntVal = 0;
+    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
-        sal_Int32 nIntVal = 0;
-        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        if(pValues[nProp].hasValue())
         {
-            if(pValues[nProp].hasValue())
+            switch (nProp)
             {
-                switch (nProp)
-                {
-                case SCDEFAULTSOPT_TAB_COUNT:
-                    if (pValues[nProp] >>= nIntVal)
-                        SetInitTabCount( static_cast<SCTAB>(nIntVal) );
-                    break;
-                case SCDEFAULTSOPT_TAB_PREFIX:
-                    if (pValues[nProp] >>= aPrefix)
-                        SetInitTabPrefix(aPrefix);
-                    break;
-                case SCDEFAULTSOPT_JUMBO_SHEETS:
-                    if (pValues[nProp] >>= bValue)
-                        SetInitJumboSheets(bValue);
-                    break;
-                }
+            case SCDEFAULTSOPT_TAB_COUNT:
+                if (pValues[nProp] >>= nIntVal)
+                    SetInitTabCount( static_cast<SCTAB>(nIntVal) );
+                break;
+            case SCDEFAULTSOPT_TAB_PREFIX:
+                if (pValues[nProp] >>= aPrefix)
+                    SetInitTabPrefix(aPrefix);
+                break;
+            case SCDEFAULTSOPT_JUMBO_SHEETS:
+                if (pValues[nProp] >>= bValue)
+                    SetInitJumboSheets(bValue);
+                break;
             }
         }
     }

@@ -41,19 +41,19 @@ ScFilterOptions::ScFilterOptions() :
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
     OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() == aNames.getLength())
+    if(aValues.getLength() != aNames.getLength())
+        return;
+
+    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
-        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
+        if(pValues[nProp].hasValue())
         {
-            OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
-            if(pValues[nProp].hasValue())
+            switch(nProp)
             {
-                switch(nProp)
-                {
-                    case SCFILTOPT_WK3:
-                        bWK3Flag = ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] );
-                        break;
-                }
+                case SCFILTOPT_WK3:
+                    bWK3Flag = ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] );
+                    break;
             }
         }
     }

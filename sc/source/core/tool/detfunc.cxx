@@ -675,45 +675,45 @@ void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, bool bDestPnt )
     pPage->RecalcObjOrdNums();
 
     const size_t nObjCount = pPage->GetObjCount();
-    if (nObjCount)
+    if (!nObjCount)
+        return;
+
+    size_t nDelCount = 0;
+    std::unique_ptr<SdrObject*[]> ppObj(new SdrObject*[nObjCount]);
+
+    SdrObjListIter aIter( pPage, SdrIterMode::Flat );
+    SdrObject* pObject = aIter.Next();
+    while (pObject)
     {
-        size_t nDelCount = 0;
-        std::unique_ptr<SdrObject*[]> ppObj(new SdrObject*[nObjCount]);
-
-        SdrObjListIter aIter( pPage, SdrIterMode::Flat );
-        SdrObject* pObject = aIter.Next();
-        while (pObject)
+        if ( pObject->GetLayer()==SC_LAYER_INTERN &&
+                pObject->IsPolyObj() && pObject->GetPointCount()==2 )
         {
-            if ( pObject->GetLayer()==SC_LAYER_INTERN &&
-                    pObject->IsPolyObj() && pObject->GetPointCount()==2 )
-            {
-                if (aRect.IsInside(pObject->GetPoint(bDestPnt ? 1 : 0))) // start/destinationpoint
-                    ppObj[nDelCount++] = pObject;
-            }
-
-            pObject = aIter.Next();
+            if (aRect.IsInside(pObject->GetPoint(bDestPnt ? 1 : 0))) // start/destinationpoint
+                ppObj[nDelCount++] = pObject;
         }
 
-        const bool bRecording = pModel->IsRecording();
-
-        if (bRecording)
-        {
-            for (size_t i=1; i<=nDelCount; ++i)
-                pModel->AddCalcUndo(std::make_unique<SdrUndoDelObj>(*ppObj[nDelCount-i]));
-        }
-
-        for (size_t i=1; i<=nDelCount; ++i)
-        {
-            // remove the object from the drawing page, delete if undo is disabled
-            SdrObject* pObj = pPage->RemoveObject(ppObj[nDelCount-i]->GetOrdNum());
-            if( !bRecording )
-                SdrObject::Free( pObj );
-        }
-
-        ppObj.reset();
-
-        Modified();
+        pObject = aIter.Next();
     }
+
+    const bool bRecording = pModel->IsRecording();
+
+    if (bRecording)
+    {
+        for (size_t i=1; i<=nDelCount; ++i)
+            pModel->AddCalcUndo(std::make_unique<SdrUndoDelObj>(*ppObj[nDelCount-i]));
+    }
+
+    for (size_t i=1; i<=nDelCount; ++i)
+    {
+        // remove the object from the drawing page, delete if undo is disabled
+        SdrObject* pObj = pPage->RemoveObject(ppObj[nDelCount-i]->GetOrdNum());
+        if( !bRecording )
+            SdrObject::Free( pObj );
+    }
+
+    ppObj.reset();
+
+    Modified();
 }
 
         //      delete box around reference
@@ -748,37 +748,37 @@ void ScDetectiveFunc::DeleteBox( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nR
     pPage->RecalcObjOrdNums();
 
     const size_t nObjCount = pPage->GetObjCount();
-    if (nObjCount)
+    if (!nObjCount)
+        return;
+
+    size_t nDelCount = 0;
+    std::unique_ptr<SdrObject*[]> ppObj(new SdrObject*[nObjCount]);
+
+    SdrObjListIter aIter( pPage, SdrIterMode::Flat );
+    SdrObject* pObject = aIter.Next();
+    while (pObject)
     {
-        size_t nDelCount = 0;
-        std::unique_ptr<SdrObject*[]> ppObj(new SdrObject*[nObjCount]);
-
-        SdrObjListIter aIter( pPage, SdrIterMode::Flat );
-        SdrObject* pObject = aIter.Next();
-        while (pObject)
+        if ( pObject->GetLayer() == SC_LAYER_INTERN &&
+                dynamic_cast< const SdrRectObj* >(pObject) != nullptr )
         {
-            if ( pObject->GetLayer() == SC_LAYER_INTERN &&
-                    dynamic_cast< const SdrRectObj* >(pObject) != nullptr )
-            {
-                aObjRect = static_cast<SdrRectObj*>(pObject)->GetLogicRect();
-                aObjRect.Justify();
-                if ( RectIsPoints( aObjRect, aStartCorner, aEndCorner ) )
-                    ppObj[nDelCount++] = pObject;
-            }
-
-            pObject = aIter.Next();
+            aObjRect = static_cast<SdrRectObj*>(pObject)->GetLogicRect();
+            aObjRect.Justify();
+            if ( RectIsPoints( aObjRect, aStartCorner, aEndCorner ) )
+                ppObj[nDelCount++] = pObject;
         }
 
-        for (size_t i=1; i<=nDelCount; ++i)
-            pModel->AddCalcUndo( std::make_unique<SdrUndoRemoveObj>( *ppObj[nDelCount-i] ) );
-
-        for (size_t i=1; i<=nDelCount; ++i)
-            pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
-
-        ppObj.reset();
-
-        Modified();
+        pObject = aIter.Next();
     }
+
+    for (size_t i=1; i<=nDelCount; ++i)
+        pModel->AddCalcUndo( std::make_unique<SdrUndoRemoveObj>( *ppObj[nDelCount-i] ) );
+
+    for (size_t i=1; i<=nDelCount; ++i)
+        pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
+
+    ppObj.reset();
+
+    Modified();
 }
 
 sal_uInt16 ScDetectiveFunc::InsertPredLevelArea( const ScRange& rRef,
@@ -1545,24 +1545,24 @@ void ScDetectiveFunc::FindFrameForObject( const SdrObject* pObject, ScRange& rRa
     if (!pPage) return;
 
     // test if the object is a direct page member
-    if( pObject && pObject->getSdrPageFromSdrObject() && (pObject->getSdrPageFromSdrObject() == pObject->getParentSdrObjListFromSdrObject()->getSdrPageFromSdrObjList()) )
+    if( !(pObject && pObject->getSdrPageFromSdrObject() && (pObject->getSdrPageFromSdrObject() == pObject->getParentSdrObjListFromSdrObject()->getSdrPageFromSdrObjList())) )
+        return;
+
+    // Is there a previous object?
+    const size_t nOrdNum = pObject->GetOrdNum();
+
+    if(nOrdNum <= 0)
+        return;
+
+    SdrObject* pPrevObj = pPage->GetObj(nOrdNum - 1);
+
+    if ( pPrevObj && pPrevObj->GetLayer() == SC_LAYER_INTERN && dynamic_cast<const SdrRectObj*>( pPrevObj) !=  nullptr )
     {
-        // Is there a previous object?
-        const size_t nOrdNum = pObject->GetOrdNum();
-
-        if(nOrdNum > 0)
+        ScDrawObjData* pPrevData = ScDrawLayer::GetObjDataTab( pPrevObj, rRange.aStart.Tab() );
+        if ( pPrevData && pPrevData->maStart.IsValid() && pPrevData->maEnd.IsValid() && (pPrevData->maStart == rRange.aStart) )
         {
-            SdrObject* pPrevObj = pPage->GetObj(nOrdNum - 1);
-
-            if ( pPrevObj && pPrevObj->GetLayer() == SC_LAYER_INTERN && dynamic_cast<const SdrRectObj*>( pPrevObj) !=  nullptr )
-            {
-                ScDrawObjData* pPrevData = ScDrawLayer::GetObjDataTab( pPrevObj, rRange.aStart.Tab() );
-                if ( pPrevData && pPrevData->maStart.IsValid() && pPrevData->maEnd.IsValid() && (pPrevData->maStart == rRange.aStart) )
-                {
-                    rRange.aEnd = pPrevData->maEnd;
-                    return;
-                }
-            }
+            rRange.aEnd = pPrevData->maEnd;
+            return;
         }
     }
 }

@@ -89,18 +89,18 @@ TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::Formula
     }
 
     // Fetch all relevant bits for external references.
-    if (pDoc->HasExternalRefManager())
+    if (!pDoc->HasExternalRefManager())
+        return;
+
+    const ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
+    maExternalFileNames = pRefMgr->getAllCachedExternalFileNames();
+    for (size_t i = 0, n = maExternalFileNames.size(); i < n; ++i)
     {
-        const ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
-        maExternalFileNames = pRefMgr->getAllCachedExternalFileNames();
-        for (size_t i = 0, n = maExternalFileNames.size(); i < n; ++i)
-        {
-            sal_uInt16 nFileId = static_cast<sal_uInt16>(i);
-            std::vector<OUString> aTabNames;
-            pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
-            if (!aTabNames.empty())
-                maExternalCachedTabNames.emplace(nFileId, aTabNames);
-        }
+        sal_uInt16 nFileId = static_cast<sal_uInt16>(i);
+        std::vector<OUString> aTabNames;
+        pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
+        if (!aTabNames.empty())
+            maExternalCachedTabNames.emplace(nFileId, aTabNames);
     }
 }
 

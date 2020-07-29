@@ -57,44 +57,44 @@ ScUnitConverter::ScUnitConverter()
     const Sequence<OUString> aNodeNames = aConfigItem.GetNodeNames( "" );
 
     long nNodeCount = aNodeNames.getLength();
-    if ( nNodeCount )
+    if ( !nNodeCount )
+        return;
+
+    Sequence<OUString> aValNames( nNodeCount * 3 );
+    OUString* pValNameArray = aValNames.getArray();
+    const OUString sSlash('/');
+
+    long nIndex = 0;
+    for (const OUString& rNode : aNodeNames)
     {
-        Sequence<OUString> aValNames( nNodeCount * 3 );
-        OUString* pValNameArray = aValNames.getArray();
-        const OUString sSlash('/');
+        OUString sPrefix = rNode + sSlash;
 
-        long nIndex = 0;
-        for (const OUString& rNode : aNodeNames)
-        {
-            OUString sPrefix = rNode + sSlash;
+        pValNameArray[nIndex++] = sPrefix + CFGSTR_UNIT_FROM;
+        pValNameArray[nIndex++] = sPrefix + CFGSTR_UNIT_TO;
+        pValNameArray[nIndex++] = sPrefix + CFGSTR_UNIT_FACTOR;
+    }
 
-            pValNameArray[nIndex++] = sPrefix + CFGSTR_UNIT_FROM;
-            pValNameArray[nIndex++] = sPrefix + CFGSTR_UNIT_TO;
-            pValNameArray[nIndex++] = sPrefix + CFGSTR_UNIT_FACTOR;
-        }
+    Sequence<Any> aProperties = aConfigItem.GetProperties(aValNames);
 
-        Sequence<Any> aProperties = aConfigItem.GetProperties(aValNames);
+    if (aProperties.getLength() != aValNames.getLength())
+        return;
 
-        if (aProperties.getLength() == aValNames.getLength())
-        {
-            const Any* pProperties = aProperties.getConstArray();
+    const Any* pProperties = aProperties.getConstArray();
 
-            OUString sFromUnit;
-            OUString sToUnit;
-            double fFactor = 0;
+    OUString sFromUnit;
+    OUString sToUnit;
+    double fFactor = 0;
 
-            nIndex = 0;
-            for (long i=0; i<nNodeCount; i++)
-            {
-                pProperties[nIndex++] >>= sFromUnit;
-                pProperties[nIndex++] >>= sToUnit;
-                pProperties[nIndex++] >>= fFactor;
+    nIndex = 0;
+    for (long i=0; i<nNodeCount; i++)
+    {
+        pProperties[nIndex++] >>= sFromUnit;
+        pProperties[nIndex++] >>= sToUnit;
+        pProperties[nIndex++] >>= fFactor;
 
-                ScUnitConverterData aNew(sFromUnit, sToUnit, fFactor);
-                OUString const aIndex = aNew.GetIndexString();
-                maData.insert(std::make_pair(aIndex, aNew));
-            }
-        }
+        ScUnitConverterData aNew(sFromUnit, sToUnit, fFactor);
+        OUString const aIndex = aNew.GetIndexString();
+        maData.insert(std::make_pair(aIndex, aNew));
     }
 }
 

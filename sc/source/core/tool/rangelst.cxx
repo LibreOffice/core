@@ -1237,36 +1237,36 @@ void ScRangePairList::UpdateReference( UpdateRefMode eUpdateRefMode,
                                     const ScDocument* pDoc, const ScRange& rWhere,
                                     SCCOL nDx, SCROW nDy, SCTAB nDz )
 {
-    if ( !maPairs.empty() )
+    if ( maPairs.empty() )
+        return;
+
+    SCCOL nCol1;
+    SCROW nRow1;
+    SCTAB nTab1;
+    SCCOL nCol2;
+    SCROW nRow2;
+    SCTAB nTab2;
+    rWhere.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+    for (ScRangePair & rR : maPairs)
     {
-        SCCOL nCol1;
-        SCROW nRow1;
-        SCTAB nTab1;
-        SCCOL nCol2;
-        SCROW nRow2;
-        SCTAB nTab2;
-        rWhere.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-        for (ScRangePair & rR : maPairs)
+        for ( sal_uInt16 j=0; j<2; j++ )
         {
-            for ( sal_uInt16 j=0; j<2; j++ )
+            ScRange& rRange = rR.GetRange(j);
+            SCCOL theCol1;
+            SCROW theRow1;
+            SCTAB theTab1;
+            SCCOL theCol2;
+            SCROW theRow2;
+            SCTAB theTab2;
+            rRange.GetVars( theCol1, theRow1, theTab1, theCol2, theRow2, theTab2 );
+            if ( ScRefUpdate::Update( pDoc, eUpdateRefMode,
+                    nCol1, nRow1, nTab1, nCol2, nRow2, nTab2,
+                    nDx, nDy, nDz,
+                    theCol1, theRow1, theTab1, theCol2, theRow2, theTab2 )
+                    != UR_NOTHING )
             {
-                ScRange& rRange = rR.GetRange(j);
-                SCCOL theCol1;
-                SCROW theRow1;
-                SCTAB theTab1;
-                SCCOL theCol2;
-                SCROW theRow2;
-                SCTAB theTab2;
-                rRange.GetVars( theCol1, theRow1, theTab1, theCol2, theRow2, theTab2 );
-                if ( ScRefUpdate::Update( pDoc, eUpdateRefMode,
-                        nCol1, nRow1, nTab1, nCol2, nRow2, nTab2,
-                        nDx, nDy, nDz,
-                        theCol1, theRow1, theTab1, theCol2, theRow2, theTab2 )
-                        != UR_NOTHING )
-                {
-                    rRange.aStart.Set( theCol1, theRow1, theTab1 );
-                    rRange.aEnd.Set( theCol2, theRow2, theTab2 );
-                }
+                rRange.aStart.Set( theCol1, theRow1, theTab1 );
+                rRange.aEnd.Set( theCol2, theRow2, theTab2 );
             }
         }
     }

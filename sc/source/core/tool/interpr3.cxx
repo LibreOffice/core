@@ -1195,21 +1195,21 @@ void ScInterpreter::ScCombinA()
 
 void ScInterpreter::ScPermut()
 {
-    if ( MustHaveParamCount( GetByte(), 2 ) )
+    if ( !MustHaveParamCount( GetByte(), 2 ) )
+        return;
+
+    double k = ::rtl::math::approxFloor(GetDouble());
+    double n = ::rtl::math::approxFloor(GetDouble());
+    if (n < 0.0 || k < 0.0 || k > n)
+        PushIllegalArgument();
+    else if (k == 0.0)
+        PushInt(1);     // (n! / (n - 0)!) == 1
+    else
     {
-        double k = ::rtl::math::approxFloor(GetDouble());
-        double n = ::rtl::math::approxFloor(GetDouble());
-        if (n < 0.0 || k < 0.0 || k > n)
-            PushIllegalArgument();
-        else if (k == 0.0)
-            PushInt(1);     // (n! / (n - 0)!) == 1
-        else
-        {
-            double nVal = n;
-            for (sal_uLong i = static_cast<sal_uLong>(k)-1; i >= 1; i--)
-                nVal *= n-static_cast<double>(i);
-            PushDouble(nVal);
-        }
+        double nVal = n;
+        for (sal_uLong i = static_cast<sal_uLong>(k)-1; i >= 1; i--)
+            nVal *= n-static_cast<double>(i);
+        PushDouble(nVal);
     }
 }
 
@@ -1343,157 +1343,157 @@ void ScInterpreter::ScB()
 
 void ScInterpreter::ScBinomDist()
 {
-    if ( MustHaveParamCount( GetByte(), 4 ) )
+    if ( !MustHaveParamCount( GetByte(), 4 ) )
+        return;
+
+    bool bIsCum   = GetBool();     // false=mass function; true=cumulative
+    double p      = GetDouble();
+    double n      = ::rtl::math::approxFloor(GetDouble());
+    double x      = ::rtl::math::approxFloor(GetDouble());
+    double q = (0.5 - p) + 0.5;           // get one bit more for p near 1.0
+    if (n < 0.0 || x < 0.0 || x > n || p < 0.0 || p > 1.0)
     {
-        bool bIsCum   = GetBool();     // false=mass function; true=cumulative
-        double p      = GetDouble();
-        double n      = ::rtl::math::approxFloor(GetDouble());
-        double x      = ::rtl::math::approxFloor(GetDouble());
-        double q = (0.5 - p) + 0.5;           // get one bit more for p near 1.0
-        if (n < 0.0 || x < 0.0 || x > n || p < 0.0 || p > 1.0)
-        {
-            PushIllegalArgument();
-            return;
-        }
-        if ( p == 0.0)
-        {
-            PushDouble( (x==0.0 || bIsCum) ? 1.0 : 0.0 );
-            return;
-        }
-        if ( p == 1.0)
-        {
-            PushDouble( (x==n) ? 1.0 : 0.0);
-            return;
-        }
-        if (!bIsCum)
-            PushDouble( GetBinomDistPMF(x,n,p));
+        PushIllegalArgument();
+        return;
+    }
+    if ( p == 0.0)
+    {
+        PushDouble( (x==0.0 || bIsCum) ? 1.0 : 0.0 );
+        return;
+    }
+    if ( p == 1.0)
+    {
+        PushDouble( (x==n) ? 1.0 : 0.0);
+        return;
+    }
+    if (!bIsCum)
+        PushDouble( GetBinomDistPMF(x,n,p));
+    else
+    {
+        if (x == n)
+            PushDouble(1.0);
         else
         {
-            if (x == n)
-                PushDouble(1.0);
-            else
+            double fFactor = pow(q, n);
+            if (x == 0.0)
+                PushDouble(fFactor);
+            else if (fFactor <= ::std::numeric_limits<double>::min())
             {
-                double fFactor = pow(q, n);
-                if (x == 0.0)
-                    PushDouble(fFactor);
-                else if (fFactor <= ::std::numeric_limits<double>::min())
-                {
-                    fFactor = pow(p, n);
-                    if (fFactor <= ::std::numeric_limits<double>::min())
-                        PushDouble(GetBetaDist(q,n-x,x+1.0));
-                    else
-                    {
-                        if (fFactor > fMachEps)
-                        {
-                            double fSum = 1.0 - fFactor;
-                            sal_uInt32 max = static_cast<sal_uInt32> (n - x) - 1;
-                            for (sal_uInt32 i = 0; i < max && fFactor > 0.0; i++)
-                            {
-                                fFactor *= (n-i)/(i+1)*q/p;
-                                fSum -= fFactor;
-                            }
-                            PushDouble( (fSum < 0.0) ? 0.0 : fSum );
-                        }
-                        else
-                            PushDouble(lcl_GetBinomDistRange(n,n-x,n,fFactor,q,p));
-                    }
-                }
+                fFactor = pow(p, n);
+                if (fFactor <= ::std::numeric_limits<double>::min())
+                    PushDouble(GetBetaDist(q,n-x,x+1.0));
                 else
-                    PushDouble( lcl_GetBinomDistRange(n,0.0,x,fFactor,p,q)) ;
+                {
+                    if (fFactor > fMachEps)
+                    {
+                        double fSum = 1.0 - fFactor;
+                        sal_uInt32 max = static_cast<sal_uInt32> (n - x) - 1;
+                        for (sal_uInt32 i = 0; i < max && fFactor > 0.0; i++)
+                        {
+                            fFactor *= (n-i)/(i+1)*q/p;
+                            fSum -= fFactor;
+                        }
+                        PushDouble( (fSum < 0.0) ? 0.0 : fSum );
+                    }
+                    else
+                        PushDouble(lcl_GetBinomDistRange(n,n-x,n,fFactor,q,p));
+                }
             }
+            else
+                PushDouble( lcl_GetBinomDistRange(n,0.0,x,fFactor,p,q)) ;
         }
     }
 }
 
 void ScInterpreter::ScCritBinom()
 {
-    if ( MustHaveParamCount( GetByte(), 3 ) )
+    if ( !MustHaveParamCount( GetByte(), 3 ) )
+        return;
+
+    double alpha  = GetDouble();
+    double p      = GetDouble();
+    double n      = ::rtl::math::approxFloor(GetDouble());
+    if (n < 0.0 || alpha < 0.0 || alpha > 1.0 || p < 0.0 || p > 1.0)
+        PushIllegalArgument();
+    else if ( alpha == 0.0 )
+        PushDouble( 0.0 );
+    else if ( alpha == 1.0 )
+        PushDouble( p == 0 ? 0.0 : n );
+    else
     {
-        double alpha  = GetDouble();
-        double p      = GetDouble();
-        double n      = ::rtl::math::approxFloor(GetDouble());
-        if (n < 0.0 || alpha < 0.0 || alpha > 1.0 || p < 0.0 || p > 1.0)
-            PushIllegalArgument();
-        else if ( alpha == 0.0 )
-            PushDouble( 0.0 );
-        else if ( alpha == 1.0 )
-            PushDouble( p == 0 ? 0.0 : n );
-        else
+        double fFactor;
+        double q = (0.5 - p) + 0.5;           // get one bit more for p near 1.0
+        if ( q > p )                          // work from the side where the cumulative curve is
         {
-            double fFactor;
-            double q = (0.5 - p) + 0.5;           // get one bit more for p near 1.0
-            if ( q > p )                          // work from the side where the cumulative curve is
+            // work from 0 upwards
+            fFactor = pow(q,n);
+            if (fFactor > ::std::numeric_limits<double>::min())
             {
-                // work from 0 upwards
-                fFactor = pow(q,n);
-                if (fFactor > ::std::numeric_limits<double>::min())
+                double fSum = fFactor;
+                sal_uInt32 max = static_cast<sal_uInt32> (n), i;
+                for (i = 0; i < max && fSum < alpha; i++)
                 {
-                    double fSum = fFactor;
-                    sal_uInt32 max = static_cast<sal_uInt32> (n), i;
-                    for (i = 0; i < max && fSum < alpha; i++)
-                    {
-                        fFactor *= (n-i)/(i+1)*p/q;
-                        fSum += fFactor;
-                    }
-                    PushDouble(i);
+                    fFactor *= (n-i)/(i+1)*p/q;
+                    fSum += fFactor;
                 }
-                else
-                {
-                    // accumulate BinomDist until accumulated BinomDist reaches alpha
-                    double fSum = 0.0;
-                    sal_uInt32 max = static_cast<sal_uInt32> (n), i;
-                    for (i = 0; i < max && fSum < alpha; i++)
-                    {
-                        const double x = GetBetaDistPDF( p, ( i + 1 ), ( n - i + 1 ) )/( n + 1 );
-                        if ( nGlobalError == FormulaError::NONE )
-                        {
-                            fSum += x;
-                        }
-                        else
-                        {
-                            PushNoValue();
-                            return;
-                        }
-                    }
-                    PushDouble( i - 1 );
-                }
+                PushDouble(i);
             }
             else
             {
-                // work from n backwards
-                fFactor = pow(p, n);
-                if (fFactor > ::std::numeric_limits<double>::min())
+                // accumulate BinomDist until accumulated BinomDist reaches alpha
+                double fSum = 0.0;
+                sal_uInt32 max = static_cast<sal_uInt32> (n), i;
+                for (i = 0; i < max && fSum < alpha; i++)
                 {
-                    double fSum = 1.0 - fFactor;
-                    sal_uInt32 max = static_cast<sal_uInt32> (n), i;
-                    for (i = 0; i < max && fSum >= alpha; i++)
+                    const double x = GetBetaDistPDF( p, ( i + 1 ), ( n - i + 1 ) )/( n + 1 );
+                    if ( nGlobalError == FormulaError::NONE )
                     {
-                        fFactor *= (n-i)/(i+1)*q/p;
-                        fSum -= fFactor;
+                        fSum += x;
                     }
-                    PushDouble(n-i);
+                    else
+                    {
+                        PushNoValue();
+                        return;
+                    }
                 }
-                else
+                PushDouble( i - 1 );
+            }
+        }
+        else
+        {
+            // work from n backwards
+            fFactor = pow(p, n);
+            if (fFactor > ::std::numeric_limits<double>::min())
+            {
+                double fSum = 1.0 - fFactor;
+                sal_uInt32 max = static_cast<sal_uInt32> (n), i;
+                for (i = 0; i < max && fSum >= alpha; i++)
                 {
-                    // accumulate BinomDist until accumulated BinomDist reaches alpha
-                    double fSum = 0.0;
-                    sal_uInt32 max = static_cast<sal_uInt32> (n), i;
-                    alpha = 1 - alpha;
-                    for (i = 0; i < max && fSum < alpha; i++)
-                    {
-                        const double x = GetBetaDistPDF( q, ( i + 1 ), ( n - i + 1 ) )/( n + 1 );
-                        if ( nGlobalError == FormulaError::NONE )
-                        {
-                            fSum += x;
-                        }
-                        else
-                        {
-                            PushNoValue();
-                            return;
-                        }
-                    }
-                    PushDouble( n - i + 1 );
+                    fFactor *= (n-i)/(i+1)*q/p;
+                    fSum -= fFactor;
                 }
+                PushDouble(n-i);
+            }
+            else
+            {
+                // accumulate BinomDist until accumulated BinomDist reaches alpha
+                double fSum = 0.0;
+                sal_uInt32 max = static_cast<sal_uInt32> (n), i;
+                alpha = 1 - alpha;
+                for (i = 0; i < max && fSum < alpha; i++)
+                {
+                    const double x = GetBetaDistPDF( q, ( i + 1 ), ( n - i + 1 ) )/( n + 1 );
+                    if ( nGlobalError == FormulaError::NONE )
+                    {
+                        fSum += x;
+                    }
+                    else
+                    {
+                        PushNoValue();
+                        return;
+                    }
+                }
+                PushDouble( n - i + 1 );
             }
         }
     }
@@ -1501,46 +1501,46 @@ void ScInterpreter::ScCritBinom()
 
 void ScInterpreter::ScNegBinomDist()
 {
-    if ( MustHaveParamCount( GetByte(), 3 ) )
+    if ( !MustHaveParamCount( GetByte(), 3 ) )
+        return;
+
+    double p = GetDouble();                            // probability
+    double s = ::rtl::math::approxFloor(GetDouble());  // No of successes
+    double f = ::rtl::math::approxFloor(GetDouble());  // No of failures
+    if ((f + s) <= 1.0 || p < 0.0 || p > 1.0)
+        PushIllegalArgument();
+    else
     {
-        double p = GetDouble();                            // probability
-        double s = ::rtl::math::approxFloor(GetDouble());  // No of successes
-        double f = ::rtl::math::approxFloor(GetDouble());  // No of failures
-        if ((f + s) <= 1.0 || p < 0.0 || p > 1.0)
-            PushIllegalArgument();
-        else
-        {
-            double q = 1.0 - p;
-            double fFactor = pow(p,s);
-            for (double i = 0.0; i < f; i++)
-                fFactor *= (i+s)/(i+1.0)*q;
-            PushDouble(fFactor);
-        }
+        double q = 1.0 - p;
+        double fFactor = pow(p,s);
+        for (double i = 0.0; i < f; i++)
+            fFactor *= (i+s)/(i+1.0)*q;
+        PushDouble(fFactor);
     }
 }
 
 void ScInterpreter::ScNegBinomDist_MS()
 {
-    if ( MustHaveParamCount( GetByte(), 4 ) )
+    if ( !MustHaveParamCount( GetByte(), 4 ) )
+        return;
+
+    bool bCumulative = GetBool();
+    double p = GetDouble();                            // probability
+    double s = ::rtl::math::approxFloor(GetDouble());  // No of successes
+    double f = ::rtl::math::approxFloor(GetDouble());  // No of failures
+    if ( s < 1.0 || f < 0.0 || p < 0.0 || p > 1.0 )
+        PushIllegalArgument();
+    else
     {
-        bool bCumulative = GetBool();
-        double p = GetDouble();                            // probability
-        double s = ::rtl::math::approxFloor(GetDouble());  // No of successes
-        double f = ::rtl::math::approxFloor(GetDouble());  // No of failures
-        if ( s < 1.0 || f < 0.0 || p < 0.0 || p > 1.0 )
-            PushIllegalArgument();
+        double q = 1.0 - p;
+        if ( bCumulative )
+            PushDouble( 1.0 - GetBetaDist( q, f + 1, s ) );
         else
         {
-            double q = 1.0 - p;
-            if ( bCumulative )
-                PushDouble( 1.0 - GetBetaDist( q, f + 1, s ) );
-            else
-            {
-                double fFactor = pow( p, s );
-                for ( double i = 0.0; i < f; i++ )
-                    fFactor *= ( i + s ) / ( i + 1.0 ) * q;
-                PushDouble( fFactor );
-            }
+            double fFactor = pow( p, s );
+            for ( double i = 0.0; i < f; i++ )
+                fFactor *= ( i + s ) / ( i + 1.0 ) * q;
+            PushDouble( fFactor );
         }
     }
 }
@@ -1616,27 +1616,27 @@ void ScInterpreter::ScStdNormDist_MS()
 
 void ScInterpreter::ScExpDist()
 {
-    if ( MustHaveParamCount( GetByte(), 3 ) )
+    if ( !MustHaveParamCount( GetByte(), 3 ) )
+        return;
+
+    double kum    = GetDouble();                    // 0 or 1
+    double lambda = GetDouble();                    // lambda
+    double x      = GetDouble();                    // x
+    if (lambda <= 0.0)
+        PushIllegalArgument();
+    else if (kum == 0.0)                        // density
     {
-        double kum    = GetDouble();                    // 0 or 1
-        double lambda = GetDouble();                    // lambda
-        double x      = GetDouble();                    // x
-        if (lambda <= 0.0)
-            PushIllegalArgument();
-        else if (kum == 0.0)                        // density
-        {
-            if (x >= 0.0)
-                PushDouble(lambda * exp(-lambda*x));
-            else
-                PushInt(0);
-        }
-        else                                        // distribution
-        {
-            if (x > 0.0)
-                PushDouble(1.0 - exp(-lambda*x));
-            else
-                PushInt(0);
-        }
+        if (x >= 0.0)
+            PushDouble(lambda * exp(-lambda*x));
+        else
+            PushInt(0);
+    }
+    else                                        // distribution
+    {
+        if (x > 0.0)
+            PushDouble(1.0 - exp(-lambda*x));
+        else
+            PushInt(0);
     }
 }
 
@@ -1764,68 +1764,68 @@ void ScInterpreter::ScChiDist( bool bODFF )
 
 void ScInterpreter::ScWeibull()
 {
-    if ( MustHaveParamCount( GetByte(), 4 ) )
-    {
-        double kum   = GetDouble();                 // 0 or 1
-        double beta  = GetDouble();                 // beta
-        double alpha = GetDouble();                 // alpha
-        double x     = GetDouble();                 // x
-        if (alpha <= 0.0 || beta <= 0.0 || x < 0.0)
-            PushIllegalArgument();
-        else if (kum == 0.0)                        // Density
-            PushDouble(alpha/pow(beta,alpha)*pow(x,alpha-1.0)*
-                       exp(-pow(x/beta,alpha)));
-        else                                        // Distribution
-            PushDouble(1.0 - exp(-pow(x/beta,alpha)));
-    }
+    if ( !MustHaveParamCount( GetByte(), 4 ) )
+        return;
+
+    double kum   = GetDouble();                 // 0 or 1
+    double beta  = GetDouble();                 // beta
+    double alpha = GetDouble();                 // alpha
+    double x     = GetDouble();                 // x
+    if (alpha <= 0.0 || beta <= 0.0 || x < 0.0)
+        PushIllegalArgument();
+    else if (kum == 0.0)                        // Density
+        PushDouble(alpha/pow(beta,alpha)*pow(x,alpha-1.0)*
+                   exp(-pow(x/beta,alpha)));
+    else                                        // Distribution
+        PushDouble(1.0 - exp(-pow(x/beta,alpha)));
 }
 
 void ScInterpreter::ScPoissonDist( bool bODFF )
 {
     sal_uInt8 nParamCount = GetByte();
-    if ( MustHaveParamCount( nParamCount, ( bODFF ? 2 : 3 ), 3 ) )
+    if ( !MustHaveParamCount( nParamCount, ( bODFF ? 2 : 3 ), 3 ) )
+        return;
+
+    bool bCumulative = nParamCount != 3 || GetBool();         // default cumulative
+    double lambda    = GetDouble();                           // Mean
+    double x         = ::rtl::math::approxFloor(GetDouble()); // discrete distribution
+    if (lambda <= 0.0 || x < 0.0)
+        PushIllegalArgument();
+    else if (!bCumulative)                            // Probability mass function
     {
-        bool bCumulative = nParamCount != 3 || GetBool();         // default cumulative
-        double lambda    = GetDouble();                           // Mean
-        double x         = ::rtl::math::approxFloor(GetDouble()); // discrete distribution
-        if (lambda <= 0.0 || x < 0.0)
-            PushIllegalArgument();
-        else if (!bCumulative)                            // Probability mass function
-        {
-            if (lambda >712.0)    // underflow in exp(-lambda)
-            {   // accuracy 11 Digits
-                PushDouble( exp(x*log(lambda)-lambda-GetLogGamma(x+1.0)));
-            }
-            else
-            {
-                double fPoissonVar = 1.0;
-                for ( double f = 0.0; f < x; ++f )
-                    fPoissonVar *= lambda / ( f + 1.0 );
-                PushDouble( fPoissonVar * exp( -lambda ) );
-            }
+        if (lambda >712.0)    // underflow in exp(-lambda)
+        {   // accuracy 11 Digits
+            PushDouble( exp(x*log(lambda)-lambda-GetLogGamma(x+1.0)));
         }
-        else                                // Cumulative distribution function
+        else
         {
-            if (lambda > 712.0)  // underflow in exp(-lambda)
-            {   // accuracy 12 Digits
-                PushDouble(GetUpRegIGamma(x+1.0,lambda));
-            }
+            double fPoissonVar = 1.0;
+            for ( double f = 0.0; f < x; ++f )
+                fPoissonVar *= lambda / ( f + 1.0 );
+            PushDouble( fPoissonVar * exp( -lambda ) );
+        }
+    }
+    else                                // Cumulative distribution function
+    {
+        if (lambda > 712.0)  // underflow in exp(-lambda)
+        {   // accuracy 12 Digits
+            PushDouble(GetUpRegIGamma(x+1.0,lambda));
+        }
+        else
+        {
+            if (x >= 936.0) // result is always indistinguishable from 1
+                PushDouble (1.0);
             else
             {
-                if (x >= 936.0) // result is always indistinguishable from 1
-                    PushDouble (1.0);
-                else
+                double fSummand = exp(-lambda);
+                double fSum = fSummand;
+                int nEnd = sal::static_int_cast<int>( x );
+                for (int i = 1; i <= nEnd; i++)
                 {
-                    double fSummand = exp(-lambda);
-                    double fSum = fSummand;
-                    int nEnd = sal::static_int_cast<int>( x );
-                    for (int i = 1; i <= nEnd; i++)
-                    {
-                        fSummand = (fSummand * lambda)/static_cast<double>(i);
-                        fSum += fSummand;
-                    }
-                    PushDouble(fSum);
+                    fSummand = (fSummand * lambda)/static_cast<double>(i);
+                    fSum += fSummand;
                 }
+                PushDouble(fSum);
             }
         }
     }
@@ -4625,20 +4625,20 @@ void ScInterpreter::ScRSQ()
 {
     // Same as ScPearson()*ScPearson()
     ScPearson();
-    if (nGlobalError == FormulaError::NONE)
+    if (nGlobalError != FormulaError::NONE)
+        return;
+
+    switch (GetStackType())
     {
-        switch (GetStackType())
-        {
-            case svDouble:
-                {
-                    double fVal = PopDouble();
-                    PushDouble( fVal * fVal);
-                }
-                break;
-            default:
-                PopError();
-                PushNoValue();
-        }
+        case svDouble:
+            {
+                double fVal = PopDouble();
+                PushDouble( fVal * fVal);
+            }
+            break;
+        default:
+            PopError();
+            PushNoValue();
     }
 }
 

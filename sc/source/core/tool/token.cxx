@@ -1333,21 +1333,21 @@ void ScTokenArray::CheckForThreading( const FormulaToken& r )
         return;
     }
 
-    if (eOp == ocPush)
+    if (eOp != ocPush)
+        return;
+
+    switch (r.GetType())
     {
-        switch (r.GetType())
-        {
-            case svExternalDoubleRef:
-            case svExternalSingleRef:
-            case svExternalName:
-            case svMatrix:
-                SAL_INFO("sc.core.formulagroup", "opcode ocPush: variable type " << StackVarEnumToString(r.GetType())
-                    << " disables threaded calculation of formula group");
-                mbThreadingEnabled = false;
-                return;
-            default:
-                break;
-        }
+        case svExternalDoubleRef:
+        case svExternalSingleRef:
+        case svExternalName:
+        case svMatrix:
+            SAL_INFO("sc.core.formulagroup", "opcode ocPush: variable type " << StackVarEnumToString(r.GetType())
+                << " disables threaded calculation of formula group");
+            mbThreadingEnabled = false;
+            return;
+        default:
+            break;
     }
 }
 

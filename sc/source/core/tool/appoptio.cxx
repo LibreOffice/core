@@ -128,18 +128,18 @@ void ScAppOptions::SetLRUFuncList( const sal_uInt16* pList, const sal_uInt16 nCo
 static void lcl_SetLastFunctions( ScAppOptions& rOpt, const Any& rValue )
 {
     Sequence<sal_Int32> aSeq;
-    if ( rValue >>= aSeq )
-    {
-        sal_Int32 nCount = aSeq.getLength();
-        if ( nCount < SAL_MAX_UINT16 )
-        {
-            const sal_Int32* pArray = aSeq.getConstArray();
-            std::unique_ptr<sal_uInt16[]> pUShorts(new sal_uInt16[nCount]);
-            for (sal_Int32 i=0; i<nCount; i++)
-                pUShorts[i] = static_cast<sal_uInt16>(pArray[i]);
+    if ( !(rValue >>= aSeq) )
+        return;
 
-            rOpt.SetLRUFuncList( pUShorts.get(), sal::static_int_cast<sal_uInt16>(nCount) );
-        }
+    sal_Int32 nCount = aSeq.getLength();
+    if ( nCount < SAL_MAX_UINT16 )
+    {
+        const sal_Int32* pArray = aSeq.getConstArray();
+        std::unique_ptr<sal_uInt16[]> pUShorts(new sal_uInt16[nCount]);
+        for (sal_Int32 i=0; i<nCount; i++)
+            pUShorts[i] = static_cast<sal_uInt16>(pArray[i]);
+
+        rOpt.SetLRUFuncList( pUShorts.get(), sal::static_int_cast<sal_uInt16>(nCount) );
     }
 }
 
@@ -162,29 +162,29 @@ static void lcl_GetLastFunctions( Any& rDest, const ScAppOptions& rOpt )
 static void lcl_SetSortList( const Any& rValue )
 {
     Sequence<OUString> aSeq;
-    if ( rValue >>= aSeq )
+    if ( !(rValue >>= aSeq) )
+        return;
+
+    long nCount = aSeq.getLength();
+    const OUString* pArray = aSeq.getConstArray();
+    ScUserList aList;
+
+    //  if setting is "default", keep default values from ScUserList ctor
+    //TODO: mark "default" in a safe way
+    bool bDefault = ( nCount == 1 && pArray[0] == "NULL" );
+
+    if (!bDefault)
     {
-        long nCount = aSeq.getLength();
-        const OUString* pArray = aSeq.getConstArray();
-        ScUserList aList;
+        aList.clear();
 
-        //  if setting is "default", keep default values from ScUserList ctor
-        //TODO: mark "default" in a safe way
-        bool bDefault = ( nCount == 1 && pArray[0] == "NULL" );
-
-        if (!bDefault)
+        for (const auto& rStr : std::as_const(aSeq))
         {
-            aList.clear();
-
-            for (const auto& rStr : std::as_const(aSeq))
-            {
-                ScUserListData* pNew = new ScUserListData( rStr );
-                aList.push_back(pNew);
-            }
+            ScUserListData* pNew = new ScUserListData( rStr );
+            aList.push_back(pNew);
         }
-
-        ScGlobal::SetUserList( &aList );
     }
+
+    ScGlobal::SetUserList( &aList );
 }
 
 static void lcl_GetSortList( Any& rDest )

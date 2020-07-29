@@ -56,7 +56,10 @@ private:
 ScParserFactoryMap::ScParserFactoryMap() :
     mxContext( ::comphelper::getProcessComponentContext() )
 {
-    if( mxContext.is() ) try
+    if( !mxContext.is() )
+        return;
+
+    try
     {
         // enumerate all implementations of the FormulaParser service
         Reference< XContentEnumerationAccess > xFactoryEA( mxContext->getServiceManager(), UNO_QUERY_THROW );

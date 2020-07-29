@@ -154,27 +154,27 @@ void ScProgress::CreateInterpretProgress( ScDocument* pDoc, bool bWait )
 
 void ScProgress::DeleteInterpretProgress()
 {
-    if ( nInterpretProgress )
+    if ( !nInterpretProgress )
+        return;
+
+    /*  Do not decrement 'nInterpretProgress', before 'pInterpretProgress'
+        is deleted. In rare cases, deletion of 'pInterpretProgress' causes
+        a refresh of the sheet window which may call CreateInterpretProgress
+        and DeleteInterpretProgress again (from Output::DrawStrings),
+        resulting in double deletion of 'pInterpretProgress'. */
+    if ( nInterpretProgress == 1 )
     {
-        /*  Do not decrement 'nInterpretProgress', before 'pInterpretProgress'
-            is deleted. In rare cases, deletion of 'pInterpretProgress' causes
-            a refresh of the sheet window which may call CreateInterpretProgress
-            and DeleteInterpretProgress again (from Output::DrawStrings),
-            resulting in double deletion of 'pInterpretProgress'. */
-        if ( nInterpretProgress == 1 )
+        if ( pInterpretProgress != &theDummyInterpretProgress )
         {
-            if ( pInterpretProgress != &theDummyInterpretProgress )
-            {
-                // move pointer to local temporary to avoid double deletion
-                ScProgress* pTmpProgress = pInterpretProgress;
-                pInterpretProgress = &theDummyInterpretProgress;
-                delete pTmpProgress;
-            }
-            if ( pInterpretDoc )
-                pInterpretDoc->EnableIdle(bIdleWasEnabled);
+            // move pointer to local temporary to avoid double deletion
+            ScProgress* pTmpProgress = pInterpretProgress;
+            pInterpretProgress = &theDummyInterpretProgress;
+            delete pTmpProgress;
         }
-        --nInterpretProgress;
+        if ( pInterpretDoc )
+            pInterpretDoc->EnableIdle(bIdleWasEnabled);
     }
+    --nInterpretProgress;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
