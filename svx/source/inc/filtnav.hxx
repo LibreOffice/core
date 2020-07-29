@@ -32,26 +32,21 @@
 #include <sfx2/dockwin.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <vcl/image.hxx>
-#include <vcl/treelistbox.hxx>
 
 #include "fmexch.hxx"
 #include "sqlparserclient.hxx"
 
 class FmFormShell;
 
-
 namespace svxform
 {
-
 
 class FmFilterItem;
 class FmFilterItems;
 class FmParentData;
 class FmFilterAdapter;
 
-
 // data structure for the filter model
-
 class FmFilterData
 {
     FmParentData*    m_pParent;
@@ -71,7 +66,6 @@ public:
     virtual Image GetImage() const;
 };
 
-
 class FmParentData : public FmFilterData
 {
 protected:
@@ -85,7 +79,6 @@ public:
 
     ::std::vector< std::unique_ptr<FmFilterData> >& GetChildren() { return m_aChildren; }
 };
-
 
 // Item representing the forms and subforms
 class FmFormItem : public FmParentData
@@ -223,8 +216,10 @@ protected:
 };
 
 
-class FmFilterNavigator final : public SvTreeListBox, public SfxListener
+class FmFilterNavigator final : public SfxListener
 {
+    std::unique_ptr<weld::TreeView> m_xTreeView;
+
     enum DROP_ACTION{ DA_SCROLLUP, DA_SCROLLDOWN, DA_EXPANDNODE };
 
     std::unique_ptr<FmFilterModel> m_pModel;
@@ -238,9 +233,8 @@ class FmFilterNavigator final : public SvTreeListBox, public SfxListener
     DROP_ACTION         m_aDropActionType;
 
 public:
-    FmFilterNavigator( vcl::Window* pParent );
+    FmFilterNavigator(std::unique_ptr<weld::TreeView> xTreeView);
     virtual ~FmFilterNavigator() override;
-    virtual void dispose() override;
 
     void UpdateContent(
             const css::uno::Reference< css::container::XIndexAccess > & xControllers,
@@ -248,10 +242,12 @@ public:
         );
 
 private:
-
+#if 0
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
     virtual void Command( const CommandEvent& rEvt ) override;
+#endif
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
+#if 0
     virtual void InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, const Image& rImg1, const Image& rImg2) override;
     virtual bool Select( SvTreeListEntry* pEntry, bool bSelect=true ) override;
     virtual bool EditingEntry( SvTreeListEntry* pEntry, Selection& rSelection ) override;
@@ -260,9 +256,12 @@ private:
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
     virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
+#endif
 
     void DeleteSelection();
+#if 0
     SvTreeListEntry* FindEntry(const FmFilterData* pItem) const;
+#endif
     void Insert(FmFilterData* pItem, sal_uLong nPos);
     void Remove(FmFilterData const * pItem);
 
@@ -276,6 +275,7 @@ private:
             The first form item.
     */
     FmFormItem* getSelectedFilterItems(::std::vector<FmFilterItem*>& _rItemList);
+
     /**
      * inserts the filter items into the tree model and creates new FilterItems if needed.
      *    @param  _rFilterList
@@ -286,25 +286,29 @@ private:
      *        If <TRUE/> the items will not be removed from the model, otherwise they will.
      */
     void insertFilterItem(const ::std::vector<FmFilterItem*>& _rFilterList,FmFilterItems* _pTargetItems, bool _bCopy);
+
+#if 0
     SvTreeListEntry* getPrevEntry(SvTreeListEntry* _pStartWith);
     SvTreeListEntry* getNextEntry(SvTreeListEntry* _pStartWith);
 
     using SvTreeListBox::Select;
     using SvTreeListBox::ExecuteDrop;
     using SvTreeListBox::Insert;
+#endif
 };
-
 
 class FmFilterNavigatorWin : public SfxDockingWindow, public SfxControllerItem
 {
 private:
-    VclPtr<FmFilterNavigator> m_pNavigator;
+    std::unique_ptr<FmFilterNavigator> m_xNavigatorTree;
 
 protected:
-    virtual void Resize() override;
     virtual bool Close() override;
+    virtual void GetFocus() override;
     virtual Size CalcDockingSize( SfxChildAlignment ) override;
     virtual SfxChildAlignment CheckAlignment( SfxChildAlignment, SfxChildAlignment ) override;
+
+    using SfxDockingWindow::StateChanged;
 
 public:
     FmFilterNavigatorWin( SfxBindings *pBindings, SfxChildWindow *pMgr,
@@ -315,12 +319,7 @@ public:
     void UpdateContent( FmFormShell const * pFormShell );
     void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
     void FillInfo( SfxChildWinInfo& rInfo ) const override;
-
-    using SfxDockingWindow::StateChanged;
-
-    virtual void GetFocus() override;
 };
-
 
 class FmFilterNavigatorWinMgr : public SfxChildWindow
 {
@@ -330,9 +329,7 @@ public:
     SFX_DECL_CHILDWINDOW( FmFilterNavigatorWinMgr );
 };
 
-
 }
-
 
 #endif // INCLUDED_SVX_SOURCE_INC_FILTNAV_HXX
 
