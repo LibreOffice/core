@@ -19,6 +19,7 @@
 
 #include <officecfg/Office/Writer.hxx>
 #include <wordcountdialog.hxx>
+#include <docsh.hxx>
 #include <docstat.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>
@@ -133,7 +134,9 @@ void SwWordCountFloatDlg::UpdateCounts()
     SwDocStat aCurrCnt;
     SwDocStat aDocStat;
     {
-        SwWait aWait( *::GetActiveView()->GetDocShell(), true );
+        auto& rDocShell(*GetActiveView()->GetDocShell());
+        SwWait aWait(rDocShell, true);
+        auto aLock = rDocShell.LockAllViews();
         rSh.StartAction();
         rSh.CountWords( aCurrCnt );
         aDocStat = rSh.GetUpdatedDocStat();
