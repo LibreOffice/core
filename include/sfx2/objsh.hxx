@@ -218,6 +218,13 @@ protected:
     // helper method
     void AddToRecentlyUsedList();
 
+    // Parent class for actual guard objects that would do useful work
+    class LockAllViewsGuard
+    {
+    public:
+        virtual ~LockAllViewsGuard() {}
+    };
+
 public:
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXDOCSH)
 
@@ -770,6 +777,13 @@ public:
 
     /// Gets the certificate that is already picked by the user but not yet used for signing.
     css::uno::Reference<css::security::XCertificate> GetSignPDFCertificate() const;
+
+    // Lock all unlocked views, and returns a guard object which unlocks those views when destructed
+    virtual std::unique_ptr<LockAllViewsGuard> LockAllViews()
+    {
+        return std::make_unique<LockAllViewsGuard>();
+    }
+
 };
 
 #define SFX_GLOBAL_CLASSID \

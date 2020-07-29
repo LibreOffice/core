@@ -1128,6 +1128,8 @@ bool SfxObjectShell::SaveTo_Impl
     UpdateDocInfoForSave();
 
     ModifyBlocker_Impl aMod(this);
+    // tdf#41063, tdf#135244: prevent jumping to cursor at any temporary modification
+    auto aViewGuard(LockAllViews());
 
     std::shared_ptr<const SfxFilter> pFilter = rMedium.GetFilter();
     if ( !pFilter )

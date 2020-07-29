@@ -379,7 +379,7 @@ bool SwDocShell::Save()
     return !nErr.IsError();
 }
 
-SwDocShell::LockAllViewsGuard::LockAllViewsGuard(SwViewShell* pViewShell)
+SwDocShell::LockAllViewsGuard_Impl::LockAllViewsGuard_Impl(SwViewShell* pViewShell)
 {
     if (!pViewShell)
         return;
@@ -393,23 +393,21 @@ SwDocShell::LockAllViewsGuard::LockAllViewsGuard(SwViewShell* pViewShell)
     }
 }
 
-SwDocShell::LockAllViewsGuard::~LockAllViewsGuard()
+SwDocShell::LockAllViewsGuard_Impl::~LockAllViewsGuard_Impl()
 {
     for (SwViewShell* pShell : m_aViewWasUnLocked)
         pShell->LockView(false);
 }
 
-std::unique_ptr<SwDocShell::LockAllViewsGuard> SwDocShell::LockAllViews()
+std::unique_ptr<SfxObjectShell::LockAllViewsGuard> SwDocShell::LockAllViews()
 {
-    return std::make_unique<LockAllViewsGuard>(GetEditShell());
+    return std::make_unique<LockAllViewsGuard_Impl>(GetEditShell());
 }
 
 // Save using the Defaultformat
 bool SwDocShell::SaveAs( SfxMedium& rMedium )
 {
     SwWait aWait( *this, true );
-    // tdf#41063: prevent jumping to cursor at any temporary modification
-    auto aViewGuard(LockAllViews());
     //#i3370# remove quick help to prevent saving of autocorrection suggestions
     if (m_pView)
         m_pView->GetEditWin().StopQuickHelp();
