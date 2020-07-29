@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkImage" id="image1">
@@ -196,6 +196,11 @@
                                     </child>
                                   </object>
                                 </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="checklb-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | checklb">Lists the original font and the font that will replace it. Select Always to replace the font, even if the original font is installed on your system. Select Screen only to replace the screen font only and never replace the font for printing.</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
@@ -220,6 +225,11 @@
                         <property name="receives_default">True</property>
                         <property name="valign">center</property>
                         <property name="image">image1</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="apply-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | apply">Applies the selected font replacement.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -234,6 +244,11 @@
                         <property name="receives_default">True</property>
                         <property name="valign">center</property>
                         <property name="image">image2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="delete-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | delete">Deletes the selected font replacement.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -250,6 +265,11 @@
                           <object class="GtkEntry">
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
+                          </object>
+                        </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="font2-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | font2">Enter or select the name of the replacement font.</property>
                           </object>
                         </child>
                       </object>
@@ -270,11 +290,21 @@
                             <property name="activates_default">True</property>
                           </object>
                         </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="font1-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | font1">Enter or select the name of the font that you want to replace.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
                       </packing>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="replacements-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | replacements">Substitutes a font with a font of your choice. The substitution replaces a font only when it is displayed on screen, or on screen and when printing. The replacement does not change the font settings that are saved in the document.</property>
+                      </object>
                     </child>
                   </object>
                   <packing>
@@ -292,6 +322,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="usetable-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | usetable">Enables the font replacement settings that you define.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -377,6 +412,11 @@
                     <items>
                       <item translatable="yes" context="optfontspage|fontname">Automatic</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="fontname-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | fontname">Select the font for the display of HTML and Basic source code.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -392,6 +432,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="nonpropfontonly-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | nonpropfontonly">Check to display only non-proportional fonts in the Fonts list box.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -404,6 +449,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="fontheight-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | fontheight">Select a font size for the display of HTML and Basic source code.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
