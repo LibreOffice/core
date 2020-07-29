@@ -38,6 +38,7 @@ struct ImpSwapInfo
     bool mbIsAlpha;
 
     sal_uInt32 mnAnimationLoopCount;
+    sal_Int32 mnPageIndex;
 };
 
 class OutputDevice;
