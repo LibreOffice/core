@@ -348,7 +348,6 @@ namespace
 }
 
 // XFilterControllerListener
-
 void FmFilterAdapter::predicateExpressionChanged( const FilterEvent& Event )
 {
     SolarMutexGuard aGuard;

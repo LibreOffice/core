@@ -285,12 +285,10 @@ bool DbGridColumn::Commit()
     return bResult;
 }
 
-
 DbGridColumn::~DbGridColumn()
 {
     Clear();
 }
-
 
 void DbGridColumn::setModel(const css::uno::Reference< css::beans::XPropertySet >&  _xModel)
 {
@@ -674,7 +672,6 @@ void DbCellControl::_propertyChanged(const PropertyChangeEvent& _rEvent)
         implAdjustGenericFieldSetting( xSourceProps );
 }
 
-
 bool DbCellControl::Commit()
 {
     // lock the listening for value property changes
@@ -694,7 +691,6 @@ bool DbCellControl::Commit()
     // outta here
     return bReturn;
 }
-
 
 void DbCellControl::ImplInitWindow( vcl::Window const & rParent, const InitWindowFacet _eInitWhat )
 {
@@ -2820,8 +2816,16 @@ bool DbFilterField::commitControl()
             }
             return true;
         }
+        case css::form::FormComponentType::COMBOBOX:
+        {
+            aText = static_cast<ComboBoxControl*>(m_pWindow.get())->get_widget().get_active_text();
+            break;
+        }
         default:
-            aText = m_pWindow->GetText();
+        {
+            aText = static_cast<EditControlBase*>(m_pWindow.get())->get_widget().get_text();
+            break;
+        }
     }
 
     if (m_aText != aText)
@@ -2898,8 +2902,16 @@ void DbFilterField::SetText(const OUString& rText)
             sal_Int32 nPos = ::comphelper::findValue(m_aValueList, m_aText);
             static_cast<ListBoxControl*>(m_pWindow.get())->get_widget().set_active(nPos);
         }   break;
+        case css::form::FormComponentType::COMBOBOX:
+        {
+            static_cast<ComboBoxControl*>(m_pWindow.get())->get_widget().set_entry_text(m_aText);
+            break;
+        }
         default:
-            m_pWindow->SetText(m_aText);
+        {
+            static_cast<EditControlBase*>(m_pWindow.get())->get_widget().set_text(m_aText);
+            break;
+        }
     }
 
     // now force a repaint on the window
@@ -4235,22 +4247,18 @@ sal_Bool SAL_CALL FmXFilterCell::isEditable()
     return true;
 }
 
-
 void SAL_CALL FmXFilterCell::setEditable( sal_Bool /*bEditable*/ )
 {
 }
-
 
 sal_Int16 SAL_CALL FmXFilterCell::getMaxTextLen()
 {
     return 0;
 }
 
-
 void SAL_CALL FmXFilterCell::setMaxTextLen( sal_Int16 /*nLen*/ )
 {
 }
-
 
 IMPL_LINK_NOARG(FmXFilterCell, OnCommit, DbFilterField&, void)
 {
