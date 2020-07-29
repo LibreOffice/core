@@ -696,7 +696,9 @@ Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
 Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt );
 
 OString GetCSS1_Color(const Color& rColor);
-bool IgnorePropertyForReqIF(bool bReqIF, const OString& rProperty);
+
+/// Determines if rProperty with a given rValue has to be suppressed due to ReqIF mode.
+bool IgnorePropertyForReqIF(bool bReqIF, const OString& rProperty, const OString& rValue);
 
 #endif // INCLUDED_SW_SOURCE_FILTER_HTML_WRTHTML_HXX
 

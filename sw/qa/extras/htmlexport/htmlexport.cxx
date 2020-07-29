@@ -17,6 +17,7 @@
 #include <com/sun/star/frame/XDispatchHelper.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/awt/FontUnderline.hpp>
 
 #include <svtools/htmlcfg.hxx>
 #include <swmodule.hxx>
@@ -1104,6 +1105,33 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testMultiParaListItem)
     // i.e. </li> was written before "C", not after "C", so "C" was not in the 2nd list item.
     assertXPathContent(pXmlDoc, "//reqif-xhtml:ol/reqif-xhtml:li[2]/reqif-xhtml:p[2]", "C");
     assertXPathContent(pXmlDoc, "//reqif-xhtml:ol/reqif-xhtml:li[3]/reqif-xhtml:p", "D");
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testUnderlineNone)
+{
+    // Create a document with a single paragraph: its underlying is set to an explicit 'none' value.
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    xText->insertString(xText->getEnd(), "x", /*bAbsorb=*/false);
+    uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
+    xParagraph->setPropertyValue("CharUnderline", uno::makeAny(sal_Int16(awt::FontUnderline::NONE)));
+
+    // Export to reqif-xhtml.
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+
+    // Make sure that the paragraph has no explicit style, because "text-decoration: none" is
+    // filtered out.
+    SvMemoryStream aStream;
+    HtmlExportTest::wrapFragment(maTempFile, aStream);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPathNoAttribute(pXmlDoc, "//reqif-xhtml:div/reqif-xhtml:p", "style");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
