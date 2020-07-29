@@ -184,15 +184,22 @@ OString lclConvToHex(sal_uInt16 nHex)
 }
 }
 
-/// Determines if rProperty has to be suppressed due to ReqIF mode.
-bool IgnorePropertyForReqIF(bool bReqIF, const OString& rProperty)
+bool IgnorePropertyForReqIF(bool bReqIF, const OString& rProperty, const OString& rValue)
 {
     if (!bReqIF)
         return false;
 
     // Only allow these two keys, nothing else in ReqIF mode.
     if (rProperty == sCSS1_P_text_decoration)
-        return false;
+    {
+        // Deny other text-decoration values (e.g. "none").
+        if (rValue == "underline" || rValue == "line-through")
+        {
+            return false;
+        }
+
+        return true;
+    }
 
     if (rProperty == sCSS1_P_color)
         return false;
@@ -237,7 +244,7 @@ void SwHTMLWriter::OutCSS1_Property( const char *pProp,
                                      const char *pVal,
                                      const OUString *pSVal )
 {
-    if (IgnorePropertyForReqIF(mbReqIF, pProp))
+    if (IgnorePropertyForReqIF(mbReqIF, pProp, pVal))
         return;
 
     OStringBuffer sOut;
