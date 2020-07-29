@@ -34,6 +34,24 @@
       "revId": "0beb438bebe2e2688741d94cad2cac256671ad48",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "791be917_78728f41",
+        "filename": "sc/source/filter/excel/xestream.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 829,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-07-29T18:28:20Z",
+      "side": 1,
+      "message": "bAllowErrRef doesn\u0027t need to be passed as ConventionXL_OOX::makeRefStr() is called only for the OOXML case. In fact bAllowErrRef is unnecessary and superfluent, AFAIK there\u0027s no place where OOXML specifies the reference parts to be #REF! like we display in the UI, only entire references.\n\nYes, in OOXML .xlsx a single #REF! substitutes all invalid references like #REF!!A2\n\n\u003e \"why should we return just \"#REF!\" directly from ConventionXL_OOX::makeRefStr() and ConventionXL_A1::makeRefStr() and loose some significant formula parts in all LO corners\"\n\nThat is exactly why I wrote in the bug comment \"Caveat, the same methods are used for the Excel A1 native UI \", the substitution with a simple #REF! is to be done *only* for the OOXML case, i.e. when ConventionXL_OOX::makeRefStr() is invoked.",
+      "parentUuid": "c324ccab_c30fe81c",
+      "revId": "0beb438bebe2e2688741d94cad2cac256671ad48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
