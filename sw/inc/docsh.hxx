@@ -320,16 +320,19 @@ public:
     void CallAutomationDocumentEventSinks(const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments);
     void RegisterAutomationDocumentObject(css::uno::Reference< ooo::vba::word::XDocument > const& xDocument);
 
-    class LockAllViewsGuard
+    // Lock all unlocked views, and returns a guard object which unlocks those views when destructed
+    virtual std::unique_ptr<LockAllViewsGuard> LockAllViews() override;
+
+protected:
+    class LockAllViewsGuard_Impl : public LockAllViewsGuard
     {
         std::vector<SwViewShell*> m_aViewWasUnLocked;
 
     public:
-        explicit LockAllViewsGuard(SwViewShell* pViewShell);
-        ~LockAllViewsGuard();
+        explicit LockAllViewsGuard_Impl(SwViewShell* pViewShell);
+        ~LockAllViewsGuard_Impl();
     };
-    // Lock all unlocked views, and returns a guard object which unlocks those views when destructed
-    std::unique_ptr<LockAllViewsGuard> LockAllViews();
+
 };
 
 /** Find the right DocShell and create a new one:
