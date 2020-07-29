@@ -2819,9 +2819,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
                 nValue = static_cast<sal_uLong>(ImplW2I( aValueBuf ));
                 if ( (nValue > 1000) && (nValue < 10000) )
                 {
-                    MiscSettings aMiscSettings = rSettings.GetMiscSettings();
                     utl::MiscCfg().SetYear2000( static_cast<sal_Int32>(nValue-99) );
-                    rSettings.SetMiscSettings( aMiscSettings );
                 }
             }
         }
