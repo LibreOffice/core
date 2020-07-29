@@ -25,7 +25,6 @@
 #include <strings.hrc>
 #include <resource/sharedresources.hxx>
 
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>

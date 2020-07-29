@@ -24,7 +24,6 @@
 #include <comphelper/sequence.hxx>
 #include <strings.hrc>
 #include <resource/sharedresources.hxx>
-#include <comphelper/processfactory.hxx>
 
 
 using namespace connectivity::flat;

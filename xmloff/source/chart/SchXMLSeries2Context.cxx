@@ -24,7 +24,6 @@
 #include "SchXMLTools.hxx"
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>

@@ -21,8 +21,6 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
-#include <comphelper/processfactory.hxx>
-
 using namespace css;
 
 namespace

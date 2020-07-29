@@ -20,7 +20,6 @@
 #include <mysql/YDriver.hxx>
 #include <mysql/YCatalog.hxx>
 #include <comphelper/namedvaluecollection.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/supportsservice.hxx>

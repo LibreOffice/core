@@ -75,7 +75,6 @@
 #include "ww8scan.hxx"
 #include "ww8par.hxx"
 #include "writerhelper.hxx"
-#include "fields.hxx"
 #include <o3tl/safeint.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <xmloff/odffields.hxx>

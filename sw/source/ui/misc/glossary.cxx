@@ -26,7 +26,6 @@
 #include <svl/stritem.hxx>
 #include <svl/macitem.hxx>
 #include <unotools/pathoptions.hxx>
-#include <unotools/lingucfg.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfilt.hxx>

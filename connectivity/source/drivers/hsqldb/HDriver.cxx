@@ -41,7 +41,6 @@
 #include <osl/file.h>
 #include <osl/process.h>
 #include <comphelper/namedvaluecollection.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>

@@ -20,7 +20,6 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 

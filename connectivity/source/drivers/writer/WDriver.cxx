@@ -23,7 +23,6 @@
 #include <connectivity/dbexception.hxx>
 #include <resource/sharedresources.hxx>
 #include <strings.hrc>
-#include <comphelper/processfactory.hxx>
 
 using namespace connectivity::file;
 using namespace ::com::sun::star;

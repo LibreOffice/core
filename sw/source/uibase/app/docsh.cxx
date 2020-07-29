@@ -40,7 +40,6 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/classids.hxx>
 #include <basic/sbmod.hxx>
-#include <fmtfld.hxx>
 #include <node.hxx>
 #include <swwait.hxx>
 #include <printdata.hxx>

@@ -42,3 +42,9 @@ excludelist:
     xmloff/source/text/txtprmap.cxx:
     # Needed for constructors parameter
     - rtl/ref.hxx
+    xmloff/source/core/RDFaExportHelper.cxx:
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/draw/sdxmlimp.cxx:
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/xforms/xformsexport.cxx:
+    - com/sun/star/frame/XModel.hpp

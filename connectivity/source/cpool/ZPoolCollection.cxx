@@ -27,7 +27,6 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
 #include <com/sun/star/sdbc/DriverManager.hpp>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <osl/diagnose.h>

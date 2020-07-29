@@ -91,7 +91,6 @@
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"
 #include "ww8attributeoutput.hxx"

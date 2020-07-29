@@ -19,7 +19,6 @@
 
 #include <MetaExportComponent.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Exception.hpp>
@@ -29,7 +28,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
-#include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
