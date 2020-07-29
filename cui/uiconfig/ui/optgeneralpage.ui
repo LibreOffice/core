@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -39,6 +39,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="exthelp-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | exthelp">Displays a help text when you rest the cursor on an icon, a menu command, or a control on a dialog.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -221,6 +226,11 @@
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="docstatus-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | docstatus">Specifies whether the printing of the document counts as a modification.</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
@@ -278,6 +288,11 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="year-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | year">Defines a date range, within which the system recognizes a two-digit year.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -341,6 +356,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="collectusageinfo-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | collectusageinfo">Send usage data to help The Document Foundation improve the software usability.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -468,8 +488,8 @@
                 <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkButton" id="assocfiles">
-                    <property name="visible">True</property>
                     <property name="label" translatable="yes" context="optgeneralpage|fileassoc">Windows Default apps</property>
+                    <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="no_show_all">True</property>
@@ -499,6 +519,11 @@
         <property name="left_attach">0</property>
         <property name="top_attach">7</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="OptGeneralPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | OptGeneralPage">Specifies the general settings for %PRODUCTNAME.</property>
+      </object>
     </child>
   </object>
 </interface>
