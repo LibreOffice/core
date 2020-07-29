@@ -24,26 +24,12 @@ char const DATA_DIRECTORY[] = "/sw/qa/core/doc/data/";
 /// Covers sw/source/core/doc/ fixes.
 class SwCoreDocTest : public SwModelTestBase
 {
-public:
-    SwDoc* createDoc(const char* pName = nullptr);
 };
-
-SwDoc* SwCoreDocTest::createDoc(const char* pName)
-{
-    if (!pName)
-        loadURL("private:factory/swriter", nullptr);
-    else
-        load(DATA_DIRECTORY, pName);
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    return pTextDoc->GetDocShell()->GetDoc();
-}
 
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testMathInsertAnchorType)
 {
     // Given an empty document.
-    SwDoc* pDoc = createDoc();
+    SwDoc* pDoc = createSwDoc();
 
     // When inserting an a math object.
     SwWrtShell* pShell = pDoc->GetDocShell()->GetWrtShell();
@@ -66,7 +52,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testMathInsertAnchorType)
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTextboxTextRotateAngle)
 {
     // Check the writing direction of the only TextFrame in the document.
-    SwDoc* pDoc = createDoc("textbox-textrotateangle.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "textbox-textrotateangle.odt");
     SwFrameFormats& rFrameFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rFrameFormats.size());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(RES_DRAWFRMFMT), rFrameFormats[0]->Which());
