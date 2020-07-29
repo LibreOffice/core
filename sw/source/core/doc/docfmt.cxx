@@ -25,11 +25,11 @@
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/rsiditem.hxx>
 #include <editeng/colritem.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <svl/zforlist.hxx>
 #include <comphelper/doublecheckedinit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/configmgr.hxx>
-#include <unotools/misccfg.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
@@ -1726,7 +1726,7 @@ void SwDoc::EnsureNumberFormatter()
         SvNumberFormatter* pRet = new SvNumberFormatter(comphelper::getProcessComponentContext(), eLang);
         pRet->SetEvalDateFormat( NF_EVALDATEFORMAT_FORMAT_INTL );
         if (!utl::ConfigManager::IsFuzzing())
-            pRet->SetYear2000(static_cast<sal_uInt16>(::utl::MiscCfg().GetYear2000()));
+            pRet->SetYear2000(officecfg::Office::Common::DateFormat::TwoDigitYear::get());
         return pRet;
     });
 }
