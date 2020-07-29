@@ -44,26 +44,26 @@ static void load_FixedWidthList(ScCsvSplits &rSplits)
     aValues = aItem.GetProperties( aNames );
     pProperties = aValues.getConstArray();
 
-    if( pProperties[0].hasValue() )
+    if( !pProperties[0].hasValue() )
+        return;
+
+    rSplits.Clear();
+
+    OUString sFixedWidthLists;
+    pProperties[0] >>= sFixedWidthLists;
+
+    sal_Int32 nIdx {0};
+    for(;;)
     {
-        rSplits.Clear();
-
-        OUString sFixedWidthLists;
-        pProperties[0] >>= sFixedWidthLists;
-
-        sal_Int32 nIdx {0};
-        for(;;)
+        const sal_Int32 n {sFixedWidthLists.getToken(0, ';', nIdx).toInt32()};
+        if (nIdx<0)
         {
-            const sal_Int32 n {sFixedWidthLists.getToken(0, ';', nIdx).toInt32()};
-            if (nIdx<0)
-            {
-                // String ends with a semi-colon so there
-                // is no useful 'int' after the last one.
-                // This also works in case of empty string
-                break;
-            }
-            rSplits.Insert(n);
+            // String ends with a semi-colon so there
+            // is no useful 'int' after the last one.
+            // This also works in case of empty string
+            break;
         }
+        rSplits.Insert(n);
     }
 }
 static void save_FixedWidthList(const ScCsvSplits& rSplits)
@@ -190,52 +190,52 @@ void ScCsvRuler::MoveCursor( sal_Int32 nPos, bool bScroll )
 
 void ScCsvRuler::MoveCursorRel( ScMoveMode eDir )
 {
-    if( GetRulerCursorPos() != CSV_POS_INVALID )
+    if( GetRulerCursorPos() == CSV_POS_INVALID )
+        return;
+
+    switch( eDir )
     {
-        switch( eDir )
+        case MOVE_FIRST:
+            MoveCursor( 1 );
+        break;
+        case MOVE_LAST:
+            MoveCursor( GetPosCount() - 1 );
+        break;
+        case MOVE_PREV:
+            if( GetRulerCursorPos() > 1 )
+                MoveCursor( GetRulerCursorPos() - 1 );
+        break;
+        case MOVE_NEXT:
+            if( GetRulerCursorPos() < GetPosCount() - 1 )
+                MoveCursor( GetRulerCursorPos() + 1 );
+        break;
+        default:
         {
-            case MOVE_FIRST:
-                MoveCursor( 1 );
-            break;
-            case MOVE_LAST:
-                MoveCursor( GetPosCount() - 1 );
-            break;
-            case MOVE_PREV:
-                if( GetRulerCursorPos() > 1 )
-                    MoveCursor( GetRulerCursorPos() - 1 );
-            break;
-            case MOVE_NEXT:
-                if( GetRulerCursorPos() < GetPosCount() - 1 )
-                    MoveCursor( GetRulerCursorPos() + 1 );
-            break;
-            default:
-            {
-                // added to avoid warnings
-            }
+            // added to avoid warnings
         }
     }
 }
 
 void ScCsvRuler::MoveCursorToSplit( ScMoveMode eDir )
 {
-    if( GetRulerCursorPos() != CSV_POS_INVALID )
+    if( GetRulerCursorPos() == CSV_POS_INVALID )
+        return;
+
+    sal_uInt32 nIndex = CSV_VEC_NOTFOUND;
+    switch( eDir )
     {
-        sal_uInt32 nIndex = CSV_VEC_NOTFOUND;
-        switch( eDir )
+        case MOVE_FIRST:    nIndex = maSplits.LowerBound( 0 );                          break;
+        case MOVE_LAST:     nIndex = maSplits.UpperBound( GetPosCount() );              break;
+        case MOVE_PREV:     nIndex = maSplits.UpperBound( GetRulerCursorPos() - 1 );    break;
+        case MOVE_NEXT:     nIndex = maSplits.LowerBound( GetRulerCursorPos() + 1 );    break;
+        default:
         {
-            case MOVE_FIRST:    nIndex = maSplits.LowerBound( 0 );                          break;
-            case MOVE_LAST:     nIndex = maSplits.UpperBound( GetPosCount() );              break;
-            case MOVE_PREV:     nIndex = maSplits.UpperBound( GetRulerCursorPos() - 1 );    break;
-            case MOVE_NEXT:     nIndex = maSplits.LowerBound( GetRulerCursorPos() + 1 );    break;
-            default:
-            {
-                // added to avoid warnings
-            }
+            // added to avoid warnings
         }
-        sal_Int32 nPos = maSplits[ nIndex ];
-        if( nPos != CSV_POS_INVALID )
-            MoveCursor( nPos );
     }
+    sal_Int32 nPos = maSplits[ nIndex ];
+    if( nPos != CSV_POS_INVALID )
+        MoveCursor( nPos );
 }
 
 void ScCsvRuler::ScrollVertRel( ScMoveMode eDir )

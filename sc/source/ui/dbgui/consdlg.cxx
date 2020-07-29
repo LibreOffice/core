@@ -232,26 +232,26 @@ void ScConsolidateDlg::FillAreaLists()
 
 void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
 {
-    if ( m_pRefInputEdit )
-    {
-        if ( rRef.aStart != rRef.aEnd )
-            RefInputStart( m_pRefInputEdit );
+    if ( !m_pRefInputEdit )
+        return;
 
-        OUString      aStr;
-        ScRefFlags      nFmt = ScRefFlags::RANGE_ABS_3D;       //!!! nCurTab is still missing
-        const formula::FormulaGrammar::AddressConvention eConv = rDocP.GetAddressConvention();
+    if ( rRef.aStart != rRef.aEnd )
+        RefInputStart( m_pRefInputEdit );
 
-        if ( rRef.aStart.Tab() != rRef.aEnd.Tab() )
-            nFmt |= ScRefFlags::TAB2_3D;
+    OUString      aStr;
+    ScRefFlags      nFmt = ScRefFlags::RANGE_ABS_3D;       //!!! nCurTab is still missing
+    const formula::FormulaGrammar::AddressConvention eConv = rDocP.GetAddressConvention();
 
-        if ( m_pRefInputEdit == m_xEdDataArea.get())
-            aStr = rRef.Format(rDocP, nFmt, eConv);
-        else if ( m_pRefInputEdit == m_xEdDestArea.get() )
-            aStr = rRef.aStart.Format(nFmt, &rDocP, eConv);
+    if ( rRef.aStart.Tab() != rRef.aEnd.Tab() )
+        nFmt |= ScRefFlags::TAB2_3D;
 
-        m_pRefInputEdit->SetRefString( aStr );
-        ModifyHdl( *m_pRefInputEdit );
-    }
+    if ( m_pRefInputEdit == m_xEdDataArea.get())
+        aStr = rRef.Format(rDocP, nFmt, eConv);
+    else if ( m_pRefInputEdit == m_xEdDestArea.get() )
+        aStr = rRef.aStart.Format(nFmt, &rDocP, eConv);
+
+    m_pRefInputEdit->SetRefString( aStr );
+    ModifyHdl( *m_pRefInputEdit );
 }
 
 void ScConsolidateDlg::Close()

@@ -44,39 +44,39 @@ ScImportOptions::ScImportOptions( const OUString& rStr )
     bSaveFormulas = false;
     bRemoveSpace = false;
     sal_Int32 nTokenCount = comphelper::string::getTokenCount(rStr, ',');
-    if ( nTokenCount >= 3 )
-    {
-        sal_Int32 nIdx{ 0 };
-        // first 3 tokens: common
-        OUString aToken( rStr.getToken( 0, ',', nIdx ) );
-        if( aToken.equalsIgnoreAsciiCase( pStrFix ) )
-            bFixedWidth = true;
-        else
-            nFieldSepCode = ScAsciiOptions::GetWeightedFieldSep( aToken, true);
-        nTextSepCode  = static_cast<sal_Unicode>(rStr.getToken(0, ',', nIdx).toInt32());
-        aStrFont      = rStr.getToken(0, ',', nIdx);
-        eCharSet      = ScGlobal::GetCharsetValue(aStrFont);
+    if ( nTokenCount < 3 )
+        return;
 
-        if ( nTokenCount == 4 )
-        {
-            // compatibility with old options string: "Save as shown" as 4th token, numeric
-            bSaveAsShown = rStr.getToken(0, ',', nIdx).toInt32() != 0;
-            bQuoteAllText = true;   // use old default then
-        }
-        else
-        {
-            // look at the same positions as in ScAsciiOptions
-            if ( nTokenCount >= 7 )
-                bQuoteAllText = rStr.getToken(3, ',', nIdx) == "true";  // 7th token
-            if ( nTokenCount >= 8 )
-                bSaveNumberAsSuch = rStr.getToken(0, ',', nIdx) == "true";
-            if ( nTokenCount >= 9 )
-                bSaveAsShown = rStr.getToken(0, ',', nIdx) == "true";
-            if ( nTokenCount >= 10 )
-                bSaveFormulas = rStr.getToken(0, ',', nIdx) == "true";
-            if ( nTokenCount >= 11 )
-                bRemoveSpace = rStr.getToken(0, ',', nIdx) == "true";
-        }
+    sal_Int32 nIdx{ 0 };
+    // first 3 tokens: common
+    OUString aToken( rStr.getToken( 0, ',', nIdx ) );
+    if( aToken.equalsIgnoreAsciiCase( pStrFix ) )
+        bFixedWidth = true;
+    else
+        nFieldSepCode = ScAsciiOptions::GetWeightedFieldSep( aToken, true);
+    nTextSepCode  = static_cast<sal_Unicode>(rStr.getToken(0, ',', nIdx).toInt32());
+    aStrFont      = rStr.getToken(0, ',', nIdx);
+    eCharSet      = ScGlobal::GetCharsetValue(aStrFont);
+
+    if ( nTokenCount == 4 )
+    {
+        // compatibility with old options string: "Save as shown" as 4th token, numeric
+        bSaveAsShown = rStr.getToken(0, ',', nIdx).toInt32() != 0;
+        bQuoteAllText = true;   // use old default then
+    }
+    else
+    {
+        // look at the same positions as in ScAsciiOptions
+        if ( nTokenCount >= 7 )
+            bQuoteAllText = rStr.getToken(3, ',', nIdx) == "true";  // 7th token
+        if ( nTokenCount >= 8 )
+            bSaveNumberAsSuch = rStr.getToken(0, ',', nIdx) == "true";
+        if ( nTokenCount >= 9 )
+            bSaveAsShown = rStr.getToken(0, ',', nIdx) == "true";
+        if ( nTokenCount >= 10 )
+            bSaveFormulas = rStr.getToken(0, ',', nIdx) == "true";
+        if ( nTokenCount >= 11 )
+            bRemoveSpace = rStr.getToken(0, ',', nIdx) == "true";
     }
 }
 

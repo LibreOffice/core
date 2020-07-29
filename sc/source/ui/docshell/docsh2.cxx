@@ -114,45 +114,45 @@ void ScDocShell::InitItems()
         PutItem( SvxColorListItem( XColorList::GetStdColorList(), SID_COLOR_TABLE ) );
     }
 
-    if (!utl::ConfigManager::IsFuzzing() &&
-        (!m_aDocument.GetForbiddenCharacters() || !m_aDocument.IsValidAsianCompression() || !m_aDocument.IsValidAsianKerning()))
+    if (!(!utl::ConfigManager::IsFuzzing() &&
+        (!m_aDocument.GetForbiddenCharacters() || !m_aDocument.IsValidAsianCompression() || !m_aDocument.IsValidAsianKerning())))
+        return;
+
+    //  get settings from SvxAsianConfig
+    SvxAsianConfig aAsian;
+
+    if (!m_aDocument.GetForbiddenCharacters())
     {
-        //  get settings from SvxAsianConfig
-        SvxAsianConfig aAsian;
-
-        if (!m_aDocument.GetForbiddenCharacters())
+        // set forbidden characters if necessary
+        const uno::Sequence<lang::Locale> aLocales = aAsian.GetStartEndCharLocales();
+        if (aLocales.hasElements())
         {
-            // set forbidden characters if necessary
-            const uno::Sequence<lang::Locale> aLocales = aAsian.GetStartEndCharLocales();
-            if (aLocales.hasElements())
+            std::shared_ptr<SvxForbiddenCharactersTable> xForbiddenTable(
+                SvxForbiddenCharactersTable::makeForbiddenCharactersTable(comphelper::getProcessComponentContext()));
+
+            for (const lang::Locale& rLocale : aLocales)
             {
-                std::shared_ptr<SvxForbiddenCharactersTable> xForbiddenTable(
-                    SvxForbiddenCharactersTable::makeForbiddenCharactersTable(comphelper::getProcessComponentContext()));
+                i18n::ForbiddenCharacters aForbidden;
+                aAsian.GetStartEndChars( rLocale, aForbidden.beginLine, aForbidden.endLine );
+                LanguageType eLang = LanguageTag::convertToLanguageType(rLocale);
 
-                for (const lang::Locale& rLocale : aLocales)
-                {
-                    i18n::ForbiddenCharacters aForbidden;
-                    aAsian.GetStartEndChars( rLocale, aForbidden.beginLine, aForbidden.endLine );
-                    LanguageType eLang = LanguageTag::convertToLanguageType(rLocale);
-
-                    xForbiddenTable->SetForbiddenCharacters( eLang, aForbidden );
-                }
-
-                m_aDocument.SetForbiddenCharacters( xForbiddenTable );
+                xForbiddenTable->SetForbiddenCharacters( eLang, aForbidden );
             }
-        }
 
-        if ( !m_aDocument.IsValidAsianCompression() )
-        {
-            // set compression mode from configuration if not already set (e.g. XML import)
-            m_aDocument.SetAsianCompression( aAsian.GetCharDistanceCompression() );
+            m_aDocument.SetForbiddenCharacters( xForbiddenTable );
         }
+    }
 
-        if ( !m_aDocument.IsValidAsianKerning() )
-        {
-            // set asian punctuation kerning from configuration if not already set (e.g. XML import)
-            m_aDocument.SetAsianKerning( !aAsian.IsKerningWesternTextOnly() );    // reversed
-        }
+    if ( !m_aDocument.IsValidAsianCompression() )
+    {
+        // set compression mode from configuration if not already set (e.g. XML import)
+        m_aDocument.SetAsianCompression( aAsian.GetCharDistanceCompression() );
+    }
+
+    if ( !m_aDocument.IsValidAsianKerning() )
+    {
+        // set asian punctuation kerning from configuration if not already set (e.g. XML import)
+        m_aDocument.SetAsianKerning( !aAsian.IsKerningWesternTextOnly() );    // reversed
     }
 }
 

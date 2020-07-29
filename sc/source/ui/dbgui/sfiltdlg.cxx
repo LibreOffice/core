@@ -197,21 +197,21 @@ void ScSpecialFilterDlg::Close()
 
 void ScSpecialFilterDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
 {
-    if ( bRefInputMode && m_pRefInputEdit )       // only possible if in the reference edit mode
-    {
-        if ( rRef.aStart != rRef.aEnd )
-            RefInputStart( m_pRefInputEdit );
+    if ( !(bRefInputMode && m_pRefInputEdit) )       // only possible if in the reference edit mode
+        return;
 
-        OUString aRefStr;
-        const formula::FormulaGrammar::AddressConvention eConv = rDocP.GetAddressConvention();
+    if ( rRef.aStart != rRef.aEnd )
+        RefInputStart( m_pRefInputEdit );
 
-        if (m_pRefInputEdit == m_xEdCopyArea.get())
-            aRefStr = rRef.aStart.Format(ScRefFlags::ADDR_ABS_3D, &rDocP, eConv);
-        else if (m_pRefInputEdit == m_xEdFilterArea.get())
-            aRefStr = rRef.Format(rDocP, ScRefFlags::RANGE_ABS_3D, eConv);
+    OUString aRefStr;
+    const formula::FormulaGrammar::AddressConvention eConv = rDocP.GetAddressConvention();
 
-        m_pRefInputEdit->SetRefString( aRefStr );
-    }
+    if (m_pRefInputEdit == m_xEdCopyArea.get())
+        aRefStr = rRef.aStart.Format(ScRefFlags::ADDR_ABS_3D, &rDocP, eConv);
+    else if (m_pRefInputEdit == m_xEdFilterArea.get())
+        aRefStr = rRef.Format(rDocP, ScRefFlags::RANGE_ABS_3D, eConv);
+
+    m_pRefInputEdit->SetRefString( aRefStr );
 }
 
 void ScSpecialFilterDlg::SetActive()
@@ -371,23 +371,23 @@ IMPL_LINK_NOARG(ScSpecialFilterDlg, RefInputButtonHdl, formula::RefButton&, void
 
 void ScSpecialFilterDlg::RefInputHdl()
 {
-    if (m_xDialog->has_toplevel_focus())
+    if (!m_xDialog->has_toplevel_focus())
+        return;
+
+    if( m_xEdCopyArea->GetWidget()->has_focus() || m_xRbCopyArea->GetWidget()->has_focus() )
     {
-        if( m_xEdCopyArea->GetWidget()->has_focus() || m_xRbCopyArea->GetWidget()->has_focus() )
-        {
-            m_pRefInputEdit = m_xEdCopyArea.get();
-            bRefInputMode = true;
-        }
-        else if( m_xEdFilterArea->GetWidget()->has_focus() || m_xRbFilterArea->GetWidget()->has_focus() )
-        {
-            m_pRefInputEdit = m_xEdFilterArea.get();
-            bRefInputMode = true;
-        }
-        else if( bRefInputMode )
-        {
-            m_pRefInputEdit = nullptr;
-            bRefInputMode = false;
-        }
+        m_pRefInputEdit = m_xEdCopyArea.get();
+        bRefInputMode = true;
+    }
+    else if( m_xEdFilterArea->GetWidget()->has_focus() || m_xRbFilterArea->GetWidget()->has_focus() )
+    {
+        m_pRefInputEdit = m_xEdFilterArea.get();
+        bRefInputMode = true;
+    }
+    else if( bRefInputMode )
+    {
+        m_pRefInputEdit = nullptr;
+        bRefInputMode = false;
     }
 }
 
@@ -407,31 +407,31 @@ IMPL_LINK(ScSpecialFilterDlg, FilterAreaSelHdl, weld::ComboBox&, rLb, void)
 
 IMPL_LINK( ScSpecialFilterDlg, FilterAreaModHdl, formula::RefEdit&, rEd, void )
 {
-    if (&rEd == m_xEdFilterArea.get())
-    {
-        if ( pDoc && pViewData )
-        {
-            OUString  theCurAreaStr = rEd.GetText();
-            ScRefFlags  nResult = ScRange().Parse( theCurAreaStr, pDoc );
+    if (&rEd != m_xEdFilterArea.get())
+        return;
 
-            if ( (nResult & ScRefFlags::VALID) == ScRefFlags::VALID )
+    if ( pDoc && pViewData )
+    {
+        OUString  theCurAreaStr = rEd.GetText();
+        ScRefFlags  nResult = ScRange().Parse( theCurAreaStr, pDoc );
+
+        if ( (nResult & ScRefFlags::VALID) == ScRefFlags::VALID )
+        {
+            const sal_Int32 nCount  = m_xLbFilterArea->get_count();
+            for (sal_Int32 i = 1; i < nCount; ++i)
             {
-                const sal_Int32 nCount  = m_xLbFilterArea->get_count();
-                for (sal_Int32 i = 1; i < nCount; ++i)
+                OUString aStr = m_xLbFilterArea->get_id(i);
+                if (theCurAreaStr == aStr)
                 {
-                    OUString aStr = m_xLbFilterArea->get_id(i);
-                    if (theCurAreaStr == aStr)
-                    {
-                        m_xLbFilterArea->set_active( i );
-                        return;
-                    }
+                    m_xLbFilterArea->set_active( i );
+                    return;
                 }
-                m_xLbFilterArea->set_active( 0 );
             }
-        }
-        else
             m_xLbFilterArea->set_active( 0 );
+        }
     }
+    else
+        m_xLbFilterArea->set_active( 0 );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

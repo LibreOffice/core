@@ -900,63 +900,63 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
         pArgs = rReq.GetArgs();
     }
 
-    if ( pArgs )
+    if ( !pArgs )
+        return;
+
+    if ( bArgsInReq &&
+        ( nSlot == SID_ATTR_CHAR_FONT || nSlot == SID_ATTR_CHAR_FONTHEIGHT ||
+          nSlot == SID_ATTR_CHAR_WEIGHT || nSlot == SID_ATTR_CHAR_POSTURE ) )
     {
-        if ( bArgsInReq &&
-            ( nSlot == SID_ATTR_CHAR_FONT || nSlot == SID_ATTR_CHAR_FONTHEIGHT ||
-              nSlot == SID_ATTR_CHAR_WEIGHT || nSlot == SID_ATTR_CHAR_POSTURE ) )
-        {
-            // font items from toolbox controller have to be applied for the right script type
+        // font items from toolbox controller have to be applied for the right script type
 
-            // #i78017 establish the same behaviour as in Writer
-            SvtScriptType nScript = SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX;
-            if (nSlot == SID_ATTR_CHAR_FONT)
-                nScript = pView->GetScriptType();
+        // #i78017 establish the same behaviour as in Writer
+        SvtScriptType nScript = SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX;
+        if (nSlot == SID_ATTR_CHAR_FONT)
+            nScript = pView->GetScriptType();
 
-            SfxItemPool& rPool = GetPool();
-            SvxScriptSetItem aSetItem( nSlot, rPool );
-            sal_uInt16 nWhich = rPool.GetWhich( nSlot );
-            aSetItem.PutItemForScriptType( nScript, pArgs->Get( nWhich ) );
+        SfxItemPool& rPool = GetPool();
+        SvxScriptSetItem aSetItem( nSlot, rPool );
+        sal_uInt16 nWhich = rPool.GetWhich( nSlot );
+        aSetItem.PutItemForScriptType( nScript, pArgs->Get( nWhich ) );
 
-            pView->SetAttributes( aSetItem.GetItemSet() );
-        }
-        else if( nSlot == SID_ATTR_PARA_LRSPACE )
-        {
-            sal_uInt16 nId = SID_ATTR_PARA_LRSPACE;
-            const SvxLRSpaceItem& rItem = static_cast<const SvxLRSpaceItem&>(
-                pArgs->Get( nId ));
-            SfxItemSet aAttr( GetPool(), svl::Items<EE_PARA_LRSPACE, EE_PARA_LRSPACE>{} );
-            nId = EE_PARA_LRSPACE;
-            SvxLRSpaceItem aLRSpaceItem( rItem.GetLeft(),
-                rItem.GetRight(), rItem.GetTextLeft(),
-                rItem.GetTextFirstLineOffset(), nId );
-            aAttr.Put( aLRSpaceItem );
-            pView->SetAttributes( aAttr );
-        }
-        else if( nSlot == SID_ATTR_PARA_LINESPACE )
-        {
-            SvxLineSpacingItem aLineSpaceItem = static_cast<const SvxLineSpacingItem&>(pArgs->Get(
-                                                                GetPool().GetWhich(nSlot)));
-            SfxItemSet aAttr( GetPool(), svl::Items<EE_PARA_SBL, EE_PARA_SBL>{} );
-            aAttr.Put( aLineSpaceItem );
-            pView->SetAttributes( aAttr );
-        }
-        else if( nSlot == SID_ATTR_PARA_ULSPACE )
-        {
-            SvxULSpaceItem aULSpaceItem = static_cast<const SvxULSpaceItem&>(pArgs->Get(
-                                                                GetPool().GetWhich(nSlot)));
-            SfxItemSet aAttr( GetPool(), svl::Items<EE_PARA_ULSPACE, EE_PARA_ULSPACE>{} );
-            aULSpaceItem.SetWhich(EE_PARA_ULSPACE);
-            aAttr.Put( aULSpaceItem );
-            pView->SetAttributes( aAttr );
-        }
-        else
-        {
-            // use args directly
-            pView->SetAttributes( *pArgs );
-        }
-        pViewData->GetScDrawView()->InvalidateDrawTextAttrs();
+        pView->SetAttributes( aSetItem.GetItemSet() );
     }
+    else if( nSlot == SID_ATTR_PARA_LRSPACE )
+    {
+        sal_uInt16 nId = SID_ATTR_PARA_LRSPACE;
+        const SvxLRSpaceItem& rItem = static_cast<const SvxLRSpaceItem&>(
+            pArgs->Get( nId ));
+        SfxItemSet aAttr( GetPool(), svl::Items<EE_PARA_LRSPACE, EE_PARA_LRSPACE>{} );
+        nId = EE_PARA_LRSPACE;
+        SvxLRSpaceItem aLRSpaceItem( rItem.GetLeft(),
+            rItem.GetRight(), rItem.GetTextLeft(),
+            rItem.GetTextFirstLineOffset(), nId );
+        aAttr.Put( aLRSpaceItem );
+        pView->SetAttributes( aAttr );
+    }
+    else if( nSlot == SID_ATTR_PARA_LINESPACE )
+    {
+        SvxLineSpacingItem aLineSpaceItem = static_cast<const SvxLineSpacingItem&>(pArgs->Get(
+                                                            GetPool().GetWhich(nSlot)));
+        SfxItemSet aAttr( GetPool(), svl::Items<EE_PARA_SBL, EE_PARA_SBL>{} );
+        aAttr.Put( aLineSpaceItem );
+        pView->SetAttributes( aAttr );
+    }
+    else if( nSlot == SID_ATTR_PARA_ULSPACE )
+    {
+        SvxULSpaceItem aULSpaceItem = static_cast<const SvxULSpaceItem&>(pArgs->Get(
+                                                            GetPool().GetWhich(nSlot)));
+        SfxItemSet aAttr( GetPool(), svl::Items<EE_PARA_ULSPACE, EE_PARA_ULSPACE>{} );
+        aULSpaceItem.SetWhich(EE_PARA_ULSPACE);
+        aAttr.Put( aULSpaceItem );
+        pView->SetAttributes( aAttr );
+    }
+    else
+    {
+        // use args directly
+        pView->SetAttributes( *pArgs );
+    }
+    pViewData->GetScDrawView()->InvalidateDrawTextAttrs();
 }
 
 void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
@@ -1171,19 +1171,19 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
 void ScDrawTextObjectBar::ExecuteTrans( const SfxRequest& rReq )
 {
     TransliterationFlags nType = ScViewUtil::GetTransliterationType( rReq.GetSlot() );
-    if ( nType != TransliterationFlags::NONE )
+    if ( nType == TransliterationFlags::NONE )
+        return;
+
+    ScDrawView* pView = pViewData->GetScDrawView();
+    OutlinerView* pOutView = pView->GetTextEditOutlinerView();
+    if ( pOutView )
     {
-        ScDrawView* pView = pViewData->GetScDrawView();
-        OutlinerView* pOutView = pView->GetTextEditOutlinerView();
-        if ( pOutView )
-        {
-            //  change selected text in object
-            pOutView->TransliterateText( nType );
-        }
-        else
-        {
-            //! apply to whole objects?
-        }
+        //  change selected text in object
+        pOutView->TransliterateText( nType );
+    }
+    else
+    {
+        //! apply to whole objects?
     }
 }
 

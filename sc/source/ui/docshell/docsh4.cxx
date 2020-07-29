@@ -1436,31 +1436,31 @@ void ScDocShell::DoRecalc( bool bApi )
             pSh->UpdateInputHandler();
         }
     }
-    if (!bDone)                         // otherwise re-calculate document
+    if (bDone)                         // otherwise re-calculate document
+        return;
+
+    weld::WaitObject aWaitObj( GetActiveDialogParent() );
+    if ( pHdl )
     {
-        weld::WaitObject aWaitObj( GetActiveDialogParent() );
-        if ( pHdl )
-        {
-            // tdf97897 set current cell to Dirty to force recalculation of cell
-            ScFormulaCell* pFC = m_aDocument.GetFormulaCell( pHdl->GetCursorPos());
-            if (pFC)
-                pFC->SetDirty();
-        }
-        m_aDocument.CalcFormulaTree();
-        if ( pSh )
-            pSh->UpdateCharts(true);
-
-        m_aDocument.BroadcastUno( SfxHint( SfxHintId::DataChanged ) );
-
-        //  If there are charts, then paint everything, so that PostDataChanged
-        //  and the charts do not come one after the other and parts are painted twice.
-
-        ScChartListenerCollection* pCharts = m_aDocument.GetChartListenerCollection();
-        if ( pCharts && pCharts->hasListeners() )
-            PostPaintGridAll();
-        else
-            PostDataChanged();
+        // tdf97897 set current cell to Dirty to force recalculation of cell
+        ScFormulaCell* pFC = m_aDocument.GetFormulaCell( pHdl->GetCursorPos());
+        if (pFC)
+            pFC->SetDirty();
     }
+    m_aDocument.CalcFormulaTree();
+    if ( pSh )
+        pSh->UpdateCharts(true);
+
+    m_aDocument.BroadcastUno( SfxHint( SfxHintId::DataChanged ) );
+
+    //  If there are charts, then paint everything, so that PostDataChanged
+    //  and the charts do not come one after the other and parts are painted twice.
+
+    ScChartListenerCollection* pCharts = m_aDocument.GetChartListenerCollection();
+    if ( pCharts && pCharts->hasListeners() )
+        PostPaintGridAll();
+    else
+        PostDataChanged();
 }
 
 void ScDocShell::DoHardRecalc()
@@ -1509,19 +1509,19 @@ void ScDocShell::DoAutoStyle( const ScRange& rRange, const OUString& rStyle )
     if (!pStyleSheet)
         pStyleSheet = static_cast<ScStyleSheet*>(
             pStylePool->Find( ScResId(STR_STYLENAME_STANDARD_CELL), SfxStyleFamily::Para ));
-    if (pStyleSheet)
-    {
-        OSL_ENSURE(rRange.aStart.Tab() == rRange.aEnd.Tab(),
-                        "DoAutoStyle with several tables");
-        SCTAB nTab = rRange.aStart.Tab();
-        SCCOL nStartCol = rRange.aStart.Col();
-        SCROW nStartRow = rRange.aStart.Row();
-        SCCOL nEndCol = rRange.aEnd.Col();
-        SCROW nEndRow = rRange.aEnd.Row();
-        m_aDocument.ApplyStyleAreaTab( nStartCol, nStartRow, nEndCol, nEndRow, nTab, *pStyleSheet );
-        m_aDocument.ExtendMerge( nStartCol, nStartRow, nEndCol, nEndRow, nTab );
-        PostPaint( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab, PaintPartFlags::Grid );
-    }
+    if (!pStyleSheet)
+        return;
+
+    OSL_ENSURE(rRange.aStart.Tab() == rRange.aEnd.Tab(),
+                    "DoAutoStyle with several tables");
+    SCTAB nTab = rRange.aStart.Tab();
+    SCCOL nStartCol = rRange.aStart.Col();
+    SCROW nStartRow = rRange.aStart.Row();
+    SCCOL nEndCol = rRange.aEnd.Col();
+    SCROW nEndRow = rRange.aEnd.Row();
+    m_aDocument.ApplyStyleAreaTab( nStartCol, nStartRow, nEndCol, nEndRow, nTab, *pStyleSheet );
+    m_aDocument.ExtendMerge( nStartCol, nStartRow, nEndCol, nEndRow, nTab );
+    PostPaint( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab, PaintPartFlags::Grid );
 }
 
 void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
@@ -1604,31 +1604,31 @@ void ScDocShell::SetPrintZoom( SCTAB nTab, sal_uInt16 nScale, sal_uInt16 nPages 
     ScStyleSheetPool* pStylePool = m_aDocument.GetStyleSheetPool();
     SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName, SfxStyleFamily::Page );
     OSL_ENSURE( pStyleSheet, "PageStyle not found" );
-    if ( pStyleSheet )
+    if ( !pStyleSheet )
+        return;
+
+    ScDocShellModificator aModificator( *this );
+
+    SfxItemSet& rSet = pStyleSheet->GetItemSet();
+    const bool bUndo(m_aDocument.IsUndoEnabled());
+    if (bUndo)
     {
-        ScDocShellModificator aModificator( *this );
-
-        SfxItemSet& rSet = pStyleSheet->GetItemSet();
-        const bool bUndo(m_aDocument.IsUndoEnabled());
-        if (bUndo)
-        {
-            sal_uInt16 nOldScale = rSet.Get(ATTR_PAGE_SCALE).GetValue();
-            sal_uInt16 nOldPages = rSet.Get(ATTR_PAGE_SCALETOPAGES).GetValue();
-            GetUndoManager()->AddUndoAction( std::make_unique<ScUndoPrintZoom>(
-                            this, nTab, nOldScale, nOldPages, nScale, nPages ) );
-        }
-
-        rSet.Put( SfxUInt16Item( ATTR_PAGE_SCALE, nScale ) );
-        rSet.Put( SfxUInt16Item( ATTR_PAGE_SCALETOPAGES, nPages ) );
-
-        ScPrintFunc aPrintFunc( this, GetPrinter(), nTab );
-        aPrintFunc.UpdatePages();
-        aModificator.SetDocumentModified();
-
-        SfxBindings* pBindings = GetViewBindings();
-        if (pBindings)
-            pBindings->Invalidate( FID_RESET_PRINTZOOM );
+        sal_uInt16 nOldScale = rSet.Get(ATTR_PAGE_SCALE).GetValue();
+        sal_uInt16 nOldPages = rSet.Get(ATTR_PAGE_SCALETOPAGES).GetValue();
+        GetUndoManager()->AddUndoAction( std::make_unique<ScUndoPrintZoom>(
+                        this, nTab, nOldScale, nOldPages, nScale, nPages ) );
     }
+
+    rSet.Put( SfxUInt16Item( ATTR_PAGE_SCALE, nScale ) );
+    rSet.Put( SfxUInt16Item( ATTR_PAGE_SCALETOPAGES, nPages ) );
+
+    ScPrintFunc aPrintFunc( this, GetPrinter(), nTab );
+    aPrintFunc.UpdatePages();
+    aModificator.SetDocumentModified();
+
+    SfxBindings* pBindings = GetViewBindings();
+    if (pBindings)
+        pBindings->Invalidate( FID_RESET_PRINTZOOM );
 }
 
 bool ScDocShell::AdjustPrintZoom( const ScRange& rRange )

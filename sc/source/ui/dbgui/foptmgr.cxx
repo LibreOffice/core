@@ -215,49 +215,49 @@ IMPL_LINK( ScFilterOptionsMgr, LbAreaSelHdl, weld::ComboBox&, rLb, void )
 
 IMPL_LINK( ScFilterOptionsMgr, EdAreaModifyHdl, formula::RefEdit&, rEd, void )
 {
-    if ( &rEd == pEdCopyArea )
+    if ( &rEd != pEdCopyArea )
+        return;
+
+    OUString  theCurPosStr = rEd.GetText();
+    ScRefFlags  nResult = ScAddress().Parse( theCurPosStr, pDoc, pDoc->GetAddressConvention() );
+
+    if ( (nResult & ScRefFlags::VALID) == ScRefFlags::VALID)
     {
-        OUString  theCurPosStr = rEd.GetText();
-        ScRefFlags  nResult = ScAddress().Parse( theCurPosStr, pDoc, pDoc->GetAddressConvention() );
+        const sal_Int32 nCount = pLbCopyArea->get_count();
 
-        if ( (nResult & ScRefFlags::VALID) == ScRefFlags::VALID)
+        for ( sal_Int32 i=2; i<nCount; ++i )
         {
-            const sal_Int32 nCount = pLbCopyArea->get_count();
-
-            for ( sal_Int32 i=2; i<nCount; ++i )
+            OUString aStr = pLbCopyArea->get_id(i);
+            if (theCurPosStr == aStr)
             {
-                OUString aStr = pLbCopyArea->get_id(i);
-                if (theCurPosStr == aStr)
-                {
-                    pLbCopyArea->set_active( i );
-                    return;
-                }
+                pLbCopyArea->set_active( i );
+                return;
             }
-
         }
-        pLbCopyArea->set_active( 0 );
+
     }
+    pLbCopyArea->set_active( 0 );
 }
 
 IMPL_LINK( ScFilterOptionsMgr, BtnCopyResultHdl, weld::ToggleButton&, rBox, void )
 {
-    if ( &rBox == pBtnCopyResult )
+    if ( &rBox != pBtnCopyResult )
+        return;
+
+    if ( rBox.get_active() )
     {
-        if ( rBox.get_active() )
-        {
-            pBtnDestPers->set_sensitive(true);
-            pLbCopyArea->set_sensitive(true);
-            pEdCopyArea->GetWidget()->set_sensitive(true);
-            pRbCopyArea->GetWidget()->set_sensitive(true);
-            pEdCopyArea->GrabFocus();
-        }
-        else
-        {
-            pBtnDestPers->set_sensitive(false);
-            pLbCopyArea->set_sensitive(false);
-            pEdCopyArea->GetWidget()->set_sensitive(false);
-            pRbCopyArea->GetWidget()->set_sensitive(false);
-        }
+        pBtnDestPers->set_sensitive(true);
+        pLbCopyArea->set_sensitive(true);
+        pEdCopyArea->GetWidget()->set_sensitive(true);
+        pRbCopyArea->GetWidget()->set_sensitive(true);
+        pEdCopyArea->GrabFocus();
+    }
+    else
+    {
+        pBtnDestPers->set_sensitive(false);
+        pLbCopyArea->set_sensitive(false);
+        pEdCopyArea->GetWidget()->set_sensitive(false);
+        pRbCopyArea->GetWidget()->set_sensitive(false);
     }
 }
 

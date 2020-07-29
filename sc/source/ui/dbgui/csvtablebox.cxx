@@ -60,41 +60,41 @@ ScCsvTableBox::~ScCsvTableBox()
 
 void ScCsvTableBox::SetSeparatorsMode()
 {
-    if( mbFixedMode )
-    {
-        // rescue data for fixed width mode
-        mnFixedWidth = mxGrid->GetPosCount();
-        maFixColStates = mxGrid->GetColumnStates();
-        // switch to separators mode
-        mbFixedMode = false;
-        // reset and reinitialize controls
-        mxGrid->DisableRepaint();
-        mxGrid->Execute( CSVCMD_SETLINEOFFSET, 0 );
-        mxGrid->Execute( CSVCMD_SETPOSCOUNT, 1 );
-        mxGrid->Execute( CSVCMD_NEWCELLTEXTS );
-        mxGrid->SetColumnStates( maSepColStates );
-        InitControls();
-        mxGrid->EnableRepaint();
-    }
+    if( !mbFixedMode )
+        return;
+
+    // rescue data for fixed width mode
+    mnFixedWidth = mxGrid->GetPosCount();
+    maFixColStates = mxGrid->GetColumnStates();
+    // switch to separators mode
+    mbFixedMode = false;
+    // reset and reinitialize controls
+    mxGrid->DisableRepaint();
+    mxGrid->Execute( CSVCMD_SETLINEOFFSET, 0 );
+    mxGrid->Execute( CSVCMD_SETPOSCOUNT, 1 );
+    mxGrid->Execute( CSVCMD_NEWCELLTEXTS );
+    mxGrid->SetColumnStates( maSepColStates );
+    InitControls();
+    mxGrid->EnableRepaint();
 }
 
 void ScCsvTableBox::SetFixedWidthMode()
 {
-    if( !mbFixedMode )
-    {
-        // rescue data for separators mode
-        maSepColStates = mxGrid->GetColumnStates();
-        // switch to fixed width mode
-        mbFixedMode = true;
-        // reset and reinitialize controls
-        mxGrid->DisableRepaint();
-        mxGrid->Execute( CSVCMD_SETLINEOFFSET, 0 );
-        mxGrid->Execute( CSVCMD_SETPOSCOUNT, mnFixedWidth );
-        mxGrid->SetSplits( mxRuler->GetSplits() );
-        mxGrid->SetColumnStates( maFixColStates );
-        InitControls();
-        mxGrid->EnableRepaint();
-    }
+    if( mbFixedMode )
+        return;
+
+    // rescue data for separators mode
+    maSepColStates = mxGrid->GetColumnStates();
+    // switch to fixed width mode
+    mbFixedMode = true;
+    // reset and reinitialize controls
+    mxGrid->DisableRepaint();
+    mxGrid->Execute( CSVCMD_SETLINEOFFSET, 0 );
+    mxGrid->Execute( CSVCMD_SETPOSCOUNT, mnFixedWidth );
+    mxGrid->SetSplits( mxRuler->GetSplits() );
+    mxGrid->SetColumnStates( maFixColStates );
+    InitControls();
+    mxGrid->EnableRepaint();
 }
 
 void ScCsvTableBox::Init()

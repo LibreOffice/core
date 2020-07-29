@@ -111,34 +111,34 @@ void ScDrawShell::GetState( SfxItemSet& rSet )          // Conditions / Toggles
         }
     }
 
-    if ( !bDisableAnchor )
+    if ( bDisableAnchor )
+        return;
+
+    switch( pView->GetAnchorType() )
     {
-        switch( pView->GetAnchorType() )
-        {
-        case SCA_PAGE:
-            rSet.Put( SfxBoolItem( SID_ANCHOR_PAGE, true ) );
-            rSet.Put( SfxBoolItem( SID_ANCHOR_CELL, false ) );
-            rSet.Put( SfxBoolItem( SID_ANCHOR_CELL_RESIZE, false ) );
-        break;
+    case SCA_PAGE:
+        rSet.Put( SfxBoolItem( SID_ANCHOR_PAGE, true ) );
+        rSet.Put( SfxBoolItem( SID_ANCHOR_CELL, false ) );
+        rSet.Put( SfxBoolItem( SID_ANCHOR_CELL_RESIZE, false ) );
+    break;
 
-        case SCA_CELL:
-            rSet.Put( SfxBoolItem( SID_ANCHOR_PAGE, false ) );
-            rSet.Put( SfxBoolItem( SID_ANCHOR_CELL, true ) );
-            rSet.Put( SfxBoolItem( SID_ANCHOR_CELL_RESIZE, false ) );
-        break;
+    case SCA_CELL:
+        rSet.Put( SfxBoolItem( SID_ANCHOR_PAGE, false ) );
+        rSet.Put( SfxBoolItem( SID_ANCHOR_CELL, true ) );
+        rSet.Put( SfxBoolItem( SID_ANCHOR_CELL_RESIZE, false ) );
+    break;
 
-        case SCA_CELL_RESIZE:
-            rSet.Put( SfxBoolItem( SID_ANCHOR_PAGE, false ) );
-            rSet.Put( SfxBoolItem( SID_ANCHOR_CELL, false ) );
-            rSet.Put( SfxBoolItem( SID_ANCHOR_CELL_RESIZE, true ) );
-        break;
+    case SCA_CELL_RESIZE:
+        rSet.Put( SfxBoolItem( SID_ANCHOR_PAGE, false ) );
+        rSet.Put( SfxBoolItem( SID_ANCHOR_CELL, false ) );
+        rSet.Put( SfxBoolItem( SID_ANCHOR_CELL_RESIZE, true ) );
+    break;
 
-        default:
-            rSet.Put( SfxBoolItem( SID_ANCHOR_PAGE, false ) );
-            rSet.Put( SfxBoolItem( SID_ANCHOR_CELL, false ) );
-            rSet.Put( SfxBoolItem( SID_ANCHOR_CELL_RESIZE, false ) );
-        break;
-        }
+    default:
+        rSet.Put( SfxBoolItem( SID_ANCHOR_PAGE, false ) );
+        rSet.Put( SfxBoolItem( SID_ANCHOR_CELL, false ) );
+        rSet.Put( SfxBoolItem( SID_ANCHOR_CELL_RESIZE, false ) );
+    break;
     }
 }
 
@@ -328,48 +328,48 @@ void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
     }
 
     SdrPageView* pPV = pDrView->GetSdrPageView();
-    if ( pPV )
+    if ( !pPV )
+        return;
+
+    // #i52073# when a sheet with an active OLE object is deleted,
+    // the slot state is queried without an active page view
+
+    //  Items for position and size (see ScGridWindow::UpdateStatusPosSize, #108137#)
+
+    // #i34458# The SvxSizeItem in SID_TABLE_CELL is no longer needed by
+    // SvxPosSizeStatusBarControl, it's enough to have it in SID_ATTR_SIZE.
+
+    bool bActionItem = false;
+    if ( pDrView->IsAction() )              // action rectangle
     {
-        // #i52073# when a sheet with an active OLE object is deleted,
-        // the slot state is queried without an active page view
-
-        //  Items for position and size (see ScGridWindow::UpdateStatusPosSize, #108137#)
-
-        // #i34458# The SvxSizeItem in SID_TABLE_CELL is no longer needed by
-        // SvxPosSizeStatusBarControl, it's enough to have it in SID_ATTR_SIZE.
-
-        bool bActionItem = false;
-        if ( pDrView->IsAction() )              // action rectangle
+        tools::Rectangle aRect;
+        pDrView->TakeActionRect( aRect );
+        if ( !aRect.IsEmpty() )
         {
-            tools::Rectangle aRect;
-            pDrView->TakeActionRect( aRect );
-            if ( !aRect.IsEmpty() )
-            {
-                pPV->LogicToPagePos(aRect);
-                rSet.Put( SfxPointItem( SID_ATTR_POSITION, aRect.TopLeft() ) );
-                Size aSize( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() );
-                rSet.Put( SvxSizeItem( SID_ATTR_SIZE, aSize ) );
-                bActionItem = true;
-            }
+            pPV->LogicToPagePos(aRect);
+            rSet.Put( SfxPointItem( SID_ATTR_POSITION, aRect.TopLeft() ) );
+            Size aSize( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() );
+            rSet.Put( SvxSizeItem( SID_ATTR_SIZE, aSize ) );
+            bActionItem = true;
         }
-        if ( !bActionItem )
-        {
-            if ( pDrView->AreObjectsMarked() )      // selected objects
-            {
-                tools::Rectangle aRect = pDrView->GetAllMarkedRect();
-                pPV->LogicToPagePos(aRect);
-                rSet.Put( SfxPointItem( SID_ATTR_POSITION, aRect.TopLeft() ) );
-                Size aSize( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() );
-                rSet.Put( SvxSizeItem( SID_ATTR_SIZE, aSize ) );
-            }
-            else                                // mouse position
-            {
-                // aPos is initialized above
-                pPV->LogicToPagePos(aPos);
-                rSet.Put( SfxPointItem( SID_ATTR_POSITION, aPos ) );
-                rSet.Put( SvxSizeItem( SID_ATTR_SIZE, Size( 0, 0 ) ) );
-            }
-        }
+    }
+    if ( bActionItem )
+        return;
+
+    if ( pDrView->AreObjectsMarked() )      // selected objects
+    {
+        tools::Rectangle aRect = pDrView->GetAllMarkedRect();
+        pPV->LogicToPagePos(aRect);
+        rSet.Put( SfxPointItem( SID_ATTR_POSITION, aRect.TopLeft() ) );
+        Size aSize( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() );
+        rSet.Put( SvxSizeItem( SID_ATTR_SIZE, aSize ) );
+    }
+    else                                // mouse position
+    {
+        // aPos is initialized above
+        pPV->LogicToPagePos(aPos);
+        rSet.Put( SfxPointItem( SID_ATTR_POSITION, aPos ) );
+        rSet.Put( SvxSizeItem( SID_ATTR_SIZE, Size( 0, 0 ) ) );
     }
 }
 

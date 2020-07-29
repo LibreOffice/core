@@ -96,42 +96,42 @@ void ScClient::RequestNewObjectArea( tools::Rectangle& aLogicRect )
 
     sal_uInt16 nTab = pViewSh->GetViewData().GetTabNo();
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(static_cast<sal_Int16>(nTab)));
-    if ( pPage && aLogicRect != aOldRect )
+    if ( !(pPage && aLogicRect != aOldRect) )
+        return;
+
+    Point aPos;
+    Size aSize = pPage->GetSize();
+    if ( aSize.Width() < 0 )
     {
-        Point aPos;
-        Size aSize = pPage->GetSize();
-        if ( aSize.Width() < 0 )
-        {
-            aPos.setX( aSize.Width() + 1 );       // negative
-            aSize.setWidth( -aSize.Width() );     // positive
-        }
-        tools::Rectangle aPageRect( aPos, aSize );
+        aPos.setX( aSize.Width() + 1 );       // negative
+        aSize.setWidth( -aSize.Width() );     // positive
+    }
+    tools::Rectangle aPageRect( aPos, aSize );
 
-        if (aLogicRect.Right() > aPageRect.Right())
-        {
-            long nDiff = aLogicRect.Right() - aPageRect.Right();
-            aLogicRect.AdjustLeft( -nDiff );
-            aLogicRect.AdjustRight( -nDiff );
-        }
-        if (aLogicRect.Bottom() > aPageRect.Bottom())
-        {
-            long nDiff = aLogicRect.Bottom() - aPageRect.Bottom();
-            aLogicRect.AdjustTop( -nDiff );
-            aLogicRect.AdjustBottom( -nDiff );
-        }
+    if (aLogicRect.Right() > aPageRect.Right())
+    {
+        long nDiff = aLogicRect.Right() - aPageRect.Right();
+        aLogicRect.AdjustLeft( -nDiff );
+        aLogicRect.AdjustRight( -nDiff );
+    }
+    if (aLogicRect.Bottom() > aPageRect.Bottom())
+    {
+        long nDiff = aLogicRect.Bottom() - aPageRect.Bottom();
+        aLogicRect.AdjustTop( -nDiff );
+        aLogicRect.AdjustBottom( -nDiff );
+    }
 
-        if (aLogicRect.Left() < aPageRect.Left())
-        {
-            long nDiff = aLogicRect.Left() - aPageRect.Left();
-            aLogicRect.AdjustRight( -nDiff );
-            aLogicRect.AdjustLeft( -nDiff );
-        }
-        if (aLogicRect.Top() < aPageRect.Top())
-        {
-            long nDiff = aLogicRect.Top() - aPageRect.Top();
-            aLogicRect.AdjustBottom( -nDiff );
-            aLogicRect.AdjustTop( -nDiff );
-        }
+    if (aLogicRect.Left() < aPageRect.Left())
+    {
+        long nDiff = aLogicRect.Left() - aPageRect.Left();
+        aLogicRect.AdjustRight( -nDiff );
+        aLogicRect.AdjustLeft( -nDiff );
+    }
+    if (aLogicRect.Top() < aPageRect.Top())
+    {
+        long nDiff = aLogicRect.Top() - aPageRect.Top();
+        aLogicRect.AdjustBottom( -nDiff );
+        aLogicRect.AdjustTop( -nDiff );
     }
 }
 
@@ -147,30 +147,30 @@ void ScClient::ObjectAreaChanged()
 
     // Take over position and size into document
     SdrOle2Obj* pDrawObj = GetDrawObj();
-    if (pDrawObj)
+    if (!pDrawObj)
+        return;
+
+    tools::Rectangle aNewRectangle(GetScaledObjArea());
+
+    // #i118524# if sheared/rotated, center to non-rotated LogicRect
+    pDrawObj->setSuppressSetVisAreaSize(true);
+
+    if(pDrawObj->GetGeoStat().nRotationAngle || pDrawObj->GetGeoStat().nShearAngle)
     {
-        tools::Rectangle aNewRectangle(GetScaledObjArea());
-
-        // #i118524# if sheared/rotated, center to non-rotated LogicRect
-        pDrawObj->setSuppressSetVisAreaSize(true);
-
-        if(pDrawObj->GetGeoStat().nRotationAngle || pDrawObj->GetGeoStat().nShearAngle)
-        {
-            pDrawObj->SetLogicRect( aNewRectangle );
-
-            const tools::Rectangle& rBoundRect = pDrawObj->GetCurrentBoundRect();
-            const Point aDelta(aNewRectangle.Center() - rBoundRect.Center());
-
-            aNewRectangle.Move(aDelta.X(), aDelta.Y());
-        }
-
         pDrawObj->SetLogicRect( aNewRectangle );
-        pDrawObj->setSuppressSetVisAreaSize(false);
 
-        //  set document modified (SdrModel::SetChanged is not used)
-        pViewSh->GetViewData().GetDocShell()->SetDrawModified();
-        pViewSh->ScrollToObject(pDrawObj);
+        const tools::Rectangle& rBoundRect = pDrawObj->GetCurrentBoundRect();
+        const Point aDelta(aNewRectangle.Center() - rBoundRect.Center());
+
+        aNewRectangle.Move(aDelta.X(), aDelta.Y());
     }
+
+    pDrawObj->SetLogicRect( aNewRectangle );
+    pDrawObj->setSuppressSetVisAreaSize(false);
+
+    //  set document modified (SdrModel::SetChanged is not used)
+    pViewSh->GetViewData().GetDocShell()->SetDrawModified();
+    pViewSh->ScrollToObject(pDrawObj);
 }
 
 void ScClient::ViewChanged()
@@ -200,32 +200,32 @@ void ScClient::ViewChanged()
 
     // Take over position and size into document
     SdrOle2Obj* pDrawObj = GetDrawObj();
-    if (pDrawObj)
+    if (!pDrawObj)
+        return;
+
+    tools::Rectangle aLogicRect = pDrawObj->GetLogicRect();
+    Fraction aFractX = GetScaleWidth() * aVisSize.Width();
+    Fraction aFractY = GetScaleHeight() * aVisSize.Height();
+    aVisSize = Size( static_cast<long>(aFractX), static_cast<long>(aFractY) ); // Scaled for Draw model
+
+    //  pClientData->SetObjArea before pDrawObj->SetLogicRect, so that we don't
+    //  calculate wrong scalings:
+    //Rectangle aObjArea = aLogicRect;
+    //aObjArea.SetSize( aVisSize );          // Document size from the server
+    //SetObjArea( aObjArea );
+
+    SfxViewShell* pSfxViewSh = GetViewShell();
+    ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( pSfxViewSh  );
+    if ( pViewSh )
     {
-        tools::Rectangle aLogicRect = pDrawObj->GetLogicRect();
-        Fraction aFractX = GetScaleWidth() * aVisSize.Width();
-        Fraction aFractY = GetScaleHeight() * aVisSize.Height();
-        aVisSize = Size( static_cast<long>(aFractX), static_cast<long>(aFractY) ); // Scaled for Draw model
-
-        //  pClientData->SetObjArea before pDrawObj->SetLogicRect, so that we don't
-        //  calculate wrong scalings:
-        //Rectangle aObjArea = aLogicRect;
-        //aObjArea.SetSize( aVisSize );          // Document size from the server
-        //SetObjArea( aObjArea );
-
-        SfxViewShell* pSfxViewSh = GetViewShell();
-        ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( pSfxViewSh  );
-        if ( pViewSh )
+        vcl::Window* pWin = pViewSh->GetActiveWin();
+        if ( pWin->LogicToPixel( aVisSize ) != pWin->LogicToPixel( aLogicRect.GetSize() ) )
         {
-            vcl::Window* pWin = pViewSh->GetActiveWin();
-            if ( pWin->LogicToPixel( aVisSize ) != pWin->LogicToPixel( aLogicRect.GetSize() ) )
-            {
-                aLogicRect.SetSize( aVisSize );
-                pDrawObj->SetLogicRect( aLogicRect );
+            aLogicRect.SetSize( aVisSize );
+            pDrawObj->SetLogicRect( aLogicRect );
 
-                // set document modified (SdrModel::SetChanged is not used)
-                pViewSh->GetViewData().GetDocShell()->SetDrawModified();
-            }
+            // set document modified (SdrModel::SetChanged is not used)
+            pViewSh->GetViewData().GetDocShell()->SetDrawModified();
         }
     }
 }

@@ -527,19 +527,19 @@ void ScInputWindow::NotifyLOKClient()
     if (comphelper::LibreOfficeKit::isActive() && !GetLOKNotifier() && mpViewShell)
         SetLOKNotifier(mpViewShell);
 
-    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
-    {
-        Size aSize = GetSizePixel();
-        if (!aSize.IsEmpty())
-        {
-            std::vector<vcl::LOKPayloadItem> aItems;
-            aItems.emplace_back("type", "calc-input-win");
-            aItems.emplace_back(std::make_pair("position", Point(GetOutOffXPixel(), GetOutOffYPixel()).toString()));
-            aItems.emplace_back(std::make_pair("size", aSize.toString()));
-            aItems.emplace_back("lines", OString::number(aTextWindow.GetNumLines()));
-            pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
-        }
+    const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier();
+    if (!pNotifier)
+        return;
 
+    Size aSize = GetSizePixel();
+    if (!aSize.IsEmpty())
+    {
+        std::vector<vcl::LOKPayloadItem> aItems;
+        aItems.emplace_back("type", "calc-input-win");
+        aItems.emplace_back(std::make_pair("position", Point(GetOutOffXPixel(), GetOutOffYPixel()).toString()));
+        aItems.emplace_back(std::make_pair("size", aSize.toString()));
+        aItems.emplace_back("lines", OString::number(aTextWindow.GetNumLines()));
+        pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
     }
 }
 
@@ -551,29 +551,29 @@ void ScInputWindow::SetFuncString( const OUString& rString, bool bDoEdit )
     aTextWindow.StartEditEngine();
 
     ScModule* pScMod = SC_MOD();
-    if ( pScMod->IsEditMode() )
+    if ( !pScMod->IsEditMode() )
+        return;
+
+    if ( bDoEdit )
+        aTextWindow.GrabFocus();
+    aTextWindow.SetTextString( rString );
+    EditView* pView = aTextWindow.GetEditView();
+    if (!pView)
+        return;
+
+    sal_Int32 nLen = rString.getLength();
+
+    if ( nLen > 0 )
     {
-        if ( bDoEdit )
-            aTextWindow.GrabFocus();
-        aTextWindow.SetTextString( rString );
-        EditView* pView = aTextWindow.GetEditView();
-        if (pView)
-        {
-            sal_Int32 nLen = rString.getLength();
-
-            if ( nLen > 0 )
-            {
-                nLen--;
-                pView->SetSelection( ESelection( 0, nLen, 0, nLen ) );
-            }
-
-            pScMod->InputChanged(pView);
-            if ( bDoEdit )
-                SetOkCancelMode(); // Not the case if immediately followed by Enter/Cancel
-
-            pView->SetEditEngineUpdateMode(true);
-        }
+        nLen--;
+        pView->SetSelection( ESelection( 0, nLen, 0, nLen ) );
     }
+
+    pScMod->InputChanged(pView);
+    if ( bDoEdit )
+        SetOkCancelMode(); // Not the case if immediately followed by Enter/Cancel
+
+    pView->SetEditEngineUpdateMode(true);
 }
 
 void ScInputWindow::SetPosString( const OUString& rStr )
@@ -595,20 +595,20 @@ void ScInputWindow::SetOkCancelMode()
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     EnableButtons( pViewFrm && !pViewFrm->GetChildWindow( SID_OPENDLG_FUNCTION ) );
 
-    if (!bIsOkCancelMode)
-    {
-        EnableItem  ( SID_INPUT_SUM,   false );
-        EnableItem  ( SID_INPUT_EQUAL, false );
-        HideItem    ( SID_INPUT_SUM );
-        HideItem    ( SID_INPUT_EQUAL );
+    if (bIsOkCancelMode)
+        return;
 
-        ShowItem    ( SID_INPUT_CANCEL, true );
-        ShowItem    ( SID_INPUT_OK,     true );
-        EnableItem  ( SID_INPUT_CANCEL, true );
-        EnableItem  ( SID_INPUT_OK,     true );
+    EnableItem  ( SID_INPUT_SUM,   false );
+    EnableItem  ( SID_INPUT_EQUAL, false );
+    HideItem    ( SID_INPUT_SUM );
+    HideItem    ( SID_INPUT_EQUAL );
 
-        bIsOkCancelMode = true;
-    }
+    ShowItem    ( SID_INPUT_CANCEL, true );
+    ShowItem    ( SID_INPUT_OK,     true );
+    EnableItem  ( SID_INPUT_CANCEL, true );
+    EnableItem  ( SID_INPUT_OK,     true );
+
+    bIsOkCancelMode = true;
 }
 
 void ScInputWindow::SetSumAssignMode()
@@ -617,22 +617,22 @@ void ScInputWindow::SetSumAssignMode()
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     EnableButtons( pViewFrm && !pViewFrm->GetChildWindow( SID_OPENDLG_FUNCTION ) );
 
-    if (bIsOkCancelMode)
-    {
-        EnableItem  ( SID_INPUT_CANCEL, false );
-        EnableItem  ( SID_INPUT_OK,     false );
-        HideItem    ( SID_INPUT_CANCEL );
-        HideItem    ( SID_INPUT_OK );
+    if (!bIsOkCancelMode)
+        return;
 
-        ShowItem    ( SID_INPUT_SUM,    true );
-        ShowItem    ( SID_INPUT_EQUAL,  true );
-        EnableItem  ( SID_INPUT_SUM,    true );
-        EnableItem  ( SID_INPUT_EQUAL,  true );
+    EnableItem  ( SID_INPUT_CANCEL, false );
+    EnableItem  ( SID_INPUT_OK,     false );
+    HideItem    ( SID_INPUT_CANCEL );
+    HideItem    ( SID_INPUT_OK );
 
-        bIsOkCancelMode = false;
+    ShowItem    ( SID_INPUT_SUM,    true );
+    ShowItem    ( SID_INPUT_EQUAL,  true );
+    EnableItem  ( SID_INPUT_SUM,    true );
+    EnableItem  ( SID_INPUT_EQUAL,  true );
 
-        SetFormulaMode(false); // No editing -> no formula
-    }
+    bIsOkCancelMode = false;
+
+    SetFormulaMode(false); // No editing -> no formula
 }
 
 void ScInputWindow::SetFormulaMode( bool bSet )
@@ -824,36 +824,36 @@ void ScInputWindow::AutoSum( bool& bRangeFinder, bool& bSubTotal, OpCode eCode )
 {
     ScModule* pScMod = SC_MOD();
     ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
-    if ( pViewSh )
-    {
-        const OUString aFormula = pViewSh->DoAutoSum(bRangeFinder, bSubTotal, eCode);
-        if ( !aFormula.isEmpty() )
-        {
-            SetFuncString( aFormula );
-            const sal_Int32 aOpen = aFormula.indexOf('(');
-            const sal_Int32 aLen  = aFormula.getLength();
-            if (bRangeFinder && pScMod->IsEditMode())
-            {
-                ScInputHandler* pHdl = pScMod->GetInputHdl( pViewSh );
-                if ( pHdl )
-                {
-                    pHdl->InitRangeFinder( aFormula );
+    if ( !pViewSh )
+        return;
 
-                    //! SetSelection at the InputHandler?
-                    //! Set bSelIsRef?
-                    if ( aOpen != -1 && aLen > aOpen )
-                    {
-                        ESelection aSel( 0, aOpen + (bSubTotal ? 3 : 1), 0, aLen-1 );
-                        EditView* pTableView = pHdl->GetTableView();
-                        if ( pTableView )
-                            pTableView->SetSelection( aSel );
-                        EditView* pTopView = pHdl->GetTopView();
-                        if ( pTopView )
-                            pTopView->SetSelection( aSel );
-                    }
-                }
-            }
-        }
+    const OUString aFormula = pViewSh->DoAutoSum(bRangeFinder, bSubTotal, eCode);
+    if ( aFormula.isEmpty() )
+        return;
+
+    SetFuncString( aFormula );
+    const sal_Int32 aOpen = aFormula.indexOf('(');
+    const sal_Int32 aLen  = aFormula.getLength();
+    if (!(bRangeFinder && pScMod->IsEditMode()))
+        return;
+
+    ScInputHandler* pHdl = pScMod->GetInputHdl( pViewSh );
+    if ( !pHdl )
+        return;
+
+    pHdl->InitRangeFinder( aFormula );
+
+    //! SetSelection at the InputHandler?
+    //! Set bSelIsRef?
+    if ( aOpen != -1 && aLen > aOpen )
+    {
+        ESelection aSel( 0, aOpen + (bSubTotal ? 3 : 1), 0, aLen-1 );
+        EditView* pTableView = pHdl->GetTableView();
+        if ( pTableView )
+            pTableView->SetSelection( aSel );
+        EditView* pTopView = pHdl->GetTopView();
+        if ( pTopView )
+            pTopView->SetSelection( aSel );
     }
 }
 
@@ -1081,39 +1081,39 @@ void ScInputBarGroup::TriggerToolboxLayout()
     if ( !mnVertOffset )
         mnVertOffset = rParent.GetItemPosRect( rParent.GetItemCount() - 1 ).Top();
 
-    if ( pViewFrm )
+    if ( !pViewFrm )
+        return;
+
+    Reference< css::beans::XPropertySet > xPropSet( pViewFrm->GetFrame().GetFrameInterface(), UNO_QUERY );
+    Reference< css::frame::XLayoutManager > xLayoutManager;
+
+    if ( xPropSet.is() )
     {
-        Reference< css::beans::XPropertySet > xPropSet( pViewFrm->GetFrame().GetFrameInterface(), UNO_QUERY );
-        Reference< css::frame::XLayoutManager > xLayoutManager;
-
-        if ( xPropSet.is() )
-        {
-            css::uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
-            aValue >>= xLayoutManager;
-        }
-
-        if ( xLayoutManager.is() )
-        {
-            xLayoutManager->lock();
-            DataChangedEvent aFakeUpdate( DataChangedEventType::SETTINGS, nullptr,  AllSettingsFlags::STYLE );
-
-            // this basically will trigger the repositioning of the
-            // items in the toolbar from ImplFormat ( which is controlled by
-            // mnWinHeight ) which in turn is updated in ImplCalcItem which is
-            // controlled by mbCalc. Additionally the ImplFormat above is
-            // controlled via mbFormat. It seems the easiest way to get these
-            // booleans set is to send in the fake event below.
-            rParent.DataChanged( aFakeUpdate);
-
-            // highest item in toolbar will have been calculated via the
-            // event above. Call resize on InputBar to pick up the height
-            // change
-            rParent.Resize();
-
-            // unlock relayouts the toolbars in the 4 quadrants
-            xLayoutManager->unlock();
-        }
+        css::uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
+        aValue >>= xLayoutManager;
     }
+
+    if ( !xLayoutManager.is() )
+        return;
+
+    xLayoutManager->lock();
+    DataChangedEvent aFakeUpdate( DataChangedEventType::SETTINGS, nullptr,  AllSettingsFlags::STYLE );
+
+    // this basically will trigger the repositioning of the
+    // items in the toolbar from ImplFormat ( which is controlled by
+    // mnWinHeight ) which in turn is updated in ImplCalcItem which is
+    // controlled by mbCalc. Additionally the ImplFormat above is
+    // controlled via mbFormat. It seems the easiest way to get these
+    // booleans set is to send in the fake event below.
+    rParent.DataChanged( aFakeUpdate);
+
+    // highest item in toolbar will have been calculated via the
+    // event above. Call resize on InputBar to pick up the height
+    // change
+    rParent.Resize();
+
+    // unlock relayouts the toolbars in the 4 quadrants
+    xLayoutManager->unlock();
 }
 
 void ScInputBarGroup::TextGrabFocus()
@@ -2277,21 +2277,21 @@ void ScPosWnd::FillFunctions()
 
 void ScPosWnd::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( !bFormulaMode )
+    if ( bFormulaMode )
+        return;
+
+    // Does the list of range names need updating?
+    if ( dynamic_cast<const SfxEventHint*>(&rHint) )
     {
-        // Does the list of range names need updating?
-        if ( dynamic_cast<const SfxEventHint*>(&rHint) )
-        {
-            SfxEventHintId nEventId = static_cast<const SfxEventHint*>(&rHint)->GetEventId();
-            if ( nEventId == SfxEventHintId::ActivateDoc )
-                FillRangeNames();
-        }
-        else
-        {
-            const SfxHintId nHintId = rHint.GetId();
-            if ( nHintId == SfxHintId::ScAreasChanged || nHintId == SfxHintId::ScNavigatorUpdateAll)
-                FillRangeNames();
-        }
+        SfxEventHintId nEventId = static_cast<const SfxEventHint*>(&rHint)->GetEventId();
+        if ( nEventId == SfxEventHintId::ActivateDoc )
+            FillRangeNames();
+    }
+    else
+    {
+        const SfxHintId nHintId = rHint.GetId();
+        if ( nHintId == SfxHintId::ScAreasChanged || nHintId == SfxHintId::ScNavigatorUpdateAll)
+            FillRangeNames();
     }
 }
 
@@ -2362,53 +2362,53 @@ IMPL_LINK_NOARG(ScPosWnd, ModifyHdl, weld::ComboBox&, void)
         return;
     }
 
-    if (!bFormulaMode)
+    if (bFormulaMode)
+        return;
+
+    // determine the action that would be taken for the current input
+
+    ScNameInputType eType = lcl_GetInputType(m_xWidget->get_active_text());      // uses current view
+    const char* pStrId = nullptr;
+    switch ( eType )
     {
-        // determine the action that would be taken for the current input
-
-        ScNameInputType eType = lcl_GetInputType(m_xWidget->get_active_text());      // uses current view
-        const char* pStrId = nullptr;
-        switch ( eType )
-        {
-            case SC_NAME_INPUT_CELL:
-                pStrId = STR_NAME_INPUT_CELL;
-                break;
-            case SC_NAME_INPUT_RANGE:
-            case SC_NAME_INPUT_NAMEDRANGE:
-                pStrId = STR_NAME_INPUT_RANGE;      // named range or range reference
-                break;
-            case SC_NAME_INPUT_DATABASE:
-                pStrId = STR_NAME_INPUT_DBRANGE;
-                break;
-            case SC_NAME_INPUT_ROW:
-                pStrId = STR_NAME_INPUT_ROW;
-                break;
-            case SC_NAME_INPUT_SHEET:
-                pStrId = STR_NAME_INPUT_SHEET;
-                break;
-            case SC_NAME_INPUT_DEFINE:
-                pStrId = STR_NAME_INPUT_DEFINE;
-                break;
-            default:
-                // other cases (error): no tip help
-                break;
-        }
-
-        if (pStrId)
-        {
-            // show the help tip at the text cursor position
-            Point aPos;
-            vcl::Cursor* pCur = GetCursor();
-            if (pCur)
-                aPos = LogicToPixel( pCur->GetPos() );
-            aPos = OutputToScreenPixel( aPos );
-            tools::Rectangle aRect( aPos, aPos );
-
-            OUString aText = ScResId(pStrId);
-            QuickHelpFlags const nAlign = QuickHelpFlags::Left|QuickHelpFlags::Bottom;
-            nTipVisible = Help::ShowPopover(this, aRect, aText, nAlign);
-        }
+        case SC_NAME_INPUT_CELL:
+            pStrId = STR_NAME_INPUT_CELL;
+            break;
+        case SC_NAME_INPUT_RANGE:
+        case SC_NAME_INPUT_NAMEDRANGE:
+            pStrId = STR_NAME_INPUT_RANGE;      // named range or range reference
+            break;
+        case SC_NAME_INPUT_DATABASE:
+            pStrId = STR_NAME_INPUT_DBRANGE;
+            break;
+        case SC_NAME_INPUT_ROW:
+            pStrId = STR_NAME_INPUT_ROW;
+            break;
+        case SC_NAME_INPUT_SHEET:
+            pStrId = STR_NAME_INPUT_SHEET;
+            break;
+        case SC_NAME_INPUT_DEFINE:
+            pStrId = STR_NAME_INPUT_DEFINE;
+            break;
+        default:
+            // other cases (error): no tip help
+            break;
     }
+
+    if (!pStrId)
+        return;
+
+    // show the help tip at the text cursor position
+    Point aPos;
+    vcl::Cursor* pCur = GetCursor();
+    if (pCur)
+        aPos = LogicToPixel( pCur->GetPos() );
+    aPos = OutputToScreenPixel( aPos );
+    tools::Rectangle aRect( aPos, aPos );
+
+    OUString aText = ScResId(pStrId);
+    QuickHelpFlags const nAlign = QuickHelpFlags::Left|QuickHelpFlags::Bottom;
+    nTipVisible = Help::ShowPopover(this, aRect, aText, nAlign);
 }
 
 void ScPosWnd::DoEnter()

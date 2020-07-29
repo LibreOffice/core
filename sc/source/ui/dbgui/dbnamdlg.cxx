@@ -280,20 +280,20 @@ void ScDbNameDlg::SetInfoStrings( const ScDBData* pDBData )
 
 void ScDbNameDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
 {
-    if (m_xEdAssign->GetWidget()->get_sensitive())
-    {
-        if ( rRef.aStart != rRef.aEnd )
-            RefInputStart(m_xEdAssign.get());
+    if (!m_xEdAssign->GetWidget()->get_sensitive())
+        return;
 
-        theCurArea = rRef;
+    if ( rRef.aStart != rRef.aEnd )
+        RefInputStart(m_xEdAssign.get());
 
-        OUString aRefStr(theCurArea.Format(rDocP, ScRefFlags::RANGE_ABS_3D, aAddrDetails));
-        m_xEdAssign->SetRefString( aRefStr );
-        m_xOptions->set_sensitive(true);
-        m_xBtnAdd->set_sensitive(true);
-        bSaved = true;
-        pSaveObj->Save();
-    }
+    theCurArea = rRef;
+
+    OUString aRefStr(theCurArea.Format(rDocP, ScRefFlags::RANGE_ABS_3D, aAddrDetails));
+    m_xEdAssign->SetRefString( aRefStr );
+    m_xOptions->set_sensitive(true);
+    m_xBtnAdd->set_sensitive(true);
+    bSaved = true;
+    pSaveObj->Save();
 }
 
 void ScDbNameDlg::Close()
@@ -404,82 +404,82 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl, weld::Button&, void)
     OUString aNewName = comphelper::string::strip(m_xEdName->get_active_text(), ' ');
     OUString aNewArea = m_xEdAssign->GetText();
 
-    if ( !aNewName.isEmpty() && !aNewArea.isEmpty() )
+    if ( aNewName.isEmpty() || aNewArea.isEmpty() )
+        return;
+
+    if ( ScRangeData::IsNameValid( aNewName, &rDoc ) == ScRangeData::NAME_VALID && aNewName != STR_DB_LOCAL_NONAME )
     {
-        if ( ScRangeData::IsNameValid( aNewName, &rDoc ) == ScRangeData::NAME_VALID && aNewName != STR_DB_LOCAL_NONAME )
+        //  because editing can be done now, parsing is needed first
+        ScRange aTmpRange;
+        OUString aText = m_xEdAssign->GetText();
+        if ( aTmpRange.ParseAny( aText, &rDoc, aAddrDetails ) & ScRefFlags::VALID )
         {
-            //  because editing can be done now, parsing is needed first
-            ScRange aTmpRange;
-            OUString aText = m_xEdAssign->GetText();
-            if ( aTmpRange.ParseAny( aText, &rDoc, aAddrDetails ) & ScRefFlags::VALID )
+            theCurArea = aTmpRange;
+            ScAddress aStart = theCurArea.aStart;
+            ScAddress aEnd   = theCurArea.aEnd;
+
+            ScDBData* pOldEntry = aLocalDbCol.getNamedDBs().findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aNewName));
+            if (pOldEntry)
             {
-                theCurArea = aTmpRange;
-                ScAddress aStart = theCurArea.aStart;
-                ScAddress aEnd   = theCurArea.aEnd;
+                //  modify area
 
-                ScDBData* pOldEntry = aLocalDbCol.getNamedDBs().findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aNewName));
-                if (pOldEntry)
-                {
-                    //  modify area
-
-                    pOldEntry->MoveTo( aStart.Tab(), aStart.Col(), aStart.Row(),
-                                                        aEnd.Col(), aEnd.Row() );
-                    pOldEntry->SetByRow( true );
-                    pOldEntry->SetHeader( m_xBtnHeader->get_active() );
-                    pOldEntry->SetTotals( m_xBtnTotals->get_active() );
-                    pOldEntry->SetDoSize( m_xBtnDoSize->get_active() );
-                    pOldEntry->SetKeepFmt( m_xBtnKeepFmt->get_active() );
-                    pOldEntry->SetStripData( m_xBtnStripData->get_active() );
-                }
-                else
-                {
-                    //  insert new area
-
-                    std::unique_ptr<ScDBData> pNewEntry(new ScDBData( aNewName, aStart.Tab(),
-                                                        aStart.Col(), aStart.Row(),
-                                                        aEnd.Col(), aEnd.Row(),
-                                                        true, m_xBtnHeader->get_active(),
-                                                        m_xBtnTotals->get_active() ));
-                    pNewEntry->SetDoSize( m_xBtnDoSize->get_active() );
-                    pNewEntry->SetKeepFmt( m_xBtnKeepFmt->get_active() );
-                    pNewEntry->SetStripData( m_xBtnStripData->get_active() );
-
-                    bool ins = aLocalDbCol.getNamedDBs().insert(std::move(pNewEntry));
-                    assert(ins); (void)ins;
-                }
-
-                UpdateNames();
-
-                m_xEdName->set_entry_text( EMPTY_OUSTRING );
-                m_xEdName->grab_focus();
-                m_xBtnAdd->set_label( aStrAdd );
-                m_xBtnAdd->set_sensitive(false);
-                m_xBtnRemove->set_sensitive(false);
-                m_xEdAssign->SetText( EMPTY_OUSTRING );
-                m_xBtnHeader->set_active(true);             // Default: with column headers
-                m_xBtnTotals->set_active( false );      // Default: without totals row
-                m_xBtnDoSize->set_active( false );
-                m_xBtnKeepFmt->set_active( false );
-                m_xBtnStripData->set_active( false );
-                SetInfoStrings( nullptr );     // empty
-                theCurArea = ScRange();
-                bSaved = true;
-                pSaveObj->Save();
-                NameModifyHdl( *m_xEdName );
+                pOldEntry->MoveTo( aStart.Tab(), aStart.Col(), aStart.Row(),
+                                                    aEnd.Col(), aEnd.Row() );
+                pOldEntry->SetByRow( true );
+                pOldEntry->SetHeader( m_xBtnHeader->get_active() );
+                pOldEntry->SetTotals( m_xBtnTotals->get_active() );
+                pOldEntry->SetDoSize( m_xBtnDoSize->get_active() );
+                pOldEntry->SetKeepFmt( m_xBtnKeepFmt->get_active() );
+                pOldEntry->SetStripData( m_xBtnStripData->get_active() );
             }
             else
             {
-                ERRORBOX(m_xDialog.get(), aStrInvalid);
-                m_xEdAssign->SelectAll();
-                m_xEdAssign->GrabFocus();
+                //  insert new area
+
+                std::unique_ptr<ScDBData> pNewEntry(new ScDBData( aNewName, aStart.Tab(),
+                                                    aStart.Col(), aStart.Row(),
+                                                    aEnd.Col(), aEnd.Row(),
+                                                    true, m_xBtnHeader->get_active(),
+                                                    m_xBtnTotals->get_active() ));
+                pNewEntry->SetDoSize( m_xBtnDoSize->get_active() );
+                pNewEntry->SetKeepFmt( m_xBtnKeepFmt->get_active() );
+                pNewEntry->SetStripData( m_xBtnStripData->get_active() );
+
+                bool ins = aLocalDbCol.getNamedDBs().insert(std::move(pNewEntry));
+                assert(ins); (void)ins;
             }
+
+            UpdateNames();
+
+            m_xEdName->set_entry_text( EMPTY_OUSTRING );
+            m_xEdName->grab_focus();
+            m_xBtnAdd->set_label( aStrAdd );
+            m_xBtnAdd->set_sensitive(false);
+            m_xBtnRemove->set_sensitive(false);
+            m_xEdAssign->SetText( EMPTY_OUSTRING );
+            m_xBtnHeader->set_active(true);             // Default: with column headers
+            m_xBtnTotals->set_active( false );      // Default: without totals row
+            m_xBtnDoSize->set_active( false );
+            m_xBtnKeepFmt->set_active( false );
+            m_xBtnStripData->set_active( false );
+            SetInfoStrings( nullptr );     // empty
+            theCurArea = ScRange();
+            bSaved = true;
+            pSaveObj->Save();
+            NameModifyHdl( *m_xEdName );
         }
         else
         {
-            ERRORBOX(m_xDialog.get(), ScResId(STR_INVALIDNAME));
-            m_xEdName->select_entry_region(0, -1);
-            m_xEdName->grab_focus();
+            ERRORBOX(m_xDialog.get(), aStrInvalid);
+            m_xEdAssign->SelectAll();
+            m_xEdAssign->GrabFocus();
         }
+    }
+    else
+    {
+        ERRORBOX(m_xDialog.get(), ScResId(STR_INVALIDNAME));
+        m_xEdName->select_entry_region(0, -1);
+        m_xEdName->grab_focus();
     }
 }
 
@@ -505,45 +505,45 @@ IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl, weld::Button&, void)
     ScDBCollection::NamedDBs::iterator itr =
         ::std::find_if(rDBs.begin(), rDBs.end(), FindByName(aStrEntry));
 
-    if (itr != rDBs.end())
-    {
-        OUString aStrDelMsg = ScResId( STR_QUERY_DELENTRY );
-        OUString sMsg{ aStrDelMsg.getToken(0, '#') + aStrEntry + aStrDelMsg.getToken(1, '#') };
-        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(m_xDialog.get(),
-                                                       VclMessageType::Question, VclButtonsType::YesNo,
-                                                       sMsg));
-        xQueryBox->set_default_response(RET_YES);
-        if (RET_YES == xQueryBox->run())
-        {
-            SCTAB nTab;
-            SCCOL nColStart, nColEnd;
-            SCROW nRowStart, nRowEnd;
-            (*itr)->GetArea( nTab, nColStart, nRowStart, nColEnd, nRowEnd );
-            aRemoveList.emplace_back( ScAddress( nColStart, nRowStart, nTab ),
-                         ScAddress( nColEnd,   nRowEnd,   nTab ) );
+    if (itr == rDBs.end())
+        return;
 
-            rDBs.erase(itr);
+    OUString aStrDelMsg = ScResId( STR_QUERY_DELENTRY );
+    OUString sMsg{ aStrDelMsg.getToken(0, '#') + aStrEntry + aStrDelMsg.getToken(1, '#') };
+    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(m_xDialog.get(),
+                                                   VclMessageType::Question, VclButtonsType::YesNo,
+                                                   sMsg));
+    xQueryBox->set_default_response(RET_YES);
+    if (RET_YES != xQueryBox->run())
+        return;
 
-            UpdateNames();
+    SCTAB nTab;
+    SCCOL nColStart, nColEnd;
+    SCROW nRowStart, nRowEnd;
+    (*itr)->GetArea( nTab, nColStart, nRowStart, nColEnd, nRowEnd );
+    aRemoveList.emplace_back( ScAddress( nColStart, nRowStart, nTab ),
+                 ScAddress( nColEnd,   nRowEnd,   nTab ) );
 
-            m_xEdName->set_entry_text( EMPTY_OUSTRING );
-            m_xEdName->grab_focus();
-            m_xBtnAdd->set_label( aStrAdd );
-            m_xBtnAdd->set_sensitive(false);
-            m_xBtnRemove->set_sensitive(false);
-            m_xEdAssign->SetText( EMPTY_OUSTRING );
-            theCurArea = ScRange();
-            m_xBtnHeader->set_active(true);             // Default: with column headers
-            m_xBtnTotals->set_active( false );      // Default: without totals row
-            m_xBtnDoSize->set_active( false );
-            m_xBtnKeepFmt->set_active( false );
-            m_xBtnStripData->set_active( false );
-            SetInfoStrings( nullptr );     // empty
-            bSaved=false;
-            pSaveObj->Restore();
-            NameModifyHdl( *m_xEdName );
-        }
-    }
+    rDBs.erase(itr);
+
+    UpdateNames();
+
+    m_xEdName->set_entry_text( EMPTY_OUSTRING );
+    m_xEdName->grab_focus();
+    m_xBtnAdd->set_label( aStrAdd );
+    m_xBtnAdd->set_sensitive(false);
+    m_xBtnRemove->set_sensitive(false);
+    m_xEdAssign->SetText( EMPTY_OUSTRING );
+    theCurArea = ScRange();
+    m_xBtnHeader->set_active(true);             // Default: with column headers
+    m_xBtnTotals->set_active( false );      // Default: without totals row
+    m_xBtnDoSize->set_active( false );
+    m_xBtnKeepFmt->set_active( false );
+    m_xBtnStripData->set_active( false );
+    SetInfoStrings( nullptr );     // empty
+    bSaved=false;
+    pSaveObj->Restore();
+    NameModifyHdl( *m_xEdName );
 }
 
 IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl, weld::ComboBox&, void)

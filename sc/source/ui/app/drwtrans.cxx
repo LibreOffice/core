@@ -685,57 +685,57 @@ void ScDrawTransferObj::CreateOLEData()
 
 void ScDrawTransferObj::InitDocShell()
 {
-    if ( !m_aDocShellRef.is() )
+    if ( m_aDocShellRef.is() )
+        return;
+
+    ScDocShell* pDocSh = new ScDocShell;
+    m_aDocShellRef = pDocSh;      // ref must be there before InitNew
+
+    pDocSh->DoInitNew();
+
+    ScDocument& rDestDoc = pDocSh->GetDocument();
+    rDestDoc.InitDrawLayer( pDocSh );
+
+    SdrModel* pDestModel = rDestDoc.GetDrawLayer();
+    // #i71538# use complete SdrViews
+    // SdrExchangeView aDestView( pDestModel );
+    SdrView aDestView(*pDestModel);
+    aDestView.ShowSdrPage(aDestView.GetModel()->GetPage(0));
+    aDestView.Paste(
+        *m_pModel,
+        Point(m_aSrcSize.Width()/2, m_aSrcSize.Height()/2),
+        nullptr, SdrInsertFlags::NONE);
+
+    // put objects to right layer (see ScViewFunc::PasteDataFormat for SotClipboardFormatId::DRAWING)
+
+    SdrPage* pPage = pDestModel->GetPage(0);
+    if (pPage)
     {
-        ScDocShell* pDocSh = new ScDocShell;
-        m_aDocShellRef = pDocSh;      // ref must be there before InitNew
-
-        pDocSh->DoInitNew();
-
-        ScDocument& rDestDoc = pDocSh->GetDocument();
-        rDestDoc.InitDrawLayer( pDocSh );
-
-        SdrModel* pDestModel = rDestDoc.GetDrawLayer();
-        // #i71538# use complete SdrViews
-        // SdrExchangeView aDestView( pDestModel );
-        SdrView aDestView(*pDestModel);
-        aDestView.ShowSdrPage(aDestView.GetModel()->GetPage(0));
-        aDestView.Paste(
-            *m_pModel,
-            Point(m_aSrcSize.Width()/2, m_aSrcSize.Height()/2),
-            nullptr, SdrInsertFlags::NONE);
-
-        // put objects to right layer (see ScViewFunc::PasteDataFormat for SotClipboardFormatId::DRAWING)
-
-        SdrPage* pPage = pDestModel->GetPage(0);
-        if (pPage)
+        SdrObjListIter aIter( pPage, SdrIterMode::DeepWithGroups );
+        SdrObject* pObject = aIter.Next();
+        while (pObject)
         {
-            SdrObjListIter aIter( pPage, SdrIterMode::DeepWithGroups );
-            SdrObject* pObject = aIter.Next();
-            while (pObject)
-            {
-                if ( dynamic_cast<const SdrUnoObj*>( pObject) !=  nullptr )
-                    pObject->NbcSetLayer(SC_LAYER_CONTROLS);
-                else
-                    pObject->NbcSetLayer(SC_LAYER_FRONT);
-                pObject = aIter.Next();
-            }
+            if ( dynamic_cast<const SdrUnoObj*>( pObject) !=  nullptr )
+                pObject->NbcSetLayer(SC_LAYER_CONTROLS);
+            else
+                pObject->NbcSetLayer(SC_LAYER_FRONT);
+            pObject = aIter.Next();
         }
-
-        tools::Rectangle aDestArea( Point(), m_aSrcSize );
-        pDocSh->SetVisArea( aDestArea );
-
-        ScViewOptions aViewOpt( rDestDoc.GetViewOptions() );
-        aViewOpt.SetOption( VOPT_GRID, false );
-        rDestDoc.SetViewOptions( aViewOpt );
-
-        ScViewData aViewData( pDocSh, nullptr );
-        aViewData.SetTabNo( 0 );
-        aViewData.SetScreen( aDestArea );
-        aViewData.SetCurX( 0 );
-        aViewData.SetCurY( 0 );
-        pDocSh->UpdateOle(&aViewData, true);
     }
+
+    tools::Rectangle aDestArea( Point(), m_aSrcSize );
+    pDocSh->SetVisArea( aDestArea );
+
+    ScViewOptions aViewOpt( rDestDoc.GetViewOptions() );
+    aViewOpt.SetOption( VOPT_GRID, false );
+    rDestDoc.SetViewOptions( aViewOpt );
+
+    ScViewData aViewData( pDocSh, nullptr );
+    aViewData.SetTabNo( 0 );
+    aViewData.SetScreen( aDestArea );
+    aViewData.SetCurX( 0 );
+    aViewData.SetCurY( 0 );
+    pDocSh->UpdateOle(&aViewData, true);
 }
 
 namespace

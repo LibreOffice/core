@@ -686,34 +686,34 @@ const ScDocOptions& ScModule::GetDocOptions()
 
 void ScModule::InsertEntryToLRUList(sal_uInt16 nFIndex)
 {
-    if(nFIndex != 0)
+    if(nFIndex == 0)
+        return;
+
+    const ScAppOptions& rAppOpt = GetAppOptions();
+    sal_uInt16 nLRUFuncCount = std::min( rAppOpt.GetLRUFuncListCount(), sal_uInt16(LRU_MAX) );
+    sal_uInt16* pLRUListIds = rAppOpt.GetLRUFuncList();
+
+    sal_uInt16  aIdxList[LRU_MAX];
+    sal_uInt16  n = 0;
+    bool    bFound = false;
+
+    while ((n < LRU_MAX) && n<nLRUFuncCount)                        // Iterate through old list
     {
-        const ScAppOptions& rAppOpt = GetAppOptions();
-        sal_uInt16 nLRUFuncCount = std::min( rAppOpt.GetLRUFuncListCount(), sal_uInt16(LRU_MAX) );
-        sal_uInt16* pLRUListIds = rAppOpt.GetLRUFuncList();
-
-        sal_uInt16  aIdxList[LRU_MAX];
-        sal_uInt16  n = 0;
-        bool    bFound = false;
-
-        while ((n < LRU_MAX) && n<nLRUFuncCount)                        // Iterate through old list
-        {
-            if (!bFound && (pLRUListIds[n]== nFIndex))
-                bFound = true;                                          // First hit!
-            else if (bFound)
-                aIdxList[n  ] = pLRUListIds[n];                         // Copy after hit
-            else if ((n+1) < LRU_MAX)
-                aIdxList[n+1] = pLRUListIds[n];                         // Move before hit
-            n++;
-        }
-        if (!bFound && (n < LRU_MAX))                                   // Entry not found?
-            n++;                                                        // One more
-        aIdxList[0] = nFIndex;                                          // Current on Top
-
-        ScAppOptions aNewOpts(rAppOpt);                                 // Let App know
-        aNewOpts.SetLRUFuncList(aIdxList, n);
-        SetAppOptions(aNewOpts);
+        if (!bFound && (pLRUListIds[n]== nFIndex))
+            bFound = true;                                          // First hit!
+        else if (bFound)
+            aIdxList[n  ] = pLRUListIds[n];                         // Copy after hit
+        else if ((n+1) < LRU_MAX)
+            aIdxList[n+1] = pLRUListIds[n];                         // Move before hit
+        n++;
     }
+    if (!bFound && (n < LRU_MAX))                                   // Entry not found?
+        n++;                                                        // One more
+    aIdxList[0] = nFIndex;                                          // Current on Top
+
+    ScAppOptions aNewOpts(rAppOpt);                                 // Let App know
+    aNewOpts.SetLRUFuncList(aIdxList, n);
+    SetAppOptions(aNewOpts);
 }
 
 void ScModule::SetAppOptions( const ScAppOptions& rOpt )
@@ -1255,45 +1255,45 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     }
 
     // update ref device (for all documents)
-    if ( bUpdateRefDev )
+    if ( !bUpdateRefDev )
+        return;
+
+    // for all documents: recalc output factor, update row heights
+    SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
+    while ( pObjSh )
     {
-        // for all documents: recalc output factor, update row heights
-        SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
-        while ( pObjSh )
+        if ( dynamic_cast<const ScDocShell *>(pObjSh) != nullptr )
         {
-            if ( dynamic_cast<const ScDocShell *>(pObjSh) != nullptr )
-            {
-                ScDocShell* pOneDocSh = static_cast<ScDocShell*>(pObjSh);
-                pOneDocSh->CalcOutputFactor();
-                SCTAB nTabCount = pOneDocSh->GetDocument().GetTableCount();
-                for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-                    pOneDocSh->AdjustRowHeight( 0, pDocSh->GetDocument().MaxRow(), nTab );
-            }
-            pObjSh = SfxObjectShell::GetNext( *pObjSh );
+            ScDocShell* pOneDocSh = static_cast<ScDocShell*>(pObjSh);
+            pOneDocSh->CalcOutputFactor();
+            SCTAB nTabCount = pOneDocSh->GetDocument().GetTableCount();
+            for (SCTAB nTab=0; nTab<nTabCount; nTab++)
+                pOneDocSh->AdjustRowHeight( 0, pDocSh->GetDocument().MaxRow(), nTab );
         }
+        pObjSh = SfxObjectShell::GetNext( *pObjSh );
+    }
 
-        // for all (tab-) views:
-        SfxViewShell* pSh = SfxViewShell::GetFirst( true, checkSfxViewShell<ScTabViewShell> );
-        while ( pSh )
-        {
-            ScTabViewShell* pOneViewSh = static_cast<ScTabViewShell*>(pSh);
+    // for all (tab-) views:
+    SfxViewShell* pSh = SfxViewShell::GetFirst( true, checkSfxViewShell<ScTabViewShell> );
+    while ( pSh )
+    {
+        ScTabViewShell* pOneViewSh = static_cast<ScTabViewShell*>(pSh);
 
-            // set ref-device for EditEngine
-            ScInputHandler* pHdl = GetInputHdl(pOneViewSh);
-            if (pHdl)
-                pHdl->UpdateRefDevice();
+        // set ref-device for EditEngine
+        ScInputHandler* pHdl = GetInputHdl(pOneViewSh);
+        if (pHdl)
+            pHdl->UpdateRefDevice();
 
-            // update view scale
-            ScViewData& rViewData = pOneViewSh->GetViewData();
-            pOneViewSh->SetZoom( rViewData.GetZoomX(), rViewData.GetZoomY(), false );
+        // update view scale
+        ScViewData& rViewData = pOneViewSh->GetViewData();
+        pOneViewSh->SetZoom( rViewData.GetZoomX(), rViewData.GetZoomY(), false );
 
-            // repaint
-            pOneViewSh->PaintGrid();
-            pOneViewSh->PaintTop();
-            pOneViewSh->PaintLeft();
+        // repaint
+        pOneViewSh->PaintGrid();
+        pOneViewSh->PaintTop();
+        pOneViewSh->PaintLeft();
 
-            pSh = SfxViewShell::GetNext( *pSh, true, checkSfxViewShell<ScTabViewShell> );
-        }
+        pSh = SfxViewShell::GetNext( *pSh, true, checkSfxViewShell<ScTabViewShell> );
     }
 }
 
@@ -1430,34 +1430,34 @@ void ScModule::InputTurnOffWinEngine()
 void ScModule::ActivateInputWindow( const OUString* pStrFormula, bool bMatrix )
 {
     ScInputHandler* pHdl = GetInputHdl();
-    if ( pHdl )
-    {
-        ScInputWindow* pWin = pHdl->GetInputWindow();
-        if ( pStrFormula )
-        {
-            // Take over formula
-            if ( pWin )
-            {
-                pWin->SetFuncString( *pStrFormula, false );
-                // SetSumAssignMode due to sal_False not necessary
-            }
-            ScEnterMode nMode = bMatrix ? ScEnterMode::MATRIX : ScEnterMode::NORMAL;
-            pHdl->EnterHandler( nMode );
+    if ( !pHdl )
+        return;
 
-            // Without Invalidate the selection remains active, if the formula has not changed
-            if (pWin)
-                pWin->TextInvalidate();
-        }
-        else
+    ScInputWindow* pWin = pHdl->GetInputWindow();
+    if ( pStrFormula )
+    {
+        // Take over formula
+        if ( pWin )
         {
-            // Cancel
-            if ( pWin )
-            {
-                pWin->SetFuncString( EMPTY_OUSTRING, false );
-                // SetSumAssignMode due to sal_False no necessary
-            }
-            pHdl->CancelHandler();
+            pWin->SetFuncString( *pStrFormula, false );
+            // SetSumAssignMode due to sal_False not necessary
         }
+        ScEnterMode nMode = bMatrix ? ScEnterMode::MATRIX : ScEnterMode::NORMAL;
+        pHdl->EnterHandler( nMode );
+
+        // Without Invalidate the selection remains active, if the formula has not changed
+        if (pWin)
+            pWin->TextInvalidate();
+    }
+    else
+    {
+        // Cancel
+        if ( pWin )
+        {
+            pWin->SetFuncString( EMPTY_OUSTRING, false );
+            // SetSumAssignMode due to sal_False no necessary
+        }
+        pHdl->CancelHandler();
     }
 }
 
@@ -1468,47 +1468,47 @@ void ScModule::SetRefDialog( sal_uInt16 nId, bool bVis, SfxViewFrame* pViewFrm )
 {
     //TODO: Move reference dialog handling to view
     //      Just keep function autopilot here for references to other documents
-    if ( m_nCurRefDlgId == 0 || ( nId == m_nCurRefDlgId && !bVis )
-       || ( comphelper::LibreOfficeKit::isActive() ) )
+    if ( !(m_nCurRefDlgId == 0 || ( nId == m_nCurRefDlgId && !bVis )
+       || ( comphelper::LibreOfficeKit::isActive() )) )
+        return;
+
+    if ( !pViewFrm )
+        pViewFrm = SfxViewFrame::Current();
+
+    // bindings update causes problems with update of stylist if
+    // current style family has changed
+    //if ( pViewFrm )
+    //  pViewFrm->GetBindings().Update();       // to avoid trouble in LockDispatcher
+
+    // before SetChildWindow
+    if ( comphelper::LibreOfficeKit::isActive() )
     {
-        if ( !pViewFrm )
-            pViewFrm = SfxViewFrame::Current();
+        if ( bVis )
+            m_nCurRefDlgId = nId;
+    }
+    else
+    {
+        m_nCurRefDlgId = bVis ? nId : 0;
+    }
 
-        // bindings update causes problems with update of stylist if
-        // current style family has changed
-        //if ( pViewFrm )
-        //  pViewFrm->GetBindings().Update();       // to avoid trouble in LockDispatcher
-
-        // before SetChildWindow
-        if ( comphelper::LibreOfficeKit::isActive() )
-        {
-            if ( bVis )
-                m_nCurRefDlgId = nId;
-        }
+    if ( pViewFrm )
+    {
+        //  store the dialog id also in the view shell
+        SfxViewShell* pViewSh = pViewFrm->GetViewShell();
+        if (ScTabViewShell* pTabViewSh = dynamic_cast<ScTabViewShell*>(pViewSh))
+            pTabViewSh->SetCurRefDlgId(m_nCurRefDlgId);
         else
         {
-            m_nCurRefDlgId = bVis ? nId : 0;
+            // no ScTabViewShell - possible for example from a Basic macro
+            bVis = false;
+            m_nCurRefDlgId = 0;   // don't set nCurRefDlgId if no dialog is created
         }
 
-        if ( pViewFrm )
-        {
-            //  store the dialog id also in the view shell
-            SfxViewShell* pViewSh = pViewFrm->GetViewShell();
-            if (ScTabViewShell* pTabViewSh = dynamic_cast<ScTabViewShell*>(pViewSh))
-                pTabViewSh->SetCurRefDlgId(m_nCurRefDlgId);
-            else
-            {
-                // no ScTabViewShell - possible for example from a Basic macro
-                bVis = false;
-                m_nCurRefDlgId = 0;   // don't set nCurRefDlgId if no dialog is created
-            }
-
-            pViewFrm->SetChildWindow( nId, bVis );
-        }
-
-        SfxApplication* pSfxApp = SfxGetpApp();
-        pSfxApp->Broadcast( SfxHint( SfxHintId::ScRefModeChanged ) );
+        pViewFrm->SetChildWindow( nId, bVis );
     }
+
+    SfxApplication* pSfxApp = SfxGetpApp();
+    pSfxApp->Broadcast( SfxHint( SfxHintId::ScRefModeChanged ) );
 }
 
 static SfxChildWindow* lcl_GetChildWinFromCurrentView( sal_uInt16 nId )
@@ -1756,26 +1756,26 @@ void ScModule::EndReference()
     // We also annul the ZoomIn again in RefDialogs
 
     //FIXME: ShowRefFrame at InputHdl, if the Function AutoPilot is open?
-    if ( m_nCurRefDlgId )
+    if ( !m_nCurRefDlgId )
+        return;
+
+    SfxChildWindow* pChildWnd = nullptr;
+
+    if ( comphelper::LibreOfficeKit::isActive() )
+        pChildWnd = lcl_GetChildWinFromCurrentView( m_nCurRefDlgId );
+    else
+        pChildWnd = lcl_GetChildWinFromAnyView( m_nCurRefDlgId );
+
+    OSL_ENSURE( pChildWnd, "NoChildWin" );
+    if ( pChildWnd )
     {
-        SfxChildWindow* pChildWnd = nullptr;
-
-        if ( comphelper::LibreOfficeKit::isActive() )
-            pChildWnd = lcl_GetChildWinFromCurrentView( m_nCurRefDlgId );
-        else
-            pChildWnd = lcl_GetChildWinFromAnyView( m_nCurRefDlgId );
-
-        OSL_ENSURE( pChildWnd, "NoChildWin" );
-        if ( pChildWnd )
+        if (pChildWnd->GetController())
         {
-            if (pChildWnd->GetController())
+            IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetController().get());
+            assert(pRefDlg);
+            if(pRefDlg)
             {
-                IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetController().get());
-                assert(pRefDlg);
-                if(pRefDlg)
-                {
-                    pRefDlg->SetActive();
-                }
+                pRefDlg->SetActive();
             }
         }
     }

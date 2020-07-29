@@ -68,18 +68,18 @@ void ScNumberFormat::GetFocus()
 IMPL_STATIC_LINK(ScNumberFormat, NumFormatSelectHdl, weld::ComboBox&, rBox, void)
 {
     auto* pCurSh = SfxViewFrame::Current();
-    if (pCurSh)
-    {
-        SfxDispatcher* pDisp = pCurSh->GetBindings().GetDispatcher();
-        if (pDisp)
-        {
-            const sal_Int32 nVal = rBox.get_active();
-            SfxUInt16Item aItem(SID_NUMBER_TYPE_FORMAT, nVal);
-            pDisp->ExecuteList(SID_NUMBER_TYPE_FORMAT,
-                    SfxCallMode::RECORD, {&aItem});
+    if (!pCurSh)
+        return;
 
-            pCurSh->GetWindow().GrabFocus();
-        }
+    SfxDispatcher* pDisp = pCurSh->GetBindings().GetDispatcher();
+    if (pDisp)
+    {
+        const sal_Int32 nVal = rBox.get_active();
+        SfxUInt16Item aItem(SID_NUMBER_TYPE_FORMAT, nVal);
+        pDisp->ExecuteList(SID_NUMBER_TYPE_FORMAT,
+                SfxCallMode::RECORD, {&aItem});
+
+        pCurSh->GetWindow().GrabFocus();
     }
 }
 

@@ -614,19 +614,19 @@ ScChangeAction* ScDocShell::GetChangeAction( const ScAddress& rPos )
 
 void ScDocShell::SetChangeComment( ScChangeAction* pAction, const OUString& rComment )
 {
-    if (pAction)
-    {
-        pAction->SetComment( rComment );
-        //! Undo ???
-        SetDocumentModified();
+    if (!pAction)
+        return;
 
-        //  Dialog-Notify
-        ScChangeTrack* pTrack = GetDocument().GetChangeTrack();
-        if (pTrack)
-        {
-            sal_uLong nNumber = pAction->GetActionNumber();
-            pTrack->NotifyModified( ScChangeTrackMsgType::Change, nNumber, nNumber );
-        }
+    pAction->SetComment( rComment );
+    //! Undo ???
+    SetDocumentModified();
+
+    //  Dialog-Notify
+    ScChangeTrack* pTrack = GetDocument().GetChangeTrack();
+    if (pTrack)
+    {
+        sal_uLong nNumber = pAction->GetActionNumber();
+        pTrack->NotifyModified( ScChangeTrackMsgType::Change, nNumber, nNumber );
     }
 }
 
