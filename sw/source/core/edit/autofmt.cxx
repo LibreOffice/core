@@ -1084,31 +1084,31 @@ bool SwAutoFormat::IsSentenceAtEnd(const SwTextFrame & rTextFrame)
 /// Delete beginning and/or end in a node
 void SwAutoFormat::DeleteLeadingTrailingBlanks(bool bStart, bool bEnd)
 {
-    if( m_aFlags.bAFormatByInput
+    if( !(m_aFlags.bAFormatByInput
         ? m_aFlags.bAFormatByInpDelSpacesAtSttEnd
-        : m_aFlags.bAFormatDelSpacesAtSttEnd )
+        : m_aFlags.bAFormatDelSpacesAtSttEnd) )
+        return;
+
+    // delete blanks at the end of the current and at the beginning of the next one
+    m_aDelPam.DeleteMark();
+    TextFrameIndex nPos(GetLeadingBlanks(m_pCurTextFrame->GetText()));
+    if (bStart && TextFrameIndex(0) != nPos)
     {
-        // delete blanks at the end of the current and at the beginning of the next one
+        *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(TextFrameIndex(0));
+        m_aDelPam.SetMark();
+        *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(nPos);
+        DeleteSel( m_aDelPam );
         m_aDelPam.DeleteMark();
-        TextFrameIndex nPos(GetLeadingBlanks(m_pCurTextFrame->GetText()));
-        if (bStart && TextFrameIndex(0) != nPos)
-        {
-            *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(TextFrameIndex(0));
-            m_aDelPam.SetMark();
-            *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(nPos);
-            DeleteSel( m_aDelPam );
-            m_aDelPam.DeleteMark();
-        }
-        nPos = TextFrameIndex(GetTrailingBlanks(m_pCurTextFrame->GetText()));
-        if (bEnd && TextFrameIndex(m_pCurTextFrame->GetText().getLength()) != nPos)
-        {
-            *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(
-                    TextFrameIndex(m_pCurTextFrame->GetText().getLength()));
-            m_aDelPam.SetMark();
-            *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(nPos);
-            DeleteSel( m_aDelPam );
-            m_aDelPam.DeleteMark();
-        }
+    }
+    nPos = TextFrameIndex(GetTrailingBlanks(m_pCurTextFrame->GetText()));
+    if (bEnd && TextFrameIndex(m_pCurTextFrame->GetText().getLength()) != nPos)
+    {
+        *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(
+                TextFrameIndex(m_pCurTextFrame->GetText().getLength()));
+        m_aDelPam.SetMark();
+        *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(nPos);
+        DeleteSel( m_aDelPam );
+        m_aDelPam.DeleteMark();
     }
 }
 
@@ -1287,37 +1287,37 @@ void SwAutoFormat::DelEmptyLine( bool bTstNextPara )
 
 void SwAutoFormat::DelMoreLinesBlanks( bool bWithLineBreaks )
 {
-    if( m_aFlags.bAFormatByInput
+    if( !(m_aFlags.bAFormatByInput
         ? m_aFlags.bAFormatByInpDelSpacesBetweenLines
-        : m_aFlags.bAFormatDelSpacesBetweenLines )
+        : m_aFlags.bAFormatDelSpacesBetweenLines) )
+        return;
+
+    // delete all blanks on the left and right of the indentation
+    m_aDelPam.DeleteMark();
+
+    SwTextFrameInfo aFInfo( m_pCurTextFrame );
+    std::vector<std::pair<TextFrameIndex, TextFrameIndex>> spaces;
+    aFInfo.GetSpaces(spaces, !m_aFlags.bAFormatByInput || bWithLineBreaks);
+
+    // tdf#123285 iterate backwards - delete invalidates following indexes
+    for (auto iter = spaces.rbegin(); iter != spaces.rend(); ++iter)
     {
-        // delete all blanks on the left and right of the indentation
-        m_aDelPam.DeleteMark();
-
-        SwTextFrameInfo aFInfo( m_pCurTextFrame );
-        std::vector<std::pair<TextFrameIndex, TextFrameIndex>> spaces;
-        aFInfo.GetSpaces(spaces, !m_aFlags.bAFormatByInput || bWithLineBreaks);
-
-        // tdf#123285 iterate backwards - delete invalidates following indexes
-        for (auto iter = spaces.rbegin(); iter != spaces.rend(); ++iter)
+        auto & rSpaceRange(*iter);
+        assert(rSpaceRange.first != rSpaceRange.second);
+        bool const bHasBlanks = HasSelBlanks(
+                m_pCurTextFrame, rSpaceRange.first,
+                m_pCurTextFrame, rSpaceRange.second);
+        if (rSpaceRange.first != rSpaceRange.second)
         {
-            auto & rSpaceRange(*iter);
-            assert(rSpaceRange.first != rSpaceRange.second);
-            bool const bHasBlanks = HasSelBlanks(
-                    m_pCurTextFrame, rSpaceRange.first,
-                    m_pCurTextFrame, rSpaceRange.second);
-            if (rSpaceRange.first != rSpaceRange.second)
+            *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(rSpaceRange.first);
+            m_aDelPam.SetMark();
+            *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(rSpaceRange.second);
+            DeleteSel(m_aDelPam);
+            if (!bHasBlanks)
             {
-                *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(rSpaceRange.first);
-                m_aDelPam.SetMark();
-                *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(rSpaceRange.second);
-                DeleteSel(m_aDelPam);
-                if (!bHasBlanks)
-                {
-                    m_pDoc->getIDocumentContentOperations().InsertString(m_aDelPam, OUString(' '));
-                }
-                m_aDelPam.DeleteMark();
+                m_pDoc->getIDocumentContentOperations().InsertString(m_aDelPam, OUString(' '));
             }
+            m_aDelPam.DeleteMark();
         }
     }
 }

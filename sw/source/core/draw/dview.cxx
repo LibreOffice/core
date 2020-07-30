@@ -355,19 +355,54 @@ void SwDrawView::MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
     }
 
     // check, if 'repeated' objects exists.
-    if ( aAnchoredObjs.size() > 1 )
-    {
-        SdrPage* pDrawPage = GetModel()->GetPage( 0 );
+    if ( aAnchoredObjs.size() <= 1 )
+        return;
 
+    SdrPage* pDrawPage = GetModel()->GetPage( 0 );
+
+    // move 'repeated' ones to the same order number as the already moved one.
+    const size_t nNewPos = _rMovedAnchoredObj.GetDrawObj()->GetOrdNum();
+    while ( !aAnchoredObjs.empty() )
+    {
+        SwAnchoredObject* pAnchoredObj = aAnchoredObjs.back();
+        if ( pAnchoredObj != &_rMovedAnchoredObj )
+        {
+            pDrawPage->SetObjectOrdNum( pAnchoredObj->GetDrawObj()->GetOrdNum(),
+                                        nNewPos );
+            pDrawPage->RecalcObjOrdNums();
+            // adjustments for accessibility API
+            if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
+            {
+                const SwFlyFrame *pTmpFlyFrame = static_cast<SwFlyFrame*>(pAnchoredObj);
+                m_rImp.DisposeAccessibleFrame( pTmpFlyFrame );
+                m_rImp.AddAccessibleFrame( pTmpFlyFrame );
+            }
+            else
+            {
+                m_rImp.DisposeAccessibleObj(pAnchoredObj->GetDrawObj(), true);
+                m_rImp.AddAccessibleObj( pAnchoredObj->GetDrawObj() );
+            }
+        }
+        aAnchoredObjs.pop_back();
+    }
+
+    // move 'repeated' ones of 'child' objects
+    for ( SdrObject* pChildObj : _rMovedChildObjs )
+    {
+        {
+            const SwContact* pContact = ::GetUserCall( pChildObj );
+            assert(pContact && "SwDrawView::MoveRepeatedObjs(..) - missing contact object -> crash.");
+            pContact->GetAnchoredObjs( aAnchoredObjs );
+        }
         // move 'repeated' ones to the same order number as the already moved one.
-        const size_t nNewPos = _rMovedAnchoredObj.GetDrawObj()->GetOrdNum();
+        const size_t nTmpNewPos = pChildObj->GetOrdNum();
         while ( !aAnchoredObjs.empty() )
         {
             SwAnchoredObject* pAnchoredObj = aAnchoredObjs.back();
-            if ( pAnchoredObj != &_rMovedAnchoredObj )
+            if ( pAnchoredObj->GetDrawObj() != pChildObj )
             {
                 pDrawPage->SetObjectOrdNum( pAnchoredObj->GetDrawObj()->GetOrdNum(),
-                                            nNewPos );
+                                            nTmpNewPos );
                 pDrawPage->RecalcObjOrdNums();
                 // adjustments for accessibility API
                 if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
@@ -383,41 +418,6 @@ void SwDrawView::MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
                 }
             }
             aAnchoredObjs.pop_back();
-        }
-
-        // move 'repeated' ones of 'child' objects
-        for ( SdrObject* pChildObj : _rMovedChildObjs )
-        {
-            {
-                const SwContact* pContact = ::GetUserCall( pChildObj );
-                assert(pContact && "SwDrawView::MoveRepeatedObjs(..) - missing contact object -> crash.");
-                pContact->GetAnchoredObjs( aAnchoredObjs );
-            }
-            // move 'repeated' ones to the same order number as the already moved one.
-            const size_t nTmpNewPos = pChildObj->GetOrdNum();
-            while ( !aAnchoredObjs.empty() )
-            {
-                SwAnchoredObject* pAnchoredObj = aAnchoredObjs.back();
-                if ( pAnchoredObj->GetDrawObj() != pChildObj )
-                {
-                    pDrawPage->SetObjectOrdNum( pAnchoredObj->GetDrawObj()->GetOrdNum(),
-                                                nTmpNewPos );
-                    pDrawPage->RecalcObjOrdNums();
-                    // adjustments for accessibility API
-                    if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
-                    {
-                        const SwFlyFrame *pTmpFlyFrame = static_cast<SwFlyFrame*>(pAnchoredObj);
-                        m_rImp.DisposeAccessibleFrame( pTmpFlyFrame );
-                        m_rImp.AddAccessibleFrame( pTmpFlyFrame );
-                    }
-                    else
-                    {
-                        m_rImp.DisposeAccessibleObj(pAnchoredObj->GetDrawObj(), true);
-                        m_rImp.AddAccessibleObj( pAnchoredObj->GetDrawObj() );
-                    }
-                }
-                aAnchoredObjs.pop_back();
-            }
         }
     }
 }
@@ -902,40 +902,40 @@ void SwDrawView::ReplaceMarkedDrawVirtObjs( SdrMarkView& _rMarkView )
     SdrPageView* pDrawPageView = _rMarkView.GetSdrPageView();
     const SdrMarkList& rMarkList = _rMarkView.GetMarkedObjectList();
 
-    if( rMarkList.GetMarkCount() )
-    {
-        // collect marked objects in a local data structure
-        std::vector<SdrObject*> aMarkedObjs;
-        for( size_t i = 0; i < rMarkList.GetMarkCount(); ++i )
-        {
-            SdrObject* pMarkedObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
-            aMarkedObjs.push_back( pMarkedObj );
-        }
-        // unmark all objects
-        _rMarkView.UnmarkAllObj();
-        // re-mark objects, but for marked <SwDrawVirtObj>-objects marked its
-        // reference object.
-        while ( !aMarkedObjs.empty() )
-        {
-            SdrObject* pMarkObj = aMarkedObjs.back();
-            if ( dynamic_cast< const SwDrawVirtObj *>( pMarkObj ) !=  nullptr )
-            {
-                SdrObject* pRefObj = &(static_cast<SwDrawVirtObj*>(pMarkObj)->ReferencedObj());
-                if ( !_rMarkView.IsObjMarked( pRefObj )  )
-                {
-                    _rMarkView.MarkObj( pRefObj, pDrawPageView );
-                }
-            }
-            else
-            {
-                _rMarkView.MarkObj( pMarkObj, pDrawPageView );
-            }
+    if( !rMarkList.GetMarkCount() )
+        return;
 
-            aMarkedObjs.pop_back();
-        }
-        // sort marked list in order to assure consistent state in drawing layer
-        _rMarkView.SortMarkedObjects();
+    // collect marked objects in a local data structure
+    std::vector<SdrObject*> aMarkedObjs;
+    for( size_t i = 0; i < rMarkList.GetMarkCount(); ++i )
+    {
+        SdrObject* pMarkedObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
+        aMarkedObjs.push_back( pMarkedObj );
     }
+    // unmark all objects
+    _rMarkView.UnmarkAllObj();
+    // re-mark objects, but for marked <SwDrawVirtObj>-objects marked its
+    // reference object.
+    while ( !aMarkedObjs.empty() )
+    {
+        SdrObject* pMarkObj = aMarkedObjs.back();
+        if ( dynamic_cast< const SwDrawVirtObj *>( pMarkObj ) !=  nullptr )
+        {
+            SdrObject* pRefObj = &(static_cast<SwDrawVirtObj*>(pMarkObj)->ReferencedObj());
+            if ( !_rMarkView.IsObjMarked( pRefObj )  )
+            {
+                _rMarkView.MarkObj( pRefObj, pDrawPageView );
+            }
+        }
+        else
+        {
+            _rMarkView.MarkObj( pMarkObj, pDrawPageView );
+        }
+
+        aMarkedObjs.pop_back();
+    }
+    // sort marked list in order to assure consistent state in drawing layer
+    _rMarkView.SortMarkedObjects();
 }
 
 SfxViewShell* SwDrawView::GetSfxViewShell() const

@@ -150,37 +150,37 @@ void SwEditShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
 {
     assert(dynamic_cast<const SwTOXBaseSection*>(&rTOX) && "no TOXBaseSection!");
     SwTOXBaseSection& rTOXSect = static_cast<SwTOXBaseSection&>(const_cast<SwTOXBase&>(rTOX));
-    if (rTOXSect.GetFormat()->GetSectionNode())
-    {
-        SwDoc* pMyDoc = GetDoc();
-        SwDocShell* pDocSh = pMyDoc->GetDocShell();
+    if (!rTOXSect.GetFormat()->GetSectionNode())
+        return;
 
-        bool bInIndex = &rTOX == GetCurTOX();
-        CurrShell aCurr( this );
-        StartAllAction();
+    SwDoc* pMyDoc = GetDoc();
+    SwDocShell* pDocSh = pMyDoc->GetDocShell();
 
-        ::StartProgress( STR_STATSTR_TOX_UPDATE, 0, 0, pDocSh );
+    bool bInIndex = &rTOX == GetCurTOX();
+    CurrShell aCurr( this );
+    StartAllAction();
 
-        pMyDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::TOXCHANGE, nullptr);
+    ::StartProgress( STR_STATSTR_TOX_UPDATE, 0, 0, pDocSh );
 
-        // create listing stub
-        rTOXSect.Update(pSet, GetLayout());
+    pMyDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::TOXCHANGE, nullptr);
 
-        // correct Cursor
-        if( bInIndex )
-            rTOXSect.SetPosAtStartEnd(*GetCursor()->GetPoint());
+    // create listing stub
+    rTOXSect.Update(pSet, GetLayout());
 
-        // start formatting
-        CalcLayout();
+    // correct Cursor
+    if( bInIndex )
+        rTOXSect.SetPosAtStartEnd(*GetCursor()->GetPoint());
 
-        // insert page numbering
-        rTOXSect.UpdatePageNum();
+    // start formatting
+    CalcLayout();
 
-        pMyDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::TOXCHANGE, nullptr);
+    // insert page numbering
+    rTOXSect.UpdatePageNum();
 
-        ::EndProgress( pDocSh );
-        EndAllAction();
-    }
+    pMyDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::TOXCHANGE, nullptr);
+
+    ::EndProgress( pDocSh );
+    EndAllAction();
 }
 
 /// Get current listing before or at the Cursor

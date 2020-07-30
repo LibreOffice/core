@@ -191,19 +191,19 @@ namespace drawinglayer::primitive2d
 {
         void SwVirtFlyDrawObjPrimitive::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            if(!getOuterRange().isEmpty())
-            {
-                // currently this SW object has no primitive representation. As long as this is the case,
-                // create invisible geometry to allow correct HitTest and BoundRect calculations for the
-                // object. Use a filled primitive to get 'inside' as default object hit. The special cases from
-                // the old SwVirtFlyDrawObj::CheckHit implementation are handled now in SwDrawView::PickObj;
-                // this removed the 'hack' to get a view from inside model data or to react on null-tolerance
-                // as it was done in the old implementation
-                rContainer.push_back(
-                    createHiddenGeometryPrimitives2D(
-                        true,
-                        getOuterRange()));
-            }
+            if(getOuterRange().isEmpty())
+                return;
+
+            // currently this SW object has no primitive representation. As long as this is the case,
+            // create invisible geometry to allow correct HitTest and BoundRect calculations for the
+            // object. Use a filled primitive to get 'inside' as default object hit. The special cases from
+            // the old SwVirtFlyDrawObj::CheckHit implementation are handled now in SwDrawView::PickObj;
+            // this removed the 'hack' to get a view from inside model data or to react on null-tolerance
+            // as it was done in the old implementation
+            rContainer.push_back(
+                createHiddenGeometryPrimitives2D(
+                    true,
+                    getOuterRange()));
         }
 
         bool SwVirtFlyDrawObjPrimitive::operator==(const BasePrimitive2D& rPrimitive) const
@@ -453,24 +453,24 @@ namespace
                 : mbMapModeRestored( false )
                 , mpOutDev( pViewShell->GetOut() )
             {
-                if ( pViewShell->getPrePostMapMode() != mpOutDev->GetMapMode() )
+                if ( pViewShell->getPrePostMapMode() == mpOutDev->GetMapMode() )
+                    return;
+
+                mpOutDev->Push(PushFlags::MAPMODE);
+
+                GDIMetaFile* pMetaFile = mpOutDev->GetConnectMetaFile();
+                if ( pMetaFile &&
+                     pMetaFile->IsRecord() && !pMetaFile->IsPause() )
                 {
-                    mpOutDev->Push(PushFlags::MAPMODE);
-
-                    GDIMetaFile* pMetaFile = mpOutDev->GetConnectMetaFile();
-                    if ( pMetaFile &&
-                         pMetaFile->IsRecord() && !pMetaFile->IsPause() )
-                    {
-                        OSL_FAIL( "MapMode restoration during meta file creation is somehow suspect - using <SetRelativeMapMode(..)>, but not sure, if correct." );
-                        mpOutDev->SetRelativeMapMode( pViewShell->getPrePostMapMode() );
-                    }
-                    else
-                    {
-                        mpOutDev->SetMapMode( pViewShell->getPrePostMapMode() );
-                    }
-
-                    mbMapModeRestored = true;
+                    OSL_FAIL( "MapMode restoration during meta file creation is somehow suspect - using <SetRelativeMapMode(..)>, but not sure, if correct." );
+                    mpOutDev->SetRelativeMapMode( pViewShell->getPrePostMapMode() );
                 }
+                else
+                {
+                    mpOutDev->SetMapMode( pViewShell->getPrePostMapMode() );
+                }
+
+                mbMapModeRestored = true;
             };
 
             ~RestoreMapMode()
@@ -498,36 +498,36 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject(
     // but no paints. IsPaintInProgress() depends on SW repaint, so, as long
     // as SW paints self and calls DrawLayer() for Heaven and Hell, this will
     // be correct
-    if ( pShell && pShell->IsDrawingLayerPaintInProgress() )
+    if ( !(pShell && pShell->IsDrawingLayerPaintInProgress()) )
+        return;
+
+    bool bDrawObject(true);
+
+    if ( !SwFlyFrame::IsPaint( const_cast<SwVirtFlyDrawObj*>(this), pShell ) )
     {
-        bool bDrawObject(true);
-
-        if ( !SwFlyFrame::IsPaint( const_cast<SwVirtFlyDrawObj*>(this), pShell ) )
-        {
-            bDrawObject = false;
-        }
-
-        if ( bDrawObject )
-        {
-            // if there's no viewport set, all fly-frames will be painted,
-            // which is slow, wastes memory, and can cause other trouble.
-            (void) rViewInformation; // suppress "unused parameter" warning
-            assert(comphelper::LibreOfficeKit::isActive() || !rViewInformation.getViewport().isEmpty());
-            if ( !m_pFlyFrame->IsFlyInContentFrame() )
-            {
-                // it is also necessary to restore the VCL MapMode from ViewInformation since e.g.
-                // the VCL PixelRenderer resets it at the used OutputDevice. Unfortunately, this
-                // excludes shears and rotates which are not expressible in MapMode.
-                // OD #i102707#
-                // new helper class to restore MapMode - restoration, only if
-                // needed and consideration of paint for meta file creation .
-                RestoreMapMode aRestoreMapModeIfNeeded( pShell );
-
-                // paint the FlyFrame (use standard VCL-Paint)
-                m_pFlyFrame->PaintSwFrame( *pShell->GetOut(), GetFlyFrame()->getFrameArea() );
-            }
-        }
+        bDrawObject = false;
     }
+
+    if ( !bDrawObject )
+        return;
+
+    // if there's no viewport set, all fly-frames will be painted,
+    // which is slow, wastes memory, and can cause other trouble.
+    (void) rViewInformation; // suppress "unused parameter" warning
+    assert(comphelper::LibreOfficeKit::isActive() || !rViewInformation.getViewport().isEmpty());
+    if ( m_pFlyFrame->IsFlyInContentFrame() )
+        return;
+
+    // it is also necessary to restore the VCL MapMode from ViewInformation since e.g.
+    // the VCL PixelRenderer resets it at the used OutputDevice. Unfortunately, this
+    // excludes shears and rotates which are not expressible in MapMode.
+    // OD #i102707#
+    // new helper class to restore MapMode - restoration, only if
+    // needed and consideration of paint for meta file creation .
+    RestoreMapMode aRestoreMapModeIfNeeded( pShell );
+
+    // paint the FlyFrame (use standard VCL-Paint)
+    m_pFlyFrame->PaintSwFrame( *pShell->GetOut(), GetFlyFrame()->getFrameArea() );
 }
 
 void SwVirtFlyDrawObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
@@ -1093,32 +1093,32 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef, const Fraction& xFact, const
     //Position can also be changed, get new one
     const Point aNewPos(bUseRightEdge ? aOutRect.Right() + 1 : aOutRect.Left(), aOutRect.Top());
 
-    if ( aNewPos != aOldPos )
+    if ( aNewPos == aOldPos )
+        return;
+
+    // Former late change in aOutRect by ChgSize
+    // is now taken into account directly by calculating
+    // aNewPos *after* calling ChgSize (see old code).
+    // Still need to adapt aOutRect since the 'Move' is already applied
+    // here (see ResizeRect) and it's the same SdrObject
+    const Size aDeltaMove(
+            aNewPos.X() - aOldPos.X(),
+            aNewPos.Y() - aOldPos.Y());
+    aOutRect.Move(-aDeltaMove.Width(), -aDeltaMove.Height());
+
+    // Now, move as needed (no empty delta which was a hack anyways)
+    if(bIsTransformableSwFrame)
     {
-        // Former late change in aOutRect by ChgSize
-        // is now taken into account directly by calculating
-        // aNewPos *after* calling ChgSize (see old code).
-        // Still need to adapt aOutRect since the 'Move' is already applied
-        // here (see ResizeRect) and it's the same SdrObject
-        const Size aDeltaMove(
-                aNewPos.X() - aOldPos.X(),
-                aNewPos.Y() - aOldPos.Y());
-        aOutRect.Move(-aDeltaMove.Width(), -aDeltaMove.Height());
-
-        // Now, move as needed (no empty delta which was a hack anyways)
-        if(bIsTransformableSwFrame)
-        {
-            // need to save aOutRect to FrameArea, will be restored to aOutRect in
-            // SwVirtFlyDrawObj::NbcMove currently for TransformableSwFrames
-            SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*GetFlyFrame());
-            aFrm.setSwRect(aOutRect);
-        }
-
-        // keep old hack - not clear what happens here
-        bInResize = true;
-        NbcMove(aDeltaMove);
-        bInResize = false;
+        // need to save aOutRect to FrameArea, will be restored to aOutRect in
+        // SwVirtFlyDrawObj::NbcMove currently for TransformableSwFrames
+        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*GetFlyFrame());
+        aFrm.setSwRect(aOutRect);
     }
+
+    // keep old hack - not clear what happens here
+    bInResize = true;
+    NbcMove(aDeltaMove);
+    bInResize = false;
 }
 
 void SwVirtFlyDrawObj::Move(const Size& rSiz)
@@ -1199,44 +1199,44 @@ SdrObjectUniquePtr SwVirtFlyDrawObj::getFullDragClone() const
 void SwVirtFlyDrawObj::addCropHandles(SdrHdlList& rTarget) const
 {
     // RotGrfFlyFrame: Adapt to possible rotated Graphic contained in FlyFrame
-    if(GetFlyFrame()->getFrameArea().HasArea())
-    {
-        // Use InnerBound, OuterBound (same as GetFlyFrame()->getFrameArea().SVRect())
-        // may have a distance to InnerBound which needs to be taken into account.
-        // The Graphic is mapped to InnerBound, as is the rotated Graphic.
-        const basegfx::B2DRange aTargetRange(getInnerBound());
+    if(!GetFlyFrame()->getFrameArea().HasArea())
+        return;
 
-        if(!aTargetRange.isEmpty())
-        {
-            // RotGrfFlyFrame3: get inner bounds/transformation
-            const basegfx::B2DHomMatrix aTargetTransform(GetFlyFrame()->getFramePrintAreaTransformation());
+    // Use InnerBound, OuterBound (same as GetFlyFrame()->getFrameArea().SVRect())
+    // may have a distance to InnerBound which needs to be taken into account.
+    // The Graphic is mapped to InnerBound, as is the rotated Graphic.
+    const basegfx::B2DRange aTargetRange(getInnerBound());
 
-            // break up matrix
-            basegfx::B2DTuple aScale;
-            basegfx::B2DTuple aTranslate;
-            double fRotate(0.0);
-            double fShearX(0.0);
-            aTargetTransform.decompose(aScale, aTranslate, fRotate, fShearX);
-            basegfx::B2DPoint aPos;
+    if(aTargetRange.isEmpty())
+        return;
 
-            aPos = aTargetTransform * basegfx::B2DPoint(0.0, 0.0);
-            rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::UpperLeft, fShearX, fRotate));
-            aPos = aTargetTransform * basegfx::B2DPoint(0.5, 0.0);
-            rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::Upper, fShearX, fRotate));
-            aPos = aTargetTransform * basegfx::B2DPoint(1.0, 0.0);
-            rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::UpperRight, fShearX, fRotate));
-            aPos = aTargetTransform * basegfx::B2DPoint(0.0, 0.5);
-            rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::Left , fShearX, fRotate));
-            aPos = aTargetTransform * basegfx::B2DPoint(1.0, 0.5);
-            rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::Right, fShearX, fRotate));
-            aPos = aTargetTransform * basegfx::B2DPoint(0.0, 1.0);
-            rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::LowerLeft, fShearX, fRotate));
-            aPos = aTargetTransform * basegfx::B2DPoint(0.5, 1.0);
-            rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::Lower, fShearX, fRotate));
-            aPos = aTargetTransform * basegfx::B2DPoint(1.0, 1.0);
-            rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::LowerRight, fShearX, fRotate));
-        }
-    }
+    // RotGrfFlyFrame3: get inner bounds/transformation
+    const basegfx::B2DHomMatrix aTargetTransform(GetFlyFrame()->getFramePrintAreaTransformation());
+
+    // break up matrix
+    basegfx::B2DTuple aScale;
+    basegfx::B2DTuple aTranslate;
+    double fRotate(0.0);
+    double fShearX(0.0);
+    aTargetTransform.decompose(aScale, aTranslate, fRotate, fShearX);
+    basegfx::B2DPoint aPos;
+
+    aPos = aTargetTransform * basegfx::B2DPoint(0.0, 0.0);
+    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::UpperLeft, fShearX, fRotate));
+    aPos = aTargetTransform * basegfx::B2DPoint(0.5, 0.0);
+    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::Upper, fShearX, fRotate));
+    aPos = aTargetTransform * basegfx::B2DPoint(1.0, 0.0);
+    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::UpperRight, fShearX, fRotate));
+    aPos = aTargetTransform * basegfx::B2DPoint(0.0, 0.5);
+    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::Left , fShearX, fRotate));
+    aPos = aTargetTransform * basegfx::B2DPoint(1.0, 0.5);
+    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::Right, fShearX, fRotate));
+    aPos = aTargetTransform * basegfx::B2DPoint(0.0, 1.0);
+    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::LowerLeft, fShearX, fRotate));
+    aPos = aTargetTransform * basegfx::B2DPoint(0.5, 1.0);
+    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::Lower, fShearX, fRotate));
+    aPos = aTargetTransform * basegfx::B2DPoint(1.0, 1.0);
+    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::LowerRight, fShearX, fRotate));
 }
 
 // Macro
