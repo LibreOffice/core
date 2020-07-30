@@ -175,21 +175,21 @@ void SwAccessibleSelectionHelper::selectAllAccessibleChildren(  )
     // the first we can select, and select it.
 
     SwFEShell* pFEShell = GetFEShell();
-    if( pFEShell )
-    {
-        std::list< SwAccessibleChild > aChildren;
-        m_rContext.GetChildren( *(m_rContext.GetMap()), aChildren );
+    if( !pFEShell )
+        return;
 
-        for( const SwAccessibleChild& rChild : aChildren )
+    std::list< SwAccessibleChild > aChildren;
+    m_rContext.GetChildren( *(m_rContext.GetMap()), aChildren );
+
+    for( const SwAccessibleChild& rChild : aChildren )
+    {
+        const SdrObject* pObj = rChild.GetDrawObject();
+        const SwFrame* pFrame = rChild.GetSwFrame();
+        if( pObj && !(pFrame != nullptr && pFEShell->IsObjSelected()) )
         {
-            const SdrObject* pObj = rChild.GetDrawObject();
-            const SwFrame* pFrame = rChild.GetSwFrame();
-            if( pObj && !(pFrame != nullptr && pFEShell->IsObjSelected()) )
-            {
-                m_rContext.Select( const_cast< SdrObject *>( pObj ), nullptr==pFrame );
-                if( pFrame )
-                    break;
-            }
+            m_rContext.Select( const_cast< SdrObject *>( pObj ), nullptr==pFrame );
+            if( pFrame )
+                break;
         }
     }
 }

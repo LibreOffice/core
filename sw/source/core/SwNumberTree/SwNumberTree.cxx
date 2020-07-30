@@ -107,21 +107,21 @@ void SwNumberTreeNode::ClearObsoletePhantoms()
 {
     tSwNumberTreeChildren::iterator aIt = mChildren.begin();
 
-    if (aIt != mChildren.end() && (*aIt)->IsPhantom())
+    if (!(aIt != mChildren.end() && (*aIt)->IsPhantom()))
+        return;
+
+    (*aIt)->ClearObsoletePhantoms();
+
+    if ((*aIt)->mChildren.empty())
     {
-        (*aIt)->ClearObsoletePhantoms();
+        // #i60652#
+        // Because <mChildren.erase(aIt)> could destroy the element, which
+        // is referenced by <mItLastValid>, it's needed to adjust
+        // <mItLastValid> before erasing <aIt>.
+        SetLastValid(mChildren.end());
 
-        if ((*aIt)->mChildren.empty())
-        {
-            // #i60652#
-            // Because <mChildren.erase(aIt)> could destroy the element, which
-            // is referenced by <mItLastValid>, it's needed to adjust
-            // <mItLastValid> before erasing <aIt>.
-            SetLastValid(mChildren.end());
-
-            delete *aIt;
-            mChildren.erase(aIt);
-        }
+        delete *aIt;
+        mChildren.erase(aIt);
     }
 }
 
@@ -130,102 +130,102 @@ void SwNumberTreeNode::ValidateHierarchical(const SwNumberTreeNode * pNode) cons
     tSwNumberTreeChildren::const_iterator aValidateIt =
         GetIterator(pNode);
 
-    if (aValidateIt != mChildren.end())
+    if (aValidateIt == mChildren.end())
+        return;
+
+    OSL_ENSURE((*aValidateIt)->mpParent == this, "wrong parent");
+
+    tSwNumberTreeChildren::const_iterator aIt = mItLastValid;
+
+    // -->
+    // improvement:
+    // - Only one time checked for <mChildren.end()>.
+    // - Less checks for each loop run.
+    // correction:
+    // - consider case that current node isn't counted and isn't the first
+    // child of its parent. In this case the number of last counted child
+    // of the previous node determines the start value for the following
+    // children loop, if all children have to be validated and the first
+    // one doesn't restart the counting.
+    SwNumberTree::tSwNumTreeNumber nTmpNumber( 0 );
+    if (aIt != mChildren.end())
+        nTmpNumber = (*aIt)->mnNumber;
+    else
     {
-        OSL_ENSURE((*aValidateIt)->mpParent == this, "wrong parent");
+        aIt = mChildren.begin();
+        (*aIt)->mbContinueingPreviousSubTree = false;
 
-        tSwNumberTreeChildren::const_iterator aIt = mItLastValid;
-
-        // -->
-        // improvement:
-        // - Only one time checked for <mChildren.end()>.
-        // - Less checks for each loop run.
-        // correction:
-        // - consider case that current node isn't counted and isn't the first
-        // child of its parent. In this case the number of last counted child
-        // of the previous node determines the start value for the following
-        // children loop, if all children have to be validated and the first
-        // one doesn't restart the counting.
-        SwNumberTree::tSwNumTreeNumber nTmpNumber( 0 );
-        if (aIt != mChildren.end())
-            nTmpNumber = (*aIt)->mnNumber;
-        else
+        // determine default start value
+        // consider the case that the first child isn't counted.
+        nTmpNumber = (*aIt)->GetStartValue();
+        if ( !(*aIt)->IsCounted() &&
+             ( !(*aIt)->HasCountedChildren() || (*aIt)->IsPhantom() ) )
         {
-            aIt = mChildren.begin();
-            (*aIt)->mbContinueingPreviousSubTree = false;
+            --nTmpNumber;
+        }
 
-            // determine default start value
-            // consider the case that the first child isn't counted.
-            nTmpNumber = (*aIt)->GetStartValue();
-            if ( !(*aIt)->IsCounted() &&
-                 ( !(*aIt)->HasCountedChildren() || (*aIt)->IsPhantom() ) )
+        // determine special start value for the case that first child
+        // doesn't restart the numbering and the parent node isn't counted
+        // and isn't the first child.
+        const bool bParentCounted( IsCounted() &&
+                                   ( !IsPhantom() ||
+                                     HasPhantomCountedParent() ) );
+        if ( !(*aIt)->IsRestart() &&
+             GetParent() && !bParentCounted )
+        {
+            tSwNumberTreeChildren::const_iterator aParentChildIt =
+                                            GetParent()->GetIterator( this );
+            while ( aParentChildIt != GetParent()->mChildren.begin() )
             {
-                --nTmpNumber;
-            }
-
-            // determine special start value for the case that first child
-            // doesn't restart the numbering and the parent node isn't counted
-            // and isn't the first child.
-            const bool bParentCounted( IsCounted() &&
-                                       ( !IsPhantom() ||
-                                         HasPhantomCountedParent() ) );
-            if ( !(*aIt)->IsRestart() &&
-                 GetParent() && !bParentCounted )
-            {
-                tSwNumberTreeChildren::const_iterator aParentChildIt =
-                                                GetParent()->GetIterator( this );
-                while ( aParentChildIt != GetParent()->mChildren.begin() )
+                --aParentChildIt;
+                SwNumberTreeNode* pPrevNode( *aParentChildIt );
+                if ( pPrevNode->GetChildCount() > 0 )
                 {
-                    --aParentChildIt;
-                    SwNumberTreeNode* pPrevNode( *aParentChildIt );
-                    if ( pPrevNode->GetChildCount() > 0 )
+                    (*aIt)->mbContinueingPreviousSubTree = true;
+                    nTmpNumber = (*(pPrevNode->mChildren.rbegin()))->GetNumber();
+                    if ( (*aIt)->IsCounted() &&
+                         ( !(*aIt)->IsPhantom() ||
+                           (*aIt)->HasPhantomCountedParent() ) )
                     {
-                        (*aIt)->mbContinueingPreviousSubTree = true;
-                        nTmpNumber = (*(pPrevNode->mChildren.rbegin()))->GetNumber();
-                        if ( (*aIt)->IsCounted() &&
-                             ( !(*aIt)->IsPhantom() ||
-                               (*aIt)->HasPhantomCountedParent() ) )
-                        {
-                            ++nTmpNumber;
-                        }
-                        break;
+                        ++nTmpNumber;
                     }
-                    else if ( pPrevNode->IsCounted() )
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        // Previous node has no children and is not counted.
-                        // Thus, next turn and check for the previous node.
-                    }
+                    break;
+                }
+                else if ( pPrevNode->IsCounted() )
+                {
+                    break;
+                }
+                else
+                {
+                    // Previous node has no children and is not counted.
+                    // Thus, next turn and check for the previous node.
                 }
             }
-
-            (*aIt)->mnNumber = nTmpNumber;
         }
 
-        while (aIt != aValidateIt)
-        {
-            ++aIt;
-            (*aIt)->mbContinueingPreviousSubTree = false;
-
-            // --> only for counted nodes the number
-            // has to be adjusted, compared to the previous node.
-            // this condition is hold also for nodes, which restart the numbering.
-            if ( (*aIt)->IsCounted() )
-            {
-                if ((*aIt)->IsRestart())
-                    nTmpNumber = (*aIt)->GetStartValue();
-                else
-                    ++nTmpNumber;
-            }
-
-            (*aIt)->mnNumber = nTmpNumber;
-        }
-
-        SetLastValid(aIt, true);
+        (*aIt)->mnNumber = nTmpNumber;
     }
+
+    while (aIt != aValidateIt)
+    {
+        ++aIt;
+        (*aIt)->mbContinueingPreviousSubTree = false;
+
+        // --> only for counted nodes the number
+        // has to be adjusted, compared to the previous node.
+        // this condition is hold also for nodes, which restart the numbering.
+        if ( (*aIt)->IsCounted() )
+        {
+            if ((*aIt)->IsRestart())
+                nTmpNumber = (*aIt)->GetStartValue();
+            else
+                ++nTmpNumber;
+        }
+
+        (*aIt)->mnNumber = nTmpNumber;
+    }
+
+    SetLastValid(aIt, true);
 }
 
 void SwNumberTreeNode::ValidateContinuous(const SwNumberTreeNode * pNode) const
@@ -640,23 +640,23 @@ void SwNumberTreeNode::RemoveChild(SwNumberTreeNode * pChild)
 
 void SwNumberTreeNode::RemoveMe()
 {
-    if (mpParent)
-    {
-        SwNumberTreeNode * pSavedParent = mpParent;
+    if (!mpParent)
+        return;
 
-        pSavedParent->RemoveChild(this);
+    SwNumberTreeNode * pSavedParent = mpParent;
 
-        while (pSavedParent && pSavedParent->IsPhantom() &&
-               pSavedParent->HasOnlyPhantoms())
-            pSavedParent = pSavedParent->GetParent();
+    pSavedParent->RemoveChild(this);
 
-        if (pSavedParent)
-            pSavedParent->ClearObsoletePhantoms();
+    while (pSavedParent && pSavedParent->IsPhantom() &&
+           pSavedParent->HasOnlyPhantoms())
+        pSavedParent = pSavedParent->GetParent();
+
+    if (pSavedParent)
+        pSavedParent->ClearObsoletePhantoms();
 
 #ifdef DBG_UTIL
-        IsSane(false);
+    IsSane(false);
 #endif
-    }
 }
 
 bool SwNumberTreeNode::IsValid() const

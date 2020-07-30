@@ -154,47 +154,47 @@ void SwAccessibleFrameBase::InvalidateCursorPos_()
         GetMap()->SetCursorContext( xThis );
     }
 
-    if( bOldSelected != bNewSelected )
-    {
-        vcl::Window *pWin = GetWindow();
-        if( pWin && pWin->HasFocus() && bNewSelected )
-            FireStateChangedEvent( AccessibleStateType::FOCUSED, bNewSelected );
-        if( pWin && pWin->HasFocus() && !bNewSelected )
-            FireStateChangedEvent( AccessibleStateType::FOCUSED, bNewSelected );
-        if(bNewSelected)
-        {
-            uno::Reference< XAccessible > xParent( GetWeakParent() );
-            if( xParent.is() )
-            {
-                SwAccessibleContext *pAcc =
-                    static_cast <SwAccessibleContext *>( xParent.get() );
+    if( bOldSelected == bNewSelected )
+        return;
 
-                AccessibleEventObject aEvent;
-                aEvent.EventId = AccessibleEventId::SELECTION_CHANGED;
-                uno::Reference< XAccessible > xChild(this);
-                aEvent.NewValue <<= xChild;
-                pAcc->FireAccessibleEvent( aEvent );
-            }
-        }
+    vcl::Window *pWin = GetWindow();
+    if( pWin && pWin->HasFocus() && bNewSelected )
+        FireStateChangedEvent( AccessibleStateType::FOCUSED, bNewSelected );
+    if( pWin && pWin->HasFocus() && !bNewSelected )
+        FireStateChangedEvent( AccessibleStateType::FOCUSED, bNewSelected );
+    if(!bNewSelected)
+        return;
+
+    uno::Reference< XAccessible > xParent( GetWeakParent() );
+    if( xParent.is() )
+    {
+        SwAccessibleContext *pAcc =
+            static_cast <SwAccessibleContext *>( xParent.get() );
+
+        AccessibleEventObject aEvent;
+        aEvent.EventId = AccessibleEventId::SELECTION_CHANGED;
+        uno::Reference< XAccessible > xChild(this);
+        aEvent.NewValue <<= xChild;
+        pAcc->FireAccessibleEvent( aEvent );
     }
 }
 
 void SwAccessibleFrameBase::InvalidateFocus_()
 {
     vcl::Window *pWin = GetWindow();
-    if( pWin )
+    if( !pWin )
+        return;
+
+    bool bSelected;
+
     {
-        bool bSelected;
-
-        {
-            osl::MutexGuard aGuard( m_Mutex );
-            bSelected = m_bIsSelected;
-        }
-        assert(bSelected && "focus object should be selected");
-
-        FireStateChangedEvent( AccessibleStateType::FOCUSED,
-                               pWin->HasFocus() && bSelected );
+        osl::MutexGuard aGuard( m_Mutex );
+        bSelected = m_bIsSelected;
     }
+    assert(bSelected && "focus object should be selected");
+
+    FireStateChangedEvent( AccessibleStateType::FOCUSED,
+                           pWin->HasFocus() && bSelected );
 }
 
 bool SwAccessibleFrameBase::HasCursor()

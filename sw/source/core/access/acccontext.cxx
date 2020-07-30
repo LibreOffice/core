@@ -302,25 +302,24 @@ void SwAccessibleContext::ScrolledIn()
     ::rtl::Reference< SwAccessibleContext > xParentImpl(
          GetMap()->GetContextImpl( pParent, false ) );
     uno::Reference < XAccessibleContext > xThis( this );
-    if( xParentImpl.is() )
+    if( !xParentImpl.is() )
+        return;
+
+    SetParent( xParentImpl.get() );
+
+    AccessibleEventObject aEvent;
+    aEvent.EventId = AccessibleEventId::CHILD;
+    aEvent.NewValue <<= xThis;
+
+    xParentImpl->FireAccessibleEvent( aEvent );
+
+    if( HasCursor() )
     {
-        SetParent( xParentImpl.get() );
-
-        AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::CHILD;
-        aEvent.NewValue <<= xThis;
-
-        xParentImpl->FireAccessibleEvent( aEvent );
-
-        if( HasCursor() )
+        vcl::Window *pWin = GetWindow();
+        if( pWin && pWin->HasFocus() )
         {
-            vcl::Window *pWin = GetWindow();
-            if( pWin && pWin->HasFocus() )
-            {
-                FireStateChangedEvent( AccessibleStateType::FOCUSED, true );
-            }
+            FireStateChangedEvent( AccessibleStateType::FOCUSED, true );
         }
-
     }
 }
 
@@ -775,19 +774,19 @@ void SAL_CALL SwAccessibleContext::addAccessibleEventListener(
 void SAL_CALL SwAccessibleContext::removeAccessibleEventListener(
             const uno::Reference< XAccessibleEventListener >& xListener )
 {
-    if (xListener.is() && m_nClientId)
+    if (!(xListener.is() && m_nClientId))
+        return;
+
+    SolarMutexGuard aGuard;
+    sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( m_nClientId, xListener );
+    if ( !nListenerCount )
     {
-        SolarMutexGuard aGuard;
-        sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( m_nClientId, xListener );
-        if ( !nListenerCount )
-        {
-            // no listeners anymore
-            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-            // and at least to us not firing any events anymore, in case somebody calls
-            // NotifyAccessibleEvent, again
-            comphelper::AccessibleEventNotifier::revokeClient( m_nClientId );
-            m_nClientId = 0;
-        }
+        // no listeners anymore
+        // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
+        // and at least to us not firing any events anymore, in case somebody calls
+        // NotifyAccessibleEvent, again
+        comphelper::AccessibleEventNotifier::revokeClient( m_nClientId );
+        m_nClientId = 0;
     }
 }
 
@@ -1044,18 +1043,18 @@ void SwAccessibleContext::ScrolledInShape( ::accessibility::AccessibleShape *pAc
     aEvent.NewValue <<= xAcc;
     FireAccessibleEvent( aEvent );
 
-    if( pAccImpl->GetState( AccessibleStateType::FOCUSED ) )
-    {
-        vcl::Window *pWin = GetWindow();
-        if( pWin && pWin->HasFocus() )
-        {
-            AccessibleEventObject aStateChangedEvent;
-            aStateChangedEvent.EventId = AccessibleEventId::STATE_CHANGED;
-            aStateChangedEvent.NewValue <<= AccessibleStateType::FOCUSED;
-            aStateChangedEvent.Source = xAcc;
+    if( !pAccImpl->GetState( AccessibleStateType::FOCUSED ) )
+        return;
 
-            FireAccessibleEvent( aStateChangedEvent );
-        }
+    vcl::Window *pWin = GetWindow();
+    if( pWin && pWin->HasFocus() )
+    {
+        AccessibleEventObject aStateChangedEvent;
+        aStateChangedEvent.EventId = AccessibleEventId::STATE_CHANGED;
+        aStateChangedEvent.NewValue <<= AccessibleStateType::FOCUSED;
+        aStateChangedEvent.Source = xAcc;
+
+        FireAccessibleEvent( aStateChangedEvent );
     }
 }
 
@@ -1310,43 +1309,43 @@ void SwAccessibleContext::InvalidateFocus()
 // #i27301# - use new type definition for <_nStates>
 void SwAccessibleContext::InvalidateStates( AccessibleStates _nStates )
 {
-    if( GetMap() )
+    if( !GetMap() )
+        return;
+
+    SwViewShell *pVSh = GetMap()->GetShell();
+    if( pVSh )
     {
-        SwViewShell *pVSh = GetMap()->GetShell();
-        if( pVSh )
+        if( _nStates & AccessibleStates::EDITABLE )
         {
-            if( _nStates & AccessibleStates::EDITABLE )
+            bool bIsOldEditableState;
+            bool bIsNewEditableState = IsEditable( pVSh );
             {
-                bool bIsOldEditableState;
-                bool bIsNewEditableState = IsEditable( pVSh );
-                {
-                    osl::MutexGuard aGuard( m_Mutex );
-                    bIsOldEditableState = m_isEditableState;
-                    m_isEditableState = bIsNewEditableState;
-                }
-
-                if( bIsOldEditableState != bIsNewEditableState )
-                    FireStateChangedEvent( AccessibleStateType::EDITABLE,
-                                           bIsNewEditableState  );
+                osl::MutexGuard aGuard( m_Mutex );
+                bIsOldEditableState = m_isEditableState;
+                m_isEditableState = bIsNewEditableState;
             }
-            if( _nStates & AccessibleStates::OPAQUE )
-            {
-                bool bIsOldOpaqueState;
-                bool bIsNewOpaqueState = IsOpaque( pVSh );
-                {
-                    osl::MutexGuard aGuard( m_Mutex );
-                    bIsOldOpaqueState = m_isOpaqueState;
-                    m_isOpaqueState = bIsNewOpaqueState;
-                }
 
-                if( bIsOldOpaqueState != bIsNewOpaqueState )
-                    FireStateChangedEvent( AccessibleStateType::OPAQUE,
-                                           bIsNewOpaqueState  );
-            }
+            if( bIsOldEditableState != bIsNewEditableState )
+                FireStateChangedEvent( AccessibleStateType::EDITABLE,
+                                       bIsNewEditableState  );
         }
+        if( _nStates & AccessibleStates::OPAQUE )
+        {
+            bool bIsOldOpaqueState;
+            bool bIsNewOpaqueState = IsOpaque( pVSh );
+            {
+                osl::MutexGuard aGuard( m_Mutex );
+                bIsOldOpaqueState = m_isOpaqueState;
+                m_isOpaqueState = bIsNewOpaqueState;
+            }
 
-        InvalidateChildrenStates( GetFrame(), _nStates );
+            if( bIsOldOpaqueState != bIsNewOpaqueState )
+                FireStateChangedEvent( AccessibleStateType::OPAQUE,
+                                       bIsNewOpaqueState  );
+        }
     }
+
+    InvalidateChildrenStates( GetFrame(), _nStates );
 }
 
 void SwAccessibleContext::InvalidateRelation( sal_uInt16 nType )
