@@ -22,6 +22,29 @@
       "revId": "231e1e416c039d1f9724962a89cf0573a3db48a2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ee08d13_00035a8b",
+        "filename": "basic/source/sbx/sbxbase.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-07-30T10:48:21Z",
+      "side": 1,
+      "message": "This has no effect (and apparently doesn\u0027t match the preceding comment?).",
+      "range": {
+        "startLine": 53,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 27
+      },
+      "revId": "231e1e416c039d1f9724962a89cf0573a3db48a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
