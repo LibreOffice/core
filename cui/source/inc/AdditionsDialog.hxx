@@ -13,9 +13,18 @@
 #include <vcl/svapp.hxx>
 #include <salhelper/thread.hxx>
 #include <rtl/ref.hxx>
-#include <vcl/timer.hxx>
 #include <vcl/weld.hxx>
+
+// Detect changes on the UI
+#include <vcl/timer.hxx>
+
+// Search and filter
 #include <i18nutil/searchopt.hxx>
+
+// Extension Manager Connection
+#include <com/sun/star/deployment/XExtensionManager.hpp>
+#include <com/sun/star/deployment/ExtensionManager.hpp>
+#include <com/sun/star/deployment/XPackageManager.hpp>
 
 class AdditionsDialog;
 class SearchAndParseThread;
@@ -40,6 +49,7 @@ struct AdditionsItem
         , m_xLabelDownloadNumber(m_xBuilder->weld_label("labelDownloadNumber"))
         , m_xButtonShowMore(m_xBuilder->weld_button("buttonShowMore"))
         , m_pParentDialog(nullptr)
+        , m_sDownloadURL("")
     {
         m_xButtonShowMore->connect_clicked(LINK(this, AdditionsItem, ShowMoreHdl));
     }
@@ -63,6 +73,7 @@ struct AdditionsItem
     std::unique_ptr<weld::Label> m_xLabelDownloadNumber;
     std::unique_ptr<weld::Button> m_xButtonShowMore;
     AdditionsDialog* m_pParentDialog;
+    OUString m_sDownloadURL;
 };
 
 struct AdditionInfo
@@ -88,6 +99,8 @@ class AdditionsDialog : public weld::GenericDialogController
 {
 private:
     Timer m_aSearchDataTimer;
+
+    css::uno::Reference<css::deployment::XExtensionManager> m_xExtensionManager;
 
     DECL_LINK(SearchUpdateHdl, weld::Entry&, void);
     DECL_LINK(ImplUpdateDataHdl, Timer*, void);
@@ -116,6 +129,8 @@ public:
 
     AdditionsDialog(weld::Window* pParent, const OUString& sAdditionsTag);
     ~AdditionsDialog() override;
+    css::uno::Sequence<css::uno::Sequence<css::uno::Reference<css::deployment::XPackage>>>
+    getInstalledExtensions();
     void SetProgress(const OUString& rProgress);
     void ClearList();
 };
@@ -127,18 +142,20 @@ private:
     std::atomic<bool> m_bExecute;
     bool m_bIsFirstLoading;
 
-    virtual ~SearchAndParseThread() override;
-    virtual void execute() override;
-
-public:
-    SearchAndParseThread(AdditionsDialog* pDialog, const bool& bIsFirstLoading);
-
     void LoadInfo(const AdditionInfo& additionInfo, AdditionsItem& rCurrentItem);
     void Search();
 
     void Append(const AdditionInfo& additionInfo);
 
     void AppendAllExtensions();
+
+    void CheckInstalledExtensions();
+
+    virtual ~SearchAndParseThread() override;
+    virtual void execute() override;
+
+public:
+    SearchAndParseThread(AdditionsDialog* pDialog, const bool& bIsFirstLoading);
 
     void StopExecution() { m_bExecute = false; }
 };
