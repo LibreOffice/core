@@ -2287,7 +2287,13 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     {
         if ( m_pImpl->IsDiscardHeaderFooter() )
             break;
-
+        //tdf112342: Break before images as well, if there are page break
+        if (m_pImpl->isBreakDeferred(BreakType::PAGE_BREAK))
+        {
+            m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH)
+                ->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_PAGE_BEFORE));
+            m_pImpl->clearDeferredBreak(PAGE_BREAK);
+        }
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         if( pProperties )
         {

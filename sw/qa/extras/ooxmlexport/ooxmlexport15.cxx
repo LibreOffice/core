@@ -295,6 +295,21 @@ DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorHeightFromBottomMarginHasFooter,
     assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "height", "1147");
 }
 
+DECLARE_OOXMLIMPORT_TEST(TestTdf112342, "tdf112342.docx")
+{
+    //Get the last para
+    uno::Reference<text::XTextRange> xPara = getParagraph(3);
+    auto xCur = xPara->getText()->createTextCursor();
+    //Go to the end of it
+    xCur->gotoEnd(false);
+    //And let's remove the last 2 chars (the last para with its char).
+    xCur->goLeft(2, true);
+    xCur->setString("");
+
+    //If the second paragraph on the second page, this will be passed.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Page break does not match", 2, getPages());
+}
+
 DECLARE_OOXMLIMPORT_TEST(TestTdf132483, "tdf132483.docx")
 {
     uno::Reference<beans::XPropertySet> xOLEProps(getShape(1), uno::UNO_QUERY_THROW);
