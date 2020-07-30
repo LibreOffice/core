@@ -27,6 +27,7 @@
 #include <vcl/svapp.hxx>     //Application::
 #include <vcl/virdev.hxx>    //VirtualDevice
 #include <vcl/weld.hxx>
+#include <unotools/resmgr.hxx> //Translate
 
 #include <config_buildid.h> //EXTRA_BUILDID
 #include <dialmgr.hxx>      //CuiResId
@@ -169,7 +170,7 @@ OUString AboutDialog::GetBuildString() {
   return sBuildId;
 }
 
-OUString AboutDialog::GetLocaleString() {
+OUString AboutDialog::GetLocaleString(const bool bLocalized) {
 
   OUString sLocaleStr;
 
@@ -190,7 +191,12 @@ OUString AboutDialog::GetLocaleString() {
 
   OUString aUILocaleStr =
       Application::GetSettings().GetUILanguageTag().getBcp47();
-  OUString sUILocaleStr(CuiResId(RID_SVXSTR_ABOUT_UILOCALE));
+  OUString sUILocaleStr;
+  if (bLocalized)
+     sUILocaleStr = CuiResId(RID_SVXSTR_ABOUT_UILOCALE);
+  else
+     sUILocaleStr = Translate::get(RID_SVXSTR_ABOUT_UILOCALE, Translate::Create("cui", LanguageTag("en-US")));
+
   if (sUILocaleStr.indexOf("$LOCALE") == -1) {
     SAL_WARN("cui.dialogs", "translated uilocale string in translations "
                             "doesn't contain $LOCALE placeholder");
@@ -250,7 +256,8 @@ OUString AboutDialog::GetCopyrightString() {
   return aCopyrightString;
 }
 
-//special labels to comply with previous version info
+// special labels to comply with previous version info
+// untranslated English for QA
 IMPL_LINK_NOARG(AboutDialog, HandleClick, weld::Button &, void) {
   css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
       css::datatransfer::clipboard::SystemClipboard::create(
@@ -259,8 +266,8 @@ IMPL_LINK_NOARG(AboutDialog, HandleClick, weld::Button &, void) {
   OUString sInfo = "Version: " + m_pVersionLabel->get_label() + "\n" // version
                    "Build ID: " + GetBuildString() + "\n" + // build id
                    Application::GetHWOSConfInfo(0,false) + "\n" // env+UI
-                   "Locale: " + m_pLocaleLabel->get_label() + "\n" + // locale
-                   m_pMiscLabel->get_label(); // misc
+                   "Locale: " + GetLocaleString(false) + "\n" + // locale
+                   GetMiscString(); // misc
 
   vcl::unohelper::TextDataObject::CopyStringTo(sInfo, xClipboard);
 }
