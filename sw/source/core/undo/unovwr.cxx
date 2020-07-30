@@ -448,26 +448,26 @@ void SwUndoTransliterate::AddChanges( SwTextNode& rTNd,
 void UndoTransliterate_Data::SetChangeAtNode( SwDoc& rDoc )
 {
     SwTextNode* pTNd = rDoc.GetNodes()[ nNdIdx ]->GetTextNode();
-    if( pTNd )
-    {
-        Sequence <sal_Int32> aOffsets( pOffsets ? pOffsets->getLength() : nLen );
-        if( pOffsets )
-            aOffsets = *pOffsets;
-        else
-        {
-            sal_Int32* p = aOffsets.getArray();
-            for( sal_Int32 n = 0; n < nLen; ++n, ++p )
-                *p = n + nStart;
-        }
-        pTNd->ReplaceTextOnly( nStart, nLen, sText, aOffsets );
+    if( !pTNd )
+        return;
 
-        if( pHistory )
-        {
-            if( pTNd->GetpSwpHints() )
-                pTNd->ClearSwpHintsArr( false );
-            pHistory->TmpRollback( &rDoc, 0, false );
-            pHistory->SetTmpEnd( pHistory->Count() );
-        }
+    Sequence <sal_Int32> aOffsets( pOffsets ? pOffsets->getLength() : nLen );
+    if( pOffsets )
+        aOffsets = *pOffsets;
+    else
+    {
+        sal_Int32* p = aOffsets.getArray();
+        for( sal_Int32 n = 0; n < nLen; ++n, ++p )
+            *p = n + nStart;
+    }
+    pTNd->ReplaceTextOnly( nStart, nLen, sText, aOffsets );
+
+    if( pHistory )
+    {
+        if( pTNd->GetpSwpHints() )
+            pTNd->ClearSwpHintsArr( false );
+        pHistory->TmpRollback( &rDoc, 0, false );
+        pHistory->SetTmpEnd( pHistory->Count() );
     }
 }
 

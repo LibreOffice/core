@@ -62,31 +62,31 @@ SwUndoFormatAttrHelper::SwUndoFormatAttrHelper( SwFormat& rFormat, bool bSvDrwPt
 
 void SwUndoFormatAttrHelper::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
-    if( pOld ) {
-        if ( pOld->Which() == RES_OBJECTDYING ) {
-            CheckRegistration( pOld );
-        } else if ( pNew ) {
-            const SwDoc& rDoc = *static_cast<SwFormat*>(GetRegisteredInNonConst())->GetDoc();
-            if( POOLATTR_END >= pOld->Which() ) {
-                if ( GetUndo() ) {
-                    m_pUndo->PutAttr( *pOld, rDoc );
-                } else {
-                    m_pUndo.reset( new SwUndoFormatAttr( *pOld,
-                                                      *static_cast<SwFormat*>(GetRegisteredInNonConst()), m_bSaveDrawPt ) );
+    if( !pOld )        return;
+
+    if ( pOld->Which() == RES_OBJECTDYING ) {
+        CheckRegistration( pOld );
+    } else if ( pNew ) {
+        const SwDoc& rDoc = *static_cast<SwFormat*>(GetRegisteredInNonConst())->GetDoc();
+        if( POOLATTR_END >= pOld->Which() ) {
+            if ( GetUndo() ) {
+                m_pUndo->PutAttr( *pOld, rDoc );
+            } else {
+                m_pUndo.reset( new SwUndoFormatAttr( *pOld,
+                                                  *static_cast<SwFormat*>(GetRegisteredInNonConst()), m_bSaveDrawPt ) );
+            }
+        } else if ( RES_ATTRSET_CHG == pOld->Which() ) {
+            if ( GetUndo() ) {
+                SfxItemIter aIter(
+                    *static_cast<const SwAttrSetChg*>(pOld)->GetChgSet() );
+                for (auto pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+                {
+                    m_pUndo->PutAttr( *pItem, rDoc );
                 }
-            } else if ( RES_ATTRSET_CHG == pOld->Which() ) {
-                if ( GetUndo() ) {
-                    SfxItemIter aIter(
-                        *static_cast<const SwAttrSetChg*>(pOld)->GetChgSet() );
-                    for (auto pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
-                    {
-                        m_pUndo->PutAttr( *pItem, rDoc );
-                    }
-                } else {
-                    m_pUndo.reset( new SwUndoFormatAttr(
-                                       *static_cast<const SwAttrSetChg*>(pOld)->GetChgSet(),
-                                       *static_cast<SwFormat*>(GetRegisteredInNonConst()), m_bSaveDrawPt ) );
-                }
+            } else {
+                m_pUndo.reset( new SwUndoFormatAttr(
+                                   *static_cast<const SwAttrSetChg*>(pOld)->GetChgSet(),
+                                   *static_cast<SwFormat*>(GetRegisteredInNonConst()), m_bSaveDrawPt ) );
             }
         }
     }
@@ -180,19 +180,19 @@ void SwUndoFormatAttr::UndoImpl(::sw::UndoRedoContext & rContext)
         }
     }
 
-    if ( !bAnchorAttrRestored ) {
-        SwUndoFormatAttrHelper aTmp( *pFormat, m_bSaveDrawPt );
-        pFormat->SetFormatAttr( *m_pOldSet );
-        if ( aTmp.GetUndo() ) {
-            // transfer ownership of helper object's old set
-            m_pOldSet = std::move(aTmp.GetUndo()->m_pOldSet);
-        } else {
-            m_pOldSet->ClearItem();
-        }
+    if ( bAnchorAttrRestored )        return;
 
-        if ( RES_FLYFRMFMT == m_nFormatWhich || RES_DRAWFRMFMT == m_nFormatWhich ) {
-            rContext.SetSelections(static_cast<SwFrameFormat*>(pFormat), nullptr);
-        }
+    SwUndoFormatAttrHelper aTmp( *pFormat, m_bSaveDrawPt );
+    pFormat->SetFormatAttr( *m_pOldSet );
+    if ( aTmp.GetUndo() ) {
+        // transfer ownership of helper object's old set
+        m_pOldSet = std::move(aTmp.GetUndo()->m_pOldSet);
+    } else {
+        m_pOldSet->ClearItem();
+    }
+
+    if ( RES_FLYFRMFMT == m_nFormatWhich || RES_DRAWFRMFMT == m_nFormatWhich ) {
+        rContext.SetSelections(static_cast<SwFrameFormat*>(pFormat), nullptr);
     }
 }
 

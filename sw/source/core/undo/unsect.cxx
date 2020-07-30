@@ -100,20 +100,20 @@ SwUndoInsSection::SwUndoInsSection(
     if( !FillSaveData( rPam, *m_pRedlineSaveData, false ))
             m_pRedlineSaveData.reset();
 
-    if( !rPam.HasMark() )
+    if( rPam.HasMark() )
+        return;
+
+    const SwContentNode* pCNd = rPam.GetPoint()->nNode.GetNode().GetContentNode();
+    if( pCNd && pCNd->HasSwAttrSet() && (
+        !rPam.GetPoint()->nContent.GetIndex() ||
+        rPam.GetPoint()->nContent.GetIndex() == pCNd->Len() ))
     {
-        const SwContentNode* pCNd = rPam.GetPoint()->nNode.GetNode().GetContentNode();
-        if( pCNd && pCNd->HasSwAttrSet() && (
-            !rPam.GetPoint()->nContent.GetIndex() ||
-            rPam.GetPoint()->nContent.GetIndex() == pCNd->Len() ))
+        SfxItemSet aBrkSet( rDoc.GetAttrPool(), aBreakSetRange );
+        aBrkSet.Put( *pCNd->GetpSwAttrSet() );
+        if( aBrkSet.Count() )
         {
-            SfxItemSet aBrkSet( rDoc.GetAttrPool(), aBreakSetRange );
-            aBrkSet.Put( *pCNd->GetpSwAttrSet() );
-            if( aBrkSet.Count() )
-            {
-                m_pHistory.reset( new SwHistory );
-                m_pHistory->CopyFormatAttr( aBrkSet, pCNd->GetIndex() );
-            }
+            m_pHistory.reset( new SwHistory );
+            m_pHistory->CopyFormatAttr( aBrkSet, pCNd->GetIndex() );
         }
     }
 }
@@ -486,26 +486,26 @@ void SwUndoUpdateSection::UndoImpl(::sw::UndoRedoContext & rContext)
     }
     m_pAttrSet = std::move(pCur);
 
-    if (!m_bOnlyAttrChanged)
+    if (m_bOnlyAttrChanged)
+        return;
+
+    const bool bUpdate =
+           (!rNdSect.IsLinkType() && m_pSectionData->IsLinkType())
+        || (    !m_pSectionData->GetLinkFileName().isEmpty()
+            &&  (m_pSectionData->GetLinkFileName() !=
+                    rNdSect.GetLinkFileName()));
+
+    // swap stored section data with live section data
+    SwSectionData *const pOld( new SwSectionData(rNdSect) );
+    rNdSect.SetSectionData(*m_pSectionData);
+    m_pSectionData.reset(pOld);
+
+    if( bUpdate )
+        rNdSect.CreateLink( LinkCreateType::Update );
+    else if( SectionType::Content == rNdSect.GetType() && rNdSect.IsConnected() )
     {
-        const bool bUpdate =
-               (!rNdSect.IsLinkType() && m_pSectionData->IsLinkType())
-            || (    !m_pSectionData->GetLinkFileName().isEmpty()
-                &&  (m_pSectionData->GetLinkFileName() !=
-                        rNdSect.GetLinkFileName()));
-
-        // swap stored section data with live section data
-        SwSectionData *const pOld( new SwSectionData(rNdSect) );
-        rNdSect.SetSectionData(*m_pSectionData);
-        m_pSectionData.reset(pOld);
-
-        if( bUpdate )
-            rNdSect.CreateLink( LinkCreateType::Update );
-        else if( SectionType::Content == rNdSect.GetType() && rNdSect.IsConnected() )
-        {
-            rNdSect.Disconnect();
-            rDoc.getIDocumentLinksAdministration().GetLinkManager().Remove( &rNdSect.GetBaseLink() );
-        }
+        rNdSect.Disconnect();
+        rDoc.getIDocumentLinksAdministration().GetLinkManager().Remove( &rNdSect.GetBaseLink() );
     }
 }
 

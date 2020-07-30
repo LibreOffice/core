@@ -135,31 +135,31 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, bool bScanFlys,
 
     // Fill m_FlyUndos with flys anchored to first and last paragraphs
 
-    if( bScanFlys)
+    if( !bScanFlys)
+        return;
+
+    // than collect all new Flys
+    SwDoc* pDoc = rPam.GetDoc();
+    const size_t nArrLen = pDoc->GetSpzFrameFormats()->size();
+    for( size_t n = 0; n < nArrLen; ++n )
     {
-        // than collect all new Flys
-        SwDoc* pDoc = rPam.GetDoc();
-        const size_t nArrLen = pDoc->GetSpzFrameFormats()->size();
-        for( size_t n = 0; n < nArrLen; ++n )
+        SwFrameFormat* pFormat = (*pDoc->GetSpzFrameFormats())[n];
+        SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();
+        if (IsCreateUndoForNewFly(*pAnchor, m_nSttNode, m_nEndNode))
         {
-            SwFrameFormat* pFormat = (*pDoc->GetSpzFrameFormats())[n];
-            SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();
-            if (IsCreateUndoForNewFly(*pAnchor, m_nSttNode, m_nEndNode))
+            std::vector<SwFrameFormat*>::iterator it;
+            if( !m_pFrameFormats ||
+                m_pFrameFormats->end() == ( it = std::find( m_pFrameFormats->begin(), m_pFrameFormats->end(), pFormat ) ) )
             {
-                std::vector<SwFrameFormat*>::iterator it;
-                if( !m_pFrameFormats ||
-                    m_pFrameFormats->end() == ( it = std::find( m_pFrameFormats->begin(), m_pFrameFormats->end(), pFormat ) ) )
-                {
-                    std::shared_ptr<SwUndoInsLayFormat> const pFlyUndo =
-                        std::make_shared<SwUndoInsLayFormat>(pFormat, 0, 0);
-                    m_FlyUndos.push_back(pFlyUndo);
-                }
-                else
-                    m_pFrameFormats->erase( it );
+                std::shared_ptr<SwUndoInsLayFormat> const pFlyUndo =
+                    std::make_shared<SwUndoInsLayFormat>(pFormat, 0, 0);
+                m_FlyUndos.push_back(pFlyUndo);
             }
+            else
+                m_pFrameFormats->erase( it );
         }
-        m_pFrameFormats.reset();
     }
+    m_pFrameFormats.reset();
 }
 
 /** This is not the same as IsDestroyFrameAnchoredAtChar()
@@ -323,46 +323,46 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
 
     SwNodeIndex& rIdx = rPam.GetPoint()->nNode;
     SwTextNode* pTextNode = rIdx.GetNode().GetTextNode();
-    if( pTextNode )
+    if( !pTextNode )
+        return;
+
+    if( !m_pTextFormatColl ) // if 0 than it's no TextNode -> delete
     {
-        if( !m_pTextFormatColl ) // if 0 than it's no TextNode -> delete
+        SwNodeIndex aDelIdx( rIdx );
+        assert(0 < m_nDeleteTextNodes && m_nDeleteTextNodes < 3);
+        for (int i = 0; i < m_nDeleteTextNodes; ++i)
         {
-            SwNodeIndex aDelIdx( rIdx );
-            assert(0 < m_nDeleteTextNodes && m_nDeleteTextNodes < 3);
-            for (int i = 0; i < m_nDeleteTextNodes; ++i)
-            {
-                rPam.Move(fnMoveForward, GoInNode);
-            }
-            rPam.DeleteMark();
-
-            for (int i = 0; i < m_nDeleteTextNodes; ++i)
-            {
-                RemoveIdxRel(aDelIdx.GetIndex() + i, *rPam.GetPoint());
-            }
-
-            rDoc.GetNodes().Delete( aDelIdx, m_nDeleteTextNodes );
+            rPam.Move(fnMoveForward, GoInNode);
         }
-        else
+        rPam.DeleteMark();
+
+        for (int i = 0; i < m_nDeleteTextNodes; ++i)
         {
-            if( bJoinNext && pTextNode->CanJoinNext())
-            {
-                {
-                    RemoveIdxRel( rIdx.GetIndex()+1, SwPosition( rIdx,
-                        SwIndex( pTextNode, pTextNode->GetText().getLength() )));
-                }
-                pTextNode->JoinNext();
-            }
-            // reset all text attributes in the paragraph!
-            pTextNode->RstTextAttr( SwIndex(pTextNode, 0), pTextNode->Len(), 0, nullptr, true );
-
-            pTextNode->ResetAllAttr();
-
-            if (rDoc.GetTextFormatColls()->IsAlive(m_pTextFormatColl))
-                m_pTextFormatColl = static_cast<SwTextFormatColl*>(pTextNode->ChgFormatColl( m_pTextFormatColl )) ;
-
-            m_pHistory->SetTmpEnd( m_nSetPos );
-            m_pHistory->TmpRollback(&rDoc, 0, false);
+            RemoveIdxRel(aDelIdx.GetIndex() + i, *rPam.GetPoint());
         }
+
+        rDoc.GetNodes().Delete( aDelIdx, m_nDeleteTextNodes );
+    }
+    else
+    {
+        if( bJoinNext && pTextNode->CanJoinNext())
+        {
+            {
+                RemoveIdxRel( rIdx.GetIndex()+1, SwPosition( rIdx,
+                    SwIndex( pTextNode, pTextNode->GetText().getLength() )));
+            }
+            pTextNode->JoinNext();
+        }
+        // reset all text attributes in the paragraph!
+        pTextNode->RstTextAttr( SwIndex(pTextNode, 0), pTextNode->Len(), 0, nullptr, true );
+
+        pTextNode->ResetAllAttr();
+
+        if (rDoc.GetTextFormatColls()->IsAlive(m_pTextFormatColl))
+            m_pTextFormatColl = static_cast<SwTextFormatColl*>(pTextNode->ChgFormatColl( m_pTextFormatColl )) ;
+
+        m_pHistory->SetTmpEnd( m_nSetPos );
+        m_pHistory->TmpRollback(&rDoc, 0, false);
     }
 }
 

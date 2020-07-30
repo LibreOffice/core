@@ -120,27 +120,27 @@ static void DelFullParaMoveFrames(SwDoc & rDoc, SwUndRng const& rRange,
     SwTextNode * pFirstMergedDeletedTextNode(nullptr);
     SwTextNode *const pNextNode = FindFirstAndNextNode(rDoc, rRange,
             rRedlineSaveData, pFirstMergedDeletedTextNode);
-    if (pNextNode)
+    if (!pNextNode)
+        return;
+
+    std::vector<SwTextFrame*> frames;
+    SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pFirstMergedDeletedTextNode);
+    for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
     {
-        std::vector<SwTextFrame*> frames;
-        SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pFirstMergedDeletedTextNode);
-        for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+        if (pFrame->getRootFrame()->IsHideRedlines())
         {
-            if (pFrame->getRootFrame()->IsHideRedlines())
-            {
-                assert(pFrame->GetMergedPara());
-                assert(pFrame->GetMergedPara()->pFirstNode == pFirstMergedDeletedTextNode);
-                assert(pNextNode->GetIndex() <= pFrame->GetMergedPara()->pLastNode->GetIndex());
-                frames.push_back(pFrame);
-            }
+            assert(pFrame->GetMergedPara());
+            assert(pFrame->GetMergedPara()->pFirstNode == pFirstMergedDeletedTextNode);
+            assert(pNextNode->GetIndex() <= pFrame->GetMergedPara()->pLastNode->GetIndex());
+            frames.push_back(pFrame);
         }
-        for (SwTextFrame *const pFrame : frames)
-        {
-            // sw_redlinehide: don't need FrameMode::Existing here
-            // because everything from pNextNode onwards is already
-            // correctly hidden
-            pFrame->RegisterToNode(*pNextNode, true);
-        }
+    }
+    for (SwTextFrame *const pFrame : frames)
+    {
+        // sw_redlinehide: don't need FrameMode::Existing here
+        // because everything from pNextNode onwards is already
+        // correctly hidden
+        pFrame->RegisterToNode(*pNextNode, true);
     }
 }
 
@@ -818,24 +818,24 @@ SwRewriter SwUndoDelete::GetRewriter() const
 // Every object, anchored "AtContent" will be reanchored at rPos
 static void lcl_ReAnchorAtContentFlyFrames( const SwFrameFormats& rSpzArr, SwPosition &rPos, sal_uLong nOldIdx )
 {
-    if( !rSpzArr.empty() )
+    if( rSpzArr.empty() )
+        return;
+
+    SwFlyFrameFormat* pFormat;
+    const SwFormatAnchor* pAnchor;
+    const SwPosition* pAPos;
+    for( size_t n = 0; n < rSpzArr.size(); ++n )
     {
-        SwFlyFrameFormat* pFormat;
-        const SwFormatAnchor* pAnchor;
-        const SwPosition* pAPos;
-        for( size_t n = 0; n < rSpzArr.size(); ++n )
+        pFormat = static_cast<SwFlyFrameFormat*>(rSpzArr[n]);
+        pAnchor = &pFormat->GetAnchor();
+        if (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_PARA)
         {
-            pFormat = static_cast<SwFlyFrameFormat*>(rSpzArr[n]);
-            pAnchor = &pFormat->GetAnchor();
-            if (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_PARA)
+            pAPos =  pAnchor->GetContentAnchor();
+            if( pAPos && nOldIdx == pAPos->nNode.GetIndex() )
             {
-                pAPos =  pAnchor->GetContentAnchor();
-                if( pAPos && nOldIdx == pAPos->nNode.GetIndex() )
-                {
-                    SwFormatAnchor aAnch( *pAnchor );
-                    aAnch.SetAnchor( &rPos );
-                    pFormat->SetFormatAttr( aAnch );
-                }
+                SwFormatAnchor aAnch( *pAnchor );
+                aAnch.SetAnchor( &rPos );
+                pFormat->SetFormatAttr( aAnch );
             }
         }
     }

@@ -69,56 +69,56 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
         m_bExchange = false;
     if( ( rOldHead.IsActive() || rOldFoot.IsActive() ) && ( rOldDesc.IsFirstShared() != rNewDesc.IsFirstShared() ) )
         m_bExchange = false;
-    if( m_bExchange )
-    {
-        if( rNewHead.IsActive() )
-        {
-            SwFrameFormat* pFormat = new SwFrameFormat( *rNewHead.GetHeaderFormat() );
-            // The Ctor of this object will remove the duplicate!
-            SwFormatHeader aFormatHeader(pFormat);
-            (void)aFormatHeader;
-            if (!rNewDesc.IsHeaderShared())
-            {
-                pFormat = new SwFrameFormat( *rNewDesc.GetLeft().GetHeader().GetHeaderFormat() );
-                // The Ctor of this object will remove the duplicate!
-                SwFormatHeader aLeftHeader(pFormat);
-                (void)aLeftHeader;
-            }
-            if (!rNewDesc.IsFirstShared())
-            {
-                pFormat = new SwFrameFormat( *rNewDesc.GetFirstMaster().GetHeader().GetHeaderFormat() );
-                // The Ctor of this object will remove the duplicate!
-                SwFormatHeader aFirstHeader(pFormat);
-                (void)aFirstHeader;
-            }
-        }
-        // Same procedure for footers...
-        if( rNewFoot.IsActive() )
-        {
-            SwFrameFormat* pFormat = new SwFrameFormat( *rNewFoot.GetFooterFormat() );
-            // The Ctor of this object will remove the duplicate!
-            SwFormatFooter aFormatFooter(pFormat);
-            (void)aFormatFooter;
-            if (!rNewDesc.IsFooterShared())
-            {
-                pFormat = new SwFrameFormat( *rNewDesc.GetLeft().GetFooter().GetFooterFormat() );
-                // The Ctor of this object will remove the duplicate!
-                SwFormatFooter aLeftFooter(pFormat);
-                (void)aLeftFooter;
-            }
-            if (!rNewDesc.IsFirstShared())
-            {
-                pFormat = new SwFrameFormat( *rNewDesc.GetFirstMaster().GetFooter().GetFooterFormat() );
-                // The Ctor of this object will remove the duplicate!
-                SwFormatFooter aFirstFooter(pFormat);
-                (void)aFirstFooter;
-            }
-        }
+    if( !m_bExchange )
+        return;
 
-        // After this exchange method the old page description will point to zero,
-        // the new one will point to the node position of the original content nodes.
-        ExchangeContentNodes( m_aOld.m_PageDesc, m_aNew.m_PageDesc );
+    if( rNewHead.IsActive() )
+    {
+        SwFrameFormat* pFormat = new SwFrameFormat( *rNewHead.GetHeaderFormat() );
+        // The Ctor of this object will remove the duplicate!
+        SwFormatHeader aFormatHeader(pFormat);
+        (void)aFormatHeader;
+        if (!rNewDesc.IsHeaderShared())
+        {
+            pFormat = new SwFrameFormat( *rNewDesc.GetLeft().GetHeader().GetHeaderFormat() );
+            // The Ctor of this object will remove the duplicate!
+            SwFormatHeader aLeftHeader(pFormat);
+            (void)aLeftHeader;
+        }
+        if (!rNewDesc.IsFirstShared())
+        {
+            pFormat = new SwFrameFormat( *rNewDesc.GetFirstMaster().GetHeader().GetHeaderFormat() );
+            // The Ctor of this object will remove the duplicate!
+            SwFormatHeader aFirstHeader(pFormat);
+            (void)aFirstHeader;
+        }
     }
+    // Same procedure for footers...
+    if( rNewFoot.IsActive() )
+    {
+        SwFrameFormat* pFormat = new SwFrameFormat( *rNewFoot.GetFooterFormat() );
+        // The Ctor of this object will remove the duplicate!
+        SwFormatFooter aFormatFooter(pFormat);
+        (void)aFormatFooter;
+        if (!rNewDesc.IsFooterShared())
+        {
+            pFormat = new SwFrameFormat( *rNewDesc.GetLeft().GetFooter().GetFooterFormat() );
+            // The Ctor of this object will remove the duplicate!
+            SwFormatFooter aLeftFooter(pFormat);
+            (void)aLeftFooter;
+        }
+        if (!rNewDesc.IsFirstShared())
+        {
+            pFormat = new SwFrameFormat( *rNewDesc.GetFirstMaster().GetFooter().GetFooterFormat() );
+            // The Ctor of this object will remove the duplicate!
+            SwFormatFooter aFirstFooter(pFormat);
+            (void)aFirstFooter;
+        }
+    }
+
+    // After this exchange method the old page description will point to zero,
+    // the new one will point to the node position of the original content nodes.
+    ExchangeContentNodes( m_aOld.m_PageDesc, m_aNew.m_PageDesc );
 }
 
 SwUndoPageDesc::~SwUndoPageDesc()

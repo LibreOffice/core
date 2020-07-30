@@ -105,72 +105,72 @@ static void lcl_SendRemoveToUno( SwFormat& rFormat )
 static void lcl_SaveAnchor( SwFrameFormat* pFormat, sal_uLong& rNodePos )
 {
     const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
-    if ((RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()) ||
+    if (!((RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()) ||
         (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()) ||
         (RndStdIds::FLY_AT_FLY  == rAnchor.GetAnchorId()) ||
-        (RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId()))
+        (RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId())))
+        return;
+
+    rNodePos = rAnchor.GetContentAnchor()->nNode.GetIndex();
+    sal_Int32 nContentPos = 0;
+
+    if (RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId())
     {
-        rNodePos = rAnchor.GetContentAnchor()->nNode.GetIndex();
-        sal_Int32 nContentPos = 0;
+        nContentPos = rAnchor.GetContentAnchor()->nContent.GetIndex();
 
-        if (RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId())
+        // destroy TextAttribute
+        SwTextNode *pTextNd = pFormat->GetDoc()->GetNodes()[ rNodePos ]->GetTextNode();
+        OSL_ENSURE( pTextNd, "No text node found!" );
+        SwTextFlyCnt* pAttr = static_cast<SwTextFlyCnt*>(
+            pTextNd->GetTextAttrForCharAt( nContentPos, RES_TXTATR_FLYCNT ));
+        // attribute still in text node, delete
+        if( pAttr && pAttr->GetFlyCnt().GetFrameFormat() == pFormat )
         {
-            nContentPos = rAnchor.GetContentAnchor()->nContent.GetIndex();
-
-            // destroy TextAttribute
-            SwTextNode *pTextNd = pFormat->GetDoc()->GetNodes()[ rNodePos ]->GetTextNode();
-            OSL_ENSURE( pTextNd, "No text node found!" );
-            SwTextFlyCnt* pAttr = static_cast<SwTextFlyCnt*>(
-                pTextNd->GetTextAttrForCharAt( nContentPos, RES_TXTATR_FLYCNT ));
-            // attribute still in text node, delete
-            if( pAttr && pAttr->GetFlyCnt().GetFrameFormat() == pFormat )
-            {
-                // just set pointer to 0, don't delete
-                const_cast<SwFormatFlyCnt&>(pAttr->GetFlyCnt()).SetFlyFormat();
-                SwIndex aIdx( pTextNd, nContentPos );
-                pTextNd->EraseText( aIdx, 1 );
-            }
+            // just set pointer to 0, don't delete
+            const_cast<SwFormatFlyCnt&>(pAttr->GetFlyCnt()).SetFlyFormat();
+            SwIndex aIdx( pTextNd, nContentPos );
+            pTextNd->EraseText( aIdx, 1 );
         }
-        else if (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId())
-        {
-            nContentPos = rAnchor.GetContentAnchor()->nContent.GetIndex();
-        }
-
-        pFormat->SetFormatAttr( SwFormatAnchor( rAnchor.GetAnchorId(), nContentPos ) );
     }
+    else if (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId())
+    {
+        nContentPos = rAnchor.GetContentAnchor()->nContent.GetIndex();
+    }
+
+    pFormat->SetFormatAttr( SwFormatAnchor( rAnchor.GetAnchorId(), nContentPos ) );
 }
 
 static void lcl_RestoreAnchor( SwFrameFormat* pFormat, sal_uLong nNodePos )
 {
     const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
-    if ((RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()) ||
+    if (!((RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()) ||
         (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()) ||
         (RndStdIds::FLY_AT_FLY  == rAnchor.GetAnchorId()) ||
-        (RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId()))
+        (RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId())))
+        return;
+
+    const sal_Int32 nContentPos = rAnchor.GetPageNum();
+    SwNodes& rNds = pFormat->GetDoc()->GetNodes();
+
+    SwNodeIndex aIdx( rNds, nNodePos );
+    SwPosition aPos( aIdx );
+
+    SwFormatAnchor aTmp( rAnchor.GetAnchorId() );
+    if ((RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId()) ||
+        (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()))
     {
-        const sal_Int32 nContentPos = rAnchor.GetPageNum();
-        SwNodes& rNds = pFormat->GetDoc()->GetNodes();
+        aPos.nContent.Assign( aIdx.GetNode().GetContentNode(), nContentPos );
+    }
+    aTmp.SetAnchor( &aPos );
+    RndStdIds nAnchorId = rAnchor.GetAnchorId();
+    pFormat->SetFormatAttr( aTmp );
 
-        SwNodeIndex aIdx( rNds, nNodePos );
-        SwPosition aPos( aIdx );
-
-        SwFormatAnchor aTmp( rAnchor.GetAnchorId() );
-        if ((RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId()) ||
-            (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()))
-        {
-            aPos.nContent.Assign( aIdx.GetNode().GetContentNode(), nContentPos );
-        }
-        aTmp.SetAnchor( &aPos );
-        RndStdIds nAnchorId = rAnchor.GetAnchorId();
-        pFormat->SetFormatAttr( aTmp );
-
-        if (RndStdIds::FLY_AS_CHAR == nAnchorId)
-        {
-            SwTextNode *pTextNd = aIdx.GetNode().GetTextNode();
-            OSL_ENSURE( pTextNd, "no Text Node" );
-            SwFormatFlyCnt aFormat( pFormat );
-            pTextNd->InsertItem( aFormat, nContentPos, nContentPos );
-        }
+    if (RndStdIds::FLY_AS_CHAR == nAnchorId)
+    {
+        SwTextNode *pTextNd = aIdx.GetNode().GetTextNode();
+        OSL_ENSURE( pTextNd, "no Text Node" );
+        SwFormatFlyCnt aFormat( pFormat );
+        pTextNd->InsertItem( aFormat, nContentPos, nContentPos );
     }
 }
 
