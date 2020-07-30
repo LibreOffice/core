@@ -256,20 +256,20 @@ static void lcl_CollectLines( std::vector<SwTableLine*> &rArr, const SwCursor& r
 
     // Remove lines, that have a common superordinate row.
     // (Not for row split)
-    if ( bRemoveLines )
+    if ( !bRemoveLines )
+        return;
+
+    for ( std::vector<SwTableLine*>::size_type i = 0; i < rArr.size(); ++i )
     {
-        for ( std::vector<SwTableLine*>::size_type i = 0; i < rArr.size(); ++i )
+        SwTableLine *pUpLine = rArr[i];
+        for ( std::vector<SwTableLine*>::size_type k = 0; k < rArr.size(); ++k )
         {
-            SwTableLine *pUpLine = rArr[i];
-            for ( std::vector<SwTableLine*>::size_type k = 0; k < rArr.size(); ++k )
+            if ( k != i && ::lcl_IsAnLower( pUpLine, rArr[k] ) )
             {
-                if ( k != i && ::lcl_IsAnLower( pUpLine, rArr[k] ) )
-                {
-                    rArr.erase( rArr.begin() + k );
-                    if ( k <= i )
-                        --i;
-                    --k;
-                }
+                rArr.erase( rArr.begin() + k );
+                if ( k <= i )
+                    --i;
+                --k;
             }
         }
     }
@@ -318,27 +318,27 @@ static void lcl_ProcessBoxSize(std::vector<std::unique_ptr<SwTableFormatCmp>>& r
 void SwDoc::SetRowSplit( const SwCursor& rCursor, const SwFormatRowSplit &rNew )
 {
     SwTableNode* pTableNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
-    if( pTableNd )
+    if( !pTableNd )
+        return;
+
+    std::vector<SwTableLine*> aRowArr; // For Lines collecting
+    ::lcl_CollectLines( aRowArr, rCursor, false );
+
+    if( aRowArr.empty() )
+        return;
+
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        std::vector<SwTableLine*> aRowArr; // For Lines collecting
-        ::lcl_CollectLines( aRowArr, rCursor, false );
-
-        if( !aRowArr.empty() )
-        {
-            if (GetIDocumentUndoRedo().DoesUndo())
-            {
-                GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoAttrTable>(*pTableNd));
-            }
-
-            std::vector<std::unique_ptr<SwTableFormatCmp>> aFormatCmp;
-            aFormatCmp.reserve( std::max( 255, static_cast<int>(aRowArr.size()) ) );
-
-            for( auto pLn : aRowArr )
-                ::lcl_ProcessRowAttr( aFormatCmp, pLn, rNew );
-
-            getIDocumentState().SetModified();
-        }
+        GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoAttrTable>(*pTableNd));
     }
+
+    std::vector<std::unique_ptr<SwTableFormatCmp>> aFormatCmp;
+    aFormatCmp.reserve( std::max( 255, static_cast<int>(aRowArr.size()) ) );
+
+    for( auto pLn : aRowArr )
+        ::lcl_ProcessRowAttr( aFormatCmp, pLn, rNew );
+
+    getIDocumentState().SetModified();
 }
 
 std::unique_ptr<SwFormatRowSplit> SwDoc::GetRowSplit( const SwCursor& rCursor )
@@ -383,26 +383,26 @@ std::unique_ptr<SwFormatRowSplit> SwDoc::GetRowSplit( const SwCursor& rCursor )
 void SwDoc::SetRowHeight( const SwCursor& rCursor, const SwFormatFrameSize &rNew )
 {
     SwTableNode* pTableNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
-    if( pTableNd )
+    if( !pTableNd )
+        return;
+
+    std::vector<SwTableLine*> aRowArr; // For Lines collecting
+    ::lcl_CollectLines( aRowArr, rCursor, true );
+
+    if( aRowArr.empty() )
+        return;
+
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        std::vector<SwTableLine*> aRowArr; // For Lines collecting
-        ::lcl_CollectLines( aRowArr, rCursor, true );
-
-        if( !aRowArr.empty() )
-        {
-            if (GetIDocumentUndoRedo().DoesUndo())
-            {
-                GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoAttrTable>(*pTableNd));
-            }
-
-            std::vector<std::unique_ptr<SwTableFormatCmp>> aFormatCmp;
-            aFormatCmp.reserve( std::max( 255, static_cast<int>(aRowArr.size()) ) );
-            for ( auto pLn : aRowArr )
-                ::lcl_ProcessRowSize( aFormatCmp, pLn, rNew );
-
-            getIDocumentState().SetModified();
-        }
+        GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoAttrTable>(*pTableNd));
     }
+
+    std::vector<std::unique_ptr<SwTableFormatCmp>> aFormatCmp;
+    aFormatCmp.reserve( std::max( 255, static_cast<int>(aRowArr.size()) ) );
+    for ( auto pLn : aRowArr )
+        ::lcl_ProcessRowSize( aFormatCmp, pLn, rNew );
+
+    getIDocumentState().SetModified();
 }
 
 std::unique_ptr<SwFormatFrameSize> SwDoc::GetRowHeight( const SwCursor& rCursor )
@@ -481,27 +481,27 @@ bool SwDoc::BalanceRowHeight( const SwCursor& rCursor, bool bTstOnly, const bool
 void SwDoc::SetRowBackground( const SwCursor& rCursor, const SvxBrushItem &rNew )
 {
     SwTableNode* pTableNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
-    if( pTableNd )
+    if( !pTableNd )
+        return;
+
+    std::vector<SwTableLine*> aRowArr; // For Lines collecting
+    ::lcl_CollectLines( aRowArr, rCursor, true );
+
+    if( aRowArr.empty() )
+        return;
+
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        std::vector<SwTableLine*> aRowArr; // For Lines collecting
-        ::lcl_CollectLines( aRowArr, rCursor, true );
-
-        if( !aRowArr.empty() )
-        {
-            if (GetIDocumentUndoRedo().DoesUndo())
-            {
-                GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoAttrTable>(*pTableNd));
-            }
-
-            std::vector<std::unique_ptr<SwTableFormatCmp>> aFormatCmp;
-            aFormatCmp.reserve( std::max( 255, static_cast<int>(aRowArr.size()) ) );
-
-            for( auto pLn : aRowArr )
-                ::lcl_ProcessRowAttr( aFormatCmp, pLn, rNew );
-
-            getIDocumentState().SetModified();
-        }
+        GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoAttrTable>(*pTableNd));
     }
+
+    std::vector<std::unique_ptr<SwTableFormatCmp>> aFormatCmp;
+    aFormatCmp.reserve( std::max( 255, static_cast<int>(aRowArr.size()) ) );
+
+    for( auto pLn : aRowArr )
+        ::lcl_ProcessRowAttr( aFormatCmp, pLn, rNew );
+
+    getIDocumentState().SetModified();
 }
 
 bool SwDoc::GetRowBackground( const SwCursor& rCursor, std::unique_ptr<SvxBrushItem>& rToFill )
@@ -861,67 +861,67 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
     SwSelUnions aUnions;
     ::MakeSelUnions( aUnions, pStart, pEnd );
 
-    if( !aUnions.empty() )
+    if( aUnions.empty() )
+        return;
+
+    SwTable& rTable = pTableNd->GetTable();
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        SwTable& rTable = pTableNd->GetTable();
-        if (GetIDocumentUndoRedo().DoesUndo())
-        {
-            GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoAttrTable>(*pTableNd));
-        }
-
-        for( auto &rU : aUnions )
-        {
-            SwSelUnion *pUnion = &rU;
-            SwTabFrame *pTab = pUnion->GetTable();
-            std::vector<SwCellFrame*> aCellArr;
-            aCellArr.reserve( 255 );
-            ::lcl_CollectCells( aCellArr, pUnion->GetUnion(), pTab );
-
-            for ( auto pCell : aCellArr )
-            {
-                // Do not set anything by default in HeadlineRepeats
-                if ( pTab->IsFollow() && pTab->IsInHeadline( *pCell ) )
-                    continue;
-
-                const_cast<SwTableBox*>(pCell->GetTabBox())->ClaimFrameFormat();
-                SwFrameFormat *pFormat = pCell->GetFormat();
-                std::unique_ptr<SvxBoxItem> aBox(pFormat->GetBox().Clone());
-
-                if ( !pBorderLine && bSetLine )
-                {
-                    aBox.reset(::GetDfltAttr(RES_BOX)->Clone());
-                }
-                else
-                {
-                    if ( aBox->GetTop() )
-                        ::lcl_SetLineStyle( const_cast<SvxBorderLine*>(aBox->GetTop()),
-                                        pColor, pBorderLine );
-                    if ( aBox->GetBottom() )
-                        ::lcl_SetLineStyle( const_cast<SvxBorderLine*>(aBox->GetBottom()),
-                                        pColor, pBorderLine );
-                    if ( aBox->GetLeft() )
-                        ::lcl_SetLineStyle( const_cast<SvxBorderLine*>(aBox->GetLeft()),
-                                        pColor, pBorderLine );
-                    if ( aBox->GetRight() )
-                        ::lcl_SetLineStyle( const_cast<SvxBorderLine*>(aBox->GetRight()),
-                                        pColor, pBorderLine );
-                }
-                pFormat->SetFormatAttr( *aBox );
-            }
-        }
-
-        SwHTMLTableLayout *pTableLayout = rTable.GetHTMLTableLayout();
-        if( pTableLayout )
-        {
-            SwContentFrame* pFrame = rCursor.GetContentNode()->getLayoutFrame( rCursor.GetContentNode()->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() );
-            SwTabFrame* pTabFrame = pFrame->ImplFindTabFrame();
-
-            pTableLayout->BordersChanged(
-                pTableLayout->GetBrowseWidthByTabFrame( *pTabFrame ) );
-        }
-        ::ClearFEShellTabCols(*this, nullptr);
-        getIDocumentState().SetModified();
+        GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoAttrTable>(*pTableNd));
     }
+
+    for( auto &rU : aUnions )
+    {
+        SwSelUnion *pUnion = &rU;
+        SwTabFrame *pTab = pUnion->GetTable();
+        std::vector<SwCellFrame*> aCellArr;
+        aCellArr.reserve( 255 );
+        ::lcl_CollectCells( aCellArr, pUnion->GetUnion(), pTab );
+
+        for ( auto pCell : aCellArr )
+        {
+            // Do not set anything by default in HeadlineRepeats
+            if ( pTab->IsFollow() && pTab->IsInHeadline( *pCell ) )
+                continue;
+
+            const_cast<SwTableBox*>(pCell->GetTabBox())->ClaimFrameFormat();
+            SwFrameFormat *pFormat = pCell->GetFormat();
+            std::unique_ptr<SvxBoxItem> aBox(pFormat->GetBox().Clone());
+
+            if ( !pBorderLine && bSetLine )
+            {
+                aBox.reset(::GetDfltAttr(RES_BOX)->Clone());
+            }
+            else
+            {
+                if ( aBox->GetTop() )
+                    ::lcl_SetLineStyle( const_cast<SvxBorderLine*>(aBox->GetTop()),
+                                    pColor, pBorderLine );
+                if ( aBox->GetBottom() )
+                    ::lcl_SetLineStyle( const_cast<SvxBorderLine*>(aBox->GetBottom()),
+                                    pColor, pBorderLine );
+                if ( aBox->GetLeft() )
+                    ::lcl_SetLineStyle( const_cast<SvxBorderLine*>(aBox->GetLeft()),
+                                    pColor, pBorderLine );
+                if ( aBox->GetRight() )
+                    ::lcl_SetLineStyle( const_cast<SvxBorderLine*>(aBox->GetRight()),
+                                    pColor, pBorderLine );
+            }
+            pFormat->SetFormatAttr( *aBox );
+        }
+    }
+
+    SwHTMLTableLayout *pTableLayout = rTable.GetHTMLTableLayout();
+    if( pTableLayout )
+    {
+        SwContentFrame* pFrame = rCursor.GetContentNode()->getLayoutFrame( rCursor.GetContentNode()->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() );
+        SwTabFrame* pTabFrame = pFrame->ImplFindTabFrame();
+
+        pTableLayout->BordersChanged(
+            pTableLayout->GetBrowseWidthByTabFrame( *pTabFrame ) );
+    }
+    ::ClearFEShellTabCols(*this, nullptr);
+    getIDocumentState().SetModified();
 }
 
 void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet )
@@ -937,257 +937,257 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet )
     SwSelUnions aUnions;
     ::MakeSelUnions( aUnions, pStart, pEnd );
 
-    if( !aUnions.empty() )
+    if( aUnions.empty() )
+        return;
+
+    SvxBoxItem     aSetBox    ( rSet.Get(RES_BOX    ) );
+    SvxBoxInfoItem aSetBoxInfo( rSet.Get(SID_ATTR_BORDER_INNER) );
+
+    bool bTopSet      = false,
+         bBottomSet   = false,
+         bLeftSet     = false,
+         bRightSet    = false,
+         bHoriSet     = false,
+         bVertSet     = false,
+         bDistanceSet = false,
+         bRTLTab      = false;
+
+    aSetBoxInfo.ResetFlags();
+
+    for ( SwSelUnions::size_type i = 0; i < aUnions.size(); ++i )
     {
-        SvxBoxItem     aSetBox    ( rSet.Get(RES_BOX    ) );
-        SvxBoxInfoItem aSetBoxInfo( rSet.Get(SID_ATTR_BORDER_INNER) );
+        SwSelUnion *pUnion = &aUnions[i];
+        const SwTabFrame *pTab = pUnion->GetTable();
+        const SwRect &rUnion = pUnion->GetUnion();
+        const bool bFirst = i == 0;
+        const bool bLast  = (i == aUnions.size() - 1);
 
-        bool bTopSet      = false,
-             bBottomSet   = false,
-             bLeftSet     = false,
-             bRightSet    = false,
-             bHoriSet     = false,
-             bVertSet     = false,
-             bDistanceSet = false,
-             bRTLTab      = false;
+        std::vector<SwCellFrame*> aCellArr;
+        aCellArr.reserve(255);
+        ::lcl_CollectCells( aCellArr, rUnion, const_cast<SwTabFrame*>(pTab) );
 
-        aSetBoxInfo.ResetFlags();
-
-        for ( SwSelUnions::size_type i = 0; i < aUnions.size(); ++i )
+        for ( auto pCell : aCellArr )
         {
-            SwSelUnion *pUnion = &aUnions[i];
-            const SwTabFrame *pTab = pUnion->GetTable();
-            const SwRect &rUnion = pUnion->GetUnion();
-            const bool bFirst = i == 0;
-            const bool bLast  = (i == aUnions.size() - 1);
-
-            std::vector<SwCellFrame*> aCellArr;
-            aCellArr.reserve(255);
-            ::lcl_CollectCells( aCellArr, rUnion, const_cast<SwTabFrame*>(pTab) );
-
-            for ( auto pCell : aCellArr )
+            const bool bVert = pTab->IsVertical();
+            const bool bRTL = bRTLTab = pTab->IsRightToLeft();
+            bool bTopOver, bLeftOver, bRightOver, bBottomOver;
+            if ( bVert )
             {
-                const bool bVert = pTab->IsVertical();
-                const bool bRTL = bRTLTab = pTab->IsRightToLeft();
-                bool bTopOver, bLeftOver, bRightOver, bBottomOver;
-                if ( bVert )
-                {
-                    bTopOver = pCell->getFrameArea().Right() >= rUnion.Right();
-                    bLeftOver = pCell->getFrameArea().Top() <= rUnion.Top();
-                    bRightOver = pCell->getFrameArea().Bottom() >= rUnion.Bottom();
-                    bBottomOver = pCell->getFrameArea().Left() <= rUnion.Left();
-                }
-                else
-                {
-                    bTopOver = pCell->getFrameArea().Top() <= rUnion.Top();
-                    bLeftOver = pCell->getFrameArea().Left() <= rUnion.Left();
-                    bRightOver = pCell->getFrameArea().Right() >= rUnion.Right();
-                    bBottomOver = pCell->getFrameArea().Bottom() >= rUnion.Bottom();
-                }
+                bTopOver = pCell->getFrameArea().Right() >= rUnion.Right();
+                bLeftOver = pCell->getFrameArea().Top() <= rUnion.Top();
+                bRightOver = pCell->getFrameArea().Bottom() >= rUnion.Bottom();
+                bBottomOver = pCell->getFrameArea().Left() <= rUnion.Left();
+            }
+            else
+            {
+                bTopOver = pCell->getFrameArea().Top() <= rUnion.Top();
+                bLeftOver = pCell->getFrameArea().Left() <= rUnion.Left();
+                bRightOver = pCell->getFrameArea().Right() >= rUnion.Right();
+                bBottomOver = pCell->getFrameArea().Bottom() >= rUnion.Bottom();
+            }
 
-                if ( bRTL )
-                {
-                    bool bTmp = bRightOver;
-                    bRightOver = bLeftOver;
-                    bLeftOver = bTmp;
-                }
+            if ( bRTL )
+            {
+                bool bTmp = bRightOver;
+                bRightOver = bLeftOver;
+                bLeftOver = bTmp;
+            }
 
-                const SwFrameFormat  *pFormat  = pCell->GetFormat();
-                const SvxBoxItem  &rBox  = pFormat->GetBox();
+            const SwFrameFormat  *pFormat  = pCell->GetFormat();
+            const SvxBoxItem  &rBox  = pFormat->GetBox();
 
-                // Top Border
-                if ( bFirst && bTopOver )
+            // Top Border
+            if ( bFirst && bTopOver )
+            {
+                if (aSetBoxInfo.IsValid(SvxBoxInfoItemValidFlags::TOP))
                 {
-                    if (aSetBoxInfo.IsValid(SvxBoxInfoItemValidFlags::TOP))
+                    if ( !bTopSet )
+                    {   bTopSet = true;
+                        aSetBox.SetLine( rBox.GetTop(), SvxBoxItemLine::TOP );
+                    }
+                    else if ((aSetBox.GetTop() && rBox.GetTop() &&
+                             (*aSetBox.GetTop() != *rBox.GetTop())) ||
+                             ((!aSetBox.GetTop()) != (!rBox.GetTop()))) // != expression is true, if one and only one of the two pointers is !0
                     {
-                        if ( !bTopSet )
-                        {   bTopSet = true;
-                            aSetBox.SetLine( rBox.GetTop(), SvxBoxItemLine::TOP );
-                        }
-                        else if ((aSetBox.GetTop() && rBox.GetTop() &&
-                                 (*aSetBox.GetTop() != *rBox.GetTop())) ||
-                                 ((!aSetBox.GetTop()) != (!rBox.GetTop()))) // != expression is true, if one and only one of the two pointers is !0
-                        {
-                            aSetBoxInfo.SetValid(SvxBoxInfoItemValidFlags::TOP, false );
-                            aSetBox.SetLine( nullptr, SvxBoxItemLine::TOP );
-                        }
-                    }
-                }
-
-                // Left Border
-                if ( bLeftOver )
-                {
-                    if (aSetBoxInfo.IsValid(SvxBoxInfoItemValidFlags::LEFT))
-                    {
-                        if ( !bLeftSet )
-                        {   bLeftSet = true;
-                            aSetBox.SetLine( rBox.GetLeft(), SvxBoxItemLine::LEFT );
-                        }
-                        else if ((aSetBox.GetLeft() && rBox.GetLeft() &&
-                                 (*aSetBox.GetLeft() != *rBox.GetLeft())) ||
-                                 ((!aSetBox.GetLeft()) != (!rBox.GetLeft())))
-                        {
-                            aSetBoxInfo.SetValid(SvxBoxInfoItemValidFlags::LEFT, false );
-                            aSetBox.SetLine( nullptr, SvxBoxItemLine::LEFT );
-                        }
-                    }
-                }
-                else
-                {
-                    if (aSetBoxInfo.IsValid(SvxBoxInfoItemValidFlags::VERT))
-                    {
-                        if ( !bVertSet )
-                        {   bVertSet = true;
-                            aSetBoxInfo.SetLine( rBox.GetLeft(), SvxBoxInfoItemLine::VERT );
-                        }
-                        else if ((aSetBoxInfo.GetVert() && rBox.GetLeft() &&
-                                 (*aSetBoxInfo.GetVert() != *rBox.GetLeft())) ||
-                                 ((!aSetBoxInfo.GetVert()) != (!rBox.GetLeft())))
-                        {   aSetBoxInfo.SetValid( SvxBoxInfoItemValidFlags::VERT, false );
-                            aSetBoxInfo.SetLine( nullptr, SvxBoxInfoItemLine::VERT );
-                        }
-                    }
-                }
-
-                // Right Border
-                if ( aSetBoxInfo.IsValid(SvxBoxInfoItemValidFlags::RIGHT) && bRightOver )
-                {
-                    if ( !bRightSet )
-                    {   bRightSet = true;
-                        aSetBox.SetLine( rBox.GetRight(), SvxBoxItemLine::RIGHT );
-                    }
-                    else if ((aSetBox.GetRight() && rBox.GetRight() &&
-                             (*aSetBox.GetRight() != *rBox.GetRight())) ||
-                             (!aSetBox.GetRight() != !rBox.GetRight()))
-                    {   aSetBoxInfo.SetValid( SvxBoxInfoItemValidFlags::RIGHT, false );
-                        aSetBox.SetLine( nullptr, SvxBoxItemLine::RIGHT );
-                    }
-                }
-
-                // Bottom Border
-                if ( bLast && bBottomOver )
-                {
-                    if ( aSetBoxInfo.IsValid(SvxBoxInfoItemValidFlags::BOTTOM) )
-                    {
-                        if ( !bBottomSet )
-                        {   bBottomSet = true;
-                            aSetBox.SetLine( rBox.GetBottom(), SvxBoxItemLine::BOTTOM );
-                        }
-                        else if ((aSetBox.GetBottom() && rBox.GetBottom() &&
-                                 (*aSetBox.GetBottom() != *rBox.GetBottom())) ||
-                                 (!aSetBox.GetBottom() != !rBox.GetBottom()))
-                        {   aSetBoxInfo.SetValid( SvxBoxInfoItemValidFlags::BOTTOM, false );
-                            aSetBox.SetLine( nullptr, SvxBoxItemLine::BOTTOM );
-                        }
-                    }
-                }
-                // In all Lines, except for the last one, the horizontal Line
-                // is taken from the Bottom Line.
-                else
-                {
-                    if (aSetBoxInfo.IsValid(SvxBoxInfoItemValidFlags::HORI))
-                    {
-                        if ( !bHoriSet )
-                        {   bHoriSet = true;
-                            aSetBoxInfo.SetLine( rBox.GetBottom(), SvxBoxInfoItemLine::HORI );
-                        }
-                        else if ((aSetBoxInfo.GetHori() && rBox.GetBottom() &&
-                                 (*aSetBoxInfo.GetHori() != *rBox.GetBottom())) ||
-                                 ((!aSetBoxInfo.GetHori()) != (!rBox.GetBottom())))
-                        {
-                            aSetBoxInfo.SetValid( SvxBoxInfoItemValidFlags::HORI, false );
-                            aSetBoxInfo.SetLine( nullptr, SvxBoxInfoItemLine::HORI );
-                        }
-                    }
-                }
-
-                // Distance to text
-                if (aSetBoxInfo.IsValid(SvxBoxInfoItemValidFlags::DISTANCE))
-                {
-                    if( !bDistanceSet ) // Set on first iteration
-                    {
-                        bDistanceSet = true;
-                        for( SvxBoxItemLine k : o3tl::enumrange<SvxBoxItemLine>() )
-                            aSetBox.SetDistance( rBox.GetDistance( k ), k );
-                    }
-                    else
-                    {
-                        for( SvxBoxItemLine k : o3tl::enumrange<SvxBoxItemLine>() )
-                            if( aSetBox.GetDistance( k ) !=
-                                rBox.GetDistance( k ) )
-                            {
-                                aSetBoxInfo.SetValid( SvxBoxInfoItemValidFlags::DISTANCE, false );
-                                aSetBox.SetAllDistances(0);
-                                break;
-                            }
+                        aSetBoxInfo.SetValid(SvxBoxInfoItemValidFlags::TOP, false );
+                        aSetBox.SetLine( nullptr, SvxBoxItemLine::TOP );
                     }
                 }
             }
+
+            // Left Border
+            if ( bLeftOver )
+            {
+                if (aSetBoxInfo.IsValid(SvxBoxInfoItemValidFlags::LEFT))
+                {
+                    if ( !bLeftSet )
+                    {   bLeftSet = true;
+                        aSetBox.SetLine( rBox.GetLeft(), SvxBoxItemLine::LEFT );
+                    }
+                    else if ((aSetBox.GetLeft() && rBox.GetLeft() &&
+                             (*aSetBox.GetLeft() != *rBox.GetLeft())) ||
+                             ((!aSetBox.GetLeft()) != (!rBox.GetLeft())))
+                    {
+                        aSetBoxInfo.SetValid(SvxBoxInfoItemValidFlags::LEFT, false );
+                        aSetBox.SetLine( nullptr, SvxBoxItemLine::LEFT );
+                    }
+                }
+            }
+            else
+            {
+                if (aSetBoxInfo.IsValid(SvxBoxInfoItemValidFlags::VERT))
+                {
+                    if ( !bVertSet )
+                    {   bVertSet = true;
+                        aSetBoxInfo.SetLine( rBox.GetLeft(), SvxBoxInfoItemLine::VERT );
+                    }
+                    else if ((aSetBoxInfo.GetVert() && rBox.GetLeft() &&
+                             (*aSetBoxInfo.GetVert() != *rBox.GetLeft())) ||
+                             ((!aSetBoxInfo.GetVert()) != (!rBox.GetLeft())))
+                    {   aSetBoxInfo.SetValid( SvxBoxInfoItemValidFlags::VERT, false );
+                        aSetBoxInfo.SetLine( nullptr, SvxBoxInfoItemLine::VERT );
+                    }
+                }
+            }
+
+            // Right Border
+            if ( aSetBoxInfo.IsValid(SvxBoxInfoItemValidFlags::RIGHT) && bRightOver )
+            {
+                if ( !bRightSet )
+                {   bRightSet = true;
+                    aSetBox.SetLine( rBox.GetRight(), SvxBoxItemLine::RIGHT );
+                }
+                else if ((aSetBox.GetRight() && rBox.GetRight() &&
+                         (*aSetBox.GetRight() != *rBox.GetRight())) ||
+                         (!aSetBox.GetRight() != !rBox.GetRight()))
+                {   aSetBoxInfo.SetValid( SvxBoxInfoItemValidFlags::RIGHT, false );
+                    aSetBox.SetLine( nullptr, SvxBoxItemLine::RIGHT );
+                }
+            }
+
+            // Bottom Border
+            if ( bLast && bBottomOver )
+            {
+                if ( aSetBoxInfo.IsValid(SvxBoxInfoItemValidFlags::BOTTOM) )
+                {
+                    if ( !bBottomSet )
+                    {   bBottomSet = true;
+                        aSetBox.SetLine( rBox.GetBottom(), SvxBoxItemLine::BOTTOM );
+                    }
+                    else if ((aSetBox.GetBottom() && rBox.GetBottom() &&
+                             (*aSetBox.GetBottom() != *rBox.GetBottom())) ||
+                             (!aSetBox.GetBottom() != !rBox.GetBottom()))
+                    {   aSetBoxInfo.SetValid( SvxBoxInfoItemValidFlags::BOTTOM, false );
+                        aSetBox.SetLine( nullptr, SvxBoxItemLine::BOTTOM );
+                    }
+                }
+            }
+            // In all Lines, except for the last one, the horizontal Line
+            // is taken from the Bottom Line.
+            else
+            {
+                if (aSetBoxInfo.IsValid(SvxBoxInfoItemValidFlags::HORI))
+                {
+                    if ( !bHoriSet )
+                    {   bHoriSet = true;
+                        aSetBoxInfo.SetLine( rBox.GetBottom(), SvxBoxInfoItemLine::HORI );
+                    }
+                    else if ((aSetBoxInfo.GetHori() && rBox.GetBottom() &&
+                             (*aSetBoxInfo.GetHori() != *rBox.GetBottom())) ||
+                             ((!aSetBoxInfo.GetHori()) != (!rBox.GetBottom())))
+                    {
+                        aSetBoxInfo.SetValid( SvxBoxInfoItemValidFlags::HORI, false );
+                        aSetBoxInfo.SetLine( nullptr, SvxBoxInfoItemLine::HORI );
+                    }
+                }
+            }
+
+            // Distance to text
+            if (aSetBoxInfo.IsValid(SvxBoxInfoItemValidFlags::DISTANCE))
+            {
+                if( !bDistanceSet ) // Set on first iteration
+                {
+                    bDistanceSet = true;
+                    for( SvxBoxItemLine k : o3tl::enumrange<SvxBoxItemLine>() )
+                        aSetBox.SetDistance( rBox.GetDistance( k ), k );
+                }
+                else
+                {
+                    for( SvxBoxItemLine k : o3tl::enumrange<SvxBoxItemLine>() )
+                        if( aSetBox.GetDistance( k ) !=
+                            rBox.GetDistance( k ) )
+                        {
+                            aSetBoxInfo.SetValid( SvxBoxInfoItemValidFlags::DISTANCE, false );
+                            aSetBox.SetAllDistances(0);
+                            break;
+                        }
+                }
+            }
         }
-
-        // fdo#62470 fix the reading for table format.
-        if ( bRTLTab )
-        {
-            SvxBoxItem     aTempBox    ( rSet.Get(RES_BOX    ) );
-            SvxBoxInfoItem aTempBoxInfo( rSet.Get(SID_ATTR_BORDER_INNER) );
-
-            aTempBox.SetLine( aSetBox.GetRight(), SvxBoxItemLine::RIGHT);
-            aSetBox.SetLine( aSetBox.GetLeft(), SvxBoxItemLine::RIGHT);
-            aSetBox.SetLine( aTempBox.GetRight(), SvxBoxItemLine::LEFT);
-
-            aTempBoxInfo.SetValid( SvxBoxInfoItemValidFlags::LEFT, aSetBoxInfo.IsValid(SvxBoxInfoItemValidFlags::LEFT) );
-            aSetBoxInfo.SetValid( SvxBoxInfoItemValidFlags::LEFT, aSetBoxInfo.IsValid(SvxBoxInfoItemValidFlags::RIGHT) );
-            aSetBoxInfo.SetValid( SvxBoxInfoItemValidFlags::RIGHT, aTempBoxInfo.IsValid(SvxBoxInfoItemValidFlags::LEFT) );
-        }
-
-        rSet.Put( aSetBox );
-        rSet.Put( aSetBoxInfo );
     }
+
+    // fdo#62470 fix the reading for table format.
+    if ( bRTLTab )
+    {
+        SvxBoxItem     aTempBox    ( rSet.Get(RES_BOX    ) );
+        SvxBoxInfoItem aTempBoxInfo( rSet.Get(SID_ATTR_BORDER_INNER) );
+
+        aTempBox.SetLine( aSetBox.GetRight(), SvxBoxItemLine::RIGHT);
+        aSetBox.SetLine( aSetBox.GetLeft(), SvxBoxItemLine::RIGHT);
+        aSetBox.SetLine( aTempBox.GetRight(), SvxBoxItemLine::LEFT);
+
+        aTempBoxInfo.SetValid( SvxBoxInfoItemValidFlags::LEFT, aSetBoxInfo.IsValid(SvxBoxInfoItemValidFlags::LEFT) );
+        aSetBoxInfo.SetValid( SvxBoxInfoItemValidFlags::LEFT, aSetBoxInfo.IsValid(SvxBoxInfoItemValidFlags::RIGHT) );
+        aSetBoxInfo.SetValid( SvxBoxInfoItemValidFlags::RIGHT, aTempBoxInfo.IsValid(SvxBoxInfoItemValidFlags::LEFT) );
+    }
+
+    rSet.Put( aSetBox );
+    rSet.Put( aSetBoxInfo );
 }
 
 void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
 {
     SwTableNode* pTableNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
     SwSelBoxes aBoxes;
-    if( pTableNd && ::lcl_GetBoxSel( rCursor, aBoxes, true ) )
+    if( !(pTableNd && ::lcl_GetBoxSel( rCursor, aBoxes, true )) )
+        return;
+
+    SwTable& rTable = pTableNd->GetTable();
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        SwTable& rTable = pTableNd->GetTable();
-        if (GetIDocumentUndoRedo().DoesUndo())
-        {
-            GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwUndoAttrTable>(*pTableNd) );
-        }
-
-        std::vector<std::unique_ptr<SwTableFormatCmp>> aFormatCmp;
-        aFormatCmp.reserve(std::max<size_t>(255, aBoxes.size()));
-        for (size_t i = 0; i < aBoxes.size(); ++i)
-        {
-            SwTableBox *pBox = aBoxes[i];
-
-            SwFrameFormat *pNewFormat = SwTableFormatCmp::FindNewFormat( aFormatCmp, pBox->GetFrameFormat(), 0 );
-            if ( nullptr != pNewFormat )
-                pBox->ChgFrameFormat( static_cast<SwTableBoxFormat*>(pNewFormat) );
-            else
-            {
-                SwFrameFormat *pOld = pBox->GetFrameFormat();
-                SwFrameFormat *pNew = pBox->ClaimFrameFormat();
-                pNew->SetFormatAttr( rNew );
-                aFormatCmp.push_back(std::make_unique<SwTableFormatCmp>(pOld, pNew, 0));
-            }
-
-            pBox->SetDirectFormatting(true);
-        }
-
-        SwHTMLTableLayout *pTableLayout = rTable.GetHTMLTableLayout();
-        if( pTableLayout )
-        {
-            SwContentFrame* pFrame = rCursor.GetContentNode()->getLayoutFrame( rCursor.GetContentNode()->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() );
-            SwTabFrame* pTabFrame = pFrame->ImplFindTabFrame();
-
-            pTableLayout->Resize(
-                pTableLayout->GetBrowseWidthByTabFrame( *pTabFrame ), true );
-        }
-        getIDocumentState().SetModified();
+        GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwUndoAttrTable>(*pTableNd) );
     }
+
+    std::vector<std::unique_ptr<SwTableFormatCmp>> aFormatCmp;
+    aFormatCmp.reserve(std::max<size_t>(255, aBoxes.size()));
+    for (size_t i = 0; i < aBoxes.size(); ++i)
+    {
+        SwTableBox *pBox = aBoxes[i];
+
+        SwFrameFormat *pNewFormat = SwTableFormatCmp::FindNewFormat( aFormatCmp, pBox->GetFrameFormat(), 0 );
+        if ( nullptr != pNewFormat )
+            pBox->ChgFrameFormat( static_cast<SwTableBoxFormat*>(pNewFormat) );
+        else
+        {
+            SwFrameFormat *pOld = pBox->GetFrameFormat();
+            SwFrameFormat *pNew = pBox->ClaimFrameFormat();
+            pNew->SetFormatAttr( rNew );
+            aFormatCmp.push_back(std::make_unique<SwTableFormatCmp>(pOld, pNew, 0));
+        }
+
+        pBox->SetDirectFormatting(true);
+    }
+
+    SwHTMLTableLayout *pTableLayout = rTable.GetHTMLTableLayout();
+    if( pTableLayout )
+    {
+        SwContentFrame* pFrame = rCursor.GetContentNode()->getLayoutFrame( rCursor.GetContentNode()->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() );
+        SwTabFrame* pTabFrame = pFrame->ImplFindTabFrame();
+
+        pTableLayout->Resize(
+            pTableLayout->GetBrowseWidthByTabFrame( *pTabFrame ), true );
+    }
+    getIDocumentState().SetModified();
 }
 
 bool SwDoc::GetBoxAttr( const SwCursor& rCursor, std::unique_ptr<SfxPoolItem>& rToFill )

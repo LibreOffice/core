@@ -750,29 +750,29 @@ void SwDoc::UpdateSection( size_t const nPos, SwSectionData & rNewData,
 void sw_DeleteFootnote( SwSectionNode *pNd, sal_uLong nStt, sal_uLong nEnd )
 {
     SwFootnoteIdxs& rFootnoteArr = pNd->GetDoc()->GetFootnoteIdxs();
-    if( !rFootnoteArr.empty() )
+    if( rFootnoteArr.empty() )
+        return;
+
+    size_t nPos = 0;
+    rFootnoteArr.SeekEntry( SwNodeIndex( *pNd ), &nPos );
+    SwTextFootnote* pSrch;
+
+    // Delete all succeeding Footnotes
+    while( nPos < rFootnoteArr.size() &&
+        SwTextFootnote_GetIndex( (pSrch = rFootnoteArr[ nPos ]) ) <= nEnd )
     {
-        size_t nPos = 0;
-        rFootnoteArr.SeekEntry( SwNodeIndex( *pNd ), &nPos );
-        SwTextFootnote* pSrch;
+        // If the Nodes are not deleted, they need to deregister at the Pages
+        // (delete Frames) or else they will remain there (Undo does not delete them!)
+        pSrch->DelFrames(nullptr);
+        ++nPos;
+    }
 
-        // Delete all succeeding Footnotes
-        while( nPos < rFootnoteArr.size() &&
-            SwTextFootnote_GetIndex( (pSrch = rFootnoteArr[ nPos ]) ) <= nEnd )
-        {
-            // If the Nodes are not deleted, they need to deregister at the Pages
-            // (delete Frames) or else they will remain there (Undo does not delete them!)
-            pSrch->DelFrames(nullptr);
-            ++nPos;
-        }
-
-        while( nPos-- &&
-            SwTextFootnote_GetIndex( (pSrch = rFootnoteArr[ nPos ]) ) >= nStt )
-        {
-            // If the Nodes are not deleted, they need to deregister at the Pages
-            // (delete Frames) or else they will remain there (Undo does not delete them!)
-            pSrch->DelFrames(nullptr);
-        }
+    while( nPos-- &&
+        SwTextFootnote_GetIndex( (pSrch = rFootnoteArr[ nPos ]) ) >= nStt )
+    {
+        // If the Nodes are not deleted, they need to deregister at the Pages
+        // (delete Frames) or else they will remain there (Undo does not delete them!)
+        pSrch->DelFrames(nullptr);
     }
 }
 
@@ -1027,92 +1027,67 @@ void SwSectionNode::MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx)
 {
     // Take my successive or preceding ContentFrame
     SwNodes& rNds = GetNodes();
-    if( rNds.IsDocNodes() && rNds.GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() )
+    if( !(rNds.IsDocNodes() && rNds.GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell()) )
+        return;
+
+    if( GetSection().IsHidden() || IsContentHidden() )
     {
-        if( GetSection().IsHidden() || IsContentHidden() )
+        SwNodeIndex aIdx( *EndOfSectionNode() );
+        SwContentNode* pCNd = rNds.GoNextSection( &aIdx, true, false );
+        if( !pCNd )
         {
-            SwNodeIndex aIdx( *EndOfSectionNode() );
-            SwContentNode* pCNd = rNds.GoNextSection( &aIdx, true, false );
-            if( !pCNd )
-            {
-                aIdx = *this;
-                pCNd = SwNodes::GoPrevSection(&aIdx, true, false);
-                if (!pCNd)
-                    return;
-            }
-            pCNd = aIdx.GetNode().GetContentNode();
-            pCNd->MakeFramesForAdjacentContentNode(static_cast<SwContentNode&>(rIdx.GetNode()));
+            aIdx = *this;
+            pCNd = SwNodes::GoPrevSection(&aIdx, true, false);
+            if (!pCNd)
+                return;
         }
-        else
+        pCNd = aIdx.GetNode().GetContentNode();
+        pCNd->MakeFramesForAdjacentContentNode(static_cast<SwContentNode&>(rIdx.GetNode()));
+    }
+    else
+    {
+        SwNode2Layout aNode2Layout( *this, rIdx.GetIndex() );
+        SwFrame *pFrame;
+        while( nullptr != (pFrame = aNode2Layout.NextFrame()) )
         {
-            SwNode2Layout aNode2Layout( *this, rIdx.GetIndex() );
-            SwFrame *pFrame;
-            while( nullptr != (pFrame = aNode2Layout.NextFrame()) )
+            OSL_ENSURE( pFrame->IsSctFrame(), "Depend of Section not a Section." );
+            if (pFrame->getRootFrame()->IsHideRedlines()
+                && !rIdx.GetNode().IsCreateFrameWhenHidingRedlines())
             {
-                OSL_ENSURE( pFrame->IsSctFrame(), "Depend of Section not a Section." );
-                if (pFrame->getRootFrame()->IsHideRedlines()
-                    && !rIdx.GetNode().IsCreateFrameWhenHidingRedlines())
+                continue;
+            }
+            SwFrame *pNew = rIdx.GetNode().GetContentNode()->MakeFrame( pFrame );
+
+            SwSectionNode* pS = rIdx.GetNode().FindSectionNode();
+
+            // Assure that node is not inside a table, which is inside the
+            // found section.
+            if ( pS )
+            {
+                SwTableNode* pTableNode = rIdx.GetNode().FindTableNode();
+                if ( pTableNode &&
+                     pTableNode->GetIndex() > pS->GetIndex() )
                 {
-                    continue;
+                    pS = nullptr;
                 }
-                SwFrame *pNew = rIdx.GetNode().GetContentNode()->MakeFrame( pFrame );
+            }
 
-                SwSectionNode* pS = rIdx.GetNode().FindSectionNode();
-
-                // Assure that node is not inside a table, which is inside the
-                // found section.
-                if ( pS )
+            // if the node is in a section, the sectionframe now
+            // has to be created...
+            // boolean to control <Init()> of a new section frame.
+            bool bInitNewSect = false;
+            if( pS )
+            {
+                SwSectionFrame *pSct = new SwSectionFrame( pS->GetSection(), pFrame );
+                // prepare <Init()> of new section frame.
+                bInitNewSect = true;
+                SwLayoutFrame* pUp = pSct;
+                while( pUp->Lower() )  // for columned sections
                 {
-                    SwTableNode* pTableNode = rIdx.GetNode().FindTableNode();
-                    if ( pTableNode &&
-                         pTableNode->GetIndex() > pS->GetIndex() )
-                    {
-                        pS = nullptr;
-                    }
+                    OSL_ENSURE( pUp->Lower()->IsLayoutFrame(),"Who's in there?" );
+                    pUp = static_cast<SwLayoutFrame*>(pUp->Lower());
                 }
-
-                // if the node is in a section, the sectionframe now
-                // has to be created...
-                // boolean to control <Init()> of a new section frame.
-                bool bInitNewSect = false;
-                if( pS )
-                {
-                    SwSectionFrame *pSct = new SwSectionFrame( pS->GetSection(), pFrame );
-                    // prepare <Init()> of new section frame.
-                    bInitNewSect = true;
-                    SwLayoutFrame* pUp = pSct;
-                    while( pUp->Lower() )  // for columned sections
-                    {
-                        OSL_ENSURE( pUp->Lower()->IsLayoutFrame(),"Who's in there?" );
-                        pUp = static_cast<SwLayoutFrame*>(pUp->Lower());
-                    }
-                    pNew->Paste( pUp );
-                    // #i27138#
-                    // notify accessibility paragraphs objects about changed
-                    // CONTENT_FLOWS_FROM/_TO relation.
-                    // Relation CONTENT_FLOWS_FROM for next paragraph will change
-                    // and relation CONTENT_FLOWS_TO for previous paragraph will change.
-                    if ( pNew->IsTextFrame() )
-                    {
-                        SwViewShell* pViewShell( pNew->getRootFrame()->GetCurrShell() );
-                        if ( pViewShell && pViewShell->GetLayout() &&
-                             pViewShell->GetLayout()->IsAnyShellAccessible() )
-                        {
-                            pViewShell->InvalidateAccessibleParaFlowRelation(
-                                dynamic_cast<SwTextFrame*>(pNew->FindNextCnt( true )),
-                                dynamic_cast<SwTextFrame*>(pNew->FindPrevCnt()) );
-                        }
-                    }
-                    pNew = pSct;
-                }
-
-                // If a Node got Frames attached before or after
-                if ( rIdx < GetIndex() )
-                    // the new one precedes me
-                    pNew->Paste( pFrame->GetUpper(), pFrame );
-                else
-                    // the new one succeeds me
-                    pNew->Paste( pFrame->GetUpper(), pFrame->GetNext() );
+                pNew->Paste( pUp );
                 // #i27138#
                 // notify accessibility paragraphs objects about changed
                 // CONTENT_FLOWS_FROM/_TO relation.
@@ -1129,9 +1104,34 @@ void SwSectionNode::MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx)
                             dynamic_cast<SwTextFrame*>(pNew->FindPrevCnt()) );
                     }
                 }
-                if ( bInitNewSect )
-                    static_cast<SwSectionFrame*>(pNew)->Init();
+                pNew = pSct;
             }
+
+            // If a Node got Frames attached before or after
+            if ( rIdx < GetIndex() )
+                // the new one precedes me
+                pNew->Paste( pFrame->GetUpper(), pFrame );
+            else
+                // the new one succeeds me
+                pNew->Paste( pFrame->GetUpper(), pFrame->GetNext() );
+            // #i27138#
+            // notify accessibility paragraphs objects about changed
+            // CONTENT_FLOWS_FROM/_TO relation.
+            // Relation CONTENT_FLOWS_FROM for next paragraph will change
+            // and relation CONTENT_FLOWS_TO for previous paragraph will change.
+            if ( pNew->IsTextFrame() )
+            {
+                SwViewShell* pViewShell( pNew->getRootFrame()->GetCurrShell() );
+                if ( pViewShell && pViewShell->GetLayout() &&
+                     pViewShell->GetLayout()->IsAnyShellAccessible() )
+                {
+                    pViewShell->InvalidateAccessibleParaFlowRelation(
+                        dynamic_cast<SwTextFrame*>(pNew->FindNextCnt( true )),
+                        dynamic_cast<SwTextFrame*>(pNew->FindPrevCnt()) );
+                }
+            }
+            if ( bInitNewSect )
+                static_cast<SwSectionFrame*>(pNew)->Init();
         }
     }
 }

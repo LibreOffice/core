@@ -109,29 +109,29 @@ static void SetParent( std::shared_ptr<const SfxItemSet>& rpAttrSet,
 
     const SwAttrSet* pParentSet = pParentFormat ? &pParentFormat->GetAttrSet() : nullptr;
 
-    if ( pParentSet != pAttrSet->GetParent() )
+    if ( pParentSet == pAttrSet->GetParent() )
+        return;
+
+    SwAttrSet aNewSet( *pAttrSet );
+    aNewSet.SetParent( pParentSet );
+    aNewSet.ClearItem( RES_FRMATR_STYLE_NAME );
+    aNewSet.ClearItem( RES_FRMATR_CONDITIONAL_STYLE_NAME );
+    OUString sVal;
+
+    if ( pParentFormat )
     {
-        SwAttrSet aNewSet( *pAttrSet );
-        aNewSet.SetParent( pParentSet );
-        aNewSet.ClearItem( RES_FRMATR_STYLE_NAME );
-        aNewSet.ClearItem( RES_FRMATR_CONDITIONAL_STYLE_NAME );
-        OUString sVal;
+        SwStyleNameMapper::FillProgName( pParentFormat->GetName(), sVal, SwGetPoolIdFromName::TxtColl );
+        const SfxStringItem aAnyFormatColl( RES_FRMATR_STYLE_NAME, sVal );
+        aNewSet.Put( aAnyFormatColl );
 
-        if ( pParentFormat )
-        {
-            SwStyleNameMapper::FillProgName( pParentFormat->GetName(), sVal, SwGetPoolIdFromName::TxtColl );
-            const SfxStringItem aAnyFormatColl( RES_FRMATR_STYLE_NAME, sVal );
-            aNewSet.Put( aAnyFormatColl );
+        if ( pConditionalFormat != pParentFormat )
+            SwStyleNameMapper::FillProgName( pConditionalFormat->GetName(), sVal, SwGetPoolIdFromName::TxtColl );
 
-            if ( pConditionalFormat != pParentFormat )
-                SwStyleNameMapper::FillProgName( pConditionalFormat->GetName(), sVal, SwGetPoolIdFromName::TxtColl );
-
-            const SfxStringItem aFormatColl( RES_FRMATR_CONDITIONAL_STYLE_NAME, sVal );
-            aNewSet.Put( aFormatColl );
-        }
-
-        GetNewAutoStyle( rpAttrSet, rNode, aNewSet );
+        const SfxStringItem aFormatColl( RES_FRMATR_CONDITIONAL_STYLE_NAME, sVal );
+        aNewSet.Put( aFormatColl );
     }
+
+    GetNewAutoStyle( rpAttrSet, rNode, aNewSet );
 }
 
 static const SfxPoolItem* Put( std::shared_ptr<const SfxItemSet>& rpAttrSet,
@@ -291,20 +291,20 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const SwNodeType nNdType )
 #endif
     , m_pStartOfSection( nullptr )
 {
-    if( rWhere.GetIndex() )
+    if( !rWhere.GetIndex() )
+        return;
+
+    SwNodes& rNodes = const_cast<SwNodes&> (rWhere.GetNodes());
+    SwNode* pNd = rNodes[ rWhere.GetIndex() -1 ];
+    rNodes.InsertNode( this, rWhere );
+    m_pStartOfSection = pNd->GetStartNode();
+    if( nullptr == m_pStartOfSection )
     {
-        SwNodes& rNodes = const_cast<SwNodes&> (rWhere.GetNodes());
-        SwNode* pNd = rNodes[ rWhere.GetIndex() -1 ];
-        rNodes.InsertNode( this, rWhere );
-        m_pStartOfSection = pNd->GetStartNode();
-        if( nullptr == m_pStartOfSection )
+        m_pStartOfSection = pNd->m_pStartOfSection;
+        if( pNd->GetEndNode() )     // Skip EndNode ? Section
         {
+            pNd = m_pStartOfSection;
             m_pStartOfSection = pNd->m_pStartOfSection;
-            if( pNd->GetEndNode() )     // Skip EndNode ? Section
-            {
-                pNd = m_pStartOfSection;
-                m_pStartOfSection = pNd->m_pStartOfSection;
-            }
         }
     }
 }
@@ -325,19 +325,19 @@ SwNode::SwNode( SwNodes& rNodes, sal_uLong nPos, const SwNodeType nNdType )
 #endif
     , m_pStartOfSection( nullptr )
 {
-    if( nPos )
+    if( !nPos )
+        return;
+
+    SwNode* pNd = rNodes[ nPos - 1 ];
+    rNodes.InsertNode( this, nPos );
+    m_pStartOfSection = pNd->GetStartNode();
+    if( nullptr == m_pStartOfSection )
     {
-        SwNode* pNd = rNodes[ nPos - 1 ];
-        rNodes.InsertNode( this, nPos );
-        m_pStartOfSection = pNd->GetStartNode();
-        if( nullptr == m_pStartOfSection )
+        m_pStartOfSection = pNd->m_pStartOfSection;
+        if( pNd->GetEndNode() )     // Skip EndNode ? Section!
         {
+            pNd = m_pStartOfSection;
             m_pStartOfSection = pNd->m_pStartOfSection;
-            if( pNd->GetEndNode() )     // Skip EndNode ? Section!
-            {
-                pNd = m_pStartOfSection;
-                m_pStartOfSection = pNd->m_pStartOfSection;
-            }
         }
     }
 }
@@ -1888,28 +1888,28 @@ bool SwContentNode::CanJoinPrev( SwNodeIndex* pIdx ) const
 
 void SwContentNode::SetCondFormatColl(SwFormatColl* pColl)
 {
-    if( (!pColl && m_pCondColl) || ( pColl && !m_pCondColl ) ||
-        ( pColl && pColl != m_pCondColl->GetRegisteredIn() ) )
-    {
-        SwFormatColl* pOldColl = GetCondFormatColl();
-        m_aCondCollListener.EndListeningAll();
-        if(pColl)
-            m_aCondCollListener.StartListening(pColl);
-        m_pCondColl = pColl;
-        if(GetpSwAttrSet())
-            AttrSetHandleHelper::SetParent(mpAttrSet, *this, &GetAnyFormatColl(), GetFormatColl());
+    if( !((!pColl && m_pCondColl) || ( pColl && !m_pCondColl ) ||
+        ( pColl && pColl != m_pCondColl->GetRegisteredIn() )) )
+        return;
 
-        if(!IsModifyLocked())
-        {
-            SwFormatChg aTmp1(pOldColl ? pOldColl : GetFormatColl());
-            SwFormatChg aTmp2(pColl ? pColl : GetFormatColl());
-            NotifyClients(&aTmp1, &aTmp2);
-        }
-        if(IsInCache())
-        {
-            SwFrame::GetCache().Delete(this);
-            SetInCache(false);
-        }
+    SwFormatColl* pOldColl = GetCondFormatColl();
+    m_aCondCollListener.EndListeningAll();
+    if(pColl)
+        m_aCondCollListener.StartListening(pColl);
+    m_pCondColl = pColl;
+    if(GetpSwAttrSet())
+        AttrSetHandleHelper::SetParent(mpAttrSet, *this, &GetAnyFormatColl(), GetFormatColl());
+
+    if(!IsModifyLocked())
+    {
+        SwFormatChg aTmp1(pOldColl ? pOldColl : GetFormatColl());
+        SwFormatChg aTmp2(pColl ? pColl : GetFormatColl());
+        NotifyClients(&aTmp1, &aTmp2);
+    }
+    if(IsInCache())
+    {
+        SwFrame::GetCache().Delete(this);
+        SetInCache(false);
     }
 }
 
@@ -2002,44 +2002,44 @@ bool SwContentNode::IsAnyCondition( SwCollCondition& rTmp ) const
 void SwContentNode::ChkCondColl()
 {
     // Check, just to be sure
-    if( RES_CONDTXTFMTCOLL == GetFormatColl()->Which() )
+    if( RES_CONDTXTFMTCOLL != GetFormatColl()->Which() )
+        return;
+
+    SwCollCondition aTmp( nullptr, Master_CollCondition::NONE, 0 );
+    const SwCollCondition* pCColl;
+
+    bool bDone = false;
+
+    if( IsAnyCondition( aTmp ))
     {
-        SwCollCondition aTmp( nullptr, Master_CollCondition::NONE, 0 );
-        const SwCollCondition* pCColl;
+        pCColl = static_cast<SwConditionTextFormatColl*>(GetFormatColl())
+            ->HasCondition( aTmp );
 
-        bool bDone = false;
-
-        if( IsAnyCondition( aTmp ))
+        if (pCColl)
         {
-            pCColl = static_cast<SwConditionTextFormatColl*>(GetFormatColl())
-                ->HasCondition( aTmp );
-
-            if (pCColl)
-            {
-                SetCondFormatColl( pCColl->GetTextFormatColl() );
-                bDone = true;
-            }
-        }
-
-        if (!bDone)
-        {
-            if( IsTextNode() && static_cast<SwTextNode*>(this)->GetNumRule())
-            {
-                // Is at which Level in a list?
-                aTmp.SetCondition( Master_CollCondition::PARA_IN_LIST,
-                                static_cast<SwTextNode*>(this)->GetActualListLevel() );
-                pCColl = static_cast<SwConditionTextFormatColl*>(GetFormatColl())->
-                                HasCondition( aTmp );
-            }
-            else
-                pCColl = nullptr;
-
-            if( pCColl )
-                SetCondFormatColl( pCColl->GetTextFormatColl() );
-            else if( m_pCondColl )
-                SetCondFormatColl( nullptr );
+            SetCondFormatColl( pCColl->GetTextFormatColl() );
+            bDone = true;
         }
     }
+
+    if (bDone)
+        return;
+
+    if( IsTextNode() && static_cast<SwTextNode*>(this)->GetNumRule())
+    {
+        // Is at which Level in a list?
+        aTmp.SetCondition( Master_CollCondition::PARA_IN_LIST,
+                        static_cast<SwTextNode*>(this)->GetActualListLevel() );
+        pCColl = static_cast<SwConditionTextFormatColl*>(GetFormatColl())->
+                        HasCondition( aTmp );
+    }
+    else
+        pCColl = nullptr;
+
+    if( pCColl )
+        SetCondFormatColl( pCColl->GetTextFormatColl() );
+    else if( m_pCondColl )
+        SetCondFormatColl( nullptr );
 }
 
 // #i42921#

@@ -211,18 +211,18 @@ IMPL_LINK_NOARG(ThreadManager, TryToStartNewThread, Timer *, void)
 {
     osl::MutexGuard aGuard(maMutex);
 
-    if ( !StartingOfThreadsSuspended() )
+    if ( StartingOfThreadsSuspended() )
+        return;
+
+    // Try to start thread from waiting ones
+    if ( !StartWaitingThread() )
     {
-        // Try to start thread from waiting ones
-        if ( !StartWaitingThread() )
+        // No success on starting thread
+        // If no more started threads exist, but still threads are waiting,
+        // setup Timer to start thread from waiting ones
+        if ( maStartedThreads.empty() && !maWaitingForStartThreads.empty() )
         {
-            // No success on starting thread
-            // If no more started threads exist, but still threads are waiting,
-            // setup Timer to start thread from waiting ones
-            if ( maStartedThreads.empty() && !maWaitingForStartThreads.empty() )
-            {
-                maStartNewThreadIdle.Start();
-            }
+            maStartNewThreadIdle.Start();
         }
     }
 }
