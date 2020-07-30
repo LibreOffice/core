@@ -278,6 +278,7 @@ public:
     void testTdf84695Tab();
     void testTableStyleUndo();
     void testRedlineCopyPaste();
+    void testTdf134436();
     void testRedlineParam();
     void testRedlineViewAuthor();
     void testTdf91292();
@@ -478,6 +479,7 @@ public:
     CPPUNIT_TEST(testTdf84695Tab);
     CPPUNIT_TEST(testTableStyleUndo);
     CPPUNIT_TEST(testRedlineCopyPaste);
+    CPPUNIT_TEST(testTdf134436);
     CPPUNIT_TEST(testRedlineParam);
     CPPUNIT_TEST(testRedlineViewAuthor);
     CPPUNIT_TEST(testTdf91292);
@@ -5027,6 +5029,92 @@ void SwUiWriterTest::testRedlineCopyPaste()
 
     // With the bug this is "abzcdefgh", ie. contains the first deleted piece, too
     CPPUNIT_ASSERT_EQUAL(OUString("abcdefgh"), pTextNode->GetText());
+}
+
+void SwUiWriterTest::testTdf134436()
+{
+    load(DATA_DIRECTORY, "tdf134436.fodt");
+
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
+    SwDoc * pDoc = pXTextDocument->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell * pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
+
+    // select all 3 times, table at the start
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+    // the stupid SwXTextView::getString doesn't work "for symmetry" so use CursorShell
+    // ... no \n yet in 6.1 branch :(
+    //CPPUNIT_ASSERT_EQUAL(OUString("a\nb\n"), pWrtShell->GetCursor()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("ab"), pWrtShell->GetCursor()->GetText());
+
+    // first, the section doesn't get deleted
+    lcl_dispatchCommand(mxComponent, ".uno:Delete", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pWrtShell->GetCursor()->GetText());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+    // CPPUNIT_ASSERT_EQUAL(OUString("a\nb\n"), pWrtShell->GetCursor()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("ab"), pWrtShell->GetCursor()->GetText());
+
+    // second, the section does get deleted because point is at the end
+    lcl_dispatchCommand(mxComponent, ".uno:Delete", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xSections->getCount());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pWrtShell->GetCursor()->GetText());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+    //CPPUNIT_ASSERT_EQUAL(OUString("a\nb\n"), pWrtShell->GetCursor()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("ab"), pWrtShell->GetCursor()->GetText());
+
+    // the problem was that the section was not deleted on Redo
+    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xSections->getCount());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pWrtShell->GetCursor()->GetText());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+    //CPPUNIT_ASSERT_EQUAL(OUString("a\nb\n"), pWrtShell->GetCursor()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("ab"), pWrtShell->GetCursor()->GetText());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xSections->getCount());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pWrtShell->GetCursor()->GetText());
 }
 
 void SwUiWriterTest::testRedlineParam()

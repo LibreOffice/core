@@ -4086,6 +4086,19 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam)
 
         if( aSttIdx != nEnde )
         {
+            // tdf#134436 delete section nodes like SwUndoDelete::SwUndoDelete
+            SwNode *pTmpNd;
+            while (pEnd == rPam.GetPoint()
+                && nEnde + 2 < m_rDoc.GetNodes().Count()
+                && (pTmpNd = m_rDoc.GetNodes()[nEnde + 1])->IsEndNode()
+                && pTmpNd->StartOfSectionNode()->IsSectionNode()
+                && aSttIdx <= pTmpNd->StartOfSectionNode()->GetIndex())
+            {
+                SwNodeRange range(*pTmpNd->StartOfSectionNode(), *pTmpNd);
+                m_rDoc.GetNodes().SectionUp(&range);
+                --nEnde; // account for deleted start node
+            }
+
             // delete the Nodes into the NodesArary
             m_rDoc.GetNodes().Delete( aSttIdx, nEnde - aSttIdx.GetIndex() );
         }
