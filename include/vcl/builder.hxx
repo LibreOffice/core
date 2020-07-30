@@ -252,7 +252,6 @@ private:
         SizeGroup() {}
     };
 
-    typedef std::map<VclPtr<vcl::Window>, stringmap> AtkMap;
 
     struct ParserState
     {
@@ -282,7 +281,7 @@ private:
 
         std::vector<SizeGroup> m_aSizeGroups;
 
-        AtkMap m_aAtkInfo;
+        std::map<VclPtr<vcl::Window>, stringmap> m_aAtkInfo;
 
         std::vector<MnemonicWidgetMap> m_aMnemonicWidgetMaps;
 
