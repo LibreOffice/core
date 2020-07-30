@@ -68,18 +68,18 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(weld::Window* pParent,
         }
     }
     Reference<XQueriesSupplier> xQSupplier(m_xConnection, UNO_QUERY);
-    if (xQSupplier.is())
+    if (!xQSupplier.is())
+        return;
+
+    Reference<XNameAccess> xQueries = xQSupplier->getQueries();
+    const Sequence<OUString> aQueries = xQueries->getElementNames();
+    int nPos = m_xTable->n_children();
+    for (const OUString& rQuery : aQueries)
     {
-        Reference<XNameAccess> xQueries = xQSupplier->getQueries();
-        const Sequence<OUString> aQueries = xQueries->getElementNames();
-        int nPos = m_xTable->n_children();
-        for (const OUString& rQuery : aQueries)
-        {
-            m_xTable->append_text(rQuery);
-            m_xTable->set_text(nPos, SwResId(ST_QUERY), 1);
-            m_xTable->set_id(nPos, OUString::number(1));
-            ++nPos;
-        }
+        m_xTable->append_text(rQuery);
+        m_xTable->set_text(nPos, SwResId(ST_QUERY), 1);
+        m_xTable->set_id(nPos, OUString::number(1));
+        ++nPos;
     }
 }
 

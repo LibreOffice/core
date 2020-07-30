@@ -268,24 +268,24 @@ IMPL_LINK_NOARG(SwCompatibilityOptPage, UseAsDefaultHdl, weld::Button&, void)
 {
     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/querydefaultcompatdialog.ui"));
     std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("QueryDefaultCompatDialog"));
-    if (xQueryBox->run() == RET_YES)
+    if (xQueryBox->run() != RET_YES)
+        return;
+
+    auto pItem = std::find_if(m_pImpl->m_aList.begin(), m_pImpl->m_aList.end(),
+        [](const SvtCompatibilityEntry& rItem) { return rItem.isDefaultEntry(); });
+    if (pItem != m_pImpl->m_aList.end())
     {
-        auto pItem = std::find_if(m_pImpl->m_aList.begin(), m_pImpl->m_aList.end(),
-            [](const SvtCompatibilityEntry& rItem) { return rItem.isDefaultEntry(); });
-        if (pItem != m_pImpl->m_aList.end())
+        const sal_Int32 nCount = m_xOptionsLB->n_children();
+        for ( sal_Int32 i = 0; i < nCount; ++i )
         {
-            const sal_Int32 nCount = m_xOptionsLB->n_children();
-            for ( sal_Int32 i = 0; i < nCount; ++i )
-            {
-                bool bChecked = m_xOptionsLB->get_toggle(i);
+            bool bChecked = m_xOptionsLB->get_toggle(i);
 
-                int nCoptIdx = i + 2; /* Consider "Name" & "Module" indexes */
-                pItem->setValue<bool>( SvtCompatibilityEntry::Index(nCoptIdx), bChecked );
-            }
+            int nCoptIdx = i + 2; /* Consider "Name" & "Module" indexes */
+            pItem->setValue<bool>( SvtCompatibilityEntry::Index(nCoptIdx), bChecked );
         }
-
-        WriteOptions();
     }
+
+    WriteOptions();
 }
 
 void SwCompatibilityOptPage::SetCurrentOptions( sal_uInt32 nOptions )

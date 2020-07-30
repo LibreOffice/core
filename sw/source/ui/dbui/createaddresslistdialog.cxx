@@ -142,21 +142,21 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
 
 void SwAddressControl_Impl::SetCurrentDataSet(sal_uInt32 nSet)
 {
-    if(m_bNoDataSet || m_nCurrentDataSet != nSet)
+    if(!(m_bNoDataSet || m_nCurrentDataSet != nSet))
+        return;
+
+    m_bNoDataSet = false;
+    m_nCurrentDataSet = nSet;
+    OSL_ENSURE(m_pData->aDBData.size() > m_nCurrentDataSet, "wrong data set index");
+    if(m_pData->aDBData.size() > m_nCurrentDataSet)
     {
-        m_bNoDataSet = false;
-        m_nCurrentDataSet = nSet;
-        OSL_ENSURE(m_pData->aDBData.size() > m_nCurrentDataSet, "wrong data set index");
-        if(m_pData->aDBData.size() > m_nCurrentDataSet)
+        sal_uInt32 nIndex = 0;
+        for(auto& rLine : m_aLines)
         {
-            sal_uInt32 nIndex = 0;
-            for(auto& rLine : m_aLines)
-            {
-                OSL_ENSURE(nIndex < m_pData->aDBData[m_nCurrentDataSet].size(),
-                            "number of columns doesn't match number of Edits");
-                rLine->m_xEntry->set_text(m_pData->aDBData[m_nCurrentDataSet][nIndex]);
-                ++nIndex;
-            }
+            OSL_ENSURE(nIndex < m_pData->aDBData[m_nCurrentDataSet].size(),
+                        "number of columns doesn't match number of Edits");
+            rLine->m_xEntry->set_text(m_pData->aDBData[m_nCurrentDataSet][nIndex]);
+            ++nIndex;
         }
     }
 }
@@ -428,22 +428,22 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl, weld::Button&, void)
             m_sURL = aResult.GetMainURL(INetURLObject::DecodeMechanism::NONE);
         }
     }
-    if(!m_sURL.isEmpty())
+    if(m_sURL.isEmpty())
+        return;
+
+    SfxMedium aMedium( m_sURL, StreamMode::READWRITE|StreamMode::TRUNC );
+    SvStream* pStream = aMedium.GetOutStream();
+    pStream->SetLineDelimiter( LINEEND_LF );
+    pStream->SetStreamCharSet(RTL_TEXTENCODING_UTF8);
+
+    lcl_WriteValues(&(m_pCSVData->aDBColumnHeaders), pStream);
+
+    for(const auto& rData : m_pCSVData->aDBData)
     {
-        SfxMedium aMedium( m_sURL, StreamMode::READWRITE|StreamMode::TRUNC );
-        SvStream* pStream = aMedium.GetOutStream();
-        pStream->SetLineDelimiter( LINEEND_LF );
-        pStream->SetStreamCharSet(RTL_TEXTENCODING_UTF8);
-
-        lcl_WriteValues(&(m_pCSVData->aDBColumnHeaders), pStream);
-
-        for(const auto& rData : m_pCSVData->aDBData)
-        {
-            lcl_WriteValues(&rData, pStream);
-        }
-        aMedium.Commit();
-        m_xDialog->response(RET_OK);
+        lcl_WriteValues(&rData, pStream);
     }
+    aMedium.Commit();
+    m_xDialog->response(RET_OK);
 }
 
 IMPL_LINK(SwCreateAddressListDialog, DBCursorHdl_Impl, weld::Button&, rButton, void)

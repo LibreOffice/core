@@ -2173,20 +2173,20 @@ void SwTestTabPage::Reset( const SfxItemSet* )
     const SfxItemSet& rSet = GetItemSet();
     const SwTestItem* pTestAttr = nullptr;
 
-    if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_SWTEST , false,
+    if( SfxItemState::SET != rSet.GetItemState( FN_PARAM_SWTEST , false,
                                     reinterpret_cast<const SfxPoolItem**>(&pTestAttr) ))
-    {
-        m_xTest1CBox->set_active(pTestAttr->m_bTest1);
-        m_xTest2CBox->set_active(pTestAttr->m_bTest2);
-        m_xTest3CBox->set_active(pTestAttr->m_bTest3);
-        m_xTest4CBox->set_active(pTestAttr->m_bTest4);
-        m_xTest5CBox->set_active(pTestAttr->m_bTest5);
-        m_xTest6CBox->set_active(pTestAttr->m_bTest6);
-        m_xTest7CBox->set_active(pTestAttr->m_bTest7);
-        m_xTest8CBox->set_active(pTestAttr->m_bTest8);
-        m_xTest9CBox->set_active(pTestAttr->m_bTest9);
-        m_xTest10CBox->set_active(pTestAttr->m_bTest10);
-    }
+        return;
+
+    m_xTest1CBox->set_active(pTestAttr->m_bTest1);
+    m_xTest2CBox->set_active(pTestAttr->m_bTest2);
+    m_xTest3CBox->set_active(pTestAttr->m_bTest3);
+    m_xTest4CBox->set_active(pTestAttr->m_bTest4);
+    m_xTest5CBox->set_active(pTestAttr->m_bTest5);
+    m_xTest6CBox->set_active(pTestAttr->m_bTest6);
+    m_xTest7CBox->set_active(pTestAttr->m_bTest7);
+    m_xTest8CBox->set_active(pTestAttr->m_bTest8);
+    m_xTest9CBox->set_active(pTestAttr->m_bTest9);
+    m_xTest10CBox->set_active(pTestAttr->m_bTest10);
 }
 
 void SwTestTabPage::Init()

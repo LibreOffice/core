@@ -573,19 +573,19 @@ IMPL_LINK( SwInsertDBColAutoPilot, TableToFromHdl, weld::Button&, rButton, void 
         }
     }
 
-    if( bChgEnable )
-    {
-        m_xIbDbcolOneTo->set_sensitive( bEnableTo );
-        m_xIbDbcolAllTo->set_sensitive( bEnableTo );
-        m_xIbDbcolOneFrom->set_sensitive( bEnableFrom );
-        m_xIbDbcolAllFrom->set_sensitive( bEnableFrom );
+    if( !bChgEnable )
+        return;
 
-        m_xRbDbFormatFromDb->set_sensitive( false );
-        m_xRbDbFormatFromUsr->set_sensitive( false );
-        m_xLbDbFormatFromUsr->set_sensitive( false );
+    m_xIbDbcolOneTo->set_sensitive( bEnableTo );
+    m_xIbDbcolAllTo->set_sensitive( bEnableTo );
+    m_xIbDbcolOneFrom->set_sensitive( bEnableFrom );
+    m_xIbDbcolAllFrom->set_sensitive( bEnableFrom );
 
-        m_xPbTableFormat->set_sensitive( bEnableFrom );
-    }
+    m_xRbDbFormatFromDb->set_sensitive( false );
+    m_xRbDbFormatFromUsr->set_sensitive( false );
+    m_xLbDbFormatFromUsr->set_sensitive( false );
+
+    m_xPbTableFormat->set_sensitive( bEnableFrom );
 }
 
 IMPL_LINK(SwInsertDBColAutoPilot, DblClickHdl, weld::TreeView&, rBox, bool)

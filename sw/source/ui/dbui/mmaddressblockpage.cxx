@@ -129,22 +129,22 @@ void SwMailMergeAddressBlockPage::Activate()
     m_xStep3->set_visible(bIsLetter);
     m_xStep4->set_visible(bIsLetter);
 
-    if (bIsLetter)
-    {
-        m_xHideEmptyParagraphsCB->set_active( rConfigItem.IsHideEmptyParagraphs() );
-        m_xDocumentIndexFI->set_label(m_sDocument.replaceFirst("%1", "1"));
+    if (!bIsLetter)
+        return;
 
-        m_xSettings->Clear();
-        const uno::Sequence< OUString> aBlocks =
-                    m_pWizard->GetConfigItem().GetAddressBlocks();
-        for(const auto& rAddress : aBlocks)
-            m_xSettings->AddAddress(rAddress);
-        m_xSettings->SelectAddress(static_cast<sal_uInt16>(rConfigItem.GetCurrentAddressBlockIndex()));
-        m_xAddressCB->set_active(rConfigItem.IsAddressBlock());
-        AddressBlockHdl_Impl(*m_xAddressCB);
-        m_xSettings->SetLayout(1, 2);
-        InsertDataHdl(nullptr);
-    }
+    m_xHideEmptyParagraphsCB->set_active( rConfigItem.IsHideEmptyParagraphs() );
+    m_xDocumentIndexFI->set_label(m_sDocument.replaceFirst("%1", "1"));
+
+    m_xSettings->Clear();
+    const uno::Sequence< OUString> aBlocks =
+                m_pWizard->GetConfigItem().GetAddressBlocks();
+    for(const auto& rAddress : aBlocks)
+        m_xSettings->AddAddress(rAddress);
+    m_xSettings->SelectAddress(static_cast<sal_uInt16>(rConfigItem.GetCurrentAddressBlockIndex()));
+    m_xAddressCB->set_active(rConfigItem.IsAddressBlock());
+    AddressBlockHdl_Impl(*m_xAddressCB);
+    m_xSettings->SetLayout(1, 2);
+    InsertDataHdl(nullptr);
 }
 
 bool SwMailMergeAddressBlockPage::commitPage( ::vcl::WizardTypes::CommitPageReason _eReason )
@@ -416,24 +416,24 @@ IMPL_LINK(SwSelectAddressBlockDialog, NewCustomizeHdl_Impl, weld::Button&, rButt
     {
         xDlg->SetAddress(m_aAddressBlocks[m_xPreview->GetSelectedAddress()]);
     }
-    if (RET_OK == xDlg->run())
+    if (RET_OK != xDlg->run())
+        return;
+
+    const OUString sNew = xDlg->GetAddress();
+    if(bCustomize)
     {
-        const OUString sNew = xDlg->GetAddress();
-        if(bCustomize)
-        {
-            m_xPreview->ReplaceSelectedAddress(sNew);
-            m_aAddressBlocks[m_xPreview->GetSelectedAddress()] = sNew;
-        }
-        else
-        {
-            m_xPreview->AddAddress(sNew);
-            m_aAddressBlocks.realloc(m_aAddressBlocks.getLength() + 1);
-            const sal_Int32 nSelect = m_aAddressBlocks.getLength() - 1;
-            m_aAddressBlocks[nSelect] = sNew;
-            m_xPreview->SelectAddress(static_cast<sal_uInt16>(nSelect));
-        }
-        m_xDeletePB->set_sensitive(m_aAddressBlocks.getLength() > 1);
+        m_xPreview->ReplaceSelectedAddress(sNew);
+        m_aAddressBlocks[m_xPreview->GetSelectedAddress()] = sNew;
     }
+    else
+    {
+        m_xPreview->AddAddress(sNew);
+        m_aAddressBlocks.realloc(m_aAddressBlocks.getLength() + 1);
+        const sal_Int32 nSelect = m_aAddressBlocks.getLength() - 1;
+        m_aAddressBlocks[nSelect] = sNew;
+        m_xPreview->SelectAddress(static_cast<sal_uInt16>(nSelect));
+    }
+    m_xDeletePB->set_sensitive(m_aAddressBlocks.getLength() > 1);
 }
 
 IMPL_LINK_NOARG(SwSelectAddressBlockDialog, IncludeHdl_Impl, weld::ToggleButton&,  void)

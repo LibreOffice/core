@@ -162,45 +162,45 @@ void SwMailMergeLayoutPage::Activate()
     m_xGreetingLine->set_sensitive(bGreetingLine);
 
     //check if greeting and/or address frame have to be inserted/removed
-    if(m_pExampleWrtShell) // initially there's nothing to check
+    if(!m_pExampleWrtShell) // initially there's nothing to check
+        return;
+
+    if(!rConfigItem.IsGreetingInserted() &&
+            m_bIsGreetingInserted != bGreetingLine )
     {
-        if(!rConfigItem.IsGreetingInserted() &&
-                m_bIsGreetingInserted != bGreetingLine )
+        if( m_bIsGreetingInserted )
         {
-            if( m_bIsGreetingInserted )
-            {
-                m_pExampleWrtShell->DelFullPara();
-                m_bIsGreetingInserted = false;
-            }
-            else
-            {
-                InsertGreeting(*m_pExampleWrtShell, m_pWizard->GetConfigItem(), true);
-                m_bIsGreetingInserted = true;
-            }
+            m_pExampleWrtShell->DelFullPara();
+            m_bIsGreetingInserted = false;
         }
-        if(!rConfigItem.IsAddressInserted() &&
-                rConfigItem.IsAddressBlock() != ( nullptr != m_pAddressBlockFormat ))
+        else
         {
-            if( m_pAddressBlockFormat )
-            {
-                m_pExampleWrtShell->Push();
-                m_pExampleWrtShell->GotoFly( m_pAddressBlockFormat->GetName() );
-                m_pExampleWrtShell->DelRight();
-                m_pAddressBlockFormat = nullptr;
-                m_pExampleWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
-            }
-            else
-            {
-                long nLeft = static_cast< long >(m_xLeftMF->denormalize(m_xLeftMF->get_value(FieldUnit::TWIP)));
-                long nTop  = static_cast< long >(m_xTopMF->denormalize(m_xTopMF->get_value(FieldUnit::TWIP)));
-                m_pAddressBlockFormat = InsertAddressFrame(
-                        *m_pExampleWrtShell, m_pWizard->GetConfigItem(),
-                        Point(nLeft, nTop),
-                        m_xAlignToBodyCB->get_active(), true);
-            }
+            InsertGreeting(*m_pExampleWrtShell, m_pWizard->GetConfigItem(), true);
+            m_bIsGreetingInserted = true;
         }
-        m_xExampleFrame->Invalidate();
     }
+    if(!rConfigItem.IsAddressInserted() &&
+            rConfigItem.IsAddressBlock() != ( nullptr != m_pAddressBlockFormat ))
+    {
+        if( m_pAddressBlockFormat )
+        {
+            m_pExampleWrtShell->Push();
+            m_pExampleWrtShell->GotoFly( m_pAddressBlockFormat->GetName() );
+            m_pExampleWrtShell->DelRight();
+            m_pAddressBlockFormat = nullptr;
+            m_pExampleWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
+        }
+        else
+        {
+            long nLeft = static_cast< long >(m_xLeftMF->denormalize(m_xLeftMF->get_value(FieldUnit::TWIP)));
+            long nTop  = static_cast< long >(m_xTopMF->denormalize(m_xTopMF->get_value(FieldUnit::TWIP)));
+            m_pAddressBlockFormat = InsertAddressFrame(
+                    *m_pExampleWrtShell, m_pWizard->GetConfigItem(),
+                    Point(nLeft, nTop),
+                    m_xAlignToBodyCB->get_active(), true);
+        }
+    }
+    m_xExampleFrame->Invalidate();
 }
 
 bool SwMailMergeLayoutPage::commitPage(::vcl::WizardTypes::CommitPageReason eReason)
@@ -629,45 +629,45 @@ IMPL_LINK_NOARG(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl, SwOneExampleFrame&
 
 IMPL_LINK(SwMailMergeLayoutPage, ZoomHdl_Impl, weld::ComboBox&, rBox, void)
 {
-    if (m_pExampleWrtShell)
-    {
-        sal_Int16 eType = DocumentZoomType::BY_VALUE;
-        short nZoom = 50;
-        switch (rBox.get_active())
-        {
-            case 0 : eType = DocumentZoomType::ENTIRE_PAGE; break;
-            case 1 : nZoom = 50; break;
-            case 2 : nZoom = 75; break;
-            case 3 : nZoom = 100; break;
-        }
-        Any aZoom;
-        aZoom <<= eType;
-        m_xViewProperties->setPropertyValue(UNO_NAME_ZOOM_TYPE, aZoom);
-        aZoom <<= nZoom;
-        m_xViewProperties->setPropertyValue(UNO_NAME_ZOOM_VALUE, aZoom);
+    if (!m_pExampleWrtShell)
+        return;
 
-        m_xExampleFrame->Invalidate();
+    sal_Int16 eType = DocumentZoomType::BY_VALUE;
+    short nZoom = 50;
+    switch (rBox.get_active())
+    {
+        case 0 : eType = DocumentZoomType::ENTIRE_PAGE; break;
+        case 1 : nZoom = 50; break;
+        case 2 : nZoom = 75; break;
+        case 3 : nZoom = 100; break;
     }
+    Any aZoom;
+    aZoom <<= eType;
+    m_xViewProperties->setPropertyValue(UNO_NAME_ZOOM_TYPE, aZoom);
+    aZoom <<= nZoom;
+    m_xViewProperties->setPropertyValue(UNO_NAME_ZOOM_VALUE, aZoom);
+
+    m_xExampleFrame->Invalidate();
 }
 
 IMPL_LINK_NOARG(SwMailMergeLayoutPage, ChangeAddressHdl_Impl, weld::MetricSpinButton&, void)
 {
-    if(m_pExampleWrtShell && m_pAddressBlockFormat)
-    {
-        long nLeft = static_cast< long >(m_xLeftMF->denormalize(m_xLeftMF->get_value(FieldUnit::TWIP)));
-        long nTop  = static_cast< long >(m_xTopMF->denormalize(m_xTopMF->get_value(FieldUnit::TWIP)));
+    if(!(m_pExampleWrtShell && m_pAddressBlockFormat))
+        return;
 
-        SfxItemSet aSet(
-            m_pExampleWrtShell->GetAttrPool(),
-            svl::Items<RES_VERT_ORIENT, RES_ANCHOR>{});
-        if (m_xAlignToBodyCB->get_active())
-            aSet.Put(SwFormatHoriOrient( 0, text::HoriOrientation::NONE, text::RelOrientation::PAGE_PRINT_AREA ));
-        else
-            aSet.Put(SwFormatHoriOrient( nLeft, text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
-        aSet.Put(SwFormatVertOrient( nTop, text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
-        m_pExampleWrtShell->GetDoc()->SetFlyFrameAttr( *m_pAddressBlockFormat, aSet );
-        m_xExampleFrame->Invalidate();
-    }
+    long nLeft = static_cast< long >(m_xLeftMF->denormalize(m_xLeftMF->get_value(FieldUnit::TWIP)));
+    long nTop  = static_cast< long >(m_xTopMF->denormalize(m_xTopMF->get_value(FieldUnit::TWIP)));
+
+    SfxItemSet aSet(
+        m_pExampleWrtShell->GetAttrPool(),
+        svl::Items<RES_VERT_ORIENT, RES_ANCHOR>{});
+    if (m_xAlignToBodyCB->get_active())
+        aSet.Put(SwFormatHoriOrient( 0, text::HoriOrientation::NONE, text::RelOrientation::PAGE_PRINT_AREA ));
+    else
+        aSet.Put(SwFormatHoriOrient( nLeft, text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
+    aSet.Put(SwFormatVertOrient( nTop, text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
+    m_pExampleWrtShell->GetDoc()->SetFlyFrameAttr( *m_pAddressBlockFormat, aSet );
+    m_xExampleFrame->Invalidate();
 }
 
 IMPL_LINK(SwMailMergeLayoutPage, GreetingsHdl_Impl, weld::Button&, rButton, void)
