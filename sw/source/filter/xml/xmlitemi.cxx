@@ -180,46 +180,46 @@ bool SwXMLImportTableItemMapper_Impl::handleNoItem(
 void SwXMLImportTableItemMapper_Impl::finished(
         SfxItemSet & rSet, SvXMLUnitConverter const& rUnitConverter) const
 {
-    if (!m_FoMarginValue.isEmpty())
+    if (m_FoMarginValue.isEmpty())
+        return;
+
+    sal_uInt16 const Ids[4][2] = {
+        { RES_LR_SPACE, MID_L_MARGIN },
+        { RES_LR_SPACE, MID_R_MARGIN },
+        { RES_UL_SPACE, MID_UP_MARGIN },
+        { RES_UL_SPACE, MID_LO_MARGIN },
+    };
+    for (int i = 0; i < 4; ++i)
     {
-        sal_uInt16 const Ids[4][2] = {
-            { RES_LR_SPACE, MID_L_MARGIN },
-            { RES_LR_SPACE, MID_R_MARGIN },
-            { RES_UL_SPACE, MID_UP_MARGIN },
-            { RES_UL_SPACE, MID_LO_MARGIN },
-        };
-        for (int i = 0; i < 4; ++i)
+        if (m_bHaveMargin[i])
         {
-            if (m_bHaveMargin[i])
-            {
-                continue; // already read fo:margin-top etc.
-            }
-            // first get item from itemset
-            SfxPoolItem const* pItem = nullptr;
-            SfxItemState eState =
-                rSet.GetItemState(Ids[i][0], true, &pItem);
+            continue; // already read fo:margin-top etc.
+        }
+        // first get item from itemset
+        SfxPoolItem const* pItem = nullptr;
+        SfxItemState eState =
+            rSet.GetItemState(Ids[i][0], true, &pItem);
 
-            // if not set, try the pool
-            if ((SfxItemState::SET != eState) && SfxItemPool::IsWhich(Ids[i][0]))
-            {
-                pItem = &rSet.GetPool()->GetDefaultItem(Ids[i][0]);
-            }
+        // if not set, try the pool
+        if ((SfxItemState::SET != eState) && SfxItemPool::IsWhich(Ids[i][0]))
+        {
+            pItem = &rSet.GetPool()->GetDefaultItem(Ids[i][0]);
+        }
 
-            // do we have an item?
-            if (eState >= SfxItemState::DEFAULT && pItem)
+        // do we have an item?
+        if (eState >= SfxItemState::DEFAULT && pItem)
+        {
+            std::unique_ptr<SfxPoolItem> pNewItem(pItem->Clone());
+            bool const bPut = PutXMLValue(
+                    *pNewItem, m_FoMarginValue, Ids[i][1], rUnitConverter);
+            if (bPut)
             {
-                std::unique_ptr<SfxPoolItem> pNewItem(pItem->Clone());
-                bool const bPut = PutXMLValue(
-                        *pNewItem, m_FoMarginValue, Ids[i][1], rUnitConverter);
-                if (bPut)
-                {
-                    rSet.Put(std::move(pNewItem));
-                }
+                rSet.Put(std::move(pNewItem));
             }
-            else
-            {
-                OSL_ENSURE(false, "could not get item");
-            }
+        }
+        else
+        {
+            OSL_ENSURE(false, "could not get item");
         }
     }
 }

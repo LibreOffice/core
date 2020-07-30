@@ -1094,66 +1094,66 @@ void SwXMLExport::ExportTable( const SwTableNode& rTableNd )
         }
     }
 
-    if (oPrefix)
+    if (!oPrefix)
+        return;
+
+    const SwTable& rTable = rTableNd.GetTable();
+    const SwFrameFormat *pTableFormat = rTable.GetFrameFormat();
+    if (pTableFormat && !pTableFormat->GetName().isEmpty())
     {
-        const SwTable& rTable = rTableNd.GetTable();
-        const SwFrameFormat *pTableFormat = rTable.GetFrameFormat();
-        if (pTableFormat && !pTableFormat->GetName().isEmpty())
-        {
-            AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, pTableFormat->GetName());
-            AddAttribute(XML_NAMESPACE_TABLE, XML_STYLE_NAME,
-                         EncodeStyleName(pTableFormat->GetName()));
-        }
-
-        // table:template-name=
-        if (!rTable.GetTableStyleName().isEmpty())
-        {
-            OUString sStyleName;
-            SwStyleNameMapper::FillProgName(rTable.GetTableStyleName(), sStyleName, SwGetPoolIdFromName::TabStyle);
-            AddAttribute(XML_NAMESPACE_TABLE, XML_TEMPLATE_NAME, sStyleName);
-        }
-
-        SvXMLElementExport aElem(*this, *oPrefix, XML_TABLE, true, true);
-
-        // export DDE source (if this is a DDE table)
-        if ( dynamic_cast<const SwDDETable*>( &rTable) !=  nullptr )
-        {
-            // get DDE Field Type (contains the DDE connection)
-            const SwDDEFieldType* pDDEFieldType =
-                static_cast<const SwDDETable&>(rTable).GetDDEFieldType();
-
-            // connection name
-            AddAttribute( XML_NAMESPACE_OFFICE, XML_NAME,
-                          pDDEFieldType->GetName() );
-
-            // DDE command
-            const OUString& sCmd = pDDEFieldType->GetCmd();
-            sal_Int32 nIdx{ 0 };
-            AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_APPLICATION,
-                          sCmd.getToken(0, sfx2::cTokenSeparator, nIdx) );
-            AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_ITEM,
-                          sCmd.getToken(0, sfx2::cTokenSeparator, nIdx) );
-            AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_TOPIC,
-                          sCmd.getToken(0, sfx2::cTokenSeparator, nIdx) );
-
-            // auto update
-            if (pDDEFieldType->GetType() == SfxLinkUpdateMode::ALWAYS)
-            {
-                AddAttribute( XML_NAMESPACE_OFFICE,
-                              XML_AUTOMATIC_UPDATE, XML_TRUE );
-            }
-
-            // DDE source element (always empty)
-            SvXMLElementExport aSource(*this, XML_NAMESPACE_OFFICE,
-                                       XML_DDE_SOURCE, true, false);
-        }
-
-        SwXMLTableInfo_Impl aTableInfo(&rTable, *oPrefix);
-        ExportTableLines( rTable.GetTabLines(), aTableInfo, rTable.GetRowsToRepeat() );
-
-        for( SwTableLine *pLine : const_cast<SwTable &>(rTable).GetTabLines() )
-            lcl_xmltble_ClearName_Line( pLine );
+        AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, pTableFormat->GetName());
+        AddAttribute(XML_NAMESPACE_TABLE, XML_STYLE_NAME,
+                     EncodeStyleName(pTableFormat->GetName()));
     }
+
+    // table:template-name=
+    if (!rTable.GetTableStyleName().isEmpty())
+    {
+        OUString sStyleName;
+        SwStyleNameMapper::FillProgName(rTable.GetTableStyleName(), sStyleName, SwGetPoolIdFromName::TabStyle);
+        AddAttribute(XML_NAMESPACE_TABLE, XML_TEMPLATE_NAME, sStyleName);
+    }
+
+    SvXMLElementExport aElem(*this, *oPrefix, XML_TABLE, true, true);
+
+    // export DDE source (if this is a DDE table)
+    if ( dynamic_cast<const SwDDETable*>( &rTable) !=  nullptr )
+    {
+        // get DDE Field Type (contains the DDE connection)
+        const SwDDEFieldType* pDDEFieldType =
+            static_cast<const SwDDETable&>(rTable).GetDDEFieldType();
+
+        // connection name
+        AddAttribute( XML_NAMESPACE_OFFICE, XML_NAME,
+                      pDDEFieldType->GetName() );
+
+        // DDE command
+        const OUString& sCmd = pDDEFieldType->GetCmd();
+        sal_Int32 nIdx{ 0 };
+        AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_APPLICATION,
+                      sCmd.getToken(0, sfx2::cTokenSeparator, nIdx) );
+        AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_ITEM,
+                      sCmd.getToken(0, sfx2::cTokenSeparator, nIdx) );
+        AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_TOPIC,
+                      sCmd.getToken(0, sfx2::cTokenSeparator, nIdx) );
+
+        // auto update
+        if (pDDEFieldType->GetType() == SfxLinkUpdateMode::ALWAYS)
+        {
+            AddAttribute( XML_NAMESPACE_OFFICE,
+                          XML_AUTOMATIC_UPDATE, XML_TRUE );
+        }
+
+        // DDE source element (always empty)
+        SvXMLElementExport aSource(*this, XML_NAMESPACE_OFFICE,
+                                   XML_DDE_SOURCE, true, false);
+    }
+
+    SwXMLTableInfo_Impl aTableInfo(&rTable, *oPrefix);
+    ExportTableLines( rTable.GetTabLines(), aTableInfo, rTable.GetRowsToRepeat() );
+
+    for( SwTableLine *pLine : const_cast<SwTable &>(rTable).GetTabLines() )
+        lcl_xmltble_ClearName_Line( pLine );
 }
 
 void SwXMLTextParagraphExport::exportTable(

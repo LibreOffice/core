@@ -156,44 +156,44 @@ SwXMLConditionParser_Impl::SwXMLConditionParser_Impl( const OUString& rInp ) :
 
     bOK &= nPos == nLength;
 
-    if( bOK )
+    if( !bOK )
+        return;
+
+    if( IsXMLToken( sFunc, XML_ENDNOTE ) && !bHasSub )
+        nCondition = Master_CollCondition::PARA_IN_ENDNOTE;
+    else if( IsXMLToken( sFunc, XML_FOOTER ) && !bHasSub )
+        nCondition = Master_CollCondition::PARA_IN_FOOTER;
+    else if( IsXMLToken( sFunc, XML_FOOTNOTE ) && !bHasSub )
+        nCondition = Master_CollCondition::PARA_IN_FOOTNOTE;
+    else if( IsXMLToken( sFunc, XML_HEADER ) && !bHasSub )
+        nCondition = Master_CollCondition::PARA_IN_HEADER;
+    else if( IsXMLToken( sFunc, XML_LIST_LEVEL) &&
+            nSub >=1 && nSub <= MAXLEVEL )
     {
-        if( IsXMLToken( sFunc, XML_ENDNOTE ) && !bHasSub )
-            nCondition = Master_CollCondition::PARA_IN_ENDNOTE;
-        else if( IsXMLToken( sFunc, XML_FOOTER ) && !bHasSub )
-            nCondition = Master_CollCondition::PARA_IN_FOOTER;
-        else if( IsXMLToken( sFunc, XML_FOOTNOTE ) && !bHasSub )
-            nCondition = Master_CollCondition::PARA_IN_FOOTNOTE;
-        else if( IsXMLToken( sFunc, XML_HEADER ) && !bHasSub )
-            nCondition = Master_CollCondition::PARA_IN_HEADER;
-        else if( IsXMLToken( sFunc, XML_LIST_LEVEL) &&
-                nSub >=1 && nSub <= MAXLEVEL )
-        {
-            nCondition = Master_CollCondition::PARA_IN_LIST;
-            nSubCondition = nSub-1;
-        }
-        else if( IsXMLToken( sFunc, XML_OUTLINE_LEVEL) &&
-                 nSub >=1 && nSub <= MAXLEVEL )
-        {
-            nCondition = Master_CollCondition::PARA_IN_OUTLINE;
-            nSubCondition = nSub-1;
-        }
-        else if( IsXMLToken( sFunc, XML_SECTION ) && !bHasSub )
-        {
-            nCondition = Master_CollCondition::PARA_IN_SECTION;
-        }
-        else if( IsXMLToken( sFunc, XML_TABLE ) && !bHasSub )
-        {
-            nCondition = Master_CollCondition::PARA_IN_TABLEBODY;
-        }
-        else if( IsXMLToken( sFunc, XML_TABLE_HEADER ) && !bHasSub )
-        {
-            nCondition = Master_CollCondition::PARA_IN_TABLEHEAD;
-        }
-        else if( IsXMLToken( sFunc, XML_TEXT_BOX ) && !bHasSub )
-        {
-            nCondition = Master_CollCondition::PARA_IN_FRAME;
-        }
+        nCondition = Master_CollCondition::PARA_IN_LIST;
+        nSubCondition = nSub-1;
+    }
+    else if( IsXMLToken( sFunc, XML_OUTLINE_LEVEL) &&
+             nSub >=1 && nSub <= MAXLEVEL )
+    {
+        nCondition = Master_CollCondition::PARA_IN_OUTLINE;
+        nSubCondition = nSub-1;
+    }
+    else if( IsXMLToken( sFunc, XML_SECTION ) && !bHasSub )
+    {
+        nCondition = Master_CollCondition::PARA_IN_SECTION;
+    }
+    else if( IsXMLToken( sFunc, XML_TABLE ) && !bHasSub )
+    {
+        nCondition = Master_CollCondition::PARA_IN_TABLEBODY;
+    }
+    else if( IsXMLToken( sFunc, XML_TABLE_HEADER ) && !bHasSub )
+    {
+        nCondition = Master_CollCondition::PARA_IN_TABLEHEAD;
+    }
+    else if( IsXMLToken( sFunc, XML_TEXT_BOX ) && !bHasSub )
+    {
+        nCondition = Master_CollCondition::PARA_IN_FRAME;
     }
 }
 

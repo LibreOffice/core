@@ -417,42 +417,42 @@ static void lcl_AdjustOutlineStylesForOOo(SwDoc& _rDoc)
 
 static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs(SwDoc& _rDoc)
 {
-    if ( _rDoc.getIDocumentDrawModelAccess().GetDrawModel() &&
-         _rDoc.getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 ) )
+    if ( !(_rDoc.getIDocumentDrawModelAccess().GetDrawModel() &&
+         _rDoc.getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 )) )
+        return;
+
+    const SdrPage& rSdrPage( *(_rDoc.getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 )) );
+
+    // iterate recursive with group objects over all shapes on the draw page
+    SdrObjListIter aIter( &rSdrPage );
+    while( aIter.IsMore() )
     {
-        const SdrPage& rSdrPage( *(_rDoc.getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 )) );
-
-        // iterate recursive with group objects over all shapes on the draw page
-        SdrObjListIter aIter( &rSdrPage );
-        while( aIter.IsMore() )
+        SdrOle2Obj* pOle2Obj = dynamic_cast< SdrOle2Obj* >( aIter.Next() );
+        if( pOle2Obj )
         {
-            SdrOle2Obj* pOle2Obj = dynamic_cast< SdrOle2Obj* >( aIter.Next() );
-            if( pOle2Obj )
-            {
-                // found an ole2 shape
-                SdrObjList* pObjList = pOle2Obj->getParentSdrObjListFromSdrObject();
+            // found an ole2 shape
+            SdrObjList* pObjList = pOle2Obj->getParentSdrObjListFromSdrObject();
 
-                // get its graphic
-                Graphic aGraphic;
-                pOle2Obj->Connect();
-                const Graphic* pGraphic = pOle2Obj->GetGraphic();
-                if( pGraphic )
-                    aGraphic = *pGraphic;
-                pOle2Obj->Disconnect();
+            // get its graphic
+            Graphic aGraphic;
+            pOle2Obj->Connect();
+            const Graphic* pGraphic = pOle2Obj->GetGraphic();
+            if( pGraphic )
+                aGraphic = *pGraphic;
+            pOle2Obj->Disconnect();
 
-                // create new graphic shape with the ole graphic and shape size
-                SdrGrafObj* pGraphicObj = new SdrGrafObj(
-                    pOle2Obj->getSdrModelFromSdrObject(),
-                    aGraphic,
-                    pOle2Obj->GetCurrentBoundRect());
+            // create new graphic shape with the ole graphic and shape size
+            SdrGrafObj* pGraphicObj = new SdrGrafObj(
+                pOle2Obj->getSdrModelFromSdrObject(),
+                aGraphic,
+                pOle2Obj->GetCurrentBoundRect());
 
-                // apply layer of ole2 shape at graphic shape
-                pGraphicObj->SetLayer( pOle2Obj->GetLayer() );
+            // apply layer of ole2 shape at graphic shape
+            pGraphicObj->SetLayer( pOle2Obj->GetLayer() );
 
-                // replace ole2 shape with the new graphic object and delete the ol2 shape
-                SdrObject* pReplaced = pObjList->ReplaceObject( pGraphicObj, pOle2Obj->GetOrdNum() );
-                SdrObject::Free( pReplaced );
-            }
+            // replace ole2 shape with the new graphic object and delete the ol2 shape
+            SdrObject* pReplaced = pObjList->ReplaceObject( pGraphicObj, pOle2Obj->GetOrdNum() );
+            SdrObject::Free( pReplaced );
         }
     }
 }

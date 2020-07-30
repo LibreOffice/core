@@ -420,21 +420,21 @@ void XMLRedlineImportHelper::Add(
 
     // ad 3)
     auto itPair = m_aRedlineMap.emplace(rId, pInfo);
-    if (!itPair.second)
-    {
-        // 3b) we already have a redline with this name: hierarchical redlines
-        // insert pInfo as last element in the chain.
-        // (hierarchy sanity checking happens on inserting into the document)
+    if (itPair.second)
+        return;
 
-        // find last element
-        RedlineInfo* pInfoChain;
-        for( pInfoChain = itPair.first->second;
-            nullptr != pInfoChain->pNextRedline;
-            pInfoChain = pInfoChain->pNextRedline) ; // empty loop
+    // 3b) we already have a redline with this name: hierarchical redlines
+    // insert pInfo as last element in the chain.
+    // (hierarchy sanity checking happens on inserting into the document)
 
-        // insert as last element
-        pInfoChain->pNextRedline = pInfo;
-    }
+    // find last element
+    RedlineInfo* pInfoChain;
+    for( pInfoChain = itPair.first->second;
+        nullptr != pInfoChain->pNextRedline;
+        pInfoChain = pInfoChain->pNextRedline) ; // empty loop
+
+    // insert as last element
+    pInfoChain->pNextRedline = pInfo;
 }
 
 Reference<XTextCursor> XMLRedlineImportHelper::CreateRedlineTextSection(
@@ -494,43 +494,43 @@ void XMLRedlineImportHelper::SetCursor(
     bool bIsOutsideOfParagraph)
 {
     RedlineMapType::iterator aFind = m_aRedlineMap.find(rId);
-    if (m_aRedlineMap.end() != aFind)
-    {
-        // RedlineInfo found; now set Cursor
-        RedlineInfo* pInfo = aFind->second;
-        if (bIsOutsideOfParagraph)
-        {
-            // outside of paragraph: remember SwNodeIndex
-            if (bStart)
-            {
-                pInfo->aAnchorStart.SetAsNodeIndex(rRange);
-            }
-            else
-            {
-                pInfo->aAnchorEnd.SetAsNodeIndex(rRange);
-            }
+    if (m_aRedlineMap.end() == aFind)
+        return;
 
-            // also remember that we expect an adjustment for this redline
-            pInfo->bNeedsAdjustment = true;
+    // RedlineInfo found; now set Cursor
+    RedlineInfo* pInfo = aFind->second;
+    if (bIsOutsideOfParagraph)
+    {
+        // outside of paragraph: remember SwNodeIndex
+        if (bStart)
+        {
+            pInfo->aAnchorStart.SetAsNodeIndex(rRange);
         }
         else
         {
-            // inside of a paragraph: use regular XTextRanges (bookmarks)
-            if (bStart)
-                pInfo->aAnchorStart.Set(rRange);
-            else
-                pInfo->aAnchorEnd.Set(rRange);
+            pInfo->aAnchorEnd.SetAsNodeIndex(rRange);
         }
 
-        // if this Cursor was the last missing info, we insert the
-        // node into the document
-        // then we can remove the entry from the map and destroy the object
-        if (IsReady(pInfo))
-        {
-            InsertIntoDocument(pInfo);
-            m_aRedlineMap.erase(rId);
-            delete pInfo;
-        }
+        // also remember that we expect an adjustment for this redline
+        pInfo->bNeedsAdjustment = true;
+    }
+    else
+    {
+        // inside of a paragraph: use regular XTextRanges (bookmarks)
+        if (bStart)
+            pInfo->aAnchorStart.Set(rRange);
+        else
+            pInfo->aAnchorEnd.Set(rRange);
+    }
+
+    // if this Cursor was the last missing info, we insert the
+    // node into the document
+    // then we can remove the entry from the map and destroy the object
+    if (IsReady(pInfo))
+    {
+        InsertIntoDocument(pInfo);
+        m_aRedlineMap.erase(rId);
+        delete pInfo;
     }
     // else: unknown Id -> ignore
 }
@@ -545,20 +545,20 @@ void XMLRedlineImportHelper::AdjustStartNodeCursor(
     // necessary that the target node already exists.
 
     RedlineMapType::iterator aFind = m_aRedlineMap.find(rId);
-    if (m_aRedlineMap.end() != aFind)
+    if (m_aRedlineMap.end() == aFind)
+        return;
+
+    // RedlineInfo found; now set Cursor
+    RedlineInfo* pInfo = aFind->second;
+
+    pInfo->bNeedsAdjustment = false;
+
+    // if now ready, insert into document
+    if( IsReady(pInfo) )
     {
-        // RedlineInfo found; now set Cursor
-        RedlineInfo* pInfo = aFind->second;
-
-        pInfo->bNeedsAdjustment = false;
-
-        // if now ready, insert into document
-        if( IsReady(pInfo) )
-        {
-            InsertIntoDocument(pInfo);
-            m_aRedlineMap.erase(rId);
-            delete pInfo;
-        }
+        InsertIntoDocument(pInfo);
+        m_aRedlineMap.erase(rId);
+        delete pInfo;
     }
     // else: can't find redline -> ignore
 }
