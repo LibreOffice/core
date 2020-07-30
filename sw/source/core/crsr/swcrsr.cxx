@@ -1916,32 +1916,32 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
 void SwCursor::DoSetBidiLevelUpDown()
 {
     SwNode& rNode = GetPoint()->nNode.GetNode();
-    if ( rNode.IsTextNode() )
+    if ( !rNode.IsTextNode() )
+        return;
+
+    SwTextFrame const* pFrame;
+    const SwScriptInfo* pSI =
+        SwScriptInfo::GetScriptInfo( *rNode.GetTextNode(), &pFrame );
+    if ( !pSI )
+        return;
+
+    SwIndex& rIdx = GetPoint()->nContent;
+    const sal_Int32 nPos = rIdx.GetIndex();
+
+    if (!(nPos && nPos < rNode.GetTextNode()->GetText().getLength()))
+        return;
+
+    TextFrameIndex const nIndex(pFrame->MapModelToView(rNode.GetTextNode(), nPos));
+    const sal_uInt8 nCurrLevel = pSI->DirType( nIndex );
+    const sal_uInt8 nPrevLevel = pSI->DirType( nIndex - TextFrameIndex(1) );
+
+    if ( nCurrLevel % 2 != nPrevLevel % 2 )
     {
-        SwTextFrame const* pFrame;
-        const SwScriptInfo* pSI =
-            SwScriptInfo::GetScriptInfo( *rNode.GetTextNode(), &pFrame );
-        if ( pSI )
-        {
-            SwIndex& rIdx = GetPoint()->nContent;
-            const sal_Int32 nPos = rIdx.GetIndex();
-
-            if (nPos && nPos < rNode.GetTextNode()->GetText().getLength())
-            {
-                TextFrameIndex const nIndex(pFrame->MapModelToView(rNode.GetTextNode(), nPos));
-                const sal_uInt8 nCurrLevel = pSI->DirType( nIndex );
-                const sal_uInt8 nPrevLevel = pSI->DirType( nIndex - TextFrameIndex(1) );
-
-                if ( nCurrLevel % 2 != nPrevLevel % 2 )
-                {
-                    // set cursor level to the lower of the two levels
-                    SetCursorBidiLevel( std::min( nCurrLevel, nPrevLevel ) );
-                }
-                else
-                    SetCursorBidiLevel( nCurrLevel );
-            }
-        }
+        // set cursor level to the lower of the two levels
+        SetCursorBidiLevel( std::min( nCurrLevel, nPrevLevel ) );
     }
+    else
+        SetCursorBidiLevel( nCurrLevel );
 }
 
 bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
@@ -2293,23 +2293,23 @@ void SwCursor::RestoreSavePos()
     OSL_ENSURE(m_vSavePos.empty() || m_vSavePos.back().nNode < uNodeCount,
         "SwCursor::RestoreSavePos: invalid node: "
         "probably something was deleted; consider using SwUnoCursor instead");
-    if (!m_vSavePos.empty() && m_vSavePos.back().nNode < uNodeCount)
-    {
-        GetPoint()->nNode = m_vSavePos.back().nNode;
+    if (m_vSavePos.empty() || m_vSavePos.back().nNode >= uNodeCount)
+        return;
 
-        sal_Int32 nIdx = 0;
-        if ( GetContentNode() )
+    GetPoint()->nNode = m_vSavePos.back().nNode;
+
+    sal_Int32 nIdx = 0;
+    if ( GetContentNode() )
+    {
+        if (m_vSavePos.back().nContent <= GetContentNode()->Len())
+            nIdx = m_vSavePos.back().nContent;
+        else
         {
-            if (m_vSavePos.back().nContent <= GetContentNode()->Len())
-                nIdx = m_vSavePos.back().nContent;
-            else
-            {
-                nIdx = GetContentNode()->Len();
-                OSL_FAIL("SwCursor::RestoreSavePos: invalid content index");
-            }
+            nIdx = GetContentNode()->Len();
+            OSL_FAIL("SwCursor::RestoreSavePos: invalid content index");
         }
-        GetPoint()->nContent.Assign( GetContentNode(), nIdx );
     }
+    GetPoint()->nContent.Assign( GetContentNode(), nIdx );
 }
 
 SwTableCursor::SwTableCursor( const SwPosition &rPos )

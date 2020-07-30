@@ -219,41 +219,41 @@ void SwModify::Add( SwClient* pDepend )
     DBG_TESTSOLARMUTEX();
     OSL_ENSURE( !m_bLockClientList, "Client inserted while in Modify" );
 
-    if(pDepend->m_pRegisteredIn != this )
-    {
+    if(pDepend->m_pRegisteredIn == this )
+        return;
+
 #if OSL_DEBUG_LEVEL > 0
-        if(sw::ClientIteratorBase::s_pClientIters)
+    if(sw::ClientIteratorBase::s_pClientIters)
+    {
+        for(auto& rIter : sw::ClientIteratorBase::s_pClientIters->GetRingContainer())
         {
-            for(auto& rIter : sw::ClientIteratorBase::s_pClientIters->GetRingContainer())
-            {
-                SAL_WARN_IF(&rIter.m_rRoot == m_pWriterListeners, "sw.core", "a " << typeid(*pDepend).name() << " client added as listener to a " << typeid(*this).name() << " during client iteration.");
-            }
+            SAL_WARN_IF(&rIter.m_rRoot == m_pWriterListeners, "sw.core", "a " << typeid(*pDepend).name() << " client added as listener to a " << typeid(*this).name() << " during client iteration.");
         }
-#endif
-        // deregister new client in case it is already registered elsewhere
-        if( pDepend->m_pRegisteredIn != nullptr )
-            pDepend->m_pRegisteredIn->Remove( pDepend );
-
-        if( !m_pWriterListeners )
-        {
-            // first client added
-            m_pWriterListeners = pDepend;
-            m_pWriterListeners->m_pLeft = nullptr;
-            m_pWriterListeners->m_pRight = nullptr;
-        }
-        else
-        {
-            // append client
-            pDepend->m_pRight = m_pWriterListeners->m_pRight;
-            m_pWriterListeners->m_pRight = pDepend;
-            pDepend->m_pLeft = m_pWriterListeners;
-            if( pDepend->m_pRight )
-                pDepend->m_pRight->m_pLeft = pDepend;
-        }
-
-        // connect client to me
-        pDepend->m_pRegisteredIn = this;
     }
+#endif
+    // deregister new client in case it is already registered elsewhere
+    if( pDepend->m_pRegisteredIn != nullptr )
+        pDepend->m_pRegisteredIn->Remove( pDepend );
+
+    if( !m_pWriterListeners )
+    {
+        // first client added
+        m_pWriterListeners = pDepend;
+        m_pWriterListeners->m_pLeft = nullptr;
+        m_pWriterListeners->m_pRight = nullptr;
+    }
+    else
+    {
+        // append client
+        pDepend->m_pRight = m_pWriterListeners->m_pRight;
+        m_pWriterListeners->m_pRight = pDepend;
+        pDepend->m_pLeft = m_pWriterListeners;
+        if( pDepend->m_pRight )
+            pDepend->m_pRight->m_pLeft = pDepend;
+    }
+
+    // connect client to me
+    pDepend->m_pRegisteredIn = this;
 }
 
 SwClient* SwModify::Remove( SwClient* pDepend )

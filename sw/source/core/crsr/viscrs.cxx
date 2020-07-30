@@ -300,21 +300,21 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
         }
     }
 
-    if ( !m_pCursorShell->IsCursorReadonly()  || m_pCursorShell->GetViewOptions()->IsSelectionInReadonly() )
+    if ( !(!m_pCursorShell->IsCursorReadonly()  || m_pCursorShell->GetViewOptions()->IsSelectionInReadonly()) )
+        return;
+
+    if ( m_pCursorShell->GetDrawView() )
+        const_cast<SwDrawView*>(static_cast<const SwDrawView*>(m_pCursorShell->GetDrawView()))->SetAnimationEnabled(
+                !m_pCursorShell->IsSelection() );
+
+    sal_uInt16 nStyle = m_bIsDragCursor ? CURSOR_SHADOW : 0;
+    if( nStyle != m_aTextCursor.GetStyle() )
     {
-        if ( m_pCursorShell->GetDrawView() )
-            const_cast<SwDrawView*>(static_cast<const SwDrawView*>(m_pCursorShell->GetDrawView()))->SetAnimationEnabled(
-                    !m_pCursorShell->IsSelection() );
-
-        sal_uInt16 nStyle = m_bIsDragCursor ? CURSOR_SHADOW : 0;
-        if( nStyle != m_aTextCursor.GetStyle() )
-        {
-            m_aTextCursor.SetStyle( nStyle );
-            m_aTextCursor.SetWindow( m_bIsDragCursor ? m_pCursorShell->GetWin() : nullptr );
-        }
-
-        m_aTextCursor.Show();
+        m_aTextCursor.SetStyle( nStyle );
+        m_aTextCursor.SetWindow( m_bIsDragCursor ? m_pCursorShell->GetWin() : nullptr );
     }
+
+    m_aTextCursor.Show();
 }
 
 const vcl::Cursor& SwVisibleCursor::GetTextCursor() const
@@ -389,109 +389,109 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
 {
     SdrView *const pView = const_cast<SdrView*>(m_pCursorShell->GetDrawView());
 
-    if(pView && pView->PaintWindowCount())
-    {
-        // reset rects
-        SwRects::clear();
-        FillRects();
+    if(!(pView && pView->PaintWindowCount()))
+        return;
+
+    // reset rects
+    SwRects::clear();
+    FillRects();
 
 #if HAVE_FEATURE_DESKTOP
-        // get new rects
-        std::vector< basegfx::B2DRange > aNewRanges;
-        aNewRanges.reserve(size());
-        for(size_type a = 0; a < size(); ++a)
-        {
-            const SwRect aNextRect((*this)[a]);
-            const tools::Rectangle aPntRect(aNextRect.SVRect());
+    // get new rects
+    std::vector< basegfx::B2DRange > aNewRanges;
+    aNewRanges.reserve(size());
+    for(size_type a = 0; a < size(); ++a)
+    {
+        const SwRect aNextRect((*this)[a]);
+        const tools::Rectangle aPntRect(aNextRect.SVRect());
 
-            aNewRanges.emplace_back(
-                aPntRect.Left(), aPntRect.Top(),
-                aPntRect.Right() + 1, aPntRect.Bottom() + 1);
+        aNewRanges.emplace_back(
+            aPntRect.Left(), aPntRect.Top(),
+            aPntRect.Right() + 1, aPntRect.Bottom() + 1);
+    }
+
+    if (m_pCursorOverlay)
+    {
+        if(!aNewRanges.empty())
+        {
+            static_cast<sdr::overlay::OverlaySelection*>(m_pCursorOverlay.get())->setRanges(aNewRanges);
         }
-
-        if (m_pCursorOverlay)
+        else
         {
-            if(!aNewRanges.empty())
-            {
-                static_cast<sdr::overlay::OverlaySelection*>(m_pCursorOverlay.get())->setRanges(aNewRanges);
-            }
-            else
-            {
-                m_pCursorOverlay.reset();
-            }
-        }
-        else if(!empty())
-        {
-            SdrPaintWindow* pCandidate = pView->GetPaintWindow(0);
-            const rtl::Reference< sdr::overlay::OverlayManager >& xTargetOverlay = pCandidate->GetOverlayManager();
-
-            if (xTargetOverlay.is())
-            {
-                // get the system's highlight color
-                const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-                const Color aHighlight(aSvtOptionsDrawinglayer.getHilightColor());
-
-                // create correct selection
-                m_pCursorOverlay.reset( new sdr::overlay::OverlaySelection(
-                    sdr::overlay::OverlayType::Transparent,
-                    aHighlight,
-                    aNewRanges,
-                    true) );
-
-                xTargetOverlay->add(*m_pCursorOverlay);
-            }
-        }
-
-        HighlightInputField();
-#endif
-
-        // Tiled editing does not expose the draw and writer cursor, it just
-        // talks about "the" cursor at the moment. As long as that's true,
-        // don't say anything about the Writer cursor till a draw object is
-        // being edited.
-        if (comphelper::LibreOfficeKit::isActive() && !pView->GetTextEditObject())
-        {
-            // If pSelectionRectangles is set, we're just collecting the text selections -> don't emit start/end.
-            if (!empty() && !pSelectionRectangles)
-            {
-                // The selection may be a complex polygon, emit the logical
-                // start/end cursor rectangle of the selection as separate
-                // events, if there is a real selection.
-                // This can be used to easily show selection handles on the
-                // client side.
-                SwRect aStartRect;
-                SwRect aEndRect;
-                FillStartEnd(aStartRect, aEndRect);
-
-                if (aStartRect.HasArea())
-                {
-                    OString sRect = aStartRect.SVRect().toString();
-                    GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, sRect.getStr());
-                }
-                if (aEndRect.HasArea())
-                {
-                    OString sRect = aEndRect.SVRect().toString();
-                    GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, sRect.getStr());
-                }
-            }
-
-            std::vector<OString> aRect;
-            aRect.reserve(size());
-            for (size_type i = 0; i < size(); ++i)
-            {
-                const SwRect& rRect = (*this)[i];
-                aRect.push_back(rRect.SVRect().toString());
-            }
-            OString sRect = comphelper::string::join("; ", aRect);
-            if (!pSelectionRectangles)
-            {
-                GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());
-                SfxLokHelper::notifyOtherViews(GetShell()->GetSfxViewShell(), LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRect);
-            }
-            else
-                pSelectionRectangles->push_back(sRect);
+            m_pCursorOverlay.reset();
         }
     }
+    else if(!empty())
+    {
+        SdrPaintWindow* pCandidate = pView->GetPaintWindow(0);
+        const rtl::Reference< sdr::overlay::OverlayManager >& xTargetOverlay = pCandidate->GetOverlayManager();
+
+        if (xTargetOverlay.is())
+        {
+            // get the system's highlight color
+            const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+            const Color aHighlight(aSvtOptionsDrawinglayer.getHilightColor());
+
+            // create correct selection
+            m_pCursorOverlay.reset( new sdr::overlay::OverlaySelection(
+                sdr::overlay::OverlayType::Transparent,
+                aHighlight,
+                aNewRanges,
+                true) );
+
+            xTargetOverlay->add(*m_pCursorOverlay);
+        }
+    }
+
+    HighlightInputField();
+#endif
+
+    // Tiled editing does not expose the draw and writer cursor, it just
+    // talks about "the" cursor at the moment. As long as that's true,
+    // don't say anything about the Writer cursor till a draw object is
+    // being edited.
+    if (!(comphelper::LibreOfficeKit::isActive() && !pView->GetTextEditObject()))
+        return;
+
+    // If pSelectionRectangles is set, we're just collecting the text selections -> don't emit start/end.
+    if (!empty() && !pSelectionRectangles)
+    {
+        // The selection may be a complex polygon, emit the logical
+        // start/end cursor rectangle of the selection as separate
+        // events, if there is a real selection.
+        // This can be used to easily show selection handles on the
+        // client side.
+        SwRect aStartRect;
+        SwRect aEndRect;
+        FillStartEnd(aStartRect, aEndRect);
+
+        if (aStartRect.HasArea())
+        {
+            OString sRect = aStartRect.SVRect().toString();
+            GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, sRect.getStr());
+        }
+        if (aEndRect.HasArea())
+        {
+            OString sRect = aEndRect.SVRect().toString();
+            GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, sRect.getStr());
+        }
+    }
+
+    std::vector<OString> aRect;
+    aRect.reserve(size());
+    for (size_type i = 0; i < size(); ++i)
+    {
+        const SwRect& rRect = (*this)[i];
+        aRect.push_back(rRect.SVRect().toString());
+    }
+    OString sRect = comphelper::string::join("; ", aRect);
+    if (!pSelectionRectangles)
+    {
+        GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());
+        SfxLokHelper::notifyOtherViews(GetShell()->GetSfxViewShell(), LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRect);
+    }
+    else
+        pSelectionRectangles->push_back(sRect);
 }
 
 void SwSelPaintRects::HighlightInputField()
@@ -571,18 +571,18 @@ void SwSelPaintRects::Invalidate( const SwRect& rRect )
     // visible area, it is never aligned on one pixel at the right/bottom.
     // This has to be determined here and if that is the case the
     // rectangle has to be expanded.
-    if( GetShell()->m_bVisPortChgd && 0 != ( nSz = size()) )
+    if( !(GetShell()->m_bVisPortChgd && 0 != ( nSz = size())) )
+        return;
+
+    SwSelPaintRects::Get1PixelInLogic( *GetShell() );
+    iterator it = begin();
+    for( ; nSz--; ++it )
     {
-        SwSelPaintRects::Get1PixelInLogic( *GetShell() );
-        iterator it = begin();
-        for( ; nSz--; ++it )
-        {
-            SwRect& rRectIt = *it;
-            if( rRectIt.Right() == GetShell()->m_aOldRBPos.X() )
-                rRectIt.AddRight( s_nPixPtX );
-            if( rRectIt.Bottom() == GetShell()->m_aOldRBPos.Y() )
-                rRectIt.AddBottom( s_nPixPtY );
-        }
+        SwRect& rRectIt = *it;
+        if( rRectIt.Right() == GetShell()->m_aOldRBPos.X() )
+            rRectIt.AddRight( s_nPixPtX );
+        if( rRectIt.Bottom() == GetShell()->m_aOldRBPos.Y() )
+            rRectIt.AddBottom( s_nPixPtY );
     }
 }
 
@@ -679,27 +679,27 @@ void SwShellCursor::Show(SfxViewShell const * pViewShell)
             pShCursor->SwSelPaintRects::Show(&aSelectionRectangles);
     }
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    std::vector<OString> aRect;
+    for (const OString & rSelectionRectangle : aSelectionRectangles)
     {
-        std::vector<OString> aRect;
-        for (const OString & rSelectionRectangle : aSelectionRectangles)
-        {
-            if (rSelectionRectangle.isEmpty())
-                continue;
-            aRect.push_back(rSelectionRectangle);
-        }
-        OString sRect = comphelper::string::join("; ", aRect);
-        if (pViewShell)
-        {
-            // Just notify pViewShell about our existing selection.
-            if (pViewShell != GetShell()->GetSfxViewShell())
-                SfxLokHelper::notifyOtherView(GetShell()->GetSfxViewShell(), pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRect);
-        }
-        else
-        {
-            GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());
-            SfxLokHelper::notifyOtherViews(GetShell()->GetSfxViewShell(), LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRect);
-        }
+        if (rSelectionRectangle.isEmpty())
+            continue;
+        aRect.push_back(rSelectionRectangle);
+    }
+    OString sRect = comphelper::string::join("; ", aRect);
+    if (pViewShell)
+    {
+        // Just notify pViewShell about our existing selection.
+        if (pViewShell != GetShell()->GetSfxViewShell())
+            SfxLokHelper::notifyOtherView(GetShell()->GetSfxViewShell(), pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRect);
+    }
+    else
+    {
+        GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());
+        SfxLokHelper::notifyOtherViews(GetShell()->GetSfxViewShell(), LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRect);
     }
 }
 

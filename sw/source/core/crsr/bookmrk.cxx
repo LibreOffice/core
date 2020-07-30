@@ -717,60 +717,60 @@ namespace sw::mark
               return;
         }
 
-        if (comphelper::LibreOfficeKit::isActive())
-        {
-            if (!m_pButton)
-              return;
+        if (!comphelper::LibreOfficeKit::isActive())
+            return;
 
-            SwEditWin* pEditWin = dynamic_cast<SwEditWin*>(m_pButton->GetParent());
-            if (!pEditWin)
+        if (!m_pButton)
+          return;
+
+        SwEditWin* pEditWin = dynamic_cast<SwEditWin*>(m_pButton->GetParent());
+        if (!pEditWin)
+            return;
+
+        OStringBuffer sPayload;
+        if (sAction == "show")
+        {
+            if(m_aPortionPaintArea.IsEmpty())
                 return;
 
-            OStringBuffer sPayload;
-            if (sAction == "show")
+            sPayload = OStringLiteral("{\"action\": \"show\","
+                       " \"type\": \"drop-down\", \"textArea\": \"") +
+                       m_aPortionPaintArea.SVRect().toString() + "\",";
+            // Add field params to the message
+            sPayload.append(" \"params\": { \"items\": [");
+
+            // List items
+            auto pParameters = this->GetParameters();
+            auto pListEntriesIter = pParameters->find(ODF_FORMDROPDOWN_LISTENTRY);
+            css::uno::Sequence<OUString> vListEntries;
+            if (pListEntriesIter != pParameters->end())
             {
-                if(m_aPortionPaintArea.IsEmpty())
-                    return;
-
-                sPayload = OStringLiteral("{\"action\": \"show\","
-                           " \"type\": \"drop-down\", \"textArea\": \"") +
-                           m_aPortionPaintArea.SVRect().toString() + "\",";
-                // Add field params to the message
-                sPayload.append(" \"params\": { \"items\": [");
-
-                // List items
-                auto pParameters = this->GetParameters();
-                auto pListEntriesIter = pParameters->find(ODF_FORMDROPDOWN_LISTENTRY);
-                css::uno::Sequence<OUString> vListEntries;
-                if (pListEntriesIter != pParameters->end())
-                {
-                    pListEntriesIter->second >>= vListEntries;
-                    for (const OUString& sItem : std::as_const(vListEntries))
-                        sPayload.append("\"" + OUStringToOString(sItem, RTL_TEXTENCODING_UTF8) + "\", ");
-                    sPayload.setLength(sPayload.getLength() - 2);
-                }
-                sPayload.append("], ");
-
-                // Selected item
-                auto pSelectedItemIter = pParameters->find(ODF_FORMDROPDOWN_RESULT);
-                sal_Int32 nSelection = -1;
-                if (pSelectedItemIter != pParameters->end())
-                {
-                    pSelectedItemIter->second >>= nSelection;
-                }
-                sPayload.append("\"selected\": \"" + OString::number(nSelection) + "\", ");
-
-                // Placeholder text
-                sPayload.append("\"placeholderText\": \"" + OUStringToOString(SwResId(STR_DROP_DOWN_EMPTY_LIST), RTL_TEXTENCODING_UTF8) + "\"}}");
+                pListEntriesIter->second >>= vListEntries;
+                for (const OUString& sItem : std::as_const(vListEntries))
+                    sPayload.append("\"" + OUStringToOString(sItem, RTL_TEXTENCODING_UTF8) + "\", ");
+                sPayload.setLength(sPayload.getLength() - 2);
             }
-            else
+            sPayload.append("], ");
+
+            // Selected item
+            auto pSelectedItemIter = pParameters->find(ODF_FORMDROPDOWN_RESULT);
+            sal_Int32 nSelection = -1;
+            if (pSelectedItemIter != pParameters->end())
             {
-                sPayload = "{\"action\": \"hide\", \"type\": \"drop-down\"}";
+                pSelectedItemIter->second >>= nSelection;
             }
-            if (sPayload.toString() != m_sLastSentLOKMsg) {
-                m_sLastSentLOKMsg = sPayload.toString();
-                pEditWin->GetView().GetWrtShell().GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_FORM_FIELD_BUTTON, m_sLastSentLOKMsg.getStr());
-            }
+            sPayload.append("\"selected\": \"" + OString::number(nSelection) + "\", ");
+
+            // Placeholder text
+            sPayload.append("\"placeholderText\": \"" + OUStringToOString(SwResId(STR_DROP_DOWN_EMPTY_LIST), RTL_TEXTENCODING_UTF8) + "\"}}");
+        }
+        else
+        {
+            sPayload = "{\"action\": \"hide\", \"type\": \"drop-down\"}";
+        }
+        if (sPayload.toString() != m_sLastSentLOKMsg) {
+            m_sLastSentLOKMsg = sPayload.toString();
+            pEditWin->GetView().GetWrtShell().GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_FORM_FIELD_BUTTON, m_sLastSentLOKMsg.getStr());
         }
     }
 

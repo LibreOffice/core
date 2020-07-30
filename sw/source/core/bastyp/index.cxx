@@ -286,19 +286,19 @@ void SwIndexReg::Update(
 
 void SwIndexReg::MoveTo( SwIndexReg& rArr )
 {
-    if (this != &rArr && m_pFirst)
+    if (!(this != &rArr && m_pFirst))
+        return;
+
+    SwIndex * pIdx = const_cast<SwIndex*>(m_pFirst);
+    SwIndex * pNext;
+    while( pIdx )
     {
-        SwIndex * pIdx = const_cast<SwIndex*>(m_pFirst);
-        SwIndex * pNext;
-        while( pIdx )
-        {
-            pNext = pIdx->m_pNext;
-            pIdx->Assign( &rArr, pIdx->GetIndex() );
-            pIdx = pNext;
-        }
-        m_pFirst = nullptr;
-        m_pLast = nullptr;
+        pNext = pIdx->m_pNext;
+        pIdx->Assign( &rArr, pIdx->GetIndex() );
+        pIdx = pNext;
     }
+    m_pFirst = nullptr;
+    m_pLast = nullptr;
 }
 
 #ifdef DBG_UTIL

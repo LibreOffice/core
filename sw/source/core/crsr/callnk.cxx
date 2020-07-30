@@ -203,20 +203,20 @@ SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE
     if (!pFrame)
         return;
     pFlyFrame = pFrame->FindFlyFrame();
-    if ( pFlyFrame && !m_rShell.IsTableMode() )
-    {
-        const SwNodeIndex* pIndex = pFlyFrame->GetFormat()->GetContent().GetContentIdx();
-        OSL_ENSURE( pIndex, "Fly without Content" );
+    if ( !(pFlyFrame && !m_rShell.IsTableMode()) )
+        return;
 
-        if (!pIndex)
-            return;
+    const SwNodeIndex* pIndex = pFlyFrame->GetFormat()->GetContent().GetContentIdx();
+    OSL_ENSURE( pIndex, "Fly without Content" );
 
-        const SwNode& rStNd = pIndex->GetNode();
+    if (!pIndex)
+        return;
 
-        if( rStNd.EndOfSectionNode()->StartOfSectionIndex() > m_nNode ||
-            m_nNode > rStNd.EndOfSectionIndex() )
-            m_rShell.GetFlyMacroLnk().Call( pFlyFrame->GetFormat() );
-    }
+    const SwNode& rStNd = pIndex->GetNode();
+
+    if( rStNd.EndOfSectionNode()->StartOfSectionIndex() > m_nNode ||
+        m_nNode > rStNd.EndOfSectionIndex() )
+        m_rShell.GetFlyMacroLnk().Call( pFlyFrame->GetFormat() );
 }
 
 long SwCallLink::getLayoutFrame(const SwRootFrame* pRoot,

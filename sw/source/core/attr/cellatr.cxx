@@ -124,62 +124,62 @@ void SwTableBoxFormula::ChangeState( const SfxPoolItem* pItem )
     if (!pNd || &pNd->GetNodes() != &pNd->GetDoc()->GetNodes())
         return;
     pTableNd = pNd->FindTableNode();
-    if( pTableNd != nullptr )
+    if( pTableNd == nullptr )
+        return;
+
+    switch( pUpdateField->m_eFlags )
     {
-        switch( pUpdateField->m_eFlags )
+    case TBL_CALC:
+        // reset value flag
+        ChgValid( false );
+        break;
+    case TBL_BOXNAME:
+        if( &pTableNd->GetTable() == pUpdateField->m_pTable )
+            // use external rendering
+            PtrToBoxNm( pUpdateField->m_pTable );
+        break;
+    case TBL_BOXPTR:
+        // internal rendering
+        BoxNmToPtr( &pTableNd->GetTable() );
+        break;
+    case TBL_RELBOXNAME:
+        if( &pTableNd->GetTable() == pUpdateField->m_pTable )
+            // relative rendering
+            ToRelBoxNm( pUpdateField->m_pTable );
+        break;
+
+    case TBL_SPLITTBL:
+        if( &pTableNd->GetTable() == pUpdateField->m_pTable )
         {
-        case TBL_CALC:
-            // reset value flag
-            ChgValid( false );
-            break;
-        case TBL_BOXNAME:
-            if( &pTableNd->GetTable() == pUpdateField->m_pTable )
-                // use external rendering
-                PtrToBoxNm( pUpdateField->m_pTable );
-            break;
-        case TBL_BOXPTR:
-            // internal rendering
-            BoxNmToPtr( &pTableNd->GetTable() );
-            break;
-        case TBL_RELBOXNAME:
-            if( &pTableNd->GetTable() == pUpdateField->m_pTable )
-                // relative rendering
-                ToRelBoxNm( pUpdateField->m_pTable );
-            break;
-
-        case TBL_SPLITTBL:
-            if( &pTableNd->GetTable() == pUpdateField->m_pTable )
-            {
-                sal_uInt16 nLnPos = SwTableFormula::GetLnPosInTable(
-                                        pTableNd->GetTable(), GetTableBox() );
-                pUpdateField->m_bBehindSplitLine = USHRT_MAX != nLnPos &&
-                                            pUpdateField->m_nSplitLine <= nLnPos;
-            }
-            else
-                pUpdateField->m_bBehindSplitLine = false;
-            [[fallthrough]];
-        case TBL_MERGETBL:
-            if( pUpdateField->m_pHistory )
-            {
-                // for a history record the unchanged formula is needed
-                SwTableBoxFormula aCopy( *this );
-                pUpdateField->m_bModified = false;
-                ToSplitMergeBoxNm( *pUpdateField );
-
-                if( pUpdateField->m_bModified )
-                {
-                    // external rendering
-                    aCopy.PtrToBoxNm( &pTableNd->GetTable() );
-                    pUpdateField->m_pHistory->Add(
-                        &aCopy,
-                        &aCopy,
-                        pNd->FindTableBoxStartNode()->GetIndex());
-                }
-            }
-            else
-                ToSplitMergeBoxNm( *pUpdateField );
-            break;
+            sal_uInt16 nLnPos = SwTableFormula::GetLnPosInTable(
+                                    pTableNd->GetTable(), GetTableBox() );
+            pUpdateField->m_bBehindSplitLine = USHRT_MAX != nLnPos &&
+                                        pUpdateField->m_nSplitLine <= nLnPos;
         }
+        else
+            pUpdateField->m_bBehindSplitLine = false;
+        [[fallthrough]];
+    case TBL_MERGETBL:
+        if( pUpdateField->m_pHistory )
+        {
+            // for a history record the unchanged formula is needed
+            SwTableBoxFormula aCopy( *this );
+            pUpdateField->m_bModified = false;
+            ToSplitMergeBoxNm( *pUpdateField );
+
+            if( pUpdateField->m_bModified )
+            {
+                // external rendering
+                aCopy.PtrToBoxNm( &pTableNd->GetTable() );
+                pUpdateField->m_pHistory->Add(
+                    &aCopy,
+                    &aCopy,
+                    pNd->FindTableBoxStartNode()->GetIndex());
+            }
+        }
+        else
+            ToSplitMergeBoxNm( *pUpdateField );
+        break;
     }
 }
 
