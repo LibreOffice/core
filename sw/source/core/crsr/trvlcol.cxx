@@ -71,32 +71,32 @@ void SwCursorShell::MoveColumn( SwWhichColumn fnWhichCol, SwPosColumn fnPosCol )
     if( !pLayFrame )
         return;
     pLayFrame = (*fnWhichCol)( pLayFrame );
-    if(  pLayFrame )
+    if(  !pLayFrame )
+        return;
+
+    SwContentFrame* pCnt = (*fnPosCol)( pLayFrame );
+    if( !pCnt )
+        return;
+
+    CurrShell aCurr( this );
+    SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
+    SwCursorSaveState aSaveState( *m_pCurrentCursor );
+
+    pCnt->Calc(GetOut());
+
+    Point aPt( pCnt->getFrameArea().Pos() + pCnt->getFramePrintArea().Pos() );
+    if( fnPosCol == GetColumnEnd )
     {
-        SwContentFrame* pCnt = (*fnPosCol)( pLayFrame );
-        if( pCnt )
-        {
-            CurrShell aCurr( this );
-            SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
-            SwCursorSaveState aSaveState( *m_pCurrentCursor );
+        aPt.setX(aPt.getX() + pCnt->getFramePrintArea().Width());
+        aPt.setY(aPt.getY() + pCnt->getFramePrintArea().Height());
+    }
 
-            pCnt->Calc(GetOut());
+    pCnt->GetModelPositionForViewPoint( m_pCurrentCursor->GetPoint(), aPt );
 
-            Point aPt( pCnt->getFrameArea().Pos() + pCnt->getFramePrintArea().Pos() );
-            if( fnPosCol == GetColumnEnd )
-            {
-                aPt.setX(aPt.getX() + pCnt->getFramePrintArea().Width());
-                aPt.setY(aPt.getY() + pCnt->getFramePrintArea().Height());
-            }
-
-            pCnt->GetModelPositionForViewPoint( m_pCurrentCursor->GetPoint(), aPt );
-
-            if( !m_pCurrentCursor->IsInProtectTable( true ) &&
-                !m_pCurrentCursor->IsSelOvr() )
-            {
-                UpdateCursor();
-            }
-        }
+    if( !m_pCurrentCursor->IsInProtectTable( true ) &&
+        !m_pCurrentCursor->IsSelOvr() )
+    {
+        UpdateCursor();
     }
 }
 

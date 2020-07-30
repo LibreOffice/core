@@ -387,20 +387,19 @@ bool SwCursorShell::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
 void SwCursorShell::MarkListLevel( const OUString& sListId,
                                  const int nListLevel )
 {
-    if ( sListId != m_sMarkedListId ||
-         nListLevel != m_nMarkedListLevel)
+    if (sListId == m_sMarkedListId && nListLevel == m_nMarkedListLevel)
+        return;
+
+    if ( !m_sMarkedListId.isEmpty() )
+        mxDoc->MarkListLevel( m_sMarkedListId, m_nMarkedListLevel, false );
+
+    if ( !sListId.isEmpty() )
     {
-        if ( !m_sMarkedListId.isEmpty() )
-            mxDoc->MarkListLevel( m_sMarkedListId, m_nMarkedListLevel, false );
-
-        if ( !sListId.isEmpty() )
-        {
-            mxDoc->MarkListLevel( sListId, nListLevel, true );
-        }
-
-        m_sMarkedListId = sListId;
-        m_nMarkedListLevel = nListLevel;
+        mxDoc->MarkListLevel( sListId, nListLevel, true );
     }
+
+    m_sMarkedListId = sListId;
+    m_nMarkedListLevel = nListLevel;
 }
 
 void SwCursorShell::UpdateMarkedListLevel()
@@ -408,27 +407,27 @@ void SwCursorShell::UpdateMarkedListLevel()
     SwTextNode const*const pTextNd = sw::GetParaPropsNode(*GetLayout(),
             GetCursor_()->GetPoint()->nNode);
 
-    if ( pTextNd )
+    if ( !pTextNd )
+        return;
+
+    if (!pTextNd->IsNumbered(GetLayout()))
     {
-        if (!pTextNd->IsNumbered(GetLayout()))
+        m_pCurrentCursor->SetInFrontOfLabel_( false );
+        MarkListLevel( OUString(), 0 );
+    }
+    else if ( m_pCurrentCursor->IsInFrontOfLabel() )
+    {
+        if ( pTextNd->IsInList() )
         {
-            m_pCurrentCursor->SetInFrontOfLabel_( false );
-            MarkListLevel( OUString(), 0 );
+            assert(pTextNd->GetActualListLevel() >= 0 &&
+                   pTextNd->GetActualListLevel() < MAXLEVEL);
+            MarkListLevel( pTextNd->GetListId(),
+                           pTextNd->GetActualListLevel() );
         }
-        else if ( m_pCurrentCursor->IsInFrontOfLabel() )
-        {
-            if ( pTextNd->IsInList() )
-            {
-                assert(pTextNd->GetActualListLevel() >= 0 &&
-                       pTextNd->GetActualListLevel() < MAXLEVEL);
-                MarkListLevel( pTextNd->GetListId(),
-                               pTextNd->GetActualListLevel() );
-            }
-        }
-        else
-        {
-            MarkListLevel( OUString(), 0 );
-        }
+    }
+    else
+    {
+        MarkListLevel( OUString(), 0 );
     }
 }
 
@@ -2150,76 +2149,58 @@ void SwCursorShell::RefreshBlockCursor()
     aRect.Justify();
     SwSelectionList aSelList( pFrame );
 
-    if( GetLayout()->FillSelection( aSelList, aRect ) )
+    if( !GetLayout()->FillSelection( aSelList, aRect ) )
+        return;
+
+    SwCursor* pNxt = static_cast<SwCursor*>(m_pCurrentCursor->GetNext());
+    while( pNxt != m_pCurrentCursor )
     {
-        SwCursor* pNxt = static_cast<SwCursor*>(m_pCurrentCursor->GetNext());
-        while( pNxt != m_pCurrentCursor )
-        {
-            delete pNxt;
-            pNxt = static_cast<SwCursor*>(m_pCurrentCursor->GetNext());
-        }
+        delete pNxt;
+        pNxt = static_cast<SwCursor*>(m_pCurrentCursor->GetNext());
+    }
 
-        std::list<SwPaM*>::iterator pStart = aSelList.getStart();
-        std::list<SwPaM*>::iterator pPam = aSelList.getEnd();
-        OSL_ENSURE( pPam != pStart, "FillSelection should deliver at least one PaM" );
-        m_pCurrentCursor->SetMark();
-        --pPam;
-        // If there is only one text portion inside the rectangle, a simple
-        // selection is created
-        if( pPam == pStart )
-        {
-            *m_pCurrentCursor->GetPoint() = *(*pPam)->GetPoint();
-            if( (*pPam)->HasMark() )
-                *m_pCurrentCursor->GetMark() = *(*pPam)->GetMark();
-            else
-                m_pCurrentCursor->DeleteMark();
-            delete *pPam;
-            m_pCurrentCursor->SetColumnSelection( false );
-        }
+    std::list<SwPaM*>::iterator pStart = aSelList.getStart();
+    std::list<SwPaM*>::iterator pPam = aSelList.getEnd();
+    OSL_ENSURE( pPam != pStart, "FillSelection should deliver at least one PaM" );
+    m_pCurrentCursor->SetMark();
+    --pPam;
+    // If there is only one text portion inside the rectangle, a simple
+    // selection is created
+    if( pPam == pStart )
+    {
+        *m_pCurrentCursor->GetPoint() = *(*pPam)->GetPoint();
+        if( (*pPam)->HasMark() )
+            *m_pCurrentCursor->GetMark() = *(*pPam)->GetMark();
         else
+            m_pCurrentCursor->DeleteMark();
+        delete *pPam;
+        m_pCurrentCursor->SetColumnSelection( false );
+    }
+    else
+    {
+        // The order of the SwSelectionList has to be preserved but
+        // the order inside the ring created by CreateCursor() is not like
+        // expected => First create the selections before the last one
+        // downto the first selection.
+        // At least create the cursor for the last selection
+        --pPam;
+        *m_pCurrentCursor->GetPoint() = *(*pPam)->GetPoint(); // n-1 (if n == number of selections)
+        if( (*pPam)->HasMark() )
+            *m_pCurrentCursor->GetMark() = *(*pPam)->GetMark();
+        else
+            m_pCurrentCursor->DeleteMark();
+        delete *pPam;
+        m_pCurrentCursor->SetColumnSelection( true );
+        while( pPam != pStart )
         {
-            // The order of the SwSelectionList has to be preserved but
-            // the order inside the ring created by CreateCursor() is not like
-            // expected => First create the selections before the last one
-            // downto the first selection.
-            // At least create the cursor for the last selection
             --pPam;
-            *m_pCurrentCursor->GetPoint() = *(*pPam)->GetPoint(); // n-1 (if n == number of selections)
-            if( (*pPam)->HasMark() )
-                *m_pCurrentCursor->GetMark() = *(*pPam)->GetMark();
-            else
-                m_pCurrentCursor->DeleteMark();
-            delete *pPam;
-            m_pCurrentCursor->SetColumnSelection( true );
-            while( pPam != pStart )
-            {
-                --pPam;
 
-                SwShellCursor* pNew = new SwShellCursor( *m_pCurrentCursor );
-                pNew->insert( pNew->begin(), m_pCurrentCursor->begin(),  m_pCurrentCursor->end());
-                m_pCurrentCursor->clear();
-                m_pCurrentCursor->DeleteMark();
+            SwShellCursor* pNew = new SwShellCursor( *m_pCurrentCursor );
+            pNew->insert( pNew->begin(), m_pCurrentCursor->begin(),  m_pCurrentCursor->end());
+            m_pCurrentCursor->clear();
+            m_pCurrentCursor->DeleteMark();
 
-                *m_pCurrentCursor->GetPoint() = *(*pPam)->GetPoint(); // n-2, n-3, .., 2, 1
-                if( (*pPam)->HasMark() )
-                {
-                    m_pCurrentCursor->SetMark();
-                    *m_pCurrentCursor->GetMark() = *(*pPam)->GetMark();
-                }
-                else
-                    m_pCurrentCursor->DeleteMark();
-                m_pCurrentCursor->SetColumnSelection( true );
-                delete *pPam;
-            }
-            {
-                SwShellCursor* pNew = new SwShellCursor( *m_pCurrentCursor );
-                pNew->insert( pNew->begin(), m_pCurrentCursor->begin(), m_pCurrentCursor->end() );
-                m_pCurrentCursor->clear();
-                m_pCurrentCursor->DeleteMark();
-            }
-            pPam = aSelList.getEnd();
-            --pPam;
-            *m_pCurrentCursor->GetPoint() = *(*pPam)->GetPoint(); // n, the last selection
+            *m_pCurrentCursor->GetPoint() = *(*pPam)->GetPoint(); // n-2, n-3, .., 2, 1
             if( (*pPam)->HasMark() )
             {
                 m_pCurrentCursor->SetMark();
@@ -2230,6 +2211,24 @@ void SwCursorShell::RefreshBlockCursor()
             m_pCurrentCursor->SetColumnSelection( true );
             delete *pPam;
         }
+        {
+            SwShellCursor* pNew = new SwShellCursor( *m_pCurrentCursor );
+            pNew->insert( pNew->begin(), m_pCurrentCursor->begin(), m_pCurrentCursor->end() );
+            m_pCurrentCursor->clear();
+            m_pCurrentCursor->DeleteMark();
+        }
+        pPam = aSelList.getEnd();
+        --pPam;
+        *m_pCurrentCursor->GetPoint() = *(*pPam)->GetPoint(); // n, the last selection
+        if( (*pPam)->HasMark() )
+        {
+            m_pCurrentCursor->SetMark();
+            *m_pCurrentCursor->GetMark() = *(*pPam)->GetMark();
+        }
+        else
+            m_pCurrentCursor->DeleteMark();
+        m_pCurrentCursor->SetColumnSelection( true );
+        delete *pPam;
     }
 }
 
@@ -2386,38 +2385,38 @@ void SwCursorShell::ShowCursors( bool bCursorVis )
 
 void SwCursorShell::ShowCursor()
 {
-    if( !m_bBasicHideCursor )
+    if( m_bBasicHideCursor )
+        return;
+
+    m_bSVCursorVis = true;
+    m_pCurrentCursor->SetShowTextInputFieldOverlay( true );
+
+    if (comphelper::LibreOfficeKit::isActive())
     {
-        m_bSVCursorVis = true;
-        m_pCurrentCursor->SetShowTextInputFieldOverlay( true );
-
-        if (comphelper::LibreOfficeKit::isActive())
-        {
-            OString aPayload = OString::boolean(m_bSVCursorVis);
-            GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload.getStr());
-            SfxLokHelper::notifyOtherViews(GetSfxViewShell(), LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
-        }
-
-        UpdateCursor();
+        OString aPayload = OString::boolean(m_bSVCursorVis);
+        GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload.getStr());
+        SfxLokHelper::notifyOtherViews(GetSfxViewShell(), LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
     }
+
+    UpdateCursor();
 }
 
 void SwCursorShell::HideCursor()
 {
-    if( !m_bBasicHideCursor )
-    {
-        m_bSVCursorVis = false;
-        // possibly reverse selected areas!!
-        CurrShell aCurr( this );
-        m_pCurrentCursor->SetShowTextInputFieldOverlay( false );
-        m_pVisibleCursor->Hide();
+    if( m_bBasicHideCursor )
+        return;
 
-        if (comphelper::LibreOfficeKit::isActive())
-        {
-            OString aPayload = OString::boolean(m_bSVCursorVis);
-            GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload.getStr());
-            SfxLokHelper::notifyOtherViews(GetSfxViewShell(), LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
-        }
+    m_bSVCursorVis = false;
+    // possibly reverse selected areas!!
+    CurrShell aCurr( this );
+    m_pCurrentCursor->SetShowTextInputFieldOverlay( false );
+    m_pVisibleCursor->Hide();
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        OString aPayload = OString::boolean(m_bSVCursorVis);
+        GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload.getStr());
+        SfxLokHelper::notifyOtherViews(GetSfxViewShell(), LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
     }
 }
 
@@ -3703,30 +3702,30 @@ void SwCursorShell::GetSmartTagTerm( std::vector< OUString >& rSmartTagTypes,
     SwPaM* pCursor = GetCursor();
     SwPosition aPos( *pCursor->GetPoint() );
     SwTextNode *pNode = aPos.nNode.GetNode().GetTextNode();
-    if ( pNode && !pNode->IsInProtectSect() )
+    if ( !(pNode && !pNode->IsInProtectSect()) )
+        return;
+
+    const SwWrongList *pSmartTagList = pNode->GetSmartTags();
+    if ( !pSmartTagList )
+        return;
+
+    sal_Int32 nCurrent = aPos.nContent.GetIndex();
+    sal_Int32 nBegin = nCurrent;
+    sal_Int32 nLen = 1;
+
+    if (!(pSmartTagList->InWrongWord(nBegin, nLen) && !pNode->IsSymbolAt(nBegin)))
+        return;
+
+    const sal_uInt16 nIndex = pSmartTagList->GetWrongPos( nBegin );
+    const SwWrongList* pSubList = pSmartTagList->SubList( nIndex );
+    if ( pSubList )
     {
-        const SwWrongList *pSmartTagList = pNode->GetSmartTags();
-        if ( pSmartTagList )
-        {
-            sal_Int32 nCurrent = aPos.nContent.GetIndex();
-            sal_Int32 nBegin = nCurrent;
-            sal_Int32 nLen = 1;
-
-            if (pSmartTagList->InWrongWord(nBegin, nLen) && !pNode->IsSymbolAt(nBegin))
-            {
-                const sal_uInt16 nIndex = pSmartTagList->GetWrongPos( nBegin );
-                const SwWrongList* pSubList = pSmartTagList->SubList( nIndex );
-                if ( pSubList )
-                {
-                    pSmartTagList = pSubList;
-                    nCurrent = 0;
-                }
-
-                lcl_FillRecognizerData( rSmartTagTypes, rStringKeyMaps, *pSmartTagList, nCurrent );
-                lcl_FillTextRange( rRange, *pNode, nBegin, nLen );
-            }
-        }
+        pSmartTagList = pSubList;
+        nCurrent = 0;
     }
+
+    lcl_FillRecognizerData( rSmartTagTypes, rStringKeyMaps, *pSmartTagList, nCurrent );
+    lcl_FillTextRange( rRange, *pNode, nBegin, nLen );
 }
 
 // see also SwEditShell::GetCorrection( const Point* pPt, SwRect& rSelectRect )
@@ -3749,67 +3748,67 @@ void SwCursorShell::GetSmartTagRect( const Point& rPt, SwRect& rSelectRect )
     pSmartTagList = pNode->GetSmartTags();
     if( !pSmartTagList )
         return;
-    if( !pNode->IsInProtectSect() )
-    {
-        sal_Int32 nBegin = aPos.nContent.GetIndex();
-        sal_Int32 nLen = 1;
+    if( pNode->IsInProtectSect() )
+        return;
 
-        if (pSmartTagList->InWrongWord(nBegin, nLen) && !pNode->IsSymbolAt(nBegin))
-        {
-            // get smarttag word
-            OUString aText( pNode->GetText().copy(nBegin, nLen) );
+    sal_Int32 nBegin = aPos.nContent.GetIndex();
+    sal_Int32 nLen = 1;
 
-            //save the start and end positions of the line and the starting point
-            Push();
-            LeftMargin();
-            const sal_Int32 nLineStart = GetCursor()->GetPoint()->nContent.GetIndex();
-            RightMargin();
-            const sal_Int32 nLineEnd = GetCursor()->GetPoint()->nContent.GetIndex();
-            Pop(PopMode::DeleteCurrent);
+    if (!(pSmartTagList->InWrongWord(nBegin, nLen) && !pNode->IsSymbolAt(nBegin)))
+        return;
 
-            // make sure the selection build later from the data below does not
-            // include "in word" character to the left and right in order to
-            // preserve those. Therefore count those "in words" in order to
-            // modify the selection accordingly.
-            const sal_Unicode* pChar = aText.getStr();
-            sal_Int32 nLeft = 0;
-            while (*pChar++ == CH_TXTATR_INWORD)
-                ++nLeft;
-            pChar = aText.getLength() ? aText.getStr() + aText.getLength() - 1 : nullptr;
-            sal_Int32 nRight = 0;
-            while (pChar && *pChar-- == CH_TXTATR_INWORD)
-                ++nRight;
+    // get smarttag word
+    OUString aText( pNode->GetText().copy(nBegin, nLen) );
 
-            aPos.nContent = nBegin + nLeft;
-            pCursor = GetCursor();
-            *pCursor->GetPoint() = aPos;
-            pCursor->SetMark();
-            ExtendSelection( true, nLen - nLeft - nRight );
-            // do not determine the rectangle in the current line
-            const sal_Int32 nWordStart = (nBegin + nLeft) < nLineStart ? nLineStart : nBegin + nLeft;
-            // take one less than the line end - otherwise the next line would
-            // be calculated
-            const sal_Int32 nWordEnd = std::min(nBegin + nLen - nLeft - nRight, nLineEnd);
-            Push();
-            pCursor->DeleteMark();
-            SwIndex& rContent = GetCursor()->GetPoint()->nContent;
-            rContent = nWordStart;
-            SwRect aStartRect;
-            SwCursorMoveState aState;
-            aState.m_bRealWidth = true;
-            SwContentNode* pContentNode = pCursor->GetContentNode();
-            std::pair<Point, bool> const tmp(rPt, false);
-            SwContentFrame *pContentFrame = pContentNode->getLayoutFrame(
-                    GetLayout(), pCursor->GetPoint(), &tmp);
+    //save the start and end positions of the line and the starting point
+    Push();
+    LeftMargin();
+    const sal_Int32 nLineStart = GetCursor()->GetPoint()->nContent.GetIndex();
+    RightMargin();
+    const sal_Int32 nLineEnd = GetCursor()->GetPoint()->nContent.GetIndex();
+    Pop(PopMode::DeleteCurrent);
 
-            pContentFrame->GetCharRect( aStartRect, *pCursor->GetPoint(), &aState );
-            rContent = nWordEnd - 1;
-            SwRect aEndRect;
-            pContentFrame->GetCharRect( aEndRect, *pCursor->GetPoint(),&aState );
-            rSelectRect = aStartRect.Union( aEndRect );
-            Pop(PopMode::DeleteCurrent);
-        }
-    }
+    // make sure the selection build later from the data below does not
+    // include "in word" character to the left and right in order to
+    // preserve those. Therefore count those "in words" in order to
+    // modify the selection accordingly.
+    const sal_Unicode* pChar = aText.getStr();
+    sal_Int32 nLeft = 0;
+    while (*pChar++ == CH_TXTATR_INWORD)
+        ++nLeft;
+    pChar = aText.getLength() ? aText.getStr() + aText.getLength() - 1 : nullptr;
+    sal_Int32 nRight = 0;
+    while (pChar && *pChar-- == CH_TXTATR_INWORD)
+        ++nRight;
+
+    aPos.nContent = nBegin + nLeft;
+    pCursor = GetCursor();
+    *pCursor->GetPoint() = aPos;
+    pCursor->SetMark();
+    ExtendSelection( true, nLen - nLeft - nRight );
+    // do not determine the rectangle in the current line
+    const sal_Int32 nWordStart = (nBegin + nLeft) < nLineStart ? nLineStart : nBegin + nLeft;
+    // take one less than the line end - otherwise the next line would
+    // be calculated
+    const sal_Int32 nWordEnd = std::min(nBegin + nLen - nLeft - nRight, nLineEnd);
+    Push();
+    pCursor->DeleteMark();
+    SwIndex& rContent = GetCursor()->GetPoint()->nContent;
+    rContent = nWordStart;
+    SwRect aStartRect;
+    SwCursorMoveState aState;
+    aState.m_bRealWidth = true;
+    SwContentNode* pContentNode = pCursor->GetContentNode();
+    std::pair<Point, bool> const tmp(rPt, false);
+    SwContentFrame *pContentFrame = pContentNode->getLayoutFrame(
+            GetLayout(), pCursor->GetPoint(), &tmp);
+
+    pContentFrame->GetCharRect( aStartRect, *pCursor->GetPoint(), &aState );
+    rContent = nWordEnd - 1;
+    SwRect aEndRect;
+    pContentFrame->GetCharRect( aEndRect, *pCursor->GetPoint(),&aState );
+    rSelectRect = aStartRect.Union( aEndRect );
+    Pop(PopMode::DeleteCurrent);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
