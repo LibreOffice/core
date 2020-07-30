@@ -44,7 +44,7 @@ private:
 
     static OUString GetVersionString();
     static OUString GetBuildString();
-    static OUString GetLocaleString();
+    static OUString GetLocaleString(bool bLocalized = true);
     static OUString GetMiscString();
 
     static OUString GetCopyrightString();
