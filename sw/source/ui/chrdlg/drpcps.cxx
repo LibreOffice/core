@@ -696,49 +696,49 @@ IMPL_LINK_NOARG(SwDropCapsPage, SelectHdl, weld::ComboBox&, void)
 
 void SwDropCapsPage::FillSet( SfxItemSet &rSet )
 {
-    if(bModified)
+    if(!bModified)
+        return;
+
+    SwFormatDrop aFormat;
+
+    bool bOn = m_xDropCapsBox->get_active();
+    if (bOn)
     {
-        SwFormatDrop aFormat;
+        // quantity, lines, gap
+        aFormat.GetChars()     = static_cast<sal_uInt8>(m_xDropCapsField->get_value());
+        aFormat.GetLines()     = static_cast<sal_uInt8>(m_xLinesField->get_value());
+        aFormat.GetDistance()  = static_cast<sal_uInt16>(m_xDistanceField->denormalize(m_xDistanceField->get_value(FieldUnit::TWIP)));
+        aFormat.GetWholeWord() = m_xWholeWordCB->get_active();
 
-        bool bOn = m_xDropCapsBox->get_active();
-        if (bOn)
+        // template
+        if (m_xTemplateBox->get_active())
+            aFormat.SetCharFormat(rSh.GetCharStyle(m_xTemplateBox->get_active_text()));
+    }
+    else
+    {
+        aFormat.GetChars()    = 1;
+        aFormat.GetLines()    = 1;
+        aFormat.GetDistance() = 0;
+    }
+
+    // set attributes
+    const SfxPoolItem* pOldItem;
+    if (nullptr == (pOldItem = GetOldItem(rSet, FN_FORMAT_DROPCAPS)) || aFormat != *pOldItem)
+        rSet.Put(aFormat);
+
+    // hard text formatting
+    // Bug 24974: in designer/template catalog this doesn't make sense!!
+    if (!bFormat && m_xDropCapsBox->get_active())
+    {
+        OUString sText(m_xTextEdit->get_text());
+
+        if (!m_xWholeWordCB->get_active())
         {
-            // quantity, lines, gap
-            aFormat.GetChars()     = static_cast<sal_uInt8>(m_xDropCapsField->get_value());
-            aFormat.GetLines()     = static_cast<sal_uInt8>(m_xLinesField->get_value());
-            aFormat.GetDistance()  = static_cast<sal_uInt16>(m_xDistanceField->denormalize(m_xDistanceField->get_value(FieldUnit::TWIP)));
-            aFormat.GetWholeWord() = m_xWholeWordCB->get_active();
-
-            // template
-            if (m_xTemplateBox->get_active())
-                aFormat.SetCharFormat(rSh.GetCharStyle(m_xTemplateBox->get_active_text()));
-        }
-        else
-        {
-            aFormat.GetChars()    = 1;
-            aFormat.GetLines()    = 1;
-            aFormat.GetDistance() = 0;
+            sText = sText.copy(0, std::min<sal_Int32>(sText.getLength(), m_xDropCapsField->get_value()));
         }
 
-        // set attributes
-        const SfxPoolItem* pOldItem;
-        if (nullptr == (pOldItem = GetOldItem(rSet, FN_FORMAT_DROPCAPS)) || aFormat != *pOldItem)
-            rSet.Put(aFormat);
-
-        // hard text formatting
-        // Bug 24974: in designer/template catalog this doesn't make sense!!
-        if (!bFormat && m_xDropCapsBox->get_active())
-        {
-            OUString sText(m_xTextEdit->get_text());
-
-            if (!m_xWholeWordCB->get_active())
-            {
-                sText = sText.copy(0, std::min<sal_Int32>(sText.getLength(), m_xDropCapsField->get_value()));
-            }
-
-            SfxStringItem aStr(FN_PARAM_1, sText);
-            rSet.Put(aStr);
-        }
+        SfxStringItem aStr(FN_PARAM_1, sText);
+        rSet.Put(aStr);
     }
 }
 

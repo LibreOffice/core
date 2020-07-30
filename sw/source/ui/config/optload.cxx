@@ -349,19 +349,19 @@ void SwLoadOptPage::Reset( const SfxItemSet* rSet)
 IMPL_LINK_NOARG(SwLoadOptPage, MetricHdl, weld::ComboBox&, void)
 {
     const sal_Int32 nMPos = m_xMetricLB->get_active();
-    if(nMPos != -1)
-    {
-        // Double-Cast for VA3.0
-        FieldUnit eFieldUnit = static_cast<FieldUnit>(m_xMetricLB->get_id(nMPos).toUInt32());
-        bool bModified = m_xTabMF->get_value_changed_from_saved();
-        long nVal = bModified ?
-            sal::static_int_cast<sal_Int32, sal_Int64 >( m_xTabMF->denormalize( m_xTabMF->get_value( FieldUnit::TWIP ) )) :
-                m_nLastTab;
-        ::SetFieldUnit( *m_xTabMF, eFieldUnit );
-        m_xTabMF->set_value( m_xTabMF->normalize( nVal ), FieldUnit::TWIP );
-        if (!bModified)
-            m_xTabMF->save_value();
-    }
+    if(nMPos == -1)
+        return;
+
+    // Double-Cast for VA3.0
+    FieldUnit eFieldUnit = static_cast<FieldUnit>(m_xMetricLB->get_id(nMPos).toUInt32());
+    bool bModified = m_xTabMF->get_value_changed_from_saved();
+    long nVal = bModified ?
+        sal::static_int_cast<sal_Int32, sal_Int64 >( m_xTabMF->denormalize( m_xTabMF->get_value( FieldUnit::TWIP ) )) :
+            m_nLastTab;
+    ::SetFieldUnit( *m_xTabMF, eFieldUnit );
+    m_xTabMF->set_value( m_xTabMF->normalize( nVal ), FieldUnit::TWIP );
+    if (!bModified)
+        m_xTabMF->save_value();
 }
 
 SwCaptionOptDlg::SwCaptionOptDlg(weld::Window* pParent, const SfxItemSet& rSet)

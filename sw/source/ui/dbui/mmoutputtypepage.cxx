@@ -242,26 +242,26 @@ SwSendMailDialog::SwSendMailDialog(weld::Window *pParent, SwMailMergeConfigItem&
 
 SwSendMailDialog::~SwSendMailDialog()
 {
-    if(m_pImpl->xMailDispatcher.is())
-    {
-        try
-        {
-            if(m_pImpl->xMailDispatcher->isStarted())
-                m_pImpl->xMailDispatcher->stop();
-            if(m_pImpl->xConnectedInMailService.is() && m_pImpl->xConnectedInMailService->isConnected())
-                m_pImpl->xConnectedInMailService->disconnect();
+    if(!m_pImpl->xMailDispatcher.is())
+        return;
 
-            uno::Reference<mail::XMailMessage> xMessage =
-                    m_pImpl->xMailDispatcher->dequeueMailMessage();
-            while(xMessage.is())
-            {
-                SwMailDispatcherListener_Impl::DeleteAttachments( xMessage );
-                xMessage = m_pImpl->xMailDispatcher->dequeueMailMessage();
-            }
-        }
-        catch (const uno::Exception&)
+    try
+    {
+        if(m_pImpl->xMailDispatcher->isStarted())
+            m_pImpl->xMailDispatcher->stop();
+        if(m_pImpl->xConnectedInMailService.is() && m_pImpl->xConnectedInMailService->isConnected())
+            m_pImpl->xConnectedInMailService->disconnect();
+
+        uno::Reference<mail::XMailMessage> xMessage =
+                m_pImpl->xMailDispatcher->dequeueMailMessage();
+        while(xMessage.is())
         {
+            SwMailDispatcherListener_Impl::DeleteAttachments( xMessage );
+            xMessage = m_pImpl->xMailDispatcher->dequeueMailMessage();
         }
+    }
+    catch (const uno::Exception&)
+    {
     }
 }
 
@@ -279,20 +279,20 @@ void SwSendMailDialog::AddDocument( SwMailDescriptor const & rDesc )
 IMPL_LINK( SwSendMailDialog, StopHdl_Impl, weld::Button&, rButton, void )
 {
     m_bCancel = true;
-    if(m_pImpl->xMailDispatcher.is())
+    if(!m_pImpl->xMailDispatcher.is())
+        return;
+
+    if(m_pImpl->xMailDispatcher->isStarted())
     {
-        if(m_pImpl->xMailDispatcher->isStarted())
-        {
-            m_pImpl->xMailDispatcher->stop();
-            rButton.set_label(m_sContinue);
-            m_xPaused->show();
-        }
-        else
-        {
-            m_pImpl->xMailDispatcher->start();
-            rButton.set_label(m_sStop);
-            m_xPaused->hide();
-        }
+        m_pImpl->xMailDispatcher->stop();
+        rButton.set_label(m_sContinue);
+        m_xPaused->show();
+    }
+    else
+    {
+        m_pImpl->xMailDispatcher->start();
+        rButton.set_label(m_sStop);
+        m_xPaused->hide();
     }
 }
 

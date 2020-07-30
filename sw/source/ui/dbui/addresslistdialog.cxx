@@ -225,52 +225,52 @@ IMPL_LINK_NOARG(SwAddressListDialog, FilterHdl_Impl, weld::Button&, void)
 {
     int nSelect = m_xListLB->get_selected_index();
     uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-    if (nSelect != -1)
+    if (nSelect == -1)
+        return;
+
+    const OUString sCommand = m_xListLB->get_text(nSelect, 1);
+    if (sCommand.isEmpty())
+        return;
+
+    AddressUserData_Impl* pUserData = reinterpret_cast<AddressUserData_Impl*>(m_xListLB->get_id(nSelect).toInt64());
+    if (!pUserData->xConnection.is() )
+        return;
+
+    try
     {
-        const OUString sCommand = m_xListLB->get_text(nSelect, 1);
-        if (sCommand.isEmpty())
-            return;
+        uno::Reference<lang::XMultiServiceFactory> xConnectFactory(pUserData->xConnection, UNO_QUERY_THROW);
+        uno::Reference<XSingleSelectQueryComposer> xComposer(
+                xConnectFactory->createInstance("com.sun.star.sdb.SingleSelectQueryComposer"), UNO_QUERY_THROW);
 
-        AddressUserData_Impl* pUserData = reinterpret_cast<AddressUserData_Impl*>(m_xListLB->get_id(nSelect).toInt64());
-        if (pUserData->xConnection.is() )
+        uno::Reference<XRowSet> xRowSet(
+                xMgr->createInstance("com.sun.star.sdb.RowSet"), UNO_QUERY);
+        uno::Reference<XPropertySet> xRowProperties(xRowSet, UNO_QUERY);
+        xRowProperties->setPropertyValue("DataSourceName",
+                makeAny(m_xListLB->get_text(nSelect, 0)));
+        xRowProperties->setPropertyValue("Command", makeAny(sCommand));
+        xRowProperties->setPropertyValue("CommandType", makeAny(pUserData->nCommandType));
+        xRowProperties->setPropertyValue("ActiveConnection", makeAny(pUserData->xConnection.getTyped()));
+        xRowSet->execute();
+
+        OUString sQuery;
+        xRowProperties->getPropertyValue("ActiveCommand")>>= sQuery;
+        xComposer->setQuery(sQuery);
+        if(!pUserData->sFilter.isEmpty())
+            xComposer->setFilter(pUserData->sFilter);
+
+        uno::Reference< XExecutableDialog> xDialog = sdb::FilterDialog::createWithQuery( comphelper::getComponentContext(xMgr),
+           xComposer,xRowSet, uno::Reference<awt::XWindow>() );
+
+        if ( RET_OK == xDialog->execute() )
         {
-            try
-            {
-                uno::Reference<lang::XMultiServiceFactory> xConnectFactory(pUserData->xConnection, UNO_QUERY_THROW);
-                uno::Reference<XSingleSelectQueryComposer> xComposer(
-                        xConnectFactory->createInstance("com.sun.star.sdb.SingleSelectQueryComposer"), UNO_QUERY_THROW);
-
-                uno::Reference<XRowSet> xRowSet(
-                        xMgr->createInstance("com.sun.star.sdb.RowSet"), UNO_QUERY);
-                uno::Reference<XPropertySet> xRowProperties(xRowSet, UNO_QUERY);
-                xRowProperties->setPropertyValue("DataSourceName",
-                        makeAny(m_xListLB->get_text(nSelect, 0)));
-                xRowProperties->setPropertyValue("Command", makeAny(sCommand));
-                xRowProperties->setPropertyValue("CommandType", makeAny(pUserData->nCommandType));
-                xRowProperties->setPropertyValue("ActiveConnection", makeAny(pUserData->xConnection.getTyped()));
-                xRowSet->execute();
-
-                OUString sQuery;
-                xRowProperties->getPropertyValue("ActiveCommand")>>= sQuery;
-                xComposer->setQuery(sQuery);
-                if(!pUserData->sFilter.isEmpty())
-                    xComposer->setFilter(pUserData->sFilter);
-
-                uno::Reference< XExecutableDialog> xDialog = sdb::FilterDialog::createWithQuery( comphelper::getComponentContext(xMgr),
-                   xComposer,xRowSet, uno::Reference<awt::XWindow>() );
-
-                if ( RET_OK == xDialog->execute() )
-                {
-                    weld::WaitObject aWait(m_xDialog.get());
-                    pUserData->sFilter = xComposer->getFilter();
-                }
-                ::comphelper::disposeComponent(xRowSet);
-            }
-            catch (const Exception&)
-            {
-                OSL_FAIL("exception caught in SwAddressListDialog::FilterHdl_Impl");
-            }
+            weld::WaitObject aWait(m_xDialog.get());
+            pUserData->sFilter = xComposer->getFilter();
         }
+        ::comphelper::disposeComponent(xRowSet);
+    }
+    catch (const Exception&)
+    {
+        OSL_FAIL("exception caught in SwAddressListDialog::FilterHdl_Impl");
     }
 }
 
@@ -295,25 +295,26 @@ IMPL_LINK_NOARG(SwAddressListDialog, LoadHdl_Impl, weld::Button&, void)
 IMPL_LINK_NOARG(SwAddressListDialog, RemoveHdl_Impl, weld::Button&, void)
 {
     int nEntry = m_xListLB->get_selected_index();
-    if (nEntry != -1)
-    {
-        std::unique_ptr<weld::MessageDialog> xQuery(Application::CreateMessageDialog(getDialog(),
-                                                    VclMessageType::Question, VclButtonsType::YesNo, SwResId(ST_DELETE_CONFIRM)));
-        if (xQuery->run() == RET_YES)
-        {   // Remove data source connection
-            SwDBManager::RevokeDataSource(m_xListLB->get_selected_text());
-            // Remove item from the list
-            m_xListLB->remove(nEntry);
-            // If this was the last item, disable the Remove & Edit buttons and enable Create
-            if (m_xListLB->n_children() < 1 )
-                {
-                m_xRemovePB->set_sensitive(false);
-                m_xEditPB->set_sensitive(false);
-                m_xFilterPB->set_sensitive(false);
-                m_xCreateListPB->set_sensitive(true);
-                }
+    if (nEntry == -1)
+        return;
+
+    std::unique_ptr<weld::MessageDialog> xQuery(Application::CreateMessageDialog(getDialog(),
+                                                VclMessageType::Question, VclButtonsType::YesNo, SwResId(ST_DELETE_CONFIRM)));
+    if (xQuery->run() != RET_YES)
+        return;
+
+    // Remove data source connection
+    SwDBManager::RevokeDataSource(m_xListLB->get_selected_text());
+    // Remove item from the list
+    m_xListLB->remove(nEntry);
+    // If this was the last item, disable the Remove & Edit buttons and enable Create
+    if (m_xListLB->n_children() < 1 )
+        {
+        m_xRemovePB->set_sensitive(false);
+        m_xEditPB->set_sensitive(false);
+        m_xFilterPB->set_sensitive(false);
+        m_xCreateListPB->set_sensitive(true);
         }
-    }
 
 
 }
@@ -321,74 +322,74 @@ IMPL_LINK_NOARG(SwAddressListDialog, RemoveHdl_Impl, weld::Button&, void)
 IMPL_LINK_NOARG(SwAddressListDialog, CreateHdl_Impl, weld::Button&, void)
 {
     SwCreateAddressListDialog aDlg(m_xDialog.get(), /*sInputURL*/OUString(), m_pAddressPage->GetWizard()->GetConfigItem());
-    if (RET_OK == aDlg.run())
+    if (RET_OK != aDlg.run())
+        return;
+
+    //register the URL a new datasource
+    const OUString sURL = aDlg.GetURL();
+    try
     {
-        //register the URL a new datasource
-        const OUString sURL = aDlg.GetURL();
-        try
+        uno::Reference<XInterface> xNewInstance = m_xDBContext->createInstance();
+        INetURLObject aURL( sURL );
+        const OUString sNewName = aURL.getBase();
+        //find a unique name if sNewName already exists
+        OUString sFind(sNewName);
+        sal_Int32 nIndex = 0;
+        while(m_xDBContext->hasByName(sFind))
         {
-            uno::Reference<XInterface> xNewInstance = m_xDBContext->createInstance();
-            INetURLObject aURL( sURL );
-            const OUString sNewName = aURL.getBase();
-            //find a unique name if sNewName already exists
-            OUString sFind(sNewName);
-            sal_Int32 nIndex = 0;
-            while(m_xDBContext->hasByName(sFind))
-            {
-                sFind = sNewName + OUString::number(++nIndex);
-            }
-            uno::Reference<XPropertySet> xDataProperties(xNewInstance, UNO_QUERY);
-
-            //only the 'path' has to be added
-            INetURLObject aTempURL(aURL);
-            aTempURL.removeSegment();
-            aTempURL.removeFinalSlash();
-            const OUString sDBURL("sdbc:flat:" + aTempURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
-            xDataProperties->setPropertyValue("URL", Any(sDBURL));
-            //set the filter to the file name without extension
-            uno::Sequence<OUString> aFilters { sNewName };
-            xDataProperties->setPropertyValue("TableFilter", Any(aFilters));
-
-            uno::Sequence<PropertyValue> aInfo(4);
-            PropertyValue* pInfo = aInfo.getArray();
-            pInfo[0].Name = "FieldDelimiter";
-            pInfo[0].Value <<= OUString('\t');
-            pInfo[1].Name = "StringDelimiter";
-            pInfo[1].Value <<= OUString('"');
-            pInfo[2].Name = "Extension";
-            pInfo[2].Value <<= aURL.getExtension();//"csv";
-            pInfo[3].Name = "CharSet";
-            pInfo[3].Value <<= OUString("UTF-8");
-            xDataProperties->setPropertyValue("Info", Any(aInfo));
-
-            uno::Reference<sdb::XDocumentDataSource> xDS(xNewInstance, UNO_QUERY_THROW);
-            uno::Reference<frame::XStorable> xStore(xDS->getDatabaseDocument(), UNO_QUERY_THROW);
-            OUString const sExt(".odb");
-            OUString sTmpName;
-            {
-                OUString sHomePath(SvtPathOptions().GetWorkPath());
-                utl::TempFile aTempFile(sFind, true, &sExt, &sHomePath);
-                aTempFile.EnableKillingFile();
-                sTmpName = aTempFile.GetURL();
-            }
-            xStore->storeAsURL(sTmpName, Sequence< PropertyValue >());
-
-            m_xDBContext->registerObject( sFind, xNewInstance );
-            //now insert the new source into the ListBox
-            m_xListLB->append(m_xIter.get());
-            m_xListLB->set_text(*m_xIter, sFind, 0);
-            m_xListLB->set_text(*m_xIter, aFilters[0], 1);
-            m_aUserData.emplace_back(new AddressUserData_Impl);
-            AddressUserData_Impl* pUserData = m_aUserData.back().get();
-            m_xListLB->set_id(*m_xIter, OUString::number(reinterpret_cast<sal_Int64>(pUserData)));
-            m_xListLB->select(*m_xIter);
-            ListBoxSelectHdl_Impl(*m_xListLB);
-            m_xCreateListPB->set_sensitive(false);
-            m_xRemovePB->set_sensitive(true);
+            sFind = sNewName + OUString::number(++nIndex);
         }
-        catch (const Exception&)
+        uno::Reference<XPropertySet> xDataProperties(xNewInstance, UNO_QUERY);
+
+        //only the 'path' has to be added
+        INetURLObject aTempURL(aURL);
+        aTempURL.removeSegment();
+        aTempURL.removeFinalSlash();
+        const OUString sDBURL("sdbc:flat:" + aTempURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+        xDataProperties->setPropertyValue("URL", Any(sDBURL));
+        //set the filter to the file name without extension
+        uno::Sequence<OUString> aFilters { sNewName };
+        xDataProperties->setPropertyValue("TableFilter", Any(aFilters));
+
+        uno::Sequence<PropertyValue> aInfo(4);
+        PropertyValue* pInfo = aInfo.getArray();
+        pInfo[0].Name = "FieldDelimiter";
+        pInfo[0].Value <<= OUString('\t');
+        pInfo[1].Name = "StringDelimiter";
+        pInfo[1].Value <<= OUString('"');
+        pInfo[2].Name = "Extension";
+        pInfo[2].Value <<= aURL.getExtension();//"csv";
+        pInfo[3].Name = "CharSet";
+        pInfo[3].Value <<= OUString("UTF-8");
+        xDataProperties->setPropertyValue("Info", Any(aInfo));
+
+        uno::Reference<sdb::XDocumentDataSource> xDS(xNewInstance, UNO_QUERY_THROW);
+        uno::Reference<frame::XStorable> xStore(xDS->getDatabaseDocument(), UNO_QUERY_THROW);
+        OUString const sExt(".odb");
+        OUString sTmpName;
         {
+            OUString sHomePath(SvtPathOptions().GetWorkPath());
+            utl::TempFile aTempFile(sFind, true, &sExt, &sHomePath);
+            aTempFile.EnableKillingFile();
+            sTmpName = aTempFile.GetURL();
         }
+        xStore->storeAsURL(sTmpName, Sequence< PropertyValue >());
+
+        m_xDBContext->registerObject( sFind, xNewInstance );
+        //now insert the new source into the ListBox
+        m_xListLB->append(m_xIter.get());
+        m_xListLB->set_text(*m_xIter, sFind, 0);
+        m_xListLB->set_text(*m_xIter, aFilters[0], 1);
+        m_aUserData.emplace_back(new AddressUserData_Impl);
+        AddressUserData_Impl* pUserData = m_aUserData.back().get();
+        m_xListLB->set_id(*m_xIter, OUString::number(reinterpret_cast<sal_Int64>(pUserData)));
+        m_xListLB->select(*m_xIter);
+        ListBoxSelectHdl_Impl(*m_xListLB);
+        m_xCreateListPB->set_sensitive(false);
+        m_xRemovePB->set_sensitive(true);
+    }
+    catch (const Exception&)
+    {
     }
 }
 
@@ -396,25 +397,25 @@ IMPL_LINK_NOARG(SwAddressListDialog, EditHdl_Impl, weld::Button&, void)
 {
     int nEntry = m_xListLB->get_selected_index();
     AddressUserData_Impl* pUserData = nEntry != -1 ? reinterpret_cast<AddressUserData_Impl*>(m_xListLB->get_id(nEntry).toInt64()) : nullptr;
-    if (pUserData && !pUserData->sURL.isEmpty())
-    {
-        if(pUserData->xResultSet.is())
-        {
-            SwMailMergeConfigItem& rConfigItem = m_pAddressPage->GetWizard()->GetConfigItem();
-            if(rConfigItem.GetResultSet() != pUserData->xResultSet)
-                ::comphelper::disposeComponent( pUserData->xResultSet );
-            pUserData->xResultSet = nullptr;
+    if (!(pUserData && !pUserData->sURL.isEmpty()))
+        return;
 
-            rConfigItem.DisposeResultSet();
-        }
-        pUserData->xSource.clear();
-        pUserData->xColumnsSupplier.clear();
-        pUserData->xConnection.clear();
-            // will automatically close if it was the las reference
-        SwCreateAddressListDialog aDlg(m_xDialog.get(), pUserData->sURL,
-                                       m_pAddressPage->GetWizard()->GetConfigItem());
-        aDlg.run();
+    if(pUserData->xResultSet.is())
+    {
+        SwMailMergeConfigItem& rConfigItem = m_pAddressPage->GetWizard()->GetConfigItem();
+        if(rConfigItem.GetResultSet() != pUserData->xResultSet)
+            ::comphelper::disposeComponent( pUserData->xResultSet );
+        pUserData->xResultSet = nullptr;
+
+        rConfigItem.DisposeResultSet();
     }
+    pUserData->xSource.clear();
+    pUserData->xColumnsSupplier.clear();
+    pUserData->xConnection.clear();
+        // will automatically close if it was the las reference
+    SwCreateAddressListDialog aDlg(m_xDialog.get(), pUserData->sURL,
+                                   m_pAddressPage->GetWizard()->GetConfigItem());
+    aDlg.run();
 };
 
 IMPL_LINK_NOARG(SwAddressListDialog, ListBoxSelectHdl_Impl, weld::TreeView&, void)
