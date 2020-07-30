@@ -133,6 +133,12 @@ using ::com::sun::star::container::XIndexContainer;
 #define ShellClass_SfxViewFrame
 #include <sfxslots.hxx>
 
+#include <unordered_map>
+#include <sfx2/sidebar/SidebarController.hxx>
+#include <sfx2/sidebar/ResourceManager.hxx>
+#include <sidebar/ContextList.hxx>
+#include <sidebar/DeckDescriptor.hxx>
+
 SFX_IMPL_SUPERCLASS_INTERFACE(SfxViewFrame,SfxShell)
 
 void SfxViewFrame::InitInterface_Impl()
@@ -3087,6 +3093,10 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
     }
 }
 
+static std::unordered_map<sal_uInt16, OUString> aDeckMap = {
+    { SID_NAVIGATOR_DECK, "NavigatorDeck" }
+};
+
 /*  [Description]
 
     This method can be included in the Execute method for the on- and off-
@@ -3153,6 +3163,19 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
 
         ::sfx2::sidebar::Sidebar::ShowPanel("StyleListPanel",
                                             GetFrame().GetFrameInterface(), true);
+        rReq.Done();
+        return;
+    }
+    if (aDeckMap.count(nSID))
+    {
+        // First make sure that the sidebar is visible
+        ShowChildWindow(SID_SIDEBAR);
+
+        ::sfx2::sidebar::SidebarController* pController =
+                ::sfx2::sidebar::SidebarController::GetSidebarControllerForFrame(GetFrame().GetFrameInterface());
+        if (pController)
+            pController->OpenThenSwitchToDeck(aDeckMap[nSID]);
+
         rReq.Done();
         return;
     }
@@ -3228,6 +3251,26 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
             else
             {
                 rState.Put( SfxBoolItem( nSID, HasChildWindow( nSID ) ) );
+            }
+        }
+        else if (aDeckMap.count(nSID))
+        {
+            bool bEnable = false;
+            ::sfx2::sidebar::SidebarController* pController =
+                    ::sfx2::sidebar::SidebarController::GetSidebarControllerForFrame(GetFrame().GetFrameInterface());
+            if (pController)
+            {
+                std::shared_ptr<sfx2::sidebar::DeckDescriptor> xDeckDescriptor = pController->GetResourceManager()->GetDeckDescriptor(aDeckMap[nSID]);
+                if (xDeckDescriptor)
+                {
+                    const ::sfx2::sidebar::ContextList::Entry* pMatchingEntry = xDeckDescriptor->maContextList.GetMatch(pController->GetCurrentContext());
+                    if (pMatchingEntry)
+                        bEnable = true;
+                }
+            }
+            if (!bEnable)
+            {
+                rState.DisableItem( nSID );
             }
         }
         else if ( KnowsChildWindow(nSID) )
