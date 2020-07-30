@@ -195,90 +195,90 @@ void SwFrame::CheckDirChange()
     mbInvalidR2L = true;
     bool bChg = bOldR2L != IsRightToLeft();
     bool bOldVertL2R = IsVertLR();
-    if( ( IsVertical() != bOldVert ) || bChg || bOldVertL2R != IsVertLR() )
+    if( !(( IsVertical() != bOldVert ) || bChg || bOldVertL2R != IsVertLR()) )
+        return;
+
+    InvalidateAll();
+    if( IsLayoutFrame() )
     {
-        InvalidateAll();
-        if( IsLayoutFrame() )
+        // set minimum row height for vertical cells in horizontal table:
+        if ( IsCellFrame() && GetUpper() )
         {
-            // set minimum row height for vertical cells in horizontal table:
-            if ( IsCellFrame() && GetUpper() )
+            if ( IsVertical() != GetUpper()->IsVertical() &&
+                 static_cast<SwCellFrame*>(this)->GetTabBox()->getRowSpan() == 1 )
             {
-                if ( IsVertical() != GetUpper()->IsVertical() &&
-                     static_cast<SwCellFrame*>(this)->GetTabBox()->getRowSpan() == 1 )
-                {
-                    enum {
-                        MIN_VERT_CELL_HEIGHT = 1135
-                    };
+                enum {
+                    MIN_VERT_CELL_HEIGHT = 1135
+                };
 
-                    SwTableLine* pLine = const_cast<SwTableLine*>(static_cast<SwCellFrame*>(this)->GetTabBox()->GetUpper());
-                    SwFrameFormat* pFrameFormat = pLine->GetFrameFormat();
-                    SwFormatFrameSize aNew( pFrameFormat->GetFrameSize() );
-                    if ( SwFrameSize::Fixed != aNew.GetHeightSizeType() )
-                        aNew.SetHeightSizeType( SwFrameSize::Minimum );
-                    if ( aNew.GetHeight() < MIN_VERT_CELL_HEIGHT )
-                        aNew.SetHeight( MIN_VERT_CELL_HEIGHT );
-                    SwDoc* pDoc = pFrameFormat->GetDoc();
-                    pDoc->SetAttr( aNew, *pLine->ClaimFrameFormat() );
-                }
+                SwTableLine* pLine = const_cast<SwTableLine*>(static_cast<SwCellFrame*>(this)->GetTabBox()->GetUpper());
+                SwFrameFormat* pFrameFormat = pLine->GetFrameFormat();
+                SwFormatFrameSize aNew( pFrameFormat->GetFrameSize() );
+                if ( SwFrameSize::Fixed != aNew.GetHeightSizeType() )
+                    aNew.SetHeightSizeType( SwFrameSize::Minimum );
+                if ( aNew.GetHeight() < MIN_VERT_CELL_HEIGHT )
+                    aNew.SetHeight( MIN_VERT_CELL_HEIGHT );
+                SwDoc* pDoc = pFrameFormat->GetDoc();
+                pDoc->SetAttr( aNew, *pLine->ClaimFrameFormat() );
             }
-
-            SwFrame* pFrame = static_cast<SwLayoutFrame*>(this)->Lower();
-            const SwFormatCol* pCol = nullptr;
-            SwLayoutFrame* pBody = nullptr;
-            if( pFrame )
-            {
-                if( IsPageFrame() )
-                {
-                    // If we're a page frame and we change our layout direction,
-                    // we have to look for columns and rearrange them.
-                    pBody = static_cast<SwPageFrame*>(this)->FindBodyCont();
-                    if(pBody && pBody->Lower() && pBody->Lower()->IsColumnFrame())
-                        pCol = &static_cast<SwPageFrame*>(this)->GetFormat()->GetCol();
-                }
-                else if( pFrame->IsColumnFrame() )
-                {
-                    pBody = static_cast<SwLayoutFrame*>(this);
-                    const SwFrameFormat *pFormat = pBody->GetFormat();
-                    if( pFormat )
-                        pCol = &pFormat->GetCol();
-                }
-            }
-            while( pFrame )
-            {
-                pFrame->CheckDirChange();
-                pFrame = pFrame->GetNext();
-            }
-            if( pCol )
-                pBody->AdjustColumns( pCol, true );
         }
-        else if( IsTextFrame() )
-            static_cast<SwTextFrame*>(this)->Prepare();
 
-        // #i31698# - notify anchored objects also for page frames.
-        // Remove code above for special handling of page frames
-        if ( GetDrawObjs() )
+        SwFrame* pFrame = static_cast<SwLayoutFrame*>(this)->Lower();
+        const SwFormatCol* pCol = nullptr;
+        SwLayoutFrame* pBody = nullptr;
+        if( pFrame )
         {
-            const SwSortedObjs *pObjs = GetDrawObjs();
-            const size_t nCnt = pObjs->size();
-            for ( size_t i = 0; i < nCnt; ++i )
+            if( IsPageFrame() )
             {
-                SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
-                if( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
-                    static_cast<SwFlyFrame*>(pAnchoredObj)->CheckDirChange();
-                else
-                {
-                    // OD 2004-04-06 #i26791# - direct object
-                    // positioning no longer needed. Instead
-                    // invalidate
-                    pAnchoredObj->InvalidateObjPos();
-                }
-                // #i31698# - update layout direction of
-                // anchored object
-                {
-                    ::setContextWritingMode( pAnchoredObj->DrawObj(), pAnchoredObj->GetAnchorFrameContainingAnchPos() );
-                    pAnchoredObj->UpdateLayoutDir();
-                }
+                // If we're a page frame and we change our layout direction,
+                // we have to look for columns and rearrange them.
+                pBody = static_cast<SwPageFrame*>(this)->FindBodyCont();
+                if(pBody && pBody->Lower() && pBody->Lower()->IsColumnFrame())
+                    pCol = &static_cast<SwPageFrame*>(this)->GetFormat()->GetCol();
             }
+            else if( pFrame->IsColumnFrame() )
+            {
+                pBody = static_cast<SwLayoutFrame*>(this);
+                const SwFrameFormat *pFormat = pBody->GetFormat();
+                if( pFormat )
+                    pCol = &pFormat->GetCol();
+            }
+        }
+        while( pFrame )
+        {
+            pFrame->CheckDirChange();
+            pFrame = pFrame->GetNext();
+        }
+        if( pCol )
+            pBody->AdjustColumns( pCol, true );
+    }
+    else if( IsTextFrame() )
+        static_cast<SwTextFrame*>(this)->Prepare();
+
+    // #i31698# - notify anchored objects also for page frames.
+    // Remove code above for special handling of page frames
+    if ( !GetDrawObjs() )
+        return;
+
+    const SwSortedObjs *pObjs = GetDrawObjs();
+    const size_t nCnt = pObjs->size();
+    for ( size_t i = 0; i < nCnt; ++i )
+    {
+        SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
+        if( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
+            static_cast<SwFlyFrame*>(pAnchoredObj)->CheckDirChange();
+        else
+        {
+            // OD 2004-04-06 #i26791# - direct object
+            // positioning no longer needed. Instead
+            // invalidate
+            pAnchoredObj->InvalidateObjPos();
+        }
+        // #i31698# - update layout direction of
+        // anchored object
+        {
+            ::setContextWritingMode( pAnchoredObj->DrawObj(), pAnchoredObj->GetAnchorFrameContainingAnchPos() );
+            pAnchoredObj->UpdateLayoutDir();
         }
     }
 }
@@ -343,30 +343,30 @@ void SwFrame::DestroyImpl()
         }
     }
 
-    if (m_pDrawObjs)
+    if (!m_pDrawObjs)
+        return;
+
+    for (size_t i = m_pDrawObjs->size(); i; )
     {
-        for (size_t i = m_pDrawObjs->size(); i; )
+        SwAnchoredObject* pAnchoredObj = (*m_pDrawObjs)[--i];
+        if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
         {
-            SwAnchoredObject* pAnchoredObj = (*m_pDrawObjs)[--i];
-            if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
+            SwFrame::DestroyFrame(static_cast<SwFlyFrame*>(pAnchoredObj));
+        }
+        else
+        {
+            SdrObject* pSdrObj = pAnchoredObj->DrawObj();
+            SwDrawContact* pContact =
+                    static_cast<SwDrawContact*>(pSdrObj->GetUserCall());
+            OSL_ENSURE( pContact,
+                    "<SwFrame::~SwFrame> - missing contact for drawing object" );
+            if ( pContact )
             {
-                SwFrame::DestroyFrame(static_cast<SwFlyFrame*>(pAnchoredObj));
-            }
-            else
-            {
-                SdrObject* pSdrObj = pAnchoredObj->DrawObj();
-                SwDrawContact* pContact =
-                        static_cast<SwDrawContact*>(pSdrObj->GetUserCall());
-                OSL_ENSURE( pContact,
-                        "<SwFrame::~SwFrame> - missing contact for drawing object" );
-                if ( pContact )
-                {
-                    pContact->DisconnectObjFromLayout( pSdrObj );
-                }
+                pContact->DisconnectObjFromLayout( pSdrObj );
             }
         }
-        m_pDrawObjs.reset();
     }
+    m_pDrawObjs.reset();
 }
 
 SwFrame::~SwFrame()

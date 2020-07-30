@@ -342,26 +342,26 @@ void SwAnchoredDrawObject::MakeObjPos()
     }
 
     // --> #i62875#
-    if ( mbCaptureAfterLayoutDirChange &&
-         GetPageFrame() )
+    if ( !(mbCaptureAfterLayoutDirChange &&
+         GetPageFrame()) )
+        return;
+
+    SwRect aPageRect( GetPageFrame()->getFrameArea() );
+    SwRect aObjRect( GetObjRect() );
+    if ( aObjRect.Right() >= aPageRect.Right() + 10 )
     {
-        SwRect aPageRect( GetPageFrame()->getFrameArea() );
-        SwRect aObjRect( GetObjRect() );
-        if ( aObjRect.Right() >= aPageRect.Right() + 10 )
-        {
-            Size aSize( aPageRect.Right() - aObjRect.Right(), 0 );
-            DrawObj()->Move( aSize );
-            aObjRect = GetObjRect();
-        }
-
-        if ( aObjRect.Left() + 10 <= aPageRect.Left() )
-        {
-            Size aSize( aPageRect.Left() - aObjRect.Left(), 0 );
-            DrawObj()->Move( aSize );
-        }
-
-        mbCaptureAfterLayoutDirChange = false;
+        Size aSize( aPageRect.Right() - aObjRect.Right(), 0 );
+        DrawObj()->Move( aSize );
+        aObjRect = GetObjRect();
     }
+
+    if ( aObjRect.Left() + 10 <= aPageRect.Left() )
+    {
+        Size aSize( aPageRect.Left() - aObjRect.Left(), 0 );
+        DrawObj()->Move( aSize );
+    }
+
+    mbCaptureAfterLayoutDirChange = false;
 }
 
 /** method for the intrinsic positioning of an at-paragraph|at-character
@@ -523,83 +523,83 @@ void SwAnchoredDrawObject::SetDrawObjAnchor()
 */
 void SwAnchoredDrawObject::InvalidatePage_( SwPageFrame* _pPageFrame )
 {
-    if ( _pPageFrame && !_pPageFrame->GetFormat()->GetDoc()->IsInDtor() )
-    {
-        if ( _pPageFrame->GetUpper() )
-        {
-            // --> #i35007# - correct invalidation for as-character
-            // anchored objects.
-            if ( GetFrameFormat().GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR )
-            {
-                _pPageFrame->InvalidateFlyInCnt();
-            }
-            else
-            {
-                _pPageFrame->InvalidateFlyLayout();
-            }
+    if ( !(_pPageFrame && !_pPageFrame->GetFormat()->GetDoc()->IsInDtor()) )
+        return;
 
-            SwRootFrame* pRootFrame = static_cast<SwRootFrame*>(_pPageFrame->GetUpper());
-            pRootFrame->DisallowTurbo();
-            if ( pRootFrame->GetTurbo() )
-            {
-                const SwContentFrame* pTmpFrame = pRootFrame->GetTurbo();
-                pRootFrame->ResetTurbo();
-                pTmpFrame->InvalidatePage();
-            }
-            pRootFrame->SetIdleFlags();
-        }
+    if ( !_pPageFrame->GetUpper() )
+        return;
+
+    // --> #i35007# - correct invalidation for as-character
+    // anchored objects.
+    if ( GetFrameFormat().GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR )
+    {
+        _pPageFrame->InvalidateFlyInCnt();
     }
+    else
+    {
+        _pPageFrame->InvalidateFlyLayout();
+    }
+
+    SwRootFrame* pRootFrame = static_cast<SwRootFrame*>(_pPageFrame->GetUpper());
+    pRootFrame->DisallowTurbo();
+    if ( pRootFrame->GetTurbo() )
+    {
+        const SwContentFrame* pTmpFrame = pRootFrame->GetTurbo();
+        pRootFrame->ResetTurbo();
+        pTmpFrame->InvalidatePage();
+    }
+    pRootFrame->SetIdleFlags();
 }
 
 void SwAnchoredDrawObject::InvalidateObjPos()
 {
     // --> #i28701# - check, if invalidation is allowed
-    if ( mbValidPos &&
-         InvalidationOfPosAllowed() )
+    if ( !(mbValidPos &&
+         InvalidationOfPosAllowed()) )
+        return;
+
+    mbValidPos = false;
+    // --> #i68520#
+    InvalidateObjRectWithSpaces();
+
+    // --> #i44339# - check, if anchor frame exists.
+    if ( !GetAnchorFrame() )
+        return;
+
+    // --> #118547# - notify anchor frame of as-character
+    // anchored object, because its positioned by the format of its anchor frame.
+    // --> #i44559# - assure, that text hint is already
+    // existing in the text frame
+    if ( dynamic_cast< const SwTextFrame* >(GetAnchorFrame()) !=  nullptr &&
+         (GetFrameFormat().GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR) )
     {
-        mbValidPos = false;
-        // --> #i68520#
-        InvalidateObjRectWithSpaces();
-
-        // --> #i44339# - check, if anchor frame exists.
-        if ( GetAnchorFrame() )
+        SwTextFrame* pAnchorTextFrame( static_cast<SwTextFrame*>(AnchorFrame()) );
+        if (pAnchorTextFrame->CalcFlyPos(&GetFrameFormat()) != TextFrameIndex(COMPLETE_STRING))
         {
-            // --> #118547# - notify anchor frame of as-character
-            // anchored object, because its positioned by the format of its anchor frame.
-            // --> #i44559# - assure, that text hint is already
-            // existing in the text frame
-            if ( dynamic_cast< const SwTextFrame* >(GetAnchorFrame()) !=  nullptr &&
-                 (GetFrameFormat().GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR) )
-            {
-                SwTextFrame* pAnchorTextFrame( static_cast<SwTextFrame*>(AnchorFrame()) );
-                if (pAnchorTextFrame->CalcFlyPos(&GetFrameFormat()) != TextFrameIndex(COMPLETE_STRING))
-                {
-                    AnchorFrame()->Prepare( PrepareHint::FlyFrameAttributesChanged, &GetFrameFormat() );
-                }
-            }
-
-            SwPageFrame* pPageFrame = AnchorFrame()->FindPageFrame();
-            InvalidatePage_( pPageFrame );
-
-            // --> #i32270# - also invalidate page frame, at which the
-            // drawing object is registered at.
-            SwPageFrame* pPageFrameRegisteredAt = GetPageFrame();
-            if ( pPageFrameRegisteredAt &&
-                 pPageFrameRegisteredAt != pPageFrame )
-            {
-                InvalidatePage_( pPageFrameRegisteredAt );
-            }
-            // #i33751#, #i34060# - method <GetPageFrameOfAnchor()>
-            // is replaced by method <FindPageFrameOfAnchor()>. It's return value
-            // have to be checked.
-            SwPageFrame* pPageFrameOfAnchor = FindPageFrameOfAnchor();
-            if ( pPageFrameOfAnchor &&
-                 pPageFrameOfAnchor != pPageFrame &&
-                 pPageFrameOfAnchor != pPageFrameRegisteredAt )
-            {
-                InvalidatePage_( pPageFrameOfAnchor );
-            }
+            AnchorFrame()->Prepare( PrepareHint::FlyFrameAttributesChanged, &GetFrameFormat() );
         }
+    }
+
+    SwPageFrame* pPageFrame = AnchorFrame()->FindPageFrame();
+    InvalidatePage_( pPageFrame );
+
+    // --> #i32270# - also invalidate page frame, at which the
+    // drawing object is registered at.
+    SwPageFrame* pPageFrameRegisteredAt = GetPageFrame();
+    if ( pPageFrameRegisteredAt &&
+         pPageFrameRegisteredAt != pPageFrame )
+    {
+        InvalidatePage_( pPageFrameRegisteredAt );
+    }
+    // #i33751#, #i34060# - method <GetPageFrameOfAnchor()>
+    // is replaced by method <FindPageFrameOfAnchor()>. It's return value
+    // have to be checked.
+    SwPageFrame* pPageFrameOfAnchor = FindPageFrameOfAnchor();
+    if ( pPageFrameOfAnchor &&
+         pPageFrameOfAnchor != pPageFrame &&
+         pPageFrameOfAnchor != pPageFrameRegisteredAt )
+    {
+        InvalidatePage_( pPageFrameOfAnchor );
     }
 }
 

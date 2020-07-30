@@ -533,33 +533,95 @@ static SwFrame* lcl_NotHiddenPrev( SwFrame* pFrame )
 
 void SwFrame::MakePos()
 {
-    if ( !isFrameAreaPositionValid() )
+    if ( isFrameAreaPositionValid() )
+        return;
+
+    setFrameAreaPositionValid(true);
+    bool bUseUpper = false;
+    SwFrame* pPrv = lcl_Prev( this );
+    if ( pPrv &&
+         ( !pPrv->IsContentFrame() ||
+           ( static_cast<SwContentFrame*>(pPrv)->GetFollow() != this ) )
+       )
     {
-        setFrameAreaPositionValid(true);
-        bool bUseUpper = false;
-        SwFrame* pPrv = lcl_Prev( this );
-        if ( pPrv &&
-             ( !pPrv->IsContentFrame() ||
-               ( static_cast<SwContentFrame*>(pPrv)->GetFollow() != this ) )
+        if ( !StackHack::IsLocked() &&
+             ( !IsInSct() || IsSctFrame() ) &&
+             !pPrv->IsSctFrame() &&
+             !pPrv->GetAttrSet()->GetKeep().GetValue()
            )
         {
-            if ( !StackHack::IsLocked() &&
-                 ( !IsInSct() || IsSctFrame() ) &&
-                 !pPrv->IsSctFrame() &&
-                 !pPrv->GetAttrSet()->GetKeep().GetValue()
-               )
+            pPrv->Calc(getRootFrame()->GetCurrShell() ? getRootFrame()->GetCurrShell()->GetOut() : nullptr);   // This may cause Prev to vanish!
+        }
+        else if ( pPrv->getFrameArea().Top() == 0 )
+        {
+            bUseUpper = true;
+        }
+    }
+
+    pPrv = lcl_Prev( this, false );
+    const SwFrameType nMyType = GetType();
+    SwRectFnSet aRectFnSet((IsCellFrame() && GetUpper() ? GetUpper() : this));
+    if ( !bUseUpper && pPrv )
+    {
+        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
+        aFrm.Pos( pPrv->getFrameArea().Pos() );
+
+        if( FRM_NEIGHBOUR & nMyType )
+        {
+            const bool bR2L = IsRightToLeft();
+
+            if( bR2L )
             {
-                pPrv->Calc(getRootFrame()->GetCurrShell() ? getRootFrame()->GetCurrShell()->GetOut() : nullptr);   // This may cause Prev to vanish!
+                aRectFnSet.SetPosX( aFrm, aRectFnSet.GetLeft(aFrm) - aRectFnSet.GetWidth(aFrm) );
             }
-            else if ( pPrv->getFrameArea().Top() == 0 )
+            else
             {
-                bUseUpper = true;
+                aRectFnSet.SetPosX( aFrm, aRectFnSet.GetLeft(aFrm) + aRectFnSet.GetWidth(pPrv->getFrameArea()) );
+            }
+
+            // cells may now leave their uppers
+            if( aRectFnSet.IsVert() && SwFrameType::Cell & nMyType )
+            {
+                aFrm.Pos().setX(aFrm.Pos().getX() - aFrm.Width() + pPrv->getFrameArea().Width());
             }
         }
-
+        else if( aRectFnSet.IsVert() && FRM_NOTE_VERT & nMyType )
+        {
+            if ( aRectFnSet.IsVertL2R() )
+            {
+                aFrm.Pos().setX(aFrm.Pos().getX() + pPrv->getFrameArea().Width());
+            }
+            else
+            {
+                aFrm.Pos().setX(aFrm.Pos().getX() - aFrm.Width());
+            }
+        }
+        else
+        {
+            aFrm.Pos().setY(aFrm.Pos().getY() + pPrv->getFrameArea().Height());
+        }
+    }
+    else if ( GetUpper() )
+    {
+        // If parent frame is a footer frame and its <ColLocked()>, then
+        // do *not* calculate it.
+        // NOTE: Footer frame is <ColLocked()> during its
+        //     <FormatSize(..)>, which is called from <Format(..)>, which
+        //     is called from <MakeAll()>, which is called from <Calc()>.
+        // #i56850#
+        // - no format of upper Writer fly frame, which is anchored
+        //   at-paragraph or at-character.
+        if ( !GetUpper()->IsTabFrame() &&
+             !( IsTabFrame() && GetUpper()->IsInTab() ) &&
+             !GetUpper()->IsSctFrame() &&
+             !dynamic_cast<SwFlyAtContentFrame*>(GetUpper()) &&
+             !( GetUpper()->IsFooterFrame() &&
+                GetUpper()->IsColLocked() )
+           )
+        {
+            GetUpper()->Calc(getRootFrame()->GetCurrShell()->GetOut());
+        }
         pPrv = lcl_Prev( this, false );
-        const SwFrameType nMyType = GetType();
-        SwRectFnSet aRectFnSet((IsCellFrame() && GetUpper() ? GetUpper() : this));
         if ( !bUseUpper && pPrv )
         {
             SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
@@ -586,120 +648,58 @@ void SwFrame::MakePos()
             }
             else if( aRectFnSet.IsVert() && FRM_NOTE_VERT & nMyType )
             {
-                if ( aRectFnSet.IsVertL2R() )
-                {
-                    aFrm.Pos().setX(aFrm.Pos().getX() + pPrv->getFrameArea().Width());
-                }
-                else
-                {
-                    aFrm.Pos().setX(aFrm.Pos().getX() - aFrm.Width());
-                }
+                aFrm.Pos().setX(aFrm.Pos().getX() - aFrm.Width());
             }
             else
             {
                 aFrm.Pos().setY(aFrm.Pos().getY() + pPrv->getFrameArea().Height());
             }
         }
-        else if ( GetUpper() )
-        {
-            // If parent frame is a footer frame and its <ColLocked()>, then
-            // do *not* calculate it.
-            // NOTE: Footer frame is <ColLocked()> during its
-            //     <FormatSize(..)>, which is called from <Format(..)>, which
-            //     is called from <MakeAll()>, which is called from <Calc()>.
-            // #i56850#
-            // - no format of upper Writer fly frame, which is anchored
-            //   at-paragraph or at-character.
-            if ( !GetUpper()->IsTabFrame() &&
-                 !( IsTabFrame() && GetUpper()->IsInTab() ) &&
-                 !GetUpper()->IsSctFrame() &&
-                 !dynamic_cast<SwFlyAtContentFrame*>(GetUpper()) &&
-                 !( GetUpper()->IsFooterFrame() &&
-                    GetUpper()->IsColLocked() )
-               )
-            {
-                GetUpper()->Calc(getRootFrame()->GetCurrShell()->GetOut());
-            }
-            pPrv = lcl_Prev( this, false );
-            if ( !bUseUpper && pPrv )
-            {
-                SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-                aFrm.Pos( pPrv->getFrameArea().Pos() );
-
-                if( FRM_NEIGHBOUR & nMyType )
-                {
-                    const bool bR2L = IsRightToLeft();
-
-                    if( bR2L )
-                    {
-                        aRectFnSet.SetPosX( aFrm, aRectFnSet.GetLeft(aFrm) - aRectFnSet.GetWidth(aFrm) );
-                    }
-                    else
-                    {
-                        aRectFnSet.SetPosX( aFrm, aRectFnSet.GetLeft(aFrm) + aRectFnSet.GetWidth(pPrv->getFrameArea()) );
-                    }
-
-                    // cells may now leave their uppers
-                    if( aRectFnSet.IsVert() && SwFrameType::Cell & nMyType )
-                    {
-                        aFrm.Pos().setX(aFrm.Pos().getX() - aFrm.Width() + pPrv->getFrameArea().Width());
-                    }
-                }
-                else if( aRectFnSet.IsVert() && FRM_NOTE_VERT & nMyType )
-                {
-                    aFrm.Pos().setX(aFrm.Pos().getX() - aFrm.Width());
-                }
-                else
-                {
-                    aFrm.Pos().setY(aFrm.Pos().getY() + pPrv->getFrameArea().Height());
-                }
-            }
-            else
-            {
-                SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-                aFrm.Pos( GetUpper()->getFrameArea().Pos() );
-
-                if( GetUpper()->IsFlyFrame() )
-                {
-                    aFrm.Pos() += static_cast<SwFlyFrame*>(GetUpper())->ContentPos();
-                }
-                else
-                {
-                    aFrm.Pos() += GetUpper()->getFramePrintArea().Pos();
-                }
-
-                if( FRM_NEIGHBOUR & nMyType && IsRightToLeft() )
-                {
-                    if( aRectFnSet.IsVert() )
-                    {
-                        aFrm.Pos().setY(aFrm.Pos().getY() + GetUpper()->getFramePrintArea().Height() - aFrm.Height());
-                    }
-                    else
-                    {
-                        aFrm.Pos().setX(aFrm.Pos().getX() + GetUpper()->getFramePrintArea().Width() - aFrm.Width());
-                    }
-                }
-                else if( aRectFnSet.IsVert() && !aRectFnSet.IsVertL2R() && FRM_NOTE_VERT & nMyType )
-                {
-                    aFrm.Pos().setX(aFrm.Pos().getX() - aFrm.Width() + GetUpper()->getFramePrintArea().Width());
-                }
-            }
-        }
         else
         {
             SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-            aFrm.Pos().setX(0);
-            aFrm.Pos().setY(0);
-        }
+            aFrm.Pos( GetUpper()->getFrameArea().Pos() );
 
-        if( IsBodyFrame() && aRectFnSet.IsVert() && !aRectFnSet.IsVertL2R() && GetUpper() )
-        {
-            SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-            aFrm.Pos().setX(aFrm.Pos().getX() + GetUpper()->getFramePrintArea().Width() - aFrm.Width());
-        }
+            if( GetUpper()->IsFlyFrame() )
+            {
+                aFrm.Pos() += static_cast<SwFlyFrame*>(GetUpper())->ContentPos();
+            }
+            else
+            {
+                aFrm.Pos() += GetUpper()->getFramePrintArea().Pos();
+            }
 
-        setFrameAreaPositionValid(true);
+            if( FRM_NEIGHBOUR & nMyType && IsRightToLeft() )
+            {
+                if( aRectFnSet.IsVert() )
+                {
+                    aFrm.Pos().setY(aFrm.Pos().getY() + GetUpper()->getFramePrintArea().Height() - aFrm.Height());
+                }
+                else
+                {
+                    aFrm.Pos().setX(aFrm.Pos().getX() + GetUpper()->getFramePrintArea().Width() - aFrm.Width());
+                }
+            }
+            else if( aRectFnSet.IsVert() && !aRectFnSet.IsVertL2R() && FRM_NOTE_VERT & nMyType )
+            {
+                aFrm.Pos().setX(aFrm.Pos().getX() - aFrm.Width() + GetUpper()->getFramePrintArea().Width());
+            }
+        }
     }
+    else
+    {
+        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
+        aFrm.Pos().setX(0);
+        aFrm.Pos().setY(0);
+    }
+
+    if( IsBodyFrame() && aRectFnSet.IsVert() && !aRectFnSet.IsVertL2R() && GetUpper() )
+    {
+        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
+        aFrm.Pos().setX(aFrm.Pos().getX() + GetUpper()->getFramePrintArea().Width() - aFrm.Width());
+    }
+
+    setFrameAreaPositionValid(true);
 }
 
 // #i28701# - new type <SwSortedObjs>
@@ -1068,135 +1068,135 @@ bool SwFrame::IsCollapse() const
 
 void SwContentFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
 {
-    if ( !isFramePrintAreaValid() )
+    if ( isFramePrintAreaValid() )
+        return;
+
+    setFramePrintAreaValid(true);
+    SwRectFnSet aRectFnSet(this);
+    const bool bTextFrame = IsTextFrame();
+    SwTwips nUpper = 0;
+    if ( bTextFrame && static_cast<SwTextFrame*>(this)->IsHiddenNow() )
     {
-        setFramePrintAreaValid(true);
-        SwRectFnSet aRectFnSet(this);
-        const bool bTextFrame = IsTextFrame();
-        SwTwips nUpper = 0;
-        if ( bTextFrame && static_cast<SwTextFrame*>(this)->IsHiddenNow() )
+        if ( static_cast<SwTextFrame*>(this)->HasFollow() )
+            static_cast<SwTextFrame*>(this)->JoinFrame();
+
+        if( aRectFnSet.GetHeight(getFramePrintArea()) )
         {
-            if ( static_cast<SwTextFrame*>(this)->HasFollow() )
-                static_cast<SwTextFrame*>(this)->JoinFrame();
-
-            if( aRectFnSet.GetHeight(getFramePrintArea()) )
-            {
-                static_cast<SwTextFrame*>(this)->HideHidden();
-            }
-
-            {
-                SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
-                aPrt.Pos().setX(0);
-                aPrt.Pos().setY(0);
-                aRectFnSet.SetWidth( aPrt, aRectFnSet.GetWidth(getFrameArea()) );
-                aRectFnSet.SetHeight( aPrt, 0 );
-            }
-
-            nUpper = -( aRectFnSet.GetHeight(getFrameArea()) );
+            static_cast<SwTextFrame*>(this)->HideHidden();
         }
+
+        {
+            SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
+            aPrt.Pos().setX(0);
+            aPrt.Pos().setY(0);
+            aRectFnSet.SetWidth( aPrt, aRectFnSet.GetWidth(getFrameArea()) );
+            aRectFnSet.SetHeight( aPrt, 0 );
+        }
+
+        nUpper = -( aRectFnSet.GetHeight(getFrameArea()) );
+    }
+    else
+    {
+        // Simplification: ContentFrames are always variable in height!
+
+        // At the FixSize, the surrounding Frame enforces the size;
+        // the borders are simply subtracted.
+        const long nLeft = rAttrs.CalcLeft( this );
+        const long nRight = rAttrs.CalcRight( this );
+        aRectFnSet.SetXMargins( *this, nLeft, nRight );
+
+        SwViewShell *pSh = getRootFrame()->GetCurrShell();
+        SwTwips nWidthArea;
+        if( pSh && 0!=(nWidthArea=aRectFnSet.GetWidth(pSh->VisArea())) &&
+            GetUpper()->IsPageBodyFrame() && // but not for BodyFrames in Columns
+            pSh->GetViewOptions()->getBrowseMode() )
+        {
+            // Do not protrude the edge of the visible area. The page may be
+            // wider, because there may be objects with excess width
+            // (RootFrame::ImplCalcBrowseWidth())
+            long nMinWidth = 0;
+
+            for (size_t i = 0; GetDrawObjs() && i < GetDrawObjs()->size(); ++i)
+            {
+                // #i28701# - consider changed type of
+                // <SwSortedObjs> entries
+                SwAnchoredObject* pObj = (*GetDrawObjs())[i];
+                const SwFrameFormat& rFormat = pObj->GetFrameFormat();
+                const bool bFly = dynamic_cast<const SwFlyFrame*>( pObj) !=  nullptr;
+                if ((bFly && (FAR_AWAY == pObj->GetObjRect().Width()))
+                    || rFormat.GetFrameSize().GetWidthPercent())
+                {
+                    continue;
+                }
+
+                if ( RndStdIds::FLY_AS_CHAR == rFormat.GetAnchor().GetAnchorId() )
+                {
+                    nMinWidth = std::max( nMinWidth,
+                                     bFly ? rFormat.GetFrameSize().GetWidth()
+                                          : pObj->GetObjRect().Width() );
+                }
+            }
+
+            const Size aBorder = pSh->GetOut()->PixelToLogic( pSh->GetBrowseBorder() );
+            long nWidth = nWidthArea - 2 * ( IsVertical() ? aBorder.Height() : aBorder.Width() );
+            nWidth -= aRectFnSet.GetLeft(getFramePrintArea());
+            nWidth -= rAttrs.CalcRightLine();
+            nWidth = std::max( nMinWidth, nWidth );
+
+            SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
+            aRectFnSet.SetWidth( aPrt, std::min( nWidth, aRectFnSet.GetWidth(aPrt) ) );
+        }
+
+        if ( aRectFnSet.GetWidth(getFramePrintArea()) <= MINLAY )
+        {
+            // The PrtArea should already be at least MINLAY wide, matching the
+            // minimal values of the UI
+            SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
+            aRectFnSet.SetWidth( aPrt, std::min( long(MINLAY), aRectFnSet.GetWidth(getFrameArea()) ) );
+            SwTwips nTmp = aRectFnSet.GetWidth(getFrameArea()) - aRectFnSet.GetWidth(aPrt);
+
+            if( aRectFnSet.GetLeft(aPrt) > nTmp )
+            {
+                aRectFnSet.SetLeft( aPrt, nTmp );
+            }
+        }
+
+        // The following rules apply for VarSize:
+        // 1. The first entry of a chain has no top border
+        // 2. There is never a bottom border
+        // 3. The top border is the maximum of the distance
+        //    of Prev downwards and our own distance upwards
+        // Those three rules apply when calculating spacings
+        // that are given by UL- and LRSpace. There might be a spacing
+        // in all directions however; this may be caused by borders
+        // and / or shadows.
+        // 4. The spacing for TextFrames corresponds to the interline lead,
+        //    at a minimum.
+
+        nUpper = CalcUpperSpace( &rAttrs );
+
+        SwTwips nLower = CalcLowerSpace( &rAttrs );
+        if (IsCollapse()) {
+            nUpper=0;
+            nLower=0;
+        }
+
+        {
+            SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
+            aRectFnSet.SetPosY( aPrt, !aRectFnSet.IsVert() ? nUpper : nLower);
+        }
+
+        nUpper += nLower;
+        nUpper -= aRectFnSet.GetHeight(getFrameArea()) - aRectFnSet.GetHeight(getFramePrintArea());
+    }
+    // If there's a difference between old and new size, call Grow() or
+    // Shrink() respectively.
+    if ( nUpper )
+    {
+        if ( nUpper > 0 )
+            GrowFrame( nUpper );
         else
-        {
-            // Simplification: ContentFrames are always variable in height!
-
-            // At the FixSize, the surrounding Frame enforces the size;
-            // the borders are simply subtracted.
-            const long nLeft = rAttrs.CalcLeft( this );
-            const long nRight = rAttrs.CalcRight( this );
-            aRectFnSet.SetXMargins( *this, nLeft, nRight );
-
-            SwViewShell *pSh = getRootFrame()->GetCurrShell();
-            SwTwips nWidthArea;
-            if( pSh && 0!=(nWidthArea=aRectFnSet.GetWidth(pSh->VisArea())) &&
-                GetUpper()->IsPageBodyFrame() && // but not for BodyFrames in Columns
-                pSh->GetViewOptions()->getBrowseMode() )
-            {
-                // Do not protrude the edge of the visible area. The page may be
-                // wider, because there may be objects with excess width
-                // (RootFrame::ImplCalcBrowseWidth())
-                long nMinWidth = 0;
-
-                for (size_t i = 0; GetDrawObjs() && i < GetDrawObjs()->size(); ++i)
-                {
-                    // #i28701# - consider changed type of
-                    // <SwSortedObjs> entries
-                    SwAnchoredObject* pObj = (*GetDrawObjs())[i];
-                    const SwFrameFormat& rFormat = pObj->GetFrameFormat();
-                    const bool bFly = dynamic_cast<const SwFlyFrame*>( pObj) !=  nullptr;
-                    if ((bFly && (FAR_AWAY == pObj->GetObjRect().Width()))
-                        || rFormat.GetFrameSize().GetWidthPercent())
-                    {
-                        continue;
-                    }
-
-                    if ( RndStdIds::FLY_AS_CHAR == rFormat.GetAnchor().GetAnchorId() )
-                    {
-                        nMinWidth = std::max( nMinWidth,
-                                         bFly ? rFormat.GetFrameSize().GetWidth()
-                                              : pObj->GetObjRect().Width() );
-                    }
-                }
-
-                const Size aBorder = pSh->GetOut()->PixelToLogic( pSh->GetBrowseBorder() );
-                long nWidth = nWidthArea - 2 * ( IsVertical() ? aBorder.Height() : aBorder.Width() );
-                nWidth -= aRectFnSet.GetLeft(getFramePrintArea());
-                nWidth -= rAttrs.CalcRightLine();
-                nWidth = std::max( nMinWidth, nWidth );
-
-                SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
-                aRectFnSet.SetWidth( aPrt, std::min( nWidth, aRectFnSet.GetWidth(aPrt) ) );
-            }
-
-            if ( aRectFnSet.GetWidth(getFramePrintArea()) <= MINLAY )
-            {
-                // The PrtArea should already be at least MINLAY wide, matching the
-                // minimal values of the UI
-                SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
-                aRectFnSet.SetWidth( aPrt, std::min( long(MINLAY), aRectFnSet.GetWidth(getFrameArea()) ) );
-                SwTwips nTmp = aRectFnSet.GetWidth(getFrameArea()) - aRectFnSet.GetWidth(aPrt);
-
-                if( aRectFnSet.GetLeft(aPrt) > nTmp )
-                {
-                    aRectFnSet.SetLeft( aPrt, nTmp );
-                }
-            }
-
-            // The following rules apply for VarSize:
-            // 1. The first entry of a chain has no top border
-            // 2. There is never a bottom border
-            // 3. The top border is the maximum of the distance
-            //    of Prev downwards and our own distance upwards
-            // Those three rules apply when calculating spacings
-            // that are given by UL- and LRSpace. There might be a spacing
-            // in all directions however; this may be caused by borders
-            // and / or shadows.
-            // 4. The spacing for TextFrames corresponds to the interline lead,
-            //    at a minimum.
-
-            nUpper = CalcUpperSpace( &rAttrs );
-
-            SwTwips nLower = CalcLowerSpace( &rAttrs );
-            if (IsCollapse()) {
-                nUpper=0;
-                nLower=0;
-            }
-
-            {
-                SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
-                aRectFnSet.SetPosY( aPrt, !aRectFnSet.IsVert() ? nUpper : nLower);
-            }
-
-            nUpper += nLower;
-            nUpper -= aRectFnSet.GetHeight(getFrameArea()) - aRectFnSet.GetHeight(getFramePrintArea());
-        }
-        // If there's a difference between old and new size, call Grow() or
-        // Shrink() respectively.
-        if ( nUpper )
-        {
-            if ( nUpper > 0 )
-                GrowFrame( nUpper );
-            else
-                ShrinkFrame( -nUpper );
-        }
+            ShrinkFrame( -nUpper );
     }
 }
 

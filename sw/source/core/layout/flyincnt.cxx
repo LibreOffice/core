@@ -154,24 +154,24 @@ void SwFlyInContentFrame::Format( vcl::RenderContext* pRenderContext, const SwBo
  **/
 void SwFlyInContentFrame::MakeObjPos()
 {
-    if ( !isFrameAreaPositionValid() )
+    if ( isFrameAreaPositionValid() )
+        return;
+
+    setFrameAreaPositionValid(true);
+    SwFlyFrameFormat *pFormat = GetFormat();
+    const SwFormatVertOrient &rVert = pFormat->GetVertOrient();
+    //Update the current values in the format if needed, during this we of
+    //course must not send any Modify.
+    const bool bVert = GetAnchorFrame()->IsVertical();
+    SwTwips nOld = rVert.GetPos();
+    SwTwips nAct = bVert ? -GetCurrRelPos().X() : GetCurrRelPos().Y();
+    if( nAct != nOld )
     {
-        setFrameAreaPositionValid(true);
-        SwFlyFrameFormat *pFormat = GetFormat();
-        const SwFormatVertOrient &rVert = pFormat->GetVertOrient();
-        //Update the current values in the format if needed, during this we of
-        //course must not send any Modify.
-        const bool bVert = GetAnchorFrame()->IsVertical();
-        SwTwips nOld = rVert.GetPos();
-        SwTwips nAct = bVert ? -GetCurrRelPos().X() : GetCurrRelPos().Y();
-        if( nAct != nOld )
-        {
-            SwFormatVertOrient aVert( rVert );
-            aVert.SetPos( nAct );
-            pFormat->LockModify();
-            pFormat->SetFormatAttr( aVert );
-            pFormat->UnlockModify();
-        }
+        SwFormatVertOrient aVert( rVert );
+        aVert.SetPos( nAct );
+        pFormat->LockModify();
+        pFormat->SetFormatAttr( aVert );
+        pFormat->UnlockModify();
     }
 }
 
