@@ -208,19 +208,20 @@ void SwDocShell::DoFlushDocInfo()
 static void lcl_processCompatibleSfxHint( const uno::Reference< script::vba::XVBAEventProcessor >& xVbaEvents, const SfxHint& rHint )
 {
     using namespace com::sun::star::script::vba::VBAEventId;
-    if ( const SfxEventHint* pSfxEventHint = dynamic_cast<const SfxEventHint*>(&rHint) )
+    const SfxEventHint* pSfxEventHint = dynamic_cast<const SfxEventHint*>(&rHint);
+    if ( !pSfxEventHint )
+        return;
+
+    uno::Sequence< uno::Any > aArgs;
+    switch( pSfxEventHint->GetEventId() )
     {
-        uno::Sequence< uno::Any > aArgs;
-        switch( pSfxEventHint->GetEventId() )
-        {
-            case SfxEventHintId::CreateDoc:
-                xVbaEvents->processVbaEvent( DOCUMENT_NEW, aArgs );
-            break;
-            case SfxEventHintId::OpenDoc:
-                xVbaEvents->processVbaEvent( DOCUMENT_OPEN, aArgs );
-            break;
-            default: break;
-        }
+        case SfxEventHintId::CreateDoc:
+            xVbaEvents->processVbaEvent( DOCUMENT_NEW, aArgs );
+        break;
+        case SfxEventHintId::OpenDoc:
+            xVbaEvents->processVbaEvent( DOCUMENT_OPEN, aArgs );
+        break;
+        default: break;
     }
 }
 
@@ -295,51 +296,51 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         }
     }
 
-    if( nAction )
+    if( !nAction )
+        return;
+
+    bool bUnlockView = true; //initializing prevents warning
+    if (m_pWrtShell)
     {
-        bool bUnlockView = true; //initializing prevents warning
-        if (m_pWrtShell)
+        bUnlockView = !m_pWrtShell->IsViewLocked();
+        m_pWrtShell->LockView( true );    //lock visible section
+        m_pWrtShell->StartAllAction();
+    }
+    switch( nAction )
+    {
+    case 2:
+        m_xDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Filename )->UpdateFields();
+        break;
+    // #i38126# - own action for event LOADFINISHED
+    // in order to avoid a modified document.
+    // #i41679# - Also for the instance of <SwDoc>
+    // it has to be assured, that it's not modified.
+    // Perform the same as for action id 1, but disable <SetModified>.
+    case 3:
         {
-            bUnlockView = !m_pWrtShell->IsViewLocked();
-            m_pWrtShell->LockView( true );    //lock visible section
-            m_pWrtShell->StartAllAction();
-        }
-        switch( nAction )
-        {
-        case 2:
-            m_xDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Filename )->UpdateFields();
-            break;
-        // #i38126# - own action for event LOADFINISHED
-        // in order to avoid a modified document.
-        // #i41679# - Also for the instance of <SwDoc>
-        // it has to be assured, that it's not modified.
-        // Perform the same as for action id 1, but disable <SetModified>.
-        case 3:
-            {
-                const bool bResetModified = IsEnableSetModified();
-                if ( bResetModified )
-                    EnableSetModified( false );
-                // #i41679#
-                const bool bIsDocModified = m_xDoc->getIDocumentState().IsModified();
-                // TODO: is the ResetModified() below because of only the direct call from DocInfoChgd, or does UpdateFields() set it too?
+            const bool bResetModified = IsEnableSetModified();
+            if ( bResetModified )
+                EnableSetModified( false );
+            // #i41679#
+            const bool bIsDocModified = m_xDoc->getIDocumentState().IsModified();
+            // TODO: is the ResetModified() below because of only the direct call from DocInfoChgd, or does UpdateFields() set it too?
 
-                m_xDoc->getIDocumentStatistics().DocInfoChgd(false);
+            m_xDoc->getIDocumentStatistics().DocInfoChgd(false);
 
-                // #i41679#
-                if ( !bIsDocModified )
-                    m_xDoc->getIDocumentState().ResetModified();
-                if ( bResetModified )
-                    EnableSetModified();
-            }
-            break;
+            // #i41679#
+            if ( !bIsDocModified )
+                m_xDoc->getIDocumentState().ResetModified();
+            if ( bResetModified )
+                EnableSetModified();
         }
+        break;
+    }
 
-        if (m_pWrtShell)
-        {
-            m_pWrtShell->EndAllAction();
-            if( bUnlockView )
-                m_pWrtShell->LockView( false );
-        }
+    if (m_pWrtShell)
+    {
+        m_pWrtShell->EndAllAction();
+        if( bUnlockView )
+            m_pWrtShell->LockView( false );
     }
 }
 
@@ -1379,29 +1380,29 @@ void SwDocShell::SetModified( bool bSet )
     if (utl::ConfigManager::IsFuzzing())
         return;
     SfxObjectShell::SetModified( bSet );
-    if( IsEnableSetModified())
+    if( !IsEnableSetModified())
+        return;
+
+    if (!m_xDoc->getIDocumentState().IsInCallModified())
     {
-        if (!m_xDoc->getIDocumentState().IsInCallModified())
+        EnableSetModified( false );
+        if( bSet )
         {
-            EnableSetModified( false );
-            if( bSet )
+            bool const bOld = m_xDoc->getIDocumentState().IsModified();
+            m_xDoc->getIDocumentState().SetModified();
+            if( !bOld )
             {
-                bool const bOld = m_xDoc->getIDocumentState().IsModified();
-                m_xDoc->getIDocumentState().SetModified();
-                if( !bOld )
-                {
-                    m_xDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
-                }
+                m_xDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
             }
-            else
-                m_xDoc->getIDocumentState().ResetModified();
-
-            EnableSetModified();
         }
+        else
+            m_xDoc->getIDocumentState().ResetModified();
 
-        UpdateChildWindows();
-        Broadcast(SfxHint(SfxHintId::DocChanged));
+        EnableSetModified();
     }
+
+    UpdateChildWindows();
+    Broadcast(SfxHint(SfxHintId::DocChanged));
 }
 
 void SwDocShell::UpdateChildWindows()

@@ -130,20 +130,20 @@ sal_uInt16 SwViewOption::GetPostItsWidth( const OutputDevice *pOut )
 
 void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, bool bIsScript )
 {
-    if( pOut && bIsScript )
-    {
-        Color aOldLineColor( pOut->GetLineColor() );
-        pOut->SetLineColor( COL_GRAY );
-        // to make it look nice, we subtract two pixels everywhere
-        sal_uInt16 nPix = s_nPixelTwips * 2;
-        if( rRect.Width() <= 2 * nPix || rRect.Height() <= 2 * nPix )
-            nPix = 0;
-        const Point aTopLeft(  rRect.Left()  + nPix, rRect.Top()    + nPix );
-        const Point aBotRight( rRect.Right() - nPix, rRect.Bottom() - nPix );
-        const SwRect aRect( aTopLeft, aBotRight );
-        DrawRect( pOut, aRect, s_aScriptIndicatorColor );
-        pOut->SetLineColor( aOldLineColor );
-    }
+    if( !(pOut && bIsScript) )
+        return;
+
+    Color aOldLineColor( pOut->GetLineColor() );
+    pOut->SetLineColor( COL_GRAY );
+    // to make it look nice, we subtract two pixels everywhere
+    sal_uInt16 nPix = s_nPixelTwips * 2;
+    if( rRect.Width() <= 2 * nPix || rRect.Height() <= 2 * nPix )
+        nPix = 0;
+    const Point aTopLeft(  rRect.Left()  + nPix, rRect.Top()    + nPix );
+    const Point aBotRight( rRect.Right() - nPix, rRect.Bottom() - nPix );
+    const SwRect aRect( aTopLeft, aBotRight );
+    DrawRect( pOut, aRect, s_aScriptIndicatorColor );
+    pOut->SetLineColor( aOldLineColor );
 }
 
 SwViewOption::SwViewOption() :
@@ -524,39 +524,39 @@ void SwViewOption::SetAppearanceFlag(ViewOptFlags nFlag, bool bSet, bool bSaveIn
         s_nAppearanceFlags |= nFlag;
     else
         s_nAppearanceFlags &= ~nFlag;
-    if(bSaveInConfig)
+    if(!bSaveInConfig)
+        return;
+
+    //create an editable svtools::ColorConfig and store the change
+    svtools::EditableColorConfig aEditableConfig;
+    struct FlagToConfig_Impl
     {
-        //create an editable svtools::ColorConfig and store the change
-        svtools::EditableColorConfig aEditableConfig;
-        struct FlagToConfig_Impl
+        ViewOptFlags                nFlag;
+        svtools::ColorConfigEntry   eEntry;
+    };
+    static const FlagToConfig_Impl aFlags[] =
+    {
+        { ViewOptFlags::DocBoundaries     ,   svtools::DOCBOUNDARIES },
+        { ViewOptFlags::ObjectBoundaries  ,   svtools::OBJECTBOUNDARIES },
+        { ViewOptFlags::TableBoundaries   ,   svtools::TABLEBOUNDARIES },
+        { ViewOptFlags::IndexShadings     ,   svtools::WRITERIDXSHADINGS },
+        { ViewOptFlags::Links             ,   svtools::LINKS },
+        { ViewOptFlags::VisitedLinks      ,   svtools::LINKSVISITED },
+        { ViewOptFlags::FieldShadings     ,   svtools::WRITERFIELDSHADINGS },
+        { ViewOptFlags::SectionBoundaries ,   svtools::WRITERSECTIONBOUNDARIES },
+        { ViewOptFlags::Shadow            ,   svtools::SHADOWCOLOR },
+        { ViewOptFlags::NONE              ,   svtools::ColorConfigEntryCount }
+    };
+    sal_uInt16 nPos = 0;
+    while(aFlags[nPos].nFlag != ViewOptFlags::NONE)
+    {
+        if(nFlag & aFlags[nPos].nFlag)
         {
-            ViewOptFlags                nFlag;
-            svtools::ColorConfigEntry   eEntry;
-        };
-        static const FlagToConfig_Impl aFlags[] =
-        {
-            { ViewOptFlags::DocBoundaries     ,   svtools::DOCBOUNDARIES },
-            { ViewOptFlags::ObjectBoundaries  ,   svtools::OBJECTBOUNDARIES },
-            { ViewOptFlags::TableBoundaries   ,   svtools::TABLEBOUNDARIES },
-            { ViewOptFlags::IndexShadings     ,   svtools::WRITERIDXSHADINGS },
-            { ViewOptFlags::Links             ,   svtools::LINKS },
-            { ViewOptFlags::VisitedLinks      ,   svtools::LINKSVISITED },
-            { ViewOptFlags::FieldShadings     ,   svtools::WRITERFIELDSHADINGS },
-            { ViewOptFlags::SectionBoundaries ,   svtools::WRITERSECTIONBOUNDARIES },
-            { ViewOptFlags::Shadow            ,   svtools::SHADOWCOLOR },
-            { ViewOptFlags::NONE              ,   svtools::ColorConfigEntryCount }
-        };
-        sal_uInt16 nPos = 0;
-        while(aFlags[nPos].nFlag != ViewOptFlags::NONE)
-        {
-            if(nFlag & aFlags[nPos].nFlag)
-            {
-                svtools::ColorConfigValue aValue = aEditableConfig.GetColorValue(aFlags[nPos].eEntry);
-                aValue.bIsVisible = bSet;
-                aEditableConfig.SetColorValue(aFlags[nPos].eEntry, aValue);
-            }
-            nPos++;
+            svtools::ColorConfigValue aValue = aEditableConfig.GetColorValue(aFlags[nPos].eEntry);
+            aValue.bIsVisible = bSet;
+            aEditableConfig.SetColorValue(aFlags[nPos].eEntry, aValue);
         }
+        nPos++;
     }
 }
 
