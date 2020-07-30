@@ -20,6 +20,31 @@
 #include <galobj.hxx>
 #include <svx/galleryobjectcollection.hxx>
 
+GalleryObjectCollection::GalleryObjectCollection() {}
+
 void GalleryObjectCollection::clear() { m_aObjectList.clear(); }
+
+const GalleryObject* GalleryObjectCollection::searchObjectWithURL(const INetURLObject& rURL)
+{
+    for (auto const& i : m_aObjectList)
+        if (i->aURL == rURL)
+            return i.get();
+    return nullptr;
+}
+
+sal_uInt32 GalleryObjectCollection::searchPosWithObject(const GalleryObject* pObj)
+{
+    for (sal_uInt32 i = 0, n = size(); i < n; ++i)
+        if (pObj == get(i).get())
+            return i;
+    return SAL_MAX_UINT32;
+}
+
+const GalleryObject* GalleryObjectCollection::getForPosition(sal_uInt32 nPos) const
+{
+    if (nPos < size())
+        return get(nPos).get();
+    return nullptr;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

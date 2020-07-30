@@ -94,14 +94,6 @@ std::unique_ptr<GalleryBinaryEngine> GalleryTheme::createGalleryBinaryEngine(boo
     return pGalleryBinaryEngine;
 }
 
-const GalleryObject* GalleryTheme::ImplGetGalleryObject(const INetURLObject& rURL)
-{
-    for (auto const& i : maGalleryObjectCollection.getObjectList())
-        if (i->aURL == rURL)
-            return i.get();
-    return nullptr;
-}
-
 void GalleryTheme::ImplBroadcast(sal_uInt32 nUpdatePos)
 {
     if( !IsBroadcasterLocked() )
@@ -162,7 +154,7 @@ bool GalleryTheme::InsertObject(const SgaObject& rObj, sal_uInt32 nInsertPos)
 
 std::unique_ptr<SgaObject> GalleryTheme::AcquireObject(sal_uInt32 nPos)
 {
-    return mpGalleryBinaryEngine->implReadSgaObject(ImplGetGalleryObject(nPos));
+    return mpGalleryBinaryEngine->implReadSgaObject(maGalleryObjectCollection.getForPosition(nPos));
 }
 
 void GalleryTheme::GetPreviewBitmapExAndStrings(sal_uInt32 nPos, BitmapEx& rBitmapEx, Size& rSize, OUString& rTitle, OUString& rPath)
@@ -335,7 +327,7 @@ bool GalleryTheme::GetThumb(sal_uInt32 nPos, BitmapEx& rBmp)
 
 bool GalleryTheme::GetGraphic(sal_uInt32 nPos, Graphic& rGraphic)
 {
-    const GalleryObject*    pObject = ImplGetGalleryObject( nPos );
+    const GalleryObject*    pObject = maGalleryObjectCollection.getForPosition( nPos );
     bool                    bRet = false;
 
     if( pObject )
@@ -460,7 +452,7 @@ bool GalleryTheme::InsertGraphic(const Graphic& rGraphic, sal_uInt32 nInsertPos)
 
 bool GalleryTheme::GetModel(sal_uInt32 nPos, SdrModel& rModel)
 {
-    const GalleryObject*    pObject = ImplGetGalleryObject( nPos );
+    const GalleryObject*    pObject = maGalleryObjectCollection.getForPosition( nPos );
     bool                    bRet = false;
 
     if( pObject && ( SgaObjKind::SvDraw == pObject->eObjKind ) )
@@ -482,7 +474,7 @@ bool GalleryTheme::InsertModel(const FmFormModel& rModel, sal_uInt32 nInsertPos)
 
 bool GalleryTheme::GetModelStream(sal_uInt32 nPos, tools::SvRef<SotStorageStream> const & rxModelStream)
 {
-    const GalleryObject*    pObject = ImplGetGalleryObject( nPos );
+    const GalleryObject*    pObject = maGalleryObjectCollection.getForPosition( nPos );
     bool                    bRet = false;
 
     if( pObject && ( SgaObjKind::SvDraw == pObject->eObjKind ) )
@@ -506,7 +498,7 @@ bool GalleryTheme::InsertModelStream(const tools::SvRef<SotStorageStream>& rxMod
 
 bool GalleryTheme::GetURL(sal_uInt32 nPos, INetURLObject& rURL)
 {
-    const GalleryObject*    pObject = ImplGetGalleryObject( nPos );
+    const GalleryObject*    pObject = maGalleryObjectCollection.getForPosition( nPos );
     bool                    bRet = false;
 
     if( pObject )
@@ -671,7 +663,7 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
 
     for( sal_uInt32 i = 0; i < nCount; i++ )
     {
-        const GalleryObject* pObj = ImplGetGalleryObject( i );
+        const GalleryObject* pObj = maGalleryObjectCollection.getForPosition( i );
         OUString               aPath;
 
         if( SgaObjKind::SvDraw == pObj->eObjKind )
