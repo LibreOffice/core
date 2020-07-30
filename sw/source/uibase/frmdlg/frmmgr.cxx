@@ -148,28 +148,28 @@ void SwFlyFrameAttrMgr::UpdateFlyFrame()
     OSL_ENSURE( m_pOwnSh->IsFrameSelected(),
         "no frame selected or no shell, update not possible");
 
-    if( m_pOwnSh->IsFrameSelected() )
-    {
-        //JP 6.8.2001: set never an invalid anchor into the core.
-        const SfxPoolItem *pGItem, *pItem;
-        if( SfxItemState::SET == m_aSet.GetItemState( RES_ANCHOR, false, &pItem ))
-        {
-            SfxItemSet aGetSet( *m_aSet.GetPool(), svl::Items<RES_ANCHOR, RES_ANCHOR>{} );
-            if( m_pOwnSh->GetFlyFrameAttr( aGetSet ) && 1 == aGetSet.Count() &&
-                SfxItemState::SET == aGetSet.GetItemState( RES_ANCHOR, false, &pGItem )
-                && static_cast<const SwFormatAnchor*>(pGItem)->GetAnchorId() ==
-                   static_cast<const SwFormatAnchor*>(pItem)->GetAnchorId() )
-                m_aSet.ClearItem( RES_ANCHOR );
-        }
+    if( !m_pOwnSh->IsFrameSelected() )
+        return;
 
-        // return wg. BASIC
-        if( m_aSet.Count() )
-        {
-            m_pOwnSh->StartAllAction();
-            m_pOwnSh->SetFlyFrameAttr( m_aSet );
-            UpdateFlyFrame_();
-            m_pOwnSh->EndAllAction();
-        }
+    //JP 6.8.2001: set never an invalid anchor into the core.
+    const SfxPoolItem *pGItem, *pItem;
+    if( SfxItemState::SET == m_aSet.GetItemState( RES_ANCHOR, false, &pItem ))
+    {
+        SfxItemSet aGetSet( *m_aSet.GetPool(), svl::Items<RES_ANCHOR, RES_ANCHOR>{} );
+        if( m_pOwnSh->GetFlyFrameAttr( aGetSet ) && 1 == aGetSet.Count() &&
+            SfxItemState::SET == aGetSet.GetItemState( RES_ANCHOR, false, &pGItem )
+            && static_cast<const SwFormatAnchor*>(pGItem)->GetAnchorId() ==
+               static_cast<const SwFormatAnchor*>(pItem)->GetAnchorId() )
+            m_aSet.ClearItem( RES_ANCHOR );
+    }
+
+    // return wg. BASIC
+    if( m_aSet.Count() )
+    {
+        m_pOwnSh->StartAllAction();
+        m_pOwnSh->SetFlyFrameAttr( m_aSet );
+        UpdateFlyFrame_();
+        m_pOwnSh->EndAllAction();
     }
 }
 

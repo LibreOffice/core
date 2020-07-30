@@ -1157,42 +1157,42 @@ namespace
 
 void SwRedlineAcceptDlg::Initialize(OUString& rExtraString)
 {
-    if (!rExtraString.isEmpty())
+    if (rExtraString.isEmpty())
+        return;
+
+    OUString aStr = lcl_StripAcceptChgDat(rExtraString);
+    if (aStr.isEmpty())
+        return;
+
+    int nCount = aStr.toInt32();
+    if (nCount <= 2)
+        return;
+
+    std::vector<int> aEndPos;
+
+    for (int i = 0; i < nCount; ++i)
     {
-        OUString aStr = lcl_StripAcceptChgDat(rExtraString);
-        if (!aStr.isEmpty())
-        {
-            int nCount = aStr.toInt32();
-            if (nCount > 2)
-            {
-                std::vector<int> aEndPos;
+        sal_Int32 n1 = aStr.indexOf(';');
+        aStr = aStr.copy( n1+1 );
+        aEndPos.push_back(aStr.toInt32());
+    }
 
-                for (int i = 0; i < nCount; ++i)
-                {
-                    sal_Int32 n1 = aStr.indexOf(';');
-                    aStr = aStr.copy( n1+1 );
-                    aEndPos.push_back(aStr.toInt32());
-                }
+    bool bUseless = false;
 
-                bool bUseless = false;
+    std::vector<int> aWidths;
+    for (int i = 1; i < nCount; ++i)
+    {
+        aWidths.push_back(aEndPos[i] - aEndPos[i - 1]);
+        if (aWidths.back() <= 0)
+            bUseless = true;
+    }
 
-                std::vector<int> aWidths;
-                for (int i = 1; i < nCount; ++i)
-                {
-                    aWidths.push_back(aEndPos[i] - aEndPos[i - 1]);
-                    if (aWidths.back() <= 0)
-                        bUseless = true;
-                }
-
-                if (!bUseless)
-                {
-                    // turn column end points back to column widths, ignoring the small
-                    // value used for the expander column
-                    weld::TreeView& rTreeView = m_pTable->GetWidget();
-                    rTreeView.set_column_fixed_widths(aWidths);
-                }
-            }
-        }
+    if (!bUseless)
+    {
+        // turn column end points back to column widths, ignoring the small
+        // value used for the expander column
+        weld::TreeView& rTreeView = m_pTable->GetWidget();
+        rTreeView.set_column_fixed_widths(aWidths);
     }
 }
 

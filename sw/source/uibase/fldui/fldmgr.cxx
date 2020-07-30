@@ -568,97 +568,97 @@ void SwFieldMgr::GetSubTypes(SwFieldTypesEnum nTypeId, std::vector<OUString>& rT
 {
     SwWrtShell *pSh = m_pWrtShell ? m_pWrtShell : lcl_GetShell();
     OSL_ENSURE(pSh, "no SwWrtShell found");
-    if(pSh)
+    if(!pSh)
+        return;
+
+    const sal_uInt16 nPos = GetPos(nTypeId);
+
+    switch(nTypeId)
     {
-        const sal_uInt16 nPos = GetPos(nTypeId);
-
-        switch(nTypeId)
+        case SwFieldTypesEnum::SetRef:
+        case SwFieldTypesEnum::GetRef:
         {
-            case SwFieldTypesEnum::SetRef:
-            case SwFieldTypesEnum::GetRef:
-            {
-                // references are no fields
-                pSh->GetRefMarks( &rToFill );
-                break;
-            }
-            case SwFieldTypesEnum::Macro:
-            {
-                break;
-            }
-            case SwFieldTypesEnum::Input:
-            {
-                rToFill.push_back(SwResId(aSwFields[nPos].pSubTypeResIds[0]));
-                [[fallthrough]]; // move on at generic types
-            }
-            case SwFieldTypesEnum::DDE:
-            case SwFieldTypesEnum::Sequence:
-            case SwFieldTypesEnum::Formel:
-            case SwFieldTypesEnum::Get:
-            case SwFieldTypesEnum::Set:
-            case SwFieldTypesEnum::User:
-            {
+            // references are no fields
+            pSh->GetRefMarks( &rToFill );
+            break;
+        }
+        case SwFieldTypesEnum::Macro:
+        {
+            break;
+        }
+        case SwFieldTypesEnum::Input:
+        {
+            rToFill.push_back(SwResId(aSwFields[nPos].pSubTypeResIds[0]));
+            [[fallthrough]]; // move on at generic types
+        }
+        case SwFieldTypesEnum::DDE:
+        case SwFieldTypesEnum::Sequence:
+        case SwFieldTypesEnum::Formel:
+        case SwFieldTypesEnum::Get:
+        case SwFieldTypesEnum::Set:
+        case SwFieldTypesEnum::User:
+        {
 
-                const size_t nCount = pSh->GetFieldTypeCount();
-                for(size_t i = 0; i < nCount; ++i)
+            const size_t nCount = pSh->GetFieldTypeCount();
+            for(size_t i = 0; i < nCount; ++i)
+            {
+                SwFieldType* pFieldType = pSh->GetFieldType( i );
+                const SwFieldIds nWhich = pFieldType->Which();
+
+                if((nTypeId == SwFieldTypesEnum::DDE && pFieldType->Which() == SwFieldIds::Dde) ||
+
+                   (nTypeId == SwFieldTypesEnum::User && nWhich == SwFieldIds::User) ||
+
+                   (nTypeId == SwFieldTypesEnum::Get && nWhich == SwFieldIds::SetExp &&
+                    !(static_cast<SwSetExpFieldType*>(pFieldType)->GetType() & nsSwGetSetExpType::GSE_SEQ)) ||
+
+                   (nTypeId == SwFieldTypesEnum::Set && nWhich == SwFieldIds::SetExp &&
+                    !(static_cast<SwSetExpFieldType*>(pFieldType)->GetType() & nsSwGetSetExpType::GSE_SEQ)) ||
+
+                   (nTypeId == SwFieldTypesEnum::Sequence && nWhich == SwFieldIds::SetExp  &&
+                   (static_cast<SwSetExpFieldType*>(pFieldType)->GetType() & nsSwGetSetExpType::GSE_SEQ)) ||
+
+                   ((nTypeId == SwFieldTypesEnum::Input || nTypeId == SwFieldTypesEnum::Formel) &&
+                     (nWhich == SwFieldIds::User ||
+                      (nWhich == SwFieldIds::SetExp &&
+                      !(static_cast<SwSetExpFieldType*>(pFieldType)->GetType() & nsSwGetSetExpType::GSE_SEQ))) ) )
                 {
-                    SwFieldType* pFieldType = pSh->GetFieldType( i );
-                    const SwFieldIds nWhich = pFieldType->Which();
-
-                    if((nTypeId == SwFieldTypesEnum::DDE && pFieldType->Which() == SwFieldIds::Dde) ||
-
-                       (nTypeId == SwFieldTypesEnum::User && nWhich == SwFieldIds::User) ||
-
-                       (nTypeId == SwFieldTypesEnum::Get && nWhich == SwFieldIds::SetExp &&
-                        !(static_cast<SwSetExpFieldType*>(pFieldType)->GetType() & nsSwGetSetExpType::GSE_SEQ)) ||
-
-                       (nTypeId == SwFieldTypesEnum::Set && nWhich == SwFieldIds::SetExp &&
-                        !(static_cast<SwSetExpFieldType*>(pFieldType)->GetType() & nsSwGetSetExpType::GSE_SEQ)) ||
-
-                       (nTypeId == SwFieldTypesEnum::Sequence && nWhich == SwFieldIds::SetExp  &&
-                       (static_cast<SwSetExpFieldType*>(pFieldType)->GetType() & nsSwGetSetExpType::GSE_SEQ)) ||
-
-                       ((nTypeId == SwFieldTypesEnum::Input || nTypeId == SwFieldTypesEnum::Formel) &&
-                         (nWhich == SwFieldIds::User ||
-                          (nWhich == SwFieldIds::SetExp &&
-                          !(static_cast<SwSetExpFieldType*>(pFieldType)->GetType() & nsSwGetSetExpType::GSE_SEQ))) ) )
-                    {
-                        rToFill.push_back(pFieldType->GetName());
-                    }
+                    rToFill.push_back(pFieldType->GetName());
                 }
-                break;
             }
-            case SwFieldTypesEnum::DatabaseNextSet:
-            case SwFieldTypesEnum::DatabaseNumberSet:
-            case SwFieldTypesEnum::DatabaseName:
-            case SwFieldTypesEnum::DatabaseSetNumber:
-                break;
+            break;
+        }
+        case SwFieldTypesEnum::DatabaseNextSet:
+        case SwFieldTypesEnum::DatabaseNumberSet:
+        case SwFieldTypesEnum::DatabaseName:
+        case SwFieldTypesEnum::DatabaseSetNumber:
+            break;
 
-            default:
+        default:
+        {
+            // static SubTypes
+            if(nPos != USHRT_MAX)
             {
-                // static SubTypes
-                if(nPos != USHRT_MAX)
+                sal_uInt16 nCount;
+                if (nTypeId == SwFieldTypesEnum::DocumentInfo)
+                    nCount = DI_SUBTYPE_END - DI_SUBTYPE_BEGIN;
+                else
+                    nCount = aSwFields[nPos].nSubTypeLength;
+
+                for(sal_uInt16 i = 0; i < nCount; ++i)
                 {
-                    sal_uInt16 nCount;
+                    OUString sNew;
                     if (nTypeId == SwFieldTypesEnum::DocumentInfo)
-                        nCount = DI_SUBTYPE_END - DI_SUBTYPE_BEGIN;
-                    else
-                        nCount = aSwFields[nPos].nSubTypeLength;
-
-                    for(sal_uInt16 i = 0; i < nCount; ++i)
                     {
-                        OUString sNew;
-                        if (nTypeId == SwFieldTypesEnum::DocumentInfo)
-                        {
-                            if ( i == DI_CUSTOM )
-                                sNew = SwResId(STR_CUSTOM_FIELD);
-                            else
-                                sNew = SwViewShell::GetShellRes()->aDocInfoLst[i];
-                        }
+                        if ( i == DI_CUSTOM )
+                            sNew = SwResId(STR_CUSTOM_FIELD);
                         else
-                            sNew = SwResId(aSwFields[nPos].pSubTypeResIds[i]);
-
-                        rToFill.push_back(sNew);
+                            sNew = SwViewShell::GetShellRes()->aDocInfoLst[i];
                     }
+                    else
+                        sNew = SwResId(aSwFields[nPos].pSubTypeResIds[i]);
+
+                    rToFill.push_back(sNew);
                 }
             }
         }

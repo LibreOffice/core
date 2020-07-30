@@ -98,20 +98,20 @@ void SwNumberingTypeListBox::Reload(SwInsertNumTypes nTypeFlags)
             m_xWidget->insert(nPos, SvxNumberingTypeTable::GetString(i), &sId, nullptr, nullptr);
         }
     }
-    if (nTypeFlags & SwInsertNumTypes::Extended)
+    if (!(nTypeFlags & SwInsertNumTypes::Extended))
+        return;
+
+    for (sal_Int16 nCurrent : aTypes)
     {
-        for (sal_Int16 nCurrent : aTypes)
+        if (nCurrent > style::NumberingType::CHARS_LOWER_LETTER_N)
         {
-            if (nCurrent > style::NumberingType::CHARS_LOWER_LETTER_N)
+            if (m_xWidget->find_id(OUString::number(nCurrent)) == -1)
             {
-                if (m_xWidget->find_id(OUString::number(nCurrent)) == -1)
-                {
-                    m_xWidget->append(OUString::number(nCurrent), m_xImpl->xInfo->getNumberingIdentifier(nCurrent));
-                }
+                m_xWidget->append(OUString::number(nCurrent), m_xImpl->xInfo->getNumberingIdentifier(nCurrent));
             }
         }
-        m_xWidget->set_active(0);
     }
+    m_xWidget->set_active(0);
 }
 
 SvxNumType SwNumberingTypeListBox::GetSelectedNumberingType() const

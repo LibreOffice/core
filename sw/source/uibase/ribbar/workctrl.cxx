@@ -708,22 +708,22 @@ void NavElementBox_Base::ReleaseFocus_Impl()
 
 IMPL_LINK(NavElementBox_Base, SelectHdl, weld::ComboBox&, rComboBox, void)
 {
-    if (rComboBox.changed_by_direct_pick())  // only when picked from the list
-    {
-        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
+    if (!rComboBox.changed_by_direct_pick())  // only when picked from the list
+        return;
 
-        sal_uInt16 nMoveType = rComboBox.get_active_id().toUInt32();
-        SwView::SetMoveType( nMoveType );
+    SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
 
-        css::uno::Sequence< css::beans::PropertyValue > aArgs;
+    sal_uInt16 nMoveType = rComboBox.get_active_id().toUInt32();
+    SwView::SetMoveType( nMoveType );
 
-        /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
-            This instance may be deleted in the meantime (i.e. when a dialog is opened
-            while in Dispatch()), accessing members will crash in this case. */
-        ReleaseFocus_Impl();
+    css::uno::Sequence< css::beans::PropertyValue > aArgs;
 
-        m_pCtrl->dispatchCommand( aArgs );
-    }
+    /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
+        This instance may be deleted in the meantime (i.e. when a dialog is opened
+        while in Dispatch()), accessing members will crash in this case. */
+    ReleaseFocus_Impl();
+
+    m_pCtrl->dispatchCommand( aArgs );
 }
 
 void NavElementBox_Base::UpdateBox()
@@ -840,19 +840,19 @@ void SAL_CALL NavElementToolBoxControl::dispose()
 // XStatusListener
 void SAL_CALL NavElementToolBoxControl::statusChanged( const frame::FeatureStateEvent& rEvent )
 {
-    if (m_pBox)
+    if (!m_pBox)
+        return;
+
+    SolarMutexGuard aSolarMutexGuard;
+    if ( rEvent.FeatureURL.Path == "NavElement" )
     {
-        SolarMutexGuard aSolarMutexGuard;
-        if ( rEvent.FeatureURL.Path == "NavElement" )
+        if ( rEvent.IsEnabled )
         {
-            if ( rEvent.IsEnabled )
-            {
-                m_pBox->set_sensitive(true);
-                m_pBox->UpdateBox();
-            }
-            else
-                m_pBox->set_sensitive(true);
+            m_pBox->set_sensitive(true);
+            m_pBox->UpdateBox();
         }
+        else
+            m_pBox->set_sensitive(true);
     }
 }
 
