@@ -519,19 +519,19 @@ void SwHTMLParser::NewField()
         ;
     }
 
-    if (xNewField)
+    if (!xNewField)
+        return;
+
+    if (bInsOnEndTag)
     {
-        if (bInsOnEndTag)
-        {
-            m_xField = std::move(xNewField);
-        }
-        else
-        {
-            m_xDoc->getIDocumentContentOperations().InsertPoolItem(*m_pPam, SwFormatField(*xNewField));
-            xNewField.reset();
-        }
-        m_bInField = true;
+        m_xField = std::move(xNewField);
     }
+    else
+    {
+        m_xDoc->getIDocumentContentOperations().InsertPoolItem(*m_pPam, SwFormatField(*xNewField));
+        xNewField.reset();
+    }
+    m_bInField = true;
 }
 
 void SwHTMLParser::EndField()

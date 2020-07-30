@@ -102,53 +102,53 @@ void SwPaintQueue::Add( SwViewShell *pNew, const SwRect &rNew )
 
 void SwPaintQueue::Repaint()
 {
-    if (!SwRootFrame::IsInPaint() && s_pPaintQueue)
-    {
-        SwQueuedPaint *pPt = s_pPaintQueue;
-        do
-        {   SwViewShell *pSh = pPt->pSh;
-            CurrShell aCurr( pSh );
-            if ( pSh->IsPreview() )
-            {
-                if ( pSh->GetWin() )
-                {
-                    // for previewing, since rows/columns are known in PaintHdl (UI)
-                    pSh->GetWin()->Invalidate();
-                }
-            }
-            else
-                pSh->Paint(*pSh->GetOut(), pPt->aRect.SVRect());
-            pPt = pPt->pNext;
-        } while ( pPt );
+    if (!(!SwRootFrame::IsInPaint() && s_pPaintQueue))
+        return;
 
-        do
+    SwQueuedPaint *pPt = s_pPaintQueue;
+    do
+    {   SwViewShell *pSh = pPt->pSh;
+        CurrShell aCurr( pSh );
+        if ( pSh->IsPreview() )
         {
-            pPt = s_pPaintQueue;
-            s_pPaintQueue = s_pPaintQueue->pNext;
-            delete pPt;
-        } while (s_pPaintQueue);
-    }
+            if ( pSh->GetWin() )
+            {
+                // for previewing, since rows/columns are known in PaintHdl (UI)
+                pSh->GetWin()->Invalidate();
+            }
+        }
+        else
+            pSh->Paint(*pSh->GetOut(), pPt->aRect.SVRect());
+        pPt = pPt->pNext;
+    } while ( pPt );
+
+    do
+    {
+        pPt = s_pPaintQueue;
+        s_pPaintQueue = s_pPaintQueue->pNext;
+        delete pPt;
+    } while (s_pPaintQueue);
 }
 
 void SwPaintQueue::Remove( SwViewShell const *pSh )
 {
     SwQueuedPaint *pPt = s_pPaintQueue;
-    if (nullptr != pPt)
+    if (nullptr == pPt)
+        return;
+
+    SwQueuedPaint *pPrev = nullptr;
+    while ( pPt && pPt->pSh != pSh )
     {
-        SwQueuedPaint *pPrev = nullptr;
-        while ( pPt && pPt->pSh != pSh )
-        {
-            pPrev = pPt;
-            pPt = pPt->pNext;
-        }
-        if ( pPt )
-        {
-            if ( pPrev )
-                pPrev->pNext = pPt->pNext;
-            else if (pPt == s_pPaintQueue)
-                s_pPaintQueue = nullptr;
-            delete pPt;
-        }
+        pPrev = pPt;
+        pPt = pPt->pNext;
+    }
+    if ( pPt )
+    {
+        if ( pPrev )
+            pPrev->pNext = pPt->pNext;
+        else if (pPt == s_pPaintQueue)
+            s_pPaintQueue = nullptr;
+        delete pPt;
     }
 }
 
@@ -670,18 +670,18 @@ void SwViewShell::PrepareForPrint( const SwPrintData &rOptions, bool bIsPDFExpor
     // Font should not be black if it's a PDF Export
     mpOpt->SetBlackFont( rOptions.m_bPrintBlackFont && !bIsPDFExport );
 
-    if ( HasDrawView() )
+    if ( !HasDrawView() )
+        return;
+
+    SdrView *pDrawView = GetDrawView();
+    // OD 09.01.2003 #i6467# - consider, if view shell belongs to page preview
+    if ( !IsPreview() )
     {
-        SdrView *pDrawView = GetDrawView();
-        // OD 09.01.2003 #i6467# - consider, if view shell belongs to page preview
-        if ( !IsPreview() )
-        {
-            pDrawView->SetLayerPrintable( "Controls", rOptions.m_bPrintControl );
-        }
-        else
-        {
-            pDrawView->SetLayerVisible( "Controls", rOptions.m_bPrintControl );
-        }
+        pDrawView->SetLayerPrintable( "Controls", rOptions.m_bPrintControl );
+    }
+    else
+    {
+        pDrawView->SetLayerVisible( "Controls", rOptions.m_bPrintControl );
     }
 }
 

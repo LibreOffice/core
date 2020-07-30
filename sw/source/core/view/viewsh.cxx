@@ -540,19 +540,19 @@ bool SwViewShell::AddPaintRect( const SwRect & rRect )
 
 void SwViewShell::InvalidateWindows( const SwRect &rRect )
 {
-    if ( !Imp()->IsCalcLayoutProgress() )
+    if ( Imp()->IsCalcLayoutProgress() )
+        return;
+
+    for(SwViewShell& rSh : GetRingContainer())
     {
-        for(SwViewShell& rSh : GetRingContainer())
+        if ( rSh.GetWin() )
         {
-            if ( rSh.GetWin() )
-            {
-                if ( rSh.IsPreview() )
-                    ::RepaintPagePreview( &rSh, rRect );
-                // In case of tiled rendering, invalidation is wanted even if
-                // the rectangle is outside the visual area.
-                else if ( rSh.VisArea().IsOver( rRect ) || comphelper::LibreOfficeKit::isActive() )
-                    rSh.GetWin()->Invalidate( rRect.SVRect() );
-            }
+            if ( rSh.IsPreview() )
+                ::RepaintPagePreview( &rSh, rRect );
+            // In case of tiled rendering, invalidation is wanted even if
+            // the rectangle is outside the visual area.
+            else if ( rSh.VisArea().IsOver( rRect ) || comphelper::LibreOfficeKit::isActive() )
+                rSh.GetWin()->Invalidate( rRect.SVRect() );
         }
     }
 }
@@ -566,32 +566,32 @@ const SwRect& SwViewShell::VisArea() const
 
 void SwViewShell::MakeVisible( const SwRect &rRect )
 {
-    if ( !VisArea().IsInside( rRect ) || IsScrollMDI( this, rRect ) || GetCareDialog(*this) )
+    if ( !(!VisArea().IsInside( rRect ) || IsScrollMDI( this, rRect ) || GetCareDialog(*this)) )
+        return;
+
+    if ( IsViewLocked() )
+        return;
+
+    if( mpWin )
     {
-        if ( !IsViewLocked() )
-        {
-            if( mpWin )
-            {
-                const SwFrame* pRoot = GetLayout();
-                int nLoopCnt = 3;
-                long nOldH;
-                do{
-                    nOldH = pRoot->getFrameArea().Height();
-                    StartAction();
-                    ScrollMDI( this, rRect, USHRT_MAX, USHRT_MAX );
-                    EndAction();
-                } while( nOldH != pRoot->getFrameArea().Height() && nLoopCnt-- );
-            }
+        const SwFrame* pRoot = GetLayout();
+        int nLoopCnt = 3;
+        long nOldH;
+        do{
+            nOldH = pRoot->getFrameArea().Height();
+            StartAction();
+            ScrollMDI( this, rRect, USHRT_MAX, USHRT_MAX );
+            EndAction();
+        } while( nOldH != pRoot->getFrameArea().Height() && nLoopCnt-- );
+    }
 #if OSL_DEBUG_LEVEL > 0
-            else
-            {
-                //MA: 04. Nov. 94, no one needs this, does one?
-                OSL_ENSURE( false, "Is MakeVisible still needed for printers?" );
-            }
+    else
+    {
+        //MA: 04. Nov. 94, no one needs this, does one?
+        OSL_ENSURE( false, "Is MakeVisible still needed for printers?" );
+    }
 
 #endif
-        }
-    }
 }
 
 weld::Window* SwViewShell::CareChildWin(SwViewShell const & rVSh)
@@ -928,21 +928,21 @@ void SwViewShell::SetSubtractFlysAnchoredAtFlys(bool bSubtractFlysAnchoredAtFlys
 void SwViewShell::SetEmptyDbFieldHidesPara(bool bEmptyDbFieldHidesPara)
 {
     IDocumentSettingAccess& rIDSA = getIDocumentSettingAccess();
-    if (rIDSA.get(DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA) != bEmptyDbFieldHidesPara)
+    if (rIDSA.get(DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA) == bEmptyDbFieldHidesPara)
+        return;
+
+    SwWait aWait(*GetDoc()->GetDocShell(), true);
+    rIDSA.set(DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA, bEmptyDbFieldHidesPara);
+    StartAction();
+    GetDoc()->getIDocumentState().SetModified();
+    for (auto const & pFieldType : *GetDoc()->getIDocumentFieldsAccess().GetFieldTypes())
     {
-        SwWait aWait(*GetDoc()->GetDocShell(), true);
-        rIDSA.set(DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA, bEmptyDbFieldHidesPara);
-        StartAction();
-        GetDoc()->getIDocumentState().SetModified();
-        for (auto const & pFieldType : *GetDoc()->getIDocumentFieldsAccess().GetFieldTypes())
+        if (pFieldType->Which() == SwFieldIds::Database)
         {
-            if (pFieldType->Which() == SwFieldIds::Database)
-            {
-                pFieldType->ModifyNotification(nullptr, nullptr);
-            }
+            pFieldType->ModifyNotification(nullptr, nullptr);
         }
-        EndAction();
     }
+    EndAction();
 }
 
 void SwViewShell::Reformat()
@@ -1723,24 +1723,24 @@ public:
     {
         pRef = pValue;
 
-        if (pValue != pShell->GetWin())
+        if (pValue == pShell->GetWin())
+            return;
+
+        SdrView* pDrawView(pShell->Imp()->GetDrawView());
+
+        if (nullptr == pDrawView)
+            return;
+
+        SdrPageView* pSdrPageView(pDrawView->GetSdrPageView());
+
+        if (nullptr != pSdrPageView)
         {
-            SdrView* pDrawView(pShell->Imp()->GetDrawView());
+            m_pPatchedPageWindow = pSdrPageView->FindPageWindow(*pShell->GetWin());
 
-            if (nullptr != pDrawView)
+            if (nullptr != m_pPatchedPageWindow)
             {
-                SdrPageView* pSdrPageView(pDrawView->GetSdrPageView());
-
-                if (nullptr != pSdrPageView)
-                {
-                    m_pPatchedPageWindow = pSdrPageView->FindPageWindow(*pShell->GetWin());
-
-                    if (nullptr != m_pPatchedPageWindow)
-                    {
-                        m_TemporaryPaintWindow.reset(new SdrPaintWindow(*pDrawView, *pValue));
-                        m_pPatchedPageWindow->patchPaintWindow(*m_TemporaryPaintWindow);
-                    }
-                }
+                m_TemporaryPaintWindow.reset(new SdrPaintWindow(*pDrawView, *pValue));
+                m_pPatchedPageWindow->patchPaintWindow(*m_TemporaryPaintWindow);
             }
         }
     }
@@ -2271,18 +2271,18 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         EndAction();
     }
 
-    if( bOnlineSpellChgd )
+    if( !bOnlineSpellChgd )
+        return;
+
+    bool bOnlineSpl = rOpt.IsOnlineSpell();
+    for(SwViewShell& rSh : GetRingContainer())
     {
-        bool bOnlineSpl = rOpt.IsOnlineSpell();
-        for(SwViewShell& rSh : GetRingContainer())
-        {
-            if(&rSh == this)
-                continue;
-            rSh.mpOpt->SetOnlineSpell( bOnlineSpl );
-            vcl::Window *pTmpWin = rSh.GetWin();
-            if( pTmpWin )
-                pTmpWin->Invalidate();
-        }
+        if(&rSh == this)
+            continue;
+        rSh.mpOpt->SetOnlineSpell( bOnlineSpl );
+        vcl::Window *pTmpWin = rSh.GetWin();
+        if( pTmpWin )
+            pTmpWin->Invalidate();
     }
 
 }
@@ -2304,28 +2304,28 @@ void SwViewShell::SetReadonlyOption(bool bSet)
     //              and if need be format; Bug 61335
 
     // Are we switching from readonly to edit?
-    if( bSet != mpOpt->IsReadonly() )
+    if( bSet == mpOpt->IsReadonly() )
+        return;
+
+    // so that the flags can be queried properly.
+    mpOpt->SetReadonly( false );
+
+    bool bReformat = mpOpt->IsFieldName();
+
+    mpOpt->SetReadonly( bSet );
+
+    if( bReformat )
     {
-        // so that the flags can be queried properly.
-        mpOpt->SetReadonly( false );
-
-        bool bReformat = mpOpt->IsFieldName();
-
-        mpOpt->SetReadonly( bSet );
-
-        if( bReformat )
-        {
-            StartAction();
-            Reformat();
-            if ( GetWin() )
-                GetWin()->Invalidate();
-            EndAction();
-        }
-        else if ( GetWin() )
+        StartAction();
+        Reformat();
+        if ( GetWin() )
             GetWin()->Invalidate();
-        if( Imp()->IsAccessible() )
-            Imp()->InvalidateAccessibleEditableState( false );
+        EndAction();
     }
+    else if ( GetWin() )
+        GetWin()->Invalidate();
+    if( Imp()->IsAccessible() )
+        Imp()->InvalidateAccessibleEditableState( false );
 }
 
 void  SwViewShell::SetPDFExportOption(bool bSet)
