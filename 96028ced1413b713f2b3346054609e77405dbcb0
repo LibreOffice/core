@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c2531e58_18509e7c",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-30T09:25:44Z",
+      "side": 1,
+      "message": "We are doing the same as CuiResId, so need \"cui\" here :-)",
+      "range": {
+        "startLine": 198,
+        "startChar": 81,
+        "endLine": 198,
+        "endChar": 84
+      },
+      "revId": "96028ced1413b713f2b3346054609e77405dbcb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bde6e3a7_079209de",
+        "filename": "cui/source/inc/about.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-30T09:25:44Z",
+      "side": 1,
+      "message": "const is not needed in function declaration for by-value arguments. Please remove. (It\u0027s OK in definition in CXX though, if you want it to make sure the value is not changed)",
+      "range": {
+        "startLine": 47,
+        "startChar": 36,
+        "endLine": 47,
+        "endChar": 42
+      },
+      "revId": "96028ced1413b713f2b3346054609e77405dbcb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
