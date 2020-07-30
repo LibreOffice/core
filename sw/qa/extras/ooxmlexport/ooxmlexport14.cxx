@@ -479,6 +479,34 @@ DECLARE_OOXMLEXPORT_TEST(testTdf78352, "tdf78352.docx")
     CPPUNIT_ASSERT_LESS(150, nWidth);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf81567, "tdf81567.odt")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
+
+    int nFrameWidth = parseDump("/root/page/body/txt/anchored/fly/infos/bounds", "width").toInt32();
+    CPPUNIT_ASSERT_EQUAL(2371, nFrameWidth);
+
+    int nFrameHeight = parseDump("/root/page/body/txt/anchored/fly/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_EQUAL(3520, nFrameHeight);
+
+    int nFrameTop = parseDump("/root/page/body/txt/anchored/fly/infos/bounds", "top").toInt32();
+    CPPUNIT_ASSERT_EQUAL(1518, nFrameTop);
+
+    int nImageWidth = parseDump("/root/page/body/txt/anchored/fly/txt/anchored/fly/infos/bounds", "width").toInt32();
+    CPPUNIT_ASSERT_EQUAL(2370, nImageWidth);
+
+    int nImageHeight = parseDump("/root/page/body/txt/anchored/fly/txt/anchored/fly/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_EQUAL(1605, nImageHeight);
+
+    // Check the image is at the top of the frame
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 1638
+    // - Actual  : 2236
+    int nImageTop = parseDump("/root/page/body/txt/anchored/fly/txt/anchored/fly/infos/bounds", "top").toInt32();
+    CPPUNIT_ASSERT_EQUAL(1638, nImageTop);
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf92472, "tdf92472.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
