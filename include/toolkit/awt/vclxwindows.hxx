@@ -623,7 +623,7 @@ public:
 
 //  class VCLXEdit
 
-class VCLXEdit :  public css::awt::XTextComponent,
+class SAL_DLLPUBLIC_RTTI VCLXEdit :  public css::awt::XTextComponent,
                     public css::awt::XTextEditField,
                     public css::awt::XTextLayoutConstrains,
                     public VCLXWindow
