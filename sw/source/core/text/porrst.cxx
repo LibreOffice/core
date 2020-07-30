@@ -55,19 +55,19 @@ SwTmpEndPortion::SwTmpEndPortion( const SwLinePortion &rPortion )
 
 void SwTmpEndPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
-    if (rInf.OnWin() && rInf.GetOpt().IsParagraph())
-    {
-        const SwFont* pOldFnt = rInf.GetFont();
+    if (!(rInf.OnWin() && rInf.GetOpt().IsParagraph()))
+        return;
 
-        SwFont aFont(*pOldFnt);
-        aFont.SetColor(NON_PRINTING_CHARACTER_COLOR);
-        const_cast<SwTextPaintInfo&>(rInf).SetFont(&aFont);
+    const SwFont* pOldFnt = rInf.GetFont();
 
-        // draw the pilcrow
-        rInf.DrawText(CH_PAR, *this);
+    SwFont aFont(*pOldFnt);
+    aFont.SetColor(NON_PRINTING_CHARACTER_COLOR);
+    const_cast<SwTextPaintInfo&>(rInf).SetFont(&aFont);
 
-        const_cast<SwTextPaintInfo&>(rInf).SetFont(const_cast<SwFont*>(pOldFnt));
-    }
+    // draw the pilcrow
+    rInf.DrawText(CH_PAR, *this);
+
+    const_cast<SwTextPaintInfo&>(rInf).SetFont(const_cast<SwFont*>(pOldFnt));
 }
 
 SwBreakPortion::SwBreakPortion( const SwLinePortion &rPortion )
@@ -135,28 +135,28 @@ SwKernPortion::SwKernPortion( const SwLinePortion& rPortion ) :
 
 void SwKernPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
-    if( Width() )
+    if( !Width() )
+        return;
+
+    // bBackground is set for Kerning Portions between two fields
+    if ( bBackground )
+        rInf.DrawViewOpt( *this, PortionType::Field );
+
+    rInf.DrawBackBrush( *this );
+    if (GetJoinBorderWithNext() ||GetJoinBorderWithPrev())
+        rInf.DrawBorder( *this );
+
+    // do we have to repaint a post it portion?
+    if( rInf.OnWin() && mpNextPortion && !mpNextPortion->Width() )
+        mpNextPortion->PrePaint( rInf, this );
+
+    if( rInf.GetFont()->IsPaintBlank() )
     {
-        // bBackground is set for Kerning Portions between two fields
-        if ( bBackground )
-            rInf.DrawViewOpt( *this, PortionType::Field );
-
-        rInf.DrawBackBrush( *this );
-        if (GetJoinBorderWithNext() ||GetJoinBorderWithPrev())
-            rInf.DrawBorder( *this );
-
-        // do we have to repaint a post it portion?
-        if( rInf.OnWin() && mpNextPortion && !mpNextPortion->Width() )
-            mpNextPortion->PrePaint( rInf, this );
-
-        if( rInf.GetFont()->IsPaintBlank() )
-        {
-            SwRect aClipRect;
-            rInf.CalcRect( *this, &aClipRect );
-            SwSaveClip aClip( const_cast<OutputDevice*>(rInf.GetOut()) );
-            aClip.ChgClip( aClipRect );
-            rInf.DrawText("  ", *this, TextFrameIndex(0), TextFrameIndex(2), true );
-        }
+        SwRect aClipRect;
+        rInf.CalcRect( *this, &aClipRect );
+        SwSaveClip aClip( const_cast<OutputDevice*>(rInf.GetOut()) );
+        aClip.ChgClip( aClipRect );
+        rInf.DrawText("  ", *this, TextFrameIndex(0), TextFrameIndex(2), true );
     }
 }
 
@@ -564,52 +564,52 @@ bool SwBookmarkPortion::DoPaint(SwTextPaintInfo const& rTextPaintInfo,
 
 void SwControlCharPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
-    if ( Width() )  // is only set during prepaint mode
+    if ( !Width() )  // is only set during prepaint mode
+        return;
+
+    rInf.DrawViewOpt(*this, GetWhichPor());
+
+    int deltaY(0);
+    SwFont aTmpFont( *rInf.GetFont() );
+    OUString aOutString;
+
+    if (!(rInf.OnWin()
+        && !rInf.GetOpt().IsPagePreview()
+        && !rInf.GetOpt().IsReadonly()
+        && DoPaint(rInf, aOutString, aTmpFont, deltaY)))
+        return;
+
+    SwFontSave aFontSave( rInf, &aTmpFont );
+
+    if ( !mnHalfCharWidth )
+        mnHalfCharWidth = rInf.GetTextSize( aOutString ).Width() / 2;
+
+    Point aOldPos = rInf.GetPos();
+    Point aNewPos( aOldPos );
+    auto const deltaX((Width() / 2) - mnHalfCharWidth);
+    switch (rInf.GetFont()->GetOrientation(rInf.GetTextFrame()->IsVertical()))
     {
-        rInf.DrawViewOpt(*this, GetWhichPor());
-
-        int deltaY(0);
-        SwFont aTmpFont( *rInf.GetFont() );
-        OUString aOutString;
-
-        if (rInf.OnWin()
-            && !rInf.GetOpt().IsPagePreview()
-            && !rInf.GetOpt().IsReadonly()
-            && DoPaint(rInf, aOutString, aTmpFont, deltaY))
-        {
-            SwFontSave aFontSave( rInf, &aTmpFont );
-
-            if ( !mnHalfCharWidth )
-                mnHalfCharWidth = rInf.GetTextSize( aOutString ).Width() / 2;
-
-            Point aOldPos = rInf.GetPos();
-            Point aNewPos( aOldPos );
-            auto const deltaX((Width() / 2) - mnHalfCharWidth);
-            switch (rInf.GetFont()->GetOrientation(rInf.GetTextFrame()->IsVertical()))
-            {
-                case 0:
-                    aNewPos.AdjustX(deltaX);
-                    aNewPos.AdjustY(deltaY);
-                    break;
-                case 900:
-                    aNewPos.AdjustY(-deltaX);
-                    aNewPos.AdjustX(deltaY);
-                    break;
-                case 2700:
-                    aNewPos.AdjustY(deltaX);
-                    aNewPos.AdjustX(-deltaY);
-                    break;
-                default:
-                    assert(false);
-                    break;
-            }
-            const_cast< SwTextPaintInfo& >( rInf ).SetPos( aNewPos );
-
-            rInf.DrawText( aOutString, *this );
-
-            const_cast< SwTextPaintInfo& >( rInf ).SetPos( aOldPos );
-        }
+        case 0:
+            aNewPos.AdjustX(deltaX);
+            aNewPos.AdjustY(deltaY);
+            break;
+        case 900:
+            aNewPos.AdjustY(-deltaX);
+            aNewPos.AdjustX(deltaY);
+            break;
+        case 2700:
+            aNewPos.AdjustY(deltaX);
+            aNewPos.AdjustX(-deltaY);
+            break;
+        default:
+            assert(false);
+            break;
     }
+    const_cast< SwTextPaintInfo& >( rInf ).SetPos( aNewPos );
+
+    rInf.DrawText( aOutString, *this );
+
+    const_cast< SwTextPaintInfo& >( rInf ).SetPos( aOldPos );
 }
 
 bool SwControlCharPortion::Format( SwTextFormatInfo &rInf )

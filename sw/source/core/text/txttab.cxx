@@ -567,24 +567,24 @@ void SwTabPortion::Paint( const SwTextPaintInfo &rInf ) const
     }
 
     // Display fill characters
-    if( IsFilled() )
-    {
-        // Tabs with filling/filled tabs
-        const sal_uInt16 nCharWidth = rInf.GetTextSize(OUString(cFill)).Width();
-        OSL_ENSURE( nCharWidth, "!SwTabPortion::Paint: sophisticated tabchar" );
+    if( !IsFilled() )
+        return;
 
-        // Robust:
-        if( nCharWidth )
-        {
-            // Always with kerning, also on printer!
-            sal_uInt16 nChar = Width() / nCharWidth;
-            if ( cFill == '_' )
-                ++nChar; // to avoid gaps
-            OUStringBuffer aBuf;
-            comphelper::string::padToLength(aBuf, nChar, cFill);
-            rInf.DrawText(aBuf.makeStringAndClear(), *this, TextFrameIndex(0),
-                            TextFrameIndex(nChar), true);
-        }
+    // Tabs with filling/filled tabs
+    const sal_uInt16 nCharWidth = rInf.GetTextSize(OUString(cFill)).Width();
+    OSL_ENSURE( nCharWidth, "!SwTabPortion::Paint: sophisticated tabchar" );
+
+    // Robust:
+    if( nCharWidth )
+    {
+        // Always with kerning, also on printer!
+        sal_uInt16 nChar = Width() / nCharWidth;
+        if ( cFill == '_' )
+            ++nChar; // to avoid gaps
+        OUStringBuffer aBuf;
+        comphelper::string::padToLength(aBuf, nChar, cFill);
+        rInf.DrawText(aBuf.makeStringAndClear(), *this, TextFrameIndex(0),
+                        TextFrameIndex(nChar), true);
     }
 }
 

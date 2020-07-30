@@ -976,42 +976,42 @@ void SwTextPaintInfo::DrawRect( const SwRect &rRect, bool bRetouche ) const
 
 void SwTextPaintInfo::DrawTab( const SwLinePortion &rPor ) const
 {
-    if( OnWin() )
-    {
-        SwRect aRect;
-        CalcRect( rPor, &aRect );
+    if( !OnWin() )
+        return;
 
-        if ( ! aRect.HasArea() )
-            return;
+    SwRect aRect;
+    CalcRect( rPor, &aRect );
 
-        const sal_Unicode cChar = GetTextFrame()->IsRightToLeft() ? CHAR_TAB_RTL : CHAR_TAB;
-        const sal_uInt8 nOptions = DRAW_SPECIAL_OPTIONS_CENTER | DRAW_SPECIAL_OPTIONS_ROTATE;
+    if ( ! aRect.HasArea() )
+        return;
 
-        lcl_DrawSpecial( *this, rPor, aRect, NON_PRINTING_CHARACTER_COLOR, cChar, nOptions );
-    }
+    const sal_Unicode cChar = GetTextFrame()->IsRightToLeft() ? CHAR_TAB_RTL : CHAR_TAB;
+    const sal_uInt8 nOptions = DRAW_SPECIAL_OPTIONS_CENTER | DRAW_SPECIAL_OPTIONS_ROTATE;
+
+    lcl_DrawSpecial( *this, rPor, aRect, NON_PRINTING_CHARACTER_COLOR, cChar, nOptions );
 }
 
 void SwTextPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
 {
-    if( OnWin() )
+    if( !OnWin() )
+        return;
+
+    sal_uInt16 nOldWidth = rPor.Width();
+    const_cast<SwLinePortion&>(rPor).Width( LINE_BREAK_WIDTH );
+
+    SwRect aRect;
+    CalcRect( rPor, &aRect );
+
+    if( aRect.HasArea() )
     {
-        sal_uInt16 nOldWidth = rPor.Width();
-        const_cast<SwLinePortion&>(rPor).Width( LINE_BREAK_WIDTH );
+        const sal_Unicode cChar = GetTextFrame()->IsRightToLeft() ?
+                                  CHAR_LINEBREAK_RTL : CHAR_LINEBREAK;
+        const sal_uInt8 nOptions = 0;
 
-        SwRect aRect;
-        CalcRect( rPor, &aRect );
-
-        if( aRect.HasArea() )
-        {
-            const sal_Unicode cChar = GetTextFrame()->IsRightToLeft() ?
-                                      CHAR_LINEBREAK_RTL : CHAR_LINEBREAK;
-            const sal_uInt8 nOptions = 0;
-
-            lcl_DrawSpecial( *this, rPor, aRect, NON_PRINTING_CHARACTER_COLOR, cChar, nOptions );
-        }
-
-        const_cast<SwLinePortion&>(rPor).Width( nOldWidth );
+        lcl_DrawSpecial( *this, rPor, aRect, NON_PRINTING_CHARACTER_COLOR, cChar, nOptions );
     }
+
+    const_cast<SwLinePortion&>(rPor).Width( nOldWidth );
 }
 
 void SwTextPaintInfo::DrawRedArrow( const SwLinePortion &rPor ) const
@@ -1098,31 +1098,31 @@ void SwTextPaintInfo::DrawCheckBox(const SwFieldFormCheckboxPortion &rPor, bool 
 {
     SwRect aIntersect;
     CalcRect( rPor, &aIntersect );
-    if ( aIntersect.HasArea() )
+    if ( !aIntersect.HasArea() )
+        return;
+
+    if (OnWin() && SwViewOption::IsFieldShadings() &&
+            !GetOpt().IsPagePreview())
     {
-        if (OnWin() && SwViewOption::IsFieldShadings() &&
-                !GetOpt().IsPagePreview())
-        {
-            OutputDevice* pOut = const_cast<OutputDevice*>(GetOut());
-            pOut->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
-            pOut->SetFillColor( SwViewOption::GetFieldShadingsColor() );
-            pOut->SetLineColor();
-            pOut->DrawRect( aIntersect.SVRect() );
-            pOut->Pop();
-        }
-        const int delta=10;
-        tools::Rectangle r(aIntersect.Left()+delta, aIntersect.Top()+delta, aIntersect.Right()-delta, aIntersect.Bottom()-delta);
-        m_pOut->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
-        m_pOut->SetLineColor( Color(0, 0, 0));
-        m_pOut->SetFillColor();
-        m_pOut->DrawRect( r );
-        if (bChecked)
-        {
-            m_pOut->DrawLine(r.TopLeft(), r.BottomRight());
-            m_pOut->DrawLine(r.TopRight(), r.BottomLeft());
-        }
-        m_pOut->Pop();
+        OutputDevice* pOut = const_cast<OutputDevice*>(GetOut());
+        pOut->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
+        pOut->SetFillColor( SwViewOption::GetFieldShadingsColor() );
+        pOut->SetLineColor();
+        pOut->DrawRect( aIntersect.SVRect() );
+        pOut->Pop();
     }
+    const int delta=10;
+    tools::Rectangle r(aIntersect.Left()+delta, aIntersect.Top()+delta, aIntersect.Right()-delta, aIntersect.Bottom()-delta);
+    m_pOut->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
+    m_pOut->SetLineColor( Color(0, 0, 0));
+    m_pOut->SetFillColor();
+    m_pOut->DrawRect( r );
+    if (bChecked)
+    {
+        m_pOut->DrawLine(r.TopLeft(), r.BottomRight());
+        m_pOut->DrawLine(r.TopRight(), r.BottomLeft());
+    }
+    m_pOut->Pop();
 }
 
 void SwTextPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
@@ -1132,25 +1132,25 @@ void SwTextPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
     SwRect aIntersect;
     CalcRect( rPor, nullptr, &aIntersect, true );
 
-    if ( aIntersect.HasArea() )
+    if ( !aIntersect.HasArea() )
+        return;
+
+    OutputDevice* pOut = const_cast<OutputDevice*>(GetOut());
+    pOut->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
+
+    // For dark background we do not want to have a filled rectangle
+    if ( GetVsh() && GetVsh()->GetWin() && lcl_IsDarkBackground( *this ) )
     {
-        OutputDevice* pOut = const_cast<OutputDevice*>(GetOut());
-        pOut->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
-
-        // For dark background we do not want to have a filled rectangle
-        if ( GetVsh() && GetVsh()->GetWin() && lcl_IsDarkBackground( *this ) )
-        {
-            pOut->SetLineColor( SwViewOption::GetFontColor() );
-        }
-        else
-        {
-            pOut->SetFillColor( SwViewOption::GetFieldShadingsColor() );
-            pOut->SetLineColor();
-        }
-
-        DrawRect( aIntersect, true );
-        pOut->Pop();
+        pOut->SetLineColor( SwViewOption::GetFontColor() );
     }
+    else
+    {
+        pOut->SetFillColor( SwViewOption::GetFieldShadingsColor() );
+        pOut->SetLineColor();
+    }
+
+    DrawRect( aIntersect, true );
+    pOut->Pop();
 }
 
 void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
@@ -1187,117 +1187,117 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
     SwRect aIntersect;
     CalcRect( rPor, nullptr, &aIntersect, true );
 
-    if ( aIntersect.HasArea() )
+    if ( !aIntersect.HasArea() )
+        return;
+
+    OutputDevice* pTmpOut = const_cast<OutputDevice*>(GetOut());
+
+    // #i16816# tagged pdf support
+    SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, nullptr, *pTmpOut );
+
+    Color aFillColor;
+
+    if( m_pFnt->GetHighlightColor() != COL_TRANSPARENT )
     {
-        OutputDevice* pTmpOut = const_cast<OutputDevice*>(GetOut());
+        aFillColor = m_pFnt->GetHighlightColor();
+    }
+    else
+    {
+        if( !m_pFnt->GetBackColor() )
+            return;
+        aFillColor = *m_pFnt->GetBackColor();
+    }
 
-        // #i16816# tagged pdf support
-        SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, nullptr, *pTmpOut );
-
-        Color aFillColor;
-
-        if( m_pFnt->GetHighlightColor() != COL_TRANSPARENT )
+    // tdf#104349 do not highlight portions of space chars before end of line if the compatibility option is enabled
+    // for LTR mode only
+    if ( !GetTextFrame()->IsRightToLeft() )
+    {
+        if (GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS))
         {
-            aFillColor = m_pFnt->GetHighlightColor();
-        }
-        else
-        {
-            if( !m_pFnt->GetBackColor() )
-                return;
-            aFillColor = *m_pFnt->GetBackColor();
-        }
+            bool           draw = false;
+            bool           full = false;
+            SwLinePortion *pPos = const_cast<SwLinePortion *>(&rPor);
+            TextFrameIndex nIdx = GetIdx();
+            TextFrameIndex nLen;
 
-        // tdf#104349 do not highlight portions of space chars before end of line if the compatibility option is enabled
-        // for LTR mode only
-        if ( !GetTextFrame()->IsRightToLeft() )
-        {
-            if (GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS))
+            do
             {
-                bool           draw = false;
-                bool           full = false;
-                SwLinePortion *pPos = const_cast<SwLinePortion *>(&rPor);
-                TextFrameIndex nIdx = GetIdx();
-                TextFrameIndex nLen;
-
-                do
+                nLen = pPos->GetLen();
+                for (TextFrameIndex i = nIdx; i < (nIdx + nLen); ++i)
                 {
-                    nLen = pPos->GetLen();
-                    for (TextFrameIndex i = nIdx; i < (nIdx + nLen); ++i)
+                    if (i < TextFrameIndex(GetText().getLength())
+                        && GetText()[sal_Int32(i)] == CH_TXTATR_NEWLINE)
                     {
-                        if (i < TextFrameIndex(GetText().getLength())
-                            && GetText()[sal_Int32(i)] == CH_TXTATR_NEWLINE)
+                        if ( i >= (GetIdx() + rPor.GetLen()) )
                         {
-                            if ( i >= (GetIdx() + rPor.GetLen()) )
-                            {
-                                goto drawcontinue;
-                            }
-                        }
-                        if (i >= TextFrameIndex(GetText().getLength())
-                            || GetText()[sal_Int32(i)] != CH_BLANK)
-                        {
-                            draw = true;
-                            if ( i >= (GetIdx() + rPor.GetLen()) )
-                            {
-                                full = true;
-                                goto drawcontinue;
-                            }
+                            goto drawcontinue;
                         }
                     }
-                    nIdx += nLen;
-                    pPos = pPos->GetNextPortion();
-                } while ( pPos );
-
-            drawcontinue:
-
-                if ( !draw )
-                    return;
-
-                if ( !full )
-                {
-                    pPos = const_cast<SwLinePortion *>(&rPor);
-                    nIdx = GetIdx();
-
-                    nLen = pPos->GetLen();
-                    for (TextFrameIndex i = nIdx + nLen - TextFrameIndex(1);
-                            i >= nIdx; --i)
+                    if (i >= TextFrameIndex(GetText().getLength())
+                        || GetText()[sal_Int32(i)] != CH_BLANK)
                     {
-                        if (i < TextFrameIndex(GetText().getLength())
-                            && GetText()[sal_Int32(i)] == CH_TXTATR_NEWLINE)
+                        draw = true;
+                        if ( i >= (GetIdx() + rPor.GetLen()) )
                         {
-                            continue;
+                            full = true;
+                            goto drawcontinue;
                         }
-                        if (i >= TextFrameIndex(GetText().getLength())
-                            || GetText()[sal_Int32(i)] != CH_BLANK)
+                    }
+                }
+                nIdx += nLen;
+                pPos = pPos->GetNextPortion();
+            } while ( pPos );
+
+        drawcontinue:
+
+            if ( !draw )
+                return;
+
+            if ( !full )
+            {
+                pPos = const_cast<SwLinePortion *>(&rPor);
+                nIdx = GetIdx();
+
+                nLen = pPos->GetLen();
+                for (TextFrameIndex i = nIdx + nLen - TextFrameIndex(1);
+                        i >= nIdx; --i)
+                {
+                    if (i < TextFrameIndex(GetText().getLength())
+                        && GetText()[sal_Int32(i)] == CH_TXTATR_NEWLINE)
+                    {
+                        continue;
+                    }
+                    if (i >= TextFrameIndex(GetText().getLength())
+                        || GetText()[sal_Int32(i)] != CH_BLANK)
+                    {
+                        sal_uInt16 nOldWidth = rPor.Width();
+                        sal_uInt16 nNewWidth = GetTextSize(m_pOut, nullptr,
+                            GetText(), nIdx, (i + TextFrameIndex(1) - nIdx)).Width();
+
+                        const_cast<SwLinePortion&>(rPor).Width( nNewWidth );
+                        CalcRect( rPor, nullptr, &aIntersect, true );
+                        const_cast<SwLinePortion&>(rPor).Width( nOldWidth );
+
+                        if ( !aIntersect.HasArea() )
                         {
-                            sal_uInt16 nOldWidth = rPor.Width();
-                            sal_uInt16 nNewWidth = GetTextSize(m_pOut, nullptr,
-                                GetText(), nIdx, (i + TextFrameIndex(1) - nIdx)).Width();
-
-                            const_cast<SwLinePortion&>(rPor).Width( nNewWidth );
-                            CalcRect( rPor, nullptr, &aIntersect, true );
-                            const_cast<SwLinePortion&>(rPor).Width( nOldWidth );
-
-                            if ( !aIntersect.HasArea() )
-                            {
-                                return;
-                            }
-
-                            break;
+                            return;
                         }
+
+                        break;
                     }
                 }
             }
         }
-
-        pTmpOut->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
-
-        pTmpOut->SetFillColor(aFillColor);
-        pTmpOut->SetLineColor();
-
-        DrawRect( aIntersect, false );
-
-        pTmpOut->Pop();
     }
+
+    pTmpOut->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
+
+    pTmpOut->SetFillColor(aFillColor);
+    pTmpOut->SetLineColor();
+
+    DrawRect( aIntersect, false );
+
+    pTmpOut->Pop();
 }
 
 void SwTextPaintInfo::DrawBorder( const SwLinePortion &rPor ) const
@@ -1315,58 +1315,58 @@ void SwTextPaintInfo::DrawBorder( const SwLinePortion &rPor ) const
 void SwTextPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
                                    PortionType nWhich ) const
 {
-    if( OnWin() && !IsMulti() )
+    if( !(OnWin() && !IsMulti()) )
+        return;
+
+    bool bDraw = false;
+    switch( nWhich )
     {
-        bool bDraw = false;
-        switch( nWhich )
+    case PortionType::Footnote:
+    case PortionType::QuoVadis:
+    case PortionType::Number:
+    case PortionType::Field:
+    case PortionType::Hidden:
+    case PortionType::Tox:
+    case PortionType::Ref:
+    case PortionType::Meta:
+    case PortionType::ControlChar:
+        if ( !GetOpt().IsPagePreview()
+             && !GetOpt().IsReadonly()
+             && SwViewOption::IsFieldShadings()
+             && ( PortionType::Number != nWhich
+                  || m_pFrame->GetTextNodeForParaProps()->HasMarkedLabel())) // #i27615#
         {
-        case PortionType::Footnote:
-        case PortionType::QuoVadis:
-        case PortionType::Number:
-        case PortionType::Field:
-        case PortionType::Hidden:
-        case PortionType::Tox:
-        case PortionType::Ref:
-        case PortionType::Meta:
-        case PortionType::ControlChar:
-            if ( !GetOpt().IsPagePreview()
-                 && !GetOpt().IsReadonly()
-                 && SwViewOption::IsFieldShadings()
-                 && ( PortionType::Number != nWhich
-                      || m_pFrame->GetTextNodeForParaProps()->HasMarkedLabel())) // #i27615#
-            {
-                bDraw = PortionType::Footnote != nWhich || m_pFrame->IsFootnoteAllowed();
-            }
-            break;
-        case PortionType::Bookmark:
-            // no shading
-            break;
-        case PortionType::InputField:
-            // input field shading also in read-only mode
-            if ( !GetOpt().IsPagePreview()
-                 && SwViewOption::IsFieldShadings() )
-            {
-                bDraw = true;
-            }
-            break;
-        case PortionType::Table:
-            if ( GetOpt().IsTab() )     bDraw = true;
-            break;
-        case PortionType::SoftHyphen:
-            if ( GetOpt().IsSoftHyph() )bDraw = true;
-            break;
-        case PortionType::Blank:
-            if ( GetOpt().IsHardBlank())bDraw = true;
-            break;
-        default:
-            {
-                OSL_ENSURE( false, "SwTextPaintInfo::DrawViewOpt: don't know how to draw this" );
-                break;
-            }
+            bDraw = PortionType::Footnote != nWhich || m_pFrame->IsFootnoteAllowed();
         }
-        if ( bDraw )
-            DrawBackground( rPor );
+        break;
+    case PortionType::Bookmark:
+        // no shading
+        break;
+    case PortionType::InputField:
+        // input field shading also in read-only mode
+        if ( !GetOpt().IsPagePreview()
+             && SwViewOption::IsFieldShadings() )
+        {
+            bDraw = true;
+        }
+        break;
+    case PortionType::Table:
+        if ( GetOpt().IsTab() )     bDraw = true;
+        break;
+    case PortionType::SoftHyphen:
+        if ( GetOpt().IsSoftHyph() )bDraw = true;
+        break;
+    case PortionType::Blank:
+        if ( GetOpt().IsHardBlank())bDraw = true;
+        break;
+    default:
+        {
+            OSL_ENSURE( false, "SwTextPaintInfo::DrawViewOpt: don't know how to draw this" );
+            break;
+        }
     }
+    if ( bDraw )
+        DrawBackground( rPor );
 }
 
 static void lcl_InitHyphValues( PropertyValues &rVals,
@@ -1816,97 +1816,97 @@ SwTextSlot::SwTextSlot(
     }
 
     // The text is replaced ...
-    if( bOn )
-    {
-        pInf = const_cast<SwTextSizeInfo*>(pNew);
-        nIdx = pInf->GetIdx();
-        nLen = pInf->GetLen();
-        pOldText = &(pInf->GetText());
-        m_pOldCachedVclData = pInf->GetCachedVclData();
-        pInf->SetText( aText );
-        pInf->SetIdx(TextFrameIndex(0));
-        pInf->SetLen(bTextLen ? TextFrameIndex(pInf->GetText().getLength()) : pPor->GetLen());
-        pInf->SetCachedVclData(nullptr);
+    if( !bOn )
+        return;
 
-        // ST2
-        if ( bExgLists )
+    pInf = const_cast<SwTextSizeInfo*>(pNew);
+    nIdx = pInf->GetIdx();
+    nLen = pInf->GetLen();
+    pOldText = &(pInf->GetText());
+    m_pOldCachedVclData = pInf->GetCachedVclData();
+    pInf->SetText( aText );
+    pInf->SetIdx(TextFrameIndex(0));
+    pInf->SetLen(bTextLen ? TextFrameIndex(pInf->GetText().getLength()) : pPor->GetLen());
+    pInf->SetCachedVclData(nullptr);
+
+    // ST2
+    if ( !bExgLists )
+        return;
+
+    m_pOldSmartTagList = static_cast<SwTextPaintInfo*>(pInf)->GetSmartTags();
+    if (m_pOldSmartTagList)
+    {
+        std::pair<SwTextNode const*, sal_Int32> pos(pNew->GetTextFrame()->MapViewToModel(nIdx));
+        SwWrongList const*const pSmartTags(pos.first->GetSmartTags());
+        if (pSmartTags)
         {
-            m_pOldSmartTagList = static_cast<SwTextPaintInfo*>(pInf)->GetSmartTags();
-            if (m_pOldSmartTagList)
+            const sal_uInt16 nPos = pSmartTags->GetWrongPos(pos.second);
+            const sal_Int32 nListPos = pSmartTags->Pos(nPos);
+            if (nListPos == pos.second && pSmartTags->SubList(nPos) != nullptr)
             {
-                std::pair<SwTextNode const*, sal_Int32> pos(pNew->GetTextFrame()->MapViewToModel(nIdx));
-                SwWrongList const*const pSmartTags(pos.first->GetSmartTags());
-                if (pSmartTags)
-                {
-                    const sal_uInt16 nPos = pSmartTags->GetWrongPos(pos.second);
-                    const sal_Int32 nListPos = pSmartTags->Pos(nPos);
-                    if (nListPos == pos.second && pSmartTags->SubList(nPos) != nullptr)
-                    {
-                        m_pTempIter.reset(new sw::WrongListIterator(*pSmartTags->SubList(nPos)));
-                        static_cast<SwTextPaintInfo*>(pInf)->SetSmartTags(m_pTempIter.get());
-                    }
-                    else if (!m_pTempList && nPos < pSmartTags->Count()
-                                && nListPos < pos.second && !aText.isEmpty())
-                    {
-                        m_pTempList.reset(new SwWrongList( WRONGLIST_SMARTTAG ));
-                        m_pTempList->Insert( OUString(), nullptr, 0, aText.getLength(), 0 );
-                        m_pTempIter.reset(new sw::WrongListIterator(*m_pTempList));
-                        static_cast<SwTextPaintInfo*>(pInf)->SetSmartTags(m_pTempIter.get());
-                    }
-                    else
-                        static_cast<SwTextPaintInfo*>(pInf)->SetSmartTags(nullptr);
-                }
-                else
-                    static_cast<SwTextPaintInfo*>(pInf)->SetSmartTags(nullptr);
+                m_pTempIter.reset(new sw::WrongListIterator(*pSmartTags->SubList(nPos)));
+                static_cast<SwTextPaintInfo*>(pInf)->SetSmartTags(m_pTempIter.get());
             }
-            m_pOldGrammarCheckList = static_cast<SwTextPaintInfo*>(pInf)->GetGrammarCheckList();
-            if (m_pOldGrammarCheckList)
+            else if (!m_pTempList && nPos < pSmartTags->Count()
+                        && nListPos < pos.second && !aText.isEmpty())
             {
-                std::pair<SwTextNode const*, sal_Int32> pos(pNew->GetTextFrame()->MapViewToModel(nIdx));
-                SwWrongList const*const pGrammar(pos.first->GetGrammarCheck());
-                if (pGrammar)
-                {
-                    const sal_uInt16 nPos = pGrammar->GetWrongPos(pos.second);
-                    const sal_Int32 nListPos = pGrammar->Pos(nPos);
-                    if (nListPos == pos.second && pGrammar->SubList(nPos) != nullptr)
-                    {
-                        m_pTempIter.reset(new sw::WrongListIterator(*pGrammar->SubList(nPos)));
-                        static_cast<SwTextPaintInfo*>(pInf)->SetGrammarCheckList(m_pTempIter.get());
-                    }
-                    else if (!m_pTempList && nPos < pGrammar->Count()
-                                && nListPos < pos.second && !aText.isEmpty())
-                    {
-                        m_pTempList.reset(new SwWrongList( WRONGLIST_GRAMMAR ));
-                        m_pTempList->Insert( OUString(), nullptr, 0, aText.getLength(), 0 );
-                        m_pTempIter.reset(new sw::WrongListIterator(*m_pTempList));
-                        static_cast<SwTextPaintInfo*>(pInf)->SetGrammarCheckList(m_pTempIter.get());
-                    }
-                    else
-                        static_cast<SwTextPaintInfo*>(pInf)->SetGrammarCheckList(nullptr);
-                }
-                else
-                    static_cast<SwTextPaintInfo*>(pInf)->SetGrammarCheckList(nullptr);
+                m_pTempList.reset(new SwWrongList( WRONGLIST_SMARTTAG ));
+                m_pTempList->Insert( OUString(), nullptr, 0, aText.getLength(), 0 );
+                m_pTempIter.reset(new sw::WrongListIterator(*m_pTempList));
+                static_cast<SwTextPaintInfo*>(pInf)->SetSmartTags(m_pTempIter.get());
             }
+            else
+                static_cast<SwTextPaintInfo*>(pInf)->SetSmartTags(nullptr);
         }
+        else
+            static_cast<SwTextPaintInfo*>(pInf)->SetSmartTags(nullptr);
     }
+    m_pOldGrammarCheckList = static_cast<SwTextPaintInfo*>(pInf)->GetGrammarCheckList();
+    if (!m_pOldGrammarCheckList)
+        return;
+
+    std::pair<SwTextNode const*, sal_Int32> pos(pNew->GetTextFrame()->MapViewToModel(nIdx));
+    SwWrongList const*const pGrammar(pos.first->GetGrammarCheck());
+    if (pGrammar)
+    {
+        const sal_uInt16 nPos = pGrammar->GetWrongPos(pos.second);
+        const sal_Int32 nListPos = pGrammar->Pos(nPos);
+        if (nListPos == pos.second && pGrammar->SubList(nPos) != nullptr)
+        {
+            m_pTempIter.reset(new sw::WrongListIterator(*pGrammar->SubList(nPos)));
+            static_cast<SwTextPaintInfo*>(pInf)->SetGrammarCheckList(m_pTempIter.get());
+        }
+        else if (!m_pTempList && nPos < pGrammar->Count()
+                    && nListPos < pos.second && !aText.isEmpty())
+        {
+            m_pTempList.reset(new SwWrongList( WRONGLIST_GRAMMAR ));
+            m_pTempList->Insert( OUString(), nullptr, 0, aText.getLength(), 0 );
+            m_pTempIter.reset(new sw::WrongListIterator(*m_pTempList));
+            static_cast<SwTextPaintInfo*>(pInf)->SetGrammarCheckList(m_pTempIter.get());
+        }
+        else
+            static_cast<SwTextPaintInfo*>(pInf)->SetGrammarCheckList(nullptr);
+    }
+    else
+        static_cast<SwTextPaintInfo*>(pInf)->SetGrammarCheckList(nullptr);
 }
 
 SwTextSlot::~SwTextSlot()
 {
-    if( bOn )
-    {
-        pInf->SetCachedVclData(m_pOldCachedVclData);
-        pInf->SetText( *pOldText );
-        pInf->SetIdx( nIdx );
-        pInf->SetLen( nLen );
+    if( !bOn )
+        return;
 
-        // ST2
-        // Restore old smart tag list
-        if (m_pOldSmartTagList)
-            static_cast<SwTextPaintInfo*>(pInf)->SetSmartTags(m_pOldSmartTagList);
-        if (m_pOldGrammarCheckList)
-            static_cast<SwTextPaintInfo*>(pInf)->SetGrammarCheckList(m_pOldGrammarCheckList);
-    }
+    pInf->SetCachedVclData(m_pOldCachedVclData);
+    pInf->SetText( *pOldText );
+    pInf->SetIdx( nIdx );
+    pInf->SetLen( nLen );
+
+    // ST2
+    // Restore old smart tag list
+    if (m_pOldSmartTagList)
+        static_cast<SwTextPaintInfo*>(pInf)->SetSmartTags(m_pOldSmartTagList);
+    if (m_pOldGrammarCheckList)
+        static_cast<SwTextPaintInfo*>(pInf)->SetGrammarCheckList(m_pOldGrammarCheckList);
 }
 
 SwFontSave::SwFontSave(const SwTextSizeInfo &rInf, SwFont *pNew,
@@ -1915,33 +1915,33 @@ SwFontSave::SwFontSave(const SwTextSizeInfo &rInf, SwFont *pNew,
     , pFnt(pNew ? const_cast<SwTextSizeInfo&>(rInf).GetFont() : nullptr)
     , pIter(nullptr)
 {
-    if( pFnt )
+    if( !pFnt )
+        return;
+
+    pInf = &const_cast<SwTextSizeInfo&>(rInf);
+    // In these cases we temporarily switch to the new font:
+    // 1. the fonts have a different magic number
+    // 2. they have different script types
+    // 3. their background colors differ (this is not covered by 1.)
+    if( pFnt->DifferentFontCacheId( pNew, pFnt->GetActual() ) ||
+        pNew->GetActual() != pFnt->GetActual() ||
+        ( ! pNew->GetBackColor() && pFnt->GetBackColor() ) ||
+        ( pNew->GetBackColor() && ! pFnt->GetBackColor() ) ||
+        ( pNew->GetBackColor() && pFnt->GetBackColor() &&
+          ( *pNew->GetBackColor() != *pFnt->GetBackColor() ) ) )
     {
-        pInf = &const_cast<SwTextSizeInfo&>(rInf);
-        // In these cases we temporarily switch to the new font:
-        // 1. the fonts have a different magic number
-        // 2. they have different script types
-        // 3. their background colors differ (this is not covered by 1.)
-        if( pFnt->DifferentFontCacheId( pNew, pFnt->GetActual() ) ||
-            pNew->GetActual() != pFnt->GetActual() ||
-            ( ! pNew->GetBackColor() && pFnt->GetBackColor() ) ||
-            ( pNew->GetBackColor() && ! pFnt->GetBackColor() ) ||
-            ( pNew->GetBackColor() && pFnt->GetBackColor() &&
-              ( *pNew->GetBackColor() != *pFnt->GetBackColor() ) ) )
-        {
-            pNew->SetTransparent( true );
-            pNew->SetAlign( ALIGN_BASELINE );
-            pInf->SetFont( pNew );
-        }
-        else
-            pFnt = nullptr;
-        pNew->Invalidate();
-        pNew->ChgPhysFnt( pInf->GetVsh(), *pInf->GetOut() );
-        if( pItr && pItr->GetFnt() == pFnt )
-        {
-            pIter = pItr;
-            pIter->SetFnt( pNew );
-        }
+        pNew->SetTransparent( true );
+        pNew->SetAlign( ALIGN_BASELINE );
+        pInf->SetFont( pNew );
+    }
+    else
+        pFnt = nullptr;
+    pNew->Invalidate();
+    pNew->ChgPhysFnt( pInf->GetVsh(), *pInf->GetOut() );
+    if( pItr && pItr->GetFnt() == pFnt )
+    {
+        pIter = pItr;
+        pIter->SetFnt( pNew );
     }
 }
 

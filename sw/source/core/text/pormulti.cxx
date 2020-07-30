@@ -103,20 +103,20 @@ void SwMultiPortion::CalcSize( SwTextFormatter& rLine, SwTextFormatInfo &rInf )
             Width( pLay->Width() );
         pLay = pLay->GetNext();
     } while ( pLay );
-    if( HasBrackets() )
+    if( !HasBrackets() )
+        return;
+
+    sal_uInt16 nTmp = static_cast<SwDoubleLinePortion*>(this)->GetBrackets()->nHeight;
+    if( nTmp > Height() )
     {
-        sal_uInt16 nTmp = static_cast<SwDoubleLinePortion*>(this)->GetBrackets()->nHeight;
-        if( nTmp > Height() )
-        {
-            const sal_uInt16 nAdd = ( nTmp - Height() ) / 2;
-            GetRoot().SetAscent( GetRoot().GetAscent() + nAdd );
-            GetRoot().Height( GetRoot().Height() + nAdd );
-            Height( nTmp );
-        }
-        nTmp = static_cast<SwDoubleLinePortion*>(this)->GetBrackets()->nAscent;
-        if( nTmp > GetAscent() )
-            SetAscent( nTmp );
+        const sal_uInt16 nAdd = ( nTmp - Height() ) / 2;
+        GetRoot().SetAscent( GetRoot().GetAscent() + nAdd );
+        GetRoot().Height( GetRoot().Height() + nAdd );
+        Height( nTmp );
     }
+    nTmp = static_cast<SwDoubleLinePortion*>(this)->GetBrackets()->nAscent;
+    if( nTmp > GetAscent() )
+        SetAscent( nTmp );
 }
 
 long SwMultiPortion::CalcSpacing( long , const SwTextSizeInfo & ) const

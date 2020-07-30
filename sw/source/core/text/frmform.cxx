@@ -116,20 +116,20 @@ void SwTextFrame::ValidateFrame()
 static void ValidateBodyFrame_( SwFrame *pFrame )
 {
     vcl::RenderContext* pRenderContext = pFrame ? pFrame->getRootFrame()->GetCurrShell()->GetOut() : nullptr;
-    if( pFrame && !pFrame->IsCellFrame() )
+    if( !(pFrame && !pFrame->IsCellFrame()) )
+        return;
+
+    if( !pFrame->IsBodyFrame() && pFrame->GetUpper() )
+        ValidateBodyFrame_( pFrame->GetUpper() );
+    if( !pFrame->IsSctFrame() )
+        pFrame->Calc(pRenderContext);
+    else
     {
-        if( !pFrame->IsBodyFrame() && pFrame->GetUpper() )
-            ValidateBodyFrame_( pFrame->GetUpper() );
-        if( !pFrame->IsSctFrame() )
-            pFrame->Calc(pRenderContext);
-        else
-        {
-            const bool bOld = static_cast<SwSectionFrame*>(pFrame)->IsContentLocked();
-            static_cast<SwSectionFrame*>(pFrame)->SetContentLock( true );
-            pFrame->Calc(pRenderContext);
-            if( !bOld )
-                static_cast<SwSectionFrame*>(pFrame)->SetContentLock( false );
-        }
+        const bool bOld = static_cast<SwSectionFrame*>(pFrame)->IsContentLocked();
+        static_cast<SwSectionFrame*>(pFrame)->SetContentLock( true );
+        pFrame->Calc(pRenderContext);
+        if( !bOld )
+            static_cast<SwSectionFrame*>(pFrame)->SetContentLock( false );
     }
 }
 
@@ -338,22 +338,22 @@ void SwTextFrame::MakePos()
 {
     SwFrame::MakePos();
     // Inform LOK clients about change in position of redlines (if any)
-    if(comphelper::LibreOfficeKit::isActive())
+    if(!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    SwTextNode const* pTextNode = GetTextNodeFirst();
+    const SwRedlineTable& rTable = pTextNode->getIDocumentRedlineAccess().GetRedlineTable();
+    for (SwRedlineTable::size_type nRedlnPos = 0; nRedlnPos < rTable.size(); ++nRedlnPos)
     {
-        SwTextNode const* pTextNode = GetTextNodeFirst();
-        const SwRedlineTable& rTable = pTextNode->getIDocumentRedlineAccess().GetRedlineTable();
-        for (SwRedlineTable::size_type nRedlnPos = 0; nRedlnPos < rTable.size(); ++nRedlnPos)
+        SwRangeRedline* pRedln = rTable[nRedlnPos];
+        if (pTextNode->GetIndex() == pRedln->GetPoint()->nNode.GetNode().GetIndex())
         {
-            SwRangeRedline* pRedln = rTable[nRedlnPos];
-            if (pTextNode->GetIndex() == pRedln->GetPoint()->nNode.GetNode().GetIndex())
+            pRedln->MaybeNotifyRedlinePositionModification(getFrameArea().Top());
+            if (GetMergedPara()
+                && pRedln->GetType() == RedlineType::Delete
+                && pRedln->GetPoint()->nNode != pRedln->GetMark()->nNode)
             {
-                pRedln->MaybeNotifyRedlinePositionModification(getFrameArea().Top());
-                if (GetMergedPara()
-                    && pRedln->GetType() == RedlineType::Delete
-                    && pRedln->GetPoint()->nNode != pRedln->GetMark()->nNode)
-                {
-                    pTextNode = pRedln->End()->nNode.GetNode().GetTextNode();
-                }
+                pTextNode = pRedln->End()->nNode.GetNode().GetTextNode();
             }
         }
     }
@@ -1603,24 +1603,24 @@ void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
         }
     }
 
-    if( !rInf.IsTest() )
+    if( rInf.IsTest() )
+        return;
+
+    // FormatAdjust does not pay off at OnceMore
+    if( bAdjust || !rLine.GetDropFormat() || !rLine.CalcOnceMore() )
     {
-        // FormatAdjust does not pay off at OnceMore
-        if( bAdjust || !rLine.GetDropFormat() || !rLine.CalcOnceMore() )
-        {
-            FormatAdjust( rLine, aFrameBreak, nStrLen, rInf.IsStop() );
-        }
-        if( rRepaint.HasArea() )
-            SetRepaint();
-        rLine.SetTruncLines( false );
-        if( nOldBottom ) // We check whether paragraphs that need scrolling can
-                         // be shrunk, so that they don't need scrolling anymore
-        {
-            rLine.Bottom();
-            SwTwips nNewBottom = rLine.Y();
-            if( nNewBottom < nOldBottom )
-                SetOffset_(TextFrameIndex(0));
-        }
+        FormatAdjust( rLine, aFrameBreak, nStrLen, rInf.IsStop() );
+    }
+    if( rRepaint.HasArea() )
+        SetRepaint();
+    rLine.SetTruncLines( false );
+    if( nOldBottom ) // We check whether paragraphs that need scrolling can
+                     // be shrunk, so that they don't need scrolling anymore
+    {
+        rLine.Bottom();
+        SwTwips nNewBottom = rLine.Y();
+        if( nNewBottom < nOldBottom )
+            SetOffset_(TextFrameIndex(0));
     }
 }
 
@@ -1726,20 +1726,20 @@ void SwTextFrame::Format_( vcl::RenderContext* pRenderContext, SwParaPortion *pP
 
     OSL_ENSURE( ! IsSwapped(), "A frame is swapped after Format_" );
 
-    if( 1 < aLine.GetDropLines() )
-    {
-        if( SvxAdjust::Left != aLine.GetAdjust() &&
-            SvxAdjust::Block != aLine.GetAdjust() )
-        {
-            aLine.CalcDropAdjust();
-            aLine.SetPaintDrop( true );
-        }
+    if( 1 >= aLine.GetDropLines() )
+        return;
 
-        if( aLine.IsPaintDrop() )
-        {
-            aLine.CalcDropRepaint();
-            aLine.SetPaintDrop( false );
-        }
+    if( SvxAdjust::Left != aLine.GetAdjust() &&
+        SvxAdjust::Block != aLine.GetAdjust() )
+    {
+        aLine.CalcDropAdjust();
+        aLine.SetPaintDrop( true );
+    }
+
+    if( aLine.IsPaintDrop() )
+    {
+        aLine.CalcDropRepaint();
+        aLine.SetPaintDrop( false );
     }
 }
 

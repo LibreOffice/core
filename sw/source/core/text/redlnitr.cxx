@@ -444,47 +444,47 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
     }
     const bool bShow = IDocumentRedlineAccess::IsShowChanges(rIDRA.GetRedlineFlags())
         && pRootFrame && !pRootFrame->IsHideRedlines();
-    if (pExtInp || m_pMergedPara || bShow)
+    if (!(pExtInp || m_pMergedPara || bShow))
+        return;
+
+    SwRedlineTable::size_type nRedlPos = rIDRA.GetRedlinePos( rTextNode, RedlineType::Any );
+    if (SwRedlineTable::npos == nRedlPos && m_pMergedPara)
     {
-        SwRedlineTable::size_type nRedlPos = rIDRA.GetRedlinePos( rTextNode, RedlineType::Any );
-        if (SwRedlineTable::npos == nRedlPos && m_pMergedPara)
-        {
-            SwTextNode const* pNode(&rTextNode);
-            for (auto const& rExtent : m_pMergedPara->extents)
-            {   // note: have to search because extents based only on Delete
-                if (rExtent.pNode != pNode)
-                {
-                    pNode = rExtent.pNode;
-                    nRedlPos = rIDRA.GetRedlinePos(*pNode, RedlineType::Any);
-                    if (SwRedlineTable::npos != nRedlPos)
-                        break;
-                }
-            }
-            // TODO this is true initially but after delete ops it may be false... need to delete m_pMerged somewhere?
-            // assert(SwRedlineTable::npos != nRedlPos);
-            assert(SwRedlineTable::npos != nRedlPos || m_pMergedPara->extents.size() <= 1);
-        }
-        if (pExtInp || m_pMergedPara || SwRedlineTable::npos != nRedlPos)
-        {
-            const std::vector<ExtTextInputAttr> *pArr = nullptr;
-            if( pExtInp )
+        SwTextNode const* pNode(&rTextNode);
+        for (auto const& rExtent : m_pMergedPara->extents)
+        {   // note: have to search because extents based only on Delete
+            if (rExtent.pNode != pNode)
             {
-                pArr = &pExtInp->GetAttrs();
-                Seek( TextFrameIndex(0) );
+                pNode = rExtent.pNode;
+                nRedlPos = rIDRA.GetRedlinePos(*pNode, RedlineType::Any);
+                if (SwRedlineTable::npos != nRedlPos)
+                    break;
             }
-
-            m_pRedline.reset(new SwRedlineItr( rTextNode, *m_pFont, m_aAttrHandler, nRedlPos,
-                            m_pMergedPara
-                                ? SwRedlineItr::Mode::Hide
-                                : bShow
-                                    ? SwRedlineItr::Mode::Show
-                                    : SwRedlineItr::Mode::Ignore,
-                            pArr, pExtInp ? pExtInp->Start() : nullptr));
-
-            if( m_pRedline->IsOn() )
-                ++m_nChgCnt;
         }
+        // TODO this is true initially but after delete ops it may be false... need to delete m_pMerged somewhere?
+        // assert(SwRedlineTable::npos != nRedlPos);
+        assert(SwRedlineTable::npos != nRedlPos || m_pMergedPara->extents.size() <= 1);
     }
+    if (!(pExtInp || m_pMergedPara || SwRedlineTable::npos != nRedlPos))
+        return;
+
+    const std::vector<ExtTextInputAttr> *pArr = nullptr;
+    if( pExtInp )
+    {
+        pArr = &pExtInp->GetAttrs();
+        Seek( TextFrameIndex(0) );
+    }
+
+    m_pRedline.reset(new SwRedlineItr( rTextNode, *m_pFont, m_aAttrHandler, nRedlPos,
+                    m_pMergedPara
+                        ? SwRedlineItr::Mode::Hide
+                        : bShow
+                            ? SwRedlineItr::Mode::Show
+                            : SwRedlineItr::Mode::Ignore,
+                    pArr, pExtInp ? pExtInp->Start() : nullptr));
+
+    if( m_pRedline->IsOn() )
+        ++m_nChgCnt;
 }
 
 // The Redline-Iterator

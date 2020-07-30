@@ -158,26 +158,26 @@ SwFieldSlot::SwFieldSlot( const SwTextFormatInfo* pNew, const SwFieldPortion *pP
     bOn = pPor->GetExpText( *pNew, aText );
 
     // The text will be replaced ...
-    if( bOn )
+    if( !bOn )
+        return;
+
+    pInf = const_cast<SwTextFormatInfo*>(pNew);
+    nIdx = pInf->GetIdx();
+    nLen = pInf->GetLen();
+    pOldText = &(pInf->GetText());
+    m_pOldCachedVclData = pInf->GetCachedVclData();
+    pInf->SetLen(TextFrameIndex(aText.getLength()));
+    pInf->SetCachedVclData(nullptr);
+    if( pPor->IsFollow() )
     {
-        pInf = const_cast<SwTextFormatInfo*>(pNew);
-        nIdx = pInf->GetIdx();
-        nLen = pInf->GetLen();
-        pOldText = &(pInf->GetText());
-        m_pOldCachedVclData = pInf->GetCachedVclData();
-        pInf->SetLen(TextFrameIndex(aText.getLength()));
-        pInf->SetCachedVclData(nullptr);
-        if( pPor->IsFollow() )
-        {
-            pInf->SetFakeLineStart( nIdx > pInf->GetLineStart() );
-            pInf->SetIdx(TextFrameIndex(0));
-        }
-        else if (nIdx < TextFrameIndex(pOldText->getLength()))
-        {
-            aText = (*pOldText).replaceAt(sal_Int32(nIdx), 1, aText);
-        }
-        pInf->SetText( aText );
+        pInf->SetFakeLineStart( nIdx > pInf->GetLineStart() );
+        pInf->SetIdx(TextFrameIndex(0));
     }
+    else if (nIdx < TextFrameIndex(pOldText->getLength()))
+    {
+        aText = (*pOldText).replaceAt(sal_Int32(nIdx), 1, aText);
+    }
+    pInf->SetText( aText );
 }
 
 SwFieldSlot::~SwFieldSlot()
@@ -660,77 +660,77 @@ void SwNumberPortion::Paint( const SwTextPaintInfo &rInf ) const
         pThis->Width( nOldWidth );
     }
 
-    if( !m_aExpand.isEmpty() )
+    if( m_aExpand.isEmpty() )
+        return;
+
+    const SwFont *pTmpFnt = rInf.GetFont();
+    bool bPaintSpace = ( LINESTYLE_NONE != pTmpFnt->GetUnderline() ||
+                             LINESTYLE_NONE != pTmpFnt->GetOverline()  ||
+                             STRIKEOUT_NONE != pTmpFnt->GetStrikeout() ) &&
+                             !pTmpFnt->IsWordLineMode();
+    if( bPaintSpace && m_pFont )
+        bPaintSpace = ( LINESTYLE_NONE != m_pFont->GetUnderline() ||
+                        LINESTYLE_NONE != m_pFont->GetOverline()  ||
+                        STRIKEOUT_NONE != m_pFont->GetStrikeout() ) &&
+                        !m_pFont->IsWordLineMode();
+
+    SwFontSave aSave( rInf, m_pFont.get() );
+
+    if( nFixWidth == Width() && ! HasFollow() )
+        SwExpandPortion::Paint( rInf );
+    else
     {
-        const SwFont *pTmpFnt = rInf.GetFont();
-        bool bPaintSpace = ( LINESTYLE_NONE != pTmpFnt->GetUnderline() ||
-                                 LINESTYLE_NONE != pTmpFnt->GetOverline()  ||
-                                 STRIKEOUT_NONE != pTmpFnt->GetStrikeout() ) &&
-                                 !pTmpFnt->IsWordLineMode();
-        if( bPaintSpace && m_pFont )
-            bPaintSpace = ( LINESTYLE_NONE != m_pFont->GetUnderline() ||
-                            LINESTYLE_NONE != m_pFont->GetOverline()  ||
-                            STRIKEOUT_NONE != m_pFont->GetStrikeout() ) &&
-                            !m_pFont->IsWordLineMode();
+        // logical const: reset width
+        SwNumberPortion *pThis = const_cast<SwNumberPortion*>(this);
+        bPaintSpace = bPaintSpace && nFixWidth < nOldWidth;
+        sal_uInt16 nSpaceOffs = nFixWidth;
+        pThis->Width( nFixWidth );
 
-        SwFontSave aSave( rInf, m_pFont.get() );
-
-        if( nFixWidth == Width() && ! HasFollow() )
+        if( ( IsLeft() && ! rInf.GetTextFrame()->IsRightToLeft() ) ||
+            ( ! IsLeft() && ! IsCenter() && rInf.GetTextFrame()->IsRightToLeft() ) )
             SwExpandPortion::Paint( rInf );
         else
         {
-            // logical const: reset width
-            SwNumberPortion *pThis = const_cast<SwNumberPortion*>(this);
-            bPaintSpace = bPaintSpace && nFixWidth < nOldWidth;
-            sal_uInt16 nSpaceOffs = nFixWidth;
-            pThis->Width( nFixWidth );
-
-            if( ( IsLeft() && ! rInf.GetTextFrame()->IsRightToLeft() ) ||
-                ( ! IsLeft() && ! IsCenter() && rInf.GetTextFrame()->IsRightToLeft() ) )
-                SwExpandPortion::Paint( rInf );
+            SwTextPaintInfo aInf( rInf );
+            if( nOffset < nMinDist )
+                nOffset = 0;
             else
             {
-                SwTextPaintInfo aInf( rInf );
-                if( nOffset < nMinDist )
-                    nOffset = 0;
+                if( IsCenter() )
+                {
+                    /* #110778# a / 2 * 2 == a is not a tautology */
+                    sal_uInt16 nTmpOffset = nOffset;
+                    nOffset /= 2;
+                    if( nOffset < nMinDist )
+                        nOffset = nTmpOffset - nMinDist;
+                }
                 else
-                {
-                    if( IsCenter() )
-                    {
-                        /* #110778# a / 2 * 2 == a is not a tautology */
-                        sal_uInt16 nTmpOffset = nOffset;
-                        nOffset /= 2;
-                        if( nOffset < nMinDist )
-                            nOffset = nTmpOffset - nMinDist;
-                    }
-                    else
-                        nOffset = nOffset - nMinDist;
-                }
-                aInf.X( aInf.X() + nOffset );
-                SwExpandPortion::Paint( aInf );
-                if( bPaintSpace )
-                    nSpaceOffs = nSpaceOffs + nOffset;
+                    nOffset = nOffset - nMinDist;
             }
-            if( bPaintSpace && nOldWidth > nSpaceOffs )
-            {
-                SwTextPaintInfo aInf( rInf );
-                aInf.X( aInf.X() + nSpaceOffs );
-
-                // #i53199# Adjust position of underline:
-                if ( rInf.GetUnderFnt() )
-                {
-                    const Point aNewPos( aInf.GetPos().X(), rInf.GetUnderFnt()->GetPos().Y() );
-                    rInf.GetUnderFnt()->SetPos( aNewPos );
-                }
-
-                pThis->Width( nOldWidth - nSpaceOffs + 12 );
-                {
-                    SwTextSlot aDiffText( &aInf, this, true, false, "  " );
-                    aInf.DrawText( *this, aInf.GetLen(), true );
-                }
-            }
-            pThis->Width( nOldWidth );
+            aInf.X( aInf.X() + nOffset );
+            SwExpandPortion::Paint( aInf );
+            if( bPaintSpace )
+                nSpaceOffs = nSpaceOffs + nOffset;
         }
+        if( bPaintSpace && nOldWidth > nSpaceOffs )
+        {
+            SwTextPaintInfo aInf( rInf );
+            aInf.X( aInf.X() + nSpaceOffs );
+
+            // #i53199# Adjust position of underline:
+            if ( rInf.GetUnderFnt() )
+            {
+                const Point aNewPos( aInf.GetPos().X(), rInf.GetUnderFnt()->GetPos().Y() );
+                rInf.GetUnderFnt()->SetPos( aNewPos );
+            }
+
+            pThis->Width( nOldWidth - nSpaceOffs + 12 );
+            {
+                SwTextSlot aDiffText( &aInf, this, true, false, "  " );
+                aInf.DrawText( *this, aInf.GetLen(), true );
+            }
+        }
+        pThis->Width( nOldWidth );
     }
 }
 
@@ -998,59 +998,59 @@ void SwGrfNumPortion::Paint( const SwTextPaintInfo &rInf ) const
 void SwGrfNumPortion::SetBase( long nLnAscent, long nLnDescent,
                                long nFlyAsc, long nFlyDesc )
 {
-    if ( GetOrient() != text::VertOrientation::NONE )
+    if ( GetOrient() == text::VertOrientation::NONE )
+        return;
+
+    SetRelPos( 0 );
+    if ( GetOrient() == text::VertOrientation::CENTER )
+        SetRelPos( GetGrfHeight() / 2 );
+    else if ( GetOrient() == text::VertOrientation::TOP )
+        SetRelPos( GetGrfHeight() - GRFNUM_SECURE );
+    else if ( GetOrient() == text::VertOrientation::BOTTOM )
+        ;
+    else if ( GetOrient() == text::VertOrientation::CHAR_CENTER )
+        SetRelPos( ( GetGrfHeight() + nLnAscent - nLnDescent ) / 2 );
+    else if ( GetOrient() == text::VertOrientation::CHAR_TOP )
+        SetRelPos( nLnAscent );
+    else if ( GetOrient() == text::VertOrientation::CHAR_BOTTOM )
+        SetRelPos( GetGrfHeight() - nLnDescent );
+    else
     {
-        SetRelPos( 0 );
-        if ( GetOrient() == text::VertOrientation::CENTER )
-            SetRelPos( GetGrfHeight() / 2 );
-        else if ( GetOrient() == text::VertOrientation::TOP )
-            SetRelPos( GetGrfHeight() - GRFNUM_SECURE );
-        else if ( GetOrient() == text::VertOrientation::BOTTOM )
-            ;
-        else if ( GetOrient() == text::VertOrientation::CHAR_CENTER )
-            SetRelPos( ( GetGrfHeight() + nLnAscent - nLnDescent ) / 2 );
-        else if ( GetOrient() == text::VertOrientation::CHAR_TOP )
-            SetRelPos( nLnAscent );
-        else if ( GetOrient() == text::VertOrientation::CHAR_BOTTOM )
-            SetRelPos( GetGrfHeight() - nLnDescent );
-        else
+        if( GetGrfHeight() >= nFlyAsc + nFlyDesc )
         {
-            if( GetGrfHeight() >= nFlyAsc + nFlyDesc )
-            {
-                // If I'm as large as the line, I do not need to adjust
-                // at the line; I'll leave the max. ascent unchanged
-                SetRelPos( nFlyAsc );
-            }
-            else if ( GetOrient() == text::VertOrientation::LINE_CENTER )
-                SetRelPos( ( GetGrfHeight() + nFlyAsc - nFlyDesc ) / 2 );
-            else if ( GetOrient() == text::VertOrientation::LINE_TOP )
-                SetRelPos( nFlyAsc );
-            else if ( GetOrient() == text::VertOrientation::LINE_BOTTOM )
-                SetRelPos( GetGrfHeight() - nFlyDesc );
+            // If I'm as large as the line, I do not need to adjust
+            // at the line; I'll leave the max. ascent unchanged
+            SetRelPos( nFlyAsc );
         }
+        else if ( GetOrient() == text::VertOrientation::LINE_CENTER )
+            SetRelPos( ( GetGrfHeight() + nFlyAsc - nFlyDesc ) / 2 );
+        else if ( GetOrient() == text::VertOrientation::LINE_TOP )
+            SetRelPos( nFlyAsc );
+        else if ( GetOrient() == text::VertOrientation::LINE_BOTTOM )
+            SetRelPos( GetGrfHeight() - nFlyDesc );
     }
 }
 
 void SwTextFrame::StopAnimation( OutputDevice* pOut )
 {
     OSL_ENSURE( HasAnimation(), "SwTextFrame::StopAnimation: Which Animation?" );
-    if( HasPara() )
+    if( !HasPara() )
+        return;
+
+    SwLineLayout *pLine = GetPara();
+    while( pLine )
     {
-        SwLineLayout *pLine = GetPara();
-        while( pLine )
+        SwLinePortion *pPor = pLine->GetNextPortion();
+        while( pPor )
         {
-            SwLinePortion *pPor = pLine->GetNextPortion();
-            while( pPor )
-            {
-                if( pPor->IsGrfNumPortion() )
-                    static_cast<SwGrfNumPortion*>(pPor)->StopAnimation( pOut );
-                // The NumberPortion is always at the first char,
-                // which means we can cancel as soon as we've reached a portion
-                // with a length > 0
-                pPor = pPor->GetLen() ? nullptr : pPor->GetNextPortion();
-            }
-            pLine = pLine->GetLen() ? nullptr : pLine->GetNext();
+            if( pPor->IsGrfNumPortion() )
+                static_cast<SwGrfNumPortion*>(pPor)->StopAnimation( pOut );
+            // The NumberPortion is always at the first char,
+            // which means we can cancel as soon as we've reached a portion
+            // with a length > 0
+            pPor = pPor->GetLen() ? nullptr : pPor->GetNextPortion();
         }
+        pLine = pLine->GetLen() ? nullptr : pLine->GetNext();
     }
 }
 

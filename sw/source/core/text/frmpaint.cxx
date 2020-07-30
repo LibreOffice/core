@@ -160,23 +160,23 @@ SwExtraPainter::SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
             m_nX += pFrame->getFrameArea().Width() + m_rLineInf.GetPosFromLeft();
         }
     }
-    if( eHor != text::HoriOrientation::NONE )
+    if( eHor == text::HoriOrientation::NONE )
+        return;
+
+    if( text::HoriOrientation::INSIDE == eHor || text::HoriOrientation::OUTSIDE == eHor )
     {
-        if( text::HoriOrientation::INSIDE == eHor || text::HoriOrientation::OUTSIDE == eHor )
-        {
-            if (!oIsRightPage)
-                oIsRightPage = pFrame->FindPageFrame()->OnRightPage();
-            if (*oIsRightPage)
-                eHor = eHor == text::HoriOrientation::INSIDE ? text::HoriOrientation::LEFT : text::HoriOrientation::RIGHT;
-            else
-                eHor = eHor == text::HoriOrientation::OUTSIDE ? text::HoriOrientation::LEFT : text::HoriOrientation::RIGHT;
-        }
-        const SwFrame* pTmpFrame = pFrame->FindTabFrame();
-        if( !pTmpFrame )
-            pTmpFrame = pFrame;
-        m_nRedX = text::HoriOrientation::LEFT == eHor ? pTmpFrame->getFrameArea().Left() - REDLINE_DISTANCE :
-            pTmpFrame->getFrameArea().Right() + REDLINE_DISTANCE;
+        if (!oIsRightPage)
+            oIsRightPage = pFrame->FindPageFrame()->OnRightPage();
+        if (*oIsRightPage)
+            eHor = eHor == text::HoriOrientation::INSIDE ? text::HoriOrientation::LEFT : text::HoriOrientation::RIGHT;
+        else
+            eHor = eHor == text::HoriOrientation::OUTSIDE ? text::HoriOrientation::LEFT : text::HoriOrientation::RIGHT;
     }
+    const SwFrame* pTmpFrame = pFrame->FindTabFrame();
+    if( !pTmpFrame )
+        pTmpFrame = pFrame;
+    m_nRedX = text::HoriOrientation::LEFT == eHor ? pTmpFrame->getFrameArea().Left() - REDLINE_DISTANCE :
+        pTmpFrame->getFrameArea().Right() + REDLINE_DISTANCE;
 }
 
 void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed )

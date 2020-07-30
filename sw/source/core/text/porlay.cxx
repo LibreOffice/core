@@ -2561,30 +2561,30 @@ void SwScriptInfo::selectRedLineDeleted(const SwTextNode& rNode, MultiSelection 
         || (rNode.GetText().getLength() == rHiddenMulti.GetTotalRange().Len()));
 
     const IDocumentRedlineAccess& rIDRA = rNode.getIDocumentRedlineAccess();
-    if ( IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineFlags() ) )
+    if ( !IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineFlags() ) )
+        return;
+
+    SwRedlineTable::size_type nAct = rIDRA.GetRedlinePos( rNode, RedlineType::Any );
+
+    for ( ; nAct < rIDRA.GetRedlineTable().size(); nAct++ )
     {
-        SwRedlineTable::size_type nAct = rIDRA.GetRedlinePos( rNode, RedlineType::Any );
+        const SwRangeRedline* pRed = rIDRA.GetRedlineTable()[ nAct ];
 
-        for ( ; nAct < rIDRA.GetRedlineTable().size(); nAct++ )
+        if (pRed->Start()->nNode > rNode.GetIndex())
+            break;
+
+        if (pRed->GetType() != RedlineType::Delete)
+            continue;
+
+        sal_Int32 nRedlStart;
+        sal_Int32 nRedlnEnd;
+        pRed->CalcStartEnd( rNode.GetIndex(), nRedlStart, nRedlnEnd );
+        //clip it if the redline extends past the end of the nodes text
+        nRedlnEnd = std::min<sal_Int32>(nRedlnEnd, rNode.GetText().getLength());
+        if ( nRedlnEnd > nRedlStart )
         {
-            const SwRangeRedline* pRed = rIDRA.GetRedlineTable()[ nAct ];
-
-            if (pRed->Start()->nNode > rNode.GetIndex())
-                break;
-
-            if (pRed->GetType() != RedlineType::Delete)
-                continue;
-
-            sal_Int32 nRedlStart;
-            sal_Int32 nRedlnEnd;
-            pRed->CalcStartEnd( rNode.GetIndex(), nRedlStart, nRedlnEnd );
-            //clip it if the redline extends past the end of the nodes text
-            nRedlnEnd = std::min<sal_Int32>(nRedlnEnd, rNode.GetText().getLength());
-            if ( nRedlnEnd > nRedlStart )
-            {
-                Range aTmp( nRedlStart, nRedlnEnd - 1 );
-                rHiddenMulti.Select( aTmp, bSelect );
-            }
+            Range aTmp( nRedlStart, nRedlnEnd - 1 );
+            rHiddenMulti.Select( aTmp, bSelect );
         }
     }
 }
@@ -2644,26 +2644,26 @@ void SwScriptInfo::CJKJustify( const OUString& rText, long* pKernArray,
                                      long nSpaceAdd, bool bIsSpaceStop )
 {
     assert( pKernArray != nullptr && sal_Int32(nStt) >= 0 );
-    if (sal_Int32(nLen) > 0)
+    if (sal_Int32(nLen) <= 0)
+        return;
+
+    long nSpaceSum = 0;
+    const lang::Locale &rLocale = g_pBreakIt->GetLocale( aLang );
+    sal_Int32 nDone = 0;
+    sal_Int32 nNext(nStt);
+    for ( sal_Int32 nI = 0; nI < sal_Int32(nLen); ++nI )
     {
-        long nSpaceSum = 0;
-        const lang::Locale &rLocale = g_pBreakIt->GetLocale( aLang );
-        sal_Int32 nDone = 0;
-        sal_Int32 nNext(nStt);
-        for ( sal_Int32 nI = 0; nI < sal_Int32(nLen); ++nI )
+        if (nI + sal_Int32(nStt) == nNext)
         {
-            if (nI + sal_Int32(nStt) == nNext)
-            {
-                nNext = g_pBreakIt->GetBreakIter()->nextCharacters( rText, nNext,
-                        rLocale,
-                        i18n::CharacterIteratorMode::SKIPCELL, 1, nDone );
-                if (nNext < sal_Int32(nStt + nLen) || !bIsSpaceStop)
-                    nSpaceSum += nSpaceAdd;
-            }
-            pKernArray[ nI ] += nSpaceSum;
-            if ( pScrArray )
-                pScrArray[ nI ] += nSpaceSum;
+            nNext = g_pBreakIt->GetBreakIter()->nextCharacters( rText, nNext,
+                    rLocale,
+                    i18n::CharacterIteratorMode::SKIPCELL, 1, nDone );
+            if (nNext < sal_Int32(nStt + nLen) || !bIsSpaceStop)
+                nSpaceSum += nSpaceAdd;
         }
+        pKernArray[ nI ] += nSpaceSum;
+        if ( pScrArray )
+            pScrArray[ nI ] += nSpaceSum;
     }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

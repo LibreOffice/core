@@ -262,44 +262,44 @@ WidowsAndOrphans::WidowsAndOrphans( SwTextFrame *pNewFrame, const SwTwips nRst,
 
     }
 
-    if ( m_bKeep || nWidLines || nOrphLines )
+    if ( !(m_bKeep || nWidLines || nOrphLines) )
+        return;
+
+    bool bResetFlags = false;
+
+    if ( m_pFrame->IsInTab() )
     {
-        bool bResetFlags = false;
-
-        if ( m_pFrame->IsInTab() )
+        // For compatibility reasons, we disable Keep/Widows/Orphans
+        // inside splittable row frames:
+        if ( m_pFrame->GetNextCellLeaf() || m_pFrame->IsInFollowFlowRow() )
         {
-            // For compatibility reasons, we disable Keep/Widows/Orphans
-            // inside splittable row frames:
-            if ( m_pFrame->GetNextCellLeaf() || m_pFrame->IsInFollowFlowRow() )
-            {
-                const SwFrame* pTmpFrame = m_pFrame->GetUpper();
-                while ( !pTmpFrame->IsRowFrame() )
-                    pTmpFrame = pTmpFrame->GetUpper();
-                if ( static_cast<const SwRowFrame*>(pTmpFrame)->IsRowSplitAllowed() )
-                    bResetFlags = true;
-            }
-        }
-
-        if( m_pFrame->IsInFootnote() && !m_pFrame->GetIndPrev() )
-        {
-            // Inside of footnotes there are good reasons to turn off the Keep attribute
-            // as well as Widows/Orphans.
-            SwFootnoteFrame *pFootnote = m_pFrame->FindFootnoteFrame();
-            const bool bFt = !pFootnote->GetAttr()->GetFootnote().IsEndNote();
-            if( !pFootnote->GetPrev() &&
-                pFootnote->FindFootnoteBossFrame( bFt ) != pFootnote->GetRef()->FindFootnoteBossFrame( bFt )
-                && ( !m_pFrame->IsInSct() || m_pFrame->FindSctFrame()->MoveAllowed(m_pFrame) ) )
-            {
+            const SwFrame* pTmpFrame = m_pFrame->GetUpper();
+            while ( !pTmpFrame->IsRowFrame() )
+                pTmpFrame = pTmpFrame->GetUpper();
+            if ( static_cast<const SwRowFrame*>(pTmpFrame)->IsRowSplitAllowed() )
                 bResetFlags = true;
-            }
         }
+    }
 
-        if ( bResetFlags )
+    if( m_pFrame->IsInFootnote() && !m_pFrame->GetIndPrev() )
+    {
+        // Inside of footnotes there are good reasons to turn off the Keep attribute
+        // as well as Widows/Orphans.
+        SwFootnoteFrame *pFootnote = m_pFrame->FindFootnoteFrame();
+        const bool bFt = !pFootnote->GetAttr()->GetFootnote().IsEndNote();
+        if( !pFootnote->GetPrev() &&
+            pFootnote->FindFootnoteBossFrame( bFt ) != pFootnote->GetRef()->FindFootnoteBossFrame( bFt )
+            && ( !m_pFrame->IsInSct() || m_pFrame->FindSctFrame()->MoveAllowed(m_pFrame) ) )
         {
-            m_bKeep = false;
-            nOrphLines = 0;
-            nWidLines = 0;
+            bResetFlags = true;
         }
+    }
+
+    if ( bResetFlags )
+    {
+        m_bKeep = false;
+        nOrphLines = 0;
+        nWidLines = 0;
     }
 }
 

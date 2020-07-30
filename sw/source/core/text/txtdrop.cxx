@@ -393,27 +393,27 @@ void SwDropPortion::PaintDrop( const SwTextPaintInfo &rInf ) const
 void SwDropPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     // normal output is being done here
-    if( ! nDropHeight || ! pPart || 1 == nLines )
+    if( !(! nDropHeight || ! pPart || 1 == nLines) )
+        return;
+
+    if ( rInf.OnWin() &&
+        !rInf.GetOpt().IsPagePreview() && !rInf.GetOpt().IsReadonly() && SwViewOption::IsFieldShadings()       )
+        rInf.DrawBackground( *this );
+
+    // make sure that font is not rotated
+    std::unique_ptr<SwFont> pTmpFont;
+    if ( rInf.GetFont()->GetOrientation( rInf.GetTextFrame()->IsVertical() ) )
     {
-        if ( rInf.OnWin() &&
-            !rInf.GetOpt().IsPagePreview() && !rInf.GetOpt().IsReadonly() && SwViewOption::IsFieldShadings()       )
-            rInf.DrawBackground( *this );
-
-        // make sure that font is not rotated
-        std::unique_ptr<SwFont> pTmpFont;
-        if ( rInf.GetFont()->GetOrientation( rInf.GetTextFrame()->IsVertical() ) )
-        {
-            pTmpFont.reset(new SwFont( *rInf.GetFont() ));
-            pTmpFont->SetVertical( 0, rInf.GetTextFrame()->IsVertical() );
-        }
-
-        SwFontSave aFontSave( rInf, pTmpFont.get() );
-        // for text inside drop portions we let vcl handle the text directions
-        SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
-        aLayoutModeModifier.SetAuto();
-
-        SwTextPortion::Paint( rInf );
+        pTmpFont.reset(new SwFont( *rInf.GetFont() ));
+        pTmpFont->SetVertical( 0, rInf.GetTextFrame()->IsVertical() );
     }
+
+    SwFontSave aFontSave( rInf, pTmpFont.get() );
+    // for text inside drop portions we let vcl handle the text directions
+    SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
+    aLayoutModeModifier.SetAuto();
+
+    SwTextPortion::Paint( rInf );
 }
 
 bool SwDropPortion::FormatText( SwTextFormatInfo &rInf )
