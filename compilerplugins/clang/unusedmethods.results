@@ -104,6 +104,8 @@ connectivity/source/inc/OTypeInfo.hxx:47
     _Bool connectivity::OTypeInfo::operator!=(const struct connectivity::OTypeInfo &) const
 cui/source/dialogs/SpellAttrib.hxx:72
     _Bool svx::SpellErrorDescription::operator==(const struct svx::SpellErrorDescription &) const
+cui/source/inc/AdditionsDialog.hxx:141
+    void SearchAndParseThread::AppendAllExtensions()
 cui/source/inc/cfg.hxx:336
     class rtl::OUString SvxMenuEntriesListBox::get_text(int)
 cui/source/inc/cfg.hxx:337
@@ -190,14 +192,12 @@ editeng/inc/edtspell.hxx:104
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const struct editeng::MisspellRange *, class std::__cxx1998::vector<struct editeng::MisspellRange, class std::allocator<struct editeng::MisspellRange> > >, class std::__debug::vector<struct editeng::MisspellRange, class std::allocator<struct editeng::MisspellRange> >, struct std::random_access_iterator_tag> WrongList::begin() const
 editeng/inc/edtspell.hxx:105
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const struct editeng::MisspellRange *, class std::__cxx1998::vector<struct editeng::MisspellRange, class std::allocator<struct editeng::MisspellRange> > >, class std::__debug::vector<struct editeng::MisspellRange, class std::allocator<struct editeng::MisspellRange> >, struct std::random_access_iterator_tag> WrongList::end() const
-extensions/source/propctrlr/formcontroller.hxx:99
-    class rtl::OUString pcr::DialogController::getImplementationName_static()
-extensions/source/propctrlr/formcontroller.hxx:101
-    class com::sun::star::uno::Sequence<class rtl::OUString> pcr::DialogController::getSupportedServiceNames_static()
-extensions/source/propctrlr/formcontroller.hxx:103
-    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> pcr::DialogController::Create(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &)
-extensions/source/propctrlr/modulepcr.hxx:45
-     pcr::OAutoRegistration::OAutoRegistration<TYPE>()
+extensions/source/inc/componentmodule.hxx:96
+    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> compmodule::OModule::getComponentFactory(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::lang::XMultiServiceFactory> &)
+extensions/source/inc/componentmodule.hxx:122
+     compmodule::OMultiInstanceAutoRegistration::OMultiInstanceAutoRegistration<TYPE>()
+extensions/source/propctrlr/modulepcr.hxx:33
+    class pcr::PcrModule & pcr::PcrModule::getInstance()
 extensions/source/scanner/scanner.hxx:79
     void ScannerManager::SetData(void *)
 hwpfilter/source/mzstring.h:99
@@ -406,12 +406,10 @@ include/comphelper/basicio.hxx:52
     const class com::sun::star::uno::Reference<class com::sun::star::io::XObjectInputStream> & comphelper::operator>>(const class com::sun::star::uno::Reference<class com::sun::star::io::XObjectInputStream> &,unsigned int &)
 include/comphelper/basicio.hxx:53
     const class com::sun::star::uno::Reference<class com::sun::star::io::XObjectOutputStream> & comphelper::operator<<(const class com::sun::star::uno::Reference<class com::sun::star::io::XObjectOutputStream> &,unsigned int)
-include/comphelper/componentmodule.hxx:102
-    void comphelper::OModule::registerImplementation(const class rtl::OUString &,const class com::sun::star::uno::Sequence<class rtl::OUString> &,class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> (*)(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &))
-include/comphelper/componentmodule.hxx:118
-    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> comphelper::OModule::getComponentFactory(const class rtl::OUString &)
-include/comphelper/componentmodule.hxx:146
-     comphelper::OAutoRegistration::OAutoRegistration<TYPE>(class comphelper::OModule &)
+include/comphelper/componentmodule.hxx:61
+     comphelper::ComponentDescription::ComponentDescription(const class rtl::OUString &,const class com::sun::star::uno::Sequence<class rtl::OUString> &,class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> (*)(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &),class com::sun::star::uno::Reference<class com::sun::star::lang::XSingleComponentFactory> (*)(class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> (*)(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &), const class rtl::OUString &, const class com::sun::star::uno::Sequence<class rtl::OUString> &, struct _rtl_ModuleCount *))
+include/comphelper/componentmodule.hxx:94
+    void comphelper::OModule::registerImplementation(const struct comphelper::ComponentDescription &)
 include/comphelper/configuration.hxx:248
     type-parameter-?-? comphelper::ConfigurationLocalizedProperty::get(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &)
 include/comphelper/configuration.hxx:264
@@ -511,8 +509,6 @@ include/comphelper/scopeguard.hxx:57
 include/comphelper/scopeguard.hxx:84
     ScopeGuard<Func> comphelper::<deduction guide for ScopeGuard>(const ScopeGuard<Func> &)
 include/comphelper/sequence.hxx:200
-    Sequence<type-parameter-?-?> comphelper::containerToSequence(type-parameter-?-? const (&)[_Num])
-include/comphelper/sequence.hxx:200
     Sequence<type-parameter-?-?> comphelper::containerToSequence(type-parameter-?-? const (&)[S])
 include/comphelper/sequence.hxx:200
     Sequence<type-parameter-?-?> comphelper::containerToSequence(type-parameter-?-? const (&)[_Bound])
@@ -522,22 +518,40 @@ include/comphelper/sequence.hxx:200
     Sequence<type-parameter-?-?> comphelper::containerToSequence(type-parameter-?-? const (&)[_Nm])
 include/comphelper/sequence.hxx:200
     Sequence<type-parameter-?-?> comphelper::containerToSequence(type-parameter-?-? const (&)[SrcSize])
+include/comphelper/sequence.hxx:200
+    Sequence<type-parameter-?-?> comphelper::containerToSequence(type-parameter-?-? const (&)[_Num])
+include/comphelper/servicedecl.hxx:108
+     comphelper::service_decl::ServiceDecl::ServiceDecl(const type-parameter-?-? &,const char *,const char *)
+include/comphelper/servicedecl.hxx:152
+     comphelper::service_decl::detail::OwnServiceImpl::OwnServiceImpl<ImplT>(const class comphelper::service_decl::ServiceDecl &,const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &)
+include/comphelper/servicedecl.hxx:157
+     comphelper::service_decl::detail::OwnServiceImpl::OwnServiceImpl<ImplT>(const class comphelper::service_decl::ServiceDecl &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &)
 include/comphelper/servicedecl.hxx:183
      comphelper::service_decl::detail::ServiceImpl::ServiceImpl<ImplT>(const class comphelper::service_decl::ServiceDecl &,const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &)
 include/comphelper/servicedecl.hxx:188
      comphelper::service_decl::detail::ServiceImpl::ServiceImpl<ImplT>(const class comphelper::service_decl::ServiceDecl &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &)
-include/comphelper/servicedecl.hxx:283
-     comphelper::service_decl::serviceimpl_base::serviceimpl_base(const type-parameter-?-? &)
+include/comphelper/servicedecl.hxx:199
+     comphelper::service_decl::detail::InheritingServiceImpl::InheritingServiceImpl<ImplT>(const class comphelper::service_decl::ServiceDecl &,const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &)
+include/comphelper/servicedecl.hxx:209
+    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> comphelper::service_decl::detail::PostProcessDefault::operator()(type-parameter-?-? *) const
+include/comphelper/servicedecl.hxx:220
+     comphelper::service_decl::detail::CreateFunc::CreateFunc<type-parameter-?-?, type-parameter-?-?, comphelper::service_decl::with_args<false> >(const type-parameter-?-? &)
+include/comphelper/servicedecl.hxx:224
+    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> comphelper::service_decl::detail::CreateFunc::operator()(const class comphelper::service_decl::ServiceDecl &,const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &) const
+include/comphelper/servicedecl.hxx:237
+     comphelper::service_decl::detail::CreateFunc::CreateFunc<type-parameter-?-?, type-parameter-?-?, comphelper::service_decl::with_args<true> >(const type-parameter-?-? &)
+include/comphelper/servicedecl.hxx:271
+     comphelper::service_decl::serviceimpl_base::serviceimpl_base<ImplT_, WithArgsT>()
 include/comphelper/servicedecl.hxx:283
      comphelper::service_decl::serviceimpl_base::serviceimpl_base<ImplT_, WithArgsT>(const type-parameter-?-? &)
 include/comphelper/servicedecl.hxx:295
      comphelper::service_decl::class_::class_<ImplT_, WithArgsT>()
 include/comphelper/servicedecl.hxx:304
      comphelper::service_decl::class_::class_<ImplT_, WithArgsT>(const type-parameter-?-? &)
+include/comphelper/servicedecl.hxx:314
+     comphelper::service_decl::inheritingClass_::inheritingClass_<ImplT_, WithArgsT>()
 include/comphelper/servicedecl.hxx:323
      comphelper::service_decl::inheritingClass_::inheritingClass_<ImplT_, WithArgsT>(const type-parameter-?-? &)
-include/comphelper/servicedecl.hxx:323
-     comphelper::service_decl::inheritingClass_::inheritingClass_(const type-parameter-?-? &)
 include/comphelper/unique_disposing_ptr.hxx:46
     type-parameter-?-? & comphelper::unique_disposing_ptr::operator*() const
 include/comphelper/unwrapargs.hxx:51
@@ -674,6 +688,8 @@ include/sfx2/lokhelper.hxx:62
     int SfxLokHelper::getDocumentIdOfView(int)
 include/sfx2/msg.hxx:120
     const class std::type_info * SfxType0::Type() const
+include/sfx2/sfxmodelfactory.hxx:66
+    class com::sun::star::uno::Reference<class com::sun::star::lang::XSingleServiceFactory> sfx2::createSfxModelFactory(const class com::sun::star::uno::Reference<class com::sun::star::lang::XMultiServiceFactory> &,const class rtl::OUString &,class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> (*const)(const class com::sun::star::uno::Reference<class com::sun::star::lang::XMultiServiceFactory> &, enum SfxModelFlags),const class com::sun::star::uno::Sequence<class rtl::OUString> &)
 include/sfx2/thumbnailview.hxx:206
     unsigned short ThumbnailView::getNextItemId() const
 include/sfx2/viewsh.hxx:365
@@ -716,7 +732,7 @@ include/svx/framelink.hxx:198
     _Bool svx::frame::operator>(const class svx::frame::Style &,const class svx::frame::Style &)
 include/svx/gallery1.hxx:58
     const class std::unique_ptr<class GalleryBinaryEngineEntry, struct std::default_delete<class GalleryBinaryEngineEntry> > & GalleryThemeEntry::getGalleryBinaryEngineEntry() const
-include/svx/gallerybinaryengine.hxx:58
+include/svx/gallerybinaryengine.hxx:63
     const class INetURLObject & GalleryBinaryEngine::GetStrURL() const
 include/svx/langbox.hxx:94
     void SvxLanguageBox::show()
@@ -826,6 +842,8 @@ include/unotools/moduleoptions.hxx:166
     _Bool SvtModuleOptions::IsDataBase() const
 include/unotools/textsearch.hxx:121
     basic_ostream<type-parameter-?-?, type-parameter-?-?> & utl::operator<<(basic_ostream<type-parameter-?-?, type-parameter-?-?> &,const enum utl::SearchParam::SearchType &)
+include/vbahelper/helperdecl.hxx:33
+     comphelper::service_decl::vba_service_class_::vba_service_class_<ImplT_, WithArgsT>()
 include/vcl/alpha.hxx:47
     _Bool AlphaMask::operator==(const class AlphaMask &) const
 include/vcl/alpha.hxx:48
@@ -840,7 +858,7 @@ include/vcl/BitmapColor.hxx:39
     void BitmapColor::SetAlpha(unsigned char)
 include/vcl/builder.hxx:338
     void VclBuilder::connectNumericFormatterAdjustment(const class rtl::OString &,const class rtl::OUString &)
-include/vcl/builder.hxx:482
+include/vcl/builder.hxx:480
     class rtl::OString VclBuilderContainer::getUIFile() const
 include/vcl/builderpage.hxx:36
     void BuilderPage::SetHelpId(const class rtl::OString &)
@@ -866,8 +884,6 @@ include/vcl/customweld.hxx:138
     void weld::CustomWeld::queue_draw_area(int,int,int,int)
 include/vcl/customweld.hxx:153
     void weld::CustomWeld::set_visible(_Bool)
-include/vcl/edit.hxx:209
-    _Bool Edit::IsValueChangedFromSaved() const
 include/vcl/errcode.hxx:86
     _Bool ErrCode::operator<(const class ErrCode &) const
 include/vcl/errcode.hxx:87
@@ -924,7 +940,7 @@ include/vcl/settings.hxx:509
     void StyleSettings::SetSpinSize(long)
 include/vcl/settings.hxx:664
     _Bool HelpSettings::operator!=(const class HelpSettings &) const
-include/vcl/settings.hxx:721
+include/vcl/settings.hxx:722
     _Bool AllSettings::operator!=(const class AllSettings &) const
 include/vcl/split.hxx:92
     void Splitter::SetHorizontal(_Bool)
@@ -1086,10 +1102,10 @@ libreofficekit/qa/gtktiledviewer/gtv-application-window.cxx:72
     void ::operator()(struct _GtkBuilder *) const
 libreofficekit/qa/gtktiledviewer/gtv-comments-sidebar.cxx:31
     void * gtv_comments_sidebar_get_instance_private(struct GtvCommentsSidebar *)
+libreofficekit/qa/gtktiledviewer/gtv-comments-sidebar.cxx:49
+    void ::operator()(struct _GList *) const
 libreofficekit/qa/gtktiledviewer/gtv-helpers.cxx:80
     void ::operator()(struct _GtkTargetList *) const
-libreofficekit/qa/gtktiledviewer/gtv-lokdocview-signal-handlers.cxx:255
-    void ::operator()(struct _GList *) const
 libreofficekit/qa/gtktiledviewer/gtv-signal-handlers.hxx:35
     void openLokDialog(struct _GtkWidget *,void *)
 lotuswordpro/source/filter/clone.hxx:28
@@ -1116,9 +1132,9 @@ oox/inc/drawingml/textliststyle.hxx:49
     void oox::drawingml::TextListStyle::dump() const
 oox/inc/drawingml/textparagraphproperties.hxx:98
     void oox::drawingml::TextParagraphProperties::setLineSpacing(const class oox::drawingml::TextSpacing &)
-oox/source/drawingml/diagram/diagramlayoutatoms.hxx:256
+oox/source/drawingml/diagram/diagramlayoutatoms.hxx:278
     const class std::__debug::vector<class std::shared_ptr<class oox::drawingml::Shape>, class std::allocator<class std::shared_ptr<class oox::drawingml::Shape> > > & oox::drawingml::LayoutNode::getNodeShapes() const
-oox/source/drawingml/diagram/diagramlayoutatoms.hxx:265
+oox/source/drawingml/diagram/diagramlayoutatoms.hxx:287
     const class oox::drawingml::LayoutNode * oox::drawingml::LayoutNode::getParentLayoutNode() const
 sal/osl/unx/uunxapi.hxx:35
     int mkdir_c(const class rtl::OString &,unsigned int)
@@ -1333,11 +1349,11 @@ sd/source/filter/ppt/pptinanimations.hxx:108
 sd/source/ui/inc/filedlg.hxx:55
     _Bool SdOpenSoundFileDialog::IsInsertAsLinkSelected() const
 sd/source/ui/inc/GraphicViewShell.hxx:43
+    class SfxViewFactory * sd::GraphicViewShell::Factory()
+sd/source/ui/inc/GraphicViewShell.hxx:43
     void sd::GraphicViewShell::RegisterFactory(struct o3tl::strong_int<unsigned short, struct SfxInterfaceIdTag>)
 sd/source/ui/inc/GraphicViewShell.hxx:43
     void sd::GraphicViewShell::InitFactory()
-sd/source/ui/inc/GraphicViewShell.hxx:43
-    class SfxViewFactory * sd::GraphicViewShell::Factory()
 sd/source/ui/inc/GraphicViewShell.hxx:43
     class SfxViewShell * sd::GraphicViewShell::CreateInstance(class SfxViewFrame *,class SfxViewShell *)
 sd/source/ui/inc/optsitem.hxx:178
@@ -1427,6 +1443,8 @@ slideshow/source/engine/animationfactory.cxx:538
 slideshow/source/engine/opengl/TransitionImpl.hxx:184
     void OGLTransitionImpl::cleanup()
 slideshow/source/inc/listenercontainer.hxx:44
+    _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::ViewUpdate> &)
+slideshow/source/inc/listenercontainer.hxx:44
     _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::AnimationEventHandler> &)
 slideshow/source/inc/listenercontainer.hxx:44
     _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::ShapeListenerEventHandler> &)
@@ -1435,15 +1453,13 @@ slideshow/source/inc/listenercontainer.hxx:44
 slideshow/source/inc/listenercontainer.hxx:44
     _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::PauseEventHandler> &)
 slideshow/source/inc/listenercontainer.hxx:44
-    _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::ViewUpdate> &)
-slideshow/source/inc/listenercontainer.hxx:44
     _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::UserPaintEventHandler> &)
 slideshow/source/inc/listenercontainer.hxx:44
     _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::IntrinsicAnimationEventHandler> &)
 slideshow/source/inc/listenercontainer.hxx:54
-    _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::ViewEventHandler> &)
-slideshow/source/inc/listenercontainer.hxx:54
     _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::ViewRepaintHandler> &)
+slideshow/source/inc/listenercontainer.hxx:54
+    _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::ViewEventHandler> &)
 slideshow/source/inc/shape.hxx:212
     _Bool slideshow::internal::Shape::isForeground() const
 slideshow/source/inc/shapemanager.hxx:105
@@ -1529,11 +1545,11 @@ sw/inc/docary.hxx:94
 sw/inc/docary.hxx:94
     void SwVectorModifyBase::insert(class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwGrfFormatColl **, class std::__cxx1998::vector<class SwGrfFormatColl *, class std::allocator<class SwGrfFormatColl *> > >, class std::__debug::vector<class SwGrfFormatColl *, class std::allocator<class SwGrfFormatColl *> >, struct std::random_access_iterator_tag>,type-parameter-?-?,type-parameter-?-?)
 sw/inc/docary.hxx:94
+    void SwVectorModifyBase::insert(class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwFrameFormat **, class std::__cxx1998::vector<class SwFrameFormat *, class std::allocator<class SwFrameFormat *> > >, class std::__debug::vector<class SwFrameFormat *, class std::allocator<class SwFrameFormat *> >, struct std::random_access_iterator_tag>,type-parameter-?-?,type-parameter-?-?)
+sw/inc/docary.hxx:94
     void SwVectorModifyBase::insert(class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwSectionFormat **, class std::__cxx1998::vector<class SwSectionFormat *, class std::allocator<class SwSectionFormat *> > >, class std::__debug::vector<class SwSectionFormat *, class std::allocator<class SwSectionFormat *> >, struct std::random_access_iterator_tag>,type-parameter-?-?,type-parameter-?-?)
 sw/inc/docary.hxx:94
     void SwVectorModifyBase::insert(class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwCharFormat **, class std::__cxx1998::vector<class SwCharFormat *, class std::allocator<class SwCharFormat *> > >, class std::__debug::vector<class SwCharFormat *, class std::allocator<class SwCharFormat *> >, struct std::random_access_iterator_tag>,type-parameter-?-?,type-parameter-?-?)
-sw/inc/docary.hxx:94
-    void SwVectorModifyBase::insert(class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwFrameFormat **, class std::__cxx1998::vector<class SwFrameFormat *, class std::allocator<class SwFrameFormat *> > >, class std::__debug::vector<class SwFrameFormat *, class std::allocator<class SwFrameFormat *> >, struct std::random_access_iterator_tag>,type-parameter-?-?,type-parameter-?-?)
 sw/inc/docary.hxx:94
     void SwVectorModifyBase::insert(class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwNumRule **, class std::__cxx1998::vector<class SwNumRule *, class std::allocator<class SwNumRule *> > >, class std::__debug::vector<class SwNumRule *, class std::allocator<class SwNumRule *> >, struct std::random_access_iterator_tag>,type-parameter-?-?,type-parameter-?-?)
 sw/inc/docary.hxx:140
@@ -1806,7 +1822,7 @@ vcl/inc/unx/salframe.h:184
     enum SalFrameStyleFlags X11SalFrame::GetStyle() const
 vcl/qa/cppunit/lifecycle.cxx:237
      (anonymous namespace)::LeakTestClass::LeakTestClass(_Bool &,type-parameter-?-? &&...)
-vcl/skia/salbmp.cxx:454
+vcl/skia/salbmp.cxx:481
     void ::operator()(void *,void *) const
 vcl/source/app/scheduler.cxx:83
     basic_ostream<type-parameter-?-?, type-parameter-?-?> & (anonymous namespace)::operator<<(basic_ostream<type-parameter-?-?, type-parameter-?-?> &,const class Idle &)

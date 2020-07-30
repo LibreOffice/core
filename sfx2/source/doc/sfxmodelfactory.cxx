@@ -52,80 +52,6 @@ namespace sfx2
     using ::com::sun::star::lang::XInitialization;
 
 
-    //= SfxModelFactory - declaration
-
-    typedef ::cppu::WeakImplHelper <   XSingleServiceFactory
-                                    ,   XServiceInfo
-                                    >   SfxModelFactory_Base;
-
-    namespace {
-
-    /** implements a XSingleServiceFactory which can be used to created instances
-        of classes derived from SfxBaseModel
-
-        In opposite to the default implementations from module cppuhelper, this
-        factory evaluates certain creation arguments (passed to createInstanceWithArguments)
-        and passes them to the factory function of the derived class.
-    */
-    class SfxModelFactory : public SfxModelFactory_Base
-    {
-    public:
-        SfxModelFactory(
-            const Reference< XMultiServiceFactory >& _rxServiceFactory,
-            const OUString& _rImplementationName,
-            const SfxModelFactoryFunc _pComponentFactoryFunc,
-            const Sequence< OUString >& _rServiceNames
-        );
-
-        // XSingleServiceFactory
-        virtual Reference< XInterface > SAL_CALL createInstance(  ) override;
-        virtual Reference< XInterface > SAL_CALL createInstanceWithArguments( const Sequence< Any >& aArguments ) override;
-
-        static css::uno::Reference<css::uno::XInterface> create(
-            const css::uno::Sequence<css::uno::Any> & rxArgs,
-            std::function<css::uno::Reference<css::uno::XInterface>(SfxModelFlags)> creationFunc);
-
-        // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
-
-    protected:
-        virtual ~SfxModelFactory() override;
-
-    private:
-        const Reference< XMultiServiceFactory >     m_xServiceFactory;
-        const OUString                       m_sImplementationName;
-        const Sequence< OUString >           m_aServiceNames;
-        const SfxModelFactoryFunc                   m_pComponentFactoryFunc;
-    };
-
-    }
-
-    //= SfxModelFactory - implementation
-
-
-    SfxModelFactory::SfxModelFactory( const Reference< XMultiServiceFactory >& _rxServiceFactory,
-            const OUString& _rImplementationName, const SfxModelFactoryFunc _pComponentFactoryFunc,
-            const Sequence< OUString >& _rServiceNames )
-        :m_xServiceFactory( _rxServiceFactory )
-        ,m_sImplementationName( _rImplementationName )
-        ,m_aServiceNames( _rServiceNames )
-        ,m_pComponentFactoryFunc( _pComponentFactoryFunc )
-    {
-    }
-
-
-    SfxModelFactory::~SfxModelFactory()
-    {
-    }
-
-
-    Reference< XInterface > SAL_CALL SfxModelFactory::createInstance(  )
-    {
-        return createInstanceWithArguments( Sequence< Any >() );
-    }
-
 
     namespace
     {
@@ -148,18 +74,9 @@ namespace sfx2
     }
 
 
-    Reference< XInterface > SAL_CALL SfxModelFactory::createInstanceWithArguments( const Sequence< Any >&  _rArguments )
-    {
-        return create(_rArguments,
-            [&](SfxModelFlags _nCreationFlags)
-            {
-                return m_pComponentFactoryFunc(m_xServiceFactory, _nCreationFlags).get();
-            });
-    }
-
-    css::uno::Reference<css::uno::XInterface> SfxModelFactory::create(
-            const css::uno::Sequence<css::uno::Any> & _rArguments,
-            std::function<css::uno::Reference<css::uno::XInterface>(SfxModelFlags)> creationFunc)
+    css::uno::Reference<css::uno::XInterface> createSfxModelInstance(
+        const css::uno::Sequence<css::uno::Any> & _rArguments,
+        std::function<css::uno::Reference<css::uno::XInterface>(SfxModelFlags)> creationFunc)
     {
         ::comphelper::NamedValueCollection aArgs( _rArguments );
         const bool bEmbeddedObject = aArgs.getOrDefault( "EmbeddedObject", false );
@@ -196,34 +113,7 @@ namespace sfx2
         return xInstance;
     }
 
-    OUString SAL_CALL SfxModelFactory::getImplementationName(  )
-    {
-        return m_sImplementationName;
-    }
 
-    sal_Bool SAL_CALL SfxModelFactory::supportsService( const OUString& _rServiceName )
-    {
-        return cppu::supportsService(this, _rServiceName);
-    }
-
-    Sequence< OUString > SAL_CALL SfxModelFactory::getSupportedServiceNames(  )
-    {
-        return m_aServiceNames;
-    }
-
-    css::uno::Reference<css::uno::XInterface> createSfxModelInstance(
-        const css::uno::Sequence<css::uno::Any> & rxArgs,
-        std::function<css::uno::Reference<css::uno::XInterface>(SfxModelFlags)> creationFunc)
-    {
-        return SfxModelFactory::create(rxArgs, creationFunc);
-    }
-
-    Reference< XSingleServiceFactory > createSfxModelFactory( const Reference< XMultiServiceFactory >& _rxServiceFactory,
-            const OUString& _rImplementationName, const SfxModelFactoryFunc _pComponentFactoryFunc,
-            const Sequence< OUString >& _rServiceNames )
-    {
-        return new SfxModelFactory( _rxServiceFactory, _rImplementationName, _pComponentFactoryFunc, _rServiceNames );
-    }
 } // namespace sfx2
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

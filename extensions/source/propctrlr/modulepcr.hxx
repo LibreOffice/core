@@ -20,21 +20,10 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_MODULEPCR_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_MODULEPCR_HXX
 
-#include <comphelper/componentmodule.hxx>
+#include <rtl/ustring.hxx>
 
 namespace pcr
 {
-    /* -------------------------------------------------------------------- */
-    class PcrModule : public ::comphelper::OModule
-    {
-        friend struct CreateModuleClass;
-        typedef ::comphelper::OModule BaseClass;
-    public:
-        static PcrModule& getInstance();
-    private:
-        PcrModule();
-    };
-
     OUString PcrRes(const char* pId);
 } // namespace pcr
 

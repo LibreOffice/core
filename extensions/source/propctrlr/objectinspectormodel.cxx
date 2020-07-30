@@ -23,6 +23,7 @@
 
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 
 namespace pcr

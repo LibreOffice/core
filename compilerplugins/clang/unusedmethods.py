@@ -145,9 +145,6 @@ for d in definitionSet:
     # ignore the Java symbols, loaded from the JavaVM
     if d[1].startswith("Java_"):
        continue
-    # ignore external code
-    if definitionToSourceLocationMap[d].startswith("external/"):
-       continue
     # ignore the VCL_BUILDER_DECL_FACTORY stuff
     if d[0]=="void" and d[1].startswith("make") and ("(class VclPtr<class vcl::Window> &" in d[1]):
        continue
@@ -216,9 +213,6 @@ for d in definitionSet:
         or "operator<<" in d[1] or "operator>>" in d[1]
         or "operator++" in d[1] or "operator--" in d[1]):
         continue
-    # ignore external code
-    if definitionToSourceLocationMap[d].startswith("external/"):
-       continue
     # ignore UNO constructor functions
     if (d[0] == "class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface>" and
         d[1].endswith("_createInstance(const class com::sun::star::uno::Reference<class com::sun::star::lang::XMultiServiceFactory> &)")):
@@ -260,9 +254,6 @@ for d in publicDefinitionSet:
         continue
     if isOtherConstness(d, calledFromOutsideSet):
         continue
-    # ignore external code
-    if definitionToSourceLocationMap[d].startswith("external/"):
-       continue
     tmp3set.add((method, definitionToSourceLocationMap[d]))
 
 # print output, sorted by name and line number

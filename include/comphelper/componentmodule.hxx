@@ -34,45 +34,6 @@ namespace comphelper
 {
 
 
-    /** factory declaration
-    */
-    typedef css::uno::Reference< css::lang::XSingleComponentFactory > (*FactoryInstantiation)
-    (
-        ::cppu::ComponentFactoryFunc          _pFactoryFunc,
-        OUString const&                       _rComponentName,
-        css::uno::Sequence< OUString > const & _rServiceNames,
-        rtl_ModuleCount*
-    );
-
-
-    //= ComponentDescription
-
-    struct COMPHELPER_DLLPUBLIC ComponentDescription
-    {
-        /// the implementation name of the component
-        OUString const                               sImplementationName;
-        /// the services supported by the component implementation
-        css::uno::Sequence< OUString > const         aSupportedServices;
-        /// the function to create an instance of the component
-        ::cppu::ComponentFactoryFunc const           pComponentCreationFunc;
-        /// the function to create a factory for the component (usually <code>::cppu::createSingleComponentFactory</code>)
-        FactoryInstantiation const                   pFactoryCreationFunc;
-
-        ComponentDescription(
-                const OUString& _rImplementationName,
-                const css::uno::Sequence< OUString >& _rSupportedServices,
-                ::cppu::ComponentFactoryFunc _pComponentCreationFunc,
-                FactoryInstantiation _pFactoryCreationFunc
-            )
-            :sImplementationName( _rImplementationName )
-            ,aSupportedServices( _rSupportedServices )
-            ,pComponentCreationFunc( _pComponentCreationFunc )
-            ,pFactoryCreationFunc( _pFactoryCreationFunc )
-        {
-        }
-    };
-
-
     //= OModule
 
     class OModuleImpl;
@@ -88,10 +49,6 @@ namespace comphelper
         OModule();
 
         virtual ~OModule();
-
-        /** registers a component given by ComponentDescription
-        */
-        void registerImplementation( const ComponentDescription& _rComp );
 
     private:
         OModule( const OModule& ) = delete;

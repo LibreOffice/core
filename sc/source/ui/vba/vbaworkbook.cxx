@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vbahelper/helperdecl.hxx>
 #include <tools/urlobj.hxx>
 
 #include <com/sun/star/util/XProtectable.hpp>

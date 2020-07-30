@@ -300,7 +300,6 @@
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <unotools/eventcfg.hxx>
-#include <vbahelper/helperdecl.hxx>
 #include <vbahelper/vbaaccesshelper.hxx>
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <vbahelper/vbahelper.hxx>

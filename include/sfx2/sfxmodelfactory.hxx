@@ -47,29 +47,6 @@ namespace o3tl
 
 namespace sfx2
 {
-    typedef css::uno::Reference< css::uno::XInterface > ( * SfxModelFactoryFunc ) (
-        const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory,
-        SfxModelFlags _nCreationFlags
-    );
-
-
-    //= createSfxModelFactory
-
-    /** creates a XSingleServiceFactory which can be used to created instances
-        of classes derived from SfxBaseModel
-
-        In opposite to the default implementations from module cppuhelper, this
-        factory evaluates certain creation arguments (passed to createInstanceWithArguments)
-        and passes them to the factory function of the derived class.
-    */
-    css::uno::Reference< css::lang::XSingleServiceFactory >
-        SFX2_DLLPUBLIC createSfxModelFactory(
-            const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxServiceFactory,
-            const OUString& _rImplementationName,
-            const SfxModelFactoryFunc _pComponentFactoryFunc,
-            const css::uno::Sequence< OUString >& _rServiceNames
-        );
-
     /**
      * Intended to be called from UNO constructor functions
      * This evaluates certain creation arguments (passed to createInstanceWithArguments)
