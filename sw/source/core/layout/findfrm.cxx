@@ -1230,44 +1230,44 @@ SwFrame *SwFrame::FindPrev_()
 void SwFrame::ImplInvalidateNextPos( bool bNoFootnote )
 {
     SwFrame *pFrame = FindNext_();
-    if ( nullptr != pFrame )
+    if ( nullptr == pFrame )
+        return;
+
+    if( pFrame->IsSctFrame() )
     {
-        if( pFrame->IsSctFrame() )
+        while( pFrame && pFrame->IsSctFrame() )
         {
-            while( pFrame && pFrame->IsSctFrame() )
+            if( static_cast<SwSectionFrame*>(pFrame)->GetSection() )
             {
-                if( static_cast<SwSectionFrame*>(pFrame)->GetSection() )
-                {
-                    SwFrame* pTmp = static_cast<SwSectionFrame*>(pFrame)->ContainsAny();
-                    if( pTmp )
-                        pTmp->InvalidatePos();
-                    else if( !bNoFootnote )
-                        static_cast<SwSectionFrame*>(pFrame)->InvalidateFootnotePos();
-                    if( !IsInSct() || FindSctFrame()->GetFollow() != pFrame )
-                        pFrame->InvalidatePos();
-                    return;
-                }
-                pFrame = pFrame->FindNext();
+                SwFrame* pTmp = static_cast<SwSectionFrame*>(pFrame)->ContainsAny();
+                if( pTmp )
+                    pTmp->InvalidatePos();
+                else if( !bNoFootnote )
+                    static_cast<SwSectionFrame*>(pFrame)->InvalidateFootnotePos();
+                if( !IsInSct() || FindSctFrame()->GetFollow() != pFrame )
+                    pFrame->InvalidatePos();
+                return;
             }
-            if( pFrame )
+            pFrame = pFrame->FindNext();
+        }
+        if( pFrame )
+        {
+            if ( pFrame->IsSctFrame())
             {
-                if ( pFrame->IsSctFrame())
-                {
-                    // We need to invalidate the section's content so it gets
-                    // the chance to flow to a different page.
-                    SwFrame* pTmp = static_cast<SwSectionFrame*>(pFrame)->ContainsAny();
-                    if( pTmp )
-                        pTmp->InvalidatePos();
-                    if( !IsInSct() || FindSctFrame()->GetFollow() != pFrame )
-                        pFrame->InvalidatePos();
-                }
-                else
+                // We need to invalidate the section's content so it gets
+                // the chance to flow to a different page.
+                SwFrame* pTmp = static_cast<SwSectionFrame*>(pFrame)->ContainsAny();
+                if( pTmp )
+                    pTmp->InvalidatePos();
+                if( !IsInSct() || FindSctFrame()->GetFollow() != pFrame )
                     pFrame->InvalidatePos();
             }
+            else
+                pFrame->InvalidatePos();
         }
-        else
-            pFrame->InvalidatePos();
     }
+    else
+        pFrame->InvalidatePos();
 }
 
 /** method to invalidate printing area of next frame
@@ -1293,31 +1293,31 @@ void SwFrame::InvalidateNextPrtArea()
     }
 
     // Invalidate printing area of found next frame
-    if ( pNextFrame )
-    {
-        if ( pNextFrame->IsSctFrame() )
-        {
-            // Invalidate printing area of found section frame, if
-            // (1) this text frame isn't in a section OR
-            // (2) found section frame isn't a follow of the section frame this
-            //     text frame is in.
-            if ( !IsInSct() || FindSctFrame()->GetFollow() != pNextFrame )
-            {
-                pNextFrame->InvalidatePrt();
-            }
+    if ( !pNextFrame )
+        return;
 
-            // Invalidate printing area of first content in found section.
-            SwFrame* pFstContentOfSctFrame =
-                    static_cast<SwSectionFrame*>(pNextFrame)->ContainsAny();
-            if ( pFstContentOfSctFrame )
-            {
-                pFstContentOfSctFrame->InvalidatePrt();
-            }
-        }
-        else
+    if ( pNextFrame->IsSctFrame() )
+    {
+        // Invalidate printing area of found section frame, if
+        // (1) this text frame isn't in a section OR
+        // (2) found section frame isn't a follow of the section frame this
+        //     text frame is in.
+        if ( !IsInSct() || FindSctFrame()->GetFollow() != pNextFrame )
         {
             pNextFrame->InvalidatePrt();
         }
+
+        // Invalidate printing area of first content in found section.
+        SwFrame* pFstContentOfSctFrame =
+                static_cast<SwSectionFrame*>(pNextFrame)->ContainsAny();
+        if ( pFstContentOfSctFrame )
+        {
+            pFstContentOfSctFrame->InvalidatePrt();
+        }
+    }
+    else
+    {
+        pNextFrame->InvalidatePrt();
     }
 }
 

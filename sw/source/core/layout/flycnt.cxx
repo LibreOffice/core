@@ -329,208 +329,208 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
         return;
     }
 
-    if ( !SwOszControl::IsInProgress( this ) && !IsLocked() && !IsColLocked() )
+    if ( !(!SwOszControl::IsInProgress( this ) && !IsLocked() && !IsColLocked()) )
+        return;
+
+    // #i28701# - use new method <GetPageFrame()>
+    if( !GetPageFrame() && GetAnchorFrame() && GetAnchorFrame()->IsInFly() )
     {
-        // #i28701# - use new method <GetPageFrame()>
-        if( !GetPageFrame() && GetAnchorFrame() && GetAnchorFrame()->IsInFly() )
+        SwFlyFrame* pFly = AnchorFrame()->FindFlyFrame();
+        SwPageFrame *pTmpPage = pFly ? pFly->FindPageFrame() : nullptr;
+        if( pTmpPage )
+            pTmpPage->AppendFlyToPage( this );
+    }
+    // #i28701# - use new method <GetPageFrame()>
+    if( !GetPageFrame() )
+        return;
+
+    bSetCompletePaintOnInvalidate = true;
+    {
+        SwFlyFrameFormat *pFormat = GetFormat();
+        const SwFormatFrameSize &rFrameSz = GetFormat()->GetFrameSize();
+        if( rFrameSz.GetHeightPercent() != SwFormatFrameSize::SYNCED &&
+            rFrameSz.GetHeightPercent() >= 100 )
         {
-            SwFlyFrame* pFly = AnchorFrame()->FindFlyFrame();
-            SwPageFrame *pTmpPage = pFly ? pFly->FindPageFrame() : nullptr;
-            if( pTmpPage )
-                pTmpPage->AppendFlyToPage( this );
-        }
-        // #i28701# - use new method <GetPageFrame()>
-        if( GetPageFrame() )
-        {
-            bSetCompletePaintOnInvalidate = true;
+            pFormat->LockModify();
+            SwFormatSurround aMain( pFormat->GetSurround() );
+            if ( aMain.GetSurround() == css::text::WrapTextMode_NONE )
             {
-                SwFlyFrameFormat *pFormat = GetFormat();
-                const SwFormatFrameSize &rFrameSz = GetFormat()->GetFrameSize();
-                if( rFrameSz.GetHeightPercent() != SwFormatFrameSize::SYNCED &&
-                    rFrameSz.GetHeightPercent() >= 100 )
-                {
-                    pFormat->LockModify();
-                    SwFormatSurround aMain( pFormat->GetSurround() );
-                    if ( aMain.GetSurround() == css::text::WrapTextMode_NONE )
-                    {
-                        aMain.SetSurround( css::text::WrapTextMode_THROUGH );
-                        pFormat->SetFormatAttr( aMain );
-                    }
-                    pFormat->UnlockModify();
-                }
+                aMain.SetSurround( css::text::WrapTextMode_THROUGH );
+                pFormat->SetFormatAttr( aMain );
             }
-
-            SwOszControl aOszCntrl( this );
-
-            // #i43255#
-            // #i50356# - format the anchor frame, which
-            // contains the anchor position. E.g., for at-character anchored
-            // object this can be the follow frame of the anchor frame.
-            const bool bFormatAnchor =
-                    !static_cast<const SwTextFrame*>( GetAnchorFrameContainingAnchPos() )->IsAnyJoinLocked() &&
-                    !ConsiderObjWrapInfluenceOnObjPos() &&
-                    !ConsiderObjWrapInfluenceOfOtherObjs();
-
-            const SwFrame* pFooter = GetAnchorFrame()->FindFooterOrHeader();
-            if( pFooter && !pFooter->IsFooterFrame() )
-                pFooter = nullptr;
-            bool bOsz = false;
-            bool bExtra = Lower() && Lower()->IsColumnFrame();
-            // #i3317# - boolean, to apply temporarily the
-            // 'straightforward positioning process' for the frame due to its
-            // overlapping with a previous column.
-            bool bConsiderWrapInfluenceDueToOverlapPrevCol( false );
-            //  #i35911# - boolean, to apply temporarily the
-            // 'straightforward positioning process' for the frame due to fact
-            // that it causes the complete content of its layout environment
-            // to move forward.
-            // #i40444# - extend usage of this boolean:
-            // apply temporarily the 'straightforward positioning process' for
-            // the frame due to the fact that the frame clears the area for
-            // the anchor frame, thus it has to move forward.
-            bool bConsiderWrapInfluenceDueToMovedFwdAnchor( false );
-            do {
-                SwRectFnSet aRectFnSet(this);
-                Point aOldPos( aRectFnSet.GetPos(getFrameArea()) );
-                SwFlyFreeFrame::MakeAll(pRenderContext);
-                const bool bPosChgDueToOwnFormat =
-                                        aOldPos != aRectFnSet.GetPos(getFrameArea());
-                // #i3317#
-                if ( !ConsiderObjWrapInfluenceOnObjPos() &&
-                     OverlapsPrevColumn() )
-                {
-                    bConsiderWrapInfluenceDueToOverlapPrevCol = true;
-                }
-                // #i28701# - no format of anchor frame, if
-                // wrapping style influence is considered on object positioning
-                if ( bFormatAnchor )
-                {
-                    SwTextFrame& rAnchPosAnchorFrame =
-                            dynamic_cast<SwTextFrame&>(*GetAnchorFrameContainingAnchPos());
-                    // #i58182# - For the usage of new method
-                    // <SwObjectFormatterTextFrame::CheckMovedFwdCondition(..)>
-                    // to check move forward of anchor frame due to the object
-                    // positioning it's needed to know, if the object is anchored
-                    // at the master frame before the anchor frame is formatted.
-                    const bool bAnchoredAtMaster(!rAnchPosAnchorFrame.IsFollow());
-
-                    // #i56300#
-                    // perform complete format of anchor text frame and its
-                    // previous frames, which have become invalid due to the
-                    // fly frame format.
-                    SwObjectFormatterTextFrame::FormatAnchorFrameAndItsPrevs( rAnchPosAnchorFrame );
-                    // #i35911#
-                    // #i40444#
-                    // #i58182# - usage of new method
-                    // <SwObjectFormatterTextFrame::CheckMovedFwdCondition(..)>
-                    sal_uInt32 nToPageNum( 0 );
-                    bool bDummy( false );
-                    if ( SwObjectFormatterTextFrame::CheckMovedFwdCondition(
-                                        *this, GetPageFrame()->GetPhyPageNum(),
-                                        bAnchoredAtMaster, nToPageNum, bDummy ) )
-                    {
-                        bConsiderWrapInfluenceDueToMovedFwdAnchor = true;
-                        // mark anchor text frame
-                        // directly, that it is moved forward by object positioning.
-                        SwTextFrame* pAnchorTextFrame( static_cast<SwTextFrame*>(AnchorFrame()) );
-                        bool bInsert( true );
-                        sal_uInt32 nAnchorFrameToPageNum( 0 );
-                        const SwDoc& rDoc = *(GetFrameFormat().GetDoc());
-                        if ( SwLayouter::FrameMovedFwdByObjPos(
-                                                rDoc, *pAnchorTextFrame, nAnchorFrameToPageNum ) )
-                        {
-                            if ( nAnchorFrameToPageNum < nToPageNum )
-                                SwLayouter::RemoveMovedFwdFrame( rDoc, *pAnchorTextFrame );
-                            else
-                                bInsert = false;
-                        }
-                        if ( bInsert )
-                        {
-                            SwLayouter::InsertMovedFwdFrame( rDoc, *pAnchorTextFrame,
-                                                           nToPageNum );
-                        }
-                    }
-                }
-
-                if ( aOldPos != aRectFnSet.GetPos(getFrameArea()) ||
-                     ( !isFrameAreaPositionValid() &&
-                       ( pFooter || bPosChgDueToOwnFormat ) ) )
-                {
-                    bOsz = aOszCntrl.ChkOsz();
-
-                    // special loop prevention for dedicated document:
-                    if ( bOsz &&
-                         HasFixSize() && IsClipped() &&
-                         GetAnchorFrame()->GetUpper()->IsCellFrame() )
-                    {
-                        SwFrameFormat* pFormat = GetFormat();
-                        const SwFormatFrameSize& rFrameSz = pFormat->GetFrameSize();
-                        if ( rFrameSz.GetWidthPercent() &&
-                             rFrameSz.GetHeightPercent() == SwFormatFrameSize::SYNCED )
-                        {
-                            SwFormatSurround aSurround( pFormat->GetSurround() );
-                            if ( aSurround.GetSurround() == css::text::WrapTextMode_NONE )
-                            {
-                                pFormat->LockModify();
-                                aSurround.SetSurround( css::text::WrapTextMode_THROUGH );
-                                pFormat->SetFormatAttr( aSurround );
-                                pFormat->UnlockModify();
-                                bOsz = false;
-                                OSL_FAIL( "<SwFlyAtContentFrame::MakeAll()> - special loop prevention for dedicated document of b6403541 applied" );
-                            }
-                        }
-                    }
-                }
-
-                if ( bExtra && Lower() && !Lower()->isFrameAreaPositionValid() )
-                {
-                    // If a multi column frame leaves invalid columns because of
-                    // a position change, we loop once more and format
-                    // our content using FormatWidthCols again.
-                    InvalidateSize_();
-                    bExtra = false; // Ensure only one additional loop run
-                }
-            } while ( !isFrameAreaDefinitionValid() && !bOsz &&
-                      // #i3317#
-                      !bConsiderWrapInfluenceDueToOverlapPrevCol &&
-                      // #i40444#
-                      !bConsiderWrapInfluenceDueToMovedFwdAnchor &&
-                      GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) );
-
-            // #i3317# - instead of attribute change apply
-            // temporarily the 'straightforward positioning process'.
-            // #i80924#
-            // handle special case during splitting of table rows
-            if ( bConsiderWrapInfluenceDueToMovedFwdAnchor &&
-                 GetAnchorFrame()->IsInTab() &&
-                 GetAnchorFrame()->IsInFollowFlowRow() )
-            {
-                const SwFrame* pCellFrame = GetAnchorFrame();
-                while ( pCellFrame && !pCellFrame->IsCellFrame() )
-                {
-                    pCellFrame = pCellFrame->GetUpper();
-                }
-                if ( pCellFrame )
-                {
-                    SwRectFnSet aRectFnSet(pCellFrame);
-                    if ( aRectFnSet.GetTop(pCellFrame->getFrameArea()) == 0 &&
-                         aRectFnSet.GetHeight(pCellFrame->getFrameArea()) == 0 )
-                    {
-                        bConsiderWrapInfluenceDueToMovedFwdAnchor = false;
-                    }
-                }
-            }
-            if ( bOsz || bConsiderWrapInfluenceDueToOverlapPrevCol ||
-                 // #i40444#
-                 bConsiderWrapInfluenceDueToMovedFwdAnchor )
-            {
-                SetTmpConsiderWrapInfluence( true );
-                SetRestartLayoutProcess( true );
-                SetTmpConsiderWrapInfluenceOfOtherObjs();
-            }
-            bSetCompletePaintOnInvalidate = false;
+            pFormat->UnlockModify();
         }
     }
+
+    SwOszControl aOszCntrl( this );
+
+    // #i43255#
+    // #i50356# - format the anchor frame, which
+    // contains the anchor position. E.g., for at-character anchored
+    // object this can be the follow frame of the anchor frame.
+    const bool bFormatAnchor =
+            !static_cast<const SwTextFrame*>( GetAnchorFrameContainingAnchPos() )->IsAnyJoinLocked() &&
+            !ConsiderObjWrapInfluenceOnObjPos() &&
+            !ConsiderObjWrapInfluenceOfOtherObjs();
+
+    const SwFrame* pFooter = GetAnchorFrame()->FindFooterOrHeader();
+    if( pFooter && !pFooter->IsFooterFrame() )
+        pFooter = nullptr;
+    bool bOsz = false;
+    bool bExtra = Lower() && Lower()->IsColumnFrame();
+    // #i3317# - boolean, to apply temporarily the
+    // 'straightforward positioning process' for the frame due to its
+    // overlapping with a previous column.
+    bool bConsiderWrapInfluenceDueToOverlapPrevCol( false );
+    //  #i35911# - boolean, to apply temporarily the
+    // 'straightforward positioning process' for the frame due to fact
+    // that it causes the complete content of its layout environment
+    // to move forward.
+    // #i40444# - extend usage of this boolean:
+    // apply temporarily the 'straightforward positioning process' for
+    // the frame due to the fact that the frame clears the area for
+    // the anchor frame, thus it has to move forward.
+    bool bConsiderWrapInfluenceDueToMovedFwdAnchor( false );
+    do {
+        SwRectFnSet aRectFnSet(this);
+        Point aOldPos( aRectFnSet.GetPos(getFrameArea()) );
+        SwFlyFreeFrame::MakeAll(pRenderContext);
+        const bool bPosChgDueToOwnFormat =
+                                aOldPos != aRectFnSet.GetPos(getFrameArea());
+        // #i3317#
+        if ( !ConsiderObjWrapInfluenceOnObjPos() &&
+             OverlapsPrevColumn() )
+        {
+            bConsiderWrapInfluenceDueToOverlapPrevCol = true;
+        }
+        // #i28701# - no format of anchor frame, if
+        // wrapping style influence is considered on object positioning
+        if ( bFormatAnchor )
+        {
+            SwTextFrame& rAnchPosAnchorFrame =
+                    dynamic_cast<SwTextFrame&>(*GetAnchorFrameContainingAnchPos());
+            // #i58182# - For the usage of new method
+            // <SwObjectFormatterTextFrame::CheckMovedFwdCondition(..)>
+            // to check move forward of anchor frame due to the object
+            // positioning it's needed to know, if the object is anchored
+            // at the master frame before the anchor frame is formatted.
+            const bool bAnchoredAtMaster(!rAnchPosAnchorFrame.IsFollow());
+
+            // #i56300#
+            // perform complete format of anchor text frame and its
+            // previous frames, which have become invalid due to the
+            // fly frame format.
+            SwObjectFormatterTextFrame::FormatAnchorFrameAndItsPrevs( rAnchPosAnchorFrame );
+            // #i35911#
+            // #i40444#
+            // #i58182# - usage of new method
+            // <SwObjectFormatterTextFrame::CheckMovedFwdCondition(..)>
+            sal_uInt32 nToPageNum( 0 );
+            bool bDummy( false );
+            if ( SwObjectFormatterTextFrame::CheckMovedFwdCondition(
+                                *this, GetPageFrame()->GetPhyPageNum(),
+                                bAnchoredAtMaster, nToPageNum, bDummy ) )
+            {
+                bConsiderWrapInfluenceDueToMovedFwdAnchor = true;
+                // mark anchor text frame
+                // directly, that it is moved forward by object positioning.
+                SwTextFrame* pAnchorTextFrame( static_cast<SwTextFrame*>(AnchorFrame()) );
+                bool bInsert( true );
+                sal_uInt32 nAnchorFrameToPageNum( 0 );
+                const SwDoc& rDoc = *(GetFrameFormat().GetDoc());
+                if ( SwLayouter::FrameMovedFwdByObjPos(
+                                        rDoc, *pAnchorTextFrame, nAnchorFrameToPageNum ) )
+                {
+                    if ( nAnchorFrameToPageNum < nToPageNum )
+                        SwLayouter::RemoveMovedFwdFrame( rDoc, *pAnchorTextFrame );
+                    else
+                        bInsert = false;
+                }
+                if ( bInsert )
+                {
+                    SwLayouter::InsertMovedFwdFrame( rDoc, *pAnchorTextFrame,
+                                                   nToPageNum );
+                }
+            }
+        }
+
+        if ( aOldPos != aRectFnSet.GetPos(getFrameArea()) ||
+             ( !isFrameAreaPositionValid() &&
+               ( pFooter || bPosChgDueToOwnFormat ) ) )
+        {
+            bOsz = aOszCntrl.ChkOsz();
+
+            // special loop prevention for dedicated document:
+            if ( bOsz &&
+                 HasFixSize() && IsClipped() &&
+                 GetAnchorFrame()->GetUpper()->IsCellFrame() )
+            {
+                SwFrameFormat* pFormat = GetFormat();
+                const SwFormatFrameSize& rFrameSz = pFormat->GetFrameSize();
+                if ( rFrameSz.GetWidthPercent() &&
+                     rFrameSz.GetHeightPercent() == SwFormatFrameSize::SYNCED )
+                {
+                    SwFormatSurround aSurround( pFormat->GetSurround() );
+                    if ( aSurround.GetSurround() == css::text::WrapTextMode_NONE )
+                    {
+                        pFormat->LockModify();
+                        aSurround.SetSurround( css::text::WrapTextMode_THROUGH );
+                        pFormat->SetFormatAttr( aSurround );
+                        pFormat->UnlockModify();
+                        bOsz = false;
+                        OSL_FAIL( "<SwFlyAtContentFrame::MakeAll()> - special loop prevention for dedicated document of b6403541 applied" );
+                    }
+                }
+            }
+        }
+
+        if ( bExtra && Lower() && !Lower()->isFrameAreaPositionValid() )
+        {
+            // If a multi column frame leaves invalid columns because of
+            // a position change, we loop once more and format
+            // our content using FormatWidthCols again.
+            InvalidateSize_();
+            bExtra = false; // Ensure only one additional loop run
+        }
+    } while ( !isFrameAreaDefinitionValid() && !bOsz &&
+              // #i3317#
+              !bConsiderWrapInfluenceDueToOverlapPrevCol &&
+              // #i40444#
+              !bConsiderWrapInfluenceDueToMovedFwdAnchor &&
+              GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) );
+
+    // #i3317# - instead of attribute change apply
+    // temporarily the 'straightforward positioning process'.
+    // #i80924#
+    // handle special case during splitting of table rows
+    if ( bConsiderWrapInfluenceDueToMovedFwdAnchor &&
+         GetAnchorFrame()->IsInTab() &&
+         GetAnchorFrame()->IsInFollowFlowRow() )
+    {
+        const SwFrame* pCellFrame = GetAnchorFrame();
+        while ( pCellFrame && !pCellFrame->IsCellFrame() )
+        {
+            pCellFrame = pCellFrame->GetUpper();
+        }
+        if ( pCellFrame )
+        {
+            SwRectFnSet aRectFnSet(pCellFrame);
+            if ( aRectFnSet.GetTop(pCellFrame->getFrameArea()) == 0 &&
+                 aRectFnSet.GetHeight(pCellFrame->getFrameArea()) == 0 )
+            {
+                bConsiderWrapInfluenceDueToMovedFwdAnchor = false;
+            }
+        }
+    }
+    if ( bOsz || bConsiderWrapInfluenceDueToOverlapPrevCol ||
+         // #i40444#
+         bConsiderWrapInfluenceDueToMovedFwdAnchor )
+    {
+        SetTmpConsiderWrapInfluence( true );
+        SetRestartLayoutProcess( true );
+        SetTmpConsiderWrapInfluenceOfOtherObjs();
+    }
+    bSetCompletePaintOnInvalidate = false;
 }
 
 /** method to determine, if a <MakeAll()> on the Writer fly frame is possible

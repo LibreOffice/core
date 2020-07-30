@@ -462,28 +462,28 @@ void SwObjectFormatterTextFrame::InvalidatePrevObjs( SwAnchoredObject& _rAnchore
     // Note: list of objects at anchor frame is sorted by this property.
     if ( _rAnchoredObj.GetFrameFormat().GetWrapInfluenceOnObjPos().
                 // #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
-                GetWrapInfluenceOnObjPos( true ) ==
+                GetWrapInfluenceOnObjPos( true ) !=
                             // #i35017# - constant name has changed
                             text::WrapInfluenceOnPosition::ONCE_CONCURRENT )
+        return;
+
+    const SwSortedObjs* pObjs = GetAnchorFrame().GetDrawObjs();
+    if ( !pObjs )
+        return;
+
+    // determine start index
+    size_t i = pObjs->ListPosOf( _rAnchoredObj );
+    while (i > 0)
     {
-        const SwSortedObjs* pObjs = GetAnchorFrame().GetDrawObjs();
-        if ( pObjs )
+        --i;
+        SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
+        if ( pAnchoredObj->GetFrameFormat().GetWrapInfluenceOnObjPos().
+                // #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
+                GetWrapInfluenceOnObjPos( true ) ==
+                    // #i35017# - constant name has changed
+                    text::WrapInfluenceOnPosition::ONCE_CONCURRENT )
         {
-            // determine start index
-            size_t i = pObjs->ListPosOf( _rAnchoredObj );
-            while (i > 0)
-            {
-                --i;
-                SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
-                if ( pAnchoredObj->GetFrameFormat().GetWrapInfluenceOnObjPos().
-                        // #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
-                        GetWrapInfluenceOnObjPos( true ) ==
-                            // #i35017# - constant name has changed
-                            text::WrapInfluenceOnPosition::ONCE_CONCURRENT )
-                {
-                    pAnchoredObj->InvalidateObjPosForConsiderWrapInfluence();
-                }
-            }
+            pAnchoredObj->InvalidateObjPosForConsiderWrapInfluence();
         }
     }
 }

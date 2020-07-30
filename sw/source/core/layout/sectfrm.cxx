@@ -221,29 +221,29 @@ void SwSectionFrame::DelEmpty( bool bRemove )
             pMaster->InvalidateSize();
     }
     SetFollow(nullptr);
-    if( pUp )
+    if( !pUp )
+        return;
+
     {
-        {
-            SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-            aFrm.Height( 0 );
-        }
-
-        // If we are destroyed immediately anyway, we don't need
-        // to put us into the list
-        if( bRemove )
-        {   // If we already were half dead before this DelEmpty,
-            // we are likely in the list and have to remove us from
-            // it
-            if( !m_pSection && getRootFrame() )
-                getRootFrame()->RemoveFromList( this );
-        }
-        else if( getRootFrame() )
-        {
-            getRootFrame()->InsertEmptySct( this );
-        }
-
-        m_pSection = nullptr;  // like this a reanimation is virtually impossible though
+        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
+        aFrm.Height( 0 );
     }
+
+    // If we are destroyed immediately anyway, we don't need
+    // to put us into the list
+    if( bRemove )
+    {   // If we already were half dead before this DelEmpty,
+        // we are likely in the list and have to remove us from
+        // it
+        if( !m_pSection && getRootFrame() )
+            getRootFrame()->RemoveFromList( this );
+    }
+    else if( getRootFrame() )
+    {
+        getRootFrame()->InsertEmptySct( this );
+    }
+
+    m_pSection = nullptr;  // like this a reanimation is virtually impossible though
 }
 
 void SwSectionFrame::Cut()
@@ -313,24 +313,24 @@ void SwSectionFrame::Cut_( bool bRemove )
     }
     if( pPrepFrame )
         pPrepFrame->Prepare( PrepareHint::FootnoteInvalidation );
-    if ( pUp )
+    if ( !pUp )
+        return;
+
+    SwRectFnSet aRectFnSet(this);
+    SwTwips nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
+    if( nFrameHeight <= 0 )
+        return;
+
+    if( !bRemove )
     {
-        SwRectFnSet aRectFnSet(this);
-        SwTwips nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
-        if( nFrameHeight > 0 )
-        {
-            if( !bRemove )
-            {
-                SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-                aRectFnSet.SetHeight( aFrm, 0 );
+        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
+        aRectFnSet.SetHeight( aFrm, 0 );
 
-                SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
-                aRectFnSet.SetHeight( aPrt, 0 );
-            }
-
-            pUp->Shrink( nFrameHeight );
-        }
+        SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
+        aRectFnSet.SetHeight( aPrt, 0 );
     }
+
+    pUp->Shrink( nFrameHeight );
 }
 
 void SwSectionFrame::Paste( SwFrame* pParent, SwFrame* pSibling )
@@ -467,36 +467,36 @@ void SwSectionFrame::MergeNext( SwSectionFrame* pNxt )
     if (pNxt->IsDeleteForbidden())
         return;
 
-    if (!pNxt->IsJoinLocked() && GetSection() == pNxt->GetSection())
-    {
-        PROTOCOL( this, PROT::Section, DbgAction::Merge, pNxt )
+    if (pNxt->IsJoinLocked() || GetSection() != pNxt->GetSection())
+        return;
 
-        SwFrame* pTmp = ::SaveContent( pNxt );
-        if( pTmp )
+    PROTOCOL( this, PROT::Section, DbgAction::Merge, pNxt )
+
+    SwFrame* pTmp = ::SaveContent( pNxt );
+    if( pTmp )
+    {
+        SwFrame* pLast = Lower();
+        SwLayoutFrame* pLay = this;
+        if( pLast )
         {
-            SwFrame* pLast = Lower();
-            SwLayoutFrame* pLay = this;
-            if( pLast )
-            {
-                while( pLast->GetNext() )
-                    pLast = pLast->GetNext();
-                if( pLast->IsColumnFrame() )
-                {   // Columns now with BodyFrame
-                    pLay = static_cast<SwLayoutFrame*>(static_cast<SwLayoutFrame*>(pLast)->Lower());
-                    pLast = pLay->Lower();
-                    if( pLast )
-                        while( pLast->GetNext() )
-                            pLast = pLast->GetNext();
-                }
+            while( pLast->GetNext() )
+                pLast = pLast->GetNext();
+            if( pLast->IsColumnFrame() )
+            {   // Columns now with BodyFrame
+                pLay = static_cast<SwLayoutFrame*>(static_cast<SwLayoutFrame*>(pLast)->Lower());
+                pLast = pLay->Lower();
+                if( pLast )
+                    while( pLast->GetNext() )
+                        pLast = pLast->GetNext();
             }
-            ::RestoreContent( pTmp, pLay, pLast );
         }
-        SetFollow( pNxt->GetFollow() );
-        pNxt->SetFollow( nullptr );
-        pNxt->Cut();
-        SwFrame::DestroyFrame(pNxt);
-        InvalidateSize();
+        ::RestoreContent( pTmp, pLay, pLast );
     }
+    SetFollow( pNxt->GetFollow() );
+    pNxt->SetFollow( nullptr );
+    pNxt->Cut();
+    SwFrame::DestroyFrame(pNxt);
+    InvalidateSize();
 }
 
 /**
@@ -877,30 +877,30 @@ const SwSectionFormat* SwSectionFrame::GetEndSectFormat_() const
 static void lcl_FindContentFrame( SwContentFrame* &rpContentFrame, SwFootnoteFrame* &rpFootnoteFrame,
     SwFrame* pFrame, bool &rbChkFootnote )
 {
-    if( pFrame )
+    if( !pFrame )
+        return;
+
+    while( pFrame->GetNext() )
+        pFrame = pFrame->GetNext();
+    while( !rpContentFrame && pFrame )
     {
-        while( pFrame->GetNext() )
-            pFrame = pFrame->GetNext();
-        while( !rpContentFrame && pFrame )
+        if( pFrame->IsContentFrame() )
+            rpContentFrame = static_cast<SwContentFrame*>(pFrame);
+        else if( pFrame->IsLayoutFrame() )
         {
-            if( pFrame->IsContentFrame() )
-                rpContentFrame = static_cast<SwContentFrame*>(pFrame);
-            else if( pFrame->IsLayoutFrame() )
+            if( pFrame->IsFootnoteFrame() )
             {
-                if( pFrame->IsFootnoteFrame() )
+                if( rbChkFootnote )
                 {
-                    if( rbChkFootnote )
-                    {
-                        rpFootnoteFrame = static_cast<SwFootnoteFrame*>(pFrame);
-                        rbChkFootnote = rpFootnoteFrame->GetAttr()->GetFootnote().IsEndNote();
-                    }
+                    rpFootnoteFrame = static_cast<SwFootnoteFrame*>(pFrame);
+                    rbChkFootnote = rpFootnoteFrame->GetAttr()->GetFootnote().IsEndNote();
                 }
-                else
-                    lcl_FindContentFrame( rpContentFrame, rpFootnoteFrame,
-                        static_cast<SwLayoutFrame*>(pFrame)->Lower(), rbChkFootnote );
             }
-            pFrame = pFrame->GetPrev();
+            else
+                lcl_FindContentFrame( rpContentFrame, rpFootnoteFrame,
+                    static_cast<SwLayoutFrame*>(pFrame)->Lower(), rbChkFootnote );
         }
+        pFrame = pFrame->GetPrev();
     }
 }
 
@@ -1111,51 +1111,51 @@ void SwSectionFrame::CheckClipping( bool bGrow, bool bMaximize )
         else if( GetFollow() && !GetFollow()->ContainsAny() )
             bExtraCalc = true;
     }
-    if ( bCalc || bExtraCalc )
+    if ( !(bCalc || bExtraCalc) )
+        return;
+
+    nDiff = aRectFnSet.YDiff( nDeadLine, aRectFnSet.GetTop(getFrameArea()) );
+    if( nDiff < 0 )
+        nDeadLine = aRectFnSet.GetTop(getFrameArea());
+    const Size aOldSz( getFramePrintArea().SSize() );
+    long nTop = aRectFnSet.GetTopMargin(*this);
+
     {
-        nDiff = aRectFnSet.YDiff( nDeadLine, aRectFnSet.GetTop(getFrameArea()) );
-        if( nDiff < 0 )
-            nDeadLine = aRectFnSet.GetTop(getFrameArea());
-        const Size aOldSz( getFramePrintArea().SSize() );
-        long nTop = aRectFnSet.GetTopMargin(*this);
+        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
+        aRectFnSet.SetBottom( aFrm, nDeadLine );
+    }
 
-        {
-            SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-            aRectFnSet.SetBottom( aFrm, nDeadLine );
-        }
+    nDiff = aRectFnSet.GetHeight(getFrameArea());
+    if( nTop > nDiff )
+        nTop = nDiff;
+    aRectFnSet.SetYMargins( *this, nTop, 0 );
 
-        nDiff = aRectFnSet.GetHeight(getFrameArea());
-        if( nTop > nDiff )
-            nTop = nDiff;
-        aRectFnSet.SetYMargins( *this, nTop, 0 );
+    // OD 18.09.2002 #100522#
+    // Determine, if height has changed.
+    // Note: In vertical layout the height equals the width value.
+    bool bHeightChanged = aRectFnSet.IsVert() ?
+                        (aOldSz.Width() != getFramePrintArea().Width()) :
+                        (aOldSz.Height() != getFramePrintArea().Height());
+    // Last but not least we have changed the height again, thus the inner
+    // layout (columns) is calculated and the content as well.
+    // OD 18.09.2002 #100522#
+    // calculate content, only if height has changed.
+    // OD 03.11.2003 #i19737# - restriction of content calculation too strong.
+    // If an endnote has an incorrect position or a follow section contains
+    // no content except footnotes/endnotes, the content has also been calculated.
+    if ( !(( bHeightChanged || bExtraCalc ) && Lower()) )
+        return;
 
-        // OD 18.09.2002 #100522#
-        // Determine, if height has changed.
-        // Note: In vertical layout the height equals the width value.
-        bool bHeightChanged = aRectFnSet.IsVert() ?
-                            (aOldSz.Width() != getFramePrintArea().Width()) :
-                            (aOldSz.Height() != getFramePrintArea().Height());
-        // Last but not least we have changed the height again, thus the inner
-        // layout (columns) is calculated and the content as well.
-        // OD 18.09.2002 #100522#
-        // calculate content, only if height has changed.
-        // OD 03.11.2003 #i19737# - restriction of content calculation too strong.
-        // If an endnote has an incorrect position or a follow section contains
-        // no content except footnotes/endnotes, the content has also been calculated.
-        if ( ( bHeightChanged || bExtraCalc ) && Lower() )
-        {
-            if( Lower()->IsColumnFrame() )
-            {
-                lcl_ColumnRefresh( this, false );
-                ::CalcContent( this );
-            }
-            else
-            {
-                ChgLowersProp( aOldSz );
-                if( !bMaximize && !IsContentLocked() )
-                    ::CalcContent( this );
-            }
-        }
+    if( Lower()->IsColumnFrame() )
+    {
+        lcl_ColumnRefresh( this, false );
+        ::CalcContent( this );
+    }
+    else
+    {
+        ChgLowersProp( aOldSz );
+        if( !bMaximize && !IsContentLocked() )
+            ::CalcContent( this );
     }
 }
 
@@ -1210,19 +1210,19 @@ class ExtraFormatToPositionObjs
 
         ~ExtraFormatToPositionObjs()
         {
-            if ( mbExtraFormatPerformed )
+            if ( !mbExtraFormatPerformed )
+                return;
+
+            // release keep locked position of lower floating screen objects
+            SwPageFrame* pPageFrame = mpSectFrame->FindPageFrame();
+            SwSortedObjs* pObjs = pPageFrame ? pPageFrame->GetSortedObjs() : nullptr;
+            if ( pObjs )
             {
-                // release keep locked position of lower floating screen objects
-                SwPageFrame* pPageFrame = mpSectFrame->FindPageFrame();
-                SwSortedObjs* pObjs = pPageFrame ? pPageFrame->GetSortedObjs() : nullptr;
-                if ( pObjs )
+                for (SwAnchoredObject* pAnchoredObj : *pObjs)
                 {
-                    for (SwAnchoredObject* pAnchoredObj : *pObjs)
+                    if ( mpSectFrame->IsAnLower( pAnchoredObj->GetAnchorFrame() ) )
                     {
-                        if ( mpSectFrame->IsAnLower( pAnchoredObj->GetAnchorFrame() ) )
-                        {
-                            pAnchoredObj->SetKeepPosLocked( false );
-                        }
+                        pAnchoredObj->SetKeepPosLocked( false );
                     }
                 }
             }
@@ -2814,28 +2814,28 @@ void SwSectionFrame::CalcFootnoteContent()
 {
     vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
     SwFootnoteContFrame* pCont = ContainsFootnoteCont();
-    if( pCont )
+    if( !pCont )
+        return;
+
+    SwFrame* pFrame = pCont->ContainsAny();
+    if( pFrame )
+        pCont->Calc(pRenderContext);
+    while( pFrame && IsAnLower( pFrame ) )
     {
-        SwFrame* pFrame = pCont->ContainsAny();
-        if( pFrame )
-            pCont->Calc(pRenderContext);
-        while( pFrame && IsAnLower( pFrame ) )
+        SwFootnoteFrame* pFootnote = pFrame->FindFootnoteFrame();
+        if( pFootnote )
+            pFootnote->Calc(pRenderContext);
+        pFrame->Calc(pRenderContext);
+        if( pFrame->IsSctFrame() )
         {
-            SwFootnoteFrame* pFootnote = pFrame->FindFootnoteFrame();
-            if( pFootnote )
-                pFootnote->Calc(pRenderContext);
-            pFrame->Calc(pRenderContext);
-            if( pFrame->IsSctFrame() )
+            SwFrame *pTmp = static_cast<SwSectionFrame*>(pFrame)->ContainsAny();
+            if( pTmp )
             {
-                SwFrame *pTmp = static_cast<SwSectionFrame*>(pFrame)->ContainsAny();
-                if( pTmp )
-                {
-                    pFrame = pTmp;
-                    continue;
-                }
+                pFrame = pTmp;
+                continue;
             }
-            pFrame = pFrame->FindNext();
         }
+        pFrame = pFrame->FindNext();
     }
 }
 

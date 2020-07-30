@@ -1360,36 +1360,36 @@ void SwTabFrame::Join()
 
     SwTabFrame *pFoll = GetFollow();
 
-    if (pFoll && !pFoll->IsJoinLocked())
+    if (!(pFoll && !pFoll->IsJoinLocked()))
+        return;
+
+    SwRectFnSet aRectFnSet(this);
+    pFoll->Cut();   //Cut out first to avoid unnecessary notifications.
+
+    SwFrame *pRow = pFoll->GetFirstNonHeadlineRow(),
+          *pNxt;
+
+    SwFrame* pPrv = GetLastLower();
+
+    SwTwips nHeight = 0;    //Total height of the inserted rows as return value.
+
+    while ( pRow )
     {
-        SwRectFnSet aRectFnSet(this);
-        pFoll->Cut();   //Cut out first to avoid unnecessary notifications.
-
-        SwFrame *pRow = pFoll->GetFirstNonHeadlineRow(),
-              *pNxt;
-
-        SwFrame* pPrv = GetLastLower();
-
-        SwTwips nHeight = 0;    //Total height of the inserted rows as return value.
-
-        while ( pRow )
-        {
-            pNxt = pRow->GetNext();
-            nHeight += aRectFnSet.GetHeight(pRow->getFrameArea());
-            pRow->RemoveFromLayout();
-            pRow->InvalidateAll_();
-            pRow->InsertBehind( this, pPrv );
-            pRow->CheckDirChange();
-            pPrv = pRow;
-            pRow = pNxt;
-        }
-
-        SetFollow( pFoll->GetFollow() );
-        SetFollowFlowLine( pFoll->HasFollowFlowLine() );
-        SwFrame::DestroyFrame(pFoll);
-
-        Grow( nHeight );
+        pNxt = pRow->GetNext();
+        nHeight += aRectFnSet.GetHeight(pRow->getFrameArea());
+        pRow->RemoveFromLayout();
+        pRow->InvalidateAll_();
+        pRow->InsertBehind( this, pPrv );
+        pRow->CheckDirChange();
+        pPrv = pRow;
+        pRow = pNxt;
     }
+
+    SetFollow( pFoll->GetFollow() );
+    SetFollowFlowLine( pFoll->HasFollowFlowLine() );
+    SwFrame::DestroyFrame(pFoll);
+
+    Grow( nHeight );
 }
 
 static void SwInvalidatePositions( SwFrame *pFrame, long nBottom )
@@ -3116,27 +3116,27 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
         }
     }
 
-    if ( !isFrameAreaSizeValid() )
+    if ( isFrameAreaSizeValid() )
+        return;
+
+    setFrameAreaSizeValid(true);
+
+    // The size is defined by the content plus the margins.
+    SwTwips nRemaining = 0, nDiff;
+    SwFrame *pFrame = m_pLower;
+    while ( pFrame )
     {
-        setFrameAreaSizeValid(true);
-
-        // The size is defined by the content plus the margins.
-        SwTwips nRemaining = 0, nDiff;
-        SwFrame *pFrame = m_pLower;
-        while ( pFrame )
-        {
-            nRemaining += aRectFnSet.GetHeight(pFrame->getFrameArea());
-            pFrame = pFrame->GetNext();
-        }
-        // And now add the margins
-        nRemaining += nUpper + nLower;
-
-        nDiff = aRectFnSet.GetHeight(getFrameArea()) - nRemaining;
-        if ( nDiff > 0 )
-            Shrink( nDiff );
-        else if ( nDiff < 0 )
-            Grow( -nDiff );
+        nRemaining += aRectFnSet.GetHeight(pFrame->getFrameArea());
+        pFrame = pFrame->GetNext();
     }
+    // And now add the margins
+    nRemaining += nUpper + nLower;
+
+    nDiff = aRectFnSet.GetHeight(getFrameArea()) - nRemaining;
+    if ( nDiff > 0 )
+        Shrink( nDiff );
+    else if ( nDiff < 0 )
+        Grow( -nDiff );
 }
 
 SwTwips SwTabFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
@@ -3246,40 +3246,40 @@ void SwTabFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
     else
         UpdateAttr_( pOld, pNew, nInvFlags );
 
-    if ( nInvFlags != 0 )
+    if ( nInvFlags == 0 )
+        return;
+
+    SwPageFrame *pPage = FindPageFrame();
+    InvalidatePage( pPage );
+    if ( nInvFlags & 0x02 )
+        InvalidatePrt_();
+    if ( nInvFlags & 0x40 )
+        InvalidatePos_();
+    SwFrame *pTmp = GetIndNext();
+    if ( nullptr != pTmp )
     {
-        SwPageFrame *pPage = FindPageFrame();
-        InvalidatePage( pPage );
-        if ( nInvFlags & 0x02 )
-            InvalidatePrt_();
-        if ( nInvFlags & 0x40 )
-            InvalidatePos_();
-        SwFrame *pTmp = GetIndNext();
-        if ( nullptr != pTmp )
-        {
-            if ( nInvFlags & 0x04 )
-            {
-                pTmp->InvalidatePrt_();
-                if ( pTmp->IsContentFrame() )
-                    pTmp->InvalidatePage( pPage );
-            }
-            if ( nInvFlags & 0x10 )
-                pTmp->SetCompletePaint();
-        }
-        if ( nInvFlags & 0x08 && nullptr != (pTmp = GetPrev()) )
+        if ( nInvFlags & 0x04 )
         {
             pTmp->InvalidatePrt_();
             if ( pTmp->IsContentFrame() )
                 pTmp->InvalidatePage( pPage );
         }
-        if ( nInvFlags & 0x20  )
-        {
-            if ( pPage && pPage->GetUpper() && !IsFollow() )
-                static_cast<SwRootFrame*>(pPage->GetUpper())->InvalidateBrowseWidth();
-        }
-        if ( nInvFlags & 0x80 )
-            InvalidateNextPos();
+        if ( nInvFlags & 0x10 )
+            pTmp->SetCompletePaint();
     }
+    if ( nInvFlags & 0x08 && nullptr != (pTmp = GetPrev()) )
+    {
+        pTmp->InvalidatePrt_();
+        if ( pTmp->IsContentFrame() )
+            pTmp->InvalidatePage( pPage );
+    }
+    if ( nInvFlags & 0x20  )
+    {
+        if ( pPage && pPage->GetUpper() && !IsFollow() )
+            static_cast<SwRootFrame*>(pPage->GetUpper())->InvalidateBrowseWidth();
+    }
+    if ( nInvFlags & 0x80 )
+        InvalidateNextPos();
 }
 
 void SwTabFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
@@ -3739,18 +3739,18 @@ void SwTabFrame::Paste( SwFrame* pParent, SwFrame* pSibling )
         // b) The new follower was previously the first in a chain
         GetNext()->InvalidatePrt_();
 
-    if ( pPage && !IsFollow() )
-    {
-        if ( pPage->GetUpper() )
-            static_cast<SwRootFrame*>(pPage->GetUpper())->InvalidateBrowseWidth();
+    if ( !(pPage && !IsFollow()) )
+        return;
 
-        if ( !GetPrev() )//At least needed for HTML with a table at the beginning.
-        {
-            const SwPageDesc *pDesc = GetFormat()->GetPageDesc().GetPageDesc();
-            if ( (pDesc && pDesc != pPage->GetPageDesc()) ||
-                 (!pDesc && pPage->GetPageDesc() != &GetFormat()->GetDoc()->GetPageDesc(0)) )
-                CheckPageDescs( pPage );
-        }
+    if ( pPage->GetUpper() )
+        static_cast<SwRootFrame*>(pPage->GetUpper())->InvalidateBrowseWidth();
+
+    if ( !GetPrev() )//At least needed for HTML with a table at the beginning.
+    {
+        const SwPageDesc *pDesc = GetFormat()->GetPageDesc().GetPageDesc();
+        if ( (pDesc && pDesc != pPage->GetPageDesc()) ||
+             (!pDesc && pPage->GetPageDesc() != &GetFormat()->GetDoc()->GetPageDesc(0)) )
+            CheckPageDescs( pPage );
     }
 }
 
@@ -4409,22 +4409,22 @@ void SwRowFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
     }
 
     // last row will fill the space in its upper.
-    if ( !GetNext() )
+    if ( GetNext() )
+        return;
+
+    //The last fills the remaining space in the upper.
+    SwTwips nDiff = aRectFnSet.GetHeight(GetUpper()->getFramePrintArea());
+    SwFrame *pSibling = GetUpper()->Lower();
+    do
+    {   nDiff -= aRectFnSet.GetHeight(pSibling->getFrameArea());
+        pSibling = pSibling->GetNext();
+    } while ( pSibling );
+    if ( nDiff > 0 )
     {
-        //The last fills the remaining space in the upper.
-        SwTwips nDiff = aRectFnSet.GetHeight(GetUpper()->getFramePrintArea());
-        SwFrame *pSibling = GetUpper()->Lower();
-        do
-        {   nDiff -= aRectFnSet.GetHeight(pSibling->getFrameArea());
-            pSibling = pSibling->GetNext();
-        } while ( pSibling );
-        if ( nDiff > 0 )
-        {
-            mbFixSize = false;
-            Grow( nDiff );
-            mbFixSize = bFix;
-            setFrameAreaSizeValid(true);
-        }
+        mbFixSize = false;
+        Grow( nDiff );
+        mbFixSize = bFix;
+        setFrameAreaSizeValid(true);
     }
 }
 

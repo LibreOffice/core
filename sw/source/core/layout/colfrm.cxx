@@ -411,34 +411,34 @@ void SwLayoutFrame::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttribu
         pCol = bR2L ? pCol->GetPrev() : pCol->GetNext();
     }
 
-    if( bOrtho )
+    if( !bOrtho )
+        return;
+
+    long nInnerWidth = ( nAvail - nGutter ) / pAttr->GetNumCols();
+    pCol = Lower();
+    for( sal_uInt16 i = 0; i < pAttr->GetNumCols() && pCol; pCol = pCol->GetNext(), ++i ) //i118878, value returned by GetNumCols() can't be trusted
     {
-        long nInnerWidth = ( nAvail - nGutter ) / pAttr->GetNumCols();
-        pCol = Lower();
-        for( sal_uInt16 i = 0; i < pAttr->GetNumCols() && pCol; pCol = pCol->GetNext(), ++i ) //i118878, value returned by GetNumCols() can't be trusted
+        SwTwips nWidth;
+        if ( i == pAttr->GetNumCols() - 1 )
+            nWidth = nAvail;
+        else
         {
-            SwTwips nWidth;
-            if ( i == pAttr->GetNumCols() - 1 )
-                nWidth = nAvail;
-            else
-            {
-                SvxLRSpaceItem aLR( pCol->GetAttrSet()->GetLRSpace() );
-                nWidth = nInnerWidth + aLR.GetLeft() + aLR.GetRight();
-            }
-            if( nWidth < 0 )
-                nWidth = 0;
-
-            const Size aColSz = bVert ?
-                                Size( getFramePrintArea().Width(), nWidth ) :
-                                Size( nWidth, getFramePrintArea().Height() );
-
-            pCol->ChgSize( aColSz );
-
-            if( IsBodyFrame() )
-                static_cast<SwLayoutFrame*>(pCol)->Lower()->ChgSize( aColSz );
-
-            nAvail -= nWidth;
+            SvxLRSpaceItem aLR( pCol->GetAttrSet()->GetLRSpace() );
+            nWidth = nInnerWidth + aLR.GetLeft() + aLR.GetRight();
         }
+        if( nWidth < 0 )
+            nWidth = 0;
+
+        const Size aColSz = bVert ?
+                            Size( getFramePrintArea().Width(), nWidth ) :
+                            Size( nWidth, getFramePrintArea().Height() );
+
+        pCol->ChgSize( aColSz );
+
+        if( IsBodyFrame() )
+            static_cast<SwLayoutFrame*>(pCol)->Lower()->ChgSize( aColSz );
+
+        nAvail -= nWidth;
     }
 }
 
