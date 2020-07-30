@@ -16,6 +16,24 @@
       "revId": "d0b67d9e08b6d81edea48397c116d0c759281156",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb10d899_30cb1047",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1181,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-07-30T08:59:01Z",
+      "side": 1,
+      "message": "hope SAL_NEWLINE_STRING works",
+      "parentUuid": "25adc824_38113a1b",
+      "revId": "d0b67d9e08b6d81edea48397c116d0c759281156",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
