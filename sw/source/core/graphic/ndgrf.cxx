@@ -308,48 +308,48 @@ void SwGrfNode::onGraphicChanged()
     // when it is set.
     SwFlyFrameFormat* pFlyFormat = dynamic_cast< SwFlyFrameFormat* >(GetFlyFormat());
 
-    if(pFlyFormat)
+    if(!pFlyFormat)
+        return;
+
+    OUString aName;
+    OUString aTitle;
+    OUString aDesc;
+    auto const & rVectorGraphicDataPtr = GetGrf().getVectorGraphicData();
+
+    if (rVectorGraphicDataPtr)
     {
-        OUString aName;
-        OUString aTitle;
-        OUString aDesc;
-        auto const & rVectorGraphicDataPtr = GetGrf().getVectorGraphicData();
+        const drawinglayer::primitive2d::Primitive2DContainer aSequence(rVectorGraphicDataPtr->getPrimitive2DSequence());
 
-        if (rVectorGraphicDataPtr)
+        if(!aSequence.empty())
         {
-            const drawinglayer::primitive2d::Primitive2DContainer aSequence(rVectorGraphicDataPtr->getPrimitive2DSequence());
+            drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+            drawinglayer::processor2d::ObjectInfoPrimitiveExtractor2D aProcessor(aViewInformation2D);
 
-            if(!aSequence.empty())
+            aProcessor.process(aSequence);
+
+            const drawinglayer::primitive2d::ObjectInfoPrimitive2D* pResult = aProcessor.getResult();
+
+            if(pResult)
             {
-                drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-                drawinglayer::processor2d::ObjectInfoPrimitiveExtractor2D aProcessor(aViewInformation2D);
-
-                aProcessor.process(aSequence);
-
-                const drawinglayer::primitive2d::ObjectInfoPrimitive2D* pResult = aProcessor.getResult();
-
-                if(pResult)
-                {
-                    aName = pResult->getName();
-                    aTitle = pResult->getTitle();
-                    aDesc = pResult->getDesc();
-                }
+                aName = pResult->getName();
+                aTitle = pResult->getTitle();
+                aDesc = pResult->getDesc();
             }
         }
+    }
 
-        if(!aTitle.isEmpty())
-        {
-            SetTitle(aTitle);
-        }
-        else if (!aName.isEmpty())
-        {
-            SetTitle(aName);
-        }
+    if(!aTitle.isEmpty())
+    {
+        SetTitle(aTitle);
+    }
+    else if (!aName.isEmpty())
+    {
+        SetTitle(aName);
+    }
 
-        if(!aDesc.isEmpty())
-        {
-            SetDescription(aDesc);
-        }
+    if(!aDesc.isEmpty())
+    {
+        SetDescription(aDesc);
     }
 }
 
@@ -558,63 +558,63 @@ void SwGrfNode::InsertLink( const OUString& rGrfName, const OUString& rFltName )
     mxLink = new SwBaseLink( SfxLinkUpdateMode::ONCALL, SotClipboardFormatId::GDIMETAFILE, this );
 
     IDocumentLinksAdministration& rIDLA = getIDocumentLinksAdministration();
-    if( GetNodes().IsDocNodes() )
-    {
-        mxLink->SetVisible( rIDLA.IsVisibleLinks() );
-        if( rFltName == "DDE" )
-        {
-            sal_Int32 nTmp = 0;
-            const OUString sApp{ rGrfName.getToken( 0, sfx2::cTokenSeparator, nTmp ) };
-            const OUString sTopic{ rGrfName.getToken( 0, sfx2::cTokenSeparator, nTmp ) };
-            const OUString sItem{ rGrfName.copy( nTmp ) };
-            rIDLA.GetLinkManager().InsertDDELink( mxLink.get(), sApp, sTopic, sItem );
-        }
-        else
-        {
-            const bool bSync = rFltName == "SYNCHRON";
-            mxLink->SetSynchron( bSync );
-            mxLink->SetContentType( SotClipboardFormatId::SVXB );
+    if( !GetNodes().IsDocNodes() )
+        return;
 
-            rIDLA.GetLinkManager().InsertFileLink( *mxLink,
-                                            sfx2::SvBaseLinkObjectType::ClientGraphic, rGrfName,
-                                (!bSync && !rFltName.isEmpty() ? &rFltName : nullptr) );
-        }
+    mxLink->SetVisible( rIDLA.IsVisibleLinks() );
+    if( rFltName == "DDE" )
+    {
+        sal_Int32 nTmp = 0;
+        const OUString sApp{ rGrfName.getToken( 0, sfx2::cTokenSeparator, nTmp ) };
+        const OUString sTopic{ rGrfName.getToken( 0, sfx2::cTokenSeparator, nTmp ) };
+        const OUString sItem{ rGrfName.copy( nTmp ) };
+        rIDLA.GetLinkManager().InsertDDELink( mxLink.get(), sApp, sTopic, sItem );
+    }
+    else
+    {
+        const bool bSync = rFltName == "SYNCHRON";
+        mxLink->SetSynchron( bSync );
+        mxLink->SetContentType( SotClipboardFormatId::SVXB );
+
+        rIDLA.GetLinkManager().InsertFileLink( *mxLink,
+                                        sfx2::SvBaseLinkObjectType::ClientGraphic, rGrfName,
+                            (!bSync && !rFltName.isEmpty() ? &rFltName : nullptr) );
     }
 }
 
 void SwGrfNode::ReleaseLink()
 {
-    if( mxLink.is() )
+    if( !mxLink.is() )
+        return;
+
+    Graphic aLocalGraphic(maGrfObj.GetGraphic());
+    const bool bHasOriginalData(aLocalGraphic.IsGfxLink());
+
     {
-        Graphic aLocalGraphic(maGrfObj.GetGraphic());
-        const bool bHasOriginalData(aLocalGraphic.IsGfxLink());
+        mbInSwapIn = true;
+        SwBaseLink* pLink = static_cast<SwBaseLink*>( mxLink.get() );
+        pLink->SwapIn( true, true );
+        mbInSwapIn = false;
+    }
 
-        {
-            mbInSwapIn = true;
-            SwBaseLink* pLink = static_cast<SwBaseLink*>( mxLink.get() );
-            pLink->SwapIn( true, true );
-            mbInSwapIn = false;
-        }
+    getIDocumentLinksAdministration().GetLinkManager().Remove( mxLink.get() );
+    mxLink.clear();
+    aLocalGraphic.setOriginURL("");
 
-        getIDocumentLinksAdministration().GetLinkManager().Remove( mxLink.get() );
-        mxLink.clear();
-        aLocalGraphic.setOriginURL("");
-
-        // #i15508# added extra processing after getting rid of the link. Use whatever is
-        // known from the formerly linked graphic to get to a state as close to a directly
-        // unlinked inserted graphic as possible. Goal is to have a valid GfxLink at the
-        // ImplGraphic (see there) that holds temporary data to the original data and type
-        // information about the original data. Only when this is given will
-        // SvXMLGraphicHelper::ImplInsertGraphicURL which is used at export use that type
-        // and use the original graphic at export for the ODF, without evtl. recoding
-        // of the bitmap graphic data to something without loss (e.g. PNG) but bigger
-        if(bHasOriginalData)
-        {
-            // #i15508# if we have the original data at the Graphic, let it survive
-            // by using that Graphic again, this time at a GraphicObject without link.
-            // This happens e.g. when inserting a linked graphic and breaking the link
-            maGrfObj.SetGraphic(aLocalGraphic);
-        }
+    // #i15508# added extra processing after getting rid of the link. Use whatever is
+    // known from the formerly linked graphic to get to a state as close to a directly
+    // unlinked inserted graphic as possible. Goal is to have a valid GfxLink at the
+    // ImplGraphic (see there) that holds temporary data to the original data and type
+    // information about the original data. Only when this is given will
+    // SvXMLGraphicHelper::ImplInsertGraphicURL which is used at export use that type
+    // and use the original graphic at export for the ODF, without evtl. recoding
+    // of the bitmap graphic data to something without loss (e.g. PNG) but bigger
+    if(bHasOriginalData)
+    {
+        // #i15508# if we have the original data at the Graphic, let it survive
+        // by using that Graphic again, this time at a GraphicObject without link.
+        // This happens e.g. when inserting a linked graphic and breaking the link
+        maGrfObj.SetGraphic(aLocalGraphic);
     }
 }
 
@@ -801,20 +801,20 @@ void SwGrfNode::TriggerAsyncRetrieveInputStream()
         return;
     }
 
-    if (mpThreadConsumer == nullptr)
-    {
-        mpThreadConsumer.reset(new SwAsyncRetrieveInputStreamThreadConsumer(*this), o3tl::default_delete<SwAsyncRetrieveInputStreamThreadConsumer>());
+    if (mpThreadConsumer != nullptr)
+        return;
 
-        OUString sGrfNm;
-        sfx2::LinkManager::GetDisplayNames( mxLink.get(), nullptr, &sGrfNm );
-        OUString sReferer;
-        SfxObjectShell * sh = GetDoc()->GetPersist();
-        if (sh != nullptr && sh->HasName())
-        {
-            sReferer = sh->GetMedium()->GetName();
-        }
-        mpThreadConsumer->CreateThread( sGrfNm, sReferer );
+    mpThreadConsumer.reset(new SwAsyncRetrieveInputStreamThreadConsumer(*this), o3tl::default_delete<SwAsyncRetrieveInputStreamThreadConsumer>());
+
+    OUString sGrfNm;
+    sfx2::LinkManager::GetDisplayNames( mxLink.get(), nullptr, &sGrfNm );
+    OUString sReferer;
+    SfxObjectShell * sh = GetDoc()->GetPersist();
+    if (sh != nullptr && sh->HasName())
+    {
+        sReferer = sh->GetMedium()->GetName();
     }
+    mpThreadConsumer->CreateThread( sGrfNm, sReferer );
 }
 
 
@@ -838,19 +838,19 @@ void SwGrfNode::ApplyInputStream(
 void SwGrfNode::UpdateLinkWithInputStream()
 {
     // do not work on link, if a <SwapIn> has been triggered.
-    if ( !mbInSwapIn && IsLinkedFile() )
-    {
-        GetLink()->setStreamToLoadFrom( mxInputStream, mbIsStreamReadOnly );
-        GetLink()->Update();
-        SwMsgPoolItem aMsgHint( RES_GRAPHIC_ARRIVED );
-        ModifyNotification( &aMsgHint, &aMsgHint );
+    if ( !(!mbInSwapIn && IsLinkedFile()) )
+        return;
 
-        // #i88291#
-        mxInputStream.clear();
-        GetLink()->clearStreamToLoadFrom();
-        mbLinkedInputStreamReady = false;
-        mpThreadConsumer.reset();
-    }
+    GetLink()->setStreamToLoadFrom( mxInputStream, mbIsStreamReadOnly );
+    GetLink()->Update();
+    SwMsgPoolItem aMsgHint( RES_GRAPHIC_ARRIVED );
+    ModifyNotification( &aMsgHint, &aMsgHint );
+
+    // #i88291#
+    mxInputStream.clear();
+    GetLink()->clearStreamToLoadFrom();
+    mbLinkedInputStreamReady = false;
+    mpThreadConsumer.reset();
 }
 
 // #i90395#

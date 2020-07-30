@@ -740,40 +740,40 @@ void SwFEShell::EndDrag()
 {
     OSL_ENSURE( Imp()->HasDrawView(), "EndDrag without DrawView?" );
     SdrView *pView = Imp()->GetDrawView();
-    if ( pView->IsDragObj() )
+    if ( !pView->IsDragObj() )
+        return;
+
+    for(SwViewShell& rSh : GetRingContainer())
+        rSh.StartAction();
+
+    StartUndo( SwUndoId::START );
+
+    // #50778# Bug during dragging: In StartAction a HideShowXor is called.
+    // In EndDragObj() this is reversed, for no reason and even wrong.
+    // To restore consistency we should bring up the Xor again.
+
+    // Reanimation from the hack #50778 to fix bug #97057
+    // May be not the best solution, but the one with lowest risc at the moment.
+    // pView->ShowShownXor( GetOut() );
+
+    pView->EndDragObj();
+
+    // DrawUndo on to flyframes are not stored
+    //             The flys change the flag.
+    GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(true);
+    ChgAnchor( RndStdIds::FLY_AT_PARA, true );
+
+    EndUndo( SwUndoId::END );
+
+    for(SwViewShell& rSh : GetRingContainer())
     {
-        for(SwViewShell& rSh : GetRingContainer())
-            rSh.StartAction();
-
-        StartUndo( SwUndoId::START );
-
-        // #50778# Bug during dragging: In StartAction a HideShowXor is called.
-        // In EndDragObj() this is reversed, for no reason and even wrong.
-        // To restore consistency we should bring up the Xor again.
-
-        // Reanimation from the hack #50778 to fix bug #97057
-        // May be not the best solution, but the one with lowest risc at the moment.
-        // pView->ShowShownXor( GetOut() );
-
-        pView->EndDragObj();
-
-        // DrawUndo on to flyframes are not stored
-        //             The flys change the flag.
-        GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(true);
-        ChgAnchor( RndStdIds::FLY_AT_PARA, true );
-
-        EndUndo( SwUndoId::END );
-
-        for(SwViewShell& rSh : GetRingContainer())
-        {
-            rSh.EndAction();
-            if( dynamic_cast<const SwCursorShell *>(&rSh) != nullptr )
-                static_cast<SwCursorShell*>(&rSh)->CallChgLnk();
-        }
-
-        GetDoc()->getIDocumentState().SetModified();
-        ::FrameNotify( this );
+        rSh.EndAction();
+        if( dynamic_cast<const SwCursorShell *>(&rSh) != nullptr )
+            static_cast<SwCursorShell*>(&rSh)->CallChgLnk();
     }
+
+    GetDoc()->getIDocumentState().SetModified();
+    ::FrameNotify( this );
 }
 
 void SwFEShell::BreakDrag()
@@ -1102,39 +1102,39 @@ SdrLayerID SwFEShell::GetLayerId() const
 //       If <SwFEShell> exists, layout exists!!
 void SwFEShell::ChangeOpaque( SdrLayerID nLayerId )
 {
-    if ( Imp()->HasDrawView() )
+    if ( !Imp()->HasDrawView() )
+        return;
+
+    const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
+    const IDocumentDrawModelAccess& rIDDMA = getIDocumentDrawModelAccess();
+    // correct type of <nControls>
+    for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
     {
-        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
-        const IDocumentDrawModelAccess& rIDDMA = getIDocumentDrawModelAccess();
-        // correct type of <nControls>
-        for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
+        SdrObject* pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
+        if( !pObj )
+            continue;
+        // or group objects containing controls.
+        // --> #i113730#
+        // consider that a member of a drawing group has been selected.
+        const SwContact* pContact = ::GetUserCall( pObj );
+        OSL_ENSURE( pContact && pContact->GetMaster(), "<SwFEShell::ChangeOpaque(..)> - missing contact or missing master object at contact!" );
+        const bool bControlObj = ( pContact && pContact->GetMaster() )
+                                 ? ::CheckControlLayer( pContact->GetMaster() )
+                                 : ::CheckControlLayer( pObj );
+        if ( !bControlObj && pObj->GetLayer() != nLayerId )
         {
-            SdrObject* pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
-            if( !pObj )
-                continue;
-            // or group objects containing controls.
-            // --> #i113730#
-            // consider that a member of a drawing group has been selected.
-            const SwContact* pContact = ::GetUserCall( pObj );
-            OSL_ENSURE( pContact && pContact->GetMaster(), "<SwFEShell::ChangeOpaque(..)> - missing contact or missing master object at contact!" );
-            const bool bControlObj = ( pContact && pContact->GetMaster() )
-                                     ? ::CheckControlLayer( pContact->GetMaster() )
-                                     : ::CheckControlLayer( pObj );
-            if ( !bControlObj && pObj->GetLayer() != nLayerId )
+            pObj->SetLayer( nLayerId );
+            InvalidateWindows( SwRect( pObj->GetCurrentBoundRect() ) );
+            if (SwVirtFlyDrawObj* pVirtO = dynamic_cast<SwVirtFlyDrawObj*>(pObj))
             {
-                pObj->SetLayer( nLayerId );
-                InvalidateWindows( SwRect( pObj->GetCurrentBoundRect() ) );
-                if (SwVirtFlyDrawObj* pVirtO = dynamic_cast<SwVirtFlyDrawObj*>(pObj))
-                {
-                    SwFormat *pFormat = pVirtO->GetFlyFrame()->GetFormat();
-                    SvxOpaqueItem aOpa( pFormat->GetOpaque() );
-                    aOpa.SetValue(  nLayerId == rIDDMA.GetHellId() );
-                    pFormat->SetFormatAttr( aOpa );
-                }
+                SwFormat *pFormat = pVirtO->GetFlyFrame()->GetFormat();
+                SvxOpaqueItem aOpa( pFormat->GetOpaque() );
+                aOpa.SetValue(  nLayerId == rIDDMA.GetHellId() );
+                pFormat->SetFormatAttr( aOpa );
             }
         }
-        GetDoc()->getIDocumentState().SetModified();
     }
+    GetDoc()->getIDocumentState().SetModified();
 }
 
 void SwFEShell::SelectionToHeaven()

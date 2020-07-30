@@ -2523,22 +2523,22 @@ void FndBox_::MakeNewFrames( SwTable &rTable, const sal_uInt16 nNumber,
     // If necessary headlines should be processed. In order to
     // not to fragment good code, we iterate once more.
     const sal_uInt16 nRowsToRepeat = rTable.GetRowsToRepeat();
-    if ( nRowsToRepeat > 0 &&
+    if ( !(nRowsToRepeat > 0 &&
          ( ( !bBehind && ( nBfPos == USHRT_MAX || nBfPos + 1 < nRowsToRepeat ) ) ||
-           (  bBehind && ( ( nBfPos == USHRT_MAX && nRowsToRepeat > 1 ) || nBfPos + 2 < nRowsToRepeat ) ) ) )
-    {
-        for ( pTable = aTabIter.First(); pTable; pTable = aTabIter.Next() )
-        {
-            if ( pTable->Lower() )
-            {
-                if ( pTable->IsFollow() )
-                {
-                    lcl_UpdateRepeatedHeadlines( *pTable, true );
-                }
+           (  bBehind && ( ( nBfPos == USHRT_MAX && nRowsToRepeat > 1 ) || nBfPos + 2 < nRowsToRepeat ) ) )) )
+        return;
 
-                OSL_ENSURE( static_cast<SwRowFrame*>(pTable->Lower())->GetTabLine() ==
-                        rTable.GetTabLines()[0], "MakeNewFrames: Table corruption!" );
+    for ( pTable = aTabIter.First(); pTable; pTable = aTabIter.Next() )
+    {
+        if ( pTable->Lower() )
+        {
+            if ( pTable->IsFollow() )
+            {
+                lcl_UpdateRepeatedHeadlines( *pTable, true );
             }
+
+            OSL_ENSURE( static_cast<SwRowFrame*>(pTable->Lower())->GetTabLine() ==
+                    rTable.GetTabLines()[0], "MakeNewFrames: Table corruption!" );
         }
     }
 }
