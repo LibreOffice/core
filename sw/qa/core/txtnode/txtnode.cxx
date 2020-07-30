@@ -14,6 +14,8 @@
 #include <fmtanchr.hxx>
 #include <frameformats.hxx>
 #include <wrtsh.hxx>
+#include <unotxdoc.hxx>
+#include <docsh.hxx>
 
 char const DATA_DIRECTORY[] = "/sw/qa/core/txtnode/data/";
 

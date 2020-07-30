@@ -25,6 +25,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_core_crsr, \
     sfx \
     svxcore \
     sw \
+	swqahelper \
     test \
     unotest \
     utl \

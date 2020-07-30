@@ -7,13 +7,17 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <swmodeltestbase.hxx>
+
 #include <string>
+
 #include <boost/property_tree/json_parser.hpp>
 
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <swmodeltestbase.hxx>
+#include <com/sun/star/frame/Desktop.hpp>
+
 #include <test/helper/transferable.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/dispatchcommand.hxx>
@@ -28,28 +32,33 @@
 #include <svl/srchitem.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/stritem.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/lokhelper.hxx>
+#include <vcl/scheduler.hxx>
+#include <vcl/vclevent.hxx>
+#include <vcl/bitmapaccess.hxx>
+#include <svx/svxids.hrc>
+#include <vcl/ITiledRenderable.hxx>
+#include <tools/json_writer.hxx>
+#include <unotools/mediadescriptor.hxx>
+#include <comphelper/processfactory.hxx>
+
 #include <drawdoc.hxx>
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <UndoManager.hxx>
 #include <cmdid.h>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/bindings.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/lokhelper.hxx>
 #include <redline.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
-#include <vcl/scheduler.hxx>
-#include <vcl/vclevent.hxx>
-#include <vcl/bitmapaccess.hxx>
-#include <svx/svxids.hrc>
 #include <flddat.hxx>
 #include <basesh.hxx>
-#include <vcl/ITiledRenderable.hxx>
-#include <tools/json_writer.hxx>
+#include <unotxdoc.hxx>
+#include <docsh.hxx>
 
 char const DATA_DIRECTORY[] = "/sw/qa/extras/tiledrendering/data/";
 

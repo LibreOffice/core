@@ -29,6 +29,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_ww8export3, \
     unotest \
     utl \
     sw \
+	swqahelper \
     tl \
 ))
 

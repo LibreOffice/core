@@ -19,7 +19,6 @@
 
 #include <swmodeltestbase.hxx>
 
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
@@ -45,17 +44,27 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/text/GraphicCrop.hpp>
+#include <com/sun/star/drawing/HomogenMatrix3.hpp>
+#include <com/sun/star/awt/CharSet.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/text/XTextSectionsSupplier.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/table/XTableRows.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
+
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <o3tl/cppunittraitshelper.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <com/sun/star/text/GraphicCrop.hpp>
 #include <tools/datetimeutils.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <com/sun/star/drawing/HomogenMatrix3.hpp>
-#include <com/sun/star/awt/CharSet.hpp>
-#include <com/sun/star/text/WritingMode2.hpp>
+#include <osl/time.h>
+#include <comphelper/processfactory.hxx>
 
 class Test : public SwModelTestBase
 {

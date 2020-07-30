@@ -7,8 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <memory>
 #include <swmodeltestbase.hxx>
+
+#include <memory>
 
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -18,14 +19,12 @@
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
-
-#include <svtools/htmlcfg.hxx>
-#include <swmodule.hxx>
-#include <swdll.hxx>
-#include <usrpref.hxx>
-#include <wrtsh.hxx>
-#include <ndtxt.hxx>
-#include <paratr.hxx>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
 #include <test/htmltesttools.hxx>
 #include <tools/urlobj.hxx>
@@ -38,6 +37,20 @@
 #include <filter/msfilter/rtfutil.hxx>
 #include <sot/storage.hxx>
 #include <svl/eitem.hxx>
+#include <vcl/svapp.hxx>
+#include <unotools/mediadescriptor.hxx>
+#include <svtools/htmlcfg.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#include <comphelper/processfactory.hxx>
+
+#include <swmodule.hxx>
+#include <swdll.hxx>
+#include <usrpref.hxx>
+#include <wrtsh.hxx>
+#include <ndtxt.hxx>
+#include <paratr.hxx>
+#include <docsh.hxx>
+#include <unotxdoc.hxx>
 
 class HtmlExportTest : public SwModelTestBase, public HtmlTestTools
 {

@@ -8,9 +8,15 @@
  */
 
 #include <swmodeltestbase.hxx>
+
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
+
 #include <xmloff/odffields.hxx>
+
 #include <IDocumentMarkAccess.hxx>
 #include <IMark.hxx>
+#include <docsh.hxx>
+#include <unotxdoc.hxx>
 
 class Test : public SwModelTestBase
 {

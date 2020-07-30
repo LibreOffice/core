@@ -43,15 +43,29 @@
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/table/XTableRows.hpp>
+#include <com/sun/star/text/XFootnotesSupplier.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/text/XEndnotesSupplier.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
+
 #include <unotools/fltrcfg.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <swtypes.hxx>
-#include <drawdoc.hxx>
-#include <IDocumentDrawModelAccess.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <svx/svdpage.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+
+#include <swtypes.hxx>
+#include <drawdoc.hxx>
+#include <IDocumentDrawModelAccess.hxx>
+#include <unotxdoc.hxx>
+#include <docsh.hxx>
 
 class Test : public SwModelTestBase
 {

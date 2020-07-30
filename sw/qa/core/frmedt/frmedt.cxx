@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/text/VertOrientation.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 
 #include <svx/svdpage.hxx>
 
@@ -19,6 +20,8 @@
 #include <drawdoc.hxx>
 #include <dcontact.hxx>
 #include <frameformats.hxx>
+#include <unotxdoc.hxx>
+#include <docsh.hxx>
 
 char const DATA_DIRECTORY[] = "/sw/qa/core/frmedt/data/";
 

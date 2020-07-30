@@ -28,6 +28,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_htmlimport, \
 	svl \
 	svt \
 	sw \
+	swqahelper \
 	test \
 	tl \
 	unotest \

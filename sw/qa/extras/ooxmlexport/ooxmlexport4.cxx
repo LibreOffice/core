@@ -21,11 +21,17 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/util/Date.hpp>
-#include <unotools/tempfile.hxx>
+#include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
+
 #include <config_features.h>
+#include <unotools/tempfile.hxx>
 #include <comphelper/configuration.hxx>
 #include <officecfg/Office/Writer.hxx>
-
+#include <vcl/svapp.hxx>
 
 class Test : public SwModelTestBase
 {

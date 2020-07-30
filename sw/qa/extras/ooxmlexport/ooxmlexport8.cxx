@@ -41,14 +41,23 @@
 #include <com/sun/star/view/XFormLayerAccess.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/TableBorder2.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/drawing/XShapes2.hpp>
+#include <com/sun/star/text/XNumberingRulesSupplier.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
+
 #include <unotools/fltrcfg.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <xmloff/odffields.hxx>
+
 #include <IDocumentMarkAccess.hxx>
 #include <IMark.hxx>
-
 #include <bordertest.hxx>
+#include <unotxdoc.hxx>
+#include <docsh.hxx>
 
 class Test : public SwModelTestBase
 {

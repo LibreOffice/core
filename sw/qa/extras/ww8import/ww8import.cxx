@@ -11,17 +11,23 @@
 
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/text/XTextSectionsSupplier.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-#include <viscrs.hxx>
-#include <wrtsh.hxx>
-#include <ndgrf.hxx>
-#include <fmtsrnd.hxx>
-#include <frameformats.hxx>
+
 #include <editeng/boxitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
+
+#include <viscrs.hxx>
+#include <wrtsh.hxx>
+#include <ndgrf.hxx>
+#include <fmtsrnd.hxx>
+#include <frameformats.hxx>
+#include <docsh.hxx>
+#include <unotxdoc.hxx>
+#include <IDocumentLayoutAccess.hxx>
 
 class Test : public SwModelTestBase
 {

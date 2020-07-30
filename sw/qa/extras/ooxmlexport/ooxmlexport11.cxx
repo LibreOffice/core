@@ -20,6 +20,18 @@
 #include <com/sun/star/text/RubyPosition.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/style/TabStop.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+
+#include <comphelper/processfactory.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+
+#include <unotxdoc.hxx>
+#include <docsh.hxx>
 
 class Test : public SwModelTestBase
 {

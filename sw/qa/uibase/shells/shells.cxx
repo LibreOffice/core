@@ -9,6 +9,9 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/GraphicObject.hxx>
@@ -17,6 +20,7 @@
 #include <editeng/adjustitem.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <IDocumentContentOperations.hxx>
 #include <cmdid.h>
@@ -25,6 +29,8 @@
 #include <wrtsh.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <drawdoc.hxx>
+#include <unotxdoc.hxx>
+#include <docsh.hxx>
 
 char const DATA_DIRECTORY[] = "/sw/qa/uibase/shells/data/";
 

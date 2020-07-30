@@ -42,6 +42,12 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/XFormField.hpp>
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextSectionsSupplier.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
+
 #include <o3tl/cppunittraitshelper.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/settings.hxx>

@@ -13,14 +13,19 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/style/TabStop.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
 #include <o3tl/cppunittraitshelper.hxx>
 #include <svx/swframetypes.hxx>
 
 #include <doc.hxx>
+#include <docsh.hxx>
 #include <unotxdoc.hxx>
 #include <pam.hxx>
 #include <fmtanchr.hxx>
 #include <frameformats.hxx>
+
+using namespace css;
 
 /**
   Split these tests into their own file because they are really really slow

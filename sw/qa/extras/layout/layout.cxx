@@ -21,6 +21,8 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/unolingu.hxx>
+#include <comphelper/sequence.hxx>
+
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
 #include <fmtcntnt.hxx>
@@ -36,6 +38,10 @@
 #include <frmatr.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <config_features.h>
+#include <unotxdoc.hxx>
+#include <rootfrm.hxx>
+#include <docsh.hxx>
+#include <IDocumentLayoutAccess.hxx>
 
 char const DATA_DIRECTORY[] = "/sw/qa/extras/layout/data/";
 

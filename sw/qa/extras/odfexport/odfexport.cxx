@@ -32,17 +32,34 @@
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
+#include <com/sun/star/container/XIndexContainer.hpp>
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
+#include <com/sun/star/text/XTextFramesSupplier.hpp>
+#include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/util/XRefreshable.hpp>
+#include <com/sun/star/container/XContentEnumerationAccess.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
+
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/propertysequence.hxx>
 #include <unotools/streamwrap.hxx>
 #include <svl/PasswordHelper.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+
 #include <docufld.hxx> // for SwHiddenTextField::ParseIfFieldDefinition() method call
 #include <unoprnms.hxx>
 #include <sortedobjs.hxx>
 #include <flyfrm.hxx>
 #include <ftnidx.hxx>
 #include <txtftn.hxx>
+#include <unotxdoc.hxx>
+#include <docsh.hxx>
+#include <IDocumentLayoutAccess.hxx>
+#include <rootfrm.hxx>
 
 class Test : public SwModelTestBase
 {
