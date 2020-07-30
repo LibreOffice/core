@@ -583,76 +583,75 @@ uno::Reference< beans::XPropertySetInfo >  SwXEndnoteProperties::getPropertySetI
 void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
 {
     SolarMutexGuard aGuard;
-    if(m_pDoc)
+    if(!m_pDoc)
+        return;
+
+    const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
+    if(!pEntry)
+        throw UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+
+    if ( pEntry->nFlags & PropertyAttribute::READONLY)
+        throw PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+    SwEndNoteInfo aEndInfo(m_pDoc->GetEndNoteInfo());
+    switch(pEntry->nWID)
     {
-        const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
-        if(!pEntry)
-            throw UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-
-        if ( pEntry->nFlags & PropertyAttribute::READONLY)
-            throw PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-        SwEndNoteInfo aEndInfo(m_pDoc->GetEndNoteInfo());
-        switch(pEntry->nWID)
+        case WID_PREFIX:
         {
-            case WID_PREFIX:
-            {
-                OUString uTmp;
-                aValue >>= uTmp;
-                aEndInfo.SetPrefix(uTmp);
-            }
-            break;
-            case WID_SUFFIX:
-            {
-                OUString uTmp;
-                aValue >>= uTmp;
-                aEndInfo.SetSuffix(uTmp);
-            }
-            break;
-            case  WID_NUMBERING_TYPE :
-            {
-                sal_Int16 nTmp = 0;
-                aValue >>= nTmp;
-                aEndInfo.m_aFormat.SetNumberingType(static_cast<SvxNumType>(nTmp));
-            }
-            break;
-            case  WID_START_AT:
-            {
-                sal_Int16 nTmp = 0;
-                aValue >>= nTmp;
-                aEndInfo.m_nFootnoteOffset = nTmp;
-            }
-            break;
-            case  WID_PARAGRAPH_STYLE    :
-            {
-                SwTextFormatColl* pColl = lcl_GetParaStyle(m_pDoc, aValue);
-                if(pColl)
-                    aEndInfo.SetFootnoteTextColl(*pColl);
-            }
-            break;
-            case  WID_PAGE_STYLE :
-            {
-                SwPageDesc* pDesc = lcl_GetPageDesc(m_pDoc, aValue);
-                if(pDesc)
-                    aEndInfo.ChgPageDesc( pDesc );
-            }
-            break;
-            case WID_ANCHOR_CHARACTER_STYLE:
-            case  WID_CHARACTER_STYLE    :
-            {
-                SwCharFormat* pFormat = lcl_getCharFormat(m_pDoc, aValue);
-                if(pFormat)
-                {
-                    if(pEntry->nWID == WID_ANCHOR_CHARACTER_STYLE)
-                        aEndInfo.SetAnchorCharFormat(pFormat);
-                    else
-                        aEndInfo.SetCharFormat(pFormat);
-                }
-            }
-            break;
+            OUString uTmp;
+            aValue >>= uTmp;
+            aEndInfo.SetPrefix(uTmp);
         }
-        m_pDoc->SetEndNoteInfo(aEndInfo);
-
+        break;
+        case WID_SUFFIX:
+        {
+            OUString uTmp;
+            aValue >>= uTmp;
+            aEndInfo.SetSuffix(uTmp);
+        }
+        break;
+        case  WID_NUMBERING_TYPE :
+        {
+            sal_Int16 nTmp = 0;
+            aValue >>= nTmp;
+            aEndInfo.m_aFormat.SetNumberingType(static_cast<SvxNumType>(nTmp));
+        }
+        break;
+        case  WID_START_AT:
+        {
+            sal_Int16 nTmp = 0;
+            aValue >>= nTmp;
+            aEndInfo.m_nFootnoteOffset = nTmp;
+        }
+        break;
+        case  WID_PARAGRAPH_STYLE    :
+        {
+            SwTextFormatColl* pColl = lcl_GetParaStyle(m_pDoc, aValue);
+            if(pColl)
+                aEndInfo.SetFootnoteTextColl(*pColl);
+        }
+        break;
+        case  WID_PAGE_STYLE :
+        {
+            SwPageDesc* pDesc = lcl_GetPageDesc(m_pDoc, aValue);
+            if(pDesc)
+                aEndInfo.ChgPageDesc( pDesc );
+        }
+        break;
+        case WID_ANCHOR_CHARACTER_STYLE:
+        case  WID_CHARACTER_STYLE    :
+        {
+            SwCharFormat* pFormat = lcl_getCharFormat(m_pDoc, aValue);
+            if(pFormat)
+            {
+                if(pEntry->nWID == WID_ANCHOR_CHARACTER_STYLE)
+                    aEndInfo.SetAnchorCharFormat(pFormat);
+                else
+                    aEndInfo.SetCharFormat(pFormat);
+            }
+        }
+        break;
     }
+    m_pDoc->SetEndNoteInfo(aEndInfo);
 }
 
 uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)

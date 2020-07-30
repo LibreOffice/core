@@ -619,21 +619,21 @@ void SwXFieldmark::setFieldType(const OUString & fieldType)
     IFieldmark *pBkm = dynamic_cast<IFieldmark*>(GetBookmark());
     if(!pBkm)
         throw uno::RuntimeException();
-    if(fieldType != getFieldType())
-    {
-        if(fieldType == ODF_FORMDROPDOWN || fieldType == ODF_FORMCHECKBOX || fieldType == ODF_FORMDATE)
-        {
-            ::sw::mark::IFieldmark* pNewFieldmark = GetIDocumentMarkAccess()->changeFormFieldmarkType(pBkm, fieldType);
-            if (pNewFieldmark)
-            {
-                registerInMark(*this, pNewFieldmark);
-                return;
-            }
-        }
+    if(fieldType == getFieldType())
+        return;
 
-        // We did not generate a new fieldmark, so set the type ID
-        pBkm->SetFieldname(fieldType);
+    if(fieldType == ODF_FORMDROPDOWN || fieldType == ODF_FORMCHECKBOX || fieldType == ODF_FORMDATE)
+    {
+        ::sw::mark::IFieldmark* pNewFieldmark = GetIDocumentMarkAccess()->changeFormFieldmarkType(pBkm, fieldType);
+        if (pNewFieldmark)
+        {
+            registerInMark(*this, pNewFieldmark);
+            return;
+        }
     }
+
+    // We did not generate a new fieldmark, so set the type ID
+    pBkm->SetFieldname(fieldType);
 }
 
 uno::Reference<container::XNameContainer> SwXFieldmark::getParameters()

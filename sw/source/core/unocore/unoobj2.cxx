@@ -80,19 +80,19 @@ void DeepCopyPaM(SwPaM const & rSource, SwPaM & rTarget)
 {
     rTarget = rSource;
 
-    if (rSource.GetNext() != &rSource)
+    if (rSource.GetNext() == &rSource)
+        return;
+
+    SwPaM *pPam = const_cast<SwPaM*>(rSource.GetNext());
+    do
     {
-        SwPaM *pPam = const_cast<SwPaM*>(rSource.GetNext());
-        do
-        {
-            // create new PaM
-            SwPaM *const pNew = new SwPaM(*pPam, nullptr);
-            // insert into ring
-            pNew->MoveTo(&rTarget);
-            pPam = pPam->GetNext();
-        }
-        while (pPam != &rSource);
+        // create new PaM
+        SwPaM *const pNew = new SwPaM(*pPam, nullptr);
+        // insert into ring
+        pNew->MoveTo(&rTarget);
+        pPam = pPam->GetNext();
     }
+    while (pPam != &rSource);
 }
 
 } // namespace sw
@@ -764,26 +764,26 @@ void SwXTextRange::DeleteAndInsert(
 
     const SwPosition aPos(GetDoc().GetNodes().GetEndOfContent());
     SwCursor aCursor(aPos, nullptr);
-    if (GetPositions(aCursor))
+    if (!GetPositions(aCursor))
+        return;
+
+    UnoActionContext aAction(& m_pImpl->m_rDoc);
+    m_pImpl->m_rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
+    if (aCursor.HasMark())
     {
-        UnoActionContext aAction(& m_pImpl->m_rDoc);
-        m_pImpl->m_rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
-        if (aCursor.HasMark())
-        {
-            m_pImpl->m_rDoc.getIDocumentContentOperations().DeleteAndJoin(aCursor);
-        }
-
-        if (!rText.isEmpty())
-        {
-            SwUnoCursorHelper::DocInsertStringSplitCR(
-                    m_pImpl->m_rDoc, aCursor, rText, bForceExpandHints);
-
-            SwUnoCursorHelper::SelectPam(aCursor, true);
-            aCursor.Left(rText.getLength());
-        }
-        SetPositions(aCursor);
-        m_pImpl->m_rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
+        m_pImpl->m_rDoc.getIDocumentContentOperations().DeleteAndJoin(aCursor);
     }
+
+    if (!rText.isEmpty())
+    {
+        SwUnoCursorHelper::DocInsertStringSplitCR(
+                m_pImpl->m_rDoc, aCursor, rText, bForceExpandHints);
+
+        SwUnoCursorHelper::SelectPam(aCursor, true);
+        aCursor.Left(rText.getLength());
+    }
+    SetPositions(aCursor);
+    m_pImpl->m_rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
 }
 
 namespace
@@ -1441,18 +1441,18 @@ struct SwXTextRangesImpl final : public SwXTextRanges
 
 void SwXTextRangesImpl::MakeRanges()
 {
-    if (GetCursor())
+    if (!GetCursor())
+        return;
+
+    for(SwPaM& rTmpCursor : GetCursor()->GetRingContainer())
     {
-        for(SwPaM& rTmpCursor : GetCursor()->GetRingContainer())
+        const uno::Reference< text::XTextRange > xRange(
+                SwXTextRange::CreateXTextRange(
+                    *rTmpCursor.GetDoc(),
+                    *rTmpCursor.GetPoint(), rTmpCursor.GetMark()));
+        if (xRange.is())
         {
-            const uno::Reference< text::XTextRange > xRange(
-                    SwXTextRange::CreateXTextRange(
-                        *rTmpCursor.GetDoc(),
-                        *rTmpCursor.GetPoint(), rTmpCursor.GetMark()));
-            if (xRange.is())
-            {
-                m_Ranges.push_back(xRange);
-            }
+            m_Ranges.push_back(xRange);
         }
     }
 }

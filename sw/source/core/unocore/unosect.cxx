@@ -523,32 +523,32 @@ lcl_UpdateSection(SwSectionFormat *const pFormat,
     std::unique_ptr<SfxItemSet> const& pItemSet,
     bool const bLinkModeChanged, bool const bLinkUpdateAlways = true)
 {
-    if (pFormat)
-    {
-        SwSection & rSection = *pFormat->GetSection();
-        SwDoc *const pDoc = pFormat->GetDoc();
-        SwSectionFormats const& rFormats = pDoc->GetSections();
-        UnoActionContext aContext(pDoc);
-        for (size_t i = 0; i < rFormats.size(); ++i)
-        {
-            if (rFormats[i]->GetSection()->GetSectionName()
-                    == rSection.GetSectionName())
-            {
-                pDoc->UpdateSection(i, *pSectionData, pItemSet.get(),
-                        pDoc->IsInReading());
-                {
-                    // temporarily remove actions to allow cursor update
-                    // TODO: why? no table cursor here!
-                    UnoActionRemoveContext aRemoveContext( pDoc );
-                }
+    if (!pFormat)
+        return;
 
-                if (bLinkModeChanged)
-                {
-                    lcl_UpdateLinkType(rSection, bLinkUpdateAlways);
-                }
-                // section found and processed: break from loop
-                break;
+    SwSection & rSection = *pFormat->GetSection();
+    SwDoc *const pDoc = pFormat->GetDoc();
+    SwSectionFormats const& rFormats = pDoc->GetSections();
+    UnoActionContext aContext(pDoc);
+    for (size_t i = 0; i < rFormats.size(); ++i)
+    {
+        if (rFormats[i]->GetSection()->GetSectionName()
+                == rSection.GetSectionName())
+        {
+            pDoc->UpdateSection(i, *pSectionData, pItemSet.get(),
+                    pDoc->IsInReading());
+            {
+                // temporarily remove actions to allow cursor update
+                // TODO: why? no table cursor here!
+                UnoActionRemoveContext aRemoveContext( pDoc );
             }
+
+            if (bLinkModeChanged)
+            {
+                lcl_UpdateLinkType(rSection, bLinkUpdateAlways);
+            }
+            // section found and processed: break from loop
+            break;
         }
     }
 }

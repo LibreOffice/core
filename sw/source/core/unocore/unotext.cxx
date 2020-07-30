@@ -460,36 +460,36 @@ SwXText::insertControlCharacter(
                 aPam, OUString(cIns), nInsertFlags);
     }
 
-    if (bAbsorb)
-    {
-        const uno::Reference<lang::XUnoTunnel> xRangeTunnel(
-                xTextRange, uno::UNO_QUERY);
-        SwXTextRange *const pRange =
-            ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
-        OTextCursorHelper *const pCursor =
-            ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
+    if (!bAbsorb)
+        return;
 
-        SwCursor aCursor(*aPam.GetPoint(), nullptr);
-        SwUnoCursorHelper::SelectPam(aCursor, true);
-        aCursor.Left(1);
-        // here, the PaM needs to be moved:
-        if (pRange)
+    const uno::Reference<lang::XUnoTunnel> xRangeTunnel(
+            xTextRange, uno::UNO_QUERY);
+    SwXTextRange *const pRange =
+        ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
+    OTextCursorHelper *const pCursor =
+        ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
+
+    SwCursor aCursor(*aPam.GetPoint(), nullptr);
+    SwUnoCursorHelper::SelectPam(aCursor, true);
+    aCursor.Left(1);
+    // here, the PaM needs to be moved:
+    if (pRange)
+    {
+        pRange->SetPositions(aCursor);
+    }
+    else
+    {
+        SwPaM *const pUnoCursor = pCursor->GetPaM();
+        *pUnoCursor->GetPoint() = *aCursor.GetPoint();
+        if (aCursor.HasMark())
         {
-            pRange->SetPositions(aCursor);
+            pUnoCursor->SetMark();
+            *pUnoCursor->GetMark() = *aCursor.GetMark();
         }
         else
         {
-            SwPaM *const pUnoCursor = pCursor->GetPaM();
-            *pUnoCursor->GetPoint() = *aCursor.GetPoint();
-            if (aCursor.HasMark())
-            {
-                pUnoCursor->SetMark();
-                *pUnoCursor->GetMark() = *aCursor.GetMark();
-            }
-            else
-            {
-                pUnoCursor->DeleteMark();
-            }
+            pUnoCursor->DeleteMark();
         }
     }
 }
