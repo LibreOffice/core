@@ -50,67 +50,67 @@ void SwMediaShell::ExecMedia(SfxRequest const &rReq)
     SwWrtShell* pSh = &GetShell();
     SdrView*    pSdrView = pSh->GetDrawView();
 
-    if( pSdrView )
+    if( !pSdrView )
+        return;
+
+    const SfxItemSet*   pArgs = rReq.GetArgs();
+    bool                bChanged = pSdrView->GetModel()->IsChanged();
+
+    pSdrView->GetModel()->SetChanged( false );
+
+    switch( rReq.GetSlot() )
     {
-        const SfxItemSet*   pArgs = rReq.GetArgs();
-        bool                bChanged = pSdrView->GetModel()->IsChanged();
-
-        pSdrView->GetModel()->SetChanged( false );
-
-        switch( rReq.GetSlot() )
+        case SID_DELETE:
         {
-            case SID_DELETE:
+            if( pSh->IsObjSelected() )
             {
-                if( pSh->IsObjSelected() )
-                {
-                    pSh->SetModified();
-                    pSh->DelSelectedObj();
+                pSh->SetModified();
+                pSh->DelSelectedObj();
 
-                    if( pSh->IsSelFrameMode() )
-                        pSh->LeaveSelFrameMode();
+                if( pSh->IsSelFrameMode() )
+                    pSh->LeaveSelFrameMode();
 
-                    GetView().AttrChangedNotify(nullptr);
-                }
+                GetView().AttrChangedNotify(nullptr);
             }
-            break;
+        }
+        break;
 
-            case SID_AVMEDIA_TOOLBOX:
+        case SID_AVMEDIA_TOOLBOX:
+        {
+            if( pSh->IsObjSelected() )
             {
-                if( pSh->IsObjSelected() )
+                const SfxPoolItem*  pItem;
+
+                if( !pArgs || ( SfxItemState::SET != pArgs->GetItemState( SID_AVMEDIA_TOOLBOX, false, &pItem ) ) )
+                    pItem = nullptr;
+
+                if( pItem )
                 {
-                    const SfxPoolItem*  pItem;
+                    std::unique_ptr<SdrMarkList> pMarkList(new SdrMarkList( pSdrView->GetMarkedObjectList() ));
 
-                    if( !pArgs || ( SfxItemState::SET != pArgs->GetItemState( SID_AVMEDIA_TOOLBOX, false, &pItem ) ) )
-                        pItem = nullptr;
-
-                    if( pItem )
+                    if( 1 == pMarkList->GetMarkCount() )
                     {
-                        std::unique_ptr<SdrMarkList> pMarkList(new SdrMarkList( pSdrView->GetMarkedObjectList() ));
+                        SdrObject* pObj = pMarkList->GetMark( 0 )->GetMarkedSdrObj();
 
-                        if( 1 == pMarkList->GetMarkCount() )
+                        if( dynamic_cast< const SdrMediaObj *>( pObj ) )
                         {
-                            SdrObject* pObj = pMarkList->GetMark( 0 )->GetMarkedSdrObj();
-
-                            if( dynamic_cast< const SdrMediaObj *>( pObj ) )
-                            {
-                                static_cast< sdr::contact::ViewContactOfSdrMediaObj& >( pObj->GetViewContact() ).executeMediaItem(
-                                    static_cast< const ::avmedia::MediaItem& >( *pItem ) );
-                            }
+                            static_cast< sdr::contact::ViewContactOfSdrMediaObj& >( pObj->GetViewContact() ).executeMediaItem(
+                                static_cast< const ::avmedia::MediaItem& >( *pItem ) );
                         }
                     }
                 }
             }
-            break;
-
-            default:
-            break;
         }
+        break;
 
-        if( pSdrView->GetModel()->IsChanged() )
-            GetShell().SetModified();
-        else if( bChanged )
-            pSdrView->GetModel()->SetChanged();
+        default:
+        break;
     }
+
+    if( pSdrView->GetModel()->IsChanged() )
+        GetShell().SetModified();
+    else if( bChanged )
+        pSdrView->GetModel()->SetChanged();
 }
 
 void SwMediaShell::GetMediaState(SfxItemSet &rSet)

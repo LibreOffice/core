@@ -1261,69 +1261,71 @@ void SwBaseShell::Execute(SfxRequest &rReq)
 
     pItem = nullptr;
     pArgs->GetItemState(GetPool().GetWhich(nSlot), false, &pItem);
-    if(pItem)
-        switch(nSlot)
-        {
-        case SID_ATTR_BRUSH:
-        case SID_ATTR_BORDER_SHADOW:
-        case RES_SHADOW:
-        {
-            rSh.StartAllAction();
-            // Tabele cell(s) selected?
-            if ( rSh.IsTableMode() )
-            {
-                SwFrameFormat *pFormat = rSh.GetTableFormat();
-                pFormat->SetFormatAttr( *pItem );
-            }
-            else if ( rSh.IsFrameSelected() )
-            {
-                // Set border attributes via Frame-Manager.
-                SwFlyFrameAttrMgr aMgr( false, &rSh, Frmmgr_Type::NONE, nullptr );
-                aMgr.SetAttrSet( *pArgs );
-                aMgr.UpdateFlyFrame();
-            }
-            else
-            {
-                rSh.SetAttrSet( *pArgs );
-            }
-            rSh.EndAllAction();
-        }
-        break;
-        case FN_PAGE_STYLE_SET_LR_MARGIN:
-        case FN_PAGE_STYLE_SET_UL_MARGIN:
-        case FN_PAGE_STYLE_SET_NUMBER_FORMAT:
-        case FN_PAGE_STYLE_SET_PAPER_SIZE:
-        case FN_PAGE_STYLE_SET_PAPER_BIN:
-        {
-            OSL_FAIL("not implemented");
-        }
-        break;
+    if(!pItem)
+        return;
 
-        case SID_ATTR_BORDER_OUTER:
+    switch(nSlot)
+    {
+    case SID_ATTR_BRUSH:
+    case SID_ATTR_BORDER_SHADOW:
+    case RES_SHADOW:
+    {
+        rSh.StartAllAction();
+        // Tabele cell(s) selected?
+        if ( rSh.IsTableMode() )
         {
-            // Tabele cell(s) selected?
-            if ( rSh.IsTableMode() )
-            {
-                // Set border attributes Get/SetTabBorders()
-                rSh.SetTabBorders(*pArgs);
-            }
-            else if ( rSh.IsFrameSelected() )
-            {
-                // Set border attributes via Frame-Manager.
-                SwFlyFrameAttrMgr aMgr( false, &rSh, Frmmgr_Type::NONE, nullptr );
-                aMgr.SetAttrSet(*pArgs);
-                aMgr.UpdateFlyFrame();
-            }
-            else
-            {
-                // Set border attributes via shell quite normally.
-                rSh.SetAttrItem( *pItem );
-            }
+            SwFrameFormat *pFormat = rSh.GetTableFormat();
+            pFormat->SetFormatAttr( *pItem );
         }
-        break;
-        default:
-                OSL_FAIL("wrong Dispatcher");
+        else if ( rSh.IsFrameSelected() )
+        {
+            // Set border attributes via Frame-Manager.
+            SwFlyFrameAttrMgr aMgr( false, &rSh, Frmmgr_Type::NONE, nullptr );
+            aMgr.SetAttrSet( *pArgs );
+            aMgr.UpdateFlyFrame();
         }
+        else
+        {
+            rSh.SetAttrSet( *pArgs );
+        }
+        rSh.EndAllAction();
+    }
+    break;
+    case FN_PAGE_STYLE_SET_LR_MARGIN:
+    case FN_PAGE_STYLE_SET_UL_MARGIN:
+    case FN_PAGE_STYLE_SET_NUMBER_FORMAT:
+    case FN_PAGE_STYLE_SET_PAPER_SIZE:
+    case FN_PAGE_STYLE_SET_PAPER_BIN:
+    {
+        OSL_FAIL("not implemented");
+    }
+    break;
+
+    case SID_ATTR_BORDER_OUTER:
+    {
+        // Tabele cell(s) selected?
+        if ( rSh.IsTableMode() )
+        {
+            // Set border attributes Get/SetTabBorders()
+            rSh.SetTabBorders(*pArgs);
+        }
+        else if ( rSh.IsFrameSelected() )
+        {
+            // Set border attributes via Frame-Manager.
+            SwFlyFrameAttrMgr aMgr( false, &rSh, Frmmgr_Type::NONE, nullptr );
+            aMgr.SetAttrSet(*pArgs);
+            aMgr.UpdateFlyFrame();
+        }
+        else
+        {
+            // Set border attributes via shell quite normally.
+            rSh.SetAttrItem( *pItem );
+        }
+    }
+    break;
+    default:
+            OSL_FAIL("wrong Dispatcher");
+    }
 }
 
 // Here the state for SID_IMAP / SID_CONTOUR will be handled
@@ -1335,94 +1337,93 @@ IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl, SwCursorShell&, void)
     if (CNT_GRF != rSh.SwEditShell::GetCntType())
         return;
     GraphicType const nGrfType(rSh.GetGraphicType());
-    if (GraphicType::NONE != nGrfType &&
-        !aGrfUpdateSlots.empty() )
+    if (GraphicType::NONE == nGrfType || aGrfUpdateSlots.empty())
+        return;
+
+    bool bProtect = FlyProtectFlags::NONE != rSh.IsSelObjProtected(FlyProtectFlags::Content|FlyProtectFlags::Parent);
+    SfxViewFrame* pVFrame = GetView().GetViewFrame();
+    for( const auto nSlot : aGrfUpdateSlots )
     {
-        bool bProtect = FlyProtectFlags::NONE != rSh.IsSelObjProtected(FlyProtectFlags::Content|FlyProtectFlags::Parent);
-        SfxViewFrame* pVFrame = GetView().GetViewFrame();
-        for( const auto nSlot : aGrfUpdateSlots )
+        bool bSetState = false;
+        bool bState = false;
+        switch( nSlot )
         {
-            bool bSetState = false;
-            bool bState = false;
-            switch( nSlot )
+        case SID_IMAP:
+        case SID_IMAP_EXEC:
             {
-            case SID_IMAP:
-            case SID_IMAP_EXEC:
+                sal_uInt16 nId = SvxIMapDlgChildWindow::GetChildWindowId();
+                SfxChildWindow *pChildWindow = pVFrame->HasChildWindow(nId) ?
+                    pVFrame->GetChildWindow(nId) : nullptr;
+                SvxIMapDlg *pDlg = pChildWindow ?
+                    static_cast<SvxIMapDlg*>(pChildWindow->GetController().get()) : nullptr;
+
+                if( pDlg && ( SID_IMAP_EXEC == nSlot ||
+                            ( SID_IMAP == nSlot && !bProtect)) &&
+                    pDlg->GetEditingObject() != rSh.GetIMapInventor())
+                        lcl_UpdateIMapDlg( rSh );
+
+                if( !bProtect && SID_IMAP == nSlot )
                 {
-                    sal_uInt16 nId = SvxIMapDlgChildWindow::GetChildWindowId();
-                    SfxChildWindow *pChildWindow = pVFrame->HasChildWindow(nId) ?
-                        pVFrame->GetChildWindow(nId) : nullptr;
-                    SvxIMapDlg *pDlg = pChildWindow ?
-                        static_cast<SvxIMapDlg*>(pChildWindow->GetController().get()) : nullptr;
-
-                    if( pDlg && ( SID_IMAP_EXEC == nSlot ||
-                                ( SID_IMAP == nSlot && !bProtect)) &&
-                        pDlg->GetEditingObject() != rSh.GetIMapInventor())
-                            lcl_UpdateIMapDlg( rSh );
-
-                    if( !bProtect && SID_IMAP == nSlot )
-                    {
-                        bSetState = true;
-                        bState = nullptr != pDlg;
-                    }
-                }
-                break;
-
-            case SID_CONTOUR_DLG:
-                if( !bProtect )
-                {
-                    sal_uInt16 nId = SvxContourDlgChildWindow::GetChildWindowId();
-                    SfxChildWindow *pChildWindow = pVFrame->HasChildWindow(nId) ?
-                        pVFrame->GetChildWindow(nId) : nullptr;
-                    SvxIMapDlg *pDlg = pChildWindow ?
-                        static_cast<SvxIMapDlg*>(pChildWindow->GetController().get()) : nullptr;
-                    if( pDlg && pDlg->GetEditingObject() !=
-                                rSh.GetIMapInventor() )
-                        lcl_UpdateContourDlg( rSh, SelectionType::Graphic );
-
                     bSetState = true;
                     bState = nullptr != pDlg;
                 }
-                break;
-
-            case FN_FRAME_WRAP_CONTOUR:
-                if( !bProtect )
-                {
-                    SfxItemSet aSet(GetPool(), svl::Items<RES_SURROUND, RES_SURROUND>{});
-                    rSh.GetFlyFrameAttr(aSet);
-                    const SwFormatSurround& rWrap = aSet.Get(RES_SURROUND);
-                    bSetState = true;
-                    bState = rWrap.IsContour();
-                }
-                break;
-
-            case SID_GRFFILTER:
-            case SID_GRFFILTER_INVERT:
-            case SID_GRFFILTER_SMOOTH:
-            case SID_GRFFILTER_SHARPEN:
-            case SID_GRFFILTER_REMOVENOISE:
-            case SID_GRFFILTER_SOBEL:
-            case SID_GRFFILTER_MOSAIC:
-            case SID_GRFFILTER_EMBOSS:
-            case SID_GRFFILTER_POSTER:
-            case SID_GRFFILTER_POPART:
-            case SID_GRFFILTER_SEPIA:
-            case SID_GRFFILTER_SOLARIZE:
-                bSetState = bState = GraphicType::Bitmap == nGrfType;
-                break;
             }
+            break;
 
-            if( bSetState )
+        case SID_CONTOUR_DLG:
+            if( !bProtect )
             {
-                SfxBoolItem aBool( nSlot, bState );
-                if( pGetStateSet )
-                    pGetStateSet->Put( aBool );
-                else
-                    pVFrame->GetBindings().SetState( aBool );
+                sal_uInt16 nId = SvxContourDlgChildWindow::GetChildWindowId();
+                SfxChildWindow *pChildWindow = pVFrame->HasChildWindow(nId) ?
+                    pVFrame->GetChildWindow(nId) : nullptr;
+                SvxIMapDlg *pDlg = pChildWindow ?
+                    static_cast<SvxIMapDlg*>(pChildWindow->GetController().get()) : nullptr;
+                if( pDlg && pDlg->GetEditingObject() !=
+                            rSh.GetIMapInventor() )
+                    lcl_UpdateContourDlg( rSh, SelectionType::Graphic );
+
+                bSetState = true;
+                bState = nullptr != pDlg;
             }
+            break;
+
+        case FN_FRAME_WRAP_CONTOUR:
+            if( !bProtect )
+            {
+                SfxItemSet aSet(GetPool(), svl::Items<RES_SURROUND, RES_SURROUND>{});
+                rSh.GetFlyFrameAttr(aSet);
+                const SwFormatSurround& rWrap = aSet.Get(RES_SURROUND);
+                bSetState = true;
+                bState = rWrap.IsContour();
+            }
+            break;
+
+        case SID_GRFFILTER:
+        case SID_GRFFILTER_INVERT:
+        case SID_GRFFILTER_SMOOTH:
+        case SID_GRFFILTER_SHARPEN:
+        case SID_GRFFILTER_REMOVENOISE:
+        case SID_GRFFILTER_SOBEL:
+        case SID_GRFFILTER_MOSAIC:
+        case SID_GRFFILTER_EMBOSS:
+        case SID_GRFFILTER_POSTER:
+        case SID_GRFFILTER_POPART:
+        case SID_GRFFILTER_SEPIA:
+        case SID_GRFFILTER_SOLARIZE:
+            bSetState = bState = GraphicType::Bitmap == nGrfType;
+            break;
         }
-        aGrfUpdateSlots.clear();
+
+        if( bSetState )
+        {
+            SfxBoolItem aBool( nSlot, bState );
+            if( pGetStateSet )
+                pGetStateSet->Put( aBool );
+            else
+                pVFrame->GetBindings().SetState( aBool );
+        }
     }
+    aGrfUpdateSlots.clear();
 }
 
 void SwBaseShell::GetState( SfxItemSet &rSet )
@@ -2743,125 +2744,125 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
     const SfxItemSet* pArgs = _rRequest.GetArgs();
     SwWrtShell& rSh = GetShell();
 
-    if ( !( rSh.GetFrameType( nullptr, true ) & FrameTypeFlags::FOOTNOTE ) )
+    if ( rSh.GetFrameType( nullptr, true ) & FrameTypeFlags::FOOTNOTE )
+        return;
+
+    SwView &rTempView = GetView(); // Because GetView() does not work after the shell exchange
+    bool bHTMLMode = 0 != (::GetHtmlMode(rTempView.GetDocShell())&HTMLMODE_ON);
+    bool bCallEndUndo = false;
+
+    if( !pArgs && rSh.IsSelection() && !rSh.IsInClickToEdit() &&
+        !rSh.IsTableMode() )
     {
-        SwView &rTempView = GetView(); // Because GetView() does not work after the shell exchange
-        bool bHTMLMode = 0 != (::GetHtmlMode(rTempView.GetDocShell())&HTMLMODE_ON);
-        bool bCallEndUndo = false;
+        const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
+        SwInsertTableOptions aInsTableOpts = pModOpt->GetInsTableFlags(bHTMLMode);
 
-        if( !pArgs && rSh.IsSelection() && !rSh.IsInClickToEdit() &&
-            !rSh.IsTableMode() )
+        rSh.StartUndo(SwUndoId::INSTABLE);
+        bCallEndUndo = true;
+
+        bool bInserted = rSh.TextToTable( aInsTableOpts, '\t' );
+        rSh.EnterStdMode();
+        if (bInserted)
+            rTempView.AutoCaption(TABLE_CAP);
+        _rRequest.Done();
+    }
+    else
+    {
+        sal_uInt16 nColsIn = 0;
+        sal_uInt16 nRowsIn = 0;
+        SwInsertTableOptions aInsTableOptsIn( SwInsertTableFlags::All, 1 );
+        OUString aTableNameIn;
+        OUString aAutoNameIn;
+        std::unique_ptr<SwTableAutoFormat> pTAFormatIn;
+
+        if( pArgs && pArgs->Count() >= 2 )
         {
-            const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
-            SwInsertTableOptions aInsTableOpts = pModOpt->GetInsTableFlags(bHTMLMode);
+            const SfxStringItem* pName = _rRequest.GetArg<SfxStringItem>(FN_INSERT_TABLE);
+            const SfxUInt16Item* pCols = _rRequest.GetArg<SfxUInt16Item>(SID_ATTR_TABLE_COLUMN);
+            const SfxUInt16Item* pRows = _rRequest.GetArg<SfxUInt16Item>(SID_ATTR_TABLE_ROW);
+            const SfxInt32Item* pFlags = _rRequest.GetArg<SfxInt32Item>(FN_PARAM_1);
+            const SfxStringItem* pAuto = _rRequest.GetArg<SfxStringItem>(FN_PARAM_2);
 
-            rSh.StartUndo(SwUndoId::INSTABLE);
-            bCallEndUndo = true;
+            if ( pName )
+                aTableNameIn = pName->GetValue();
+            if ( pCols )
+                nColsIn = pCols->GetValue();
+            if ( pRows )
+                nRowsIn = pRows->GetValue();
+            if ( pAuto )
+            {
+                aAutoNameIn = pAuto->GetValue();
+                if ( !aAutoNameIn.isEmpty() )
+                {
+                    SwTableAutoFormatTable aTableTable;
+                    aTableTable.Load();
+                    for ( size_t n=0; n<aTableTable.size(); n++ )
+                    {
+                        if ( aTableTable[n].GetName() == aAutoNameIn )
+                        {
+                            pTAFormatIn.reset(new SwTableAutoFormat( aTableTable[n] ));
+                            break;
+                        }
+                    }
+                }
+            }
 
-            bool bInserted = rSh.TextToTable( aInsTableOpts, '\t' );
-            rSh.EnterStdMode();
-            if (bInserted)
-                rTempView.AutoCaption(TABLE_CAP);
-            _rRequest.Done();
+            if ( pFlags )
+                aInsTableOptsIn.mnInsMode = static_cast<SwInsertTableFlags>(pFlags->GetValue());
+            else
+            {
+                const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
+                aInsTableOptsIn = pModOpt->GetInsTableFlags(bHTMLMode);
+            }
+        }
+
+        if( !nColsIn || !nRowsIn )
+        {
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            std::shared_ptr<AbstractInsTableDlg> pAbstractDialog(pFact->CreateInsTableDlg(rTempView));
+            std::shared_ptr<weld::DialogController> pDialogController(pAbstractDialog->getDialogController());
+
+            weld::DialogController::runAsync(pDialogController,
+                [pAbstractDialog, &rSh, &rTempView, aTableNameIn, nRowsIn, nColsIn, aInsTableOptsIn, aAutoNameIn] (sal_Int32 nResult) {
+                    if( RET_OK == nResult )
+                    {
+                        sal_uInt16 nCols = nColsIn;
+                        sal_uInt16 nRows = nRowsIn;
+                        SwInsertTableOptions aInsTableOpts = aInsTableOptsIn;
+                        OUString aTableName = aTableNameIn;
+                        OUString aAutoName = aAutoNameIn;
+                        std::unique_ptr<SwTableAutoFormat> pTAFormat;
+
+                        pAbstractDialog->GetValues( aTableName, nRows, nCols, aInsTableOpts, aAutoName, pTAFormat );
+
+                        if( nCols && nRows )
+                        {
+                            InsertTableImpl( rSh, rTempView, aTableName, nRows, nCols, aInsTableOpts, aAutoName, pTAFormat );
+                            EndUndo(rSh);
+                        }
+                    }
+                }
+            );
         }
         else
         {
-            sal_uInt16 nColsIn = 0;
-            sal_uInt16 nRowsIn = 0;
-            SwInsertTableOptions aInsTableOptsIn( SwInsertTableFlags::All, 1 );
-            OUString aTableNameIn;
-            OUString aAutoNameIn;
-            std::unique_ptr<SwTableAutoFormat> pTAFormatIn;
+            // record before shell change
+            _rRequest.AppendItem( SfxStringItem( FN_INSERT_TABLE, aTableNameIn ) );
+            if ( !aAutoNameIn.isEmpty() )
+                _rRequest.AppendItem( SfxStringItem( FN_PARAM_2, aAutoNameIn ) );
+            _rRequest.AppendItem( SfxUInt16Item( SID_ATTR_TABLE_COLUMN, nColsIn ) );
+            _rRequest.AppendItem( SfxUInt16Item( SID_ATTR_TABLE_ROW, nRowsIn ) );
+            _rRequest.AppendItem( SfxInt32Item( FN_PARAM_1, static_cast<sal_Int32>(aInsTableOptsIn.mnInsMode) ) );
+            _rRequest.Done();
 
-            if( pArgs && pArgs->Count() >= 2 )
-            {
-                const SfxStringItem* pName = _rRequest.GetArg<SfxStringItem>(FN_INSERT_TABLE);
-                const SfxUInt16Item* pCols = _rRequest.GetArg<SfxUInt16Item>(SID_ATTR_TABLE_COLUMN);
-                const SfxUInt16Item* pRows = _rRequest.GetArg<SfxUInt16Item>(SID_ATTR_TABLE_ROW);
-                const SfxInt32Item* pFlags = _rRequest.GetArg<SfxInt32Item>(FN_PARAM_1);
-                const SfxStringItem* pAuto = _rRequest.GetArg<SfxStringItem>(FN_PARAM_2);
+            InsertTableImpl( rSh, rTempView, aTableNameIn, nRowsIn, nColsIn, aInsTableOptsIn, aAutoNameIn, pTAFormatIn );
 
-                if ( pName )
-                    aTableNameIn = pName->GetValue();
-                if ( pCols )
-                    nColsIn = pCols->GetValue();
-                if ( pRows )
-                    nRowsIn = pRows->GetValue();
-                if ( pAuto )
-                {
-                    aAutoNameIn = pAuto->GetValue();
-                    if ( !aAutoNameIn.isEmpty() )
-                    {
-                        SwTableAutoFormatTable aTableTable;
-                        aTableTable.Load();
-                        for ( size_t n=0; n<aTableTable.size(); n++ )
-                        {
-                            if ( aTableTable[n].GetName() == aAutoNameIn )
-                            {
-                                pTAFormatIn.reset(new SwTableAutoFormat( aTableTable[n] ));
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                if ( pFlags )
-                    aInsTableOptsIn.mnInsMode = static_cast<SwInsertTableFlags>(pFlags->GetValue());
-                else
-                {
-                    const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
-                    aInsTableOptsIn = pModOpt->GetInsTableFlags(bHTMLMode);
-                }
-            }
-
-            if( !nColsIn || !nRowsIn )
-            {
-                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                std::shared_ptr<AbstractInsTableDlg> pAbstractDialog(pFact->CreateInsTableDlg(rTempView));
-                std::shared_ptr<weld::DialogController> pDialogController(pAbstractDialog->getDialogController());
-
-                weld::DialogController::runAsync(pDialogController,
-                    [pAbstractDialog, &rSh, &rTempView, aTableNameIn, nRowsIn, nColsIn, aInsTableOptsIn, aAutoNameIn] (sal_Int32 nResult) {
-                        if( RET_OK == nResult )
-                        {
-                            sal_uInt16 nCols = nColsIn;
-                            sal_uInt16 nRows = nRowsIn;
-                            SwInsertTableOptions aInsTableOpts = aInsTableOptsIn;
-                            OUString aTableName = aTableNameIn;
-                            OUString aAutoName = aAutoNameIn;
-                            std::unique_ptr<SwTableAutoFormat> pTAFormat;
-
-                            pAbstractDialog->GetValues( aTableName, nRows, nCols, aInsTableOpts, aAutoName, pTAFormat );
-
-                            if( nCols && nRows )
-                            {
-                                InsertTableImpl( rSh, rTempView, aTableName, nRows, nCols, aInsTableOpts, aAutoName, pTAFormat );
-                                EndUndo(rSh);
-                            }
-                        }
-                    }
-                );
-            }
-            else
-            {
-                // record before shell change
-                _rRequest.AppendItem( SfxStringItem( FN_INSERT_TABLE, aTableNameIn ) );
-                if ( !aAutoNameIn.isEmpty() )
-                    _rRequest.AppendItem( SfxStringItem( FN_PARAM_2, aAutoNameIn ) );
-                _rRequest.AppendItem( SfxUInt16Item( SID_ATTR_TABLE_COLUMN, nColsIn ) );
-                _rRequest.AppendItem( SfxUInt16Item( SID_ATTR_TABLE_ROW, nRowsIn ) );
-                _rRequest.AppendItem( SfxInt32Item( FN_PARAM_1, static_cast<sal_Int32>(aInsTableOptsIn.mnInsMode) ) );
-                _rRequest.Done();
-
-                InsertTableImpl( rSh, rTempView, aTableNameIn, nRowsIn, nColsIn, aInsTableOptsIn, aAutoNameIn, pTAFormatIn );
-
-                bCallEndUndo = true;
-            }
+            bCallEndUndo = true;
         }
-
-        if( bCallEndUndo )
-            EndUndo(rSh);
     }
+
+    if( bCallEndUndo )
+        EndUndo(rSh);
 }
 
 void SwBaseShell::GetGalleryState( SfxItemSet &rSet )

@@ -1489,27 +1489,29 @@ void SwTableShell::ExecTableStyle(SfxRequest& rReq)
 {
     SwWrtShell &rSh = GetShell();
     const SfxItemSet *pArgs = rReq.GetArgs();
-    if(pArgs)
-        switch ( rReq.GetSlot() )
-        {
-            case SID_FRAME_LINESTYLE:
-            case SID_FRAME_LINECOLOR:
-                if ( rReq.GetSlot() == SID_FRAME_LINESTYLE )
-                {
-                    const SvxLineItem &rLineItem = pArgs->Get( SID_FRAME_LINESTYLE );
-                    const SvxBorderLine* pBorderLine = rLineItem.GetLine();
-                    rSh.SetTabLineStyle( nullptr, true, pBorderLine);
-                }
-                else
-                {
-                    const SvxColorItem &rNewColorItem = pArgs->Get( SID_FRAME_LINECOLOR );
-                    rSh.SetTabLineStyle( &rNewColorItem.GetValue() );
-                }
+    if(!pArgs)
+        return;
 
-                rReq.Done();
+    switch ( rReq.GetSlot() )
+    {
+        case SID_FRAME_LINESTYLE:
+        case SID_FRAME_LINECOLOR:
+            if ( rReq.GetSlot() == SID_FRAME_LINESTYLE )
+            {
+                const SvxLineItem &rLineItem = pArgs->Get( SID_FRAME_LINESTYLE );
+                const SvxBorderLine* pBorderLine = rLineItem.GetLine();
+                rSh.SetTabLineStyle( nullptr, true, pBorderLine);
+            }
+            else
+            {
+                const SvxColorItem &rNewColorItem = pArgs->Get( SID_FRAME_LINECOLOR );
+                rSh.SetTabLineStyle( &rNewColorItem.GetValue() );
+            }
 
-                break;
-        }
+            rReq.Done();
+
+            break;
+    }
 }
 
 void SwTableShell::GetLineStyleState(SfxItemSet &rSet)
