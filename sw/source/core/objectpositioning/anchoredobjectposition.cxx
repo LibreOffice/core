@@ -750,51 +750,51 @@ void SwAnchoredObjectPosition::ToggleHoriOrientAndAlign(
                                         sal_Int16& _iopeRelOrient
                                       )
 {
-    if( _bToggleLeftRight )
-    {
-        // toggle orientation
-        switch ( _ioeHoriOrient )
-        {
-            case text::HoriOrientation::RIGHT :
-                {
-                    _ioeHoriOrient = text::HoriOrientation::LEFT;
-                }
-                break;
-            case text::HoriOrientation::LEFT :
-                {
-                    _ioeHoriOrient = text::HoriOrientation::RIGHT;
-                }
-                break;
-            default:
-                break;
-        }
+    if( !_bToggleLeftRight )
+        return;
 
-        // toggle relative alignment
-        switch ( _iopeRelOrient )
-        {
-            case text::RelOrientation::PAGE_RIGHT :
-                {
-                    _iopeRelOrient = text::RelOrientation::PAGE_LEFT;
-                }
-                break;
-            case text::RelOrientation::PAGE_LEFT :
-                {
-                    _iopeRelOrient = text::RelOrientation::PAGE_RIGHT;
-                }
-                break;
-            case text::RelOrientation::FRAME_RIGHT :
-                {
-                    _iopeRelOrient = text::RelOrientation::FRAME_LEFT;
-                }
-                break;
-            case text::RelOrientation::FRAME_LEFT :
-                {
-                    _iopeRelOrient = text::RelOrientation::FRAME_RIGHT;
-                }
-                break;
-            default:
-                break;
-        }
+    // toggle orientation
+    switch ( _ioeHoriOrient )
+    {
+        case text::HoriOrientation::RIGHT :
+            {
+                _ioeHoriOrient = text::HoriOrientation::LEFT;
+            }
+            break;
+        case text::HoriOrientation::LEFT :
+            {
+                _ioeHoriOrient = text::HoriOrientation::RIGHT;
+            }
+            break;
+        default:
+            break;
+    }
+
+    // toggle relative alignment
+    switch ( _iopeRelOrient )
+    {
+        case text::RelOrientation::PAGE_RIGHT :
+            {
+                _iopeRelOrient = text::RelOrientation::PAGE_LEFT;
+            }
+            break;
+        case text::RelOrientation::PAGE_LEFT :
+            {
+                _iopeRelOrient = text::RelOrientation::PAGE_RIGHT;
+            }
+            break;
+        case text::RelOrientation::FRAME_RIGHT :
+            {
+                _iopeRelOrient = text::RelOrientation::FRAME_LEFT;
+            }
+            break;
+        case text::RelOrientation::FRAME_LEFT :
+            {
+                _iopeRelOrient = text::RelOrientation::FRAME_RIGHT;
+            }
+            break;
+        default:
+            break;
     }
 }
 

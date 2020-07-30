@@ -231,8 +231,10 @@ SwTextBlocks::SwTextBlocks( const OUString& rFile )
     case SwImpBlocks::FileType::NoFile: m_pImp.reset( new SwXMLTextBlocks( sFileName ) ); break;
     default: break;
     }
-    if( !m_pImp )
-        m_nErr = ERR_SWG_FILE_FORMAT_ERROR;
+    if( m_pImp )
+        return;
+
+    m_nErr = ERR_SWG_FILE_FORMAT_ERROR;
 }
 
 SwTextBlocks::~SwTextBlocks()
@@ -307,40 +309,40 @@ bool SwTextBlocks::Delete( sal_uInt16 n )
 
 void SwTextBlocks::Rename( sal_uInt16 n, const OUString* s, const OUString* l )
 {
-    if( m_pImp && !m_pImp->m_bInPutMuchBlocks )
-    {
-        m_pImp->m_nCurrentIndex = USHRT_MAX;
-        OUString aNew;
-        OUString aLong;
-        if( s )
-            aNew = aLong = *s;
-        if( l )
-            aLong = *l;
-        if( aNew.isEmpty() )
-        {
-            OSL_ENSURE( false, "No short name provided in the rename" );
-            m_nErr = ERR_SWG_INTERNAL_ERROR;
-            return;
-        }
+    if( !(m_pImp && !m_pImp->m_bInPutMuchBlocks) )
+        return;
 
-        if( m_pImp->IsFileChanged() )
-            m_nErr = ERR_TXTBLOCK_NEWFILE_ERROR;
-        else if( ERRCODE_NONE == ( m_nErr = m_pImp->OpenFile( false )))
-        {
-            // Set the new entry in the list before we do that!
-            aNew = GetAppCharClass().uppercase( aNew );
-            m_nErr = m_pImp->Rename( n, aNew );
-            if( !m_nErr )
-            {
-                bool bOnlyText = m_pImp->m_aNames[ n ]->bIsOnlyText;
-                m_pImp->m_aNames.erase( m_pImp->m_aNames.begin() + n );
-                m_pImp->AddName( aNew, aLong, bOnlyText );
-                m_nErr = m_pImp->MakeBlockList();
-            }
-        }
-        m_pImp->CloseFile();
-        m_pImp->Touch();
+    m_pImp->m_nCurrentIndex = USHRT_MAX;
+    OUString aNew;
+    OUString aLong;
+    if( s )
+        aNew = aLong = *s;
+    if( l )
+        aLong = *l;
+    if( aNew.isEmpty() )
+    {
+        OSL_ENSURE( false, "No short name provided in the rename" );
+        m_nErr = ERR_SWG_INTERNAL_ERROR;
+        return;
     }
+
+    if( m_pImp->IsFileChanged() )
+        m_nErr = ERR_TXTBLOCK_NEWFILE_ERROR;
+    else if( ERRCODE_NONE == ( m_nErr = m_pImp->OpenFile( false )))
+    {
+        // Set the new entry in the list before we do that!
+        aNew = GetAppCharClass().uppercase( aNew );
+        m_nErr = m_pImp->Rename( n, aNew );
+        if( !m_nErr )
+        {
+            bool bOnlyText = m_pImp->m_aNames[ n ]->bIsOnlyText;
+            m_pImp->m_aNames.erase( m_pImp->m_aNames.begin() + n );
+            m_pImp->AddName( aNew, aLong, bOnlyText );
+            m_nErr = m_pImp->MakeBlockList();
+        }
+    }
+    m_pImp->CloseFile();
+    m_pImp->Touch();
 }
 
 bool SwTextBlocks::BeginGetDoc( sal_uInt16 n )
