@@ -99,7 +99,7 @@ namespace connectivity::mork
             friend class MQueryHelper;
 
         public:
-            typedef std::vector< MQueryExpressionBase* > ExprVector;
+            typedef std::vector< std::unique_ptr<MQueryExpressionBase> > ExprVector;
 
             typedef enum {
                 AND,
@@ -110,8 +110,8 @@ namespace connectivity::mork
             void setExpressionCondition( bool_cond _cond )
                             { m_aExprCondType = _cond; }
 
-            void addExpression(MQueryExpressionBase * expr)
-                            { m_aExprVector.push_back(expr); }
+            void addExpression(std::unique_ptr<MQueryExpressionBase> expr)
+                            { m_aExprVector.push_back(std::move(expr)); }
 
             ExprVector const & getExpressions( ) const
                             { return m_aExprVector; }

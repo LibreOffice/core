@@ -235,7 +235,7 @@ std::vector<bool> entryMatchedByExpression(MQueryHelper* _aQuery, MQueryExpressi
     for (auto const& expr : _aExpr->getExpressions())
     {
         if ( expr->isStringExpr() ) {
-            MQueryExpressionString* evStr = static_cast<MQueryExpressionString*> (expr);
+            MQueryExpressionString* evStr = static_cast<MQueryExpressionString*> (expr.get());
             // Set the 'name' property of the boolString.
             OString attrName = _aQuery->getColumnAlias().getProgrammaticNameOrFallbackToUTF8Alias( evStr->getName() );
             SAL_INFO("connectivity.mork", "Name = " << attrName);
@@ -287,7 +287,7 @@ std::vector<bool> entryMatchedByExpression(MQueryHelper* _aQuery, MQueryExpressi
         }
         else if ( expr->isExpr() ) {
             SAL_INFO("connectivity.mork", "Appending Subquery Expression");
-            MQueryExpression* queryExpression = static_cast<MQueryExpression*> (expr);
+            MQueryExpression* queryExpression = static_cast<MQueryExpression*> (expr.get());
             // recursive call
             std::vector<bool> subquery_result = entryMatchedByExpression(_aQuery, queryExpression, entry);
             MQueryExpression::bool_cond condition = queryExpression->getExpressionCondition();
