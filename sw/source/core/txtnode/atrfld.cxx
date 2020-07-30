@@ -95,36 +95,36 @@ SwFormatField::SwFormatField( const SwFormatField& rAttr )
     , SfxBroadcaster()
     , mpTextField( nullptr )
 {
-    if ( rAttr.mpField )
+    if ( !rAttr.mpField )
+        return;
+
+    rAttr.mpField->GetTyp()->Add(this);
+    mpField = rAttr.mpField->CopyField();
+    if ( mpField->GetTyp()->Which() == SwFieldIds::Input )
     {
-        rAttr.mpField->GetTyp()->Add(this);
-        mpField = rAttr.mpField->CopyField();
-        if ( mpField->GetTyp()->Which() == SwFieldIds::Input )
+        // input field in-place editing
+        SetWhich( RES_TXTATR_INPUTFIELD );
+        SwInputField *pField = dynamic_cast<SwInputField*>(mpField.get());
+        assert(pField);
+        if (pField)
+            pField->SetFormatField( *this );
+    }
+    else if (mpField->GetTyp()->Which() == SwFieldIds::SetExp)
+    {
+        SwSetExpField *const pSetField(static_cast<SwSetExpField *>(mpField.get()));
+        if (pSetField->GetInputFlag()
+            && (static_cast<SwSetExpFieldType*>(pSetField->GetTyp())->GetType()
+                & nsSwGetSetExpType::GSE_STRING))
         {
-            // input field in-place editing
             SetWhich( RES_TXTATR_INPUTFIELD );
-            SwInputField *pField = dynamic_cast<SwInputField*>(mpField.get());
-            assert(pField);
-            if (pField)
-                pField->SetFormatField( *this );
         }
-        else if (mpField->GetTyp()->Which() == SwFieldIds::SetExp)
-        {
-            SwSetExpField *const pSetField(static_cast<SwSetExpField *>(mpField.get()));
-            if (pSetField->GetInputFlag()
-                && (static_cast<SwSetExpFieldType*>(pSetField->GetTyp())->GetType()
-                    & nsSwGetSetExpType::GSE_STRING))
-            {
-                SetWhich( RES_TXTATR_INPUTFIELD );
-            }
-            // see SwWrtShell::StartInputFieldDlg
-            pSetField->SetFormatField(*this);
-        }
-        else if ( mpField->GetTyp()->Which() == SwFieldIds::Postit )
-        {
-            // text annotation field
-            SetWhich( RES_TXTATR_ANNOTATION );
-        }
+        // see SwWrtShell::StartInputFieldDlg
+        pSetField->SetFormatField(*this);
+    }
+    else if ( mpField->GetTyp()->Which() == SwFieldIds::Postit )
+    {
+        // text annotation field
+        SetWhich( RES_TXTATR_ANNOTATION );
     }
 }
 
@@ -139,31 +139,31 @@ SwFormatField::~SwFormatField()
     mpField.reset();
 
     // some fields need to delete their field type
-    if( pType && pType->HasOnlyOneListener() )
+    if( !(pType && pType->HasOnlyOneListener()) )
+        return;
+
+    bool bDel = false;
+    switch( pType->Which() )
     {
-        bool bDel = false;
-        switch( pType->Which() )
-        {
-        case SwFieldIds::User:
-            bDel = static_cast<SwUserFieldType*>(pType)->IsDeleted();
-            break;
+    case SwFieldIds::User:
+        bDel = static_cast<SwUserFieldType*>(pType)->IsDeleted();
+        break;
 
-        case SwFieldIds::SetExp:
-            bDel = static_cast<SwSetExpFieldType*>(pType)->IsDeleted();
-            break;
+    case SwFieldIds::SetExp:
+        bDel = static_cast<SwSetExpFieldType*>(pType)->IsDeleted();
+        break;
 
-        case SwFieldIds::Dde:
-            bDel = static_cast<SwDDEFieldType*>(pType)->IsDeleted();
-            break;
-        default: break;
-        }
+    case SwFieldIds::Dde:
+        bDel = static_cast<SwDDEFieldType*>(pType)->IsDeleted();
+        break;
+    default: break;
+    }
 
-        if( bDel )
-        {
-            // unregister before deleting
-            pType->Remove( this );
-            delete pType;
-        }
+    if( bDel )
+    {
+        // unregister before deleting
+        pType->Remove( this );
+        delete pType;
     }
 }
 
@@ -655,33 +655,33 @@ OUString SwTextInputField::GetFieldContent() const
 
 void SwTextInputField::UpdateFieldContent()
 {
-    if ( IsFieldInDoc()
-         && GetStart() != (*End()) )
+    if ( !(IsFieldInDoc()
+         && GetStart() != (*End())) )
+        return;
+
+    assert( (*End()) - GetStart() >= 2 &&
+            "<SwTextInputField::UpdateFieldContent()> - Are CH_TXT_ATR_INPUTFIELDSTART and/or CH_TXT_ATR_INPUTFIELDEND missing?" );
+    // skip CH_TXT_ATR_INPUTFIELDSTART character
+    const sal_Int32 nIdx = GetStart() + 1;
+    // skip CH_TXT_ATR_INPUTFIELDEND character
+    const sal_Int32 nLen = static_cast<sal_Int32>(std::max<sal_Int32>( 0, ( (*End()) - 1 - nIdx ) ));
+    const OUString aNewFieldContent = GetTextNode().GetExpandText(nullptr, nIdx, nLen);
+
+    const SwField* pField = GetFormatField().GetField();
+    const SwInputField* pInputField = dynamic_cast<const SwInputField*>(pField);
+    if (pInputField)
+        const_cast<SwInputField*>(pInputField)->applyFieldContent( aNewFieldContent );
+
+    const SwSetExpField* pExpField = dynamic_cast<const SwSetExpField*>(pField);
+    if (pExpField)
     {
-        assert( (*End()) - GetStart() >= 2 &&
-                "<SwTextInputField::UpdateFieldContent()> - Are CH_TXT_ATR_INPUTFIELDSTART and/or CH_TXT_ATR_INPUTFIELDEND missing?" );
-        // skip CH_TXT_ATR_INPUTFIELDSTART character
-        const sal_Int32 nIdx = GetStart() + 1;
-        // skip CH_TXT_ATR_INPUTFIELDEND character
-        const sal_Int32 nLen = static_cast<sal_Int32>(std::max<sal_Int32>( 0, ( (*End()) - 1 - nIdx ) ));
-        const OUString aNewFieldContent = GetTextNode().GetExpandText(nullptr, nIdx, nLen);
-
-        const SwField* pField = GetFormatField().GetField();
-        const SwInputField* pInputField = dynamic_cast<const SwInputField*>(pField);
-        if (pInputField)
-            const_cast<SwInputField*>(pInputField)->applyFieldContent( aNewFieldContent );
-
-        const SwSetExpField* pExpField = dynamic_cast<const SwSetExpField*>(pField);
-        if (pExpField)
-        {
-            assert(pExpField->GetInputFlag());
-            const_cast<SwSetExpField*>(pExpField)->SetPar2(aNewFieldContent);
-        }
-        assert(pInputField || pExpField);
-
-        // trigger update of fields for scenarios in which the Input Field's content is part of e.g. a table formula
-        GetTextNode().GetDoc()->getIDocumentFieldsAccess().GetUpdateFields().SetFieldsDirty(true);
+        assert(pExpField->GetInputFlag());
+        const_cast<SwSetExpField*>(pExpField)->SetPar2(aNewFieldContent);
     }
+    assert(pInputField || pExpField);
+
+    // trigger update of fields for scenarios in which the Input Field's content is part of e.g. a table formula
+    GetTextNode().GetDoc()->getIDocumentFieldsAccess().GetUpdateFields().SetFieldsDirty(true);
 }
 
 void SwTextInputField::UpdateTextNodeContent( const OUString& rNewContent )

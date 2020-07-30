@@ -178,39 +178,39 @@ void SwLanguageIterator::SearchNextChg()
     m_pCurrentItem = m_pParaItem;
 
     const SwpHints* pHts = m_rTextNode.GetpSwpHints();
-    if( pHts )
+    if( !pHts )
+        return;
+
+    if( !nWh )
     {
-        if( !nWh )
+        nWh = GetWhichOfScript( RES_CHRATR_LANGUAGE, m_aScriptIter.GetCurrScript() );
+    }
+
+    const SfxPoolItem* pItem = nullptr;
+    for( ; m_nAttrPos < pHts->Count(); ++m_nAttrPos )
+    {
+        const SwTextAttr* pHt = pHts->Get( m_nAttrPos );
+        const sal_Int32* pEnd = pHt->End();
+        const sal_Int32 nHtStt = pHt->GetStart();
+        if( nHtStt < nStt && ( !pEnd || *pEnd <= nStt ))
+            continue;
+
+        if( nHtStt >= m_nChgPos )
+            break;
+
+        pItem = CharFormat::GetItem( *pHt, nWh );
+        if ( pItem )
         {
-            nWh = GetWhichOfScript( RES_CHRATR_LANGUAGE, m_aScriptIter.GetCurrScript() );
-        }
-
-        const SfxPoolItem* pItem = nullptr;
-        for( ; m_nAttrPos < pHts->Count(); ++m_nAttrPos )
-        {
-            const SwTextAttr* pHt = pHts->Get( m_nAttrPos );
-            const sal_Int32* pEnd = pHt->End();
-            const sal_Int32 nHtStt = pHt->GetStart();
-            if( nHtStt < nStt && ( !pEnd || *pEnd <= nStt ))
-                continue;
-
-            if( nHtStt >= m_nChgPos )
-                break;
-
-            pItem = CharFormat::GetItem( *pHt, nWh );
-            if ( pItem )
+            if( nHtStt > nStt )
             {
-                if( nHtStt > nStt )
-                {
-                    if( m_nChgPos > nHtStt )
-                        m_nChgPos = nHtStt;
-                    break;
-                }
-                AddToStack( *pHt );
-                m_pCurrentItem = pItem;
-                if( *pEnd < m_nChgPos )
-                    m_nChgPos = *pEnd;
+                if( m_nChgPos > nHtStt )
+                    m_nChgPos = nHtStt;
+                break;
             }
+            AddToStack( *pHt );
+            m_pCurrentItem = pItem;
+            if( *pEnd < m_nChgPos )
+                m_nChgPos = *pEnd;
         }
     }
 }

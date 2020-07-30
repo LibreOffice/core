@@ -490,42 +490,42 @@ void SwTextFootnote::DelFrames(SwRootFrame const*const pRoot)
     }
     //JP 13.05.97: if the layout is deleted before the footnotes are deleted,
     //             try to delete the footnote's frames by another way
-    if ( !bFrameFnd && m_pStartNode )
+    if ( !(!bFrameFnd && m_pStartNode) )
+        return;
+
+    SwNodeIndex aIdx( *m_pStartNode );
+    SwContentNode* pCNd = m_pTextNode->GetNodes().GoNext( &aIdx );
+    if( !pCNd )
+        return;
+
+    SwIterator<SwContentFrame, SwContentNode, sw::IteratorMode::UnwrapMulti> aIter(*pCNd);
+    for( SwContentFrame* pFnd = aIter.First(); pFnd; pFnd = aIter.Next() )
     {
-        SwNodeIndex aIdx( *m_pStartNode );
-        SwContentNode* pCNd = m_pTextNode->GetNodes().GoNext( &aIdx );
-        if( pCNd )
+        if( pRoot != pFnd->getRootFrame() && pRoot )
+            continue;
+        SwPageFrame* pPage = pFnd->FindPageFrame();
+
+        SwFrame *pFrame = pFnd->GetUpper();
+        while ( pFrame && !pFrame->IsFootnoteFrame() )
+            pFrame = pFrame->GetUpper();
+
+        SwFootnoteFrame *pFootnote = static_cast<SwFootnoteFrame*>(pFrame);
+        while ( pFootnote && pFootnote->GetMaster() )
+            pFootnote = pFootnote->GetMaster();
+        OSL_ENSURE( pFootnote->GetAttr() == this, "Footnote mismatch error." );
+
+        while ( pFootnote )
         {
-            SwIterator<SwContentFrame, SwContentNode, sw::IteratorMode::UnwrapMulti> aIter(*pCNd);
-            for( SwContentFrame* pFnd = aIter.First(); pFnd; pFnd = aIter.Next() )
-            {
-                if( pRoot != pFnd->getRootFrame() && pRoot )
-                    continue;
-                SwPageFrame* pPage = pFnd->FindPageFrame();
-
-                SwFrame *pFrame = pFnd->GetUpper();
-                while ( pFrame && !pFrame->IsFootnoteFrame() )
-                    pFrame = pFrame->GetUpper();
-
-                SwFootnoteFrame *pFootnote = static_cast<SwFootnoteFrame*>(pFrame);
-                while ( pFootnote && pFootnote->GetMaster() )
-                    pFootnote = pFootnote->GetMaster();
-                OSL_ENSURE( pFootnote->GetAttr() == this, "Footnote mismatch error." );
-
-                while ( pFootnote )
-                {
-                    SwFootnoteFrame *pFoll = pFootnote->GetFollow();
-                    pFootnote->Cut();
-                    SwFrame::DestroyFrame(pFootnote);
-                    pFootnote = pFoll;
-                }
-
-                // #i20556# During hiding of a section, the connection
-                // to the layout is already lost. pPage may be 0:
-                if ( pPage )
-                    pPage->UpdateFootnoteNum();
-            }
+            SwFootnoteFrame *pFoll = pFootnote->GetFollow();
+            pFootnote->Cut();
+            SwFrame::DestroyFrame(pFootnote);
+            pFootnote = pFoll;
         }
+
+        // #i20556# During hiding of a section, the connection
+        // to the layout is already lost. pPage may be 0:
+        if ( pPage )
+            pPage->UpdateFootnoteNum();
     }
 }
 
