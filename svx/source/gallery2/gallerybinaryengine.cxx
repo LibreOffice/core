@@ -37,7 +37,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/tempfile.hxx>
-#include <tools/urlobj.hxx>
 #include <tools/vcompat.hxx>
 
 using namespace ::com::sun::star;
