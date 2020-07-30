@@ -22,6 +22,30 @@
       "revId": "1a22b9207755e6724d33f41cf72b27184fdebe84",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b91e98e_b3ec49a5",
+        "filename": "cui/source/inc/about.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-07-30T09:56:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d215d06_be71f6cb",
+      "range": {
+        "startLine": 45,
+        "startChar": 4,
+        "endLine": 48,
+        "endChar": 36
+      },
+      "revId": "1a22b9207755e6724d33f41cf72b27184fdebe84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
