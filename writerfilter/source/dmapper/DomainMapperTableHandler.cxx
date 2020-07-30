@@ -36,6 +36,7 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #ifdef DEBUG_WRITERFILTER
 #include "PropertyMapHelper.hxx"
@@ -1144,6 +1145,13 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
 
             // A non-zero left margin would move the table out of the frame, move the frame itself instead.
             xTableProperties->setPropertyValue("LeftMargin", uno::makeAny(sal_Int32(0)));
+
+            if (nestedTableLevel >= 2)
+            {
+                // Floating tables inside a table always stay inside the cell.
+                aFrameProperties.push_back(
+                    comphelper::makePropertyValue("IsFollowingTextFlow", true));
+            }
 
             // In case the document ends with a table, we're called after
             // SectionPropertyMap::CloseSectionGroup(), so we'll have no idea
