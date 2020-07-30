@@ -151,32 +151,32 @@ void SwAnnotationWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
 {
     Window::Paint(rRenderContext, rRect);
 
-    if (mpMetadataAuthor->IsVisible())
+    if (!mpMetadataAuthor->IsVisible())
+        return;
+
+    //draw left over space
+    if (Application::GetSettings().GetStyleSettings().GetHighContrastMode())
     {
-        //draw left over space
-        if (Application::GetSettings().GetStyleSettings().GetHighContrastMode())
-        {
-            rRenderContext.SetFillColor(COL_BLACK);
-        }
-        else
-        {
-            rRenderContext.SetFillColor(mColorDark);
-        }
-
-        sal_uInt32 boxHeight = mpMetadataAuthor->GetSizePixel().Height() + mpMetadataDate->GetSizePixel().Height();
-        boxHeight += IsThreadResolved() ? mpMetadataResolved->GetSizePixel().Height() : 0;
-
-        rRenderContext.SetLineColor();
-        tools::Rectangle aRectangle(Point(mpMetadataAuthor->GetPosPixel().X() + mpMetadataAuthor->GetSizePixel().Width(),
-                                   mpMetadataAuthor->GetPosPixel().Y()),
-                             Size(GetMetaButtonAreaWidth(), boxHeight));
-
-        if (comphelper::LibreOfficeKit::isActive())
-            aRectangle = rRect;
-        else
-            aRectangle = PixelToLogic(aRectangle);
-        rRenderContext.DrawRect(aRectangle);
+        rRenderContext.SetFillColor(COL_BLACK);
     }
+    else
+    {
+        rRenderContext.SetFillColor(mColorDark);
+    }
+
+    sal_uInt32 boxHeight = mpMetadataAuthor->GetSizePixel().Height() + mpMetadataDate->GetSizePixel().Height();
+    boxHeight += IsThreadResolved() ? mpMetadataResolved->GetSizePixel().Height() : 0;
+
+    rRenderContext.SetLineColor();
+    tools::Rectangle aRectangle(Point(mpMetadataAuthor->GetPosPixel().X() + mpMetadataAuthor->GetSizePixel().Width(),
+                               mpMetadataAuthor->GetPosPixel().Y()),
+                         Size(GetMetaButtonAreaWidth(), boxHeight));
+
+    if (comphelper::LibreOfficeKit::isActive())
+        aRectangle = rRect;
+    else
+        aRectangle = PixelToLogic(aRectangle);
+    rRenderContext.DrawRect(aRectangle);
 }
 
 void SwAnnotationWin::PaintTile(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
@@ -1021,44 +1021,44 @@ void SwAnnotationWin::SetColor(Color aColorDark,Color aColorLight, Color aColorA
     mColorLight = aColorLight;
     mColorAnchor = aColorAnchor;
 
-    if ( !Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+    if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+        return;
+
     {
-        {
-            mpMetadataAuthor->SetControlBackground(mColorDark);
-            AllSettings aSettings = mpMetadataAuthor->GetSettings();
-            StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-            aStyleSettings.SetFieldTextColor(aColorAnchor);
-            aSettings.SetStyleSettings(aStyleSettings);
-            mpMetadataAuthor->SetSettings(aSettings);
-        }
-
-        {
-            mpMetadataDate->SetControlBackground(mColorDark);
-            AllSettings aSettings = mpMetadataDate->GetSettings();
-            StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-            aStyleSettings.SetFieldTextColor(aColorAnchor);
-            aSettings.SetStyleSettings(aStyleSettings);
-            mpMetadataDate->SetSettings(aSettings);
-        }
-
-        {
-            mpMetadataResolved->SetControlBackground(mColorDark);
-            AllSettings aSettings = mpMetadataResolved->GetSettings();
-            StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-            aStyleSettings.SetFieldTextColor(aColorAnchor);
-            aSettings.SetStyleSettings(aStyleSettings);
-            mpMetadataResolved->SetSettings(aSettings);
-        }
-
-        AllSettings aSettings2 = mpVScrollbar->GetSettings();
-        StyleSettings aStyleSettings2 = aSettings2.GetStyleSettings();
-        aStyleSettings2.SetButtonTextColor(Color(0,0,0));
-        aStyleSettings2.SetCheckedColor(mColorLight); // background
-        aStyleSettings2.SetShadowColor(mColorAnchor);
-        aStyleSettings2.SetFaceColor(mColorDark);
-        aSettings2.SetStyleSettings(aStyleSettings2);
-        mpVScrollbar->SetSettings(aSettings2);
+        mpMetadataAuthor->SetControlBackground(mColorDark);
+        AllSettings aSettings = mpMetadataAuthor->GetSettings();
+        StyleSettings aStyleSettings = aSettings.GetStyleSettings();
+        aStyleSettings.SetFieldTextColor(aColorAnchor);
+        aSettings.SetStyleSettings(aStyleSettings);
+        mpMetadataAuthor->SetSettings(aSettings);
     }
+
+    {
+        mpMetadataDate->SetControlBackground(mColorDark);
+        AllSettings aSettings = mpMetadataDate->GetSettings();
+        StyleSettings aStyleSettings = aSettings.GetStyleSettings();
+        aStyleSettings.SetFieldTextColor(aColorAnchor);
+        aSettings.SetStyleSettings(aStyleSettings);
+        mpMetadataDate->SetSettings(aSettings);
+    }
+
+    {
+        mpMetadataResolved->SetControlBackground(mColorDark);
+        AllSettings aSettings = mpMetadataResolved->GetSettings();
+        StyleSettings aStyleSettings = aSettings.GetStyleSettings();
+        aStyleSettings.SetFieldTextColor(aColorAnchor);
+        aSettings.SetStyleSettings(aStyleSettings);
+        mpMetadataResolved->SetSettings(aSettings);
+    }
+
+    AllSettings aSettings2 = mpVScrollbar->GetSettings();
+    StyleSettings aStyleSettings2 = aSettings2.GetStyleSettings();
+    aStyleSettings2.SetButtonTextColor(Color(0,0,0));
+    aStyleSettings2.SetCheckedColor(mColorLight); // background
+    aStyleSettings2.SetShadowColor(mColorAnchor);
+    aStyleSettings2.SetFaceColor(mColorDark);
+    aSettings2.SetStyleSettings(aStyleSettings2);
+    mpVScrollbar->SetSettings(aSettings2);
 }
 
 void SwAnnotationWin::SetSidebarPosition(sw::sidebarwindows::SidebarPosition eSidebarPosition)

@@ -248,20 +248,20 @@ SwTransferable::SwTransferable( SwWrtShell& rSh )
 {
     rSh.GetView().AddTransferable(*this);
     SwDocShell* pDShell = rSh.GetDoc()->GetDocShell();
-    if( pDShell )
-    {
-        pDShell->FillTransferableObjectDescriptor( m_aObjDesc );
-        if( pDShell->GetMedium() )
-        {
-            const INetURLObject& rURLObj = pDShell->GetMedium()->GetURLObject();
-            m_aObjDesc.maDisplayName = URIHelper::removePassword(
-                                rURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
-                                INetURLObject::EncodeMechanism::WasEncoded,
-                                INetURLObject::DecodeMechanism::Unambiguous );
-        }
+    if( !pDShell )
+        return;
 
-        PrepareOLE( m_aObjDesc );
+    pDShell->FillTransferableObjectDescriptor( m_aObjDesc );
+    if( pDShell->GetMedium() )
+    {
+        const INetURLObject& rURLObj = pDShell->GetMedium()->GetURLObject();
+        m_aObjDesc.maDisplayName = URIHelper::removePassword(
+                            rURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
+                            INetURLObject::EncodeMechanism::WasEncoded,
+                            INetURLObject::DecodeMechanism::Unambiguous );
     }
+
+    PrepareOLE( m_aObjDesc );
 }
 
 SwTransferable::~SwTransferable()
@@ -407,18 +407,18 @@ namespace
     void lclCheckAndPerformRotation(Graphic& aGraphic)
     {
         GraphicNativeMetadata aMetadata;
-        if ( aMetadata.read(aGraphic) )
+        if ( !aMetadata.read(aGraphic) )
+            return;
+
+        sal_uInt16 aRotation = aMetadata.getRotation();
+        if (aRotation != 0)
         {
-            sal_uInt16 aRotation = aMetadata.getRotation();
-            if (aRotation != 0)
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/swriter/ui/queryrotateintostandarddialog.ui"));
+            std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("QueryRotateIntoStandardOrientationDialog"));
+            if (xQueryBox->run() == RET_YES)
             {
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/swriter/ui/queryrotateintostandarddialog.ui"));
-                std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("QueryRotateIntoStandardOrientationDialog"));
-                if (xQueryBox->run() == RET_YES)
-                {
-                    GraphicNativeTransform aTransform( aGraphic );
-                    aTransform.rotate( aRotation );
-                }
+                GraphicNativeTransform aTransform( aGraphic );
+                aTransform.rotate( aRotation );
             }
         }
     }
@@ -3561,22 +3561,22 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
         }
     }
 
-    if( m_pWrtShell->IsFrameSelected() )
+    if( !m_pWrtShell->IsFrameSelected() )
+        return;
+
+    SfxItemSet aSet( m_pWrtShell->GetAttrPool(), svl::Items<RES_URL, RES_URL>{} );
+    m_pWrtShell->GetFlyFrameAttr( aSet );
+    const SwFormatURL& rURL = aSet.Get( RES_URL );
+    if( rURL.GetMap() )
     {
-        SfxItemSet aSet( m_pWrtShell->GetAttrPool(), svl::Items<RES_URL, RES_URL>{} );
-        m_pWrtShell->GetFlyFrameAttr( aSet );
-        const SwFormatURL& rURL = aSet.Get( RES_URL );
-        if( rURL.GetMap() )
-        {
-            m_pImageMap.reset( new ImageMap( *rURL.GetMap() ) );
-            AddFormat( SotClipboardFormatId::SVIM );
-        }
-        else if( !rURL.GetURL().isEmpty() )
-        {
-            m_pTargetURL.reset(new INetImage( sGrfNm, rURL.GetURL(),
-                                        rURL.GetTargetFrameName() ));
-            AddFormat( SotClipboardFormatId::INET_IMAGE );
-        }
+        m_pImageMap.reset( new ImageMap( *rURL.GetMap() ) );
+        AddFormat( SotClipboardFormatId::SVIM );
+    }
+    else if( !rURL.GetURL().isEmpty() )
+    {
+        m_pTargetURL.reset(new INetImage( sGrfNm, rURL.GetURL(),
+                                    rURL.GetTargetFrameName() ));
+        AddFormat( SotClipboardFormatId::INET_IMAGE );
     }
 }
 
@@ -4169,20 +4169,20 @@ SwTransferDdeLink::SwTransferDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
         rSh.DoUndo( bUndo );
     }
 
-    if( !sName.isEmpty() &&
-        nullptr != ( pDocShell = rSh.GetDoc()->GetDocShell() ) )
+    if( sName.isEmpty() ||
+        nullptr == ( pDocShell = rSh.GetDoc()->GetDocShell() ))
+        return;
+
+    // then we create our "server" and connect to it
+    refObj = pDocShell->DdeCreateLinkSource( sName );
+    if( refObj.is() )
     {
-        // then we create our "server" and connect to it
-        refObj = pDocShell->DdeCreateLinkSource( sName );
-        if( refObj.is() )
-        {
-            refObj->AddConnectAdvise( this );
-            refObj->AddDataAdvise( this,
-                            OUString(),
-                            ADVISEMODE_NODATA | ADVISEMODE_ONLYONCE );
-            nOldTimeOut = refObj->GetUpdateTimeout();
-            refObj->SetUpdateTimeout( 0 );
-        }
+        refObj->AddConnectAdvise( this );
+        refObj->AddDataAdvise( this,
+                        OUString(),
+                        ADVISEMODE_NODATA | ADVISEMODE_ONLYONCE );
+        nOldTimeOut = refObj->GetUpdateTimeout();
+        refObj->SetUpdateTimeout( 0 );
     }
 }
 

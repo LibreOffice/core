@@ -901,25 +901,25 @@ OUString&    SwMailMergeConfigItem::GetFilter() const
 
 void  SwMailMergeConfigItem::SetFilter(OUString const & rFilter)
 {
-    if(m_pImpl->m_sFilter != rFilter)
+    if(m_pImpl->m_sFilter == rFilter)
+        return;
+
+    m_pImpl->m_sFilter = rFilter;
+    m_pImpl->SetModified();
+    Reference<XPropertySet> xRowProperties(m_pImpl->m_xResultSet, UNO_QUERY);
+    if(!xRowProperties.is())
+        return;
+
+    try
     {
-        m_pImpl->m_sFilter = rFilter;
-        m_pImpl->SetModified();
-        Reference<XPropertySet> xRowProperties(m_pImpl->m_xResultSet, UNO_QUERY);
-        if(xRowProperties.is())
-        {
-            try
-            {
-                xRowProperties->setPropertyValue("ApplyFilter", makeAny(!m_pImpl->m_sFilter.isEmpty()));
-                xRowProperties->setPropertyValue("Filter", makeAny(m_pImpl->m_sFilter));
-                uno::Reference<XRowSet> xRowSet( m_pImpl->m_xResultSet, UNO_QUERY_THROW );
-                xRowSet->execute();
-            }
-            catch (const Exception&)
-            {
-                TOOLS_WARN_EXCEPTION("sw.ui", "SwMailMergeConfigItem::SetFilter()");
-            }
-        }
+        xRowProperties->setPropertyValue("ApplyFilter", makeAny(!m_pImpl->m_sFilter.isEmpty()));
+        xRowProperties->setPropertyValue("Filter", makeAny(m_pImpl->m_sFilter));
+        uno::Reference<XRowSet> xRowSet( m_pImpl->m_xResultSet, UNO_QUERY_THROW );
+        xRowSet->execute();
+    }
+    catch (const Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("sw.ui", "SwMailMergeConfigItem::SetFilter()");
     }
 }
 

@@ -112,18 +112,18 @@ SidebarWinAccessible::~SidebarWinAccessible()
 
 void SidebarWinAccessible::ChangeSidebarItem( const SwSidebarItem& rSidebarItem )
 {
-    if ( bAccContextCreated )
+    if ( !bAccContextCreated )
+        return;
+
+    css::uno::Reference< css::accessibility::XAccessibleContext > xAcc
+                                                = getAccessibleContext();
+    if ( xAcc.is() )
     {
-        css::uno::Reference< css::accessibility::XAccessibleContext > xAcc
-                                                    = getAccessibleContext();
-        if ( xAcc.is() )
+        SidebarWinAccessibleContext* pAccContext =
+                    dynamic_cast<SidebarWinAccessibleContext*>(xAcc.get());
+        if ( pAccContext )
         {
-            SidebarWinAccessibleContext* pAccContext =
-                        dynamic_cast<SidebarWinAccessibleContext*>(xAcc.get());
-            if ( pAccContext )
-            {
-                pAccContext->ChangeAnchor( rSidebarItem.maLayoutInfo.mpAnchorFrame );
-            }
+            pAccContext->ChangeAnchor( rSidebarItem.maLayoutInfo.mpAnchorFrame );
         }
     }
 }

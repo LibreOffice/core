@@ -259,20 +259,20 @@ void SwPostItMgr::CheckForRemovedPostIts()
             ++it;
     }
 
-    if ( bRemoved )
+    if ( !bRemoved )
+        return;
+
+    // make sure that no deleted items remain in page lists
+    // todo: only remove deleted ones?!
+    if ( mvPostItFields.empty() )
     {
-        // make sure that no deleted items remain in page lists
-        // todo: only remove deleted ones?!
-        if ( mvPostItFields.empty() )
-        {
-            PreparePageContainer();
-            PrepareView();
-        }
-        else
-            // if postits are their make sure that page lists are not empty
-            // otherwise sudden paints can cause pain (in BorderOverPageBorder)
-            CalcRects();
+        PreparePageContainer();
+        PrepareView();
     }
+    else
+        // if postits are their make sure that page lists are not empty
+        // otherwise sudden paints can cause pain (in BorderOverPageBorder)
+        CalcRects();
 }
 
 SwSidebarItem* SwPostItMgr::InsertItem(SfxBroadcaster* pItem, bool bCheckExistence, bool bFocus)
@@ -1050,22 +1050,22 @@ void SwPostItMgr::Scroll(const long lScroll,const unsigned long aPage)
 void SwPostItMgr::AutoScroll(const SwAnnotationWin* pPostIt,const unsigned long aPage )
 {
     // otherwise all notes are visible
-    if (mPages[aPage-1]->bScrollbar)
+    if (!mPages[aPage-1]->bScrollbar)
+        return;
+
+    const long aSidebarheight = mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height();
+    const bool bBottom  = mpEditWin->PixelToLogic(Point(0,pPostIt->GetPosPixel().Y()+pPostIt->GetSizePixel().Height())).Y() <= (mPages[aPage-1]->mPageRect.Bottom()-aSidebarheight);
+    const bool bTop = mpEditWin->PixelToLogic(Point(0,pPostIt->GetPosPixel().Y())).Y() >= (mPages[aPage-1]->mPageRect.Top()+aSidebarheight);
+    if ( !(bBottom && bTop))
     {
-        const long aSidebarheight = mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height();
-        const bool bBottom  = mpEditWin->PixelToLogic(Point(0,pPostIt->GetPosPixel().Y()+pPostIt->GetSizePixel().Height())).Y() <= (mPages[aPage-1]->mPageRect.Bottom()-aSidebarheight);
-        const bool bTop = mpEditWin->PixelToLogic(Point(0,pPostIt->GetPosPixel().Y())).Y() >= (mPages[aPage-1]->mPageRect.Top()+aSidebarheight);
-        if ( !(bBottom && bTop))
-        {
-            const long aDiff = bBottom ? mpEditWin->LogicToPixel(Point(0,mPages[aPage-1]->mPageRect.Top() + aSidebarheight)).Y() - pPostIt->GetPosPixel().Y() :
-                                            mpEditWin->LogicToPixel(Point(0,mPages[aPage-1]->mPageRect.Bottom() - aSidebarheight)).Y() - (pPostIt->GetPosPixel().Y()+pPostIt->GetSizePixel().Height());
-            // this just adds the missing value to get the next a* GetScrollSize() after aDiff
-            // e.g aDiff= 61 POSTIT_SCROLL=50 --> lScroll = 100
-            const auto nScrollSize = GetScrollSize();
-            assert(nScrollSize);
-            const long lScroll = bBottom ? (aDiff + ( nScrollSize - (aDiff % nScrollSize))) : (aDiff - (nScrollSize + (aDiff % nScrollSize)));
-            Scroll(lScroll, aPage);
-        }
+        const long aDiff = bBottom ? mpEditWin->LogicToPixel(Point(0,mPages[aPage-1]->mPageRect.Top() + aSidebarheight)).Y() - pPostIt->GetPosPixel().Y() :
+                                        mpEditWin->LogicToPixel(Point(0,mPages[aPage-1]->mPageRect.Bottom() - aSidebarheight)).Y() - (pPostIt->GetPosPixel().Y()+pPostIt->GetSizePixel().Height());
+        // this just adds the missing value to get the next a* GetScrollSize() after aDiff
+        // e.g aDiff= 61 POSTIT_SCROLL=50 --> lScroll = 100
+        const auto nScrollSize = GetScrollSize();
+        assert(nScrollSize);
+        const long lScroll = bBottom ? (aDiff + ( nScrollSize - (aDiff % nScrollSize))) : (aDiff - (nScrollSize + (aDiff % nScrollSize)));
+        Scroll(lScroll, aPage);
     }
 }
 
@@ -1414,35 +1414,35 @@ class FieldDocWatchingStack : public SfxListener
     virtual void Notify(SfxBroadcaster&, const SfxHint& rHint) override
     {
         const SwFormatFieldHint* pHint = dynamic_cast<const SwFormatFieldHint*>(&rHint);
-        if (pHint)
-        {
-            bool bAllInvalidated = false;
-            if (pHint->Which() == SwFormatFieldHintWhich::REMOVED)
-            {
-                const SwFormatField* pField = pHint->GetField();
-                bAllInvalidated = pField == nullptr;
-                if (!bAllInvalidated && m_rFilter(pField))
-                {
-                    EndListening(const_cast<SwFormatField&>(*pField));
-                    v.erase(std::remove(v.begin(), v.end(), pField), v.end());
-                }
-            }
-            else if (pHint->Which() == SwFormatFieldHintWhich::INSERTED)
-            {
-                const SwFormatField* pField = pHint->GetField();
-                bAllInvalidated = pField == nullptr;
-                if (!bAllInvalidated && m_rFilter(pField))
-                {
-                    StartListening(const_cast<SwFormatField&>(*pField));
-                    v.push_back(pField);
-                }
-            }
-
-            if (bAllInvalidated)
-                FillVector();
-
+        if (!pHint)
             return;
+
+        bool bAllInvalidated = false;
+        if (pHint->Which() == SwFormatFieldHintWhich::REMOVED)
+        {
+            const SwFormatField* pField = pHint->GetField();
+            bAllInvalidated = pField == nullptr;
+            if (!bAllInvalidated && m_rFilter(pField))
+            {
+                EndListening(const_cast<SwFormatField&>(*pField));
+                v.erase(std::remove(v.begin(), v.end(), pField), v.end());
+            }
         }
+        else if (pHint->Which() == SwFormatFieldHintWhich::INSERTED)
+        {
+            const SwFormatField* pField = pHint->GetField();
+            bAllInvalidated = pField == nullptr;
+            if (!bAllInvalidated && m_rFilter(pField))
+            {
+                StartListening(const_cast<SwFormatField&>(*pField));
+                v.push_back(pField);
+            }
+        }
+
+        if (bAllInvalidated)
+            FillVector();
+
+        return;
     }
 
 public:
@@ -2019,23 +2019,23 @@ void SwPostItMgr::CorrectPositions()
     const long aAnchorY = pFirstPostIt->Anchor()
                           ? mpEditWin->LogicToPixel( Point(0,static_cast<long>(pFirstPostIt->Anchor()->GetSixthPosition().getY()))).Y() + 1
                           : 0;
-    if (Point(aAnchorX,aAnchorY) != pFirstPostIt->GetPosPixel())
+    if (Point(aAnchorX,aAnchorY) == pFirstPostIt->GetPosPixel())
+        return;
+
+    long aAnchorPosX = 0;
+    long aAnchorPosY = 0;
+    for (const std::unique_ptr<SwPostItPageItem>& pPage : mPages)
     {
-        long aAnchorPosX = 0;
-        long aAnchorPosY = 0;
-        for (const std::unique_ptr<SwPostItPageItem>& pPage : mPages)
+        for (auto const& item : pPage->mvSidebarItems)
         {
-            for (auto const& item : pPage->mvSidebarItems)
+            // check, if anchor overlay object exists.
+            if ( item->bShow && item->pPostIt && item->pPostIt->Anchor() )
             {
-                // check, if anchor overlay object exists.
-                if ( item->bShow && item->pPostIt && item->pPostIt->Anchor() )
-                {
-                    aAnchorPosX = pPage->eSidebarPosition == sw::sidebarwindows::SidebarPosition::LEFT
-                        ? mpEditWin->LogicToPixel( Point(static_cast<long>(item->pPostIt->Anchor()->GetSeventhPosition().getX()),0)).X()
-                        : mpEditWin->LogicToPixel( Point(static_cast<long>(item->pPostIt->Anchor()->GetSixthPosition().getX()),0)).X();
-                    aAnchorPosY = mpEditWin->LogicToPixel( Point(0,static_cast<long>(item->pPostIt->Anchor()->GetSixthPosition().getY()))).Y() + 1;
-                    item->pPostIt->SetPosPixel(Point(aAnchorPosX,aAnchorPosY));
-                }
+                aAnchorPosX = pPage->eSidebarPosition == sw::sidebarwindows::SidebarPosition::LEFT
+                    ? mpEditWin->LogicToPixel( Point(static_cast<long>(item->pPostIt->Anchor()->GetSeventhPosition().getX()),0)).X()
+                    : mpEditWin->LogicToPixel( Point(static_cast<long>(item->pPostIt->Anchor()->GetSixthPosition().getX()),0)).X();
+                aAnchorPosY = mpEditWin->LogicToPixel( Point(0,static_cast<long>(item->pPostIt->Anchor()->GetSixthPosition().getY()))).Y() + 1;
+                item->pPostIt->SetPosPixel(Point(aAnchorPosX,aAnchorPosY));
             }
         }
     }
@@ -2133,24 +2133,24 @@ Color SwPostItMgr::GetColorAnchor(std::size_t aAuthorIndex)
 
 void SwPostItMgr::SetActiveSidebarWin( SwAnnotationWin* p)
 {
-    if ( p != mpActivePostIt )
+    if ( p == mpActivePostIt )
+        return;
+
+    // we need the temp variable so we can set mpActivePostIt before we call DeactivatePostIt
+    // therefore we get a new layout in DOCCHANGED when switching from postit to document,
+    // otherwise, GetActivePostIt() would still hold our old postit
+    SwAnnotationWin* pActive = mpActivePostIt;
+    mpActivePostIt = p;
+    if (pActive)
     {
-        // we need the temp variable so we can set mpActivePostIt before we call DeactivatePostIt
-        // therefore we get a new layout in DOCCHANGED when switching from postit to document,
-        // otherwise, GetActivePostIt() would still hold our old postit
-        SwAnnotationWin* pActive = mpActivePostIt;
-        mpActivePostIt = p;
-        if (pActive)
-        {
-            pActive->DeactivatePostIt();
-            mShadowState.mpShadowField = nullptr;
-        }
-        if (mpActivePostIt)
-        {
-            mpActivePostIt->GotoPos();
-            mpView->AttrChangedNotify(nullptr);
-            mpActivePostIt->ActivatePostIt();
-        }
+        pActive->DeactivatePostIt();
+        mShadowState.mpShadowField = nullptr;
+    }
+    if (mpActivePostIt)
+    {
+        mpActivePostIt->GotoPos();
+        mpView->AttrChangedNotify(nullptr);
+        mpActivePostIt->ActivatePostIt();
     }
 }
 

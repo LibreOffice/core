@@ -158,56 +158,56 @@ SwEnvCfgItem::SwEnvCfgItem() :
     EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
     OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() == aNames.getLength())
+    if(aValues.getLength() != aNames.getLength())
+        return;
+
+    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
-        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        if(pValues[nProp].hasValue())
         {
-            if(pValues[nProp].hasValue())
+            switch(nProp)
             {
-                switch(nProp)
+                case  0: pValues[nProp] >>= m_aEnvItem.m_aAddrText; break;// "Inscription/Addressee",
+                case  1: pValues[nProp] >>= m_aEnvItem.m_aSendText; break;// "Inscription/Sender",
+                case  2: m_aEnvItem.m_bSend = *o3tl::doAccess<bool>(pValues[nProp]); break;// "Inscription/UseSender",
+                case  3:
+                    pValues[nProp] >>= m_aEnvItem.m_nAddrFromLeft;// "Format/AddresseeFromLeft",
+                    m_aEnvItem.m_nAddrFromLeft = convertMm100ToTwip(m_aEnvItem.m_nAddrFromLeft);
+                break;
+                case  4:
+                    pValues[nProp] >>= m_aEnvItem.m_nAddrFromTop;  // "Format/AddresseeFromTop",
+                    m_aEnvItem.m_nAddrFromTop = convertMm100ToTwip(m_aEnvItem.m_nAddrFromTop);
+                break;
+                case  5:
+                    pValues[nProp] >>= m_aEnvItem.m_nSendFromLeft; // "Format/SenderFromLeft",
+                    m_aEnvItem.m_nSendFromLeft = convertMm100ToTwip(m_aEnvItem.m_nSendFromLeft);
+                break;
+                case  6:
+                    pValues[nProp] >>= m_aEnvItem.m_nSendFromTop;// "Format/SenderFromTop",
+                    m_aEnvItem.m_nSendFromTop = convertMm100ToTwip(m_aEnvItem.m_nSendFromTop);
+                break;
+                case  7:
+                    pValues[nProp] >>= m_aEnvItem.m_nWidth; // "Format/Width",
+                    m_aEnvItem.m_nWidth = convertMm100ToTwip(m_aEnvItem.m_nWidth);
+                break;
+                case  8:
+                    pValues[nProp] >>= m_aEnvItem.m_nHeight; // "Format/Height",
+                    m_aEnvItem.m_nHeight = convertMm100ToTwip(m_aEnvItem.m_nHeight);
+                break;
+                case  9:
                 {
-                    case  0: pValues[nProp] >>= m_aEnvItem.m_aAddrText; break;// "Inscription/Addressee",
-                    case  1: pValues[nProp] >>= m_aEnvItem.m_aSendText; break;// "Inscription/Sender",
-                    case  2: m_aEnvItem.m_bSend = *o3tl::doAccess<bool>(pValues[nProp]); break;// "Inscription/UseSender",
-                    case  3:
-                        pValues[nProp] >>= m_aEnvItem.m_nAddrFromLeft;// "Format/AddresseeFromLeft",
-                        m_aEnvItem.m_nAddrFromLeft = convertMm100ToTwip(m_aEnvItem.m_nAddrFromLeft);
-                    break;
-                    case  4:
-                        pValues[nProp] >>= m_aEnvItem.m_nAddrFromTop;  // "Format/AddresseeFromTop",
-                        m_aEnvItem.m_nAddrFromTop = convertMm100ToTwip(m_aEnvItem.m_nAddrFromTop);
-                    break;
-                    case  5:
-                        pValues[nProp] >>= m_aEnvItem.m_nSendFromLeft; // "Format/SenderFromLeft",
-                        m_aEnvItem.m_nSendFromLeft = convertMm100ToTwip(m_aEnvItem.m_nSendFromLeft);
-                    break;
-                    case  6:
-                        pValues[nProp] >>= m_aEnvItem.m_nSendFromTop;// "Format/SenderFromTop",
-                        m_aEnvItem.m_nSendFromTop = convertMm100ToTwip(m_aEnvItem.m_nSendFromTop);
-                    break;
-                    case  7:
-                        pValues[nProp] >>= m_aEnvItem.m_nWidth; // "Format/Width",
-                        m_aEnvItem.m_nWidth = convertMm100ToTwip(m_aEnvItem.m_nWidth);
-                    break;
-                    case  8:
-                        pValues[nProp] >>= m_aEnvItem.m_nHeight; // "Format/Height",
-                        m_aEnvItem.m_nHeight = convertMm100ToTwip(m_aEnvItem.m_nHeight);
-                    break;
-                    case  9:
-                    {
-                        sal_Int32 nTemp = 0;
-                        pValues[nProp] >>= nTemp; m_aEnvItem.m_eAlign = static_cast<SwEnvAlign>(nTemp); break;// "Print/Alignment",
-                    }
-                    case 10: m_aEnvItem.m_bPrintFromAbove = *o3tl::doAccess<bool>(pValues[nProp]); break;// "Print/FromAbove",
-                    case 11:
-                        pValues[nProp] >>= m_aEnvItem.m_nShiftRight;
-                        m_aEnvItem.m_nShiftRight = convertMm100ToTwip(m_aEnvItem.m_nShiftRight);// "Print/Right",
-                    break;
-                    case 12:
-                        pValues[nProp] >>= m_aEnvItem.m_nShiftDown;
-                        m_aEnvItem.m_nShiftDown = convertMm100ToTwip(m_aEnvItem.m_nShiftDown);
-                    break;// "Print/Down"
+                    sal_Int32 nTemp = 0;
+                    pValues[nProp] >>= nTemp; m_aEnvItem.m_eAlign = static_cast<SwEnvAlign>(nTemp); break;// "Print/Alignment",
                 }
+                case 10: m_aEnvItem.m_bPrintFromAbove = *o3tl::doAccess<bool>(pValues[nProp]); break;// "Print/FromAbove",
+                case 11:
+                    pValues[nProp] >>= m_aEnvItem.m_nShiftRight;
+                    m_aEnvItem.m_nShiftRight = convertMm100ToTwip(m_aEnvItem.m_nShiftRight);// "Print/Right",
+                break;
+                case 12:
+                    pValues[nProp] >>= m_aEnvItem.m_nShiftDown;
+                    m_aEnvItem.m_nShiftDown = convertMm100ToTwip(m_aEnvItem.m_nShiftDown);
+                break;// "Print/Down"
             }
         }
     }

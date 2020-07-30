@@ -424,29 +424,29 @@ void SwSpellDialogChildWindow::ApplyChangedSentence(const svx::SpellPortions& rC
 {
     SwWrtShell* pWrtShell = GetWrtShell_Impl();
     OSL_ENSURE(!m_pSpellState->m_bInitialCall, "ApplyChangedSentence in initial call or after resume");
-    if(pWrtShell && !m_pSpellState->m_bInitialCall)
+    if(!(pWrtShell && !m_pSpellState->m_bInitialCall))
+        return;
+
+    ShellMode eSelMode = pWrtShell->GetView().GetShellMode();
+    bool bDrawText = ShellMode::DrawText == eSelMode;
+    bool bNormalText =
+        ShellMode::TableText == eSelMode ||
+        ShellMode::ListText == eSelMode ||
+        ShellMode::TableListText == eSelMode ||
+        ShellMode::Text == eSelMode;
+
+    // evaluate if the same sentence should be rechecked or not.
+    // Sentences that got grammar checked should always be rechecked in order
+    // to detect possible errors that get introduced with the changes
+    bRecheck |= SwEditShell::HasLastSentenceGotGrammarChecked();
+
+    if(bNormalText)
+        pWrtShell->ApplyChangedSentence(rChanged, bRecheck);
+    else if(bDrawText )
     {
-        ShellMode eSelMode = pWrtShell->GetView().GetShellMode();
-        bool bDrawText = ShellMode::DrawText == eSelMode;
-        bool bNormalText =
-            ShellMode::TableText == eSelMode ||
-            ShellMode::ListText == eSelMode ||
-            ShellMode::TableListText == eSelMode ||
-            ShellMode::Text == eSelMode;
-
-        // evaluate if the same sentence should be rechecked or not.
-        // Sentences that got grammar checked should always be rechecked in order
-        // to detect possible errors that get introduced with the changes
-        bRecheck |= SwEditShell::HasLastSentenceGotGrammarChecked();
-
-        if(bNormalText)
-            pWrtShell->ApplyChangedSentence(rChanged, bRecheck);
-        else if(bDrawText )
-        {
-            SdrView* pDrView = pWrtShell->GetDrawView();
-            SdrOutliner *pOutliner = pDrView->GetTextEditOutliner();
-            pOutliner->ApplyChangedSentence(pDrView->GetTextEditOutlinerView()->GetEditView(), rChanged, bRecheck);
-        }
+        SdrView* pDrView = pWrtShell->GetDrawView();
+        SdrOutliner *pOutliner = pDrView->GetTextEditOutliner();
+        pOutliner->ApplyChangedSentence(pDrView->GetTextEditOutlinerView()->GetEditView(), rChanged, bRecheck);
     }
 }
 
@@ -481,26 +481,26 @@ void SwSpellDialogChildWindow::SetGrammarChecking(bool bOn)
     // set current spell position to the start of the current sentence to
     // continue with this sentence after grammar checking state has been changed
     SwWrtShell* pWrtShell = GetWrtShell_Impl();
-    if(pWrtShell)
+    if(!pWrtShell)
+        return;
+
+    ShellMode eSelMode = pWrtShell->GetView().GetShellMode();
+    bool bDrawText = ShellMode::DrawText == eSelMode;
+    bool bNormalText =
+        ShellMode::TableText == eSelMode ||
+        ShellMode::ListText == eSelMode ||
+        ShellMode::TableListText == eSelMode ||
+        ShellMode::Text == eSelMode;
+    if( bNormalText )
+        SwEditShell::PutSpellingToSentenceStart();
+    else if( bDrawText )
     {
-        ShellMode eSelMode = pWrtShell->GetView().GetShellMode();
-        bool bDrawText = ShellMode::DrawText == eSelMode;
-        bool bNormalText =
-            ShellMode::TableText == eSelMode ||
-            ShellMode::ListText == eSelMode ||
-            ShellMode::TableListText == eSelMode ||
-            ShellMode::Text == eSelMode;
-        if( bNormalText )
-            SwEditShell::PutSpellingToSentenceStart();
-        else if( bDrawText )
+        SdrView*     pSdrView = pWrtShell->GetDrawView();
+        SdrOutliner* pOutliner = pSdrView ? pSdrView->GetTextEditOutliner() : nullptr;
+        OSL_ENSURE(pOutliner, "No Outliner in SwSpellDialogChildWindow::SetGrammarChecking");
+        if(pOutliner)
         {
-            SdrView*     pSdrView = pWrtShell->GetDrawView();
-            SdrOutliner* pOutliner = pSdrView ? pSdrView->GetTextEditOutliner() : nullptr;
-            OSL_ENSURE(pOutliner, "No Outliner in SwSpellDialogChildWindow::SetGrammarChecking");
-            if(pOutliner)
-            {
-                pOutliner->PutSpellingToSentenceStart( pSdrView->GetTextEditOutlinerView()->GetEditView() );
-            }
+            pOutliner->PutSpellingToSentenceStart( pSdrView->GetTextEditOutlinerView()->GetEditView() );
         }
     }
 }
