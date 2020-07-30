@@ -3694,6 +3694,14 @@ public:
             m_aCustomRenders.erase(nColumn);
     }
 
+    virtual void queue_draw() override
+    {
+        // invalidate the entries
+        SvTreeList* pModel = m_xTreeView->GetModel();
+        for (SvTreeListEntry* pEntry = m_xTreeView->First(); pEntry; pEntry = m_xTreeView->Next(pEntry))
+            pModel->InvalidateEntry(pEntry);
+    }
+
     virtual void show() override
     {
         if (LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get()))
