@@ -1011,7 +1011,22 @@ SfxVoidItem DesignerDialog SID_STYLE_DESIGNER
     GroupId = SfxGroupId::Format;
 ]
 
+SfxBoolItem NavigatorDeck SID_NAVIGATOR_DECK
 
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Options;
+]
 
 SfxVoidItem DragHierarchy SID_STYLE_DRAGHIERARCHIE
 ()

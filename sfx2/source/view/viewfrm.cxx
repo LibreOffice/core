@@ -133,6 +133,9 @@ using ::com::sun::star::container::XIndexContainer;
 #define ShellClass_SfxViewFrame
 #include <sfxslots.hxx>
 
+#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
+
 SFX_IMPL_SUPERCLASS_INTERFACE(SfxViewFrame,SfxShell)
 
 void SfxViewFrame::InitInterface_Impl()
@@ -3152,6 +3155,31 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
         ShowChildWindow(SID_SIDEBAR);
 
         ::sfx2::sidebar::Sidebar::ShowPanel("StyleListPanel",
+                                            GetFrame().GetFrameInterface(), true);
+        rReq.Done();
+        return;
+    }
+    if (nSID == SID_NAVIGATOR_DECK)
+    {
+        // First make sure that the sidebar is visible
+        ShowChildWindow(SID_SIDEBAR);
+
+        Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+        Reference<XModuleManager> xModuleManager= ModuleManager::create(xContext);
+        Reference<XFrame> xFrame = GetFrame().GetFrameInterface();
+        OUString sModuleName = xModuleManager->identify(xFrame);
+
+        OUString sPanelId;
+        if (sModuleName == "com.sun.star.text.TextDocument")
+            sPanelId = "SwNavigatorPanel";
+        else if (sModuleName == "com.sun.star.sheet.SpreadsheetDocument")
+            sPanelId = "ScNavigatorPanel";
+        else if (sModuleName == "com.sun.star.drawing.DrawingDocument" ||
+                 sModuleName == "com.sun.star.presentation.PresentationDocument")
+            sPanelId = "SdNavigatorPanel";
+
+        if (!sPanelId.isEmpty())
+            ::sfx2::sidebar::Sidebar::ShowPanel(sPanelId,
                                             GetFrame().GetFrameInterface(), true);
         rReq.Done();
         return;
