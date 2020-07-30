@@ -1417,25 +1417,25 @@ void SwDocStyleSheet::MergeIndentAttrsOfListStyle( SfxItemSet& rSet )
     }
 
     OSL_ENSURE( pColl, "<SwDocStyleSheet::MergeIndentAttrsOfListStyle(..)> - missing paragraph style");
-    if ( pColl->AreListLevelIndentsApplicable() )
+    if ( !pColl->AreListLevelIndentsApplicable() )
+        return;
+
+    OSL_ENSURE( pColl->GetItemState( RES_PARATR_NUMRULE ) == SfxItemState::SET,
+            "<SwDocStyleSheet::MergeIndentAttrsOfListStyle(..)> - list level indents are applicable at paragraph style, but no list style found. Serious defect." );
+    const OUString sNumRule = pColl->GetNumRule().GetValue();
+    if (sNumRule.isEmpty())
+        return;
+
+    const SwNumRule* pRule = rDoc.FindNumRulePtr( sNumRule );
+    if( pRule )
     {
-        OSL_ENSURE( pColl->GetItemState( RES_PARATR_NUMRULE ) == SfxItemState::SET,
-                "<SwDocStyleSheet::MergeIndentAttrsOfListStyle(..)> - list level indents are applicable at paragraph style, but no list style found. Serious defect." );
-        const OUString sNumRule = pColl->GetNumRule().GetValue();
-        if (!sNumRule.isEmpty())
+        const SwNumFormat& rFormat = pRule->Get( 0 );
+        if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
         {
-            const SwNumRule* pRule = rDoc.FindNumRulePtr( sNumRule );
-            if( pRule )
-            {
-                const SwNumFormat& rFormat = pRule->Get( 0 );
-                if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
-                {
-                    SvxLRSpaceItem aLR( RES_LR_SPACE );
-                    aLR.SetTextLeft( rFormat.GetIndentAt() );
-                    aLR.SetTextFirstLineOffset( static_cast<short>(rFormat.GetFirstLineIndent()) );
-                    rSet.Put( aLR );
-                }
-            }
+            SvxLRSpaceItem aLR( RES_LR_SPACE );
+            aLR.SetTextLeft( rFormat.GetIndentAt() );
+            aLR.SetTextFirstLineOffset( static_cast<short>(rFormat.GetFirstLineIndent()) );
+            rSet.Put( aLR );
         }
     }
 }

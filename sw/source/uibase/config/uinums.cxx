@@ -180,23 +180,23 @@ SwNumRulesWithName::SwNumFormatGlobal::SwNumFormatGlobal( const SwNumFormat& rFo
     // relative gaps?????
 
     SwCharFormat* pFormat = rFormat.GetCharFormat();
-    if( pFormat )
-    {
-        sCharFormatName = pFormat->GetName();
-        nCharPoolId = pFormat->GetPoolFormatId();
-        if( pFormat->GetAttrSet().Count() )
-        {
-            SfxItemIter aIter( pFormat->GetAttrSet() );
-            const SfxPoolItem *pCurr = aIter.GetCurItem();
-            do
-            {
-                m_Items.push_back(std::unique_ptr<SfxPoolItem>(pCurr->Clone()));
-                pCurr = aIter.NextItem();
-            } while (pCurr);
-        }
+    if( !pFormat )
+        return;
 
-        aFormat.SetCharFormat( nullptr );
+    sCharFormatName = pFormat->GetName();
+    nCharPoolId = pFormat->GetPoolFormatId();
+    if( pFormat->GetAttrSet().Count() )
+    {
+        SfxItemIter aIter( pFormat->GetAttrSet() );
+        const SfxPoolItem *pCurr = aIter.GetCurItem();
+        do
+        {
+            m_Items.push_back(std::unique_ptr<SfxPoolItem>(pCurr->Clone()));
+            pCurr = aIter.NextItem();
+        } while (pCurr);
     }
+
+    aFormat.SetCharFormat( nullptr );
 }
 
 SwNumRulesWithName::SwNumFormatGlobal::SwNumFormatGlobal( const SwNumFormatGlobal& rFormat )

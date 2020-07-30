@@ -185,45 +185,45 @@ void SwContentViewConfig::Load()
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
     OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() == aNames.getLength())
+    if(aValues.getLength() != aNames.getLength())
+        return;
+
+    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
-        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        if(pValues[nProp].hasValue())
         {
-            if(pValues[nProp].hasValue())
+            bool bSet = nProp != g_UpdateLinkIndex && *o3tl::doAccess<bool>(pValues[nProp]);
+            switch(nProp)
             {
-                bool bSet = nProp != g_UpdateLinkIndex && *o3tl::doAccess<bool>(pValues[nProp]);
-                switch(nProp)
+                case  0: rParent.SetGraphic(bSet);  break;// "Display/GraphicObject",
+                case  1: rParent.SetTable(bSet);    break;// "Display/Table",
+                case  2: rParent.SetDraw(bSet);     break;// "Display/DrawingControl",
+                case  3: rParent.SetFieldName(bSet);  break;// "Display/FieldCode",
+                case  4: rParent.SetPostIts(bSet);  break;// "Display/Note",
+                case  5: rParent.SetShowContentTips(bSet);  break;// "Display/ShowContentTips",
+                case  6: rParent.SetViewMetaChars(bSet); break; //"NonprintingCharacter/MetaCharacters"
+                case  7: rParent.SetParagraph(bSet); break;// "NonprintingCharacter/ParagraphEnd",
+                case  8: rParent.SetSoftHyph(bSet); break;// "NonprintingCharacter/OptionalHyphen",
+                case  9: rParent.SetBlank(bSet);    break;// "NonprintingCharacter/Space",
+                case 10: rParent.SetLineBreak(bSet);break;// "NonprintingCharacter/Break",
+                case 11: rParent.SetHardBlank(bSet); break;// "NonprintingCharacter/ProtectedSpace",
+                case 12: rParent.SetTab(bSet);      break;// "NonprintingCharacter/Tab",
+                case 13: rParent.SetShowHiddenField(bSet);   break;// "NonprintingCharacter/Fields: HiddenText",
+                case 14: rParent.SetShowHiddenPara(bSet); break;// "NonprintingCharacter/Fields: HiddenParagraph",
+                case 15: rParent.SetShowHiddenChar(bSet); break;// "NonprintingCharacter/HiddenCharacter",
+                case 16: rParent.SetShowBookmarks(bSet); break;// "NonprintingCharacter/Bookmarks",
+                case 17:
                 {
-                    case  0: rParent.SetGraphic(bSet);  break;// "Display/GraphicObject",
-                    case  1: rParent.SetTable(bSet);    break;// "Display/Table",
-                    case  2: rParent.SetDraw(bSet);     break;// "Display/DrawingControl",
-                    case  3: rParent.SetFieldName(bSet);  break;// "Display/FieldCode",
-                    case  4: rParent.SetPostIts(bSet);  break;// "Display/Note",
-                    case  5: rParent.SetShowContentTips(bSet);  break;// "Display/ShowContentTips",
-                    case  6: rParent.SetViewMetaChars(bSet); break; //"NonprintingCharacter/MetaCharacters"
-                    case  7: rParent.SetParagraph(bSet); break;// "NonprintingCharacter/ParagraphEnd",
-                    case  8: rParent.SetSoftHyph(bSet); break;// "NonprintingCharacter/OptionalHyphen",
-                    case  9: rParent.SetBlank(bSet);    break;// "NonprintingCharacter/Space",
-                    case 10: rParent.SetLineBreak(bSet);break;// "NonprintingCharacter/Break",
-                    case 11: rParent.SetHardBlank(bSet); break;// "NonprintingCharacter/ProtectedSpace",
-                    case 12: rParent.SetTab(bSet);      break;// "NonprintingCharacter/Tab",
-                    case 13: rParent.SetShowHiddenField(bSet);   break;// "NonprintingCharacter/Fields: HiddenText",
-                    case 14: rParent.SetShowHiddenPara(bSet); break;// "NonprintingCharacter/Fields: HiddenParagraph",
-                    case 15: rParent.SetShowHiddenChar(bSet); break;// "NonprintingCharacter/HiddenCharacter",
-                    case 16: rParent.SetShowBookmarks(bSet); break;// "NonprintingCharacter/Bookmarks",
-                    case 17:
-                    {
-                        sal_Int32 nSet = 0;
-                        pValues[nProp] >>= nSet;
-                        rParent.SetUpdateLinkMode(nSet, true);
-                    }
-                    break;// "Update/Link",
-                    case 18: rParent.SetUpdateFields(bSet); break;// "Update/Field",
-                    case 19: rParent.SetUpdateCharts(bSet); break;// "Update/Chart"
-                    case 20: rParent.SetShowInlineTooltips(bSet); break;// "Display/ShowInlineTooltips"
-                    case 21: rParent.SetUseHeaderFooterMenu(bSet); break;// "Display/UseHeaderFooterMenu"
-                    case 22: rParent.SetShowOutlineContentVisibilityButton(bSet); break;// "Display/ShowOutlineContententVisibilityButton"
+                    sal_Int32 nSet = 0;
+                    pValues[nProp] >>= nSet;
+                    rParent.SetUpdateLinkMode(nSet, true);
                 }
+                break;// "Update/Link",
+                case 18: rParent.SetUpdateFields(bSet); break;// "Update/Field",
+                case 19: rParent.SetUpdateCharts(bSet); break;// "Update/Chart"
+                case 20: rParent.SetShowInlineTooltips(bSet); break;// "Display/ShowInlineTooltips"
+                case 21: rParent.SetUseHeaderFooterMenu(bSet); break;// "Display/UseHeaderFooterMenu"
+                case 22: rParent.SetShowOutlineContentVisibilityButton(bSet); break;// "Display/ShowOutlineContententVisibilityButton"
             }
         }
     }
@@ -328,50 +328,50 @@ void SwLayoutViewConfig::Load()
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
     OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() == aNames.getLength())
-    {
-        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
-        {
-            if(pValues[nProp].hasValue())
-            {
-                sal_Int32   nInt32Val   = 0;
-                bool    bSet        = false;
-                pValues[nProp] >>= nInt32Val;
-                pValues[nProp] >>= bSet;
+    if(aValues.getLength() != aNames.getLength())
+        return;
 
-                switch(nProp)
+    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+    {
+        if(pValues[nProp].hasValue())
+        {
+            sal_Int32   nInt32Val   = 0;
+            bool    bSet        = false;
+            pValues[nProp] >>= nInt32Val;
+            pValues[nProp] >>= bSet;
+
+            switch(nProp)
+            {
+                case  0: rParent.SetCrossHair(bSet); break;// "Line/Guide",
+                case  1: rParent.SetViewHScrollBar(bSet); break;// "Window/HorizontalScroll",
+                case  2: rParent.SetViewVScrollBar(bSet); break;// "Window/VerticalScroll",
+                case  3: rParent.SetViewAnyRuler(bSet);break; // "Window/ShowRulers"
+                case  4: rParent.SetViewHRuler(bSet); break;// "Window/HorizontalRuler",
+                case  5: rParent.SetViewVRuler(bSet); break;// "Window/VerticalRuler",
+                case  6:
                 {
-                    case  0: rParent.SetCrossHair(bSet); break;// "Line/Guide",
-                    case  1: rParent.SetViewHScrollBar(bSet); break;// "Window/HorizontalScroll",
-                    case  2: rParent.SetViewVScrollBar(bSet); break;// "Window/VerticalScroll",
-                    case  3: rParent.SetViewAnyRuler(bSet);break; // "Window/ShowRulers"
-                    case  4: rParent.SetViewHRuler(bSet); break;// "Window/HorizontalRuler",
-                    case  5: rParent.SetViewVRuler(bSet); break;// "Window/VerticalRuler",
-                    case  6:
-                    {
-                        rParent.m_bIsHScrollMetricSet = true;
-                        rParent.m_eHScrollMetric = static_cast<FieldUnit>(nInt32Val);  // "Window/HorizontalRulerUnit"
-                    }
-                    break;
-                    case  7:
-                    {
-                        rParent.m_bIsVScrollMetricSet = true;
-                        rParent.m_eVScrollMetric = static_cast<FieldUnit>(nInt32Val); // "Window/VerticalRulerUnit"
-                    }
-                    break;
-                    case  8: rParent.SetSmoothScroll(bSet); break;// "Window/SmoothScroll",
-                    case  9: rParent.SetZoom( static_cast< sal_uInt16 >(nInt32Val) ); break;// "Zoom/Value",
-                    case 10: rParent.SetZoomType( static_cast< SvxZoomType >(nInt32Val) ); break;// "Zoom/Type",
-                    case 11: rParent.SetAlignMathObjectsToBaseline(bSet, true); break;// "Other/IsAlignMathObjectsToBaseline"
-                    case 12: rParent.SetMetric(static_cast<FieldUnit>(nInt32Val), true); break;// "Other/MeasureUnit",
-                    case 13: rParent.SetDefTabInMm100(nInt32Val, true); break;// "Other/TabStop",
-                    case 14: rParent.SetVRulerRight(bSet); break;// "Window/IsVerticalRulerRight",
-                    case 15: rParent.SetViewLayoutColumns( static_cast<sal_uInt16>(nInt32Val) ); break;// "ViewLayout/Columns",
-                    case 16: rParent.SetViewLayoutBookMode(bSet); break;// "ViewLayout/BookMode",
-                    case 17: rParent.SetDefaultPageMode(bSet,true); break;// "Other/IsSquaredPageMode",
-                    case 18: rParent.SetApplyCharUnit(bSet, true); break;// "Other/ApplyUserChar"
-                    case 19: rParent.SetShowScrollBarTips(bSet); break;// "Window/ShowScrollBarTips",
+                    rParent.m_bIsHScrollMetricSet = true;
+                    rParent.m_eHScrollMetric = static_cast<FieldUnit>(nInt32Val);  // "Window/HorizontalRulerUnit"
                 }
+                break;
+                case  7:
+                {
+                    rParent.m_bIsVScrollMetricSet = true;
+                    rParent.m_eVScrollMetric = static_cast<FieldUnit>(nInt32Val); // "Window/VerticalRulerUnit"
+                }
+                break;
+                case  8: rParent.SetSmoothScroll(bSet); break;// "Window/SmoothScroll",
+                case  9: rParent.SetZoom( static_cast< sal_uInt16 >(nInt32Val) ); break;// "Zoom/Value",
+                case 10: rParent.SetZoomType( static_cast< SvxZoomType >(nInt32Val) ); break;// "Zoom/Type",
+                case 11: rParent.SetAlignMathObjectsToBaseline(bSet, true); break;// "Other/IsAlignMathObjectsToBaseline"
+                case 12: rParent.SetMetric(static_cast<FieldUnit>(nInt32Val), true); break;// "Other/MeasureUnit",
+                case 13: rParent.SetDefTabInMm100(nInt32Val, true); break;// "Other/TabStop",
+                case 14: rParent.SetVRulerRight(bSet); break;// "Window/IsVerticalRulerRight",
+                case 15: rParent.SetViewLayoutColumns( static_cast<sal_uInt16>(nInt32Val) ); break;// "ViewLayout/Columns",
+                case 16: rParent.SetViewLayoutBookMode(bSet); break;// "ViewLayout/BookMode",
+                case 17: rParent.SetDefaultPageMode(bSet,true); break;// "Other/IsSquaredPageMode",
+                case 18: rParent.SetApplyCharUnit(bSet, true); break;// "Other/ApplyUserChar"
+                case 19: rParent.SetShowScrollBarTips(bSet); break;// "Window/ShowScrollBarTips",
             }
         }
     }
@@ -441,31 +441,31 @@ void SwGridConfig::Load()
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
     OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() == aNames.getLength())
+    if(aValues.getLength() != aNames.getLength())
+        return;
+
+    Size aSnap(rParent.GetSnapSize());
+    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
-        Size aSnap(rParent.GetSnapSize());
-        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        if(pValues[nProp].hasValue())
         {
-            if(pValues[nProp].hasValue())
+            bool bSet = nProp < 3 && *o3tl::doAccess<bool>(pValues[nProp]);
+            sal_Int32 nSet = 0;
+            if(nProp >= 3)
+                pValues[nProp] >>= nSet;
+            switch(nProp)
             {
-                bool bSet = nProp < 3 && *o3tl::doAccess<bool>(pValues[nProp]);
-                sal_Int32 nSet = 0;
-                if(nProp >= 3)
-                    pValues[nProp] >>= nSet;
-                switch(nProp)
-                {
-                    case  0: rParent.SetSnap(bSet); break;//        "Option/SnapToGrid",
-                    case  1: rParent.SetGridVisible(bSet); break;//"Option/VisibleGrid",
-                    case  2: rParent.SetSynchronize(bSet); break;//  "Option/Synchronize",
-                    case  3: aSnap.setWidth( convertMm100ToTwip(nSet) ); break;//      "Resolution/XAxis",
-                    case  4: aSnap.setHeight( convertMm100ToTwip(nSet) ); break;//      "Resolution/YAxis",
-                    case  5: rParent.SetDivisionX(static_cast<short>(nSet)); break;//   "Subdivision/XAxis",
-                    case  6: rParent.SetDivisionY(static_cast<short>(nSet)); break;//   "Subdivision/YAxis"
-                }
+                case  0: rParent.SetSnap(bSet); break;//        "Option/SnapToGrid",
+                case  1: rParent.SetGridVisible(bSet); break;//"Option/VisibleGrid",
+                case  2: rParent.SetSynchronize(bSet); break;//  "Option/Synchronize",
+                case  3: aSnap.setWidth( convertMm100ToTwip(nSet) ); break;//      "Resolution/XAxis",
+                case  4: aSnap.setHeight( convertMm100ToTwip(nSet) ); break;//      "Resolution/YAxis",
+                case  5: rParent.SetDivisionX(static_cast<short>(nSet)); break;//   "Subdivision/XAxis",
+                case  6: rParent.SetDivisionY(static_cast<short>(nSet)); break;//   "Subdivision/YAxis"
             }
         }
-        rParent.SetSnapSize(aSnap);
     }
+    rParent.SetSnapSize(aSnap);
 }
 
 void SwGridConfig::Notify( const css::uno::Sequence< OUString >& ) {}
@@ -521,28 +521,27 @@ void SwCursorConfig::Load()
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
     OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() == aNames.getLength())
-    {
+    if(aValues.getLength() != aNames.getLength())
+        return;
 
-        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+
+    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+    {
+        if(pValues[nProp].hasValue())
         {
-            if(pValues[nProp].hasValue())
+            bool bSet = false;
+            sal_Int32 nSet = 0;
+            if(nProp != 1 )
+                bSet = *o3tl::doAccess<bool>(pValues[nProp]);
+            else
+                pValues[nProp] >>= nSet;
+            switch(nProp)
             {
-                bool bSet = false;
-                sal_Int32 nSet = 0;
-                if(nProp != 1 )
-                    bSet = *o3tl::doAccess<bool>(pValues[nProp]);
-                else
-                    pValues[nProp] >>= nSet;
-                switch(nProp)
-                {
-                    case  0: rParent.SetShadowCursor(bSet);                  break; // "DirectCursor/UseDirectCursor",
-                    case  1: rParent.SetShdwCursorFillMode(static_cast<SwFillMode>(nSet)); break; // "DirectCursor/Insert",
-                    case  2: rParent.SetCursorInProtectedArea(bSet);         break; // "Option/ProtectedArea"
-                }
+                case  0: rParent.SetShadowCursor(bSet);                  break; // "DirectCursor/UseDirectCursor",
+                case  1: rParent.SetShdwCursorFillMode(static_cast<SwFillMode>(nSet)); break; // "DirectCursor/Insert",
+                case  2: rParent.SetCursorInProtectedArea(bSet);         break; // "Option/ProtectedArea"
             }
         }
-
     }
 }
 
@@ -581,19 +580,19 @@ void SwWebColorConfig::Load()
     Sequence<Any> aValues = GetProperties(aPropNames);
     const Any* pValues = aValues.getConstArray();
     OSL_ENSURE(aValues.getLength() == aPropNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() == aPropNames.getLength())
+    if(aValues.getLength() != aPropNames.getLength())
+        return;
+
+    for(int nProp = 0; nProp < aPropNames.getLength(); nProp++)
     {
-        for(int nProp = 0; nProp < aPropNames.getLength(); nProp++)
+        if(pValues[nProp].hasValue())
         {
-            if(pValues[nProp].hasValue())
+            switch(nProp)
             {
-                switch(nProp)
-                {
-                    case  0:
-                        Color nSet;
-                        pValues[nProp] >>= nSet; rParent.SetRetoucheColor(nSet);
-                    break;// "Color",
-                }
+                case  0:
+                    Color nSet;
+                    pValues[nProp] >>= nSet; rParent.SetRetoucheColor(nSet);
+                break;// "Color",
             }
         }
     }

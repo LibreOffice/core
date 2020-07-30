@@ -368,22 +368,23 @@ void SwModule::ShowDBObj(SwView const & rView, const SwDBData& rData)
     Reference<XFrame> xFrame = rView.GetViewFrame()->GetFrame().GetFrameInterface();
 
     uno::Reference<XFrame> xBeamerFrame = xFrame->findFrame("_beamer", FrameSearchFlag::CHILDREN);
-    if (xBeamerFrame.is())
-    {   // the beamer has been opened by the SfxViewFrame
-        Reference<XController> xController = xBeamerFrame->getController();
-        Reference<XSelectionSupplier> xControllerSelection(xController, UNO_QUERY);
-        if (xControllerSelection.is())
-        {
+    if (!xBeamerFrame.is())
+        return;
 
-            ODataAccessDescriptor aSelection;
-            aSelection.setDataSource(rData.sDataSource);
-            aSelection[DataAccessDescriptorProperty::Command]       <<= rData.sCommand;
-            aSelection[DataAccessDescriptorProperty::CommandType]   <<= rData.nCommandType;
-            xControllerSelection->select(makeAny(aSelection.createPropertyValueSequence()));
-        }
-        else {
-            OSL_FAIL("no selection supplier in the beamer!");
-        }
+// the beamer has been opened by the SfxViewFrame
+    Reference<XController> xController = xBeamerFrame->getController();
+    Reference<XSelectionSupplier> xControllerSelection(xController, UNO_QUERY);
+    if (xControllerSelection.is())
+    {
+
+        ODataAccessDescriptor aSelection;
+        aSelection.setDataSource(rData.sDataSource);
+        aSelection[DataAccessDescriptorProperty::Command]       <<= rData.sCommand;
+        aSelection[DataAccessDescriptorProperty::CommandType]   <<= rData.nCommandType;
+        xControllerSelection->select(makeAny(aSelection.createPropertyValueSequence()));
+    }
+    else {
+        OSL_FAIL("no selection supplier in the beamer!");
     }
 }
 
@@ -632,20 +633,20 @@ void SwModule::CheckSpellChanges( bool bOnlineSpelling,
 {
     bool bOnlyWrong = bIsSpellWrongAgain && !bIsSpellAllAgain;
     bool bInvalid = bOnlyWrong || bIsSpellAllAgain;
-    if( bOnlineSpelling || bInvalid )
+    if( !(bOnlineSpelling || bInvalid) )
+        return;
+
+    for( SwDocShell *pDocSh = static_cast<SwDocShell*>(SfxObjectShell::GetFirst(checkSfxObjectShell<SwDocShell>));
+         pDocSh;
+         pDocSh = static_cast<SwDocShell*>(SfxObjectShell::GetNext( *pDocSh, checkSfxObjectShell<SwDocShell> ) ) )
     {
-        for( SwDocShell *pDocSh = static_cast<SwDocShell*>(SfxObjectShell::GetFirst(checkSfxObjectShell<SwDocShell>));
-             pDocSh;
-             pDocSh = static_cast<SwDocShell*>(SfxObjectShell::GetNext( *pDocSh, checkSfxObjectShell<SwDocShell> ) ) )
+        SwDoc* pTmp = pDocSh->GetDoc();
+        if ( pTmp->getIDocumentLayoutAccess().GetCurrentViewShell() )
         {
-            SwDoc* pTmp = pDocSh->GetDoc();
-            if ( pTmp->getIDocumentLayoutAccess().GetCurrentViewShell() )
-            {
-                pTmp->SpellItAgainSam( bInvalid, bOnlyWrong, bSmartTags );
-                SwViewShell* pViewShell = pTmp->getIDocumentLayoutAccess().GetCurrentViewShell();
-                if ( bSmartTags && pViewShell && pViewShell->GetWin() )
-                    pViewShell->GetWin()->Invalidate();
-            }
+            pTmp->SpellItAgainSam( bInvalid, bOnlyWrong, bSmartTags );
+            SwViewShell* pViewShell = pTmp->getIDocumentLayoutAccess().GetCurrentViewShell();
+            if ( bSmartTags && pViewShell && pViewShell->GetWin() )
+                pViewShell->GetWin()->Invalidate();
         }
     }
 }

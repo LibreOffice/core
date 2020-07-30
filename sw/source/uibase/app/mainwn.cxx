@@ -91,31 +91,31 @@ void SetProgressState( long nPosition, SwDocShell const *pDocShell )
 
 void EndProgress( SwDocShell const *pDocShell )
 {
-    if( pProgressContainer && !SW_MOD()->IsEmbeddedLoadSave() )
-    {
-        SwProgress *pProgress = nullptr;
-        std::vector<SwProgress *>::size_type i;
-        for ( i = 0; i < pProgressContainer->size(); ++i )
-        {
-            SwProgress *pTmp = (*pProgressContainer)[i].get();
-            if ( pTmp->pDocShell == pDocShell )
-            {
-                pProgress = pTmp;
-                break;
-            }
-        }
+    if( !(pProgressContainer && !SW_MOD()->IsEmbeddedLoadSave()) )
+        return;
 
-        if ( pProgress && 0 == --pProgress->nStartCount )
+    SwProgress *pProgress = nullptr;
+    std::vector<SwProgress *>::size_type i;
+    for ( i = 0; i < pProgressContainer->size(); ++i )
+    {
+        SwProgress *pTmp = (*pProgressContainer)[i].get();
+        if ( pTmp->pDocShell == pDocShell )
         {
-            pProgress->pProgress->Stop();
-            pProgressContainer->erase( pProgressContainer->begin() + i );
-            //#112337# it may happen that the container has been removed
-            //while rescheduling
-            if ( pProgressContainer && pProgressContainer->empty() )
-            {
-                delete pProgressContainer;
-                pProgressContainer = nullptr;
-            }
+            pProgress = pTmp;
+            break;
+        }
+    }
+
+    if ( pProgress && 0 == --pProgress->nStartCount )
+    {
+        pProgress->pProgress->Stop();
+        pProgressContainer->erase( pProgressContainer->begin() + i );
+        //#112337# it may happen that the container has been removed
+        //while rescheduling
+        if ( pProgressContainer && pProgressContainer->empty() )
+        {
+            delete pProgressContainer;
+            pProgressContainer = nullptr;
         }
     }
 }

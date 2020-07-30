@@ -62,19 +62,19 @@ void SwDBConfig::Load()
     Sequence<Any> aValues = GetProperties(rNames);
     const Any* pValues = aValues.getConstArray();
     OSL_ENSURE(aValues.getLength() == rNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() == rNames.getLength())
+    if(aValues.getLength() != rNames.getLength())
+        return;
+
+    for(int nProp = 0; nProp < rNames.getLength(); nProp++)
     {
-        for(int nProp = 0; nProp < rNames.getLength(); nProp++)
+        switch(nProp)
         {
-            switch(nProp)
-            {
-                case  0: pValues[nProp] >>= pAdrImpl->sDataSource;  break;
-                case  1: pValues[nProp] >>= pAdrImpl->sCommand;     break;
-                case  2: pValues[nProp] >>= pAdrImpl->nCommandType; break;
-                case  3: pValues[nProp] >>= pBibImpl->sDataSource;  break;
-                case  4: pValues[nProp] >>= pBibImpl->sCommand;     break;
-                case  5: pValues[nProp] >>= pBibImpl->nCommandType; break;
-            }
+            case  0: pValues[nProp] >>= pAdrImpl->sDataSource;  break;
+            case  1: pValues[nProp] >>= pAdrImpl->sCommand;     break;
+            case  2: pValues[nProp] >>= pAdrImpl->nCommandType; break;
+            case  3: pValues[nProp] >>= pBibImpl->sDataSource;  break;
+            case  4: pValues[nProp] >>= pBibImpl->sCommand;     break;
+            case  5: pValues[nProp] >>= pBibImpl->nCommandType; break;
         }
     }
 }
