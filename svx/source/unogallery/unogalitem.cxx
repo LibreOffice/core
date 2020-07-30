@@ -268,7 +268,7 @@ void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEnt
 
                 if( pGalTheme )
                 {
-                    std::unique_ptr<SgaObject> pObj = pGalTheme->AcquireObject( pGalTheme->ImplGetGalleryObjectPos( implGetObject() ) );
+                    std::unique_ptr<SgaObject> pObj = pGalTheme->AcquireObject( pGalTheme->maGalleryObjectCollection.searchPosWithObject( implGetObject() ) );
 
                     if( pObj )
                     {
@@ -284,7 +284,7 @@ void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEnt
 
                 if( pGalTheme )
                 {
-                    std::unique_ptr<SgaObject> pObj = pGalTheme->AcquireObject( pGalTheme->ImplGetGalleryObjectPos( implGetObject() ) );
+                    std::unique_ptr<SgaObject> pObj = pGalTheme->AcquireObject( pGalTheme->maGalleryObjectCollection.searchPosWithObject( implGetObject() ) );
 
                     if( pObj )
                     {
@@ -306,7 +306,7 @@ void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEnt
                 ::GalleryTheme* pGalTheme = ( isValid() ? mpTheme->implGetTheme() : nullptr );
                 Graphic         aGraphic;
 
-                if( pGalTheme && pGalTheme->GetGraphic( pGalTheme->ImplGetGalleryObjectPos( implGetObject() ), aGraphic ) )
+                if( pGalTheme && pGalTheme->GetGraphic( pGalTheme->maGalleryObjectCollection.searchPosWithObject( implGetObject() ), aGraphic ) )
                     *pValue <<= aGraphic.GetXGraphic();
             }
             break;
@@ -320,7 +320,7 @@ void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEnt
 
                     pModel->GetItemPool().FreezeIdRanges();
 
-                    if( pGalTheme && pGalTheme->GetModel( pGalTheme->ImplGetGalleryObjectPos( implGetObject() ), *pModel ) )
+                    if( pGalTheme && pGalTheme->GetModel( pGalTheme->maGalleryObjectCollection.searchPosWithObject( implGetObject() ), *pModel ) )
                     {
                         uno::Reference< lang::XComponent > xDrawing( new GalleryDrawingModel( pModel ) );
 
