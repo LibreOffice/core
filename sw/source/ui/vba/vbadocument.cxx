@@ -43,7 +43,6 @@
 #include <ooo/vba/word/WdSaveFormat.hpp>
 #include <ooo/vba/word/XDocumentOutgoing.hpp>
 
-#include <vbahelper/helperdecl.hxx>
 #include "wordvbahelper.hxx"
 #include <docsh.hxx>
 #include "vbatemplate.hxx"

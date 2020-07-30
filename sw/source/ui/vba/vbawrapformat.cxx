@@ -26,7 +26,6 @@
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <basic/sberrors.hxx>
 #include <vbahelper/vbahelper.hxx>
-#include <vbahelper/helperdecl.hxx>
 
 using namespace ooo::vba;
 using namespace com::sun::star;

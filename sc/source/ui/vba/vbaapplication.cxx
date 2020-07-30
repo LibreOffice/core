@@ -76,7 +76,6 @@
 #include <cellsuno.hxx>
 #include <unonames.hxx>
 #include <docsh.hxx>
-#include <vbahelper/helperdecl.hxx>
 #include "excelvbahelper.hxx"
 
 #include <basic/sbxobj.hxx>

@@ -89,8 +89,12 @@ public:
 
         std::string output;
         for (const MyFuncInfo & s : definitionSet)
-            output += "definition:\t" + s.access + "\t" + s.returnType + "\t" + s.nameAndParams
-                      + "\t" + s.sourceLocation + "\t" + s.virtualness + "\n";
+        {
+            // ignore external code
+            if (s.sourceLocation.rfind("external/", 0) != 0)
+                output += "definition:\t" + s.access + "\t" + s.returnType + "\t" + s.nameAndParams
+                          + "\t" + s.sourceLocation + "\t" + s.virtualness + "\n";
+        }
         // for the "unused method" analysis
         for (const MyFuncInfo & s : callSet)
             output += "call:\t" + s.returnType + "\t" + s.nameAndParams + "\n";

@@ -19,8 +19,6 @@
 
 #include "vbarange.hxx"
 
-#include <vbahelper/helperdecl.hxx>
-
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <o3tl/any.hxx>

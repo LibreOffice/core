@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vbahelper/helperdecl.hxx>
-
 #include "vbaworksheet.hxx"
 #include "vbanames.hxx"
 

@@ -33,15 +33,11 @@ namespace comphelper
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
 
-    typedef std::vector< ComponentDescription >   ComponentDescriptions;
-
     /** implementation for <type>OModule</type>. not threadsafe, has to be guarded by its owner
     */
     class OModuleImpl
     {
     public:
-        ComponentDescriptions                           m_aRegisteredComponents;
-
         OModuleImpl();
     };
 
@@ -56,15 +52,6 @@ namespace comphelper
 
     OModule::~OModule()
     {
-    }
-
-    void OModule::registerImplementation( const ComponentDescription& _rComp )
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        if ( !m_pImpl )
-            throw RuntimeException();
-
-        m_pImpl->m_aRegisteredComponents.push_back( _rComp );
     }
 
 } // namespace comphelper
