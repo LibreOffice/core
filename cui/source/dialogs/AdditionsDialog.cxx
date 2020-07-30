@@ -47,6 +47,13 @@
 #include <ucbhelper/content.hxx>
 #include <comphelper/simplefileaccessinteraction.hxx>
 
+#include <com/sun/star/deployment/DeploymentException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <com/sun/star/frame/TerminationVetoException.hpp>
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
+#include <com/sun/star/ucb/CommandFailedException.hpp>
+
+//cURL
 #include <curl/curl.h>
 #include <orcus/json_document_tree.hpp>
 #include <orcus/config.hpp>
@@ -341,6 +348,7 @@ void SearchAndParseThread::LoadInfo(const AdditionInfo& additionInfo, AdditionsI
     rCurrentItem.m_xLinkButtonComments->set_uri(additionInfo.sCommentURL);
     rCurrentItem.m_xLabelDownloadNumber->set_label(additionInfo.sDownloadNumber);
     rCurrentItem.m_pParentDialog = m_pAdditionsDialog;
+    rCurrentItem.m_sDownloadURL = additionInfo.sDownloadURL;
 }
 
 void SearchAndParseThread::Append(const AdditionInfo& additionInfo)
@@ -407,6 +415,48 @@ void SearchAndParseThread::Search()
             if (nIteration >= m_pAdditionsDialog->m_nCurrentListItemCount)
                 Append(rInfo);
             nIteration++;
+        }
+    }
+    CheckInstalledExtensions();
+}
+
+void SearchAndParseThread::CheckInstalledExtensions()
+{
+    uno::Sequence<uno::Sequence<uno::Reference<deployment::XPackage>>> xAllPackages
+        = m_pAdditionsDialog->getInstalledExtensions();
+
+    if (!xAllPackages.hasElements())
+        return;
+
+    OUString currentExtensionName;
+
+    for (auto& package : xAllPackages)
+    {
+        for (auto& extensionVersion : package)
+        {
+            if (extensionVersion.is())
+            {
+                currentExtensionName = extensionVersion->getName();
+                if (currentExtensionName.isEmpty())
+                    continue;
+
+                m_pAdditionsDialog->m_searchOptions.searchString = currentExtensionName;
+                utl::TextSearch textSearch(m_pAdditionsDialog->m_searchOptions);
+
+                for (auto& rInfo : m_pAdditionsDialog->m_aAdditionsItems)
+                {
+                    OUString sExtensionDownloadURL = rInfo.m_sDownloadURL;
+
+                    if (!textSearch.searchForward(sExtensionDownloadURL))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        rInfo.m_xButtonInstall->set_sensitive(false);
+                    }
+                }
+            }
         }
     }
 }
@@ -479,6 +529,9 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditio
     OString rURL = sPrefixURL + m_sTag + sSuffixURL;
     m_sURL = rURL;
 
+    m_xExtensionManager
+        = deployment::ExtensionManager::get(::comphelper::getProcessComponentContext());
+
     //Initialize search util
     m_searchOptions.AlgorithmType2 = css::util::SearchAlgorithms2::ABSOLUTE;
     m_searchOptions.transliterateFlags |= TransliterationFlags::IGNORE_CASE;
@@ -499,6 +552,36 @@ AdditionsDialog::~AdditionsDialog()
         SolarMutexReleaser aReleaser;
         m_pSearchThread->join();
     }
+}
+
+uno::Sequence<uno::Sequence<uno::Reference<deployment::XPackage>>>
+AdditionsDialog::getInstalledExtensions()
+{
+    uno::Sequence<uno::Sequence<uno::Reference<deployment::XPackage>>> xAllPackages;
+
+    try
+    {
+        xAllPackages = m_xExtensionManager->getAllExtensions(
+            uno::Reference<task::XAbortChannel>(), uno::Reference<ucb::XCommandEnvironment>());
+    }
+    catch (const deployment::DeploymentException&)
+    {
+        SAL_WARN("cui.dialogs", "Deployment Exception");
+    }
+    catch (const ucb::CommandFailedException&)
+    {
+        SAL_WARN("cui.dialogs", "Command Failed Exception");
+    }
+    catch (const ucb::CommandAbortedException&)
+    {
+        SAL_WARN("cui.dialogs", "Command Aborted Exception");
+    }
+    catch (const lang::IllegalArgumentException& e)
+    {
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException(e.Message, e.Context, anyEx);
+    }
+    return xAllPackages;
 }
 
 void AdditionsDialog::SetProgress(const OUString& rProgress)
