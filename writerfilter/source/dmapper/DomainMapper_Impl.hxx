@@ -664,6 +664,7 @@ public:
     /// Getter method for m_bSdt.
     bool GetSdt() const { return m_bSdt;}
     bool GetParaChanged() const { return m_bParaChanged;}
+    bool GetParaHadField() const { return m_bParaHadField; }
     bool GetRemoveThisPara() const { return m_bRemoveThisParagraph; }
 
     void deferBreak( BreakType deferredBreakType );
