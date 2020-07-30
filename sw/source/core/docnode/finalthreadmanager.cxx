@@ -318,26 +318,26 @@ void SAL_CALL FinalThreadManager::cancelAllJobs()
         maThreads.clear();
     }
 
-    if ( !aThreads.empty() )
-    {
-        osl::MutexGuard aGuard(maMutex);
+    if ( aThreads.empty() )
+        return;
 
-        if ( mpCancelJobsThread == nullptr )
+    osl::MutexGuard aGuard(maMutex);
+
+    if ( mpCancelJobsThread == nullptr )
+    {
+        mpCancelJobsThread.reset(new CancelJobsThread( aThreads ));
+        if ( !mpCancelJobsThread->create() )
         {
-            mpCancelJobsThread.reset(new CancelJobsThread( aThreads ));
-            if ( !mpCancelJobsThread->create() )
+            mpCancelJobsThread.reset();
+            for (auto const& elem : aThreads)
             {
-                mpCancelJobsThread.reset();
-                for (auto const& elem : aThreads)
-                {
-                    elem->cancel();
-                }
-                aThreads.clear();
+                elem->cancel();
             }
+            aThreads.clear();
         }
-        else
-            mpCancelJobsThread->addJobs( aThreads );
     }
+    else
+        mpCancelJobsThread->addJobs( aThreads );
 }
 
 // css::frame::XTerminateListener

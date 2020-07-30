@@ -300,38 +300,38 @@ void SwSection::ImplSetHiddenFlag(bool const bTmpHidden, bool const bCondition)
 {
     SwSectionFormat* pFormat = GetFormat();
     OSL_ENSURE(pFormat, "ImplSetHiddenFlag: no format?");
-    if( pFormat )
+    if( !pFormat )
+        return;
+
+    const bool bHide = bTmpHidden && bCondition;
+
+    if (bHide) // should be hidden
     {
-        const bool bHide = bTmpHidden && bCondition;
-
-        if (bHide) // should be hidden
+        if (!m_Data.IsHiddenFlag()) // is not hidden
         {
-            if (!m_Data.IsHiddenFlag()) // is not hidden
-            {
-                // Is the Parent hidden?
-                // This should be shown by the bHiddenFlag.
+            // Is the Parent hidden?
+            // This should be shown by the bHiddenFlag.
 
-                // Tell all Children that they are hidden
-                SwMsgPoolItem aMsgItem( RES_SECTION_HIDDEN );
-                pFormat->ModifyNotification( &aMsgItem, &aMsgItem );
+            // Tell all Children that they are hidden
+            SwMsgPoolItem aMsgItem( RES_SECTION_HIDDEN );
+            pFormat->ModifyNotification( &aMsgItem, &aMsgItem );
 
-                // Delete all Frames
-                pFormat->DelFrames();
-            }
+            // Delete all Frames
+            pFormat->DelFrames();
         }
-        else if (m_Data.IsHiddenFlag()) // show Nodes again
+    }
+    else if (m_Data.IsHiddenFlag()) // show Nodes again
+    {
+        // Show all Frames (Child Sections are accounted for by MakeFrames)
+        // Only if the Parent Section is not restricting us!
+        SwSection* pParentSect = pFormat->GetParentSection();
+        if( !pParentSect || !pParentSect->IsHiddenFlag() )
         {
-            // Show all Frames (Child Sections are accounted for by MakeFrames)
-            // Only if the Parent Section is not restricting us!
-            SwSection* pParentSect = pFormat->GetParentSection();
-            if( !pParentSect || !pParentSect->IsHiddenFlag() )
-            {
-                // Tell all Children that the Parent is not hidden anymore
-                SwMsgPoolItem aMsgItem( RES_SECTION_NOT_HIDDEN );
-                pFormat->ModifyNotification( &aMsgItem, &aMsgItem );
+            // Tell all Children that the Parent is not hidden anymore
+            SwMsgPoolItem aMsgItem( RES_SECTION_NOT_HIDDEN );
+            pFormat->ModifyNotification( &aMsgItem, &aMsgItem );
 
-                pFormat->MakeFrames();
-            }
+            pFormat->MakeFrames();
         }
     }
 }
@@ -631,41 +631,41 @@ SwSectionFormat::SwSectionFormat( SwFrameFormat* pDrvdFrame, SwDoc *pDoc )
 
 SwSectionFormat::~SwSectionFormat()
 {
-    if( !GetDoc()->IsInDtor() )
+    if( GetDoc()->IsInDtor() )
+        return;
+
+    SwSectionNode* pSectNd;
+    const SwNodeIndex* pIdx = GetContent( false ).GetContentIdx();
+    if( pIdx && &GetDoc()->GetNodes() == &pIdx->GetNodes() &&
+        nullptr != (pSectNd = pIdx->GetNode().GetSectionNode() ))
     {
-        SwSectionNode* pSectNd;
-        const SwNodeIndex* pIdx = GetContent( false ).GetContentIdx();
-        if( pIdx && &GetDoc()->GetNodes() == &pIdx->GetNodes() &&
-            nullptr != (pSectNd = pIdx->GetNode().GetSectionNode() ))
+        SwSection& rSect = pSectNd->GetSection();
+        // If it was a linked Section, we need to make all Child Links
+        // visible again
+        if( rSect.IsConnected() )
+            SwSection::MakeChildLinksVisible( *pSectNd );
+
+        // Check whether we need to be visible, before deleting the Nodes
+        if( rSect.IsHiddenFlag() )
         {
-            SwSection& rSect = pSectNd->GetSection();
-            // If it was a linked Section, we need to make all Child Links
-            // visible again
-            if( rSect.IsConnected() )
-                SwSection::MakeChildLinksVisible( *pSectNd );
-
-            // Check whether we need to be visible, before deleting the Nodes
-            if( rSect.IsHiddenFlag() )
+            SwSection* pParentSect = rSect.GetParent();
+            if( !pParentSect || !pParentSect->IsHiddenFlag() )
             {
-                SwSection* pParentSect = rSect.GetParent();
-                if( !pParentSect || !pParentSect->IsHiddenFlag() )
-                {
-                    // Make Nodes visible again
-                    rSect.SetHidden(false);
-                }
+                // Make Nodes visible again
+                rSect.SetHidden(false);
             }
-            // mba: test iteration; objects are removed while iterating
-            // use hint which allows to specify, if the content shall be saved or not
-            CallSwClientNotify( SwSectionFrameMoveAndDeleteHint( true ) );
-
-            // Raise the Section up
-            SwNodeRange aRg( *pSectNd, 0, *pSectNd->EndOfSectionNode() );
-            GetDoc()->GetNodes().SectionUp( &aRg );
         }
-        LockModify();
-        ResetFormatAttr( RES_CNTNT );
-        UnlockModify();
+        // mba: test iteration; objects are removed while iterating
+        // use hint which allows to specify, if the content shall be saved or not
+        CallSwClientNotify( SwSectionFrameMoveAndDeleteHint( true ) );
+
+        // Raise the Section up
+        SwNodeRange aRg( *pSectNd, 0, *pSectNd->EndOfSectionNode() );
+        GetDoc()->GetNodes().SectionUp( &aRg );
     }
+    LockModify();
+    ResetFormatAttr( RES_CNTNT );
+    UnlockModify();
 }
 
 SwSection * SwSectionFormat::GetSection() const
@@ -699,18 +699,18 @@ void SwSectionFormat::DelFrames()
         sal_uLong nStart = pSectNd->GetIndex()+1;
         sw_DeleteFootnote( pSectNd, nStart, nEnd );
     }
-    if( pIdx )
+    if( !pIdx )
+        return;
+
+    // Send Hint for PageDesc. Actually the Layout contained in the
+    // Paste of the Frame itself would need to do this. But that leads
+    // to subsequent errors, which we'd need to solve at run-time.
+    SwNodeIndex aNextNd( *pIdx );
+    SwContentNode* pCNd = GetDoc()->GetNodes().GoNextSection( &aNextNd, true, false );
+    if( pCNd )
     {
-        // Send Hint for PageDesc. Actually the Layout contained in the
-        // Paste of the Frame itself would need to do this. But that leads
-        // to subsequent errors, which we'd need to solve at run-time.
-        SwNodeIndex aNextNd( *pIdx );
-        SwContentNode* pCNd = GetDoc()->GetNodes().GoNextSection( &aNextNd, true, false );
-        if( pCNd )
-        {
-            const SfxPoolItem& rItem = pCNd->GetSwAttrSet().Get( RES_PAGEDESC );
-            pCNd->ModifyNotification( &rItem, &rItem );
-        }
+        const SfxPoolItem& rItem = pCNd->GetSwAttrSet().Get( RES_PAGEDESC );
+        pCNd->ModifyNotification( &rItem, &rItem );
     }
 }
 
@@ -886,29 +886,29 @@ void SwSectionFormat::GetChildSections( SwSections& rArr,
 {
     rArr.clear();
 
-    if( HasWriterListeners() )
-    {
-        SwIterator<SwSectionFormat,SwSectionFormat> aIter(*this);
-        const SwNodeIndex* pIdx;
-        for( SwSectionFormat* pLast = aIter.First(); pLast; pLast = aIter.Next() )
-            if( bAllSections ||
-                ( nullptr != ( pIdx = pLast->GetContent(false).
-                GetContentIdx()) && &pIdx->GetNodes() == &GetDoc()->GetNodes() ))
-            {
-                SwSection* pDummy = pLast->GetSection();
-                rArr.push_back( pDummy );
-            }
+    if( !HasWriterListeners() )
+        return;
 
-        // Do we need any sorting?
-        if( 1 < rArr.size() )
-            switch( eSort )
-            {
-            case SectionSort::Pos:
-                std::sort( rArr.begin(), rArr.end(), lcl_SectionCmpPos );
-                break;
-            case SectionSort::Not: break;
-            }
-    }
+    SwIterator<SwSectionFormat,SwSectionFormat> aIter(*this);
+    const SwNodeIndex* pIdx;
+    for( SwSectionFormat* pLast = aIter.First(); pLast; pLast = aIter.Next() )
+        if( bAllSections ||
+            ( nullptr != ( pIdx = pLast->GetContent(false).
+            GetContentIdx()) && &pIdx->GetNodes() == &GetDoc()->GetNodes() ))
+        {
+            SwSection* pDummy = pLast->GetSection();
+            rArr.push_back( pDummy );
+        }
+
+    // Do we need any sorting?
+    if( 1 < rArr.size() )
+        switch( eSort )
+        {
+        case SectionSort::Pos:
+            std::sort( rArr.begin(), rArr.end(), lcl_SectionCmpPos );
+            break;
+        case SectionSort::Not: break;
+        }
 }
 
 // See whether the Section is within the Nodes or the UndoNodes array

@@ -901,29 +901,29 @@ static void lcl_RemoveBreaks(SwContentNode & rNode, SwTableFormat *const pTableF
     SwTextNode & rTextNode = *rNode.GetTextNode();
     // remove PageBreaks/PageDesc/ColBreak
     SfxItemSet const* pSet = rTextNode.GetpSwAttrSet();
-    if (pSet)
-    {
-        const SfxPoolItem* pItem;
-        if (SfxItemState::SET == pSet->GetItemState(RES_BREAK, false, &pItem))
-        {
-            if (pTableFormat)
-            {
-                pTableFormat->SetFormatAttr(*pItem);
-            }
-            rTextNode.ResetAttr(RES_BREAK);
-            pSet = rTextNode.GetpSwAttrSet();
-        }
+    if (!pSet)
+        return;
 
-        if (pSet
-            && (SfxItemState::SET == pSet->GetItemState(RES_PAGEDESC, false, &pItem))
-            && static_cast<SwFormatPageDesc const*>(pItem)->GetPageDesc())
+    const SfxPoolItem* pItem;
+    if (SfxItemState::SET == pSet->GetItemState(RES_BREAK, false, &pItem))
+    {
+        if (pTableFormat)
         {
-            if (pTableFormat)
-            {
-                pTableFormat->SetFormatAttr(*pItem);
-            }
-            rTextNode.ResetAttr(RES_PAGEDESC);
+            pTableFormat->SetFormatAttr(*pItem);
         }
+        rTextNode.ResetAttr(RES_BREAK);
+        pSet = rTextNode.GetpSwAttrSet();
+    }
+
+    if (pSet
+        && (SfxItemState::SET == pSet->GetItemState(RES_PAGEDESC, false, &pItem))
+        && static_cast<SwFormatPageDesc const*>(pItem)->GetPageDesc())
+    {
+        if (pTableFormat)
+        {
+            pTableFormat->SetFormatAttr(*pItem);
+        }
+        rTextNode.ResetAttr(RES_PAGEDESC);
     }
 }
 
@@ -4138,28 +4138,28 @@ void SwDoc::ChkBoxNumFormat( SwTableBox& rBox, bool bCallUpdate )
             bChgd = false;
     }
 
-    if( bChgd )
+    if( !bChgd )
+        return;
+
+    if( pUndo )
     {
-        if( pUndo )
-        {
-            pUndo->SetBox( rBox );
-            GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
-            GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
-        }
-
-        const SwTableNode* pTableNd = rBox.GetSttNd()->FindTableNode();
-        if( bCallUpdate )
-        {
-            SwTableFormulaUpdate aTableUpdate( &pTableNd->GetTable() );
-            getIDocumentFieldsAccess().UpdateTableFields( &aTableUpdate );
-
-            // TL_CHART2: update charts (when cursor leaves cell and
-            // automatic update is enabled)
-            if (AUTOUPD_FIELD_AND_CHARTS == GetDocumentSettingManager().getFieldUpdateFlags(true))
-                pTableNd->GetTable().UpdateCharts();
-        }
-        getIDocumentState().SetModified();
+        pUndo->SetBox( rBox );
+        GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
+        GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
     }
+
+    const SwTableNode* pTableNd = rBox.GetSttNd()->FindTableNode();
+    if( bCallUpdate )
+    {
+        SwTableFormulaUpdate aTableUpdate( &pTableNd->GetTable() );
+        getIDocumentFieldsAccess().UpdateTableFields( &aTableUpdate );
+
+        // TL_CHART2: update charts (when cursor leaves cell and
+        // automatic update is enabled)
+        if (AUTOUPD_FIELD_AND_CHARTS == GetDocumentSettingManager().getFieldUpdateFlags(true))
+            pTableNd->GetTable().UpdateCharts();
+    }
+    getIDocumentState().SetModified();
 }
 
 void SwDoc::SetTableBoxFormulaAttrs( SwTableBox& rBox, const SfxItemSet& rSet )
@@ -4193,77 +4193,76 @@ void SwDoc::ClearLineNumAttrs( SwPosition const & rPos )
     SwContentNode *pNode = aPam.GetContentNode();
     if ( nullptr == pNode )
         return ;
-    if( pNode->IsTextNode() )
+    if( !pNode->IsTextNode() )
+        return;
+
+    SwTextNode * pTextNode = pNode->GetTextNode();
+    if (!(pTextNode && pTextNode->IsNumbered()
+        && pTextNode->GetText().isEmpty()))
+        return;
+
+    const SfxPoolItem* pFormatItem = nullptr;
+    SfxItemSet rSet( pTextNode->GetDoc()->GetAttrPool(),
+                svl::Items<RES_PARATR_BEGIN, RES_PARATR_END - 1>{});
+    pTextNode->SwContentNode::GetAttr( rSet );
+    if ( SfxItemState::SET != rSet.GetItemState( RES_PARATR_NUMRULE , false , &pFormatItem ) )
+        return;
+
+    SwUndoDelNum * pUndo;
+    if( GetIDocumentUndoRedo().DoesUndo() )
     {
-        SwTextNode * pTextNode = pNode->GetTextNode();
-        if (pTextNode && pTextNode->IsNumbered()
-            && pTextNode->GetText().isEmpty())
-        {
-            const SfxPoolItem* pFormatItem = nullptr;
-            SfxItemSet rSet( pTextNode->GetDoc()->GetAttrPool(),
-                        svl::Items<RES_PARATR_BEGIN, RES_PARATR_END - 1>{});
-            pTextNode->SwContentNode::GetAttr( rSet );
-            if ( SfxItemState::SET == rSet.GetItemState( RES_PARATR_NUMRULE , false , &pFormatItem ) )
-            {
-                SwUndoDelNum * pUndo;
-                if( GetIDocumentUndoRedo().DoesUndo() )
-                {
-                    GetIDocumentUndoRedo().ClearRedo();
-                    pUndo = new SwUndoDelNum( aPam );
-                    GetIDocumentUndoRedo().AppendUndo( std::unique_ptr<SwUndo>(pUndo) );
-                }
-                else
-                    pUndo = nullptr;
-                SwRegHistory aRegH( pUndo ? pUndo->GetHistory() : nullptr );
-                aRegH.RegisterInModify( pTextNode , *pTextNode );
-                if ( pUndo )
-                    pUndo->AddNode( *pTextNode );
-                std::unique_ptr<SfxStringItem> pNewItem(static_cast<SfxStringItem*>(pFormatItem->Clone()));
-                pNewItem->SetValue(OUString());
-                rSet.Put( std::move(pNewItem) );
-                pTextNode->SetAttr( rSet );
-            }
-        }
+        GetIDocumentUndoRedo().ClearRedo();
+        pUndo = new SwUndoDelNum( aPam );
+        GetIDocumentUndoRedo().AppendUndo( std::unique_ptr<SwUndo>(pUndo) );
     }
+    else
+        pUndo = nullptr;
+    SwRegHistory aRegH( pUndo ? pUndo->GetHistory() : nullptr );
+    aRegH.RegisterInModify( pTextNode , *pTextNode );
+    if ( pUndo )
+        pUndo->AddNode( *pTextNode );
+    std::unique_ptr<SfxStringItem> pNewItem(static_cast<SfxStringItem*>(pFormatItem->Clone()));
+    pNewItem->SetValue(OUString());
+    rSet.Put( std::move(pNewItem) );
+    pTextNode->SetAttr( rSet );
 }
 
 void SwDoc::ClearBoxNumAttrs( const SwNodeIndex& rNode )
 {
-    SwStartNode* pSttNd;
-    if( nullptr != ( pSttNd = rNode.GetNode().
-                                FindSttNodeByType( SwTableBoxStartNode )) &&
-        2 == pSttNd->EndOfSectionIndex() - pSttNd->GetIndex() )
+    SwStartNode* pSttNd = rNode.GetNode().FindSttNodeByType( SwTableBoxStartNode );
+    if( nullptr == pSttNd ||
+        2 != pSttNd->EndOfSectionIndex() - pSttNd->GetIndex())
+        return;
+
+    SwTableBox* pBox = pSttNd->FindTableNode()->GetTable().
+                        GetTableBox( pSttNd->GetIndex() );
+
+    const SfxPoolItem* pFormatItem = nullptr;
+    const SfxItemSet& rSet = pBox->GetFrameFormat()->GetAttrSet();
+    if( !(SfxItemState::SET == rSet.GetItemState( RES_BOXATR_FORMAT, false, &pFormatItem ) ||
+        SfxItemState::SET == rSet.GetItemState( RES_BOXATR_FORMULA, false ) ||
+        SfxItemState::SET == rSet.GetItemState( RES_BOXATR_VALUE, false )))
+        return;
+
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        SwTableBox* pBox = pSttNd->FindTableNode()->GetTable().
-                            GetTableBox( pSttNd->GetIndex() );
-
-        const SfxPoolItem* pFormatItem = nullptr;
-        const SfxItemSet& rSet = pBox->GetFrameFormat()->GetAttrSet();
-        if( SfxItemState::SET == rSet.GetItemState( RES_BOXATR_FORMAT, false, &pFormatItem ) ||
-            SfxItemState::SET == rSet.GetItemState( RES_BOXATR_FORMULA, false ) ||
-            SfxItemState::SET == rSet.GetItemState( RES_BOXATR_VALUE, false ))
-        {
-            if (GetIDocumentUndoRedo().DoesUndo())
-            {
-                GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoTableNumFormat>(*pBox));
-            }
-
-            SwFrameFormat* pBoxFormat = pBox->ClaimFrameFormat();
-
-            // Keep TextFormats!
-            sal_uInt16 nWhich1 = RES_BOXATR_FORMAT;
-            if( pFormatItem && GetNumberFormatter()->IsTextFormat(
-                    static_cast<const SwTableBoxNumFormat*>(pFormatItem)->GetValue() ))
-                nWhich1 = RES_BOXATR_FORMULA;
-            else
-                // Just resetting Attributes is not enough
-                // Make sure that the Text is formatted accordingly
-                pBoxFormat->SetFormatAttr( *GetDfltAttr( RES_BOXATR_FORMAT ));
-
-            pBoxFormat->ResetFormatAttr( nWhich1, RES_BOXATR_VALUE );
-            getIDocumentState().SetModified();
-        }
+        GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoTableNumFormat>(*pBox));
     }
+
+    SwFrameFormat* pBoxFormat = pBox->ClaimFrameFormat();
+
+    // Keep TextFormats!
+    sal_uInt16 nWhich1 = RES_BOXATR_FORMAT;
+    if( pFormatItem && GetNumberFormatter()->IsTextFormat(
+            static_cast<const SwTableBoxNumFormat*>(pFormatItem)->GetValue() ))
+        nWhich1 = RES_BOXATR_FORMULA;
+    else
+        // Just resetting Attributes is not enough
+        // Make sure that the Text is formatted accordingly
+        pBoxFormat->SetFormatAttr( *GetDfltAttr( RES_BOXATR_FORMAT ));
+
+    pBoxFormat->ResetFormatAttr( nWhich1, RES_BOXATR_VALUE );
+    getIDocumentState().SetModified();
 }
 
 /**
@@ -4620,28 +4619,28 @@ std::unique_ptr<SwTableAutoFormat> SwDoc::DelTableStyle(const OUString& rName, b
 void SwDoc::ChgTableStyle(const OUString& rName, const SwTableAutoFormat& rNewFormat)
 {
     SwTableAutoFormat* pFormat = GetTableStyles().FindAutoFormat(rName);
-    if (pFormat)
+    if (!pFormat)
+        return;
+
+    SwTableAutoFormat aOldFormat = *pFormat;
+    *pFormat = rNewFormat;
+    pFormat->SetName(rName);
+
+    size_t nTableCount = GetTableFrameFormatCount(true);
+    for (size_t i=0; i < nTableCount; ++i)
     {
-        SwTableAutoFormat aOldFormat = *pFormat;
-        *pFormat = rNewFormat;
-        pFormat->SetName(rName);
+        SwFrameFormat* pFrameFormat = &GetTableFrameFormat(i, true);
+        SwTable* pTable = SwTable::FindTable(pFrameFormat);
+        if (pTable->GetTableStyleName() == rName)
+            GetDocShell()->GetFEShell()->UpdateTableStyleFormatting(pTable->GetTableNode());
+    }
 
-        size_t nTableCount = GetTableFrameFormatCount(true);
-        for (size_t i=0; i < nTableCount; ++i)
-        {
-            SwFrameFormat* pFrameFormat = &GetTableFrameFormat(i, true);
-            SwTable* pTable = SwTable::FindTable(pFrameFormat);
-            if (pTable->GetTableStyleName() == rName)
-                GetDocShell()->GetFEShell()->UpdateTableStyleFormatting(pTable->GetTableNode());
-        }
+    getIDocumentState().SetModified();
 
-        getIDocumentState().SetModified();
-
-        if (GetIDocumentUndoRedo().DoesUndo())
-        {
-            GetIDocumentUndoRedo().AppendUndo(
-                std::make_unique<SwUndoTableStyleUpdate>(*pFormat, aOldFormat, this));
-        }
+    if (GetIDocumentUndoRedo().DoesUndo())
+    {
+        GetIDocumentUndoRedo().AppendUndo(
+            std::make_unique<SwUndoTableStyleUpdate>(*pFormat, aOldFormat, this));
     }
 }
 

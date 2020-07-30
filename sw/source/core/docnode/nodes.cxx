@@ -348,30 +348,32 @@ void SwNodes::ChgNode( SwNodeIndex const & rDelPos, sal_uLong nSz,
         bNewFrames = &GetDoc()->GetNodes() == &rNds &&
                     GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
 
-    if( bNewFrames )
-    {
-        // get the frames:
-        SwNodeIndex aIdx( *pPrevInsNd, 1 );
-        SwNodeIndex aFrameNdIdx( aIdx );
-        SwNode* pFrameNd = rNds.FindPrvNxtFrameNode( aFrameNdIdx,
-                                        rNds[ rInsPos.GetIndex() - 1 ] );
+    if( !bNewFrames )
+        return;
 
-        if( pFrameNd )
-            while( aIdx != rInsPos )
-            {
-                SwContentNode* pCNd = aIdx.GetNode().GetContentNode();
-                if( pCNd )
-                {
-                    if( pFrameNd->IsTableNode() )
-                        static_cast<SwTableNode*>(pFrameNd)->MakeFramesForAdjacentContentNode(aIdx);
-                    else if( pFrameNd->IsSectionNode() )
-                        static_cast<SwSectionNode*>(pFrameNd)->MakeFramesForAdjacentContentNode(aIdx);
-                    else
-                        static_cast<SwContentNode*>(pFrameNd)->MakeFramesForAdjacentContentNode(*pCNd);
-                    pFrameNd = pCNd;
-                }
-                ++aIdx;
-            }
+    // get the frames:
+    SwNodeIndex aIdx( *pPrevInsNd, 1 );
+    SwNodeIndex aFrameNdIdx( aIdx );
+    SwNode* pFrameNd = rNds.FindPrvNxtFrameNode( aFrameNdIdx,
+                                    rNds[ rInsPos.GetIndex() - 1 ] );
+
+    if( !pFrameNd )
+        return;
+
+    while( aIdx != rInsPos )
+    {
+        SwContentNode* pCNd = aIdx.GetNode().GetContentNode();
+        if( pCNd )
+        {
+            if( pFrameNd->IsTableNode() )
+                static_cast<SwTableNode*>(pFrameNd)->MakeFramesForAdjacentContentNode(aIdx);
+            else if( pFrameNd->IsSectionNode() )
+                static_cast<SwSectionNode*>(pFrameNd)->MakeFramesForAdjacentContentNode(aIdx);
+            else
+                static_cast<SwContentNode*>(pFrameNd)->MakeFramesForAdjacentContentNode(*pCNd);
+            pFrameNd = pCNd;
+        }
+        ++aIdx;
     }
 }
 
@@ -2149,27 +2151,27 @@ void SwNodes::ForEach( sal_uLong nStart, sal_uLong nEnd,
     if( nEnd > m_nSize )
         nEnd = m_nSize;
 
-    if( nStart < nEnd )
-    {
-        sal_uInt16 cur = Index2Block( nStart );
-        BlockInfo** pp = m_ppInf.get() + cur;
-        BlockInfo* p = *pp;
-        sal_uInt16 nElem = sal_uInt16( nStart - p->nStart );
-        auto pElem = p->mvData.begin() + nElem;
-        nElem = p->nElem - nElem;
-        for(;;)
-        {
-            if( !(*fn)( static_cast<SwNode *>(*pElem++), pArgs ) || ++nStart >= nEnd )
-                break;
+    if( nStart >= nEnd )
+        return;
 
-            // next element
-            if( !--nElem )
-            {
-                // new block
-                p = *++pp;
-                pElem = p->mvData.begin();
-                nElem = p->nElem;
-            }
+    sal_uInt16 cur = Index2Block( nStart );
+    BlockInfo** pp = m_ppInf.get() + cur;
+    BlockInfo* p = *pp;
+    sal_uInt16 nElem = sal_uInt16( nStart - p->nStart );
+    auto pElem = p->mvData.begin() + nElem;
+    nElem = p->nElem - nElem;
+    for(;;)
+    {
+        if( !(*fn)( static_cast<SwNode *>(*pElem++), pArgs ) || ++nStart >= nEnd )
+            break;
+
+        // next element
+        if( !--nElem )
+        {
+            // new block
+            p = *++pp;
+            pElem = p->mvData.begin();
+            nElem = p->nElem;
         }
     }
 }

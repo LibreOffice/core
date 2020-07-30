@@ -70,25 +70,25 @@ void SwRetrievedInputStreamDataManager::PushData(
 
     std::map< tDataKey, tData >::iterator aIter = maInputStreamData.find( nDataKey );
 
-    if ( aIter != maInputStreamData.end() )
+    if ( aIter == maInputStreamData.end() )
+        return;
+
+    // Fill data container.
+    (*aIter).second.mxInputStream = xInputStream;
+    (*aIter).second.mbIsStreamReadOnly = bIsStreamReadOnly;
+
+    // post user event to process the retrieved input stream data
+    if ( GetpApp() )
     {
-        // Fill data container.
-        (*aIter).second.mxInputStream = xInputStream;
-        (*aIter).second.mbIsStreamReadOnly = bIsStreamReadOnly;
 
-        // post user event to process the retrieved input stream data
-        if ( GetpApp() )
-        {
-
-            tDataKey* pDataKey = new tDataKey;
-            *pDataKey = nDataKey;
-            Application::PostUserEvent( LINK( this, SwRetrievedInputStreamDataManager, LinkedInputStreamReady ), pDataKey );
-        }
-        else
-        {
-            // no application available -> discard data
-            maInputStreamData.erase( aIter );
-        }
+        tDataKey* pDataKey = new tDataKey;
+        *pDataKey = nDataKey;
+        Application::PostUserEvent( LINK( this, SwRetrievedInputStreamDataManager, LinkedInputStreamReady ), pDataKey );
+    }
+    else
+    {
+        // no application available -> discard data
+        maInputStreamData.erase( aIter );
     }
 }
 

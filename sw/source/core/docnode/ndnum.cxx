@@ -40,36 +40,36 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
 {
     SwTextNode * pTextNd = rNd.GetTextNode();
 
-    if (pTextNd && pTextNd->IsOutlineStateChanged())
-    {
-        bool bFound = m_pOutlineNodes->find(pTextNd) != m_pOutlineNodes->end();
+    if (!(pTextNd && pTextNd->IsOutlineStateChanged()))
+        return;
 
-        if (pTextNd->IsOutline())
+    bool bFound = m_pOutlineNodes->find(pTextNd) != m_pOutlineNodes->end();
+
+    if (pTextNd->IsOutline())
+    {
+        if (! bFound)
         {
-            if (! bFound)
+            // assure that text is in the correct nodes array
+            if ( &(pTextNd->GetNodes()) == this )
             {
-                // assure that text is in the correct nodes array
-                if ( &(pTextNd->GetNodes()) == this )
-                {
-                    m_pOutlineNodes->insert(pTextNd);
-                }
-                else
-                {
-                    OSL_FAIL( "<SwNodes::UpdateOutlineNode(..)> - given text node isn't in the correct nodes array. This is a serious defect" );
-                }
+                m_pOutlineNodes->insert(pTextNd);
+            }
+            else
+            {
+                OSL_FAIL( "<SwNodes::UpdateOutlineNode(..)> - given text node isn't in the correct nodes array. This is a serious defect" );
             }
         }
-        else
-        {
-            if (bFound)
-                m_pOutlineNodes->erase(pTextNd);
-        }
-
-        pTextNd->UpdateOutlineState();
-
-        // update the structure fields
-        GetDoc()->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Chapter )->UpdateFields();
     }
+    else
+    {
+        if (bFound)
+            m_pOutlineNodes->erase(pTextNd);
+    }
+
+    pTextNd->UpdateOutlineState();
+
+    // update the structure fields
+    GetDoc()->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Chapter )->UpdateFields();
 }
 
 void SwNodes::UpdateOutlineIdx( const SwNode& rNd )
