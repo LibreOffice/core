@@ -16,6 +16,24 @@
       "revId": "4433a964d885769763e8784e441728d36111362b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdba24c7_b65cab74",
+        "filename": "sw/qa/inc/swmodeltestbase.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1044,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-07-30T07:06:57Z",
+      "side": 1,
+      "message": "Right, I\u0027ll check what can I do there in a follow-up commit. Some Library_swqahelper would be consistent with sc.",
+      "parentUuid": "cd6a2281_bcbf307c",
+      "revId": "4433a964d885769763e8784e441728d36111362b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
