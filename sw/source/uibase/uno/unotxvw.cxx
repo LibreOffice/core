@@ -1406,30 +1406,30 @@ OUString SwXTextViewCursor::getString()
 void SwXTextViewCursor::setString(const OUString& aString)
 {
     SolarMutexGuard aGuard;
-    if(m_pView)
+    if(!m_pView)
+        return;
+
+    if (!IsTextSelection( false ))
+        throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
+
+    ShellMode eSelMode = m_pView->GetShellMode();
+    switch(eSelMode)
     {
-        if (!IsTextSelection( false ))
-            throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
+        //! since setString for SEL_TABLE_TEXT (with possible
+        //! multi selection of cells) would not work properly we
+        //! will ignore this case for both
+        //! functions (setString AND getString) because of symmetrie.
 
-        ShellMode eSelMode = m_pView->GetShellMode();
-        switch(eSelMode)
+        case ShellMode::ListText       :
+        case ShellMode::TableListText :
+        case ShellMode::Text            :
         {
-            //! since setString for SEL_TABLE_TEXT (with possible
-            //! multi selection of cells) would not work properly we
-            //! will ignore this case for both
-            //! functions (setString AND getString) because of symmetrie.
-
-            case ShellMode::ListText       :
-            case ShellMode::TableListText :
-            case ShellMode::Text            :
-            {
-                SwWrtShell& rSh = m_pView->GetWrtShell();
-                SwCursor* pShellCursor = rSh.GetSwCursor();
-                SwUnoCursorHelper::SetString(*pShellCursor, aString);
-                break;
-            }
-            default:;//prevent warning
+            SwWrtShell& rSh = m_pView->GetWrtShell();
+            SwCursor* pShellCursor = rSh.GetSwCursor();
+            SwUnoCursorHelper::SetString(*pShellCursor, aString);
+            break;
         }
+        default:;//prevent warning
     }
 }
 

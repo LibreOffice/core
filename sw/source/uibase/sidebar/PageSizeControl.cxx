@@ -197,22 +197,22 @@ void PageSizeControl::ExecuteSizeChange( const Paper ePaper )
     bool bLandscape = false;
     const SfxPoolItem *pItem;
     MapUnit eUnit = lcl_GetUnit();
-    if ( SfxViewFrame::Current() )
+    if ( !SfxViewFrame::Current() )
+        return;
+
+    SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE, pItem );
+    bLandscape = static_cast<const SvxPageItem*>(pItem)->IsLandscape();
+
+    std::unique_ptr<SvxSizeItem> pPageSizeItem( new SvxSizeItem(SID_ATTR_PAGE_SIZE) );
+    Size aPageSize = SvxPaperInfo::GetPaperSize( ePaper, eUnit );
+    if ( bLandscape )
     {
-        SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE, pItem );
-        bLandscape = static_cast<const SvxPageItem*>(pItem)->IsLandscape();
-
-        std::unique_ptr<SvxSizeItem> pPageSizeItem( new SvxSizeItem(SID_ATTR_PAGE_SIZE) );
-        Size aPageSize = SvxPaperInfo::GetPaperSize( ePaper, eUnit );
-        if ( bLandscape )
-        {
-            Swap( aPageSize );
-        }
-        pPageSizeItem->SetSize( aPageSize );
-
-        SfxViewFrame::Current()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE,
-            SfxCallMode::RECORD, { pPageSizeItem.get() });
+        Swap( aPageSize );
     }
+    pPageSizeItem->SetSize( aPageSize );
+
+    SfxViewFrame::Current()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE,
+        SfxCallMode::RECORD, { pPageSizeItem.get() });
 }
 
 

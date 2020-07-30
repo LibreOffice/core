@@ -293,25 +293,25 @@ void SAL_CALL SwClipboardChangeListener::changedContents( const css::datatransfe
 
 {
     const SolarMutexGuard aGuard;
-    if( pView )
+    if( !pView )
+        return;
+
     {
-        {
-            TransferableDataHelper aDataHelper( rEventObject.Contents );
-            SwWrtShell& rSh = pView->GetWrtShell();
+        TransferableDataHelper aDataHelper( rEventObject.Contents );
+        SwWrtShell& rSh = pView->GetWrtShell();
 
-            pView->m_nLastPasteDestination = SwTransferable::GetSotDestination( rSh );
-            pView->m_bPasteState = aDataHelper.GetXTransferable().is() &&
-                            SwTransferable::IsPaste( rSh, aDataHelper );
+        pView->m_nLastPasteDestination = SwTransferable::GetSotDestination( rSh );
+        pView->m_bPasteState = aDataHelper.GetXTransferable().is() &&
+                        SwTransferable::IsPaste( rSh, aDataHelper );
 
-            pView->m_bPasteSpecialState = aDataHelper.GetXTransferable().is() &&
-                        SwTransferable::IsPasteSpecial( rSh, aDataHelper );
-        }
-
-        SfxBindings& rBind = pView->GetViewFrame()->GetBindings();
-        rBind.Invalidate( SID_PASTE );
-        rBind.Invalidate( SID_PASTE_SPECIAL );
-        rBind.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
+        pView->m_bPasteSpecialState = aDataHelper.GetXTransferable().is() &&
+                    SwTransferable::IsPasteSpecial( rSh, aDataHelper );
     }
+
+    SfxBindings& rBind = pView->GetViewFrame()->GetBindings();
+    rBind.Invalidate( SID_PASTE );
+    rBind.Invalidate( SID_PASTE_SPECIAL );
+    rBind.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
 }
 
 void SwClipboardChangeListener::AddRemoveListener( bool bAdd )

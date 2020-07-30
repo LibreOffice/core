@@ -89,37 +89,38 @@ static void lcl_addContainerToJson(boost::property_tree::ptree& rTree, const OSt
 static void lcl_emitSearchResultCallbacks(SvxSearchItem const * pSearchItem, SwWrtShell const * pWrtShell, bool bHighlightAll)
 {
     // Emit a callback also about the selection rectangles, grouped by matches.
-    if (SwPaM* pPaM = pWrtShell->GetCursor())
+    SwPaM* pPaM = pWrtShell->GetCursor();
+    if (!pPaM)
+        return;
+
+    std::vector<OString> aMatches;
+    for (SwPaM& rPaM : pPaM->GetRingContainer())
     {
-        std::vector<OString> aMatches;
-        for (SwPaM& rPaM : pPaM->GetRingContainer())
+        if (SwShellCursor* pShellCursor = dynamic_cast<SwShellCursor*>(&rPaM))
         {
-            if (SwShellCursor* pShellCursor = dynamic_cast<SwShellCursor*>(&rPaM))
+            std::vector<OString> aSelectionRectangles;
+            pShellCursor->SwSelPaintRects::Show(&aSelectionRectangles);
+            std::vector<OString> aRect;
+            for (const OString & rSelectionRectangle : aSelectionRectangles)
             {
-                std::vector<OString> aSelectionRectangles;
-                pShellCursor->SwSelPaintRects::Show(&aSelectionRectangles);
-                std::vector<OString> aRect;
-                for (const OString & rSelectionRectangle : aSelectionRectangles)
-                {
-                    if (rSelectionRectangle.isEmpty())
-                        continue;
-                    aRect.push_back(rSelectionRectangle);
-                }
-                OString sRect = comphelper::string::join("; ", aRect);
-                aMatches.push_back(sRect);
+                if (rSelectionRectangle.isEmpty())
+                    continue;
+                aRect.push_back(rSelectionRectangle);
             }
+            OString sRect = comphelper::string::join("; ", aRect);
+            aMatches.push_back(sRect);
         }
-        boost::property_tree::ptree aTree;
-        aTree.put("searchString", pSearchItem->GetSearchString().toUtf8().getStr());
-        aTree.put("highlightAll", bHighlightAll);
-        lcl_addContainerToJson(aTree, "searchResultSelection", aMatches);
-
-        std::stringstream aStream;
-        boost::property_tree::write_json(aStream, aTree);
-        OString aPayload = aStream.str().c_str();
-
-        pWrtShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
     }
+    boost::property_tree::ptree aTree;
+    aTree.put("searchString", pSearchItem->GetSearchString().toUtf8().getStr());
+    aTree.put("highlightAll", bHighlightAll);
+    lcl_addContainerToJson(aTree, "searchResultSelection", aMatches);
+
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+    OString aPayload = aStream.str().c_str();
+
+    pWrtShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
 }
 
 void SwView::ExecSearch(SfxRequest& rReq)

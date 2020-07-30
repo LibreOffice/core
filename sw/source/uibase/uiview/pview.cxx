@@ -468,45 +468,45 @@ void SwPagePreviewWin::Command( const CommandEvent& rCEvt )
 void SwPagePreviewWin::MouseButtonDown( const MouseEvent& rMEvt )
 {
     // consider single-click to set selected page
-    if( MOUSE_LEFT == ( rMEvt.GetModifier() + rMEvt.GetButtons() ) )
-    {
-        Point aPreviewPos( PixelToLogic( rMEvt.GetPosPixel() ) );
-        Point aDocPos;
-        bool bPosInEmptyPage;
-        sal_uInt16 nNewSelectedPage;
-        bool bIsDocPos =
-            mpPgPreviewLayout->IsPreviewPosInDocPreviewPage( aPreviewPos,
-                                    aDocPos, bPosInEmptyPage, nNewSelectedPage );
-        if ( bIsDocPos && rMEvt.GetClicks() == 2 )
-        {
-            // close page preview, set new cursor position and switch to
-            // normal view.
-            OUString sNewCursorPos = OUString::number( aDocPos.X() ) + ";" +
-                                   OUString::number( aDocPos.Y() ) + ";";
-            mrView.SetNewCursorPos( sNewCursorPos );
+    if( MOUSE_LEFT != ( rMEvt.GetModifier() + rMEvt.GetButtons() ) )
+        return;
 
-            SfxViewFrame *pTmpFrame = mrView.GetViewFrame();
-            pTmpFrame->GetBindings().Execute( SID_VIEWSHELL0, nullptr,
-                                                    SfxCallMode::ASYNCHRON );
-        }
-        else if ( bIsDocPos || bPosInEmptyPage )
+    Point aPreviewPos( PixelToLogic( rMEvt.GetPosPixel() ) );
+    Point aDocPos;
+    bool bPosInEmptyPage;
+    sal_uInt16 nNewSelectedPage;
+    bool bIsDocPos =
+        mpPgPreviewLayout->IsPreviewPosInDocPreviewPage( aPreviewPos,
+                                aDocPos, bPosInEmptyPage, nNewSelectedPage );
+    if ( bIsDocPos && rMEvt.GetClicks() == 2 )
+    {
+        // close page preview, set new cursor position and switch to
+        // normal view.
+        OUString sNewCursorPos = OUString::number( aDocPos.X() ) + ";" +
+                               OUString::number( aDocPos.Y() ) + ";";
+        mrView.SetNewCursorPos( sNewCursorPos );
+
+        SfxViewFrame *pTmpFrame = mrView.GetViewFrame();
+        pTmpFrame->GetBindings().Execute( SID_VIEWSHELL0, nullptr,
+                                                SfxCallMode::ASYNCHRON );
+    }
+    else if ( bIsDocPos || bPosInEmptyPage )
+    {
+        // show clicked page as the selected one
+        mpPgPreviewLayout->MarkNewSelectedPage( nNewSelectedPage );
+        GetViewShell()->ShowPreviewSelection( nNewSelectedPage );
+        // adjust position at vertical scrollbar.
+        if ( mpPgPreviewLayout->DoesPreviewLayoutRowsFitIntoWindow() )
         {
-            // show clicked page as the selected one
-            mpPgPreviewLayout->MarkNewSelectedPage( nNewSelectedPage );
-            GetViewShell()->ShowPreviewSelection( nNewSelectedPage );
-            // adjust position at vertical scrollbar.
-            if ( mpPgPreviewLayout->DoesPreviewLayoutRowsFitIntoWindow() )
-            {
-                mrView.SetVScrollbarThumbPos( nNewSelectedPage );
-            }
-            // invalidate page status.
-            static sal_uInt16 aInval[] =
-            {
-                FN_STAT_PAGE, 0
-            };
-            SfxBindings& rBindings = mrView.GetViewFrame()->GetBindings();
-            rBindings.Invalidate( aInval );
+            mrView.SetVScrollbarThumbPos( nNewSelectedPage );
         }
+        // invalidate page status.
+        static sal_uInt16 aInval[] =
+        {
+            FN_STAT_PAGE, 0
+        };
+        SfxBindings& rBindings = mrView.GetViewFrame()->GetBindings();
+        rBindings.Invalidate( aInval );
     }
 }
 

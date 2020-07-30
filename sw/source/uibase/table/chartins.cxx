@@ -158,70 +158,70 @@ SwInsertChart::SwInsertChart( const Link<css::ui::dialogs::DialogClosedEvent*, v
     //@todo get context from writer if that has one
     uno::Reference< uno::XComponentContext > xContext(
         ::cppu::defaultBootstrap_InitialComponentContext() );
-    if( xContext.is() && xChartModel.is() && xDataProvider.is())
-    {
-        uno::Reference< lang::XMultiComponentFactory > xMCF( xContext->getServiceManager() );
-        if(xMCF.is())
-        {
-            uno::Reference< ui::dialogs::XAsynchronousExecutableDialog > xDialog(
-                xMCF->createInstanceWithContext(
-                    "com.sun.star.comp.chart2.WizardDialog", xContext),
-                uno::UNO_QUERY);
-            uno::Reference< lang::XInitialization > xInit( xDialog, uno::UNO_QUERY );
-            if( xInit.is() )
-            {
-                //  initialize dialog
-                uno::Sequence<uno::Any> aSeq(comphelper::InitAnyPropertySequence(
-                {
-                    {"ParentWindow", uno::Any(uno::Reference< awt::XWindow >())},
-                    {"ChartModel", uno::Any(xChartModel)}
-                }));
-                xInit->initialize( aSeq );
+    if( !(xContext.is() && xChartModel.is() && xDataProvider.is()))
+        return;
 
-                // try to set the dialog's position so it doesn't hide the chart
-                uno::Reference < beans::XPropertySet > xDialogProps( xDialog, uno::UNO_QUERY );
-                if ( xDialogProps.is() )
+    uno::Reference< lang::XMultiComponentFactory > xMCF( xContext->getServiceManager() );
+    if(!xMCF.is())
+        return;
+
+    uno::Reference< ui::dialogs::XAsynchronousExecutableDialog > xDialog(
+        xMCF->createInstanceWithContext(
+            "com.sun.star.comp.chart2.WizardDialog", xContext),
+        uno::UNO_QUERY);
+    uno::Reference< lang::XInitialization > xInit( xDialog, uno::UNO_QUERY );
+    if( xInit.is() )
+    {
+        //  initialize dialog
+        uno::Sequence<uno::Any> aSeq(comphelper::InitAnyPropertySequence(
+        {
+            {"ParentWindow", uno::Any(uno::Reference< awt::XWindow >())},
+            {"ChartModel", uno::Any(xChartModel)}
+        }));
+        xInit->initialize( aSeq );
+
+        // try to set the dialog's position so it doesn't hide the chart
+        uno::Reference < beans::XPropertySet > xDialogProps( xDialog, uno::UNO_QUERY );
+        if ( xDialogProps.is() )
+        {
+            try
+            {
+                //get dialog size:
+                awt::Size aDialogAWTSize;
+                if( xDialogProps->getPropertyValue("Size")
+                    >>= aDialogAWTSize )
                 {
-                    try
+                    Size aDialogSize( aDialogAWTSize.Width, aDialogAWTSize.Height );
+                    if ( !aDialogSize.IsEmpty() )
                     {
-                        //get dialog size:
-                        awt::Size aDialogAWTSize;
-                        if( xDialogProps->getPropertyValue("Size")
-                            >>= aDialogAWTSize )
-                        {
-                            Size aDialogSize( aDialogAWTSize.Width, aDialogAWTSize.Height );
-                            if ( !aDialogSize.IsEmpty() )
-                            {
-                                //calculate and set new position
-                                SwRect aSwRect;
-                                if (pFlyFrameFormat)
-                                    aSwRect = pFlyFrameFormat->GetAnchoredObj()->GetObjRectWithSpaces();
-                                tools::Rectangle aRect( aSwRect.SVRect() );
-                                Point aDialogPos = SwGetChartDialogPos( &rWrtShell.GetView().GetEditWin(), aDialogSize, aRect );
-                                xDialogProps->setPropertyValue("Position",
-                                    uno::makeAny( awt::Point(aDialogPos.getX(),aDialogPos.getY()) ) );
-                            }
-                        }
-                    }
-                    catch (const uno::Exception&)
-                    {
-                        OSL_FAIL("Chart wizard couldn't be positioned automatically" );
+                        //calculate and set new position
+                        SwRect aSwRect;
+                        if (pFlyFrameFormat)
+                            aSwRect = pFlyFrameFormat->GetAnchoredObj()->GetObjRectWithSpaces();
+                        tools::Rectangle aRect( aSwRect.SVRect() );
+                        Point aDialogPos = SwGetChartDialogPos( &rWrtShell.GetView().GetEditWin(), aDialogSize, aRect );
+                        xDialogProps->setPropertyValue("Position",
+                            uno::makeAny( awt::Point(aDialogPos.getX(),aDialogPos.getY()) ) );
                     }
                 }
-
-                ::svt::DialogClosedListener* pListener = new ::svt::DialogClosedListener();
-                pListener->SetDialogClosedLink( rLink );
-                css::uno::Reference<css::ui::dialogs::XDialogClosedListener> xListener( pListener );
-
-                xDialog->startExecuteModal( xListener );
             }
-            else
+            catch (const uno::Exception&)
             {
-                uno::Reference< lang::XComponent > xComponent( xDialog, uno::UNO_QUERY );
-                if( xComponent.is())
-                    xComponent->dispose();
+                OSL_FAIL("Chart wizard couldn't be positioned automatically" );
             }
         }
+
+        ::svt::DialogClosedListener* pListener = new ::svt::DialogClosedListener();
+        pListener->SetDialogClosedLink( rLink );
+        css::uno::Reference<css::ui::dialogs::XDialogClosedListener> xListener( pListener );
+
+        xDialog->startExecuteModal( xListener );
+    }
+    else
+    {
+        uno::Reference< lang::XComponent > xComponent( xDialog, uno::UNO_QUERY );
+        if( xComponent.is())
+            xComponent->dispose();
     }
 }
 

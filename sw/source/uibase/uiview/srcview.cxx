@@ -582,49 +582,49 @@ void SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
         nFound = 0;
     }
 
-    if( !nFound )
+    if( nFound )
+        return;
+
+    bool bNotFoundMessage = false;
+    if(!bRecursive)
     {
-        bool bNotFoundMessage = false;
-        if(!bRecursive)
+        bNotFoundMessage = bAtStart;
+    }
+    else if(bAtStart)
+    {
+        bNotFoundMessage = true;
+    }
+
+    if(bApi)
+        return;
+
+    if(bNotFoundMessage)
+    {
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/swriter/ui/infonotfounddialog.ui"));
+        std::unique_ptr<weld::MessageDialog> xInfoBox(xBuilder->weld_message_dialog("InfoNotFoundDialog"));
+        xInfoBox->run();
+    }
+    else if(!bRecursive)
+    {
+        int nRet;
+
+        if (!bForward)
         {
-            bNotFoundMessage = bAtStart;
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/swriter/ui/querycontinueenddialog.ui"));
+            std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("QueryContinueEndDialog"));
+            nRet = xQueryBox->run();
         }
-        else if(bAtStart)
+        else
         {
-            bNotFoundMessage = true;
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/swriter/ui/querycontinuebegindialog.ui"));
+            std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("QueryContinueBeginDialog"));
+            nRet = xQueryBox->run();
         }
 
-        if(!bApi)
+        if (nRet == RET_YES)
         {
-            if(bNotFoundMessage)
-            {
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/swriter/ui/infonotfounddialog.ui"));
-                std::unique_ptr<weld::MessageDialog> xInfoBox(xBuilder->weld_message_dialog("InfoNotFoundDialog"));
-                xInfoBox->run();
-            }
-            else if(!bRecursive)
-            {
-                int nRet;
-
-                if (!bForward)
-                {
-                    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/swriter/ui/querycontinueenddialog.ui"));
-                    std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("QueryContinueEndDialog"));
-                    nRet = xQueryBox->run();
-                }
-                else
-                {
-                    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/swriter/ui/querycontinuebegindialog.ui"));
-                    std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("QueryContinueBeginDialog"));
-                    nRet = xQueryBox->run();
-                }
-
-                if (nRet == RET_YES)
-                {
-                    pTextView->SetSelection( TextSelection( aPaM, aPaM ) );
-                    StartSearchAndReplace( rSearchItem, false, true );
-                }
-            }
+            pTextView->SetSelection( TextSelection( aPaM, aPaM ) );
+            StartSearchAndReplace( rSearchItem, false, true );
         }
     }
 }

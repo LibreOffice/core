@@ -318,32 +318,32 @@ void SetAppPrintOptions( SwViewShell* pSh, bool bWeb )
     const IDocumentDeviceAccess& rIDDA = pSh->getIDocumentDeviceAccess();
     const SwPrintData& aPrtData = rIDDA.getPrintData();
 
-    if( rIDDA.getPrinter( false ) )
-    {
-        // Close application own printing options in SfxPrinter.
-        SwAddPrinterItem aAddPrinterItem(aPrtData);
-        SfxItemSet aSet(
-            pSh->GetAttrPool(),
-            svl::Items<
-                SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
-                SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
-                SID_HTML_MODE, SID_HTML_MODE,
-                FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER>{});
+    if( !rIDDA.getPrinter( false ) )
+        return;
 
-        if(bWeb)
-            aSet.Put(SfxUInt16Item(SID_HTML_MODE,
-                    ::GetHtmlMode(static_cast<SwWrtShell*>(pSh)->GetView().GetDocShell())));
-        aSet.Put(SfxBoolItem(SID_PRINTER_NOTFOUND_WARN,
-                        officecfg::Office::Common::Print::Warning::NotFound::get() ));
-        aSet.Put(aAddPrinterItem);
-        aSet.Put( SfxFlagItem( SID_PRINTER_CHANGESTODOC,
-            static_cast<int>(officecfg::Office::Common::Print::Warning::PaperSize::get()
-                ? SfxPrinterChangeFlags::CHG_SIZE : SfxPrinterChangeFlags::NONE)   |
-            static_cast<int>(officecfg::Office::Common::Print::Warning::PaperOrientation::get()
-                ? SfxPrinterChangeFlags::CHG_ORIENTATION : SfxPrinterChangeFlags::NONE )));
+    // Close application own printing options in SfxPrinter.
+    SwAddPrinterItem aAddPrinterItem(aPrtData);
+    SfxItemSet aSet(
+        pSh->GetAttrPool(),
+        svl::Items<
+            SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
+            SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
+            SID_HTML_MODE, SID_HTML_MODE,
+            FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER>{});
 
-        rIDDA.getPrinter( true )->SetOptions( aSet );
-    }
+    if(bWeb)
+        aSet.Put(SfxUInt16Item(SID_HTML_MODE,
+                ::GetHtmlMode(static_cast<SwWrtShell*>(pSh)->GetView().GetDocShell())));
+    aSet.Put(SfxBoolItem(SID_PRINTER_NOTFOUND_WARN,
+                    officecfg::Office::Common::Print::Warning::NotFound::get() ));
+    aSet.Put(aAddPrinterItem);
+    aSet.Put( SfxFlagItem( SID_PRINTER_CHANGESTODOC,
+        static_cast<int>(officecfg::Office::Common::Print::Warning::PaperSize::get()
+            ? SfxPrinterChangeFlags::CHG_SIZE : SfxPrinterChangeFlags::NONE)   |
+        static_cast<int>(officecfg::Office::Common::Print::Warning::PaperOrientation::get()
+            ? SfxPrinterChangeFlags::CHG_ORIENTATION : SfxPrinterChangeFlags::NONE )));
+
+    rIDDA.getPrinter( true )->SetOptions( aSet );
 
 }
 

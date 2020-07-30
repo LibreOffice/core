@@ -381,48 +381,48 @@ void SwView::ExitDraw()
 {
     NoRotate();
 
-    if(m_pShell)
+    if(!m_pShell)
+        return;
+
+    // the shell may be invalid at close/reload/SwitchToViewShell
+    SfxDispatcher* pDispatch = GetViewFrame()->GetDispatcher();
+    sal_uInt16 nIdx = 0;
+    SfxShell* pTest = nullptr;
+    do
     {
-        // the shell may be invalid at close/reload/SwitchToViewShell
-        SfxDispatcher* pDispatch = GetViewFrame()->GetDispatcher();
-        sal_uInt16 nIdx = 0;
-        SfxShell* pTest = nullptr;
-        do
-        {
-            pTest = pDispatch->GetShell(nIdx++);
-        }
-        while( pTest && pTest != this && pTest != m_pShell);
-        if(pTest == m_pShell &&
-            // don't call LeaveSelFrameMode() etc. for the below,
-            // because objects may still be selected:
-            dynamic_cast< const SwDrawBaseShell *>( m_pShell ) ==  nullptr &&
-            dynamic_cast< const SwBezierShell *>( m_pShell ) ==  nullptr &&
-            dynamic_cast< const svx::ExtrusionBar *>( m_pShell ) ==  nullptr &&
-            dynamic_cast< const svx::FontworkBar *>( m_pShell ) ==  nullptr)
-        {
-            SdrView *pSdrView = m_pWrtShell->GetDrawView();
-
-            if (pSdrView && pSdrView->IsGroupEntered())
-            {
-                pSdrView->LeaveOneGroup();
-                pSdrView->UnmarkAll();
-                GetViewFrame()->GetBindings().Invalidate(SID_ENTER_GROUP);
-            }
-
-            if (GetDrawFuncPtr())
-            {
-                if (m_pWrtShell->IsSelFrameMode())
-                    m_pWrtShell->LeaveSelFrameMode();
-                GetDrawFuncPtr()->Deactivate();
-
-                SetDrawFuncPtr(nullptr);
-                LeaveDrawCreate();
-
-                GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
-            }
-            GetEditWin().SetPointer(PointerStyle::Text);
-        }
+        pTest = pDispatch->GetShell(nIdx++);
     }
+    while( pTest && pTest != this && pTest != m_pShell);
+    if(!(pTest == m_pShell &&
+        // don't call LeaveSelFrameMode() etc. for the below,
+        // because objects may still be selected:
+        dynamic_cast< const SwDrawBaseShell *>( m_pShell ) ==  nullptr &&
+        dynamic_cast< const SwBezierShell *>( m_pShell ) ==  nullptr &&
+        dynamic_cast< const svx::ExtrusionBar *>( m_pShell ) ==  nullptr &&
+        dynamic_cast< const svx::FontworkBar *>( m_pShell ) ==  nullptr))
+        return;
+
+    SdrView *pSdrView = m_pWrtShell->GetDrawView();
+
+    if (pSdrView && pSdrView->IsGroupEntered())
+    {
+        pSdrView->LeaveOneGroup();
+        pSdrView->UnmarkAll();
+        GetViewFrame()->GetBindings().Invalidate(SID_ENTER_GROUP);
+    }
+
+    if (GetDrawFuncPtr())
+    {
+        if (m_pWrtShell->IsSelFrameMode())
+            m_pWrtShell->LeaveSelFrameMode();
+        GetDrawFuncPtr()->Deactivate();
+
+        SetDrawFuncPtr(nullptr);
+        LeaveDrawCreate();
+
+        GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
+    }
+    GetEditWin().SetPointer(PointerStyle::Text);
 }
 
 // Disable rotate mode

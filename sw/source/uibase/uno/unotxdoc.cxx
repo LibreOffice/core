@@ -449,36 +449,36 @@ SwXDocumentPropertyHelper * SwXTextDocument::GetPropertyHelper ()
 
 void SwXTextDocument::GetNumberFormatter()
 {
-    if(IsValid())
-    {
-        if(!xNumFormatAgg.is())
-        {
-            if ( pDocShell->GetDoc() )
-            {
-                SvNumberFormatsSupplierObj* pNumFormat = new SvNumberFormatsSupplierObj(
-                                    pDocShell->GetDoc()->GetNumberFormatter());
-                Reference< util::XNumberFormatsSupplier >  xTmp = pNumFormat;
-                xNumFormatAgg.set(xTmp, UNO_QUERY);
-            }
-            if(xNumFormatAgg.is())
-                xNumFormatAgg->setDelegator(static_cast<cppu::OWeakObject*>(static_cast<SwXTextDocumentBaseClass*>(this)));
-        }
-        else
-        {
-            const uno::Type& rTunnelType = cppu::UnoType<XUnoTunnel>::get();
-            Any aNumTunnel = xNumFormatAgg->queryAggregation(rTunnelType);
-            SvNumberFormatsSupplierObj* pNumFormat = nullptr;
-            Reference< XUnoTunnel > xNumTunnel;
-            if(aNumTunnel >>= xNumTunnel)
-            {
-                pNumFormat = reinterpret_cast<SvNumberFormatsSupplierObj*>(
-                        xNumTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
+    if(!IsValid())
+        return;
 
-            }
-            OSL_ENSURE(pNumFormat, "No number formatter available");
-            if (pNumFormat && !pNumFormat->GetNumberFormatter())
-                pNumFormat->SetNumberFormatter(pDocShell->GetDoc()->GetNumberFormatter());
+    if(!xNumFormatAgg.is())
+    {
+        if ( pDocShell->GetDoc() )
+        {
+            SvNumberFormatsSupplierObj* pNumFormat = new SvNumberFormatsSupplierObj(
+                                pDocShell->GetDoc()->GetNumberFormatter());
+            Reference< util::XNumberFormatsSupplier >  xTmp = pNumFormat;
+            xNumFormatAgg.set(xTmp, UNO_QUERY);
         }
+        if(xNumFormatAgg.is())
+            xNumFormatAgg->setDelegator(static_cast<cppu::OWeakObject*>(static_cast<SwXTextDocumentBaseClass*>(this)));
+    }
+    else
+    {
+        const uno::Type& rTunnelType = cppu::UnoType<XUnoTunnel>::get();
+        Any aNumTunnel = xNumFormatAgg->queryAggregation(rTunnelType);
+        SvNumberFormatsSupplierObj* pNumFormat = nullptr;
+        Reference< XUnoTunnel > xNumTunnel;
+        if(aNumTunnel >>= xNumTunnel)
+        {
+            pNumFormat = reinterpret_cast<SvNumberFormatsSupplierObj*>(
+                    xNumTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
+
+        }
+        OSL_ENSURE(pNumFormat, "No number formatter available");
+        if (pNumFormat && !pNumFormat->GetNumberFormatter())
+            pNumFormat->SetNumberFormatter(pDocShell->GetDoc()->GetNumberFormatter());
     }
 }
 
@@ -3232,20 +3232,20 @@ void SwXTextDocument::setClientZoom(int nTilePixelWidth_, int /*nTilePixelHeight
     // for in place chart editing. We assume that x and y scale is roughly
     // the same.
     SfxInPlaceClient* pIPClient = pDocShell->GetView()->GetIPClient();
-    if (pIPClient)
-    {
-        SwViewShell* pWrtViewShell = pDocShell->GetWrtShell();
-        double fScale = nTilePixelWidth_ * TWIPS_PER_PIXEL / (nTileTwipWidth_ * 1.0);
-        SwViewOption aOption(*(pWrtViewShell->GetViewOptions()));
-        if (aOption.GetZoom() != fScale * 100)
-        {
-            aOption.SetZoom(fScale * 100);
-            pWrtViewShell->ApplyViewOptions(aOption);
+    if (!pIPClient)
+        return;
 
-            // Changing the zoom value doesn't always trigger the updating of
-            // the client ole object area, so we call it directly.
-            pIPClient->VisAreaChanged();
-        }
+    SwViewShell* pWrtViewShell = pDocShell->GetWrtShell();
+    double fScale = nTilePixelWidth_ * TWIPS_PER_PIXEL / (nTileTwipWidth_ * 1.0);
+    SwViewOption aOption(*(pWrtViewShell->GetViewOptions()));
+    if (aOption.GetZoom() != fScale * 100)
+    {
+        aOption.SetZoom(fScale * 100);
+        pWrtViewShell->ApplyViewOptions(aOption);
+
+        // Changing the zoom value doesn't always trigger the updating of
+        // the client ole object area, so we call it directly.
+        pIPClient->VisAreaChanged();
     }
 }
 
@@ -3266,44 +3266,44 @@ void SwXTextDocument::getTrackedChanges(tools::JsonWriter& rJson)
 
     // Disable since usability is very low beyond some small number of changes.
     static bool bDisableRedlineComments = getenv("DISABLE_REDLINE") != nullptr;
-    if (!bDisableRedlineComments)
+    if (bDisableRedlineComments)
+        return;
+
+    const SwRedlineTable& rRedlineTable
+        = pDocShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    for (SwRedlineTable::size_type i = 0; i < rRedlineTable.size(); ++i)
     {
-        const SwRedlineTable& rRedlineTable
-            = pDocShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
-        for (SwRedlineTable::size_type i = 0; i < rRedlineTable.size(); ++i)
+        auto redlineNode = rJson.startNode("");
+        rJson.put("index", rRedlineTable[i]->GetId());
+        rJson.put("author", rRedlineTable[i]->GetAuthorString(1));
+        rJson.put("type", SwRedlineTypeToOUString(
+                                       rRedlineTable[i]->GetRedlineData().GetType()));
+        rJson.put("comment",
+                           rRedlineTable[i]->GetRedlineData().GetComment());
+        rJson.put("description", rRedlineTable[i]->GetDescr());
+        OUString sDateTime = utl::toISO8601(
+            rRedlineTable[i]->GetRedlineData().GetTimeStamp().GetUNODateTime());
+        rJson.put("dateTime", sDateTime);
+
+        SwContentNode* pContentNd = rRedlineTable[i]->GetContentNode();
+        SwView* pView = dynamic_cast<SwView*>(SfxViewShell::Current());
+        if (pView && pContentNd)
         {
-            auto redlineNode = rJson.startNode("");
-            rJson.put("index", rRedlineTable[i]->GetId());
-            rJson.put("author", rRedlineTable[i]->GetAuthorString(1));
-            rJson.put("type", SwRedlineTypeToOUString(
-                                           rRedlineTable[i]->GetRedlineData().GetType()));
-            rJson.put("comment",
-                               rRedlineTable[i]->GetRedlineData().GetComment());
-            rJson.put("description", rRedlineTable[i]->GetDescr());
-            OUString sDateTime = utl::toISO8601(
-                rRedlineTable[i]->GetRedlineData().GetTimeStamp().GetUNODateTime());
-            rJson.put("dateTime", sDateTime);
+            SwShellCursor aCursor(pView->GetWrtShell(), *(rRedlineTable[i]->Start()));
+            aCursor.SetMark();
+            aCursor.GetMark()->nNode = *pContentNd;
+            aCursor.GetMark()->nContent.Assign(pContentNd,
+                                               rRedlineTable[i]->End()->nContent.GetIndex());
 
-            SwContentNode* pContentNd = rRedlineTable[i]->GetContentNode();
-            SwView* pView = dynamic_cast<SwView*>(SfxViewShell::Current());
-            if (pView && pContentNd)
-            {
-                SwShellCursor aCursor(pView->GetWrtShell(), *(rRedlineTable[i]->Start()));
-                aCursor.SetMark();
-                aCursor.GetMark()->nNode = *pContentNd;
-                aCursor.GetMark()->nContent.Assign(pContentNd,
-                                                   rRedlineTable[i]->End()->nContent.GetIndex());
+            aCursor.FillRects();
 
-                aCursor.FillRects();
+            SwRects* pRects(&aCursor);
+            std::vector<OString> aRects;
+            for (const SwRect& rNextRect : *pRects)
+                aRects.push_back(rNextRect.SVRect().toString());
 
-                SwRects* pRects(&aCursor);
-                std::vector<OString> aRects;
-                for (const SwRect& rNextRect : *pRects)
-                    aRects.push_back(rNextRect.SVRect().toString());
-
-                const OString sRects = comphelper::string::join("; ", aRects);
-                rJson.put("textRange", sRects);
-            }
+            const OString sRects = comphelper::string::join("; ", aRects);
+            rJson.put("textRange", sRects);
         }
     }
 }
@@ -3363,33 +3363,33 @@ void SwXTextDocument::getPostIts(tools::JsonWriter& rJsonWriter)
 void SwXTextDocument::executeFromFieldEvent(const StringMap& aArguments)
 {
     auto aIter = aArguments.find("type");
-    if (aIter != aArguments.end() && aIter->second == "drop-down")
+    if (!(aIter != aArguments.end() && aIter->second == "drop-down"))
+        return;
+
+    aIter = aArguments.find("cmd");
+    if (!(aIter != aArguments.end() && aIter->second == "selected"))
+        return;
+
+    aIter = aArguments.find("data");
+    if (aIter == aArguments.end())
+        return;
+
+    sal_Int32 nSelection = aIter->second.toInt32();
+    SwPosition aPos(*pDocShell->GetWrtShell()->GetCursor()->GetPoint());
+    sw::mark::IFieldmark* pFieldBM = pDocShell->GetWrtShell()->getIDocumentMarkAccess()->getFieldmarkFor(aPos);
+    if ( !pFieldBM )
     {
-        aIter = aArguments.find("cmd");
-        if (aIter != aArguments.end() && aIter->second == "selected")
+        --aPos.nContent;
+        pFieldBM = pDocShell->GetWrtShell()->getIDocumentMarkAccess()->getFieldmarkFor(aPos);
+    }
+    if (pFieldBM && pFieldBM->GetFieldname() == ODF_FORMDROPDOWN)
+    {
+        if (nSelection >= 0)
         {
-            aIter = aArguments.find("data");
-            if (aIter != aArguments.end())
-            {
-                sal_Int32 nSelection = aIter->second.toInt32();
-                SwPosition aPos(*pDocShell->GetWrtShell()->GetCursor()->GetPoint());
-                sw::mark::IFieldmark* pFieldBM = pDocShell->GetWrtShell()->getIDocumentMarkAccess()->getFieldmarkFor(aPos);
-                if ( !pFieldBM )
-                {
-                    --aPos.nContent;
-                    pFieldBM = pDocShell->GetWrtShell()->getIDocumentMarkAccess()->getFieldmarkFor(aPos);
-                }
-                if (pFieldBM && pFieldBM->GetFieldname() == ODF_FORMDROPDOWN)
-                {
-                    if (nSelection >= 0)
-                    {
-                        (*pFieldBM->GetParameters())[ODF_FORMDROPDOWN_RESULT] <<= nSelection;
-                        pFieldBM->Invalidate();
-                        pDocShell->GetWrtShell()->SetModified();
-                        pDocShell->GetView()->GetEditWin().LogicInvalidate(nullptr);
-                    }
-                }
-            }
+            (*pFieldBM->GetParameters())[ODF_FORMDROPDOWN_RESULT] <<= nSelection;
+            pFieldBM->Invalidate();
+            pDocShell->GetWrtShell()->SetModified();
+            pDocShell->GetView()->GetEditWin().LogicInvalidate(nullptr);
         }
     }
 }
