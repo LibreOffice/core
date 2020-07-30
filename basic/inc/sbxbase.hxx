@@ -38,7 +38,7 @@ struct SbxAppData
 {
     ErrCode             eErrCode;  // Error code
     SbxVariableRef      m_aGlobErr; // Global error object
-    std::vector<SbxFactory*> m_Factories; // these are owned by
+    std::vector<SbxFactory*> m_Factories; // these are owned by fields in SbiGlobals
     tools::SvRef<SvRefBase>  mrImplRepository;
 
     // Pointer to Format()-Command helper class
