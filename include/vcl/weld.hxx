@@ -1174,6 +1174,9 @@ public:
     void connect_custom_render(const Link<render_args, void>& rLink) { m_aRenderHdl = rLink; }
     // call set_column_custom_renderer after setting custom callbacks
     virtual void set_column_custom_renderer(int nColumn, bool bEnable) = 0;
+    // redraw all rows, typically only useful with custom rendering to redraw due to external
+    // state change
+    virtual void queue_draw() = 0;
 
     /* with bDnDMode false simply return the row under the point
      *

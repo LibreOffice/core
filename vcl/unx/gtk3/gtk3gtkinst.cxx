@@ -10104,6 +10104,11 @@ public:
         }
     }
 
+    virtual void queue_draw() override
+    {
+        gtk_widget_queue_draw(GTK_WIDGET(m_pTreeView));
+    }
+
     virtual void insert(const weld::TreeIter* pParent, int pos, const OUString* pText, const OUString* pId, const OUString* pIconName,
                         VirtualDevice* pImageSurface,
                         bool bChildrenOnDemand, weld::TreeIter* pRet) override
