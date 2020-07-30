@@ -11,6 +11,8 @@
 
 #include <vcl/gdimtf.hxx>
 
+#include <docsh.hxx>
+#include <unotxdoc.hxx>
 #include <wrtsh.hxx>
 
 char const DATA_DIRECTORY[] = "/sw/qa/core/text/data/";

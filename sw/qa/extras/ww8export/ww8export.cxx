@@ -9,12 +9,10 @@
 
 #include <swmodeltestbase.hxx>
 
-//#include <com/sun/star/text/XDependentTextField.hpp>
-
-#include <IDocumentSettingAccess.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/form/validation/XValidatableFormComponent.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -33,23 +31,26 @@
 #include <com/sun/star/view/DocumentZoomType.hpp>
 #include <com/sun/star/rdf/URI.hpp>
 #include <com/sun/star/rdf/Statement.hpp>
-//#include <vcl/svapp.hxx>
-#include <grfatr.hxx>
-#include <pagedesc.hxx>
-#include <ndgrf.hxx>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/text/XPageCursor.hpp>
 
+#include <config_features.h>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <cmdid.h>
 #include <envimg.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
-
-#include <config_features.h>
-
+#include <grfatr.hxx>
+#include <pagedesc.hxx>
+#include <ndgrf.hxx>
 #include <bordertest.hxx>
+#include <IDocumentSettingAccess.hxx>
+#include <docsh.hxx>
+#include <unotxdoc.hxx>
 
 class Test : public SwModelTestBase
 {

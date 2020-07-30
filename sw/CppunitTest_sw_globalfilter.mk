@@ -25,6 +25,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_globalfilter, \
     sfx \
     svt \
     sw \
+	swqahelper \
     test \
     tl \
     unotest \

@@ -22,11 +22,16 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/XFootnotesSupplier.hpp>
+#include <com/sun/star/text/XEndnotesSupplier.hpp>
+
+#include <svx/svdpage.hxx>
 
 #include <ftninfo.hxx>
-#include <svx/svdpage.hxx>
 #include <drawdoc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <docsh.hxx>
+#include <unotxdoc.hxx>
 
 class Test : public SwModelTestBase
 {

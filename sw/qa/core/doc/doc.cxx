@@ -18,6 +18,7 @@
 #include <wrtsh.hxx>
 #include <fmtanchr.hxx>
 #include <frameformats.hxx>
+#include <docsh.hxx>
 
 char const DATA_DIRECTORY[] = "/sw/qa/core/doc/data/";
 

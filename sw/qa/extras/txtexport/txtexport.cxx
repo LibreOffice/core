@@ -12,6 +12,8 @@
 #include <shellio.hxx>
 #include <unotextrange.hxx>
 #include <iodetect.hxx>
+#include <unotxdoc.hxx>
+#include <docsh.hxx>
 
 class TxtImportTest : public SwModelTestBase
 {

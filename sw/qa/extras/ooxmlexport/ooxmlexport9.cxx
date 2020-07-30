@@ -33,10 +33,16 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
 
-#include <ftninfo.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
+#include <comphelper/processfactory.hxx>
+
+#include <docsh.hxx>
+#include <ftninfo.hxx>
+#include <unotxdoc.hxx>
 
 class Test : public SwModelTestBase
 {

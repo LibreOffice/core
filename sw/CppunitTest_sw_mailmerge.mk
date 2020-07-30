@@ -23,6 +23,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_mailmerge, \
     sfx \
     svl \
     sw \
+	swqahelper \
     test \
     tl \
     unotest \

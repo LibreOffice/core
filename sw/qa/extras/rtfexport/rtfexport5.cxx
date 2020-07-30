@@ -30,12 +30,17 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/text/XTextContentAppend.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #include <rtl/ustring.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <i18nlangtag/languagetag.hxx>
+
+using namespace css;
 
 class Test : public SwModelTestBase
 {

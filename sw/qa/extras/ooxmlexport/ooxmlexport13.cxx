@@ -16,14 +16,20 @@
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/text/XTextSectionsSupplier.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
+
 #include <editeng/escapementitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <xmloff/odffields.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <editsh.hxx>
 #include <frmatr.hxx>
 #include <frameformats.hxx>
+#include <unotxdoc.hxx>
+#include <docsh.hxx>
 
 class Test : public SwModelTestBase
 {

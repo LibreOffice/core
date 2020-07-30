@@ -12,6 +12,9 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/view/XLineCursor.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/text/XTextViewCursor.hpp>
 
 #include <comphelper/propertysequence.hxx>
 #include <svl/srchitem.hxx>

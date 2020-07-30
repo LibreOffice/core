@@ -14,7 +14,10 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/embed/XInplaceObject.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
+
 #include <tools/datetime.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -27,6 +30,7 @@
 #include <fmtflcnt.hxx>
 #include <fmtfsize.hxx>
 #include <frameformats.hxx>
+#include <unotxdoc.hxx>
 
 class HtmlImportTest : public SwModelTestBase
 {

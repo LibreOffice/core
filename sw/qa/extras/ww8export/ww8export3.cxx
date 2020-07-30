@@ -9,7 +9,6 @@
 
 #include <swmodeltestbase.hxx>
 
-#include <IDocumentSettingAccess.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -21,6 +20,18 @@
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XTextContentAppend.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/text/XTextSectionsSupplier.hpp>
+#include <com/sun/star/text/XFootnotesSupplier.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XLineNumberingProperties.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+
+#include <comphelper/sequenceashashmap.hxx>
+
+#include <IDocumentSettingAccess.hxx>
+#include <docsh.hxx>
+#include <unotxdoc.hxx>
 
 class Test : public SwModelTestBase
 {

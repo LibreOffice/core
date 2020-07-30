@@ -11,8 +11,9 @@
 
 #include <vcl/transfer.hxx>
 
-#include <wrtsh.hxx>
+#include <docsh.hxx>
 #include <swdtflvr.hxx>
+#include <wrtsh.hxx>
 
 /// Covers sw/source/uibase/dochdl/ fixes.
 class SwUibaseDochdlTest : public SwModelTestBase

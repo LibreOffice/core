@@ -17,6 +17,8 @@
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/table/XTableRows.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <i18nlangtag/languagetag.hxx>
@@ -50,6 +52,13 @@
 #include <shellio.hxx>
 #include <editeng/fontitem.hxx>
 #include <tools/json_writer.hxx>
+#include <docsh.hxx>
+#include <unotxdoc.hxx>
+#include <IDocumentLayoutAccess.hxx>
+#include <rootfrm.hxx>
+#include <unotools/mediadescriptor.hxx>
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+#include <comphelper/processfactory.hxx>
 
 namespace
 {
