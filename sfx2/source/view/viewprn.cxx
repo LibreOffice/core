@@ -200,10 +200,11 @@ const Any& SfxPrinterController::getSelectionObject() const
     if( pVal )
         pVal->Value >>= nChoice;
 
+    //TODO: Even odd  option needs to be fixed for calc
     if ( bIsCalc )
         return (nChoice > 1) ? maSelection : maCompleteSelection;
     else
-        return (nChoice > 3) ? maSelection : maCompleteSelection;
+        return (nChoice > 1) ? maSelection : maCompleteSelection;
 }
 
 Sequence< beans::PropertyValue > SfxPrinterController::getMergedOptions() const
