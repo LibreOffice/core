@@ -80,28 +80,28 @@ class NoTextNodeAltTextCheck : public NodeCheck
             return;
 
         OUString sAlternative = pNoTextNode->GetTitle();
-        if (sAlternative.isEmpty())
+        if (!sAlternative.isEmpty())
+            return;
+
+        OUString sName = pNoTextNode->GetFlyFormat()->GetName();
+
+        OUString sIssueText = SwResId(STR_NO_ALT).replaceAll("%OBJECT_NAME%", sName);
+
+        if (pNoTextNode->IsOLENode())
         {
-            OUString sName = pNoTextNode->GetFlyFormat()->GetName();
-
-            OUString sIssueText = SwResId(STR_NO_ALT).replaceAll("%OBJECT_NAME%", sName);
-
-            if (pNoTextNode->IsOLENode())
-            {
-                auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
-                                          sfx::AccessibilityIssueID::NO_ALT_OLE);
-                pIssue->setDoc(pNoTextNode->GetDoc());
-                pIssue->setIssueObject(IssueObject::OLE);
-                pIssue->setObjectID(pNoTextNode->GetFlyFormat()->GetName());
-            }
-            else if (pNoTextNode->IsGrfNode())
-            {
-                auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
-                                          sfx::AccessibilityIssueID::NO_ALT_GRAPHIC);
-                pIssue->setDoc(pNoTextNode->GetDoc());
-                pIssue->setIssueObject(IssueObject::GRAPHIC);
-                pIssue->setObjectID(pNoTextNode->GetFlyFormat()->GetName());
-            }
+            auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
+                                      sfx::AccessibilityIssueID::NO_ALT_OLE);
+            pIssue->setDoc(pNoTextNode->GetDoc());
+            pIssue->setIssueObject(IssueObject::OLE);
+            pIssue->setObjectID(pNoTextNode->GetFlyFormat()->GetName());
+        }
+        else if (pNoTextNode->IsGrfNode())
+        {
+            auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
+                                      sfx::AccessibilityIssueID::NO_ALT_GRAPHIC);
+            pIssue->setDoc(pNoTextNode->GetDoc());
+            pIssue->setIssueObject(IssueObject::GRAPHIC);
+            pIssue->setObjectID(pNoTextNode->GetFlyFormat()->GetName());
         }
     }
 
@@ -225,24 +225,24 @@ public:
 
     void check(SwNode* pCurrent) override
     {
-        if (pCurrent->IsTextNode())
+        if (!pCurrent->IsTextNode())
+            return;
+
+        if (m_pPreviousTextNode)
         {
-            if (m_pPreviousTextNode)
+            for (auto& rPair : m_aNumberingCombinations)
             {
-                for (auto& rPair : m_aNumberingCombinations)
+                if (pCurrent->GetTextNode()->GetText().startsWith(rPair.second)
+                    && m_pPreviousTextNode->GetText().startsWith(rPair.first))
                 {
-                    if (pCurrent->GetTextNode()->GetText().startsWith(rPair.second)
-                        && m_pPreviousTextNode->GetText().startsWith(rPair.first))
-                    {
-                        OUString sNumbering = rPair.first + " " + rPair.second + "...";
-                        OUString sIssueText
-                            = SwResId(STR_FAKE_NUMBERING).replaceAll("%NUMBERING%", sNumbering);
-                        lclAddIssue(m_rIssueCollection, sIssueText);
-                    }
+                    OUString sNumbering = rPair.first + " " + rPair.second + "...";
+                    OUString sIssueText
+                        = SwResId(STR_FAKE_NUMBERING).replaceAll("%NUMBERING%", sNumbering);
+                    lclAddIssue(m_rIssueCollection, sIssueText);
                 }
             }
-            m_pPreviousTextNode = pCurrent->GetTextNode();
         }
+        m_pPreviousTextNode = pCurrent->GetTextNode();
     }
 };
 
@@ -252,19 +252,19 @@ private:
     void checkTextRange(uno::Reference<text::XTextRange> const& xTextRange)
     {
         uno::Reference<beans::XPropertySet> xProperties(xTextRange, uno::UNO_QUERY);
-        if (xProperties->getPropertySetInfo()->hasPropertyByName("HyperLinkURL"))
+        if (!xProperties->getPropertySetInfo()->hasPropertyByName("HyperLinkURL"))
+            return;
+
+        OUString sHyperlink;
+        xProperties->getPropertyValue("HyperLinkURL") >>= sHyperlink;
+        if (!sHyperlink.isEmpty())
         {
-            OUString sHyperlink;
-            xProperties->getPropertyValue("HyperLinkURL") >>= sHyperlink;
-            if (!sHyperlink.isEmpty())
+            OUString sText = xTextRange->getString();
+            if (INetURLObject(sText) == INetURLObject(sHyperlink))
             {
-                OUString sText = xTextRange->getString();
-                if (INetURLObject(sText) == INetURLObject(sHyperlink))
-                {
-                    OUString sIssueText
-                        = SwResId(STR_HYPERLINK_TEXT_IS_LINK).replaceFirst("%LINK%", sHyperlink);
-                    lclAddIssue(m_rIssueCollection, sIssueText);
-                }
+                OUString sIssueText
+                    = SwResId(STR_HYPERLINK_TEXT_IS_LINK).replaceFirst("%LINK%", sHyperlink);
+                lclAddIssue(m_rIssueCollection, sIssueText);
             }
         }
     }
@@ -277,25 +277,23 @@ public:
 
     void check(SwNode* pCurrent) override
     {
-        if (pCurrent->IsTextNode())
+        if (!pCurrent->IsTextNode())
+            return;
+
+        SwTextNode* pTextNode = pCurrent->GetTextNode();
+        uno::Reference<text::XTextContent> xParagraph
+            = SwXParagraph::CreateXParagraph(*pTextNode->GetDoc(), pTextNode);
+        if (!xParagraph.is())
+            return;
+
+        uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParagraph, uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+        while (xRunEnum->hasMoreElements())
         {
-            SwTextNode* pTextNode = pCurrent->GetTextNode();
-            uno::Reference<text::XTextContent> xParagraph
-                = SwXParagraph::CreateXParagraph(*pTextNode->GetDoc(), pTextNode);
-            if (xParagraph.is())
+            uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
+            if (xRun.is())
             {
-                uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParagraph,
-                                                                             uno::UNO_QUERY);
-                uno::Reference<container::XEnumeration> xRunEnum
-                    = xRunEnumAccess->createEnumeration();
-                while (xRunEnum->hasMoreElements())
-                {
-                    uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
-                    if (xRun.is())
-                    {
-                        checkTextRange(xRun);
-                    }
-                }
+                checkTextRange(xRun);
             }
         }
     }
@@ -349,62 +347,62 @@ private:
         }
 
         uno::Reference<beans::XPropertySet> xProperties(xTextRange, uno::UNO_QUERY);
-        if (xProperties.is())
+        if (!xProperties.is())
+            return;
+
+        // Foreground color
+        sal_Int32 nCharColor = {}; // spurious -Werror=maybe-uninitialized
+        if (!(xProperties->getPropertyValue("CharColor") >>= nCharColor))
+        { // not sure this is impossible, can the default be void?
+            SAL_WARN("sw.a11y", "CharColor void");
+            return;
+        }
+        Color aForegroundColor(nCharColor);
+        if (aForegroundColor == COL_AUTO)
+            return;
+
+        const SwPageDesc* pPageDescription = pTextNode->FindPageDesc();
+        const SwFrameFormat& rPageFormat = pPageDescription->GetMaster();
+        const SwAttrSet& rPageSet = rPageFormat.GetAttrSet();
+
+        const XFillStyleItem* pXFillStyleItem(
+            rPageSet.GetItem<XFillStyleItem>(XATTR_FILLSTYLE, false));
+        Color aPageBackground;
+
+        if (pXFillStyleItem && pXFillStyleItem->GetValue() == css::drawing::FillStyle_SOLID)
         {
-            // Foreground color
-            sal_Int32 nCharColor = {}; // spurious -Werror=maybe-uninitialized
-            if (!(xProperties->getPropertyValue("CharColor") >>= nCharColor))
-            { // not sure this is impossible, can the default be void?
-                SAL_WARN("sw.a11y", "CharColor void");
-                return;
-            }
-            Color aForegroundColor(nCharColor);
-            if (aForegroundColor == COL_AUTO)
-                return;
+            const XFillColorItem* rXFillColorItem
+                = rPageSet.GetItem<XFillColorItem>(XATTR_FILLCOLOR, false);
+            aPageBackground = rXFillColorItem->GetColorValue();
+        }
 
-            const SwPageDesc* pPageDescription = pTextNode->FindPageDesc();
-            const SwFrameFormat& rPageFormat = pPageDescription->GetMaster();
-            const SwAttrSet& rPageSet = rPageFormat.GetAttrSet();
+        sal_Int32 nCharBackColor = {}; // spurious -Werror=maybe-uninitialized
 
-            const XFillStyleItem* pXFillStyleItem(
-                rPageSet.GetItem<XFillStyleItem>(XATTR_FILLSTYLE, false));
-            Color aPageBackground;
+        if (!(xProperties->getPropertyValue("CharBackColor") >>= nCharBackColor))
+        {
+            SAL_WARN("sw.a11y", "CharBackColor void");
+            return;
+        }
+        // Determine the background color
+        // Try Character background (highlight)
+        Color aBackgroundColor(nCharBackColor);
 
-            if (pXFillStyleItem && pXFillStyleItem->GetValue() == css::drawing::FillStyle_SOLID)
-            {
-                const XFillColorItem* rXFillColorItem
-                    = rPageSet.GetItem<XFillColorItem>(XATTR_FILLCOLOR, false);
-                aPageBackground = rXFillColorItem->GetColorValue();
-            }
+        // If not character background color, try paragraph background color
+        if (aBackgroundColor == COL_AUTO)
+            aBackgroundColor = Color(nParaBackColor);
 
-            sal_Int32 nCharBackColor = {}; // spurious -Werror=maybe-uninitialized
+        // If not paragraph background color, try page color
+        if (aBackgroundColor == COL_AUTO)
+            aBackgroundColor = aPageBackground;
 
-            if (!(xProperties->getPropertyValue("CharBackColor") >>= nCharBackColor))
-            {
-                SAL_WARN("sw.a11y", "CharBackColor void");
-                return;
-            }
-            // Determine the background color
-            // Try Character background (highlight)
-            Color aBackgroundColor(nCharBackColor);
+        // If not page color, assume white background color
+        if (aBackgroundColor == COL_AUTO)
+            aBackgroundColor = COL_WHITE;
 
-            // If not character background color, try paragraph background color
-            if (aBackgroundColor == COL_AUTO)
-                aBackgroundColor = Color(nParaBackColor);
-
-            // If not paragraph background color, try page color
-            if (aBackgroundColor == COL_AUTO)
-                aBackgroundColor = aPageBackground;
-
-            // If not page color, assume white background color
-            if (aBackgroundColor == COL_AUTO)
-                aBackgroundColor = COL_WHITE;
-
-            double fContrastRatio = calculateContrastRatio(aForegroundColor, aBackgroundColor);
-            if (fContrastRatio < 4.5)
-            {
-                lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_CONTRAST));
-            }
+        double fContrastRatio = calculateContrastRatio(aForegroundColor, aBackgroundColor);
+        if (fContrastRatio < 4.5)
+        {
+            lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_CONTRAST));
         }
     }
 
@@ -416,24 +414,22 @@ public:
 
     void check(SwNode* pCurrent) override
     {
-        if (pCurrent->IsTextNode())
+        if (!pCurrent->IsTextNode())
+            return;
+
+        SwTextNode* pTextNode = pCurrent->GetTextNode();
+        uno::Reference<text::XTextContent> xParagraph;
+        xParagraph = SwXParagraph::CreateXParagraph(*pTextNode->GetDoc(), pTextNode);
+        if (!xParagraph.is())
+            return;
+
+        uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParagraph, uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+        while (xRunEnum->hasMoreElements())
         {
-            SwTextNode* pTextNode = pCurrent->GetTextNode();
-            uno::Reference<text::XTextContent> xParagraph;
-            xParagraph = SwXParagraph::CreateXParagraph(*pTextNode->GetDoc(), pTextNode);
-            if (xParagraph.is())
-            {
-                uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParagraph,
-                                                                             uno::UNO_QUERY);
-                uno::Reference<container::XEnumeration> xRunEnum
-                    = xRunEnumAccess->createEnumeration();
-                while (xRunEnum->hasMoreElements())
-                {
-                    uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
-                    if (xRun.is())
-                        checkTextRange(xRun, xParagraph, pTextNode);
-                }
-            }
+            uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
+            if (xRun.is())
+                checkTextRange(xRun, xParagraph, pTextNode);
         }
     }
 };
@@ -519,35 +515,34 @@ public:
                 aFormattings.push_back(sFormattingType);
             pItem = aItemIter.NextItem();
         }
-        if (!aFormattings.empty())
-        {
-            o3tl::remove_duplicates(aFormattings);
-            auto pIssue
-                = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_FORMATTING_CONVEYS_MEANING),
-                              sfx::AccessibilityIssueID::TEXT_FORMATTING);
-            pIssue->setIssueObject(IssueObject::TEXT);
-            pIssue->setNode(pTextNode);
-            SwDoc* pDocument = pTextNode->GetDoc();
-            pIssue->setDoc(pDocument);
-            pIssue->setStart(pTextAttr->GetStart());
-            pIssue->setEnd(pTextAttr->GetAnyEnd());
-        }
+        if (aFormattings.empty())
+            return;
+
+        o3tl::remove_duplicates(aFormattings);
+        auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_FORMATTING_CONVEYS_MEANING),
+                                  sfx::AccessibilityIssueID::TEXT_FORMATTING);
+        pIssue->setIssueObject(IssueObject::TEXT);
+        pIssue->setNode(pTextNode);
+        SwDoc* pDocument = pTextNode->GetDoc();
+        pIssue->setDoc(pDocument);
+        pIssue->setStart(pTextAttr->GetStart());
+        pIssue->setEnd(pTextAttr->GetAnyEnd());
     }
     void check(SwNode* pCurrent) override
     {
-        if (pCurrent->IsTextNode())
+        if (!pCurrent->IsTextNode())
+            return;
+
+        SwTextNode* pTextNode = pCurrent->GetTextNode();
+        if (pTextNode->HasHints())
         {
-            SwTextNode* pTextNode = pCurrent->GetTextNode();
-            if (pTextNode->HasHints())
+            SwpHints& rHints = pTextNode->GetSwpHints();
+            for (size_t i = 0; i < rHints.Count(); ++i)
             {
-                SwpHints& rHints = pTextNode->GetSwpHints();
-                for (size_t i = 0; i < rHints.Count(); ++i)
+                const SwTextAttr* pTextAttr = rHints.Get(i);
+                if (pTextAttr->Which() == RES_TXTATR_AUTOFMT)
                 {
-                    const SwTextAttr* pTextAttr = rHints.Get(i);
-                    if (pTextAttr->Which() == RES_TXTATR_AUTOFMT)
-                    {
-                        checkAutoFormat(pTextNode, pTextAttr);
-                    }
+                    checkAutoFormat(pTextNode, pTextAttr);
                 }
             }
         }
@@ -580,24 +575,22 @@ public:
 
     void check(SwNode* pCurrent) override
     {
-        if (pCurrent->IsTextNode())
+        if (!pCurrent->IsTextNode())
+            return;
+
+        SwTextNode* pTextNode = pCurrent->GetTextNode();
+        uno::Reference<text::XTextContent> xParagraph;
+        xParagraph = SwXParagraph::CreateXParagraph(*pTextNode->GetDoc(), pTextNode);
+        if (!xParagraph.is())
+            return;
+
+        uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParagraph, uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+        while (xRunEnum->hasMoreElements())
         {
-            SwTextNode* pTextNode = pCurrent->GetTextNode();
-            uno::Reference<text::XTextContent> xParagraph;
-            xParagraph = SwXParagraph::CreateXParagraph(*pTextNode->GetDoc(), pTextNode);
-            if (xParagraph.is())
-            {
-                uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParagraph,
-                                                                             uno::UNO_QUERY);
-                uno::Reference<container::XEnumeration> xRunEnum
-                    = xRunEnumAccess->createEnumeration();
-                while (xRunEnum->hasMoreElements())
-                {
-                    uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
-                    if (xRun.is())
-                        checkTextRange(xRun);
-                }
-            }
+            uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
+            if (xRun.is())
+                checkTextRange(xRun);
         }
     }
 };
@@ -616,20 +609,20 @@ public:
 
     void check(SwNode* pCurrent) override
     {
-        if (pCurrent->IsTextNode())
-        {
-            SwTextNode* pTextNode = pCurrent->GetTextNode();
-            SwTextFormatColl* pCollection = pTextNode->GetTextColl();
-            int nLevel = pCollection->GetAssignedOutlineStyleLevel();
-            if (nLevel < 0)
-                return;
+        if (!pCurrent->IsTextNode())
+            return;
 
-            if (nLevel > m_nPreviousLevel && std::abs(nLevel - m_nPreviousLevel) > 1)
-            {
-                lclAddIssue(m_rIssueCollection, SwResId(STR_HEADINGS_NOT_IN_ORDER));
-            }
-            m_nPreviousLevel = nLevel;
+        SwTextNode* pTextNode = pCurrent->GetTextNode();
+        SwTextFormatColl* pCollection = pTextNode->GetTextColl();
+        int nLevel = pCollection->GetAssignedOutlineStyleLevel();
+        if (nLevel < 0)
+            return;
+
+        if (nLevel > m_nPreviousLevel && std::abs(nLevel - m_nPreviousLevel) > 1)
+        {
+            lclAddIssue(m_rIssueCollection, SwResId(STR_HEADINGS_NOT_IN_ORDER));
         }
+        m_nPreviousLevel = nLevel;
     }
 };
 
@@ -692,18 +685,18 @@ public:
     void check(SwDoc* pDoc) override
     {
         SwDocShell* pShell = pDoc->GetDocShell();
-        if (pShell)
+        if (!pShell)
+            return;
+
+        const uno::Reference<document::XDocumentPropertiesSupplier> xDPS(pShell->GetModel(),
+                                                                         uno::UNO_QUERY_THROW);
+        const uno::Reference<document::XDocumentProperties> xDocumentProperties(
+            xDPS->getDocumentProperties());
+        OUString sTitle = xDocumentProperties->getTitle();
+        if (sTitle.isEmpty())
         {
-            const uno::Reference<document::XDocumentPropertiesSupplier> xDPS(pShell->GetModel(),
-                                                                             uno::UNO_QUERY_THROW);
-            const uno::Reference<document::XDocumentProperties> xDocumentProperties(
-                xDPS->getDocumentProperties());
-            OUString sTitle = xDocumentProperties->getTitle();
-            if (sTitle.isEmpty())
-            {
-                lclAddIssue(m_rIssueCollection, SwResId(STR_DOCUMENT_TITLE),
-                            sfx::AccessibilityIssueID::DOCUMENT_TITLE);
-            }
+            lclAddIssue(m_rIssueCollection, SwResId(STR_DOCUMENT_TITLE),
+                        sfx::AccessibilityIssueID::DOCUMENT_TITLE);
         }
     }
 };

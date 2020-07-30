@@ -90,19 +90,19 @@ void SwAccessiblePage::InvalidateCursorPos_()
 void SwAccessiblePage::InvalidateFocus_()
 {
     vcl::Window *pWin = GetWindow();
-    if( pWin )
+    if( !pWin )
+        return;
+
+    bool bSelected;
+
     {
-        bool bSelected;
-
-        {
-            osl::MutexGuard aGuard( m_Mutex );
-            bSelected = m_bIsSelected;
-        }
-        OSL_ENSURE( bSelected, "focus object should be selected" );
-
-        FireStateChangedEvent( AccessibleStateType::FOCUSED,
-                               pWin->HasFocus() && bSelected );
+        osl::MutexGuard aGuard( m_Mutex );
+        bSelected = m_bIsSelected;
     }
+    OSL_ENSURE( bSelected, "focus object should be selected" );
+
+    FireStateChangedEvent( AccessibleStateType::FOCUSED,
+                           pWin->HasFocus() && bSelected );
 }
 
 SwAccessiblePage::SwAccessiblePage(std::shared_ptr<SwAccessibleMap> const& pInitMap,

@@ -303,27 +303,27 @@ void SwAccessibleParagraph::InvalidateContent_( bool bVisibleDataFired )
         FireAccessibleEvent( aEvent );
     }
 
-    if( rText != sOldText )
+    if( rText == sOldText )
+        return;
+
+    OUString sNewDesc( GetDescription() );
+    OUString sOldDesc;
     {
-        OUString sNewDesc( GetDescription() );
-        OUString sOldDesc;
-        {
-            osl::MutexGuard aGuard( m_Mutex );
-            sOldDesc = m_sDesc;
-            if( m_sDesc != sNewDesc )
-                m_sDesc = sNewDesc;
-        }
+        osl::MutexGuard aGuard( m_Mutex );
+        sOldDesc = m_sDesc;
+        if( m_sDesc != sNewDesc )
+            m_sDesc = sNewDesc;
+    }
 
-        if( sNewDesc != sOldDesc )
-        {
-            // The text is changed
-            AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::DESCRIPTION_CHANGED;
-            aEvent.OldValue <<= sOldDesc;
-            aEvent.NewValue <<= sNewDesc;
+    if( sNewDesc != sOldDesc )
+    {
+        // The text is changed
+        AccessibleEventObject aEvent;
+        aEvent.EventId = AccessibleEventId::DESCRIPTION_CHANGED;
+        aEvent.OldValue <<= sOldDesc;
+        aEvent.NewValue <<= sNewDesc;
 
-            FireAccessibleEvent( aEvent );
-        }
+        FireAccessibleEvent( aEvent );
     }
 }
 

@@ -328,26 +328,26 @@ void SwNodeNum::UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum )
         UnregisterMeAndChildrenDueToRootDelete( *pChildNode );
     }
 
-    if ( !bIsPhantom )
-    {
-        SwTextNode* pTextNode( rNodeNum.GetTextNode() );
-        if ( pTextNode )
-        {
-            pTextNode->RemoveFromList();
-            // --> clear all list attributes and the list style
-            std::set<sal_uInt16> aResetAttrsArray;
-            aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_LIST_ID );
-            aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_LIST_LEVEL );
-            aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_LIST_ISRESTART );
-            aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_LIST_RESTARTVALUE );
-            aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_LIST_ISCOUNTED );
-            aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_NUMRULE );
-            SwPaM aPam( *pTextNode );
-            pTextNode->GetDoc()->ResetAttrs( aPam, false,
-                                            aResetAttrsArray,
-                                            false );
-        }
-    }
+    if ( bIsPhantom )
+        return;
+
+    SwTextNode* pTextNode( rNodeNum.GetTextNode() );
+    if ( !pTextNode )
+        return;
+
+    pTextNode->RemoveFromList();
+    // --> clear all list attributes and the list style
+    std::set<sal_uInt16> aResetAttrsArray;
+    aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_LIST_ID );
+    aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_LIST_LEVEL );
+    aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_LIST_ISRESTART );
+    aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_LIST_RESTARTVALUE );
+    aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_LIST_ISCOUNTED );
+    aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_NUMRULE );
+    SwPaM aPam( *pTextNode );
+    pTextNode->GetDoc()->ResetAttrs( aPam, false,
+                                    aResetAttrsArray,
+                                    false );
 }
 
 // #i81002#
