@@ -289,19 +289,19 @@ static void SetLineEndAttr( SfxItemSet& rSet, WW8_DP_LINEEND const & rLe,
     }
 
     sal_uInt16 aEB = SVBT16ToUInt16( rLe.aEndBits );
-    if( aEB & 0x3 ){
-        ::basegfx::B2DPolygon aPolygon;
-        aPolygon.append(::basegfx::B2DPoint(0.0, 330.0));
-        aPolygon.append(::basegfx::B2DPoint(100.0, 0.0));
-        aPolygon.append(::basegfx::B2DPoint(200.0, 330.0));
-        aPolygon.setClosed(true);
-        rSet.Put( XLineStartItem( OUString(), ::basegfx::B2DPolyPolygon(aPolygon) ) );
-        sal_uInt16 nSiz = SVBT16ToUInt16( rLt.lnpw )
-                        * ( ( aEB >> 2 & 0x3 ) + ( aEB >> 4 & 0x3 ) );
-        if( nSiz < 220 ) nSiz = 220;
-        rSet.Put(XLineStartWidthItem(nSiz));
-        rSet.Put(XLineStartCenterItem(false));
-    }
+    if( !(aEB & 0x3) )        return;
+
+    ::basegfx::B2DPolygon aPolygon;
+    aPolygon.append(::basegfx::B2DPoint(0.0, 330.0));
+    aPolygon.append(::basegfx::B2DPoint(100.0, 0.0));
+    aPolygon.append(::basegfx::B2DPoint(200.0, 330.0));
+    aPolygon.setClosed(true);
+    rSet.Put( XLineStartItem( OUString(), ::basegfx::B2DPolyPolygon(aPolygon) ) );
+    sal_uInt16 nSiz = SVBT16ToUInt16( rLt.lnpw )
+                    * ( ( aEB >> 2 & 0x3 ) + ( aEB >> 4 & 0x3 ) );
+    if( nSiz < 220 ) nSiz = 220;
+    rSet.Put(XLineStartWidthItem(nSiz));
+    rSet.Put(XLineStartCenterItem(false));
 }
 
 // start of routines for the different objects
@@ -494,28 +494,28 @@ static ESelection GetESelection(EditEngine const &rDrawEditEngine, long nCpStart
 void SwWW8ImplReader::InsertTxbxStyAttrs( SfxItemSet& rS, sal_uInt16 nColl )
 {
     SwWW8StyInf * pStyInf = GetStyle(nColl);
-    if( pStyInf != nullptr && pStyInf->m_pFormat && pStyInf->m_bColl )
+    if( !(pStyInf != nullptr && pStyInf->m_pFormat && pStyInf->m_bColl) )
+        return;
+
+    const SfxPoolItem* pItem;
+    for( sal_uInt16 i = POOLATTR_BEGIN; i < POOLATTR_END; i++ )
     {
-        const SfxPoolItem* pItem;
-        for( sal_uInt16 i = POOLATTR_BEGIN; i < POOLATTR_END; i++ )
+        // If we are set in the source and not set in the destination
+        // then add it in.
+        if ( SfxItemState::SET == pStyInf->m_pFormat->GetItemState(
+            i, true, &pItem ) )
         {
-            // If we are set in the source and not set in the destination
-            // then add it in.
-            if ( SfxItemState::SET == pStyInf->m_pFormat->GetItemState(
-                i, true, &pItem ) )
+            SfxItemPool *pEditPool = rS.GetPool();
+            sal_uInt16 nWhich = i;
+            sal_uInt16 nSlotId = m_rDoc.GetAttrPool().GetSlotId(nWhich);
+            if (
+                nSlotId && nWhich != nSlotId &&
+                0 != (nWhich = pEditPool->GetWhich(nSlotId)) &&
+                nWhich != nSlotId &&
+                ( SfxItemState::SET != rS.GetItemState(nWhich, false) )
+               )
             {
-                SfxItemPool *pEditPool = rS.GetPool();
-                sal_uInt16 nWhich = i;
-                sal_uInt16 nSlotId = m_rDoc.GetAttrPool().GetSlotId(nWhich);
-                if (
-                    nSlotId && nWhich != nSlotId &&
-                    0 != (nWhich = pEditPool->GetWhich(nSlotId)) &&
-                    nWhich != nSlotId &&
-                    ( SfxItemState::SET != rS.GetItemState(nWhich, false) )
-                   )
-                {
-                    rS.Put( pItem->CloneSetWhich(nWhich) );
-                }
+                rS.Put( pItem->CloneSetWhich(nWhich) );
             }
         }
     }
@@ -2100,98 +2100,98 @@ SwWW8ImplReader::SetAttributesAtGrfNode(SvxMSDffImportRec const*const pRecord,
     const SwNodeIndex* pIdx = pFlyFormat->GetContent(false).GetContentIdx();
     SwGrfNode *const pGrfNd(
         pIdx ? m_rDoc.GetNodes()[pIdx->GetIndex() + 1]->GetGrfNode() : nullptr);
-    if (pGrfNd)
+    if (!pGrfNd)
+        return;
+
+    Size aSz(pGrfNd->GetTwipSize());
+    // use type <sal_uInt64> instead of sal_uLong to get correct results
+    // in the following calculations.
+    sal_uInt64 nHeight = aSz.Height();
+    sal_uInt64 nWidth  = aSz.Width();
+    if (!nWidth && pF)
+        nWidth = o3tl::saturating_sub(pF->nXaRight, pF->nXaLeft);
+    else if (!nHeight && pF)
+        nHeight = o3tl::saturating_sub(pF->nYaBottom, pF->nYaTop);
+
+    if( pRecord->nCropFromTop || pRecord->nCropFromBottom ||
+        pRecord->nCropFromLeft || pRecord->nCropFromRight )
     {
-        Size aSz(pGrfNd->GetTwipSize());
-        // use type <sal_uInt64> instead of sal_uLong to get correct results
-        // in the following calculations.
-        sal_uInt64 nHeight = aSz.Height();
-        sal_uInt64 nWidth  = aSz.Width();
-        if (!nWidth && pF)
-            nWidth = o3tl::saturating_sub(pF->nXaRight, pF->nXaLeft);
-        else if (!nHeight && pF)
-            nHeight = o3tl::saturating_sub(pF->nYaBottom, pF->nYaTop);
-
-        if( pRecord->nCropFromTop || pRecord->nCropFromBottom ||
-            pRecord->nCropFromLeft || pRecord->nCropFromRight )
+        SwCropGrf aCrop;            // Cropping is stored in 'fixed floats'
+                                    // 16.16 (fraction times total
+        if( pRecord->nCropFromTop ) //        image width or height resp.)
         {
-            SwCropGrf aCrop;            // Cropping is stored in 'fixed floats'
-                                        // 16.16 (fraction times total
-            if( pRecord->nCropFromTop ) //        image width or height resp.)
-            {
-                aCrop.SetTop(lcl_ConvertCrop(pRecord->nCropFromTop, nHeight));
-            }
-            if( pRecord->nCropFromBottom )
-            {
-                aCrop.SetBottom(lcl_ConvertCrop(pRecord->nCropFromBottom, nHeight));
-            }
-            if( pRecord->nCropFromLeft )
-            {
-                aCrop.SetLeft(lcl_ConvertCrop(pRecord->nCropFromLeft, nWidth));
-            }
-            if( pRecord->nCropFromRight )
-            {
-                aCrop.SetRight(lcl_ConvertCrop(pRecord->nCropFromRight, nWidth));
-            }
-
-            pGrfNd->SetAttr( aCrop );
+            aCrop.SetTop(lcl_ConvertCrop(pRecord->nCropFromTop, nHeight));
+        }
+        if( pRecord->nCropFromBottom )
+        {
+            aCrop.SetBottom(lcl_ConvertCrop(pRecord->nCropFromBottom, nHeight));
+        }
+        if( pRecord->nCropFromLeft )
+        {
+            aCrop.SetLeft(lcl_ConvertCrop(pRecord->nCropFromLeft, nWidth));
+        }
+        if( pRecord->nCropFromRight )
+        {
+            aCrop.SetRight(lcl_ConvertCrop(pRecord->nCropFromRight, nWidth));
         }
 
-        bool bFlipH(pRecord->nFlags & ShapeFlag::FlipH);
-        bool bFlipV(pRecord->nFlags & ShapeFlag::FlipV);
-        if ( bFlipH || bFlipV )
+        pGrfNd->SetAttr( aCrop );
+    }
+
+    bool bFlipH(pRecord->nFlags & ShapeFlag::FlipH);
+    bool bFlipV(pRecord->nFlags & ShapeFlag::FlipV);
+    if ( bFlipH || bFlipV )
+    {
+        SwMirrorGrf aMirror = pGrfNd->GetSwAttrSet().GetMirrorGrf();
+        if( bFlipH )
         {
-            SwMirrorGrf aMirror = pGrfNd->GetSwAttrSet().GetMirrorGrf();
-            if( bFlipH )
-            {
-                if( bFlipV )
-                    aMirror.SetValue(MirrorGraph::Both);
-                else
-                    aMirror.SetValue(MirrorGraph::Vertical);
-            }
+            if( bFlipV )
+                aMirror.SetValue(MirrorGraph::Both);
             else
-                aMirror.SetValue(MirrorGraph::Horizontal);
-
-            pGrfNd->SetAttr( aMirror );
+                aMirror.SetValue(MirrorGraph::Vertical);
         }
+        else
+            aMirror.SetValue(MirrorGraph::Horizontal);
 
-        if (pRecord->pObj)
-        {
-            const SfxItemSet& rOldSet = pRecord->pObj->GetMergedItemSet();
-            // contrast
-            if (WW8ITEMVALUE(rOldSet, SDRATTR_GRAFCONTRAST,
-                SdrGrafContrastItem))
-            {
-                SwContrastGrf aContrast(
-                    WW8ITEMVALUE(rOldSet,
-                    SDRATTR_GRAFCONTRAST, SdrGrafContrastItem));
-                pGrfNd->SetAttr( aContrast );
-            }
+        pGrfNd->SetAttr( aMirror );
+    }
 
-            // luminance
-            if (WW8ITEMVALUE(rOldSet, SDRATTR_GRAFLUMINANCE,
-                SdrGrafLuminanceItem))
-            {
-                SwLuminanceGrf aLuminance(WW8ITEMVALUE(rOldSet,
-                    SDRATTR_GRAFLUMINANCE, SdrGrafLuminanceItem));
-                pGrfNd->SetAttr( aLuminance );
-            }
-            // gamma
-            if (WW8ITEMVALUE(rOldSet, SDRATTR_GRAFGAMMA, SdrGrafGamma100Item))
-            {
-                double fVal = WW8ITEMVALUE(rOldSet, SDRATTR_GRAFGAMMA,
-                    SdrGrafGamma100Item);
-                pGrfNd->SetAttr(SwGammaGrf(fVal/100.));
-            }
+    if (!pRecord->pObj)
+        return;
 
-            // drawmode
-            auto nGrafMode = rOldSet.GetItem<SdrGrafModeItem>(SDRATTR_GRAFMODE)->GetValue();
-            if ( nGrafMode != GraphicDrawMode::Standard)
-            {
-                SwDrawModeGrf aDrawMode( nGrafMode );
-                pGrfNd->SetAttr( aDrawMode );
-            }
-        }
+    const SfxItemSet& rOldSet = pRecord->pObj->GetMergedItemSet();
+    // contrast
+    if (WW8ITEMVALUE(rOldSet, SDRATTR_GRAFCONTRAST,
+        SdrGrafContrastItem))
+    {
+        SwContrastGrf aContrast(
+            WW8ITEMVALUE(rOldSet,
+            SDRATTR_GRAFCONTRAST, SdrGrafContrastItem));
+        pGrfNd->SetAttr( aContrast );
+    }
+
+    // luminance
+    if (WW8ITEMVALUE(rOldSet, SDRATTR_GRAFLUMINANCE,
+        SdrGrafLuminanceItem))
+    {
+        SwLuminanceGrf aLuminance(WW8ITEMVALUE(rOldSet,
+            SDRATTR_GRAFLUMINANCE, SdrGrafLuminanceItem));
+        pGrfNd->SetAttr( aLuminance );
+    }
+    // gamma
+    if (WW8ITEMVALUE(rOldSet, SDRATTR_GRAFGAMMA, SdrGrafGamma100Item))
+    {
+        double fVal = WW8ITEMVALUE(rOldSet, SDRATTR_GRAFGAMMA,
+            SdrGrafGamma100Item);
+        pGrfNd->SetAttr(SwGammaGrf(fVal/100.));
+    }
+
+    // drawmode
+    auto nGrafMode = rOldSet.GetItem<SdrGrafModeItem>(SDRATTR_GRAFMODE)->GetValue();
+    if ( nGrafMode != GraphicDrawMode::Standard)
+    {
+        SwDrawModeGrf aDrawMode( nGrafMode );
+        pGrfNd->SetAttr( aDrawMode );
     }
 }
 
@@ -3171,24 +3171,24 @@ SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObj
 
 void SwWW8ImplReader::GrafikCtor()  // For SVDraw and VCControls and Escher
 {
-    if (!m_pDrawModel)
-    {
-        m_rDoc.getIDocumentDrawModelAccess().GetOrCreateDrawModel(); // #i52858# - method name changed
-        m_pDrawModel  = m_rDoc.getIDocumentDrawModelAccess().GetDrawModel();
-        OSL_ENSURE(m_pDrawModel, "Cannot create DrawModel");
-        m_pDrawPg = m_pDrawModel->GetPage(0);
+    if (m_pDrawModel)
+        return;
 
-        m_xMSDffManager.reset(new SwMSDffManager(*this, m_bSkipImages));
-        m_xMSDffManager->SetModel(m_pDrawModel, 1440);
-        /*
-         Now the dff manager always needs a controls converter as well, but a
-         control converter may still exist without a dffmanager.
-        */
-        m_xFormImpl.reset(new SwMSConvertControls(m_pDocShell, m_pPaM));
+    m_rDoc.getIDocumentDrawModelAccess().GetOrCreateDrawModel(); // #i52858# - method name changed
+    m_pDrawModel  = m_rDoc.getIDocumentDrawModelAccess().GetDrawModel();
+    OSL_ENSURE(m_pDrawModel, "Cannot create DrawModel");
+    m_pDrawPg = m_pDrawModel->GetPage(0);
 
-        m_xWWZOrder.reset(new wwZOrderer(sw::util::SetLayer(m_rDoc), m_pDrawPg,
-            m_xMSDffManager->GetShapeOrders()));
-    }
+    m_xMSDffManager.reset(new SwMSDffManager(*this, m_bSkipImages));
+    m_xMSDffManager->SetModel(m_pDrawModel, 1440);
+    /*
+     Now the dff manager always needs a controls converter as well, but a
+     control converter may still exist without a dffmanager.
+    */
+    m_xFormImpl.reset(new SwMSConvertControls(m_pDocShell, m_pPaM));
+
+    m_xWWZOrder.reset(new wwZOrderer(sw::util::SetLayer(m_rDoc), m_pDrawPg,
+        m_xMSDffManager->GetShapeOrders()));
 }
 
 void SwWW8ImplReader::GrafikDtor()

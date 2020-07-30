@@ -1288,42 +1288,43 @@ void WW8_WrFkp::Write( SvStream& rStrm, SwWW8WrGrf& rGrf )
 void WW8_WrFkp::MergeToNew( short& rVarLen, sal_uInt8 *& rpNewSprms )
 {
     sal_uInt8 nStart = pOfs[ (nIMax-1) * nItemSize ];
-    if( nStart )
-    {   // has Sprms
-        sal_uInt8* p = pFkp + ( static_cast<sal_uInt16>(nStart) << 1 );
+    if( !nStart )
+        return;
 
-        // old and new equal? Then copy only one into the new sprms
-        if( nOldVarLen == rVarLen && !memcmp( p+1, rpNewSprms, nOldVarLen ))
-        {
-            sal_uInt8* pNew = new sal_uInt8[ nOldVarLen ];
-            memcpy( pNew, p+1, nOldVarLen );
-            rpNewSprms = pNew;
-        }
-        else
-        {
-            sal_uInt8* pNew = new sal_uInt8[ nOldVarLen + rVarLen ];
-            memcpy( pNew, p+1, nOldVarLen );
-            memcpy( pNew + nOldVarLen, rpNewSprms, rVarLen );
+// has Sprms
+    sal_uInt8* p = pFkp + ( static_cast<sal_uInt16>(nStart) << 1 );
 
-            rpNewSprms = pNew;
-            rVarLen = rVarLen + nOldVarLen;
-        }
-        --nIMax;
-        // if this Sprms don't used from others, remove it
-        bool bFnd = false;
-        for (sal_uInt16 n = 0; n < nIMax; ++n)
+    // old and new equal? Then copy only one into the new sprms
+    if( nOldVarLen == rVarLen && !memcmp( p+1, rpNewSprms, nOldVarLen ))
+    {
+        sal_uInt8* pNew = new sal_uInt8[ nOldVarLen ];
+        memcpy( pNew, p+1, nOldVarLen );
+        rpNewSprms = pNew;
+    }
+    else
+    {
+        sal_uInt8* pNew = new sal_uInt8[ nOldVarLen + rVarLen ];
+        memcpy( pNew, p+1, nOldVarLen );
+        memcpy( pNew + nOldVarLen, rpNewSprms, rVarLen );
+
+        rpNewSprms = pNew;
+        rVarLen = rVarLen + nOldVarLen;
+    }
+    --nIMax;
+    // if this Sprms don't used from others, remove it
+    bool bFnd = false;
+    for (sal_uInt16 n = 0; n < nIMax; ++n)
+    {
+        if (nStart == pOfs[n * nItemSize])
         {
-            if (nStart == pOfs[n * nItemSize])
-            {
-                bFnd = true;
-                break;
-            }
+            bFnd = true;
+            break;
         }
-        if (!bFnd)
-        {
-            nStartGrp = nOldStartGrp;
-            memset( p, 0, nOldVarLen+1 );
-        }
+    }
+    if (!bFnd)
+    {
+        nStartGrp = nOldStartGrp;
+        memset( p, 0, nOldVarLen+1 );
     }
 }
 
@@ -1438,40 +1439,40 @@ void WW8Export::AppendBookmarks( const SwTextNode& rNd, sal_Int32 nCurrentPos, s
     std::vector< const ::sw::mark::IMark* > aArr;
     sal_uInt16 nContent;
     const sal_Int32 nCurrentEnd = nCurrentPos + nLen;
-    if( GetWriter().GetBookmarks( rNd, nCurrentPos, nCurrentEnd, aArr ))
+    if( !GetWriter().GetBookmarks( rNd, nCurrentPos, nCurrentEnd, aArr ))
+        return;
+
+    sal_uLong nNd = rNd.GetIndex(), nSttCP = Fc2Cp( Strm().Tell() );
+    for(const ::sw::mark::IMark* p : aArr)
     {
-        sal_uLong nNd = rNd.GetIndex(), nSttCP = Fc2Cp( Strm().Tell() );
-        for(const ::sw::mark::IMark* p : aArr)
+        const ::sw::mark::IMark& rBkmk = *p;
+        if(dynamic_cast< const ::sw::mark::IFieldmark *>(&rBkmk))
+            continue;
+
+        const SwPosition* pPos = &rBkmk.GetMarkPos();
+        const SwPosition* pOPos = nullptr;
+        if(rBkmk.IsExpanded())
+            pOPos = &rBkmk.GetOtherMarkPos();
+        if( pOPos && pOPos->nNode == pPos->nNode &&
+            pOPos->nContent < pPos->nContent )
         {
-            const ::sw::mark::IMark& rBkmk = *p;
-            if(dynamic_cast< const ::sw::mark::IFieldmark *>(&rBkmk))
-                continue;
+            pPos = pOPos;
+            pOPos = &rBkmk.GetMarkPos();
+        }
 
-            const SwPosition* pPos = &rBkmk.GetMarkPos();
-            const SwPosition* pOPos = nullptr;
-            if(rBkmk.IsExpanded())
-                pOPos = &rBkmk.GetOtherMarkPos();
-            if( pOPos && pOPos->nNode == pPos->nNode &&
-                pOPos->nContent < pPos->nContent )
-            {
-                pPos = pOPos;
-                pOPos = &rBkmk.GetMarkPos();
-            }
-
-            if( !pOPos || ( nNd == pPos->nNode.GetIndex() &&
-                ( nContent = pPos->nContent.GetIndex() ) >= nCurrentPos &&
-                nContent < nCurrentEnd ) )
-            {
-                sal_uLong nCp = nSttCP + pPos->nContent.GetIndex() - nCurrentPos;
-                m_pBkmks->Append(nCp, BookmarkToWord(rBkmk.GetName()));
-            }
-            if( pOPos && nNd == pOPos->nNode.GetIndex() &&
-                ( nContent = pOPos->nContent.GetIndex() ) >= nCurrentPos &&
-                nContent < nCurrentEnd )
-            {
-                sal_uLong nCp = nSttCP + pOPos->nContent.GetIndex() - nCurrentPos;
-                m_pBkmks->Append(nCp, BookmarkToWord(rBkmk.GetName()));
-            }
+        if( !pOPos || ( nNd == pPos->nNode.GetIndex() &&
+            ( nContent = pPos->nContent.GetIndex() ) >= nCurrentPos &&
+            nContent < nCurrentEnd ) )
+        {
+            sal_uLong nCp = nSttCP + pPos->nContent.GetIndex() - nCurrentPos;
+            m_pBkmks->Append(nCp, BookmarkToWord(rBkmk.GetName()));
+        }
+        if( pOPos && nNd == pOPos->nNode.GetIndex() &&
+            ( nContent = pOPos->nContent.GetIndex() ) >= nCurrentPos &&
+            nContent < nCurrentEnd )
+        {
+            sal_uLong nCp = nSttCP + pOPos->nContent.GetIndex() - nCurrentPos;
+            m_pBkmks->Append(nCp, BookmarkToWord(rBkmk.GetName()));
         }
     }
 }
@@ -1688,22 +1689,22 @@ void WW8Export::WriteAsStringTable(const std::vector<OUString>& rStrings,
     sal_Int32& rfcSttbf, sal_Int32& rlcbSttbf)
 {
     sal_uInt16 n, nCount = static_cast< sal_uInt16 >(rStrings.size());
-    if( nCount )
+    if( !nCount )
+        return;
+
+    // we have some Redlines found in the document -> the
+    // Author Name Stringtable
+    SvStream& rStrm = *pTableStrm;
+    rfcSttbf = rStrm.Tell();
+    SwWW8Writer::WriteShort( rStrm, -1 );
+    SwWW8Writer::WriteLong( rStrm, nCount );
+    for( n = 0; n < nCount; ++n )
     {
-        // we have some Redlines found in the document -> the
-        // Author Name Stringtable
-        SvStream& rStrm = *pTableStrm;
-        rfcSttbf = rStrm.Tell();
-        SwWW8Writer::WriteShort( rStrm, -1 );
-        SwWW8Writer::WriteLong( rStrm, nCount );
-        for( n = 0; n < nCount; ++n )
-        {
-            const OUString& rNm = rStrings[n];
-            SwWW8Writer::WriteShort( rStrm, rNm.getLength() );
-            SwWW8Writer::WriteString16(rStrm, rNm, false);
-        }
-        rlcbSttbf = rStrm.Tell() - rfcSttbf;
+        const OUString& rNm = rStrings[n];
+        SwWW8Writer::WriteShort( rStrm, rNm.getLength() );
+        SwWW8Writer::WriteString16(rStrm, rNm, false);
     }
+    rlcbSttbf = rStrm.Tell() - rfcSttbf;
 }
 
 // WriteShort() sets at FilePos nPos the value nVal and seeks to the old
@@ -2002,19 +2003,19 @@ void WW8AttributeOutput::TableInfoCell( ww8::WW8TableNodeInfoInner::Pointer_t pT
 {
     sal_uInt32 nDepth = pTableTextNodeInfoInner->getDepth();
 
-    if ( nDepth > 0 )
-    {
-        /* Cell */
-        m_rWW8Export.InsUInt16( NS_sprm::PFInTable::val );
-        m_rWW8Export.pO->push_back( sal_uInt8(0x1) );
-        m_rWW8Export.InsUInt16( NS_sprm::PItap::val );
-        m_rWW8Export.InsUInt32( nDepth );
+    if ( nDepth <= 0 )
+        return;
 
-        if ( nDepth > 1 && pTableTextNodeInfoInner->isEndOfCell() )
-        {
-            m_rWW8Export.InsUInt16( NS_sprm::PFInnerTableCell::val );
-            m_rWW8Export.pO->push_back( sal_uInt8(0x1) );
-        }
+    /* Cell */
+    m_rWW8Export.InsUInt16( NS_sprm::PFInTable::val );
+    m_rWW8Export.pO->push_back( sal_uInt8(0x1) );
+    m_rWW8Export.InsUInt16( NS_sprm::PItap::val );
+    m_rWW8Export.InsUInt32( nDepth );
+
+    if ( nDepth > 1 && pTableTextNodeInfoInner->isEndOfCell() )
+    {
+        m_rWW8Export.InsUInt16( NS_sprm::PFInnerTableCell::val );
+        m_rWW8Export.pO->push_back( sal_uInt8(0x1) );
     }
 }
 
@@ -2022,47 +2023,47 @@ void WW8AttributeOutput::TableInfoRow( ww8::WW8TableNodeInfoInner::Pointer_t pTa
 {
     sal_uInt32 nDepth = pTableTextNodeInfoInner->getDepth();
 
-    if ( nDepth > 0 )
+    if ( nDepth <= 0 )
+        return;
+
+    /* Row */
+    if ( !pTableTextNodeInfoInner->isEndOfLine() )
+        return;
+
+    m_rWW8Export.InsUInt16( NS_sprm::PFInTable::val );
+    m_rWW8Export.pO->push_back( sal_uInt8(0x1) );
+
+    if ( nDepth == 1 )
     {
-        /* Row */
-        if ( pTableTextNodeInfoInner->isEndOfLine() )
-        {
-            m_rWW8Export.InsUInt16( NS_sprm::PFInTable::val );
-            m_rWW8Export.pO->push_back( sal_uInt8(0x1) );
-
-            if ( nDepth == 1 )
-            {
-                m_rWW8Export.InsUInt16( NS_sprm::PFTtp::val );
-                m_rWW8Export.pO->push_back( sal_uInt8(0x1) );
-            }
-
-            m_rWW8Export.InsUInt16( NS_sprm::PItap::val );
-            m_rWW8Export.InsUInt32( nDepth );
-
-            if ( nDepth > 1 )
-            {
-                m_rWW8Export.InsUInt16( NS_sprm::PFInnerTableCell::val );
-                m_rWW8Export.pO->push_back( sal_uInt8(0x1) );
-                m_rWW8Export.InsUInt16( NS_sprm::PFInnerTtp::val );
-                m_rWW8Export.pO->push_back( sal_uInt8(0x1) );
-            }
-
-            // Most of these are per-row definitions, not per-table.
-            // WW8 has no explicit table start/end markup,
-            // simply rows with the same table properties that are grouped together as a table.
-            TableBidi( pTableTextNodeInfoInner );
-            TableOrientation( pTableTextNodeInfoInner );
-            TableSpacing( pTableTextNodeInfoInner );
-            TableDefinition( pTableTextNodeInfoInner );     //per row definitions
-            TableHeight( pTableTextNodeInfoInner );         //per row definitions
-            TableBackgrounds( pTableTextNodeInfoInner );    //per row definitions
-            // Since this isEndOfLine, cell margin defaults for each row come from last column.
-            TableDefaultBorders( pTableTextNodeInfoInner ); //per row definitions
-            TableCanSplit( pTableTextNodeInfoInner );       //per row definitions
-            TableVerticalCell( pTableTextNodeInfoInner );   //per row definitions
-            TableCellBorders( pTableTextNodeInfoInner );    //per row definitions
-        }
+        m_rWW8Export.InsUInt16( NS_sprm::PFTtp::val );
+        m_rWW8Export.pO->push_back( sal_uInt8(0x1) );
     }
+
+    m_rWW8Export.InsUInt16( NS_sprm::PItap::val );
+    m_rWW8Export.InsUInt32( nDepth );
+
+    if ( nDepth > 1 )
+    {
+        m_rWW8Export.InsUInt16( NS_sprm::PFInnerTableCell::val );
+        m_rWW8Export.pO->push_back( sal_uInt8(0x1) );
+        m_rWW8Export.InsUInt16( NS_sprm::PFInnerTtp::val );
+        m_rWW8Export.pO->push_back( sal_uInt8(0x1) );
+    }
+
+    // Most of these are per-row definitions, not per-table.
+    // WW8 has no explicit table start/end markup,
+    // simply rows with the same table properties that are grouped together as a table.
+    TableBidi( pTableTextNodeInfoInner );
+    TableOrientation( pTableTextNodeInfoInner );
+    TableSpacing( pTableTextNodeInfoInner );
+    TableDefinition( pTableTextNodeInfoInner );     //per row definitions
+    TableHeight( pTableTextNodeInfoInner );         //per row definitions
+    TableBackgrounds( pTableTextNodeInfoInner );    //per row definitions
+    // Since this isEndOfLine, cell margin defaults for each row come from last column.
+    TableDefaultBorders( pTableTextNodeInfoInner ); //per row definitions
+    TableCanSplit( pTableTextNodeInfoInner );       //per row definitions
+    TableVerticalCell( pTableTextNodeInfoInner );   //per row definitions
+    TableCellBorders( pTableTextNodeInfoInner );    //per row definitions
 }
 
 static sal_uInt16 lcl_TCFlags(SwDoc &rDoc, const SwTableBox * pBox, sal_Int32 nRowSpan)
@@ -2234,50 +2235,50 @@ void WW8AttributeOutput::TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t
     const SwFormatVertOrient &rVert = pFormat->GetVertOrient();
 
     if (
-        (text::RelOrientation::PRINT_AREA == rHori.GetRelationOrient() ||
+        !((text::RelOrientation::PRINT_AREA == rHori.GetRelationOrient() ||
          text::RelOrientation::FRAME == rHori.GetRelationOrient())
         &&
         (text::RelOrientation::PRINT_AREA == rVert.GetRelationOrient() ||
-         text::RelOrientation::FRAME == rVert.GetRelationOrient())
+         text::RelOrientation::FRAME == rVert.GetRelationOrient()))
         )
+        return;
+
+    const bool bIsRTL = m_rWW8Export.TrueFrameDirection(*pFormat) == SvxFrameDirection::Horizontal_RL_TB;
+    sal_Int16 eHOri = rHori.GetHoriOrient();
+    switch (eHOri)
     {
-        const bool bIsRTL = m_rWW8Export.TrueFrameDirection(*pFormat) == SvxFrameDirection::Horizontal_RL_TB;
-        sal_Int16 eHOri = rHori.GetHoriOrient();
-        switch (eHOri)
-        {
-            case text::HoriOrientation::CENTER:
-                m_rWW8Export.InsUInt16( NS_sprm::TJc::val ); //logical orientation required for MSO
-                m_rWW8Export.InsUInt16( 1 );
-                m_rWW8Export.InsUInt16( NS_sprm::TJc90::val ); //physical orientation required for LO
-                m_rWW8Export.InsUInt16( 1 );
-                break;
-            case text::HoriOrientation::RIGHT:
+        case text::HoriOrientation::CENTER:
+            m_rWW8Export.InsUInt16( NS_sprm::TJc::val ); //logical orientation required for MSO
+            m_rWW8Export.InsUInt16( 1 );
+            m_rWW8Export.InsUInt16( NS_sprm::TJc90::val ); //physical orientation required for LO
+            m_rWW8Export.InsUInt16( 1 );
+            break;
+        case text::HoriOrientation::RIGHT:
+            m_rWW8Export.InsUInt16( NS_sprm::TJc90::val ); //required for LO
+            m_rWW8Export.InsUInt16( 2 );
+            if ( !bIsRTL )
+            {
+                m_rWW8Export.InsUInt16( NS_sprm::TJc::val ); //required for MSO
+                m_rWW8Export.InsUInt16( 2 );
+            }
+            break;
+        case text::HoriOrientation::LEFT:
+            if ( bIsRTL )
+            {
+                m_rWW8Export.InsUInt16( NS_sprm::TJc::val ); //required for MSO
+                m_rWW8Export.InsUInt16( 2 );
+            }
+            break;
+        case text::HoriOrientation::LEFT_AND_WIDTH:
+            // Width can only be specified for the LOGICAL left, so in RTL, that is always PHYSICAL right
+            if ( bIsRTL )
+            {
                 m_rWW8Export.InsUInt16( NS_sprm::TJc90::val ); //required for LO
                 m_rWW8Export.InsUInt16( 2 );
-                if ( !bIsRTL )
-                {
-                    m_rWW8Export.InsUInt16( NS_sprm::TJc::val ); //required for MSO
-                    m_rWW8Export.InsUInt16( 2 );
-                }
-                break;
-            case text::HoriOrientation::LEFT:
-                if ( bIsRTL )
-                {
-                    m_rWW8Export.InsUInt16( NS_sprm::TJc::val ); //required for MSO
-                    m_rWW8Export.InsUInt16( 2 );
-                }
-                break;
-            case text::HoriOrientation::LEFT_AND_WIDTH:
-                // Width can only be specified for the LOGICAL left, so in RTL, that is always PHYSICAL right
-                if ( bIsRTL )
-                {
-                    m_rWW8Export.InsUInt16( NS_sprm::TJc90::val ); //required for LO
-                    m_rWW8Export.InsUInt16( 2 );
-                }
-                break;
-            default:
-                break;
-        }
+            }
+            break;
+        default:
+            break;
     }
 }
 
@@ -2289,33 +2290,33 @@ void WW8AttributeOutput::TableSpacing(ww8::WW8TableNodeInfoInner::Pointer_t pTab
 
     // Writing these SPRM's will make the table a floating one, so only write
     // them in case the table is already inside a frame.
-    if (pTableFormat != nullptr && pTable->GetTableNode()->GetFlyFormat())
+    if (!(pTableFormat != nullptr && pTable->GetTableNode()->GetFlyFormat()))
+        return;
+
+    const SvxULSpaceItem & rUL = pTableFormat->GetULSpace();
+
+    if (rUL.GetUpper() > 0)
     {
-        const SvxULSpaceItem & rUL = pTableFormat->GetULSpace();
+        sal_uInt8 const nPadding = 2;
+        sal_uInt8 const nPcVert = 0;
+        sal_uInt8 const nPcHorz = 0;
 
-        if (rUL.GetUpper() > 0)
-        {
-            sal_uInt8 const nPadding = 2;
-            sal_uInt8 const nPcVert = 0;
-            sal_uInt8 const nPcHorz = 0;
+        sal_uInt8 const nTPc = (nPadding << 4) | (nPcVert << 2) | nPcHorz;
 
-            sal_uInt8 const nTPc = (nPadding << 4) | (nPcVert << 2) | nPcHorz;
+        m_rWW8Export.InsUInt16(NS_sprm::TPc::val);
+        m_rWW8Export.pO->push_back( nTPc );
 
-            m_rWW8Export.InsUInt16(NS_sprm::TPc::val);
-            m_rWW8Export.pO->push_back( nTPc );
+        m_rWW8Export.InsUInt16(NS_sprm::TDyaAbs::val);
+        m_rWW8Export.InsUInt16(rUL.GetUpper());
 
-            m_rWW8Export.InsUInt16(NS_sprm::TDyaAbs::val);
-            m_rWW8Export.InsUInt16(rUL.GetUpper());
+        m_rWW8Export.InsUInt16(NS_sprm::TDyaFromText::val);
+        m_rWW8Export.InsUInt16(rUL.GetUpper());
+    }
 
-            m_rWW8Export.InsUInt16(NS_sprm::TDyaFromText::val);
-            m_rWW8Export.InsUInt16(rUL.GetUpper());
-        }
-
-        if (rUL.GetLower() > 0)
-        {
-            m_rWW8Export.InsUInt16(NS_sprm::TDyaFromTextBottom::val);
-            m_rWW8Export.InsUInt16(rUL.GetLower());
-        }
+    if (rUL.GetLower() > 0)
+    {
+        m_rWW8Export.InsUInt16(NS_sprm::TDyaFromTextBottom::val);
+        m_rWW8Export.InsUInt16(rUL.GetLower());
     }
 }
 
@@ -3675,27 +3676,27 @@ void WW8Export::PrepareStorage()
     SwDocShell* pDocShell = m_pDoc->GetDocShell ();
     OSL_ENSURE(pDocShell, "no SwDocShell");
 
-    if (pDocShell) {
-        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-            pDocShell->GetModel(), uno::UNO_QUERY_THROW);
-        uno::Reference<document::XDocumentProperties> xDocProps(
-            xDPS->getDocumentProperties());
-        OSL_ENSURE(xDocProps.is(), "DocumentProperties is null");
+    if (!pDocShell)        return;
 
-        if (xDocProps.is())
-        {
-            if ( SvtFilterOptions::Get().IsEnableWordPreview() )
-            {
-                std::shared_ptr<GDIMetaFile> xMetaFile =
-                    pDocShell->GetPreviewMetaFile();
-                uno::Sequence<sal_Int8> metaFile(
-                    sfx2::convertMetaFile(xMetaFile.get()));
-                sfx2::SaveOlePropertySet(xDocProps, &GetWriter().GetStorage(), &metaFile);
-            }
-            else
-                sfx2::SaveOlePropertySet( xDocProps, &GetWriter().GetStorage() );
-        }
+    uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+        pDocShell->GetModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<document::XDocumentProperties> xDocProps(
+        xDPS->getDocumentProperties());
+    OSL_ENSURE(xDocProps.is(), "DocumentProperties is null");
+
+    if (!xDocProps.is())
+        return;
+
+    if ( SvtFilterOptions::Get().IsEnableWordPreview() )
+    {
+        std::shared_ptr<GDIMetaFile> xMetaFile =
+            pDocShell->GetPreviewMetaFile();
+        uno::Sequence<sal_Int8> metaFile(
+            sfx2::convertMetaFile(xMetaFile.get()));
+        sfx2::SaveOlePropertySet(xDocProps, &GetWriter().GetStorage(), &metaFile);
     }
+    else
+        sfx2::SaveOlePropertySet( xDocProps, &GetWriter().GetStorage() );
 }
 
 ErrCode SwWW8Writer::WriteStorage()

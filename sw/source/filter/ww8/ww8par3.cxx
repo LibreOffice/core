@@ -1664,21 +1664,21 @@ void UseListIndent(SwWW8StyInf &rStyle, const SwNumFormat &rFormat)
 
 void SetStyleIndent(SwWW8StyInf &rStyle, const SwNumFormat &rFormat)
 {
-    if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION ) // #i86652#
-    {
-        SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*rStyle.m_pFormat, RES_LR_SPACE));
-        if (rStyle.m_bListReleventIndentSet)
-        {
+    if ( rFormat.GetPositionAndSpaceMode() != SvxNumberFormat::LABEL_WIDTH_AND_POSITION ) // #i86652#
+        return;
 
-            SyncIndentWithList( aLR, rFormat, false, false ); // #i103711#, #i105414#
-        }
-        else
-        {
-            aLR.SetTextLeft(0);
-            aLR.SetTextFirstLineOffset(0);
-        }
-        rStyle.m_pFormat->SetFormatAttr(aLR);
+    SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*rStyle.m_pFormat, RES_LR_SPACE));
+    if (rStyle.m_bListReleventIndentSet)
+    {
+
+        SyncIndentWithList( aLR, rFormat, false, false ); // #i103711#, #i105414#
     }
+    else
+    {
+        aLR.SetTextLeft(0);
+        aLR.SetTextFirstLineOffset(0);
+    }
+    rStyle.m_pFormat->SetFormatAttr(aLR);
 }
 
 void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nCurrentLFO,
@@ -1688,29 +1688,29 @@ void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nCurrentLFO,
         return;
 
     SwWW8StyInf &rStyleInf = m_vColl[nStyle];
-    if (rStyleInf.m_bValid)
-    {
-        OSL_ENSURE(m_pCurrentColl, "Cannot be called outside of style import");
-        // Phase 1: Numbering attributes when reading a StyleDef
-        if( m_pCurrentColl )
-        {
-            // only save the Parameters for now. The actual List will be appended
-            // at a later point, when the Listdefinitions is read...
-            if (
-                 (USHRT_MAX > nCurrentLFO) &&
-                 (WW8ListManager::nMaxLevel > nCurrentLevel)
-               )
-            {
-                rStyleInf.m_nLFOIndex  = nCurrentLFO;
-                rStyleInf.m_nListLevel = nCurrentLevel;
+    if (!rStyleInf.m_bValid)
+        return;
 
-                std::vector<sal_uInt8> aParaSprms;
-                SwNumRule* pNmRule = m_xLstManager->GetNumRuleForActivation(
-                    nCurrentLFO, nCurrentLevel, aParaSprms);
-                if (pNmRule)
-                    UseListIndent(rStyleInf, pNmRule->Get(nCurrentLevel));
-            }
-        }
+    OSL_ENSURE(m_pCurrentColl, "Cannot be called outside of style import");
+    // Phase 1: Numbering attributes when reading a StyleDef
+    if( !m_pCurrentColl )
+        return;
+
+    // only save the Parameters for now. The actual List will be appended
+    // at a later point, when the Listdefinitions is read...
+    if (
+         (USHRT_MAX > nCurrentLFO) &&
+         (WW8ListManager::nMaxLevel > nCurrentLevel)
+       )
+    {
+        rStyleInf.m_nLFOIndex  = nCurrentLFO;
+        rStyleInf.m_nListLevel = nCurrentLevel;
+
+        std::vector<sal_uInt8> aParaSprms;
+        SwNumRule* pNmRule = m_xLstManager->GetNumRuleForActivation(
+            nCurrentLFO, nCurrentLevel, aParaSprms);
+        if (pNmRule)
+            UseListIndent(rStyleInf, pNmRule->Get(nCurrentLevel));
     }
 }
 
@@ -1721,43 +1721,43 @@ void SwWW8ImplReader::RegisterNumFormatOnStyle(sal_uInt16 nStyle)
         return;
 
     SwWW8StyInf &rStyleInf = m_vColl[nStyle];
-    if (rStyleInf.m_bValid && rStyleInf.m_pFormat)
+    if (!(rStyleInf.m_bValid && rStyleInf.m_pFormat))
+        return;
+
+    //Save old pre-list modified indent, which are the word indent values
+    rStyleInf.maWordLR.reset(ItemGet<SvxLRSpaceItem>(*rStyleInf.m_pFormat, RES_LR_SPACE).Clone());
+
+    // Phase 2: refresh StyleDef after reading all Lists
+    SwNumRule* pNmRule = nullptr;
+    const sal_uInt16 nLFO = rStyleInf.m_nLFOIndex;
+    const sal_uInt8  nLevel = rStyleInf.m_nListLevel;
+    if (
+         (USHRT_MAX > nLFO) &&
+         (WW8ListManager::nMaxLevel > nLevel)
+       )
     {
-        //Save old pre-list modified indent, which are the word indent values
-        rStyleInf.maWordLR.reset(ItemGet<SvxLRSpaceItem>(*rStyleInf.m_pFormat, RES_LR_SPACE).Clone());
+        std::vector<sal_uInt8> aParaSprms;
+        pNmRule = m_xLstManager->GetNumRuleForActivation(nLFO, nLevel,
+            aParaSprms);
 
-        // Phase 2: refresh StyleDef after reading all Lists
-        SwNumRule* pNmRule = nullptr;
-        const sal_uInt16 nLFO = rStyleInf.m_nLFOIndex;
-        const sal_uInt8  nLevel = rStyleInf.m_nListLevel;
-        if (
-             (USHRT_MAX > nLFO) &&
-             (WW8ListManager::nMaxLevel > nLevel)
-           )
+        if (pNmRule != nullptr)
         {
-            std::vector<sal_uInt8> aParaSprms;
-            pNmRule = m_xLstManager->GetNumRuleForActivation(nLFO, nLevel,
-                aParaSprms);
-
-            if (pNmRule != nullptr)
+            if (rStyleInf.IsWW8BuiltInHeadingStyle()
+                && rStyleInf.HasWW8OutlineLevel())
             {
-                if (rStyleInf.IsWW8BuiltInHeadingStyle()
-                    && rStyleInf.HasWW8OutlineLevel())
-                {
-                    rStyleInf.m_pOutlineNumrule = pNmRule;
-                }
-                else
-                {
-                    rStyleInf.m_pFormat->SetFormatAttr(
-                        SwNumRuleItem(pNmRule->GetName()));
-                    rStyleInf.m_bHasStyNumRule = true;
-                }
+                rStyleInf.m_pOutlineNumrule = pNmRule;
+            }
+            else
+            {
+                rStyleInf.m_pFormat->SetFormatAttr(
+                    SwNumRuleItem(pNmRule->GetName()));
+                rStyleInf.m_bHasStyNumRule = true;
             }
         }
-
-        if (pNmRule)
-            SetStyleIndent(rStyleInf, pNmRule->Get(nLevel));
     }
+
+    if (pNmRule)
+        SetStyleIndent(rStyleInf, pNmRule->Get(nLevel));
 }
 
 void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nCurrentLFO,
@@ -1769,86 +1769,86 @@ void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nCurrentLFO,
     // and only sets the Level. It does not check if there is a NumRule
     // attached to the STYLE !!!
 
-    if (m_xLstManager) // are all list declarations read?
+    if (!m_xLstManager) // are all list declarations read?
+        return;
+
+    SwTextNode* pTextNd = m_pPaM->GetNode().GetTextNode();
+    OSL_ENSURE(pTextNd, "No Text-Node at PaM-Position");
+    if (!pTextNd)
+        return;
+
+    std::vector<sal_uInt8> aParaSprms;
+    const SwNumRule* pRule = bSetAttr ?
+        m_xLstManager->GetNumRuleForActivation( nCurrentLFO, nCurrentLevel,
+            aParaSprms, pTextNd) : nullptr;
+
+    if (pRule == nullptr && bSetAttr)
+        return;
+
+    if (bSetAttr && pTextNd->GetNumRule() != pRule
+        && pTextNd->GetNumRule() != m_rDoc.GetOutlineNumRule())
     {
-        SwTextNode* pTextNd = m_pPaM->GetNode().GetTextNode();
-        OSL_ENSURE(pTextNd, "No Text-Node at PaM-Position");
-        if (!pTextNd)
-            return;
+        pTextNd->SetAttr(SwNumRuleItem(pRule->GetName()));
+    }
+    pTextNd->SetAttrListLevel(nCurrentLevel);
 
-        std::vector<sal_uInt8> aParaSprms;
-        const SwNumRule* pRule = bSetAttr ?
-            m_xLstManager->GetNumRuleForActivation( nCurrentLFO, nCurrentLevel,
-                aParaSprms, pTextNd) : nullptr;
+    // <IsCounted()> state of text node has to be adjusted accordingly.
+    if ( /*nCurrentLevel >= 0 &&*/ nCurrentLevel < MAXLEVEL )
+    {
+        pTextNd->SetCountedInList( true );
+    }
 
-        if (pRule != nullptr || !bSetAttr)
+    // #i99822#
+    // Direct application of the list level formatting no longer
+    // needed for list levels of mode LABEL_ALIGNMENT
+    bool bApplyListLevelIndentDirectlyAtPara(true);
+    {
+        if (pTextNd->GetNumRule() && nCurrentLevel < MAXLEVEL)
         {
-            if (bSetAttr && pTextNd->GetNumRule() != pRule
-                && pTextNd->GetNumRule() != m_rDoc.GetOutlineNumRule())
+            const SwNumFormat& rFormat = pTextNd->GetNumRule()->Get(nCurrentLevel);
+            if (rFormat.GetPositionAndSpaceMode()
+                == SvxNumberFormat::LABEL_ALIGNMENT)
             {
-                pTextNd->SetAttr(SwNumRuleItem(pRule->GetName()));
-            }
-            pTextNd->SetAttrListLevel(nCurrentLevel);
-
-            // <IsCounted()> state of text node has to be adjusted accordingly.
-            if ( /*nCurrentLevel >= 0 &&*/ nCurrentLevel < MAXLEVEL )
-            {
-                pTextNd->SetCountedInList( true );
-            }
-
-            // #i99822#
-            // Direct application of the list level formatting no longer
-            // needed for list levels of mode LABEL_ALIGNMENT
-            bool bApplyListLevelIndentDirectlyAtPara(true);
-            {
-                if (pTextNd->GetNumRule() && nCurrentLevel < MAXLEVEL)
-                {
-                    const SwNumFormat& rFormat = pTextNd->GetNumRule()->Get(nCurrentLevel);
-                    if (rFormat.GetPositionAndSpaceMode()
-                        == SvxNumberFormat::LABEL_ALIGNMENT)
-                    {
-                        bApplyListLevelIndentDirectlyAtPara = false;
-                    }
-                }
-            }
-
-            if (bApplyListLevelIndentDirectlyAtPara)
-            {
-                std::unique_ptr<SfxItemSet> xListIndent(new SfxItemSet(m_rDoc.GetAttrPool(), svl::Items<RES_LR_SPACE,
-                                                                                                        RES_LR_SPACE>{}));
-                const SvxLRSpaceItem *pItem = static_cast<const SvxLRSpaceItem*>(
-                    GetFormatAttr(RES_LR_SPACE));
-                OSL_ENSURE(pItem, "impossible");
-                if (pItem)
-                    xListIndent->Put(*pItem);
-
-                /*
-                 Take the original paragraph sprms attached to this list level
-                 formatting and apply them to the paragraph. I'm convinced that
-                 this is exactly what word does.
-                */
-                if (short nLen = static_cast< short >(aParaSprms.size()))
-                {
-                    std::unique_ptr<SfxItemSet> xOldCurrentItemSet(SetCurrentItemSet(std::move(xListIndent)));
-
-                    sal_uInt8* pSprms1  = aParaSprms.data();
-                    while (0 < nLen)
-                    {
-                        sal_uInt16 nL1 = ImportSprm(pSprms1, nLen);
-                        nLen = nLen - nL1;
-                        pSprms1 += nL1;
-                    }
-
-                    xListIndent = SetCurrentItemSet(std::move(xOldCurrentItemSet));
-                }
-
-                if (const SvxLRSpaceItem *pLR = xListIndent->GetItem<SvxLRSpaceItem>(RES_LR_SPACE))
-                {
-                    m_xCtrlStck->NewAttr(*m_pPaM->GetPoint(), *pLR);
-                    m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_LR_SPACE);
-                }
+                bApplyListLevelIndentDirectlyAtPara = false;
             }
         }
+    }
+
+    if (!bApplyListLevelIndentDirectlyAtPara)
+        return;
+
+    std::unique_ptr<SfxItemSet> xListIndent(new SfxItemSet(m_rDoc.GetAttrPool(), svl::Items<RES_LR_SPACE,
+                                                                                            RES_LR_SPACE>{}));
+    const SvxLRSpaceItem *pItem = static_cast<const SvxLRSpaceItem*>(
+        GetFormatAttr(RES_LR_SPACE));
+    OSL_ENSURE(pItem, "impossible");
+    if (pItem)
+        xListIndent->Put(*pItem);
+
+    /*
+     Take the original paragraph sprms attached to this list level
+     formatting and apply them to the paragraph. I'm convinced that
+     this is exactly what word does.
+    */
+    if (short nLen = static_cast< short >(aParaSprms.size()))
+    {
+        std::unique_ptr<SfxItemSet> xOldCurrentItemSet(SetCurrentItemSet(std::move(xListIndent)));
+
+        sal_uInt8* pSprms1  = aParaSprms.data();
+        while (0 < nLen)
+        {
+            sal_uInt16 nL1 = ImportSprm(pSprms1, nLen);
+            nLen = nLen - nL1;
+            pSprms1 += nL1;
+        }
+
+        xListIndent = SetCurrentItemSet(std::move(xOldCurrentItemSet));
+    }
+
+    if (const SvxLRSpaceItem *pLR = xListIndent->GetItem<SvxLRSpaceItem>(RES_LR_SPACE))
+    {
+        m_xCtrlStck->NewAttr(*m_pPaM->GetPoint(), *pLR);
+        m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_LR_SPACE);
     }
 }
 

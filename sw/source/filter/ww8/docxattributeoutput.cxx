@@ -909,75 +909,75 @@ void DocxAttributeOutput::SyncNodelessCells(ww8::WW8TableNodeInfoInner::Pointer_
 
 void DocxAttributeOutput::FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointer_t const & pInner, bool bForceEmptyParagraph )
 {
-    if ( pInner )
+    if ( !pInner )
+        return;
+
+    // Where are we in the table
+    sal_uInt32 nRow = pInner->getRow();
+    sal_Int32 nCell = pInner->getCell();
+
+    InitTableHelper( pInner );
+
+    // HACK
+    // msoffice seems to have an internal limitation of 63 columns for tables
+    // and refuses to load .docx with more, even though the spec seems to allow that;
+    // so simply if there are more columns, don't close the last one msoffice will handle
+    // and merge the contents of the remaining ones into it (since we don't close the cell
+    // here, following ones will not be opened)
+    const bool limitWorkaround = (nCell >= MAX_CELL_IN_WORD && !pInner->isEndOfLine());
+    const bool bEndCell = pInner->isEndOfCell() && !limitWorkaround;
+    const bool bEndRow = pInner->isEndOfLine();
+
+    if (bEndCell)
     {
-        // Where are we in the table
-        sal_uInt32 nRow = pInner->getRow();
-        sal_Int32 nCell = pInner->getCell();
-
-        InitTableHelper( pInner );
-
-        // HACK
-        // msoffice seems to have an internal limitation of 63 columns for tables
-        // and refuses to load .docx with more, even though the spec seems to allow that;
-        // so simply if there are more columns, don't close the last one msoffice will handle
-        // and merge the contents of the remaining ones into it (since we don't close the cell
-        // here, following ones will not be opened)
-        const bool limitWorkaround = (nCell >= MAX_CELL_IN_WORD && !pInner->isEndOfLine());
-        const bool bEndCell = pInner->isEndOfCell() && !limitWorkaround;
-        const bool bEndRow = pInner->isEndOfLine();
-
-        if (bEndCell)
+        while (pInner->getDepth() < m_tableReference->m_nTableDepth)
         {
-            while (pInner->getDepth() < m_tableReference->m_nTableDepth)
-            {
-                //we expect that the higher depth row was closed, and
-                //we are just missing the table close
-                assert(lastOpenCell.back() == -1 && lastClosedCell.back() == -1);
-                EndTable();
-            }
-
-            SyncNodelessCells(pInner, nCell, nRow);
-
-            sal_Int32 nClosedCell = lastClosedCell.back();
-            if (nCell == nClosedCell)
-            {
-                //Start missing trailing cell(s)
-                ++nCell;
-                StartTableCell(pInner, nCell, nRow);
-
-                //Continue on missing next trailing cell(s)
-                ww8::RowSpansPtr xRowSpans = pInner->getRowSpansOfRow();
-                sal_Int32 nRemainingCells = xRowSpans->size() - nCell;
-                for (sal_Int32 i = 1; i < nRemainingCells; ++i)
-                {
-                    if (bForceEmptyParagraph)
-                    {
-                        m_pSerializer->singleElementNS(XML_w, XML_p);
-                    }
-
-                    EndTableCell(nCell);
-
-                    StartTableCell(pInner, nCell, nRow);
-                }
-            }
-
-            if (bForceEmptyParagraph)
-            {
-                m_pSerializer->singleElementNS(XML_w, XML_p);
-            }
-
-            EndTableCell(nCell);
+            //we expect that the higher depth row was closed, and
+            //we are just missing the table close
+            assert(lastOpenCell.back() == -1 && lastClosedCell.back() == -1);
+            EndTable();
         }
 
-        // This is a line end
-        if (bEndRow)
-            EndTableRow();
+        SyncNodelessCells(pInner, nCell, nRow);
 
-        // This is the end of the table
-        if (pInner->isFinalEndOfLine())
-            EndTable();
+        sal_Int32 nClosedCell = lastClosedCell.back();
+        if (nCell == nClosedCell)
+        {
+            //Start missing trailing cell(s)
+            ++nCell;
+            StartTableCell(pInner, nCell, nRow);
+
+            //Continue on missing next trailing cell(s)
+            ww8::RowSpansPtr xRowSpans = pInner->getRowSpansOfRow();
+            sal_Int32 nRemainingCells = xRowSpans->size() - nCell;
+            for (sal_Int32 i = 1; i < nRemainingCells; ++i)
+            {
+                if (bForceEmptyParagraph)
+                {
+                    m_pSerializer->singleElementNS(XML_w, XML_p);
+                }
+
+                EndTableCell(nCell);
+
+                StartTableCell(pInner, nCell, nRow);
+            }
+        }
+
+        if (bForceEmptyParagraph)
+        {
+            m_pSerializer->singleElementNS(XML_w, XML_p);
+        }
+
+        EndTableCell(nCell);
     }
+
+    // This is a line end
+    if (bEndRow)
+        EndTableRow();
+
+    // This is the end of the table
+    if (pInner->isFinalEndOfLine())
+        EndTable();
 }
 
 void DocxAttributeOutput::EmptyParagraph()
@@ -2309,32 +2309,32 @@ void DocxAttributeOutput::EndField_Impl( const SwTextNode* pNode, sal_Int32 nPos
     }
     // Write the ref field if a bookmark had to be set and the field
     // should be visible
-    if ( rInfos.pField )
-    {
-        sal_uInt16 nSubType = rInfos.pField->GetSubType( );
-        bool bIsSetField = rInfos.pField->GetTyp( )->Which( ) == SwFieldIds::SetExp;
-        bool bShowRef = bIsSetField && ( nSubType & nsSwExtendedSubType::SUB_INVISIBLE ) == 0;
+    if ( !rInfos.pField )
+        return;
 
-        if ( ( !m_sFieldBkm.isEmpty() ) && bShowRef )
-        {
-            // Write the field beginning
-            m_pSerializer->startElementNS(XML_w, XML_r);
-            m_pSerializer->singleElementNS( XML_w, XML_fldChar,
-                FSNS( XML_w, XML_fldCharType ), "begin" );
-            m_pSerializer->endElementNS( XML_w, XML_r );
+    sal_uInt16 nSubType = rInfos.pField->GetSubType( );
+    bool bIsSetField = rInfos.pField->GetTyp( )->Which( ) == SwFieldIds::SetExp;
+    bool bShowRef = bIsSetField && ( nSubType & nsSwExtendedSubType::SUB_INVISIBLE ) == 0;
 
-            rInfos.sCmd = FieldString( ww::eREF );
-            rInfos.sCmd += "\"";
-            rInfos.sCmd += m_sFieldBkm;
-            rInfos.sCmd += "\" ";
+    if ( !(( !m_sFieldBkm.isEmpty() ) && bShowRef) )
+        return;
 
-            // Clean the field bookmark data to avoid infinite loop
-            m_sFieldBkm = OUString( );
+    // Write the field beginning
+    m_pSerializer->startElementNS(XML_w, XML_r);
+    m_pSerializer->singleElementNS( XML_w, XML_fldChar,
+        FSNS( XML_w, XML_fldCharType ), "begin" );
+    m_pSerializer->endElementNS( XML_w, XML_r );
 
-            // Write the end of the field
-            EndField_Impl( pNode, nPos, rInfos );
-        }
-    }
+    rInfos.sCmd = FieldString( ww::eREF );
+    rInfos.sCmd += "\"";
+    rInfos.sCmd += m_sFieldBkm;
+    rInfos.sCmd += "\" ";
+
+    // Clean the field bookmark data to avoid infinite loop
+    m_sFieldBkm = OUString( );
+
+    // Write the end of the field
+    EndField_Impl( pNode, nPos, rInfos );
 }
 
 void DocxAttributeOutput::StartRunProperties()
@@ -2693,30 +2693,30 @@ void DocxAttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
 
 void DocxAttributeOutput::GetSdtEndBefore(const SdrObject* pSdrObj)
 {
-    if (pSdrObj)
-    {
-        uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY_THROW);
-        uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
-        if( xPropSet.is() )
-        {
-            uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
-            uno::Sequence< beans::PropertyValue > aGrabBag;
-            if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
-            {
-                xPropSet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
-            }
-            else if(xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("InteropGrabBag"))
-            {
-                xPropSet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
-            }
+    if (!pSdrObj)
+        return;
 
-            auto pProp = std::find_if(aGrabBag.begin(), aGrabBag.end(),
-                [this](const beans::PropertyValue& rProp) {
-                    return "SdtEndBefore" == rProp.Name && m_bStartedCharSdt && !m_bEndCharSdt; });
-            if (pProp != aGrabBag.end())
-                pProp->Value >>= m_bEndCharSdt;
-        }
+    uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
+    if( !xPropSet.is() )
+        return;
+
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+    uno::Sequence< beans::PropertyValue > aGrabBag;
+    if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
+    {
+        xPropSet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
     }
+    else if(xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("InteropGrabBag"))
+    {
+        xPropSet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+    }
+
+    auto pProp = std::find_if(aGrabBag.begin(), aGrabBag.end(),
+        [this](const beans::PropertyValue& rProp) {
+            return "SdtEndBefore" == rProp.Name && m_bStartedCharSdt && !m_bEndCharSdt; });
+    if (pProp != aGrabBag.end())
+        pProp->Value >>= m_bEndCharSdt;
 }
 
 void DocxAttributeOutput::WritePostponedGraphic()
@@ -4339,23 +4339,23 @@ void DocxAttributeOutput::TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTa
     const SwFrameFormat * pLineFormat = pTabLine->GetFrameFormat();
 
     const SwFormatFrameSize& rLSz = pLineFormat->GetFrameSize();
-    if ( SwFrameSize::Variable != rLSz.GetHeightSizeType() && rLSz.GetHeight() )
+    if ( !(SwFrameSize::Variable != rLSz.GetHeightSizeType() && rLSz.GetHeight()) )
+        return;
+
+    sal_Int32 nHeight = rLSz.GetHeight();
+    const char *pRule = nullptr;
+
+    switch ( rLSz.GetHeightSizeType() )
     {
-        sal_Int32 nHeight = rLSz.GetHeight();
-        const char *pRule = nullptr;
-
-        switch ( rLSz.GetHeightSizeType() )
-        {
-            case SwFrameSize::Fixed: pRule = "exact"; break;
-            case SwFrameSize::Minimum: pRule = "atLeast"; break;
-            default:           break;
-        }
-
-        if ( pRule )
-            m_pSerializer->singleElementNS( XML_w, XML_trHeight,
-                    FSNS( XML_w, XML_val ), OString::number(nHeight),
-                    FSNS( XML_w, XML_hRule ), pRule );
+        case SwFrameSize::Fixed: pRule = "exact"; break;
+        case SwFrameSize::Minimum: pRule = "atLeast"; break;
+        default:           break;
     }
+
+    if ( pRule )
+        m_pSerializer->singleElementNS( XML_w, XML_trHeight,
+                FSNS( XML_w, XML_val ), OString::number(nHeight),
+                FSNS( XML_w, XML_hRule ), pRule );
 }
 
 void DocxAttributeOutput::TableCanSplit( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
@@ -4398,20 +4398,20 @@ void DocxAttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer
     SwWriteTableRow *pRow = rRows[ pTableTextNodeInfoInner->getRow( ) ].get();
     sal_uInt32 nCell = pTableTextNodeInfoInner->getCell();
     const SwWriteTableCells& rTableCells =  pRow->GetCells();
-    if (nCell < rTableCells.size() )
+    if (nCell >= rTableCells.size() )
+        return;
+
+    const SwWriteTableCell *const pCell = pRow->GetCells()[ nCell ].get();
+    switch( pCell->GetVertOri())
     {
-        const SwWriteTableCell *const pCell = pRow->GetCells()[ nCell ].get();
-        switch( pCell->GetVertOri())
-        {
-        case text::VertOrientation::TOP:
-            break;
-        case text::VertOrientation::CENTER:
-            m_pSerializer->singleElementNS(XML_w, XML_vAlign, FSNS(XML_w, XML_val), "center");
-            break;
-        case text::VertOrientation::BOTTOM:
-            m_pSerializer->singleElementNS(XML_w, XML_vAlign, FSNS(XML_w, XML_val), "bottom");
-            break;
-        }
+    case text::VertOrientation::TOP:
+        break;
+    case text::VertOrientation::CENTER:
+        m_pSerializer->singleElementNS(XML_w, XML_vAlign, FSNS(XML_w, XML_val), "center");
+        break;
+    case text::VertOrientation::BOTTOM:
+        m_pSerializer->singleElementNS(XML_w, XML_vAlign, FSNS(XML_w, XML_val), "bottom");
+        break;
     }
 }
 
@@ -4801,22 +4801,22 @@ void DocxAttributeOutput::WriteSrcRect(const SdrObject* pSdrObj, const SwFrameFo
         nCropB -= rBox.GetDistance( SvxBoxItemLine::BOTTOM );
     }
 
-    if ( (0 != nCropL) || (0 != nCropT) || (0 != nCropR) || (0 != nCropB) )
-    {
-        double  widthMultiplier  = 100000.0/aOriginalSize.Width();
-        double  heightMultiplier = 100000.0/aOriginalSize.Height();
+    if ( !((0 != nCropL) || (0 != nCropT) || (0 != nCropR) || (0 != nCropB)) )
+        return;
 
-        sal_Int32 left   = static_cast<sal_Int32>(rtl::math::round(nCropL * widthMultiplier));
-        sal_Int32 right  = static_cast<sal_Int32>(rtl::math::round(nCropR * widthMultiplier));
-        sal_Int32 top    = static_cast<sal_Int32>(rtl::math::round(nCropT * heightMultiplier));
-        sal_Int32 bottom = static_cast<sal_Int32>(rtl::math::round(nCropB * heightMultiplier));
+    double  widthMultiplier  = 100000.0/aOriginalSize.Width();
+    double  heightMultiplier = 100000.0/aOriginalSize.Height();
 
-        m_pSerializer->singleElementNS( XML_a, XML_srcRect,
-             XML_l, OString::number(left),
-             XML_t, OString::number(top),
-             XML_r, OString::number(right),
-             XML_b, OString::number(bottom) );
-    }
+    sal_Int32 left   = static_cast<sal_Int32>(rtl::math::round(nCropL * widthMultiplier));
+    sal_Int32 right  = static_cast<sal_Int32>(rtl::math::round(nCropR * widthMultiplier));
+    sal_Int32 top    = static_cast<sal_Int32>(rtl::math::round(nCropT * heightMultiplier));
+    sal_Int32 bottom = static_cast<sal_Int32>(rtl::math::round(nCropB * heightMultiplier));
+
+    m_pSerializer->singleElementNS( XML_a, XML_srcRect,
+         XML_l, OString::number(left),
+         XML_t, OString::number(top),
+         XML_r, OString::number(right),
+         XML_b, OString::number(bottom) );
 }
 
 void DocxAttributeOutput::PopRelIdCache()
@@ -7178,23 +7178,23 @@ void DocxAttributeOutput::CharFont( const SvxFontItem& rFont)
     GetExport().GetId( rFont ); // ensure font info is written to fontTable.xml
     const OUString& sFontName(rFont.GetFamilyName());
     const OString sFontNameUtf8 = OUStringToOString(sFontName, RTL_TEXTENCODING_UTF8);
-    if (!sFontNameUtf8.isEmpty())
-    {
-        if (m_pFontsAttrList &&
-            (   m_pFontsAttrList->hasAttribute(FSNS( XML_w, XML_ascii )) ||
-                m_pFontsAttrList->hasAttribute(FSNS( XML_w, XML_hAnsi ))    )
-            )
-        {
-            // tdf#38778: do to fields output into DOC the font could be added before and after field declaration
-            // that all sub runs of the field will have correct font inside.
-            // For DOCX we should do not add the same font information twice in the same node
-            return;
-        }
+    if (sFontNameUtf8.isEmpty())
+        return;
 
-        AddToAttrList( m_pFontsAttrList, 2,
-            FSNS( XML_w, XML_ascii ), sFontNameUtf8.getStr(),
-            FSNS( XML_w, XML_hAnsi ), sFontNameUtf8.getStr() );
+    if (m_pFontsAttrList &&
+        (   m_pFontsAttrList->hasAttribute(FSNS( XML_w, XML_ascii )) ||
+            m_pFontsAttrList->hasAttribute(FSNS( XML_w, XML_hAnsi ))    )
+        )
+    {
+        // tdf#38778: do to fields output into DOC the font could be added before and after field declaration
+        // that all sub runs of the field will have correct font inside.
+        // For DOCX we should do not add the same font information twice in the same node
+        return;
     }
+
+    AddToAttrList( m_pFontsAttrList, 2,
+        FSNS( XML_w, XML_ascii ), sFontNameUtf8.getStr(),
+        FSNS( XML_w, XML_hAnsi ), sFontNameUtf8.getStr() );
 }
 
 void DocxAttributeOutput::CharFontSize( const SvxFontHeightItem& rFontSize)
@@ -7689,22 +7689,22 @@ void DocxAttributeOutput::WriteField_Impl( const SwField* pField, ww::eField eTy
     infos.bOpen = bool(FieldFlags::Start & nMode);
     m_Fields.push_back( infos );
 
-    if ( pField )
-    {
-        SwFieldIds nType = pField->GetTyp( )->Which( );
-        sal_uInt16 nSubType = pField->GetSubType();
+    if ( !pField )
+        return;
 
-        // TODO Any other field types here ?
-        if ( ( nType == SwFieldIds::SetExp ) && ( nSubType & nsSwGetSetExpType::GSE_STRING ) )
-        {
-            const SwSetExpField *pSet = static_cast<const SwSetExpField*>( pField );
-            m_sFieldBkm = pSet->GetPar1( );
-        }
-        else if ( nType == SwFieldIds::Dropdown )
-        {
-            const SwDropDownField* pDropDown = static_cast<const SwDropDownField*>( pField );
-            m_sFieldBkm = pDropDown->GetName( );
-        }
+    SwFieldIds nType = pField->GetTyp( )->Which( );
+    sal_uInt16 nSubType = pField->GetSubType();
+
+    // TODO Any other field types here ?
+    if ( ( nType == SwFieldIds::SetExp ) && ( nSubType & nsSwGetSetExpType::GSE_STRING ) )
+    {
+        const SwSetExpField *pSet = static_cast<const SwSetExpField*>( pField );
+        m_sFieldBkm = pSet->GetPar1( );
+    }
+    else if ( nType == SwFieldIds::Dropdown )
+    {
+        const SwDropDownField* pDropDown = static_cast<const SwDropDownField*>( pField );
+        m_sFieldBkm = pDropDown->GetName( );
     }
 }
 
@@ -8231,22 +8231,22 @@ void DocxAttributeOutput::ParaHyphenZone( const SvxHyphenZoneItem& rHyphenZone )
 
 void DocxAttributeOutput::ParaNumRule_Impl( const SwTextNode* pTextNd, sal_Int32 nLvl, sal_Int32 nNumId )
 {
-    if ( USHRT_MAX != nNumId )
-    {
-        const sal_Int32 nTableSize = m_rExport.m_pUsedNumTable ? m_rExport.m_pUsedNumTable->size() : 0;
-        const SwNumRule* pRule = nNumId > 0 && nNumId <= nTableSize ? (*m_rExport.m_pUsedNumTable)[nNumId-1] : nullptr;
-        const bool bOutlineRule = pRule && pRule->IsOutlineRule();
+    if ( USHRT_MAX == nNumId )
+        return;
 
-        // Do not export outline rules (Chapter Numbering) as paragraph properties, only as style properties.
-        if ( !pTextNd || !bOutlineRule )
-        {
-            m_pSerializer->startElementNS(XML_w, XML_numPr);
-            m_pSerializer->singleElementNS(XML_w, XML_ilvl,
-                                           FSNS(XML_w, XML_val), OString::number(nLvl));
-            m_pSerializer->singleElementNS(XML_w, XML_numId,
-                                           FSNS(XML_w, XML_val), OString::number(nNumId));
-            m_pSerializer->endElementNS( XML_w, XML_numPr );
-        }
+    const sal_Int32 nTableSize = m_rExport.m_pUsedNumTable ? m_rExport.m_pUsedNumTable->size() : 0;
+    const SwNumRule* pRule = nNumId > 0 && nNumId <= nTableSize ? (*m_rExport.m_pUsedNumTable)[nNumId-1] : nullptr;
+    const bool bOutlineRule = pRule && pRule->IsOutlineRule();
+
+    // Do not export outline rules (Chapter Numbering) as paragraph properties, only as style properties.
+    if ( !pTextNd || !bOutlineRule )
+    {
+        m_pSerializer->startElementNS(XML_w, XML_numPr);
+        m_pSerializer->singleElementNS(XML_w, XML_ilvl,
+                                       FSNS(XML_w, XML_val), OString::number(nLvl));
+        m_pSerializer->singleElementNS(XML_w, XML_numId,
+                                       FSNS(XML_w, XML_val), OString::number(nNumId));
+        m_pSerializer->endElementNS( XML_w, XML_numPr );
     }
 }
 
@@ -8920,33 +8920,33 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         aOutputBorderOptions.aShadowLocation = pShadowItem->GetLocation();
     }
 
-    if ( !m_bOpenedSectPr || GetWritingHeaderFooter())
+    if ( !(!m_bOpenedSectPr || GetWritingHeaderFooter()))
+        return;
+
+    // Not inside a section
+
+    // Open the paragraph's borders tag
+    m_pSerializer->startElementNS(XML_w, XML_pBdr);
+
+    std::map<SvxBoxItemLine, css::table::BorderLine2> aStyleBorders;
+    const SvxBoxItem* pInherited = nullptr;
+    if ( GetExport().m_pStyAttr )
+        pInherited = GetExport().m_pStyAttr->GetItem<SvxBoxItem>(RES_BOX);
+    else if ( GetExport().m_pCurrentStyle && GetExport().m_pCurrentStyle->DerivedFrom() )
+        pInherited = GetExport().m_pCurrentStyle->DerivedFrom()->GetAttrSet().GetItem<SvxBoxItem>(RES_BOX);
+
+    if ( pInherited )
     {
-        // Not inside a section
-
-        // Open the paragraph's borders tag
-        m_pSerializer->startElementNS(XML_w, XML_pBdr);
-
-        std::map<SvxBoxItemLine, css::table::BorderLine2> aStyleBorders;
-        const SvxBoxItem* pInherited = nullptr;
-        if ( GetExport().m_pStyAttr )
-            pInherited = GetExport().m_pStyAttr->GetItem<SvxBoxItem>(RES_BOX);
-        else if ( GetExport().m_pCurrentStyle && GetExport().m_pCurrentStyle->DerivedFrom() )
-            pInherited = GetExport().m_pCurrentStyle->DerivedFrom()->GetAttrSet().GetItem<SvxBoxItem>(RES_BOX);
-
-        if ( pInherited )
-        {
-            aStyleBorders[ SvxBoxItemLine::TOP ] = SvxBoxItem::SvxLineToLine(pInherited->GetTop(), /*bConvert=*/false);
-            aStyleBorders[ SvxBoxItemLine::BOTTOM ] = SvxBoxItem::SvxLineToLine(pInherited->GetBottom(), false);
-            aStyleBorders[ SvxBoxItemLine::LEFT ] = SvxBoxItem::SvxLineToLine(pInherited->GetLeft(), false);
-            aStyleBorders[ SvxBoxItemLine::RIGHT ] = SvxBoxItem::SvxLineToLine(pInherited->GetRight(), false);
-        }
-
-        impl_borders( m_pSerializer, rBox, aOutputBorderOptions, aStyleBorders );
-
-        // Close the paragraph's borders tag
-        m_pSerializer->endElementNS( XML_w, XML_pBdr );
+        aStyleBorders[ SvxBoxItemLine::TOP ] = SvxBoxItem::SvxLineToLine(pInherited->GetTop(), /*bConvert=*/false);
+        aStyleBorders[ SvxBoxItemLine::BOTTOM ] = SvxBoxItem::SvxLineToLine(pInherited->GetBottom(), false);
+        aStyleBorders[ SvxBoxItemLine::LEFT ] = SvxBoxItem::SvxLineToLine(pInherited->GetLeft(), false);
+        aStyleBorders[ SvxBoxItemLine::RIGHT ] = SvxBoxItem::SvxLineToLine(pInherited->GetRight(), false);
     }
+
+    impl_borders( m_pSerializer, rBox, aOutputBorderOptions, aStyleBorders );
+
+    // Close the paragraph's borders tag
+    m_pSerializer->endElementNS( XML_w, XML_pBdr );
 }
 
 void DocxAttributeOutput::FormatColumns_Impl( sal_uInt16 nCols, const SwFormatCol& rCol, bool bEven, SwTwips nPageSize )
