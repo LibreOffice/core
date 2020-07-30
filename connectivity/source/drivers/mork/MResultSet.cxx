@@ -710,9 +710,9 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         SQL_ISPUNCTUATION(parseTree->getChild(0),"(") &&
         SQL_ISPUNCTUATION(parseTree->getChild(2),")"))
     {
-        MQueryExpression *subExpression = new MQueryExpression();
+        auto subExpression = std::make_unique<MQueryExpression>();
         analyseWhereClause( parseTree->getChild( 1 ), *subExpression );
-        queryExpression.addExpression( subExpression );
+        queryExpression.addExpression( std::move(subExpression) );
     }
     else if ((SQL_ISRULE(parseTree,search_condition) || SQL_ISRULE(parseTree,boolean_term))
              && parseTree->count() == 3)                   // Handle AND/OR
@@ -769,7 +769,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         if ( columnName == "0" && op == MQueryOp::Is && matchString == "1" ) {
             m_bIsAlwaysFalseQuery = true;
         }
-        queryExpression.addExpression( new MQueryExpressionString( columnName, op, matchString ));
+        queryExpression.addExpression( std::make_unique<MQueryExpressionString>( columnName, op, matchString ));
     }
     else if (SQL_ISRULE(parseTree,like_predicate))
     {
@@ -901,7 +901,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
             }
         }
 
-        queryExpression.addExpression( new MQueryExpressionString( columnName, op, matchString ));
+        queryExpression.addExpression( std::make_unique<MQueryExpressionString>( columnName, op, matchString ));
     }
     else if (SQL_ISRULE(parseTree,test_for_null))
     {
@@ -926,7 +926,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         OUString sTableRange;
         m_pSQLIterator->getColumnRange(parseTree->getChild(0),columnName,sTableRange);
 
-        queryExpression.addExpression( new MQueryExpressionString( columnName, op ));
+        queryExpression.addExpression( std::make_unique<MQueryExpressionString>( columnName, op ));
     }
     else
     {
