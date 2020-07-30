@@ -12225,6 +12225,7 @@ private:
     gulong m_nOutputSignalId;
     gulong m_nInputSignalId;
     bool m_bEmptyField;
+    bool m_bSyncingValue;
     double m_dValueWhenEmpty;
 
     bool signal_output()
@@ -12285,6 +12286,7 @@ public:
         , m_nOutputSignalId(g_signal_connect(pButton, "output", G_CALLBACK(signalOutput), this))
         , m_nInputSignalId(g_signal_connect(pButton, "input", G_CALLBACK(signalInput), this))
         , m_bEmptyField(false)
+        , m_bSyncingValue(false)
         , m_dValueWhenEmpty(0.0)
     {
     }
@@ -12359,9 +12361,14 @@ public:
     {
         if (!m_pFormatter)
             return;
+        // tdf#135317 avoid reenterence
+        if (m_bSyncingValue)
+            return;
+        m_bSyncingValue = true;
         disable_notify_events();
         gtk_spin_button_set_value(m_pButton, m_pFormatter->GetValue());
         enable_notify_events();
+        m_bSyncingValue = false;
     }
 
     virtual void sync_range_from_formatter() override
