@@ -185,35 +185,35 @@ void SwDoGetCapitalBreak::Init( SwFntObj *, SwFntObj * )
 
 void SwDoGetCapitalBreak::Do()
 {
-    if ( nTextWidth )
+    if ( !nTextWidth )
+        return;
+
+    if ( rInf.GetSize().Width() < nTextWidth )
+        nTextWidth -= rInf.GetSize().Width();
+    else
     {
-        if ( rInf.GetSize().Width() < nTextWidth )
-            nTextWidth -= rInf.GetSize().Width();
-        else
+        TextFrameIndex nEnd = rInf.GetEnd();
+        m_nBreak = TextFrameIndex(GetOut().GetTextBreak(
+                       rInf.GetText(), nTextWidth, sal_Int32(rInf.GetIdx()),
+                       sal_Int32(rInf.GetLen()), rInf.GetKern()));
+
+        if (m_nBreak > nEnd || m_nBreak < TextFrameIndex(0))
+            m_nBreak = nEnd;
+
+        // m_nBreak may be relative to the display string. It has to be
+        // calculated relative to the original string:
+        if ( GetCapInf()  )
         {
-            TextFrameIndex nEnd = rInf.GetEnd();
-            m_nBreak = TextFrameIndex(GetOut().GetTextBreak(
-                           rInf.GetText(), nTextWidth, sal_Int32(rInf.GetIdx()),
-                           sal_Int32(rInf.GetLen()), rInf.GetKern()));
-
-            if (m_nBreak > nEnd || m_nBreak < TextFrameIndex(0))
-                m_nBreak = nEnd;
-
-            // m_nBreak may be relative to the display string. It has to be
-            // calculated relative to the original string:
-            if ( GetCapInf()  )
-            {
-                if ( GetCapInf()->nLen != rInf.GetLen() )
-                    m_nBreak = sw_CalcCaseMap( *rInf.GetFont(),
-                                              GetCapInf()->rString,
-                                              GetCapInf()->nIdx,
-                                              GetCapInf()->nLen, m_nBreak );
-                else
-                    m_nBreak = m_nBreak + GetCapInf()->nIdx;
-            }
-
-            nTextWidth = 0;
+            if ( GetCapInf()->nLen != rInf.GetLen() )
+                m_nBreak = sw_CalcCaseMap( *rInf.GetFont(),
+                                          GetCapInf()->rString,
+                                          GetCapInf()->nIdx,
+                                          GetCapInf()->nLen, m_nBreak );
+            else
+                m_nBreak = m_nBreak + GetCapInf()->nIdx;
         }
+
+        nTextWidth = 0;
     }
 }
 
@@ -356,38 +356,38 @@ void SwDoCapitalCursorOfst::Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont )
 
 void SwDoCapitalCursorOfst::Do()
 {
-    if ( nOfst )
+    if ( !nOfst )
+        return;
+
+    if ( static_cast<long>(nOfst) > rInf.GetSize().Width() )
     {
-        if ( static_cast<long>(nOfst) > rInf.GetSize().Width() )
+        nOfst -= rInf.GetSize().Width();
+        nCursor = nCursor + rInf.GetLen();
+    }
+    else
+    {
+        SwDrawTextInfo aDrawInf( rInf.GetShell(), *rInf.GetpOut(),
+                                 rInf.GetScriptInfo(),
+                                 rInf.GetText(),
+                                 rInf.GetIdx(),
+                                 rInf.GetLen(), 0, false );
+        aDrawInf.SetOffset( nOfst );
+        aDrawInf.SetKern( rInf.GetKern() );
+        aDrawInf.SetKanaComp( rInf.GetKanaComp() );
+        aDrawInf.SetFrame( rInf.GetFrame() );
+        aDrawInf.SetFont( rInf.GetFont() );
+
+        if ( rInf.GetUpper() )
         {
-            nOfst -= rInf.GetSize().Width();
-            nCursor = nCursor + rInf.GetLen();
+            aDrawInf.SetSpace( 0 );
+            nCursor = nCursor + pUpperFnt->GetModelPositionForViewPoint( aDrawInf );
         }
         else
         {
-            SwDrawTextInfo aDrawInf( rInf.GetShell(), *rInf.GetpOut(),
-                                     rInf.GetScriptInfo(),
-                                     rInf.GetText(),
-                                     rInf.GetIdx(),
-                                     rInf.GetLen(), 0, false );
-            aDrawInf.SetOffset( nOfst );
-            aDrawInf.SetKern( rInf.GetKern() );
-            aDrawInf.SetKanaComp( rInf.GetKanaComp() );
-            aDrawInf.SetFrame( rInf.GetFrame() );
-            aDrawInf.SetFont( rInf.GetFont() );
-
-            if ( rInf.GetUpper() )
-            {
-                aDrawInf.SetSpace( 0 );
-                nCursor = nCursor + pUpperFnt->GetModelPositionForViewPoint( aDrawInf );
-            }
-            else
-            {
-                aDrawInf.SetSpace( rInf.GetSpace() );
-                nCursor = nCursor + pLowerFnt->GetModelPositionForViewPoint( aDrawInf );
-            }
-            nOfst = 0;
+            aDrawInf.SetSpace( rInf.GetSpace() );
+            nCursor = nCursor + pLowerFnt->GetModelPositionForViewPoint( aDrawInf );
         }
+        nOfst = 0;
     }
 }
 

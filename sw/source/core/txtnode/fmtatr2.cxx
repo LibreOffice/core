@@ -608,25 +608,25 @@ void SwFormatMeta::DoCopy(::sw::MetaFieldManager & i_rTargetDocManager,
         SwTextNode & i_rTargetTextNode)
 {
     OSL_ENSURE(m_pMeta, "DoCopy called for SwFormatMeta with no sw::Meta?");
-    if (m_pMeta)
+    if (!m_pMeta)
+        return;
+
+    const std::shared_ptr< ::sw::Meta> pOriginal( m_pMeta );
+    if (RES_TXTATR_META == Which())
     {
-        const std::shared_ptr< ::sw::Meta> pOriginal( m_pMeta );
-        if (RES_TXTATR_META == Which())
-        {
-            m_pMeta = std::make_shared<::sw::Meta>(this);
-        }
-        else
-        {
-            ::sw::MetaField *const pMetaField(
-                static_cast< ::sw::MetaField* >(pOriginal.get()));
-            m_pMeta = i_rTargetDocManager.makeMetaField( this,
-                pMetaField->m_nNumberFormat, pMetaField->IsFixedLanguage() );
-        }
-        // Meta must have a text node before calling RegisterAsCopyOf
-        m_pMeta->NotifyChangeTextNode(& i_rTargetTextNode);
-        // this cannot be done in Clone: a Clone is not necessarily a copy!
-        m_pMeta->RegisterAsCopyOf(*pOriginal);
+        m_pMeta = std::make_shared<::sw::Meta>(this);
     }
+    else
+    {
+        ::sw::MetaField *const pMetaField(
+            static_cast< ::sw::MetaField* >(pOriginal.get()));
+        m_pMeta = i_rTargetDocManager.makeMetaField( this,
+            pMetaField->m_nNumberFormat, pMetaField->IsFixedLanguage() );
+    }
+    // Meta must have a text node before calling RegisterAsCopyOf
+    m_pMeta->NotifyChangeTextNode(& i_rTargetTextNode);
+    // this cannot be done in Clone: a Clone is not necessarily a copy!
+    m_pMeta->RegisterAsCopyOf(*pOriginal);
 }
 
 namespace sw {

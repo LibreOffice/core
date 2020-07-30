@@ -85,21 +85,21 @@ IMPL_LINK( SwGrammarContact, TimerRepaint, Timer *, pTimer, void )
 void SwGrammarContact::updateCursorPosition( const SwPosition& rNewPos )
 {
     SwTextNode* pTextNode = rNewPos.nNode.GetNode().GetTextNode();
-    if( pTextNode != GetRegisteredIn() ) // paragraph has been changed
+    if( pTextNode == GetRegisteredIn() ) // paragraph has been changed
+        return;
+
+    aTimer.Stop();
+    if( GetRegisteredIn() ) // My last paragraph has been left
     {
-        aTimer.Stop();
-        if( GetRegisteredIn() ) // My last paragraph has been left
-        {
-            if( mpProxyList )
-            {   // replace old list by the proxy list and repaint
-                getMyTextNode()->SetGrammarCheck( mpProxyList.release() );
-                SwTextFrame::repaintTextFrames( *getMyTextNode() );
-            }
-            EndListeningAll();
+        if( mpProxyList )
+        {   // replace old list by the proxy list and repaint
+            getMyTextNode()->SetGrammarCheck( mpProxyList.release() );
+            SwTextFrame::repaintTextFrames( *getMyTextNode() );
         }
-        if( pTextNode )
-            pTextNode->Add( this ); // welcome new paragraph
+        EndListeningAll();
     }
+    if( pTextNode )
+        pTextNode->Add( this ); // welcome new paragraph
 }
 
 /* deliver a grammar check list for the given text node */

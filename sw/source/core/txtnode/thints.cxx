@@ -1146,110 +1146,110 @@ SwTextAttr* MakeTextAttr( SwDoc & rDoc, const SfxItemSet& rSet,
 // delete the text attribute and unregister its item at the pool
 void SwTextNode::DestroyAttr( SwTextAttr* pAttr )
 {
-    if( pAttr )
+    if( !pAttr )
+        return;
+
+    // some things need to be done before deleting the formatting attribute
+    SwDoc* pDoc = GetDoc();
+    switch( pAttr->Which() )
     {
-        // some things need to be done before deleting the formatting attribute
-        SwDoc* pDoc = GetDoc();
-        switch( pAttr->Which() )
+    case RES_TXTATR_FLYCNT:
         {
-        case RES_TXTATR_FLYCNT:
-            {
-                SwFrameFormat* pFormat = pAttr->GetFlyCnt().GetFrameFormat();
-                if( pFormat )      // set to 0 by Undo?
-                    pDoc->getIDocumentLayoutAccess().DelLayoutFormat( pFormat );
-            }
-            break;
-
-        case RES_CHRATR_HIDDEN:
-            SetCalcHiddenCharFlags();
-            break;
-
-        case RES_TXTATR_FTN:
-            static_cast<SwTextFootnote*>(pAttr)->SetStartNode( nullptr );
-            static_cast<SwFormatFootnote&>(pAttr->GetAttr()).InvalidateFootnote();
-            break;
-
-        case RES_TXTATR_FIELD:
-        case RES_TXTATR_ANNOTATION:
-        case RES_TXTATR_INPUTFIELD:
-            if( !pDoc->IsInDtor() )
-            {
-                SwTextField *const pTextField(static_txtattr_cast<SwTextField*>(pAttr));
-                SwFieldType* pFieldType = pAttr->GetFormatField().GetField()->GetTyp();
-
-                //JP 06-08-95: DDE-fields are an exception
-                assert(SwFieldIds::Dde == pFieldType->Which() ||
-                       this == pTextField->GetpTextNode());
-
-                // certain fields must update the SwDoc's calculation flags
-
-                // Certain fields (like HiddenParaField) must trigger recalculation of visible flag
-                if (GetDoc()->FieldCanHideParaWeight(pFieldType->Which()))
-                    SetCalcHiddenParaField();
-
-                switch( pFieldType->Which() )
-                {
-                case SwFieldIds::HiddenPara:
-                case SwFieldIds::DbSetNumber:
-                case SwFieldIds::GetExp:
-                case SwFieldIds::Database:
-                case SwFieldIds::SetExp:
-                case SwFieldIds::HiddenText:
-                case SwFieldIds::DbNumSet:
-                case SwFieldIds::DbNextSet:
-                    if( !pDoc->getIDocumentFieldsAccess().IsNewFieldLst() && GetNodes().IsDocNodes() )
-                        pDoc->getIDocumentFieldsAccess().InsDelFieldInFieldLst(false, *pTextField);
-                    break;
-                case SwFieldIds::Dde:
-                    if (GetNodes().IsDocNodes() && pTextField->GetpTextNode())
-                        static_cast<SwDDEFieldType*>(pFieldType)->DecRefCnt();
-                    break;
-                case SwFieldIds::Postit:
-                    {
-                        const_cast<SwFormatField&>(pAttr->GetFormatField()).Broadcast(
-                            SwFormatFieldHint(&pTextField->GetFormatField(), SwFormatFieldHintWhich::REMOVED));
-                        break;
-                    }
-                default: break;
-                }
-            }
-            static_cast<SwFormatField&>(pAttr->GetAttr()).InvalidateField();
-            break;
-
-        case RES_TXTATR_TOXMARK:
-            static_cast<SwTOXMark&>(pAttr->GetAttr()).InvalidateTOXMark();
-            break;
-
-        case RES_TXTATR_REFMARK:
-            static_cast<SwFormatRefMark&>(pAttr->GetAttr()).InvalidateRefMark();
-            break;
-
-        case RES_TXTATR_META:
-        case RES_TXTATR_METAFIELD:
-        {
-            auto pTextMeta = static_txtattr_cast<SwTextMeta*>(pAttr);
-            SwFormatMeta & rFormatMeta( static_cast<SwFormatMeta &>(pTextMeta->GetAttr()) );
-            if (::sw::Meta* pMeta = rFormatMeta.GetMeta())
-            {
-                if (SwDocShell* pDocSh = pDoc->GetDocShell())
-                {
-                    static const OUString metaNS("urn:bails");
-                    const css::uno::Reference<css::rdf::XResource> xSubject = pMeta->MakeUnoObject();
-                    uno::Reference<frame::XModel> xModel = pDocSh->GetBaseModel();
-                    SwRDFHelper::clearStatements(xModel, metaNS, xSubject);
-                }
-            }
-
-            static_txtattr_cast<SwTextMeta*>(pAttr)->ChgTextNode(nullptr);
+            SwFrameFormat* pFormat = pAttr->GetFlyCnt().GetFrameFormat();
+            if( pFormat )      // set to 0 by Undo?
+                pDoc->getIDocumentLayoutAccess().DelLayoutFormat( pFormat );
         }
-            break;
+        break;
 
-        default:
-            break;
+    case RES_CHRATR_HIDDEN:
+        SetCalcHiddenCharFlags();
+        break;
+
+    case RES_TXTATR_FTN:
+        static_cast<SwTextFootnote*>(pAttr)->SetStartNode( nullptr );
+        static_cast<SwFormatFootnote&>(pAttr->GetAttr()).InvalidateFootnote();
+        break;
+
+    case RES_TXTATR_FIELD:
+    case RES_TXTATR_ANNOTATION:
+    case RES_TXTATR_INPUTFIELD:
+        if( !pDoc->IsInDtor() )
+        {
+            SwTextField *const pTextField(static_txtattr_cast<SwTextField*>(pAttr));
+            SwFieldType* pFieldType = pAttr->GetFormatField().GetField()->GetTyp();
+
+            //JP 06-08-95: DDE-fields are an exception
+            assert(SwFieldIds::Dde == pFieldType->Which() ||
+                   this == pTextField->GetpTextNode());
+
+            // certain fields must update the SwDoc's calculation flags
+
+            // Certain fields (like HiddenParaField) must trigger recalculation of visible flag
+            if (GetDoc()->FieldCanHideParaWeight(pFieldType->Which()))
+                SetCalcHiddenParaField();
+
+            switch( pFieldType->Which() )
+            {
+            case SwFieldIds::HiddenPara:
+            case SwFieldIds::DbSetNumber:
+            case SwFieldIds::GetExp:
+            case SwFieldIds::Database:
+            case SwFieldIds::SetExp:
+            case SwFieldIds::HiddenText:
+            case SwFieldIds::DbNumSet:
+            case SwFieldIds::DbNextSet:
+                if( !pDoc->getIDocumentFieldsAccess().IsNewFieldLst() && GetNodes().IsDocNodes() )
+                    pDoc->getIDocumentFieldsAccess().InsDelFieldInFieldLst(false, *pTextField);
+                break;
+            case SwFieldIds::Dde:
+                if (GetNodes().IsDocNodes() && pTextField->GetpTextNode())
+                    static_cast<SwDDEFieldType*>(pFieldType)->DecRefCnt();
+                break;
+            case SwFieldIds::Postit:
+                {
+                    const_cast<SwFormatField&>(pAttr->GetFormatField()).Broadcast(
+                        SwFormatFieldHint(&pTextField->GetFormatField(), SwFormatFieldHintWhich::REMOVED));
+                    break;
+                }
+            default: break;
+            }
+        }
+        static_cast<SwFormatField&>(pAttr->GetAttr()).InvalidateField();
+        break;
+
+    case RES_TXTATR_TOXMARK:
+        static_cast<SwTOXMark&>(pAttr->GetAttr()).InvalidateTOXMark();
+        break;
+
+    case RES_TXTATR_REFMARK:
+        static_cast<SwFormatRefMark&>(pAttr->GetAttr()).InvalidateRefMark();
+        break;
+
+    case RES_TXTATR_META:
+    case RES_TXTATR_METAFIELD:
+    {
+        auto pTextMeta = static_txtattr_cast<SwTextMeta*>(pAttr);
+        SwFormatMeta & rFormatMeta( static_cast<SwFormatMeta &>(pTextMeta->GetAttr()) );
+        if (::sw::Meta* pMeta = rFormatMeta.GetMeta())
+        {
+            if (SwDocShell* pDocSh = pDoc->GetDocShell())
+            {
+                static const OUString metaNS("urn:bails");
+                const css::uno::Reference<css::rdf::XResource> xSubject = pMeta->MakeUnoObject();
+                uno::Reference<frame::XModel> xModel = pDocSh->GetBaseModel();
+                SwRDFHelper::clearStatements(xModel, metaNS, xSubject);
+            }
         }
 
-        SwTextAttr::Destroy( pAttr, pDoc->GetAttrPool() );
+        static_txtattr_cast<SwTextMeta*>(pAttr)->ChgTextNode(nullptr);
     }
+        break;
+
+    default:
+        break;
+    }
+
+    SwTextAttr::Destroy( pAttr, pDoc->GetAttrPool() );
 }
 
 SwTextAttr* SwTextNode::InsertItem(
@@ -1839,25 +1839,25 @@ void SwTextNode::TryCharSetExpandToNum(const SfxItemSet& aCharSet)
 
     int nLevel = GetActualListLevel();
 
-    if (nLevel != -1 && pCurrNum)
-    {
-        const SwNumFormat* pCurrNumFormat = pCurrNum->GetNumFormat(static_cast<sal_uInt16>(nLevel));
-        if (pCurrNumFormat)
-        {
-            if (pCurrNumFormat->IsItemize() && lcl_IsIgnoredCharFormatForBullets(nWhich))
-                return;
-            if (pCurrNumFormat->IsEnumeration() && SwTextNode::IsIgnoredCharFormatForNumbering(nWhich))
-                return;
-            SwCharFormat* pCurrCharFormat =pCurrNumFormat->GetCharFormat();
+    if (!(nLevel != -1 && pCurrNum))
+        return;
 
-            if (pCurrCharFormat && pCurrCharFormat->GetItemState(nWhich,false) != SfxItemState::SET)
-            {
-                pCurrCharFormat->SetFormatAttr(*pItem);
-                SwNumFormat aNewNumFormat(*pCurrNumFormat);
-                aNewNumFormat.SetCharFormat(pCurrCharFormat);
-                pCurrNum->Set(nLevel,aNewNumFormat);
-            }
-        }
+    const SwNumFormat* pCurrNumFormat = pCurrNum->GetNumFormat(static_cast<sal_uInt16>(nLevel));
+    if (!pCurrNumFormat)
+        return;
+
+    if (pCurrNumFormat->IsItemize() && lcl_IsIgnoredCharFormatForBullets(nWhich))
+        return;
+    if (pCurrNumFormat->IsEnumeration() && SwTextNode::IsIgnoredCharFormatForNumbering(nWhich))
+        return;
+    SwCharFormat* pCurrCharFormat =pCurrNumFormat->GetCharFormat();
+
+    if (pCurrCharFormat && pCurrCharFormat->GetItemState(nWhich,false) != SfxItemState::SET)
+    {
+        pCurrCharFormat->SetFormatAttr(*pItem);
+        SwNumFormat aNewNumFormat(*pCurrNumFormat);
+        aNewNumFormat.SetCharFormat(pCurrCharFormat);
+        pCurrNum->Set(nLevel,aNewNumFormat);
     }
 }
 
@@ -2074,19 +2074,19 @@ public:
 static void lcl_MergeListLevelIndentAsLRSpaceItem( const SwTextNode& rTextNode,
                                             SfxItemSet& rSet )
 {
-    if ( rTextNode.AreListLevelIndentsApplicable() )
+    if ( !rTextNode.AreListLevelIndentsApplicable() )
+        return;
+
+    const SwNumRule* pRule = rTextNode.GetNumRule();
+    if ( pRule && rTextNode.GetActualListLevel() >= 0 )
     {
-        const SwNumRule* pRule = rTextNode.GetNumRule();
-        if ( pRule && rTextNode.GetActualListLevel() >= 0 )
+        const SwNumFormat& rFormat = pRule->Get(static_cast<sal_uInt16>(rTextNode.GetActualListLevel()));
+        if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
         {
-            const SwNumFormat& rFormat = pRule->Get(static_cast<sal_uInt16>(rTextNode.GetActualListLevel()));
-            if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
-            {
-                SvxLRSpaceItem aLR( RES_LR_SPACE );
-                aLR.SetTextLeft( rFormat.GetIndentAt() );
-                aLR.SetTextFirstLineOffset( static_cast<short>(rFormat.GetFirstLineIndent()) );
-                rSet.Put( aLR );
-            }
+            SvxLRSpaceItem aLR( RES_LR_SPACE );
+            aLR.SetTextLeft( rFormat.GetIndentAt() );
+            aLR.SetTextFirstLineOffset( static_cast<short>(rFormat.GetFirstLineIndent()) );
+            rSet.Put( aLR );
         }
     }
 }
@@ -3364,38 +3364,38 @@ void SwpHints::Delete( SwTextAttr const * pTextHt )
 
 void SwTextNode::ClearSwpHintsArr( bool bDelFields )
 {
-    if ( HasHints() )
+    if ( !HasHints() )
+        return;
+
+    size_t nPos = 0;
+    while ( nPos < m_pSwpHints->Count() )
     {
-        size_t nPos = 0;
-        while ( nPos < m_pSwpHints->Count() )
+        SwTextAttr* pDel = m_pSwpHints->Get( nPos );
+        bool bDel = false;
+
+        switch( pDel->Which() )
         {
-            SwTextAttr* pDel = m_pSwpHints->Get( nPos );
-            bool bDel = false;
+        case RES_TXTATR_FLYCNT:
+        case RES_TXTATR_FTN:
+            break;
 
-            switch( pDel->Which() )
-            {
-            case RES_TXTATR_FLYCNT:
-            case RES_TXTATR_FTN:
-                break;
-
-            case RES_TXTATR_FIELD:
-            case RES_TXTATR_ANNOTATION:
-            case RES_TXTATR_INPUTFIELD:
-                if( bDelFields )
-                    bDel = true;
-                break;
-            default:
-                bDel = true; break;
-            }
-
-            if( bDel )
-            {
-                m_pSwpHints->DeleteAtPos( nPos );
-                DestroyAttr( pDel );
-            }
-            else
-                ++nPos;
+        case RES_TXTATR_FIELD:
+        case RES_TXTATR_ANNOTATION:
+        case RES_TXTATR_INPUTFIELD:
+            if( bDelFields )
+                bDel = true;
+            break;
+        default:
+            bDel = true; break;
         }
+
+        if( bDel )
+        {
+            m_pSwpHints->DeleteAtPos( nPos );
+            DestroyAttr( pDel );
+        }
+        else
+            ++nPos;
     }
 }
 

@@ -281,73 +281,73 @@ sal_Int32 SwTextNode::Len() const
 static void lcl_ChangeFootnoteRef( SwTextNode &rNode )
 {
     SwpHints *pSwpHints = rNode.GetpSwpHints();
-    if( pSwpHints && rNode.GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() )
-    {
-        SwContentFrame* pFrame = nullptr;
-        // OD 07.11.2002 #104840# - local variable to remember first footnote
-        // of node <rNode> in order to invalidate position of its first content.
-        // Thus, in its <MakeAll()> it will checked its position relative to its reference.
-        SwFootnoteFrame* pFirstFootnoteOfNode = nullptr;
-        for( size_t j = pSwpHints->Count(); j; )
-        {
-            SwTextAttr* pHt = pSwpHints->Get(--j);
-            if (RES_TXTATR_FTN == pHt->Which())
-            {
-                if( !pFrame )
-                {
-                    pFrame = SwIterator<SwContentFrame, SwTextNode, sw::IteratorMode::UnwrapMulti>(rNode).First();
-                    if (!pFrame)
-                        return;
-                }
-                SwTextFootnote *pAttr = static_cast<SwTextFootnote*>(pHt);
-                OSL_ENSURE( pAttr->GetStartNode(), "FootnoteAtr without StartNode." );
-                SwNodeIndex aIdx( *pAttr->GetStartNode(), 1 );
-                SwContentNode *pNd = aIdx.GetNode().GetContentNode();
-                if ( !pNd )
-                    pNd = pFrame->GetAttrSet()->GetDoc()->
-                            GetNodes().GoNextSection( &aIdx, true, false );
-                if ( !pNd )
-                    continue;
+    if( !(pSwpHints && rNode.GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell()) )
+        return;
 
-                SwIterator<SwContentFrame, SwContentNode, sw::IteratorMode::UnwrapMulti> aIter(*pNd);
-                SwContentFrame* pContent = aIter.First();
-                if( pContent )
-                {
-                    OSL_ENSURE( pContent->getRootFrame() == pFrame->getRootFrame(),
-                            "lcl_ChangeFootnoteRef: Layout double?" );
-                    SwFootnoteFrame *pFootnote = pContent->FindFootnoteFrame();
-                    if( pFootnote && pFootnote->GetAttr() == pAttr )
-                    {
-                        while( pFootnote->GetMaster() )
-                            pFootnote = pFootnote->GetMaster();
-                        // #104840# - remember footnote frame
-                        pFirstFootnoteOfNode = pFootnote;
-                        while ( pFootnote )
-                        {
-                            pFootnote->SetRef( pFrame );
-                            pFootnote = pFootnote->GetFollow();
-                            static_cast<SwTextFrame*>(pFrame)->SetFootnote( true );
-                        }
-                    }
-#if OSL_DEBUG_LEVEL > 0
-                    while( nullptr != (pContent = aIter.Next()) )
-                    {
-                        SwFootnoteFrame *pDbgFootnote = pContent->FindFootnoteFrame();
-                        OSL_ENSURE( !pDbgFootnote || pDbgFootnote->GetRef() == pFrame,
-                                "lcl_ChangeFootnoteRef: Who's that guy?" );
-                    }
-#endif
-                }
-            }
-        } // end of for-loop on <SwpHints>
-        // #104840# - invalidate
-        if ( pFirstFootnoteOfNode )
+    SwContentFrame* pFrame = nullptr;
+    // OD 07.11.2002 #104840# - local variable to remember first footnote
+    // of node <rNode> in order to invalidate position of its first content.
+    // Thus, in its <MakeAll()> it will checked its position relative to its reference.
+    SwFootnoteFrame* pFirstFootnoteOfNode = nullptr;
+    for( size_t j = pSwpHints->Count(); j; )
+    {
+        SwTextAttr* pHt = pSwpHints->Get(--j);
+        if (RES_TXTATR_FTN == pHt->Which())
         {
-            SwContentFrame* pContent = pFirstFootnoteOfNode->ContainsContent();
-            if ( pContent )
+            if( !pFrame )
             {
-                pContent->InvalidatePos_();
+                pFrame = SwIterator<SwContentFrame, SwTextNode, sw::IteratorMode::UnwrapMulti>(rNode).First();
+                if (!pFrame)
+                    return;
             }
+            SwTextFootnote *pAttr = static_cast<SwTextFootnote*>(pHt);
+            OSL_ENSURE( pAttr->GetStartNode(), "FootnoteAtr without StartNode." );
+            SwNodeIndex aIdx( *pAttr->GetStartNode(), 1 );
+            SwContentNode *pNd = aIdx.GetNode().GetContentNode();
+            if ( !pNd )
+                pNd = pFrame->GetAttrSet()->GetDoc()->
+                        GetNodes().GoNextSection( &aIdx, true, false );
+            if ( !pNd )
+                continue;
+
+            SwIterator<SwContentFrame, SwContentNode, sw::IteratorMode::UnwrapMulti> aIter(*pNd);
+            SwContentFrame* pContent = aIter.First();
+            if( pContent )
+            {
+                OSL_ENSURE( pContent->getRootFrame() == pFrame->getRootFrame(),
+                        "lcl_ChangeFootnoteRef: Layout double?" );
+                SwFootnoteFrame *pFootnote = pContent->FindFootnoteFrame();
+                if( pFootnote && pFootnote->GetAttr() == pAttr )
+                {
+                    while( pFootnote->GetMaster() )
+                        pFootnote = pFootnote->GetMaster();
+                    // #104840# - remember footnote frame
+                    pFirstFootnoteOfNode = pFootnote;
+                    while ( pFootnote )
+                    {
+                        pFootnote->SetRef( pFrame );
+                        pFootnote = pFootnote->GetFollow();
+                        static_cast<SwTextFrame*>(pFrame)->SetFootnote( true );
+                    }
+                }
+#if OSL_DEBUG_LEVEL > 0
+                while( nullptr != (pContent = aIter.Next()) )
+                {
+                    SwFootnoteFrame *pDbgFootnote = pContent->FindFootnoteFrame();
+                    OSL_ENSURE( !pDbgFootnote || pDbgFootnote->GetRef() == pFrame,
+                            "lcl_ChangeFootnoteRef: Who's that guy?" );
+                }
+#endif
+            }
+        }
+    } // end of for-loop on <SwpHints>
+    // #104840# - invalidate
+    if ( pFirstFootnoteOfNode )
+    {
+        SwContentFrame* pContent = pFirstFootnoteOfNode->ContainsContent();
+        if ( pContent )
+        {
+            pContent->InvalidatePos_();
         }
     }
 }
@@ -1535,26 +1535,26 @@ void SwTextNode::Update(
     // Inform LOK clients about change in position of redlines (if any)
     // Don't emit notifications during save: redline flags are temporarily changed during save, but
     // it's not useful to let clients know about such changes.
-    if (comphelper::LibreOfficeKit::isActive() && !GetDoc()->IsInWriting())
+    if (!(comphelper::LibreOfficeKit::isActive() && !GetDoc()->IsInWriting()))
+        return;
+
+    const SwRedlineTable& rTable = GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    for (SwRedlineTable::size_type nRedlnPos = 0; nRedlnPos < rTable.size(); ++nRedlnPos)
     {
-        const SwRedlineTable& rTable = GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
-        for (SwRedlineTable::size_type nRedlnPos = 0; nRedlnPos < rTable.size(); ++nRedlnPos)
+        SwRangeRedline* pRedln = rTable[nRedlnPos];
+        if (pRedln->HasMark())
         {
-            SwRangeRedline* pRedln = rTable[nRedlnPos];
-            if (pRedln->HasMark())
+            if (this == &pRedln->End()->nNode.GetNode() && *pRedln->GetPoint() != *pRedln->GetMark())
             {
-                if (this == &pRedln->End()->nNode.GetNode() && *pRedln->GetPoint() != *pRedln->GetMark())
+                // Redline is changed only when some change occurs before it
+                if (nChangePos <= pRedln->Start()->nContent.GetIndex())
                 {
-                    // Redline is changed only when some change occurs before it
-                    if (nChangePos <= pRedln->Start()->nContent.GetIndex())
-                    {
-                        SwRedlineTable::LOKRedlineNotification(RedlineNotification::Modify, pRedln);
-                    }
+                    SwRedlineTable::LOKRedlineNotification(RedlineNotification::Modify, pRedln);
                 }
             }
-            else if (this == &pRedln->GetPoint()->nNode.GetNode())
-                SwRedlineTable::LOKRedlineNotification(RedlineNotification::Modify, pRedln);
         }
+        else if (this == &pRedln->GetPoint()->nNode.GetNode())
+            SwRedlineTable::LOKRedlineNotification(RedlineNotification::Modify, pRedln);
     }
 }
 
@@ -3330,43 +3330,43 @@ static void Replace0xFF(
     sal_Int32 & rTextStt,
     sal_Int32 nEndPos )
 {
-    if (rNode.GetpSwpHints())
+    if (!rNode.GetpSwpHints())
+        return;
+
+    sal_Unicode cSrchChr = CH_TXTATR_BREAKWORD;
+    for( int nSrchIter = 0; 2 > nSrchIter; ++nSrchIter, cSrchChr = CH_TXTATR_INWORD )
     {
-        sal_Unicode cSrchChr = CH_TXTATR_BREAKWORD;
-        for( int nSrchIter = 0; 2 > nSrchIter; ++nSrchIter, cSrchChr = CH_TXTATR_INWORD )
+        sal_Int32 nPos = rText.indexOf(cSrchChr);
+        while (-1 != nPos && nPos < nEndPos)
         {
-            sal_Int32 nPos = rText.indexOf(cSrchChr);
-            while (-1 != nPos && nPos < nEndPos)
+            const SwTextAttr* const pAttr =
+                rNode.GetTextAttrForCharAt(rTextStt + nPos);
+            if( pAttr )
             {
-                const SwTextAttr* const pAttr =
-                    rNode.GetTextAttrForCharAt(rTextStt + nPos);
-                if( pAttr )
+                switch( pAttr->Which() )
                 {
-                    switch( pAttr->Which() )
-                    {
-                    case RES_TXTATR_FIELD:
-                    case RES_TXTATR_ANNOTATION:
-                        rText.remove(nPos, 1);
-                        ++rTextStt;
-                        break;
+                case RES_TXTATR_FIELD:
+                case RES_TXTATR_ANNOTATION:
+                    rText.remove(nPos, 1);
+                    ++rTextStt;
+                    break;
 
-                    case RES_TXTATR_FTN:
-                        rText.remove(nPos, 1);
-                        ++rTextStt;
-                        break;
+                case RES_TXTATR_FTN:
+                    rText.remove(nPos, 1);
+                    ++rTextStt;
+                    break;
 
-                    default:
-                        rText.remove(nPos, 1);
-                        ++rTextStt;
-                    }
+                default:
+                    rText.remove(nPos, 1);
+                    ++rTextStt;
                 }
-                else
-                {
-                    ++nPos;
-                    ++nEndPos;
-                }
-                nPos = rText.indexOf(cSrchChr, nPos);
             }
+            else
+            {
+                ++nPos;
+                ++nEndPos;
+            }
+            nPos = rText.indexOf(cSrchChr, nPos);
         }
     }
 }
@@ -4163,18 +4163,18 @@ void SwTextNode::SetAttrListRestartValue( SwNumberTree::tSwNumTreeNumber nNumber
                          ? GetAttrListRestartValue() != nNumber
                          : nNumber != USHRT_MAX );
 
-    if ( bChanged || !HasAttrListRestartValue() )
+    if ( !(bChanged || !HasAttrListRestartValue()) )
+        return;
+
+    if ( nNumber == USHRT_MAX )
     {
-        if ( nNumber == USHRT_MAX )
-        {
-            ResetAttr( RES_PARATR_LIST_RESTARTVALUE );
-        }
-        else
-        {
-            SfxInt16Item aNewListRestartValueItem( RES_PARATR_LIST_RESTARTVALUE,
-                                                   static_cast<sal_Int16>(nNumber) );
-            SetAttr( aNewListRestartValueItem );
-        }
+        ResetAttr( RES_PARATR_LIST_RESTARTVALUE );
+    }
+    else
+    {
+        SfxInt16Item aNewListRestartValueItem( RES_PARATR_LIST_RESTARTVALUE,
+                                               static_cast<sal_Int16>(nNumber) );
+        SetAttr( aNewListRestartValueItem );
     }
 }
 
@@ -4289,23 +4289,23 @@ void SwTextNode::AddToList()
     }
 
     SwList *const pList(FindList(this));
-    if (pList && GetNodes().IsDocNodes()) // not for undo nodes
+    if (!(pList && GetNodes().IsDocNodes())) // not for undo nodes
+        return;
+
+    assert(!mpNodeNum);
+    mpNodeNum.reset(new SwNodeNum(this, false));
+    pList->InsertListItem(*mpNodeNum, false, GetAttrListLevel());
+    // iterate all frames & if there's one with hidden layout...
+    SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> iter(*this);
+    for (SwTextFrame* pFrame = iter.First(); pFrame; pFrame = iter.Next())
     {
-        assert(!mpNodeNum);
-        mpNodeNum.reset(new SwNodeNum(this, false));
-        pList->InsertListItem(*mpNodeNum, false, GetAttrListLevel());
-        // iterate all frames & if there's one with hidden layout...
-        SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> iter(*this);
-        for (SwTextFrame* pFrame = iter.First(); pFrame; pFrame = iter.Next())
+        if (pFrame->getRootFrame()->IsHideRedlines())
         {
-            if (pFrame->getRootFrame()->IsHideRedlines())
+            if (pFrame->GetTextNodeForParaProps() == this)
             {
-                if (pFrame->GetTextNodeForParaProps() == this)
-                {
-                    AddToListRLHidden();
-                }
-                break; // assume it's consistent, need to check only once
+                AddToListRLHidden();
             }
+            break; // assume it's consistent, need to check only once
         }
     }
 }
@@ -4879,22 +4879,22 @@ namespace {
         }
 
         // #i70748#
-        if (mbOutlineLevelSet)
+        if (!mbOutlineLevelSet)
+            return;
+
+        mrTextNode.GetNodes().UpdateOutlineNode(mrTextNode);
+        if (mrTextNode.GetAttrOutlineLevel() == 0)
         {
-            mrTextNode.GetNodes().UpdateOutlineNode(mrTextNode);
-            if (mrTextNode.GetAttrOutlineLevel() == 0)
+            mrTextNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
+        }
+        else
+        {
+            const SfxPoolItem* pItem = nullptr;
+            if ( mrTextNode.GetSwAttrSet().GetItemState( RES_PARATR_NUMRULE,
+                                                        true, &pItem )
+                                                            != SfxItemState::SET )
             {
-                mrTextNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
-            }
-            else
-            {
-                const SfxPoolItem* pItem = nullptr;
-                if ( mrTextNode.GetSwAttrSet().GetItemState( RES_PARATR_NUMRULE,
-                                                            true, &pItem )
-                                                                != SfxItemState::SET )
-                {
-                    mrTextNode.SetEmptyListStyleDueToSetOutlineLevelAttr();
-                }
+                mrTextNode.SetEmptyListStyleDueToSetOutlineLevelAttr();
             }
         }
     }
@@ -5103,29 +5103,29 @@ namespace {
             }
         }
 
-        if ( mrTextNode.IsInList() )
+        if ( !mrTextNode.IsInList() )
+            return;
+
+        if ( mbUpdateListLevel )
         {
-            if ( mbUpdateListLevel )
-            {
-                auto const nLevel(mrTextNode.GetAttrListLevel());
-                mrTextNode.DoNum(
-                    [nLevel](SwNodeNum & rNum) { rNum.SetLevelInListTree(nLevel); });
-            }
+            auto const nLevel(mrTextNode.GetAttrListLevel());
+            mrTextNode.DoNum(
+                [nLevel](SwNodeNum & rNum) { rNum.SetLevelInListTree(nLevel); });
+        }
 
-            if ( mbUpdateListRestart )
-            {
-                mrTextNode.DoNum(
-                    [](SwNodeNum & rNum) {
-                        rNum.InvalidateMe();
-                        rNum.NotifyInvalidSiblings();
-                    });
-            }
+        if ( mbUpdateListRestart )
+        {
+            mrTextNode.DoNum(
+                [](SwNodeNum & rNum) {
+                    rNum.InvalidateMe();
+                    rNum.NotifyInvalidSiblings();
+                });
+        }
 
-            if ( mbUpdateListCount )
-            {
-                mrTextNode.DoNum(
-                    [](SwNodeNum & rNum) { rNum.InvalidateAndNotifyTree(); });
-            }
+        if ( mbUpdateListCount )
+        {
+            mrTextNode.DoNum(
+                [](SwNodeNum & rNum) { rNum.InvalidateAndNotifyTree(); });
         }
     }
     // End of class <HandleResetAttrAtTextNode>
