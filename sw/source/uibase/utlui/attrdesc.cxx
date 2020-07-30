@@ -68,20 +68,20 @@ void SwAttrSet::GetPresentation(
 {
     rText.clear();
     OUString aStr;
-    if( Count() )
+    if( !Count() )
+        return;
+
+    SfxItemIter aIter( *this );
+    const SfxPoolItem* pItem = aIter.GetCurItem();
+    const IntlWrapper aInt(SvtSysLocale().GetUILanguageTag());
+    do
     {
-        SfxItemIter aIter( *this );
-        const SfxPoolItem* pItem = aIter.GetCurItem();
-        const IntlWrapper aInt(SvtSysLocale().GetUILanguageTag());
-        do
-        {
-            pItem->GetPresentation(ePres, eCoreMetric, ePresMetric, aStr, aInt);
-            if( rText.getLength() && aStr.getLength() )
-                rText += ", ";
-            rText += aStr;
-            pItem = aIter.NextItem();
-        } while (pItem);
-    }
+        pItem->GetPresentation(ePres, eCoreMetric, ePresMetric, aStr, aInt);
+        if( rText.getLength() && aStr.getLength() )
+            rText += ", ";
+        rText += aStr;
+        pItem = aIter.NextItem();
+    } while (pItem);
 }
 
 bool SwFormatCharFormat::GetPresentation

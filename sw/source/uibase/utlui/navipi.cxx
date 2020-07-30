@@ -92,25 +92,24 @@ void SwNavigationPI::MoveOutline(SwOutlineNodes::size_type nSource, SwOutlineNod
     SwWrtShell &rSh = pView->GetWrtShell();
     if(nTarget < nSource || nTarget == SwOutlineNodes::npos)
         nTarget ++;
-    if ( rSh.IsOutlineMovable( nSource ))
-    {
+    if ( !rSh.IsOutlineMovable( nSource ))
+        return;
 
-        SwOutlineNodes::difference_type nMove = nTarget-nSource; //( nDir<0 ) ? 1 : 0 ;
-        rSh.GotoOutline(nSource);
-        rSh.MakeOutlineSel(nSource, nSource, true);
-        // While moving, the selected children does not counting.
-        const SwOutlineNodes::size_type nLastOutlinePos = rSh.GetOutlinePos(MAXLEVEL);
-        if(nMove > 1 && nLastOutlinePos < nTarget)
-        {
-            if(!rSh.IsCursorPtAtEnd())
-                rSh.SwapPam();
-            nMove -= nLastOutlinePos - nSource;
-        }
-        if( nMove < 1 || nLastOutlinePos < nTarget )
-            rSh.MoveOutlinePara( nMove );
-        rSh.ClearMark();
-        rSh.GotoOutline( nSource + nMove);
+    SwOutlineNodes::difference_type nMove = nTarget-nSource; //( nDir<0 ) ? 1 : 0 ;
+    rSh.GotoOutline(nSource);
+    rSh.MakeOutlineSel(nSource, nSource, true);
+    // While moving, the selected children does not counting.
+    const SwOutlineNodes::size_type nLastOutlinePos = rSh.GetOutlinePos(MAXLEVEL);
+    if(nMove > 1 && nLastOutlinePos < nTarget)
+    {
+        if(!rSh.IsCursorPtAtEnd())
+            rSh.SwapPam();
+        nMove -= nLastOutlinePos - nSource;
     }
+    if( nMove < 1 || nLastOutlinePos < nTarget )
+        rSh.MoveOutlinePara( nMove );
+    rSh.ClearMark();
+    rSh.GotoOutline( nSource + nMove);
 
 }
 
@@ -348,20 +347,20 @@ IMPL_LINK(SwNavigationPI, ToolBox3DropdownClickHdl, const OString&, rCommand, vo
     if (!m_xContent3ToolBox->get_menu_item_active(rCommand))
         return;
 
-    if (rCommand == "dragmode")
+    if (rCommand != "dragmode")
+        return;
+
+    switch (m_nRegionMode)
     {
-        switch (m_nRegionMode)
-        {
-            case RegionMode::NONE:
-                m_xDragModeMenu->set_active("hyperlink", true);
-                break;
-            case RegionMode::LINK:
-                m_xDragModeMenu->set_active("link", true);
-                break;
-            case RegionMode::EMBEDDED:
-                m_xDragModeMenu->set_active("copy", true);
-                break;
-        }
+        case RegionMode::NONE:
+            m_xDragModeMenu->set_active("hyperlink", true);
+            break;
+        case RegionMode::LINK:
+            m_xDragModeMenu->set_active("link", true);
+            break;
+        case RegionMode::EMBEDDED:
+            m_xDragModeMenu->set_active("copy", true);
+            break;
     }
 }
 
@@ -867,21 +866,21 @@ void SwNavigationPI::UpdateListBox()
 IMPL_LINK(SwNavigationPI, DoneLink, SfxPoolItem const *, pItem, void)
 {
     const SfxViewFrameItem* pFrameItem = dynamic_cast<SfxViewFrameItem const *>( pItem  );
-    if( pFrameItem )
+    if( !pFrameItem )
+        return;
+
+    SfxViewFrame* pFrame =  pFrameItem->GetFrame();
+    if(pFrame)
     {
-        SfxViewFrame* pFrame =  pFrameItem->GetFrame();
-        if(pFrame)
-        {
-            m_xContentTree->clear();
-            m_pContentView = dynamic_cast<SwView*>( pFrame->GetViewShell() );
-            OSL_ENSURE(m_pContentView, "no SwView");
-            if(m_pContentView)
-                m_pContentWrtShell = m_pContentView->GetWrtShellPtr();
-            else
-                m_pContentWrtShell = nullptr;
-            m_pxObjectShell.reset( new SfxObjectShellLock(pFrame->GetObjectShell()) );
-            FillBox();
-        }
+        m_xContentTree->clear();
+        m_pContentView = dynamic_cast<SwView*>( pFrame->GetViewShell() );
+        OSL_ENSURE(m_pContentView, "no SwView");
+        if(m_pContentView)
+            m_pContentWrtShell = m_pContentView->GetWrtShellPtr();
+        else
+            m_pContentWrtShell = nullptr;
+        m_pxObjectShell.reset( new SfxObjectShellLock(pFrame->GetObjectShell()) );
+        FillBox();
     }
 }
 

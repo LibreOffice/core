@@ -54,44 +54,44 @@ SwNavigationConfig::SwNavigationConfig() :
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
     OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() == aNames.getLength())
+    if(aValues.getLength() != aNames.getLength())
+        return;
+
+    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
-        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        if(pValues[nProp].hasValue())
         {
-            if(pValues[nProp].hasValue())
+            switch(nProp)
             {
-                switch(nProp)
+                case 0:
                 {
-                    case 0:
+                    sal_Int32 nTmp = {}; // spurious -Werror=maybe-uninitialized
+                    if (pValues[nProp] >>= nTmp)
                     {
-                        sal_Int32 nTmp = {}; // spurious -Werror=maybe-uninitialized
-                        if (pValues[nProp] >>= nTmp)
+                        if (nTmp < sal_Int32(ContentTypeId::UNKNOWN)
+                            || nTmp > sal_Int32(ContentTypeId::LAST))
                         {
-                            if (nTmp < sal_Int32(ContentTypeId::UNKNOWN)
-                                || nTmp > sal_Int32(ContentTypeId::LAST))
-                            {
-                                SAL_WARN(
-                                    "sw",
-                                    "out-of-bounds ContentTypeId " << nTmp);
-                                nTmp = sal_Int32(ContentTypeId::UNKNOWN);
-                            }
-                            nRootType = static_cast<ContentTypeId>(nTmp);
+                            SAL_WARN(
+                                "sw",
+                                "out-of-bounds ContentTypeId " << nTmp);
+                            nTmp = sal_Int32(ContentTypeId::UNKNOWN);
                         }
-                        break;
+                        nRootType = static_cast<ContentTypeId>(nTmp);
                     }
-                    case 1: pValues[nProp] >>= nSelectedPos;   break;
-                    case 2: pValues[nProp] >>= nOutlineLevel;  break;
-                    case 3:
-                    {
-                            sal_uInt16 nTmp;
-                            if (pValues[nProp] >>= nTmp)
-                                nRegionMode = static_cast<RegionMode>(nTmp);
-                            break;
-                    }
-                    case 4: pValues[nProp] >>= nActiveBlock;    break;
-                    case 5: bIsSmall        = *o3tl::doAccess<bool>(pValues[nProp]);  break;
-                    case 6: bIsGlobalActive = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                    break;
                 }
+                case 1: pValues[nProp] >>= nSelectedPos;   break;
+                case 2: pValues[nProp] >>= nOutlineLevel;  break;
+                case 3:
+                {
+                        sal_uInt16 nTmp;
+                        if (pValues[nProp] >>= nTmp)
+                            nRegionMode = static_cast<RegionMode>(nTmp);
+                        break;
+                }
+                case 4: pValues[nProp] >>= nActiveBlock;    break;
+                case 5: bIsSmall        = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                case 6: bIsGlobalActive = *o3tl::doAccess<bool>(pValues[nProp]);  break;
             }
         }
     }

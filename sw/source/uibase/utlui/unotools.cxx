@@ -428,34 +428,34 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
 void SwOneExampleFrame::ClearDocument()
 {
     uno::Reference< lang::XUnoTunnel> xTunnel( m_xCursor, uno::UNO_QUERY);
-    if( xTunnel.is() )
-    {
-        OTextCursorHelper* pCursor = reinterpret_cast<OTextCursorHelper*>(xTunnel->getSomething(
-                                        OTextCursorHelper::getUnoTunnelId()) );
-        if( pCursor )
-        {
-            SwDoc* pDoc = pCursor->GetDoc();
-            SwEditShell* pSh = pDoc->GetEditShell();
-            pSh->LockPaint();
-            pSh->StartAllAction();
-            pSh->KillPams();
-            pSh->ClearMark();
-            pDoc->ClearDoc();
-            pSh->ClearUpCursors();
+    if( !xTunnel.is() )
+        return;
 
-            if( m_aLoadedIdle.IsActive())
-            {
-                pSh->EndAllAction();
-                pSh->UnlockPaint();
-            }
-            m_aLoadedIdle.Start();
-        }
-        else
+    OTextCursorHelper* pCursor = reinterpret_cast<OTextCursorHelper*>(xTunnel->getSomething(
+                                    OTextCursorHelper::getUnoTunnelId()) );
+    if( pCursor )
+    {
+        SwDoc* pDoc = pCursor->GetDoc();
+        SwEditShell* pSh = pDoc->GetEditShell();
+        pSh->LockPaint();
+        pSh->StartAllAction();
+        pSh->KillPams();
+        pSh->ClearMark();
+        pDoc->ClearDoc();
+        pSh->ClearUpCursors();
+
+        if( m_aLoadedIdle.IsActive())
         {
-            m_xCursor->gotoStart(false);
-            m_xCursor->gotoEnd(true);
-            m_xCursor->setString(OUString());
+            pSh->EndAllAction();
+            pSh->UnlockPaint();
         }
+        m_aLoadedIdle.Start();
+    }
+    else
+    {
+        m_xCursor->gotoStart(false);
+        m_xCursor->gotoEnd(true);
+        m_xCursor->setString(OUString());
     }
 }
 

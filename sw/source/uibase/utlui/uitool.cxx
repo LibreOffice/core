@@ -373,32 +373,32 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
 
     // Register compliant
 
-    if(SfxItemState::SET == rSet.GetItemState(
+    if(SfxItemState::SET != rSet.GetItemState(
                             SID_SWREGISTER_MODE, false, &pItem))
+        return;
+
+    bool bSet = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+    if(!bSet)
+        rPageDesc.SetRegisterFormatColl(nullptr);
+    else if(SfxItemState::SET == rSet.GetItemState(
+                            SID_SWREGISTER_COLLECTION, false, &pItem))
     {
-        bool bSet = static_cast<const SfxBoolItem*>(pItem)->GetValue();
-        if(!bSet)
-            rPageDesc.SetRegisterFormatColl(nullptr);
-        else if(SfxItemState::SET == rSet.GetItemState(
-                                SID_SWREGISTER_COLLECTION, false, &pItem))
+        const OUString& rColl = static_cast<const SfxStringItem*>(pItem)->GetValue();
+        SwDoc& rDoc = *rMaster.GetDoc();
+        SwTextFormatColl* pColl = rDoc.FindTextFormatCollByName( rColl );
+        if( !pColl )
         {
-            const OUString& rColl = static_cast<const SfxStringItem*>(pItem)->GetValue();
-            SwDoc& rDoc = *rMaster.GetDoc();
-            SwTextFormatColl* pColl = rDoc.FindTextFormatCollByName( rColl );
-            if( !pColl )
-            {
-                const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
-                    rColl, SwGetPoolIdFromName::TxtColl );
-                if( USHRT_MAX != nId )
-                    pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( nId );
-                else
-                    pColl = rDoc.MakeTextFormatColl( rColl,
-                                rDoc.GetDfltTextFormatColl() );
-            }
-            if( pColl )
-                pColl->SetFormatAttr( SwRegisterItem ( true ));
-            rPageDesc.SetRegisterFormatColl( pColl );
+            const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
+                rColl, SwGetPoolIdFromName::TxtColl );
+            if( USHRT_MAX != nId )
+                pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( nId );
+            else
+                pColl = rDoc.MakeTextFormatColl( rColl,
+                            rDoc.GetDfltTextFormatColl() );
         }
+        if( pColl )
+            pColl->SetFormatAttr( SwRegisterItem ( true ));
+        rPageDesc.SetRegisterFormatColl( pColl );
     }
 }
 

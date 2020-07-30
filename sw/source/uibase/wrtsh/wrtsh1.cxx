@@ -169,22 +169,22 @@ bool SwWrtShell::IsEndWrd()
 // Insert string
 void SwWrtShell::InsertByWord( const OUString & rStr)
 {
-    if( !rStr.isEmpty() )
-    {
-        bool bDelim = GetAppCharClass().isLetterNumeric( rStr, 0 );
-        sal_Int32 nPos = 0, nStt = 0;
-        for( ; nPos < rStr.getLength(); nPos++ )
-           {
-            bool bTmpDelim = GetAppCharClass().isLetterNumeric( rStr, nPos );
-            if( bTmpDelim != bDelim )
-            {
-                Insert( rStr.copy( nStt, nPos - nStt ));
-                nStt = nPos;
-            }
-        }
-        if( nStt != nPos )
+    if( rStr.isEmpty() )
+        return;
+
+    bool bDelim = GetAppCharClass().isLetterNumeric( rStr, 0 );
+    sal_Int32 nPos = 0, nStt = 0;
+    for( ; nPos < rStr.getLength(); nPos++ )
+       {
+        bool bTmpDelim = GetAppCharClass().isLetterNumeric( rStr, nPos );
+        if( bTmpDelim != bDelim )
+        {
             Insert( rStr.copy( nStt, nPos - nStt ));
+            nStt = nPos;
+        }
     }
+    if( nStt != nPos )
+        Insert( rStr.copy( nStt, nPos - nStt ));
 }
 
 void SwWrtShell::Insert( const OUString &rStr )
@@ -609,30 +609,30 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrame
 
 void SwWrtShell::LaunchOLEObj( long nVerb )
 {
-    if ( GetCntType() == CNT_OLE &&
-         !GetView().GetViewFrame()->GetFrame().IsInPlace() )
-    {
-        svt::EmbeddedObjectRef& xRef = GetOLEObject();
-        OSL_ENSURE( xRef.is(), "OLE not found" );
+    if ( GetCntType() != CNT_OLE ||
+         GetView().GetViewFrame()->GetFrame().IsInPlace() )
+        return;
 
-        // LOK: we don't want to handle any other embedded objects than
-        // charts, there are too many problems with eg. embedded spreadsheets
-        // (like it creates a separate view for the calc sheet)
-        if (comphelper::LibreOfficeKit::isActive() && !SotExchange::IsChart(xRef->getClassID()))
-            return;
+    svt::EmbeddedObjectRef& xRef = GetOLEObject();
+    OSL_ENSURE( xRef.is(), "OLE not found" );
 
-        SfxInPlaceClient* pCli = GetView().FindIPClient( xRef.GetObject(), &GetView().GetEditWin() );
-        if ( !pCli )
-            pCli = new SwOleClient( &GetView(), &GetView().GetEditWin(), xRef );
+    // LOK: we don't want to handle any other embedded objects than
+    // charts, there are too many problems with eg. embedded spreadsheets
+    // (like it creates a separate view for the calc sheet)
+    if (comphelper::LibreOfficeKit::isActive() && !SotExchange::IsChart(xRef->getClassID()))
+        return;
 
-        static_cast<SwOleClient*>(pCli)->SetInDoVerb( true );
+    SfxInPlaceClient* pCli = GetView().FindIPClient( xRef.GetObject(), &GetView().GetEditWin() );
+    if ( !pCli )
+        pCli = new SwOleClient( &GetView(), &GetView().GetEditWin(), xRef );
 
-        CalcAndSetScale( xRef );
-        pCli->DoVerb( nVerb );
+    static_cast<SwOleClient*>(pCli)->SetInDoVerb( true );
 
-        static_cast<SwOleClient*>(pCli)->SetInDoVerb( false );
-        CalcAndSetScale( xRef );
-    }
+    CalcAndSetScale( xRef );
+    pCli->DoVerb( nVerb );
+
+    static_cast<SwOleClient*>(pCli)->SetInDoVerb( false );
+    CalcAndSetScale( xRef );
 }
 
 void SwWrtShell::MoveObjectIfActive( svt::EmbeddedObjectRef& xObj, const Point& rOffset )
@@ -936,20 +936,20 @@ void SwWrtShell::InsertColumnBreak()
 {
     SwActContext aActContext(this);
     ResetCursorStack();
-    if( CanInsert() )
+    if( !CanInsert() )
+        return;
+
+    StartUndo(SwUndoId::UI_INSERT_COLUMN_BREAK);
+
+    if ( !IsCursorInTable() )
     {
-        StartUndo(SwUndoId::UI_INSERT_COLUMN_BREAK);
-
-        if ( !IsCursorInTable() )
-        {
-            if(HasSelection())
-                DelRight();
-            SwFEShell::SplitNode( false, false );
-        }
-        SetAttrItem(SvxFormatBreakItem(SvxBreak::ColumnBefore, RES_BREAK));
-
-        EndUndo(SwUndoId::UI_INSERT_COLUMN_BREAK);
+        if(HasSelection())
+            DelRight();
+        SwFEShell::SplitNode( false, false );
     }
+    SetAttrItem(SvxFormatBreakItem(SvxBreak::ColumnBefore, RES_BREAK));
+
+    EndUndo(SwUndoId::UI_INSERT_COLUMN_BREAK);
 }
 
 // Insert footnote
@@ -958,30 +958,30 @@ void SwWrtShell::InsertColumnBreak()
 void SwWrtShell::InsertFootnote(const OUString &rStr, bool bEndNote, bool bEdit )
 {
     ResetCursorStack();
-    if( CanInsert() )
+    if( !CanInsert() )
+        return;
+
+    if(HasSelection())
     {
-        if(HasSelection())
-        {
-            //collapse cursor to the end
-            if(!IsCursorPtAtEnd())
-                SwapPam();
-            ClearMark();
-        }
-        SwPosition aPos = *GetCursor()->GetPoint();
-        SwFormatFootnote aFootNote( bEndNote );
-        if(!rStr.isEmpty())
-            aFootNote.SetNumStr( rStr );
-
-        SetAttrItem(aFootNote);
-
-        if( bEdit )
-        {
-            // For editing the footnote text.
-            Left(CRSR_SKIP_CHARS, false, 1, false );
-            GotoFootnoteText();
-        }
-        m_aNavigationMgr.addEntry(aPos);
+        //collapse cursor to the end
+        if(!IsCursorPtAtEnd())
+            SwapPam();
+        ClearMark();
     }
+    SwPosition aPos = *GetCursor()->GetPoint();
+    SwFormatFootnote aFootNote( bEndNote );
+    if(!rStr.isEmpty())
+        aFootNote.SetNumStr( rStr );
+
+    SetAttrItem(aFootNote);
+
+    if( bEdit )
+    {
+        // For editing the footnote text.
+        Left(CRSR_SKIP_CHARS, false, 1, false );
+        GotoFootnoteText();
+    }
+    m_aNavigationMgr.addEntry(aPos);
 }
 
 // SplitNode; also, because
@@ -991,22 +991,22 @@ void SwWrtShell::InsertFootnote(const OUString &rStr, bool bEndNote, bool bEdit 
 void SwWrtShell::SplitNode( bool bAutoFormat )
 {
     ResetCursorStack();
-    if( CanInsert() )
+    if( !CanInsert() )
+        return;
+
+    SwActContext aActContext(this);
+
+    m_rView.GetEditWin().FlushInBuffer();
+    bool bHasSel = HasSelection();
+    if( bHasSel )
     {
-        SwActContext aActContext(this);
-
-        m_rView.GetEditWin().FlushInBuffer();
-        bool bHasSel = HasSelection();
-        if( bHasSel )
-        {
-            StartUndo( SwUndoId::INSERT );
-            DelRight();
-        }
-
-        SwFEShell::SplitNode( bAutoFormat );
-        if( bHasSel )
-            EndUndo( SwUndoId::INSERT );
+        StartUndo( SwUndoId::INSERT );
+        DelRight();
     }
+
+    SwFEShell::SplitNode( bAutoFormat );
+    if( bHasSel )
+        EndUndo( SwUndoId::INSERT );
 }
 
 // Turn on numbering
@@ -1348,43 +1348,43 @@ void SwWrtShell::NumOrBulletOff()
 {
     const SwNumRule * pCurNumRule = GetNumRuleAtCurrCursorPos();
 
-    if (pCurNumRule)
+    if (!pCurNumRule)
+        return;
+
+    if (pCurNumRule->IsOutlineRule())
     {
-        if (pCurNumRule->IsOutlineRule())
+        SwNumRule aNumRule(*pCurNumRule);
+
+        SwTextNode * pTextNode =
+            sw::GetParaPropsNode(*GetLayout(), GetCursor()->GetPoint()->nNode);
+
+        if (pTextNode)
         {
-            SwNumRule aNumRule(*pCurNumRule);
+            int nLevel = pTextNode->GetActualListLevel();
 
-            SwTextNode * pTextNode =
-                sw::GetParaPropsNode(*GetLayout(), GetCursor()->GetPoint()->nNode);
+            if (nLevel < 0)
+                nLevel = 0;
 
-            if (pTextNode)
-            {
-                int nLevel = pTextNode->GetActualListLevel();
+            if (nLevel >= MAXLEVEL)
+                nLevel = MAXLEVEL - 1;
 
-                if (nLevel < 0)
-                    nLevel = 0;
+            SwNumFormat aFormat(aNumRule.Get(static_cast<sal_uInt16>(nLevel)));
 
-                if (nLevel >= MAXLEVEL)
-                    nLevel = MAXLEVEL - 1;
+            aFormat.SetNumberingType(SVX_NUM_NUMBER_NONE);
+            aNumRule.Set(nLevel, aFormat);
 
-                SwNumFormat aFormat(aNumRule.Get(static_cast<sal_uInt16>(nLevel)));
-
-                aFormat.SetNumberingType(SVX_NUM_NUMBER_NONE);
-                aNumRule.Set(nLevel, aFormat);
-
-                // no start or continuation of a list - the outline style is only changed.
-                SetCurNumRule( aNumRule, false );
-            }
+            // no start or continuation of a list - the outline style is only changed.
+            SetCurNumRule( aNumRule, false );
         }
-        else
-        {
-            DelNumRules();
-        }
-
-        // #126346# - Cursor can not be anymore in front of
-        // a label, because numbering/bullet is switched off.
-        SetInFrontOfLabel( false );
     }
+    else
+    {
+        DelNumRules();
+    }
+
+    // #126346# - Cursor can not be anymore in front of
+    // a label, because numbering/bullet is switched off.
+    SetInFrontOfLabel( false );
 }
 // <- #i29560#
 
@@ -1632,38 +1632,38 @@ void SwWrtShell::AutoUpdateFrame( SwFrameFormat* pFormat, const SfxItemSet& rSty
 void SwWrtShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar )
 {
     ResetCursorStack();
-    if(CanInsert())
+    if(!CanInsert())
+        return;
+
+    bool bStarted = false;
+    SwRewriter aRewriter;
+
+    if(HasSelection())
     {
-        bool bStarted = false;
-        SwRewriter aRewriter;
+            // Only parentheses here, because the regular insert
+            // is already clipped to the editshell
+        StartAllAction();
 
-        if(HasSelection())
-        {
-                // Only parentheses here, because the regular insert
-                // is already clipped to the editshell
-            StartAllAction();
+        OUString aTmpStr1 = SwResId(STR_START_QUOTE) +
+            GetSelText() +
+            SwResId(STR_END_QUOTE);
+        OUString aTmpStr3 = SwResId(STR_START_QUOTE) +
+            OUStringChar(cChar) +
+            SwResId(STR_END_QUOTE);
+        aRewriter.AddRule( UndoArg1, aTmpStr1 );
+        aRewriter.AddRule( UndoArg2, SwResId(STR_YIELDS) );
+        aRewriter.AddRule( UndoArg3, aTmpStr3 );
 
-            OUString aTmpStr1 = SwResId(STR_START_QUOTE) +
-                GetSelText() +
-                SwResId(STR_END_QUOTE);
-            OUString aTmpStr3 = SwResId(STR_START_QUOTE) +
-                OUStringChar(cChar) +
-                SwResId(STR_END_QUOTE);
-            aRewriter.AddRule( UndoArg1, aTmpStr1 );
-            aRewriter.AddRule( UndoArg2, SwResId(STR_YIELDS) );
-            aRewriter.AddRule( UndoArg3, aTmpStr3 );
+        StartUndo( SwUndoId::REPLACE, &aRewriter );
+        bStarted = true;
+        DelRight();
+    }
+    SwEditShell::AutoCorrect( rACorr, IsInsMode(), cChar );
 
-            StartUndo( SwUndoId::REPLACE, &aRewriter );
-            bStarted = true;
-            DelRight();
-        }
-        SwEditShell::AutoCorrect( rACorr, IsInsMode(), cChar );
-
-        if(bStarted)
-        {
-            EndAllAction();
-            EndUndo( SwUndoId::REPLACE, &aRewriter );
-        }
+    if(bStarted)
+    {
+        EndAllAction();
+        EndUndo( SwUndoId::REPLACE, &aRewriter );
     }
 }
 

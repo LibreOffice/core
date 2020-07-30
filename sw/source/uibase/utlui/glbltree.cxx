@@ -1069,22 +1069,22 @@ IMPL_LINK( SwGlobalTree, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, vo
         return;
 
     SfxMediumList aMedList(m_pDocInserter->CreateMediumList());
-    if ( !aMedList.empty() )
+    if ( aMedList.empty() )
+        return;
+
+    Sequence< OUString >aFileNames( aMedList.size() );
+    OUString* pFileNames = aFileNames.getArray();
+    sal_Int32 nPos = 0;
+    for (const std::unique_ptr<SfxMedium>& pMed : aMedList)
     {
-        Sequence< OUString >aFileNames( aMedList.size() );
-        OUString* pFileNames = aFileNames.getArray();
-        sal_Int32 nPos = 0;
-        for (const std::unique_ptr<SfxMedium>& pMed : aMedList)
-        {
-            OUString sFileName = pMed->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE )
-                + OUStringChar(sfx2::cTokenSeparator)
-                + pMed->GetFilter()->GetFilterName()
-                + OUStringChar(sfx2::cTokenSeparator);
-            pFileNames[nPos++] = sFileName;
-        }
-        InsertRegion( m_pDocContent.get(), aFileNames );
-        m_pDocContent.reset();
+        OUString sFileName = pMed->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE )
+            + OUStringChar(sfx2::cTokenSeparator)
+            + pMed->GetFilter()->GetFilterName()
+            + OUStringChar(sfx2::cTokenSeparator);
+        pFileNames[nPos++] = sFileName;
     }
+    InsertRegion( m_pDocContent.get(), aFileNames );
+    m_pDocContent.reset();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
