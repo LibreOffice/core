@@ -223,7 +223,7 @@ void SwTextPortion::BreakCut( SwTextFormatInfo &rInf, const SwTextGuess &rGuess 
     // We truncate ...
     const sal_uInt16 nLineWidth = static_cast<sal_uInt16>(rInf.Width() - rInf.X());
     TextFrameIndex nLen = rGuess.CutPos() - rInf.GetIdx();
-    if (nLen > TextFrameIndex(0))
+    if ((nLen > TextFrameIndex(0)) && rInf.GetFont()->GetCaseMap() != SvxCaseMap::SmallCaps)
     {
         // special case: guess does not always provide the correct
         // width, only in common cases.
@@ -344,7 +344,8 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
         Insert( aGuess.ReleaseHangingPortion() );
     }
     // breakPos >= index
-    else if (aGuess.BreakPos() >= rInf.GetIdx() && aGuess.BreakPos() != TextFrameIndex(COMPLETE_STRING))
+    else if (aGuess.BreakPos() >= rInf.GetIdx() && aGuess.BreakPos() != TextFrameIndex(COMPLETE_STRING)
+        && rInf.GetFont()->GetCaseMap() != SvxCaseMap::SmallCaps)
     {
         // case B1
         if( aGuess.HyphWord().is() && aGuess.BreakPos() > rInf.GetLineStart()
