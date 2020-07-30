@@ -804,19 +804,19 @@ void wwFont::WriteDocx( DocxAttributeOutput* rAttrOutput ) const
 {
     // no font embedding, panose id, subsetting, ... implemented
 
-    if (!msFamilyNm.isEmpty())
-    {
-        rAttrOutput->StartFont( msFamilyNm );
+    if (msFamilyNm.isEmpty())
+        return;
 
-        if ( mbAlt )
-            rAttrOutput->FontAlternateName( msAltNm );
-        rAttrOutput->FontCharset( sw::ms::rtl_TextEncodingToWinCharset( meChrSet ), meChrSet );
-        rAttrOutput->FontFamilyType( meFamily );
-        rAttrOutput->FontPitchType( mePitch );
-        rAttrOutput->EmbedFont( msFamilyNm, meFamily, mePitch );
+    rAttrOutput->StartFont( msFamilyNm );
 
-        rAttrOutput->EndFont();
-    }
+    if ( mbAlt )
+        rAttrOutput->FontAlternateName( msAltNm );
+    rAttrOutput->FontCharset( sw::ms::rtl_TextEncodingToWinCharset( meChrSet ), meChrSet );
+    rAttrOutput->FontFamilyType( meFamily );
+    rAttrOutput->FontPitchType( mePitch );
+    rAttrOutput->EmbedFont( msFamilyNm, meFamily, mePitch );
+
+    rAttrOutput->EndFont();
 }
 
 void wwFont::WriteRtf( const RtfAttributeOutput* rAttrOutput ) const
@@ -1478,26 +1478,26 @@ void WW8Export::SetupSectionPositions( WW8_PdAttrDesc* pA )
 
 void WW8AttributeOutput::TextVerticalAdjustment( const drawing::TextVerticalAdjust nVA )
 {
-    if ( drawing::TextVerticalAdjust_TOP != nVA ) // top alignment is the default
+    if ( drawing::TextVerticalAdjust_TOP == nVA ) // top alignment is the default
+        return;
+
+    sal_uInt8 nMSVA = 0;
+    switch( nVA )
     {
-        sal_uInt8 nMSVA = 0;
-        switch( nVA )
-        {
-            case drawing::TextVerticalAdjust_CENTER:
-                nMSVA = 1;
-                break;
-            case drawing::TextVerticalAdjust_BOTTOM:  //Writer = 2, Word = 3
-                nMSVA = 3;
-                break;
-            case drawing::TextVerticalAdjust_BLOCK:   //Writer = 3, Word = 2
-                nMSVA = 2;
-                break;
-            default:
-                break;
-        }
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::SVjc::val );
-        m_rWW8Export.pO->push_back( nMSVA );
+        case drawing::TextVerticalAdjust_CENTER:
+            nMSVA = 1;
+            break;
+        case drawing::TextVerticalAdjust_BOTTOM:  //Writer = 2, Word = 3
+            nMSVA = 3;
+            break;
+        case drawing::TextVerticalAdjust_BLOCK:   //Writer = 3, Word = 2
+            nMSVA = 2;
+            break;
+        default:
+            break;
     }
+    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::SVjc::val );
+    m_rWW8Export.pO->push_back( nMSVA );
 }
 
 void WW8Export::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,

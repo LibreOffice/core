@@ -731,33 +731,33 @@ void RtfAttributeOutput::TableDefaultBorders(
         = pRow->GetCells()[pTableTextNodeInfoInner->getCell()].get();
     const SwFrameFormat* pCellFormat = pCell->GetBox()->GetFrameFormat();
     const SfxPoolItem* pItem;
-    if (pCellFormat->GetAttrSet().HasItem(RES_BOX, &pItem))
+    if (!pCellFormat->GetAttrSet().HasItem(RES_BOX, &pItem))
+        return;
+
+    auto& rBox = static_cast<const SvxBoxItem&>(*pItem);
+    static const SvxBoxItemLine aBorders[] = { SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT,
+                                               SvxBoxItemLine::BOTTOM, SvxBoxItemLine::RIGHT };
+    static const char* aBorderNames[]
+        = { OOO_STRING_SVTOOLS_RTF_CLBRDRT, OOO_STRING_SVTOOLS_RTF_CLBRDRL,
+            OOO_STRING_SVTOOLS_RTF_CLBRDRB, OOO_STRING_SVTOOLS_RTF_CLBRDRR };
+    //Yes left and top are swapped with each other for cell padding! Because
+    //that's what the thundering annoying rtf export/import word xp does.
+    static const char* aCellPadNames[]
+        = { OOO_STRING_SVTOOLS_RTF_CLPADL, OOO_STRING_SVTOOLS_RTF_CLPADT,
+            OOO_STRING_SVTOOLS_RTF_CLPADB, OOO_STRING_SVTOOLS_RTF_CLPADR };
+    static const char* aCellPadUnits[]
+        = { OOO_STRING_SVTOOLS_RTF_CLPADFL, OOO_STRING_SVTOOLS_RTF_CLPADFT,
+            OOO_STRING_SVTOOLS_RTF_CLPADFB, OOO_STRING_SVTOOLS_RTF_CLPADFR };
+    for (int i = 0; i < 4; ++i)
     {
-        auto& rBox = static_cast<const SvxBoxItem&>(*pItem);
-        static const SvxBoxItemLine aBorders[] = { SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT,
-                                                   SvxBoxItemLine::BOTTOM, SvxBoxItemLine::RIGHT };
-        static const char* aBorderNames[]
-            = { OOO_STRING_SVTOOLS_RTF_CLBRDRT, OOO_STRING_SVTOOLS_RTF_CLBRDRL,
-                OOO_STRING_SVTOOLS_RTF_CLBRDRB, OOO_STRING_SVTOOLS_RTF_CLBRDRR };
-        //Yes left and top are swapped with each other for cell padding! Because
-        //that's what the thundering annoying rtf export/import word xp does.
-        static const char* aCellPadNames[]
-            = { OOO_STRING_SVTOOLS_RTF_CLPADL, OOO_STRING_SVTOOLS_RTF_CLPADT,
-                OOO_STRING_SVTOOLS_RTF_CLPADB, OOO_STRING_SVTOOLS_RTF_CLPADR };
-        static const char* aCellPadUnits[]
-            = { OOO_STRING_SVTOOLS_RTF_CLPADFL, OOO_STRING_SVTOOLS_RTF_CLPADFT,
-                OOO_STRING_SVTOOLS_RTF_CLPADFB, OOO_STRING_SVTOOLS_RTF_CLPADFR };
-        for (int i = 0; i < 4; ++i)
+        if (const editeng::SvxBorderLine* pLn = rBox.GetLine(aBorders[i]))
+            m_aRowDefs.append(OutTBLBorderLine(m_rExport, pLn, aBorderNames[i]));
+        if (rBox.GetDistance(aBorders[i]))
         {
-            if (const editeng::SvxBorderLine* pLn = rBox.GetLine(aBorders[i]))
-                m_aRowDefs.append(OutTBLBorderLine(m_rExport, pLn, aBorderNames[i]));
-            if (rBox.GetDistance(aBorders[i]))
-            {
-                m_aRowDefs.append(aCellPadUnits[i]);
-                m_aRowDefs.append(sal_Int32(3));
-                m_aRowDefs.append(aCellPadNames[i]);
-                m_aRowDefs.append(static_cast<sal_Int32>(rBox.GetDistance(aBorders[i])));
-            }
+            m_aRowDefs.append(aCellPadUnits[i]);
+            m_aRowDefs.append(sal_Int32(3));
+            m_aRowDefs.append(aCellPadNames[i]);
+            m_aRowDefs.append(static_cast<sal_Int32>(rBox.GetDistance(aBorders[i])));
         }
     }
 }
@@ -817,27 +817,27 @@ void RtfAttributeOutput::TableHeight(ww8::WW8TableNodeInfoInner::Pointer_t pTabl
     const SwFrameFormat* pLineFormat = pTabLine->GetFrameFormat();
     const SwFormatFrameSize& rLSz = pLineFormat->GetFrameSize();
 
-    if (SwFrameSize::Variable != rLSz.GetHeightSizeType() && rLSz.GetHeight())
+    if (!(SwFrameSize::Variable != rLSz.GetHeightSizeType() && rLSz.GetHeight()))
+        return;
+
+    sal_Int32 nHeight = 0;
+
+    switch (rLSz.GetHeightSizeType())
     {
-        sal_Int32 nHeight = 0;
+        case SwFrameSize::Fixed:
+            nHeight = -rLSz.GetHeight();
+            break;
+        case SwFrameSize::Minimum:
+            nHeight = rLSz.GetHeight();
+            break;
+        default:
+            break;
+    }
 
-        switch (rLSz.GetHeightSizeType())
-        {
-            case SwFrameSize::Fixed:
-                nHeight = -rLSz.GetHeight();
-                break;
-            case SwFrameSize::Minimum:
-                nHeight = rLSz.GetHeight();
-                break;
-            default:
-                break;
-        }
-
-        if (nHeight)
-        {
-            m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_TRRH);
-            m_aRowDefs.append(nHeight);
-        }
+    if (nHeight)
+    {
+        m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_TRRH);
+        m_aRowDefs.append(nHeight);
     }
 }
 
@@ -889,19 +889,21 @@ void RtfAttributeOutput::TableVerticalCell(
         m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_CLVMRG);
 
     // vertical alignment
-    if (pCellFormat->GetAttrSet().HasItem(RES_VERT_ORIENT, &pItem))
-        switch (static_cast<const SwFormatVertOrient*>(pItem)->GetVertOrient())
-        {
-            case text::VertOrientation::CENTER:
-                m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_CLVERTALC);
-                break;
-            case text::VertOrientation::BOTTOM:
-                m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_CLVERTALB);
-                break;
-            default:
-                m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_CLVERTALT);
-                break;
-        }
+    if (!pCellFormat->GetAttrSet().HasItem(RES_VERT_ORIENT, &pItem))
+        return;
+
+    switch (static_cast<const SwFormatVertOrient*>(pItem)->GetVertOrient())
+    {
+        case text::VertOrientation::CENTER:
+            m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_CLVERTALC);
+            break;
+        case text::VertOrientation::BOTTOM:
+            m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_CLVERTALB);
+            break;
+        default:
+            m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_CLVERTALT);
+            break;
+    }
 }
 
 void RtfAttributeOutput::TableNodeInfoInner(ww8::WW8TableNodeInfoInner::Pointer_t pNodeInfoInner)
@@ -1089,26 +1091,26 @@ void RtfAttributeOutput::EndTable()
 
 void RtfAttributeOutput::FinishTableRowCell(const ww8::WW8TableNodeInfoInner::Pointer_t& pInner)
 {
-    if (pInner)
-    {
-        // Where are we in the table
-        sal_uInt32 nRow = pInner->getRow();
+    if (!pInner)
+        return;
 
-        const SwTable* pTable = pInner->getTable();
-        const SwTableLines& rLines = pTable->GetTabLines();
-        sal_uInt16 nLinesCount = rLines.size();
+    // Where are we in the table
+    sal_uInt32 nRow = pInner->getRow();
 
-        if (pInner->isEndOfCell())
-            EndTableCell();
+    const SwTable* pTable = pInner->getTable();
+    const SwTableLines& rLines = pTable->GetTabLines();
+    sal_uInt16 nLinesCount = rLines.size();
 
-        // This is a line end
-        if (pInner->isEndOfLine())
-            EndTableRow();
+    if (pInner->isEndOfCell())
+        EndTableCell();
 
-        // This is the end of the table
-        if (pInner->isEndOfLine() && (nRow + 1) == nLinesCount)
-            EndTable();
-    }
+    // This is a line end
+    if (pInner->isEndOfLine())
+        EndTableRow();
+
+    // This is the end of the table
+    if (pInner->isEndOfLine() && (nRow + 1) == nLinesCount)
+        EndTable();
 }
 
 void RtfAttributeOutput::StartStyles()
@@ -1858,23 +1860,23 @@ void lcl_TextFrameRelativeSize(std::vector<std::pair<OString, OString>>& rFlyPro
         rFlyProperties.emplace_back(std::make_pair("sizerelh", aRelation));
     }
     const sal_uInt8 nHeightPercent = rSize.GetHeightPercent();
-    if (nHeightPercent && nHeightPercent != SwFormatFrameSize::SYNCED)
-    {
-        rFlyProperties.push_back(
-            std::make_pair<OString, OString>("pctVert", OString::number(nHeightPercent * 10)));
+    if (!(nHeightPercent && nHeightPercent != SwFormatFrameSize::SYNCED))
+        return;
 
-        OString aRelation;
-        switch (rSize.GetHeightPercentRelation())
-        {
-            case text::RelOrientation::PAGE_FRAME:
-                aRelation = "1"; // page
-                break;
-            default:
-                aRelation = "0"; // margin
-                break;
-        }
-        rFlyProperties.emplace_back(std::make_pair("sizerelv", aRelation));
+    rFlyProperties.push_back(
+        std::make_pair<OString, OString>("pctVert", OString::number(nHeightPercent * 10)));
+
+    OString aRelation;
+    switch (rSize.GetHeightPercentRelation())
+    {
+        case text::RelOrientation::PAGE_FRAME:
+            aRelation = "1"; // page
+            break;
+        default:
+            aRelation = "0"; // margin
+            break;
     }
+    rFlyProperties.emplace_back(std::make_pair("sizerelv", aRelation));
 }
 }
 
@@ -2730,26 +2732,26 @@ void RtfAttributeOutput::CharEmphasisMark(const SvxEmphasisMarkItem& rEmphasisMa
 
 void RtfAttributeOutput::CharTwoLines(const SvxTwoLinesItem& rTwoLines)
 {
-    if (rTwoLines.GetValue())
-    {
-        sal_Unicode cStart = rTwoLines.GetStartBracket();
-        sal_Unicode cEnd = rTwoLines.GetEndBracket();
+    if (!rTwoLines.GetValue())
+        return;
 
-        sal_uInt16 nType;
-        if (!cStart && !cEnd)
-            nType = 0;
-        else if ('{' == cStart || '}' == cEnd)
-            nType = 4;
-        else if ('<' == cStart || '>' == cEnd)
-            nType = 3;
-        else if ('[' == cStart || ']' == cEnd)
-            nType = 2;
-        else // all other kind of brackets
-            nType = 1;
+    sal_Unicode cStart = rTwoLines.GetStartBracket();
+    sal_Unicode cEnd = rTwoLines.GetEndBracket();
 
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_TWOINONE);
-        m_aStyles.append(static_cast<sal_Int32>(nType));
-    }
+    sal_uInt16 nType;
+    if (!cStart && !cEnd)
+        nType = 0;
+    else if ('{' == cStart || '}' == cEnd)
+        nType = 4;
+    else if ('<' == cStart || '>' == cEnd)
+        nType = 3;
+    else if ('[' == cStart || ']' == cEnd)
+        nType = 2;
+    else // all other kind of brackets
+        nType = 1;
+
+    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_TWOINONE);
+    m_aStyles.append(static_cast<sal_Int32>(nType));
 }
 
 void RtfAttributeOutput::CharScaleWidth(const SvxCharScaleWidthItem& rScaleWidth)
@@ -2804,18 +2806,18 @@ void RtfAttributeOutput::CharHighlight(const SvxBrushItem& rBrush)
 
 void RtfAttributeOutput::TextINetFormat(const SwFormatINetFormat& rURL)
 {
-    if (!rURL.GetValue().isEmpty())
-    {
-        const SwCharFormat* pFormat;
-        const SwTextINetFormat* pTextAtr = rURL.GetTextINetFormat();
+    if (rURL.GetValue().isEmpty())
+        return;
 
-        if (pTextAtr && nullptr != (pFormat = pTextAtr->GetCharFormat()))
-        {
-            sal_uInt16 nStyle = m_rExport.GetId(pFormat);
-            OString* pString = m_rExport.GetStyle(nStyle);
-            if (pString)
-                m_aStyles.append(*pString);
-        }
+    const SwCharFormat* pFormat;
+    const SwTextINetFormat* pTextAtr = rURL.GetTextINetFormat();
+
+    if (pTextAtr && nullptr != (pFormat = pTextAtr->GetCharFormat()))
+    {
+        sal_uInt16 nStyle = m_rExport.GetId(pFormat);
+        OString* pString = m_rExport.GetStyle(nStyle);
+        if (pString)
+            m_aStyles.append(*pString);
     }
 }
 
@@ -3323,121 +3325,121 @@ void RtfAttributeOutput::FormatSurround(const SwFormatSurround& rSurround)
 
 void RtfAttributeOutput::FormatVertOrientation(const SwFormatVertOrient& rFlyVert)
 {
-    if (m_rExport.m_bOutFlyFrameAttrs && m_rExport.GetRTFFlySyntax())
+    if (!(m_rExport.m_bOutFlyFrameAttrs && m_rExport.GetRTFFlySyntax()))
+        return;
+
+    switch (rFlyVert.GetRelationOrient())
     {
-        switch (rFlyVert.GetRelationOrient())
-        {
-            case text::RelOrientation::PAGE_FRAME:
-                m_aFlyProperties.push_back(
-                    std::make_pair<OString, OString>("posrelv", OString::number(1)));
-                break;
-            default:
-                m_aFlyProperties.push_back(
-                    std::make_pair<OString, OString>("posrelv", OString::number(2)));
-                m_rExport.Strm()
-                    .WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SHPBYPARA)
-                    .WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SHPBYIGNORE);
-                break;
-        }
+        case text::RelOrientation::PAGE_FRAME:
+            m_aFlyProperties.push_back(
+                std::make_pair<OString, OString>("posrelv", OString::number(1)));
+            break;
+        default:
+            m_aFlyProperties.push_back(
+                std::make_pair<OString, OString>("posrelv", OString::number(2)));
+            m_rExport.Strm()
+                .WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SHPBYPARA)
+                .WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SHPBYIGNORE);
+            break;
+    }
 
-        switch (rFlyVert.GetVertOrient())
-        {
-            case text::VertOrientation::TOP:
-            case text::VertOrientation::LINE_TOP:
-                m_aFlyProperties.push_back(
-                    std::make_pair<OString, OString>("posv", OString::number(1)));
-                break;
-            case text::VertOrientation::BOTTOM:
-            case text::VertOrientation::LINE_BOTTOM:
-                m_aFlyProperties.push_back(
-                    std::make_pair<OString, OString>("posv", OString::number(3)));
-                break;
-            case text::VertOrientation::CENTER:
-            case text::VertOrientation::LINE_CENTER:
-                m_aFlyProperties.push_back(
-                    std::make_pair<OString, OString>("posv", OString::number(2)));
-                break;
-            default:
-                break;
-        }
+    switch (rFlyVert.GetVertOrient())
+    {
+        case text::VertOrientation::TOP:
+        case text::VertOrientation::LINE_TOP:
+            m_aFlyProperties.push_back(
+                std::make_pair<OString, OString>("posv", OString::number(1)));
+            break;
+        case text::VertOrientation::BOTTOM:
+        case text::VertOrientation::LINE_BOTTOM:
+            m_aFlyProperties.push_back(
+                std::make_pair<OString, OString>("posv", OString::number(3)));
+            break;
+        case text::VertOrientation::CENTER:
+        case text::VertOrientation::LINE_CENTER:
+            m_aFlyProperties.push_back(
+                std::make_pair<OString, OString>("posv", OString::number(2)));
+            break;
+        default:
+            break;
+    }
 
-        m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SHPTOP);
-        m_rExport.OutLong(rFlyVert.GetPos());
-        if (m_pFlyFrameSize)
-        {
-            m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SHPBOTTOM);
-            m_rExport.OutLong(rFlyVert.GetPos() + m_pFlyFrameSize->Height());
-        }
+    m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SHPTOP);
+    m_rExport.OutLong(rFlyVert.GetPos());
+    if (m_pFlyFrameSize)
+    {
+        m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SHPBOTTOM);
+        m_rExport.OutLong(rFlyVert.GetPos() + m_pFlyFrameSize->Height());
     }
 }
 
 void RtfAttributeOutput::FormatHorizOrientation(const SwFormatHoriOrient& rFlyHori)
 {
-    if (m_rExport.m_bOutFlyFrameAttrs && m_rExport.GetRTFFlySyntax())
+    if (!(m_rExport.m_bOutFlyFrameAttrs && m_rExport.GetRTFFlySyntax()))
+        return;
+
+    switch (rFlyHori.GetRelationOrient())
     {
-        switch (rFlyHori.GetRelationOrient())
-        {
-            case text::RelOrientation::PAGE_FRAME:
-                m_aFlyProperties.push_back(
-                    std::make_pair<OString, OString>("posrelh", OString::number(1)));
-                break;
-            default:
-                m_aFlyProperties.push_back(
-                    std::make_pair<OString, OString>("posrelh", OString::number(2)));
-                m_rExport.Strm()
-                    .WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SHPBXCOLUMN)
-                    .WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SHPBXIGNORE);
-                break;
-        }
+        case text::RelOrientation::PAGE_FRAME:
+            m_aFlyProperties.push_back(
+                std::make_pair<OString, OString>("posrelh", OString::number(1)));
+            break;
+        default:
+            m_aFlyProperties.push_back(
+                std::make_pair<OString, OString>("posrelh", OString::number(2)));
+            m_rExport.Strm()
+                .WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SHPBXCOLUMN)
+                .WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SHPBXIGNORE);
+            break;
+    }
 
-        switch (rFlyHori.GetHoriOrient())
-        {
-            case text::HoriOrientation::LEFT:
-                m_aFlyProperties.push_back(
-                    std::make_pair<OString, OString>("posh", OString::number(1)));
-                break;
-            case text::HoriOrientation::CENTER:
-                m_aFlyProperties.push_back(
-                    std::make_pair<OString, OString>("posh", OString::number(2)));
-                break;
-            case text::HoriOrientation::RIGHT:
-                m_aFlyProperties.push_back(
-                    std::make_pair<OString, OString>("posh", OString::number(3)));
-                break;
-            default:
-                break;
-        }
+    switch (rFlyHori.GetHoriOrient())
+    {
+        case text::HoriOrientation::LEFT:
+            m_aFlyProperties.push_back(
+                std::make_pair<OString, OString>("posh", OString::number(1)));
+            break;
+        case text::HoriOrientation::CENTER:
+            m_aFlyProperties.push_back(
+                std::make_pair<OString, OString>("posh", OString::number(2)));
+            break;
+        case text::HoriOrientation::RIGHT:
+            m_aFlyProperties.push_back(
+                std::make_pair<OString, OString>("posh", OString::number(3)));
+            break;
+        default:
+            break;
+    }
 
-        m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SHPLEFT);
-        m_rExport.OutLong(rFlyHori.GetPos());
-        if (m_pFlyFrameSize)
-        {
-            m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SHPRIGHT);
-            m_rExport.OutLong(rFlyHori.GetPos() + m_pFlyFrameSize->Width());
-        }
+    m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SHPLEFT);
+    m_rExport.OutLong(rFlyHori.GetPos());
+    if (m_pFlyFrameSize)
+    {
+        m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SHPRIGHT);
+        m_rExport.OutLong(rFlyHori.GetPos() + m_pFlyFrameSize->Width());
     }
 }
 
 void RtfAttributeOutput::FormatAnchor(const SwFormatAnchor& rAnchor)
 {
-    if (!m_rExport.GetRTFFlySyntax())
+    if (m_rExport.GetRTFFlySyntax())
+        return;
+
+    RndStdIds eId = rAnchor.GetAnchorId();
+    m_aRunText->append(OOO_STRING_SVTOOLS_RTF_FLYANCHOR);
+    m_aRunText->append(static_cast<sal_Int32>(eId));
+    switch (eId)
     {
-        RndStdIds eId = rAnchor.GetAnchorId();
-        m_aRunText->append(OOO_STRING_SVTOOLS_RTF_FLYANCHOR);
-        m_aRunText->append(static_cast<sal_Int32>(eId));
-        switch (eId)
-        {
-            case RndStdIds::FLY_AT_PAGE:
-                m_aRunText->append(OOO_STRING_SVTOOLS_RTF_FLYPAGE);
-                m_aRunText->append(static_cast<sal_Int32>(rAnchor.GetPageNum()));
-                break;
-            case RndStdIds::FLY_AT_PARA:
-            case RndStdIds::FLY_AS_CHAR:
-                m_aRunText->append(OOO_STRING_SVTOOLS_RTF_FLYCNTNT);
-                break;
-            default:
-                break;
-        }
+        case RndStdIds::FLY_AT_PAGE:
+            m_aRunText->append(OOO_STRING_SVTOOLS_RTF_FLYPAGE);
+            m_aRunText->append(static_cast<sal_Int32>(rAnchor.GetPageNum()));
+            break;
+        case RndStdIds::FLY_AT_PARA:
+        case RndStdIds::FLY_AS_CHAR:
+            m_aRunText->append(OOO_STRING_SVTOOLS_RTF_FLYCNTNT);
+            break;
+        default:
+            break;
     }
 }
 
@@ -3464,35 +3466,35 @@ void RtfAttributeOutput::FormatFillStyle(const XFillStyleItem& rFillStyle)
 
 void RtfAttributeOutput::FormatFillGradient(const XFillGradientItem& rFillGradient)
 {
-    if (*m_oFillStyle == drawing::FillStyle_GRADIENT)
+    if (*m_oFillStyle != drawing::FillStyle_GRADIENT)
+        return;
+
+    m_aFlyProperties.push_back(std::make_pair<OString, OString>(
+        "fillType", OString::number(7))); // Shade using the fillAngle
+
+    const XGradient& rGradient = rFillGradient.GetGradientValue();
+    const Color& rStartColor = rGradient.GetStartColor();
+    m_aFlyProperties.push_back(std::make_pair<OString, OString>(
+        "fillBackColor", OString::number(wwUtility::RGBToBGR(rStartColor))));
+
+    const Color& rEndColor = rGradient.GetEndColor();
+    m_aFlyProperties.push_back(std::make_pair<OString, OString>(
+        "fillColor", OString::number(wwUtility::RGBToBGR(rEndColor))));
+
+    switch (rGradient.GetGradientStyle())
     {
-        m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "fillType", OString::number(7))); // Shade using the fillAngle
-
-        const XGradient& rGradient = rFillGradient.GetGradientValue();
-        const Color& rStartColor = rGradient.GetStartColor();
-        m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "fillBackColor", OString::number(wwUtility::RGBToBGR(rStartColor))));
-
-        const Color& rEndColor = rGradient.GetEndColor();
-        m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "fillColor", OString::number(wwUtility::RGBToBGR(rEndColor))));
-
-        switch (rGradient.GetGradientStyle())
-        {
-            case css::awt::GradientStyle_LINEAR:
-                break;
-            case css::awt::GradientStyle_AXIAL:
-                m_aFlyProperties.push_back(
-                    std::make_pair<OString, OString>("fillFocus", OString::number(50)));
-                break;
-            case css::awt::GradientStyle_RADIAL:
-            case css::awt::GradientStyle_ELLIPTICAL:
-            case css::awt::GradientStyle_SQUARE:
-            case css::awt::GradientStyle_RECT:
-            default:
-                break;
-        }
+        case css::awt::GradientStyle_LINEAR:
+            break;
+        case css::awt::GradientStyle_AXIAL:
+            m_aFlyProperties.push_back(
+                std::make_pair<OString, OString>("fillFocus", OString::number(50)));
+            break;
+        case css::awt::GradientStyle_RADIAL:
+        case css::awt::GradientStyle_ELLIPTICAL:
+        case css::awt::GradientStyle_SQUARE:
+        case css::awt::GradientStyle_RECT:
+        default:
+            break;
     }
 }
 

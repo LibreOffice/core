@@ -555,45 +555,45 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bWriteCombChars)
 void SwWW8AttrIter::handleToggleProperty(SfxItemSet& rExportSet, const SwFormatCharFormat* pCharFormatItem,
     sal_uInt16 nWhich, const SfxPoolItem* pValue)
 {
-    if (!rExportSet.HasItem(nWhich) && pValue)
+    if (!(!rExportSet.HasItem(nWhich) && pValue))
+        return;
+
+    bool hasPropertyInCharStyle = false;
+    bool hasPropertyInParaStyle = false;
+
+    // get bold flag from specified character style
+    if (pCharFormatItem)
     {
-        bool hasPropertyInCharStyle = false;
-        bool hasPropertyInParaStyle = false;
-
-        // get bold flag from specified character style
-        if (pCharFormatItem)
+        if (const SwCharFormat* pCharFormat = pCharFormatItem->GetCharFormat())
         {
-            if (const SwCharFormat* pCharFormat = pCharFormatItem->GetCharFormat())
+            const SfxPoolItem* pItem = nullptr;
+            if (pCharFormat->GetAttrSet().HasItem(nWhich, &pItem))
             {
-                const SfxPoolItem* pItem = nullptr;
-                if (pCharFormat->GetAttrSet().HasItem(nWhich, &pItem))
-                {
-                    hasPropertyInCharStyle = (*pItem == *pValue);
-                }
+                hasPropertyInCharStyle = (*pItem == *pValue);
             }
         }
+    }
 
-        // get bold flag from specified paragraph style
+    // get bold flag from specified paragraph style
+    {
+        SwTextFormatColl& rTextColl = static_cast<SwTextFormatColl&>( rNd.GetAnyFormatColl() );
+        sal_uInt16 nStyle = m_rExport.m_pStyles->GetSlot( &rTextColl );
+        nStyle = ( nStyle != 0xfff ) ? nStyle : 0;
+        const SwFormat* pFormat = m_rExport.m_pStyles->GetSwFormat(nStyle);
+        if (pFormat)
         {
-            SwTextFormatColl& rTextColl = static_cast<SwTextFormatColl&>( rNd.GetAnyFormatColl() );
-            sal_uInt16 nStyle = m_rExport.m_pStyles->GetSlot( &rTextColl );
-            nStyle = ( nStyle != 0xfff ) ? nStyle : 0;
-            const SwFormat* pFormat = m_rExport.m_pStyles->GetSwFormat(nStyle);
-            if (pFormat)
+            const SfxPoolItem* pItem = nullptr;
+            if (pFormat->GetAttrSet().HasItem(nWhich, &pItem))
             {
-                const SfxPoolItem* pItem = nullptr;
-                if (pFormat->GetAttrSet().HasItem(nWhich, &pItem))
-                {
-                    hasPropertyInParaStyle = (*pItem == *pValue);
-                }
+                hasPropertyInParaStyle = (*pItem == *pValue);
             }
         }
+    }
 
-        // add inline property
-        if (hasPropertyInCharStyle && hasPropertyInParaStyle)
-        {
-            rExportSet.Put(*pValue);
-        }
+    // add inline property
+    if (hasPropertyInCharStyle && hasPropertyInParaStyle)
+    {
+        rExportSet.Put(*pValue);
     }
 }
 

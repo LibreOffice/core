@@ -276,29 +276,29 @@ void SwBasicEscherEx::PreWriteHyperlinkWithinFly(const SwFrameFormat& rFormat,Es
 {
     const SfxPoolItem* pItem;
     const SwAttrSet& rAttrSet = rFormat.GetAttrSet();
-    if (SfxItemState::SET == rAttrSet.GetItemState(RES_URL, true, &pItem))
+    if (SfxItemState::SET != rAttrSet.GetItemState(RES_URL, true, &pItem))
+        return;
+
+    const SwFormatURL *pINetFormat = dynamic_cast<const SwFormatURL*>(pItem);
+    if (!(pINetFormat && !pINetFormat->GetURL().isEmpty()))
+        return;
+
+    SvMemoryStream aStrm;
+    WriteHyperlinkWithinFly( aStrm, pINetFormat );
+    rPropOpt.AddOpt(ESCHER_Prop_pihlShape, true, 0, aStrm);
+    sal_uInt32 nValue;
+    OUString aNamestr = pINetFormat->GetName();
+    if (!aNamestr.isEmpty())
     {
-        const SwFormatURL *pINetFormat = dynamic_cast<const SwFormatURL*>(pItem);
-        if (pINetFormat && !pINetFormat->GetURL().isEmpty())
-        {
-            SvMemoryStream aStrm;
-            WriteHyperlinkWithinFly( aStrm, pINetFormat );
-            rPropOpt.AddOpt(ESCHER_Prop_pihlShape, true, 0, aStrm);
-            sal_uInt32 nValue;
-            OUString aNamestr = pINetFormat->GetName();
-            if (!aNamestr.isEmpty())
-            {
-                rPropOpt.AddOpt(ESCHER_Prop_wzName, aNamestr );
-            }
-            if(rPropOpt.GetOpt( ESCHER_Prop_fPrint, nValue))
-            {
-                nValue|=0x03080008;
-                rPropOpt.AddOpt(ESCHER_Prop_fPrint, nValue );
-            }
-            else
-                rPropOpt.AddOpt(ESCHER_Prop_fPrint, 0x03080008 );
-        }
+        rPropOpt.AddOpt(ESCHER_Prop_wzName, aNamestr );
     }
+    if(rPropOpt.GetOpt( ESCHER_Prop_fPrint, nValue))
+    {
+        nValue|=0x03080008;
+        rPropOpt.AddOpt(ESCHER_Prop_fPrint, nValue );
+    }
+    else
+        rPropOpt.AddOpt(ESCHER_Prop_fPrint, 0x03080008 );
 }
 
 namespace
@@ -620,234 +620,234 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
 
     sal_uInt32 nFcStart = rWrt.pTableStrm->Tell();
 
-    if (!maDrawObjs.empty())
+    if (maDrawObjs.empty())
+        return;
+
+    // write CPs
+    WW8Fib& rFib = *rWrt.pFib;
+    WW8_CP nCpOffs = GetCpOffset(rFib);
+
+    for (const auto& rDrawObj : maDrawObjs)
+        SwWW8Writer::WriteLong(*rWrt.pTableStrm, rDrawObj.mnCp - nCpOffs);
+
+    SwWW8Writer::WriteLong(*rWrt.pTableStrm, rFib.m_ccpText + rFib.m_ccpFootnote +
+        rFib.m_ccpHdr + rFib.m_ccpEdn + rFib.m_ccpTxbx + rFib.m_ccpHdrTxbx + 1);
+
+    for (const auto& rDrawObj : maDrawObjs)
     {
-        // write CPs
-        WW8Fib& rFib = *rWrt.pFib;
-        WW8_CP nCpOffs = GetCpOffset(rFib);
+        // write the fspa-struct
+        const ww8::Frame &rFrameFormat = rDrawObj.maContent;
+        const SwFrameFormat &rFormat = rFrameFormat.GetFrameFormat();
+        const SdrObject* pObj = rFormat.FindRealSdrObject();
 
-        for (const auto& rDrawObj : maDrawObjs)
-            SwWW8Writer::WriteLong(*rWrt.pTableStrm, rDrawObj.mnCp - nCpOffs);
+        tools::Rectangle aRect;
+        SwFormatVertOrient rVOr = rFormat.GetVertOrient();
+        SwFormatHoriOrient rHOr = rFormat.GetHoriOrient();
+        // #i30669# - convert the positioning attributes.
+        // Most positions are converted, if layout information exists.
+        const bool bPosConverted =
+            WinwordAnchoring::ConvertPosition( rHOr, rVOr, rFormat );
 
-        SwWW8Writer::WriteLong(*rWrt.pTableStrm, rFib.m_ccpText + rFib.m_ccpFootnote +
-            rFib.m_ccpHdr + rFib.m_ccpEdn + rFib.m_ccpTxbx + rFib.m_ccpHdrTxbx + 1);
-
-        for (const auto& rDrawObj : maDrawObjs)
+        Point aObjPos;
+        bool bHasHeightWidthSwapped(false);
+        if (RES_FLYFRMFMT == rFormat.Which())
         {
-            // write the fspa-struct
-            const ww8::Frame &rFrameFormat = rDrawObj.maContent;
-            const SwFrameFormat &rFormat = rFrameFormat.GetFrameFormat();
-            const SdrObject* pObj = rFormat.FindRealSdrObject();
-
-            tools::Rectangle aRect;
-            SwFormatVertOrient rVOr = rFormat.GetVertOrient();
-            SwFormatHoriOrient rHOr = rFormat.GetHoriOrient();
-            // #i30669# - convert the positioning attributes.
-            // Most positions are converted, if layout information exists.
-            const bool bPosConverted =
-                WinwordAnchoring::ConvertPosition( rHOr, rVOr, rFormat );
-
-            Point aObjPos;
-            bool bHasHeightWidthSwapped(false);
-            if (RES_FLYFRMFMT == rFormat.Which())
-            {
-                SwRect aLayRect(rFormat.FindLayoutRect(false, &aObjPos));
-                // the Object is not visible - so get the values from
-                // the format. The Position may not be correct.
-                if( aLayRect.IsEmpty() )
-                    aRect.SetSize( rFormat.GetFrameSize().GetSize() );
-                else
-                {
-                    // #i56090# Do not only consider the first client
-                    // Note that we actually would have to find the maximum size of the
-                    // frame format clients. However, this already should work in most cases.
-                    const SwRect aSizeRect(rFormat.FindLayoutRect());
-                    if ( aSizeRect.Width() > aLayRect.Width() )
-                        aLayRect.Width( aSizeRect.Width() );
-
-                    aRect = aLayRect.SVRect();
-                }
-            }
+            SwRect aLayRect(rFormat.FindLayoutRect(false, &aObjPos));
+            // the Object is not visible - so get the values from
+            // the format. The Position may not be correct.
+            if( aLayRect.IsEmpty() )
+                aRect.SetSize( rFormat.GetFrameSize().GetSize() );
             else
             {
-                OSL_ENSURE(pObj, "Where is the SDR-Object?");
-                if (pObj)
-                {
-                    aRect = pObj->GetLogicRect();
+                // #i56090# Do not only consider the first client
+                // Note that we actually would have to find the maximum size of the
+                // frame format clients. However, this already should work in most cases.
+                const SwRect aSizeRect(rFormat.FindLayoutRect());
+                if ( aSizeRect.Width() > aLayRect.Width() )
+                    aLayRect.Width( aSizeRect.Width() );
 
-                    // rotating to vertical means swapping height and width as seen in SvxMSDffManager::ImportShape
-                    const long nAngle = NormAngle36000( pObj->GetRotateAngle() );
-                    const bool bAllowSwap = pObj->GetObjIdentifier() != OBJ_LINE && pObj->GetObjIdentifier() != OBJ_GRUP;
-                    if ( bAllowSwap && (( nAngle > 4500 && nAngle <= 13500 ) || ( nAngle > 22500 && nAngle <= 31500 )) )
-                    {
-                        const long nWidth  = aRect.getWidth();
-                        const long nHeight = aRect.getHeight();
-                        aRect.setWidth( nHeight );
-                        aRect.setHeight( nWidth );
-                        bHasHeightWidthSwapped = true;
-                    }
+                aRect = aLayRect.SVRect();
+            }
+        }
+        else
+        {
+            OSL_ENSURE(pObj, "Where is the SDR-Object?");
+            if (pObj)
+            {
+                aRect = pObj->GetLogicRect();
+
+                // rotating to vertical means swapping height and width as seen in SvxMSDffManager::ImportShape
+                const long nAngle = NormAngle36000( pObj->GetRotateAngle() );
+                const bool bAllowSwap = pObj->GetObjIdentifier() != OBJ_LINE && pObj->GetObjIdentifier() != OBJ_GRUP;
+                if ( bAllowSwap && (( nAngle > 4500 && nAngle <= 13500 ) || ( nAngle > 22500 && nAngle <= 31500 )) )
+                {
+                    const long nWidth  = aRect.getWidth();
+                    const long nHeight = aRect.getHeight();
+                    aRect.setWidth( nHeight );
+                    aRect.setHeight( nWidth );
+                    bHasHeightWidthSwapped = true;
                 }
             }
-
-            // #i30669# - use converted position, if conversion is performed.
-            // Unify position determination of Writer fly frames
-            // and drawing objects.
-            if ( bPosConverted )
-            {
-                aRect.SetPos( Point( rHOr.GetPos(), rVOr.GetPos() ) );
-            }
-            else
-            {
-                aRect -= rDrawObj.maParentPos;
-                aObjPos = aRect.TopLeft();
-                if (text::VertOrientation::NONE == rVOr.GetVertOrient())
-                {
-                    // #i22673#
-                    sal_Int16 eOri = rVOr.GetRelationOrient();
-                    if (eOri == text::RelOrientation::CHAR || eOri == text::RelOrientation::TEXT_LINE)
-                        aObjPos.setY( -rVOr.GetPos() );
-                    else
-                        aObjPos.setY( rVOr.GetPos() );
-                }
-                if (text::HoriOrientation::NONE == rHOr.GetHoriOrient())
-                    aObjPos.setX( rHOr.GetPos() );
-                aRect.SetPos( aObjPos );
-            }
-
-            sal_Int32 nThick = rDrawObj.mnThick;
-
-            //If we are being exported as an inline hack, set
-            //corner to 0 and forget about border thickness for positioning
-            if (rFrameFormat.IsInline())
-            {
-                aRect.SetPos(Point(0,0));
-                nThick = 0;
-            }
-
-            // spid
-            SwWW8Writer::WriteLong(*rWrt.pTableStrm, rDrawObj.mnShapeId);
-
-            SwTwips nLeft = aRect.Left() + nThick;
-            SwTwips nRight = aRect.Right() - nThick;
-            SwTwips nTop = aRect.Top() + nThick;
-            SwTwips nBottom = aRect.Bottom() - nThick;
-
-            // tdf#93675, 0 below line/paragraph and/or top line/paragraph with
-            // wrap top+bottom or other wraps is affecting the line directly
-            // above the anchor line, which seems odd, but a tiny adjustment
-            // here to bring the top down convinces msoffice to wrap like us
-            if (nTop == 0 && !rFrameFormat.IsInline() &&
-                rVOr.GetVertOrient() == text::VertOrientation::NONE &&
-                rVOr.GetRelationOrient() == text::RelOrientation::FRAME)
-            {
-                nTop = 8;
-            }
-
-            //Nasty swap for bidi if necessary
-            rWrt.MiserableRTLFrameFormatHack(nLeft, nRight, rFrameFormat);
-
-            // tdf#70838. Word relates the position to the unrotated rectangle,
-            // Writer to the rotated one. Because the rotation is around center,
-            // the difference counts half.
-            if(pObj && pObj->GetRotateAngle())
-            {
-                SwTwips nXOff;
-                SwTwips nYOff;
-                SwTwips nSnapWidth = pObj->GetSnapRect().getWidth();
-                SwTwips nSnapHeight = pObj->GetSnapRect().getHeight();
-                SwTwips nLogicWidth = pObj->GetLogicRect().getWidth();
-                SwTwips nLogicHeight = pObj->GetLogicRect().getHeight();
-                // +1 for to compensate integer arithmetic rounding errors
-                if(bHasHeightWidthSwapped)
-                {
-                    nXOff = (nSnapWidth - nLogicHeight + 1) / 2;
-                    nYOff = (nSnapHeight - nLogicWidth + 1) / 2;
-                }
-                else
-                {
-                    nXOff = (nSnapWidth - nLogicWidth + 1) / 2;
-                    nYOff = (nSnapHeight - nLogicHeight + 1) / 2;
-                }
-                nLeft += nXOff;
-                nRight += nXOff;
-                nTop += nYOff;
-                nBottom += nYOff;
-            }
-
-            //xaLeft/yaTop/xaRight/yaBottom - rel. to anchor
-            //(most of) the border is outside the graphic is word, so
-            //change dimensions to fit
-            SwWW8Writer::WriteLong(*rWrt.pTableStrm, nLeft);
-            SwWW8Writer::WriteLong(*rWrt.pTableStrm, nTop);
-            SwWW8Writer::WriteLong(*rWrt.pTableStrm, nRight);
-            SwWW8Writer::WriteLong(*rWrt.pTableStrm, nBottom);
-
-            //fHdr/bx/by/wr/wrk/fRcaSimple/fBelowText/fAnchorLock
-            sal_uInt16 nFlags=0;
-            //If nFlags isn't 0x14 its overridden by the escher properties
-            if (RndStdIds::FLY_AT_PAGE == rFormat.GetAnchor().GetAnchorId())
-                nFlags = 0x0000;
-            else
-                nFlags = 0x0014;        // x-rel to text,  y-rel to text
-
-            const SwFormatSurround& rSurr = rFormat.GetSurround();
-            sal_uInt16 nContour = rSurr.IsContour() ? 0x0080 : 0x0040;
-            css::text::WrapTextMode eSurround = rSurr.GetSurround();
-
-            /*
-             #i3958#
-             The inline elements being export as anchored to character inside
-             the shape field hack are required to be wrap through so as to flow
-             over the following dummy 0x01 graphic
-            */
-            if (rFrameFormat.IsInline())
-                eSurround = css::text::WrapTextMode_THROUGH;
-
-            switch (eSurround)
-            {
-                case css::text::WrapTextMode_NONE:
-                    nFlags |= 0x0020;
-                    break;
-                case css::text::WrapTextMode_THROUGH:
-                    nFlags |= 0x0060;
-                    break;
-                case css::text::WrapTextMode_PARALLEL:
-                    nFlags |= 0x0000 | nContour;
-                    break;
-                case css::text::WrapTextMode_DYNAMIC:
-                    nFlags |= 0x0600 | nContour;
-                    break;
-                case css::text::WrapTextMode_LEFT:
-                    nFlags |= 0x0200 | nContour;
-                    break;
-                case css::text::WrapTextMode_RIGHT:
-                    nFlags |= 0x0400 | nContour;
-                    break;
-                default:
-                    OSL_ENSURE(false, "Unsupported surround type for export");
-                    break;
-            }
-            if (pObj && (pObj->GetLayer() == rWrt.m_pDoc->getIDocumentDrawModelAccess().GetHellId() ||
-                    pObj->GetLayer() == rWrt.m_pDoc->getIDocumentDrawModelAccess().GetInvisibleHellId()))
-            {
-                nFlags |= 0x4000;
-            }
-
-            /*
-             #i3958# Required to make this inline stuff work in WordXP, not
-             needed for 2003 interestingly
-             */
-            if (rFrameFormat.IsInline())
-                nFlags |= 0x8000;
-
-            SwWW8Writer::WriteShort(*rWrt.pTableStrm, nFlags);
-
-            // cTxbx
-            SwWW8Writer::WriteLong(*rWrt.pTableStrm, 0);
         }
 
-        RegisterWithFib(rFib, nFcStart, rWrt.pTableStrm->Tell() - nFcStart);
+        // #i30669# - use converted position, if conversion is performed.
+        // Unify position determination of Writer fly frames
+        // and drawing objects.
+        if ( bPosConverted )
+        {
+            aRect.SetPos( Point( rHOr.GetPos(), rVOr.GetPos() ) );
+        }
+        else
+        {
+            aRect -= rDrawObj.maParentPos;
+            aObjPos = aRect.TopLeft();
+            if (text::VertOrientation::NONE == rVOr.GetVertOrient())
+            {
+                // #i22673#
+                sal_Int16 eOri = rVOr.GetRelationOrient();
+                if (eOri == text::RelOrientation::CHAR || eOri == text::RelOrientation::TEXT_LINE)
+                    aObjPos.setY( -rVOr.GetPos() );
+                else
+                    aObjPos.setY( rVOr.GetPos() );
+            }
+            if (text::HoriOrientation::NONE == rHOr.GetHoriOrient())
+                aObjPos.setX( rHOr.GetPos() );
+            aRect.SetPos( aObjPos );
+        }
+
+        sal_Int32 nThick = rDrawObj.mnThick;
+
+        //If we are being exported as an inline hack, set
+        //corner to 0 and forget about border thickness for positioning
+        if (rFrameFormat.IsInline())
+        {
+            aRect.SetPos(Point(0,0));
+            nThick = 0;
+        }
+
+        // spid
+        SwWW8Writer::WriteLong(*rWrt.pTableStrm, rDrawObj.mnShapeId);
+
+        SwTwips nLeft = aRect.Left() + nThick;
+        SwTwips nRight = aRect.Right() - nThick;
+        SwTwips nTop = aRect.Top() + nThick;
+        SwTwips nBottom = aRect.Bottom() - nThick;
+
+        // tdf#93675, 0 below line/paragraph and/or top line/paragraph with
+        // wrap top+bottom or other wraps is affecting the line directly
+        // above the anchor line, which seems odd, but a tiny adjustment
+        // here to bring the top down convinces msoffice to wrap like us
+        if (nTop == 0 && !rFrameFormat.IsInline() &&
+            rVOr.GetVertOrient() == text::VertOrientation::NONE &&
+            rVOr.GetRelationOrient() == text::RelOrientation::FRAME)
+        {
+            nTop = 8;
+        }
+
+        //Nasty swap for bidi if necessary
+        rWrt.MiserableRTLFrameFormatHack(nLeft, nRight, rFrameFormat);
+
+        // tdf#70838. Word relates the position to the unrotated rectangle,
+        // Writer to the rotated one. Because the rotation is around center,
+        // the difference counts half.
+        if(pObj && pObj->GetRotateAngle())
+        {
+            SwTwips nXOff;
+            SwTwips nYOff;
+            SwTwips nSnapWidth = pObj->GetSnapRect().getWidth();
+            SwTwips nSnapHeight = pObj->GetSnapRect().getHeight();
+            SwTwips nLogicWidth = pObj->GetLogicRect().getWidth();
+            SwTwips nLogicHeight = pObj->GetLogicRect().getHeight();
+            // +1 for to compensate integer arithmetic rounding errors
+            if(bHasHeightWidthSwapped)
+            {
+                nXOff = (nSnapWidth - nLogicHeight + 1) / 2;
+                nYOff = (nSnapHeight - nLogicWidth + 1) / 2;
+            }
+            else
+            {
+                nXOff = (nSnapWidth - nLogicWidth + 1) / 2;
+                nYOff = (nSnapHeight - nLogicHeight + 1) / 2;
+            }
+            nLeft += nXOff;
+            nRight += nXOff;
+            nTop += nYOff;
+            nBottom += nYOff;
+        }
+
+        //xaLeft/yaTop/xaRight/yaBottom - rel. to anchor
+        //(most of) the border is outside the graphic is word, so
+        //change dimensions to fit
+        SwWW8Writer::WriteLong(*rWrt.pTableStrm, nLeft);
+        SwWW8Writer::WriteLong(*rWrt.pTableStrm, nTop);
+        SwWW8Writer::WriteLong(*rWrt.pTableStrm, nRight);
+        SwWW8Writer::WriteLong(*rWrt.pTableStrm, nBottom);
+
+        //fHdr/bx/by/wr/wrk/fRcaSimple/fBelowText/fAnchorLock
+        sal_uInt16 nFlags=0;
+        //If nFlags isn't 0x14 its overridden by the escher properties
+        if (RndStdIds::FLY_AT_PAGE == rFormat.GetAnchor().GetAnchorId())
+            nFlags = 0x0000;
+        else
+            nFlags = 0x0014;        // x-rel to text,  y-rel to text
+
+        const SwFormatSurround& rSurr = rFormat.GetSurround();
+        sal_uInt16 nContour = rSurr.IsContour() ? 0x0080 : 0x0040;
+        css::text::WrapTextMode eSurround = rSurr.GetSurround();
+
+        /*
+         #i3958#
+         The inline elements being export as anchored to character inside
+         the shape field hack are required to be wrap through so as to flow
+         over the following dummy 0x01 graphic
+        */
+        if (rFrameFormat.IsInline())
+            eSurround = css::text::WrapTextMode_THROUGH;
+
+        switch (eSurround)
+        {
+            case css::text::WrapTextMode_NONE:
+                nFlags |= 0x0020;
+                break;
+            case css::text::WrapTextMode_THROUGH:
+                nFlags |= 0x0060;
+                break;
+            case css::text::WrapTextMode_PARALLEL:
+                nFlags |= 0x0000 | nContour;
+                break;
+            case css::text::WrapTextMode_DYNAMIC:
+                nFlags |= 0x0600 | nContour;
+                break;
+            case css::text::WrapTextMode_LEFT:
+                nFlags |= 0x0200 | nContour;
+                break;
+            case css::text::WrapTextMode_RIGHT:
+                nFlags |= 0x0400 | nContour;
+                break;
+            default:
+                OSL_ENSURE(false, "Unsupported surround type for export");
+                break;
+        }
+        if (pObj && (pObj->GetLayer() == rWrt.m_pDoc->getIDocumentDrawModelAccess().GetHellId() ||
+                pObj->GetLayer() == rWrt.m_pDoc->getIDocumentDrawModelAccess().GetInvisibleHellId()))
+        {
+            nFlags |= 0x4000;
+        }
+
+        /*
+         #i3958# Required to make this inline stuff work in WordXP, not
+         needed for 2003 interestingly
+         */
+        if (rFrameFormat.IsInline())
+            nFlags |= 0x8000;
+
+        SwWW8Writer::WriteShort(*rWrt.pTableStrm, nFlags);
+
+        // cTxbx
+        SwWW8Writer::WriteLong(*rWrt.pTableStrm, 0);
     }
+
+    RegisterWithFib(rFib, nFcStart, rWrt.pTableStrm->Tell() - nFcStart);
 }
 
 void MainTextPlcDrawObj::RegisterWithFib(WW8Fib &rFib, sal_uInt32 nStart,
@@ -1135,62 +1135,62 @@ void MSWord_SdrAttrIter::OutAttr( sal_Int32 nSwPos )
 
     OutParaAttr(true, &aUsedRunWhichs);
 
-    if (!aTextAtrArr.empty())
+    if (aTextAtrArr.empty())
+        return;
+
+    const SwModify* pOldMod = m_rExport.m_pOutFormatNode;
+    m_rExport.m_pOutFormatNode = nullptr;
+
+    const SfxItemPool* pSrcPool = pEditPool;
+    const SfxItemPool& rDstPool = m_rExport.m_pDoc->GetAttrPool();
+
+    nTmpSwPos = nSwPos;
+    // Did we already produce a <w:sz> element?
+    m_rExport.m_bFontSizeWritten = false;
+    for(const auto& rTextAtr : aTextAtrArr)
     {
-        const SwModify* pOldMod = m_rExport.m_pOutFormatNode;
-        m_rExport.m_pOutFormatNode = nullptr;
-
-        const SfxItemPool* pSrcPool = pEditPool;
-        const SfxItemPool& rDstPool = m_rExport.m_pDoc->GetAttrPool();
-
-        nTmpSwPos = nSwPos;
-        // Did we already produce a <w:sz> element?
-        m_rExport.m_bFontSizeWritten = false;
-        for(const auto& rTextAtr : aTextAtrArr)
+        if (nSwPos >= rTextAtr.nStart && nSwPos < rTextAtr.nEnd)
         {
-            if (nSwPos >= rTextAtr.nStart && nSwPos < rTextAtr.nEnd)
+            sal_uInt16 nWhich = rTextAtr.pAttr->Which();
+            if (nWhich == EE_FEATURE_FIELD)
             {
-                sal_uInt16 nWhich = rTextAtr.pAttr->Which();
-                if (nWhich == EE_FEATURE_FIELD)
-                {
-                    OutEEField(*(rTextAtr.pAttr));
-                    continue;
-                }
-                if (nWhich == EE_FEATURE_TAB)
-                {
-                    m_rExport.WriteChar(0x9);
-                    continue;
-                }
-
-                const sal_uInt16 nSlotId = pSrcPool->GetSlotId(nWhich);
-                if (nSlotId && nWhich != nSlotId)
-                {
-                    nWhich = rDstPool.GetWhich(nSlotId);
-                    if (nWhich && nWhich != nSlotId &&
-                        nWhich < RES_UNKNOWNATR_BEGIN &&
-                        m_rExport.CollapseScriptsforWordOk(nScript,nWhich))
-                    {
-                        // use always the SW-Which Id !
-                        std::unique_ptr<SfxPoolItem> pI(rTextAtr.pAttr->Clone());
-                        pI->SetWhich( nWhich );
-                        // Will this item produce a <w:sz> element?
-                        bool bFontSizeItem = nWhich == RES_CHRATR_FONTSIZE || nWhich == RES_CHRATR_CJK_FONTSIZE;
-                        if (!m_rExport.m_bFontSizeWritten || !bFontSizeItem)
-                            m_rExport.AttrOutput().OutputItem( *pI );
-                        if (bFontSizeItem)
-                            m_rExport.m_bFontSizeWritten = true;
-                    }
-                }
+                OutEEField(*(rTextAtr.pAttr));
+                continue;
+            }
+            if (nWhich == EE_FEATURE_TAB)
+            {
+                m_rExport.WriteChar(0x9);
+                continue;
             }
 
-            if( nSwPos < rTextAtr.nStart )
-                break;
+            const sal_uInt16 nSlotId = pSrcPool->GetSlotId(nWhich);
+            if (nSlotId && nWhich != nSlotId)
+            {
+                nWhich = rDstPool.GetWhich(nSlotId);
+                if (nWhich && nWhich != nSlotId &&
+                    nWhich < RES_UNKNOWNATR_BEGIN &&
+                    m_rExport.CollapseScriptsforWordOk(nScript,nWhich))
+                {
+                    // use always the SW-Which Id !
+                    std::unique_ptr<SfxPoolItem> pI(rTextAtr.pAttr->Clone());
+                    pI->SetWhich( nWhich );
+                    // Will this item produce a <w:sz> element?
+                    bool bFontSizeItem = nWhich == RES_CHRATR_FONTSIZE || nWhich == RES_CHRATR_CJK_FONTSIZE;
+                    if (!m_rExport.m_bFontSizeWritten || !bFontSizeItem)
+                        m_rExport.AttrOutput().OutputItem( *pI );
+                    if (bFontSizeItem)
+                        m_rExport.m_bFontSizeWritten = true;
+                }
+            }
         }
-        m_rExport.m_bFontSizeWritten = false;
 
-        nTmpSwPos = 0;      // HasTextItem only allowed in the above area
-        m_rExport.m_pOutFormatNode = pOldMod;
+        if( nSwPos < rTextAtr.nStart )
+            break;
     }
+    m_rExport.m_bFontSizeWritten = false;
+
+    nTmpSwPos = 0;      // HasTextItem only allowed in the above area
+    m_rExport.m_pOutFormatNode = pOldMod;
 }
 
 bool MSWord_SdrAttrIter::IsTextAttr(sal_Int32 nSwPos)
@@ -1276,40 +1276,40 @@ void MSWord_SdrAttrIter::OutParaAttr(bool bCharAttr, const std::set<sal_uInt16>*
 
     SetItemsThatDifferFromStandard(bCharAttr, aSet);
 
-    if (aSet.Count())
+    if (!aSet.Count())
+        return;
+
+    const SfxItemSet* pOldSet = m_rExport.GetCurItemSet();
+    m_rExport.SetCurItemSet( &aSet );
+
+    SfxItemIter aIter( aSet );
+    const SfxPoolItem* pItem = aIter.GetCurItem();
+
+    const SfxItemPool* pSrcPool = pEditPool,
+                     * pDstPool = &m_rExport.m_pDoc->GetAttrPool();
+
+    do
     {
-        const SfxItemSet* pOldSet = m_rExport.GetCurItemSet();
-        m_rExport.SetCurItemSet( &aSet );
+        sal_uInt16 nWhich = pItem->Which();
+        if (pWhichsToIgnore && pWhichsToIgnore->find(nWhich) != pWhichsToIgnore->end())
+            continue;
 
-        SfxItemIter aIter( aSet );
-        const SfxPoolItem* pItem = aIter.GetCurItem();
+        sal_uInt16 nSlotId = pSrcPool->GetSlotId(nWhich);
 
-        const SfxItemPool* pSrcPool = pEditPool,
-                         * pDstPool = &m_rExport.m_pDoc->GetAttrPool();
-
-        do
+        if ( nSlotId && nWhich != nSlotId &&
+             0 != ( nWhich = pDstPool->GetWhich( nSlotId ) ) &&
+             nWhich != nSlotId &&
+             ( bCharAttr ? ( nWhich >= RES_CHRATR_BEGIN && nWhich < RES_TXTATR_END )
+                         : ( nWhich >= RES_PARATR_BEGIN && nWhich < RES_FRMATR_END ) ) )
         {
-            sal_uInt16 nWhich = pItem->Which();
-            if (pWhichsToIgnore && pWhichsToIgnore->find(nWhich) != pWhichsToIgnore->end())
-                continue;
-
-            sal_uInt16 nSlotId = pSrcPool->GetSlotId(nWhich);
-
-            if ( nSlotId && nWhich != nSlotId &&
-                 0 != ( nWhich = pDstPool->GetWhich( nSlotId ) ) &&
-                 nWhich != nSlotId &&
-                 ( bCharAttr ? ( nWhich >= RES_CHRATR_BEGIN && nWhich < RES_TXTATR_END )
-                             : ( nWhich >= RES_PARATR_BEGIN && nWhich < RES_FRMATR_END ) ) )
-            {
-                // use always the SW-Which Id !
-                std::unique_ptr<SfxPoolItem> pI(pItem->Clone());
-                pI->SetWhich( nWhich );
-                if (m_rExport.CollapseScriptsforWordOk(nScript,nWhich))
-                    m_rExport.AttrOutput().OutputItem(*pI);
-            }
-        } while ((pItem = aIter.NextItem()));
-        m_rExport.SetCurItemSet( pOldSet );
-    }
+            // use always the SW-Which Id !
+            std::unique_ptr<SfxPoolItem> pI(pItem->Clone());
+            pI->SetWhich( nWhich );
+            if (m_rExport.CollapseScriptsforWordOk(nScript,nWhich))
+                m_rExport.AttrOutput().OutputItem(*pI);
+        }
+    } while ((pItem = aIter.NextItem()));
+    m_rExport.SetCurItemSet( pOldSet );
 }
 
 void WW8Export::WriteSdrTextObj(const SdrTextObj& rTextObj, sal_uInt8 nTyp)
@@ -1428,27 +1428,27 @@ void WinwordAnchoring::WriteData( EscherEx& rEx ) const
 {
     //Toplevel groups get their winword extra data attached, and sub elements
     //use the defaults
-    if (rEx.GetGroupLevel() <= 1)
+    if (rEx.GetGroupLevel() > 1)
+        return;
+
+    SvStream& rSt = rEx.GetStream();
+    //The last argument denotes the number of sub properties in this atom
+    if (mbInline)
     {
-        SvStream& rSt = rEx.GetStream();
-        //The last argument denotes the number of sub properties in this atom
-        if (mbInline)
-        {
-            rEx.AddAtom(18, DFF_msofbtUDefProp, 3, 3); //Prop id is 0xF122
-            rSt.WriteUInt16( 0x0390 ).WriteUInt32( 3 );
-            rSt.WriteUInt16( 0x0392 ).WriteUInt32( 3 );
-            //This sub property is required to be in the dummy inline frame as
-            //well
-            rSt.WriteUInt16( 0x053F ).WriteUInt32( nInlineHack );
-        }
-        else
-        {
-            rEx.AddAtom(24, DFF_msofbtUDefProp, 3, 4 ); //Prop id is 0xF122
-            rSt.WriteUInt16( 0x038F ).WriteUInt32( mnXAlign );
-            rSt.WriteUInt16( 0x0390 ).WriteUInt32( mnXRelTo );
-            rSt.WriteUInt16( 0x0391 ).WriteUInt32( mnYAlign );
-            rSt.WriteUInt16( 0x0392 ).WriteUInt32( mnYRelTo );
-        }
+        rEx.AddAtom(18, DFF_msofbtUDefProp, 3, 3); //Prop id is 0xF122
+        rSt.WriteUInt16( 0x0390 ).WriteUInt32( 3 );
+        rSt.WriteUInt16( 0x0392 ).WriteUInt32( 3 );
+        //This sub property is required to be in the dummy inline frame as
+        //well
+        rSt.WriteUInt16( 0x053F ).WriteUInt32( nInlineHack );
+    }
+    else
+    {
+        rEx.AddAtom(24, DFF_msofbtUDefProp, 3, 4 ); //Prop id is 0xF122
+        rSt.WriteUInt16( 0x038F ).WriteUInt32( mnXAlign );
+        rSt.WriteUInt16( 0x0390 ).WriteUInt32( mnXRelTo );
+        rSt.WriteUInt16( 0x0391 ).WriteUInt32( mnYAlign );
+        rSt.WriteUInt16( 0x0392 ).WriteUInt32( mnYRelTo );
     }
 }
 

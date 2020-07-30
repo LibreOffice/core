@@ -796,26 +796,26 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
     }
 
     // No? Then just approximate based on what we have.
-    if (isAnchor && !nWrapToken)
+    if (!(isAnchor && !nWrapToken))
+        return;
+
+    switch (pFrameFormat->GetSurround().GetValue())
     {
-        switch (pFrameFormat->GetSurround().GetValue())
-        {
-            case css::text::WrapTextMode_NONE:
-                m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_wrapTopAndBottom);
-                break;
-            case css::text::WrapTextMode_THROUGH:
-                m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_wrapNone);
-                break;
-            case css::text::WrapTextMode_PARALLEL:
-                m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_wrapSquare, XML_wrapText,
-                                                          "bothSides");
-                break;
-            case css::text::WrapTextMode_DYNAMIC:
-            default:
-                m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_wrapSquare, XML_wrapText,
-                                                          "largest");
-                break;
-        }
+        case css::text::WrapTextMode_NONE:
+            m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_wrapTopAndBottom);
+            break;
+        case css::text::WrapTextMode_THROUGH:
+            m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_wrapNone);
+            break;
+        case css::text::WrapTextMode_PARALLEL:
+            m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_wrapSquare, XML_wrapText,
+                                                      "bothSides");
+            break;
+        case css::text::WrapTextMode_DYNAMIC:
+        default:
+            m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_wrapSquare, XML_wrapText,
+                                                      "largest");
+            break;
     }
 }
 

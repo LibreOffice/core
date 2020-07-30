@@ -3305,21 +3305,21 @@ void WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId, std::vector<SprmResult> &rResult)
     WW8PLCFxDesc aDesc;
     GetPCDSprms( aDesc );
 
-    if (aDesc.pMemPos)
+    if (!aDesc.pMemPos)
+        return;
+
+    const wwSprmParser &rSprmParser = pFkp->GetSprmParser();
+    WW8SprmIter aIter(aDesc.pMemPos, aDesc.nSprmsLen, rSprmParser);
+    while(aIter.GetSprms())
     {
-        const wwSprmParser &rSprmParser = pFkp->GetSprmParser();
-        WW8SprmIter aIter(aDesc.pMemPos, aDesc.nSprmsLen, rSprmParser);
-        while(aIter.GetSprms())
+        if (aIter.GetCurrentId() == nId)
         {
-            if (aIter.GetCurrentId() == nId)
-            {
-                sal_uInt16 nFixedLen = rSprmParser.DistanceToData(nId);
-                sal_uInt16 nL = rSprmParser.GetSprmSize(nId, aIter.GetSprms(), aIter.GetRemLen());
-                rResult.emplace_back(aIter.GetCurrentParams(), nL - nFixedLen);
-            }
-            aIter.advance();
-        };
-    }
+            sal_uInt16 nFixedLen = rSprmParser.DistanceToData(nId);
+            sal_uInt16 nL = rSprmParser.GetSprmSize(nId, aIter.GetSprms(), aIter.GetRemLen());
+            rResult.emplace_back(aIter.GetCurrentParams(), nL - nFixedLen);
+        }
+        aIter.advance();
+    };
 }
 
 WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream* pSt, SvStream* pTableSt,
@@ -4362,25 +4362,25 @@ long WW8PLCFx_Book::GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen )
 
 void WW8PLCFx_Book::advance()
 {
-    if( pBook[0] && pBook[1] && nIMax )
-    {
-        (*pBook[nIsEnd]).advance();
+    if( !(pBook[0] && pBook[1] && nIMax) )
+        return;
 
-        sal_uLong l0 = pBook[0]->Where();
-        sal_uLong l1 = pBook[1]->Where();
-        if( l0 < l1 )
+    (*pBook[nIsEnd]).advance();
+
+    sal_uLong l0 = pBook[0]->Where();
+    sal_uLong l1 = pBook[1]->Where();
+    if( l0 < l1 )
+        nIsEnd = 0;
+    else if( l1 < l0 )
+        nIsEnd = 1;
+    else
+    {
+        const void * p = pBook[0]->GetData(pBook[0]->GetIdx());
+        long nPairFor = (p == nullptr) ? 0 : SVBT16ToUInt16(*static_cast<SVBT16 const *>(p));
+        if (nPairFor == pBook[1]->GetIdx())
             nIsEnd = 0;
-        else if( l1 < l0 )
-            nIsEnd = 1;
         else
-        {
-            const void * p = pBook[0]->GetData(pBook[0]->GetIdx());
-            long nPairFor = (p == nullptr) ? 0 : SVBT16ToUInt16(*static_cast<SVBT16 const *>(p));
-            if (nPairFor == pBook[1]->GetIdx())
-                nIsEnd = 0;
-            else
-                nIsEnd = nIsEnd ? 0 : 1;
-        }
+            nIsEnd = nIsEnd ? 0 : 1;
     }
 }
 
@@ -4602,25 +4602,25 @@ long WW8PLCFx_AtnBook::GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen
 
 void WW8PLCFx_AtnBook::advance()
 {
-    if( m_pBook[0] && m_pBook[1] && nIMax )
-    {
-        (*m_pBook[static_cast<int>(m_bIsEnd)]).advance();
+    if( !(m_pBook[0] && m_pBook[1] && nIMax) )
+        return;
 
-        sal_uLong l0 = m_pBook[0]->Where();
-        sal_uLong l1 = m_pBook[1]->Where();
-        if( l0 < l1 )
+    (*m_pBook[static_cast<int>(m_bIsEnd)]).advance();
+
+    sal_uLong l0 = m_pBook[0]->Where();
+    sal_uLong l1 = m_pBook[1]->Where();
+    if( l0 < l1 )
+        m_bIsEnd = false;
+    else if( l1 < l0 )
+        m_bIsEnd = true;
+    else
+    {
+        const void * p = m_pBook[0]->GetData(m_pBook[0]->GetIdx());
+        long nPairFor = (p == nullptr) ? 0 : SVBT16ToUInt16(*static_cast<SVBT16 const *>(p));
+        if (nPairFor == m_pBook[1]->GetIdx())
             m_bIsEnd = false;
-        else if( l1 < l0 )
-            m_bIsEnd = true;
         else
-        {
-            const void * p = m_pBook[0]->GetData(m_pBook[0]->GetIdx());
-            long nPairFor = (p == nullptr) ? 0 : SVBT16ToUInt16(*static_cast<SVBT16 const *>(p));
-            if (nPairFor == m_pBook[1]->GetIdx())
-                m_bIsEnd = false;
-            else
-                m_bIsEnd = !m_bIsEnd;
-        }
+            m_bIsEnd = !m_bIsEnd;
     }
 }
 
@@ -4731,25 +4731,25 @@ long WW8PLCFx_FactoidBook::GetNoSprms(WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& r
 
 void WW8PLCFx_FactoidBook::advance()
 {
-    if (m_pBook[0] && m_pBook[1] && m_nIMax)
-    {
-        (*m_pBook[static_cast<int>(m_bIsEnd)]).advance();
+    if (!(m_pBook[0] && m_pBook[1] && m_nIMax))
+        return;
 
-        sal_uLong l0 = m_pBook[0]->Where();
-        sal_uLong l1 = m_pBook[1]->Where();
-        if (l0 < l1)
+    (*m_pBook[static_cast<int>(m_bIsEnd)]).advance();
+
+    sal_uLong l0 = m_pBook[0]->Where();
+    sal_uLong l1 = m_pBook[1]->Where();
+    if (l0 < l1)
+        m_bIsEnd = false;
+    else if (l1 < l0)
+        m_bIsEnd = true;
+    else
+    {
+        const void * p = m_pBook[0]->GetData(m_pBook[0]->GetIdx());
+        long nPairFor = (p == nullptr) ? 0 : SVBT16ToUInt16(*static_cast<SVBT16 const *>(p));
+        if (nPairFor == m_pBook[1]->GetIdx())
             m_bIsEnd = false;
-        else if (l1 < l0)
-            m_bIsEnd = true;
         else
-        {
-            const void * p = m_pBook[0]->GetData(m_pBook[0]->GetIdx());
-            long nPairFor = (p == nullptr) ? 0 : SVBT16ToUInt16(*static_cast<SVBT16 const *>(p));
-            if (nPairFor == m_pBook[1]->GetIdx())
-                m_bIsEnd = false;
-            else
-                m_bIsEnd = !m_bIsEnd;
-        }
+            m_bIsEnd = !m_bIsEnd;
     }
 }
 
@@ -5596,60 +5596,60 @@ void WW8PLCFx_Cp_FKP::Restore( const WW8PLCFxSave1& rSave )
 
 void WW8PLCFxDesc::Save( WW8PLCFxSave1& rSave ) const
 {
-    if( pPLCFx )
+    if( !pPLCFx )
+        return;
+
+    pPLCFx->Save( rSave );
+    if( !pPLCFx->IsSprm() )
+        return;
+
+    WW8PLCFxDesc aD;
+    aD.nStartPos = nOrigStartPos+nCpOfs;
+    aD.nCpOfs = rSave.nCpOfs = nCpOfs;
+    if (!(pPLCFx->SeekPos(aD.nStartPos)))
     {
-        pPLCFx->Save( rSave );
-        if( pPLCFx->IsSprm() )
-        {
-            WW8PLCFxDesc aD;
-            aD.nStartPos = nOrigStartPos+nCpOfs;
-            aD.nCpOfs = rSave.nCpOfs = nCpOfs;
-            if (!(pPLCFx->SeekPos(aD.nStartPos)))
-            {
-                aD.nEndPos = WW8_CP_MAX;
-                pPLCFx->SetDirty(true);
-            }
-            pPLCFx->GetSprms(&aD);
-            pPLCFx->SetDirty(false);
-            aD.ReduceByOffset();
-            rSave.nStartCp = aD.nStartPos;
-            rSave.nPLCFxMemOfs = nOrigSprmsLen - nSprmsLen;
-        }
+        aD.nEndPos = WW8_CP_MAX;
+        pPLCFx->SetDirty(true);
     }
+    pPLCFx->GetSprms(&aD);
+    pPLCFx->SetDirty(false);
+    aD.ReduceByOffset();
+    rSave.nStartCp = aD.nStartPos;
+    rSave.nPLCFxMemOfs = nOrigSprmsLen - nSprmsLen;
 }
 
 void WW8PLCFxDesc::Restore( const WW8PLCFxSave1& rSave )
 {
-    if( pPLCFx )
-    {
-        pPLCFx->Restore( rSave );
-        if( pPLCFx->IsSprm() )
-        {
-            WW8PLCFxDesc aD;
-            aD.nStartPos = rSave.nStartCp+rSave.nCpOfs;
-            nCpOfs = aD.nCpOfs = rSave.nCpOfs;
-            if (!(pPLCFx->SeekPos(aD.nStartPos)))
-            {
-                aD.nEndPos = WW8_CP_MAX;
-                pPLCFx->SetDirty(true);
-            }
-            pPLCFx->GetSprms(&aD);
-            pPLCFx->SetDirty(false);
-            aD.ReduceByOffset();
+    if( !pPLCFx )
+        return;
 
-            if (nOrigSprmsLen > aD.nSprmsLen)
-            {
-                //two entries exist for the same offset, cut and run
-                SAL_WARN("sw.ww8", "restored properties don't match saved properties, bailing out");
-                nSprmsLen = 0;
-                pMemPos = nullptr;
-            }
-            else
-            {
-                nSprmsLen = nOrigSprmsLen - rSave.nPLCFxMemOfs;
-                pMemPos = aD.pMemPos == nullptr ? nullptr : aD.pMemPos + rSave.nPLCFxMemOfs;
-            }
-        }
+    pPLCFx->Restore( rSave );
+    if( !pPLCFx->IsSprm() )
+        return;
+
+    WW8PLCFxDesc aD;
+    aD.nStartPos = rSave.nStartCp+rSave.nCpOfs;
+    nCpOfs = aD.nCpOfs = rSave.nCpOfs;
+    if (!(pPLCFx->SeekPos(aD.nStartPos)))
+    {
+        aD.nEndPos = WW8_CP_MAX;
+        pPLCFx->SetDirty(true);
+    }
+    pPLCFx->GetSprms(&aD);
+    pPLCFx->SetDirty(false);
+    aD.ReduceByOffset();
+
+    if (nOrigSprmsLen > aD.nSprmsLen)
+    {
+        //two entries exist for the same offset, cut and run
+        SAL_WARN("sw.ww8", "restored properties don't match saved properties, bailing out");
+        nSprmsLen = 0;
+        pMemPos = nullptr;
+    }
+    else
+    {
+        nSprmsLen = nOrigSprmsLen - rSave.nPLCFxMemOfs;
+        pMemPos = aD.pMemPos == nullptr ? nullptr : aD.pMemPos + rSave.nPLCFxMemOfs;
     }
 }
 

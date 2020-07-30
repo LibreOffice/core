@@ -1079,19 +1079,18 @@ SvStream& RtfExport::OutLong(long nVal) { return Writer::OutLong(Strm(), nVal); 
 
 void RtfExport::OutUnicode(const char* pToken, const OUString& rContent, bool bUpr)
 {
-    if (!rContent.isEmpty())
+    if (rContent.isEmpty())
+        return;
+
+    if (!bUpr)
     {
-        if (!bUpr)
-        {
-            Strm().WriteChar('{').WriteCharPtr(pToken).WriteChar(' ');
-            Strm().WriteCharPtr(
-                msfilter::rtfutil::OutString(rContent, m_eCurrentEncoding).getStr());
-            Strm().WriteChar('}');
-        }
-        else
-            Strm().WriteCharPtr(
-                msfilter::rtfutil::OutStringUpr(pToken, rContent, m_eCurrentEncoding).getStr());
+        Strm().WriteChar('{').WriteCharPtr(pToken).WriteChar(' ');
+        Strm().WriteCharPtr(msfilter::rtfutil::OutString(rContent, m_eCurrentEncoding).getStr());
+        Strm().WriteChar('}');
     }
+    else
+        Strm().WriteCharPtr(
+            msfilter::rtfutil::OutStringUpr(pToken, rContent, m_eCurrentEncoding).getStr());
 }
 
 void RtfExport::OutDateTime(const char* pStr, const util::DateTime& rDT)

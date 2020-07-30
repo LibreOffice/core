@@ -211,109 +211,109 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
 
     tools::SvRef<SotStorage> xObjStg = GetWriter().GetStorage().OpenSotStorage(SL::aObjectPool);
 
-    if( xObjStg.is()  )
+    if( !xObjStg.is()  )
+        return;
+
+    uno::Reference < embed::XEmbeddedObject > xObj(const_cast<SwOLENode&>(rOLENode).GetOLEObj().GetOleRef());
+    if( !xObj.is() )
+        return;
+
+    const embed::XEmbeddedObject *pObj = xObj.get();
+    //Don't want to use pointer ids, as is traditional, because we need
+    //to put this into a 32bit value, and on 64bit the bottom bits
+    //might collide and two unrelated ole objects end up considered the
+    //same.  Don't want to simply start at 0 which is a special value
+    sal_Int32 nPictureId = SAL_MAX_INT32 - m_aOleMap.size();
+    WW8OleMap::value_type entry = std::make_pair(pObj, nPictureId);
+    std::pair<WW8OleMap::iterator, bool> aRes = m_aOleMap.insert(entry);
+    bool bIsNotDuplicate = aRes.second; //.second is false when element already existed
+    nPictureId = aRes.first->second;
+    Set_UInt32(pDataAdr, nPictureId);
+    OUString sStorageName = "_" + OUString::number( nPictureId );
+    tools::SvRef<SotStorage> xOleStg = xObjStg->OpenSotStorage( sStorageName );
+    if( !xOleStg.is() )
+        return;
+
+    /*
+    If this object storage has been written already don't
+    waste time rewriting it
+    */
+    if (bIsNotDuplicate)
     {
-        uno::Reference < embed::XEmbeddedObject > xObj(const_cast<SwOLENode&>(rOLENode).GetOLEObj().GetOleRef());
-        if( xObj.is() )
+        sal_Int64 nAspect = rOLENode.GetAspect();
+        svt::EmbeddedObjectRef aObjRef( xObj, nAspect );
+        m_pOLEExp->ExportOLEObject( aObjRef, *xOleStg );
+        if ( nAspect == embed::Aspects::MSOLE_ICON )
         {
-            const embed::XEmbeddedObject *pObj = xObj.get();
-            //Don't want to use pointer ids, as is traditional, because we need
-            //to put this into a 32bit value, and on 64bit the bottom bits
-            //might collide and two unrelated ole objects end up considered the
-            //same.  Don't want to simply start at 0 which is a special value
-            sal_Int32 nPictureId = SAL_MAX_INT32 - m_aOleMap.size();
-            WW8OleMap::value_type entry = std::make_pair(pObj, nPictureId);
-            std::pair<WW8OleMap::iterator, bool> aRes = m_aOleMap.insert(entry);
-            bool bIsNotDuplicate = aRes.second; //.second is false when element already existed
-            nPictureId = aRes.first->second;
-            Set_UInt32(pDataAdr, nPictureId);
-            OUString sStorageName = "_" + OUString::number( nPictureId );
-            tools::SvRef<SotStorage> xOleStg = xObjStg->OpenSotStorage( sStorageName );
-            if( xOleStg.is() )
+            OUString aObjInfo( "\3ObjInfo" );
+            if ( !xOleStg->IsStream( aObjInfo ) )
             {
-                /*
-                If this object storage has been written already don't
-                waste time rewriting it
-                */
-                if (bIsNotDuplicate)
+                const sal_uInt8 pObjInfoData[] = { 0x40, 0x00, 0x03, 0x00 };
+                tools::SvRef<SotStorageStream> rObjInfoStream = xOleStg->OpenSotStream( aObjInfo );
+                if ( rObjInfoStream.is() && !rObjInfoStream->GetError() )
                 {
-                    sal_Int64 nAspect = rOLENode.GetAspect();
-                    svt::EmbeddedObjectRef aObjRef( xObj, nAspect );
-                    m_pOLEExp->ExportOLEObject( aObjRef, *xOleStg );
-                    if ( nAspect == embed::Aspects::MSOLE_ICON )
-                    {
-                        OUString aObjInfo( "\3ObjInfo" );
-                        if ( !xOleStg->IsStream( aObjInfo ) )
-                        {
-                            const sal_uInt8 pObjInfoData[] = { 0x40, 0x00, 0x03, 0x00 };
-                            tools::SvRef<SotStorageStream> rObjInfoStream = xOleStg->OpenSotStream( aObjInfo );
-                            if ( rObjInfoStream.is() && !rObjInfoStream->GetError() )
-                            {
-                                rObjInfoStream->WriteBytes(pObjInfoData, sizeof(pObjInfoData));
-                                xOleStg->Commit();
-                            }
-                        }
-                    }
+                    rObjInfoStream->WriteBytes(pObjInfoData, sizeof(pObjInfoData));
+                    xOleStg->Commit();
                 }
-
-                // write as embedded field - the other things will be done
-                // in the escher export
-                OUString sServer = FieldString(ww::eEMBED) + xOleStg->GetUserName() + " ";
-
-                OutputField(nullptr, ww::eEMBED, sServer, FieldFlags::Start |
-                    FieldFlags::CmdStart | FieldFlags::CmdEnd);
-
-                m_pChpPlc->AppendFkpEntry( Strm().Tell(),
-                        nSize, pSpecOLE );
-
-                bool bEndCR = true;
-                /*
-                In the word filter we only need a preview image for
-                floating images, and then only (the usual case) if the
-                object doesn't contain enough information to reconstruct
-                what we need.
-
-                We don't need a graphic for inline objects, so we don't
-                even need the overhead of a graphic in that case.
-                */
-                bool bGraphicNeeded = false;
-
-                if (m_pParentFrame)
-                {
-                    bGraphicNeeded = true;
-
-                    if (m_pParentFrame->IsInline())
-                    {
-                        const SwAttrSet& rSet =
-                            m_pParentFrame->GetFrameFormat().GetAttrSet();
-                        bEndCR = false;
-                        bGraphicNeeded = TestOleNeedsGraphic(rSet,
-                            xOleStg, xObjStg, sStorageName, const_cast<SwOLENode*>(&rOLENode));
-                    }
-                }
-
-                if (!bGraphicNeeded)
-                    WriteChar(0x1);
-                else
-                {
-                    /*
-                    ##897##
-                    We need to insert the graphic representation of
-                    this object for the inline case, otherwise word
-                    has no place to find the dimensions of the ole
-                    object, and will not be able to draw it
-                    */
-                    OutGrf(*m_pParentFrame);
-                }
-
-                OutputField(nullptr, ww::eEMBED, OUString(),
-                    FieldFlags::End | FieldFlags::Close);
-
-                if (bEndCR) //No newline in inline case
-                    WriteCR();
             }
         }
     }
+
+    // write as embedded field - the other things will be done
+    // in the escher export
+    OUString sServer = FieldString(ww::eEMBED) + xOleStg->GetUserName() + " ";
+
+    OutputField(nullptr, ww::eEMBED, sServer, FieldFlags::Start |
+        FieldFlags::CmdStart | FieldFlags::CmdEnd);
+
+    m_pChpPlc->AppendFkpEntry( Strm().Tell(),
+            nSize, pSpecOLE );
+
+    bool bEndCR = true;
+    /*
+    In the word filter we only need a preview image for
+    floating images, and then only (the usual case) if the
+    object doesn't contain enough information to reconstruct
+    what we need.
+
+    We don't need a graphic for inline objects, so we don't
+    even need the overhead of a graphic in that case.
+    */
+    bool bGraphicNeeded = false;
+
+    if (m_pParentFrame)
+    {
+        bGraphicNeeded = true;
+
+        if (m_pParentFrame->IsInline())
+        {
+            const SwAttrSet& rSet =
+                m_pParentFrame->GetFrameFormat().GetAttrSet();
+            bEndCR = false;
+            bGraphicNeeded = TestOleNeedsGraphic(rSet,
+                xOleStg, xObjStg, sStorageName, const_cast<SwOLENode*>(&rOLENode));
+        }
+    }
+
+    if (!bGraphicNeeded)
+        WriteChar(0x1);
+    else
+    {
+        /*
+        ##897##
+        We need to insert the graphic representation of
+        this object for the inline case, otherwise word
+        has no place to find the dimensions of the ole
+        object, and will not be able to draw it
+        */
+        OutGrf(*m_pParentFrame);
+    }
+
+    OutputField(nullptr, ww::eEMBED, OUString(),
+        FieldFlags::End | FieldFlags::Close);
+
+    if (bEndCR) //No newline in inline case
+        WriteCR();
 }
 
 void WW8Export::OutputLinkedOLE( const OUString& rOleId )
@@ -324,33 +324,33 @@ void WW8Export::OutputLinkedOLE( const OUString& rOleId )
 
     tools::SvRef<SotStorage> xObjStg = GetWriter().GetStorage().OpenSotStorage(SL::aObjectPool);
 
-    if( xObjStg.is() && xObjSrc.is() )
-    {
-        tools::SvRef<SotStorage> xOleDst = xObjStg->OpenSotStorage( rOleId );
-        if ( xOleDst.is() )
-            xObjSrc->CopyTo( xOleDst.get() );
+    if( !(xObjStg.is() && xObjSrc.is()) )
+        return;
 
-        if ( !xOleDst->GetError( ) )
-        {
-            xOleDst->Commit();
+    tools::SvRef<SotStorage> xOleDst = xObjStg->OpenSotStorage( rOleId );
+    if ( xOleDst.is() )
+        xObjSrc->CopyTo( xOleDst.get() );
 
-            // Output the cPicLocation attribute
-            std::unique_ptr<ww::bytes> pBuf( new ww::bytes );
-            SwWW8Writer::InsUInt16( *pBuf, NS_sprm::CPicLocation::val );
-            SwWW8Writer::InsUInt32( *pBuf, rOleId.copy( 1 ).toInt32() );
+    if ( xOleDst->GetError( ) )
+        return;
 
-            SwWW8Writer::InsUInt16( *pBuf, NS_sprm::CFOle2::val );
-            pBuf->push_back( 1 );
+    xOleDst->Commit();
 
-            SwWW8Writer::InsUInt16( *pBuf, NS_sprm::CFSpec::val );
-            pBuf->push_back( 1 );
+    // Output the cPicLocation attribute
+    std::unique_ptr<ww::bytes> pBuf( new ww::bytes );
+    SwWW8Writer::InsUInt16( *pBuf, NS_sprm::CPicLocation::val );
+    SwWW8Writer::InsUInt32( *pBuf, rOleId.copy( 1 ).toInt32() );
 
-            SwWW8Writer::InsUInt16( *pBuf, NS_sprm::CFObj::val );
-            pBuf->push_back( 1 );
+    SwWW8Writer::InsUInt16( *pBuf, NS_sprm::CFOle2::val );
+    pBuf->push_back( 1 );
 
-            m_pChpPlc->AppendFkpEntry( Strm().Tell(), pBuf->size(), pBuf->data() );
-        }
-    }
+    SwWW8Writer::InsUInt16( *pBuf, NS_sprm::CFSpec::val );
+    pBuf->push_back( 1 );
+
+    SwWW8Writer::InsUInt16( *pBuf, NS_sprm::CFObj::val );
+    pBuf->push_back( 1 );
+
+    m_pChpPlc->AppendFkpEntry( Strm().Tell(), pBuf->size(), pBuf->data() );
 }
 
 void WW8Export::OutGrf(const ww8::Frame &rFrame)

@@ -291,67 +291,67 @@ void MSWordExportBase::ExportPoolItemsToCHP( ww8::PoolItems &rItems, sal_uInt16 
 void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, bool bChpFormat, sal_uInt16 nScript,
                                       bool bExportParentItemSet )
 {
-    if( bExportParentItemSet || rSet.Count() )
+    if( !(bExportParentItemSet || rSet.Count()) )
+        return;
+
+    const SfxPoolItem* pItem;
+    m_pISet = &rSet;                  // for double attributes
+
+    // If frame dir is set, but not adjust, then force adjust as well
+    if ( bPapFormat && SfxItemState::SET == rSet.GetItemState( RES_FRAMEDIR, bExportParentItemSet ) )
     {
-        const SfxPoolItem* pItem;
-        m_pISet = &rSet;                  // for double attributes
-
-        // If frame dir is set, but not adjust, then force adjust as well
-        if ( bPapFormat && SfxItemState::SET == rSet.GetItemState( RES_FRAMEDIR, bExportParentItemSet ) )
+        // No explicit adjust set ?
+        if ( SfxItemState::SET != rSet.GetItemState( RES_PARATR_ADJUST, bExportParentItemSet ) )
         {
-            // No explicit adjust set ?
-            if ( SfxItemState::SET != rSet.GetItemState( RES_PARATR_ADJUST, bExportParentItemSet ) )
+            pItem = rSet.GetItem( RES_PARATR_ADJUST, bExportParentItemSet );
+            if ( nullptr != pItem )
             {
-                pItem = rSet.GetItem( RES_PARATR_ADJUST, bExportParentItemSet );
-                if ( nullptr != pItem )
-                {
-                    // then set the adjust used by the parent format
-                    AttrOutput().OutputItem( *pItem );
-                }
-            }
-        }
-
-        if ( bPapFormat && SfxItemState::SET == rSet.GetItemState( RES_PARATR_NUMRULE, bExportParentItemSet, &pItem ) )
-        {
-            AttrOutput().OutputItem( *pItem );
-
-            // switch off the numbering?
-            if ( static_cast<const SwNumRuleItem*>(pItem)->GetValue().isEmpty() &&
-                 SfxItemState::SET != rSet.GetItemState( RES_LR_SPACE, false) &&
-                 SfxItemState::SET == rSet.GetItemState( RES_LR_SPACE, true, &pItem ) )
-            {
-                // the set the LR-Space of the parentformat!
+                // then set the adjust used by the parent format
                 AttrOutput().OutputItem( *pItem );
             }
         }
-
-        ww8::PoolItems aItems;
-        GetPoolItems( rSet, aItems, bExportParentItemSet );
-        if ( bChpFormat )
-            ExportPoolItemsToCHP(aItems, nScript, nullptr);
-        if ( bPapFormat )
-        {
-            for ( const auto& rItem : aItems )
-            {
-                pItem = rItem.second;
-                sal_uInt16 nWhich = pItem->Which();
-                // Handle fill attributes just like frame attributes for now.
-                if ( (nWhich >= RES_PARATR_BEGIN && nWhich < RES_FRMATR_END && nWhich != RES_PARATR_NUMRULE ) ||
-                     (nWhich >= XATTR_FILL_FIRST && nWhich < XATTR_FILL_LAST))
-                    AttrOutput().OutputItem( *pItem );
-            }
-
-            // Has to be called after RES_PARATR_GRABBAG is processed.
-            const XFillStyleItem* pXFillStyleItem(rSet.GetItem<XFillStyleItem>(XATTR_FILLSTYLE));
-            if (pXFillStyleItem && pXFillStyleItem->GetValue() == drawing::FillStyle_SOLID && !rSet.HasItem(RES_BACKGROUND))
-            {
-                // Construct an SvxBrushItem, as expected by the exporters.
-                std::unique_ptr<SvxBrushItem> aBrush(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
-                AttrOutput().OutputItem(*aBrush);
-            }
-        }
-        m_pISet = nullptr;                      // for double attributes
     }
+
+    if ( bPapFormat && SfxItemState::SET == rSet.GetItemState( RES_PARATR_NUMRULE, bExportParentItemSet, &pItem ) )
+    {
+        AttrOutput().OutputItem( *pItem );
+
+        // switch off the numbering?
+        if ( static_cast<const SwNumRuleItem*>(pItem)->GetValue().isEmpty() &&
+             SfxItemState::SET != rSet.GetItemState( RES_LR_SPACE, false) &&
+             SfxItemState::SET == rSet.GetItemState( RES_LR_SPACE, true, &pItem ) )
+        {
+            // the set the LR-Space of the parentformat!
+            AttrOutput().OutputItem( *pItem );
+        }
+    }
+
+    ww8::PoolItems aItems;
+    GetPoolItems( rSet, aItems, bExportParentItemSet );
+    if ( bChpFormat )
+        ExportPoolItemsToCHP(aItems, nScript, nullptr);
+    if ( bPapFormat )
+    {
+        for ( const auto& rItem : aItems )
+        {
+            pItem = rItem.second;
+            sal_uInt16 nWhich = pItem->Which();
+            // Handle fill attributes just like frame attributes for now.
+            if ( (nWhich >= RES_PARATR_BEGIN && nWhich < RES_FRMATR_END && nWhich != RES_PARATR_NUMRULE ) ||
+                 (nWhich >= XATTR_FILL_FIRST && nWhich < XATTR_FILL_LAST))
+                AttrOutput().OutputItem( *pItem );
+        }
+
+        // Has to be called after RES_PARATR_GRABBAG is processed.
+        const XFillStyleItem* pXFillStyleItem(rSet.GetItem<XFillStyleItem>(XATTR_FILLSTYLE));
+        if (pXFillStyleItem && pXFillStyleItem->GetValue() == drawing::FillStyle_SOLID && !rSet.HasItem(RES_BACKGROUND))
+        {
+            // Construct an SvxBrushItem, as expected by the exporters.
+            std::unique_ptr<SvxBrushItem> aBrush(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
+            AttrOutput().OutputItem(*aBrush);
+        }
+    }
+    m_pISet = nullptr;                      // for double attributes
 }
 
 void MSWordExportBase::GatherChapterFields()
@@ -649,26 +649,27 @@ void WW8Export::PrepareNewPageDesc( const SfxItemSet*pSet,
 
 void MSWordExportBase::CorrectTabStopInSet( SfxItemSet& rSet, sal_Int32 nAbsLeft )
 {
-    if (const SvxTabStopItem *pItem = rSet.GetItem<SvxTabStopItem>(RES_PARATR_TABSTOP))
+    const SvxTabStopItem *pItem = rSet.GetItem<SvxTabStopItem>(RES_PARATR_TABSTOP);
+    if (!pItem)
+        return;
+
+    // then it must be corrected for the output
+    SvxTabStopItem aTStop(*pItem);
+    for ( sal_uInt16 nCnt = 0; nCnt < aTStop.Count(); ++nCnt )
     {
-        // then it must be corrected for the output
-        SvxTabStopItem aTStop(*pItem);
-        for ( sal_uInt16 nCnt = 0; nCnt < aTStop.Count(); ++nCnt )
+        SvxTabStop& rTab = const_cast<SvxTabStop&>(aTStop[ nCnt ]);
+        if ( SvxTabAdjust::Default != rTab.GetAdjustment() &&
+            rTab.GetTabPos() >= nAbsLeft )
         {
-            SvxTabStop& rTab = const_cast<SvxTabStop&>(aTStop[ nCnt ]);
-            if ( SvxTabAdjust::Default != rTab.GetAdjustment() &&
-                rTab.GetTabPos() >= nAbsLeft )
-            {
-                rTab.GetTabPos() -= nAbsLeft;
-            }
-            else
-            {
-                aTStop.Remove( nCnt );
-                --nCnt;
-            }
+            rTab.GetTabPos() -= nAbsLeft;
         }
-        rSet.Put( aTStop );
+        else
+        {
+            aTStop.Remove( nCnt );
+            --nCnt;
+        }
     }
+    rSet.Put( aTStop );
 }
 
 sal_uInt8 WW8Export::GetNumId( sal_uInt16 eNumType )
@@ -1331,24 +1332,24 @@ void WW8AttributeOutput::CharLanguage( const SvxLanguageItem& rLanguage )
             break;
     }
 
-    if ( nId )
-    {
-        // use sprmCRgLid0_80 rather than sprmCLid
-        m_rWW8Export.InsUInt16( nId );
-        m_rWW8Export.InsUInt16( static_cast<sal_uInt16>(rLanguage.GetLanguage()) );
+    if ( !nId )
+        return;
 
-        // Word 2000 and above apparently require both old and new versions of
-        // these sprms to be set, without it spellchecking doesn't work
-        if ( nId == NS_sprm::CRgLid0_80::val )
-        {
-            m_rWW8Export.InsUInt16( NS_sprm::CRgLid0::val );
-            m_rWW8Export.InsUInt16( static_cast<sal_uInt16>(rLanguage.GetLanguage()) );
-        }
-        else if ( nId == NS_sprm::CRgLid1_80::val )
-        {
-            m_rWW8Export.InsUInt16( NS_sprm::CRgLid1::val );
-            m_rWW8Export.InsUInt16( static_cast<sal_uInt16>(rLanguage.GetLanguage()) );
-        }
+    // use sprmCRgLid0_80 rather than sprmCLid
+    m_rWW8Export.InsUInt16( nId );
+    m_rWW8Export.InsUInt16( static_cast<sal_uInt16>(rLanguage.GetLanguage()) );
+
+    // Word 2000 and above apparently require both old and new versions of
+    // these sprms to be set, without it spellchecking doesn't work
+    if ( nId == NS_sprm::CRgLid0_80::val )
+    {
+        m_rWW8Export.InsUInt16( NS_sprm::CRgLid0::val );
+        m_rWW8Export.InsUInt16( static_cast<sal_uInt16>(rLanguage.GetLanguage()) );
+    }
+    else if ( nId == NS_sprm::CRgLid1_80::val )
+    {
+        m_rWW8Export.InsUInt16( NS_sprm::CRgLid1::val );
+        m_rWW8Export.InsUInt16( static_cast<sal_uInt16>(rLanguage.GetLanguage()) );
     }
 }
 
@@ -1391,18 +1392,18 @@ void WW8AttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
         m_rWW8Export.pO->push_back( b );
     }
 
-    if ( 0 == b || 0xFF == b )
+    if ( 0 != b && 0xFF != b )
+        return;
+
+    double fHeight = m_rWW8Export.GetItem( RES_CHRATR_FONTSIZE ).GetHeight();
+    m_rWW8Export.InsUInt16( NS_sprm::CHpsPos::val );
+
+    m_rWW8Export.InsUInt16(static_cast<short>( round(fHeight * nEsc / 1000) ));
+
+    if( 100 != nProp || !b )
     {
-        double fHeight = m_rWW8Export.GetItem( RES_CHRATR_FONTSIZE ).GetHeight();
-        m_rWW8Export.InsUInt16( NS_sprm::CHpsPos::val );
-
-        m_rWW8Export.InsUInt16(static_cast<short>( round(fHeight * nEsc / 1000) ));
-
-        if( 100 != nProp || !b )
-        {
-            m_rWW8Export.InsUInt16( NS_sprm::CHps::val );
-            m_rWW8Export.InsUInt16(msword_cast<sal_uInt16>( round(fHeight * nProp / 1000) ));
-        }
+        m_rWW8Export.InsUInt16( NS_sprm::CHps::val );
+        m_rWW8Export.InsUInt16(msword_cast<sal_uInt16>( round(fHeight * nProp / 1000) ));
     }
 }
 
@@ -1482,20 +1483,20 @@ void WW8AttributeOutput::CharRotate( const SvxCharRotateItem& rRotate )
     if ( !rRotate.GetValue() )
         return;
 
-    if (!m_rWW8Export.IsInTable())
-    {
-        // #i36867 In word the text in a table is rotated via the TC or NS_sprm::TTextFlow::val
-        // This means you can only rotate all or none of the text adding NS_sprm::CFELayout::val
-        // here corrupts the table, hence !m_rWW8Export.bIsInTable
+    if (m_rWW8Export.IsInTable())
+        return;
 
-        m_rWW8Export.InsUInt16( NS_sprm::CFELayout::val );
-        m_rWW8Export.pO->push_back( sal_uInt8(0x06) ); //len 6
-        m_rWW8Export.pO->push_back( sal_uInt8(0x01) );
+    // #i36867 In word the text in a table is rotated via the TC or NS_sprm::TTextFlow::val
+    // This means you can only rotate all or none of the text adding NS_sprm::CFELayout::val
+    // here corrupts the table, hence !m_rWW8Export.bIsInTable
 
-        m_rWW8Export.InsUInt16( rRotate.IsFitToLine() ? 1 : 0 );
-        static const sal_uInt8 aZeroArr[ 3 ] = { 0, 0, 0 };
-        m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), aZeroArr, aZeroArr+3);
-    }
+    m_rWW8Export.InsUInt16( NS_sprm::CFELayout::val );
+    m_rWW8Export.pO->push_back( sal_uInt8(0x06) ); //len 6
+    m_rWW8Export.pO->push_back( sal_uInt8(0x01) );
+
+    m_rWW8Export.InsUInt16( rRotate.IsFitToLine() ? 1 : 0 );
+    static const sal_uInt8 aZeroArr[ 3 ] = { 0, 0, 0 };
+    m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), aZeroArr, aZeroArr+3);
 }
 
 void WW8AttributeOutput::CharEmphasisMark( const SvxEmphasisMarkItem& rEmphasisMark )
@@ -1580,23 +1581,23 @@ void WW8AttributeOutput::CharBackground( const SvxBrushItem& rBrush )
 
 void WW8AttributeOutput::TextINetFormat( const SwFormatINetFormat& rINet )
 {
-    if ( !rINet.GetValue().isEmpty() )
+    if ( rINet.GetValue().isEmpty() )
+        return;
+
+    const sal_uInt16 nId = rINet.GetINetFormatId();
+    const OUString& rStr = rINet.GetINetFormat();
+    if (rStr.isEmpty())
     {
-        const sal_uInt16 nId = rINet.GetINetFormatId();
-        const OUString& rStr = rINet.GetINetFormat();
-        if (rStr.isEmpty())
-        {
-            OSL_ENSURE( false, "WW8AttributeOutput::TextINetFormat(..) - missing unvisited character format at hyperlink attribute" );
-        }
-
-        const SwCharFormat* pFormat = IsPoolUserFormat( nId )
-                        ? m_rWW8Export.m_pDoc->FindCharFormatByName( rStr )
-                        : m_rWW8Export.m_pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool( nId );
-
-        m_rWW8Export.InsUInt16( NS_sprm::CIstd::val );
-
-        m_rWW8Export.InsUInt16( m_rWW8Export.GetId( pFormat ) );
+        OSL_ENSURE( false, "WW8AttributeOutput::TextINetFormat(..) - missing unvisited character format at hyperlink attribute" );
     }
+
+    const SwCharFormat* pFormat = IsPoolUserFormat( nId )
+                    ? m_rWW8Export.m_pDoc->FindCharFormatByName( rStr )
+                    : m_rWW8Export.m_pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool( nId );
+
+    m_rWW8Export.InsUInt16( NS_sprm::CIstd::val );
+
+    m_rWW8Export.InsUInt16( m_rWW8Export.GetId( pFormat ) );
 }
 
 // #i43956# - add optional parameter <pLinkStr>
@@ -1835,25 +1836,25 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
             }
         }
     }
-    if (FieldFlags::Close & nMode)
+    if (!(FieldFlags::Close & nMode))
+        return;
+
+    sal_uInt8 aField15[2] = { 0x15, 0x80 };
+
+    if (pField)
     {
-        sal_uInt8 aField15[2] = { 0x15, 0x80 };
-
-        if (pField)
+        if (pField->GetTyp()->Which() == SwFieldIds::Input &&
+            eFieldType == ww::eFORMTEXT)
         {
-            if (pField->GetTyp()->Which() == SwFieldIds::Input &&
-                eFieldType == ww::eFORMTEXT)
-            {
-                sal_uInt16 nSubType = pField->GetSubType();
+            sal_uInt16 nSubType = pField->GetSubType();
 
-                if (nSubType == REF_SEQUENCEFLD)
-                    aField15[0] |= (0x4 << 5);
-            }
+            if (nSubType == REF_SEQUENCEFLD)
+                aField15[0] |= (0x4 << 5);
         }
-
-        pFieldP->Append( Fc2Cp( Strm().Tell() ), aField15 );
-        InsertSpecialChar( *this, 0x15, nullptr, bIncludeEmptyPicLocation );
     }
+
+    pFieldP->Append( Fc2Cp( Strm().Tell() ), aField15 );
+    InsertSpecialChar( *this, 0x15, nullptr, bIncludeEmptyPicLocation );
 }
 
 void WW8Export::StartCommentOutput(const OUString& rName)
@@ -1976,165 +1977,166 @@ void AttributeOutputBase::GenerateBookmarksForSequenceField(const SwTextNode& rN
     if(GetExport().GetExportFormat() == MSWordExportBase::ExportFormat::RTF) // Not implemented for RTF
         return;
 
-    if (const SwpHints* pTextAttrs = rNode.GetpSwpHints())
+    const SwpHints* pTextAttrs = rNode.GetpSwpHints();
+    if (!pTextAttrs)
+        return;
+
+    for( size_t i = 0; i < pTextAttrs->Count(); ++i )
     {
-        for( size_t i = 0; i < pTextAttrs->Count(); ++i )
+        const SwTextAttr* pHt = pTextAttrs->Get(i);
+        if (pHt->GetAttr().Which() == RES_TXTATR_FIELD)
         {
-            const SwTextAttr* pHt = pTextAttrs->Get(i);
-            if (pHt->GetAttr().Which() == RES_TXTATR_FIELD)
+            const SwFormatField& rField = static_cast<const SwFormatField&>(pHt->GetAttr());
+            const SwField* pField = rField.GetField();
+            // Need to have bookmarks only for sequence fields
+            if (pField && pField->GetTyp()->Which() == SwFieldIds::SetExp && pField->GetSubType() == nsSwGetSetExpType::GSE_SEQ)
             {
-                const SwFormatField& rField = static_cast<const SwFormatField&>(pHt->GetAttr());
-                const SwField* pField = rField.GetField();
-                // Need to have bookmarks only for sequence fields
-                if (pField && pField->GetTyp()->Which() == SwFieldIds::SetExp && pField->GetSubType() == nsSwGetSetExpType::GSE_SEQ)
+                const sal_uInt16 nSeqFieldNumber = static_cast<const SwSetExpField*>(pField)->GetSeqNumber();
+                const OUString sObjectName = static_cast<const SwSetExpFieldType*>(pField->GetTyp())->GetName();
+                const SwFieldTypes* pFieldTypes = GetExport().m_pDoc->getIDocumentFieldsAccess().GetFieldTypes();
+                bool bHaveFullBkm = false;
+                bool bHaveLabelAndNumberBkm = false;
+                bool bHaveCaptionOnlyBkm = false;
+                bool bHaveNumberOnlyBkm = false;
+                bool bRunSplittedAtSep = false;
+                for( auto const & pFieldType : *pFieldTypes )
                 {
-                    const sal_uInt16 nSeqFieldNumber = static_cast<const SwSetExpField*>(pField)->GetSeqNumber();
-                    const OUString sObjectName = static_cast<const SwSetExpFieldType*>(pField->GetTyp())->GetName();
-                    const SwFieldTypes* pFieldTypes = GetExport().m_pDoc->getIDocumentFieldsAccess().GetFieldTypes();
-                    bool bHaveFullBkm = false;
-                    bool bHaveLabelAndNumberBkm = false;
-                    bool bHaveCaptionOnlyBkm = false;
-                    bool bHaveNumberOnlyBkm = false;
-                    bool bRunSplittedAtSep = false;
-                    for( auto const & pFieldType : *pFieldTypes )
+                    if( SwFieldIds::GetRef == pFieldType->Which() )
                     {
-                        if( SwFieldIds::GetRef == pFieldType->Which() )
+                        SwIterator<SwFormatField,SwFieldType> aIter( *pFieldType );
+                        for( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
                         {
-                            SwIterator<SwFormatField,SwFieldType> aIter( *pFieldType );
-                            for( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
+                            SwGetRefField* pRefField = static_cast<SwGetRefField*>(pFormatField->GetField());
+                            // If we have a reference to the current sequence field
+                            if(pRefField->GetSeqNo() == nSeqFieldNumber && pRefField->GetSetRefName() == sObjectName)
                             {
-                                SwGetRefField* pRefField = static_cast<SwGetRefField*>(pFormatField->GetField());
-                                // If we have a reference to the current sequence field
-                                if(pRefField->GetSeqNo() == nSeqFieldNumber && pRefField->GetSetRefName() == sObjectName)
+                                // Need to create a separate run for separator character
+                                SwWW8AttrIter aLocalAttrIter( GetExport(), rNode ); // We need a local iterator having the right number of runs
+                                const OUString& aText = rNode.GetText();
+                                const sal_Int32 nCategoryStart = aText.indexOf(pRefField->GetSetRefName());
+                                const sal_Int32 nPosBeforeSeparator = std::max(nCategoryStart, pHt->GetStart());
+                                bool bCategoryFirst = nCategoryStart < pHt->GetStart();
+                                sal_Int32 nSeparatorPos = 0;
+                                if (bCategoryFirst)
                                 {
-                                    // Need to create a separate run for separator character
-                                    SwWW8AttrIter aLocalAttrIter( GetExport(), rNode ); // We need a local iterator having the right number of runs
-                                    const OUString& aText = rNode.GetText();
-                                    const sal_Int32 nCategoryStart = aText.indexOf(pRefField->GetSetRefName());
-                                    const sal_Int32 nPosBeforeSeparator = std::max(nCategoryStart, pHt->GetStart());
-                                    bool bCategoryFirst = nCategoryStart < pHt->GetStart();
-                                    sal_Int32 nSeparatorPos = 0;
-                                    if (bCategoryFirst)
+                                    nSeparatorPos = aLocalAttrIter.WhereNext();
+                                    while (nSeparatorPos <= nPosBeforeSeparator)
                                     {
+                                        aLocalAttrIter.NextPos();
                                         nSeparatorPos = aLocalAttrIter.WhereNext();
-                                        while (nSeparatorPos <= nPosBeforeSeparator)
-                                        {
-                                            aLocalAttrIter.NextPos();
-                                            nSeparatorPos = aLocalAttrIter.WhereNext();
-                                        }
                                     }
-                                    else
+                                }
+                                else
+                                {
+                                    nSeparatorPos = nCategoryStart + pRefField->GetSetRefName().getLength();
+                                }
+                                sal_Int32 nRefTextPos = 0;
+                                if(nSeparatorPos < aText.getLength())
+                                {
+                                    nRefTextPos = SwGetExpField::GetReferenceTextPos(pHt->GetFormatField(), *GetExport().m_pDoc, nSeparatorPos);
+                                    if(nRefTextPos != nSeparatorPos)
                                     {
-                                        nSeparatorPos = nCategoryStart + pRefField->GetSetRefName().getLength();
-                                    }
-                                    sal_Int32 nRefTextPos = 0;
-                                    if(nSeparatorPos < aText.getLength())
-                                    {
-                                        nRefTextPos = SwGetExpField::GetReferenceTextPos(pHt->GetFormatField(), *GetExport().m_pDoc, nSeparatorPos);
-                                        if(nRefTextPos != nSeparatorPos)
+                                        if(!bRunSplittedAtSep)
                                         {
-                                            if(!bRunSplittedAtSep)
-                                            {
-                                                if(!bCategoryFirst)
-                                                    rAttrIter.SplitRun(nSeparatorPos);
-                                                rAttrIter.SplitRun(nRefTextPos);
-                                                bRunSplittedAtSep = true;
-                                            }
                                             if(!bCategoryFirst)
-                                                aLocalAttrIter.SplitRun(nSeparatorPos);
-                                            aLocalAttrIter.SplitRun(nRefTextPos);
-                                        }
-                                        else if (bCategoryFirst)
-                                        {
-                                            if(!bRunSplittedAtSep)
-                                            {
                                                 rAttrIter.SplitRun(nSeparatorPos);
-                                                bRunSplittedAtSep = true;
-                                            }
+                                            rAttrIter.SplitRun(nRefTextPos);
+                                            bRunSplittedAtSep = true;
+                                        }
+                                        if(!bCategoryFirst)
                                             aLocalAttrIter.SplitRun(nSeparatorPos);
-                                        }
+                                        aLocalAttrIter.SplitRun(nRefTextPos);
                                     }
-                                    // Generate bookmarks on the right position
-                                    OUString sName("Ref_" + pRefField->GetSetRefName() + OUString::number(pRefField->GetSeqNo()));
-                                    switch (pRefField->GetFormat())
+                                    else if (bCategoryFirst)
                                     {
-                                        case REF_PAGE:
-                                        case REF_PAGE_PGDESC:
-                                        case REF_CONTENT:
-                                        case REF_UPDOWN:
-                                            if(!bHaveFullBkm)
-                                            {
-                                                sal_Int32 nLastAttrStart = 0;
-                                                sal_Int32 nActAttr = aLocalAttrIter.WhereNext();
-                                                while (nActAttr < rNode.GetText().getLength())
-                                                {
-                                                    nLastAttrStart = nActAttr;
-                                                    aLocalAttrIter.NextPos();
-                                                    nActAttr = aLocalAttrIter.WhereNext();
-                                                }
-                                                WriteBookmarkInActParagraph( sName + "_full", std::min(nCategoryStart, pHt->GetStart()), nLastAttrStart );
-                                                bHaveFullBkm = true;
-                                            }
-                                            break;
-                                        case REF_ONLYNUMBER:
+                                        if(!bRunSplittedAtSep)
                                         {
-                                            if(!bHaveLabelAndNumberBkm)
-                                            {
-                                                sName += "_label_and_number";
-                                                if(bCategoryFirst)
-                                                    WriteBookmarkInActParagraph( sName, std::min(nCategoryStart, pHt->GetStart()), std::max(nCategoryStart, pHt->GetStart()) );
-                                                else
-                                                {
-                                                    // Find the last run which contains category text
-                                                    SwWW8AttrIter aLocalAttrIter2( GetExport(), rNode );
-                                                    sal_Int32 nCatLastRun = 0;
-                                                    sal_Int32 nNextAttr = aLocalAttrIter2.WhereNext();
-                                                    while (nNextAttr < nSeparatorPos)
-                                                    {
-                                                        nCatLastRun = nNextAttr;
-                                                        aLocalAttrIter2.NextPos();
-                                                        nNextAttr = aLocalAttrIter2.WhereNext();
-                                                    }
-                                                    WriteBookmarkInActParagraph( sName, pHt->GetStart(), nCatLastRun );
-                                                }
-                                                bHaveLabelAndNumberBkm = true;
-                                            }
-                                            break;
+                                            rAttrIter.SplitRun(nSeparatorPos);
+                                            bRunSplittedAtSep = true;
                                         }
-                                        case REF_ONLYCAPTION:
+                                        aLocalAttrIter.SplitRun(nSeparatorPos);
+                                    }
+                                }
+                                // Generate bookmarks on the right position
+                                OUString sName("Ref_" + pRefField->GetSetRefName() + OUString::number(pRefField->GetSeqNo()));
+                                switch (pRefField->GetFormat())
+                                {
+                                    case REF_PAGE:
+                                    case REF_PAGE_PGDESC:
+                                    case REF_CONTENT:
+                                    case REF_UPDOWN:
+                                        if(!bHaveFullBkm)
                                         {
-                                            if(!bHaveCaptionOnlyBkm)
+                                            sal_Int32 nLastAttrStart = 0;
+                                            sal_Int32 nActAttr = aLocalAttrIter.WhereNext();
+                                            while (nActAttr < rNode.GetText().getLength())
                                             {
-                                                // Find last run
-                                                sal_Int32 nLastAttrStart = 0;
-                                                sal_Int32 nActAttr = aLocalAttrIter.WhereNext();
-                                                while (nActAttr < rNode.GetText().getLength())
-                                                {
-                                                    nLastAttrStart = nActAttr;
-                                                    aLocalAttrIter.NextPos();
-                                                    nActAttr = aLocalAttrIter.WhereNext();
-                                                }
-                                                WriteBookmarkInActParagraph( sName + "_caption_only", nRefTextPos, nLastAttrStart );
-                                                bHaveCaptionOnlyBkm = true;
+                                                nLastAttrStart = nActAttr;
+                                                aLocalAttrIter.NextPos();
+                                                nActAttr = aLocalAttrIter.WhereNext();
                                             }
-                                            break;
+                                            WriteBookmarkInActParagraph( sName + "_full", std::min(nCategoryStart, pHt->GetStart()), nLastAttrStart );
+                                            bHaveFullBkm = true;
                                         }
-                                        case REF_ONLYSEQNO:
+                                        break;
+                                    case REF_ONLYNUMBER:
+                                    {
+                                        if(!bHaveLabelAndNumberBkm)
                                         {
-                                            if(!bHaveNumberOnlyBkm)
+                                            sName += "_label_and_number";
+                                            if(bCategoryFirst)
+                                                WriteBookmarkInActParagraph( sName, std::min(nCategoryStart, pHt->GetStart()), std::max(nCategoryStart, pHt->GetStart()) );
+                                            else
                                             {
-                                                WriteBookmarkInActParagraph( sName + "_number_only", pHt->GetStart(), pHt->GetStart() );
-                                                bHaveNumberOnlyBkm = true;
+                                                // Find the last run which contains category text
+                                                SwWW8AttrIter aLocalAttrIter2( GetExport(), rNode );
+                                                sal_Int32 nCatLastRun = 0;
+                                                sal_Int32 nNextAttr = aLocalAttrIter2.WhereNext();
+                                                while (nNextAttr < nSeparatorPos)
+                                                {
+                                                    nCatLastRun = nNextAttr;
+                                                    aLocalAttrIter2.NextPos();
+                                                    nNextAttr = aLocalAttrIter2.WhereNext();
+                                                }
+                                                WriteBookmarkInActParagraph( sName, pHt->GetStart(), nCatLastRun );
                                             }
-                                            break;
+                                            bHaveLabelAndNumberBkm = true;
                                         }
+                                        break;
+                                    }
+                                    case REF_ONLYCAPTION:
+                                    {
+                                        if(!bHaveCaptionOnlyBkm)
+                                        {
+                                            // Find last run
+                                            sal_Int32 nLastAttrStart = 0;
+                                            sal_Int32 nActAttr = aLocalAttrIter.WhereNext();
+                                            while (nActAttr < rNode.GetText().getLength())
+                                            {
+                                                nLastAttrStart = nActAttr;
+                                                aLocalAttrIter.NextPos();
+                                                nActAttr = aLocalAttrIter.WhereNext();
+                                            }
+                                            WriteBookmarkInActParagraph( sName + "_caption_only", nRefTextPos, nLastAttrStart );
+                                            bHaveCaptionOnlyBkm = true;
+                                        }
+                                        break;
+                                    }
+                                    case REF_ONLYSEQNO:
+                                    {
+                                        if(!bHaveNumberOnlyBkm)
+                                        {
+                                            WriteBookmarkInActParagraph( sName + "_number_only", pHt->GetStart(), pHt->GetStart() );
+                                            bHaveNumberOnlyBkm = true;
+                                        }
+                                        break;
                                     }
                                 }
                             }
                         }
                     }
-                    return;
                 }
+                return;
             }
         }
     }
@@ -3478,44 +3480,44 @@ void WW8AttributeOutput::TextCharFormat( const SwFormatCharFormat& rCharFormat )
 void WW8AttributeOutput::CharTwoLines( const SvxTwoLinesItem& rTwoLines )
 {
     // #i28331# - check that bOn is set
-    if ( rTwoLines.GetValue() )
-    {
-        m_rWW8Export.InsUInt16( NS_sprm::CFELayout::val );
-        m_rWW8Export.pO->push_back( sal_uInt8(0x06) ); //len 6
-        m_rWW8Export.pO->push_back( sal_uInt8(0x02) );
+    if ( !rTwoLines.GetValue() )
+        return;
 
-        sal_Unicode cStart = rTwoLines.GetStartBracket();
-        sal_Unicode cEnd = rTwoLines.GetEndBracket();
+    m_rWW8Export.InsUInt16( NS_sprm::CFELayout::val );
+    m_rWW8Export.pO->push_back( sal_uInt8(0x06) ); //len 6
+    m_rWW8Export.pO->push_back( sal_uInt8(0x02) );
 
-        /*
-        As per usual we have problems. We can have separate left and right brackets
-        in OOo, it doesn't appear that you can in word. Also in word there appear
-        to only be a limited number of possibilities, we can use pretty much
-        anything.
+    sal_Unicode cStart = rTwoLines.GetStartBracket();
+    sal_Unicode cEnd = rTwoLines.GetEndBracket();
 
-        So if we have none, we export none, if either bracket is set to a known
-        word type we export both as that type (with the bracket winning out in
-        the case of a conflict simply being the order of test here.
+    /*
+    As per usual we have problems. We can have separate left and right brackets
+    in OOo, it doesn't appear that you can in word. Also in word there appear
+    to only be a limited number of possibilities, we can use pretty much
+    anything.
 
-        Upshot being a documented created in word will be reexported with no
-        ill effects.
-        */
+    So if we have none, we export none, if either bracket is set to a known
+    word type we export both as that type (with the bracket winning out in
+    the case of a conflict simply being the order of test here.
 
-        sal_uInt16 nType;
-        if (!cStart && !cEnd)
-            nType = 0;
-        else if ((cStart == '{') || (cEnd == '}'))
-            nType = 4;
-        else if ((cStart == '<') || (cEnd == '>'))
-            nType = 3;
-        else if ((cStart == '[') || (cEnd == ']'))
-            nType = 2;
-        else
-            nType = 1;
-        m_rWW8Export.InsUInt16( nType );
-        static const sal_uInt8 aZeroArr[ 3 ] = { 0, 0, 0 };
-        m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), aZeroArr, aZeroArr+3);
-    }
+    Upshot being a documented created in word will be reexported with no
+    ill effects.
+    */
+
+    sal_uInt16 nType;
+    if (!cStart && !cEnd)
+        nType = 0;
+    else if ((cStart == '{') || (cEnd == '}'))
+        nType = 4;
+    else if ((cStart == '<') || (cEnd == '>'))
+        nType = 3;
+    else if ((cStart == '[') || (cEnd == ']'))
+        nType = 2;
+    else
+        nType = 1;
+    m_rWW8Export.InsUInt16( nType );
+    static const sal_uInt8 aZeroArr[ 3 ] = { 0, 0, 0 };
+    m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), aZeroArr, aZeroArr+3);
 }
 
 void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
@@ -3920,59 +3922,59 @@ sal_uInt32 AttributeOutputBase::GridCharacterPitch( const SwTextGridItem& rGrid 
 
 void WW8AttributeOutput::FormatTextGrid( const SwTextGridItem& rGrid )
 {
-    if (m_rWW8Export.m_bOutPageDescs)
+    if (!m_rWW8Export.m_bOutPageDescs)
+        return;
+
+    sal_uInt16 nGridType = 0;
+    switch ( rGrid.GetGridType() )
     {
-        sal_uInt16 nGridType = 0;
-        switch ( rGrid.GetGridType() )
-        {
-            default:
-                OSL_FAIL("Unknown grid type");
-                [[fallthrough]];
-            case GRID_NONE:
-                nGridType = 0;
-                break;
-            case GRID_LINES_ONLY:
-                nGridType = 2;
-                break;
-            case GRID_LINES_CHARS:
-                if ( rGrid.IsSnapToChars() )
-                    nGridType = 3;
-                else
-                    nGridType = 1;
-                break;
-        }
-        m_rWW8Export.InsUInt16( NS_sprm::SClm::val );
-        m_rWW8Export.InsUInt16( nGridType );
-
-        sal_uInt16 nHeight = rGrid.GetBaseHeight() + rGrid.GetRubyHeight();
-        m_rWW8Export.InsUInt16( NS_sprm::SDyaLinePitch::val );
-        m_rWW8Export.InsUInt16( nHeight );
-
-        m_rWW8Export.InsUInt16( NS_sprm::SDxtCharSpace::val );
-        m_rWW8Export.InsUInt32( GridCharacterPitch( rGrid ) );
+        default:
+            OSL_FAIL("Unknown grid type");
+            [[fallthrough]];
+        case GRID_NONE:
+            nGridType = 0;
+            break;
+        case GRID_LINES_ONLY:
+            nGridType = 2;
+            break;
+        case GRID_LINES_CHARS:
+            if ( rGrid.IsSnapToChars() )
+                nGridType = 3;
+            else
+                nGridType = 1;
+            break;
     }
+    m_rWW8Export.InsUInt16( NS_sprm::SClm::val );
+    m_rWW8Export.InsUInt16( nGridType );
+
+    sal_uInt16 nHeight = rGrid.GetBaseHeight() + rGrid.GetRubyHeight();
+    m_rWW8Export.InsUInt16( NS_sprm::SDyaLinePitch::val );
+    m_rWW8Export.InsUInt16( nHeight );
+
+    m_rWW8Export.InsUInt16( NS_sprm::SDxtCharSpace::val );
+    m_rWW8Export.InsUInt32( GridCharacterPitch( rGrid ) );
 }
 
 void WW8AttributeOutput::FormatPaperBin( const SvxPaperBinItem& rPaperBin )
 {
-    if ( m_rWW8Export.m_bOutPageDescs )
+    if ( !m_rWW8Export.m_bOutPageDescs )
+        return;
+
+    sal_uInt16 nVal;
+    switch ( rPaperBin.GetValue() )
     {
-        sal_uInt16 nVal;
-        switch ( rPaperBin.GetValue() )
-        {
-            case 0: nVal = 15;  break;      // Automatically select
-            case 1: nVal = 1;   break;      // Upper paper tray
-            case 2: nVal = 4;   break;      // Manual paper feed
-            default: nVal = 0;  break;
-        }
+        case 0: nVal = 15;  break;      // Automatically select
+        case 1: nVal = 1;   break;      // Upper paper tray
+        case 2: nVal = 4;   break;      // Manual paper feed
+        default: nVal = 0;  break;
+    }
 
-        if ( nVal )
-        {
-            m_rWW8Export.InsUInt16( m_rWW8Export.m_bOutFirstPage
-                    ? NS_sprm::SDmBinFirst::val : NS_sprm::SDmBinOther::val );
+    if ( nVal )
+    {
+        m_rWW8Export.InsUInt16( m_rWW8Export.m_bOutFirstPage
+                ? NS_sprm::SDmBinFirst::val : NS_sprm::SDmBinOther::val );
 
-            m_rWW8Export.InsUInt16( nVal );
-        }
+        m_rWW8Export.InsUInt16( nVal );
     }
 }
 
@@ -4102,33 +4104,33 @@ void WW8AttributeOutput::FormatVertOrientation( const SwFormatVertOrient& rFlyVe
 {
 
     //!!!! anchor type and corresponding borders are still missing
-    if ( m_rWW8Export.m_bOutFlyFrameAttrs )
-    {
-        short nPos;
-        switch( rFlyVert.GetVertOrient() )
-        {
-            case text::VertOrientation::NONE:
-                nPos = static_cast<short>(rFlyVert.GetPos());
-                break;
-            case text::VertOrientation::CENTER:
-            case text::VertOrientation::LINE_CENTER:
-                nPos = -8;
-                break;
-            case text::VertOrientation::BOTTOM:
-            case text::VertOrientation::LINE_BOTTOM:
-                nPos = -12;
-                break;
-            case text::VertOrientation::TOP:
-            case text::VertOrientation::LINE_TOP:
-            default:
-                nPos = -4;
-                break;
-        }
+    if ( !m_rWW8Export.m_bOutFlyFrameAttrs )
+        return;
 
-        // sprmPDyaAbs
-        m_rWW8Export.InsUInt16( NS_sprm::PDyaAbs::val );
-        m_rWW8Export.InsUInt16( nPos );
+    short nPos;
+    switch( rFlyVert.GetVertOrient() )
+    {
+        case text::VertOrientation::NONE:
+            nPos = static_cast<short>(rFlyVert.GetPos());
+            break;
+        case text::VertOrientation::CENTER:
+        case text::VertOrientation::LINE_CENTER:
+            nPos = -8;
+            break;
+        case text::VertOrientation::BOTTOM:
+        case text::VertOrientation::LINE_BOTTOM:
+            nPos = -12;
+            break;
+        case text::VertOrientation::TOP:
+        case text::VertOrientation::LINE_TOP:
+        default:
+            nPos = -4;
+            break;
     }
+
+    // sprmPDyaAbs
+    m_rWW8Export.InsUInt16( NS_sprm::PDyaAbs::val );
+    m_rWW8Export.InsUInt16( nPos );
 }
 
 void WW8AttributeOutput::FormatHorizOrientation( const SwFormatHoriOrient& rFlyHori )
@@ -4140,105 +4142,105 @@ void WW8AttributeOutput::FormatHorizOrientation( const SwFormatHoriOrient& rFlyH
     }
 
     //!!!! anchor type and corresponding borders are still missing
-    if ( m_rWW8Export.m_bOutFlyFrameAttrs )
-    {
-        short nPos;
-        switch( rFlyHori.GetHoriOrient() )
-        {
-            case text::HoriOrientation::NONE:
-                nPos = static_cast<short>(rFlyHori.GetPos());
-                if( !nPos )
-                    nPos = 1;   // WW: 0 is reserved
-                break;
-            case text::HoriOrientation::LEFT:
-                nPos = rFlyHori.IsPosToggle() ? -12 : 0;
-                break;
-            case text::HoriOrientation::RIGHT:
-                nPos = rFlyHori.IsPosToggle() ? -16 : -8;
-                break;
-            case text::HoriOrientation::CENTER:
-            case text::HoriOrientation::FULL: // FULL only for tables
-            default:
-                nPos = -4;
-                break;
-        }
+    if ( !m_rWW8Export.m_bOutFlyFrameAttrs )
+        return;
 
-        // sprmPDxaAbs
-        m_rWW8Export.InsUInt16( NS_sprm::PDxaAbs::val );
-        m_rWW8Export.InsUInt16( nPos );
+    short nPos;
+    switch( rFlyHori.GetHoriOrient() )
+    {
+        case text::HoriOrientation::NONE:
+            nPos = static_cast<short>(rFlyHori.GetPos());
+            if( !nPos )
+                nPos = 1;   // WW: 0 is reserved
+            break;
+        case text::HoriOrientation::LEFT:
+            nPos = rFlyHori.IsPosToggle() ? -12 : 0;
+            break;
+        case text::HoriOrientation::RIGHT:
+            nPos = rFlyHori.IsPosToggle() ? -16 : -8;
+            break;
+        case text::HoriOrientation::CENTER:
+        case text::HoriOrientation::FULL: // FULL only for tables
+        default:
+            nPos = -4;
+            break;
     }
+
+    // sprmPDxaAbs
+    m_rWW8Export.InsUInt16( NS_sprm::PDxaAbs::val );
+    m_rWW8Export.InsUInt16( nPos );
 }
 
 void WW8AttributeOutput::FormatAnchor( const SwFormatAnchor& rAnchor )
 {
     OSL_ENSURE( m_rWW8Export.m_pParentFrame, "Anchor without mpParentFrame !!" );
 
-    if ( m_rWW8Export.m_bOutFlyFrameAttrs )
-    {
-        sal_uInt8 nP = 0;
-        switch ( rAnchor.GetAnchorId() )
-        {
-            case RndStdIds::FLY_AT_PAGE:
-                // vertical: page | horizontal: page
-                nP |= (1 << 4) | (2 << 6);
-                break;
-            // in case of Fly as characters: set paragraph-bound!!!
-            case RndStdIds::FLY_AT_FLY:
-            case RndStdIds::FLY_AT_CHAR:
-            case RndStdIds::FLY_AT_PARA:
-            case RndStdIds::FLY_AS_CHAR:
-                // vertical: page | horizontal: page
-                nP |= (2 << 4) | (0 << 6);
-                break;
-            default:
-                break;
-        }
+    if ( !m_rWW8Export.m_bOutFlyFrameAttrs )
+        return;
 
-        // sprmPPc
-        m_rWW8Export.InsUInt16( NS_sprm::PPc::val );
-        m_rWW8Export.pO->push_back( nP );
+    sal_uInt8 nP = 0;
+    switch ( rAnchor.GetAnchorId() )
+    {
+        case RndStdIds::FLY_AT_PAGE:
+            // vertical: page | horizontal: page
+            nP |= (1 << 4) | (2 << 6);
+            break;
+        // in case of Fly as characters: set paragraph-bound!!!
+        case RndStdIds::FLY_AT_FLY:
+        case RndStdIds::FLY_AT_CHAR:
+        case RndStdIds::FLY_AT_PARA:
+        case RndStdIds::FLY_AS_CHAR:
+            // vertical: page | horizontal: page
+            nP |= (2 << 4) | (0 << 6);
+            break;
+        default:
+            break;
     }
+
+    // sprmPPc
+    m_rWW8Export.InsUInt16( NS_sprm::PPc::val );
+    m_rWW8Export.pO->push_back( nP );
 }
 
 void WW8AttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
 {
     // WW cannot have background in a section
-    if ( !m_rWW8Export.m_bOutPageDescs )
-    {
-        WW8_SHD aSHD;
-        WW8Export::TransBrush( rBrush.GetColor(), aSHD );
+    if ( m_rWW8Export.m_bOutPageDescs )
+        return;
 
-        m_rWW8Export.InsUInt16( NS_sprm::PShd80::val );
-        m_rWW8Export.InsUInt16( aSHD.GetValue() );
+    WW8_SHD aSHD;
+    WW8Export::TransBrush( rBrush.GetColor(), aSHD );
 
-        m_rWW8Export.InsUInt16( NS_sprm::PShd::val );
-        m_rWW8Export.pO->push_back( 10 ); //size of operand: MUST be 10
-        m_rWW8Export.InsUInt32( 0xFF000000 ); //cvFore: Foreground BGR = cvAuto
-        m_rWW8Export.InsUInt32( SuitableBGColor( rBrush.GetColor() ) ); //cvBack
-        m_rWW8Export.InsUInt16( 0x0000 ); //iPat: specifies the pattern used for shading = clear/100% background
-    }
+    m_rWW8Export.InsUInt16( NS_sprm::PShd80::val );
+    m_rWW8Export.InsUInt16( aSHD.GetValue() );
+
+    m_rWW8Export.InsUInt16( NS_sprm::PShd::val );
+    m_rWW8Export.pO->push_back( 10 ); //size of operand: MUST be 10
+    m_rWW8Export.InsUInt32( 0xFF000000 ); //cvFore: Foreground BGR = cvAuto
+    m_rWW8Export.InsUInt32( SuitableBGColor( rBrush.GetColor() ) ); //cvBack
+    m_rWW8Export.InsUInt16( 0x0000 ); //iPat: specifies the pattern used for shading = clear/100% background
 }
 
 void WW8AttributeOutput::FormatFillStyle( const XFillStyleItem& rFillStyle )
 {
     // WW cannot have background in a section
-    if ( !m_rWW8Export.m_bOutPageDescs )
-    {
-        // see MSWordExportBase::OutputItemSet for how _SOLID is handled
-        if ( rFillStyle.GetValue() == drawing::FillStyle_NONE )
-        {
-            //Shd80Nil
-            m_rWW8Export.InsUInt16( NS_sprm::PShd80::val );
-            m_rWW8Export.InsUInt16( 0xffff );
+    if ( m_rWW8Export.m_bOutPageDescs )
+        return;
 
-            //cvAuto
-            m_rWW8Export.InsUInt16( NS_sprm::PShd::val );
-            m_rWW8Export.pO->push_back( 10 );
-            m_rWW8Export.InsUInt32( 0xFF000000 );
-            m_rWW8Export.InsUInt32( 0xFF000000 );
-            m_rWW8Export.InsUInt16( 0x0000 );
-        }
-    }
+    // see MSWordExportBase::OutputItemSet for how _SOLID is handled
+    if ( rFillStyle.GetValue() != drawing::FillStyle_NONE )
+        return;
+
+    //Shd80Nil
+    m_rWW8Export.InsUInt16( NS_sprm::PShd80::val );
+    m_rWW8Export.InsUInt16( 0xffff );
+
+    //cvAuto
+    m_rWW8Export.InsUInt16( NS_sprm::PShd::val );
+    m_rWW8Export.pO->push_back( 10 );
+    m_rWW8Export.InsUInt32( 0xFF000000 );
+    m_rWW8Export.InsUInt32( 0xFF000000 );
+    m_rWW8Export.InsUInt16( 0x0000 );
 }
 
 void WW8AttributeOutput::FormatFillGradient( const XFillGradientItem& /*rFillGradient*/ )
@@ -4499,33 +4501,33 @@ void WW8AttributeOutput::FormatBox( const SvxBoxItem& rBox )
 {
     // Fly around graphic -> here no border, because the
     // graphics header already has the border
-    if ( !m_rWW8Export.m_bOutGrf )
+    if ( m_rWW8Export.m_bOutGrf )
+        return;
+
+    bool bShadow = false;
+    const SfxPoolItem* pItem = m_rWW8Export.HasItem( RES_SHADOW );
+    if ( pItem )
     {
-        bool bShadow = false;
-        const SfxPoolItem* pItem = m_rWW8Export.HasItem( RES_SHADOW );
-        if ( pItem )
-        {
-            const SvxShadowItem* p = static_cast<const SvxShadowItem*>(pItem);
-            bShadow = ( p->GetLocation() != SvxShadowLocation::NONE )
-                      && ( p->GetWidth() != 0 );
-        }
-
-        SvxBoxItem aBox(rBox);
-        if (m_rWW8Export.m_bOutPageDescs)
-        {
-            editeng::WordBorderDistances aDistances;
-            editeng::BorderDistancesToWord(aBox, m_pageMargins, aDistances);
-
-            aBox.SetDistance(aDistances.nTop, SvxBoxItemLine::TOP);
-            aBox.SetDistance(aDistances.nLeft, SvxBoxItemLine::LEFT);
-            aBox.SetDistance(aDistances.nBottom, SvxBoxItemLine::BOTTOM);
-            aBox.SetDistance(aDistances.nRight, SvxBoxItemLine::RIGHT);
-
-            m_bFromEdge = aDistances.bFromEdge;
-        }
-
-        m_rWW8Export.Out_SwFormatBox( aBox, bShadow );
+        const SvxShadowItem* p = static_cast<const SvxShadowItem*>(pItem);
+        bShadow = ( p->GetLocation() != SvxShadowLocation::NONE )
+                  && ( p->GetWidth() != 0 );
     }
+
+    SvxBoxItem aBox(rBox);
+    if (m_rWW8Export.m_bOutPageDescs)
+    {
+        editeng::WordBorderDistances aDistances;
+        editeng::BorderDistancesToWord(aBox, m_pageMargins, aDistances);
+
+        aBox.SetDistance(aDistances.nTop, SvxBoxItemLine::TOP);
+        aBox.SetDistance(aDistances.nLeft, SvxBoxItemLine::LEFT);
+        aBox.SetDistance(aDistances.nBottom, SvxBoxItemLine::BOTTOM);
+        aBox.SetDistance(aDistances.nRight, SvxBoxItemLine::RIGHT);
+
+        m_bFromEdge = aDistances.bFromEdge;
+    }
+
+    m_rWW8Export.Out_SwFormatBox( aBox, bShadow );
 }
 
 SwTwips WW8Export::CurrentPageWidth(SwTwips &rLeft, SwTwips &rRight) const
@@ -4560,25 +4562,25 @@ void WW8AttributeOutput::FormatColumns_Impl( sal_uInt16 nCols, const SwFormatCol
     m_rWW8Export.InsUInt16( NS_sprm::SFEvenlySpaced::val );
     m_rWW8Export.pO->push_back( bEven ? 1 : 0 );
 
-    if ( !bEven )
-    {
-        for ( sal_uInt16 n = 0; n < nCols; ++n )
-        {
-            //sprmSDxaColWidth
-            m_rWW8Export.InsUInt16( NS_sprm::SDxaColWidth::val );
-            m_rWW8Export.pO->push_back( static_cast<sal_uInt8>(n) );
-            m_rWW8Export.InsUInt16( rCol.
-                                    CalcPrtColWidth( n,
-                                                     static_cast<sal_uInt16>(nPageSize) ) );
+    if ( bEven )
+        return;
 
-            if ( n + 1 != nCols )
-            {
-                //sprmSDxaColSpacing
-                m_rWW8Export.InsUInt16( NS_sprm::SDxaColSpacing::val );
-                m_rWW8Export.pO->push_back( static_cast<sal_uInt8>(n) );
-                m_rWW8Export.InsUInt16( rColumns[n].GetRight(  ) +
-                                        rColumns[n + 1].GetLeft(  ) );
-            }
+    for ( sal_uInt16 n = 0; n < nCols; ++n )
+    {
+        //sprmSDxaColWidth
+        m_rWW8Export.InsUInt16( NS_sprm::SDxaColWidth::val );
+        m_rWW8Export.pO->push_back( static_cast<sal_uInt8>(n) );
+        m_rWW8Export.InsUInt16( rCol.
+                                CalcPrtColWidth( n,
+                                                 static_cast<sal_uInt16>(nPageSize) ) );
+
+        if ( n + 1 != nCols )
+        {
+            //sprmSDxaColSpacing
+            m_rWW8Export.InsUInt16( NS_sprm::SDxaColSpacing::val );
+            m_rWW8Export.pO->push_back( static_cast<sal_uInt8>(n) );
+            m_rWW8Export.InsUInt16( rColumns[n].GetRight(  ) +
+                                    rColumns[n + 1].GetLeft(  ) );
         }
     }
 }
@@ -4588,66 +4590,66 @@ void AttributeOutputBase::FormatColumns( const SwFormatCol& rCol )
     const SwColumns& rColumns = rCol.GetColumns();
 
     sal_uInt16 nCols = rColumns.size();
-    if ( 1 < nCols && !GetExport( ).m_bOutFlyFrameAttrs )
+    if (1 >= nCols || GetExport( ).m_bOutFlyFrameAttrs)
+        return;
+
+    // get the page width without borders !!
+
+    const SwFrameFormat* pFormat = GetExport( ).m_pCurrentPageDesc ? &GetExport( ).m_pCurrentPageDesc->GetMaster() : &const_cast<const SwDoc *>(GetExport( ).m_pDoc)->GetPageDesc(0).GetMaster();
+    const SvxFrameDirectionItem &frameDirection = pFormat->GetFrameDir();
+    SwTwips nPageSize;
+    if ( frameDirection.GetValue() == SvxFrameDirection::Vertical_RL_TB || frameDirection.GetValue() == SvxFrameDirection::Vertical_LR_TB )
     {
-        // get the page width without borders !!
+        const SvxULSpaceItem &rUL = pFormat->GetULSpace();
+        nPageSize = pFormat->GetFrameSize().GetHeight();
+        nPageSize -= rUL.GetUpper() + rUL.GetLower();
 
-        const SwFrameFormat* pFormat = GetExport( ).m_pCurrentPageDesc ? &GetExport( ).m_pCurrentPageDesc->GetMaster() : &const_cast<const SwDoc *>(GetExport( ).m_pDoc)->GetPageDesc(0).GetMaster();
-        const SvxFrameDirectionItem &frameDirection = pFormat->GetFrameDir();
-        SwTwips nPageSize;
-        if ( frameDirection.GetValue() == SvxFrameDirection::Vertical_RL_TB || frameDirection.GetValue() == SvxFrameDirection::Vertical_LR_TB )
+        const SwFormatHeader *header = pFormat->GetAttrSet().GetItem(RES_HEADER);
+        if ( header )
         {
-            const SvxULSpaceItem &rUL = pFormat->GetULSpace();
-            nPageSize = pFormat->GetFrameSize().GetHeight();
-            nPageSize -= rUL.GetUpper() + rUL.GetLower();
-
-            const SwFormatHeader *header = pFormat->GetAttrSet().GetItem(RES_HEADER);
-            if ( header )
+            const SwFrameFormat *headerFormat = header->GetHeaderFormat();
+            if (headerFormat)
             {
-                const SwFrameFormat *headerFormat = header->GetHeaderFormat();
-                if (headerFormat)
-                {
-                    nPageSize -= headerFormat->GetFrameSize().GetHeight();
-                }
-            }
-            const SwFormatFooter *footer = pFormat->GetAttrSet().GetItem(RES_FOOTER);
-            if ( footer )
-            {
-                const SwFrameFormat *footerFormat = footer->GetFooterFormat();
-                if ( footerFormat )
-                {
-                    nPageSize -= footerFormat->GetFrameSize().GetHeight();
-                }
+                nPageSize -= headerFormat->GetFrameSize().GetHeight();
             }
         }
-        else
+        const SwFormatFooter *footer = pFormat->GetAttrSet().GetItem(RES_FOOTER);
+        if ( footer )
         {
-            const SvxLRSpaceItem &rLR = pFormat->GetLRSpace();
-            nPageSize = pFormat->GetFrameSize().GetWidth();
-            nPageSize -= rLR.GetLeft() + rLR.GetRight();
-            //i120133: The Section width should consider page indent value.
-            nPageSize -= rCol.GetAdjustValue();
-
-        }
-
-        // look if all columns are equal
-        bool bEven = true;
-        sal_uInt16 n;
-        sal_uInt16 nColWidth = rCol.CalcPrtColWidth( 0, static_cast<sal_uInt16>(nPageSize) );
-        for ( n = 1; n < nCols; n++ )
-        {
-            short nDiff = nColWidth -
-                rCol.CalcPrtColWidth( n, static_cast<sal_uInt16>(nPageSize) );
-
-            if ( nDiff > 10 || nDiff < -10 )      // Tolerance: 10 tw
+            const SwFrameFormat *footerFormat = footer->GetFooterFormat();
+            if ( footerFormat )
             {
-                bEven = false;
-                break;
+                nPageSize -= footerFormat->GetFrameSize().GetHeight();
             }
         }
-
-        FormatColumns_Impl( nCols, rCol, bEven, nPageSize );
     }
+    else
+    {
+        const SvxLRSpaceItem &rLR = pFormat->GetLRSpace();
+        nPageSize = pFormat->GetFrameSize().GetWidth();
+        nPageSize -= rLR.GetLeft() + rLR.GetRight();
+        //i120133: The Section width should consider page indent value.
+        nPageSize -= rCol.GetAdjustValue();
+
+    }
+
+    // look if all columns are equal
+    bool bEven = true;
+    sal_uInt16 n;
+    sal_uInt16 nColWidth = rCol.CalcPrtColWidth( 0, static_cast<sal_uInt16>(nPageSize) );
+    for ( n = 1; n < nCols; n++ )
+    {
+        short nDiff = nColWidth -
+            rCol.CalcPrtColWidth( n, static_cast<sal_uInt16>(nPageSize) );
+
+        if ( nDiff > 10 || nDiff < -10 )      // Tolerance: 10 tw
+        {
+            bEven = false;
+            break;
+        }
+    }
+
+    FormatColumns_Impl( nCols, rCol, bEven, nPageSize );
 }
 
 // "Paragraphs together"

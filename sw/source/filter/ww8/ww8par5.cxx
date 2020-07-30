@@ -2844,66 +2844,66 @@ static void EnsureMaxLevelForTemplates(SwTOXBase& rBase)
 static void lcl_toxMatchTSwitch(SwWW8ImplReader const & rReader, SwTOXBase& rBase,
     WW8ReadFieldParams& rParam)
 {
-    if ( rParam.GoToTokenParam() )
+    if ( !rParam.GoToTokenParam() )
+        return;
+
+    OUString sParams( rParam.GetResult() );
+    if( sParams.isEmpty() )
+        return;
+
+    sal_Int32 nIndex = 0;
+
+    // Delimiters between styles and style levels appears to allow both ; and ,
+
+    OUString sTemplate( sParams.getToken(0, ';', nIndex) );
+    if( -1 == nIndex )
     {
-        OUString sParams( rParam.GetResult() );
-        if( !sParams.isEmpty() )
+        nIndex=0;
+        sTemplate = sParams.getToken(0, ',', nIndex);
+    }
+    if( -1 == nIndex )
+    {
+        const SwFormat* pStyle = rReader.GetStyleWithOrgWWName(sTemplate);
+        if( pStyle )
+            sTemplate = pStyle->GetName();
+        // Store Style for Level 0 into TOXBase
+        rBase.SetStyleNames( sTemplate, 0 );
+    }
+    else while( -1 != nIndex )
+    {
+        sal_Int32 nOldIndex=nIndex;
+        sal_uInt16 nLevel = static_cast<sal_uInt16>(
+            sParams.getToken(0, ';', nIndex).toInt32());
+        if( -1 == nIndex )
         {
-            sal_Int32 nIndex = 0;
+            nIndex = nOldIndex;
+            nLevel = static_cast<sal_uInt16>(
+                sParams.getToken(0, ',', nIndex).toInt32());
+        }
 
-            // Delimiters between styles and style levels appears to allow both ; and ,
+        if( (0 < nLevel) && (MAXLEVEL >= nLevel) )
+        {
+            nLevel--;
+            // Store Style and Level into TOXBase
+            const SwFormat* pStyle
+                    = rReader.GetStyleWithOrgWWName( sTemplate );
 
-            OUString sTemplate( sParams.getToken(0, ';', nIndex) );
-            if( -1 == nIndex )
-            {
-                nIndex=0;
-                sTemplate = sParams.getToken(0, ',', nIndex);
-            }
-            if( -1 == nIndex )
-            {
-                const SwFormat* pStyle = rReader.GetStyleWithOrgWWName(sTemplate);
-                if( pStyle )
-                    sTemplate = pStyle->GetName();
-                // Store Style for Level 0 into TOXBase
-                rBase.SetStyleNames( sTemplate, 0 );
-            }
-            else while( -1 != nIndex )
-            {
-                sal_Int32 nOldIndex=nIndex;
-                sal_uInt16 nLevel = static_cast<sal_uInt16>(
-                    sParams.getToken(0, ';', nIndex).toInt32());
-                if( -1 == nIndex )
-                {
-                    nIndex = nOldIndex;
-                    nLevel = static_cast<sal_uInt16>(
-                        sParams.getToken(0, ',', nIndex).toInt32());
-                }
+            if( pStyle )
+                sTemplate = pStyle->GetName();
 
-                if( (0 < nLevel) && (MAXLEVEL >= nLevel) )
-                {
-                    nLevel--;
-                    // Store Style and Level into TOXBase
-                    const SwFormat* pStyle
-                            = rReader.GetStyleWithOrgWWName( sTemplate );
-
-                    if( pStyle )
-                        sTemplate = pStyle->GetName();
-
-                    OUString sStyles( rBase.GetStyleNames( nLevel ) );
-                    if( !sStyles.isEmpty() )
-                        sStyles += OUStringChar(TOX_STYLE_DELIMITER);
-                    sStyles += sTemplate;
-                    rBase.SetStyleNames( sStyles, nLevel );
-                }
-                // read next style name...
-                nOldIndex = nIndex;
-                sTemplate = sParams.getToken(0, ';', nIndex);
-                if( -1 == nIndex )
-                {
-                    nIndex=nOldIndex;
-                    sTemplate = sParams.getToken(0, ',', nIndex);
-                }
-            }
+            OUString sStyles( rBase.GetStyleNames( nLevel ) );
+            if( !sStyles.isEmpty() )
+                sStyles += OUStringChar(TOX_STYLE_DELIMITER);
+            sStyles += sTemplate;
+            rBase.SetStyleNames( sStyles, nLevel );
+        }
+        // read next style name...
+        nOldIndex = nIndex;
+        sTemplate = sParams.getToken(0, ';', nIndex);
+        if( -1 == nIndex )
+        {
+            nIndex=nOldIndex;
+            sTemplate = sParams.getToken(0, ',', nIndex);
         }
     }
 }

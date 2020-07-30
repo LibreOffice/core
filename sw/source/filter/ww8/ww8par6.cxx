@@ -754,49 +754,49 @@ SwSectionFormat *wwSectionManager::InsertSection(
 void SwWW8ImplReader::HandleLineNumbering(const wwSection &rSection)
 {
     // check if Line Numbering must be activated or reset
-    if (m_bNewDoc && rSection.maSep.nLnnMod)
+    if (!(m_bNewDoc && rSection.maSep.nLnnMod))
+        return;
+
+    // restart-numbering-mode: 0 per page, 1 per section, 2 never restart
+    bool bRestartLnNumPerSection = (1 == rSection.maSep.lnc);
+
+    if (m_bNoLnNumYet)
     {
-        // restart-numbering-mode: 0 per page, 1 per section, 2 never restart
-        bool bRestartLnNumPerSection = (1 == rSection.maSep.lnc);
+        SwLineNumberInfo aInfo( m_rDoc.GetLineNumberInfo() );
 
-        if (m_bNoLnNumYet)
+        aInfo.SetPaintLineNumbers(true);
+
+        aInfo.SetRestartEachPage(rSection.maSep.lnc == 0);
+
+        // A value of 0 (auto) indicates that the application MUST automatically determine positioning.
+        if ( rSection.maSep.dxaLnn )
+            aInfo.SetPosFromLeft(writer_cast<sal_uInt16>(rSection.maSep.dxaLnn));
+
+        //Paint only for every n line
+        aInfo.SetCountBy(rSection.maSep.nLnnMod);
+
+        // to be defaulted features ( HARDCODED in MS Word 6,7,8,9 )
+        aInfo.SetCountBlankLines(true);
+        aInfo.SetCountInFlys(false);
+        aInfo.SetPos( LINENUMBER_POS_LEFT );
+        SvxNumberType aNumType; // this sets SVX_NUM_ARABIC per default
+        aInfo.SetNumType( aNumType );
+
+        m_rDoc.SetLineNumberInfo( aInfo );
+        m_bNoLnNumYet = false;
+    }
+
+    if ((0 < rSection.maSep.lnnMin) || bRestartLnNumPerSection)
+    {
+        SwFormatLineNumber aLN;
+        if (const SwFormatLineNumber* pLN
+            = static_cast<const SwFormatLineNumber*>(GetFormatAttr(RES_LINENUMBER)))
         {
-            SwLineNumberInfo aInfo( m_rDoc.GetLineNumberInfo() );
-
-            aInfo.SetPaintLineNumbers(true);
-
-            aInfo.SetRestartEachPage(rSection.maSep.lnc == 0);
-
-            // A value of 0 (auto) indicates that the application MUST automatically determine positioning.
-            if ( rSection.maSep.dxaLnn )
-                aInfo.SetPosFromLeft(writer_cast<sal_uInt16>(rSection.maSep.dxaLnn));
-
-            //Paint only for every n line
-            aInfo.SetCountBy(rSection.maSep.nLnnMod);
-
-            // to be defaulted features ( HARDCODED in MS Word 6,7,8,9 )
-            aInfo.SetCountBlankLines(true);
-            aInfo.SetCountInFlys(false);
-            aInfo.SetPos( LINENUMBER_POS_LEFT );
-            SvxNumberType aNumType; // this sets SVX_NUM_ARABIC per default
-            aInfo.SetNumType( aNumType );
-
-            m_rDoc.SetLineNumberInfo( aInfo );
-            m_bNoLnNumYet = false;
+            aLN.SetCountLines( pLN->IsCount() );
         }
-
-        if ((0 < rSection.maSep.lnnMin) || bRestartLnNumPerSection)
-        {
-            SwFormatLineNumber aLN;
-            if (const SwFormatLineNumber* pLN
-                = static_cast<const SwFormatLineNumber*>(GetFormatAttr(RES_LINENUMBER)))
-            {
-                aLN.SetCountLines( pLN->IsCount() );
-            }
-            aLN.SetStartValue(1 + rSection.maSep.lnnMin);
-            NewAttr(aLN);
-            m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_LINENUMBER);
-        }
+        aLN.SetStartValue(1 + rSection.maSep.lnnMin);
+        NewAttr(aLN);
+        m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_LINENUMBER);
     }
 }
 
@@ -2156,20 +2156,20 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
     Put( SwFormatWrapInfluenceOnObjPos(
                 text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ) );
 
-    if( !bGraf )
-    {
-        Put( SwFormatAnchor(WW8SwFlyPara::eAnchor) );
-        // adjust size
+    if( bGraf )
+        return;
 
-        //Ordinarily with frames, the border width and spacing is
-        //placed outside the frame, making it larger. With these
-        //types of frames, the left right thickness and space makes
-        //it wider, but the top bottom spacing and border thickness
-        //is placed inside.
-        Put( SwFormatFrameSize( pFS->eHeightFix, pFS->nWidth +
-            aSizeArray[WW8_LEFT] + aSizeArray[WW8_RIGHT],
-            pFS->nHeight));
-    }
+    Put( SwFormatAnchor(WW8SwFlyPara::eAnchor) );
+    // adjust size
+
+    //Ordinarily with frames, the border width and spacing is
+    //placed outside the frame, making it larger. With these
+    //types of frames, the left right thickness and space makes
+    //it wider, but the top bottom spacing and border thickness
+    //is placed inside.
+    Put( SwFormatFrameSize( pFS->eHeightFix, pFS->nWidth +
+        aSizeArray[WW8_LEFT] + aSizeArray[WW8_RIGHT],
+        pFS->nHeight));
 }
 
 // WW8FlySet-ctor for character bound graphics
@@ -2748,41 +2748,41 @@ void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr,
                                const bool bFirstLineOfStSet,
                                const bool bLeftIndentSet )
 {
-    if( !m_bNoAttrImport ) // for ignoring styles during doc inserts
-    {
-        if (m_pCurrentColl)
-        {
-            OSL_ENSURE(rAttr.Which() != RES_FLTR_REDLINE, "redline in style!");
-            m_pCurrentColl->SetFormatAttr(rAttr);
-        }
-        else if (m_xCurrentItemSet)
-        {
-            m_xCurrentItemSet->Put(rAttr);
-        }
-        else if (rAttr.Which() == RES_FLTR_REDLINE)
-        {
-            m_xRedlineStack->open(*m_pPaM->GetPoint(), rAttr);
-        }
-        else
-        {
-            m_xCtrlStck->NewAttr(*m_pPaM->GetPoint(), rAttr);
-            // #i103711#
-            if ( bFirstLineOfStSet )
-            {
-                const SwNode* pNd = &(m_pPaM->GetPoint()->nNode.GetNode());
-                m_aTextNodesHavingFirstLineOfstSet.insert( pNd );
-            }
-            // #i105414#
-            if ( bLeftIndentSet )
-            {
-                const SwNode* pNd = &(m_pPaM->GetPoint()->nNode.GetNode());
-                m_aTextNodesHavingLeftIndentSet.insert( pNd );
-            }
-        }
+    if( m_bNoAttrImport ) // for ignoring styles during doc inserts
+        return;
 
-        if (m_pPostProcessAttrsInfo && m_pPostProcessAttrsInfo->mbCopy)
-            m_pPostProcessAttrsInfo->mItemSet.Put(rAttr);
+    if (m_pCurrentColl)
+    {
+        OSL_ENSURE(rAttr.Which() != RES_FLTR_REDLINE, "redline in style!");
+        m_pCurrentColl->SetFormatAttr(rAttr);
     }
+    else if (m_xCurrentItemSet)
+    {
+        m_xCurrentItemSet->Put(rAttr);
+    }
+    else if (rAttr.Which() == RES_FLTR_REDLINE)
+    {
+        m_xRedlineStack->open(*m_pPaM->GetPoint(), rAttr);
+    }
+    else
+    {
+        m_xCtrlStck->NewAttr(*m_pPaM->GetPoint(), rAttr);
+        // #i103711#
+        if ( bFirstLineOfStSet )
+        {
+            const SwNode* pNd = &(m_pPaM->GetPoint()->nNode.GetNode());
+            m_aTextNodesHavingFirstLineOfstSet.insert( pNd );
+        }
+        // #i105414#
+        if ( bLeftIndentSet )
+        {
+            const SwNode* pNd = &(m_pPaM->GetPoint()->nNode.GetNode());
+            m_aTextNodesHavingLeftIndentSet.insert( pNd );
+        }
+    }
+
+    if (m_pPostProcessAttrsInfo && m_pPostProcessAttrsInfo->mbCopy)
+        m_pPostProcessAttrsInfo->mItemSet.Put(rAttr);
 }
 
 // fetches attribute from FormatColl / Stack / Doc
@@ -2908,42 +2908,42 @@ void SwWW8ImplReader::Read_POutLvl(sal_uInt16, const sal_uInt8* pData, short nLe
 
 void SwWW8ImplReader::Read_Symbol(sal_uInt16, const sal_uInt8* pData, short nLen )
 {
-    if( !m_bIgnoreText )
-    {
-        if (nLen < (m_bVer67 ? 3 : 4))
-        {
-            //otherwise disable after we print the char
-            if (m_xPlcxMan && m_xPlcxMan->GetDoingDrawTextBox())
-                m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_FONT );
-            m_bSymbol = false;
-        }
-        else
-        {
-            // Make new Font-Attribut
-            // (will be closed in SwWW8ImplReader::ReadChars() )
+    if( m_bIgnoreText )
+        return;
 
-            //Will not be added to the charencoding stack, for styles the real
-            //font setting will be put in as the styles charset, and for plain
-            //text encoding for symbols is moot. Drawing boxes will check bSymbol
-            //themselves so they don't need to add it to the stack either.
-            if (SetNewFontAttr(SVBT16ToUInt16( pData ), false, RES_CHRATR_FONT))
+    if (nLen < (m_bVer67 ? 3 : 4))
+    {
+        //otherwise disable after we print the char
+        if (m_xPlcxMan && m_xPlcxMan->GetDoingDrawTextBox())
+            m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_FONT );
+        m_bSymbol = false;
+    }
+    else
+    {
+        // Make new Font-Attribut
+        // (will be closed in SwWW8ImplReader::ReadChars() )
+
+        //Will not be added to the charencoding stack, for styles the real
+        //font setting will be put in as the styles charset, and for plain
+        //text encoding for symbols is moot. Drawing boxes will check bSymbol
+        //themselves so they don't need to add it to the stack either.
+        if (SetNewFontAttr(SVBT16ToUInt16( pData ), false, RES_CHRATR_FONT))
+        {
+            SetNewFontAttr(SVBT16ToUInt16( pData ), false, RES_CHRATR_CJK_FONT);
+            SetNewFontAttr(SVBT16ToUInt16( pData ), false, RES_CHRATR_CTL_FONT);
+            if( m_bVer67 )
             {
-                SetNewFontAttr(SVBT16ToUInt16( pData ), false, RES_CHRATR_CJK_FONT);
-                SetNewFontAttr(SVBT16ToUInt16( pData ), false, RES_CHRATR_CTL_FONT);
-                if( m_bVer67 )
-                {
-                    //convert single byte from MS1252 to Unicode
-                    m_cSymbol = OUString(
-                        reinterpret_cast<const char*>(pData+2), 1,
-                        RTL_TEXTENCODING_MS_1252).toChar();
-                }
-                else
-                {
-                    //already is Unicode
-                    m_cSymbol = SVBT16ToUInt16( pData+2 );
-                }
-                m_bSymbol = true;
+                //convert single byte from MS1252 to Unicode
+                m_cSymbol = OUString(
+                    reinterpret_cast<const char*>(pData+2), 1,
+                    RTL_TEXTENCODING_MS_1252).toChar();
             }
+            else
+            {
+                //already is Unicode
+                m_cSymbol = SVBT16ToUInt16( pData+2 );
+            }
+            m_bSymbol = true;
         }
     }
 }
@@ -3849,48 +3849,49 @@ void SwWW8ImplReader::Read_FontCode( sal_uInt16 nId, const sal_uInt8* pData, sho
     //Note: this function needs to be able to run multiple times on the same data.
     //It is called by Read_SubSuperProp to ensure that the current fontsize is known.
 
-    if (!m_bSymbol)           // if bSymbol, the symbol's font
-    {                       // (see sprmCSymbol) is valid!
-        switch( nId )
-        {
-            case 113:                   //WW7
-            case NS_sprm::CRgFtc2::val:  //"Other" font, override with BiDi if it exists
-            case NS_sprm::CFtcBi::val:   //BiDi Font
-                nId = RES_CHRATR_CTL_FONT;
-                break;
-            case NS_sprm::v6::sprmCFtc: //WW6
-            case 111:                   //WW7
-            case NS_sprm::CRgFtc0::val:
-                nId = RES_CHRATR_FONT;
-                break;
-            case 112:                   //WW7
-            case NS_sprm::CRgFtc1::val:
-                nId = RES_CHRATR_CJK_FONT;
-                break;
-            default:
-                return ;
-        }
+    if (m_bSymbol)           // if bSymbol, the symbol's font
+        return;
 
-        ww::WordVersion eVersion = m_xWwFib->GetFIBVersion();
+// (see sprmCSymbol) is valid!
+    switch( nId )
+    {
+        case 113:                   //WW7
+        case NS_sprm::CRgFtc2::val:  //"Other" font, override with BiDi if it exists
+        case NS_sprm::CFtcBi::val:   //BiDi Font
+            nId = RES_CHRATR_CTL_FONT;
+            break;
+        case NS_sprm::v6::sprmCFtc: //WW6
+        case 111:                   //WW7
+        case NS_sprm::CRgFtc0::val:
+            nId = RES_CHRATR_FONT;
+            break;
+        case 112:                   //WW7
+        case NS_sprm::CRgFtc1::val:
+            nId = RES_CHRATR_CJK_FONT;
+            break;
+        default:
+            return ;
+    }
 
-        if (nLen < 2) // end of attribute
+    ww::WordVersion eVersion = m_xWwFib->GetFIBVersion();
+
+    if (nLen < 2) // end of attribute
+    {
+        if (eVersion <= ww::eWW6)
         {
-            if (eVersion <= ww::eWW6)
-            {
-                closeFont(RES_CHRATR_CTL_FONT);
-                closeFont(RES_CHRATR_CJK_FONT);
-            }
-            closeFont(nId);
+            closeFont(RES_CHRATR_CTL_FONT);
+            closeFont(RES_CHRATR_CJK_FONT);
         }
-        else
+        closeFont(nId);
+    }
+    else
+    {
+        sal_uInt16 nFCode = SVBT16ToUInt16( pData );     // font number
+        openFont(nFCode, nId);
+        if (eVersion <= ww::eWW6)
         {
-            sal_uInt16 nFCode = SVBT16ToUInt16( pData );     // font number
-            openFont(nFCode, nId);
-            if (eVersion <= ww::eWW6)
-            {
-                openFont(nFCode, RES_CHRATR_CJK_FONT);
-                openFont(nFCode, RES_CHRATR_CTL_FONT);
-            }
+            openFont(nFCode, RES_CHRATR_CJK_FONT);
+            openFont(nFCode, RES_CHRATR_CTL_FONT);
         }
     }
 }
@@ -4951,25 +4952,25 @@ Color SwWW8ImplReader::ExtractColour(const sal_uInt8* &rpData, bool bVer67)
 
 void SwWW8ImplReader::Read_TextVerticalAdjustment( sal_uInt16, const sal_uInt8* pData, short nLen )
 {
-    if( nLen > 0 )
+    if( nLen <= 0 )
+        return;
+
+    drawing::TextVerticalAdjust nVA = drawing::TextVerticalAdjust_TOP;
+    switch( *pData )
     {
-        drawing::TextVerticalAdjust nVA = drawing::TextVerticalAdjust_TOP;
-        switch( *pData )
-        {
-            case 1:
-                nVA = drawing::TextVerticalAdjust_CENTER;
-                break;
-            case 2: //justify
-                nVA = drawing::TextVerticalAdjust_BLOCK;
-                break;
-            case 3:
-                nVA = drawing::TextVerticalAdjust_BOTTOM;
-                break;
-            default:
-                break;
-        }
-        m_aSectionManager.SetCurrentSectionVerticalAdjustment( nVA );
+        case 1:
+            nVA = drawing::TextVerticalAdjust_CENTER;
+            break;
+        case 2: //justify
+            nVA = drawing::TextVerticalAdjust_BLOCK;
+            break;
+        case 3:
+            nVA = drawing::TextVerticalAdjust_BOTTOM;
+            break;
+        default:
+            break;
     }
+    m_aSectionManager.SetCurrentSectionVerticalAdjustment( nVA );
 }
 
 void SwWW8ImplReader::Read_Border(sal_uInt16 , const sal_uInt8*, short nLen)

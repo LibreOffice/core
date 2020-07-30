@@ -319,19 +319,19 @@ namespace sw
 
         DrawingOLEAdaptor::~DrawingOLEAdaptor()
         {
-            if (mxIPRef.is())
-            {
-                OSL_ENSURE( !mrPers.GetEmbeddedObjectContainer().HasEmbeddedObject( mxIPRef ), "Object in adaptor is inserted?!" );
-                try
-                {
-                    mxIPRef->close(true);
-                }
-                catch ( const css::util::CloseVetoException& )
-                {
-                }
+            if (!mxIPRef.is())
+                return;
 
-                mxIPRef = nullptr;
+            OSL_ENSURE( !mrPers.GetEmbeddedObjectContainer().HasEmbeddedObject( mxIPRef ), "Object in adaptor is inserted?!" );
+            try
+            {
+                mxIPRef->close(true);
             }
+            catch ( const css::util::CloseVetoException& )
+            {
+            }
+
+            mxIPRef = nullptr;
         }
     }
 

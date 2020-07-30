@@ -2297,95 +2297,95 @@ void SwWW8ImplReader::Read_HdFt(int nSect, const SwPageDesc *pPrev,
     sal_uInt8 grpfIhdt = rSection.maSep.grpfIhdt;
     SwPageDesc *pPD = rSection.mpPage;
 
-    if( m_xHdFt )
+    if( !m_xHdFt )
+        return;
+
+    WW8_CP nStart, nLen;
+    sal_uInt8 nNumber = 5;
+
+    // This loops through the 6 flags WW8_{FOOTER,HEADER}_{ODD,EVEN,FIRST}
+    // corresponding to bit fields in grpfIhdt indicating which
+    // header/footer(s) are present in this section
+    for( sal_uInt8 nI = 0x20; nI; nI >>= 1, nNumber-- )
     {
-        WW8_CP nStart, nLen;
-        sal_uInt8 nNumber = 5;
-
-        // This loops through the 6 flags WW8_{FOOTER,HEADER}_{ODD,EVEN,FIRST}
-        // corresponding to bit fields in grpfIhdt indicating which
-        // header/footer(s) are present in this section
-        for( sal_uInt8 nI = 0x20; nI; nI >>= 1, nNumber-- )
+        if (nI & grpfIhdt)
         {
-            if (nI & grpfIhdt)
+            bool bOk = true;
+            if( m_bVer67 )
+                bOk = ( m_xHdFt->GetTextPos(grpfIhdt, nI, nStart, nLen ) && nLen >= 2 );
+            else
             {
-                bool bOk = true;
-                if( m_bVer67 )
-                    bOk = ( m_xHdFt->GetTextPos(grpfIhdt, nI, nStart, nLen ) && nLen >= 2 );
-                else
-                {
-                    m_xHdFt->GetTextPosExact( static_cast< short >(nNumber + (nSect+1)*6), nStart, nLen);
-                    bOk = ( 2 <= nLen ) && isValid_HdFt_CP(nStart);
-                }
-
-                bool bUseLeft
-                    = (nI & ( WW8_HEADER_EVEN | WW8_FOOTER_EVEN )) != 0;
-                bool bUseFirst
-                    = (nI & ( WW8_HEADER_FIRST | WW8_FOOTER_FIRST )) != 0;
-
-                // If we are loading a first-page header/footer which is not
-                // actually enabled in this section (it still needs to be
-                // loaded as it may be inherited by a later section)
-                bool bDisabledFirst = bUseFirst && !rSection.HasTitlePage();
-
-                bool bFooter
-                    = (nI & ( WW8_FOOTER_EVEN | WW8_FOOTER_ODD | WW8_FOOTER_FIRST )) != 0;
-
-                SwFrameFormat& rFormat = bUseLeft ? pPD->GetLeft()
-                    : bUseFirst ? pPD->GetFirstMaster()
-                    : pPD->GetMaster();
-
-                SwFrameFormat* pHdFtFormat;
-                // If we have empty first page header and footer.
-                bool bNoFirst = !(grpfIhdt & WW8_HEADER_FIRST) && !(grpfIhdt & WW8_FOOTER_FIRST);
-                if (bFooter)
-                {
-                    m_bIsFooter = true;
-                    //#i17196# Cannot have left without right
-                    if (!bDisabledFirst
-                            && !pPD->GetMaster().GetFooter().GetFooterFormat())
-                        pPD->GetMaster().SetFormatAttr(SwFormatFooter(true));
-                    if (bUseLeft)
-                        pPD->GetLeft().SetFormatAttr(SwFormatFooter(true));
-                    if (bUseFirst || (rSection.maSep.fTitlePage && bNoFirst))
-                        pPD->GetFirstMaster().SetFormatAttr(SwFormatFooter(true));
-                    pHdFtFormat = const_cast<SwFrameFormat*>(rFormat.GetFooter().GetFooterFormat());
-                }
-                else
-                {
-                    m_bIsHeader = true;
-                    //#i17196# Cannot have left without right
-                    if (!bDisabledFirst
-                            && !pPD->GetMaster().GetHeader().GetHeaderFormat())
-                        pPD->GetMaster().SetFormatAttr(SwFormatHeader(true));
-                    if (bUseLeft)
-                        pPD->GetLeft().SetFormatAttr(SwFormatHeader(true));
-                    if (bUseFirst || (rSection.maSep.fTitlePage && bNoFirst))
-                        pPD->GetFirstMaster().SetFormatAttr(SwFormatHeader(true));
-                    pHdFtFormat = const_cast<SwFrameFormat*>(rFormat.GetHeader().GetHeaderFormat());
-                }
-
-                if (bOk)
-                {
-                    bool bHackRequired = false;
-                    if (m_bIsHeader && rSection.IsFixedHeightHeader())
-                        bHackRequired = true;
-                    else if (m_bIsFooter && rSection.IsFixedHeightFooter())
-                        bHackRequired = true;
-
-                    if (bHackRequired)
-                    {
-                        Read_HdFtTextAsHackedFrame(nStart, nLen, *pHdFtFormat,
-                            static_cast< sal_uInt16 >(rSection.GetTextAreaWidth()) );
-                    }
-                    else
-                        Read_HdFtText(nStart, nLen, pHdFtFormat);
-                }
-                else if (pPrev)
-                    CopyPageDescHdFt(pPrev, pPD, nI);
-
-                m_bIsHeader = m_bIsFooter = false;
+                m_xHdFt->GetTextPosExact( static_cast< short >(nNumber + (nSect+1)*6), nStart, nLen);
+                bOk = ( 2 <= nLen ) && isValid_HdFt_CP(nStart);
             }
+
+            bool bUseLeft
+                = (nI & ( WW8_HEADER_EVEN | WW8_FOOTER_EVEN )) != 0;
+            bool bUseFirst
+                = (nI & ( WW8_HEADER_FIRST | WW8_FOOTER_FIRST )) != 0;
+
+            // If we are loading a first-page header/footer which is not
+            // actually enabled in this section (it still needs to be
+            // loaded as it may be inherited by a later section)
+            bool bDisabledFirst = bUseFirst && !rSection.HasTitlePage();
+
+            bool bFooter
+                = (nI & ( WW8_FOOTER_EVEN | WW8_FOOTER_ODD | WW8_FOOTER_FIRST )) != 0;
+
+            SwFrameFormat& rFormat = bUseLeft ? pPD->GetLeft()
+                : bUseFirst ? pPD->GetFirstMaster()
+                : pPD->GetMaster();
+
+            SwFrameFormat* pHdFtFormat;
+            // If we have empty first page header and footer.
+            bool bNoFirst = !(grpfIhdt & WW8_HEADER_FIRST) && !(grpfIhdt & WW8_FOOTER_FIRST);
+            if (bFooter)
+            {
+                m_bIsFooter = true;
+                //#i17196# Cannot have left without right
+                if (!bDisabledFirst
+                        && !pPD->GetMaster().GetFooter().GetFooterFormat())
+                    pPD->GetMaster().SetFormatAttr(SwFormatFooter(true));
+                if (bUseLeft)
+                    pPD->GetLeft().SetFormatAttr(SwFormatFooter(true));
+                if (bUseFirst || (rSection.maSep.fTitlePage && bNoFirst))
+                    pPD->GetFirstMaster().SetFormatAttr(SwFormatFooter(true));
+                pHdFtFormat = const_cast<SwFrameFormat*>(rFormat.GetFooter().GetFooterFormat());
+            }
+            else
+            {
+                m_bIsHeader = true;
+                //#i17196# Cannot have left without right
+                if (!bDisabledFirst
+                        && !pPD->GetMaster().GetHeader().GetHeaderFormat())
+                    pPD->GetMaster().SetFormatAttr(SwFormatHeader(true));
+                if (bUseLeft)
+                    pPD->GetLeft().SetFormatAttr(SwFormatHeader(true));
+                if (bUseFirst || (rSection.maSep.fTitlePage && bNoFirst))
+                    pPD->GetFirstMaster().SetFormatAttr(SwFormatHeader(true));
+                pHdFtFormat = const_cast<SwFrameFormat*>(rFormat.GetHeader().GetHeaderFormat());
+            }
+
+            if (bOk)
+            {
+                bool bHackRequired = false;
+                if (m_bIsHeader && rSection.IsFixedHeightHeader())
+                    bHackRequired = true;
+                else if (m_bIsFooter && rSection.IsFixedHeightFooter())
+                    bHackRequired = true;
+
+                if (bHackRequired)
+                {
+                    Read_HdFtTextAsHackedFrame(nStart, nLen, *pHdFtFormat,
+                        static_cast< sal_uInt16 >(rSection.GetTextAreaWidth()) );
+                }
+                else
+                    Read_HdFtText(nStart, nLen, pHdFtFormat);
+            }
+            else if (pPrev)
+                CopyPageDescHdFt(pPrev, pPD, nI);
+
+            m_bIsHeader = m_bIsFooter = false;
         }
     }
 }
@@ -2888,20 +2888,20 @@ rtl_TextEncoding SwWW8ImplReader::GetCurrentCJKCharSet()
 
 void SwWW8ImplReader::PostProcessAttrs()
 {
-    if (m_pPostProcessAttrsInfo != nullptr)
+    if (m_pPostProcessAttrsInfo == nullptr)
+        return;
+
+    SfxItemIter aIter(m_pPostProcessAttrsInfo->mItemSet);
+
+    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
     {
-        SfxItemIter aIter(m_pPostProcessAttrsInfo->mItemSet);
-
-        for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
-        {
-            m_xCtrlStck->NewAttr(*m_pPostProcessAttrsInfo->mPaM.GetPoint(),
-                               *pItem);
-            m_xCtrlStck->SetAttr(*m_pPostProcessAttrsInfo->mPaM.GetMark(),
-                               pItem->Which());
-        }
-
-        m_pPostProcessAttrsInfo.reset();
+        m_xCtrlStck->NewAttr(*m_pPostProcessAttrsInfo->mPaM.GetPoint(),
+                           *pItem);
+        m_xCtrlStck->SetAttr(*m_pPostProcessAttrsInfo->mPaM.GetMark(),
+                           pItem->Which());
     }
+
+    m_pPostProcessAttrsInfo.reset();
 }
 
 /*
@@ -4737,31 +4737,31 @@ void wwExtraneousParas::delete_all_from_doc()
 
 void SwWW8ImplReader::StoreMacroCmds()
 {
-    if (m_xWwFib->m_lcbCmds)
+    if (!m_xWwFib->m_lcbCmds)
+        return;
+
+    bool bValidPos = checkSeek(*m_pTableStream, m_xWwFib->m_fcCmds);
+    if (!bValidPos)
+        return;
+
+    uno::Reference < embed::XStorage > xRoot(m_pDocShell->GetStorage());
+
+    if (!xRoot.is())
+        return;
+
+    try
     {
-        bool bValidPos = checkSeek(*m_pTableStream, m_xWwFib->m_fcCmds);
-        if (!bValidPos)
-            return;
+        uno::Reference < io::XStream > xStream =
+                xRoot->openStreamElement( SL::aMSMacroCmds, embed::ElementModes::READWRITE );
+        std::unique_ptr<SvStream> xOutStream(::utl::UcbStreamHelper::CreateStream(xStream));
 
-        uno::Reference < embed::XStorage > xRoot(m_pDocShell->GetStorage());
-
-        if (!xRoot.is())
-            return;
-
-        try
-        {
-            uno::Reference < io::XStream > xStream =
-                    xRoot->openStreamElement( SL::aMSMacroCmds, embed::ElementModes::READWRITE );
-            std::unique_ptr<SvStream> xOutStream(::utl::UcbStreamHelper::CreateStream(xStream));
-
-            sal_uInt32 lcbCmds = std::min<sal_uInt32>(m_xWwFib->m_lcbCmds, m_pTableStream->remainingSize());
-            std::unique_ptr<sal_uInt8[]> xBuffer(new sal_uInt8[lcbCmds]);
-            m_xWwFib->m_lcbCmds = m_pTableStream->ReadBytes(xBuffer.get(), lcbCmds);
-            xOutStream->WriteBytes(xBuffer.get(), m_xWwFib->m_lcbCmds);
-        }
-        catch (...)
-        {
-        }
+        sal_uInt32 lcbCmds = std::min<sal_uInt32>(m_xWwFib->m_lcbCmds, m_pTableStream->remainingSize());
+        std::unique_ptr<sal_uInt8[]> xBuffer(new sal_uInt8[lcbCmds]);
+        m_xWwFib->m_lcbCmds = m_pTableStream->ReadBytes(xBuffer.get(), lcbCmds);
+        xOutStream->WriteBytes(xBuffer.get(), m_xWwFib->m_lcbCmds);
+    }
+    catch (...)
+    {
     }
 }
 
@@ -4773,28 +4773,28 @@ void SwWW8ImplReader::ReadDocVars()
     WW8ReadSTTBF(!m_bVer67, *m_pTableStream, m_xWwFib->m_fcStwUser,
         m_xWwFib->m_lcbStwUser, m_bVer67 ? 2 : 0, m_eStructCharSet,
         aDocVarStrings, &aDocVarStringIds, &aDocValueStrings);
-    if (!m_bVer67) {
-        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-            m_pDocShell->GetModel(), uno::UNO_QUERY_THROW);
-        uno::Reference<document::XDocumentProperties> xDocProps(
-            xDPS->getDocumentProperties());
-        OSL_ENSURE(xDocProps.is(), "DocumentProperties is null");
-        uno::Reference<beans::XPropertyContainer> xUserDefinedProps =
-            xDocProps->getUserDefinedProperties();
-        OSL_ENSURE(xUserDefinedProps.is(), "UserDefinedProperties is null");
+    if (m_bVer67)        return;
 
-        for(size_t i=0; i<aDocVarStrings.size(); i++)
-        {
-            const OUString &rName = aDocVarStrings[i];
-            uno::Any aValue;
-            aValue <<= rName;
-            try {
-                xUserDefinedProps->addProperty( rName,
-                    beans::PropertyAttribute::REMOVABLE,
-                    aValue );
-            } catch (const uno::Exception &) {
-                // ignore
-            }
+    uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+        m_pDocShell->GetModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<document::XDocumentProperties> xDocProps(
+        xDPS->getDocumentProperties());
+    OSL_ENSURE(xDocProps.is(), "DocumentProperties is null");
+    uno::Reference<beans::XPropertyContainer> xUserDefinedProps =
+        xDocProps->getUserDefinedProperties();
+    OSL_ENSURE(xUserDefinedProps.is(), "UserDefinedProperties is null");
+
+    for(size_t i=0; i<aDocVarStrings.size(); i++)
+    {
+        const OUString &rName = aDocVarStrings[i];
+        uno::Any aValue;
+        aValue <<= rName;
+        try {
+            xUserDefinedProps->addProperty( rName,
+                beans::PropertyAttribute::REMOVABLE,
+                aValue );
+        } catch (const uno::Exception &) {
+            // ignore
         }
     }
 }
@@ -4804,82 +4804,82 @@ void SwWW8ImplReader::ReadDocVars()
  */
 void SwWW8ImplReader::ReadDocInfo()
 {
-    if( m_pStg )
+    if( !m_pStg )
+        return;
+
+    uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+        m_pDocShell->GetModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<document::XDocumentProperties> xDocProps(
+        xDPS->getDocumentProperties());
+    OSL_ENSURE(xDocProps.is(), "DocumentProperties is null");
+
+    if (!xDocProps.is())
+        return;
+
+    if ( m_xWwFib->m_fDot )
     {
-        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-            m_pDocShell->GetModel(), uno::UNO_QUERY_THROW);
-        uno::Reference<document::XDocumentProperties> xDocProps(
-            xDPS->getDocumentProperties());
-        OSL_ENSURE(xDocProps.is(), "DocumentProperties is null");
-
-        if (xDocProps.is())
+        OUString sTemplateURL;
+        SfxMedium* pMedium = m_pDocShell->GetMedium();
+        if ( pMedium )
         {
-            if ( m_xWwFib->m_fDot )
-            {
-                OUString sTemplateURL;
-                SfxMedium* pMedium = m_pDocShell->GetMedium();
-                if ( pMedium )
-                {
-                    const OUString& aName = pMedium->GetName();
-                    INetURLObject aURL( aName );
-                    sTemplateURL = aURL.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
-                    if ( !sTemplateURL.isEmpty() )
-                        xDocProps->setTemplateURL( sTemplateURL );
-                }
-            }
-            else if (m_xWwFib->m_lcbSttbfAssoc) // not a template, and has a SttbfAssoc
-            {
-                auto nCur = m_pTableStream->Tell();
-                Sttb aSttb;
-                // point at tgc record
-                if (!checkSeek(*m_pTableStream, m_xWwFib->m_fcSttbfAssoc) || !aSttb.Read(*m_pTableStream))
-                    SAL_WARN("sw.ww8", "** Read of SttbAssoc data failed!!!! ");
-                m_pTableStream->Seek( nCur ); // return to previous position, is that necessary?
-                OUString sPath = aSttb.getStringAtIndex( 0x1 );
-                OUString aURL;
-                // attempt to convert to url (won't work for obvious reasons on linux)
-                if ( !sPath.isEmpty() )
-                    osl::FileBase::getFileURLFromSystemPath( sPath, aURL );
-                if (aURL.isEmpty())
-                    xDocProps->setTemplateURL( aURL );
-                else
-                    xDocProps->setTemplateURL( sPath );
-
-            }
-            sfx2::LoadOlePropertySet(xDocProps, m_pStg);
+            const OUString& aName = pMedium->GetName();
+            INetURLObject aURL( aName );
+            sTemplateURL = aURL.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
+            if ( !sTemplateURL.isEmpty() )
+                xDocProps->setTemplateURL( sTemplateURL );
         }
     }
+    else if (m_xWwFib->m_lcbSttbfAssoc) // not a template, and has a SttbfAssoc
+    {
+        auto nCur = m_pTableStream->Tell();
+        Sttb aSttb;
+        // point at tgc record
+        if (!checkSeek(*m_pTableStream, m_xWwFib->m_fcSttbfAssoc) || !aSttb.Read(*m_pTableStream))
+            SAL_WARN("sw.ww8", "** Read of SttbAssoc data failed!!!! ");
+        m_pTableStream->Seek( nCur ); // return to previous position, is that necessary?
+        OUString sPath = aSttb.getStringAtIndex( 0x1 );
+        OUString aURL;
+        // attempt to convert to url (won't work for obvious reasons on linux)
+        if ( !sPath.isEmpty() )
+            osl::FileBase::getFileURLFromSystemPath( sPath, aURL );
+        if (aURL.isEmpty())
+            xDocProps->setTemplateURL( aURL );
+        else
+            xDocProps->setTemplateURL( sPath );
+
+    }
+    sfx2::LoadOlePropertySet(xDocProps, m_pStg);
 }
 
 static void lcl_createTemplateToProjectEntry( const uno::Reference< container::XNameContainer >& xPrjNameCache, const OUString& sTemplatePathOrURL, const OUString& sVBAProjName )
 {
-    if ( xPrjNameCache.is() )
+    if ( !xPrjNameCache.is() )
+        return;
+
+    INetURLObject aObj;
+    aObj.SetURL( sTemplatePathOrURL );
+    bool bIsURL = aObj.GetProtocol() != INetProtocol::NotValid;
+    OUString aURL;
+    if ( bIsURL )
+        aURL = sTemplatePathOrURL;
+    else
     {
-        INetURLObject aObj;
-        aObj.SetURL( sTemplatePathOrURL );
-        bool bIsURL = aObj.GetProtocol() != INetProtocol::NotValid;
-        OUString aURL;
-        if ( bIsURL )
-            aURL = sTemplatePathOrURL;
-        else
+        osl::FileBase::getFileURLFromSystemPath( sTemplatePathOrURL, aURL );
+        aObj.SetURL( aURL );
+    }
+    try
+    {
+        OUString templateNameWithExt = aObj.GetLastName();
+        OUString templateName;
+        sal_Int32 nIndex =  templateNameWithExt.lastIndexOf( '.' );
+        if ( nIndex != -1 )
         {
-            osl::FileBase::getFileURLFromSystemPath( sTemplatePathOrURL, aURL );
-            aObj.SetURL( aURL );
+            templateName = templateNameWithExt.copy( 0, nIndex );
+            xPrjNameCache->insertByName( templateName, uno::makeAny( sVBAProjName ) );
         }
-        try
-        {
-            OUString templateNameWithExt = aObj.GetLastName();
-            OUString templateName;
-            sal_Int32 nIndex =  templateNameWithExt.lastIndexOf( '.' );
-            if ( nIndex != -1 )
-            {
-                templateName = templateNameWithExt.copy( 0, nIndex );
-                xPrjNameCache->insertByName( templateName, uno::makeAny( sVBAProjName ) );
-            }
-        }
-        catch( const uno::Exception& )
-        {
-        }
+    }
+    catch( const uno::Exception& )
+    {
     }
 }
 

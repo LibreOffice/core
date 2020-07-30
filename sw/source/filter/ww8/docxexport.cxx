@@ -693,52 +693,52 @@ void DocxExport::WriteFootnotesEndnotes()
         m_pAttrOutput->SetSerializer( m_pDocumentFS );
     }
 
-    if ( m_pAttrOutput->HasEndnotes() )
-    {
-        // setup word/styles.xml and the relations + content type
-        m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
-                oox::getRelationship(Relationship::ENDNOTES),
-                "endnotes.xml" );
+    if ( !m_pAttrOutput->HasEndnotes() )
+        return;
 
-        ::sax_fastparser::FSHelperPtr pEndnotesFS =
-            m_pFilter->openFragmentStreamWithSerializer( "word/endnotes.xml",
-                    "application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml" );
+    // setup word/styles.xml and the relations + content type
+    m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
+            oox::getRelationship(Relationship::ENDNOTES),
+            "endnotes.xml" );
 
-        // switch the serializer to redirect the output to word/endnotes.xml
-        m_pAttrOutput->SetSerializer( pEndnotesFS );
-        // tdf#99227
-        m_pSdrExport->setSerializer( pEndnotesFS );
-        // tdf#107969
-        m_pVMLExport->SetFS(pEndnotesFS);
+    ::sax_fastparser::FSHelperPtr pEndnotesFS =
+        m_pFilter->openFragmentStreamWithSerializer( "word/endnotes.xml",
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml" );
 
-        // do the work
-        m_pAttrOutput->FootnotesEndnotes( false );
+    // switch the serializer to redirect the output to word/endnotes.xml
+    m_pAttrOutput->SetSerializer( pEndnotesFS );
+    // tdf#99227
+    m_pSdrExport->setSerializer( pEndnotesFS );
+    // tdf#107969
+    m_pVMLExport->SetFS(pEndnotesFS);
 
-        // switch the serializer back
-        m_pVMLExport->SetFS(m_pDocumentFS);
-        m_pSdrExport->setSerializer( m_pDocumentFS );
-        m_pAttrOutput->SetSerializer( m_pDocumentFS );
-    }
+    // do the work
+    m_pAttrOutput->FootnotesEndnotes( false );
+
+    // switch the serializer back
+    m_pVMLExport->SetFS(m_pDocumentFS);
+    m_pSdrExport->setSerializer( m_pDocumentFS );
+    m_pAttrOutput->SetSerializer( m_pDocumentFS );
 }
 
 void DocxExport::WritePostitFields()
 {
-    if ( m_pAttrOutput->HasPostitFields() )
-    {
-        m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
-                oox::getRelationship(Relationship::COMMENTS),
-                "comments.xml" );
+    if ( !m_pAttrOutput->HasPostitFields() )
+        return;
 
-        ::sax_fastparser::FSHelperPtr pPostitFS =
-            m_pFilter->openFragmentStreamWithSerializer( "word/comments.xml",
-                    "application/vnd.openxmlformats-officedocument.wordprocessingml.comments+xml" );
+    m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
+            oox::getRelationship(Relationship::COMMENTS),
+            "comments.xml" );
 
-        pPostitFS->startElementNS( XML_w, XML_comments, MainXmlNamespaces());
-        m_pAttrOutput->SetSerializer( pPostitFS );
-        m_pAttrOutput->WritePostitFields();
-        m_pAttrOutput->SetSerializer( m_pDocumentFS );
-        pPostitFS->endElementNS( XML_w, XML_comments );
-    }
+    ::sax_fastparser::FSHelperPtr pPostitFS =
+        m_pFilter->openFragmentStreamWithSerializer( "word/comments.xml",
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.comments+xml" );
+
+    pPostitFS->startElementNS( XML_w, XML_comments, MainXmlNamespaces());
+    m_pAttrOutput->SetSerializer( pPostitFS );
+    m_pAttrOutput->WritePostitFields();
+    m_pAttrOutput->SetSerializer( m_pDocumentFS );
+    pPostitFS->endElementNS( XML_w, XML_comments );
 }
 
 void DocxExport::WriteNumbering()
@@ -1538,26 +1538,26 @@ void DocxExport::WriteVBA()
         return;
 
     uno::Reference<io::XStream> xDataStream = xDocumentStorage->openStreamElement(aDataName, nOpenMode);
-    if (xDataStream.is())
-    {
-        // Then the data stream, which wants to work with an already set
-        // xProjectStream.
-        std::unique_ptr<SvStream> pIn(utl::UcbStreamHelper::CreateStream(xDataStream));
+    if (!xDataStream.is())
+        return;
 
-        uno::Reference<io::XStream> xOutputStream(GetFilter().openFragmentStream("word/vbaData.xml", "application/vnd.ms-word.vbaData+xml"), uno::UNO_QUERY);
-        if (!xOutputStream.is())
-            return;
-        std::unique_ptr<SvStream> pOut(utl::UcbStreamHelper::CreateStream(xOutputStream));
+    // Then the data stream, which wants to work with an already set
+    // xProjectStream.
+    std::unique_ptr<SvStream> pIn(utl::UcbStreamHelper::CreateStream(xDataStream));
 
-        // Write the stream.
-        pOut->WriteStream(*pIn);
+    uno::Reference<io::XStream> xOutputStream(GetFilter().openFragmentStream("word/vbaData.xml", "application/vnd.ms-word.vbaData+xml"), uno::UNO_QUERY);
+    if (!xOutputStream.is())
+        return;
+    std::unique_ptr<SvStream> pOut(utl::UcbStreamHelper::CreateStream(xOutputStream));
 
-        // Write the relationship.
-        if (!xProjectStream.is())
-            return;
+    // Write the stream.
+    pOut->WriteStream(*pIn);
 
-        m_pFilter->addRelation(xProjectStream, oox::getRelationship(Relationship::WORDVBADATA), "vbaData.xml");
-    }
+    // Write the relationship.
+    if (!xProjectStream.is())
+        return;
+
+    m_pFilter->addRelation(xProjectStream, oox::getRelationship(Relationship::WORDVBADATA), "vbaData.xml");
 }
 
 void DocxExport::WriteEmbeddings()
