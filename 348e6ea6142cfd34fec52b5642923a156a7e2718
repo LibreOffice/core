@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f8a5e873_0202b502",
+        "filename": "sfx2/source/view/viewprn.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-30T11:53:53Z",
+      "side": 1,
+      "message": "Now the two branches are identical; that would warn in static analyzers. Please remove the condition; the comment tells it about Calc. bIsCalc becomes unneeded, and should also be removed.",
+      "range": {
+        "startLine": 207,
+        "startChar": 26,
+        "endLine": 207,
+        "endChar": 27
+      },
+      "revId": "348e6ea6142cfd34fec52b5642923a156a7e2718",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
