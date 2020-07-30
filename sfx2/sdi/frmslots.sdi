@@ -73,6 +73,11 @@ interface Window
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
+    SID_NAVIGATOR_DECK
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
     SID_STYLE_DESIGNER // ole(no) api(final/play/rec)
     [
         ExecMethod = ChildWindowExecute ;
