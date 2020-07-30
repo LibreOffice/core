@@ -132,19 +132,19 @@ static void lcl_addOutplaceProperties(
     MapMode aMode( MapUnit::Map100thMM ); // the API expects this map mode for the embedded objects
     Size aSize = rObj.GetSize( &aMode ); // get the size in the requested map mode
 
-    if( aSize.Width() && aSize.Height() )
-    {
-        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_LEFT ), Any(sal_Int32(0)) );
-        pStates++;
+    if( !(aSize.Width() && aSize.Height()) )
+        return;
 
-        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_TOP ), Any(sal_Int32(0)) );
-        pStates++;
+    *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_LEFT ), Any(sal_Int32(0)) );
+    pStates++;
 
-        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_WIDTH ), Any(static_cast<sal_Int32>(aSize.Width())) );
-        pStates++;
+    *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_TOP ), Any(sal_Int32(0)) );
+    pStates++;
 
-        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_HEIGHT ), Any(static_cast<sal_Int32>(aSize.Height())) );
-    }
+    *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_WIDTH ), Any(static_cast<sal_Int32>(aSize.Width())) );
+    pStates++;
+
+    *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_HEIGHT ), Any(static_cast<sal_Int32>(aSize.Height())) );
 }
 
 static void lcl_addFrameProperties(

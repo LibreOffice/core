@@ -1352,21 +1352,21 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
         // take care of open redlines for tables
         GetImport().GetTextImport()->RedlineAdjustStartNodeCursor();
     }
-    if( pXTable )
-    {
-        SwFrameFormat *const pTableFrameFormat = pXTable->GetFrameFormat();
-        OSL_ENSURE( pTableFrameFormat, "table format missing" );
-        SwTable *pTable = SwTable::FindTable( pTableFrameFormat );
-        OSL_ENSURE( pTable, "table missing" );
-        m_pTableNode = pTable->GetTableNode();
-        OSL_ENSURE( m_pTableNode, "table node missing" );
+    if( !pXTable )
+        return;
 
-        pTableFrameFormat->SetName( sTableName );
+    SwFrameFormat *const pTableFrameFormat = pXTable->GetFrameFormat();
+    OSL_ENSURE( pTableFrameFormat, "table format missing" );
+    SwTable *pTable = SwTable::FindTable( pTableFrameFormat );
+    OSL_ENSURE( pTable, "table missing" );
+    m_pTableNode = pTable->GetTableNode();
+    OSL_ENSURE( m_pTableNode, "table node missing" );
 
-        SwTableLine *pLine1 = m_pTableNode->GetTable().GetTabLines()[0U];
-        m_pBox1 = pLine1->GetTabBoxes()[0U];
-        m_pSttNd1 = m_pBox1->GetSttNd();
-    }
+    pTableFrameFormat->SetName( sTableName );
+
+    SwTableLine *pLine1 = m_pTableNode->GetTable().GetTabLines()[0U];
+    m_pBox1 = pLine1->GetTabBoxes()[0U];
+    m_pSttNd1 = m_pBox1->GetSttNd();
 }
 
 SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
@@ -1468,22 +1468,22 @@ void SwXMLTableContext::InsertColumn( sal_Int32 nWidth2, bool bRelWidth2,
     else if( nWidth2 > MAX_WIDTH )
         nWidth2 = MAX_WIDTH;
     m_aColumnWidths.emplace_back(nWidth2, bRelWidth2 );
-    if( (pDfltCellStyleName && !pDfltCellStyleName->isEmpty()) ||
-        m_pColumnDefaultCellStyleNames )
-    {
-        if( !m_pColumnDefaultCellStyleNames )
-        {
-            m_pColumnDefaultCellStyleNames.reset(new std::vector<OUString>);
-            sal_uLong nCount = m_aColumnWidths.size() - 1;
-            while( nCount-- )
-                m_pColumnDefaultCellStyleNames->push_back(OUString());
-        }
+    if( !((pDfltCellStyleName && !pDfltCellStyleName->isEmpty()) ||
+        m_pColumnDefaultCellStyleNames) )
+        return;
 
-        if(pDfltCellStyleName)
-            m_pColumnDefaultCellStyleNames->push_back(*pDfltCellStyleName);
-        else
+    if( !m_pColumnDefaultCellStyleNames )
+    {
+        m_pColumnDefaultCellStyleNames.reset(new std::vector<OUString>);
+        sal_uLong nCount = m_aColumnWidths.size() - 1;
+        while( nCount-- )
             m_pColumnDefaultCellStyleNames->push_back(OUString());
     }
+
+    if(pDfltCellStyleName)
+        m_pColumnDefaultCellStyleNames->push_back(*pDfltCellStyleName);
+    else
+        m_pColumnDefaultCellStyleNames->push_back(OUString());
 }
 
 sal_Int32 SwXMLTableContext::GetColumnWidth( sal_uInt32 nCol,

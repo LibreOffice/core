@@ -127,23 +127,23 @@ static void lcl_setObjectVisualArea( const uno::Reference< embed::XEmbeddedObjec
                                     const Size& aVisSize,
                                     const MapUnit& aUnit )
 {
-    if( xObj.is() && nAspect != embed::Aspects::MSOLE_ICON )
-    {
-        // convert the visual area to the objects units
-        MapUnit aObjUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
-        Size aObjVisSize = OutputDevice::LogicToLogic(aVisSize, MapMode(aUnit), MapMode(aObjUnit));
-        awt::Size aSz;
-        aSz.Width = aObjVisSize.Width();
-        aSz.Height = aObjVisSize.Height();
+    if( !(xObj.is() && nAspect != embed::Aspects::MSOLE_ICON) )
+        return;
 
-        try
-        {
-            xObj->setVisualAreaSize( nAspect, aSz );
-        }
-        catch( uno::Exception& )
-        {
-            OSL_FAIL( "Couldn't set visual area of the object!" );
-        }
+    // convert the visual area to the objects units
+    MapUnit aObjUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
+    Size aObjVisSize = OutputDevice::LogicToLogic(aVisSize, MapMode(aUnit), MapMode(aObjUnit));
+    awt::Size aSz;
+    aSz.Width = aObjVisSize.Width();
+    aSz.Height = aObjVisSize.Height();
+
+    try
+    {
+        xObj->setVisualAreaSize( nAspect, aSz );
+    }
+    catch( uno::Exception& )
+    {
+        OSL_FAIL( "Couldn't set visual area of the object!" );
     }
 }
 
@@ -925,41 +925,41 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
     SwOLEObj& rOLEObj = pOLENd->GetOLEObj();
 
     uno::Reference < embed::XEmbeddedObject > xEmbObj( rOLEObj.GetOleRef() );
-    if ( svt::EmbeddedObjectRef::TryRunningState( xEmbObj ) )
+    if ( !svt::EmbeddedObjectRef::TryRunningState( xEmbObj ) )
+        return;
+
+    uno::Reference < beans::XPropertySet > xSet( xEmbObj->getComponent(), uno::UNO_QUERY );
+    if ( !xSet.is() )
+        return;
+
+    const sal_Int32 nCount = rParamMap.size();
+    uno::Sequence< beans::PropertyValue > aCommandSequence( nCount );
+
+    sal_Int32 nIndex=0;
+    for (const auto& rParam : rParamMap )
     {
-        uno::Reference < beans::XPropertySet > xSet( xEmbObj->getComponent(), uno::UNO_QUERY );
-        if ( xSet.is() )
+        aCommandSequence[nIndex].Name = rParam.first;
+        aCommandSequence[nIndex].Handle = -1;
+        aCommandSequence[nIndex].Value <<= rParam.second;
+        aCommandSequence[nIndex].State = beans::PropertyState_DIRECT_VALUE;
+        ++nIndex;
+    }
+
+    // unfortunately the names of the properties are depending on the object
+    OUString aParaName("AppletCommands");
+    try
+    {
+        xSet->setPropertyValue( aParaName, makeAny( aCommandSequence ) );
+    }
+    catch ( uno::Exception& )
+    {
+        aParaName = "PluginCommands";
+        try
         {
-            const sal_Int32 nCount = rParamMap.size();
-            uno::Sequence< beans::PropertyValue > aCommandSequence( nCount );
-
-            sal_Int32 nIndex=0;
-            for (const auto& rParam : rParamMap )
-            {
-                aCommandSequence[nIndex].Name = rParam.first;
-                aCommandSequence[nIndex].Handle = -1;
-                aCommandSequence[nIndex].Value <<= rParam.second;
-                aCommandSequence[nIndex].State = beans::PropertyState_DIRECT_VALUE;
-                ++nIndex;
-            }
-
-            // unfortunately the names of the properties are depending on the object
-            OUString aParaName("AppletCommands");
-            try
-            {
-                xSet->setPropertyValue( aParaName, makeAny( aCommandSequence ) );
-            }
-            catch ( uno::Exception& )
-            {
-                aParaName = "PluginCommands";
-                try
-                {
-                    xSet->setPropertyValue( aParaName, makeAny( aCommandSequence ) );
-                }
-                catch ( uno::Exception& )
-                {
-                }
-            }
+            xSet->setPropertyValue( aParaName, makeAny( aCommandSequence ) );
+        }
+        catch ( uno::Exception& )
+        {
         }
     }
 }
