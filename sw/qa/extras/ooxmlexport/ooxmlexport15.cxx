@@ -108,6 +108,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135216_evenOddFooter, "tdf135216_evenOddFooter.o
     xPageStyle.set(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
     xFooter.set(getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterTextLeft"));
     CPPUNIT_ASSERT_EQUAL(OUString("even page"), xFooter->getString());
+
+    // The contents of paragraph 2 should be the page number (2) located on page 1.
+    getParagraph(2, "2");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf133370_columnBreak, "tdf133370_columnBreak.odt")
