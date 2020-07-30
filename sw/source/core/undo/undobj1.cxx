@@ -555,68 +555,68 @@ void SwUndoSetFlyFormat::UndoImpl(::sw::UndoRedoContext & rContext)
 
     // Is the new Format still existent?
     SwFrameFormat* pDerivedFromFrameFormat = rDoc.FindFrameFormatByName(m_DerivedFromFormatName);
-    if (pDerivedFromFrameFormat)
+    if (!pDerivedFromFrameFormat)
+        return;
+
+    if( m_bAnchorChanged )
+        m_pFrameFormat->DelFrames();
+
+    if( m_pFrameFormat->DerivedFrom() != pDerivedFromFrameFormat)
+        m_pFrameFormat->SetDerivedFrom(pDerivedFromFrameFormat);
+
+    SfxItemIter aIter( *m_pItemSet );
+    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
     {
-        if( m_bAnchorChanged )
-            m_pFrameFormat->DelFrames();
-
-        if( m_pFrameFormat->DerivedFrom() != pDerivedFromFrameFormat)
-            m_pFrameFormat->SetDerivedFrom(pDerivedFromFrameFormat);
-
-        SfxItemIter aIter( *m_pItemSet );
-        for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
-        {
-            if( IsInvalidItem( pItem ))
-                m_pFrameFormat->ResetFormatAttr( m_pItemSet->GetWhichByPos(
-                                        aIter.GetCurPos() ));
-            else
-                m_pFrameFormat->SetFormatAttr( *pItem );
-        }
-
-        if( m_bAnchorChanged )
-        {
-            const SwFormatAnchor& rOldAnch = m_pFrameFormat->GetAnchor();
-            if (RndStdIds::FLY_AS_CHAR == rOldAnch.GetAnchorId())
-            {
-                // With InContents it's tricky: the text attribute needs to be
-                // deleted. Unfortunately, this not only destroys the Frames but
-                // also the format. To prevent that, first detach the
-                // connection between attribute and format.
-                const SwPosition *pPos = rOldAnch.GetContentAnchor();
-                SwTextNode *pTextNode = pPos->nNode.GetNode().GetTextNode();
-                OSL_ENSURE( pTextNode->HasHints(), "Missing FlyInCnt-Hint." );
-                const sal_Int32 nIdx = pPos->nContent.GetIndex();
-                SwTextAttr * pHint = pTextNode->GetTextAttrForCharAt(
-                        nIdx, RES_TXTATR_FLYCNT );
-                assert(pHint && "Missing Hint.");
-                OSL_ENSURE( pHint->Which() == RES_TXTATR_FLYCNT,
-                            "Missing FlyInCnt-Hint." );
-                OSL_ENSURE( pHint->GetFlyCnt().GetFrameFormat() == m_pFrameFormat,
-                            "Wrong TextFlyCnt-Hint." );
-                const_cast<SwFormatFlyCnt&>(pHint->GetFlyCnt()).SetFlyFormat();
-
-                // Connection is now detached, therefore the attribute can be
-                // deleted
-                pTextNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx, nIdx );
-            }
-
-            // reposition anchor
-            SwFormatAnchor aNewAnchor( m_nOldAnchorType );
-            GetAnchor( aNewAnchor, m_nOldNode, m_nOldContent );
-            m_pFrameFormat->SetFormatAttr( aNewAnchor );
-
-            if (RndStdIds::FLY_AS_CHAR == aNewAnchor.GetAnchorId())
-            {
-                const SwPosition* pPos = aNewAnchor.GetContentAnchor();
-                SwFormatFlyCnt aFormat( m_pFrameFormat );
-                pPos->nNode.GetNode().GetTextNode()->InsertItem( aFormat,
-                    m_nOldContent, 0 );
-            }
-
-            m_pFrameFormat->MakeFrames();
-        }
-        rContext.SetSelections(m_pFrameFormat, nullptr);
+        if( IsInvalidItem( pItem ))
+            m_pFrameFormat->ResetFormatAttr( m_pItemSet->GetWhichByPos(
+                                    aIter.GetCurPos() ));
+        else
+            m_pFrameFormat->SetFormatAttr( *pItem );
     }
+
+    if( m_bAnchorChanged )
+    {
+        const SwFormatAnchor& rOldAnch = m_pFrameFormat->GetAnchor();
+        if (RndStdIds::FLY_AS_CHAR == rOldAnch.GetAnchorId())
+        {
+            // With InContents it's tricky: the text attribute needs to be
+            // deleted. Unfortunately, this not only destroys the Frames but
+            // also the format. To prevent that, first detach the
+            // connection between attribute and format.
+            const SwPosition *pPos = rOldAnch.GetContentAnchor();
+            SwTextNode *pTextNode = pPos->nNode.GetNode().GetTextNode();
+            OSL_ENSURE( pTextNode->HasHints(), "Missing FlyInCnt-Hint." );
+            const sal_Int32 nIdx = pPos->nContent.GetIndex();
+            SwTextAttr * pHint = pTextNode->GetTextAttrForCharAt(
+                    nIdx, RES_TXTATR_FLYCNT );
+            assert(pHint && "Missing Hint.");
+            OSL_ENSURE( pHint->Which() == RES_TXTATR_FLYCNT,
+                        "Missing FlyInCnt-Hint." );
+            OSL_ENSURE( pHint->GetFlyCnt().GetFrameFormat() == m_pFrameFormat,
+                        "Wrong TextFlyCnt-Hint." );
+            const_cast<SwFormatFlyCnt&>(pHint->GetFlyCnt()).SetFlyFormat();
+
+            // Connection is now detached, therefore the attribute can be
+            // deleted
+            pTextNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx, nIdx );
+        }
+
+        // reposition anchor
+        SwFormatAnchor aNewAnchor( m_nOldAnchorType );
+        GetAnchor( aNewAnchor, m_nOldNode, m_nOldContent );
+        m_pFrameFormat->SetFormatAttr( aNewAnchor );
+
+        if (RndStdIds::FLY_AS_CHAR == aNewAnchor.GetAnchorId())
+        {
+            const SwPosition* pPos = aNewAnchor.GetContentAnchor();
+            SwFormatFlyCnt aFormat( m_pFrameFormat );
+            pPos->nNode.GetNode().GetTextNode()->InsertItem( aFormat,
+                m_nOldContent, 0 );
+        }
+
+        m_pFrameFormat->MakeFrames();
+    }
+    rContext.SetSelections(m_pFrameFormat, nullptr);
 }
 
 void SwUndoSetFlyFormat::RedoImpl(::sw::UndoRedoContext & rContext)
@@ -625,21 +625,21 @@ void SwUndoSetFlyFormat::RedoImpl(::sw::UndoRedoContext & rContext)
 
     // Is the new Format still existent?
     SwFrameFormat* pNewFrameFormat = rDoc.FindFrameFormatByName(m_NewFormatName);
-    if (pNewFrameFormat)
-    {
-        if( m_bAnchorChanged )
-        {
-            SwFormatAnchor aNewAnchor( m_nNewAnchorType );
-            GetAnchor( aNewAnchor, m_nNewNode, m_nNewContent );
-            SfxItemSet aSet( rDoc.GetAttrPool(), aFrameFormatSetRange );
-            aSet.Put( aNewAnchor );
-            rDoc.SetFrameFormatToFly( *m_pFrameFormat, *pNewFrameFormat, &aSet );
-        }
-        else
-            rDoc.SetFrameFormatToFly( *m_pFrameFormat, *pNewFrameFormat);
+    if (!pNewFrameFormat)
+        return;
 
-        rContext.SetSelections(m_pFrameFormat, nullptr);
+    if( m_bAnchorChanged )
+    {
+        SwFormatAnchor aNewAnchor( m_nNewAnchorType );
+        GetAnchor( aNewAnchor, m_nNewNode, m_nNewContent );
+        SfxItemSet aSet( rDoc.GetAttrPool(), aFrameFormatSetRange );
+        aSet.Put( aNewAnchor );
+        rDoc.SetFrameFormatToFly( *m_pFrameFormat, *pNewFrameFormat, &aSet );
     }
+    else
+        rDoc.SetFrameFormatToFly( *m_pFrameFormat, *pNewFrameFormat);
+
+    rContext.SetSelections(m_pFrameFormat, nullptr);
 }
 
 void SwUndoSetFlyFormat::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
@@ -697,19 +697,19 @@ void SwUndoSetFlyFormat::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
 
 void SwUndoSetFlyFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* )
 {
-    if( pOld )
-    {
-        sal_uInt16 nWhich = pOld->Which();
+    if( !pOld )
+        return;
 
-        if( nWhich < POOLATTR_END )
-            PutAttr( nWhich, pOld );
-        else if( RES_ATTRSET_CHG == nWhich )
+    sal_uInt16 nWhich = pOld->Which();
+
+    if( nWhich < POOLATTR_END )
+        PutAttr( nWhich, pOld );
+    else if( RES_ATTRSET_CHG == nWhich )
+    {
+        SfxItemIter aIter( *static_cast<const SwAttrSetChg*>(pOld)->GetChgSet() );
+        for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
         {
-            SfxItemIter aIter( *static_cast<const SwAttrSetChg*>(pOld)->GetChgSet() );
-            for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
-            {
-                PutAttr( pItem->Which(), pItem );
-            }
+            PutAttr( pItem->Which(), pItem );
         }
     }
 }

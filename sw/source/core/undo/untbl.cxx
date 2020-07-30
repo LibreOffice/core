@@ -316,26 +316,26 @@ void SwUndoInsTable::RedoImpl(::sw::UndoRedoContext & rContext)
         m_pDDEFieldType.reset();
     }
 
-    if( (m_pRedlineData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() )) ||
+    if( !((m_pRedlineData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() )) ||
         ( !( RedlineFlags::Ignore & GetRedlineFlags() ) &&
-            !rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty() ))
+            !rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty() )))
+        return;
+
+    SwPaM aPam( *pTableNode->EndOfSectionNode(), *pTableNode, 1 );
+    SwContentNode* pCNd = aPam.GetContentNode( false );
+    if( pCNd )
+        aPam.GetMark()->nContent.Assign( pCNd, 0 );
+
+    if( m_pRedlineData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ) )
     {
-        SwPaM aPam( *pTableNode->EndOfSectionNode(), *pTableNode, 1 );
-        SwContentNode* pCNd = aPam.GetContentNode( false );
-        if( pCNd )
-            aPam.GetMark()->nContent.Assign( pCNd, 0 );
+        RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
+        rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld & ~RedlineFlags::Ignore);
 
-        if( m_pRedlineData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ) )
-        {
-            RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
-            rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld & ~RedlineFlags::Ignore);
-
-            rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( *m_pRedlineData, aPam ), true);
-            rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
-        }
-        else
-            rDoc.getIDocumentRedlineAccess().SplitRedline( aPam );
+        rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( *m_pRedlineData, aPam ), true);
+        rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     }
+    else
+        rDoc.getIDocumentRedlineAccess().SplitRedline( aPam );
 }
 
 void SwUndoInsTable::RepeatImpl(::sw::RepeatContext & rContext)

@@ -43,22 +43,22 @@ SwUndoFormatCreate::~SwUndoFormatCreate()
 
 void SwUndoFormatCreate::UndoImpl(::sw::UndoRedoContext &)
 {
+    if (!m_pNew)
+        return;
+
+    if (m_sNewName.isEmpty())
+        m_sNewName = m_pNew->GetName();
+
+    if (!m_sNewName.isEmpty())
+        m_pNew = Find(m_sNewName);
+
     if (m_pNew)
     {
-        if (m_sNewName.isEmpty())
-            m_sNewName = m_pNew->GetName();
+        m_pNewSet = new SfxItemSet(m_pNew->GetAttrSet());
+        m_nId = m_pNew->GetPoolFormatId() & COLL_GET_RANGE_BITS;
+        m_bAuto = m_pNew->IsAuto();
 
-        if (!m_sNewName.isEmpty())
-            m_pNew = Find(m_sNewName);
-
-        if (m_pNew)
-        {
-            m_pNewSet = new SfxItemSet(m_pNew->GetAttrSet());
-            m_nId = m_pNew->GetPoolFormatId() & COLL_GET_RANGE_BITS;
-            m_bAuto = m_pNew->IsAuto();
-
-            Delete();
-        }
+        Delete();
     }
 }
 
