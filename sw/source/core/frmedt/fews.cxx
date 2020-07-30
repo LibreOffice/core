@@ -1223,19 +1223,19 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
         }
 
     }
-    if( !_opRef )
-    {
-        if( bVertic && !bVerticalL2R )
-            _orRect.Pos( aPos.getX() - _orRect.Width() - _orRect.Left(), _orRect.Top() - aPos.getY() );
-        else if( bVerticalL2R )
-            _orRect.Pos( _orRect.Left() - aPos.getX(), _orRect.Top() - aPos.getY() );
-        else if ( bRTL )
-            _orRect.Pos( - ( _orRect.Right() - aPos.getX() ), _orRect.Top() - aPos.getY() );
-        else
-            _orRect.Pos( _orRect.Left() - aPos.getX(), _orRect.Top() - aPos.getY() );
-        if( _bMirror )
-            _orRect.Pos( -_orRect.Right(), _orRect.Top() );
-    }
+    if( _opRef )
+        return;
+
+    if( bVertic && !bVerticalL2R )
+        _orRect.Pos( aPos.getX() - _orRect.Width() - _orRect.Left(), _orRect.Top() - aPos.getY() );
+    else if( bVerticalL2R )
+        _orRect.Pos( _orRect.Left() - aPos.getX(), _orRect.Top() - aPos.getY() );
+    else if ( bRTL )
+        _orRect.Pos( - ( _orRect.Right() - aPos.getX() ), _orRect.Top() - aPos.getY() );
+    else
+        _orRect.Pos( _orRect.Left() - aPos.getX(), _orRect.Top() - aPos.getY() );
+    if( _bMirror )
+        _orRect.Pos( -_orRect.Right(), _orRect.Top() );
 }
 
 Size SwFEShell::GetGraphicDefaultSize() const
