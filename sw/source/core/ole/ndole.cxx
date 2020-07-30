@@ -572,22 +572,22 @@ void SwOLENode::BreakFileLink_Impl()
 {
     SfxObjectShell* pPers = GetDoc()->GetPersist();
 
-    if ( pPers )
+    if ( !pPers )
+        return;
+
+    uno::Reference< embed::XStorage > xStorage = pPers->GetStorage();
+    if ( !xStorage.is() )
+        return;
+
+    try
     {
-        uno::Reference< embed::XStorage > xStorage = pPers->GetStorage();
-        if ( xStorage.is() )
-        {
-            try
-            {
-                uno::Reference< embed::XLinkageSupport > xLinkSupport( maOLEObj.GetOleRef(), uno::UNO_QUERY_THROW );
-                xLinkSupport->breakLink( xStorage, maOLEObj.GetCurrentPersistName() );
-                DisconnectFileLink_Impl();
-                maLinkURL.clear();
-            }
-            catch( uno::Exception& )
-            {
-            }
-        }
+        uno::Reference< embed::XLinkageSupport > xLinkSupport( maOLEObj.GetOleRef(), uno::UNO_QUERY_THROW );
+        xLinkSupport->breakLink( xStorage, maOLEObj.GetCurrentPersistName() );
+        DisconnectFileLink_Impl();
+        maLinkURL.clear();
+    }
+    catch( uno::Exception& )
+    {
     }
 }
 
@@ -602,27 +602,27 @@ void SwOLENode::DisconnectFileLink_Impl()
 
 void SwOLENode::CheckFileLink_Impl()
 {
-    if ( maOLEObj.m_xOLERef.GetObject().is() && !mpObjectLink )
+    if ( !(maOLEObj.m_xOLERef.GetObject().is() && !mpObjectLink) )
+        return;
+
+    try
     {
-        try
+        uno::Reference< embed::XLinkageSupport > xLinkSupport( maOLEObj.m_xOLERef.GetObject(), uno::UNO_QUERY_THROW );
+        if ( xLinkSupport->isLink() )
         {
-            uno::Reference< embed::XLinkageSupport > xLinkSupport( maOLEObj.m_xOLERef.GetObject(), uno::UNO_QUERY_THROW );
-            if ( xLinkSupport->isLink() )
+            const OUString aLinkURL = xLinkSupport->getLinkURL();
+            if ( !aLinkURL.isEmpty() )
             {
-                const OUString aLinkURL = xLinkSupport->getLinkURL();
-                if ( !aLinkURL.isEmpty() )
-                {
-                    // this is a file link so the model link manager should handle it
-                    mpObjectLink = new SwEmbedObjectLink( this );
-                    maLinkURL = aLinkURL;
-                    GetDoc()->getIDocumentLinksAdministration().GetLinkManager().InsertFileLink( *mpObjectLink, sfx2::SvBaseLinkObjectType::ClientOle, aLinkURL );
-                    mpObjectLink->Connect();
-                }
+                // this is a file link so the model link manager should handle it
+                mpObjectLink = new SwEmbedObjectLink( this );
+                maLinkURL = aLinkURL;
+                GetDoc()->getIDocumentLinksAdministration().GetLinkManager().InsertFileLink( *mpObjectLink, sfx2::SvBaseLinkObjectType::ClientOle, aLinkURL );
+                mpObjectLink->Connect();
             }
         }
-        catch( uno::Exception& )
-        {
-        }
+    }
+    catch( uno::Exception& )
+    {
     }
 }
 
@@ -862,39 +862,39 @@ SwOLEObj::~SwOLEObj() COVERITY_NOEXCEPT_FALSE
 void SwOLEObj::SetNode( SwOLENode* pNode )
 {
     m_pOLENode = pNode;
-    if ( m_aName.isEmpty() )
+    if ( !m_aName.isEmpty() )
+        return;
+
+    SwDoc* pDoc = pNode->GetDoc();
+
+    // If there's already a SvPersist instance, we use it
+    SfxObjectShell* p = pDoc->GetPersist();
+    if( !p )
     {
-        SwDoc* pDoc = pNode->GetDoc();
-
-        // If there's already a SvPersist instance, we use it
-        SfxObjectShell* p = pDoc->GetPersist();
-        if( !p )
-        {
-            // TODO/LATER: Isn't an EmbeddedObjectContainer sufficient here?
-            // What happens to the document?
-            OSL_ENSURE( false, "Why are we creating a DocShell here??" );
-            p = new SwDocShell( pDoc, SfxObjectCreateMode::INTERNAL );
-            p->DoInitNew();
-        }
-
-        OUString aObjName;
-        uno::Reference < container::XChild > xChild( m_xOLERef.GetObject(), uno::UNO_QUERY );
-        if ( xChild.is() && xChild->getParent() != p->GetModel() )
-            // it is possible that the parent was set already
-            xChild->setParent( p->GetModel() );
-        if (!p->GetEmbeddedObjectContainer().InsertEmbeddedObject( m_xOLERef.GetObject(), aObjName ) )
-        {
-            OSL_FAIL( "InsertObject failed" );
-            if ( xChild.is() )
-                xChild->setParent( nullptr );
-        }
-        else
-            m_xOLERef.AssignToContainer( &p->GetEmbeddedObjectContainer(), aObjName );
-
-        const_cast<SwOLENode*>(m_pOLENode)->CheckFileLink_Impl(); // for this notification nonconst access is required
-
-        m_aName = aObjName;
+        // TODO/LATER: Isn't an EmbeddedObjectContainer sufficient here?
+        // What happens to the document?
+        OSL_ENSURE( false, "Why are we creating a DocShell here??" );
+        p = new SwDocShell( pDoc, SfxObjectCreateMode::INTERNAL );
+        p->DoInitNew();
     }
+
+    OUString aObjName;
+    uno::Reference < container::XChild > xChild( m_xOLERef.GetObject(), uno::UNO_QUERY );
+    if ( xChild.is() && xChild->getParent() != p->GetModel() )
+        // it is possible that the parent was set already
+        xChild->setParent( p->GetModel() );
+    if (!p->GetEmbeddedObjectContainer().InsertEmbeddedObject( m_xOLERef.GetObject(), aObjName ) )
+    {
+        OSL_FAIL( "InsertObject failed" );
+        if ( xChild.is() )
+            xChild->setParent( nullptr );
+    }
+    else
+        m_xOLERef.AssignToContainer( &p->GetEmbeddedObjectContainer(), aObjName );
+
+    const_cast<SwOLENode*>(m_pOLENode)->CheckFileLink_Impl(); // for this notification nonconst access is required
+
+    m_aName = aObjName;
 }
 
 OUString SwOLEObj::GetStyleString()
@@ -1219,20 +1219,20 @@ void SwOLELRUCache::InsertObj( SwOLEObj& rObj )
         m_OleObjects.erase(it);
         it = m_OleObjects.end();
     }
-    if (it == m_OleObjects.end())
+    if (it != m_OleObjects.end())
+        return;
+
+    std::shared_ptr<SwOLELRUCache> xKeepAlive(g_pOLELRU_Cache); // prevent delete this
+    // try to remove objects if necessary
+    sal_Int32 nCount = m_OleObjects.size();
+    sal_Int32 nPos = nCount-1;
+    while (nPos >= 0 && nCount >= m_nLRU_InitSize)
     {
-        std::shared_ptr<SwOLELRUCache> xKeepAlive(g_pOLELRU_Cache); // prevent delete this
-        // try to remove objects if necessary
-        sal_Int32 nCount = m_OleObjects.size();
-        sal_Int32 nPos = nCount-1;
-        while (nPos >= 0 && nCount >= m_nLRU_InitSize)
-        {
-            pObj = m_OleObjects[ nPos-- ];
-            if ( pObj->UnloadObject() )
-                nCount--;
-        }
-        m_OleObjects.push_front(&rObj);
+        pObj = m_OleObjects[ nPos-- ];
+        if ( pObj->UnloadObject() )
+            nCount--;
     }
+    m_OleObjects.push_front(&rObj);
 }
 
 void SwOLELRUCache::RemoveObj( SwOLEObj& rObj )

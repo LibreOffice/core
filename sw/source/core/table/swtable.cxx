@@ -451,44 +451,44 @@ static void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
     else if ( bRefreshHidden )
         ::lcl_RefreshHidden( rToFill, nPos );
 
-    if ( bHidden && !bRefreshHidden )
+    if ( !(bHidden && !bRefreshHidden) )
+        return;
+
+    // calculate minimum/maximum values for the existing entries:
+    nLeftMin = nPos - nLeftMin;
+    nRightMax = nPos + nRightMax;
+
+    // check if nPos is entry:
+    bool bFoundPos = false;
+    bool bFoundMax = false;
+    for ( size_t j = 0; !(bFoundPos && bFoundMax ) && j < rToFill.Count(); ++j )
     {
-        // calculate minimum/maximum values for the existing entries:
-        nLeftMin = nPos - nLeftMin;
-        nRightMax = nPos + nRightMax;
+        SwTabColsEntry& rEntry = rToFill.GetEntry( j );
+        long nCmp = rToFill[j];
 
-        // check if nPos is entry:
-        bool bFoundPos = false;
-        bool bFoundMax = false;
-        for ( size_t j = 0; !(bFoundPos && bFoundMax ) && j < rToFill.Count(); ++j )
+        if ( (nPos >= ((nCmp >= COLFUZZY) ? nCmp - COLFUZZY : nCmp)) &&
+             (nPos <= (nCmp + COLFUZZY)) )
         {
-            SwTabColsEntry& rEntry = rToFill.GetEntry( j );
-            long nCmp = rToFill[j];
+            // check if nLeftMin is > old minimum for entry nPos:
+            const long nOldMin = rEntry.nMin;
+            if ( nLeftMin > nOldMin )
+                rEntry.nMin = nLeftMin;
+            // check if nRightMin is < old maximum for entry nPos:
+            const long nOldMax = rEntry.nMax;
+            if ( nRightMax < nOldMax )
+                rEntry.nMax = nRightMax;
 
-            if ( (nPos >= ((nCmp >= COLFUZZY) ? nCmp - COLFUZZY : nCmp)) &&
-                 (nPos <= (nCmp + COLFUZZY)) )
-            {
-                // check if nLeftMin is > old minimum for entry nPos:
-                const long nOldMin = rEntry.nMin;
-                if ( nLeftMin > nOldMin )
-                    rEntry.nMin = nLeftMin;
-                // check if nRightMin is < old maximum for entry nPos:
-                const long nOldMax = rEntry.nMax;
-                if ( nRightMax < nOldMax )
-                    rEntry.nMax = nRightMax;
+            bFoundPos = true;
+        }
+        else if ( (nRightMax >= ((nCmp >= COLFUZZY) ? nCmp - COLFUZZY : nCmp)) &&
+                  (nRightMax <= (nCmp + COLFUZZY)) )
+        {
+            // check if nPos is > old minimum for entry nRightMax:
+            const long nOldMin = rEntry.nMin;
+            if ( nPos > nOldMin )
+                rEntry.nMin = nPos;
 
-                bFoundPos = true;
-            }
-            else if ( (nRightMax >= ((nCmp >= COLFUZZY) ? nCmp - COLFUZZY : nCmp)) &&
-                      (nRightMax <= (nCmp + COLFUZZY)) )
-            {
-                // check if nPos is > old minimum for entry nRightMax:
-                const long nOldMin = rEntry.nMin;
-                if ( nPos > nOldMin )
-                    rEntry.nMin = nPos;
-
-                bFoundMax = true;
-            }
+            bFoundMax = true;
         }
     }
 }
@@ -2571,25 +2571,25 @@ void SwTableBox::ActualiseValueBox()
 {
     const SfxPoolItem *pFormatItem, *pValItem;
     SwFrameFormat* pFormat = GetFrameFormat();
-    if( SfxItemState::SET == pFormat->GetItemState( RES_BOXATR_FORMAT, true, &pFormatItem )
-        && SfxItemState::SET == pFormat->GetItemState( RES_BOXATR_VALUE, true, &pValItem ))
+    if( SfxItemState::SET != pFormat->GetItemState( RES_BOXATR_FORMAT, true, &pFormatItem )
+        || SfxItemState::SET != pFormat->GetItemState( RES_BOXATR_VALUE, true, &pValItem ))
+        return;
+
+    const sal_uLong nFormatId = static_cast<const SwTableBoxNumFormat*>(pFormatItem)->GetValue();
+    sal_uLong nNdPos = ULONG_MAX;
+    SvNumberFormatter* pNumFormatr = pFormat->GetDoc()->GetNumberFormatter();
+
+    if( !pNumFormatr->IsTextFormat( nFormatId ) &&
+        ULONG_MAX != (nNdPos = IsValidNumTextNd()) )
     {
-        const sal_uLong nFormatId = static_cast<const SwTableBoxNumFormat*>(pFormatItem)->GetValue();
-        sal_uLong nNdPos = ULONG_MAX;
-        SvNumberFormatter* pNumFormatr = pFormat->GetDoc()->GetNumberFormatter();
+        double fVal = static_cast<const SwTableBoxValue*>(pValItem)->GetValue();
+        Color* pCol = nullptr;
+        OUString sNewText;
+        pNumFormatr->GetOutputString( fVal, nFormatId, sNewText, &pCol );
 
-        if( !pNumFormatr->IsTextFormat( nFormatId ) &&
-            ULONG_MAX != (nNdPos = IsValidNumTextNd()) )
-        {
-            double fVal = static_cast<const SwTableBoxValue*>(pValItem)->GetValue();
-            Color* pCol = nullptr;
-            OUString sNewText;
-            pNumFormatr->GetOutputString( fVal, nFormatId, sNewText, &pCol );
-
-            const OUString& rText = m_pStartNode->GetNodes()[ nNdPos ]->GetTextNode()->GetText();
-            if( rText != sNewText )
-                ChgTextToNum( *this, sNewText, pCol, false ,nNdPos);
-        }
+        const OUString& rText = m_pStartNode->GetNodes()[ nNdPos ]->GetTextNode()->GetText();
+        if( rText != sNewText )
+            ChgTextToNum( *this, sNewText, pCol, false ,nNdPos);
     }
 }
 

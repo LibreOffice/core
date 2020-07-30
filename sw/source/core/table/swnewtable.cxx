@@ -1564,53 +1564,53 @@ bool SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
 
 void SwTable::PrepareDelBoxes( const SwSelBoxes& rBoxes )
 {
-    if( IsNewModel() )
+    if( !IsNewModel() )
+        return;
+
+    for (size_t i = 0; i < rBoxes.size(); ++i)
     {
-        for (size_t i = 0; i < rBoxes.size(); ++i)
+        SwTableBox* pBox = rBoxes[i];
+        long nRowSpan = pBox->getRowSpan();
+        if( nRowSpan != 1 && pBox->GetFrameFormat()->GetFrameSize().GetWidth() )
         {
-            SwTableBox* pBox = rBoxes[i];
-            long nRowSpan = pBox->getRowSpan();
-            if( nRowSpan != 1 && pBox->GetFrameFormat()->GetFrameSize().GetWidth() )
+            long nLeft = lcl_Box2LeftBorder( *pBox );
+            SwTableLine *pLine = pBox->GetUpper();
+            sal_uInt16 nLinePos = GetTabLines().GetPos( pLine);
+            OSL_ENSURE( nLinePos < USHRT_MAX, "Box/table mismatch" );
+            if( nRowSpan > 1 )
             {
-                long nLeft = lcl_Box2LeftBorder( *pBox );
-                SwTableLine *pLine = pBox->GetUpper();
-                sal_uInt16 nLinePos = GetTabLines().GetPos( pLine);
-                OSL_ENSURE( nLinePos < USHRT_MAX, "Box/table mismatch" );
-                if( nRowSpan > 1 )
+                if( ++nLinePos < GetTabLines().size() )
                 {
-                    if( ++nLinePos < GetTabLines().size() )
-                    {
-                        pLine = GetTabLines()[ nLinePos ];
-                        pBox = lcl_LeftBorder2Box( nLeft, pLine );
-                        OSL_ENSURE( pBox, "RowSpan irritation I" );
-                        if( pBox )
-                            pBox->setRowSpan( --nRowSpan );
-                    }
+                    pLine = GetTabLines()[ nLinePos ];
+                    pBox = lcl_LeftBorder2Box( nLeft, pLine );
+                    OSL_ENSURE( pBox, "RowSpan irritation I" );
+                    if( pBox )
+                        pBox->setRowSpan( --nRowSpan );
                 }
-                else if( nLinePos > 0 )
+            }
+            else if( nLinePos > 0 )
+            {
+                do
                 {
-                    do
+                    pLine = GetTabLines()[ --nLinePos ];
+                    pBox = lcl_LeftBorder2Box( nLeft, pLine );
+                    OSL_ENSURE( pBox, "RowSpan irritation II" );
+                    if( pBox )
                     {
-                        pLine = GetTabLines()[ --nLinePos ];
-                        pBox = lcl_LeftBorder2Box( nLeft, pLine );
-                        OSL_ENSURE( pBox, "RowSpan irritation II" );
-                        if( pBox )
+                        nRowSpan = pBox->getRowSpan();
+                        if( nRowSpan > 1 )
                         {
-                            nRowSpan = pBox->getRowSpan();
-                            if( nRowSpan > 1 )
-                            {
-                                lcl_InvalidateCellFrame( *pBox );
-                                --nRowSpan;
-                            }
-                            else
-                                ++nRowSpan;
-                            pBox->setRowSpan( nRowSpan );
+                            lcl_InvalidateCellFrame( *pBox );
+                            --nRowSpan;
                         }
                         else
-                            nRowSpan = 1;
+                            ++nRowSpan;
+                        pBox->setRowSpan( nRowSpan );
                     }
-                    while( nRowSpan < 0 && nLinePos > 0 );
+                    else
+                        nRowSpan = 1;
                 }
+                while( nRowSpan < 0 && nLinePos > 0 );
             }
         }
     }
@@ -2022,49 +2022,49 @@ void SwTable::RestoreRowSpan( const SwSaveRowSpan& rSave )
         return;
     sal_uInt16 nLineCount = GetTabLines().size();
     OSL_ENSURE( rSave.mnSplitLine < nLineCount, "Restore behind last line?" );
-    if( rSave.mnSplitLine < nLineCount )
-    {
-        SwTableLine* pLine = GetTabLines()[rSave.mnSplitLine];
-        const size_t nColCount = pLine->GetTabBoxes().size();
-        OSL_ENSURE( nColCount, "Empty Table Line" );
-        OSL_ENSURE( nColCount == rSave.mnRowSpans.size(), "Wrong row span store" );
-        if( nColCount == rSave.mnRowSpans.size() )
-        {
-            for( size_t nCurrCol = 0; nCurrCol < nColCount; ++nCurrCol )
-            {
-                SwTableBox* pBox = pLine->GetTabBoxes()[nCurrCol];
-                OSL_ENSURE( pBox, "Missing Table Box" );
-                long nRowSp = pBox->getRowSpan();
-                if( nRowSp != rSave.mnRowSpans[ nCurrCol ] )
-                {
-                    OSL_ENSURE( -nRowSp == rSave.mnRowSpans[ nCurrCol ], "Pardon me?!" );
-                    OSL_ENSURE( rSave.mnRowSpans[ nCurrCol ] < 0, "Pardon me?!" );
-                    pBox->setRowSpan( -nRowSp );
+    if( rSave.mnSplitLine >= nLineCount )
+        return;
 
-                    sal_uInt16 nLine = rSave.mnSplitLine;
-                    if( nLine )
+    SwTableLine* pLine = GetTabLines()[rSave.mnSplitLine];
+    const size_t nColCount = pLine->GetTabBoxes().size();
+    OSL_ENSURE( nColCount, "Empty Table Line" );
+    OSL_ENSURE( nColCount == rSave.mnRowSpans.size(), "Wrong row span store" );
+    if( nColCount != rSave.mnRowSpans.size() )
+        return;
+
+    for( size_t nCurrCol = 0; nCurrCol < nColCount; ++nCurrCol )
+    {
+        SwTableBox* pBox = pLine->GetTabBoxes()[nCurrCol];
+        OSL_ENSURE( pBox, "Missing Table Box" );
+        long nRowSp = pBox->getRowSpan();
+        if( nRowSp != rSave.mnRowSpans[ nCurrCol ] )
+        {
+            OSL_ENSURE( -nRowSp == rSave.mnRowSpans[ nCurrCol ], "Pardon me?!" );
+            OSL_ENSURE( rSave.mnRowSpans[ nCurrCol ] < 0, "Pardon me?!" );
+            pBox->setRowSpan( -nRowSp );
+
+            sal_uInt16 nLine = rSave.mnSplitLine;
+            if( nLine )
+            {
+                long nLeftBorder = lcl_Box2LeftBorder( *pBox );
+                SwTableBox* pNext;
+                do
+                {
+                    pNext = lcl_LeftBorder2Box( nLeftBorder, GetTabLines()[--nLine] );
+                    if( pNext )
                     {
-                        long nLeftBorder = lcl_Box2LeftBorder( *pBox );
-                        SwTableBox* pNext;
-                        do
+                        pBox = pNext;
+                        long nNewSpan = pBox->getRowSpan();
+                        if( pBox->getRowSpan() < 1 )
+                            nNewSpan -= nRowSp;
+                        else
                         {
-                            pNext = lcl_LeftBorder2Box( nLeftBorder, GetTabLines()[--nLine] );
-                            if( pNext )
-                            {
-                                pBox = pNext;
-                                long nNewSpan = pBox->getRowSpan();
-                                if( pBox->getRowSpan() < 1 )
-                                    nNewSpan -= nRowSp;
-                                else
-                                {
-                                    nNewSpan += nRowSp;
-                                    pNext = nullptr;
-                                }
-                                pBox->setRowSpan( nNewSpan );
-                            }
-                        } while( nLine && pNext );
+                            nNewSpan += nRowSp;
+                            pNext = nullptr;
+                        }
+                        pBox->setRowSpan( nNewSpan );
                     }
-                }
+                } while( nLine && pNext );
             }
         }
     }

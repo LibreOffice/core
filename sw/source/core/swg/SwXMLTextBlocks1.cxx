@@ -416,46 +416,46 @@ void SwXMLTextBlocks::ReadInfo()
 }
 void SwXMLTextBlocks::WriteInfo()
 {
-    if ( xBlkRoot.is() || ERRCODE_NONE == OpenFile ( false ) )
-    {
-        uno::Reference< uno::XComponentContext > xContext =
-            comphelper::getProcessComponentContext();
-
-        uno::Reference < xml::sax::XWriter > xWriter = xml::sax::Writer::create(xContext);
-
-        /*
-        if ( xBlkRoot->IsContained( sDocName) )
-        {
-            xBlkRoot->Remove ( sDocName );
-            xBlkRoot->Commit();
-        }
-        */
-
-        try
-        {
-        uno::Reference < io::XStream > xDocStream = xBlkRoot->openStreamElement( XMLN_BLOCKLIST,
-                    embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
-
-        uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );
-        xSet->setPropertyValue("MediaType", Any(OUString( "text/xml" )) );
-        uno::Reference < io::XOutputStream > xOut = xDocStream->getOutputStream();
-        xWriter->setOutputStream(xOut);
-
-        rtl::Reference<SwXMLBlockListExport> xExp(new SwXMLBlockListExport( xContext, *this, XMLN_BLOCKLIST, xWriter) );
-
-        xExp->exportDoc( XML_BLOCK_LIST );
-
-        uno::Reference < embed::XTransactedObject > xTrans( xBlkRoot, uno::UNO_QUERY );
-        if ( xTrans.is() )
-            xTrans->commit();
-        }
-        catch ( uno::Exception& )
-        {
-        }
-
-        m_bInfoChanged = false;
+    if ( !(xBlkRoot.is() || ERRCODE_NONE == OpenFile ( false )) )
         return;
+
+    uno::Reference< uno::XComponentContext > xContext =
+        comphelper::getProcessComponentContext();
+
+    uno::Reference < xml::sax::XWriter > xWriter = xml::sax::Writer::create(xContext);
+
+    /*
+    if ( xBlkRoot->IsContained( sDocName) )
+    {
+        xBlkRoot->Remove ( sDocName );
+        xBlkRoot->Commit();
     }
+    */
+
+    try
+    {
+    uno::Reference < io::XStream > xDocStream = xBlkRoot->openStreamElement( XMLN_BLOCKLIST,
+                embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
+
+    uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );
+    xSet->setPropertyValue("MediaType", Any(OUString( "text/xml" )) );
+    uno::Reference < io::XOutputStream > xOut = xDocStream->getOutputStream();
+    xWriter->setOutputStream(xOut);
+
+    rtl::Reference<SwXMLBlockListExport> xExp(new SwXMLBlockListExport( xContext, *this, XMLN_BLOCKLIST, xWriter) );
+
+    xExp->exportDoc( XML_BLOCK_LIST );
+
+    uno::Reference < embed::XTransactedObject > xTrans( xBlkRoot, uno::UNO_QUERY );
+    if ( xTrans.is() )
+        xTrans->commit();
+    }
+    catch ( uno::Exception& )
+    {
+    }
+
+    m_bInfoChanged = false;
+    return;
 }
 
 ErrCode SwXMLTextBlocks::SetMacroTable(
