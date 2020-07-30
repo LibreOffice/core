@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "8e0f7308_2c7468da",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-30T09:28:37Z",
+      "side": 1,
+      "message": "Possibly change other \"get_label\", too, to be consistent, and not depend on what is displayed in UI, even though today these are language-independent? Just use GetMiscString here?",
+      "range": {
+        "startLine": 269,
+        "startChar": 19,
+        "endLine": 269,
+        "endChar": 42
+      },
+      "revId": "96028ced1413b713f2b3346054609e77405dbcb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bde6e3a7_079209de",
         "filename": "cui/source/inc/about.hxx",
         "patchSetId": 1
