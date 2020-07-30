@@ -13,6 +13,14 @@
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/text/XEndnotesSupplier.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/style/TabStop.hpp>
+
+#include <comphelper/sequenceashashmap.hxx>
+
+using namespace css;
 
 class Test : public SwModelTestBase
 {

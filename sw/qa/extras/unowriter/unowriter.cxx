@@ -8,6 +8,7 @@
  */
 
 #include <swmodeltestbase.hxx>
+
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
@@ -17,6 +18,7 @@
 #include <com/sun/star/text/XTextPortionAppend.hpp>
 #include <com/sun/star/text/XTextContentAppend.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
+#include <com/sun/star/text/XPasteListener.hpp>
 #include <com/sun/star/rdf/URI.hpp>
 #include <com/sun/star/rdf/URIs.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
@@ -24,9 +26,19 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/view/XRenderable.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/XPageCursor.hpp>
+
 #include <comphelper/propertyvalue.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/processfactory.hxx>
+
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
 #include <swdtflvr.hxx>
@@ -36,6 +48,8 @@
 #include <AnnotationWin.hxx>
 #include <flyfrm.hxx>
 #include <fmtanchr.hxx>
+#include <unotxdoc.hxx>
+#include <docsh.hxx>
 
 using namespace ::com::sun::star;
 

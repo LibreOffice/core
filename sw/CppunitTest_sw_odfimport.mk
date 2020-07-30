@@ -25,6 +25,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_odfimport, \
 	svt \
 	sfx \
 	sw \
+	swqahelper \
     test \
     unotest \
     vcl \

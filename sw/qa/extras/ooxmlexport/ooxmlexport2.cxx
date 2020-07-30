@@ -9,6 +9,8 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <string>
+
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -23,12 +25,15 @@
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
-//#include <com/sun/star/awt/FontWeight.hpp> // keep for testTableStylerPrSz
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
-#include <oox/drawingml/drawingmltypes.hxx>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
 
-#include <string>
+#include <oox/drawingml/drawingmltypes.hxx>
 
 class Test : public SwModelTestBase
 {

@@ -15,18 +15,27 @@
 #endif
 
 #include <swmodeltestbase.hxx>
-#include <wrtsh.hxx>
+
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/style/BreakType.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/container/XContentEnumerationAccess.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
+
 #include <xmloff/odffields.hxx>
+
+#include <wrtsh.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <IMark.hxx>
 #include <sortedobjs.hxx>
 #include <anchoredobject.hxx>
 #include <fmtftn.hxx>
 #include <ftnidx.hxx>
+#include <unotxdoc.hxx>
+#include <docsh.hxx>
+#include <rootfrm.hxx>
 
 class Test : public SwModelTestBase
 {

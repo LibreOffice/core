@@ -10,22 +10,35 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/awt/FontUnderline.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <IDocumentSettingAccess.hxx>
-
-#include <editsh.hxx>
-#include <frmatr.hxx>
-#include <tools/lineend.hxx>
-#include <oox/drawingml/drawingmltypes.hxx>
-#include <com/sun/star/table/ShadowFormat.hpp>
-#include <com/sun/star/text/TableColumnSeparator.hpp>
-#include <com/sun/star/text/XDocumentIndex.hpp>
-#include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/table/ShadowFormat.hpp>
+#include <com/sun/star/table/XTableRows.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
+#include <com/sun/star/text/XDocumentIndex.hpp>
+#include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
+#include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XTextContentAppend.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
+#include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
+
+#include <comphelper/sequenceashashmap.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
+#include <tools/lineend.hxx>
+#include <unotools/mediadescriptor.hxx>
+
+#include <IDocumentSettingAccess.hxx>
+#include <editsh.hxx>
+#include <frmatr.hxx>
 
 char const DATA_DIRECTORY[] = "/sw/qa/extras/ooxmlexport/data/";
 

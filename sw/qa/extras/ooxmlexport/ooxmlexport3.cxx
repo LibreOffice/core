@@ -22,7 +22,10 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/style/BreakType.hpp>
+
 #include <ftninfo.hxx>
+#include <docsh.hxx>
+#include <unotxdoc.hxx>
 
 class Test : public SwModelTestBase
 {

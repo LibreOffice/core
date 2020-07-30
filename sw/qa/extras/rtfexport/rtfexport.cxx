@@ -31,6 +31,17 @@
 #include <com/sun/star/text/RubyPosition.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextFramesSupplier.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/XLineNumberingProperties.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/text/XBookmarksSupplier.hpp>
+
+#include <comphelper/sequenceashashmap.hxx>
+
+using namespace css;
 
 class Test : public SwModelTestBase
 {

@@ -19,8 +19,18 @@
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+
 #include <o3tl/cppunittraitshelper.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/processfactory.hxx>
 
 class Test : public SwModelTestBase
 {

@@ -18,6 +18,7 @@ define sw_ooxmlexport_libraries
 	sfx \
 	svl \
 	sw \
+	swqahelper \
 	test \
 	tl \
 	unotest \

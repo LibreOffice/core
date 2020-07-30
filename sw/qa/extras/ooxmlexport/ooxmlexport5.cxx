@@ -19,10 +19,16 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/rdf/URI.hpp>
 #include <com/sun/star/rdf/Statement.hpp>
+#include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
+#include <com/sun/star/text/XTextSectionsSupplier.hpp>
+
 #include <o3tl/cppunittraitshelper.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <ndindex.hxx>
 #include <pam.hxx>
+#include <unotxdoc.hxx>
+#include <docsh.hxx>
 
 class Test : public SwModelTestBase
 {

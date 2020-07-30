@@ -25,6 +25,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_rtfimport, \
     sfx \
 	i18nlangtag \
 	sw \
+	swqahelper \
     test \
     unotest \
     vcl \

@@ -25,6 +25,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_core_accessibilitycheck, \
     svx \
     sfx \
     sw \
+	swqahelper \
     test \
     unotest \
     utl \

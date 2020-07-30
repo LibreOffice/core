@@ -535,6 +535,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 	unotest \
 	vclbootstrapprotector \
 	scqahelper \
+	swqahelper \
 	unowinreg \
 	wpftqahelper \
 	precompiled_system \

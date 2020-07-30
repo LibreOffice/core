@@ -98,6 +98,8 @@
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/text/XPageCursor.hpp>
 #include <o3tl/cppunittraitshelper.hxx>
 #include <o3tl/make_shared.hxx>
 #include <osl/file.hxx>
@@ -129,6 +131,10 @@
 #include <wrthtml.hxx>
 #include <dbmgr.hxx>
 #include <frameformats.hxx>
+#include <docsh.hxx>
+#include <unotxdoc.hxx>
+#include <comphelper/processfactory.hxx>
+#include <rootfrm.hxx>
 
 namespace
 {

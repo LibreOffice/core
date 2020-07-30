@@ -14,6 +14,8 @@
 
 #include <wrtsh.hxx>
 #include <unotextrange.hxx>
+#include <unotxdoc.hxx>
+#include <docsh.hxx>
 
 using namespace ::com::sun::star;
 

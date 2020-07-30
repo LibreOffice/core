@@ -24,6 +24,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_rtfexport, \
     sal \
     sfx \
 	sw \
+	swqahelper \
     test \
     unotest \
 	utl \

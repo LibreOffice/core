@@ -11,6 +11,10 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/scheduler.hxx>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/text/XPageCursor.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <frameformats.hxx>
@@ -20,6 +24,8 @@
 #include <tools/json_writer.hxx>
 
 #include <wrtsh.hxx>
+#include <unotxdoc.hxx>
+#include <docsh.hxx>
 
 namespace
 {

@@ -33,6 +33,13 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
+#include <com/sun/star/util/XRefreshable.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/container/XIndexContainer.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/text/XTextFramesSupplier.hpp>
 
 #include <IDocumentSettingAccess.hxx>
 #include <wrtsh.hxx>
@@ -42,6 +49,8 @@
 #include <edtwin.hxx>
 #include <olmenu.hxx>
 #include <hintids.hxx>
+#include <docsh.hxx>
+#include <unotxdoc.hxx>
 
 typedef std::map<OUString, css::uno::Sequence< css::table::BorderLine> > AllBordersMap;
 typedef std::pair<OUString, css::uno::Sequence< css::table::BorderLine> > StringSequencePair;

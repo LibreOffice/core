@@ -49,6 +49,7 @@ endif
 
 ifneq ($(OS),iOS)
 $(eval $(call gb_Module_add_check_targets,sw,\
+    Library_swqahelper \
     CppunitTest_sw_uibase_unit \
 ))
 

@@ -23,12 +23,17 @@
 
 #include <tools/urlobj.hxx>
 #include <unotools/localfilehelper.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
 #include <pagefrm.hxx>
 #include <unoprnms.hxx>
 #include <dbmgr.hxx>
+#include <unotxdoc.hxx>
+#include <docsh.hxx>
+#include <IDocumentLayoutAccess.hxx>
+#include <rootfrm.hxx>
 
 /**
  * Maps database URIs to the registered database names for quick lookups

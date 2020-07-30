@@ -10,8 +10,11 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/text/VertOrientation.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 
 #include <wrtsh.hxx>
+#include <unotxdoc.hxx>
+#include <docsh.hxx>
 
 char const DATA_DIRECTORY[] = "/sw/qa/core/objectpositioning/data/";
 

@@ -33,6 +33,7 @@
 #include <IDocumentMarkAccess.hxx>
 #include <IMark.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <unotools/mediadescriptor.hxx>
 
 class Test : public SwModelTestBase
 {
