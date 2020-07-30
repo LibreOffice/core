@@ -1563,29 +1563,107 @@ void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > const & xAl
     SwEditShell *pMySh = GetSh();
     OUString sText;
     pMySh->GetSelectedText( sText );
-    if(!sText.isEmpty())
+    if(sText.isEmpty())
+        return;
+
+    if(xAlt.is() || pGrammarResult != nullptr)
     {
-        if(xAlt.is() || pGrammarResult != nullptr)
+        CreatePortion(xAlt, pGrammarResult, false, false);
+    }
+    else
+    {
+        SwPaM *pCursor = GetSh()->GetCursor();
+        if ( *pCursor->GetPoint() > *pCursor->GetMark() )
+            pCursor->Exchange();
+        // save the start and end positions
+        SwPosition aStart(*pCursor->GetPoint());
+        SwPosition aEnd(*pCursor->GetMark());
+        // iterate over the text to find changes in language
+        // set the mark equal to the point
+        *pCursor->GetMark() = aStart;
+        SwTextNode* pTextNode = pCursor->GetNode().GetTextNode();
+        LanguageType eStartLanguage = lcl_GetLanguage(*GetSh());
+        SpellContentPosition  aNextRedline = lcl_FindNextDeletedRedline(
+                    rDeletedRedlines, aStart.nContent.GetIndex() );
+        if( aNextRedline.nLeft == aStart.nContent.GetIndex() )
         {
-            CreatePortion(xAlt, pGrammarResult, false, false);
-        }
-        else
-        {
-            SwPaM *pCursor = GetSh()->GetCursor();
-            if ( *pCursor->GetPoint() > *pCursor->GetMark() )
-                pCursor->Exchange();
-            // save the start and end positions
-            SwPosition aStart(*pCursor->GetPoint());
-            SwPosition aEnd(*pCursor->GetMark());
-            // iterate over the text to find changes in language
-            // set the mark equal to the point
-            *pCursor->GetMark() = aStart;
-            SwTextNode* pTextNode = pCursor->GetNode().GetTextNode();
-            LanguageType eStartLanguage = lcl_GetLanguage(*GetSh());
-            SpellContentPosition  aNextRedline = lcl_FindNextDeletedRedline(
+            // select until the end of the current redline
+            const sal_Int32 nEnd = aEnd.nContent.GetIndex() < aNextRedline.nRight ?
+                        aEnd.nContent.GetIndex() : aNextRedline.nRight;
+            pCursor->GetPoint()->nContent.Assign( pTextNode, nEnd );
+            CreatePortion(xAlt, pGrammarResult, false, true);
+            aStart = *pCursor->End();
+            // search for next redline
+            aNextRedline = lcl_FindNextDeletedRedline(
                         rDeletedRedlines, aStart.nContent.GetIndex() );
-            if( aNextRedline.nLeft == aStart.nContent.GetIndex() )
+        }
+        while(*pCursor->GetPoint() < aEnd)
+        {
+            // #125786 in table cell with fixed row height the cursor might not move forward
+            if(!GetSh()->Right(1, CRSR_SKIP_CELLS))
+                break;
+
+            bool bField = false;
+            // read the character at the current position to check if it's a field
+            sal_Unicode const cChar =
+                pTextNode->GetText()[pCursor->GetMark()->nContent.GetIndex()];
+            if( CH_TXTATR_BREAKWORD == cChar || CH_TXTATR_INWORD == cChar)
             {
+                const SwTextAttr* pTextAttr = pTextNode->GetTextAttrForCharAt(
+                    pCursor->GetMark()->nContent.GetIndex() );
+                const sal_uInt16 nWhich = pTextAttr
+                    ? pTextAttr->Which()
+                    : RES_TXTATR_END;
+                switch (nWhich)
+                {
+                    case RES_TXTATR_FIELD:
+                    case RES_TXTATR_ANNOTATION:
+                    case RES_TXTATR_FTN:
+                    case RES_TXTATR_FLYCNT:
+                        bField = true;
+                        break;
+                }
+            }
+            else if (cChar == CH_TXT_ATR_FORMELEMENT)
+            {
+                SwPosition aPos(*pCursor->GetMark());
+                bField = pMySh->GetDoc()->getIDocumentMarkAccess()->getDropDownFor(aPos);
+            }
+
+            LanguageType eCurLanguage = lcl_GetLanguage(*GetSh());
+            bool bRedline = aNextRedline.nLeft == pCursor->GetPoint()->nContent.GetIndex();
+            // create a portion if the next character
+            //  - is a field,
+            //  - is at the beginning of a deleted redline
+            //  - has a different language
+            if(bField || bRedline || eCurLanguage != eStartLanguage)
+            {
+                eStartLanguage = eCurLanguage;
+                // go one step back - the cursor currently selects the first character
+                // with a different language
+                // in the case of redlining it's different
+                if(eCurLanguage != eStartLanguage || bField)
+                    *pCursor->GetPoint() = *pCursor->GetMark();
+                // set to the last start
+                *pCursor->GetMark() = aStart;
+                // create portion should only be called if a selection exists
+                // there's no selection if there's a field at the beginning
+                if(*pCursor->Start() != *pCursor->End())
+                    CreatePortion(xAlt, pGrammarResult, false, false);
+                aStart = *pCursor->End();
+                // now export the field - if there is any
+                if(bField)
+                {
+                    *pCursor->GetMark() = *pCursor->GetPoint();
+                    GetSh()->Right(1, CRSR_SKIP_CELLS);
+                    CreatePortion(xAlt, pGrammarResult, true, false);
+                    aStart = *pCursor->End();
+                }
+            }
+            // if a redline start then create a portion for it
+            if(bRedline)
+            {
+                *pCursor->GetMark() = *pCursor->GetPoint();
                 // select until the end of the current redline
                 const sal_Int32 nEnd = aEnd.nContent.GetIndex() < aNextRedline.nRight ?
                             aEnd.nContent.GetIndex() : aNextRedline.nRight;
@@ -1596,89 +1674,11 @@ void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > const & xAl
                 aNextRedline = lcl_FindNextDeletedRedline(
                             rDeletedRedlines, aStart.nContent.GetIndex() );
             }
-            while(*pCursor->GetPoint() < aEnd)
-            {
-                // #125786 in table cell with fixed row height the cursor might not move forward
-                if(!GetSh()->Right(1, CRSR_SKIP_CELLS))
-                    break;
-
-                bool bField = false;
-                // read the character at the current position to check if it's a field
-                sal_Unicode const cChar =
-                    pTextNode->GetText()[pCursor->GetMark()->nContent.GetIndex()];
-                if( CH_TXTATR_BREAKWORD == cChar || CH_TXTATR_INWORD == cChar)
-                {
-                    const SwTextAttr* pTextAttr = pTextNode->GetTextAttrForCharAt(
-                        pCursor->GetMark()->nContent.GetIndex() );
-                    const sal_uInt16 nWhich = pTextAttr
-                        ? pTextAttr->Which()
-                        : RES_TXTATR_END;
-                    switch (nWhich)
-                    {
-                        case RES_TXTATR_FIELD:
-                        case RES_TXTATR_ANNOTATION:
-                        case RES_TXTATR_FTN:
-                        case RES_TXTATR_FLYCNT:
-                            bField = true;
-                            break;
-                    }
-                }
-                else if (cChar == CH_TXT_ATR_FORMELEMENT)
-                {
-                    SwPosition aPos(*pCursor->GetMark());
-                    bField = pMySh->GetDoc()->getIDocumentMarkAccess()->getDropDownFor(aPos);
-                }
-
-                LanguageType eCurLanguage = lcl_GetLanguage(*GetSh());
-                bool bRedline = aNextRedline.nLeft == pCursor->GetPoint()->nContent.GetIndex();
-                // create a portion if the next character
-                //  - is a field,
-                //  - is at the beginning of a deleted redline
-                //  - has a different language
-                if(bField || bRedline || eCurLanguage != eStartLanguage)
-                {
-                    eStartLanguage = eCurLanguage;
-                    // go one step back - the cursor currently selects the first character
-                    // with a different language
-                    // in the case of redlining it's different
-                    if(eCurLanguage != eStartLanguage || bField)
-                        *pCursor->GetPoint() = *pCursor->GetMark();
-                    // set to the last start
-                    *pCursor->GetMark() = aStart;
-                    // create portion should only be called if a selection exists
-                    // there's no selection if there's a field at the beginning
-                    if(*pCursor->Start() != *pCursor->End())
-                        CreatePortion(xAlt, pGrammarResult, false, false);
-                    aStart = *pCursor->End();
-                    // now export the field - if there is any
-                    if(bField)
-                    {
-                        *pCursor->GetMark() = *pCursor->GetPoint();
-                        GetSh()->Right(1, CRSR_SKIP_CELLS);
-                        CreatePortion(xAlt, pGrammarResult, true, false);
-                        aStart = *pCursor->End();
-                    }
-                }
-                // if a redline start then create a portion for it
-                if(bRedline)
-                {
-                    *pCursor->GetMark() = *pCursor->GetPoint();
-                    // select until the end of the current redline
-                    const sal_Int32 nEnd = aEnd.nContent.GetIndex() < aNextRedline.nRight ?
-                                aEnd.nContent.GetIndex() : aNextRedline.nRight;
-                    pCursor->GetPoint()->nContent.Assign( pTextNode, nEnd );
-                    CreatePortion(xAlt, pGrammarResult, false, true);
-                    aStart = *pCursor->End();
-                    // search for next redline
-                    aNextRedline = lcl_FindNextDeletedRedline(
-                                rDeletedRedlines, aStart.nContent.GetIndex() );
-                }
-                *pCursor->GetMark() = *pCursor->GetPoint();
-            }
-            pCursor->SetMark();
-            *pCursor->GetMark() = aStart;
-            CreatePortion(xAlt, pGrammarResult, false, false);
+            *pCursor->GetMark() = *pCursor->GetPoint();
         }
+        pCursor->SetMark();
+        *pCursor->GetMark() = aStart;
+        CreatePortion(xAlt, pGrammarResult, false, false);
     }
 }
 

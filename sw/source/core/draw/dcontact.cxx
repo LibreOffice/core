@@ -215,21 +215,21 @@ void SwContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
     MoveObjToLayer( true, _pDrawObj );
 
     // #i46297#
-    if ( bNotify )
-    {
-        SwAnchoredObject* pAnchoredObj = GetAnchoredObj( _pDrawObj );
-        assert(pAnchoredObj);
-        ::setContextWritingMode( _pDrawObj, pAnchoredObj->GetAnchorFrameContainingAnchPos() );
-        // Note: as-character anchored objects aren't registered at a page frame and
-        //       a notification of its background isn't needed.
-        if ( pAnchoredObj->GetPageFrame() )
-        {
-            ::Notify_Background( _pDrawObj, pAnchoredObj->GetPageFrame(),
-                                 pAnchoredObj->GetObjRect(), PrepareHint::FlyFrameArrive, true );
-        }
+    if ( !bNotify )
+        return;
 
-        pAnchoredObj->InvalidateObjPos();
+    SwAnchoredObject* pAnchoredObj = GetAnchoredObj( _pDrawObj );
+    assert(pAnchoredObj);
+    ::setContextWritingMode( _pDrawObj, pAnchoredObj->GetAnchorFrameContainingAnchPos() );
+    // Note: as-character anchored objects aren't registered at a page frame and
+    //       a notification of its background isn't needed.
+    if ( pAnchoredObj->GetPageFrame() )
+    {
+        ::Notify_Background( _pDrawObj, pAnchoredObj->GetPageFrame(),
+                             pAnchoredObj->GetObjRect(), PrepareHint::FlyFrameArrive, true );
     }
+
+    pAnchoredObj->InvalidateObjPos();
 }
 
 /// method to move drawing object to corresponding invisible layer - #i18447#
@@ -915,31 +915,31 @@ static void lcl_NotifyBackgroundOfObj( SwDrawContact const & _rDrawContact,
     // #i34640#
     SwAnchoredObject* pAnchoredObj =
         const_cast<SwAnchoredObject*>(_rDrawContact.GetAnchoredObj( &_rObj ));
-    if ( pAnchoredObj && pAnchoredObj->GetAnchorFrame() )
+    if ( !(pAnchoredObj && pAnchoredObj->GetAnchorFrame()) )
+        return;
+
+    // #i34640# - determine correct page frame
+    SwPageFrame* pPageFrame = pAnchoredObj->FindPageFrameOfAnchor();
+    if( _pOldObjRect && pPageFrame )
     {
-        // #i34640# - determine correct page frame
-        SwPageFrame* pPageFrame = pAnchoredObj->FindPageFrameOfAnchor();
-        if( _pOldObjRect && pPageFrame )
+        SwRect aOldRect( *_pOldObjRect );
+        if( aOldRect.HasArea() )
         {
-            SwRect aOldRect( *_pOldObjRect );
-            if( aOldRect.HasArea() )
-            {
-                // #i34640# - determine correct page frame
-                SwPageFrame* pOldPageFrame = const_cast<SwPageFrame*>(static_cast<const SwPageFrame*>(::FindPage( aOldRect, pPageFrame )));
-                ::Notify_Background( &_rObj, pOldPageFrame, aOldRect,
-                                     PrepareHint::FlyFrameLeave, true);
-            }
+            // #i34640# - determine correct page frame
+            SwPageFrame* pOldPageFrame = const_cast<SwPageFrame*>(static_cast<const SwPageFrame*>(::FindPage( aOldRect, pPageFrame )));
+            ::Notify_Background( &_rObj, pOldPageFrame, aOldRect,
+                                 PrepareHint::FlyFrameLeave, true);
         }
-        // #i34640# - include spacing for wrapping
-        SwRect aNewRect( pAnchoredObj->GetObjRectWithSpaces() );
-        if( aNewRect.HasArea() && pPageFrame )
-        {
-            pPageFrame = const_cast<SwPageFrame*>(static_cast<const SwPageFrame*>(::FindPage( aNewRect, pPageFrame )));
-            ::Notify_Background( &_rObj, pPageFrame, aNewRect,
-                                 PrepareHint::FlyFrameArrive, true );
-        }
-        ClrContourCache( &_rObj );
     }
+    // #i34640# - include spacing for wrapping
+    SwRect aNewRect( pAnchoredObj->GetObjRectWithSpaces() );
+    if( aNewRect.HasArea() && pPageFrame )
+    {
+        pPageFrame = const_cast<SwPageFrame*>(static_cast<const SwPageFrame*>(::FindPage( aNewRect, pPageFrame )));
+        ::Notify_Background( &_rObj, pPageFrame, aNewRect,
+                             PrepareHint::FlyFrameArrive, true );
+    }
+    ClrContourCache( &_rObj );
 }
 
 void SwDrawContact::Changed( const SdrObject& rObj,
@@ -1032,32 +1032,32 @@ class NestedUserCallHdl
 
         void AssertNestedUserCall()
         {
-            if ( IsNestedUserCall() )
-            {
-                bool bTmpAssert( true );
-                // Currently its known, that a nested event SdrUserCallType::Resize
-                // could occur during parent user call SdrUserCallType::Inserted,
-                // SdrUserCallType::Delete and SdrUserCallType::Resize for edge objects.
-                // Also possible are nested SdrUserCallType::ChildResize events for
-                // edge objects
-                // Thus, assert all other combinations
-                if ( ( meParentUserCallEventType == SdrUserCallType::Inserted ||
-                       meParentUserCallEventType == SdrUserCallType::Delete ||
-                       meParentUserCallEventType == SdrUserCallType::Resize ) &&
-                     mpDrawContact->meEventTypeOfCurrentUserCall == SdrUserCallType::Resize )
-                {
-                    bTmpAssert = false;
-                }
-                else if ( meParentUserCallEventType == SdrUserCallType::ChildResize &&
-                          mpDrawContact->meEventTypeOfCurrentUserCall == SdrUserCallType::ChildResize )
-                {
-                    bTmpAssert = false;
-                }
+            if ( !IsNestedUserCall() )
+                return;
 
-                if ( bTmpAssert )
-                {
-                    OSL_FAIL( "<SwDrawContact::Changed_(..)> - unknown nested <UserCall> event. This is serious." );
-                }
+            bool bTmpAssert( true );
+            // Currently its known, that a nested event SdrUserCallType::Resize
+            // could occur during parent user call SdrUserCallType::Inserted,
+            // SdrUserCallType::Delete and SdrUserCallType::Resize for edge objects.
+            // Also possible are nested SdrUserCallType::ChildResize events for
+            // edge objects
+            // Thus, assert all other combinations
+            if ( ( meParentUserCallEventType == SdrUserCallType::Inserted ||
+                   meParentUserCallEventType == SdrUserCallType::Delete ||
+                   meParentUserCallEventType == SdrUserCallType::Resize ) &&
+                 mpDrawContact->meEventTypeOfCurrentUserCall == SdrUserCallType::Resize )
+            {
+                bTmpAssert = false;
+            }
+            else if ( meParentUserCallEventType == SdrUserCallType::ChildResize &&
+                      mpDrawContact->meEventTypeOfCurrentUserCall == SdrUserCallType::ChildResize )
+            {
+                bTmpAssert = false;
+            }
+
+            if ( bTmpAssert )
+            {
+                OSL_FAIL( "<SwDrawContact::Changed_(..)> - unknown nested <UserCall> event. This is serious." );
             }
         }
 };
@@ -1935,23 +1935,23 @@ void SwDrawContact::ChkPage()
                        maAnchoredDrawObj.GetAnchorFrame()->IsPageFrame() )
                      ? GetPageFrame()
                      : FindPage( GetMaster()->GetCurrentBoundRect() );
-    if ( GetPageFrame() != pPg )
+    if ( GetPageFrame() == pPg )
+        return;
+
+    // if drawing object is anchor in header/footer a change of the page
+    // is a dramatic change. Thus, completely re-connect to the layout
+    if ( maAnchoredDrawObj.GetAnchorFrame() &&
+         maAnchoredDrawObj.GetAnchorFrame()->FindFooterOrHeader() )
     {
-        // if drawing object is anchor in header/footer a change of the page
-        // is a dramatic change. Thus, completely re-connect to the layout
-        if ( maAnchoredDrawObj.GetAnchorFrame() &&
-             maAnchoredDrawObj.GetAnchorFrame()->FindFooterOrHeader() )
-        {
-            ConnectToLayout();
-        }
-        else
-        {
-            // --> #i28701# - use methods <GetPageFrame()> and <SetPageFrame>
-            if ( GetPageFrame() )
-                GetPageFrame()->RemoveDrawObjFromPage( maAnchoredDrawObj );
-            pPg->AppendDrawObjToPage( maAnchoredDrawObj );
-            maAnchoredDrawObj.SetPageFrame( pPg );
-        }
+        ConnectToLayout();
+    }
+    else
+    {
+        // --> #i28701# - use methods <GetPageFrame()> and <SetPageFrame>
+        if ( GetPageFrame() )
+            GetPageFrame()->RemoveDrawObjFromPage( maAnchoredDrawObj );
+        pPg->AppendDrawObjToPage( maAnchoredDrawObj );
+        maAnchoredDrawObj.SetPageFrame( pPg );
     }
 }
 

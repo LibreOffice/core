@@ -648,43 +648,43 @@ void SwDontExpandItem::SaveDontExpandItems( const SwPosition& rPos )
 void SwDontExpandItem::RestoreDontExpandItems( const SwPosition& rPos )
 {
     SwTextNode* pTextNd = rPos.nNode.GetNode().GetTextNode();
-    if( pTextNd )
+    if( !pTextNd )
+        return;
+
+    const sal_Int32 nStart = rPos.nContent.GetIndex();
+    if( nStart == pTextNd->GetText().getLength() )
+        pTextNd->FormatToTextAttr( pTextNd );
+
+    if( !(pTextNd->GetpSwpHints() && pTextNd->GetpSwpHints()->Count()) )
+        return;
+
+    const size_t nSize = pTextNd->GetpSwpHints()->Count();
+    sal_Int32 nAttrStart;
+
+    for( size_t n = 0; n < nSize; ++n )
     {
-        const sal_Int32 nStart = rPos.nContent.GetIndex();
-        if( nStart == pTextNd->GetText().getLength() )
-            pTextNd->FormatToTextAttr( pTextNd );
+        SwTextAttr* pHt = pTextNd->GetpSwpHints()->Get( n );
+        nAttrStart = pHt->GetStart();
+        if( nAttrStart > nStart )       // beyond the area
+            break;
 
-        if( pTextNd->GetpSwpHints() && pTextNd->GetpSwpHints()->Count() )
+        const sal_Int32* pAttrEnd;
+        if( nullptr != ( pAttrEnd = pHt->End() ) &&
+            ( ( nAttrStart < nStart &&
+                ( pHt->DontExpand() ? nStart < *pAttrEnd
+                                    : nStart <= *pAttrEnd )) ||
+              ( nStart == nAttrStart &&
+                ( nAttrStart == *pAttrEnd || !nStart ))) )
         {
-            const size_t nSize = pTextNd->GetpSwpHints()->Count();
-            sal_Int32 nAttrStart;
-
-            for( size_t n = 0; n < nSize; ++n )
+            const SfxPoolItem* pItem;
+            if( !m_pDontExpandItems || SfxItemState::SET != m_pDontExpandItems->
+                GetItemState( pHt->Which(), false, &pItem ) ||
+                *pItem != pHt->GetAttr() )
             {
-                SwTextAttr* pHt = pTextNd->GetpSwpHints()->Get( n );
-                nAttrStart = pHt->GetStart();
-                if( nAttrStart > nStart )       // beyond the area
-                    break;
-
-                const sal_Int32* pAttrEnd;
-                if( nullptr != ( pAttrEnd = pHt->End() ) &&
-                    ( ( nAttrStart < nStart &&
-                        ( pHt->DontExpand() ? nStart < *pAttrEnd
-                                            : nStart <= *pAttrEnd )) ||
-                      ( nStart == nAttrStart &&
-                        ( nAttrStart == *pAttrEnd || !nStart ))) )
-                {
-                    const SfxPoolItem* pItem;
-                    if( !m_pDontExpandItems || SfxItemState::SET != m_pDontExpandItems->
-                        GetItemState( pHt->Which(), false, &pItem ) ||
-                        *pItem != pHt->GetAttr() )
-                    {
-                        // The attribute was not previously set in this form in the
-                        // paragraph, so it can only be created through insert/copy
-                        // Because of that it is a candidate for DontExpand
-                        pHt->SetDontExpand( true );
-                    }
-                }
+                // The attribute was not previously set in this form in the
+                // paragraph, so it can only be created through insert/copy
+                // Because of that it is a candidate for DontExpand
+                pHt->SetDontExpand( true );
             }
         }
     }

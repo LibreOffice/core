@@ -2249,39 +2249,39 @@ void SwEditShell::FillByEx(SwTextFormatColl* pColl)
         pCnt = sw::GetParaPropsNode(*GetLayout(), pCursor->GetPoint()->nNode);
     }
     const SfxItemSet* pSet = pCnt->GetpSwAttrSet();
-    if( pSet )
-    {
-        // JP 05.10.98: Special treatment if one of the attributes Break/PageDesc/NumRule(auto) is
-        //      in the ItemSet. Otherwise there will be too much or wrong processing (NumRules!)
-        //      Bug 57568
+    if( !pSet )
+        return;
 
-        // Do NOT copy AutoNumRules into the template
-        const SfxPoolItem* pItem;
-        const SwNumRule* pRule = nullptr;
-        if (SfxItemState::SET == pSet->GetItemState(RES_BREAK, false)
-            || SfxItemState::SET == pSet->GetItemState(RES_PAGEDESC, false)
+    // JP 05.10.98: Special treatment if one of the attributes Break/PageDesc/NumRule(auto) is
+    //      in the ItemSet. Otherwise there will be too much or wrong processing (NumRules!)
+    //      Bug 57568
+
+    // Do NOT copy AutoNumRules into the template
+    const SfxPoolItem* pItem;
+    const SwNumRule* pRule = nullptr;
+    if (SfxItemState::SET == pSet->GetItemState(RES_BREAK, false)
+        || SfxItemState::SET == pSet->GetItemState(RES_PAGEDESC, false)
+        || (SfxItemState::SET == pSet->GetItemState(RES_PARATR_NUMRULE, false, &pItem)
+            && nullptr != (pRule = GetDoc()->FindNumRulePtr(
+                    static_cast<const SwNumRuleItem*>(pItem)->GetValue()))
+            && pRule->IsAutoRule()))
+    {
+        SfxItemSet aSet( *pSet );
+        aSet.ClearItem( RES_BREAK );
+        aSet.ClearItem( RES_PAGEDESC );
+
+        if (pRule
             || (SfxItemState::SET == pSet->GetItemState(RES_PARATR_NUMRULE, false, &pItem)
                 && nullptr != (pRule = GetDoc()->FindNumRulePtr(
                         static_cast<const SwNumRuleItem*>(pItem)->GetValue()))
                 && pRule->IsAutoRule()))
-        {
-            SfxItemSet aSet( *pSet );
-            aSet.ClearItem( RES_BREAK );
-            aSet.ClearItem( RES_PAGEDESC );
+            aSet.ClearItem( RES_PARATR_NUMRULE );
 
-            if (pRule
-                || (SfxItemState::SET == pSet->GetItemState(RES_PARATR_NUMRULE, false, &pItem)
-                    && nullptr != (pRule = GetDoc()->FindNumRulePtr(
-                            static_cast<const SwNumRuleItem*>(pItem)->GetValue()))
-                    && pRule->IsAutoRule()))
-                aSet.ClearItem( RES_PARATR_NUMRULE );
-
-            if( aSet.Count() )
-                GetDoc()->ChgFormat(*pColl, aSet );
-        }
-        else
-            GetDoc()->ChgFormat(*pColl, *pSet );
+        if( aSet.Count() )
+            GetDoc()->ChgFormat(*pColl, aSet );
     }
+    else
+        GetDoc()->ChgFormat(*pColl, *pSet );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

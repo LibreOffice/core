@@ -222,25 +222,25 @@ static void lcl_SelectSdrMarkList( SwEditShell* pShell,
     OSL_ENSURE( pShell != nullptr, "need shell!" );
     OSL_ENSURE( pSdrMarkList != nullptr, "need mark list" );
 
-    if( dynamic_cast<const SwFEShell*>( pShell) !=  nullptr )
-    {
-        SwFEShell* pFEShell = static_cast<SwFEShell*>( pShell );
-        bool bFirst = true;
-        for( size_t i = 0; i < pSdrMarkList->GetMarkCount(); ++i )
-        {
-            SdrObject *pObj = pSdrMarkList->GetMark( i )->GetMarkedSdrObj();
-            if( pObj )
-            {
-                pFEShell->SelectObj( Point(), bFirst ? 0 : SW_ADD_SELECT, pObj );
-                bFirst = false;
-            }
-        }
+    if( dynamic_cast<const SwFEShell*>( pShell) ==  nullptr )
+        return;
 
-        // the old implementation would always unselect
-        // objects, even if no new ones were selected. If this
-        // is a problem, we need to re-work this a little.
-        OSL_ENSURE( pSdrMarkList->GetMarkCount() != 0, "empty mark list" );
+    SwFEShell* pFEShell = static_cast<SwFEShell*>( pShell );
+    bool bFirst = true;
+    for( size_t i = 0; i < pSdrMarkList->GetMarkCount(); ++i )
+    {
+        SdrObject *pObj = pSdrMarkList->GetMark( i )->GetMarkedSdrObj();
+        if( pObj )
+        {
+            pFEShell->SelectObj( Point(), bFirst ? 0 : SW_ADD_SELECT, pObj );
+            bFirst = false;
+        }
     }
+
+    // the old implementation would always unselect
+    // objects, even if no new ones were selected. If this
+    // is a problem, we need to re-work this a little.
+    OSL_ENSURE( pSdrMarkList->GetMarkCount() != 0, "empty mark list" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -397,25 +397,25 @@ void SwEditShell::DoSpecialInsert()
     // get current node
     SwPosition* pCursorPos = GetCursor()->GetPoint();
     const SwNode* pInsertNode = lcl_SpecialInsertNode( pCursorPos );
-    if( pInsertNode != nullptr )
-    {
-        StartAllAction();
+    if( pInsertNode == nullptr )
+        return;
 
-        // adjust insert position to insert before start nodes and after end
-        // nodes
-        SwNodeIndex aInsertIndex( *pInsertNode,
-                                  pInsertNode->IsStartNode() ? -1 : 0 );
-        SwPosition aInsertPos( aInsertIndex );
+    StartAllAction();
 
-        // insert a new text node, and set the cursor
-        GetDoc()->getIDocumentContentOperations().AppendTextNode( aInsertPos );
-        *pCursorPos = aInsertPos;
+    // adjust insert position to insert before start nodes and after end
+    // nodes
+    SwNodeIndex aInsertIndex( *pInsertNode,
+                              pInsertNode->IsStartNode() ? -1 : 0 );
+    SwPosition aInsertPos( aInsertIndex );
 
-        // call AttrChangeNotify for the UI
-        CallChgLnk();
+    // insert a new text node, and set the cursor
+    GetDoc()->getIDocumentContentOperations().AppendTextNode( aInsertPos );
+    *pCursorPos = aInsertPos;
 
-        EndAllAction();
-    }
+    // call AttrChangeNotify for the UI
+    CallChgLnk();
+
+    EndAllAction();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
