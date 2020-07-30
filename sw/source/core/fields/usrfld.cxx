@@ -281,27 +281,27 @@ OUString SwUserFieldType::GetContent( sal_uInt32 nFormat )
 
 void SwUserFieldType::SetContent( const OUString& rStr, sal_uInt32 nFormat )
 {
-    if( m_aContent != rStr )
+    if( m_aContent == rStr )
+        return;
+
+    m_aContent = rStr;
+
+    if (nFormat && nFormat != SAL_MAX_UINT32)
     {
-        m_aContent = rStr;
+        double fValue;
 
-        if (nFormat && nFormat != SAL_MAX_UINT32)
+        if (GetDoc()->IsNumberFormat(rStr, nFormat, fValue))
         {
-            double fValue;
-
-            if (GetDoc()->IsNumberFormat(rStr, nFormat, fValue))
-            {
-                SetValue(fValue);
-                m_aContent = DoubleToString(fValue, nFormat);
-            }
+            SetValue(fValue);
+            m_aContent = DoubleToString(fValue, nFormat);
         }
+    }
 
-        bool bModified = GetDoc()->getIDocumentState().IsModified();
-        GetDoc()->getIDocumentState().SetModified();
-        if( !bModified )    // Bug 57028
-        {
-            GetDoc()->GetIDocumentUndoRedo().SetUndoNoResetModified();
-        }
+    bool bModified = GetDoc()->getIDocumentState().IsModified();
+    GetDoc()->getIDocumentState().SetModified();
+    if( !bModified )    // Bug 57028
+    {
+        GetDoc()->GetIDocumentUndoRedo().SetUndoNoResetModified();
     }
 }
 

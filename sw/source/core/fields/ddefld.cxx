@@ -308,23 +308,23 @@ void SwDDEFieldType::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
     default:
         assert(false);
     }
-    if( nPart>=0 )
+    if( nPart<0 )
+        return;
+
+    const OUString sOldCmd( GetCmd() );
+    OUStringBuffer sNewCmd;
+    sal_Int32 nIndex = 0;
+    for (sal_Int32 i=0; i<3; ++i)
     {
-        const OUString sOldCmd( GetCmd() );
-        OUStringBuffer sNewCmd;
-        sal_Int32 nIndex = 0;
-        for (sal_Int32 i=0; i<3; ++i)
+        OUString sToken = sOldCmd.getToken(0, sfx2::cTokenSeparator, nIndex);
+        if (i==nPart)
         {
-            OUString sToken = sOldCmd.getToken(0, sfx2::cTokenSeparator, nIndex);
-            if (i==nPart)
-            {
-                rVal >>= sToken;
-            }
-            sNewCmd.append((i < 2)
-                ? sToken + OUStringChar(sfx2::cTokenSeparator) : sToken);
+            rVal >>= sToken;
         }
-        SetCmd( sNewCmd.makeStringAndClear() );
+        sNewCmd.append((i < 2)
+            ? sToken + OUStringChar(sfx2::cTokenSeparator) : sToken);
     }
+    SetCmd( sNewCmd.makeStringAndClear() );
 }
 
 SwDDEField::SwDDEField( SwDDEFieldType* pInitType )

@@ -640,26 +640,26 @@ void SwSetExpFieldType::SetChapter(SwSetExpField& rField, const SwNode& rNd,
         SwRootFrame const*const pLayout)
 {
     const SwTextNode* pTextNd = rNd.FindOutlineNodeOfLevel(m_nLevel, pLayout);
-    if( pTextNd )
+    if( !pTextNd )
+        return;
+
+    SwNumRule * pRule = pTextNd->GetNumRule();
+
+    if (!pRule)
+        return;
+
+    // --> OD 2005-11-02 #i51089 - TUNING#
+    if (SwNodeNum const*const pNum = pTextNd->GetNum(pLayout))
     {
-        SwNumRule * pRule = pTextNd->GetNumRule();
+        // only get the number, without pre-/post-fixstrings
+        OUString const sNumber(pRule->MakeNumString(*pNum, false));
 
-        if (pRule)
-        {
-            // --> OD 2005-11-02 #i51089 - TUNING#
-            if (SwNodeNum const*const pNum = pTextNd->GetNum(pLayout))
-            {
-                // only get the number, without pre-/post-fixstrings
-                OUString const sNumber(pRule->MakeNumString(*pNum, false));
-
-                if( !sNumber.isEmpty() )
-                    rField.ChgExpStr(sNumber + m_sDelim + rField.GetExpStr(pLayout), pLayout);
-            }
-            else
-            {
-                OSL_ENSURE(pTextNd->GetNum(nullptr), "<SwSetExpFieldType::SetChapter(..)> - text node with numbering rule, but without number. This is a serious defect");
-            }
-        }
+        if( !sNumber.isEmpty() )
+            rField.ChgExpStr(sNumber + m_sDelim + rField.GetExpStr(pLayout), pLayout);
+    }
+    else
+    {
+        OSL_ENSURE(pTextNd->GetNum(nullptr), "<SwSetExpFieldType::SetChapter(..)> - text node with numbering rule, but without number. This is a serious defect");
     }
 }
 
@@ -912,18 +912,18 @@ void SwSetExpField::SetValue(const double& rValue, SwRootFrame const*const pLayo
     {
         SetValue(rValue);
     }
-    if (!pLayout || pLayout->IsHideRedlines())
+    if (!(!pLayout || pLayout->IsHideRedlines()))
+        return;
+
+    m_fValueRLHidden = rValue;
+    if (IsSequenceField())
     {
-        m_fValueRLHidden = rValue;
-        if (IsSequenceField())
-        {
-            msExpandRLHidden = FormatNumber(rValue, static_cast<SvxNumType>(GetFormat()), GetLanguage());
-        }
-        else
-        {
-            msExpandRLHidden = static_cast<SwValueFieldType*>(GetTyp())->ExpandValue(
-                    rValue, GetFormat(), GetLanguage());
-        }
+        msExpandRLHidden = FormatNumber(rValue, static_cast<SvxNumType>(GetFormat()), GetLanguage());
+    }
+    else
+    {
+        msExpandRLHidden = static_cast<SwValueFieldType*>(GetTyp())->ExpandValue(
+                rValue, GetFormat(), GetLanguage());
     }
 }
 

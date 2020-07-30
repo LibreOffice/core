@@ -946,42 +946,42 @@ void SwTableFormula::GetBoxes( const SwTableBox& rSttBox,
     const SwTable* pTable = pStt->FindTabFrame()->GetTable();
 
     // filter headline boxes
-    if( pTable->GetRowsToRepeat() > 0 )
-    {
-        do {    // middle-check loop
-            const SwTableLine* pLine = rSttBox.GetUpper();
+    if( pTable->GetRowsToRepeat() <= 0 )
+        return;
+
+    do {    // middle-check loop
+        const SwTableLine* pLine = rSttBox.GetUpper();
+        while( pLine->GetUpper() )
+            pLine = pLine->GetUpper()->GetUpper();
+
+        if( pTable->IsHeadline( *pLine ) )
+            break;      // headline in this area!
+
+        // maybe start and end are swapped
+        pLine = rEndBox.GetUpper();
+        while ( pLine->GetUpper() )
+            pLine = pLine->GetUpper()->GetUpper();
+
+        if( pTable->IsHeadline( *pLine ) )
+            break;      // headline in this area!
+
+        const SwTabFrame *pStartTable = pStt->FindTabFrame();
+        const SwTabFrame *pEndTable = pEnd->FindTabFrame();
+
+        if (pStartTable == pEndTable) // no split table
+            break;
+
+        // then remove table headers
+        for (size_t n = 0; n < rBoxes.size(); ++n)
+        {
+            pLine = rBoxes[n]->GetUpper();
             while( pLine->GetUpper() )
                 pLine = pLine->GetUpper()->GetUpper();
 
             if( pTable->IsHeadline( *pLine ) )
-                break;      // headline in this area!
-
-            // maybe start and end are swapped
-            pLine = rEndBox.GetUpper();
-            while ( pLine->GetUpper() )
-                pLine = pLine->GetUpper()->GetUpper();
-
-            if( pTable->IsHeadline( *pLine ) )
-                break;      // headline in this area!
-
-            const SwTabFrame *pStartTable = pStt->FindTabFrame();
-            const SwTabFrame *pEndTable = pEnd->FindTabFrame();
-
-            if (pStartTable == pEndTable) // no split table
-                break;
-
-            // then remove table headers
-            for (size_t n = 0; n < rBoxes.size(); ++n)
-            {
-                pLine = rBoxes[n]->GetUpper();
-                while( pLine->GetUpper() )
-                    pLine = pLine->GetUpper()->GetUpper();
-
-                if( pTable->IsHeadline( *pLine ) )
-                    rBoxes.erase( rBoxes.begin() + n-- );
-            }
-        } while( false );
-    }
+                rBoxes.erase( rBoxes.begin() + n-- );
+        }
+    } while( false );
 }
 
 /// Are all boxes valid that are referenced by the formula?
@@ -989,48 +989,48 @@ void SwTableFormula::HasValidBoxes_( const SwTable& rTable, OUStringBuffer& ,
                     OUString& rFirstBox, OUString* pLastBox, void* pPara ) const
 {
     bool* pBValid = static_cast<bool*>(pPara);
-    if( *pBValid )      // wrong is wrong
+    if( !(*pBValid) )      // wrong is wrong
+        return;
+
+    SwTableBox* pSttBox = nullptr, *pEndBox = nullptr;
+    rFirstBox = rFirstBox.copy(1);       // delete identifier of box
+
+    // area in this parenthesis?
+    if( pLastBox )
+        rFirstBox = rFirstBox.copy( pLastBox->getLength()+1 );
+
+    switch (m_eNmType)
     {
-        SwTableBox* pSttBox = nullptr, *pEndBox = nullptr;
-        rFirstBox = rFirstBox.copy(1);       // delete identifier of box
-
-        // area in this parenthesis?
+    case INTRNL_NAME:
         if( pLastBox )
-            rFirstBox = rFirstBox.copy( pLastBox->getLength()+1 );
+            pEndBox = reinterpret_cast<SwTableBox*>(sal::static_int_cast<sal_IntPtr>(pLastBox->toInt64()));
+        pSttBox = reinterpret_cast<SwTableBox*>(sal::static_int_cast<sal_IntPtr>(rFirstBox.toInt64()));
+        break;
 
-        switch (m_eNmType)
+    case REL_NAME:
         {
-        case INTRNL_NAME:
+            const SwNode* pNd = GetNodeOfFormula();
+            const SwTableBox* pBox = !pNd ? nullptr
+                                           : const_cast<SwTableBox *>(rTable.GetTableBox(
+                                pNd->FindTableBoxStartNode()->GetIndex() ));
             if( pLastBox )
-                pEndBox = reinterpret_cast<SwTableBox*>(sal::static_int_cast<sal_IntPtr>(pLastBox->toInt64()));
-            pSttBox = reinterpret_cast<SwTableBox*>(sal::static_int_cast<sal_IntPtr>(rFirstBox.toInt64()));
-            break;
-
-        case REL_NAME:
-            {
-                const SwNode* pNd = GetNodeOfFormula();
-                const SwTableBox* pBox = !pNd ? nullptr
-                                               : const_cast<SwTableBox *>(rTable.GetTableBox(
-                                    pNd->FindTableBoxStartNode()->GetIndex() ));
-                if( pLastBox )
-                    pEndBox = const_cast<SwTableBox*>(lcl_RelToBox( rTable, pBox, *pLastBox ));
-                pSttBox = const_cast<SwTableBox*>(lcl_RelToBox( rTable, pBox, rFirstBox ));
-            }
-            break;
-
-        case EXTRNL_NAME:
-            if( pLastBox )
-                pEndBox = const_cast<SwTableBox*>(rTable.GetTableBox( *pLastBox ));
-            pSttBox = const_cast<SwTableBox*>(rTable.GetTableBox( rFirstBox ));
-            break;
+                pEndBox = const_cast<SwTableBox*>(lcl_RelToBox( rTable, pBox, *pLastBox ));
+            pSttBox = const_cast<SwTableBox*>(lcl_RelToBox( rTable, pBox, rFirstBox ));
         }
+        break;
 
-        // Are these valid pointers?
-        if( ( pLastBox &&
-              ( !pEndBox || rTable.GetTabSortBoxes().find( pEndBox ) == rTable.GetTabSortBoxes().end() ) ) ||
-            ( !pSttBox || rTable.GetTabSortBoxes().find( pSttBox ) == rTable.GetTabSortBoxes().end() ) )
-                *pBValid = false;
+    case EXTRNL_NAME:
+        if( pLastBox )
+            pEndBox = const_cast<SwTableBox*>(rTable.GetTableBox( *pLastBox ));
+        pSttBox = const_cast<SwTableBox*>(rTable.GetTableBox( rFirstBox ));
+        break;
     }
+
+    // Are these valid pointers?
+    if( ( pLastBox &&
+          ( !pEndBox || rTable.GetTabSortBoxes().find( pEndBox ) == rTable.GetTabSortBoxes().end() ) ) ||
+        ( !pSttBox || rTable.GetTabSortBoxes().find( pSttBox ) == rTable.GetTabSortBoxes().end() ) )
+            *pBValid = false;
 }
 
 bool SwTableFormula::HasValidBoxes() const

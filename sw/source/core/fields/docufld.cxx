@@ -133,30 +133,30 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc,
         m_nNumberingType = *pNumFormat;
 
     m_bVirtual = false;
-    if (bVirt && pDoc)
+    if (!(bVirt && pDoc))
+        return;
+
+    // check the flag since the layout NEVER sets it back
+    const SfxItemPool &rPool = pDoc->GetAttrPool();
+    for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(RES_PAGEDESC))
     {
-        // check the flag since the layout NEVER sets it back
-        const SfxItemPool &rPool = pDoc->GetAttrPool();
-        for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(RES_PAGEDESC))
+        auto pDesc = dynamic_cast<const SwFormatPageDesc*>(pItem);
+        if( pDesc && pDesc->GetNumOffset() && pDesc->GetDefinedIn() )
         {
-            auto pDesc = dynamic_cast<const SwFormatPageDesc*>(pItem);
-            if( pDesc && pDesc->GetNumOffset() && pDesc->GetDefinedIn() )
+            const SwContentNode* pNd = dynamic_cast<const SwContentNode*>( pDesc->GetDefinedIn()  );
+            if( pNd )
             {
-                const SwContentNode* pNd = dynamic_cast<const SwContentNode*>( pDesc->GetDefinedIn()  );
-                if( pNd )
-                {
-                    if (SwIterator<SwFrame, SwContentNode, sw::IteratorMode::UnwrapMulti>(*pNd).First())
-                    // sw_redlinehide: not sure if this should happen only if
-                    // it's the first node, because that's where RES_PAGEDESC
-                    // is effective?
-                        m_bVirtual = true;
-                }
-                else if( dynamic_cast< const SwFormat* >(pDesc->GetDefinedIn()) !=  nullptr)
-                {
-                    SwAutoFormatGetDocNode aGetHt( &pDoc->GetNodes() );
-                    m_bVirtual = !pDesc->GetDefinedIn()->GetInfo( aGetHt );
-                    break;
-                }
+                if (SwIterator<SwFrame, SwContentNode, sw::IteratorMode::UnwrapMulti>(*pNd).First())
+                // sw_redlinehide: not sure if this should happen only if
+                // it's the first node, because that's where RES_PAGEDESC
+                // is effective?
+                    m_bVirtual = true;
+            }
+            else if( dynamic_cast< const SwFormat* >(pDesc->GetDefinedIn()) !=  nullptr)
+            {
+                SwAutoFormatGetDocNode aGetHt( &pDoc->GetNodes() );
+                m_bVirtual = !pDesc->GetDefinedIn()->GetInfo( aGetHt );
+                break;
             }
         }
     }
@@ -1323,56 +1323,56 @@ void SwHiddenTextField::Evaluate(SwDoc* pDoc)
 {
     OSL_ENSURE(pDoc, "got no document");
 
-    if( SwFieldTypesEnum::ConditionalText == m_nSubType )
-    {
-#if !HAVE_FEATURE_DBCONNECTIVITY
-        (void) pDoc;
-#else
-        SwDBManager* pMgr = pDoc->GetDBManager();
-#endif
-        m_bValid = false;
-        OUString sTmpName = (m_bCanToggle && !m_bIsHidden) ? m_aTRUEText : m_aFALSEText;
+    if( SwFieldTypesEnum::ConditionalText != m_nSubType )
+        return;
 
-        // Database expressions need to be different from normal text. Therefore, normal text is set
-        // in quotes. If the latter exist they will be removed. If not, check if potential DB name.
-        // Only if there are two or more dots and no quotes, we assume a database.
-        if (sTmpName.getLength()>1 &&
-            sTmpName.startsWith("\"") &&
-            sTmpName.endsWith("\""))
-        {
-            m_aContent = sTmpName.copy(1, sTmpName.getLength() - 2);
-            m_bValid = true;
-        }
-        else if(sTmpName.indexOf('\"')<0 &&
-            comphelper::string::getTokenCount(sTmpName, '.') > 2)
-        {
-            sTmpName = ::ReplacePoint(sTmpName);
-            if(sTmpName.startsWith("[") && sTmpName.endsWith("]"))
-            {   // remove brackets
-                sTmpName = sTmpName.copy(1, sTmpName.getLength() - 2);
-            }
-#if HAVE_FEATURE_DBCONNECTIVITY
-            if( pMgr)
-            {
-                sal_Int32 nIdx{ 0 };
-                OUString sDBName( GetDBName( sTmpName, pDoc ));
-                OUString sDataSource(sDBName.getToken(0, DB_DELIM, nIdx));
-                OUString sDataTableOrQuery(sDBName.getToken(0, DB_DELIM, nIdx));
-                if( pMgr->IsInMerge() && !sDBName.isEmpty() &&
-                    pMgr->IsDataSourceOpen( sDataSource,
-                                                sDataTableOrQuery, false))
-                {
-                    double fNumber;
-                    pMgr->GetMergeColumnCnt(GetColumnName( sTmpName ),
-                        GetLanguage(), m_aContent, &fNumber );
-                    m_bValid = true;
-                }
-                else if( !sDBName.isEmpty() && !sDataSource.isEmpty() &&
-                         !sDataTableOrQuery.isEmpty() )
-                    m_bValid = true;
-            }
+#if !HAVE_FEATURE_DBCONNECTIVITY
+    (void) pDoc;
+#else
+    SwDBManager* pMgr = pDoc->GetDBManager();
 #endif
+    m_bValid = false;
+    OUString sTmpName = (m_bCanToggle && !m_bIsHidden) ? m_aTRUEText : m_aFALSEText;
+
+    // Database expressions need to be different from normal text. Therefore, normal text is set
+    // in quotes. If the latter exist they will be removed. If not, check if potential DB name.
+    // Only if there are two or more dots and no quotes, we assume a database.
+    if (sTmpName.getLength()>1 &&
+        sTmpName.startsWith("\"") &&
+        sTmpName.endsWith("\""))
+    {
+        m_aContent = sTmpName.copy(1, sTmpName.getLength() - 2);
+        m_bValid = true;
+    }
+    else if(sTmpName.indexOf('\"')<0 &&
+        comphelper::string::getTokenCount(sTmpName, '.') > 2)
+    {
+        sTmpName = ::ReplacePoint(sTmpName);
+        if(sTmpName.startsWith("[") && sTmpName.endsWith("]"))
+        {   // remove brackets
+            sTmpName = sTmpName.copy(1, sTmpName.getLength() - 2);
         }
+#if HAVE_FEATURE_DBCONNECTIVITY
+        if( pMgr)
+        {
+            sal_Int32 nIdx{ 0 };
+            OUString sDBName( GetDBName( sTmpName, pDoc ));
+            OUString sDataSource(sDBName.getToken(0, DB_DELIM, nIdx));
+            OUString sDataTableOrQuery(sDBName.getToken(0, DB_DELIM, nIdx));
+            if( pMgr->IsInMerge() && !sDBName.isEmpty() &&
+                pMgr->IsDataSourceOpen( sDataSource,
+                                            sDataTableOrQuery, false))
+            {
+                double fNumber;
+                pMgr->GetMergeColumnCnt(GetColumnName( sTmpName ),
+                    GetLanguage(), m_aContent, &fNumber );
+                m_bValid = true;
+            }
+            else if( !sDBName.isEmpty() && !sDataSource.isEmpty() &&
+                     !sDataTableOrQuery.isEmpty() )
+                m_bValid = true;
+        }
+#endif
     }
 }
 
@@ -2391,20 +2391,20 @@ void SwRefPageGetField::ChangeExpansion(const SwFrame& rFrame,
     std::pair<Point, bool> const tmp(aPt, false);
     const SwContentFrame *const pRefFrame = pRefTextField->GetTextNode().getLayoutFrame(
             &rLayout, nullptr, &tmp);
-    if( pSetField->IsOn() && pRefFrame )
-    {
-        // determine the correct offset
-        const SwPageFrame* pPgFrame = rFrame.FindPageFrame();
-        const short nDiff = pPgFrame->GetPhyPageNum() -
-                            pRefFrame->FindPageFrame()->GetPhyPageNum() + 1;
+    if( !(pSetField->IsOn() && pRefFrame) )
+        return;
 
-        SwRefPageGetField* pGetField = const_cast<SwRefPageGetField*>(static_cast<const SwRefPageGetField*>(pField->GetFormatField().GetField()));
-        SvxNumType nTmpFormat = SVX_NUM_PAGEDESC == pGetField->GetFormat()
-                            ? pPgFrame->GetPageDesc()->GetNumType().GetNumberingType()
-                            : static_cast<SvxNumType>(pGetField->GetFormat());
-        const short nPageNum = std::max<short>(0, pSetField->GetOffset() + nDiff);
-        pGetField->SetText(FormatNumber(nPageNum, nTmpFormat), &rLayout);
-    }
+    // determine the correct offset
+    const SwPageFrame* pPgFrame = rFrame.FindPageFrame();
+    const short nDiff = pPgFrame->GetPhyPageNum() -
+                        pRefFrame->FindPageFrame()->GetPhyPageNum() + 1;
+
+    SwRefPageGetField* pGetField = const_cast<SwRefPageGetField*>(static_cast<const SwRefPageGetField*>(pField->GetFormatField().GetField()));
+    SvxNumType nTmpFormat = SVX_NUM_PAGEDESC == pGetField->GetFormat()
+                        ? pPgFrame->GetPageDesc()->GetNumType().GetNumberingType()
+                        : static_cast<SvxNumType>(pGetField->GetFormat());
+    const short nPageNum = std::max<short>(0, pSetField->GetOffset() + nDiff);
+    pGetField->SetText(FormatNumber(nPageNum, nTmpFormat), &rLayout);
 }
 
 bool SwRefPageGetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const

@@ -154,69 +154,69 @@ void SwChapterField::ChangeExpansion(const SwTextNode &rTextNd, bool bSrchNum,
 
     SwDoc* pDoc = const_cast<SwDoc*>(rTextNd.GetDoc());
     const SwTextNode *pTextNd = rTextNd.FindOutlineNodeOfLevel(rState.nLevel, pLayout);
-    if( pTextNd )
+    if( !pTextNd )
+        return;
+
+    if( bSrchNum )
     {
-        if( bSrchNum )
-        {
-            const SwTextNode* pONd = pTextNd;
-            do {
-                if( pONd && pONd->GetTextColl() )
-                {
-                    sal_uInt8 nPrevLvl = rState.nLevel;
-
-                    OSL_ENSURE( pONd->GetAttrOutlineLevel() >= 0 && pONd->GetAttrOutlineLevel() <= MAXLEVEL,
-                            "<SwChapterField::ChangeExpansion(..)> - outline node with inconsistent outline level. Serious defect." );
-                    rState.nLevel = static_cast<sal_uInt8>(pONd->GetAttrOutlineLevel());
-
-                    if (nPrevLvl < rState.nLevel)
-                        rState.nLevel = nPrevLvl;
-                    else if( SVX_NUM_NUMBER_NONE != pDoc->GetOutlineNumRule()
-                            ->Get( rState.nLevel ).GetNumberingType() )
-                    {
-                        pTextNd = pONd;
-                        break;
-                    }
-
-                    if (!rState.nLevel--)
-                        break;
-                    pONd = pTextNd->FindOutlineNodeOfLevel(rState.nLevel, pLayout);
-                }
-                else
-                    break;
-            } while( true );
-        }
-
-        // get the number without Pre-/Post-fixstrings
-
-        if ( pTextNd->IsOutline() )
-        {
-            // correction of refactoring done by cws swnumtree:
-            // retrieve numbering string without prefix and suffix strings
-            // as stated in the above german comment.
-            rState.sNumber = pTextNd->GetNumString(false, MAXLEVEL, pLayout);
-
-            SwNumRule* pRule( pTextNd->GetNumRule() );
-            if ( pTextNd->IsCountedInList() && pRule )
+        const SwTextNode* pONd = pTextNd;
+        do {
+            if( pONd && pONd->GetTextColl() )
             {
-                int nListLevel = pTextNd->GetActualListLevel();
-                if (nListLevel < 0)
-                    nListLevel = 0;
-                if (nListLevel >= MAXLEVEL)
-                    nListLevel = MAXLEVEL - 1;
+                sal_uInt8 nPrevLvl = rState.nLevel;
 
-                const SwNumFormat& rNFormat = pRule->Get(nListLevel);
-                rState.sPost = rNFormat.GetSuffix();
-                rState.sPre = rNFormat.GetPrefix();
+                OSL_ENSURE( pONd->GetAttrOutlineLevel() >= 0 && pONd->GetAttrOutlineLevel() <= MAXLEVEL,
+                        "<SwChapterField::ChangeExpansion(..)> - outline node with inconsistent outline level. Serious defect." );
+                rState.nLevel = static_cast<sal_uInt8>(pONd->GetAttrOutlineLevel());
+
+                if (nPrevLvl < rState.nLevel)
+                    rState.nLevel = nPrevLvl;
+                else if( SVX_NUM_NUMBER_NONE != pDoc->GetOutlineNumRule()
+                        ->Get( rState.nLevel ).GetNumberingType() )
+                {
+                    pTextNd = pONd;
+                    break;
+                }
+
+                if (!rState.nLevel--)
+                    break;
+                pONd = pTextNd->FindOutlineNodeOfLevel(rState.nLevel, pLayout);
             }
-        }
-        else
-        {
-            rState.sNumber = "??";
-        }
-
-        rState.sTitle = removeControlChars(sw::GetExpandTextMerged(pLayout,
-                    *pTextNd, false, false, ExpandMode(0)));
+            else
+                break;
+        } while( true );
     }
+
+    // get the number without Pre-/Post-fixstrings
+
+    if ( pTextNd->IsOutline() )
+    {
+        // correction of refactoring done by cws swnumtree:
+        // retrieve numbering string without prefix and suffix strings
+        // as stated in the above german comment.
+        rState.sNumber = pTextNd->GetNumString(false, MAXLEVEL, pLayout);
+
+        SwNumRule* pRule( pTextNd->GetNumRule() );
+        if ( pTextNd->IsCountedInList() && pRule )
+        {
+            int nListLevel = pTextNd->GetActualListLevel();
+            if (nListLevel < 0)
+                nListLevel = 0;
+            if (nListLevel >= MAXLEVEL)
+                nListLevel = MAXLEVEL - 1;
+
+            const SwNumFormat& rNFormat = pRule->Get(nListLevel);
+            rState.sPost = rNFormat.GetSuffix();
+            rState.sPre = rNFormat.GetPrefix();
+        }
+    }
+    else
+    {
+        rState.sNumber = "??";
+    }
+
+    rState.sTitle = removeControlChars(sw::GetExpandTextMerged(pLayout,
+                *pTextNd, false, false, ExpandMode(0)));
 }
 
 bool SwChapterField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
