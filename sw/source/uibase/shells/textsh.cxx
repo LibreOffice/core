@@ -946,103 +946,103 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         return;
     }
 
-    if( !aChars.isEmpty() )
+    if( aChars.isEmpty() )
+        return;
+
+    rSh.StartAllAction();
+
+    // Delete selected content.
+    SwRewriter aRewriter;
+    aRewriter.AddRule(UndoArg1, SwResId(STR_SPECIALCHAR));
+
+    rSh.StartUndo( SwUndoId::INSERT, &aRewriter );
+    if ( rSh.HasSelection() )
     {
-        rSh.StartAllAction();
+        rSh.DelRight();
+        aSet.ClearItem();
+        rSh.GetCurAttr( aSet );
 
-        // Delete selected content.
-        SwRewriter aRewriter;
-        aRewriter.AddRule(UndoArg1, SwResId(STR_SPECIALCHAR));
-
-        rSh.StartUndo( SwUndoId::INSERT, &aRewriter );
-        if ( rSh.HasSelection() )
+        SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, *aSet.GetPool() );
+        aSetItem.GetItemSet().Put( aSet, false );
+        const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScript );
+        if( pI )
         {
-            rSh.DelRight();
-            aSet.ClearItem();
-            rSh.GetCurAttr( aSet );
+            aFont.reset(static_cast<SvxFontItem*>(pI->Clone()));
+        }
+        else
+        {
+            aFont.reset(static_cast<SvxFontItem*>(aSet.Get( GetWhichOfScript(
+                        RES_CHRATR_FONT,
+                        SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() ) )).Clone()));
+        }
+    }
 
-            SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, *aSet.GetPool() );
-            aSetItem.GetItemSet().Put( aSet, false );
-            const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScript );
-            if( pI )
-            {
-                aFont.reset(static_cast<SvxFontItem*>(pI->Clone()));
-            }
-            else
-            {
-                aFont.reset(static_cast<SvxFontItem*>(aSet.Get( GetWhichOfScript(
-                            RES_CHRATR_FONT,
-                            SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() ) )).Clone()));
-            }
+    // Insert character.
+    rSh.Insert( aChars );
+
+    // #108876# a font attribute has to be set always due to a guessed script type
+    if( !aNewFont.GetFamilyName().isEmpty() )
+    {
+        std::unique_ptr<SvxFontItem> aNewFontItem(aFont->Clone());
+        aNewFontItem->SetFamilyName( aNewFont.GetFamilyName() );
+        aNewFontItem->SetFamily(  aNewFont.GetFamilyType());
+        aNewFontItem->SetPitch(   aNewFont.GetPitch());
+        aNewFontItem->SetCharSet( aNewFont.GetCharSet() );
+
+        SfxItemSet aRestoreSet( GetPool(), svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONT,
+                                           RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT,
+                                           RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT>{} );
+
+        nScript = g_pBreakIt->GetAllScriptsOfText( aChars );
+        if( SvtScriptType::LATIN & nScript )
+        {
+            aRestoreSet.Put( aSet.Get( RES_CHRATR_FONT ) );
+            aNewFontItem->SetWhich(RES_CHRATR_FONT);
+            aSet.Put( *aNewFontItem );
+        }
+        if( SvtScriptType::ASIAN & nScript )
+        {
+            aRestoreSet.Put( aSet.Get( RES_CHRATR_CJK_FONT ) );
+            aNewFontItem->SetWhich(RES_CHRATR_CJK_FONT);
+            aSet.Put( *aNewFontItem );
+        }
+        if( SvtScriptType::COMPLEX & nScript )
+        {
+            aRestoreSet.Put( aSet.Get( RES_CHRATR_CTL_FONT ) );
+            aNewFontItem->SetWhich(RES_CHRATR_CTL_FONT);
+            aSet.Put( *aNewFontItem );
         }
 
-        // Insert character.
-        rSh.Insert( aChars );
+        rSh.SetMark();
+        rSh.ExtendSelection( false, aChars.getLength() );
+        rSh.SetAttrSet( aSet, SetAttrMode::DONTEXPAND | SetAttrMode::NOFORMATATTR );
+        if( !rSh.IsCursorPtAtEnd() )
+            rSh.SwapPam();
 
-        // #108876# a font attribute has to be set always due to a guessed script type
-        if( !aNewFont.GetFamilyName().isEmpty() )
-        {
-            std::unique_ptr<SvxFontItem> aNewFontItem(aFont->Clone());
-            aNewFontItem->SetFamilyName( aNewFont.GetFamilyName() );
-            aNewFontItem->SetFamily(  aNewFont.GetFamilyType());
-            aNewFontItem->SetPitch(   aNewFont.GetPitch());
-            aNewFontItem->SetCharSet( aNewFont.GetCharSet() );
+        rSh.ClearMark();
 
-            SfxItemSet aRestoreSet( GetPool(), svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONT,
-                                               RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT,
-                                               RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT>{} );
+        // #i75891#
+        // SETATTR_DONTEXPAND does not work if there are already hard attributes.
+        // Therefore we have to restore the font attributes.
+        rSh.SetMark();
+        rSh.SetAttrSet( aRestoreSet );
+        rSh.ClearMark();
 
-            nScript = g_pBreakIt->GetAllScriptsOfText( aChars );
-            if( SvtScriptType::LATIN & nScript )
-            {
-                aRestoreSet.Put( aSet.Get( RES_CHRATR_FONT ) );
-                aNewFontItem->SetWhich(RES_CHRATR_FONT);
-                aSet.Put( *aNewFontItem );
-            }
-            if( SvtScriptType::ASIAN & nScript )
-            {
-                aRestoreSet.Put( aSet.Get( RES_CHRATR_CJK_FONT ) );
-                aNewFontItem->SetWhich(RES_CHRATR_CJK_FONT);
-                aSet.Put( *aNewFontItem );
-            }
-            if( SvtScriptType::COMPLEX & nScript )
-            {
-                aRestoreSet.Put( aSet.Get( RES_CHRATR_CTL_FONT ) );
-                aNewFontItem->SetWhich(RES_CHRATR_CTL_FONT);
-                aSet.Put( *aNewFontItem );
-            }
+        rSh.UpdateAttr();
 
-            rSh.SetMark();
-            rSh.ExtendSelection( false, aChars.getLength() );
-            rSh.SetAttrSet( aSet, SetAttrMode::DONTEXPAND | SetAttrMode::NOFORMATATTR );
-            if( !rSh.IsCursorPtAtEnd() )
-                rSh.SwapPam();
+        // Why was this done? aFont is not used anymore below, we are not
+        // in a loop and it's a local variable...?
+        // aFont = aNewFontItem;
+    }
 
-            rSh.ClearMark();
+    rSh.EndAllAction();
+    rSh.EndUndo();
 
-            // #i75891#
-            // SETATTR_DONTEXPAND does not work if there are already hard attributes.
-            // Therefore we have to restore the font attributes.
-            rSh.SetMark();
-            rSh.SetAttrSet( aRestoreSet );
-            rSh.ClearMark();
-
-            rSh.UpdateAttr();
-
-            // Why was this done? aFont is not used anymore below, we are not
-            // in a loop and it's a local variable...?
-            // aFont = aNewFontItem;
-        }
-
-        rSh.EndAllAction();
-        rSh.EndUndo();
-
-        if ( !aChars.isEmpty() )
-        {
-            rReq.AppendItem( SfxStringItem( GetPool().GetWhich(SID_CHARMAP), aChars ) );
-            rReq.AppendItem( SfxStringItem( SID_ATTR_SPECIALCHAR, aNewFont.GetFamilyName() ) );
-            rReq.Done();
-        }
+    if ( !aChars.isEmpty() )
+    {
+        rReq.AppendItem( SfxStringItem( GetPool().GetWhich(SID_CHARMAP), aChars ) );
+        rReq.AppendItem( SfxStringItem( SID_ATTR_SPECIALCHAR, aNewFont.GetFamilyName() ) );
+        rReq.Done();
     }
 }
 

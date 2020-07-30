@@ -202,22 +202,22 @@ void SwDrawTextShell::ExecFormText(SfxRequest const & rReq)
 
     const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
 
-    if ( rMarkList.GetMarkCount() == 1 && rReq.GetArgs() )
+    if ( !(rMarkList.GetMarkCount() == 1 && rReq.GetArgs()) )
+        return;
+
+    const SfxItemSet& rSet = *rReq.GetArgs();
+
+    if ( pDrView->IsTextEdit() )
     {
-        const SfxItemSet& rSet = *rReq.GetArgs();
-
-        if ( pDrView->IsTextEdit() )
-        {
-            //#111733# Sometimes SdrEndTextEdit() initiates the change in selection and
-            // 'this' is not valid anymore
-            SwView& rTempView = GetView();
-            pDrView->SdrEndTextEdit(true);
-            //this removes the current shell from the dispatcher stack!!
-            rTempView.AttrChangedNotify(nullptr);
-        }
-
-        pDrView->SetAttributes(rSet);
+        //#111733# Sometimes SdrEndTextEdit() initiates the change in selection and
+        // 'this' is not valid anymore
+        SwView& rTempView = GetView();
+        pDrView->SdrEndTextEdit(true);
+        //this removes the current shell from the dispatcher stack!!
+        rTempView.AttrChangedNotify(nullptr);
     }
+
+    pDrView->SetAttributes(rSet);
 
 }
 
@@ -264,88 +264,88 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest const &rReq)
 {
     SwWrtShell &rSh = GetShell();
     OutlinerView* pOutlinerView = pSdrView->GetTextEditOutlinerView();
-    if( rSh.GetDrawView()->GetMarkedObjectList().GetMarkCount() )
+    if( !rSh.GetDrawView()->GetMarkedObjectList().GetMarkCount() )
+        return;
+
+    switch(rReq.GetSlot())
     {
-        switch(rReq.GetSlot())
+    case SID_THESAURUS:
+        pOutlinerView->StartThesaurus();
+        break;
+
+    case SID_HANGUL_HANJA_CONVERSION:
+        pOutlinerView->StartTextConversion(LANGUAGE_KOREAN, LANGUAGE_KOREAN, nullptr,
+                i18n::TextConversionOption::CHARACTER_BY_CHARACTER, true, false);
+        break;
+
+    case SID_CHINESE_CONVERSION:
         {
-        case SID_THESAURUS:
-            pOutlinerView->StartThesaurus();
-            break;
+            //open ChineseTranslationDialog
+            Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+            if (!xContext.is())
+                return;
 
-        case SID_HANGUL_HANJA_CONVERSION:
-            pOutlinerView->StartTextConversion(LANGUAGE_KOREAN, LANGUAGE_KOREAN, nullptr,
-                    i18n::TextConversionOption::CHARACTER_BY_CHARACTER, true, false);
-            break;
+            Reference<lang::XMultiComponentFactory> xMCF(xContext->getServiceManager());
+            if (!xMCF.is())
+                return;
 
-        case SID_CHINESE_CONVERSION:
+            Reference<ui::dialogs::XExecutableDialog> xDialog(
+                    xMCF->createInstanceWithContext("com.sun.star.linguistic2.ChineseTranslationDialog", xContext), UNO_QUERY);
+
+            Reference<lang::XInitialization> xInit(xDialog, UNO_QUERY);
+
+            if (!xInit.is())
+                return;
+
+            //  initialize dialog
+            uno::Sequence<uno::Any> aSequence(comphelper::InitAnyPropertySequence(
             {
-                //open ChineseTranslationDialog
-                Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
-                if (!xContext.is())
-                    return;
+                {"ParentWindow", uno::Any(Reference<awt::XWindow>())}
+            }));
+            xInit->initialize( aSequence );
 
-                Reference<lang::XMultiComponentFactory> xMCF(xContext->getServiceManager());
-                if (!xMCF.is())
-                    return;
-
-                Reference<ui::dialogs::XExecutableDialog> xDialog(
-                        xMCF->createInstanceWithContext("com.sun.star.linguistic2.ChineseTranslationDialog", xContext), UNO_QUERY);
-
-                Reference<lang::XInitialization> xInit(xDialog, UNO_QUERY);
-
-                if (!xInit.is())
-                    return;
-
-                //  initialize dialog
-                uno::Sequence<uno::Any> aSequence(comphelper::InitAnyPropertySequence(
+            //execute dialog
+            sal_Int16 nDialogRet = xDialog->execute();
+            if(RET_OK == nDialogRet)
+            {
+                //get some parameters from the dialog
+                bool bToSimplified = true;
+                bool bUseVariants = true;
+                bool bCommonTerms = true;
+                Reference<beans::XPropertySet> xPropertySet(xDialog, UNO_QUERY);
+                if (xPropertySet.is())
                 {
-                    {"ParentWindow", uno::Any(Reference<awt::XWindow>())}
-                }));
-                xInit->initialize( aSequence );
-
-                //execute dialog
-                sal_Int16 nDialogRet = xDialog->execute();
-                if(RET_OK == nDialogRet)
-                {
-                    //get some parameters from the dialog
-                    bool bToSimplified = true;
-                    bool bUseVariants = true;
-                    bool bCommonTerms = true;
-                    Reference<beans::XPropertySet> xPropertySet(xDialog, UNO_QUERY);
-                    if (xPropertySet.is())
+                    try
                     {
-                        try
-                        {
-                            xPropertySet->getPropertyValue("IsDirectionToSimplified") >>= bToSimplified;
-                            xPropertySet->getPropertyValue("IsUseCharacterVariants") >>= bUseVariants;
-                            xPropertySet->getPropertyValue("IsTranslateCommonTerms") >>= bCommonTerms;
-                        }
-                        catch (const Exception&)
-                        {
-                        }
+                        xPropertySet->getPropertyValue("IsDirectionToSimplified") >>= bToSimplified;
+                        xPropertySet->getPropertyValue("IsUseCharacterVariants") >>= bUseVariants;
+                        xPropertySet->getPropertyValue("IsTranslateCommonTerms") >>= bCommonTerms;
                     }
-
-                    //execute translation
-                    LanguageType nSourceLang = bToSimplified ? LANGUAGE_CHINESE_TRADITIONAL : LANGUAGE_CHINESE_SIMPLIFIED;
-                    LanguageType nTargetLang = bToSimplified ? LANGUAGE_CHINESE_SIMPLIFIED : LANGUAGE_CHINESE_TRADITIONAL;
-                    sal_Int32 nOptions       = bUseVariants ? i18n::TextConversionOption::USE_CHARACTER_VARIANTS : 0;
-                    if(!bCommonTerms)
-                        nOptions = nOptions | i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
-
-                    vcl::Font aTargetFont = OutputDevice::GetDefaultFont(DefaultFontType::CJK_TEXT, nTargetLang, GetDefaultFontFlags::OnlyOne);
-
-                    pOutlinerView->StartTextConversion(nSourceLang, nTargetLang, &aTargetFont, nOptions, false, false);
+                    catch (const Exception&)
+                    {
+                    }
                 }
 
-                Reference<lang::XComponent> xComponent(xDialog, UNO_QUERY);
-                if (xComponent.is())
-                    xComponent->dispose();
-            }
-            break;
+                //execute translation
+                LanguageType nSourceLang = bToSimplified ? LANGUAGE_CHINESE_TRADITIONAL : LANGUAGE_CHINESE_SIMPLIFIED;
+                LanguageType nTargetLang = bToSimplified ? LANGUAGE_CHINESE_SIMPLIFIED : LANGUAGE_CHINESE_TRADITIONAL;
+                sal_Int32 nOptions       = bUseVariants ? i18n::TextConversionOption::USE_CHARACTER_VARIANTS : 0;
+                if(!bCommonTerms)
+                    nOptions = nOptions | i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
 
-        default:
-            OSL_ENSURE(false, "unexpected slot-id");
+                vcl::Font aTargetFont = OutputDevice::GetDefaultFont(DefaultFontType::CJK_TEXT, nTargetLang, GetDefaultFontFlags::OnlyOne);
+
+                pOutlinerView->StartTextConversion(nSourceLang, nTargetLang, &aTargetFont, nOptions, false, false);
+            }
+
+            Reference<lang::XComponent> xComponent(xDialog, UNO_QUERY);
+            if (xComponent.is())
+                xComponent->dispose();
         }
+        break;
+
+    default:
+        OSL_ENSURE(false, "unexpected slot-id");
     }
 }
 
@@ -489,43 +489,43 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
 
 void SwDrawTextShell::ExecUndo(SfxRequest &rReq)
 {
-    if( IsTextEdit() )
+    if( !IsTextEdit() )
+        return;
+
+    bool bCallBase = true;
+    const SfxItemSet* pArgs = rReq.GetArgs();
+    if( pArgs )
     {
-        bool bCallBase = true;
-        const SfxItemSet* pArgs = rReq.GetArgs();
-        if( pArgs )
+        sal_uInt16 nId = rReq.GetSlot(), nCnt = 1;
+        const SfxPoolItem* pItem;
+        switch( nId )
         {
-            sal_uInt16 nId = rReq.GetSlot(), nCnt = 1;
-            const SfxPoolItem* pItem;
-            switch( nId )
+        case SID_UNDO:
+        case SID_REDO:
+            if( SfxItemState::SET == pArgs->GetItemState( nId, false, &pItem ) &&
+                1 < (nCnt = static_cast<const SfxUInt16Item*>(pItem)->GetValue()) )
             {
-            case SID_UNDO:
-            case SID_REDO:
-                if( SfxItemState::SET == pArgs->GetItemState( nId, false, &pItem ) &&
-                    1 < (nCnt = static_cast<const SfxUInt16Item*>(pItem)->GetValue()) )
+                // then we make by ourself.
+                SfxUndoManager* pUndoManager = GetUndoManager();
+                if( pUndoManager )
                 {
-                    // then we make by ourself.
-                    SfxUndoManager* pUndoManager = GetUndoManager();
-                    if( pUndoManager )
-                    {
-                        if( SID_UNDO == nId )
-                            while( nCnt-- )
-                                pUndoManager->Undo();
-                        else
-                            while( nCnt-- )
-                                pUndoManager->Redo();
-                    }
-                    bCallBase = false;
-                    GetView().GetViewFrame()->GetBindings().InvalidateAll(false);
+                    if( SID_UNDO == nId )
+                        while( nCnt-- )
+                            pUndoManager->Undo();
+                    else
+                        while( nCnt-- )
+                            pUndoManager->Redo();
                 }
-                break;
+                bCallBase = false;
+                GetView().GetViewFrame()->GetBindings().InvalidateAll(false);
             }
+            break;
         }
-        if( bCallBase )
-        {
-            SfxViewFrame *pSfxViewFrame = GetView().GetViewFrame();
-            pSfxViewFrame->ExecuteSlot(rReq, pSfxViewFrame->GetInterface());
-        }
+    }
+    if( bCallBase )
+    {
+        SfxViewFrame *pSfxViewFrame = GetView().GetViewFrame();
+        pSfxViewFrame->ExecuteSlot(rReq, pSfxViewFrame->GetInterface());
     }
 }
 

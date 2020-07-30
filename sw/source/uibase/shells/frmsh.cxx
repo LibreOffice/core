@@ -734,333 +734,333 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
 {
     SwWrtShell &rSh = GetShell();
     bool bHtmlMode = 0 != ::GetHtmlMode(rSh.GetView().GetDocShell());
-    if (rSh.IsFrameSelected())
+    if (!rSh.IsFrameSelected())
+        return;
+
+    SfxItemSet aSet(
+        rSh.GetAttrPool(),
+        svl::Items<
+            RES_LR_SPACE, RES_UL_SPACE,
+            RES_PRINT, RES_HORI_ORIENT>{});
+    rSh.GetFlyFrameAttr( aSet );
+
+    bool bProtect = rSh.IsSelObjProtected(FlyProtectFlags::Pos) != FlyProtectFlags::NONE;
+    bool bParentCntProt = rSh.IsSelObjProtected( FlyProtectFlags::Content|FlyProtectFlags::Parent ) != FlyProtectFlags::NONE;
+
+    bProtect |= bParentCntProt;
+
+    const FrameTypeFlags eFrameType = rSh.GetFrameType(nullptr,true);
+    SwFlyFrameAttrMgr aMgr( false, &rSh, Frmmgr_Type::NONE, nullptr );
+
+    SfxWhichIter aIter( rSet );
+    sal_uInt16 nWhich = aIter.FirstWhich();
+    while ( nWhich )
     {
-        SfxItemSet aSet(
-            rSh.GetAttrPool(),
-            svl::Items<
-                RES_LR_SPACE, RES_UL_SPACE,
-                RES_PRINT, RES_HORI_ORIENT>{});
-        rSh.GetFlyFrameAttr( aSet );
-
-        bool bProtect = rSh.IsSelObjProtected(FlyProtectFlags::Pos) != FlyProtectFlags::NONE;
-        bool bParentCntProt = rSh.IsSelObjProtected( FlyProtectFlags::Content|FlyProtectFlags::Parent ) != FlyProtectFlags::NONE;
-
-        bProtect |= bParentCntProt;
-
-        const FrameTypeFlags eFrameType = rSh.GetFrameType(nullptr,true);
-        SwFlyFrameAttrMgr aMgr( false, &rSh, Frmmgr_Type::NONE, nullptr );
-
-        SfxWhichIter aIter( rSet );
-        sal_uInt16 nWhich = aIter.FirstWhich();
-        while ( nWhich )
+        switch ( nWhich )
         {
-            switch ( nWhich )
+            case RES_FRM_SIZE:
             {
-                case RES_FRM_SIZE:
-                {
-                    const SwFormatFrameSize& aSz(aMgr.GetFrameSize());
-                    rSet.Put(aSz);
-                }
-                break;
-                case RES_VERT_ORIENT:
-                case RES_HORI_ORIENT:
-                case SID_ATTR_ULSPACE:
-                case SID_ATTR_LRSPACE:
-                case RES_LR_SPACE:
-                case RES_UL_SPACE:
-                case RES_PROTECT:
-                case RES_OPAQUE:
-                case RES_PRINT:
-                case RES_SURROUND:
-                {
-                    rSet.Put(aSet.Get(GetPool().GetWhich(nWhich)));
-                }
-                break;
-                case SID_OBJECT_ALIGN:
-                {
-                    if ( bProtect )
-                        rSet.DisableItem( nWhich );
-                }
-                break;
-                case SID_OBJECT_ALIGN_LEFT   :
-                case SID_OBJECT_ALIGN_CENTER :
-                case SID_OBJECT_ALIGN_RIGHT  :
-                case FN_FRAME_ALIGN_HORZ_CENTER:
-                case FN_FRAME_ALIGN_HORZ_RIGHT:
-                case FN_FRAME_ALIGN_HORZ_LEFT:
-                    if ( (eFrameType & FrameTypeFlags::FLY_INCNT) ||
-                         bProtect ||
-                         ((nWhich == FN_FRAME_ALIGN_HORZ_CENTER  || nWhich == SID_OBJECT_ALIGN_CENTER) &&
-                          bHtmlMode ))
-                    {
-                        rSet.DisableItem( nWhich );
-                    }
-                    else
-                    {
-                        sal_Int16 nHoriOrient = -1;
-                        switch(nWhich)
-                        {
-                            case SID_OBJECT_ALIGN_LEFT:
-                                nHoriOrient = text::HoriOrientation::LEFT;
-                                break;
-                            case SID_OBJECT_ALIGN_CENTER:
-                                nHoriOrient = text::HoriOrientation::CENTER;
-                                break;
-                            case SID_OBJECT_ALIGN_RIGHT:
-                                nHoriOrient = text::HoriOrientation::RIGHT;
-                                break;
-                            default:
-                                break;
-                        }
-                        SwFormatHoriOrient aHOrient(aMgr.GetHoriOrient());
-                        if (nHoriOrient != -1)
-                            rSet.Put(SfxBoolItem(nWhich, nHoriOrient == aHOrient.GetHoriOrient()));
-                    }
-                break;
-                case FN_FRAME_ALIGN_VERT_ROW_TOP:
-                case FN_FRAME_ALIGN_VERT_ROW_CENTER:
-                case FN_FRAME_ALIGN_VERT_ROW_BOTTOM:
-                case FN_FRAME_ALIGN_VERT_CHAR_TOP:
-                case FN_FRAME_ALIGN_VERT_CHAR_CENTER:
-                case FN_FRAME_ALIGN_VERT_CHAR_BOTTOM:
-                    if ( !(eFrameType & FrameTypeFlags::FLY_INCNT) || bProtect
-                         || (bHtmlMode && FN_FRAME_ALIGN_VERT_CHAR_BOTTOM == nWhich) )
-                        rSet.DisableItem( nWhich );
-                break;
-
-                case SID_OBJECT_ALIGN_UP     :
-                case SID_OBJECT_ALIGN_MIDDLE :
-                case SID_OBJECT_ALIGN_DOWN :
-
-                case FN_FRAME_ALIGN_VERT_TOP:
-                case FN_FRAME_ALIGN_VERT_CENTER:
-                case FN_FRAME_ALIGN_VERT_BOTTOM:
-                    if ( bProtect || (bHtmlMode && eFrameType & FrameTypeFlags::FLY_ATCNT))
-                        rSet.DisableItem( nWhich );
-                    else
-                    {
-                        // These slots need different labels depending on whether they are anchored in a character
-                        // or on a paragraph/page etc.
-                        OUString sNewLabel;
-                        if (eFrameType & FrameTypeFlags::FLY_INCNT)
-                        {
-                            switch (nWhich)
-                            {
-                                case SID_OBJECT_ALIGN_UP     :
-                                case FN_FRAME_ALIGN_VERT_TOP:
-                                    sNewLabel = SwResId(STR_FRMUI_TOP_BASE);
-                                    break;
-                                case SID_OBJECT_ALIGN_MIDDLE :
-                                case FN_FRAME_ALIGN_VERT_CENTER:
-                                    sNewLabel = SwResId(STR_FRMUI_CENTER_BASE);
-                                    break;
-                                case SID_OBJECT_ALIGN_DOWN :
-                                case FN_FRAME_ALIGN_VERT_BOTTOM:
-                                    if(!bHtmlMode)
-                                        sNewLabel = SwResId(STR_FRMUI_BOTTOM_BASE);
-                                    else
-                                        rSet.DisableItem( nWhich );
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            if (nWhich != FN_FRAME_ALIGN_VERT_TOP &&
-                                    nWhich != SID_OBJECT_ALIGN_UP )
-                            {
-                                if (aMgr.GetAnchor() == RndStdIds::FLY_AT_FLY)
-                                {
-                                    const SwFrameFormat* pFormat = rSh.IsFlyInFly();
-                                    if (pFormat)
-                                    {
-                                        const SwFormatFrameSize& rFrameSz = pFormat->GetFrameSize();
-                                        if (rFrameSz.GetHeightSizeType() != SwFrameSize::Fixed)
-                                        {
-                                            rSet.DisableItem( nWhich );
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                            OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(GetFrame()->GetFrame().GetFrameInterface()));
-                            switch (nWhich)
-                            {
-                                case SID_OBJECT_ALIGN_UP :
-                                case FN_FRAME_ALIGN_VERT_TOP:
-                                {
-                                    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:AlignTop", aModuleName);
-                                    sNewLabel = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
-                                    break;
-                                }
-                                case SID_OBJECT_ALIGN_MIDDLE:
-                                case FN_FRAME_ALIGN_VERT_CENTER:
-                                {
-                                    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:AlignVerticalCenter", aModuleName);
-                                    sNewLabel = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
-                                    break;
-                                }
-                                case SID_OBJECT_ALIGN_DOWN:
-                                case FN_FRAME_ALIGN_VERT_BOTTOM:
-                                {
-                                    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:AlignBottom", aModuleName);
-                                    sNewLabel = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
-                                    break;
-                                }
-                            }
-                        }
-                        if ( !sNewLabel.isEmpty() )
-                            rSet.Put( SfxStringItem( nWhich, sNewLabel ));
-                    }
-                break;
-                case SID_HYPERLINK_GETLINK:
-                {
-                    SvxHyperlinkItem aHLinkItem;
-                    const SfxPoolItem* pItem;
-
-                    SfxItemSet aURLSet(GetPool(), svl::Items<RES_URL, RES_URL>{});
-                    rSh.GetFlyFrameAttr( aURLSet );
-
-                    if(SfxItemState::SET == aURLSet.GetItemState(RES_URL, true, &pItem))
-                    {
-                        const SwFormatURL* pFormatURL = static_cast<const SwFormatURL*>(pItem);
-                        aHLinkItem.SetURL(pFormatURL->GetURL());
-                        aHLinkItem.SetTargetFrame(pFormatURL->GetTargetFrameName());
-                        aHLinkItem.SetName(rSh.GetFlyName());
-                    }
-
-                    aHLinkItem.SetInsertMode(static_cast<SvxLinkInsertMode>(aHLinkItem.GetInsertMode() |
-                        (bHtmlMode ? HLINK_HTMLMODE : 0)));
-
-                    rSet.Put(aHLinkItem);
-                }
-                break;
-
-                case FN_FRAME_CHAIN:
-                {
-                    const SelectionType nSel = rSh.GetSelectionType();
-                    if (nSel & SelectionType::Graphic || nSel & SelectionType::Ole)
-                        rSet.DisableItem( FN_FRAME_CHAIN );
-                    else
-                    {
-                        const SwFrameFormat *pFormat = rSh.GetFlyFrameFormat();
-                        if ( bParentCntProt || rSh.GetView().GetEditWin().GetApplyTemplate() ||
-                             !pFormat || pFormat->GetChain().GetNext() )
-                        {
-                            rSet.DisableItem( FN_FRAME_CHAIN );
-                        }
-                        else
-                        {
-                            bool bChainMode = rSh.GetView().GetEditWin().IsChainMode();
-                            rSet.Put( SfxBoolItem( FN_FRAME_CHAIN, bChainMode ) );
-                        }
-                    }
-                }
-                break;
-                case FN_FRAME_UNCHAIN:
-                {
-                    const SelectionType nSel = rSh.GetSelectionType();
-                    if (nSel & SelectionType::Graphic || nSel & SelectionType::Ole)
-                        rSet.DisableItem( FN_FRAME_UNCHAIN );
-                    else
-                    {
-                        const SwFrameFormat *pFormat = rSh.GetFlyFrameFormat();
-                        if ( bParentCntProt || rSh.GetView().GetEditWin().GetApplyTemplate() ||
-                             !pFormat || !pFormat->GetChain().GetNext() )
-                        {
-                            rSet.DisableItem( FN_FRAME_UNCHAIN );
-                        }
-                    }
-                }
-                break;
-                case SID_FRAME_TO_TOP:
-                case SID_FRAME_TO_BOTTOM:
-                case FN_FRAME_UP:
-                case FN_FRAME_DOWN:
-                    if ( bParentCntProt )
-                        rSet.DisableItem( nWhich );
-                break;
-
-                case SID_ATTR_TRANSFORM:
+                const SwFormatFrameSize& aSz(aMgr.GetFrameSize());
+                rSet.Put(aSz);
+            }
+            break;
+            case RES_VERT_ORIENT:
+            case RES_HORI_ORIENT:
+            case SID_ATTR_ULSPACE:
+            case SID_ATTR_LRSPACE:
+            case RES_LR_SPACE:
+            case RES_UL_SPACE:
+            case RES_PROTECT:
+            case RES_OPAQUE:
+            case RES_PRINT:
+            case RES_SURROUND:
+            {
+                rSet.Put(aSet.Get(GetPool().GetWhich(nWhich)));
+            }
+            break;
+            case SID_OBJECT_ALIGN:
+            {
+                if ( bProtect )
+                    rSet.DisableItem( nWhich );
+            }
+            break;
+            case SID_OBJECT_ALIGN_LEFT   :
+            case SID_OBJECT_ALIGN_CENTER :
+            case SID_OBJECT_ALIGN_RIGHT  :
+            case FN_FRAME_ALIGN_HORZ_CENTER:
+            case FN_FRAME_ALIGN_HORZ_RIGHT:
+            case FN_FRAME_ALIGN_HORZ_LEFT:
+                if ( (eFrameType & FrameTypeFlags::FLY_INCNT) ||
+                     bProtect ||
+                     ((nWhich == FN_FRAME_ALIGN_HORZ_CENTER  || nWhich == SID_OBJECT_ALIGN_CENTER) &&
+                      bHtmlMode ))
                 {
                     rSet.DisableItem( nWhich );
                 }
-                break;
-
-                case SID_ATTR_TRANSFORM_PROTECT_SIZE:
+                else
                 {
-                    const FlyProtectFlags eProtection = rSh.IsSelObjProtected( FlyProtectFlags::Size );
-                    if ( ( eProtection & FlyProtectFlags::Content ) ||
-                         ( eProtection & FlyProtectFlags::Size ) )
+                    sal_Int16 nHoriOrient = -1;
+                    switch(nWhich)
                     {
-                        rSet.Put( SfxBoolItem( SID_ATTR_TRANSFORM_PROTECT_SIZE, true ) );
+                        case SID_OBJECT_ALIGN_LEFT:
+                            nHoriOrient = text::HoriOrientation::LEFT;
+                            break;
+                        case SID_OBJECT_ALIGN_CENTER:
+                            nHoriOrient = text::HoriOrientation::CENTER;
+                            break;
+                        case SID_OBJECT_ALIGN_RIGHT:
+                            nHoriOrient = text::HoriOrientation::RIGHT;
+                            break;
+                        default:
+                            break;
+                    }
+                    SwFormatHoriOrient aHOrient(aMgr.GetHoriOrient());
+                    if (nHoriOrient != -1)
+                        rSet.Put(SfxBoolItem(nWhich, nHoriOrient == aHOrient.GetHoriOrient()));
+                }
+            break;
+            case FN_FRAME_ALIGN_VERT_ROW_TOP:
+            case FN_FRAME_ALIGN_VERT_ROW_CENTER:
+            case FN_FRAME_ALIGN_VERT_ROW_BOTTOM:
+            case FN_FRAME_ALIGN_VERT_CHAR_TOP:
+            case FN_FRAME_ALIGN_VERT_CHAR_CENTER:
+            case FN_FRAME_ALIGN_VERT_CHAR_BOTTOM:
+                if ( !(eFrameType & FrameTypeFlags::FLY_INCNT) || bProtect
+                     || (bHtmlMode && FN_FRAME_ALIGN_VERT_CHAR_BOTTOM == nWhich) )
+                    rSet.DisableItem( nWhich );
+            break;
+
+            case SID_OBJECT_ALIGN_UP     :
+            case SID_OBJECT_ALIGN_MIDDLE :
+            case SID_OBJECT_ALIGN_DOWN :
+
+            case FN_FRAME_ALIGN_VERT_TOP:
+            case FN_FRAME_ALIGN_VERT_CENTER:
+            case FN_FRAME_ALIGN_VERT_BOTTOM:
+                if ( bProtect || (bHtmlMode && eFrameType & FrameTypeFlags::FLY_ATCNT))
+                    rSet.DisableItem( nWhich );
+                else
+                {
+                    // These slots need different labels depending on whether they are anchored in a character
+                    // or on a paragraph/page etc.
+                    OUString sNewLabel;
+                    if (eFrameType & FrameTypeFlags::FLY_INCNT)
+                    {
+                        switch (nWhich)
+                        {
+                            case SID_OBJECT_ALIGN_UP     :
+                            case FN_FRAME_ALIGN_VERT_TOP:
+                                sNewLabel = SwResId(STR_FRMUI_TOP_BASE);
+                                break;
+                            case SID_OBJECT_ALIGN_MIDDLE :
+                            case FN_FRAME_ALIGN_VERT_CENTER:
+                                sNewLabel = SwResId(STR_FRMUI_CENTER_BASE);
+                                break;
+                            case SID_OBJECT_ALIGN_DOWN :
+                            case FN_FRAME_ALIGN_VERT_BOTTOM:
+                                if(!bHtmlMode)
+                                    sNewLabel = SwResId(STR_FRMUI_BOTTOM_BASE);
+                                else
+                                    rSet.DisableItem( nWhich );
+                            break;
+                        }
                     }
                     else
                     {
-                        rSet.Put( SfxBoolItem( SID_ATTR_TRANSFORM_PROTECT_SIZE, false ) );
-                    }
-                }
-                break;
-
-                case SID_ATTR_TRANSFORM_WIDTH:
-                {
-                    rSet.Put( SfxUInt32Item( SID_ATTR_TRANSFORM_WIDTH, aMgr.GetSize().getWidth() ) );
-                }
-                break;
-
-                case SID_ATTR_TRANSFORM_HEIGHT:
-                {
-                    rSet.Put( SfxUInt32Item( SID_ATTR_TRANSFORM_HEIGHT, aMgr.GetSize().getHeight() ) );
-                }
-                break;
-
-                case FN_FORMAT_FRAME_DLG:
-                {
-                    const SelectionType nSel = rSh.GetSelectionType();
-                    if ( bParentCntProt || nSel & SelectionType::Graphic)
-                        rSet.DisableItem( nWhich );
-                }
-                break;
-                // #i73249#
-                case FN_TITLE_DESCRIPTION_SHAPE:
-                case FN_NAME_SHAPE:
-                {
-                    SwWrtShell &rWrtSh = GetShell();
-                    SdrView* pSdrView = rWrtSh.GetDrawViewWithValidMarkList();
-                    if ( !pSdrView ||
-                         pSdrView->GetMarkedObjectCount() != 1 )
-                    {
-                        rSet.DisableItem( nWhich );
-                    }
-                }
-                break;
-
-                case FN_POSTIT:
-                {
-                    SwFlyFrame* pFly = rSh.GetSelectedFlyFrame();
-                    if (pFly)
-                    {
-                        SwFrameFormat* pFormat = pFly->GetFormat();
-                        if (pFormat)
+                        if (nWhich != FN_FRAME_ALIGN_VERT_TOP &&
+                                nWhich != SID_OBJECT_ALIGN_UP )
                         {
-                            RndStdIds eAnchorId = pFormat->GetAnchor().GetAnchorId();
-                            // SwWrtShell::InsertPostIt() only works on as-char and at-char anchored
-                            // images.
-                            if (eAnchorId != RndStdIds::FLY_AS_CHAR && eAnchorId != RndStdIds::FLY_AT_CHAR)
+                            if (aMgr.GetAnchor() == RndStdIds::FLY_AT_FLY)
                             {
-                                rSet.DisableItem(nWhich);
+                                const SwFrameFormat* pFormat = rSh.IsFlyInFly();
+                                if (pFormat)
+                                {
+                                    const SwFormatFrameSize& rFrameSz = pFormat->GetFrameSize();
+                                    if (rFrameSz.GetHeightSizeType() != SwFrameSize::Fixed)
+                                    {
+                                        rSet.DisableItem( nWhich );
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(GetFrame()->GetFrame().GetFrameInterface()));
+                        switch (nWhich)
+                        {
+                            case SID_OBJECT_ALIGN_UP :
+                            case FN_FRAME_ALIGN_VERT_TOP:
+                            {
+                                auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:AlignTop", aModuleName);
+                                sNewLabel = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
+                                break;
+                            }
+                            case SID_OBJECT_ALIGN_MIDDLE:
+                            case FN_FRAME_ALIGN_VERT_CENTER:
+                            {
+                                auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:AlignVerticalCenter", aModuleName);
+                                sNewLabel = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
+                                break;
+                            }
+                            case SID_OBJECT_ALIGN_DOWN:
+                            case FN_FRAME_ALIGN_VERT_BOTTOM:
+                            {
+                                auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:AlignBottom", aModuleName);
+                                sNewLabel = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
+                                break;
                             }
                         }
                     }
+                    if ( !sNewLabel.isEmpty() )
+                        rSet.Put( SfxStringItem( nWhich, sNewLabel ));
                 }
-                break;
+            break;
+            case SID_HYPERLINK_GETLINK:
+            {
+                SvxHyperlinkItem aHLinkItem;
+                const SfxPoolItem* pItem;
 
-                default:
-                    /* do nothing */;
-                    break;
+                SfxItemSet aURLSet(GetPool(), svl::Items<RES_URL, RES_URL>{});
+                rSh.GetFlyFrameAttr( aURLSet );
+
+                if(SfxItemState::SET == aURLSet.GetItemState(RES_URL, true, &pItem))
+                {
+                    const SwFormatURL* pFormatURL = static_cast<const SwFormatURL*>(pItem);
+                    aHLinkItem.SetURL(pFormatURL->GetURL());
+                    aHLinkItem.SetTargetFrame(pFormatURL->GetTargetFrameName());
+                    aHLinkItem.SetName(rSh.GetFlyName());
+                }
+
+                aHLinkItem.SetInsertMode(static_cast<SvxLinkInsertMode>(aHLinkItem.GetInsertMode() |
+                    (bHtmlMode ? HLINK_HTMLMODE : 0)));
+
+                rSet.Put(aHLinkItem);
             }
-            nWhich = aIter.NextWhich();
+            break;
+
+            case FN_FRAME_CHAIN:
+            {
+                const SelectionType nSel = rSh.GetSelectionType();
+                if (nSel & SelectionType::Graphic || nSel & SelectionType::Ole)
+                    rSet.DisableItem( FN_FRAME_CHAIN );
+                else
+                {
+                    const SwFrameFormat *pFormat = rSh.GetFlyFrameFormat();
+                    if ( bParentCntProt || rSh.GetView().GetEditWin().GetApplyTemplate() ||
+                         !pFormat || pFormat->GetChain().GetNext() )
+                    {
+                        rSet.DisableItem( FN_FRAME_CHAIN );
+                    }
+                    else
+                    {
+                        bool bChainMode = rSh.GetView().GetEditWin().IsChainMode();
+                        rSet.Put( SfxBoolItem( FN_FRAME_CHAIN, bChainMode ) );
+                    }
+                }
+            }
+            break;
+            case FN_FRAME_UNCHAIN:
+            {
+                const SelectionType nSel = rSh.GetSelectionType();
+                if (nSel & SelectionType::Graphic || nSel & SelectionType::Ole)
+                    rSet.DisableItem( FN_FRAME_UNCHAIN );
+                else
+                {
+                    const SwFrameFormat *pFormat = rSh.GetFlyFrameFormat();
+                    if ( bParentCntProt || rSh.GetView().GetEditWin().GetApplyTemplate() ||
+                         !pFormat || !pFormat->GetChain().GetNext() )
+                    {
+                        rSet.DisableItem( FN_FRAME_UNCHAIN );
+                    }
+                }
+            }
+            break;
+            case SID_FRAME_TO_TOP:
+            case SID_FRAME_TO_BOTTOM:
+            case FN_FRAME_UP:
+            case FN_FRAME_DOWN:
+                if ( bParentCntProt )
+                    rSet.DisableItem( nWhich );
+            break;
+
+            case SID_ATTR_TRANSFORM:
+            {
+                rSet.DisableItem( nWhich );
+            }
+            break;
+
+            case SID_ATTR_TRANSFORM_PROTECT_SIZE:
+            {
+                const FlyProtectFlags eProtection = rSh.IsSelObjProtected( FlyProtectFlags::Size );
+                if ( ( eProtection & FlyProtectFlags::Content ) ||
+                     ( eProtection & FlyProtectFlags::Size ) )
+                {
+                    rSet.Put( SfxBoolItem( SID_ATTR_TRANSFORM_PROTECT_SIZE, true ) );
+                }
+                else
+                {
+                    rSet.Put( SfxBoolItem( SID_ATTR_TRANSFORM_PROTECT_SIZE, false ) );
+                }
+            }
+            break;
+
+            case SID_ATTR_TRANSFORM_WIDTH:
+            {
+                rSet.Put( SfxUInt32Item( SID_ATTR_TRANSFORM_WIDTH, aMgr.GetSize().getWidth() ) );
+            }
+            break;
+
+            case SID_ATTR_TRANSFORM_HEIGHT:
+            {
+                rSet.Put( SfxUInt32Item( SID_ATTR_TRANSFORM_HEIGHT, aMgr.GetSize().getHeight() ) );
+            }
+            break;
+
+            case FN_FORMAT_FRAME_DLG:
+            {
+                const SelectionType nSel = rSh.GetSelectionType();
+                if ( bParentCntProt || nSel & SelectionType::Graphic)
+                    rSet.DisableItem( nWhich );
+            }
+            break;
+            // #i73249#
+            case FN_TITLE_DESCRIPTION_SHAPE:
+            case FN_NAME_SHAPE:
+            {
+                SwWrtShell &rWrtSh = GetShell();
+                SdrView* pSdrView = rWrtSh.GetDrawViewWithValidMarkList();
+                if ( !pSdrView ||
+                     pSdrView->GetMarkedObjectCount() != 1 )
+                {
+                    rSet.DisableItem( nWhich );
+                }
+            }
+            break;
+
+            case FN_POSTIT:
+            {
+                SwFlyFrame* pFly = rSh.GetSelectedFlyFrame();
+                if (pFly)
+                {
+                    SwFrameFormat* pFormat = pFly->GetFormat();
+                    if (pFormat)
+                    {
+                        RndStdIds eAnchorId = pFormat->GetAnchor().GetAnchorId();
+                        // SwWrtShell::InsertPostIt() only works on as-char and at-char anchored
+                        // images.
+                        if (eAnchorId != RndStdIds::FLY_AS_CHAR && eAnchorId != RndStdIds::FLY_AT_CHAR)
+                        {
+                            rSet.DisableItem(nWhich);
+                        }
+                    }
+                }
+            }
+            break;
+
+            default:
+                /* do nothing */;
+                break;
         }
+        nWhich = aIter.NextWhich();
     }
 }
 

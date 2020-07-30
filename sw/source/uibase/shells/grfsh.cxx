@@ -926,25 +926,25 @@ void SwGrfShell::ExecuteRotation(SfxRequest const &rReq)
         aRotation = 1800;
     }
 
-    if (rReq.GetSlot() == SID_ROTATE_GRAPHIC_RESET || 0 != aRotation)
+    if (rReq.GetSlot() != SID_ROTATE_GRAPHIC_RESET && 0 == aRotation)
+        return;
+
+    SwWrtShell& rShell = GetShell();
+    SfxItemSet aSet( rShell.GetAttrPool(), svl::Items<RES_GRFATR_ROTATION, RES_GRFATR_ROTATION>{} );
+    rShell.GetCurAttr( aSet );
+    const SwRotationGrf& rRotation = aSet.Get(RES_GRFATR_ROTATION);
+    SwFlyFrameAttrMgr aMgr(false, &rShell, rShell.IsFrameSelected() ? Frmmgr_Type::NONE : Frmmgr_Type::GRF, nullptr);
+
+    // RotGrfFlyFrame: Possible rotation change here, SwFlyFrameAttrMgr aMgr is available
+    if (rReq.GetSlot() == SID_ROTATE_GRAPHIC_RESET)
     {
-        SwWrtShell& rShell = GetShell();
-        SfxItemSet aSet( rShell.GetAttrPool(), svl::Items<RES_GRFATR_ROTATION, RES_GRFATR_ROTATION>{} );
-        rShell.GetCurAttr( aSet );
-        const SwRotationGrf& rRotation = aSet.Get(RES_GRFATR_ROTATION);
-        SwFlyFrameAttrMgr aMgr(false, &rShell, rShell.IsFrameSelected() ? Frmmgr_Type::NONE : Frmmgr_Type::GRF, nullptr);
+        aMgr.SetRotation(rRotation.GetValue(), 0, rRotation.GetUnrotatedSize());
+    }
+    else if(0 != aRotation)
+    {
+        const sal_uInt16 aNewRotation((aRotation + rRotation.GetValue()) % 3600);
 
-        // RotGrfFlyFrame: Possible rotation change here, SwFlyFrameAttrMgr aMgr is available
-        if (rReq.GetSlot() == SID_ROTATE_GRAPHIC_RESET)
-        {
-            aMgr.SetRotation(rRotation.GetValue(), 0, rRotation.GetUnrotatedSize());
-        }
-        else if(0 != aRotation)
-        {
-            const sal_uInt16 aNewRotation((aRotation + rRotation.GetValue()) % 3600);
-
-            aMgr.SetRotation(rRotation.GetValue(), aNewRotation, rRotation.GetUnrotatedSize());
-        }
+        aMgr.SetRotation(rRotation.GetValue(), aNewRotation, rRotation.GetUnrotatedSize());
     }
 }
 

@@ -1457,19 +1457,19 @@ void SwAnnotationShell::ExecTransliteration(SfxRequest const &rReq)
 
 void SwAnnotationShell::ExecRotateTransliteration( SfxRequest const & rReq )
 {
-    if( rReq.GetSlot() == SID_TRANSLITERATE_ROTATE_CASE )
-    {
-        SwPostItMgr* pPostItMgr = rView.GetPostItMgr();
-        if (!pPostItMgr || !pPostItMgr->HasActiveSidebarWin())
-            return;
+    if( rReq.GetSlot() != SID_TRANSLITERATE_ROTATE_CASE )
+        return;
 
-        OutlinerView* pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
+    SwPostItMgr* pPostItMgr = rView.GetPostItMgr();
+    if (!pPostItMgr || !pPostItMgr->HasActiveSidebarWin())
+        return;
 
-        if (!pOLV)
-            return;
+    OutlinerView* pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
 
-        pOLV->TransliterateText(m_aRotateCase.getNextMode());
-    }
+    if (!pOLV)
+        return;
+
+    pOLV->TransliterateText(m_aRotateCase.getNextMode());
 }
 
 void SwAnnotationShell::ExecUndo(SfxRequest &rReq)

@@ -93,30 +93,30 @@ namespace
         OUString sColor;
         const SfxPoolItem* pItem = nullptr;
 
-        if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pItem))
+        if (SfxItemState::SET != pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pItem))
+            return;
+
+        sColor = static_cast<const SfxStringItem*>(pItem)->GetValue();
+
+        if (sColor == "transparent")
+            aColor = COL_TRANSPARENT;
+        else
+            aColor = Color(sColor.toInt32(16));
+
+        switch (nSlot)
         {
-            sColor = static_cast<const SfxStringItem*>(pItem)->GetValue();
-
-            if (sColor == "transparent")
-                aColor = COL_TRANSPARENT;
-            else
-                aColor = Color(sColor.toInt32(16));
-
-            switch (nSlot)
+            case SID_ATTR_CHAR_COLOR:
             {
-                case SID_ATTR_CHAR_COLOR:
-                {
-                    SvxColorItem aColorItem(aColor, EE_CHAR_COLOR);
-                    pArgs->Put(aColorItem);
-                    break;
-                }
+                SvxColorItem aColorItem(aColor, EE_CHAR_COLOR);
+                pArgs->Put(aColorItem);
+                break;
+            }
 
-                case SID_ATTR_CHAR_BACK_COLOR:
-                {
-                    SvxBackgroundColorItem pBackgroundItem(aColor, EE_CHAR_BKGCOLOR);
-                    pArgs->Put(pBackgroundItem);
-                    break;
-                }
+            case SID_ATTR_CHAR_BACK_COLOR:
+            {
+                SvxBackgroundColorItem pBackgroundItem(aColor, EE_CHAR_BKGCOLOR);
+                pArgs->Put(pBackgroundItem);
+                break;
             }
         }
     }
