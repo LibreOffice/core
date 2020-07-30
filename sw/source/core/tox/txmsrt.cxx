@@ -135,46 +135,46 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwContentNode* pNd,
     if ( pLocale )
         aLocale = *pLocale;
 
-    if( pNd )
+    if( !pNd )
+        return;
+
+    sal_Int32 n = 0;
+    if( pTextMark )
+        n = pTextMark->GetStart();
+    SwTOXSource aTmp( pNd, n, pTextMark && pTextMark->GetTOXMark().IsMainEntry() );
+    aTOXSources.push_back(aTmp);
+
+    nPos = pNd->GetIndex();
+
+    switch( nTyp )
     {
-        sal_Int32 n = 0;
-        if( pTextMark )
-            n = pTextMark->GetStart();
-        SwTOXSource aTmp( pNd, n, pTextMark && pTextMark->GetTOXMark().IsMainEntry() );
-        aTOXSources.push_back(aTmp);
-
-        nPos = pNd->GetIndex();
-
-        switch( nTyp )
+    case TOX_SORT_CONTENT:
+    case TOX_SORT_PARA:
+    case TOX_SORT_TABLE:
+        // If they are in a special areas, we should get the position at the
+        // body
+        if( nPos < pNd->GetNodes().GetEndOfExtras().GetIndex() )
         {
-        case TOX_SORT_CONTENT:
-        case TOX_SORT_PARA:
-        case TOX_SORT_TABLE:
-            // If they are in a special areas, we should get the position at the
-            // body
-            if( nPos < pNd->GetNodes().GetEndOfExtras().GetIndex() )
+            // Then get the 'anchor' (body) position
+            Point aPt;
+            std::pair<Point, bool> tmp(aPt, false);
+            const SwContentFrame *const pFrame = pNd->getLayoutFrame(
+                pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+                nullptr, &tmp);
+            if( pFrame )
             {
-                // Then get the 'anchor' (body) position
-                Point aPt;
-                std::pair<Point, bool> tmp(aPt, false);
-                const SwContentFrame *const pFrame = pNd->getLayoutFrame(
-                    pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
-                    nullptr, &tmp);
-                if( pFrame )
-                {
-                    SwPosition aPos( *pNd );
-                    const SwDoc& rDoc = *pNd->GetDoc();
-                    bool const bResult = GetBodyTextNode( rDoc, aPos, *pFrame );
-                    OSL_ENSURE(bResult, "where is the text node");
-                    nPos = aPos.nNode.GetIndex();
-                    nCntPos = aPos.nContent.GetIndex();
-                }
+                SwPosition aPos( *pNd );
+                const SwDoc& rDoc = *pNd->GetDoc();
+                bool const bResult = GetBodyTextNode( rDoc, aPos, *pFrame );
+                OSL_ENSURE(bResult, "where is the text node");
+                nPos = aPos.nNode.GetIndex();
+                nCntPos = aPos.nContent.GetIndex();
             }
-            else
-                nCntPos = n;
-            break;
-        default: break;
         }
+        else
+            nCntPos = n;
+        break;
+    default: break;
     }
 }
 

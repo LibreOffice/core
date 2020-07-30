@@ -1768,20 +1768,20 @@ void SwTextFrame::CalcLineSpace()
         }
     }
 
-    if( nDelta )
+    if( !nDelta )
+        return;
+
+    SwTextFrameBreak aBreak( this );
+    if( GetFollow() || aBreak.IsBreakNow( aLine ) )
     {
-        SwTextFrameBreak aBreak( this );
-        if( GetFollow() || aBreak.IsBreakNow( aLine ) )
-        {
-            // if there is a Follow() or if we need to break here, reformat
-            Init();
-        }
-        else
-        {
-            // everything is business as usual...
-            pPara->SetPrepAdjust();
-            pPara->SetPrep();
-        }
+        // if there is a Follow() or if we need to break here, reformat
+        Init();
+    }
+    else
+    {
+        // everything is business as usual...
+        pPara->SetPrepAdjust();
+        pPara->SetPrep();
     }
 }
 
@@ -1912,23 +1912,23 @@ void UpdateMergedParaForMove(sw::MergedPara & rMerged,
             deleted.emplace_back(std::max(nLastEnd, nSourceStart), nSourceEnd);
         }
     }
-    if (!deleted.empty())
+    if (deleted.empty())
+        return;
+
+    o_rbRecalcFootnoteFlag = true;
+    for (auto const& it : deleted)
     {
-        o_rbRecalcFootnoteFlag = true;
-        for (auto const& it : deleted)
-        {
-            sal_Int32 const nStart(it.first - nSourceStart + nDestStart);
-            TextFrameIndex const nDeleted = UpdateMergedParaForDelete(rMerged, false,
-                rDestNode, nStart, it.second - it.first);
+        sal_Int32 const nStart(it.first - nSourceStart + nDestStart);
+        TextFrameIndex const nDeleted = UpdateMergedParaForDelete(rMerged, false,
+            rDestNode, nStart, it.second - it.first);
 //FIXME asserts valid for join - but if called from split, the new node isn't there yet and it will be added later...       assert(nDeleted);
 //            assert(nDeleted == it.second - it.first);
-            if(nDeleted)
-            {
-                // InvalidateRange/lcl_SetScriptInval was called sufficiently for SwInsText
-                lcl_SetWrong(rTextFrame, rDestNode, nStart, it.first - it.second, false);
-                TextFrameIndex const nIndex(sw::MapModelToView(rMerged, &rDestNode, nStart));
-                lcl_ModifyOfst(rTextFrame, nIndex, nDeleted, &o3tl::operator-<sal_Int32, Tag_TextFrameIndex>);
-            }
+        if(nDeleted)
+        {
+            // InvalidateRange/lcl_SetScriptInval was called sufficiently for SwInsText
+            lcl_SetWrong(rTextFrame, rDestNode, nStart, it.first - it.second, false);
+            TextFrameIndex const nIndex(sw::MapModelToView(rMerged, &rDestNode, nStart));
+            lcl_ModifyOfst(rTextFrame, nIndex, nDeleted, &o3tl::operator-<sal_Int32, Tag_TextFrameIndex>);
         }
     }
 }
@@ -3461,67 +3461,67 @@ void SwTextFrame::CalcAdditionalFirstLineOffset()
     const SwTextNode* pTextNode( GetTextNodeForParaProps() );
     // sw_redlinehide: check that pParaPropsNode is the correct one
     assert(pTextNode->IsNumbered(getRootFrame()) == pTextNode->IsNumbered(nullptr));
-    if (pTextNode->IsNumbered(getRootFrame()) &&
-        pTextNode->IsCountedInList() && pTextNode->GetNumRule())
+    if (!(pTextNode->IsNumbered(getRootFrame()) &&
+        pTextNode->IsCountedInList() && pTextNode->GetNumRule()))
+        return;
+
+    int nListLevel = pTextNode->GetActualListLevel();
+
+    if (nListLevel < 0)
+        nListLevel = 0;
+
+    if (nListLevel >= MAXLEVEL)
+        nListLevel = MAXLEVEL - 1;
+
+    const SwNumFormat& rNumFormat =
+            pTextNode->GetNumRule()->Get( static_cast<sal_uInt16>(nListLevel) );
+    if ( rNumFormat.GetPositionAndSpaceMode() != SvxNumberFormat::LABEL_ALIGNMENT )
+        return;
+
+    // keep current paragraph portion and apply dummy paragraph portion
+    SwParaPortion* pOldPara = GetPara();
+    SwParaPortion *pDummy = new SwParaPortion();
+    SetPara( pDummy, false );
+
+    // lock paragraph
+    TextFrameLockGuard aLock( this );
+
+    // simulate text formatting
+    SwTextFormatInfo aInf( getRootFrame()->GetCurrShell()->GetOut(), this, false, true, true );
+    aInf.SetIgnoreFly( true );
+    SwTextFormatter aLine( this, &aInf );
+    SwHookOut aHook( aInf );
+    aLine.CalcFitToContent_();
+
+    // determine additional first line offset
+    const SwLinePortion* pFirstPortion = aLine.GetCurr()->GetFirstPortion();
+    if ( pFirstPortion->InNumberGrp() && !pFirstPortion->IsFootnoteNumPortion() )
     {
-        int nListLevel = pTextNode->GetActualListLevel();
+        SwTwips nNumberPortionWidth( pFirstPortion->Width() );
 
-        if (nListLevel < 0)
-            nListLevel = 0;
-
-        if (nListLevel >= MAXLEVEL)
-            nListLevel = MAXLEVEL - 1;
-
-        const SwNumFormat& rNumFormat =
-                pTextNode->GetNumRule()->Get( static_cast<sal_uInt16>(nListLevel) );
-        if ( rNumFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+        const SwLinePortion* pPortion = pFirstPortion->GetNextPortion();
+        while ( pPortion &&
+                pPortion->InNumberGrp() && !pPortion->IsFootnoteNumPortion())
         {
-            // keep current paragraph portion and apply dummy paragraph portion
-            SwParaPortion* pOldPara = GetPara();
-            SwParaPortion *pDummy = new SwParaPortion();
-            SetPara( pDummy, false );
+            nNumberPortionWidth += pPortion->Width();
+            pPortion = pPortion->GetNextPortion();
+        }
 
-            // lock paragraph
-            TextFrameLockGuard aLock( this );
-
-            // simulate text formatting
-            SwTextFormatInfo aInf( getRootFrame()->GetCurrShell()->GetOut(), this, false, true, true );
-            aInf.SetIgnoreFly( true );
-            SwTextFormatter aLine( this, &aInf );
-            SwHookOut aHook( aInf );
-            aLine.CalcFitToContent_();
-
-            // determine additional first line offset
-            const SwLinePortion* pFirstPortion = aLine.GetCurr()->GetFirstPortion();
-            if ( pFirstPortion->InNumberGrp() && !pFirstPortion->IsFootnoteNumPortion() )
-            {
-                SwTwips nNumberPortionWidth( pFirstPortion->Width() );
-
-                const SwLinePortion* pPortion = pFirstPortion->GetNextPortion();
-                while ( pPortion &&
-                        pPortion->InNumberGrp() && !pPortion->IsFootnoteNumPortion())
-                {
-                    nNumberPortionWidth += pPortion->Width();
-                    pPortion = pPortion->GetNextPortion();
-                }
-
-                if ( ( IsRightToLeft() &&
-                       rNumFormat.GetNumAdjust() == SvxAdjust::Left ) ||
-                     ( !IsRightToLeft() &&
-                       rNumFormat.GetNumAdjust() == SvxAdjust::Right ) )
-                {
-                    mnAdditionalFirstLineOffset = -nNumberPortionWidth;
-                }
-                else if ( rNumFormat.GetNumAdjust() == SvxAdjust::Center )
-                {
-                    mnAdditionalFirstLineOffset = -(nNumberPortionWidth/2);
-                }
-            }
-
-            // restore paragraph portion
-            SetPara( pOldPara );
+        if ( ( IsRightToLeft() &&
+               rNumFormat.GetNumAdjust() == SvxAdjust::Left ) ||
+             ( !IsRightToLeft() &&
+               rNumFormat.GetNumAdjust() == SvxAdjust::Right ) )
+        {
+            mnAdditionalFirstLineOffset = -nNumberPortionWidth;
+        }
+        else if ( rNumFormat.GetNumAdjust() == SvxAdjust::Center )
+        {
+            mnAdditionalFirstLineOffset = -(nNumberPortionWidth/2);
         }
     }
+
+    // restore paragraph portion
+    SetPara( pOldPara );
 }
 
 /**
@@ -3778,87 +3778,87 @@ void SwTextFrame::ChgThisLines()
     else if ( rInf.IsCountBlankLines() )
         nNew = 1;
 
-    if ( nNew != mnThisLines )
-    {
-        if (!IsInTab() && GetTextNodeForParaProps()->GetSwAttrSet().GetLineNumber().IsCount())
-        {
-            mnAllLines -= mnThisLines;
-            mnThisLines = nNew;
-            mnAllLines  += mnThisLines;
-            SwFrame *pNxt = GetNextContentFrame();
-            while( pNxt && pNxt->IsInTab() )
-            {
-                pNxt = pNxt->FindTabFrame();
-                if( nullptr != pNxt )
-                    pNxt = pNxt->FindNextCnt();
-            }
-            if( pNxt )
-                pNxt->InvalidateLineNum();
+    if ( nNew == mnThisLines )
+        return;
 
-            // Extend repaint to the bottom.
-            if ( HasPara() )
-            {
-                SwRepaint& rRepaint = GetPara()->GetRepaint();
-                rRepaint.Bottom( std::max( rRepaint.Bottom(),
-                                       getFrameArea().Top()+getFramePrintArea().Bottom()));
-            }
+    if (!IsInTab() && GetTextNodeForParaProps()->GetSwAttrSet().GetLineNumber().IsCount())
+    {
+        mnAllLines -= mnThisLines;
+        mnThisLines = nNew;
+        mnAllLines  += mnThisLines;
+        SwFrame *pNxt = GetNextContentFrame();
+        while( pNxt && pNxt->IsInTab() )
+        {
+            pNxt = pNxt->FindTabFrame();
+            if( nullptr != pNxt )
+                pNxt = pNxt->FindNextCnt();
         }
-        else // Paragraphs which are not counted should not manipulate the AllLines.
-            mnThisLines = nNew;
+        if( pNxt )
+            pNxt->InvalidateLineNum();
+
+        // Extend repaint to the bottom.
+        if ( HasPara() )
+        {
+            SwRepaint& rRepaint = GetPara()->GetRepaint();
+            rRepaint.Bottom( std::max( rRepaint.Bottom(),
+                                   getFrameArea().Top()+getFramePrintArea().Bottom()));
+        }
     }
+    else // Paragraphs which are not counted should not manipulate the AllLines.
+        mnThisLines = nNew;
 }
 
 void SwTextFrame::RecalcAllLines()
 {
     ValidateLineNum();
 
-    if ( !IsInTab() )
+    if ( IsInTab() )
+        return;
+
+    const sal_uLong nOld = GetAllLines();
+    const SwFormatLineNumber &rLineNum = GetTextNodeForParaProps()->GetSwAttrSet().GetLineNumber();
+    sal_uLong nNewNum;
+    const bool bRestart = GetDoc().GetLineNumberInfo().IsRestartEachPage();
+
+    if ( !IsFollow() && rLineNum.GetStartValue() && rLineNum.IsCount() )
+        nNewNum = rLineNum.GetStartValue() - 1;
+    // If it is a follow or not has not be considered if it is a restart at each page; the
+    // restart should also take effect at follows.
+    else if ( bRestart && FindPageFrame()->FindFirstBodyContent() == this )
     {
-        const sal_uLong nOld = GetAllLines();
-        const SwFormatLineNumber &rLineNum = GetTextNodeForParaProps()->GetSwAttrSet().GetLineNumber();
-        sal_uLong nNewNum;
-        const bool bRestart = GetDoc().GetLineNumberInfo().IsRestartEachPage();
+        nNewNum = 0;
+    }
+    else
+    {
+        SwContentFrame *pPrv = GetPrevContentFrame();
+        while ( pPrv &&
+                (pPrv->IsInTab() || pPrv->IsInDocBody() != IsInDocBody()) )
+            pPrv = pPrv->GetPrevContentFrame();
 
-        if ( !IsFollow() && rLineNum.GetStartValue() && rLineNum.IsCount() )
-            nNewNum = rLineNum.GetStartValue() - 1;
-        // If it is a follow or not has not be considered if it is a restart at each page; the
-        // restart should also take effect at follows.
-        else if ( bRestart && FindPageFrame()->FindFirstBodyContent() == this )
-        {
-            nNewNum = 0;
-        }
+        // i#78254 Restart line numbering at page change
+        // First body content may be in table!
+        if ( bRestart && pPrv && pPrv->FindPageFrame() != FindPageFrame() )
+            pPrv = nullptr;
+
+        nNewNum = pPrv ? static_cast<SwTextFrame*>(pPrv)->GetAllLines() : 0;
+    }
+    if ( rLineNum.IsCount() )
+        nNewNum += GetThisLines();
+
+    if ( nOld == nNewNum )
+        return;
+
+    mnAllLines = nNewNum;
+    SwContentFrame *pNxt = GetNextContentFrame();
+    while ( pNxt &&
+            (pNxt->IsInTab() || pNxt->IsInDocBody() != IsInDocBody()) )
+        pNxt = pNxt->GetNextContentFrame();
+    if ( pNxt )
+    {
+        if ( pNxt->GetUpper() != GetUpper() )
+            pNxt->InvalidateLineNum();
         else
-        {
-            SwContentFrame *pPrv = GetPrevContentFrame();
-            while ( pPrv &&
-                    (pPrv->IsInTab() || pPrv->IsInDocBody() != IsInDocBody()) )
-                pPrv = pPrv->GetPrevContentFrame();
-
-            // i#78254 Restart line numbering at page change
-            // First body content may be in table!
-            if ( bRestart && pPrv && pPrv->FindPageFrame() != FindPageFrame() )
-                pPrv = nullptr;
-
-            nNewNum = pPrv ? static_cast<SwTextFrame*>(pPrv)->GetAllLines() : 0;
-        }
-        if ( rLineNum.IsCount() )
-            nNewNum += GetThisLines();
-
-        if ( nOld != nNewNum )
-        {
-            mnAllLines = nNewNum;
-            SwContentFrame *pNxt = GetNextContentFrame();
-            while ( pNxt &&
-                    (pNxt->IsInTab() || pNxt->IsInDocBody() != IsInDocBody()) )
-                pNxt = pNxt->GetNextContentFrame();
-            if ( pNxt )
-            {
-                if ( pNxt->GetUpper() != GetUpper() )
-                    pNxt->InvalidateLineNum();
-                else
-                    pNxt->InvalidateLineNum_();
-            }
-        }
+            pNxt->InvalidateLineNum_();
     }
 }
 

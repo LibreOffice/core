@@ -25,19 +25,19 @@
 SwSaveClip::~SwSaveClip()
 {
     // We recover the old state
-    if( pOut && bChg )
+    if( !(pOut && bChg) )
+        return;
+
+    if ( pOut->GetConnectMetaFile() )
+        pOut->Pop();
+    else
     {
-        if ( pOut->GetConnectMetaFile() )
-            pOut->Pop();
+        if( bOn )
+            pOut->SetClipRegion( aClip );
         else
-        {
-            if( bOn )
-                pOut->SetClipRegion( aClip );
-            else
-                pOut->SetClipRegion();
-        }
-        bChg = false;
+            pOut->SetClipRegion();
     }
+    bChg = false;
 }
 
 void SwSaveClip::ChgClip_( const SwRect &rRect, const SwTextFrame* pFrame,

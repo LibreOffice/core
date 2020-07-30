@@ -505,27 +505,27 @@ bool SwSoftHyphPortion::Format( SwTextFormatInfo &rInf )
  */
 void SwSoftHyphPortion::FormatEOL( SwTextFormatInfo &rInf )
 {
-    if( !IsExpand() )
-    {
-        SetExpand( true );
-        if( rInf.GetLast() == this )
-            rInf.SetLast( FindPrevPortion( rInf.GetRoot() ) );
+    if( IsExpand() )
+        return;
 
-        // We need to reset the old values
-        const SwTwips nOldX  = rInf.X();
-        TextFrameIndex const nOldIdx = rInf.GetIdx();
-        rInf.X( rInf.X() - PrtWidth() );
-        rInf.SetIdx( rInf.GetIdx() - GetLen() );
-        const bool bFull = SwHyphPortion::Format( rInf );
+    SetExpand( true );
+    if( rInf.GetLast() == this )
+        rInf.SetLast( FindPrevPortion( rInf.GetRoot() ) );
 
-        // Shady business: We're allowed to get wider, but a Fly is also
-        // being processed, which needs a correct X position
-        if( bFull || !rInf.GetFly() )
-            rInf.X( nOldX );
-        else
-            rInf.X( nOldX + Width() );
-        rInf.SetIdx( nOldIdx );
-    }
+    // We need to reset the old values
+    const SwTwips nOldX  = rInf.X();
+    TextFrameIndex const nOldIdx = rInf.GetIdx();
+    rInf.X( rInf.X() - PrtWidth() );
+    rInf.SetIdx( rInf.GetIdx() - GetLen() );
+    const bool bFull = SwHyphPortion::Format( rInf );
+
+    // Shady business: We're allowed to get wider, but a Fly is also
+    // being processed, which needs a correct X position
+    if( bFull || !rInf.GetFly() )
+        rInf.X( nOldX );
+    else
+        rInf.X( nOldX + Width() );
+    rInf.SetIdx( nOldIdx );
 }
 
 /**

@@ -295,46 +295,45 @@ SwTaggedPDFHelper::SwTaggedPDFHelper( const Num_Info* pNumInfo,
     mpPDFExtOutDevData =
         dynamic_cast< vcl::PDFExtOutDevData*>( rOut.GetExtOutDevData() );
 
-    if ( mpPDFExtOutDevData && mpPDFExtOutDevData->GetIsExportTaggedPDF() )
-    {
-#if OSL_DEBUG_LEVEL > 1
-        sal_Int32 nCurrentStruct = mpPDFExtOutDevData->GetCurrentStructureElement();
-        lcl_DBGCheckStack();
-#endif
-        if ( mpNumInfo )
-            BeginNumberedListStructureElements();
-        else if ( mpFrameInfo )
-            BeginBlockStructureElements();
-        else if ( mpPorInfo )
-            BeginInlineStructureElements();
-        else
-            BeginTag( vcl::PDFWriter::NonStructElement, OUString() );
+    if ( !(mpPDFExtOutDevData && mpPDFExtOutDevData->GetIsExportTaggedPDF()) )
+        return;
 
 #if OSL_DEBUG_LEVEL > 1
-        nCurrentStruct = mpPDFExtOutDevData->GetCurrentStructureElement();
-        lcl_DBGCheckStack();
-        (void)nCurrentStruct;
+    sal_Int32 nCurrentStruct = mpPDFExtOutDevData->GetCurrentStructureElement();
+    lcl_DBGCheckStack();
 #endif
-    }
+    if ( mpNumInfo )
+        BeginNumberedListStructureElements();
+    else if ( mpFrameInfo )
+        BeginBlockStructureElements();
+    else if ( mpPorInfo )
+        BeginInlineStructureElements();
+    else
+        BeginTag( vcl::PDFWriter::NonStructElement, OUString() );
+
+#if OSL_DEBUG_LEVEL > 1
+    nCurrentStruct = mpPDFExtOutDevData->GetCurrentStructureElement();
+    lcl_DBGCheckStack();
+    (void)nCurrentStruct;
+#endif
 }
 
 SwTaggedPDFHelper::~SwTaggedPDFHelper()
 {
-    if ( mpPDFExtOutDevData && mpPDFExtOutDevData->GetIsExportTaggedPDF() )
-    {
-#if OSL_DEBUG_LEVEL > 1
-        sal_Int32 nCurrentStruct = mpPDFExtOutDevData->GetCurrentStructureElement();
-        lcl_DBGCheckStack();
-#endif
-        EndStructureElements();
+    if ( !(mpPDFExtOutDevData && mpPDFExtOutDevData->GetIsExportTaggedPDF()) )
+        return;
 
 #if OSL_DEBUG_LEVEL > 1
-        nCurrentStruct = mpPDFExtOutDevData->GetCurrentStructureElement();
-        lcl_DBGCheckStack();
-        (void)nCurrentStruct;
+    sal_Int32 nCurrentStruct = mpPDFExtOutDevData->GetCurrentStructureElement();
+    lcl_DBGCheckStack();
 #endif
+    EndStructureElements();
 
-    }
+#if OSL_DEBUG_LEVEL > 1
+    nCurrentStruct = mpPDFExtOutDevData->GetCurrentStructureElement();
+    lcl_DBGCheckStack();
+    (void)nCurrentStruct;
+#endif
 }
 
 bool SwTaggedPDFHelper::CheckReopenTag()

@@ -76,32 +76,32 @@ void SwGluePortion::Paint( const SwTextPaintInfo &rInf ) const
         aInf.DrawText(*this, TextFrameIndex(aText.getLength()), true);
     }
 
-    if( rInf.OnWin() && rInf.GetOpt().IsBlank() && rInf.IsNoSymbol() )
-    {
+    if( !(rInf.OnWin() && rInf.GetOpt().IsBlank() && rInf.IsNoSymbol()) )
+        return;
+
 #if OSL_DEBUG_LEVEL > 0
-        const sal_Unicode cChar = rInf.GetChar( rInf.GetIdx() );
-        OSL_ENSURE( CH_BLANK  == cChar || CH_BULLET == cChar,
-                "SwGluePortion::Paint: blank expected" );
+    const sal_Unicode cChar = rInf.GetChar( rInf.GetIdx() );
+    OSL_ENSURE( CH_BLANK  == cChar || CH_BULLET == cChar,
+            "SwGluePortion::Paint: blank expected" );
 #endif
-        if (TextFrameIndex(1) == GetLen())
-        {
-            OUString aBullet( CH_BULLET );
-            SwPosSize aBulletSize( rInf.GetTextSize( aBullet ) );
-            Point aPos( rInf.GetPos() );
-            aPos.AdjustX((Width()/2) - (aBulletSize.Width()/2) );
-            SwTextPaintInfo aInf( rInf, &aBullet );
-            aInf.SetPos( aPos );
-            SwTextPortion aBulletPor;
-            aBulletPor.Width( aBulletSize.Width() );
-            aBulletPor.Height( aBulletSize.Height() );
-            aBulletPor.SetAscent( GetAscent() );
-            aInf.DrawText(aBulletPor, TextFrameIndex(aBullet.getLength()), true);
-        }
-        else
-        {
-            SwTextSlot aSlot( &rInf, this, true, false );
-            rInf.DrawText( *this, rInf.GetLen(), true );
-        }
+    if (TextFrameIndex(1) == GetLen())
+    {
+        OUString aBullet( CH_BULLET );
+        SwPosSize aBulletSize( rInf.GetTextSize( aBullet ) );
+        Point aPos( rInf.GetPos() );
+        aPos.AdjustX((Width()/2) - (aBulletSize.Width()/2) );
+        SwTextPaintInfo aInf( rInf, &aBullet );
+        aInf.SetPos( aPos );
+        SwTextPortion aBulletPor;
+        aBulletPor.Width( aBulletSize.Width() );
+        aBulletPor.Height( aBulletSize.Height() );
+        aBulletPor.SetAscent( GetAscent() );
+        aInf.DrawText(aBulletPor, TextFrameIndex(aBullet.getLength()), true);
+    }
+    else
+    {
+        SwTextSlot aSlot( &rInf, this, true, false );
+        rInf.DrawText( *this, rInf.GetLen(), true );
     }
 }
 

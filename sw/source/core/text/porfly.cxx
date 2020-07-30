@@ -149,31 +149,31 @@ void SwTextFrame::MoveFlyInCnt(SwTextFrame *pNew,
         TextFrameIndex const nStart, TextFrameIndex const nEnd)
 {
     SwSortedObjs *pObjs = GetDrawObjs();
-    if ( nullptr != pObjs )
+    if ( nullptr == pObjs )
+        return;
+
+    for ( size_t i = 0; GetDrawObjs() && i < pObjs->size(); ++i )
     {
-        for ( size_t i = 0; GetDrawObjs() && i < pObjs->size(); ++i )
+        // Consider changed type of <SwSortedList> entries
+        SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
+        const SwFormatAnchor& rAnch = pAnchoredObj->GetFrameFormat().GetAnchor();
+        if (rAnch.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
         {
-            // Consider changed type of <SwSortedList> entries
-            SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
-            const SwFormatAnchor& rAnch = pAnchoredObj->GetFrameFormat().GetAnchor();
-            if (rAnch.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
+            const SwPosition* pPos = rAnch.GetContentAnchor();
+            TextFrameIndex const nIndex(MapModelToViewPos(*pPos));
+            if (nStart <= nIndex && nIndex < nEnd)
             {
-                const SwPosition* pPos = rAnch.GetContentAnchor();
-                TextFrameIndex const nIndex(MapModelToViewPos(*pPos));
-                if (nStart <= nIndex && nIndex < nEnd)
+                if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
                 {
-                    if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
-                    {
-                        RemoveFly( static_cast<SwFlyFrame*>(pAnchoredObj) );
-                        pNew->AppendFly( static_cast<SwFlyFrame*>(pAnchoredObj) );
-                    }
-                    else if ( dynamic_cast< const SwAnchoredDrawObject *>( pAnchoredObj ) !=  nullptr )
-                    {
-                        RemoveDrawObj( *pAnchoredObj );
-                        pNew->AppendDrawObj( *pAnchoredObj );
-                    }
-                    --i;
+                    RemoveFly( static_cast<SwFlyFrame*>(pAnchoredObj) );
+                    pNew->AppendFly( static_cast<SwFlyFrame*>(pAnchoredObj) );
                 }
+                else if ( dynamic_cast< const SwAnchoredDrawObject *>( pAnchoredObj ) !=  nullptr )
+                {
+                    RemoveDrawObj( *pAnchoredObj );
+                    pNew->AppendDrawObj( *pAnchoredObj );
+                }
+                --i;
             }
         }
     }
@@ -209,30 +209,30 @@ void sw::FlyContentPortion::Paint(const SwTextPaintInfo& rInf) const
     if(rInf.GetTextFrame()->IsVertical())
         rInf.GetTextFrame()->SwitchHorizontalToVertical(aRepaintRect);
 
-    if((m_pFly->IsCompletePaint() ||
+    if(!((m_pFly->IsCompletePaint() ||
             m_pFly->getFrameArea().IsOver(aRepaintRect)) &&
-            SwFlyFrame::IsPaint(m_pFly->GetVirtDrawObj(), m_pFly->getRootFrame()->GetCurrShell()))
+            SwFlyFrame::IsPaint(m_pFly->GetVirtDrawObj(), m_pFly->getRootFrame()->GetCurrShell())))
+        return;
+
+    SwRect aRect(m_pFly->getFrameArea());
+    if(!m_pFly->IsCompletePaint())
+        aRect.Intersection_(aRepaintRect);
+
+    // GetFlyFrame() may change the layout mode at the output device.
     {
-        SwRect aRect(m_pFly->getFrameArea());
-        if(!m_pFly->IsCompletePaint())
-            aRect.Intersection_(aRepaintRect);
-
-        // GetFlyFrame() may change the layout mode at the output device.
-        {
-            SwLayoutModeModifier aLayoutModeModifier(*rInf.GetOut());
-            m_pFly->PaintSwFrame(const_cast<vcl::RenderContext&>(*rInf.GetOut()), aRect);
-        }
-        const_cast<SwTextPaintInfo&>(rInf).GetRefDev()->SetLayoutMode(rInf.GetOut()->GetLayoutMode());
-
-        // As the OutputDevice might be anything, the font must be re-selected.
-        // Being in const method should not be a problem.
-        const_cast<SwTextPaintInfo&>(rInf).SelectFont();
-
-        assert(rInf.GetVsh());
-        SAL_WARN_IF(rInf.GetVsh()->GetOut() != rInf.GetOut(), "sw.core", "SwFlyCntPortion::Paint: Outdev has changed");
-        if(rInf.GetVsh())
-            const_cast<SwTextPaintInfo&>(rInf).SetOut(rInf.GetVsh()->GetOut());
+        SwLayoutModeModifier aLayoutModeModifier(*rInf.GetOut());
+        m_pFly->PaintSwFrame(const_cast<vcl::RenderContext&>(*rInf.GetOut()), aRect);
     }
+    const_cast<SwTextPaintInfo&>(rInf).GetRefDev()->SetLayoutMode(rInf.GetOut()->GetLayoutMode());
+
+    // As the OutputDevice might be anything, the font must be re-selected.
+    // Being in const method should not be a problem.
+    const_cast<SwTextPaintInfo&>(rInf).SelectFont();
+
+    assert(rInf.GetVsh());
+    SAL_WARN_IF(rInf.GetVsh()->GetOut() != rInf.GetOut(), "sw.core", "SwFlyCntPortion::Paint: Outdev has changed");
+    if(rInf.GetVsh())
+        const_cast<SwTextPaintInfo&>(rInf).SetOut(rInf.GetVsh()->GetOut());
 }
 
 void sw::DrawFlyCntPortion::Paint(const SwTextPaintInfo&) const

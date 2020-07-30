@@ -160,20 +160,20 @@ sal_uInt16 SwBlankPortion::MayUnderflow( const SwTextFormatInfo &rInf,
 void SwBlankPortion::FormatEOL( SwTextFormatInfo &rInf )
 {
     sal_uInt16 nMay = MayUnderflow( rInf, rInf.GetIdx() - nLineLength, true );
-    if( nMay )
+    if( !nMay )
+        return;
+
+    if( nMay > 1 )
     {
-        if( nMay > 1 )
-        {
-            if( rInf.GetLast() == this )
-               rInf.SetLast( FindPrevPortion( rInf.GetRoot() ) );
-            rInf.X( rInf.X() - PrtWidth() );
-            rInf.SetIdx( rInf.GetIdx() - GetLen() );
-        }
-        Truncate();
-        rInf.SetUnderflow( this );
-        if( rInf.GetLast()->IsKernPortion() )
-            rInf.SetUnderflow( rInf.GetLast() );
+        if( rInf.GetLast() == this )
+           rInf.SetLast( FindPrevPortion( rInf.GetRoot() ) );
+        rInf.X( rInf.X() - PrtWidth() );
+        rInf.SetIdx( rInf.GetIdx() - GetLen() );
     }
+    Truncate();
+    rInf.SetUnderflow( this );
+    if( rInf.GetLast()->IsKernPortion() )
+        rInf.SetUnderflow( rInf.GetLast() );
 }
 
 /**
