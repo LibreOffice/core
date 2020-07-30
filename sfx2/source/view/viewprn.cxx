@@ -189,20 +189,12 @@ const Any& SfxPrinterController::getSelectionObject() const
         return bSel ? maSelection : maCompleteSelection;
     }
 
-    bool bIsCalc = false;
-    pVal = getValue( OUString( "PrintRange" ) );
-    if ( pVal )
-        bIsCalc = true;
-
     sal_Int32 nChoice = 0;
     pVal = getValue( OUString( "PrintContent" ) );
     if( pVal )
         pVal->Value >>= nChoice;
 
-    if ( bIsCalc )
-        return (nChoice > 1) ? maSelection : maCompleteSelection;
-    else
-        return (nChoice > 3) ? maSelection : maCompleteSelection;
+    return (nChoice > 1) ? maSelection : maCompleteSelection;
 }
 
 Sequence< beans::PropertyValue > SfxPrinterController::getMergedOptions() const
