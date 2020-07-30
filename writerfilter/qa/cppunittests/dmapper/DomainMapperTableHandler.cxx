@@ -15,6 +15,7 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 
 using namespace ::com::sun::star;
 
@@ -64,6 +65,20 @@ CPPUNIT_TEST_FIXTURE(Test, test1cellInsidevRightborder)
     // - Actual  : 18
     // i.e. the request to have no table-level right border was lost on import.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0), aBorder.LineWidth);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testNestedFloatingTable)
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "nested-floating-table.docx";
+    getComponent() = loadFromDesktop(aURL);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<beans::XPropertySet> xFrame(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    bool bIsFollowingTextFlow = false;
+    xFrame->getPropertyValue("IsFollowingTextFlow") >>= bIsFollowingTextFlow;
+    // Without the accompanying fix in place, this test would have failed, the nested floating table
+    // was partly positioned outside the table cell, leading to overlapping text.
+    CPPUNIT_ASSERT(bIsFollowingTextFlow);
 }
 }
 
