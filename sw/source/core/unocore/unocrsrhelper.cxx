@@ -1116,39 +1116,38 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
     SfxObjectShellRef aRef( pDocSh );
 
     pMed->Download();   // if necessary: start the download
-    if( aRef.is() && 1 < aRef->GetRefCount() )  // Ref still valid?
+    if( !(aRef.is() && 1 < aRef->GetRefCount()) )  // Ref still valid?
+        return;
+
+    SwReaderPtr pRdr;
+    SfxItemSet* pSet =  pMed->GetItemSet();
+    pSet->Put(SfxBoolItem(FN_API_CALL, true));
+    if(!sPassword.isEmpty())
+        pSet->Put(SfxStringItem(SID_PASSWORD, sPassword));
+    Reader *pRead = pDocSh->StartConvertFrom( *pMed, pRdr, nullptr, pUnoCursor);
+    if( !pRead )
+        return;
+
+    UnoActionContext aContext(pDoc);
+
+    if(pUnoCursor->HasMark())
+        pDoc->getIDocumentContentOperations().DeleteAndJoin(*pUnoCursor);
+
+    SwNodeIndex aSave(  pUnoCursor->GetPoint()->nNode, -1 );
+    sal_Int32 nContent = pUnoCursor->GetPoint()->nContent.GetIndex();
+
+    ErrCode nErrno = pRdr->Read( *pRead );   // and paste the document
+
+    if(!nErrno)
     {
-        SwReaderPtr pRdr;
-        SfxItemSet* pSet =  pMed->GetItemSet();
-        pSet->Put(SfxBoolItem(FN_API_CALL, true));
-        if(!sPassword.isEmpty())
-            pSet->Put(SfxStringItem(SID_PASSWORD, sPassword));
-        Reader *pRead = pDocSh->StartConvertFrom( *pMed, pRdr, nullptr, pUnoCursor);
-        if( pRead )
-        {
+        ++aSave;
+        pUnoCursor->SetMark();
+        pUnoCursor->GetMark()->nNode = aSave;
 
-            UnoActionContext aContext(pDoc);
-
-            if(pUnoCursor->HasMark())
-                pDoc->getIDocumentContentOperations().DeleteAndJoin(*pUnoCursor);
-
-            SwNodeIndex aSave(  pUnoCursor->GetPoint()->nNode, -1 );
-            sal_Int32 nContent = pUnoCursor->GetPoint()->nContent.GetIndex();
-
-            ErrCode nErrno = pRdr->Read( *pRead );   // and paste the document
-
-            if(!nErrno)
-            {
-                ++aSave;
-                pUnoCursor->SetMark();
-                pUnoCursor->GetMark()->nNode = aSave;
-
-                SwContentNode* pCntNode = aSave.GetNode().GetContentNode();
-                if( !pCntNode )
-                    nContent = 0;
-                pUnoCursor->GetMark()->nContent.Assign( pCntNode, nContent );
-            }
-        }
+        SwContentNode* pCntNode = aSave.GetNode().GetContentNode();
+        if( !pCntNode )
+            nContent = 0;
+        pUnoCursor->GetMark()->nContent.Assign( pCntNode, nContent );
     }
 }
 

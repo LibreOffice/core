@@ -656,19 +656,19 @@ inline const ::sw::Meta* SwXMeta::Impl::GetMeta() const
 void SwXMeta::Impl::Notify(const SfxHint& rHint)
 {
     m_pTextPortions.reset(); // throw away cache (SwTextNode changed)
-    if(rHint.GetId() == SfxHintId::Dying || rHint.GetId() == SfxHintId::Deinitializing)
-    {
-        m_bIsDisposed = true;
-        m_pMeta = nullptr;
-        m_xText->Invalidate();
-        uno::Reference<uno::XInterface> const xThis(m_wThis);
-        if (!xThis.is())
-        {   // fdo#72695: if UNO object is already dead, don't revive it with event
-            return;
-        }
-        lang::EventObject const ev(xThis);
-        m_EventListeners.disposeAndClear(ev);
+    if(rHint.GetId() != SfxHintId::Dying && rHint.GetId() != SfxHintId::Deinitializing)
+        return;
+
+    m_bIsDisposed = true;
+    m_pMeta = nullptr;
+    m_xText->Invalidate();
+    uno::Reference<uno::XInterface> const xThis(m_wThis);
+    if (!xThis.is())
+    {   // fdo#72695: if UNO object is already dead, don't revive it with event
+        return;
     }
+    lang::EventObject const ev(xThis);
+    m_EventListeners.disposeAndClear(ev);
 }
 
 uno::Reference<text::XText> const & SwXMeta::GetParentText() const

@@ -144,28 +144,28 @@ namespace
         }
 
         const SwPosition& rEndPos = pBkmk->GetMarkEnd();
-        if(rEndPos.nNode == nOwnNode)
+        if(rEndPos.nNode != nOwnNode)
+            return;
+
+        unique_ptr<SwPosition> pCrossRefEndPos;
+        const SwPosition* pEndPos = nullptr;
+        ::sw::mark::CrossRefBookmark *const pCrossRefMark(dynamic_cast< ::sw::mark::CrossRefBookmark*>(pBkmk));
+        if(hasOther)
         {
-            unique_ptr<SwPosition> pCrossRefEndPos;
-            const SwPosition* pEndPos = nullptr;
-            ::sw::mark::CrossRefBookmark *const pCrossRefMark(dynamic_cast< ::sw::mark::CrossRefBookmark*>(pBkmk));
-            if(hasOther)
-            {
-                pEndPos = &rEndPos;
-            }
-            else if (pCrossRefMark)
-            {
-                // Crossrefbookmarks only remember the start position but have to span the whole paragraph
-                pCrossRefEndPos = std::make_unique<SwPosition>(rEndPos);
-                pCrossRefEndPos->nContent = pCrossRefEndPos->nNode.GetNode().GetTextNode()->Len();
-                pEndPos = pCrossRefEndPos.get();
-            }
-            if(pEndPos)
-            {
-                rBkmArr.insert(std::make_shared<SwXBookmarkPortion_Impl>(
-                            SwXBookmark::CreateXBookmark(rDoc, pBkmk),
-                            BkmType::End, *pEndPos));
-            }
+            pEndPos = &rEndPos;
+        }
+        else if (pCrossRefMark)
+        {
+            // Crossrefbookmarks only remember the start position but have to span the whole paragraph
+            pCrossRefEndPos = std::make_unique<SwPosition>(rEndPos);
+            pCrossRefEndPos->nContent = pCrossRefEndPos->nNode.GetNode().GetTextNode()->Len();
+            pEndPos = pCrossRefEndPos.get();
+        }
+        if(pEndPos)
+        {
+            rBkmArr.insert(std::make_shared<SwXBookmarkPortion_Impl>(
+                        SwXBookmark::CreateXBookmark(rDoc, pBkmk),
+                        BkmType::End, *pEndPos));
         }
     }
 
@@ -1080,24 +1080,24 @@ static void lcl_FillRedlineArray(
     const SwRedlineTable& rRedTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
     const size_t nRedTableCount = rRedTable.size();
 
-    if ( nRedTableCount > 0 )
-    {
-        const SwPosition* pStart = rUnoCursor.GetPoint();
-        const SwNodeIndex nOwnNode = pStart->nNode;
+    if ( nRedTableCount <= 0 )
+        return;
 
-        for(size_t nRed = 0; nRed < nRedTableCount; ++nRed)
-        {
-            const SwRangeRedline* pRedline = rRedTable[nRed];
-            const SwPosition* pRedStart = pRedline->Start();
-            const SwNodeIndex nRedNode = pRedStart->nNode;
-            if ( nOwnNode == nRedNode )
-                rRedArr.insert( std::make_shared<SwXRedlinePortion_Impl>(
-                    pRedline, true ) );
-            if( pRedline->HasMark() && pRedline->End()->nNode == nOwnNode )
-                rRedArr.insert( std::make_shared<SwXRedlinePortion_Impl>(
-                    pRedline, false ) );
-       }
-    }
+    const SwPosition* pStart = rUnoCursor.GetPoint();
+    const SwNodeIndex nOwnNode = pStart->nNode;
+
+    for(size_t nRed = 0; nRed < nRedTableCount; ++nRed)
+    {
+        const SwRangeRedline* pRedline = rRedTable[nRed];
+        const SwPosition* pRedStart = pRedline->Start();
+        const SwNodeIndex nRedNode = pRedStart->nNode;
+        if ( nOwnNode == nRedNode )
+            rRedArr.insert( std::make_shared<SwXRedlinePortion_Impl>(
+                pRedline, true ) );
+        if( pRedline->HasMark() && pRedline->End()->nNode == nOwnNode )
+            rRedArr.insert( std::make_shared<SwXRedlinePortion_Impl>(
+                pRedline, false ) );
+   }
 }
 
 static void lcl_FillSoftPageBreakArray(

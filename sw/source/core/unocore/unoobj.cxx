@@ -179,25 +179,25 @@ static void
 lcl_setCharStyle(SwDoc *const pDoc, const uno::Any & rValue, SfxItemSet & rSet)
 {
     SwDocShell *const pDocSh = pDoc->GetDocShell();
-    if(pDocSh)
+    if(!pDocSh)
+        return;
+
+    OUString uStyle;
+    if (!(rValue >>= uStyle))
     {
-        OUString uStyle;
-        if (!(rValue >>= uStyle))
-        {
-            throw lang::IllegalArgumentException();
-        }
-        OUString sStyle;
-        SwStyleNameMapper::FillUIName(uStyle, sStyle,
-                SwGetPoolIdFromName::ChrFmt);
-        SwDocStyleSheet *const pStyle = static_cast<SwDocStyleSheet*>(
-            pDocSh->GetStyleSheetPool()->Find(sStyle, SfxStyleFamily::Char));
-        if (!pStyle)
-        {
-            throw lang::IllegalArgumentException();
-        }
-        const SwFormatCharFormat aFormat(pStyle->GetCharFormat());
-        rSet.Put(aFormat);
+        throw lang::IllegalArgumentException();
     }
+    OUString sStyle;
+    SwStyleNameMapper::FillUIName(uStyle, sStyle,
+            SwGetPoolIdFromName::ChrFmt);
+    SwDocStyleSheet *const pStyle = static_cast<SwDocStyleSheet*>(
+        pDocSh->GetStyleSheetPool()->Find(sStyle, SfxStyleFamily::Char));
+    if (!pStyle)
+    {
+        throw lang::IllegalArgumentException();
+    }
+    const SwFormatCharFormat aFormat(pStyle->GetCharFormat());
+    rSet.Put(aFormat);
 };
 
 /// @throws lang::IllegalArgumentException
@@ -719,34 +719,34 @@ void SwXTextCursor::DeleteAndInsert(const OUString& rText,
         const bool bForceExpandHints)
 {
     auto pUnoCursor = static_cast<SwCursor*>(m_pImpl->m_pUnoCursor.get());
-    if (pUnoCursor)
-    {
-        // Start/EndAction
-        SwDoc* pDoc = pUnoCursor->GetDoc();
-        UnoActionContext aAction(pDoc);
-        const sal_Int32 nTextLen = rText.getLength();
-        pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
-        auto pCurrent = pUnoCursor;
-        do
-        {
-            if (pCurrent->HasMark())
-            {
-                pDoc->getIDocumentContentOperations().DeleteAndJoin(*pCurrent);
-            }
-            if(nTextLen)
-            {
-                const bool bSuccess(
-                    SwUnoCursorHelper::DocInsertStringSplitCR(
-                        *pDoc, *pCurrent, rText, bForceExpandHints ) );
-                OSL_ENSURE( bSuccess, "Doc->Insert(Str) failed." );
+    if (!pUnoCursor)
+        return;
 
-                SwUnoCursorHelper::SelectPam(*pUnoCursor, true);
-                pCurrent->Left(rText.getLength());
-            }
-            pCurrent = pCurrent->GetNext();
-        } while (pCurrent != pUnoCursor);
-        pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
-    }
+    // Start/EndAction
+    SwDoc* pDoc = pUnoCursor->GetDoc();
+    UnoActionContext aAction(pDoc);
+    const sal_Int32 nTextLen = rText.getLength();
+    pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
+    auto pCurrent = pUnoCursor;
+    do
+    {
+        if (pCurrent->HasMark())
+        {
+            pDoc->getIDocumentContentOperations().DeleteAndJoin(*pCurrent);
+        }
+        if(nTextLen)
+        {
+            const bool bSuccess(
+                SwUnoCursorHelper::DocInsertStringSplitCR(
+                    *pDoc, *pCurrent, rText, bForceExpandHints ) );
+            OSL_ENSURE( bSuccess, "Doc->Insert(Str) failed." );
+
+            SwUnoCursorHelper::SelectPam(*pUnoCursor, true);
+            pCurrent->Left(rText.getLength());
+        }
+        pCurrent = pCurrent->GetNext();
+    } while (pCurrent != pUnoCursor);
+    pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
 }
 
 namespace {
@@ -2344,58 +2344,58 @@ SwXTextCursor::setPropertiesToDefault(
 
     SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
-    if ( rPropertyNames.hasElements() )
+    if ( !rPropertyNames.hasElements() )
+        return;
+
+    SwDoc & rDoc = *rUnoCursor.GetDoc();
+    std::set<sal_uInt16> aWhichIds;
+    std::set<sal_uInt16> aParaWhichIds;
+    for (const OUString& rName : rPropertyNames)
     {
-        SwDoc & rDoc = *rUnoCursor.GetDoc();
-        std::set<sal_uInt16> aWhichIds;
-        std::set<sal_uInt16> aParaWhichIds;
-        for (const OUString& rName : rPropertyNames)
+        SfxItemPropertySimpleEntry const*const  pEntry =
+            m_pImpl->m_rPropSet.getPropertyMap().getByName( rName );
+        if (!pEntry)
         {
-            SfxItemPropertySimpleEntry const*const  pEntry =
-                m_pImpl->m_rPropSet.getPropertyMap().getByName( rName );
-            if (!pEntry)
+            if (rName == UNO_NAME_IS_SKIP_HIDDEN_TEXT ||
+                rName == UNO_NAME_IS_SKIP_PROTECTED_TEXT)
             {
-                if (rName == UNO_NAME_IS_SKIP_HIDDEN_TEXT ||
-                    rName == UNO_NAME_IS_SKIP_PROTECTED_TEXT)
-                {
-                    continue;
-                }
-                throw beans::UnknownPropertyException(
-                    "Unknown property: " + rName,
-                    static_cast<cppu::OWeakObject *>(this));
+                continue;
             }
-            if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
-            {
-                throw uno::RuntimeException(
-                    "setPropertiesToDefault: property is read-only: " + rName,
-                    static_cast<cppu::OWeakObject *>(this));
-            }
-
-            if (pEntry->nWID < RES_FRMATR_END)
-            {
-                if (pEntry->nWID < RES_PARATR_BEGIN)
-                {
-                    aWhichIds.insert( pEntry->nWID );
-                }
-                else
-                {
-                    aParaWhichIds.insert( pEntry->nWID );
-                }
-            }
-            else if (pEntry->nWID == FN_UNO_NUM_START_VALUE)
-            {
-                SwUnoCursorHelper::resetCursorPropertyValue(*pEntry, rUnoCursor);
-            }
+            throw beans::UnknownPropertyException(
+                "Unknown property: " + rName,
+                static_cast<cppu::OWeakObject *>(this));
+        }
+        if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
+        {
+            throw uno::RuntimeException(
+                "setPropertiesToDefault: property is read-only: " + rName,
+                static_cast<cppu::OWeakObject *>(this));
         }
 
-        if (!aParaWhichIds.empty())
+        if (pEntry->nWID < RES_FRMATR_END)
         {
-            lcl_SelectParaAndReset(rUnoCursor, rDoc, aParaWhichIds);
+            if (pEntry->nWID < RES_PARATR_BEGIN)
+            {
+                aWhichIds.insert( pEntry->nWID );
+            }
+            else
+            {
+                aParaWhichIds.insert( pEntry->nWID );
+            }
         }
-        if (!aWhichIds.empty())
+        else if (pEntry->nWID == FN_UNO_NUM_START_VALUE)
         {
-            rDoc.ResetAttrs(rUnoCursor, true, aWhichIds);
+            SwUnoCursorHelper::resetCursorPropertyValue(*pEntry, rUnoCursor);
         }
+    }
+
+    if (!aParaWhichIds.empty())
+    {
+        lcl_SelectParaAndReset(rUnoCursor, rDoc, aParaWhichIds);
+    }
+    if (!aWhichIds.empty())
+    {
+        rDoc.ResetAttrs(rUnoCursor, true, aWhichIds);
     }
 }
 

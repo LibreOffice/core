@@ -2600,28 +2600,28 @@ void SwXFrame::dispose()
 {
     SolarMutexGuard aGuard;
     SwFrameFormat* pFormat = GetFrameFormat();
-    if (pFormat)
+    if (!pFormat)
+        return;
+
+    DisposeInternal();
+    SdrObject* pObj = pFormat->FindSdrObject();
+    // OD 11.09.2003 #112039# - add condition to perform delete of
+    // format/anchor sign, not only if the object is inserted, but also
+    // if a contact object is registered, which isn't in the destruction.
+    if ( pObj &&
+         ( pObj->IsInserted() ||
+           ( pObj->GetUserCall() &&
+             !static_cast<SwContact*>(pObj->GetUserCall())->IsInDTOR() ) ) )
     {
-        DisposeInternal();
-        SdrObject* pObj = pFormat->FindSdrObject();
-        // OD 11.09.2003 #112039# - add condition to perform delete of
-        // format/anchor sign, not only if the object is inserted, but also
-        // if a contact object is registered, which isn't in the destruction.
-        if ( pObj &&
-             ( pObj->IsInserted() ||
-               ( pObj->GetUserCall() &&
-                 !static_cast<SwContact*>(pObj->GetUserCall())->IsInDTOR() ) ) )
+        if (pFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR)
         {
-            if (pFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR)
-            {
-                const SwPosition &rPos = *(pFormat->GetAnchor().GetContentAnchor());
-                SwTextNode *pTextNode = rPos.nNode.GetNode().GetTextNode();
-                const sal_Int32 nIdx = rPos.nContent.GetIndex();
-                pTextNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx, nIdx );
-            }
-            else
-                pFormat->GetDoc()->getIDocumentLayoutAccess().DelLayoutFormat(pFormat);
+            const SwPosition &rPos = *(pFormat->GetAnchor().GetContentAnchor());
+            SwTextNode *pTextNode = rPos.nNode.GetNode().GetTextNode();
+            const sal_Int32 nIdx = rPos.nContent.GetIndex();
+            pTextNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx, nIdx );
         }
+        else
+            pFormat->GetDoc()->getIDocumentLayoutAccess().DelLayoutFormat(pFormat);
     }
 
 }
@@ -3081,28 +3081,28 @@ void SwXFrame::attach(const uno::Reference< text::XTextRange > & xTextRange)
     }
 
     SwFrameFormat* pFormat = GetFrameFormat();
-    if( pFormat )
+    if( !pFormat )
+        return;
+
+    SwDoc* pDoc = pFormat->GetDoc();
+    SwUnoInternalPaM aIntPam(*pDoc);
+    if (!::sw::XTextRangeToSwPaM(aIntPam, xTextRange))
+        throw lang::IllegalArgumentException();
+
+    SfxItemSet aSet( pDoc->GetAttrPool(), svl::Items<RES_ANCHOR, RES_ANCHOR>{} );
+    aSet.SetParent(&pFormat->GetAttrSet());
+    SwFormatAnchor aAnchor = aSet.Get(RES_ANCHOR);
+
+    if (aAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
     {
-        SwDoc* pDoc = pFormat->GetDoc();
-        SwUnoInternalPaM aIntPam(*pDoc);
-        if (!::sw::XTextRangeToSwPaM(aIntPam, xTextRange))
-            throw lang::IllegalArgumentException();
-
-        SfxItemSet aSet( pDoc->GetAttrPool(), svl::Items<RES_ANCHOR, RES_ANCHOR>{} );
-        aSet.SetParent(&pFormat->GetAttrSet());
-        SwFormatAnchor aAnchor = aSet.Get(RES_ANCHOR);
-
-        if (aAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
-        {
-            throw lang::IllegalArgumentException(
-                    "SwXFrame::attach(): re-anchoring AS_CHAR not supported",
-                    *this, 0);
-        }
-
-        aAnchor.SetAnchor( aIntPam.Start() );
-        aSet.Put(aAnchor);
-        pDoc->SetFlyFrameAttr( *pFormat, aSet );
+        throw lang::IllegalArgumentException(
+                "SwXFrame::attach(): re-anchoring AS_CHAR not supported",
+                *this, 0);
     }
+
+    aAnchor.SetAnchor( aIntPam.Start() );
+    aSet.Put(aAnchor);
+    pDoc->SetFlyFrameAttr( *pFormat, aSet );
 }
 
 awt::Point SwXFrame::getPosition()

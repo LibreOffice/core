@@ -789,23 +789,23 @@ void SwXDrawPage::ungroup(const uno::Reference< drawing::XShapeGroup > & rShapeG
     SolarMutexGuard aGuard;
     if(!pDoc)
         throw uno::RuntimeException();
-    if(xPageAgg.is())
-    {
-        SwFmDrawPage* pPage = GetSvxPage();
-        if(pPage) //TODO: can this be Null?
-        {
-            pPage->PreUnGroup(rShapeGroup);
-            UnoActionContext aContext(pDoc);
-            pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
+    if(!xPageAgg.is())
+        return;
 
-            pDoc->UnGroupSelection( *pPage->GetDrawView() );
-            pDoc->ChgAnchor( pPage->GetDrawView()->GetMarkedObjectList(),
-                        RndStdIds::FLY_AT_PARA,
-                        true, false );
-            pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
-            pPage->RemovePageView();
-        }
-    }
+    SwFmDrawPage* pPage = GetSvxPage();
+    if(!pPage) //TODO: can this be Null?
+        return;
+
+    pPage->PreUnGroup(rShapeGroup);
+    UnoActionContext aContext(pDoc);
+    pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
+
+    pDoc->UnGroupSelection( *pPage->GetDrawView() );
+    pDoc->ChgAnchor( pPage->GetDrawView()->GetMarkedObjectList(),
+                RndStdIds::FLY_AT_PARA,
+                true, false );
+    pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
+    pPage->RemovePageView();
 }
 
 SwFmDrawPage*   SwXDrawPage::GetSvxPage()
@@ -1038,390 +1038,390 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
     SolarMutexGuard aGuard;
     SwFrameFormat*   pFormat = GetFrameFormat();
     const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
-    if(xShapeAgg.is())
+    if(!xShapeAgg.is())
+        return;
+
+    if(pEntry)
     {
-        if(pEntry)
+        if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
+            throw beans::PropertyVetoException ("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        // with the layout it is possible to move the anchor without changing the position
+        if(pFormat)
         {
-            if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-                throw beans::PropertyVetoException ("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-            // with the layout it is possible to move the anchor without changing the position
-            if(pFormat)
+            SwAttrSet aSet(pFormat->GetAttrSet());
+            SwDoc* pDoc = pFormat->GetDoc();
+            if(RES_ANCHOR == pEntry->nWID && MID_ANCHOR_ANCHORFRAME == pEntry->nMemberId)
             {
-                SwAttrSet aSet(pFormat->GetAttrSet());
-                SwDoc* pDoc = pFormat->GetDoc();
-                if(RES_ANCHOR == pEntry->nWID && MID_ANCHOR_ANCHORFRAME == pEntry->nMemberId)
+                bool bDone = false;
+                uno::Reference<text::XTextFrame> xFrame;
+                if(aValue >>= xFrame)
                 {
-                    bool bDone = false;
-                    uno::Reference<text::XTextFrame> xFrame;
-                    if(aValue >>= xFrame)
+                    SwXFrame* pFrame = comphelper::getUnoTunnelImplementation<SwXFrame>(xFrame);
+                    if(pFrame && pFrame->GetFrameFormat() &&
+                        pFrame->GetFrameFormat()->GetDoc() == pDoc)
                     {
-                        SwXFrame* pFrame = comphelper::getUnoTunnelImplementation<SwXFrame>(xFrame);
-                        if(pFrame && pFrame->GetFrameFormat() &&
-                            pFrame->GetFrameFormat()->GetDoc() == pDoc)
-                        {
-                            UnoActionContext aCtx(pDoc);
-                            SfxItemSet aItemSet( pDoc->GetAttrPool(),
-                                        svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>{} );
-                            aItemSet.SetParent(&pFormat->GetAttrSet());
-                            SwFormatAnchor aAnchor = static_cast<const SwFormatAnchor&>(aItemSet.Get(pEntry->nWID));
-                            SwPosition aPos(*pFrame->GetFrameFormat()->GetContent().GetContentIdx());
-                            aAnchor.SetAnchor(&aPos);
-                            aAnchor.SetType(RndStdIds::FLY_AT_FLY);
-                            aItemSet.Put(aAnchor);
-                            pFormat->SetFormatAttr(aItemSet);
-                            bDone = true;
-                        }
+                        UnoActionContext aCtx(pDoc);
+                        SfxItemSet aItemSet( pDoc->GetAttrPool(),
+                                    svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>{} );
+                        aItemSet.SetParent(&pFormat->GetAttrSet());
+                        SwFormatAnchor aAnchor = static_cast<const SwFormatAnchor&>(aItemSet.Get(pEntry->nWID));
+                        SwPosition aPos(*pFrame->GetFrameFormat()->GetContent().GetContentIdx());
+                        aAnchor.SetAnchor(&aPos);
+                        aAnchor.SetType(RndStdIds::FLY_AT_FLY);
+                        aItemSet.Put(aAnchor);
+                        pFormat->SetFormatAttr(aItemSet);
+                        bDone = true;
                     }
-                    if(!bDone)
-                        throw lang::IllegalArgumentException();
                 }
-                else if(RES_OPAQUE == pEntry->nWID)
+                if(!bDone)
+                    throw lang::IllegalArgumentException();
+            }
+            else if(RES_OPAQUE == pEntry->nWID)
+            {
+                SvxShape* pSvxShape = GetSvxShape();
+                SAL_WARN_IF(!pSvxShape, "sw.uno", "No SvxShape found!");
+                if(pSvxShape)
                 {
-                    SvxShape* pSvxShape = GetSvxShape();
-                    SAL_WARN_IF(!pSvxShape, "sw.uno", "No SvxShape found!");
-                    if(pSvxShape)
+                    SdrObject* pObj = pSvxShape->GetSdrObject();
+                    // set layer of new drawing
+                    // object to corresponding invisible layer.
+                    bool bIsVisible = pDoc->getIDocumentDrawModelAccess().IsVisibleLayerId( pObj->GetLayer() );
+                    if(SdrInventor::FmForm != pObj->GetObjInventor())
                     {
-                        SdrObject* pObj = pSvxShape->GetSdrObject();
-                        // set layer of new drawing
-                        // object to corresponding invisible layer.
-                        bool bIsVisible = pDoc->getIDocumentDrawModelAccess().IsVisibleLayerId( pObj->GetLayer() );
-                        if(SdrInventor::FmForm != pObj->GetObjInventor())
-                        {
-                            pObj->SetLayer( *o3tl::doAccess<bool>(aValue)
-                                            ? ( bIsVisible ? pDoc->getIDocumentDrawModelAccess().GetHeavenId() : pDoc->getIDocumentDrawModelAccess().GetInvisibleHeavenId() )
-                                            : ( bIsVisible ? pDoc->getIDocumentDrawModelAccess().GetHellId() : pDoc->getIDocumentDrawModelAccess().GetInvisibleHellId() ));
-                        }
-                        else
-                        {
-                            pObj->SetLayer( bIsVisible ? pDoc->getIDocumentDrawModelAccess().GetControlsId() : pDoc->getIDocumentDrawModelAccess().GetInvisibleControlsId());
-                        }
-
+                        pObj->SetLayer( *o3tl::doAccess<bool>(aValue)
+                                        ? ( bIsVisible ? pDoc->getIDocumentDrawModelAccess().GetHeavenId() : pDoc->getIDocumentDrawModelAccess().GetInvisibleHeavenId() )
+                                        : ( bIsVisible ? pDoc->getIDocumentDrawModelAccess().GetHellId() : pDoc->getIDocumentDrawModelAccess().GetInvisibleHellId() ));
+                    }
+                    else
+                    {
+                        pObj->SetLayer( bIsVisible ? pDoc->getIDocumentDrawModelAccess().GetControlsId() : pDoc->getIDocumentDrawModelAccess().GetInvisibleControlsId());
                     }
 
                 }
-                // #i26791# - special handling for property FN_TEXT_RANGE
-                else if ( FN_TEXT_RANGE == pEntry->nWID )
+
+            }
+            // #i26791# - special handling for property FN_TEXT_RANGE
+            else if ( FN_TEXT_RANGE == pEntry->nWID )
+            {
+                SwFormatAnchor aAnchor( aSet.Get( RES_ANCHOR ) );
+                if (aAnchor.GetAnchorId() == RndStdIds::FLY_AT_PAGE)
                 {
-                    SwFormatAnchor aAnchor( aSet.Get( RES_ANCHOR ) );
-                    if (aAnchor.GetAnchorId() == RndStdIds::FLY_AT_PAGE)
-                    {
-                        // set property <TextRange> not valid for to-page anchored shapes
-                        throw lang::IllegalArgumentException();
-                    }
+                    // set property <TextRange> not valid for to-page anchored shapes
+                    throw lang::IllegalArgumentException();
+                }
 
-                    std::unique_ptr<SwUnoInternalPaM> pInternalPam(
-                                    new SwUnoInternalPaM( *(pFormat->GetDoc()) ));
-                    uno::Reference< text::XTextRange > xRg;
-                    aValue >>= xRg;
-                    if (!::sw::XTextRangeToSwPaM(*pInternalPam, xRg) )
-                    {
-                        throw uno::RuntimeException();
-                    }
+                std::unique_ptr<SwUnoInternalPaM> pInternalPam(
+                                new SwUnoInternalPaM( *(pFormat->GetDoc()) ));
+                uno::Reference< text::XTextRange > xRg;
+                aValue >>= xRg;
+                if (!::sw::XTextRangeToSwPaM(*pInternalPam, xRg) )
+                {
+                    throw uno::RuntimeException();
+                }
 
-                    if (aAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
+                if (aAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
+                {
+                    //delete old SwFormatFlyCnt
+                    //With AnchorAsCharacter the current TextAttribute has to be deleted.
+                    //Tbis removes the frame format too.
+                    //To prevent this the connection between format and attribute has to be broken before.
+                    const SwPosition *pPos = aAnchor.GetContentAnchor();
+                    SwTextNode *pTextNode = pPos->nNode.GetNode().GetTextNode();
+                    SAL_WARN_IF( !pTextNode->HasHints(), "sw.uno", "Missing FlyInCnt-Hint." );
+                    const sal_Int32 nIdx = pPos->nContent.GetIndex();
+                    SwTextAttr * const pHint =
+                            pTextNode->GetTextAttrForCharAt(
+                            nIdx, RES_TXTATR_FLYCNT );
+                    assert(pHint && "Missing Hint.");
+                    SAL_WARN_IF( pHint->Which() != RES_TXTATR_FLYCNT,
+                                "sw.uno", "Missing FlyInCnt-Hint." );
+                    SAL_WARN_IF( pHint->GetFlyCnt().GetFrameFormat() != pFormat,
+                                "sw.uno", "Wrong TextFlyCnt-Hint." );
+                    const_cast<SwFormatFlyCnt&>(pHint->GetFlyCnt())
+                        .SetFlyFormat();
+
+                    //The connection is removed now the attribute can be deleted.
+                    pTextNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx );
+                    //create a new one
+                    SwTextNode *pNd = pInternalPam->GetNode().GetTextNode();
+                    SAL_WARN_IF( !pNd, "sw.uno", "Cursor not at TextNode." );
+                    SwFormatFlyCnt aFormat( pFormat );
+                    pNd->InsertItem(aFormat, pInternalPam->GetPoint()
+                            ->nContent.GetIndex(), 0 );
+                }
+                else
+                {
+                    aAnchor.SetAnchor( pInternalPam->GetPoint() );
+                    aSet.Put(aAnchor);
+                    pFormat->SetFormatAttr(aSet);
+                }
+            }
+            else if (pEntry->nWID == FN_TEXT_BOX)
+            {
+                bool bValue(false);
+                aValue >>= bValue;
+                if (bValue)
+                    SwTextBoxHelper::create(pFormat);
+                else
+                    SwTextBoxHelper::destroy(pFormat);
+
+            }
+            else if (pEntry->nWID == RES_CHAIN)
+            {
+                if (pEntry->nMemberId == MID_CHAIN_NEXTNAME || pEntry->nMemberId == MID_CHAIN_PREVNAME)
+                    SwTextBoxHelper::syncProperty(pFormat, pEntry->nWID, pEntry->nMemberId, aValue);
+            }
+            // #i28749#
+            else if ( FN_SHAPE_POSITION_LAYOUT_DIR == pEntry->nWID )
+            {
+                sal_Int16 nPositionLayoutDir = 0;
+                aValue >>= nPositionLayoutDir;
+                pFormat->SetPositionLayoutDir( nPositionLayoutDir );
+            }
+            else if( pDoc->getIDocumentLayoutAccess().GetCurrentLayout())
+            {
+                UnoActionContext aCtx(pDoc);
+                if(RES_ANCHOR == pEntry->nWID && MID_ANCHOR_ANCHORTYPE == pEntry->nMemberId)
+                {
+                    SdrObject* pObj = pFormat->FindSdrObject();
+                    SdrMarkList aList;
+                    SdrMark aMark(pObj);
+                    aList.InsertEntry(aMark);
+                    sal_Int32 nAnchor = 0;
+                    cppu::enum2int( nAnchor, aValue );
+                    pDoc->ChgAnchor( aList, static_cast<RndStdIds>(nAnchor),
+                                            false, true );
+                }
+                else
+                {
+                    m_pPropSet->setPropertyValue(*pEntry, aValue, aSet);
+                    pFormat->SetFormatAttr(aSet);
+                }
+            }
+            else if( RES_FRM_SIZE == pEntry->nWID &&
+                    ( pEntry->nMemberId == MID_FRMSIZE_REL_HEIGHT || pEntry->nMemberId == MID_FRMSIZE_REL_WIDTH
+                      || pEntry->nMemberId == MID_FRMSIZE_REL_HEIGHT_RELATION
+                      || pEntry->nMemberId == MID_FRMSIZE_REL_WIDTH_RELATION ) )
+            {
+                SvxShape* pSvxShape = GetSvxShape();
+                SAL_WARN_IF(!pSvxShape, "sw.uno", "No SvxShape found!");
+                if(pSvxShape)
+                {
+                    SdrObject* pObj = pSvxShape->GetSdrObject();
+                    sal_Int16 nPercent(100);
+                    aValue >>= nPercent;
+                    switch (pEntry->nMemberId)
                     {
-                        //delete old SwFormatFlyCnt
+                    case MID_FRMSIZE_REL_WIDTH:
+                        pObj->SetRelativeWidth( nPercent / 100.0 );
+                    break;
+                    case MID_FRMSIZE_REL_HEIGHT:
+                        pObj->SetRelativeHeight( nPercent / 100.0 );
+                    break;
+                    case MID_FRMSIZE_REL_WIDTH_RELATION:
+                        pObj->SetRelativeWidthRelation(nPercent);
+                    break;
+                    case MID_FRMSIZE_REL_HEIGHT_RELATION:
+                        pObj->SetRelativeHeightRelation(nPercent);
+                    break;
+                    }
+                }
+            }
+            else
+            {
+                m_pPropSet->setPropertyValue( *pEntry, aValue, aSet );
+
+                if(RES_ANCHOR == pEntry->nWID && MID_ANCHOR_ANCHORTYPE == pEntry->nMemberId)
+                {
+                    bool bSetAttr = true;
+                    text::TextContentAnchorType eNewAnchor = static_cast<text::TextContentAnchorType>(SWUnoHelper::GetEnumAsInt32( aValue ));
+
+                    //if old anchor was in_cntnt the related text attribute has to be removed
+                    const SwFormatAnchor& rOldAnchor = pFormat->GetAnchor();
+                    RndStdIds eOldAnchorId = rOldAnchor.GetAnchorId();
+                    SdrObject* pObj = pFormat->FindSdrObject();
+                    SwFrameFormat *pFlyFormat = FindFrameFormat( pObj );
+                    pFlyFormat->DelFrames();
+                    if( text::TextContentAnchorType_AS_CHARACTER != eNewAnchor &&
+                        (RndStdIds::FLY_AS_CHAR == eOldAnchorId))
+                    {
                         //With AnchorAsCharacter the current TextAttribute has to be deleted.
                         //Tbis removes the frame format too.
                         //To prevent this the connection between format and attribute has to be broken before.
-                        const SwPosition *pPos = aAnchor.GetContentAnchor();
+                        const SwPosition *pPos = rOldAnchor.GetContentAnchor();
                         SwTextNode *pTextNode = pPos->nNode.GetNode().GetTextNode();
                         SAL_WARN_IF( !pTextNode->HasHints(), "sw.uno", "Missing FlyInCnt-Hint." );
                         const sal_Int32 nIdx = pPos->nContent.GetIndex();
                         SwTextAttr * const pHint =
-                                pTextNode->GetTextAttrForCharAt(
+                            pTextNode->GetTextAttrForCharAt(
                                 nIdx, RES_TXTATR_FLYCNT );
                         assert(pHint && "Missing Hint.");
                         SAL_WARN_IF( pHint->Which() != RES_TXTATR_FLYCNT,
                                     "sw.uno", "Missing FlyInCnt-Hint." );
-                        SAL_WARN_IF( pHint->GetFlyCnt().GetFrameFormat() != pFormat,
+                        SAL_WARN_IF( pHint->GetFlyCnt().GetFrameFormat() != pFlyFormat,
                                     "sw.uno", "Wrong TextFlyCnt-Hint." );
                         const_cast<SwFormatFlyCnt&>(pHint->GetFlyCnt())
                             .SetFlyFormat();
 
                         //The connection is removed now the attribute can be deleted.
-                        pTextNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx );
-                        //create a new one
-                        SwTextNode *pNd = pInternalPam->GetNode().GetTextNode();
-                        SAL_WARN_IF( !pNd, "sw.uno", "Cursor not at TextNode." );
-                        SwFormatFlyCnt aFormat( pFormat );
-                        pNd->InsertItem(aFormat, pInternalPam->GetPoint()
-                                ->nContent.GetIndex(), 0 );
+                        pTextNode->DeleteAttributes(RES_TXTATR_FLYCNT, nIdx);
                     }
-                    else
+                    else if( text::TextContentAnchorType_AT_PAGE != eNewAnchor &&
+                            (RndStdIds::FLY_AT_PAGE == eOldAnchorId))
                     {
-                        aAnchor.SetAnchor( pInternalPam->GetPoint() );
-                        aSet.Put(aAnchor);
-                        pFormat->SetFormatAttr(aSet);
-                    }
-                }
-                else if (pEntry->nWID == FN_TEXT_BOX)
-                {
-                    bool bValue(false);
-                    aValue >>= bValue;
-                    if (bValue)
-                        SwTextBoxHelper::create(pFormat);
-                    else
-                        SwTextBoxHelper::destroy(pFormat);
-
-                }
-                else if (pEntry->nWID == RES_CHAIN)
-                {
-                    if (pEntry->nMemberId == MID_CHAIN_NEXTNAME || pEntry->nMemberId == MID_CHAIN_PREVNAME)
-                        SwTextBoxHelper::syncProperty(pFormat, pEntry->nWID, pEntry->nMemberId, aValue);
-                }
-                // #i28749#
-                else if ( FN_SHAPE_POSITION_LAYOUT_DIR == pEntry->nWID )
-                {
-                    sal_Int16 nPositionLayoutDir = 0;
-                    aValue >>= nPositionLayoutDir;
-                    pFormat->SetPositionLayoutDir( nPositionLayoutDir );
-                }
-                else if( pDoc->getIDocumentLayoutAccess().GetCurrentLayout())
-                {
-                    UnoActionContext aCtx(pDoc);
-                    if(RES_ANCHOR == pEntry->nWID && MID_ANCHOR_ANCHORTYPE == pEntry->nMemberId)
-                    {
-                        SdrObject* pObj = pFormat->FindSdrObject();
-                        SdrMarkList aList;
-                        SdrMark aMark(pObj);
-                        aList.InsertEntry(aMark);
-                        sal_Int32 nAnchor = 0;
-                        cppu::enum2int( nAnchor, aValue );
-                        pDoc->ChgAnchor( aList, static_cast<RndStdIds>(nAnchor),
-                                                false, true );
-                    }
-                    else
-                    {
-                        m_pPropSet->setPropertyValue(*pEntry, aValue, aSet);
-                        pFormat->SetFormatAttr(aSet);
-                    }
-                }
-                else if( RES_FRM_SIZE == pEntry->nWID &&
-                        ( pEntry->nMemberId == MID_FRMSIZE_REL_HEIGHT || pEntry->nMemberId == MID_FRMSIZE_REL_WIDTH
-                          || pEntry->nMemberId == MID_FRMSIZE_REL_HEIGHT_RELATION
-                          || pEntry->nMemberId == MID_FRMSIZE_REL_WIDTH_RELATION ) )
-                {
-                    SvxShape* pSvxShape = GetSvxShape();
-                    SAL_WARN_IF(!pSvxShape, "sw.uno", "No SvxShape found!");
-                    if(pSvxShape)
-                    {
-                        SdrObject* pObj = pSvxShape->GetSdrObject();
-                        sal_Int16 nPercent(100);
-                        aValue >>= nPercent;
-                        switch (pEntry->nMemberId)
+                        SwFormatAnchor aNewAnchor( dynamic_cast< const SwFormatAnchor& >( aSet.Get( RES_ANCHOR ) ) );
+                        //if the fly has been anchored at page then it needs to be connected
+                        //to the content position
+                        SwPaM aPam(pDoc->GetNodes().GetEndOfContent());
+                        if( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() )
                         {
-                        case MID_FRMSIZE_REL_WIDTH:
-                            pObj->SetRelativeWidth( nPercent / 100.0 );
-                        break;
-                        case MID_FRMSIZE_REL_HEIGHT:
-                            pObj->SetRelativeHeight( nPercent / 100.0 );
-                        break;
-                        case MID_FRMSIZE_REL_WIDTH_RELATION:
-                            pObj->SetRelativeWidthRelation(nPercent);
-                        break;
-                        case MID_FRMSIZE_REL_HEIGHT_RELATION:
-                            pObj->SetRelativeHeightRelation(nPercent);
-                        break;
+                            SwCursorMoveState aState( CursorMoveState::SetOnlyText );
+                            Point aTmp( pObj->GetSnapRect().TopLeft() );
+                            pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetModelPositionForViewPoint( aPam.GetPoint(), aTmp, &aState );
                         }
+                        else
+                        {
+                            //without access to the layout the last node of the body will be used as anchor position
+                            aPam.Move( fnMoveBackward, GoInDoc );
+                        }
+                        //anchor position has to be inserted after the text attribute has been inserted
+                        aNewAnchor.SetAnchor( aPam.GetPoint() );
+                        aSet.Put( aNewAnchor );
+                        pFormat->SetFormatAttr(aSet);
+                        bSetAttr = false;
                     }
+                    if( text::TextContentAnchorType_AS_CHARACTER == eNewAnchor &&
+                        (RndStdIds::FLY_AS_CHAR != eOldAnchorId))
+                    {
+                        SwPaM aPam(pDoc->GetNodes().GetEndOfContent());
+                        if( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() )
+                        {
+                            SwCursorMoveState aState( CursorMoveState::SetOnlyText );
+                            Point aTmp( pObj->GetSnapRect().TopLeft() );
+                            pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetModelPositionForViewPoint( aPam.GetPoint(), aTmp, &aState );
+                        }
+                        else
+                        {
+                            //without access to the layout the last node of the body will be used as anchor position
+                            aPam.Move( fnMoveBackward, GoInDoc );
+                        }
+                        //the RES_TXTATR_FLYCNT needs to be added now
+                        SwTextNode *pNd = aPam.GetNode().GetTextNode();
+                        SAL_WARN_IF( !pNd, "sw.uno", "Cursor is not in a TextNode." );
+                        SwFormatFlyCnt aFormat( pFlyFormat );
+                        pNd->InsertItem(aFormat,
+                            aPam.GetPoint()->nContent.GetIndex(), 0 );
+                        --aPam.GetPoint()->nContent; // InsertItem moved it
+                        SwFormatAnchor aNewAnchor(
+                            dynamic_cast<const SwFormatAnchor&>(
+                                aSet.Get(RES_ANCHOR)));
+                        aNewAnchor.SetAnchor( aPam.GetPoint() );
+                        aSet.Put( aNewAnchor );
+                    }
+                    if( bSetAttr )
+                        pFormat->SetFormatAttr(aSet);
                 }
                 else
-                {
-                    m_pPropSet->setPropertyValue( *pEntry, aValue, aSet );
-
-                    if(RES_ANCHOR == pEntry->nWID && MID_ANCHOR_ANCHORTYPE == pEntry->nMemberId)
-                    {
-                        bool bSetAttr = true;
-                        text::TextContentAnchorType eNewAnchor = static_cast<text::TextContentAnchorType>(SWUnoHelper::GetEnumAsInt32( aValue ));
-
-                        //if old anchor was in_cntnt the related text attribute has to be removed
-                        const SwFormatAnchor& rOldAnchor = pFormat->GetAnchor();
-                        RndStdIds eOldAnchorId = rOldAnchor.GetAnchorId();
-                        SdrObject* pObj = pFormat->FindSdrObject();
-                        SwFrameFormat *pFlyFormat = FindFrameFormat( pObj );
-                        pFlyFormat->DelFrames();
-                        if( text::TextContentAnchorType_AS_CHARACTER != eNewAnchor &&
-                            (RndStdIds::FLY_AS_CHAR == eOldAnchorId))
-                        {
-                            //With AnchorAsCharacter the current TextAttribute has to be deleted.
-                            //Tbis removes the frame format too.
-                            //To prevent this the connection between format and attribute has to be broken before.
-                            const SwPosition *pPos = rOldAnchor.GetContentAnchor();
-                            SwTextNode *pTextNode = pPos->nNode.GetNode().GetTextNode();
-                            SAL_WARN_IF( !pTextNode->HasHints(), "sw.uno", "Missing FlyInCnt-Hint." );
-                            const sal_Int32 nIdx = pPos->nContent.GetIndex();
-                            SwTextAttr * const pHint =
-                                pTextNode->GetTextAttrForCharAt(
-                                    nIdx, RES_TXTATR_FLYCNT );
-                            assert(pHint && "Missing Hint.");
-                            SAL_WARN_IF( pHint->Which() != RES_TXTATR_FLYCNT,
-                                        "sw.uno", "Missing FlyInCnt-Hint." );
-                            SAL_WARN_IF( pHint->GetFlyCnt().GetFrameFormat() != pFlyFormat,
-                                        "sw.uno", "Wrong TextFlyCnt-Hint." );
-                            const_cast<SwFormatFlyCnt&>(pHint->GetFlyCnt())
-                                .SetFlyFormat();
-
-                            //The connection is removed now the attribute can be deleted.
-                            pTextNode->DeleteAttributes(RES_TXTATR_FLYCNT, nIdx);
-                        }
-                        else if( text::TextContentAnchorType_AT_PAGE != eNewAnchor &&
-                                (RndStdIds::FLY_AT_PAGE == eOldAnchorId))
-                        {
-                            SwFormatAnchor aNewAnchor( dynamic_cast< const SwFormatAnchor& >( aSet.Get( RES_ANCHOR ) ) );
-                            //if the fly has been anchored at page then it needs to be connected
-                            //to the content position
-                            SwPaM aPam(pDoc->GetNodes().GetEndOfContent());
-                            if( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() )
-                            {
-                                SwCursorMoveState aState( CursorMoveState::SetOnlyText );
-                                Point aTmp( pObj->GetSnapRect().TopLeft() );
-                                pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetModelPositionForViewPoint( aPam.GetPoint(), aTmp, &aState );
-                            }
-                            else
-                            {
-                                //without access to the layout the last node of the body will be used as anchor position
-                                aPam.Move( fnMoveBackward, GoInDoc );
-                            }
-                            //anchor position has to be inserted after the text attribute has been inserted
-                            aNewAnchor.SetAnchor( aPam.GetPoint() );
-                            aSet.Put( aNewAnchor );
-                            pFormat->SetFormatAttr(aSet);
-                            bSetAttr = false;
-                        }
-                        if( text::TextContentAnchorType_AS_CHARACTER == eNewAnchor &&
-                            (RndStdIds::FLY_AS_CHAR != eOldAnchorId))
-                        {
-                            SwPaM aPam(pDoc->GetNodes().GetEndOfContent());
-                            if( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() )
-                            {
-                                SwCursorMoveState aState( CursorMoveState::SetOnlyText );
-                                Point aTmp( pObj->GetSnapRect().TopLeft() );
-                                pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetModelPositionForViewPoint( aPam.GetPoint(), aTmp, &aState );
-                            }
-                            else
-                            {
-                                //without access to the layout the last node of the body will be used as anchor position
-                                aPam.Move( fnMoveBackward, GoInDoc );
-                            }
-                            //the RES_TXTATR_FLYCNT needs to be added now
-                            SwTextNode *pNd = aPam.GetNode().GetTextNode();
-                            SAL_WARN_IF( !pNd, "sw.uno", "Cursor is not in a TextNode." );
-                            SwFormatFlyCnt aFormat( pFlyFormat );
-                            pNd->InsertItem(aFormat,
-                                aPam.GetPoint()->nContent.GetIndex(), 0 );
-                            --aPam.GetPoint()->nContent; // InsertItem moved it
-                            SwFormatAnchor aNewAnchor(
-                                dynamic_cast<const SwFormatAnchor&>(
-                                    aSet.Get(RES_ANCHOR)));
-                            aNewAnchor.SetAnchor( aPam.GetPoint() );
-                            aSet.Put( aNewAnchor );
-                        }
-                        if( bSetAttr )
-                            pFormat->SetFormatAttr(aSet);
-                    }
-                    else
-                        pFormat->SetFormatAttr(aSet);
-                }
-                // We have a pFormat and a pEntry as well: try to sync TextBox property.
-                SwTextBoxHelper::syncProperty(pFormat, pEntry->nWID, pEntry->nMemberId, aValue);
+                    pFormat->SetFormatAttr(aSet);
             }
-            else
-            {
-                SfxPoolItem* pItem = nullptr;
-                switch(pEntry->nWID)
-                {
-                    case RES_ANCHOR:
-                        pItem = pImpl->GetAnchor(true);
-                    break;
-                    case RES_HORI_ORIENT:
-                        pItem = pImpl->GetHOrient(true);
-                    break;
-                    case RES_VERT_ORIENT:
-                        pItem = pImpl->GetVOrient(true);
-                    break;
-                    case  RES_LR_SPACE:
-                        pItem = pImpl->GetLRSpace(true);
-                    break;
-                    case  RES_UL_SPACE:
-                        pItem = pImpl->GetULSpace(true);
-                    break;
-                    case  RES_SURROUND:
-                        pItem = pImpl->GetSurround(true);
-                    break;
-                    case  FN_TEXT_RANGE:
-                        if(auto tr = o3tl::tryAccess<
-                               uno::Reference<text::XTextRange>>(aValue))
-                        {
-                            uno::Reference< text::XTextRange > & rRange = pImpl->GetTextRange();
-                            rRange = *tr;
-                        }
-                    break;
-                    case RES_OPAQUE :
-                        pImpl->SetOpaque(*o3tl::doAccess<bool>(aValue));
-                    break;
-                    // #i26791#
-                    case RES_FOLLOW_TEXT_FLOW:
-                    {
-                        pItem = pImpl->GetFollowTextFlow( true );
-                    }
-                    break;
-                    // #i28701#
-                    case RES_WRAP_INFLUENCE_ON_OBJPOS:
-                    {
-                        pItem = pImpl->GetWrapInfluenceOnObjPos( true );
-                    }
-                    break;
-                    // #i28749#
-                    case FN_SHAPE_POSITION_LAYOUT_DIR :
-                    {
-                        sal_Int16 nPositionLayoutDir = 0;
-                        aValue >>= nPositionLayoutDir;
-                        pImpl->SetPositionLayoutDir( nPositionLayoutDir );
-                    }
-                    break;
-                }
-                if(pItem)
-                    pItem->PutValue(aValue, pEntry->nMemberId);
-            }
+            // We have a pFormat and a pEntry as well: try to sync TextBox property.
+            SwTextBoxHelper::syncProperty(pFormat, pEntry->nWID, pEntry->nMemberId, aValue);
         }
         else
         {
-            const uno::Type& rPSetType =
-                cppu::UnoType<beans::XPropertySet>::get();
-            uno::Any aPSet = xShapeAgg->queryAggregation(rPSetType);
-            auto xPrSet = o3tl::tryAccess<uno::Reference<beans::XPropertySet>>(
-                aPSet);
-            if(!xPrSet)
-                throw uno::RuntimeException();
-            // #i31698# - setting the caption point of a
-            // caption object doesn't have to change the object position.
-            // Thus, keep the position, before the caption point is set and
-            // restore it afterwards.
-            awt::Point aKeepedPosition( 0, 0 );
-            if ( rPropertyName == "CaptionPoint" && getShapeType() == "com.sun.star.drawing.CaptionShape" )
+            SfxPoolItem* pItem = nullptr;
+            switch(pEntry->nWID)
             {
-                    aKeepedPosition = getPosition();
+                case RES_ANCHOR:
+                    pItem = pImpl->GetAnchor(true);
+                break;
+                case RES_HORI_ORIENT:
+                    pItem = pImpl->GetHOrient(true);
+                break;
+                case RES_VERT_ORIENT:
+                    pItem = pImpl->GetVOrient(true);
+                break;
+                case  RES_LR_SPACE:
+                    pItem = pImpl->GetLRSpace(true);
+                break;
+                case  RES_UL_SPACE:
+                    pItem = pImpl->GetULSpace(true);
+                break;
+                case  RES_SURROUND:
+                    pItem = pImpl->GetSurround(true);
+                break;
+                case  FN_TEXT_RANGE:
+                    if(auto tr = o3tl::tryAccess<
+                           uno::Reference<text::XTextRange>>(aValue))
+                    {
+                        uno::Reference< text::XTextRange > & rRange = pImpl->GetTextRange();
+                        rRange = *tr;
+                    }
+                break;
+                case RES_OPAQUE :
+                    pImpl->SetOpaque(*o3tl::doAccess<bool>(aValue));
+                break;
+                // #i26791#
+                case RES_FOLLOW_TEXT_FLOW:
+                {
+                    pItem = pImpl->GetFollowTextFlow( true );
+                }
+                break;
+                // #i28701#
+                case RES_WRAP_INFLUENCE_ON_OBJPOS:
+                {
+                    pItem = pImpl->GetWrapInfluenceOnObjPos( true );
+                }
+                break;
+                // #i28749#
+                case FN_SHAPE_POSITION_LAYOUT_DIR :
+                {
+                    sal_Int16 nPositionLayoutDir = 0;
+                    aValue >>= nPositionLayoutDir;
+                    pImpl->SetPositionLayoutDir( nPositionLayoutDir );
+                }
+                break;
             }
-            if( pFormat && pFormat->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() )
-            {
-                UnoActionContext aCtx(pFormat->GetDoc());
-                (*xPrSet)->setPropertyValue(rPropertyName, aValue);
-            }
-            else
-                (*xPrSet)->setPropertyValue(rPropertyName, aValue);
+            if(pItem)
+                pItem->PutValue(aValue, pEntry->nMemberId);
+        }
+    }
+    else
+    {
+        const uno::Type& rPSetType =
+            cppu::UnoType<beans::XPropertySet>::get();
+        uno::Any aPSet = xShapeAgg->queryAggregation(rPSetType);
+        auto xPrSet = o3tl::tryAccess<uno::Reference<beans::XPropertySet>>(
+            aPSet);
+        if(!xPrSet)
+            throw uno::RuntimeException();
+        // #i31698# - setting the caption point of a
+        // caption object doesn't have to change the object position.
+        // Thus, keep the position, before the caption point is set and
+        // restore it afterwards.
+        awt::Point aKeepedPosition( 0, 0 );
+        if ( rPropertyName == "CaptionPoint" && getShapeType() == "com.sun.star.drawing.CaptionShape" )
+        {
+                aKeepedPosition = getPosition();
+        }
+        if( pFormat && pFormat->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() )
+        {
+            UnoActionContext aCtx(pFormat->GetDoc());
+            (*xPrSet)->setPropertyValue(rPropertyName, aValue);
+        }
+        else
+            (*xPrSet)->setPropertyValue(rPropertyName, aValue);
 
-            if (pFormat)
-            {
-                // We have a pFormat (but no pEntry): try to sync TextBox property.
-                SwTextBoxHelper::syncProperty(pFormat, rPropertyName, aValue);
-            }
+        if (pFormat)
+        {
+            // We have a pFormat (but no pEntry): try to sync TextBox property.
+            SwTextBoxHelper::syncProperty(pFormat, rPropertyName, aValue);
+        }
 
-            // #i31698# - restore object position, if caption point is set.
-            if ( rPropertyName == "CaptionPoint" && getShapeType() == "com.sun.star.drawing.CaptionShape" )
-            {
-                setPosition( aKeepedPosition );
-            }
+        // #i31698# - restore object position, if caption point is set.
+        if ( rPropertyName == "CaptionPoint" && getShapeType() == "com.sun.star.drawing.CaptionShape" )
+        {
+            setPosition( aKeepedPosition );
         }
     }
 }
@@ -2035,21 +2035,22 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
 
     if(!pDoc)
         throw uno::RuntimeException();
-    if (const SwDocShell* pDocSh = pDoc->GetDocShell())
+    const SwDocShell* pDocSh = pDoc->GetDocShell();
+    if (!pDocSh)
+        return;
+
+    uno::Reference<frame::XModel> xModel = pDocSh->GetModel();
+    uno::Reference< drawing::XDrawPageSupplier > xDPS(xModel, uno::UNO_QUERY);
+    if (xDPS.is())
     {
-        uno::Reference<frame::XModel> xModel = pDocSh->GetModel();
-        uno::Reference< drawing::XDrawPageSupplier > xDPS(xModel, uno::UNO_QUERY);
-        if (xDPS.is())
+        uno::Reference< drawing::XDrawPage > xDP( xDPS->getDrawPage() );
+        if (xDP.is())
         {
-            uno::Reference< drawing::XDrawPage > xDP( xDPS->getDrawPage() );
-            if (xDP.is())
-            {
-                uno::Any aPos;
-                aPos <<= xTextRange;
-                setPropertyValue("TextRange", aPos);
-                uno::Reference< drawing::XShape > xTemp( static_cast<cppu::OWeakObject*>(this), uno::UNO_QUERY );
-                xDP->add( xTemp );
-            }
+            uno::Any aPos;
+            aPos <<= xTextRange;
+            setPropertyValue("TextRange", aPos);
+            uno::Reference< drawing::XShape > xTemp( static_cast<cppu::OWeakObject*>(this), uno::UNO_QUERY );
+            xDP->add( xTemp );
         }
     }
 }
@@ -2727,37 +2728,37 @@ void SwXGroupShape::add( const uno::Reference< XShape >& xShape )
     if(xShape.is())
         pSwShape = reinterpret_cast< SwXShape * >(
                 sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(SwXShape::getUnoTunnelId()) ));
-    if(pSwShape && pSwShape->m_bDescriptor)
+    if(!(pSwShape && pSwShape->m_bDescriptor))
+        return;
+
+    SvxShape* pAddShape = reinterpret_cast< SvxShape * >(
+            sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(SvxShape::getUnoTunnelId()) ));
+    if(pAddShape)
     {
-        SvxShape* pAddShape = reinterpret_cast< SvxShape * >(
-                sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(SvxShape::getUnoTunnelId()) ));
-        if(pAddShape)
+        SdrObject* pObj = pAddShape->GetSdrObject();
+        if(pObj)
         {
-            SdrObject* pObj = pAddShape->GetSdrObject();
-            if(pObj)
+            SwDoc* pDoc = pFormat->GetDoc();
+            // set layer of new drawing
+            // object to corresponding invisible layer.
+            if( SdrInventor::FmForm != pObj->GetObjInventor())
             {
-                SwDoc* pDoc = pFormat->GetDoc();
-                // set layer of new drawing
-                // object to corresponding invisible layer.
-                if( SdrInventor::FmForm != pObj->GetObjInventor())
-                {
-                    pObj->SetLayer( pSwShape->pImpl->GetOpaque()
-                                    ? pDoc->getIDocumentDrawModelAccess().GetInvisibleHeavenId()
-                                    : pDoc->getIDocumentDrawModelAccess().GetInvisibleHellId() );
-                }
-                else
-                {
-                    pObj->SetLayer(pDoc->getIDocumentDrawModelAccess().GetInvisibleControlsId());
-                }
+                pObj->SetLayer( pSwShape->pImpl->GetOpaque()
+                                ? pDoc->getIDocumentDrawModelAccess().GetInvisibleHeavenId()
+                                : pDoc->getIDocumentDrawModelAccess().GetInvisibleHellId() );
+            }
+            else
+            {
+                pObj->SetLayer(pDoc->getIDocumentDrawModelAccess().GetInvisibleControlsId());
             }
         }
-        pSwShape->m_bDescriptor = false;
-        //add the group member to the format of the group
-        SwFrameFormat* pShapeFormat = ::FindFrameFormat( pSvxShape->GetSdrObject() );
-
-        if(pShapeFormat)
-            pSwShape->SetFrameFormat(pShapeFormat);
     }
+    pSwShape->m_bDescriptor = false;
+    //add the group member to the format of the group
+    SwFrameFormat* pShapeFormat = ::FindFrameFormat( pSvxShape->GetSdrObject() );
+
+    if(pShapeFormat)
+        pSwShape->SetFrameFormat(pShapeFormat);
 
 }
 

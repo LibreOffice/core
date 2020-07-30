@@ -331,19 +331,19 @@ void
 SwXParagraph::attachToText(SwXText & rParent, SwTextNode & rTextNode)
 {
     OSL_ENSURE(m_pImpl->m_bIsDescriptor, "Paragraph is not a descriptor");
-    if (m_pImpl->m_bIsDescriptor)
+    if (!m_pImpl->m_bIsDescriptor)
+        return;
+
+    m_pImpl->m_bIsDescriptor = false;
+    m_pImpl->EndListeningAll();
+    m_pImpl->StartListening(rTextNode.GetNotifier());
+    rTextNode.SetXParagraph(uno::Reference<text::XTextContent>(this));
+    m_pImpl->m_xParentText = &rParent;
+    if (!m_pImpl->m_sText.isEmpty())
     {
-        m_pImpl->m_bIsDescriptor = false;
-        m_pImpl->EndListeningAll();
-        m_pImpl->StartListening(rTextNode.GetNotifier());
-        rTextNode.SetXParagraph(uno::Reference<text::XTextContent>(this));
-        m_pImpl->m_xParentText = &rParent;
-        if (!m_pImpl->m_sText.isEmpty())
-        {
-            try { setString(m_pImpl->m_sText); }
-            catch(...){}
-            m_pImpl->m_sText.clear();
-        }
+        try { setString(m_pImpl->m_sText); }
+        catch(...){}
+        m_pImpl->m_sText.clear();
     }
 }
 
@@ -478,48 +478,48 @@ void SwXParagraph::Impl::GetSinglePropertyValue_Impl(
         default: break;
     }
 
-    if(!bDone)
+    if(bDone)
+        return;
+
+    // fallback to standard get value implementation used before this helper was created
+    m_rPropSet.getPropertyValue(rEntry, rSet, rAny);
+
+    if(rEntry.aType == cppu::UnoType<sal_Int16>::get() && rEntry.aType != rAny.getValueType())
     {
-        // fallback to standard get value implementation used before this helper was created
-        m_rPropSet.getPropertyValue(rEntry, rSet, rAny);
+        // since the sfx uInt16 item now exports a sal_Int32, we may have to fix this here
+        sal_Int32 nValue(0);
 
-        if(rEntry.aType == cppu::UnoType<sal_Int16>::get() && rEntry.aType != rAny.getValueType())
+        if (rAny >>= nValue)
         {
-            // since the sfx uInt16 item now exports a sal_Int32, we may have to fix this here
-            sal_Int32 nValue(0);
-
-            if (rAny >>= nValue)
-            {
-                rAny <<= static_cast<sal_Int16>(nValue);
-            }
+            rAny <<= static_cast<sal_Int16>(nValue);
         }
+    }
 
-        // check for needed metric translation
-        if(rEntry.nMoreFlags & PropertyMoreFlags::METRIC_ITEM)
+    // check for needed metric translation
+    if(!(rEntry.nMoreFlags & PropertyMoreFlags::METRIC_ITEM))
+        return;
+
+    bool bDoIt(true);
+
+    if(XATTR_FILLBMP_SIZEX == rEntry.nWID || XATTR_FILLBMP_SIZEY == rEntry.nWID)
+    {
+        // exception: If these ItemTypes are used, do not convert when these are negative
+        // since this means they are intended as percent values
+        sal_Int32 nValue = 0;
+
+        if(rAny >>= nValue)
         {
-            bool bDoIt(true);
+            bDoIt = nValue > 0;
+        }
+    }
 
-            if(XATTR_FILLBMP_SIZEX == rEntry.nWID || XATTR_FILLBMP_SIZEY == rEntry.nWID)
-            {
-                // exception: If these ItemTypes are used, do not convert when these are negative
-                // since this means they are intended as percent values
-                sal_Int32 nValue = 0;
+    if(bDoIt)
+    {
+        const MapUnit eMapUnit(rSet.GetPool()->GetMetric(rEntry.nWID));
 
-                if(rAny >>= nValue)
-                {
-                    bDoIt = nValue > 0;
-                }
-            }
-
-            if(bDoIt)
-            {
-                const MapUnit eMapUnit(rSet.GetPool()->GetMetric(rEntry.nWID));
-
-                if(eMapUnit != MapUnit::Map100thMM)
-                {
-                    SvxUnoConvertToMM(eMapUnit, rAny);
-                }
-            }
+        if(eMapUnit != MapUnit::Map100thMM)
+        {
+            SvxUnoConvertToMM(eMapUnit, rAny);
         }
     }
 }
