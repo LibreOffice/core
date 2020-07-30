@@ -326,22 +326,22 @@ static void lcl_formatReferenceLanguage( OUString& rRefText,
         }
     }
     // not a title text starting already with a definitive article
-    if ( !sNumbering.startsWith("A ") && !sNumbering.startsWith("Az ") &&
-         !sNumbering.startsWith("a ") && !sNumbering.startsWith("az ") )
-    {
-        // lowercase, if rReferenceLanguage == "hu", not "Hu"
-        OUString sArticle;
+    if ( !(!sNumbering.startsWith("A ") && !sNumbering.startsWith("Az ") &&
+         !sNumbering.startsWith("a ") && !sNumbering.startsWith("az ")) )
+        return;
 
-        if ( rReferenceLanguage == "hu" )
-            sArticle = "a";
-        else
-            sArticle = "A";
+    // lowercase, if rReferenceLanguage == "hu", not "Hu"
+    OUString sArticle;
 
-        if (bArticleAz)
-            sArticle += "z";
+    if ( rReferenceLanguage == "hu" )
+        sArticle = "a";
+    else
+        sArticle = "A";
 
-        rRefText = sArticle + " " + rRefText;
-    }
+    if (bArticleAz)
+        sArticle += "z";
+
+    rRefText = sArticle + " " + rRefText;
 }
 
 /// get references
@@ -433,27 +433,27 @@ static void FilterText(OUString & rText, LanguageType const eLang,
         OUString const& rSetReferenceLanguage)
 {
     // remove all special characters (replace them with blanks)
-    if (!rText.isEmpty())
+    if (rText.isEmpty())
+        return;
+
+    rText = rText.replaceAll(u"\u00ad", "");
+    OUStringBuffer aBuf(rText);
+    const sal_Int32 l = aBuf.getLength();
+    for (sal_Int32 i = 0; i < l; ++i)
     {
-        rText = rText.replaceAll(u"\u00ad", "");
-        OUStringBuffer aBuf(rText);
-        const sal_Int32 l = aBuf.getLength();
-        for (sal_Int32 i = 0; i < l; ++i)
+        if (aBuf[i] < ' ')
         {
-            if (aBuf[i] < ' ')
-            {
-                aBuf[i] = ' ';
-            }
-            else if (aBuf[i] == 0x2011)
-            {
-                aBuf[i] = '-';
-            }
+            aBuf[i] = ' ';
         }
-        rText = aBuf.makeStringAndClear();
-        if (!rSetReferenceLanguage.isEmpty())
+        else if (aBuf[i] == 0x2011)
         {
-            lcl_formatReferenceLanguage(rText, false, eLang, rSetReferenceLanguage);
+            aBuf[i] = '-';
         }
+    }
+    rText = aBuf.makeStringAndClear();
+    if (!rSetReferenceLanguage.isEmpty())
+    {
+        lcl_formatReferenceLanguage(rText, false, eLang, rSetReferenceLanguage);
     }
 }
 
@@ -1027,37 +1027,37 @@ bool SwGetRefField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 
 void SwGetRefField::ConvertProgrammaticToUIName()
 {
-    if(GetTyp() && REF_SEQUENCEFLD == m_nSubType)
+    if(!(GetTyp() && REF_SEQUENCEFLD == m_nSubType))
+        return;
+
+    SwDoc* pDoc = static_cast<SwGetRefFieldType*>(GetTyp())->GetDoc();
+    const OUString rPar1 = GetPar1();
+    // don't convert when the name points to an existing field type
+    if(pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::SetExp, rPar1, false))
+        return;
+
+    sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( rPar1, SwGetPoolIdFromName::TxtColl );
+    const char* pResId = nullptr;
+    switch( nPoolId )
     {
-        SwDoc* pDoc = static_cast<SwGetRefFieldType*>(GetTyp())->GetDoc();
-        const OUString rPar1 = GetPar1();
-        // don't convert when the name points to an existing field type
-        if(!pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::SetExp, rPar1, false))
-        {
-            sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( rPar1, SwGetPoolIdFromName::TxtColl );
-            const char* pResId = nullptr;
-            switch( nPoolId )
-            {
-                case RES_POOLCOLL_LABEL_ABB:
-                    pResId = STR_POOLCOLL_LABEL_ABB;
-                break;
-                case RES_POOLCOLL_LABEL_TABLE:
-                    pResId = STR_POOLCOLL_LABEL_TABLE;
-                break;
-                case RES_POOLCOLL_LABEL_FRAME:
-                    pResId = STR_POOLCOLL_LABEL_FRAME;
-                break;
-                case RES_POOLCOLL_LABEL_DRAWING:
-                    pResId = STR_POOLCOLL_LABEL_DRAWING;
-                break;
-                case RES_POOLCOLL_LABEL_FIGURE:
-                    pResId = STR_POOLCOLL_LABEL_FIGURE;
-                break;
-            }
-            if (pResId)
-                SetPar1(SwResId(pResId));
-        }
+        case RES_POOLCOLL_LABEL_ABB:
+            pResId = STR_POOLCOLL_LABEL_ABB;
+        break;
+        case RES_POOLCOLL_LABEL_TABLE:
+            pResId = STR_POOLCOLL_LABEL_TABLE;
+        break;
+        case RES_POOLCOLL_LABEL_FRAME:
+            pResId = STR_POOLCOLL_LABEL_FRAME;
+        break;
+        case RES_POOLCOLL_LABEL_DRAWING:
+            pResId = STR_POOLCOLL_LABEL_DRAWING;
+        break;
+        case RES_POOLCOLL_LABEL_FIGURE:
+            pResId = STR_POOLCOLL_LABEL_FIGURE;
+        break;
     }
+    if (pResId)
+        SetPar1(SwResId(pResId));
 }
 
 SwGetRefFieldType::SwGetRefFieldType( SwDoc* pDc )
@@ -1408,54 +1408,54 @@ void RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rField,
 ///    what is most desirable since it's going to be wrong anyway
 void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
 {
-    if( &rDestDoc != m_pDoc )
+    if( &rDestDoc == m_pDoc )
+        return;
+
+    if (rDestDoc.IsClipBoard())
     {
-        if (rDestDoc.IsClipBoard())
-        {
-            // when copying _to_ clipboard, expectation is that no fields exist
-            // so no re-mapping is required to avoid collisions
-            assert(!rDestDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::GetRef)->HasWriterListeners());
-            return; // don't modify the fields in the source doc
-        }
+        // when copying _to_ clipboard, expectation is that no fields exist
+        // so no re-mapping is required to avoid collisions
+        assert(!rDestDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::GetRef)->HasWriterListeners());
+        return; // don't modify the fields in the source doc
+    }
 
-        // then there are RefFields in the DescDox - so all RefFields in the SourceDoc
-        // need to be converted to have unique IDs for both documents
-        RefIdsMap aFntMap { OUString() };
-        std::vector<std::unique_ptr<RefIdsMap>> aFieldMap;
+    // then there are RefFields in the DescDox - so all RefFields in the SourceDoc
+    // need to be converted to have unique IDs for both documents
+    RefIdsMap aFntMap { OUString() };
+    std::vector<std::unique_ptr<RefIdsMap>> aFieldMap;
 
-        std::vector<SwFormatField*> vFields;
-        GatherFields(vFields);
-        for(auto pField: vFields)
+    std::vector<SwFormatField*> vFields;
+    GatherFields(vFields);
+    for(auto pField: vFields)
+    {
+        SwGetRefField& rRefField = *static_cast<SwGetRefField*>(pField->GetField());
+        switch( rRefField.GetSubType() )
         {
-            SwGetRefField& rRefField = *static_cast<SwGetRefField*>(pField->GetField());
-            switch( rRefField.GetSubType() )
+        case REF_SEQUENCEFLD:
             {
-            case REF_SEQUENCEFLD:
+                RefIdsMap* pMap = nullptr;
+                for( auto n = aFieldMap.size(); n; )
                 {
-                    RefIdsMap* pMap = nullptr;
-                    for( auto n = aFieldMap.size(); n; )
+                    if (aFieldMap[ --n ]->GetName() == rRefField.GetSetRefName())
                     {
-                        if (aFieldMap[ --n ]->GetName() == rRefField.GetSetRefName())
-                        {
-                            pMap = aFieldMap[ n ].get();
-                            break;
-                        }
+                        pMap = aFieldMap[ n ].get();
+                        break;
                     }
-                    if( !pMap )
-                    {
-                        pMap = new RefIdsMap( rRefField.GetSetRefName() );
-                        aFieldMap.push_back(std::unique_ptr<RefIdsMap>(pMap));
-                    }
-
-                    pMap->Check( *m_pDoc, rDestDoc, rRefField, true );
                 }
-                break;
+                if( !pMap )
+                {
+                    pMap = new RefIdsMap( rRefField.GetSetRefName() );
+                    aFieldMap.push_back(std::unique_ptr<RefIdsMap>(pMap));
+                }
 
-            case REF_FOOTNOTE:
-            case REF_ENDNOTE:
-                aFntMap.Check( *m_pDoc, rDestDoc, rRefField, false );
-                break;
+                pMap->Check( *m_pDoc, rDestDoc, rRefField, true );
             }
+            break;
+
+        case REF_FOOTNOTE:
+        case REF_ENDNOTE:
+            aFntMap.Check( *m_pDoc, rDestDoc, rRefField, false );
+            break;
         }
     }
 }

@@ -159,19 +159,19 @@ void SwTextAPIEditSource::SetText( OutlinerParaObject const & rText )
 
 void SwTextAPIEditSource::SetString( const OUString& rText )
 {
-    if ( pImpl->mpPool )
+    if ( !pImpl->mpPool )
+        return;
+
+    if( !pImpl->mpOutliner )
     {
-        if( !pImpl->mpOutliner )
-        {
-            //init draw model first
-            pImpl->mpDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
-            pImpl->mpOutliner.reset(new Outliner(pImpl->mpPool, OutlinerMode::TextObject));
-            pImpl->mpDoc->SetCalcFieldValueHdl(pImpl->mpOutliner.get());
-        }
-        else
-            pImpl->mpOutliner->Clear();
-        pImpl->mpOutliner->Insert( rText );
+        //init draw model first
+        pImpl->mpDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
+        pImpl->mpOutliner.reset(new Outliner(pImpl->mpPool, OutlinerMode::TextObject));
+        pImpl->mpDoc->SetCalcFieldValueHdl(pImpl->mpOutliner.get());
     }
+    else
+        pImpl->mpOutliner->Clear();
+    pImpl->mpOutliner->Insert( rText );
 }
 
 std::unique_ptr<OutlinerParaObject> SwTextAPIEditSource::CreateText()

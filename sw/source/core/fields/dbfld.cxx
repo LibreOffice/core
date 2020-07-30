@@ -81,20 +81,20 @@ void SwDBFieldType::ReleaseRef()
 {
     OSL_ENSURE(m_nRefCnt > 0, "RefCount < 0!");
 
-    if (--m_nRefCnt <= 0)
+    if (--m_nRefCnt > 0)
+        return;
+
+    size_t nPos = 0;
+    for (auto const & pFieldType : *GetDoc()->getIDocumentFieldsAccess().GetFieldTypes())
     {
-        size_t nPos = 0;
-        for (auto const & pFieldType : *GetDoc()->getIDocumentFieldsAccess().GetFieldTypes())
-        {
-            if (pFieldType.get() == this)
-                break;
-            ++nPos;
-        }
-        if (nPos < GetDoc()->getIDocumentFieldsAccess().GetFieldTypes()->size())
-        {
-            GetDoc()->getIDocumentFieldsAccess().RemoveFieldType(nPos);
-            delete this;
-        }
+        if (pFieldType.get() == this)
+            break;
+        ++nPos;
+    }
+    if (nPos < GetDoc()->getIDocumentFieldsAccess().GetFieldTypes()->size())
+    {
+        GetDoc()->getIDocumentFieldsAccess().RemoveFieldType(nPos);
+        delete this;
     }
 }
 
