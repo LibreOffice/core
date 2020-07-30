@@ -1267,34 +1267,34 @@ IMPL_LINK(SwAuthorMarkPane, CreateEntryHdl, weld::Button&, rButton, void)
     {
         aDlg.SetCheckNameHdl(LINK(this, SwAuthorMarkPane, IsEntryAllowedHdl));
     }
-    if(RET_OK == aDlg.run())
+    if(RET_OK != aDlg.run())
+        return;
+
+    if(bCreate && !sOldId.isEmpty())
     {
-        if(bCreate && !sOldId.isEmpty())
-        {
-            m_xEntryLB->remove_text(sOldId);
-        }
-        for(int i = 0; i < AUTH_FIELD_END; i++)
-        {
-            m_sFields[i] = aDlg.GetEntryText(static_cast<ToxAuthorityField>(i));
-            m_sCreatedEntry[i] = m_sFields[i];
-        }
-        if(bNewEntry && !m_xFromDocContentRB->get_active())
-        {
-            m_xFromDocContentRB->set_active(true);
-            ChangeSourceHdl(*m_xFromDocContentRB);
-        }
-        if(bCreate)
-        {
-            OSL_ENSURE(m_xEntryLB->find_text(m_sFields[AUTH_FIELD_IDENTIFIER]) == -1,
-                        "entry exists!");
-            m_xEntryLB->append_text(m_sFields[AUTH_FIELD_IDENTIFIER]);
-            m_xEntryLB->set_active_text(m_sFields[AUTH_FIELD_IDENTIFIER]);
-        }
-        m_xEntryED->set_text(m_sFields[AUTH_FIELD_IDENTIFIER]);
-        m_xAuthorFI->set_label(m_sFields[AUTH_FIELD_AUTHOR]);
-        m_xTitleFI->set_label(m_sFields[AUTH_FIELD_TITLE]);
-        m_xActionBT->set_sensitive(true);
+        m_xEntryLB->remove_text(sOldId);
     }
+    for(int i = 0; i < AUTH_FIELD_END; i++)
+    {
+        m_sFields[i] = aDlg.GetEntryText(static_cast<ToxAuthorityField>(i));
+        m_sCreatedEntry[i] = m_sFields[i];
+    }
+    if(bNewEntry && !m_xFromDocContentRB->get_active())
+    {
+        m_xFromDocContentRB->set_active(true);
+        ChangeSourceHdl(*m_xFromDocContentRB);
+    }
+    if(bCreate)
+    {
+        OSL_ENSURE(m_xEntryLB->find_text(m_sFields[AUTH_FIELD_IDENTIFIER]) == -1,
+                    "entry exists!");
+        m_xEntryLB->append_text(m_sFields[AUTH_FIELD_IDENTIFIER]);
+        m_xEntryLB->set_active_text(m_sFields[AUTH_FIELD_IDENTIFIER]);
+    }
+    m_xEntryED->set_text(m_sFields[AUTH_FIELD_IDENTIFIER]);
+    m_xAuthorFI->set_label(m_sFields[AUTH_FIELD_AUTHOR]);
+    m_xTitleFI->set_label(m_sFields[AUTH_FIELD_TITLE]);
+    m_xActionBT->set_sensitive(true);
 }
 
 IMPL_LINK_NOARG(SwAuthorMarkPane, ChangeSourceHdl, weld::ToggleButton&, void)
@@ -1629,25 +1629,25 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, IdentifierHdl, weld::ComboBox&, rBox, void)
 {
     const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
                                 rWrtSh.GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));
-    if(pFType)
+    if(!pFType)
+        return;
+
+    const SwAuthEntry* pEntry = pFType->GetEntryByIdentifier(
+                                                    rBox.get_active_text());
+    if(!pEntry)
+        return;
+
+    for(int i = 0; i < AUTH_FIELD_END; i++)
     {
-        const SwAuthEntry* pEntry = pFType->GetEntryByIdentifier(
-                                                        rBox.get_active_text());
-        if(pEntry)
-        {
-            for(int i = 0; i < AUTH_FIELD_END; i++)
-            {
-                const TextInfo aCurInfo = aTextInfoArr[i];
-                if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField)
-                    continue;
-                if(AUTH_FIELD_AUTHORITY_TYPE == aCurInfo.nToxField)
-                    m_xTypeListBox->set_active_text(
-                                pEntry->GetAuthorField(aCurInfo.nToxField));
-                else
-                    pEdits[i]->set_text(
-                                pEntry->GetAuthorField(aCurInfo.nToxField));
-            }
-        }
+        const TextInfo aCurInfo = aTextInfoArr[i];
+        if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField)
+            continue;
+        if(AUTH_FIELD_AUTHORITY_TYPE == aCurInfo.nToxField)
+            m_xTypeListBox->set_active_text(
+                        pEntry->GetAuthorField(aCurInfo.nToxField));
+        else
+            pEdits[i]->set_text(
+                        pEntry->GetAuthorField(aCurInfo.nToxField));
     }
 }
 

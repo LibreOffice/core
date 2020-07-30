@@ -420,24 +420,24 @@ SwLabRec* SwLabPage::GetSelectedEntryPos()
 
 void SwLabPage::InitDatabaseBox()
 {
-    if( GetDBManager() )
+    if( !GetDBManager() )
+        return;
+
+    m_xDatabaseLB->clear();
+    const css::uno::Sequence<OUString> aDataNames = SwDBManager::GetExistingDatabaseNames();
+    for (const OUString& rDataName : aDataNames)
+        m_xDatabaseLB->append_text(rDataName);
+    sal_Int32 nIdx{ 0 };
+    OUString sDBName = sActDBName.getToken( 0, DB_DELIM, nIdx );
+    OUString sTableName = sActDBName.getToken( 0, DB_DELIM, nIdx );
+    m_xDatabaseLB->set_active_text(sDBName);
+    if( !sDBName.isEmpty() && GetDBManager()->GetTableNames(*m_xTableLB, sDBName))
     {
-        m_xDatabaseLB->clear();
-        const css::uno::Sequence<OUString> aDataNames = SwDBManager::GetExistingDatabaseNames();
-        for (const OUString& rDataName : aDataNames)
-            m_xDatabaseLB->append_text(rDataName);
-        sal_Int32 nIdx{ 0 };
-        OUString sDBName = sActDBName.getToken( 0, DB_DELIM, nIdx );
-        OUString sTableName = sActDBName.getToken( 0, DB_DELIM, nIdx );
-        m_xDatabaseLB->set_active_text(sDBName);
-        if( !sDBName.isEmpty() && GetDBManager()->GetTableNames(*m_xTableLB, sDBName))
-        {
-            m_xTableLB->set_active_text(sTableName);
-            GetDBManager()->GetColumnNames(*m_xDBFieldLB, sActDBName, sTableName);
-        }
-        else
-            m_xDBFieldLB->clear();
+        m_xTableLB->set_active_text(sTableName);
+        GetDBManager()->GetColumnNames(*m_xDBFieldLB, sActDBName, sTableName);
     }
+    else
+        m_xDBFieldLB->clear();
 }
 
 std::unique_ptr<SfxTabPage> SwLabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet)

@@ -272,26 +272,26 @@ IMPL_LINK_NOARG(SwEnvPage, SenderHdl, weld::Button&, void)
 
 void SwEnvPage::InitDatabaseBox()
 {
-    if (m_pSh->GetDBManager())
+    if (!m_pSh->GetDBManager())
+        return;
+
+    m_xDatabaseLB->clear();
+    const Sequence<OUString> aDataNames = SwDBManager::GetExistingDatabaseNames();
+
+    for (const OUString& rDataName : aDataNames)
+        m_xDatabaseLB->append_text(rDataName);
+
+    sal_Int32 nIdx{ 0 };
+    OUString sDBName = m_sActDBName.getToken( 0, DB_DELIM, nIdx );
+    OUString sTableName = m_sActDBName.getToken( 0, DB_DELIM, nIdx );
+    m_xDatabaseLB->set_active_text(sDBName);
+    if (m_pSh->GetDBManager()->GetTableNames(*m_xTableLB, sDBName))
     {
-        m_xDatabaseLB->clear();
-        const Sequence<OUString> aDataNames = SwDBManager::GetExistingDatabaseNames();
-
-        for (const OUString& rDataName : aDataNames)
-            m_xDatabaseLB->append_text(rDataName);
-
-        sal_Int32 nIdx{ 0 };
-        OUString sDBName = m_sActDBName.getToken( 0, DB_DELIM, nIdx );
-        OUString sTableName = m_sActDBName.getToken( 0, DB_DELIM, nIdx );
-        m_xDatabaseLB->set_active_text(sDBName);
-        if (m_pSh->GetDBManager()->GetTableNames(*m_xTableLB, sDBName))
-        {
-            m_xTableLB->append_text(sTableName);
-            m_pSh->GetDBManager()->GetColumnNames(*m_xDBFieldLB, sDBName, sTableName);
-        }
-        else
-            m_xDBFieldLB->clear();
+        m_xTableLB->append_text(sTableName);
+        m_pSh->GetDBManager()->GetColumnNames(*m_xDBFieldLB, sDBName, sTableName);
     }
+    else
+        m_xDBFieldLB->clear();
 }
 
 std::unique_ptr<SfxTabPage> SwEnvPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet)

@@ -916,20 +916,20 @@ void SwColumnPage::ColModify(const weld::SpinButton* pNF)
     // #i17816# changing the displayed types within the ValueSet
     //from two columns to two columns with different settings doesn't invalidate the
     // example windows in ::ColModify()
-    if (!pNF || m_xColMgr->GetCount() != m_nCols)
-    {
-        if (pNF)
-            m_aDefaultVS.SetNoSelection();
-        long nDist = static_cast< long >(m_xDistEd1->DenormalizePercent(m_xDistEd1->get_value(FieldUnit::TWIP)));
-        m_xColMgr->SetCount(m_nCols, static_cast<sal_uInt16>(nDist));
-        for(sal_uInt16 i = 0; i < m_nCols; i++)
-            m_nColDist[i] = nDist;
-        m_nFirstVis = 0;
-        SetLabels( m_nFirstVis );
-        UpdateCols();
-        ResetColWidth();
-        Update(nullptr);
-    }
+    if (pNF && m_xColMgr->GetCount() == m_nCols)
+        return;
+
+    if (pNF)
+        m_aDefaultVS.SetNoSelection();
+    long nDist = static_cast< long >(m_xDistEd1->DenormalizePercent(m_xDistEd1->get_value(FieldUnit::TWIP)));
+    m_xColMgr->SetCount(m_nCols, static_cast<sal_uInt16>(nDist));
+    for(sal_uInt16 i = 0; i < m_nCols; i++)
+        m_nColDist[i] = nDist;
+    m_nFirstVis = 0;
+    SetLabels( m_nFirstVis );
+    UpdateCols();
+    ResetColWidth();
+    Update(nullptr);
 }
 
 /*

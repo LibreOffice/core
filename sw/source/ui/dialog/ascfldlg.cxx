@@ -276,22 +276,22 @@ void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
     // save the user settings
     OUString sData;
     rOptions.WriteUserData( sData );
-    if (!sData.isEmpty())
+    if (sData.isEmpty())
+        return;
+
+    const OUString sFindNm = OUString::createFromAscii(
+                                m_xFontLB->get_visible() ? sDialogImpExtraData
+                                          : sDialogExpExtraData);
+    sal_Int32 nEnd, nStt = m_sExtraData.indexOf( sFindNm );
+    if( -1 != nStt )
     {
-        const OUString sFindNm = OUString::createFromAscii(
-                                    m_xFontLB->get_visible() ? sDialogImpExtraData
-                                              : sDialogExpExtraData);
-        sal_Int32 nEnd, nStt = m_sExtraData.indexOf( sFindNm );
-        if( -1 != nStt )
-        {
-            // called twice, so remove "old" settings
-            nEnd = m_sExtraData.indexOf( cDialogExtraDataClose,
-                                            nStt + nDialogExtraDataLen );
-            if( -1 != nEnd )
-                m_sExtraData = m_sExtraData.replaceAt( nStt, nEnd - nStt + 1, "" );
-        }
-        m_sExtraData += sFindNm + sData + OUStringChar(cDialogExtraDataClose);
+        // called twice, so remove "old" settings
+        nEnd = m_sExtraData.indexOf( cDialogExtraDataClose,
+                                        nStt + nDialogExtraDataLen );
+        if( -1 != nEnd )
+            m_sExtraData = m_sExtraData.replaceAt( nStt, nEnd - nStt + 1, "" );
     }
+    m_sExtraData += sFindNm + sData + OUStringChar(cDialogExtraDataClose);
 }
 
 void SwAsciiFilterDlg::SetCRLF( LineEnd eEnd )
@@ -334,18 +334,18 @@ bool SwAsciiFilterDlg::GetIncludeBOM() const
 
 void SwAsciiFilterDlg::UpdateIncludeBOMSensitiveState()
 {
-    if (m_xIncludeBOM_CB->get_visible())
+    if (!m_xIncludeBOM_CB->get_visible())
+        return;
+
+    switch (m_xCharSetLB->GetSelectTextEncoding())
     {
-        switch (m_xCharSetLB->GetSelectTextEncoding())
-        {
-            case RTL_TEXTENCODING_UTF8:
-            case RTL_TEXTENCODING_UCS2:
-                m_xIncludeBOM_CB->set_sensitive(true);
-                break;
-            default:
-                m_xIncludeBOM_CB->set_sensitive(false);
-                break;
-        }
+        case RTL_TEXTENCODING_UTF8:
+        case RTL_TEXTENCODING_UCS2:
+            m_xIncludeBOM_CB->set_sensitive(true);
+            break;
+        default:
+            m_xIncludeBOM_CB->set_sensitive(false);
+            break;
     }
 }
 

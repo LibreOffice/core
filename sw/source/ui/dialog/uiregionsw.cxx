@@ -538,21 +538,21 @@ SwEditRegionDlg::~SwEditRegionDlg( )
 void SwEditRegionDlg::SelectSection(const OUString& rSectionName)
 {
     std::unique_ptr<weld::TreeIter> xIter(m_xTree->make_iterator());
-    if (m_xTree->get_iter_first(*xIter))
+    if (!m_xTree->get_iter_first(*xIter))
+        return;
+
+    do
     {
-        do
+        SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(*xIter).toInt64());
+        if (pRepr->GetSectionData().GetSectionName() == rSectionName)
         {
-            SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(*xIter).toInt64());
-            if (pRepr->GetSectionData().GetSectionName() == rSectionName)
-            {
-                m_xTree->unselect_all();
-                m_xTree->select(*xIter);
-                m_xTree->scroll_to_row(*xIter);
-                GetFirstEntryHdl(*m_xTree);
-                break;
-            }
-        } while (m_xTree->iter_next(*xIter));
-    }
+            m_xTree->unselect_all();
+            m_xTree->select(*xIter);
+            m_xTree->scroll_to_row(*xIter);
+            GetFirstEntryHdl(*m_xTree);
+            break;
+        }
+    } while (m_xTree->iter_next(*xIter));
 }
 
 // selected entry in TreeListBox is showed in Edit window in case of
@@ -1022,58 +1022,58 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl, weld::Button&, void)
     aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
 
     SwSectionPropertyTabDialog aTabDlg(m_xDialog.get(), aSet, rSh);
-    if (RET_OK == aTabDlg.run())
-    {
-        const SfxItemSet* pOutSet = aTabDlg.GetOutputItemSet();
-        if( pOutSet && pOutSet->Count() )
-        {
-            const SfxPoolItem *pColItem, *pBrushItem,
-                              *pFootnoteItem, *pEndItem, *pBalanceItem,
-                              *pFrameDirItem, *pLRSpaceItem;
-            SfxItemState eColState = pOutSet->GetItemState(
-                                    RES_COL, false, &pColItem );
-            SfxItemState eBrushState = pOutSet->GetItemState(
-                                    RES_BACKGROUND, false, &pBrushItem );
-            SfxItemState eFootnoteState = pOutSet->GetItemState(
-                                    RES_FTN_AT_TXTEND, false, &pFootnoteItem );
-            SfxItemState eEndState = pOutSet->GetItemState(
-                                    RES_END_AT_TXTEND, false, &pEndItem );
-            SfxItemState eBalanceState = pOutSet->GetItemState(
-                                    RES_COLUMNBALANCE, false, &pBalanceItem );
-            SfxItemState eFrameDirState = pOutSet->GetItemState(
-                                    RES_FRAMEDIR, false, &pFrameDirItem );
-            SfxItemState eLRState = pOutSet->GetItemState(
-                                    RES_LR_SPACE, false, &pLRSpaceItem);
+    if (RET_OK != aTabDlg.run())
+        return;
 
-            if( SfxItemState::SET == eColState ||
-                SfxItemState::SET == eBrushState ||
-                SfxItemState::SET == eFootnoteState ||
-                SfxItemState::SET == eEndState ||
-                SfxItemState::SET == eBalanceState||
-                SfxItemState::SET == eFrameDirState||
-                SfxItemState::SET == eLRState)
-            {
-                m_xTree->selected_foreach([&](weld::TreeIter& rEntry){
-                    SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(rEntry).toInt64());
-                    if( SfxItemState::SET == eColState )
-                        pRepr->GetCol() = *static_cast<const SwFormatCol*>(pColItem);
-                    if( SfxItemState::SET == eBrushState )
-                        pRepr->GetBackground().reset(static_cast<SvxBrushItem*>(pBrushItem->Clone()));
-                    if( SfxItemState::SET == eFootnoteState )
-                        pRepr->GetFootnoteNtAtEnd() = *static_cast<const SwFormatFootnoteAtTextEnd*>(pFootnoteItem);
-                    if( SfxItemState::SET == eEndState )
-                        pRepr->GetEndNtAtEnd() = *static_cast<const SwFormatEndAtTextEnd*>(pEndItem);
-                    if( SfxItemState::SET == eBalanceState )
-                        pRepr->GetBalance().SetValue(static_cast<const SwFormatNoBalancedColumns*>(pBalanceItem)->GetValue());
-                    if( SfxItemState::SET == eFrameDirState )
-                        pRepr->GetFrameDir()->SetValue(static_cast<const SvxFrameDirectionItem*>(pFrameDirItem)->GetValue());
-                    if( SfxItemState::SET == eLRState )
-                        pRepr->GetLRSpace().reset(static_cast<SvxLRSpaceItem*>(pLRSpaceItem->Clone()));
-                    return false;
-                });
-            }
-        }
-    }
+    const SfxItemSet* pOutSet = aTabDlg.GetOutputItemSet();
+    if( !(pOutSet && pOutSet->Count()) )
+        return;
+
+    const SfxPoolItem *pColItem, *pBrushItem,
+                      *pFootnoteItem, *pEndItem, *pBalanceItem,
+                      *pFrameDirItem, *pLRSpaceItem;
+    SfxItemState eColState = pOutSet->GetItemState(
+                            RES_COL, false, &pColItem );
+    SfxItemState eBrushState = pOutSet->GetItemState(
+                            RES_BACKGROUND, false, &pBrushItem );
+    SfxItemState eFootnoteState = pOutSet->GetItemState(
+                            RES_FTN_AT_TXTEND, false, &pFootnoteItem );
+    SfxItemState eEndState = pOutSet->GetItemState(
+                            RES_END_AT_TXTEND, false, &pEndItem );
+    SfxItemState eBalanceState = pOutSet->GetItemState(
+                            RES_COLUMNBALANCE, false, &pBalanceItem );
+    SfxItemState eFrameDirState = pOutSet->GetItemState(
+                            RES_FRAMEDIR, false, &pFrameDirItem );
+    SfxItemState eLRState = pOutSet->GetItemState(
+                            RES_LR_SPACE, false, &pLRSpaceItem);
+
+    if( !(SfxItemState::SET == eColState ||
+        SfxItemState::SET == eBrushState ||
+        SfxItemState::SET == eFootnoteState ||
+        SfxItemState::SET == eEndState ||
+        SfxItemState::SET == eBalanceState||
+        SfxItemState::SET == eFrameDirState||
+        SfxItemState::SET == eLRState))
+        return;
+
+    m_xTree->selected_foreach([&](weld::TreeIter& rEntry){
+        SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(rEntry).toInt64());
+        if( SfxItemState::SET == eColState )
+            pRepr->GetCol() = *static_cast<const SwFormatCol*>(pColItem);
+        if( SfxItemState::SET == eBrushState )
+            pRepr->GetBackground().reset(static_cast<SvxBrushItem*>(pBrushItem->Clone()));
+        if( SfxItemState::SET == eFootnoteState )
+            pRepr->GetFootnoteNtAtEnd() = *static_cast<const SwFormatFootnoteAtTextEnd*>(pFootnoteItem);
+        if( SfxItemState::SET == eEndState )
+            pRepr->GetEndNtAtEnd() = *static_cast<const SwFormatEndAtTextEnd*>(pEndItem);
+        if( SfxItemState::SET == eBalanceState )
+            pRepr->GetBalance().SetValue(static_cast<const SwFormatNoBalancedColumns*>(pBalanceItem)->GetValue());
+        if( SfxItemState::SET == eFrameDirState )
+            pRepr->GetFrameDir()->SetValue(static_cast<const SvxFrameDirectionItem*>(pFrameDirItem)->GetValue());
+        if( SfxItemState::SET == eLRState )
+            pRepr->GetLRSpace().reset(static_cast<SvxLRSpaceItem*>(pLRSpaceItem->Clone()));
+        return false;
+    });
 }
 
 IMPL_LINK(SwEditRegionDlg, FileNameComboBoxHdl, weld::ComboBox&, rEdit, void)
@@ -1134,46 +1134,46 @@ IMPL_LINK(SwEditRegionDlg, DDEHdl, weld::ToggleButton&, rButton, void)
     if (!CheckPasswd(&rButton))
         return;
     SectRepr* pSectRepr = reinterpret_cast<SectRepr*>(m_xTree->get_selected_id().toInt64());
-    if (pSectRepr)
+    if (!pSectRepr)
+        return;
+
+    bool bFile = m_xFileCB->get_active();
+    SwSectionData & rData( pSectRepr->GetSectionData() );
+    bool bDDE = rButton.get_active();
+    if(bDDE)
     {
-        bool bFile = m_xFileCB->get_active();
-        SwSectionData & rData( pSectRepr->GetSectionData() );
-        bool bDDE = rButton.get_active();
-        if(bDDE)
+        m_xFileNameFT->hide();
+        m_xDDECommandFT->set_sensitive(true);
+        m_xDDECommandFT->show();
+        m_xSubRegionFT->hide();
+        m_xSubRegionED->hide();
+        if (SectionType::FileLink == rData.GetType())
         {
-            m_xFileNameFT->hide();
-            m_xDDECommandFT->set_sensitive(true);
-            m_xDDECommandFT->show();
-            m_xSubRegionFT->hide();
-            m_xSubRegionED->hide();
-            if (SectionType::FileLink == rData.GetType())
-            {
-                pSectRepr->SetFile(OUString());
-                m_xFileNameED->set_text(OUString());
-                rData.SetLinkFilePassword(OUString());
-            }
-            rData.SetType(SectionType::DdeLink);
+            pSectRepr->SetFile(OUString());
+            m_xFileNameED->set_text(OUString());
+            rData.SetLinkFilePassword(OUString());
         }
-        else
-        {
-            m_xDDECommandFT->hide();
-            m_xFileNameFT->set_sensitive(bFile);
-            m_xFileNameFT->show();
-            m_xSubRegionED->show();
-            m_xSubRegionFT->show();
-            m_xSubRegionED->set_sensitive(bFile);
-            m_xSubRegionFT->set_sensitive(bFile);
-            m_xSubRegionED->set_sensitive(bFile);
-            if (SectionType::DdeLink == rData.GetType())
-            {
-                rData.SetType(SectionType::FileLink);
-                pSectRepr->SetFile(OUString());
-                rData.SetLinkFilePassword(OUString());
-                m_xFileNameED->set_text(OUString());
-            }
-        }
-        m_xFilePB->set_sensitive(bFile && !bDDE);
+        rData.SetType(SectionType::DdeLink);
     }
+    else
+    {
+        m_xDDECommandFT->hide();
+        m_xFileNameFT->set_sensitive(bFile);
+        m_xFileNameFT->show();
+        m_xSubRegionED->show();
+        m_xSubRegionFT->show();
+        m_xSubRegionED->set_sensitive(bFile);
+        m_xSubRegionFT->set_sensitive(bFile);
+        m_xSubRegionED->set_sensitive(bFile);
+        if (SectionType::DdeLink == rData.GetType())
+        {
+            rData.SetType(SectionType::FileLink);
+            pSectRepr->SetFile(OUString());
+            rData.SetLinkFilePassword(OUString());
+            m_xFileNameED->set_text(OUString());
+        }
+    }
+    m_xFilePB->set_sensitive(bFile && !bDDE);
 }
 
 void SwEditRegionDlg::ChangePasswd(bool bChange)
@@ -1301,29 +1301,29 @@ IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg, v
 
 IMPL_LINK_NOARG(SwEditRegionDlg, SubRegionEventHdl, weld::ComboBox&, void)
 {
-    if (!m_bSubRegionsFilled)
+    if (m_bSubRegionsFilled)
+        return;
+
+    //if necessary fill the names bookmarks/sections/tables now
+
+    OUString sFileName = m_xFileNameED->get_text();
+    if(!sFileName.isEmpty())
     {
-        //if necessary fill the names bookmarks/sections/tables now
+        SfxMedium* pMedium = rSh.GetView().GetDocShell()->GetMedium();
+        INetURLObject aAbs;
+        if( pMedium )
+            aAbs = pMedium->GetURLObject();
+        sFileName = URIHelper::SmartRel2Abs(
+                aAbs, sFileName, URIHelper::GetMaybeFileHdl() );
 
-        OUString sFileName = m_xFileNameED->get_text();
-        if(!sFileName.isEmpty())
-        {
-            SfxMedium* pMedium = rSh.GetView().GetDocShell()->GetMedium();
-            INetURLObject aAbs;
-            if( pMedium )
-                aAbs = pMedium->GetURLObject();
-            sFileName = URIHelper::SmartRel2Abs(
-                    aAbs, sFileName, URIHelper::GetMaybeFileHdl() );
-
-            //load file and set the shell
-            SfxMedium aMedium( sFileName, StreamMode::STD_READ );
-            sFileName = aMedium.GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE );
-            ::lcl_ReadSections(aMedium, *m_xSubRegionED);
-        }
-        else
-            lcl_FillSubRegionList(rSh, *m_xSubRegionED, nullptr);
-        m_bSubRegionsFilled = true;
+        //load file and set the shell
+        SfxMedium aMedium( sFileName, StreamMode::STD_READ );
+        sFileName = aMedium.GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE );
+        ::lcl_ReadSections(aMedium, *m_xSubRegionED);
     }
+    else
+        lcl_FillSubRegionList(rSh, *m_xSubRegionED, nullptr);
+    m_bSubRegionsFilled = true;
 }
 
 // helper function - read section names from medium
@@ -1331,18 +1331,18 @@ static void lcl_ReadSections( SfxMedium& rMedium, weld::ComboBox& rBox )
 {
     rBox.clear();
     uno::Reference < embed::XStorage > xStg;
-    if( rMedium.IsStorage() && (xStg = rMedium.GetStorage()).is() )
-    {
-        std::vector<OUString> aArr;
-        SotClipboardFormatId nFormat = SotStorage::GetFormatID( xStg );
-        if ( nFormat == SotClipboardFormatId::STARWRITER_60 || nFormat == SotClipboardFormatId::STARWRITERGLOB_60 ||
-            nFormat == SotClipboardFormatId::STARWRITER_8 || nFormat == SotClipboardFormatId::STARWRITERGLOB_8)
-            SwGetReaderXML()->GetSectionList( rMedium, aArr );
+    if( !(rMedium.IsStorage() && (xStg = rMedium.GetStorage()).is()) )
+        return;
 
-        for (auto const& it : aArr)
-        {
-            rBox.append_text(it);
-        }
+    std::vector<OUString> aArr;
+    SotClipboardFormatId nFormat = SotStorage::GetFormatID( xStg );
+    if ( nFormat == SotClipboardFormatId::STARWRITER_60 || nFormat == SotClipboardFormatId::STARWRITERGLOB_60 ||
+        nFormat == SotClipboardFormatId::STARWRITER_8 || nFormat == SotClipboardFormatId::STARWRITERGLOB_8)
+        SwGetReaderXML()->GetSectionList( rMedium, aArr );
+
+    for (auto const& it : aArr)
+    {
+        rBox.append_text(it);
     }
 }
 

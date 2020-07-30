@@ -192,26 +192,26 @@ IMPL_LINK_NOARG( SwGlossaryGroupDlg, SelectHdl, weld::TreeView&, void )
 {
     m_xNewPB->set_sensitive(false);
     int nFirstEntry = m_xGroupTLB->get_selected_index();
-    if (nFirstEntry != -1)
-    {
-        GlosBibUserData* pUserData = reinterpret_cast<GlosBibUserData*>(m_xGroupTLB->get_id(nFirstEntry).toInt64());
-        const OUString sEntry(pUserData->sGroupName);
-        const OUString sName(m_xNameED->get_text());
-        bool bExists = false;
-        int nPos = m_xGroupTLB->find_text(sName);
-        if (nPos != -1)
-        {
-            GlosBibUserData* pFoundData = reinterpret_cast<GlosBibUserData*>(m_xGroupTLB->get_id(nPos).toInt64());
-            fprintf(stderr, "comparing %s and %s\n",
-                    OUStringToOString(pFoundData->sGroupName, RTL_TEXTENCODING_UTF8).getStr(),
-                    OUStringToOString(sEntry, RTL_TEXTENCODING_UTF8).getStr());
-            bExists = pFoundData->sGroupName == sEntry;
-        }
+    if (nFirstEntry == -1)
+        return;
 
-        m_xRenamePB->set_sensitive(!bExists && !sName.isEmpty());
-        fprintf(stderr, "one rename %d\n", !bExists && !sName.isEmpty());
-        m_xDelPB->set_sensitive(IsDeleteAllowed(sEntry));
+    GlosBibUserData* pUserData = reinterpret_cast<GlosBibUserData*>(m_xGroupTLB->get_id(nFirstEntry).toInt64());
+    const OUString sEntry(pUserData->sGroupName);
+    const OUString sName(m_xNameED->get_text());
+    bool bExists = false;
+    int nPos = m_xGroupTLB->find_text(sName);
+    if (nPos != -1)
+    {
+        GlosBibUserData* pFoundData = reinterpret_cast<GlosBibUserData*>(m_xGroupTLB->get_id(nPos).toInt64());
+        fprintf(stderr, "comparing %s and %s\n",
+                OUStringToOString(pFoundData->sGroupName, RTL_TEXTENCODING_UTF8).getStr(),
+                OUStringToOString(sEntry, RTL_TEXTENCODING_UTF8).getStr());
+        bExists = pFoundData->sGroupName == sEntry;
     }
+
+    m_xRenamePB->set_sensitive(!bExists && !sName.isEmpty());
+    fprintf(stderr, "one rename %d\n", !bExists && !sName.isEmpty());
+    m_xDelPB->set_sensitive(IsDeleteAllowed(sEntry));
 }
 
 IMPL_LINK_NOARG(SwGlossaryGroupDlg, NewHdl, weld::Button&, void)

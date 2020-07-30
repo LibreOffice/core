@@ -40,84 +40,84 @@ DateFormFieldDialog::~DateFormFieldDialog() {}
 
 void DateFormFieldDialog::Apply()
 {
-    if (m_pDateField != nullptr)
+    if (m_pDateField == nullptr)
+        return;
+
+    // Try to find out the current date value and replace the content
+    // with the right formatted date string
+    sw::mark::IFieldmark::parameter_map_t* pParameters = m_pDateField->GetParameters();
+    const SvNumberformat* pFormat = m_pNumberFormatter->GetEntry(m_xFormatLB->GetFormat());
+
+    // Get date value first
+    std::pair<bool, double> aResult = m_pDateField->GetCurrentDate();
+
+    // Then set the date format
+    (*pParameters)[ODF_FORMDATE_DATEFORMAT] <<= pFormat->GetFormatstring();
+    (*pParameters)[ODF_FORMDATE_DATEFORMAT_LANGUAGE]
+        <<= LanguageTag(pFormat->GetLanguage()).getBcp47();
+
+    // Update current date
+    if (aResult.first)
     {
-        // Try to find out the current date value and replace the content
-        // with the right formatted date string
-        sw::mark::IFieldmark::parameter_map_t* pParameters = m_pDateField->GetParameters();
-        const SvNumberformat* pFormat = m_pNumberFormatter->GetEntry(m_xFormatLB->GetFormat());
-
-        // Get date value first
-        std::pair<bool, double> aResult = m_pDateField->GetCurrentDate();
-
-        // Then set the date format
-        (*pParameters)[ODF_FORMDATE_DATEFORMAT] <<= pFormat->GetFormatstring();
-        (*pParameters)[ODF_FORMDATE_DATEFORMAT_LANGUAGE]
-            <<= LanguageTag(pFormat->GetLanguage()).getBcp47();
-
-        // Update current date
-        if (aResult.first)
-        {
-            m_pDateField->SetCurrentDate(aResult.second);
-        }
-        else
-        {
-            (*pParameters)[ODF_FORMDATE_CURRENTDATE] <<= OUString();
-        }
+        m_pDateField->SetCurrentDate(aResult.second);
+    }
+    else
+    {
+        (*pParameters)[ODF_FORMDATE_CURRENTDATE] <<= OUString();
     }
 }
 
 void DateFormFieldDialog::InitControls()
 {
-    if (m_pDateField != nullptr)
+    if (m_pDateField == nullptr)
+        return;
+
+    sw::mark::IFieldmark::parameter_map_t* pParameters = m_pDateField->GetParameters();
+
+    OUString sFormatString;
+    auto pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT);
+    if (pResult != pParameters->end())
     {
-        sw::mark::IFieldmark::parameter_map_t* pParameters = m_pDateField->GetParameters();
-
-        OUString sFormatString;
-        auto pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT);
-        if (pResult != pParameters->end())
-        {
-            pResult->second >>= sFormatString;
-        }
-
-        OUString sLang;
-        pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT_LANGUAGE);
-        if (pResult != pParameters->end())
-        {
-            pResult->second >>= sLang;
-        }
-
-        if (!sFormatString.isEmpty() && !sLang.isEmpty())
-        {
-            LanguageType aLangType = LanguageTag(sLang).getLanguageType();
-            sal_uInt32 nFormat = m_pNumberFormatter->GetEntryKey(sFormatString, aLangType);
-            if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
-            {
-                sal_Int32 nCheckPos = 0;
-                SvNumFormatType nType;
-                m_pNumberFormatter->PutEntry(sFormatString, nCheckPos, nType, nFormat,
-                                             LanguageTag(sLang).getLanguageType());
-            }
-
-            if (aLangType != LANGUAGE_DONTKNOW && nFormat != NUMBERFORMAT_ENTRY_NOT_FOUND)
-            {
-                if (m_xFormatLB->GetCurLanguage() == aLangType)
-                {
-                    m_xFormatLB->SetAutomaticLanguage(true);
-                }
-                else
-                {
-                    m_xFormatLB->SetAutomaticLanguage(false);
-                    m_xFormatLB->SetLanguage(aLangType);
-
-                    // Change format and change back for regenerating the list
-                    m_xFormatLB->SetFormatType(SvNumFormatType::ALL);
-                    m_xFormatLB->SetFormatType(SvNumFormatType::DATE);
-                }
-                m_xFormatLB->SetDefFormat(nFormat);
-            }
-        }
+        pResult->second >>= sFormatString;
     }
+
+    OUString sLang;
+    pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT_LANGUAGE);
+    if (pResult != pParameters->end())
+    {
+        pResult->second >>= sLang;
+    }
+
+    if (sFormatString.isEmpty() || sLang.isEmpty())
+        return;
+
+    LanguageType aLangType = LanguageTag(sLang).getLanguageType();
+    sal_uInt32 nFormat = m_pNumberFormatter->GetEntryKey(sFormatString, aLangType);
+    if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
+    {
+        sal_Int32 nCheckPos = 0;
+        SvNumFormatType nType;
+        m_pNumberFormatter->PutEntry(sFormatString, nCheckPos, nType, nFormat,
+                                     LanguageTag(sLang).getLanguageType());
+    }
+
+    if (aLangType == LANGUAGE_DONTKNOW || nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
+        return;
+
+    if (m_xFormatLB->GetCurLanguage() == aLangType)
+    {
+        m_xFormatLB->SetAutomaticLanguage(true);
+    }
+    else
+    {
+        m_xFormatLB->SetAutomaticLanguage(false);
+        m_xFormatLB->SetLanguage(aLangType);
+
+        // Change format and change back for regenerating the list
+        m_xFormatLB->SetFormatType(SvNumFormatType::ALL);
+        m_xFormatLB->SetFormatType(SvNumFormatType::DATE);
+    }
+    m_xFormatLB->SetDefFormat(nFormat);
 }
 
 } // namespace sw

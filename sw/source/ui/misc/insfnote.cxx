@@ -99,28 +99,28 @@ IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberExtCharHdl, weld::Button&, void)
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(m_xDialog.get(), aAllSet, nullptr));
-    if (RET_OK == pDlg->Execute())
+    if (RET_OK != pDlg->Execute())
+        return;
+
+    const SfxStringItem* pItem = SfxItemSet::GetItem<SfxStringItem>(pDlg->GetOutputItemSet(), SID_CHARMAP, false);
+    const SvxFontItem* pFontItem = SfxItemSet::GetItem<SvxFontItem>(pDlg->GetOutputItemSet(), SID_ATTR_CHAR_FONT, false);
+    if ( !pItem )
+        return;
+
+    m_xNumberCharEdit->set_text(pItem->GetValue());
+
+    if ( pFontItem )
     {
-        const SfxStringItem* pItem = SfxItemSet::GetItem<SfxStringItem>(pDlg->GetOutputItemSet(), SID_CHARMAP, false);
-        const SvxFontItem* pFontItem = SfxItemSet::GetItem<SvxFontItem>(pDlg->GetOutputItemSet(), SID_ATTR_CHAR_FONT, false);
-        if ( pItem )
-        {
-            m_xNumberCharEdit->set_text(pItem->GetValue());
-
-            if ( pFontItem )
-            {
-                m_aFontName = pFontItem->GetFamilyName();
-                m_eCharSet  = pFontItem->GetCharSet();
-                vcl::Font aFont(m_aFontName, pFontItem->GetStyleName(), m_xNumberCharEdit->get_font().GetFontSize());
-                aFont.SetCharSet( pFontItem->GetCharSet() );
-                aFont.SetPitch( pFontItem->GetPitch() );
-                m_xNumberCharEdit->set_font(aFont);
-            }
-
-            m_bExtCharAvailable = true;
-            m_xOkBtn->set_sensitive(!m_xNumberCharEdit->get_text().isEmpty());
-        }
+        m_aFontName = pFontItem->GetFamilyName();
+        m_eCharSet  = pFontItem->GetCharSet();
+        vcl::Font aFont(m_aFontName, pFontItem->GetStyleName(), m_xNumberCharEdit->get_font().GetFontSize());
+        aFont.SetCharSet( pFontItem->GetCharSet() );
+        aFont.SetPitch( pFontItem->GetPitch() );
+        m_xNumberCharEdit->set_font(aFont);
     }
+
+    m_bExtCharAvailable = true;
+    m_xOkBtn->set_sensitive(!m_xNumberCharEdit->get_text().isEmpty());
 }
 
 IMPL_LINK( SwInsFootNoteDlg, NextPrevHdl, weld::Button&, rBtn, void )

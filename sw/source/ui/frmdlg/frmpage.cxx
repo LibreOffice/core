@@ -1940,59 +1940,58 @@ IMPL_LINK( SwFramePage, PosHdl, weld::ComboBox&, rLB, void )
         m_bAtVertPosModified = true;
 
     // special treatment for HTML-Mode with horizontal-vertical-dependencies
-    if(m_bHtmlMode && (RndStdIds::FLY_AT_CHAR == GetAnchor()))
-    {
-        bool bSet = false;
-        if(bHori)
-        {
-            // right is allowed only above - from the left only above
-            // from the left at character -> below
-            if((text::HoriOrientation::LEFT == nAlign || text::HoriOrientation::RIGHT == nAlign) &&
-                    0 == m_xVerticalDLB->get_active())
-            {
-                if(text::RelOrientation::FRAME == nRel)
-                    m_xVerticalDLB->set_active(1);
-                else
-                    m_xVerticalDLB->set_active(0);
-                bSet = true;
-            }
-            else if(text::HoriOrientation::LEFT == nAlign && 1 == m_xVerticalDLB->get_active())
-            {
-                m_xVerticalDLB->set_active(0);
-                bSet = true;
-            }
-            else if(text::HoriOrientation::NONE == nAlign && 1 == m_xVerticalDLB->get_active())
-            {
-                m_xVerticalDLB->set_active(0);
-                bSet = true;
-            }
-            if(bSet)
-                PosHdl(*m_xVerticalDLB);
-        }
-        else
-        {
-            if(text::VertOrientation::TOP == nAlign)
-            {
-                if (1 == m_xHorizontalDLB->get_active())
-                {
-                    m_xHorizontalDLB->set_active(0);
-                    bSet = true;
-                }
-                m_xHoriRelationLB->set_active(1);
-            }
-            else if(text::VertOrientation::CHAR_BOTTOM == nAlign)
-            {
-                if (2 == m_xHorizontalDLB->get_active())
-                {
-                    m_xHorizontalDLB->set_active(0);
-                    bSet = true;
-                }
-                m_xHoriRelationLB->set_active(0) ;
-            }
-            if(bSet)
-                PosHdl(*m_xHorizontalDLB);
-        }
+    if(!(m_bHtmlMode && (RndStdIds::FLY_AT_CHAR == GetAnchor())))
+        return;
 
+    bool bSet = false;
+    if(bHori)
+    {
+        // right is allowed only above - from the left only above
+        // from the left at character -> below
+        if((text::HoriOrientation::LEFT == nAlign || text::HoriOrientation::RIGHT == nAlign) &&
+                0 == m_xVerticalDLB->get_active())
+        {
+            if(text::RelOrientation::FRAME == nRel)
+                m_xVerticalDLB->set_active(1);
+            else
+                m_xVerticalDLB->set_active(0);
+            bSet = true;
+        }
+        else if(text::HoriOrientation::LEFT == nAlign && 1 == m_xVerticalDLB->get_active())
+        {
+            m_xVerticalDLB->set_active(0);
+            bSet = true;
+        }
+        else if(text::HoriOrientation::NONE == nAlign && 1 == m_xVerticalDLB->get_active())
+        {
+            m_xVerticalDLB->set_active(0);
+            bSet = true;
+        }
+        if(bSet)
+            PosHdl(*m_xVerticalDLB);
+    }
+    else
+    {
+        if(text::VertOrientation::TOP == nAlign)
+        {
+            if (1 == m_xHorizontalDLB->get_active())
+            {
+                m_xHorizontalDLB->set_active(0);
+                bSet = true;
+            }
+            m_xHoriRelationLB->set_active(1);
+        }
+        else if(text::VertOrientation::CHAR_BOTTOM == nAlign)
+        {
+            if (2 == m_xHorizontalDLB->get_active())
+            {
+                m_xHorizontalDLB->set_active(0);
+                bSet = true;
+            }
+            m_xHoriRelationLB->set_active(0) ;
+        }
+        if(bSet)
+            PosHdl(*m_xHorizontalDLB);
     }
 }
 

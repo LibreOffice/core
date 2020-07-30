@@ -119,29 +119,29 @@ void SwFieldRefPage::SaveSelectedTextNode()
 {
     mpSavedSelectedTextNode = nullptr;
     mnSavedSelectedPos = 0;
-    if ( m_xSelectionToolTipLB->get_visible() )
-    {
-        int nEntry = m_xSelectionToolTipLB->get_selected_index();
-        if (nEntry != -1)
-        {
-            const sal_uInt16 nTypeId = m_xTypeLB->get_id(GetTypeSel()).toUInt32();
+    if ( !m_xSelectionToolTipLB->get_visible() )
+        return;
 
-            if ( nTypeId == REFFLDFLAG_HEADING )
-            {
-                mnSavedSelectedPos = m_xSelectionToolTipLB->get_id(nEntry).toUInt32();
-                if ( mnSavedSelectedPos < maOutlineNodes.size() )
-                {
-                    mpSavedSelectedTextNode = maOutlineNodes[mnSavedSelectedPos];
-                }
-            }
-            else if ( nTypeId == REFFLDFLAG_NUMITEM )
-            {
-                mnSavedSelectedPos = m_xSelectionToolTipLB->get_id(nEntry).toUInt32();
-                if ( mnSavedSelectedPos < maNumItems.size() )
-                {
-                    mpSavedSelectedTextNode = maNumItems[mnSavedSelectedPos]->GetTextNode();
-                }
-            }
+    int nEntry = m_xSelectionToolTipLB->get_selected_index();
+    if (nEntry == -1)
+        return;
+
+    const sal_uInt16 nTypeId = m_xTypeLB->get_id(GetTypeSel()).toUInt32();
+
+    if ( nTypeId == REFFLDFLAG_HEADING )
+    {
+        mnSavedSelectedPos = m_xSelectionToolTipLB->get_id(nEntry).toUInt32();
+        if ( mnSavedSelectedPos < maOutlineNodes.size() )
+        {
+            mpSavedSelectedTextNode = maOutlineNodes[mnSavedSelectedPos];
+        }
+    }
+    else if ( nTypeId == REFFLDFLAG_NUMITEM )
+    {
+        mnSavedSelectedPos = m_xSelectionToolTipLB->get_id(nEntry).toUInt32();
+        if ( mnSavedSelectedPos < maNumItems.size() )
+        {
+            mpSavedSelectedTextNode = maNumItems[mnSavedSelectedPos]->GetTextNode();
         }
     }
 }

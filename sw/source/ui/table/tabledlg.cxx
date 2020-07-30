@@ -241,19 +241,19 @@ IMPL_LINK_NOARG(SwFormatTablePage, AutoClickHdl, weld::ToggleButton&, void)
 
 void SwFormatTablePage::RightModify()
 {
-    if (m_xFreeBtn->get_active())
+    if (!m_xFreeBtn->get_active())
+        return;
+
+    bool bEnable = m_xRightMF->get_value() == 0;
+    m_xRelWidthCB->set_sensitive(bEnable);
+    if ( !bEnable )
     {
-        bool bEnable = m_xRightMF->get_value() == 0;
-        m_xRelWidthCB->set_sensitive(bEnable);
-        if ( !bEnable )
-        {
-            m_xRelWidthCB->set_active(false);
-            RelWidthClickHdl(*m_xRelWidthCB);
-        }
-        bEnable = m_xRelWidthCB->get_active();
-        m_xRightMF->set_sensitive(!bEnable);
-        m_xRightFT->set_sensitive(!bEnable);
+        m_xRelWidthCB->set_active(false);
+        RelWidthClickHdl(*m_xRelWidthCB);
     }
+    bEnable = m_xRelWidthCB->get_active();
+    m_xRightMF->set_sensitive(!bEnable);
+    m_xRightFT->set_sensitive(!bEnable);
 }
 
 IMPL_LINK( SwFormatTablePage, ValueChangedHdl, weld::MetricSpinButton&, rEdit, void )
@@ -568,26 +568,26 @@ void  SwFormatTablePage::Reset( const SfxItemSet* )
 void    SwFormatTablePage::ActivatePage( const SfxItemSet& rSet )
 {
     OSL_ENSURE(pTableData, "table data not available?");
-    if(SfxItemState::SET == rSet.GetItemState( FN_TABLE_REP ))
-    {
-        SwTwips nCurWidth = text::HoriOrientation::FULL != pTableData->GetAlign() ?
-                                        pTableData->GetWidth() :
-                                            pTableData->GetSpace();
-        if(pTableData->GetWidthPercent() == 0 &&
-                nCurWidth != m_xWidthMF->DenormalizePercent(m_xWidthMF->get_value(FieldUnit::TWIP)))
-        {
-            m_xWidthMF->set_value(m_xWidthMF->NormalizePercent(
-                            nCurWidth), FieldUnit::TWIP);
-            m_xWidthMF->save_value();
-            nSaveWidth = nCurWidth;
-            m_xLeftMF->set_value(m_xLeftMF->NormalizePercent(
-                            pTableData->GetLeftSpace()), FieldUnit::TWIP);
-            m_xLeftMF->save_value();
-            m_xRightMF->set_value(m_xRightMF->NormalizePercent(
-                            pTableData->GetRightSpace()), FieldUnit::TWIP);
-            m_xRightMF->save_value();
-        }
-    }
+    if(SfxItemState::SET != rSet.GetItemState( FN_TABLE_REP ))
+        return;
+
+    SwTwips nCurWidth = text::HoriOrientation::FULL != pTableData->GetAlign() ?
+                                    pTableData->GetWidth() :
+                                        pTableData->GetSpace();
+    if(pTableData->GetWidthPercent() != 0 ||
+       nCurWidth == m_xWidthMF->DenormalizePercent(m_xWidthMF->get_value(FieldUnit::TWIP)))
+        return;
+
+    m_xWidthMF->set_value(m_xWidthMF->NormalizePercent(
+                    nCurWidth), FieldUnit::TWIP);
+    m_xWidthMF->save_value();
+    nSaveWidth = nCurWidth;
+    m_xLeftMF->set_value(m_xLeftMF->NormalizePercent(
+                    pTableData->GetLeftSpace()), FieldUnit::TWIP);
+    m_xLeftMF->save_value();
+    m_xRightMF->set_value(m_xRightMF->NormalizePercent(
+                    pTableData->GetRightSpace()), FieldUnit::TWIP);
+    m_xRightMF->save_value();
 }
 
 DeactivateRC SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
@@ -1676,29 +1676,29 @@ IMPL_LINK_NOARG(SwTextFlowPage, ApplyCollClickHdl_Impl, weld::ToggleButton&, voi
 
 IMPL_LINK_NOARG(SwTextFlowPage, PageBreakPosHdl_Impl, weld::ToggleButton&, void)
 {
-    if (m_xPgBrkCB->get_active())
+    if (!m_xPgBrkCB->get_active())
+        return;
+
+    if (m_xPgBrkBeforeRB->get_active() && m_xPgBrkRB->get_active())
     {
-        if (m_xPgBrkBeforeRB->get_active() && m_xPgBrkRB->get_active())
-        {
-            m_xPageCollCB->set_sensitive(true);
+        m_xPageCollCB->set_sensitive(true);
 
-            bool bEnable = m_xPageCollCB->get_active() && m_xPageCollLB->get_count();
+        bool bEnable = m_xPageCollCB->get_active() && m_xPageCollLB->get_count();
 
-            m_xPageCollLB->set_sensitive(bEnable);
-            if (!bHtmlMode)
-            {
-                m_xPageNoCB->set_sensitive(bEnable);
-                m_xPageNoNF->set_sensitive(bEnable && m_xPageNoCB->get_active());
-            }
-        }
-        else if (m_xPgBrkAfterRB->get_active())
+        m_xPageCollLB->set_sensitive(bEnable);
+        if (!bHtmlMode)
         {
-            m_xPageCollCB->set_active(false);
-            m_xPageCollCB->set_sensitive(false);
-            m_xPageCollLB->set_sensitive(false);
-            m_xPageNoCB->set_sensitive(false);
-            m_xPageNoNF->set_sensitive(false);
+            m_xPageNoCB->set_sensitive(bEnable);
+            m_xPageNoNF->set_sensitive(bEnable && m_xPageNoCB->get_active());
         }
+    }
+    else if (m_xPgBrkAfterRB->get_active())
+    {
+        m_xPageCollCB->set_active(false);
+        m_xPageCollCB->set_sensitive(false);
+        m_xPageCollLB->set_sensitive(false);
+        m_xPageNoCB->set_sensitive(false);
+        m_xPageNoNF->set_sensitive(false);
     }
 }
 
