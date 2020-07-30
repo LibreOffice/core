@@ -338,23 +338,23 @@ void SwXDispatch::selectionChanged( const lang::EventObject&  )
                        ShellMode::ListText == eMode  ||
                        ShellMode::TableText == eMode  ||
                        ShellMode::TableListText == eMode;
-    if(bEnable != m_bOldEnable)
-    {
-        m_bOldEnable = bEnable;
-        frame::FeatureStateEvent aEvent;
-        aEvent.IsEnabled = bEnable;
-        aEvent.Source = *static_cast<cppu::OWeakObject*>(this);
+    if(bEnable == m_bOldEnable)
+        return;
 
-        // calls to statusChanged may call addStatusListener or removeStatusListener
-        // so copy m_aStatusListenerVector on stack
-        auto copyStatusListenerVector = m_aStatusListenerVector;
-        for (auto & status : copyStatusListenerVector)
-        {
-            aEvent.FeatureURL = status.aURL;
-            if (status.aURL.Complete != cURLDocumentDataSource)
-                // the document's data source does not depend on the selection, so it's state does not change here
-                status.xListener->statusChanged( aEvent );
-        }
+    m_bOldEnable = bEnable;
+    frame::FeatureStateEvent aEvent;
+    aEvent.IsEnabled = bEnable;
+    aEvent.Source = *static_cast<cppu::OWeakObject*>(this);
+
+    // calls to statusChanged may call addStatusListener or removeStatusListener
+    // so copy m_aStatusListenerVector on stack
+    auto copyStatusListenerVector = m_aStatusListenerVector;
+    for (auto & status : copyStatusListenerVector)
+    {
+        aEvent.FeatureURL = status.aURL;
+        if (status.aURL.Complete != cURLDocumentDataSource)
+            // the document's data source does not depend on the selection, so it's state does not change here
+            status.xListener->statusChanged( aEvent );
     }
 }
 

@@ -83,19 +83,19 @@ void SAL_CALL SwLinguServiceEventListener::processLinguServiceEvent(
     {
         SwModule::CheckSpellChanges( false, bIsSpellWrong, bIsSpellAll, false );
     }
-    if (rLngSvcEvent.nEvent & HYPHENATE_AGAIN)
-    {
-        SwView *pSwView = SwModule::GetFirstView();
+    if (!(rLngSvcEvent.nEvent & HYPHENATE_AGAIN))
+        return;
 
-        //!! since this function may be called within the ctor of
-        //!! SwView (during formatting) where the WrtShell is not yet
-        //!! created, we have to check for the WrtShellPtr to see
-        //!! if it is already available
-        while (pSwView && pSwView->GetWrtShellPtr())
-        {
-            pSwView->GetWrtShell().ChgHyphenation();
-            pSwView = SwModule::GetNextView( pSwView );
-        }
+    SwView *pSwView = SwModule::GetFirstView();
+
+    //!! since this function may be called within the ctor of
+    //!! SwView (during formatting) where the WrtShell is not yet
+    //!! created, we have to check for the WrtShellPtr to see
+    //!! if it is already available
+    while (pSwView && pSwView->GetWrtShellPtr())
+    {
+        pSwView->GetWrtShell().ChgHyphenation();
+        pSwView = SwModule::GetNextView( pSwView );
     }
 }
 

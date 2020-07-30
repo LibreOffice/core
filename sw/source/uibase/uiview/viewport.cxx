@@ -739,23 +739,23 @@ IMPL_LINK( SwView, ScrollHdl, ScrollBar *, p, void )
 IMPL_LINK( SwView, EndScrollHdl, ScrollBar *, p, void )
 {
     SwScrollbar* pScrollbar = static_cast<SwScrollbar*>(p);
-    if ( !GetWrtShell().ActionPend() )
-    {
-        if(nPgNum)
-        {
-            nPgNum = 0;
-            Help::ShowQuickHelp(pScrollbar, tools::Rectangle(), OUString());
-        }
-        Point aPos( m_aVisArea.TopLeft() );
-        bool bBorder = IsDocumentBorder();
-        lcl_GetPos(this, aPos, pScrollbar, bBorder);
-        if ( bBorder && aPos == m_aVisArea.TopLeft() )
-            UpdateScrollbars();
-        else
-            SetVisArea( aPos, false );
+    if ( GetWrtShell().ActionPend() )
+        return;
 
-        GetViewFrame()->GetBindings().Update(FN_STAT_PAGE);
+    if(nPgNum)
+    {
+        nPgNum = 0;
+        Help::ShowQuickHelp(pScrollbar, tools::Rectangle(), OUString());
     }
+    Point aPos( m_aVisArea.TopLeft() );
+    bool bBorder = IsDocumentBorder();
+    lcl_GetPos(this, aPos, pScrollbar, bBorder);
+    if ( bBorder && aPos == m_aVisArea.TopLeft() )
+        UpdateScrollbars();
+    else
+        SetVisArea( aPos, false );
+
+    GetViewFrame()->GetBindings().Update(FN_STAT_PAGE);
 }
 
 // Calculates the size of the m_aVisArea in dependency of the size of

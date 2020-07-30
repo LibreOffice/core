@@ -397,26 +397,26 @@ IMPL_LINK( PageMarginControl, SelectMarginHdl, weld::Button&, rControl, void )
         }
     }
 
-    if ( bApplyNewPageMargins )
+    if ( !bApplyNewPageMargins )
+        return;
+
+    const css::uno::Reference< css::document::XUndoManager > xUndoManager( getUndoManager( SfxViewFrame::Current()->GetFrame().GetFrameInterface() ) );
+    if ( xUndoManager.is() )
+        xUndoManager->enterUndoContext( "" );
+
+    ExecuteMarginLRChange( m_nPageLeftMargin, m_nPageRightMargin );
+    ExecuteMarginULChange( m_nPageTopMargin, m_nPageBottomMargin );
+    if ( m_bMirrored != bMirrored )
     {
-        const css::uno::Reference< css::document::XUndoManager > xUndoManager( getUndoManager( SfxViewFrame::Current()->GetFrame().GetFrameInterface() ) );
-        if ( xUndoManager.is() )
-            xUndoManager->enterUndoContext( "" );
-
-        ExecuteMarginLRChange( m_nPageLeftMargin, m_nPageRightMargin );
-        ExecuteMarginULChange( m_nPageTopMargin, m_nPageBottomMargin );
-        if ( m_bMirrored != bMirrored )
-        {
-            m_bMirrored = bMirrored;
-            ExecutePageLayoutChange( m_bMirrored );
-        }
-
-        if ( xUndoManager.is() )
-            xUndoManager->leaveUndoContext();
-
-        m_bCustomValuesUsed = false;
-        m_xControl->EndPopupMode();
+        m_bMirrored = bMirrored;
+        ExecutePageLayoutChange( m_bMirrored );
     }
+
+    if ( xUndoManager.is() )
+        xUndoManager->leaveUndoContext();
+
+    m_bCustomValuesUsed = false;
+    m_xControl->EndPopupMode();
 }
 
 void PageMarginControl::ExecuteMarginLRChange(

@@ -708,47 +708,48 @@ SwXAutoTextEntry::~SwXAutoTextEntry()
 
 void SwXAutoTextEntry::implFlushDocument( bool _bCloseDoc )
 {
-    if ( xDocSh.is() )
+    if ( !xDocSh.is() )
+        return;
+
+    if ( xDocSh->GetDoc()->getIDocumentState().IsModified () )
+        xDocSh->Save();
+
+    if ( _bCloseDoc )
     {
-        if ( xDocSh->GetDoc()->getIDocumentState().IsModified () )
-            xDocSh->Save();
+        // stop listening at the document
+        EndListening( *xDocSh );
 
-        if ( _bCloseDoc )
-        {
-            // stop listening at the document
-            EndListening( *xDocSh );
-
-            xDocSh->DoClose();
-            xDocSh.clear();
-        }
+        xDocSh->DoClose();
+        xDocSh.clear();
     }
 }
 
 void SwXAutoTextEntry::Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint )
 {
-    if ( &_rBC == xDocSh.get() )
-    {   // it's our document
-        if (const SfxEventHint* pEventHint = dynamic_cast<const SfxEventHint*>(&_rHint))
+    if ( &_rBC != xDocSh.get() )
+        return;
+
+// it's our document
+    if (const SfxEventHint* pEventHint = dynamic_cast<const SfxEventHint*>(&_rHint))
+    {
+        if (SfxEventHintId::PrepareCloseDoc == pEventHint->GetEventId())
         {
-            if (SfxEventHintId::PrepareCloseDoc == pEventHint->GetEventId())
-            {
-                implFlushDocument();
-                mxBodyText.clear();
-                EndListening( *xDocSh );
-                xDocSh.clear();
-            }
+            implFlushDocument();
+            mxBodyText.clear();
+            EndListening( *xDocSh );
+            xDocSh.clear();
         }
-        else
+    }
+    else
+    {
+        if ( SfxHintId::Deinitializing == _rHint.GetId() )
         {
-            if ( SfxHintId::Deinitializing == _rHint.GetId() )
-            {
-                // our document is dying (possibly because we're shutting down, and the document was notified
-                // earlier than we are?)
-                // stop listening at the docu
-                EndListening( *xDocSh );
-                // and release our reference
-                xDocSh.clear();
-            }
+            // our document is dying (possibly because we're shutting down, and the document was notified
+            // earlier than we are?)
+            // stop listening at the docu
+            EndListening( *xDocSh );
+            // and release our reference
+            xDocSh.clear();
         }
     }
 }
@@ -987,17 +988,17 @@ void SwAutoTextEventDescriptor::replaceByName(
     OSL_ENSURE( pBlocks,
                 "can't get autotext group; SwAutoTextEntry has illegal name?");
 
-    if( pBlocks && !pBlocks->GetError())
+    if( !(pBlocks && !pBlocks->GetError()))
+        return;
+
+    sal_uInt16 nIndex = pBlocks->GetIndex( rAutoTextEntry.GetEntryName() );
+    if( nIndex != USHRT_MAX )
     {
-        sal_uInt16 nIndex = pBlocks->GetIndex( rAutoTextEntry.GetEntryName() );
-        if( nIndex != USHRT_MAX )
+        SvxMacroTableDtor aMacroTable;
+        if( pBlocks->GetMacroTable( nIndex, aMacroTable ) )
         {
-            SvxMacroTableDtor aMacroTable;
-            if( pBlocks->GetMacroTable( nIndex, aMacroTable ) )
-            {
-                aMacroTable.Insert( nEvent, rMacro );
-                pBlocks->SetMacroTable( nIndex, aMacroTable );
-            }
+            aMacroTable.Insert( nEvent, rMacro );
+            pBlocks->SetMacroTable( nIndex, aMacroTable );
         }
     }
     // else: ignore
@@ -1024,18 +1025,18 @@ void SwAutoTextEventDescriptor::getByName(
     SvxMacro aEmptyMacro(sEmptyStr, sEmptyStr);
     rMacro = aEmptyMacro;
 
-    if ( pBlocks &&  !pBlocks->GetError())
+    if ( !(pBlocks &&  !pBlocks->GetError()))
+        return;
+
+    sal_uInt16 nIndex = pBlocks->GetIndex( rAutoTextEntry.GetEntryName() );
+    if( nIndex != USHRT_MAX )
     {
-        sal_uInt16 nIndex = pBlocks->GetIndex( rAutoTextEntry.GetEntryName() );
-        if( nIndex != USHRT_MAX )
+        SvxMacroTableDtor aMacroTable;
+        if( pBlocks->GetMacroTable( nIndex, aMacroTable ) )
         {
-            SvxMacroTableDtor aMacroTable;
-            if( pBlocks->GetMacroTable( nIndex, aMacroTable ) )
-            {
-                SvxMacro *pMacro = aMacroTable.Get( nEvent );
-                if( pMacro )
-                    rMacro = *pMacro;
-            }
+            SvxMacro *pMacro = aMacroTable.Get( nEvent );
+            if( pMacro )
+                rMacro = *pMacro;
         }
     }
 }
