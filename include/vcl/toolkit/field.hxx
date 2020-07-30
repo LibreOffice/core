@@ -468,7 +468,7 @@ public:
     bool             IsEnforceValidValue( ) const { return mbEnforceValidValue; }
 };
 
-class DateField : public SpinField, public DateFormatter
+class SAL_DLLPUBLIC_RTTI DateField : public SpinField, public DateFormatter
 {
 private:
     Date                    maFirst;
