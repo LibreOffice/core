@@ -1185,20 +1185,20 @@ void SwDoc::SpellItAgainSam( bool bInvalid, bool bOnlyWrong, bool bSmartTags )
 void SwDoc::InvalidateAutoCompleteFlag()
 {
     SwRootFrame* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();
-    if( pTmpRoot )
-    {
-        o3tl::sorted_vector<SwRootFrame*> aAllLayouts = GetAllLayouts();
-        for( auto aLayout : aAllLayouts )
-            aLayout->AllInvalidateAutoCompleteWords();
-        for( sal_uLong nNd = 1, nCnt = GetNodes().Count(); nNd < nCnt; ++nNd )
-        {
-            SwTextNode* pTextNode = GetNodes()[ nNd ]->GetTextNode();
-            if ( pTextNode ) pTextNode->SetAutoCompleteWordDirty( true );
-        }
+    if( !pTmpRoot )
+        return;
 
-        for( auto aLayout : aAllLayouts )
-            aLayout->SetIdleFlags();
+    o3tl::sorted_vector<SwRootFrame*> aAllLayouts = GetAllLayouts();
+    for( auto aLayout : aAllLayouts )
+        aLayout->AllInvalidateAutoCompleteWords();
+    for( sal_uLong nNd = 1, nCnt = GetNodes().Count(); nNd < nCnt; ++nNd )
+    {
+        SwTextNode* pTextNode = GetNodes()[ nNd ]->GetTextNode();
+        if ( pTextNode ) pTextNode->SetAutoCompleteWordDirty( true );
     }
+
+    for( auto aLayout : aAllLayouts )
+        aLayout->SetIdleFlags();
 }
 
 const SwFormatINetFormat* SwDoc::FindINetAttr( const OUString& rName ) const
@@ -1223,73 +1223,73 @@ const SwFormatINetFormat* SwDoc::FindINetAttr( const OUString& rName ) const
 void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bImpress )
 {
     const SwOutlineNodes& rOutNds = GetNodes().GetOutLineNds();
-    if( pExtDoc && !rOutNds.empty() )
+    if( !(pExtDoc && !rOutNds.empty()) )
+        return;
+
+    ::StartProgress( STR_STATSTR_SUMMARY, 0, rOutNds.size(), GetDocShell() );
+    SwNodeIndex aEndOfDoc( pExtDoc->GetNodes().GetEndOfContent(), -1 );
+    for( SwOutlineNodes::size_type i = 0; i < rOutNds.size(); ++i )
     {
-        ::StartProgress( STR_STATSTR_SUMMARY, 0, rOutNds.size(), GetDocShell() );
-        SwNodeIndex aEndOfDoc( pExtDoc->GetNodes().GetEndOfContent(), -1 );
-        for( SwOutlineNodes::size_type i = 0; i < rOutNds.size(); ++i )
+        ::SetProgressState( static_cast<long>(i), GetDocShell() );
+        const sal_uLong nIndex = rOutNds[ i ]->GetIndex();
+
+        const int nLvl = GetNodes()[ nIndex ]->GetTextNode()->GetAttrOutlineLevel()-1;
+        if( nLvl > nLevel )
+            continue;
+        long nEndOfs = 1;
+        sal_uInt8 nWish = nPara;
+        sal_uLong nNextOutNd = i + 1 < rOutNds.size() ?
+            rOutNds[ i + 1 ]->GetIndex() : GetNodes().Count();
+        bool bKeep = false;
+        while( ( nWish || bKeep ) && nIndex + nEndOfs < nNextOutNd &&
+               GetNodes()[ nIndex + nEndOfs ]->IsTextNode() )
         {
-            ::SetProgressState( static_cast<long>(i), GetDocShell() );
-            const sal_uLong nIndex = rOutNds[ i ]->GetIndex();
-
-            const int nLvl = GetNodes()[ nIndex ]->GetTextNode()->GetAttrOutlineLevel()-1;
-            if( nLvl > nLevel )
-                continue;
-            long nEndOfs = 1;
-            sal_uInt8 nWish = nPara;
-            sal_uLong nNextOutNd = i + 1 < rOutNds.size() ?
-                rOutNds[ i + 1 ]->GetIndex() : GetNodes().Count();
-            bool bKeep = false;
-            while( ( nWish || bKeep ) && nIndex + nEndOfs < nNextOutNd &&
-                   GetNodes()[ nIndex + nEndOfs ]->IsTextNode() )
-            {
-                SwTextNode* pTextNode = GetNodes()[ nIndex+nEndOfs ]->GetTextNode();
-                if (pTextNode->GetText().getLength() && nWish)
-                    --nWish;
-                bKeep = pTextNode->GetSwAttrSet().GetKeep().GetValue();
-                ++nEndOfs;
-            }
-
-            SwNodeRange aRange( *rOutNds[ i ], 0, *rOutNds[ i ], nEndOfs );
-            GetNodes().Copy_( aRange, aEndOfDoc );
+            SwTextNode* pTextNode = GetNodes()[ nIndex+nEndOfs ]->GetTextNode();
+            if (pTextNode->GetText().getLength() && nWish)
+                --nWish;
+            bKeep = pTextNode->GetSwAttrSet().GetKeep().GetValue();
+            ++nEndOfs;
         }
-        const SwTextFormatColls *pColl = pExtDoc->GetTextFormatColls();
-        for( SwTextFormatColls::size_type i = 0; i < pColl->size(); ++i )
-            (*pColl)[ i ]->ResetFormatAttr( RES_PAGEDESC, RES_BREAK );
-        SwNodeIndex aIndx( pExtDoc->GetNodes().GetEndOfExtras() );
-        ++aEndOfDoc;
-        while( aIndx < aEndOfDoc )
-        {
-            bool bDelete = false;
-            SwNode *pNode = &aIndx.GetNode();
-            if( pNode->IsTextNode() )
-            {
-                SwTextNode *pNd = pNode->GetTextNode();
-                if( pNd->HasSwAttrSet() )
-                    pNd->ResetAttr( RES_PAGEDESC, RES_BREAK );
-                if( bImpress )
-                {
-                    SwTextFormatColl* pMyColl = pNd->GetTextColl();
 
-                    const sal_uInt16 nHeadLine = static_cast<sal_uInt16>(
-                                !pMyColl->IsAssignedToListLevelOfOutlineStyle()
-                                ? RES_POOLCOLL_HEADLINE2
-                                : RES_POOLCOLL_HEADLINE1 );
-                    pMyColl = pExtDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( nHeadLine );
-                    pNd->ChgFormatColl( pMyColl );
-                }
-                if( !pNd->Len() &&
-                    pNd->StartOfSectionIndex()+2 < pNd->EndOfSectionIndex() )
-                {
-                    bDelete = true;
-                    pExtDoc->GetNodes().Delete( aIndx );
-                }
-            }
-            if( !bDelete )
-                ++aIndx;
-        }
-        ::EndProgress( GetDocShell() );
+        SwNodeRange aRange( *rOutNds[ i ], 0, *rOutNds[ i ], nEndOfs );
+        GetNodes().Copy_( aRange, aEndOfDoc );
     }
+    const SwTextFormatColls *pColl = pExtDoc->GetTextFormatColls();
+    for( SwTextFormatColls::size_type i = 0; i < pColl->size(); ++i )
+        (*pColl)[ i ]->ResetFormatAttr( RES_PAGEDESC, RES_BREAK );
+    SwNodeIndex aIndx( pExtDoc->GetNodes().GetEndOfExtras() );
+    ++aEndOfDoc;
+    while( aIndx < aEndOfDoc )
+    {
+        bool bDelete = false;
+        SwNode *pNode = &aIndx.GetNode();
+        if( pNode->IsTextNode() )
+        {
+            SwTextNode *pNd = pNode->GetTextNode();
+            if( pNd->HasSwAttrSet() )
+                pNd->ResetAttr( RES_PAGEDESC, RES_BREAK );
+            if( bImpress )
+            {
+                SwTextFormatColl* pMyColl = pNd->GetTextColl();
+
+                const sal_uInt16 nHeadLine = static_cast<sal_uInt16>(
+                            !pMyColl->IsAssignedToListLevelOfOutlineStyle()
+                            ? RES_POOLCOLL_HEADLINE2
+                            : RES_POOLCOLL_HEADLINE1 );
+                pMyColl = pExtDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( nHeadLine );
+                pNd->ChgFormatColl( pMyColl );
+            }
+            if( !pNd->Len() &&
+                pNd->StartOfSectionIndex()+2 < pNd->EndOfSectionIndex() )
+            {
+                bDelete = true;
+                pExtDoc->GetNodes().Delete( aIndx );
+            }
+        }
+        if( !bDelete )
+            ++aIndx;
+    }
+    ::EndProgress( GetDocShell() );
 }
 
 namespace

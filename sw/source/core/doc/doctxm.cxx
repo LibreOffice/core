@@ -1871,33 +1871,32 @@ void SwTOXBaseSection::UpdatePageNum_( SwTextNode* pNd,
     }
 
     // The main entries should get their character style
-    if (xCharStyleIdx && !xCharStyleIdx->empty() && !GetMainEntryCharStyle().isEmpty())
+    if (!(xCharStyleIdx && !xCharStyleIdx->empty() && !GetMainEntryCharStyle().isEmpty()))
+        return;
+
+    // eventually the last index must me appended
+    if (xCharStyleIdx->size()&0x01)
+        xCharStyleIdx->push_back(aNumStr.getLength());
+
+    // search by name
+    SwDoc* pDoc = pNd->GetDoc();
+    sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( GetMainEntryCharStyle(), SwGetPoolIdFromName::ChrFmt );
+    SwCharFormat* pCharFormat = nullptr;
+    if(USHRT_MAX != nPoolId)
+        pCharFormat = pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool(nPoolId);
+    else
+        pCharFormat = pDoc->FindCharFormatByName( GetMainEntryCharStyle() );
+    if(!pCharFormat)
+        pCharFormat = pDoc->MakeCharFormat(GetMainEntryCharStyle(), nullptr);
+
+    // find the page numbers in aNumStr and set the character style
+    sal_Int32 nOffset = pNd->GetText().getLength() - aNumStr.getLength();
+    SwFormatCharFormat aCharFormat(pCharFormat);
+    for (size_t j = 0; j < xCharStyleIdx->size(); j += 2)
     {
-        // eventually the last index must me appended
-        if (xCharStyleIdx->size()&0x01)
-            xCharStyleIdx->push_back(aNumStr.getLength());
-
-        // search by name
-        SwDoc* pDoc = pNd->GetDoc();
-        sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( GetMainEntryCharStyle(), SwGetPoolIdFromName::ChrFmt );
-        SwCharFormat* pCharFormat = nullptr;
-        if(USHRT_MAX != nPoolId)
-            pCharFormat = pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool(nPoolId);
-        else
-            pCharFormat = pDoc->FindCharFormatByName( GetMainEntryCharStyle() );
-        if(!pCharFormat)
-            pCharFormat = pDoc->MakeCharFormat(GetMainEntryCharStyle(), nullptr);
-
-        // find the page numbers in aNumStr and set the character style
-        sal_Int32 nOffset = pNd->GetText().getLength() - aNumStr.getLength();
-        SwFormatCharFormat aCharFormat(pCharFormat);
-        for (size_t j = 0; j < xCharStyleIdx->size(); j += 2)
-        {
-            sal_Int32 nStartIdx = (*xCharStyleIdx)[j] + nOffset;
-            sal_Int32 nEndIdx   = (*xCharStyleIdx)[j + 1]  + nOffset;
-            pNd->InsertItem(aCharFormat, nStartIdx, nEndIdx, SetAttrMode::DONTEXPAND);
-        }
-
+        sal_Int32 nStartIdx = (*xCharStyleIdx)[j] + nOffset;
+        sal_Int32 nEndIdx   = (*xCharStyleIdx)[j + 1]  + nOffset;
+        pNd->InsertItem(aCharFormat, nStartIdx, nEndIdx, SetAttrMode::DONTEXPAND);
     }
 }
 

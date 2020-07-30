@@ -264,23 +264,23 @@ SaveRedlEndPosForRestore::SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx, 
 {
     SwNode& rNd = rInsIdx.GetNode();
     SwDoc* pDest = rNd.GetDoc();
-    if( !pDest->getIDocumentRedlineAccess().GetRedlineTable().empty() )
+    if( pDest->getIDocumentRedlineAccess().GetRedlineTable().empty() )
+        return;
+
+    SwRedlineTable::size_type nFndPos;
+    const SwPosition* pEnd;
+    SwPosition aSrcPos( rInsIdx, SwIndex( rNd.GetContentNode(), nCnt ));
+    pDest->getIDocumentRedlineAccess().GetRedline( aSrcPos, &nFndPos );
+    const SwRangeRedline* pRedl;
+    while( nFndPos--
+          && *( pEnd = ( pRedl = pDest->getIDocumentRedlineAccess().GetRedlineTable()[ nFndPos ] )->End() ) == aSrcPos
+          && *pRedl->Start() < aSrcPos )
     {
-        SwRedlineTable::size_type nFndPos;
-        const SwPosition* pEnd;
-        SwPosition aSrcPos( rInsIdx, SwIndex( rNd.GetContentNode(), nCnt ));
-        pDest->getIDocumentRedlineAccess().GetRedline( aSrcPos, &nFndPos );
-        const SwRangeRedline* pRedl;
-        while( nFndPos--
-              && *( pEnd = ( pRedl = pDest->getIDocumentRedlineAccess().GetRedlineTable()[ nFndPos ] )->End() ) == aSrcPos
-              && *pRedl->Start() < aSrcPos )
+        if( !mpSaveIndex )
         {
-            if( !mpSaveIndex )
-            {
-                mpSaveIndex.reset(new SwNodeIndex( rInsIdx, -1 ));
-            }
-            mvSavArr.push_back( const_cast<SwPosition*>(pEnd) );
+            mpSaveIndex.reset(new SwNodeIndex( rInsIdx, -1 ));
         }
+        mvSavArr.push_back( const_cast<SwPosition*>(pEnd) );
     }
 }
 
@@ -328,31 +328,31 @@ void sw_GetJoinFlags( SwPaM& rPam, bool& rJoinText, bool& rJoinPrev )
 {
     rJoinText = false;
     rJoinPrev = false;
-    if( rPam.GetPoint()->nNode != rPam.GetMark()->nNode )
-    {
-        const SwPosition* pStt = rPam.Start(), *pEnd = rPam.End();
-        SwTextNode *pSttNd = pStt->nNode.GetNode().GetTextNode();
-        if( pSttNd )
-        {
-            SwTextNode *pEndNd = pEnd->nNode.GetNode().GetTextNode();
-            rJoinText = nullptr != pEndNd;
-            if( rJoinText )
-            {
-                bool bExchange = pStt == rPam.GetPoint();
-                if( !pStt->nContent.GetIndex() &&
-                    pEndNd->GetText().getLength() != pEnd->nContent.GetIndex())
-                    bExchange = !bExchange;
-                if( bExchange )
-                    rPam.Exchange();
-                rJoinPrev = rPam.GetPoint() == pStt;
-                OSL_ENSURE( !pStt->nContent.GetIndex() &&
-                    pEndNd->GetText().getLength() != pEnd->nContent.GetIndex()
-                    ? (rPam.GetPoint()->nNode < rPam.GetMark()->nNode)
-                    : (rPam.GetPoint()->nNode > rPam.GetMark()->nNode),
-                    "sw_GetJoinFlags");
-            }
-        }
-    }
+    if( rPam.GetPoint()->nNode == rPam.GetMark()->nNode )
+        return;
+
+    const SwPosition* pStt = rPam.Start(), *pEnd = rPam.End();
+    SwTextNode *pSttNd = pStt->nNode.GetNode().GetTextNode();
+    if( !pSttNd )
+        return;
+
+    SwTextNode *pEndNd = pEnd->nNode.GetNode().GetTextNode();
+    rJoinText = nullptr != pEndNd;
+    if( !rJoinText )
+        return;
+
+    bool bExchange = pStt == rPam.GetPoint();
+    if( !pStt->nContent.GetIndex() &&
+        pEndNd->GetText().getLength() != pEnd->nContent.GetIndex())
+        bExchange = !bExchange;
+    if( bExchange )
+        rPam.Exchange();
+    rJoinPrev = rPam.GetPoint() == pStt;
+    OSL_ENSURE( !pStt->nContent.GetIndex() &&
+        pEndNd->GetText().getLength() != pEnd->nContent.GetIndex()
+        ? (rPam.GetPoint()->nNode < rPam.GetMark()->nNode)
+        : (rPam.GetPoint()->nNode > rPam.GetMark()->nNode),
+        "sw_GetJoinFlags");
 }
 
 bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )

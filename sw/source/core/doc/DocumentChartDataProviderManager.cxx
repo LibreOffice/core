@@ -55,32 +55,32 @@ SwChartDataProvider * DocumentChartDataProviderManager::GetChartDataProvider( bo
 
 void DocumentChartDataProviderManager::CreateChartInternalDataProviders( const SwTable *pTable )
 {
-    if (pTable)
-    {
-        OUString aName( pTable->GetFrameFormat()->GetName() );
-        SwOLENode *pONd;
-        SwStartNode *pStNd;
-        SwNodeIndex aIdx( *m_rDoc.GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
-        while (nullptr != (pStNd = aIdx.GetNode().GetStartNode()))
-        {
-            ++aIdx;
-            pONd = aIdx.GetNode().GetOLENode();
-            if( pONd &&
-                aName == pONd->GetChartTableName() /* OLE node is chart? */ &&
-                nullptr != (pONd->getLayoutFrame( m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout() )) /* chart frame is not hidden */ )
-            {
-                uno::Reference < embed::XEmbeddedObject > xIP = pONd->GetOLEObj().GetOleRef();
-                if ( svt::EmbeddedObjectRef::TryRunningState( xIP ) )
-                {
-                    uno::Reference< chart2::XChartDocument > xChart( xIP->getComponent(), UNO_QUERY );
-                    if (xChart.is())
-                        xChart->createInternalDataProvider( true );
+    if (!pTable)
+        return;
 
-                    // there may be more than one chart for each table thus we need to continue the loop...
-                }
+    OUString aName( pTable->GetFrameFormat()->GetName() );
+    SwOLENode *pONd;
+    SwStartNode *pStNd;
+    SwNodeIndex aIdx( *m_rDoc.GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
+    while (nullptr != (pStNd = aIdx.GetNode().GetStartNode()))
+    {
+        ++aIdx;
+        pONd = aIdx.GetNode().GetOLENode();
+        if( pONd &&
+            aName == pONd->GetChartTableName() /* OLE node is chart? */ &&
+            nullptr != (pONd->getLayoutFrame( m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout() )) /* chart frame is not hidden */ )
+        {
+            uno::Reference < embed::XEmbeddedObject > xIP = pONd->GetOLEObj().GetOleRef();
+            if ( svt::EmbeddedObjectRef::TryRunningState( xIP ) )
+            {
+                uno::Reference< chart2::XChartDocument > xChart( xIP->getComponent(), UNO_QUERY );
+                if (xChart.is())
+                    xChart->createInternalDataProvider( true );
+
+                // there may be more than one chart for each table thus we need to continue the loop...
             }
-            aIdx.Assign( *pStNd->EndOfSectionNode(), + 1 );
         }
+        aIdx.Assign( *pStNd->EndOfSectionNode(), + 1 );
     }
 }
 

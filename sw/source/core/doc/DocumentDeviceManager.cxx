@@ -143,38 +143,38 @@ OutputDevice* DocumentDeviceManager::getReferenceDevice(/*[in]*/ bool bCreate ) 
 
 void DocumentDeviceManager::setReferenceDeviceType(/*[in]*/ bool bNewVirtual, /*[in]*/ bool bNewHiRes )
 {
-    if ( m_rDoc.GetDocumentSettingManager().get(DocumentSettingId::USE_VIRTUAL_DEVICE) != bNewVirtual ||
-         m_rDoc.GetDocumentSettingManager().get(DocumentSettingId::USE_HIRES_VIRTUAL_DEVICE) != bNewHiRes )
+    if ( m_rDoc.GetDocumentSettingManager().get(DocumentSettingId::USE_VIRTUAL_DEVICE) == bNewVirtual &&
+         m_rDoc.GetDocumentSettingManager().get(DocumentSettingId::USE_HIRES_VIRTUAL_DEVICE) == bNewHiRes )
+        return;
+
+    if ( bNewVirtual )
     {
-        if ( bNewVirtual )
-        {
-            VirtualDevice* pMyVirDev = getVirtualDevice( true );
-            if ( !bNewHiRes )
-                pMyVirDev->SetReferenceDevice( VirtualDevice::RefDevMode::Dpi600 );
-            else
-                pMyVirDev->SetReferenceDevice( VirtualDevice::RefDevMode::MSO1 );
-
-            if( m_rDoc.getIDocumentDrawModelAccess().GetDrawModel() )
-                m_rDoc.getIDocumentDrawModelAccess().GetDrawModel()->SetRefDevice( pMyVirDev );
-        }
+        VirtualDevice* pMyVirDev = getVirtualDevice( true );
+        if ( !bNewHiRes )
+            pMyVirDev->SetReferenceDevice( VirtualDevice::RefDevMode::Dpi600 );
         else
-        {
-            // #i41075#
-            // We have to take care that a printer exists before calling
-            // PrtDataChanged() in order to prevent that PrtDataChanged()
-            // triggers this funny situation:
-            // getReferenceDevice()->getPrinter()->CreatePrinter_()
-            // ->setPrinter()-> PrtDataChanged()
-            SfxPrinter* pPrinter = getPrinter( true );
-            if( m_rDoc.getIDocumentDrawModelAccess().GetDrawModel() )
-                m_rDoc.getIDocumentDrawModelAccess().GetDrawModel()->SetRefDevice( pPrinter );
-        }
+            pMyVirDev->SetReferenceDevice( VirtualDevice::RefDevMode::MSO1 );
 
-        m_rDoc.GetDocumentSettingManager().set(DocumentSettingId::USE_VIRTUAL_DEVICE, bNewVirtual );
-        m_rDoc.GetDocumentSettingManager().set(DocumentSettingId::USE_HIRES_VIRTUAL_DEVICE, bNewHiRes );
-        PrtDataChanged();
-        m_rDoc.getIDocumentState().SetModified();
+        if( m_rDoc.getIDocumentDrawModelAccess().GetDrawModel() )
+            m_rDoc.getIDocumentDrawModelAccess().GetDrawModel()->SetRefDevice( pMyVirDev );
     }
+    else
+    {
+        // #i41075#
+        // We have to take care that a printer exists before calling
+        // PrtDataChanged() in order to prevent that PrtDataChanged()
+        // triggers this funny situation:
+        // getReferenceDevice()->getPrinter()->CreatePrinter_()
+        // ->setPrinter()-> PrtDataChanged()
+        SfxPrinter* pPrinter = getPrinter( true );
+        if( m_rDoc.getIDocumentDrawModelAccess().GetDrawModel() )
+            m_rDoc.getIDocumentDrawModelAccess().GetDrawModel()->SetRefDevice( pPrinter );
+    }
+
+    m_rDoc.GetDocumentSettingManager().set(DocumentSettingId::USE_VIRTUAL_DEVICE, bNewVirtual );
+    m_rDoc.GetDocumentSettingManager().set(DocumentSettingId::USE_HIRES_VIRTUAL_DEVICE, bNewHiRes );
+    PrtDataChanged();
+    m_rDoc.getIDocumentState().SetModified();
 }
 
 const JobSetup* DocumentDeviceManager::getJobsetup() const

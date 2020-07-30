@@ -571,28 +571,28 @@ CharCompressType sw::DocumentSettingManager::getCharacterCompressionType() const
 
 void sw::DocumentSettingManager::setCharacterCompressionType( /*[in]*/CharCompressType n )
 {
-    if( meChrCmprType != n )
+    if( meChrCmprType == n )
+        return;
+
+    meChrCmprType = n;
+
+    SdrModel *pDrawModel = m_rDoc.getIDocumentDrawModelAccess().GetDrawModel();
+    if( pDrawModel )
     {
-        meChrCmprType = n;
-
-        SdrModel *pDrawModel = m_rDoc.getIDocumentDrawModelAccess().GetDrawModel();
-        if( pDrawModel )
-        {
-            pDrawModel->SetCharCompressType( n );
-            if( !m_rDoc.IsInReading() )
-                pDrawModel->ReformatAllTextObjects();
-        }
-
-        SwRootFrame* pTmpRoot = m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout();
-        if( pTmpRoot && !m_rDoc.IsInReading() )
-        {
-            pTmpRoot->StartAllAction();
-            for( auto aLayout : m_rDoc.GetAllLayouts() )
-                aLayout->InvalidateAllContent(SwInvalidateFlags::Size);
-            pTmpRoot->EndAllAction();
-        }
-        m_rDoc.getIDocumentState().SetModified();
+        pDrawModel->SetCharCompressType( n );
+        if( !m_rDoc.IsInReading() )
+            pDrawModel->ReformatAllTextObjects();
     }
+
+    SwRootFrame* pTmpRoot = m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout();
+    if( pTmpRoot && !m_rDoc.IsInReading() )
+    {
+        pTmpRoot->StartAllAction();
+        for( auto aLayout : m_rDoc.GetAllLayouts() )
+            aLayout->InvalidateAllContent(SwInvalidateFlags::Size);
+        pTmpRoot->EndAllAction();
+    }
+    m_rDoc.getIDocumentState().SetModified();
 }
 
 

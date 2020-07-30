@@ -51,22 +51,22 @@ namespace TextFormatCollFunc
         }
 
         // #i73790#
-        if ( !pTextFormatColl->StayAssignedToListLevelOfOutlineStyle() &&
-             pTextFormatColl->IsAssignedToListLevelOfOutlineStyle() )
+        if ( !(!pTextFormatColl->StayAssignedToListLevelOfOutlineStyle() &&
+             pTextFormatColl->IsAssignedToListLevelOfOutlineStyle()) )
+            return;
+
+        if (!pNewNumRuleItem)
         {
-            if (!pNewNumRuleItem)
+            (void)pTextFormatColl->GetItemState(RES_PARATR_NUMRULE, false, reinterpret_cast<const SfxPoolItem**>(&pNewNumRuleItem));
+        }
+        if (pNewNumRuleItem)
+        {
+            const OUString& sNumRuleName = pNewNumRuleItem->GetValue();
+            if ( sNumRuleName.isEmpty() ||
+                 sNumRuleName != pTextFormatColl->GetDoc()->GetOutlineNumRule()->GetName() )
             {
-                (void)pTextFormatColl->GetItemState(RES_PARATR_NUMRULE, false, reinterpret_cast<const SfxPoolItem**>(&pNewNumRuleItem));
-            }
-            if (pNewNumRuleItem)
-            {
-                const OUString& sNumRuleName = pNewNumRuleItem->GetValue();
-                if ( sNumRuleName.isEmpty() ||
-                     sNumRuleName != pTextFormatColl->GetDoc()->GetOutlineNumRule()->GetName() )
-                {
-                    // delete assignment of paragraph style to list level of outline style.
-                    pTextFormatColl->DeleteAssignmentToListLevelOfOutlineStyle();
-                }
+                // delete assignment of paragraph style to list level of outline style.
+                pTextFormatColl->DeleteAssignmentToListLevelOfOutlineStyle();
             }
         }
     }

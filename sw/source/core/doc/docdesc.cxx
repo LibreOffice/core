@@ -770,36 +770,36 @@ void SwDoc::PrtOLENotify( bool bAll )
 IMPL_LINK_NOARG( SwDoc, DoUpdateModifiedOLE, Timer *, void )
 {
     SwFEShell* pSh = static_cast<SwFEShell*>(GetEditShell());
-    if( pSh )
+    if( !pSh )
+        return;
+
+    mbOLEPrtNotifyPending = mbAllOLENotify = false;
+
+    std::unique_ptr<SwOLENodes> pNodes = SwContentNode::CreateOLENodesArray( *GetDfltGrfFormatColl(), true );
+    if( !pNodes )
+        return;
+
+    ::StartProgress( STR_STATSTR_SWGPRTOLENOTIFY,
+                     0, pNodes->size(), GetDocShell());
+    getIDocumentLayoutAccess().GetCurrentLayout()->StartAllAction();
+    SwMsgPoolItem aMsgHint( RES_UPDATE_ATTR );
+
+    for( SwOLENodes::size_type i = 0; i < pNodes->size(); ++i )
     {
-        mbOLEPrtNotifyPending = mbAllOLENotify = false;
+        ::SetProgressState( i, GetDocShell() );
 
-        std::unique_ptr<SwOLENodes> pNodes = SwContentNode::CreateOLENodesArray( *GetDfltGrfFormatColl(), true );
-        if( pNodes )
+        SwOLENode* pOLENd = (*pNodes)[i];
+        pOLENd->SetOLESizeInvalid( false );
+
+        // We don't know it, so the object has to be loaded.
+        // If it doesn't want to be informed
+        if( pOLENd->GetOLEObj().GetOleRef().is() ) // Broken?
         {
-            ::StartProgress( STR_STATSTR_SWGPRTOLENOTIFY,
-                             0, pNodes->size(), GetDocShell());
-            getIDocumentLayoutAccess().GetCurrentLayout()->StartAllAction();
-            SwMsgPoolItem aMsgHint( RES_UPDATE_ATTR );
-
-            for( SwOLENodes::size_type i = 0; i < pNodes->size(); ++i )
-            {
-                ::SetProgressState( i, GetDocShell() );
-
-                SwOLENode* pOLENd = (*pNodes)[i];
-                pOLENd->SetOLESizeInvalid( false );
-
-                // We don't know it, so the object has to be loaded.
-                // If it doesn't want to be informed
-                if( pOLENd->GetOLEObj().GetOleRef().is() ) // Broken?
-                {
-                    pOLENd->ModifyNotification( &aMsgHint, &aMsgHint );
-                }
-            }
-            getIDocumentLayoutAccess().GetCurrentLayout()->EndAllAction();
-            ::EndProgress( GetDocShell() );
+            pOLENd->ModifyNotification( &aMsgHint, &aMsgHint );
         }
     }
+    getIDocumentLayoutAccess().GetCurrentLayout()->EndAllAction();
+    ::EndProgress( GetDocShell() );
 }
 
 static SwPageDesc* lcl_FindPageDesc( const SwPageDescs *pPageDescs,

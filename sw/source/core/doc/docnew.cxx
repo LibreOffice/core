@@ -580,26 +580,26 @@ SwDoc::~SwDoc()
 
 void SwDoc::SetDocShell( SwDocShell* pDSh )
 {
-    if( mpDocShell != pDSh )
+    if( mpDocShell == pDSh )
+        return;
+
+    if (mpDocShell)
     {
-        if (mpDocShell)
-        {
-            mpDocShell->SetUndoManager(nullptr);
-        }
-        mpDocShell = pDSh;
-        if (mpDocShell)
-        {
-            mpDocShell->SetUndoManager(& GetUndoManager());
-            GetUndoManager().SetDocShell(mpDocShell);
-        }
-
-        getIDocumentLinksAdministration().GetLinkManager().SetPersist( mpDocShell );
-
-        // set DocShell pointer also on DrawModel
-        InitDrawModelAndDocShell(mpDocShell, GetDocumentDrawModelManager().GetDrawModel());
-        assert(!GetDocumentDrawModelManager().GetDrawModel() ||
-            GetDocumentDrawModelManager().GetDrawModel()->GetPersist() == GetPersist());
+        mpDocShell->SetUndoManager(nullptr);
     }
+    mpDocShell = pDSh;
+    if (mpDocShell)
+    {
+        mpDocShell->SetUndoManager(& GetUndoManager());
+        GetUndoManager().SetDocShell(mpDocShell);
+    }
+
+    getIDocumentLinksAdministration().GetLinkManager().SetPersist( mpDocShell );
+
+    // set DocShell pointer also on DrawModel
+    InitDrawModelAndDocShell(mpDocShell, GetDocumentDrawModelManager().GetDrawModel());
+    assert(!GetDocumentDrawModelManager().GetDrawModel() ||
+        GetDocumentDrawModelManager().GetDrawModel()->GetPersist() == GetPersist());
 }
 
 // Convenience method; to avoid excessive includes from docsh.hxx

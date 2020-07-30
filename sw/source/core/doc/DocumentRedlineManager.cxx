@@ -957,81 +957,81 @@ RedlineFlags DocumentRedlineManager::GetRedlineFlags() const
 
 void DocumentRedlineManager::SetRedlineFlags( RedlineFlags eMode )
 {
-    if( meRedlineFlags != eMode )
+    if( meRedlineFlags == eMode )
+        return;
+
+    if( (RedlineFlags::ShowMask & meRedlineFlags) != (RedlineFlags::ShowMask & eMode)
+        || !(RedlineFlags::ShowMask & eMode) )
     {
-        if( (RedlineFlags::ShowMask & meRedlineFlags) != (RedlineFlags::ShowMask & eMode)
-            || !(RedlineFlags::ShowMask & eMode) )
+        bool bSaveInXMLImportFlag = m_rDoc.IsInXMLImport();
+        m_rDoc.SetInXMLImport( false );
+        // and then hide/display everything
+        void (SwRangeRedline::*pFnc)(sal_uInt16, size_t); // Allow compiler warn if use of
+                                                          // uninitialized ptr is possible
+
+        RedlineFlags eShowMode = RedlineFlags::ShowMask & eMode;
+        if (eShowMode == (RedlineFlags::ShowInsert | RedlineFlags::ShowDelete))
+            pFnc = &SwRangeRedline::Show;
+        else if (eShowMode == RedlineFlags::ShowInsert)
+            pFnc = &SwRangeRedline::Hide;
+        else if (eShowMode == RedlineFlags::ShowDelete)
+            pFnc = &SwRangeRedline::ShowOriginal;
+        else
         {
-            bool bSaveInXMLImportFlag = m_rDoc.IsInXMLImport();
-            m_rDoc.SetInXMLImport( false );
-            // and then hide/display everything
-            void (SwRangeRedline::*pFnc)(sal_uInt16, size_t); // Allow compiler warn if use of
-                                                              // uninitialized ptr is possible
-
-            RedlineFlags eShowMode = RedlineFlags::ShowMask & eMode;
-            if (eShowMode == (RedlineFlags::ShowInsert | RedlineFlags::ShowDelete))
-                pFnc = &SwRangeRedline::Show;
-            else if (eShowMode == RedlineFlags::ShowInsert)
-                pFnc = &SwRangeRedline::Hide;
-            else if (eShowMode == RedlineFlags::ShowDelete)
-                pFnc = &SwRangeRedline::ShowOriginal;
-            else
-            {
-                pFnc = &SwRangeRedline::Hide;
-                eMode |= RedlineFlags::ShowInsert;
-            }
-
-            CheckAnchoredFlyConsistency(m_rDoc);
-            CHECK_REDLINE( *this )
-
-            o3tl::sorted_vector<SwRootFrame *> hiddenLayouts;
-            if (eShowMode == (RedlineFlags::ShowInsert | RedlineFlags::ShowDelete))
-            {
-                // sw_redlinehide: the problem here is that MoveFromSection
-                // creates the frames wrongly (non-merged), because its own
-                // SwRangeRedline has wrong positions until after the nodes
-                // are all moved, so fix things up by force by re-creating
-                // all merged frames from scratch.
-                o3tl::sorted_vector<SwRootFrame *> const layouts(m_rDoc.GetAllLayouts());
-                for (SwRootFrame *const pLayout : layouts)
-                {
-                    if (pLayout->IsHideRedlines())
-                    {
-                        pLayout->SetHideRedlines(false);
-                        hiddenLayouts.insert(pLayout);
-                    }
-                }
-            }
-
-            for (sal_uInt16 nLoop = 1; nLoop <= 2; ++nLoop)
-                for (size_t i = 0; i < mpRedlineTable->size(); ++i)
-                {
-                    SwRangeRedline *const pRedline((*mpRedlineTable)[i]);
-                    (pRedline->*pFnc)(nLoop, i);
-                    while (mpRedlineTable->size() <= i
-                        || (*mpRedlineTable)[i] != pRedline)
-                    {        // ensure current position
-                        --i; // a previous redline may have been deleted
-                    }
-                }
-
-            //SwRangeRedline::MoveFromSection routinely changes
-            //the keys that mpRedlineTable is sorted by
-            mpRedlineTable->Resort();
-
-            CheckAnchoredFlyConsistency(m_rDoc);
-            CHECK_REDLINE( *this )
-
-            for (SwRootFrame *const pLayout : hiddenLayouts)
-            {
-                pLayout->SetHideRedlines(true);
-            }
-
-            m_rDoc.SetInXMLImport( bSaveInXMLImportFlag );
+            pFnc = &SwRangeRedline::Hide;
+            eMode |= RedlineFlags::ShowInsert;
         }
-        meRedlineFlags = eMode;
-        m_rDoc.getIDocumentState().SetModified();
+
+        CheckAnchoredFlyConsistency(m_rDoc);
+        CHECK_REDLINE( *this )
+
+        o3tl::sorted_vector<SwRootFrame *> hiddenLayouts;
+        if (eShowMode == (RedlineFlags::ShowInsert | RedlineFlags::ShowDelete))
+        {
+            // sw_redlinehide: the problem here is that MoveFromSection
+            // creates the frames wrongly (non-merged), because its own
+            // SwRangeRedline has wrong positions until after the nodes
+            // are all moved, so fix things up by force by re-creating
+            // all merged frames from scratch.
+            o3tl::sorted_vector<SwRootFrame *> const layouts(m_rDoc.GetAllLayouts());
+            for (SwRootFrame *const pLayout : layouts)
+            {
+                if (pLayout->IsHideRedlines())
+                {
+                    pLayout->SetHideRedlines(false);
+                    hiddenLayouts.insert(pLayout);
+                }
+            }
+        }
+
+        for (sal_uInt16 nLoop = 1; nLoop <= 2; ++nLoop)
+            for (size_t i = 0; i < mpRedlineTable->size(); ++i)
+            {
+                SwRangeRedline *const pRedline((*mpRedlineTable)[i]);
+                (pRedline->*pFnc)(nLoop, i);
+                while (mpRedlineTable->size() <= i
+                    || (*mpRedlineTable)[i] != pRedline)
+                {        // ensure current position
+                    --i; // a previous redline may have been deleted
+                }
+            }
+
+        //SwRangeRedline::MoveFromSection routinely changes
+        //the keys that mpRedlineTable is sorted by
+        mpRedlineTable->Resort();
+
+        CheckAnchoredFlyConsistency(m_rDoc);
+        CHECK_REDLINE( *this )
+
+        for (SwRootFrame *const pLayout : hiddenLayouts)
+        {
+            pLayout->SetHideRedlines(true);
+        }
+
+        m_rDoc.SetInXMLImport( bSaveInXMLImportFlag );
     }
+    meRedlineFlags = eMode;
+    m_rDoc.getIDocumentState().SetModified();
 
     // #TODO - add 'SwExtraRedlineTable' also ?
 }

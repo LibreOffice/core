@@ -343,43 +343,43 @@ void DocumentFieldsManager::RemoveFieldType(size_t nField)
     /*
      * Dependent fields present -> ErrRaise
      */
-    if(nField < mpFieldTypes->size())
+    if(nField >= mpFieldTypes->size())
+        return;
+
+    SwFieldType* pTmp = (*mpFieldTypes)[nField].get();
+
+    // JP 29.07.96: Optionally prepare FieldList for Calculator
+    SwFieldIds nWhich = pTmp->Which();
+    switch( nWhich )
     {
-        SwFieldType* pTmp = (*mpFieldTypes)[nField].get();
-
-        // JP 29.07.96: Optionally prepare FieldList for Calculator
-        SwFieldIds nWhich = pTmp->Which();
-        switch( nWhich )
+    case SwFieldIds::SetExp:
+    case SwFieldIds::User:
+        mpUpdateFields->RemoveFieldType( *pTmp );
+        [[fallthrough]];
+    case SwFieldIds::Dde:
+        if( pTmp->HasWriterListeners() && !m_rDoc.IsUsed( *pTmp ) )
         {
-        case SwFieldIds::SetExp:
-        case SwFieldIds::User:
-            mpUpdateFields->RemoveFieldType( *pTmp );
-            [[fallthrough]];
-        case SwFieldIds::Dde:
-            if( pTmp->HasWriterListeners() && !m_rDoc.IsUsed( *pTmp ) )
-            {
-                if( SwFieldIds::SetExp == nWhich )
-                    static_cast<SwSetExpFieldType*>(pTmp)->SetDeleted( true );
-                else if( SwFieldIds::User == nWhich )
-                    static_cast<SwUserFieldType*>(pTmp)->SetDeleted( true );
-                else
-                    static_cast<SwDDEFieldType*>(pTmp)->SetDeleted( true );
-                nWhich = SwFieldIds::Database;
-            }
-            break;
-        default: break;
+            if( SwFieldIds::SetExp == nWhich )
+                static_cast<SwSetExpFieldType*>(pTmp)->SetDeleted( true );
+            else if( SwFieldIds::User == nWhich )
+                static_cast<SwUserFieldType*>(pTmp)->SetDeleted( true );
+            else
+                static_cast<SwDDEFieldType*>(pTmp)->SetDeleted( true );
+            nWhich = SwFieldIds::Database;
         }
-
-        if( nWhich != SwFieldIds::Database )
-        {
-            OSL_ENSURE( !pTmp->HasWriterListeners(), "Dependent fields present!" );
-        }
-        else
-            (*mpFieldTypes)[nField].release(); // DB fields are ref-counted and delete themselves
-
-        mpFieldTypes->erase( mpFieldTypes->begin() + nField );
-        m_rDoc.getIDocumentState().SetModified();
+        break;
+    default: break;
     }
+
+    if( nWhich != SwFieldIds::Database )
+    {
+        OSL_ENSURE( !pTmp->HasWriterListeners(), "Dependent fields present!" );
+    }
+    else
+        (*mpFieldTypes)[nField].release(); // DB fields are ref-counted and delete themselves
+
+    mpFieldTypes->erase( mpFieldTypes->begin() + nField );
+    m_rDoc.getIDocumentState().SetModified();
 }
 
 // All have to be re-evaluated.
