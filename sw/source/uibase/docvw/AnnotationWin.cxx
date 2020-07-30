@@ -307,23 +307,23 @@ void SwAnnotationWin::UpdateData()
 
 void SwAnnotationWin::Delete()
 {
-    if (mrView.GetWrtShellPtr()->GotoField(*mpFormatField))
+    if (!mrView.GetWrtShellPtr()->GotoField(*mpFormatField))
+        return;
+
+    if ( mrMgr.GetActiveSidebarWin() == this)
     {
-        if ( mrMgr.GetActiveSidebarWin() == this)
+        mrMgr.SetActiveSidebarWin(nullptr);
+        // if the note is empty, the previous line will send a delete event, but we are already there
+        if (mnEventId)
         {
-            mrMgr.SetActiveSidebarWin(nullptr);
-            // if the note is empty, the previous line will send a delete event, but we are already there
-            if (mnEventId)
-            {
-                Application::RemoveUserEvent( mnEventId );
-                mnEventId = nullptr;
-            }
+            Application::RemoveUserEvent( mnEventId );
+            mnEventId = nullptr;
         }
-        // we delete the field directly, the Mgr cleans up the PostIt by listening
-        GrabFocusToDocument();
-        mrView.GetWrtShellPtr()->ClearMark();
-        mrView.GetWrtShellPtr()->DelRight();
     }
+    // we delete the field directly, the Mgr cleans up the PostIt by listening
+    GrabFocusToDocument();
+    mrView.GetWrtShellPtr()->ClearMark();
+    mrView.GetWrtShellPtr()->DelRight();
 }
 
 void SwAnnotationWin::GotoPos()

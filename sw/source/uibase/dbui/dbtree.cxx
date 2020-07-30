@@ -399,38 +399,38 @@ namespace
 
 void SwDBTreeList::ShowColumns(bool bShowCol)
 {
-    if (bShowCol != bShowColumns)
+    if (bShowCol == bShowColumns)
+        return;
+
+    bShowColumns = bShowCol;
+    OUString sTableName;
+    OUString sColumnName;
+    const OUString sDBName(GetDBName(sTableName, sColumnName));
+
+    m_xTreeView->freeze();
+
+    std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
+    std::unique_ptr<weld::TreeIter> xChild(m_xTreeView->make_iterator());
+    if (m_xTreeView->get_iter_first(*xIter))
     {
-        bShowColumns = bShowCol;
-        OUString sTableName;
-        OUString sColumnName;
-        const OUString sDBName(GetDBName(sTableName, sColumnName));
-
-        m_xTreeView->freeze();
-
-        std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
-        std::unique_ptr<weld::TreeIter> xChild(m_xTreeView->make_iterator());
-        if (m_xTreeView->get_iter_first(*xIter))
+        do
         {
-            do
+            GotoRootLevelParent(*m_xTreeView, *xIter);
+            m_xTreeView->collapse_row(*xIter);
+            while (m_xTreeView->iter_has_child(*xIter))
             {
-                GotoRootLevelParent(*m_xTreeView, *xIter);
-                m_xTreeView->collapse_row(*xIter);
-                while (m_xTreeView->iter_has_child(*xIter))
-                {
-                    m_xTreeView->copy_iterator(*xIter, *xChild);
-                    (void)m_xTreeView->iter_children(*xChild);
-                    m_xTreeView->remove(*xChild);
-                }
-            } while (m_xTreeView->iter_next(*xIter));
-        }
+                m_xTreeView->copy_iterator(*xIter, *xChild);
+                (void)m_xTreeView->iter_children(*xChild);
+                m_xTreeView->remove(*xChild);
+            }
+        } while (m_xTreeView->iter_next(*xIter));
+    }
 
-        m_xTreeView->thaw();
+    m_xTreeView->thaw();
 
-        if (!sDBName.isEmpty())
-        {
-            Select(sDBName, sTableName, sColumnName);   // force RequestingChildren
-        }
+    if (!sDBName.isEmpty())
+    {
+        Select(sDBName, sTableName, sColumnName);   // force RequestingChildren
     }
 }
 

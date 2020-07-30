@@ -77,60 +77,60 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
         }
     }
 
-    if ( !m_pApplyTempl && !rSh.IsDrawCreate() && !IsDrawAction())
+    if ( !(!m_pApplyTempl && !rSh.IsDrawCreate() && !IsDrawAction()))
+        return;
+
+    bool bStart = false, bDelSelect = false;
+    SdrObject *pObj = nullptr;
+    Point aDocPos( PixelToLogic( rPosPixel ) );
+    if ( !rSh.IsInSelect() && rSh.TestCurrPam( aDocPos, true))
+        //We are not selecting and aren't at a selection
+        bStart = true;
+    else if ( !g_bFrameDrag && rSh.IsSelFrameMode() &&
+                rSh.IsInsideSelectedObj( aDocPos ) &&
+                nullptr == m_pAnchorMarker)
     {
-        bool bStart = false, bDelSelect = false;
-        SdrObject *pObj = nullptr;
-        Point aDocPos( PixelToLogic( rPosPixel ) );
-        if ( !rSh.IsInSelect() && rSh.TestCurrPam( aDocPos, true))
-            //We are not selecting and aren't at a selection
-            bStart = true;
-        else if ( !g_bFrameDrag && rSh.IsSelFrameMode() &&
-                    rSh.IsInsideSelectedObj( aDocPos ) &&
-                    nullptr == m_pAnchorMarker)
-        {
-            //We are not dragging internally and are not at an
-            //object (frame, draw object)
+        //We are not dragging internally and are not at an
+        //object (frame, draw object)
 
-            // #i106131# *and* AnchorDrag is *not* active: When active,
-            // entering global drag mode will destroy the AnchorHdl but
-            // keep the now invalid ptr in place, next access will crash.
-            // It is indeed wrong to enter drag mode when AnchorDrag is
-            // already active
-            bStart = true;
-        }
-        else if( !g_bFrameDrag && m_rView.GetDocShell()->IsReadOnly() &&
-                OBJCNT_NONE != rSh.GetObjCntType( aDocPos, pObj ))
-        {
-            rSh.LockPaint();
-            if( rSh.SelectObj( aDocPos, 0, pObj ))
-                bStart = bDelSelect = true;
-            else
-                rSh.UnlockPaint();
-        }
+        // #i106131# *and* AnchorDrag is *not* active: When active,
+        // entering global drag mode will destroy the AnchorHdl but
+        // keep the now invalid ptr in place, next access will crash.
+        // It is indeed wrong to enter drag mode when AnchorDrag is
+        // already active
+        bStart = true;
+    }
+    else if( !g_bFrameDrag && m_rView.GetDocShell()->IsReadOnly() &&
+            OBJCNT_NONE != rSh.GetObjCntType( aDocPos, pObj ))
+    {
+        rSh.LockPaint();
+        if( rSh.SelectObj( aDocPos, 0, pObj ))
+            bStart = bDelSelect = true;
         else
-        {
-            SwContentAtPos aSwContentAtPos( IsAttrAtPos::InetAttr );
-            bStart = rSh.GetContentAtPos( aDocPos,
-                        aSwContentAtPos );
-        }
+            rSh.UnlockPaint();
+    }
+    else
+    {
+        SwContentAtPos aSwContentAtPos( IsAttrAtPos::InetAttr );
+        bStart = rSh.GetContentAtPos( aDocPos,
+                    aSwContentAtPos );
+    }
 
-        if ( bStart && !m_bIsInDrag )
-        {
-            m_bMBPressed = false;
-            ReleaseMouse();
-            g_bFrameDrag = false;
-            g_bExecuteDrag = true;
-            SwEditWin::m_nDDStartPosY = aDocPos.Y();
-            SwEditWin::m_nDDStartPosX = aDocPos.X();
-            m_aMovePos = aDocPos;
-            StartExecuteDrag();
-            if( bDelSelect )
-            {
-                rSh.UnSelectFrame();
-                rSh.UnlockPaint();
-            }
-        }
+    if ( !(bStart && !m_bIsInDrag) )
+        return;
+
+    m_bMBPressed = false;
+    ReleaseMouse();
+    g_bFrameDrag = false;
+    g_bExecuteDrag = true;
+    SwEditWin::m_nDDStartPosY = aDocPos.Y();
+    SwEditWin::m_nDDStartPosX = aDocPos.X();
+    m_aMovePos = aDocPos;
+    StartExecuteDrag();
+    if( bDelSelect )
+    {
+        rSh.UnSelectFrame();
+        rSh.UnlockPaint();
     }
 }
 

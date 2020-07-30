@@ -288,26 +288,26 @@ void SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
 
 void SidebarTextControl::MouseMove( const MouseEvent& rMEvt )
 {
-    if ( GetTextView() )
-    {
-        OutlinerView* pOutlinerView( GetTextView() );
-        pOutlinerView->MouseMove( rMEvt );
-        // mba: why does OutlinerView not handle the modifier setting?!
-        // this forces the postit to handle *all* pointer types
-        SetPointer( pOutlinerView->GetPointer( rMEvt.GetPosPixel() ) );
+    if ( !GetTextView() )
+        return;
 
-        const EditView& aEV = pOutlinerView->GetEditView();
-        const SvxFieldItem* pItem = aEV.GetFieldUnderMousePointer();
-        if ( pItem )
+    OutlinerView* pOutlinerView( GetTextView() );
+    pOutlinerView->MouseMove( rMEvt );
+    // mba: why does OutlinerView not handle the modifier setting?!
+    // this forces the postit to handle *all* pointer types
+    SetPointer( pOutlinerView->GetPointer( rMEvt.GetPosPixel() ) );
+
+    const EditView& aEV = pOutlinerView->GetEditView();
+    const SvxFieldItem* pItem = aEV.GetFieldUnderMousePointer();
+    if ( pItem )
+    {
+        const SvxFieldData* pField = pItem->GetField();
+        const SvxURLField* pURL = dynamic_cast<const SvxURLField*>( pField  );
+        if ( pURL )
         {
-            const SvxFieldData* pField = pItem->GetField();
-            const SvxURLField* pURL = dynamic_cast<const SvxURLField*>( pField  );
-            if ( pURL )
-            {
-                OUString sText(SfxHelp::GetURLHelpText(pURL->GetURL()));
-                Help::ShowQuickHelp(
-                    this, PixelToLogic(tools::Rectangle(GetPosPixel(), Size(50, 10))), sText);
-            }
+            OUString sText(SfxHelp::GetURLHelpText(pURL->GetURL()));
+            Help::ShowQuickHelp(
+                this, PixelToLogic(tools::Rectangle(GetPosPixel(), Size(50, 10))), sText);
         }
     }
 }

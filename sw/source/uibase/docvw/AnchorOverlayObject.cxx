@@ -298,25 +298,25 @@ void AnchorOverlayObject::SetAllPosition( const basegfx::B2DPoint& rPoint1,
                                           const basegfx::B2DPoint& rPoint6,
                                           const basegfx::B2DPoint& rPoint7)
 {
-    if ( rPoint1 != getBasePosition() ||
+    if ( !(rPoint1 != getBasePosition() ||
          rPoint2 != GetSecondPosition() ||
          rPoint3 != GetThirdPosition() ||
          rPoint4 != GetFourthPosition() ||
          rPoint5 != GetFifthPosition() ||
          rPoint6 != GetSixthPosition() ||
-         rPoint7 != GetSeventhPosition() )
-    {
-        maBasePosition = rPoint1;
-        maSecondPosition = rPoint2;
-        maThirdPosition = rPoint3;
-        maFourthPosition = rPoint4;
-        maFifthPosition = rPoint5;
-        maSixthPosition = rPoint6;
-        maSeventhPosition = rPoint7;
+         rPoint7 != GetSeventhPosition()) )
+        return;
 
-        implResetGeometry();
-        objectChange();
-    }
+    maBasePosition = rPoint1;
+    maSecondPosition = rPoint2;
+    maThirdPosition = rPoint3;
+    maFourthPosition = rPoint4;
+    maFifthPosition = rPoint5;
+    maSixthPosition = rPoint6;
+    maSeventhPosition = rPoint7;
+
+    implResetGeometry();
+    objectChange();
 }
 
 void AnchorOverlayObject::SetSixthPosition(const basegfx::B2DPoint& rNew)

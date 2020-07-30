@@ -321,22 +321,22 @@ static void lcl_InitNumberFormatter(SwDSParam& rParam, uno::Reference<sdbc::XDat
          : SwDBManager::getDataSourceAsParent(
              rParam.xConnection, rParam.sDataSource)),
         uno::UNO_QUERY);
-    if(xSourceProps.is())
+    if(!xSourceProps.is())
+        return;
+
+    uno::Any aFormats = xSourceProps->getPropertyValue("NumberFormatsSupplier");
+    if(!aFormats.hasValue())
+        return;
+
+    uno::Reference<util::XNumberFormatsSupplier> xSuppl;
+    aFormats >>= xSuppl;
+    if(xSuppl.is())
     {
-        uno::Any aFormats = xSourceProps->getPropertyValue("NumberFormatsSupplier");
-        if(aFormats.hasValue())
-        {
-            uno::Reference<util::XNumberFormatsSupplier> xSuppl;
-            aFormats >>= xSuppl;
-            if(xSuppl.is())
-            {
-                uno::Reference< beans::XPropertySet > xSettings = xSuppl->getNumberFormatSettings();
-                uno::Any aNull = xSettings->getPropertyValue("NullDate");
-                aNull >>= rParam.aNullDate;
-                if(rParam.xFormatter.is())
-                    rParam.xFormatter->attachNumberFormatsSupplier(xSuppl);
-            }
-        }
+        uno::Reference< beans::XPropertySet > xSettings = xSuppl->getNumberFormatSettings();
+        uno::Any aNull = xSettings->getPropertyValue("NullDate");
+        aNull >>= rParam.aNullDate;
+        if(rParam.xFormatter.is())
+            rParam.xFormatter->attachNumberFormatsSupplier(xSuppl);
     }
 }
 
@@ -566,33 +566,33 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
 
 void SwDBManager::ImportFromConnection(  SwWrtShell* pSh )
 {
-    if(m_pImpl->pMergeData && !m_pImpl->pMergeData->bEndOfDB)
+    if(!(m_pImpl->pMergeData && !m_pImpl->pMergeData->bEndOfDB))
+        return;
+
+    pSh->StartAllAction();
+    pSh->StartUndo();
+    bool bGroupUndo(pSh->DoesGroupUndo());
+    pSh->DoGroupUndo(false);
+
+    if( pSh->HasSelection() )
+        pSh->DelRight();
+
+    std::unique_ptr<SwWait> pWait;
+
     {
-        pSh->StartAllAction();
-        pSh->StartUndo();
-        bool bGroupUndo(pSh->DoesGroupUndo());
-        pSh->DoGroupUndo(false);
+        sal_uLong i = 0;
+        do {
 
-        if( pSh->HasSelection() )
-            pSh->DelRight();
+            ImportDBEntry(pSh);
+            if( 10 == ++i )
+                pWait.reset(new SwWait( *pSh->GetView().GetDocShell(), true));
 
-        std::unique_ptr<SwWait> pWait;
-
-        {
-            sal_uLong i = 0;
-            do {
-
-                ImportDBEntry(pSh);
-                if( 10 == ++i )
-                    pWait.reset(new SwWait( *pSh->GetView().GetDocShell(), true));
-
-            } while(ToNextMergeRecord());
-        }
-
-        pSh->DoGroupUndo(bGroupUndo);
-        pSh->EndUndo();
-        pSh->EndAllAction();
+        } while(ToNextMergeRecord());
     }
+
+    pSh->DoGroupUndo(bGroupUndo);
+    pSh->EndUndo();
+    pSh->EndAllAction();
 }
 
 static OUString  lcl_FindColumn(const OUString& sFormatStr,sal_uInt16  &nUsedPos, sal_uInt8 &nSeparator)
@@ -628,69 +628,69 @@ static OUString  lcl_FindColumn(const OUString& sFormatStr,sal_uInt16  &nUsedPos
 
 void SwDBManager::ImportDBEntry(SwWrtShell* pSh)
 {
-    if(m_pImpl->pMergeData && !m_pImpl->pMergeData->bEndOfDB)
+    if(!(m_pImpl->pMergeData && !m_pImpl->pMergeData->bEndOfDB))
+        return;
+
+    uno::Reference< sdbcx::XColumnsSupplier > xColsSupp( m_pImpl->pMergeData->xResultSet, uno::UNO_QUERY );
+    uno::Reference<container::XNameAccess> xCols = xColsSupp->getColumns();
+    OUString sFormatStr;
+    sal_uInt16 nFormatLen = sFormatStr.getLength();
+    if( nFormatLen )
     {
-        uno::Reference< sdbcx::XColumnsSupplier > xColsSupp( m_pImpl->pMergeData->xResultSet, uno::UNO_QUERY );
-        uno::Reference<container::XNameAccess> xCols = xColsSupp->getColumns();
-        OUString sFormatStr;
-        sal_uInt16 nFormatLen = sFormatStr.getLength();
-        if( nFormatLen )
+        const char cSpace = ' ';
+        const char cTab = '\t';
+        sal_uInt16 nUsedPos = 0;
+        sal_uInt8   nSeparator;
+        OUString sColumn = lcl_FindColumn(sFormatStr, nUsedPos, nSeparator);
+        while( !sColumn.isEmpty() )
         {
-            const char cSpace = ' ';
-            const char cTab = '\t';
-            sal_uInt16 nUsedPos = 0;
-            sal_uInt8   nSeparator;
-            OUString sColumn = lcl_FindColumn(sFormatStr, nUsedPos, nSeparator);
-            while( !sColumn.isEmpty() )
+            if(!xCols->hasByName(sColumn))
+                return;
+            uno::Any aCol = xCols->getByName(sColumn);
+            uno::Reference< beans::XPropertySet > xColumnProp;
+            aCol >>= xColumnProp;
+            if(xColumnProp.is())
             {
-                if(!xCols->hasByName(sColumn))
-                    return;
-                uno::Any aCol = xCols->getByName(sColumn);
-                uno::Reference< beans::XPropertySet > xColumnProp;
-                aCol >>= xColumnProp;
-                if(xColumnProp.is())
-                {
-                    SwDBFormatData aDBFormat;
-                    OUString sInsert = GetDBField( xColumnProp,   aDBFormat);
-                    if( DB_SEP_SPACE == nSeparator )
-                            sInsert += OUStringChar(cSpace);
-                    else if( DB_SEP_TAB == nSeparator)
-                            sInsert += OUStringChar(cTab);
-                    pSh->Insert(sInsert);
-                    if( DB_SEP_RETURN == nSeparator)
-                        pSh->SplitNode();
-                    else if(DB_SEP_NEWLINE == nSeparator)
-                            pSh->InsertLineBreak();
-                }
-                else
-                {
-                    // column not found -> show error
-                    OUString sInsert = "?" + sColumn + "?";
-                    pSh->Insert(sInsert);
-                }
-                sColumn = lcl_FindColumn(sFormatStr, nUsedPos, nSeparator);
-            }
-            pSh->SplitNode();
-        }
-        else
-        {
-            OUStringBuffer sStr;
-            uno::Sequence<OUString> aColNames = xCols->getElementNames();
-            const OUString* pColNames = aColNames.getConstArray();
-            long nLength = aColNames.getLength();
-            for(long i = 0; i < nLength; i++)
-            {
-                uno::Any aCol = xCols->getByName(pColNames[i]);
-                uno::Reference< beans::XPropertySet > xColumnProp;
-                aCol >>= xColumnProp;
                 SwDBFormatData aDBFormat;
-                sStr.append(GetDBField( xColumnProp, aDBFormat));
-                if (i < nLength - 1)
-                    sStr.append("\t");
+                OUString sInsert = GetDBField( xColumnProp,   aDBFormat);
+                if( DB_SEP_SPACE == nSeparator )
+                        sInsert += OUStringChar(cSpace);
+                else if( DB_SEP_TAB == nSeparator)
+                        sInsert += OUStringChar(cTab);
+                pSh->Insert(sInsert);
+                if( DB_SEP_RETURN == nSeparator)
+                    pSh->SplitNode();
+                else if(DB_SEP_NEWLINE == nSeparator)
+                        pSh->InsertLineBreak();
             }
-            pSh->SwEditShell::Insert2(sStr.makeStringAndClear());
-            pSh->SwFEShell::SplitNode();    // line feed
+            else
+            {
+                // column not found -> show error
+                OUString sInsert = "?" + sColumn + "?";
+                pSh->Insert(sInsert);
+            }
+            sColumn = lcl_FindColumn(sFormatStr, nUsedPos, nSeparator);
         }
+        pSh->SplitNode();
+    }
+    else
+    {
+        OUStringBuffer sStr;
+        uno::Sequence<OUString> aColNames = xCols->getElementNames();
+        const OUString* pColNames = aColNames.getConstArray();
+        long nLength = aColNames.getLength();
+        for(long i = 0; i < nLength; i++)
+        {
+            uno::Any aCol = xCols->getByName(pColNames[i]);
+            uno::Reference< beans::XPropertySet > xColumnProp;
+            aCol >>= xColumnProp;
+            SwDBFormatData aDBFormat;
+            sStr.append(GetDBField( xColumnProp, aDBFormat));
+            if (i < nLength - 1)
+                sStr.append("\t");
+        }
+        pSh->SwEditShell::Insert2(sStr.makeStringAndClear());
+        pSh->SwFEShell::SplitNode();    // line feed
     }
 }
 
@@ -3143,19 +3143,19 @@ void SwDBManager::InsertText(SwWrtShell& rSh,
                                                                                 xSource,
                                                                                 xColSupp,
                                                                                 aDBData ));
-    if( RET_OK == pDlg->Execute() )
+    if( RET_OK != pDlg->Execute() )
+        return;
+
+    OUString sDummy;
+    if(!xConnection.is())
+        xConnection = xSource->getConnection(sDummy, sDummy);
+    try
     {
-        OUString sDummy;
-        if(!xConnection.is())
-            xConnection = xSource->getConnection(sDummy, sDummy);
-        try
-        {
-            pDlg->DataToDoc( aSelection , xSource, xConnection, xResSet);
-        }
-        catch (const uno::Exception&)
-        {
-            TOOLS_WARN_EXCEPTION("sw.mailmerge", "");
-        }
+        pDlg->DataToDoc( aSelection , xSource, xConnection, xResSet);
+    }
+    catch (const uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("sw.mailmerge", "");
     }
 }
 
@@ -3308,29 +3308,29 @@ std::shared_ptr<SwMailMergeConfigItem> SwDBManager::PerformMailMerge(SwView cons
 
 void SwDBManager::RevokeLastRegistrations()
 {
-    if (!m_aUncommittedRegistrations.empty())
-    {
-        SwView* pView = ( m_pDoc && m_pDoc->GetDocShell() ) ? m_pDoc->GetDocShell()->GetView() : nullptr;
-        if (pView)
-        {
-            const std::shared_ptr<SwMailMergeConfigItem>& xConfigItem = pView->GetMailMergeConfigItem();
-            if (xConfigItem)
-            {
-                xConfigItem->DisposeResultSet();
-                xConfigItem->DocumentReloaded();
-            }
-        }
+    if (m_aUncommittedRegistrations.empty())
+        return;
 
-        for (auto it = m_aUncommittedRegistrations.begin(); it != m_aUncommittedRegistrations.end();)
+    SwView* pView = ( m_pDoc && m_pDoc->GetDocShell() ) ? m_pDoc->GetDocShell()->GetView() : nullptr;
+    if (pView)
+    {
+        const std::shared_ptr<SwMailMergeConfigItem>& xConfigItem = pView->GetMailMergeConfigItem();
+        if (xConfigItem)
         {
-            if ((m_pDoc && it->first == m_pDoc->GetDocShell()) || it->first == nullptr)
-            {
-                RevokeDataSource(it->second);
-                it = m_aUncommittedRegistrations.erase(it);
-            }
-            else
-                ++it;
+            xConfigItem->DisposeResultSet();
+            xConfigItem->DocumentReloaded();
         }
+    }
+
+    for (auto it = m_aUncommittedRegistrations.begin(); it != m_aUncommittedRegistrations.end();)
+    {
+        if ((m_pDoc && it->first == m_pDoc->GetDocShell()) || it->first == nullptr)
+        {
+            RevokeDataSource(it->second);
+            it = m_aUncommittedRegistrations.erase(it);
+        }
+        else
+            ++it;
     }
 }
 

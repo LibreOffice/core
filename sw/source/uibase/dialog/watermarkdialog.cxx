@@ -81,21 +81,21 @@ void SwWatermarkDialog::InitFields()
     const SfxPoolItem* pItem;
     SfxItemState eState = m_rBindings.GetDispatcher()->QueryState( SID_WATERMARK, pItem );
 
-    if( eState >= SfxItemState::DEFAULT && pItem && pItem->Which() == SID_WATERMARK)
-    {
-        const SfxWatermarkItem* pWatermark = static_cast<const SfxWatermarkItem*>( pItem );
-        const OUString& sText = pWatermark->GetText();
-        m_xTextInput->set_text(sText);
-        OUString sFontName = pWatermark->GetFont();
-        int nFontIndex = m_xFont->find_text(sFontName);
-        if (nFontIndex != -1)
-            m_xFont->set_active(nFontIndex);
-        else
-            m_xFont->set_entry_text(sFontName);
-        m_xAngle->set_value(pWatermark->GetAngle(), FieldUnit::DEGREE);
-        m_xColor->SelectEntry( pWatermark->GetColor() );
-        m_xTransparency->set_value(pWatermark->GetTransparency(), FieldUnit::PERCENT);
-    }
+    if( !(eState >= SfxItemState::DEFAULT && pItem && pItem->Which() == SID_WATERMARK))
+        return;
+
+    const SfxWatermarkItem* pWatermark = static_cast<const SfxWatermarkItem*>( pItem );
+    const OUString& sText = pWatermark->GetText();
+    m_xTextInput->set_text(sText);
+    OUString sFontName = pWatermark->GetFont();
+    int nFontIndex = m_xFont->find_text(sFontName);
+    if (nFontIndex != -1)
+        m_xFont->set_active(nFontIndex);
+    else
+        m_xFont->set_entry_text(sFontName);
+    m_xAngle->set_value(pWatermark->GetAngle(), FieldUnit::DEGREE);
+    m_xColor->SelectEntry( pWatermark->GetColor() );
+    m_xTransparency->set_value(pWatermark->GetTransparency(), FieldUnit::PERCENT);
 }
 
 IMPL_LINK_NOARG(SwWatermarkDialog, OKButtonHdl, weld::Button&, void)

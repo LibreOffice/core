@@ -5068,20 +5068,20 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
     if (bCallBase)
         Window::MouseButtonUp(rMEvt);
 
-    if (pSdrView && rMEvt.GetClicks() == 1 && comphelper::LibreOfficeKit::isActive())
+    if (!(pSdrView && rMEvt.GetClicks() == 1 && comphelper::LibreOfficeKit::isActive()))
+        return;
+
+    // When tiled rendering, single click on a shape text starts editing already.
+    SdrViewEvent aViewEvent;
+    SdrHitKind eHit = pSdrView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONUP, aViewEvent);
+    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+    if (eHit == SdrHitKind::TextEditObj && rMarkList.GetMarkCount() == 1)
     {
-        // When tiled rendering, single click on a shape text starts editing already.
-        SdrViewEvent aViewEvent;
-        SdrHitKind eHit = pSdrView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONUP, aViewEvent);
-        const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-        if (eHit == SdrHitKind::TextEditObj && rMarkList.GetMarkCount() == 1)
+        if (SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj())
         {
-            if (SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj())
-            {
-                EnterDrawTextMode(pObj->GetLogicRect().Center());
-                if ( dynamic_cast< const SwDrawTextShell *>( m_rView.GetCurShell() ) != nullptr )
-                    static_cast<SwDrawTextShell*>(m_rView.GetCurShell())->Init();
-            }
+            EnterDrawTextMode(pObj->GetLogicRect().Center());
+            if ( dynamic_cast< const SwDrawTextShell *>( m_rView.GetCurShell() ) != nullptr )
+                static_cast<SwDrawTextShell*>(m_rView.GetCurShell())->Init();
         }
     }
 }
@@ -6177,36 +6177,36 @@ void QuickHelpData::FillStrArr( SwWrtShell const & rSh, const OUString& rWord )
     const SwAutoCompleteWord& rACList = SwEditShell::GetAutoCompleteWords();
     std::vector<OUString> strings;
 
-    if ( rACList.GetWordsMatching( rWord, strings ) )
+    if ( !rACList.GetWordsMatching( rWord, strings ) )
+        return;
+
+    for (const OUString & aCompletedString : strings)
     {
-        for (const OUString & aCompletedString : strings)
-        {
-            // when we have a matching current date, avoid to suggest
-            // other words with the same matching starting characters,
-            // for example 2016-01-3 instead of 2016-01-30
-            if (!rStrToday.isEmpty() && aCompletedString.startsWith(rWord))
-                continue;
+        // when we have a matching current date, avoid to suggest
+        // other words with the same matching starting characters,
+        // for example 2016-01-3 instead of 2016-01-30
+        if (!rStrToday.isEmpty() && aCompletedString.startsWith(rWord))
+            continue;
 
-            OUString sStr;
+        OUString sStr;
 
-            //fdo#61251 if it's an exact match, ensure unchanged replacement
-            //exists as a candidate
-            if (aCompletedString.startsWith(rWord))
-                m_aHelpStrings.emplace_back(aCompletedString, rWord.getLength());
-            else
-                sStr = aCompletedString; // to be added if no case conversion is performed below
+        //fdo#61251 if it's an exact match, ensure unchanged replacement
+        //exists as a candidate
+        if (aCompletedString.startsWith(rWord))
+            m_aHelpStrings.emplace_back(aCompletedString, rWord.getLength());
+        else
+            sStr = aCompletedString; // to be added if no case conversion is performed below
 
-            if (aWordCase == CASE_LOWER)
-                sStr = rCC.lowercase(aCompletedString);
-            else if (aWordCase == CASE_SENTENCE)
-                sStr = rCC.lowercase(aCompletedString)
-                           .replaceAt(0, 1, OUString(aCompletedString[0]));
-            else if (aWordCase == CASE_UPPER)
-                sStr = rCC.uppercase(aCompletedString);
+        if (aWordCase == CASE_LOWER)
+            sStr = rCC.lowercase(aCompletedString);
+        else if (aWordCase == CASE_SENTENCE)
+            sStr = rCC.lowercase(aCompletedString)
+                       .replaceAt(0, 1, OUString(aCompletedString[0]));
+        else if (aWordCase == CASE_UPPER)
+            sStr = rCC.uppercase(aCompletedString);
 
-            if (!sStr.isEmpty())
-                m_aHelpStrings.emplace_back(aCompletedString, rWord.getLength());
-        }
+        if (!sStr.isEmpty())
+            m_aHelpStrings.emplace_back(aCompletedString, rWord.getLength());
     }
 }
 
