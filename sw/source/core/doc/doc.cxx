@@ -721,9 +721,7 @@ void SwDoc::CalculatePagesForPrinting(
         // PageContent :
         // 0 -> print all pages (default if aPageRange is empty)
         // 1 -> print range according to PageRange
-        // 2 -> print even pages
-        // 3 -> print odd pages
-        // 4 -> print selection
+        // 2 -> print selection
         if (1 == nContent)
             aPageRange = rOptions.getStringValue( "PageRange" );
 
