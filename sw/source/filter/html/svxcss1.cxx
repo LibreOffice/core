@@ -1516,23 +1516,23 @@ static void ParseCSS1_background( const CSS1Expression *pExpr,
     if( GPOS_NONE == eRepeat )
         eRepeat = ePos;
 
-    if( bTransparent || bColor || !aURL.isEmpty() )
+    if( !(bTransparent || bColor || !aURL.isEmpty()) )
+        return;
+
+    SvxBrushItem aBrushItem( aItemIds.nBrush );
+
+    if( bTransparent )
+        aBrushItem.SetColor( COL_TRANSPARENT);
+    else if( bColor )
+        aBrushItem.SetColor( aColor );
+
+    if( !aURL.isEmpty() )
     {
-        SvxBrushItem aBrushItem( aItemIds.nBrush );
-
-        if( bTransparent )
-            aBrushItem.SetColor( COL_TRANSPARENT);
-        else if( bColor )
-            aBrushItem.SetColor( aColor );
-
-        if( !aURL.isEmpty() )
-        {
-            aBrushItem.SetGraphicLink( URIHelper::SmartRel2Abs( INetURLObject( rParser.GetBaseURL()), aURL, Link<OUString *, bool>(), false ) );
-            aBrushItem.SetGraphicPos( eRepeat );
-        }
-
-        rItemSet.Put( aBrushItem );
+        aBrushItem.SetGraphicLink( URIHelper::SmartRel2Abs( INetURLObject( rParser.GetBaseURL()), aURL, Link<OUString *, bool>(), false ) );
+        aBrushItem.SetGraphicPos( eRepeat );
     }
+
+    rItemSet.Put( aBrushItem );
 }
 
 static void ParseCSS1_background_color( const CSS1Expression *pExpr,
@@ -1653,22 +1653,22 @@ static void ParseCSS1_list_style_type( const CSS1Expression *pExpr,
 {
     OSL_ENSURE( pExpr, "no expression" );
 
-    if( pExpr->GetType() == CSS1_IDENT )
-    {
-        const OUString& rValue = pExpr->GetString();
+    if( pExpr->GetType() != CSS1_IDENT )
+        return;
 
-        // values are context-dependent, so fill both
-        sal_uInt16 nEnum;
-        if( SvxCSS1Parser::GetEnum( aNumberStyleTable, rValue, nEnum ) )
-        {
-            rPropInfo.m_bNumbering = true;
-            rPropInfo.m_nNumberingType = static_cast<SvxNumType>(nEnum);
-        }
-        if( SvxCSS1Parser::GetEnum( aBulletStyleTable, rValue, nEnum ) )
-        {
-            rPropInfo.m_bBullet = true;
-            rPropInfo.m_cBulletChar = nEnum;
-        }
+    const OUString& rValue = pExpr->GetString();
+
+    // values are context-dependent, so fill both
+    sal_uInt16 nEnum;
+    if( SvxCSS1Parser::GetEnum( aNumberStyleTable, rValue, nEnum ) )
+    {
+        rPropInfo.m_bNumbering = true;
+        rPropInfo.m_nNumberingType = static_cast<SvxNumType>(nEnum);
+    }
+    if( SvxCSS1Parser::GetEnum( aBulletStyleTable, rValue, nEnum ) )
+    {
+        rPropInfo.m_bBullet = true;
+        rPropInfo.m_cBulletChar = nEnum;
     }
 }
 
@@ -1974,24 +1974,24 @@ static void ParseCSS1_text_indent( const CSS1Expression *pExpr,
         ;
     }
 
-    if( bSet )
+    if( !bSet )
+        return;
+
+    const SfxPoolItem* pItem;
+    if( SfxItemState::SET == rItemSet.GetItemState( aItemIds.nLRSpace, false,
+                                               &pItem ) )
     {
-        const SfxPoolItem* pItem;
-        if( SfxItemState::SET == rItemSet.GetItemState( aItemIds.nLRSpace, false,
-                                                   &pItem ) )
-        {
-            SvxLRSpaceItem aLRItem( *static_cast<const SvxLRSpaceItem*>(pItem) );
-            aLRItem.SetTextFirstLineOffset( nIndent );
-            rItemSet.Put( aLRItem );
-        }
-        else
-        {
-            SvxLRSpaceItem aLRItem( aItemIds.nLRSpace );
-            aLRItem.SetTextFirstLineOffset( nIndent );
-            rItemSet.Put( aLRItem );
-        }
-        rPropInfo.m_bTextIndent = true;
+        SvxLRSpaceItem aLRItem( *static_cast<const SvxLRSpaceItem*>(pItem) );
+        aLRItem.SetTextFirstLineOffset( nIndent );
+        rItemSet.Put( aLRItem );
     }
+    else
+    {
+        SvxLRSpaceItem aLRItem( aItemIds.nLRSpace );
+        aLRItem.SetTextFirstLineOffset( nIndent );
+        rItemSet.Put( aLRItem );
+    }
+    rPropInfo.m_bTextIndent = true;
 }
 
 static void ParseCSS1_margin_left( const CSS1Expression *pExpr,
@@ -2034,27 +2034,27 @@ static void ParseCSS1_margin_left( const CSS1Expression *pExpr,
         ;
     }
 
-    if( bSet )
+    if( !bSet )
+        return;
+
+    rPropInfo.m_nLeftMargin = nLeft;
+    if( nLeft < 0 )
+        nLeft = 0;
+    const SfxPoolItem* pItem;
+    if( SfxItemState::SET == rItemSet.GetItemState( aItemIds.nLRSpace, false,
+                                               &pItem ) )
     {
-        rPropInfo.m_nLeftMargin = nLeft;
-        if( nLeft < 0 )
-            nLeft = 0;
-        const SfxPoolItem* pItem;
-        if( SfxItemState::SET == rItemSet.GetItemState( aItemIds.nLRSpace, false,
-                                                   &pItem ) )
-        {
-            SvxLRSpaceItem aLRItem( *static_cast<const SvxLRSpaceItem*>(pItem) );
-            aLRItem.SetTextLeft( static_cast<sal_uInt16>(nLeft) );
-            rItemSet.Put( aLRItem );
-        }
-        else
-        {
-            SvxLRSpaceItem aLRItem( aItemIds.nLRSpace );
-            aLRItem.SetTextLeft( static_cast<sal_uInt16>(nLeft) );
-            rItemSet.Put( aLRItem );
-        }
-        rPropInfo.m_bLeftMargin = true;
+        SvxLRSpaceItem aLRItem( *static_cast<const SvxLRSpaceItem*>(pItem) );
+        aLRItem.SetTextLeft( static_cast<sal_uInt16>(nLeft) );
+        rItemSet.Put( aLRItem );
     }
+    else
+    {
+        SvxLRSpaceItem aLRItem( aItemIds.nLRSpace );
+        aLRItem.SetTextLeft( static_cast<sal_uInt16>(nLeft) );
+        rItemSet.Put( aLRItem );
+    }
+    rPropInfo.m_bLeftMargin = true;
 }
 
 static void ParseCSS1_margin_right( const CSS1Expression *pExpr,
@@ -2093,27 +2093,27 @@ static void ParseCSS1_margin_right( const CSS1Expression *pExpr,
         ;
     }
 
-    if( bSet )
+    if( !bSet )
+        return;
+
+    rPropInfo.m_nRightMargin = nRight;
+    if( nRight < 0 )
+        nRight = 0;
+    const SfxPoolItem* pItem;
+    if( SfxItemState::SET == rItemSet.GetItemState( aItemIds.nLRSpace, false,
+                                               &pItem ) )
     {
-        rPropInfo.m_nRightMargin = nRight;
-        if( nRight < 0 )
-            nRight = 0;
-        const SfxPoolItem* pItem;
-        if( SfxItemState::SET == rItemSet.GetItemState( aItemIds.nLRSpace, false,
-                                                   &pItem ) )
-        {
-            SvxLRSpaceItem aLRItem( *static_cast<const SvxLRSpaceItem*>(pItem) );
-            aLRItem.SetRight( static_cast<sal_uInt16>(nRight) );
-            rItemSet.Put( aLRItem );
-        }
-        else
-        {
-            SvxLRSpaceItem aLRItem( aItemIds.nLRSpace );
-            aLRItem.SetRight( static_cast<sal_uInt16>(nRight) );
-            rItemSet.Put( aLRItem );
-        }
-        rPropInfo.m_bRightMargin = true;
+        SvxLRSpaceItem aLRItem( *static_cast<const SvxLRSpaceItem*>(pItem) );
+        aLRItem.SetRight( static_cast<sal_uInt16>(nRight) );
+        rItemSet.Put( aLRItem );
     }
+    else
+    {
+        SvxLRSpaceItem aLRItem( aItemIds.nLRSpace );
+        aLRItem.SetRight( static_cast<sal_uInt16>(nRight) );
+        rItemSet.Put( aLRItem );
+    }
+    rPropInfo.m_bRightMargin = true;
 }
 
 static void ParseCSS1_margin_top( const CSS1Expression *pExpr,
@@ -2158,24 +2158,24 @@ static void ParseCSS1_margin_top( const CSS1Expression *pExpr,
         ;
     }
 
-    if( bSet )
+    if( !bSet )
+        return;
+
+    const SfxPoolItem* pItem;
+    if( SfxItemState::SET == rItemSet.GetItemState( aItemIds.nULSpace, false,
+                                               &pItem ) )
     {
-        const SfxPoolItem* pItem;
-        if( SfxItemState::SET == rItemSet.GetItemState( aItemIds.nULSpace, false,
-                                                   &pItem ) )
-        {
-            SvxULSpaceItem aULItem( *static_cast<const SvxULSpaceItem*>(pItem) );
-            aULItem.SetUpper( nUpper );
-            rItemSet.Put( aULItem );
-        }
-        else
-        {
-            SvxULSpaceItem aULItem( aItemIds.nULSpace );
-            aULItem.SetUpper( nUpper );
-            rItemSet.Put( aULItem );
-        }
-        rPropInfo.m_bTopMargin = true;
+        SvxULSpaceItem aULItem( *static_cast<const SvxULSpaceItem*>(pItem) );
+        aULItem.SetUpper( nUpper );
+        rItemSet.Put( aULItem );
     }
+    else
+    {
+        SvxULSpaceItem aULItem( aItemIds.nULSpace );
+        aULItem.SetUpper( nUpper );
+        rItemSet.Put( aULItem );
+    }
+    rPropInfo.m_bTopMargin = true;
 }
 
 static void ParseCSS1_margin_bottom( const CSS1Expression *pExpr,
@@ -2220,24 +2220,24 @@ static void ParseCSS1_margin_bottom( const CSS1Expression *pExpr,
         ;
     }
 
-    if( bSet )
+    if( !bSet )
+        return;
+
+    const SfxPoolItem* pItem;
+    if( SfxItemState::SET == rItemSet.GetItemState( aItemIds.nULSpace, false,
+                                               &pItem ) )
     {
-        const SfxPoolItem* pItem;
-        if( SfxItemState::SET == rItemSet.GetItemState( aItemIds.nULSpace, false,
-                                                   &pItem ) )
-        {
-            SvxULSpaceItem aULItem( *static_cast<const SvxULSpaceItem*>(pItem) );
-            aULItem.SetLower( nLower );
-            rItemSet.Put( aULItem );
-        }
-        else
-        {
-            SvxULSpaceItem aULItem( aItemIds.nULSpace );
-            aULItem.SetLower( nLower );
-            rItemSet.Put( aULItem );
-        }
-        rPropInfo.m_bBottomMargin = true;
+        SvxULSpaceItem aULItem( *static_cast<const SvxULSpaceItem*>(pItem) );
+        aULItem.SetLower( nLower );
+        rItemSet.Put( aULItem );
     }
+    else
+    {
+        SvxULSpaceItem aULItem( aItemIds.nULSpace );
+        aULItem.SetLower( nLower );
+        rItemSet.Put( aULItem );
+    }
+    rPropInfo.m_bBottomMargin = true;
 }
 
 static void ParseCSS1_margin( const CSS1Expression *pExpr,
@@ -2355,37 +2355,37 @@ static void ParseCSS1_margin( const CSS1Expression *pExpr,
         }
     }
 
-    if( bSetMargins[0] || bSetMargins[2] )
+    if( !(bSetMargins[0] || bSetMargins[2]) )
+        return;
+
+    if( nMargins[0] < 0 )
+        nMargins[0] = 0;
+    if( nMargins[2] < 0 )
+        nMargins[2] = 0;
+
+    const SfxPoolItem* pItem;
+    if( SfxItemState::SET == rItemSet.GetItemState( aItemIds.nULSpace, false,
+                                               &pItem ) )
     {
-        if( nMargins[0] < 0 )
-            nMargins[0] = 0;
-        if( nMargins[2] < 0 )
-            nMargins[2] = 0;
-
-        const SfxPoolItem* pItem;
-        if( SfxItemState::SET == rItemSet.GetItemState( aItemIds.nULSpace, false,
-                                                   &pItem ) )
-        {
-            SvxULSpaceItem aULItem( *static_cast<const SvxULSpaceItem*>(pItem) );
-            if( bSetMargins[0] )
-                aULItem.SetUpper( static_cast<sal_uInt16>(nMargins[0]) );
-            if( bSetMargins[2] )
-                aULItem.SetLower( static_cast<sal_uInt16>(nMargins[2]) );
-            rItemSet.Put( aULItem );
-        }
-        else
-        {
-            SvxULSpaceItem aULItem( aItemIds.nULSpace );
-            if( bSetMargins[0] )
-                aULItem.SetUpper( static_cast<sal_uInt16>(nMargins[0]) );
-            if( bSetMargins[2] )
-                aULItem.SetLower( static_cast<sal_uInt16>(nMargins[2]) );
-            rItemSet.Put( aULItem );
-        }
-
-        rPropInfo.m_bTopMargin |= bSetMargins[0];
-        rPropInfo.m_bBottomMargin |= bSetMargins[2];
+        SvxULSpaceItem aULItem( *static_cast<const SvxULSpaceItem*>(pItem) );
+        if( bSetMargins[0] )
+            aULItem.SetUpper( static_cast<sal_uInt16>(nMargins[0]) );
+        if( bSetMargins[2] )
+            aULItem.SetLower( static_cast<sal_uInt16>(nMargins[2]) );
+        rItemSet.Put( aULItem );
     }
+    else
+    {
+        SvxULSpaceItem aULItem( aItemIds.nULSpace );
+        if( bSetMargins[0] )
+            aULItem.SetUpper( static_cast<sal_uInt16>(nMargins[0]) );
+        if( bSetMargins[2] )
+            aULItem.SetLower( static_cast<sal_uInt16>(nMargins[2]) );
+        rItemSet.Put( aULItem );
+    }
+
+    rPropInfo.m_bTopMargin |= bSetMargins[0];
+    rPropInfo.m_bBottomMargin |= bSetMargins[2];
 }
 
 static bool ParseCSS1_padding_xxx( const CSS1Expression *pExpr,
@@ -3049,19 +3049,18 @@ static void ParseCSS1_so_language( const CSS1Expression *pExpr,
                                SvxCSS1PropertyInfo& /*rPropInfo*/,
                                const SvxCSS1Parser& /*rParser*/ )
 {
-    if( CSS1_IDENT == pExpr->GetType() ||
-        CSS1_STRING == pExpr->GetType() )
+    if( CSS1_IDENT != pExpr->GetType() && CSS1_STRING != pExpr->GetType() )
+        return;
+
+    LanguageType eLang = LanguageTag::convertToLanguageTypeWithFallback( pExpr->GetString() );
+    if( LANGUAGE_DONTKNOW != eLang )
     {
-        LanguageType eLang = LanguageTag::convertToLanguageTypeWithFallback( pExpr->GetString() );
-        if( LANGUAGE_DONTKNOW != eLang )
-        {
-            SvxLanguageItem aLang( eLang, aItemIds.nLanguage );
-            rItemSet.Put( aLang );
-            aLang.SetWhich( aItemIds.nLanguageCJK );
-            rItemSet.Put( aLang );
-            aLang.SetWhich( aItemIds.nLanguageCTL );
-            rItemSet.Put( aLang );
-        }
+        SvxLanguageItem aLang( eLang, aItemIds.nLanguage );
+        rItemSet.Put( aLang );
+        aLang.SetWhich( aItemIds.nLanguageCJK );
+        rItemSet.Put( aLang );
+        aLang.SetWhich( aItemIds.nLanguageCTL );
+        rItemSet.Put( aLang );
     }
 }
 

@@ -1152,26 +1152,26 @@ void SwHTMLWriter::PrepareFontList( const SvxFontItem& rFontItem,
         }
     }
 
-    if( !bContainsKeyword && bGeneric )
-    {
-        const char *pStr = nullptr;
-        switch( rFontItem.GetFamily() )
-        {
-        case FAMILY_ROMAN:      pStr = sCSS1_PV_serif;      break;
-        case FAMILY_SWISS:      pStr = sCSS1_PV_sans_serif; break;
-        case FAMILY_SCRIPT:     pStr = sCSS1_PV_cursive;    break;
-        case FAMILY_DECORATIVE: pStr = sCSS1_PV_fantasy;    break;
-        case FAMILY_MODERN:     pStr = sCSS1_PV_monospace;  break;
-        default:
-            ;
-        }
+    if( !(!bContainsKeyword && bGeneric) )
+        return;
 
-        if( pStr )
-        {
-            if( !rNames.isEmpty() )
-                rNames += ", ";
-            rNames += OStringToOUString( pStr, RTL_TEXTENCODING_ASCII_US );
-        }
+    const char *pStr = nullptr;
+    switch( rFontItem.GetFamily() )
+    {
+    case FAMILY_ROMAN:      pStr = sCSS1_PV_serif;      break;
+    case FAMILY_SWISS:      pStr = sCSS1_PV_sans_serif; break;
+    case FAMILY_SCRIPT:     pStr = sCSS1_PV_cursive;    break;
+    case FAMILY_DECORATIVE: pStr = sCSS1_PV_fantasy;    break;
+    case FAMILY_MODERN:     pStr = sCSS1_PV_monospace;  break;
+    default:
+        ;
+    }
+
+    if( pStr )
+    {
+        if( !rNames.isEmpty() )
+            rNames += ", ";
+        rNames += OStringToOUString( pStr, RTL_TEXTENCODING_ASCII_US );
     }
 }
 
@@ -2221,25 +2221,25 @@ void SwHTMLWriter::OutCSS1_FrameFormatBackground( const SwFrameFormat& rFrameFor
     // At last there is the background of the page, and as the final rescue
     // the value of the Config.
     OSL_ENSURE( m_pCurrPageDesc, "no page template found" );
-    if( !OutCSS1_FrameFormatBrush( *this,
+    if( OutCSS1_FrameFormatBrush( *this,
                               *m_pCurrPageDesc->GetMaster().makeBackgroundBrushItem() ) )
+        return;
+
+    Color aColor( COL_WHITE );
+
+    // The background color is normally only used in Browse-Mode.
+    // We always use it for a HTML document, but for a text document
+    // only if viewed in Browse-Mode.
+    if( m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) ||
+        m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE))
     {
-        Color aColor( COL_WHITE );
-
-        // The background color is normally only used in Browse-Mode.
-        // We always use it for a HTML document, but for a text document
-        // only if viewed in Browse-Mode.
-        if( m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) ||
-            m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE))
-        {
-            SwViewShell *pVSh = m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
-            if ( pVSh &&
-                 COL_TRANSPARENT != pVSh->GetViewOptions()->GetRetoucheColor())
-                aColor = pVSh->GetViewOptions()->GetRetoucheColor();
-        }
-
-        OutCSS1_PropertyAscii(sCSS1_P_background, GetCSS1_Color(aColor));
+        SwViewShell *pVSh = m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
+        if ( pVSh &&
+             COL_TRANSPARENT != pVSh->GetViewOptions()->GetRetoucheColor())
+            aColor = pVSh->GetViewOptions()->GetRetoucheColor();
     }
+
+    OutCSS1_PropertyAscii(sCSS1_P_background, GetCSS1_Color(aColor));
 }
 
 static Writer& OutCSS1_SvxTextLn_SvxCrOut_SvxBlink( Writer& rWrt,
@@ -3664,28 +3664,28 @@ void SwHTMLWriter::OutCSS1_SfxItemSet( const SfxItemSet& rItemSet,
         OutCSS1_SvxFormatBreak_SwFormatPDesc_SvxFormatKeep( *this, rItemSet, bDeep );
     }
 
-    if( !m_bFirstCSS1Property )
+    if( m_bFirstCSS1Property )
+        return;
+
+    // if a Property was exported as part of a Style-Option,
+    // the Option still needs to be finished
+    OStringBuffer sOut;
+    switch( m_nCSS1OutMode & CSS1_OUTMODE_ANY_OFF )
     {
-        // if a Property was exported as part of a Style-Option,
-        // the Option still needs to be finished
-        OStringBuffer sOut;
-        switch( m_nCSS1OutMode & CSS1_OUTMODE_ANY_OFF )
-        {
-        case CSS1_OUTMODE_SPAN_TAG_OFF:
-            sOut.append(sCSS1_span_tag_end);
-            break;
+    case CSS1_OUTMODE_SPAN_TAG_OFF:
+        sOut.append(sCSS1_span_tag_end);
+        break;
 
-        case CSS1_OUTMODE_STYLE_OPT_OFF:
-            sOut.append(cCSS1_style_opt_end);
-            break;
+    case CSS1_OUTMODE_STYLE_OPT_OFF:
+        sOut.append(cCSS1_style_opt_end);
+        break;
 
-        case CSS1_OUTMODE_RULE_OFF:
-            sOut.append(sCSS1_rule_end);
-            break;
-        }
-        if (!sOut.isEmpty())
-            Strm().WriteOString( sOut.makeStringAndClear() );
+    case CSS1_OUTMODE_RULE_OFF:
+        sOut.append(sCSS1_rule_end);
+        break;
     }
+    if (!sOut.isEmpty())
+        Strm().WriteOString( sOut.makeStringAndClear() );
 }
 
 Writer& OutCSS1_HintSpanTag( Writer& rWrt, const SfxPoolItem& rHt )

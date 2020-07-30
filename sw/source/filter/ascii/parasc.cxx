@@ -115,19 +115,19 @@ SwASCIIParser::SwASCIIParser(SwDoc* pD, const SwPaM& rCursor, SvStream& rIn,
         aLang.SetWhich(RES_CHRATR_CTL_LANGUAGE);
         pItemSet->Put( aLang );
     }
-    if( !rOpt.GetFontName().isEmpty() )
-    {
-        vcl::Font aTextFont( rOpt.GetFontName(), Size( 0, 10 ) );
-        if( pDoc->getIDocumentDeviceAccess().getPrinter( false ) )
-            aTextFont = pDoc->getIDocumentDeviceAccess().getPrinter( false )->GetFontMetric( aTextFont );
-        SvxFontItem aFont( aTextFont.GetFamilyType(), aTextFont.GetFamilyName(),
-                           OUString(), aTextFont.GetPitch(), aTextFont.GetCharSet(), RES_CHRATR_FONT );
-        pItemSet->Put( aFont );
-        aFont.SetWhich(RES_CHRATR_CJK_FONT);
-        pItemSet->Put( aFont );
-        aFont.SetWhich(RES_CHRATR_CTL_FONT);
-        pItemSet->Put( aFont );
-    }
+    if( rOpt.GetFontName().isEmpty() )
+        return;
+
+    vcl::Font aTextFont( rOpt.GetFontName(), Size( 0, 10 ) );
+    if( pDoc->getIDocumentDeviceAccess().getPrinter( false ) )
+        aTextFont = pDoc->getIDocumentDeviceAccess().getPrinter( false )->GetFontMetric( aTextFont );
+    SvxFontItem aFont( aTextFont.GetFamilyType(), aTextFont.GetFamilyName(),
+                       OUString(), aTextFont.GetPitch(), aTextFont.GetCharSet(), RES_CHRATR_FONT );
+    pItemSet->Put( aFont );
+    aFont.SetWhich(RES_CHRATR_CJK_FONT);
+    pItemSet->Put( aFont );
+    aFont.SetWhich(RES_CHRATR_CTL_FONT);
+    pItemSet->Put( aFont );
 }
 
 // Calling the parser

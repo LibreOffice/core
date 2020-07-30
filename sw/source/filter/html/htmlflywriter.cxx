@@ -995,66 +995,66 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
     // Insert wrap for graphics that are anchored to a paragraph as
     // <BR CLEAR=...> in the string
 
-    if( (nFrameOptions & HtmlFrmOpts::BrClear) &&
+    if( !((nFrameOptions & HtmlFrmOpts::BrClear) &&
         ((RndStdIds::FLY_AT_PARA == rFrameFormat.GetAnchor().GetAnchorId()) ||
          (RndStdIds::FLY_AT_CHAR == rFrameFormat.GetAnchor().GetAnchorId())) &&
-        SfxItemState::SET == rItemSet.GetItemState( RES_SURROUND, true, &pItem ))
+        SfxItemState::SET == rItemSet.GetItemState( RES_SURROUND, true, &pItem )))
+        return;
+
+    const char* pSurroundString = nullptr;
+
+    const SwFormatSurround* pSurround = static_cast<const SwFormatSurround*>(pItem);
+    sal_Int16 eHoriOri = rFrameFormat.GetHoriOrient().GetHoriOrient();
+    css::text::WrapTextMode eSurround = pSurround->GetSurround();
+    bool bAnchorOnly = pSurround->IsAnchorOnly();
+    switch( eHoriOri )
     {
-        const char* pSurroundString = nullptr;
-
-        const SwFormatSurround* pSurround = static_cast<const SwFormatSurround*>(pItem);
-        sal_Int16 eHoriOri = rFrameFormat.GetHoriOrient().GetHoriOrient();
-        css::text::WrapTextMode eSurround = pSurround->GetSurround();
-        bool bAnchorOnly = pSurround->IsAnchorOnly();
-        switch( eHoriOri )
+        case text::HoriOrientation::RIGHT:
         {
-            case text::HoriOrientation::RIGHT:
+            switch( eSurround )
             {
-                switch( eSurround )
-                {
-                case css::text::WrapTextMode_NONE:
-                case css::text::WrapTextMode_RIGHT:
-                    pSurroundString = OOO_STRING_SVTOOLS_HTML_AL_right;
-                    break;
-                case css::text::WrapTextMode_LEFT:
-                case css::text::WrapTextMode_PARALLEL:
-                    if( bAnchorOnly )
-                        m_bClearRight = true;
-                    break;
-                default:
-                    ;
-                }
-            }
-            break;
-
+            case css::text::WrapTextMode_NONE:
+            case css::text::WrapTextMode_RIGHT:
+                pSurroundString = OOO_STRING_SVTOOLS_HTML_AL_right;
+                break;
+            case css::text::WrapTextMode_LEFT:
+            case css::text::WrapTextMode_PARALLEL:
+                if( bAnchorOnly )
+                    m_bClearRight = true;
+                break;
             default:
-            // If a frame is centered, it gets left aligned. This
-            // should be taken into account here, too.
-            {
-                switch( eSurround )
-                {
-                case css::text::WrapTextMode_NONE:
-                case css::text::WrapTextMode_LEFT:
-                    pSurroundString = OOO_STRING_SVTOOLS_HTML_AL_left;
-                    break;
-                case css::text::WrapTextMode_RIGHT:
-                case css::text::WrapTextMode_PARALLEL:
-                    if( bAnchorOnly )
-                        m_bClearLeft = true;
-                    break;
-                default:
-                    break;
-                }
+                ;
             }
-            break;
         }
+        break;
 
-        if (pSurroundString)
+        default:
+        // If a frame is centered, it gets left aligned. This
+        // should be taken into account here, too.
         {
-            aHtml.start(OOO_STRING_SVTOOLS_HTML_linebreak);
-            aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_clear, pSurroundString);
-            aHtml.end();
+            switch( eSurround )
+            {
+            case css::text::WrapTextMode_NONE:
+            case css::text::WrapTextMode_LEFT:
+                pSurroundString = OOO_STRING_SVTOOLS_HTML_AL_left;
+                break;
+            case css::text::WrapTextMode_RIGHT:
+            case css::text::WrapTextMode_PARALLEL:
+                if( bAnchorOnly )
+                    m_bClearLeft = true;
+                break;
+            default:
+                break;
+            }
         }
+        break;
+    }
+
+    if (pSurroundString)
+    {
+        aHtml.start(OOO_STRING_SVTOOLS_HTML_linebreak);
+        aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_clear, pSurroundString);
+        aHtml.end();
     }
 }
 

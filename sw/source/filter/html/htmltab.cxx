@@ -2450,26 +2450,26 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
 
     const_cast<SwTable *>(m_pSwTable)->SetHTMLTableLayout(m_xLayoutInfo);
 
-    if( m_pResizeDrawObjects )
+    if( !m_pResizeDrawObjects )
+        return;
+
+    sal_uInt16 nCount = m_pResizeDrawObjects->size();
+    for( sal_uInt16 i=0; i<nCount; i++ )
     {
-        sal_uInt16 nCount = m_pResizeDrawObjects->size();
-        for( sal_uInt16 i=0; i<nCount; i++ )
-        {
-            SdrObject *pObj = (*m_pResizeDrawObjects)[i];
-            sal_uInt16 nRow = (*m_pDrawObjectPercentWidths)[3*i];
-            sal_uInt16 nCol = (*m_pDrawObjectPercentWidths)[3*i+1];
-            sal_uInt8 nPercentWidth = static_cast<sal_uInt8>((*m_pDrawObjectPercentWidths)[3*i+2]);
+        SdrObject *pObj = (*m_pResizeDrawObjects)[i];
+        sal_uInt16 nRow = (*m_pDrawObjectPercentWidths)[3*i];
+        sal_uInt16 nCol = (*m_pDrawObjectPercentWidths)[3*i+1];
+        sal_uInt8 nPercentWidth = static_cast<sal_uInt8>((*m_pDrawObjectPercentWidths)[3*i+2]);
 
-            SwHTMLTableLayoutCell *pLayoutCell =
-                m_xLayoutInfo->GetCell( nRow, nCol );
-            sal_uInt16 nColSpan = pLayoutCell->GetColSpan();
+        SwHTMLTableLayoutCell *pLayoutCell =
+            m_xLayoutInfo->GetCell( nRow, nCol );
+        sal_uInt16 nColSpan = pLayoutCell->GetColSpan();
 
-            sal_uInt16 nWidth2, nDummy;
-            m_xLayoutInfo->GetAvail( nCol, nColSpan, nWidth2, nDummy );
-            nWidth2 = static_cast< sal_uInt16 >((static_cast<long>(m_nWidth) * nPercentWidth) / 100);
+        sal_uInt16 nWidth2, nDummy;
+        m_xLayoutInfo->GetAvail( nCol, nColSpan, nWidth2, nDummy );
+        nWidth2 = static_cast< sal_uInt16 >((static_cast<long>(m_nWidth) * nPercentWidth) / 100);
 
-            SwHTMLParser::ResizeDrawObject( pObj, nWidth2 );
-        }
+        SwHTMLParser::ResizeDrawObject( pObj, nWidth2 );
     }
 
 }
@@ -3108,33 +3108,33 @@ void CellSaveStruct::EndNoBreak( const SwPosition& rPos )
 
 void CellSaveStruct::CheckNoBreak( const SwPosition& rPos )
 {
-    if (m_xCnts && m_pCurrCnts == m_xCnts.get())
+    if (!(m_xCnts && m_pCurrCnts == m_xCnts.get()))
+        return;
+
+    if( m_bNoBreak )
     {
-        if( m_bNoBreak )
+        // <NOBR> wasn't closed
+        m_xCnts->SetNoBreak();
+    }
+    else if( m_pNoBreakEndNodeIndex &&
+             m_pNoBreakEndNodeIndex->GetIndex() == rPos.nNode.GetIndex() )
+    {
+        if( m_nNoBreakEndContentPos == rPos.nContent.GetIndex() )
         {
-            // <NOBR> wasn't closed
+            // <NOBR> was closed immediately before the cell end
             m_xCnts->SetNoBreak();
         }
-        else if( m_pNoBreakEndNodeIndex &&
-                 m_pNoBreakEndNodeIndex->GetIndex() == rPos.nNode.GetIndex() )
+        else if( m_nNoBreakEndContentPos + 1 == rPos.nContent.GetIndex() )
         {
-            if( m_nNoBreakEndContentPos == rPos.nContent.GetIndex() )
+            SwTextNode const*const pTextNd(rPos.nNode.GetNode().GetTextNode());
+            if( pTextNd )
             {
-                // <NOBR> was closed immediately before the cell end
-                m_xCnts->SetNoBreak();
-            }
-            else if( m_nNoBreakEndContentPos + 1 == rPos.nContent.GetIndex() )
-            {
-                SwTextNode const*const pTextNd(rPos.nNode.GetNode().GetTextNode());
-                if( pTextNd )
+                sal_Unicode const cLast =
+                        pTextNd->GetText()[m_nNoBreakEndContentPos];
+                if( ' '==cLast || '\x0a'==cLast )
                 {
-                    sal_Unicode const cLast =
-                            pTextNd->GetText()[m_nNoBreakEndContentPos];
-                    if( ' '==cLast || '\x0a'==cLast )
-                    {
-                        // There's just a blank or a newline between the <NOBR> and the cell end
-                        m_xCnts->SetNoBreak();
-                    }
+                    // There's just a blank or a newline between the <NOBR> and the cell end
+                    m_xCnts->SetNoBreak();
                 }
             }
         }
