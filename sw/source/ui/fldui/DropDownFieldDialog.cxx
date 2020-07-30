@@ -83,23 +83,23 @@ sw::DropDownFieldDialog::~DropDownFieldDialog()
 
 void sw::DropDownFieldDialog::Apply()
 {
-    if (m_pDropField)
-    {
-        OUString sSelect = m_xListItemsLB->get_selected_text();
-        if (m_pDropField->GetPar1() != sSelect)
-        {
-            m_rSh.StartAllAction();
+    if (!m_pDropField)
+        return;
 
-            std::unique_ptr<SwDropDownField> const pCopy(
-                static_cast<SwDropDownField*>(m_pDropField->CopyField().release()));
+    OUString sSelect = m_xListItemsLB->get_selected_text();
+    if (m_pDropField->GetPar1() == sSelect)
+        return;
 
-            pCopy->SetPar1(sSelect);
-            m_rSh.SwEditShell::UpdateOneField(*pCopy);
+    m_rSh.StartAllAction();
 
-            m_rSh.SetUndoNoResetModified();
-            m_rSh.EndAllAction();
-        }
-    }
+    std::unique_ptr<SwDropDownField> const pCopy(
+        static_cast<SwDropDownField*>(m_pDropField->CopyField().release()));
+
+    pCopy->SetPar1(sSelect);
+    m_rSh.SwEditShell::UpdateOneField(*pCopy);
+
+    m_rSh.SetUndoNoResetModified();
+    m_rSh.EndAllAction();
 }
 
 bool sw::DropDownFieldDialog::PrevButtonPressed() const

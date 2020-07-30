@@ -653,33 +653,33 @@ IMPL_LINK(SwAddStylesDlg_Impl, LeftRightHdl, weld::Button&, rBtn, void)
 {
     bool bLeft = &rBtn == m_xLeftPB.get();
     int nEntry = m_xHeaderTree->get_selected_index();
-    if (nEntry != -1)
+    if (nEntry == -1)
+        return;
+
+    int nToggleColumn = 0;
+    for (sal_uInt16 j = 0; j <= MAXLEVEL; ++j)
     {
-        int nToggleColumn = 0;
-        for (sal_uInt16 j = 0; j <= MAXLEVEL; ++j)
+        if (m_xHeaderTree->get_toggle(nEntry, j + 1) == TRISTATE_TRUE)
         {
-            if (m_xHeaderTree->get_toggle(nEntry, j + 1) == TRISTATE_TRUE)
-            {
-                nToggleColumn = j;
-                break;
-            }
+            nToggleColumn = j;
+            break;
         }
+    }
 
-        if (bLeft)
-        {
-            if (nToggleColumn)
-                --nToggleColumn;
-        }
-        else
-        {
-            if (nToggleColumn < MAXLEVEL)
-                ++nToggleColumn;
-        }
+    if (bLeft)
+    {
+        if (nToggleColumn)
+            --nToggleColumn;
+    }
+    else
+    {
+        if (nToggleColumn < MAXLEVEL)
+            ++nToggleColumn;
+    }
 
-        for (sal_uInt16 j = 0; j <= MAXLEVEL; ++j)
-        {
-            m_xHeaderTree->set_toggle(nEntry, j == nToggleColumn ? TRISTATE_TRUE : TRISTATE_FALSE, j + 1);
-        }
+    for (sal_uInt16 j = 0; j <= MAXLEVEL; ++j)
+    {
+        m_xHeaderTree->set_toggle(nEntry, j == nToggleColumn ? TRISTATE_TRUE : TRISTATE_FALSE, j + 1);
     }
 }
 
@@ -800,18 +800,18 @@ SwTOXSelectTabPage::~SwTOXSelectTabPage()
 void SwTOXSelectTabPage::SetWrtShell(SwWrtShell const & rSh)
 {
     const sal_uInt16 nUserTypeCount = rSh.GetTOXTypeCount(TOX_USER);
-    if(nUserTypeCount > 1)
+    if(nUserTypeCount <= 1)
+        return;
+
+    //insert all new user indexes names after the standard user index
+    sal_Int32 nPos = m_xTypeLB->find_id(OUString::number(sal_uInt32(TO_USER))) + 1;
+    for (sal_uInt16 nUser = 1; nUser < nUserTypeCount; nUser++)
     {
-        //insert all new user indexes names after the standard user index
-        sal_Int32 nPos = m_xTypeLB->find_id(OUString::number(sal_uInt32(TO_USER))) + 1;
-        for (sal_uInt16 nUser = 1; nUser < nUserTypeCount; nUser++)
-        {
-            sal_uInt32 nEntryData = nUser << 8;
-            nEntryData |= TO_USER;
-            OUString sId(OUString::number(nEntryData));
-            m_xTypeLB->insert(nPos++, rSh.GetTOXType(TOX_USER, nUser)->GetTypeName(),
-                              &sId, nullptr, nullptr);
-        }
+        sal_uInt32 nEntryData = nUser << 8;
+        nEntryData |= TO_USER;
+        OUString sId(OUString::number(nEntryData));
+        m_xTypeLB->insert(nPos++, rSh.GetTOXType(TOX_USER, nUser)->GetTypeName(),
+                          &sId, nullptr, nullptr);
     }
 }
 
@@ -2662,23 +2662,23 @@ void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
 
 void SwTokenWindow::SetActiveControl(SwTOXWidget* pSet)
 {
-    if (pSet != m_pActiveCtrl)
-    {
-        m_pActiveCtrl = pSet;
-        if( m_pActiveCtrl )
-        {
-            m_pActiveCtrl->GrabFocus();
-            //it must be a SwTOXEdit
-            const SwFormToken* pFToken;
-            if( WindowType::EDIT == m_pActiveCtrl->GetType() )
-                pFToken = &static_cast<SwTOXEdit*>(m_pActiveCtrl)->GetFormToken();
-            else
-                pFToken = &static_cast<SwTOXButton*>(m_pActiveCtrl)->GetFormToken();
+    if (pSet == m_pActiveCtrl)
+        return;
 
-            SwFormToken aTemp( *pFToken );
-            m_aButtonSelectedHdl.Call( aTemp );
-        }
-    }
+    m_pActiveCtrl = pSet;
+    if( !m_pActiveCtrl )
+        return;
+
+    m_pActiveCtrl->GrabFocus();
+    //it must be a SwTOXEdit
+    const SwFormToken* pFToken;
+    if( WindowType::EDIT == m_pActiveCtrl->GetType() )
+        pFToken = &static_cast<SwTOXEdit*>(m_pActiveCtrl)->GetFormToken();
+    else
+        pFToken = &static_cast<SwTOXButton*>(m_pActiveCtrl)->GetFormToken();
+
+    SwFormToken aTemp( *pFToken );
+    m_aButtonSelectedHdl.Call( aTemp );
 }
 
 SwTOXWidget* SwTokenWindow::InsertItem(const OUString& rText, const SwFormToken& rToken)
@@ -3012,37 +3012,37 @@ IMPL_LINK_NOARG(SwTokenWindow, ScrollHdl, weld::ScrolledWindow&, void)
 
 void SwTokenWindow::AdjustScrolling()
 {
-    if (m_aControlList.size() > 1)
+    if (m_aControlList.size() <= 1)
+        return;
+
+    //validate scroll buttons
+
+    auto nLeft = m_xScrollWin->hadjustment_get_value();
+    auto nSpace = m_xScrollWin->hadjustment_get_page_size();
+    auto nWidth = m_xScrollWin->hadjustment_get_upper();
+
+    bool bEnable = nWidth > nSpace;
+
+    //the active control must be visible
+    if (bEnable && m_pActiveCtrl)
     {
-        //validate scroll buttons
+        int x, y, width, height;
+        m_pActiveCtrl->get_extents_relative_to(*m_xCtrlParentWin, x, y, width, height);
 
-        auto nLeft = m_xScrollWin->hadjustment_get_value();
-        auto nSpace = m_xScrollWin->hadjustment_get_page_size();
-        auto nWidth = m_xScrollWin->hadjustment_get_upper();
-
-        bool bEnable = nWidth > nSpace;
-
-        //the active control must be visible
-        if (bEnable && m_pActiveCtrl)
+        if (x < nLeft || x + width > nLeft + nSpace)
         {
-            int x, y, width, height;
-            m_pActiveCtrl->get_extents_relative_to(*m_xCtrlParentWin, x, y, width, height);
-
-            if (x < nLeft || x + width > nLeft + nSpace)
-            {
-                MoveControls(x);
-                nLeft = x;
-            }
-
-            m_xLeftScrollWin->set_sensitive(nLeft > 0);
-            m_xRightScrollWin->set_sensitive(nLeft + nSpace < nWidth);
+            MoveControls(x);
+            nLeft = x;
         }
-        else
-        {
-            //if the control fits into the space then the first control must be at position 0
-            m_xRightScrollWin->set_sensitive(false);
-            m_xLeftScrollWin->set_sensitive(false);
-        }
+
+        m_xLeftScrollWin->set_sensitive(nLeft > 0);
+        m_xRightScrollWin->set_sensitive(nLeft + nSpace < nWidth);
+    }
+    else
+    {
+        //if the control fits into the space then the first control must be at position 0
+        m_xRightScrollWin->set_sensitive(false);
+        m_xLeftScrollWin->set_sensitive(false);
     }
 }
 
@@ -3254,31 +3254,31 @@ IMPL_LINK(SwTokenWindow, NextItemBtnHdl, SwTOXButton&, rBtn, void )
     auto itTest = it;
     ++itTest;
 
-    if (!rBtn.IsNextControl() || (itTest != m_aControlList.end() && rBtn.IsNextControl()))
+    if (!(!rBtn.IsNextControl() || (itTest != m_aControlList.end() && rBtn.IsNextControl())))
+        return;
+
+    bool isNext = rBtn.IsNextControl();
+
+    auto iterFocus = it;
+    isNext ? ++iterFocus : --iterFocus;
+
+    SwTOXWidget* pCtrlFocus = iterFocus->get();
+    pCtrlFocus->GrabFocus();
+    int nStartPos(0), nEndPos(0);
+
+    if (!isNext)
     {
-        bool isNext = rBtn.IsNextControl();
+        const sal_Int32 nLen = static_cast<SwTOXEdit*>(pCtrlFocus)->GetText().getLength();
 
-        auto iterFocus = it;
-        isNext ? ++iterFocus : --iterFocus;
-
-        SwTOXWidget* pCtrlFocus = iterFocus->get();
-        pCtrlFocus->GrabFocus();
-        int nStartPos(0), nEndPos(0);
-
-        if (!isNext)
-        {
-            const sal_Int32 nLen = static_cast<SwTOXEdit*>(pCtrlFocus)->GetText().getLength();
-
-            nStartPos = nLen;
-            nEndPos = nLen;
-        }
-
-        static_cast<SwTOXEdit*>(pCtrlFocus)->select_region(nStartPos, nEndPos);
-
-        rBtn.Check(false);
-
-        AdjustScrolling();
+        nStartPos = nLen;
+        nEndPos = nLen;
     }
+
+    static_cast<SwTOXEdit*>(pCtrlFocus)->select_region(nStartPos, nEndPos);
+
+    rBtn.Check(false);
+
+    AdjustScrolling();
 }
 
 IMPL_LINK(SwTokenWindow, TbxFocusBtnHdl, SwTOXWidget&, rControl, void)
@@ -3465,20 +3465,20 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, AssignHdl, weld::Button&, void)
 {
     auto nLevPos = m_xLevelLB->get_selected_index();
     auto nTemplPos = m_xParaLayLB->get_selected_index();
-    if (nLevPos != -1 && nTemplPos != -1)
-    {
-        const OUString aStr(m_xLevelLB->get_text(nLevPos).getToken(0, aDeliStart)
-            + OUStringChar(aDeliStart)
-            + m_xParaLayLB->get_selected_text()
-            + OUStringChar(aDeliEnd));
+    if (nLevPos == -1 || nTemplPos == -1)
+        return;
 
-        m_pCurrentForm->SetTemplate(nLevPos, m_xParaLayLB->get_selected_text());
+    const OUString aStr(m_xLevelLB->get_text(nLevPos).getToken(0, aDeliStart)
+        + OUStringChar(aDeliStart)
+        + m_xParaLayLB->get_selected_text()
+        + OUStringChar(aDeliEnd));
 
-        m_xLevelLB->remove(nLevPos);
-        m_xLevelLB->insert_text(nLevPos, aStr);
-        m_xLevelLB->select_text(aStr);
-        Modify();
-    }
+    m_pCurrentForm->SetTemplate(nLevPos, m_xParaLayLB->get_selected_text());
+
+    m_xLevelLB->remove(nLevPos);
+    m_xLevelLB->insert_text(nLevPos, aStr);
+    m_xLevelLB->select_text(aStr);
+    Modify();
 }
 
 IMPL_LINK_NOARG(SwTOXStylesTabPage, StdHdl, weld::Button&, void)

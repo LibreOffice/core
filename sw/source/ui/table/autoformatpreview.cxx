@@ -345,18 +345,18 @@ void AutoFormatPreview::PaintCells(vcl::RenderContext& rRenderContext)
             DrawString(rRenderContext, nCol, nRow);
 
     // 3) border
-    if (maCurrentData.IsFrame())
-    {
-        const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D;
-        std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(
-            drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(
-                rRenderContext, aNewViewInformation2D));
+    if (!maCurrentData.IsFrame())
+        return;
 
-        if (pProcessor2D)
-        {
-            pProcessor2D->process(maArray.CreateB2DPrimitiveArray());
-            pProcessor2D.reset();
-        }
+    const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D;
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(
+        drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(rRenderContext,
+                                                                          aNewViewInformation2D));
+
+    if (pProcessor2D)
+    {
+        pProcessor2D->process(maArray.CreateB2DPrimitiveArray());
+        pProcessor2D.reset();
     }
 }
 

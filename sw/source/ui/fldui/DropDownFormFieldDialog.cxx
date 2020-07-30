@@ -129,30 +129,30 @@ void DropDownFormFieldDialog::InitControls()
 
 void DropDownFormFieldDialog::AppendItemToList()
 {
-    if (m_xListAddButton->get_sensitive())
+    if (!m_xListAddButton->get_sensitive())
+        return;
+
+    if (m_xListItemsTreeView->n_children() >= ODF_FORMDROPDOWN_ENTRY_COUNT_LIMIT)
     {
-        if (m_xListItemsTreeView->n_children() >= ODF_FORMDROPDOWN_ENTRY_COUNT_LIMIT)
-        {
-            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(
-                m_xDialog.get(), VclMessageType::Info, VclButtonsType::Ok,
-                SwResId(STR_DROP_DOWN_FIELD_ITEM_LIMIT)));
-            xInfoBox->run();
-            return;
-        }
-
-        const OUString sEntry(m_xListItemEntry->get_text());
-        if (!sEntry.isEmpty())
-        {
-            m_xListItemsTreeView->append_text(sEntry);
-            m_xListItemsTreeView->select_text(sEntry);
-            m_bListHasChanged = true;
-
-            // Clear entry
-            m_xListItemEntry->set_text(OUString());
-            m_xListItemEntry->grab_focus();
-        }
-        UpdateButtons();
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(
+            m_xDialog.get(), VclMessageType::Info, VclButtonsType::Ok,
+            SwResId(STR_DROP_DOWN_FIELD_ITEM_LIMIT)));
+        xInfoBox->run();
+        return;
     }
+
+    const OUString sEntry(m_xListItemEntry->get_text());
+    if (!sEntry.isEmpty())
+    {
+        m_xListItemsTreeView->append_text(sEntry);
+        m_xListItemsTreeView->select_text(sEntry);
+        m_bListHasChanged = true;
+
+        // Clear entry
+        m_xListItemEntry->set_text(OUString());
+        m_xListItemEntry->grab_focus();
+    }
+    UpdateButtons();
 }
 
 void DropDownFormFieldDialog::UpdateButtons()
@@ -170,28 +170,28 @@ void DropDownFormFieldDialog::UpdateButtons()
 
 void DropDownFormFieldDialog::Apply()
 {
-    if (m_pDropDownField != nullptr && m_bListHasChanged)
+    if (!(m_pDropDownField != nullptr && m_bListHasChanged))
+        return;
+
+    mark::IFieldmark::parameter_map_t* pParameters = m_pDropDownField->GetParameters();
+
+    css::uno::Sequence<OUString> vListEntries(m_xListItemsTreeView->n_children());
+    for (int nIndex = 0; nIndex < m_xListItemsTreeView->n_children(); ++nIndex)
     {
-        mark::IFieldmark::parameter_map_t* pParameters = m_pDropDownField->GetParameters();
-
-        css::uno::Sequence<OUString> vListEntries(m_xListItemsTreeView->n_children());
-        for (int nIndex = 0; nIndex < m_xListItemsTreeView->n_children(); ++nIndex)
-        {
-            vListEntries[nIndex] = m_xListItemsTreeView->get_text(nIndex);
-        }
-
-        if (m_xListItemsTreeView->n_children() != 0)
-        {
-            (*pParameters)[ODF_FORMDROPDOWN_LISTENTRY] <<= vListEntries;
-        }
-        else
-        {
-            pParameters->erase(ODF_FORMDROPDOWN_LISTENTRY);
-        }
-
-        // After editing the drop down field's list we don't specify the selected item
-        pParameters->erase(ODF_FORMDROPDOWN_RESULT);
+        vListEntries[nIndex] = m_xListItemsTreeView->get_text(nIndex);
     }
+
+    if (m_xListItemsTreeView->n_children() != 0)
+    {
+        (*pParameters)[ODF_FORMDROPDOWN_LISTENTRY] <<= vListEntries;
+    }
+    else
+    {
+        pParameters->erase(ODF_FORMDROPDOWN_LISTENTRY);
+    }
+
+    // After editing the drop down field's list we don't specify the selected item
+    pParameters->erase(ODF_FORMDROPDOWN_RESULT);
 }
 
 } // namespace sw

@@ -497,20 +497,20 @@ IMPL_LINK_NOARG(SwFieldDokPage, FormatHdl, weld::TreeView&, void)
         nTypeId = static_cast<SwFieldTypesEnum>(m_xSelectionLB->get_id(nPos).toUInt32());
     }
 
-    if (nTypeId == SwFieldTypesEnum::NextPage || nTypeId == SwFieldTypesEnum::PreviousPage)
-    {
-        // Prev/Next - PageNumFields special treatment:
-        sal_uInt16 nTmp = m_xFormatLB->get_selected_id().toUInt32();
-        const OUString sOldText( m_xValueFT->get_label() );
-        const OUString sNewText( SwResId( SVX_NUM_CHAR_SPECIAL == nTmp  ? STR_VALUE
-                                                         : STR_OFFSET ));
+    if (nTypeId != SwFieldTypesEnum::NextPage && nTypeId != SwFieldTypesEnum::PreviousPage)
+        return;
 
-        if (sOldText != sNewText)
-            m_xValueFT->set_label(sNewText);
+    // Prev/Next - PageNumFields special treatment:
+    sal_uInt16 nTmp = m_xFormatLB->get_selected_id().toUInt32();
+    const OUString sOldText( m_xValueFT->get_label() );
+    const OUString sNewText( SwResId( SVX_NUM_CHAR_SPECIAL == nTmp  ? STR_VALUE
+                                                     : STR_OFFSET ));
 
-        if (sOldText != m_xValueFT->get_label())
-            m_xValueED->set_text(OUString());
-    }
+    if (sOldText != sNewText)
+        m_xValueFT->set_label(sNewText);
+
+    if (sOldText != m_xValueFT->get_label())
+        m_xValueED->set_text(OUString());
 }
 
 bool SwFieldDokPage::FillItemSet(SfxItemSet* )

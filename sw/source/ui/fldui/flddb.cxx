@@ -437,41 +437,41 @@ void SwFieldDBPage::CheckInsert()
 IMPL_LINK(SwFieldDBPage, TreeSelectHdl, weld::TreeView&, rBox, void)
 {
     std::unique_ptr<weld::TreeIter> xIter(rBox.make_iterator());
-    if (rBox.get_selected(xIter.get()))
+    if (!rBox.get_selected(xIter.get()))
+        return;
+
+    const SwFieldTypesEnum nTypeId = static_cast<SwFieldTypesEnum>(m_xTypeLB->get_id(GetTypeSel()).toUInt32());
+
+    bool bEntry = m_xDatabaseTLB->iter_parent(*xIter);
+
+    if (nTypeId == SwFieldTypesEnum::Database && bEntry)
+        bEntry = m_xDatabaseTLB->iter_parent(*xIter);
+
+    CheckInsert();
+
+    if (nTypeId != SwFieldTypesEnum::Database)
+        return;
+
+    bool bNumFormat = false;
+
+    if (bEntry)
     {
-        const SwFieldTypesEnum nTypeId = static_cast<SwFieldTypesEnum>(m_xTypeLB->get_id(GetTypeSel()).toUInt32());
-
-        bool bEntry = m_xDatabaseTLB->iter_parent(*xIter);
-
-        if (nTypeId == SwFieldTypesEnum::Database && bEntry)
-            bEntry = m_xDatabaseTLB->iter_parent(*xIter);
-
-        CheckInsert();
-
-        if (nTypeId == SwFieldTypesEnum::Database)
-        {
-            bool bNumFormat = false;
-
-            if (bEntry)
-            {
-                OUString sTableName;
-                OUString sColumnName;
-                sal_Bool bIsTable;
-                OUString sDBName = m_xDatabaseTLB->GetDBName(sTableName, sColumnName, &bIsTable);
-                bNumFormat = GetFieldMgr().IsDBNumeric(sDBName,
-                            sTableName,
-                            bIsTable,
-                            sColumnName);
-                if (!IsFieldEdit())
-                    m_xDBFormatRB->set_active(true);
-            }
-
-            m_xDBFormatRB->set_sensitive(bNumFormat);
-            m_xNewFormatRB->set_sensitive(bNumFormat);
-            m_xNumFormatLB->set_sensitive(bNumFormat);
-            m_xFormat->set_sensitive(bNumFormat);
-        }
+        OUString sTableName;
+        OUString sColumnName;
+        sal_Bool bIsTable;
+        OUString sDBName = m_xDatabaseTLB->GetDBName(sTableName, sColumnName, &bIsTable);
+        bNumFormat = GetFieldMgr().IsDBNumeric(sDBName,
+                    sTableName,
+                    bIsTable,
+                    sColumnName);
+        if (!IsFieldEdit())
+            m_xDBFormatRB->set_active(true);
     }
+
+    m_xDBFormatRB->set_sensitive(bNumFormat);
+    m_xNewFormatRB->set_sensitive(bNumFormat);
+    m_xNumFormatLB->set_sensitive(bNumFormat);
+    m_xFormat->set_sensitive(bNumFormat);
 }
 
 IMPL_LINK_NOARG(SwFieldDBPage, AddDBHdl, weld::Button&, void)

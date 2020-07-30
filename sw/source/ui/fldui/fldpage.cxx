@@ -71,26 +71,26 @@ void SwFieldPage::Init()
     // Dok-Switch (fldtdlg:ReInitTabPage)
     m_pCurField = m_aMgr.GetCurField();
 
-    if( bNewMode != m_bFieldDlgHtmlMode )
-    {
-        m_bFieldDlgHtmlMode = bNewMode;
+    if( bNewMode == m_bFieldDlgHtmlMode )
+        return;
 
-        // initialise Rangelistbox
-        if( m_bFieldDlgHtmlMode && m_bFirstHTMLInit )
-        {
-            m_bFirstHTMLInit = false;
-            SwWrtShell *pSh = m_pWrtShell;
-            if(! pSh)
-                pSh = ::GetActiveWrtShell();
-            if(pSh)
-            {
-                SwDoc* pDoc = pSh->GetDoc();
-                pSh->InsertFieldType( SwSetExpFieldType( pDoc,
-                                    "HTML_ON", 1));
-                pSh->InsertFieldType( SwSetExpFieldType(pDoc,
-                                    "HTML_OFF", 1));
-            }
-        }
+    m_bFieldDlgHtmlMode = bNewMode;
+
+    // initialise Rangelistbox
+    if( !(m_bFieldDlgHtmlMode && m_bFirstHTMLInit) )
+        return;
+
+    m_bFirstHTMLInit = false;
+    SwWrtShell *pSh = m_pWrtShell;
+    if(! pSh)
+        pSh = ::GetActiveWrtShell();
+    if(pSh)
+    {
+        SwDoc* pDoc = pSh->GetDoc();
+        pSh->InsertFieldType( SwSetExpFieldType( pDoc,
+                            "HTML_ON", 1));
+        pSh->InsertFieldType( SwSetExpFieldType(pDoc,
+                            "HTML_OFF", 1));
     }
 }
 

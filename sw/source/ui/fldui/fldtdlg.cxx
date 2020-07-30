@@ -205,20 +205,20 @@ void SwFieldDlg::ReInitTabPage(const OString& rPageId, bool bOnlyActivate)
 void SwFieldDlg::Activate()
 {
     SwView* pView = ::GetActiveView();
-    if( pView )
+    if( !pView )
+        return;
+
+    bool bHtmlMode = (::GetHtmlMode(static_cast<SwDocShell*>(SfxObjectShell::Current())) & HTMLMODE_ON) != 0;
+    const SwWrtShell& rSh = pView->GetWrtShell();
+    GetOKButton().set_sensitive(!rSh.IsReadOnlyAvailable() ||
+                                !rSh.HasReadonlySel());
+
+    ReInitTabPage("variables", true);
+
+    if( !bHtmlMode )
     {
-        bool bHtmlMode = (::GetHtmlMode(static_cast<SwDocShell*>(SfxObjectShell::Current())) & HTMLMODE_ON) != 0;
-        const SwWrtShell& rSh = pView->GetWrtShell();
-        GetOKButton().set_sensitive(!rSh.IsReadOnlyAvailable() ||
-                                    !rSh.HasReadonlySel());
-
-        ReInitTabPage("variables", true);
-
-        if( !bHtmlMode )
-        {
-            ReInitTabPage("ref", true);
-            ReInitTabPage("functions", true);
-        }
+        ReInitTabPage("ref", true);
+        ReInitTabPage("functions", true);
     }
 }
 
@@ -268,20 +268,20 @@ void SwFieldDlg::ShowReferencePage()
 void SwFieldDlg::PageCreated(const OString& rId, SfxTabPage& rPage)
 {
 #if HAVE_FEATURE_DBCONNECTIVITY
-    if (rId == "database")
+    if (rId != "database")
+        return;
+
+    SfxDispatcher* pDispatch = m_pBindings->GetDispatcher();
+    SfxViewFrame* pViewFrame = pDispatch ? pDispatch->GetFrame() : nullptr;
+    if(pViewFrame)
     {
-        SfxDispatcher* pDispatch = m_pBindings->GetDispatcher();
-        SfxViewFrame* pViewFrame = pDispatch ? pDispatch->GetFrame() : nullptr;
-        if(pViewFrame)
+        SfxViewShell* pViewShell = SfxViewShell::GetFirst( true, checkSfxViewShell<SwView> );
+        while(pViewShell && pViewShell->GetViewFrame() != pViewFrame)
         {
-            SfxViewShell* pViewShell = SfxViewShell::GetFirst( true, checkSfxViewShell<SwView> );
-            while(pViewShell && pViewShell->GetViewFrame() != pViewFrame)
-            {
-                pViewShell = SfxViewShell::GetNext( *pViewShell, true, checkSfxViewShell<SwView> );
-            }
-            if(pViewShell)
-                static_cast<SwFieldDBPage&>(rPage).SetWrtShell(static_cast<SwView*>(pViewShell)->GetWrtShell());
+            pViewShell = SfxViewShell::GetNext( *pViewShell, true, checkSfxViewShell<SwView> );
         }
+        if(pViewShell)
+            static_cast<SwFieldDBPage&>(rPage).SetWrtShell(static_cast<SwView*>(pViewShell)->GetWrtShell());
     }
 #else
     (void) rId;
