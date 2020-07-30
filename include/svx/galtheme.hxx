@@ -89,21 +89,6 @@ private:
     std::unique_ptr<GalleryBinaryEngine> createGalleryBinaryEngine(bool bReadOnly);
     const std::unique_ptr<GalleryBinaryEngine>& getGalleryBinaryEngine() const { return mpGalleryBinaryEngine; }
 
-    SAL_DLLPRIVATE const GalleryObject* ImplGetGalleryObject(sal_uInt32 nPos) const
-    {
-        if (nPos < maGalleryObjectCollection.size())
-            return maGalleryObjectCollection.get(nPos).get();
-        return nullptr;
-    }
-    const GalleryObject* ImplGetGalleryObject(const INetURLObject& rURL);
-
-    SAL_DLLPRIVATE sal_uInt32   ImplGetGalleryObjectPos( const GalleryObject* pObj )
-                                {
-                                    for (sal_uInt32 i = 0, n = maGalleryObjectCollection.size(); i < n; ++i)
-                                        if ( pObj == maGalleryObjectCollection.get(i).get() )
-                                            return i;
-                                    return SAL_MAX_UINT32;
-                                }
     SAL_DLLPRIVATE void         ImplSetModified( bool bModified );
     SAL_DLLPRIVATE void         ImplBroadcast(sal_uInt32 nUpdatePos);
 
@@ -164,14 +149,14 @@ public:
     SAL_DLLPRIVATE SgaObjKind GetObjectKind(sal_uInt32 nPos) const
     {
         if (nPos < GetObjectCount())
-            return ImplGetGalleryObject( nPos )->eObjKind;
+            return maGalleryObjectCollection.getForPosition( nPos )->eObjKind;
         return SgaObjKind::NONE;
     }
 
     SAL_DLLPRIVATE const INetURLObject& GetObjectURL(sal_uInt32 nPos) const
                                 {
                                     DBG_ASSERT( nPos < GetObjectCount(), "Position out of range" );
-                                    return ImplGetGalleryObject( nPos )->aURL;
+                                    return maGalleryObjectCollection.getForPosition( nPos )->aURL;
                                 }
 
     SAL_DLLPRIVATE bool         GetThumb(sal_uInt32 nPos, BitmapEx& rBmp);

@@ -19,23 +19,34 @@
 
 #pragma once
 
+#include <svx/svxdllapi.h>
+
+#include <tools/urlobj.hxx>
 #include <memory>
 #include <vector>
 
 struct GalleryObject;
 
-class GalleryObjectCollection
+class SVXCORE_DLLPUBLIC GalleryObjectCollection
 {
 private:
     std::vector<std::unique_ptr<GalleryObject>> m_aObjectList;
 
 public:
+    GalleryObjectCollection();
     std::vector<std::unique_ptr<GalleryObject>>& getObjectList() { return m_aObjectList; }
     std::unique_ptr<GalleryObject>& get(sal_uInt32 nPos) { return m_aObjectList[nPos]; }
     const std::unique_ptr<GalleryObject>& get(sal_uInt32 nPos) const { return m_aObjectList[nPos]; }
     sal_uInt32 size() const { return m_aObjectList.size(); }
 
+    const GalleryObject* searchObjectWithURL(const INetURLObject& rURL);
+    const GalleryObject* getForPosition(sal_uInt32 nPos) const;
+    sal_uInt32 searchPosWithObject(const GalleryObject* pObj);
+
     void clear();
+
+    GalleryObjectCollection(GalleryObjectCollection const&) = delete;
+    void operator=(GalleryObjectCollection const&) = delete;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
