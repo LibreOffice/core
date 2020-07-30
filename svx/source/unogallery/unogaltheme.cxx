@@ -130,7 +130,7 @@ uno::Any SAL_CALL GalleryTheme::getByIndex( ::sal_Int32 nIndex )
         {
             throw lang::IndexOutOfBoundsException();
         }
-        const GalleryObject* pObj = mpTheme->ImplGetGalleryObject( nIndex );
+        const GalleryObject* pObj = mpTheme->maGalleryObjectCollection.getForPosition( nIndex );
 
         if( pObj )
             aRet <<= uno::Reference< gallery::XGalleryItem >( new GalleryItem( *this, *pObj ) );
@@ -180,10 +180,10 @@ void SAL_CALL GalleryTheme::update(  )
 
             if( ( aURL.GetProtocol() != INetProtocol::NotValid ) && mpTheme->InsertURL( aURL, nIndex ) )
             {
-                const GalleryObject* pObj = mpTheme->ImplGetGalleryObject( aURL );
+                const GalleryObject* pObj = mpTheme->maGalleryObjectCollection.searchObjectWithURL( aURL );
 
                 if( pObj )
-                    nRet = mpTheme->ImplGetGalleryObjectPos( pObj );
+                    nRet = mpTheme->maGalleryObjectCollection.searchPosWithObject( pObj );
             }
         }
         catch( ... )
