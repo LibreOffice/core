@@ -180,48 +180,48 @@ void SwFlyFrame::Chain( SwFrame* _pAnch )
     // No problem, if a neighbor doesn't exist - the construction of the
     // neighbor will make the connection
     const SwFormatChain& rChain = GetFormat()->GetChain();
-    if ( rChain.GetPrev() || rChain.GetNext() )
+    if ( !(rChain.GetPrev() || rChain.GetNext()) )
+        return;
+
+    if ( rChain.GetNext() )
     {
-        if ( rChain.GetNext() )
+        SwFlyFrame* pFollow = FindChainNeighbour( *rChain.GetNext(), _pAnch );
+        if ( pFollow )
         {
-            SwFlyFrame* pFollow = FindChainNeighbour( *rChain.GetNext(), _pAnch );
-            if ( pFollow )
-            {
-                OSL_ENSURE( !pFollow->GetPrevLink(), "wrong chain detected" );
-                if ( !pFollow->GetPrevLink() )
-                    SwFlyFrame::ChainFrames( this, pFollow );
-            }
+            OSL_ENSURE( !pFollow->GetPrevLink(), "wrong chain detected" );
+            if ( !pFollow->GetPrevLink() )
+                SwFlyFrame::ChainFrames( this, pFollow );
         }
-        if ( rChain.GetPrev() )
+    }
+    if ( rChain.GetPrev() )
+    {
+        SwFlyFrame *pMaster = FindChainNeighbour( *rChain.GetPrev(), _pAnch );
+        if ( pMaster )
         {
-            SwFlyFrame *pMaster = FindChainNeighbour( *rChain.GetPrev(), _pAnch );
-            if ( pMaster )
-            {
-                OSL_ENSURE( !pMaster->GetNextLink(), "wrong chain detected" );
-                if ( !pMaster->GetNextLink() )
-                    SwFlyFrame::ChainFrames( pMaster, this );
-            }
+            OSL_ENSURE( !pMaster->GetNextLink(), "wrong chain detected" );
+            if ( !pMaster->GetNextLink() )
+                SwFlyFrame::ChainFrames( pMaster, this );
         }
     }
 }
 
 void SwFlyFrame::InsertCnt()
 {
-    if ( !GetPrevLink() )
-    {
-        const SwFormatContent& rContent = GetFormat()->GetContent();
-        OSL_ENSURE( rContent.GetContentIdx(), ":-( no content prepared." );
-        sal_uLong nIndex = rContent.GetContentIdx()->GetIndex();
-        // Lower() means SwColumnFrame; the Content then needs to be inserted into the (Column)BodyFrame
-        ::InsertCnt_( Lower() ? static_cast<SwLayoutFrame*>(static_cast<SwLayoutFrame*>(Lower())->Lower()) : static_cast<SwLayoutFrame*>(this),
-                      GetFormat()->GetDoc(), nIndex );
+    if ( GetPrevLink() )
+        return;
 
-        // NoText always have a fixed height.
-        if ( Lower() && Lower()->IsNoTextFrame() )
-        {
-            mbFixSize = true;
-            m_bMinHeight = false;
-        }
+    const SwFormatContent& rContent = GetFormat()->GetContent();
+    OSL_ENSURE( rContent.GetContentIdx(), ":-( no content prepared." );
+    sal_uLong nIndex = rContent.GetContentIdx()->GetIndex();
+    // Lower() means SwColumnFrame; the Content then needs to be inserted into the (Column)BodyFrame
+    ::InsertCnt_( Lower() ? static_cast<SwLayoutFrame*>(static_cast<SwLayoutFrame*>(Lower())->Lower()) : static_cast<SwLayoutFrame*>(this),
+                  GetFormat()->GetDoc(), nIndex );
+
+    // NoText always have a fixed height.
+    if ( Lower() && Lower()->IsNoTextFrame() )
+    {
+        mbFixSize = true;
+        m_bMinHeight = false;
     }
 }
 
@@ -239,19 +239,19 @@ void SwFlyFrame::InsertColumns()
     }
 
     const SwFormatCol &rCol = GetFormat()->GetCol();
-    if ( rCol.GetNumCols() > 1 )
-    {
-        // Start off PrtArea to be as large as Frame, so that we can put in the columns
-        // properly. It'll adjust later on.
-        {
-            SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
-            aPrt.Width( getFrameArea().Width() );
-            aPrt.Height( getFrameArea().Height() );
-        }
+    if ( rCol.GetNumCols() <= 1 )
+        return;
 
-        const SwFormatCol aOld; // ChgColumns() also needs an old value passed
-        ChgColumns( aOld, rCol );
+    // Start off PrtArea to be as large as Frame, so that we can put in the columns
+    // properly. It'll adjust later on.
+    {
+        SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
+        aPrt.Width( getFrameArea().Width() );
+        aPrt.Height( getFrameArea().Height() );
     }
+
+    const SwFormatCol aOld; // ChgColumns() also needs an old value passed
+    ChgColumns( aOld, rCol );
 }
 
 void SwFlyFrame::DestroyImpl()
@@ -1661,31 +1661,31 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
 
 void SwFlyFrame::MakeObjPos()
 {
-    if ( !isFrameAreaPositionValid() )
+    if ( isFrameAreaPositionValid() )
+        return;
+
+    vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
+    setFrameAreaPositionValid(true);
+
+    // use new class to position object
+    GetAnchorFrame()->Calc(pRenderContext);
+    objectpositioning::SwToLayoutAnchoredObjectPosition
+            aObjPositioning( *GetVirtDrawObj() );
+    aObjPositioning.CalcPosition();
+
+    // #i58280#
+    // update relative position
+    SetCurrRelPos( aObjPositioning.GetRelPos() );
+
     {
-        vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
-        setFrameAreaPositionValid(true);
-
-        // use new class to position object
-        GetAnchorFrame()->Calc(pRenderContext);
-        objectpositioning::SwToLayoutAnchoredObjectPosition
-                aObjPositioning( *GetVirtDrawObj() );
-        aObjPositioning.CalcPosition();
-
-        // #i58280#
-        // update relative position
-        SetCurrRelPos( aObjPositioning.GetRelPos() );
-
-        {
-            SwRectFnSet aRectFnSet(GetAnchorFrame());
-            SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-            aFrm.Pos( aObjPositioning.GetRelPos() );
-            aFrm.Pos() += aRectFnSet.GetPos(GetAnchorFrame()->getFrameArea());
-        }
-
-        // #i69335#
-        InvalidateObjRectWithSpaces();
+        SwRectFnSet aRectFnSet(GetAnchorFrame());
+        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
+        aFrm.Pos( aObjPositioning.GetRelPos() );
+        aFrm.Pos() += aRectFnSet.GetPos(GetAnchorFrame()->getFrameArea());
     }
+
+    // #i69335#
+    InvalidateObjRectWithSpaces();
 }
 
 void SwFlyFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
@@ -2283,65 +2283,65 @@ void SwFrame::RemoveDrawObj( SwAnchoredObject& _rToRemoveObj )
 
 void SwFrame::InvalidateObjs( const bool _bNoInvaOfAsCharAnchoredObjs )
 {
-    if ( GetDrawObjs() )
+    if ( !GetDrawObjs() )
+        return;
+
+    // #i26945# - determine page the frame is on,
+    // in order to check, if anchored object is registered at the same
+    // page.
+    const SwPageFrame* pPageFrame = FindPageFrame();
+    // #i28701# - re-factoring
+    for (SwAnchoredObject* pAnchoredObj : *GetDrawObjs())
     {
-        // #i26945# - determine page the frame is on,
-        // in order to check, if anchored object is registered at the same
-        // page.
-        const SwPageFrame* pPageFrame = FindPageFrame();
-        // #i28701# - re-factoring
-        for (SwAnchoredObject* pAnchoredObj : *GetDrawObjs())
+        if ( _bNoInvaOfAsCharAnchoredObjs &&
+             (pAnchoredObj->GetFrameFormat().GetAnchor().GetAnchorId()
+                == RndStdIds::FLY_AS_CHAR) )
         {
-            if ( _bNoInvaOfAsCharAnchoredObjs &&
-                 (pAnchoredObj->GetFrameFormat().GetAnchor().GetAnchorId()
-                    == RndStdIds::FLY_AS_CHAR) )
+            continue;
+        }
+        // #i26945# - no invalidation, if anchored object
+        // isn't registered at the same page and instead is registered at
+        // the page, where its anchor character text frame is on.
+        if ( pAnchoredObj->GetPageFrame() &&
+             pAnchoredObj->GetPageFrame() != pPageFrame )
+        {
+            SwTextFrame* pAnchorCharFrame = pAnchoredObj->FindAnchorCharFrame();
+            if ( pAnchorCharFrame &&
+                 pAnchoredObj->GetPageFrame() == pAnchorCharFrame->FindPageFrame() )
             {
                 continue;
             }
-            // #i26945# - no invalidation, if anchored object
-            // isn't registered at the same page and instead is registered at
-            // the page, where its anchor character text frame is on.
-            if ( pAnchoredObj->GetPageFrame() &&
-                 pAnchoredObj->GetPageFrame() != pPageFrame )
-            {
-                SwTextFrame* pAnchorCharFrame = pAnchoredObj->FindAnchorCharFrame();
-                if ( pAnchorCharFrame &&
-                     pAnchoredObj->GetPageFrame() == pAnchorCharFrame->FindPageFrame() )
-                {
-                    continue;
-                }
-                // #115759# - unlock its position, if anchored
-                // object isn't registered at the page, where its anchor
-                // character text frame is on, respectively if it has no
-                // anchor character text frame.
-                else
-                {
-                    pAnchoredObj->UnlockPosition();
-                }
-            }
-            // #i51474# - reset flag, that anchored object
-            // has cleared environment, and unlock its position, if the anchored
-            // object is registered at the same page as the anchor frame is on.
-            if ( pAnchoredObj->ClearedEnvironment() &&
-                 pAnchoredObj->GetPageFrame() &&
-                 pAnchoredObj->GetPageFrame() == pPageFrame )
-            {
-                pAnchoredObj->UnlockPosition();
-                pAnchoredObj->SetClearedEnvironment( false );
-            }
-            // distinguish between writer fly frames and drawing objects
-            if ( dynamic_cast<const SwFlyFrame*>( pAnchoredObj) !=  nullptr )
-            {
-                SwFlyFrame* pFly = static_cast<SwFlyFrame*>(pAnchoredObj);
-                pFly->Invalidate_();
-                pFly->InvalidatePos_();
-            }
+            // #115759# - unlock its position, if anchored
+            // object isn't registered at the page, where its anchor
+            // character text frame is on, respectively if it has no
+            // anchor character text frame.
             else
             {
-                pAnchoredObj->InvalidateObjPos();
+                pAnchoredObj->UnlockPosition();
             }
-        } // end of loop on objects, which are connected to the frame
-    }
+        }
+        // #i51474# - reset flag, that anchored object
+        // has cleared environment, and unlock its position, if the anchored
+        // object is registered at the same page as the anchor frame is on.
+        if ( pAnchoredObj->ClearedEnvironment() &&
+             pAnchoredObj->GetPageFrame() &&
+             pAnchoredObj->GetPageFrame() == pPageFrame )
+        {
+            pAnchoredObj->UnlockPosition();
+            pAnchoredObj->SetClearedEnvironment( false );
+        }
+        // distinguish between writer fly frames and drawing objects
+        if ( dynamic_cast<const SwFlyFrame*>( pAnchoredObj) !=  nullptr )
+        {
+            SwFlyFrame* pFly = static_cast<SwFlyFrame*>(pAnchoredObj);
+            pFly->Invalidate_();
+            pFly->InvalidatePos_();
+        }
+        else
+        {
+            pAnchoredObj->InvalidateObjPos();
+        }
+    } // end of loop on objects, which are connected to the frame
 }
 
 // #i26945# - correct check, if anchored object is a lower
@@ -2353,65 +2353,65 @@ void SwLayoutFrame::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
 {
     // invalidate lower floating screen objects
     SwPageFrame* pPageFrame = FindPageFrame();
-    if ( pPageFrame && pPageFrame->GetSortedObjs() )
+    if ( !(pPageFrame && pPageFrame->GetSortedObjs()) )
+        return;
+
+    SwSortedObjs& rObjs = *(pPageFrame->GetSortedObjs());
+    for (SwAnchoredObject* pObj : rObjs)
     {
-        SwSortedObjs& rObjs = *(pPageFrame->GetSortedObjs());
-        for (SwAnchoredObject* pObj : rObjs)
+        // #i26945# - check, if anchored object is a lower
+        // of the layout frame is changed to check, if its anchor frame
+        // is a lower of the layout frame.
+        // determine the anchor frame - usually it's the anchor frame,
+        // for at-character/as-character anchored objects the anchor character
+        // text frame is taken.
+        const SwFrame* pAnchorFrame = pObj->GetAnchorFrameContainingAnchPos();
+        if ( dynamic_cast<const SwFlyFrame*>( pObj) !=  nullptr )
         {
-            // #i26945# - check, if anchored object is a lower
-            // of the layout frame is changed to check, if its anchor frame
-            // is a lower of the layout frame.
-            // determine the anchor frame - usually it's the anchor frame,
-            // for at-character/as-character anchored objects the anchor character
-            // text frame is taken.
-            const SwFrame* pAnchorFrame = pObj->GetAnchorFrameContainingAnchPos();
-            if ( dynamic_cast<const SwFlyFrame*>( pObj) !=  nullptr )
+            SwFlyFrame* pFly = static_cast<SwFlyFrame*>(pObj);
+
+            if ( pFly->getFrameArea().Left() == FAR_AWAY )
+                continue;
+
+            if ( pFly->IsAnLower( this ) )
+                continue;
+
+            // #i26945# - use <pAnchorFrame> to check, if
+            // fly frame is lower of layout frame resp. if fly frame is
+            // at a different page registered as its anchor frame is on.
+            const bool bLow = IsAnLower( pAnchorFrame );
+            if ( bLow || pAnchorFrame->FindPageFrame() != pPageFrame )
             {
-                SwFlyFrame* pFly = static_cast<SwFlyFrame*>(pObj);
-
-                if ( pFly->getFrameArea().Left() == FAR_AWAY )
-                    continue;
-
-                if ( pFly->IsAnLower( this ) )
-                    continue;
-
-                // #i26945# - use <pAnchorFrame> to check, if
-                // fly frame is lower of layout frame resp. if fly frame is
-                // at a different page registered as its anchor frame is on.
-                const bool bLow = IsAnLower( pAnchorFrame );
-                if ( bLow || pAnchorFrame->FindPageFrame() != pPageFrame )
-                {
-                    pFly->Invalidate_( pPageFrame );
-                    if ( !bLow || pFly->IsFlyAtContentFrame() )
-                    {
-                        // #i44016#
-                        if ( _bUnlockPosOfObjs )
-                        {
-                            pFly->UnlockPosition();
-                        }
-                        pFly->InvalidatePos_();
-                    }
-                    else
-                        pFly->InvalidatePrt_();
-                }
-            }
-            else
-            {
-                OSL_ENSURE( dynamic_cast<const SwAnchoredDrawObject*>( pObj) !=  nullptr,
-                        "<SwLayoutFrame::NotifyFlys() - anchored object of unexpected type" );
-                // #i26945# - use <pAnchorFrame> to check, if
-                // fly frame is lower of layout frame resp. if fly frame is
-                // at a different page registered as its anchor frame is on.
-                if ( IsAnLower( pAnchorFrame ) ||
-                     pAnchorFrame->FindPageFrame() != pPageFrame )
+                pFly->Invalidate_( pPageFrame );
+                if ( !bLow || pFly->IsFlyAtContentFrame() )
                 {
                     // #i44016#
                     if ( _bUnlockPosOfObjs )
                     {
-                        pObj->UnlockPosition();
+                        pFly->UnlockPosition();
                     }
-                    pObj->InvalidateObjPos();
+                    pFly->InvalidatePos_();
                 }
+                else
+                    pFly->InvalidatePrt_();
+            }
+        }
+        else
+        {
+            OSL_ENSURE( dynamic_cast<const SwAnchoredDrawObject*>( pObj) !=  nullptr,
+                    "<SwLayoutFrame::NotifyFlys() - anchored object of unexpected type" );
+            // #i26945# - use <pAnchorFrame> to check, if
+            // fly frame is lower of layout frame resp. if fly frame is
+            // at a different page registered as its anchor frame is on.
+            if ( IsAnLower( pAnchorFrame ) ||
+                 pAnchorFrame->FindPageFrame() != pPageFrame )
+            {
+                // #i44016#
+                if ( _bUnlockPosOfObjs )
+                {
+                    pObj->UnlockPosition();
+                }
+                pObj->InvalidateObjPos();
             }
         }
     }

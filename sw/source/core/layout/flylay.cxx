@@ -871,29 +871,29 @@ void SwPageFrame::AppendFlyToPage( SwFlyFrame *pNew )
     }
 
     // #i28701# - correction: consider also drawing objects
-    if ( pNew->GetDrawObjs() )
+    if ( !pNew->GetDrawObjs() )
+        return;
+
+    SwSortedObjs &rObjs = *pNew->GetDrawObjs();
+    for (SwAnchoredObject* pTmpObj : rObjs)
     {
-        SwSortedObjs &rObjs = *pNew->GetDrawObjs();
-        for (SwAnchoredObject* pTmpObj : rObjs)
+        if ( dynamic_cast<const SwFlyFrame*>( pTmpObj) !=  nullptr )
         {
-            if ( dynamic_cast<const SwFlyFrame*>( pTmpObj) !=  nullptr )
+            SwFlyFrame* pTmpFly = static_cast<SwFlyFrame*>(pTmpObj);
+            // #i28701# - use new method <GetPageFrame()>
+            if ( pTmpFly->IsFlyFreeFrame() && !pTmpFly->GetPageFrame() )
+                AppendFlyToPage( pTmpFly );
+        }
+        else if ( dynamic_cast<const SwAnchoredDrawObject*>( pTmpObj) !=  nullptr )
+        {
+            // #i87493#
+            if ( pTmpObj->GetPageFrame() != this )
             {
-                SwFlyFrame* pTmpFly = static_cast<SwFlyFrame*>(pTmpObj);
-                // #i28701# - use new method <GetPageFrame()>
-                if ( pTmpFly->IsFlyFreeFrame() && !pTmpFly->GetPageFrame() )
-                    AppendFlyToPage( pTmpFly );
-            }
-            else if ( dynamic_cast<const SwAnchoredDrawObject*>( pTmpObj) !=  nullptr )
-            {
-                // #i87493#
-                if ( pTmpObj->GetPageFrame() != this )
+                if ( pTmpObj->GetPageFrame() != nullptr )
                 {
-                    if ( pTmpObj->GetPageFrame() != nullptr )
-                    {
-                        pTmpObj->GetPageFrame()->RemoveDrawObjFromPage( *pTmpObj );
-                    }
-                    AppendDrawObjToPage( *pTmpObj );
+                    pTmpObj->GetPageFrame()->RemoveDrawObjFromPage( *pTmpObj );
                 }
+                AppendDrawObjToPage( *pTmpObj );
             }
         }
     }
@@ -1016,29 +1016,29 @@ void SwPageFrame::MoveFly( SwFlyFrame *pToMove, SwPageFrame *pDest )
     }
 
     // #i28701# - correction: move lowers of Writer fly frame
-    if ( pToMove->GetDrawObjs() )
+    if ( !pToMove->GetDrawObjs() )
+        return;
+
+    SwSortedObjs &rObjs = *pToMove->GetDrawObjs();
+    for (SwAnchoredObject* pObj : rObjs)
     {
-        SwSortedObjs &rObjs = *pToMove->GetDrawObjs();
-        for (SwAnchoredObject* pObj : rObjs)
+        if ( dynamic_cast<const SwFlyFrame*>( pObj) !=  nullptr )
         {
-            if ( dynamic_cast<const SwFlyFrame*>( pObj) !=  nullptr )
+            SwFlyFrame* pFly = static_cast<SwFlyFrame*>(pObj);
+            if ( pFly->IsFlyFreeFrame() )
             {
-                SwFlyFrame* pFly = static_cast<SwFlyFrame*>(pObj);
-                if ( pFly->IsFlyFreeFrame() )
-                {
-                    // #i28701# - use new method <GetPageFrame()>
-                    SwPageFrame* pPageFrame = pFly->GetPageFrame();
-                    if ( pPageFrame )
-                        pPageFrame->MoveFly( pFly, pDest );
-                    else
-                        pDest->AppendFlyToPage( pFly );
-                }
+                // #i28701# - use new method <GetPageFrame()>
+                SwPageFrame* pPageFrame = pFly->GetPageFrame();
+                if ( pPageFrame )
+                    pPageFrame->MoveFly( pFly, pDest );
+                else
+                    pDest->AppendFlyToPage( pFly );
             }
-            else if ( dynamic_cast<const SwAnchoredDrawObject*>( pObj) !=  nullptr )
-            {
-                RemoveDrawObjFromPage( *pObj );
-                pDest->AppendDrawObjToPage( *pObj );
-            }
+        }
+        else if ( dynamic_cast<const SwAnchoredDrawObject*>( pObj) !=  nullptr )
+        {
+            RemoveDrawObjFromPage( *pObj );
+            pDest->AppendDrawObjToPage( *pObj );
         }
     }
 }

@@ -228,20 +228,20 @@ void SwLayAction::PaintContent( const SwContentFrame *pCnt,
         PaintContent_( pCnt, pPage, aPaintRect );
     }
 
-    if ( pCnt->IsRetouche() && !pCnt->GetNext() )
+    if ( !(pCnt->IsRetouche() && !pCnt->GetNext()) )
+        return;
+
+    const SwFrame *pTmp = pCnt;
+    if( pCnt->IsInSct() )
     {
-        const SwFrame *pTmp = pCnt;
-        if( pCnt->IsInSct() )
-        {
-            const SwSectionFrame* pSct = pCnt->FindSctFrame();
-            if( pSct->IsRetouche() && !pSct->GetNext() )
-                pTmp = pSct;
-        }
-        SwRect aRect( pTmp->GetUpper()->GetPaintArea() );
-        aRectFnSet.SetTop( aRect, aRectFnSet.GetPrtBottom(*pTmp) );
-        if ( !PaintContent_( pCnt, pPage, aRect ) )
-            pCnt->ResetRetouche();
+        const SwSectionFrame* pSct = pCnt->FindSctFrame();
+        if( pSct->IsRetouche() && !pSct->GetNext() )
+            pTmp = pSct;
     }
+    SwRect aRect( pTmp->GetUpper()->GetPaintArea() );
+    aRectFnSet.SetTop( aRect, aRectFnSet.GetPrtBottom(*pTmp) );
+    if ( !PaintContent_( pCnt, pPage, aRect ) )
+        pCnt->ResetRetouche();
 }
 
 SwLayAction::SwLayAction(SwRootFrame *pRt, SwViewShellImp *pI, TaskStopwatch* pWatch)
@@ -2120,21 +2120,21 @@ bool SwLayIdle::DoIdleJob( IdleJobType eJob, bool bVisAreaOnly )
 #if HAVE_FEATURE_DESKTOP && defined DBG_UTIL
 void SwLayIdle::ShowIdle( Color eColor )
 {
-    if ( !m_bIndicator )
+    if ( m_bIndicator )
+        return;
+
+    m_bIndicator = true;
+    vcl::Window *pWin = pImp->GetShell()->GetWin();
+    if (pWin && !pWin->SupportsDoubleBuffering()) // FIXME make this work with double-buffering
     {
-        m_bIndicator = true;
-        vcl::Window *pWin = pImp->GetShell()->GetWin();
-        if (pWin && !pWin->SupportsDoubleBuffering()) // FIXME make this work with double-buffering
-        {
-            tools::Rectangle aRect( 0, 0, 5, 5 );
-            aRect = pWin->PixelToLogic( aRect );
-            // Depending on if idle layout is in progress or not, draw a "red square" or a "green square".
-            pWin->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
-            pWin->SetFillColor( eColor );
-            pWin->SetLineColor();
-            pWin->DrawRect( aRect );
-            pWin->Pop();
-        }
+        tools::Rectangle aRect( 0, 0, 5, 5 );
+        aRect = pWin->PixelToLogic( aRect );
+        // Depending on if idle layout is in progress or not, draw a "red square" or a "green square".
+        pWin->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
+        pWin->SetFillColor( eColor );
+        pWin->SetLineColor();
+        pWin->DrawRect( aRect );
+        pWin->Pop();
     }
 }
 #define SHOW_IDLE( Color ) ShowIdle( Color )

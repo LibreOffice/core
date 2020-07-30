@@ -1007,105 +1007,105 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                                    const SwLineRects *pRects,
                                    SwPaintProperties const & properties )
 {
-    if ( !aLineRects.empty() )
+    if ( aLineRects.empty() )
+        return;
+
+    // #i16816# tagged pdf support
+    SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, nullptr, *pOut );
+
+    // Remove all help line that are almost covered (tables)
+    for (size_type i = 0; i != aLineRects.size(); ++i)
     {
-        // #i16816# tagged pdf support
-        SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, nullptr, *pOut );
+        SwLineRect &rLi = aLineRects[i];
+        const bool bVerticalSubs = rLi.Height() > rLi.Width();
 
-        // Remove all help line that are almost covered (tables)
-        for (size_type i = 0; i != aLineRects.size(); ++i)
+        for (size_type k = i + 1; k != aLineRects.size(); ++k)
         {
-            SwLineRect &rLi = aLineRects[i];
-            const bool bVerticalSubs = rLi.Height() > rLi.Width();
-
-            for (size_type k = i + 1; k != aLineRects.size(); ++k)
+            SwLineRect &rLk = aLineRects[k];
+            if ( rLi.SSize() == rLk.SSize() )
             {
-                SwLineRect &rLk = aLineRects[k];
-                if ( rLi.SSize() == rLk.SSize() )
+                if ( bVerticalSubs == ( rLk.Height() > rLk.Width() ) )
                 {
-                    if ( bVerticalSubs == ( rLk.Height() > rLk.Width() ) )
+                    if ( bVerticalSubs )
                     {
-                        if ( bVerticalSubs )
+                        long nLi = rLi.Right();
+                        long nLk = rLk.Right();
+                        if ( rLi.Top() == rLk.Top() &&
+                             ((nLi < rLk.Left() && nLi+21 > rLk.Left()) ||
+                              (nLk < rLi.Left() && nLk+21 > rLi.Left())))
                         {
-                            long nLi = rLi.Right();
-                            long nLk = rLk.Right();
-                            if ( rLi.Top() == rLk.Top() &&
-                                 ((nLi < rLk.Left() && nLi+21 > rLk.Left()) ||
-                                  (nLk < rLi.Left() && nLk+21 > rLi.Left())))
-                            {
-                                aLineRects.erase(aLineRects.begin() + i);
-                                // don't continue with inner loop any more:
-                                // the array may shrink!
-                                --i;
-                                break;
-                            }
+                            aLineRects.erase(aLineRects.begin() + i);
+                            // don't continue with inner loop any more:
+                            // the array may shrink!
+                            --i;
+                            break;
                         }
-                        else
+                    }
+                    else
+                    {
+                        long nLi = rLi.Bottom();
+                        long nLk = rLk.Bottom();
+                        if ( rLi.Left() == rLk.Left() &&
+                             ((nLi < rLk.Top() && nLi+21 > rLk.Top()) ||
+                              (nLk < rLi.Top() && nLk+21 > rLi.Top())))
                         {
-                            long nLi = rLi.Bottom();
-                            long nLk = rLk.Bottom();
-                            if ( rLi.Left() == rLk.Left() &&
-                                 ((nLi < rLk.Top() && nLi+21 > rLk.Top()) ||
-                                  (nLk < rLi.Top() && nLk+21 > rLi.Top())))
-                            {
-                                aLineRects.erase(aLineRects.begin() + i);
-                                // don't continue with inner loop any more:
-                                // the array may shrink!
-                                --i;
-                                break;
-                            }
+                            aLineRects.erase(aLineRects.begin() + i);
+                            // don't continue with inner loop any more:
+                            // the array may shrink!
+                            --i;
+                            break;
                         }
                     }
                 }
             }
-        }
-
-        if ( pRects && (!pRects->aLineRects.empty()) )
-            RemoveSuperfluousSubsidiaryLines( *pRects, properties );
-
-        if ( !aLineRects.empty() )
-        {
-            pOut->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
-            pOut->SetLineColor();
-
-            // Reset draw mode in high contrast mode in order to get fill color
-            // set at output device. Recover draw mode after draw of lines.
-            // Necessary for the subsidiary lines painted by the fly frames.
-            DrawModeFlags nOldDrawMode = pOut->GetDrawMode();
-            if( gProp.pSGlobalShell->GetWin() &&
-                Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
-            {
-                pOut->SetDrawMode( DrawModeFlags::Default );
-            }
-
-            for (SwLineRect& rLRect : aLineRects)
-            {
-                // Add condition <!rLRect.IsLocked()> to prevent paint of locked subsidiary lines.
-                if ( !rLRect.IsPainted() &&
-                     !rLRect.IsLocked() )
-                {
-                    const Color *pCol = nullptr;
-                    switch ( rLRect.GetSubColor() )
-                    {
-                        case SubColFlags::Page: pCol = &SwViewOption::GetDocBoundariesColor(); break;
-                        case SubColFlags::Fly: pCol = &SwViewOption::GetObjectBoundariesColor(); break;
-                        case SubColFlags::Tab: pCol = &SwViewOption::GetTableBoundariesColor(); break;
-                        case SubColFlags::Sect: pCol = &SwViewOption::GetSectionBoundColor(); break;
-                    }
-
-                    if (pCol && pOut->GetFillColor() != *pCol)
-                        pOut->SetFillColor( *pCol );
-                    pOut->DrawRect( rLRect.SVRect() );
-
-                    rLRect.SetPainted();
-                }
-            }
-
-            pOut->SetDrawMode( nOldDrawMode );
-
-            pOut->Pop();
         }
     }
+
+    if ( pRects && (!pRects->aLineRects.empty()) )
+        RemoveSuperfluousSubsidiaryLines( *pRects, properties );
+
+    if ( aLineRects.empty() )
+        return;
+
+    pOut->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
+    pOut->SetLineColor();
+
+    // Reset draw mode in high contrast mode in order to get fill color
+    // set at output device. Recover draw mode after draw of lines.
+    // Necessary for the subsidiary lines painted by the fly frames.
+    DrawModeFlags nOldDrawMode = pOut->GetDrawMode();
+    if( gProp.pSGlobalShell->GetWin() &&
+        Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+    {
+        pOut->SetDrawMode( DrawModeFlags::Default );
+    }
+
+    for (SwLineRect& rLRect : aLineRects)
+    {
+        // Add condition <!rLRect.IsLocked()> to prevent paint of locked subsidiary lines.
+        if ( !rLRect.IsPainted() &&
+             !rLRect.IsLocked() )
+        {
+            const Color *pCol = nullptr;
+            switch ( rLRect.GetSubColor() )
+            {
+                case SubColFlags::Page: pCol = &SwViewOption::GetDocBoundariesColor(); break;
+                case SubColFlags::Fly: pCol = &SwViewOption::GetObjectBoundariesColor(); break;
+                case SubColFlags::Tab: pCol = &SwViewOption::GetTableBoundariesColor(); break;
+                case SubColFlags::Sect: pCol = &SwViewOption::GetSectionBoundColor(); break;
+            }
+
+            if (pCol && pOut->GetFillColor() != *pCol)
+                pOut->SetFillColor( *pCol );
+            pOut->DrawRect( rLRect.SVRect() );
+
+            rLRect.SetPainted();
+        }
+    }
+
+    pOut->SetDrawMode( nOldDrawMode );
+
+    pOut->Pop();
 }
 
 // Various functions that are use in this file.
@@ -3543,125 +3543,125 @@ static drawinglayer::primitive2d::Primitive2DContainer lcl_CreateDashedIndicator
 
 void SwPageFrame::PaintBreak( ) const
 {
-    if ( gProp.pSGlobalShell->GetOut()->GetOutDevType() != OUTDEV_PRINTER  &&
+    if ( !(gProp.pSGlobalShell->GetOut()->GetOutDevType() != OUTDEV_PRINTER  &&
          !gProp.pSGlobalShell->GetViewOptions()->IsPDFExport() &&
          !gProp.pSGlobalShell->GetViewOptions()->IsReadonly() &&
-         !gProp.pSGlobalShell->IsPreview() )
+         !gProp.pSGlobalShell->IsPreview()) )
+        return;
+
+    const SwFrame* pBodyFrame = Lower();
+    while ( pBodyFrame && !pBodyFrame->IsBodyFrame() )
+        pBodyFrame = pBodyFrame->GetNext();
+
+    if ( pBodyFrame )
     {
-        const SwFrame* pBodyFrame = Lower();
-        while ( pBodyFrame && !pBodyFrame->IsBodyFrame() )
-            pBodyFrame = pBodyFrame->GetNext();
+        const SwLayoutFrame* pLayBody = static_cast< const SwLayoutFrame* >( pBodyFrame );
+        const SwFlowFrame *pFlowFrame = pLayBody->ContainsContent();
 
-        if ( pBodyFrame )
+        // Test if the first node is a table
+        const SwFrame* pFirstFrame = pLayBody->Lower();
+        if ( pFirstFrame && pFirstFrame->IsTabFrame() )
+            pFlowFrame = static_cast< const SwTabFrame* >( pFirstFrame );
+
+        SwWrtShell* pWrtSh = dynamic_cast< SwWrtShell* >( gProp.pSGlobalShell );
+        if ( pWrtSh )
         {
-            const SwLayoutFrame* pLayBody = static_cast< const SwLayoutFrame* >( pBodyFrame );
-            const SwFlowFrame *pFlowFrame = pLayBody->ContainsContent();
+            SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
+            SwFrameControlsManager& rMngr = rEditWin.GetFrameControlsManager();
 
-            // Test if the first node is a table
-            const SwFrame* pFirstFrame = pLayBody->Lower();
-            if ( pFirstFrame && pFirstFrame->IsTabFrame() )
-                pFlowFrame = static_cast< const SwTabFrame* >( pFirstFrame );
-
-            SwWrtShell* pWrtSh = dynamic_cast< SwWrtShell* >( gProp.pSGlobalShell );
-            if ( pWrtSh )
-            {
-                SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
-                SwFrameControlsManager& rMngr = rEditWin.GetFrameControlsManager();
-
-                if ( pFlowFrame && pFlowFrame->IsPageBreak( true ) )
-                    rMngr.SetPageBreakControl( this );
-                else
-                    rMngr.RemoveControlsByType( FrameControlType::PageBreak, this );
-            }
+            if ( pFlowFrame && pFlowFrame->IsPageBreak( true ) )
+                rMngr.SetPageBreakControl( this );
+            else
+                rMngr.RemoveControlsByType( FrameControlType::PageBreak, this );
         }
-        SwLayoutFrame::PaintBreak( );
     }
+    SwLayoutFrame::PaintBreak( );
 }
 
 void SwColumnFrame::PaintBreak( ) const
 {
-    if ( gProp.pSGlobalShell->GetOut()->GetOutDevType() != OUTDEV_PRINTER  &&
+    if ( !(gProp.pSGlobalShell->GetOut()->GetOutDevType() != OUTDEV_PRINTER  &&
          !gProp.pSGlobalShell->GetViewOptions()->IsPDFExport() &&
          !gProp.pSGlobalShell->GetViewOptions()->IsReadonly() &&
-         !gProp.pSGlobalShell->IsPreview() )
+         !gProp.pSGlobalShell->IsPreview()) )
+        return;
+
+    const SwFrame* pBodyFrame = Lower();
+    while ( pBodyFrame && !pBodyFrame->IsBodyFrame() )
+        pBodyFrame = pBodyFrame->GetNext();
+
+    if ( !pBodyFrame )
+        return;
+
+    const SwContentFrame *pCnt = static_cast< const SwLayoutFrame* >( pBodyFrame )->ContainsContent();
+    if ( !(pCnt && pCnt->IsColBreak( true )) )
+        return;
+
+    // Paint the break only if:
+    //    * Not in header footer edition, to avoid conflicts with the
+    //      header/footer marker
+    //    * Non-printing characters are shown, as this is more consistent
+    //      with other formatting marks
+    if ( !(!gProp.pSGlobalShell->IsShowHeaderFooterSeparator( FrameControlType::Header ) &&
+         !gProp.pSGlobalShell->IsShowHeaderFooterSeparator( FrameControlType::Footer ) &&
+          gProp.pSGlobalShell->GetViewOptions()->IsLineBreak()) )
+        return;
+
+    SwRect aRect( pCnt->getFramePrintArea() );
+    aRect.Pos() += pCnt->getFrameArea().Pos();
+
+    // Draw the line
+    basegfx::B2DPoint aStart( double( aRect.Left() ), aRect.Top() );
+    basegfx::B2DPoint aEnd( double( aRect.Right() ), aRect.Top() );
+    double nWidth = aRect.Width();
+    if ( IsVertical( ) )
     {
-        const SwFrame* pBodyFrame = Lower();
-        while ( pBodyFrame && !pBodyFrame->IsBodyFrame() )
-            pBodyFrame = pBodyFrame->GetNext();
-
-        if ( pBodyFrame )
-        {
-            const SwContentFrame *pCnt = static_cast< const SwLayoutFrame* >( pBodyFrame )->ContainsContent();
-            if ( pCnt && pCnt->IsColBreak( true ) )
-            {
-                // Paint the break only if:
-                //    * Not in header footer edition, to avoid conflicts with the
-                //      header/footer marker
-                //    * Non-printing characters are shown, as this is more consistent
-                //      with other formatting marks
-                if ( !gProp.pSGlobalShell->IsShowHeaderFooterSeparator( FrameControlType::Header ) &&
-                     !gProp.pSGlobalShell->IsShowHeaderFooterSeparator( FrameControlType::Footer ) &&
-                      gProp.pSGlobalShell->GetViewOptions()->IsLineBreak() )
-                {
-                    SwRect aRect( pCnt->getFramePrintArea() );
-                    aRect.Pos() += pCnt->getFrameArea().Pos();
-
-                    // Draw the line
-                    basegfx::B2DPoint aStart( double( aRect.Left() ), aRect.Top() );
-                    basegfx::B2DPoint aEnd( double( aRect.Right() ), aRect.Top() );
-                    double nWidth = aRect.Width();
-                    if ( IsVertical( ) )
-                    {
-                        aStart = basegfx::B2DPoint( double( aRect.Right() ), double( aRect.Top() ) );
-                        aEnd = basegfx::B2DPoint( double( aRect.Right() ), double( aRect.Bottom() ) );
-                        nWidth = aRect.Height();
-                    }
-
-                    basegfx::BColor aLineColor = SwViewOption::GetPageBreakColor().getBColor();
-
-                    drawinglayer::primitive2d::Primitive2DContainer aSeq =
-                        lcl_CreateDashedIndicatorPrimitive( aStart, aEnd, aLineColor );
-
-                    // Add the text above
-                    OUString aBreakText = SwResId(STR_COLUMN_BREAK);
-
-                    basegfx::B2DVector aFontSize;
-                    OutputDevice* pOut = gProp.pSGlobalShell->GetOut();
-                    vcl::Font aFont = pOut->GetSettings().GetStyleSettings().GetToolFont();
-                    aFont.SetFontHeight( 8 * 20 );
-                    pOut->SetFont( aFont );
-                    drawinglayer::attribute::FontAttribute aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(
-                            aFontSize, aFont, IsRightToLeft(), false );
-
-                    tools::Rectangle aTextRect;
-                    pOut->GetTextBoundRect( aTextRect, aBreakText );
-                    long nTextOff = ( nWidth - aTextRect.GetWidth() ) / 2;
-
-                    basegfx::B2DHomMatrix aTextMatrix( basegfx::utils::createScaleTranslateB2DHomMatrix(
-                                aFontSize.getX(), aFontSize.getY(),
-                                aRect.Left() + nTextOff, aRect.Top() ) );
-                    if ( IsVertical() )
-                    {
-                        aTextMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix (
-                                aFontSize.getX(), aFontSize.getY(), 0.0, M_PI_2,
-                                aRect.Right(), aRect.Top() + nTextOff );
-                    }
-
-                    drawinglayer::primitive2d::TextSimplePortionPrimitive2D * pText =
-                            new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-                                aTextMatrix,
-                                aBreakText, 0, aBreakText.getLength(),
-                                std::vector< double >(),
-                                aFontAttr,
-                                lang::Locale(),
-                                aLineColor );
-                    aSeq.push_back( drawinglayer::primitive2d::Primitive2DReference( pText ) );
-
-                    ProcessPrimitives( aSeq );
-                }
-            }
-        }
+        aStart = basegfx::B2DPoint( double( aRect.Right() ), double( aRect.Top() ) );
+        aEnd = basegfx::B2DPoint( double( aRect.Right() ), double( aRect.Bottom() ) );
+        nWidth = aRect.Height();
     }
+
+    basegfx::BColor aLineColor = SwViewOption::GetPageBreakColor().getBColor();
+
+    drawinglayer::primitive2d::Primitive2DContainer aSeq =
+        lcl_CreateDashedIndicatorPrimitive( aStart, aEnd, aLineColor );
+
+    // Add the text above
+    OUString aBreakText = SwResId(STR_COLUMN_BREAK);
+
+    basegfx::B2DVector aFontSize;
+    OutputDevice* pOut = gProp.pSGlobalShell->GetOut();
+    vcl::Font aFont = pOut->GetSettings().GetStyleSettings().GetToolFont();
+    aFont.SetFontHeight( 8 * 20 );
+    pOut->SetFont( aFont );
+    drawinglayer::attribute::FontAttribute aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(
+            aFontSize, aFont, IsRightToLeft(), false );
+
+    tools::Rectangle aTextRect;
+    pOut->GetTextBoundRect( aTextRect, aBreakText );
+    long nTextOff = ( nWidth - aTextRect.GetWidth() ) / 2;
+
+    basegfx::B2DHomMatrix aTextMatrix( basegfx::utils::createScaleTranslateB2DHomMatrix(
+                aFontSize.getX(), aFontSize.getY(),
+                aRect.Left() + nTextOff, aRect.Top() ) );
+    if ( IsVertical() )
+    {
+        aTextMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix (
+                aFontSize.getX(), aFontSize.getY(), 0.0, M_PI_2,
+                aRect.Right(), aRect.Top() + nTextOff );
+    }
+
+    drawinglayer::primitive2d::TextSimplePortionPrimitive2D * pText =
+            new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                aTextMatrix,
+                aBreakText, 0, aBreakText.getLength(),
+                std::vector< double >(),
+                aFontAttr,
+                lang::Locale(),
+                aLineColor );
+    aSeq.push_back( drawinglayer::primitive2d::Primitive2DReference( pText ) );
+
+    ProcessPrimitives( aSeq );
 }
 
 void SwLayoutFrame::PaintBreak( ) const
@@ -3678,59 +3678,59 @@ void SwLayoutFrame::PaintBreak( ) const
 void SwPageFrame::PaintDecorators( ) const
 {
     SwWrtShell* pWrtSh = dynamic_cast< SwWrtShell* >( gProp.pSGlobalShell );
-    if ( pWrtSh )
+    if ( !pWrtSh )
+        return;
+
+    SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
+
+    const SwLayoutFrame* pBody = FindBodyCont();
+    if ( !pBody )
+        return;
+
+    SwRect aBodyRect( pBody->getFrameArea() );
+
+    if ( !(gProp.pSGlobalShell->GetOut()->GetOutDevType() != OUTDEV_PRINTER &&
+         !gProp.pSGlobalShell->GetViewOptions()->IsPDFExport() &&
+         !gProp.pSGlobalShell->IsPreview() &&
+         !gProp.pSGlobalShell->GetViewOptions()->IsReadonly() &&
+         !gProp.pSGlobalShell->GetViewOptions()->getBrowseMode() &&
+         ( gProp.pSGlobalShell->IsShowHeaderFooterSeparator( FrameControlType::Header ) ||
+           gProp.pSGlobalShell->IsShowHeaderFooterSeparator( FrameControlType::Footer ) )) )
+        return;
+
+    bool bRtl = AllSettings::GetLayoutRTL();
+    const SwRect& rVisArea = gProp.pSGlobalShell->VisArea();
+    long nXOff = std::min( aBodyRect.Right(), rVisArea.Right() );
+    if ( bRtl )
+        nXOff = std::max( aBodyRect.Left(), rVisArea.Left() );
+
+    // Header
+    if ( gProp.pSGlobalShell->IsShowHeaderFooterSeparator( FrameControlType::Header ) )
     {
-        SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
+        const SwFrame* pHeaderFrame = Lower();
+        if ( !pHeaderFrame->IsHeaderFrame() )
+            pHeaderFrame = nullptr;
 
-        const SwLayoutFrame* pBody = FindBodyCont();
-        if ( pBody )
-        {
-            SwRect aBodyRect( pBody->getFrameArea() );
-
-            if ( gProp.pSGlobalShell->GetOut()->GetOutDevType() != OUTDEV_PRINTER &&
-                 !gProp.pSGlobalShell->GetViewOptions()->IsPDFExport() &&
-                 !gProp.pSGlobalShell->IsPreview() &&
-                 !gProp.pSGlobalShell->GetViewOptions()->IsReadonly() &&
-                 !gProp.pSGlobalShell->GetViewOptions()->getBrowseMode() &&
-                 ( gProp.pSGlobalShell->IsShowHeaderFooterSeparator( FrameControlType::Header ) ||
-                   gProp.pSGlobalShell->IsShowHeaderFooterSeparator( FrameControlType::Footer ) ) )
-            {
-                bool bRtl = AllSettings::GetLayoutRTL();
-                const SwRect& rVisArea = gProp.pSGlobalShell->VisArea();
-                long nXOff = std::min( aBodyRect.Right(), rVisArea.Right() );
-                if ( bRtl )
-                    nXOff = std::max( aBodyRect.Left(), rVisArea.Left() );
-
-                // Header
-                if ( gProp.pSGlobalShell->IsShowHeaderFooterSeparator( FrameControlType::Header ) )
-                {
-                    const SwFrame* pHeaderFrame = Lower();
-                    if ( !pHeaderFrame->IsHeaderFrame() )
-                        pHeaderFrame = nullptr;
-
-                    long nHeaderYOff = aBodyRect.Top();
-                    Point nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nHeaderYOff ) );
-                    rEditWin.GetFrameControlsManager().SetHeaderFooterControl( this, FrameControlType::Header, nOutputOff );
-                }
-
-                // Footer
-                if ( gProp.pSGlobalShell->IsShowHeaderFooterSeparator( FrameControlType::Footer ) )
-                {
-                    const SwFrame* pFootnoteContFrame = Lower();
-                    while ( pFootnoteContFrame )
-                    {
-                        if ( pFootnoteContFrame->IsFootnoteContFrame() )
-                            aBodyRect.AddBottom( pFootnoteContFrame->getFrameArea().Bottom() - aBodyRect.Bottom() );
-                        pFootnoteContFrame = pFootnoteContFrame->GetNext();
-                    }
-
-                    long nFooterYOff = aBodyRect.Bottom();
-                    Point nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nFooterYOff ) );
-                    rEditWin.GetFrameControlsManager().SetHeaderFooterControl( this, FrameControlType::Footer, nOutputOff );
-                }
-            }
-        }
+        long nHeaderYOff = aBodyRect.Top();
+        Point nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nHeaderYOff ) );
+        rEditWin.GetFrameControlsManager().SetHeaderFooterControl( this, FrameControlType::Header, nOutputOff );
     }
+
+    // Footer
+    if ( !gProp.pSGlobalShell->IsShowHeaderFooterSeparator( FrameControlType::Footer ) )
+        return;
+
+    const SwFrame* pFootnoteContFrame = Lower();
+    while ( pFootnoteContFrame )
+    {
+        if ( pFootnoteContFrame->IsFootnoteContFrame() )
+            aBodyRect.AddBottom( pFootnoteContFrame->getFrameArea().Bottom() - aBodyRect.Bottom() );
+        pFootnoteContFrame = pFootnoteContFrame->GetNext();
+    }
+
+    long nFooterYOff = aBodyRect.Bottom();
+    Point nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nFooterYOff ) );
+    rEditWin.GetFrameControlsManager().SetHeaderFooterControl( this, FrameControlType::Footer, nOutputOff );
 }
 
 /**
@@ -5349,292 +5349,292 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
     if( !m_bHasGrid || gProp.pSRetoucheFly || gProp.pSRetoucheFly2 )
         return;
     SwTextGridItem const*const pGrid(GetGridItem(this));
-    if( pGrid && ( OUTDEV_PRINTER != pOut->GetOutDevType() ?
-        pGrid->GetDisplayGrid() : pGrid->GetPrintGrid() ) )
+    if( !(pGrid && ( OUTDEV_PRINTER != pOut->GetOutDevType() ?
+        pGrid->GetDisplayGrid() : pGrid->GetPrintGrid() )) )
+        return;
+
+    const SwLayoutFrame* pBody = FindBodyCont();
+    if( !pBody )
+        return;
+
+    SwRect aGrid( pBody->getFramePrintArea() );
+    aGrid += pBody->getFrameArea().Pos();
+
+    SwRect aInter( aGrid );
+    aInter.Intersection( rRect );
+    if( !aInter.HasArea() )
+        return;
+
+    bool bGrid = pGrid->GetRubyTextBelow();
+    bool bCell = GRID_LINES_CHARS == pGrid->GetGridType();
+    long nGrid = pGrid->GetBaseHeight();
+    const SwDoc* pDoc = GetFormat()->GetDoc();
+    long nGridWidth = GetGridWidth(*pGrid, *pDoc);
+    long nRuby = pGrid->GetRubyHeight();
+    long nSum = nGrid + nRuby;
+    const Color *pCol = &pGrid->GetColor();
+
+    SwTwips nRight = aInter.Left() + aInter.Width();
+    SwTwips nBottom = aInter.Top() + aInter.Height();
+    if( IsVertical() )
     {
-        const SwLayoutFrame* pBody = FindBodyCont();
-        if( pBody )
+        SwTwips nOrig = aGrid.Left() + aGrid.Width();
+        SwTwips nY = nOrig + nSum *
+                     ( ( nOrig - aInter.Left() ) / nSum );
+        SwRect aTmp( Point( nY, aInter.Top() ),
+                    Size( 1, aInter.Height() ) );
+        SwTwips nX = aGrid.Top() + nGrid *
+                    ( ( aInter.Top() - aGrid.Top() )/ nGrid );
+        if( nX < aInter.Top() )
+            nX += nGrid;
+        SwTwips nGridBottom = aGrid.Top() + aGrid.Height();
+        bool bLeft = aGrid.Top() >= aInter.Top();
+        bool bRight = nGridBottom <= nBottom;
+        bool bBorder = bLeft || bRight;
+        while( nY > nRight )
         {
-            SwRect aGrid( pBody->getFramePrintArea() );
-            aGrid += pBody->getFrameArea().Pos();
-
-            SwRect aInter( aGrid );
-            aInter.Intersection( rRect );
-            if( aInter.HasArea() )
+            aTmp.Pos().setX( nY );
+            if( bGrid )
             {
-                bool bGrid = pGrid->GetRubyTextBelow();
-                bool bCell = GRID_LINES_CHARS == pGrid->GetGridType();
-                long nGrid = pGrid->GetBaseHeight();
-                const SwDoc* pDoc = GetFormat()->GetDoc();
-                long nGridWidth = GetGridWidth(*pGrid, *pDoc);
-                long nRuby = pGrid->GetRubyHeight();
-                long nSum = nGrid + nRuby;
-                const Color *pCol = &pGrid->GetColor();
-
-                SwTwips nRight = aInter.Left() + aInter.Width();
-                SwTwips nBottom = aInter.Top() + aInter.Height();
-                if( IsVertical() )
+                nY -= nGrid;
+                SwTwips nPosY = std::max( aInter.Left(), nY );
+                SwTwips nHeight = std::min(nRight, aTmp.Pos().X())-nPosY;
+                if( nHeight > 0 )
                 {
-                    SwTwips nOrig = aGrid.Left() + aGrid.Width();
-                    SwTwips nY = nOrig + nSum *
-                                 ( ( nOrig - aInter.Left() ) / nSum );
-                    SwRect aTmp( Point( nY, aInter.Top() ),
-                                Size( 1, aInter.Height() ) );
-                    SwTwips nX = aGrid.Top() + nGrid *
-                                ( ( aInter.Top() - aGrid.Top() )/ nGrid );
-                    if( nX < aInter.Top() )
-                        nX += nGrid;
-                    SwTwips nGridBottom = aGrid.Top() + aGrid.Height();
-                    bool bLeft = aGrid.Top() >= aInter.Top();
-                    bool bRight = nGridBottom <= nBottom;
-                    bool bBorder = bLeft || bRight;
-                    while( nY > nRight )
+                    if( bCell )
                     {
-                        aTmp.Pos().setX( nY );
-                        if( bGrid )
+                        SwRect aVert( Point( nPosY, nX ),
+                                    Size( nHeight, 1 ) );
+                        while( aVert.Top() <= nBottom )
                         {
-                            nY -= nGrid;
-                            SwTwips nPosY = std::max( aInter.Left(), nY );
-                            SwTwips nHeight = std::min(nRight, aTmp.Pos().X())-nPosY;
-                            if( nHeight > 0 )
-                            {
-                                if( bCell )
-                                {
-                                    SwRect aVert( Point( nPosY, nX ),
-                                                Size( nHeight, 1 ) );
-                                    while( aVert.Top() <= nBottom )
-                                    {
-                                        PaintBorderLine(rRect,aVert,this,pCol);
-                                        aVert.Pos().AdjustY(nGrid );
-                                    }
-                                }
-                                else if( bBorder )
-                                {
-                                    SwRect aVert( Point( nPosY, aGrid.Top() ),
-                                                  Size( nHeight, 1 ) );
-                                    if( bLeft )
-                                        PaintBorderLine(rRect,aVert,this,pCol);
-                                    if( bRight )
-                                    {
-                                        aVert.Pos().setY( nGridBottom );
-                                        PaintBorderLine(rRect,aVert,this,pCol);
-                                    }
-                                }
-                            }
+                            PaintBorderLine(rRect,aVert,this,pCol);
+                            aVert.Pos().AdjustY(nGrid );
                         }
-                        else
-                        {
-                            nY -= nRuby;
-                            if( bBorder )
-                            {
-                                SwTwips nPos = std::max( aInter.Left(), nY );
-                                SwTwips nW = std::min(nRight, aTmp.Pos().X()) - nPos;
-                                SwRect aVert( Point( nPos, aGrid.Top() ),
-                                              Size( nW, 1 ) );
-                                if( nW > 0 )
-                                {
-                                    if( bLeft )
-                                        PaintBorderLine(rRect,aVert,this,pCol);
-                                    if( bRight )
-                                    {
-                                        aVert.Pos().setY( nGridBottom );
-                                        PaintBorderLine(rRect,aVert,this,pCol);
-                                    }
-                                }
-                            }
-                        }
-                        bGrid = !bGrid;
                     }
-                    while( nY >= aInter.Left() )
+                    else if( bBorder )
                     {
-                        aTmp.Pos().setX( nY );
-                        PaintBorderLine( rRect, aTmp, this, pCol);
-                        if( bGrid )
+                        SwRect aVert( Point( nPosY, aGrid.Top() ),
+                                      Size( nHeight, 1 ) );
+                        if( bLeft )
+                            PaintBorderLine(rRect,aVert,this,pCol);
+                        if( bRight )
                         {
-                            nY -= nGrid;
-                            SwTwips nHeight = aTmp.Pos().X()
-                                              - std::max(aInter.Left(), nY );
-                            if( nHeight > 0 )
-                            {
-                                if( bCell )
-                                {
-                                    SwRect aVert( Point(aTmp.Pos().X()-nHeight,
-                                                  nX ), Size( nHeight, 1 ) );
-                                    while( aVert.Top() <= nBottom )
-                                    {
-                                        PaintBorderLine(rRect,aVert,this,pCol);
-                                        aVert.Pos().AdjustY(nGrid );
-                                    }
-                                }
-                                else if( bBorder )
-                                {
-                                    SwRect aVert( Point(aTmp.Pos().X()-nHeight,
-                                            aGrid.Top() ), Size( nHeight, 1 ) );
-                                    if( bLeft )
-                                        PaintBorderLine(rRect,aVert,this,pCol);
-                                    if( bRight )
-                                    {
-                                        aVert.Pos().setY( nGridBottom );
-                                        PaintBorderLine(rRect,aVert,this,pCol);
-                                    }
-                                }
-                            }
+                            aVert.Pos().setY( nGridBottom );
+                            PaintBorderLine(rRect,aVert,this,pCol);
                         }
-                        else
-                        {
-                            nY -= nRuby;
-                            if( bBorder )
-                            {
-                                SwTwips nPos = std::max( aInter.Left(), nY );
-                                SwTwips nW = std::min(nRight, aTmp.Pos().X()) - nPos;
-                                SwRect aVert( Point( nPos, aGrid.Top() ),
-                                              Size( nW, 1 ) );
-                                if( nW > 0 )
-                                {
-                                    if( bLeft )
-                                        PaintBorderLine(rRect,aVert,this,pCol);
-                                    if( bRight )
-                                    {
-                                        aVert.Pos().setY( nGridBottom );
-                                        PaintBorderLine(rRect,aVert,this,pCol);
-                                    }
-                                }
-                            }
-                        }
-                        bGrid = !bGrid;
-                    }
-                }
-                else
-                {
-                    SwTwips nOrig = aGrid.Top();
-                    SwTwips nY = nOrig + nSum *( (aInter.Top()-nOrig)/nSum );
-                    SwRect aTmp( Point( aInter.Left(), nY ),
-                                Size( aInter.Width(), 1 ) );
-                    //for textgrid refactor
-                    SwTwips nX = aGrid.Left() + nGridWidth *
-                        ( ( aInter.Left() - aGrid.Left() )/ nGridWidth );
-                    if( nX < aInter.Left() )
-                        nX += nGridWidth;
-                    SwTwips nGridRight = aGrid.Left() + aGrid.Width();
-                    bool bLeft = aGrid.Left() >= aInter.Left();
-                    bool bRight = nGridRight <= nRight;
-                    bool bBorder = bLeft || bRight;
-                    while( nY < aInter.Top() )
-                    {
-                        aTmp.Pos().setY(nY);
-                        if( bGrid )
-                        {
-                            nY += nGrid;
-                            SwTwips nPosY = std::max( aInter.Top(), aTmp.Pos().getY() );
-                            SwTwips nHeight = std::min(nBottom, nY ) - nPosY;
-                            if( nHeight )
-                            {
-                                if( bCell )
-                                {
-                                    SwRect aVert( Point( nX, nPosY ),
-                                                Size( 1, nHeight ) );
-                                    while( aVert.Left() <= nRight )
-                                    {
-                                        PaintBorderLine(rRect,aVert,this,pCol);
-                                        aVert.Pos().AdjustX(nGridWidth );  //for textgrid refactor
-                                    }
-                                }
-                                else if ( bBorder )
-                                {
-                                    SwRect aVert( Point( aGrid.Left(), nPosY ),
-                                                Size( 1, nHeight ) );
-                                    if( bLeft )
-                                        PaintBorderLine(rRect,aVert,this,pCol);
-                                    if( bRight )
-                                    {
-                                        aVert.Pos().setX( nGridRight );
-                                        PaintBorderLine(rRect,aVert,this,pCol);
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            nY += nRuby;
-                            if( bBorder )
-                            {
-                                SwTwips nPos = std::max(aInter.Top(),aTmp.Pos().getY());
-                                SwTwips nH = std::min( nBottom, nY ) - nPos;
-                                SwRect aVert( Point( aGrid.Left(), nPos ),
-                                            Size( 1, nH ) );
-                                if( nH > 0 )
-                                {
-                                    if( bLeft )
-                                        PaintBorderLine(rRect,aVert,this,pCol);
-                                    if( bRight )
-                                    {
-                                        aVert.Pos().setX(nGridRight);
-                                        PaintBorderLine(rRect,aVert,this,pCol);
-                                    }
-                                }
-                            }
-                        }
-                        bGrid = !bGrid;
-                    }
-                    while( nY <= nBottom )
-                    {
-                        aTmp.Pos().setY(nY);
-                        PaintBorderLine( rRect, aTmp, this, pCol);
-                        if( bGrid )
-                        {
-                            nY += nGrid;
-                            SwTwips nHeight = std::min(nBottom, nY) - aTmp.Pos().getY();
-                            if( nHeight )
-                            {
-                                if( bCell )
-                                {
-                                    SwRect aVert( Point( nX, aTmp.Pos().getY() ),
-                                                Size( 1, nHeight ) );
-                                    while( aVert.Left() <= nRight )
-                                    {
-                                        PaintBorderLine( rRect, aVert, this, pCol);
-                                        aVert.Pos().setX(aVert.Pos().getX() + nGridWidth);  //for textgrid refactor
-                                    }
-                                }
-                                else if( bBorder )
-                                {
-                                    SwRect aVert( Point( aGrid.Left(),
-                                        aTmp.Pos().getY() ), Size( 1, nHeight ) );
-                                    if( bLeft )
-                                        PaintBorderLine(rRect,aVert,this,pCol);
-                                    if( bRight )
-                                    {
-                                        aVert.Pos().setX(nGridRight);
-                                        PaintBorderLine(rRect,aVert,this,pCol);
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            nY += nRuby;
-                            if( bBorder )
-                            {
-                                SwTwips nPos = std::max(aInter.Top(),aTmp.Pos().Y());
-                                SwTwips nH = std::min( nBottom, nY ) - nPos;
-                                SwRect aVert( Point( aGrid.Left(), nPos ),
-                                            Size( 1, nH ) );
-                                if( nH > 0 )
-                                {
-                                    if( bLeft )
-                                        PaintBorderLine(rRect,aVert,this,pCol);
-                                    if( bRight )
-                                    {
-                                        aVert.Pos().setX(nGridRight);
-                                        PaintBorderLine(rRect,aVert,this,pCol);
-                                    }
-                                }
-                            }
-                        }
-                        bGrid = !bGrid;
                     }
                 }
             }
+            else
+            {
+                nY -= nRuby;
+                if( bBorder )
+                {
+                    SwTwips nPos = std::max( aInter.Left(), nY );
+                    SwTwips nW = std::min(nRight, aTmp.Pos().X()) - nPos;
+                    SwRect aVert( Point( nPos, aGrid.Top() ),
+                                  Size( nW, 1 ) );
+                    if( nW > 0 )
+                    {
+                        if( bLeft )
+                            PaintBorderLine(rRect,aVert,this,pCol);
+                        if( bRight )
+                        {
+                            aVert.Pos().setY( nGridBottom );
+                            PaintBorderLine(rRect,aVert,this,pCol);
+                        }
+                    }
+                }
+            }
+            bGrid = !bGrid;
+        }
+        while( nY >= aInter.Left() )
+        {
+            aTmp.Pos().setX( nY );
+            PaintBorderLine( rRect, aTmp, this, pCol);
+            if( bGrid )
+            {
+                nY -= nGrid;
+                SwTwips nHeight = aTmp.Pos().X()
+                                  - std::max(aInter.Left(), nY );
+                if( nHeight > 0 )
+                {
+                    if( bCell )
+                    {
+                        SwRect aVert( Point(aTmp.Pos().X()-nHeight,
+                                      nX ), Size( nHeight, 1 ) );
+                        while( aVert.Top() <= nBottom )
+                        {
+                            PaintBorderLine(rRect,aVert,this,pCol);
+                            aVert.Pos().AdjustY(nGrid );
+                        }
+                    }
+                    else if( bBorder )
+                    {
+                        SwRect aVert( Point(aTmp.Pos().X()-nHeight,
+                                aGrid.Top() ), Size( nHeight, 1 ) );
+                        if( bLeft )
+                            PaintBorderLine(rRect,aVert,this,pCol);
+                        if( bRight )
+                        {
+                            aVert.Pos().setY( nGridBottom );
+                            PaintBorderLine(rRect,aVert,this,pCol);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                nY -= nRuby;
+                if( bBorder )
+                {
+                    SwTwips nPos = std::max( aInter.Left(), nY );
+                    SwTwips nW = std::min(nRight, aTmp.Pos().X()) - nPos;
+                    SwRect aVert( Point( nPos, aGrid.Top() ),
+                                  Size( nW, 1 ) );
+                    if( nW > 0 )
+                    {
+                        if( bLeft )
+                            PaintBorderLine(rRect,aVert,this,pCol);
+                        if( bRight )
+                        {
+                            aVert.Pos().setY( nGridBottom );
+                            PaintBorderLine(rRect,aVert,this,pCol);
+                        }
+                    }
+                }
+            }
+            bGrid = !bGrid;
+        }
+    }
+    else
+    {
+        SwTwips nOrig = aGrid.Top();
+        SwTwips nY = nOrig + nSum *( (aInter.Top()-nOrig)/nSum );
+        SwRect aTmp( Point( aInter.Left(), nY ),
+                    Size( aInter.Width(), 1 ) );
+        //for textgrid refactor
+        SwTwips nX = aGrid.Left() + nGridWidth *
+            ( ( aInter.Left() - aGrid.Left() )/ nGridWidth );
+        if( nX < aInter.Left() )
+            nX += nGridWidth;
+        SwTwips nGridRight = aGrid.Left() + aGrid.Width();
+        bool bLeft = aGrid.Left() >= aInter.Left();
+        bool bRight = nGridRight <= nRight;
+        bool bBorder = bLeft || bRight;
+        while( nY < aInter.Top() )
+        {
+            aTmp.Pos().setY(nY);
+            if( bGrid )
+            {
+                nY += nGrid;
+                SwTwips nPosY = std::max( aInter.Top(), aTmp.Pos().getY() );
+                SwTwips nHeight = std::min(nBottom, nY ) - nPosY;
+                if( nHeight )
+                {
+                    if( bCell )
+                    {
+                        SwRect aVert( Point( nX, nPosY ),
+                                    Size( 1, nHeight ) );
+                        while( aVert.Left() <= nRight )
+                        {
+                            PaintBorderLine(rRect,aVert,this,pCol);
+                            aVert.Pos().AdjustX(nGridWidth );  //for textgrid refactor
+                        }
+                    }
+                    else if ( bBorder )
+                    {
+                        SwRect aVert( Point( aGrid.Left(), nPosY ),
+                                    Size( 1, nHeight ) );
+                        if( bLeft )
+                            PaintBorderLine(rRect,aVert,this,pCol);
+                        if( bRight )
+                        {
+                            aVert.Pos().setX( nGridRight );
+                            PaintBorderLine(rRect,aVert,this,pCol);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                nY += nRuby;
+                if( bBorder )
+                {
+                    SwTwips nPos = std::max(aInter.Top(),aTmp.Pos().getY());
+                    SwTwips nH = std::min( nBottom, nY ) - nPos;
+                    SwRect aVert( Point( aGrid.Left(), nPos ),
+                                Size( 1, nH ) );
+                    if( nH > 0 )
+                    {
+                        if( bLeft )
+                            PaintBorderLine(rRect,aVert,this,pCol);
+                        if( bRight )
+                        {
+                            aVert.Pos().setX(nGridRight);
+                            PaintBorderLine(rRect,aVert,this,pCol);
+                        }
+                    }
+                }
+            }
+            bGrid = !bGrid;
+        }
+        while( nY <= nBottom )
+        {
+            aTmp.Pos().setY(nY);
+            PaintBorderLine( rRect, aTmp, this, pCol);
+            if( bGrid )
+            {
+                nY += nGrid;
+                SwTwips nHeight = std::min(nBottom, nY) - aTmp.Pos().getY();
+                if( nHeight )
+                {
+                    if( bCell )
+                    {
+                        SwRect aVert( Point( nX, aTmp.Pos().getY() ),
+                                    Size( 1, nHeight ) );
+                        while( aVert.Left() <= nRight )
+                        {
+                            PaintBorderLine( rRect, aVert, this, pCol);
+                            aVert.Pos().setX(aVert.Pos().getX() + nGridWidth);  //for textgrid refactor
+                        }
+                    }
+                    else if( bBorder )
+                    {
+                        SwRect aVert( Point( aGrid.Left(),
+                            aTmp.Pos().getY() ), Size( 1, nHeight ) );
+                        if( bLeft )
+                            PaintBorderLine(rRect,aVert,this,pCol);
+                        if( bRight )
+                        {
+                            aVert.Pos().setX(nGridRight);
+                            PaintBorderLine(rRect,aVert,this,pCol);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                nY += nRuby;
+                if( bBorder )
+                {
+                    SwTwips nPos = std::max(aInter.Top(),aTmp.Pos().Y());
+                    SwTwips nH = std::min( nBottom, nY ) - nPos;
+                    SwRect aVert( Point( aGrid.Left(), nPos ),
+                                Size( 1, nH ) );
+                    if( nH > 0 )
+                    {
+                        if( bLeft )
+                            PaintBorderLine(rRect,aVert,this,pCol);
+                        if( bRight )
+                        {
+                            aVert.Pos().setX(nGridRight);
+                            PaintBorderLine(rRect,aVert,this,pCol);
+                        }
+                    }
+                }
+            }
+            bGrid = !bGrid;
         }
     }
 }
@@ -5657,23 +5657,23 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
 void SwPageFrame::PaintMarginArea( const SwRect& _rOutputRect,
                                  SwViewShell const * _pViewShell ) const
 {
-    if (  _pViewShell->GetWin() && !_pViewShell->GetViewOptions()->getBrowseMode() )
+    if (  !(_pViewShell->GetWin() && !_pViewShell->GetViewOptions()->getBrowseMode()) )
+        return;
+
+    // Simplified paint with DrawingLayer FillStyle
+    SwRect aPgRect = getFrameArea();
+    aPgRect.Intersection_( _rOutputRect );
+
+    if(!aPgRect.IsEmpty())
     {
-        // Simplified paint with DrawingLayer FillStyle
-        SwRect aPgRect = getFrameArea();
-        aPgRect.Intersection_( _rOutputRect );
+        OutputDevice *pOut = _pViewShell->GetOut();
 
-        if(!aPgRect.IsEmpty())
+        if(pOut->GetFillColor() != aGlobalRetoucheColor)
         {
-            OutputDevice *pOut = _pViewShell->GetOut();
-
-            if(pOut->GetFillColor() != aGlobalRetoucheColor)
-            {
-                pOut->SetFillColor(aGlobalRetoucheColor);
-            }
-
-            pOut->DrawRect(aPgRect.SVRect());
+            pOut->SetFillColor(aGlobalRetoucheColor);
         }
+
+        pOut->DrawRect(aPgRect.SVRect());
     }
 }
 
@@ -5965,90 +5965,90 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     SwAlignRect( aPageRect, _pViewShell, _pViewShell->GetOut() );
 
     const SwPostItMgr *pMgr = _pViewShell->GetPostItMgr();
-    if (pMgr && pMgr->ShowNotes() && pMgr->HasNotes())  // do not show anything in print preview
+    if (!(pMgr && pMgr->ShowNotes() && pMgr->HasNotes()))  // do not show anything in print preview
+        return;
+
+    sal_Int32 nScrollerHeight = pMgr->GetSidebarScrollerHeight();
+    const tools::Rectangle &aVisRect = _pViewShell->VisArea().SVRect();
+    //draw border and sidepane
+    _pViewShell->GetOut()->SetLineColor();
+    if (!bRight)
     {
-        sal_Int32 nScrollerHeight = pMgr->GetSidebarScrollerHeight();
-        const tools::Rectangle &aVisRect = _pViewShell->VisArea().SVRect();
-        //draw border and sidepane
-        _pViewShell->GetOut()->SetLineColor();
-        if (!bRight)
+        _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE_BORDER);
+        _pViewShell->GetOut()->DrawRect(tools::Rectangle(Point(aPageRect.Left()-pMgr->GetSidebarBorderWidth(),aPageRect.Top()),Size(pMgr->GetSidebarBorderWidth(),aPageRect.Height())))    ;
+        if (Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+            _pViewShell->GetOut()->SetFillColor(COL_BLACK);
+        else
+            _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE);
+        _pViewShell->GetOut()->DrawRect(tools::Rectangle(Point(aPageRect.Left()-pMgr->GetSidebarWidth()-pMgr->GetSidebarBorderWidth(),aPageRect.Top()),Size(pMgr->GetSidebarWidth(),aPageRect.Height())))  ;
+    }
+    else
+    {
+        _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE_BORDER);
+        SwRect aSidebarBorder(aPageRect.TopRight(),Size(pMgr->GetSidebarBorderWidth(),aPageRect.Height()));
+        _pViewShell->GetOut()->DrawRect(aSidebarBorder.SVRect());
+        if (Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+            _pViewShell->GetOut()->SetFillColor(COL_BLACK);
+        else
+            _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE);
+        SwRect aSidebar(Point(aPageRect.Right()+pMgr->GetSidebarBorderWidth(),aPageRect.Top()),Size(pMgr->GetSidebarWidth(),aPageRect.Height()));
+        _pViewShell->GetOut()->DrawRect(aSidebar.SVRect());
+    }
+    if (!pMgr->ShowScrollbar(nPageNum))
+        return;
+
+    // draw scrollbar area and arrows
+    Point aPointBottom;
+    Point aPointTop;
+    aPointBottom = !bRight ? Point(aPageRect.Left() - pMgr->GetSidebarWidth() - pMgr->GetSidebarBorderWidth() + _pViewShell->GetOut()->PixelToLogic(Size(2,0)).Width(),aPageRect.Bottom()- _pViewShell->GetOut()->PixelToLogic(Size(0,2+pMgr->GetSidebarScrollerHeight())).Height()) :
+                            Point(aPageRect.Right() + pMgr->GetSidebarBorderWidth() + _pViewShell->GetOut()->PixelToLogic(Size(2,0)).Width(),aPageRect.Bottom()- _pViewShell->GetOut()->PixelToLogic(Size(0,2+pMgr->GetSidebarScrollerHeight())).Height());
+    aPointTop = !bRight ?    Point(aPageRect.Left() - pMgr->GetSidebarWidth() + _pViewShell->GetOut()->PixelToLogic(Size(2,0)).Width(),aPageRect.Top() + _pViewShell->GetOut()->PixelToLogic(Size(0,2)).Height()) :
+                        Point(aPageRect.Right() + pMgr->GetSidebarBorderWidth() + _pViewShell->GetOut()->PixelToLogic(Size(2,0)).Width(),aPageRect.Top() + _pViewShell->GetOut()->PixelToLogic(Size(0,2)).Height());
+    Size aSize(pMgr->GetSidebarWidth() - _pViewShell->GetOut()->PixelToLogic(Size(4,0)).Width(), _pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()) ;
+    tools::Rectangle aRectBottom(aPointBottom,aSize);
+    tools::Rectangle aRectTop(aPointTop,aSize);
+
+    if (aRectBottom.IsOver(aVisRect))
+    {
+
+        if (Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
         {
-            _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE_BORDER);
-            _pViewShell->GetOut()->DrawRect(tools::Rectangle(Point(aPageRect.Left()-pMgr->GetSidebarBorderWidth(),aPageRect.Top()),Size(pMgr->GetSidebarBorderWidth(),aPageRect.Height())))    ;
-            if (Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
-                _pViewShell->GetOut()->SetFillColor(COL_BLACK);
-            else
-                _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE);
-            _pViewShell->GetOut()->DrawRect(tools::Rectangle(Point(aPageRect.Left()-pMgr->GetSidebarWidth()-pMgr->GetSidebarBorderWidth(),aPageRect.Top()),Size(pMgr->GetSidebarWidth(),aPageRect.Height())))  ;
+            _pViewShell->GetOut()->SetLineColor(COL_WHITE);
+            _pViewShell->GetOut()->SetFillColor(COL_BLACK);
         }
         else
         {
-            _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE_BORDER);
-            SwRect aSidebarBorder(aPageRect.TopRight(),Size(pMgr->GetSidebarBorderWidth(),aPageRect.Height()));
-            _pViewShell->GetOut()->DrawRect(aSidebarBorder.SVRect());
-            if (Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
-                _pViewShell->GetOut()->SetFillColor(COL_BLACK);
-            else
-                _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE);
-            SwRect aSidebar(Point(aPageRect.Right()+pMgr->GetSidebarBorderWidth(),aPageRect.Top()),Size(pMgr->GetSidebarWidth(),aPageRect.Height()));
-            _pViewShell->GetOut()->DrawRect(aSidebar.SVRect());
+            _pViewShell->GetOut()->SetLineColor(COL_BLACK);
+            _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE_SCROLLAREA);
         }
-        if (pMgr->ShowScrollbar(nPageNum))
-        {
-            // draw scrollbar area and arrows
-            Point aPointBottom;
-            Point aPointTop;
-            aPointBottom = !bRight ? Point(aPageRect.Left() - pMgr->GetSidebarWidth() - pMgr->GetSidebarBorderWidth() + _pViewShell->GetOut()->PixelToLogic(Size(2,0)).Width(),aPageRect.Bottom()- _pViewShell->GetOut()->PixelToLogic(Size(0,2+pMgr->GetSidebarScrollerHeight())).Height()) :
-                                    Point(aPageRect.Right() + pMgr->GetSidebarBorderWidth() + _pViewShell->GetOut()->PixelToLogic(Size(2,0)).Width(),aPageRect.Bottom()- _pViewShell->GetOut()->PixelToLogic(Size(0,2+pMgr->GetSidebarScrollerHeight())).Height());
-            aPointTop = !bRight ?    Point(aPageRect.Left() - pMgr->GetSidebarWidth() + _pViewShell->GetOut()->PixelToLogic(Size(2,0)).Width(),aPageRect.Top() + _pViewShell->GetOut()->PixelToLogic(Size(0,2)).Height()) :
-                                Point(aPageRect.Right() + pMgr->GetSidebarBorderWidth() + _pViewShell->GetOut()->PixelToLogic(Size(2,0)).Width(),aPageRect.Top() + _pViewShell->GetOut()->PixelToLogic(Size(0,2)).Height());
-            Size aSize(pMgr->GetSidebarWidth() - _pViewShell->GetOut()->PixelToLogic(Size(4,0)).Width(), _pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()) ;
-            tools::Rectangle aRectBottom(aPointBottom,aSize);
-            tools::Rectangle aRectTop(aPointTop,aSize);
+        _pViewShell->GetOut()->DrawRect(aRectBottom);
+        _pViewShell->GetOut()->DrawLine(aPointBottom + Point(pMgr->GetSidebarWidth()/3,0), aPointBottom + Point(pMgr->GetSidebarWidth()/3 , _pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()));
 
-            if (aRectBottom.IsOver(aVisRect))
-            {
-
-                if (Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
-                {
-                    _pViewShell->GetOut()->SetLineColor(COL_WHITE);
-                    _pViewShell->GetOut()->SetFillColor(COL_BLACK);
-                }
-                else
-                {
-                    _pViewShell->GetOut()->SetLineColor(COL_BLACK);
-                    _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE_SCROLLAREA);
-                }
-                _pViewShell->GetOut()->DrawRect(aRectBottom);
-                _pViewShell->GetOut()->DrawLine(aPointBottom + Point(pMgr->GetSidebarWidth()/3,0), aPointBottom + Point(pMgr->GetSidebarWidth()/3 , _pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()));
-
-                _pViewShell->GetOut()->SetLineColor();
-                Point aMiddleFirst(aPointBottom + Point(pMgr->GetSidebarWidth()/6,_pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()/2));
-                Point aMiddleSecond(aPointBottom + Point(pMgr->GetSidebarWidth()/3*2,_pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()/2));
-                PaintNotesSidebarArrows(aMiddleFirst,aMiddleSecond,_pViewShell,pMgr->GetArrowColor(KEY_PAGEUP,nPageNum), pMgr->GetArrowColor(KEY_PAGEDOWN,nPageNum));
-            }
-            if (aRectTop.IsOver(aVisRect))
-            {
-                if (Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
-                {
-                    _pViewShell->GetOut()->SetLineColor(COL_WHITE);
-                    _pViewShell->GetOut()->SetFillColor(COL_BLACK);
-                }
-                else
-                {
-                    _pViewShell->GetOut()->SetLineColor(COL_BLACK);
-                    _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE_SCROLLAREA);
-                }
-                _pViewShell->GetOut()->DrawRect(aRectTop);
-                _pViewShell->GetOut()->DrawLine(aPointTop + Point(pMgr->GetSidebarWidth()/3*2,0), aPointTop + Point(pMgr->GetSidebarWidth()/3*2 , _pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()));
-
-                _pViewShell->GetOut()->SetLineColor();
-                Point aMiddleFirst(aPointTop + Point(pMgr->GetSidebarWidth()/3,_pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()/2));
-                Point aMiddleSecond(aPointTop + Point(pMgr->GetSidebarWidth()/6*5,_pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()/2));
-                PaintNotesSidebarArrows(aMiddleFirst,aMiddleSecond,_pViewShell, pMgr->GetArrowColor(KEY_PAGEUP,nPageNum), pMgr->GetArrowColor(KEY_PAGEDOWN,nPageNum));
-            }
-        }
+        _pViewShell->GetOut()->SetLineColor();
+        Point aMiddleFirst(aPointBottom + Point(pMgr->GetSidebarWidth()/6,_pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()/2));
+        Point aMiddleSecond(aPointBottom + Point(pMgr->GetSidebarWidth()/3*2,_pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()/2));
+        PaintNotesSidebarArrows(aMiddleFirst,aMiddleSecond,_pViewShell,pMgr->GetArrowColor(KEY_PAGEUP,nPageNum), pMgr->GetArrowColor(KEY_PAGEDOWN,nPageNum));
     }
+    if (!aRectTop.IsOver(aVisRect))
+        return;
+
+    if (Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+    {
+        _pViewShell->GetOut()->SetLineColor(COL_WHITE);
+        _pViewShell->GetOut()->SetFillColor(COL_BLACK);
+    }
+    else
+    {
+        _pViewShell->GetOut()->SetLineColor(COL_BLACK);
+        _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE_SCROLLAREA);
+    }
+    _pViewShell->GetOut()->DrawRect(aRectTop);
+    _pViewShell->GetOut()->DrawLine(aPointTop + Point(pMgr->GetSidebarWidth()/3*2,0), aPointTop + Point(pMgr->GetSidebarWidth()/3*2 , _pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()));
+
+    _pViewShell->GetOut()->SetLineColor();
+    Point aMiddleFirst(aPointTop + Point(pMgr->GetSidebarWidth()/3,_pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()/2));
+    Point aMiddleSecond(aPointTop + Point(pMgr->GetSidebarWidth()/6*5,_pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()/2));
+    PaintNotesSidebarArrows(aMiddleFirst,aMiddleSecond,_pViewShell, pMgr->GetArrowColor(KEY_PAGEUP,nPageNum), pMgr->GetArrowColor(KEY_PAGEDOWN,nPageNum));
 }
 
 /*static*/ void SwPageFrame::PaintNotesSidebarArrows(const Point &aMiddleFirst, const Point &aMiddleSecond, SwViewShell const * _pViewShell, const Color& rColorUp, const Color& rColorDown)
@@ -6382,70 +6382,70 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
     //We end this as soon as a Frame leaves the chain and therefore is not a lower
     //of me anymore
     const SwFrame *pFrame = GetLower();
-    if ( pFrame )
-    {
-        SwRect aFrameRect;
-        SwRect aRect( GetPaintArea() );
-        aRect.Intersection_( rRect );
-        SwRect aBorderRect( aRect );
-        SwShortCut aShortCut( *pFrame, aBorderRect );
-        do
-        {   if ( gProp.pSProgress )
-                SfxProgress::Reschedule();
+    if ( !pFrame )
+        return;
 
-            aFrameRect = pFrame->GetPaintArea();
-            if ( aFrameRect.IsOver( aBorderRect ) )
+    SwRect aFrameRect;
+    SwRect aRect( GetPaintArea() );
+    aRect.Intersection_( rRect );
+    SwRect aBorderRect( aRect );
+    SwShortCut aShortCut( *pFrame, aBorderRect );
+    do
+    {   if ( gProp.pSProgress )
+            SfxProgress::Reschedule();
+
+        aFrameRect = pFrame->GetPaintArea();
+        if ( aFrameRect.IsOver( aBorderRect ) )
+        {
+            SwBorderAttrAccess aAccess( SwFrame::GetCache(), pFrame );
+            const SwBorderAttrs &rTmpAttrs = *aAccess.Get();
+            if ( ( pFrame->IsLayoutFrame() && bLowerBorder ) || aFrameRect.IsOver( aRect ) )
             {
-                SwBorderAttrAccess aAccess( SwFrame::GetCache(), pFrame );
-                const SwBorderAttrs &rTmpAttrs = *aAccess.Get();
-                if ( ( pFrame->IsLayoutFrame() && bLowerBorder ) || aFrameRect.IsOver( aRect ) )
-                {
-                    pFrame->PaintSwFrameBackground( aRect, pPage, rTmpAttrs, bLowMode,
-                                           bLowerBorder, bOnlyTextBackground );
-                }
-
-                if ( bLowerBorder )
-                {
-                    pFrame->PaintSwFrameShadowAndBorder( aBorderRect, pPage, rTmpAttrs );
-                }
+                pFrame->PaintSwFrameBackground( aRect, pPage, rTmpAttrs, bLowMode,
+                                       bLowerBorder, bOnlyTextBackground );
             }
-            pFrame = pFrame->GetNext();
-        } while ( pFrame && pFrame->GetUpper() == this &&
-                  !aShortCut.Stop( aFrameRect ) );
-    }
+
+            if ( bLowerBorder )
+            {
+                pFrame->PaintSwFrameShadowAndBorder( aBorderRect, pPage, rTmpAttrs );
+            }
+        }
+        pFrame = pFrame->GetNext();
+    } while ( pFrame && pFrame->GetUpper() == this &&
+              !aShortCut.Stop( aFrameRect ) );
 }
 
 /// Refreshes all subsidiary lines of a page.
 void SwPageFrame::RefreshSubsidiary( const SwRect &rRect ) const
 {
-    if ( isSubsidiaryLinesEnabled() || isTableBoundariesEnabled()
-        || isSubsidiaryLinesForSectionsEnabled() || isSubsidiaryLinesFlysEnabled() )
+    if ( !(isSubsidiaryLinesEnabled() || isTableBoundariesEnabled()
+        || isSubsidiaryLinesForSectionsEnabled() || isSubsidiaryLinesFlysEnabled()) )
+        return;
+
+    if ( !rRect.HasArea() )
+        return;
+
+    //During paint using the root, the array is controlled from there.
+    //Otherwise we'll handle it for our self.
+    bool bDelSubs = false;
+    if ( !gProp.pSSubsLines )
     {
-        if ( rRect.HasArea() )
-        {
-            //During paint using the root, the array is controlled from there.
-            //Otherwise we'll handle it for our self.
-            bool bDelSubs = false;
-            if ( !gProp.pSSubsLines )
-            {
-                gProp.pSSubsLines.reset(new SwSubsRects);
-                // create container for special subsidiary lines
-                gProp.pSSpecSubsLines.reset(new SwSubsRects);
-                bDelSubs = true;
-            }
+        gProp.pSSubsLines.reset(new SwSubsRects);
+        // create container for special subsidiary lines
+        gProp.pSSpecSubsLines.reset(new SwSubsRects);
+        bDelSubs = true;
+    }
 
-            RefreshLaySubsidiary( this, rRect );
+    RefreshLaySubsidiary( this, rRect );
 
-            if ( bDelSubs )
-            {
-                // paint special subsidiary lines and delete its container
-                gProp.pSSpecSubsLines->PaintSubsidiary( gProp.pSGlobalShell->GetOut(), nullptr, gProp );
-                gProp.pSSpecSubsLines.reset();
+    if ( bDelSubs )
+    {
+        // paint special subsidiary lines and delete its container
+        gProp.pSSpecSubsLines->PaintSubsidiary( gProp.pSGlobalShell->GetOut(), nullptr, gProp );
+        gProp.pSSpecSubsLines.reset();
 
-                gProp.pSSubsLines->PaintSubsidiary(gProp.pSGlobalShell->GetOut(), gProp.pSLines.get(), gProp);
-                gProp.pSSubsLines.reset();
-            }
-        }
+        gProp.pSSubsLines->PaintSubsidiary(gProp.pSGlobalShell->GetOut(), gProp.pSLines.get(), gProp);
+        gProp.pSSubsLines.reset();
     }
 }
 
@@ -6697,29 +6697,29 @@ static drawinglayer::primitive2d::Primitive2DContainer lcl_CreateColumnAreaDelim
 void SwPageFrame::PaintSubsidiaryLines( const SwPageFrame *,
                                         const SwRect & ) const
 {
-    if ( !gProp.pSGlobalShell->IsHeaderFooterEdit() )
+    if ( gProp.pSGlobalShell->IsHeaderFooterEdit() )
+        return;
+
+    const SwFrame* pLay = Lower();
+    const SwFrame* pFootnoteCont = nullptr;
+    const SwFrame* pPageBody = nullptr;
+    while ( pLay && !( pFootnoteCont && pPageBody ) )
     {
-        const SwFrame* pLay = Lower();
-        const SwFrame* pFootnoteCont = nullptr;
-        const SwFrame* pPageBody = nullptr;
-        while ( pLay && !( pFootnoteCont && pPageBody ) )
-        {
-            if ( pLay->IsFootnoteContFrame( ) )
-                pFootnoteCont = pLay;
-            if ( pLay->IsBodyFrame() )
-                pPageBody = pLay;
-            pLay = pLay->GetNext();
-        }
-
-        SwRect aArea( pPageBody->getFrameArea() );
-        if ( pFootnoteCont )
-            aArea.AddBottom( pFootnoteCont->getFrameArea().Bottom() - aArea.Bottom() );
-
-        if ( !gProp.pSGlobalShell->GetViewOptions()->IsViewMetaChars( ) )
-            ProcessPrimitives( lcl_CreatePageAreaDelimiterPrimitives( aArea ) );
-        else
-            ProcessPrimitives( lcl_CreateRectangleDelimiterPrimitives( aArea ) );
+        if ( pLay->IsFootnoteContFrame( ) )
+            pFootnoteCont = pLay;
+        if ( pLay->IsBodyFrame() )
+            pPageBody = pLay;
+        pLay = pLay->GetNext();
     }
+
+    SwRect aArea( pPageBody->getFrameArea() );
+    if ( pFootnoteCont )
+        aArea.AddBottom( pFootnoteCont->getFrameArea().Bottom() - aArea.Bottom() );
+
+    if ( !gProp.pSGlobalShell->GetViewOptions()->IsViewMetaChars( ) )
+        ProcessPrimitives( lcl_CreatePageAreaDelimiterPrimitives( aArea ) );
+    else
+        ProcessPrimitives( lcl_CreateRectangleDelimiterPrimitives( aArea ) );
 }
 
 void SwColumnFrame::PaintSubsidiaryLines( const SwPageFrame *,
@@ -6948,21 +6948,21 @@ void SwPageFrame::RefreshExtraData( const SwRect &rRect ) const
 
     SwRect aRect( rRect );
     ::SwAlignRect( aRect, gProp.pSGlobalShell, gProp.pSGlobalShell->GetOut() );
-    if ( aRect.HasArea() )
-    {
-        SwLayoutFrame::RefreshExtraData( aRect );
+    if ( !aRect.HasArea() )
+        return;
 
-        if ( bLineInFly && GetSortedObjs() )
-            for (SwAnchoredObject* pAnchoredObj : *GetSortedObjs())
+    SwLayoutFrame::RefreshExtraData( aRect );
+
+    if ( bLineInFly && GetSortedObjs() )
+        for (SwAnchoredObject* pAnchoredObj : *GetSortedObjs())
+        {
+            if ( auto pFly = dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) )
             {
-                if ( auto pFly = dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) )
-                {
-                    if ( pFly->getFrameArea().Top() <= aRect.Bottom() &&
-                         pFly->getFrameArea().Bottom() >= aRect.Top() )
-                        pFly->RefreshExtraData( aRect );
-                }
+                if ( pFly->getFrameArea().Top() <= aRect.Bottom() &&
+                     pFly->getFrameArea().Bottom() >= aRect.Top() )
+                    pFly->RefreshExtraData( aRect );
             }
-    }
+        }
 }
 
 void SwLayoutFrame::RefreshExtraData( const SwRect &rRect ) const

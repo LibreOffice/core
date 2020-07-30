@@ -308,21 +308,21 @@ void SwPageFrame::CheckGrid( bool bInvalidate )
     m_bHasGrid = true;
     SwTextGridItem const*const pGrid(GetGridItem(this));
     m_bHasGrid = nullptr != pGrid;
-    if( bInvalidate || bOld != m_bHasGrid )
+    if( !(bInvalidate || bOld != m_bHasGrid) )
+        return;
+
+    SwLayoutFrame* pBody = FindBodyCont();
+    if( pBody )
     {
-        SwLayoutFrame* pBody = FindBodyCont();
-        if( pBody )
+        pBody->InvalidatePrt();
+        SwContentFrame* pFrame = pBody->ContainsContent();
+        while( pBody->IsAnLower( pFrame ) )
         {
-            pBody->InvalidatePrt();
-            SwContentFrame* pFrame = pBody->ContainsContent();
-            while( pBody->IsAnLower( pFrame ) )
-            {
-                static_cast<SwTextFrame*>(pFrame)->Prepare();
-                pFrame = pFrame->GetNextContentFrame();
-            }
+            static_cast<SwTextFrame*>(pFrame)->Prepare();
+            pFrame = pFrame->GetNextContentFrame();
         }
-        SetCompletePaint();
     }
+    SetCompletePaint();
 }
 
 void SwPageFrame::CheckDirection( bool bVert )
@@ -524,22 +524,22 @@ void SwPageFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
     else
         UpdateAttr_( pOld, pNew, nInvFlags );
 
-    if ( nInvFlags != 0 )
-    {
-        InvalidatePage( this );
-        if ( nInvFlags & 0x01 )
-            InvalidatePrt_();
-        if ( nInvFlags & 0x02 )
-            SetCompletePaint();
-        if ( nInvFlags & 0x04 && GetNext() )
-            GetNext()->InvalidatePos();
-        if ( nInvFlags & 0x08 )
-            PrepareHeader();
-        if ( nInvFlags & 0x10 )
-            PrepareFooter();
-        if ( nInvFlags & 0x20 )
-            CheckGrid( nInvFlags & 0x40 );
-    }
+    if ( nInvFlags == 0 )
+        return;
+
+    InvalidatePage( this );
+    if ( nInvFlags & 0x01 )
+        InvalidatePrt_();
+    if ( nInvFlags & 0x02 )
+        SetCompletePaint();
+    if ( nInvFlags & 0x04 && GetNext() )
+        GetNext()->InvalidatePos();
+    if ( nInvFlags & 0x08 )
+        PrepareHeader();
+    if ( nInvFlags & 0x10 )
+        PrepareFooter();
+    if ( nInvFlags & 0x20 )
+        CheckGrid( nInvFlags & 0x40 );
 }
 
 
@@ -943,20 +943,20 @@ void SwPageFrame::Paste( SwFrame* pParent, SwFrame* pSibling )
 static void lcl_PrepFlyInCntRegister( SwContentFrame *pFrame )
 {
     pFrame->Prepare( PrepareHint::Register );
-    if( pFrame->GetDrawObjs() )
+    if( !pFrame->GetDrawObjs() )
+        return;
+
+    for(SwAnchoredObject* pAnchoredObj : *pFrame->GetDrawObjs())
     {
-        for(SwAnchoredObject* pAnchoredObj : *pFrame->GetDrawObjs())
+        // #i28701#
+        if ( dynamic_cast< const SwFlyInContentFrame *>( pAnchoredObj ) !=  nullptr )
         {
-            // #i28701#
-            if ( dynamic_cast< const SwFlyInContentFrame *>( pAnchoredObj ) !=  nullptr )
+            SwFlyFrame* pFly = static_cast<SwFlyInContentFrame*>(pAnchoredObj);
+            SwContentFrame *pCnt = pFly->ContainsContent();
+            while ( pCnt )
             {
-                SwFlyFrame* pFly = static_cast<SwFlyInContentFrame*>(pAnchoredObj);
-                SwContentFrame *pCnt = pFly->ContainsContent();
-                while ( pCnt )
-                {
-                    lcl_PrepFlyInCntRegister( pCnt );
-                    pCnt = pCnt->GetNextContentFrame();
-                }
+                lcl_PrepFlyInCntRegister( pCnt );
+                pCnt = pCnt->GetNextContentFrame();
             }
         }
     }
@@ -972,20 +972,20 @@ void SwPageFrame::PrepareRegisterChg()
         if( !IsAnLower( pFrame ) )
             break;
     }
-    if( GetSortedObjs() )
+    if( !GetSortedObjs() )
+        return;
+
+    for(SwAnchoredObject* pAnchoredObj : *GetSortedObjs())
     {
-        for(SwAnchoredObject* pAnchoredObj : *GetSortedObjs())
+        // #i28701#
+        if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
         {
-            // #i28701#
-            if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
+            SwFlyFrame *pFly = static_cast<SwFlyFrame*>(pAnchoredObj);
+            pFrame = pFly->ContainsContent();
+            while ( pFrame )
             {
-                SwFlyFrame *pFly = static_cast<SwFlyFrame*>(pAnchoredObj);
-                pFrame = pFly->ContainsContent();
-                while ( pFrame )
-                {
-                    ::lcl_PrepFlyInCntRegister( pFrame );
-                    pFrame = pFrame->GetNextContentFrame();
-                }
+                ::lcl_PrepFlyInCntRegister( pFrame );
+                pFrame = pFrame->GetNextContentFrame();
             }
         }
     }
@@ -1876,73 +1876,79 @@ void SwRootFrame::StartAllAction()
 
 void SwRootFrame::EndAllAction( bool bVirDev )
 {
-    if ( GetCurrShell() )
-        for(SwViewShell& rSh : GetCurrShell()->GetRingContainer())
+    if ( !GetCurrShell() )
+        return;
+
+    for(SwViewShell& rSh : GetCurrShell()->GetRingContainer())
+    {
+        const bool bOldEndActionByVirDev = rSh.IsEndActionByVirDev();
+        rSh.SetEndActionByVirDev( bVirDev );
+        if ( dynamic_cast<const SwCursorShell*>( &rSh) !=  nullptr )
         {
-            const bool bOldEndActionByVirDev = rSh.IsEndActionByVirDev();
-            rSh.SetEndActionByVirDev( bVirDev );
-            if ( dynamic_cast<const SwCursorShell*>( &rSh) !=  nullptr )
-            {
-                static_cast<SwCursorShell*>(&rSh)->EndAction();
-                static_cast<SwCursorShell*>(&rSh)->CallChgLnk();
-                if ( dynamic_cast<const SwFEShell*>( &rSh) !=  nullptr )
-                    static_cast<SwFEShell*>(&rSh)->SetChainMarker();
-            }
-            else
-                rSh.EndAction();
-            rSh.SetEndActionByVirDev( bOldEndActionByVirDev );
+            static_cast<SwCursorShell*>(&rSh)->EndAction();
+            static_cast<SwCursorShell*>(&rSh)->CallChgLnk();
+            if ( dynamic_cast<const SwFEShell*>( &rSh) !=  nullptr )
+                static_cast<SwFEShell*>(&rSh)->SetChainMarker();
         }
+        else
+            rSh.EndAction();
+        rSh.SetEndActionByVirDev( bOldEndActionByVirDev );
+    }
 }
 
 void SwRootFrame::UnoRemoveAllActions()
 {
-    if ( GetCurrShell() )
-        for(SwViewShell& rSh : GetCurrShell()->GetRingContainer())
+    if ( !GetCurrShell() )
+        return;
+
+    for(SwViewShell& rSh : GetCurrShell()->GetRingContainer())
+    {
+        // #i84729#
+        // No end action, if <SwViewShell> instance is currently in its end action.
+        // Recursives calls to <::EndAction()> are not allowed.
+        if ( !rSh.IsInEndAction() )
         {
-            // #i84729#
-            // No end action, if <SwViewShell> instance is currently in its end action.
-            // Recursives calls to <::EndAction()> are not allowed.
-            if ( !rSh.IsInEndAction() )
+            OSL_ENSURE(!rSh.GetRestoreActions(), "Restore action count is already set!");
+            bool bCursor = dynamic_cast<const SwCursorShell*>( &rSh) !=  nullptr;
+            bool bFE = dynamic_cast<const SwFEShell*>( &rSh) !=  nullptr;
+            sal_uInt16 nRestore = 0;
+            while( rSh.ActionCount() )
             {
-                OSL_ENSURE(!rSh.GetRestoreActions(), "Restore action count is already set!");
-                bool bCursor = dynamic_cast<const SwCursorShell*>( &rSh) !=  nullptr;
-                bool bFE = dynamic_cast<const SwFEShell*>( &rSh) !=  nullptr;
-                sal_uInt16 nRestore = 0;
-                while( rSh.ActionCount() )
+                if( bCursor )
                 {
-                    if( bCursor )
-                    {
-                        static_cast<SwCursorShell*>(&rSh)->EndAction();
-                        static_cast<SwCursorShell*>(&rSh)->CallChgLnk();
-                        if ( bFE )
-                            static_cast<SwFEShell*>(&rSh)->SetChainMarker();
-                    }
-                    else
-                        rSh.EndAction();
-                    nRestore++;
+                    static_cast<SwCursorShell*>(&rSh)->EndAction();
+                    static_cast<SwCursorShell*>(&rSh)->CallChgLnk();
+                    if ( bFE )
+                        static_cast<SwFEShell*>(&rSh)->SetChainMarker();
                 }
-                rSh.SetRestoreActions(nRestore);
+                else
+                    rSh.EndAction();
+                nRestore++;
             }
-            rSh.LockView(true);
+            rSh.SetRestoreActions(nRestore);
         }
+        rSh.LockView(true);
+    }
 }
 
 void SwRootFrame::UnoRestoreAllActions()
 {
-    if ( GetCurrShell() )
-        for(SwViewShell& rSh : GetCurrShell()->GetRingContainer())
+    if ( !GetCurrShell() )
+        return;
+
+    for(SwViewShell& rSh : GetCurrShell()->GetRingContainer())
+    {
+        sal_uInt16 nActions = rSh.GetRestoreActions();
+        while( nActions-- )
         {
-            sal_uInt16 nActions = rSh.GetRestoreActions();
-            while( nActions-- )
-            {
-                if ( dynamic_cast<const SwCursorShell*>( &rSh) !=  nullptr )
-                    static_cast<SwCursorShell*>(&rSh)->StartAction();
-                else
-                    rSh.StartAction();
-            }
-            rSh.SetRestoreActions(0);
-            rSh.LockView(false);
+            if ( dynamic_cast<const SwCursorShell*>( &rSh) !=  nullptr )
+                static_cast<SwCursorShell*>(&rSh)->StartAction();
+            else
+                rSh.StartAction();
         }
+        rSh.SetRestoreActions(0);
+        rSh.LockView(false);
+    }
 }
 
 // Helper functions for SwRootFrame::CheckViewLayout

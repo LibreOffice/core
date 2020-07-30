@@ -129,51 +129,51 @@ static void lcl_DelHFFormat( SwClient *pToRemove, SwFrameFormat *pFormat )
                 bDel = false;
     }
 
-    if ( bDel )
+    if ( !bDel )
+        return;
+
+    // If there is a Cursor registered in one of the nodes, we need to call the
+    // ParkCursor in an (arbitrary) shell.
+    SwFormatContent& rCnt = const_cast<SwFormatContent&>(pFormat->GetContent());
+    if ( rCnt.GetContentIdx() )
     {
-        // If there is a Cursor registered in one of the nodes, we need to call the
-        // ParkCursor in an (arbitrary) shell.
-        SwFormatContent& rCnt = const_cast<SwFormatContent&>(pFormat->GetContent());
-        if ( rCnt.GetContentIdx() )
+        SwNode *pNode = nullptr;
         {
-            SwNode *pNode = nullptr;
+            // #i92993#
+            // Begin with start node of page header/footer to assure that
+            // complete content is checked for cursors and the complete content
+            // is deleted on below made method call <pDoc->getIDocumentContentOperations().DeleteSection(pNode)>
+            SwNodeIndex aIdx( *rCnt.GetContentIdx(), 0 );
+            // If there is a Cursor registered in one of the nodes, we need to call the
+            // ParkCursor in an (arbitrary) shell.
+            pNode = & aIdx.GetNode();
+            sal_uInt32 nEnd = pNode->EndOfSectionIndex();
+            while ( aIdx < nEnd )
             {
-                // #i92993#
-                // Begin with start node of page header/footer to assure that
-                // complete content is checked for cursors and the complete content
-                // is deleted on below made method call <pDoc->getIDocumentContentOperations().DeleteSection(pNode)>
-                SwNodeIndex aIdx( *rCnt.GetContentIdx(), 0 );
-                // If there is a Cursor registered in one of the nodes, we need to call the
-                // ParkCursor in an (arbitrary) shell.
-                pNode = & aIdx.GetNode();
-                sal_uInt32 nEnd = pNode->EndOfSectionIndex();
-                while ( aIdx < nEnd )
+                if ( pNode->IsContentNode() &&
+                     static_cast<SwContentNode*>(pNode)->HasWriterListeners() )
                 {
-                    if ( pNode->IsContentNode() &&
-                         static_cast<SwContentNode*>(pNode)->HasWriterListeners() )
+                    SwCursorShell *pShell = SwIterator<SwCursorShell,SwContentNode>( *static_cast<SwContentNode*>(pNode) ).First();
+                    if( pShell )
                     {
-                        SwCursorShell *pShell = SwIterator<SwCursorShell,SwContentNode>( *static_cast<SwContentNode*>(pNode) ).First();
-                        if( pShell )
-                        {
-                            pShell->ParkCursor( aIdx );
-                            aIdx = nEnd-1;
-                        }
+                        pShell->ParkCursor( aIdx );
+                        aIdx = nEnd-1;
                     }
-                    ++aIdx;
-                    pNode = & aIdx.GetNode();
                 }
+                ++aIdx;
+                pNode = & aIdx.GetNode();
             }
-            rCnt.SetNewContentIdx( nullptr );
-
-            // When deleting a header/footer-format, we ALWAYS need to disable
-            // the undo function (Bug 31069)
-            ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
-
-            OSL_ENSURE( pNode, "A big problem." );
-            pDoc->getIDocumentContentOperations().DeleteSection( pNode );
         }
-        delete pFormat;
+        rCnt.SetNewContentIdx( nullptr );
+
+        // When deleting a header/footer-format, we ALWAYS need to disable
+        // the undo function (Bug 31069)
+        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
+
+        OSL_ENSURE( pNode, "A big problem." );
+        pDoc->getIDocumentContentOperations().DeleteSection( pNode );
     }
+    delete pFormat;
 }
 
 void SwFormatFrameSize::ScaleMetrics(long lMult, long lDiv) {
@@ -639,28 +639,28 @@ void SwFormatPageDesc::SwClientNotify( const SwModify& rModify, const SfxHint& r
 {
     SwClient::SwClientNotify(rModify, rHint);
     const SwPageDescHint* pHint = dynamic_cast<const SwPageDescHint*>(&rHint);
-    if ( pHint )
+    if ( !pHint )
+        return;
+
+    // mba: shouldn't that be broadcasted also?
+    SwFormatPageDesc aDfltDesc( pHint->GetPageDesc() );
+    SwPageDesc* pDesc = pHint->GetPageDesc();
+    const SwModify* pMod = GetDefinedIn();
+    if ( pMod )
     {
-        // mba: shouldn't that be broadcasted also?
-        SwFormatPageDesc aDfltDesc( pHint->GetPageDesc() );
-        SwPageDesc* pDesc = pHint->GetPageDesc();
-        const SwModify* pMod = GetDefinedIn();
-        if ( pMod )
-        {
-            if( auto pContentNode = dynamic_cast<const SwContentNode*>( pMod) )
-                const_cast<SwContentNode*>(pContentNode)->SetAttr( aDfltDesc );
-            else if( auto pFormat = dynamic_cast<const SwFormat*>( pMod) )
-                const_cast<SwFormat*>(pFormat)->SetFormatAttr( aDfltDesc );
-            else
-            {
-                OSL_FAIL( "What kind of SwModify is this?" );
-                RegisterToPageDesc( *pDesc );
-            }
-        }
+        if( auto pContentNode = dynamic_cast<const SwContentNode*>( pMod) )
+            const_cast<SwContentNode*>(pContentNode)->SetAttr( aDfltDesc );
+        else if( auto pFormat = dynamic_cast<const SwFormat*>( pMod) )
+            const_cast<SwFormat*>(pFormat)->SetFormatAttr( aDfltDesc );
         else
-            // there could be an Undo-copy
+        {
+            OSL_FAIL( "What kind of SwModify is this?" );
             RegisterToPageDesc( *pDesc );
+        }
     }
+    else
+        // there could be an Undo-copy
+        RegisterToPageDesc( *pDesc );
 }
 
 void SwFormatPageDesc::RegisterToPageDesc( SwPageDesc& rDesc )
@@ -2965,92 +2965,92 @@ void SwFlyFrameFormat::MakeFrames()
         break;
     }
 
-    if( pModify )
+    if( !pModify )
+        return;
+
+    SwIterator<SwFrame, SwModify, sw::IteratorMode::UnwrapMulti> aIter(*pModify);
+    for( SwFrame *pFrame = aIter.First(); pFrame; pFrame = aIter.Next() )
     {
-        SwIterator<SwFrame, SwModify, sw::IteratorMode::UnwrapMulti> aIter(*pModify);
-        for( SwFrame *pFrame = aIter.First(); pFrame; pFrame = aIter.Next() )
+        bool bAdd = !pFrame->IsContentFrame() ||
+                        !static_cast<SwContentFrame*>(pFrame)->IsFollow();
+
+        if ( RndStdIds::FLY_AT_FLY == aAnchorAttr.GetAnchorId() && !pFrame->IsFlyFrame() )
         {
-            bool bAdd = !pFrame->IsContentFrame() ||
-                            !static_cast<SwContentFrame*>(pFrame)->IsFollow();
-
-            if ( RndStdIds::FLY_AT_FLY == aAnchorAttr.GetAnchorId() && !pFrame->IsFlyFrame() )
+            SwFrame* pFlyFrame = pFrame->FindFlyFrame();
+            if ( pFlyFrame )
             {
-                SwFrame* pFlyFrame = pFrame->FindFlyFrame();
-                if ( pFlyFrame )
-                {
-                    pFrame = pFlyFrame;
-                }
-                else
-                {
-                    aAnchorAttr.SetType( RndStdIds::FLY_AT_PARA );
-                    SetFormatAttr( aAnchorAttr );
-                    MakeFrames();
-                    return;
-                }
+                pFrame = pFlyFrame;
             }
-
-            if (bAdd)
+            else
             {
-                switch (aAnchorAttr.GetAnchorId())
-                {
-                    case RndStdIds::FLY_AS_CHAR:
-                    case RndStdIds::FLY_AT_PARA:
-                    case RndStdIds::FLY_AT_CHAR:
-                    {
-                        assert(pFrame->IsTextFrame());
-                        bAdd = IsAnchoredObjShown(*static_cast<SwTextFrame*>(pFrame), aAnchorAttr);
-                    }
-                    break;
-                    default:
-                    break;
-                }
+                aAnchorAttr.SetType( RndStdIds::FLY_AT_PARA );
+                SetFormatAttr( aAnchorAttr );
+                MakeFrames();
+                return;
             }
+        }
 
-            if (bAdd && pFrame->GetDrawObjs())
+        if (bAdd)
+        {
+            switch (aAnchorAttr.GetAnchorId())
             {
-                // #i28701# - new type <SwSortedObjs>
-                SwSortedObjs &rObjs = *pFrame->GetDrawObjs();
-                for(SwAnchoredObject* pObj : rObjs)
-                {
-                    // #i28701# - consider changed type of
-                    // <SwSortedObjs> entries.
-                    if( dynamic_cast<const SwFlyFrame*>( pObj) !=  nullptr &&
-                        (&pObj->GetFrameFormat()) == this )
-                    {
-                        bAdd = false;
-                        break;
-                    }
-                }
-            }
-
-            if( bAdd )
-            {
-                SwFlyFrame *pFly = nullptr; // avoid warnings
-                switch( aAnchorAttr.GetAnchorId() )
-                {
-                case RndStdIds::FLY_AT_FLY:
-                    pFly = new SwFlyLayFrame( this, pFrame, pFrame );
-                    break;
-
+                case RndStdIds::FLY_AS_CHAR:
                 case RndStdIds::FLY_AT_PARA:
                 case RndStdIds::FLY_AT_CHAR:
-                    pFly = new SwFlyAtContentFrame( this, pFrame, pFrame );
-                    break;
-
-                case RndStdIds::FLY_AS_CHAR:
-                    pFly = new SwFlyInContentFrame( this, pFrame, pFrame );
-                    break;
-
-                default:
-                    assert(false && "New anchor type" );
+                {
+                    assert(pFrame->IsTextFrame());
+                    bAdd = IsAnchoredObjShown(*static_cast<SwTextFrame*>(pFrame), aAnchorAttr);
                 }
-                pFrame->AppendFly( pFly );
-                pFly->GetFormat()->SetObjTitle(GetObjTitle());
-                pFly->GetFormat()->SetObjDescription(GetObjDescription());
-                SwPageFrame *pPage = pFly->FindPageFrame();
-                if( pPage )
-                    ::RegistFlys( pPage, pFly );
+                break;
+                default:
+                break;
             }
+        }
+
+        if (bAdd && pFrame->GetDrawObjs())
+        {
+            // #i28701# - new type <SwSortedObjs>
+            SwSortedObjs &rObjs = *pFrame->GetDrawObjs();
+            for(SwAnchoredObject* pObj : rObjs)
+            {
+                // #i28701# - consider changed type of
+                // <SwSortedObjs> entries.
+                if( dynamic_cast<const SwFlyFrame*>( pObj) !=  nullptr &&
+                    (&pObj->GetFrameFormat()) == this )
+                {
+                    bAdd = false;
+                    break;
+                }
+            }
+        }
+
+        if( bAdd )
+        {
+            SwFlyFrame *pFly = nullptr; // avoid warnings
+            switch( aAnchorAttr.GetAnchorId() )
+            {
+            case RndStdIds::FLY_AT_FLY:
+                pFly = new SwFlyLayFrame( this, pFrame, pFrame );
+                break;
+
+            case RndStdIds::FLY_AT_PARA:
+            case RndStdIds::FLY_AT_CHAR:
+                pFly = new SwFlyAtContentFrame( this, pFrame, pFrame );
+                break;
+
+            case RndStdIds::FLY_AS_CHAR:
+                pFly = new SwFlyInContentFrame( this, pFrame, pFrame );
+                break;
+
+            default:
+                assert(false && "New anchor type" );
+            }
+            pFrame->AppendFly( pFly );
+            pFly->GetFormat()->SetObjTitle(GetObjTitle());
+            pFly->GetFormat()->SetObjDescription(GetObjDescription());
+            SwPageFrame *pPage = pFly->FindPageFrame();
+            if( pPage )
+                ::RegistFlys( pPage, pFly );
         }
     }
 }
@@ -3582,39 +3582,39 @@ void CheckAnchoredFlyConsistency(SwDoc const& rDoc)
         }
     }
     SwFrameFormats const*const pSpzFrameFormats(rDoc.GetSpzFrameFormats());
-    if (pSpzFrameFormats)
+    if (!pSpzFrameFormats)
+        return;
+
+    for (auto it = pSpzFrameFormats->begin(); it != pSpzFrameFormats->end(); ++it)
     {
-        for (auto it = pSpzFrameFormats->begin(); it != pSpzFrameFormats->end(); ++it)
+        SwFormatAnchor const& rAnchor((**it).GetAnchor(false));
+        if (RndStdIds::FLY_AT_PAGE == rAnchor.GetAnchorId())
         {
-            SwFormatAnchor const& rAnchor((**it).GetAnchor(false));
-            if (RndStdIds::FLY_AT_PAGE == rAnchor.GetAnchorId())
+            assert(!rAnchor.GetContentAnchor()
+                // for invalid documents that lack text:anchor-page-number
+                // it may have an anchor before MakeFrames() is called
+                || (!SwIterator<SwFrame, SwFrameFormat>(**it).First()));
+        }
+        else
+        {
+            SwNode & rNode(rAnchor.GetContentAnchor()->nNode.GetNode());
+            std::vector<SwFrameFormat*> const*const pFlys(rNode.GetAnchoredFlys());
+            assert(std::find(pFlys->begin(), pFlys->end(), *it) != pFlys->end());
+            switch (rAnchor.GetAnchorId())
             {
-                assert(!rAnchor.GetContentAnchor()
-                    // for invalid documents that lack text:anchor-page-number
-                    // it may have an anchor before MakeFrames() is called
-                    || (!SwIterator<SwFrame, SwFrameFormat>(**it).First()));
-            }
-            else
-            {
-                SwNode & rNode(rAnchor.GetContentAnchor()->nNode.GetNode());
-                std::vector<SwFrameFormat*> const*const pFlys(rNode.GetAnchoredFlys());
-                assert(std::find(pFlys->begin(), pFlys->end(), *it) != pFlys->end());
-                switch (rAnchor.GetAnchorId())
-                {
-                    case RndStdIds::FLY_AT_FLY:
-                        assert(rNode.IsStartNode());
-                    break;
-                    case RndStdIds::FLY_AT_PARA:
-                        assert(rNode.IsTextNode() || rNode.IsTableNode());
-                    break;
-                    case RndStdIds::FLY_AS_CHAR:
-                    case RndStdIds::FLY_AT_CHAR:
-                        assert(rNode.IsTextNode());
-                    break;
-                    default:
-                        assert(false);
-                    break;
-                }
+                case RndStdIds::FLY_AT_FLY:
+                    assert(rNode.IsStartNode());
+                break;
+                case RndStdIds::FLY_AT_PARA:
+                    assert(rNode.IsTextNode() || rNode.IsTableNode());
+                break;
+                case RndStdIds::FLY_AS_CHAR:
+                case RndStdIds::FLY_AT_CHAR:
+                    assert(rNode.IsTextNode());
+                break;
+                default:
+                    assert(false);
+                break;
             }
         }
     }
