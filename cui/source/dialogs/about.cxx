@@ -27,6 +27,7 @@
 #include <vcl/svapp.hxx>     //Application::
 #include <vcl/virdev.hxx>    //VirtualDevice
 #include <vcl/weld.hxx>
+#include <unotools/resmgr.hxx> //Translate
 
 #include <config_buildid.h> //EXTRA_BUILDID
 #include <dialmgr.hxx>      //CuiResId
@@ -48,6 +49,126 @@
 #include <officecfg/Office/Common.hxx>
 
 using namespace ::com::sun::star::uno;
+
+bool IsStringValidGitHash(const OUString &hash) {
+  for (int i = 0; i < hash.getLength(); i++) {
+    if (!std::isxdigit(hash[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+OUString GetVersionString() {
+  OUString sVersion = CuiResId("%ABOUTBOXPRODUCTVERSION%ABOUTBOXPRODUCTVERSIONSUFFIX");
+
+#ifdef _WIN64
+  sVersion += " (x64)";
+#elif defined(_WIN32)
+  sVersion += " (x86)";
+#endif
+  return sVersion;
+}
+
+OUString GetBuildString() {
+
+  OUString sDefault;
+  OUString sBuildId(utl::Bootstrap::getBuildVersion(sDefault));
+  if (sBuildId.isEmpty())
+    sBuildId = utl::Bootstrap::getBuildIdData(sDefault);
+  if (sBuildId.isEmpty()) {
+    sBuildId = sBuildId.getToken(0, '-');
+  }
+  OSL_ENSURE(!sBuildId.isEmpty(), "No BUILDID in bootstrap file");
+
+  return sBuildId;
+}
+
+OUString GetLocaleString(const bool bLocalized=true) {
+
+  OUString sLocaleStr;
+
+  rtl_Locale *pLocale;
+  osl_getProcessLocale(&pLocale);
+  if (pLocale && pLocale->Language) {
+    if (pLocale->Country && rtl_uString_getLength(pLocale->Country) > 0)
+      sLocaleStr = OUString::unacquired(&pLocale->Language) + "_" +
+                   OUString::unacquired(&pLocale->Country);
+    else
+      sLocaleStr = OUString(pLocale->Language);
+    if (pLocale->Variant && rtl_uString_getLength(pLocale->Variant) > 0)
+      sLocaleStr += OUString(pLocale->Variant);
+  }
+
+  sLocaleStr = Application::GetSettings().GetLanguageTag().getBcp47() + " (" +
+               sLocaleStr + ")";
+
+  OUString aUILocaleStr =
+      Application::GetSettings().GetUILanguageTag().getBcp47();
+  OUString sUILocaleStr;
+  if (bLocalized)
+     sUILocaleStr = CuiResId(RID_SVXSTR_ABOUT_UILOCALE);
+  else
+     sUILocaleStr = Translate::get(RID_SVXSTR_ABOUT_UILOCALE, Translate::Create("cui", LanguageTag("en-US")));
+
+  if (sUILocaleStr.indexOf("$LOCALE") == -1) {
+    SAL_WARN("cui.dialogs", "translated uilocale string in translations "
+                            "doesn't contain $LOCALE placeholder");
+    sUILocaleStr += " $LOCALE";
+  }
+  sUILocaleStr = sUILocaleStr.replaceAll("$LOCALE", aUILocaleStr);
+
+  return sLocaleStr + "; " + sUILocaleStr;
+}
+
+OUString GetMiscString() {
+
+  OUString sMisc;
+
+  bool const extra = EXTRA_BUILDID[0] != '\0';
+  // extracted from the 'if' to avoid Clang -Wunreachable-code
+  if (extra) {
+    sMisc = EXTRA_BUILDID "\n";
+  }
+
+  OUString aCalcMode = "Calc: "; // Calc calculation mode
+
+#if HAVE_FEATURE_OPENCL
+  bool bOpenCL = openclwrapper::GPUEnv::isOpenCLEnabled();
+  if (bOpenCL)
+    aCalcMode += "CL";
+#else
+  const bool bOpenCL = false;
+#endif
+
+  static const bool bThreadingProhibited =
+      std::getenv("SC_NO_THREADED_CALCULATION");
+  bool bThreadedCalc = officecfg::Office::Calc::Formula::Calculation::
+      UseThreadedCalculationForFormulaGroups::get();
+
+  if (!bThreadingProhibited && !bOpenCL && bThreadedCalc) {
+    if (!aCalcMode.endsWith(" "))
+      aCalcMode += " ";
+    aCalcMode += "threaded";
+  }
+
+  sMisc += aCalcMode;
+
+  return sMisc;
+}
+
+OUString GetCopyrightString() {
+  OUString sVendorTextStr(CuiResId(RID_SVXSTR_ABOUT_VENDOR));
+  OUString aCopyrightString =
+      sVendorTextStr + "\n" + CuiResId(RID_SVXSTR_ABOUT_COPYRIGHT) + "\n";
+
+  if (utl::ConfigManager::getProductName() == "LibreOffice")
+    aCopyrightString += CuiResId(RID_SVXSTR_ABOUT_BASED_ON);
+  else
+    aCopyrightString += CuiResId(RID_SVXSTR_ABOUT_DERIVED);
+
+  return aCopyrightString;
+}
 
 AboutDialog::AboutDialog(weld::Window *pParent)
     : GenericDialogController(pParent, "cui/ui/aboutdialog.ui", "AboutDialog"),
@@ -135,122 +256,8 @@ AboutDialog::AboutDialog(weld::Window *pParent)
 
 AboutDialog::~AboutDialog() {}
 
-bool AboutDialog::IsStringValidGitHash(const OUString &hash) {
-  for (int i = 0; i < hash.getLength(); i++) {
-    if (!std::isxdigit(hash[i])) {
-      return false;
-    }
-  }
-  return true;
-}
-
-OUString AboutDialog::GetVersionString() {
-  OUString sVersion = CuiResId("%ABOUTBOXPRODUCTVERSION%ABOUTBOXPRODUCTVERSIONSUFFIX");
-
-#ifdef _WIN64
-  sVersion += " (x64)";
-#elif defined(_WIN32)
-  sVersion += " (x86)";
-#endif
-  return sVersion;
-}
-
-OUString AboutDialog::GetBuildString() {
-
-  OUString sDefault;
-  OUString sBuildId(utl::Bootstrap::getBuildVersion(sDefault));
-  if (sBuildId.isEmpty())
-    sBuildId = utl::Bootstrap::getBuildIdData(sDefault);
-  if (sBuildId.isEmpty()) {
-    sBuildId = sBuildId.getToken(0, '-');
-  }
-  OSL_ENSURE(!sBuildId.isEmpty(), "No BUILDID in bootstrap file");
-
-  return sBuildId;
-}
-
-OUString AboutDialog::GetLocaleString() {
-
-  OUString sLocaleStr;
-
-  rtl_Locale *pLocale;
-  osl_getProcessLocale(&pLocale);
-  if (pLocale && pLocale->Language) {
-    if (pLocale->Country && rtl_uString_getLength(pLocale->Country) > 0)
-      sLocaleStr = OUString::unacquired(&pLocale->Language) + "_" +
-                   OUString::unacquired(&pLocale->Country);
-    else
-      sLocaleStr = OUString(pLocale->Language);
-    if (pLocale->Variant && rtl_uString_getLength(pLocale->Variant) > 0)
-      sLocaleStr += OUString(pLocale->Variant);
-  }
-
-  sLocaleStr = Application::GetSettings().GetLanguageTag().getBcp47() + " (" +
-               sLocaleStr + ")";
-
-  OUString aUILocaleStr =
-      Application::GetSettings().GetUILanguageTag().getBcp47();
-  OUString sUILocaleStr(CuiResId(RID_SVXSTR_ABOUT_UILOCALE));
-  if (sUILocaleStr.indexOf("$LOCALE") == -1) {
-    SAL_WARN("cui.dialogs", "translated uilocale string in translations "
-                            "doesn't contain $LOCALE placeholder");
-    sUILocaleStr += " $LOCALE";
-  }
-  sUILocaleStr = sUILocaleStr.replaceAll("$LOCALE", aUILocaleStr);
-
-  return sLocaleStr + "; " + sUILocaleStr;
-}
-
-OUString AboutDialog::GetMiscString() {
-
-  OUString sMisc;
-
-  bool const extra = EXTRA_BUILDID[0] != '\0';
-  // extracted from the 'if' to avoid Clang -Wunreachable-code
-  if (extra) {
-    sMisc = EXTRA_BUILDID "\n";
-  }
-
-  OUString aCalcMode = "Calc: "; // Calc calculation mode
-
-#if HAVE_FEATURE_OPENCL
-  bool bOpenCL = openclwrapper::GPUEnv::isOpenCLEnabled();
-  if (bOpenCL)
-    aCalcMode += "CL";
-#else
-  const bool bOpenCL = false;
-#endif
-
-  static const bool bThreadingProhibited =
-      std::getenv("SC_NO_THREADED_CALCULATION");
-  bool bThreadedCalc = officecfg::Office::Calc::Formula::Calculation::
-      UseThreadedCalculationForFormulaGroups::get();
-
-  if (!bThreadingProhibited && !bOpenCL && bThreadedCalc) {
-    if (!aCalcMode.endsWith(" "))
-      aCalcMode += " ";
-    aCalcMode += "threaded";
-  }
-
-  sMisc += aCalcMode;
-
-  return sMisc;
-}
-
-OUString AboutDialog::GetCopyrightString() {
-  OUString sVendorTextStr(CuiResId(RID_SVXSTR_ABOUT_VENDOR));
-  OUString aCopyrightString =
-      sVendorTextStr + "\n" + CuiResId(RID_SVXSTR_ABOUT_COPYRIGHT) + "\n";
-
-  if (utl::ConfigManager::getProductName() == "LibreOffice")
-    aCopyrightString += CuiResId(RID_SVXSTR_ABOUT_BASED_ON);
-  else
-    aCopyrightString += CuiResId(RID_SVXSTR_ABOUT_DERIVED);
-
-  return aCopyrightString;
-}
-
-//special labels to comply with previous version info
+// special labels to comply with previous version info
+// untranslated English for QA
 IMPL_LINK_NOARG(AboutDialog, HandleClick, weld::Button &, void) {
   css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
       css::datatransfer::clipboard::SystemClipboard::create(
@@ -259,8 +266,8 @@ IMPL_LINK_NOARG(AboutDialog, HandleClick, weld::Button &, void) {
   OUString sInfo = "Version: " + m_pVersionLabel->get_label() + "\n" // version
                    "Build ID: " + GetBuildString() + "\n" + // build id
                    Application::GetHWOSConfInfo(0,false) + "\n" // env+UI
-                   "Locale: " + m_pLocaleLabel->get_label() + "\n" + // locale
-                   m_pMiscLabel->get_label(); // misc
+                   "Locale: " + GetLocaleString(false) + "\n" + // locale
+                   GetMiscString(); // misc
 
   vcl::unohelper::TextDataObject::CopyStringTo(sInfo, xClipboard);
 }

@@ -42,14 +42,6 @@ private:
     std::unique_ptr<weld::Label> m_pMiscLabel;
     std::unique_ptr<weld::Label> m_pCopyrightLabel;
 
-    static OUString GetVersionString();
-    static OUString GetBuildString();
-    static OUString GetLocaleString();
-    static OUString GetMiscString();
-
-    static OUString GetCopyrightString();
-    static bool IsStringValidGitHash(const OUString& hash);
-
     DECL_LINK(HandleClick, weld::Button&, void);
 
 public:
