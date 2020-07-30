@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9d215d06_be71f6cb",
+        "filename": "cui/source/inc/about.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-30T09:48:39Z",
+      "side": 1,
+      "message": "For a follow-up: these functions are not required to be member static functions; they are not needed outside of the dialog code itself. So it would be useful to remove these from the class, and simply make them standalone static functions in the CXX.",
+      "range": {
+        "startLine": 45,
+        "startChar": 4,
+        "endLine": 48,
+        "endChar": 36
+      },
+      "revId": "1a22b9207755e6724d33f41cf72b27184fdebe84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
