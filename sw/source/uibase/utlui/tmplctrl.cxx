@@ -96,43 +96,43 @@ void SwTemplateControl::Paint( const UserDrawEvent&  )
 
 void SwTemplateControl::Command( const CommandEvent& rCEvt )
 {
-    if ( rCEvt.GetCommand() == CommandEventId::ContextMenu &&
-            !GetStatusBar().GetItemText( GetId() ).isEmpty() )
-    {
-        ScopedVclPtrInstance<SwTemplatePopup_Impl> aPop;
-        {
-            SwView* pView = ::GetActiveView();
-            SwWrtShell *const pWrtShell(pView ? pView->GetWrtShellPtr() : nullptr);
-            if (nullptr != pWrtShell &&
-                !pWrtShell->SwCursorShell::HasSelection()&&
-                !pWrtShell->IsSelFrameMode() &&
-                !pWrtShell->IsObjSelected())
-            {
-                SfxStyleSheetBasePool* pPool = pView->GetDocShell()->
-                                                            GetStyleSheetPool();
-                auto xIter = pPool->CreateIterator(SfxStyleFamily::Page);
-                if (xIter->Count() > 1)
-                {
-                    sal_uInt16 nCount = 0;
-                    SfxStyleSheetBase* pStyle = xIter->First();
-                    while( pStyle )
-                    {
-                        aPop->InsertItem( ++nCount, pStyle->GetName() );
-                        pStyle = xIter->Next();
-                    }
+    if ( rCEvt.GetCommand() != CommandEventId::ContextMenu ||
+            GetStatusBar().GetItemText( GetId() ).isEmpty())
+        return;
 
-                    aPop->Execute( &GetStatusBar(), rCEvt.GetMousePosPixel());
-                    const sal_uInt16 nCurrId = aPop->GetCurId();
-                    if( nCurrId != USHRT_MAX)
-                    {
-                        // looks a bit awkward, but another way is not possible
-                        pStyle = xIter->operator[]( nCurrId - 1 );
-                        SfxStringItem aStyle( FN_SET_PAGE_STYLE, pStyle->GetName() );
-                        pWrtShell->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(
-                                    FN_SET_PAGE_STYLE,
-                                    SfxCallMode::SLOT|SfxCallMode::RECORD,
-                                    { &aStyle });
-                    }
+    ScopedVclPtrInstance<SwTemplatePopup_Impl> aPop;
+    {
+        SwView* pView = ::GetActiveView();
+        SwWrtShell *const pWrtShell(pView ? pView->GetWrtShellPtr() : nullptr);
+        if (nullptr != pWrtShell &&
+            !pWrtShell->SwCursorShell::HasSelection()&&
+            !pWrtShell->IsSelFrameMode() &&
+            !pWrtShell->IsObjSelected())
+        {
+            SfxStyleSheetBasePool* pPool = pView->GetDocShell()->
+                                                        GetStyleSheetPool();
+            auto xIter = pPool->CreateIterator(SfxStyleFamily::Page);
+            if (xIter->Count() > 1)
+            {
+                sal_uInt16 nCount = 0;
+                SfxStyleSheetBase* pStyle = xIter->First();
+                while( pStyle )
+                {
+                    aPop->InsertItem( ++nCount, pStyle->GetName() );
+                    pStyle = xIter->Next();
+                }
+
+                aPop->Execute( &GetStatusBar(), rCEvt.GetMousePosPixel());
+                const sal_uInt16 nCurrId = aPop->GetCurId();
+                if( nCurrId != USHRT_MAX)
+                {
+                    // looks a bit awkward, but another way is not possible
+                    pStyle = xIter->operator[]( nCurrId - 1 );
+                    SfxStringItem aStyle( FN_SET_PAGE_STYLE, pStyle->GetName() );
+                    pWrtShell->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(
+                                FN_SET_PAGE_STYLE,
+                                SfxCallMode::SLOT|SfxCallMode::RECORD,
+                                { &aStyle });
                 }
             }
         }

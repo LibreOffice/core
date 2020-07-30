@@ -427,7 +427,7 @@ llvm::Optional<std::string> Flatten::invertCondition(Expr const * condExpr, Sour
     // an if statement will automatically invoke a bool-conversion method
     if (auto memberCallExpr = dyn_cast<CXXMemberCallExpr>(condExpr))
     {
-        if (isa<CXXConversionDecl>(memberCallExpr->getMethodDecl()))
+        if (memberCallExpr->getMethodDecl() && isa<CXXConversionDecl>(memberCallExpr->getMethodDecl()))
             condExpr = memberCallExpr->getImplicitObjectArgument()->IgnoreImpCasts();
     }
 
@@ -664,6 +664,11 @@ std::string Flatten::getSourceAsString(SourceRange range)
         // workaround clang weirdness, but don't return empty string
         // in case it happens during code replacement
         return "clang returned bad pointers";
+    }
+    if (p2 - p1 > 64 * 1024) {
+        // workaround clang weirdness, but don't return empty string
+        // in case it happens during code replacement
+        return "clang returned overlay large source range";
     }
     return std::string( p1, p2 - p1);
 }

@@ -103,38 +103,38 @@ void SwBookmarkControl::Paint( const UserDrawEvent&  )
 
 void SwBookmarkControl::Command( const CommandEvent& rCEvt )
 {
-    if ( rCEvt.GetCommand() == CommandEventId::ContextMenu &&
-            !GetStatusBar().GetItemText( GetId() ).isEmpty() )
+    if ( rCEvt.GetCommand() != CommandEventId::ContextMenu ||
+            GetStatusBar().GetItemText( GetId() ).isEmpty())
+        return;
+
+    ScopedVclPtrInstance<BookmarkPopup_Impl> aPop;
+    SwWrtShell* pWrtShell = ::GetActiveWrtShell();
+    if( !(pWrtShell && pWrtShell->getIDocumentMarkAccess()->getAllMarksCount() > 0) )
+        return;
+
+    IDocumentMarkAccess* const pMarkAccess = pWrtShell->getIDocumentMarkAccess();
+    IDocumentMarkAccess::const_iterator_t ppBookmarkStart = pMarkAccess->getBookmarksBegin();
+    sal_uInt16 nPopupId = 1;
+    std::map<sal_Int32, sal_uInt16> aBookmarkIdx;
+    for(IDocumentMarkAccess::const_iterator_t ppBookmark = ppBookmarkStart;
+        ppBookmark != pMarkAccess->getBookmarksEnd();
+        ++ppBookmark)
     {
-        ScopedVclPtrInstance<BookmarkPopup_Impl> aPop;
-        SwWrtShell* pWrtShell = ::GetActiveWrtShell();
-        if( pWrtShell && pWrtShell->getIDocumentMarkAccess()->getAllMarksCount() > 0 )
+        if(IDocumentMarkAccess::MarkType::BOOKMARK == IDocumentMarkAccess::GetType(**ppBookmark))
         {
-            IDocumentMarkAccess* const pMarkAccess = pWrtShell->getIDocumentMarkAccess();
-            IDocumentMarkAccess::const_iterator_t ppBookmarkStart = pMarkAccess->getBookmarksBegin();
-            sal_uInt16 nPopupId = 1;
-            std::map<sal_Int32, sal_uInt16> aBookmarkIdx;
-            for(IDocumentMarkAccess::const_iterator_t ppBookmark = ppBookmarkStart;
-                ppBookmark != pMarkAccess->getBookmarksEnd();
-                ++ppBookmark)
-            {
-                if(IDocumentMarkAccess::MarkType::BOOKMARK == IDocumentMarkAccess::GetType(**ppBookmark))
-                {
-                    aPop->InsertItem( nPopupId, (*ppBookmark)->GetName() );
-                    aBookmarkIdx[nPopupId] = static_cast<sal_uInt16>(ppBookmark - ppBookmarkStart);
-                    nPopupId++;
-                }
-            }
-            aPop->Execute( &GetStatusBar(), rCEvt.GetMousePosPixel());
-            sal_uInt16 nCurrId = aPop->GetCurId();
-            if( nCurrId != USHRT_MAX)
-            {
-                SfxUInt16Item aBookmark( FN_STAT_BOOKMARK, aBookmarkIdx[nCurrId] );
-                SfxViewFrame::Current()->GetDispatcher()->ExecuteList(FN_STAT_BOOKMARK,
-                    SfxCallMode::ASYNCHRON|SfxCallMode::RECORD,
-                    { &aBookmark });
-            }
+            aPop->InsertItem( nPopupId, (*ppBookmark)->GetName() );
+            aBookmarkIdx[nPopupId] = static_cast<sal_uInt16>(ppBookmark - ppBookmarkStart);
+            nPopupId++;
         }
+    }
+    aPop->Execute( &GetStatusBar(), rCEvt.GetMousePosPixel());
+    sal_uInt16 nCurrId = aPop->GetCurId();
+    if( nCurrId != USHRT_MAX)
+    {
+        SfxUInt16Item aBookmark( FN_STAT_BOOKMARK, aBookmarkIdx[nCurrId] );
+        SfxViewFrame::Current()->GetDispatcher()->ExecuteList(FN_STAT_BOOKMARK,
+            SfxCallMode::ASYNCHRON|SfxCallMode::RECORD,
+            { &aBookmark });
     }
 }
 

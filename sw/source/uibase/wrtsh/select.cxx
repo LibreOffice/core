@@ -478,26 +478,26 @@ void SwWrtShell::ExtSelWrd(const Point *pPt, bool )
 
     SwCursorShell::Pop(SwCursorShell::PopMode::DeleteCurrent); // restore the saved cursor
 
-    if( bMoveCursor )
+    if( !bMoveCursor )
+        return;
+
+    // select to Top but cursor select to Bottom? or
+    // select to Bottom but cursor select to Top?       --> swap the cursor
+    if( bToTop )
+        SwapPam();
+
+    SwCursorShell::Push();                // save cur cursor
+    if( SwCursorShell::SelectWord( pPt )) // select the current word
     {
-        // select to Top but cursor select to Bottom? or
-        // select to Bottom but cursor select to Top?       --> swap the cursor
         if( bToTop )
             SwapPam();
-
-        SwCursorShell::Push();                // save cur cursor
-        if( SwCursorShell::SelectWord( pPt )) // select the current word
-        {
-            if( bToTop )
-                SwapPam();
-            Combine();
-        }
-        else
-        {
-            SwCursorShell::Pop(SwCursorShell::PopMode::DeleteCurrent);
-            if( bToTop )
-                SwapPam();
-        }
+        Combine();
+    }
+    else
+    {
+        SwCursorShell::Pop(SwCursorShell::PopMode::DeleteCurrent);
+        if( bToTop )
+            SwapPam();
     }
 }
 

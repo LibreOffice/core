@@ -150,57 +150,57 @@ void SwWrtShell::UpdateInputFields( SwInputFieldList* pLst )
     }
 
     const size_t nCnt = pLst->Count();
-    if(nCnt)
+    if(!nCnt)
+        return;
+
+    pLst->PushCursor();
+
+    bool bCancel = false;
+
+    size_t nIndex = 0;
+    FieldDialogPressedButton ePressedButton = FieldDialogPressedButton::NONE;
+
+    SwField* pField = GetCurField();
+    if (pField)
     {
-        pLst->PushCursor();
-
-        bool bCancel = false;
-
-        size_t nIndex = 0;
-        FieldDialogPressedButton ePressedButton = FieldDialogPressedButton::NONE;
-
-        SwField* pField = GetCurField();
-        if (pField)
+        for (size_t i = 0; i < nCnt; i++)
         {
-            for (size_t i = 0; i < nCnt; i++)
+            if (pField == pLst->GetField(i))
             {
-                if (pField == pLst->GetField(i))
-                {
-                    nIndex = i;
-                    break;
-                }
+                nIndex = i;
+                break;
             }
         }
-
-        while (!bCancel)
-        {
-            bool bPrev = nIndex > 0;
-            bool bNext = nIndex < nCnt - 1;
-            pLst->GotoFieldPos(nIndex);
-            pField = pLst->GetField(nIndex);
-            if (pField->GetTyp()->Which() == SwFieldIds::Dropdown)
-            {
-                bCancel = StartDropDownFieldDlg(pField, bPrev, bNext, GetView().GetFrameWeld(), &ePressedButton);
-            }
-            else
-                bCancel = StartInputFieldDlg(pField, bPrev, bNext, GetView().GetFrameWeld(), &ePressedButton);
-
-            if (!bCancel)
-            {
-                // Otherwise update error at multi-selection:
-                pLst->GetField(nIndex)->GetTyp()->UpdateFields();
-
-                if (ePressedButton == FieldDialogPressedButton::Previous && nIndex > 0)
-                    nIndex--;
-                else if (ePressedButton == FieldDialogPressedButton::Next && nIndex < nCnt - 1)
-                    nIndex++;
-                else
-                    bCancel = true;
-            }
-        }
-
-        pLst->PopCursor();
     }
+
+    while (!bCancel)
+    {
+        bool bPrev = nIndex > 0;
+        bool bNext = nIndex < nCnt - 1;
+        pLst->GotoFieldPos(nIndex);
+        pField = pLst->GetField(nIndex);
+        if (pField->GetTyp()->Which() == SwFieldIds::Dropdown)
+        {
+            bCancel = StartDropDownFieldDlg(pField, bPrev, bNext, GetView().GetFrameWeld(), &ePressedButton);
+        }
+        else
+            bCancel = StartInputFieldDlg(pField, bPrev, bNext, GetView().GetFrameWeld(), &ePressedButton);
+
+        if (!bCancel)
+        {
+            // Otherwise update error at multi-selection:
+            pLst->GetField(nIndex)->GetTyp()->UpdateFields();
+
+            if (ePressedButton == FieldDialogPressedButton::Previous && nIndex > 0)
+                nIndex--;
+            else if (ePressedButton == FieldDialogPressedButton::Next && nIndex < nCnt - 1)
+                nIndex++;
+            else
+                bCancel = true;
+        }
+    }
+
+    pLst->PopCursor();
 }
 
 namespace {
