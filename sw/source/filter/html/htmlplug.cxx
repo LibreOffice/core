@@ -311,22 +311,22 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
         }
         rCSS1ItemSet.ClearItem( RES_UL_SPACE );
     }
-    if( nUpperSpace || nLowerSpace )
+    if( !(nUpperSpace || nLowerSpace) )
+        return;
+
+    SvxULSpaceItem aULItem( RES_UL_SPACE );
+    aULItem.SetUpper( nUpperSpace );
+    aULItem.SetLower( nLowerSpace );
+    rFlyItemSet.Put( aULItem );
+    if( nUpperSpace )
     {
-        SvxULSpaceItem aULItem( RES_UL_SPACE );
-        aULItem.SetUpper( nUpperSpace );
-        aULItem.SetLower( nLowerSpace );
-        rFlyItemSet.Put( aULItem );
-        if( nUpperSpace )
+        const SwFormatVertOrient& rVertOri =
+            rFlyItemSet.Get( RES_VERT_ORIENT );
+        if( text::VertOrientation::NONE == rVertOri.GetVertOrient() )
         {
-            const SwFormatVertOrient& rVertOri =
-                rFlyItemSet.Get( RES_VERT_ORIENT );
-            if( text::VertOrientation::NONE == rVertOri.GetVertOrient() )
-            {
-                SwFormatVertOrient aVertOri( rVertOri );
-                aVertOri.SetPos( aVertOri.GetPos() + nUpperSpace );
-                rFlyItemSet.Put( aVertOri );
-            }
+            SwFormatVertOrient aVertOri( rVertOri );
+            aVertOri.SetPos( aVertOri.GetPos() + nUpperSpace );
+            rFlyItemSet.Put( aVertOri );
         }
     }
 }
@@ -830,27 +830,27 @@ void SwHTMLParser::EndObject()
 #if HAVE_FEATURE_JAVA
     if( !m_pAppletImpl )
         return;
-    if( m_pAppletImpl->CreateApplet( m_sBaseURL ) )
-    {
-        m_pAppletImpl->FinishApplet();
+    if( !m_pAppletImpl->CreateApplet( m_sBaseURL ) )
+        return;
 
-        // and insert into the document
-        SwFrameFormat* pFlyFormat =
-            m_xDoc->getIDocumentContentOperations().InsertEmbObject(*m_pPam,
-                    ::svt::EmbeddedObjectRef( m_pAppletImpl->GetApplet(), embed::Aspects::MSOLE_CONTENT ),
-                    &m_pAppletImpl->GetItemSet() );
+    m_pAppletImpl->FinishApplet();
 
-        // set the alternative name
-        SwNoTextNode *pNoTextNd =
-            m_xDoc->GetNodes()[ pFlyFormat->GetContent().GetContentIdx()
-                              ->GetIndex()+1 ]->GetNoTextNode();
-        pNoTextNd->SetTitle( m_pAppletImpl->GetAltText() );
+    // and insert into the document
+    SwFrameFormat* pFlyFormat =
+        m_xDoc->getIDocumentContentOperations().InsertEmbObject(*m_pPam,
+                ::svt::EmbeddedObjectRef( m_pAppletImpl->GetApplet(), embed::Aspects::MSOLE_CONTENT ),
+                &m_pAppletImpl->GetItemSet() );
 
-        // if applicable create frames and register auto-bound frames
-        RegisterFlyFrame( pFlyFormat );
+    // set the alternative name
+    SwNoTextNode *pNoTextNd =
+        m_xDoc->GetNodes()[ pFlyFormat->GetContent().GetContentIdx()
+                          ->GetIndex()+1 ]->GetNoTextNode();
+    pNoTextNd->SetTitle( m_pAppletImpl->GetAltText() );
 
-        m_pAppletImpl.reset();
-    }
+    // if applicable create frames and register auto-bound frames
+    RegisterFlyFrame( pFlyFormat );
+
+    m_pAppletImpl.reset();
 #else
     (void) this;                // Silence loplugin:staticmethods
 #endif

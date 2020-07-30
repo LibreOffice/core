@@ -1187,34 +1187,34 @@ void SwHTMLWriter::OutPointFieldmarks( const SwPosition& rPos )
     if (!pMark)
         return;
 
-    if (pMark->GetFieldname() == ODF_FORMCHECKBOX)
+    if (pMark->GetFieldname() != ODF_FORMCHECKBOX)
+        return;
+
+    const sw::mark::ICheckboxFieldmark* pCheckBox =
+        dynamic_cast<const sw::mark::ICheckboxFieldmark*>(pMark);
+
+    if (!pCheckBox)
+        return;
+
+    OString aOut("<"
+        OOO_STRING_SVTOOLS_HTML_input
+        " "
+        OOO_STRING_SVTOOLS_HTML_O_type
+        "=\""
+        OOO_STRING_SVTOOLS_HTML_IT_checkbox
+        "\"");
+
+    if (pCheckBox->IsChecked())
     {
-        const sw::mark::ICheckboxFieldmark* pCheckBox =
-            dynamic_cast<const sw::mark::ICheckboxFieldmark*>(pMark);
-
-        if (pCheckBox)
-        {
-            OString aOut("<"
-                OOO_STRING_SVTOOLS_HTML_input
-                " "
-                OOO_STRING_SVTOOLS_HTML_O_type
-                "=\""
-                OOO_STRING_SVTOOLS_HTML_IT_checkbox
-                "\"");
-
-            if (pCheckBox->IsChecked())
-            {
-                aOut += " "
-                    OOO_STRING_SVTOOLS_HTML_O_checked
-                    "=\""
-                    OOO_STRING_SVTOOLS_HTML_O_checked
-                    "\"";
-            }
-
-            aOut += "/>";
-            Strm().WriteOString(aOut);
-        }
+        aOut += " "
+            OOO_STRING_SVTOOLS_HTML_O_checked
+            "=\""
+            OOO_STRING_SVTOOLS_HTML_O_checked
+            "\"";
     }
+
+    aOut += "/>";
+    Strm().WriteOString(aOut);
 
     // TODO : Handle other single-point fieldmark types here (if any).
 }
@@ -1343,19 +1343,19 @@ sal_uInt16 SwHTMLWriter::GetLangWhichIdFromScript( sal_uInt16 nScript )
 void SwHTMLWriter::OutLanguage( LanguageType nLang )
 {
     // ReqIF mode: consumers would ignore language anyway.
-    if (LANGUAGE_DONTKNOW != nLang && !mbReqIF)
-    {
-        OStringBuffer sOut;
-        sOut.append(' ');
-        if (mbXHTML)
-            sOut.append(OOO_STRING_SVTOOLS_XHTML_O_lang);
-        else
-            sOut.append(OOO_STRING_SVTOOLS_HTML_O_lang);
-        sOut.append("=\"");
-        Strm().WriteOString( sOut.makeStringAndClear() );
-        HTMLOutFuncs::Out_String( Strm(), LanguageTag::convertToBcp47(nLang),
-                                  m_eDestEnc, &m_aNonConvertableCharacters ).WriteChar( '"' );
-    }
+    if (!(LANGUAGE_DONTKNOW != nLang && !mbReqIF))
+        return;
+
+    OStringBuffer sOut;
+    sOut.append(' ');
+    if (mbXHTML)
+        sOut.append(OOO_STRING_SVTOOLS_XHTML_O_lang);
+    else
+        sOut.append(OOO_STRING_SVTOOLS_HTML_O_lang);
+    sOut.append("=\"");
+    Strm().WriteOString( sOut.makeStringAndClear() );
+    HTMLOutFuncs::Out_String( Strm(), LanguageTag::convertToBcp47(nLang),
+                              m_eDestEnc, &m_aNonConvertableCharacters ).WriteChar( '"' );
 }
 
 SvxFrameDirection SwHTMLWriter::GetHTMLDirection( const SfxItemSet& rItemSet ) const

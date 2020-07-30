@@ -1604,121 +1604,121 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
                             SwHTMLFormatInfos& rFormatInfos, bool bParaAttrs )
 {
     // no range ?? in that case, don't take it, it will never take effect !!
-    if( nStart != nEnd )
+    if( nStart == nEnd )
+        return;
+
+    bool bSet = false, bSplit = false;
+    switch( GetHTMLItemState(rItem) )
     {
-        bool bSet = false, bSplit = false;
-        switch( GetHTMLItemState(rItem) )
-        {
-        case HTML_ON_VALUE:
-            // output the attribute, if it isn't 'on', already
-            if( !ExistsOnTagItem( rItem.Which(), nStart ) )
-                bSet = true;
-            break;
-
-        case HTML_OFF_VALUE:
-            // If the corresponding attribute is 'on', split it.
-            // Additionally, output it as Style, if it is not set for the
-            // whole paragraph, because in that case it was already output
-            // together with the paragraph tag.
-            if( ExistsOnTagItem( rItem.Which(), nStart ) )
-                bSplit = true;
-            bSet = bOutStyles && !bParaAttrs &&
-                   !ExistsOffTagItem( rItem.Which(), nStart, nEnd );
-            break;
-
-        case HTML_REAL_VALUE:
-            // we can always output the attribute
+    case HTML_ON_VALUE:
+        // output the attribute, if it isn't 'on', already
+        if( !ExistsOnTagItem( rItem.Which(), nStart ) )
             bSet = true;
-            break;
+        break;
 
-        case HTML_STYLE_VALUE:
-            // We can only output the attribute as CSS1. If it is set for
-            // the paragraph, it was already output with the paragraph tag.
-            // The only exception is the character-background attribute. This
-            // attribute must always be handled like a Hint.
-            bSet = bOutStyles &&
-                   (!bParaAttrs
-                  || rItem.Which()==RES_CHRATR_BACKGROUND
-                  || rItem.Which()==RES_CHRATR_BOX
-                  || rItem.Which()==RES_CHRATR_OVERLINE);
-            break;
+    case HTML_OFF_VALUE:
+        // If the corresponding attribute is 'on', split it.
+        // Additionally, output it as Style, if it is not set for the
+        // whole paragraph, because in that case it was already output
+        // together with the paragraph tag.
+        if( ExistsOnTagItem( rItem.Which(), nStart ) )
+            bSplit = true;
+        bSet = bOutStyles && !bParaAttrs &&
+               !ExistsOffTagItem( rItem.Which(), nStart, nEnd );
+        break;
 
-        case HTML_CHRFMT_VALUE:
+    case HTML_REAL_VALUE:
+        // we can always output the attribute
+        bSet = true;
+        break;
+
+    case HTML_STYLE_VALUE:
+        // We can only output the attribute as CSS1. If it is set for
+        // the paragraph, it was already output with the paragraph tag.
+        // The only exception is the character-background attribute. This
+        // attribute must always be handled like a Hint.
+        bSet = bOutStyles &&
+               (!bParaAttrs
+              || rItem.Which()==RES_CHRATR_BACKGROUND
+              || rItem.Which()==RES_CHRATR_BOX
+              || rItem.Which()==RES_CHRATR_OVERLINE);
+        break;
+
+    case HTML_CHRFMT_VALUE:
+        {
+            OSL_ENSURE( RES_TXTATR_CHARFMT == rItem.Which(),
+                    "Not a character style after all" );
+            const SwFormatCharFormat& rChrFormat = static_cast<const SwFormatCharFormat&>(rItem);
+            const SwCharFormat* pFormat = rChrFormat.GetCharFormat();
+
+            const SwHTMLFormatInfo *pFormatInfo = GetFormatInfo( *pFormat, rFormatInfos );
+            if( !pFormatInfo->aToken.isEmpty() )
             {
-                OSL_ENSURE( RES_TXTATR_CHARFMT == rItem.Which(),
-                        "Not a character style after all" );
-                const SwFormatCharFormat& rChrFormat = static_cast<const SwFormatCharFormat&>(rItem);
-                const SwCharFormat* pFormat = rChrFormat.GetCharFormat();
+                // output the character style tag before the hard
+                // attributes
+                InsertItem( rItem, nStart, nEnd );
+            }
+            if( pFormatInfo->pItemSet )
+            {
+                Insert( *pFormatInfo->pItemSet, nStart, nEnd,
+                        rFormatInfos, true, bParaAttrs );
+            }
+        }
+        break;
 
-                const SwHTMLFormatInfo *pFormatInfo = GetFormatInfo( *pFormat, rFormatInfos );
-                if( !pFormatInfo->aToken.isEmpty() )
+    case HTML_AUTOFMT_VALUE:
+        {
+            const SwFormatAutoFormat& rAutoFormat = static_cast<const SwFormatAutoFormat&>(rItem);
+            const std::shared_ptr<SfxItemSet>& pSet = rAutoFormat.GetStyleHandle();
+            if( pSet )
+                Insert( *pSet, nStart, nEnd, rFormatInfos, true, bParaAttrs );
+        }
+        break;
+
+    case HTML_COLOR_VALUE:
+        // A foreground color as a paragraph attribute is only exported if
+        // it is not the same as the default color.
+        {
+            OSL_ENSURE( RES_CHRATR_COLOR == rItem.Which(),
+                    "Not a foreground color, after all" );
+            Color aColor( static_cast<const SvxColorItem&>(rItem).GetValue() );
+            if( COL_AUTO == aColor )
+                aColor = COL_BLACK;
+            bSet = !bParaAttrs || !xDfltColor ||
+                   !xDfltColor->IsRGBEqual( aColor );
+        }
+        break;
+
+    case HTML_DROPCAP_VALUE:
+        {
+            OSL_ENSURE( RES_PARATR_DROP == rItem.Which(),
+                    "Not a drop cap, after all" );
+            const SwFormatDrop& rDrop = static_cast<const SwFormatDrop&>(rItem);
+            nEnd = nStart + rDrop.GetChars();
+            if( !bOutStyles )
+            {
+                // At least use the attributes of the character style
+                const SwCharFormat *pCharFormat = rDrop.GetCharFormat();
+                if( pCharFormat )
                 {
-                    // output the character style tag before the hard
-                    // attributes
-                    InsertItem( rItem, nStart, nEnd );
-                }
-                if( pFormatInfo->pItemSet )
-                {
-                    Insert( *pFormatInfo->pItemSet, nStart, nEnd,
+                    Insert( pCharFormat->GetAttrSet(), nStart, nEnd,
                             rFormatInfos, true, bParaAttrs );
                 }
             }
-            break;
-
-        case HTML_AUTOFMT_VALUE:
+            else
             {
-                const SwFormatAutoFormat& rAutoFormat = static_cast<const SwFormatAutoFormat&>(rItem);
-                const std::shared_ptr<SfxItemSet>& pSet = rAutoFormat.GetStyleHandle();
-                if( pSet )
-                    Insert( *pSet, nStart, nEnd, rFormatInfos, true, bParaAttrs );
+                bSet = true;
             }
-            break;
-
-        case HTML_COLOR_VALUE:
-            // A foreground color as a paragraph attribute is only exported if
-            // it is not the same as the default color.
-            {
-                OSL_ENSURE( RES_CHRATR_COLOR == rItem.Which(),
-                        "Not a foreground color, after all" );
-                Color aColor( static_cast<const SvxColorItem&>(rItem).GetValue() );
-                if( COL_AUTO == aColor )
-                    aColor = COL_BLACK;
-                bSet = !bParaAttrs || !xDfltColor ||
-                       !xDfltColor->IsRGBEqual( aColor );
-            }
-            break;
-
-        case HTML_DROPCAP_VALUE:
-            {
-                OSL_ENSURE( RES_PARATR_DROP == rItem.Which(),
-                        "Not a drop cap, after all" );
-                const SwFormatDrop& rDrop = static_cast<const SwFormatDrop&>(rItem);
-                nEnd = nStart + rDrop.GetChars();
-                if( !bOutStyles )
-                {
-                    // At least use the attributes of the character style
-                    const SwCharFormat *pCharFormat = rDrop.GetCharFormat();
-                    if( pCharFormat )
-                    {
-                        Insert( pCharFormat->GetAttrSet(), nStart, nEnd,
-                                rFormatInfos, true, bParaAttrs );
-                    }
-                }
-                else
-                {
-                    bSet = true;
-                }
-            }
-            break;
-        default:
-            ;
         }
-
-        if( bSet )
-            InsertItem( rItem, nStart, nEnd );
-        if( bSplit )
-            SplitItem( rItem, nStart, nEnd );
+        break;
+    default:
+        ;
     }
+
+    if( bSet )
+        InsertItem( rItem, nStart, nEnd );
+    if( bSplit )
+        SplitItem( rItem, nStart, nEnd );
 }
 
 void HTMLEndPosLst::Insert( const SfxPoolItem& rItem,
@@ -1843,20 +1843,20 @@ void HTMLEndPosLst::Insert( const SwDrawFrameFormat& rFormat, sal_Int32 nPos,
 {
     const SdrObject* pTextObj = SwHTMLWriter::GetMarqueeTextObj( rFormat );
 
-    if( pTextObj )
-    {
-        // get the edit engine attributes of the object as SW attributes and
-        // insert them as hints. Because of the amount of Hints the styles
-        // are not considered!
-        const SfxItemSet& rFormatItemSet = rFormat.GetAttrSet();
-        SfxItemSet aItemSet( *rFormatItemSet.GetPool(), svl::Items<RES_CHRATR_BEGIN,
-                                                     RES_CHRATR_END>{} );
-        SwHTMLWriter::GetEEAttrsFromDrwObj( aItemSet, pTextObj );
-        bool bOutStylesOld = bOutStyles;
-        bOutStyles = false;
-        Insert( aItemSet, nPos, nPos+1, rFormatInfos, false );
-        bOutStyles = bOutStylesOld;
-    }
+    if( !pTextObj )
+        return;
+
+    // get the edit engine attributes of the object as SW attributes and
+    // insert them as hints. Because of the amount of Hints the styles
+    // are not considered!
+    const SfxItemSet& rFormatItemSet = rFormat.GetAttrSet();
+    SfxItemSet aItemSet( *rFormatItemSet.GetPool(), svl::Items<RES_CHRATR_BEGIN,
+                                                 RES_CHRATR_END>{} );
+    SwHTMLWriter::GetEEAttrsFromDrwObj( aItemSet, pTextObj );
+    bool bOutStylesOld = bOutStyles;
+    bOutStyles = false;
+    Insert( aItemSet, nPos, nPos+1, rFormatInfos, false );
+    bOutStyles = bOutStylesOld;
 }
 
 sal_uInt16 HTMLEndPosLst::GetScriptAtPos( sal_Int32 nPos, sal_uInt16 nWeak )

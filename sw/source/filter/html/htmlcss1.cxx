@@ -412,26 +412,26 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
         }
     }
 
-    if( bSetBrush || bSetBox || bSetFrameDir )
-    {
-        static sal_uInt16 aPoolIds[] = { RES_POOLPAGE_HTML, RES_POOLPAGE_FIRST,
-                                     RES_POOLPAGE_LEFT, RES_POOLPAGE_RIGHT };
-        for(sal_uInt16 i : aPoolIds)
-        {
-            const SwPageDesc *pPageDesc = GetPageDesc( i, false );
-            if( pPageDesc )
-            {
-                SwPageDesc aNewPageDesc( *pPageDesc );
-                SwFrameFormat &rMaster = aNewPageDesc.GetMaster();
-                if( bSetBrush )
-                    rMaster.SetFormatAttr( *aBrushItem );
-                if( bSetBox )
-                    rMaster.SetFormatAttr( *aBoxItem );
-                if( bSetFrameDir )
-                    rMaster.SetFormatAttr( *aFrameDirItem );
+    if( !(bSetBrush || bSetBox || bSetFrameDir) )
+        return;
 
-                ChgPageDesc( pPageDesc, aNewPageDesc );
-            }
+    static sal_uInt16 aPoolIds[] = { RES_POOLPAGE_HTML, RES_POOLPAGE_FIRST,
+                                 RES_POOLPAGE_LEFT, RES_POOLPAGE_RIGHT };
+    for(sal_uInt16 i : aPoolIds)
+    {
+        const SwPageDesc *pPageDesc = GetPageDesc( i, false );
+        if( pPageDesc )
+        {
+            SwPageDesc aNewPageDesc( *pPageDesc );
+            SwFrameFormat &rMaster = aNewPageDesc.GetMaster();
+            if( bSetBrush )
+                rMaster.SetFormatAttr( *aBrushItem );
+            if( bSetBox )
+                rMaster.SetFormatAttr( *aBoxItem );
+            if( bSetFrameDir )
+                rMaster.SetFormatAttr( *aFrameDirItem );
+
+            ChgPageDesc( pPageDesc, aNewPageDesc );
         }
     }
 }
@@ -1072,34 +1072,34 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
         return;
 
     SwCharFormat* pCFormat = GetChrFormat(nToken2, OUString());
-    if( pCFormat )
+    if( !pCFormat )
+        return;
+
+    SwCharFormat *pParentCFormat = nullptr;
+    if( !aClass.isEmpty() )
     {
-        SwCharFormat *pParentCFormat = nullptr;
-        if( !aClass.isEmpty() )
-        {
-            OUString aName( pCFormat->GetName() );
-            AddClassName( aName, aClass );
-            pParentCFormat = pCFormat;
+        OUString aName( pCFormat->GetName() );
+        AddClassName( aName, aClass );
+        pParentCFormat = pCFormat;
 
-            pCFormat = m_pDoc->FindCharFormatByName( aName );
-            if( !pCFormat )
-            {
-                pCFormat = m_pDoc->MakeCharFormat( aName, pParentCFormat );
-                pCFormat->SetAuto(false);
-            }
+        pCFormat = m_pDoc->FindCharFormatByName( aName );
+        if( !pCFormat )
+        {
+            pCFormat = m_pDoc->MakeCharFormat( aName, pParentCFormat );
+            pCFormat->SetAuto(false);
         }
+    }
 
-        if( Css1ScriptFlags::AllMask == nScript && !pParentCFormat )
-        {
-            SetCharFormatAttrs( pCFormat, rItemSet );
-        }
-        else
-        {
-            SfxItemSet aScriptItemSet( rItemSet );
-            RemoveScriptItems( aScriptItemSet, nScript,
-                               pParentCFormat ? &pParentCFormat->GetAttrSet() : nullptr );
-            SetCharFormatAttrs( pCFormat, aScriptItemSet );
-        }
+    if( Css1ScriptFlags::AllMask == nScript && !pParentCFormat )
+    {
+        SetCharFormatAttrs( pCFormat, rItemSet );
+    }
+    else
+    {
+        SfxItemSet aScriptItemSet( rItemSet );
+        RemoveScriptItems( aScriptItemSet, nScript,
+                           pParentCFormat ? &pParentCFormat->GetAttrSet() : nullptr );
+        SetCharFormatAttrs( pCFormat, aScriptItemSet );
     }
 }
 
@@ -1504,36 +1504,36 @@ void SwCSS1Parser::FillDropCap( SwFormatDrop& rDrop,
     }
 
     // for every other attribute create a character style
-    if( rItemSet.Count() )
+    if( !rItemSet.Count() )
+        return;
+
+    SwCharFormat *pCFormat = nullptr;
+    OUString aName;
+    if( pName )
     {
-        SwCharFormat *pCFormat = nullptr;
-        OUString aName;
-        if( pName )
-        {
-            aName = *pName + ".FL";   // first letter
-            pCFormat = m_pDoc->FindCharFormatByName( aName );
-        }
-        else
-        {
-            do
-            {
-                aName = "first-letter " + OUString::number( static_cast<sal_Int32>(++m_nDropCapCnt) );
-            }
-            while( m_pDoc->FindCharFormatByName(aName) );
-        }
-
-        if( !pCFormat )
-        {
-            pCFormat = m_pDoc->MakeCharFormat( aName, m_pDoc->GetDfltCharFormat() );
-            pCFormat->SetAuto(false);
-        }
-        SetCharFormatAttrs( pCFormat, rItemSet );
-
-        // The character style needs only be set in the attribute, when
-        // the attribute also is set.
-        if( nLines > 1 )
-            rDrop.SetCharFormat( pCFormat );
+        aName = *pName + ".FL";   // first letter
+        pCFormat = m_pDoc->FindCharFormatByName( aName );
     }
+    else
+    {
+        do
+        {
+            aName = "first-letter " + OUString::number( static_cast<sal_Int32>(++m_nDropCapCnt) );
+        }
+        while( m_pDoc->FindCharFormatByName(aName) );
+    }
+
+    if( !pCFormat )
+    {
+        pCFormat = m_pDoc->MakeCharFormat( aName, m_pDoc->GetDfltCharFormat() );
+        pCFormat->SetAuto(false);
+    }
+    SetCharFormatAttrs( pCFormat, rItemSet );
+
+    // The character style needs only be set in the attribute, when
+    // the attribute also is set.
+    if( nLines > 1 )
+        rDrop.SetCharFormat( pCFormat );
 }
 
 // specific CSS1 of SwHTMLParsers
@@ -2297,36 +2297,36 @@ static void lcl_swcss1_setEncoding( SwFormat& rFormat, rtl_TextEncoding eEnc )
 
 void SwCSS1Parser::SetDfltEncoding( rtl_TextEncoding eEnc )
 {
-    if( eEnc != GetDfltEncoding() )
+    if( eEnc == GetDfltEncoding() )
+        return;
+
+    if( m_bIsNewDoc )
     {
-        if( m_bIsNewDoc )
+        // Set new encoding as pool default
+        static const sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT,
+                                       RES_CHRATR_CTL_FONT };
+        for(sal_uInt16 i : aWhichIds)
         {
-            // Set new encoding as pool default
-            static const sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT,
-                                           RES_CHRATR_CTL_FONT };
-            for(sal_uInt16 i : aWhichIds)
-            {
-                const SvxFontItem& rDfltFont =
-                    static_cast<const SvxFontItem&>(m_pDoc->GetDefault( i));
-                SvxFontItem aFont( rDfltFont.GetFamily(),
-                                   rDfltFont.GetFamilyName(),
-                                   rDfltFont.GetStyleName(),
-                                   rDfltFont.GetPitch(),
-                                   eEnc, i );
-                m_pDoc->SetDefault( aFont );
-            }
-
-            // Change all paragraph styles that do specify a font.
-            for( auto pTextFormatColl : *m_pDoc->GetTextFormatColls() )
-                lcl_swcss1_setEncoding( *pTextFormatColl, eEnc );
-
-            // Change all character styles that do specify a font.
-            for( auto pCharFormat : *m_pDoc->GetCharFormats() )
-                lcl_swcss1_setEncoding( *pCharFormat, eEnc );
+            const SvxFontItem& rDfltFont =
+                static_cast<const SvxFontItem&>(m_pDoc->GetDefault( i));
+            SvxFontItem aFont( rDfltFont.GetFamily(),
+                               rDfltFont.GetFamilyName(),
+                               rDfltFont.GetStyleName(),
+                               rDfltFont.GetPitch(),
+                               eEnc, i );
+            m_pDoc->SetDefault( aFont );
         }
 
-        SvxCSS1Parser::SetDfltEncoding( eEnc );
+        // Change all paragraph styles that do specify a font.
+        for( auto pTextFormatColl : *m_pDoc->GetTextFormatColls() )
+            lcl_swcss1_setEncoding( *pTextFormatColl, eEnc );
+
+        // Change all character styles that do specify a font.
+        for( auto pCharFormat : *m_pDoc->GetCharFormats() )
+            lcl_swcss1_setEncoding( *pCharFormat, eEnc );
     }
+
+    SvxCSS1Parser::SetDfltEncoding( eEnc );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

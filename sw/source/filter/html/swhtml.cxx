@@ -2471,64 +2471,64 @@ void SwHTMLParser::AddParSpace()
 
     SvxULSpaceItem rULSpace =
         static_cast<const SvxULSpaceItem&>(pTextNode->SwContentNode::GetAttr( RES_UL_SPACE ));
-    if( !rULSpace.GetLower() )
+    if( rULSpace.GetLower() )
+        return;
+
+    const SvxULSpaceItem& rCollULSpace =
+        pTextNode->GetAnyFormatColl().GetULSpace();
+    if( rCollULSpace.GetLower() &&
+        rCollULSpace.GetUpper() == rULSpace.GetUpper() )
     {
-        const SvxULSpaceItem& rCollULSpace =
-            pTextNode->GetAnyFormatColl().GetULSpace();
-        if( rCollULSpace.GetLower() &&
-            rCollULSpace.GetUpper() == rULSpace.GetUpper() )
+        pTextNode->ResetAttr( RES_UL_SPACE );
+    }
+    else
+    {
+        //What I do here, is that I examine the attributes, and if
+        //I find out, that it's CJK/CTL, then I set the paragraph space
+        //to the value set in HTML_CJK_PARSPACE/HTML_CTL_PARSPACE.
+
+        bool bIsCJK = false;
+        bool bIsCTL = false;
+
+        const size_t nCntAttr = pTextNode->GetpSwpHints()
+                        ? pTextNode->GetSwpHints().Count() : 0;
+
+        for(size_t i = 0; i < nCntAttr; ++i)
         {
-            pTextNode->ResetAttr( RES_UL_SPACE );
+            SwTextAttr *const pHt = pTextNode->GetSwpHints().Get(i);
+            sal_uInt16 const nWhich = pHt->Which();
+            if (RES_CHRATR_CJK_FONT == nWhich ||
+                RES_CHRATR_CJK_FONTSIZE == nWhich ||
+                RES_CHRATR_CJK_LANGUAGE == nWhich ||
+                RES_CHRATR_CJK_POSTURE == nWhich ||
+                RES_CHRATR_CJK_WEIGHT == nWhich)
+            {
+                bIsCJK = true;
+                break;
+            }
+            if (RES_CHRATR_CTL_FONT == nWhich ||
+                RES_CHRATR_CTL_FONTSIZE == nWhich ||
+                RES_CHRATR_CTL_LANGUAGE == nWhich ||
+                RES_CHRATR_CTL_POSTURE == nWhich ||
+                RES_CHRATR_CTL_WEIGHT == nWhich)
+            {
+                bIsCTL = true;
+                break;
+            }
         }
-        else
+
+        if( bIsCTL )
         {
-            //What I do here, is that I examine the attributes, and if
-            //I find out, that it's CJK/CTL, then I set the paragraph space
-            //to the value set in HTML_CJK_PARSPACE/HTML_CTL_PARSPACE.
-
-            bool bIsCJK = false;
-            bool bIsCTL = false;
-
-            const size_t nCntAttr = pTextNode->GetpSwpHints()
-                            ? pTextNode->GetSwpHints().Count() : 0;
-
-            for(size_t i = 0; i < nCntAttr; ++i)
-            {
-                SwTextAttr *const pHt = pTextNode->GetSwpHints().Get(i);
-                sal_uInt16 const nWhich = pHt->Which();
-                if (RES_CHRATR_CJK_FONT == nWhich ||
-                    RES_CHRATR_CJK_FONTSIZE == nWhich ||
-                    RES_CHRATR_CJK_LANGUAGE == nWhich ||
-                    RES_CHRATR_CJK_POSTURE == nWhich ||
-                    RES_CHRATR_CJK_WEIGHT == nWhich)
-                {
-                    bIsCJK = true;
-                    break;
-                }
-                if (RES_CHRATR_CTL_FONT == nWhich ||
-                    RES_CHRATR_CTL_FONTSIZE == nWhich ||
-                    RES_CHRATR_CTL_LANGUAGE == nWhich ||
-                    RES_CHRATR_CTL_POSTURE == nWhich ||
-                    RES_CHRATR_CTL_WEIGHT == nWhich)
-                {
-                    bIsCTL = true;
-                    break;
-                }
-            }
-
-            if( bIsCTL )
-            {
-                pTextNode->SetAttr(
-                    SvxULSpaceItem( rULSpace.GetUpper(), HTML_CTL_PARSPACE, RES_UL_SPACE )  );
-            }
-            else if( bIsCJK )
-            {
-                pTextNode->SetAttr(
-                    SvxULSpaceItem( rULSpace.GetUpper(), HTML_CJK_PARSPACE, RES_UL_SPACE )  );
-            } else {
-                pTextNode->SetAttr(
-                    SvxULSpaceItem( rULSpace.GetUpper(), HTML_PARSPACE, RES_UL_SPACE )  );
-            }
+            pTextNode->SetAttr(
+                SvxULSpaceItem( rULSpace.GetUpper(), HTML_CTL_PARSPACE, RES_UL_SPACE )  );
+        }
+        else if( bIsCJK )
+        {
+            pTextNode->SetAttr(
+                SvxULSpaceItem( rULSpace.GetUpper(), HTML_CJK_PARSPACE, RES_UL_SPACE )  );
+        } else {
+            pTextNode->SetAttr(
+                SvxULSpaceItem( rULSpace.GetUpper(), HTML_PARSPACE, RES_UL_SPACE )  );
         }
     }
 }

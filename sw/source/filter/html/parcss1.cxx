@@ -1218,20 +1218,20 @@ void CSS1Expression::GetURL( OUString& rURL  ) const
                 ')' == aValue[aValue.getLength()-1],
                 "no valid URL(...)" );
 
-    if( aValue.getLength() > 5 )
-    {
-        rURL = aValue.copy( 4, aValue.getLength() - 5 );
+    if( aValue.getLength() <= 5 )
+        return;
 
-        // tdf#94088 original stripped only spaces, but there may also be
-        // double quotes in CSS style URLs, so be prepared to spaces followed
-        // by a single quote followed by spaces
-        const sal_Unicode aSpace(' ');
-        const sal_Unicode aSingleQuote('\'');
+    rURL = aValue.copy( 4, aValue.getLength() - 5 );
 
-        rURL = comphelper::string::strip(rURL, aSpace);
-        rURL = comphelper::string::strip(rURL, aSingleQuote);
-        rURL = comphelper::string::strip(rURL, aSpace);
-    }
+    // tdf#94088 original stripped only spaces, but there may also be
+    // double quotes in CSS style URLs, so be prepared to spaces followed
+    // by a single quote followed by spaces
+    const sal_Unicode aSpace(' ');
+    const sal_Unicode aSingleQuote('\'');
+
+    rURL = comphelper::string::strip(rURL, aSpace);
+    rURL = comphelper::string::strip(rURL, aSingleQuote);
+    rURL = comphelper::string::strip(rURL, aSpace);
 }
 
 bool CSS1Expression::GetColor( Color &rColor ) const

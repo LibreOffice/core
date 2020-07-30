@@ -316,25 +316,25 @@ void SwHTMLWriter::OutForm( bool bTag_On, const SwStartNode *pStartNd )
         }
     }
 
-    if( xNewFormComps.is() &&
-        (!mxFormComps.is() || xNewFormComps != mxFormComps) )
+    if( !(xNewFormComps.is() &&
+        (!mxFormComps.is() || xNewFormComps != mxFormComps)) )
+        return;
+
+    // A form should be opened ...
+    if( mxFormComps.is() )
     {
-        // A form should be opened ...
-        if( mxFormComps.is() )
-        {
-            // ... but a form is still open: That is in every case an error,
-            // but we'll close the old form nevertheless.
-            OutForm( false, mxFormComps );
+        // ... but a form is still open: That is in every case an error,
+        // but we'll close the old form nevertheless.
+        OutForm( false, mxFormComps );
 
-            //!!!nWarn = 1; // Control will be assigned to wrong form
-        }
-
-        mxFormComps = xNewFormComps;
-
-        OutForm( true, mxFormComps );
-        uno::Reference< beans::XPropertySet >  xTmp;
-        OutHiddenControls( mxFormComps, xTmp );
+        //!!!nWarn = 1; // Control will be assigned to wrong form
     }
+
+    mxFormComps = xNewFormComps;
+
+    OutForm( true, mxFormComps );
+    uno::Reference< beans::XPropertySet >  xTmp;
+    OutHiddenControls( mxFormComps, xTmp );
 }
 
 void SwHTMLWriter::OutHiddenForms()

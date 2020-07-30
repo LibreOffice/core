@@ -2465,19 +2465,19 @@ void SwHTMLParser::InsertSelectText()
     OSL_ENSURE( m_pFormImpl && m_pFormImpl->GetFCompPropSet().is(),
             "no select control" );
 
-    if(!m_pFormImpl->GetStringList().empty())
-    {
-        OUString& rText = m_pFormImpl->GetStringList().back();
+    if(m_pFormImpl->GetStringList().empty())
+        return;
 
-        if( !aToken.isEmpty() && ' '==aToken[ 0 ] )
-        {
-            sal_Int32 nLen = rText.getLength();
-            if( !nLen || ' '==rText[nLen-1])
-                aToken = aToken.replaceAt( 0, 1, "" );
-        }
-        if( !aToken.isEmpty() )
-            rText += aToken;
+    OUString& rText = m_pFormImpl->GetStringList().back();
+
+    if( !aToken.isEmpty() && ' '==aToken[ 0 ] )
+    {
+        sal_Int32 nLen = rText.getLength();
+        if( !nLen || ' '==rText[nLen-1])
+            aToken = aToken.replaceAt( 0, 1, "" );
     }
+    if( !aToken.isEmpty() )
+        rText += aToken;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
