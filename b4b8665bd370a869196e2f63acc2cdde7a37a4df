@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad3143d8_6f5e4ac2",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-30T08:19:21Z",
+      "side": 1,
+      "message": "It still gives this line localized, not en-US. E.g., for Russian UI, it gives:\n\n    Locale: ru-RU (ru_RU); ИП: ru-RU\n\ninstead of\n\n    Locale: ru-RU (ru_RU); UI: ru-RU",
+      "range": {
+        "startLine": 262,
+        "startChar": 19,
+        "endLine": 262,
+        "endChar": 78
+      },
+      "revId": "b4b8665bd370a869196e2f63acc2cdde7a37a4df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
