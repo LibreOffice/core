@@ -40,8 +40,6 @@ struct DdeItemImpData;
 struct Conversation;
 
 typedef ::std::vector< DdeService* > DdeServices;
-typedef ::std::vector< long > DdeFormats;
-typedef std::vector<std::unique_ptr<Conversation>> ConvList;
 
 
 class SVL_DLLPUBLIC DdeData
@@ -287,10 +285,11 @@ protected:
     const DdeTopic* GetSysTopic() const { return pSysTopic; }
 private:
     std::vector<DdeTopic*> aTopics;
-    DdeFormats      aFormats;
+    std::vector< long >    aFormats;
     DdeTopic*       pSysTopic;
     DdeString*      pName;
-    ConvList        m_vConv;
+    std::vector<std::unique_ptr<Conversation>>
+                    m_vConv;
     short           nStatus;
 
     SVL_DLLPRIVATE bool HasCbFormat( sal_uInt16 );

@@ -1025,7 +1025,6 @@ private:
         sal_uInt32          mnNextShapeId;      /// Next free shape identifier in this cluster.
         explicit     ClusterEntry( sal_uInt32 nDrawingId ) : mnDrawingId( nDrawingId ), mnNextShapeId( 0 ) {}
     };
-    typedef ::std::vector< ClusterEntry > ClusterTable;
 
     struct DrawingInfo
     {
@@ -1036,7 +1035,7 @@ private:
     };
     typedef ::std::vector< DrawingInfo > DrawingInfoVector;
 
-    ClusterTable        maClusterTable;     /// List with cluster IDs (used object IDs in drawings).
+    std::vector< ClusterEntry > maClusterTable;     /// List with cluster IDs (used object IDs in drawings).
     DrawingInfoVector   maDrawingInfos;     /// Data about all used drawings.
     SvStream*           mpPicStrm;          /// Cached result of ImplQueryPictureStream().
     bool                mbHasDggCont;       /// True = the DGGCONTAINER has been initialized.
