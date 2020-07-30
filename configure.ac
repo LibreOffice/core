@@ -4920,7 +4920,14 @@ if test "$cross_compiling" = "yes"; then
     mv config.log ../config.Build.log
     mkdir -p ../config_build
     mv config_host/*.h ../config_build
+
+    OLD_PATH=$PATH
     . ./bin/get_config_variables CC CXX INSTDIR INSTROOT LIBO_BIN_FOLDER LIBO_LIB_FOLDER LIBO_URE_LIB_FOLDER LIBO_URE_MISC_FOLDER OS PATH SDKDIRNAME SYSTEM_LIBXML SYSTEM_LIBXSLT WORKDIR
+    BUILD_PATH=$PATH
+    PATH=$OLD_PATH
+
+    line=`echo "LO_PATH_FOR_BUILD='${BUILD_PATH}'" | sed -e 's,/CONF-FOR-BUILD,,g'`
+    echo "$line" >>build-config
 
     for V in CC CXX LIBO_BIN_FOLDER LIBO_LIB_FOLDER LIBO_URE_LIB_FOLDER LIBO_URE_MISC_FOLDER OS SDKDIRNAME SYSTEM_LIBXML SYSTEM_LIBXSLT; do
         VV='$'$V
@@ -4940,9 +4947,6 @@ if test "$cross_compiling" = "yes"; then
             echo "$line" >>build-config
         fi
     done
-
-    line=`echo "LO_PATH_FOR_BUILD=$PATH" | sed -e 's,/CONF-FOR-BUILD,,g'`
-    echo "$line" >>build-config
 
     )
     test -f CONF-FOR-BUILD/build-config || AC_MSG_ERROR([Running configure script for BUILD system failed, see CONF-FOR-BUILD/config.log])
