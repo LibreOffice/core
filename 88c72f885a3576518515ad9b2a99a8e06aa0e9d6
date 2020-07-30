@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9d9e0de9_75bbc891",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-30T09:57:51Z",
+      "side": 1,
+      "message": "All these functions must be enclosed into unnamed namespace:\n\n    namespace\n    {\n    ...\n    } // namespace\n\nThese makes them local to the unit, not exported.",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 171,
+        "endChar": 1
+      },
+      "revId": "88c72f885a3576518515ad9b2a99a8e06aa0e9d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
