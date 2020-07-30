@@ -49,12 +49,11 @@ class SVXCORE_DLLPUBLIC SvXMLGraphicHelper final : public cppu::WeakComponentImp
                                                                                     css::document::XBinaryStreamResolver>
 {
 private:
-    typedef ::std::vector< css::uno::Reference< css::io::XOutputStream > >    GraphicOutputStreamVector;
-
     ::osl::Mutex                maMutex;
     css::uno::Reference < css::embed::XStorage > mxRootStorage;
     OUString             maCurStorageName;
-    GraphicOutputStreamVector   maGrfStms;
+    std::vector< css::uno::Reference< css::io::XOutputStream > >
+                                maGrfStms;
 
     std::unordered_map<OUString, css::uno::Reference<css::graphic::XGraphic>> maGraphicObjects;
     std::unordered_map<Graphic, std::pair<OUString, OUString>> maExportGraphics;

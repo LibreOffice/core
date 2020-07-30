@@ -40,8 +40,6 @@ typedef ::std::pair<
             OUString,
             css::uno::Sequence<css::beans::PropertyValue> > EventNameValuesPair;
 
-typedef ::std::vector< EventNameValuesPair > EventsVector;
-
 /**
  * Import <script:events> element.
  *
@@ -57,7 +55,7 @@ class XMLOFF_DLLPUBLIC XMLEventsImportContext : public SvXMLImportContext
 
 protected:
     // if no XNameReplace is given, use this vector to collect events
-    EventsVector aCollectEvents;
+    std::vector< EventNameValuesPair > aCollectEvents;
 
 public:
 
