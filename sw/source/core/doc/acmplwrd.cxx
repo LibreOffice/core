@@ -361,22 +361,22 @@ void SwAutoCompleteWord::CheckChangedList(
         }
     }
     // remove the elements at the end of the array
-    if( nMyPos < nMyLen )
+    if( nMyPos >= nMyLen )
+        return;
+
+    // clear LRU array first then delete the string object
+    for( ; nNewPos < nMyLen; ++nNewPos )
     {
-        // clear LRU array first then delete the string object
-        for( ; nNewPos < nMyLen; ++nNewPos )
-        {
-            SwAutoCompleteString *const pDel =
-                dynamic_cast<SwAutoCompleteString*>(m_WordList[nNewPos]);
-            SwAutoCompleteStringPtrDeque::iterator it = std::find( m_aLRUList.begin(), m_aLRUList.end(), pDel );
-            OSL_ENSURE( m_aLRUList.end() != it, "String not found" );
-            m_aLRUList.erase( it );
-            delete pDel;
-        }
-        // remove from array
-        m_WordList.erase(m_WordList.begin() + nMyPos,
-                         m_WordList.begin() + nMyLen);
+        SwAutoCompleteString *const pDel =
+            dynamic_cast<SwAutoCompleteString*>(m_WordList[nNewPos]);
+        SwAutoCompleteStringPtrDeque::iterator it = std::find( m_aLRUList.begin(), m_aLRUList.end(), pDel );
+        OSL_ENSURE( m_aLRUList.end() != it, "String not found" );
+        m_aLRUList.erase( it );
+        delete pDel;
     }
+    // remove from array
+    m_WordList.erase(m_WordList.begin() + nMyPos,
+                     m_WordList.begin() + nMyLen);
 }
 
 void SwAutoCompleteWord::DocumentDying(const SwDoc& rDoc)

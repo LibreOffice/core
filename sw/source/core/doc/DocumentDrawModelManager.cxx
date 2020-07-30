@@ -131,21 +131,21 @@ void DocumentDrawModelManager::InitDrawModel()
 
     mpDrawModel->SetNotifyUndoActionHdl( std::bind( &SwDoc::AddDrawUndo, &m_rDoc, std::placeholders::_1 ));
     SwViewShell* const pSh = m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell();
-    if ( pSh )
+    if ( !pSh )
+        return;
+
+    for(const SwViewShell& rViewSh : pSh->GetRingContainer())
     {
-        for(const SwViewShell& rViewSh : pSh->GetRingContainer())
+        SwRootFrame* pRoot =  rViewSh.GetLayout();
+        if( pRoot && !pRoot->GetDrawPage() )
         {
-            SwRootFrame* pRoot =  rViewSh.GetLayout();
-            if( pRoot && !pRoot->GetDrawPage() )
-            {
-                // Disable "multiple layout" for the moment:
-                // use pMasterPage instead of a new created SdrPage
-                // mpDrawModel->AllocPage( FALSE );
-                // mpDrawModel->InsertPage( pDrawPage );
-                SdrPage* pDrawPage = pMasterPage;
-                pRoot->SetDrawPage( pDrawPage );
-                pDrawPage->SetSize( pRoot->getFrameArea().SSize() );
-            }
+            // Disable "multiple layout" for the moment:
+            // use pMasterPage instead of a new created SdrPage
+            // mpDrawModel->AllocPage( FALSE );
+            // mpDrawModel->InsertPage( pDrawPage );
+            SdrPage* pDrawPage = pMasterPage;
+            pRoot->SetDrawPage( pDrawPage );
+            pDrawPage->SetSize( pRoot->getFrameArea().SSize() );
         }
     }
 }

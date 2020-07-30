@@ -1094,21 +1094,21 @@ void SwDocUpdateField::InsertFieldType( const SwFieldType& rType )
         OSL_ENSURE( false, "No valid field type" );
     }
 
-    if( !sFieldName.isEmpty() )
+    if( sFieldName.isEmpty() )
+        return;
+
+    SetFieldsDirty( true );
+    // look up and remove from the hash table
+    sFieldName = GetAppCharClass().lowercase( sFieldName );
+    sal_uInt16 n;
+
+    SwCalcFieldType* pFnd = GetFieldTypeTable().Find( sFieldName, &n );
+
+    if( !pFnd )
     {
-        SetFieldsDirty( true );
-        // look up and remove from the hash table
-        sFieldName = GetAppCharClass().lowercase( sFieldName );
-        sal_uInt16 n;
-
-        SwCalcFieldType* pFnd = GetFieldTypeTable().Find( sFieldName, &n );
-
-        if( !pFnd )
-        {
-            SwCalcFieldType* pNew = new SwCalcFieldType( sFieldName, &rType );
-            pNew->pNext.reset( m_FieldTypeTable[n].release() );
-            m_FieldTypeTable[n].reset(pNew);
-        }
+        SwCalcFieldType* pNew = new SwCalcFieldType( sFieldName, &rType );
+        pNew->pNext.reset( m_FieldTypeTable[n].release() );
+        m_FieldTypeTable[n].reset(pNew);
     }
 }
 
@@ -1126,29 +1126,29 @@ void SwDocUpdateField::RemoveFieldType( const SwFieldType& rType )
     default: break;
     }
 
-    if( !sFieldName.isEmpty() )
-    {
-        SetFieldsDirty( true );
-        // look up and remove from the hash table
-        sFieldName = GetAppCharClass().lowercase( sFieldName );
-        sal_uInt16 n;
+    if( sFieldName.isEmpty() )
+        return;
 
-        SwCalcFieldType* pFnd = GetFieldTypeTable().Find( sFieldName, &n );
-        if( pFnd )
-        {
-            if (m_FieldTypeTable[n].get() == pFnd)
-            {
-                m_FieldTypeTable[n].reset(static_cast<SwCalcFieldType*>(pFnd->pNext.release()));
-            }
-            else
-            {
-                SwHash* pPrev = m_FieldTypeTable[n].get();
-                while( pPrev->pNext.get() != pFnd )
-                    pPrev = pPrev->pNext.get();
-                pPrev->pNext = std::move(pFnd->pNext);
-                // no need to explicitly delete here, the embedded linked list uses unique_ptr
-            }
-        }
+    SetFieldsDirty( true );
+    // look up and remove from the hash table
+    sFieldName = GetAppCharClass().lowercase( sFieldName );
+    sal_uInt16 n;
+
+    SwCalcFieldType* pFnd = GetFieldTypeTable().Find( sFieldName, &n );
+    if( !pFnd )
+        return;
+
+    if (m_FieldTypeTable[n].get() == pFnd)
+    {
+        m_FieldTypeTable[n].reset(static_cast<SwCalcFieldType*>(pFnd->pNext.release()));
+    }
+    else
+    {
+        SwHash* pPrev = m_FieldTypeTable[n].get();
+        while( pPrev->pNext.get() != pFnd )
+            pPrev = pPrev->pNext.get();
+        pPrev->pNext = std::move(pFnd->pNext);
+        // no need to explicitly delete here, the embedded linked list uses unique_ptr
     }
 }
 

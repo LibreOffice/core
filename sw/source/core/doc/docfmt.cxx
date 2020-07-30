@@ -1364,45 +1364,45 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
     else
          pOldFormat = static_cast<SwFormatFooter*>(pNewItem.get())->GetFooterFormat();
 
-    if( pOldFormat )
-    {
-        SwFrameFormat* pNewFormat = new SwFrameFormat( GetAttrPool(), "CpyDesc",
-                                            GetDfltFrameFormat() );
-        pNewFormat->CopyAttrs( *pOldFormat );
+    if( !pOldFormat )
+        return;
 
-        if( SfxItemState::SET == pNewFormat->GetAttrSet().GetItemState(
-            RES_CNTNT, false, &pItem ))
+    SwFrameFormat* pNewFormat = new SwFrameFormat( GetAttrPool(), "CpyDesc",
+                                        GetDfltFrameFormat() );
+    pNewFormat->CopyAttrs( *pOldFormat );
+
+    if( SfxItemState::SET == pNewFormat->GetAttrSet().GetItemState(
+        RES_CNTNT, false, &pItem ))
+    {
+        const SwFormatContent* pContent = static_cast<const SwFormatContent*>(pItem);
+        if( pContent->GetContentIdx() )
         {
-            const SwFormatContent* pContent = static_cast<const SwFormatContent*>(pItem);
-            if( pContent->GetContentIdx() )
-            {
-                SwNodeIndex aTmpIdx( GetNodes().GetEndOfAutotext() );
-                const SwNodes& rSrcNds = rSrcFormat.GetDoc()->GetNodes();
-                SwStartNode* pSttNd = SwNodes::MakeEmptySection( aTmpIdx,
-                                                bCpyHeader
-                                                    ? SwHeaderStartNode
-                                                    : SwFooterStartNode );
-                const SwNode& rCSttNd = pContent->GetContentIdx()->GetNode();
-                SwNodeRange aRg( rCSttNd, 0, *rCSttNd.EndOfSectionNode() );
-                aTmpIdx = *pSttNd->EndOfSectionNode();
-                rSrcNds.Copy_( aRg, aTmpIdx );
-                aTmpIdx = *pSttNd;
-                rSrcFormat.GetDoc()->GetDocumentContentOperationsManager().CopyFlyInFlyImpl(aRg, nullptr, aTmpIdx);
-                // TODO: investigate calling CopyWithFlyInFly?
-                SwPaM const source(aRg.aStart, aRg.aEnd);
-                SwPosition dest(aTmpIdx);
-                sw::CopyBookmarks(source, dest);
-                pNewFormat->SetFormatAttr( SwFormatContent( pSttNd ));
-            }
-            else
-                pNewFormat->ResetFormatAttr( RES_CNTNT );
+            SwNodeIndex aTmpIdx( GetNodes().GetEndOfAutotext() );
+            const SwNodes& rSrcNds = rSrcFormat.GetDoc()->GetNodes();
+            SwStartNode* pSttNd = SwNodes::MakeEmptySection( aTmpIdx,
+                                            bCpyHeader
+                                                ? SwHeaderStartNode
+                                                : SwFooterStartNode );
+            const SwNode& rCSttNd = pContent->GetContentIdx()->GetNode();
+            SwNodeRange aRg( rCSttNd, 0, *rCSttNd.EndOfSectionNode() );
+            aTmpIdx = *pSttNd->EndOfSectionNode();
+            rSrcNds.Copy_( aRg, aTmpIdx );
+            aTmpIdx = *pSttNd;
+            rSrcFormat.GetDoc()->GetDocumentContentOperationsManager().CopyFlyInFlyImpl(aRg, nullptr, aTmpIdx);
+            // TODO: investigate calling CopyWithFlyInFly?
+            SwPaM const source(aRg.aStart, aRg.aEnd);
+            SwPosition dest(aTmpIdx);
+            sw::CopyBookmarks(source, dest);
+            pNewFormat->SetFormatAttr( SwFormatContent( pSttNd ));
         }
-        if( bCpyHeader )
-            static_cast<SwFormatHeader*>(pNewItem.get())->RegisterToFormat(*pNewFormat);
         else
-            static_cast<SwFormatFooter*>(pNewItem.get())->RegisterToFormat(*pNewFormat);
-        rDestFormat.SetFormatAttr( *pNewItem );
+            pNewFormat->ResetFormatAttr( RES_CNTNT );
     }
+    if( bCpyHeader )
+        static_cast<SwFormatHeader*>(pNewItem.get())->RegisterToFormat(*pNewFormat);
+    else
+        static_cast<SwFormatFooter*>(pNewItem.get())->RegisterToFormat(*pNewFormat);
+    rDestFormat.SetFormatAttr( *pNewItem );
 }
 
 void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,

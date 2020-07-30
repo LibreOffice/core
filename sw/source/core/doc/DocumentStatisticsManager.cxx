@@ -86,19 +86,19 @@ void DocumentStatisticsManager::SetDocStat( const SwDocStat& rStat )
 
 void DocumentStatisticsManager::UpdateDocStat( bool bCompleteAsync, bool bFields )
 {
-    if( mpDocStat->bModified || !mbInitialized)
+    if( !(mpDocStat->bModified || !mbInitialized))
+        return;
+
+    if (!bCompleteAsync)
     {
-        if (!bCompleteAsync)
-        {
-            maStatsUpdateIdle.Stop();
-            while (IncrementalDocStatCalculate(
-                        std::numeric_limits<long>::max(), bFields)) {}
-        }
-        else if (IncrementalDocStatCalculate(5000, bFields))
-            maStatsUpdateIdle.Start();
-        else
-            maStatsUpdateIdle.Stop();
+        maStatsUpdateIdle.Stop();
+        while (IncrementalDocStatCalculate(
+                    std::numeric_limits<long>::max(), bFields)) {}
     }
+    else if (IncrementalDocStatCalculate(5000, bFields))
+        maStatsUpdateIdle.Start();
+    else
+        maStatsUpdateIdle.Stop();
 }
 
 // returns true while there is more to do

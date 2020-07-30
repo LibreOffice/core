@@ -740,19 +740,19 @@ FlatFndBox::FlatFndBox(SwDoc* pDocPtr, const FndBox_& rBoxRef) :
     m_nCol(0)
 { // If the array is symmetric
     m_bSym = CheckLineSymmetry(rBoxRef);
-    if( m_bSym )
-    {
-        // Determine column/row count
-        m_nCols = GetColCount(rBoxRef);
-        m_nRows = GetRowCount(rBoxRef);
+    if( !m_bSym )
+        return;
 
-        // Create linear array
-        size_t nCount = static_cast<size_t>(m_nRows) * m_nCols;
-        m_pArr = std::make_unique<FndBox_ const *[]>(nCount);
-        memset(m_pArr.get(), 0, sizeof(const FndBox_*) * nCount);
+    // Determine column/row count
+    m_nCols = GetColCount(rBoxRef);
+    m_nRows = GetRowCount(rBoxRef);
 
-        FillFlat( rBoxRef );
-    }
+    // Create linear array
+    size_t nCount = static_cast<size_t>(m_nRows) * m_nCols;
+    m_pArr = std::make_unique<FndBox_ const *[]>(nCount);
+    memset(m_pArr.get(), 0, sizeof(const FndBox_*) * nCount);
+
+    FillFlat( rBoxRef );
 }
 
 FlatFndBox::~FlatFndBox()

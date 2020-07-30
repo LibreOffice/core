@@ -335,86 +335,86 @@ namespace
     {
         const SwDoc* pSrcDoc = rPam.GetDoc();
         const SwRedlineTable& rTable = pSrcDoc->getIDocumentRedlineAccess().GetRedlineTable();
-        if( !rTable.empty() )
+        if( rTable.empty() )
+            return;
+
+        SwDoc* pDestDoc = rCpyPam.GetDoc();
+        SwPosition* pCpyStt = rCpyPam.Start(), *pCpyEnd = rCpyPam.End();
+        std::unique_ptr<SwPaM> pDelPam;
+        const SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
+        // We have to count the "non-copied" nodes
+        sal_uLong nDelCount;
+        SwNodeIndex aCorrIdx(InitDelCount(rPam, nDelCount));
+
+        SwRedlineTable::size_type n = 0;
+        pSrcDoc->getIDocumentRedlineAccess().GetRedline( *pStt, &n );
+        for( ; n < rTable.size(); ++n )
         {
-            SwDoc* pDestDoc = rCpyPam.GetDoc();
-            SwPosition* pCpyStt = rCpyPam.Start(), *pCpyEnd = rCpyPam.End();
-            std::unique_ptr<SwPaM> pDelPam;
-            const SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
-            // We have to count the "non-copied" nodes
-            sal_uLong nDelCount;
-            SwNodeIndex aCorrIdx(InitDelCount(rPam, nDelCount));
-
-            SwRedlineTable::size_type n = 0;
-            pSrcDoc->getIDocumentRedlineAccess().GetRedline( *pStt, &n );
-            for( ; n < rTable.size(); ++n )
+            const SwRangeRedline* pRedl = rTable[ n ];
+            if( RedlineType::Delete == pRedl->GetType() && pRedl->IsVisible() )
             {
-                const SwRangeRedline* pRedl = rTable[ n ];
-                if( RedlineType::Delete == pRedl->GetType() && pRedl->IsVisible() )
+                const SwPosition *pRStt = pRedl->Start(), *pREnd = pRedl->End();
+
+                SwComparePosition eCmpPos = ComparePosition( *pStt, *pEnd, *pRStt, *pREnd );
+                switch( eCmpPos )
                 {
-                    const SwPosition *pRStt = pRedl->Start(), *pREnd = pRedl->End();
+                case SwComparePosition::CollideEnd:
+                case SwComparePosition::Before:
+                    // Pos1 is before Pos2
+                    break;
 
-                    SwComparePosition eCmpPos = ComparePosition( *pStt, *pEnd, *pRStt, *pREnd );
-                    switch( eCmpPos )
+                case SwComparePosition::CollideStart:
+                case SwComparePosition::Behind:
+                    // Pos1 is after Pos2
+                    n = rTable.size();
+                    break;
+
+                default:
                     {
-                    case SwComparePosition::CollideEnd:
-                    case SwComparePosition::Before:
-                        // Pos1 is before Pos2
-                        break;
-
-                    case SwComparePosition::CollideStart:
-                    case SwComparePosition::Behind:
-                        // Pos1 is after Pos2
-                        n = rTable.size();
-                        break;
-
-                    default:
+                        pDelPam.reset(new SwPaM( *pCpyStt, pDelPam.release() ));
+                        if( *pStt < *pRStt )
                         {
-                            pDelPam.reset(new SwPaM( *pCpyStt, pDelPam.release() ));
-                            if( *pStt < *pRStt )
-                            {
-                                lcl_NonCopyCount( rPam, aCorrIdx, pRStt->nNode.GetIndex(), nDelCount );
-                                lcl_SetCpyPos( *pRStt, *pStt, *pCpyStt,
-                                                *pDelPam->GetPoint(), nDelCount );
-                            }
-                            pDelPam->SetMark();
+                            lcl_NonCopyCount( rPam, aCorrIdx, pRStt->nNode.GetIndex(), nDelCount );
+                            lcl_SetCpyPos( *pRStt, *pStt, *pCpyStt,
+                                            *pDelPam->GetPoint(), nDelCount );
+                        }
+                        pDelPam->SetMark();
 
-                            if( *pEnd < *pREnd )
-                                *pDelPam->GetPoint() = *pCpyEnd;
-                            else
-                            {
-                                lcl_NonCopyCount( rPam, aCorrIdx, pREnd->nNode.GetIndex(), nDelCount );
-                                lcl_SetCpyPos( *pREnd, *pStt, *pCpyStt,
-                                                *pDelPam->GetPoint(), nDelCount );
-                            }
+                        if( *pEnd < *pREnd )
+                            *pDelPam->GetPoint() = *pCpyEnd;
+                        else
+                        {
+                            lcl_NonCopyCount( rPam, aCorrIdx, pREnd->nNode.GetIndex(), nDelCount );
+                            lcl_SetCpyPos( *pREnd, *pStt, *pCpyStt,
+                                            *pDelPam->GetPoint(), nDelCount );
+                        }
 
-                            if (pDelPam->GetNext() && *pDelPam->GetNext()->End() == *pDelPam->Start())
-                            {
-                                *pDelPam->GetNext()->End() = *pDelPam->End();
-                                pDelPam.reset(pDelPam->GetNext());
-                            }
+                        if (pDelPam->GetNext() && *pDelPam->GetNext()->End() == *pDelPam->Start())
+                        {
+                            *pDelPam->GetNext()->End() = *pDelPam->End();
+                            pDelPam.reset(pDelPam->GetNext());
                         }
                     }
                 }
             }
-
-            if( pDelPam )
-            {
-                RedlineFlags eOld = pDestDoc->getIDocumentRedlineAccess().GetRedlineFlags();
-                pDestDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld | RedlineFlags::Ignore );
-
-                ::sw::UndoGuard const undoGuard(pDestDoc->GetIDocumentUndoRedo());
-
-                do {
-                    pDestDoc->getIDocumentContentOperations().DeleteAndJoin( *pDelPam->GetNext() );
-                    if( !pDelPam->IsMultiSelection() )
-                        break;
-                    delete pDelPam->GetNext();
-                } while( true );
-
-                pDestDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
-            }
         }
+
+        if( !pDelPam )
+            return;
+
+        RedlineFlags eOld = pDestDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+        pDestDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld | RedlineFlags::Ignore );
+
+        ::sw::UndoGuard const undoGuard(pDestDoc->GetIDocumentUndoRedo());
+
+        do {
+            pDestDoc->getIDocumentContentOperations().DeleteAndJoin( *pDelPam->GetNext() );
+            if( !pDelPam->IsMultiSelection() )
+                break;
+            delete pDelPam->GetNext();
+        } while( true );
+
+        pDestDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     }
 
     void lcl_DeleteRedlines( const SwNodeRange& rRg, SwNodeRange const & rCpyRg )
@@ -2948,23 +2948,23 @@ void DocumentContentOperationsManager::ReRead( SwPaM& rPam, const OUString& rGrf
                     const OUString& rFltName, const Graphic* pGraphic )
 {
     SwGrfNode *pGrfNd;
-    if( ( !rPam.HasMark()
+    if( !(( !rPam.HasMark()
          || rPam.GetPoint()->nNode.GetIndex() == rPam.GetMark()->nNode.GetIndex() )
-         && nullptr != ( pGrfNd = rPam.GetPoint()->nNode.GetNode().GetGrfNode() ) )
+         && nullptr != ( pGrfNd = rPam.GetPoint()->nNode.GetNode().GetGrfNode() )) )
+        return;
+
+    if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
-        if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
-        {
-            m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoReRead>(rPam, *pGrfNd));
-        }
-
-        // Because we don't know if we can mirror the graphic, the mirror attribute is always reset
-        if( MirrorGraph::Dont != pGrfNd->GetSwAttrSet().
-                                                GetMirrorGrf().GetValue() )
-            pGrfNd->SetAttr( SwMirrorGrf() );
-
-        pGrfNd->ReRead( rGrfName, rFltName, pGraphic );
-        m_rDoc.getIDocumentState().SetModified();
+        m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoReRead>(rPam, *pGrfNd));
     }
+
+    // Because we don't know if we can mirror the graphic, the mirror attribute is always reset
+    if( MirrorGraph::Dont != pGrfNd->GetSwAttrSet().
+                                            GetMirrorGrf().GetValue() )
+        pGrfNd->SetAttr( SwMirrorGrf() );
+
+    pGrfNd->ReRead( rGrfName, rFltName, pGraphic );
+    m_rDoc.getIDocumentState().SetModified();
 }
 
 // Insert drawing object, which has to be already inserted in the DrawModel
@@ -3399,28 +3399,28 @@ void DocumentContentOperationsManager::InsertItemSet ( const SwPaM &rRg, const S
 void DocumentContentOperationsManager::RemoveLeadingWhiteSpace(const SwPosition & rPos )
 {
     const SwTextNode* pTNd = rPos.nNode.GetNode().GetTextNode();
-    if ( pTNd )
-    {
-        const OUString& rText = pTNd->GetText();
-        sal_Int32 nIdx = 0;
-        while (nIdx < rText.getLength())
-        {
-            sal_Unicode const cCh = rText[nIdx];
-            if (('\t' != cCh) && (' ' != cCh))
-            {
-                break;
-            }
-            ++nIdx;
-        }
+    if ( !pTNd )
+        return;
 
-        if ( nIdx > 0 )
+    const OUString& rText = pTNd->GetText();
+    sal_Int32 nIdx = 0;
+    while (nIdx < rText.getLength())
+    {
+        sal_Unicode const cCh = rText[nIdx];
+        if (('\t' != cCh) && (' ' != cCh))
         {
-            SwPaM aPam(rPos);
-            aPam.GetPoint()->nContent = 0;
-            aPam.SetMark();
-            aPam.GetMark()->nContent = nIdx;
-            DeleteRange( aPam );
+            break;
         }
+        ++nIdx;
+    }
+
+    if ( nIdx > 0 )
+    {
+        SwPaM aPam(rPos);
+        aPam.GetPoint()->nContent = 0;
+        aPam.SetMark();
+        aPam.GetMark()->nContent = nIdx;
+        DeleteRange( aPam );
     }
 }
 
@@ -3798,41 +3798,41 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
 
     // Rebuild as much as possible of all chains that are available in the original,
     OSL_ENSURE( aSet.size() == aVecSwFrameFormat.size(), "Missing new Flys" );
-    if ( aSet.size() == aVecSwFrameFormat.size() )
-    {
-        size_t n = 0;
-        for (const auto& rFlyN : aSet)
-        {
-            const SwFrameFormat *pFormatN = rFlyN.GetFormat();
-            const SwFormatChain &rChain = pFormatN->GetChain();
-            int nCnt = int(nullptr != rChain.GetPrev());
-            nCnt += rChain.GetNext() ? 1: 0;
-            size_t k = 0;
-            for (const auto& rFlyK : aSet)
-            {
-                const SwFrameFormat *pFormatK = rFlyK.GetFormat();
-                if ( rChain.GetPrev() == pFormatK )
-                {
-                    ::lcl_ChainFormats( static_cast< SwFlyFrameFormat* >(aVecSwFrameFormat[k]),
-                                     static_cast< SwFlyFrameFormat* >(aVecSwFrameFormat[n]) );
-                    --nCnt;
-                }
-                else if ( rChain.GetNext() == pFormatK )
-                {
-                    ::lcl_ChainFormats( static_cast< SwFlyFrameFormat* >(aVecSwFrameFormat[n]),
-                                     static_cast< SwFlyFrameFormat* >(aVecSwFrameFormat[k]) );
-                    --nCnt;
-                }
-                ++k;
-            }
-            ++n;
-        }
+    if ( aSet.size() != aVecSwFrameFormat.size() )
+        return;
 
-        // Re-create content property of draw formats, knowing how old shapes
-        // were paired with old fly formats (aOldTextBoxes) and that aSet is
-        // parallel with aVecSwFrameFormat.
-        SwTextBoxHelper::restoreLinks(aSet, aVecSwFrameFormat, aOldTextBoxes, aOldContent);
+    size_t n = 0;
+    for (const auto& rFlyN : aSet)
+    {
+        const SwFrameFormat *pFormatN = rFlyN.GetFormat();
+        const SwFormatChain &rChain = pFormatN->GetChain();
+        int nCnt = int(nullptr != rChain.GetPrev());
+        nCnt += rChain.GetNext() ? 1: 0;
+        size_t k = 0;
+        for (const auto& rFlyK : aSet)
+        {
+            const SwFrameFormat *pFormatK = rFlyK.GetFormat();
+            if ( rChain.GetPrev() == pFormatK )
+            {
+                ::lcl_ChainFormats( static_cast< SwFlyFrameFormat* >(aVecSwFrameFormat[k]),
+                                 static_cast< SwFlyFrameFormat* >(aVecSwFrameFormat[n]) );
+                --nCnt;
+            }
+            else if ( rChain.GetNext() == pFormatK )
+            {
+                ::lcl_ChainFormats( static_cast< SwFlyFrameFormat* >(aVecSwFrameFormat[n]),
+                                 static_cast< SwFlyFrameFormat* >(aVecSwFrameFormat[k]) );
+                --nCnt;
+            }
+            ++k;
+        }
+        ++n;
     }
+
+    // Re-create content property of draw formats, knowing how old shapes
+    // were paired with old fly formats (aOldTextBoxes) and that aSet is
+    // parallel with aVecSwFrameFormat.
+    SwTextBoxHelper::restoreLinks(aSet, aVecSwFrameFormat, aOldTextBoxes, aOldContent);
 }
 
 /*
@@ -4550,20 +4550,20 @@ static void lcl_PushNumruleState(
     // Safe numrule item at destination.
     // #i86492# - Safe also <ListId> item of destination.
     const SfxItemSet * pAttrSet = pDestTextNd->GetpSwAttrSet();
-    if (pAttrSet != nullptr)
-    {
-        const SfxPoolItem * pItem = nullptr;
-        aNumRuleState = pAttrSet->GetItemState(RES_PARATR_NUMRULE, false, &pItem);
-        if (SfxItemState::SET == aNumRuleState)
-        {
-            aNumRuleItem.reset(static_cast<SwNumRuleItem*>(pItem->Clone()));
-        }
+    if (pAttrSet == nullptr)
+        return;
 
-        aListIdState = pAttrSet->GetItemState(RES_PARATR_LIST_ID, false, &pItem);
-        if (SfxItemState::SET == aListIdState)
-        {
-            aListIdItem.reset(static_cast<SfxStringItem*>(pItem->Clone()));
-        }
+    const SfxPoolItem * pItem = nullptr;
+    aNumRuleState = pAttrSet->GetItemState(RES_PARATR_NUMRULE, false, &pItem);
+    if (SfxItemState::SET == aNumRuleState)
+    {
+        aNumRuleItem.reset(static_cast<SwNumRuleItem*>(pItem->Clone()));
+    }
+
+    aListIdState = pAttrSet->GetItemState(RES_PARATR_LIST_ID, false, &pItem);
+    if (SfxItemState::SET == aListIdState)
+    {
+        aListIdItem.reset(static_cast<SfxStringItem*>(pItem->Clone()));
     }
 }
 
@@ -4575,24 +4575,24 @@ static void lcl_PopNumruleState(
     /* If only a part of one paragraph is copied
        restore the numrule at the destination. */
     // #i86492# - restore also <ListId> item
-    if ( !lcl_MarksWholeNode(rPam) )
+    if ( lcl_MarksWholeNode(rPam) )
+        return;
+
+    if (SfxItemState::SET == aNumRuleState)
     {
-        if (SfxItemState::SET == aNumRuleState)
-        {
-            pDestTextNd->SetAttr(*aNumRuleItem);
-        }
-        else
-        {
-            pDestTextNd->ResetAttr(RES_PARATR_NUMRULE);
-        }
-        if (SfxItemState::SET == aListIdState)
-        {
-            pDestTextNd->SetAttr(*aListIdItem);
-        }
-        else
-        {
-            pDestTextNd->ResetAttr(RES_PARATR_LIST_ID);
-        }
+        pDestTextNd->SetAttr(*aNumRuleItem);
+    }
+    else
+    {
+        pDestTextNd->ResetAttr(RES_PARATR_NUMRULE);
+    }
+    if (SfxItemState::SET == aListIdState)
+    {
+        pDestTextNd->SetAttr(*aListIdItem);
+    }
+    else
+    {
+        pDestTextNd->ResetAttr(RES_PARATR_LIST_ID);
     }
 }
 

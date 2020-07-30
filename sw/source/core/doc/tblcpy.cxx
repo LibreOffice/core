@@ -179,59 +179,59 @@ namespace
         LineStructure::size_type nMinSize )
         : mnStartCol(USHRT_MAX), mnAddLine(0)
     {
-        if( !rFndBox.GetLines().empty() )
+        if( rFndBox.GetLines().empty() )
+            return;
+
+        bool bNoSelection = rSelBoxes.size() < 2;
+        FndLines_t &rFndLines = rFndBox.GetLines();
+        maCols.push_front(0);
+        const SwTableLine* pLine = rFndLines.front()->GetLine();
+        const sal_uInt16 nStartLn = rTable.GetTabLines().GetPos( pLine );
+        SwTableLines::size_type nEndLn = nStartLn;
+        if( rFndLines.size() > 1 )
         {
-            bool bNoSelection = rSelBoxes.size() < 2;
-            FndLines_t &rFndLines = rFndBox.GetLines();
-            maCols.push_front(0);
-            const SwTableLine* pLine = rFndLines.front()->GetLine();
-            const sal_uInt16 nStartLn = rTable.GetTabLines().GetPos( pLine );
-            SwTableLines::size_type nEndLn = nStartLn;
-            if( rFndLines.size() > 1 )
-            {
-                pLine = rFndLines.back()->GetLine();
-                nEndLn = rTable.GetTabLines().GetPos( pLine );
-            }
-            if( nStartLn < USHRT_MAX && nEndLn < USHRT_MAX )
-            {
-                const SwTableLines &rLines = rTable.GetTabLines();
-                if( bNoSelection && nMinSize > nEndLn - nStartLn + 1 )
-                {
-                    SwTableLines::size_type nNewEndLn = nStartLn + nMinSize - 1;
-                    if( nNewEndLn >= rLines.size() )
-                    {
-                        mnAddLine = nNewEndLn - rLines.size() + 1;
-                        nNewEndLn = rLines.size() - 1;
-                    }
-                    while( nEndLn < nNewEndLn )
-                    {
-                        SwTableLine *pLine2 = rLines[ ++nEndLn ];
-                        SwTableBox *pTmpBox = pLine2->GetTabBoxes()[0];
-                        FndLine_ *pInsLine = new FndLine_( pLine2, &rFndBox );
-                        pInsLine->GetBoxes().insert(pInsLine->GetBoxes().begin(), std::make_unique<FndBox_>(pTmpBox, pInsLine));
-                        rFndLines.push_back(std::unique_ptr<FndLine_>(pInsLine));
-                    }
-                }
-                maLines.resize( nEndLn - nStartLn + 1 );
-                const SwSelBoxes* pSelBoxes = &rSelBoxes;
-                sal_uInt16 nCnt = 0;
-                for( SwTableLines::size_type nLine = nStartLn; nLine <= nEndLn; ++nLine )
-                {
-                    addLine( nCnt, rLines[nLine]->GetTabBoxes(),
-                             pSelBoxes, rTable.IsNewModel() );
-                    if( bNoSelection )
-                        pSelBoxes = nullptr;
-                }
-            }
-            if( bNoSelection && mnStartCol < USHRT_MAX )
-            {
-                sal_uInt16 nIdx = std::min(mnStartCol, static_cast<sal_uInt16>(maLines[0].size()));
-                mnStartCol = std::accumulate(maLines[0].begin(), maLines[0].begin() + nIdx, sal_uInt16(0),
-                    [](sal_uInt16 sum, const BoxSpanInfo& rInfo) { return sum + rInfo.mnColSpan; });
-            }
-            else
-                mnStartCol = USHRT_MAX;
+            pLine = rFndLines.back()->GetLine();
+            nEndLn = rTable.GetTabLines().GetPos( pLine );
         }
+        if( nStartLn < USHRT_MAX && nEndLn < USHRT_MAX )
+        {
+            const SwTableLines &rLines = rTable.GetTabLines();
+            if( bNoSelection && nMinSize > nEndLn - nStartLn + 1 )
+            {
+                SwTableLines::size_type nNewEndLn = nStartLn + nMinSize - 1;
+                if( nNewEndLn >= rLines.size() )
+                {
+                    mnAddLine = nNewEndLn - rLines.size() + 1;
+                    nNewEndLn = rLines.size() - 1;
+                }
+                while( nEndLn < nNewEndLn )
+                {
+                    SwTableLine *pLine2 = rLines[ ++nEndLn ];
+                    SwTableBox *pTmpBox = pLine2->GetTabBoxes()[0];
+                    FndLine_ *pInsLine = new FndLine_( pLine2, &rFndBox );
+                    pInsLine->GetBoxes().insert(pInsLine->GetBoxes().begin(), std::make_unique<FndBox_>(pTmpBox, pInsLine));
+                    rFndLines.push_back(std::unique_ptr<FndLine_>(pInsLine));
+                }
+            }
+            maLines.resize( nEndLn - nStartLn + 1 );
+            const SwSelBoxes* pSelBoxes = &rSelBoxes;
+            sal_uInt16 nCnt = 0;
+            for( SwTableLines::size_type nLine = nStartLn; nLine <= nEndLn; ++nLine )
+            {
+                addLine( nCnt, rLines[nLine]->GetTabBoxes(),
+                         pSelBoxes, rTable.IsNewModel() );
+                if( bNoSelection )
+                    pSelBoxes = nullptr;
+            }
+        }
+        if( bNoSelection && mnStartCol < USHRT_MAX )
+        {
+            sal_uInt16 nIdx = std::min(mnStartCol, static_cast<sal_uInt16>(maLines[0].size()));
+            mnStartCol = std::accumulate(maLines[0].begin(), maLines[0].begin() + nIdx, sal_uInt16(0),
+                [](sal_uInt16 sum, const BoxSpanInfo& rInfo) { return sum + rInfo.mnColSpan; });
+        }
+        else
+            mnStartCol = USHRT_MAX;
     }
 
     void TableStructure::addLine( sal_uInt16 &rLine, const SwTableBoxes& rBoxes,
@@ -325,41 +325,41 @@ namespace
         aInfo.mpCopy = nullptr;
         aInfo.mpBox = bCovered ? nullptr : pBox;
         maLines[nLine].push_back( aInfo );
-        if( aInfo.mbSelected )
+        if( !aInfo.mbSelected )
+            return;
+
+        if( rbSelected )
         {
-            if( rbSelected )
+            while( rpSel != maLines[nLine].end() )
             {
-                while( rpSel != maLines[nLine].end() )
-                {
-                    rpSel->mbSelected = true;
-                    ++rpSel;
-                }
+                rpSel->mbSelected = true;
+                ++rpSel;
             }
-            else
-            {
-                rpSel = maLines[nLine].end();
-                rbSelected = true;
-            }
-            --rpSel;
         }
+        else
+        {
+            rpSel = maLines[nLine].end();
+            rbSelected = true;
+        }
+        --rpSel;
     }
 
     void TableStructure::moreLines( const SwTable& rTable )
     {
-        if( mnAddLine )
+        if( !mnAddLine )
+            return;
+
+        const SwTableLines &rLines = rTable.GetTabLines();
+        const sal_uInt16 nLineCount = rLines.size();
+        if( nLineCount < mnAddLine )
+            mnAddLine = nLineCount;
+        sal_uInt16 nLine = static_cast<sal_uInt16>(maLines.size());
+        maLines.resize( nLine + mnAddLine );
+        while( mnAddLine )
         {
-            const SwTableLines &rLines = rTable.GetTabLines();
-            const sal_uInt16 nLineCount = rLines.size();
-            if( nLineCount < mnAddLine )
-                mnAddLine = nLineCount;
-            sal_uInt16 nLine = static_cast<sal_uInt16>(maLines.size());
-            maLines.resize( nLine + mnAddLine );
-            while( mnAddLine )
-            {
-                SwTableLine *pLine = rLines[ nLineCount - mnAddLine ];
-                addLine( nLine, pLine->GetTabBoxes(), nullptr, rTable.IsNewModel() );
-                --mnAddLine;
-            }
+            SwTableLine *pLine = rLines[ nLineCount - mnAddLine ];
+            addLine( nLine, pLine->GetTabBoxes(), nullptr, rTable.IsNewModel() );
+            --mnAddLine;
         }
     }
 
@@ -580,61 +580,61 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
 
     // heading
     SwTextNode *const pTextNd = aSavePos.GetNode().GetTextNode();
-    if( pTextNd )
+    if( !pTextNd )
+        return;
+
+    const sal_uInt16 nPoolId = pTextNd->GetTextColl()->GetPoolFormatId();
+    if( bReplaceColl &&
+        (( 1 < rDstTable.GetTabLines().size() &&
+            pLine == rDstTable.GetTabLines().front() )
+            // Is the Table's content still valid?
+            ? RES_POOLCOLL_TABLE == nPoolId
+            : RES_POOLCOLL_TABLE_HDLN == nPoolId ) )
     {
-        const sal_uInt16 nPoolId = pTextNd->GetTextColl()->GetPoolFormatId();
-        if( bReplaceColl &&
-            (( 1 < rDstTable.GetTabLines().size() &&
-                pLine == rDstTable.GetTabLines().front() )
-                // Is the Table's content still valid?
-                ? RES_POOLCOLL_TABLE == nPoolId
-                : RES_POOLCOLL_TABLE_HDLN == nPoolId ) )
+        SwTextFormatColl* pColl = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(
+            static_cast<sal_uInt16>(
+                                RES_POOLCOLL_TABLE == nPoolId
+                                    ? RES_POOLCOLL_TABLE_HDLN
+                                    : RES_POOLCOLL_TABLE ) );
+        if( pColl )         // Apply style
         {
-            SwTextFormatColl* pColl = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(
-                static_cast<sal_uInt16>(
-                                    RES_POOLCOLL_TABLE == nPoolId
-                                        ? RES_POOLCOLL_TABLE_HDLN
-                                        : RES_POOLCOLL_TABLE ) );
-            if( pColl )         // Apply style
-            {
-                SwPaM aPam( aSavePos );
-                aPam.SetMark();
-                aPam.Move( fnMoveForward, GoInSection );
-                pDoc->SetTextFormatColl( aPam, pColl );
-            }
-        }
-
-        // Delete the current Formula/Format/Value values
-        if( SfxItemState::SET == pDstBox->GetFrameFormat()->GetItemState( RES_BOXATR_FORMAT ) ||
-            SfxItemState::SET == pDstBox->GetFrameFormat()->GetItemState( RES_BOXATR_FORMULA ) ||
-            SfxItemState::SET == pDstBox->GetFrameFormat()->GetItemState( RES_BOXATR_VALUE ) )
-        {
-            pDstBox->ClaimFrameFormat()->ResetFormatAttr( RES_BOXATR_FORMAT,
-                                                 RES_BOXATR_VALUE );
-        }
-
-        // Copy the TableBoxAttributes - Formula/Format/Value
-        if( pCpyBox )
-        {
-            SfxItemSet aBoxAttrSet( pCpyDoc->GetAttrPool(), svl::Items<RES_BOXATR_FORMAT,
-                                                            RES_BOXATR_VALUE>{} );
-            aBoxAttrSet.Put( pCpyBox->GetFrameFormat()->GetAttrSet() );
-            if( aBoxAttrSet.Count() )
-            {
-                const SfxPoolItem* pItem;
-                SvNumberFormatter* pN = pDoc->GetNumberFormatter( false );
-                if( pN && pN->HasMergeFormatTable() && SfxItemState::SET == aBoxAttrSet.
-                    GetItemState( RES_BOXATR_FORMAT, false, &pItem ) )
-                {
-                    sal_uLong nOldIdx = static_cast<const SwTableBoxNumFormat*>(pItem)->GetValue();
-                    sal_uLong nNewIdx = pN->GetMergeFormatIndex( nOldIdx );
-                    if( nNewIdx != nOldIdx )
-                        aBoxAttrSet.Put( SwTableBoxNumFormat( nNewIdx ));
-                }
-                pDstBox->ClaimFrameFormat()->SetFormatAttr( aBoxAttrSet );
-            }
+            SwPaM aPam( aSavePos );
+            aPam.SetMark();
+            aPam.Move( fnMoveForward, GoInSection );
+            pDoc->SetTextFormatColl( aPam, pColl );
         }
     }
+
+    // Delete the current Formula/Format/Value values
+    if( SfxItemState::SET == pDstBox->GetFrameFormat()->GetItemState( RES_BOXATR_FORMAT ) ||
+        SfxItemState::SET == pDstBox->GetFrameFormat()->GetItemState( RES_BOXATR_FORMULA ) ||
+        SfxItemState::SET == pDstBox->GetFrameFormat()->GetItemState( RES_BOXATR_VALUE ) )
+    {
+        pDstBox->ClaimFrameFormat()->ResetFormatAttr( RES_BOXATR_FORMAT,
+                                             RES_BOXATR_VALUE );
+    }
+
+    // Copy the TableBoxAttributes - Formula/Format/Value
+    if( !pCpyBox )
+        return;
+
+    SfxItemSet aBoxAttrSet( pCpyDoc->GetAttrPool(), svl::Items<RES_BOXATR_FORMAT,
+                                                    RES_BOXATR_VALUE>{} );
+    aBoxAttrSet.Put( pCpyBox->GetFrameFormat()->GetAttrSet() );
+    if( !aBoxAttrSet.Count() )
+        return;
+
+    const SfxPoolItem* pItem;
+    SvNumberFormatter* pN = pDoc->GetNumberFormatter( false );
+    if( pN && pN->HasMergeFormatTable() && SfxItemState::SET == aBoxAttrSet.
+        GetItemState( RES_BOXATR_FORMAT, false, &pItem ) )
+    {
+        sal_uLong nOldIdx = static_cast<const SwTableBoxNumFormat*>(pItem)->GetValue();
+        sal_uLong nNewIdx = pN->GetMergeFormatIndex( nOldIdx );
+        if( nNewIdx != nOldIdx )
+            aBoxAttrSet.Put( SwTableBoxNumFormat( nNewIdx ));
+    }
+    pDstBox->ClaimFrameFormat()->SetFormatAttr( aBoxAttrSet );
 }
 
 bool SwTable::InsNewTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,

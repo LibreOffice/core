@@ -1759,29 +1759,29 @@ void SaveBookmark::SetInDoc(
     else
         aPam.GetPoint()->nContent.Assign(aPam.GetContentNode(), m_nContent1);
 
-    if(!aPam.HasMark()
-        || CheckNodesRange(aPam.GetPoint()->nNode, aPam.GetMark()->nNode, true))
-    {
-        ::sw::mark::IBookmark* const pBookmark = dynamic_cast<::sw::mark::IBookmark*>(
-            pDoc->getIDocumentMarkAccess()->makeMark(aPam, m_aName,
-                m_eOrigBkmType, sw::mark::InsertMode::New));
-        if(pBookmark)
-        {
-            pBookmark->SetKeyCode(m_aCode);
-            pBookmark->SetShortName(m_aShortName);
-            pBookmark->Hide(m_bHidden);
-            pBookmark->SetHideCondition(m_aHideCondition);
+    if(!(!aPam.HasMark()
+        || CheckNodesRange(aPam.GetPoint()->nNode, aPam.GetMark()->nNode, true)))
+        return;
 
-            if (m_pMetadataUndo)
-            {
-                ::sfx2::Metadatable * const pMeta(
-                    dynamic_cast< ::sfx2::Metadatable* >(pBookmark));
-                assert(pMeta && "metadata undo, but not metadatable?");
-                if (pMeta)
-                {
-                    pMeta->RestoreMetadata(m_pMetadataUndo);
-                }
-            }
+    ::sw::mark::IBookmark* const pBookmark = dynamic_cast<::sw::mark::IBookmark*>(
+        pDoc->getIDocumentMarkAccess()->makeMark(aPam, m_aName,
+            m_eOrigBkmType, sw::mark::InsertMode::New));
+    if(!pBookmark)
+        return;
+
+    pBookmark->SetKeyCode(m_aCode);
+    pBookmark->SetShortName(m_aShortName);
+    pBookmark->Hide(m_bHidden);
+    pBookmark->SetHideCondition(m_aHideCondition);
+
+    if (m_pMetadataUndo)
+    {
+        ::sfx2::Metadatable * const pMeta(
+            dynamic_cast< ::sfx2::Metadatable* >(pBookmark));
+        assert(pMeta && "metadata undo, but not metadatable?");
+        if (pMeta)
+        {
+            pMeta->RestoreMetadata(m_pMetadataUndo);
         }
     }
 }

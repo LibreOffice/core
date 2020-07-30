@@ -81,19 +81,20 @@ namespace {
 
     void ExpandPamForParaPropsNodes(SwPaM& rPam, SwRootFrame const*const pLayout)
     {
-        if (pLayout)
-        {   // ensure that selection from the Shell includes the para-props node
-            // to which the attributes should be applied
-            if (rPam.GetPoint()->nNode.GetNode().IsTextNode())
-            {
-                rPam.GetPoint()->nNode = *sw::GetParaPropsNode(*pLayout, rPam.GetPoint()->nNode);
-                rPam.GetPoint()->nContent.Assign(rPam.GetPoint()->nNode.GetNode().GetContentNode(), 0);
-            }
-            if (rPam.GetMark()->nNode.GetNode().IsTextNode())
-            {
-                rPam.GetMark()->nNode = *sw::GetParaPropsNode(*pLayout, rPam.GetMark()->nNode);
-                rPam.GetMark()->nContent.Assign(rPam.GetMark()->nNode.GetNode().GetContentNode(), 0);
-            }
+        if (!pLayout)
+            return;
+
+        // ensure that selection from the Shell includes the para-props node
+        // to which the attributes should be applied
+        if (rPam.GetPoint()->nNode.GetNode().IsTextNode())
+        {
+            rPam.GetPoint()->nNode = *sw::GetParaPropsNode(*pLayout, rPam.GetPoint()->nNode);
+            rPam.GetPoint()->nContent.Assign(rPam.GetPoint()->nNode.GetNode().GetContentNode(), 0);
+        }
+        if (rPam.GetMark()->nNode.GetNode().IsTextNode())
+        {
+            rPam.GetMark()->nNode = *sw::GetParaPropsNode(*pLayout, rPam.GetMark()->nNode);
+            rPam.GetMark()->nContent.Assign(rPam.GetMark()->nNode.GetNode().GetContentNode(), 0);
         }
     }
 }
@@ -1002,21 +1003,21 @@ void SwDoc::SetNumRuleStart( const SwPosition& rPos, bool bFlag )
 {
     SwTextNode* pTextNd = rPos.nNode.GetNode().GetTextNode();
 
-    if (pTextNd)
+    if (!pTextNd)
+        return;
+
+    const SwNumRule* pRule = pTextNd->GetNumRule();
+    if( pRule && !bFlag != !pTextNd->IsListRestart())
     {
-        const SwNumRule* pRule = pTextNd->GetNumRule();
-        if( pRule && !bFlag != !pTextNd->IsListRestart())
+        if (GetIDocumentUndoRedo().DoesUndo())
         {
-            if (GetIDocumentUndoRedo().DoesUndo())
-            {
-                GetIDocumentUndoRedo().AppendUndo(
-                    std::make_unique<SwUndoNumRuleStart>(rPos, bFlag) );
-            }
-
-            pTextNd->SetListRestart(bFlag);
-
-            getIDocumentState().SetModified();
+            GetIDocumentUndoRedo().AppendUndo(
+                std::make_unique<SwUndoNumRuleStart>(rPos, bFlag) );
         }
+
+        pTextNd->SetListRestart(bFlag);
+
+        getIDocumentState().SetModified();
     }
 }
 
@@ -1024,20 +1025,20 @@ void SwDoc::SetNodeNumStart( const SwPosition& rPos, sal_uInt16 nStt )
 {
     SwTextNode* pTextNd = rPos.nNode.GetNode().GetTextNode();
 
-    if (pTextNd)
-    {
-        if ( !pTextNd->HasAttrListRestartValue() ||
-             pTextNd->GetAttrListRestartValue() != nStt )
-        {
-            if (GetIDocumentUndoRedo().DoesUndo())
-            {
-                GetIDocumentUndoRedo().AppendUndo(
-                    std::make_unique<SwUndoNumRuleStart>(rPos, nStt) );
-            }
-            pTextNd->SetAttrListRestartValue( nStt );
+    if (!pTextNd)
+        return;
 
-            getIDocumentState().SetModified();
+    if ( !pTextNd->HasAttrListRestartValue() ||
+         pTextNd->GetAttrListRestartValue() != nStt )
+    {
+        if (GetIDocumentUndoRedo().DoesUndo())
+        {
+            GetIDocumentUndoRedo().AppendUndo(
+                std::make_unique<SwUndoNumRuleStart>(rPos, nStt) );
         }
+        pTextNd->SetAttrListRestartValue( nStt );
+
+        getIDocumentState().SetModified();
     }
 }
 
@@ -1085,23 +1086,23 @@ bool SwDoc::DelNumRule( const OUString& rName, bool bBroadcast )
 void SwDoc::ChgNumRuleFormats( const SwNumRule& rRule )
 {
     SwNumRule* pRule = FindNumRulePtr( rRule.GetName() );
-    if( pRule )
-    {
-        SwUndoInsNum* pUndo = nullptr;
-        if (GetIDocumentUndoRedo().DoesUndo())
-        {
-            pUndo = new SwUndoInsNum( *pRule, rRule, this );
-            pUndo->GetHistory();
-            GetIDocumentUndoRedo().AppendUndo( std::unique_ptr<SwUndo>(pUndo) );
-        }
-        ::lcl_ChgNumRule( *this, rRule );
-        if (pUndo)
-        {
-            pUndo->SetLRSpaceEndPos();
-        }
+    if( !pRule )
+        return;
 
-        getIDocumentState().SetModified();
+    SwUndoInsNum* pUndo = nullptr;
+    if (GetIDocumentUndoRedo().DoesUndo())
+    {
+        pUndo = new SwUndoInsNum( *pRule, rRule, this );
+        pUndo->GetHistory();
+        GetIDocumentUndoRedo().AppendUndo( std::unique_ptr<SwUndo>(pUndo) );
     }
+    ::lcl_ChgNumRule( *this, rRule );
+    if (pUndo)
+    {
+        pUndo->SetLRSpaceEndPos();
+    }
+
+    getIDocumentState().SetModified();
 }
 
 bool SwDoc::RenameNumRule(const OUString & rOldName, const OUString & rNewName,

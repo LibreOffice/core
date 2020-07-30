@@ -107,74 +107,74 @@ bool SwServerObject::GetData( uno::Any & rData,
 void SwServerObject::SendDataChanged( const SwPosition& rPos )
 {
     // Is someone interested in our changes?
-    if( HasDataLinks() )
+    if( !HasDataLinks() )
+        return;
+
+    bool bCall = false;
+    const SwStartNode* pNd = nullptr;
+    switch( m_eType )
     {
-        bool bCall = false;
-        const SwStartNode* pNd = nullptr;
-        switch( m_eType )
-        {
-            case BOOKMARK_SERVER:
-                if( m_CNTNT_TYPE.pBkmk->IsExpanded() )
-                {
-                    bCall = m_CNTNT_TYPE.pBkmk->GetMarkStart() <= rPos
-                        && rPos < m_CNTNT_TYPE.pBkmk->GetMarkEnd();
-                }
-                break;
-
-            case TABLE_SERVER:      pNd = m_CNTNT_TYPE.pTableNd;    break;
-            case SECTION_SERVER:    pNd = m_CNTNT_TYPE.pSectNd;   break;
-            case NONE_SERVER: break;
-        }
-        if( pNd )
-        {
-            sal_uLong nNd = rPos.nNode.GetIndex();
-            bCall = pNd->GetIndex() < nNd && nNd < pNd->EndOfSectionIndex();
-        }
-
-        if( bCall )
-        {
-            // Recognize recursions and flag them
-            IsLinkInServer( nullptr );
-            SvLinkSource::NotifyDataChanged();
-        }
-    }
-}
-
-void SwServerObject::SendDataChanged( const SwPaM& rRange )
-{
-    // Is someone interested in our changes?
-    if( HasDataLinks() )
-    {
-        bool bCall = false;
-        const SwStartNode* pNd = nullptr;
-        const SwPosition* pStt = rRange.Start(), *pEnd = rRange.End();
-        switch( m_eType )
-        {
         case BOOKMARK_SERVER:
-            if(m_CNTNT_TYPE.pBkmk->IsExpanded())
+            if( m_CNTNT_TYPE.pBkmk->IsExpanded() )
             {
-                bCall = *pStt <= m_CNTNT_TYPE.pBkmk->GetMarkEnd()
-                    && *pEnd > m_CNTNT_TYPE.pBkmk->GetMarkStart();
+                bCall = m_CNTNT_TYPE.pBkmk->GetMarkStart() <= rPos
+                    && rPos < m_CNTNT_TYPE.pBkmk->GetMarkEnd();
             }
             break;
 
         case TABLE_SERVER:      pNd = m_CNTNT_TYPE.pTableNd;    break;
         case SECTION_SERVER:    pNd = m_CNTNT_TYPE.pSectNd;   break;
         case NONE_SERVER: break;
-        }
-        if( pNd )
-        {
-            // Is the start area within the node area?
-            bCall = pStt->nNode.GetIndex() <  pNd->EndOfSectionIndex() &&
-                    pEnd->nNode.GetIndex() >= pNd->GetIndex();
-        }
+    }
+    if( pNd )
+    {
+        sal_uLong nNd = rPos.nNode.GetIndex();
+        bCall = pNd->GetIndex() < nNd && nNd < pNd->EndOfSectionIndex();
+    }
 
-        if( bCall )
+    if( bCall )
+    {
+        // Recognize recursions and flag them
+        IsLinkInServer( nullptr );
+        SvLinkSource::NotifyDataChanged();
+    }
+}
+
+void SwServerObject::SendDataChanged( const SwPaM& rRange )
+{
+    // Is someone interested in our changes?
+    if( !HasDataLinks() )
+        return;
+
+    bool bCall = false;
+    const SwStartNode* pNd = nullptr;
+    const SwPosition* pStt = rRange.Start(), *pEnd = rRange.End();
+    switch( m_eType )
+    {
+    case BOOKMARK_SERVER:
+        if(m_CNTNT_TYPE.pBkmk->IsExpanded())
         {
-            // Recognize recursions and flag them
-            IsLinkInServer( nullptr );
-            SvLinkSource::NotifyDataChanged();
+            bCall = *pStt <= m_CNTNT_TYPE.pBkmk->GetMarkEnd()
+                && *pEnd > m_CNTNT_TYPE.pBkmk->GetMarkStart();
         }
+        break;
+
+    case TABLE_SERVER:      pNd = m_CNTNT_TYPE.pTableNd;    break;
+    case SECTION_SERVER:    pNd = m_CNTNT_TYPE.pSectNd;   break;
+    case NONE_SERVER: break;
+    }
+    if( pNd )
+    {
+        // Is the start area within the node area?
+        bCall = pStt->nNode.GetIndex() <  pNd->EndOfSectionIndex() &&
+                pEnd->nNode.GetIndex() >= pNd->GetIndex();
+    }
+
+    if( bCall )
+    {
+        // Recognize recursions and flag them
+        IsLinkInServer( nullptr );
+        SvLinkSource::NotifyDataChanged();
     }
 }
 
@@ -289,30 +289,30 @@ SwDataChanged::SwDataChanged( SwDoc* pDc, const SwPosition& rPos )
 SwDataChanged::~SwDataChanged()
 {
     // JP 09.04.96: Only if the Layout is available (thus during input)
-    if( m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
+    if( !m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
+        return;
+
+    const ::sfx2::SvLinkSources& rServers = m_pDoc->getIDocumentLinksAdministration().GetLinkManager().GetServers();
+
+    ::sfx2::SvLinkSources aTemp(rServers);
+    for( const auto& rpLinkSrc : aTemp )
     {
-        const ::sfx2::SvLinkSources& rServers = m_pDoc->getIDocumentLinksAdministration().GetLinkManager().GetServers();
-
-        ::sfx2::SvLinkSources aTemp(rServers);
-        for( const auto& rpLinkSrc : aTemp )
+        ::sfx2::SvLinkSourceRef refObj( rpLinkSrc );
+        // Anyone else interested in the Object?
+        if( refObj->HasDataLinks() && dynamic_cast<const SwServerObject*>( refObj.get() ) !=  nullptr)
         {
-            ::sfx2::SvLinkSourceRef refObj( rpLinkSrc );
-            // Anyone else interested in the Object?
-            if( refObj->HasDataLinks() && dynamic_cast<const SwServerObject*>( refObj.get() ) !=  nullptr)
-            {
-                SwServerObject& rObj = *static_cast<SwServerObject*>( refObj.get() );
-                if( m_pPos )
-                    rObj.SendDataChanged( *m_pPos );
-                else
-                    rObj.SendDataChanged( *m_pPam );
-            }
+            SwServerObject& rObj = *static_cast<SwServerObject*>( refObj.get() );
+            if( m_pPos )
+                rObj.SendDataChanged( *m_pPos );
+            else
+                rObj.SendDataChanged( *m_pPam );
+        }
 
-            // We shouldn't have a connection anymore
-            if( !refObj->HasDataLinks() )
-            {
-                // Then remove from the list
-                m_pDoc->getIDocumentLinksAdministration().GetLinkManager().RemoveServer( rpLinkSrc );
-            }
+        // We shouldn't have a connection anymore
+        if( !refObj->HasDataLinks() )
+        {
+            // Then remove from the list
+            m_pDoc->getIDocumentLinksAdministration().GetLinkManager().RemoveServer( rpLinkSrc );
         }
     }
 }

@@ -1290,18 +1290,18 @@ static void lcl_collectUsedNums(std::vector<unsigned int>& rSetFlags, sal_Int32 
     lcl_collectUsedNums(rSetFlags, nNmLen, sName, rCmpName);
     // tdf#122487 take groups into account, iterate and recurse through their
     // contents for name collision check
-    if (rObj.IsGroupObject())
+    if (!rObj.IsGroupObject())
+        return;
+
+    const SdrObjList* pSub(rObj.GetSubList());
+    assert(pSub && "IsGroupObject is implemented as GetSubList != nullptr");
+    const size_t nCount = pSub->GetObjCount();
+    for (size_t i = 0; i < nCount; ++i)
     {
-        const SdrObjList* pSub(rObj.GetSubList());
-        assert(pSub && "IsGroupObject is implemented as GetSubList != nullptr");
-        const size_t nCount = pSub->GetObjCount();
-        for (size_t i = 0; i < nCount; ++i)
-        {
-            SdrObject* pObj = pSub->GetObj(i);
-            if (!pObj)
-                continue;
-            lcl_collectUsedNums(rSetFlags, nNmLen, *pObj, rCmpName);
-        }
+        SdrObject* pObj = pSub->GetObj(i);
+        if (!pObj)
+            continue;
+        lcl_collectUsedNums(rSetFlags, nNmLen, *pObj, rCmpName);
     }
 }
 
@@ -1531,21 +1531,21 @@ void SwDoc::SetAllUniqueFlyNames()
     }
     aArr.clear();
 
-    if( !GetFootnoteIdxs().empty() )
+    if( GetFootnoteIdxs().empty() )
+        return;
+
+    SwTextFootnote::SetUniqueSeqRefNo( *this );
+    // #i52775# Chapter footnotes did not get updated correctly.
+    // Calling UpdateAllFootnote() instead of UpdateFootnote() solves this problem,
+    // but I do not dare to call UpdateAllFootnote() in all cases: Safety first.
+    if ( FTNNUM_CHAPTER == GetFootnoteInfo().m_eNum )
     {
-        SwTextFootnote::SetUniqueSeqRefNo( *this );
-        // #i52775# Chapter footnotes did not get updated correctly.
-        // Calling UpdateAllFootnote() instead of UpdateFootnote() solves this problem,
-        // but I do not dare to call UpdateAllFootnote() in all cases: Safety first.
-        if ( FTNNUM_CHAPTER == GetFootnoteInfo().m_eNum )
-        {
-            GetFootnoteIdxs().UpdateAllFootnote();
-        }
-        else
-        {
-            SwNodeIndex aTmp( GetNodes() );
-            GetFootnoteIdxs().UpdateFootnote( aTmp );
-        }
+        GetFootnoteIdxs().UpdateAllFootnote();
+    }
+    else
+    {
+        SwNodeIndex aTmp( GetNodes() );
+        GetFootnoteIdxs().UpdateFootnote( aTmp );
     }
 }
 

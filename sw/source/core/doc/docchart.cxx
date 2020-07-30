@@ -78,19 +78,19 @@ bool SwTable::IsTableComplexForChart( const OUString& rSelection ) const
 void SwDoc::DoUpdateAllCharts()
 {
     SwViewShell* pVSh = getIDocumentLayoutAccess().GetCurrentViewShell();
-    if( pVSh )
+    if( !pVSh )
+        return;
+
+    const SwFrameFormats& rTableFormats = *GetTableFrameFormats();
+    for( size_t n = 0; n < rTableFormats.size(); ++n )
     {
-        const SwFrameFormats& rTableFormats = *GetTableFrameFormats();
-        for( size_t n = 0; n < rTableFormats.size(); ++n )
-        {
-            const SwFrameFormat* pFormat = rTableFormats[ n ];
-            if( SwTable* pTmpTable = SwTable::FindTable( pFormat ) )
-                if( const SwTableNode* pTableNd = pTmpTable->GetTableNode() )
-                    if( pTableNd->GetNodes().IsDocNodes() )
-                    {
-                        UpdateCharts_( *pTmpTable, *pVSh );
-                    }
-        }
+        const SwFrameFormat* pFormat = rTableFormats[ n ];
+        if( SwTable* pTmpTable = SwTable::FindTable( pFormat ) )
+            if( const SwTableNode* pTableNd = pTmpTable->GetTableNode() )
+                if( pTableNd->GetNodes().IsDocNodes() )
+                {
+                    UpdateCharts_( *pTmpTable, *pVSh );
+                }
     }
 }
 

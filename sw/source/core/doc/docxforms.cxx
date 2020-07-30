@@ -89,38 +89,38 @@ void SwDoc::initXForms( bool bCreateDefaultModel )
 void SwDoc::disposeXForms( )
 {
     // get XForms models
-    if( mxXForms.is() )
+    if( !mxXForms.is() )
+        return;
+
+    // iterate over all models
+    const uno::Sequence<OUString> aNames = mxXForms->getElementNames();
+    for( const OUString& rName : aNames )
     {
-        // iterate over all models
-        const uno::Sequence<OUString> aNames = mxXForms->getElementNames();
-        for( const OUString& rName : aNames )
+        Reference< xforms::XModel > xModel(
+            mxXForms->getByName( rName ), UNO_QUERY );
+
+        if( xModel.is() )
         {
-            Reference< xforms::XModel > xModel(
-                mxXForms->getByName( rName ), UNO_QUERY );
+            // ask model for bindings
+            Reference< XIndexAccess > xBindings(
+                     xModel->getBindings(), UNO_QUERY );
 
-            if( xModel.is() )
+            // Then release them one by one
+            int nCount = xBindings->getCount();
+            for( int i = nCount-1; i >= 0; i-- )
             {
-                // ask model for bindings
-                Reference< XIndexAccess > xBindings(
-                         xModel->getBindings(), UNO_QUERY );
+                xModel->getBindings()->remove(xBindings->getByIndex( i ));
+            }
 
-                // Then release them one by one
-                int nCount = xBindings->getCount();
-                for( int i = nCount-1; i >= 0; i-- )
-                {
-                    xModel->getBindings()->remove(xBindings->getByIndex( i ));
-                }
+            // ask model for Submissions
+            Reference< XIndexAccess > xSubmissions(
+                     xModel->getSubmissions(), UNO_QUERY );
 
-                // ask model for Submissions
-                Reference< XIndexAccess > xSubmissions(
-                         xModel->getSubmissions(), UNO_QUERY );
-
-                // Then release them one by one
-                nCount = xSubmissions->getCount();
-                for( int i = nCount-1; i >= 0; i-- )
-                {
-                    xModel->getSubmissions()->remove(xSubmissions->getByIndex( i ));
-                }
+            // Then release them one by one
+            nCount = xSubmissions->getCount();
+            for( int i = nCount-1; i >= 0; i-- )
+            {
+                xModel->getSubmissions()->remove(xSubmissions->getByIndex( i ));
             }
         }
     }

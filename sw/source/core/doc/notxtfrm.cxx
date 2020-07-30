@@ -183,36 +183,36 @@ static void lcl_ClearArea( const SwFrame &rFrame,
     SwRegionRects aRegion( rPtArea, 4 );
     aRegion -= rGrfArea;
 
-    if ( !aRegion.empty() )
+    if ( aRegion.empty() )
+        return;
+
+    const SvxBrushItem *pItem;
+    const Color *pCol;
+    SwRect aOrigRect;
+    drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
+
+    if ( rFrame.GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigRect, false, /*bConsiderTextBox=*/false ) )
     {
-        const SvxBrushItem *pItem;
-        const Color *pCol;
-        SwRect aOrigRect;
-        drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
+        SwRegionRects const region(rPtArea);
+        basegfx::utils::B2DClipState aClipState;
+        const bool bDone(::DrawFillAttributes(aFillAttributes, aOrigRect, region, aClipState, rOut));
 
-        if ( rFrame.GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigRect, false, /*bConsiderTextBox=*/false ) )
+        if(!bDone)
         {
-            SwRegionRects const region(rPtArea);
-            basegfx::utils::B2DClipState aClipState;
-            const bool bDone(::DrawFillAttributes(aFillAttributes, aOrigRect, region, aClipState, rOut));
-
-            if(!bDone)
+            for( const auto &rRegion : aRegion )
             {
-                for( const auto &rRegion : aRegion )
-                {
-                    ::DrawGraphic( pItem, &rOut, aOrigRect, rRegion );
-                }
+                ::DrawGraphic( pItem, &rOut, aOrigRect, rRegion );
             }
         }
-        else
-        {
-            rOut.Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
-            rOut.SetFillColor( rFrame.getRootFrame()->GetCurrShell()->Imp()->GetRetoucheColor());
-            rOut.SetLineColor();
-            for( const auto &rRegion : aRegion )
-                rOut.DrawRect( rRegion.SVRect() );
-            rOut.Pop();
-        }
+    }
+    else
+    {
+        rOut.Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
+        rOut.SetFillColor( rFrame.getRootFrame()->GetCurrShell()->Imp()->GetRetoucheColor());
+        rOut.SetLineColor();
+        for( const auto &rRegion : aRegion )
+            rOut.DrawRect( rRegion.SVRect() );
+        rOut.Pop();
     }
 }
 
@@ -454,20 +454,20 @@ void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
     rRect.SSize( aVisSz );
 
     // Calculate the whole graphic if needed
-    if ( pOrigRect )
-    {
-        Size aTmpSz( aGrfSz );
-        aGrfPt.setX(aGrfPt.getX() + nLeftCrop);
-        aTmpSz.AdjustWidth( -(nLeftCrop + nRightCrop) );
-        aGrfPt.setY(aGrfPt.getY() + nTopCrop);
-        aTmpSz.AdjustHeight( -(nTopCrop + nBottomCrop) );
+    if ( !pOrigRect )
+        return;
 
-        if( MirrorGraph::Dont != nMirror )
-            lcl_CalcRect( aGrfPt, aTmpSz, nMirror );
+    Size aTmpSz( aGrfSz );
+    aGrfPt.setX(aGrfPt.getX() + nLeftCrop);
+    aTmpSz.AdjustWidth( -(nLeftCrop + nRightCrop) );
+    aGrfPt.setY(aGrfPt.getY() + nTopCrop);
+    aTmpSz.AdjustHeight( -(nTopCrop + nBottomCrop) );
 
-        pOrigRect->Pos  ( aGrfPt );
-        pOrigRect->SSize( aTmpSz );
-    }
+    if( MirrorGraph::Dont != nMirror )
+        lcl_CalcRect( aGrfPt, aTmpSz, nMirror );
+
+    pOrigRect->Pos  ( aGrfPt );
+    pOrigRect->SSize( aTmpSz );
 }
 
 /** By returning the surrounding Fly's size which equals the graphic's size */

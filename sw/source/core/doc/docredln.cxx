@@ -1107,34 +1107,34 @@ void SwRangeRedline::CallDisplayFunc(size_t nMyPos)
 
 void SwRangeRedline::Show(sal_uInt16 nLoop, size_t nMyPos)
 {
-    if( 1 <= nLoop )
+    if( 1 > nLoop )
+        return;
+
+    SwDoc* pDoc = GetDoc();
+    RedlineFlags eOld = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld | RedlineFlags::Ignore);
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
+
+    switch( GetType() )
     {
-        SwDoc* pDoc = GetDoc();
-        RedlineFlags eOld = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
-        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld | RedlineFlags::Ignore);
-        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
+    case RedlineType::Insert:           // Content has been inserted
+        m_bIsVisible = true;
+        MoveFromSection(nMyPos);
+        break;
 
-        switch( GetType() )
-        {
-        case RedlineType::Insert:           // Content has been inserted
-            m_bIsVisible = true;
-            MoveFromSection(nMyPos);
-            break;
+    case RedlineType::Delete:           // Content has been deleted
+        m_bIsVisible = true;
+        MoveFromSection(nMyPos);
+        break;
 
-        case RedlineType::Delete:           // Content has been deleted
-            m_bIsVisible = true;
-            MoveFromSection(nMyPos);
-            break;
-
-        case RedlineType::Format:           // Attributes have been applied
-        case RedlineType::Table:            // Table structure has been modified
-            InvalidateRange(Invalidation::Add);
-            break;
-        default:
-            break;
-        }
-        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
+    case RedlineType::Format:           // Attributes have been applied
+    case RedlineType::Table:            // Table structure has been modified
+        InvalidateRange(Invalidation::Add);
+        break;
+    default:
+        break;
     }
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
 }
 
 void SwRangeRedline::Hide(sal_uInt16 nLoop, size_t nMyPos)
@@ -1451,88 +1451,88 @@ void SwRangeRedline::CopyToSection()
 
 void SwRangeRedline::DelCopyOfSection(size_t nMyPos)
 {
-    if( m_pContentSect )
+    if( !m_pContentSect )
+        return;
+
+    const SwPosition* pStt = Start(),
+                    * pEnd = pStt == GetPoint() ? GetMark() : GetPoint();
+
+    SwDoc* pDoc = GetDoc();
+    SwPaM aPam( *pStt, *pEnd );
+    SwContentNode* pCSttNd = pStt->nNode.GetNode().GetContentNode();
+    SwContentNode* pCEndNd = pEnd->nNode.GetNode().GetContentNode();
+
+    if( !pCSttNd )
     {
-        const SwPosition* pStt = Start(),
-                        * pEnd = pStt == GetPoint() ? GetMark() : GetPoint();
-
-        SwDoc* pDoc = GetDoc();
-        SwPaM aPam( *pStt, *pEnd );
-        SwContentNode* pCSttNd = pStt->nNode.GetNode().GetContentNode();
-        SwContentNode* pCEndNd = pEnd->nNode.GetNode().GetContentNode();
-
-        if( !pCSttNd )
+        // In order to not move other Redlines' indices, we set them
+        // to the end (is exclusive)
+        const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+        for(SwRangeRedline* pRedl : rTable)
         {
-            // In order to not move other Redlines' indices, we set them
-            // to the end (is exclusive)
-            const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
-            for(SwRangeRedline* pRedl : rTable)
-            {
-                if( pRedl->GetBound() == *pStt )
-                    pRedl->GetBound() = *pEnd;
-                if( pRedl->GetBound(false) == *pStt )
-                    pRedl->GetBound(false) = *pEnd;
-            }
+            if( pRedl->GetBound() == *pStt )
+                pRedl->GetBound() = *pEnd;
+            if( pRedl->GetBound(false) == *pStt )
+                pRedl->GetBound(false) = *pEnd;
         }
-
-        if( pCSttNd && pCEndNd )
-        {
-            // #i100466# - force a <join next> on <delete and join> operation
-            // tdf#125319 - rather not?
-            pDoc->getIDocumentContentOperations().DeleteAndJoin(aPam/*, true*/);
-        }
-        else if( pCSttNd || pCEndNd )
-        {
-            if( pCSttNd && !pCEndNd )
-                m_bDelLastPara = true;
-            pDoc->getIDocumentContentOperations().DeleteRange( aPam );
-
-            if( m_bDelLastPara )
-            {
-                // To prevent dangling references to the paragraph to
-                // be deleted, redline that point into this paragraph should be
-                // moved to the new end position. Since redlines in the redline
-                // table are sorted and the pEnd position is an endnode (see
-                // bDelLastPara condition above), only redlines before the
-                // current ones can be affected.
-                const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
-                size_t n = nMyPos;
-                for( bool bBreak = false; !bBreak && n > 0; )
-                {
-                    --n;
-                    bBreak = true;
-                    if( rTable[ n ]->GetBound() == *aPam.GetPoint() )
-                    {
-                        rTable[ n ]->GetBound() = *pEnd;
-                        bBreak = false;
-                    }
-                    if( rTable[ n ]->GetBound(false) == *aPam.GetPoint() )
-                    {
-                        rTable[ n ]->GetBound(false) = *pEnd;
-                        bBreak = false;
-                    }
-                }
-
-                *GetPoint() = *pEnd;
-                *GetMark() = *pEnd;
-                DeleteMark();
-
-                aPam.GetBound().nContent.Assign( nullptr, 0 );
-                aPam.GetBound( false ).nContent.Assign( nullptr, 0 );
-                aPam.DeleteMark();
-                pDoc->getIDocumentContentOperations().DelFullPara( aPam );
-            }
-        }
-        else
-        {
-            pDoc->getIDocumentContentOperations().DeleteRange( aPam );
-        }
-
-        if( pStt == GetPoint() )
-            Exchange();
-
-        DeleteMark();
     }
+
+    if( pCSttNd && pCEndNd )
+    {
+        // #i100466# - force a <join next> on <delete and join> operation
+        // tdf#125319 - rather not?
+        pDoc->getIDocumentContentOperations().DeleteAndJoin(aPam/*, true*/);
+    }
+    else if( pCSttNd || pCEndNd )
+    {
+        if( pCSttNd && !pCEndNd )
+            m_bDelLastPara = true;
+        pDoc->getIDocumentContentOperations().DeleteRange( aPam );
+
+        if( m_bDelLastPara )
+        {
+            // To prevent dangling references to the paragraph to
+            // be deleted, redline that point into this paragraph should be
+            // moved to the new end position. Since redlines in the redline
+            // table are sorted and the pEnd position is an endnode (see
+            // bDelLastPara condition above), only redlines before the
+            // current ones can be affected.
+            const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+            size_t n = nMyPos;
+            for( bool bBreak = false; !bBreak && n > 0; )
+            {
+                --n;
+                bBreak = true;
+                if( rTable[ n ]->GetBound() == *aPam.GetPoint() )
+                {
+                    rTable[ n ]->GetBound() = *pEnd;
+                    bBreak = false;
+                }
+                if( rTable[ n ]->GetBound(false) == *aPam.GetPoint() )
+                {
+                    rTable[ n ]->GetBound(false) = *pEnd;
+                    bBreak = false;
+                }
+            }
+
+            *GetPoint() = *pEnd;
+            *GetMark() = *pEnd;
+            DeleteMark();
+
+            aPam.GetBound().nContent.Assign( nullptr, 0 );
+            aPam.GetBound( false ).nContent.Assign( nullptr, 0 );
+            aPam.DeleteMark();
+            pDoc->getIDocumentContentOperations().DelFullPara( aPam );
+        }
+    }
+    else
+    {
+        pDoc->getIDocumentContentOperations().DeleteRange( aPam );
+    }
+
+    if( pStt == GetPoint() )
+        Exchange();
+
+    DeleteMark();
 }
 
 void SwRangeRedline::MoveFromSection(size_t nMyPos)

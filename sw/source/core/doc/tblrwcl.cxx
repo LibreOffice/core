@@ -914,18 +914,18 @@ lcl_SaveUpperLowerBorder( SwTable& rTable, const SwTableBox& rBox,
             bChgd = true;
         }
     }
-    if( !bChgd && pPrvBox && pPrvBox->GetSttNd() )
+    if( !(!bChgd && pPrvBox && pPrvBox->GetSttNd()) )
+        return;
+
+    const SvxBoxItem& rPrvBoxItem = pPrvBox->GetFrameFormat()->GetBox();
+    if( !rPrvBoxItem.GetTop() && ( !pNxtBox ||
+        !pNxtBox->GetFrameFormat()->GetBox().GetTop()) )
     {
-        const SvxBoxItem& rPrvBoxItem = pPrvBox->GetFrameFormat()->GetBox();
-        if( !rPrvBoxItem.GetTop() && ( !pNxtBox ||
-            !pNxtBox->GetFrameFormat()->GetBox().GetTop()) )
-        {
-            SvxBoxItem aTmp( rPrvBoxItem );
-            aTmp.SetLine( rBoxItem.GetTop() ? rBoxItem.GetTop()
-                                            : rBoxItem.GetBottom(),
-                                            SvxBoxItemLine::BOTTOM );
-            rShareFormats.SetAttr( *pPrvBox, aTmp );
-        }
+        SvxBoxItem aTmp( rPrvBoxItem );
+        aTmp.SetLine( rBoxItem.GetTop() ? rBoxItem.GetTop()
+                                        : rBoxItem.GetBottom(),
+                                        SvxBoxItemLine::BOTTOM );
+        rShareFormats.SetAttr( *pPrvBox, aTmp );
     }
 
 }
@@ -1389,28 +1389,28 @@ static void lcl_Merge_MoveBox(FndBox_ & rFndBox, InsULPara *const pULPara)
     pBoxes = &pULPara->pInsLine->GetTabBoxes();
 
     // Is there still a level to step down to?
-    if (!rFndBox.GetBox()->GetTabLines().empty())
+    if (rFndBox.GetBox()->GetTabLines().empty())
+        return;
+
+    SwTableBox* pBox = new SwTableBox(
+            static_cast<SwTableBoxFormat*>(rFndBox.GetBox()->GetFrameFormat()),
+            0, pULPara->pInsLine );
+    InsULPara aPara( *pULPara );
+    aPara.pInsBox = pBox;
+    for (FndLines_t::iterator it = rFndBox.GetLines().begin() + nStt;
+         it != rFndBox.GetLines().begin() + nEnd; ++it )
     {
-        SwTableBox* pBox = new SwTableBox(
-                static_cast<SwTableBoxFormat*>(rFndBox.GetBox()->GetFrameFormat()),
-                0, pULPara->pInsLine );
-        InsULPara aPara( *pULPara );
-        aPara.pInsBox = pBox;
-        for (FndLines_t::iterator it = rFndBox.GetLines().begin() + nStt;
-             it != rFndBox.GetLines().begin() + nEnd; ++it )
-        {
-            lcl_Merge_MoveLine(**it, &aPara);
-        }
-        if( !pBox->GetTabLines().empty() )
-        {
-            if( USHRT_MAX == nInsPos )
-                nInsPos = pBoxes->size();
-            pBoxes->insert( pBoxes->begin() + nInsPos, pBox );
-            lcl_CalcWidth( pBox );      // calculate the Box's width
-        }
-        else
-            delete pBox;
+        lcl_Merge_MoveLine(**it, &aPara);
     }
+    if( !pBox->GetTabLines().empty() )
+    {
+        if( USHRT_MAX == nInsPos )
+            nInsPos = pBoxes->size();
+        pBoxes->insert( pBoxes->begin() + nInsPos, pBox );
+        lcl_CalcWidth( pBox );      // calculate the Box's width
+    }
+    else
+        delete pBox;
 }
 
 static void lcl_Merge_MoveLine(FndLine_& rFndLine, InsULPara *const pULPara)
@@ -1754,25 +1754,25 @@ static void lcl_CalcNewWidths(const FndLines_t& rFndLines, CpyPara& rPara)
     }
     // Second step: calculate the new widths for the copied cells
     sal_uLong nSelSize = rPara.nMaxRight - rPara.nMinLeft;
-    if( nSelSize )
+    if( !nSelSize )
+        return;
+
+    for( size_t nLine = 0; nLine < nLineCount; ++nLine )
     {
-        for( size_t nLine = 0; nLine < nLineCount; ++nLine )
+        std::vector< sal_uLong > &rWidth = (*rPara.pWidths)[ nLine ];
+        const size_t nCount = rWidth.size();
+        if( nCount > 2 )
         {
-            std::vector< sal_uLong > &rWidth = (*rPara.pWidths)[ nLine ];
-            const size_t nCount = rWidth.size();
-            if( nCount > 2 )
+            rWidth[ nCount - 1 ] = rPara.nMaxRight;
+            sal_uLong nLastPos = 0;
+            for( size_t nBox = 0; nBox < nCount; ++nBox )
             {
-                rWidth[ nCount - 1 ] = rPara.nMaxRight;
-                sal_uLong nLastPos = 0;
-                for( size_t nBox = 0; nBox < nCount; ++nBox )
-                {
-                    sal_uInt64 nNextPos = rWidth[ nBox ];
-                    nNextPos -= rPara.nMinLeft;
-                    nNextPos *= rPara.nNewSize;
-                    nNextPos /= nSelSize;
-                    rWidth[ nBox ] = static_cast<sal_uLong>(nNextPos - nLastPos);
-                    nLastPos = static_cast<sal_uLong>(nNextPos);
-                }
+                sal_uInt64 nNextPos = rWidth[ nBox ];
+                nNextPos -= rPara.nMinLeft;
+                nNextPos *= rPara.nNewSize;
+                nNextPos /= nSelSize;
+                rWidth[ nBox ] = static_cast<sal_uLong>(nNextPos - nLastPos);
+                nLastPos = static_cast<sal_uLong>(nNextPos);
             }
         }
     }

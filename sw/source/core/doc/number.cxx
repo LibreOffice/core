@@ -102,21 +102,21 @@ const SwNumFormat* SwNumRule::GetNumFormat( sal_uInt16 i ) const
 void SwNumRule::SetName( const OUString & rName,
                          IDocumentListsAccess& rDocListAccess)
 {
-    if ( msName != rName )
+    if ( msName == rName )
+        return;
+
+    if (mpNumRuleMap)
     {
-        if (mpNumRuleMap)
+        mpNumRuleMap->erase(msName);
+        (*mpNumRuleMap)[rName] = this;
+
+        if ( !GetDefaultListId().isEmpty() )
         {
-            mpNumRuleMap->erase(msName);
-            (*mpNumRuleMap)[rName] = this;
-
-            if ( !GetDefaultListId().isEmpty() )
-            {
-                rDocListAccess.trackChangeOfListStyleName( msName, rName );
-            }
+            rDocListAccess.trackChangeOfListStyleName( msName, rName );
         }
-
-        msName = rName;
     }
+
+    msName = rName;
 }
 
 void SwNumRule::GetTextNodeList( SwNumRule::tTextNodeList& rTextNodeList ) const
@@ -1237,50 +1237,50 @@ namespace numfunc
         const uno::Any* pValues = aValues.getConstArray();
         OSL_ENSURE( aValues.getLength() == aPropNames.getLength(),
                 "<SwDefBulletConfig::SwDefBulletConfig()> - GetProperties failed");
-        if ( aValues.getLength() == aPropNames.getLength() )
+        if ( aValues.getLength() != aPropNames.getLength() )
+            return;
+
+        for ( int nProp = 0; nProp < aPropNames.getLength(); ++nProp )
         {
-            for ( int nProp = 0; nProp < aPropNames.getLength(); ++nProp )
+            if ( pValues[nProp].hasValue() )
             {
-                if ( pValues[nProp].hasValue() )
+                switch ( nProp )
                 {
-                    switch ( nProp )
+                    case 0:
                     {
-                        case 0:
-                        {
-                            OUString aStr;
-                            pValues[nProp] >>= aStr;
-                            msFontname = aStr;
-                            mbUserDefinedFontname = true;
-                        }
-                        break;
-                        case 1:
-                        case 2:
-                        {
-                            sal_Int16 nTmp = 0;
-                            pValues[nProp] >>= nTmp;
-                            if ( nProp == 1 )
-                                meFontWeight = static_cast<FontWeight>(nTmp);
-                            else if ( nProp == 2 )
-                                meFontItalic = static_cast<FontItalic>(nTmp);
-                        }
-                        break;
-                        case 3:
-                        case 4:
-                        case 5:
-                        case 6:
-                        case 7:
-                        case 8:
-                        case 9:
-                        case 10:
-                        case 11:
-                        case 12:
-                        {
-                            sal_Unicode cChar = sal_Unicode();
-                            pValues[nProp] >>= cChar;
-                            mnLevelChars[nProp-3] = cChar;
-                        }
-                        break;
+                        OUString aStr;
+                        pValues[nProp] >>= aStr;
+                        msFontname = aStr;
+                        mbUserDefinedFontname = true;
                     }
+                    break;
+                    case 1:
+                    case 2:
+                    {
+                        sal_Int16 nTmp = 0;
+                        pValues[nProp] >>= nTmp;
+                        if ( nProp == 1 )
+                            meFontWeight = static_cast<FontWeight>(nTmp);
+                        else if ( nProp == 2 )
+                            meFontItalic = static_cast<FontItalic>(nTmp);
+                    }
+                    break;
+                    case 3:
+                    case 4:
+                    case 5:
+                    case 6:
+                    case 7:
+                    case 8:
+                    case 9:
+                    case 10:
+                    case 11:
+                    case 12:
+                    {
+                        sal_Unicode cChar = sal_Unicode();
+                        pValues[nProp] >>= cChar;
+                        mnLevelChars[nProp-3] = cChar;
+                    }
+                    break;
                 }
             }
         }
@@ -1404,23 +1404,23 @@ namespace numfunc
         const css::uno::Any* pValues = aValues.getConstArray();
         OSL_ENSURE( aValues.getLength() == aPropNames.getLength(),
                 "<SwNumberingUIBehaviorConfig::LoadConfig()> - GetProperties failed");
-        if ( aValues.getLength() == aPropNames.getLength() )
+        if ( aValues.getLength() != aPropNames.getLength() )
+            return;
+
+        for ( int nProp = 0; nProp < aPropNames.getLength(); ++nProp )
         {
-            for ( int nProp = 0; nProp < aPropNames.getLength(); ++nProp )
+            if ( pValues[nProp].hasValue() )
             {
-                if ( pValues[nProp].hasValue() )
+                switch ( nProp )
                 {
-                    switch ( nProp )
+                    case 0:
                     {
-                        case 0:
-                        {
-                            pValues[nProp] >>= mbChangeIndentOnTabAtFirstPosOfFirstListItem;
-                        }
-                        break;
-                        default:
-                        {
-                            OSL_FAIL( "<SwNumberingUIBehaviorConfig::LoadConfig()> - unknown configuration property");
-                        }
+                        pValues[nProp] >>= mbChangeIndentOnTabAtFirstPosOfFirstListItem;
+                    }
+                    break;
+                    default:
+                    {
+                        OSL_FAIL( "<SwNumberingUIBehaviorConfig::LoadConfig()> - unknown configuration property");
                     }
                 }
             }

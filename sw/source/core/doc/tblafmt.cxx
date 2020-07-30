@@ -529,30 +529,30 @@ void SwTableAutoFormat::UpdateFromSet( sal_uInt8 nPos,
         pFormat->SetColor( rSet.Get( RES_CHRATR_COLOR ) );
         pFormat->SetAdjust( rSet.Get( RES_PARATR_ADJUST ) );
     }
-    if( SwTableAutoFormatUpdateFlags::Box & eFlags )
-    {
-        pFormat->SetBox( rSet.Get( RES_BOX ) );
+    if( !(SwTableAutoFormatUpdateFlags::Box & eFlags) )
+        return;
+
+    pFormat->SetBox( rSet.Get( RES_BOX ) );
 // FIXME - add attribute IDs for the diagonal line items
 //        pFormat->SetTLBR( (SvxLineItem&)rSet.Get( RES_... ) );
 //        pFormat->SetBLTR( (SvxLineItem&)rSet.Get( RES_... ) );
-        pFormat->SetBackground( rSet.Get( RES_BACKGROUND ) );
-        pFormat->SetTextOrientation(rSet.Get(RES_FRAMEDIR));
-        pFormat->SetVerticalAlignment(rSet.Get(RES_VERT_ORIENT));
+    pFormat->SetBackground( rSet.Get( RES_BACKGROUND ) );
+    pFormat->SetTextOrientation(rSet.Get(RES_FRAMEDIR));
+    pFormat->SetVerticalAlignment(rSet.Get(RES_VERT_ORIENT));
 
-        const SwTableBoxNumFormat* pNumFormatItem;
-        const SvNumberformat* pNumFormat = nullptr;
-        if( SfxItemState::SET == rSet.GetItemState( RES_BOXATR_FORMAT, true,
-            reinterpret_cast<const SfxPoolItem**>(&pNumFormatItem) ) && pNFormatr &&
-            nullptr != (pNumFormat = pNFormatr->GetEntry( pNumFormatItem->GetValue() )) )
-            pFormat->SetValueFormat( pNumFormat->GetFormatstring(),
-                                    pNumFormat->GetLanguage(),
-                                    ::GetAppLanguage());
-        else
-        {
-            // default
-            pFormat->SetValueFormat( OUString(), LANGUAGE_SYSTEM,
-                                  ::GetAppLanguage() );
-        }
+    const SwTableBoxNumFormat* pNumFormatItem;
+    const SvNumberformat* pNumFormat = nullptr;
+    if( SfxItemState::SET == rSet.GetItemState( RES_BOXATR_FORMAT, true,
+        reinterpret_cast<const SfxPoolItem**>(&pNumFormatItem) ) && pNFormatr &&
+        nullptr != (pNumFormat = pNFormatr->GetEntry( pNumFormatItem->GetValue() )) )
+        pFormat->SetValueFormat( pNumFormat->GetFormatstring(),
+                                pNumFormat->GetLanguage(),
+                                ::GetAppLanguage());
+    else
+    {
+        // default
+        pFormat->SetValueFormat( OUString(), LANGUAGE_SYSTEM,
+                              ::GetAppLanguage() );
     }
 
     // we cannot handle the rest, that's specific to StarCalc
@@ -612,62 +612,62 @@ void SwTableAutoFormat::UpdateToSet(const sal_uInt8 nPos, const bool bSingleRowT
             rSet.Put( rChg.GetAdjust() );
     }
 
-    if( SwTableAutoFormatUpdateFlags::Box & eFlags )
+    if( !(SwTableAutoFormatUpdateFlags::Box & eFlags) )
+        return;
+
+    if( IsFrame() )
     {
-        if( IsFrame() )
+        SvxBoxItem aAutoFormatBox = rChg.GetBox();
+
+        // No format box is adequate to specify the borders of single column/row tables, so combine first/last.
+        if ( bSingleRowTable || bSingleColTable )
         {
-            SvxBoxItem aAutoFormatBox = rChg.GetBox();
+            sal_uInt8 nSingleRowOrColumnId = 15; //LAST_ROW_END_COLUMN
+            if ( !bSingleRowTable )
+                nSingleRowOrColumnId = nPos + 3;  //LAST COLUMN (3, 7, 11, 15)
+            else if ( !bSingleColTable )
+                nSingleRowOrColumnId = nPos + 12; //LAST ROW (12, 13, 14, 15)
 
-            // No format box is adequate to specify the borders of single column/row tables, so combine first/last.
-            if ( bSingleRowTable || bSingleColTable )
-            {
-                sal_uInt8 nSingleRowOrColumnId = 15; //LAST_ROW_END_COLUMN
-                if ( !bSingleRowTable )
-                    nSingleRowOrColumnId = nPos + 3;  //LAST COLUMN (3, 7, 11, 15)
-                else if ( !bSingleColTable )
-                    nSingleRowOrColumnId = nPos + 12; //LAST ROW (12, 13, 14, 15)
+            assert( nSingleRowOrColumnId < 16 );
+            const SvxBoxItem aLastAutoFormatBox( GetBoxFormat(nSingleRowOrColumnId).GetBox() );
+            if ( bSingleRowTable )
+                aAutoFormatBox.SetLine( aLastAutoFormatBox.GetLine(SvxBoxItemLine::BOTTOM), SvxBoxItemLine::BOTTOM );
+            if ( bSingleColTable )
+                aAutoFormatBox.SetLine( aLastAutoFormatBox.GetLine(SvxBoxItemLine::RIGHT), SvxBoxItemLine::RIGHT );
+        }
 
-                assert( nSingleRowOrColumnId < 16 );
-                const SvxBoxItem aLastAutoFormatBox( GetBoxFormat(nSingleRowOrColumnId).GetBox() );
-                if ( bSingleRowTable )
-                    aAutoFormatBox.SetLine( aLastAutoFormatBox.GetLine(SvxBoxItemLine::BOTTOM), SvxBoxItemLine::BOTTOM );
-                if ( bSingleColTable )
-                    aAutoFormatBox.SetLine( aLastAutoFormatBox.GetLine(SvxBoxItemLine::RIGHT), SvxBoxItemLine::RIGHT );
-            }
-
-            rSet.Put( aAutoFormatBox );
+        rSet.Put( aAutoFormatBox );
 // FIXME - uncomment the lines to put the diagonal line items
 //            rSet.Put( rChg.GetTLBR() );
 //            rSet.Put( rChg.GetBLTR() );
-        }
-        if( IsBackground() )
-            rSet.Put( rChg.GetBackground() );
-
-        rSet.Put(rChg.GetTextOrientation());
-
-        // Do not put a VertAlign when it has default value.
-        // It prevents the export of default value by automatic cell-styles export.
-        if (rChg.GetVerticalAlignment().GetVertOrient() != GetDefaultBoxFormat().GetVerticalAlignment().GetVertOrient())
-            rSet.Put(rChg.GetVerticalAlignment());
-
-        if( IsValueFormat() && pNFormatr )
-        {
-            OUString sFormat;
-            LanguageType eLng, eSys;
-            rChg.GetValueFormat( sFormat, eLng, eSys );
-            if( !sFormat.isEmpty() )
-            {
-                SvNumFormatType nType;
-                bool bNew;
-                sal_Int32 nCheckPos;
-                sal_uInt32 nKey = pNFormatr->GetIndexPuttingAndConverting( sFormat, eLng,
-                                                                        eSys, nType, bNew, nCheckPos);
-                rSet.Put( SwTableBoxNumFormat( nKey ));
-            }
-            else
-                rSet.ClearItem( RES_BOXATR_FORMAT );
-        }
     }
+    if( IsBackground() )
+        rSet.Put( rChg.GetBackground() );
+
+    rSet.Put(rChg.GetTextOrientation());
+
+    // Do not put a VertAlign when it has default value.
+    // It prevents the export of default value by automatic cell-styles export.
+    if (rChg.GetVerticalAlignment().GetVertOrient() != GetDefaultBoxFormat().GetVerticalAlignment().GetVertOrient())
+        rSet.Put(rChg.GetVerticalAlignment());
+
+    if( !(IsValueFormat() && pNFormatr) )
+        return;
+
+    OUString sFormat;
+    LanguageType eLng, eSys;
+    rChg.GetValueFormat( sFormat, eLng, eSys );
+    if( !sFormat.isEmpty() )
+    {
+        SvNumFormatType nType;
+        bool bNew;
+        sal_Int32 nCheckPos;
+        sal_uInt32 nKey = pNFormatr->GetIndexPuttingAndConverting( sFormat, eLng,
+                                                                eSys, nType, bNew, nCheckPos);
+        rSet.Put( SwTableBoxNumFormat( nKey ));
+    }
+    else
+        rSet.ClearItem( RES_BOXATR_FORMAT );
 
     // we cannot handle the rest, that's specific to StarCalc
 }
