@@ -117,6 +117,30 @@
       "revId": "231e1e416c039d1f9724962a89cf0573a3db48a2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d711835f_8a3477db",
+        "filename": "basic/source/sbx/sbxbase.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-07-30T11:10:42Z",
+      "side": 1,
+      "message": "possibly I get confused during my debugging. I was assuming it would create a temporary containing the vector contents.\n\nIf it can be removed, and jenkins is still happy on mac, then great.",
+      "parentUuid": "94cee1ff_e18255df",
+      "range": {
+        "startLine": 53,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 27
+      },
+      "revId": "231e1e416c039d1f9724962a89cf0573a3db48a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
