@@ -485,28 +485,28 @@ void SwDrawBase::EnterSelectMode(const MouseEvent& rMEvt)
 {
     m_pWin->SetDrawAction(false);
 
-    if (!m_pSh->IsObjSelected() && !m_pWin->IsDrawAction())
+    if (m_pSh->IsObjSelected() || m_pWin->IsDrawAction())
+        return;
+
+    Point aPnt(m_pWin->PixelToLogic(rMEvt.GetPosPixel()));
+
+    if (m_pSh->IsObjSelectable(aPnt))
     {
-        Point aPnt(m_pWin->PixelToLogic(rMEvt.GetPosPixel()));
-
-        if (m_pSh->IsObjSelectable(aPnt))
+        m_pSh->SelectObj(aPnt);
+        if (rMEvt.GetModifier() == KEY_SHIFT || !m_pSh->IsObjSelected())
         {
-            m_pSh->SelectObj(aPnt);
-            if (rMEvt.GetModifier() == KEY_SHIFT || !m_pSh->IsObjSelected())
-            {
-                m_pView->LeaveDrawCreate();    // Switch to selection mode
+            m_pView->LeaveDrawCreate();    // Switch to selection mode
 
-                m_pSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
-            }
+            m_pSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
         }
-        else
-        {
-            m_pView->LeaveDrawCreate();
-            if (m_pSh->IsSelFrameMode())
-                m_pSh->LeaveSelFrameMode();
-        }
-        m_pView->NoRotate();
     }
+    else
+    {
+        m_pView->LeaveDrawCreate();
+        if (m_pSh->IsSelFrameMode())
+            m_pSh->LeaveSelFrameMode();
+    }
+    m_pView->NoRotate();
 }
 
 void SwDrawBase::CreateDefaultObject()

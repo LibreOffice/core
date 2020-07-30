@@ -136,22 +136,21 @@ SwHHCWrapper::~SwHHCWrapper()
     // finally for chinese translation we need to change the documents
     // default language and font to the new ones to be used.
     LanguageType nTargetLang = GetTargetLanguage();
-    if (IsChinese( nTargetLang ))
+    if (!IsChinese( nTargetLang ))
+        return;
+
+    SwDoc *pDoc = m_pView->GetDocShell()->GetDoc();
+
+    //!! Note: This also effects the default language of text boxes (EditEngine/EditView) !!
+    pDoc->SetDefault( SvxLanguageItem( nTargetLang, RES_CHRATR_CJK_LANGUAGE ) );
+
+    const vcl::Font *pFont = GetTargetFont();
+    if (pFont)
     {
-        SwDoc *pDoc = m_pView->GetDocShell()->GetDoc();
-
-        //!! Note: This also effects the default language of text boxes (EditEngine/EditView) !!
-        pDoc->SetDefault( SvxLanguageItem( nTargetLang, RES_CHRATR_CJK_LANGUAGE ) );
-
-        const vcl::Font *pFont = GetTargetFont();
-        if (pFont)
-        {
-            SvxFontItem aFontItem( pFont->GetFamilyType(), pFont->GetFamilyName(),
-                    pFont->GetStyleName(), pFont->GetPitch(),
-                    pFont->GetCharSet(), RES_CHRATR_CJK_FONT );
-            pDoc->SetDefault( aFontItem );
-        }
-
+        SvxFontItem aFontItem( pFont->GetFamilyType(), pFont->GetFamilyName(),
+                pFont->GetStyleName(), pFont->GetPitch(),
+                pFont->GetCharSet(), RES_CHRATR_CJK_FONT );
+        pDoc->SetDefault( aFontItem );
     }
 }
 

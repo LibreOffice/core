@@ -155,19 +155,19 @@ void SwInputWindow::dispose()
 
 void SwInputWindow::CleanupUglyHackWithUndo()
 {
-    if (m_bResetUndo)
+    if (!m_bResetUndo)
+        return;
+
+    if (pWrtShell)
     {
-        if (pWrtShell)
+        DelBoxContent();
+        pWrtShell->DoUndo(m_bDoesUndo);
+        if (m_bCallUndo)
         {
-            DelBoxContent();
-            pWrtShell->DoUndo(m_bDoesUndo);
-            if (m_bCallUndo)
-            {
-                pWrtShell->Undo();
-            }
+            pWrtShell->Undo();
         }
-        m_bResetUndo = false; // #i117122# once is enough :)
     }
+    m_bResetUndo = false; // #i117122# once is enough :)
 }
 
 void SwInputWindow::Resize()
@@ -354,22 +354,22 @@ void  SwInputWindow::ApplyFormula()
 
 void  SwInputWindow::CancelFormula()
 {
-    if(pView)
-    {
-        pView->GetViewFrame()->GetDispatcher()->Lock( false );
-        pView->GetEditWin().LockKeyInput(false);
-        CleanupUglyHackWithUndo();
-        pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
+    if(!pView)
+        return;
 
-        if( bDelSel )
-            pWrtShell->EnterStdMode();
+    pView->GetViewFrame()->GetDispatcher()->Lock( false );
+    pView->GetEditWin().LockKeyInput(false);
+    CleanupUglyHackWithUndo();
+    pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
 
-        pWrtShell->EndSelTableCells();
+    if( bDelSel )
+        pWrtShell->EnterStdMode();
 
-        pView->GetEditWin().GrabFocus();
+    pWrtShell->EndSelTableCells();
 
-        pView->GetViewFrame()->GetDispatcher()->Execute( FN_EDIT_FORMULA, SfxCallMode::ASYNCHRON);
-    }
+    pView->GetEditWin().GrabFocus();
+
+    pView->GetViewFrame()->GetDispatcher()->Execute( FN_EDIT_FORMULA, SfxCallMode::ASYNCHRON);
 }
 
 const sal_Unicode CH_LRE = 0x202a;

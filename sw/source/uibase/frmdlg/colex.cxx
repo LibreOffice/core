@@ -260,65 +260,65 @@ void SwColExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOr
                 aRect.SetTop( aRect.Bottom() + pColMgr->GetGutterWidth(i) );
         }
     }
-    if (pColMgr->HasLine())
+    if (!pColMgr->HasLine())
+        return;
+
+    Point aUp(rOrg.X() + nL, rOrg.Y() + GetTop());
+    Point aDown(rOrg.X() + nL,
+                    rOrg.Y() + GetSize().Height() - GetBottom() - GetFtHeight() - GetFtDist());
+
+    if (pColMgr->GetLineHeightPercent() != 100)
     {
-        Point aUp(rOrg.X() + nL, rOrg.Y() + GetTop());
-        Point aDown(rOrg.X() + nL,
-                        rOrg.Y() + GetSize().Height() - GetBottom() - GetFtHeight() - GetFtDist());
-
-        if (pColMgr->GetLineHeightPercent() != 100)
+        long nLength = !m_bVertical ? aDown.Y() - aUp.Y() : aDown.X() - aUp.X();
+        nLength -= nLength * pColMgr->GetLineHeightPercent() / 100;
+        switch (pColMgr->GetAdjust())
         {
-            long nLength = !m_bVertical ? aDown.Y() - aUp.Y() : aDown.X() - aUp.X();
-            nLength -= nLength * pColMgr->GetLineHeightPercent() / 100;
-            switch (pColMgr->GetAdjust())
-            {
-                case COLADJ_BOTTOM:
-                    if (!m_bVertical)
-                        aUp.AdjustY(nLength );
-                    else
-                        aUp.AdjustX(nLength );
-                    break;
-                case COLADJ_TOP:
-                    if (!m_bVertical)
-                        aDown.AdjustY( -nLength );
-                    else
-                        aDown.AdjustX( -nLength );
-                    break;
-                case COLADJ_CENTER:
-                    if (!m_bVertical)
-                    {
-                        aUp.AdjustY(nLength / 2 );
-                        aDown.AdjustY( -(nLength / 2) );
-                    }
-                    else
-                    {
-                        aUp.AdjustX(nLength / 2 );
-                        aDown.AdjustX( -(nLength / 2) );
-                    }
-                    break;
-                default:
-                    break; // prevent warning
-            }
+            case COLADJ_BOTTOM:
+                if (!m_bVertical)
+                    aUp.AdjustY(nLength );
+                else
+                    aUp.AdjustX(nLength );
+                break;
+            case COLADJ_TOP:
+                if (!m_bVertical)
+                    aDown.AdjustY( -nLength );
+                else
+                    aDown.AdjustX( -nLength );
+                break;
+            case COLADJ_CENTER:
+                if (!m_bVertical)
+                {
+                    aUp.AdjustY(nLength / 2 );
+                    aDown.AdjustY( -(nLength / 2) );
+                }
+                else
+                {
+                    aUp.AdjustX(nLength / 2 );
+                    aDown.AdjustX( -(nLength / 2) );
+                }
+                break;
+            default:
+                break; // prevent warning
+        }
+    }
+
+    for (sal_uInt16 i = 0; i < nColumnCount -  1; ++i)
+    {
+        int nGutter = pColMgr->GetGutterWidth(i);
+        int nDist = pColMgr->GetColWidth( i ) + nGutter;
+        nDist -= (i == 0) ? nGutter / 2 : 0;
+        if (!m_bVertical)
+        {
+            aUp.AdjustX(nDist );
+            aDown.AdjustX(nDist );
+        }
+        else
+        {
+            aUp.AdjustY(nDist );
+            aDown.AdjustY(nDist );
         }
 
-        for (sal_uInt16 i = 0; i < nColumnCount -  1; ++i)
-        {
-            int nGutter = pColMgr->GetGutterWidth(i);
-            int nDist = pColMgr->GetColWidth( i ) + nGutter;
-            nDist -= (i == 0) ? nGutter / 2 : 0;
-            if (!m_bVertical)
-            {
-                aUp.AdjustX(nDist );
-                aDown.AdjustX(nDist );
-            }
-            else
-            {
-                aUp.AdjustY(nDist );
-                aDown.AdjustY(nDist );
-            }
-
-            rRenderContext.DrawLine(aUp, aDown);
-        }
+        rRenderContext.DrawLine(aUp, aDown);
     }
 }
 
@@ -451,22 +451,22 @@ void  SwColumnOnlyExample::SetColumns(const SwFormatCol& rCol)
         pCol->SetRight(static_cast<sal_uInt16>(nRight));
     }
     // #97495# make sure that the automatic column width's are always equal
-    if(nColCount && m_aCols.IsOrtho())
+    if(!(nColCount && m_aCols.IsOrtho()))
+        return;
+
+    sal_Int32 nColumnWidthSum = 0;
+    sal_uInt16 i;
+    for(i = 0; i < nColCount; ++i)
     {
-        sal_Int32 nColumnWidthSum = 0;
-        sal_uInt16 i;
-        for(i = 0; i < nColCount; ++i)
-        {
-            SwColumn* pCol = &rCols[i];
-            nColumnWidthSum += pCol->GetWishWidth();
-            nColumnWidthSum -= (pCol->GetRight() + pCol->GetLeft());
-        }
-        nColumnWidthSum /= nColCount;
-        for(i = 0; i < nColCount; ++i)
-        {
-            SwColumn* pCol = &rCols[i];
-            pCol->SetWishWidth( static_cast< sal_uInt16 >(nColumnWidthSum + pCol->GetRight() + pCol->GetLeft()));
-        }
+        SwColumn* pCol = &rCols[i];
+        nColumnWidthSum += pCol->GetWishWidth();
+        nColumnWidthSum -= (pCol->GetRight() + pCol->GetLeft());
+    }
+    nColumnWidthSum /= nColCount;
+    for(i = 0; i < nColCount; ++i)
+    {
+        SwColumn* pCol = &rCols[i];
+        pCol->SetWishWidth( static_cast< sal_uInt16 >(nColumnWidthSum + pCol->GetRight() + pCol->GetLeft()));
     }
 }
 

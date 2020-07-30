@@ -568,61 +568,61 @@ SwSpellPopup::~SwSpellPopup() {}
 
 void SwSpellPopup::InitItemCommands(const css::uno::Sequence< OUString >& aSuggestions)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    // None is added only for LOK, it means there is no need to execute anything
+    m_xPopupMenu->SetItemCommand(MN_SHORT_COMMENT, ".uno:None");
+    m_xPopupMenu->SetItemCommand(m_nSpellDialogId, ".uno:SpellingAndGrammarDialog");
+    if(m_bGrammarResults)
+        m_xPopupMenu->SetItemCommand(m_nIgnoreWordId, ".uno:SpellCheckIgnoreAll?Type:string=Grammar");
+    else
+        m_xPopupMenu->SetItemCommand(m_nIgnoreWordId, ".uno:SpellCheckIgnoreAll?Type:string=Spelling");
+    if(m_bGrammarResults)
+        m_xPopupMenu->SetItemCommand(MN_IGNORE_SELECTION, ".uno:SpellCheckIgnore?Type:string=Grammar");
+    else
+        m_xPopupMenu->SetItemCommand(MN_IGNORE_SELECTION, ".uno:SpellCheckIgnore?Type:string=Spelling");
+
+    for(int i = 0; i < aSuggestions.getLength(); ++i)
     {
-        // None is added only for LOK, it means there is no need to execute anything
-        m_xPopupMenu->SetItemCommand(MN_SHORT_COMMENT, ".uno:None");
-        m_xPopupMenu->SetItemCommand(m_nSpellDialogId, ".uno:SpellingAndGrammarDialog");
+        sal_uInt16 nItemId = MN_SUGGESTION_START + i;
+        OUString sCommandString = ".uno:SpellCheckApplySuggestion?ApplyRule:string=";
         if(m_bGrammarResults)
-            m_xPopupMenu->SetItemCommand(m_nIgnoreWordId, ".uno:SpellCheckIgnoreAll?Type:string=Grammar");
-        else
-            m_xPopupMenu->SetItemCommand(m_nIgnoreWordId, ".uno:SpellCheckIgnoreAll?Type:string=Spelling");
-        if(m_bGrammarResults)
-            m_xPopupMenu->SetItemCommand(MN_IGNORE_SELECTION, ".uno:SpellCheckIgnore?Type:string=Grammar");
-        else
-            m_xPopupMenu->SetItemCommand(MN_IGNORE_SELECTION, ".uno:SpellCheckIgnore?Type:string=Spelling");
+            sCommandString += "Grammar_";
+        else if (m_xSpellAlt.is())
+            sCommandString += "Spelling_";
+        sCommandString += m_xPopupMenu->GetItemText(nItemId);
+        m_xPopupMenu->SetItemCommand(nItemId, sCommandString);
+    }
 
-        for(int i = 0; i < aSuggestions.getLength(); ++i)
+    PopupMenu *pMenu = m_xPopupMenu->GetPopupMenu(m_nLangSelectionMenuId);
+    m_xPopupMenu->SetItemCommand(m_nLangSelectionMenuId, ".uno:SetSelectionLanguageMenu");
+    if(pMenu)
+    {
+        for (const auto& item : m_aLangTable_Text)
         {
-            sal_uInt16 nItemId = MN_SUGGESTION_START + i;
-            OUString sCommandString = ".uno:SpellCheckApplySuggestion?ApplyRule:string=";
-            if(m_bGrammarResults)
-                sCommandString += "Grammar_";
-            else if (m_xSpellAlt.is())
-                sCommandString += "Spelling_";
-            sCommandString += m_xPopupMenu->GetItemText(nItemId);
-            m_xPopupMenu->SetItemCommand(nItemId, sCommandString);
+            OUString sCommandString = ".uno:LanguageStatus?Language:string=Current_" + item.second;
+            pMenu->SetItemCommand(item.first, sCommandString);
         }
 
-        PopupMenu *pMenu = m_xPopupMenu->GetPopupMenu(m_nLangSelectionMenuId);
-        m_xPopupMenu->SetItemCommand(m_nLangSelectionMenuId, ".uno:SetSelectionLanguageMenu");
-        if(pMenu)
-        {
-            for (const auto& item : m_aLangTable_Text)
-            {
-                OUString sCommandString = ".uno:LanguageStatus?Language:string=Current_" + item.second;
-                pMenu->SetItemCommand(item.first, sCommandString);
-            }
+        pMenu->SetItemCommand(MN_SET_SELECTION_NONE, ".uno:LanguageStatus?Language:string=Current_LANGUAGE_NONE");
+        pMenu->SetItemCommand(MN_SET_SELECTION_RESET, ".uno:LanguageStatus?Language:string=Current_RESET_LANGUAGES");
+        pMenu->SetItemCommand(MN_SET_SELECTION_MORE, ".uno:FontDialog?Page:string=font");
+    }
 
-            pMenu->SetItemCommand(MN_SET_SELECTION_NONE, ".uno:LanguageStatus?Language:string=Current_LANGUAGE_NONE");
-            pMenu->SetItemCommand(MN_SET_SELECTION_RESET, ".uno:LanguageStatus?Language:string=Current_RESET_LANGUAGES");
-            pMenu->SetItemCommand(MN_SET_SELECTION_MORE, ".uno:FontDialog?Page:string=font");
+    pMenu = m_xPopupMenu->GetPopupMenu(m_nLangParaMenuId);
+    m_xPopupMenu->SetItemCommand(m_nLangParaMenuId, ".uno:SetParagraphLanguageMenu");
+    if(pMenu)
+    {
+        for (const auto& item : m_aLangTable_Paragraph)
+        {
+            OUString sCommandString = ".uno:LanguageStatus?Language:string=Paragraph_" + item.second;
+            pMenu->SetItemCommand(item.first, sCommandString);
         }
 
-        pMenu = m_xPopupMenu->GetPopupMenu(m_nLangParaMenuId);
-        m_xPopupMenu->SetItemCommand(m_nLangParaMenuId, ".uno:SetParagraphLanguageMenu");
-        if(pMenu)
-        {
-            for (const auto& item : m_aLangTable_Paragraph)
-            {
-                OUString sCommandString = ".uno:LanguageStatus?Language:string=Paragraph_" + item.second;
-                pMenu->SetItemCommand(item.first, sCommandString);
-            }
-
-            pMenu->SetItemCommand(MN_SET_PARA_NONE, ".uno:LanguageStatus?Language:string=Paragraph_LANGUAGE_NONE");
-            pMenu->SetItemCommand(MN_SET_PARA_RESET, ".uno:LanguageStatus?Language:string=Paragraph_RESET_LANGUAGES");
-            pMenu->SetItemCommand(MN_SET_PARA_MORE, ".uno:FontDialogForParagraph");
-        }
+        pMenu->SetItemCommand(MN_SET_PARA_NONE, ".uno:LanguageStatus?Language:string=Paragraph_LANGUAGE_NONE");
+        pMenu->SetItemCommand(MN_SET_PARA_RESET, ".uno:LanguageStatus?Language:string=Paragraph_RESET_LANGUAGES");
+        pMenu->SetItemCommand(MN_SET_PARA_MORE, ".uno:FontDialogForParagraph");
     }
 }
 
