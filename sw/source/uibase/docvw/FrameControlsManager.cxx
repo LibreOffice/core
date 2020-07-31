@@ -267,7 +267,7 @@ void SwFrameControlsManager::SetOutlineContentVisibilityButton(const SwTextNode*
 
     if (pWin->GetSymbol() == SymbolType::ARROW_RIGHT)
     {
-        // show expand button immediatly
+        // show expand button immediately
         pWin->Show();
         // outline content might not be folded, this happens on undo, outline moves, and folded outline content reveals
         SwOutlineNodes::size_type nPos;
