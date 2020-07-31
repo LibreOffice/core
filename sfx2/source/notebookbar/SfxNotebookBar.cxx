@@ -366,6 +366,17 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
         if ((!sFile.isEmpty() && bChangedFile) || !pNotebookBar || !pNotebookBar->IsVisible()
             || bReloadNotebookbar || comphelper::LibreOfficeKit::isActive())
         {
+            // Notebookbar was loaded too early what caused:
+            //   * little hang in the start center on desktop
+            //   * in LOK: Paste Special feature was incorrectly initialized
+            // Skip first request so Notebookbar will be initialized after document was loaded
+            static bool bSkipFirstInit = true;
+            if (bSkipFirstInit)
+            {
+                bSkipFirstInit = false;
+                return false;
+            }
+
             RemoveListeners(pSysWindow);
 
             OUString aBuf = rUIFile + sFile;
