@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -260,6 +260,11 @@
                     <property name="receives_default">True</property>
                     <property name="halign">end</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="default-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|default">Click to use the current settings on this tab page as the default for further sessions with %PRODUCTNAME.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -286,6 +291,11 @@
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="OptCompatPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptCompatPage">Specifies compatibility settings for text documents. These options help in fine-tuning %PRODUCTNAME when importing Microsoft Word documents.</property>
+      </object>
     </child>
   </object>
 </interface>

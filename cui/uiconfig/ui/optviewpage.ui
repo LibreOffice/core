@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment2">
@@ -82,6 +82,11 @@
                           <item translatable="yes" context="optviewpage|mousepos">Dialog center</item>
                           <item translatable="yes" context="optviewpage|mousepos">No automatic positioning</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="mousepos-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | mousepos">Specifies if and how the mouse pointer will be positioned in newly opened dialogs.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -99,6 +104,11 @@
                           <item translatable="yes" context="optviewpage|mousemiddle">Automatic scrolling</item>
                           <item translatable="yes" context="optviewpage|mousemiddle">Paste clipboard</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="mousemiddle-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | mousemiddle">Defines the function of the middle mouse button.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -171,6 +181,11 @@
                               <item translatable="yes" context="optviewpage|menuicons">Hide</item>
                               <item translatable="yes" context="optviewpage|menuicons">Show</item>
                             </items>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="menuicons-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | menuicons">Displays icons next to the corresponding menu items. Select from "Automatic", "Hide" and "Show". "Automatic" displays icons according to system settings and themes.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -275,6 +290,11 @@
                           <item translatable="yes" context="optviewpage|notebookbariconsize">Small</item>
                           <item translatable="yes" context="optviewpage|notebookbariconsize">Large</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="notebookbariconsize-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | notebookbariconsize">Specifies the display size of notebook bar icons.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -305,6 +325,11 @@
                           <item translatable="yes" context="optviewpage|sidebariconsize">Small</item>
                           <item translatable="yes" context="optviewpage|sidebariconsize">Large</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="sidebariconsize-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | sidebariconsize">Specifies the display size of sidebar icons.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -336,6 +361,11 @@
                           <item translatable="yes" context="optviewpage|iconsize">Large</item>
                           <item translatable="yes" context="optviewpage|iconsize">Extra Large</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="iconsize-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | iconsize">Specifies the display size of toolbar icons.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -410,6 +440,11 @@
                           <item translatable="yes" context="optviewpage|iconstyle">Sifr</item>
                           <item translatable="yes" context="optviewpage|iconstyle">Breeze</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="iconstyle-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | iconstyle">Specifies the icon style for icons in toolbars and dialogs.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -488,6 +523,11 @@
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="useaccel-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | useaccel">Directly accesses hardware features of the graphical display adapter to improve the screen display.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -503,6 +543,11 @@
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="useaa-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | useaa">When supported, you can enable and disable anti-aliasing of graphics. With anti-aliasing enabled, the display of most graphical objects looks smoother and with less artifacts.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -628,6 +673,11 @@
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="showfontpreview-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | showfontpreview">Displays the names of selectable fonts in the corresponding font, for example, fonts in the Font box on the Formatting bar.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -643,6 +693,11 @@
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="aafont-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | aafont">Select to smooth the screen appearance of text.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -675,6 +730,11 @@
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="aanf-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | aanf">Enter the smallest font size to apply antialiasing.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>

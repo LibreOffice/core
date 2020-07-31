@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">0.01</property>
     <property name="upper">10</property>
     <property name="value">1</property>
-    <property name="step_increment">0.20000000000000001</property>
+    <property name="step_increment">0.2</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="adjustment2">
@@ -35,7 +35,7 @@
   <object class="GtkAdjustment" id="adjustment6">
     <property name="lower">0.01</property>
     <property name="upper">10</property>
-    <property name="step_increment">0.20000000000000001</property>
+    <property name="step_increment">0.2</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="adjustment7">
@@ -78,6 +78,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="usegridsnap-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|usegridsnap">Specifies whether to move frames, drawing elements, and controls only between grid points.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -93,6 +98,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="gridvisible-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|gridvisible">Specifies whether to display the grid.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -153,6 +163,11 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="digits">2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="mtrflddrawx-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|mtrflddrawx">Defines the unit of measure for the spacing between grid points on the X-axis.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -166,6 +181,11 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment6</property>
                         <property name="digits">2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="mtrflddrawy-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|mtrflddrawy">Defines the grid points spacing in the desired unit of measurement on the Y-axis.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -210,6 +230,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="synchronize-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|synchronize">Specifies whether to change the current grid settings symmetrically.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -270,6 +295,11 @@
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="numflddivisionx-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|numflddivisionx">Specify the number of intermediate spaces between grid points on the X-axis.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -305,6 +335,11 @@
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment7</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="numflddivisiony-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|numflddivisiony">Specify the number of intermediate spaces between grid points on the Y-axis.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -417,6 +452,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="snaphelplines-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|snaphelplines">Snaps the edge of a dragged object to the nearest snap line when you release the mouse.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -432,6 +472,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="snapborder-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|snapborder">Specifies whether to align the contour of the graphic object to the nearest page margin.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -447,6 +492,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="snapframe-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|snapframe">Specifies whether to align the contour of the graphic object to the border of the nearest graphic object.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -462,6 +512,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="snappoints-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|snappoints">Specifies whether to align the contour of the graphic object to the points of the nearest graphic object.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -479,6 +534,11 @@
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment3</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="mtrfldsnaparea-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|mtrfldsnaparea">Defines the snap distance between the mouse pointer and the object contour. %PRODUCTNAME Impress snaps to a snap point if the mouse pointer is nearer than the distance selected in the Snap range control.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -554,6 +614,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="ortho-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|ortho">Specifies that graphic objects are restricted vertically, horizontally or diagonally (45°) when creating or moving them.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -569,6 +634,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="bigortho-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|bigortho">Specifies that a square is created based on the longer side of a rectangle when the Shift key is pressed before you release the mouse button. This also applies to an ellipse (a circle will be created based on the longest diameter of the ellipse). When the Extend edges box is not marked, a square or a circle will be created based on the shorter side or diameter.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -590,6 +660,11 @@
                             <accessibility>
                               <relation type="labelled-by" target="rotate"/>
                             </accessibility>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="mtrfldangle-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|mtrfldangle">Specifies that graphic objects can only be rotated within the rotation angle that you selected in the When rotating control.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -608,6 +683,11 @@
                             <accessibility>
                               <relation type="label-for" target="mtrfldangle"/>
                             </accessibility>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="rotate-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|rotate">Specifies that graphic objects can only be rotated within the rotation angle that you selected in the When rotating control.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -621,6 +701,11 @@
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment5</property>
                             <property name="digits">2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="mtrfldbezangle-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|mtrfldbezangle">Defines the angle for point reduction.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -674,6 +759,11 @@
         <property name="fill">True</property>
         <property name="position">2</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="OptGridPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptGridPage">Specifies the settings for the configurable grid on your document pages. This grid helps you determine the exact position of your objects. You can also set this grid in line with the "magnetic" snap grid.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

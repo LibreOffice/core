@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkBox" id="PrintOptionsPage">
@@ -40,6 +40,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="graphics-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|graphics">Specifies whether the graphics of your text document are printed.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -55,6 +60,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="formcontrols-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|formcontrols">Specifies whether the form control fields of the text document are printed.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -70,6 +80,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="background-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|background">Specifies whether to include colors and objects that are inserted to the background of the page (Format - Page - Background) in the printed document.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -85,6 +100,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="inblack-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|inblack">Specifies whether to always print text in black.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -100,6 +120,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="hiddentext-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|hiddentext">Enable this option to print text that is marked as hidden.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -115,6 +140,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="textplaceholder-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|textplaceholder">Enable this option to print text placeholders. Disable this option to leave the text placeholders blank in the printout.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -167,6 +197,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="leftpages-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|leftpages">Specifies whether to print all left (even numbered) pages of the document.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -182,6 +217,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="rightpages-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|rightpages">Specifies whether to print all right (odd numbered) pages of the document.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -197,6 +237,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="brochure-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|brochure">Select the Brochure option to print your document in brochure format.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -213,6 +258,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="rtl-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|rtl">Check to print the pages of the brochure in the correct order for a right-to-left script.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -266,6 +316,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="none-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|none">Specifies whether comments in your document are printed.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -282,6 +337,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">none</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="only-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|only">Specifies whether comments in your document are printed.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -298,6 +358,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">none</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="end-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|end">Specifies whether comments in your document are printed.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -314,6 +379,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">none</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="endpage-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|endpage">Specifies whether comments in your document are printed.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -330,6 +400,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">none</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="inmargins-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|inmargins">Specifies whether comments in your document are printed.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -405,6 +480,11 @@
                       <object class="GtkComboBoxText" id="fax">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="fax-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|fax">If you have installed fax software on your computer and wish to fax directly from the text document, select the desired fax machine.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -426,6 +506,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="blankpages-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|blankpages">If this option is enabled, automatically-inserted blank pages are being printed. This is best if you are printing double-sided. For example, in a book, a "chapter" paragraph style has been set to always start with an odd numbered page. If the previous chapter ends on an odd page, %PRODUCTNAME inserts an even numbered blank page. This option controls whether to print that even numbered page or not.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -441,6 +526,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="papertray-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|papertray">For printers with multiple trays, the "Paper tray from printer settings" option specifies whether the paper tray used is specified by the system settings of the printer.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -467,6 +557,11 @@
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="PrintOptionsPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|PrintOptionsPage">Specifies print settings within a text or HTML document.</property>
+      </object>
     </child>
   </object>
 </interface>

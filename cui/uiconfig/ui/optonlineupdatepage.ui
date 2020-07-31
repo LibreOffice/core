@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkFrame" id="OptOnlineUpdatePage">
@@ -35,9 +35,14 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
                     <property name="halign">start</property>
+                    <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="autocheck-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|autocheck">Mark to check for online updates periodically, then select the time interval how often %PRODUCTNAME will check for online updates.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -54,17 +59,21 @@
                       <object class="GtkGrid" id="grid4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="row_spacing">0</property>
                         <child>
                           <object class="GtkRadioButton" id="everyday">
                             <property name="label" translatable="yes" context="optonlineupdatepage|everyday">Every da_y</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
                             <property name="halign">start</property>
+                            <property name="use_underline">True</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="everyday-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|everyday">A check will be performed once a day.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -77,10 +86,15 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
                             <property name="halign">start</property>
+                            <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">everyday</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="everyweek-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|everyweek">A check will be performed once a week. This is the default setting.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -93,10 +107,15 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
                             <property name="halign">start</property>
+                            <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">everyday</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="everymonth-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|everymonth">A check will be performed once a month.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -120,6 +139,11 @@
                     <property name="receives_default">True</property>
                     <property name="valign">center</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checknow-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|checknow">A check will be performed now.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -207,9 +231,14 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
                         <property name="halign">start</property>
+                        <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="autodownload-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|autodownload">Enable the automatic download of updates to the specified folder.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -236,6 +265,11 @@
                                 <property name="receives_default">True</property>
                                 <property name="halign">start</property>
                                 <property name="use_underline">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="changepath-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|changepath">Click to select the destination folder for downloaded files.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -253,6 +287,11 @@
                                     <property name="can_focus">False</property>
                                     <property name="label" translatable="yes" context="optonlineupdatepage|destpathlabel">Download destination:</property>
                                     <property name="xalign">0</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="destpathlabel-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|destpathlabel">Click to select the destination folder for downloaded files.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -335,8 +374,8 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="tooltip_text" translatable="yes" context="optonlineupdatepage|extrabits|tooltip_text">This information lets us make optimizations for your hardware and operating system.</property>
-                        <property name="use_underline">True</property>
                         <property name="halign">start</property>
+                        <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
@@ -432,6 +471,11 @@
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>
+      </object>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="OptOnlineUpdatePage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptOnlineUpdatePage">Specifies some options for the automatic notification and downloading of online updates to %PRODUCTNAME.</property>
       </object>
     </child>
   </object>

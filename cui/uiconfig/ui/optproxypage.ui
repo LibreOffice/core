@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkFrame" id="OptProxyPage">
@@ -44,6 +44,11 @@
                 <property name="valign">center</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="http-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|http">Type the name of the proxy server for HTTP.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -57,6 +62,11 @@
                 <property name="valign">center</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="https-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|https">Type the name of the proxy server for HTTPS. Type the port in the right-hand field.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -70,6 +80,11 @@
                 <property name="valign">center</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="ftp-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|ftp">Type the name of the proxy server for FTP.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -83,6 +98,11 @@
                 <property name="valign">center</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="noproxy-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|noproxy">Specifies the names of the servers that do not require any proxy servers, separated by semicolons.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -98,6 +118,11 @@
                 <property name="activates_default">True</property>
                 <property name="width_chars">5</property>
                 <property name="input_purpose">digits</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="httpport-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|httpport">Type the port for the corresponding proxy server.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">3</property>
@@ -113,6 +138,11 @@
                 <property name="activates_default">True</property>
                 <property name="width_chars">5</property>
                 <property name="input_purpose">digits</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="httpsport-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|httpsport">Type the port for the corresponding proxy server.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">3</property>
@@ -128,6 +158,11 @@
                 <property name="activates_default">True</property>
                 <property name="width_chars">5</property>
                 <property name="input_purpose">digits</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="ftpport-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|ftpport">Type the port for the corresponding proxy server.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">3</property>
@@ -143,6 +178,11 @@
                   <item translatable="yes" context="optproxypage|proxymode">System</item>
                   <item translatable="yes" context="optproxypage|proxymode">Manual</item>
                 </items>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="proxymode-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|proxymode">Specifies the type of proxy definition.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -275,6 +315,11 @@
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>
+      </object>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="OptProxyPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptProxyPage">Specifies the type of proxy definition.</property>
       </object>
     </child>
   </object>

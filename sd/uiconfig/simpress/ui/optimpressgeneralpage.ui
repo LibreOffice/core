@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -63,6 +63,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="startwithwizard-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|startwithwizard">Specifies whether to activate the Select a Template window when opening a presentation with File - New - Presentation.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -117,6 +122,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="qickedit-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|qickedit">If on, you can edit text immediately after clicking a text object. If off, you must double-click to edit text.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -133,6 +143,11 @@
                     <property name="xalign">0</property>
                     <property name="image_position">right</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="textselected-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|textselected">Specifies whether to select a text box by clicking the text.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -188,6 +203,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="copywhenmove-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|copywhenmove">If enabled, a copy is created when you move an object while holding down the Ctrl key.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -218,6 +238,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="add_tearoffs">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="units-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|units">Determines the Unit of measurement for presentations.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -259,6 +284,11 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="digits">2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="metricFields-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|metricFields">Defines the spacing between tab stops.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -280,6 +310,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="objalwymov-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|objalwymov">Specifies that you want to move an object with the Rotate tool enabled. If Object always moveable is not marked, the Rotate tool can only be used to rotate an object.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -311,6 +346,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="backgroundback-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|backgroundback">Specifies whether to use the cache for displaying objects on the master slide.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -490,6 +530,11 @@
                         <property name="activates_default">True</property>
                       </object>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="scaleBox-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|scaleBox">Determines the drawing scale on the rulers.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -550,6 +595,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="printermetrics-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|printermetrics">Specifies that printer metrics are applied for printing and also for formatting the display on the screen. If this box is not checked, a printer independent layout will be used for screen display and printing.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -565,6 +615,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="cbCompatibility-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|cbCompatibility">Specifies that %PRODUCTNAME Impress calculates the paragraph spacing exactly like Microsoft PowerPoint.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -580,8 +635,8 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes" context="optimpressgeneralpage|label1">Compatibility</property>
-            <property name="xalign">0.49</property>
-            <property name="yalign">0.49</property>
+            <property name="xalign">0.49000000953674316</property>
+            <property name="yalign">0.49000000953674316</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -621,6 +676,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="enremotcont-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|enremotcont">Specifies that you want to enable Bluetooth remote control while Impress is running.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -636,6 +696,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="enprsntcons-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|enprsntcons">Specifies that you want to enable the Presenter Console during slideshows.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -664,6 +729,11 @@
     </child>
     <child>
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="OptSavePage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptSavePage">Defines the general options for drawing or presentation documents.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroupLabel">

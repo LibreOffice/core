@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkGrid" id="OptAsianPage">
@@ -35,6 +35,11 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="charkerning-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|charkerning">Specifies that kerning is only applied to western text.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -52,6 +57,11 @@
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">charkerning</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="charpunctkerning-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|charpunctkerning">Specifies that kerning is applied to both western text and Asian punctuation.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -107,6 +117,11 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="nocompression-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|nocompression">Specifies that no compression at all will occur.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -124,6 +139,11 @@
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">nocompression</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="punctcompression-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|punctcompression">Specifies that only the punctuation is compressed.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -141,6 +161,11 @@
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">nocompression</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="punctkanacompression-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|punctkanacompression">Specifies that punctuation and Japanese Kana are compressed.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -208,6 +233,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="language-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|language">Specifies the language for which you want to define first and last characters.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -224,6 +254,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="standard-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|standard">When you mark Default, the following two text boxes are filled with the default characters for the selected language:</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -285,6 +320,11 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="start-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|start">Specifies the characters that should not appear alone at the beginning of a line.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -297,6 +337,11 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="end-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|end">Specifies the characters that should not appear alone at the end of a line.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
