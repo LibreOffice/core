@@ -10085,6 +10085,9 @@ public:
         GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(g_list_nth_data(m_pColumns, nColumn));
         assert(pColumn && "wrong count");
 
+        GtkCellRenderer* pExpander = nullptr;
+        GtkCellRenderer* pToggle = nullptr;
+
         // migrate existing editable setting to the new renderer
         gboolean is_editable(false);
         void* pEditCellData(nullptr);
@@ -10092,18 +10095,54 @@ public:
         for (GList* pRenderer = g_list_first(pRenderers); pRenderer; pRenderer = g_list_next(pRenderer))
         {
             GtkCellRenderer* pCellRenderer = GTK_CELL_RENDERER(pRenderer->data);
+
+            void* pData = g_object_get_data(G_OBJECT(pCellRenderer), "g-lo-CellIndex");
+            auto nCellIndex = reinterpret_cast<sal_IntPtr>(pData);
+
             if (GTK_IS_CELL_RENDERER_TEXT(pCellRenderer))
             {
                 g_object_get(pCellRenderer, "editable", &is_editable, nullptr);
-                pEditCellData = g_object_get_data(G_OBJECT(pCellRenderer), "g-lo-CellIndex");
+                pEditCellData = pData;
                 break;
             }
+            else if (GTK_IS_CELL_RENDERER_TOGGLE(pCellRenderer))
+            {
+                if (nCellIndex == m_nExpanderToggleCol)
+                {
+                    pToggle = pCellRenderer;
+                    g_object_ref(pToggle);
+                }
+            }
+            else if (GTK_IS_CELL_RENDERER_PIXBUF(pCellRenderer))
+            {
+                if (nCellIndex == m_nExpanderImageCol)
+                {
+                    pExpander = pCellRenderer;
+                    g_object_ref(pExpander);
+                }
+            }
+
         }
         g_list_free(pRenderers);
 
         GtkCellRenderer* pRenderer;
 
         gtk_cell_layout_clear(GTK_CELL_LAYOUT(pColumn));
+        if (pExpander)
+        {
+            gtk_tree_view_column_pack_start(pColumn, pExpander, false);
+            gtk_tree_view_column_add_attribute(pColumn, pExpander, "pixbuf", m_nExpanderImageCol);
+            g_object_unref(pExpander);
+        }
+        if (pToggle)
+        {
+            gtk_tree_view_column_pack_start(pColumn, pToggle, false);
+            gtk_tree_view_column_add_attribute(pColumn, pToggle, "active", m_nExpanderToggleCol);
+            gtk_tree_view_column_add_attribute(pColumn, pToggle, "active", m_nExpanderToggleCol);
+            gtk_tree_view_column_add_attribute(pColumn, pToggle, "visible", m_aToggleTriStateMap[m_nExpanderToggleCol]);
+            g_object_unref(pToggle);
+        }
+
         if (bEnable)
         {
             pRenderer = custom_cell_renderer_surface_new();
