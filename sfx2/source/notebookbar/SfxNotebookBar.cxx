@@ -367,11 +367,10 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
             || bReloadNotebookbar || comphelper::LibreOfficeKit::isActive())
         {
             // Notebookbar was loaded too early what caused:
-            //   * little hang in the start center on desktop
             //   * in LOK: Paste Special feature was incorrectly initialized
             // Skip first request so Notebookbar will be initialized after document was loaded
             static bool bSkipFirstInit = true;
-            if (bSkipFirstInit)
+            if (comphelper::LibreOfficeKit::isActive() && bSkipFirstInit)
             {
                 bSkipFirstInit = false;
                 return false;
