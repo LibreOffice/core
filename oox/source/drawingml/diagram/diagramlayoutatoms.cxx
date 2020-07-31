@@ -651,7 +651,7 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
             }
 
             // See if all vertical space is used or we have to center the content.
-            if (nVertMin >= 0 && nVertMax <= rParent[XML_h])
+            if (nVertMin >= 0 && nVertMin <= nVertMax && nVertMax <= rParent[XML_h])
             {
                 sal_Int32 nDiff = rParent[XML_h] - (nVertMax - nVertMin);
                 if (nDiff > 0)
