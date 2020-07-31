@@ -181,7 +181,13 @@ com_sun_star_comp_rendering_Canvas_Cairo_get_implementation(
 {
     auto p = new cairocanvas::Canvas(args, context);
     p->acquire();
-    p->initialize();
+    try {
+        p->initialize();
+    } catch (css::uno::Exception&) {
+        p->dispose();
+        p->release();
+        throw;
+    }
     return static_cast<cppu::OWeakObject*>(p);
 }
 
