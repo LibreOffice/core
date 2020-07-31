@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkBox" id="prntopts">
@@ -41,6 +41,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="pagedefaultrb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|pagedefaultrb">Specifies that you do not want to further scale pages when printing.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -57,6 +62,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">pagedefaultrb</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="fittopgrb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|fittopgrb">Specifies whether to scale down objects that are beyond the margins of the current printer, so that they fit on the paper in the printer.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -73,6 +83,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">pagedefaultrb</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="tilepgrb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|tilepgrb">Specifies that pages are to be printed in tiled format. If the pages or slides are smaller than the paper, several pages or slides will be printed on one page of paper.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -88,6 +103,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="papertryfrmprntrcb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|papertryfrmprntrcb">Determines that the paper tray to be used is the one defined in the printer setup.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -104,6 +124,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">pagedefaultrb</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="brouchrb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|brouchrb">Select the Brochure option to print the document in brochure format.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -133,6 +158,11 @@
                                 <accessibility>
                                   <relation type="labelled-by" target="brouchrb"/>
                                 </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="frontcb-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|frontcb">Select Front to print the front of a brochure.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -152,6 +182,11 @@
                                 <accessibility>
                                   <relation type="labelled-by" target="brouchrb"/>
                                 </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="backcb-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|backcb">Select Back to print the back of a brochure.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -215,6 +250,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="pagenmcb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|pagenmcb">Specifies whether to print the page name.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -230,6 +270,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="datecb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|datecb">Specifies whether to print the current date.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -245,6 +290,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="timecb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|timecb">Specifies whether to print the current time.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -260,6 +310,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="hiddenpgcb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|hiddenpgcb">Specifies whether to print the pages that are currently hidden from the presentation.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -326,6 +381,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="defaultrb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|defaultrb">Specifies that you want to print in original colors.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -342,6 +402,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">defaultrb</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="grayscalerb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|grayscalerb">Specifies that you want to print colors as grayscale.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -358,6 +423,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">defaultrb</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="blackwhiterb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|blackwhiterb">Specifies that you want to print the document in black and white.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -490,6 +560,11 @@
         <property name="fill">True</property>
         <property name="position">2</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="prntopts-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|prntopts">Specifies print settings within a drawing or presentation document.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkBox" id="OptBasicIDEPage">
@@ -33,6 +33,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="codecomplete_enable-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|codecomplete_enable">Display methods of a Basic object.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -86,6 +91,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="autoclose_proc-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|autoclose_proc">Automatically insert closing statements for procedures.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -101,6 +111,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="autoclose_paren-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|autoclose_paren">Automatically close open parenthesis.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -116,6 +131,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="autoclose_quotes-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|autoclose_quotes">Automatically close open quotes.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -128,10 +148,15 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
                     <property name="relief">none</property>
+                    <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="autocorrect-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|autocorrect">Correct cases of Basic variables and keywords while typing.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -185,6 +210,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="extendedtypes_enable-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|extendedtypes_enable">Allow UNO object types as valid Basic types.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>

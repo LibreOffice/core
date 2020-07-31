@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sm">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -43,6 +43,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="title-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|title">Specifies whether you want the name of the document to be included in the printout.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -59,6 +64,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="text-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|text">Specifies whether to include the contents of the Commands window at the bottom of the printout.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -75,6 +85,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="frame-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|frame">Applies a thin border to the formula area in the printout.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -132,6 +147,11 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="sizenormal-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|sizenormal">Prints the formula without adjusting the current font size.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -149,6 +169,11 @@
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">sizenormal</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="sizescaled-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|sizescaled">Adjusts the formula to the page format used in the printout.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -184,6 +209,11 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment1</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="zoom-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|zoom">Reduces or enlarges the size of the printed formula by a specified enlargement factor.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -246,6 +276,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="norightspaces-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|norightspaces">Specifies that these space wildcards will be removed if they are at the end of a line.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -262,6 +297,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="saveonlyusedsymbols-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|saveonlyusedsymbols">Saves only those symbols with each formula that are used in that formula.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -305,6 +345,11 @@
         <property name="fill">True</property>
         <property name="position">2</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="SmathSettings-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|SmathSettings">Defines formula settings that will be valid for all documents.</property>
+      </object>
     </child>
   </object>
 </interface>

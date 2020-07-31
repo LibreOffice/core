@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkBox" id="OptAppearancePage">
@@ -50,6 +50,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_stock">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="save-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|save">Saves the current settings as a color scheme that you can reload later.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -63,6 +68,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_stock">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="delete-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|delete">Deletes the color scheme shown in the Scheme box. You cannot delete the Default scheme.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -74,6 +84,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="colorschemelb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|colorschemelb">Selects the color scheme you want to use.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -179,6 +194,11 @@
                                 <child>
                                   <placeholder/>
                                 </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="colorconfig-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|colorconfig">Select the colors for the user interface elements.</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
@@ -269,6 +289,11 @@
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="OptAppearancePage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptAppearancePage">Sets the colors for the %PRODUCTNAME user interface.</property>
+      </object>
     </child>
   </object>
 </interface>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -131,6 +131,11 @@
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
                             <property name="hexpand">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="position-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|position">Determines the position of the caption with respect to the object.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -144,6 +149,11 @@
                             <property name="valign">center</property>
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="separator-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|separator">Defines the character to be displayed after the number of the heading or chapter level.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -170,6 +180,11 @@
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
                             <property name="hexpand">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="numbering-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|numbering">Specifies the type of numbering required.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -187,6 +202,11 @@
                               <object class="GtkEntry" id="comboboxtext-entry">
                                 <property name="can_focus">True</property>
                                 <property name="activates_default">True</property>
+                              </object>
+                            </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="category-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|category">Specifies the category of the selected object.</property>
                               </object>
                             </child>
                           </object>
@@ -271,6 +291,11 @@
                             <property name="valign">center</property>
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="chapseparator-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|chapseparator">Defines the character to be displayed after the number of the heading or chapter level.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -286,6 +311,11 @@
                             <items>
                               <item translatable="yes" context="optcaptionpage|level">None</item>
                             </items>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="level-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|level">Specifies the headings or chapter levels where you want the numbering to start.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -355,6 +385,11 @@
                             <items>
                               <item translatable="yes" context="optcaptionpage|charstyle">None</item>
                             </items>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="charstyle-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|charstyle">Specifies the character style of the caption paragraph.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -370,6 +405,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="applyborder-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|applyborder">Applies the border and shadow of the object to the caption frame.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -469,6 +509,11 @@
                                     <attribute name="text">1</attribute>
                                   </attributes>
                                 </child>
+                              </object>
+                            </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="objects-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|objects">Select the object type for which the AutoCaption settings are to be valid.</property>
                               </object>
                             </child>
                           </object>
@@ -579,6 +624,11 @@ when inserting:</property>
         <property name="fill">True</property>
         <property name="position">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="OptCaptionPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptCaptionPage">Select the object type for which the AutoCaption settings are to be valid.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

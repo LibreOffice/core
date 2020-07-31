@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -18,9 +18,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -120,6 +117,11 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="parameterfield-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|parameterfield">Enter a start parameter for a JRE as you would on a command line. Click Assign to add the parameter to the list of available start parameters.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -170,6 +172,11 @@
                             </child>
                           </object>
                         </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="assignlist-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|assignlist">Lists the assigned JRE start parameters. To remove a start parameter, select the parameter, and then click Remove.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -199,6 +206,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0.49000000953674316</property>
                     <property name="yalign">0.49000000953674316</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="assignbtn-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|assignbtn">Adds the current JRE start parameter to the list.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -219,6 +231,11 @@
                         <property name="receives_default">True</property>
                         <property name="valign">start</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="editbtn-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|editbtn">Opens a dialog where the selected JRE start parameter can be edited.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -234,6 +251,11 @@
                         <property name="receives_default">True</property>
                         <property name="valign">start</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="removebtn-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|removebtn">Deletes the selected JRE start parameter.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -277,5 +299,8 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

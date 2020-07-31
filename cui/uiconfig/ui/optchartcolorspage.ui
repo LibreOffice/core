@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -60,9 +60,6 @@
                       <object class="GtkTreeViewColumn" id="treeviewcolumn1">
                         <child>
                           <object class="GtkCellRendererPixbuf" id="cellrenderertext1"/>
-                          <attributes>
-                            <attribute name="surface">0</attribute>
-                          </attributes>
                         </child>
                       </object>
                     </child>
@@ -76,6 +73,11 @@
                             <attribute name="text">1</attribute>
                           </attributes>
                         </child>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="colors-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|colors">Displays all the colors available for the data series.</property>
                       </object>
                     </child>
                   </object>
@@ -165,6 +167,11 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="default-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|default">Restores the color settings that were defined when the program was installed.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -242,6 +249,11 @@
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="OptChartColorsPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptChartColorsPage">Displays all the colors available for the data series.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1"/>

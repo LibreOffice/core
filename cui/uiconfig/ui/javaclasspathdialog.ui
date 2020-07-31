@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -153,6 +153,11 @@
                             </child>
                           </object>
                         </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="paths-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|paths">Specifies the location of Java classes or Java class libraries.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -182,6 +187,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="archive-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|archive">Select an archive file in jar or zip format and add the file to the class path.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -196,6 +206,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="folder-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|folder">Select a folder and add the folder to the class path.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -210,6 +225,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="remove-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|remove">Select an archive or a folder in the list and click Remove to remove the object from the class path.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -238,8 +258,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="JavaClassPath-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|JavaClassPath">Specifies the location of Java classes or Java class libraries.</property>
+      </object>
     </child>
   </object>
 </interface>

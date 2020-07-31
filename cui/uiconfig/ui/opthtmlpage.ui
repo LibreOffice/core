@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustsize1">
@@ -100,6 +100,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="adjustment">adjustsize7</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="size7-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|size7">Use the spin buttons Size 1 to Size 7 to define the respective font sizes for the HTML &lt;font size=1&gt; to &lt;font size=7&gt; tags.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -124,6 +129,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="adjustment">adjustsize6</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="size6-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|size6">Use the spin buttons Size 1 to Size 7 to define the respective font sizes for the HTML &lt;font size=1&gt; to &lt;font size=7&gt; tags.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -148,6 +158,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="adjustment">adjustsize5</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="size5-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|size5">Use the spin buttons Size 1 to Size 7 to define the respective font sizes for the HTML &lt;font size=1&gt; to &lt;font size=7&gt; tags.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -172,6 +187,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="adjustment">adjustsize4</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="size4-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|size4">Use the spin buttons Size 1 to Size 7 to define the respective font sizes for the HTML &lt;font size=1&gt; to &lt;font size=7&gt; tags.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -196,6 +216,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="adjustment">adjustsize3</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="size3-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|size3">Use the spin buttons Size 1 to Size 7 to define the respective font sizes for the HTML &lt;font size=1&gt; to &lt;font size=7&gt; tags.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -220,6 +245,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="adjustment">adjustsize2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="size2-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|size2">Use the spin buttons Size 1 to Size 7 to define the respective font sizes for the HTML &lt;font size=1&gt; to &lt;font size=7&gt; tags.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -244,6 +274,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="adjustment">adjustsize1</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="size1-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|size1">Use the spin buttons Size 1 to Size 7 to define the respective font sizes for the HTML &lt;font size=1&gt; to &lt;font size=7&gt; tags.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -315,6 +350,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="ignorefontnames-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|ignorefontnames">Mark this check box to ignore all font settings when importing. The fonts that were defined in the HTML Page Style will be the fonts that will be used. </property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -331,6 +371,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="unknowntag-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|unknowntag">Mark this check box if you want tags that are not recognized by %PRODUCTNAME to be imported as fields.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -347,6 +392,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="numbersenglishus-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|numbersenglishus">If not checked, numbers will be interpreted according to the setting in Language Settings - Language of - Locale setting in the Options dialog box. If checked, numbers will be interpreted as 'English (USA)' locale.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -421,6 +471,11 @@
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
                             <property name="hexpand">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="charset-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|charset">Select the appropriate character set for the export</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -443,6 +498,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="savegrflocal-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|savegrflocal">Mark this check box to automatically upload the embedded pictures to the Internet server when uploading using FTP. Use the Save As dialog to save the document and enter a complete FTP URL as the file name in the Internet.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -459,6 +519,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="printextension-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|printextension">If you mark this field, the print layout of the current document (for example, table of contents with justified page numbers and dot leaders) is exported as well.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -476,6 +541,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="starbasicwarning-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|starbasicwarning">If this field is marked, when exporting to HTML a warning is shown that %PRODUCTNAME Basic macros will be lost.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -492,6 +562,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="starbasic-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|starbasic">Mark this check box to include the %PRODUCTNAME Basic instructions when exporting to HTML format.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -525,6 +600,11 @@
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="OptHtmlPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptHtmlPage">Defines settings for HTML pages.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1"/>

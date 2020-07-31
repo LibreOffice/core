@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="ColOrRowDialog">
@@ -11,9 +11,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -105,6 +102,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="columns-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|columns">Select the Columns option to summarize the contents of the selected columns in a list.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -122,6 +124,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">columns</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="rows-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|rows">Select the Rows option to summarize the contents of the selected rows in a list.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -157,5 +164,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="ColOrRowDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|ColOrRowDialog">Allows you to copy marked cells to a sort list.</property>
+      </object>
+    </child>
   </object>
 </interface>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="xsc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkBox" id="CertGeneral">
@@ -40,6 +40,11 @@
             <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
+        </child>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="box1-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|box1">The General page of the View Certificate dialog displays basic information about the certificate.</property>
+          </object>
         </child>
       </object>
       <packing>

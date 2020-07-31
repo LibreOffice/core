@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkGrid" id="OptSecurityPage">
@@ -51,6 +51,11 @@
                     <property name="receives_default">True</property>
                     <property name="valign">center</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="tsas-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|tsas">Opens the Time Stamping Authority URLs dialog.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -121,6 +126,11 @@
                     <property name="receives_default">True</property>
                     <property name="valign">center</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="cert-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|cert">Opens the Certificate Path dialog.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -191,6 +201,11 @@
                     <property name="receives_default">True</property>
                     <property name="valign">center</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="macro-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|macro">Opens the Macro Security dialog.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -252,6 +267,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="savepassword-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|savepassword">If enabled, %PRODUCTNAME will securely store all passwords that you use to access files from web servers. You can retrieve the passwords from the list after you enter the master password.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -350,6 +370,11 @@ Do you want to delete password list and reset master password?</property>
                             <property name="receives_default">True</property>
                             <property name="valign">center</property>
                             <property name="use_underline">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="connections-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|connections">Asks for the master password. If master password is correct, shows the Stored Web Connection Information dialog.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -374,6 +399,11 @@ Do you want to delete password list and reset master password?</property>
                             <property name="receives_default">True</property>
                             <property name="valign">center</property>
                             <property name="use_underline">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="masterpassword-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|masterpassword">Opens the Enter Master Password dialog.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -456,6 +486,11 @@ Do you want to delete password list and reset master password?</property>
                     <property name="receives_default">True</property>
                     <property name="valign">center</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="options-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|options">Opens the "Security Options and Warnings" dialog.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -481,6 +516,11 @@ Do you want to delete password list and reset master password?</property>
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="OptSecurityPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptSecurityPage">Defines the security options for saving documents, for web connections, and for opening documents that contain macros.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

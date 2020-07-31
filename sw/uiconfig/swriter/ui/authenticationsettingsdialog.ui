@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -95,6 +95,11 @@
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="authentication-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|authentication">Enables the authentication that is required to send email by SMTP.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -113,6 +118,11 @@
                 <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="separateauthentication-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|separateauthentication">Select if your SMTP server requires a user name and password.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -141,6 +151,11 @@
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
                 <property name="width_chars">40</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="username-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|username">Enter the user name for the SMTP server.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -171,6 +186,11 @@
                 <property name="activates_default">True</property>
                 <property name="width_chars">40</property>
                 <property name="input_purpose">password</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="outpassword-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|outpassword">Enter the password for the user name.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -204,6 +224,11 @@
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">separateauthentication</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="smtpafterpop-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|smtpafterpop">Select if you are required to first read your email before you can send email.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -232,6 +257,11 @@
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
                 <property name="width_chars">40</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="server-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|server">Enter the server name of your POP 3 or IMAP mail server.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -260,6 +290,11 @@
                 <property name="activates_default">True</property>
                 <property name="width_chars">3</property>
                 <property name="adjustment">adjustment1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="port-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|port">Enter the port on the POP3 or IMAP server.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">3</property>
@@ -303,6 +338,11 @@
                 <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="pop3-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|pop3">Specifies that the incoming mail server uses POP 3.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -320,6 +360,11 @@
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">pop3</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="imap-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|imap">Specifies that the incoming mail server uses IMAP.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -333,6 +378,11 @@
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
                 <property name="width_chars">40</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="inusername-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|inusername">Enter the user name for the IMAP server.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -348,6 +398,11 @@
                 <property name="activates_default">True</property>
                 <property name="width_chars">40</property>
                 <property name="input_purpose">password</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="inpassword-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|inpassword">Enter the password.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -437,7 +492,7 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
   </object>
