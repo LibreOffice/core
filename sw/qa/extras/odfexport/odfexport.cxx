@@ -1666,6 +1666,13 @@ DECLARE_ODFEXPORT_TEST(testTdf118393, "tdf118393.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("Seite * von *"),   parseDump("/root/page[7]/footer/txt/text()"));
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf135338_firstLeftPageFooter, "tdf135338_firstLeftPageFooter.odt")
+{
+    // The first page is a left page only style, but it should still show the first page footer
+    // instead of the left footer text "EVEN/LEFT (Left page only)"
+    CPPUNIT_ASSERT_EQUAL(OUString("First (Left page only)"),  parseDump("/root/page[2]/footer/txt/text()"));
+}
+
 DECLARE_ODFEXPORT_TEST(testGerrit13858, "gerrit13858.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getShapes());

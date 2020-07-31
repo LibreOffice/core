@@ -167,7 +167,7 @@ bool IsRightPageByNumber(SwRootFrame const& rLayout, sal_uInt16 nPageNum);
 
 SwPageFrame *InsertNewPage( SwPageDesc &rDesc, SwFrame *pUpper,
                           bool isRightPage, bool bFirst, bool bInsertEmpty, bool bFootnote,
-                          SwFrame *pSibling );
+                          SwFrame *pSibling, bool bVeryFirstPage = false );
 
 // connect Flys with page
 void RegistFlys( SwPageFrame*, const SwLayoutFrame* );
