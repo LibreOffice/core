@@ -231,6 +231,7 @@ public:
     void testTdf98844();
     void testTdf100458();
     void testTdf134455();
+    void testTdf119533();
     void testTdf127982();
     void testTdf131424();
     void testTdf100709XLSX();
@@ -393,6 +394,7 @@ public:
     CPPUNIT_TEST(testTdf98844);
     CPPUNIT_TEST(testTdf100458);
     CPPUNIT_TEST(testTdf134455);
+    CPPUNIT_TEST(testTdf119533);
     CPPUNIT_TEST(testTdf127982);
     CPPUNIT_TEST(testTdf131424);
     CPPUNIT_TEST(testTdf100709XLSX);
@@ -3830,6 +3832,25 @@ void ScFiltersTest::testTdf134455()
     // greater than 59
     CPPUNIT_ASSERT_EQUAL(OUString("01:05"), rDoc.GetString(ScAddress(3,7,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("04:00"), rDoc.GetString(ScAddress(3,8,0)));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf119533()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf119533.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Without fix in place, this test would have failed with
+    // - Expected: 0.5
+    // - Actual  : 0.483333333333333
+    CPPUNIT_ASSERT_EQUAL(OUString("0.5"), rDoc.GetString(ScAddress(4,0,0)));
+
+    // Without fix in place, this test would have failed with
+    // - Expected: 9.5
+    // - Actual  : 9.51666666666667
+    CPPUNIT_ASSERT_EQUAL(OUString("9.5"), rDoc.GetString(ScAddress(5,0,0)));
 
     xDocSh->DoClose();
 }
