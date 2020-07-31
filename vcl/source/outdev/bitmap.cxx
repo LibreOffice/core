@@ -1213,7 +1213,17 @@ void OutputDevice::DrawTransformedBitmapEx(
     if ( mbInitClipRegion )
         InitClipRegion();
 
-    if ( mbOutputClipped )
+    const bool bMetafile(nullptr != mpMetaFile);
+    /*
+       tdf#135325 typically in these OutputDevice methods the in
+       record-to-metafile case MetaFile is already written to before the test
+       against mbOutputClipped to determine that output to the current device
+       would result in no visual output. In this case the metafile is written
+       after the test, so we must continue past mbOutputClipped if recording to
+       a metafile. It's typical to record with a device of nominal size and
+       play back later against something of a totally different size.
+     */
+    if (mbOutputClipped && !bMetafile)
         return;
 
 #ifdef DO_TIME_TEST
@@ -1233,7 +1243,6 @@ void OutputDevice::DrawTransformedBitmapEx(
     static bool bAllowPreferDirectPaint(true);
     const bool bInvert(RasterOp::Invert == meRasterOp);
     const bool bBitmapChangedColor(mnDrawMode & (DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap | DrawModeFlags::GrayBitmap ));
-    const bool bMetafile(nullptr != mpMetaFile);
     const bool bTryDirectPaint(!bInvert && !bBitmapChangedColor && !bMetafile);
 
     if(bAllowPreferDirectPaint && bTryDirectPaint)
