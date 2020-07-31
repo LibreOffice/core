@@ -46,26 +46,9 @@ void * com_sun_star_comp_uui_UUIInteractionHandler_get_implementation( void *, v
 void * emfio_emfreader_XEmfParser_get_implementation( void *, void * );
 void * i18npool_CalendarImpl_get_implementation( void *, void * );
 void * i18npool_Calendar_gregorian_get_implementation( void *, void * );
-void * unoxml_rdfRepository_get_implementation( void *, void * );
-void * unoxml_CURI_get_implementation( void *, void * );
-void * unoxml_CLiteral_get_implementation( void *, void * );
-void * unoxml_CBlankNode_get_implementation( void *, void * );
 void * unoxml_CXPathAPI_get_implementation( void *, void * );
-void * unoxml_CSAXDocumentBuilder_get_implementation( void *, void * );
 void * unoxml_CDocumentBuilder_get_implementation( void *, void * );
-void * sd_DrawingDocument_get_implementation( void *, void * );
-void * com_sun_star_comp_Draw_DrawingModule_get_implementation( void *, void * );
 void * sd_PresentationDocument_get_implementation( void *, void * );
-void * com_sun_star_comp_Draw_PresenterHelper_get_implementation( void *, void * );
-void * com_sun_star_comp_Draw_PresenterPreviewCache_get_implementation( void *, void * );
-void * com_sun_star_comp_Draw_PresenterTextView_get_implementation( void *, void * );
-void * com_sun_star_comp_Draw_SlideRenderer_get_implementation( void *, void * );
-void * com_sun_star_comp_Draw_SlideSorter_get_implementation( void *, void * );
-void * com_sun_star_comp_Draw_framework_configuration_Configuration_get_implementation( void *, void * );
-void * com_sun_star_comp_draw_SdHtmlOptionsDialog_get_implementation( void *, void * );
-void * com_sun_star_comp_sd_InsertSlideController_get_implementation( void *, void * );
-void * com_sun_star_comp_sd_SlideLayoutController_get_implementation( void *, void * );
-void * com_sun_star_comp_sd_DisplayModeController_get_implementation( void *, void * );
 }
 
 const lib_to_factory_mapping *
@@ -112,26 +95,9 @@ lo_get_constructor_map(void)
         { "emfio_emfreader_XEmfParser_get_implementation", emfio_emfreader_XEmfParser_get_implementation},
         { "i18npool_CalendarImpl_get_implementation", i18npool_CalendarImpl_get_implementation},
         { "i18npool_Calendar_gregorian_get_implementation", i18npool_Calendar_gregorian_get_implementation},
-        { "unoxml_rdfRepository_get_implementation", unoxml_rdfRepository_get_implementation },
-        { "unoxml_CURI_get_implementation", unoxml_CURI_get_implementation },
-        { "unoxml_CLiteral_get_implementation", unoxml_CLiteral_get_implementation },
-        { "unoxml_CBlankNode_get_implementation", unoxml_CBlankNode_get_implementation },
         { "unoxml_CXPathAPI_get_implementation", unoxml_CXPathAPI_get_implementation },
-        { "unoxml_CSAXDocumentBuilder_get_implementation", unoxml_CSAXDocumentBuilder_get_implementation },
         { "unoxml_CDocumentBuilder_get_implementation", unoxml_CDocumentBuilder_get_implementation },
-        { "sd_DrawingDocument_get_implementation", sd_DrawingDocument_get_implementation },
-        { "com_sun_star_comp_Draw_DrawingModule_get_implementation", com_sun_star_comp_Draw_DrawingModule_get_implementation },
         { "sd_PresentationDocument_get_implementation", sd_PresentationDocument_get_implementation },
-        { "com_sun_star_comp_Draw_PresenterHelper_get_implementation", com_sun_star_comp_Draw_PresenterHelper_get_implementation },
-        { "com_sun_star_comp_Draw_PresenterPreviewCache_get_implementation", com_sun_star_comp_Draw_PresenterPreviewCache_get_implementation },
-        { "com_sun_star_comp_Draw_PresenterTextView_get_implementation", com_sun_star_comp_Draw_PresenterTextView_get_implementation },
-        { "com_sun_star_comp_Draw_SlideRenderer_get_implementation", com_sun_star_comp_Draw_SlideRenderer_get_implementation },
-        { "com_sun_star_comp_Draw_SlideSorter_get_implementation", com_sun_star_comp_Draw_SlideSorter_get_implementation },
-        { "com_sun_star_comp_Draw_framework_configuration_Configuration_get_implementation", com_sun_star_comp_Draw_framework_configuration_Configuration_get_implementation },
-        { "com_sun_star_comp_draw_SdHtmlOptionsDialog_get_implementation", com_sun_star_comp_draw_SdHtmlOptionsDialog_get_implementation },
-        { "com_sun_star_comp_sd_InsertSlideController_get_implementation", com_sun_star_comp_sd_InsertSlideController_get_implementation },
-        { "com_sun_star_comp_sd_SlideLayoutController_get_implementation", com_sun_star_comp_sd_SlideLayoutController_get_implementation },
-        { "com_sun_star_comp_sd_DisplayModeController_get_implementation", com_sun_star_comp_sd_DisplayModeController_get_implementation },
         { 0, 0 }
     };
 
