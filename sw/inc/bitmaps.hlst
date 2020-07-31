@@ -23,9 +23,9 @@
 
 #define BMP_REDLINE_INSERTED                    "sw/res/redline_inserted.png"
 #define BMP_REDLINE_DELETED                     "sw/res/redline_deleted.png"
-#define BMP_REDLINE_FORMATTED                   "sw/res/redline_inserted.png"
-#define BMP_REDLINE_TABLECHG                    "sw/res/redline_inserted.png"
-#define BMP_REDLINE_FMTCOLLSET                  "sw/res/redline_inserted.png"
+#define BMP_REDLINE_FORMATTED                   "sw/res/redline_formatted.png"
+#define BMP_REDLINE_TABLECHG                    "sw/res/redline_tablechg.png"
+#define BMP_REDLINE_FMTCOLLSET                  "sw/res/redline_fmtcollset.png"
 
 #define RID_BMP_COLLAPSE                        "res/sx18002.png"
 #define RID_BMP_EXPAND                          "res/sx18003.png"
