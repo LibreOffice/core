@@ -65,10 +65,28 @@ ContextHandlerRef PPTShapeContext::onCreateContext( sal_Int32 aElementToken, con
         }
         case PPT_TOKEN( ph ):
         {
+            SlidePersistPtr pMasterPersist( mpSlidePersistPtr->getMasterPersist() );
+            OptValue< sal_Int32 > oSubType( rAttribs.getToken( XML_type) );
             sal_Int32 nSubType( rAttribs.getToken( XML_type, XML_obj ) );
+            sal_Int32 nSubTypeIndex;
+            oox::drawingml::ShapePtr pTmpPlaceholder;
+
             mpShapePtr->setSubType( nSubType );
+
             if( rAttribs.hasAttribute( XML_idx ) )
-                mpShapePtr->setSubTypeIndex( rAttribs.getString( XML_idx ).get().toInt32() );
+            {
+                nSubTypeIndex = rAttribs.getString( XML_idx ).get().toInt32();
+                mpShapePtr->setSubTypeIndex( nSubTypeIndex );
+
+                if(!oSubType.has() && pMasterPersist)
+                {
+                    pTmpPlaceholder = PPTShape::findPlaceholderByIndex( nSubTypeIndex, pMasterPersist->getShapes()->getChildren() );
+
+                    if(pTmpPlaceholder)
+                        nSubType = pTmpPlaceholder->getSubType(); // When we don't have type attribute on slide but have on slidelayout we have to use it instead of default type
+                }
+            }
+
             if ( nSubType )
             {
                 PPTShape* pPPTShapePtr = dynamic_cast< PPTShape* >( mpShapePtr.get() );
@@ -125,7 +143,6 @@ ContextHandlerRef PPTShapeContext::onCreateContext( sal_Int32 aElementToken, con
                               }
                               else if ( eShapeLocation == Slide )   // normal slide shapes have to search within the corresponding master tree for referenced objects
                               {
-                                  SlidePersistPtr pMasterPersist( mpSlidePersistPtr->getMasterPersist() );
                                   if ( pMasterPersist )
                                   {
                                       pPlaceholder = PPTShape::findPlaceholder( nFirstPlaceholder, nSecondPlaceholder,
