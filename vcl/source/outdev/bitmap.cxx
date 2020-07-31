@@ -1215,13 +1215,13 @@ void OutputDevice::DrawTransformedBitmapEx(
 
     const bool bMetafile(nullptr != mpMetaFile);
     /*
-       tdf#135325 typically in these OutputDevice methods the in
-       record-to-metafile case MetaFile is already written to before the test
-       against mbOutputClipped to determine that output to the current device
-       would result in no visual output. In this case the metafile is written
-       after the test, so we must continue past mbOutputClipped if recording to
-       a metafile. It's typical to record with a device of nominal size and
-       play back later against something of a totally different size.
+       tdf#135325 typically in these OutputDevice methods, for the in
+       record-to-metafile case the  MetaFile is already written to before the
+       test against mbOutputClipped to determine that output to the current
+       device would result in no visual output. In this case the metafile is
+       written after the test, so we must continue past mbOutputClipped if
+       recording to a metafile. It's typical to record with a device of nominal
+       size and play back later against something of a totally different size.
      */
     if (mbOutputClipped && !bMetafile)
         return;
