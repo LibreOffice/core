@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkListStore" id="liststore1">
@@ -78,6 +78,11 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="userinterface-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|userinterface">Select the language used for the user interface, for example menus, dialogs, help files. You must have installed at least one additional language pack or a multi-language version of %PRODUCTNAME.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -146,6 +151,11 @@
                         <attribute name="pixbuf">2</attribute>
                       </attributes>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="westernlanguage-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|westernlanguage">Specifies the language used for the spellcheck function in western alphabets.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -172,6 +182,11 @@
                       <attributes>
                         <attribute name="pixbuf">2</attribute>
                       </attributes>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="asianlanguage-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|asianlanguage">Specifies the language used for the spellcheck function in Asian alphabets.</property>
+                      </object>
                     </child>
                   </object>
                   <packing>
@@ -200,6 +215,11 @@
                         <attribute name="pixbuf">2</attribute>
                       </attributes>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="complexlanguage-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|complexlanguage">Specifies the language for the complex text layout spellcheck.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -216,6 +236,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="currentdoc-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|currentdoc">Specifies that the settings for default languages are valid only for the current document.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -231,6 +256,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="ctlsupport-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|ctlsupport">Activates complex text layout support. You can now modify the settings corresponding to complex text layout in %PRODUCTNAME.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -246,6 +276,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="asiansupport-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|asiansupport">Activates Asian languages support. You can now modify the corresponding Asian language settings in %PRODUCTNAME.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -315,6 +350,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="ignorelanguagechange-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|ignorelanguagechange">Indicates whether changes to the system input language/keyboard will be ignored. If ignored, when new text is typed that text will follow the language of the document or current paragraph, not the current system language.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -424,6 +464,11 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="localesetting-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|localesetting">Specifies the locale setting of the country setting. This influences settings for numbering, currency and units of measure.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -436,6 +481,11 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="currencylb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|currencylb">Specifies the default currency that is used for the currency format and the currency fields.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -449,6 +499,11 @@
                     <property name="halign">start</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="datepatterns-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|datepatterns">Specifies the date acceptance patterns for the current locale. Calc spreadsheet and Writer table cell input needs to match locale dependent date acceptance patterns before it is recognized as a valid date.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -464,6 +519,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="decimalseparator-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|decimalseparator">Specifies to use the decimal separator key that is set in your system when you press the respective key on the number pad.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -489,6 +549,11 @@
         <property name="left_attach">0</property>
         <property name="top_attach">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="OptLanguagesPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptLanguagesPage">Defines the default languages and some other locale settings for documents.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

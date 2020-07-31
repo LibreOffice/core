@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -43,6 +43,11 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="input_purpose">name</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="displayname-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|displayname">Enter your name.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -55,6 +60,11 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="input_purpose">email</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="address-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|address">Enter your email address for replies.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -67,6 +77,11 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="input_purpose">email</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="replyto-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|replyto">Enter the address to use for email replies.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -110,6 +125,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="replytocb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|replytocb">Uses the email address that you enter in the Reply address text box as the reply-to email address.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -180,6 +200,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="server-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|server">Enter the SMTP server name.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -203,6 +228,11 @@
                         <property name="receives_default">True</property>
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="serverauthentication-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|serverauthentication">Opens the Server Authentication dialog where you can specify the server authentication settings for secure email.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -221,6 +251,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">adjustment1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="port-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|port">Enter the SMTP port.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -266,6 +301,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="secure-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|secure">When available, uses a secure connection to send emails.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -287,6 +327,11 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="test-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|test">Opens the Test Account Settings dialog to test the current settings.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -326,6 +371,11 @@
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="MailConfigPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|MailConfigPage">Specifies the user information and server settings for when you send form letters as email messages.</property>
+      </object>
     </child>
   </object>
 </interface>

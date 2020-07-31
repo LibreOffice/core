@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkBox" id="OptCTLPage">
@@ -35,6 +35,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="sequencechecking-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|sequencechecking">Enables sequence input checking for languages such as Thai.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -60,6 +65,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="restricted-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|restricted">Prevents the use as well as the printing of illegal character combinations.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -150,6 +160,11 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="movementlogical-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|movementlogical">Pressing the Right Arrow key moves the text cursor toward the end of the current text. Pressing the Left Arrow key moves the text cursor toward the beginning of the current text.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -166,6 +181,11 @@
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">movementlogical</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="movementvisual-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|movementvisual">Pressing the Right Arrow key moves the text cursor in the right-hand direction. Pressing the Left Arrow key moves the text cursor in the left-hand direction.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -237,6 +257,11 @@
                       <item translatable="yes" context="optctlpage|numerals">System</item>
                       <item translatable="yes" context="optctlpage|numerals">Context</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="numerals-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|numerals">Selects the type of numerals used within text, text in objects, fields, and controls, in all %PRODUCTNAME modules. Only cell contents of %PRODUCTNAME Calc are not affected.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -263,6 +288,11 @@
         <property name="fill">True</property>
         <property name="position">2</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="OptCTLPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptCTLPage">Defines the options for documents with complex text layouts.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

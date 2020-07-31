@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -42,6 +42,11 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="printer-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|printer">Specifies whether the print settings apply to direct printing or to printing to a file.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -58,6 +63,11 @@
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">printer</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="file-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|file">Specifies whether the print settings apply to direct printing or to printing to a file.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -112,6 +122,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="papersize-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|papersize">Mark this check box if a certain paper size is needed for printing the current document.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -127,6 +142,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="paperorient-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|paperorient">Mark this check box if you need a certain paper orientation for printing the current document.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -142,6 +162,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="trans-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|trans">Mark this check box if you always want to be warned if transparent objects are contained in the document.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -194,6 +219,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="reducegrad-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|reducegrad">If this field is marked, gradients are printed with reduced quality.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -225,6 +255,11 @@
                                 <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="reducegradstripes-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|reducegradstripes">Specifies the maximum number of gradient stripes for printing.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -237,6 +272,11 @@
                                 <property name="can_focus">True</property>
                                 <property name="activates_default">True</property>
                                 <property name="adjustment">adjustment1</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="reducegradstep-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|reducegradstep">Specifies the maximum number of gradient stripes for printing.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -259,6 +299,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">reducegradstripes</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="reducegradcolor-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|reducegradcolor">Specifies that gradients are only printed in a single intermediate color.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -285,6 +330,11 @@
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
+          </object>
+        </child>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="frame2-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|frame2">Defines which warnings appear before printing begins.</property>
           </object>
         </child>
       </object>
@@ -330,6 +380,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">reducebitmapoptimal</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="reducebitmapnormal-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|reducebitmapnormal">High print quality corresponds to a resolution of 300dpi. Normal print quality corresponds to a resolution of 200dpi. </property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -351,6 +406,11 @@
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">reducebitmapoptimal</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="reducebitmapresol-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|reducebitmapresol">Specifies the maximum print quality in dpi. The resolution can only be reduced and not increased.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -369,6 +429,11 @@
                                   <item translatable="yes" context="optprintpage|reducebitmapdpi">300 DPI</item>
                                   <item translatable="yes" context="optprintpage|reducebitmapdpi">600 DPI</item>
                                 </items>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="reducebitmapdpi-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|reducebitmapdpi">Specifies the maximum print quality in dpi. The resolution can only be reduced and not increased.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -391,6 +456,11 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="reducebitmapoptimal-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|reducebitmapoptimal">High print quality corresponds to a resolution of 300dpi. Normal print quality corresponds to a resolution of 200dpi. </property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -414,6 +484,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="reducebitmap-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|reducebitmap">Specifies that bitmaps are printed with reduced quality. The resolution can only be reduced and not increased.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -477,6 +552,11 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="reducetransauto-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|reducetransauto">Specifies that the transparency is only printed if the transparent area covers less than a quarter of the entire page.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -493,6 +573,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">reducetransauto</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="reducetransnone-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|reducetransnone">With this option transparency is never printed.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -516,6 +601,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="reducetrans-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|reducetrans">If you mark this field the transparent objects will be printed like normal, non-transparent objects, depending on your selection in the following two option buttons.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -583,6 +673,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="converttogray-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|converttogray">Specifies that all colors are printed only as grayscale.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -598,6 +693,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="reducebitmaptrans-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|reducebitmaptrans">If this field is marked, the reduction in print quality for bitmaps also applies to the transparent areas of objects.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -631,6 +731,11 @@
     </child>
     <child>
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="OptPrintPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptPrintPage">Specifies the print setting options.</property>
+      </object>
     </child>
   </object>
 </interface>

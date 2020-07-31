@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkFrame" id="SdViewPage">
@@ -30,6 +30,11 @@
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="ruler-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|ruler">Specifies whether to display the rulers at the top and to the left of the work area.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -46,6 +51,11 @@
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="dragstripes-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|dragstripes">Specifies whether to display guides when moving an object.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -62,6 +72,11 @@
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="handlesbezier-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|handlesbezier">Displays the control points of all Bézier points if you have previously selected a Bézier curve. If the All control points in Bézier editor option is not marked, only the control points of the selected Bézier points will be visible.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -78,6 +93,11 @@
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="moveoutline-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|moveoutline">%PRODUCTNAME displays the contour line of each individual object when moving this object.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -97,6 +117,11 @@
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>
+      </object>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="SdViewPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|SdViewPage">Specifies the available display modes.</property>
       </object>
     </child>
   </object>

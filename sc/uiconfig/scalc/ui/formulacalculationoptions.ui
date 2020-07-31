@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="FormulaCalculationOptions">
@@ -207,12 +207,17 @@
       </object>
     </child>
     <action-widgets>
+      <action-widget response="-11">help</action-widget>
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-6">cancel</action-widget>
-      <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="FormulaCalculationOptions-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|FormulaCalculationOptions">Sets the rules for conversion from strings values to numeric values, string values to cell references, and strings values to date and time values. This affects built-in functions such as INDIRECT that takes a reference as a string value or date and time functions that takes arguments as string values in local or ISO 8601 formats.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">0.5</property>
-    <property name="upper">99.989999999999995</property>
+    <property name="upper">99.99</property>
     <property name="value">1.25</property>
-    <property name="step_increment">0.10000000000000001</property>
-    <property name="page_increment">0.10000000000000001</property>
+    <property name="step_increment">0.1</property>
+    <property name="page_increment">0.1</property>
   </object>
   <object class="GtkBox" id="ScGeneralPage">
     <property name="visible">True</property>
@@ -67,6 +67,11 @@
                     <property name="can_focus">True</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="tabmf-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|tabmf">Defines the tab stops distance.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -77,6 +82,11 @@
                   <object class="GtkComboBoxText" id="unitlb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="unitlb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|unitlb">Defines the unit of measure in spreadsheets.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -224,6 +234,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="editmodecb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|editmodecb">Allows you to immediately edit the selected cell after pressing the Enter key.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -240,6 +255,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="formatcb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|formatcb">Specifies whether to automatically apply the formatting attributes of the selected cell to the empty adjacent cells.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -256,6 +276,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="exprefcb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|exprefcb">Specifies whether to expand references when inserting columns or rows adjacent to the reference range. This is only possible if the reference range, where the column or row is inserted, originally spanned at least two cells in the desired direction.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -275,6 +300,11 @@
                       <item translatable="yes" context="scgeneralpage|alignlb">Up</item>
                       <item translatable="yes" context="scgeneralpage|alignlb">Left</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="alignlb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|alignlb">Determines the direction that the cursor in the spreadsheet will move after you press the Enter key.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -305,6 +335,16 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="legacy_cell_selection_cb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|legacy_cell_selection_cb">With the option set, expanding a selection (with Command
+  Ctrl  +Shift+Down/Up) jumps to the end of the range in the column that was added as last to the initial selection.
+ When the option is not set, expanding a selection (with CommandCtrl+Shift
+  +Down/Up) jumps to the end of the range in the column where selecting the cell range was started.
+ The same of course applies when extending a selection on rows, with CommandCtrl+
+  Shift+Left/Right.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -321,6 +361,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="replwarncb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|replwarncb">Specifies that, when you paste cells from the clipboard to a cell range that is not empty, a warning appears.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -336,6 +381,11 @@
                     <property name="receives_default">False</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="textfmtcb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|textfmtcb">Specifies that printer metrics are applied for printing and also for formatting the display on the screen.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -352,6 +402,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="markhdrcb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|markhdrcb">Specifies whether to highlight column and row headers in the selected columns or rows.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
