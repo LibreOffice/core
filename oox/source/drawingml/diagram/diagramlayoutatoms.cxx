@@ -905,7 +905,7 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
             const sal_Int32 nIncX = nDir==XML_fromL ? 1 : (nDir==XML_fromR ? -1 : 0);
             const sal_Int32 nIncY = nDir==XML_fromT ? 1 : (nDir==XML_fromB ? -1 : 0);
 
-            sal_Int32 nCount = rShape->getChildren().size();
+            double fCount = rShape->getChildren().size();
             sal_Int32 nConnectorAngle = 0;
             switch (nDir)
             {
@@ -952,17 +952,49 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
             if (!aChildrenToShrink.empty())
             {
                 // Have scaling info from rules: then only count scaled children.
+                // Also count children which are a fraction of a scaled child.
+                std::set<OUString> aChildrenToShrinkDeps;
                 for (auto& aCurrShape : rShape->getChildren())
                 {
                     if (aChildrenToShrink.find(aCurrShape->getInternalName())
                         == aChildrenToShrink.end())
                     {
-                        if (nCount > 1)
+                        if (fCount > 1.0)
                         {
-                            --nCount;
+                            fCount -= 1.0;
+
+                            for (const auto& rConstraint : rConstraints)
+                            {
+                                if (rConstraint.msForName != aCurrShape->getInternalName())
+                                {
+                                    continue;
+                                }
+
+                                if (aChildrenToShrink.find(rConstraint.msRefForName) == aChildrenToShrink.end())
+                                {
+                                    continue;
+                                }
+
+                                if ((nDir == XML_fromL || nDir == XML_fromR) && rConstraint.mnType != XML_w)
+                                {
+                                    continue;
+                                }
+                                if ((nDir == XML_fromT || nDir == XML_fromB) && rConstraint.mnType != XML_h)
+                                {
+                                    continue;
+                                }
+
+                                // At this point we have a child with a size which is a factor of an
+                                // other child which will be scaled.
+                                fCount += rConstraint.mfFactor;
+                                aChildrenToShrinkDeps.insert(aCurrShape->getInternalName());
+                                break;
+                            }
                         }
                     }
                 }
+
+                aChildrenToShrink.insert(aChildrenToShrinkDeps.begin(), aChildrenToShrinkDeps.end());
 
                 // No manual spacing: spacings are children as well.
                 aSpaceSize = awt::Size();
@@ -978,13 +1010,13 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                                               && aChild->getChildren().empty();
                                    }),
                     rShape->getChildren().end());
-                nCount = rShape->getChildren().size();
+                fCount = rShape->getChildren().size();
             }
             awt::Size aChildSize = rShape->getSize();
             if (nDir == XML_fromL || nDir == XML_fromR)
-                aChildSize.Width /= nCount;
+                aChildSize.Width /= fCount;
             else if (nDir == XML_fromT || nDir == XML_fromB)
-                aChildSize.Height /= nCount;
+                aChildSize.Height /= fCount;
 
             awt::Point aCurrPos(0, 0);
             if (nIncX == -1)
@@ -1008,8 +1040,8 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                 aTotalSize.Height += aSize.Height;
             }
 
-            aTotalSize.Width += (nCount-1) * aSpaceSize.Width;
-            aTotalSize.Height += (nCount-1) * aSpaceSize.Height;
+            aTotalSize.Width += (fCount-1) * aSpaceSize.Width;
+            aTotalSize.Height += (fCount-1) * aSpaceSize.Height;
 
             double fWidthScale = 1.0;
             double fHeightScale = 1.0;
