@@ -1550,6 +1550,10 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                 pPageMaker->CheckInsert( nIndex );
 
             pFrame->InsertBehind( pLay, pPrv );
+            if (pPage) // would null in SwCellFrame ctor
+            {   // tdf#134931 call ResetTurbo(); not sure if Paste() would be
+                pFrame->InvalidatePage(pPage); // better than InsertBehind()?
+            }
             // #i27138#
             // notify accessibility paragraphs objects about changed
             // CONTENT_FLOWS_FROM/_TO relation.
