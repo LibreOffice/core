@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkBox" id="OptFormatAidsPage">
@@ -40,6 +40,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="paragraph-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|paragraph">Specifies whether paragraph delimiters are displayed. The paragraph delimiters also contain paragraph format information.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -55,6 +60,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="hyphens-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|hyphens">Specifies whether soft hyphens (called also as optional or discretionary hyphens) are displayed. These are hidden user-defined delimiters that you enter within a word by pressing Ctrl+Hyphen(-). Words with soft hyphens are only separated at the end of a line at the point where a soft hyphen has been inserted, irrespective of whether the automatic hyphenation is activated or deactivated.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -70,6 +80,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="spaces-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|spaces">Specifies whether to represent every space in the text with a dot.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -85,6 +100,12 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="nonbreak-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|nonbreak">Specifies that non-breaking spaces are shown as gray boxes. Non-breaking spaces are not broken at the end of a line and are entered with the Command+Shift+Spacebar
+Ctrl+Shift+Spacebar shortcut keys.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -100,6 +121,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="tabs-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|tabs">Specifies that tab stops are displayed as small arrows.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -115,6 +141,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="break-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|break">Displays all line breaks inserted with the Shift+Enter shortcut. These breaks create a new line, but do not start a new paragraph.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -130,6 +161,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="hiddentext-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|hiddentext">Displays text that uses the character format "hidden", when View - Formatting Marks is enabled.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -210,9 +246,9 @@
                       <object class="GtkLabel" id="bookmarks_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label">| [ ]</property>
                         <property name="tooltip_text" translatable="yes" context="optformataidspage|bookmarks_label|tooltip_text">| indicates a point bookmark
 [ ] indicate the start and end of a bookmark on a text range</property>
+                        <property name="label">| [ ]</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -323,6 +359,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cursoronoff-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|cursoronoff">Activates the direct cursor.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -421,6 +462,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cursorinprot-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|cursorinprot">Specifies that you can set the cursor in a protected area, but cannot make any changes.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -453,6 +499,11 @@
         <property name="fill">True</property>
         <property name="position">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="OptFormatAidsPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptFormatAidsPage">In %PRODUCTNAME text and HTML documents, defines the display for certain characters and for the direct cursor.</property>
+      </object>
     </child>
   </object>
 </interface>

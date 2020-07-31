@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">0.25</property>
-    <property name="upper">9.9900000000000002</property>
-    <property name="step_increment">0.10000000000000001</property>
+    <property name="upper">9.99</property>
+    <property name="step_increment">0.1</property>
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment2">
     <property name="lower">0.25</property>
-    <property name="upper">9.9900000000000002</property>
-    <property name="step_increment">0.10000000000000001</property>
+    <property name="upper">9.99</property>
+    <property name="step_increment">0.1</property>
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment3">
     <property name="lower">0.25</property>
-    <property name="upper">9.9900000000000002</property>
-    <property name="step_increment">0.10000000000000001</property>
+    <property name="upper">9.99</property>
+    <property name="step_increment">0.1</property>
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment4">
     <property name="lower">0.25</property>
-    <property name="upper">9.9900000000000002</property>
-    <property name="step_increment">0.10000000000000001</property>
+    <property name="upper">9.99</property>
+    <property name="step_increment">0.1</property>
     <property name="page_increment">10</property>
   </object>
   <object class="GtkBox" id="OptTablePage">
@@ -68,6 +68,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="header-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|header">Specifies that the first row of the table is formatted with the "Table heading" Paragraph Style.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -84,6 +89,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="repeatheader-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|repeatheader">Specifies whether the table heading is carried over onto the new page after a page break.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -99,6 +109,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="dontsplit-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|dontsplit">Specifies that tables are not split by any type of text flow break.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -114,6 +129,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="border-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|border">Specifies that table cells have a border by default.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -171,6 +191,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="numformatting-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|numformatting">Specifies that numbers in a text table are recognized and formatted as numbers.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -187,6 +212,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="numfmtformatting-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|numfmtformatting">If Number format recognition is not marked, only input in the format that has been set at the cell is accepted. Any other input resets the format to Text.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -203,6 +233,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="numalignment-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|numalignment">Specifies that numbers are always bottom right aligned in the cell.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -290,6 +325,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="fix-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|fix">Specifies that changes to a row or column only affect the corresponding adjacent area.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -308,6 +348,11 @@
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">fix</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="fixprop-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|fixprop">Specifies that changes to a row or column have an effect on the entire table.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -326,6 +371,11 @@
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">fix</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="var-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|var">Specifies that changes to a row or column affect the table size.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -423,6 +473,11 @@
                             <property name="halign">start</property>
                             <property name="adjustment">adjustment1</property>
                             <property name="digits">2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="rowmove-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|rowmove">Specifies the value to be used for moving a row.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -436,6 +491,11 @@
                             <property name="halign">start</property>
                             <property name="adjustment">adjustment2</property>
                             <property name="digits">2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="colmove-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|colmove">Specifies the value to be used for moving a column.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -495,6 +555,11 @@
                             <property name="halign">start</property>
                             <property name="adjustment">adjustment3</property>
                             <property name="digits">2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="rowinsert-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|rowinsert">Specifies the default value for inserting rows.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -508,6 +573,11 @@
                             <property name="halign">start</property>
                             <property name="adjustment">adjustment4</property>
                             <property name="digits">2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="colinsert-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|colinsert">Specifies the default value for inserting columns.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -590,6 +660,11 @@
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="OptTablePage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptTablePage">Defines the attributes of tables in text documents.</property>
+      </object>
     </child>
   </object>
 </interface>

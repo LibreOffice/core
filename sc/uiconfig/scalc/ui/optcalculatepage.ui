@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -105,6 +105,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="case-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|case">Specifies whether to distinguish between upper and lower case in texts when comparing cell contents.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -120,6 +125,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="calc-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|calc">Specifies whether to make calculations using the rounded values displayed in the sheet. Charts will be shown with the displayed values. If the Precision as shown option is not marked, the displayed numbers are rounded, but they are calculated internally using the non-rounded number.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -136,6 +146,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="match-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|match">Specifies that the search criteria you set for the Calc database functions must match the whole cell exactly. When both, the Search criteria = and &lt;&gt; must apply to whole cells box and the Enable wildcards in formulas box are marked, %PRODUCTNAME Calc behaves exactly as Microsoft Excel when searching cells in the database functions.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -151,6 +166,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="lookup-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|lookup">Specifies that you can use the text in any cell as a label for the column below the text or the row to the right of the text. The text must consist of at least one word and must not contain any operators.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -166,6 +186,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="generalprec-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|generalprec">You can specify the maximum number of decimal places that are shown by default for cells with General number format. If not enabled, cells with General number format show as many decimal places as the column width allows.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -202,6 +227,11 @@
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="prec-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|prec">Defines the number of decimals to be displayed for numbers with the General number format. The numbers are displayed as rounded numbers, but are not saved as rounded numbers.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -265,6 +295,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="iterate-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|iterate">Specifies whether formulas with iterative references (formulas that are continuously repeated until the problem is solved) are calculated after a specific number of repetitions.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -317,6 +352,11 @@
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment1</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="steps-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|steps">Sets the maximum number of iteration steps.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -329,6 +369,11 @@
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
                             <property name="width_chars">12</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="minchange-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|minchange">Specifies the difference between two consecutive iteration step results. If the result of the iteration is lower than the minimum change value, then the iteration will stop.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -392,6 +437,11 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="datestd-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|datestd">Sets 12/30/1899 as day zero.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -409,6 +459,11 @@
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">datestd</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="datesc10-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|datesc10">Sets 1/1/1900 as day zero. Use this setting for StarCalc 1.0 spreadsheets containing date entries.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -426,6 +481,11 @@
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">datestd</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="date1904-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|date1904">Sets 1/1/1904 as day zero. Use this setting for spreadsheets that are imported in a foreign format.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -479,6 +539,11 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="formulawildcards-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|formulawildcards">Specifies that wildcards are enabled when searching and also for character string comparisons.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -495,6 +560,11 @@
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">formulawildcards</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="formularegex-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|formularegex">Specifies that regular expressions instead of simple wildcards are enabled when searching and also for character string comparisons.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -511,6 +581,11 @@
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">formulawildcards</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="formulaliteral-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|formulaliteral">Specifies that only literal strings are used when searching and also for character string comparisons.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>

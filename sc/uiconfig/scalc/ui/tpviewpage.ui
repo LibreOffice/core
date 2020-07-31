@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkBox" id="TpViewPage">
@@ -37,6 +37,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="formula-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|formula">Specifies whether to show formulas instead of results in the cells.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -52,6 +57,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="nil-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|nil">Specifies whether to show numbers with the value of 0.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -67,6 +77,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="annot-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|annot">Specifies that a small rectangle in the top right corner of the cell indicates that a comment exists. The comment will be shown only when you enable tips under %PRODUCTNAME - General in the Options dialog box.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -82,6 +97,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="value-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|value">Mark the Value highlighting box to show the cell contents in different colors, depending on type. Text cells are formatted in black, formulas in green, number cells in blue, and protected cells are shown with light grey background, no matter how their display is formatted.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -97,6 +117,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="anchor-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|anchor">Specifies whether the anchor icon is displayed when an inserted object, such as a graphic, is selected.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -112,6 +137,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="clipmark-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|clipmark">If a cell contains text that is wider than the width of the cell, the text is displayed over empty neighboring cells in the same row. If there is no empty neighboring cell, a small triangle at the cell border indicates that the text continues.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -127,6 +157,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="rangefind-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|rangefind">Specifies that each reference is highlighted in color in the formula. The cell range is also enclosed by a colored border as soon as the cell containing the reference is selected for editing.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -178,6 +213,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="rowcolheader-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|rowcolheader">Specifies whether to display row and column headers.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -193,6 +233,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="hscroll-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|hscroll">Specifies whether to display a horizontal scrollbar at the bottom of the document window.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -208,6 +253,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="vscroll-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|vscroll">Specifies whether to display a vertical scrollbar at the right of the document window.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -223,6 +273,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="tblreg-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|tblreg">Specifies whether to display the sheet tabs at the bottom of the spreadsheet document.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -238,6 +293,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="outline-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|outline">If you have defined an outline, the Outline symbols option specifies whether to view the outline symbols at the border of the sheet.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -301,6 +361,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="synczoom-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|synczoom">If checked, all sheets are shown with the same zoom factor. If not checked, each sheet can have its own zoom factor.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -351,9 +416,13 @@
                             <property name="receives_default">False</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
-                            <property name="label" translatable="no"></property>
                             <child>
                               <placeholder/>
+                            </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="color-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|color">Specifies a color for the grid lines in the current document.</property>
+                              </object>
                             </child>
                           </object>
                           <packing>
@@ -398,6 +467,11 @@
                               <item translatable="yes" context="tpviewpage|grid">Show on colored cells</item>
                               <item translatable="yes" context="tpviewpage|grid">Hide</item>
                             </items>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="grid-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|grid">Specifies when grid lines will be displayed. Default is to display grid lines only on cells that do not have a background color. You can choose to also display grid lines on cells with background color, or to hide them.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -419,6 +493,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="break-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|break">Specifies whether to view the page breaks within a defined print area.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -434,6 +513,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="guideline-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|guideline">Specifies whether to view guides when moving drawings, frames, graphics and other objects.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -528,6 +612,11 @@
                           <item translatable="yes" context="tpviewpage|objgrf">Show</item>
                           <item translatable="yes" context="tpviewpage|objgrf">Hide</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="objgrf-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|objgrf">Defines if objects and graphics are shown or hidden.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -542,6 +631,11 @@
                           <item translatable="yes" context="tpviewpage|diagram">Show</item>
                           <item translatable="yes" context="tpviewpage|diagram">Hide</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="diagram-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|diagram">Defines if charts in your document are shown or hidden.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -556,6 +650,11 @@
                           <item translatable="yes" context="tpviewpage|draw">Show</item>
                           <item translatable="yes" context="tpviewpage|draw">Hide</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="draw-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|draw">Defines if drawing objects in your document are shown or hidden.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -591,6 +690,11 @@
         <property name="fill">True</property>
         <property name="position">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="TpViewPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|TpViewPage">Defines which elements of the %PRODUCTNAME Calc main window are displayed. You can also show or hide highlighting of values in tables.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroupLabel">

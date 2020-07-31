@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore3">
@@ -125,6 +125,11 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="new-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|new">Opens the Database Link dialog to create a new entry.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -139,6 +144,11 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="delete-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|delete">Removes the selected entry from the list.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -153,6 +163,11 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="edit-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|edit">Opens the Database Link dialog to edit the selected entry.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>

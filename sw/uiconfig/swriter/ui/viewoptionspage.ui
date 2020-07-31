@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkBox" id="ViewOptionsPage">
@@ -48,6 +48,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="helplines-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|helplines">Displays snap lines around the frames when frames are moved. You can select the Helplines While Moving option to show the exact position of the object using lineal values.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -101,6 +106,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="graphics-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|graphics">Specifies whether to display images and objects on the screen.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -116,6 +126,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="tables-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|tables">Displays the tables contained in your document.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -131,6 +146,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="drawings-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|drawings">Displays the drawings and controls contained in your document.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -146,6 +166,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="comments-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|comments">Displays comments. Click a comment to edit the text. Use the context menu in Navigator to locate or delete a comment. Use the comments's context menu to delete this comment or all comments or all comments of this author.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -245,6 +270,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="hiddentextfield-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|hiddentextfield">Displays text that is hidden by Conditional Text or Hidden Text fields.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -260,6 +290,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="hiddenparafield-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|hiddenparafield">If you have inserted text using the Hidden Paragraph field, specifies whether to display the hidden paragraph.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -326,6 +361,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="smoothscroll-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|smoothscroll">Activates the smooth page scrolling function. </property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -348,6 +388,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="vruler-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|vruler">Displays the vertical ruler. Select the desired measurement unit from the corresponding list.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -359,6 +404,11 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="hexpand">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="hrulercombobox-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|hrulercombobox">Displays the horizontal ruler. Select the desired measurement unit from the corresponding list.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -370,6 +420,11 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="hexpand">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="vrulercombobox-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|vrulercombobox">Displays the vertical ruler. Select the desired measurement unit from the corresponding list.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -386,6 +441,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="vrulerright-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|vrulerright">Aligns the vertical ruler with the right border.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -401,6 +461,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">hrulercombobox</property>
                                 <property name="ellipsize">end</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="hruler-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|hruler">Displays the horizontal ruler. Select the desired measurement unit from the corresponding list.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -456,6 +521,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="measureunit-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|measureunit">Specifies the Unit for HTML documents.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -506,6 +576,11 @@
         <property name="fill">True</property>
         <property name="position">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="ViewOptionsPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|ViewOptionsPage">Defines the default settings for displaying objects in your text documents and also the default settings for the window elements.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

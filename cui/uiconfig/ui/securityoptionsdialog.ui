@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="SecurityOptionsDialog">
@@ -112,6 +112,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="savesenddocs-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|savesenddocs">Select to see a warning dialog when you try to save or send a document that contains recorded changes, versions, or comments.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -127,6 +132,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="whensigning-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|whensigning">Select to see a warning dialog when you try to sign a document that contains recorded changes, versions, fields, references to other sources (for example linked sections or linked pictures), or comments.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">3</property>
@@ -142,6 +152,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="whenprinting-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|whenprinting">Select to see a warning dialog when you try to print a document that contains recorded changes or comments.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -157,6 +172,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="whenpdf-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|whenpdf">Select to see a warning dialog when you try to export a document to PDF format that displays recorded changes in Writer, or that displays comments.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">3</property>
@@ -284,6 +304,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="removepersonal-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|removepersonal">Select to always remove user data from the file properties. If this option is not selected, you can still remove the personal information for the current document with the Reset Properties button on File - Properties - General.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -300,6 +325,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="password-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|password">Select to always enable the Save with password option in the file save dialogs. Deselect the option to save files by default without password.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -316,6 +346,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="ctrlclick-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|ctrlclick">If enabled, you must hold down the Ctrl key while clicking a hyperlink to follow that link. If not enabled, a click opens the hyperlink.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -332,6 +367,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="blockuntrusted-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|blockuntrusted">Blocks the use of linked images by documents not in the trusted locations defined on the Trusted Sources tab of the Macro Security dialog.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -422,8 +462,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="SecurityOptionsDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|SecurityOptionsDialog">Set security related options and warnings about hidden information in documents.</property>
+      </object>
     </child>
   </object>
 </interface>

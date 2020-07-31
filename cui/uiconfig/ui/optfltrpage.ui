@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkBox" id="OptFltrPage">
@@ -33,12 +34,15 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="wo_basic-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|wo_basic">Loads and saves the Basic code from a Microsoft document as a special %PRODUCTNAME Basic module with the document. The disabled Microsoft Basic code is visible in the %PRODUCTNAME Basic IDE between Sub and End Sub.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -51,12 +55,15 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="wo_exec-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|wo_exec">The VBA (Visual Basic for Applications) code will be loaded ready to be executed. If this checkbox is not checked, the VBA code will be commented out so it can be inspected, but will not run.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -68,12 +75,15 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="wo_saveorig-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|wo_saveorig">Specifies that the original Microsoft Basic code contained in the document is held in a special internal memory for as long as the document remains loaded in %PRODUCTNAME. When saving the document in Microsoft format the Microsoft Basic is saved again with the code in an unchanged form.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>
@@ -123,12 +133,15 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="ex_basic-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|ex_basic">Loads and saves the Basic code from a Microsoft document as a special %PRODUCTNAME Basic module with the document. The disabled Microsoft Basic code is visible in the %PRODUCTNAME Basic IDE between Sub and End Sub.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -141,12 +154,15 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="ex_exec-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|ex_exec">The VBA (Visual Basic for Applications) code will be loaded ready to be executed. If this checkbox is not checked, the VBA code will be commented out so it can be inspected, but will not run.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -158,12 +174,15 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="ex_saveorig-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|ex_saveorig">Specifies that the original Microsoft Basic code contained in the document is held in a special internal memory for as long as the document remains loaded in %PRODUCTNAME. When saving the document in Microsoft format the Microsoft Basic is saved again with the code in an unchanged form.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>
@@ -213,12 +232,15 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="pp_basic-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|pp_basic">Loads and saves the Basic code from a Microsoft document as a special %PRODUCTNAME Basic module with the document. The disabled Microsoft Basic code is visible in the %PRODUCTNAME Basic IDE between Sub and End Sub.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -230,12 +252,15 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="pp_saveorig-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|pp_saveorig">Specifies that the original Microsoft Basic code contained in the document is held in a special internal memory for as long as the document remains loaded in %PRODUCTNAME. When saving the document in Microsoft format the Microsoft Basic is saved again with the code in an unchanged form.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>
@@ -258,6 +283,11 @@
         <property name="fill">True</property>
         <property name="position">2</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="OptFltrPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptFltrPage">Specifies the general properties for loading and saving Microsoft Office documents with VBA (Visual Basic for Applications) code.</property>
+      </object>
     </child>
   </object>
 </interface>

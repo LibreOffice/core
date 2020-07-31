@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="xsc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkGrid" id="SecurityLevelPage">
@@ -25,6 +25,11 @@ Use this setting only if you are certain that all documents that will be opened 
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
         <property name="group">high</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="low-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|low">A macro can be set to auto-start, and it can perform potentially damaging actions, as for example delete or rename files. This setting is not recommended when you open documents from other authors.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -43,6 +48,11 @@ Confirmation required before executing macros from untrusted sources.</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
         <property name="group">high</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="med-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|med">Trusted sources can be set on the Trusted Sources tab page. Signed macros from a trusted source are allowed to run. In addition, any macro from a trusted file location is allowed to run. All other macros require your confirmation.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -62,6 +72,11 @@ Unsigned macros are disabled.</property>
         <property name="xalign">0</property>
         <property name="active">True</property>
         <property name="draw_indicator">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="high-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|high">Trusted sources can be set on the Trusted Sources tab page. Only signed macros from a trusted source are allowed to run. In addition, any macro from a trusted file location is allowed to run.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -81,6 +96,11 @@ All other macros, regardless whether signed or not, are disabled.</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
         <property name="group">high</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="vhigh-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|vhigh">Trusted file locations can be set on the Trusted Sources tab page. Any macro from a trusted file location is allowed to run.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
