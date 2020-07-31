@@ -520,7 +520,8 @@ IMPL_LINK( SvxMenuConfigPage, ContentContextMenuHdl, const CommandEvent&, rCEvt,
 
     // Select clicked entry
     std::unique_ptr<weld::TreeIter> xIter(rTreeView.make_iterator());
-    rTreeView.get_dest_row_at_pos( rCEvt.GetMousePosPixel(), xIter.get(), false );
+    if (! rTreeView.get_dest_row_at_pos( rCEvt.GetMousePosPixel(), xIter.get(), false ))
+        return false;
     rTreeView.select(*xIter);
     SelectMenuEntry( rTreeView );
 
@@ -563,7 +564,8 @@ IMPL_LINK( SvxMenuConfigPage, FunctionContextMenuHdl, const CommandEvent&, rCEvt
 
     // Select clicked entry
     std::unique_ptr<weld::TreeIter> xIter(rTreeView.make_iterator());
-    rTreeView.get_dest_row_at_pos( rCEvt.GetMousePosPixel(), xIter.get(), false );
+    if (! rTreeView.get_dest_row_at_pos( rCEvt.GetMousePosPixel(), xIter.get(), false ))
+        return false;
     rTreeView.select(*xIter);
     SelectFunctionHdl( rTreeView );
 
