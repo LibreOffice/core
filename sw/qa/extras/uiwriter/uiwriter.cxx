@@ -4473,6 +4473,41 @@ void SwUiWriterTest::testTdf88986()
     CPPUNIT_ASSERT(aSet.HasItem(SID_COLOR_TABLE));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf134931)
+{
+    load(DATA_DIRECTORY, "tdf134931.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
+
+    lcl_dispatchCommand(mxComponent, ".uno:GoDown", {});
+
+    for (sal_Int32 i = 0; i < 10; ++i)
+    {
+        lcl_dispatchCommand(mxComponent, ".uno:Paste", {});
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), xIndexAccess->getCount());
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 4
+    // - Actual  : 1
+    // Because the tables are pasted but not displayed
+
+    CPPUNIT_ASSERT_EQUAL(4, getPages());
+}
+
 void SwUiWriterTest::testTdf87922()
 {
     // Create an SwDrawTextInfo.
