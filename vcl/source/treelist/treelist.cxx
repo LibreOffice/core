@@ -787,15 +787,6 @@ SvTreeListEntry* SvTreeList::NextSelected( const SvListView* pView, SvTreeListEn
     return pEntry;
 }
 
-SvTreeListEntry* SvTreeList::LastSelected( const SvListView* pView ) const
-{
-    DBG_ASSERT(pView,"LastSel:No View");
-    SvTreeListEntry* pEntry = Last();
-    while( pEntry && !pView->IsSelected(pEntry) )
-        pEntry = Prev( pEntry );
-    return pEntry;
-}
-
 sal_uLong SvTreeList::Insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,sal_uLong nPos )
 {
     DBG_ASSERT( pEntry,"Entry?");
