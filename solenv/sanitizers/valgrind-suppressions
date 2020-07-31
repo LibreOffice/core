@@ -1,0 +1,39 @@
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+# Pass this file to valgrind with
+#    --suppressions=solenv/sanitizers/valgrind-suppressions
+#
+
+
+#
+# Ignore module-static data allocated when we dlopen() glib
+{
+   glib1
+   Memcheck:Leak
+   match-leak-kinds: possible
+   ...
+   fun:g_type_register_*
+   ...
+   fun:osl_loadModule
+   ...
+}
+{
+   glib2
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:calloc
+   fun:g_malloc0
+   obj:*libgobject*
+   ...
+   fun:call_init.part.0
+   ...
+   fun:osl_loadModule
+   ...
+}
+
