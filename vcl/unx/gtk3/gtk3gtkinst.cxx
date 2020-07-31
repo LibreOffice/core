@@ -10084,10 +10084,29 @@ public:
         assert(n_children() == 0 && "tree must be empty");
         GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(g_list_nth_data(m_pColumns, nColumn));
         assert(pColumn && "wrong count");
+
+        // migrate existing editable setting to the new renderer
+        gboolean is_editable(false);
+        void* pEditCellData(nullptr);
+        GList *pRenderers = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(pColumn));
+        for (GList* pRenderer = g_list_first(pRenderers); pRenderer; pRenderer = g_list_next(pRenderer))
+        {
+            GtkCellRenderer* pCellRenderer = GTK_CELL_RENDERER(pRenderer->data);
+            if (GTK_IS_CELL_RENDERER_TEXT(pCellRenderer))
+            {
+                g_object_get(pCellRenderer, "editable", &is_editable, nullptr);
+                pEditCellData = g_object_get_data(G_OBJECT(pCellRenderer), "g-lo-CellIndex");
+                break;
+            }
+        }
+        g_list_free(pRenderers);
+
+        GtkCellRenderer* pRenderer;
+
         gtk_cell_layout_clear(GTK_CELL_LAYOUT(pColumn));
         if (bEnable)
         {
-            GtkCellRenderer *pRenderer = custom_cell_renderer_surface_new();
+            pRenderer = custom_cell_renderer_surface_new();
             GValue value = G_VALUE_INIT;
             g_value_init(&value, G_TYPE_POINTER);
             g_value_set_pointer(&value, static_cast<gpointer>(this));
@@ -10098,9 +10117,18 @@ public:
         }
         else
         {
-            GtkCellRenderer *pRenderer = gtk_cell_renderer_text_new();
+            pRenderer = gtk_cell_renderer_text_new();
             gtk_tree_view_column_pack_start(pColumn, pRenderer, true);
             gtk_tree_view_column_add_attribute(pColumn, pRenderer, "text", m_nTextCol);
+        }
+
+        if (is_editable)
+        {
+            g_object_set(pRenderer, "editable", true, "editable-set", true, nullptr);
+            g_object_set_data(G_OBJECT(pRenderer), "g-lo-CellIndex", pEditCellData);
+            g_signal_connect(pRenderer, "editing-started", G_CALLBACK(signalCellEditingStarted), this);
+            g_signal_connect(pRenderer, "editing-canceled", G_CALLBACK(signalCellEditingCanceled), this);
+            g_signal_connect(pRenderer, "edited", G_CALLBACK(signalCellEdited), this);
         }
     }
 
