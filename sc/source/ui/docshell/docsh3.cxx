@@ -34,6 +34,7 @@
 #include <svx/pageitem.hxx>
 #include <svx/postattr.hxx>
 #include <svx/svxids.hrc>
+#include <unotools/configmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
@@ -412,8 +413,11 @@ void ScDocShell::InitOptions(bool bForLoading)      // called from InitNew and L
     ScViewOptions aViewOpt = pScMod->GetViewOptions();
     aDocOpt.SetAutoSpell( bAutoSpell );
 
-    // two-digit year entry from Tools->Options->General
-    aDocOpt.SetYear2000(officecfg::Office::Common::DateFormat::TwoDigitYear::get());
+    if (!utl::ConfigManager::IsFuzzing())
+    {
+        // two-digit year entry from Tools->Options->General
+        aDocOpt.SetYear2000(officecfg::Office::Common::DateFormat::TwoDigitYear::get());
+    }
 
     if (bForLoading)
     {
