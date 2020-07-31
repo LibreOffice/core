@@ -1541,6 +1541,14 @@ void SdImportTestSmartArt::testLinearRule()
     // i.e. the width of the background arrow was too small.
     CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(17500), xShape->getSize().Width);
 
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 3160
+    // - Actual  : 8770
+    // i.e. there was unexpected spacing on the left of the arrow.
+    sal_Int32 nGroupLeft = xGroup->getPosition().X;
+    sal_Int32 nArrowLeft = xShape->getPosition().X;
+    CPPUNIT_ASSERT_EQUAL(nGroupLeft, nArrowLeft);
+
     xDocShRef->DoClose();
 }
 
