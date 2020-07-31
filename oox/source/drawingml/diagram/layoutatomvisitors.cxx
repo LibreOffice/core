@@ -123,12 +123,6 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
     meLookFor = LAYOUT_NODE;
     defaultVisit(rAtom);
 
-    // remove unneeded empty group shapes
-    pCurrParent->getChildren().erase(
-        std::remove_if(pCurrParent->getChildren().begin(), pCurrParent->getChildren().end(),
-            [] (const ShapePtr & aChild) { return aChild->getServiceName() == "com.sun.star.drawing.GroupShape" && aChild->getChildren().empty(); }),
-        pCurrParent->getChildren().end());
-
     meLookFor = ALGORITHM;
     defaultVisit(rAtom);
     meLookFor = LAYOUT_NODE;
