@@ -193,7 +193,8 @@ vcl_SystemClipboard_get_implementation(
 {
     SolarMutexGuard aGuard;
     auto xClipboard = ImplGetSVData()->mpDefInst->CreateClipboard( args );
-    xClipboard->acquire();
+    if (xClipboard.is())
+        xClipboard->acquire();
     return xClipboard.get();
 }
 
