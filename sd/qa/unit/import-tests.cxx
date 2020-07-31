@@ -133,6 +133,7 @@ public:
     void testN828390_2();
     void testN828390_3();
     void testFdo68594();
+    void testPlaceholderPriority();
     void testFdo72998();
     void testFdo77027();
     void testStrictOOXML();
@@ -241,6 +242,7 @@ public:
     CPPUNIT_TEST(testN828390_2);
     CPPUNIT_TEST(testN828390_3);
     CPPUNIT_TEST(testFdo68594);
+    CPPUNIT_TEST(testPlaceholderPriority);
     CPPUNIT_TEST(testFdo72998);
     CPPUNIT_TEST(testFdo77027);
     CPPUNIT_TEST(testStrictOOXML);
@@ -686,6 +688,24 @@ void SdImportTest::testFdo68594()
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Placeholder color mismatch", sal_uInt32(0), sal_uInt32(pC->GetValue()) );
 
     xDocShRef->DoClose();
+}
+
+void SdImportTest::testPlaceholderPriority()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/ppt/placeholder-priority.pptx"), PPTX);
+
+    const SdrPage* pPage = GetPage( 1, xDocShRef );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Missing placeholder", sal_uInt32(2), sal_uInt32(pPage->GetObjCount()));
+
+    tools::Rectangle pObj1Rect(9100, 3500, 29619, 4038);
+    SdrObject *pObj1 = pPage->GetObj(0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Placeholder position is wrong, check the placeholder priority", pObj1Rect, pObj1->GetCurrentBoundRect());
+
+    tools::Rectangle pObj2Rect(9102, 8643, 29619, 12642);
+    SdrObject *pObj2 = pPage->GetObj(1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Placeholder position is wrong, check the placeholder priority", pObj2Rect, pObj2->GetCurrentBoundRect());
+
+    // If the placeholder positions are wrong, please check placeholder priority in Placeholders class.
 }
 
 void SdImportTest::testPptCrop()
