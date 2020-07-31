@@ -104,6 +104,7 @@ private:
     void                    DeActivatePageImpl ();
     void                    ResetPageImpl ();
 
+    void Activate() override;
     virtual void Close() override;
     void Apply();
 

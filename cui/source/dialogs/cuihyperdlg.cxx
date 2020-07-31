@@ -140,6 +140,7 @@ SvxHpLinkDlg::SvxHpLinkDlg(SfxBindings* pBindings, SfxChildWindow* pChild, weld:
     // Init Dialog
     Start();
 
+    GetBindings().Update(SID_HYPERLINK_GETLINK);
     GetBindings().Update(SID_READONLY_MODE);
 
     m_xResetBtn->connect_clicked( LINK( this, SvxHpLinkDlg, ResetHdl ) );
@@ -161,6 +162,14 @@ SvxHpLinkDlg::~SvxHpLinkDlg()
 
     pRanges.reset();
     pOutSet.reset();
+}
+
+void SvxHpLinkDlg::Activate() {
+    if (mbGrabFocus) {
+        static_cast<SvxHyperlinkTabPageBase *>(GetTabPage(GetCurPageId()))->SetInitFocus();
+        mbGrabFocus = false;
+    }
+    SfxModelessDialogController::Activate();
 }
 
 void SvxHpLinkDlg::Close()
@@ -259,11 +268,6 @@ void SvxHpLinkDlg::SetPage ( SvxHyperlinkItem const * pItem )
         aPageSet.Put ( *pItem );
 
         pCurrentPage->Reset( aPageSet );
-        if ( mbGrabFocus )
-        {
-            pCurrentPage->SetInitFocus();   // #92535# grab the focus only once at initialization
-            mbGrabFocus = false;
-        }
     }
 }
 
