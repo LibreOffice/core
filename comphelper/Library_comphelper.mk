@@ -92,7 +92,6 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/backupfilehelper \
     comphelper/source/misc/base64 \
     comphelper/source/misc/componentbase \
-    comphelper/source/misc/componentmodule \
     comphelper/source/misc/configuration \
     comphelper/source/misc/configurationhelper \
     comphelper/source/misc/debuggerinfo \
