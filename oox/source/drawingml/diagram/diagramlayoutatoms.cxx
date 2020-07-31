@@ -19,6 +19,8 @@
 
 #include "diagramlayoutatoms.hxx"
 
+#include <set>
+
 #include "layoutatomvisitorbase.hxx"
 
 #include <basegfx/numeric/ftools.hxx>
@@ -478,10 +480,21 @@ void ApplyConstraintToLayout(const Constraint& rConstraint, LayoutPropertyMap& r
 }
 }
 
-void AlgAtom::layoutShape( const ShapePtr& rShape,
-                           const std::vector<Constraint>& rConstraints,
-                           const std::vector<Rule>& /*rRules*/ )
+void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>& rConstraints,
+                          const std::vector<Rule>& rRules)
 {
+    if (mnType != XML_lin)
+    {
+        // TODO Handle spacing from constraints for non-lin algorithms as well.
+        rShape->getChildren().erase(
+            std::remove_if(rShape->getChildren().begin(), rShape->getChildren().end(),
+                           [](const ShapePtr& aChild) {
+                               return aChild->getServiceName() == "com.sun.star.drawing.GroupShape"
+                                      && aChild->getChildren().empty();
+                           }),
+            rShape->getChildren().end());
+    }
+
     switch(mnType)
     {
         case XML_composite:
@@ -928,6 +941,45 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             }
 
             // first approximation of children size
+            std::set<OUString> aChildrenToShrink;
+            for (const auto& rRule : rRules)
+            {
+                // Consider rules: when scaling down, only change children where the rule allows
+                // doing so.
+                aChildrenToShrink.insert(rRule.msForName);
+            }
+
+            if (!aChildrenToShrink.empty())
+            {
+                // Have scaling info from rules: then only count scaled children.
+                for (auto& aCurrShape : rShape->getChildren())
+                {
+                    if (aChildrenToShrink.find(aCurrShape->getInternalName())
+                        == aChildrenToShrink.end())
+                    {
+                        if (nCount > 1)
+                        {
+                            --nCount;
+                        }
+                    }
+                }
+
+                // No manual spacing: spacings are children as well.
+                aSpaceSize = awt::Size();
+            }
+            else
+            {
+                // TODO Handle spacing from constraints without rules as well.
+                rShape->getChildren().erase(
+                    std::remove_if(rShape->getChildren().begin(), rShape->getChildren().end(),
+                                   [](const ShapePtr& aChild) {
+                                       return aChild->getServiceName()
+                                                  == "com.sun.star.drawing.GroupShape"
+                                              && aChild->getChildren().empty();
+                                   }),
+                    rShape->getChildren().end());
+                nCount = rShape->getChildren().size();
+            }
             awt::Size aChildSize = rShape->getSize();
             if (nDir == XML_fromL || nDir == XML_fromR)
                 aChildSize.Width /= nCount;
@@ -979,8 +1031,18 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                     aSize.Width = oWidth.get();
                 if (oHeight.has())
                     aSize.Height = oHeight.get();
-                aSize.Width *= fWidthScale;
-                aSize.Height *= fHeightScale;
+                if (aChildrenToShrink.empty()
+                    || aChildrenToShrink.find(aCurrShape->getInternalName())
+                           != aChildrenToShrink.end())
+                {
+                    aSize.Width *= fWidthScale;
+                }
+                if (aChildrenToShrink.empty()
+                    || aChildrenToShrink.find(aCurrShape->getInternalName())
+                           != aChildrenToShrink.end())
+                {
+                    aSize.Height *= fHeightScale;
+                }
                 aCurrShape->setSize(aSize);
                 aCurrShape->setChildSize(aSize);
 

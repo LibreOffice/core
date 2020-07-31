@@ -82,6 +82,25 @@ static void sortChildrenByZOrder(const ShapePtr& pShape)
         sortChildrenByZOrder(rChild);
 }
 
+/// Removes empty group shapes, now that their spacing influenced the layout.
+static void removeUnneededGroupShapes(const ShapePtr& pShape)
+{
+    std::vector<ShapePtr>& rChildren = pShape->getChildren();
+
+    rChildren.erase(std::remove_if(rChildren.begin(), rChildren.end(),
+                                   [](const ShapePtr& aChild) {
+                                       return aChild->getServiceName()
+                                                  == "com.sun.star.drawing.GroupShape"
+                                              && aChild->getChildren().empty();
+                                   }),
+                    rChildren.end());
+
+    for (const auto& pChild : rChildren)
+    {
+        removeUnneededGroupShapes(pChild);
+    }
+}
+
 void Diagram::addTo( const ShapePtr & pParentShape )
 {
     if (pParentShape->getSize().Width == 0 || pParentShape->getSize().Height == 0)
@@ -103,6 +122,7 @@ void Diagram::addTo( const ShapePtr & pParentShape )
         mpLayout->getNode()->accept(aLayoutingVisitor);
 
         sortChildrenByZOrder(pParentShape);
+        removeUnneededGroupShapes(pParentShape);
     }
 
     ShapePtr pBackground = std::make_shared<Shape>("com.sun.star.drawing.CustomShape");
