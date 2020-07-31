@@ -34,6 +34,24 @@
       "revId": "4433a964d885769763e8784e441728d36111362b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a995d30_d559cd78",
+        "filename": "sw/qa/inc/swmodeltestbase.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1044,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-07-31T08:11:01Z",
+      "side": 1,
+      "message": "Done in 6353c51e8bf66fe223080db649fc07e62a3a6c97, it is quite a large commit because I also removed now unused includes from sw/qa/inc/swmodeltestbase.hxx, and that started an avalanche.",
+      "parentUuid": "cdba24c7_b65cab74",
+      "revId": "4433a964d885769763e8784e441728d36111362b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
