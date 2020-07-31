@@ -1550,7 +1550,6 @@ comphelper/source/misc/base64.cxx
 comphelper/source/misc/comphelper_module.cxx
 comphelper/source/misc/comphelper_services.cxx
 comphelper/source/misc/componentbase.cxx
-comphelper/source/misc/componentmodule.cxx
 comphelper/source/misc/configuration.cxx
 comphelper/source/misc/configurationhelper.cxx
 comphelper/source/misc/dispatchcommand.cxx
@@ -5602,7 +5601,6 @@ include/comphelper/classids.hxx
 include/comphelper/comphelperdllapi.h
 include/comphelper/componentbase.hxx
 include/comphelper/componentguard.hxx
-include/comphelper/componentmodule.hxx
 include/comphelper/configuration.hxx
 include/comphelper/configurationhelper.hxx
 include/comphelper/configurationlistener.hxx

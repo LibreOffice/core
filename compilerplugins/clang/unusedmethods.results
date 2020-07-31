@@ -192,12 +192,6 @@ editeng/inc/edtspell.hxx:104
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const struct editeng::MisspellRange *, class std::__cxx1998::vector<struct editeng::MisspellRange, class std::allocator<struct editeng::MisspellRange> > >, class std::__debug::vector<struct editeng::MisspellRange, class std::allocator<struct editeng::MisspellRange> >, struct std::random_access_iterator_tag> WrongList::begin() const
 editeng/inc/edtspell.hxx:105
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const struct editeng::MisspellRange *, class std::__cxx1998::vector<struct editeng::MisspellRange, class std::allocator<struct editeng::MisspellRange> > >, class std::__debug::vector<struct editeng::MisspellRange, class std::allocator<struct editeng::MisspellRange> >, struct std::random_access_iterator_tag> WrongList::end() const
-extensions/source/inc/componentmodule.hxx:96
-    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> compmodule::OModule::getComponentFactory(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::lang::XMultiServiceFactory> &)
-extensions/source/inc/componentmodule.hxx:122
-     compmodule::OMultiInstanceAutoRegistration::OMultiInstanceAutoRegistration<TYPE>()
-extensions/source/propctrlr/modulepcr.hxx:33
-    class pcr::PcrModule & pcr::PcrModule::getInstance()
 extensions/source/scanner/scanner.hxx:79
     void ScannerManager::SetData(void *)
 hwpfilter/source/mzstring.h:99
@@ -406,10 +400,8 @@ include/comphelper/basicio.hxx:52
     const class com::sun::star::uno::Reference<class com::sun::star::io::XObjectInputStream> & comphelper::operator>>(const class com::sun::star::uno::Reference<class com::sun::star::io::XObjectInputStream> &,unsigned int &)
 include/comphelper/basicio.hxx:53
     const class com::sun::star::uno::Reference<class com::sun::star::io::XObjectOutputStream> & comphelper::operator<<(const class com::sun::star::uno::Reference<class com::sun::star::io::XObjectOutputStream> &,unsigned int)
-include/comphelper/componentmodule.hxx:61
-     comphelper::ComponentDescription::ComponentDescription(const class rtl::OUString &,const class com::sun::star::uno::Sequence<class rtl::OUString> &,class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> (*)(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &),class com::sun::star::uno::Reference<class com::sun::star::lang::XSingleComponentFactory> (*)(class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> (*)(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &), const class rtl::OUString &, const class com::sun::star::uno::Sequence<class rtl::OUString> &, struct _rtl_ModuleCount *))
-include/comphelper/componentmodule.hxx:94
-    void comphelper::OModule::registerImplementation(const struct comphelper::ComponentDescription &)
+include/comphelper/componentmodule.hxx:49
+     comphelper::OModule::OModule()
 include/comphelper/configuration.hxx:248
     type-parameter-?-? comphelper::ConfigurationLocalizedProperty::get(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &)
 include/comphelper/configuration.hxx:264
@@ -509,9 +501,9 @@ include/comphelper/scopeguard.hxx:57
 include/comphelper/scopeguard.hxx:84
     ScopeGuard<Func> comphelper::<deduction guide for ScopeGuard>(const ScopeGuard<Func> &)
 include/comphelper/sequence.hxx:200
-    Sequence<type-parameter-?-?> comphelper::containerToSequence(type-parameter-?-? const (&)[S])
+    Sequence<type-parameter-?-?> comphelper::containerToSequence(type-parameter-?-? const (&)[_Num])
 include/comphelper/sequence.hxx:200
-    Sequence<type-parameter-?-?> comphelper::containerToSequence(type-parameter-?-? const (&)[_Bound])
+    Sequence<type-parameter-?-?> comphelper::containerToSequence(type-parameter-?-? const (&)[S])
 include/comphelper/sequence.hxx:200
     Sequence<type-parameter-?-?> comphelper::containerToSequence(type-parameter-?-? const (&)[N])
 include/comphelper/sequence.hxx:200
@@ -519,39 +511,9 @@ include/comphelper/sequence.hxx:200
 include/comphelper/sequence.hxx:200
     Sequence<type-parameter-?-?> comphelper::containerToSequence(type-parameter-?-? const (&)[SrcSize])
 include/comphelper/sequence.hxx:200
-    Sequence<type-parameter-?-?> comphelper::containerToSequence(type-parameter-?-? const (&)[_Num])
+    Sequence<type-parameter-?-?> comphelper::containerToSequence(type-parameter-?-? const (&)[_Bound])
 include/comphelper/servicedecl.hxx:108
      comphelper::service_decl::ServiceDecl::ServiceDecl(const type-parameter-?-? &,const char *,const char *)
-include/comphelper/servicedecl.hxx:152
-     comphelper::service_decl::detail::OwnServiceImpl::OwnServiceImpl<ImplT>(const class comphelper::service_decl::ServiceDecl &,const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &)
-include/comphelper/servicedecl.hxx:157
-     comphelper::service_decl::detail::OwnServiceImpl::OwnServiceImpl<ImplT>(const class comphelper::service_decl::ServiceDecl &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &)
-include/comphelper/servicedecl.hxx:183
-     comphelper::service_decl::detail::ServiceImpl::ServiceImpl<ImplT>(const class comphelper::service_decl::ServiceDecl &,const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &)
-include/comphelper/servicedecl.hxx:188
-     comphelper::service_decl::detail::ServiceImpl::ServiceImpl<ImplT>(const class comphelper::service_decl::ServiceDecl &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &)
-include/comphelper/servicedecl.hxx:199
-     comphelper::service_decl::detail::InheritingServiceImpl::InheritingServiceImpl<ImplT>(const class comphelper::service_decl::ServiceDecl &,const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &)
-include/comphelper/servicedecl.hxx:209
-    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> comphelper::service_decl::detail::PostProcessDefault::operator()(type-parameter-?-? *) const
-include/comphelper/servicedecl.hxx:220
-     comphelper::service_decl::detail::CreateFunc::CreateFunc<type-parameter-?-?, type-parameter-?-?, comphelper::service_decl::with_args<false> >(const type-parameter-?-? &)
-include/comphelper/servicedecl.hxx:224
-    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> comphelper::service_decl::detail::CreateFunc::operator()(const class comphelper::service_decl::ServiceDecl &,const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &) const
-include/comphelper/servicedecl.hxx:237
-     comphelper::service_decl::detail::CreateFunc::CreateFunc<type-parameter-?-?, type-parameter-?-?, comphelper::service_decl::with_args<true> >(const type-parameter-?-? &)
-include/comphelper/servicedecl.hxx:271
-     comphelper::service_decl::serviceimpl_base::serviceimpl_base<ImplT_, WithArgsT>()
-include/comphelper/servicedecl.hxx:283
-     comphelper::service_decl::serviceimpl_base::serviceimpl_base<ImplT_, WithArgsT>(const type-parameter-?-? &)
-include/comphelper/servicedecl.hxx:295
-     comphelper::service_decl::class_::class_<ImplT_, WithArgsT>()
-include/comphelper/servicedecl.hxx:304
-     comphelper::service_decl::class_::class_<ImplT_, WithArgsT>(const type-parameter-?-? &)
-include/comphelper/servicedecl.hxx:314
-     comphelper::service_decl::inheritingClass_::inheritingClass_<ImplT_, WithArgsT>()
-include/comphelper/servicedecl.hxx:323
-     comphelper::service_decl::inheritingClass_::inheritingClass_<ImplT_, WithArgsT>(const type-parameter-?-? &)
 include/comphelper/unique_disposing_ptr.hxx:46
     type-parameter-?-? & comphelper::unique_disposing_ptr::operator*() const
 include/comphelper/unwrapargs.hxx:51
@@ -688,8 +650,6 @@ include/sfx2/lokhelper.hxx:62
     int SfxLokHelper::getDocumentIdOfView(int)
 include/sfx2/msg.hxx:120
     const class std::type_info * SfxType0::Type() const
-include/sfx2/sfxmodelfactory.hxx:66
-    class com::sun::star::uno::Reference<class com::sun::star::lang::XSingleServiceFactory> sfx2::createSfxModelFactory(const class com::sun::star::uno::Reference<class com::sun::star::lang::XMultiServiceFactory> &,const class rtl::OUString &,class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> (*const)(const class com::sun::star::uno::Reference<class com::sun::star::lang::XMultiServiceFactory> &, enum SfxModelFlags),const class com::sun::star::uno::Sequence<class rtl::OUString> &)
 include/sfx2/thumbnailview.hxx:206
     unsigned short ThumbnailView::getNextItemId() const
 include/sfx2/viewsh.hxx:365
@@ -802,8 +762,6 @@ include/tools/fract.hxx:106
     class Fraction operator-(const class Fraction &,double)
 include/tools/fract.hxx:108
     class Fraction operator/(const class Fraction &,double)
-include/tools/gen.hxx:97
-    class Point operator/(const class Point &,const long)
 include/tools/gen.hxx:259
     class Pair & Range::toPair()
 include/tools/gen.hxx:326
@@ -842,8 +800,6 @@ include/unotools/moduleoptions.hxx:166
     _Bool SvtModuleOptions::IsDataBase() const
 include/unotools/textsearch.hxx:121
     basic_ostream<type-parameter-?-?, type-parameter-?-?> & utl::operator<<(basic_ostream<type-parameter-?-?, type-parameter-?-?> &,const enum utl::SearchParam::SearchType &)
-include/vbahelper/helperdecl.hxx:33
-     comphelper::service_decl::vba_service_class_::vba_service_class_<ImplT_, WithArgsT>()
 include/vcl/alpha.hxx:47
     _Bool AlphaMask::operator==(const class AlphaMask &) const
 include/vcl/alpha.hxx:48
@@ -1082,11 +1038,11 @@ include/vcl/weldutils.hxx:333
     void weld::PatternFormatter::connect_focus_in(const class Link<class weld::Widget &, void> &)
 include/vcl/window.hxx:409
     const char * ImplDbgCheckWindow(const void *)
-include/xmloff/txtimp.hxx:385
-    class XMLPropertyBackpatcher<short> & XMLTextImportHelper::GetFootnoteBP()
 include/xmloff/txtimp.hxx:386
+    class XMLPropertyBackpatcher<short> & XMLTextImportHelper::GetFootnoteBP()
+include/xmloff/txtimp.hxx:387
     class XMLPropertyBackpatcher<short> & XMLTextImportHelper::GetSequenceIdBP()
-include/xmloff/txtimp.hxx:568
+include/xmloff/txtimp.hxx:570
     class rtl::OUString XMLTextImportHelper::FindActiveBookmarkName()
 include/xmloff/xmlnumi.hxx:60
      SvxXMLListStyleContext::SvxXMLListStyleContext(class SvXMLImport &,int,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XFastAttributeList> &,_Bool)
@@ -1136,6 +1092,8 @@ oox/source/drawingml/diagram/diagramlayoutatoms.hxx:278
     const class std::__debug::vector<class std::shared_ptr<class oox::drawingml::Shape>, class std::allocator<class std::shared_ptr<class oox::drawingml::Shape> > > & oox::drawingml::LayoutNode::getNodeShapes() const
 oox/source/drawingml/diagram/diagramlayoutatoms.hxx:287
     const class oox::drawingml::LayoutNode * oox::drawingml::LayoutNode::getParentLayoutNode() const
+reportdesign/qa/unit/reportdesign-dialogs-test.cxx:61
+    int main()
 sal/osl/unx/uunxapi.hxx:35
     int mkdir_c(const class rtl::OString &,unsigned int)
 sal/osl/unx/uunxapi.hxx:70
@@ -1230,8 +1188,6 @@ sc/inc/userlist.hxx:88
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> > *, class std::__cxx1998::vector<class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> >, class std::allocator<class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> > > > >, class std::__debug::vector<class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> >, class std::allocator<class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> > > >, struct std::random_access_iterator_tag> ScUserList::begin() const
 sc/qa/unit/helper/qahelper.hxx:155
     class std::__cxx11::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > print(const class ScAddress &)
-sc/qa/unit/screenshots/screenshots.cxx:326
-    int main()
 sc/qa/unit/ucalc.hxx:150
     void Test::testFormulaHashAndTag()
 sc/qa/unit/ucalc.hxx:189
@@ -1312,8 +1268,6 @@ sc/source/ui/inc/condformatdlgentry.hxx:80
     int ScCondFrmtEntry::get_grid_top_attach() const
 sc/source/ui/inc/condformatdlgentry.hxx:82
     class Size ScCondFrmtEntry::get_preferred_size() const
-sc/source/ui/inc/csvruler.hxx:142
-    void ScCsvRuler::EndMouseTracking(_Bool)
 sc/source/ui/inc/dataprovider.hxx:56
     _Bool sc::CSVFetchThread::IsRequestedTerminate()
 sc/source/ui/inc/dataprovider.hxx:57
@@ -1342,6 +1296,8 @@ sccomp/source/solver/DifferentialEvolution.hxx:67
     int DifferentialEvolutionAlgorithm::getLastChange()
 sccomp/source/solver/ParticelSwarmOptimization.hxx:85
     int ParticleSwarmOptimizationAlgorithm::getLastChange()
+sd/inc/sdabstdlg.hxx:185
+    class VclPtr<class SfxAbstractTabDialog> SdAbstractDialogFactory::CreateSdOutlineBulletTabDlg(class weld::Window *,const class SfxItemSet *,class sd::View *)
 sd/inc/sddll.hxx:48
      SdDLL::SdDLL()
 sd/source/filter/ppt/pptinanimations.hxx:108
@@ -1443,8 +1399,6 @@ slideshow/source/engine/animationfactory.cxx:538
 slideshow/source/engine/opengl/TransitionImpl.hxx:184
     void OGLTransitionImpl::cleanup()
 slideshow/source/inc/listenercontainer.hxx:44
-    _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::ViewUpdate> &)
-slideshow/source/inc/listenercontainer.hxx:44
     _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::AnimationEventHandler> &)
 slideshow/source/inc/listenercontainer.hxx:44
     _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::ShapeListenerEventHandler> &)
@@ -1452,6 +1406,8 @@ slideshow/source/inc/listenercontainer.hxx:44
     _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::EventHandler> &)
 slideshow/source/inc/listenercontainer.hxx:44
     _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::PauseEventHandler> &)
+slideshow/source/inc/listenercontainer.hxx:44
+    _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::ViewUpdate> &)
 slideshow/source/inc/listenercontainer.hxx:44
     _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::UserPaintEventHandler> &)
 slideshow/source/inc/listenercontainer.hxx:44
@@ -1545,11 +1501,11 @@ sw/inc/docary.hxx:94
 sw/inc/docary.hxx:94
     void SwVectorModifyBase::insert(class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwGrfFormatColl **, class std::__cxx1998::vector<class SwGrfFormatColl *, class std::allocator<class SwGrfFormatColl *> > >, class std::__debug::vector<class SwGrfFormatColl *, class std::allocator<class SwGrfFormatColl *> >, struct std::random_access_iterator_tag>,type-parameter-?-?,type-parameter-?-?)
 sw/inc/docary.hxx:94
-    void SwVectorModifyBase::insert(class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwFrameFormat **, class std::__cxx1998::vector<class SwFrameFormat *, class std::allocator<class SwFrameFormat *> > >, class std::__debug::vector<class SwFrameFormat *, class std::allocator<class SwFrameFormat *> >, struct std::random_access_iterator_tag>,type-parameter-?-?,type-parameter-?-?)
-sw/inc/docary.hxx:94
     void SwVectorModifyBase::insert(class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwSectionFormat **, class std::__cxx1998::vector<class SwSectionFormat *, class std::allocator<class SwSectionFormat *> > >, class std::__debug::vector<class SwSectionFormat *, class std::allocator<class SwSectionFormat *> >, struct std::random_access_iterator_tag>,type-parameter-?-?,type-parameter-?-?)
 sw/inc/docary.hxx:94
     void SwVectorModifyBase::insert(class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwCharFormat **, class std::__cxx1998::vector<class SwCharFormat *, class std::allocator<class SwCharFormat *> > >, class std::__debug::vector<class SwCharFormat *, class std::allocator<class SwCharFormat *> >, struct std::random_access_iterator_tag>,type-parameter-?-?,type-parameter-?-?)
+sw/inc/docary.hxx:94
+    void SwVectorModifyBase::insert(class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwFrameFormat **, class std::__cxx1998::vector<class SwFrameFormat *, class std::allocator<class SwFrameFormat *> > >, class std::__debug::vector<class SwFrameFormat *, class std::allocator<class SwFrameFormat *> >, struct std::random_access_iterator_tag>,type-parameter-?-?,type-parameter-?-?)
 sw/inc/docary.hxx:94
     void SwVectorModifyBase::insert(class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwNumRule **, class std::__cxx1998::vector<class SwNumRule *, class std::allocator<class SwNumRule *> > >, class std::__debug::vector<class SwNumRule *, class std::allocator<class SwNumRule *> >, struct std::random_access_iterator_tag>,type-parameter-?-?,type-parameter-?-?)
 sw/inc/docary.hxx:140
