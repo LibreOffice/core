@@ -110,6 +110,7 @@ public:
     void testTdf131553();
     void testFillColorList();
     void testTdf134221();
+    void testLinearRule();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -157,6 +158,7 @@ public:
     CPPUNIT_TEST(testTdf131553);
     CPPUNIT_TEST(testFillColorList);
     CPPUNIT_TEST(testTdf134221);
+    CPPUNIT_TEST(testLinearRule);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1521,6 +1523,23 @@ void SdImportTestSmartArt::testTdf134221()
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(736),
         xTxtProps->getPropertyValue("TextUpperDistance").get<sal_Int32>());
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testLinearRule()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-linear-rule.pptx"), PPTX);
+
+    uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    // Last child, then again last child.
+    uno::Reference<drawing::XShape> xShape = getChildShape(getChildShape(xGroup, 1), 3);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater than: 17500 (19867)
+    // - Actual  : 4966
+    // i.e. the width of the background arrow was too small.
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(17500), xShape->getSize().Width);
 
     xDocShRef->DoClose();
 }
