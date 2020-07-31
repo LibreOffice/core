@@ -1192,7 +1192,7 @@ static void lcl_SetOutlineContentEntriesSensitivities(SwContentTree* pThis, weld
         if (rNodes.GoNext(&aIdx) != pEndNd)
             bHasContent = true;
 
-        // decendants
+        // descendants
         if (!bHasContent && (rContentTree.iter_has_child(rEntry) || rContentTree.get_children_on_demand(rEntry)))
         {
             while (++nPos < rOutlineNodes.size() &&
@@ -2803,7 +2803,7 @@ void SwContentTree::ExecCommand(const OString& rCmd, bool bOutlineWithChildren)
                     for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNds.size(); ++nPos)
                     {
                         SwNode* pNd = rOutlineNds[nPos];
-                        if (pNd->IsTextNode()) // should aways be true
+                        if (pNd->IsTextNode()) // should always be true
                         {
                             bool bOutlineContentVisibleAttr = true;
                             pNd->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
@@ -3180,7 +3180,7 @@ void SwContentTree::MoveOutline(SwOutlineNodes::size_type nTargetPos)
         for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNds.size(); ++nPos)
         {
             SwNode* pNd = rOutlineNds[nPos];
-            if (pNd->IsTextNode()) // should aways be true
+            if (pNd->IsTextNode()) // should always be true
             {
                 bool bOutlineContentVisibleAttr = true;
                 pNd->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
@@ -3553,8 +3553,8 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
     switch (nSelectedPopupEntry)
     {
         case 1512: // fold or unfold outline content of selected entry
-        case 1513: // fold outline content of selected entry and decendents
-        case 1514: // unfold outline content of selected entry and decendents
+        case 1513: // fold outline content of selected entry and descendants
+        case 1514: // unfold outline content of selected entry and descendants
         {
             m_pActiveShell->EnterStdMode();
             m_bIgnoreViewChange = true;
