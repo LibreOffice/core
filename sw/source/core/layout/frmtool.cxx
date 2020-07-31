@@ -2998,7 +2998,8 @@ bool IsRightPageByNumber(SwRootFrame const& rLayout, sal_uInt16 const nPageNum)
 SwPageFrame * InsertNewPage( SwPageDesc &rDesc, SwFrame *pUpper,
         bool const isRightPage, bool const bFirst, bool bInsertEmpty,
         bool const bFootnote,
-                          SwFrame *pSibling )
+        SwFrame *pSibling,
+        bool const bVeryFirstPage )
 {
     assert(pUpper);
     assert(pUpper->IsRootFrame());
@@ -3030,7 +3031,7 @@ SwPageFrame * InsertNewPage( SwPageDesc &rDesc, SwFrame *pUpper,
     // If there is no FrameFormat for this page, add an empty page
     if ( !pFormat )
     {
-        pFormat = isRightPage ? rDesc.GetLeftFormat() : rDesc.GetRightFormat();
+        pFormat = isRightPage ? rDesc.GetLeftFormat(bVeryFirstPage) : rDesc.GetRightFormat(bVeryFirstPage);
         OSL_ENSURE( pFormat, "Descriptor without any format?!" );
         bInsertEmpty = !bInsertEmpty;
     }
