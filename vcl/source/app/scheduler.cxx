@@ -473,6 +473,12 @@ bool Scheduler::ProcessTaskScheduling()
 
         // invoke the task
         sal_uInt32 nLockCount = Unlock( true );
+        /*
+        * Current policy is that scheduler tasks aren't allowed to throw an exception.
+        * Because otherwise the exception is caught somewhere totally unrelated.
+        * TODO Ideally we could capture a proper backtrace and feed this into breakpad,
+        *   which is do-able, but requires writing some assembly.
+        */
         try
         {
             pTask->Invoke();
