@@ -22,6 +22,8 @@
 #include <galobj.hxx>
 #include <svx/gallerybinaryengine.hxx>
 #include <svx/galleryobjectcollection.hxx>
+#include <svx/gallery1.hxx>
+#include <osl/thread.hxx>
 #include "codec.hxx"
 #include "gallerydrawmodel.hxx"
 #include <vcl/cvtgrf.hxx>
@@ -51,11 +53,18 @@ GalleryBinaryEngine::GalleryBinaryEngine(const GalleryStorageLocations& rGallery
     : maGalleryStorageLocations(rGalleryStorageLocations)
     , mrGalleryObjectCollection(rGalleryObjectCollection)
     , mbReadOnly(bReadOnly)
+    , m_bDestDirRelative(false)
 {
     ImplCreateSvDrawStorage();
 }
 
 GalleryBinaryEngine::~GalleryBinaryEngine() { clearSotStorage(); }
+
+void GalleryBinaryEngine::setDestDir(const OUString& rDestDir, bool bRelative)
+{
+    m_aDestDir = rDestDir;
+    m_bDestDirRelative = bRelative;
+}
 
 void GalleryBinaryEngine::clearSotStorage() { m_aSvDrawStorageRef.clear(); }
 
@@ -85,7 +94,7 @@ const tools::SvRef<SotStorage>& GalleryBinaryEngine::GetSvDrawStorage() const
     return m_aSvDrawStorageRef;
 }
 
-bool GalleryBinaryEngine::implWrite(const GalleryTheme& rTheme)
+bool GalleryBinaryEngine::implWrite(const GalleryTheme& rTheme, const GalleryThemeEntry* pThm)
 {
     INetURLObject aPathURL(GetThmURL());
 
@@ -108,7 +117,7 @@ bool GalleryBinaryEngine::implWrite(const GalleryTheme& rTheme)
 
         if (pOStm)
         {
-            WriteGalleryTheme(*pOStm, rTheme);
+            writeGalleryTheme(*pOStm, rTheme, pThm);
             pOStm.reset();
             return true;
         }
@@ -119,7 +128,7 @@ bool GalleryBinaryEngine::implWrite(const GalleryTheme& rTheme)
 }
 
 void GalleryBinaryEngine::insertObject(const SgaObject& rObj, GalleryObject* pFoundEntry,
-                                       OUString& rDestDir, sal_uInt32& rInsertPos)
+                                       sal_uInt32& rInsertPos)
 {
     if (pFoundEntry)
     {
@@ -138,11 +147,11 @@ void GalleryBinaryEngine::insertObject(const SgaObject& rObj, GalleryObject* pFo
         else if (rObj.GetTitle() == "__<empty>__")
             const_cast<SgaObject&>(rObj).SetTitle("");
 
-        implWriteSgaObject(rObj, rInsertPos, &aNewEntry, rDestDir);
+        implWriteSgaObject(rObj, rInsertPos, &aNewEntry);
         pFoundEntry->nOffset = aNewEntry.nOffset;
     }
     else
-        implWriteSgaObject(rObj, rInsertPos, nullptr, rDestDir);
+        implWriteSgaObject(rObj, rInsertPos, nullptr);
 }
 
 std::unique_ptr<SgaObject> GalleryBinaryEngine::implReadSgaObject(GalleryObject const* pEntry)
@@ -201,7 +210,7 @@ std::unique_ptr<SgaObject> GalleryBinaryEngine::implReadSgaObject(GalleryObject 
 }
 
 bool GalleryBinaryEngine::implWriteSgaObject(const SgaObject& rObj, sal_uInt32 nPos,
-                                             GalleryObject* pExistentEntry, OUString& aDestDir)
+                                             GalleryObject* pExistentEntry)
 {
     std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream(
         GetSdgURL().GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::WRITE));
@@ -211,7 +220,7 @@ bool GalleryBinaryEngine::implWriteSgaObject(const SgaObject& rObj, sal_uInt32 n
     {
         const sal_uInt32 nOffset = pOStm->Seek(STREAM_SEEK_TO_END);
 
-        rObj.WriteData(*pOStm, aDestDir);
+        rObj.WriteData(*pOStm, m_aDestDir);
 
         if (!pOStm->GetError())
         {
@@ -262,6 +271,7 @@ bool GalleryBinaryEngine::readModel(const GalleryObject* pObject, SdrModel& rMod
     }
     return bRet;
 }
+
 SgaObjectSvDraw GalleryBinaryEngine::insertModel(const FmFormModel& rModel,
                                                  const INetURLObject& rUserURL)
 {
@@ -659,9 +669,110 @@ void GalleryBinaryEngine::insertFileOrDirURL(const INetURLObject& rFileOrDirURL,
     }
 }
 
-SvStream& WriteGalleryTheme(SvStream& rOut, const GalleryTheme& rTheme)
+SvStream& GalleryBinaryEngine::writeGalleryTheme(SvStream& rOStm, const GalleryTheme& rTheme,
+                                                 const GalleryThemeEntry* pThm)
 {
-    return rTheme.WriteData(rOut);
+    const INetURLObject rRelURL1 = rTheme.GetParent()->GetRelativeURL();
+    const INetURLObject rRelURL2 = rTheme.GetParent()->GetUserURL();
+    const sal_uInt32 rId = rTheme.GetId();
+    sal_uInt32 nCount = mrGalleryObjectCollection.size();
+    bool bRel;
+
+    rOStm.WriteUInt16(0x0004);
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, pThm->GetThemeName(),
+                                                 RTL_TEXTENCODING_UTF8);
+    rOStm.WriteUInt32(nCount).WriteUInt16(osl_getThreadTextEncoding());
+
+    for (sal_uInt32 i = 0; i < nCount; i++)
+    {
+        const GalleryObject* pObj = mrGalleryObjectCollection.getForPosition(i);
+        OUString aPath;
+
+        if (SgaObjKind::SvDraw == pObj->eObjKind)
+        {
+            aPath = GetSvDrawStreamNameFromURL(pObj->aURL);
+            bRel = false;
+        }
+        else
+        {
+            aPath = pObj->aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+            aPath = aPath.copy(
+                0, std::min(rRelURL1.GetMainURL(INetURLObject::DecodeMechanism::NONE).getLength(),
+                            aPath.getLength()));
+            bRel = aPath == rRelURL1.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+
+            if (bRel
+                && (pObj->aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE).getLength()
+                    > (rRelURL1.GetMainURL(INetURLObject::DecodeMechanism::NONE).getLength() + 1)))
+            {
+                aPath = pObj->aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+                aPath = aPath.copy(
+                    std::min(rRelURL1.GetMainURL(INetURLObject::DecodeMechanism::NONE).getLength(),
+                             aPath.getLength()));
+            }
+            else
+            {
+                aPath = pObj->aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+                aPath = aPath.copy(
+                    0,
+                    std::min(rRelURL2.GetMainURL(INetURLObject::DecodeMechanism::NONE).getLength(),
+                             aPath.getLength()));
+                bRel = aPath == rRelURL2.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+
+                if (bRel
+                    && (pObj->aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE).getLength()
+                        > (rRelURL2.GetMainURL(INetURLObject::DecodeMechanism::NONE).getLength()
+                           + 1)))
+                {
+                    aPath = pObj->aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+                    aPath = aPath.copy(std::min(
+                        rRelURL2.GetMainURL(INetURLObject::DecodeMechanism::NONE).getLength(),
+                        aPath.getLength()));
+                }
+                else
+                    aPath = pObj->aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+            }
+        }
+
+        if (!m_aDestDir.isEmpty())
+        {
+            bool aFound = aPath.indexOf(m_aDestDir) != -1;
+            aPath = aPath.replaceFirst(m_aDestDir, "");
+            if (aFound)
+                bRel = m_bDestDirRelative;
+            else
+                SAL_WARN("svx", "failed to replace destdir of '" << m_aDestDir << "' in '" << aPath
+                                                                 << "'");
+        }
+
+        rOStm.WriteBool(bRel);
+        write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aPath, RTL_TEXTENCODING_UTF8);
+        rOStm.WriteUInt32(pObj->nOffset).WriteUInt16(static_cast<sal_uInt16>(pObj->eObjKind));
+    }
+
+    // more recently, a 512-byte reserve buffer is written,
+    // to recognize them two sal_uInt32-Ids will be written.
+    rOStm.WriteUInt32(COMPAT_FORMAT('G', 'A', 'L', 'R'))
+        .WriteUInt32(COMPAT_FORMAT('E', 'S', 'R', 'V'));
+
+    const long nReservePos = rOStm.Tell();
+    std::unique_ptr<VersionCompat> pCompat(new VersionCompat(rOStm, StreamMode::WRITE, 2));
+
+    rOStm.WriteUInt32(rId).WriteBool(pThm->IsNameFromResource()); // From version 2 and up
+
+    pCompat.reset();
+
+    // Fill the rest of the buffer.
+    const long nRest = std::max(512L - (static_cast<long>(rOStm.Tell()) - nReservePos), 0L);
+
+    if (nRest)
+    {
+        std::unique_ptr<char[]> pReserve(new char[nRest]);
+        memset(pReserve.get(), 0, nRest);
+        rOStm.WriteBytes(pReserve.get(), nRest);
+    }
+
+    return rOStm;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
