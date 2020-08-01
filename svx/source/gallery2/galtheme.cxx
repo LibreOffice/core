@@ -61,8 +61,7 @@
 using namespace ::com::sun::star;
 
 GalleryTheme::GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry )
-    : m_bDestDirRelative(false)
-    , pParent(pGallery)
+    : pParent(pGallery)
     , pThm(pThemeEntry)
     , mnThemeLockCount(0)
     , mnBroadcasterLockCount(0)
@@ -76,7 +75,7 @@ GalleryTheme::GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry )
 GalleryTheme::~GalleryTheme()
 {
     if(pThm->IsModified())
-        if(!mpGalleryBinaryEngine->implWrite(*this))
+        if(!mpGalleryBinaryEngine->implWrite(*this, pThm))
             ImplSetModified(false);
 
     for (auto & pEntry : maGalleryObjectCollection.getObjectList())
@@ -86,6 +85,11 @@ GalleryTheme::~GalleryTheme()
     }
     maGalleryObjectCollection.clear();
     mpGalleryBinaryEngine->clearSotStorage();
+}
+
+void GalleryTheme::SetDestDir(const OUString& rDestDir, bool bRelative)
+{
+    mpGalleryBinaryEngine->setDestDir(rDestDir, bRelative);
 }
 
 std::unique_ptr<GalleryBinaryEngine> GalleryTheme::createGalleryBinaryEngine(bool bReadOnly)
@@ -144,7 +148,7 @@ bool GalleryTheme::InsertObject(const SgaObject& rObj, sal_uInt32 nInsertPos)
         }
     }
 
-    mpGalleryBinaryEngine->insertObject(rObj, pFoundEntry, m_aDestDir, nInsertPos);
+    mpGalleryBinaryEngine->insertObject(rObj, pFoundEntry, nInsertPos);
 
     ImplSetModified(true);
     ImplBroadcast(pFoundEntry? iFoundPos: nInsertPos);
@@ -306,7 +310,7 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
     mpGalleryBinaryEngine->updateTheme();
     ImplSetModified( true );
     if (pThm->IsModified())
-        if (!mpGalleryBinaryEngine->implWrite(*this))
+        if (!mpGalleryBinaryEngine->implWrite(*this, pThm))
             ImplSetModified(false);
     UnlockBroadcaster();
 }
@@ -648,94 +652,6 @@ void GalleryTheme::CopyToClipboard(sal_uInt32 nPos)
 {
     GalleryTransferable* pTransferable = new GalleryTransferable( this, nPos, false );
     pTransferable->CopyToClipboard(GetSystemClipboard());
-}
-
-SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
-{
-    const INetURLObject aRelURL1( GetParent()->GetRelativeURL() );
-    const INetURLObject aRelURL2( GetParent()->GetUserURL() );
-    sal_uInt32          nCount = GetObjectCount();
-    bool                bRel;
-
-    rOStm.WriteUInt16( 0x0004 );
-    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, pThm->GetThemeName(), RTL_TEXTENCODING_UTF8);
-    rOStm.WriteUInt32( nCount ).WriteUInt16( osl_getThreadTextEncoding() );
-
-    for( sal_uInt32 i = 0; i < nCount; i++ )
-    {
-        const GalleryObject* pObj = maGalleryObjectCollection.getForPosition( i );
-        OUString               aPath;
-
-        if( SgaObjKind::SvDraw == pObj->eObjKind )
-        {
-            aPath = GetSvDrawStreamNameFromURL( pObj->aURL );
-            bRel = false;
-        }
-        else
-        {
-            aPath = pObj->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-            aPath = aPath.copy( 0, std::min(aRelURL1.GetMainURL( INetURLObject::DecodeMechanism::NONE ).getLength(), aPath.getLength()) );
-            bRel = aPath == aRelURL1.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-
-            if( bRel && ( pObj->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ).getLength() > ( aRelURL1.GetMainURL( INetURLObject::DecodeMechanism::NONE ).getLength() + 1 ) ) )
-            {
-                aPath = pObj->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-                aPath = aPath.copy( std::min(aRelURL1.GetMainURL( INetURLObject::DecodeMechanism::NONE ).getLength(), aPath.getLength()) );
-            }
-            else
-            {
-                aPath = pObj->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-                aPath = aPath.copy( 0, std::min(aRelURL2.GetMainURL( INetURLObject::DecodeMechanism::NONE ).getLength(), aPath.getLength()) );
-                bRel = aPath == aRelURL2.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-
-                if( bRel && ( pObj->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ).getLength() > ( aRelURL2.GetMainURL( INetURLObject::DecodeMechanism::NONE ).getLength() + 1 ) ) )
-                {
-                    aPath = pObj->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-                    aPath = aPath.copy( std::min(aRelURL2.GetMainURL( INetURLObject::DecodeMechanism::NONE ).getLength(), aPath.getLength()) );
-                }
-                else
-                    aPath = pObj->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-            }
-        }
-
-        if ( !m_aDestDir.isEmpty() )
-        {
-            bool aFound = aPath.indexOf(m_aDestDir) != -1;
-            aPath = aPath.replaceFirst(m_aDestDir, "");
-            if ( aFound )
-                bRel = m_bDestDirRelative;
-            else
-                SAL_WARN( "svx", "failed to replace destdir of '"
-                          << m_aDestDir << "' in '" << aPath << "'");
-        }
-
-        rOStm.WriteBool( bRel );
-        write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aPath, RTL_TEXTENCODING_UTF8);
-        rOStm.WriteUInt32( pObj->nOffset ).WriteUInt16( static_cast<sal_uInt16>(pObj->eObjKind) );
-    }
-
-    // more recently, a 512-byte reserve buffer is written,
-    // to recognize them two sal_uInt32-Ids will be written.
-    rOStm.WriteUInt32( COMPAT_FORMAT( 'G', 'A', 'L', 'R' ) ).WriteUInt32( COMPAT_FORMAT( 'E', 'S', 'R', 'V' ) );
-
-    const long      nReservePos = rOStm.Tell();
-    std::unique_ptr<VersionCompat> pCompat(new VersionCompat( rOStm, StreamMode::WRITE, 2 ));
-
-    rOStm.WriteUInt32( GetId() ).WriteBool( pThm->IsNameFromResource() ); // From version 2 and up
-
-    pCompat.reset();
-
-    // Fill the rest of the buffer.
-    const long  nRest = std::max( 512L - ( static_cast<long>(rOStm.Tell()) - nReservePos ), 0L );
-
-    if( nRest )
-    {
-        std::unique_ptr<char[]> pReserve(new char[ nRest ]);
-        memset( pReserve.get(), 0, nRest );
-        rOStm.WriteBytes(pReserve.get(), nRest);
-    }
-
-    return rOStm;
 }
 
 SvStream& GalleryTheme::ReadData( SvStream& rIStm )
