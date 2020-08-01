@@ -1324,14 +1324,29 @@ void SectionPropertyMap::HandleIncreasedAnchoredObjectSpacing(DomainMapper_Impl&
 
 void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 {
+    SectionPropertyMap* pPrevSection = rDM_Impl.GetLastSectionContext();
+
     // The default section type is nextPage.
     if ( m_nBreakType == -1 )
         m_nBreakType = NS_ooxml::LN_Value_ST_SectionMark_nextPage;
-    // if page orientation differs from previous section, it can't be treated as continuous
+    else if ( m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_nextColumn )
+    {
+        // Word 2013+ seems to treat a section column break as a page break all the time.
+        // It always acts like a page break if there are no columns, or a different number of columns.
+        // Also, if this is the first section, the break type is basically irrelevant - works best as nextPage.
+        if ( rDM_Impl.GetSettingsTable()->GetWordCompatibilityMode() > 14
+             || !pPrevSection
+             || m_nColumnCount < 2
+             || m_nColumnCount != pPrevSection->ColumnCount()
+           )
+        {
+            m_nBreakType = NS_ooxml::LN_Value_ST_SectionMark_nextPage;
+        }
+    }
     else if ( m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_continuous )
     {
-        SectionPropertyMap* pLastContext = rDM_Impl.GetLastSectionContext();
-        if ( pLastContext )
+        // if page orientation differs from previous section, it can't be treated as continuous
+        if ( pPrevSection )
         {
             bool bIsLandscape = false;
             std::optional< PropertyMap::Property > pProp = getProperty( PROP_IS_LANDSCAPE );
@@ -1339,7 +1354,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 pProp->second >>= bIsLandscape;
 
             bool bPrevIsLandscape = false;
-            pProp = pLastContext->getProperty( PROP_IS_LANDSCAPE );
+            pProp = pPrevSection->getProperty( PROP_IS_LANDSCAPE );
             if ( pProp )
                 pProp->second >>= bPrevIsLandscape;
 
@@ -1562,9 +1577,8 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         }
 
         // these BreakTypes are effectively page-breaks: don't evenly distribute text in columns before a page break;
-        SectionPropertyMap* pLastContext = rDM_Impl.GetLastSectionContext();
-        if ( pLastContext && pLastContext->ColumnCount() )
-            pLastContext->DontBalanceTextColumns();
+        if ( pPrevSection && pPrevSection->ColumnCount() )
+            pPrevSection->DontBalanceTextColumns();
 
         //prepare text grid properties
         sal_Int32 nHeight = 1;
