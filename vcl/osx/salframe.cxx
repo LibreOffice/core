@@ -1162,7 +1162,7 @@ static void getAppleScrollBarVariant(StyleSettings &rSettings)
     }
 }
 
-static Color getColor( NSColor* pSysColor, const Color& rDefault, NSWindow* pWin )
+Color AquaSalFrame::getColor( NSColor* pSysColor, const Color& rDefault, NSWindow* pWin )
 {
     Color aRet( rDefault );
     if( pSysColor )

@@ -258,7 +258,16 @@ SalGraphicsImpl* AquaSalGraphics::GetImpl() const
 
 void AquaSalGraphics::SetTextColor( Color nColor )
 {
-    maTextColor = RGBAColor( nColor );
+
+    // there are non key windows which are childs of key windows, e.g. autofilter configuration dialog or sidebar dropdown dialogs.
+    // To handle these windows correctly, parent frame's key window state is considered here additionally.
+
+    const bool bDrawActive = mpFrame == nullptr || [mpFrame->getNSWindow() isKeyWindow]
+                             || (mpFrame->mpParent != nullptr && [mpFrame->mpParent->getNSWindow() isKeyWindow]);
+    if (bDrawActive)
+        maTextColor = RGBAColor( nColor );
+    else
+        maTextColor = mpFrame->getColor([NSColor disabledControlTextColor], COL_BLACK, mpFrame->getNSWindow());
     // SAL_ DEBUG(std::hex << nColor << std::dec << "={" << maTextColor.GetRed() << ", " << maTextColor.GetGreen() << ", " << maTextColor.GetBlue() << ", " << maTextColor.GetAlpha() << "}");
 }
 
