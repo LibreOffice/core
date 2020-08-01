@@ -1893,7 +1893,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
             if( aFilterName.equalsIgnoreAsciiCase( EXP_BMP ) )
             {
                 BitmapEx aBmp( aGraphic.GetBitmapEx() );
-                BmpConversion nColorRes = static_cast<BmpConversion>(aConfigItem.ReadInt32( "Colors", 0 ));
+                BmpConversion nColorRes = static_cast<BmpConversion>(aConfigItem.ReadInt32( "Color", 0 ));
                 if ( nColorRes != BmpConversion::NNONE && ( nColorRes <= BmpConversion::N24Bit) )
                 {
                     if( !aBmp.Convert( nColorRes ) )
