@@ -71,6 +71,7 @@ public:
     SAL_DLLPRIVATE bool implWrite(const GalleryTheme& rTheme, const GalleryThemeEntry* pThm);
 
     void insertObject(const SgaObject& rObj, GalleryObject* pFoundEntry, sal_uInt32& rInsertPos);
+    void removeObject(std::unique_ptr<GalleryObject>& pEntry);
 
     std::unique_ptr<SgaObject> implReadSgaObject(GalleryObject const* pEntry);
     bool implWriteSgaObject(const SgaObject& rObj, sal_uInt32 nPos, GalleryObject* pExistentEntry);

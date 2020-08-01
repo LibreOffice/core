@@ -187,11 +187,7 @@ void GalleryTheme::RemoveObject(sal_uInt32 nPos)
     std::unique_ptr<GalleryObject> pEntry = std::move(*it);
     maGalleryObjectCollection.getObjectList().erase( it );
 
-    if( maGalleryObjectCollection.getObjectList().empty() )
-        KillFile( GetSdgURL() );
-
-    if( SgaObjKind::SvDraw == pEntry->eObjKind )
-        mpGalleryBinaryEngine->GetSvDrawStorage()->Remove( pEntry->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+    mpGalleryBinaryEngine->removeObject(pEntry);
 
     Broadcast( GalleryHint( GalleryHintType::CLOSE_OBJECT, GetName(), pEntry.get() ) );
     pEntry.reset();
