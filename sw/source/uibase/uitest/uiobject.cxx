@@ -13,6 +13,7 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <navipi.hxx>
+#include <ndtxt.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/viewfrm.hxx>
 
@@ -101,7 +102,18 @@ void SwEditWinUIObject::execute(const OUString& rAction,
             OUString aEndPos = itr->second;
             sal_Int32 nEndPos = aEndPos.toInt32();
 
-            getWrtShell(mxEditWin).SelectText(nStartPos, nEndPos);
+            auto & shell = getWrtShell(mxEditWin);
+            sal_Int32 len;
+            if (auto const text = shell.GetCursor_()->GetPoint()->nNode.GetNode().GetTextNode()) {
+                len = text->GetText().getLength();
+            } else {
+                len = 0;
+            }
+            SAL_WARN_IF(
+                nStartPos < 0 || nStartPos > len || nEndPos < 0 || nEndPos > len, "sw.ui",
+                "SELECT START/END_POS " << nStartPos << ".." << nEndPos << " outside 0.." << len);
+            shell.SelectText(
+                std::clamp(nStartPos, sal_Int32(0), len), std::clamp(nEndPos, sal_Int32(0), len));
         }
     }
     else if (rAction == "SIDEBAR")
