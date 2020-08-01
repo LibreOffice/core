@@ -46,6 +46,7 @@
 #include <osl/thread.h>
 #include <rtl/digest.h>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/uri.hxx>
 #include <sal/log.hxx>
 #include <svl/urihelper.hxx>
 #include <tools/fract.hxx>
@@ -4414,7 +4415,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                 {
                     // create a URI action
                     aLine.append( "/AA<</D<</Type/Action/S/URI/URI(" );
-                    aLine.append( OUStringToOString( rWidget.m_aListEntries.front(), RTL_TEXTENCODING_ASCII_US ) );
+                    aLine.append( OUStringToOString( rtl::Url::encode(rWidget.m_aListEntries.front(), rtl_UriCharClassPchar,rtl_UriEncodeKeepEscapes,RTL_TEXTENCODING_UTF8), RTL_TEXTENCODING_ASCII_US ) );
                     aLine.append( ")>>>>\n" );
                 }
             }
