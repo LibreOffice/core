@@ -2134,10 +2134,11 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             pProperties->resolve(*pSectHdl);
             if(pSectionContext && !m_pImpl->isInIndexContext())
             {
+                sal_Int16 nColumnCount = pSectHdl->GetNum() == 1 ? 0 : pSectHdl->GetNum();
                 if( pSectHdl->IsEqualWidth() )
                 {
                     pSectionContext->SetEvenlySpaced( true );
-                    pSectionContext->SetColumnCount( static_cast<sal_Int16>(pSectHdl->GetNum() - 1) );
+                    pSectionContext->SetColumnCount( nColumnCount );
                     pSectionContext->SetColumnDistance( pSectHdl->GetSpace() );
                     pSectionContext->SetSeparatorLine( pSectHdl->IsSeparator() );
                 }
@@ -2145,7 +2146,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 {
                     pSectionContext->SetEvenlySpaced( false );
                     pSectionContext->SetColumnDistance( pSectHdl->GetSpace() );
-                    pSectionContext->SetColumnCount( static_cast<sal_Int16>(pSectHdl->GetColumns().size() -1));
+                    nColumnCount = pSectHdl->GetColumns().size();
+                    pSectionContext->SetColumnCount( nColumnCount == 1 ? 0 : nColumnCount );
                     std::vector<Column_>::const_iterator tmpIter = pSectHdl->GetColumns().begin();
                     for (; tmpIter != pSectHdl->GetColumns().end(); ++tmpIter)
                     {
@@ -2155,9 +2157,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                     }
                     pSectionContext->SetSeparatorLine( pSectHdl->IsSeparator() );
                 }
-                else if( pSectHdl->GetNum() > 0 )
+                else if( nColumnCount )
                 {
-                    pSectionContext->SetColumnCount( static_cast<sal_Int16>(pSectHdl->GetNum()) - 1 );
+                    pSectionContext->SetColumnCount( nColumnCount );
                     pSectionContext->SetColumnDistance( pSectHdl->GetSpace() );
                     pSectionContext->SetSeparatorLine( pSectHdl->IsSeparator() );
                 }
