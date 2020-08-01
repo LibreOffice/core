@@ -154,6 +154,15 @@ void GalleryBinaryEngine::insertObject(const SgaObject& rObj, GalleryObject* pFo
         implWriteSgaObject(rObj, rInsertPos, nullptr);
 }
 
+void GalleryBinaryEngine::removeObject(std::unique_ptr<GalleryObject>& pEntry)
+{
+    if (mrGalleryObjectCollection.getObjectList().empty())
+        KillFile(GetSdgURL());
+
+    if (SgaObjKind::SvDraw == pEntry->eObjKind)
+        GetSvDrawStorage()->Remove(pEntry->aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+}
+
 std::unique_ptr<SgaObject> GalleryBinaryEngine::implReadSgaObject(GalleryObject const* pEntry)
 {
     std::unique_ptr<SgaObject> pSgaObj;
