@@ -31,6 +31,7 @@
 #include <vcl/toolkit/combobox.hxx>
 #include <vcl/toolkit/lstbox.hxx>
 #include <strings.hxx>
+#include <mutex>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -254,7 +255,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2(VCLXAccessibleBox, VCLXAccessibleComponent, VCL
 
 Reference< XAccessibleContext > SAL_CALL VCLXAccessibleBox::getAccessibleContext(  )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::scoped_lock aGuard( GetMutex() );
 
     return this;
 }
@@ -264,7 +265,7 @@ Reference< XAccessibleContext > SAL_CALL VCLXAccessibleBox::getAccessibleContext
 sal_Int32 VCLXAccessibleBox::getAccessibleChildCount()
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::scoped_lock aGuard( GetMutex() );
 
     return implGetAccessibleChildCount();
 }
@@ -292,7 +293,7 @@ sal_Int32 VCLXAccessibleBox::implGetAccessibleChildCount()
 Reference<XAccessible> SAL_CALL VCLXAccessibleBox::getAccessibleChild (sal_Int32 i)
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::scoped_lock aGuard( GetMutex() );
 
     if (i<0 || i>=implGetAccessibleChildCount())
         throw IndexOutOfBoundsException();
@@ -340,7 +341,7 @@ Reference<XAccessible> SAL_CALL VCLXAccessibleBox::getAccessibleChild (sal_Int32
 
 sal_Int16 SAL_CALL VCLXAccessibleBox::getAccessibleRole()
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::scoped_lock aGuard( GetMutex() );
 
     // Return the role <const>COMBO_BOX</const> for both VCL combo boxes and
     // VCL list boxes in DropDown-Mode else <const>PANEL</const>.
@@ -356,7 +357,7 @@ sal_Int16 SAL_CALL VCLXAccessibleBox::getAccessibleRole()
 
 sal_Int32 SAL_CALL VCLXAccessibleBox::getAccessibleActionCount()
 {
-    ::osl::Guard< ::osl::Mutex> aGuard (GetMutex());
+    std::scoped_lock aGuard (GetMutex());
 
     // There is one action for drop down boxes (toggle popup) and none for
     // the other boxes.
@@ -369,7 +370,7 @@ sal_Bool SAL_CALL VCLXAccessibleBox::doAccessibleAction (sal_Int32 nIndex)
 
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+        std::scoped_lock aGuard( GetMutex() );
 
         if (nIndex!=0 || !m_bIsDropDownBox)
             throw css::lang::IndexOutOfBoundsException(
@@ -406,7 +407,7 @@ sal_Bool SAL_CALL VCLXAccessibleBox::doAccessibleAction (sal_Int32 nIndex)
 
 OUString SAL_CALL VCLXAccessibleBox::getAccessibleActionDescription (sal_Int32 nIndex)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::scoped_lock aGuard( GetMutex() );
     if (nIndex!=0 || !m_bIsDropDownBox)
         throw css::lang::IndexOutOfBoundsException();
 
@@ -415,7 +416,7 @@ OUString SAL_CALL VCLXAccessibleBox::getAccessibleActionDescription (sal_Int32 n
 
 Reference< XAccessibleKeyBinding > VCLXAccessibleBox::getAccessibleActionKeyBinding( sal_Int32 nIndex )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::scoped_lock aGuard( GetMutex() );
 
     Reference< XAccessibleKeyBinding > xRet;
 
@@ -430,7 +431,7 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleBox::getAccessibleActionKeyBind
 Any VCLXAccessibleBox::getCurrentValue( )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::scoped_lock aGuard( GetMutex() );
 
     Any aAny;
     if( m_xList.is() && m_xText.is())
@@ -466,7 +467,7 @@ Any VCLXAccessibleBox::getCurrentValue( )
 sal_Bool VCLXAccessibleBox::setCurrentValue( const Any& aNumber )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::scoped_lock aGuard( GetMutex() );
 
     OUString  fValue;
     bool bValid = (aNumber >>= fValue);
