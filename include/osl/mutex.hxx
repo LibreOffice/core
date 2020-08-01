@@ -22,6 +22,11 @@
 
 #include "osl/mutex.h"
 
+#ifdef LIBO_INTERNAL_ONLY
+#include <stdexcept>
+
+#endif
+
 #include <cassert>
 
 namespace osl
@@ -57,8 +62,20 @@ namespace osl
             return osl_acquireMutex(mutex);
         }
 
+#ifdef LIBO_INTERNAL_ONLY
+        /** Lock the mutex, block if already acquired by another thread.
+            @return false if system-call fails.
+            @see ::osl_acquireMutex()
+        */
+        void lock()
+        {
+            if (!osl_acquireMutex(mutex))
+                throw std::runtime_error("Unable to acquire mutex");
+        }
+#endif
+
         /** Try to acquire the mutex without blocking.
-            @return false if it could not be acquired.
+            @throw std::system_error if system-call fails.
             @see ::osl_tryToAcquireMutex()
         */
         bool tryToAcquire()
@@ -74,6 +91,18 @@ namespace osl
         {
             return osl_releaseMutex(mutex);
         }
+
+#ifdef LIBO_INTERNAL_ONLY
+        /** Release the mutex.
+            @throw std::system_error if system-call fails.
+            @see ::osl_releaseMutex()
+        */
+        void unlock()
+        {
+            if (!osl_releaseMutex(mutex))
+                throw std::runtime_error("Unable to release mutex");
+        }
+#endif
 
         /** Returns a global static mutex object.
             The global and static mutex object can be used to initialize other
