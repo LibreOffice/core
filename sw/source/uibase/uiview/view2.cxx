@@ -2537,7 +2537,13 @@ IMPL_LINK( SwView, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )
 
     std::unique_ptr<SfxMedium> pMed = m_pViewImpl->CreateMedium();
     if ( !pMed )
+    {
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetEditWin().GetFrameWeld(),
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      SwResId(RID_SVXSTR_TXTFILTER_FILTERERROR)));
+        xInfoBox->run();
         return;
+    }
 
     const sal_uInt16 nSlot = m_pViewImpl->GetRequest()->GetSlot();
     long nFound = InsertMedium( nSlot, std::move(pMed), m_pViewImpl->GetParam() );

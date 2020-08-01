@@ -165,6 +165,7 @@
 #define RID_SVXSTR_GRFILTER_FORMATERROR         NC_("RID_SVXSTR_GRFILTER_FORMATERROR", "Unknown image format")
 #define RID_SVXSTR_GRFILTER_VERSIONERROR        NC_("RID_SVXSTR_GRFILTER_VERSIONERROR", "This version of the image file is not supported")
 #define RID_SVXSTR_GRFILTER_FILTERERROR         NC_("RID_SVXSTR_GRFILTER_FILTERERROR", "Image filter not found")
+#define RID_SVXSTR_TXTFILTER_FILTERERROR        NC_("RID_SVXSTR_TXTFILTER_FILTERERROR", "This is not a text document")
 #define RID_SVXSTR_END_REDLINING_WARNING        NC_("RID_SVXSTR_END_REDLINING_WARNING", "This action will exit the change recording mode.\nNo information about changes will be recorded from now on.\n\nExit change recording mode?\n\n")
 #define RID_SVXSTR_INCORRECT_PASSWORD           NC_("RID_SVXSTR_INCORRECT_PASSWORD", "Incorrect password")
 #define RID_SVXSTR_GPG_ENCRYPT_FAILURE          NC_("RID_SVXSTR_GPG_ENCRYPT_FAILURE", "OpenPGP key not trusted, damaged, or encryption failure. Please try again.")
