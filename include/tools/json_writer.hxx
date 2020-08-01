@@ -47,6 +47,7 @@ public:
     /** Hands ownership of the the underlying storage buffer to the caller,
      * after this no more document modifications may be written. */
     char* extractData();
+    OString extractAsOString();
 
 private:
     void endNode();
