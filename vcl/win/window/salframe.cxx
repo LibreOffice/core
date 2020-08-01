@@ -5291,15 +5291,18 @@ static void ImplHandleIMENotify( HWND hWnd, WPARAM wParam )
 static bool
 ImplHandleGetObject(HWND hWnd, LPARAM lParam, WPARAM wParam, LRESULT & nRet)
 {
-    // IA2 should be enabled automatically
-    AllSettings aSettings = Application::GetSettings();
-    MiscSettings aMisc = aSettings.GetMiscSettings();
-    aMisc.SetEnableATToolSupport( true );
-    aSettings.SetMiscSettings( aMisc );
-    Application::SetSettings( aSettings );
-
     if (!Application::GetSettings().GetMiscSettings().GetEnableATToolSupport())
-        return false; // locked down somehow ?
+    {
+        // IA2 should be enabled automatically
+        AllSettings aSettings = Application::GetSettings();
+        MiscSettings aMisc = aSettings.GetMiscSettings();
+        aMisc.SetEnableATToolSupport(true);
+        // The above is enough, since aMisc changes the same shared ImplMiscData as used in global
+        // gettings, so no need to call aSettings.SetMiscSettings and Application::SetSettings
+
+        if (!Application::GetSettings().GetMiscSettings().GetEnableATToolSupport())
+            return false; // locked down somehow ?
+    }
 
     ImplSVData* pSVData = ImplGetSVData();
 
