@@ -264,7 +264,7 @@ namespace accessibility
     void SAL_CALL AccessibleTabListBoxTable::selectAccessibleChild( sal_Int32 nChildIndex )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( getMutex() );
+        std::scoped_lock aGuard( getMutex() );
 
         ensureIsAlive();
         ensureValidIndex( nChildIndex );
@@ -275,7 +275,7 @@ namespace accessibility
     sal_Bool SAL_CALL AccessibleTabListBoxTable::isAccessibleChildSelected( sal_Int32 nChildIndex )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( getMutex() );
+        std::scoped_lock aGuard( getMutex() );
 
         ensureIsAlive();
         ensureValidIndex( nChildIndex );
@@ -286,7 +286,7 @@ namespace accessibility
     void SAL_CALL AccessibleTabListBoxTable::clearAccessibleSelection(  )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( getMutex() );
+        std::scoped_lock aGuard( getMutex() );
 
         ensureIsAlive();
 
@@ -296,7 +296,7 @@ namespace accessibility
     void SAL_CALL AccessibleTabListBoxTable::selectAllAccessibleChildren(  )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( getMutex() );
+        std::scoped_lock aGuard( getMutex() );
 
         ensureIsAlive();
 
@@ -306,7 +306,7 @@ namespace accessibility
     sal_Int32 SAL_CALL AccessibleTabListBoxTable::getSelectedAccessibleChildCount(  )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( getMutex() );
+        std::scoped_lock aGuard( getMutex() );
 
         ensureIsAlive();
 
@@ -316,7 +316,7 @@ namespace accessibility
     Reference< XAccessible > SAL_CALL AccessibleTabListBoxTable::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( getMutex() );
+        std::scoped_lock aGuard( getMutex() );
 
         ensureIsAlive();
 
@@ -332,7 +332,7 @@ namespace accessibility
     void SAL_CALL AccessibleTabListBoxTable::deselectAccessibleChild( sal_Int32 nSelectedChildIndex )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( getMutex() );
+        std::scoped_lock aGuard( getMutex() );
 
         ensureIsAlive();
         ensureValidIndex( nSelectedChildIndex );

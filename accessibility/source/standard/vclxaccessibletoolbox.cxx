@@ -35,6 +35,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <mutex>
 
 using namespace ::comphelper;
 using namespace ::com::sun::star;
@@ -72,7 +73,7 @@ namespace
 
     sal_Int32 SAL_CALL OToolBoxWindowItemContext::getAccessibleIndexInParent(  )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         return m_nIndexInParent;
     }
 

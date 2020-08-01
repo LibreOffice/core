@@ -39,6 +39,7 @@
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/uno3.hxx>
+#include <mutex>
 
 
 namespace vcl { class Window; }
@@ -378,12 +379,12 @@ protected:
 
 // a helper class for protecting methods which need to lock the solar mutex in addition to the own mutex
 
-class SolarMethodGuard : public SolarMutexGuard, public osl::MutexGuard
+class SolarMethodGuard : public SolarMutexGuard, public std::scoped_lock<osl::Mutex>
 {
 public:
     SolarMethodGuard( osl::Mutex& rMutex )
         :SolarMutexGuard( )
-        ,osl::MutexGuard( rMutex )
+        ,std::scoped_lock<osl::Mutex>( rMutex )
     {
     }
 };

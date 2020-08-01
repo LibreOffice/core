@@ -33,6 +33,7 @@
 #include <vcl/toolkit/combobox.hxx>
 #include <vcl/toolkit/lstbox.hxx>
 #include <toolkit/helper/convert.hxx>
+#include <mutex>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -200,7 +201,7 @@ void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool bHasDropDownList)
 
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+        std::scoped_lock aGuard( GetMutex() );
         Reference< XAccessible > xNewAcc;
         if ( m_pListBoxHelper )
         {
@@ -524,7 +525,7 @@ Reference<XAccessibleContext> SAL_CALL
 sal_Int32 SAL_CALL VCLXAccessibleList::getAccessibleChildCount()
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::scoped_lock aGuard( GetMutex() );
     return implGetAccessibleChildCount();
 }
 
@@ -540,7 +541,7 @@ sal_Int32 VCLXAccessibleList::implGetAccessibleChildCount()
 Reference<XAccessible> SAL_CALL VCLXAccessibleList::getAccessibleChild (sal_Int32 i)
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::scoped_lock aGuard( GetMutex() );
 
     if ( i < 0 || i >= getAccessibleChildCount() )
         throw IndexOutOfBoundsException();
@@ -561,7 +562,7 @@ Reference<XAccessible> SAL_CALL VCLXAccessibleList::getAccessibleChild (sal_Int3
 
 Reference< XAccessible > SAL_CALL VCLXAccessibleList::getAccessibleParent(  )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::scoped_lock aGuard( GetMutex() );
 
     return m_xParent;
 }
@@ -610,7 +611,7 @@ void VCLXAccessibleList::UpdateVisibleLineCount()
 void VCLXAccessibleList::UpdateEntryRange_Impl()
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::scoped_lock aGuard( GetMutex() );
 
     sal_Int32 nTop = m_nLastTopEntry;
 
@@ -661,7 +662,7 @@ void VCLXAccessibleList::UpdateSelection_Impl(sal_Int32)
 
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+        std::scoped_lock aGuard( GetMutex() );
         Reference< XAccessible > xNewAcc;
 
         if ( m_pListBoxHelper )
@@ -730,7 +731,8 @@ void SAL_CALL VCLXAccessibleList::selectAccessibleChild( sal_Int32 nChildIndex )
 
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+        std::scoped_lock aGuard( GetMutex() );
+
 
         if ( m_pListBoxHelper )
         {
@@ -752,7 +754,7 @@ void SAL_CALL VCLXAccessibleList::selectAccessibleChild( sal_Int32 nChildIndex )
 sal_Bool SAL_CALL VCLXAccessibleList::isAccessibleChildSelected( sal_Int32 nChildIndex )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::scoped_lock aGuard( GetMutex() );
 
     bool bRet = false;
     if ( m_pListBoxHelper )
@@ -770,7 +772,7 @@ void SAL_CALL VCLXAccessibleList::clearAccessibleSelection(  )
 
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+        std::scoped_lock aGuard( GetMutex() );
 
         if ( m_pListBoxHelper )
         {
@@ -789,7 +791,7 @@ void SAL_CALL VCLXAccessibleList::selectAllAccessibleChildren(  )
 
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+        std::scoped_lock aGuard( GetMutex() );
 
         if ( m_pListBoxHelper )
         {
@@ -811,7 +813,7 @@ void SAL_CALL VCLXAccessibleList::selectAllAccessibleChildren(  )
 sal_Int32 SAL_CALL VCLXAccessibleList::getSelectedAccessibleChildCount(  )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::scoped_lock aGuard( GetMutex() );
 
     sal_Int32 nCount = 0;
     if ( m_pListBoxHelper )
@@ -822,7 +824,7 @@ sal_Int32 SAL_CALL VCLXAccessibleList::getSelectedAccessibleChildCount(  )
 Reference< XAccessible > SAL_CALL VCLXAccessibleList::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::scoped_lock aGuard( GetMutex() );
 
     if ( m_pListBoxHelper )
     {
@@ -839,7 +841,7 @@ void SAL_CALL VCLXAccessibleList::deselectAccessibleChild( sal_Int32 nSelectedCh
 
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+        std::scoped_lock aGuard( GetMutex() );
 
         if ( m_pListBoxHelper )
         {
@@ -891,7 +893,7 @@ awt::Rectangle VCLXAccessibleList::implGetBounds()
 awt::Point VCLXAccessibleList::getLocationOnScreen(  )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::scoped_lock aGuard( GetMutex() );
 
     awt::Point aPos;
     if ( m_pListBoxHelper

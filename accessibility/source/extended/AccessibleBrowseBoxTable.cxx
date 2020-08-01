@@ -61,7 +61,7 @@ AccessibleBrowseBoxTable::getAccessibleChild( sal_Int32 nChildIndex )
 
 sal_Int32 SAL_CALL AccessibleBrowseBoxTable::getAccessibleIndexInParent()
 {
-    osl::MutexGuard aGuard( getMutex() );
+    std::scoped_lock aGuard( getMutex() );
     ensureIsAlive();
     return vcl::BBINDEX_TABLE;
 }
@@ -111,14 +111,14 @@ OUString SAL_CALL AccessibleBrowseBoxTable::getAccessibleColumnDescription( sal_
 
 Reference< XAccessibleTable > SAL_CALL AccessibleBrowseBoxTable::getAccessibleRowHeaders()
 {
-    ::osl::MutexGuard aGuard( getMutex() );
+    std::scoped_lock aGuard( getMutex() );
     ensureIsAlive();
     return implGetHeaderBar( vcl::BBINDEX_ROWHEADERBAR );
 }
 
 Reference< XAccessibleTable > SAL_CALL AccessibleBrowseBoxTable::getAccessibleColumnHeaders()
 {
-    ::osl::MutexGuard aGuard( getMutex() );
+    std::scoped_lock aGuard( getMutex() );
     ensureIsAlive();
     return implGetHeaderBar( vcl::BBINDEX_COLUMNHEADERBAR );
 }

@@ -44,6 +44,7 @@
 #include <memory>
 #include <numeric>
 #include <vector>
+#include <mutex>
 
 namespace accessibility
 {
@@ -601,7 +602,7 @@ void SAL_CALL Paragraph::removeAccessibleEventListener(
 {
     comphelper::AccessibleEventNotifier::TClientId nId = 0;
     {
-        osl::MutexGuard aGuard(rBHelper.rMutex);
+        std::scoped_lock aGuard(rBHelper.rMutex);
         if (rListener.is() && m_nClientId != 0
             && comphelper::AccessibleEventNotifier::removeEventListener( m_nClientId, rListener ) == 0)
         {
@@ -624,7 +625,7 @@ void SAL_CALL Paragraph::disposing()
 {
     comphelper::AccessibleEventNotifier::TClientId nId = 0;
     {
-        osl::MutexGuard aGuard(rBHelper.rMutex);
+        std::scoped_lock aGuard(rBHelper.rMutex);
         nId = m_nClientId;
         m_nClientId = 0;
     }
@@ -694,7 +695,7 @@ void Paragraph::implGetLineBoundary( const OUString& rText,
 
 void Paragraph::checkDisposed()
 {
-    ::osl::MutexGuard aGuard(rBHelper.rMutex);
+    std::scoped_lock aGuard(rBHelper.rMutex);
     if (!(rBHelper.bDisposed || rBHelper.bInDispose))
         return;
     throw css::lang::DisposedException(
@@ -727,7 +728,7 @@ css::lang::Locale Document::retrieveLocale()
 
 ::sal_Int32 Document::retrieveParagraphIndex(Paragraph const * pParagraph)
 {
-    ::osl::MutexGuard aInternalGuard(GetMutex());
+    std::scoped_lock aInternalGuard(GetMutex());
 
     // If a client holds on to a Paragraph that is no longer visible, it can
     // happen that this Paragraph lies outside the range from m_aVisibleBegin
@@ -741,7 +742,7 @@ css::lang::Locale Document::retrieveLocale()
 
 ::sal_Int64 Document::retrieveParagraphState(Paragraph const * pParagraph)
 {
-    ::osl::MutexGuard aInternalGuard(GetMutex());
+    std::scoped_lock aInternalGuard(GetMutex());
 
     // If a client holds on to a Paragraph that is no longer visible, it can
     // happen that this Paragraph lies outside the range from m_aVisibleBegin
@@ -779,7 +780,7 @@ Document::retrieveParagraphBounds(Paragraph const * pParagraph,
                                   bool bAbsolute)
 {
     SolarMutexGuard aGuard;
-    ::osl::MutexGuard aInternalGuard(GetMutex());
+    std::scoped_lock aInternalGuard(GetMutex());
 
     // If a client holds on to a Paragraph that is no longer visible (as it
     // scrolled out the top of the view), it can happen that this Paragraph
@@ -811,7 +812,7 @@ OUString
 Document::retrieveParagraphText(Paragraph const * pParagraph)
 {
     SolarMutexGuard aGuard;
-    ::osl::MutexGuard aInternalGuard(GetMutex());
+    std::scoped_lock aInternalGuard(GetMutex());
     return m_rEngine.GetText(static_cast< ::sal_uInt32 >(pParagraph->getNumber()));
         // numeric overflow cannot happen here
 }
@@ -821,7 +822,7 @@ void Document::retrieveParagraphSelection(Paragraph const * pParagraph,
                                           ::sal_Int32 * pEnd)
 {
     SolarMutexGuard aGuard;
-    ::osl::MutexGuard aInternalGuard(GetMutex());
+    std::scoped_lock aInternalGuard(GetMutex());
     ::TextSelection const & rSelection = m_rView.GetSelection();
     Paragraphs::size_type nNumber = pParagraph->getNumber();
     TextPaM aStartPaM( rSelection.GetStart() );
@@ -851,7 +852,7 @@ void Document::retrieveParagraphSelection(Paragraph const * pParagraph,
 ::sal_Int32 Document::retrieveParagraphCaretPosition(Paragraph const * pParagraph)
 {
     SolarMutexGuard aGuard;
-    ::osl::MutexGuard aInternalGuard(GetMutex());
+    std::scoped_lock aInternalGuard(GetMutex());
     ::TextSelection const & rSelection = m_rView.GetSelection();
     Paragraphs::size_type nNumber = pParagraph->getNumber();
     TextPaM aEndPaM( rSelection.GetEnd() );
@@ -864,7 +865,7 @@ Document::retrieveCharacterBounds(Paragraph const * pParagraph,
                                   ::sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
-    ::osl::MutexGuard aInternalGuard(GetMutex());
+    std::scoped_lock aInternalGuard(GetMutex());
     ::sal_uInt32 nNumber = static_cast< ::sal_uInt32 >(pParagraph->getNumber());
     sal_Int32 nLength = m_rEngine.GetText(nNumber).getLength();
         // XXX  numeric overflow
@@ -910,7 +911,7 @@ Document::retrieveCharacterBounds(Paragraph const * pParagraph,
                                              css::awt::Point const & rPoint)
 {
     SolarMutexGuard aGuard;
-    ::osl::MutexGuard aInternalGuard(GetMutex());
+    std::scoped_lock aInternalGuard(GetMutex());
     ::sal_uInt32 nNumber = static_cast< ::sal_uInt32 >(pParagraph->getNumber());
         // XXX  numeric overflow
     ::TextPaM aPaM(m_rEngine.GetPaM(::Point(static_cast< tools::Long >(rPoint.X),
@@ -989,7 +990,7 @@ Document::retrieveCharacterAttributes(
     aAttrib.Value <<= static_cast<sal_Int16>(m_rEngine.GetTextAlign());
     aAttribs.push_back(aAttrib);
 
-    ::osl::MutexGuard aInternalGuard(GetMutex());
+    std::scoped_lock aInternalGuard(GetMutex());
     ::sal_uInt32 nNumber = static_cast< ::sal_uInt32 >(pParagraph->getNumber());
         // XXX  numeric overflow
         // nIndex can be equal to getLength();
@@ -1083,7 +1084,7 @@ Document::retrieveRunAttributes(
     const css::uno::Sequence< OUString >& RequestedAttributes)
 {
     SolarMutexGuard aGuard;
-    ::osl::MutexGuard aInternalGuard( GetMutex() );
+    std::scoped_lock aInternalGuard( GetMutex() );
     ::sal_uInt32 nNumber = static_cast< ::sal_uInt32 >( pParagraph->getNumber() );
         // XXX  numeric overflow
     if ( Index < 0 || Index >= m_rEngine.GetText(nNumber).getLength() )
@@ -1102,7 +1103,7 @@ void Document::changeParagraphText(Paragraph const * pParagraph,
 {
     SolarMutexGuard aGuard;
     {
-        ::osl::MutexGuard aInternalGuard(GetMutex());
+        std::scoped_lock aInternalGuard(GetMutex());
         ::sal_uInt32 nNumber = static_cast< ::sal_uInt32 >(pParagraph->getNumber());
             // XXX  numeric overflow
         changeParagraphText(nNumber, 0, m_rEngine.GetTextLen(nNumber), false,
@@ -1117,7 +1118,7 @@ void Document::changeParagraphText(Paragraph const * pParagraph,
 {
     SolarMutexGuard aGuard;
     {
-        ::osl::MutexGuard aInternalGuard(GetMutex());
+        std::scoped_lock aInternalGuard(GetMutex());
         ::sal_uInt32 nNumber = static_cast< ::sal_uInt32 >(pParagraph->getNumber());
             // XXX  numeric overflow
         if (nBegin < 0 || nBegin > nEnd
@@ -1137,7 +1138,7 @@ void Document::copyParagraphText(Paragraph const * pParagraph,
 {
     SolarMutexGuard aGuard;
     {
-        ::osl::MutexGuard aInternalGuard(GetMutex());
+        std::scoped_lock aInternalGuard(GetMutex());
         ::sal_uInt32 nNumber = static_cast< ::sal_uInt32 >(pParagraph->getNumber());
             // XXX  numeric overflow
         if (nBegin < 0 || nBegin > nEnd
@@ -1160,7 +1161,7 @@ void Document::changeParagraphAttributes(
 {
     SolarMutexGuard aGuard;
     {
-        ::osl::MutexGuard aInternalGuard(GetMutex());
+        std::scoped_lock aInternalGuard(GetMutex());
         ::sal_uInt32 nNumber = static_cast< ::sal_uInt32 >(pParagraph->getNumber());
         // XXX  numeric overflow
         if (nBegin < 0 || nBegin > nEnd
@@ -1192,7 +1193,7 @@ void Document::changeParagraphSelection(Paragraph const * pParagraph,
 {
     SolarMutexGuard aGuard;
     {
-        ::osl::MutexGuard aInternalGuard(GetMutex());
+        std::scoped_lock aInternalGuard(GetMutex());
         ::sal_uInt32 nNumber = static_cast< ::sal_uInt32 >(pParagraph->getNumber());
             // XXX  numeric overflow
         if (nBegin < 0 || nBegin > nEnd
@@ -1218,7 +1219,7 @@ Document::retrieveParagraphLineBoundary( Paragraph const * pParagraph,
 
     SolarMutexGuard aGuard;
     {
-        ::osl::MutexGuard aInternalGuard( GetMutex() );
+        std::scoped_lock aInternalGuard( GetMutex() );
         ::sal_uInt32 nNumber = static_cast< ::sal_uInt32 >( pParagraph->getNumber() );
         if ( nIndex < 0 || nIndex > m_rEngine.GetText( nNumber ).getLength() )
             throw css::lang::IndexOutOfBoundsException(
@@ -1256,7 +1257,7 @@ Document::retrieveParagraphBoundaryOfLine( Paragraph const * pParagraph,
 
     SolarMutexGuard aGuard;
     {
-        ::osl::MutexGuard aInternalGuard( GetMutex() );
+        std::scoped_lock aInternalGuard( GetMutex() );
         ::sal_uInt32 nNumber = static_cast< ::sal_uInt32 >( pParagraph->getNumber() );
         if ( nLineNo >= m_rEngine.GetLineCount( nNumber ) )
             throw css::lang::IndexOutOfBoundsException(
@@ -1281,7 +1282,7 @@ Document::retrieveParagraphBoundaryOfLine( Paragraph const * pParagraph,
 sal_Int32 Document::retrieveParagraphLineWithCursor( Paragraph const * pParagraph )
 {
     SolarMutexGuard aGuard;
-    ::osl::MutexGuard aInternalGuard(GetMutex());
+    std::scoped_lock aInternalGuard(GetMutex());
     ::TextSelection const & rSelection = m_rView.GetSelection();
     Paragraphs::size_type nNumber = pParagraph->getNumber();
     TextPaM aEndPaM( rSelection.GetEnd() );
@@ -1294,7 +1295,7 @@ sal_Int32 Document::retrieveParagraphLineWithCursor( Paragraph const * pParagrap
 css::uno::Reference< css::accessibility::XAccessibleRelationSet >
 Document::retrieveParagraphRelationSet( Paragraph const * pParagraph )
 {
-    ::osl::MutexGuard aInternalGuard( GetMutex() );
+    std::scoped_lock aInternalGuard( GetMutex() );
 
     ::utl::AccessibleRelationSetHelper* pRelationSetHelper = new ::utl::AccessibleRelationSetHelper();
     css::uno::Reference< css::accessibility::XAccessibleRelationSet > xSet = pRelationSetHelper;
@@ -1426,7 +1427,7 @@ void Document::Notify(::SfxBroadcaster &, ::SfxHint const & rHint)
         // before the changes are applied.  Therefore, SfxHintId::TextFormatParas
         // are just buffered until another hint comes in:
         {
-            ::osl::MutexGuard aInternalGuard(GetMutex());
+            std::scoped_lock aInternalGuard(GetMutex());
             if (!isAlive())
                 break;
 
@@ -1437,7 +1438,7 @@ void Document::Notify(::SfxBroadcaster &, ::SfxHint const & rHint)
     case SfxHintId::TextHeightChanged:
     case SfxHintId::TextModified:
         {
-            ::osl::MutexGuard aInternalGuard(GetMutex());
+            std::scoped_lock aInternalGuard(GetMutex());
             if (!isAlive())
                 break;
             handleParagraphNotifications();
@@ -1445,7 +1446,7 @@ void Document::Notify(::SfxBroadcaster &, ::SfxHint const & rHint)
         }
     case SfxHintId::TextViewScrolled:
         {
-            ::osl::MutexGuard aInternalGuard(GetMutex());
+            std::scoped_lock aInternalGuard(GetMutex());
             if (!isAlive())
                 break;
             handleParagraphNotifications();
@@ -1472,7 +1473,7 @@ void Document::Notify(::SfxBroadcaster &, ::SfxHint const & rHint)
     case SfxHintId::TextViewSelectionChanged:
     case SfxHintId::TextViewCaretChanged:
         {
-            ::osl::MutexGuard aInternalGuard(GetMutex());
+            std::scoped_lock aInternalGuard(GetMutex());
             if (!isAlive())
                 break;
 
@@ -1506,7 +1507,7 @@ IMPL_LINK(Document, WindowEventHandler, ::VclWindowEvent&, rEvent, void)
     {
     case VclEventId::WindowResize:
         {
-            ::osl::MutexGuard aInternalGuard(GetMutex());
+            std::scoped_lock aInternalGuard(GetMutex());
             if (!isAlive())
                 break;
 
@@ -1529,7 +1530,7 @@ IMPL_LINK(Document, WindowEventHandler, ::VclWindowEvent&, rEvent, void)
         }
     case VclEventId::WindowGetFocus:
         {
-            ::osl::MutexGuard aInternalGuard(GetMutex());
+            std::scoped_lock aInternalGuard(GetMutex());
             if (!isAlive())
                 break;
             //to enable the PARAGRAPH to get focus for multiline edit
@@ -1554,7 +1555,7 @@ IMPL_LINK(Document, WindowEventHandler, ::VclWindowEvent&, rEvent, void)
         }
     case VclEventId::WindowLoseFocus:
         {
-            ::osl::MutexGuard aInternalGuard(GetMutex());
+            std::scoped_lock aInternalGuard(GetMutex());
             if (!isAlive())
                 break;
             //to enable the PARAGRAPH to get focus for multiline edit

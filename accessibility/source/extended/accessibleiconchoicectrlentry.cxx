@@ -33,6 +33,7 @@
 #include <svtools/stringtransfer.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <mutex>
 
 #define ACCESSIBLE_ACTION_COUNT     1
 
@@ -148,7 +149,7 @@ namespace accessibility
     tools::Rectangle AccessibleIconChoiceCtrlEntry::GetBoundingBox()
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         EnsureIsAlive();
         return GetBoundingBox_Impl();
@@ -157,7 +158,7 @@ namespace accessibility
     tools::Rectangle AccessibleIconChoiceCtrlEntry::GetBoundingBoxOnScreen()
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         EnsureIsAlive();
         return GetBoundingBoxOnScreen_Impl();
@@ -200,7 +201,7 @@ namespace accessibility
 
     void SAL_CALL AccessibleIconChoiceCtrlEntry::disposing()
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         // Send a disposing to all listeners.
         if ( m_nClientId )
@@ -259,7 +260,7 @@ namespace accessibility
 
     Reference< XAccessible > SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleParent(  )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         EnsureIsAlive();
         return m_xParent;
@@ -267,7 +268,7 @@ namespace accessibility
 
     sal_Int32 SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleIndexInParent(  )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         return m_nIndex;
     }
@@ -286,7 +287,7 @@ namespace accessibility
 
     OUString SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleName(  )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         EnsureIsAlive();
         return implGetText();
@@ -300,7 +301,7 @@ namespace accessibility
     Reference< XAccessibleStateSet > SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleStateSet(  )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         utl::AccessibleStateSetHelper* pStateSetHelper = new utl::AccessibleStateSetHelper;
         Reference< XAccessibleStateSet > xStateSet = pStateSetHelper;
@@ -329,7 +330,7 @@ namespace accessibility
     Locale SAL_CALL AccessibleIconChoiceCtrlEntry::getLocale(  )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         return implGetLocale();
     }
@@ -374,7 +375,7 @@ namespace accessibility
     sal_Int32 AccessibleIconChoiceCtrlEntry::getForeground( )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         sal_Int32 nColor = 0;
         Reference< XAccessible > xParent = getAccessibleParent();
@@ -391,7 +392,7 @@ namespace accessibility
     sal_Int32 AccessibleIconChoiceCtrlEntry::getBackground(  )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         sal_Int32 nColor = 0;
         Reference< XAccessible > xParent = getAccessibleParent();
@@ -411,7 +412,7 @@ namespace accessibility
     awt::Rectangle SAL_CALL AccessibleIconChoiceCtrlEntry::getCharacterBounds( sal_Int32 _nIndex )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         if ( ( 0 > _nIndex ) || ( implGetText().getLength() <= _nIndex ) )
             throw IndexOutOfBoundsException();
@@ -431,7 +432,7 @@ namespace accessibility
     sal_Int32 SAL_CALL AccessibleIconChoiceCtrlEntry::getIndexAtPoint( const awt::Point& aPoint )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         sal_Int32 nIndex = -1;
         if ( m_pIconCtrl )
@@ -460,7 +461,7 @@ namespace accessibility
     sal_Bool SAL_CALL AccessibleIconChoiceCtrlEntry::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
 
         OUString sText = implGetText();
@@ -485,7 +486,7 @@ namespace accessibility
     {
         if (xListener.is())
         {
-            ::osl::MutexGuard aGuard( m_aMutex );
+            std::scoped_lock aGuard( m_aMutex );
             if (!m_nClientId)
                 m_nClientId = comphelper::AccessibleEventNotifier::registerClient( );
             comphelper::AccessibleEventNotifier::addEventListener( m_nClientId, xListener );
@@ -497,7 +498,7 @@ namespace accessibility
         if (!xListener.is())
             return;
 
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( m_nClientId, xListener );
         if ( !nListenerCount )
@@ -519,7 +520,7 @@ namespace accessibility
     sal_Bool SAL_CALL AccessibleIconChoiceCtrlEntry::setCaretPosition ( sal_Int32 nIndex )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
 
         if ( !implIsValidRange( nIndex, nIndex, implGetText().getLength() ) )
@@ -530,14 +531,14 @@ namespace accessibility
     sal_Unicode SAL_CALL AccessibleIconChoiceCtrlEntry::getCharacter( sal_Int32 nIndex )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
         return OCommonAccessibleText::implGetCharacter( implGetText(), nIndex );
     }
     css::uno::Sequence< css::beans::PropertyValue > SAL_CALL AccessibleIconChoiceCtrlEntry::getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
 
         OUString sText( implGetText() );
@@ -550,7 +551,7 @@ namespace accessibility
     sal_Int32 SAL_CALL AccessibleIconChoiceCtrlEntry::getCharacterCount(  )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
         return implGetText().getLength();
     }
@@ -558,28 +559,28 @@ namespace accessibility
     OUString SAL_CALL AccessibleIconChoiceCtrlEntry::getSelectedText(  )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
         return OUString();
     }
     sal_Int32 SAL_CALL AccessibleIconChoiceCtrlEntry::getSelectionStart(  )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
         return 0;
     }
     sal_Int32 SAL_CALL AccessibleIconChoiceCtrlEntry::getSelectionEnd(  )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
         return 0;
     }
     sal_Bool SAL_CALL AccessibleIconChoiceCtrlEntry::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
 
         if ( !implIsValidRange( nStartIndex, nEndIndex, implGetText().getLength() ) )
@@ -590,35 +591,35 @@ namespace accessibility
     OUString SAL_CALL AccessibleIconChoiceCtrlEntry::getText(  )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
         return implGetText(  );
     }
     OUString SAL_CALL AccessibleIconChoiceCtrlEntry::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
         return OCommonAccessibleText::implGetTextRange( implGetText(), nStartIndex, nEndIndex );
     }
     css::accessibility::TextSegment SAL_CALL AccessibleIconChoiceCtrlEntry::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
         return OCommonAccessibleText::getTextAtIndex( nIndex ,aTextType);
     }
     css::accessibility::TextSegment SAL_CALL AccessibleIconChoiceCtrlEntry::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
         return OCommonAccessibleText::getTextBeforeIndex( nIndex ,aTextType);
     }
     css::accessibility::TextSegment SAL_CALL AccessibleIconChoiceCtrlEntry::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
 
         return OCommonAccessibleText::getTextBehindIndex( nIndex ,aTextType);
@@ -629,7 +630,7 @@ namespace accessibility
 
     sal_Int32 SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleActionCount(  )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         // three actions supported
         return ACCESSIBLE_ACTION_COUNT;
@@ -638,7 +639,7 @@ namespace accessibility
     sal_Bool SAL_CALL AccessibleIconChoiceCtrlEntry::doAccessibleAction( sal_Int32 nIndex )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         bool bRet = false;
         checkActionIndex_Impl( nIndex );
@@ -658,7 +659,7 @@ namespace accessibility
     OUString SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleActionDescription( sal_Int32 nIndex )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         checkActionIndex_Impl( nIndex );
         EnsureIsAlive();
@@ -668,7 +669,7 @@ namespace accessibility
 
     Reference< XAccessibleKeyBinding > AccessibleIconChoiceCtrlEntry::getAccessibleActionKeyBinding( sal_Int32 nIndex )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         Reference< XAccessibleKeyBinding > xRet;
         checkActionIndex_Impl( nIndex );

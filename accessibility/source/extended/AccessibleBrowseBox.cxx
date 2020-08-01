@@ -25,6 +25,7 @@
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sal/types.h>
+#include <mutex>
 
 
 namespace accessibility
@@ -63,7 +64,7 @@ AccessibleBrowseBox::~AccessibleBrowseBox()
 
 void SAL_CALL AccessibleBrowseBox::disposing()
 {
-    ::osl::MutexGuard aGuard( getMutex() );
+    std::scoped_lock aGuard( getMutex() );
 
     m_aCreator.clear();
 
@@ -101,7 +102,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBox::getAccessibleChildCount()
 css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
 AccessibleBrowseBox::getAccessibleChild( sal_Int32 nChildIndex )
 {
-    SolarMethodGuard aGuard(getMutex());
+    std::scoped_lock aGuard(getMutex());
     ensureIsAlive();
 
     css::uno::Reference< css::accessibility::XAccessible > xRet;
@@ -128,7 +129,7 @@ AccessibleBrowseBox::getAccessibleChild( sal_Int32 nChildIndex )
 css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
 AccessibleBrowseBox::getAccessibleAtPoint( const awt::Point& rPoint )
 {
-    SolarMethodGuard aGuard(getMutex());
+    std::scoped_lock aGuard(getMutex());
     ensureIsAlive();
 
     css::uno::Reference< css::accessibility::XAccessible > xChild;
@@ -157,7 +158,7 @@ AccessibleBrowseBox::getAccessibleAtPoint( const awt::Point& rPoint )
 
 void SAL_CALL AccessibleBrowseBox::grabFocus()
 {
-    SolarMethodGuard aGuard(getMutex());
+    std::scoped_lock aGuard(getMutex());
     ensureIsAlive();
 
     mpBrowseBox->GrabFocus();
@@ -281,7 +282,7 @@ AccessibleBrowseBoxAccess::~AccessibleBrowseBoxAccess()
 
 void AccessibleBrowseBoxAccess::dispose()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if (m_xContext.is())
     {
@@ -293,7 +294,7 @@ void AccessibleBrowseBoxAccess::dispose()
 
 css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL AccessibleBrowseBoxAccess::getAccessibleContext()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     // if the context died meanwhile (there is no listener, so it won't tell us explicitly when this happens),
     // then reset and re-create.

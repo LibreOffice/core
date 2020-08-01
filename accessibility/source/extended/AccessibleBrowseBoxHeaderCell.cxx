@@ -145,7 +145,7 @@ tools::Rectangle AccessibleBrowseBoxHeaderCell::implGetBoundingBoxOnScreen()
 
 sal_Int32 SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleIndexInParent()
 {
-    ::osl::MutexGuard aGuard( getMutex() );
+    std::scoped_lock aGuard( getMutex() );
     ensureIsAlive();
     sal_Int32 nIndex = m_nColumnRowId;
     if ( mpBrowseBox->HasRowHeader() )

@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
+#include <mutex>
 
 
 namespace accessibility
@@ -265,7 +266,7 @@ namespace accessibility
 
     void SAL_CALL AccessibleListBox::disposing()
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         m_mapEntry.clear();
         VCLXAccessibleComponent::disposing();
@@ -329,7 +330,7 @@ namespace accessibility
 
     Reference< XAccessible > SAL_CALL AccessibleListBox::getAccessibleParent(  )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         ensureAlive();
         return m_xParent;

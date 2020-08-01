@@ -38,6 +38,7 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <helper/accresmgr.hxx>
 #include <strings.hrc>
+#include <mutex>
 
 #define ACCESSIBLE_ACTION_COUNT 1
 
@@ -185,7 +186,7 @@ namespace accessibility
     tools::Rectangle AccessibleListBoxEntry::GetBoundingBox()
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         EnsureIsAlive();
         return GetBoundingBox_Impl();
@@ -194,7 +195,7 @@ namespace accessibility
     tools::Rectangle AccessibleListBoxEntry::GetBoundingBoxOnScreen()
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         EnsureIsAlive();
         return GetBoundingBoxOnScreen_Impl();
@@ -239,7 +240,7 @@ namespace accessibility
     void SAL_CALL AccessibleListBoxEntry::disposing()
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         Reference< XAccessible > xKeepAlive( this );
 
@@ -291,7 +292,7 @@ namespace accessibility
     sal_Int32 SAL_CALL AccessibleListBoxEntry::getAccessibleChildCount(  )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         EnsureIsAlive();
         SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
@@ -305,7 +306,7 @@ namespace accessibility
     Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleChild( sal_Int32 i )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
 
         SvTreeListEntry* pEntry = GetRealChild(i);
@@ -361,7 +362,7 @@ namespace accessibility
     Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleParent(  )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
 
         return implGetParentAccessible( );
@@ -369,7 +370,7 @@ namespace accessibility
 
     sal_Int32 SAL_CALL AccessibleListBoxEntry::getAccessibleIndexInParent(  )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         OSL_ENSURE( !m_aEntryPath.empty(), "empty path" );
         return m_aEntryPath.empty() ? -1 : m_aEntryPath.back();
@@ -407,7 +408,7 @@ namespace accessibility
     sal_Int16 SAL_CALL AccessibleListBoxEntry::getAccessibleRole(  )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         SvTreeListBox* pBox = m_pTreeListBox;
         if(pBox)
@@ -439,7 +440,7 @@ namespace accessibility
     OUString SAL_CALL AccessibleListBoxEntry::getAccessibleDescription(  )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         if( getAccessibleRole() == AccessibleRole::TREE_ITEM )
@@ -472,7 +473,7 @@ namespace accessibility
 
     OUString SAL_CALL AccessibleListBoxEntry::getAccessibleName(  )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         EnsureIsAlive();
 
@@ -498,7 +499,7 @@ namespace accessibility
 
     Reference< XAccessibleStateSet > SAL_CALL AccessibleListBoxEntry::getAccessibleStateSet(  )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         utl::AccessibleStateSetHelper* pStateSetHelper = new utl::AccessibleStateSetHelper;
         Reference< XAccessibleStateSet > xStateSet = pStateSetHelper;
@@ -537,7 +538,7 @@ namespace accessibility
     Locale SAL_CALL AccessibleListBoxEntry::getLocale(  )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         return implGetLocale();
     }
@@ -552,7 +553,7 @@ namespace accessibility
     Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleAtPoint( const awt::Point& _aPoint )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         EnsureIsAlive();
         SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry( VCLPoint( _aPoint ) );
@@ -597,7 +598,7 @@ namespace accessibility
     sal_Int32 AccessibleListBoxEntry::getForeground(    )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         sal_Int32 nColor = 0;
         Reference< XAccessible > xParent = getAccessibleParent();
@@ -614,7 +615,7 @@ namespace accessibility
     sal_Int32 AccessibleListBoxEntry::getBackground(  )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         sal_Int32 nColor = 0;
         Reference< XAccessible > xParent = getAccessibleParent();
@@ -634,7 +635,7 @@ namespace accessibility
     awt::Rectangle SAL_CALL AccessibleListBoxEntry::getCharacterBounds( sal_Int32 nIndex )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         EnsureIsAlive();
 
@@ -659,7 +660,7 @@ namespace accessibility
     sal_Int32 SAL_CALL AccessibleListBoxEntry::getIndexAtPoint( const awt::Point& aPoint )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
         if(aPoint.X==0 && aPoint.Y==0) return 0;
 
@@ -681,7 +682,7 @@ namespace accessibility
     sal_Bool SAL_CALL AccessibleListBoxEntry::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
 
         OUString sText = implGetText();
@@ -706,7 +707,7 @@ namespace accessibility
     {
         if (xListener.is())
         {
-            ::osl::MutexGuard aGuard( m_aMutex );
+            std::scoped_lock aGuard( m_aMutex );
             if (!m_nClientId)
                 m_nClientId = comphelper::AccessibleEventNotifier::registerClient( );
             comphelper::AccessibleEventNotifier::addEventListener( m_nClientId, xListener );
@@ -718,7 +719,7 @@ namespace accessibility
         if (!xListener.is())
             return;
 
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( m_nClientId, xListener );
         if ( !nListenerCount )
@@ -738,7 +739,7 @@ namespace accessibility
 
     sal_Int32 SAL_CALL AccessibleListBoxEntry::getAccessibleActionCount(  )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         // three actions supported
         SvTreeFlags treeFlag = m_pTreeListBox->GetTreeFlags();
@@ -759,7 +760,7 @@ namespace accessibility
     sal_Bool SAL_CALL AccessibleListBoxEntry::doAccessibleAction( sal_Int32 nIndex )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         bool bRet = false;
         checkActionIndex_Impl( nIndex );
@@ -797,7 +798,7 @@ namespace accessibility
     OUString SAL_CALL AccessibleListBoxEntry::getAccessibleActionDescription( sal_Int32 nIndex )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         checkActionIndex_Impl( nIndex );
         EnsureIsAlive();
@@ -833,7 +834,7 @@ namespace accessibility
 
     Reference< XAccessibleKeyBinding > AccessibleListBoxEntry::getAccessibleActionKeyBinding( sal_Int32 nIndex )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         Reference< XAccessibleKeyBinding > xRet;
         checkActionIndex_Impl( nIndex );
@@ -846,7 +847,7 @@ namespace accessibility
     void SAL_CALL AccessibleListBoxEntry::selectAccessibleChild( sal_Int32 nChildIndex )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         EnsureIsAlive();
 
@@ -860,7 +861,7 @@ namespace accessibility
     sal_Bool SAL_CALL AccessibleListBoxEntry::isAccessibleChildSelected( sal_Int32 nChildIndex )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         EnsureIsAlive();
 
@@ -875,7 +876,7 @@ namespace accessibility
     void SAL_CALL AccessibleListBoxEntry::clearAccessibleSelection(  )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         EnsureIsAlive();
 
@@ -894,7 +895,7 @@ namespace accessibility
     void SAL_CALL AccessibleListBoxEntry::selectAllAccessibleChildren(  )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         EnsureIsAlive();
 
@@ -913,7 +914,7 @@ namespace accessibility
     sal_Int32 SAL_CALL AccessibleListBoxEntry::getSelectedAccessibleChildCount(  )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         EnsureIsAlive();
 
@@ -936,7 +937,7 @@ namespace accessibility
     Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         EnsureIsAlive();
 
@@ -971,7 +972,7 @@ namespace accessibility
     void SAL_CALL AccessibleListBoxEntry::deselectAccessibleChild( sal_Int32 nSelectedChildIndex )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         EnsureIsAlive();
 
@@ -989,7 +990,7 @@ namespace accessibility
     sal_Bool SAL_CALL AccessibleListBoxEntry::setCaretPosition ( sal_Int32 nIndex )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
 
         if ( !implIsValidRange( nIndex, nIndex, implGetText().getLength() ) )
@@ -1000,14 +1001,14 @@ namespace accessibility
     sal_Unicode SAL_CALL AccessibleListBoxEntry::getCharacter( sal_Int32 nIndex )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
         return OCommonAccessibleText::implGetCharacter( implGetText(), nIndex );
     }
     css::uno::Sequence< css::beans::PropertyValue > SAL_CALL AccessibleListBoxEntry::getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
 
         OUString sText( implGetText() );
@@ -1020,7 +1021,7 @@ namespace accessibility
     sal_Int32 SAL_CALL AccessibleListBoxEntry::getCharacterCount(  )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
         return implGetText().getLength();
     }
@@ -1028,28 +1029,28 @@ namespace accessibility
     OUString SAL_CALL AccessibleListBoxEntry::getSelectedText(  )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
         return OUString();
     }
     sal_Int32 SAL_CALL AccessibleListBoxEntry::getSelectionStart(  )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
         return 0;
     }
     sal_Int32 SAL_CALL AccessibleListBoxEntry::getSelectionEnd(  )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
         return 0;
     }
     sal_Bool SAL_CALL AccessibleListBoxEntry::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
 
         if ( !implIsValidRange( nStartIndex, nEndIndex, implGetText().getLength() ) )
@@ -1060,35 +1061,35 @@ namespace accessibility
     OUString SAL_CALL AccessibleListBoxEntry::getText(  )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
         return implGetText(  );
     }
     OUString SAL_CALL AccessibleListBoxEntry::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
         return OCommonAccessibleText::implGetTextRange( implGetText(), nStartIndex, nEndIndex );
     }
     css::accessibility::TextSegment SAL_CALL AccessibleListBoxEntry::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
         return OCommonAccessibleText::getTextAtIndex( nIndex ,aTextType);
     }
     css::accessibility::TextSegment SAL_CALL AccessibleListBoxEntry::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
         return OCommonAccessibleText::getTextBeforeIndex( nIndex ,aTextType);
     }
     css::accessibility::TextSegment SAL_CALL AccessibleListBoxEntry::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         EnsureIsAlive();
 
         return OCommonAccessibleText::getTextBehindIndex( nIndex ,aTextType);
@@ -1099,7 +1100,7 @@ namespace accessibility
 
     Any AccessibleListBoxEntry::getCurrentValue(  )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         Any aValue;
         sal_Int32 level = static_cast<sal_Int32>(m_aEntryPath.size()) - 1;
         level = level < 0 ?  0: level;
@@ -1110,7 +1111,7 @@ namespace accessibility
 
     sal_Bool AccessibleListBoxEntry::setCurrentValue( const Any& aNumber )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
 
         bool bReturn = false;
@@ -1141,7 +1142,7 @@ namespace accessibility
 
     Any AccessibleListBoxEntry::getMaximumValue(  )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         Any aValue;
         // SvTreeListBox* pBox = m_pTreeListBox;
@@ -1161,7 +1162,7 @@ namespace accessibility
 
     Any AccessibleListBoxEntry::getMinimumValue(  )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         Any aValue;
         // SvTreeListBox* pBox = m_pTreeListBox;

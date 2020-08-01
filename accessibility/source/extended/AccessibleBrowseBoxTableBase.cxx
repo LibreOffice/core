@@ -56,7 +56,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleChildCount()
 
 sal_Int16 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleRole()
 {
-    osl::MutexGuard aGuard( getMutex() );
+    std::scoped_lock aGuard( getMutex() );
     ensureIsAlive();
     return AccessibleRole::TABLE;
 }

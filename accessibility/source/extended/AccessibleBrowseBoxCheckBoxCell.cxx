@@ -22,6 +22,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <vcl/accessibletableprovider.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <mutex>
 
 namespace accessibility
 {
@@ -47,7 +48,7 @@ namespace accessibility
 
     Reference< XAccessibleContext > SAL_CALL AccessibleCheckBoxCell::getAccessibleContext(  )
     {
-        osl::MutexGuard aGuard( getMutex() );
+        std::scoped_lock aGuard( getMutex() );
         ensureIsAlive();
         return this;
     }
@@ -70,7 +71,7 @@ namespace accessibility
 
     Any SAL_CALL AccessibleCheckBoxCell::getCurrentValue(  )
     {
-        ::osl::MutexGuard aGuard( getMutex() );
+        std::scoped_lock aGuard( getMutex() );
 
         sal_Int32 nValue = 0;
         switch( m_eState )
@@ -95,7 +96,7 @@ namespace accessibility
 
     Any SAL_CALL AccessibleCheckBoxCell::getMaximumValue(  )
     {
-        ::osl::MutexGuard aGuard( getMutex() );
+        std::scoped_lock aGuard( getMutex() );
 
         Any aValue;
 
@@ -133,7 +134,7 @@ namespace accessibility
 
     sal_Int32 SAL_CALL AccessibleCheckBoxCell::getAccessibleIndexInParent()
     {
-        ::osl::MutexGuard aGuard( getMutex() );
+        std::scoped_lock aGuard( getMutex() );
         ensureIsAlive();
 
         return ( getRowPos() * mpBrowseBox->GetColumnCount() ) + getColumnPos();

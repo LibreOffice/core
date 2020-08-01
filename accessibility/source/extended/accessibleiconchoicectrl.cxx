@@ -26,6 +26,7 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/toolkit/ivctrl.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <mutex>
 
 
 namespace accessibility
@@ -114,7 +115,7 @@ namespace accessibility
 
     void SAL_CALL AccessibleIconChoiceCtrl::disposing()
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         m_xParent = nullptr;
     }
@@ -172,7 +173,7 @@ namespace accessibility
 
     Reference< XAccessible > SAL_CALL AccessibleIconChoiceCtrl::getAccessibleParent(  )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         ensureAlive();
         return m_xParent;

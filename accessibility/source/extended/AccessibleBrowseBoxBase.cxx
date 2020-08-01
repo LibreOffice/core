@@ -30,6 +30,7 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
+#include <mutex>
 
 
 using ::com::sun::star::uno::Reference;
@@ -98,7 +99,7 @@ AccessibleBrowseBoxBase::~AccessibleBrowseBoxBase()
 
 void SAL_CALL AccessibleBrowseBoxBase::disposing()
 {
-    ::osl::MutexGuard aGuard( getMutex() );
+    std::scoped_lock aGuard( getMutex() );
     if ( m_xFocusWindow.is() )
     {
         SolarMutexGuard aSolarGuard;
@@ -120,14 +121,14 @@ void SAL_CALL AccessibleBrowseBoxBase::disposing()
 
 Reference< css::accessibility::XAccessible > SAL_CALL AccessibleBrowseBoxBase::getAccessibleParent()
 {
-    ::osl::MutexGuard aGuard( getMutex() );
+    std::scoped_lock aGuard( getMutex() );
     ensureIsAlive();
     return mxParent;
 }
 
 sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getAccessibleIndexInParent()
 {
-    ::osl::MutexGuard aGuard( getMutex() );
+    std::scoped_lock aGuard( getMutex() );
     ensureIsAlive();
 
     // -1 for child not found/no parent (according to specification)
@@ -162,14 +163,14 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getAccessibleIndexInParent()
 
 OUString SAL_CALL AccessibleBrowseBoxBase::getAccessibleDescription()
 {
-    ::osl::MutexGuard aGuard( getMutex() );
+    std::scoped_lock aGuard( getMutex() );
     ensureIsAlive();
     return maDescription;
 }
 
 OUString SAL_CALL AccessibleBrowseBoxBase::getAccessibleName()
 {
-    ::osl::MutexGuard aGuard( getMutex() );
+    std::scoped_lock aGuard( getMutex() );
     ensureIsAlive();
     return maName;
 }
@@ -177,7 +178,7 @@ OUString SAL_CALL AccessibleBrowseBoxBase::getAccessibleName()
 Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL
 AccessibleBrowseBoxBase::getAccessibleRelationSet()
 {
-    ::osl::MutexGuard aGuard( getMutex() );
+    std::scoped_lock aGuard( getMutex() );
     ensureIsAlive();
     // BrowseBox does not have relations.
     return new utl::AccessibleRelationSetHelper;
@@ -193,7 +194,7 @@ AccessibleBrowseBoxBase::getAccessibleStateSet()
 
 lang::Locale SAL_CALL AccessibleBrowseBoxBase::getLocale()
 {
-    ::osl::MutexGuard aGuard( getMutex() );
+    std::scoped_lock aGuard( getMutex() );
     ensureIsAlive();
     if( mxParent.is() )
     {
@@ -257,7 +258,7 @@ void SAL_CALL AccessibleBrowseBoxBase::addAccessibleEventListener(
 {
     if ( _rxListener.is() )
     {
-        ::osl::MutexGuard aGuard( getMutex() );
+        std::scoped_lock aGuard( getMutex() );
         if ( !getClientId( ) )
             setClientId( AccessibleEventNotifier::registerClient( ) );
 
@@ -271,7 +272,7 @@ void SAL_CALL AccessibleBrowseBoxBase::removeAccessibleEventListener(
     if( !(_rxListener.is() && getClientId( )) )
         return;
 
-    ::osl::MutexGuard aGuard( getMutex() );
+    std::scoped_lock aGuard( getMutex() );
     sal_Int32 nListenerCount = AccessibleEventNotifier::removeEventListener( getClientId( ), _rxListener );
     if ( !nListenerCount )
     {
@@ -415,7 +416,7 @@ tools::Rectangle AccessibleBrowseBoxBase::getBoundingBoxOnScreen()
 void AccessibleBrowseBoxBase::commitEvent(
         sal_Int16 _nEventId, const Any& _rNewValue, const Any& _rOldValue )
 {
-    osl::MutexGuard aGuard( getMutex() );
+    std::scoped_lock aGuard( getMutex() );
     if ( !getClientId( ) )
             // if we don't have a client id for the notifier, then we don't have listeners, then
             // we don't need to notify anything
@@ -435,7 +436,7 @@ void AccessibleBrowseBoxBase::commitEvent(
 
 sal_Int16 SAL_CALL AccessibleBrowseBoxBase::getAccessibleRole()
 {
-    osl::MutexGuard aGuard( getMutex() );
+    std::scoped_lock aGuard( getMutex() );
     ensureIsAlive();
     sal_Int16 nRole = AccessibleRole::UNKNOWN;
     switch ( meObjType )
@@ -528,7 +529,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( BrowseBoxAccessibleElement, AccessibleBrowseBo
 
 Reference< css::accessibility::XAccessibleContext > SAL_CALL BrowseBoxAccessibleElement::getAccessibleContext()
 {
-    osl::MutexGuard aGuard( getMutex() );
+    std::scoped_lock aGuard( getMutex() );
     ensureIsAlive();
     return this;
 }

@@ -30,6 +30,7 @@
 #include <com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <sal/log.hxx>
+#include <mutex>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
@@ -301,7 +302,7 @@ bool AccessibleGridControlBase::implIsShowing()
 
 bool AccessibleGridControlBase::isAlive() const
 {
-    ::osl::MutexGuard g(m_aMutex); // guards rBHelper members
+    std::scoped_lock g(m_aMutex); // guards rBHelper members
     return !rBHelper.bDisposed && !rBHelper.bInDispose;
 }
 
