@@ -33,10 +33,6 @@ SbiGlobals* GetSbData()
 SbiGlobals::SbiGlobals()
 {
     pInst = nullptr;
-    pTypeFac = nullptr;
-    pClassFac = nullptr;
-    pOLEFac = nullptr;
-    pFormFac = nullptr;
     pMod = nullptr;
     pCompMod = nullptr; // JSM
     nInst = 0;
