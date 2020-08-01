@@ -76,8 +76,6 @@ private:
 
     std::unique_ptr<GalleryBinaryEngine>     mpGalleryBinaryEngine;
     GalleryObjectCollection     maGalleryObjectCollection;
-    OUString                    m_aDestDir;
-    bool                        m_bDestDirRelative;
     Gallery*                    pParent;
     GalleryThemeEntry*          pThm;
     sal_uInt32                  mnThemeLockCount;
@@ -113,7 +111,9 @@ public:
 
     // used for building gallery themes during compilation:
     SAL_DLLPRIVATE void         SetDestDir(const OUString& rDestDir, bool bRelative)
-                                { m_aDestDir = rDestDir; m_bDestDirRelative = bRelative; }
+                                {
+                                    mpGalleryBinaryEngine->setDestDir(rDestDir, bRelative);
+                                }
 
     SAL_DLLPRIVATE const INetURLObject& GetThmURL() const;
     const INetURLObject&        GetSdgURL() const;
@@ -180,7 +180,6 @@ public:
 
 public:
 
-    SAL_DLLPRIVATE SvStream&    WriteData( SvStream& rOut ) const;
     SAL_DLLPRIVATE SvStream&    ReadData( SvStream& rIn );
     static void                 InsertAllThemes(weld::ComboBox& rListBox);
 
