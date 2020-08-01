@@ -38,6 +38,7 @@ class SotStorage;
 struct GalleryObject;
 class FmFormModel;
 class GalleryTheme;
+class GalleryThemeEntry;
 
 class SVXCORE_DLLPUBLIC GalleryBinaryEngine
 {
@@ -46,6 +47,8 @@ private:
     const GalleryStorageLocations& maGalleryStorageLocations;
     GalleryObjectCollection& mrGalleryObjectCollection;
     bool mbReadOnly;
+    OUString m_aDestDir;
+    bool m_bDestDirRelative;
 
 public:
     GalleryBinaryEngine(const GalleryStorageLocations& rGalleryStorageLocations,
@@ -53,6 +56,8 @@ public:
     SAL_DLLPRIVATE ~GalleryBinaryEngine();
 
     void clearSotStorage();
+
+    void setDestDir(const OUString& rDestDir, bool bRelative);
 
     SAL_DLLPRIVATE void ImplCreateSvDrawStorage();
     SAL_DLLPRIVATE const tools::SvRef<SotStorage>& GetSvDrawStorage() const;
@@ -62,14 +67,12 @@ public:
     const INetURLObject& GetSdvURL() const { return maGalleryStorageLocations.GetSdvURL(); }
     const INetURLObject& GetStrURL() const { return maGalleryStorageLocations.GetStrURL(); }
 
-    SAL_DLLPRIVATE bool implWrite(const GalleryTheme& rTheme);
+    SAL_DLLPRIVATE bool implWrite(const GalleryTheme& rTheme, const GalleryThemeEntry* pThm);
 
-    void insertObject(const SgaObject& rObj, GalleryObject* pFoundEntry, OUString& rDestDir,
-                      sal_uInt32& rInsertPos);
+    void insertObject(const SgaObject& rObj, GalleryObject* pFoundEntry, sal_uInt32& rInsertPos);
 
     std::unique_ptr<SgaObject> implReadSgaObject(GalleryObject const* pEntry);
-    bool implWriteSgaObject(const SgaObject& rObj, sal_uInt32 nPos, GalleryObject* pExistentEntry,
-                            OUString& aDestDir);
+    bool implWriteSgaObject(const SgaObject& rObj, sal_uInt32 nPos, GalleryObject* pExistentEntry);
 
     bool readModel(const GalleryObject* pObject, SdrModel& rModel);
     SgaObjectSvDraw insertModel(const FmFormModel& rModel, const INetURLObject& rUserURL);
@@ -90,8 +93,9 @@ public:
     void updateTheme();
     static void insertFileOrDirURL(const INetURLObject& rFileOrDirURL,
                                    std::vector<INetURLObject>& rURLVector);
-};
 
-SvStream& WriteGalleryTheme(SvStream& rOut, const GalleryTheme& rTheme);
+    SvStream& writeGalleryTheme(SvStream& rOStm, const GalleryTheme& rTheme,
+                                const GalleryThemeEntry* pThm);
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
