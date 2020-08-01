@@ -721,6 +721,7 @@ uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties( 
                                                                                 DomainMapper_Impl& rDM_Impl )
 {
     uno::Reference< text::XTextColumns > xColumns;
+    assert( m_nColumnCount > 1 && "ApplyColumnProperties called without any columns" );
     try
     {
         const OUString sTextColumns = getPropertyName( PROP_TEXT_COLUMNS );
@@ -728,13 +729,13 @@ uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties( 
             xColumnContainer->getPropertyValue( sTextColumns ) >>= xColumns;
         uno::Reference< beans::XPropertySet > xColumnPropSet( xColumns, uno::UNO_QUERY_THROW );
         if ( !m_bEvenlySpaced &&
-             ( sal_Int32(m_aColWidth.size()) == (m_nColumnCount + 1) ) &&
-             ( (sal_Int32(m_aColDistance.size()) == m_nColumnCount) || (sal_Int32(m_aColDistance.size()) == m_nColumnCount + 1) ) )
+             ( sal_Int32(m_aColWidth.size()) == m_nColumnCount ) &&
+             ( (sal_Int32(m_aColDistance.size()) == m_nColumnCount - 1) || (sal_Int32(m_aColDistance.size()) == m_nColumnCount) ) )
         {
             // the column width in word is an absolute value, in OOo it's relative
             // the distances are both absolute
             sal_Int32 nColSum = 0;
-            for ( sal_Int32 nCol = 0; nCol <= m_nColumnCount; ++nCol )
+            for ( sal_Int32 nCol = 0; nCol < m_nColumnCount; ++nCol )
             {
                 nColSum += m_aColWidth[nCol];
                 if ( nCol )
@@ -743,29 +744,29 @@ uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties( 
 
             sal_Int32 nRefValue = xColumns->getReferenceValue();
             double fRel = nColSum ? double( nRefValue ) / double( nColSum ) : 0.0;
-            uno::Sequence< text::TextColumn > aColumns( m_nColumnCount + 1 );
+            uno::Sequence< text::TextColumn > aColumns( m_nColumnCount );
             text::TextColumn* pColumn = aColumns.getArray();
 
             nColSum = 0;
-            for ( sal_Int32 nCol = 0; nCol <= m_nColumnCount; ++nCol )
+            for ( sal_Int32 nCol = 0; nCol < m_nColumnCount; ++nCol )
             {
                 const double fLeft = nCol ? m_aColDistance[nCol - 1] / 2 : 0;
                 pColumn[nCol].LeftMargin = fLeft;
-                const double fRight = nCol == m_nColumnCount ? 0 : m_aColDistance[nCol] / 2;
+                const double fRight = (nCol == m_nColumnCount - 1) ? 0 : m_aColDistance[nCol] / 2;
                 pColumn[nCol].RightMargin = fRight;
                 const double fWidth = m_aColWidth[nCol];
                 pColumn[nCol].Width = (fWidth + fLeft + fRight) * fRel;
                 nColSum += pColumn[nCol].Width;
             }
             if ( nColSum != nRefValue )
-                pColumn[m_nColumnCount].Width += (nRefValue - nColSum);
-            assert( pColumn[m_nColumnCount].Width >= 0 );
+                pColumn[m_nColumnCount - 1].Width += (nRefValue - nColSum);
+            assert( pColumn[m_nColumnCount - 1].Width >= 0 );
 
             xColumns->setColumns( aColumns );
         }
         else
         {
-            xColumns->setColumnCount( m_nColumnCount + 1 );
+            xColumns->setColumnCount( m_nColumnCount );
             xColumnPropSet->setPropertyValue( getPropertyName( PROP_AUTOMATIC_DISTANCE ), uno::makeAny( m_nColumnDistance ) );
         }
 
@@ -1189,7 +1190,7 @@ bool SectionPropertyMap::FloatingTableConversion( const DomainMapper_Impl& rDM_I
 
     // If there are columns, always create the fly, otherwise the columns would
     // restrict geometry of the table.
-    if ( ColumnCount() + 1 >= 2 )
+    if ( ColumnCount() > 1 )
         return true;
 
     return false;
@@ -1416,7 +1417,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             rDM_Impl.appendTextSectionAfter( m_xStartingRange );
         if ( xSection.is() )
         {
-            if ( m_nColumnCount > 0 )
+            if ( m_nColumnCount > 1 )
                 ApplyColumnProperties( xSection, rDM_Impl );
 
             ApplyProtectionProperties( xSection, rDM_Impl );
@@ -1515,7 +1516,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
     // But only if there actually are columns on the page, otherwise a column break
     // seems to be handled like a page break by MSO.
     else if (m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_nextColumn)
-            && 0 < m_nColumnCount && !rDM_Impl.IsInComments())
+            && m_nColumnCount > 1 && !rDM_Impl.IsInComments())
     {
         try
         {
@@ -1549,7 +1550,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             Insert( PROP_PAGE_STYLE_LAYOUT, uno::makeAny( style::PageStyleLayout_MIRRORED ) );
         }
         uno::Reference< text::XTextColumns > xColumns;
-        if ( m_nColumnCount > 0 )
+        if ( m_nColumnCount > 1 )
         {
             // prefer setting column properties into a section, not a page style if at all possible.
             if ( !xSection.is() )
@@ -1744,13 +1745,13 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 
     // Now that the margins are known, resize relative width shapes because some shapes in LO do not support percentage-sizes
     sal_Int32 nParagraphWidth = GetPageWidth() - m_nLeftMargin - m_nRightMargin;
-    if ( m_nColumnCount > 0 )
+    if ( m_nColumnCount > 1 )
     {
         // skip custom-width columns since we don't know what column the shape is in.
         if ( !m_aColWidth.empty() )
             nParagraphWidth = 0;
         else
-            nParagraphWidth = (nParagraphWidth - (m_nColumnDistance * m_nColumnCount)) / (m_nColumnCount + 1);
+            nParagraphWidth = (nParagraphWidth - (m_nColumnDistance * (m_nColumnCount - 1))) / m_nColumnCount;
     }
     if ( nParagraphWidth > 0 )
     {
