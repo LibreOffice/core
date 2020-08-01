@@ -75,7 +75,7 @@ class HyperlinkDialog(UITestCase):
         # Check that the link is added
         xMainWindow = self.xUITest.getTopFocusWindow()
         xedit = xMainWindow.getChild("writer_edit")
-        xedit.executeAction("SELECT", mkPropertyValues({"END_POS": "0", "START_POS": "4"}))
+        xedit.executeAction("SELECT", mkPropertyValues({"START_POS": "0", "END_POS": "4"}))
         self.assertEqual(get_state_as_dict(xedit)["SelectedText"], "link")
 
         self.ui_test.close_doc()
