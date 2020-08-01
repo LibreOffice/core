@@ -450,7 +450,7 @@ void ScTiledRenderingTest::testEmptyColumnSelection()
 }
 
 /// A view callback tracks callbacks invoked on one specific view.
-class ViewCallback
+class ViewCallback final
 {
     SfxViewShell* mpViewShell;
     int mnView;
