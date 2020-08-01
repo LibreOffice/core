@@ -255,5 +255,13 @@ char* JsonWriter::extractData()
     return pRet;
 }
 
+OString JsonWriter::extractAsOString()
+{
+    char* pChar = extractData();
+    OString ret(pChar);
+    free(pChar);
+    return ret;
+}
+
 } // namespace tools
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
