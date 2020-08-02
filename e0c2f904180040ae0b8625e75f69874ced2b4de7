@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "34df0d2d_d5f1e483",
+        "filename": "basctl/source/basicide/macrodlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-08-02T07:46:14Z",
+      "side": 1,
+      "message": "Correct me please if I am wrong: the menu in the ui-file should be ok? The menu opens and shows the two possibilities. However, if I give an id to the submenu, LO crashes, if I try to weld that. If I weld the item with the sortmenu id LO crashes also. So I have to weld the top menu. But on which items then I have to set the set_active property?",
+      "parentUuid": "805347cf_d7e6c37d",
+      "range": {
+        "startLine": 765,
+        "startChar": 4,
+        "endLine": 765,
+        "endChar": 16
+      },
+      "revId": "e0c2f904180040ae0b8625e75f69874ced2b4de7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3a9a016b_d965353d",
         "filename": "basctl/source/basicide/macrodlg.cxx",
         "patchSetId": 4
