@@ -32,7 +32,7 @@ void PageSizePopup::initialize( const css::uno::Sequence< css::uno::Any >& rArgu
 
     ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
-    if (getToolboxId(nId, &pToolBox) && pToolBox->GetItemCommand(nId) == m_aCommandURL)
+    if (getToolboxId(nId, &pToolBox))
         pToolBox->SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | pToolBox->GetItemBits(nId));
 }
 
