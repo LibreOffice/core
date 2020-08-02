@@ -194,20 +194,20 @@ void SidebarDockingWindow::SyncUpdate()
 
 void SidebarDockingWindow::NotifyResize()
 {
-    if (comphelper::LibreOfficeKit::isActive() && mpSidebarController.is() && SfxViewShell::Current())
+    if (!(comphelper::LibreOfficeKit::isActive() && mpSidebarController.is() && SfxViewShell::Current()))
+        return;
+
+    const vcl::ILibreOfficeKitNotifier* pCurrentView = SfxViewShell::Current();
+    if (GetLOKNotifier() != pCurrentView)
     {
-        const vcl::ILibreOfficeKitNotifier* pCurrentView = SfxViewShell::Current();
-        if (GetLOKNotifier() != pCurrentView)
-        {
-            // ViewShell not yet set, or has changed. Reset it.
-            // Note GetLOKWindowId will return a new value after resetting, so we must notify clients.
-            LOKClose();
+        // ViewShell not yet set, or has changed. Reset it.
+        // Note GetLOKWindowId will return a new value after resetting, so we must notify clients.
+        LOKClose();
 
-            SetLOKNotifier(pCurrentView);
-        }
-
-        mpIdleNotify->Start();
+        SetLOKNotifier(pCurrentView);
     }
+
+    mpIdleNotify->Start();
 }
 
 SfxChildAlignment SidebarDockingWindow::CheckAlignment (

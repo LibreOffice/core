@@ -65,22 +65,22 @@ SfxFilter::SfxFilter( const OUString &rName,
 {
     const OUString aExts = GetWildcard().getGlob();
     sal_Int32 nLen{ aExts.getLength() };
-    if (nLen>0)
+    if (nLen<=0)
+        return;
+
+    // truncate to first empty extension
+    if (aExts[0]==';')
     {
-        // truncate to first empty extension
-        if (aExts[0]==';')
-        {
-            aWildCard.setGlob("");
-            return;
-        }
-        const sal_Int32 nIdx{ aExts.indexOf(";;") };
-        if (nIdx>0)
-            nLen = nIdx;
-        else if (aExts[nLen-1]==';')
-            --nLen;
-        if (nLen<aExts.getLength())
-            aWildCard.setGlob(aExts.copy(0, nLen));
+        aWildCard.setGlob("");
+        return;
     }
+    const sal_Int32 nIdx{ aExts.indexOf(";;") };
+    if (nIdx>0)
+        nLen = nIdx;
+    else if (aExts[nLen-1]==';')
+        --nLen;
+    if (nLen<aExts.getLength())
+        aWildCard.setGlob(aExts.copy(0, nLen));
 }
 
 SfxFilter::~SfxFilter()

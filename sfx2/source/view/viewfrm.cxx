@@ -1235,39 +1235,39 @@ void SfxViewFrame::AppendReadOnlyInfobar()
     auto pInfoBar = AppendInfoBar("readonly", "",
                                   SfxResId(bSignPDF ? STR_READONLY_PDF : STR_READONLY_DOCUMENT),
                                   InfobarType::INFO);
-    if (pInfoBar)
+    if (!pInfoBar)
+        return;
+
+    if (bSignPDF)
     {
-        if (bSignPDF)
+        // SID_SIGNPDF opened a read-write PDF
+        // read-only for signing purposes.
+        VclPtrInstance<PushButton> xSignButton(&GetWindow());
+        if (bSignWithCert)
         {
-            // SID_SIGNPDF opened a read-write PDF
-            // read-only for signing purposes.
-            VclPtrInstance<PushButton> xSignButton(&GetWindow());
-            if (bSignWithCert)
-            {
-                xSignButton->SetText(SfxResId(STR_READONLY_FINISH_SIGN));
-            }
-            else
-            {
-                xSignButton->SetText(SfxResId(STR_READONLY_SIGN));
-            }
-
-            xSignButton->SetSizePixel(xSignButton->GetOptimalSize());
-            xSignButton->SetClickHdl(LINK(this, SfxViewFrame, SignDocumentHandler));
-            pInfoBar->addButton(xSignButton);
+            xSignButton->SetText(SfxResId(STR_READONLY_FINISH_SIGN));
+        }
+        else
+        {
+            xSignButton->SetText(SfxResId(STR_READONLY_SIGN));
         }
 
-        bool showEditDocumentButton = true;
-        if (m_xObjSh->isEditDocLocked())
-            showEditDocumentButton = false;
+        xSignButton->SetSizePixel(xSignButton->GetOptimalSize());
+        xSignButton->SetClickHdl(LINK(this, SfxViewFrame, SignDocumentHandler));
+        pInfoBar->addButton(xSignButton);
+    }
 
-        if (showEditDocumentButton)
-        {
-            VclPtrInstance<PushButton> xBtn(&GetWindow());
-            xBtn->SetText(SfxResId(STR_READONLY_EDIT));
-            xBtn->SetSizePixel(xBtn->GetOptimalSize());
-            xBtn->SetClickHdl(LINK(this, SfxViewFrame, SwitchReadOnlyHandler));
-            pInfoBar->addButton(xBtn);
-        }
+    bool showEditDocumentButton = true;
+    if (m_xObjSh->isEditDocLocked())
+        showEditDocumentButton = false;
+
+    if (showEditDocumentButton)
+    {
+        VclPtrInstance<PushButton> xBtn(&GetWindow());
+        xBtn->SetText(SfxResId(STR_READONLY_EDIT));
+        xBtn->SetSizePixel(xBtn->GetOptimalSize());
+        xBtn->SetClickHdl(LINK(this, SfxViewFrame, SwitchReadOnlyHandler));
+        pInfoBar->addButton(xBtn);
     }
 }
 

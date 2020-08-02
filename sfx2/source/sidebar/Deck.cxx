@@ -291,32 +291,32 @@ void Deck::RequestLayout()
 {
     RequestLayoutInternal();
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    bool bChangeNeeded = false;
+    Size aParentSize = GetParent()->GetSizePixel();
+
+    if (mnMinimalHeight > 0 && (mnMinimalHeight != aParentSize.Height() || GetSizePixel().Height() != mnMinimalHeight))
     {
-        bool bChangeNeeded = false;
-        Size aParentSize = GetParent()->GetSizePixel();
-
-        if (mnMinimalHeight > 0 && (mnMinimalHeight != aParentSize.Height() || GetSizePixel().Height() != mnMinimalHeight))
-        {
-            aParentSize.setHeight(mnMinimalHeight);
-            bChangeNeeded = true;
-        }
-        const SfxViewShell* pViewShell = SfxViewShell::Current();
-        if (mnMinimalWidth > 0 && (mnMinimalWidth != aParentSize.Width() || GetSizePixel().Width() != mnMinimalWidth)
-                && pViewShell && pViewShell->isLOKMobilePhone())
-        {
-            aParentSize.setWidth(mnMinimalWidth);
-            bChangeNeeded = true;
-        }
-
-        if (bChangeNeeded)
-        {
-            GetParent()->SetSizePixel(aParentSize);
-            setPosSizePixel(0, 0, aParentSize.Width(), aParentSize.Height());
-        }
-        else if (aParentSize != GetSizePixel()) //Sync parent & child sizes
-            setPosSizePixel(0, 0, aParentSize.Width(), aParentSize.Height());
+        aParentSize.setHeight(mnMinimalHeight);
+        bChangeNeeded = true;
     }
+    const SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (mnMinimalWidth > 0 && (mnMinimalWidth != aParentSize.Width() || GetSizePixel().Width() != mnMinimalWidth)
+            && pViewShell && pViewShell->isLOKMobilePhone())
+    {
+        aParentSize.setWidth(mnMinimalWidth);
+        bChangeNeeded = true;
+    }
+
+    if (bChangeNeeded)
+    {
+        GetParent()->SetSizePixel(aParentSize);
+        setPosSizePixel(0, 0, aParentSize.Width(), aParentSize.Height());
+    }
+    else if (aParentSize != GetSizePixel()) //Sync parent & child sizes
+        setPosSizePixel(0, 0, aParentSize.Width(), aParentSize.Height());
 }
 
 vcl::Window* Deck::GetPanelParentWindow()

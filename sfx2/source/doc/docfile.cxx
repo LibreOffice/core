@@ -3017,30 +3017,30 @@ void SfxMedium::UnlockFile( bool bReleaseLockStream )
     catch( const uno::Exception& )
     {}
 
-    if(pImpl->m_bMSOLockFileCreated)
-    {
-        ::svt::MSODocumentLockFile aMSOLockFile( pImpl->m_aLogicName );
+    if(!pImpl->m_bMSOLockFileCreated)
+        return;
 
+    ::svt::MSODocumentLockFile aMSOLockFile( pImpl->m_aLogicName );
+
+    try
+    {
+        pImpl->m_bLocked = false;
+        // TODO/LATER: A warning could be shown in case the file is not the own one
+        aMSOLockFile.RemoveFile();
+    }
+    catch( const io::WrongFormatException& )
+    {
         try
         {
-            pImpl->m_bLocked = false;
-            // TODO/LATER: A warning could be shown in case the file is not the own one
-            aMSOLockFile.RemoveFile();
-        }
-        catch( const io::WrongFormatException& )
-        {
-            try
-            {
-                // erase the empty or corrupt file
-                aMSOLockFile.RemoveFileDirectly();
-            }
-            catch( const uno::Exception& )
-            {}
+            // erase the empty or corrupt file
+            aMSOLockFile.RemoveFileDirectly();
         }
         catch( const uno::Exception& )
         {}
-        pImpl->m_bMSOLockFileCreated = false;
     }
+    catch( const uno::Exception& )
+    {}
+    pImpl->m_bMSOLockFileCreated = false;
 #endif
 }
 

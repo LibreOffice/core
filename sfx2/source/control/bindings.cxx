@@ -1628,18 +1628,18 @@ void SfxBindings::QueryControlState( sal_uInt16 nSlot, boost::property_tree::ptr
         pImpl->pSubBindings->QueryControlState( nSlot, rState );
 
     SfxStateCache* pCache = GetStateCache( nSlot );
-    if ( pCache )
-    {
-        if ( pImpl->bMsgDirty )
-        {
-            UpdateSlotServer_Impl();
-            pCache = GetStateCache( nSlot );
-        }
+    if ( !pCache )
+        return;
 
-        if (pCache && pCache->GetItemLink() )
-        {
-            pCache->GetState(rState);
-        }
+    if ( pImpl->bMsgDirty )
+    {
+        UpdateSlotServer_Impl();
+        pCache = GetStateCache( nSlot );
+    }
+
+    if (pCache && pCache->GetItemLink() )
+    {
+        pCache->GetState(rState);
     }
 }
 
