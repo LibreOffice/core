@@ -2296,6 +2296,9 @@ int SdXImpressDocument::getParts()
 {
     // TODO: master pages?
     // Read: drviews1.cxx
+    if (!mpDoc)
+        return 0;
+
     return mpDoc->GetSdPageCount(PageKind::Standard);
 }
 
