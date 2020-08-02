@@ -123,7 +123,7 @@ void OTableWindow::dispose()
 {
     if (m_xListBox)
     {
-        OSL_ENSURE(m_xListBox->GetEntryCount()==0,"Forgot to call EmptyListbox()!");
+        OSL_ENSURE(m_xListBox->get_widget().n_children()==0,"Forgot to call EmptyListbox()!");
     }
     m_xListBox.disposeAndClear();
     if ( m_pContainerListener.is() )
@@ -179,7 +179,7 @@ void OTableWindow::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
 
 void OTableWindow::FillListBox()
 {
-    m_xListBox->Clear();
+    m_xListBox->get_widget().clear();
     if ( !m_pContainerListener.is() )
     {
         Reference< XContainer> xContainer(m_pData->getColumns(),UNO_QUERY);
@@ -192,8 +192,8 @@ void OTableWindow::FillListBox()
 
     if (GetData()->IsShowAll())
     {
-        SvTreeListEntry* pEntry = m_xListBox->InsertEntry( OUString("*") );
-        pEntry->SetUserData( createUserData(nullptr,false) );
+        weld::TreeView& rTreeView = m_xListBox->get_widget();
+        rTreeView.append(OUString::number(reinterpret_cast<sal_uInt64>(createUserData(nullptr,false))), "");
     }
 
     Reference<XNameAccess> xPKeyColumns;
@@ -213,7 +213,7 @@ void OTableWindow::FillListBox()
             Sequence< OUString> aColumns = xColumns->getElementNames();
             const OUString* pIter = aColumns.getConstArray();
             const OUString* pEnd = pIter + aColumns.getLength();
-
+#if 0
             SvTreeListEntry* pEntry = nullptr;
             for (; pIter != pEnd; ++pIter)
             {
@@ -228,6 +228,7 @@ void OTableWindow::FillListBox()
                 if ( xColumn.is() )
                     pEntry->SetUserData( createUserData(xColumn,bPrimaryKeyColumn) );
             }
+#endif
         }
     }
     catch(Exception&)
@@ -252,6 +253,7 @@ void OTableWindow::clearListBox()
     if ( !m_xListBox )
         return;
 
+#if 0
     SvTreeListEntry* pEntry = m_xListBox->First();
 
     while(pEntry)
@@ -262,6 +264,7 @@ void OTableWindow::clearListBox()
         m_xListBox->GetModel()->Remove(pEntry);
         pEntry = pNextEntry;
     }
+#endif
 }
 
 void OTableWindow::impl_updateImage()
@@ -287,8 +290,8 @@ bool OTableWindow::Init()
     if ( !m_xListBox )
     {
         m_xListBox = VclPtr<OTableWindowListBox>::Create(this);
-        OSL_ENSURE( m_xListBox != nullptr, "OTableWindow::Init() : CreateListBox returned NULL !" );
-        m_xListBox->SetSelectionMode( SelectionMode::Multiple );
+        assert(m_xListBox && "OTableWindow::Init() : CreateListBox returned NULL !");
+        m_xListBox->get_widget().set_selection_mode(SelectionMode::Multiple);
     }
 
     // Set the title
@@ -300,7 +303,7 @@ bool OTableWindow::Init()
     // add the fields to the ListBox
     clearListBox();
     FillListBox();
-    m_xListBox->SelectAll( false );
+    m_xListBox->get_widget().unselect_all();
 
     impl_updateImage();
 
@@ -475,8 +478,12 @@ void OTableWindow::GetFocus()
 void OTableWindow::setActive(bool _bActive)
 {
     SetBoldTitle( _bActive );
-    if (!_bActive && m_xListBox && m_xListBox->GetSelectionCount() != 0)
-        m_xListBox->SelectAll(false);
+    if (_bActive || !m_xListBox)
+        return;
+
+    weld::TreeView& rTreeView = m_xListBox->get_widget();
+    if (rTreeView.get_selected_index() != -1)
+        rTreeView.unselect_all();
 }
 
 void OTableWindow::Remove()
@@ -513,6 +520,7 @@ bool OTableWindow::ExistsAConn() const
 void OTableWindow::EnumValidFields(std::vector< OUString>& arrstrFields)
 {
     arrstrFields.clear();
+#if 0
     // This default implementation counts every item in the ListBox ... for any other behaviour it must be over-written
     if ( m_xListBox )
     {
@@ -524,6 +532,7 @@ void OTableWindow::EnumValidFields(std::vector< OUString>& arrstrFields)
             pEntryLoop = m_xListBox->Next(pEntryLoop);
         }
     }
+#endif
 }
 
 void OTableWindow::StateChanged( StateChangedType nType )
@@ -567,11 +576,13 @@ void OTableWindow::Command(const CommandEvent& rEvt)
                     ptWhere = rEvt.GetMousePosPixel();
                 else
                 {
+#if 0
                     SvTreeListEntry* pCurrent = m_xListBox->GetCurEntry();
                     if ( pCurrent )
                         ptWhere = m_xListBox->GetEntryPosition(pCurrent);
                     else
                         ptWhere = m_xTitle->GetPosPixel();
+#endif
                 }
 
                 VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "dbaccess/ui/jointablemenu.ui", "");

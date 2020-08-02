@@ -861,11 +861,11 @@ void OJoinTableView::DeselectConn(OTableConnection* pConn)
     // deselect the corresponding entries in the ListBox of the table window
     OTableWindow* pWin = pConn->GetSourceWin();
     if (pWin && pWin->GetListBox())
-        pWin->GetListBox()->SelectAll(false);
+        pWin->GetListBox()->get_widget().unselect_all();
 
     pWin = pConn->GetDestWin();
     if (pWin && pWin->GetListBox())
-        pWin->GetListBox()->SelectAll(false);
+        pWin->GetListBox()->get_widget().unselect_all();
 
     pConn->Deselect();
     m_pSelectedConn = nullptr;
@@ -890,9 +890,10 @@ void OJoinTableView::SelectConn(OTableConnection* pConn)
     if (!(pSourceBox && pDestBox))
         return;
 
-    pSourceBox->SelectAll(false);
-    pDestBox->SelectAll(false);
+    pSourceBox->get_widget().unselect_all();
+    pDestBox->get_widget().unselect_all();
 
+#if 0
     SvTreeListEntry* pFirstSourceVisible = pSourceBox->GetFirstEntryInView();
     SvTreeListEntry* pFirstDestVisible = pDestBox->GetFirstEntryInView();
 
@@ -902,18 +903,18 @@ void OJoinTableView::SelectConn(OTableConnection* pConn)
     {
         if ((*aIter)->IsValid())
         {
-            SvTreeListEntry* pSourceEntry = pSourceBox->GetEntryFromText((*aIter)->GetData()->GetSourceFieldName());
-            if (pSourceEntry)
+            int nSourceEntry = pSourceBox->GetEntryFromText((*aIter)->GetData()->GetSourceFieldName());
+            if (nSourceEntry != -1)
             {
-                pSourceBox->Select(pSourceEntry);
-                pSourceBox->MakeVisible(pSourceEntry);
+                pSourceBox->get_widget().select(*xSourceEntry);
+                pSourceBox->get_widget().scroll_to_row(*xSourceEntry);
             }
 
-            SvTreeListEntry* pDestEntry = pDestBox->GetEntryFromText((*aIter)->GetData()->GetDestFieldName());
-            if (pDestEntry)
+            int nDestEntry = pDestBox->GetEntryFromText((*aIter)->GetData()->GetDestFieldName());
+            if (nDestEntry != -1)
             {
-                pDestBox->Select(pDestEntry);
-                pDestBox->MakeVisible(pDestEntry);
+                pDestBox->get_widget().select(*xDestEntry);
+                pDestBox->get_widget().scroll_to_row(*xDestEntry);
             }
 
         }
@@ -923,6 +924,7 @@ void OJoinTableView::SelectConn(OTableConnection* pConn)
         || (pFirstDestVisible != pDestBox->GetFirstEntryInView()))
         // scrolling was done -> redraw
         Invalidate(InvalidateFlags::NoChildren);
+#endif
 }
 
 void OJoinTableView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)

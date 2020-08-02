@@ -177,6 +177,7 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
     TTableConnectionData::value_type pTabConnData = std::make_shared<ORelationTableConnectionData>(pSourceWin->GetData(),
                                                                                    pDestWin->GetData());
 
+#if 0
     // the names of the affected fields
     OUString sSourceFieldName = jxdSource.pListBox->GetEntryText(jxdSource.pEntry);
     OUString sDestFieldName = jxdDest.pListBox->GetEntryText(jxdDest.pEntry);
@@ -209,6 +210,7 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
             OSL_FAIL("ORelationTableView::AddConnection: Exception occurred!");
         }
     }
+#endif
 }
 
 void ORelationTableView::ConnDoubleClicked(VclPtr<OTableConnection>& rConnection)

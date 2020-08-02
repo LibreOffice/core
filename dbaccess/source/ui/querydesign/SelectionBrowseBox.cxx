@@ -1541,10 +1541,12 @@ void OSelectionBrowseBox::InsertColumn(const OTableFieldDescRef& pEntry, sal_uIn
 
 OTableFieldDescRef OSelectionBrowseBox::InsertField(const OJoinExchangeData& jxdSource)
 {
+#if 0
     OQueryTableWindow* pSourceWin = static_cast<OQueryTableWindow*>(jxdSource.pListBox->GetTabWin());
     if (!pSourceWin)
+#endif
         return nullptr;
-
+#if 0
     // name and position of the selected field
     OUString aFieldName = jxdSource.pListBox->GetEntryText(jxdSource.pEntry);
     sal_uInt32 nFieldIndex = jxdSource.pListBox->GetModel()->GetAbsPos(jxdSource.pEntry);
@@ -1561,6 +1563,7 @@ OTableFieldDescRef OSelectionBrowseBox::InsertField(const OJoinExchangeData& jxd
     aInfo->SetVisible();
 
     return InsertField(aInfo);
+#endif
 }
 
 OTableFieldDescRef OSelectionBrowseBox::InsertField(const OTableFieldDescRef& _rInfo, sal_uInt16 _nColumnPosition, bool bVis, bool bActivate)
