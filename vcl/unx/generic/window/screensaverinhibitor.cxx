@@ -55,20 +55,20 @@ void ScreenSaverInhibitor::inhibit( bool bInhibit, const OUString& sReason,
     inhibitFDO( bInhibit, appname, aReason.getStr() );
     inhibitFDOPM( bInhibit, appname, aReason.getStr() );
 
-    if ( bIsX11 )
-    {
-        if (pDisplay)
-        {
-            inhibitXScreenSaver( bInhibit, *pDisplay );
-            inhibitXAutoLock( bInhibit, *pDisplay );
-            inhibitDPMS( bInhibit, *pDisplay );
-        }
+    if ( !bIsX11 )
+        return;
 
-        if (xid)
-        {
-            inhibitGSM( bInhibit, appname, aReason.getStr(), *xid );
-            inhibitMSM( bInhibit, appname, aReason.getStr(), *xid );
-        }
+    if (pDisplay)
+    {
+        inhibitXScreenSaver( bInhibit, *pDisplay );
+        inhibitXAutoLock( bInhibit, *pDisplay );
+        inhibitDPMS( bInhibit, *pDisplay );
+    }
+
+    if (xid)
+    {
+        inhibitGSM( bInhibit, appname, aReason.getStr(), *xid );
+        inhibitMSM( bInhibit, appname, aReason.getStr(), *xid );
     }
 }
 

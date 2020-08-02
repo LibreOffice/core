@@ -160,24 +160,24 @@ void XMLChangedRegionImportContext::SetChangeInfo(
 void XMLChangedRegionImportContext::UseRedlineText()
 {
     // if we haven't already installed the redline cursor, do it now
-    if (! xOldCursor.is())
+    if ( xOldCursor.is())
+        return;
+
+    // get TextImportHelper and old Cursor
+    rtl::Reference<XMLTextImportHelper> rHelper(GetImport().GetTextImport());
+    Reference<XTextCursor> xCursor( rHelper->GetCursor() );
+
+    // create Redline and new Cursor
+    Reference<XTextCursor> xNewCursor =
+        rHelper->RedlineCreateText(xCursor, sID);
+
+    if (xNewCursor.is())
     {
-        // get TextImportHelper and old Cursor
-        rtl::Reference<XMLTextImportHelper> rHelper(GetImport().GetTextImport());
-        Reference<XTextCursor> xCursor( rHelper->GetCursor() );
-
-        // create Redline and new Cursor
-        Reference<XTextCursor> xNewCursor =
-            rHelper->RedlineCreateText(xCursor, sID);
-
-        if (xNewCursor.is())
-        {
-            // save old cursor and install new one
-            xOldCursor = xCursor;
-            rHelper->SetCursor( xNewCursor );
-        }
-        // else: leave as is
+        // save old cursor and install new one
+        xOldCursor = xCursor;
+        rHelper->SetCursor( xNewCursor );
     }
+    // else: leave as is
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

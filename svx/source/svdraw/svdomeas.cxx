@@ -564,40 +564,40 @@ bool SdrMeasureObj::CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, 
 
 void SdrMeasureObj::UndirtyText() const
 {
-    if (bTextDirty)
+    if (!bTextDirty)
+        return;
+
+    SdrOutliner& rOutliner=ImpGetDrawOutliner();
+    OutlinerParaObject* pOutlinerParaObject = SdrTextObj::GetOutlinerParaObject();
+    if(pOutlinerParaObject==nullptr)
     {
-        SdrOutliner& rOutliner=ImpGetDrawOutliner();
-        OutlinerParaObject* pOutlinerParaObject = SdrTextObj::GetOutlinerParaObject();
-        if(pOutlinerParaObject==nullptr)
-        {
-            rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SdrMeasureFieldKind::Rotate90Blanks), EE_FEATURE_FIELD), ESelection(0,0));
-            rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SdrMeasureFieldKind::Value), EE_FEATURE_FIELD),ESelection(0,1));
-            rOutliner.QuickInsertText(" ", ESelection(0,2));
-            rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SdrMeasureFieldKind::Unit), EE_FEATURE_FIELD),ESelection(0,3));
-            rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SdrMeasureFieldKind::Rotate90Blanks), EE_FEATURE_FIELD),ESelection(0,4));
+        rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SdrMeasureFieldKind::Rotate90Blanks), EE_FEATURE_FIELD), ESelection(0,0));
+        rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SdrMeasureFieldKind::Value), EE_FEATURE_FIELD),ESelection(0,1));
+        rOutliner.QuickInsertText(" ", ESelection(0,2));
+        rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SdrMeasureFieldKind::Unit), EE_FEATURE_FIELD),ESelection(0,3));
+        rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SdrMeasureFieldKind::Rotate90Blanks), EE_FEATURE_FIELD),ESelection(0,4));
 
-            if(GetStyleSheet())
-                rOutliner.SetStyleSheet(0, GetStyleSheet());
+        if(GetStyleSheet())
+            rOutliner.SetStyleSheet(0, GetStyleSheet());
 
-            rOutliner.SetParaAttribs(0, GetObjectItemSet());
+        rOutliner.SetParaAttribs(0, GetObjectItemSet());
 
-            // cast to nonconst
-            const_cast<SdrMeasureObj*>(this)->NbcSetOutlinerParaObject( rOutliner.CreateParaObject() );
-        }
-        else
-        {
-            rOutliner.SetText(*pOutlinerParaObject);
-        }
-
-        rOutliner.SetUpdateMode(true);
-        rOutliner.UpdateFields();
-        Size aSiz(rOutliner.CalcTextSize());
-        rOutliner.Clear();
-        // cast to nonconst three times
-        const_cast<SdrMeasureObj*>(this)->aTextSize=aSiz;
-        const_cast<SdrMeasureObj*>(this)->bTextSizeDirty=false;
-        const_cast<SdrMeasureObj*>(this)->bTextDirty=false;
+        // cast to nonconst
+        const_cast<SdrMeasureObj*>(this)->NbcSetOutlinerParaObject( rOutliner.CreateParaObject() );
     }
+    else
+    {
+        rOutliner.SetText(*pOutlinerParaObject);
+    }
+
+    rOutliner.SetUpdateMode(true);
+    rOutliner.UpdateFields();
+    Size aSiz(rOutliner.CalcTextSize());
+    rOutliner.Clear();
+    // cast to nonconst three times
+    const_cast<SdrMeasureObj*>(this)->aTextSize=aSiz;
+    const_cast<SdrMeasureObj*>(this)->bTextSizeDirty=false;
+    const_cast<SdrMeasureObj*>(this)->bTextDirty=false;
 }
 
 void SdrMeasureObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
@@ -1417,20 +1417,20 @@ void SdrMeasureObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
     const Point aNewPt1(basegfx::fround(aPosA.getX()), basegfx::fround(aPosA.getY()));
     const Point aNewPt2(basegfx::fround(aPosB.getX()), basegfx::fround(aPosB.getY()));
 
-    if(aNewPt1 != aPt1 || aNewPt2 != aPt2)
-    {
-        // set model values and broadcast
-        tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    if(aNewPt1 == aPt1 && aNewPt2 == aPt2)
+        return;
 
-        aPt1 = aNewPt1;
-        aPt2 = aNewPt2;
+    // set model values and broadcast
+    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
 
-        SetTextDirty();
-        ActionChanged();
-        SetChanged();
-        BroadcastObjectChange();
-        SendUserCall(SdrUserCallType::MoveOnly,aBoundRect0);
-    }
+    aPt1 = aNewPt1;
+    aPt2 = aNewPt2;
+
+    SetTextDirty();
+    ActionChanged();
+    SetChanged();
+    BroadcastObjectChange();
+    SendUserCall(SdrUserCallType::MoveOnly,aBoundRect0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

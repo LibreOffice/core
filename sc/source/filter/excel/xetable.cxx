@@ -381,22 +381,25 @@ void XclExpTableop::Finalize()
     }
 
     // check if referred cells are outside of own range
-    if( mbValid ) switch( mnScMode )
+    if( !mbValid )
+        return;
+
+    switch( mnScMode )
     {
-        case 0:
-            mbValid =   (mnColInpXclCol + 1 < maXclRange.maFirst.mnCol) || (mnColInpXclCol > maXclRange.maLast.mnCol) ||
-                        (mnColInpXclRow     < maXclRange.maFirst.mnRow) || (mnColInpXclRow > maXclRange.maLast.mnRow);
-        break;
-        case 1:
-            mbValid =   (mnColInpXclCol     < maXclRange.maFirst.mnCol) || (mnColInpXclCol > maXclRange.maLast.mnCol) ||
-                        (mnColInpXclRow + 1 < maXclRange.maFirst.mnRow) || (mnColInpXclRow > maXclRange.maLast.mnRow);
-        break;
-        case 2:
-            mbValid =   ((mnColInpXclCol + 1 < maXclRange.maFirst.mnCol) || (mnColInpXclCol > maXclRange.maLast.mnCol) ||
-                         (mnColInpXclRow + 1 < maXclRange.maFirst.mnRow) || (mnColInpXclRow > maXclRange.maLast.mnRow)) &&
-                        ((mnRowInpXclCol + 1 < maXclRange.maFirst.mnCol) || (mnRowInpXclCol > maXclRange.maLast.mnCol) ||
-                         (mnRowInpXclRow + 1 < maXclRange.maFirst.mnRow) || (mnRowInpXclRow > maXclRange.maLast.mnRow));
-        break;
+    case 0:
+        mbValid =   (mnColInpXclCol + 1 < maXclRange.maFirst.mnCol) || (mnColInpXclCol > maXclRange.maLast.mnCol) ||
+                    (mnColInpXclRow     < maXclRange.maFirst.mnRow) || (mnColInpXclRow > maXclRange.maLast.mnRow);
+    break;
+    case 1:
+        mbValid =   (mnColInpXclCol     < maXclRange.maFirst.mnCol) || (mnColInpXclCol > maXclRange.maLast.mnCol) ||
+                    (mnColInpXclRow + 1 < maXclRange.maFirst.mnRow) || (mnColInpXclRow > maXclRange.maLast.mnRow);
+    break;
+    case 2:
+        mbValid =   ((mnColInpXclCol + 1 < maXclRange.maFirst.mnCol) || (mnColInpXclCol > maXclRange.maLast.mnCol) ||
+                     (mnColInpXclRow + 1 < maXclRange.maFirst.mnRow) || (mnColInpXclRow > maXclRange.maLast.mnRow)) &&
+                    ((mnRowInpXclCol + 1 < maXclRange.maFirst.mnCol) || (mnRowInpXclCol > maXclRange.maLast.mnCol) ||
+                     (mnRowInpXclRow + 1 < maXclRange.maFirst.mnRow) || (mnRowInpXclRow > maXclRange.maLast.mnRow));
+    break;
     }
 }
 
@@ -1406,46 +1409,46 @@ XclExpOutlineBuffer::XclExpOutlineBuffer( const XclExpRoot& rRoot, bool bRows ) 
 
 void XclExpOutlineBuffer::UpdateColRow( SCCOLROW nScPos )
 {
-    if( mpScOLArray )
+    if( !mpScOLArray )
+        return;
+
+    // find open level index for passed position
+    size_t nNewOpenScLevel = 0; // new open level (0-based Calc index)
+    sal_uInt8 nNewLevel = 0;    // new open level (1-based Excel index)
+
+    if( mpScOLArray->FindTouchedLevel( nScPos, nScPos, nNewOpenScLevel ) )
+        nNewLevel = static_cast< sal_uInt8 >( nNewOpenScLevel + 1 );
+    // else nNewLevel keeps 0 to show that there are no groups
+
+    mbCurrCollapse = false;
+    if( nNewLevel >= mnCurrLevel )
     {
-        // find open level index for passed position
-        size_t nNewOpenScLevel = 0; // new open level (0-based Calc index)
-        sal_uInt8 nNewLevel = 0;    // new open level (1-based Excel index)
-
-        if( mpScOLArray->FindTouchedLevel( nScPos, nScPos, nNewOpenScLevel ) )
-            nNewLevel = static_cast< sal_uInt8 >( nNewOpenScLevel + 1 );
-        // else nNewLevel keeps 0 to show that there are no groups
-
-        mbCurrCollapse = false;
-        if( nNewLevel >= mnCurrLevel )
+        // new level(s) opened, or no level closed - update all level infos
+        for( size_t nScLevel = 0; nScLevel <= nNewOpenScLevel; ++nScLevel )
         {
-            // new level(s) opened, or no level closed - update all level infos
-            for( size_t nScLevel = 0; nScLevel <= nNewOpenScLevel; ++nScLevel )
+            /*  In each level: check if a new group is started (there may be
+                neighbored groups without gap - therefore check ALL levels). */
+            if( maLevelInfos[ nScLevel ].mnScEndPos < nScPos )
             {
-                /*  In each level: check if a new group is started (there may be
-                    neighbored groups without gap - therefore check ALL levels). */
-                if( maLevelInfos[ nScLevel ].mnScEndPos < nScPos )
+                if( const ScOutlineEntry* pEntry = mpScOLArray->GetEntryByPos( nScLevel, nScPos ) )
                 {
-                    if( const ScOutlineEntry* pEntry = mpScOLArray->GetEntryByPos( nScLevel, nScPos ) )
-                    {
-                        maLevelInfos[ nScLevel ].mnScEndPos = pEntry->GetEnd();
-                        maLevelInfos[ nScLevel ].mbHidden = pEntry->IsHidden();
-                    }
+                    maLevelInfos[ nScLevel ].mnScEndPos = pEntry->GetEnd();
+                    maLevelInfos[ nScLevel ].mbHidden = pEntry->IsHidden();
                 }
             }
         }
-        else
-        {
-            // level(s) closed - check if any of the closed levels are collapsed
-            // Calc uses 0-based level indexes
-            sal_uInt16 nOldOpenScLevel = mnCurrLevel - 1;
-            for( sal_uInt16 nScLevel = nNewOpenScLevel + 1; !mbCurrCollapse && (nScLevel <= nOldOpenScLevel); ++nScLevel )
-                mbCurrCollapse = maLevelInfos[ nScLevel ].mbHidden;
-        }
-
-        // cache new opened level
-        mnCurrLevel = nNewLevel;
     }
+    else
+    {
+        // level(s) closed - check if any of the closed levels are collapsed
+        // Calc uses 0-based level indexes
+        sal_uInt16 nOldOpenScLevel = mnCurrLevel - 1;
+        for( sal_uInt16 nScLevel = nNewOpenScLevel + 1; !mbCurrCollapse && (nScLevel <= nOldOpenScLevel); ++nScLevel )
+            mbCurrCollapse = maLevelInfos[ nScLevel ].mbHidden;
+    }
+
+    // cache new opened level
+    mnCurrLevel = nNewLevel;
 }
 
 XclExpGuts::XclExpGuts( const XclExpRoot& rRoot ) :
@@ -1455,25 +1458,26 @@ XclExpGuts::XclExpGuts( const XclExpRoot& rRoot ) :
     mnRowLevels( 0 ),
     mnRowWidth( 0 )
 {
-    if( const ScOutlineTable* pOutlineTable = rRoot.GetDoc().GetOutlineTable( rRoot.GetCurrScTab() ) )
-    {
-        // column outline groups
-        const ScOutlineArray& rColArray = pOutlineTable->GetColArray();
-        mnColLevels = ulimit_cast< sal_uInt16 >( rColArray.GetDepth(), EXC_OUTLINE_MAX );
-        if( mnColLevels )
-        {
-            ++mnColLevels;
-            mnColWidth = 12 * mnColLevels + 5;
-        }
+    const ScOutlineTable* pOutlineTable = rRoot.GetDoc().GetOutlineTable( rRoot.GetCurrScTab() );
+    if(!pOutlineTable)
+        return;
 
-        // row outline groups
-        const ScOutlineArray& rRowArray = pOutlineTable->GetRowArray();
-        mnRowLevels = ulimit_cast< sal_uInt16 >( rRowArray.GetDepth(), EXC_OUTLINE_MAX );
-        if( mnRowLevels )
-        {
-            ++mnRowLevels;
-            mnRowWidth = 12 * mnRowLevels + 5;
-        }
+    // column outline groups
+    const ScOutlineArray& rColArray = pOutlineTable->GetColArray();
+    mnColLevels = ulimit_cast< sal_uInt16 >( rColArray.GetDepth(), EXC_OUTLINE_MAX );
+    if( mnColLevels )
+    {
+        ++mnColLevels;
+        mnColWidth = 12 * mnColLevels + 5;
+    }
+
+    // row outline groups
+    const ScOutlineArray& rRowArray = pOutlineTable->GetRowArray();
+    mnRowLevels = ulimit_cast< sal_uInt16 >( rRowArray.GetDepth(), EXC_OUTLINE_MAX );
+    if( mnRowLevels )
+    {
+        ++mnRowLevels;
+        mnRowWidth = 12 * mnRowLevels + 5;
     }
 }
 

@@ -1330,23 +1330,23 @@ void ScEditShell::GetUndoState(SfxItemSet &rSet)
 void ScEditShell::ExecuteTrans( const SfxRequest& rReq )
 {
     TransliterationFlags nType = ScViewUtil::GetTransliterationType( rReq.GetSlot() );
-    if ( nType != TransliterationFlags::NONE )
-    {
-        ScInputHandler* pHdl = GetMyInputHdl();
-        assert(pHdl && "no ScInputHandler");
+    if ( nType == TransliterationFlags::NONE )
+        return;
 
-        EditView* pTopView   = pHdl->GetTopView();
-        EditView* pTableView = pHdl->GetTableView();
-        assert(pTableView && "no EditView");
+    ScInputHandler* pHdl = GetMyInputHdl();
+    assert(pHdl && "no ScInputHandler");
 
-        pHdl->DataChanging();
+    EditView* pTopView   = pHdl->GetTopView();
+    EditView* pTableView = pHdl->GetTableView();
+    assert(pTableView && "no EditView");
 
-        pTableView->TransliterateText( nType );
-        if (pTopView)
-            pTopView->TransliterateText( nType );
+    pHdl->DataChanging();
 
-        pHdl->DataChanged();
-    }
+    pTableView->TransliterateText( nType );
+    if (pTopView)
+        pTopView->TransliterateText( nType );
+
+    pHdl->DataChanged();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

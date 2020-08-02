@@ -812,18 +812,18 @@ void ScUndoReplaceNote::DoInsertNote( const ScNoteData& rNoteData )
 
 void ScUndoReplaceNote::DoRemoveNote( const ScNoteData& rNoteData )
 {
-    if( rNoteData.mxCaption )
+    if( !rNoteData.mxCaption )
+        return;
+
+    ScDocument& rDoc = pDocShell->GetDocument();
+    OSL_ENSURE( rDoc.GetNote(maPos), "ScUndoReplaceNote::DoRemoveNote - missing cell note" );
+    if( std::unique_ptr<ScPostIt> pNote = rDoc.ReleaseNote( maPos ) )
     {
-        ScDocument& rDoc = pDocShell->GetDocument();
-        OSL_ENSURE( rDoc.GetNote(maPos), "ScUndoReplaceNote::DoRemoveNote - missing cell note" );
-        if( std::unique_ptr<ScPostIt> pNote = rDoc.ReleaseNote( maPos ) )
-        {
-            /*  Forget pointer to caption object to suppress removing the
-                caption object from the drawing layer while deleting pNote
-                (removing the caption is done by a drawing undo action). */
-            pNote->ForgetCaption();
-            ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Remove, &rDoc, maPos, pNote.get());
-        }
+        /*  Forget pointer to caption object to suppress removing the
+            caption object from the drawing layer while deleting pNote
+            (removing the caption is done by a drawing undo action). */
+        pNote->ForgetCaption();
+        ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Remove, &rDoc, maPos, pNote.get());
     }
 }
 

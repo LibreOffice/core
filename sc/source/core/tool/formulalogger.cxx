@@ -75,20 +75,20 @@ struct FormulaLogger::GroupScope::Impl
     {
         ++mrLogger.mnNestLevel;
 
-        if (mbOutputEnabled)
-        {
-            sc::TokenStringContext aCxt(&rDoc, rDoc.GetGrammar());
-            OUString aFormula = rCell.GetCode()->CreateString(aCxt, rCell.aPos);
+        if (!mbOutputEnabled)
+            return;
 
-            mrLogger.write(maPrefix);
-            mrLogger.writeNestLevel();
+        sc::TokenStringContext aCxt(&rDoc, rDoc.GetGrammar());
+        OUString aFormula = rCell.GetCode()->CreateString(aCxt, rCell.aPos);
 
-            mrLogger.writeAscii("-- enter (formula='");
-            mrLogger.write(aFormula);
-            mrLogger.writeAscii("', size=");
-            mrLogger.write(rCell.GetSharedLength());
-            mrLogger.writeAscii(")\n");
-        }
+        mrLogger.write(maPrefix);
+        mrLogger.writeNestLevel();
+
+        mrLogger.writeAscii("-- enter (formula='");
+        mrLogger.write(aFormula);
+        mrLogger.writeAscii("', size=");
+        mrLogger.write(rCell.GetSharedLength());
+        mrLogger.writeAscii(")\n");
     }
 
     ~Impl()

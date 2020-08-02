@@ -139,37 +139,37 @@ void AccessibleShape::Init()
     // depths of the core.  Necessary for making the edit engine
     // accessible.
     Reference<text::XText> xText (mxShape, uno::UNO_QUERY);
-    if (xText.is())
+    if (!xText.is())
+        return;
+
+    SdrView* pView = maShapeTreeInfo.GetSdrView ();
+    const vcl::Window* pWindow = maShapeTreeInfo.GetWindow ();
+    if (!(pView != nullptr && pWindow != nullptr && mxShape.is()))
+        return;
+
+    // #107948# Determine whether shape text is empty
+    SdrObject* pSdrObject = GetSdrObjectFromXShape(mxShape);
+    if( !pSdrObject )
+        return;
+
+    SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( pSdrObject  );
+    const bool hasOutlinerParaObject = (pTextObj && pTextObj->CanCreateEditOutlinerParaObject()) || (pSdrObject->GetOutlinerParaObject() != nullptr);
+
+    // create AccessibleTextHelper to handle this shape's text
+    if( !hasOutlinerParaObject )
     {
-        SdrView* pView = maShapeTreeInfo.GetSdrView ();
-        const vcl::Window* pWindow = maShapeTreeInfo.GetWindow ();
-        if (pView != nullptr && pWindow != nullptr && mxShape.is())
-        {
-            // #107948# Determine whether shape text is empty
-            SdrObject* pSdrObject = GetSdrObjectFromXShape(mxShape);
-            if( pSdrObject )
-            {
-                SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( pSdrObject  );
-                const bool hasOutlinerParaObject = (pTextObj && pTextObj->CanCreateEditOutlinerParaObject()) || (pSdrObject->GetOutlinerParaObject() != nullptr);
-
-                // create AccessibleTextHelper to handle this shape's text
-                if( !hasOutlinerParaObject )
-                {
-                    // empty text -> use proxy edit source to delay creation of EditEngine
-                    mpText.reset( new AccessibleTextHelper( std::make_unique<AccessibleEmptyEditSource >(*pSdrObject, *pView, *pWindow) ) );
-                }
-                else
-                {
-                    // non-empty text -> use full-fledged edit source right away
-                    mpText.reset( new AccessibleTextHelper( std::make_unique<SvxTextEditSource >(*pSdrObject, nullptr, *pView, *pWindow) ) );
-                }
-                if( pWindow->HasFocus() )
-                    mpText->SetFocus();
-
-                mpText->SetEventSource(this);
-            }
-        }
+        // empty text -> use proxy edit source to delay creation of EditEngine
+        mpText.reset( new AccessibleTextHelper( std::make_unique<AccessibleEmptyEditSource >(*pSdrObject, *pView, *pWindow) ) );
     }
+    else
+    {
+        // non-empty text -> use full-fledged edit source right away
+        mpText.reset( new AccessibleTextHelper( std::make_unique<SvxTextEditSource >(*pSdrObject, nullptr, *pView, *pWindow) ) );
+    }
+    if( pWindow->HasFocus() )
+        mpText->SetFocus();
+
+    mpText->SetEventSource(this);
 }
 
 
@@ -917,24 +917,24 @@ void AccessibleShape::disposing (const lang::EventObject& aEvent)
 void SAL_CALL
     AccessibleShape::notifyShapeEvent (const document::EventObject& rEventObject)
 {
-    if (rEventObject.EventName == "ShapeModified")
-    {
-        //Need to update text children when receiving ShapeModified hint when exiting edit mode for text box
-        if (mpText)
-            mpText->UpdateChildren();
+    if (rEventObject.EventName != "ShapeModified")
+        return;
+
+    //Need to update text children when receiving ShapeModified hint when exiting edit mode for text box
+    if (mpText)
+        mpText->UpdateChildren();
 
 
-        // Some property of a shape has been modified.  Send an event
-        // that indicates a change of the visible data to all listeners.
-        CommitChange (
-            AccessibleEventId::VISIBLE_DATA_CHANGED,
-            uno::Any(),
-            uno::Any());
+    // Some property of a shape has been modified.  Send an event
+    // that indicates a change of the visible data to all listeners.
+    CommitChange (
+        AccessibleEventId::VISIBLE_DATA_CHANGED,
+        uno::Any(),
+        uno::Any());
 
-        // Name and Description may have changed.  Update the local
-        // values accordingly.
-        UpdateNameAndDescription();
-    }
+    // Name and Description may have changed.  Update the local
+    // values accordingly.
+    UpdateNameAndDescription();
 }
 
 // lang::XUnoTunnel

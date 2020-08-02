@@ -176,35 +176,35 @@ void ScPreview::UpdateDrawView()        // nTab must be right
 
 void ScPreview::TestLastPage()
 {
-    if (nPageNo >= nTotalPages)
-    {
-        if (nTotalPages)
-        {
-            nPageNo = nTotalPages - 1;
-            nTab = static_cast<SCTAB>(nPages.size()) -1;
-            while (nTab > 0 && !nPages[nTab])       // not the last empty Table
-                --nTab;
-            OSL_ENSURE(0 < static_cast<SCTAB>(nPages.size()),"are all tables empty?");
-            nTabPage = nPages[nTab] - 1;
-            nTabStart = 0;
-            for (sal_uInt16 i=0; i<nTab; i++)
-                nTabStart += nPages[i];
+    if (nPageNo < nTotalPages)
+        return;
 
-            ScDocument& rDoc = pDocShell->GetDocument();
-            nDisplayStart = lcl_GetDisplayStart( nTab, &rDoc, nPages );
-        }
-        else        // empty Document
-        {
-            nTab = 0;
-            nPageNo = nTabPage = nTabStart = nDisplayStart = 0;
-            aState.nPrintTab = 0;
-            aState.nStartCol = aState.nEndCol = 0;
-            aState.nStartRow = aState.nEndRow = 0;
-            aState.nZoom = 0;
-            aState.nPagesX = aState.nPagesY = 0;
-            aState.nTabPages = aState.nTotalPages =
-            aState.nPageStart = aState.nDocPages = 0;
-        }
+    if (nTotalPages)
+    {
+        nPageNo = nTotalPages - 1;
+        nTab = static_cast<SCTAB>(nPages.size()) -1;
+        while (nTab > 0 && !nPages[nTab])       // not the last empty Table
+            --nTab;
+        OSL_ENSURE(0 < static_cast<SCTAB>(nPages.size()),"are all tables empty?");
+        nTabPage = nPages[nTab] - 1;
+        nTabStart = 0;
+        for (sal_uInt16 i=0; i<nTab; i++)
+            nTabStart += nPages[i];
+
+        ScDocument& rDoc = pDocShell->GetDocument();
+        nDisplayStart = lcl_GetDisplayStart( nTab, &rDoc, nPages );
+    }
+    else        // empty Document
+    {
+        nTab = 0;
+        nPageNo = nTabPage = nTabStart = nDisplayStart = 0;
+        aState.nPrintTab = 0;
+        aState.nStartCol = aState.nEndCol = 0;
+        aState.nStartRow = aState.nEndRow = 0;
+        aState.nZoom = 0;
+        aState.nPagesX = aState.nPagesY = 0;
+        aState.nTabPages = aState.nTotalPages =
+        aState.nPageStart = aState.nDocPages = 0;
     }
 }
 
@@ -471,146 +471,146 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
         }
     }
 
-    if ( bDoPrint )
+    if ( !bDoPrint )
+        return;
+
+    long nPageEndX = aLocalPageSize.Width()  - aOffset.X();
+    long nPageEndY = aLocalPageSize.Height() - aOffset.Y();
+    if ( !bValidPage )
+        nPageEndX = nPageEndY = 0;
+
+    Size aWinSize = GetOutputSize();
+    Point aWinEnd( aWinSize.Width(), aWinSize.Height() );
+    bool bRight  = nPageEndX <= aWinEnd.X();
+    bool bBottom = nPageEndY <= aWinEnd.Y();
+
+    if (!nTotalPages)
     {
-        long nPageEndX = aLocalPageSize.Width()  - aOffset.X();
-        long nPageEndY = aLocalPageSize.Height() - aOffset.Y();
-        if ( !bValidPage )
-            nPageEndX = nPageEndY = 0;
+        // There is no data to print. Print a friendly warning message and
+        // bail out.
 
-        Size aWinSize = GetOutputSize();
-        Point aWinEnd( aWinSize.Width(), aWinSize.Height() );
-        bool bRight  = nPageEndX <= aWinEnd.X();
-        bool bBottom = nPageEndY <= aWinEnd.Y();
+        SetMapMode(aMMMode);
 
-        if (!nTotalPages)
+        // Draw background first.
+        SetLineColor();
+        SetFillColor(aBackColor);
+        DrawRect(tools::Rectangle(0, 0, aWinEnd.X(), aWinEnd.Y()));
+
+        const ScPatternAttr& rDefPattern =
+                rDoc.GetPool()->GetDefaultItem(ATTR_PATTERN);
+
+        std::unique_ptr<ScEditEngineDefaulter> pEditEng(
+            new ScEditEngineDefaulter(EditEngine::CreatePool(), true));
+
+        pEditEng->SetRefMapMode(aMMMode);
+        auto pEditDefaults = std::make_unique<SfxItemSet>( pEditEng->GetEmptyItemSet() );
+        rDefPattern.FillEditItemSet(pEditDefaults.get());
+        pEditDefaults->Put(SvxColorItem(COL_LIGHTGRAY, EE_CHAR_COLOR));
+        pEditEng->SetDefaults(std::move(pEditDefaults));
+
+        OUString aEmptyMsg;
+        if (mbHasEmptyRangeTable)
+            aEmptyMsg = ScResId(STR_PRINT_PREVIEW_EMPTY_RANGE);
+        else
+            aEmptyMsg = ScResId(STR_PRINT_PREVIEW_NODATA);
+
+        long nHeight = 3000;
+        pEditEng->SetDefaultItem(SvxFontHeightItem(nHeight, 100, EE_CHAR_FONTHEIGHT));
+        pEditEng->SetDefaultItem(SvxFontHeightItem(nHeight, 100, EE_CHAR_FONTHEIGHT_CJK));
+        pEditEng->SetDefaultItem(SvxFontHeightItem(nHeight, 100, EE_CHAR_FONTHEIGHT_CTL));
+
+        pEditEng->SetTextCurrentDefaults(aEmptyMsg);
+
+        Point aCenter(
+            (aWinEnd.X() - pEditEng->CalcTextWidth())/2,
+            (aWinEnd.Y() - pEditEng->GetTextHeight())/2);
+
+        pEditEng->Draw(this, aCenter);
+
+        return;
+    }
+
+    if( bPageMargin && bValidPage )
+    {
+        SetMapMode(aMMMode);
+        SetLineColor( COL_BLACK );
+        DrawInvert( static_cast<long>( nTopMargin - aOffset.Y() ), PointerStyle::VSizeBar );
+        DrawInvert( static_cast<long>(nPageEndY - nBottomMargin ), PointerStyle::VSizeBar );
+        DrawInvert( static_cast<long>( nLeftMargin - aOffset.X() ), PointerStyle::HSizeBar );
+        DrawInvert( static_cast<long>( nPageEndX - nRightMargin ) , PointerStyle::HSizeBar );
+        if( bHeaderOn )
         {
-            // There is no data to print. Print a friendly warning message and
-            // bail out.
-
-            SetMapMode(aMMMode);
-
-            // Draw background first.
-            SetLineColor();
-            SetFillColor(aBackColor);
-            DrawRect(tools::Rectangle(0, 0, aWinEnd.X(), aWinEnd.Y()));
-
-            const ScPatternAttr& rDefPattern =
-                    rDoc.GetPool()->GetDefaultItem(ATTR_PATTERN);
-
-            std::unique_ptr<ScEditEngineDefaulter> pEditEng(
-                new ScEditEngineDefaulter(EditEngine::CreatePool(), true));
-
-            pEditEng->SetRefMapMode(aMMMode);
-            auto pEditDefaults = std::make_unique<SfxItemSet>( pEditEng->GetEmptyItemSet() );
-            rDefPattern.FillEditItemSet(pEditDefaults.get());
-            pEditDefaults->Put(SvxColorItem(COL_LIGHTGRAY, EE_CHAR_COLOR));
-            pEditEng->SetDefaults(std::move(pEditDefaults));
-
-            OUString aEmptyMsg;
-            if (mbHasEmptyRangeTable)
-                aEmptyMsg = ScResId(STR_PRINT_PREVIEW_EMPTY_RANGE);
-            else
-                aEmptyMsg = ScResId(STR_PRINT_PREVIEW_NODATA);
-
-            long nHeight = 3000;
-            pEditEng->SetDefaultItem(SvxFontHeightItem(nHeight, 100, EE_CHAR_FONTHEIGHT));
-            pEditEng->SetDefaultItem(SvxFontHeightItem(nHeight, 100, EE_CHAR_FONTHEIGHT_CJK));
-            pEditEng->SetDefaultItem(SvxFontHeightItem(nHeight, 100, EE_CHAR_FONTHEIGHT_CTL));
-
-            pEditEng->SetTextCurrentDefaults(aEmptyMsg);
-
-            Point aCenter(
-                (aWinEnd.X() - pEditEng->CalcTextWidth())/2,
-                (aWinEnd.Y() - pEditEng->GetTextHeight())/2);
-
-            pEditEng->Draw(this, aCenter);
-
-            return;
+            DrawInvert( nHeaderHeight - aOffset.Y(), PointerStyle::VSizeBar );
+        }
+        if( bFooterOn )
+        {
+            DrawInvert( nPageEndY - nFooterHeight, PointerStyle::VSizeBar );
         }
 
-        if( bPageMargin && bValidPage )
+        SetMapMode( MapMode( MapUnit::MapPixel ) );
+        for( int i= aPageArea.aStart.Col(); i<= aPageArea.aEnd.Col(); i++ )
         {
-            SetMapMode(aMMMode);
+            Point aColumnTop = LogicToPixel( Point( 0, -aOffset.Y() ) ,aMMMode );
             SetLineColor( COL_BLACK );
-            DrawInvert( static_cast<long>( nTopMargin - aOffset.Y() ), PointerStyle::VSizeBar );
-            DrawInvert( static_cast<long>(nPageEndY - nBottomMargin ), PointerStyle::VSizeBar );
-            DrawInvert( static_cast<long>( nLeftMargin - aOffset.X() ), PointerStyle::HSizeBar );
-            DrawInvert( static_cast<long>( nPageEndX - nRightMargin ) , PointerStyle::HSizeBar );
-            if( bHeaderOn )
-            {
-                DrawInvert( nHeaderHeight - aOffset.Y(), PointerStyle::VSizeBar );
-            }
-            if( bFooterOn )
-            {
-                DrawInvert( nPageEndY - nFooterHeight, PointerStyle::VSizeBar );
-            }
-
-            SetMapMode( MapMode( MapUnit::MapPixel ) );
-            for( int i= aPageArea.aStart.Col(); i<= aPageArea.aEnd.Col(); i++ )
-            {
-                Point aColumnTop = LogicToPixel( Point( 0, -aOffset.Y() ) ,aMMMode );
-                SetLineColor( COL_BLACK );
-                SetFillColor( COL_BLACK );
-                DrawRect( tools::Rectangle( Point( mvRight[i] - 2, aColumnTop.Y() ),Point( mvRight[i] + 2 , 4 + aColumnTop.Y()) ));
-                DrawLine( Point( mvRight[i], aColumnTop.Y() ), Point( mvRight[i],  10 + aColumnTop.Y()) );
-            }
-            SetMapMode( aMMMode );
+            SetFillColor( COL_BLACK );
+            DrawRect( tools::Rectangle( Point( mvRight[i] - 2, aColumnTop.Y() ),Point( mvRight[i] + 2 , 4 + aColumnTop.Y()) ));
+            DrawLine( Point( mvRight[i], aColumnTop.Y() ), Point( mvRight[i],  10 + aColumnTop.Y()) );
         }
+        SetMapMode( aMMMode );
+    }
 
-        if (bRight || bBottom)
+    if (bRight || bBottom)
+    {
+        SetMapMode(aMMMode);
+        SetLineColor();
+        SetFillColor(aBackColor);
+        if (bRight)
+            DrawRect(tools::Rectangle(nPageEndX,0, aWinEnd.X(),aWinEnd.Y()));
+        if (bBottom)
         {
-            SetMapMode(aMMMode);
-            SetLineColor();
-            SetFillColor(aBackColor);
             if (bRight)
-                DrawRect(tools::Rectangle(nPageEndX,0, aWinEnd.X(),aWinEnd.Y()));
-            if (bBottom)
-            {
-                if (bRight)
-                    DrawRect(tools::Rectangle(0,nPageEndY, nPageEndX,aWinEnd.Y()));    // Corner not duplicated
-                else
-                    DrawRect(tools::Rectangle(0,nPageEndY, aWinEnd.X(),aWinEnd.Y()));
-            }
-        }
-
-        if ( bValidPage )
-        {
-            Color aBorderColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
-
-            //  draw border
-
-            if ( aOffset.X() <= 0 || aOffset.Y() <= 0 || bRight || bBottom )
-            {
-                SetLineColor( aBorderColor );
-                SetFillColor();
-
-                tools::Rectangle aPixel( LogicToPixel( tools::Rectangle( -aOffset.X(), -aOffset.Y(), nPageEndX, nPageEndY ) ) );
-                aPixel.AdjustRight( -1 );
-                aPixel.AdjustBottom( -1 );
-                DrawRect( PixelToLogic( aPixel ) );
-            }
-
-            //  draw shadow
-
-            SetLineColor();
-            SetFillColor( aBorderColor );
-
-            tools::Rectangle aPixel;
-
-            aPixel = LogicToPixel( tools::Rectangle( nPageEndX, -aOffset.Y(), nPageEndX, nPageEndY ) );
-            aPixel.AdjustTop(SC_PREVIEW_SHADOWSIZE );
-            aPixel.AdjustRight(SC_PREVIEW_SHADOWSIZE - 1 );
-            aPixel.AdjustBottom(SC_PREVIEW_SHADOWSIZE - 1 );
-            DrawRect( PixelToLogic( aPixel ) );
-
-            aPixel = LogicToPixel( tools::Rectangle( -aOffset.X(), nPageEndY, nPageEndX, nPageEndY ) );
-            aPixel.AdjustLeft(SC_PREVIEW_SHADOWSIZE );
-            aPixel.AdjustRight(SC_PREVIEW_SHADOWSIZE - 1 );
-            aPixel.AdjustBottom(SC_PREVIEW_SHADOWSIZE - 1 );
-            DrawRect( PixelToLogic( aPixel ) );
+                DrawRect(tools::Rectangle(0,nPageEndY, nPageEndX,aWinEnd.Y()));    // Corner not duplicated
+            else
+                DrawRect(tools::Rectangle(0,nPageEndY, aWinEnd.X(),aWinEnd.Y()));
         }
     }
+
+    if ( !bValidPage )
+        return;
+
+    Color aBorderColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
+
+    //  draw border
+
+    if ( aOffset.X() <= 0 || aOffset.Y() <= 0 || bRight || bBottom )
+    {
+        SetLineColor( aBorderColor );
+        SetFillColor();
+
+        tools::Rectangle aPixel( LogicToPixel( tools::Rectangle( -aOffset.X(), -aOffset.Y(), nPageEndX, nPageEndY ) ) );
+        aPixel.AdjustRight( -1 );
+        aPixel.AdjustBottom( -1 );
+        DrawRect( PixelToLogic( aPixel ) );
+    }
+
+    //  draw shadow
+
+    SetLineColor();
+    SetFillColor( aBorderColor );
+
+    tools::Rectangle aPixel;
+
+    aPixel = LogicToPixel( tools::Rectangle( nPageEndX, -aOffset.Y(), nPageEndX, nPageEndY ) );
+    aPixel.AdjustTop(SC_PREVIEW_SHADOWSIZE );
+    aPixel.AdjustRight(SC_PREVIEW_SHADOWSIZE - 1 );
+    aPixel.AdjustBottom(SC_PREVIEW_SHADOWSIZE - 1 );
+    DrawRect( PixelToLogic( aPixel ) );
+
+    aPixel = LogicToPixel( tools::Rectangle( -aOffset.X(), nPageEndY, nPageEndX, nPageEndY ) );
+    aPixel.AdjustLeft(SC_PREVIEW_SHADOWSIZE );
+    aPixel.AdjustRight(SC_PREVIEW_SHADOWSIZE - 1 );
+    aPixel.AdjustBottom(SC_PREVIEW_SHADOWSIZE - 1 );
+    DrawRect( PixelToLogic( aPixel ) );
 }
 
 void ScPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& /* rRect */ )
@@ -718,26 +718,26 @@ void ScPreview::SetZoom(sal_uInt16 nNewZoom)
         nNewZoom = 20;
     if (nNewZoom > 400)
         nNewZoom = 400;
-    if (nNewZoom != nZoom)
-    {
-        nZoom = nNewZoom;
+    if (nNewZoom == nZoom)
+        return;
 
-        //  apply new MapMode and call UpdateScrollBars to update aOffset
+    nZoom = nNewZoom;
 
-        Fraction aPreviewZoom( nZoom, 100 );
-        Fraction aHorPrevZoom( static_cast<long>( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
-        MapMode aMMMode( MapUnit::Map100thMM, Point(), aHorPrevZoom, aPreviewZoom );
-        SetMapMode( aMMMode );
+    //  apply new MapMode and call UpdateScrollBars to update aOffset
 
-        bInSetZoom = true;              // don't scroll during SetYOffset in UpdateScrollBars
-        pViewShell->UpdateNeededScrollBars(true);
-        bInSetZoom = false;
+    Fraction aPreviewZoom( nZoom, 100 );
+    Fraction aHorPrevZoom( static_cast<long>( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
+    MapMode aMMMode( MapUnit::Map100thMM, Point(), aHorPrevZoom, aPreviewZoom );
+    SetMapMode( aMMMode );
 
-        bStateValid = false;
-        InvalidateLocationData( SfxHintId::ScAccVisAreaChanged );
-        DoInvalidate();
-        Invalidate();
-    }
+    bInSetZoom = true;              // don't scroll during SetYOffset in UpdateScrollBars
+    pViewShell->UpdateNeededScrollBars(true);
+    bInSetZoom = false;
+
+    bStateValid = false;
+    InvalidateLocationData( SfxHintId::ScAccVisAreaChanged );
+    DoInvalidate();
+    Invalidate();
 }
 
 void ScPreview::SetPageNo( long nPage )
@@ -924,29 +924,29 @@ void ScPreview::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged(rDCEvt);
 
-    if ( (rDCEvt.GetType() == DataChangedEventType::PRINTER) ||
+    if ( !((rDCEvt.GetType() == DataChangedEventType::PRINTER) ||
          (rDCEvt.GetType() == DataChangedEventType::DISPLAY) ||
          (rDCEvt.GetType() == DataChangedEventType::FONTS) ||
          (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
-    {
-        if ( rDCEvt.GetType() == DataChangedEventType::FONTS )
-            pDocShell->UpdateFontList();
+          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))) )
+        return;
 
-        // #i114518# Paint of form controls may modify the window's settings.
-        // Ignore the event if it is called from within Paint.
-        if ( !bInPaint )
+    if ( rDCEvt.GetType() == DataChangedEventType::FONTS )
+        pDocShell->UpdateFontList();
+
+    // #i114518# Paint of form controls may modify the window's settings.
+    // Ignore the event if it is called from within Paint.
+    if ( !bInPaint )
+    {
+        if ( rDCEvt.GetType() == DataChangedEventType::SETTINGS &&
+              (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
         {
-            if ( rDCEvt.GetType() == DataChangedEventType::SETTINGS &&
-                  (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
-            {
-                //  scroll bar size may have changed
-                pViewShell->InvalidateBorder();     // calls OuterResizePixel
-            }
-            Invalidate();
-            InvalidateLocationData( SfxHintId::ScDataChanged );
+            //  scroll bar size may have changed
+            pViewShell->InvalidateBorder();     // calls OuterResizePixel
         }
+        Invalidate();
+        InvalidateLocationData( SfxHintId::ScDataChanged );
     }
 }
 
@@ -1007,30 +1007,30 @@ void ScPreview::MouseButtonDown( const MouseEvent& rMEvt )
         }
     }
 
-    if( rMEvt.IsLeft() && GetPointer() == PointerStyle::HSplit )
+    if( !(rMEvt.IsLeft() && GetPointer() == PointerStyle::HSplit) )
+        return;
+
+    Point  aNowPt = rMEvt.GetPosPixel();
+    SCCOL i = 0;
+    for( i = aPageArea.aStart.Col(); i<= aPageArea.aEnd.Col(); i++ )
     {
-        Point  aNowPt = rMEvt.GetPosPixel();
-        SCCOL i = 0;
-        for( i = aPageArea.aStart.Col(); i<= aPageArea.aEnd.Col(); i++ )
+        if( aNowPt.X() < mvRight[i] + 2 && aNowPt.X() > mvRight[i] - 2 )
         {
-            if( aNowPt.X() < mvRight[i] + 2 && aNowPt.X() > mvRight[i] - 2 )
-            {
-                nColNumberButttonDown = i;
-                break;
-            }
+            nColNumberButttonDown = i;
+            break;
         }
-        if( i == aPageArea.aEnd.Col()+1 )
-            return;
-
-        SetMapMode( aMMMode );
-        if( nColNumberButttonDown == aPageArea.aStart.Col() )
-            DrawInvert( PixelToLogic( Point( nLeftPosition, 0 ),aMMMode ).X() ,PointerStyle::HSplit );
-        else
-            DrawInvert( PixelToLogic( Point( mvRight[ nColNumberButttonDown-1 ], 0 ),aMMMode ).X() ,PointerStyle::HSplit );
-
-        DrawInvert( aButtonDownChangePoint.X(), PointerStyle::HSplit );
-        bColRulerMove = true;
     }
+    if( i == aPageArea.aEnd.Col()+1 )
+        return;
+
+    SetMapMode( aMMMode );
+    if( nColNumberButttonDown == aPageArea.aStart.Col() )
+        DrawInvert( PixelToLogic( Point( nLeftPosition, 0 ),aMMMode ).X() ,PointerStyle::HSplit );
+    else
+        DrawInvert( PixelToLogic( Point( mvRight[ nColNumberButttonDown-1 ], 0 ),aMMMode ).X() ,PointerStyle::HSplit );
+
+    DrawInvert( aButtonDownChangePoint.X(), PointerStyle::HSplit );
+    bColRulerMove = true;
 }
 
 void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
@@ -1393,91 +1393,91 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
         bFooterRulerChange = true;
     }
 
-    if( bPageMargin )
+    if( !bPageMargin )
+        return;
+
+    if(( (aPixPt.X() < ( aLeftTop.X() + 2 ) && aPixPt.X() > ( aLeftTop.X() - 2 )) || bLeftRulerMove ||
+        ( aPixPt.X() < ( aRightTop.X() + 2 ) && aPixPt.X() > ( aRightTop.X() - 2 ) ) || bRightRulerMove || bOnColRulerChange || bColRulerMove )
+        && aPixPt.Y() > aLeftTop.Y() && aPixPt.Y() < aLeftBottom.Y() )
     {
-        if(( (aPixPt.X() < ( aLeftTop.X() + 2 ) && aPixPt.X() > ( aLeftTop.X() - 2 )) || bLeftRulerMove ||
-            ( aPixPt.X() < ( aRightTop.X() + 2 ) && aPixPt.X() > ( aRightTop.X() - 2 ) ) || bRightRulerMove || bOnColRulerChange || bColRulerMove )
-            && aPixPt.Y() > aLeftTop.Y() && aPixPt.Y() < aLeftBottom.Y() )
+        if( bOnColRulerChange || bColRulerMove )
         {
-            if( bOnColRulerChange || bColRulerMove )
+            SetPointer( PointerStyle::HSplit );
+            if( bColRulerMove )
             {
-                SetPointer( PointerStyle::HSplit );
-                if( bColRulerMove )
-                {
-                    if( aMouseMovePoint.X() > -aOffset.X() && aMouseMovePoint.X() < nWidth * HMM_PER_TWIPS - aOffset.X() )
-                       DragMove( aMouseMovePoint.X(), PointerStyle::HSplit );
-                }
-            }
-            else
-            {
-                if( bLeftRulerChange && !bTopRulerMove && !bBottomRulerMove && !bHeaderRulerMove && !bFooterRulerMove )
-                {
-                    SetPointer( PointerStyle::HSizeBar );
-                    if( bLeftRulerMove )
-                    {
-                       if( aMouseMovePoint.X() > -aOffset.X() && aMouseMovePoint.X() < nWidth * HMM_PER_TWIPS - aOffset.X() )
-                           DragMove( aMouseMovePoint.X(), PointerStyle::HSizeBar );
-                    }
-                }
-                else if( bRightRulerChange && !bTopRulerMove && !bBottomRulerMove && !bHeaderRulerMove && !bFooterRulerMove )
-                {
-                    SetPointer( PointerStyle::HSizeBar );
-                    if( bRightRulerMove )
-                    {
-                       if( aMouseMovePoint.X() > -aOffset.X() && aMouseMovePoint.X() < nWidth * HMM_PER_TWIPS - aOffset.X() )
-                           DragMove( aMouseMovePoint.X(), PointerStyle::HSizeBar );
-                    }
-                }
+                if( aMouseMovePoint.X() > -aOffset.X() && aMouseMovePoint.X() < nWidth * HMM_PER_TWIPS - aOffset.X() )
+                   DragMove( aMouseMovePoint.X(), PointerStyle::HSplit );
             }
         }
         else
         {
-            if( ( ( aPixPt.Y() < ( aTopLeft.Y() + 2 ) && aPixPt.Y() > ( aTopLeft.Y() - 2 ) ) || bTopRulerMove ||
-                ( aPixPt.Y() < ( aBottomLeft.Y() + 2 ) && aPixPt.Y() > ( aBottomLeft.Y() - 2 ) ) || bBottomRulerMove ||
-                ( aPixPt.Y() < ( aHeaderLeft.Y() + 2 ) && aPixPt.Y() > ( aHeaderLeft.Y() - 2 ) ) || bHeaderRulerMove ||
-                ( aPixPt.Y() < ( aFooderLeft.Y() + 2 ) && aPixPt.Y() > ( aFooderLeft.Y() - 2 ) ) || bFooterRulerMove )
-                && aPixPt.X() > aTopLeft.X() && aPixPt.X() < aTopRight.X() )
+            if( bLeftRulerChange && !bTopRulerMove && !bBottomRulerMove && !bHeaderRulerMove && !bFooterRulerMove )
             {
-                if( bTopRulerChange )
+                SetPointer( PointerStyle::HSizeBar );
+                if( bLeftRulerMove )
                 {
-                    SetPointer( PointerStyle::VSizeBar );
-                    if( bTopRulerMove )
-                    {
-                        if( aMouseMovePoint.Y() > -aOffset.Y() && aMouseMovePoint.Y() < nHeight * HMM_PER_TWIPS - aOffset.Y() )
-                            DragMove( aMouseMovePoint.Y(), PointerStyle::VSizeBar );
-                    }
-                }
-                else if( bBottomRulerChange )
-                {
-                    SetPointer( PointerStyle::VSizeBar );
-                    if( bBottomRulerMove )
-                    {
-                        if( aMouseMovePoint.Y() > -aOffset.Y() && aMouseMovePoint.Y() < nHeight * HMM_PER_TWIPS - aOffset.Y() )
-                            DragMove( aMouseMovePoint.Y(), PointerStyle::VSizeBar );
-                    }
-                }
-                else if( bHeaderRulerChange )
-                {
-                    SetPointer( PointerStyle::VSizeBar );
-                    if( bHeaderRulerMove )
-                    {
-                        if( aMouseMovePoint.Y() > -aOffset.Y() && aMouseMovePoint.Y() < nHeight * HMM_PER_TWIPS - aOffset.Y() )
-                            DragMove( aMouseMovePoint.Y(), PointerStyle::VSizeBar );
-                    }
-                }
-                else if( bFooterRulerChange )
-                {
-                    SetPointer( PointerStyle::VSizeBar );
-                    if( bFooterRulerMove )
-                    {
-                        if( aMouseMovePoint.Y() > -aOffset.Y() && aMouseMovePoint.Y() < nHeight * HMM_PER_TWIPS - aOffset.Y() )
-                            DragMove( aMouseMovePoint.Y(), PointerStyle::VSizeBar );
-                    }
+                   if( aMouseMovePoint.X() > -aOffset.X() && aMouseMovePoint.X() < nWidth * HMM_PER_TWIPS - aOffset.X() )
+                       DragMove( aMouseMovePoint.X(), PointerStyle::HSizeBar );
                 }
             }
-            else
-                SetPointer( PointerStyle::Arrow );
+            else if( bRightRulerChange && !bTopRulerMove && !bBottomRulerMove && !bHeaderRulerMove && !bFooterRulerMove )
+            {
+                SetPointer( PointerStyle::HSizeBar );
+                if( bRightRulerMove )
+                {
+                   if( aMouseMovePoint.X() > -aOffset.X() && aMouseMovePoint.X() < nWidth * HMM_PER_TWIPS - aOffset.X() )
+                       DragMove( aMouseMovePoint.X(), PointerStyle::HSizeBar );
+                }
+            }
         }
+    }
+    else
+    {
+        if( ( ( aPixPt.Y() < ( aTopLeft.Y() + 2 ) && aPixPt.Y() > ( aTopLeft.Y() - 2 ) ) || bTopRulerMove ||
+            ( aPixPt.Y() < ( aBottomLeft.Y() + 2 ) && aPixPt.Y() > ( aBottomLeft.Y() - 2 ) ) || bBottomRulerMove ||
+            ( aPixPt.Y() < ( aHeaderLeft.Y() + 2 ) && aPixPt.Y() > ( aHeaderLeft.Y() - 2 ) ) || bHeaderRulerMove ||
+            ( aPixPt.Y() < ( aFooderLeft.Y() + 2 ) && aPixPt.Y() > ( aFooderLeft.Y() - 2 ) ) || bFooterRulerMove )
+            && aPixPt.X() > aTopLeft.X() && aPixPt.X() < aTopRight.X() )
+        {
+            if( bTopRulerChange )
+            {
+                SetPointer( PointerStyle::VSizeBar );
+                if( bTopRulerMove )
+                {
+                    if( aMouseMovePoint.Y() > -aOffset.Y() && aMouseMovePoint.Y() < nHeight * HMM_PER_TWIPS - aOffset.Y() )
+                        DragMove( aMouseMovePoint.Y(), PointerStyle::VSizeBar );
+                }
+            }
+            else if( bBottomRulerChange )
+            {
+                SetPointer( PointerStyle::VSizeBar );
+                if( bBottomRulerMove )
+                {
+                    if( aMouseMovePoint.Y() > -aOffset.Y() && aMouseMovePoint.Y() < nHeight * HMM_PER_TWIPS - aOffset.Y() )
+                        DragMove( aMouseMovePoint.Y(), PointerStyle::VSizeBar );
+                }
+            }
+            else if( bHeaderRulerChange )
+            {
+                SetPointer( PointerStyle::VSizeBar );
+                if( bHeaderRulerMove )
+                {
+                    if( aMouseMovePoint.Y() > -aOffset.Y() && aMouseMovePoint.Y() < nHeight * HMM_PER_TWIPS - aOffset.Y() )
+                        DragMove( aMouseMovePoint.Y(), PointerStyle::VSizeBar );
+                }
+            }
+            else if( bFooterRulerChange )
+            {
+                SetPointer( PointerStyle::VSizeBar );
+                if( bFooterRulerMove )
+                {
+                    if( aMouseMovePoint.Y() > -aOffset.Y() && aMouseMovePoint.Y() < nHeight * HMM_PER_TWIPS - aOffset.Y() )
+                        DragMove( aMouseMovePoint.Y(), PointerStyle::VSizeBar );
+                }
+            }
+        }
+        else
+            SetPointer( PointerStyle::Arrow );
     }
 }
 

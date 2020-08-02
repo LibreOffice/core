@@ -253,26 +253,26 @@ void XclExpChRootData::RegisterFutureRecBlock( const XclChFrBlock& rFrBlock )
 void XclExpChRootData::InitializeFutureRecBlock( XclExpStream& rStrm )
 {
     // first call from a future record writes all missing CHFRBLOCKBEGIN records
-    if( !maUnwrittenFrBlocks.empty() )
+    if( maUnwrittenFrBlocks.empty() )
+        return;
+
+    // write the leading CHFRINFO record
+    if( maWrittenFrBlocks.empty() )
     {
-        // write the leading CHFRINFO record
-        if( maWrittenFrBlocks.empty() )
-        {
-            rStrm.StartRecord( EXC_ID_CHFRINFO, 20 );
-            rStrm << EXC_ID_CHFRINFO << EXC_FUTUREREC_EMPTYFLAGS << EXC_CHFRINFO_EXCELXP2003 << EXC_CHFRINFO_EXCELXP2003 << sal_uInt16( 3 );
-            rStrm << sal_uInt16( 0x0850 ) << sal_uInt16( 0x085A ) << sal_uInt16( 0x0861 ) << sal_uInt16( 0x0861 ) << sal_uInt16( 0x086A ) << sal_uInt16( 0x086B );
-            rStrm.EndRecord();
-        }
-        // write all unwritten CHFRBLOCKBEGIN records
-        for( const auto& rUnwrittenFrBlock : maUnwrittenFrBlocks )
-        {
-            OSL_ENSURE( rUnwrittenFrBlock.mnType != EXC_CHFRBLOCK_TYPE_UNKNOWN, "XclExpChRootData::InitializeFutureRecBlock - unknown future record block type" );
-            lclWriteChFrBlockRecord( rStrm, rUnwrittenFrBlock, true );
-        }
-        // move all record infos to vector of written blocks
-        maWrittenFrBlocks.insert( maWrittenFrBlocks.end(), maUnwrittenFrBlocks.begin(), maUnwrittenFrBlocks.end() );
-        maUnwrittenFrBlocks.clear();
+        rStrm.StartRecord( EXC_ID_CHFRINFO, 20 );
+        rStrm << EXC_ID_CHFRINFO << EXC_FUTUREREC_EMPTYFLAGS << EXC_CHFRINFO_EXCELXP2003 << EXC_CHFRINFO_EXCELXP2003 << sal_uInt16( 3 );
+        rStrm << sal_uInt16( 0x0850 ) << sal_uInt16( 0x085A ) << sal_uInt16( 0x0861 ) << sal_uInt16( 0x0861 ) << sal_uInt16( 0x086A ) << sal_uInt16( 0x086B );
+        rStrm.EndRecord();
     }
+    // write all unwritten CHFRBLOCKBEGIN records
+    for( const auto& rUnwrittenFrBlock : maUnwrittenFrBlocks )
+    {
+        OSL_ENSURE( rUnwrittenFrBlock.mnType != EXC_CHFRBLOCK_TYPE_UNKNOWN, "XclExpChRootData::InitializeFutureRecBlock - unknown future record block type" );
+        lclWriteChFrBlockRecord( rStrm, rUnwrittenFrBlock, true );
+    }
+    // move all record infos to vector of written blocks
+    maWrittenFrBlocks.insert( maWrittenFrBlocks.end(), maUnwrittenFrBlocks.begin(), maUnwrittenFrBlocks.end() );
+    maUnwrittenFrBlocks.clear();
 }
 
 void XclExpChRootData::FinalizeFutureRecBlock( XclExpStream& rStrm )
@@ -436,19 +436,19 @@ void XclExpChGroupBase::Save( XclExpStream& rStrm )
     // header record
     XclExpRecord::Save( rStrm );
     // group records
-    if( HasSubRecords() )
-    {
-        // register the future record context corresponding to this record group
-        RegisterFutureRecBlock( maFrBlock );
-        // CHBEGIN record
-        XclExpEmptyRecord( EXC_ID_CHBEGIN ).Save( rStrm );
-        // embedded records
-        WriteSubRecords( rStrm );
-        // finalize the future records, must be done before the closing CHEND
-        FinalizeFutureRecBlock( rStrm );
-        // CHEND record
-        XclExpEmptyRecord( EXC_ID_CHEND ).Save( rStrm );
-    }
+    if( !HasSubRecords() )
+        return;
+
+    // register the future record context corresponding to this record group
+    RegisterFutureRecBlock( maFrBlock );
+    // CHBEGIN record
+    XclExpEmptyRecord( EXC_ID_CHBEGIN ).Save( rStrm );
+    // embedded records
+    WriteSubRecords( rStrm );
+    // finalize the future records, must be done before the closing CHEND
+    FinalizeFutureRecBlock( rStrm );
+    // CHEND record
+    XclExpEmptyRecord( EXC_ID_CHEND ).Save( rStrm );
 }
 
 bool XclExpChGroupBase::HasSubRecords() const
@@ -734,19 +734,19 @@ void XclExpChFrameBase::ConvertFrameBase( const XclExpChRoot& rRoot,
     mxLineFmt = new XclExpChLineFormat( rRoot );
     mxLineFmt->Convert( rRoot, rPropSet, eObjType );
     // area format (only for frame objects)
-    if( rRoot.GetFormatInfo( eObjType ).mbIsFrame )
+    if( !rRoot.GetFormatInfo( eObjType ).mbIsFrame )
+        return;
+
+    mxAreaFmt = new XclExpChAreaFormat( rRoot );
+    bool bComplexFill = mxAreaFmt->Convert( rRoot, rPropSet, eObjType );
+    if( (rRoot.GetBiff() == EXC_BIFF8) && bComplexFill )
     {
-        mxAreaFmt = new XclExpChAreaFormat( rRoot );
-        bool bComplexFill = mxAreaFmt->Convert( rRoot, rPropSet, eObjType );
-        if( (rRoot.GetBiff() == EXC_BIFF8) && bComplexFill )
-        {
-            mxEscherFmt = new XclExpChEscherFormat( rRoot );
-            mxEscherFmt->Convert( rPropSet, eObjType );
-            if( mxEscherFmt->IsValid() )
-                mxAreaFmt->SetAuto( false );
-            else
-                mxEscherFmt.clear();
-        }
+        mxEscherFmt = new XclExpChEscherFormat( rRoot );
+        mxEscherFmt->Convert( rPropSet, eObjType );
+        if( mxEscherFmt->IsValid() )
+            mxAreaFmt->SetAuto( false );
+        else
+            mxEscherFmt.clear();
     }
 }
 
@@ -1511,30 +1511,30 @@ XclExpCh3dDataFormat::XclExpCh3dDataFormat() :
 void XclExpCh3dDataFormat::Convert( const ScfPropertySet& rPropSet )
 {
     sal_Int32 nApiType(0);
-    if( rPropSet.GetProperty( nApiType, EXC_CHPROP_GEOMETRY3D ) )
+    if( !rPropSet.GetProperty( nApiType, EXC_CHPROP_GEOMETRY3D ) )
+        return;
+
+    using namespace cssc2::DataPointGeometry3D;
+    switch( nApiType )
     {
-        using namespace cssc2::DataPointGeometry3D;
-        switch( nApiType )
-        {
-            case CUBOID:
-                maData.mnBase = EXC_CH3DDATAFORMAT_RECT;
-                maData.mnTop = EXC_CH3DDATAFORMAT_STRAIGHT;
-            break;
-            case PYRAMID:
-                maData.mnBase = EXC_CH3DDATAFORMAT_RECT;
-                maData.mnTop = EXC_CH3DDATAFORMAT_SHARP;
-            break;
-            case CYLINDER:
-                maData.mnBase = EXC_CH3DDATAFORMAT_CIRC;
-                maData.mnTop = EXC_CH3DDATAFORMAT_STRAIGHT;
-            break;
-            case CONE:
-                maData.mnBase = EXC_CH3DDATAFORMAT_CIRC;
-                maData.mnTop = EXC_CH3DDATAFORMAT_SHARP;
-            break;
-            default:
-                OSL_FAIL( "XclExpCh3dDataFormat::Convert - unknown 3D bar format" );
-        }
+        case CUBOID:
+            maData.mnBase = EXC_CH3DDATAFORMAT_RECT;
+            maData.mnTop = EXC_CH3DDATAFORMAT_STRAIGHT;
+        break;
+        case PYRAMID:
+            maData.mnBase = EXC_CH3DDATAFORMAT_RECT;
+            maData.mnTop = EXC_CH3DDATAFORMAT_SHARP;
+        break;
+        case CYLINDER:
+            maData.mnBase = EXC_CH3DDATAFORMAT_CIRC;
+            maData.mnTop = EXC_CH3DDATAFORMAT_STRAIGHT;
+        break;
+        case CONE:
+            maData.mnBase = EXC_CH3DDATAFORMAT_CIRC;
+            maData.mnTop = EXC_CH3DDATAFORMAT_SHARP;
+        break;
+        default:
+            OSL_FAIL( "XclExpCh3dDataFormat::Convert - unknown 3D bar format" );
     }
 }
 
@@ -2116,48 +2116,48 @@ XclExpChType::XclExpChType( const XclExpChRoot& rRoot ) :
 void XclExpChType::Convert( Reference< XDiagram > const & xDiagram, Reference< XChartType > const & xChartType,
         sal_Int32 nApiAxesSetIdx, bool bSwappedAxesSet, bool bHasXLabels )
 {
-    if( xChartType.is() )
+    if( !xChartType.is() )
+        return;
+
+    maTypeInfo = GetChartTypeInfo( xChartType->getChartType() );
+    // special handling for some chart types
+    switch( maTypeInfo.meTypeCateg )
     {
-        maTypeInfo = GetChartTypeInfo( xChartType->getChartType() );
-        // special handling for some chart types
-        switch( maTypeInfo.meTypeCateg )
+        case EXC_CHTYPECATEG_BAR:
         {
-            case EXC_CHTYPECATEG_BAR:
-            {
-                maTypeInfo = GetChartTypeInfo( bSwappedAxesSet ? EXC_CHTYPEID_HORBAR : EXC_CHTYPEID_BAR );
-                ::set_flag( maData.mnFlags, EXC_CHBAR_HORIZONTAL, bSwappedAxesSet );
-                ScfPropertySet aTypeProp( xChartType );
-                Sequence< sal_Int32 > aInt32Seq;
-                maData.mnOverlap = 0;
-                if( aTypeProp.GetProperty( aInt32Seq, EXC_CHPROP_OVERLAPSEQ ) && (nApiAxesSetIdx < aInt32Seq.getLength()) )
-                    maData.mnOverlap = limit_cast< sal_Int16 >( -aInt32Seq[ nApiAxesSetIdx ], -100, 100 );
-                maData.mnGap = 150;
-                if( aTypeProp.GetProperty( aInt32Seq, EXC_CHPROP_GAPWIDTHSEQ ) && (nApiAxesSetIdx < aInt32Seq.getLength()) )
-                    maData.mnGap = limit_cast< sal_uInt16 >( aInt32Seq[ nApiAxesSetIdx ], 0, 500 );
-            }
-            break;
-            case EXC_CHTYPECATEG_RADAR:
-                ::set_flag( maData.mnFlags, EXC_CHRADAR_AXISLABELS, bHasXLabels );
-            break;
-            case EXC_CHTYPECATEG_PIE:
-            {
-                ScfPropertySet aTypeProp( xChartType );
-                bool bDonut = aTypeProp.GetBoolProperty( EXC_CHPROP_USERINGS );
-                maTypeInfo = GetChartTypeInfo( bDonut ? EXC_CHTYPEID_DONUT : EXC_CHTYPEID_PIE );
-                maData.mnPieHole = bDonut ? 50 : 0;
-                // #i85166# starting angle of first pie slice
-                ScfPropertySet aDiaProp( xDiagram );
-                maData.mnRotation = XclExpChRoot::ConvertPieRotation( aDiaProp );
-            }
-            break;
-            case EXC_CHTYPECATEG_SCATTER:
-                if( GetBiff() == EXC_BIFF8 )
-                    ::set_flag( maData.mnFlags, EXC_CHSCATTER_BUBBLES, maTypeInfo.meTypeId == EXC_CHTYPEID_BUBBLES );
-            break;
-            default:;
+            maTypeInfo = GetChartTypeInfo( bSwappedAxesSet ? EXC_CHTYPEID_HORBAR : EXC_CHTYPEID_BAR );
+            ::set_flag( maData.mnFlags, EXC_CHBAR_HORIZONTAL, bSwappedAxesSet );
+            ScfPropertySet aTypeProp( xChartType );
+            Sequence< sal_Int32 > aInt32Seq;
+            maData.mnOverlap = 0;
+            if( aTypeProp.GetProperty( aInt32Seq, EXC_CHPROP_OVERLAPSEQ ) && (nApiAxesSetIdx < aInt32Seq.getLength()) )
+                maData.mnOverlap = limit_cast< sal_Int16 >( -aInt32Seq[ nApiAxesSetIdx ], -100, 100 );
+            maData.mnGap = 150;
+            if( aTypeProp.GetProperty( aInt32Seq, EXC_CHPROP_GAPWIDTHSEQ ) && (nApiAxesSetIdx < aInt32Seq.getLength()) )
+                maData.mnGap = limit_cast< sal_uInt16 >( aInt32Seq[ nApiAxesSetIdx ], 0, 500 );
         }
-        SetRecId( maTypeInfo.mnRecId );
+        break;
+        case EXC_CHTYPECATEG_RADAR:
+            ::set_flag( maData.mnFlags, EXC_CHRADAR_AXISLABELS, bHasXLabels );
+        break;
+        case EXC_CHTYPECATEG_PIE:
+        {
+            ScfPropertySet aTypeProp( xChartType );
+            bool bDonut = aTypeProp.GetBoolProperty( EXC_CHPROP_USERINGS );
+            maTypeInfo = GetChartTypeInfo( bDonut ? EXC_CHTYPEID_DONUT : EXC_CHTYPEID_PIE );
+            maData.mnPieHole = bDonut ? 50 : 0;
+            // #i85166# starting angle of first pie slice
+            ScfPropertySet aDiaProp( xDiagram );
+            maData.mnRotation = XclExpChRoot::ConvertPieRotation( aDiaProp );
+        }
+        break;
+        case EXC_CHTYPECATEG_SCATTER:
+            if( GetBiff() == EXC_BIFF8 )
+                ::set_flag( maData.mnFlags, EXC_CHSCATTER_BUBBLES, maTypeInfo.meTypeId == EXC_CHTYPEID_BUBBLES );
+        break;
+        default:;
     }
+    SetRecId( maTypeInfo.mnRecId );
 }
 
 void XclExpChType::SetStacked( bool bPercent )
@@ -2420,66 +2420,66 @@ void XclExpChTypeGroup::ConvertSeries(
         sal_Int32 nGroupAxesSetIdx, bool bPercent, bool bConnectBars )
 {
     Reference< XDataSeriesContainer > xSeriesCont( xChartType, UNO_QUERY );
-    if( xSeriesCont.is() )
+    if( !xSeriesCont.is() )
+        return;
+
+    std::vector< Reference< XDataSeries > > aSeriesVec;
+
+    // copy data series attached to the current axes set to the vector
+    const Sequence< Reference< XDataSeries > > aSeriesSeq = xSeriesCont->getDataSeries();
+    for( const Reference< XDataSeries >& rSeries : aSeriesSeq )
     {
-        std::vector< Reference< XDataSeries > > aSeriesVec;
+        ScfPropertySet aSeriesProp( rSeries );
+        sal_Int32 nSeriesAxesSetIdx(0);
+        if( aSeriesProp.GetProperty( nSeriesAxesSetIdx, EXC_CHPROP_ATTAXISINDEX ) && (nSeriesAxesSetIdx == nGroupAxesSetIdx) )
+            aSeriesVec.push_back( rSeries );
+    }
 
-        // copy data series attached to the current axes set to the vector
-        const Sequence< Reference< XDataSeries > > aSeriesSeq = xSeriesCont->getDataSeries();
-        for( const Reference< XDataSeries >& rSeries : aSeriesSeq )
+    // Are there any series in the current axes set?
+    if( aSeriesVec.empty() )
+        return;
+
+    // stacking direction (stacked/percent/deep 3d) from first series
+    ScfPropertySet aSeriesProp( aSeriesVec.front() );
+    cssc2::StackingDirection eStacking;
+    if( !aSeriesProp.GetProperty( eStacking, EXC_CHPROP_STACKINGDIR ) )
+        eStacking = cssc2::StackingDirection_NO_STACKING;
+
+    // stacked or percent chart
+    if( maTypeInfo.mbSupportsStacking && (eStacking == cssc2::StackingDirection_Y_STACKING) )
+    {
+        // percent overrides simple stacking
+        maType.SetStacked( bPercent );
+
+        // connected data points (only in stacked bar charts)
+        if (bConnectBars && (maTypeInfo.meTypeCateg == EXC_CHTYPECATEG_BAR))
         {
-            ScfPropertySet aSeriesProp( rSeries );
-            sal_Int32 nSeriesAxesSetIdx(0);
-            if( aSeriesProp.GetProperty( nSeriesAxesSetIdx, EXC_CHPROP_ATTAXISINDEX ) && (nSeriesAxesSetIdx == nGroupAxesSetIdx) )
-                aSeriesVec.push_back( rSeries );
+            sal_uInt16 nKey = EXC_CHCHARTLINE_CONNECT;
+            m_ChartLines.insert(std::make_pair(nKey, std::make_unique<XclExpChLineFormat>(GetChRoot())));
         }
+    }
+    else
+    {
+        // reverse series order for some unstacked 2D chart types
+        if( maTypeInfo.mbReverseSeries && !Is3dChart() )
+            ::std::reverse( aSeriesVec.begin(), aSeriesVec.end() );
+    }
 
-        // Are there any series in the current axes set?
-        if( !aSeriesVec.empty() )
-        {
-            // stacking direction (stacked/percent/deep 3d) from first series
-            ScfPropertySet aSeriesProp( aSeriesVec.front() );
-            cssc2::StackingDirection eStacking;
-            if( !aSeriesProp.GetProperty( eStacking, EXC_CHPROP_STACKINGDIR ) )
-                eStacking = cssc2::StackingDirection_NO_STACKING;
+    // deep 3d chart or clustered 3d chart (stacked is not clustered)
+    if( (eStacking == cssc2::StackingDirection_NO_STACKING) && Is3dWallChart() )
+        mxChart3d->SetClustered();
 
-            // stacked or percent chart
-            if( maTypeInfo.mbSupportsStacking && (eStacking == cssc2::StackingDirection_Y_STACKING) )
-            {
-                // percent overrides simple stacking
-                maType.SetStacked( bPercent );
+    // varied point colors
+    ::set_flag( maData.mnFlags, EXC_CHTYPEGROUP_VARIEDCOLORS, aSeriesProp.GetBoolProperty( EXC_CHPROP_VARYCOLORSBY ) );
 
-                // connected data points (only in stacked bar charts)
-                if (bConnectBars && (maTypeInfo.meTypeCateg == EXC_CHTYPECATEG_BAR))
-                {
-                    sal_uInt16 nKey = EXC_CHCHARTLINE_CONNECT;
-                    m_ChartLines.insert(std::make_pair(nKey, std::make_unique<XclExpChLineFormat>(GetChRoot())));
-                }
-            }
-            else
-            {
-                // reverse series order for some unstacked 2D chart types
-                if( maTypeInfo.mbReverseSeries && !Is3dChart() )
-                    ::std::reverse( aSeriesVec.begin(), aSeriesVec.end() );
-            }
-
-            // deep 3d chart or clustered 3d chart (stacked is not clustered)
-            if( (eStacking == cssc2::StackingDirection_NO_STACKING) && Is3dWallChart() )
-                mxChart3d->SetClustered();
-
-            // varied point colors
-            ::set_flag( maData.mnFlags, EXC_CHTYPEGROUP_VARIEDCOLORS, aSeriesProp.GetBoolProperty( EXC_CHPROP_VARYCOLORSBY ) );
-
-            // process all series
-            for( const auto& rxSeries : aSeriesVec )
-            {
-                // create Excel series object, stock charts need special processing
-                if( maTypeInfo.meTypeId == EXC_CHTYPEID_STOCK )
-                    CreateAllStockSeries( xChartType, rxSeries );
-                else
-                    CreateDataSeries( xDiagram, rxSeries );
-            }
-        }
+    // process all series
+    for( const auto& rxSeries : aSeriesVec )
+    {
+        // create Excel series object, stock charts need special processing
+        if( maTypeInfo.meTypeId == EXC_CHTYPEID_STOCK )
+            CreateAllStockSeries( xChartType, rxSeries );
+        else
+            CreateDataSeries( xDiagram, rxSeries );
     }
 }
 
@@ -2551,21 +2551,21 @@ void XclExpChTypeGroup::CreateAllStockSeries(
         m_ChartLines.insert(std::make_pair(nKey, std::make_unique<XclExpChLineFormat>(GetChRoot())));
     }
     // dropbars
-    if( bHasOpen && bHasClose )
-    {
-        // dropbar type is dependent on position in the file - always create both
-        Reference< XPropertySet > xWhitePropSet, xBlackPropSet;
-        // white dropbar format
-        aTypeProp.GetProperty( xWhitePropSet, EXC_CHPROP_WHITEDAY );
-        ScfPropertySet aWhiteProp( xWhitePropSet );
-        mxUpBar = new XclExpChDropBar( GetChRoot(), EXC_CHOBJTYPE_WHITEDROPBAR );
-        mxUpBar->Convert( aWhiteProp );
-        // black dropbar format
-        aTypeProp.GetProperty( xBlackPropSet, EXC_CHPROP_BLACKDAY );
-        ScfPropertySet aBlackProp( xBlackPropSet );
-        mxDownBar = new XclExpChDropBar( GetChRoot(), EXC_CHOBJTYPE_BLACKDROPBAR );
-        mxDownBar->Convert( aBlackProp );
-    }
+    if( !(bHasOpen && bHasClose) )
+        return;
+
+    // dropbar type is dependent on position in the file - always create both
+    Reference< XPropertySet > xWhitePropSet, xBlackPropSet;
+    // white dropbar format
+    aTypeProp.GetProperty( xWhitePropSet, EXC_CHPROP_WHITEDAY );
+    ScfPropertySet aWhiteProp( xWhitePropSet );
+    mxUpBar = new XclExpChDropBar( GetChRoot(), EXC_CHOBJTYPE_WHITEDROPBAR );
+    mxUpBar->Convert( aWhiteProp );
+    // black dropbar format
+    aTypeProp.GetProperty( xBlackPropSet, EXC_CHPROP_BLACKDAY );
+    ScfPropertySet aBlackProp( xBlackPropSet );
+    mxDownBar = new XclExpChDropBar( GetChRoot(), EXC_CHOBJTYPE_BLACKDROPBAR );
+    mxDownBar->Convert( aBlackProp );
 }
 
 bool XclExpChTypeGroup::CreateStockSeries( Reference< XDataSeries > const & xDataSeries,
@@ -2685,20 +2685,20 @@ void XclExpChLabelRange::Save( XclExpStream& rStrm )
     XclExpRecord::Save( rStrm );
 
     // the CHDATERANGE record with date axis settings (BIFF8 only)
-    if( GetBiff() == EXC_BIFF8 )
-    {
-        rStrm.StartRecord( EXC_ID_CHDATERANGE, 18 );
-        rStrm   << maDateData.mnMinDate
-                << maDateData.mnMaxDate
-                << maDateData.mnMajorStep
-                << maDateData.mnMajorUnit
-                << maDateData.mnMinorStep
-                << maDateData.mnMinorUnit
-                << maDateData.mnBaseUnit
-                << maDateData.mnCross
-                << maDateData.mnFlags;
-        rStrm.EndRecord();
-    }
+    if( GetBiff() != EXC_BIFF8 )
+        return;
+
+    rStrm.StartRecord( EXC_ID_CHDATERANGE, 18 );
+    rStrm   << maDateData.mnMinDate
+            << maDateData.mnMaxDate
+            << maDateData.mnMajorStep
+            << maDateData.mnMajorUnit
+            << maDateData.mnMinorStep
+            << maDateData.mnMinorUnit
+            << maDateData.mnBaseUnit
+            << maDateData.mnCross
+            << maDateData.mnFlags;
+    rStrm.EndRecord();
 }
 
 void XclExpChLabelRange::WriteBody( XclExpStream& rStrm )
@@ -2754,24 +2754,24 @@ void XclExpChValueRange::ConvertAxisPosition( const ScfPropertySet& rPropSet )
 {
     cssc::ChartAxisPosition eAxisPos = cssc::ChartAxisPosition_VALUE;
     double fCrossingPos = 0.0;
-    if( rPropSet.GetProperty( eAxisPos, EXC_CHPROP_CROSSOVERPOSITION ) && rPropSet.GetProperty( fCrossingPos, EXC_CHPROP_CROSSOVERVALUE ) )
+    if( !(rPropSet.GetProperty( eAxisPos, EXC_CHPROP_CROSSOVERPOSITION ) && rPropSet.GetProperty( fCrossingPos, EXC_CHPROP_CROSSOVERVALUE )) )
+        return;
+
+    switch( eAxisPos )
     {
-        switch( eAxisPos )
-        {
-            case cssc::ChartAxisPosition_ZERO:
-            case cssc::ChartAxisPosition_START:
-                ::set_flag( maData.mnFlags, EXC_CHVALUERANGE_AUTOCROSS );
-            break;
-            case cssc::ChartAxisPosition_END:
-                ::set_flag( maData.mnFlags, EXC_CHVALUERANGE_MAXCROSS );
-            break;
-            case cssc::ChartAxisPosition_VALUE:
-                ::set_flag( maData.mnFlags, EXC_CHVALUERANGE_AUTOCROSS, false );
-                maData.mfCross = ::get_flagvalue< double >( maData.mnFlags, EXC_CHVALUERANGE_LOGSCALE, log( fCrossingPos ) / log( 10.0 ), fCrossingPos );
-            break;
-            default:
-                ::set_flag( maData.mnFlags, EXC_CHVALUERANGE_AUTOCROSS );
-        }
+        case cssc::ChartAxisPosition_ZERO:
+        case cssc::ChartAxisPosition_START:
+            ::set_flag( maData.mnFlags, EXC_CHVALUERANGE_AUTOCROSS );
+        break;
+        case cssc::ChartAxisPosition_END:
+            ::set_flag( maData.mnFlags, EXC_CHVALUERANGE_MAXCROSS );
+        break;
+        case cssc::ChartAxisPosition_VALUE:
+            ::set_flag( maData.mnFlags, EXC_CHVALUERANGE_AUTOCROSS, false );
+            maData.mfCross = ::get_flagvalue< double >( maData.mnFlags, EXC_CHVALUERANGE_LOGSCALE, log( fCrossingPos ) / log( 10.0 ), fCrossingPos );
+        break;
+        default:
+            ::set_flag( maData.mnFlags, EXC_CHVALUERANGE_AUTOCROSS );
     }
 }
 
@@ -2997,41 +2997,44 @@ void XclExpChAxis::Convert( Reference< XAxis > const & xAxis, Reference< XAxis >
 
     // grid -------------------------------------------------------------------
 
-    if( xAxis.is() )
+    if( !xAxis.is() )
+        return;
+
+    // main grid
+    ScfPropertySet aGridProp( xAxis->getGridProperties() );
+    if( aGridProp.GetBoolProperty( EXC_CHPROP_SHOW ) )
+        mxMajorGrid = lclCreateLineFormat( GetChRoot(), aGridProp, EXC_CHOBJTYPE_GRIDLINE );
+    // sub grid
+    Sequence< Reference< XPropertySet > > aSubGridPropSeq = xAxis->getSubGridProperties();
+    if( aSubGridPropSeq.hasElements() )
     {
-        // main grid
-        ScfPropertySet aGridProp( xAxis->getGridProperties() );
-        if( aGridProp.GetBoolProperty( EXC_CHPROP_SHOW ) )
-            mxMajorGrid = lclCreateLineFormat( GetChRoot(), aGridProp, EXC_CHOBJTYPE_GRIDLINE );
-        // sub grid
-        Sequence< Reference< XPropertySet > > aSubGridPropSeq = xAxis->getSubGridProperties();
-        if( aSubGridPropSeq.hasElements() )
-        {
-            ScfPropertySet aSubGridProp( aSubGridPropSeq[ 0 ] );
-            if( aSubGridProp.GetBoolProperty( EXC_CHPROP_SHOW ) )
-                mxMinorGrid = lclCreateLineFormat( GetChRoot(), aSubGridProp, EXC_CHOBJTYPE_GRIDLINE );
-        }
+        ScfPropertySet aSubGridProp( aSubGridPropSeq[ 0 ] );
+        if( aSubGridProp.GetBoolProperty( EXC_CHPROP_SHOW ) )
+            mxMinorGrid = lclCreateLineFormat( GetChRoot(), aSubGridProp, EXC_CHOBJTYPE_GRIDLINE );
     }
 }
 
 void XclExpChAxis::ConvertWall( css::uno::Reference< css::chart2::XDiagram > const & xDiagram )
 {
-    if( xDiagram.is() ) switch( GetAxisType() )
+    if( !xDiagram.is() )
+        return;
+
+    switch( GetAxisType() )
     {
-        case EXC_CHAXIS_X:
-        {
-            ScfPropertySet aWallProp( xDiagram->getWall() );
-            mxWallFrame = lclCreateFrame( GetChRoot(), aWallProp, EXC_CHOBJTYPE_WALL3D );
-        }
-        break;
-        case EXC_CHAXIS_Y:
-        {
-            ScfPropertySet aFloorProp( xDiagram->getFloor() );
-            mxWallFrame = lclCreateFrame( GetChRoot(), aFloorProp, EXC_CHOBJTYPE_FLOOR3D );
-        }
-        break;
-        default:
-            mxWallFrame.clear();
+    case EXC_CHAXIS_X:
+    {
+        ScfPropertySet aWallProp( xDiagram->getWall() );
+        mxWallFrame = lclCreateFrame( GetChRoot(), aWallProp, EXC_CHOBJTYPE_WALL3D );
+    }
+    break;
+    case EXC_CHAXIS_Y:
+    {
+        ScfPropertySet aFloorProp( xDiagram->getFloor() );
+        mxWallFrame = lclCreateFrame( GetChRoot(), aFloorProp, EXC_CHOBJTYPE_FLOOR3D );
+    }
+    break;
+    default:
+        mxWallFrame.clear();
     }
 }
 
@@ -3315,51 +3318,51 @@ XclExpChChart::XclExpChChart( const XclExpRoot& rRoot,
     mxPrimAxesSet = std::make_shared<XclExpChAxesSet>( GetChRoot(), EXC_CHAXESSET_PRIMARY );
     mxSecnAxesSet = std::make_shared<XclExpChAxesSet>( GetChRoot(), EXC_CHAXESSET_SECONDARY );
 
-    if( xChartDoc.is() )
+    if( !xChartDoc.is() )
+        return;
+
+    Reference< XDiagram > xDiagram = xChartDoc->getFirstDiagram();
+
+    // global chart properties (only 'include hidden cells' attribute for now)
+    ScfPropertySet aDiagramProp( xDiagram );
+    bool bIncludeHidden = aDiagramProp.GetBoolProperty( EXC_CHPROP_INCLUDEHIDDENCELLS );
+    ::set_flag( maProps.mnFlags,  EXC_CHPROPS_SHOWVISIBLEONLY, !bIncludeHidden );
+
+    // initialize API conversion (remembers xChartDoc and rChartRect internally)
+    InitConversion( xChartDoc, rChartRect );
+
+    // chart frame
+    ScfPropertySet aFrameProp( xChartDoc->getPageBackground() );
+    mxFrame = lclCreateFrame( GetChRoot(), aFrameProp, EXC_CHOBJTYPE_BACKGROUND );
+
+    // chart title
+    Reference< XTitled > xTitled( xChartDoc, UNO_QUERY );
+    OUString aSubTitle;
+    lcl_getChartSubTitle(xChartDoc, aSubTitle);
+    mxTitle = lclCreateTitle( GetChRoot(), xTitled, EXC_CHOBJLINK_TITLE,
+                              !aSubTitle.isEmpty() ? &aSubTitle : nullptr );
+
+    // diagrams (axes sets)
+    sal_uInt16 nFreeGroupIdx = mxPrimAxesSet->Convert( xDiagram, 0 );
+    if( !mxPrimAxesSet->Is3dChart() )
+        mxSecnAxesSet->Convert( xDiagram, nFreeGroupIdx );
+
+    // treatment of missing values
+    ScfPropertySet aDiaProp( xDiagram );
+    sal_Int32 nMissingValues = 0;
+    if( aDiaProp.GetProperty( nMissingValues, EXC_CHPROP_MISSINGVALUETREATMENT ) )
     {
-        Reference< XDiagram > xDiagram = xChartDoc->getFirstDiagram();
-
-        // global chart properties (only 'include hidden cells' attribute for now)
-        ScfPropertySet aDiagramProp( xDiagram );
-        bool bIncludeHidden = aDiagramProp.GetBoolProperty( EXC_CHPROP_INCLUDEHIDDENCELLS );
-        ::set_flag( maProps.mnFlags,  EXC_CHPROPS_SHOWVISIBLEONLY, !bIncludeHidden );
-
-        // initialize API conversion (remembers xChartDoc and rChartRect internally)
-        InitConversion( xChartDoc, rChartRect );
-
-        // chart frame
-        ScfPropertySet aFrameProp( xChartDoc->getPageBackground() );
-        mxFrame = lclCreateFrame( GetChRoot(), aFrameProp, EXC_CHOBJTYPE_BACKGROUND );
-
-        // chart title
-        Reference< XTitled > xTitled( xChartDoc, UNO_QUERY );
-        OUString aSubTitle;
-        lcl_getChartSubTitle(xChartDoc, aSubTitle);
-        mxTitle = lclCreateTitle( GetChRoot(), xTitled, EXC_CHOBJLINK_TITLE,
-                                  !aSubTitle.isEmpty() ? &aSubTitle : nullptr );
-
-        // diagrams (axes sets)
-        sal_uInt16 nFreeGroupIdx = mxPrimAxesSet->Convert( xDiagram, 0 );
-        if( !mxPrimAxesSet->Is3dChart() )
-            mxSecnAxesSet->Convert( xDiagram, nFreeGroupIdx );
-
-        // treatment of missing values
-        ScfPropertySet aDiaProp( xDiagram );
-        sal_Int32 nMissingValues = 0;
-        if( aDiaProp.GetProperty( nMissingValues, EXC_CHPROP_MISSINGVALUETREATMENT ) )
+        using namespace cssc::MissingValueTreatment;
+        switch( nMissingValues )
         {
-            using namespace cssc::MissingValueTreatment;
-            switch( nMissingValues )
-            {
-                case LEAVE_GAP: maProps.mnEmptyMode = EXC_CHPROPS_EMPTY_SKIP;           break;
-                case USE_ZERO:  maProps.mnEmptyMode = EXC_CHPROPS_EMPTY_ZERO;           break;
-                case CONTINUE:  maProps.mnEmptyMode = EXC_CHPROPS_EMPTY_INTERPOLATE;    break;
-            }
+            case LEAVE_GAP: maProps.mnEmptyMode = EXC_CHPROPS_EMPTY_SKIP;           break;
+            case USE_ZERO:  maProps.mnEmptyMode = EXC_CHPROPS_EMPTY_ZERO;           break;
+            case CONTINUE:  maProps.mnEmptyMode = EXC_CHPROPS_EMPTY_INTERPOLATE;    break;
         }
-
-        // finish API conversion
-        FinishConversion();
     }
+
+    // finish API conversion
+    FinishConversion();
 }
 
 XclExpChSeriesRef XclExpChChart::CreateSeries()
@@ -3427,24 +3430,24 @@ XclExpChartDrawing::XclExpChartDrawing( const XclExpRoot& rRoot,
         const Reference< XModel >& rxModel, const Size& rChartSize ) :
     XclExpRoot( rRoot )
 {
-    if( !rChartSize.IsEmpty() )
-    {
-        ScfPropertySet aPropSet( rxModel );
-        Reference< XShapes > xShapes;
-        if( aPropSet.GetProperty( xShapes, EXC_CHPROP_ADDITIONALSHAPES ) && xShapes.is() && (xShapes->getCount() > 0) )
-        {
-            /*  Create a new independent object manager with own DFF stream for the
-                DGCONTAINER, pass global manager as parent for shared usage of
-                global DFF data (picture container etc.). */
-            mxObjMgr = std::make_shared<XclExpEmbeddedObjectManager>( GetObjectManager(), rChartSize, EXC_CHART_TOTALUNITS, EXC_CHART_TOTALUNITS );
-            // initialize the drawing object list
-            mxObjMgr->StartSheet();
-            // process the draw page (convert all shapes)
-            mxObjRecs = mxObjMgr->ProcessDrawing( xShapes );
-            // finalize the DFF stream
-            mxObjMgr->EndDocument();
-        }
-    }
+    if( rChartSize.IsEmpty() )
+        return;
+
+    ScfPropertySet aPropSet( rxModel );
+    Reference< XShapes > xShapes;
+    if( !(aPropSet.GetProperty( xShapes, EXC_CHPROP_ADDITIONALSHAPES ) && xShapes.is() && (xShapes->getCount() > 0)) )
+        return;
+
+    /*  Create a new independent object manager with own DFF stream for the
+        DGCONTAINER, pass global manager as parent for shared usage of
+        global DFF data (picture container etc.). */
+    mxObjMgr = std::make_shared<XclExpEmbeddedObjectManager>( GetObjectManager(), rChartSize, EXC_CHART_TOTALUNITS, EXC_CHART_TOTALUNITS );
+    // initialize the drawing object list
+    mxObjMgr->StartSheet();
+    // process the draw page (convert all shapes)
+    mxObjRecs = mxObjMgr->ProcessDrawing( xShapes );
+    // finalize the DFF stream
+    mxObjMgr->EndDocument();
 }
 
 XclExpChartDrawing::~XclExpChartDrawing()

@@ -78,33 +78,33 @@ ScfProgressBar::ScfProgressSegment* ScfProgressBar::GetSegment( sal_Int32 nSegme
 
 void ScfProgressBar::SetCurrSegment( ScfProgressSegment* pSegment )
 {
-    if( mpCurrSegment != pSegment )
+    if( mpCurrSegment == pSegment )
+        return;
+
+    mpCurrSegment = pSegment;
+
+    if( mpParentProgress && mpParentSegment )
     {
-        mpCurrSegment = pSegment;
+        mpParentProgress->SetCurrSegment( mpParentSegment );
+    }
+    else if( !mxSysProgress && (mnTotalSize > 0) )
+    {
+        // System progress has an internal limit of ULONG_MAX/100.
+        mnSysProgressScale = 1;
+        sal_uLong nSysTotalSize = static_cast< sal_uLong >( mnTotalSize );
+        while( nSysTotalSize >= ULONG_MAX / 100 )
+        {
+            nSysTotalSize /= 2;
+            mnSysProgressScale *= 2;
+        }
+        mxSysProgress.reset( new ScProgress( mpDocShell, maText, nSysTotalSize, true ) );
+    }
 
-        if( mpParentProgress && mpParentSegment )
-        {
-            mpParentProgress->SetCurrSegment( mpParentSegment );
-        }
-        else if( !mxSysProgress && (mnTotalSize > 0) )
-        {
-            // System progress has an internal limit of ULONG_MAX/100.
-            mnSysProgressScale = 1;
-            sal_uLong nSysTotalSize = static_cast< sal_uLong >( mnTotalSize );
-            while( nSysTotalSize >= ULONG_MAX / 100 )
-            {
-                nSysTotalSize /= 2;
-                mnSysProgressScale *= 2;
-            }
-            mxSysProgress.reset( new ScProgress( mpDocShell, maText, nSysTotalSize, true ) );
-        }
-
-        if( !mbInProgress && mpCurrSegment && (mnTotalSize > 0) )
-        {
-            mnUnitSize = mnTotalSize / 256 + 1;   // at most 256 calls of system progress
-            mnNextUnitPos = 0;
-            mbInProgress = true;
-        }
+    if( !mbInProgress && mpCurrSegment && (mnTotalSize > 0) )
+    {
+        mnUnitSize = mnTotalSize / 256 + 1;   // at most 256 calls of system progress
+        mnNextUnitPos = 0;
+        mbInProgress = true;
     }
 }
 

@@ -57,63 +57,63 @@ Bitmap::Bitmap(std::shared_ptr<SalBitmap> const & pSalBitmap)
 
 Bitmap::Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalette* pPal )
 {
-    if (rSizePixel.Width() && rSizePixel.Height())
+    if (!(rSizePixel.Width() && rSizePixel.Height()))
+        return;
+
+    BitmapPalette   aPal;
+    BitmapPalette*  pRealPal = nullptr;
+
+    if( nBitCount <= 8 )
     {
-        BitmapPalette   aPal;
-        BitmapPalette*  pRealPal = nullptr;
-
-        if( nBitCount <= 8 )
+        if( !pPal )
         {
-            if( !pPal )
+            if( 1 == nBitCount )
             {
-                if( 1 == nBitCount )
+                aPal.SetEntryCount( 2 );
+                aPal[ 0 ] = COL_BLACK;
+                aPal[ 1 ] = COL_WHITE;
+            }
+            else if( ( 4 == nBitCount ) || ( 8 == nBitCount ) )
+            {
+                aPal.SetEntryCount( 1 << nBitCount );
+                aPal[ 0 ] = COL_BLACK;
+                aPal[ 1 ] = COL_BLUE;
+                aPal[ 2 ] = COL_GREEN;
+                aPal[ 3 ] = COL_CYAN;
+                aPal[ 4 ] = COL_RED;
+                aPal[ 5 ] = COL_MAGENTA;
+                aPal[ 6 ] = COL_BROWN;
+                aPal[ 7 ] = COL_GRAY;
+                aPal[ 8 ] = COL_LIGHTGRAY;
+                aPal[ 9 ] = COL_LIGHTBLUE;
+                aPal[ 10 ] = COL_LIGHTGREEN;
+                aPal[ 11 ] = COL_LIGHTCYAN;
+                aPal[ 12 ] = COL_LIGHTRED;
+                aPal[ 13 ] = COL_LIGHTMAGENTA;
+                aPal[ 14 ] = COL_YELLOW;
+                aPal[ 15 ] = COL_WHITE;
+
+                // Create dither palette
+                if( 8 == nBitCount )
                 {
-                    aPal.SetEntryCount( 2 );
-                    aPal[ 0 ] = COL_BLACK;
-                    aPal[ 1 ] = COL_WHITE;
-                }
-                else if( ( 4 == nBitCount ) || ( 8 == nBitCount ) )
-                {
-                    aPal.SetEntryCount( 1 << nBitCount );
-                    aPal[ 0 ] = COL_BLACK;
-                    aPal[ 1 ] = COL_BLUE;
-                    aPal[ 2 ] = COL_GREEN;
-                    aPal[ 3 ] = COL_CYAN;
-                    aPal[ 4 ] = COL_RED;
-                    aPal[ 5 ] = COL_MAGENTA;
-                    aPal[ 6 ] = COL_BROWN;
-                    aPal[ 7 ] = COL_GRAY;
-                    aPal[ 8 ] = COL_LIGHTGRAY;
-                    aPal[ 9 ] = COL_LIGHTBLUE;
-                    aPal[ 10 ] = COL_LIGHTGREEN;
-                    aPal[ 11 ] = COL_LIGHTCYAN;
-                    aPal[ 12 ] = COL_LIGHTRED;
-                    aPal[ 13 ] = COL_LIGHTMAGENTA;
-                    aPal[ 14 ] = COL_YELLOW;
-                    aPal[ 15 ] = COL_WHITE;
+                    sal_uInt16 nActCol = 16;
 
-                    // Create dither palette
-                    if( 8 == nBitCount )
-                    {
-                        sal_uInt16 nActCol = 16;
+                    for( sal_uInt16 nB = 0; nB < 256; nB += 51 )
+                        for( sal_uInt16 nG = 0; nG < 256; nG += 51 )
+                            for( sal_uInt16 nR = 0; nR < 256; nR += 51 )
+                                aPal[ nActCol++ ] = BitmapColor( static_cast<sal_uInt8>(nR), static_cast<sal_uInt8>(nG), static_cast<sal_uInt8>(nB) );
 
-                        for( sal_uInt16 nB = 0; nB < 256; nB += 51 )
-                            for( sal_uInt16 nG = 0; nG < 256; nG += 51 )
-                                for( sal_uInt16 nR = 0; nR < 256; nR += 51 )
-                                    aPal[ nActCol++ ] = BitmapColor( static_cast<sal_uInt8>(nR), static_cast<sal_uInt8>(nG), static_cast<sal_uInt8>(nB) );
-
-                        // Set standard Office colors
-                        aPal[ nActCol++ ] = BitmapColor( 0, 184, 255 );
-                    }
+                    // Set standard Office colors
+                    aPal[ nActCol++ ] = BitmapColor( 0, 184, 255 );
                 }
             }
-            else
-                pRealPal = const_cast<BitmapPalette*>(pPal);
         }
-
-        mxSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
-        mxSalBmp->Create( rSizePixel, nBitCount, pRealPal ? *pRealPal : aPal );
+        else
+            pRealPal = const_cast<BitmapPalette*>(pPal);
     }
+
+    mxSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
+    mxSalBmp->Create( rSizePixel, nBitCount, pRealPal ? *pRealPal : aPal );
 }
 
 #ifdef DBG_UTIL

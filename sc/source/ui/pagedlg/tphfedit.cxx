@@ -92,25 +92,25 @@ void ScEditWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     if (mbRTL)
         m_xEditEngine->SetDefaultHorizontalTextDirection(EEHorizontalTextDirection::R2L);
 
-    if (pAcc)
-    {
-        OUString sName;
-        switch (eLocation)
-        {
-            case Left:
-                sName = ScResId(STR_ACC_LEFTAREA_NAME);
-                break;
-            case Center:
-                sName = ScResId(STR_ACC_CENTERAREA_NAME);
-                break;
-            case Right:
-                sName = ScResId(STR_ACC_RIGHTAREA_NAME);
-                break;
-        }
+    if (!pAcc)
+        return;
 
-        pAcc->InitAcc(nullptr, m_xEditView.get(), nullptr,
-                      sName, pDrawingArea->get_tooltip_text());
+    OUString sName;
+    switch (eLocation)
+    {
+        case Left:
+            sName = ScResId(STR_ACC_LEFTAREA_NAME);
+            break;
+        case Center:
+            sName = ScResId(STR_ACC_CENTERAREA_NAME);
+            break;
+        case Right:
+            sName = ScResId(STR_ACC_RIGHTAREA_NAME);
+            break;
     }
+
+    pAcc->InitAcc(nullptr, m_xEditView.get(), nullptr,
+                  sName, pDrawingArea->get_tooltip_text());
 }
 
 ScEditWindow::~ScEditWindow()
@@ -179,26 +179,26 @@ void ScEditWindow::SetCharAttributes()
     OSL_ENSURE( pDocSh,  "Current DocShell not found" );
     OSL_ENSURE( pViewSh, "Current ViewShell not found" );
 
-    if ( pDocSh && pViewSh )
+    if ( !(pDocSh && pViewSh) )
+        return;
+
+    if(pTabViewSh!=nullptr) pTabViewSh->SetInFormatDialog(true);
+
+    SfxItemSet aSet( m_xEditView->GetAttribs() );
+
+    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+
+    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScCharDlg(
+        mpDialog,  &aSet, pDocSh, false));
+    pDlg->SetText( ScResId( STR_TEXTATTRS ) );
+    if ( pDlg->Execute() == RET_OK )
     {
-        if(pTabViewSh!=nullptr) pTabViewSh->SetInFormatDialog(true);
-
-        SfxItemSet aSet( m_xEditView->GetAttribs() );
-
-        ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-
-        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScCharDlg(
-            mpDialog,  &aSet, pDocSh, false));
-        pDlg->SetText( ScResId( STR_TEXTATTRS ) );
-        if ( pDlg->Execute() == RET_OK )
-        {
-            aSet.ClearItem();
-            aSet.Put( *pDlg->GetOutputItemSet() );
-            m_xEditView->SetAttribs( aSet );
-        }
-
-        if(pTabViewSh!=nullptr) pTabViewSh->SetInFormatDialog(false);
+        aSet.ClearItem();
+        aSet.Put( *pDlg->GetOutputItemSet() );
+        m_xEditView->SetAttribs( aSet );
     }
+
+    if(pTabViewSh!=nullptr) pTabViewSh->SetInFormatDialog(false);
 }
 
 bool ScEditWindow::KeyInput( const KeyEvent& rKEvt )

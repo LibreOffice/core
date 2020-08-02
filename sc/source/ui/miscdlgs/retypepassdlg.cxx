@@ -159,33 +159,33 @@ void ScRetypePassDlg::SetDocData()
 
 void ScRetypePassDlg::SetTableData(size_t nRowPos, SCTAB nTab)
 {
-    if (nRowPos < maSheets.size())
+    if (nRowPos >= maSheets.size())
+        return;
+
+    weld::Label& rName = *maSheets[nRowPos]->m_xName;
+    weld::Label& rStatus = *maSheets[nRowPos]->m_xStatus;
+    weld::Button& rBtn = *maSheets[nRowPos]->m_xButton;
+
+    bool bBtnEnabled = false;
+    rName.set_label(maTableItems[nTab].maName);
+    const ScTableProtection* pTabProtect = maTableItems[nTab].mpProtect.get();
+    if (pTabProtect && pTabProtect->isProtected())
     {
-        weld::Label& rName = *maSheets[nRowPos]->m_xName;
-        weld::Label& rStatus = *maSheets[nRowPos]->m_xStatus;
-        weld::Button& rBtn = *maSheets[nRowPos]->m_xButton;
-
-        bool bBtnEnabled = false;
-        rName.set_label(maTableItems[nTab].maName);
-        const ScTableProtection* pTabProtect = maTableItems[nTab].mpProtect.get();
-        if (pTabProtect && pTabProtect->isProtected())
-        {
-            if (pTabProtect->isPasswordEmpty())
-                rStatus.set_label(maTextNotPassProtected);
-            else if (pTabProtect->hasPasswordHash(meDesiredHash))
-                rStatus.set_label(maTextHashGood);
-            else
-            {
-                // incompatible hash
-                rStatus.set_label(maTextHashBad);
-                bBtnEnabled = true;
-            }
-        }
+        if (pTabProtect->isPasswordEmpty())
+            rStatus.set_label(maTextNotPassProtected);
+        else if (pTabProtect->hasPasswordHash(meDesiredHash))
+            rStatus.set_label(maTextHashGood);
         else
-            rStatus.set_label(maTextNotProtected);
-
-        rBtn.set_sensitive(bBtnEnabled);
+        {
+            // incompatible hash
+            rStatus.set_label(maTextHashBad);
+            bBtnEnabled = true;
+        }
     }
+    else
+        rStatus.set_label(maTextNotProtected);
+
+    rBtn.set_sensitive(bBtnEnabled);
 }
 
 static bool lcl_IsInGoodStatus(const ScPassHashProtectable* pProtected, ScPasswordHash eDesiredHash)
@@ -256,24 +256,24 @@ IMPL_LINK(ScRetypePassDlg, RetypeBtnHdl, weld::Button&, rBtn, void)
         return;
 
     ScRetypePassInputDlg aDlg(m_xDialog.get(), pProtected);
-    if (aDlg.run() == RET_OK)
-    {
-        // OK is pressed.  Update the protected item.
-        if (aDlg.IsRemovePassword())
-        {
-            // Remove password from this item.
-            pProtected->setPassword(OUString());
-        }
-        else
-        {
-            // Set a new password.
-            OUString aNewPass = aDlg.GetNewPassword();
-            pProtected->setPassword(aNewPass);
-        }
+    if (aDlg.run() != RET_OK)
+        return;
 
-        SetDocData();
-        CheckHashStatus();
+    // OK is pressed.  Update the protected item.
+    if (aDlg.IsRemovePassword())
+    {
+        // Remove password from this item.
+        pProtected->setPassword(OUString());
     }
+    else
+    {
+        // Set a new password.
+        OUString aNewPass = aDlg.GetNewPassword();
+        pProtected->setPassword(aNewPass);
+    }
+
+    SetDocData();
+    CheckHashStatus();
 }
 
 ScRetypePassInputDlg::ScRetypePassInputDlg(weld::Window* pParent, ScPassHashProtectable* pProtected)

@@ -189,39 +189,39 @@ void XMLEventExport::ExportEvent(
     const PropertyValue* pValue = std::find_if(rEventValues.begin(), rEventValues.end(),
         [](const PropertyValue& rValue) { return gsEventType == rValue.Name; });
 
-    if (pValue != rEventValues.end())
+    if (pValue == rEventValues.end())
+        return;
+
+    // found! Now find handler and delegate
+    OUString sType;
+    pValue->Value >>= sType;
+
+    if (aHandlerMap.count(sType))
     {
-        // found! Now find handler and delegate
-        OUString sType;
-        pValue->Value >>= sType;
-
-        if (aHandlerMap.count(sType))
+        if (! rExported)
         {
-            if (! rExported)
-            {
-                // OK, we have't yet exported the enclosing
-                // element. So we do that now.
-                rExported = true;
-                StartElement(bUseWhitespace);
-            }
-
-            OUString aEventQName(
-                rExport.GetNamespaceMap().GetQNameByKey(
-                        rXmlEventName.m_nPrefix, rXmlEventName.m_aName ) );
-
-            // delegate to proper ExportEventHandler
-            aHandlerMap[sType]->Export(rExport, aEventQName,
-                                       rEventValues, bUseWhitespace);
+            // OK, we have't yet exported the enclosing
+            // element. So we do that now.
+            rExported = true;
+            StartElement(bUseWhitespace);
         }
-        else
+
+        OUString aEventQName(
+            rExport.GetNamespaceMap().GetQNameByKey(
+                    rXmlEventName.m_nPrefix, rXmlEventName.m_aName ) );
+
+        // delegate to proper ExportEventHandler
+        aHandlerMap[sType]->Export(rExport, aEventQName,
+                                   rEventValues, bUseWhitespace);
+    }
+    else
+    {
+        if ( sType != "None" )
         {
-            if ( sType != "None" )
-            {
-                OSL_FAIL("unknown event type returned by API");
-                // unknown type -> error (ignore)
-            }
-            // else: we ignore None fields
+            OSL_FAIL("unknown event type returned by API");
+            // unknown type -> error (ignore)
         }
+        // else: we ignore None fields
     }
 }
 

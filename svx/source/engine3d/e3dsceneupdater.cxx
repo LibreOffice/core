@@ -28,83 +28,84 @@ E3DModifySceneSnapRectUpdater::E3DModifySceneSnapRectUpdater(const SdrObject* pO
 :   mpScene(nullptr)
 {
     // Secure old 3D transformation stack before modification
-    if(const E3dObject* pE3dObject = dynamic_cast< const E3dObject* >(pObject))
+    const E3dObject* pE3dObject = dynamic_cast< const E3dObject* >(pObject);
+    if(!pE3dObject)
+        return;
+
+    mpScene = pE3dObject->getRootE3dSceneFromE3dObject();
+
+    if(nullptr == mpScene || mpScene->getRootE3dSceneFromE3dObject() != mpScene)
+        return;
+
+    // if there is a scene and it's the outmost scene, get current 3D range
+    const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(mpScene->GetViewContact());
+    const basegfx::B3DRange aAllContentRange(rVCScene.getAllContentRange3D());
+
+    if(aAllContentRange.isEmpty())
     {
-        mpScene = pE3dObject->getRootE3dSceneFromE3dObject();
-
-        if(nullptr != mpScene && mpScene->getRootE3dSceneFromE3dObject() == mpScene)
-        {
-            // if there is a scene and it's the outmost scene, get current 3D range
-            const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(mpScene->GetViewContact());
-            const basegfx::B3DRange aAllContentRange(rVCScene.getAllContentRange3D());
-
-            if(aAllContentRange.isEmpty())
-            {
-                // no content, nothing to do
-                mpScene = nullptr;
-            }
-            else
-            {
-                // secure current 3D transformation stack
-                mpViewInformation3D.reset(
-                    new drawinglayer::geometry::ViewInformation3D(
-                        rVCScene.getViewInformation3D(aAllContentRange)));
-            }
-        }
+        // no content, nothing to do
+        mpScene = nullptr;
+    }
+    else
+    {
+        // secure current 3D transformation stack
+        mpViewInformation3D.reset(
+            new drawinglayer::geometry::ViewInformation3D(
+                rVCScene.getViewInformation3D(aAllContentRange)));
     }
 }
 
 E3DModifySceneSnapRectUpdater::~E3DModifySceneSnapRectUpdater()
 {
-    if(mpScene && mpViewInformation3D)
+    if(!(mpScene && mpViewInformation3D))
+        return;
+
+    // after changing parts of the scene, use the secured last 3d transformation stack and the new content
+    // range to calculate a new, eventually expanded or shrunk, 2D geometry for the scene and apply it.
+    // Get new content range
+    const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(mpScene->GetViewContact());
+    basegfx::B3DRange aAllContentRange(rVCScene.getAllContentRange3D());
+
+    // only change when there is still content; else let scene stay at old SnapRect
+    if(aAllContentRange.isEmpty())
+        return;
+
+    // check if object transform of scene has changed
+    if(mpViewInformation3D->getObjectTransformation() != mpScene->GetTransform())
     {
-        // after changing parts of the scene, use the secured last 3d transformation stack and the new content
-        // range to calculate a new, eventually expanded or shrunk, 2D geometry for the scene and apply it.
-        // Get new content range
-        const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(mpScene->GetViewContact());
-        basegfx::B3DRange aAllContentRange(rVCScene.getAllContentRange3D());
+        // If Yes, it needs to be updated since it's - for historical reasons -
+        // part of the basic 3d transformation stack of the scene
+        drawinglayer::geometry::ViewInformation3D* pNew = new drawinglayer::geometry::ViewInformation3D(
+            mpScene->GetTransform(), // replace object transformation with new local transform
+            mpViewInformation3D->getOrientation(),
+            mpViewInformation3D->getProjection(),
+            mpViewInformation3D->getDeviceToView(),
+            mpViewInformation3D->getViewTime(),
+            mpViewInformation3D->getExtendedInformationSequence());
+        mpViewInformation3D.reset(pNew);
+    }
 
-        // only change when there is still content; else let scene stay at old SnapRect
-        if(!aAllContentRange.isEmpty())
-        {
-            // check if object transform of scene has changed
-            if(mpViewInformation3D->getObjectTransformation() != mpScene->GetTransform())
-            {
-                // If Yes, it needs to be updated since it's - for historical reasons -
-                // part of the basic 3d transformation stack of the scene
-                drawinglayer::geometry::ViewInformation3D* pNew = new drawinglayer::geometry::ViewInformation3D(
-                    mpScene->GetTransform(), // replace object transformation with new local transform
-                    mpViewInformation3D->getOrientation(),
-                    mpViewInformation3D->getProjection(),
-                    mpViewInformation3D->getDeviceToView(),
-                    mpViewInformation3D->getViewTime(),
-                    mpViewInformation3D->getExtendedInformationSequence());
-                mpViewInformation3D.reset(pNew);
-            }
+    // transform content range to scene-relative coordinates using old 3d transformation stack
+    aAllContentRange.transform(mpViewInformation3D->getObjectToView());
 
-            // transform content range to scene-relative coordinates using old 3d transformation stack
-            aAllContentRange.transform(mpViewInformation3D->getObjectToView());
+    // build 2d relative content range
+    basegfx::B2DRange aSnapRange(
+        aAllContentRange.getMinX(), aAllContentRange.getMinY(),
+        aAllContentRange.getMaxX(), aAllContentRange.getMaxY());
 
-            // build 2d relative content range
-            basegfx::B2DRange aSnapRange(
-                aAllContentRange.getMinX(), aAllContentRange.getMinY(),
-                aAllContentRange.getMaxX(), aAllContentRange.getMaxY());
+    // transform to 2D world coordinates using scene's 2D transformation
+    aSnapRange.transform(rVCScene.getObjectTransformation());
 
-            // transform to 2D world coordinates using scene's 2D transformation
-            aSnapRange.transform(rVCScene.getObjectTransformation());
+    // snap to (old) integer
+    const tools::Rectangle aNewSnapRect(
+        sal_Int32(floor(aSnapRange.getMinX())), sal_Int32(floor(aSnapRange.getMinY())),
+        sal_Int32(ceil(aSnapRange.getMaxX())), sal_Int32(ceil(aSnapRange.getMaxY())));
 
-            // snap to (old) integer
-            const tools::Rectangle aNewSnapRect(
-                sal_Int32(floor(aSnapRange.getMinX())), sal_Int32(floor(aSnapRange.getMinY())),
-                sal_Int32(ceil(aSnapRange.getMaxX())), sal_Int32(ceil(aSnapRange.getMaxY())));
-
-            // set as new SnapRect and invalidate bound volume
-            if(mpScene->GetSnapRect() != aNewSnapRect)
-            {
-                mpScene->SetSnapRect(aNewSnapRect);
-                mpScene->InvalidateBoundVolume();
-            }
-        }
+    // set as new SnapRect and invalidate bound volume
+    if(mpScene->GetSnapRect() != aNewSnapRect)
+    {
+        mpScene->SetSnapRect(aNewSnapRect);
+        mpScene->InvalidateBoundVolume();
     }
 }
 

@@ -124,21 +124,21 @@ void TabPage::DataChanged( const DataChangedEvent& rDCEvt )
 void TabPage::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& )
 {
     // draw native tabpage only inside tabcontrols, standalone tabpages look ugly (due to bad dialog design)
-    if( IsNativeControlSupported(ControlType::TabBody, ControlPart::Entire) && GetParent() && (GetParent()->GetType() == WindowType::TABCONTROL) )
-    {
-        const ImplControlValue aControlValue;
+    if( !(IsNativeControlSupported(ControlType::TabBody, ControlPart::Entire) && GetParent() && (GetParent()->GetType() == WindowType::TABCONTROL)) )
+        return;
 
-        ControlState nState = ControlState::ENABLED;
-        if ( !IsEnabled() )
-            nState &= ~ControlState::ENABLED;
-        if ( HasFocus() )
-            nState |= ControlState::FOCUSED;
-        // pass the whole window region to NWF as the tab body might be a gradient or bitmap
-        // that has to be scaled properly, clipping makes sure that we do not paint too much
-        tools::Rectangle aCtrlRegion( Point(), GetOutputSizePixel() );
-        rRenderContext.DrawNativeControl( ControlType::TabBody, ControlPart::Entire, aCtrlRegion, nState,
-                aControlValue, OUString() );
-    }
+    const ImplControlValue aControlValue;
+
+    ControlState nState = ControlState::ENABLED;
+    if ( !IsEnabled() )
+        nState &= ~ControlState::ENABLED;
+    if ( HasFocus() )
+        nState |= ControlState::FOCUSED;
+    // pass the whole window region to NWF as the tab body might be a gradient or bitmap
+    // that has to be scaled properly, clipping makes sure that we do not paint too much
+    tools::Rectangle aCtrlRegion( Point(), GetOutputSizePixel() );
+    rRenderContext.DrawNativeControl( ControlType::TabBody, ControlPart::Entire, aCtrlRegion, nState,
+            aControlValue, OUString() );
 }
 
 void TabPage::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags )

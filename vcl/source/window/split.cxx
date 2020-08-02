@@ -650,21 +650,21 @@ void Splitter::KeyInput( const KeyEvent& rKEvt )
 void Splitter::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
-    if( rDCEvt.GetType() == DataChangedEventType::SETTINGS )
-    {
-        const AllSettings* pOldSettings = rDCEvt.GetOldSettings();
-        if(!pOldSettings)
-            return;
+    if( rDCEvt.GetType() != DataChangedEventType::SETTINGS )
+        return;
 
-        Color oldFaceColor = pOldSettings->GetStyleSettings().GetFaceColor();
-        Color newFaceColor = Application::GetSettings().GetStyleSettings().GetFaceColor();
-        if( oldFaceColor.IsDark() != newFaceColor.IsDark() )
-        {
-            if( newFaceColor.IsDark() )
-                SetBackground( ImplWhiteWall::get() );
-            else
-                SetBackground( ImplBlackWall::get() );
-        }
+    const AllSettings* pOldSettings = rDCEvt.GetOldSettings();
+    if(!pOldSettings)
+        return;
+
+    Color oldFaceColor = pOldSettings->GetStyleSettings().GetFaceColor();
+    Color newFaceColor = Application::GetSettings().GetStyleSettings().GetFaceColor();
+    if( oldFaceColor.IsDark() != newFaceColor.IsDark() )
+    {
+        if( newFaceColor.IsDark() )
+            SetBackground( ImplWhiteWall::get() );
+        else
+            SetBackground( ImplBlackWall::get() );
     }
 }
 

@@ -270,22 +270,22 @@ OUString XclImpRoot::GetScAddInName( const OUString& rXclName )
 
 void XclImpRoot::ReadCodeName( XclImpStream& rStrm, bool bGlobals )
 {
-    if( mrImpData.mbHasBasic && (GetBiff() == EXC_BIFF8) )
+    if( !(mrImpData.mbHasBasic && (GetBiff() == EXC_BIFF8)) )
+        return;
+
+    OUString aName = rStrm.ReadUniString();
+    if( aName.isEmpty() )
+        return;
+
+    if( bGlobals )
     {
-        OUString aName = rStrm.ReadUniString();
-        if( !aName.isEmpty() )
-        {
-            if( bGlobals )
-            {
-                GetExtDocOptions().GetDocSettings().maGlobCodeName = aName;
-                GetDoc().SetCodeName( aName );
-            }
-            else
-            {
-                GetExtDocOptions().SetCodeName( GetCurrScTab(), aName );
-                GetDoc().SetCodeName( GetCurrScTab(), aName );
-            }
-        }
+        GetExtDocOptions().GetDocSettings().maGlobCodeName = aName;
+        GetDoc().SetCodeName( aName );
+    }
+    else
+    {
+        GetExtDocOptions().SetCodeName( GetCurrScTab(), aName );
+        GetDoc().SetCodeName( GetCurrScTab(), aName );
     }
 }
 

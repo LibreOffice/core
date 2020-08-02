@@ -435,23 +435,23 @@ void ScTpUserLists::RemoveList( size_t nList )
 
 IMPL_LINK( ScTpUserLists, LbSelectHdl, weld::TreeView&, rLb, void )
 {
-    if ( &rLb == mxLbLists.get() )
-    {
-        sal_Int32 nSelPos = mxLbLists->get_selected_index();
-        if ( nSelPos != -1 )
-        {
-            if ( !mxFtEntries->get_sensitive() )  mxFtEntries->set_sensitive(true);
-            if ( !mxEdEntries->get_sensitive() )  mxEdEntries->set_sensitive(true);
-            if ( !mxBtnRemove->get_sensitive() )  mxBtnRemove->set_sensitive(true);
-            if ( mxBtnAdd->get_sensitive() )
-            {
-                mxBtnAdd->set_sensitive(false);
-                mxBtnModify->set_sensitive(false);
-            }
+    if ( &rLb != mxLbLists.get() )
+        return;
 
-            UpdateEntries( nSelPos );
-        }
+    sal_Int32 nSelPos = mxLbLists->get_selected_index();
+    if ( nSelPos == -1 )
+        return;
+
+    if ( !mxFtEntries->get_sensitive() )  mxFtEntries->set_sensitive(true);
+    if ( !mxEdEntries->get_sensitive() )  mxEdEntries->set_sensitive(true);
+    if ( !mxBtnRemove->get_sensitive() )  mxBtnRemove->set_sensitive(true);
+    if ( mxBtnAdd->get_sensitive() )
+    {
+        mxBtnAdd->set_sensitive(false);
+        mxBtnModify->set_sensitive(false);
     }
+
+    UpdateEntries( nSelPos );
 }
 
 IMPL_LINK( ScTpUserLists, BtnClickHdl, weld::Button&, rBtn, void )

@@ -63,7 +63,10 @@ void ExcelVbaProject::prepareImport()
 {
     /*  Check if the sheets have imported codenames. Generate new unused
         codenames if not. */
-    if( mxDocument.is() ) try
+    if( !mxDocument.is() )
+        return;
+
+    try
     {
         // collect existing codenames (do not use them when creating new codenames)
         ::std::set< OUString > aUsedCodeNames;

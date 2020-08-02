@@ -278,65 +278,65 @@ void XclImpPCField::ReadSxfield( XclImpStream& rStrm )
     // for now, ignore data type of calculated fields
     OSL_ENSURE( bCalced || bType || bTypeNone, "XclImpPCField::ReadSxfield - unknown item data type" );
 
-    if( nVisC > 0 || bPostp )
+    if( !(nVisC > 0 || bPostp) )
+        return;
+
+    if( bItems && !bPostp )
     {
-        if( bItems && !bPostp )
+        if( !bCalced )
         {
-            if( !bCalced )
+            // 1) standard fields and standard grouping fields
+            if( !bNum )
             {
-                // 1) standard fields and standard grouping fields
-                if( !bNum )
-                {
-                    // 1a) standard field without grouping
-                    if( bType && (nGroupC == 0) && (nBaseC == 0) && (nOrigC == nVisC) )
-                        meFieldType = EXC_PCFIELD_STANDARD;
+                // 1a) standard field without grouping
+                if( bType && (nGroupC == 0) && (nBaseC == 0) && (nOrigC == nVisC) )
+                    meFieldType = EXC_PCFIELD_STANDARD;
 
-                    // 1b) standard grouping field
-                    else if( bTypeNone && (nGroupC == nVisC) && (nBaseC > 0) && (nOrigC == 0) )
-                        meFieldType = EXC_PCFIELD_STDGROUP;
-                }
-                // 2) numerical grouping fields
-                else if( (nGroupC == nVisC) && (nBaseC == 0) )
+                // 1b) standard grouping field
+                else if( bTypeNone && (nGroupC == nVisC) && (nBaseC > 0) && (nOrigC == 0) )
+                    meFieldType = EXC_PCFIELD_STDGROUP;
+            }
+            // 2) numerical grouping fields
+            else if( (nGroupC == nVisC) && (nBaseC == 0) )
+            {
+                // 2a) single num/date grouping field without child grouping field
+                if( !bChild && bType && (nOrigC > 0) )
                 {
-                    // 2a) single num/date grouping field without child grouping field
-                    if( !bChild && bType && (nOrigC > 0) )
+                    switch( nType )
                     {
-                        switch( nType )
-                        {
-                            case EXC_SXFIELD_DATA_INT:
-                            case EXC_SXFIELD_DATA_DBL:  meFieldType = EXC_PCFIELD_NUMGROUP;     break;
-                            case EXC_SXFIELD_DATA_DATE: meFieldType = EXC_PCFIELD_DATEGROUP;    break;
-                            default:    OSL_FAIL( "XclImpPCField::ReadSxfield - numeric group with wrong data type" );
-                        }
+                        case EXC_SXFIELD_DATA_INT:
+                        case EXC_SXFIELD_DATA_DBL:  meFieldType = EXC_PCFIELD_NUMGROUP;     break;
+                        case EXC_SXFIELD_DATA_DATE: meFieldType = EXC_PCFIELD_DATEGROUP;    break;
+                        default:    OSL_FAIL( "XclImpPCField::ReadSxfield - numeric group with wrong data type" );
                     }
-
-                    // 2b) first date grouping field with child grouping field
-                    else if( bChild && (nType == EXC_SXFIELD_DATA_DATE) && (nOrigC > 0) )
-                        meFieldType = EXC_PCFIELD_DATEGROUP;
-
-                    // 2c) additional date grouping field
-                    else if( bTypeNone && (nOrigC == 0) )
-                        meFieldType = EXC_PCFIELD_DATECHILD;
                 }
-                OSL_ENSURE( meFieldType != EXC_PCFIELD_UNKNOWN, "XclImpPCField::ReadSxfield - invalid standard or grouped field" );
-            }
 
-            // 3) calculated field
-            else
-            {
-                if( !bChild && !bNum && (nGroupC == 0) && (nBaseC == 0) && (nOrigC == 0) )
-                    meFieldType = EXC_PCFIELD_CALCED;
-                OSL_ENSURE( meFieldType == EXC_PCFIELD_CALCED, "XclImpPCField::ReadSxfield - invalid calculated field" );
+                // 2b) first date grouping field with child grouping field
+                else if( bChild && (nType == EXC_SXFIELD_DATA_DATE) && (nOrigC > 0) )
+                    meFieldType = EXC_PCFIELD_DATEGROUP;
+
+                // 2c) additional date grouping field
+                else if( bTypeNone && (nOrigC == 0) )
+                    meFieldType = EXC_PCFIELD_DATECHILD;
             }
+            OSL_ENSURE( meFieldType != EXC_PCFIELD_UNKNOWN, "XclImpPCField::ReadSxfield - invalid standard or grouped field" );
         }
 
-        else if( !bItems && bPostp )
+        // 3) calculated field
+        else
         {
-            // 4) standard field with postponed items
-            if( !bCalced && !bChild && !bNum && bType && (nGroupC == 0) && (nBaseC == 0) && (nOrigC == 0) )
-                meFieldType = EXC_PCFIELD_STANDARD;
-            OSL_ENSURE( meFieldType == EXC_PCFIELD_STANDARD, "XclImpPCField::ReadSxfield - invalid postponed field" );
+            if( !bChild && !bNum && (nGroupC == 0) && (nBaseC == 0) && (nOrigC == 0) )
+                meFieldType = EXC_PCFIELD_CALCED;
+            OSL_ENSURE( meFieldType == EXC_PCFIELD_CALCED, "XclImpPCField::ReadSxfield - invalid calculated field" );
         }
+    }
+
+    else if( !bItems && bPostp )
+    {
+        // 4) standard field with postponed items
+        if( !bCalced && !bChild && !bNum && bType && (nGroupC == 0) && (nBaseC == 0) && (nOrigC == 0) )
+            meFieldType = EXC_PCFIELD_STANDARD;
+        OSL_ENSURE( meFieldType == EXC_PCFIELD_STANDARD, "XclImpPCField::ReadSxfield - invalid postponed field" );
     }
 }
 
@@ -406,34 +406,35 @@ void XclImpPCField::ConvertGroupField( ScDPSaveData& rSaveData, const ScfStringV
 
 void XclImpPCField::ConvertStdGroupField( ScDPSaveData& rSaveData, const ScfStringVec& rVisNames ) const
 {
-    if( const XclImpPCField* pBaseField = GetGroupBaseField() )
-    {
-        const OUString& rBaseFieldName = pBaseField->GetFieldName( rVisNames );
-        if( !rBaseFieldName.isEmpty() )
-        {
-            // *** create a ScDPSaveGroupItem for each own item, they collect base item names ***
-            ScDPSaveGroupItemVec aGroupItems;
-            aGroupItems.reserve( maItems.size() );
-            // initialize with own item names
-            for( const auto& rxItem : maItems )
-                aGroupItems.emplace_back( rxItem->ConvertToText() );
+    const XclImpPCField* pBaseField = GetGroupBaseField();
+    if(!pBaseField)
+        return;
 
-            // *** iterate over all base items, set their names at corresponding own items ***
-            for( sal_uInt16 nItemIdx = 0, nItemCount = static_cast< sal_uInt16 >( maGroupOrder.size() ); nItemIdx < nItemCount; ++nItemIdx )
-                if( maGroupOrder[ nItemIdx ] < aGroupItems.size() )
-                    if( const XclImpPCItem* pBaseItem = pBaseField->GetItem( nItemIdx ) )
-                        if( const XclImpPCItem* pGroupItem = GetItem( maGroupOrder[ nItemIdx ] ) )
-                            if( *pBaseItem != *pGroupItem )
-                                aGroupItems[ maGroupOrder[ nItemIdx ] ].AddElement( pBaseItem->ConvertToText() );
+    const OUString& rBaseFieldName = pBaseField->GetFieldName( rVisNames );
+    if( rBaseFieldName.isEmpty() )
+        return;
 
-            // *** create the ScDPSaveGroupDimension object, fill with grouping info ***
-            ScDPSaveGroupDimension aGroupDim( rBaseFieldName, GetFieldName( rVisNames ) );
-            for( const auto& rGroupItem : aGroupItems )
-                if( !rGroupItem.IsEmpty() )
-                    aGroupDim.AddGroupItem( rGroupItem );
-            rSaveData.GetDimensionData()->AddGroupDimension( aGroupDim );
-        }
-    }
+    // *** create a ScDPSaveGroupItem for each own item, they collect base item names ***
+    ScDPSaveGroupItemVec aGroupItems;
+    aGroupItems.reserve( maItems.size() );
+    // initialize with own item names
+    for( const auto& rxItem : maItems )
+        aGroupItems.emplace_back( rxItem->ConvertToText() );
+
+    // *** iterate over all base items, set their names at corresponding own items ***
+    for( sal_uInt16 nItemIdx = 0, nItemCount = static_cast< sal_uInt16 >( maGroupOrder.size() ); nItemIdx < nItemCount; ++nItemIdx )
+        if( maGroupOrder[ nItemIdx ] < aGroupItems.size() )
+            if( const XclImpPCItem* pBaseItem = pBaseField->GetItem( nItemIdx ) )
+                if( const XclImpPCItem* pGroupItem = GetItem( maGroupOrder[ nItemIdx ] ) )
+                    if( *pBaseItem != *pGroupItem )
+                        aGroupItems[ maGroupOrder[ nItemIdx ] ].AddElement( pBaseItem->ConvertToText() );
+
+    // *** create the ScDPSaveGroupDimension object, fill with grouping info ***
+    ScDPSaveGroupDimension aGroupDim( rBaseFieldName, GetFieldName( rVisNames ) );
+    for( const auto& rGroupItem : aGroupItems )
+        if( !rGroupItem.IsEmpty() )
+            aGroupDim.AddGroupItem( rGroupItem );
+    rSaveData.GetDimensionData()->AddGroupDimension( aGroupDim );
 }
 
 void XclImpPCField::ConvertNumGroupField( ScDPSaveData& rSaveData, const ScfStringVec& rVisNames ) const
@@ -1336,22 +1337,22 @@ void XclImpPivotTable::ReadSxivd( XclImpStream& rStrm )
         pFieldVec = &maColFields;
 
     // fill the vector from record data
-    if( pFieldVec )
-    {
-        sal_uInt16 nSize = ulimit_cast< sal_uInt16 >( rStrm.GetRecSize() / 2, EXC_PT_MAXROWCOLCOUNT );
-        pFieldVec->reserve( nSize );
-        for( sal_uInt16 nIdx = 0; nIdx < nSize; ++nIdx )
-        {
-            sal_uInt16 nFieldIdx;
-            nFieldIdx = rStrm.ReaduInt16();
-            pFieldVec->push_back( nFieldIdx );
+    if( !pFieldVec )
+        return;
 
-            // set orientation at special data orientation field
-            if( nFieldIdx == EXC_SXIVD_DATA )
-            {
-                sal_uInt16 nAxis = (pFieldVec == &maRowFields) ? EXC_SXVD_AXIS_ROW : EXC_SXVD_AXIS_COL;
-                maDataOrientField.SetAxes( nAxis );
-            }
+    sal_uInt16 nSize = ulimit_cast< sal_uInt16 >( rStrm.GetRecSize() / 2, EXC_PT_MAXROWCOLCOUNT );
+    pFieldVec->reserve( nSize );
+    for( sal_uInt16 nIdx = 0; nIdx < nSize; ++nIdx )
+    {
+        sal_uInt16 nFieldIdx;
+        nFieldIdx = rStrm.ReaduInt16();
+        pFieldVec->push_back( nFieldIdx );
+
+        // set orientation at special data orientation field
+        if( nFieldIdx == EXC_SXIVD_DATA )
+        {
+            sal_uInt16 nAxis = (pFieldVec == &maRowFields) ? EXC_SXVD_AXIS_ROW : EXC_SXVD_AXIS_COL;
+            maDataOrientField.SetAxes( nAxis );
         }
     }
 }
@@ -1563,19 +1564,19 @@ void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveD
 
     aGeometry.getRowFieldPositions(aFieldBtns);
     rSaveData.GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_ROW, aFieldDims);
-    if ((aFieldBtns.size() == aFieldDims.size()) || (maPTAddlInfo.mbCompactMode && aFieldBtns.size() == 1))
+    if (!((aFieldBtns.size() == aFieldDims.size()) || (maPTAddlInfo.mbCompactMode && aFieldBtns.size() == 1)))
+        return;
+
+    vector<const ScDPSaveDimension*>::const_iterator itDim = aFieldDims.begin();
+    for (const auto& rFieldBtn : aFieldBtns)
     {
-        vector<const ScDPSaveDimension*>::const_iterator itDim = aFieldDims.begin();
-        for (const auto& rFieldBtn : aFieldBtns)
-        {
-            ScMF nMFlag = ScMF::Button;
-            const ScDPSaveDimension* pDim = itDim != aFieldDims.end() ? *itDim++ : nullptr;
-            if (pDim && pDim->HasInvisibleMember())
-                nMFlag |= ScMF::HiddenMember;
-            if (!pDim || !pDim->IsDataLayout())
-                nMFlag |= ScMF::ButtonPopup;
-            rDoc.ApplyFlagsTab(rFieldBtn.Col(), rFieldBtn.Row(), rFieldBtn.Col(), rFieldBtn.Row(), rFieldBtn.Tab(), nMFlag);
-        }
+        ScMF nMFlag = ScMF::Button;
+        const ScDPSaveDimension* pDim = itDim != aFieldDims.end() ? *itDim++ : nullptr;
+        if (pDim && pDim->HasInvisibleMember())
+            nMFlag |= ScMF::HiddenMember;
+        if (!pDim || !pDim->IsDataLayout())
+            nMFlag |= ScMF::ButtonPopup;
+        rDoc.ApplyFlagsTab(rFieldBtn.Col(), rFieldBtn.Row(), rFieldBtn.Col(), rFieldBtn.Row(), rFieldBtn.Tab(), nMFlag);
     }
 }
 

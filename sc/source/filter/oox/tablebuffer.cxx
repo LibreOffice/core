@@ -88,7 +88,10 @@ void Table::finalizeImport()
     // ranges (or tables in their terminology) as Table1, Table2 etc.  We need
     // to import them as named db ranges because they may be referenced by
     // name in formula expressions.
-    if( (maModel.mnId > 0) && !maModel.maDisplayName.isEmpty() ) try
+    if( (maModel.mnId <= 0) || maModel.maDisplayName.isEmpty() )
+        return;
+
+    try
     {
         maDBRangeName = maModel.maDisplayName;
 
@@ -128,20 +131,20 @@ void Table::finalizeImport()
 
 void Table::applyAutoFilters()
 {
-    if( !maDBRangeName.isEmpty() )
+    if( maDBRangeName.isEmpty() )
+        return;
+
+    try
     {
-        try
-        {
-            // get the range ( maybe we should cache the xDatabaseRange from finalizeImport )
-            PropertySet aDocProps( getDocument() );
-            Reference< XDatabaseRanges > xDatabaseRanges( aDocProps.getAnyProperty( PROP_DatabaseRanges ), UNO_QUERY_THROW );
-            Reference< XDatabaseRange > xDatabaseRange( xDatabaseRanges->getByName( maDBRangeName ), UNO_QUERY );
-            maAutoFilters.finalizeImport( xDatabaseRange );
-        }
-        catch( Exception& )
-        {
-            OSL_FAIL( "Table::applyAutofilters - cannot create filter" );
-        }
+        // get the range ( maybe we should cache the xDatabaseRange from finalizeImport )
+        PropertySet aDocProps( getDocument() );
+        Reference< XDatabaseRanges > xDatabaseRanges( aDocProps.getAnyProperty( PROP_DatabaseRanges ), UNO_QUERY_THROW );
+        Reference< XDatabaseRange > xDatabaseRange( xDatabaseRanges->getByName( maDBRangeName ), UNO_QUERY );
+        maAutoFilters.finalizeImport( xDatabaseRange );
+    }
+    catch( Exception& )
+    {
+        OSL_FAIL( "Table::applyAutofilters - cannot create filter" );
     }
 }
 

@@ -112,29 +112,29 @@ OUString WorksheetBuffer::getCalcSheetName( sal_Int32 nWorksheet ) const
 
 void WorksheetBuffer::convertSheetNameRef( OUString& sSheetNameRef ) const
 {
-    if( sSheetNameRef.startsWith("#") )
+    if( !sSheetNameRef.startsWith("#") )
+        return;
+
+    sal_Int32 nSepPos = sSheetNameRef.lastIndexOf( '!' );
+    if( nSepPos <= 0 )
+        return;
+
+    // Do not attempt to blindly convert '#SheetName!A1' to
+    // '#SheetName.A1', it can be #SheetName!R1C1 as well. Hyperlink
+    // handler has to handle all, but prefer '#SheetName.A1' if
+    // possible.
+    if (nSepPos < sSheetNameRef.getLength() - 1)
     {
-        sal_Int32 nSepPos = sSheetNameRef.lastIndexOf( '!' );
-        if( nSepPos > 0 )
-        {
-            // Do not attempt to blindly convert '#SheetName!A1' to
-            // '#SheetName.A1', it can be #SheetName!R1C1 as well. Hyperlink
-            // handler has to handle all, but prefer '#SheetName.A1' if
-            // possible.
-            if (nSepPos < sSheetNameRef.getLength() - 1)
-            {
-                ScRange aRange;
-                if ((aRange.ParseAny( sSheetNameRef.copy( nSepPos + 1 ), &getScDocument(),
-                                formula::FormulaGrammar::CONV_XL_R1C1) & ScRefFlags::VALID) == ScRefFlags::ZERO)
-                    sSheetNameRef = sSheetNameRef.replaceAt( nSepPos, 1, OUString( '.' ) );
-            }
-            // #i66592# convert sheet names that have been renamed on import
-            OUString aSheetName = sSheetNameRef.copy( 1, nSepPos - 1 );
-            OUString aCalcName = getCalcSheetName( aSheetName );
-            if( !aCalcName.isEmpty() )
-                sSheetNameRef = sSheetNameRef.replaceAt( 1, nSepPos - 1, aCalcName );
-        }
+        ScRange aRange;
+        if ((aRange.ParseAny( sSheetNameRef.copy( nSepPos + 1 ), &getScDocument(),
+                        formula::FormulaGrammar::CONV_XL_R1C1) & ScRefFlags::VALID) == ScRefFlags::ZERO)
+            sSheetNameRef = sSheetNameRef.replaceAt( nSepPos, 1, OUString( '.' ) );
     }
+    // #i66592# convert sheet names that have been renamed on import
+    OUString aSheetName = sSheetNameRef.copy( 1, nSepPos - 1 );
+    OUString aCalcName = getCalcSheetName( aSheetName );
+    if( !aCalcName.isEmpty() )
+        sSheetNameRef = sSheetNameRef.replaceAt( 1, nSepPos - 1, aCalcName );
 }
 
 sal_Int16 WorksheetBuffer::getCalcSheetIndex( const OUString& rWorksheetName ) const

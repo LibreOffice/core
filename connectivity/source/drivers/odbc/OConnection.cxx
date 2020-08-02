@@ -60,21 +60,21 @@ OConnection::~OConnection()
     if(!isClosed(  ))
         close();
 
-    if ( SQL_NULL_HANDLE != m_aConnectionHandle )
+    if ( SQL_NULL_HANDLE == m_aConnectionHandle )
+        return;
+
+    SQLRETURN rc;
+
+    if (!m_bClosed)
     {
-        SQLRETURN rc;
-
-        if (!m_bClosed)
-        {
-            rc = N3SQLDisconnect( m_aConnectionHandle );
-            OSL_ENSURE( rc == SQL_SUCCESS || rc == SQL_SUCCESS_WITH_INFO, "Failure from SQLDisconnect" );
-        }
-
-        rc = N3SQLFreeHandle( SQL_HANDLE_DBC, m_aConnectionHandle );
-        OSL_ENSURE( rc == SQL_SUCCESS , "Failure from SQLFreeHandle for connection");
-
-        m_aConnectionHandle = SQL_NULL_HANDLE;
+        rc = N3SQLDisconnect( m_aConnectionHandle );
+        OSL_ENSURE( rc == SQL_SUCCESS || rc == SQL_SUCCESS_WITH_INFO, "Failure from SQLDisconnect" );
     }
+
+    rc = N3SQLFreeHandle( SQL_HANDLE_DBC, m_aConnectionHandle );
+    OSL_ENSURE( rc == SQL_SUCCESS , "Failure from SQLFreeHandle for connection");
+
+    m_aConnectionHandle = SQL_NULL_HANDLE;
 }
 
 oslGenericFunction OConnection::getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const

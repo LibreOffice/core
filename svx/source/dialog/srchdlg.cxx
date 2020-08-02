@@ -153,18 +153,18 @@ static void ListToStrArr_Impl(sal_uInt16 nId, std::vector<OUString>& rStrLst, we
     const SfxStringListItem* pSrchItem =
         static_cast<const SfxStringListItem*>(SfxGetpApp()->GetItem( nId ));
 
-    if (pSrchItem)
+    if (!pSrchItem)
+        return;
+
+    std::vector<OUString> aLst = pSrchItem->GetList();
+
+    if (aLst.size() > nRememberSize)
+        aLst.resize(nRememberSize);
+
+    for (const OUString & s : aLst)
     {
-        std::vector<OUString> aLst = pSrchItem->GetList();
-
-        if (aLst.size() > nRememberSize)
-            aLst.resize(nRememberSize);
-
-        for (const OUString & s : aLst)
-        {
-            rStrLst.push_back(s);
-            rCBox.append_text(s);
-        }
+        rStrLst.push_back(s);
+        rCBox.append_text(s);
     }
 }
 
@@ -466,45 +466,45 @@ void SvxSearchDialog::Construct_Impl()
             bSearchComponent2 = true;
     }
 
-    if( bSearchComponent1 || bSearchComponent2 )
+    if( !(bSearchComponent1 || bSearchComponent2) )
+        return;
+
+    try
     {
-        try
-        {
-            uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider =
-                    configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
-            uno::Sequence< uno::Any > aArgs {
-                        Any(OUString( "/org.openoffice.Office.Common/SearchOptions/")) };
+        uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider =
+                configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
+        uno::Sequence< uno::Any > aArgs {
+                    Any(OUString( "/org.openoffice.Office.Common/SearchOptions/")) };
 
-            uno::Reference< uno::XInterface > xIFace = xConfigurationProvider->createInstanceWithArguments(
-                        "com.sun.star.configuration.ConfigurationUpdateAccess",
-                        aArgs);
-            uno::Reference< container::XNameAccess> xDirectAccess(xIFace, uno::UNO_QUERY);
-            if(xDirectAccess.is())
-            {
-                OUString sTemp;
-                uno::Any aRet = xDirectAccess->getByName("ComponentSearchGroupLabel");
-                aRet >>= sTemp;
-                m_xComponentFrame->set_label(sTemp);
-                aRet = xDirectAccess->getByName("ComponentSearchCommandLabel1");
-                aRet >>= sTemp;
-                m_xSearchComponent1PB->set_label( sTemp );
-                aRet = xDirectAccess->getByName("ComponentSearchCommandLabel2");
-                aRet >>= sTemp;
-                m_xSearchComponent2PB->set_label( sTemp );
-            }
+        uno::Reference< uno::XInterface > xIFace = xConfigurationProvider->createInstanceWithArguments(
+                    "com.sun.star.configuration.ConfigurationUpdateAccess",
+                    aArgs);
+        uno::Reference< container::XNameAccess> xDirectAccess(xIFace, uno::UNO_QUERY);
+        if(xDirectAccess.is())
+        {
+            OUString sTemp;
+            uno::Any aRet = xDirectAccess->getByName("ComponentSearchGroupLabel");
+            aRet >>= sTemp;
+            m_xComponentFrame->set_label(sTemp);
+            aRet = xDirectAccess->getByName("ComponentSearchCommandLabel1");
+            aRet >>= sTemp;
+            m_xSearchComponent1PB->set_label( sTemp );
+            aRet = xDirectAccess->getByName("ComponentSearchCommandLabel2");
+            aRet >>= sTemp;
+            m_xSearchComponent2PB->set_label( sTemp );
         }
-        catch(uno::Exception&){}
+    }
+    catch(uno::Exception&){}
 
-        if(!m_xSearchComponent1PB->get_label().isEmpty() && bSearchComponent1 )
-        {
-            m_xComponentFrame->show();
-            m_xSearchComponent1PB->show();
-        }
-        if( !m_xSearchComponent2PB->get_label().isEmpty() )
-        {
-            m_xComponentFrame->show();
-            m_xSearchComponent2PB->show();
-        }
+    if(!m_xSearchComponent1PB->get_label().isEmpty() && bSearchComponent1 )
+    {
+        m_xComponentFrame->show();
+        m_xSearchComponent1PB->show();
+    }
+    if( !m_xSearchComponent2PB->get_label().isEmpty() )
+    {
+        m_xComponentFrame->show();
+        m_xSearchComponent2PB->show();
     }
 }
 
@@ -1447,34 +1447,34 @@ IMPL_LINK( SvxSearchDialog, ModifyHdl_Impl, weld::ComboBox&, rEd, void )
     // Calc allows searching for empty cells.
     bool bAllowEmptySearch = (pSearchItem->GetAppFlag() == SvxSearchApp::CALC);
 
-    if (&rEd == m_xSearchLB.get() || &rEd == m_xReplaceLB.get())
-    {
-        sal_Int32 nSrchTxtLen = m_xSearchLB->get_active_text().getLength();
-        sal_Int32 nReplTxtLen = 0;
-        if (bAllowEmptySearch)
-            nReplTxtLen = m_xReplaceLB->get_active_text().getLength();
-        sal_Int32 nAttrTxtLen = m_xSearchAttrText->get_label().getLength();
+    if (&rEd != m_xSearchLB.get() && &rEd != m_xReplaceLB.get())
+        return;
 
-        if (nSrchTxtLen || nReplTxtLen || nAttrTxtLen)
+    sal_Int32 nSrchTxtLen = m_xSearchLB->get_active_text().getLength();
+    sal_Int32 nReplTxtLen = 0;
+    if (bAllowEmptySearch)
+        nReplTxtLen = m_xReplaceLB->get_active_text().getLength();
+    sal_Int32 nAttrTxtLen = m_xSearchAttrText->get_label().getLength();
+
+    if (nSrchTxtLen || nReplTxtLen || nAttrTxtLen)
+    {
+        EnableControl_Impl(*m_xSearchBtn);
+        EnableControl_Impl(*m_xBackSearchBtn);
+        EnableControl_Impl(*m_xReplaceBtn);
+        if (!bWriter || !m_xNotesBtn->get_active())
         {
-            EnableControl_Impl(*m_xSearchBtn);
-            EnableControl_Impl(*m_xBackSearchBtn);
-            EnableControl_Impl(*m_xReplaceBtn);
-            if (!bWriter || !m_xNotesBtn->get_active())
-            {
-                EnableControl_Impl(*m_xSearchAllBtn);
-                EnableControl_Impl(*m_xReplaceAllBtn);
-            }
+            EnableControl_Impl(*m_xSearchAllBtn);
+            EnableControl_Impl(*m_xReplaceAllBtn);
         }
-        else
-        {
-            m_xComponentFrame->set_sensitive(false);
-            m_xSearchBtn->set_sensitive(false);
-            m_xBackSearchBtn->set_sensitive(false);
-            m_xSearchAllBtn->set_sensitive(false);
-            m_xReplaceBtn->set_sensitive(false);
-            m_xReplaceAllBtn->set_sensitive(false);
-        }
+    }
+    else
+    {
+        m_xComponentFrame->set_sensitive(false);
+        m_xSearchBtn->set_sensitive(false);
+        m_xBackSearchBtn->set_sensitive(false);
+        m_xSearchAllBtn->set_sensitive(false);
+        m_xReplaceBtn->set_sensitive(false);
+        m_xReplaceAllBtn->set_sensitive(false);
     }
 }
 
@@ -1981,32 +1981,32 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl, weld::Button&, void)
     ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTabItemDialog(m_xDialog.get(), aSet));
     pDlg->SetText( aTxt );
 
-    if ( executeSubDialog(pDlg.get()) == RET_OK )
+    if ( executeSubDialog(pDlg.get()) != RET_OK )
+        return;
+
+    DBG_ASSERT( pDlg->GetOutputItemSet(), "invalid Output-Set" );
+    SfxItemSet aOutSet( *pDlg->GetOutputItemSet() );
+
+    SearchAttrItemList* pList = bSearch ? pSearchList.get() : pReplaceList.get();
+
+    const SfxPoolItem* pItem;
+    for( sal_uInt16 n = 0; n < pList->Count(); ++n )
     {
-        DBG_ASSERT( pDlg->GetOutputItemSet(), "invalid Output-Set" );
-        SfxItemSet aOutSet( *pDlg->GetOutputItemSet() );
-
-        SearchAttrItemList* pList = bSearch ? pSearchList.get() : pReplaceList.get();
-
-        const SfxPoolItem* pItem;
-        for( sal_uInt16 n = 0; n < pList->Count(); ++n )
+        SearchAttrItem* pAItem = &pList->GetObject(n);
+        if( !IsInvalidItem( pAItem->pItem ) &&
+            SfxItemState::SET == aOutSet.GetItemState(
+                pAItem->pItem->Which(), false, &pItem ) )
         {
-            SearchAttrItem* pAItem = &pList->GetObject(n);
-            if( !IsInvalidItem( pAItem->pItem ) &&
-                SfxItemState::SET == aOutSet.GetItemState(
-                    pAItem->pItem->Which(), false, &pItem ) )
-            {
-                delete pAItem->pItem;
-                pAItem->pItem = pItem->Clone();
-                aOutSet.ClearItem( pAItem->pItem->Which() );
-            }
+            delete pAItem->pItem;
+            pAItem->pItem = pItem->Clone();
+            aOutSet.ClearItem( pAItem->pItem->Which() );
         }
-
-        if( aOutSet.Count() )
-            pList->Put( aOutSet );
-
-        PaintAttrText_Impl(); // Set AttributText in GroupBox
     }
+
+    if( aOutSet.Count() )
+        pList->Put( aOutSet );
+
+    PaintAttrText_Impl(); // Set AttributText in GroupBox
 }
 
 IMPL_LINK_NOARG(SvxSearchDialog, NoFormatHdl_Impl, weld::Button&, void)

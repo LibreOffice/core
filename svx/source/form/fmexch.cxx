@@ -47,20 +47,20 @@ namespace svxform
 
     void OLocalExchange::clear()
     {
-        if ( isClipboardOwner() )
+        if ( !isClipboardOwner() )
+            return;
+
+        try
         {
-            try
-            {
-                Reference< clipboard::XClipboard > xClipBoard( getOwnClipboard() );
-                if ( xClipBoard.is() )
-                    xClipBoard->setContents( nullptr, nullptr );
-            }
-            catch( const Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION("svx");
-            }
-            m_bClipboardOwner = false;
+            Reference< clipboard::XClipboard > xClipBoard( getOwnClipboard() );
+            if ( xClipBoard.is() )
+                xClipBoard->setContents( nullptr, nullptr );
         }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION("svx");
+        }
+        m_bClipboardOwner = false;
     }
 
     void SAL_CALL OLocalExchange::lostOwnership( const Reference< clipboard::XClipboard >& _rxClipboard, const Reference< XTransferable >& _rxTrans )

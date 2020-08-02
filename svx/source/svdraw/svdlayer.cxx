@@ -46,22 +46,22 @@ void SdrLayerIDSet::operator&=(const SdrLayerIDSet& r2ndSet)
 void SdrLayerIDSet::PutValue( const css::uno::Any & rAny )
 {
     css::uno::Sequence< sal_Int8 > aSeq;
-    if( rAny >>= aSeq )
+    if( !(rAny >>= aSeq) )
+        return;
+
+    sal_Int16 nCount = static_cast<sal_Int16>(aSeq.getLength());
+    if( nCount > 32 )
+        nCount = 32;
+
+    sal_Int16 nIndex;
+    for( nIndex = 0; nIndex < nCount; nIndex++ )
     {
-        sal_Int16 nCount = static_cast<sal_Int16>(aSeq.getLength());
-        if( nCount > 32 )
-            nCount = 32;
+        aData[nIndex] = static_cast<sal_uInt8>(aSeq[nIndex]);
+    }
 
-        sal_Int16 nIndex;
-        for( nIndex = 0; nIndex < nCount; nIndex++ )
-        {
-            aData[nIndex] = static_cast<sal_uInt8>(aSeq[nIndex]);
-        }
-
-        for( ; nIndex < 32; nIndex++ )
-        {
-            aData[nIndex] = 0;
-        }
+    for( ; nIndex < 32; nIndex++ )
+    {
+        aData[nIndex] = 0;
     }
 }
 

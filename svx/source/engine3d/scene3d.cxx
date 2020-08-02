@@ -844,23 +844,23 @@ void E3dScene::NbcSetLayer(SdrLayerID nLayer)
 
 void E3dScene::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
 {
-    if(pOldPage != pNewPage)
+    if(pOldPage == pNewPage)
+        return;
+
+    // call parent
+    E3dObject::handlePageChange(pOldPage, pNewPage);
+
+    for(size_t a(0); a < GetObjCount(); a++)
     {
-        // call parent
-        E3dObject::handlePageChange(pOldPage, pNewPage);
+        E3dObject* pCandidate = dynamic_cast< E3dObject* >(GetObj(a));
 
-        for(size_t a(0); a < GetObjCount(); a++)
+        if(pCandidate)
         {
-            E3dObject* pCandidate = dynamic_cast< E3dObject* >(GetObj(a));
-
-            if(pCandidate)
-            {
-                pCandidate->handlePageChange(pOldPage, pNewPage);
-            }
-            else
-            {
-                OSL_ENSURE(false, "E3dScene::handlePageChange invalid object list (!)");
-            }
+            pCandidate->handlePageChange(pOldPage, pNewPage);
+        }
+        else
+        {
+            OSL_ENSURE(false, "E3dScene::handlePageChange invalid object list (!)");
         }
     }
 }

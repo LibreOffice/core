@@ -671,25 +671,26 @@ void VmlDrawing::notifyXShapeInserted( const Reference< XShape >& rxShape,
         extendShapeBoundingBox( rShapeRect );
 
     // convert settings from VML client data
-    if( const ::oox::vml::ClientData* pClientData = rShape.getClientData() )
+    const ::oox::vml::ClientData* pClientData = rShape.getClientData();
+    if(!pClientData)
+        return;
+
+    // specific settings for embedded form controls
+    try
     {
-        // specific settings for embedded form controls
-        try
-        {
-            Reference< XControlShape > xCtrlShape( rxShape, UNO_QUERY_THROW );
-            Reference< XControlModel > xCtrlModel( xCtrlShape->getControl(), UNO_SET_THROW );
-            PropertySet aPropSet( xCtrlModel );
+        Reference< XControlShape > xCtrlShape( rxShape, UNO_QUERY_THROW );
+        Reference< XControlModel > xCtrlModel( xCtrlShape->getControl(), UNO_SET_THROW );
+        PropertySet aPropSet( xCtrlModel );
 
-            // printable
-            aPropSet.setProperty( PROP_Printable, pClientData->mbPrintObject );
+        // printable
+        aPropSet.setProperty( PROP_Printable, pClientData->mbPrintObject );
 
-            // control source links
-            if( !pClientData->maFmlaLink.isEmpty() || !pClientData->maFmlaRange.isEmpty() )
-                maControlConv.bindToSources( xCtrlModel, pClientData->maFmlaLink, pClientData->maFmlaRange, getSheetIndex() );
-        }
-        catch( Exception& )
-        {
-        }
+        // control source links
+        if( !pClientData->maFmlaLink.isEmpty() || !pClientData->maFmlaRange.isEmpty() )
+            maControlConv.bindToSources( xCtrlModel, pClientData->maFmlaLink, pClientData->maFmlaRange, getSheetIndex() );
+    }
+    catch( Exception& )
+    {
     }
 }
 

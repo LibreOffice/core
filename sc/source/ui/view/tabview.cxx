@@ -730,26 +730,26 @@ void ScTabView::UpdateVarZoom()
     //  update variable zoom types
 
     SvxZoomType eZoomType = GetZoomType();
-    if ( eZoomType != SvxZoomType::PERCENT && !bInZoomUpdate )
-    {
-        bInZoomUpdate = true;
-        const Fraction& rOldX = GetViewData().GetZoomX();
-        const Fraction& rOldY = GetViewData().GetZoomY();
-        long nOldPercent = long(rOldY * 100);
-        sal_uInt16 nNewZoom = CalcZoom( eZoomType, static_cast<sal_uInt16>(nOldPercent) );
-        Fraction aNew( nNewZoom, 100 );
+    if (eZoomType == SvxZoomType::PERCENT || bInZoomUpdate)
+        return;
 
-        if ( aNew != rOldX || aNew != rOldY )
-        {
-            SetZoom( aNew, aNew, false );   // always separately per sheet
-            PaintGrid();
-            PaintTop();
-            PaintLeft();
-            aViewData.GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
-            aViewData.GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
-        }
-        bInZoomUpdate = false;
+    bInZoomUpdate = true;
+    const Fraction& rOldX = GetViewData().GetZoomX();
+    const Fraction& rOldY = GetViewData().GetZoomY();
+    long nOldPercent = long(rOldY * 100);
+    sal_uInt16 nNewZoom = CalcZoom( eZoomType, static_cast<sal_uInt16>(nOldPercent) );
+    Fraction aNew( nNewZoom, 100 );
+
+    if ( aNew != rOldX || aNew != rOldY )
+    {
+        SetZoom( aNew, aNew, false );   // always separately per sheet
+        PaintGrid();
+        PaintTop();
+        PaintLeft();
+        aViewData.GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
+        aViewData.GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
     }
+    bInZoomUpdate = false;
 }
 
 void ScTabView::UpdateFixPos()
@@ -824,26 +824,26 @@ void ScTabView::GetBorderSize( SvBorder& rBorder, const Size& /* rSize */ )
 
 IMPL_LINK_NOARG(ScTabView, TabBarResize, TabBar*, void)
 {
-    if (aViewData.IsHScrollMode())
+    if (!aViewData.IsHScrollMode())
+        return;
+
+    const long nOverlap = 0;    // ScrollBar::GetWindowOverlapPixel();
+    long nSize = pTabControl->GetSplitSize();
+
+    if (aViewData.GetHSplitMode() != SC_SPLIT_FIX)
     {
-        const long nOverlap = 0;    // ScrollBar::GetWindowOverlapPixel();
-        long nSize = pTabControl->GetSplitSize();
+        long nMax = pHSplitter->GetPosPixel().X();
+        if( pTabControl->IsEffectiveRTL() )
+            nMax = pFrameWin->GetSizePixel().Width() - nMax;
+        --nMax;
+        if (nSize>nMax) nSize = nMax;
+    }
 
-        if (aViewData.GetHSplitMode() != SC_SPLIT_FIX)
-        {
-            long nMax = pHSplitter->GetPosPixel().X();
-            if( pTabControl->IsEffectiveRTL() )
-                nMax = pFrameWin->GetSizePixel().Width() - nMax;
-            --nMax;
-            if (nSize>nMax) nSize = nMax;
-        }
-
-        if ( nSize != pTabControl->GetSizePixel().Width() )
-        {
-            pTabControl->SetSizePixel( Size( nSize+nOverlap,
-                                        pTabControl->GetSizePixel().Height() ) );
-            RepeatResize();
-        }
+    if ( nSize != pTabControl->GetSizePixel().Width() )
+    {
+        pTabControl->SetSizePixel( Size( nSize+nOverlap,
+                                    pTabControl->GetSizePixel().Height() ) );
+        RepeatResize();
     }
 }
 
@@ -1384,21 +1384,21 @@ void ScTabView::UpdateHeaderWidth( const ScVSplitPos* pWhich, const SCROW* pPosY
         nEndPos = 1;
     long nWidth = nBig - ( 10000 - nEndPos ) * nDiff / 10000;
 
-    if ( nWidth != pRowBar[SC_SPLIT_BOTTOM]->GetWidth() && !bInUpdateHeader )
-    {
-        bInUpdateHeader = true;
+    if (nWidth == pRowBar[SC_SPLIT_BOTTOM]->GetWidth() || bInUpdateHeader)
+        return;
 
-        pRowBar[SC_SPLIT_BOTTOM]->SetWidth( nWidth );
-        if (pRowBar[SC_SPLIT_TOP])
-            pRowBar[SC_SPLIT_TOP]->SetWidth( nWidth );
+    bInUpdateHeader = true;
 
-        RepeatResize();
+    pRowBar[SC_SPLIT_BOTTOM]->SetWidth( nWidth );
+    if (pRowBar[SC_SPLIT_TOP])
+        pRowBar[SC_SPLIT_TOP]->SetWidth( nWidth );
 
-        // on VCL there are endless updates (each Update is valid for all windows)
-        //aCornerButton->Update();       // otherwise this never gets an Update
+    RepeatResize();
 
-        bInUpdateHeader = false;
-    }
+    // on VCL there are endless updates (each Update is valid for all windows)
+    //aCornerButton->Update();       // otherwise this never gets an Update
+
+    bInUpdateHeader = false;
 }
 
 static void ShowHide( vcl::Window* pWin, bool bShow )
@@ -1547,48 +1547,48 @@ void ScTabView::DoHSplit(long nSplitPos)
 
     aViewData.SetHSplitMode( aNewMode );
 
-    if ( aNewMode != aOldMode )
+    if ( aNewMode == aOldMode )
+        return;
+
+    UpdateShow();       // before ActivatePart !!
+
+    if ( aNewMode == SC_SPLIT_NONE )
     {
-        UpdateShow();       // before ActivatePart !!
-
-        if ( aNewMode == SC_SPLIT_NONE )
-        {
-            if (aViewData.GetActivePart() == SC_SPLIT_TOPRIGHT)
-                ActivatePart( SC_SPLIT_TOPLEFT );
-            if (aViewData.GetActivePart() == SC_SPLIT_BOTTOMRIGHT)
-                ActivatePart( SC_SPLIT_BOTTOMLEFT );
-        }
-        else
-        {
-            nOldDelta = aViewData.GetPosX( SC_SPLIT_LEFT );
-            long nLeftWidth = nSplitPos - pRowBar[SC_SPLIT_BOTTOM]->GetSizePixel().Width();
-            if ( nLeftWidth < 0 ) nLeftWidth = 0;
-            nNewDelta = nOldDelta + aViewData.CellsAtX( nOldDelta, 1, SC_SPLIT_LEFT,
-                            static_cast<sal_uInt16>(nLeftWidth) );
-            ScDocument* pDoc = aViewData.GetDocument();
-            if ( nNewDelta > pDoc->MaxCol() )
-                nNewDelta = pDoc->MaxCol();
-            aViewData.SetPosX( SC_SPLIT_RIGHT, nNewDelta );
-            if ( nNewDelta > aViewData.GetCurX() )
-                ActivatePart( (WhichV(aViewData.GetActivePart()) == SC_SPLIT_BOTTOM) ?
-                    SC_SPLIT_BOTTOMLEFT : SC_SPLIT_TOPLEFT );
-            else
-                ActivatePart( (WhichV(aViewData.GetActivePart()) == SC_SPLIT_BOTTOM) ?
-                    SC_SPLIT_BOTTOMRIGHT : SC_SPLIT_TOPRIGHT );
-        }
-
-        // Form Layer needs to know the visible part of all windows
-        // that is why MapMode must already be correct here
-        for (VclPtr<ScGridWindow> & pWin : pGridWin)
-            if (pWin)
-                pWin->SetMapMode( pWin->GetDrawMapMode() );
-        SetNewVisArea();
-
-        PaintGrid();
-        PaintTop();
-
-        InvalidateSplit();
+        if (aViewData.GetActivePart() == SC_SPLIT_TOPRIGHT)
+            ActivatePart( SC_SPLIT_TOPLEFT );
+        if (aViewData.GetActivePart() == SC_SPLIT_BOTTOMRIGHT)
+            ActivatePart( SC_SPLIT_BOTTOMLEFT );
     }
+    else
+    {
+        nOldDelta = aViewData.GetPosX( SC_SPLIT_LEFT );
+        long nLeftWidth = nSplitPos - pRowBar[SC_SPLIT_BOTTOM]->GetSizePixel().Width();
+        if ( nLeftWidth < 0 ) nLeftWidth = 0;
+        nNewDelta = nOldDelta + aViewData.CellsAtX( nOldDelta, 1, SC_SPLIT_LEFT,
+                        static_cast<sal_uInt16>(nLeftWidth) );
+        ScDocument* pDoc = aViewData.GetDocument();
+        if ( nNewDelta > pDoc->MaxCol() )
+            nNewDelta = pDoc->MaxCol();
+        aViewData.SetPosX( SC_SPLIT_RIGHT, nNewDelta );
+        if ( nNewDelta > aViewData.GetCurX() )
+            ActivatePart( (WhichV(aViewData.GetActivePart()) == SC_SPLIT_BOTTOM) ?
+                SC_SPLIT_BOTTOMLEFT : SC_SPLIT_TOPLEFT );
+        else
+            ActivatePart( (WhichV(aViewData.GetActivePart()) == SC_SPLIT_BOTTOM) ?
+                SC_SPLIT_BOTTOMRIGHT : SC_SPLIT_TOPRIGHT );
+    }
+
+    // Form Layer needs to know the visible part of all windows
+    // that is why MapMode must already be correct here
+    for (VclPtr<ScGridWindow> & pWin : pGridWin)
+        if (pWin)
+            pWin->SetMapMode( pWin->GetDrawMapMode() );
+    SetNewVisArea();
+
+    PaintGrid();
+    PaintTop();
+
+    InvalidateSplit();
 }
 
 void ScTabView::DoVSplit(long nSplitPos)
@@ -1612,56 +1612,56 @@ void ScTabView::DoVSplit(long nSplitPos)
 
     aViewData.SetVSplitMode( aNewMode );
 
-    if ( aNewMode != aOldMode )
+    if ( aNewMode == aOldMode )
+        return;
+
+    UpdateShow();       // before ActivatePart !!
+
+    if ( aNewMode == SC_SPLIT_NONE )
     {
-        UpdateShow();       // before ActivatePart !!
+        nOldDelta = aViewData.GetPosY( SC_SPLIT_TOP );
+        aViewData.SetPosY( SC_SPLIT_BOTTOM, nOldDelta );
 
-        if ( aNewMode == SC_SPLIT_NONE )
-        {
-            nOldDelta = aViewData.GetPosY( SC_SPLIT_TOP );
-            aViewData.SetPosY( SC_SPLIT_BOTTOM, nOldDelta );
-
-            if (aViewData.GetActivePart() == SC_SPLIT_TOPLEFT)
-                ActivatePart( SC_SPLIT_BOTTOMLEFT );
-            if (aViewData.GetActivePart() == SC_SPLIT_TOPRIGHT)
-                ActivatePart( SC_SPLIT_BOTTOMRIGHT );
-        }
-        else
-        {
-            if ( aOldMode == SC_SPLIT_NONE )
-                nOldDelta = aViewData.GetPosY( SC_SPLIT_BOTTOM );
-            else
-                nOldDelta = aViewData.GetPosY( SC_SPLIT_TOP );
-
-            aViewData.SetPosY( SC_SPLIT_TOP, nOldDelta );
-            long nTopHeight = nSplitPos - pColBar[SC_SPLIT_LEFT]->GetSizePixel().Height();
-            if ( nTopHeight < 0 ) nTopHeight = 0;
-            nNewDelta = nOldDelta + aViewData.CellsAtY( nOldDelta, 1, SC_SPLIT_TOP,
-                            static_cast<sal_uInt16>(nTopHeight) );
-            ScDocument* pDoc = aViewData.GetDocument();
-            if ( nNewDelta > pDoc->MaxRow() )
-                nNewDelta = pDoc->MaxRow();
-            aViewData.SetPosY( SC_SPLIT_BOTTOM, nNewDelta );
-            if ( nNewDelta > aViewData.GetCurY() )
-                ActivatePart( (WhichH(aViewData.GetActivePart()) == SC_SPLIT_LEFT) ?
-                    SC_SPLIT_TOPLEFT : SC_SPLIT_TOPRIGHT );
-            else
-                ActivatePart( (WhichH(aViewData.GetActivePart()) == SC_SPLIT_LEFT) ?
-                    SC_SPLIT_BOTTOMLEFT : SC_SPLIT_BOTTOMRIGHT );
-        }
-
-        // Form Layer needs to know the visible part of all windows
-        // that is why MapMode must already be correct here
-        for (VclPtr<ScGridWindow> & pWin : pGridWin)
-            if (pWin)
-                pWin->SetMapMode( pWin->GetDrawMapMode() );
-        SetNewVisArea();
-
-        PaintGrid();
-        PaintLeft();
-
-        InvalidateSplit();
+        if (aViewData.GetActivePart() == SC_SPLIT_TOPLEFT)
+            ActivatePart( SC_SPLIT_BOTTOMLEFT );
+        if (aViewData.GetActivePart() == SC_SPLIT_TOPRIGHT)
+            ActivatePart( SC_SPLIT_BOTTOMRIGHT );
     }
+    else
+    {
+        if ( aOldMode == SC_SPLIT_NONE )
+            nOldDelta = aViewData.GetPosY( SC_SPLIT_BOTTOM );
+        else
+            nOldDelta = aViewData.GetPosY( SC_SPLIT_TOP );
+
+        aViewData.SetPosY( SC_SPLIT_TOP, nOldDelta );
+        long nTopHeight = nSplitPos - pColBar[SC_SPLIT_LEFT]->GetSizePixel().Height();
+        if ( nTopHeight < 0 ) nTopHeight = 0;
+        nNewDelta = nOldDelta + aViewData.CellsAtY( nOldDelta, 1, SC_SPLIT_TOP,
+                        static_cast<sal_uInt16>(nTopHeight) );
+        ScDocument* pDoc = aViewData.GetDocument();
+        if ( nNewDelta > pDoc->MaxRow() )
+            nNewDelta = pDoc->MaxRow();
+        aViewData.SetPosY( SC_SPLIT_BOTTOM, nNewDelta );
+        if ( nNewDelta > aViewData.GetCurY() )
+            ActivatePart( (WhichH(aViewData.GetActivePart()) == SC_SPLIT_LEFT) ?
+                SC_SPLIT_TOPLEFT : SC_SPLIT_TOPRIGHT );
+        else
+            ActivatePart( (WhichH(aViewData.GetActivePart()) == SC_SPLIT_LEFT) ?
+                SC_SPLIT_BOTTOMLEFT : SC_SPLIT_BOTTOMRIGHT );
+    }
+
+    // Form Layer needs to know the visible part of all windows
+    // that is why MapMode must already be correct here
+    for (VclPtr<ScGridWindow> & pWin : pGridWin)
+        if (pWin)
+            pWin->SetMapMode( pWin->GetDrawMapMode() );
+    SetNewVisArea();
+
+    PaintGrid();
+    PaintLeft();
+
+    InvalidateSplit();
 }
 
 Point ScTabView::GetInsertPos() const

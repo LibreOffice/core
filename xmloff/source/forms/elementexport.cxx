@@ -1321,43 +1321,43 @@ namespace xmloff
         // one or both of the selected flags.
         // 21.05.2001 - 85388 - frank.schoenheit@germany.sun.com
 
-        if ( !aSelection.empty() || !aDefaultSelection.empty() )
+        if (aSelection.empty() && aDefaultSelection.empty())
+            return;
+
+        sal_Int16 nLastSelected = -1;
+        if ( !aSelection.empty() )
+            nLastSelected = *(--aSelection.end());
+
+        sal_Int16 nLastDefaultSelected = -1;
+        if ( !aDefaultSelection.empty() )
+            nLastDefaultSelected = *(--aDefaultSelection.end());
+
+        // the maximum element in both sets
+        sal_Int16 nLastReferredEntry = std::max(nLastSelected, nLastDefaultSelected);
+        OSL_ENSURE(nLastReferredEntry >= nMaxLen, "OControlExport::exportListSourceAsElements: inconsistence!");
+            // if the maximum (selected or default selected) entry number is less than the maximum item count
+            // in both lists, the entry number should have been removed from the set
+
+        for (sal_Int16 i=nMaxLen; i<=nLastReferredEntry; ++i)
         {
-            sal_Int16 nLastSelected = -1;
-            if ( !aSelection.empty() )
-                nLastSelected = *(--aSelection.end());
-
-            sal_Int16 nLastDefaultSelected = -1;
-            if ( !aDefaultSelection.empty() )
-                nLastDefaultSelected = *(--aDefaultSelection.end());
-
-            // the maximum element in both sets
-            sal_Int16 nLastReferredEntry = std::max(nLastSelected, nLastDefaultSelected);
-            OSL_ENSURE(nLastReferredEntry >= nMaxLen, "OControlExport::exportListSourceAsElements: inconsistence!");
-                // if the maximum (selected or default selected) entry number is less than the maximum item count
-                // in both lists, the entry number should have been removed from the set
-
-            for (sal_Int16 i=nMaxLen; i<=nLastReferredEntry; ++i)
-            {
-                if (aSelection.end() != aSelection.find(i))
-                {   // the (not existent) item at this position is selected
-                    AddAttribute(
-                        OAttributeMetaData::getCommonControlAttributeNamespace(CCAFlags::CurrentSelected),
-                        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::CurrentSelected),
-                        sTrue
-                        );
-                }
-
-                if (aDefaultSelection.end() != aDefaultSelection.find(i))
-                {   // the (not existent) item at this position is selected as default
-                    AddAttribute(
-                        OAttributeMetaData::getCommonControlAttributeNamespace(CCAFlags::Selected),
-                        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Selected),
-                        sTrue
-                        );
-                }
-                SvXMLElementExport aFormElement(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "option", true, true);
+            if (aSelection.end() != aSelection.find(i))
+            {   // the (not existent) item at this position is selected
+                AddAttribute(
+                    OAttributeMetaData::getCommonControlAttributeNamespace(CCAFlags::CurrentSelected),
+                    OAttributeMetaData::getCommonControlAttributeName(CCAFlags::CurrentSelected),
+                    sTrue
+                    );
             }
+
+            if (aDefaultSelection.end() != aDefaultSelection.find(i))
+            {   // the (not existent) item at this position is selected as default
+                AddAttribute(
+                    OAttributeMetaData::getCommonControlAttributeNamespace(CCAFlags::Selected),
+                    OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Selected),
+                    sTrue
+                    );
+            }
+            SvXMLElementExport aFormElement(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "option", true, true);
         }
     }
 

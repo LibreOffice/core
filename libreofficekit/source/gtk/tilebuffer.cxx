@@ -61,21 +61,21 @@ void TileBuffer::setInvalid(int x, int y, float fZoom, GTask* task,
 {
     int index = x * m_nWidth + y;
     GError* error = nullptr;
-    if (m_mTiles.find(index) != m_mTiles.end())
-    {
-        m_mTiles[index].valid = false;
+    if (m_mTiles.find(index) == m_mTiles.end())
+        return;
 
-        LOEvent* pLOEvent = new LOEvent(LOK_PAINT_TILE);
-        pLOEvent->m_nPaintTileX = x;
-        pLOEvent->m_nPaintTileY = y;
-        pLOEvent->m_fPaintTileZoom = fZoom;
-        g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
-        g_thread_pool_push(lokThreadPool, g_object_ref(task), &error);
-        if (error != nullptr)
-        {
-            g_warning("Unable to call LOK_PAINT_TILE: %s", error->message);
-            g_clear_error(&error);
-        }
+    m_mTiles[index].valid = false;
+
+    LOEvent* pLOEvent = new LOEvent(LOK_PAINT_TILE);
+    pLOEvent->m_nPaintTileX = x;
+    pLOEvent->m_nPaintTileY = y;
+    pLOEvent->m_fPaintTileZoom = fZoom;
+    g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
+    g_thread_pool_push(lokThreadPool, g_object_ref(task), &error);
+    if (error != nullptr)
+    {
+        g_warning("Unable to call LOK_PAINT_TILE: %s", error->message);
+        g_clear_error(&error);
     }
 }
 

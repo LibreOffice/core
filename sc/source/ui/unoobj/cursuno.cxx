@@ -88,20 +88,20 @@ void SAL_CALL ScCellCursorObj::collapseToCurrentRegion()
 
     aOneRange.PutInOrder();
     ScDocShell* pDocSh = GetDocShell();
-    if ( pDocSh )
-    {
-        SCCOL nStartCol = aOneRange.aStart.Col();
-        SCROW nStartRow = aOneRange.aStart.Row();
-        SCCOL nEndCol = aOneRange.aEnd.Col();
-        SCROW nEndRow = aOneRange.aEnd.Row();
-        SCTAB nTab = aOneRange.aStart.Tab();
+    if ( !pDocSh )
+        return;
 
-        pDocSh->GetDocument().GetDataArea(
-                        nTab, nStartCol, nStartRow, nEndCol, nEndRow, true, false );
+    SCCOL nStartCol = aOneRange.aStart.Col();
+    SCROW nStartRow = aOneRange.aStart.Row();
+    SCCOL nEndCol = aOneRange.aEnd.Col();
+    SCROW nEndRow = aOneRange.aEnd.Row();
+    SCTAB nTab = aOneRange.aStart.Tab();
 
-        ScRange aNew( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab );
-        SetNewRange( aNew );
-    }
+    pDocSh->GetDocument().GetDataArea(
+                    nTab, nStartCol, nStartRow, nEndCol, nEndRow, true, false );
+
+    ScRange aNew( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab );
+    SetNewRange( aNew );
 }
 
 void SAL_CALL ScCellCursorObj::collapseToCurrentArray()
@@ -220,54 +220,54 @@ void SAL_CALL ScCellCursorObj::gotoStartOfUsedArea(sal_Bool bExpand)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
-    if ( pDocSh )
+    if ( !pDocSh )
+        return;
+
+    const ScRangeList& rRanges = GetRangeList();
+    OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aNewRange( rRanges[0] );
+    SCTAB nTab = aNewRange.aStart.Tab();
+
+    SCCOL nUsedX = 0;       // fetch the beginning
+    SCROW nUsedY = 0;
+    if (!pDocSh->GetDocument().GetDataStart( nTab, nUsedX, nUsedY ))
     {
-        const ScRangeList& rRanges = GetRangeList();
-        OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
-        ScRange aNewRange( rRanges[0] );
-        SCTAB nTab = aNewRange.aStart.Tab();
-
-        SCCOL nUsedX = 0;       // fetch the beginning
-        SCROW nUsedY = 0;
-        if (!pDocSh->GetDocument().GetDataStart( nTab, nUsedX, nUsedY ))
-        {
-            nUsedX = 0;
-            nUsedY = 0;
-        }
-
-        aNewRange.aStart.SetCol( nUsedX );
-        aNewRange.aStart.SetRow( nUsedY );
-        if (!bExpand)
-            aNewRange.aEnd = aNewRange.aStart;
-        SetNewRange( aNewRange );
+        nUsedX = 0;
+        nUsedY = 0;
     }
+
+    aNewRange.aStart.SetCol( nUsedX );
+    aNewRange.aStart.SetRow( nUsedY );
+    if (!bExpand)
+        aNewRange.aEnd = aNewRange.aStart;
+    SetNewRange( aNewRange );
 }
 
 void SAL_CALL ScCellCursorObj::gotoEndOfUsedArea( sal_Bool bExpand )
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
-    if ( pDocSh )
+    if ( !pDocSh )
+        return;
+
+    const ScRangeList& rRanges = GetRangeList();
+    OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aNewRange( rRanges[ 0 ]);
+    SCTAB nTab = aNewRange.aStart.Tab();
+
+    SCCOL nUsedX = 0;       // fetch the end
+    SCROW nUsedY = 0;
+    if (!pDocSh->GetDocument().GetTableArea( nTab, nUsedX, nUsedY ))
     {
-        const ScRangeList& rRanges = GetRangeList();
-        OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
-        ScRange aNewRange( rRanges[ 0 ]);
-        SCTAB nTab = aNewRange.aStart.Tab();
-
-        SCCOL nUsedX = 0;       // fetch the end
-        SCROW nUsedY = 0;
-        if (!pDocSh->GetDocument().GetTableArea( nTab, nUsedX, nUsedY ))
-        {
-            nUsedX = 0;
-            nUsedY = 0;
-        }
-
-        aNewRange.aEnd.SetCol( nUsedX );
-        aNewRange.aEnd.SetRow( nUsedY );
-        if (!bExpand)
-            aNewRange.aStart = aNewRange.aEnd;
-        SetNewRange( aNewRange );
+        nUsedX = 0;
+        nUsedY = 0;
     }
+
+    aNewRange.aEnd.SetCol( nUsedX );
+    aNewRange.aEnd.SetRow( nUsedY );
+    if (!bExpand)
+        aNewRange.aStart = aNewRange.aEnd;
+    SetNewRange( aNewRange );
 }
 
 // XCellCursor
@@ -284,20 +284,20 @@ void SAL_CALL ScCellCursorObj::gotoStart()
 
     aOneRange.PutInOrder();
     ScDocShell* pDocSh = GetDocShell();
-    if ( pDocSh )
-    {
-        SCCOL nStartCol = aOneRange.aStart.Col();
-        SCROW nStartRow = aOneRange.aStart.Row();
-        SCCOL nEndCol = aOneRange.aEnd.Col();
-        SCROW nEndRow = aOneRange.aEnd.Row();
-        SCTAB nTab = aOneRange.aStart.Tab();
+    if ( !pDocSh )
+        return;
 
-        pDocSh->GetDocument().GetDataArea(
-                        nTab, nStartCol, nStartRow, nEndCol, nEndRow, false, false );
+    SCCOL nStartCol = aOneRange.aStart.Col();
+    SCROW nStartRow = aOneRange.aStart.Row();
+    SCCOL nEndCol = aOneRange.aEnd.Col();
+    SCROW nEndRow = aOneRange.aEnd.Row();
+    SCTAB nTab = aOneRange.aStart.Tab();
 
-        ScRange aNew( nStartCol, nStartRow, nTab );
-        SetNewRange( aNew );
-    }
+    pDocSh->GetDocument().GetDataArea(
+                    nTab, nStartCol, nStartRow, nEndCol, nEndRow, false, false );
+
+    ScRange aNew( nStartCol, nStartRow, nTab );
+    SetNewRange( aNew );
 }
 
 void SAL_CALL ScCellCursorObj::gotoEnd()
@@ -312,20 +312,20 @@ void SAL_CALL ScCellCursorObj::gotoEnd()
 
     aOneRange.PutInOrder();
     ScDocShell* pDocSh = GetDocShell();
-    if ( pDocSh )
-    {
-        SCCOL nStartCol = aOneRange.aStart.Col();
-        SCROW nStartRow = aOneRange.aStart.Row();
-        SCCOL nEndCol = aOneRange.aEnd.Col();
-        SCROW nEndRow = aOneRange.aEnd.Row();
-        SCTAB nTab = aOneRange.aStart.Tab();
+    if ( !pDocSh )
+        return;
 
-        pDocSh->GetDocument().GetDataArea(
-                        nTab, nStartCol, nStartRow, nEndCol, nEndRow, false, false );
+    SCCOL nStartCol = aOneRange.aStart.Col();
+    SCROW nStartRow = aOneRange.aStart.Row();
+    SCCOL nEndCol = aOneRange.aEnd.Col();
+    SCROW nEndRow = aOneRange.aEnd.Row();
+    SCTAB nTab = aOneRange.aStart.Tab();
 
-        ScRange aNew( nEndCol, nEndRow, nTab );
-        SetNewRange( aNew );
-    }
+    pDocSh->GetDocument().GetDataArea(
+                    nTab, nStartCol, nStartRow, nEndCol, nEndRow, false, false );
+
+    ScRange aNew( nEndCol, nEndRow, nTab );
+    SetNewRange( aNew );
 }
 
 void SAL_CALL ScCellCursorObj::gotoNext()

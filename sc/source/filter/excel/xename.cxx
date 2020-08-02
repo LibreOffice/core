@@ -242,26 +242,26 @@ void XclExpName::SetTokenArray( const XclTokenArrayRef& xTokArr )
 void XclExpName::SetLocalTab( SCTAB nScTab )
 {
     OSL_ENSURE( GetTabInfo().IsExportTab( nScTab ), "XclExpName::SetLocalTab - invalid sheet index" );
-    if( GetTabInfo().IsExportTab( nScTab ) )
+    if( !GetTabInfo().IsExportTab( nScTab ) )
+        return;
+
+    mnScTab = nScTab;
+    GetGlobalLinkManager().FindExtSheet( mnExtSheet, mnXclTab, nScTab );
+
+    // special handling for NAME record
+    switch( GetBiff() )
     {
-        mnScTab = nScTab;
-        GetGlobalLinkManager().FindExtSheet( mnExtSheet, mnXclTab, nScTab );
-
-        // special handling for NAME record
-        switch( GetBiff() )
-        {
-            case EXC_BIFF5: // EXTERNSHEET index is positive in NAME record
-                mnExtSheet = ~mnExtSheet + 1;
-            break;
-            case EXC_BIFF8: // EXTERNSHEET index not used, but must be created in link table
-                mnExtSheet = 0;
-            break;
-            default:    DBG_ERROR_BIFF();
-        }
-
-        // Excel sheet index is 1-based
-        ++mnXclTab;
+        case EXC_BIFF5: // EXTERNSHEET index is positive in NAME record
+            mnExtSheet = ~mnExtSheet + 1;
+        break;
+        case EXC_BIFF8: // EXTERNSHEET index not used, but must be created in link table
+            mnExtSheet = 0;
+        break;
+        default:    DBG_ERROR_BIFF();
     }
+
+    // Excel sheet index is 1-based
+    ++mnXclTab;
 }
 
 void XclExpName::SetHidden( bool bHidden )

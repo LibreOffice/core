@@ -107,49 +107,49 @@ static void lcl_SetFontProperties(
 
 void ScAutoFmtPreview::MakeFonts(vcl::RenderContext const& rRenderContext, sal_uInt16 nIndex, vcl::Font& rFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont)
 {
-    if ( pCurData )
-    {
-        rFont = rCJKFont = rCTLFont = rRenderContext.GetFont();
-        Size aFontSize(rFont.GetFontSize().Width(), 10 * rRenderContext.GetDPIScaleFactor());
+    if ( !pCurData )
+        return;
 
-        const SvxFontItem*        pFontItem       = pCurData->GetItem( nIndex, ATTR_FONT );
-        const SvxWeightItem*      pWeightItem     = pCurData->GetItem( nIndex, ATTR_FONT_WEIGHT );
-        const SvxPostureItem*     pPostureItem    = pCurData->GetItem( nIndex, ATTR_FONT_POSTURE );
-        const SvxFontItem*        pCJKFontItem    = pCurData->GetItem( nIndex, ATTR_CJK_FONT );
-        const SvxWeightItem*      pCJKWeightItem  = pCurData->GetItem( nIndex, ATTR_CJK_FONT_WEIGHT );
-        const SvxPostureItem*     pCJKPostureItem = pCurData->GetItem( nIndex, ATTR_CJK_FONT_POSTURE );
-        const SvxFontItem*        pCTLFontItem    = pCurData->GetItem( nIndex, ATTR_CTL_FONT );
-        const SvxWeightItem*      pCTLWeightItem  = pCurData->GetItem( nIndex, ATTR_CTL_FONT_WEIGHT );
-        const SvxPostureItem*     pCTLPostureItem = pCurData->GetItem( nIndex, ATTR_CTL_FONT_POSTURE );
-        const SvxUnderlineItem*   pUnderlineItem  = pCurData->GetItem( nIndex, ATTR_FONT_UNDERLINE );
-        const SvxOverlineItem*    pOverlineItem   = pCurData->GetItem( nIndex, ATTR_FONT_OVERLINE );
-        const SvxCrossedOutItem*  pCrossedOutItem = pCurData->GetItem( nIndex, ATTR_FONT_CROSSEDOUT );
-        const SvxContourItem*     pContourItem    = pCurData->GetItem( nIndex, ATTR_FONT_CONTOUR );
-        const SvxShadowedItem*    pShadowedItem   = pCurData->GetItem( nIndex, ATTR_FONT_SHADOWED );
-        const SvxColorItem*       pColorItem      = pCurData->GetItem( nIndex, ATTR_FONT_COLOR );
+    rFont = rCJKFont = rCTLFont = rRenderContext.GetFont();
+    Size aFontSize(rFont.GetFontSize().Width(), 10 * rRenderContext.GetDPIScaleFactor());
 
-        lcl_SetFontProperties( rFont, *pFontItem, *pWeightItem, *pPostureItem );
-        lcl_SetFontProperties( rCJKFont, *pCJKFontItem, *pCJKWeightItem, *pCJKPostureItem );
-        lcl_SetFontProperties( rCTLFont, *pCTLFontItem, *pCTLWeightItem, *pCTLPostureItem );
+    const SvxFontItem*        pFontItem       = pCurData->GetItem( nIndex, ATTR_FONT );
+    const SvxWeightItem*      pWeightItem     = pCurData->GetItem( nIndex, ATTR_FONT_WEIGHT );
+    const SvxPostureItem*     pPostureItem    = pCurData->GetItem( nIndex, ATTR_FONT_POSTURE );
+    const SvxFontItem*        pCJKFontItem    = pCurData->GetItem( nIndex, ATTR_CJK_FONT );
+    const SvxWeightItem*      pCJKWeightItem  = pCurData->GetItem( nIndex, ATTR_CJK_FONT_WEIGHT );
+    const SvxPostureItem*     pCJKPostureItem = pCurData->GetItem( nIndex, ATTR_CJK_FONT_POSTURE );
+    const SvxFontItem*        pCTLFontItem    = pCurData->GetItem( nIndex, ATTR_CTL_FONT );
+    const SvxWeightItem*      pCTLWeightItem  = pCurData->GetItem( nIndex, ATTR_CTL_FONT_WEIGHT );
+    const SvxPostureItem*     pCTLPostureItem = pCurData->GetItem( nIndex, ATTR_CTL_FONT_POSTURE );
+    const SvxUnderlineItem*   pUnderlineItem  = pCurData->GetItem( nIndex, ATTR_FONT_UNDERLINE );
+    const SvxOverlineItem*    pOverlineItem   = pCurData->GetItem( nIndex, ATTR_FONT_OVERLINE );
+    const SvxCrossedOutItem*  pCrossedOutItem = pCurData->GetItem( nIndex, ATTR_FONT_CROSSEDOUT );
+    const SvxContourItem*     pContourItem    = pCurData->GetItem( nIndex, ATTR_FONT_CONTOUR );
+    const SvxShadowedItem*    pShadowedItem   = pCurData->GetItem( nIndex, ATTR_FONT_SHADOWED );
+    const SvxColorItem*       pColorItem      = pCurData->GetItem( nIndex, ATTR_FONT_COLOR );
 
-        Color aColor( pColorItem->GetValue() );
-        if( aColor == COL_TRANSPARENT )
-            aColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
+    lcl_SetFontProperties( rFont, *pFontItem, *pWeightItem, *pPostureItem );
+    lcl_SetFontProperties( rCJKFont, *pCJKFontItem, *pCJKWeightItem, *pCJKPostureItem );
+    lcl_SetFontProperties( rCTLFont, *pCTLFontItem, *pCTLWeightItem, *pCTLPostureItem );
+
+    Color aColor( pColorItem->GetValue() );
+    if( aColor == COL_TRANSPARENT )
+        aColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
 
 #define SETONALLFONTS( MethodName, Value ) \
 rFont.MethodName( Value ); rCJKFont.MethodName( Value ); rCTLFont.MethodName( Value );
 
-        SETONALLFONTS( SetUnderline,        pUnderlineItem->GetValue() )
-        SETONALLFONTS( SetOverline,         pOverlineItem->GetValue() )
-        SETONALLFONTS( SetStrikeout,        pCrossedOutItem->GetValue() )
-        SETONALLFONTS( SetOutline,          pContourItem->GetValue() )
-        SETONALLFONTS( SetShadow,           pShadowedItem->GetValue() )
-        SETONALLFONTS( SetColor,            aColor )
-        SETONALLFONTS( SetFontSize,  aFontSize )
-        SETONALLFONTS( SetTransparent,      true )
+    SETONALLFONTS( SetUnderline,        pUnderlineItem->GetValue() )
+    SETONALLFONTS( SetOverline,         pOverlineItem->GetValue() )
+    SETONALLFONTS( SetStrikeout,        pCrossedOutItem->GetValue() )
+    SETONALLFONTS( SetOutline,          pContourItem->GetValue() )
+    SETONALLFONTS( SetShadow,           pShadowedItem->GetValue() )
+    SETONALLFONTS( SetColor,            aColor )
+    SETONALLFONTS( SetFontSize,  aFontSize )
+    SETONALLFONTS( SetTransparent,      true )
 
 #undef SETONALLFONTS
-    }
 }
 
 sal_uInt16 ScAutoFmtPreview::GetFormatIndex( size_t nCol, size_t nRow ) const
@@ -239,175 +239,174 @@ void ScAutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCo
             break;
     }
 
-    if (!cellString.isEmpty())
+    if (cellString.isEmpty())
+        return;
+
+    Size aStrSize;
+    sal_uInt16 nFmtIndex = GetFormatIndex( nCol, nRow );
+    const basegfx::B2DRange cellRange(maArray.GetCellRange( nCol, nRow, true ));
+    Point aPos(basegfx::fround(cellRange.getMinX()), basegfx::fround(cellRange.getMinY()));
+    sal_uInt16 nRightX = 0;
+    bool bJustify = pCurData->GetIncludeJustify();
+    SvxCellHorJustify eJustification;
+
+    SvtScriptedTextHelper aScriptedText(rRenderContext);
+
+    // Justification:
+
+    eJustification  = mbRTL ? SvxCellHorJustify::Right : bJustify ?
+        pCurData->GetItem(nFmtIndex, ATTR_HOR_JUSTIFY)->GetValue() :
+        SvxCellHorJustify::Standard;
+
+    if (pCurData->GetIncludeFont())
     {
+        vcl::Font aFont, aCJKFont, aCTLFont;
+        Size theMaxStrSize;
 
-        Size aStrSize;
-        sal_uInt16 nFmtIndex = GetFormatIndex( nCol, nRow );
-        const basegfx::B2DRange cellRange(maArray.GetCellRange( nCol, nRow, true ));
-        Point aPos(basegfx::fround(cellRange.getMinX()), basegfx::fround(cellRange.getMinY()));
-        sal_uInt16 nRightX = 0;
-        bool bJustify = pCurData->GetIncludeJustify();
-        SvxCellHorJustify eJustification;
+        MakeFonts(rRenderContext, nFmtIndex, aFont, aCJKFont, aCTLFont);
 
-        SvtScriptedTextHelper aScriptedText(rRenderContext);
+        theMaxStrSize = Size(basegfx::fround(cellRange.getWidth()), basegfx::fround(cellRange.getHeight()));
+        theMaxStrSize.AdjustWidth( -(FRAME_OFFSET) );
+        theMaxStrSize.AdjustHeight( -(FRAME_OFFSET) );
 
-        // Justification:
+        aScriptedText.SetFonts( &aFont, &aCJKFont, &aCTLFont );
+        aScriptedText.SetText(cellString, xBreakIter);
+        aStrSize = aScriptedText.GetTextSize();
 
-        eJustification  = mbRTL ? SvxCellHorJustify::Right : bJustify ?
-            pCurData->GetItem(nFmtIndex, ATTR_HOR_JUSTIFY)->GetValue() :
-            SvxCellHorJustify::Standard;
-
-        if (pCurData->GetIncludeFont())
+        if (theMaxStrSize.Height() < aStrSize.Height())
         {
-            vcl::Font aFont, aCJKFont, aCTLFont;
-            Size theMaxStrSize;
-
-            MakeFonts(rRenderContext, nFmtIndex, aFont, aCJKFont, aCTLFont);
-
-            theMaxStrSize = Size(basegfx::fround(cellRange.getWidth()), basegfx::fround(cellRange.getHeight()));
-            theMaxStrSize.AdjustWidth( -(FRAME_OFFSET) );
-            theMaxStrSize.AdjustHeight( -(FRAME_OFFSET) );
-
-            aScriptedText.SetFonts( &aFont, &aCJKFont, &aCTLFont );
-            aScriptedText.SetText(cellString, xBreakIter);
-            aStrSize = aScriptedText.GetTextSize();
-
-            if (theMaxStrSize.Height() < aStrSize.Height())
-            {
-                // if the string does not fit in the row using this font,
-                // the default font is used
-                aScriptedText.SetDefaultFont();
-                aStrSize = aScriptedText.GetTextSize();
-            }
-            while((theMaxStrSize.Width() <= aStrSize.Width()) && (cellString.getLength() > 1))
-            {
-                if( eJustification == SvxCellHorJustify::Right )
-                    cellString = cellString.copy(1);
-                else
-                    cellString = cellString.copy(0, cellString.getLength() - 1 );
-
-                aScriptedText.SetText( cellString, xBreakIter );
-                aStrSize = aScriptedText.GetTextSize();
-            }
-        }
-        else
-        {
+            // if the string does not fit in the row using this font,
+            // the default font is used
             aScriptedText.SetDefaultFont();
+            aStrSize = aScriptedText.GetTextSize();
+        }
+        while((theMaxStrSize.Width() <= aStrSize.Width()) && (cellString.getLength() > 1))
+        {
+            if( eJustification == SvxCellHorJustify::Right )
+                cellString = cellString.copy(1);
+            else
+                cellString = cellString.copy(0, cellString.getLength() - 1 );
+
             aScriptedText.SetText( cellString, xBreakIter );
             aStrSize = aScriptedText.GetTextSize();
         }
+    }
+    else
+    {
+        aScriptedText.SetDefaultFont();
+        aScriptedText.SetText( cellString, xBreakIter );
+        aStrSize = aScriptedText.GetTextSize();
+    }
 
-        nRightX  = sal_uInt16(basegfx::fround(cellRange.getWidth()) - aStrSize.Width() - FRAME_OFFSET);
+    nRightX  = sal_uInt16(basegfx::fround(cellRange.getWidth()) - aStrSize.Width() - FRAME_OFFSET);
 
-        // vertical (always center):
+    // vertical (always center):
 
-        aPos.AdjustY((mnRowHeight - static_cast<sal_uInt16>(aStrSize.Height())) / 2 );
+    aPos.AdjustY((mnRowHeight - static_cast<sal_uInt16>(aStrSize.Height())) / 2 );
 
-        // horizontal
+    // horizontal
 
-        if (eJustification != SvxCellHorJustify::Standard)
+    if (eJustification != SvxCellHorJustify::Standard)
+    {
+        sal_uInt16 nHorPos = sal_uInt16((basegfx::fround(cellRange.getWidth())-aStrSize.Width()) / 2);
+        //sal_uInt16 nHorPos = sal_uInt16((basegfx::fround(cellRange.getWidth())-aStrSize.Width()) / 2);
+
+        switch (eJustification)
         {
-            sal_uInt16 nHorPos = sal_uInt16((basegfx::fround(cellRange.getWidth())-aStrSize.Width()) / 2);
-            //sal_uInt16 nHorPos = sal_uInt16((basegfx::fround(cellRange.getWidth())-aStrSize.Width()) / 2);
+            case SvxCellHorJustify::Left:
+                aPos.AdjustX(FRAME_OFFSET );
+                break;
+            case SvxCellHorJustify::Right:
+                aPos.AdjustX(nRightX );
+                break;
+            case SvxCellHorJustify::Block:
+            case SvxCellHorJustify::Repeat:
+            case SvxCellHorJustify::Center:
+                aPos.AdjustX(nHorPos );
+                break;
+            // coverity[dead_error_line] - following conditions exist to avoid compiler warning
+            case SvxCellHorJustify::Standard:
+            default:
+                // Standard is not handled here
+                break;
+        }
+    }
+    else
+    {
 
-            switch (eJustification)
-            {
-                case SvxCellHorJustify::Left:
-                    aPos.AdjustX(FRAME_OFFSET );
-                    break;
-                case SvxCellHorJustify::Right:
-                    aPos.AdjustX(nRightX );
-                    break;
-                case SvxCellHorJustify::Block:
-                case SvxCellHorJustify::Repeat:
-                case SvxCellHorJustify::Center:
-                    aPos.AdjustX(nHorPos );
-                    break;
-                // coverity[dead_error_line] - following conditions exist to avoid compiler warning
-                case SvxCellHorJustify::Standard:
-                default:
-                    // Standard is not handled here
-                    break;
-            }
+        // Standard justification
+
+        if (nCol == 0 || nRow == 0)
+        {
+            // Text label to the left or sum left adjusted
+            aPos.AdjustX(FRAME_OFFSET );
         }
         else
         {
-
-            // Standard justification
-
-            if (nCol == 0 || nRow == 0)
-            {
-                // Text label to the left or sum left adjusted
-                aPos.AdjustX(FRAME_OFFSET );
-            }
-            else
-            {
-                 // Numbers/Dates right adjusted
-                aPos.AdjustX(nRightX );
-            }
+             // Numbers/Dates right adjusted
+            aPos.AdjustX(nRightX );
         }
-        aScriptedText.DrawText(aPos);
     }
+    aScriptedText.DrawText(aPos);
 }
 
 #undef FRAME_OFFSET
 
 void ScAutoFmtPreview::DrawBackground(vcl::RenderContext& rRenderContext)
 {
-    if (pCurData)
+    if (!pCurData)
+        return;
+
+    for(size_t nRow = 0; nRow < 5; ++nRow)
     {
-        for(size_t nRow = 0; nRow < 5; ++nRow)
+        for(size_t nCol = 0; nCol < 5; ++nCol)
         {
-            for(size_t nCol = 0; nCol < 5; ++nCol)
-            {
-                const SvxBrushItem* pItem =
-                    pCurData->GetItem( GetFormatIndex( nCol, nRow ), ATTR_BACKGROUND );
+            const SvxBrushItem* pItem =
+                pCurData->GetItem( GetFormatIndex( nCol, nRow ), ATTR_BACKGROUND );
 
-                rRenderContext.Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
-                rRenderContext.SetLineColor();
-                rRenderContext.SetFillColor( pItem->GetColor() );
+            rRenderContext.Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
+            rRenderContext.SetLineColor();
+            rRenderContext.SetFillColor( pItem->GetColor() );
 
-                const basegfx::B2DRange aCellRange(maArray.GetCellRange( nCol, nRow, true ));
-                rRenderContext.DrawRect(
-                    tools::Rectangle(
-                        basegfx::fround(aCellRange.getMinX()), basegfx::fround(aCellRange.getMinY()),
-                        basegfx::fround(aCellRange.getMaxX()), basegfx::fround(aCellRange.getMaxY())));
+            const basegfx::B2DRange aCellRange(maArray.GetCellRange( nCol, nRow, true ));
+            rRenderContext.DrawRect(
+                tools::Rectangle(
+                    basegfx::fround(aCellRange.getMinX()), basegfx::fround(aCellRange.getMinY()),
+                    basegfx::fround(aCellRange.getMaxX()), basegfx::fround(aCellRange.getMaxY())));
 
-                rRenderContext.Pop();
-            }
+            rRenderContext.Pop();
         }
     }
 }
 
 void ScAutoFmtPreview::PaintCells(vcl::RenderContext& rRenderContext)
 {
-    if (pCurData)
+    if (!pCurData)
+        return;
+
+    // 1) background
+    if (pCurData->GetIncludeBackground())
+        DrawBackground(rRenderContext);
+
+    // 2) values
+    for(size_t nRow = 0; nRow < 5; ++nRow)
+        for(size_t nCol = 0; nCol < 5; ++nCol)
+            DrawString(rRenderContext, nCol, nRow);
+
+    // 3) border
+    if (!pCurData->GetIncludeFrame())
+        return;
+
+    const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D;
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(
+        drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(
+            rRenderContext,
+            aNewViewInformation2D));
+
+    if (pProcessor2D)
     {
-        // 1) background
-        if (pCurData->GetIncludeBackground())
-            DrawBackground(rRenderContext);
-
-        // 2) values
-        for(size_t nRow = 0; nRow < 5; ++nRow)
-            for(size_t nCol = 0; nCol < 5; ++nCol)
-                DrawString(rRenderContext, nCol, nRow);
-
-        // 3) border
-        if (pCurData->GetIncludeFrame())
-        {
-            const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D;
-            std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(
-                drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(
-                    rRenderContext,
-                    aNewViewInformation2D));
-
-            if (pProcessor2D)
-            {
-                pProcessor2D->process(maArray.CreateB2DPrimitiveArray());
-                pProcessor2D.reset();
-            }
-        }
+        pProcessor2D->process(maArray.CreateB2DPrimitiveArray());
+        pProcessor2D.reset();
     }
 }
 
@@ -451,29 +450,29 @@ static void lclSetStyleFromBorder( svx::frame::Style& rStyle, const ::editeng::S
 
 void ScAutoFmtPreview::CalcLineMap()
 {
-    if ( pCurData )
+    if ( !pCurData )
+        return;
+
+    for( size_t nRow = 0; nRow < 5; ++nRow )
     {
-        for( size_t nRow = 0; nRow < 5; ++nRow )
+        for( size_t nCol = 0; nCol < 5; ++nCol )
         {
-            for( size_t nCol = 0; nCol < 5; ++nCol )
-            {
-                svx::frame::Style aStyle;
+            svx::frame::Style aStyle;
 
-                const SvxBoxItem& rItem = GetBoxItem( nCol, nRow );
-                lclSetStyleFromBorder( aStyle, rItem.GetLeft() );
-                maArray.SetCellStyleLeft( nCol, nRow, aStyle );
-                lclSetStyleFromBorder( aStyle, rItem.GetRight() );
-                maArray.SetCellStyleRight( nCol, nRow, aStyle );
-                lclSetStyleFromBorder( aStyle, rItem.GetTop() );
-                maArray.SetCellStyleTop( nCol, nRow, aStyle );
-                lclSetStyleFromBorder( aStyle, rItem.GetBottom() );
-                maArray.SetCellStyleBottom( nCol, nRow, aStyle );
+            const SvxBoxItem& rItem = GetBoxItem( nCol, nRow );
+            lclSetStyleFromBorder( aStyle, rItem.GetLeft() );
+            maArray.SetCellStyleLeft( nCol, nRow, aStyle );
+            lclSetStyleFromBorder( aStyle, rItem.GetRight() );
+            maArray.SetCellStyleRight( nCol, nRow, aStyle );
+            lclSetStyleFromBorder( aStyle, rItem.GetTop() );
+            maArray.SetCellStyleTop( nCol, nRow, aStyle );
+            lclSetStyleFromBorder( aStyle, rItem.GetBottom() );
+            maArray.SetCellStyleBottom( nCol, nRow, aStyle );
 
-                lclSetStyleFromBorder( aStyle, GetDiagItem( nCol, nRow, true ).GetLine() );
-                maArray.SetCellStyleTLBR( nCol, nRow, aStyle );
-                lclSetStyleFromBorder( aStyle, GetDiagItem( nCol, nRow, false ).GetLine() );
-                maArray.SetCellStyleBLTR( nCol, nRow, aStyle );
-            }
+            lclSetStyleFromBorder( aStyle, GetDiagItem( nCol, nRow, true ).GetLine() );
+            maArray.SetCellStyleTLBR( nCol, nRow, aStyle );
+            lclSetStyleFromBorder( aStyle, GetDiagItem( nCol, nRow, false ).GetLine() );
+            maArray.SetCellStyleBLTR( nCol, nRow, aStyle );
         }
     }
 }

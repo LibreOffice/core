@@ -303,20 +303,21 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
         }
     }
 
-    if (!m_sControlDataStyleName.isEmpty())
-    {   // we had a data-style-name attribute
+    if (m_sControlDataStyleName.isEmpty())
+        return;
 
-        // set the formatting on the control model of the control shape
-        uno::Reference< drawing::XControlShape > xControlShape(rPropSet, uno::UNO_QUERY);
-        DBG_ASSERT(xControlShape.is(), "XMLShapeStyleContext::FillPropertySet: data style for a non-control shape!");
-        if (xControlShape.is())
+    // we had a data-style-name attribute
+
+    // set the formatting on the control model of the control shape
+    uno::Reference< drawing::XControlShape > xControlShape(rPropSet, uno::UNO_QUERY);
+    DBG_ASSERT(xControlShape.is(), "XMLShapeStyleContext::FillPropertySet: data style for a non-control shape!");
+    if (xControlShape.is())
+    {
+        uno::Reference< beans::XPropertySet > xControlModel(xControlShape->getControl(), uno::UNO_QUERY);
+        DBG_ASSERT(xControlModel.is(), "XMLShapeStyleContext::FillPropertySet: no control model for the shape!");
+        if (xControlModel.is())
         {
-            uno::Reference< beans::XPropertySet > xControlModel(xControlShape->getControl(), uno::UNO_QUERY);
-            DBG_ASSERT(xControlModel.is(), "XMLShapeStyleContext::FillPropertySet: no control model for the shape!");
-            if (xControlModel.is())
-            {
-                GetImport().GetFormImport()->applyControlNumberStyle(xControlModel, m_sControlDataStyleName);
-            }
+            GetImport().GetFormImport()->applyControlNumberStyle(xControlModel, m_sControlDataStyleName);
         }
     }
 }

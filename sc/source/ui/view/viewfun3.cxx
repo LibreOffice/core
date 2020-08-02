@@ -1956,70 +1956,70 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
     ScMarkData& rMark = GetViewData().GetMarkData();
     ScDocShellModificator aModificator( *pDocSh );
     SfxUndoManager* pUndoMgr = pDocSh->GetUndoManager();
-    if ( pDoc )
+    if ( !pDoc )
+        return;
+
+    const bool bRecord( pDoc->IsUndoEnabled());
+    ScDocumentUniquePtr pUndoDoc;
+    ScDocumentUniquePtr pRedoDoc;
+    std::unique_ptr<ScRefUndoData> pUndoData;
+    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nStartTab = nTab;
+    SCTAB nEndTab = nTab;
+
     {
-        const bool bRecord( pDoc->IsUndoEnabled());
-        ScDocumentUniquePtr pUndoDoc;
-        ScDocumentUniquePtr pRedoDoc;
-        std::unique_ptr<ScRefUndoData> pUndoData;
-        SCTAB nTab = GetViewData().GetTabNo();
-        SCTAB nStartTab = nTab;
-        SCTAB nEndTab = nTab;
-
-        {
-                ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
-                if ( pChangeTrack )
-                        pChangeTrack->ResetLastCut();   // no more cut-mode
-        }
-        ScRange aUserRange( nStartCol, nCurrentRow, nStartTab, nEndCol, nCurrentRow, nEndTab );
-        bool bColInfo = ( nStartRow==0 && nEndRow==pDoc->MaxRow() );
-        bool bRowInfo = ( nStartCol==0 && nEndCol==pDoc->MaxCol() );
-        SCCOL nUndoEndCol = nStartCol+aColLength-1;
-        SCROW nUndoEndRow = nCurrentRow;
-
-        if ( bRecord )
-        {
-            pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
-            pUndoDoc->InitUndoSelected( pDoc , rMark , bColInfo , bRowInfo );
-            pDoc->CopyToDocument( aUserRange , InsertDeleteFlags::VALUE , false, *pUndoDoc );
-        }
-        sal_uInt16 nExtFlags = 0;
-        pDocSh->UpdatePaintExt( nExtFlags, nStartCol, nStartRow, nStartTab , nEndCol, nEndRow, nEndTab ); // content before the change
-        pDoc->BeginDrawUndo();
-
-        for(sal_uInt16 i = 0; i < aColLength; i++)
-        {
-            if (rEdits[i] != nullptr)
-            {
-                OUString aFieldName = rEdits[i]->m_xEdit->get_text();
-                pDoc->SetString( nStartCol + i, nCurrentRow, nTab, aFieldName );
-            }
-        }
-        pDocSh->UpdatePaintExt( nExtFlags, nStartCol, nCurrentRow, nStartTab, nEndCol, nCurrentRow, nEndTab );  // content after the change
-        std::unique_ptr<SfxUndoAction> pUndo( new ScUndoDataForm( pDocSh,
-                                                   nStartCol, nCurrentRow, nStartTab,
-                                                   nUndoEndCol, nUndoEndRow, nEndTab, rMark,
-                                                   std::move(pUndoDoc), std::move(pRedoDoc),
-                                                   std::move(pUndoData) ) );
-        pUndoMgr->AddUndoAction( std::make_unique<ScUndoWrapper>( std::move(pUndo) ), true );
-
-        PaintPartFlags nPaint = PaintPartFlags::Grid;
-        if (bColInfo)
-        {
-                nPaint |= PaintPartFlags::Top;
-                nUndoEndCol = pDoc->MaxCol();                           // just for drawing !
-        }
-        if (bRowInfo)
-        {
-                nPaint |= PaintPartFlags::Left;
-                nUndoEndRow = pDoc->MaxRow();                           // just for drawing !
-        }
-
-        pDocSh->PostPaint(
-            ScRange(nStartCol, nCurrentRow, nStartTab, nUndoEndCol, nUndoEndRow, nEndTab),
-            nPaint, nExtFlags);
-        pDocSh->UpdateOle(&GetViewData());
+            ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
+            if ( pChangeTrack )
+                    pChangeTrack->ResetLastCut();   // no more cut-mode
     }
+    ScRange aUserRange( nStartCol, nCurrentRow, nStartTab, nEndCol, nCurrentRow, nEndTab );
+    bool bColInfo = ( nStartRow==0 && nEndRow==pDoc->MaxRow() );
+    bool bRowInfo = ( nStartCol==0 && nEndCol==pDoc->MaxCol() );
+    SCCOL nUndoEndCol = nStartCol+aColLength-1;
+    SCROW nUndoEndRow = nCurrentRow;
+
+    if ( bRecord )
+    {
+        pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
+        pUndoDoc->InitUndoSelected( pDoc , rMark , bColInfo , bRowInfo );
+        pDoc->CopyToDocument( aUserRange , InsertDeleteFlags::VALUE , false, *pUndoDoc );
+    }
+    sal_uInt16 nExtFlags = 0;
+    pDocSh->UpdatePaintExt( nExtFlags, nStartCol, nStartRow, nStartTab , nEndCol, nEndRow, nEndTab ); // content before the change
+    pDoc->BeginDrawUndo();
+
+    for(sal_uInt16 i = 0; i < aColLength; i++)
+    {
+        if (rEdits[i] != nullptr)
+        {
+            OUString aFieldName = rEdits[i]->m_xEdit->get_text();
+            pDoc->SetString( nStartCol + i, nCurrentRow, nTab, aFieldName );
+        }
+    }
+    pDocSh->UpdatePaintExt( nExtFlags, nStartCol, nCurrentRow, nStartTab, nEndCol, nCurrentRow, nEndTab );  // content after the change
+    std::unique_ptr<SfxUndoAction> pUndo( new ScUndoDataForm( pDocSh,
+                                               nStartCol, nCurrentRow, nStartTab,
+                                               nUndoEndCol, nUndoEndRow, nEndTab, rMark,
+                                               std::move(pUndoDoc), std::move(pRedoDoc),
+                                               std::move(pUndoData) ) );
+    pUndoMgr->AddUndoAction( std::make_unique<ScUndoWrapper>( std::move(pUndo) ), true );
+
+    PaintPartFlags nPaint = PaintPartFlags::Grid;
+    if (bColInfo)
+    {
+            nPaint |= PaintPartFlags::Top;
+            nUndoEndCol = pDoc->MaxCol();                           // just for drawing !
+    }
+    if (bRowInfo)
+    {
+            nPaint |= PaintPartFlags::Left;
+            nUndoEndRow = pDoc->MaxRow();                           // just for drawing !
+    }
+
+    pDocSh->PostPaint(
+        ScRange(nStartCol, nCurrentRow, nStartTab, nUndoEndCol, nUndoEndRow, nEndTab),
+        nPaint, nExtFlags);
+    pDocSh->UpdateOle(&GetViewData());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

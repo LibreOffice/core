@@ -1986,95 +1986,95 @@ void ScViewData::EditGrowX()
         }
     }
 
-    if (bChanged)
+    if (!bChanged)
+        return;
+
+    if ( bMoveArea || bGrowCentered || bGrowBackwards || bLayoutRTL )
     {
-        if ( bMoveArea || bGrowCentered || bGrowBackwards || bLayoutRTL )
-        {
-            tools::Rectangle aVis = pCurView->GetVisArea();
-            tools::Rectangle aVisPTwips;
-            if (bLOKPrintTwips)
-                aVisPTwips = pCurView->GetLOKSpecialVisArea();
-
-            if ( bGrowCentered )
-            {
-                //  switch to center-aligned (undo?) and reset VisArea to center
-
-                pEngine->SetDefaultItem( SvxAdjustItem( SvxAdjust::Center, EE_PARA_JUST ) );
-
-                long nCenter = aSize.Width() / 2;
-                long nVisSize = aArea.GetWidth();
-                aVis.SetLeft( nCenter - nVisSize / 2 );
-                aVis.SetRight( aVis.Left() + nVisSize - 1 );
-
-                if (bLOKPrintTwips)
-                {
-                    long nCenterPTwips = aSizePTwips.Width() / 2;
-                    long nVisSizePTwips = aAreaPTwips.GetWidth();
-                    aVisPTwips.SetLeft( nCenterPTwips - nVisSizePTwips / 2 );
-                    aVisPTwips.SetRight( aVisPTwips.Left() + nVisSizePTwips - 1 );
-                }
-            }
-            else if ( bGrowToLeft )
-            {
-                //  switch to right-aligned (undo?) and reset VisArea to the right
-
-                pEngine->SetDefaultItem( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
-
-                aVis.SetRight( aSize.Width() - 1 );
-                aVis.SetLeft( aSize.Width() - aArea.GetWidth() );     // with the new, increased area
-
-                if (bLOKPrintTwips)
-                {
-                    aVisPTwips.SetRight( aSizePTwips.Width() - 1 );
-                    aVisPTwips.SetLeft( aSizePTwips.Width() - aAreaPTwips.GetWidth() ); // with the new, increased area
-                }
-            }
-            else
-            {
-                //  switch to left-aligned (undo?) and reset VisArea to the left
-
-                pEngine->SetDefaultItem( SvxAdjustItem( SvxAdjust::Left, EE_PARA_JUST ) );
-
-                long nMove = aVis.Left();
-                aVis.SetLeft( 0 );
-                aVis.AdjustRight( -nMove );
-
-                if (bLOKPrintTwips)
-                {
-                    long nMovePTwips = aVisPTwips.Left();
-                    aVisPTwips.SetLeft( 0 );
-                    aVisPTwips.AdjustRight( -nMovePTwips );
-                }
-            }
-
-            pCurView->SetVisArea( aVis );
-            if (bLOKPrintTwips)
-                pCurView->SetLOKSpecialVisArea( aVisPTwips );
-
-            bMoveArea = false;
-        }
-
+        tools::Rectangle aVis = pCurView->GetVisArea();
+        tools::Rectangle aVisPTwips;
         if (bLOKPrintTwips)
-            pCurView->SetLOKSpecialOutputArea(aAreaPTwips);
+            aVisPTwips = pCurView->GetLOKSpecialVisArea();
 
-        pCurView->SetOutputArea(aArea);
-
-        //  In vertical mode, the whole text is moved to the next cell (right-aligned),
-        //  so everything must be repainted. Otherwise, paint only the new area.
-        //  If growing in centered alignment, if the cells left and right have different sizes,
-        //  the whole text will move, and may not even obscure all of the original display.
-        if ( bUnevenGrow )
+        if ( bGrowCentered )
         {
-            aArea.SetLeft( pWin->PixelToLogic( Point(0,0) ).X() );
-            aArea.SetRight( pWin->PixelToLogic( aScrSize ).Width() );
-        }
-        else if ( !bAsianVertical && !bGrowToLeft && !bGrowCentered )
-            aArea.SetLeft( nOldRight );
-        pWin->Invalidate(aArea);
+            //  switch to center-aligned (undo?) and reset VisArea to center
 
-        // invalidate other views
-        pCurView->InvalidateOtherViewWindows(aArea);
+            pEngine->SetDefaultItem( SvxAdjustItem( SvxAdjust::Center, EE_PARA_JUST ) );
+
+            long nCenter = aSize.Width() / 2;
+            long nVisSize = aArea.GetWidth();
+            aVis.SetLeft( nCenter - nVisSize / 2 );
+            aVis.SetRight( aVis.Left() + nVisSize - 1 );
+
+            if (bLOKPrintTwips)
+            {
+                long nCenterPTwips = aSizePTwips.Width() / 2;
+                long nVisSizePTwips = aAreaPTwips.GetWidth();
+                aVisPTwips.SetLeft( nCenterPTwips - nVisSizePTwips / 2 );
+                aVisPTwips.SetRight( aVisPTwips.Left() + nVisSizePTwips - 1 );
+            }
+        }
+        else if ( bGrowToLeft )
+        {
+            //  switch to right-aligned (undo?) and reset VisArea to the right
+
+            pEngine->SetDefaultItem( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
+
+            aVis.SetRight( aSize.Width() - 1 );
+            aVis.SetLeft( aSize.Width() - aArea.GetWidth() );     // with the new, increased area
+
+            if (bLOKPrintTwips)
+            {
+                aVisPTwips.SetRight( aSizePTwips.Width() - 1 );
+                aVisPTwips.SetLeft( aSizePTwips.Width() - aAreaPTwips.GetWidth() ); // with the new, increased area
+            }
+        }
+        else
+        {
+            //  switch to left-aligned (undo?) and reset VisArea to the left
+
+            pEngine->SetDefaultItem( SvxAdjustItem( SvxAdjust::Left, EE_PARA_JUST ) );
+
+            long nMove = aVis.Left();
+            aVis.SetLeft( 0 );
+            aVis.AdjustRight( -nMove );
+
+            if (bLOKPrintTwips)
+            {
+                long nMovePTwips = aVisPTwips.Left();
+                aVisPTwips.SetLeft( 0 );
+                aVisPTwips.AdjustRight( -nMovePTwips );
+            }
+        }
+
+        pCurView->SetVisArea( aVis );
+        if (bLOKPrintTwips)
+            pCurView->SetLOKSpecialVisArea( aVisPTwips );
+
+        bMoveArea = false;
     }
+
+    if (bLOKPrintTwips)
+        pCurView->SetLOKSpecialOutputArea(aAreaPTwips);
+
+    pCurView->SetOutputArea(aArea);
+
+    //  In vertical mode, the whole text is moved to the next cell (right-aligned),
+    //  so everything must be repainted. Otherwise, paint only the new area.
+    //  If growing in centered alignment, if the cells left and right have different sizes,
+    //  the whole text will move, and may not even obscure all of the original display.
+    if ( bUnevenGrow )
+    {
+        aArea.SetLeft( pWin->PixelToLogic( Point(0,0) ).X() );
+        aArea.SetRight( pWin->PixelToLogic( aScrSize ).Width() );
+    }
+    else if ( !bAsianVertical && !bGrowToLeft && !bGrowCentered )
+        aArea.SetLeft( nOldRight );
+    pWin->Invalidate(aArea);
+
+    // invalidate other views
+    pCurView->InvalidateOtherViewWindows(aArea);
 }
 
 void ScViewData::EditGrowY( bool bInitial )
@@ -2165,25 +2165,25 @@ void ScViewData::EditGrowY( bool bInitial )
         nAllowedExtra = SC_GROWY_SMALL_EXTRA;   // larger value is only for first row
     }
 
-    if (bChanged)
+    if (!bChanged)
+        return;
+
+    if (bLOKPrintTwips)
+        pCurView->SetLOKSpecialOutputArea(aAreaPTwips);
+
+    pCurView->SetOutputArea(aArea);
+
+    if (nEditEndRow >= nBottom || bMaxReached)
     {
-        if (bLOKPrintTwips)
-            pCurView->SetLOKSpecialOutputArea(aAreaPTwips);
-
-        pCurView->SetOutputArea(aArea);
-
-        if (nEditEndRow >= nBottom || bMaxReached)
-        {
-            if (!(nControl & EVControlBits::AUTOSCROLL))
-                pCurView->SetControlWord( nControl | EVControlBits::AUTOSCROLL );
-        }
-
-        aArea.SetTop( nOldBottom );
-        pWin->Invalidate(aArea);
-
-        // invalidate other views
-        pCurView->InvalidateOtherViewWindows(aArea);
+        if (!(nControl & EVControlBits::AUTOSCROLL))
+            pCurView->SetControlWord( nControl | EVControlBits::AUTOSCROLL );
     }
+
+    aArea.SetTop( nOldBottom );
+    pWin->Invalidate(aArea);
+
+    // invalidate other views
+    pCurView->InvalidateOtherViewWindows(aArea);
 }
 
 void ScViewData::ResetEditView()
@@ -2782,31 +2782,31 @@ void ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
     if (rPosY<0) rPosY=0;
     if (rPosY>pDoc->MaxRow()) rPosY=pDoc->MaxRow();
 
-    if (bTestMerge && bForCurTab)
+    if (!(bTestMerge && bForCurTab))
+        return;
+
+    // public method to adapt position
+    SCCOL nOrigX = rPosX;
+    SCROW nOrigY = rPosY;
+    pDoc->SkipOverlapped(rPosX, rPosY, nTabNo);
+    bool bHOver = (nOrigX != rPosX);
+    bool bVOver = (nOrigY != rPosY);
+
+    if ( !(bRepair && ( bHOver || bVOver )) )
+        return;
+
+    const ScMergeAttr* pMerge = pDoc->GetAttr( rPosX, rPosY, nTabNo, ATTR_MERGE );
+    if ( ( bHOver && pMerge->GetColMerge() <= 1 ) ||
+         ( bVOver && pMerge->GetRowMerge() <= 1 ) )
     {
-        // public method to adapt position
-        SCCOL nOrigX = rPosX;
-        SCROW nOrigY = rPosY;
-        pDoc->SkipOverlapped(rPosX, rPosY, nTabNo);
-        bool bHOver = (nOrigX != rPosX);
-        bool bVOver = (nOrigY != rPosY);
+        OSL_FAIL("merge error found");
 
-        if ( bRepair && ( bHOver || bVOver ) )
-        {
-            const ScMergeAttr* pMerge = pDoc->GetAttr( rPosX, rPosY, nTabNo, ATTR_MERGE );
-            if ( ( bHOver && pMerge->GetColMerge() <= 1 ) ||
-                 ( bVOver && pMerge->GetRowMerge() <= 1 ) )
-            {
-                OSL_FAIL("merge error found");
-
-                pDoc->RemoveFlagsTab( 0,0, pDoc->MaxCol(),pDoc->MaxRow(), nTabNo, ScMF::Hor | ScMF::Ver );
-                SCCOL nEndCol = pDoc->MaxCol();
-                SCROW nEndRow = pDoc->MaxRow();
-                pDoc->ExtendMerge( 0,0, nEndCol,nEndRow, nTabNo, true );
-                if (pDocShell)
-                    pDocShell->PostPaint( ScRange(0,0,nTabNo,pDoc->MaxCol(),pDoc->MaxRow(),nTabNo), PaintPartFlags::Grid );
-            }
-        }
+        pDoc->RemoveFlagsTab( 0,0, pDoc->MaxCol(),pDoc->MaxRow(), nTabNo, ScMF::Hor | ScMF::Ver );
+        SCCOL nEndCol = pDoc->MaxCol();
+        SCROW nEndRow = pDoc->MaxRow();
+        pDoc->ExtendMerge( 0,0, nEndCol,nEndRow, nTabNo, true );
+        if (pDocShell)
+            pDocShell->PostPaint( ScRange(0,0,nTabNo,pDoc->MaxCol(),pDoc->MaxRow(),nTabNo), PaintPartFlags::Grid );
     }
 }
 

@@ -491,44 +491,44 @@ void ScVbaWorksheets::PrintPreview( const css::uno::Any& /*EnableChanges*/ )
     SfxViewFrame* pViewFrame = nullptr;
     if ( pViewShell )
         pViewFrame = pViewShell->GetViewFrame();
-    if ( pViewFrame )
-    {
-        if ( !pViewFrame->GetFrame().IsInPlace() )
-        {
-            dispatchExecute( pViewShell, SID_VIEWSHELL1 );
-            SfxViewShell*  pShell = SfxViewShell::Get( pViewFrame->GetFrame().GetFrameInterface()->getController() );
+    if ( !pViewFrame )
+        return;
 
-            if (  dynamic_cast<const ScPreviewShell*>( pShell) !=  nullptr )
-            {
-                ScPreviewShell* pPrvShell = static_cast<  ScPreviewShell* >( pShell );
-                ScPreview* pPrvView = pPrvShell->GetPreview();
-                const ScDocument& rDoc = *pViewShell->GetViewData().GetDocument();
-                ScMarkData aMarkData(rDoc.GetSheetLimits());
-                sal_Int32 nElems = getCount();
-                for ( sal_Int32 nItem = 1; nItem <= nElems; ++nItem )
-                {
-                    uno::Reference< excel::XWorksheet > xSheet( Item( uno::makeAny( nItem ), uno::Any() ), uno::UNO_QUERY_THROW );
-                    ScVbaWorksheet* pSheet = excel::getImplFromDocModuleWrapper<ScVbaWorksheet>( xSheet );
-                    if ( pSheet )
-                        aMarkData.SelectTable(static_cast< SCTAB >( pSheet->getSheetID() ), true );
-                }
-                // save old selection, setting the selectedtabs in the preview
-                // can affect the current selection when preview has been
-                // closed
-                ScMarkData::MarkedTabsType aOldTabs = pPrvView->GetSelectedTabs();
-                pPrvView->SetSelectedTabs( aMarkData );
-                // force update
-                pPrvView->DataChanged(false);
-                // set sensible first page
-                long nPage = pPrvView->GetFirstPage( 1 );
-                pPrvView->SetPageNo( nPage );
-                WaitUntilPreviewIsClosed( pViewFrame );
-                // restore old tab selection
-                pViewShell = excel::getBestViewShell( mxModel );
-                pViewShell->GetViewData().GetMarkData().SetSelectedTabs(aOldTabs);
-            }
-        }
+    if ( pViewFrame->GetFrame().IsInPlace() )
+        return;
+
+    dispatchExecute( pViewShell, SID_VIEWSHELL1 );
+    SfxViewShell*  pShell = SfxViewShell::Get( pViewFrame->GetFrame().GetFrameInterface()->getController() );
+
+    if (  dynamic_cast<const ScPreviewShell*>( pShell) ==  nullptr )
+        return;
+
+    ScPreviewShell* pPrvShell = static_cast<  ScPreviewShell* >( pShell );
+    ScPreview* pPrvView = pPrvShell->GetPreview();
+    const ScDocument& rDoc = *pViewShell->GetViewData().GetDocument();
+    ScMarkData aMarkData(rDoc.GetSheetLimits());
+    sal_Int32 nElems = getCount();
+    for ( sal_Int32 nItem = 1; nItem <= nElems; ++nItem )
+    {
+        uno::Reference< excel::XWorksheet > xSheet( Item( uno::makeAny( nItem ), uno::Any() ), uno::UNO_QUERY_THROW );
+        ScVbaWorksheet* pSheet = excel::getImplFromDocModuleWrapper<ScVbaWorksheet>( xSheet );
+        if ( pSheet )
+            aMarkData.SelectTable(static_cast< SCTAB >( pSheet->getSheetID() ), true );
     }
+    // save old selection, setting the selectedtabs in the preview
+    // can affect the current selection when preview has been
+    // closed
+    ScMarkData::MarkedTabsType aOldTabs = pPrvView->GetSelectedTabs();
+    pPrvView->SetSelectedTabs( aMarkData );
+    // force update
+    pPrvView->DataChanged(false);
+    // set sensible first page
+    long nPage = pPrvView->GetFirstPage( 1 );
+    pPrvView->SetPageNo( nPage );
+    WaitUntilPreviewIsClosed( pViewFrame );
+    // restore old tab selection
+    pViewShell = excel::getBestViewShell( mxModel );
+    pViewShell->GetViewData().GetMarkData().SetSelectedTabs(aOldTabs);
 
 }
 

@@ -116,26 +116,26 @@ FileDefinitionWidgetDraw::FileDefinitionWidgetDraw(SalGraphics& rGraphics)
         m_pWidgetDefinition = getWidgetDefinitionForTheme("ios");
 #endif
 
-    if (m_pWidgetDefinition)
-    {
-        auto& pSettings = m_pWidgetDefinition->mpSettings;
+    if (!m_pWidgetDefinition)
+        return;
 
-        ImplSVData* pSVData = ImplGetSVData();
-        pSVData->maNWFData.mbNoFocusRects = true;
-        pSVData->maNWFData.mbNoFocusRectsForFlatButtons = true;
-        pSVData->maNWFData.mbNoActiveTabTextRaise
-            = getSettingValueBool(pSettings->msNoActiveTabTextRaise, true);
-        pSVData->maNWFData.mbCenteredTabs = getSettingValueBool(pSettings->msCenteredTabs, true);
-        pSVData->maNWFData.mbProgressNeedsErase = true;
-        pSVData->maNWFData.mnStatusBarLowerRightOffset = 10;
-        pSVData->maNWFData.mbCanDrawWidgetAnySize = true;
+    auto& pSettings = m_pWidgetDefinition->mpSettings;
 
-        int nDefaultListboxEntryMargin = pSVData->maNWFData.mnListBoxEntryMargin;
-        pSVData->maNWFData.mnListBoxEntryMargin
-            = getSettingValueInteger(pSettings->msListBoxEntryMargin, nDefaultListboxEntryMargin);
+    ImplSVData* pSVData = ImplGetSVData();
+    pSVData->maNWFData.mbNoFocusRects = true;
+    pSVData->maNWFData.mbNoFocusRectsForFlatButtons = true;
+    pSVData->maNWFData.mbNoActiveTabTextRaise
+        = getSettingValueBool(pSettings->msNoActiveTabTextRaise, true);
+    pSVData->maNWFData.mbCenteredTabs = getSettingValueBool(pSettings->msCenteredTabs, true);
+    pSVData->maNWFData.mbProgressNeedsErase = true;
+    pSVData->maNWFData.mnStatusBarLowerRightOffset = 10;
+    pSVData->maNWFData.mbCanDrawWidgetAnySize = true;
 
-        m_bIsActive = true;
-    }
+    int nDefaultListboxEntryMargin = pSVData->maNWFData.mnListBoxEntryMargin;
+    pSVData->maNWFData.mnListBoxEntryMargin
+        = getSettingValueInteger(pSettings->msListBoxEntryMargin, nDefaultListboxEntryMargin);
+
+    m_bIsActive = true;
 }
 
 bool FileDefinitionWidgetDraw::isNativeControlSupported(ControlType eType, ControlPart ePart)

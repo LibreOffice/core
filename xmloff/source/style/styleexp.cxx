@@ -492,50 +492,50 @@ void XMLStyleExport::exportStyleFamily(
             pAutoStylePool->RegisterName( nFamily, xStyle->getName() );
     }
 
-    if( pExportedStyles )
-    {
-        // if next styles are supported, export all next styles that are
-        // unused and that for, haven't been exported in the first loop.
-        for(const auto& rName : aSeq)
-        {
-            Reference< XStyle > xStyle;
-            xStyleCont->getByName( rName ) >>= xStyle;
+    if( !pExportedStyles )
+        return;
 
+    // if next styles are supported, export all next styles that are
+    // unused and that for, haven't been exported in the first loop.
+    for(const auto& rName : aSeq)
+    {
+        Reference< XStyle > xStyle;
+        xStyleCont->getByName( rName ) >>= xStyle;
+
+        assert(xStyle.is());
+
+        Reference< XPropertySet > xPropSet( xStyle, UNO_QUERY );
+        Reference< XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
+
+        // styles that aren't existing really are ignored.
+        if (xPropSetInfo->hasPropertyByName( gsIsPhysical ))
+        {
+            Any aAny( xPropSet->getPropertyValue( gsIsPhysical ) );
+            if (!*o3tl::doAccess<bool>(aAny))
+                continue;
+        }
+
+        if (!xStyle->isInUse())
+            continue;
+
+        if (!xPropSetInfo->hasPropertyByName( gsFollowStyle ))
+        {
+            continue;
+        }
+
+        OUString sNextName;
+        xPropSet->getPropertyValue( gsFollowStyle ) >>= sNextName;
+        OUString sTmp( sNextName );
+        // if the next style hasn't been exported by now, export it now
+        // and remember its name.
+        if (xStyle->getName() != sNextName &&
+            0 == pExportedStyles->count( sTmp ))
+        {
+            xStyleCont->getByName( sNextName ) >>= xStyle;
             assert(xStyle.is());
 
-            Reference< XPropertySet > xPropSet( xStyle, UNO_QUERY );
-            Reference< XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
-
-            // styles that aren't existing really are ignored.
-            if (xPropSetInfo->hasPropertyByName( gsIsPhysical ))
-            {
-                Any aAny( xPropSet->getPropertyValue( gsIsPhysical ) );
-                if (!*o3tl::doAccess<bool>(aAny))
-                    continue;
-            }
-
-            if (!xStyle->isInUse())
-                continue;
-
-            if (!xPropSetInfo->hasPropertyByName( gsFollowStyle ))
-            {
-                continue;
-            }
-
-            OUString sNextName;
-            xPropSet->getPropertyValue( gsFollowStyle ) >>= sNextName;
-            OUString sTmp( sNextName );
-            // if the next style hasn't been exported by now, export it now
-            // and remember its name.
-            if (xStyle->getName() != sNextName &&
-                0 == pExportedStyles->count( sTmp ))
-            {
-                xStyleCont->getByName( sNextName ) >>= xStyle;
-                assert(xStyle.is());
-
-                if (exportStyle(xStyle, rXMLFamily, rPropMapper, xStyleCont, pPrefix))
-                    pExportedStyles->insert( sTmp );
-            }
+            if (exportStyle(xStyle, rXMLFamily, rPropMapper, xStyleCont, pPrefix))
+                pExportedStyles->insert( sTmp );
         }
     }
 }

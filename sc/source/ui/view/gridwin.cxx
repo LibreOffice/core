@@ -1832,26 +1832,26 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
 
             //      Gridwin - Selection Engine
 
-    if ( rMEvt.IsLeft() )
-    {
-        ScViewSelectionEngine* pSelEng = pViewData->GetView()->GetSelEngine();
-        pSelEng->SetWindow(this);
-        pSelEng->SetWhich(eWhich);
-        pSelEng->SetVisibleArea( tools::Rectangle(Point(), GetOutputSizePixel()) );
+    if ( !rMEvt.IsLeft() )
+        return;
 
-        //  SelMouseButtonDown on the View is still setting the bMoveIsShift flag
-        if ( pViewData->GetView()->SelMouseButtonDown( rMEvt ) )
+    ScViewSelectionEngine* pSelEng = pViewData->GetView()->GetSelEngine();
+    pSelEng->SetWindow(this);
+    pSelEng->SetWhich(eWhich);
+    pSelEng->SetVisibleArea( tools::Rectangle(Point(), GetOutputSizePixel()) );
+
+    //  SelMouseButtonDown on the View is still setting the bMoveIsShift flag
+    if ( pViewData->GetView()->SelMouseButtonDown( rMEvt ) )
+    {
+        if (IsMouseCaptured())
         {
-            if (IsMouseCaptured())
-            {
-                //  Tracking instead of CaptureMouse, so it can be canceled cleanly
-                //! Someday SelectionEngine should call StartTracking on its own!?!
-                ReleaseMouse();
-                StartTracking();
-            }
-            pViewData->GetMarkData().SetMarking(true);
-            return;
+            //  Tracking instead of CaptureMouse, so it can be canceled cleanly
+            //! Someday SelectionEngine should call StartTracking on its own!?!
+            ReleaseMouse();
+            StartTracking();
         }
+        pViewData->GetMarkData().SetMarking(true);
+        return;
     }
 }
 
@@ -2315,57 +2315,57 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     //  SelMouseButtonDown is called only for left button, but SelMouseButtonUp would return
     //  sal_True for any call, so IsLeft must be checked here, too.
 
-    if ( rMEvt.IsLeft() && pViewData->GetView()->GetSelEngine()->SelMouseButtonUp( rMEvt ) )
-    {
-        pViewData->GetView()->SelectionChanged();
-
-        SfxDispatcher* pDisp = pViewData->GetViewShell()->GetDispatcher();
-        bool bFormulaMode = pScMod->IsFormulaMode();
-        OSL_ENSURE( pDisp || bFormulaMode, "Cursor moved on inactive View ?" );
-
-        //  #i14927# execute SID_CURRENTCELL (for macro recording) only if there is no
-        //  multiple selection, so the argument string completely describes the selection,
-        //  and executing the slot won't change the existing selection (executing the slot
-        //  here and from a recorded macro is treated equally)
-        if ( pDisp && !bFormulaMode && !rMark.IsMultiMarked() )
-        {
-            OUString aAddr;                               // CurrentCell
-            if( rMark.IsMarked() )
-            {
-                ScRange aScRange;
-                rMark.GetMarkArea( aScRange );
-                aAddr = aScRange.Format(*pDoc, ScRefFlags::RANGE_ABS);
-                if ( aScRange.aStart == aScRange.aEnd )
-                {
-                    //  make sure there is a range selection string even for a single cell
-                    aAddr += ":" + aAddr;
-                }
-
-                //! SID_MARKAREA does not exist anymore ???
-                //! What happens when selecting with the cursor ???
-            }
-            else                                        // only move cursor
-            {
-                ScAddress aScAddress( pViewData->GetCurX(), pViewData->GetCurY(), 0 );
-                aAddr = aScAddress.Format(ScRefFlags::ADDR_ABS);
-            }
-
-            SfxStringItem aPosItem( SID_CURRENTCELL, aAddr );
-            // We don't want to align to the cursor position because if the
-            // cell cursor isn't visible after making selection, it would jump
-            // back to the origin of the selection where the cell cursor is.
-            SfxBoolItem aAlignCursorItem( FN_PARAM_2, false );
-            pDisp->ExecuteList(SID_CURRENTCELL,
-                    SfxCallMode::SLOT | SfxCallMode::RECORD,
-                    { &aPosItem, &aAlignCursorItem });
-
-            pViewData->GetView()->InvalidateAttribs();
-
-        }
-        pViewData->GetViewShell()->SelectionChanged();
-
+    if ( !(rMEvt.IsLeft() && pViewData->GetView()->GetSelEngine()->SelMouseButtonUp( rMEvt )) )
         return;
+
+    pViewData->GetView()->SelectionChanged();
+
+    SfxDispatcher* pDisp = pViewData->GetViewShell()->GetDispatcher();
+    bool bFormulaMode = pScMod->IsFormulaMode();
+    OSL_ENSURE( pDisp || bFormulaMode, "Cursor moved on inactive View ?" );
+
+    //  #i14927# execute SID_CURRENTCELL (for macro recording) only if there is no
+    //  multiple selection, so the argument string completely describes the selection,
+    //  and executing the slot won't change the existing selection (executing the slot
+    //  here and from a recorded macro is treated equally)
+    if ( pDisp && !bFormulaMode && !rMark.IsMultiMarked() )
+    {
+        OUString aAddr;                               // CurrentCell
+        if( rMark.IsMarked() )
+        {
+            ScRange aScRange;
+            rMark.GetMarkArea( aScRange );
+            aAddr = aScRange.Format(*pDoc, ScRefFlags::RANGE_ABS);
+            if ( aScRange.aStart == aScRange.aEnd )
+            {
+                //  make sure there is a range selection string even for a single cell
+                aAddr += ":" + aAddr;
+            }
+
+            //! SID_MARKAREA does not exist anymore ???
+            //! What happens when selecting with the cursor ???
+        }
+        else                                        // only move cursor
+        {
+            ScAddress aScAddress( pViewData->GetCurX(), pViewData->GetCurY(), 0 );
+            aAddr = aScAddress.Format(ScRefFlags::ADDR_ABS);
+        }
+
+        SfxStringItem aPosItem( SID_CURRENTCELL, aAddr );
+        // We don't want to align to the cursor position because if the
+        // cell cursor isn't visible after making selection, it would jump
+        // back to the origin of the selection where the cell cursor is.
+        SfxBoolItem aAlignCursorItem( FN_PARAM_2, false );
+        pDisp->ExecuteList(SID_CURRENTCELL,
+                SfxCallMode::SLOT | SfxCallMode::RECORD,
+                { &aPosItem, &aAlignCursorItem });
+
+        pViewData->GetView()->InvalidateAttribs();
+
     }
+    pViewData->GetViewShell()->SelectionChanged();
+
+    return;
 }
 
 void ScGridWindow::FakeButtonUp()
@@ -2877,174 +2877,174 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
     if (bDisable)
         return;
 
-    if ( nCmd == CommandEventId::ContextMenu && !SC_MOD()->GetIsWaterCan() )
+    if (nCmd != CommandEventId::ContextMenu || SC_MOD()->GetIsWaterCan())
+        return;
+
+    bool bMouse = rCEvt.IsMouseEvent();
+    if ( bMouse && nMouseStatus == SC_GM_IGNORE )
+        return;
+
+    if (pViewData->IsAnyFillMode())
     {
-        bool bMouse = rCEvt.IsMouseEvent();
-        if ( bMouse && nMouseStatus == SC_GM_IGNORE )
+        pViewData->GetView()->StopRefMode();
+        pViewData->ResetFillMode();
+    }
+    ReleaseMouse();
+    StopMarking();
+
+    Point aPosPixel = rCEvt.GetMousePosPixel();
+    Point aMenuPos = aPosPixel;
+
+    SCCOL nCellX = -1;
+    SCROW nCellY = -1;
+    pViewData->GetPosFromPixel(aPosPixel.X(), aPosPixel.Y(), eWhich, nCellX, nCellY);
+
+    bool bSpellError = false;
+    SCCOL nColSpellError = nCellX;
+
+    if ( bMouse )
+    {
+        ScDocument* pDoc = pViewData->GetDocument();
+        SCTAB nTab = pViewData->GetTabNo();
+        const ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+        bool bSelectAllowed = true;
+        if ( pProtect && pProtect->isProtected() )
+        {
+            // This sheet is protected.  Check if a context menu is allowed on this cell.
+            bool bCellProtected = pDoc->HasAttrib(nCellX, nCellY, nTab, nCellX, nCellY, nTab, HasAttrFlags::Protected);
+            bool bSelProtected   = pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
+            bool bSelUnprotected = pProtect->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
+
+            if (bCellProtected)
+                bSelectAllowed = bSelProtected;
+            else
+                bSelectAllowed = bSelUnprotected;
+        }
+        if (!bSelectAllowed)
+            // Selecting this cell is not allowed, neither is context menu.
             return;
 
-        if (pViewData->IsAnyFillMode())
+        if (mpSpellCheckCxt)
         {
-            pViewData->GetView()->StopRefMode();
-            pViewData->ResetFillMode();
-        }
-        ReleaseMouse();
-        StopMarking();
-
-        Point aPosPixel = rCEvt.GetMousePosPixel();
-        Point aMenuPos = aPosPixel;
-
-        SCCOL nCellX = -1;
-        SCROW nCellY = -1;
-        pViewData->GetPosFromPixel(aPosPixel.X(), aPosPixel.Y(), eWhich, nCellX, nCellY);
-
-        bool bSpellError = false;
-        SCCOL nColSpellError = nCellX;
-
-        if ( bMouse )
-        {
-            ScDocument* pDoc = pViewData->GetDocument();
-            SCTAB nTab = pViewData->GetTabNo();
-            const ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
-            bool bSelectAllowed = true;
-            if ( pProtect && pProtect->isProtected() )
+            // Find the first string to the left for spell checking in case the current cell is empty.
+            ScAddress aPos(nCellX, nCellY, nTab);
+            ScRefCellValue aSpellCheckCell(*pDoc, aPos);
+            while (aSpellCheckCell.meType == CELLTYPE_NONE)
             {
-                // This sheet is protected.  Check if a context menu is allowed on this cell.
-                bool bCellProtected = pDoc->HasAttrib(nCellX, nCellY, nTab, nCellX, nCellY, nTab, HasAttrFlags::Protected);
-                bool bSelProtected   = pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
-                bool bSelUnprotected = pProtect->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
+                // Loop until we get the first non-empty cell in the row.
+                aPos.IncCol(-1);
+                if (aPos.Col() < 0)
+                    break;
 
-                if (bCellProtected)
-                    bSelectAllowed = bSelProtected;
-                else
-                    bSelectAllowed = bSelUnprotected;
-            }
-            if (!bSelectAllowed)
-                // Selecting this cell is not allowed, neither is context menu.
-                return;
-
-            if (mpSpellCheckCxt)
-            {
-                // Find the first string to the left for spell checking in case the current cell is empty.
-                ScAddress aPos(nCellX, nCellY, nTab);
-                ScRefCellValue aSpellCheckCell(*pDoc, aPos);
-                while (aSpellCheckCell.meType == CELLTYPE_NONE)
-                {
-                    // Loop until we get the first non-empty cell in the row.
-                    aPos.IncCol(-1);
-                    if (aPos.Col() < 0)
-                        break;
-
-                    aSpellCheckCell.assign(*pDoc, aPos);
-                }
-
-                if (aPos.Col() >= 0 && (aSpellCheckCell.meType == CELLTYPE_STRING || aSpellCheckCell.meType == CELLTYPE_EDIT))
-                    nColSpellError = aPos.Col();
-
-                bSpellError = (mpSpellCheckCxt->isMisspelled(nColSpellError, nCellY));
-                if (bSpellError)
-                {
-                    // Check and see if a misspelled word is under the mouse pointer.
-                    bSpellError = IsSpellErrorAtPos(aPosPixel, nColSpellError, nCellY);
-                }
+                aSpellCheckCell.assign(*pDoc, aPos);
             }
 
-            //  #i18735# First select the item under the mouse pointer.
-            //  This can change the selection, and the view state (edit mode, etc).
-            SelectForContextMenu(aPosPixel, bSpellError ? nColSpellError : nCellX, nCellY);
-        }
+            if (aPos.Col() >= 0 && (aSpellCheckCell.meType == CELLTYPE_STRING || aSpellCheckCell.meType == CELLTYPE_EDIT))
+                nColSpellError = aPos.Col();
 
-        bool bDone = false;
-        bool bEdit = pViewData->HasEditView(eWhich);
-
-        if ( !bEdit )
-        {
-                // Edit cell with spelling errors ?
-            if (bMouse && (GetEditUrl(aPosPixel) || bSpellError))
-            {
-                //  GetEditUrlOrError has already moved the Cursor
-
-                pScMod->SetInputMode( SC_INPUT_TABLE );
-                bEdit = pViewData->HasEditView(eWhich);     // Did it work?
-
-                OSL_ENSURE( bEdit, "Can not be switched in edit mode" );
-            }
-        }
-        if ( bEdit )
-        {
-            EditView* pEditView = pViewData->GetEditView( eWhich );     // is then not 0
-
-            if ( !bMouse )
-            {
-                vcl::Cursor* pCur = pEditView->GetCursor();
-                if ( pCur )
-                {
-                    Point aLogicPos = pCur->GetPos();
-                    //  use the position right of the cursor (spell popup is opened if
-                    //  the cursor is before the word, but not if behind it)
-                    aLogicPos.AdjustX(pCur->GetWidth() );
-                    aLogicPos.AdjustY(pCur->GetHeight() / 2 );     // center vertically
-                    aMenuPos = LogicToPixel( aLogicPos );
-                }
-            }
-
-            //  if edit mode was just started above, online spelling may be incomplete
-            pEditView->GetEditEngine()->CompleteOnlineSpelling();
-
-            //  IsCursorAtWrongSpelledWord could be used for !bMouse
-            //  if there was a corresponding ExecuteSpellPopup call
-
+            bSpellError = (mpSpellCheckCxt->isMisspelled(nColSpellError, nCellY));
             if (bSpellError)
             {
-                // On OS/2 when clicking next to the Popup menu, the MouseButtonDown
-                // comes before the end of menu execute, thus the SetModified has to
-                // be done prior to this (Bug #40968#)
-                ScInputHandler* pHdl = pScMod->GetInputHdl();
-                if (pHdl)
-                    pHdl->SetModified();
-
-                Link<SpellCallbackInfo&,void> aLink = LINK( this, ScGridWindow, PopupSpellingHdl );
-                pEditView->ExecuteSpellPopup( aMenuPos, &aLink );
-
-                bDone = true;
+                // Check and see if a misspelled word is under the mouse pointer.
+                bSpellError = IsSpellErrorAtPos(aPosPixel, nColSpellError, nCellY);
             }
         }
-        else if ( !bMouse )
+
+        //  #i18735# First select the item under the mouse pointer.
+        //  This can change the selection, and the view state (edit mode, etc).
+        SelectForContextMenu(aPosPixel, bSpellError ? nColSpellError : nCellX, nCellY);
+    }
+
+    bool bDone = false;
+    bool bEdit = pViewData->HasEditView(eWhich);
+
+    if ( !bEdit )
+    {
+            // Edit cell with spelling errors ?
+        if (bMouse && (GetEditUrl(aPosPixel) || bSpellError))
         {
-            //  non-edit menu by keyboard -> use lower right of cell cursor position
-            ScDocument* aDoc = pViewData->GetDocument();
-            SCTAB nTabNo = pViewData->GetTabNo();
-            bool bLayoutIsRTL = aDoc->IsLayoutRTL(nTabNo);
+            //  GetEditUrlOrError has already moved the Cursor
 
-            SCCOL nCurX = pViewData->GetCurX();
-            SCROW nCurY = pViewData->GetCurY();
-            aMenuPos = pViewData->GetScrPos( nCurX, nCurY, eWhich, true );
-            long nSizeXPix;
-            long nSizeYPix;
-            pViewData->GetMergeSizePixel( nCurX, nCurY, nSizeXPix, nSizeYPix );
-            // fdo#55432 take the correct position for RTL sheet
-            aMenuPos.AdjustX(bLayoutIsRTL ? -nSizeXPix : nSizeXPix );
-            aMenuPos.AdjustY(nSizeYPix );
+            pScMod->SetInputMode( SC_INPUT_TABLE );
+            bEdit = pViewData->HasEditView(eWhich);     // Did it work?
 
-            ScTabViewShell* pViewSh = pViewData->GetViewShell();
-            if (pViewSh)
+            OSL_ENSURE( bEdit, "Can not be switched in edit mode" );
+        }
+    }
+    if ( bEdit )
+    {
+        EditView* pEditView = pViewData->GetEditView( eWhich );     // is then not 0
+
+        if ( !bMouse )
+        {
+            vcl::Cursor* pCur = pEditView->GetCursor();
+            if ( pCur )
             {
-                //  Is a draw object selected?
-
-                SdrView* pDrawView = pViewSh->GetScDrawView();
-                if (pDrawView && pDrawView->AreObjectsMarked())
-                {
-                    // #100442#; the context menu should open in the middle of the selected objects
-                    tools::Rectangle aSelectRect(LogicToPixel(pDrawView->GetAllMarkedBoundRect()));
-                    aMenuPos = aSelectRect.Center();
-                }
+                Point aLogicPos = pCur->GetPos();
+                //  use the position right of the cursor (spell popup is opened if
+                //  the cursor is before the word, but not if behind it)
+                aLogicPos.AdjustX(pCur->GetWidth() );
+                aLogicPos.AdjustY(pCur->GetHeight() / 2 );     // center vertically
+                aMenuPos = LogicToPixel( aLogicPos );
             }
         }
 
-        if (!bDone)
+        //  if edit mode was just started above, online spelling may be incomplete
+        pEditView->GetEditEngine()->CompleteOnlineSpelling();
+
+        //  IsCursorAtWrongSpelledWord could be used for !bMouse
+        //  if there was a corresponding ExecuteSpellPopup call
+
+        if (bSpellError)
         {
-            SfxDispatcher::ExecutePopup( this, &aMenuPos );
+            // On OS/2 when clicking next to the Popup menu, the MouseButtonDown
+            // comes before the end of menu execute, thus the SetModified has to
+            // be done prior to this (Bug #40968#)
+            ScInputHandler* pHdl = pScMod->GetInputHdl();
+            if (pHdl)
+                pHdl->SetModified();
+
+            Link<SpellCallbackInfo&,void> aLink = LINK( this, ScGridWindow, PopupSpellingHdl );
+            pEditView->ExecuteSpellPopup( aMenuPos, &aLink );
+
+            bDone = true;
         }
+    }
+    else if ( !bMouse )
+    {
+        //  non-edit menu by keyboard -> use lower right of cell cursor position
+        ScDocument* aDoc = pViewData->GetDocument();
+        SCTAB nTabNo = pViewData->GetTabNo();
+        bool bLayoutIsRTL = aDoc->IsLayoutRTL(nTabNo);
+
+        SCCOL nCurX = pViewData->GetCurX();
+        SCROW nCurY = pViewData->GetCurY();
+        aMenuPos = pViewData->GetScrPos( nCurX, nCurY, eWhich, true );
+        long nSizeXPix;
+        long nSizeYPix;
+        pViewData->GetMergeSizePixel( nCurX, nCurY, nSizeXPix, nSizeYPix );
+        // fdo#55432 take the correct position for RTL sheet
+        aMenuPos.AdjustX(bLayoutIsRTL ? -nSizeXPix : nSizeXPix );
+        aMenuPos.AdjustY(nSizeYPix );
+
+        ScTabViewShell* pViewSh = pViewData->GetViewShell();
+        if (pViewSh)
+        {
+            //  Is a draw object selected?
+
+            SdrView* pDrawView = pViewSh->GetScDrawView();
+            if (pDrawView && pDrawView->AreObjectsMarked())
+            {
+                // #100442#; the context menu should open in the middle of the selected objects
+                tools::Rectangle aSelectRect(LogicToPixel(pDrawView->GetAllMarkedBoundRect()));
+                aMenuPos = aSelectRect.Center();
+            }
+        }
+    }
+
+    if (!bDone)
+    {
+        SfxDispatcher::ExecutePopup( this, &aMenuPos );
     }
 }
 
@@ -3178,26 +3178,26 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCCOL nCellX, S
 
     //  select drawing object or move cell cursor
 
-    if ( !bHitSelected )
+    if ( bHitSelected )
+        return;
+
+    bool bWasDraw = ( pDrawView && pDrawView->AreObjectsMarked() );
+    bool bHitDraw = false;
+    if ( pDrawView )
     {
-        bool bWasDraw = ( pDrawView && pDrawView->AreObjectsMarked() );
-        bool bHitDraw = false;
-        if ( pDrawView )
-        {
-            pDrawView->UnmarkAllObj();
-            // Unlock the Internal Layer in order to activate the context menu.
-            // re-lock in ScDrawView::MarkListHasChanged()
-            lcl_UnLockComment( pDrawView, aLogicPos ,pViewData);
-            bHitDraw = pDrawView->MarkObj( aLogicPos );
-            // draw shell is activated in MarkListHasChanged
-        }
-        if ( !bHitDraw )
-        {
-            pView->Unmark();
-            pView->SetCursor(nCellX, nCellY);
-            if ( bWasDraw )
-                pViewData->GetViewShell()->SetDrawShell( false );   // switch shells
-        }
+        pDrawView->UnmarkAllObj();
+        // Unlock the Internal Layer in order to activate the context menu.
+        // re-lock in ScDrawView::MarkListHasChanged()
+        lcl_UnLockComment( pDrawView, aLogicPos ,pViewData);
+        bHitDraw = pDrawView->MarkObj( aLogicPos );
+        // draw shell is activated in MarkListHasChanged
+    }
+    if ( !bHitDraw )
+    {
+        pView->Unmark();
+        pView->SetCursor(nCellX, nCellY);
+        if ( bWasDraw )
+            pViewData->GetViewShell()->SetDrawShell( false );   // switch shells
     }
 }
 
@@ -4524,55 +4524,55 @@ void ScGridWindow::PasteSelection( const Point& rPosPixel )
 
 void ScGridWindow::UpdateEditViewPos()
 {
-    if (pViewData->HasEditView(eWhich))
+    if (!pViewData->HasEditView(eWhich))
+        return;
+
+    EditView* pView;
+    SCCOL nCol;
+    SCROW nRow;
+    pViewData->GetEditView( eWhich, pView, nCol, nRow );
+    SCCOL nEndCol = pViewData->GetEditEndCol();
+    SCROW nEndRow = pViewData->GetEditEndRow();
+
+    //  hide EditView?
+
+    bool bHide = ( nEndCol<pViewData->GetPosX(eHWhich) || nEndRow<pViewData->GetPosY(eVWhich) );
+    if ( SC_MOD()->IsFormulaMode() )
+        if ( pViewData->GetTabNo() != pViewData->GetRefTabNo() )
+            bHide = true;
+
+    if (bHide)
     {
-        EditView* pView;
-        SCCOL nCol;
-        SCROW nRow;
-        pViewData->GetEditView( eWhich, pView, nCol, nRow );
-        SCCOL nEndCol = pViewData->GetEditEndCol();
-        SCROW nEndRow = pViewData->GetEditEndRow();
+        tools::Rectangle aRect = pView->GetOutputArea();
+        long nHeight = aRect.Bottom() - aRect.Top();
+        aRect.SetTop( PixelToLogic(GetOutputSizePixel(), pViewData->GetLogicMode()).
+                        Height() * 2 );
+        aRect.SetBottom( aRect.Top() + nHeight );
+        pView->SetOutputArea( aRect );
+        pView->HideCursor();
+    }
+    else
+    {
+        // bForceToTop = sal_True for editing
+        tools::Rectangle aPixRect = pViewData->GetEditArea( eWhich, nCol, nRow, this, nullptr, true );
 
-        //  hide EditView?
-
-        bool bHide = ( nEndCol<pViewData->GetPosX(eHWhich) || nEndRow<pViewData->GetPosY(eVWhich) );
-        if ( SC_MOD()->IsFormulaMode() )
-            if ( pViewData->GetTabNo() != pViewData->GetRefTabNo() )
-                bHide = true;
-
-        if (bHide)
+        if (comphelper::LibreOfficeKit::isActive() &&
+            comphelper::LibreOfficeKit::isCompatFlagSet(
+                comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
         {
-            tools::Rectangle aRect = pView->GetOutputArea();
-            long nHeight = aRect.Bottom() - aRect.Top();
-            aRect.SetTop( PixelToLogic(GetOutputSizePixel(), pViewData->GetLogicMode()).
-                            Height() * 2 );
-            aRect.SetBottom( aRect.Top() + nHeight );
-            pView->SetOutputArea( aRect );
-            pView->HideCursor();
+            tools::Rectangle aPTwipsRect = pViewData->GetEditArea(eWhich, nCol, nRow, this, nullptr,
+                    true, true /* bInPrintTwips */);
+            tools::Rectangle aOutputAreaPTwips = pView->GetLOKSpecialOutputArea();
+            aOutputAreaPTwips.SetPos(aPTwipsRect.TopLeft());
+            pView->SetLOKSpecialOutputArea(aOutputAreaPTwips);
         }
-        else
-        {
-            // bForceToTop = sal_True for editing
-            tools::Rectangle aPixRect = pViewData->GetEditArea( eWhich, nCol, nRow, this, nullptr, true );
 
-            if (comphelper::LibreOfficeKit::isActive() &&
-                comphelper::LibreOfficeKit::isCompatFlagSet(
-                    comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
-            {
-                tools::Rectangle aPTwipsRect = pViewData->GetEditArea(eWhich, nCol, nRow, this, nullptr,
-                        true, true /* bInPrintTwips */);
-                tools::Rectangle aOutputAreaPTwips = pView->GetLOKSpecialOutputArea();
-                aOutputAreaPTwips.SetPos(aPTwipsRect.TopLeft());
-                pView->SetLOKSpecialOutputArea(aOutputAreaPTwips);
-            }
+        Point aScrPos = PixelToLogic( aPixRect.TopLeft(), pViewData->GetLogicMode() );
 
-            Point aScrPos = PixelToLogic( aPixRect.TopLeft(), pViewData->GetLogicMode() );
-
-            tools::Rectangle aRect = pView->GetOutputArea();
-            aRect.SetPos( aScrPos );
-            pView->SetOutputArea( aRect );
-            pView->ShowCursor();
-        }
+        tools::Rectangle aRect = pView->GetOutputArea();
+        aRect.SetPos( aScrPos );
+        pView->SetOutputArea( aRect );
+        pView->ShowCursor();
     }
 }
 
@@ -4734,19 +4734,19 @@ void ScGridWindow::UpdateListValPos( bool bVisible, const ScAddress& rPos )
             }
         }
     }
-    if ( bOldButton )
+    if ( !bOldButton )
+        return;
+
+    if ( !bListValButton || aListValPos != aOldPos )
     {
-        if ( !bListValButton || aListValPos != aOldPos )
+        // paint area of old button
+        if ( comphelper::LibreOfficeKit::isActive() )
         {
-            // paint area of old button
-            if ( comphelper::LibreOfficeKit::isActive() )
-            {
-                updateLOKValListButton( false, aOldPos );
-            }
-            else
-            {
-                Invalidate( PixelToLogic( GetListValButtonRect( aOldPos ) ) );
-            }
+            updateLOKValListButton( false, aOldPos );
+        }
+        else
+        {
+            Invalidate( PixelToLogic( GetListValButtonRect( aOldPos ) ) );
         }
     }
 }
@@ -6417,78 +6417,78 @@ void ScGridWindow::UpdateAutoFillOverlay()
 
     //  get the AutoFill handle rectangle in pixels
 
-    if ( bAutoMarkVisible && aAutoMarkPos.Tab() == pViewData->GetTabNo() &&
-         !pViewData->HasEditView(eWhich) && pViewData->IsActive() )
+    if ( !(bAutoMarkVisible && aAutoMarkPos.Tab() == pViewData->GetTabNo() &&
+         !pViewData->HasEditView(eWhich) && pViewData->IsActive()) )
+        return;
+
+    SCCOL nX = aAutoMarkPos.Col();
+    SCROW nY = aAutoMarkPos.Row();
+
+    if (!maVisibleRange.isInside(nX, nY) && !comphelper::LibreOfficeKit::isActive())
     {
-        SCCOL nX = aAutoMarkPos.Col();
-        SCROW nY = aAutoMarkPos.Row();
-
-        if (!maVisibleRange.isInside(nX, nY) && !comphelper::LibreOfficeKit::isActive())
-        {
-            // Autofill mark is not visible.  Bail out.
-            return;
-        }
-
-        SCTAB nTab = pViewData->GetTabNo();
-        ScDocument* pDoc = pViewData->GetDocument();
-        bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
-
-        float fScaleFactor = GetDPIScaleFactor();
-        // Size should be even
-        Size aFillHandleSize(6 * fScaleFactor, 6 * fScaleFactor);
-
-        Point aFillPos = pViewData->GetScrPos( nX, nY, eWhich, true );
-        long nSizeXPix;
-        long nSizeYPix;
-        pViewData->GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
-
-        if (bLayoutRTL)
-            aFillPos.AdjustX( -(nSizeXPix - 2 + (aFillHandleSize.Width() / 2)) );
-        else
-            aFillPos.AdjustX(nSizeXPix - (aFillHandleSize.Width() / 2) );
-
-        aFillPos.AdjustY(nSizeYPix );
-        aFillPos.AdjustY( -(aFillHandleSize.Height() / 2) );
-
-        tools::Rectangle aFillRect(aFillPos, aFillHandleSize);
-
-        // expand rect to increase hit area
-        mpAutoFillRect = aFillRect;
-        mpAutoFillRect->expand(fScaleFactor);
-
-        // #i70788# get the OverlayManager safely
-        rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
-        if (comphelper::LibreOfficeKit::isActive()) // notify the LibreOfficeKit
-        {
-            updateLibreOfficeKitAutoFill(pViewData, aFillRect);
-        }
-        else if (xOverlayManager.is())
-        {
-            Color aHandleColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
-            if (pViewData->GetActivePart() != eWhich)
-                // non-active pane uses a different color.
-                aHandleColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCPAGEBREAKAUTOMATIC).nColor;
-            std::vector< basegfx::B2DRange > aRanges;
-            const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
-            basegfx::B2DRange aRB = vcl::unotools::b2DRectangleFromRectangle(aFillRect);
-
-            aRB.transform(aTransform);
-            aRanges.push_back(aRB);
-
-            std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
-                sdr::overlay::OverlayType::Solid,
-                aHandleColor,
-                aRanges,
-                false));
-
-            xOverlayManager->add(*pOverlay);
-            mpOOAutoFill.reset(new sdr::overlay::OverlayObjectList);
-            mpOOAutoFill->append(std::move(pOverlay));
-        }
-
-        if ( aOldMode != aDrawMode )
-            SetMapMode( aOldMode );
+        // Autofill mark is not visible.  Bail out.
+        return;
     }
+
+    SCTAB nTab = pViewData->GetTabNo();
+    ScDocument* pDoc = pViewData->GetDocument();
+    bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+
+    float fScaleFactor = GetDPIScaleFactor();
+    // Size should be even
+    Size aFillHandleSize(6 * fScaleFactor, 6 * fScaleFactor);
+
+    Point aFillPos = pViewData->GetScrPos( nX, nY, eWhich, true );
+    long nSizeXPix;
+    long nSizeYPix;
+    pViewData->GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
+
+    if (bLayoutRTL)
+        aFillPos.AdjustX( -(nSizeXPix - 2 + (aFillHandleSize.Width() / 2)) );
+    else
+        aFillPos.AdjustX(nSizeXPix - (aFillHandleSize.Width() / 2) );
+
+    aFillPos.AdjustY(nSizeYPix );
+    aFillPos.AdjustY( -(aFillHandleSize.Height() / 2) );
+
+    tools::Rectangle aFillRect(aFillPos, aFillHandleSize);
+
+    // expand rect to increase hit area
+    mpAutoFillRect = aFillRect;
+    mpAutoFillRect->expand(fScaleFactor);
+
+    // #i70788# get the OverlayManager safely
+    rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
+    if (comphelper::LibreOfficeKit::isActive()) // notify the LibreOfficeKit
+    {
+        updateLibreOfficeKitAutoFill(pViewData, aFillRect);
+    }
+    else if (xOverlayManager.is())
+    {
+        Color aHandleColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
+        if (pViewData->GetActivePart() != eWhich)
+            // non-active pane uses a different color.
+            aHandleColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCPAGEBREAKAUTOMATIC).nColor;
+        std::vector< basegfx::B2DRange > aRanges;
+        const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
+        basegfx::B2DRange aRB = vcl::unotools::b2DRectangleFromRectangle(aFillRect);
+
+        aRB.transform(aTransform);
+        aRanges.push_back(aRB);
+
+        std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
+            sdr::overlay::OverlayType::Solid,
+            aHandleColor,
+            aRanges,
+            false));
+
+        xOverlayManager->add(*pOverlay);
+        mpOOAutoFill.reset(new sdr::overlay::OverlayObjectList);
+        mpOOAutoFill->append(std::move(pOverlay));
+    }
+
+    if ( aOldMode != aDrawMode )
+        SetMapMode( aOldMode );
 }
 
 void ScGridWindow::DeleteDragRectOverlay()

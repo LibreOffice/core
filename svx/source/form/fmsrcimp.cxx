@@ -738,25 +738,25 @@ void FmSearchEngine::SetFormatterUsing(bool bSet)
 
 void FmSearchEngine::PropagateProgress(bool _bDontPropagateOverflow)
 {
-    if (m_aProgressHandler.IsSet())
-    {
-        FmSearchProgress aProgress;
-        try
-        {
-            aProgress.aSearchState = FmSearchProgress::State::Progress;
-            aProgress.nCurrentRecord = m_xSearchCursor.getRow() - 1;
-            if (m_bForward)
-                aProgress.bOverflow = !_bDontPropagateOverflow && m_xSearchCursor.isFirst();
-            else
-                aProgress.bOverflow = !_bDontPropagateOverflow && m_xSearchCursor.isLast();
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("svx");
-        }
+    if (!m_aProgressHandler.IsSet())
+        return;
 
-        m_aProgressHandler.Call(&aProgress);
+    FmSearchProgress aProgress;
+    try
+    {
+        aProgress.aSearchState = FmSearchProgress::State::Progress;
+        aProgress.nCurrentRecord = m_xSearchCursor.getRow() - 1;
+        if (m_bForward)
+            aProgress.bOverflow = !_bDontPropagateOverflow && m_xSearchCursor.isFirst();
+        else
+            aProgress.bOverflow = !_bDontPropagateOverflow && m_xSearchCursor.isLast();
     }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("svx");
+    }
+
+    m_aProgressHandler.Call(&aProgress);
 }
 
 

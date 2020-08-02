@@ -408,28 +408,28 @@ void ScTabControl::SetSheetLayoutRTL( bool bSheetRTL )
 
 void ScTabControl::SwitchToPageId(sal_uInt16 nId)
 {
-    if (nId)
+    if (!nId)
+        return;
+
+    bool bAlreadySelected = IsPageSelected( nId );
+    //make the clicked page the current one
+    SetCurPageId( nId );
+    //change the selection when the current one is not already
+    //selected or part of a multi selection
+    if(bAlreadySelected)
+        return;
+
+    sal_uInt16 nCount = GetMaxId();
+
+    for (sal_uInt16 i=1; i<=nCount; i++)
+        SelectPage( i, i==nId );
+    Select();
+
+    if (comphelper::LibreOfficeKit::isActive())
     {
-        bool bAlreadySelected = IsPageSelected( nId );
-        //make the clicked page the current one
-        SetCurPageId( nId );
-        //change the selection when the current one is not already
-        //selected or part of a multi selection
-        if(!bAlreadySelected)
-        {
-            sal_uInt16 nCount = GetMaxId();
-
-            for (sal_uInt16 i=1; i<=nCount; i++)
-                SelectPage( i, i==nId );
-            Select();
-
-            if (comphelper::LibreOfficeKit::isActive())
-            {
-                // notify LibreOfficeKit about changed page
-                OString aPayload = OString::number(nId - 1);
-                pViewData->GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
-            }
-        }
+        // notify LibreOfficeKit about changed page
+        OString aPayload = OString::number(nId - 1);
+        pViewData->GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
     }
 }
 
@@ -442,21 +442,21 @@ void ScTabControl::Command( const CommandEvent& rCEvt )
     // first activate ViewFrame (Bug 19493):
     pViewSh->SetActive();
 
-    if ( rCEvt.GetCommand() == CommandEventId::ContextMenu && !bDisable)
-    {
-        // #i18735# select the page that is under the mouse cursor
-        // if multiple tables are selected and the one under the cursor
-        // is not part of them then unselect them
-        sal_uInt16 nId = GetPageId( rCEvt.GetMousePosPixel() );
-        SwitchToPageId(nId);
+    if (rCEvt.GetCommand() != CommandEventId::ContextMenu || bDisable)
+        return;
 
-        // #i52073# OLE inplace editing has to be stopped before showing the sheet tab context menu
-        pViewSh->DeactivateOle();
+    // #i18735# select the page that is under the mouse cursor
+    // if multiple tables are selected and the one under the cursor
+    // is not part of them then unselect them
+    sal_uInt16 nId = GetPageId( rCEvt.GetMousePosPixel() );
+    SwitchToPageId(nId);
 
-        //  Popup-Menu:
-        //  get Dispatcher from ViewData (ViewFrame) instead of Shell (Frame), so it can't be null
-        pViewData->GetDispatcher().ExecutePopup( "sheettab" );
-    }
+    // #i52073# OLE inplace editing has to be stopped before showing the sheet tab context menu
+    pViewSh->DeactivateOle();
+
+    //  Popup-Menu:
+    //  get Dispatcher from ViewData (ViewFrame) instead of Shell (Frame), so it can't be null
+    pViewData->GetDispatcher().ExecutePopup( "sheettab" );
 }
 
 void ScTabControl::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )

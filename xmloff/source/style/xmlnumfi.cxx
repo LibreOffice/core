@@ -805,50 +805,50 @@ static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumForm
         // else: normal quoting (below)
     }
 
-    if ( bQuote )
+    if ( !bQuote )
+        return;
+
+    // #i55469# quotes in the string itself have to be escaped
+    bool bEscape = ( rContent.indexOf( '"' ) >= 0 );
+    if ( bEscape )
     {
-        // #i55469# quotes in the string itself have to be escaped
-        bool bEscape = ( rContent.indexOf( '"' ) >= 0 );
-        if ( bEscape )
+        // A quote is turned into "\"" - a quote to end quoted text, an escaped quote,
+        // and a quote to resume quoting.
+        OUString aInsert(  "\"\\\""  );
+
+        sal_Int32 nPos = 0;
+        while ( nPos < rContent.getLength() )
         {
-            // A quote is turned into "\"" - a quote to end quoted text, an escaped quote,
-            // and a quote to resume quoting.
-            OUString aInsert(  "\"\\\""  );
-
-            sal_Int32 nPos = 0;
-            while ( nPos < rContent.getLength() )
+            if ( rContent[nPos] == '"' )
             {
-                if ( rContent[nPos] == '"' )
-                {
-                    rContent.insert( nPos, aInsert );
-                    nPos += aInsert.getLength();
-                }
-                ++nPos;
+                rContent.insert( nPos, aInsert );
+                nPos += aInsert.getLength();
             }
+            ++nPos;
         }
+    }
 
-        //  quote string literals
-        rContent.insert( 0, '"' );
-        rContent.append( '"' );
+    //  quote string literals
+    rContent.insert( 0, '"' );
+    rContent.append( '"' );
 
-        // remove redundant double quotes at start or end
-        if ( bEscape )
-        {
-            if ( rContent.getLength() > 2 &&
-                 rContent[0] == '"' &&
-                 rContent[1] == '"' )
-            {
-                rContent.remove(0, 2);
-            }
+    // remove redundant double quotes at start or end
+    if ( !bEscape )
+        return;
 
-            sal_Int32 nLen = rContent.getLength();
-            if ( nLen > 2 &&
-                 rContent[nLen - 1] == '"' &&
-                 rContent[nLen - 2] == '"' )
-            {
-                rContent.truncate(nLen - 2);
-            }
-        }
+    if ( rContent.getLength() > 2 &&
+         rContent[0] == '"' &&
+         rContent[1] == '"' )
+    {
+        rContent.remove(0, 2);
+    }
+
+    sal_Int32 nLen = rContent.getLength();
+    if ( nLen > 2 &&
+         rContent[nLen - 1] == '"' &&
+         rContent[nLen - 2] == '"' )
+    {
+        rContent.truncate(nLen - 2);
     }
 }
 
@@ -1434,37 +1434,37 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
             nFormatLang = LANGUAGE_SYSTEM;          //! error handling for unknown locales?
     }
 
-    if ( !aNatNumAttr.Format.isEmpty() || !aSpellout.isEmpty() )
+    if (aNatNumAttr.Format.isEmpty() && aSpellout.isEmpty())
+        return;
+
+    LanguageTag aLanguageTag( OUString(), aNatNumAttr.Locale.Language,
+                OUString(), aNatNumAttr.Locale.Country);
+    aNatNumAttr.Locale = aLanguageTag.getLocale( false);
+
+    // NatNum12 spell out formula (cardinal, ordinal, ordinal-feminine etc.)
+    if ( !aSpellout.isEmpty() )
     {
-        LanguageTag aLanguageTag( OUString(), aNatNumAttr.Locale.Language,
-                    OUString(), aNatNumAttr.Locale.Country);
-        aNatNumAttr.Locale = aLanguageTag.getLocale( false);
+        aFormatCode.append( "[NatNum12 " );
+        aFormatCode.append( aSpellout );
+    } else {
+        SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
+        if ( !pFormatter ) return;
 
-        // NatNum12 spell out formula (cardinal, ordinal, ordinal-feminine etc.)
-        if ( !aSpellout.isEmpty() )
-        {
-            aFormatCode.append( "[NatNum12 " );
-            aFormatCode.append( aSpellout );
-        } else {
-            SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
-            if ( !pFormatter ) return;
-
-            sal_Int32 nNatNum = pFormatter->GetNatNum()->convertFromXmlAttributes( aNatNumAttr );
-            aFormatCode.append( "[NatNum" );
-            aFormatCode.append( nNatNum );
-        }
-
-        LanguageType eLang = aLanguageTag.getLanguageType( false );
-        if ( eLang == LANGUAGE_DONTKNOW )
-            eLang = LANGUAGE_SYSTEM;            //! error handling for unknown locales?
-        if ( eLang != nFormatLang && eLang != LANGUAGE_SYSTEM )
-        {
-            aFormatCode.append( "][$-" );
-            // language code in upper hex:
-            aFormatCode.append(OUString::number(static_cast<sal_uInt16>(eLang), 16).toAsciiUpperCase());
-        }
-        aFormatCode.append( ']' );
+        sal_Int32 nNatNum = pFormatter->GetNatNum()->convertFromXmlAttributes( aNatNumAttr );
+        aFormatCode.append( "[NatNum" );
+        aFormatCode.append( nNatNum );
     }
+
+    LanguageType eLang = aLanguageTag.getLanguageType( false );
+    if ( eLang == LANGUAGE_DONTKNOW )
+        eLang = LANGUAGE_SYSTEM;            //! error handling for unknown locales?
+    if ( eLang != nFormatLang && eLang != LANGUAGE_SYSTEM )
+    {
+        aFormatCode.append( "][$-" );
+        // language code in upper hex:
+        aFormatCode.append(OUString::number(static_cast<sal_uInt16>(eLang), 16).toAsciiUpperCase());
+    }
+    aFormatCode.append( ']' );
 }
 
 SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
@@ -1945,18 +1945,18 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
 
     //  add extra thousands separators for display factor
 
-    if ( rInfo.fDisplayFactor != 1.0 && rInfo.fDisplayFactor > 0.0 )
-    {
-        //  test for 1.0 is just for optimization - nSepCount would be 0
+    if (rInfo.fDisplayFactor == 1.0 || rInfo.fDisplayFactor <= 0.0)
+        return;
 
-        //  one separator for each factor of 1000
-        sal_Int32 nSepCount = static_cast<sal_Int32>(::rtl::math::round( log10(rInfo.fDisplayFactor) / 3.0 ));
-        if ( nSepCount > 0 )
-        {
-            OUString aSep = pData->GetLocaleData( nFormatLang ).getNumThousandSep();
-            for ( sal_Int32 i=0; i<nSepCount; i++ )
-                aFormatCode.append( aSep );
-        }
+    //  test for 1.0 is just for optimization - nSepCount would be 0
+
+    //  one separator for each factor of 1000
+    sal_Int32 nSepCount = static_cast<sal_Int32>(::rtl::math::round( log10(rInfo.fDisplayFactor) / 3.0 ));
+    if ( nSepCount > 0 )
+    {
+        OUString aSep = pData->GetLocaleData( nFormatLang ).getNumThousandSep();
+        for ( sal_Int32 i=0; i<nSepCount; i++ )
+            aFormatCode.append( aSep );
     }
 }
 
@@ -2137,54 +2137,54 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
     sal_uInt32 l_nKey = pData->GetKeyForName( rApplyName );
 
     OUString sRealCond;
-    if ( pFormatter && l_nKey != NUMBERFORMAT_ENTRY_NOT_FOUND &&
-            rCondition.startsWith("value()", &sRealCond) )
+    if ( !(pFormatter && l_nKey != NUMBERFORMAT_ENTRY_NOT_FOUND &&
+            rCondition.startsWith("value()", &sRealCond)) )
+        return;
+
+    //! test for valid conditions
+    //! test for default conditions
+
+    bool bDefaultCond = false;
+
+    //! collect all conditions first and adjust default to >=0, >0 or <0 depending on count
+    //! allow blanks in conditions
+    if ( aConditions.isEmpty() && aMyConditions.size() == 1 && sRealCond == ">=0" )
+        bDefaultCond = true;
+
+    if ( nType == XML_TOK_STYLES_TEXT_STYLE && static_cast<size_t>(nIndex) == aMyConditions.size() - 1 )
     {
-        //! test for valid conditions
-        //! test for default conditions
-
-        bool bDefaultCond = false;
-
-        //! collect all conditions first and adjust default to >=0, >0 or <0 depending on count
-        //! allow blanks in conditions
-        if ( aConditions.isEmpty() && aMyConditions.size() == 1 && sRealCond == ">=0" )
-            bDefaultCond = true;
-
-        if ( nType == XML_TOK_STYLES_TEXT_STYLE && static_cast<size_t>(nIndex) == aMyConditions.size() - 1 )
-        {
-            //  The last condition in a number format with a text part can only
-            //  be "all other numbers", the condition string must be empty.
-            bDefaultCond = true;
-        }
-
-        if (!bDefaultCond)
-        {
-            // Convert != to <>
-            sal_Int32 nPos = sRealCond.indexOf( "!=" );
-            if ( nPos >= 0 )
-            {
-                sRealCond = sRealCond.replaceAt( nPos, 2, "<>" );
-            }
-
-            nPos = sRealCond.indexOf( '.' );
-            if ( nPos >= 0 )
-            {
-                // #i8026# #103991# localize decimal separator
-                const OUString& rDecSep = GetLocaleData().getNumDecimalSep();
-                if ( rDecSep.getLength() > 1 || rDecSep[0] != '.' )
-                {
-                    sRealCond = sRealCond.replaceAt( nPos, 1, rDecSep );
-                }
-            }
-            aConditions.append("[").append(sRealCond).append("]");
-        }
-
-        const SvNumberformat* pFormat = pFormatter->GetEntry(l_nKey);
-        if ( pFormat )
-            aConditions.append( pFormat->GetFormatstring() );
-
-        aConditions.append( ';' );
+        //  The last condition in a number format with a text part can only
+        //  be "all other numbers", the condition string must be empty.
+        bDefaultCond = true;
     }
+
+    if (!bDefaultCond)
+    {
+        // Convert != to <>
+        sal_Int32 nPos = sRealCond.indexOf( "!=" );
+        if ( nPos >= 0 )
+        {
+            sRealCond = sRealCond.replaceAt( nPos, 2, "<>" );
+        }
+
+        nPos = sRealCond.indexOf( '.' );
+        if ( nPos >= 0 )
+        {
+            // #i8026# #103991# localize decimal separator
+            const OUString& rDecSep = GetLocaleData().getNumDecimalSep();
+            if ( rDecSep.getLength() > 1 || rDecSep[0] != '.' )
+            {
+                sRealCond = sRealCond.replaceAt( nPos, 1, rDecSep );
+            }
+        }
+        aConditions.append("[").append(sRealCond).append("]");
+    }
+
+    const SvNumberformat* pFormat = pFormatter->GetEntry(l_nKey);
+    if ( pFormat )
+        aConditions.append( pFormat->GetFormatstring() );
+
+    aConditions.append( ';' );
 }
 
 void SvXMLNumFormatContext::AddCondition( const OUString& rCondition, const OUString& rApplyName )

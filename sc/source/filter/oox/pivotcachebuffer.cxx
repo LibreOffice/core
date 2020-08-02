@@ -816,21 +816,21 @@ void PivotCacheField::importPCRecordItem( SequenceInputStream& rStrm, const Work
 void PivotCacheField::writeItemToSourceDataCell( const WorksheetHelper& rSheetHelper,
         sal_Int32 nCol, sal_Int32 nRow, const PivotCacheItem& rItem )
 {
-    if( rItem.getType() != XML_m )
+    if( rItem.getType() == XML_m )
+        return;
+
+    CellModel aModel;
+    aModel.maCellAddr = ScAddress( SCCOL( nCol ), SCROW( nRow ), rSheetHelper.getSheetIndex() );
+    SheetDataBuffer& rSheetData = rSheetHelper.getSheetData();
+    switch( rItem.getType() )
     {
-        CellModel aModel;
-        aModel.maCellAddr = ScAddress( SCCOL( nCol ), SCROW( nRow ), rSheetHelper.getSheetIndex() );
-        SheetDataBuffer& rSheetData = rSheetHelper.getSheetData();
-        switch( rItem.getType() )
-        {
-            case XML_s: rSheetData.setStringCell( aModel, rItem.getValue().get< OUString >() );                             break;
-            case XML_n: rSheetData.setValueCell( aModel, rItem.getValue().get< double >() );                                break;
-            case XML_i: rSheetData.setValueCell( aModel, rItem.getValue().get< sal_Int16 >() );                             break;
-            case XML_d: rSheetData.setDateTimeCell( aModel, rItem.getValue().get< css::util::DateTime >() );                           break;
-            case XML_b: rSheetData.setBooleanCell( aModel, rItem.getValue().get< bool >() );                                break;
-            case XML_e: rSheetData.setErrorCell( aModel, static_cast< sal_uInt8 >( rItem.getValue().get< sal_Int32 >() ) ); break;
-            default:    OSL_FAIL( "PivotCacheField::writeItemToSourceDataCell - unexpected item data type" );
-        }
+        case XML_s: rSheetData.setStringCell( aModel, rItem.getValue().get< OUString >() );                             break;
+        case XML_n: rSheetData.setValueCell( aModel, rItem.getValue().get< double >() );                                break;
+        case XML_i: rSheetData.setValueCell( aModel, rItem.getValue().get< sal_Int16 >() );                             break;
+        case XML_d: rSheetData.setDateTimeCell( aModel, rItem.getValue().get< css::util::DateTime >() );                           break;
+        case XML_b: rSheetData.setBooleanCell( aModel, rItem.getValue().get< bool >() );                                break;
+        case XML_e: rSheetData.setErrorCell( aModel, static_cast< sal_uInt8 >( rItem.getValue().get< sal_Int32 >() ) ); break;
+        default:    OSL_FAIL( "PivotCacheField::writeItemToSourceDataCell - unexpected item data type" );
     }
 }
 

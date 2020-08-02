@@ -520,19 +520,19 @@ bool LocaleDataWrapper::doesSecondaryCalendarUseEC( const OUString& rName ) cons
 
 void LocaleDataWrapper::getDefaultCalendarImpl()
 {
-    if (!xDefaultCalendar)
+    if (xDefaultCalendar)
+        return;
+
+    Sequence< Calendar2 > xCals = getAllCalendars();
+    auto pCal = xCals.begin();
+    if (xCals.getLength() > 1)
     {
-        Sequence< Calendar2 > xCals = getAllCalendars();
-        auto pCal = xCals.begin();
-        if (xCals.getLength() > 1)
-        {
-            pCal = std::find_if(xCals.begin(), xCals.end(),
-                [](const Calendar2& rCal) { return rCal.Default; });
-            if (pCal == xCals.end())
-                pCal = xCals.begin();
-        }
-        xDefaultCalendar = std::make_shared<Calendar2>( *pCal);
+        pCal = std::find_if(xCals.begin(), xCals.end(),
+            [](const Calendar2& rCal) { return rCal.Default; });
+        if (pCal == xCals.end())
+            pCal = xCals.begin();
     }
+    xDefaultCalendar = std::make_shared<Calendar2>( *pCal);
 }
 
 const std::shared_ptr< css::i18n::Calendar2 >& LocaleDataWrapper::getDefaultCalendar() const
@@ -1061,21 +1061,21 @@ void LocaleDataWrapper::getDigitGroupingImpl()
         aGrouping.realloc(3);   // room for {3,2,0}
         aGrouping[0] = 0;       // invalidate
     }
-    if (!aGrouping[0])
+    if (aGrouping[0])
+        return;
+
+    i18n::LanguageCountryInfo aLCInfo( getLanguageCountryInfo());
+    if (aLCInfo.Country.equalsIgnoreAsciiCase("IN") || // India
+        aLCInfo.Country.equalsIgnoreAsciiCase("BT") )  // Bhutan
     {
-        i18n::LanguageCountryInfo aLCInfo( getLanguageCountryInfo());
-        if (aLCInfo.Country.equalsIgnoreAsciiCase("IN") || // India
-            aLCInfo.Country.equalsIgnoreAsciiCase("BT") )  // Bhutan
-        {
-            aGrouping[0] = 3;
-            aGrouping[1] = 2;
-            aGrouping[2] = 0;
-        }
-        else
-        {
-            aGrouping[0] = 3;
-            aGrouping[1] = 0;
-        }
+        aGrouping[0] = 3;
+        aGrouping[1] = 2;
+        aGrouping[2] = 0;
+    }
+    else
+    {
+        aGrouping[0] = 3;
+        aGrouping[1] = 0;
     }
 }
 

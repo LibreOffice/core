@@ -140,21 +140,21 @@ void WorkWindow::ShowFullScreenMode( bool bFullScreenMode, sal_Int32 nDisplayScr
         return;
 
     mbFullScreenMode = bFullScreenMode;
-    if ( !mbSysChild )
-    {
-        // Dispose of the canvas implementation, which might rely on
-        // screen-specific system data.
-        css::uno::Reference< css::rendering::XCanvas > xCanvas( mpWindowImpl->mxCanvas );
-        if( xCanvas.is() )
-        {
-            css::uno::Reference< css::lang::XComponent >  xCanvasComponent( xCanvas, css::uno::UNO_QUERY );
-            if( xCanvasComponent.is() )
-                xCanvasComponent->dispose();
-        }
+    if ( mbSysChild )
+        return;
 
-        mpWindowImpl->mpFrameWindow->mpWindowImpl->mbWaitSystemResize = true;
-        ImplGetFrame()->ShowFullScreen( bFullScreenMode, nDisplayScreen );
+    // Dispose of the canvas implementation, which might rely on
+    // screen-specific system data.
+    css::uno::Reference< css::rendering::XCanvas > xCanvas( mpWindowImpl->mxCanvas );
+    if( xCanvas.is() )
+    {
+        css::uno::Reference< css::lang::XComponent >  xCanvasComponent( xCanvas, css::uno::UNO_QUERY );
+        if( xCanvasComponent.is() )
+            xCanvasComponent->dispose();
     }
+
+    mpWindowImpl->mpFrameWindow->mpWindowImpl->mbWaitSystemResize = true;
+    ImplGetFrame()->ShowFullScreen( bFullScreenMode, nDisplayScreen );
 }
 
 void WorkWindow::StartPresentationMode( PresentationFlags nFlags )

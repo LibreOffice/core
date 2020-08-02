@@ -833,67 +833,67 @@ void PrinterController::setupPrinter( weld::Window* i_pParent )
     // Important to hold printer alive while doing setup etc.
     VclPtr< Printer > xPrinter = mpImplData->mxPrinter;
 
-    if( xPrinter )
+    if( !xPrinter )
+        return;
+
+    xPrinter->Push();
+    xPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
+
+    // get current data
+    Size aPaperSize(xPrinter->GetPaperSize());
+    Orientation eOrientation = xPrinter->GetOrientation();
+    sal_uInt16 nPaperBin = xPrinter->GetPaperBin();
+
+    // reset paper size back to last configured size, not
+    // whatever happens to be the current page
+    // (but only if the printer config has changed, otherwise
+    // don't override printer page auto-detection - tdf#91362)
+    if (getPrinterModified() || getPapersizeFromSetup())
     {
-        xPrinter->Push();
-        xPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
-
-        // get current data
-        Size aPaperSize(xPrinter->GetPaperSize());
-        Orientation eOrientation = xPrinter->GetOrientation();
-        sal_uInt16 nPaperBin = xPrinter->GetPaperBin();
-
-        // reset paper size back to last configured size, not
-        // whatever happens to be the current page
-        // (but only if the printer config has changed, otherwise
-        // don't override printer page auto-detection - tdf#91362)
-        if (getPrinterModified() || getPapersizeFromSetup())
-        {
-            resetPaperToLastConfigured();
-        }
-
-        // call driver setup
-        bRet = xPrinter->Setup( i_pParent, PrinterSetupMode::SingleJob );
-        SAL_WARN_IF(xPrinter != mpImplData->mxPrinter, "vcl.gdi",
-                    "Printer changed underneath us during setup");
-        xPrinter = mpImplData->mxPrinter;
-
-        Size aNewPaperSize(xPrinter->GetPaperSize());
-        if (bRet)
-        {
-            bool bInvalidateCache = false;
-            setPapersizeFromSetup(xPrinter->GetPrinterSettingsPreferred());
-
-            // was papersize overridden ? if so we need to take action if we're
-            // configured to use the driver papersize
-            if (aNewPaperSize != mpImplData->maDefaultPageSize)
-            {
-                mpImplData->maDefaultPageSize = aNewPaperSize;
-                bInvalidateCache = getPapersizeFromSetup();
-            }
-
-            // was bin overridden ? if so we need to take action
-            sal_uInt16 nNewPaperBin = xPrinter->GetPaperBin();
-            if (nNewPaperBin != nPaperBin)
-            {
-                mpImplData->mnFixedPaperBin = nNewPaperBin;
-                bInvalidateCache = true;
-            }
-
-            if (bInvalidateCache)
-            {
-                mpImplData->maPageCache.invalidate();
-            }
-        }
-        else
-        {
-            //restore to whatever it was before we entered this method
-            xPrinter->SetOrientation( eOrientation );
-            if (aPaperSize != aNewPaperSize)
-                xPrinter->SetPaperSizeUser(aPaperSize);
-        }
-        xPrinter->Pop();
+        resetPaperToLastConfigured();
     }
+
+    // call driver setup
+    bRet = xPrinter->Setup( i_pParent, PrinterSetupMode::SingleJob );
+    SAL_WARN_IF(xPrinter != mpImplData->mxPrinter, "vcl.gdi",
+                "Printer changed underneath us during setup");
+    xPrinter = mpImplData->mxPrinter;
+
+    Size aNewPaperSize(xPrinter->GetPaperSize());
+    if (bRet)
+    {
+        bool bInvalidateCache = false;
+        setPapersizeFromSetup(xPrinter->GetPrinterSettingsPreferred());
+
+        // was papersize overridden ? if so we need to take action if we're
+        // configured to use the driver papersize
+        if (aNewPaperSize != mpImplData->maDefaultPageSize)
+        {
+            mpImplData->maDefaultPageSize = aNewPaperSize;
+            bInvalidateCache = getPapersizeFromSetup();
+        }
+
+        // was bin overridden ? if so we need to take action
+        sal_uInt16 nNewPaperBin = xPrinter->GetPaperBin();
+        if (nNewPaperBin != nPaperBin)
+        {
+            mpImplData->mnFixedPaperBin = nNewPaperBin;
+            bInvalidateCache = true;
+        }
+
+        if (bInvalidateCache)
+        {
+            mpImplData->maPageCache.invalidate();
+        }
+    }
+    else
+    {
+        //restore to whatever it was before we entered this method
+        xPrinter->SetOrientation( eOrientation );
+        if (aPaperSize != aNewPaperSize)
+            xPrinter->SetPaperSizeUser(aPaperSize);
+    }
+    xPrinter->Pop();
 }
 
 PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( const css::uno::Sequence< css::beans::PropertyValue >& i_rProps )
@@ -1075,20 +1075,20 @@ static void appendSubPage( GDIMetaFile& o_rMtf, const tools::Rectangle& i_rClipR
     o_rMtf.AddAction( new MetaPopAction() );
 
     // draw a border
-    if( i_bDrawBorder )
-    {
-        // save gstate
-        o_rMtf.AddAction( new MetaPushAction( PushFlags::LINECOLOR | PushFlags::FILLCOLOR | PushFlags::CLIPREGION | PushFlags::MAPMODE ) );
-        o_rMtf.AddAction( new MetaMapModeAction( MapMode( MapUnit::Map100thMM ) ) );
+    if( !i_bDrawBorder )
+        return;
 
-        tools::Rectangle aBorderRect( i_rClipRect );
-        o_rMtf.AddAction( new MetaLineColorAction( COL_BLACK, true ) );
-        o_rMtf.AddAction( new MetaFillColorAction( COL_TRANSPARENT, false ) );
-        o_rMtf.AddAction( new MetaRectAction( aBorderRect ) );
+    // save gstate
+    o_rMtf.AddAction( new MetaPushAction( PushFlags::LINECOLOR | PushFlags::FILLCOLOR | PushFlags::CLIPREGION | PushFlags::MAPMODE ) );
+    o_rMtf.AddAction( new MetaMapModeAction( MapMode( MapUnit::Map100thMM ) ) );
 
-        // restore gstate
-        o_rMtf.AddAction( new MetaPopAction() );
-    }
+    tools::Rectangle aBorderRect( i_rClipRect );
+    o_rMtf.AddAction( new MetaLineColorAction( COL_BLACK, true ) );
+    o_rMtf.AddAction( new MetaFillColorAction( COL_TRANSPARENT, false ) );
+    o_rMtf.AddAction( new MetaRectAction( aBorderRect ) );
+
+    // restore gstate
+    o_rMtf.AddAction( new MetaPopAction() );
 }
 
 PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache )

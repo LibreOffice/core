@@ -57,27 +57,27 @@ ScDrawView::ScDrawView(
 
 void ScDrawView::SetPageAnchored()
 {
-    if( AreObjectsMarked() )
+    if( !AreObjectsMarked() )
+        return;
+
+    const SdrMarkList* pMark = &GetMarkedObjectList();
+    const size_t nCount = pMark->GetMarkCount();
+
+    BegUndo(ScResId(SCSTR_UNDO_PAGE_ANCHOR));
+    for( size_t i=0; i<nCount; ++i )
     {
-        const SdrMarkList* pMark = &GetMarkedObjectList();
-        const size_t nCount = pMark->GetMarkCount();
-
-        BegUndo(ScResId(SCSTR_UNDO_PAGE_ANCHOR));
-        for( size_t i=0; i<nCount; ++i )
-        {
-            SdrObject* pObj = pMark->GetMark(i)->GetMarkedSdrObj();
-            AddUndo (std::make_unique<ScUndoAnchorData>( pObj, pDoc, nTab ));
-            ScDrawLayer::SetPageAnchored( *pObj );
-        }
-        EndUndo();
-
-        if ( pViewData )
-            pViewData->GetDocShell()->SetDrawModified();
-
-        // Remove the anchor object.
-        maHdlList.RemoveAllByKind(SdrHdlKind::Anchor);
-        maHdlList.RemoveAllByKind(SdrHdlKind::Anchor_TR);
+        SdrObject* pObj = pMark->GetMark(i)->GetMarkedSdrObj();
+        AddUndo (std::make_unique<ScUndoAnchorData>( pObj, pDoc, nTab ));
+        ScDrawLayer::SetPageAnchored( *pObj );
     }
+    EndUndo();
+
+    if ( pViewData )
+        pViewData->GetDocShell()->SetDrawModified();
+
+    // Remove the anchor object.
+    maHdlList.RemoveAllByKind(SdrHdlKind::Anchor);
+    maHdlList.RemoveAllByKind(SdrHdlKind::Anchor_TR);
 }
 
 void ScDrawView::SetCellAnchored(bool bResizeWithCell)
@@ -85,27 +85,27 @@ void ScDrawView::SetCellAnchored(bool bResizeWithCell)
     if (!pDoc)
         return;
 
-    if( AreObjectsMarked() )
+    if( !AreObjectsMarked() )
+        return;
+
+    const SdrMarkList* pMark = &GetMarkedObjectList();
+    const size_t nCount = pMark->GetMarkCount();
+
+    BegUndo(ScResId(SCSTR_UNDO_CELL_ANCHOR));
+    for( size_t i=0; i<nCount; ++i )
     {
-        const SdrMarkList* pMark = &GetMarkedObjectList();
-        const size_t nCount = pMark->GetMarkCount();
+        SdrObject* pObj = pMark->GetMark(i)->GetMarkedSdrObj();
+        AddUndo (std::make_unique<ScUndoAnchorData>( pObj, pDoc, nTab ));
+        ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *pDoc, nTab, bResizeWithCell);
+    }
+    EndUndo();
 
-        BegUndo(ScResId(SCSTR_UNDO_CELL_ANCHOR));
-        for( size_t i=0; i<nCount; ++i )
-        {
-            SdrObject* pObj = pMark->GetMark(i)->GetMarkedSdrObj();
-            AddUndo (std::make_unique<ScUndoAnchorData>( pObj, pDoc, nTab ));
-            ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *pDoc, nTab, bResizeWithCell);
-        }
-        EndUndo();
+    if ( pViewData )
+    {
+        pViewData->GetDocShell()->SetDrawModified();
 
-        if ( pViewData )
-        {
-            pViewData->GetDocShell()->SetDrawModified();
-
-            // Set the anchor object.
-            AddCustomHdl();
-        }
+        // Set the anchor object.
+        AddCustomHdl();
     }
 }
 
@@ -204,32 +204,32 @@ void ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 void ScDrawView::UpdateIMap( SdrObject* pObj )
 {
-    if ( pViewData &&
+    if ( !(pViewData &&
          pViewData->GetViewShell()->GetViewFrame()->HasChildWindow( ScIMapChildWindowId() ) &&
-         pObj && ( dynamic_cast<const SdrGrafObj*>( pObj) != nullptr || dynamic_cast<const SdrOle2Obj*>( pObj) != nullptr ) )
+         pObj && ( dynamic_cast<const SdrGrafObj*>( pObj) != nullptr || dynamic_cast<const SdrOle2Obj*>( pObj) != nullptr )) )
+        return;
+
+    Graphic     aGraphic;
+    TargetList  aTargetList;
+    SvxIMapInfo* pIMapInfo = SvxIMapInfo::GetIMapInfo( pObj );
+    const ImageMap* pImageMap = nullptr;
+    if ( pIMapInfo )
+        pImageMap = &pIMapInfo->GetImageMap();
+
+    // handle target list
+    SfxViewFrame::GetTargetList( aTargetList );
+
+    // handle graphics from object
+    if ( dynamic_cast<const SdrGrafObj*>( pObj) !=  nullptr )
+        aGraphic = static_cast<SdrGrafObj*>(pObj)->GetGraphic();
+    else
     {
-        Graphic     aGraphic;
-        TargetList  aTargetList;
-        SvxIMapInfo* pIMapInfo = SvxIMapInfo::GetIMapInfo( pObj );
-        const ImageMap* pImageMap = nullptr;
-        if ( pIMapInfo )
-            pImageMap = &pIMapInfo->GetImageMap();
-
-        // handle target list
-        SfxViewFrame::GetTargetList( aTargetList );
-
-        // handle graphics from object
-        if ( dynamic_cast<const SdrGrafObj*>( pObj) !=  nullptr )
-            aGraphic = static_cast<SdrGrafObj*>(pObj)->GetGraphic();
-        else
-        {
-            const Graphic* pGraphic = static_cast<const SdrOle2Obj*>(pObj)->GetGraphic();
-            if ( pGraphic )
-                aGraphic = *pGraphic;
-        }
-
-        ScIMapDlgSet( aGraphic, pImageMap, &aTargetList, pObj );    // from imapwrap
+        const Graphic* pGraphic = static_cast<const SdrOle2Obj*>(pObj)->GetGraphic();
+        if ( pGraphic )
+            aGraphic = *pGraphic;
     }
+
+    ScIMapDlgSet( aGraphic, pImageMap, &aTargetList, pObj );    // from imapwrap
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

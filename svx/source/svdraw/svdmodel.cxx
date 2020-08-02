@@ -388,24 +388,24 @@ void SdrModel::Repeat(SfxRepeatTarget& rView)
 void SdrModel::ImpPostUndoAction(std::unique_ptr<SdrUndoAction> pUndo)
 {
     DBG_ASSERT( mpImpl->mpUndoManager == nullptr, "svx::SdrModel::ImpPostUndoAction(), method not supported with application undo manager!" );
-    if( IsUndoEnabled() )
+    if( !IsUndoEnabled() )
+        return;
+
+    if (m_aUndoLink)
     {
-        if (m_aUndoLink)
+        m_aUndoLink(std::move(pUndo));
+    }
+    else
+    {
+        if (!m_pUndoStack)
+            m_pUndoStack.reset(new std::deque<std::unique_ptr<SfxUndoAction>>);
+        m_pUndoStack->emplace_front(std::move(pUndo));
+        while (m_pUndoStack->size()>m_nMaxUndoCount)
         {
-            m_aUndoLink(std::move(pUndo));
+            m_pUndoStack->pop_back();
         }
-        else
-        {
-            if (!m_pUndoStack)
-                m_pUndoStack.reset(new std::deque<std::unique_ptr<SfxUndoAction>>);
-            m_pUndoStack->emplace_front(std::move(pUndo));
-            while (m_pUndoStack->size()>m_nMaxUndoCount)
-            {
-                m_pUndoStack->pop_back();
-            }
-            if (m_pRedoStack!=nullptr)
-                m_pRedoStack->clear();
-        }
+        if (m_pRedoStack!=nullptr)
+            m_pRedoStack->clear();
     }
 }
 
@@ -1730,55 +1730,55 @@ void SdrModel::setLock( bool bLock )
 void SdrModel::MigrateItemSet( const SfxItemSet* pSourceSet, SfxItemSet* pDestSet, SdrModel* pNewModelel )
 {
     assert(pNewModelel != nullptr);
-    if( pSourceSet && pDestSet && (pSourceSet != pDestSet ) )
+    if( !(pSourceSet && pDestSet && (pSourceSet != pDestSet )) )
+        return;
+
+    SfxWhichIter aWhichIter(*pSourceSet);
+    sal_uInt16 nWhich(aWhichIter.FirstWhich());
+    const SfxPoolItem *pPoolItem;
+
+    while(nWhich)
     {
-        SfxWhichIter aWhichIter(*pSourceSet);
-        sal_uInt16 nWhich(aWhichIter.FirstWhich());
-        const SfxPoolItem *pPoolItem;
-
-        while(nWhich)
+        if(SfxItemState::SET == pSourceSet->GetItemState(nWhich, false, &pPoolItem))
         {
-            if(SfxItemState::SET == pSourceSet->GetItemState(nWhich, false, &pPoolItem))
+            std::unique_ptr<SfxPoolItem> pResultItem;
+
+            switch( nWhich )
             {
-                std::unique_ptr<SfxPoolItem> pResultItem;
-
-                switch( nWhich )
-                {
-                case XATTR_FILLBITMAP:
-                    pResultItem = static_cast<const XFillBitmapItem*>(pPoolItem)->checkForUniqueItem( pNewModelel );
-                    break;
-                case XATTR_LINEDASH:
-                    pResultItem = static_cast<const XLineDashItem*>(pPoolItem)->checkForUniqueItem( pNewModelel );
-                    break;
-                case XATTR_LINESTART:
-                    pResultItem = static_cast<const XLineStartItem*>(pPoolItem)->checkForUniqueItem( pNewModelel );
-                    break;
-                case XATTR_LINEEND:
-                    pResultItem = static_cast<const XLineEndItem*>(pPoolItem)->checkForUniqueItem( pNewModelel );
-                    break;
-                case XATTR_FILLGRADIENT:
-                    pResultItem = static_cast<const XFillGradientItem*>(pPoolItem)->checkForUniqueItem( pNewModelel );
-                    break;
-                case XATTR_FILLFLOATTRANSPARENCE:
-                    // allow all kinds of XFillFloatTransparenceItem to be set
-                    pResultItem = static_cast<const XFillFloatTransparenceItem*>(pPoolItem)->checkForUniqueItem( pNewModelel );
-                    break;
-                case XATTR_FILLHATCH:
-                    pResultItem = static_cast<const XFillHatchItem*>(pPoolItem)->checkForUniqueItem( pNewModelel );
-                    break;
-                }
-
-                // set item
-                if( pResultItem )
-                {
-                    pDestSet->Put(*pResultItem);
-                    pResultItem.reset();
-                }
-                else
-                    pDestSet->Put(*pPoolItem);
+            case XATTR_FILLBITMAP:
+                pResultItem = static_cast<const XFillBitmapItem*>(pPoolItem)->checkForUniqueItem( pNewModelel );
+                break;
+            case XATTR_LINEDASH:
+                pResultItem = static_cast<const XLineDashItem*>(pPoolItem)->checkForUniqueItem( pNewModelel );
+                break;
+            case XATTR_LINESTART:
+                pResultItem = static_cast<const XLineStartItem*>(pPoolItem)->checkForUniqueItem( pNewModelel );
+                break;
+            case XATTR_LINEEND:
+                pResultItem = static_cast<const XLineEndItem*>(pPoolItem)->checkForUniqueItem( pNewModelel );
+                break;
+            case XATTR_FILLGRADIENT:
+                pResultItem = static_cast<const XFillGradientItem*>(pPoolItem)->checkForUniqueItem( pNewModelel );
+                break;
+            case XATTR_FILLFLOATTRANSPARENCE:
+                // allow all kinds of XFillFloatTransparenceItem to be set
+                pResultItem = static_cast<const XFillFloatTransparenceItem*>(pPoolItem)->checkForUniqueItem( pNewModelel );
+                break;
+            case XATTR_FILLHATCH:
+                pResultItem = static_cast<const XFillHatchItem*>(pPoolItem)->checkForUniqueItem( pNewModelel );
+                break;
             }
-            nWhich = aWhichIter.NextWhich();
+
+            // set item
+            if( pResultItem )
+            {
+                pDestSet->Put(*pResultItem);
+                pResultItem.reset();
+            }
+            else
+                pDestSet->Put(*pPoolItem);
         }
+        nWhich = aWhichIter.NextWhich();
     }
 }
 

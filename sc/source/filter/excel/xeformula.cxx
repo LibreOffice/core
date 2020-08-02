@@ -194,19 +194,19 @@ bool XclExpFuncData::IsExcelOnlyParam() const
 
 void XclExpFuncData::IncParamInfoIdx()
 {
-    if( mpParamInfo )
-    {
-        // move pointer to next entry, if something explicit follows
-        if( (o3tl::make_unsigned( mpParamInfo - mrFuncInfo.mpParamInfos + 1 ) < EXC_FUNCINFO_PARAMINFO_COUNT) && (mpParamInfo[ 1 ].meValid != EXC_PARAM_NONE) )
-            ++mpParamInfo;
-        // if last parameter type is 'Excel-only' or 'Calc-only', do not repeat it
-        else if( IsExcelOnlyParam() || IsCalcOnlyParam() )
-            mpParamInfo = nullptr;
-        // points to last info, but parameter pairs expected, move to previous info
-        else if( mrFuncInfo.IsParamPairs() )
-            --mpParamInfo;
-        // otherwise: repeat last parameter class
-    }
+    if( !mpParamInfo )
+        return;
+
+    // move pointer to next entry, if something explicit follows
+    if( (o3tl::make_unsigned( mpParamInfo - mrFuncInfo.mpParamInfos + 1 ) < EXC_FUNCINFO_PARAMINFO_COUNT) && (mpParamInfo[ 1 ].meValid != EXC_PARAM_NONE) )
+        ++mpParamInfo;
+    // if last parameter type is 'Excel-only' or 'Calc-only', do not repeat it
+    else if( IsExcelOnlyParam() || IsCalcOnlyParam() )
+        mpParamInfo = nullptr;
+    // points to last info, but parameter pairs expected, move to previous info
+    else if( mrFuncInfo.IsParamPairs() )
+        --mpParamInfo;
+    // otherwise: repeat last parameter class
 }
 
 void XclExpFuncData::FinishParam( sal_uInt16 nTokPos )
@@ -617,26 +617,26 @@ void XclExpFmlaCompImpl::Init( XclFormulaType eType, const ScTokenArray& rScTokA
 
 void XclExpFmlaCompImpl::RecalcTokenClasses()
 {
+    if( !mxData->mbOk )
+        return;
+
+    mxData->mbOk = mxData->maOpPosStack.size() == 1;
+    OSL_ENSURE( mxData->mbOk, "XclExpFmlaCompImpl::RecalcTokenClasses - position of root token expected on stack" );
     if( mxData->mbOk )
     {
-        mxData->mbOk = mxData->maOpPosStack.size() == 1;
-        OSL_ENSURE( mxData->mbOk, "XclExpFmlaCompImpl::RecalcTokenClasses - position of root token expected on stack" );
-        if( mxData->mbOk )
-        {
-            /*  Cell and array formulas start with VAL conversion and VALTYPE
-                parameter type, defined names start with ARR conversion and
-                REFTYPE parameter type for the root token. */
-            bool bNameFmla = mxData->mrCfg.meClassType == EXC_CLASSTYPE_NAME;
-            XclFuncParamConv eParamConv = bNameFmla ? EXC_PARAMCONV_ARR : EXC_PARAMCONV_VAL;
-            XclExpClassConv eClassConv = bNameFmla ? EXC_CLASSCONV_ARR : EXC_CLASSCONV_VAL;
-            XclExpTokenConvInfo aConvInfo = { PopOperandPos(), eParamConv, !bNameFmla };
-            RecalcTokenClass( aConvInfo, eParamConv, eClassConv, bNameFmla );
-        }
-
-        // clear operand vectors (calls to the expensive InsertZeros() may follow)
-        mxData->maOpListVec.clear();
-        mxData->maOpPosStack.clear();
+        /*  Cell and array formulas start with VAL conversion and VALTYPE
+            parameter type, defined names start with ARR conversion and
+            REFTYPE parameter type for the root token. */
+        bool bNameFmla = mxData->mrCfg.meClassType == EXC_CLASSTYPE_NAME;
+        XclFuncParamConv eParamConv = bNameFmla ? EXC_PARAMCONV_ARR : EXC_PARAMCONV_VAL;
+        XclExpClassConv eClassConv = bNameFmla ? EXC_CLASSCONV_ARR : EXC_CLASSCONV_VAL;
+        XclExpTokenConvInfo aConvInfo = { PopOperandPos(), eParamConv, !bNameFmla };
+        RecalcTokenClass( aConvInfo, eParamConv, eClassConv, bNameFmla );
     }
+
+    // clear operand vectors (calls to the expensive InsertZeros() may follow)
+    mxData->maOpListVec.clear();
+    mxData->maOpPosStack.clear();
 }
 
 void XclExpFmlaCompImpl::RecalcTokenClass( const XclExpTokenConvInfo& rConvInfo,
@@ -1434,23 +1434,23 @@ void XclExpFmlaCompImpl::ProcessFunction( const XclExpScToken& rTokData )
 void XclExpFmlaCompImpl::PrepareFunction( const XclExpFuncData& rFuncData )
 {
     // For OOXML these are not rewritten anymore.
-    if (GetOutput() != EXC_OUTPUT_XML_2007)
+    if (GetOutput() == EXC_OUTPUT_XML_2007)
+        return;
+
+    switch( rFuncData.GetOpCode() )
     {
-        switch( rFuncData.GetOpCode() )
-        {
-            case ocCosecant:                // simulate CSC(x) by (1/SIN(x))
-            case ocSecant:                  // simulate SEC(x) by (1/COS(x))
-            case ocCot:                     // simulate COT(x) by (1/TAN(x))
-            case ocCosecantHyp:             // simulate CSCH(x) by (1/SINH(x))
-            case ocSecantHyp:               // simulate SECH(x) by (1/COSH(x))
-            case ocCotHyp:                  // simulate COTH(x) by (1/TANH(x))
-                AppendIntToken( 1 );
-                break;
-            case ocArcCot:                  // simulate ACOT(x) by (PI/2-ATAN(x))
-                AppendNumToken( F_PI2 );
-                break;
-            default:;
-        }
+        case ocCosecant:                // simulate CSC(x) by (1/SIN(x))
+        case ocSecant:                  // simulate SEC(x) by (1/COS(x))
+        case ocCot:                     // simulate COT(x) by (1/TAN(x))
+        case ocCosecantHyp:             // simulate CSCH(x) by (1/SINH(x))
+        case ocSecantHyp:               // simulate SECH(x) by (1/COSH(x))
+        case ocCotHyp:                  // simulate COTH(x) by (1/TANH(x))
+            AppendIntToken( 1 );
+            break;
+        case ocArcCot:                  // simulate ACOT(x) by (PI/2-ATAN(x))
+            AppendNumToken( F_PI2 );
+            break;
+        default:;
     }
 }
 

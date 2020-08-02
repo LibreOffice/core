@@ -116,19 +116,19 @@ IMPL_LINK_NOARG(ImplGrafControl, ImplModifyHdl, Timer*, void)
               maCommand == ".uno:GrafTransparence" )
         a <<= sal_Int32( nVal );
 
-    if ( a.hasValue() )
-    {
-        INetURLObject aObj( maCommand );
+    if ( !a.hasValue() )
+        return;
 
-        Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = aObj.GetURLPath();
-        aArgs[0].Value = a;
+    INetURLObject aObj( maCommand );
 
-        SfxToolBoxControl::Dispatch(
-            Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
-            maCommand,
-            aArgs );
-    }
+    Sequence< PropertyValue > aArgs( 1 );
+    aArgs[0].Name = aObj.GetURLPath();
+    aArgs[0].Value = a;
+
+    SfxToolBoxControl::Dispatch(
+        Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
+        maCommand,
+        aArgs );
 }
 
 void ImplGrafControl::Update( const SfxPoolItem* pItem )

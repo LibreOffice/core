@@ -27,21 +27,21 @@ VersionCompat::VersionCompat( SvStream& rStm, StreamMode nStreamMode, sal_uInt16
             mnStmMode   ( nStreamMode ),
             mnVersion   ( nVersion )
 {
-    if( !mpRWStm->GetError() )
+    if( mpRWStm->GetError() )
+        return;
+
+    if( StreamMode::WRITE == mnStmMode )
     {
-        if( StreamMode::WRITE == mnStmMode )
-        {
-            mpRWStm->WriteUInt16( mnVersion );
-            mnCompatPos = mpRWStm->Tell();
-            mnTotalSize = mnCompatPos + 4;
-            mpRWStm->SeekRel( 4 );
-        }
-        else
-        {
-            mpRWStm->ReadUInt16( mnVersion );
-            mpRWStm->ReadUInt32( mnTotalSize );
-            mnCompatPos = mpRWStm->Tell();
-        }
+        mpRWStm->WriteUInt16( mnVersion );
+        mnCompatPos = mpRWStm->Tell();
+        mnTotalSize = mnCompatPos + 4;
+        mpRWStm->SeekRel( 4 );
+    }
+    else
+    {
+        mpRWStm->ReadUInt16( mnVersion );
+        mpRWStm->ReadUInt32( mnTotalSize );
+        mnCompatPos = mpRWStm->Tell();
     }
 }
 

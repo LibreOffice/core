@@ -309,28 +309,28 @@ XPropertySetInfoImpl2::hasPropertyByName(
 void FileProvider::initProperties()
 {
     osl::MutexGuard aGuard( m_aMutex );
-    if( ! m_xPropertySetInfo.is() )
-    {
-        osl_getLocalHostname( &m_HostName.pData );
+    if(  m_xPropertySetInfo.is() )
+        return;
+
+    osl_getLocalHostname( &m_HostName.pData );
 
 #if defined ( UNX )
-        m_FileSystemNotation = FileSystemNotation::UNIX_NOTATION;
+    m_FileSystemNotation = FileSystemNotation::UNIX_NOTATION;
 #elif defined( _WIN32 )
-        m_FileSystemNotation = FileSystemNotation::DOS_NOTATION;
+    m_FileSystemNotation = FileSystemNotation::DOS_NOTATION;
 #else
-        m_FileSystemNotation = FileSystemNotation::UNKNOWN_NOTATION;
+    m_FileSystemNotation = FileSystemNotation::UNKNOWN_NOTATION;
 #endif
-        osl::Security aSecurity;
-        aSecurity.getHomeDir( m_HomeDirectory );
+    osl::Security aSecurity;
+    aSecurity.getHomeDir( m_HomeDirectory );
 
-        // static const sal_Int32 UNKNOWN_NOTATION = (sal_Int32)0;
-        // static const sal_Int32 UNIX_NOTATION = (sal_Int32)1;
-        // static const sal_Int32 DOS_NOTATION = (sal_Int32)2;
-        // static const sal_Int32 MAC_NOTATION = (sal_Int32)3;
+    // static const sal_Int32 UNKNOWN_NOTATION = (sal_Int32)0;
+    // static const sal_Int32 UNIX_NOTATION = (sal_Int32)1;
+    // static const sal_Int32 DOS_NOTATION = (sal_Int32)2;
+    // static const sal_Int32 MAC_NOTATION = (sal_Int32)3;
 
-        XPropertySetInfoImpl2* p = new XPropertySetInfoImpl2();
-        m_xPropertySetInfo.set( p );
-    }
+    XPropertySetInfoImpl2* p = new XPropertySetInfoImpl2();
+    m_xPropertySetInfo.set( p );
 }
 
 

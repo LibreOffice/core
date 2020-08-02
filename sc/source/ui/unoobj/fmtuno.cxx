@@ -144,39 +144,39 @@ ScTableConditionalFormat::ScTableConditionalFormat(
 {
     //  read the entry from the document...
 
-    if ( pDoc && nKey )
+    if ( !(pDoc && nKey) )
+        return;
+
+    ScConditionalFormatList* pList = pDoc->GetCondFormList(nTab);
+    if (!pList)
+        return;
+
+    const ScConditionalFormat* pFormat = pList->GetFormat( nKey );
+    if (!pFormat)
+        return;
+
+    // During save to XML.
+    if (pDoc->IsInExternalReferenceMarking())
+        pFormat->MarkUsedExternalReferences();
+
+    size_t nEntryCount = pFormat->size();
+    for (size_t i=0; i<nEntryCount; i++)
     {
-        ScConditionalFormatList* pList = pDoc->GetCondFormList(nTab);
-        if (pList)
-        {
-            const ScConditionalFormat* pFormat = pList->GetFormat( nKey );
-            if (pFormat)
-            {
-                // During save to XML.
-                if (pDoc->IsInExternalReferenceMarking())
-                    pFormat->MarkUsedExternalReferences();
+        ScCondFormatEntryItem aItem;
+        const ScFormatEntry* pFrmtEntry = pFormat->GetEntry(i);
+        if(pFrmtEntry->GetType() != ScFormatEntry::Type::Condition &&
+           pFrmtEntry->GetType() != ScFormatEntry::Type::ExtCondition)
+            continue;
 
-                size_t nEntryCount = pFormat->size();
-                for (size_t i=0; i<nEntryCount; i++)
-                {
-                    ScCondFormatEntryItem aItem;
-                    const ScFormatEntry* pFrmtEntry = pFormat->GetEntry(i);
-                    if(pFrmtEntry->GetType() != ScFormatEntry::Type::Condition &&
-                       pFrmtEntry->GetType() != ScFormatEntry::Type::ExtCondition)
-                        continue;
+        const ScCondFormatEntry* pFormatEntry = static_cast<const ScCondFormatEntry*>(pFrmtEntry);
+        aItem.meMode = pFormatEntry->GetOperation();
+        aItem.maPos = pFormatEntry->GetValidSrcPos();
+        aItem.maExpr1 = pFormatEntry->GetExpression(aItem.maPos, 0, 0, eGrammar);
+        aItem.maExpr2 = pFormatEntry->GetExpression(aItem.maPos, 1, 0, eGrammar);
+        aItem.meGrammar1 = aItem.meGrammar2 = eGrammar;
+        aItem.maStyle = pFormatEntry->GetStyle();
 
-                    const ScCondFormatEntry* pFormatEntry = static_cast<const ScCondFormatEntry*>(pFrmtEntry);
-                    aItem.meMode = pFormatEntry->GetOperation();
-                    aItem.maPos = pFormatEntry->GetValidSrcPos();
-                    aItem.maExpr1 = pFormatEntry->GetExpression(aItem.maPos, 0, 0, eGrammar);
-                    aItem.maExpr2 = pFormatEntry->GetExpression(aItem.maPos, 1, 0, eGrammar);
-                    aItem.meGrammar1 = aItem.meGrammar2 = eGrammar;
-                    aItem.maStyle = pFormatEntry->GetStyle();
-
-                    AddEntry_Impl(aItem);
-                }
-            }
-        }
+        AddEntry_Impl(aItem);
     }
 }
 

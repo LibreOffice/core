@@ -164,76 +164,76 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
 {
     sal_uInt16 nItemId = maCtlFavorites.GetSelectedItemId();
 
-    if( nItemId > 0 )
+    if( nItemId <= 0 )
+        return;
+
+    std::unique_ptr<FmFormModel> pModel(new FmFormModel());
+    pModel->GetItemPool().FreezeIdRanges();
+
+    if( !GalleryExplorer::GetSdrObj( mnThemeId, nItemId-1, pModel.get() ) )
+        return;
+
+    SdrPage* pPage = pModel->GetPage(0);
+    if( !(pPage && pPage->GetObjCount()) )
+        return;
+
+    // tdf#116993 Calc uses a 'special' mode for this dialog in being the
+    // only caller of ::SetSdrObjectRef. Only in that case mpDestModel seems
+    // to be the correct target SdrModel.
+    // If this is not used, the correct SdrModel seems to be the one from
+    // the mrSdrView that is used to insert (InsertObjectAtView below) the
+    // cloned SdrObject.
+    const bool bUseSpecialCalcMode(nullptr != mppSdrObject && nullptr != mpDestModel);
+
+    // center shape on current view
+    OutputDevice* pOutDev(mrSdrView.GetFirstOutputDevice());
+
+    if (!pOutDev)
+        return;
+
+    // Clone directly to target SdrModel (may be different due to user/caller (!))
+    SdrObject* pNewObject(
+        pPage->GetObj(0)->CloneSdrObject(
+            bUseSpecialCalcMode ? *mpDestModel : mrSdrView.getSdrModelFromSdrView()));
+
+    pNewObject->MakeNameUnique();
+
+    // tdf#117629
+    // Since the 'old' ::CloneSdrObject also copies the SdrPage* the
+    // SdrObject::getUnoShape() *will* create the wrong UNO API object
+    // early. This IS one of the reasons I do change these things - this
+    // error does not happen with my next change I am working on already
+    // ARGH! For now, reset the SdrPage* to nullptr.
+    // What sense does it have to copy the SdrPage* of the original SdrObject ?!?
+    // TTTT: This also *might* be the hidden reason for the strange code at the
+    // end of SdrObject::SetPage that tries to delete the SvxShape under some
+    // circumstances...
+    // pNewObject->SetPage(nullptr);
+
+    tools::Rectangle aObjRect( pNewObject->GetLogicRect() );
+    tools::Rectangle aVisArea = pOutDev->PixelToLogic(tools::Rectangle(Point(0,0), pOutDev->GetOutputSizePixel()));
+    Point aPagePos = aVisArea.Center();
+    aPagePos.AdjustX( -(aObjRect.GetWidth() / 2) );
+    aPagePos.AdjustY( -(aObjRect.GetHeight() / 2) );
+    tools::Rectangle aNewObjectRectangle(aPagePos, aObjRect.GetSize());
+    pNewObject->SetLogicRect(aNewObjectRectangle);
+
+    if (bUseSpecialCalcMode)
     {
-        std::unique_ptr<FmFormModel> pModel(new FmFormModel());
-        pModel->GetItemPool().FreezeIdRanges();
+        *mppSdrObject = pNewObject;
+    }
+    else
+    {
+        SdrPageView* pPV(mrSdrView.GetSdrPageView());
 
-        if( GalleryExplorer::GetSdrObj( mnThemeId, nItemId-1, pModel.get() ) )
+        if (nullptr != pPV)
         {
-            SdrPage* pPage = pModel->GetPage(0);
-            if( pPage && pPage->GetObjCount() )
-            {
-                // tdf#116993 Calc uses a 'special' mode for this dialog in being the
-                // only caller of ::SetSdrObjectRef. Only in that case mpDestModel seems
-                // to be the correct target SdrModel.
-                // If this is not used, the correct SdrModel seems to be the one from
-                // the mrSdrView that is used to insert (InsertObjectAtView below) the
-                // cloned SdrObject.
-                const bool bUseSpecialCalcMode(nullptr != mppSdrObject && nullptr != mpDestModel);
-
-                // center shape on current view
-                OutputDevice* pOutDev(mrSdrView.GetFirstOutputDevice());
-
-                if (pOutDev)
-                {
-                    // Clone directly to target SdrModel (may be different due to user/caller (!))
-                    SdrObject* pNewObject(
-                        pPage->GetObj(0)->CloneSdrObject(
-                            bUseSpecialCalcMode ? *mpDestModel : mrSdrView.getSdrModelFromSdrView()));
-
-                    pNewObject->MakeNameUnique();
-
-                    // tdf#117629
-                    // Since the 'old' ::CloneSdrObject also copies the SdrPage* the
-                    // SdrObject::getUnoShape() *will* create the wrong UNO API object
-                    // early. This IS one of the reasons I do change these things - this
-                    // error does not happen with my next change I am working on already
-                    // ARGH! For now, reset the SdrPage* to nullptr.
-                    // What sense does it have to copy the SdrPage* of the original SdrObject ?!?
-                    // TTTT: This also *might* be the hidden reason for the strange code at the
-                    // end of SdrObject::SetPage that tries to delete the SvxShape under some
-                    // circumstances...
-                    // pNewObject->SetPage(nullptr);
-
-                    tools::Rectangle aObjRect( pNewObject->GetLogicRect() );
-                    tools::Rectangle aVisArea = pOutDev->PixelToLogic(tools::Rectangle(Point(0,0), pOutDev->GetOutputSizePixel()));
-                    Point aPagePos = aVisArea.Center();
-                    aPagePos.AdjustX( -(aObjRect.GetWidth() / 2) );
-                    aPagePos.AdjustY( -(aObjRect.GetHeight() / 2) );
-                    tools::Rectangle aNewObjectRectangle(aPagePos, aObjRect.GetSize());
-                    pNewObject->SetLogicRect(aNewObjectRectangle);
-
-                    if (bUseSpecialCalcMode)
-                    {
-                        *mppSdrObject = pNewObject;
-                    }
-                    else
-                    {
-                        SdrPageView* pPV(mrSdrView.GetSdrPageView());
-
-                        if (nullptr != pPV)
-                        {
-                            mrSdrView.InsertObjectAtView( pNewObject, *pPV );
-                        }
-                        else
-                        {
-                            // tdf#116993 no target -> delete clone
-                            SdrObject::Free(pNewObject);
-                        }
-                    }
-                }
-            }
+            mrSdrView.InsertObjectAtView( pNewObject, *pPV );
+        }
+        else
+        {
+            // tdf#116993 no target -> delete clone
+            SdrObject::Free(pNewObject);
         }
     }
 }
@@ -318,18 +318,18 @@ void FontworkAlignmentWindow::implSetAlignment( int nSurface, bool bEnabled )
 
 void FontworkAlignmentWindow::statusChanged( const css::frame::FeatureStateEvent& Event )
 {
-    if( Event.FeatureURL.Main == gsFontworkAlignment )
+    if( Event.FeatureURL.Main != gsFontworkAlignment )
+        return;
+
+    if( !Event.IsEnabled )
     {
-        if( !Event.IsEnabled )
-        {
-            implSetAlignment( 0, false );
-        }
-        else
-        {
-            sal_Int32 nValue = 0;
-            if( Event.State >>= nValue )
-                implSetAlignment( nValue, true );
-        }
+        implSetAlignment( 0, false );
+    }
+    else
+    {
+        sal_Int32 nValue = 0;
+        if( Event.State >>= nValue )
+            implSetAlignment( nValue, true );
     }
 }
 

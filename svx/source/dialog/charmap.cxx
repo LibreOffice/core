@@ -259,21 +259,21 @@ void SvxShowCharSet::CopyToClipboard(const OUString& rOUStr)
     css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
         css::datatransfer::clipboard::SystemClipboard::create(comphelper::getProcessComponentContext());
 
-    if (xClipboard.is())
+    if (!xClipboard.is())
+        return;
+
+    TETextDataObject* pDataObj = new TETextDataObject(rOUStr);
+
+    try
     {
-        TETextDataObject* pDataObj = new TETextDataObject(rOUStr);
+        xClipboard->setContents( pDataObj, nullptr );
 
-        try
-        {
-            xClipboard->setContents( pDataObj, nullptr );
-
-            css::uno::Reference<css::datatransfer::clipboard::XFlushableClipboard> xFlushableClipboard(xClipboard, css::uno::UNO_QUERY);
-            if( xFlushableClipboard.is() )
-                xFlushableClipboard->flushClipboard();
-        }
-        catch( const css::uno::Exception& )
-        {
-        }
+        css::uno::Reference<css::datatransfer::clipboard::XFlushableClipboard> xFlushableClipboard(xClipboard, css::uno::UNO_QUERY);
+        if( xFlushableClipboard.is() )
+            xFlushableClipboard->flushClipboard();
+    }
+    catch( const css::uno::Exception& )
+    {
     }
 }
 

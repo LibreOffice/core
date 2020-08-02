@@ -51,44 +51,44 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
 {
     const OUString sShareContentFirst( "FirstIsShared" );
     // NOTE: if this ever handles XML_DISPLAY attr then beware of fdo#72850 !
-    if( bLeft || bFirst )
-    {
-        Any aAny = xPropSet->getPropertyValue( sOn );
-        bool bOn = *o3tl::doAccess<bool>(aAny);
+    if( !(bLeft || bFirst) )
+        return;
 
-        if( bOn )
+    Any aAny = xPropSet->getPropertyValue( sOn );
+    bool bOn = *o3tl::doAccess<bool>(aAny);
+
+    if( bOn )
+    {
+        if (bLeft)
         {
-            if (bLeft)
+            aAny = xPropSet->getPropertyValue( sShareContent );
+            bool bShared = bool();
+            if (!(aAny >>= bShared))
+                assert(false); // should return a value!
+            if( bShared )
             {
-                aAny = xPropSet->getPropertyValue( sShareContent );
-                bool bShared = bool();
-                if (!(aAny >>= bShared))
-                    assert(false); // should return a value!
-                if( bShared )
-                {
-                    // Don't share headers any longer
-                    xPropSet->setPropertyValue( sShareContent, Any(false) );
-                }
-            }
-            if (bFirst)
-            {
-                aAny = xPropSet->getPropertyValue( sShareContentFirst );
-                bool bSharedFirst = bool();
-                if (!(aAny >>= bSharedFirst))
-                    assert(false); // should return a value!
-                if( bSharedFirst )
-                {
-                    // Don't share first/right headers any longer
-                    xPropSet->setPropertyValue( sShareContentFirst, Any(false) );
-                }
+                // Don't share headers any longer
+                xPropSet->setPropertyValue( sShareContent, Any(false) );
             }
         }
-        else
+        if (bFirst)
         {
-            // If headers or footers are switched off, no content must be
-            // inserted.
-            bInsertContent = false;
+            aAny = xPropSet->getPropertyValue( sShareContentFirst );
+            bool bSharedFirst = bool();
+            if (!(aAny >>= bSharedFirst))
+                assert(false); // should return a value!
+            if( bSharedFirst )
+            {
+                // Don't share first/right headers any longer
+                xPropSet->setPropertyValue( sShareContentFirst, Any(false) );
+            }
         }
+    }
+    else
+    {
+        // If headers or footers are switched off, no content must be
+        // inserted.
+        bInsertContent = false;
     }
 }
 

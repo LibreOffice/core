@@ -782,51 +782,51 @@ void Font::finalizeImport()
     }
 
     // supported script types
-    if( maUsedFlags.mbNameUsed )
-    {
-        PropertySet aDocProps( getDocument() );
-        Reference< XDevice > xDevice( aDocProps.getAnyProperty( PROP_ReferenceDevice ), UNO_QUERY );
-        if( xDevice.is() )
-        {
-            Reference< XFont2 > xFont( xDevice->getFont( maApiData.maDesc ), UNO_QUERY );
-            if( xFont.is() )
-            {
-                // #91658# CJK fonts
-                bool bHasAsian =
-                    xFont->hasGlyphs( OUString( u'\x3041' ) ) ||    // 3040-309F: Hiragana
-                    xFont->hasGlyphs( OUString( u'\x30A1' ) ) ||    // 30A0-30FF: Katakana
-                    xFont->hasGlyphs( OUString( u'\x3111' ) ) ||    // 3100-312F: Bopomofo
-                    xFont->hasGlyphs( OUString( u'\x3131' ) ) ||    // 3130-318F: Hangul Compatibility Jamo
-                    xFont->hasGlyphs( OUString( u'\x3301' ) ) ||    // 3300-33FF: CJK Compatibility
-                    xFont->hasGlyphs( OUString( u'\x3401' ) ) ||    // 3400-4DBF: CJK Unified Ideographs Extension A
-                    xFont->hasGlyphs( OUString( u'\x4E01' ) ) ||    // 4E00-9FFF: CJK Unified Ideographs
-                    xFont->hasGlyphs( OUString( u'\x7E01' ) ) ||    // 4E00-9FFF: CJK Unified Ideographs
-                    xFont->hasGlyphs( OUString( u'\xA001' ) ) ||    // A001-A48F: Yi Syllables
-                    xFont->hasGlyphs( OUString( u'\xAC01' ) ) ||    // AC00-D7AF: Hangul Syllables
-                    xFont->hasGlyphs( OUString( u'\xCC01' ) ) ||    // AC00-D7AF: Hangul Syllables
-                    xFont->hasGlyphs( OUString( u'\xF901' ) ) ||    // F900-FAFF: CJK Compatibility Ideographs
-                    xFont->hasGlyphs( OUString( u'\xFF71' ) );      // FF00-FFEF: Halfwidth/Fullwidth Forms
-                // #113783# CTL fonts
-                bool bHasCmplx =
-                    xFont->hasGlyphs( OUString( u'\x05D1' ) ) ||    // 0590-05FF: Hebrew
-                    xFont->hasGlyphs( OUString( u'\x0631' ) ) ||    // 0600-06FF: Arabic
-                    xFont->hasGlyphs( OUString( u'\x0721' ) ) ||    // 0700-074F: Syriac
-                    xFont->hasGlyphs( OUString( u'\x0911' ) ) ||    // 0900-0DFF: Indic scripts
-                    xFont->hasGlyphs( OUString( u'\x0E01' ) ) ||    // 0E00-0E7F: Thai
-                    xFont->hasGlyphs( OUString( u'\xFB21' ) ) ||    // FB1D-FB4F: Hebrew Presentation Forms
-                    xFont->hasGlyphs( OUString( u'\xFB51' ) ) ||    // FB50-FDFF: Arabic Presentation Forms-A
-                    xFont->hasGlyphs( OUString( u'\xFE71' ) );      // FE70-FEFF: Arabic Presentation Forms-B
-                // Western fonts
-                bool bHasLatin =
-                    (!bHasAsian && !bHasCmplx) ||
-                    xFont->hasGlyphs( OUString( 'A' ) );
+    if( !maUsedFlags.mbNameUsed )
+        return;
 
-                lclSetFontName( maApiData.maLatinFont, maApiData.maDesc, bHasLatin );
-                lclSetFontName( maApiData.maAsianFont, maApiData.maDesc, bHasAsian );
-                lclSetFontName( maApiData.maCmplxFont, maApiData.maDesc, bHasCmplx );
-            }
-        }
-    }
+    PropertySet aDocProps( getDocument() );
+    Reference< XDevice > xDevice( aDocProps.getAnyProperty( PROP_ReferenceDevice ), UNO_QUERY );
+    if( !xDevice.is() )
+        return;
+
+    Reference< XFont2 > xFont( xDevice->getFont( maApiData.maDesc ), UNO_QUERY );
+    if( !xFont.is() )
+        return;
+
+    // #91658# CJK fonts
+    bool bHasAsian =
+        xFont->hasGlyphs( OUString( u'\x3041' ) ) ||    // 3040-309F: Hiragana
+        xFont->hasGlyphs( OUString( u'\x30A1' ) ) ||    // 30A0-30FF: Katakana
+        xFont->hasGlyphs( OUString( u'\x3111' ) ) ||    // 3100-312F: Bopomofo
+        xFont->hasGlyphs( OUString( u'\x3131' ) ) ||    // 3130-318F: Hangul Compatibility Jamo
+        xFont->hasGlyphs( OUString( u'\x3301' ) ) ||    // 3300-33FF: CJK Compatibility
+        xFont->hasGlyphs( OUString( u'\x3401' ) ) ||    // 3400-4DBF: CJK Unified Ideographs Extension A
+        xFont->hasGlyphs( OUString( u'\x4E01' ) ) ||    // 4E00-9FFF: CJK Unified Ideographs
+        xFont->hasGlyphs( OUString( u'\x7E01' ) ) ||    // 4E00-9FFF: CJK Unified Ideographs
+        xFont->hasGlyphs( OUString( u'\xA001' ) ) ||    // A001-A48F: Yi Syllables
+        xFont->hasGlyphs( OUString( u'\xAC01' ) ) ||    // AC00-D7AF: Hangul Syllables
+        xFont->hasGlyphs( OUString( u'\xCC01' ) ) ||    // AC00-D7AF: Hangul Syllables
+        xFont->hasGlyphs( OUString( u'\xF901' ) ) ||    // F900-FAFF: CJK Compatibility Ideographs
+        xFont->hasGlyphs( OUString( u'\xFF71' ) );      // FF00-FFEF: Halfwidth/Fullwidth Forms
+    // #113783# CTL fonts
+    bool bHasCmplx =
+        xFont->hasGlyphs( OUString( u'\x05D1' ) ) ||    // 0590-05FF: Hebrew
+        xFont->hasGlyphs( OUString( u'\x0631' ) ) ||    // 0600-06FF: Arabic
+        xFont->hasGlyphs( OUString( u'\x0721' ) ) ||    // 0700-074F: Syriac
+        xFont->hasGlyphs( OUString( u'\x0911' ) ) ||    // 0900-0DFF: Indic scripts
+        xFont->hasGlyphs( OUString( u'\x0E01' ) ) ||    // 0E00-0E7F: Thai
+        xFont->hasGlyphs( OUString( u'\xFB21' ) ) ||    // FB1D-FB4F: Hebrew Presentation Forms
+        xFont->hasGlyphs( OUString( u'\xFB51' ) ) ||    // FB50-FDFF: Arabic Presentation Forms-A
+        xFont->hasGlyphs( OUString( u'\xFE71' ) );      // FE70-FEFF: Arabic Presentation Forms-B
+    // Western fonts
+    bool bHasLatin =
+        (!bHasAsian && !bHasCmplx) ||
+        xFont->hasGlyphs( OUString( 'A' ) );
+
+    lclSetFontName( maApiData.maLatinFont, maApiData.maDesc, bHasLatin );
+    lclSetFontName( maApiData.maAsianFont, maApiData.maDesc, bHasAsian );
+    lclSetFontName( maApiData.maCmplxFont, maApiData.maDesc, bHasCmplx );
 }
 
 bool Font::needsRichTextFormat() const
@@ -961,18 +961,18 @@ void Font::fillToItemSet( SfxItemSet& rItemSet, bool bEditEngineText, bool bSkip
     {
         ScfTools::PutItem( rItemSet, SvxShadowedItem( maApiData.mbShadow, ATTR_FONT_SHADOWED ), bEditEngineText ? static_cast<sal_uInt16>(EE_CHAR_SHADOW) : ATTR_FONT_SHADOWED, bSkipPoolDefs );
     }
-    if( maUsedFlags.mbEscapementUsed )
+    if( !maUsedFlags.mbEscapementUsed )
+        return;
+
+    SvxEscapement eScEscapem = SvxEscapement::Off;
+    if ( maApiData.mnEscapement == API_ESCAPE_SUPERSCRIPT )
+        eScEscapem = SvxEscapement::Superscript;
+    else if ( maApiData.mnEscapement == API_ESCAPE_SUBSCRIPT )
+        eScEscapem = SvxEscapement::Subscript;
+    if( bEditEngineText )
     {
-        SvxEscapement eScEscapem = SvxEscapement::Off;
-        if ( maApiData.mnEscapement == API_ESCAPE_SUPERSCRIPT )
-            eScEscapem = SvxEscapement::Superscript;
-        else if ( maApiData.mnEscapement == API_ESCAPE_SUBSCRIPT )
-            eScEscapem = SvxEscapement::Subscript;
-        if( bEditEngineText )
-        {
-           // #TODO handle EscapementHeight
-            rItemSet.Put( SvxEscapementItem( eScEscapem, EE_CHAR_ESCAPEMENT ) );
-        }
+       // #TODO handle EscapementHeight
+        rItemSet.Put( SvxEscapementItem( eScEscapem, EE_CHAR_ESCAPEMENT ) );
     }
 }
 
@@ -1523,22 +1523,22 @@ void Border::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
          }
          ScfTools::PutItem( rItemSet, aBoxItem, bSkipPoolDefs );
     }
-    if ( maApiData.mbDiagUsed )
+    if ( !maApiData.mbDiagUsed )
+        return;
+
+    SvxLineItem aTLBRItem( ATTR_BORDER_TLBR );
+    SvxLineItem aBLTRItem( ATTR_BORDER_BLTR );
+    ::editeng::SvxBorderLine aLine;
+    if (SvxBoxItem::LineToSvxLine(maApiData.maTLtoBR, aLine, false))
     {
-        SvxLineItem aTLBRItem( ATTR_BORDER_TLBR );
-        SvxLineItem aBLTRItem( ATTR_BORDER_BLTR );
-        ::editeng::SvxBorderLine aLine;
-        if (SvxBoxItem::LineToSvxLine(maApiData.maTLtoBR, aLine, false))
-        {
-            aTLBRItem.SetLine( &aLine );
-        }
-        if (SvxBoxItem::LineToSvxLine(maApiData.maBLtoTR, aLine, false))
-        {
-            aBLTRItem.SetLine( &aLine );
-        }
-        ScfTools::PutItem( rItemSet, aTLBRItem, bSkipPoolDefs );
-        ScfTools::PutItem( rItemSet, aBLTRItem, bSkipPoolDefs );
+        aTLBRItem.SetLine( &aLine );
     }
+    if (SvxBoxItem::LineToSvxLine(maApiData.maBLtoTR, aLine, false))
+    {
+        aBLTRItem.SetLine( &aLine );
+    }
+    ScfTools::PutItem( rItemSet, aTLBRItem, bSkipPoolDefs );
+    ScfTools::PutItem( rItemSet, aBLTRItem, bSkipPoolDefs );
 }
 
 BorderLineModel* Border::getBorderLine( sal_Int32 nElement )
@@ -1901,19 +1901,19 @@ void Fill::finalizeImport()
 
 void Fill::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
 {
-    if( maApiData.mbUsed )
+    if( !maApiData.mbUsed )
+        return;
+
+    SvxBrushItem aBrushItem( ATTR_BACKGROUND );
+    if ( maApiData.mbTransparent )
     {
-        SvxBrushItem aBrushItem( ATTR_BACKGROUND );
-        if ( maApiData.mbTransparent )
-        {
-            aBrushItem.SetColor( COL_TRANSPARENT );
-        }
-        else
-        {
-            aBrushItem.SetColor( maApiData.mnColor  );
-        }
-        ScfTools::PutItem( rItemSet, aBrushItem, bSkipPoolDefs );
+        aBrushItem.SetColor( COL_TRANSPARENT );
     }
+    else
+    {
+        aBrushItem.SetColor( maApiData.mnColor  );
+    }
+    ScfTools::PutItem( rItemSet, aBrushItem, bSkipPoolDefs );
 }
 
 XfModel::XfModel() :
@@ -2064,38 +2064,38 @@ void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal
     if (!sc::NumFmtUtil::isLatinScript(mnScNumFmt, rDoc))
         rAttrs.mbLatinNumFmtOnly = false;
 
-    if (rPat.GetStyleName())
+    if (!rPat.GetStyleName())
+        return;
+
+    // Check for a gap between the last entry and this one.
+    bool bHasGap = false;
+    if (rAttrs.maAttrs.empty() && nRow1 > 0)
+        // First attribute range doesn't start at row 0.
+        bHasGap = true;
+
+    if (!rAttrs.maAttrs.empty() && rAttrs.maAttrs.back().nEndRow + 1 < nRow1)
+        bHasGap = true;
+
+    if (bHasGap)
     {
-        // Check for a gap between the last entry and this one.
-        bool bHasGap = false;
-        if (rAttrs.maAttrs.empty() && nRow1 > 0)
-            // First attribute range doesn't start at row 0.
-            bHasGap = true;
-
-        if (!rAttrs.maAttrs.empty() && rAttrs.maAttrs.back().nEndRow + 1 < nRow1)
-            bHasGap = true;
-
-        if (bHasGap)
-        {
-            // Fill this gap with the default pattern.
-            ScAttrEntry aEntry;
-            aEntry.nEndRow = nRow1 - 1;
-            aEntry.pPattern = &rDoc.GetPool()->Put(*rAttrs.mpDefPattern);
-            rAttrs.maAttrs.push_back(aEntry);
-
-            // Check if the default pattern is 'General'.
-            if (!sc::NumFmtUtil::isLatinScript(*aEntry.pPattern, rDoc))
-                rAttrs.mbLatinNumFmtOnly = false;
-        }
-
+        // Fill this gap with the default pattern.
         ScAttrEntry aEntry;
-        aEntry.nEndRow = nRow2;
-        aEntry.pPattern = &rDoc.GetPool()->Put(rPat);
+        aEntry.nEndRow = nRow1 - 1;
+        aEntry.pPattern = &rDoc.GetPool()->Put(*rAttrs.mpDefPattern);
         rAttrs.maAttrs.push_back(aEntry);
 
+        // Check if the default pattern is 'General'.
         if (!sc::NumFmtUtil::isLatinScript(*aEntry.pPattern, rDoc))
             rAttrs.mbLatinNumFmtOnly = false;
     }
+
+    ScAttrEntry aEntry;
+    aEntry.nEndRow = nRow2;
+    aEntry.pPattern = &rDoc.GetPool()->Put(rPat);
+    rAttrs.maAttrs.push_back(aEntry);
+
+    if (!sc::NumFmtUtil::isLatinScript(*aEntry.pPattern, rDoc))
+        rAttrs.mbLatinNumFmtOnly = false;
 }
 
 void Xf::writeToDoc( ScDocumentImport& rDoc, const ScRange& rRange )
@@ -2485,34 +2485,34 @@ void CellStyle::createCellStyle()
         mbCreated = maFinalName.isEmpty();
     }
 
-    if( !mbCreated && !mpStyleSheet )
-    {
-        bool bCreatePattern = false;
-        Xf* pXF = getStyles().getStyleXf( maModel.mnXfId ).get();
-        ::ScDocument& rDoc = getScDocument();
+    if( mbCreated || mpStyleSheet )
+        return;
 
-        if( bDefStyle )
+    bool bCreatePattern = false;
+    Xf* pXF = getStyles().getStyleXf( maModel.mnXfId ).get();
+    ::ScDocument& rDoc = getScDocument();
+
+    if( bDefStyle )
+    {
+        // use existing "Default" style sheet
+        mpStyleSheet = static_cast< ScStyleSheet* >( rDoc.GetStyleSheetPool()->Find(
+            ScResId( STR_STYLENAME_STANDARD_CELL ), SfxStyleFamily::Para ) );
+        OSL_ENSURE( mpStyleSheet, "CellStyle::createStyle - Default style not found" );
+        bCreatePattern = true;
+    }
+    else
+    {
+        mpStyleSheet = static_cast< ScStyleSheet* >( rDoc.GetStyleSheetPool()->Find( maFinalName, SfxStyleFamily::Para ) );
+        if( !mpStyleSheet )
         {
-            // use existing "Default" style sheet
-            mpStyleSheet = static_cast< ScStyleSheet* >( rDoc.GetStyleSheetPool()->Find(
-                ScResId( STR_STYLENAME_STANDARD_CELL ), SfxStyleFamily::Para ) );
-            OSL_ENSURE( mpStyleSheet, "CellStyle::createStyle - Default style not found" );
+            mpStyleSheet = &static_cast< ScStyleSheet& >( rDoc.GetStyleSheetPool()->Make( maFinalName, SfxStyleFamily::Para, SfxStyleSearchBits::UserDefined ) );
             bCreatePattern = true;
         }
-        else
-        {
-            mpStyleSheet = static_cast< ScStyleSheet* >( rDoc.GetStyleSheetPool()->Find( maFinalName, SfxStyleFamily::Para ) );
-            if( !mpStyleSheet )
-            {
-                mpStyleSheet = &static_cast< ScStyleSheet& >( rDoc.GetStyleSheetPool()->Make( maFinalName, SfxStyleFamily::Para, SfxStyleSearchBits::UserDefined ) );
-                bCreatePattern = true;
-            }
-        }
-
-        // bDefStyle==true omits default pool items in CreatePattern()
-        if( bCreatePattern && mpStyleSheet && pXF )
-            mpStyleSheet->GetItemSet().Put( pXF->createPattern( bDefStyle ).GetItemSet() );
     }
+
+    // bDefStyle==true omits default pool items in CreatePattern()
+    if( bCreatePattern && mpStyleSheet && pXF )
+        mpStyleSheet->GetItemSet().Put( pXF->createPattern( bDefStyle ).GetItemSet() );
 }
 
 void CellStyle::finalizeImport( const OUString& rFinalName )
@@ -2646,19 +2646,19 @@ OUString CellStyleBuffer::createCellStyle( sal_Int32 nXfId ) const
 void CellStyleBuffer::insertCellStyle( CellStyleRef const & xCellStyle )
 {
     const CellStyleModel& rModel = xCellStyle->getModel();
-    if( rModel.mnXfId >= 0 )
-    {
-        // insert into the built-in map or user defined map
-        (rModel.isBuiltin() ? maBuiltinStyles : maUserStyles).push_back( xCellStyle );
+    if( rModel.mnXfId < 0 )
+        return;
 
-        // insert into the XF identifier map
-        OSL_ENSURE( maStylesByXf.count( rModel.mnXfId ) == 0, "CellStyleBuffer::insertCellStyle - multiple styles with equal XF identifier" );
-        maStylesByXf[ rModel.mnXfId ] = xCellStyle;
+    // insert into the built-in map or user defined map
+    (rModel.isBuiltin() ? maBuiltinStyles : maUserStyles).push_back( xCellStyle );
 
-        // remember default cell style
-        if( rModel.isDefaultStyle() )
-            mxDefStyle = xCellStyle;
-    }
+    // insert into the XF identifier map
+    OSL_ENSURE( maStylesByXf.count( rModel.mnXfId ) == 0, "CellStyleBuffer::insertCellStyle - multiple styles with equal XF identifier" );
+    maStylesByXf[ rModel.mnXfId ] = xCellStyle;
+
+    // remember default cell style
+    if( rModel.isDefaultStyle() )
+        mxDefStyle = xCellStyle;
 }
 
 ::ScStyleSheet* CellStyleBuffer::getCellStyleSheet( const CellStyleRef& rxCellStyle )

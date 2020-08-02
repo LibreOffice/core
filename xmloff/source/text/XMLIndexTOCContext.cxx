@@ -249,29 +249,29 @@ void XMLIndexTOCContext::EndElement()
 {
     // complete import of index by removing the markers (if the index
     // was actually inserted, that is)
-    if( bValid )
+    if( !bValid )
+        return;
+
+    // preliminaries
+    rtl::Reference<XMLTextImportHelper> rHelper= GetImport().GetTextImport();
+
+    // get rid of last paragraph (unless it's the only paragraph)
+    rHelper->GetCursor()->goRight(1, false);
+    if( xBodyContextRef.is() &&
+        static_cast<XMLIndexBodyContext*>(xBodyContextRef.get())->HasContent() )
     {
-        // preliminaries
-        rtl::Reference<XMLTextImportHelper> rHelper= GetImport().GetTextImport();
-
-        // get rid of last paragraph (unless it's the only paragraph)
-        rHelper->GetCursor()->goRight(1, false);
-        if( xBodyContextRef.is() &&
-            static_cast<XMLIndexBodyContext*>(xBodyContextRef.get())->HasContent() )
-        {
-            rHelper->GetCursor()->goLeft(1, true);
-            rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
-                                             "", true);
-        }
-
-        // and delete second marker
-        rHelper->GetCursor()->goRight(1, true);
+        rHelper->GetCursor()->goLeft(1, true);
         rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
                                          "", true);
-
-        // check for Redlines on our end node
-        GetImport().GetTextImport()->RedlineAdjustStartNodeCursor();
     }
+
+    // and delete second marker
+    rHelper->GetCursor()->goRight(1, true);
+    rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
+                                     "", true);
+
+    // check for Redlines on our end node
+    GetImport().GetTextImport()->RedlineAdjustStartNodeCursor();
 }
 
 SvXMLImportContextRef XMLIndexTOCContext::CreateChildContext(

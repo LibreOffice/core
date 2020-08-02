@@ -800,20 +800,20 @@ namespace svxform
 
         // refill model form root upward
         Clear();
-        if (xForms.is())
-        {
-            xForms->addContainerListener(m_pPropChangeList.get());
+        if (!xForms.is())
+            return;
 
-            FillBranch(nullptr);
+        xForms->addContainerListener(m_pPropChangeList.get());
 
-            // select same control in tree as in view
-            // (or all of them), if there is one ...
-            if(!m_pFormShell) return;       // no shell
+        FillBranch(nullptr);
 
-            FmFormView* pFormView = m_pFormShell->GetFormView();
-            DBG_ASSERT(pFormView != nullptr, "NavigatorTreeModel::UpdateContent : no FormView");
-            BroadcastMarkedObjects(pFormView->GetMarkedObjectList());
-        }
+        // select same control in tree as in view
+        // (or all of them), if there is one ...
+        if(!m_pFormShell) return;       // no shell
+
+        FmFormView* pFormView = m_pFormShell->GetFormView();
+        DBG_ASSERT(pFormView != nullptr, "NavigatorTreeModel::UpdateContent : no FormView");
+        BroadcastMarkedObjects(pFormView->GetMarkedObjectList());
     }
 
 

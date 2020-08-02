@@ -302,42 +302,42 @@ bool XMLVersionContext::ParseISODateTimeString(
 void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XStorage >& xRoot, const uno::Sequence< util::RevisionTag >& rVersions )
 {
     // no storage, no version list!
-    if ( xRoot.is() )
+    if ( !xRoot.is() )
+        return;
+
+    // get the services needed for writing the xml data
+    Reference< uno::XComponentContext > xContext =
+            comphelper::getProcessComponentContext();
+
+    Reference< XWriter > xWriter = Writer::create(xContext);
+
+    // check whether there's already a sub storage with the version info
+    // and delete it
+    OUString sVerName( XMLN_VERSIONSLIST  );
+
+    try {
+        // open (create) the sub storage with the version info
+        uno::Reference< io::XStream > xVerStream = xRoot->openStreamElement(
+                                        sVerName,
+                                        embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
+        if ( !xVerStream.is() )
+            throw uno::RuntimeException();
+
+        Reference< io::XOutputStream > xOut = xVerStream->getOutputStream();
+        if ( !xOut.is() )
+            throw uno::RuntimeException(); // the stream was successfully opened for writing already
+
+        xWriter->setOutputStream(xOut);
+
+        rtl::Reference< XMLVersionListExport > xExp( new XMLVersionListExport( xContext, rVersions, sVerName, xWriter ) );
+
+        xExp->exportDoc( ::xmloff::token::XML_VERSION );
+
+        xVerStream.clear(); // use refcounting for now to dispose
+    }
+    catch( uno::Exception& )
     {
-        // get the services needed for writing the xml data
-        Reference< uno::XComponentContext > xContext =
-                comphelper::getProcessComponentContext();
-
-        Reference< XWriter > xWriter = Writer::create(xContext);
-
-        // check whether there's already a sub storage with the version info
-        // and delete it
-        OUString sVerName( XMLN_VERSIONSLIST  );
-
-        try {
-            // open (create) the sub storage with the version info
-            uno::Reference< io::XStream > xVerStream = xRoot->openStreamElement(
-                                            sVerName,
-                                            embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
-            if ( !xVerStream.is() )
-                throw uno::RuntimeException();
-
-            Reference< io::XOutputStream > xOut = xVerStream->getOutputStream();
-            if ( !xOut.is() )
-                throw uno::RuntimeException(); // the stream was successfully opened for writing already
-
-            xWriter->setOutputStream(xOut);
-
-            rtl::Reference< XMLVersionListExport > xExp( new XMLVersionListExport( xContext, rVersions, sVerName, xWriter ) );
-
-            xExp->exportDoc( ::xmloff::token::XML_VERSION );
-
-            xVerStream.clear(); // use refcounting for now to dispose
-        }
-        catch( uno::Exception& )
-        {
-            // TODO: error handling
-        }
+        // TODO: error handling
     }
 }
 

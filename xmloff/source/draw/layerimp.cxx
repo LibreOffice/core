@@ -113,7 +113,10 @@ SvXMLImportContextRef SdXMLLayerContext::CreateChildContext( sal_uInt16 nPrefix,
 void SdXMLLayerContext::EndElement()
 {
     SAL_WARN_IF( msName.isEmpty(), "xmloff", "xmloff::SdXMLLayerContext::EndElement(), draw:layer element without draw:name!" );
-    if( !msName.isEmpty() ) try
+    if( msName.isEmpty() )
+        return;
+
+    try
     {
         Reference< XPropertySet > xLayer;
 

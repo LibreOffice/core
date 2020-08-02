@@ -717,52 +717,52 @@ void UnoControlContainer::createPeer( const uno::Reference< awt::XToolkit >& rxT
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    if( !getPeer().is() )
+    if( getPeer().is() )
+        return;
+
+    bool bVis = maComponentInfos.bVisible;
+    if( bVis )
+        UnoControl::setVisible( false );
+
+    // Create a new peer
+    UnoControl::createPeer( rxToolkit, rParent );
+
+    // Create all children's peers
+    if ( !mbCreatingCompatiblePeer )
     {
-        bool bVis = maComponentInfos.bVisible;
-        if( bVis )
-            UnoControl::setVisible( false );
-
-        // Create a new peer
-        UnoControl::createPeer( rxToolkit, rParent );
-
-        // Create all children's peers
-        if ( !mbCreatingCompatiblePeer )
+        // Evaluate "Step" property
+        uno::Reference< awt::XControlModel > xModel( getModel() );
+        uno::Reference< beans::XPropertySet > xPSet
+            ( xModel, uno::UNO_QUERY );
+        uno::Reference< beans::XPropertySetInfo >
+            xInfo = xPSet->getPropertySetInfo();
+        OUString aPropName( "Step" );
+        if ( xInfo->hasPropertyByName( aPropName ) )
         {
-            // Evaluate "Step" property
-            uno::Reference< awt::XControlModel > xModel( getModel() );
-            uno::Reference< beans::XPropertySet > xPSet
-                ( xModel, uno::UNO_QUERY );
-            uno::Reference< beans::XPropertySetInfo >
-                xInfo = xPSet->getPropertySetInfo();
-            OUString aPropName( "Step" );
-            if ( xInfo->hasPropertyByName( aPropName ) )
-            {
-                css::uno::Any aVal = xPSet->getPropertyValue( aPropName );
-                sal_Int32 nDialogStep = 0;
-                aVal >>= nDialogStep;
-                uno::Reference< awt::XControlContainer > xContainer =
-                    static_cast< awt::XControlContainer* >(this);
-                implUpdateVisibility( nDialogStep, xContainer );
+            css::uno::Any aVal = xPSet->getPropertyValue( aPropName );
+            sal_Int32 nDialogStep = 0;
+            aVal >>= nDialogStep;
+            uno::Reference< awt::XControlContainer > xContainer =
+                static_cast< awt::XControlContainer* >(this);
+            implUpdateVisibility( nDialogStep, xContainer );
 
-                uno::Reference< beans::XPropertyChangeListener > xListener =
-                    new DialogStepChangedListener(xContainer);
-                xPSet->addPropertyChangeListener( aPropName, xListener );
-            }
-
-            uno::Sequence< uno::Reference< awt::XControl > > aCtrls = getControls();
-            for( auto& rCtrl : aCtrls )
-                rCtrl->createPeer( rxToolkit, getPeer() );
-
-            uno::Reference< awt::XVclContainerPeer >  xC( getPeer(), uno::UNO_QUERY );
-            if ( xC.is() )
-                xC->enableDialogControl( true );
-            ImplActivateTabControllers();
+            uno::Reference< beans::XPropertyChangeListener > xListener =
+                new DialogStepChangedListener(xContainer);
+            xPSet->addPropertyChangeListener( aPropName, xListener );
         }
 
-        if( bVis && !isDesignMode() )
-            UnoControl::setVisible( true );
+        uno::Sequence< uno::Reference< awt::XControl > > aCtrls = getControls();
+        for( auto& rCtrl : aCtrls )
+            rCtrl->createPeer( rxToolkit, getPeer() );
+
+        uno::Reference< awt::XVclContainerPeer >  xC( getPeer(), uno::UNO_QUERY );
+        if ( xC.is() )
+            xC->enableDialogControl( true );
+        ImplActivateTabControllers();
     }
+
+    if( bVis && !isDesignMode() )
+        UnoControl::setVisible( true );
 }
 
 

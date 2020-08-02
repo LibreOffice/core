@@ -112,26 +112,26 @@ void ScLinkedAreaDlg::LoadDocument( const OUString& rFile, const OUString& rFilt
         aSourceRef.clear();
     }
 
-    if ( !rFile.isEmpty() )
+    if ( rFile.isEmpty() )
+        return;
+
+    weld::WaitObject aWait(m_xDialog.get());
+
+    OUString aNewFilter = rFilter;
+    OUString aNewOptions = rOptions;
+
+    SfxErrorContext aEc( ERRCTX_SFX_OPENDOC, rFile );
+
+    ScDocumentLoader aLoader( rFile, aNewFilter, aNewOptions, 0, m_xDialog.get() );    // with interaction
+    m_pSourceShell = aLoader.GetDocShell();
+    if (m_pSourceShell)
     {
-        weld::WaitObject aWait(m_xDialog.get());
+        ErrCode nErr = m_pSourceShell->GetErrorCode();
+        if (nErr)
+            ErrorHandler::HandleError( nErr );      // including warnings
 
-        OUString aNewFilter = rFilter;
-        OUString aNewOptions = rOptions;
-
-        SfxErrorContext aEc( ERRCTX_SFX_OPENDOC, rFile );
-
-        ScDocumentLoader aLoader( rFile, aNewFilter, aNewOptions, 0, m_xDialog.get() );    // with interaction
-        m_pSourceShell = aLoader.GetDocShell();
-        if (m_pSourceShell)
-        {
-            ErrCode nErr = m_pSourceShell->GetErrorCode();
-            if (nErr)
-                ErrorHandler::HandleError( nErr );      // including warnings
-
-            aSourceRef = m_pSourceShell;
-            aLoader.ReleaseDocRef();    // don't call DoClose in DocLoader dtor
-        }
+        aSourceRef = m_pSourceShell;
+        aLoader.ReleaseDocRef();    // don't call DoClose in DocLoader dtor
     }
 }
 

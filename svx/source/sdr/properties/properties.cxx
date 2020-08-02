@@ -164,26 +164,26 @@ namespace sdr::properties
             const bool bFillBitmap = rItemSet.GetItemState(XATTR_FILLBITMAP, false) == SfxItemState::SET;
             const bool bFillGradient = rItemSet.GetItemState(XATTR_FILLGRADIENT, false) == SfxItemState::SET;
             const bool bFillHatch = rItemSet.GetItemState(XATTR_FILLHATCH, false) == SfxItemState::SET;
-            if( bFillBitmap || bFillGradient || bFillHatch )
+            if( !(bFillBitmap || bFillGradient || bFillHatch) )
+                return;
+
+            const XFillStyleItem* pFillStyleItem = rItemSet.GetItem(XATTR_FILLSTYLE);
+            if( !pFillStyleItem )
+                return;
+
+            if( bFillBitmap && (pFillStyleItem->GetValue() != drawing::FillStyle_BITMAP) )
             {
-                const XFillStyleItem* pFillStyleItem = rItemSet.GetItem(XATTR_FILLSTYLE);
-                if( pFillStyleItem )
-                {
-                    if( bFillBitmap && (pFillStyleItem->GetValue() != drawing::FillStyle_BITMAP) )
-                    {
-                        rItemSet.ClearItem( XATTR_FILLBITMAP );
-                    }
+                rItemSet.ClearItem( XATTR_FILLBITMAP );
+            }
 
-                    if( bFillGradient && (pFillStyleItem->GetValue() != drawing::FillStyle_GRADIENT) )
-                    {
-                        rItemSet.ClearItem( XATTR_FILLGRADIENT );
-                    }
+            if( bFillGradient && (pFillStyleItem->GetValue() != drawing::FillStyle_GRADIENT) )
+            {
+                rItemSet.ClearItem( XATTR_FILLGRADIENT );
+            }
 
-                    if( bFillHatch && (pFillStyleItem->GetValue() != drawing::FillStyle_HATCH) )
-                    {
-                        rItemSet.ClearItem( XATTR_FILLHATCH );
-                    }
-                }
+            if( bFillHatch && (pFillStyleItem->GetValue() != drawing::FillStyle_HATCH) )
+            {
+                rItemSet.ClearItem( XATTR_FILLHATCH );
             }
         }
 

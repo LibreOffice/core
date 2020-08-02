@@ -765,22 +765,22 @@ vcl::Region SdrPaintView::OptimizeDrawLayersRegion(OutputDevice* pOut, const vcl
 
 void SdrPaintView::ImpFormLayerDrawing( SdrPaintWindow& rPaintWindow )
 {
-    if(mpPageView)
+    if(!mpPageView)
+        return;
+
+    SdrPageWindow* pKnownTarget = mpPageView->FindPageWindow(rPaintWindow);
+
+    if(pKnownTarget)
     {
-        SdrPageWindow* pKnownTarget = mpPageView->FindPageWindow(rPaintWindow);
+        const SdrModel& rModel = *(GetModel());
+        const SdrLayerAdmin& rLayerAdmin = rModel.GetLayerAdmin();
+        const SdrLayerID nControlLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName());
 
-        if(pKnownTarget)
-        {
-            const SdrModel& rModel = *(GetModel());
-            const SdrLayerAdmin& rLayerAdmin = rModel.GetLayerAdmin();
-            const SdrLayerID nControlLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName());
-
-            // BUFFERED use GetTargetOutputDevice() now, it may be targeted to VDevs, too
-            // need to set PreparedPageWindow to make DrawLayer use the correct ObjectContact
-            mpPageView->setPreparedPageWindow(pKnownTarget);
-            mpPageView->DrawLayer(nControlLayerId, &rPaintWindow.GetTargetOutputDevice());
-            mpPageView->setPreparedPageWindow(nullptr);
-        }
+        // BUFFERED use GetTargetOutputDevice() now, it may be targeted to VDevs, too
+        // need to set PreparedPageWindow to make DrawLayer use the correct ObjectContact
+        mpPageView->setPreparedPageWindow(pKnownTarget);
+        mpPageView->DrawLayer(nControlLayerId, &rPaintWindow.GetTargetOutputDevice());
+        mpPageView->setPreparedPageWindow(nullptr);
     }
 }
 
@@ -1076,23 +1076,23 @@ void SdrPaintView::SetAnimationEnabled( bool bEnable )
 
 void SdrPaintView::SetAnimationPause( bool bSet )
 {
-    if(mbAnimationPause != bSet)
+    if(mbAnimationPause == bSet)
+        return;
+
+    mbAnimationPause = bSet;
+
+    if(!mpPageView)
+        return;
+
+    for(sal_uInt32 b(0); b < mpPageView->PageWindowCount(); b++)
     {
-        mbAnimationPause = bSet;
+        SdrPageWindow& rPageWindow = *(mpPageView->GetPageWindow(b));
+        sdr::contact::ObjectContact& rObjectContact = rPageWindow.GetObjectContact();
+        sdr::animation::primitiveAnimator& rAnimator = rObjectContact.getPrimitiveAnimator();
 
-        if(mpPageView)
+        if(rAnimator.IsPaused() != bSet)
         {
-            for(sal_uInt32 b(0); b < mpPageView->PageWindowCount(); b++)
-            {
-                SdrPageWindow& rPageWindow = *(mpPageView->GetPageWindow(b));
-                sdr::contact::ObjectContact& rObjectContact = rPageWindow.GetObjectContact();
-                sdr::animation::primitiveAnimator& rAnimator = rObjectContact.getPrimitiveAnimator();
-
-                if(rAnimator.IsPaused() != bSet)
-                {
-                    rAnimator.SetPaused(bSet);
-                }
-            }
+            rAnimator.SetPaused(bSet);
         }
     }
 }
@@ -1104,21 +1104,21 @@ void SdrPaintView::SetAnimationMode( const SdrAnimationMode eMode )
 
 void SdrPaintView::VisAreaChanged(const OutputDevice* pOut)
 {
-    if(mpPageView)
-    {
-        if (pOut)
-        {
-            SdrPageWindow* pWindow = mpPageView->FindPageWindow(*const_cast<OutputDevice*>(pOut));
+    if(!mpPageView)
+        return;
 
-            if(pWindow)
-            {
-                VisAreaChanged();
-            }
-        }
-        else
+    if (pOut)
+    {
+        SdrPageWindow* pWindow = mpPageView->FindPageWindow(*const_cast<OutputDevice*>(pOut));
+
+        if(pWindow)
         {
             VisAreaChanged();
         }
+    }
+    else
+    {
+        VisAreaChanged();
     }
 }
 

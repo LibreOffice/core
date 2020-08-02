@@ -223,31 +223,31 @@ ImplPrimitive2DIDBlock(OverlayStaticRectanglePrimitive, PRIMITIVE2D_ID_OVERLAYRE
         {
             // use the prepared Viewport information accessible using getViewport()
 
-            if(!getViewport().isEmpty())
-            {
-                basegfx::B2DPolygon aPolygon;
+            if(getViewport().isEmpty())
+                return;
 
-                aPolygon.append(basegfx::B2DPoint(getViewport().getMinX(), getBasePosition().getY()));
-                aPolygon.append(basegfx::B2DPoint(getViewport().getMaxX(), getBasePosition().getY()));
+            basegfx::B2DPolygon aPolygon;
 
-                rContainer.push_back(
-                    new PolygonMarkerPrimitive2D(
-                        aPolygon,
-                        getRGBColorA(),
-                        getRGBColorB(),
-                        getDiscreteDashLength()));
+            aPolygon.append(basegfx::B2DPoint(getViewport().getMinX(), getBasePosition().getY()));
+            aPolygon.append(basegfx::B2DPoint(getViewport().getMaxX(), getBasePosition().getY()));
 
-                aPolygon.clear();
-                aPolygon.append(basegfx::B2DPoint(getBasePosition().getX(), getViewport().getMinY()));
-                aPolygon.append(basegfx::B2DPoint(getBasePosition().getX(), getViewport().getMaxY()));
+            rContainer.push_back(
+                new PolygonMarkerPrimitive2D(
+                    aPolygon,
+                    getRGBColorA(),
+                    getRGBColorB(),
+                    getDiscreteDashLength()));
 
-                rContainer.push_back(
-                    new PolygonMarkerPrimitive2D(
-                        aPolygon,
-                        getRGBColorA(),
-                        getRGBColorB(),
-                        getDiscreteDashLength()));
-            }
+            aPolygon.clear();
+            aPolygon.append(basegfx::B2DPoint(getBasePosition().getX(), getViewport().getMinY()));
+            aPolygon.append(basegfx::B2DPoint(getBasePosition().getX(), getViewport().getMaxY()));
+
+            rContainer.push_back(
+                new PolygonMarkerPrimitive2D(
+                    aPolygon,
+                    getRGBColorA(),
+                    getRGBColorB(),
+                    getDiscreteDashLength()));
         }
 
         bool OverlayCrosshairPrimitive::operator==( const BasePrimitive2D& rPrimitive ) const
@@ -414,69 +414,69 @@ ImplPrimitive2DIDBlock(OverlayStaticRectanglePrimitive, PRIMITIVE2D_ID_OVERLAYRE
         {
             // use the prepared Viewport information accessible using getViewport()
 
-            if(!getViewport().isEmpty())
+            if(getViewport().isEmpty())
+                return;
+
+            switch(getStyle())
             {
-                switch(getStyle())
+                case HELPLINESTYLE_VERTICAL :
                 {
-                    case HELPLINESTYLE_VERTICAL :
-                    {
-                        basegfx::B2DPolygon aLine;
+                    basegfx::B2DPolygon aLine;
 
-                        aLine.append(basegfx::B2DPoint(getBasePosition().getX(), getViewport().getMinY()));
-                        aLine.append(basegfx::B2DPoint(getBasePosition().getX(), getViewport().getMaxY()));
+                    aLine.append(basegfx::B2DPoint(getBasePosition().getX(), getViewport().getMinY()));
+                    aLine.append(basegfx::B2DPoint(getBasePosition().getX(), getViewport().getMaxY()));
 
-                        rContainer.push_back(
-                            new PolygonMarkerPrimitive2D(
-                                aLine,
-                                getRGBColorA(),
-                                getRGBColorB(),
-                                getDiscreteDashLength()));
-                        break;
-                    }
+                    rContainer.push_back(
+                        new PolygonMarkerPrimitive2D(
+                            aLine,
+                            getRGBColorA(),
+                            getRGBColorB(),
+                            getDiscreteDashLength()));
+                    break;
+                }
 
-                    case HELPLINESTYLE_HORIZONTAL :
-                    {
-                        basegfx::B2DPolygon aLine;
+                case HELPLINESTYLE_HORIZONTAL :
+                {
+                    basegfx::B2DPolygon aLine;
 
-                        aLine.append(basegfx::B2DPoint(getViewport().getMinX(), getBasePosition().getY()));
-                        aLine.append(basegfx::B2DPoint(getViewport().getMaxX(), getBasePosition().getY()));
+                    aLine.append(basegfx::B2DPoint(getViewport().getMinX(), getBasePosition().getY()));
+                    aLine.append(basegfx::B2DPoint(getViewport().getMaxX(), getBasePosition().getY()));
 
-                        rContainer.push_back(
-                            new PolygonMarkerPrimitive2D(
-                                aLine,
-                                getRGBColorA(),
-                                getRGBColorB(),
-                                getDiscreteDashLength()));
-                        break;
-                    }
+                    rContainer.push_back(
+                        new PolygonMarkerPrimitive2D(
+                            aLine,
+                            getRGBColorA(),
+                            getRGBColorB(),
+                            getDiscreteDashLength()));
+                    break;
+                }
 
-                    default: // case HELPLINESTYLE_POINT :
-                    {
-                        const double fDiscreteUnit((rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0)).getLength());
-                        basegfx::B2DPolygon aLineA, aLineB;
+                default: // case HELPLINESTYLE_POINT :
+                {
+                    const double fDiscreteUnit((rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0)).getLength());
+                    basegfx::B2DPolygon aLineA, aLineB;
 
-                        aLineA.append(basegfx::B2DPoint(getBasePosition().getX(), getBasePosition().getY() - fDiscreteUnit));
-                        aLineA.append(basegfx::B2DPoint(getBasePosition().getX(), getBasePosition().getY() + fDiscreteUnit));
+                    aLineA.append(basegfx::B2DPoint(getBasePosition().getX(), getBasePosition().getY() - fDiscreteUnit));
+                    aLineA.append(basegfx::B2DPoint(getBasePosition().getX(), getBasePosition().getY() + fDiscreteUnit));
 
-                        rContainer.push_back(
-                            new PolygonMarkerPrimitive2D(
-                                aLineA,
-                                getRGBColorA(),
-                                getRGBColorB(),
-                                getDiscreteDashLength()));
+                    rContainer.push_back(
+                        new PolygonMarkerPrimitive2D(
+                            aLineA,
+                            getRGBColorA(),
+                            getRGBColorB(),
+                            getDiscreteDashLength()));
 
-                        aLineB.append(basegfx::B2DPoint(getBasePosition().getX() - fDiscreteUnit, getBasePosition().getY()));
-                        aLineB.append(basegfx::B2DPoint(getBasePosition().getX() + fDiscreteUnit, getBasePosition().getY()));
+                    aLineB.append(basegfx::B2DPoint(getBasePosition().getX() - fDiscreteUnit, getBasePosition().getY()));
+                    aLineB.append(basegfx::B2DPoint(getBasePosition().getX() + fDiscreteUnit, getBasePosition().getY()));
 
-                        rContainer.push_back(
-                            new PolygonMarkerPrimitive2D(
-                                aLineB,
-                                getRGBColorA(),
-                                getRGBColorB(),
-                                getDiscreteDashLength()));
+                    rContainer.push_back(
+                        new PolygonMarkerPrimitive2D(
+                            aLineB,
+                            getRGBColorA(),
+                            getRGBColorB(),
+                            getDiscreteDashLength()));
 
-                        break;
-                    }
+                    break;
                 }
             }
         }

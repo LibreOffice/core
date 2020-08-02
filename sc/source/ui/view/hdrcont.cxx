@@ -904,43 +904,43 @@ void ScHeaderControl::StopMarking()
 
 void ScHeaderControl::ShowDragHelp()
 {
-    if (Help::IsQuickHelpEnabled())
+    if (!Help::IsQuickHelpEnabled())
+        return;
+
+    long nScrPos    = GetScrPos( nDragNo );
+    bool bLayoutRTL = IsLayoutRTL();
+    long nVal = bLayoutRTL ? ( nScrPos - nDragPos + 1 )
+                           : ( nDragPos + 2 - nScrPos );
+
+    OUString aHelpStr = GetDragHelp( nVal );
+    Point aPos = OutputToScreenPixel( Point(0,0) );
+    Size aSize = GetSizePixel();
+
+    Point aMousePos = OutputToScreenPixel(GetPointerPosPixel());
+
+    tools::Rectangle aRect;
+    QuickHelpFlags nAlign;
+    if (!bVertical)
     {
-        long nScrPos    = GetScrPos( nDragNo );
-        bool bLayoutRTL = IsLayoutRTL();
-        long nVal = bLayoutRTL ? ( nScrPos - nDragPos + 1 )
-                               : ( nDragPos + 2 - nScrPos );
-
-        OUString aHelpStr = GetDragHelp( nVal );
-        Point aPos = OutputToScreenPixel( Point(0,0) );
-        Size aSize = GetSizePixel();
-
-        Point aMousePos = OutputToScreenPixel(GetPointerPosPixel());
-
-        tools::Rectangle aRect;
-        QuickHelpFlags nAlign;
-        if (!bVertical)
-        {
-            // above
-            aRect.SetLeft( aMousePos.X() );
-            aRect.SetTop( aPos.Y() - 4 );
-            nAlign       = QuickHelpFlags::Bottom|QuickHelpFlags::Center;
-        }
-        else
-        {
-            // top right
-            aRect.SetLeft( aPos.X() + aSize.Width() + 8 );
-            aRect.SetTop( aMousePos.Y() - 2 );
-            nAlign       = QuickHelpFlags::Left|QuickHelpFlags::Bottom;
-        }
-
-        aRect.SetRight( aRect.Left() );
-        aRect.SetBottom( aRect.Top() );
-
-        if (nTipVisible)
-            Help::HidePopover(this, nTipVisible);
-        nTipVisible = Help::ShowPopover(this, aRect, aHelpStr, nAlign);
+        // above
+        aRect.SetLeft( aMousePos.X() );
+        aRect.SetTop( aPos.Y() - 4 );
+        nAlign       = QuickHelpFlags::Bottom|QuickHelpFlags::Center;
     }
+    else
+    {
+        // top right
+        aRect.SetLeft( aPos.X() + aSize.Width() + 8 );
+        aRect.SetTop( aMousePos.Y() - 2 );
+        nAlign       = QuickHelpFlags::Left|QuickHelpFlags::Bottom;
+    }
+
+    aRect.SetRight( aRect.Left() );
+    aRect.SetBottom( aRect.Top() );
+
+    if (nTipVisible)
+        Help::HidePopover(this, nTipVisible);
+    nTipVisible = Help::ShowPopover(this, aRect, aHelpStr, nAlign);
 }
 
 void ScHeaderControl::RequestHelp( const HelpEvent& rHEvt )

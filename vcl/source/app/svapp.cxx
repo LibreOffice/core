@@ -1686,19 +1686,19 @@ void registerPollCallbacks(
 void unregisterPollCallbacks()
 {
     ImplSVData * pSVData = ImplGetSVData();
-    if (pSVData)
-    {
-        // Not hyper-elegant - but in the case of Android & unipoll we need to detach
-        // this thread from the JVM's clutches to avoid a crash closing document
-        if (pSVData->mpPollClosure && pSVData->mpDefInst)
-            pSVData->mpDefInst->releaseMainThread();
+    if (!pSVData)
+        return;
 
-        // Just set mpPollClosure to null as that is what calling this means, that the callback data
-        // points to an object that no longer exists. In particular, don't set
-        // pSVData->mpPollCallback to nullptr as that is used to detect whether Unipoll is in use in
-        // isUnipoll().
-        pSVData->mpPollClosure = nullptr;
-    }
+    // Not hyper-elegant - but in the case of Android & unipoll we need to detach
+    // this thread from the JVM's clutches to avoid a crash closing document
+    if (pSVData->mpPollClosure && pSVData->mpDefInst)
+        pSVData->mpDefInst->releaseMainThread();
+
+    // Just set mpPollClosure to null as that is what calling this means, that the callback data
+    // points to an object that no longer exists. In particular, don't set
+    // pSVData->mpPollCallback to nullptr as that is used to detect whether Unipoll is in use in
+    // isUnipoll().
+    pSVData->mpPollClosure = nullptr;
 }
 
 bool isUnipoll()

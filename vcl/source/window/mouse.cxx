@@ -134,24 +134,24 @@ PointerStyle Window::ImplGetMousePointer() const
 
 void Window::ImplCallMouseMove( sal_uInt16 nMouseCode, bool bModChanged )
 {
-    if ( mpWindowImpl->mpFrameData->mbMouseIn && mpWindowImpl->mpFrameWindow->mpWindowImpl->mbReallyVisible )
-    {
-        sal_uInt64 nTime   = tools::Time::GetSystemTicks();
-        long    nX      = mpWindowImpl->mpFrameData->mnLastMouseX;
-        long    nY      = mpWindowImpl->mpFrameData->mnLastMouseY;
-        sal_uInt16  nCode   = nMouseCode;
-        MouseEventModifiers nMode = mpWindowImpl->mpFrameData->mnMouseMode;
-        bool    bLeave;
-        // check for MouseLeave
-        bLeave = ((nX < 0) || (nY < 0) ||
-                  (nX >= mpWindowImpl->mpFrameWindow->mnOutWidth) ||
-                  (nY >= mpWindowImpl->mpFrameWindow->mnOutHeight)) &&
-                 !ImplGetSVData()->mpWinData->mpCaptureWin;
-        nMode |= MouseEventModifiers::SYNTHETIC;
-        if ( bModChanged )
-            nMode |= MouseEventModifiers::MODIFIERCHANGED;
-        ImplHandleMouseEvent( mpWindowImpl->mpFrameWindow, MouseNotifyEvent::MOUSEMOVE, bLeave, nX, nY, nTime, nCode, nMode );
-    }
+    if ( !(mpWindowImpl->mpFrameData->mbMouseIn && mpWindowImpl->mpFrameWindow->mpWindowImpl->mbReallyVisible) )
+        return;
+
+    sal_uInt64 nTime   = tools::Time::GetSystemTicks();
+    long    nX      = mpWindowImpl->mpFrameData->mnLastMouseX;
+    long    nY      = mpWindowImpl->mpFrameData->mnLastMouseY;
+    sal_uInt16  nCode   = nMouseCode;
+    MouseEventModifiers nMode = mpWindowImpl->mpFrameData->mnMouseMode;
+    bool    bLeave;
+    // check for MouseLeave
+    bLeave = ((nX < 0) || (nY < 0) ||
+              (nX >= mpWindowImpl->mpFrameWindow->mnOutWidth) ||
+              (nY >= mpWindowImpl->mpFrameWindow->mnOutHeight)) &&
+             !ImplGetSVData()->mpWinData->mpCaptureWin;
+    nMode |= MouseEventModifiers::SYNTHETIC;
+    if ( bModChanged )
+        nMode |= MouseEventModifiers::MODIFIERCHANGED;
+    ImplHandleMouseEvent( mpWindowImpl->mpFrameWindow, MouseNotifyEvent::MOUSEMOVE, bLeave, nX, nY, nTime, nCode, nMode );
 }
 
 void Window::ImplGenerateMouseMove()
@@ -482,25 +482,26 @@ void Window::SetPointer( PointerStyle nPointer )
     if ( !mpWindowImpl->mpFrameData->mbInMouseMove && ImplTestMousePointerSet() )
         mpWindowImpl->mpFrame->SetPointer( ImplGetMousePointer() );
 
-    if (VclPtr<vcl::Window> pWin = GetParentWithLOKNotifier())
-    {
-        PointerStyle aPointer = GetPointer();
-        // We don't map all possible pointers hence we need a default
-        OString aPointerString = "default";
-        auto aIt = vcl::gaLOKPointerMap.find(aPointer);
-        if (aIt != vcl::gaLOKPointerMap.end())
-        {
-            aPointerString = aIt->second;
-        }
+    VclPtr<vcl::Window> pWin = GetParentWithLOKNotifier();
+    if (!pWin)
+        return;
 
-        // issue mouse pointer events only for document windows
-        // Doc windows' immediate parent SfxFrameViewWindow_Impl is the one with
-        // parent notifier set during initialization
-        if (GetParent()->ImplGetWindowImpl()->mbLOKParentNotifier &&
-            GetParent()->ImplGetWindowImpl()->mnLOKWindowId == 0)
-        {
-            pWin->GetLOKNotifier()->libreOfficeKitViewCallback(LOK_CALLBACK_MOUSE_POINTER, aPointerString.getStr());
-        }
+    PointerStyle aPointer = GetPointer();
+    // We don't map all possible pointers hence we need a default
+    OString aPointerString = "default";
+    auto aIt = vcl::gaLOKPointerMap.find(aPointer);
+    if (aIt != vcl::gaLOKPointerMap.end())
+    {
+        aPointerString = aIt->second;
+    }
+
+    // issue mouse pointer events only for document windows
+    // Doc windows' immediate parent SfxFrameViewWindow_Impl is the one with
+    // parent notifier set during initialization
+    if (GetParent()->ImplGetWindowImpl()->mbLOKParentNotifier &&
+        GetParent()->ImplGetWindowImpl()->mnLOKWindowId == 0)
+    {
+        pWin->GetLOKNotifier()->libreOfficeKitViewCallback(LOK_CALLBACK_MOUSE_POINTER, aPointerString.getStr());
     }
 }
 

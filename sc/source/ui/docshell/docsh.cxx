@@ -1049,31 +1049,32 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         }
     }
 
-    if ( const SfxEventHint* pSfxEventHint = dynamic_cast<const SfxEventHint*>(&rHint) )
+    const SfxEventHint* pSfxEventHint = dynamic_cast<const SfxEventHint*>(&rHint);
+    if (!pSfxEventHint)
+        return;
+
+    switch( pSfxEventHint->GetEventId() )
     {
-        switch( pSfxEventHint->GetEventId() )
-        {
-           case SfxEventHintId::CreateDoc:
-                {
-                    uno::Any aWorkbook;
-                    aWorkbook <<= mxAutomationWorkbookObject;
-                    uno::Sequence< uno::Any > aArgs(1);
-                    aArgs[0] = aWorkbook;
-                    SC_MOD()->CallAutomationApplicationEventSinks( "NewWorkbook", aArgs );
-                }
-                break;
-            case SfxEventHintId::OpenDoc:
-                {
-                    uno::Any aWorkbook;
-                    aWorkbook <<= mxAutomationWorkbookObject;
-                    uno::Sequence< uno::Any > aArgs(1);
-                    aArgs[0] = aWorkbook;
-                    SC_MOD()->CallAutomationApplicationEventSinks( "WorkbookOpen", aArgs );
-                }
-                break;
-            default:
-                break;
-        }
+       case SfxEventHintId::CreateDoc:
+            {
+                uno::Any aWorkbook;
+                aWorkbook <<= mxAutomationWorkbookObject;
+                uno::Sequence< uno::Any > aArgs(1);
+                aArgs[0] = aWorkbook;
+                SC_MOD()->CallAutomationApplicationEventSinks( "NewWorkbook", aArgs );
+            }
+            break;
+        case SfxEventHintId::OpenDoc:
+            {
+                uno::Any aWorkbook;
+                aWorkbook <<= mxAutomationWorkbookObject;
+                uno::Sequence< uno::Any > aArgs(1);
+                aArgs[0] = aWorkbook;
+                SC_MOD()->CallAutomationApplicationEventSinks( "WorkbookOpen", aArgs );
+            }
+            break;
+        default:
+            break;
     }
 }
 
@@ -3111,24 +3112,24 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
 
 void ScDocShell::UseSheetSaveEntries()
 {
-    if (m_pSheetSaveData)
+    if (!m_pSheetSaveData)
+        return;
+
+    m_pSheetSaveData->UseSaveEntries();   // use positions from saved file for next saving
+
+    bool bHasEntries = false;
+    SCTAB nTabCount = m_aDocument.GetTableCount();
+    SCTAB nTab;
+    for (nTab = 0; nTab < nTabCount; ++nTab)
+        if (m_pSheetSaveData->HasStreamPos(nTab))
+            bHasEntries = true;
+
+    if (!bHasEntries)
     {
-        m_pSheetSaveData->UseSaveEntries();   // use positions from saved file for next saving
-
-        bool bHasEntries = false;
-        SCTAB nTabCount = m_aDocument.GetTableCount();
-        SCTAB nTab;
+        // if no positions were set (for example, export to other format),
+        // reset all "valid" flags
         for (nTab = 0; nTab < nTabCount; ++nTab)
-            if (m_pSheetSaveData->HasStreamPos(nTab))
-                bHasEntries = true;
-
-        if (!bHasEntries)
-        {
-            // if no positions were set (for example, export to other format),
-            // reset all "valid" flags
-            for (nTab = 0; nTab < nTabCount; ++nTab)
-                m_aDocument.SetStreamValid(nTab, false);
-        }
+            m_aDocument.SetStreamValid(nTab, false);
     }
 }
 
@@ -3220,29 +3221,29 @@ void ScDocShell::SetChangeRecording( bool bActivate )
 void ScDocShell::SetProtectionPassword( const OUString &rNewPassword )
 {
     ScChangeTrack* pChangeTrack = m_aDocument.GetChangeTrack();
-    if (pChangeTrack)
+    if (!pChangeTrack)
+        return;
+
+    bool bProtected = pChangeTrack->IsProtected();
+
+    if (!rNewPassword.isEmpty())
     {
-        bool bProtected = pChangeTrack->IsProtected();
+        // when password protection is applied change tracking must always be active
+        SetChangeRecording( true );
 
-        if (!rNewPassword.isEmpty())
-        {
-            // when password protection is applied change tracking must always be active
-            SetChangeRecording( true );
+        css::uno::Sequence< sal_Int8 > aProtectionHash;
+        SvPasswordHelper::GetHashPassword( aProtectionHash, rNewPassword );
+        pChangeTrack->SetProtection( aProtectionHash );
+    }
+    else
+    {
+        pChangeTrack->SetProtection( css::uno::Sequence< sal_Int8 >() );
+    }
 
-            css::uno::Sequence< sal_Int8 > aProtectionHash;
-            SvPasswordHelper::GetHashPassword( aProtectionHash, rNewPassword );
-            pChangeTrack->SetProtection( aProtectionHash );
-        }
-        else
-        {
-            pChangeTrack->SetProtection( css::uno::Sequence< sal_Int8 >() );
-        }
-
-        if ( bProtected != pChangeTrack->IsProtected() )
-        {
-            UpdateAcceptChangesDialog();
-            SetDocumentModified();
-        }
+    if ( bProtected != pChangeTrack->IsProtected() )
+    {
+        UpdateAcceptChangesDialog();
+        SetDocumentModified();
     }
 }
 

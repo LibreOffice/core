@@ -72,102 +72,102 @@ namespace
             mfAngle(fAngle),
             maOffsets()
         {
-            if (rStyle.IsUsed())
+            if (!rStyle.IsUsed())
+                return;
+
+            svx::frame::RefMode aRefMode(rStyle.GetRefMode());
+            Color aPrim(rStyle.GetColorPrim());
+            Color aSecn(rStyle.GetColorSecn());
+            const bool bSecnUsed(0.0 != rStyle.Secn());
+
+            // Get the single segment line widths. This is the point where the
+            // minimal discrete unit will be used if given (fMinimalDiscreteUnit). If
+            // not given it's 0.0 and thus will have no influence.
+            double fPrim(snapToDiscreteUnit(rStyle.Prim(), fMinimalDiscreteUnit));
+            const double fDist(snapToDiscreteUnit(rStyle.Dist(), fMinimalDiscreteUnit));
+            double fSecn(snapToDiscreteUnit(rStyle.Secn(), fMinimalDiscreteUnit));
+
+            // Of course also do not use svx::frame::Style::GetWidth() for obvious
+            // reasons.
+            const double fStyleWidth(fPrim + fDist + fSecn);
+
+            if(bMirrored)
             {
-                svx::frame::RefMode aRefMode(rStyle.GetRefMode());
-                Color aPrim(rStyle.GetColorPrim());
-                Color aSecn(rStyle.GetColorSecn());
-                const bool bSecnUsed(0.0 != rStyle.Secn());
-
-                // Get the single segment line widths. This is the point where the
-                // minimal discrete unit will be used if given (fMinimalDiscreteUnit). If
-                // not given it's 0.0 and thus will have no influence.
-                double fPrim(snapToDiscreteUnit(rStyle.Prim(), fMinimalDiscreteUnit));
-                const double fDist(snapToDiscreteUnit(rStyle.Dist(), fMinimalDiscreteUnit));
-                double fSecn(snapToDiscreteUnit(rStyle.Secn(), fMinimalDiscreteUnit));
-
-                // Of course also do not use svx::frame::Style::GetWidth() for obvious
-                // reasons.
-                const double fStyleWidth(fPrim + fDist + fSecn);
-
-                if(bMirrored)
+                switch(aRefMode)
                 {
-                    switch(aRefMode)
-                    {
-                        case svx::frame::RefMode::Begin: aRefMode = svx::frame::RefMode::End; break;
-                        case svx::frame::RefMode::End: aRefMode = svx::frame::RefMode::Begin; break;
-                        default: break;
-                    }
-
-                    if(bSecnUsed)
-                    {
-                        std::swap(aPrim, aSecn);
-                        std::swap(fPrim, fSecn);
-                    }
+                    case svx::frame::RefMode::Begin: aRefMode = svx::frame::RefMode::End; break;
+                    case svx::frame::RefMode::End: aRefMode = svx::frame::RefMode::Begin; break;
+                    default: break;
                 }
 
-                if (svx::frame::RefMode::Centered != aRefMode)
+                if(bSecnUsed)
                 {
-                    const double fHalfWidth(fStyleWidth * 0.5);
-
-                    if (svx::frame::RefMode::Begin == aRefMode)
-                    {
-                        // move aligned below vector
-                        mfRefModeOffset = fHalfWidth;
-                    }
-                    else if (svx::frame::RefMode::End == aRefMode)
-                    {
-                        // move aligned above vector
-                        mfRefModeOffset = -fHalfWidth;
-                    }
+                    std::swap(aPrim, aSecn);
+                    std::swap(fPrim, fSecn);
                 }
+            }
 
-                if (bSecnUsed)
+            if (svx::frame::RefMode::Centered != aRefMode)
+            {
+                const double fHalfWidth(fStyleWidth * 0.5);
+
+                if (svx::frame::RefMode::Begin == aRefMode)
                 {
-                    // both or all three lines used
-                    const bool bPrimTransparent(0xff == rStyle.GetColorPrim().GetTransparency());
-                    const bool bDistTransparent(!rStyle.UseGapColor() || 0xff == rStyle.GetColorGap().GetTransparency());
-                    const bool bSecnTransparent(0xff == aSecn.GetTransparency());
-
-                    if(!bPrimTransparent || !bDistTransparent || !bSecnTransparent)
-                    {
-                        const double a(mfRefModeOffset - (fStyleWidth * 0.5));
-                        const double b(a + fPrim);
-                        const double c(b + fDist);
-                        const double d(c + fSecn);
-
-                        maOffsets.push_back(
-                            OffsetAndHalfWidthAndColor(
-                                (a + b) * 0.5,
-                                fPrim * 0.5,
-                                nullptr != pForceColor ? *pForceColor : aPrim));
-
-                        maOffsets.push_back(
-                            OffsetAndHalfWidthAndColor(
-                                (b + c) * 0.5,
-                                fDist * 0.5,
-                                rStyle.UseGapColor()
-                                    ? (nullptr != pForceColor ? *pForceColor : rStyle.GetColorGap())
-                                    : COL_TRANSPARENT));
-
-                        maOffsets.push_back(
-                            OffsetAndHalfWidthAndColor(
-                                (c + d) * 0.5,
-                                fSecn * 0.5,
-                                nullptr != pForceColor ? *pForceColor : aSecn));
-                    }
+                    // move aligned below vector
+                    mfRefModeOffset = fHalfWidth;
                 }
-                else
+                else if (svx::frame::RefMode::End == aRefMode)
                 {
-                    // one line used, push two values, from outer to inner
-                    if(0xff != rStyle.GetColorPrim().GetTransparency())
-                    {
-                        maOffsets.push_back(
-                            OffsetAndHalfWidthAndColor(
-                                mfRefModeOffset,
-                                fPrim * 0.5,
-                                nullptr != pForceColor ? *pForceColor : aPrim));
-                    }
+                    // move aligned above vector
+                    mfRefModeOffset = -fHalfWidth;
+                }
+            }
+
+            if (bSecnUsed)
+            {
+                // both or all three lines used
+                const bool bPrimTransparent(0xff == rStyle.GetColorPrim().GetTransparency());
+                const bool bDistTransparent(!rStyle.UseGapColor() || 0xff == rStyle.GetColorGap().GetTransparency());
+                const bool bSecnTransparent(0xff == aSecn.GetTransparency());
+
+                if(!bPrimTransparent || !bDistTransparent || !bSecnTransparent)
+                {
+                    const double a(mfRefModeOffset - (fStyleWidth * 0.5));
+                    const double b(a + fPrim);
+                    const double c(b + fDist);
+                    const double d(c + fSecn);
+
+                    maOffsets.push_back(
+                        OffsetAndHalfWidthAndColor(
+                            (a + b) * 0.5,
+                            fPrim * 0.5,
+                            nullptr != pForceColor ? *pForceColor : aPrim));
+
+                    maOffsets.push_back(
+                        OffsetAndHalfWidthAndColor(
+                            (b + c) * 0.5,
+                            fDist * 0.5,
+                            rStyle.UseGapColor()
+                                ? (nullptr != pForceColor ? *pForceColor : rStyle.GetColorGap())
+                                : COL_TRANSPARENT));
+
+                    maOffsets.push_back(
+                        OffsetAndHalfWidthAndColor(
+                            (c + d) * 0.5,
+                            fSecn * 0.5,
+                            nullptr != pForceColor ? *pForceColor : aSecn));
+                }
+            }
+            else
+            {
+                // one line used, push two values, from outer to inner
+                if(0xff != rStyle.GetColorPrim().GetTransparency())
+                {
+                    maOffsets.push_back(
+                        OffsetAndHalfWidthAndColor(
+                            mfRefModeOffset,
+                            fPrim * 0.5,
+                            nullptr != pForceColor ? *pForceColor : aPrim));
                 }
             }
         }
@@ -207,19 +207,19 @@ namespace
             bool bMirrored,
             double fMinimalDiscreteUnit)
         {
-            if(rStyle.IsUsed() && !basegfx::areParallel(rMyVector, rOtherVector))
-            {
-                // create angle between both. angle() needs vectors pointing away from the same point,
-                // so take the mirrored one. Add F_PI to get from -pi..+pi to [0..F_PI2] for sorting
-                const double fAngle(basegfx::B2DVector(-rMyVector.getX(), -rMyVector.getY()).angle(rOtherVector) + F_PI);
-                maEntries.emplace_back(
-                    rStyle,
-                    rOtherVector,
-                    fAngle,
-                    bMirrored,
-                    nullptr,
-                    fMinimalDiscreteUnit);
-            }
+            if(!(rStyle.IsUsed() && !basegfx::areParallel(rMyVector, rOtherVector)))
+                return;
+
+            // create angle between both. angle() needs vectors pointing away from the same point,
+            // so take the mirrored one. Add F_PI to get from -pi..+pi to [0..F_PI2] for sorting
+            const double fAngle(basegfx::B2DVector(-rMyVector.getX(), -rMyVector.getY()).angle(rOtherVector) + F_PI);
+            maEntries.emplace_back(
+                rStyle,
+                rOtherVector,
+                fAngle,
+                bMirrored,
+                nullptr,
+                fMinimalDiscreteUnit);
         }
 
         void sort()
@@ -315,164 +315,164 @@ namespace
         const basegfx::B2DVector& rPerpendX,                        // normalized perpendicular to own vector
         const std::vector< StyleVectorCombination >& rStyleVector)  // other vectors emerging in this point
     {
-        if(!rCombination.empty() && !rStyleVector.empty() && rCombination.size() == rExtendSet.size())
-        {
-            const size_t nOffsetA(rCombination.size());
+        if(!(!rCombination.empty() && !rStyleVector.empty() && rCombination.size() == rExtendSet.size()))
+            return;
 
-            if(1 == nOffsetA)
+        const size_t nOffsetA(rCombination.size());
+
+        if(1 == nOffsetA)
+        {
+            Color aMyColor; double fMyOffset(0.0); double fMyHalfWidth(0.0);
+            rCombination.getColorAndOffsetAndHalfWidth(0, aMyColor, fMyOffset, fMyHalfWidth);
+
+            if(0xff != aMyColor.GetTransparency())
+            {
+                const basegfx::B2DPoint aLeft(rOrigin + (rPerpendX * (fMyOffset - fMyHalfWidth)));
+                const basegfx::B2DPoint aRight(rOrigin + (rPerpendX * (fMyOffset + fMyHalfWidth)));
+                std::vector< CutSet > aCutSets;
+
+                for(const auto& rStyleCandidate : rStyleVector)
+                {
+                    const basegfx::B2DVector aOtherPerpend(basegfx::getNormalizedPerpendicular(rStyleCandidate.getB2DVector()));
+                    const size_t nOffsetB(rStyleCandidate.size());
+
+                    for(size_t other(0); other < nOffsetB; other++)
+                    {
+                        Color aOtherColor; double fOtherOffset(0.0); double fOtherHalfWidth(0.0);
+                        rStyleCandidate.getColorAndOffsetAndHalfWidth(other, aOtherColor, fOtherOffset, fOtherHalfWidth);
+
+                        if(0xff != aOtherColor.GetTransparency())
+                        {
+                            const basegfx::B2DPoint aOtherLeft(rOrigin + (aOtherPerpend * (fOtherOffset - fOtherHalfWidth)));
+                            const basegfx::B2DPoint aOtherRight(rOrigin + (aOtherPerpend * (fOtherOffset + fOtherHalfWidth)));
+
+                            CutSet aNewCutSet;
+                            getCutSet(aNewCutSet, aLeft, aRight, rCombination.getB2DVector(), aOtherLeft, aOtherRight, rStyleCandidate.getB2DVector());
+                            aCutSets.push_back(aNewCutSet);
+                        }
+                    }
+                }
+
+                if(!aCutSets.empty())
+                {
+                    CutSet aCutSet(aCutSets[0]);
+                    const size_t nNumCutSets(aCutSets.size());
+
+                    if(1 != nNumCutSets)
+                    {
+                        double fCutSet(aCutSet.getSum());
+
+                        for(size_t a(1); a < nNumCutSets; a++)
+                        {
+                            const CutSet& rCandidate(aCutSets[a]);
+                            const double fCandidate(rCandidate.getSum());
+
+                            if(basegfx::fTools::equalZero(fCandidate - fCutSet))
+                            {
+                                // both have equal center point, use medium cut
+                                const double fNewOLML(std::max(std::min(rCandidate.mfOLML, rCandidate.mfORML), std::min(aCutSet.mfOLML, aCutSet.mfORML)));
+                                const double fNewORML(std::min(std::max(rCandidate.mfOLML, rCandidate.mfORML), std::max(aCutSet.mfOLML, aCutSet.mfORML)));
+                                const double fNewOLMR(std::max(std::min(rCandidate.mfOLMR, rCandidate.mfORMR), std::min(aCutSet.mfOLMR, aCutSet.mfORMR)));
+                                const double fNewORMR(std::min(std::max(rCandidate.mfOLMR, rCandidate.mfORMR), std::max(aCutSet.mfOLMR, aCutSet.mfORMR)));
+                                aCutSet.mfOLML = fNewOLML;
+                                aCutSet.mfORML = fNewORML;
+                                aCutSet.mfOLMR = fNewOLMR;
+                                aCutSet.mfORMR = fNewORMR;
+                                fCutSet = aCutSet.getSum();
+                            }
+                            else if(fCandidate < fCutSet)
+                            {
+                                // get minimum
+                                fCutSet = fCandidate;
+                                aCutSet = rCandidate;
+                            }
+                        }
+                    }
+
+                    ExtendSet& rExt(rExtendSet[0]);
+
+                    rExt.mfExtLeft = std::min(aCutSet.mfOLML, aCutSet.mfORML);
+                    rExt.mfExtRight = std::min(aCutSet.mfOLMR, aCutSet.mfORMR);
+                }
+            }
+        }
+        else
+        {
+            size_t nVisEdgeUp(0);
+            size_t nVisEdgeDn(0);
+
+            for(size_t my(0); my < nOffsetA; my++)
             {
                 Color aMyColor; double fMyOffset(0.0); double fMyHalfWidth(0.0);
-                rCombination.getColorAndOffsetAndHalfWidth(0, aMyColor, fMyOffset, fMyHalfWidth);
+                rCombination.getColorAndOffsetAndHalfWidth(my, aMyColor, fMyOffset, fMyHalfWidth);
 
                 if(0xff != aMyColor.GetTransparency())
                 {
                     const basegfx::B2DPoint aLeft(rOrigin + (rPerpendX * (fMyOffset - fMyHalfWidth)));
                     const basegfx::B2DPoint aRight(rOrigin + (rPerpendX * (fMyOffset + fMyHalfWidth)));
+                    const bool bUpper(my <= (nOffsetA >> 1));
+                    const StyleVectorCombination& rStyleCandidate(bUpper ? rStyleVector.front() : rStyleVector.back());
+                    const basegfx::B2DVector aOtherPerpend(basegfx::getNormalizedPerpendicular(rStyleCandidate.getB2DVector()));
+                    const size_t nOffsetB(rStyleCandidate.size());
                     std::vector< CutSet > aCutSets;
 
-                    for(const auto& rStyleCandidate : rStyleVector)
+                    for(size_t other(0); other < nOffsetB; other++)
                     {
-                        const basegfx::B2DVector aOtherPerpend(basegfx::getNormalizedPerpendicular(rStyleCandidate.getB2DVector()));
-                        const size_t nOffsetB(rStyleCandidate.size());
+                        Color aOtherColor; double fOtherOffset(0.0); double fOtherHalfWidth(0.0);
+                        rStyleCandidate.getColorAndOffsetAndHalfWidth(other, aOtherColor, fOtherOffset, fOtherHalfWidth);
 
-                        for(size_t other(0); other < nOffsetB; other++)
+                        if(0xff != aOtherColor.GetTransparency())
                         {
-                            Color aOtherColor; double fOtherOffset(0.0); double fOtherHalfWidth(0.0);
-                            rStyleCandidate.getColorAndOffsetAndHalfWidth(other, aOtherColor, fOtherOffset, fOtherHalfWidth);
-
-                            if(0xff != aOtherColor.GetTransparency())
-                            {
-                                const basegfx::B2DPoint aOtherLeft(rOrigin + (aOtherPerpend * (fOtherOffset - fOtherHalfWidth)));
-                                const basegfx::B2DPoint aOtherRight(rOrigin + (aOtherPerpend * (fOtherOffset + fOtherHalfWidth)));
-
-                                CutSet aNewCutSet;
-                                getCutSet(aNewCutSet, aLeft, aRight, rCombination.getB2DVector(), aOtherLeft, aOtherRight, rStyleCandidate.getB2DVector());
-                                aCutSets.push_back(aNewCutSet);
-                            }
+                            const basegfx::B2DPoint aOtherLeft(rOrigin + (aOtherPerpend * (fOtherOffset - fOtherHalfWidth)));
+                            const basegfx::B2DPoint aOtherRight(rOrigin + (aOtherPerpend * (fOtherOffset + fOtherHalfWidth)));
+                            CutSet aCutSet;
+                            getCutSet(aCutSet, aLeft, aRight, rCombination.getB2DVector(), aOtherLeft, aOtherRight, rStyleCandidate.getB2DVector());
+                            aCutSets.push_back(aCutSet);
                         }
                     }
 
                     if(!aCutSets.empty())
                     {
-                        CutSet aCutSet(aCutSets[0]);
+                        // sort: min to start, max to end
+                        std::sort(aCutSets.begin(), aCutSets.end());
+                        const bool bOtherUpper(rStyleCandidate.getAngle() > F_PI);
+
+                        // check if we need min or max
+                        //  bUpper      bOtherUpper        MinMax
+                        //    t             t               max
+                        //    t             f               min
+                        //    f             f               max
+                        //    f             t               min
+                        const bool bMax(bUpper == bOtherUpper);
+                        size_t nBaseIndex(0);
                         const size_t nNumCutSets(aCutSets.size());
 
-                        if(1 != nNumCutSets)
+                        if(bMax)
                         {
-                            double fCutSet(aCutSet.getSum());
-
-                            for(size_t a(1); a < nNumCutSets; a++)
-                            {
-                                const CutSet& rCandidate(aCutSets[a]);
-                                const double fCandidate(rCandidate.getSum());
-
-                                if(basegfx::fTools::equalZero(fCandidate - fCutSet))
-                                {
-                                    // both have equal center point, use medium cut
-                                    const double fNewOLML(std::max(std::min(rCandidate.mfOLML, rCandidate.mfORML), std::min(aCutSet.mfOLML, aCutSet.mfORML)));
-                                    const double fNewORML(std::min(std::max(rCandidate.mfOLML, rCandidate.mfORML), std::max(aCutSet.mfOLML, aCutSet.mfORML)));
-                                    const double fNewOLMR(std::max(std::min(rCandidate.mfOLMR, rCandidate.mfORMR), std::min(aCutSet.mfOLMR, aCutSet.mfORMR)));
-                                    const double fNewORMR(std::min(std::max(rCandidate.mfOLMR, rCandidate.mfORMR), std::max(aCutSet.mfOLMR, aCutSet.mfORMR)));
-                                    aCutSet.mfOLML = fNewOLML;
-                                    aCutSet.mfORML = fNewORML;
-                                    aCutSet.mfOLMR = fNewOLMR;
-                                    aCutSet.mfORMR = fNewORMR;
-                                    fCutSet = aCutSet.getSum();
-                                }
-                                else if(fCandidate < fCutSet)
-                                {
-                                    // get minimum
-                                    fCutSet = fCandidate;
-                                    aCutSet = rCandidate;
-                                }
-                            }
-                        }
-
-                        ExtendSet& rExt(rExtendSet[0]);
-
-                        rExt.mfExtLeft = std::min(aCutSet.mfOLML, aCutSet.mfORML);
-                        rExt.mfExtRight = std::min(aCutSet.mfOLMR, aCutSet.mfORMR);
-                    }
-                }
-            }
-            else
-            {
-                size_t nVisEdgeUp(0);
-                size_t nVisEdgeDn(0);
-
-                for(size_t my(0); my < nOffsetA; my++)
-                {
-                    Color aMyColor; double fMyOffset(0.0); double fMyHalfWidth(0.0);
-                    rCombination.getColorAndOffsetAndHalfWidth(my, aMyColor, fMyOffset, fMyHalfWidth);
-
-                    if(0xff != aMyColor.GetTransparency())
-                    {
-                        const basegfx::B2DPoint aLeft(rOrigin + (rPerpendX * (fMyOffset - fMyHalfWidth)));
-                        const basegfx::B2DPoint aRight(rOrigin + (rPerpendX * (fMyOffset + fMyHalfWidth)));
-                        const bool bUpper(my <= (nOffsetA >> 1));
-                        const StyleVectorCombination& rStyleCandidate(bUpper ? rStyleVector.front() : rStyleVector.back());
-                        const basegfx::B2DVector aOtherPerpend(basegfx::getNormalizedPerpendicular(rStyleCandidate.getB2DVector()));
-                        const size_t nOffsetB(rStyleCandidate.size());
-                        std::vector< CutSet > aCutSets;
-
-                        for(size_t other(0); other < nOffsetB; other++)
-                        {
-                            Color aOtherColor; double fOtherOffset(0.0); double fOtherHalfWidth(0.0);
-                            rStyleCandidate.getColorAndOffsetAndHalfWidth(other, aOtherColor, fOtherOffset, fOtherHalfWidth);
-
-                            if(0xff != aOtherColor.GetTransparency())
-                            {
-                                const basegfx::B2DPoint aOtherLeft(rOrigin + (aOtherPerpend * (fOtherOffset - fOtherHalfWidth)));
-                                const basegfx::B2DPoint aOtherRight(rOrigin + (aOtherPerpend * (fOtherOffset + fOtherHalfWidth)));
-                                CutSet aCutSet;
-                                getCutSet(aCutSet, aLeft, aRight, rCombination.getB2DVector(), aOtherLeft, aOtherRight, rStyleCandidate.getB2DVector());
-                                aCutSets.push_back(aCutSet);
-                            }
-                        }
-
-                        if(!aCutSets.empty())
-                        {
-                            // sort: min to start, max to end
-                            std::sort(aCutSets.begin(), aCutSets.end());
-                            const bool bOtherUpper(rStyleCandidate.getAngle() > F_PI);
-
-                            // check if we need min or max
-                            //  bUpper      bOtherUpper        MinMax
-                            //    t             t               max
-                            //    t             f               min
-                            //    f             f               max
-                            //    f             t               min
-                            const bool bMax(bUpper == bOtherUpper);
-                            size_t nBaseIndex(0);
-                            const size_t nNumCutSets(aCutSets.size());
-
-                            if(bMax)
-                            {
-                                // access at end
-                                nBaseIndex = nNumCutSets - 1 - (bUpper ? nVisEdgeUp : nVisEdgeDn);
-                            }
-                            else
-                            {
-                                // access at start
-                                nBaseIndex = bUpper ? nVisEdgeUp : nVisEdgeDn;
-                            }
-
-                            const size_t nSecuredIndex(std::min(nNumCutSets - 1, std::max(nBaseIndex, static_cast< size_t >(0))));
-                            const CutSet& rCutSet(aCutSets[nSecuredIndex]);
-                            ExtendSet& rExt(rExtendSet[my]);
-
-                            rExt.mfExtLeft = std::min(rCutSet.mfOLML, rCutSet.mfORML);
-                            rExt.mfExtRight = std::min(rCutSet.mfOLMR, rCutSet.mfORMR);
-                        }
-
-                        if(bUpper)
-                        {
-                            nVisEdgeUp++;
+                            // access at end
+                            nBaseIndex = nNumCutSets - 1 - (bUpper ? nVisEdgeUp : nVisEdgeDn);
                         }
                         else
                         {
-                            nVisEdgeDn++;
+                            // access at start
+                            nBaseIndex = bUpper ? nVisEdgeUp : nVisEdgeDn;
                         }
+
+                        const size_t nSecuredIndex(std::min(nNumCutSets - 1, std::max(nBaseIndex, static_cast< size_t >(0))));
+                        const CutSet& rCutSet(aCutSets[nSecuredIndex]);
+                        ExtendSet& rExt(rExtendSet[my]);
+
+                        rExt.mfExtLeft = std::min(rCutSet.mfOLML, rCutSet.mfORML);
+                        rExt.mfExtRight = std::min(rCutSet.mfOLMR, rCutSet.mfORMR);
+                    }
+
+                    if(bUpper)
+                    {
+                        nVisEdgeUp++;
+                    }
+                    else
+                    {
+                        nVisEdgeDn++;
                     }
                 }
             }

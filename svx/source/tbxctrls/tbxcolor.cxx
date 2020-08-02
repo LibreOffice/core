@@ -39,19 +39,19 @@ namespace svx
         m_sToolboxResName += rToolboxName;
 
         // the layout manager
-        if ( SfxViewFrame::Current() )
+        if ( !SfxViewFrame::Current() )
+            return;
+
+        try
         {
-            try
-            {
-                Reference< XFrame > xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
-                Reference< XPropertySet > xFrameProps( xFrame, UNO_QUERY );
-                if ( xFrameProps.is() )
-                    xFrameProps->getPropertyValue( "LayoutManager" ) >>= m_xLayouter;
-            }
-            catch ( Exception const & )
-            {
-                TOOLS_WARN_EXCEPTION( "svx.tbxcrtls", "ToolboxAccess::Ctor()" );
-            }
+            Reference< XFrame > xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
+            Reference< XPropertySet > xFrameProps( xFrame, UNO_QUERY );
+            if ( xFrameProps.is() )
+                xFrameProps->getPropertyValue( "LayoutManager" ) >>= m_xLayouter;
+        }
+        catch ( Exception const & )
+        {
+            TOOLS_WARN_EXCEPTION( "svx.tbxcrtls", "ToolboxAccess::Ctor()" );
         }
     }
 

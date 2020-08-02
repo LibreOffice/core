@@ -1256,37 +1256,37 @@ void GetPropsUsingHeadRequest(DAVResource& resource,
                               const std::vector< OUString >& aHTTPNames,
                               const uno::Reference< ucb::XCommandEnvironment >& xEnv)
 {
-    if (!aHTTPNames.empty())
+    if (aHTTPNames.empty())
+        return;
+
+    DAVOptions aDAVOptions;
+    OUString   aTargetURL = xResAccess->getURL();
+    // retrieve the cached options if any
+    aStaticDAVOptionsCache.getDAVOptions(aTargetURL, aDAVOptions);
+
+    // clean cached value of PROPFIND property names
+    // PROPPATCH can change them
+    Content::removeCachedPropertyNames(aTargetURL);
+    // test if HEAD allowed, if not, throw, should be caught immediately
+    // SC_GONE used internally by us, see comment in Content::getPropertyValues
+    // in the catch scope
+    if (aDAVOptions.getHttpResponseStatusCode() != SC_GONE &&
+        !aDAVOptions.isHeadAllowed())
     {
-        DAVOptions aDAVOptions;
-        OUString   aTargetURL = xResAccess->getURL();
-        // retrieve the cached options if any
-        aStaticDAVOptionsCache.getDAVOptions(aTargetURL, aDAVOptions);
-
-        // clean cached value of PROPFIND property names
-        // PROPPATCH can change them
-        Content::removeCachedPropertyNames(aTargetURL);
-        // test if HEAD allowed, if not, throw, should be caught immediately
-        // SC_GONE used internally by us, see comment in Content::getPropertyValues
-        // in the catch scope
-        if (aDAVOptions.getHttpResponseStatusCode() != SC_GONE &&
-            !aDAVOptions.isHeadAllowed())
-        {
-            throw DAVException(DAVException::DAV_HTTP_ERROR, "405 Not Implemented", SC_METHOD_NOT_ALLOWED);
-        }
-        // if HEAD is enabled on this site
-        // check if there is a relevant HTTP response status code cached
-        if (aDAVOptions.getHttpResponseStatusCode() != SC_NONE)
-        {
-            // throws exception as if there was a server error, a DAV exception
-            throw DAVException(DAVException::DAV_HTTP_ERROR,
-                aDAVOptions.getHttpResponseStatusText(),
-                aDAVOptions.getHttpResponseStatusCode());
-            // Unreachable
-        }
-
-        xResAccess->HEAD(aHTTPNames, resource, xEnv);
+        throw DAVException(DAVException::DAV_HTTP_ERROR, "405 Not Implemented", SC_METHOD_NOT_ALLOWED);
     }
+    // if HEAD is enabled on this site
+    // check if there is a relevant HTTP response status code cached
+    if (aDAVOptions.getHttpResponseStatusCode() != SC_NONE)
+    {
+        // throws exception as if there was a server error, a DAV exception
+        throw DAVException(DAVException::DAV_HTTP_ERROR,
+            aDAVOptions.getHttpResponseStatusText(),
+            aDAVOptions.getHttpResponseStatusCode());
+        // Unreachable
+    }
+
+    xResAccess->HEAD(aHTTPNames, resource, xEnv);
 }
 }
 

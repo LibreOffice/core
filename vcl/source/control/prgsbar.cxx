@@ -92,25 +92,25 @@ void ProgressBar::ImplInitSettings( bool bFont,
         }
     }
 
-    if ( bForeground || bFont )
+    if ( !(bForeground || bFont) )
+        return;
+
+    Color aColor = rStyleSettings.GetHighlightColor();
+    if ( IsControlForeground() )
+        aColor = GetControlForeground();
+    if ( aColor.IsRGBEqual( GetBackground().GetColor() ) )
     {
-        Color aColor = rStyleSettings.GetHighlightColor();
-        if ( IsControlForeground() )
-            aColor = GetControlForeground();
-        if ( aColor.IsRGBEqual( GetBackground().GetColor() ) )
-        {
-            if ( aColor.GetLuminance() > 100 )
-                aColor.DecreaseLuminance( 64 );
-            else
-                aColor.IncreaseLuminance( 64 );
-        }
-        SetLineColor();
-        SetFillColor( aColor );
-/* FIXME: !!! We do not support text output at the moment
-        SetTextColor( aColor );
-        SetTextFillColor();
-*/
+        if ( aColor.GetLuminance() > 100 )
+            aColor.DecreaseLuminance( 64 );
+        else
+            aColor.IncreaseLuminance( 64 );
     }
+    SetLineColor();
+    SetFillColor( aColor );
+/* FIXME: !!! We do not support text output at the moment
+    SetTextColor( aColor );
+    SetTextFillColor();
+*/
 }
 
 void ProgressBar::ImplDrawProgress(vcl::RenderContext& rRenderContext, sal_uInt16 nNewPerc)

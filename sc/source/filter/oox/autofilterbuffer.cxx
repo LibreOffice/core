@@ -556,86 +556,86 @@ FilterColumn& AutoFilter::createFilterColumn()
 
 void AutoFilter::finalizeImport( const Reference<XSheetFilterDescriptor3>& rxFilterDesc )
 {
-    if( rxFilterDesc.is() )
+    if( !rxFilterDesc.is() )
+        return;
+
+    // set some common properties for the auto filter range
+    PropertySet aDescProps( rxFilterDesc );
+    aDescProps.setProperty( PROP_IsCaseSensitive, false );
+    aDescProps.setProperty( PROP_SkipDuplicates, false );
+    aDescProps.setProperty( PROP_Orientation, TableOrientation_ROWS );
+    aDescProps.setProperty( PROP_ContainsHeader, true );
+    aDescProps.setProperty( PROP_CopyOutputData, false );
+
+    // maximum number of UNO API filter fields
+    sal_Int32 nMaxCount = 0;
+    aDescProps.getProperty( nMaxCount, PROP_MaxFieldCount );
+    OSL_ENSURE( nMaxCount > 0, "AutoFilter::finalizeImport - invalid maximum filter field count" );
+
+    // resulting list of all UNO API filter fields
+    ::std::vector<TableFilterField3> aFilterFields;
+
+    // track if columns require to enable or disable regular expressions
+    OptValue< bool > obNeedsRegExp;
+
+    /*  Track whether the filter fields of the first filter column are
+        connected with 'or'. In this case, other filter fields cannot be
+        inserted without altering the result of the entire filter, due to
+        Calc's precedence for the 'and' connection operator. Example:
+        Excel's filter conditions 'A1 and (B1 or B2) and C1' where B1 and
+        B2 belong to filter column B, will be evaluated by Calc as
+        '(A1 and B1) or (B2 and C1)'. */
+    bool bHasOrConnection = false;
+
+    // process all filter column objects, exit when 'or' connection exists
+    for( const auto& rxFilterColumn : maFilterColumns )
     {
-        // set some common properties for the auto filter range
-        PropertySet aDescProps( rxFilterDesc );
-        aDescProps.setProperty( PROP_IsCaseSensitive, false );
-        aDescProps.setProperty( PROP_SkipDuplicates, false );
-        aDescProps.setProperty( PROP_Orientation, TableOrientation_ROWS );
-        aDescProps.setProperty( PROP_ContainsHeader, true );
-        aDescProps.setProperty( PROP_CopyOutputData, false );
+        // the filter settings object creates a list of filter fields
+        ApiFilterSettings aSettings = rxFilterColumn->finalizeImport( nMaxCount );
+        ApiFilterSettings::FilterFieldVector& rColumnFields = aSettings.maFilterFields;
 
-        // maximum number of UNO API filter fields
-        sal_Int32 nMaxCount = 0;
-        aDescProps.getProperty( nMaxCount, PROP_MaxFieldCount );
-        OSL_ENSURE( nMaxCount > 0, "AutoFilter::finalizeImport - invalid maximum filter field count" );
+        // new total number of filter fields
+        sal_Int32 nNewCount = static_cast< sal_Int32 >( aFilterFields.size() + rColumnFields.size() );
 
-        // resulting list of all UNO API filter fields
-        ::std::vector<TableFilterField3> aFilterFields;
+        /*  Check whether mode for regular expressions is compatible with
+            the global mode in obNeedsRegExp. If either one is still in
+            don't-care state, all is fine. If both are set, they must be
+            equal. */
+        bool bRegExpCompatible = !obNeedsRegExp || !aSettings.mobNeedsRegExp || (obNeedsRegExp.get() == aSettings.mobNeedsRegExp.get());
 
-        // track if columns require to enable or disable regular expressions
-        OptValue< bool > obNeedsRegExp;
+        // check whether fields are connected by 'or' (see comments above).
+        if( rColumnFields.size() >= 2 )
+            bHasOrConnection = std::any_of(rColumnFields.begin() + 1, rColumnFields.end(),
+                [](const css::sheet::TableFilterField3& rColumnField) { return rColumnField.Connection == FilterConnection_OR; });
 
-        /*  Track whether the filter fields of the first filter column are
-            connected with 'or'. In this case, other filter fields cannot be
-            inserted without altering the result of the entire filter, due to
-            Calc's precedence for the 'and' connection operator. Example:
-            Excel's filter conditions 'A1 and (B1 or B2) and C1' where B1 and
-            B2 belong to filter column B, will be evaluated by Calc as
-            '(A1 and B1) or (B2 and C1)'. */
-        bool bHasOrConnection = false;
-
-        // process all filter column objects, exit when 'or' connection exists
-        for( const auto& rxFilterColumn : maFilterColumns )
+        /*  Skip the column filter, if no filter fields have been created,
+            if the number of new filter fields would exceed the total limit
+            of filter fields, or if the mode for regular expressions of the
+            filter column does not fit. */
+        if( !rColumnFields.empty() && (nNewCount <= nMaxCount) && bRegExpCompatible )
         {
-            // the filter settings object creates a list of filter fields
-            ApiFilterSettings aSettings = rxFilterColumn->finalizeImport( nMaxCount );
-            ApiFilterSettings::FilterFieldVector& rColumnFields = aSettings.maFilterFields;
+            /*  Add 'and' connection to the first filter field to connect
+                it to the existing filter fields of other columns. */
+            rColumnFields[ 0 ].Connection = FilterConnection_AND;
 
-            // new total number of filter fields
-            sal_Int32 nNewCount = static_cast< sal_Int32 >( aFilterFields.size() + rColumnFields.size() );
+            // insert the new filter fields
+            aFilterFields.insert( aFilterFields.end(), rColumnFields.begin(), rColumnFields.end() );
 
-            /*  Check whether mode for regular expressions is compatible with
-                the global mode in obNeedsRegExp. If either one is still in
-                don't-care state, all is fine. If both are set, they must be
-                equal. */
-            bool bRegExpCompatible = !obNeedsRegExp || !aSettings.mobNeedsRegExp || (obNeedsRegExp.get() == aSettings.mobNeedsRegExp.get());
-
-            // check whether fields are connected by 'or' (see comments above).
-            if( rColumnFields.size() >= 2 )
-                bHasOrConnection = std::any_of(rColumnFields.begin() + 1, rColumnFields.end(),
-                    [](const css::sheet::TableFilterField3& rColumnField) { return rColumnField.Connection == FilterConnection_OR; });
-
-            /*  Skip the column filter, if no filter fields have been created,
-                if the number of new filter fields would exceed the total limit
-                of filter fields, or if the mode for regular expressions of the
-                filter column does not fit. */
-            if( !rColumnFields.empty() && (nNewCount <= nMaxCount) && bRegExpCompatible )
-            {
-                /*  Add 'and' connection to the first filter field to connect
-                    it to the existing filter fields of other columns. */
-                rColumnFields[ 0 ].Connection = FilterConnection_AND;
-
-                // insert the new filter fields
-                aFilterFields.insert( aFilterFields.end(), rColumnFields.begin(), rColumnFields.end() );
-
-                // update the regular expressions mode
-                obNeedsRegExp.assignIfUsed( aSettings.mobNeedsRegExp );
-            }
-
-            if( bHasOrConnection )
-                break;
+            // update the regular expressions mode
+            obNeedsRegExp.assignIfUsed( aSettings.mobNeedsRegExp );
         }
 
-        // insert all filter fields to the filter descriptor
-        if( !aFilterFields.empty() )
-            rxFilterDesc->setFilterFields3( ContainerHelper::vectorToSequence( aFilterFields ) );
-
-        // regular expressions
-        bool bUseRegExp = obNeedsRegExp.get( false );
-        aDescProps.setProperty( PROP_UseRegularExpressions, bUseRegExp );
+        if( bHasOrConnection )
+            break;
     }
+
+    // insert all filter fields to the filter descriptor
+    if( !aFilterFields.empty() )
+        rxFilterDesc->setFilterFields3( ContainerHelper::vectorToSequence( aFilterFields ) );
+
+    // regular expressions
+    bool bUseRegExp = obNeedsRegExp.get( false );
+    aDescProps.setProperty( PROP_UseRegularExpressions, bUseRegExp );
 }
 
 AutoFilterBuffer::AutoFilterBuffer( const WorkbookHelper& rHelper ) :
@@ -653,59 +653,61 @@ AutoFilter& AutoFilterBuffer::createAutoFilter()
 void AutoFilterBuffer::finalizeImport( sal_Int16 nSheet )
 {
     // rely on existence of the defined name '_FilterDatabase' containing the range address of the filtered area
-    if( const DefinedName* pFilterDBName = getDefinedNames().getByBuiltinId( BIFF_DEFNAME_FILTERDATABASE, nSheet ).get() )
+    const DefinedName* pFilterDBName = getDefinedNames().getByBuiltinId( BIFF_DEFNAME_FILTERDATABASE, nSheet ).get();
+    if(!pFilterDBName)
+        return;
+
+    ScRange aFilterRange;
+    if( !(pFilterDBName->getAbsoluteRange( aFilterRange ) && (aFilterRange.aStart.Tab() == nSheet)) )
+        return;
+
+    // use the same name for the database range as used for the defined name '_FilterDatabase'
+    Reference< XDatabaseRange > xDatabaseRange = createUnnamedDatabaseRangeObject( aFilterRange );
+    // first, try to create an auto filter
+    bool bHasAutoFilter = finalizeImport( xDatabaseRange );
+    // no success: try to create an advanced filter
+    if( !(!bHasAutoFilter && xDatabaseRange.is()) )
+        return;
+
+    // the built-in defined name 'Criteria' must exist
+    const DefinedName* pCriteriaName = getDefinedNames().getByBuiltinId( BIFF_DEFNAME_CRITERIA, nSheet ).get();
+    if( !pCriteriaName )
+        return;
+
+    ScRange aCriteriaRange;
+    if( !pCriteriaName->getAbsoluteRange( aCriteriaRange ) )
+        return;
+
+    // set some common properties for the filter descriptor
+    PropertySet aDescProps( xDatabaseRange->getFilterDescriptor() );
+    aDescProps.setProperty( PROP_IsCaseSensitive, false );
+    aDescProps.setProperty( PROP_SkipDuplicates, false );
+    aDescProps.setProperty( PROP_Orientation, TableOrientation_ROWS );
+    aDescProps.setProperty( PROP_ContainsHeader, true );
+    // criteria range may contain wildcards, but these are incompatible with REs
+    aDescProps.setProperty( PROP_UseRegularExpressions, false );
+
+    // position of output data (if built-in defined name 'Extract' exists)
+    DefinedNameRef xExtractName = getDefinedNames().getByBuiltinId( BIFF_DEFNAME_EXTRACT, nSheet );
+    ScRange aOutputRange;
+    bool bHasOutputRange = xExtractName && xExtractName->getAbsoluteRange( aOutputRange );
+    aDescProps.setProperty( PROP_CopyOutputData, bHasOutputRange );
+    if( bHasOutputRange )
     {
-        ScRange aFilterRange;
-        if( pFilterDBName->getAbsoluteRange( aFilterRange ) && (aFilterRange.aStart.Tab() == nSheet) )
-        {
-            // use the same name for the database range as used for the defined name '_FilterDatabase'
-            Reference< XDatabaseRange > xDatabaseRange = createUnnamedDatabaseRangeObject( aFilterRange );
-            // first, try to create an auto filter
-            bool bHasAutoFilter = finalizeImport( xDatabaseRange );
-            // no success: try to create an advanced filter
-            if( !bHasAutoFilter && xDatabaseRange.is() )
-            {
-                // the built-in defined name 'Criteria' must exist
-                if( const DefinedName* pCriteriaName = getDefinedNames().getByBuiltinId( BIFF_DEFNAME_CRITERIA, nSheet ).get() )
-                {
-                    ScRange aCriteriaRange;
-                    if( pCriteriaName->getAbsoluteRange( aCriteriaRange ) )
-                    {
-                        // set some common properties for the filter descriptor
-                        PropertySet aDescProps( xDatabaseRange->getFilterDescriptor() );
-                        aDescProps.setProperty( PROP_IsCaseSensitive, false );
-                        aDescProps.setProperty( PROP_SkipDuplicates, false );
-                        aDescProps.setProperty( PROP_Orientation, TableOrientation_ROWS );
-                        aDescProps.setProperty( PROP_ContainsHeader, true );
-                        // criteria range may contain wildcards, but these are incompatible with REs
-                        aDescProps.setProperty( PROP_UseRegularExpressions, false );
-
-                        // position of output data (if built-in defined name 'Extract' exists)
-                        DefinedNameRef xExtractName = getDefinedNames().getByBuiltinId( BIFF_DEFNAME_EXTRACT, nSheet );
-                        ScRange aOutputRange;
-                        bool bHasOutputRange = xExtractName && xExtractName->getAbsoluteRange( aOutputRange );
-                        aDescProps.setProperty( PROP_CopyOutputData, bHasOutputRange );
-                        if( bHasOutputRange )
-                        {
-                            aDescProps.setProperty( PROP_SaveOutputPosition, true );
-                            aDescProps.setProperty( PROP_OutputPosition, CellAddress( aOutputRange.aStart.Tab(), aOutputRange.aStart.Col(), aOutputRange.aStart.Row() ) );
-                        }
-
-                        /*  Properties of the database range (must be set after
-                            modifying properties of the filter descriptor,
-                            otherwise the 'FilterCriteriaSource' property gets
-                            deleted). */
-                        PropertySet aRangeProps( xDatabaseRange );
-                        aRangeProps.setProperty( PROP_AutoFilter, false );
-                        aRangeProps.setProperty( PROP_FilterCriteriaSource,
-                                                 CellRangeAddress( aCriteriaRange.aStart.Tab(),
-                                                                   aCriteriaRange.aStart.Col(), aCriteriaRange.aStart.Row(),
-                                                                   aCriteriaRange.aEnd.Col(), aCriteriaRange.aEnd.Row() ));
-                    }
-                }
-            }
-        }
+        aDescProps.setProperty( PROP_SaveOutputPosition, true );
+        aDescProps.setProperty( PROP_OutputPosition, CellAddress( aOutputRange.aStart.Tab(), aOutputRange.aStart.Col(), aOutputRange.aStart.Row() ) );
     }
+
+    /*  Properties of the database range (must be set after
+        modifying properties of the filter descriptor,
+        otherwise the 'FilterCriteriaSource' property gets
+        deleted). */
+    PropertySet aRangeProps( xDatabaseRange );
+    aRangeProps.setProperty( PROP_AutoFilter, false );
+    aRangeProps.setProperty( PROP_FilterCriteriaSource,
+                             CellRangeAddress( aCriteriaRange.aStart.Tab(),
+                                               aCriteriaRange.aStart.Col(), aCriteriaRange.aStart.Row(),
+                                               aCriteriaRange.aEnd.Col(), aCriteriaRange.aEnd.Row() ));
 }
 
 bool AutoFilterBuffer::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRange )

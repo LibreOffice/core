@@ -71,23 +71,23 @@ void SvxTbxCtlDraw::StateChanged( sal_uInt16 nSID, SfxItemState eState,
 void SvxTbxCtlDraw::toggleToolbox()
 {
     Reference< XLayoutManager > xLayoutMgr = getLayoutManager();
-    if ( xLayoutMgr.is() )
-    {
-        bool bCheck = false;
-        if ( xLayoutMgr->isElementVisible( m_sToolboxName ) )
-        {
-            xLayoutMgr->hideElement( m_sToolboxName );
-            xLayoutMgr->destroyElement( m_sToolboxName );
-        }
-        else
-        {
-            bCheck = true;
-            xLayoutMgr->createElement( m_sToolboxName );
-            xLayoutMgr->showElement( m_sToolboxName );
-        }
+    if ( !xLayoutMgr.is() )
+        return;
 
-        GetToolBox().CheckItem( GetId(), bCheck );
+    bool bCheck = false;
+    if ( xLayoutMgr->isElementVisible( m_sToolboxName ) )
+    {
+        xLayoutMgr->hideElement( m_sToolboxName );
+        xLayoutMgr->destroyElement( m_sToolboxName );
     }
+    else
+    {
+        bCheck = true;
+        xLayoutMgr->createElement( m_sToolboxName );
+        xLayoutMgr->showElement( m_sToolboxName );
+    }
+
+    GetToolBox().CheckItem( GetId(), bCheck );
 }
 
 

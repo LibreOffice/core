@@ -311,67 +311,67 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     // with qualifier construct directly
     FuPoor* pFuActual = GetDrawFuncPtr();
 
-    if(pFuActual && ((rReq.GetModifier() & KEY_MOD1) || bCreateDirectly))
+    if(!(pFuActual && ((rReq.GetModifier() & KEY_MOD1) || bCreateDirectly)))
+        return;
+
+    // Create default drawing objects via keyboard
+    const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
+    sal_uInt32 nDefaultObjectSizeWidth = rAppOpt.GetDefaultObjectSizeWidth();
+    sal_uInt32 nDefaultObjectSizeHeight = rAppOpt.GetDefaultObjectSizeHeight();
+
+    // calc position and size
+    bool bLOKIsActive = comphelper::LibreOfficeKit::isActive();
+    Point aInsertPos;
+    if(!bLOKIsActive)
     {
-        // Create default drawing objects via keyboard
-        const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
-        sal_uInt32 nDefaultObjectSizeWidth = rAppOpt.GetDefaultObjectSizeWidth();
-        sal_uInt32 nDefaultObjectSizeHeight = rAppOpt.GetDefaultObjectSizeHeight();
+        tools::Rectangle aVisArea = pWin->PixelToLogic(tools::Rectangle(Point(0,0), pWin->GetOutputSizePixel()));
+        aInsertPos = aVisArea.Center();
+        aInsertPos.AdjustX( -sal_Int32(nDefaultObjectSizeWidth / 2) );
+        aInsertPos.AdjustY( -sal_Int32(nDefaultObjectSizeHeight / 2) );
+    }
+    else
+    {
+        ScViewData& rViewData = GetViewData();
+        aInsertPos = rViewData.getLOKVisibleArea().Center();
+        if (comphelper::LibreOfficeKit::isCompatFlagSet(
+                comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+            aInsertPos = rViewData.GetPrintTwipsPosFromTileTwips(aInsertPos);
 
-        // calc position and size
-        bool bLOKIsActive = comphelper::LibreOfficeKit::isActive();
-        Point aInsertPos;
-        if(!bLOKIsActive)
-        {
-            tools::Rectangle aVisArea = pWin->PixelToLogic(tools::Rectangle(Point(0,0), pWin->GetOutputSizePixel()));
-            aInsertPos = aVisArea.Center();
-            aInsertPos.AdjustX( -sal_Int32(nDefaultObjectSizeWidth / 2) );
-            aInsertPos.AdjustY( -sal_Int32(nDefaultObjectSizeHeight / 2) );
-        }
-        else
-        {
-            ScViewData& rViewData = GetViewData();
-            aInsertPos = rViewData.getLOKVisibleArea().Center();
-            if (comphelper::LibreOfficeKit::isCompatFlagSet(
-                    comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
-                aInsertPos = rViewData.GetPrintTwipsPosFromTileTwips(aInsertPos);
+        aInsertPos.setX(sc::TwipsToHMM(aInsertPos.X()));
+        aInsertPos.setY(sc::TwipsToHMM(aInsertPos.Y()));
 
-            aInsertPos.setX(sc::TwipsToHMM(aInsertPos.X()));
-            aInsertPos.setY(sc::TwipsToHMM(aInsertPos.Y()));
+        aInsertPos.AdjustX( -sal_Int32(nDefaultObjectSizeWidth / 2) );
+        aInsertPos.AdjustY( -sal_Int32(nDefaultObjectSizeHeight / 2) );
+    }
 
-            aInsertPos.AdjustX( -sal_Int32(nDefaultObjectSizeWidth / 2) );
-            aInsertPos.AdjustY( -sal_Int32(nDefaultObjectSizeHeight / 2) );
-        }
+    tools::Rectangle aNewObjectRectangle(aInsertPos, Size(nDefaultObjectSizeWidth, nDefaultObjectSizeHeight));
 
-        tools::Rectangle aNewObjectRectangle(aInsertPos, Size(nDefaultObjectSizeWidth, nDefaultObjectSizeHeight));
+    ScDrawView* pDrView = GetScDrawView();
 
-        ScDrawView* pDrView = GetScDrawView();
+    if(!pDrView)
+        return;
 
-        if(pDrView)
-        {
-            SdrPageView* pPageView = pDrView->GetSdrPageView();
+    SdrPageView* pPageView = pDrView->GetSdrPageView();
 
-            if(pPageView)
-            {
-                // create the default object
-                SdrObjectUniquePtr pObj = pFuActual->CreateDefaultObject(nNewId, aNewObjectRectangle);
+    if(!pPageView)
+        return;
 
-                if(pObj)
-                {
-                    // insert into page
-                    pView->InsertObjectAtView(pObj.release(), *pPageView);
+    // create the default object
+    SdrObjectUniquePtr pObj = pFuActual->CreateDefaultObject(nNewId, aNewObjectRectangle);
 
-                    if ( nNewId == SID_DRAW_CAPTION || nNewId == SID_DRAW_CAPTION_VERTICAL )
-                    {
-                        //  use KeyInput to start edit mode (FuText is created).
-                        //  For FuText objects, edit mode is handled within CreateDefaultObject.
-                        //  KEY_F2 is handled in FuDraw::KeyInput.
+    if(!pObj)
+        return;
 
-                        pFuActual->KeyInput( KeyEvent( 0, vcl::KeyCode( KEY_F2 ) ) );
-                    }
-                }
-            }
-        }
+    // insert into page
+    pView->InsertObjectAtView(pObj.release(), *pPageView);
+
+    if ( nNewId == SID_DRAW_CAPTION || nNewId == SID_DRAW_CAPTION_VERTICAL )
+    {
+        //  use KeyInput to start edit mode (FuText is created).
+        //  For FuText objects, edit mode is handled within CreateDefaultObject.
+        //  KEY_F2 is handled in FuDraw::KeyInput.
+
+        pFuActual->KeyInput( KeyEvent( 0, vcl::KeyCode( KEY_F2 ) ) );
     }
 }
 

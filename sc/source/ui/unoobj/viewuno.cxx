@@ -1050,20 +1050,20 @@ void SAL_CALL ScTabViewObj::setActiveSheet( const uno::Reference<sheet::XSpreads
     comphelper::ProfileZone aZone("setActiveSheet");
 
     ScTabViewShell* pViewSh = GetViewShell();
-    if ( pViewSh && xActiveSheet.is() )
-    {
-        //  XSpreadsheet and ScCellRangesBase -> has to be the same sheet
+    if ( !(pViewSh && xActiveSheet.is()) )
+        return;
 
-        ScCellRangesBase* pRangesImp = comphelper::getUnoTunnelImplementation<ScCellRangesBase>( xActiveSheet );
-        if ( pRangesImp && pViewSh->GetViewData().GetDocShell() == pRangesImp->GetDocShell() )
+    //  XSpreadsheet and ScCellRangesBase -> has to be the same sheet
+
+    ScCellRangesBase* pRangesImp = comphelper::getUnoTunnelImplementation<ScCellRangesBase>( xActiveSheet );
+    if ( pRangesImp && pViewSh->GetViewData().GetDocShell() == pRangesImp->GetDocShell() )
+    {
+        const ScRangeList& rRanges = pRangesImp->GetRangeList();
+        if ( rRanges.size() == 1 )
         {
-            const ScRangeList& rRanges = pRangesImp->GetRangeList();
-            if ( rRanges.size() == 1 )
-            {
-                SCTAB nNewTab = rRanges[ 0 ].aStart.Tab();
-                if ( pViewSh->GetViewData().GetDocument()->HasTable(nNewTab) )
-                    pViewSh->SetTabNo( nNewTab );
-            }
+            SCTAB nNewTab = rRanges[ 0 ].aStart.Tab();
+            if ( pViewSh->GetViewData().GetDocument()->HasTable(nNewTab) )
+                pViewSh->SetTabNo( nNewTab );
         }
     }
 }
@@ -1377,27 +1377,27 @@ sal_Int16 ScTabViewObj::GetZoom() const
 void ScTabViewObj::SetZoom(sal_Int16 nZoom)
 {
     ScTabViewShell* pViewSh = GetViewShell();
-    if (pViewSh)
+    if (!pViewSh)
+        return;
+
+    if ( nZoom != GetZoom() && nZoom != 0 )
     {
-        if ( nZoom != GetZoom() && nZoom != 0 )
+        if (!pViewSh->GetViewData().IsPagebreakMode())
         {
-            if (!pViewSh->GetViewData().IsPagebreakMode())
-            {
-                ScModule* pScMod = SC_MOD();
-                ScAppOptions aNewOpt(pScMod->GetAppOptions());
-                aNewOpt.SetZoom( nZoom );
-                aNewOpt.SetZoomType( pViewSh->GetViewData().GetView()->GetZoomType() );
-                pScMod->SetAppOptions( aNewOpt );
-            }
+            ScModule* pScMod = SC_MOD();
+            ScAppOptions aNewOpt(pScMod->GetAppOptions());
+            aNewOpt.SetZoom( nZoom );
+            aNewOpt.SetZoomType( pViewSh->GetViewData().GetView()->GetZoomType() );
+            pScMod->SetAppOptions( aNewOpt );
         }
-        Fraction aFract( nZoom, 100 );
-        pViewSh->SetZoom( aFract, aFract, true );
-        pViewSh->PaintGrid();
-        pViewSh->PaintTop();
-        pViewSh->PaintLeft();
-        pViewSh->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
-        pViewSh->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
     }
+    Fraction aFract( nZoom, 100 );
+    pViewSh->SetZoom( aFract, aFract, true );
+    pViewSh->PaintGrid();
+    pViewSh->PaintTop();
+    pViewSh->PaintLeft();
+    pViewSh->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
+    pViewSh->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
 }
 
 sal_Int16 ScTabViewObj::GetZoomType() const
@@ -1432,55 +1432,55 @@ sal_Int16 ScTabViewObj::GetZoomType() const
 void ScTabViewObj::SetZoomType(sal_Int16 aZoomType)
 {
     ScTabViewShell* pViewSh = GetViewShell();
-    if (pViewSh)
+    if (!pViewSh)
+        return;
+
+    ScDBFunc* pView = pViewSh->GetViewData().GetView();
+    if (!pView)
+        return;
+
+    SvxZoomType eZoomType;
+    switch (aZoomType)
     {
-        ScDBFunc* pView = pViewSh->GetViewData().GetView();
-        if (pView)
-        {
-            SvxZoomType eZoomType;
-            switch (aZoomType)
-            {
-            case view::DocumentZoomType::BY_VALUE:
-                eZoomType = SvxZoomType::PERCENT;
-                break;
-            case view::DocumentZoomType::OPTIMAL:
-                eZoomType = SvxZoomType::OPTIMAL;
-                break;
-            case view::DocumentZoomType::ENTIRE_PAGE:
-                eZoomType = SvxZoomType::WHOLEPAGE;
-                break;
-            case view::DocumentZoomType::PAGE_WIDTH:
-                eZoomType = SvxZoomType::PAGEWIDTH;
-                break;
-            case view::DocumentZoomType::PAGE_WIDTH_EXACT:
-                eZoomType = SvxZoomType::PAGEWIDTH_NOBORDER;
-                break;
-            default:
-                eZoomType = SvxZoomType::OPTIMAL;
-            }
-            sal_Int16 nZoom(GetZoom());
-            sal_Int16 nOldZoom(nZoom);
-            if ( eZoomType == SvxZoomType::PERCENT )
-            {
-                if ( nZoom < MINZOOM )  nZoom = MINZOOM;
-                if ( nZoom > MAXZOOM )  nZoom = MAXZOOM;
-            }
-            else
-                nZoom = pView->CalcZoom( eZoomType, nOldZoom );
-
-            switch ( eZoomType )
-            {
-                case SvxZoomType::WHOLEPAGE:
-                case SvxZoomType::PAGEWIDTH:
-                    pView->SetZoomType( eZoomType, true );
-                    break;
-
-                default:
-                    pView->SetZoomType( SvxZoomType::PERCENT, true );
-            }
-            SetZoom( nZoom );
-        }
+    case view::DocumentZoomType::BY_VALUE:
+        eZoomType = SvxZoomType::PERCENT;
+        break;
+    case view::DocumentZoomType::OPTIMAL:
+        eZoomType = SvxZoomType::OPTIMAL;
+        break;
+    case view::DocumentZoomType::ENTIRE_PAGE:
+        eZoomType = SvxZoomType::WHOLEPAGE;
+        break;
+    case view::DocumentZoomType::PAGE_WIDTH:
+        eZoomType = SvxZoomType::PAGEWIDTH;
+        break;
+    case view::DocumentZoomType::PAGE_WIDTH_EXACT:
+        eZoomType = SvxZoomType::PAGEWIDTH_NOBORDER;
+        break;
+    default:
+        eZoomType = SvxZoomType::OPTIMAL;
     }
+    sal_Int16 nZoom(GetZoom());
+    sal_Int16 nOldZoom(nZoom);
+    if ( eZoomType == SvxZoomType::PERCENT )
+    {
+        if ( nZoom < MINZOOM )  nZoom = MINZOOM;
+        if ( nZoom > MAXZOOM )  nZoom = MAXZOOM;
+    }
+    else
+        nZoom = pView->CalcZoom( eZoomType, nOldZoom );
+
+    switch ( eZoomType )
+    {
+        case SvxZoomType::WHOLEPAGE:
+        case SvxZoomType::PAGEWIDTH:
+            pView->SetZoomType( eZoomType, true );
+            break;
+
+        default:
+            pView->SetZoomType( SvxZoomType::PERCENT, true );
+    }
+    SetZoom( nZoom );
 }
 
 sal_Bool SAL_CALL ScTabViewObj::getIsWindowSplit()
@@ -1604,25 +1604,25 @@ void SAL_CALL ScTabViewObj::freezeAtPosition( sal_Int32 nColumns, sal_Int32 nRow
 {
     SolarMutexGuard aGuard;
     ScTabViewShell* pViewSh = GetViewShell();
-    if (pViewSh)
-    {
-        //  first, remove them all -> no stress with scrolling in the meantime
+    if (!pViewSh)
+        return;
 
-        pViewSh->RemoveSplit();
+    //  first, remove them all -> no stress with scrolling in the meantime
 
-        Point aWinStart;
-        vcl::Window* pWin = pViewSh->GetWindowByPos( SC_SPLIT_BOTTOMLEFT );
-        if (pWin)
-            aWinStart = pWin->GetPosPixel();
+    pViewSh->RemoveSplit();
 
-        ScViewData& rViewData = pViewSh->GetViewData();
-        Point aSplit(rViewData.GetScrPos( static_cast<SCCOL>(nColumns), static_cast<SCROW>(nRows), SC_SPLIT_BOTTOMLEFT, true ));
-        aSplit += aWinStart;
+    Point aWinStart;
+    vcl::Window* pWin = pViewSh->GetWindowByPos( SC_SPLIT_BOTTOMLEFT );
+    if (pWin)
+        aWinStart = pWin->GetPosPixel();
 
-        pViewSh->SplitAtPixel( aSplit );
-        pViewSh->FreezeSplitters( true );
-        pViewSh->InvalidateSplit();
-    }
+    ScViewData& rViewData = pViewSh->GetViewData();
+    Point aSplit(rViewData.GetScrPos( static_cast<SCCOL>(nColumns), static_cast<SCROW>(nRows), SC_SPLIT_BOTTOMLEFT, true ));
+    aSplit += aWinStart;
+
+    pViewSh->SplitAtPixel( aSplit );
+    pViewSh->FreezeSplitters( true );
+    pViewSh->InvalidateSplit();
 }
 
 void SAL_CALL ScTabViewObj::addSelectionChangeListener(
@@ -1680,18 +1680,18 @@ void ScTabViewObj::SelectionChanged()
 
     SfxApplication::Get()->Broadcast( SfxHint( SfxHintId::ScSelectionChanged ) );
 
-    if ( !mbLeftMousePressed ) // selection still in progress
+    if ( mbLeftMousePressed ) // selection still in progress
+        return;
+
+    try
     {
-        try
-        {
-            uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( rDoc.GetVbaEventProcessor(), uno::UNO_SET_THROW );
-            uno::Sequence< uno::Any > aArgs( 1 );
-            aArgs[ 0 ] = getSelection();
-            xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( ScSheetEventId::SELECT ), aArgs );
-        }
-        catch( uno::Exception& )
-        {
-        }
+        uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( rDoc.GetVbaEventProcessor(), uno::UNO_SET_THROW );
+        uno::Sequence< uno::Any > aArgs( 1 );
+        aArgs[ 0 ] = getSelection();
+        xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( ScSheetEventId::SELECT ), aArgs );
+    }
+    catch( uno::Exception& )
+    {
     }
 }
 
@@ -1718,113 +1718,113 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
     }
 
     ScTabViewShell* pViewSh = GetViewShell();
-    if (pViewSh)
+    if (!pViewSh)
+        return;
+
+    ScViewData& rViewData = pViewSh->GetViewData();
+    const ScViewOptions& rOldOpt = pViewSh->GetViewData().GetOptions();
+    ScViewOptions aNewOpt(rOldOpt);
+
+    if ( aPropertyName == SC_UNO_COLROWHDR || aPropertyName == OLD_UNO_COLROWHDR )
+        aNewOpt.SetOption( VOPT_HEADER, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if ( aPropertyName == SC_UNO_HORSCROLL || aPropertyName == OLD_UNO_HORSCROLL )
+        aNewOpt.SetOption( VOPT_HSCROLL, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if ( aPropertyName == SC_UNO_OUTLSYMB || aPropertyName == OLD_UNO_OUTLSYMB )
+        aNewOpt.SetOption( VOPT_OUTLINER, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if ( aPropertyName == SC_UNO_SHEETTABS || aPropertyName == OLD_UNO_SHEETTABS )
+        aNewOpt.SetOption( VOPT_TABCONTROLS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if ( aPropertyName == SC_UNO_SHOWANCHOR )
+        aNewOpt.SetOption( VOPT_ANCHOR, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if ( aPropertyName == SC_UNO_SHOWFORM )
+        aNewOpt.SetOption( VOPT_FORMULAS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if ( aPropertyName == SC_UNO_SHOWGRID )
+        aNewOpt.SetOption( VOPT_GRID, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if ( aPropertyName == SC_UNO_SHOWHELP )
+        aNewOpt.SetOption( VOPT_HELPLINES, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if ( aPropertyName == SC_UNO_SHOWNOTES )
+        aNewOpt.SetOption( VOPT_NOTES, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if ( aPropertyName == SC_UNO_SHOWPAGEBR )
+        aNewOpt.SetOption( VOPT_PAGEBREAKS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if ( aPropertyName == SC_UNO_SHOWZERO )
+        aNewOpt.SetOption( VOPT_NULLVALS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if ( aPropertyName == SC_UNO_VALUEHIGH || aPropertyName == OLD_UNO_VALUEHIGH )
+        aNewOpt.SetOption( VOPT_SYNTAX, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if ( aPropertyName == SC_UNO_VERTSCROLL || aPropertyName == OLD_UNO_VERTSCROLL )
+        aNewOpt.SetOption( VOPT_VSCROLL, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if ( aPropertyName == SC_UNO_SHOWOBJ )
     {
-        ScViewData& rViewData = pViewSh->GetViewData();
-        const ScViewOptions& rOldOpt = pViewSh->GetViewData().GetOptions();
-        ScViewOptions aNewOpt(rOldOpt);
-
-        if ( aPropertyName == SC_UNO_COLROWHDR || aPropertyName == OLD_UNO_COLROWHDR )
-            aNewOpt.SetOption( VOPT_HEADER, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName == SC_UNO_HORSCROLL || aPropertyName == OLD_UNO_HORSCROLL )
-            aNewOpt.SetOption( VOPT_HSCROLL, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName == SC_UNO_OUTLSYMB || aPropertyName == OLD_UNO_OUTLSYMB )
-            aNewOpt.SetOption( VOPT_OUTLINER, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName == SC_UNO_SHEETTABS || aPropertyName == OLD_UNO_SHEETTABS )
-            aNewOpt.SetOption( VOPT_TABCONTROLS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName == SC_UNO_SHOWANCHOR )
-            aNewOpt.SetOption( VOPT_ANCHOR, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName == SC_UNO_SHOWFORM )
-            aNewOpt.SetOption( VOPT_FORMULAS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName == SC_UNO_SHOWGRID )
-            aNewOpt.SetOption( VOPT_GRID, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName == SC_UNO_SHOWHELP )
-            aNewOpt.SetOption( VOPT_HELPLINES, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName == SC_UNO_SHOWNOTES )
-            aNewOpt.SetOption( VOPT_NOTES, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName == SC_UNO_SHOWPAGEBR )
-            aNewOpt.SetOption( VOPT_PAGEBREAKS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName == SC_UNO_SHOWZERO )
-            aNewOpt.SetOption( VOPT_NULLVALS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName == SC_UNO_VALUEHIGH || aPropertyName == OLD_UNO_VALUEHIGH )
-            aNewOpt.SetOption( VOPT_SYNTAX, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName == SC_UNO_VERTSCROLL || aPropertyName == OLD_UNO_VERTSCROLL )
-            aNewOpt.SetOption( VOPT_VSCROLL, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName == SC_UNO_SHOWOBJ )
+        sal_Int16 nIntVal = 0;
+        if ( aValue >>= nIntVal )
         {
-            sal_Int16 nIntVal = 0;
-            if ( aValue >>= nIntVal )
-            {
-                //#i80528# adapt to new range eventually
-                if(sal_Int16(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int16(VOBJ_MODE_SHOW);
+            //#i80528# adapt to new range eventually
+            if(sal_Int16(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int16(VOBJ_MODE_SHOW);
 
-                aNewOpt.SetObjMode( VOBJ_TYPE_OLE, static_cast<ScVObjMode>(nIntVal));
-            }
-        }
-        else if ( aPropertyName == SC_UNO_SHOWCHARTS )
-        {
-            sal_Int16 nIntVal = 0;
-            if ( aValue >>= nIntVal )
-            {
-                //#i80528# adapt to new range eventually
-                if(sal_Int16(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int16(VOBJ_MODE_SHOW);
-
-                aNewOpt.SetObjMode( VOBJ_TYPE_CHART, static_cast<ScVObjMode>(nIntVal));
-            }
-        }
-        else if ( aPropertyName == SC_UNO_SHOWDRAW )
-        {
-            sal_Int16 nIntVal = 0;
-            if ( aValue >>= nIntVal )
-            {
-                //#i80528# adapt to new range eventually
-                if(sal_Int16(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int16(VOBJ_MODE_SHOW);
-
-                aNewOpt.SetObjMode( VOBJ_TYPE_DRAW, static_cast<ScVObjMode>(nIntVal));
-            }
-        }
-        else if ( aPropertyName == SC_UNO_GRIDCOLOR )
-        {
-            Color nIntVal;
-            if ( aValue >>= nIntVal )
-                aNewOpt.SetGridColor( nIntVal, OUString() );
-        }
-        else if ( aPropertyName == SC_UNO_ZOOMTYPE )
-        {
-            sal_Int16 nIntVal = 0;
-            if ( aValue >>= nIntVal )
-                SetZoomType(nIntVal);
-        }
-        else if ( aPropertyName == SC_UNO_ZOOMVALUE )
-        {
-            sal_Int16 nIntVal = 0;
-            if ( aValue >>= nIntVal )
-                SetZoom(nIntVal);
-        }
-
-        //  Options are set on the view and document (for new views),
-        //  so that they remain during saving.
-        //! In the app (module) we need an extra options to tune that
-        //! (for new documents)
-
-        if ( aNewOpt != rOldOpt )
-        {
-            rViewData.SetOptions( aNewOpt );
-            rViewData.GetDocument()->SetViewOptions( aNewOpt );
-            rViewData.GetDocShell()->SetDocumentModified();    //! really?
-
-            pViewSh->UpdateFixPos();
-            pViewSh->PaintGrid();
-            pViewSh->PaintTop();
-            pViewSh->PaintLeft();
-            pViewSh->PaintExtras();
-            pViewSh->InvalidateBorder();
-
-            SfxBindings& rBindings = pViewSh->GetViewFrame()->GetBindings();
-            rBindings.Invalidate( FID_TOGGLEHEADERS ); // -> check in menu
-            rBindings.Invalidate( FID_TOGGLESYNTAX );
+            aNewOpt.SetObjMode( VOBJ_TYPE_OLE, static_cast<ScVObjMode>(nIntVal));
         }
     }
+    else if ( aPropertyName == SC_UNO_SHOWCHARTS )
+    {
+        sal_Int16 nIntVal = 0;
+        if ( aValue >>= nIntVal )
+        {
+            //#i80528# adapt to new range eventually
+            if(sal_Int16(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int16(VOBJ_MODE_SHOW);
+
+            aNewOpt.SetObjMode( VOBJ_TYPE_CHART, static_cast<ScVObjMode>(nIntVal));
+        }
+    }
+    else if ( aPropertyName == SC_UNO_SHOWDRAW )
+    {
+        sal_Int16 nIntVal = 0;
+        if ( aValue >>= nIntVal )
+        {
+            //#i80528# adapt to new range eventually
+            if(sal_Int16(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int16(VOBJ_MODE_SHOW);
+
+            aNewOpt.SetObjMode( VOBJ_TYPE_DRAW, static_cast<ScVObjMode>(nIntVal));
+        }
+    }
+    else if ( aPropertyName == SC_UNO_GRIDCOLOR )
+    {
+        Color nIntVal;
+        if ( aValue >>= nIntVal )
+            aNewOpt.SetGridColor( nIntVal, OUString() );
+    }
+    else if ( aPropertyName == SC_UNO_ZOOMTYPE )
+    {
+        sal_Int16 nIntVal = 0;
+        if ( aValue >>= nIntVal )
+            SetZoomType(nIntVal);
+    }
+    else if ( aPropertyName == SC_UNO_ZOOMVALUE )
+    {
+        sal_Int16 nIntVal = 0;
+        if ( aValue >>= nIntVal )
+            SetZoom(nIntVal);
+    }
+
+    //  Options are set on the view and document (for new views),
+    //  so that they remain during saving.
+    //! In the app (module) we need an extra options to tune that
+    //! (for new documents)
+
+    if ( aNewOpt == rOldOpt )
+        return;
+
+    rViewData.SetOptions( aNewOpt );
+    rViewData.GetDocument()->SetViewOptions( aNewOpt );
+    rViewData.GetDocShell()->SetDocumentModified();    //! really?
+
+    pViewSh->UpdateFixPos();
+    pViewSh->PaintGrid();
+    pViewSh->PaintTop();
+    pViewSh->PaintLeft();
+    pViewSh->PaintExtras();
+    pViewSh->InvalidateBorder();
+
+    SfxBindings& rBindings = pViewSh->GetViewFrame()->GetBindings();
+    rBindings.Invalidate( FID_TOGGLEHEADERS ); // -> check in menu
+    rBindings.Invalidate( FID_TOGGLESYNTAX );
 }
 
 uno::Any SAL_CALL ScTabViewObj::getPropertyValue( const OUString& aPropertyName )
@@ -1925,38 +1925,38 @@ void SAL_CALL ScTabViewObj::startRangeSelection(
 {
     SolarMutexGuard aGuard;
     ScTabViewShell* pViewSh = GetViewShell();
-    if (pViewSh)
+    if (!pViewSh)
+        return;
+
+    OUString aInitVal, aTitle;
+    bool bCloseOnButtonUp = false;
+    bool bSingleCell = false;
+    bool bMultiSelection = false;
+
+    OUString aStrVal;
+    for (const beans::PropertyValue& rProp : aArguments)
     {
-        OUString aInitVal, aTitle;
-        bool bCloseOnButtonUp = false;
-        bool bSingleCell = false;
-        bool bMultiSelection = false;
+        OUString aPropName(rProp.Name);
 
-        OUString aStrVal;
-        for (const beans::PropertyValue& rProp : aArguments)
+        if (aPropName == SC_UNONAME_CLOSEONUP )
+            bCloseOnButtonUp = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
+        else if (aPropName == SC_UNONAME_TITLE )
         {
-            OUString aPropName(rProp.Name);
-
-            if (aPropName == SC_UNONAME_CLOSEONUP )
-                bCloseOnButtonUp = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
-            else if (aPropName == SC_UNONAME_TITLE )
-            {
-                if ( rProp.Value >>= aStrVal )
-                    aTitle = aStrVal;
-            }
-            else if (aPropName == SC_UNONAME_INITVAL )
-            {
-                if ( rProp.Value >>= aStrVal )
-                    aInitVal = aStrVal;
-            }
-            else if (aPropName == SC_UNONAME_SINGLECELL )
-                bSingleCell = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
-            else if (aPropName == SC_UNONAME_MULTISEL )
-                bMultiSelection = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
+            if ( rProp.Value >>= aStrVal )
+                aTitle = aStrVal;
         }
-
-        pViewSh->StartSimpleRefDialog( aTitle, aInitVal, bCloseOnButtonUp, bSingleCell, bMultiSelection );
+        else if (aPropName == SC_UNONAME_INITVAL )
+        {
+            if ( rProp.Value >>= aStrVal )
+                aInitVal = aStrVal;
+        }
+        else if (aPropName == SC_UNONAME_SINGLECELL )
+            bSingleCell = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
+        else if (aPropName == SC_UNONAME_MULTISEL )
+            bMultiSelection = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
     }
+
+    pViewSh->StartSimpleRefDialog( aTitle, aInitVal, bCloseOnButtonUp, bSingleCell, bMultiSelection );
 }
 
 void SAL_CALL ScTabViewObj::abortRangeSelection()

@@ -128,25 +128,25 @@ void ScGridWindow::dumpGraphicInformation()
 {
     ScDocument* pDoc = pViewData->GetDocument();
     ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
-    if (pDrawLayer)
-    {
-        sal_uInt16 nPageCount = pDrawLayer->GetPageCount();
-        for (sal_uInt16 nPage = 0; nPage < nPageCount; ++nPage)
-        {
-            SdrPage* pPage = pDrawLayer->GetPage(nPage);
-            size_t nObjCount = pPage->GetObjCount();
-            for (size_t nObj = 0; nObj < nObjCount; ++nObj)
-            {
-                SdrObject* pObj = pPage->GetObj(nObj);
-                std::cout << "Graphic Object" << std::endl;
-                ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pObj);
-                if (pObjData)
-                    dumpScDrawObjData(*this, *pObjData, pDrawLayer->GetScaleUnit());
+    if (!pDrawLayer)
+        return;
 
-                const tools::Rectangle& rRect = pObj->GetSnapRect();
-                tools::Rectangle aRect = LogicToPixel(rRect, MapMode(pDrawLayer->GetScaleUnit()));
-                std::cout << "Snap Rectangle (in pixel): " << aRect << std::endl;
-            }
+    sal_uInt16 nPageCount = pDrawLayer->GetPageCount();
+    for (sal_uInt16 nPage = 0; nPage < nPageCount; ++nPage)
+    {
+        SdrPage* pPage = pDrawLayer->GetPage(nPage);
+        size_t nObjCount = pPage->GetObjCount();
+        for (size_t nObj = 0; nObj < nObjCount; ++nObj)
+        {
+            SdrObject* pObj = pPage->GetObj(nObj);
+            std::cout << "Graphic Object" << std::endl;
+            ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pObj);
+            if (pObjData)
+                dumpScDrawObjData(*this, *pObjData, pDrawLayer->GetScaleUnit());
+
+            const tools::Rectangle& rRect = pObj->GetSnapRect();
+            tools::Rectangle aRect = LogicToPixel(rRect, MapMode(pDrawLayer->GetScaleUnit()));
+            std::cout << "Snap Rectangle (in pixel): " << aRect << std::endl;
         }
     }
 }

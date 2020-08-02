@@ -758,68 +758,68 @@ void WorksheetGlobals::setColumnModel( const ColumnModel& rModel )
     // convert 1-based OOXML column indexes to 0-based API column indexes
     sal_Int32 nFirstCol = rModel.maRange.mnFirst - 1;
     sal_Int32 nLastCol = rModel.maRange.mnLast - 1;
-    if( getAddressConverter().checkCol( nFirstCol, true ) && (nFirstCol <= nLastCol) )
+    if( !(getAddressConverter().checkCol( nFirstCol, true ) && (nFirstCol <= nLastCol)) )
+        return;
+
+    // Validate last column index.
+    // If last column is equal to last possible column, Excel adds one
+    // more. We do that also in XclExpColinfo::SaveXml() and for 1024 end
+    // up with 1025 instead, which would lead to excess columns in
+    // checkCol(). Cater for this oddity.
+    if (nLastCol == mrMaxApiPos.Col() + 1)
+        --nLastCol;
+    // This is totally fouled up. If we saved 1025 and the file is saved
+    // with Excel again, it increments the value to 1026.
+    else if (nLastCol == mrMaxApiPos.Col() + 2)
+        nLastCol -= 2;
+    // Excel may add a column range for the remaining columns (with
+    // <cols><col .../></cols>), even if not used or only used to grey out
+    // columns in page break view. Don't let that trigger overflow warning,
+    // so check for the last possible column. If there really is content in
+    // the range that should be caught anyway.
+    else if (nLastCol == getAddressConverter().getMaxXlsAddress().Col())
+        nLastCol = mrMaxApiPos.Col();
+    // User may have applied custom column widths to arbitrary excess
+    // columns. Ignore those and don't track as overflow columns (false).
+    // Effectively this does the same as the above cases, just keep them
+    // for explanation.
+    // Actual data present should trigger the overflow detection later.
+    else if( !getAddressConverter().checkCol( nLastCol, false ) )
+        nLastCol = mrMaxApiPos.Col();
+    // try to find entry in column model map that is able to merge with the passed model
+    bool bInsertModel = true;
+    if( !maColModels.empty() )
     {
-        // Validate last column index.
-        // If last column is equal to last possible column, Excel adds one
-        // more. We do that also in XclExpColinfo::SaveXml() and for 1024 end
-        // up with 1025 instead, which would lead to excess columns in
-        // checkCol(). Cater for this oddity.
-        if (nLastCol == mrMaxApiPos.Col() + 1)
-            --nLastCol;
-        // This is totally fouled up. If we saved 1025 and the file is saved
-        // with Excel again, it increments the value to 1026.
-        else if (nLastCol == mrMaxApiPos.Col() + 2)
-            nLastCol -= 2;
-        // Excel may add a column range for the remaining columns (with
-        // <cols><col .../></cols>), even if not used or only used to grey out
-        // columns in page break view. Don't let that trigger overflow warning,
-        // so check for the last possible column. If there really is content in
-        // the range that should be caught anyway.
-        else if (nLastCol == getAddressConverter().getMaxXlsAddress().Col())
-            nLastCol = mrMaxApiPos.Col();
-        // User may have applied custom column widths to arbitrary excess
-        // columns. Ignore those and don't track as overflow columns (false).
-        // Effectively this does the same as the above cases, just keep them
-        // for explanation.
-        // Actual data present should trigger the overflow detection later.
-        else if( !getAddressConverter().checkCol( nLastCol, false ) )
-            nLastCol = mrMaxApiPos.Col();
-        // try to find entry in column model map that is able to merge with the passed model
-        bool bInsertModel = true;
-        if( !maColModels.empty() )
+        // find first column model range following nFirstCol (nFirstCol < aIt->first), or end of map
+        ColumnModelRangeMap::iterator aIt = maColModels.upper_bound( nFirstCol );
+        OSL_ENSURE( aIt == maColModels.end(), "WorksheetGlobals::setColModel - columns are unsorted" );
+        // if inserting before another column model, get last free column
+        OSL_ENSURE( (aIt == maColModels.end()) || (nLastCol < aIt->first), "WorksheetGlobals::setColModel - multiple models of the same column" );
+        if( aIt != maColModels.end() )
+            nLastCol = ::std::min( nLastCol, aIt->first - 1 );
+        if( aIt != maColModels.begin() )
         {
-            // find first column model range following nFirstCol (nFirstCol < aIt->first), or end of map
-            ColumnModelRangeMap::iterator aIt = maColModels.upper_bound( nFirstCol );
-            OSL_ENSURE( aIt == maColModels.end(), "WorksheetGlobals::setColModel - columns are unsorted" );
-            // if inserting before another column model, get last free column
-            OSL_ENSURE( (aIt == maColModels.end()) || (nLastCol < aIt->first), "WorksheetGlobals::setColModel - multiple models of the same column" );
-            if( aIt != maColModels.end() )
-                nLastCol = ::std::min( nLastCol, aIt->first - 1 );
-            if( aIt != maColModels.begin() )
+            // go to previous map element (which may be able to merge with the passed model)
+            --aIt;
+            // the usage of upper_bound() above ensures that aIt->first is less than or equal to nFirstCol now
+            sal_Int32& rnLastMapCol = aIt->second.second;
+            OSL_ENSURE( rnLastMapCol < nFirstCol, "WorksheetGlobals::setColModel - multiple models of the same column" );
+            nFirstCol = ::std::max( rnLastMapCol + 1, nFirstCol );
+            if( (rnLastMapCol + 1 == nFirstCol) && (nFirstCol <= nLastCol) && aIt->second.first.isMergeable( rModel ) )
             {
-                // go to previous map element (which may be able to merge with the passed model)
-                --aIt;
-                // the usage of upper_bound() above ensures that aIt->first is less than or equal to nFirstCol now
-                sal_Int32& rnLastMapCol = aIt->second.second;
-                OSL_ENSURE( rnLastMapCol < nFirstCol, "WorksheetGlobals::setColModel - multiple models of the same column" );
-                nFirstCol = ::std::max( rnLastMapCol + 1, nFirstCol );
-                if( (rnLastMapCol + 1 == nFirstCol) && (nFirstCol <= nLastCol) && aIt->second.first.isMergeable( rModel ) )
-                {
-                    // can merge with existing model, update last column index
-                    rnLastMapCol = nLastCol;
-                    bInsertModel = false;
-                }
+                // can merge with existing model, update last column index
+                rnLastMapCol = nLastCol;
+                bInsertModel = false;
             }
         }
-        if( nFirstCol <= nLastCol )
-        {
-            // insert the column model, if it has not been merged with another
-            if( bInsertModel )
-                maColModels[ nFirstCol ] = ColumnModelRange( rModel, nLastCol );
-            // set column formatting directly
-            convertColumnFormat( nFirstCol, nLastCol, rModel.mnXfId );
-        }
+    }
+    if( nFirstCol <= nLastCol )
+    {
+        // insert the column model, if it has not been merged with another
+        if( bInsertModel )
+            maColModels[ nFirstCol ] = ColumnModelRange( rModel, nLastCol );
+        // set column formatting directly
+        convertColumnFormat( nFirstCol, nLastCol, rModel.mnXfId );
     }
 }
 

@@ -447,7 +447,10 @@ std::unique_ptr<XclExpTbxControlObj> XclEscherEx::CreateTBXCtrlObj( Reference< X
 void XclEscherEx::ConvertTbxMacro( XclExpTbxControlObj& rTbxCtrlObj, Reference< XControlModel > const & xCtrlModel )
 {
     SdrPage* pSdrPage = GetSdrPage( GetCurrScTab() );
-    if( xCtrlModel.is() && GetDocShell() && pSdrPage ) try
+    if( !(xCtrlModel.is() && GetDocShell() && pSdrPage) )
+        return;
+
+    try
     {
         Reference< XFormsSupplier > xFormsSupplier( pSdrPage->getUnoPage(), UNO_QUERY_THROW );
         Reference< XIndexAccess > xFormsIA( xFormsSupplier->getForms(), UNO_QUERY_THROW );

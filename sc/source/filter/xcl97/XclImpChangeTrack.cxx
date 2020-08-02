@@ -49,22 +49,22 @@ XclImpChangeTrack::XclImpChangeTrack( const XclImpRoot& rRoot, const XclImpStrea
         return;
 
     xInStrm = OpenStream( EXC_STREAM_REVLOG );
-    if( xInStrm.is() )
+    if( !xInStrm.is() )
+        return;
+
+    xInStrm->Seek( STREAM_SEEK_TO_END );
+    sal_uInt64 const nStreamLen = xInStrm->Tell();
+    if( (xInStrm->GetErrorCode() == ERRCODE_NONE) && (nStreamLen != STREAM_SEEK_TO_END) )
     {
-        xInStrm->Seek( STREAM_SEEK_TO_END );
-        sal_uInt64 const nStreamLen = xInStrm->Tell();
-        if( (xInStrm->GetErrorCode() == ERRCODE_NONE) && (nStreamLen != STREAM_SEEK_TO_END) )
-        {
-            xInStrm->Seek( STREAM_SEEK_TO_BEGIN );
-            pStrm.reset( new XclImpStream( *xInStrm, GetRoot() ) );
-            pStrm->CopyDecrypterFrom( rBookStrm );
-            pChangeTrack.reset(new ScChangeTrack( &GetDoc() ));
+        xInStrm->Seek( STREAM_SEEK_TO_BEGIN );
+        pStrm.reset( new XclImpStream( *xInStrm, GetRoot() ) );
+        pStrm->CopyDecrypterFrom( rBookStrm );
+        pChangeTrack.reset(new ScChangeTrack( &GetDoc() ));
 
-            sOldUsername = pChangeTrack->GetUser();
-            pChangeTrack->SetUseFixDateTime( true );
+        sOldUsername = pChangeTrack->GetUser();
+        pChangeTrack->SetUseFixDateTime( true );
 
-            ReadRecords();
-        }
+        ReadRecords();
     }
 }
 
@@ -284,40 +284,40 @@ void XclImpChangeTrack::ReadCell(
 void XclImpChangeTrack::ReadChTrInsert()
 {
     *pStrm >> aRecHeader;
-    if( CheckRecord( EXC_CHTR_OP_UNKNOWN ) )
+    if( !CheckRecord( EXC_CHTR_OP_UNKNOWN ) )
+        return;
+
+    if( (aRecHeader.nOpCode != EXC_CHTR_OP_INSROW) &&
+        (aRecHeader.nOpCode != EXC_CHTR_OP_INSCOL) &&
+        (aRecHeader.nOpCode != EXC_CHTR_OP_DELROW) &&
+        (aRecHeader.nOpCode != EXC_CHTR_OP_DELCOL) )
     {
-        if( (aRecHeader.nOpCode != EXC_CHTR_OP_INSROW) &&
-            (aRecHeader.nOpCode != EXC_CHTR_OP_INSCOL) &&
-            (aRecHeader.nOpCode != EXC_CHTR_OP_DELROW) &&
-            (aRecHeader.nOpCode != EXC_CHTR_OP_DELCOL) )
-        {
-            OSL_FAIL( "XclImpChangeTrack::ReadChTrInsert - unknown action" );
-            return;
-        }
+        OSL_FAIL( "XclImpChangeTrack::ReadChTrInsert - unknown action" );
+        return;
+    }
 
-        ScRange aRange;
-        aRange.aStart.SetTab( ReadTabNum() );
-        aRange.aEnd.SetTab( aRange.aStart.Tab() );
-        sal_uInt16 nFlags = pStrm->ReaduInt16();
-        bool bEndOfList = (nFlags & 0x0001); // row auto-inserted at the bottom.
-        Read2DRange( aRange );
+    ScRange aRange;
+    aRange.aStart.SetTab( ReadTabNum() );
+    aRange.aEnd.SetTab( aRange.aStart.Tab() );
+    sal_uInt16 nFlags = pStrm->ReaduInt16();
+    bool bEndOfList = (nFlags & 0x0001); // row auto-inserted at the bottom.
+    Read2DRange( aRange );
 
-        if( aRecHeader.nOpCode & EXC_CHTR_OP_COLFLAG )
-            aRange.aEnd.SetRow( GetDocImport().getDoc().MaxRow() );
+    if( aRecHeader.nOpCode & EXC_CHTR_OP_COLFLAG )
+        aRange.aEnd.SetRow( GetDocImport().getDoc().MaxRow() );
+    else
+        aRange.aEnd.SetCol( GetDocImport().getDoc().MaxCol() );
+
+    bool bValid = pStrm->IsValid();
+    if( FoundNestedMode() )
+        ReadNestedRecords();
+
+    if( bValid )
+    {
+        if( aRecHeader.nOpCode & EXC_CHTR_OP_DELFLAG )
+            DoDeleteRange( aRange );
         else
-            aRange.aEnd.SetCol( GetDocImport().getDoc().MaxCol() );
-
-        bool bValid = pStrm->IsValid();
-        if( FoundNestedMode() )
-            ReadNestedRecords();
-
-        if( bValid )
-        {
-            if( aRecHeader.nOpCode & EXC_CHTR_OP_DELFLAG )
-                DoDeleteRange( aRange );
-            else
-                DoInsertRange(aRange, bEndOfList);
-        }
+            DoInsertRange(aRange, bEndOfList);
     }
 }
 
@@ -342,49 +342,49 @@ void XclImpChangeTrack::ReadChTrInfo()
 void XclImpChangeTrack::ReadChTrCellContent()
 {
     *pStrm >> aRecHeader;
-    if( CheckRecord( EXC_CHTR_OP_CELL ) )
-    {
-        ScAddress aPosition;
-        SCTAB nTab = ReadTabNum();
-        aPosition.SetTab( nTab );
-        sal_uInt16 nValueType;
-        nValueType = pStrm->ReaduInt16();
-        sal_uInt16 nOldValueType = (nValueType >> 3) & EXC_CHTR_TYPE_MASK;
-        sal_uInt16 nNewValueType = nValueType & EXC_CHTR_TYPE_MASK;
-        pStrm->Ignore( 2 );
-        Read2DAddress( aPosition );
-        sal_uInt16 nOldSize;
-        nOldSize = pStrm->ReaduInt16();
-        SAL_WARN_IF( (nOldSize == 0) != (nOldValueType == EXC_CHTR_TYPE_EMPTY),
-            "sc.filter",
-            "XclImpChangeTrack::ReadChTrCellContent - old value mismatch" );
-        pStrm->Ignore( 4 );
-        switch( nValueType & EXC_CHTR_TYPE_FORMATMASK )
-        {
-            case 0x0000:                            break;
-            case 0x1100:    pStrm->Ignore( 16 );    break;
-            case 0x1300:    pStrm->Ignore( 8 );     break;
-            default:        OSL_FAIL( "XclImpChangeTrack::ReadChTrCellContent - unknown format info" );
-        }
+    if( !CheckRecord( EXC_CHTR_OP_CELL ) )
+        return;
 
-        ScCellValue aOldCell;
-        ScCellValue aNewCell;
-        sal_uInt32 nOldFormat;
-        sal_uInt32 nNewFormat;
-        ReadCell(aOldCell, nOldFormat, nOldValueType, aPosition);
-        ReadCell(aNewCell, nNewFormat, nNewValueType, aPosition);
-        if( !pStrm->IsValid() || (pStrm->GetRecLeft() > 0) )
-        {
-            OSL_FAIL( "XclImpChangeTrack::ReadChTrCellContent - bytes left, action ignored" );
-            aOldCell.clear();
-            aNewCell.clear();
-        }
-        else
-        {
-            ScChangeActionContent* pNewAction =
-                pChangeTrack->AppendContentOnTheFly(aPosition, aOldCell, aNewCell, nOldFormat, nNewFormat);
-            DoAcceptRejectAction( pNewAction );
-        }
+    ScAddress aPosition;
+    SCTAB nTab = ReadTabNum();
+    aPosition.SetTab( nTab );
+    sal_uInt16 nValueType;
+    nValueType = pStrm->ReaduInt16();
+    sal_uInt16 nOldValueType = (nValueType >> 3) & EXC_CHTR_TYPE_MASK;
+    sal_uInt16 nNewValueType = nValueType & EXC_CHTR_TYPE_MASK;
+    pStrm->Ignore( 2 );
+    Read2DAddress( aPosition );
+    sal_uInt16 nOldSize;
+    nOldSize = pStrm->ReaduInt16();
+    SAL_WARN_IF( (nOldSize == 0) != (nOldValueType == EXC_CHTR_TYPE_EMPTY),
+        "sc.filter",
+        "XclImpChangeTrack::ReadChTrCellContent - old value mismatch" );
+    pStrm->Ignore( 4 );
+    switch( nValueType & EXC_CHTR_TYPE_FORMATMASK )
+    {
+        case 0x0000:                            break;
+        case 0x1100:    pStrm->Ignore( 16 );    break;
+        case 0x1300:    pStrm->Ignore( 8 );     break;
+        default:        OSL_FAIL( "XclImpChangeTrack::ReadChTrCellContent - unknown format info" );
+    }
+
+    ScCellValue aOldCell;
+    ScCellValue aNewCell;
+    sal_uInt32 nOldFormat;
+    sal_uInt32 nNewFormat;
+    ReadCell(aOldCell, nOldFormat, nOldValueType, aPosition);
+    ReadCell(aNewCell, nNewFormat, nNewValueType, aPosition);
+    if( !pStrm->IsValid() || (pStrm->GetRecLeft() > 0) )
+    {
+        OSL_FAIL( "XclImpChangeTrack::ReadChTrCellContent - bytes left, action ignored" );
+        aOldCell.clear();
+        aNewCell.clear();
+    }
+    else
+    {
+        ScChangeActionContent* pNewAction =
+            pChangeTrack->AppendContentOnTheFly(aPosition, aOldCell, aNewCell, nOldFormat, nNewFormat);
+        DoAcceptRejectAction( pNewAction );
     }
 }
 
@@ -397,26 +397,26 @@ void XclImpChangeTrack::ReadChTrTabId()
 void XclImpChangeTrack::ReadChTrMoveRange()
 {
     *pStrm >> aRecHeader;
-    if( CheckRecord( EXC_CHTR_OP_MOVE ) )
+    if( !CheckRecord( EXC_CHTR_OP_MOVE ) )
+        return;
+
+    ScRange aSourceRange;
+    ScRange aDestRange;
+    aDestRange.aStart.SetTab( ReadTabNum() );
+    aDestRange.aEnd.SetTab( aDestRange.aStart.Tab() );
+    Read2DRange( aSourceRange );
+    Read2DRange( aDestRange );
+    aSourceRange.aStart.SetTab( ReadTabNum() );
+    aSourceRange.aEnd.SetTab( aSourceRange.aStart.Tab() );
+
+    bool bValid = pStrm->IsValid();
+    if( FoundNestedMode() )
+        ReadNestedRecords();
+
+    if( bValid )
     {
-        ScRange aSourceRange;
-        ScRange aDestRange;
-        aDestRange.aStart.SetTab( ReadTabNum() );
-        aDestRange.aEnd.SetTab( aDestRange.aStart.Tab() );
-        Read2DRange( aSourceRange );
-        Read2DRange( aDestRange );
-        aSourceRange.aStart.SetTab( ReadTabNum() );
-        aSourceRange.aEnd.SetTab( aSourceRange.aStart.Tab() );
-
-        bool bValid = pStrm->IsValid();
-        if( FoundNestedMode() )
-            ReadNestedRecords();
-
-        if( bValid )
-        {
-            pChangeTrack->AppendMove( aSourceRange, aDestRange, nullptr );
-            DoAcceptRejectAction( pChangeTrack->GetLast() );
-        }
+        pChangeTrack->AppendMove( aSourceRange, aDestRange, nullptr );
+        DoAcceptRejectAction( pChangeTrack->GetLast() );
     }
 }
 

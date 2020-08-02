@@ -571,20 +571,20 @@ static basegfx::B2DPolyPolygon GetOutlinesFromShape2d( const SdrObject* pShape2d
 static void CalcDistances( const tools::Polygon& rPoly, std::vector< double >& rDistances )
 {
     sal_uInt16 i, nCount = rPoly.GetSize();
-    if ( nCount > 1 )
+    if ( nCount <= 1 )
+        return;
+
+    for ( i = 0; i < nCount; i++ )
     {
-        for ( i = 0; i < nCount; i++ )
-        {
-            double fDistance = i ? rPoly.CalcDistance( i, i - 1 ) : 0.0;
-            rDistances.push_back( fDistance );
-        }
-        std::partial_sum( rDistances.begin(), rDistances.end(), rDistances.begin() );
-        double fLength = rDistances[ rDistances.size() - 1 ];
-        if ( fLength > 0.0 )
-        {
-            for ( auto& rDistance : rDistances )
-                rDistance /= fLength;
-        }
+        double fDistance = i ? rPoly.CalcDistance( i, i - 1 ) : 0.0;
+        rDistances.push_back( fDistance );
+    }
+    std::partial_sum( rDistances.begin(), rDistances.end(), rDistances.begin() );
+    double fLength = rDistances[ rDistances.size() - 1 ];
+    if ( fLength > 0.0 )
+    {
+        for ( auto& rDistance : rDistances )
+            rDistance /= fLength;
     }
 }
 
@@ -645,29 +645,29 @@ static void InsertMissingOutlinePoints( const std::vector< double >& rDistances,
 static void GetPoint( const tools::Polygon& rPoly, const std::vector< double >& rDistances, const double& fX, double& fx1, double& fy1 )
 {
     fy1 = fx1 = 0.0;
-    if ( rPoly.GetSize() > 1 )
-    {
-        std::vector< double >::const_iterator aIter = std::lower_bound( rDistances.begin(), rDistances.end(), fX );
-        sal_uInt16 nIdx = sal::static_int_cast<sal_uInt16>( std::distance( rDistances.begin(), aIter ) );
-        if ( aIter == rDistances.end() )
-            nIdx--;
-        const Point& rPt = rPoly[ nIdx ];
-        fx1 = rPt.X();
-        fy1 = rPt.Y();
-        if ( nIdx && ( aIter != rDistances.end() ) && !rtl::math::approxEqual( *aIter, fX ) )
-        {
-            nIdx = sal::static_int_cast<sal_uInt16>( std::distance( rDistances.begin(), aIter ) );
-            double fDist0 = *( aIter - 1 );
-            double fd = ( 1.0 / ( *aIter - fDist0 ) ) * ( fX - fDist0 );
-            const Point& rPt2 = rPoly[ nIdx - 1 ];
-            double fWidth = rPt.X() - rPt2.X();
-            double fHeight= rPt.Y() - rPt2.Y();
-            fWidth *= fd;
-            fHeight*= fd;
-            fx1 = rPt2.X() + fWidth;
-            fy1 = rPt2.Y() + fHeight;
-        }
-    }
+    if ( rPoly.GetSize() <= 1 )
+        return;
+
+    std::vector< double >::const_iterator aIter = std::lower_bound( rDistances.begin(), rDistances.end(), fX );
+    sal_uInt16 nIdx = sal::static_int_cast<sal_uInt16>( std::distance( rDistances.begin(), aIter ) );
+    if ( aIter == rDistances.end() )
+        nIdx--;
+    const Point& rPt = rPoly[ nIdx ];
+    fx1 = rPt.X();
+    fy1 = rPt.Y();
+    if ( !(nIdx && ( aIter != rDistances.end() ) && !rtl::math::approxEqual( *aIter, fX )) )
+        return;
+
+    nIdx = sal::static_int_cast<sal_uInt16>( std::distance( rDistances.begin(), aIter ) );
+    double fDist0 = *( aIter - 1 );
+    double fd = ( 1.0 / ( *aIter - fDist0 ) ) * ( fX - fDist0 );
+    const Point& rPt2 = rPoly[ nIdx - 1 ];
+    double fWidth = rPt.X() - rPt2.X();
+    double fHeight= rPt.Y() - rPt2.Y();
+    fWidth *= fd;
+    fHeight*= fd;
+    fx1 = rPt2.X() + fWidth;
+    fy1 = rPt2.Y() + fHeight;
 }
 
 static void FitTextOutlinesToShapeOutlines( const tools::PolyPolygon& aOutlines2d, FWData& rFWData )

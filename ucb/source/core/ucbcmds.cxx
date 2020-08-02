@@ -1839,22 +1839,22 @@ void UniversalContentBroker::globalTransfer(
     // (3) Delete source, if operation is MOVE.
 
 
-    if ( rArg.Operation == ucb::TransferCommandOperation_MOVE )
-    {
-        try
-        {
-            ucb::Command aCommand(
-                "delete",                   // Name
-                -1,                         // Handle
-                uno::makeAny( true ) );     // Argument
+    if ( rArg.Operation != ucb::TransferCommandOperation_MOVE )
+        return;
 
-            xCommandProcessor->execute( aCommand, 0, xLocalEnv );
-        }
-        catch ( uno::Exception const & )
-        {
-            OSL_FAIL( "Cannot delete source object!" );
-            throw;
-        }
+    try
+    {
+        ucb::Command aCommand(
+            "delete",                   // Name
+            -1,                         // Handle
+            uno::makeAny( true ) );     // Argument
+
+        xCommandProcessor->execute( aCommand, 0, xLocalEnv );
+    }
+    catch ( uno::Exception const & )
+    {
+        OSL_FAIL( "Cannot delete source object!" );
+        throw;
     }
 }
 

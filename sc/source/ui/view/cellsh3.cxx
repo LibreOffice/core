@@ -70,85 +70,85 @@ OString escapeJSON(const OUString &aStr)
 void lcl_lokGetWholeFunctionList()
 {
     const SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (comphelper::LibreOfficeKit::isActive()
-        && pViewShell && pViewShell->isLOKMobilePhone())
+    if (!(comphelper::LibreOfficeKit::isActive()
+        && pViewShell && pViewShell->isLOKMobilePhone()))
+        return;
+
+    const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
+    sal_uInt32 nListCount = pFuncList->GetCount();
+    std::set<OUString> aFuncNameOrderedSet;
+    for(sal_uInt32 i = 0; i < nListCount; ++i)
     {
-        const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
-        sal_uInt32 nListCount = pFuncList->GetCount();
-        std::set<OUString> aFuncNameOrderedSet;
-        for(sal_uInt32 i = 0; i < nListCount; ++i)
+        const ScFuncDesc* pDesc = pFuncList->GetFunction( i );
+        if ( pDesc->mxFuncName )
         {
-            const ScFuncDesc* pDesc = pFuncList->GetFunction( i );
-            if ( pDesc->mxFuncName )
-            {
-                aFuncNameOrderedSet.insert(*pDesc->mxFuncName);
-            }
-        }
-        ScFunctionMgr* pFuncManager = ScGlobal::GetStarCalcFunctionMgr();
-        if (pFuncManager && aFuncNameOrderedSet.size())
-        {
-            OStringBuffer aPayload;
-            aPayload.append("{ \"wholeList\": true, ");
-            aPayload.append("\"categories\": [ ");
-
-            formula::FormulaHelper aHelper(pFuncManager);
-            sal_uInt32 nCategoryCount = pFuncManager->getCount();
-            for (sal_uInt32 i = 0; i < nCategoryCount; ++i)
-            {
-                OUString sCategoryName = ScFunctionMgr::GetCategoryName(i);
-                aPayload.append("{");
-                aPayload.append("\"name\": \"");
-                aPayload.append(escapeJSON(sCategoryName));
-                aPayload.append("\"}, ");
-            }
-            sal_Int32 nLen = aPayload.getLength();
-            aPayload[nLen - 2] = ' ';
-            aPayload[nLen - 1] = ']';
-            aPayload.append(", ");
-
-            OUString aDescFuncNameStr;
-            aPayload.append("\"functions\": [ ");
-            sal_uInt32 nCurIndex = 0;
-            for (const OUString& aFuncNameStr : aFuncNameOrderedSet)
-            {
-                aDescFuncNameStr = aFuncNameStr + "()";
-                sal_Int32 nNextFStart = 0;
-                const formula::IFunctionDescription* ppFDesc;
-                ::std::vector< OUString > aArgs;
-                OUString eqPlusFuncName = "=" + aDescFuncNameStr;
-                if ( aHelper.GetNextFunc( eqPlusFuncName, false, nNextFStart, nullptr, &ppFDesc, &aArgs ) )
-                {
-                    if ( ppFDesc && !ppFDesc->getFunctionName().isEmpty() )
-                    {
-                        if (ppFDesc->getCategory())
-                        {
-                            aPayload.append("{");
-                            aPayload.append("\"index\": ");
-                            aPayload.append(OString::number(nCurIndex));
-                            aPayload.append(", ");
-                            aPayload.append("\"category\": ");
-                            aPayload.append(OString::number(ppFDesc->getCategory()->getNumber()));
-                            aPayload.append(", ");
-                            aPayload.append("\"signature\": \"");
-                            aPayload.append(escapeJSON(ppFDesc->getSignature()));
-                            aPayload.append("\", ");
-                            aPayload.append("\"description\": \"");
-                            aPayload.append(escapeJSON(ppFDesc->getDescription()));
-                            aPayload.append("\"}, ");
-                        }
-                    }
-                }
-                ++nCurIndex;
-            }
-            nLen = aPayload.getLength();
-            aPayload[nLen - 2] = ' ';
-            aPayload[nLen - 1] = ']';
-            aPayload.append(" }");
-
-            OString s = aPayload.makeStringAndClear();
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CALC_FUNCTION_LIST, s.getStr());
+            aFuncNameOrderedSet.insert(*pDesc->mxFuncName);
         }
     }
+    ScFunctionMgr* pFuncManager = ScGlobal::GetStarCalcFunctionMgr();
+    if (!(pFuncManager && aFuncNameOrderedSet.size()))
+        return;
+
+    OStringBuffer aPayload;
+    aPayload.append("{ \"wholeList\": true, ");
+    aPayload.append("\"categories\": [ ");
+
+    formula::FormulaHelper aHelper(pFuncManager);
+    sal_uInt32 nCategoryCount = pFuncManager->getCount();
+    for (sal_uInt32 i = 0; i < nCategoryCount; ++i)
+    {
+        OUString sCategoryName = ScFunctionMgr::GetCategoryName(i);
+        aPayload.append("{");
+        aPayload.append("\"name\": \"");
+        aPayload.append(escapeJSON(sCategoryName));
+        aPayload.append("\"}, ");
+    }
+    sal_Int32 nLen = aPayload.getLength();
+    aPayload[nLen - 2] = ' ';
+    aPayload[nLen - 1] = ']';
+    aPayload.append(", ");
+
+    OUString aDescFuncNameStr;
+    aPayload.append("\"functions\": [ ");
+    sal_uInt32 nCurIndex = 0;
+    for (const OUString& aFuncNameStr : aFuncNameOrderedSet)
+    {
+        aDescFuncNameStr = aFuncNameStr + "()";
+        sal_Int32 nNextFStart = 0;
+        const formula::IFunctionDescription* ppFDesc;
+        ::std::vector< OUString > aArgs;
+        OUString eqPlusFuncName = "=" + aDescFuncNameStr;
+        if ( aHelper.GetNextFunc( eqPlusFuncName, false, nNextFStart, nullptr, &ppFDesc, &aArgs ) )
+        {
+            if ( ppFDesc && !ppFDesc->getFunctionName().isEmpty() )
+            {
+                if (ppFDesc->getCategory())
+                {
+                    aPayload.append("{");
+                    aPayload.append("\"index\": ");
+                    aPayload.append(OString::number(nCurIndex));
+                    aPayload.append(", ");
+                    aPayload.append("\"category\": ");
+                    aPayload.append(OString::number(ppFDesc->getCategory()->getNumber()));
+                    aPayload.append(", ");
+                    aPayload.append("\"signature\": \"");
+                    aPayload.append(escapeJSON(ppFDesc->getSignature()));
+                    aPayload.append("\", ");
+                    aPayload.append("\"description\": \"");
+                    aPayload.append(escapeJSON(ppFDesc->getDescription()));
+                    aPayload.append("\"}, ");
+                }
+            }
+        }
+        ++nCurIndex;
+    }
+    nLen = aPayload.getLength();
+    aPayload[nLen - 2] = ' ';
+    aPayload[nLen - 1] = ']';
+    aPayload.append(" }");
+
+    OString s = aPayload.makeStringAndClear();
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CALC_FUNCTION_LIST, s.getStr());
 }
 
 } // end namespace

@@ -325,79 +325,79 @@ static void GetGeometryForCustomShape( SdrCustomShapeGeometryItem& rGeometryItem
     /* SJ: CustomShapes that are available in the gallery are having the highest
        priority, so we will take a look there before taking the internal default */
 
-    if ( GalleryExplorer::GetSdrObjCount( GALLERY_THEME_POWERPOINT ) )
-    {
-        std::vector< OUString > aObjList;
-        if ( GalleryExplorer::FillObjListTitle( GALLERY_THEME_POWERPOINT, aObjList ) )
-        {
-            for ( std::vector<OUString>::size_type i = 0; i < aObjList.size(); i++ )
-            {
-                if ( aObjList[ i ].equalsIgnoreAsciiCase( rCustomShape ) )
-                {
-                    FmFormModel aFormModel;
-                    SfxItemPool& rPool(aFormModel.GetItemPool());
-                    rPool.FreezeIdRanges();
+    if ( !GalleryExplorer::GetSdrObjCount( GALLERY_THEME_POWERPOINT ) )
+        return;
 
-                    if ( GalleryExplorer::GetSdrObj( GALLERY_THEME_POWERPOINT, i, &aFormModel ) )
+    std::vector< OUString > aObjList;
+    if ( !GalleryExplorer::FillObjListTitle( GALLERY_THEME_POWERPOINT, aObjList ) )
+        return;
+
+    for ( std::vector<OUString>::size_type i = 0; i < aObjList.size(); i++ )
+    {
+        if ( aObjList[ i ].equalsIgnoreAsciiCase( rCustomShape ) )
+        {
+            FmFormModel aFormModel;
+            SfxItemPool& rPool(aFormModel.GetItemPool());
+            rPool.FreezeIdRanges();
+
+            if ( GalleryExplorer::GetSdrObj( GALLERY_THEME_POWERPOINT, i, &aFormModel ) )
+            {
+                const SdrObject* pSourceObj = nullptr;
+                if (aFormModel.GetPageCount() > 0)
+                    pSourceObj = aFormModel.GetPage( 0 )->GetObj( 0 );
+                SAL_WARN_IF(!pSourceObj, "svx.form", "No content in gallery custom shape '" << rCustomShape << "'" );
+                if( pSourceObj )
+                {
+                    PropertyValue aPropVal_;
+                    const SdrCustomShapeGeometryItem& rSourceGeometry = pSourceObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
+                    const css::uno::Any* pAny = rSourceGeometry.GetPropertyValueByName( sType );
+                    if ( pAny )
                     {
-                        const SdrObject* pSourceObj = nullptr;
-                        if (aFormModel.GetPageCount() > 0)
-                            pSourceObj = aFormModel.GetPage( 0 )->GetObj( 0 );
-                        SAL_WARN_IF(!pSourceObj, "svx.form", "No content in gallery custom shape '" << rCustomShape << "'" );
-                        if( pSourceObj )
-                        {
-                            PropertyValue aPropVal_;
-                            const SdrCustomShapeGeometryItem& rSourceGeometry = pSourceObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
-                            const css::uno::Any* pAny = rSourceGeometry.GetPropertyValueByName( sType );
-                            if ( pAny )
-                            {
-                                aPropVal_.Name = sType;
-                                aPropVal_.Value = *pAny;
-                                rGeometryItem.SetPropertyValue( aPropVal_ );
-                            }
-                            pAny = rSourceGeometry.GetPropertyValueByName( sAdjustmentValues );
-                            if ( pAny )
-                            {
-                                aPropVal_.Name = sAdjustmentValues;
-                                aPropVal_.Value = *pAny;
-                                rGeometryItem.SetPropertyValue( aPropVal_ );
-                            }
-                            pAny = rSourceGeometry.GetPropertyValueByName( sCoordinateOrigin );
-                            if ( pAny )
-                            {
-                                aPropVal_.Name = sCoordinateOrigin;
-                                aPropVal_.Value = *pAny;
-                                rGeometryItem.SetPropertyValue( aPropVal_ );
-                            }
-                            pAny = rSourceGeometry.GetPropertyValueByName( sCoordinateSize );
-                            if ( pAny )
-                            {
-                                aPropVal_.Name = sCoordinateSize;
-                                aPropVal_.Value = *pAny;
-                                rGeometryItem.SetPropertyValue( aPropVal_ );
-                            }
-                            pAny = rSourceGeometry.GetPropertyValueByName( sEquations );
-                            if ( pAny )
-                            {
-                                aPropVal_.Name = sEquations;
-                                aPropVal_.Value = *pAny;
-                                rGeometryItem.SetPropertyValue( aPropVal_ );
-                            }
-                            pAny = rSourceGeometry.GetPropertyValueByName( sHandles );
-                            if ( pAny )
-                            {
-                                aPropVal_.Name = sHandles;
-                                aPropVal_.Value = *pAny;
-                                rGeometryItem.SetPropertyValue( aPropVal_ );
-                            }
-                            pAny = rSourceGeometry.GetPropertyValueByName( sPath );
-                            if ( pAny )
-                            {
-                                aPropVal_.Name = sPath;
-                                aPropVal_.Value = *pAny;
-                                rGeometryItem.SetPropertyValue( aPropVal_ );
-                            }
-                        }
+                        aPropVal_.Name = sType;
+                        aPropVal_.Value = *pAny;
+                        rGeometryItem.SetPropertyValue( aPropVal_ );
+                    }
+                    pAny = rSourceGeometry.GetPropertyValueByName( sAdjustmentValues );
+                    if ( pAny )
+                    {
+                        aPropVal_.Name = sAdjustmentValues;
+                        aPropVal_.Value = *pAny;
+                        rGeometryItem.SetPropertyValue( aPropVal_ );
+                    }
+                    pAny = rSourceGeometry.GetPropertyValueByName( sCoordinateOrigin );
+                    if ( pAny )
+                    {
+                        aPropVal_.Name = sCoordinateOrigin;
+                        aPropVal_.Value = *pAny;
+                        rGeometryItem.SetPropertyValue( aPropVal_ );
+                    }
+                    pAny = rSourceGeometry.GetPropertyValueByName( sCoordinateSize );
+                    if ( pAny )
+                    {
+                        aPropVal_.Name = sCoordinateSize;
+                        aPropVal_.Value = *pAny;
+                        rGeometryItem.SetPropertyValue( aPropVal_ );
+                    }
+                    pAny = rSourceGeometry.GetPropertyValueByName( sEquations );
+                    if ( pAny )
+                    {
+                        aPropVal_.Name = sEquations;
+                        aPropVal_.Value = *pAny;
+                        rGeometryItem.SetPropertyValue( aPropVal_ );
+                    }
+                    pAny = rSourceGeometry.GetPropertyValueByName( sHandles );
+                    if ( pAny )
+                    {
+                        aPropVal_.Name = sHandles;
+                        aPropVal_.Value = *pAny;
+                        rGeometryItem.SetPropertyValue( aPropVal_ );
+                    }
+                    pAny = rSourceGeometry.GetPropertyValueByName( sPath );
+                    if ( pAny )
+                    {
+                        aPropVal_.Name = sPath;
+                        aPropVal_.Value = *pAny;
+                        rGeometryItem.SetPropertyValue( aPropVal_ );
                     }
                 }
             }

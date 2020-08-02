@@ -376,64 +376,63 @@ void CachedContentResultSetStub
         bLastDirection          = m_bLastFetchDirection;
         bFirstPropagationDone   = m_bFirstFetchSizePropagationDone;
     }
-    if( bNeedAction )
+    if( !bNeedAction )
+        return;
+
+    if( nLastSize == nFetchSize
+        && bLastDirection == bFetchDirection
+        && bFirstPropagationDone )
+        return;
+
+    if(!bFirstPropagationDone)
     {
-        if( nLastSize == nFetchSize
-            && bLastDirection == bFetchDirection
-            && bFirstPropagationDone )
-            return;
+        //check whether the properties 'FetchSize' and 'FetchDirection' do exist
 
-        if(!bFirstPropagationDone)
-        {
-            //check whether the properties 'FetchSize' and 'FetchDirection' do exist
+        Reference< XPropertySetInfo > xPropertySetInfo = getPropertySetInfo();
+        bool bHasSize = xPropertySetInfo->hasPropertyByName( m_aPropertyNameForFetchSize );
+        bool bHasDirection = xPropertySetInfo->hasPropertyByName( m_aPropertyNameForFetchDirection );
 
-            Reference< XPropertySetInfo > xPropertySetInfo = getPropertySetInfo();
-            bool bHasSize = xPropertySetInfo->hasPropertyByName( m_aPropertyNameForFetchSize );
-            bool bHasDirection = xPropertySetInfo->hasPropertyByName( m_aPropertyNameForFetchDirection );
-
-            if(!bHasSize || !bHasDirection)
-            {
-                osl::Guard< osl::Mutex > aGuard( m_aMutex );
-                m_bNeedToPropagateFetchSize = false;
-                return;
-            }
-        }
-
-        bool bSetSize       = ( nLastSize       !=nFetchSize        ) || !bFirstPropagationDone;
-        bool bSetDirection  = ( bLastDirection  !=bFetchDirection   ) || !bFirstPropagationDone;
-
+        if(!bHasSize || !bHasDirection)
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
-            m_bFirstFetchSizePropagationDone = true;
-            m_nLastFetchSize        = nFetchSize;
-            m_bLastFetchDirection   = bFetchDirection;
+            m_bNeedToPropagateFetchSize = false;
+            return;
         }
-
-        if( bSetSize )
-        {
-            Any aValue;
-            aValue <<= nFetchSize;
-            try
-            {
-                setPropertyValue( m_aPropertyNameForFetchSize, aValue );
-            }
-            catch( css::uno::Exception& ) {}
-        }
-        if( bSetDirection )
-        {
-            sal_Int32 nFetchDirection = FetchDirection::FORWARD;
-            if( !bFetchDirection )
-                nFetchDirection = FetchDirection::REVERSE;
-            Any aValue;
-            aValue <<= nFetchDirection;
-            try
-            {
-                setPropertyValue( m_aPropertyNameForFetchDirection, aValue );
-            }
-            catch( css::uno::Exception& ) {}
-        }
-
     }
+
+    bool bSetSize       = ( nLastSize       !=nFetchSize        ) || !bFirstPropagationDone;
+    bool bSetDirection  = ( bLastDirection  !=bFetchDirection   ) || !bFirstPropagationDone;
+
+    {
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        m_bFirstFetchSizePropagationDone = true;
+        m_nLastFetchSize        = nFetchSize;
+        m_bLastFetchDirection   = bFetchDirection;
+    }
+
+    if( bSetSize )
+    {
+        Any aValue;
+        aValue <<= nFetchSize;
+        try
+        {
+            setPropertyValue( m_aPropertyNameForFetchSize, aValue );
+        }
+        catch( css::uno::Exception& ) {}
+    }
+    if( !bSetDirection )
+        return;
+
+    sal_Int32 nFetchDirection = FetchDirection::FORWARD;
+    if( !bFetchDirection )
+        nFetchDirection = FetchDirection::REVERSE;
+    Any aValue;
+    aValue <<= nFetchDirection;
+    try
+    {
+        setPropertyValue( m_aPropertyNameForFetchDirection, aValue );
+    }
+    catch( css::uno::Exception& ) {}
 }
 
 

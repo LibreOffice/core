@@ -323,19 +323,19 @@ void SdrObjList::InsertObjectThenMakeNameUnique(SdrObject* pObj)
 void SdrObjList::InsertObjectThenMakeNameUnique(SdrObject* pObj, std::unordered_set<OUString>& rNameSet, size_t nPos)
 {
     InsertObject(pObj, nPos);
-    if (!pObj->GetName().isEmpty())
+    if (pObj->GetName().isEmpty())
+        return;
+
+    pObj->MakeNameUnique(rNameSet);
+    SdrObjList* pSdrObjList = pObj->GetSubList(); // group
+    if (pSdrObjList)
     {
-        pObj->MakeNameUnique(rNameSet);
-        SdrObjList* pSdrObjList = pObj->GetSubList(); // group
-        if (pSdrObjList)
+        SdrObject* pListObj;
+        SdrObjListIter aIter(pSdrObjList, SdrIterMode::DeepWithGroups);
+        while (aIter.IsMore())
         {
-            SdrObject* pListObj;
-            SdrObjListIter aIter(pSdrObjList, SdrIterMode::DeepWithGroups);
-            while (aIter.IsMore())
-            {
-                pListObj = aIter.Next();
-                pListObj->MakeNameUnique(rNameSet);
-            }
+            pListObj = aIter.Next();
+            pListObj->MakeNameUnique(rNameSet);
         }
     }
 }
@@ -344,39 +344,39 @@ void SdrObjList::InsertObject(SdrObject* pObj, size_t nPos)
 {
     DBG_ASSERT(pObj!=nullptr,"SdrObjList::InsertObject(NULL)");
 
-    if(pObj)
+    if(!pObj)
+        return;
+
+    // if anchor is used, reset it before grouping
+    if(getSdrObjectFromSdrObjList())
     {
-        // if anchor is used, reset it before grouping
-        if(getSdrObjectFromSdrObjList())
-        {
-            const Point& rAnchorPos = pObj->GetAnchorPos();
-            if(rAnchorPos.X() || rAnchorPos.Y())
-                pObj->NbcSetAnchorPos(Point());
-        }
-
-        // do insert to new group
-        NbcInsertObject(pObj, nPos);
-
-        // In case the object is inserted into a group and doesn't overlap with
-        // the group's other members, it needs an own repaint.
-        SdrObject* pParentSdrObject(getSdrObjectFromSdrObjList());
-
-        if(pParentSdrObject)
-        {
-            // only repaint here
-            pParentSdrObject->ActionChanged();
-        }
-
-        // TODO: We need a different broadcast here!
-        // Repaint from object number ... (heads-up: GroupObj)
-        if(pObj->getSdrPageFromSdrObject())
-        {
-            SdrHint aHint(SdrHintKind::ObjectInserted, *pObj);
-            pObj->getSdrModelFromSdrObject().Broadcast(aHint);
-        }
-
-        pObj->getSdrModelFromSdrObject().SetChanged();
+        const Point& rAnchorPos = pObj->GetAnchorPos();
+        if(rAnchorPos.X() || rAnchorPos.Y())
+            pObj->NbcSetAnchorPos(Point());
     }
+
+    // do insert to new group
+    NbcInsertObject(pObj, nPos);
+
+    // In case the object is inserted into a group and doesn't overlap with
+    // the group's other members, it needs an own repaint.
+    SdrObject* pParentSdrObject(getSdrObjectFromSdrObjList());
+
+    if(pParentSdrObject)
+    {
+        // only repaint here
+        pParentSdrObject->ActionChanged();
+    }
+
+    // TODO: We need a different broadcast here!
+    // Repaint from object number ... (heads-up: GroupObj)
+    if(pObj->getSdrPageFromSdrObject())
+    {
+        SdrHint aHint(SdrHintKind::ObjectInserted, *pObj);
+        pObj->getSdrModelFromSdrObject().Broadcast(aHint);
+    }
+
+    pObj->getSdrModelFromSdrObject().SetChanged();
 }
 
 SdrObject* SdrObjList::NbcRemoveObject(size_t nObjNum)
@@ -854,23 +854,23 @@ void SdrObjList::SetObjectNavigationPosition (
 
     // Move the object to its new position.
     const sal_uInt32 nOldPosition = ::std::distance(mxNavigationOrder->begin(), iObject);
-    if (nOldPosition != nNewPosition)
-    {
-        mxNavigationOrder->erase(iObject);
-        sal_uInt32 nInsertPosition (nNewPosition);
-        // Adapt insertion position for the just erased object.
-        if (nNewPosition >= nOldPosition)
-            nInsertPosition -= 1;
-        if (nInsertPosition >= mxNavigationOrder->size())
-            mxNavigationOrder->push_back(aReference);
-        else
-            mxNavigationOrder->insert(mxNavigationOrder->begin()+nInsertPosition, aReference);
+    if (nOldPosition == nNewPosition)
+        return;
 
-        mbIsNavigationOrderDirty = true;
+    mxNavigationOrder->erase(iObject);
+    sal_uInt32 nInsertPosition (nNewPosition);
+    // Adapt insertion position for the just erased object.
+    if (nNewPosition >= nOldPosition)
+        nInsertPosition -= 1;
+    if (nInsertPosition >= mxNavigationOrder->size())
+        mxNavigationOrder->push_back(aReference);
+    else
+        mxNavigationOrder->insert(mxNavigationOrder->begin()+nInsertPosition, aReference);
 
-        // The navigation order is written out to file so mark the model as modified.
-        rObject.getSdrModelFromSdrObject().SetChanged();
-    }
+    mbIsNavigationOrderDirty = true;
+
+    // The navigation order is written out to file so mark the model as modified.
+    rObject.getSdrModelFromSdrObject().SetChanged();
 }
 
 
@@ -1638,23 +1638,23 @@ OUString SdrPage::GetLayoutName() const
 
 void SdrPage::SetInserted( bool bIns )
 {
-    if( mbInserted != bIns )
+    if( mbInserted == bIns )
+        return;
+
+    mbInserted = bIns;
+
+    // #i120437# go over whole hierarchy, not only over object level null (seen from grouping)
+    SdrObjListIter aIter(this, SdrIterMode::DeepNoGroups);
+
+    while ( aIter.IsMore() )
     {
-        mbInserted = bIns;
-
-        // #i120437# go over whole hierarchy, not only over object level null (seen from grouping)
-        SdrObjListIter aIter(this, SdrIterMode::DeepNoGroups);
-
-        while ( aIter.IsMore() )
+        SdrObject* pObj = aIter.Next();
+        if ( dynamic_cast<const SdrOle2Obj* >(pObj) !=  nullptr )
         {
-            SdrObject* pObj = aIter.Next();
-            if ( dynamic_cast<const SdrOle2Obj* >(pObj) !=  nullptr )
-            {
-                if( mbInserted )
-                    static_cast<SdrOle2Obj*>(pObj)->Connect();
-                else
-                    static_cast<SdrOle2Obj*>(pObj)->Disconnect();
-            }
+            if( mbInserted )
+                static_cast<SdrOle2Obj*>(pObj)->Connect();
+            else
+                static_cast<SdrOle2Obj*>(pObj)->Disconnect();
         }
     }
 }

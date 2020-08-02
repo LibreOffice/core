@@ -331,58 +331,58 @@ bool FmPropBrw::implIsReadOnlyModel() const
 
 void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
 {
-    if ( m_xBrowserController.is() )
+    if ( !m_xBrowserController.is() )
+        return;
+
+    try
     {
-        try
-        {
-            Reference< XObjectInspector > xInspector( m_xBrowserController, UNO_QUERY_THROW );
+        Reference< XObjectInspector > xInspector( m_xBrowserController, UNO_QUERY_THROW );
 
-            // tell it the objects to inspect
-            xInspector->inspect( comphelper::containerToSequence(_rSelection) );
-        }
-        catch( const VetoException& )
-        {
-            return;
-        }
-        catch( const Exception& )
-        {
-            OSL_FAIL( "FmPropBrw::implSetNewSelection: caught an unexpected exception!" );
-            return;
-        }
-
-        // set the new title according to the selected object
-        OUString sTitle;
-
-        if ( _rSelection.empty() )
-        {
-            sTitle = SvxResId(RID_STR_NO_PROPERTIES);
-        }
-        else if ( _rSelection.size() > 1 )
-        {
-            // no form component and (no form or no name) -> Multiselection
-            sTitle = SvxResId(RID_STR_PROPERTIES_CONTROL) +
-                SvxResId(RID_STR_PROPTITLE_MULTISELECT);
-        }
-        else
-        {
-            Reference< XPropertySet > xSingleSelection( *_rSelection.begin(), UNO_QUERY);
-            if  ( ::comphelper::hasProperty( FM_PROP_CLASSID, xSingleSelection ) )
-            {
-                sal_Int16 nClassID = FormComponentType::CONTROL;
-                xSingleSelection->getPropertyValue( FM_PROP_CLASSID ) >>= nClassID;
-
-                sTitle = SvxResId(RID_STR_PROPERTIES_CONTROL) +
-                    GetUIHeadlineName(nClassID, makeAny(xSingleSelection));
-            }
-            else if ( Reference< XForm >( xSingleSelection, UNO_QUERY ).is() )
-                sTitle = SvxResId(RID_STR_PROPERTIES_FORM);
-        }
-
-        if ( implIsReadOnlyModel() )
-            sTitle += SvxResId(RID_STR_READONLY_VIEW);
-
-        m_xDialog->set_title(sTitle);
+        // tell it the objects to inspect
+        xInspector->inspect( comphelper::containerToSequence(_rSelection) );
     }
+    catch( const VetoException& )
+    {
+        return;
+    }
+    catch( const Exception& )
+    {
+        OSL_FAIL( "FmPropBrw::implSetNewSelection: caught an unexpected exception!" );
+        return;
+    }
+
+    // set the new title according to the selected object
+    OUString sTitle;
+
+    if ( _rSelection.empty() )
+    {
+        sTitle = SvxResId(RID_STR_NO_PROPERTIES);
+    }
+    else if ( _rSelection.size() > 1 )
+    {
+        // no form component and (no form or no name) -> Multiselection
+        sTitle = SvxResId(RID_STR_PROPERTIES_CONTROL) +
+            SvxResId(RID_STR_PROPTITLE_MULTISELECT);
+    }
+    else
+    {
+        Reference< XPropertySet > xSingleSelection( *_rSelection.begin(), UNO_QUERY);
+        if  ( ::comphelper::hasProperty( FM_PROP_CLASSID, xSingleSelection ) )
+        {
+            sal_Int16 nClassID = FormComponentType::CONTROL;
+            xSingleSelection->getPropertyValue( FM_PROP_CLASSID ) >>= nClassID;
+
+            sTitle = SvxResId(RID_STR_PROPERTIES_CONTROL) +
+                GetUIHeadlineName(nClassID, makeAny(xSingleSelection));
+        }
+        else if ( Reference< XForm >( xSingleSelection, UNO_QUERY ).is() )
+            sTitle = SvxResId(RID_STR_PROPERTIES_FORM);
+    }
+
+    if ( implIsReadOnlyModel() )
+        sTitle += SvxResId(RID_STR_READONLY_VIEW);
+
+    m_xDialog->set_title(sTitle);
 }
 
 void FmPropBrw::FillInfo( SfxChildWinInfo& rInfo ) const

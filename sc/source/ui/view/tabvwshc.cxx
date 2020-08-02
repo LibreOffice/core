@@ -498,33 +498,33 @@ css::uno::Reference<css::datatransfer::XTransferable2> ScTabViewShell::GetClipDa
 
 void ScTabViewShell::notifyAllViewsHeaderInvalidation(SfxViewShell* pForViewShell, HeaderType eHeaderType, SCTAB nCurrentTabIndex)
 {
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        OString aPayload;
-        switch (eHeaderType)
-        {
-            case COLUMN_HEADER:
-                aPayload = "column";
-                break;
-            case ROW_HEADER:
-                aPayload = "row";
-                break;
-            case BOTH_HEADERS:
-            default:
-                aPayload = "all";
-                break;
-        }
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
 
-        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-        while (pViewShell)
+    OString aPayload;
+    switch (eHeaderType)
+    {
+        case COLUMN_HEADER:
+            aPayload = "column";
+            break;
+        case ROW_HEADER:
+            aPayload = "row";
+            break;
+        case BOTH_HEADERS:
+        default:
+            aPayload = "all";
+            break;
+    }
+
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+        if (pTabViewShell && pViewShell->GetDocId() == pForViewShell->GetDocId() && (nCurrentTabIndex == -1 || pTabViewShell->getPart() == nCurrentTabIndex))
         {
-            ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
-            if (pTabViewShell && pViewShell->GetDocId() == pForViewShell->GetDocId() && (nCurrentTabIndex == -1 || pTabViewShell->getPart() == nCurrentTabIndex))
-            {
-                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_HEADER, aPayload.getStr());
-            }
-            pViewShell = SfxViewShell::GetNext(*pViewShell);
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_HEADER, aPayload.getStr());
         }
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }
 

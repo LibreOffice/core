@@ -709,60 +709,60 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
         xMark->deleteMark(nPropDataBeginMark);
     }
 
-    if ( aProps.find( BASEPROPERTY_FONTDESCRIPTOR ) != aProps.end() )
+    if ( aProps.find( BASEPROPERTY_FONTDESCRIPTOR ) == aProps.end() )
+        return;
+
+    const css::uno::Any* pProp = &maData[ BASEPROPERTY_FONTDESCRIPTOR ];
+    // Until 5.0 export arrives, write old format...
+    css::awt::FontDescriptor aFD;
+    (*pProp) >>= aFD;
+
+    for ( sal_uInt16 n = BASEPROPERTY_FONT_TYPE; n <= BASEPROPERTY_FONT_ATTRIBS; n++ )
     {
-        const css::uno::Any* pProp = &maData[ BASEPROPERTY_FONTDESCRIPTOR ];
-        // Until 5.0 export arrives, write old format...
-        css::awt::FontDescriptor aFD;
-        (*pProp) >>= aFD;
+        sal_Int32 nPropDataBeginMark = xMark->createMark();
+        OutStream->writeLong( 0 ); // DataLen
+        OutStream->writeShort( n ); // PropId
+        OutStream->writeBoolean( false );   // Void
 
-        for ( sal_uInt16 n = BASEPROPERTY_FONT_TYPE; n <= BASEPROPERTY_FONT_ATTRIBS; n++ )
+        if ( n == BASEPROPERTY_FONT_TYPE )
         {
-            sal_Int32 nPropDataBeginMark = xMark->createMark();
-            OutStream->writeLong( 0 ); // DataLen
-            OutStream->writeShort( n ); // PropId
-            OutStream->writeBoolean( false );   // Void
-
-            if ( n == BASEPROPERTY_FONT_TYPE )
-            {
-                OutStream->writeUTF( aFD.Name );
-                OutStream->writeUTF( aFD.StyleName );
-                OutStream->writeShort( aFD.Family );
-                OutStream->writeShort( aFD.CharSet );
-                OutStream->writeShort( aFD.Pitch );
-            }
-            else if ( n == BASEPROPERTY_FONT_SIZE )
-            {
-                OutStream->writeLong( aFD.Width );
-                OutStream->writeLong( aFD.Height );
-                OutStream->writeShort(
-                    sal::static_int_cast< sal_Int16 >(
-                        vcl::unohelper::ConvertFontWidth(aFD.CharacterWidth)) );
-            }
-            else if ( n == BASEPROPERTY_FONT_ATTRIBS )
-            {
-                OutStream->writeShort(
-                    sal::static_int_cast< sal_Int16 >(
-                        vcl::unohelper::ConvertFontWeight(aFD.Weight)) );
-                OutStream->writeShort(
-                    sal::static_int_cast< sal_Int16 >(aFD.Slant) );
-                OutStream->writeShort( aFD.Underline );
-                OutStream->writeShort( aFD.Strikeout );
-                OutStream->writeShort( static_cast<short>(aFD.Orientation * 10) );
-                OutStream->writeBoolean( aFD.Kerning );
-                OutStream->writeBoolean( aFD.WordLineMode );
-            }
-            else
-            {
-                OSL_FAIL( "Property?!" );
-            }
-
-            sal_Int32 nPropDataLen = xMark->offsetToMark( nPropDataBeginMark );
-            xMark->jumpToMark( nPropDataBeginMark );
-            OutStream->writeLong( nPropDataLen );
-            xMark->jumpToFurthest();
-            xMark->deleteMark(nPropDataBeginMark);
+            OutStream->writeUTF( aFD.Name );
+            OutStream->writeUTF( aFD.StyleName );
+            OutStream->writeShort( aFD.Family );
+            OutStream->writeShort( aFD.CharSet );
+            OutStream->writeShort( aFD.Pitch );
         }
+        else if ( n == BASEPROPERTY_FONT_SIZE )
+        {
+            OutStream->writeLong( aFD.Width );
+            OutStream->writeLong( aFD.Height );
+            OutStream->writeShort(
+                sal::static_int_cast< sal_Int16 >(
+                    vcl::unohelper::ConvertFontWidth(aFD.CharacterWidth)) );
+        }
+        else if ( n == BASEPROPERTY_FONT_ATTRIBS )
+        {
+            OutStream->writeShort(
+                sal::static_int_cast< sal_Int16 >(
+                    vcl::unohelper::ConvertFontWeight(aFD.Weight)) );
+            OutStream->writeShort(
+                sal::static_int_cast< sal_Int16 >(aFD.Slant) );
+            OutStream->writeShort( aFD.Underline );
+            OutStream->writeShort( aFD.Strikeout );
+            OutStream->writeShort( static_cast<short>(aFD.Orientation * 10) );
+            OutStream->writeBoolean( aFD.Kerning );
+            OutStream->writeBoolean( aFD.WordLineMode );
+        }
+        else
+        {
+            OSL_FAIL( "Property?!" );
+        }
+
+        sal_Int32 nPropDataLen = xMark->offsetToMark( nPropDataBeginMark );
+        xMark->jumpToMark( nPropDataBeginMark );
+        OutStream->writeLong( nPropDataLen );
+        xMark->jumpToFurthest();
+        xMark->deleteMark(nPropDataBeginMark);
     }
 }
 
@@ -1308,49 +1308,49 @@ void UnoControlModel::setPropertyValues( const css::uno::Sequence< OUString >& r
 
     sal_Int32 nValidHandles = getInfoHelper().fillHandles( pHandles, rPropertyNames );
 
+    if ( !nValidHandles )
+        return;
+
+    // if somebody sets properties which are single aspects of a font descriptor,
+    // remove them, and build a font descriptor instead
+    std::unique_ptr< awt::FontDescriptor > pFD;
+    for ( sal_Int32 n = 0; n < nProps; ++n )
+    {
+        if ( ( pHandles[n] >= BASEPROPERTY_FONTDESCRIPTORPART_START ) && ( pHandles[n] <= BASEPROPERTY_FONTDESCRIPTORPART_END ) )
+        {
+            if (!pFD)
+            {
+                css::uno::Any* pProp = &maData[ BASEPROPERTY_FONTDESCRIPTOR ];
+                pFD.reset( new awt::FontDescriptor );
+                (*pProp) >>= *pFD;
+            }
+            lcl_ImplMergeFontProperty( *pFD, static_cast<sal_uInt16>(pHandles[n]), pValues[n] );
+            pHandles[n] = -1;
+            nValidHandles--;
+        }
+    }
+
     if ( nValidHandles )
     {
-        // if somebody sets properties which are single aspects of a font descriptor,
-        // remove them, and build a font descriptor instead
-        std::unique_ptr< awt::FontDescriptor > pFD;
-        for ( sal_Int32 n = 0; n < nProps; ++n )
-        {
-            if ( ( pHandles[n] >= BASEPROPERTY_FONTDESCRIPTORPART_START ) && ( pHandles[n] <= BASEPROPERTY_FONTDESCRIPTORPART_END ) )
-            {
-                if (!pFD)
-                {
-                    css::uno::Any* pProp = &maData[ BASEPROPERTY_FONTDESCRIPTOR ];
-                    pFD.reset( new awt::FontDescriptor );
-                    (*pProp) >>= *pFD;
-                }
-                lcl_ImplMergeFontProperty( *pFD, static_cast<sal_uInt16>(pHandles[n]), pValues[n] );
-                pHandles[n] = -1;
-                nValidHandles--;
-            }
-        }
+        ImplNormalizePropertySequence( nProps, pHandles, pValues, &nValidHandles );
+        aGuard.clear();
+            // clear our guard before calling into setFastPropertyValues - this method
+            // will implicitly call property listeners, and this should not happen with
+            // our mutex locked
+            // #i23451#
+        setFastPropertyValues( nProps, pHandles, pValues, nValidHandles );
+    }
+    else
+        aGuard.clear();
+        // same as a few lines above
 
-        if ( nValidHandles )
-        {
-            ImplNormalizePropertySequence( nProps, pHandles, pValues, &nValidHandles );
-            aGuard.clear();
-                // clear our guard before calling into setFastPropertyValues - this method
-                // will implicitly call property listeners, and this should not happen with
-                // our mutex locked
-                // #i23451#
-            setFastPropertyValues( nProps, pHandles, pValues, nValidHandles );
-        }
-        else
-            aGuard.clear();
-            // same as a few lines above
-
-        // Don't merge FD property into array, as it is sorted
-        if (pFD)
-        {
-            css::uno::Any aValue;
-            aValue <<= *pFD;
-            sal_Int32 nHandle = BASEPROPERTY_FONTDESCRIPTOR;
-            setFastPropertyValues( 1, &nHandle, &aValue, 1 );
-        }
+    // Don't merge FD property into array, as it is sorted
+    if (pFD)
+    {
+        css::uno::Any aValue;
+        aValue <<= *pFD;
+        sal_Int32 nHandle = BASEPROPERTY_FONTDESCRIPTOR;
+        setFastPropertyValues( 1, &nHandle, &aValue, 1 );
     }
 }
 

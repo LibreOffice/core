@@ -126,20 +126,20 @@ short ScInsertTableDlg::run()
 
 void ScInsertTableDlg::SetNewTable_Impl()
 {
-    if (m_xBtnNew->get_active() )
-    {
-        m_xNfCount->set_sensitive(true);
-        m_xFtCount->set_sensitive(true);
-        m_xLbTables->set_sensitive(false);
-        m_xFtPath->set_sensitive(false);
-        m_xBtnBrowse->set_sensitive(false);
-        m_xBtnLink->set_sensitive(false);
+    if (!m_xBtnNew->get_active() )
+        return;
 
-        if(nTableCount==1)
-        {
-            m_xEdName->set_sensitive(true);
-            m_xFtName->set_sensitive(true);
-        }
+    m_xNfCount->set_sensitive(true);
+    m_xFtCount->set_sensitive(true);
+    m_xLbTables->set_sensitive(false);
+    m_xFtPath->set_sensitive(false);
+    m_xBtnBrowse->set_sensitive(false);
+    m_xBtnLink->set_sensitive(false);
+
+    if(nTableCount==1)
+    {
+        m_xEdName->set_sensitive(true);
+        m_xFtName->set_sensitive(true);
     }
 }
 

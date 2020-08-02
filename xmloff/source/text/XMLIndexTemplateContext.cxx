@@ -142,46 +142,46 @@ void XMLIndexTemplateContext::StartElement(
 
 void XMLIndexTemplateContext::EndElement()
 {
-    if (bOutlineLevelOK)
+    if (!bOutlineLevelOK)
+        return;
+
+    const sal_Int32 nCount = aValueVector.size();
+    Sequence<PropertyValues> aValueSequence(nCount);
+    for(sal_Int32 i = 0; i<nCount; i++)
     {
-        const sal_Int32 nCount = aValueVector.size();
-        Sequence<PropertyValues> aValueSequence(nCount);
-        for(sal_Int32 i = 0; i<nCount; i++)
-        {
-            aValueSequence[i] = aValueVector[i];
-        }
+        aValueSequence[i] = aValueVector[i];
+    }
 
-        // get LevelFormat IndexReplace ...
-        Any aAny = rPropertySet->getPropertyValue("LevelFormat");
-        Reference<XIndexReplace> xIndexReplace;
-        aAny >>= xIndexReplace;
+    // get LevelFormat IndexReplace ...
+    Any aAny = rPropertySet->getPropertyValue("LevelFormat");
+    Reference<XIndexReplace> xIndexReplace;
+    aAny >>= xIndexReplace;
 
-        // ... and insert
-        xIndexReplace->replaceByIndex(nOutlineLevel, Any(aValueSequence));
+    // ... and insert
+    xIndexReplace->replaceByIndex(nOutlineLevel, Any(aValueSequence));
 
-        if (bStyleNameOK)
-        {
-            const char* pStyleProperty =
-                pOutlineLevelStylePropMap[nOutlineLevel];
+    if (!bStyleNameOK)
+        return;
 
-            DBG_ASSERT(nullptr != pStyleProperty, "need property name");
-            if (nullptr != pStyleProperty)
-            {
-                OUString sDisplayStyleName =
-                        GetImport().GetStyleDisplayName(
-                        XmlStyleFamily::TEXT_PARAGRAPH,
-                        sStyleName );
-                // #i50288#: Check if style exists
-                const Reference < css::container::XNameContainer > & rStyles =
-                    GetImport().GetTextImport()->GetParaStyles();
-                if( rStyles.is() &&
-                    rStyles->hasByName( sDisplayStyleName ) )
-                {
-                    rPropertySet->setPropertyValue(
-                        OUString::createFromAscii(pStyleProperty), css::uno::Any(sDisplayStyleName));
-                }
-            }
-        }
+    const char* pStyleProperty =
+        pOutlineLevelStylePropMap[nOutlineLevel];
+
+    DBG_ASSERT(nullptr != pStyleProperty, "need property name");
+    if (nullptr == pStyleProperty)
+        return;
+
+    OUString sDisplayStyleName =
+            GetImport().GetStyleDisplayName(
+            XmlStyleFamily::TEXT_PARAGRAPH,
+            sStyleName );
+    // #i50288#: Check if style exists
+    const Reference < css::container::XNameContainer > & rStyles =
+        GetImport().GetTextImport()->GetParaStyles();
+    if( rStyles.is() &&
+        rStyles->hasByName( sDisplayStyleName ) )
+    {
+        rPropertySet->setPropertyValue(
+            OUString::createFromAscii(pStyleProperty), css::uno::Any(sDisplayStyleName));
     }
 }
 

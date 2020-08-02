@@ -107,20 +107,20 @@ namespace drawinglayer::attribute
                 mbWrongSpell(bWrongSpell),
                 mbChainable(bChainable)
             {
-                if(pSdrText)
-                {
-                    if(XFormTextStyle::NONE != eFormTextStyle)
-                    {
-                        // text on path. Create FormText attribute
-                        const SfxItemSet& rSet = pSdrText->GetItemSet();
-                        maSdrFormTextAttribute = SdrFormTextAttribute(rSet);
-                    }
+                if(!pSdrText)
+                    return;
 
-                    // #i101556# init with version number to detect changes of single text
-                    // attribute and/or style sheets in primitive data without having to
-                    // copy that data locally (which would be better from principle)
-                    maPropertiesVersion = pSdrText->GetObject().GetProperties().getVersion();
+                if(XFormTextStyle::NONE != eFormTextStyle)
+                {
+                    // text on path. Create FormText attribute
+                    const SfxItemSet& rSet = pSdrText->GetItemSet();
+                    maSdrFormTextAttribute = SdrFormTextAttribute(rSet);
                 }
+
+                // #i101556# init with version number to detect changes of single text
+                // attribute and/or style sheets in primitive data without having to
+                // copy that data locally (which would be better from principle)
+                maPropertiesVersion = pSdrText->GetObject().GetProperties().getVersion();
             }
 
             ImpSdrTextAttribute()

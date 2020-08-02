@@ -726,20 +726,20 @@ static void addtopattern(FcPattern *pPattern,
         }
         FcPatternAddInteger(pPattern, FC_WIDTH, nWidth);
     }
-    if( ePitch != PITCH_DONTKNOW )
+    if( ePitch == PITCH_DONTKNOW )
+        return;
+
+    int nSpacing = FC_PROPORTIONAL;
+    switch( ePitch )
     {
-        int nSpacing = FC_PROPORTIONAL;
-        switch( ePitch )
-        {
-            case PITCH_FIXED:           nSpacing = FC_MONO;break;
-            case PITCH_VARIABLE:        nSpacing = FC_PROPORTIONAL;break;
-            default:
-                break;
-        }
-        FcPatternAddInteger(pPattern, FC_SPACING, nSpacing);
-        if (nSpacing == FC_MONO)
-            FcPatternAddString(pPattern, FC_FAMILY, reinterpret_cast<FcChar8 const *>("monospace"));
+        case PITCH_FIXED:           nSpacing = FC_MONO;break;
+        case PITCH_VARIABLE:        nSpacing = FC_PROPORTIONAL;break;
+        default:
+            break;
     }
+    FcPatternAddInteger(pPattern, FC_SPACING, nSpacing);
+    if (nSpacing == FC_MONO)
+        FcPatternAddString(pPattern, FC_FAMILY, reinterpret_cast<FcChar8 const *>("monospace"));
 }
 
 namespace

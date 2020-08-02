@@ -679,31 +679,31 @@ namespace xmloff
 
     void OFormLayerXMLExport_Impl::ensureControlNumberStyleExport()
     {
-        if (!m_pControlNumberStyles)
+        if (m_pControlNumberStyles)
+            return;
+
+        // create our number formats supplier (if necessary)
+        Reference< XNumberFormatsSupplier > xFormatsSupplier;
+
+        OSL_ENSURE(!m_xControlNumberFormats.is(), "OFormLayerXMLExport_Impl::getControlNumberStyleExport: inconsistence!");
+            // the m_xControlNumberFormats and m_pControlNumberStyles should be maintained together
+
+        try
         {
-            // create our number formats supplier (if necessary)
-            Reference< XNumberFormatsSupplier > xFormatsSupplier;
-
-            OSL_ENSURE(!m_xControlNumberFormats.is(), "OFormLayerXMLExport_Impl::getControlNumberStyleExport: inconsistence!");
-                // the m_xControlNumberFormats and m_pControlNumberStyles should be maintained together
-
-            try
-            {
-                // create it for en-US (does not really matter, as we will specify a locale for every
-                // concrete language to use)
-                Locale aLocale (  "en", "US", OUString() );
-                xFormatsSupplier = NumberFormatsSupplier::createWithLocale( m_rContext.getComponentContext(), aLocale );
-                m_xControlNumberFormats = xFormatsSupplier->getNumberFormats();
-            }
-            catch(const Exception&)
-            {
-            }
-
-            OSL_ENSURE(m_xControlNumberFormats.is(), "OFormLayerXMLExport_Impl::getControlNumberStyleExport: could not obtain my default number formats!");
-
-            // create the exporter
-            m_pControlNumberStyles = new SvXMLNumFmtExport(m_rContext, xFormatsSupplier, getControlNumberStyleNamePrefix());
+            // create it for en-US (does not really matter, as we will specify a locale for every
+            // concrete language to use)
+            Locale aLocale (  "en", "US", OUString() );
+            xFormatsSupplier = NumberFormatsSupplier::createWithLocale( m_rContext.getComponentContext(), aLocale );
+            m_xControlNumberFormats = xFormatsSupplier->getNumberFormats();
         }
+        catch(const Exception&)
+        {
+        }
+
+        OSL_ENSURE(m_xControlNumberFormats.is(), "OFormLayerXMLExport_Impl::getControlNumberStyleExport: could not obtain my default number formats!");
+
+        // create the exporter
+        m_pControlNumberStyles = new SvXMLNumFmtExport(m_rContext, xFormatsSupplier, getControlNumberStyleNamePrefix());
     }
 
     SvXMLNumFmtExport* OFormLayerXMLExport_Impl::getControlNumberStyleExport()

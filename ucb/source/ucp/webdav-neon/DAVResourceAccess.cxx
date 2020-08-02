@@ -1018,40 +1018,40 @@ void DAVResourceAccess::setURL( const OUString & rNewURL )
 void DAVResourceAccess::initialize()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
-    if ( m_aPath.isEmpty() )
+    if ( !m_aPath.isEmpty() )
+        return;
+
+    NeonUri aURI( m_aURL );
+    const OUString& aPath( aURI.GetPath() );
+
+    /* #134089# - Check URI */
+    if ( aPath.isEmpty() )
+        throw DAVException( DAVException::DAV_INVALID_ARG );
+
+    /* #134089# - Check URI */
+    if ( aURI.GetHost().isEmpty() )
+        throw DAVException( DAVException::DAV_INVALID_ARG );
+
+    if ( !m_xSession.is() || !m_xSession->CanUse( m_aURL, m_aFlags ) )
     {
-        NeonUri aURI( m_aURL );
-        const OUString& aPath( aURI.GetPath() );
+        m_xSession.clear();
 
-        /* #134089# - Check URI */
-        if ( aPath.isEmpty() )
-            throw DAVException( DAVException::DAV_INVALID_ARG );
+        // create new webdav session
+        m_xSession
+            = m_xSessionFactory->createDAVSession( m_aURL, m_aFlags, m_xContext );
 
-        /* #134089# - Check URI */
-        if ( aURI.GetHost().isEmpty() )
-            throw DAVException( DAVException::DAV_INVALID_ARG );
-
-        if ( !m_xSession.is() || !m_xSession->CanUse( m_aURL, m_aFlags ) )
-        {
-            m_xSession.clear();
-
-            // create new webdav session
-            m_xSession
-                = m_xSessionFactory->createDAVSession( m_aURL, m_aFlags, m_xContext );
-
-            if ( !m_xSession.is() )
-                return;
-        }
-
-        // Own URI is needed to redirect cycle detection.
-        m_aRedirectURIs.push_back( aURI );
-
-        // Success.
-        m_aPath = aPath;
-
-        // Not only the path has to be encoded
-        m_aURL = aURI.GetURI();
+        if ( !m_xSession.is() )
+            return;
     }
+
+    // Own URI is needed to redirect cycle detection.
+    m_aRedirectURIs.push_back( aURI );
+
+    // Success.
+    m_aPath = aPath;
+
+    // Not only the path has to be encoded
+    m_aURL = aURI.GetURI();
 }
 
 

@@ -1597,19 +1597,19 @@ void XclExpChangeTrack::Write()
     if (maRecList.empty())
         return;
 
-    if( WriteUserNamesStream() )
+    if( !WriteUserNamesStream() )
+        return;
+
+    tools::SvRef<SotStorageStream> xSvStrm = OpenStream( EXC_STREAM_REVLOG );
+    OSL_ENSURE( xSvStrm.is(), "XclExpChangeTrack::Write - no stream" );
+    if( xSvStrm.is() )
     {
-        tools::SvRef<SotStorageStream> xSvStrm = OpenStream( EXC_STREAM_REVLOG );
-        OSL_ENSURE( xSvStrm.is(), "XclExpChangeTrack::Write - no stream" );
-        if( xSvStrm.is() )
-        {
-            XclExpStream aXclStrm( *xSvStrm, GetRoot(), EXC_MAXRECSIZE_BIFF8 + 8 );
+        XclExpStream aXclStrm( *xSvStrm, GetRoot(), EXC_MAXRECSIZE_BIFF8 + 8 );
 
-            for(const auto& rxRec : maRecList)
-                rxRec->Save(aXclStrm);
+        for(const auto& rxRec : maRecList)
+            rxRec->Save(aXclStrm);
 
-            xSvStrm->Commit();
-        }
+        xSvStrm->Commit();
     }
 }
 

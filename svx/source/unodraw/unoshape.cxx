@@ -341,27 +341,27 @@ void SvxShape::impl_initFromSdrObject()
     const SdrInventor nInventor = GetSdrObject()->GetObjInventor();
 
     // is it one of ours (svx) ?
-    if( nInventor == SdrInventor::Default || nInventor == SdrInventor::E3d || nInventor == SdrInventor::FmForm )
-    {
-        if(nInventor == SdrInventor::FmForm)
-        {
-            mpImpl->mnObjId = OBJ_UNO;
-        }
-        else
-        {
-            mpImpl->mnObjId = GetSdrObject()->GetObjIdentifier();
-            if( nInventor == SdrInventor::E3d )
-                mpImpl->mnObjId |= E3D_INVENTOR_FLAG;
-        }
+    if( !(nInventor == SdrInventor::Default || nInventor == SdrInventor::E3d || nInventor == SdrInventor::FmForm) )
+        return;
 
-        switch(mpImpl->mnObjId)
-        {
-        case OBJ_CCUT:          // segment of circle
-        case OBJ_CARC:          // arc of circle
-        case OBJ_SECT:          // sector
-            mpImpl->mnObjId = OBJ_CIRC;
-            break;
-        }
+    if(nInventor == SdrInventor::FmForm)
+    {
+        mpImpl->mnObjId = OBJ_UNO;
+    }
+    else
+    {
+        mpImpl->mnObjId = GetSdrObject()->GetObjIdentifier();
+        if( nInventor == SdrInventor::E3d )
+            mpImpl->mnObjId |= E3D_INVENTOR_FLAG;
+    }
+
+    switch(mpImpl->mnObjId)
+    {
+    case OBJ_CCUT:          // segment of circle
+    case OBJ_CARC:          // arc of circle
+    case OBJ_SECT:          // sector
+        mpImpl->mnObjId = OBJ_CIRC;
+        break;
     }
 }
 
@@ -426,24 +426,24 @@ void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* /*pNewPage*/ )
 void SvxShape::ForceMetricToItemPoolMetric(Pair& rPoint) const throw()
 {
     DBG_TESTSOLARMUTEX();
-    if(HasSdrObject())
+    if(!HasSdrObject())
+        return;
+
+    MapUnit eMapUnit(GetSdrObject()->getSdrModelFromSdrObject().GetItemPool().GetMetric(0));
+    if(eMapUnit == MapUnit::Map100thMM)
+        return;
+
+    switch(eMapUnit)
     {
-        MapUnit eMapUnit(GetSdrObject()->getSdrModelFromSdrObject().GetItemPool().GetMetric(0));
-        if(eMapUnit != MapUnit::Map100thMM)
+        case MapUnit::MapTwip :
         {
-            switch(eMapUnit)
-            {
-                case MapUnit::MapTwip :
-                {
-                    rPoint.A() = MM_TO_TWIPS(rPoint.A());
-                    rPoint.B() = MM_TO_TWIPS(rPoint.B());
-                    break;
-                }
-                default:
-                {
-                    OSL_FAIL("AW: Missing unit translation to PoolMetric!");
-                }
-            }
+            rPoint.A() = MM_TO_TWIPS(rPoint.A());
+            rPoint.B() = MM_TO_TWIPS(rPoint.B());
+            break;
+        }
+        default:
+        {
+            OSL_FAIL("AW: Missing unit translation to PoolMetric!");
         }
     }
 }
@@ -451,27 +451,27 @@ void SvxShape::ForceMetricToItemPoolMetric(Pair& rPoint) const throw()
 void SvxShape::ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygon) const throw()
 {
     DBG_TESTSOLARMUTEX();
-    if(HasSdrObject())
-    {
-        MapUnit eMapUnit(GetSdrObject()->getSdrModelFromSdrObject().GetItemPool().GetMetric(0));
-        if(eMapUnit != MapUnit::Map100thMM)
-        {
-            switch(eMapUnit)
-            {
-                case MapUnit::MapTwip :
-                {
-                    basegfx::B2DHomMatrix aTransform;
-                    const double fMMToTWIPS(72.0 / 127.0);
+    if(!HasSdrObject())
+        return;
 
-                    aTransform.scale(fMMToTWIPS, fMMToTWIPS);
-                    rPolyPolygon.transform(aTransform);
-                    break;
-                }
-                default:
-                {
-                    OSL_FAIL("Missing unit translation to PoolMetric!");
-                }
-            }
+    MapUnit eMapUnit(GetSdrObject()->getSdrModelFromSdrObject().GetItemPool().GetMetric(0));
+    if(eMapUnit == MapUnit::Map100thMM)
+        return;
+
+    switch(eMapUnit)
+    {
+        case MapUnit::MapTwip :
+        {
+            basegfx::B2DHomMatrix aTransform;
+            const double fMMToTWIPS(72.0 / 127.0);
+
+            aTransform.scale(fMMToTWIPS, fMMToTWIPS);
+            rPolyPolygon.transform(aTransform);
+            break;
+        }
+        default:
+        {
+            OSL_FAIL("Missing unit translation to PoolMetric!");
         }
     }
 }
@@ -479,29 +479,29 @@ void SvxShape::ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygon
 void SvxShape::ForceMetricToItemPoolMetric(basegfx::B2DHomMatrix& rB2DHomMatrix) const throw()
 {
     DBG_TESTSOLARMUTEX();
-    if(HasSdrObject())
+    if(!HasSdrObject())
+        return;
+
+    MapUnit eMapUnit(GetSdrObject()->getSdrModelFromSdrObject().GetItemPool().GetMetric(0));
+    if(eMapUnit == MapUnit::Map100thMM)
+        return;
+
+    switch(eMapUnit)
     {
-        MapUnit eMapUnit(GetSdrObject()->getSdrModelFromSdrObject().GetItemPool().GetMetric(0));
-        if(eMapUnit != MapUnit::Map100thMM)
+        case MapUnit::MapTwip :
         {
-            switch(eMapUnit)
-            {
-                case MapUnit::MapTwip :
-                {
-                    const double fMMToTWIPS(72.0 / 127.0);
-                    const basegfx::utils::B2DHomMatrixBufferedDecompose aDecomposedTransform(rB2DHomMatrix);
-                    rB2DHomMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
-                        aDecomposedTransform.getScale() * fMMToTWIPS,
-                        aDecomposedTransform.getShearX(),
-                        aDecomposedTransform.getRotate(),
-                        aDecomposedTransform.getTranslate() * fMMToTWIPS);
-                    break;
-                }
-                default:
-                {
-                    OSL_FAIL("Missing unit translation to PoolMetric!");
-                }
-            }
+            const double fMMToTWIPS(72.0 / 127.0);
+            const basegfx::utils::B2DHomMatrixBufferedDecompose aDecomposedTransform(rB2DHomMatrix);
+            rB2DHomMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
+                aDecomposedTransform.getScale() * fMMToTWIPS,
+                aDecomposedTransform.getShearX(),
+                aDecomposedTransform.getRotate(),
+                aDecomposedTransform.getTranslate() * fMMToTWIPS);
+            break;
+        }
+        default:
+        {
+            OSL_FAIL("Missing unit translation to PoolMetric!");
         }
     }
 }
@@ -510,24 +510,24 @@ void SvxShape::ForceMetricTo100th_mm(Pair& rPoint) const throw()
 {
     DBG_TESTSOLARMUTEX();
     MapUnit eMapUnit = MapUnit::Map100thMM;
-    if(HasSdrObject())
+    if(!HasSdrObject())
+        return;
+
+    eMapUnit = GetSdrObject()->getSdrModelFromSdrObject().GetItemPool().GetMetric(0);
+    if(eMapUnit == MapUnit::Map100thMM)
+        return;
+
+    switch(eMapUnit)
     {
-        eMapUnit = GetSdrObject()->getSdrModelFromSdrObject().GetItemPool().GetMetric(0);
-        if(eMapUnit != MapUnit::Map100thMM)
+        case MapUnit::MapTwip :
         {
-            switch(eMapUnit)
-            {
-                case MapUnit::MapTwip :
-                {
-                    rPoint.A() = TWIPS_TO_MM(rPoint.A());
-                    rPoint.B() = TWIPS_TO_MM(rPoint.B());
-                    break;
-                }
-                default:
-                {
-                    OSL_FAIL("AW: Missing unit translation to 100th mm!");
-                }
-            }
+            rPoint.A() = TWIPS_TO_MM(rPoint.A());
+            rPoint.B() = TWIPS_TO_MM(rPoint.B());
+            break;
+        }
+        default:
+        {
+            OSL_FAIL("AW: Missing unit translation to 100th mm!");
         }
     }
 }
@@ -536,26 +536,26 @@ void SvxShape::ForceMetricTo100th_mm(basegfx::B2DPolyPolygon& rPolyPolygon) cons
 {
     DBG_TESTSOLARMUTEX();
     MapUnit eMapUnit = MapUnit::Map100thMM;
-    if(HasSdrObject())
+    if(!HasSdrObject())
+        return;
+
+    eMapUnit = GetSdrObject()->getSdrModelFromSdrObject().GetItemPool().GetMetric(0);
+    if(eMapUnit == MapUnit::Map100thMM)
+        return;
+
+    switch(eMapUnit)
     {
-        eMapUnit = GetSdrObject()->getSdrModelFromSdrObject().GetItemPool().GetMetric(0);
-        if(eMapUnit != MapUnit::Map100thMM)
+        case MapUnit::MapTwip :
         {
-            switch(eMapUnit)
-            {
-                case MapUnit::MapTwip :
-                {
-                    basegfx::B2DHomMatrix aTransform;
-                    const double fTWIPSToMM(127.0 / 72.0);
-                    aTransform.scale(fTWIPSToMM, fTWIPSToMM);
-                    rPolyPolygon.transform(aTransform);
-                    break;
-                }
-                default:
-                {
-                    OSL_FAIL("Missing unit translation to 100th mm!");
-                }
-            }
+            basegfx::B2DHomMatrix aTransform;
+            const double fTWIPSToMM(127.0 / 72.0);
+            aTransform.scale(fTWIPSToMM, fTWIPSToMM);
+            rPolyPolygon.transform(aTransform);
+            break;
+        }
+        default:
+        {
+            OSL_FAIL("Missing unit translation to 100th mm!");
         }
     }
 }
@@ -564,29 +564,29 @@ void SvxShape::ForceMetricTo100th_mm(basegfx::B2DHomMatrix& rB2DHomMatrix) const
 {
     DBG_TESTSOLARMUTEX();
     MapUnit eMapUnit = MapUnit::Map100thMM;
-    if(HasSdrObject())
+    if(!HasSdrObject())
+        return;
+
+    eMapUnit = GetSdrObject()->getSdrModelFromSdrObject().GetItemPool().GetMetric(0);
+    if(eMapUnit == MapUnit::Map100thMM)
+        return;
+
+    switch(eMapUnit)
     {
-        eMapUnit = GetSdrObject()->getSdrModelFromSdrObject().GetItemPool().GetMetric(0);
-        if(eMapUnit != MapUnit::Map100thMM)
+        case MapUnit::MapTwip :
         {
-            switch(eMapUnit)
-            {
-                case MapUnit::MapTwip :
-                {
-                    const double fTWIPSToMM(127.0 / 72.0);
-                    const basegfx::utils::B2DHomMatrixBufferedDecompose aDecomposedTransform(rB2DHomMatrix);
-                    rB2DHomMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
-                        aDecomposedTransform.getScale() * fTWIPSToMM,
-                        aDecomposedTransform.getShearX(),
-                        aDecomposedTransform.getRotate(),
-                        aDecomposedTransform.getTranslate() * fTWIPSToMM);
-                    break;
-                }
-                default:
-                {
-                    OSL_FAIL("Missing unit translation to 100th mm!");
-                }
-            }
+            const double fTWIPSToMM(127.0 / 72.0);
+            const basegfx::utils::B2DHomMatrixBufferedDecompose aDecomposedTransform(rB2DHomMatrix);
+            rB2DHomMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
+                aDecomposedTransform.getScale() * fTWIPSToMM,
+                aDecomposedTransform.getShearX(),
+                aDecomposedTransform.getRotate(),
+                aDecomposedTransform.getTranslate() * fTWIPSToMM);
+            break;
+        }
+        default:
+        {
+            OSL_FAIL("Missing unit translation to 100th mm!");
         }
     }
 }
@@ -594,48 +594,48 @@ void SvxShape::ForceMetricTo100th_mm(basegfx::B2DHomMatrix& rB2DHomMatrix) const
 static void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet,
   SfxItemSet& rSet, const uno::Reference< beans::XPropertySet >& xSet, const SfxItemPropertyMap* pMap )
 {
-    if(rPropSet.AreThereOwnUsrAnys())
+    if(!rPropSet.AreThereOwnUsrAnys())
+        return;
+
+    const SfxItemPropertyMap& rSrc = rPropSet.getPropertyMap();
+    PropertyEntryVector_t aSrcPropVector = rSrc.getPropertyEntries();
+
+    for(const auto& rSrcProp : aSrcPropVector)
     {
-        const SfxItemPropertyMap& rSrc = rPropSet.getPropertyMap();
-        PropertyEntryVector_t aSrcPropVector = rSrc.getPropertyEntries();
+        const sal_uInt16 nWID = rSrcProp.nWID;
+        if(SfxItemPool::IsWhich(nWID)
+                && (nWID < OWN_ATTR_VALUE_START || nWID > OWN_ATTR_VALUE_END)
+                && rPropSet.GetUsrAnyForID(rSrcProp))
+            rSet.Put(rSet.GetPool()->GetDefaultItem(nWID));
+    }
 
-        for(const auto& rSrcProp : aSrcPropVector)
+    for(const auto& rSrcProp : aSrcPropVector)
+    {
+        if(rSrcProp.nWID)
         {
-            const sal_uInt16 nWID = rSrcProp.nWID;
-            if(SfxItemPool::IsWhich(nWID)
-                    && (nWID < OWN_ATTR_VALUE_START || nWID > OWN_ATTR_VALUE_END)
-                    && rPropSet.GetUsrAnyForID(rSrcProp))
-                rSet.Put(rSet.GetPool()->GetDefaultItem(nWID));
-        }
-
-        for(const auto& rSrcProp : aSrcPropVector)
-        {
-            if(rSrcProp.nWID)
+            uno::Any* pUsrAny = rPropSet.GetUsrAnyForID(rSrcProp);
+            if(pUsrAny)
             {
-                uno::Any* pUsrAny = rPropSet.GetUsrAnyForID(rSrcProp);
-                if(pUsrAny)
+                // search for equivalent entry in pDst
+                const SfxItemPropertySimpleEntry* pEntry = pMap->getByName( rSrcProp.sName );
+                if(pEntry)
                 {
-                    // search for equivalent entry in pDst
-                    const SfxItemPropertySimpleEntry* pEntry = pMap->getByName( rSrcProp.sName );
-                    if(pEntry)
+                    // entry found
+                    if(pEntry->nWID >= OWN_ATTR_VALUE_START && pEntry->nWID <= OWN_ATTR_VALUE_END)
                     {
-                        // entry found
-                        if(pEntry->nWID >= OWN_ATTR_VALUE_START && pEntry->nWID <= OWN_ATTR_VALUE_END)
-                        {
-                            // special ID in PropertySet, can only be set
-                            // directly at the object
-                            xSet->setPropertyValue( rSrcProp.sName, *pUsrAny);
-                        }
-                        else
-                        {
-                            SvxItemPropertySet_setPropertyValue(pEntry, *pUsrAny, rSet);
-                        }
+                        // special ID in PropertySet, can only be set
+                        // directly at the object
+                        xSet->setPropertyValue( rSrcProp.sName, *pUsrAny);
+                    }
+                    else
+                    {
+                        SvxItemPropertySet_setPropertyValue(pEntry, *pUsrAny, rSet);
                     }
                 }
             }
         }
-        const_cast< SvxItemPropertySet& >(rPropSet).ClearAllUsrAny();
     }
+    const_cast< SvxItemPropertySet& >(rPropSet).ClearAllUsrAny();
 }
 
 
@@ -1037,30 +1037,30 @@ void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
             break;
     };
 
-    if( bClearMe )
+    if( !bClearMe )
+        return;
+
+    if(!HasSdrObjectOwnership())
     {
-        if(!HasSdrObjectOwnership())
+        if(nullptr != pSdrObject)
         {
-            if(nullptr != pSdrObject)
-            {
-                EndListening(pSdrObject->getSdrModelFromSdrObject());
-                pSdrObject->setUnoShape(nullptr);
-            }
-
-            mpSdrObjectWeakReference.reset(nullptr);
-
-            // SdrModel *is* going down, try to Free SdrObject even
-            // when !HasSdrObjectOwnership
-            if(nullptr != pSdrObject && !pSdrObject->IsInserted())
-            {
-                SdrObject::Free(pSdrObject);
-            }
+            EndListening(pSdrObject->getSdrModelFromSdrObject());
+            pSdrObject->setUnoShape(nullptr);
         }
 
-        if(!mpImpl->mbDisposing)
+        mpSdrObjectWeakReference.reset(nullptr);
+
+        // SdrModel *is* going down, try to Free SdrObject even
+        // when !HasSdrObjectOwnership
+        if(nullptr != pSdrObject && !pSdrObject->IsInserted())
         {
-            dispose();
+            SdrObject::Free(pSdrObject);
         }
+    }
+
+    if(!mpImpl->mbDisposing)
+    {
+        dispose();
     }
 }
 
@@ -1300,42 +1300,42 @@ void SAL_CALL SvxShape::dispose()
     mpImpl->maDisposeListeners.disposeAndClear(aEvt);
     mpImpl->maPropertyNotifier.disposing();
 
-    if ( HasSdrObject() )
+    if ( !HasSdrObject() )
+        return;
+
+    SdrObject* pObject = GetSdrObject();
+
+    EndListening( pObject->getSdrModelFromSdrObject() );
+    bool bFreeSdrObject = false;
+
+    if ( pObject->IsInserted() && pObject->getSdrPageFromSdrObject() )
     {
-        SdrObject* pObject = GetSdrObject();
+        OSL_ENSURE( HasSdrObjectOwnership(), "SvxShape::dispose: is the below code correct?" );
+            // normally, we are allowed to free the SdrObject only if we have its ownership.
+            // Why isn't this checked here?
 
-        EndListening( pObject->getSdrModelFromSdrObject() );
-        bool bFreeSdrObject = false;
-
-        if ( pObject->IsInserted() && pObject->getSdrPageFromSdrObject() )
+        SdrPage* pPage = pObject->getSdrPageFromSdrObject();
+        // delete the SdrObject from the page
+        const size_t nCount = pPage->GetObjCount();
+        for ( size_t nNum = 0; nNum < nCount; ++nNum )
         {
-            OSL_ENSURE( HasSdrObjectOwnership(), "SvxShape::dispose: is the below code correct?" );
-                // normally, we are allowed to free the SdrObject only if we have its ownership.
-                // Why isn't this checked here?
-
-            SdrPage* pPage = pObject->getSdrPageFromSdrObject();
-            // delete the SdrObject from the page
-            const size_t nCount = pPage->GetObjCount();
-            for ( size_t nNum = 0; nNum < nCount; ++nNum )
+            if ( pPage->GetObj( nNum ) == pObject )
             {
-                if ( pPage->GetObj( nNum ) == pObject )
-                {
-                    OSL_VERIFY( pPage->RemoveObject( nNum ) == pObject );
-                    bFreeSdrObject = true;
-                    break;
-                }
+                OSL_VERIFY( pPage->RemoveObject( nNum ) == pObject );
+                bFreeSdrObject = true;
+                break;
             }
         }
+    }
 
-        pObject->setUnoShape(nullptr);
+    pObject->setUnoShape(nullptr);
 
-        if ( bFreeSdrObject )
-        {
-            // in case we have the ownership of the SdrObject, a Free
-            // would do nothing. So ensure the ownership is reset.
-            mpImpl->mbHasSdrObjectOwnership = false;
-            SdrObject::Free( pObject );
-        }
+    if ( bFreeSdrObject )
+    {
+        // in case we have the ownership of the SdrObject, a Free
+        // would do nothing. So ensure the ownership is reset.
+        mpImpl->mbHasSdrObjectOwnership = false;
+        SdrObject::Free( pObject );
     }
 }
 

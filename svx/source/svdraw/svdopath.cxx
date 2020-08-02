@@ -2454,27 +2454,27 @@ void SdrPathObj::NbcSetPoint(const Point& rPnt, sal_uInt32 nHdlNum)
 {
     sal_uInt32 nPoly,nPnt;
 
-    if(PolyPolygonEditor::GetRelativePolyPoint(GetPathPoly(), nHdlNum, nPoly, nPnt))
+    if(!PolyPolygonEditor::GetRelativePolyPoint(GetPathPoly(), nHdlNum, nPoly, nPnt))
+        return;
+
+    basegfx::B2DPolygon aNewPolygon(GetPathPoly().getB2DPolygon(nPoly));
+    aNewPolygon.setB2DPoint(nPnt, basegfx::B2DPoint(rPnt.X(), rPnt.Y()));
+    maPathPolygon.setB2DPolygon(nPoly, aNewPolygon);
+
+    if(meKind==OBJ_LINE)
     {
-        basegfx::B2DPolygon aNewPolygon(GetPathPoly().getB2DPolygon(nPoly));
-        aNewPolygon.setB2DPoint(nPnt, basegfx::B2DPoint(rPnt.X(), rPnt.Y()));
-        maPathPolygon.setB2DPolygon(nPoly, aNewPolygon);
-
-        if(meKind==OBJ_LINE)
-        {
-            ImpForceLineAngle();
-        }
-        else
-        {
-            if(GetPathPoly().count())
-            {
-                // #i10659# for SdrTextObj, keep aRect up to date
-                maRect = lcl_ImpGetBoundRect(GetPathPoly());
-            }
-        }
-
-        SetRectsDirty();
+        ImpForceLineAngle();
     }
+    else
+    {
+        if(GetPathPoly().count())
+        {
+            // #i10659# for SdrTextObj, keep aRect up to date
+            maRect = lcl_ImpGetBoundRect(GetPathPoly());
+        }
+    }
+
+    SetRectsDirty();
 }
 
 sal_uInt32 SdrPathObj::NbcInsPointOld(const Point& rPos, bool bNewObj)

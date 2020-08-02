@@ -113,20 +113,20 @@ static void skip_input_data (j_decompress_ptr cinfo, long numberOfBytes)
      * it doesn't work on pipes.  Not clear that being smart is worth
      * any trouble anyway --- large skips are infrequent.
      */
-    if (numberOfBytes > 0)
-    {
-        while (numberOfBytes > static_cast<long>(source->pub.bytes_in_buffer))
-        {
-            numberOfBytes -= static_cast<long>(source->pub.bytes_in_buffer);
-            (void) fill_input_buffer(cinfo);
+    if (numberOfBytes <= 0)
+        return;
 
-            /* note we assume that fill_input_buffer will never return false,
-             * so suspension need not be handled.
-             */
-        }
-        source->pub.next_input_byte += static_cast<size_t>(numberOfBytes);
-        source->pub.bytes_in_buffer -= static_cast<size_t>(numberOfBytes);
+    while (numberOfBytes > static_cast<long>(source->pub.bytes_in_buffer))
+    {
+        numberOfBytes -= static_cast<long>(source->pub.bytes_in_buffer);
+        (void) fill_input_buffer(cinfo);
+
+        /* note we assume that fill_input_buffer will never return false,
+         * so suspension need not be handled.
+         */
     }
+    source->pub.next_input_byte += static_cast<size_t>(numberOfBytes);
+    source->pub.bytes_in_buffer -= static_cast<size_t>(numberOfBytes);
 }
 
 static void term_source (j_decompress_ptr)

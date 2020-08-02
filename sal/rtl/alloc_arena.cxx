@@ -238,47 +238,47 @@ void rtl_arena_hash_rescale(
     new_bytes = new_size * sizeof(rtl_arena_segment_type*);
     new_table = static_cast<rtl_arena_segment_type **>(rtl_arena_alloc (gp_arena_arena, &new_bytes));
 
-    if (new_table)
+    if (!new_table)
+        return;
+
+    rtl_arena_segment_type ** old_table;
+    sal_Size                  old_size, i;
+
+    memset (new_table, 0, new_bytes);
+
+    RTL_MEMORY_LOCK_ACQUIRE(&(arena->m_lock));
+
+    old_table = arena->m_hash_table;
+    old_size  = arena->m_hash_size;
+
+    arena->m_hash_table = new_table;
+    arena->m_hash_size  = new_size;
+    arena->m_hash_shift = highbit(arena->m_hash_size) - 1;
+
+    for (i = 0; i < old_size; i++)
     {
-        rtl_arena_segment_type ** old_table;
-        sal_Size                  old_size, i;
-
-        memset (new_table, 0, new_bytes);
-
-        RTL_MEMORY_LOCK_ACQUIRE(&(arena->m_lock));
-
-        old_table = arena->m_hash_table;
-        old_size  = arena->m_hash_size;
-
-        arena->m_hash_table = new_table;
-        arena->m_hash_size  = new_size;
-        arena->m_hash_shift = highbit(arena->m_hash_size) - 1;
-
-        for (i = 0; i < old_size; i++)
+        rtl_arena_segment_type * curr = old_table[i];
+        while (curr)
         {
-            rtl_arena_segment_type * curr = old_table[i];
-            while (curr)
-            {
-                rtl_arena_segment_type  * next = curr->m_fnext;
-                rtl_arena_segment_type ** head;
+            rtl_arena_segment_type  * next = curr->m_fnext;
+            rtl_arena_segment_type ** head;
 
-                // coverity[negative_shift] - bogus
-                head = &(arena->m_hash_table[RTL_ARENA_HASH_INDEX(arena, curr->m_addr)]);
-                curr->m_fnext = (*head);
-                (*head) = curr;
+            // coverity[negative_shift] - bogus
+            head = &(arena->m_hash_table[RTL_ARENA_HASH_INDEX(arena, curr->m_addr)]);
+            curr->m_fnext = (*head);
+            (*head) = curr;
 
-                curr = next;
-            }
-            old_table[i] = nullptr;
+            curr = next;
         }
+        old_table[i] = nullptr;
+    }
 
-        RTL_MEMORY_LOCK_RELEASE(&(arena->m_lock));
+    RTL_MEMORY_LOCK_RELEASE(&(arena->m_lock));
 
-        if (old_table != arena->m_hash_table_0)
-        {
-            sal_Size old_bytes = old_size * sizeof(rtl_arena_segment_type*);
-            rtl_arena_free (gp_arena_arena, old_table, old_bytes);
-        }
+    if (old_table != arena->m_hash_table_0)
+    {
+        sal_Size old_bytes = old_size * sizeof(rtl_arena_segment_type*);
+        rtl_arena_free (gp_arena_arena, old_table, old_bytes);
     }
 }
 
@@ -511,21 +511,21 @@ void rtl_arena_segment_coalesce(
 
     /* try to merge w/ prev segment */
     prev = segment->m_sprev;
-    if (prev->m_type == RTL_ARENA_SEGMENT_TYPE_FREE)
-    {
-        assert(prev->m_addr + prev->m_size == segment->m_addr);
-        segment->m_addr  = prev->m_addr;
-        segment->m_size += prev->m_size;
+    if (prev->m_type != RTL_ARENA_SEGMENT_TYPE_FREE)
+        return;
 
-        /* remove from freelist */
-        rtl_arena_freelist_remove (arena, prev);
+    assert(prev->m_addr + prev->m_size == segment->m_addr);
+    segment->m_addr  = prev->m_addr;
+    segment->m_size += prev->m_size;
 
-        /* remove from segment list */
-        QUEUE_REMOVE_NAMED(prev, s);
+    /* remove from freelist */
+    rtl_arena_freelist_remove (arena, prev);
 
-        /* release segment descriptor */
-        rtl_arena_segment_put (arena, &prev);
-    }
+    /* remove from segment list */
+    QUEUE_REMOVE_NAMED(prev, s);
+
+    /* release segment descriptor */
+    rtl_arena_segment_put (arena, &prev);
 }
 
 void rtl_arena_constructor(void * obj)
@@ -859,70 +859,70 @@ void SAL_CALL rtl_arena_free (
     sal_Size         size
 ) SAL_THROW_EXTERN_C()
 {
-    if (arena)
+    if (!arena)
+        return;
+
+    size = RTL_MEMORY_ALIGN(size, arena->m_quantum);
+    if (size <= 0)
+        return;
+
+    /* free to segment list */
+    rtl_arena_segment_type * segment;
+
+    RTL_MEMORY_LOCK_ACQUIRE(&(arena->m_lock));
+
+    segment = rtl_arena_hash_remove (arena, reinterpret_cast<sal_uIntPtr>(addr), size);
+    if (segment)
     {
-        size = RTL_MEMORY_ALIGN(size, arena->m_quantum);
-        if (size > 0)
+        rtl_arena_segment_type *next, *prev;
+
+        /* coalesce w/ adjacent free segment(s) */
+        rtl_arena_segment_coalesce (arena, segment);
+
+        /* determine (new) next and prev segment */
+        next = segment->m_snext;
+        prev = segment->m_sprev;
+
+        /* entire span free when prev is a span, and next is either a span or a list head */
+        if (prev->m_type == RTL_ARENA_SEGMENT_TYPE_SPAN &&
+            ((next->m_type == RTL_ARENA_SEGMENT_TYPE_SPAN)  ||
+             (next->m_type == RTL_ARENA_SEGMENT_TYPE_HEAD)))
         {
-            /* free to segment list */
-            rtl_arena_segment_type * segment;
+            assert(
+                prev->m_addr == segment->m_addr
+                && prev->m_size == segment->m_size);
 
-            RTL_MEMORY_LOCK_ACQUIRE(&(arena->m_lock));
-
-            segment = rtl_arena_hash_remove (arena, reinterpret_cast<sal_uIntPtr>(addr), size);
-            if (segment)
+            if (arena->m_source_free)
             {
-                rtl_arena_segment_type *next, *prev;
+                addr = reinterpret_cast<void*>(prev->m_addr);
+                size = prev->m_size;
 
-                /* coalesce w/ adjacent free segment(s) */
-                rtl_arena_segment_coalesce (arena, segment);
+                /* remove from segment list */
+                QUEUE_REMOVE_NAMED(segment, s);
 
-                /* determine (new) next and prev segment */
-                next = segment->m_snext;
-                prev = segment->m_sprev;
+                /* release segment descriptor */
+                rtl_arena_segment_put (arena, &segment);
 
-                /* entire span free when prev is a span, and next is either a span or a list head */
-                if (prev->m_type == RTL_ARENA_SEGMENT_TYPE_SPAN &&
-                    ((next->m_type == RTL_ARENA_SEGMENT_TYPE_SPAN)  ||
-                     (next->m_type == RTL_ARENA_SEGMENT_TYPE_HEAD)))
-                {
-                    assert(
-                        prev->m_addr == segment->m_addr
-                        && prev->m_size == segment->m_size);
+                /* remove from segment list */
+                QUEUE_REMOVE_NAMED(prev, s);
 
-                    if (arena->m_source_free)
-                    {
-                        addr = reinterpret_cast<void*>(prev->m_addr);
-                        size = prev->m_size;
+                /* release (span) segment descriptor */
+                rtl_arena_segment_put (arena, &prev);
 
-                        /* remove from segment list */
-                        QUEUE_REMOVE_NAMED(segment, s);
+                /* update stats, return span to source arena */
+                arena->m_stats.m_mem_total -= size;
+                RTL_MEMORY_LOCK_RELEASE(&(arena->m_lock));
 
-                        /* release segment descriptor */
-                        rtl_arena_segment_put (arena, &segment);
-
-                        /* remove from segment list */
-                        QUEUE_REMOVE_NAMED(prev, s);
-
-                        /* release (span) segment descriptor */
-                        rtl_arena_segment_put (arena, &prev);
-
-                        /* update stats, return span to source arena */
-                        arena->m_stats.m_mem_total -= size;
-                        RTL_MEMORY_LOCK_RELEASE(&(arena->m_lock));
-
-                        (arena->m_source_free)(arena->m_source_arena, addr, size);
-                        return;
-                    }
-                }
-
-                /* insert onto freelist */
-                rtl_arena_freelist_insert (arena, segment);
+                (arena->m_source_free)(arena->m_source_arena, addr, size);
+                return;
             }
-
-            RTL_MEMORY_LOCK_RELEASE(&(arena->m_lock));
         }
+
+        /* insert onto freelist */
+        rtl_arena_freelist_insert (arena, segment);
     }
+
+    RTL_MEMORY_LOCK_RELEASE(&(arena->m_lock));
 }
 
 void rtl_arena_foreach (rtl_arena_type *arena, ArenaForeachFn foreachFn)
@@ -1094,19 +1094,19 @@ void rtl_arena_init()
 
 void rtl_arena_fini()
 {
-    if (gp_arena_arena)
+    if (!gp_arena_arena)
+        return;
+
+    rtl_arena_type * arena, * head;
+
+    RTL_MEMORY_LOCK_ACQUIRE(&(g_arena_list.m_lock));
+    head = &(g_arena_list.m_arena_head);
+
+    for (arena = head->m_arena_next; arena != head; arena = arena->m_arena_next)
     {
-        rtl_arena_type * arena, * head;
-
-        RTL_MEMORY_LOCK_ACQUIRE(&(g_arena_list.m_lock));
-        head = &(g_arena_list.m_arena_head);
-
-        for (arena = head->m_arena_next; arena != head; arena = arena->m_arena_next)
-        {
-            // noop
-        }
-        RTL_MEMORY_LOCK_RELEASE(&(g_arena_list.m_lock));
+        // noop
     }
+    RTL_MEMORY_LOCK_RELEASE(&(g_arena_list.m_lock));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

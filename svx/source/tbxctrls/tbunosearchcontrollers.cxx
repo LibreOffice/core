@@ -1540,25 +1540,25 @@ void SAL_CALL FindbarDispatcher::dispatch( const css::util::URL& aURL, const css
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
     ToolBox* pToolBox = static_cast<ToolBox*>(pWindow.get());
     pToolBox->set_id("FindBar");
-    if ( pToolBox )
+    if ( !pToolBox )
+        return;
+
+    ToolBox::ImplToolItems::size_type nItemCount = pToolBox->GetItemCount();
+    for ( ToolBox::ImplToolItems::size_type i=0; i<nItemCount; ++i )
     {
-        ToolBox::ImplToolItems::size_type nItemCount = pToolBox->GetItemCount();
-        for ( ToolBox::ImplToolItems::size_type i=0; i<nItemCount; ++i )
+        sal_uInt16 id = pToolBox->GetItemId(i);
+        OUString sItemCommand = pToolBox->GetItemCommand(id);
+        if ( sItemCommand == COMMAND_FINDTEXT )
         {
-            sal_uInt16 id = pToolBox->GetItemId(i);
-            OUString sItemCommand = pToolBox->GetItemCommand(id);
-            if ( sItemCommand == COMMAND_FINDTEXT )
+            vcl::Window* pItemWin = pToolBox->GetItemWindow( id );
+            if ( pItemWin )
             {
-                vcl::Window* pItemWin = pToolBox->GetItemWindow( id );
-                if ( pItemWin )
-                {
-                    SolarMutexGuard aSolarMutexGuard;
-                    FindTextFieldControl* pFindTextFieldControl = dynamic_cast<FindTextFieldControl*>(pItemWin);
-                    if ( pFindTextFieldControl )
-                        pFindTextFieldControl->SetTextToSelected_Impl();
-                    pItemWin->GrabFocus();
-                    return;
-                }
+                SolarMutexGuard aSolarMutexGuard;
+                FindTextFieldControl* pFindTextFieldControl = dynamic_cast<FindTextFieldControl*>(pItemWin);
+                if ( pFindTextFieldControl )
+                    pFindTextFieldControl->SetTextToSelected_Impl();
+                pItemWin->GrabFocus();
+                return;
             }
         }
     }

@@ -488,33 +488,33 @@ static void kitCallback(int nType, const char* pPayload, void* pData)
     nDialogId = aRoot.get<unsigned>("id");
     const std::string aAction = aRoot.get<std::string>("action");
 
-    if (aAction == "created")
-    {
-        const std::string aType = aRoot.get<std::string>("type");
-        const std::string aSize = aRoot.get<std::string>("size");
-        int nWidth = atoi(aSize.c_str());
-        int nHeight = 400;
-        const char *pComma = strstr(aSize.c_str(), ", ");
-        if (pComma)
-            nHeight = atoi(pComma + 2);
-        std::cerr << "Size " << aSize << " is " << nWidth << ", " << nHeight << "\n";
+    if (aAction != "created")
+        return;
 
-        if (aType == "dialog")
-        {
-            aTimes.emplace_back(); // complete wait for dialog
+    const std::string aType = aRoot.get<std::string>("type");
+    const std::string aSize = aRoot.get<std::string>("size");
+    int nWidth = atoi(aSize.c_str());
+    int nHeight = 400;
+    const char *pComma = strstr(aSize.c_str(), ", ");
+    if (pComma)
+        nHeight = atoi(pComma + 2);
+    std::cerr << "Size " << aSize << " is " << nWidth << ", " << nHeight << "\n";
 
-            unsigned char *pBuffer = new unsigned char[nWidth * nHeight * 4];
+    if (aType != "dialog")
+        return;
 
-            aTimes.emplace_back("render dialog");
-            pDocument->paintWindow(nDialogId, pBuffer, 0, 0, nWidth, nHeight);
-            dumpTile("dialog", nWidth, nHeight, pDocument->getTileMode(), pBuffer);
-            aTimes.emplace_back();
+    aTimes.emplace_back(); // complete wait for dialog
 
-            delete[] pBuffer;
+    unsigned char *pBuffer = new unsigned char[nWidth * nHeight * 4];
 
-            bDialogRendered = true;
-        }
-    }
+    aTimes.emplace_back("render dialog");
+    pDocument->paintWindow(nDialogId, pBuffer, 0, 0, nWidth, nHeight);
+    dumpTile("dialog", nWidth, nHeight, pDocument->getTileMode(), pBuffer);
+    aTimes.emplace_back();
+
+    delete[] pBuffer;
+
+    bDialogRendered = true;
 }
 
 static void testDialog( Document *pDocument, const char *uno_cmd )

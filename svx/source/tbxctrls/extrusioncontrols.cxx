@@ -831,18 +831,18 @@ void ExtrusionSurfaceWindow::statusChanged(
     const css::frame::FeatureStateEvent& Event
 )
 {
-    if( Event.FeatureURL.Main == g_sExtrusionSurface )
+    if( Event.FeatureURL.Main != g_sExtrusionSurface )
+        return;
+
+    if( !Event.IsEnabled )
     {
-        if( !Event.IsEnabled )
-        {
-            implSetSurface( 0, false );
-        }
-        else
-        {
-            sal_Int32 nValue = 0;
-            if( Event.State >>= nValue )
-                implSetSurface( nValue, true );
-        }
+        implSetSurface( 0, false );
+    }
+    else
+    {
+        sal_Int32 nValue = 0;
+        if( Event.State >>= nValue )
+            implSetSurface( nValue, true );
     }
 }
 

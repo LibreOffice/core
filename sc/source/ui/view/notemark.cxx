@@ -146,57 +146,57 @@ static MapMode lcl_MoveMapMode( const MapMode& rMap, const Size& rMove )
 
 void ScNoteMarker::Draw()
 {
-    if ( m_xObject && m_bVisible )
-    {
-        lcl_DrawWin( m_xObject.get(), m_pWindow, m_aMapMode );
+    if ( !(m_xObject && m_bVisible) )
+        return;
 
-        if ( m_pRightWin || m_pBottomWin )
-        {
-            Size aWinSize = m_pWindow->PixelToLogic( m_pWindow->GetOutputSizePixel(), m_aMapMode );
-            if ( m_pRightWin )
-                lcl_DrawWin( m_xObject.get(), m_pRightWin,
-                                lcl_MoveMapMode( m_aMapMode, Size( aWinSize.Width(), 0 ) ) );
-            if ( m_pBottomWin )
-                lcl_DrawWin( m_xObject.get(), m_pBottomWin,
-                                lcl_MoveMapMode( m_aMapMode, Size( 0, aWinSize.Height() ) ) );
-            if ( m_pDiagWin )
-                lcl_DrawWin( m_xObject.get(), m_pDiagWin, lcl_MoveMapMode( m_aMapMode, aWinSize ) );
-        }
+    lcl_DrawWin( m_xObject.get(), m_pWindow, m_aMapMode );
+
+    if ( m_pRightWin || m_pBottomWin )
+    {
+        Size aWinSize = m_pWindow->PixelToLogic( m_pWindow->GetOutputSizePixel(), m_aMapMode );
+        if ( m_pRightWin )
+            lcl_DrawWin( m_xObject.get(), m_pRightWin,
+                            lcl_MoveMapMode( m_aMapMode, Size( aWinSize.Width(), 0 ) ) );
+        if ( m_pBottomWin )
+            lcl_DrawWin( m_xObject.get(), m_pBottomWin,
+                            lcl_MoveMapMode( m_aMapMode, Size( 0, aWinSize.Height() ) ) );
+        if ( m_pDiagWin )
+            lcl_DrawWin( m_xObject.get(), m_pDiagWin, lcl_MoveMapMode( m_aMapMode, aWinSize ) );
     }
 }
 
 void ScNoteMarker::InvalidateWin()
 {
-    if (m_bVisible)
-    {
-        // Extend the invalidated rectangle by 1 pixel in each direction in case AA would slightly
-        // paint outside the nominal area.
-        tools::Rectangle aRect(m_aRect);
-        const Size aPixelSize = m_pWindow->PixelToLogic(Size(1, 1));
-        aRect.AdjustLeft(-aPixelSize.getWidth());
-        aRect.AdjustTop(-aPixelSize.getHeight());
-        aRect.AdjustRight(aPixelSize.getWidth());
-        aRect.AdjustBottom(aPixelSize.getHeight());
+    if (!m_bVisible)
+        return;
 
-        m_pWindow->Invalidate( OutputDevice::LogicToLogic(aRect, m_aMapMode, m_pWindow->GetMapMode()) );
+    // Extend the invalidated rectangle by 1 pixel in each direction in case AA would slightly
+    // paint outside the nominal area.
+    tools::Rectangle aRect(m_aRect);
+    const Size aPixelSize = m_pWindow->PixelToLogic(Size(1, 1));
+    aRect.AdjustLeft(-aPixelSize.getWidth());
+    aRect.AdjustTop(-aPixelSize.getHeight());
+    aRect.AdjustRight(aPixelSize.getWidth());
+    aRect.AdjustBottom(aPixelSize.getHeight());
 
-        if ( m_pRightWin || m_pBottomWin )
-        {
-            Size aWinSize = m_pWindow->PixelToLogic( m_pWindow->GetOutputSizePixel(), m_aMapMode );
-            if ( m_pRightWin )
-                m_pRightWin->Invalidate( OutputDevice::LogicToLogic(aRect,
-                                        lcl_MoveMapMode( m_aMapMode, Size( aWinSize.Width(), 0 ) ),
-                                        m_pRightWin->GetMapMode()) );
-            if ( m_pBottomWin )
-                m_pBottomWin->Invalidate( OutputDevice::LogicToLogic(aRect,
-                                        lcl_MoveMapMode( m_aMapMode, Size( 0, aWinSize.Height() ) ),
-                                        m_pBottomWin->GetMapMode()) );
-            if ( m_pDiagWin )
-                m_pDiagWin->Invalidate( OutputDevice::LogicToLogic(aRect,
-                                        lcl_MoveMapMode( m_aMapMode, aWinSize ),
-                                        m_pDiagWin->GetMapMode()) );
-        }
-    }
+    m_pWindow->Invalidate( OutputDevice::LogicToLogic(aRect, m_aMapMode, m_pWindow->GetMapMode()) );
+
+    if ( !(m_pRightWin || m_pBottomWin) )
+        return;
+
+    Size aWinSize = m_pWindow->PixelToLogic( m_pWindow->GetOutputSizePixel(), m_aMapMode );
+    if ( m_pRightWin )
+        m_pRightWin->Invalidate( OutputDevice::LogicToLogic(aRect,
+                                lcl_MoveMapMode( m_aMapMode, Size( aWinSize.Width(), 0 ) ),
+                                m_pRightWin->GetMapMode()) );
+    if ( m_pBottomWin )
+        m_pBottomWin->Invalidate( OutputDevice::LogicToLogic(aRect,
+                                lcl_MoveMapMode( m_aMapMode, Size( 0, aWinSize.Height() ) ),
+                                m_pBottomWin->GetMapMode()) );
+    if ( m_pDiagWin )
+        m_pDiagWin->Invalidate( OutputDevice::LogicToLogic(aRect,
+                                lcl_MoveMapMode( m_aMapMode, aWinSize ),
+                                m_pDiagWin->GetMapMode()) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

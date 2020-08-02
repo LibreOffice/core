@@ -273,39 +273,39 @@ void Window::EndTracking( TrackingEventFlags nFlags )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    if ( pSVData->mpWinData->mpTrackWin.get() == this )
+    if ( pSVData->mpWinData->mpTrackWin.get() != this )
+        return;
+
+    if ( pSVData->mpWinData->mpTrackTimer )
     {
-        if ( pSVData->mpWinData->mpTrackTimer )
+        delete pSVData->mpWinData->mpTrackTimer;
+        pSVData->mpWinData->mpTrackTimer = nullptr;
+    }
+
+    pSVData->mpWinData->mpTrackWin    = nullptr;
+    pSVData->mpWinData->mnTrackFlags  = StartTrackingFlags::NONE;
+    ReleaseMouse();
+
+    // call EndTracking if required
+    {
+        Point           aMousePos( mpWindowImpl->mpFrameData->mnLastMouseX, mpWindowImpl->mpFrameData->mnLastMouseY );
+        if( ImplIsAntiparallel() )
         {
-            delete pSVData->mpWinData->mpTrackTimer;
-            pSVData->mpWinData->mpTrackTimer = nullptr;
+            // re-mirror frame pos at pChild
+            const OutputDevice *pOutDev = GetOutDev();
+            pOutDev->ReMirror( aMousePos );
         }
 
-        pSVData->mpWinData->mpTrackWin    = nullptr;
-        pSVData->mpWinData->mnTrackFlags  = StartTrackingFlags::NONE;
-        ReleaseMouse();
-
-        // call EndTracking if required
-        {
-            Point           aMousePos( mpWindowImpl->mpFrameData->mnLastMouseX, mpWindowImpl->mpFrameData->mnLastMouseY );
-            if( ImplIsAntiparallel() )
-            {
-                // re-mirror frame pos at pChild
-                const OutputDevice *pOutDev = GetOutDev();
-                pOutDev->ReMirror( aMousePos );
-            }
-
-            MouseEvent      aMEvt( ImplFrameToOutput( aMousePos ),
-                                   mpWindowImpl->mpFrameData->mnClickCount, MouseEventModifiers::NONE,
-                                   mpWindowImpl->mpFrameData->mnMouseCode,
-                                   mpWindowImpl->mpFrameData->mnMouseCode );
-            TrackingEvent   aTEvt( aMEvt, nFlags | TrackingEventFlags::End );
-            // CompatTracking effectively
-            if (!mpWindowImpl || mpWindowImpl->mbInDispose)
-                return Window::Tracking( aTEvt );
-            else
-                return Tracking( aTEvt );
-        }
+        MouseEvent      aMEvt( ImplFrameToOutput( aMousePos ),
+                               mpWindowImpl->mpFrameData->mnClickCount, MouseEventModifiers::NONE,
+                               mpWindowImpl->mpFrameData->mnMouseCode,
+                               mpWindowImpl->mpFrameData->mnMouseCode );
+        TrackingEvent   aTEvt( aMEvt, nFlags | TrackingEventFlags::End );
+        // CompatTracking effectively
+        if (!mpWindowImpl || mpWindowImpl->mbInDispose)
+            return Window::Tracking( aTEvt );
+        else
+            return Tracking( aTEvt );
     }
 }
 
@@ -576,33 +576,33 @@ long Window::GetDrawPixel( OutputDevice const * pDev, long nPixels ) const
 
 static void lcl_HandleScrollHelper( ScrollBar* pScrl, double nN, bool isMultiplyByLineSize )
 {
-    if ( pScrl && nN && pScrl->IsEnabled() && pScrl->IsInputEnabled() && ! pScrl->IsInModalMode() )
+    if ( !(pScrl && nN && pScrl->IsEnabled() && pScrl->IsInputEnabled() && ! pScrl->IsInModalMode()) )
+        return;
+
+    long nNewPos = pScrl->GetThumbPos();
+
+    if ( nN == double(-LONG_MAX) )
+        nNewPos += pScrl->GetPageSize();
+    else if ( nN == double(LONG_MAX) )
+        nNewPos -= pScrl->GetPageSize();
+    else
     {
-        long nNewPos = pScrl->GetThumbPos();
-
-        if ( nN == double(-LONG_MAX) )
-            nNewPos += pScrl->GetPageSize();
-        else if ( nN == double(LONG_MAX) )
-            nNewPos -= pScrl->GetPageSize();
-        else
-        {
-            // allowing both chunked and continuous scrolling
-            if(isMultiplyByLineSize){
-                nN*=pScrl->GetLineSize();
-            }
-
-            const double fVal = nNewPos - nN;
-
-            if ( !o3tl::convertsToAtLeast(fVal, LONG_MIN) )
-                nNewPos = LONG_MIN;
-            else if ( !o3tl::convertsToAtMost(fVal, LONG_MAX) )
-                nNewPos = LONG_MAX;
-            else
-                nNewPos = static_cast<long>(fVal);
+        // allowing both chunked and continuous scrolling
+        if(isMultiplyByLineSize){
+            nN*=pScrl->GetLineSize();
         }
 
-        pScrl->DoScroll( nNewPos );
+        const double fVal = nNewPos - nN;
+
+        if ( !o3tl::convertsToAtLeast(fVal, LONG_MIN) )
+            nNewPos = LONG_MIN;
+        else if ( !o3tl::convertsToAtMost(fVal, LONG_MAX) )
+            nNewPos = LONG_MAX;
+        else
+            nNewPos = static_cast<long>(fVal);
     }
+
+    pScrl->DoScroll( nNewPos );
 
 }
 

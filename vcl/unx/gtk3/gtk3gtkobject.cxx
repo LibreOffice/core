@@ -341,38 +341,38 @@ void GtkSalObjectWidgetClip::EndSetClipRegion()
 
 void GtkSalObjectWidgetClip::ApplyClipRegion()
 {
-    if( m_pSocket )
+    if( !m_pSocket )
+        return;
+
+    GtkFixed* pContainer = GTK_FIXED(gtk_widget_get_parent(m_pScrolledWindow));
+
+    GtkAllocation allocation;
+    allocation.x = m_aRect.Left() + m_aClipRect.Left();
+    allocation.y = m_aRect.Top() + m_aClipRect.Top();
+    if (m_aClipRect.IsEmpty())
     {
-        GtkFixed* pContainer = GTK_FIXED(gtk_widget_get_parent(m_pScrolledWindow));
-
-        GtkAllocation allocation;
-        allocation.x = m_aRect.Left() + m_aClipRect.Left();
-        allocation.y = m_aRect.Top() + m_aClipRect.Top();
-        if (m_aClipRect.IsEmpty())
-        {
-            allocation.width = m_aRect.GetWidth();
-            allocation.height = m_aRect.GetHeight();
-        }
-        else
-        {
-            allocation.width = m_aClipRect.GetWidth();
-            allocation.height = m_aClipRect.GetHeight();
-        }
-
-        if (AllSettings::GetLayoutRTL())
-        {
-            GtkAllocation aParentAllocation;
-            gtk_widget_get_allocation(GTK_WIDGET(pContainer), &aParentAllocation);
-            gtk_fixed_move(pContainer, m_pScrolledWindow, aParentAllocation.width - allocation.width - 1 - allocation.x, allocation.y);
-        }
-        else
-            gtk_fixed_move(pContainer, m_pScrolledWindow, allocation.x, allocation.y);
-        gtk_widget_set_size_request(m_pScrolledWindow, allocation.width, allocation.height);
-        gtk_widget_size_allocate(m_pScrolledWindow, &allocation);
-
-        gtk_adjustment_set_value(gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(m_pScrolledWindow)), m_aClipRect.Left());
-        gtk_adjustment_set_value(gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(m_pScrolledWindow)), m_aClipRect.Top());
+        allocation.width = m_aRect.GetWidth();
+        allocation.height = m_aRect.GetHeight();
     }
+    else
+    {
+        allocation.width = m_aClipRect.GetWidth();
+        allocation.height = m_aClipRect.GetHeight();
+    }
+
+    if (AllSettings::GetLayoutRTL())
+    {
+        GtkAllocation aParentAllocation;
+        gtk_widget_get_allocation(GTK_WIDGET(pContainer), &aParentAllocation);
+        gtk_fixed_move(pContainer, m_pScrolledWindow, aParentAllocation.width - allocation.width - 1 - allocation.x, allocation.y);
+    }
+    else
+        gtk_fixed_move(pContainer, m_pScrolledWindow, allocation.x, allocation.y);
+    gtk_widget_set_size_request(m_pScrolledWindow, allocation.width, allocation.height);
+    gtk_widget_size_allocate(m_pScrolledWindow, &allocation);
+
+    gtk_adjustment_set_value(gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(m_pScrolledWindow)), m_aClipRect.Left());
+    gtk_adjustment_set_value(gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(m_pScrolledWindow)), m_aClipRect.Top());
 }
 
 void GtkSalObjectWidgetClip::SetPosSize(long nX, long nY, long nWidth, long nHeight)

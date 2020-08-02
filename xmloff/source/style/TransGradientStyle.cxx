@@ -220,75 +220,75 @@ void XMLTransGradientStyleExport::exportXML(
 {
     awt::Gradient aGradient;
 
-    if( !rStrName.isEmpty() )
+    if( rStrName.isEmpty() )
+        return;
+
+    if( !(rValue >>= aGradient) )
+        return;
+
+    OUString aStrValue;
+    OUStringBuffer aOut;
+
+    // Style
+    if( !SvXMLUnitConverter::convertEnum( aOut, aGradient.Style, pXML_GradientStyle_Enum ) )
+        return;
+
+    // Name
+    bool bEncoded = false;
+    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME,
+                          rExport.EncodeStyleName( rStrName,
+                                                    &bEncoded ) );
+    if( bEncoded )
+        rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY_NAME,
+                                rStrName );
+
+    aStrValue = aOut.makeStringAndClear();
+    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );
+
+    // Center x/y
+    if( aGradient.Style != awt::GradientStyle_LINEAR &&
+        aGradient.Style != awt::GradientStyle_AXIAL   )
     {
-        if( rValue >>= aGradient )
-        {
-            OUString aStrValue;
-            OUStringBuffer aOut;
+        ::sax::Converter::convertPercent(aOut, aGradient.XOffset);
+        aStrValue = aOut.makeStringAndClear();
+        rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CX, aStrValue );
 
-            // Style
-            if( SvXMLUnitConverter::convertEnum( aOut, aGradient.Style, pXML_GradientStyle_Enum ) )
-            {
-                // Name
-                bool bEncoded = false;
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME,
-                                      rExport.EncodeStyleName( rStrName,
-                                                                &bEncoded ) );
-                if( bEncoded )
-                    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY_NAME,
-                                            rStrName );
-
-                aStrValue = aOut.makeStringAndClear();
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );
-
-                // Center x/y
-                if( aGradient.Style != awt::GradientStyle_LINEAR &&
-                    aGradient.Style != awt::GradientStyle_AXIAL   )
-                {
-                    ::sax::Converter::convertPercent(aOut, aGradient.XOffset);
-                    aStrValue = aOut.makeStringAndClear();
-                    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CX, aStrValue );
-
-                    ::sax::Converter::convertPercent(aOut, aGradient.YOffset);
-                    aStrValue = aOut.makeStringAndClear();
-                    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CY, aStrValue );
-                }
-
-                // Transparency start
-                Color aColor(aGradient.StartColor);
-                sal_Int32 aStartValue = 100 - static_cast<sal_Int32>(((aColor.GetRed() + 1) * 100) / 255);
-                ::sax::Converter::convertPercent( aOut, aStartValue );
-                aStrValue = aOut.makeStringAndClear();
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_START, aStrValue );
-
-                // Transparency end
-                aColor = Color(aGradient.EndColor);
-                sal_Int32 aEndValue = 100 - static_cast<sal_Int32>(((aColor.GetRed() + 1) * 100) / 255);
-                ::sax::Converter::convertPercent( aOut, aEndValue );
-                aStrValue = aOut.makeStringAndClear();
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_END, aStrValue );
-
-                // Angle
-                if( aGradient.Style != awt::GradientStyle_RADIAL )
-                {
-                    ::sax::Converter::convertAngle(aOut, aGradient.Angle, rExport.getSaneDefaultVersion());
-                    aStrValue = aOut.makeStringAndClear();
-                    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_GRADIENT_ANGLE, aStrValue );
-                }
-
-                // Border
-                ::sax::Converter::convertPercent( aOut, aGradient.Border );
-                aStrValue = aOut.makeStringAndClear();
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_BORDER, aStrValue );
-
-                // Do Write
-                SvXMLElementExport rElem( rExport,
-                                          XML_NAMESPACE_DRAW, XML_OPACITY,
-                                          true, false );
-            }
-        }
+        ::sax::Converter::convertPercent(aOut, aGradient.YOffset);
+        aStrValue = aOut.makeStringAndClear();
+        rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CY, aStrValue );
     }
+
+    // Transparency start
+    Color aColor(aGradient.StartColor);
+    sal_Int32 aStartValue = 100 - static_cast<sal_Int32>(((aColor.GetRed() + 1) * 100) / 255);
+    ::sax::Converter::convertPercent( aOut, aStartValue );
+    aStrValue = aOut.makeStringAndClear();
+    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_START, aStrValue );
+
+    // Transparency end
+    aColor = Color(aGradient.EndColor);
+    sal_Int32 aEndValue = 100 - static_cast<sal_Int32>(((aColor.GetRed() + 1) * 100) / 255);
+    ::sax::Converter::convertPercent( aOut, aEndValue );
+    aStrValue = aOut.makeStringAndClear();
+    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_END, aStrValue );
+
+    // Angle
+    if( aGradient.Style != awt::GradientStyle_RADIAL )
+    {
+        ::sax::Converter::convertAngle(aOut, aGradient.Angle, rExport.getSaneDefaultVersion());
+        aStrValue = aOut.makeStringAndClear();
+        rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_GRADIENT_ANGLE, aStrValue );
+    }
+
+    // Border
+    ::sax::Converter::convertPercent( aOut, aGradient.Border );
+    aStrValue = aOut.makeStringAndClear();
+    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_BORDER, aStrValue );
+
+    // Do Write
+    SvXMLElementExport rElem( rExport,
+                              XML_NAMESPACE_DRAW, XML_OPACITY,
+                              true, false );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

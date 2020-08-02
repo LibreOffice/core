@@ -320,20 +320,20 @@ void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // cons
     }
 
     // #i12705# equalize x- and y-resolution if they are close enough
-    if( rDPIX != rDPIY )
-    {
-        // different x- and y- resolutions are usually artifacts of
-        // a wrongly calculated screen size.
+    if( rDPIX == rDPIY )
+        return;
+
+    // different x- and y- resolutions are usually artifacts of
+    // a wrongly calculated screen size.
 #ifdef DEBUG
-        SAL_INFO("vcl.gdi", "Forcing Resolution from "
-            << std::hex << rDPIX
-            << std::dec << rDPIX
-            << " to "
-            << std::hex << rDPIY
-            << std::dec << rDPIY);
+    SAL_INFO("vcl.gdi", "Forcing Resolution from "
+        << std::hex << rDPIX
+        << std::dec << rDPIX
+        << " to "
+        << std::hex << rDPIY
+        << std::dec << rDPIY);
 #endif
-        rDPIX = rDPIY; // y-resolution is more trustworthy
-    }
+    rDPIX = rDPIY; // y-resolution is more trustworthy
 }
 
 sal_uInt16 X11SalGraphics::GetBitCount() const

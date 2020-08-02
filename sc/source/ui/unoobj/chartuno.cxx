@@ -169,94 +169,94 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
     uno::Reference < embed::XEmbeddedObject > xObj;
     if ( SvtModuleOptions().IsChart() )
         xObj = pDocShell->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aName );
-    if ( xObj.is() )
+    if ( !xObj.is() )
+            return;
+
+    //  adjust rectangle
+    //! error/exception, if empty/invalid ???
+    Point aRectPos( aRect.X, aRect.Y );
+    bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
+    if ( ( aRectPos.X() < 0 && !bLayoutRTL ) || ( aRectPos.X() > 0 && bLayoutRTL ) )
+        aRectPos.setX( 0 );
+
+    if (aRectPos.Y() < 0)
+        aRectPos.setY( 0 );
+
+    Size aRectSize( aRect.Width, aRect.Height );
+    if (aRectSize.Width() <= 0)
+        aRectSize.setWidth( 5000 );   // default size
+
+    if (aRectSize.Height() <= 0)
+        aRectSize.setHeight( 5000 );
+    tools::Rectangle aInsRect( aRectPos, aRectSize );
+
+    sal_Int64 nAspect(embed::Aspects::MSOLE_CONTENT);
+    MapUnit aMapUnit(VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) ));
+    Size aSize(aInsRect.GetSize());
+    aSize = OutputDevice::LogicToLogic( aSize, MapMode( MapUnit::Map100thMM ), MapMode( aMapUnit ) );
+    awt::Size aSz;
+    aSz.Width = aSize.Width();
+    aSz.Height = aSize.Height();
+
+    // Calc -> DataProvider
+    uno::Reference< chart2::data::XDataProvider > xDataProvider = new
+            ScChart2DataProvider( &rDoc );
+    // Chart -> DataReceiver
+    uno::Reference< chart2::data::XDataReceiver > xReceiver;
+    if( xObj.is())
+        xReceiver.set( xObj->getComponent(), uno::UNO_QUERY );
+    if( xReceiver.is())
     {
-            //  adjust rectangle
-            //! error/exception, if empty/invalid ???
-            Point aRectPos( aRect.X, aRect.Y );
-            bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
-            if ( ( aRectPos.X() < 0 && !bLayoutRTL ) || ( aRectPos.X() > 0 && bLayoutRTL ) )
-                aRectPos.setX( 0 );
+        OUString sRangeStr;
+        xNewRanges->Format(sRangeStr, ScRefFlags::RANGE_ABS_3D, rDoc);
 
-            if (aRectPos.Y() < 0)
-                aRectPos.setY( 0 );
+        // connect
+        if( !sRangeStr.isEmpty() )
+            xReceiver->attachDataProvider( xDataProvider );
+        else
+            sRangeStr = "all";
 
-            Size aRectSize( aRect.Width, aRect.Height );
-            if (aRectSize.Width() <= 0)
-                aRectSize.setWidth( 5000 );   // default size
+        uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( pDocShell->GetModel(), uno::UNO_QUERY );
+        xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
 
-            if (aRectSize.Height() <= 0)
-                aRectSize.setHeight( 5000 );
-            tools::Rectangle aInsRect( aRectPos, aRectSize );
-
-            sal_Int64 nAspect(embed::Aspects::MSOLE_CONTENT);
-            MapUnit aMapUnit(VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) ));
-            Size aSize(aInsRect.GetSize());
-            aSize = OutputDevice::LogicToLogic( aSize, MapMode( MapUnit::Map100thMM ), MapMode( aMapUnit ) );
-            awt::Size aSz;
-            aSz.Width = aSize.Width();
-            aSz.Height = aSize.Height();
-
-            // Calc -> DataProvider
-            uno::Reference< chart2::data::XDataProvider > xDataProvider = new
-                ScChart2DataProvider( &rDoc );
-            // Chart -> DataReceiver
-            uno::Reference< chart2::data::XDataReceiver > xReceiver;
-            if( xObj.is())
-                xReceiver.set( xObj->getComponent(), uno::UNO_QUERY );
-            if( xReceiver.is())
-            {
-                OUString sRangeStr;
-                xNewRanges->Format(sRangeStr, ScRefFlags::RANGE_ABS_3D, rDoc);
-
-                // connect
-                if( !sRangeStr.isEmpty() )
-                    xReceiver->attachDataProvider( xDataProvider );
-                else
-                    sRangeStr = "all";
-
-                uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( pDocShell->GetModel(), uno::UNO_QUERY );
-                xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
-
-                // set arguments
-                uno::Sequence< beans::PropertyValue > aArgs( 4 );
-                aArgs[0] = beans::PropertyValue(
-                    "CellRangeRepresentation", -1,
-                    uno::makeAny( sRangeStr ), beans::PropertyState_DIRECT_VALUE );
-                aArgs[1] = beans::PropertyValue(
-                    "HasCategories", -1,
-                    uno::makeAny( bRowHeaders ), beans::PropertyState_DIRECT_VALUE );
-                aArgs[2] = beans::PropertyValue(
-                    "FirstCellAsLabel", -1,
-                    uno::makeAny( bColumnHeaders ), beans::PropertyState_DIRECT_VALUE );
-                aArgs[3] = beans::PropertyValue(
-                    "DataRowSource", -1,
-                    uno::makeAny( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
-                xReceiver->setArguments( aArgs );
-            }
-
-            ScChartListener* pChartListener =
-                new ScChartListener( aName, &rDoc, xNewRanges );
-            rDoc.GetChartListenerCollection()->insert( pChartListener );
-            pChartListener->StartListeningTo();
-
-            SdrOle2Obj* pObj = new SdrOle2Obj(
-                *pModel,
-                ::svt::EmbeddedObjectRef(xObj, embed::Aspects::MSOLE_CONTENT),
-                aName,
-                aInsRect);
-
-            // set VisArea
-            if( xObj.is())
-                xObj->setVisualAreaSize( nAspect, aSz );
-
-            // #i121334# This call will change the chart's default background fill from white to transparent.
-            // Add here again if this is wanted (see task description for details)
-            // ChartHelper::AdaptDefaultsForChart( xObj );
-
-            pPage->InsertObject( pObj );
-            pModel->AddUndo( std::make_unique<SdrUndoInsertObj>( *pObj ) );
+        // set arguments
+        uno::Sequence< beans::PropertyValue > aArgs( 4 );
+        aArgs[0] = beans::PropertyValue(
+                "CellRangeRepresentation", -1,
+                uno::makeAny( sRangeStr ), beans::PropertyState_DIRECT_VALUE );
+        aArgs[1] = beans::PropertyValue(
+                "HasCategories", -1,
+                uno::makeAny( bRowHeaders ), beans::PropertyState_DIRECT_VALUE );
+        aArgs[2] = beans::PropertyValue(
+                "FirstCellAsLabel", -1,
+                uno::makeAny( bColumnHeaders ), beans::PropertyState_DIRECT_VALUE );
+        aArgs[3] = beans::PropertyValue(
+                "DataRowSource", -1,
+                uno::makeAny( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
+        xReceiver->setArguments( aArgs );
     }
+
+    ScChartListener* pChartListener =
+            new ScChartListener( aName, &rDoc, xNewRanges );
+    rDoc.GetChartListenerCollection()->insert( pChartListener );
+    pChartListener->StartListeningTo();
+
+    SdrOle2Obj* pObj = new SdrOle2Obj(
+            *pModel,
+            ::svt::EmbeddedObjectRef(xObj, embed::Aspects::MSOLE_CONTENT),
+            aName,
+            aInsRect);
+
+    // set VisArea
+    if( xObj.is())
+        xObj->setVisualAreaSize( nAspect, aSz );
+
+    // #i121334# This call will change the chart's default background fill from white to transparent.
+    // Add here again if this is wanted (see task description for details)
+    // ChartHelper::AdaptDefaultsForChart( xObj );
+
+    pPage->InsertObject( pObj );
+    pModel->AddUndo( std::make_unique<SdrUndoInsertObj>( *pObj ) );
 }
 
 void SAL_CALL ScChartsObj::removeByName( const OUString& aName )

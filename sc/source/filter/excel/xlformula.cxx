@@ -903,20 +903,20 @@ void XclTokenArrayHelper::ConvertStringToList(
     ScTokenArray& rScTokArr, svl::SharedStringPool& rSPool, sal_Unicode cStringSep )
 {
     OUString aString;
-    if( GetString( aString, rScTokArr ) )
+    if( !GetString( aString, rScTokArr ) )
+        return;
+
+    rScTokArr.Clear();
+    if (aString.isEmpty())
+        return;
+    sal_Int32 nStringIx = 0;
+    for (;;)
     {
-        rScTokArr.Clear();
-        if (aString.isEmpty())
-            return;
-        sal_Int32 nStringIx = 0;
-        for (;;)
-        {
-            OUString aToken( aString.getToken( 0, cStringSep, nStringIx ) );
-            rScTokArr.AddString(rSPool.intern(comphelper::string::stripStart(aToken, ' ')));
-            if (nStringIx<0)
-                break;
-            rScTokArr.AddOpCode( ocSep );
-        }
+        OUString aToken( aString.getToken( 0, cStringSep, nStringIx ) );
+        rScTokArr.AddString(rSPool.intern(comphelper::string::stripStart(aToken, ' ')));
+        if (nStringIx<0)
+            break;
+        rScTokArr.AddOpCode( ocSep );
     }
 }
 

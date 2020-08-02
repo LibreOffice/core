@@ -55,54 +55,54 @@ void merge(
     assert(
         original.is() && update.is() && original->kind() == update->kind() &&
         update->getFinalized() == Data::NO_LAYER);
-    if (update->getLayer() >= original->getLayer() &&
-        update->getLayer() <= original->getFinalized())
-    {
-        switch (original->kind()) {
-        case Node::KIND_PROPERTY:
-        case Node::KIND_LOCALIZED_PROPERTY:
-        case Node::KIND_LOCALIZED_VALUE:
-            break; //TODO: merge certain parts?
-        case Node::KIND_GROUP:
-            for (auto const& updateMember : update->getMembers())
-            {
-                NodeMap & members = original->getMembers();
-                NodeMap::iterator i1(members.find(updateMember.first));
-                if (i1 == members.end()) {
-                    if (updateMember.second->kind() == Node::KIND_PROPERTY &&
-                        static_cast< GroupNode * >(
-                            original.get())->isExtensible())
-                    {
-                        members.insert(updateMember);
-                    }
-                } else if (updateMember.second->kind() == i1->second->kind()) {
-                    merge(i1->second, updateMember.second);
-                }
-            }
-            break;
-        case Node::KIND_SET:
-            for (auto const& updateMember : update->getMembers())
-            {
-                NodeMap & members = original->getMembers();
-                NodeMap::iterator i1(members.find(updateMember.first));
-                if (i1 == members.end()) {
-                    if (static_cast< SetNode * >(original.get())->
-                        isValidTemplate(updateMember.second->getTemplateName()))
-                    {
-                        members.insert(updateMember);
-                    }
-                } else if (updateMember.second->kind() == i1->second->kind() &&
-                           (updateMember.second->getTemplateName() ==
-                            i1->second->getTemplateName()))
+    if (update->getLayer() < original->getLayer() ||
+        update->getLayer() > original->getFinalized())
+        return;
+
+    switch (original->kind()) {
+    case Node::KIND_PROPERTY:
+    case Node::KIND_LOCALIZED_PROPERTY:
+    case Node::KIND_LOCALIZED_VALUE:
+        break; //TODO: merge certain parts?
+    case Node::KIND_GROUP:
+        for (auto const& updateMember : update->getMembers())
+        {
+            NodeMap & members = original->getMembers();
+            NodeMap::iterator i1(members.find(updateMember.first));
+            if (i1 == members.end()) {
+                if (updateMember.second->kind() == Node::KIND_PROPERTY &&
+                    static_cast< GroupNode * >(
+                        original.get())->isExtensible())
                 {
-                    merge(i1->second, updateMember.second);
+                    members.insert(updateMember);
                 }
+            } else if (updateMember.second->kind() == i1->second->kind()) {
+                merge(i1->second, updateMember.second);
             }
-            break;
-        case Node::KIND_ROOT:
-            assert(false); // this cannot happen
-            break;
         }
+        break;
+    case Node::KIND_SET:
+        for (auto const& updateMember : update->getMembers())
+        {
+            NodeMap & members = original->getMembers();
+            NodeMap::iterator i1(members.find(updateMember.first));
+            if (i1 == members.end()) {
+                if (static_cast< SetNode * >(original.get())->
+                    isValidTemplate(updateMember.second->getTemplateName()))
+                {
+                    members.insert(updateMember);
+                }
+            } else if (updateMember.second->kind() == i1->second->kind() &&
+                       (updateMember.second->getTemplateName() ==
+                        i1->second->getTemplateName()))
+            {
+                merge(i1->second, updateMember.second);
+            }
+        }
+        break;
+    case Node::KIND_ROOT:
+        assert(false); // this cannot happen
+        break;
     }
 }
 

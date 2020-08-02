@@ -442,149 +442,149 @@ void SchXMLAxisContext::CreateAxis()
     }
 
     // set properties
-    if( m_xAxisProps.is())
+    if( !m_xAxisProps.is())
+        return;
+
+    uno::Any aTrueBool( uno::makeAny( true ));
+    uno::Any aFalseBool( uno::makeAny( false ));
+
+    // #i109879# the line color is black as default, in the model it is a light gray
+    m_xAxisProps->setPropertyValue("LineColor",
+                                 uno::makeAny( COL_BLACK ));
+
+    m_xAxisProps->setPropertyValue("DisplayLabels", aFalseBool );
+
+    // Compatibility option: starting from LibreOffice 5.1 the rotated
+    // layout is preferred to staggering for axis labels.
+    // So the import default value for having compatibility with ODF
+    // documents created with earlier LibreOffice versions is `true`.
+    if( GetImport().getGeneratorVersion() != SvXMLImport::ProductVersionUnknown )
+        m_xAxisProps->setPropertyValue("TryStaggeringFirst", aTrueBool );
+
+    // #88077# AutoOrigin 'on' is default
+    m_xAxisProps->setPropertyValue("AutoOrigin", aTrueBool );
+
+    if( m_bAxisTypeImported )
+        m_xAxisProps->setPropertyValue("AxisType", uno::makeAny(m_nAxisType) );
+
+    if( !m_aAutoStyleName.isEmpty())
     {
-        uno::Any aTrueBool( uno::makeAny( true ));
-        uno::Any aFalseBool( uno::makeAny( false ));
-
-        // #i109879# the line color is black as default, in the model it is a light gray
-        m_xAxisProps->setPropertyValue("LineColor",
-                                     uno::makeAny( COL_BLACK ));
-
-        m_xAxisProps->setPropertyValue("DisplayLabels", aFalseBool );
-
-        // Compatibility option: starting from LibreOffice 5.1 the rotated
-        // layout is preferred to staggering for axis labels.
-        // So the import default value for having compatibility with ODF
-        // documents created with earlier LibreOffice versions is `true`.
-        if( GetImport().getGeneratorVersion() != SvXMLImport::ProductVersionUnknown )
-            m_xAxisProps->setPropertyValue("TryStaggeringFirst", aTrueBool );
-
-        // #88077# AutoOrigin 'on' is default
-        m_xAxisProps->setPropertyValue("AutoOrigin", aTrueBool );
-
-        if( m_bAxisTypeImported )
-            m_xAxisProps->setPropertyValue("AxisType", uno::makeAny(m_nAxisType) );
-
-        if( !m_aAutoStyleName.isEmpty())
+        const SvXMLStylesContext* pStylesCtxt = m_rImportHelper.GetAutoStylesContext();
+        if (pStylesCtxt)
         {
-            const SvXMLStylesContext* pStylesCtxt = m_rImportHelper.GetAutoStylesContext();
-            if (pStylesCtxt)
+            SvXMLStyleContext* pStyle = const_cast<SvXMLStyleContext*>(pStylesCtxt->FindStyleChildContext(SchXMLImportHelper::GetChartFamilyID(), m_aAutoStyleName));
+
+            if (XMLPropStyleContext * pPropStyleContext = dynamic_cast<XMLPropStyleContext*>(pStyle))
             {
-                SvXMLStyleContext* pStyle = const_cast<SvXMLStyleContext*>(pStylesCtxt->FindStyleChildContext(SchXMLImportHelper::GetChartFamilyID(), m_aAutoStyleName));
+                pPropStyleContext->FillPropertySet(m_xAxisProps);
 
-                if (XMLPropStyleContext * pPropStyleContext = dynamic_cast<XMLPropStyleContext*>(pStyle))
+                if( m_bAdaptWrongPercentScaleValues && m_aCurrentAxis.eDimension==SCH_XML_AXIS_Y )
                 {
-                    pPropStyleContext->FillPropertySet(m_xAxisProps);
-
-                    if( m_bAdaptWrongPercentScaleValues && m_aCurrentAxis.eDimension==SCH_XML_AXIS_Y )
+                    //set scale data of added x axis back to default
+                    Reference< chart2::XAxis > xAxis( lcl_getAxis( GetImport().GetModel(),
+                                        m_aCurrentAxis.eDimension, m_aCurrentAxis.nAxisIndex ) );
+                    if( xAxis.is() )
                     {
-                        //set scale data of added x axis back to default
-                        Reference< chart2::XAxis > xAxis( lcl_getAxis( GetImport().GetModel(),
-                                            m_aCurrentAxis.eDimension, m_aCurrentAxis.nAxisIndex ) );
-                        if( xAxis.is() )
-                        {
-                            chart2::ScaleData aScaleData( xAxis->getScaleData());
-                            if( lcl_AdaptWrongPercentScaleValues(aScaleData) )
-                                xAxis->setScaleData( aScaleData );
-                        }
-                    }
-
-                    if( m_bAddMissingXAxisForNetCharts )
-                    {
-                        //copy style from y axis to added x axis:
-
-                        Reference< chart::XAxisSupplier > xAxisSuppl( xDiaProp, uno::UNO_QUERY );
-                        if( xAxisSuppl.is() )
-                        {
-                            Reference< beans::XPropertySet > xXAxisProp( xAxisSuppl->getAxis(0), uno::UNO_QUERY );
-                            pPropStyleContext->FillPropertySet(xXAxisProp);
-                        }
-
-                        //set scale data of added x axis back to default
-                        Reference< chart2::XAxis > xAxis( lcl_getAxis( GetImport().GetModel(),
-                                            0 /*nDimensionIndex*/, 0 /*nAxisIndex*/ ) );
-                        if( xAxis.is() )
-                        {
-                            chart2::ScaleData aScaleData;
-                            aScaleData.AxisType = chart2::AxisType::CATEGORY;
-                            aScaleData.Orientation = chart2::AxisOrientation_MATHEMATICAL;
+                        chart2::ScaleData aScaleData( xAxis->getScaleData());
+                        if( lcl_AdaptWrongPercentScaleValues(aScaleData) )
                             xAxis->setScaleData( aScaleData );
-                        }
+                    }
+                }
 
-                        //set line style of added x axis to invisible
-                        Reference< beans::XPropertySet > xNewAxisProp( xAxis, uno::UNO_QUERY );
-                        if( xNewAxisProp.is() )
-                        {
-                            xNewAxisProp->setPropertyValue("LineStyle"
-                                , uno::makeAny(drawing::LineStyle_NONE));
-                        }
+                if( m_bAddMissingXAxisForNetCharts )
+                {
+                    //copy style from y axis to added x axis:
+
+                    Reference< chart::XAxisSupplier > xAxisSuppl( xDiaProp, uno::UNO_QUERY );
+                    if( xAxisSuppl.is() )
+                    {
+                        Reference< beans::XPropertySet > xXAxisProp( xAxisSuppl->getAxis(0), uno::UNO_QUERY );
+                        pPropStyleContext->FillPropertySet(xXAxisProp);
                     }
 
-                    if( m_bAdaptXAxisOrientationForOld2DBarCharts && m_aCurrentAxis.eDimension == SCH_XML_AXIS_X )
+                    //set scale data of added x axis back to default
+                    Reference< chart2::XAxis > xAxis( lcl_getAxis( GetImport().GetModel(),
+                                        0 /*nDimensionIndex*/, 0 /*nAxisIndex*/ ) );
+                    if( xAxis.is() )
                     {
-                        bool bIs3DChart = false;
-                        if( xDiaProp.is() && ( xDiaProp->getPropertyValue("Dim3D") >>= bIs3DChart )
-                            && !bIs3DChart )
+                        chart2::ScaleData aScaleData;
+                        aScaleData.AxisType = chart2::AxisType::CATEGORY;
+                        aScaleData.Orientation = chart2::AxisOrientation_MATHEMATICAL;
+                        xAxis->setScaleData( aScaleData );
+                    }
+
+                    //set line style of added x axis to invisible
+                    Reference< beans::XPropertySet > xNewAxisProp( xAxis, uno::UNO_QUERY );
+                    if( xNewAxisProp.is() )
+                    {
+                        xNewAxisProp->setPropertyValue("LineStyle"
+                            , uno::makeAny(drawing::LineStyle_NONE));
+                    }
+                }
+
+                if( m_bAdaptXAxisOrientationForOld2DBarCharts && m_aCurrentAxis.eDimension == SCH_XML_AXIS_X )
+                {
+                    bool bIs3DChart = false;
+                    if( xDiaProp.is() && ( xDiaProp->getPropertyValue("Dim3D") >>= bIs3DChart )
+                        && !bIs3DChart )
+                    {
+                        Reference< chart2::XChartDocument > xChart2Document( GetImport().GetModel(), uno::UNO_QUERY );
+                        if( xChart2Document.is() )
                         {
-                            Reference< chart2::XChartDocument > xChart2Document( GetImport().GetModel(), uno::UNO_QUERY );
-                            if( xChart2Document.is() )
+                            Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xChart2Document->getFirstDiagram(), uno::UNO_QUERY );
+                            if( xCooSysCnt.is() )
                             {
-                                Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xChart2Document->getFirstDiagram(), uno::UNO_QUERY );
-                                if( xCooSysCnt.is() )
+                                uno::Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems() );
+                                if( aCooSysSeq.hasElements() )
                                 {
-                                    uno::Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems() );
-                                    if( aCooSysSeq.hasElements() )
+                                    bool bSwapXandYAxis = false;
+                                    Reference< chart2::XCoordinateSystem > xCooSys( aCooSysSeq[0] );
+                                    Reference< beans::XPropertySet > xCooSysProp( xCooSys, uno::UNO_QUERY );
+                                    if( xCooSysProp.is() && ( xCooSysProp->getPropertyValue("SwapXAndYAxis") >>= bSwapXandYAxis )
+                                        && bSwapXandYAxis )
                                     {
-                                        bool bSwapXandYAxis = false;
-                                        Reference< chart2::XCoordinateSystem > xCooSys( aCooSysSeq[0] );
-                                        Reference< beans::XPropertySet > xCooSysProp( xCooSys, uno::UNO_QUERY );
-                                        if( xCooSysProp.is() && ( xCooSysProp->getPropertyValue("SwapXAndYAxis") >>= bSwapXandYAxis )
-                                            && bSwapXandYAxis )
+                                        Reference< chart2::XAxis > xAxis = xCooSys->getAxisByDimension( 0, m_aCurrentAxis.nAxisIndex );
+                                        if( xAxis.is() )
                                         {
-                                            Reference< chart2::XAxis > xAxis = xCooSys->getAxisByDimension( 0, m_aCurrentAxis.nAxisIndex );
-                                            if( xAxis.is() )
-                                            {
-                                                chart2::ScaleData aScaleData = xAxis->getScaleData();
-                                                aScaleData.Orientation = chart2::AxisOrientation_REVERSE;
-                                                xAxis->setScaleData( aScaleData );
-                                            }
+                                            chart2::ScaleData aScaleData = xAxis->getScaleData();
+                                            aScaleData.Orientation = chart2::AxisOrientation_REVERSE;
+                                            xAxis->setScaleData( aScaleData );
                                         }
                                     }
                                 }
                             }
                         }
                     }
-
-                    m_rbAxisPositionAttributeImported = m_rbAxisPositionAttributeImported || SchXMLTools::getPropertyFromContext(
-                        "CrossoverPosition", pPropStyleContext, pStylesCtxt ).hasValue();
                 }
+
+                m_rbAxisPositionAttributeImported = m_rbAxisPositionAttributeImported || SchXMLTools::getPropertyFromContext(
+                    "CrossoverPosition", pPropStyleContext, pStylesCtxt ).hasValue();
             }
         }
+    }
 
-        if (m_aCurrentAxis.eDimension == SCH_XML_AXIS_X)
-        {
-            Reference<chart2::XAxis> xAxis(lcl_getAxis(GetImport().GetModel(), m_aCurrentAxis.eDimension, m_aCurrentAxis.nAxisIndex));
-            if (xAxis.is())
-            {
-                chart2::ScaleData aScaleData(xAxis->getScaleData());
-                bool bIs3DChart = false;
-                double fMajorOrigin = -1;
-                OUString sChartType = m_xDiagram->getDiagramType();
-                if ((xDiaProp->getPropertyValue("Dim3D") >>= bIs3DChart) && bIs3DChart
-                    && (sChartType == "com.sun.star.chart.BarDiagram" || sChartType == "com.sun.star.chart.StockDiagram"))
-                {
-                    aScaleData.ShiftedCategoryPosition = true;
-                    xAxis->setScaleData(aScaleData);
-                }
-                else if ((m_xAxisProps->getPropertyValue("MajorOrigin") >>= fMajorOrigin)
-                        && (rtl::math::approxEqual(fMajorOrigin, 0.0) || rtl::math::approxEqual(fMajorOrigin, 0.5)))
-                {
-                    aScaleData.ShiftedCategoryPosition = rtl::math::approxEqual(fMajorOrigin, 0.5);
-                    xAxis->setScaleData(aScaleData);
-                }
-            }
-        }
+    if (m_aCurrentAxis.eDimension != SCH_XML_AXIS_X)
+        return;
+
+    Reference<chart2::XAxis> xAxis(lcl_getAxis(GetImport().GetModel(), m_aCurrentAxis.eDimension, m_aCurrentAxis.nAxisIndex));
+    if (!xAxis.is())
+        return;
+
+    chart2::ScaleData aScaleData(xAxis->getScaleData());
+    bool bIs3DChart = false;
+    double fMajorOrigin = -1;
+    OUString sChartType = m_xDiagram->getDiagramType();
+    if ((xDiaProp->getPropertyValue("Dim3D") >>= bIs3DChart) && bIs3DChart
+        && (sChartType == "com.sun.star.chart.BarDiagram" || sChartType == "com.sun.star.chart.StockDiagram"))
+    {
+        aScaleData.ShiftedCategoryPosition = true;
+        xAxis->setScaleData(aScaleData);
+    }
+    else if ((m_xAxisProps->getPropertyValue("MajorOrigin") >>= fMajorOrigin)
+            && (rtl::math::approxEqual(fMajorOrigin, 0.0) || rtl::math::approxEqual(fMajorOrigin, 0.5)))
+    {
+        aScaleData.ShiftedCategoryPosition = rtl::math::approxEqual(fMajorOrigin, 0.5);
+        xAxis->setScaleData(aScaleData);
     }
 }
 
@@ -752,117 +752,117 @@ void SchXMLAxisContext::CorrectAxisPositions( const Reference< chart2::XChartDoc
                           const OUString& rODFVersionOfFile,
                           bool bAxisPositionAttributeImported )
 {
-    if( rODFVersionOfFile.isEmpty() || rODFVersionOfFile == "1.0" || rODFVersionOfFile == "1.1"
-        || ( rODFVersionOfFile == "1.2" && !bAxisPositionAttributeImported ) )
+    if( !(rODFVersionOfFile.isEmpty() || rODFVersionOfFile == "1.0" || rODFVersionOfFile == "1.1"
+        || ( rODFVersionOfFile == "1.2" && !bAxisPositionAttributeImported )) )
+        return;
+
+    try
     {
-        try
+        Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xNewDoc->getFirstDiagram(), uno::UNO_QUERY_THROW );
+        uno::Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
+        if( aCooSysSeq.hasElements() )
         {
-            Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xNewDoc->getFirstDiagram(), uno::UNO_QUERY_THROW );
-            uno::Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
-            if( aCooSysSeq.hasElements() )
+            Reference< chart2::XCoordinateSystem > xCooSys( aCooSysSeq[0] );
+            if( xCooSys.is() )
             {
-                Reference< chart2::XCoordinateSystem > xCooSys( aCooSysSeq[0] );
-                if( xCooSys.is() )
+                Reference< chart2::XAxis > xMainXAxis = lcl_getAxis( xCooSys, 0, 0 );
+                Reference< chart2::XAxis > xMainYAxis = lcl_getAxis( xCooSys, 1, 0 );
+                //Reference< chart2::XAxis > xMajorZAxis = lcl_getAxis( xCooSys, 2, 0 );
+                Reference< chart2::XAxis > xSecondaryXAxis = lcl_getAxis( xCooSys, 0, 1 );
+                Reference< chart2::XAxis > xSecondaryYAxis = lcl_getAxis( xCooSys, 1, 1 );
+
+                Reference< beans::XPropertySet > xMainXAxisProp( xMainXAxis, uno::UNO_QUERY );
+                Reference< beans::XPropertySet > xMainYAxisProp( xMainYAxis, uno::UNO_QUERY );
+                Reference< beans::XPropertySet > xSecondaryXAxisProp( xSecondaryXAxis, uno::UNO_QUERY );
+                Reference< beans::XPropertySet > xSecondaryYAxisProp( xSecondaryYAxis, uno::UNO_QUERY );
+
+                if( xMainXAxisProp.is() && xMainYAxisProp.is() )
                 {
-                    Reference< chart2::XAxis > xMainXAxis = lcl_getAxis( xCooSys, 0, 0 );
-                    Reference< chart2::XAxis > xMainYAxis = lcl_getAxis( xCooSys, 1, 0 );
-                    //Reference< chart2::XAxis > xMajorZAxis = lcl_getAxis( xCooSys, 2, 0 );
-                    Reference< chart2::XAxis > xSecondaryXAxis = lcl_getAxis( xCooSys, 0, 1 );
-                    Reference< chart2::XAxis > xSecondaryYAxis = lcl_getAxis( xCooSys, 1, 1 );
-
-                    Reference< beans::XPropertySet > xMainXAxisProp( xMainXAxis, uno::UNO_QUERY );
-                    Reference< beans::XPropertySet > xMainYAxisProp( xMainYAxis, uno::UNO_QUERY );
-                    Reference< beans::XPropertySet > xSecondaryXAxisProp( xSecondaryXAxis, uno::UNO_QUERY );
-                    Reference< beans::XPropertySet > xSecondaryYAxisProp( xSecondaryYAxis, uno::UNO_QUERY );
-
-                    if( xMainXAxisProp.is() && xMainYAxisProp.is() )
+                    chart2::ScaleData aMainXScale = xMainXAxis->getScaleData();
+                    if( rChartTypeServiceName == "com.sun.star.chart2.ScatterChartType" )
                     {
-                        chart2::ScaleData aMainXScale = xMainXAxis->getScaleData();
-                        if( rChartTypeServiceName == "com.sun.star.chart2.ScatterChartType" )
-                        {
-                            xMainYAxisProp->setPropertyValue("CrossoverPosition"
-                                    , uno::makeAny( css::chart::ChartAxisPosition_VALUE) );
-                            double fCrossoverValue = 0.0;
-                            aMainXScale.Origin >>= fCrossoverValue;
-                            xMainYAxisProp->setPropertyValue("CrossoverValue"
-                                    , uno::makeAny( fCrossoverValue ) );
-
-                            if( aMainXScale.Orientation == chart2::AxisOrientation_REVERSE )
-                            {
-                                xMainYAxisProp->setPropertyValue("LabelPosition"
-                                    , uno::makeAny( css::chart::ChartAxisLabelPosition_OUTSIDE_END) );
-                                xMainYAxisProp->setPropertyValue("MarkPosition"
-                                    , uno::makeAny( css::chart::ChartAxisMarkPosition_AT_LABELS) );
-                                if( xSecondaryYAxisProp.is() )
-                                    xSecondaryYAxisProp->setPropertyValue("CrossoverPosition"
-                                    , uno::makeAny( css::chart::ChartAxisPosition_START) );
-                            }
-                            else
-                            {
-                                xMainYAxisProp->setPropertyValue("LabelPosition"
-                                    , uno::makeAny( css::chart::ChartAxisLabelPosition_OUTSIDE_START) );
-                                xMainYAxisProp->setPropertyValue("MarkPosition"
-                                    , uno::makeAny( css::chart::ChartAxisMarkPosition_AT_LABELS) );
-                                if( xSecondaryYAxisProp.is() )
-                                    xSecondaryYAxisProp->setPropertyValue("CrossoverPosition"
-                                    , uno::makeAny( css::chart::ChartAxisPosition_END) );
-                            }
-                        }
-                        else
-                        {
-                            if( aMainXScale.Orientation == chart2::AxisOrientation_REVERSE )
-                            {
-                                xMainYAxisProp->setPropertyValue("CrossoverPosition"
-                                    , uno::makeAny( css::chart::ChartAxisPosition_END) );
-                                if( xSecondaryYAxisProp.is() )
-                                    xSecondaryYAxisProp->setPropertyValue("CrossoverPosition"
-                                        , uno::makeAny( css::chart::ChartAxisPosition_START) );
-                            }
-                            else
-                            {
-                                xMainYAxisProp->setPropertyValue("CrossoverPosition"
-                                    , uno::makeAny( css::chart::ChartAxisPosition_START) );
-                                if( xSecondaryYAxisProp.is() )
-                                    xSecondaryYAxisProp->setPropertyValue("CrossoverPosition"
-                                        , uno::makeAny( css::chart::ChartAxisPosition_END) );
-                            }
-                        }
-
-                        chart2::ScaleData aMainYScale = xMainYAxis->getScaleData();
-                        xMainXAxisProp->setPropertyValue("CrossoverPosition"
+                        xMainYAxisProp->setPropertyValue("CrossoverPosition"
                                 , uno::makeAny( css::chart::ChartAxisPosition_VALUE) );
                         double fCrossoverValue = 0.0;
-                        aMainYScale.Origin >>= fCrossoverValue;
-                        xMainXAxisProp->setPropertyValue("CrossoverValue"
+                        aMainXScale.Origin >>= fCrossoverValue;
+                        xMainYAxisProp->setPropertyValue("CrossoverValue"
                                 , uno::makeAny( fCrossoverValue ) );
 
-                        if( aMainYScale.Orientation == chart2::AxisOrientation_REVERSE )
+                        if( aMainXScale.Orientation == chart2::AxisOrientation_REVERSE )
                         {
-                            xMainXAxisProp->setPropertyValue("LabelPosition"
+                            xMainYAxisProp->setPropertyValue("LabelPosition"
                                 , uno::makeAny( css::chart::ChartAxisLabelPosition_OUTSIDE_END) );
-                            xMainXAxisProp->setPropertyValue("MarkPosition"
+                            xMainYAxisProp->setPropertyValue("MarkPosition"
                                 , uno::makeAny( css::chart::ChartAxisMarkPosition_AT_LABELS) );
-                            if( xSecondaryXAxisProp.is() )
-                                xSecondaryXAxisProp->setPropertyValue("CrossoverPosition"
+                            if( xSecondaryYAxisProp.is() )
+                                xSecondaryYAxisProp->setPropertyValue("CrossoverPosition"
                                 , uno::makeAny( css::chart::ChartAxisPosition_START) );
                         }
                         else
                         {
-                            xMainXAxisProp->setPropertyValue("LabelPosition"
+                            xMainYAxisProp->setPropertyValue("LabelPosition"
                                 , uno::makeAny( css::chart::ChartAxisLabelPosition_OUTSIDE_START) );
-                            xMainXAxisProp->setPropertyValue("MarkPosition"
+                            xMainYAxisProp->setPropertyValue("MarkPosition"
                                 , uno::makeAny( css::chart::ChartAxisMarkPosition_AT_LABELS) );
-                            if( xSecondaryXAxisProp.is() )
-                                xSecondaryXAxisProp->setPropertyValue("CrossoverPosition"
+                            if( xSecondaryYAxisProp.is() )
+                                xSecondaryYAxisProp->setPropertyValue("CrossoverPosition"
                                 , uno::makeAny( css::chart::ChartAxisPosition_END) );
                         }
+                    }
+                    else
+                    {
+                        if( aMainXScale.Orientation == chart2::AxisOrientation_REVERSE )
+                        {
+                            xMainYAxisProp->setPropertyValue("CrossoverPosition"
+                                , uno::makeAny( css::chart::ChartAxisPosition_END) );
+                            if( xSecondaryYAxisProp.is() )
+                                xSecondaryYAxisProp->setPropertyValue("CrossoverPosition"
+                                    , uno::makeAny( css::chart::ChartAxisPosition_START) );
+                        }
+                        else
+                        {
+                            xMainYAxisProp->setPropertyValue("CrossoverPosition"
+                                , uno::makeAny( css::chart::ChartAxisPosition_START) );
+                            if( xSecondaryYAxisProp.is() )
+                                xSecondaryYAxisProp->setPropertyValue("CrossoverPosition"
+                                    , uno::makeAny( css::chart::ChartAxisPosition_END) );
+                        }
+                    }
+
+                    chart2::ScaleData aMainYScale = xMainYAxis->getScaleData();
+                    xMainXAxisProp->setPropertyValue("CrossoverPosition"
+                            , uno::makeAny( css::chart::ChartAxisPosition_VALUE) );
+                    double fCrossoverValue = 0.0;
+                    aMainYScale.Origin >>= fCrossoverValue;
+                    xMainXAxisProp->setPropertyValue("CrossoverValue"
+                            , uno::makeAny( fCrossoverValue ) );
+
+                    if( aMainYScale.Orientation == chart2::AxisOrientation_REVERSE )
+                    {
+                        xMainXAxisProp->setPropertyValue("LabelPosition"
+                            , uno::makeAny( css::chart::ChartAxisLabelPosition_OUTSIDE_END) );
+                        xMainXAxisProp->setPropertyValue("MarkPosition"
+                            , uno::makeAny( css::chart::ChartAxisMarkPosition_AT_LABELS) );
+                        if( xSecondaryXAxisProp.is() )
+                            xSecondaryXAxisProp->setPropertyValue("CrossoverPosition"
+                            , uno::makeAny( css::chart::ChartAxisPosition_START) );
+                    }
+                    else
+                    {
+                        xMainXAxisProp->setPropertyValue("LabelPosition"
+                            , uno::makeAny( css::chart::ChartAxisLabelPosition_OUTSIDE_START) );
+                        xMainXAxisProp->setPropertyValue("MarkPosition"
+                            , uno::makeAny( css::chart::ChartAxisMarkPosition_AT_LABELS) );
+                        if( xSecondaryXAxisProp.is() )
+                            xSecondaryXAxisProp->setPropertyValue("CrossoverPosition"
+                            , uno::makeAny( css::chart::ChartAxisPosition_END) );
                     }
                 }
             }
         }
-        catch( uno::Exception & )
-        {
-        }
+    }
+    catch( uno::Exception & )
+    {
     }
 }
 

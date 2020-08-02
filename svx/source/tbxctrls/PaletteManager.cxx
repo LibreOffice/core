@@ -327,26 +327,26 @@ void PaletteManager::DispatchColorCommand(const OUString& aCommand, const NamedC
     Reference<XDesktop2> xDesktop = Desktop::create(xContext);
     Reference<XFrame> xFrame(xDesktop->getCurrentFrame());
     Reference<XDispatchProvider> xDispatchProvider(xFrame, UNO_QUERY);
-    if (xDispatchProvider.is())
+    if (!xDispatchProvider.is())
+        return;
+
+    INetURLObject aObj( aCommand );
+
+    Sequence<PropertyValue> aArgs(1);
+    aArgs[0].Name = aObj.GetURLPath();
+    aArgs[0].Value <<= sal_Int32(rColor.first);
+
+    URL aTargetURL;
+    aTargetURL.Complete = aCommand;
+    Reference<XURLTransformer> xURLTransformer(URLTransformer::create(comphelper::getProcessComponentContext()));
+    xURLTransformer->parseStrict(aTargetURL);
+
+    Reference<XDispatch> xDispatch = xDispatchProvider->queryDispatch(aTargetURL, OUString(), 0);
+    if (xDispatch.is())
     {
-        INetURLObject aObj( aCommand );
-
-        Sequence<PropertyValue> aArgs(1);
-        aArgs[0].Name = aObj.GetURLPath();
-        aArgs[0].Value <<= sal_Int32(rColor.first);
-
-        URL aTargetURL;
-        aTargetURL.Complete = aCommand;
-        Reference<XURLTransformer> xURLTransformer(URLTransformer::create(comphelper::getProcessComponentContext()));
-        xURLTransformer->parseStrict(aTargetURL);
-
-        Reference<XDispatch> xDispatch = xDispatchProvider->queryDispatch(aTargetURL, OUString(), 0);
-        if (xDispatch.is())
-        {
-            xDispatch->dispatch(aTargetURL, aArgs);
-            if (xFrame->getContainerWindow().is())
-                xFrame->getContainerWindow()->setFocus();
-        }
+        xDispatch->dispatch(aTargetURL, aArgs);
+        if (xFrame->getContainerWindow().is())
+            xFrame->getContainerWindow()->setFocus();
     }
 }
 

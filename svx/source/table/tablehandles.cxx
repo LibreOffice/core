@@ -142,57 +142,57 @@ void TableEdgeHdl::CreateB2dIAObject()
 {
     GetRidOfIAObject();
 
-    if(pHdlList && pHdlList->GetView() && !pHdlList->GetView()->areMarkHandlesHidden())
+    if(!(pHdlList && pHdlList->GetView() && !pHdlList->GetView()->areMarkHandlesHidden()))
+        return;
+
+    SdrMarkView* pView = pHdlList->GetView();
+    SdrPageView* pPageView = pView->GetSdrPageView();
+
+    if(!pPageView)
+        return;
+
+    basegfx::B2DPolyPolygon aVisible;
+    basegfx::B2DPolyPolygon aInvisible;
+
+    // get visible and invisible parts
+    getPolyPolygon(aVisible, aInvisible, nullptr);
+
+    if(!(aVisible.count() || aInvisible.count()))
+        return;
+
+    for(sal_uInt32 nWindow = 0; nWindow < pPageView->PageWindowCount(); nWindow++)
     {
-        SdrMarkView* pView = pHdlList->GetView();
-        SdrPageView* pPageView = pView->GetSdrPageView();
+        const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(nWindow);
 
-        if(pPageView)
+        if(rPageWindow.GetPaintWindow().OutputToWindow())
         {
-            basegfx::B2DPolyPolygon aVisible;
-            basegfx::B2DPolyPolygon aInvisible;
-
-            // get visible and invisible parts
-            getPolyPolygon(aVisible, aInvisible, nullptr);
-
-            if(aVisible.count() || aInvisible.count())
+            const rtl::Reference< sdr::overlay::OverlayManager >& xManager = rPageWindow.GetOverlayManager();
+            if (xManager.is())
             {
-                for(sal_uInt32 nWindow = 0; nWindow < pPageView->PageWindowCount(); nWindow++)
+                if(aVisible.count())
                 {
-                    const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(nWindow);
+                    // create overlay object for visible parts
+                    std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject(new OverlayTableEdge(aVisible, true));
 
-                    if(rPageWindow.GetPaintWindow().OutputToWindow())
-                    {
-                        const rtl::Reference< sdr::overlay::OverlayManager >& xManager = rPageWindow.GetOverlayManager();
-                        if (xManager.is())
-                        {
-                            if(aVisible.count())
-                            {
-                                // create overlay object for visible parts
-                                std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject(new OverlayTableEdge(aVisible, true));
+                    // OVERLAYMANAGER
+                    insertNewlyCreatedOverlayObjectForSdrHdl(
+                        std::move(pOverlayObject),
+                        rPageWindow.GetObjectContact(),
+                        *xManager);
+                }
 
-                                // OVERLAYMANAGER
-                                insertNewlyCreatedOverlayObjectForSdrHdl(
-                                    std::move(pOverlayObject),
-                                    rPageWindow.GetObjectContact(),
-                                    *xManager);
-                            }
+                if(aInvisible.count())
+                {
+                    // also create overlay object for invisible parts to allow
+                    // a standard HitTest using the primitives from that overlay object
+                    // (see OverlayTableEdge implementation)
+                    std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject(new OverlayTableEdge(aInvisible, false));
 
-                            if(aInvisible.count())
-                            {
-                                // also create overlay object for invisible parts to allow
-                                // a standard HitTest using the primitives from that overlay object
-                                // (see OverlayTableEdge implementation)
-                                std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject(new OverlayTableEdge(aInvisible, false));
-
-                                // OVERLAYMANAGER
-                                insertNewlyCreatedOverlayObjectForSdrHdl(
-                                    std::move(pOverlayObject),
-                                    rPageWindow.GetObjectContact(),
-                                    *xManager);
-                            }
-                        }
-                    }
+                    // OVERLAYMANAGER
+                    insertNewlyCreatedOverlayObjectForSdrHdl(
+                        std::move(pOverlayObject),
+                        rPageWindow.GetObjectContact(),
+                        *xManager);
                 }
             }
         }
@@ -259,48 +259,48 @@ void TableBorderHdl::CreateB2dIAObject()
 {
     GetRidOfIAObject();
 
-    if (pHdlList && pHdlList->GetView() && !pHdlList->GetView()->areMarkHandlesHidden())
+    if (!(pHdlList && pHdlList->GetView() && !pHdlList->GetView()->areMarkHandlesHidden()))
+        return;
+
+    SdrMarkView* pView = pHdlList->GetView();
+    SdrPageView* pPageView = pView->GetSdrPageView();
+
+    if (!pPageView)
+        return;
+
+    for(sal_uInt32 nWindow = 0; nWindow < pPageView->PageWindowCount(); nWindow++)
     {
-        SdrMarkView* pView = pHdlList->GetView();
-        SdrPageView* pPageView = pView->GetSdrPageView();
+        const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(nWindow);
 
-        if (!pPageView)
-            return;
-
-        for(sal_uInt32 nWindow = 0; nWindow < pPageView->PageWindowCount(); nWindow++)
+        if (rPageWindow.GetPaintWindow().OutputToWindow())
         {
-            const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(nWindow);
+            const rtl::Reference<sdr::overlay::OverlayManager>& xManager = rPageWindow.GetOverlayManager();
 
-            if (rPageWindow.GetPaintWindow().OutputToWindow())
+            if (xManager.is())
             {
-                const rtl::Reference<sdr::overlay::OverlayManager>& xManager = rPageWindow.GetOverlayManager();
+                const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(maRectangle);
+                const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+                const Color aHilightColor(aSvtOptionsDrawinglayer.getHilightColor());
+                const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
+                // make animation dependent from text edit active, because for tables
+                // this handle is also used when text edit *is* active for it. This
+                // interferes too much concerning repaint stuff (at least as long as
+                // text edit is not yet on the overlay)
 
-                if (xManager.is())
-                {
-                    const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(maRectangle);
-                    const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-                    const Color aHilightColor(aSvtOptionsDrawinglayer.getHilightColor());
-                    const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
-                    // make animation dependent from text edit active, because for tables
-                    // this handle is also used when text edit *is* active for it. This
-                    // interferes too much concerning repaint stuff (at least as long as
-                    // text edit is not yet on the overlay)
+                OutputDevice& rOutDev = rPageWindow.GetPaintWindow().GetOutputDevice();
+                float fScaleFactor = rOutDev.GetDPIScaleFactor();
+                double fWidth = fScaleFactor * 6.0;
 
-                    OutputDevice& rOutDev = rPageWindow.GetPaintWindow().GetOutputDevice();
-                    float fScaleFactor = rOutDev.GetDPIScaleFactor();
-                    double fWidth = fScaleFactor * 6.0;
+                std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject(
+                    new sdr::overlay::OverlayRectangle(aRange.getMinimum(), aRange.getMaximum(),
+                                                       aHilightColor, fTransparence,
+                                                       fWidth, 0.0, 0.0, mbAnimate));
 
-                    std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject(
-                        new sdr::overlay::OverlayRectangle(aRange.getMinimum(), aRange.getMaximum(),
-                                                           aHilightColor, fTransparence,
-                                                           fWidth, 0.0, 0.0, mbAnimate));
-
-                    // OVERLAYMANAGER
-                    insertNewlyCreatedOverlayObjectForSdrHdl(
-                        std::move(pOverlayObject),
-                        rPageWindow.GetObjectContact(),
-                        *xManager);
-                }
+                // OVERLAYMANAGER
+                insertNewlyCreatedOverlayObjectForSdrHdl(
+                    std::move(pOverlayObject),
+                    rPageWindow.GetObjectContact(),
+                    *xManager);
             }
         }
     }

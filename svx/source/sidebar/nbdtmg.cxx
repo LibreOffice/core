@@ -141,30 +141,30 @@ sal_uInt16 NBOTypeMgrBase:: IsSingleLevel(sal_uInt16 nCurLevel)
 
 void NBOTypeMgrBase::SetItems(const SfxItemSet* pArg) {
     pSet = pArg;
-    if ( pSet )
+    if ( !pSet )
+        return;
+
+    SfxAllItemSet aSet(*pSet);
+
+    const SfxStringItem* pBulletCharFmt = aSet.GetItem<SfxStringItem>(SID_BULLET_CHAR_FMT, false);
+    if (pBulletCharFmt)
+        aBulletCharFmtName = pBulletCharFmt->GetValue();
+
+    const SfxStringItem* pNumCharFmt = aSet.GetItem<SfxStringItem>(SID_NUM_CHAR_FMT, false);
+    if (pNumCharFmt)
+        aNumCharFmtName = pNumCharFmt->GetValue();
+
+    const SfxPoolItem* pItem;
+    SfxItemState eState = pSet->GetItemState(SID_ATTR_NUMBERING_RULE, false, &pItem);
+    if(eState == SfxItemState::SET)
     {
-        SfxAllItemSet aSet(*pSet);
-
-        const SfxStringItem* pBulletCharFmt = aSet.GetItem<SfxStringItem>(SID_BULLET_CHAR_FMT, false);
-        if (pBulletCharFmt)
-            aBulletCharFmtName = pBulletCharFmt->GetValue();
-
-        const SfxStringItem* pNumCharFmt = aSet.GetItem<SfxStringItem>(SID_NUM_CHAR_FMT, false);
-        if (pNumCharFmt)
-            aNumCharFmtName = pNumCharFmt->GetValue();
-
-        const SfxPoolItem* pItem;
-        SfxItemState eState = pSet->GetItemState(SID_ATTR_NUMBERING_RULE, false, &pItem);
+        eCoreUnit = pSet->GetPool()->GetMetric(pSet->GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
+    } else {
+        //sd use different sid for numbering rule
+        eState = pSet->GetItemState(EE_PARA_NUMBULLET, false, &pItem);
         if(eState == SfxItemState::SET)
         {
-            eCoreUnit = pSet->GetPool()->GetMetric(pSet->GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
-        } else {
-            //sd use different sid for numbering rule
-            eState = pSet->GetItemState(EE_PARA_NUMBULLET, false, &pItem);
-            if(eState == SfxItemState::SET)
-            {
-                eCoreUnit = pSet->GetPool()->GetMetric(pSet->GetPool()->GetWhich(EE_PARA_NUMBULLET));
-            }
+            eCoreUnit = pSet->GetPool()->GetMetric(pSet->GetPool()->GetWhich(EE_PARA_NUMBULLET));
         }
     }
 }

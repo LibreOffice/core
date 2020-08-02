@@ -143,23 +143,23 @@ MutableTreeDataModel::MutableTreeDataModel()
 void MutableTreeDataModel::broadcast( broadcast_type eType, const Reference< XTreeNode >& xParentNode, const Reference< XTreeNode >& rNode )
 {
     ::cppu::OInterfaceContainerHelper* pIter = BrdcstHelper.getContainer( cppu::UnoType<XTreeDataModelListener>::get() );
-    if( pIter )
-    {
-        Reference< XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
-        const Sequence< Reference< XTreeNode > > aNodes { rNode };
-        TreeDataModelEvent aEvent( xSource, aNodes, xParentNode );
+    if( !pIter )
+        return;
 
-        ::cppu::OInterfaceIteratorHelper aListIter(*pIter);
-        while(aListIter.hasMoreElements())
+    Reference< XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
+    const Sequence< Reference< XTreeNode > > aNodes { rNode };
+    TreeDataModelEvent aEvent( xSource, aNodes, xParentNode );
+
+    ::cppu::OInterfaceIteratorHelper aListIter(*pIter);
+    while(aListIter.hasMoreElements())
+    {
+        XTreeDataModelListener* pListener = static_cast<XTreeDataModelListener*>(aListIter.next());
+        switch( eType )
         {
-            XTreeDataModelListener* pListener = static_cast<XTreeDataModelListener*>(aListIter.next());
-            switch( eType )
-            {
-            case nodes_changed:     pListener->treeNodesChanged(aEvent); break;
-            case nodes_inserted:    pListener->treeNodesInserted(aEvent); break;
-            case nodes_removed:     pListener->treeNodesRemoved(aEvent); break;
-            case structure_changed: pListener->treeStructureChanged(aEvent); break;
-            }
+        case nodes_changed:     pListener->treeNodesChanged(aEvent); break;
+        case nodes_inserted:    pListener->treeNodesInserted(aEvent); break;
+        case nodes_removed:     pListener->treeNodesRemoved(aEvent); break;
+        case structure_changed: pListener->treeStructureChanged(aEvent); break;
         }
     }
 }
@@ -175,25 +175,25 @@ void SAL_CALL MutableTreeDataModel::setRoot( const Reference< XMutableTreeNode >
         throw IllegalArgumentException();
 
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-    if( xNode != mxRootNode )
+    if( xNode == mxRootNode )
+        return;
+
+    if( mxRootNode.is() )
     {
-        if( mxRootNode.is() )
-        {
-            MutableTreeNodeRef xOldImpl( dynamic_cast< MutableTreeNode* >( mxRootNode.get() ) );
-            if( xOldImpl.is() )
-                xOldImpl->mbIsInserted = false;
-        }
-
-        MutableTreeNodeRef xImpl( dynamic_cast< MutableTreeNode* >( xNode.get() ) );
-        if( !xImpl.is() || xImpl->mbIsInserted )
-            throw IllegalArgumentException();
-
-        xImpl->mbIsInserted = true;
-        mxRootNode.set(xImpl.get());
-
-        Reference< XTreeNode > xParentNode;
-        broadcast( structure_changed, xParentNode, mxRootNode );
+        MutableTreeNodeRef xOldImpl( dynamic_cast< MutableTreeNode* >( mxRootNode.get() ) );
+        if( xOldImpl.is() )
+            xOldImpl->mbIsInserted = false;
     }
+
+    MutableTreeNodeRef xImpl( dynamic_cast< MutableTreeNode* >( xNode.get() ) );
+    if( !xImpl.is() || xImpl->mbIsInserted )
+        throw IllegalArgumentException();
+
+    xImpl->mbIsInserted = true;
+    mxRootNode.set(xImpl.get());
+
+    Reference< XTreeNode > xParentNode;
+    broadcast( structure_changed, xParentNode, mxRootNode );
 }
 
 Reference< XTreeNode > SAL_CALL MutableTreeDataModel::getRoot(  )

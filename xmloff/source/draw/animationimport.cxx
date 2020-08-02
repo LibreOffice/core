@@ -540,7 +540,10 @@ void AnimationNodeContext::startFastElement( sal_Int32 /*nElement*/, const css::
 
 void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    if( mxNode.is() ) try
+    if( !mxNode.is() )
+        return;
+
+    try
     {
         const sal_Int16 nNodeType = mxNode->getType();
 
@@ -1224,7 +1227,10 @@ Reference< XAnimationNode > SAL_CALL AnimationsImport::getAnimationNode()
 
 void AnimationNodeContext::postProcessRootNode( const Reference< XAnimationNode >& xRootNode, Reference< XPropertySet > const & xPageProps )
 {
-    if( xRootNode.is() && xPageProps.is() ) try
+    if( !(xRootNode.is() && xPageProps.is()) )
+        return;
+
+    try
     {
         Reference< XEnumerationAccess > xEnumerationAccess( xRootNode, UNO_QUERY_THROW );
         Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_SET_THROW );

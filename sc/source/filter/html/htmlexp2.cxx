@@ -40,23 +40,23 @@ using namespace com::sun::star;
 void ScHTMLExport::PrepareGraphics( ScDrawLayer* pDrawLayer, SCTAB nTab,
         SCCOL nStartCol, SCROW nStartRow,   SCCOL nEndCol, SCROW nEndRow )
 {
-    if ( pDrawLayer->HasObjectsInRows( nTab, nStartRow, nEndRow ) )
+    if ( !pDrawLayer->HasObjectsInRows( nTab, nStartRow, nEndRow ) )
+        return;
+
+    SdrPage* pDrawPage = pDrawLayer->GetPage( static_cast<sal_uInt16>(nTab) );
+    if ( !pDrawPage )
+        return;
+
+    bTabHasGraphics = true;
+    FillGraphList( pDrawPage, nTab, nStartCol, nStartRow, nEndCol, nEndRow );
+    size_t ListSize = aGraphList.size();
+    for ( size_t i = 0; i < ListSize; ++i )
     {
-        SdrPage* pDrawPage = pDrawLayer->GetPage( static_cast<sal_uInt16>(nTab) );
-        if ( pDrawPage )
-        {
-            bTabHasGraphics = true;
-            FillGraphList( pDrawPage, nTab, nStartCol, nStartRow, nEndCol, nEndRow );
-            size_t ListSize = aGraphList.size();
-            for ( size_t i = 0; i < ListSize; ++i )
-            {
-                ScHTMLGraphEntry* pE = &aGraphList[ i ];
-                if ( !pE->bInCell )
-                {   // not all cells: table next to some
-                    bTabAlignedLeft = true;
-                    break;
-                }
-            }
+        ScHTMLGraphEntry* pE = &aGraphList[ i ];
+        if ( !pE->bInCell )
+        {   // not all cells: table next to some
+            bTabAlignedLeft = true;
+            break;
         }
     }
 }
@@ -64,50 +64,50 @@ void ScHTMLExport::PrepareGraphics( ScDrawLayer* pDrawLayer, SCTAB nTab,
 void ScHTMLExport::FillGraphList( const SdrPage* pPage, SCTAB nTab,
         SCCOL nStartCol, SCROW nStartRow,   SCCOL nEndCol, SCROW nEndRow )
 {
-    if ( pPage->GetObjCount() )
+    if ( !pPage->GetObjCount() )
+        return;
+
+    tools::Rectangle aRect;
+    if ( !bAll )
+        aRect = pDoc->GetMMRect( nStartCol, nStartRow, nEndCol, nEndRow, nTab );
+    SdrObjListIter aIter( pPage, SdrIterMode::Flat );
+    SdrObject* pObject = aIter.Next();
+    while ( pObject )
     {
-        tools::Rectangle aRect;
-        if ( !bAll )
-            aRect = pDoc->GetMMRect( nStartCol, nStartRow, nEndCol, nEndRow, nTab );
-        SdrObjListIter aIter( pPage, SdrIterMode::Flat );
-        SdrObject* pObject = aIter.Next();
-        while ( pObject )
+        tools::Rectangle aObjRect = pObject->GetCurrentBoundRect();
+        if ( (bAll || aRect.IsInside( aObjRect )) && !ScDrawLayer::IsNoteCaption(pObject) )
         {
-            tools::Rectangle aObjRect = pObject->GetCurrentBoundRect();
-            if ( (bAll || aRect.IsInside( aObjRect )) && !ScDrawLayer::IsNoteCaption(pObject) )
-            {
-                Size aSpace;
-                ScRange aR = pDoc->GetRange( nTab, aObjRect );
-                // Rectangle in mm/100
-                Size aSize( MMToPixel( aObjRect.GetSize() ) );
-                // If the image is somewhere in a merged range we must
-                // move the anchor to the upper left (THE span cell).
-                pDoc->ExtendOverlapped( aR );
-                SCCOL nCol1 = aR.aStart.Col();
-                SCROW nRow1 = aR.aStart.Row();
-                SCCOL nCol2 = aR.aEnd.Col();
-                SCROW nRow2 = aR.aEnd.Row();
-                // All cells empty under object?
-                bool bInCell = (pDoc->GetEmptyLinesInBlock(
-                    nCol1, nRow1, nTab, nCol2, nRow2, nTab, DIR_TOP )
-                    == static_cast< SCSIZE >( nRow2 - nRow1 ));    // rows-1 !
-                if ( bInCell )
-                {   // Spacing in spanning cell
-                    tools::Rectangle aCellRect = pDoc->GetMMRect(
-                        nCol1, nRow1, nCol2, nRow2, nTab );
-                    aSpace = MMToPixel( Size(
-                        aCellRect.GetWidth() - aObjRect.GetWidth(),
-                        aCellRect.GetHeight() - aObjRect.GetHeight() ));
-                    aSpace.AdjustWidth((nCol2-nCol1) * (nCellSpacing+1) );
-                    aSpace.AdjustHeight((nRow2-nRow1) * (nCellSpacing+1) );
-                    aSpace.setWidth( aSpace.Width() / 2 );
-                    aSpace.setHeight( aSpace.Height() / 2 );
-                }
-                aGraphList.emplace_back( pObject,
-                    aR, aSize, bInCell, aSpace );
+            Size aSpace;
+            ScRange aR = pDoc->GetRange( nTab, aObjRect );
+            // Rectangle in mm/100
+            Size aSize( MMToPixel( aObjRect.GetSize() ) );
+            // If the image is somewhere in a merged range we must
+            // move the anchor to the upper left (THE span cell).
+            pDoc->ExtendOverlapped( aR );
+            SCCOL nCol1 = aR.aStart.Col();
+            SCROW nRow1 = aR.aStart.Row();
+            SCCOL nCol2 = aR.aEnd.Col();
+            SCROW nRow2 = aR.aEnd.Row();
+            // All cells empty under object?
+            bool bInCell = (pDoc->GetEmptyLinesInBlock(
+                nCol1, nRow1, nTab, nCol2, nRow2, nTab, DIR_TOP )
+                == static_cast< SCSIZE >( nRow2 - nRow1 ));    // rows-1 !
+            if ( bInCell )
+            {   // Spacing in spanning cell
+                tools::Rectangle aCellRect = pDoc->GetMMRect(
+                    nCol1, nRow1, nCol2, nRow2, nTab );
+                aSpace = MMToPixel( Size(
+                    aCellRect.GetWidth() - aObjRect.GetWidth(),
+                    aCellRect.GetHeight() - aObjRect.GetHeight() ));
+                aSpace.AdjustWidth((nCol2-nCol1) * (nCellSpacing+1) );
+                aSpace.AdjustHeight((nRow2-nRow1) * (nCellSpacing+1) );
+                aSpace.setWidth( aSpace.Width() / 2 );
+                aSpace.setHeight( aSpace.Height() / 2 );
             }
-            pObject = aIter.Next();
+            aGraphList.emplace_back( pObject,
+                aR, aSize, bInCell, aSpace );
         }
+        pObject = aIter.Next();
     }
 }
 

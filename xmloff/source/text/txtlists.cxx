@@ -126,21 +126,21 @@ void XMLTextListsHelper::KeepListAsProcessed( const OUString& sListId,
     msListStyleOfLastProcessedList = sListStyleName;
 
     // Inconsistent behavior regarding lists (#i92811#)
-    if ( !sListStyleDefaultListId.isEmpty())
-    {
-        if ( !mpMapListIdToListStyleDefaultListId )
-        {
-            mpMapListIdToListStyleDefaultListId = std::make_unique<tMapForLists>();
-        }
+    if ( sListStyleDefaultListId.isEmpty())
+        return;
 
-        if ( mpMapListIdToListStyleDefaultListId->find( sListStyleName ) ==
-                                mpMapListIdToListStyleDefaultListId->end() )
-        {
-            ::std::pair< OUString, OUString >
-                                aListIdMapData( sListId, sListStyleDefaultListId );
-            (*mpMapListIdToListStyleDefaultListId)[ sListStyleName ] =
-                                                                aListIdMapData;
-        }
+    if ( !mpMapListIdToListStyleDefaultListId )
+    {
+        mpMapListIdToListStyleDefaultListId = std::make_unique<tMapForLists>();
+    }
+
+    if ( mpMapListIdToListStyleDefaultListId->find( sListStyleName ) ==
+                            mpMapListIdToListStyleDefaultListId->end() )
+    {
+        ::std::pair< OUString, OUString >
+                            aListIdMapData( sListId, sListStyleDefaultListId );
+        (*mpMapListIdToListStyleDefaultListId)[ sListStyleName ] =
+                                                            aListIdMapData;
     }
 }
 

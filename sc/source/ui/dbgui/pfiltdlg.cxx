@@ -219,66 +219,66 @@ void ScPivotFilterDlg::FillFieldLists()
     m_xLbField2->append_text(aStrNone);
     m_xLbField3->append_text(aStrNone);
 
-    if ( pDoc )
-    {
-        OUString  aFieldName;
-        SCTAB   nTab        = nSrcTab;
-        SCCOL   nFirstCol   = theQueryData.nCol1;
-        SCROW   nFirstRow   = theQueryData.nRow1;
-        SCCOL   nMaxCol     = theQueryData.nCol2;
-        SCCOL   col = 0;
+    if ( !pDoc )
+        return;
 
-        for ( col=nFirstCol; col<=nMaxCol; col++ )
+    OUString  aFieldName;
+    SCTAB   nTab        = nSrcTab;
+    SCCOL   nFirstCol   = theQueryData.nCol1;
+    SCROW   nFirstRow   = theQueryData.nRow1;
+    SCCOL   nMaxCol     = theQueryData.nCol2;
+    SCCOL   col = 0;
+
+    for ( col=nFirstCol; col<=nMaxCol; col++ )
+    {
+        aFieldName = pDoc->GetString(col, nFirstRow, nTab);
+        if ( aFieldName.isEmpty() )
         {
-            aFieldName = pDoc->GetString(col, nFirstRow, nTab);
-            if ( aFieldName.isEmpty() )
-            {
-                aFieldName = ScGlobal::ReplaceOrAppend( aStrColumn, "%1", ScColToAlpha( col ));
-            }
-            m_xLbField1->append_text(aFieldName);
-            m_xLbField2->append_text(aFieldName);
-            m_xLbField3->append_text(aFieldName);
+            aFieldName = ScGlobal::ReplaceOrAppend( aStrColumn, "%1", ScColToAlpha( col ));
         }
+        m_xLbField1->append_text(aFieldName);
+        m_xLbField2->append_text(aFieldName);
+        m_xLbField3->append_text(aFieldName);
     }
 }
 
 void ScPivotFilterDlg::UpdateValueList( sal_uInt16 nList )
 {
-    if ( pDoc && nList>0 && nList<=3 )
+    if ( !(pDoc && nList>0 && nList<=3) )
+        return;
+
+    weld::ComboBox* pValList        = aValueEdArr[nList-1];
+    sal_Int32   nFieldSelPos    = aFieldLbArr[nList-1]->get_active();
+    OUString    aCurValue       = pValList->get_active_text();
+
+    pValList->clear();
+    pValList->append_text(aStrNotEmpty);
+    pValList->append_text(aStrEmpty);
+
+    if ( pDoc && nFieldSelPos )
     {
-        weld::ComboBox* pValList        = aValueEdArr[nList-1];
-        sal_Int32   nFieldSelPos    = aFieldLbArr[nList-1]->get_active();
-        OUString    aCurValue       = pValList->get_active_text();
-
-        pValList->clear();
-        pValList->append_text(aStrNotEmpty);
-        pValList->append_text(aStrEmpty);
-
-        if ( pDoc && nFieldSelPos )
+        SCCOL nColumn = theQueryData.nCol1 + static_cast<SCCOL>(nFieldSelPos) - 1;
+        if (!m_pEntryLists[nColumn])
         {
-            SCCOL nColumn = theQueryData.nCol1 + static_cast<SCCOL>(nFieldSelPos) - 1;
-            if (!m_pEntryLists[nColumn])
-            {
-                weld::WaitObject aWaiter(m_xDialog.get());
+            weld::WaitObject aWaiter(m_xDialog.get());
 
-                SCTAB   nTab        = nSrcTab;
-                SCROW   nFirstRow   = theQueryData.nRow1;
-                SCROW   nLastRow    = theQueryData.nRow2;
-                nFirstRow++;
-                bool bCaseSens = m_xBtnCase->get_active();
-                m_pEntryLists[nColumn].reset( new ScFilterEntries);
-                pDoc->GetFilterEntriesArea(
-                    nColumn, nFirstRow, nLastRow, nTab, bCaseSens, *m_pEntryLists[nColumn]);
-            }
-
-            const ScFilterEntries* pColl = m_pEntryLists[nColumn].get();
-            for (const auto& rEntry : *pColl)
-            {
-                pValList->append_text(rEntry.GetString());
-            }
+            SCTAB   nTab        = nSrcTab;
+            SCROW   nFirstRow   = theQueryData.nRow1;
+            SCROW   nLastRow    = theQueryData.nRow2;
+            nFirstRow++;
+            bool bCaseSens = m_xBtnCase->get_active();
+            m_pEntryLists[nColumn].reset( new ScFilterEntries);
+            pDoc->GetFilterEntriesArea(
+                nColumn, nFirstRow, nLastRow, nTab, bCaseSens, *m_pEntryLists[nColumn]);
         }
-        pValList->set_entry_text(aCurValue);
+
+        const ScFilterEntries* pColl = m_pEntryLists[nColumn].get();
+        for (const auto& rEntry : *pColl)
+        {
+            pValList->append_text(rEntry.GetString());
+        }
     }
+    pValList->set_entry_text(aCurValue);
 }
 
 void ScPivotFilterDlg::ClearValueList( sal_uInt16 nList )
@@ -467,21 +467,21 @@ IMPL_LINK(ScPivotFilterDlg, CheckBoxHdl, weld::Button&, rBox, void)
 {
     // update the value lists when dealing with uppercase/lowercase
 
-    if (&rBox == m_xBtnCase.get())                    // value lists
-    {
-        for (auto& a : m_pEntryLists)
-            a.reset();
+    if (&rBox != m_xBtnCase.get())                    // value lists
+        return;
 
-        OUString aCurVal1 = m_xEdVal1->get_active_text();
-        OUString aCurVal2 = m_xEdVal2->get_active_text();
-        OUString aCurVal3 = m_xEdVal3->get_active_text();
-        UpdateValueList( 1 );
-        UpdateValueList( 2 );
-        UpdateValueList( 3 );
-        m_xEdVal1->set_entry_text(aCurVal1);
-        m_xEdVal2->set_entry_text(aCurVal2);
-        m_xEdVal3->set_entry_text(aCurVal3);
-    }
+    for (auto& a : m_pEntryLists)
+        a.reset();
+
+    OUString aCurVal1 = m_xEdVal1->get_active_text();
+    OUString aCurVal2 = m_xEdVal2->get_active_text();
+    OUString aCurVal3 = m_xEdVal3->get_active_text();
+    UpdateValueList( 1 );
+    UpdateValueList( 2 );
+    UpdateValueList( 3 );
+    m_xEdVal1->set_entry_text(aCurVal1);
+    m_xEdVal2->set_entry_text(aCurVal2);
+    m_xEdVal3->set_entry_text(aCurVal3);
 }
 
 IMPL_LINK( ScPivotFilterDlg, ValModifyHdl, weld::ComboBox&, rEd, void )

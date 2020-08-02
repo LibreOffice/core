@@ -124,56 +124,56 @@ void XMLSectionFootnoteConfigExport::exportXML(
     }
 
     // we only make an element if we have an own footnote/endnote numbering
-    if (bEnd)
+    if (!bEnd)
+        return;
+
+    rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_NOTE_CLASS,
+                             GetXMLToken( bEndnote ? XML_ENDNOTE
+                                                     : XML_FOOTNOTE ) );
+    // start numbering
+    OUStringBuffer sBuf;
+    if (bNumRestart)
     {
-        rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_NOTE_CLASS,
-                                 GetXMLToken( bEndnote ? XML_ENDNOTE
-                                                         : XML_FOOTNOTE ) );
-        // start numbering
-        OUStringBuffer sBuf;
-        if (bNumRestart)
-        {
-            // restart number is stored as 0.., but interpreted as 1..
-            rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_START_VALUE,
-                                 OUString::number(nNumRestartAt+1));
-        }
-
-        if (bNumOwn)
-        {
-            // prefix and suffix
-            if (!sNumPrefix.isEmpty())
-            {
-                    rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_NUM_PREFIX,
-                                         sNumPrefix);
-            }
-            if (!sNumSuffix.isEmpty())
-            {
-                rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_NUM_SUFFIX,
-                                     sNumSuffix);
-            }
-
-            // number type: num format
-            rExport.GetMM100UnitConverter().convertNumFormat( sBuf,
-                                                              nNumberingType );
-            rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_NUM_FORMAT,
-                                 sBuf.makeStringAndClear());
-
-            // and letter sync, if applicable
-            SvXMLUnitConverter::convertNumLetterSync(
-                sBuf, nNumberingType );
-            if (!sBuf.isEmpty())
-            {
-                rExport.AddAttribute(XML_NAMESPACE_STYLE,
-                                     XML_NUM_LETTER_SYNC,
-                                     sBuf.makeStringAndClear());
-            }
-        }
-
-        // and finally, the element
-        SvXMLElementExport rElem(rExport, XML_NAMESPACE_TEXT,
-                                 XML_NOTES_CONFIGURATION,
-                                 true, true);
+        // restart number is stored as 0.., but interpreted as 1..
+        rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_START_VALUE,
+                             OUString::number(nNumRestartAt+1));
     }
+
+    if (bNumOwn)
+    {
+        // prefix and suffix
+        if (!sNumPrefix.isEmpty())
+        {
+                rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_NUM_PREFIX,
+                                     sNumPrefix);
+        }
+        if (!sNumSuffix.isEmpty())
+        {
+            rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_NUM_SUFFIX,
+                                 sNumSuffix);
+        }
+
+        // number type: num format
+        rExport.GetMM100UnitConverter().convertNumFormat( sBuf,
+                                                          nNumberingType );
+        rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_NUM_FORMAT,
+                             sBuf.makeStringAndClear());
+
+        // and letter sync, if applicable
+        SvXMLUnitConverter::convertNumLetterSync(
+            sBuf, nNumberingType );
+        if (!sBuf.isEmpty())
+        {
+            rExport.AddAttribute(XML_NAMESPACE_STYLE,
+                                 XML_NUM_LETTER_SYNC,
+                                 sBuf.makeStringAndClear());
+        }
+    }
+
+    // and finally, the element
+    SvXMLElementExport rElem(rExport, XML_NAMESPACE_TEXT,
+                             XML_NOTES_CONFIGURATION,
+                             true, true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

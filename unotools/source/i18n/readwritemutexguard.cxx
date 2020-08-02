@@ -81,27 +81,27 @@ void ReadWriteGuard::changeReadToWrite()
 {
     bool bOk = !(nMode & (ReadWriteGuardMode::Write | ReadWriteGuardMode::BlockCritical));
     DBG_ASSERT( bOk, "ReadWriteGuard::changeReadToWrite: can't" );
-    if ( bOk )
-    {
-        // MUST release read before acquiring write mutex or dead lock would
-        // occur if there was a write in another thread waiting for this read
-        // to complete.
-        rMutex.maMutex.acquire();
-        --rMutex.nReadCount;
-        rMutex.maMutex.release();
+    if ( !bOk )
+        return;
 
-        rMutex.maWriteMutex.acquire();
-        nMode |= ReadWriteGuardMode::Write;
-        // wait for any other read to complete
+    // MUST release read before acquiring write mutex or dead lock would
+    // occur if there was a write in another thread waiting for this read
+    // to complete.
+    rMutex.maMutex.acquire();
+    --rMutex.nReadCount;
+    rMutex.maMutex.release();
+
+    rMutex.maWriteMutex.acquire();
+    nMode |= ReadWriteGuardMode::Write;
+    // wait for any other read to complete
 // TODO: set up a waiting thread instead of a loop
-        bool bWait = true;
-        do
-        {
-            rMutex.maMutex.acquire();
-            bWait = (rMutex.nReadCount != 0);
-            rMutex.maMutex.release();
-        } while ( bWait );
-    }
+    bool bWait = true;
+    do
+    {
+        rMutex.maMutex.acquire();
+        bWait = (rMutex.nReadCount != 0);
+        rMutex.maMutex.release();
+    } while ( bWait );
 }
 
 }   // namespace utl

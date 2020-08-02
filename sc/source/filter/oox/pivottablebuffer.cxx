@@ -382,7 +382,10 @@ void PivotTableField::finalizeImport( const Reference< XDataPilotDescriptor >& r
         returns -1 for all fields not based on source data. */
     Reference< XDataPilotField > xDPField;
     sal_Int32 nDatabaseIdx = mrPivotTable.getCacheDatabaseIndex( mnFieldIndex );
-    if( (nDatabaseIdx >= 0) && rxDPDesc.is() ) try
+    if( !((nDatabaseIdx >= 0) && rxDPDesc.is()) )
+        return;
+
+    try
     {
         // try to get the source field and its name from passed DataPilot descriptor
         Reference< XIndexAccess > xDPFieldsIA( rxDPDesc->getDataPilotFields(), UNO_SET_THROW );
@@ -443,29 +446,30 @@ void PivotTableField::finalizeDateGroupingImport( const Reference< XDataPilotFie
 
 void PivotTableField::finalizeParentGroupingImport( const Reference< XDataPilotField >& rxBaseDPField,  const PivotCacheField& rBaseCacheField, PivotCacheGroupItemVector& orItemNames )
 {
-    if( maDPFieldName.isEmpty() )    // prevent endless loops if file format is broken
-    {
-        if( PivotCacheField* pCacheField = mrPivotTable.getCacheField( mnFieldIndex ) )
-        {
-            // data field can have user defined groupname captions, apply them
-            // if they do
-            IdCaptionPairList captionList;
-            for( const auto& rItem : maItems )
-            {
-                if ( rItem.mnType == XML_data  && rItem.msCaption.getLength() )
-                    captionList.emplace_back( rItem.mnCacheItem, rItem.msCaption );
-            }
-            if ( !captionList.empty() )
-                pCacheField->applyItemCaptions( captionList );
+    if( !maDPFieldName.isEmpty() )    // prevent endless loops if file format is broken
+        return;
 
-            maDPFieldName = pCacheField->createParentGroupField( rxBaseDPField, rBaseCacheField, orItemNames );
-            pCacheField->setFinalGroupName(maDPFieldName);
-            // on success, try to create nested group fields
-            Reference< XDataPilotField > xDPField = mrPivotTable.getDataPilotField( maDPFieldName );
-            if( xDPField.is() )
-                mrPivotTable.finalizeParentGroupingImport( xDPField, *pCacheField, orItemNames );
-        }
+    PivotCacheField* pCacheField = mrPivotTable.getCacheField( mnFieldIndex );
+    if( !pCacheField )
+        return;
+
+    // data field can have user defined groupname captions, apply them
+    // if they do
+    IdCaptionPairList captionList;
+    for( const auto& rItem : maItems )
+    {
+        if ( rItem.mnType == XML_data  && rItem.msCaption.getLength() )
+            captionList.emplace_back( rItem.mnCacheItem, rItem.msCaption );
     }
+    if ( !captionList.empty() )
+        pCacheField->applyItemCaptions( captionList );
+
+    maDPFieldName = pCacheField->createParentGroupField( rxBaseDPField, rBaseCacheField, orItemNames );
+    pCacheField->setFinalGroupName(maDPFieldName);
+    // on success, try to create nested group fields
+    Reference< XDataPilotField > xDPField = mrPivotTable.getDataPilotField( maDPFieldName );
+    if( xDPField.is() )
+        mrPivotTable.finalizeParentGroupingImport( xDPField, *pCacheField, orItemNames );
 }
 
 void PivotTableField::finalizeImportBasedOnCache( const Reference< XDataPilotDescriptor >& rxDPDesc)
@@ -516,50 +520,50 @@ void PivotTableField::convertPageField( const PTPageFieldModel& rPageField )
     // convert all settings common for row/column/page fields
     Reference< XDataPilotField > xDPField = convertRowColPageField( XML_axisPage );
 
-    if( xDPField.is() )
+    if( !xDPField.is() )
+        return;
+
+    PropertySet aPropSet( xDPField );
+
+    // find cache item used as 'selected page'
+    sal_Int32 nCacheItem = -1;
+    if( maModel.mbMultiPageItems )
     {
-        PropertySet aPropSet( xDPField );
-
-        // find cache item used as 'selected page'
-        sal_Int32 nCacheItem = -1;
-        if( maModel.mbMultiPageItems )
+        // multiple items may be selected
+        OSL_ENSURE( rPageField.mnItem == BIFF12_PTPAGEFIELD_MULTIITEMS, "PivotTableField::convertPageField - unexpected cache item index" );
+        // try to find a single visible item
+        bool bHasMultiItems = false;
+        for( const auto& rItem : maItems )
         {
-            // multiple items may be selected
-            OSL_ENSURE( rPageField.mnItem == BIFF12_PTPAGEFIELD_MULTIITEMS, "PivotTableField::convertPageField - unexpected cache item index" );
-            // try to find a single visible item
-            bool bHasMultiItems = false;
-            for( const auto& rItem : maItems )
+            if( (rItem.mnType == XML_data) && !rItem.mbHidden )
             {
-                if( (rItem.mnType == XML_data) && !rItem.mbHidden )
-                {
-                    bHasMultiItems = nCacheItem >= 0;
-                    nCacheItem = bHasMultiItems ? -1 : rItem.mnCacheItem;
-                }
-
-                if( bHasMultiItems )
-                    break;
+                bHasMultiItems = nCacheItem >= 0;
+                nCacheItem = bHasMultiItems ? -1 : rItem.mnCacheItem;
             }
-        }
-        else
-        {
-            // single item may be selected
-            if( (0 <= rPageField.mnItem) && (rPageField.mnItem < static_cast< sal_Int32 >( maItems.size() )) )
-                nCacheItem = maItems[ rPageField.mnItem ].mnCacheItem;
-        }
 
-        if( nCacheItem >= 0 )
+            if( bHasMultiItems )
+                break;
+        }
+    }
+    else
+    {
+        // single item may be selected
+        if( (0 <= rPageField.mnItem) && (rPageField.mnItem < static_cast< sal_Int32 >( maItems.size() )) )
+            nCacheItem = maItems[ rPageField.mnItem ].mnCacheItem;
+    }
+
+    if( nCacheItem < 0 )
+        return;
+
+    if( const PivotCacheField* pCacheField = mrPivotTable.getCacheField( mnFieldIndex ) )
+    {
+        if( const PivotCacheItem* pSharedItem = pCacheField->getCacheItem( nCacheItem ) )
         {
-            if( const PivotCacheField* pCacheField = mrPivotTable.getCacheField( mnFieldIndex ) )
-            {
-                if( const PivotCacheItem* pSharedItem = pCacheField->getCacheItem( nCacheItem ) )
-                {
-                    ScDPObject* pDPObj = mrPivotTable.getDPObject();
-                    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
-                    ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(pCacheField->getName());
-                    OUString aSelectedPage = pSharedItem->getFormattedName(*pDim, pDPObj, DateTime(getWorkbookSettings().getNullDate()));
-                    aPropSet.setProperty( PROP_SelectedPage, aSelectedPage );
-                }
-            }
+            ScDPObject* pDPObj = mrPivotTable.getDPObject();
+            ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+            ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(pCacheField->getName());
+            OUString aSelectedPage = pSharedItem->getFormattedName(*pDim, pDPObj, DateTime(getWorkbookSettings().getNullDate()));
+            aPropSet.setProperty( PROP_SelectedPage, aSelectedPage );
         }
     }
 }
@@ -569,75 +573,76 @@ void PivotTableField::convertDataField( const PTDataFieldModel& rDataField )
     OSL_ENSURE( rDataField.mnField == mnFieldIndex, "PivotTableField::convertDataField - wrong field index" );
     OSL_ENSURE( maModel.mbDataField, "PivotTableField::convertDataField - not a data field" );
     Reference< XDataPilotField > xDPField = mrPivotTable.getDataPilotField( maDPFieldName );
-    if( xDPField.is() )
+    if( !xDPField.is() )
+        return;
+
+    PropertySet aPropSet( xDPField );
+
+    // field orientation
+    aPropSet.setProperty( PROP_Orientation, DataPilotFieldOrientation_DATA );
+
+    if (!rDataField.maName.isEmpty())
+        aPropSet.setProperty(PROP_Name, rDataField.maName);
+
+    /*  Field aggregation function. Documentation is a little bit confused
+        about which names to use for the count functions. The name 'count'
+        means 'count all', and 'countNum' means 'count numbers'. On the
+        other hand, for subtotals, 'countA' means 'count all', and 'count'
+        means 'count numbers' (see above). */
+    GeneralFunction eAggFunc = GeneralFunction_SUM;
+    switch( rDataField.mnSubtotal )
     {
-        PropertySet aPropSet( xDPField );
-
-        // field orientation
-        aPropSet.setProperty( PROP_Orientation, DataPilotFieldOrientation_DATA );
-
-        if (!rDataField.maName.isEmpty())
-            aPropSet.setProperty(PROP_Name, rDataField.maName);
-
-        /*  Field aggregation function. Documentation is a little bit confused
-            about which names to use for the count functions. The name 'count'
-            means 'count all', and 'countNum' means 'count numbers'. On the
-            other hand, for subtotals, 'countA' means 'count all', and 'count'
-            means 'count numbers' (see above). */
-        GeneralFunction eAggFunc = GeneralFunction_SUM;
-        switch( rDataField.mnSubtotal )
-        {
-            case XML_sum:       eAggFunc = GeneralFunction_SUM;         break;
-            case XML_count:     eAggFunc = GeneralFunction_COUNT;       break;
-            case XML_average:   eAggFunc = GeneralFunction_AVERAGE;     break;
-            case XML_max:       eAggFunc = GeneralFunction_MAX;         break;
-            case XML_min:       eAggFunc = GeneralFunction_MIN;         break;
-            case XML_product:   eAggFunc = GeneralFunction_PRODUCT;     break;
-            case XML_countNums: eAggFunc = GeneralFunction_COUNTNUMS;   break;
-            case XML_stdDev:    eAggFunc = GeneralFunction_STDEV;       break;
-            case XML_stdDevp:   eAggFunc = GeneralFunction_STDEVP;      break;
-            case XML_var:       eAggFunc = GeneralFunction_VAR;         break;
-            case XML_varp:      eAggFunc = GeneralFunction_VARP;        break;
-            default:            OSL_FAIL( "PivotTableField::convertDataField - unknown aggregation function" );
-        }
-        aPropSet.setProperty( PROP_Function, eAggFunc );
-
-        // field reference ('show data as')
-        DataPilotFieldReference aReference;
-        aReference.ReferenceType = DataPilotFieldReferenceType::NONE;
-        switch( rDataField.mnShowDataAs )
-        {
-            case XML_difference:        aReference.ReferenceType = DataPilotFieldReferenceType::ITEM_DIFFERENCE;            break;
-            case XML_percent:           aReference.ReferenceType = DataPilotFieldReferenceType::ITEM_PERCENTAGE;            break;
-            case XML_percentDiff:       aReference.ReferenceType = DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE; break;
-            case XML_runTotal:          aReference.ReferenceType = DataPilotFieldReferenceType::RUNNING_TOTAL;              break;
-            case XML_percentOfRow:      aReference.ReferenceType = DataPilotFieldReferenceType::ROW_PERCENTAGE;             break;
-            case XML_percentOfCol:      aReference.ReferenceType = DataPilotFieldReferenceType::COLUMN_PERCENTAGE;          break;
-            case XML_percentOfTotal:    aReference.ReferenceType = DataPilotFieldReferenceType::TOTAL_PERCENTAGE;           break;
-            case XML_index:             aReference.ReferenceType = DataPilotFieldReferenceType::INDEX;                      break;
-        }
-        if( aReference.ReferenceType != DataPilotFieldReferenceType::NONE )
-        {
-            if( const PivotCacheField* pCacheField = mrPivotTable.getCacheField( rDataField.mnBaseField ) )
-            {
-                aReference.ReferenceField = pCacheField->getName();
-                switch( rDataField.mnBaseItem )
-                {
-                    case OOX_PT_PREVIOUS_ITEM:
-                        aReference.ReferenceItemType = DataPilotFieldReferenceItemType::PREVIOUS;
-                    break;
-                    case OOX_PT_NEXT_ITEM:
-                        aReference.ReferenceItemType = DataPilotFieldReferenceItemType::NEXT;
-                    break;
-                    default:
-                        aReference.ReferenceItemType = DataPilotFieldReferenceItemType::NAMED;
-                        if( const PivotCacheItem* pCacheItem = pCacheField->getCacheItem( rDataField.mnBaseItem ) )
-                            aReference.ReferenceItemName = pCacheItem->getName();
-                }
-                aPropSet.setProperty( PROP_Reference, aReference );
-            }
-        }
+        case XML_sum:       eAggFunc = GeneralFunction_SUM;         break;
+        case XML_count:     eAggFunc = GeneralFunction_COUNT;       break;
+        case XML_average:   eAggFunc = GeneralFunction_AVERAGE;     break;
+        case XML_max:       eAggFunc = GeneralFunction_MAX;         break;
+        case XML_min:       eAggFunc = GeneralFunction_MIN;         break;
+        case XML_product:   eAggFunc = GeneralFunction_PRODUCT;     break;
+        case XML_countNums: eAggFunc = GeneralFunction_COUNTNUMS;   break;
+        case XML_stdDev:    eAggFunc = GeneralFunction_STDEV;       break;
+        case XML_stdDevp:   eAggFunc = GeneralFunction_STDEVP;      break;
+        case XML_var:       eAggFunc = GeneralFunction_VAR;         break;
+        case XML_varp:      eAggFunc = GeneralFunction_VARP;        break;
+        default:            OSL_FAIL( "PivotTableField::convertDataField - unknown aggregation function" );
     }
+    aPropSet.setProperty( PROP_Function, eAggFunc );
+
+    // field reference ('show data as')
+    DataPilotFieldReference aReference;
+    aReference.ReferenceType = DataPilotFieldReferenceType::NONE;
+    switch( rDataField.mnShowDataAs )
+    {
+        case XML_difference:        aReference.ReferenceType = DataPilotFieldReferenceType::ITEM_DIFFERENCE;            break;
+        case XML_percent:           aReference.ReferenceType = DataPilotFieldReferenceType::ITEM_PERCENTAGE;            break;
+        case XML_percentDiff:       aReference.ReferenceType = DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE; break;
+        case XML_runTotal:          aReference.ReferenceType = DataPilotFieldReferenceType::RUNNING_TOTAL;              break;
+        case XML_percentOfRow:      aReference.ReferenceType = DataPilotFieldReferenceType::ROW_PERCENTAGE;             break;
+        case XML_percentOfCol:      aReference.ReferenceType = DataPilotFieldReferenceType::COLUMN_PERCENTAGE;          break;
+        case XML_percentOfTotal:    aReference.ReferenceType = DataPilotFieldReferenceType::TOTAL_PERCENTAGE;           break;
+        case XML_index:             aReference.ReferenceType = DataPilotFieldReferenceType::INDEX;                      break;
+    }
+    if( aReference.ReferenceType == DataPilotFieldReferenceType::NONE )
+        return;
+
+    const PivotCacheField* pCacheField = mrPivotTable.getCacheField( rDataField.mnBaseField );
+    if( !pCacheField )
+        return;
+
+    aReference.ReferenceField = pCacheField->getName();
+    switch( rDataField.mnBaseItem )
+    {
+        case OOX_PT_PREVIOUS_ITEM:
+            aReference.ReferenceItemType = DataPilotFieldReferenceItemType::PREVIOUS;
+        break;
+        case OOX_PT_NEXT_ITEM:
+            aReference.ReferenceItemType = DataPilotFieldReferenceItemType::NEXT;
+        break;
+        default:
+            aReference.ReferenceItemType = DataPilotFieldReferenceItemType::NAMED;
+            if( const PivotCacheItem* pCacheItem = pCacheField->getCacheItem( rDataField.mnBaseItem ) )
+                aReference.ReferenceItemName = pCacheItem->getName();
+    }
+    aPropSet.setProperty( PROP_Reference, aReference );
 }
 
 // private --------------------------------------------------------------------
@@ -880,19 +885,19 @@ void PivotTableFilter::importTop10Filter( SequenceInputStream& rStrm )
 void PivotTableFilter::finalizeImport()
 {
     // only simple top10 filter supported
-    if( maModel.mnType == XML_count )
+    if( maModel.mnType != XML_count )
+        return;
+
+    PropertySet aPropSet( mrPivotTable.getDataPilotField( maModel.mnField ) );
+    if( aPropSet.is() )
     {
-        PropertySet aPropSet( mrPivotTable.getDataPilotField( maModel.mnField ) );
-        if( aPropSet.is() )
-        {
-            DataPilotFieldAutoShowInfo aAutoShowInfo;
-            aAutoShowInfo.IsEnabled = true;
-            aAutoShowInfo.ShowItemsMode = maModel.mbTopFilter ? DataPilotFieldShowItemsMode::FROM_TOP : DataPilotFieldShowItemsMode::FROM_BOTTOM;
-            aAutoShowInfo.ItemCount = getLimitedValue< sal_Int32, double >( maModel.mfValue, 0, SAL_MAX_INT32 );
-            if( const PivotCacheField* pCacheField = mrPivotTable.getCacheFieldOfDataField( maModel.mnMeasureField ) )
-                aAutoShowInfo.DataField = pCacheField->getName();
-            aPropSet.setProperty( PROP_AutoShowInfo, aAutoShowInfo );
-        }
+        DataPilotFieldAutoShowInfo aAutoShowInfo;
+        aAutoShowInfo.IsEnabled = true;
+        aAutoShowInfo.ShowItemsMode = maModel.mbTopFilter ? DataPilotFieldShowItemsMode::FROM_TOP : DataPilotFieldShowItemsMode::FROM_BOTTOM;
+        aAutoShowInfo.ItemCount = getLimitedValue< sal_Int32, double >( maModel.mfValue, 0, SAL_MAX_INT32 );
+        if( const PivotCacheField* pCacheField = mrPivotTable.getCacheFieldOfDataField( maModel.mnMeasureField ) )
+            aAutoShowInfo.DataField = pCacheField->getName();
+        aPropSet.setProperty( PROP_AutoShowInfo, aAutoShowInfo );
     }
 }
 
@@ -1199,116 +1204,116 @@ PivotTableFilter& PivotTable::createTableFilter()
 
 void PivotTable::finalizeImport()
 {
-    if( getAddressConverter().validateCellRange( maLocationModel.maRange, true, true ) )
+    if( !getAddressConverter().validateCellRange( maLocationModel.maRange, true, true ) )
+        return;
+
+    mpPivotCache = getPivotCaches().importPivotCacheFragment( maDefModel.mnCacheId );
+    if( !(mpPivotCache && mpPivotCache->isValidDataSource() && !maDefModel.maName.isEmpty()) )
+        return;
+
+    // clear destination area of the original pivot table
+    try
     {
-        mpPivotCache = getPivotCaches().importPivotCacheFragment( maDefModel.mnCacheId );
-        if( mpPivotCache && mpPivotCache->isValidDataSource() && !maDefModel.maName.isEmpty() )
+        Reference< XSheetOperation > xSheetOp( getCellRangeFromDoc( maLocationModel.maRange ), UNO_QUERY_THROW );
+        using namespace ::com::sun::star::sheet::CellFlags;
+        xSheetOp->clearContents( VALUE | DATETIME | STRING | FORMULA | HARDATTR | STYLES | EDITATTR | FORMATTED );
+    }
+    catch( Exception& )
+    {
+    }
+
+    try
+    {
+        // create a new data pilot descriptor based on the source data
+        Reference< XDataPilotTablesSupplier > xDPTablesSupp( getSheetFromDoc( maLocationModel.maRange.aStart.Tab() ), UNO_QUERY_THROW );
+        Reference< XDataPilotTables > xDPTables( xDPTablesSupp->getDataPilotTables(), UNO_SET_THROW );
+        mxDPDescriptor.set( xDPTables->createDataPilotDescriptor(), UNO_SET_THROW );
+        ScRange aRange = mpPivotCache->getSourceRange();
+        CellRangeAddress aCellRangeAddress( aRange.aStart.Tab(),
+                                            aRange.aStart.Col(), aRange.aStart.Row(),
+                                            aRange.aEnd.Col(), aRange.aEnd.Row() );
+        mxDPDescriptor->setSourceRange( aCellRangeAddress );
+        mxDPDescriptor->setTag( maDefModel.maTag );
+
+        // TODO: This is a hack. Eventually we need to convert the whole thing to the internal API.
+        auto pImpl = comphelper::getUnoTunnelImplementation<ScDataPilotDescriptorBase>(mxDPDescriptor);
+        if (!pImpl)
+            return;
+
+        mpDPObject = pImpl->GetDPObject();
+        if (!mpDPObject)
+            return;
+
+        // global data pilot properties
+        PropertySet aDescProp( mxDPDescriptor );
+        aDescProp.setProperty( PROP_ColumnGrand, maDefModel.mbColGrandTotals );
+        aDescProp.setProperty( PROP_RowGrand, maDefModel.mbRowGrandTotals );
+        aDescProp.setProperty( PROP_ShowFilterButton, false );
+        aDescProp.setProperty( PROP_DrillDownOnDoubleClick, maDefModel.mbEnableDrill );
+
+        // finalize all fields, this finds field names and creates grouping fields
+        finalizeFieldsImport();
+
+        // all row fields
+        for( const auto& rRowField : maRowFields )
+            if( PivotTableField* pField = getTableField( rRowField ) )
+                pField->convertRowField();
+
+        // all column fields
+        for( const auto& rColField : maColFields )
+            if( PivotTableField* pField = getTableField( rColField ) )
+                pField->convertColField();
+
+        // all page fields
+        for( const auto& rPageField : maPageFields )
+            if( PivotTableField* pField = getTableField( rPageField.mnField ) )
+                pField->convertPageField( rPageField );
+
+        // all hidden fields
+        ::std::set< sal_Int32 > aVisFields;
+        aVisFields.insert( maRowFields.begin(), maRowFields.end() );
+        aVisFields.insert( maColFields.begin(), maColFields.end() );
+        for( const auto& rPageField : maPageFields )
+            aVisFields.insert( rPageField.mnField );
+        sal_Int32 nIndex = 0;
+        for( auto& rxField : maFields )
         {
-            // clear destination area of the original pivot table
-            try
-            {
-                Reference< XSheetOperation > xSheetOp( getCellRangeFromDoc( maLocationModel.maRange ), UNO_QUERY_THROW );
-                using namespace ::com::sun::star::sheet::CellFlags;
-                xSheetOp->clearContents( VALUE | DATETIME | STRING | FORMULA | HARDATTR | STYLES | EDITATTR | FORMATTED );
-            }
-            catch( Exception& )
-            {
-            }
-
-            try
-            {
-                // create a new data pilot descriptor based on the source data
-                Reference< XDataPilotTablesSupplier > xDPTablesSupp( getSheetFromDoc( maLocationModel.maRange.aStart.Tab() ), UNO_QUERY_THROW );
-                Reference< XDataPilotTables > xDPTables( xDPTablesSupp->getDataPilotTables(), UNO_SET_THROW );
-                mxDPDescriptor.set( xDPTables->createDataPilotDescriptor(), UNO_SET_THROW );
-                ScRange aRange = mpPivotCache->getSourceRange();
-                CellRangeAddress aCellRangeAddress( aRange.aStart.Tab(),
-                                                    aRange.aStart.Col(), aRange.aStart.Row(),
-                                                    aRange.aEnd.Col(), aRange.aEnd.Row() );
-                mxDPDescriptor->setSourceRange( aCellRangeAddress );
-                mxDPDescriptor->setTag( maDefModel.maTag );
-
-                // TODO: This is a hack. Eventually we need to convert the whole thing to the internal API.
-                auto pImpl = comphelper::getUnoTunnelImplementation<ScDataPilotDescriptorBase>(mxDPDescriptor);
-                if (!pImpl)
-                    return;
-
-                mpDPObject = pImpl->GetDPObject();
-                if (!mpDPObject)
-                    return;
-
-                // global data pilot properties
-                PropertySet aDescProp( mxDPDescriptor );
-                aDescProp.setProperty( PROP_ColumnGrand, maDefModel.mbColGrandTotals );
-                aDescProp.setProperty( PROP_RowGrand, maDefModel.mbRowGrandTotals );
-                aDescProp.setProperty( PROP_ShowFilterButton, false );
-                aDescProp.setProperty( PROP_DrillDownOnDoubleClick, maDefModel.mbEnableDrill );
-
-                // finalize all fields, this finds field names and creates grouping fields
-                finalizeFieldsImport();
-
-                // all row fields
-                for( const auto& rRowField : maRowFields )
-                    if( PivotTableField* pField = getTableField( rRowField ) )
-                        pField->convertRowField();
-
-                // all column fields
-                for( const auto& rColField : maColFields )
-                    if( PivotTableField* pField = getTableField( rColField ) )
-                        pField->convertColField();
-
-                // all page fields
-                for( const auto& rPageField : maPageFields )
-                    if( PivotTableField* pField = getTableField( rPageField.mnField ) )
-                        pField->convertPageField( rPageField );
-
-                // all hidden fields
-                ::std::set< sal_Int32 > aVisFields;
-                aVisFields.insert( maRowFields.begin(), maRowFields.end() );
-                aVisFields.insert( maColFields.begin(), maColFields.end() );
-                for( const auto& rPageField : maPageFields )
-                    aVisFields.insert( rPageField.mnField );
-                sal_Int32 nIndex = 0;
-                for( auto& rxField : maFields )
-                {
-                    if( aVisFields.count( nIndex ) == 0 )
-                        rxField->convertHiddenField();
-                    ++nIndex;
-                }
-
-                // all data fields
-                for( auto& rDataField : maDataFields )
-                {
-                    if( const PivotCacheField* pCacheField = getCacheField( rDataField.mnField  ) )
-                    {
-                        if ( pCacheField-> getGroupBaseField() != -1 )
-                            rDataField.mnField = pCacheField-> getGroupBaseField();
-                    }
-                    if( PivotTableField* pField = getTableField( rDataField.mnField ) )
-                        pField->convertDataField( rDataField );
-                }
-
-                // filters
-                maFilters.forEachMem( &PivotTableFilter::finalizeImport );
-
-                // calculate base position of table
-                CellAddress aPos( maLocationModel.maRange.aStart.Tab(), maLocationModel.maRange.aStart.Col(), maLocationModel.maRange.aStart.Row() );
-                /*  If page fields exist, include them into the destination
-                    area (they are excluded in Excel). Add an extra blank row. */
-                if( !maPageFields.empty() )
-                    aPos.Row = ::std::max< sal_Int32 >( static_cast< sal_Int32 >( aPos.Row - maPageFields.size() - 1 ), 0 );
-
-                // save interop grab bag
-                mpDPObject->PutInteropGrabBag(std::move(maInteropGrabBag));
-
-                // insert the DataPilot table into the sheet
-                xDPTables->insertNewByName( maDefModel.maName, aPos, mxDPDescriptor );
-            }
-            catch( Exception& )
-            {
-                OSL_FAIL( "PivotTable::finalizeImport - exception while creating the DataPilot table" );
-            }
+            if( aVisFields.count( nIndex ) == 0 )
+                rxField->convertHiddenField();
+            ++nIndex;
         }
+
+        // all data fields
+        for( auto& rDataField : maDataFields )
+        {
+            if( const PivotCacheField* pCacheField = getCacheField( rDataField.mnField  ) )
+            {
+                if ( pCacheField-> getGroupBaseField() != -1 )
+                    rDataField.mnField = pCacheField-> getGroupBaseField();
+            }
+            if( PivotTableField* pField = getTableField( rDataField.mnField ) )
+                pField->convertDataField( rDataField );
+        }
+
+        // filters
+        maFilters.forEachMem( &PivotTableFilter::finalizeImport );
+
+        // calculate base position of table
+        CellAddress aPos( maLocationModel.maRange.aStart.Tab(), maLocationModel.maRange.aStart.Col(), maLocationModel.maRange.aStart.Row() );
+        /*  If page fields exist, include them into the destination
+            area (they are excluded in Excel). Add an extra blank row. */
+        if( !maPageFields.empty() )
+            aPos.Row = ::std::max< sal_Int32 >( static_cast< sal_Int32 >( aPos.Row - maPageFields.size() - 1 ), 0 );
+
+        // save interop grab bag
+        mpDPObject->PutInteropGrabBag(std::move(maInteropGrabBag));
+
+        // insert the DataPilot table into the sheet
+        xDPTables->insertNewByName( maDefModel.maName, aPos, mxDPDescriptor );
+    }
+    catch( Exception& )
+    {
+        OSL_FAIL( "PivotTable::finalizeImport - exception while creating the DataPilot table" );
     }
 }
 

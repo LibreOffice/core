@@ -978,19 +978,19 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
         pProtectContext->AddAttribute( GetTransformer().GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_STYLE, GetXMLToken( XML_PROTECT ) ), aProtectAttrValue );
     }
 
-    if( pIntervalMinorDivisorContext )
-    {
-        if( fIntervalMinor != 0.0 )
-        {
-            sal_Int32 nIntervalMinorDivisor = static_cast< sal_Int32 >(
-                ::rtl::math::round( fIntervalMajor / fIntervalMinor ));
+    if( !pIntervalMinorDivisorContext )
+        return;
 
-            pIntervalMinorDivisorContext->AddAttribute(
-                GetTransformer().GetNamespaceMap().GetQNameByKey(
-                    XML_NAMESPACE_CHART,
-                    GetXMLToken( XML_INTERVAL_MINOR_DIVISOR )),
-                OUString::number( nIntervalMinorDivisor ));
-        }
+    if( fIntervalMinor != 0.0 )
+    {
+        sal_Int32 nIntervalMinorDivisor = static_cast< sal_Int32 >(
+            ::rtl::math::round( fIntervalMajor / fIntervalMinor ));
+
+        pIntervalMinorDivisorContext->AddAttribute(
+            GetTransformer().GetNamespaceMap().GetQNameByKey(
+                XML_NAMESPACE_CHART,
+                GetXMLToken( XML_INTERVAL_MINOR_DIVISOR )),
+            OUString::number( nIntervalMinorDivisor ));
     }
 }
 

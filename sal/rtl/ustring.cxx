@@ -543,20 +543,20 @@ void SAL_CALL rtl_uString_newFromAscii( rtl_uString** ppThis,
 
     *ppThis = rtl_uString_ImplAlloc( nLen );
     OSL_ASSERT(*ppThis != nullptr);
-    if ( *ppThis )
-    {
-        sal_Unicode* pBuffer = (*ppThis)->buffer;
-        do
-        {
-            assert(static_cast<unsigned char>(*pCharStr) < 0x80); // ASCII range
-            *pBuffer = *pCharStr;
-            pBuffer++;
-            pCharStr++;
-        }
-        while ( *pCharStr );
+    if ( !(*ppThis) )
+        return;
 
-        RTL_LOG_STRING_NEW( *ppThis );
+    sal_Unicode* pBuffer = (*ppThis)->buffer;
+    do
+    {
+        assert(static_cast<unsigned char>(*pCharStr) < 0x80); // ASCII range
+        *pBuffer = *pCharStr;
+        pBuffer++;
+        pCharStr++;
     }
+    while ( *pCharStr );
+
+    RTL_LOG_STRING_NEW( *ppThis );
 }
 
 void SAL_CALL rtl_uString_newFromCodePoints(

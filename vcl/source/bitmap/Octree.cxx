@@ -40,45 +40,45 @@ Octree::Octree(const BitmapReadAccess& rReadAcc, sal_uLong nColors)
     const BitmapReadAccess* pAccess = &rReadAcc;
     sal_uLong nMax(nColors);
 
-    if (!!*pAccess)
+    if (!*pAccess)
+        return;
+
+    const long nWidth = pAccess->Width();
+    const long nHeight = pAccess->Height();
+
+    if (pAccess->HasPalette())
     {
-        const long nWidth = pAccess->Width();
-        const long nHeight = pAccess->Height();
-
-        if (pAccess->HasPalette())
+        for (long nY = 0; nY < nHeight; nY++)
         {
-            for (long nY = 0; nY < nHeight; nY++)
+            Scanline pScanline = pAccess->GetScanline(nY);
+            for (long nX = 0; nX < nWidth; nX++)
             {
-                Scanline pScanline = pAccess->GetScanline(nY);
-                for (long nX = 0; nX < nWidth; nX++)
-                {
-                    mpColor = &pAccess->GetPaletteColor(pAccess->GetIndexFromData(pScanline, nX));
-                    mnLevel = 0;
-                    add(pTree);
+                mpColor = &pAccess->GetPaletteColor(pAccess->GetIndexFromData(pScanline, nX));
+                mnLevel = 0;
+                add(pTree);
 
-                    while (mnLeafCount > nMax)
-                        reduce();
-                }
+                while (mnLeafCount > nMax)
+                    reduce();
             }
         }
-        else
+    }
+    else
+    {
+        BitmapColor aColor;
+
+        mpColor = &aColor;
+
+        for (long nY = 0; nY < nHeight; nY++)
         {
-            BitmapColor aColor;
-
-            mpColor = &aColor;
-
-            for (long nY = 0; nY < nHeight; nY++)
+            Scanline pScanline = pAccess->GetScanline(nY);
+            for (long nX = 0; nX < nWidth; nX++)
             {
-                Scanline pScanline = pAccess->GetScanline(nY);
-                for (long nX = 0; nX < nWidth; nX++)
-                {
-                    aColor = pAccess->GetPixelFromData(pScanline, nX);
-                    mnLevel = 0;
-                    add(pTree);
+                aColor = pAccess->GetPixelFromData(pScanline, nX);
+                mnLevel = 0;
+                add(pTree);
 
-                    while (mnLeafCount > nMax)
-                        reduce();
-                }
+                while (mnLeafCount > nMax)
+                    reduce();
             }
         }
     }

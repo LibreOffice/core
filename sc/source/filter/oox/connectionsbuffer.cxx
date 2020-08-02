@@ -163,20 +163,20 @@ void Connection::importTables()
 
 void Connection::importTable( const AttributeList& rAttribs, sal_Int32 nElement )
 {
-    if( maModel.mxWebPr )
+    if( !maModel.mxWebPr )
+        return;
+
+    Any aTableAny;
+    switch( nElement )
     {
-        Any aTableAny;
-        switch( nElement )
-        {
-            case XLS_TOKEN( m ):                                                            break;
-            case XLS_TOKEN( s ):    aTableAny <<= rAttribs.getXString( XML_v, OUString() ); break;
-            case XLS_TOKEN( x ):    aTableAny <<= rAttribs.getInteger( XML_v, -1 );         break;
-            default:
-                OSL_ENSURE( false, "Connection::importTable - unexpected element" );
-                return;
-        }
-        maModel.mxWebPr->maTables.push_back( aTableAny );
+        case XLS_TOKEN( m ):                                                            break;
+        case XLS_TOKEN( s ):    aTableAny <<= rAttribs.getXString( XML_v, OUString() ); break;
+        case XLS_TOKEN( x ):    aTableAny <<= rAttribs.getInteger( XML_v, -1 );         break;
+        default:
+            OSL_ENSURE( false, "Connection::importTable - unexpected element" );
+            return;
     }
+    maModel.mxWebPr->maTables.push_back( aTableAny );
 }
 
 void Connection::importConnection( SequenceInputStream& rStrm )
@@ -259,20 +259,20 @@ void Connection::importWebPrTables( SequenceInputStream& /*rStrm*/ )
 
 void Connection::importWebPrTable( SequenceInputStream& rStrm, sal_Int32 nRecId )
 {
-    if( maModel.mxWebPr )
+    if( !maModel.mxWebPr )
+        return;
+
+    Any aTableAny;
+    switch( nRecId )
     {
-        Any aTableAny;
-        switch( nRecId )
-        {
-            case BIFF12_ID_PCITEM_MISSING:                                                  break;
-            case BIFF12_ID_PCITEM_STRING:   aTableAny <<= BiffHelper::readString( rStrm );  break;
-            case BIFF12_ID_PCITEM_INDEX:    aTableAny <<= rStrm.readInt32();                break;
-            default:
-                OSL_ENSURE( false, "Connection::importWebPrTable - unexpected record" );
-                return;
-        }
-        maModel.mxWebPr->maTables.push_back( aTableAny );
+        case BIFF12_ID_PCITEM_MISSING:                                                  break;
+        case BIFF12_ID_PCITEM_STRING:   aTableAny <<= BiffHelper::readString( rStrm );  break;
+        case BIFF12_ID_PCITEM_INDEX:    aTableAny <<= rStrm.readInt32();                break;
+        default:
+            OSL_ENSURE( false, "Connection::importWebPrTable - unexpected record" );
+            return;
     }
+    maModel.mxWebPr->maTables.push_back( aTableAny );
 }
 
 ConnectionsBuffer::ConnectionsBuffer( const WorkbookHelper& rHelper ) :

@@ -76,22 +76,22 @@ namespace sdr::properties
             // after this method -> memory leak (!)
             DBG_ASSERT(!mpStyleSheet, "Old style sheet not deleted before setting new one (!)");
 
-            if(pNewStyleSheet)
+            if(!pNewStyleSheet)
+                return;
+
+            // local remember
+            mpStyleSheet = pNewStyleSheet;
+
+            if(HasSfxItemSet())
             {
-                // local remember
-                mpStyleSheet = pNewStyleSheet;
+                // register as listener
+                StartListening(*pNewStyleSheet->GetPool());
+                StartListening(*pNewStyleSheet);
 
-                if(HasSfxItemSet())
+                // only apply the following when we have an SfxItemSet already, else
+                if(GetStyleSheet())
                 {
-                    // register as listener
-                    StartListening(*pNewStyleSheet->GetPool());
-                    StartListening(*pNewStyleSheet);
-
-                    // only apply the following when we have an SfxItemSet already, else
-                    if(GetStyleSheet())
-                    {
-                        ImpSetParentAtSfxItemSet(bDontRemoveHardAttr);
-                    }
+                    ImpSetParentAtSfxItemSet(bDontRemoveHardAttr);
                 }
             }
         }
@@ -198,22 +198,22 @@ namespace sdr::properties
                 }
             }
 
-            if(pTargetStyleSheet)
+            if(!pTargetStyleSheet)
+                return;
+
+            if(HasSfxItemSet())
             {
-                if(HasSfxItemSet())
-                {
-                    // The SfxItemSet has been cloned and exists,
-                    // we can directly set the SfxStyleSheet at it
-                    ImpAddStyleSheet(pTargetStyleSheet, true);
-                }
-                else
-                {
-                    // No SfxItemSet exists yet (there is none in
-                    // the source, so none was cloned). Remember the
-                    // SfxStyleSheet to set it when the SfxItemSet
-                    // got constructed on-demand
-                    mpStyleSheet = pTargetStyleSheet;
-                }
+                // The SfxItemSet has been cloned and exists,
+                // we can directly set the SfxStyleSheet at it
+                ImpAddStyleSheet(pTargetStyleSheet, true);
+            }
+            else
+            {
+                // No SfxItemSet exists yet (there is none in
+                // the source, so none was cloned). Remember the
+                // SfxStyleSheet to set it when the SfxItemSet
+                // got constructed on-demand
+                mpStyleSheet = pTargetStyleSheet;
             }
         }
 

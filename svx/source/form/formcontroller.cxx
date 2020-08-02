@@ -1906,19 +1906,19 @@ void FormController::addToEventAttacher(const Reference< XControl > & xControl)
 
     // register at the event attacher
     Reference< XFormComponent >  xComp(xControl->getModel(), UNO_QUERY);
-    if (xComp.is() && m_xModelAsIndex.is())
+    if (!(xComp.is() && m_xModelAsIndex.is()))
+        return;
+
+    // and look for the position of the ControlModel in it
+    sal_uInt32 nPos = m_xModelAsIndex->getCount();
+    Reference< XFormComponent > xTemp;
+    for( ; nPos; )
     {
-        // and look for the position of the ControlModel in it
-        sal_uInt32 nPos = m_xModelAsIndex->getCount();
-        Reference< XFormComponent > xTemp;
-        for( ; nPos; )
+        m_xModelAsIndex->getByIndex(--nPos) >>= xTemp;
+        if (xComp.get() == xTemp.get())
         {
-            m_xModelAsIndex->getByIndex(--nPos) >>= xTemp;
-            if (xComp.get() == xTemp.get())
-            {
-                m_xModelAsManager->attach( nPos, Reference<XInterface>( xControl, UNO_QUERY ), makeAny(xControl) );
-                break;
-            }
+            m_xModelAsManager->attach( nPos, Reference<XInterface>( xControl, UNO_QUERY ), makeAny(xControl) );
+            break;
         }
     }
 }
@@ -1933,19 +1933,19 @@ void FormController::removeFromEventAttacher(const Reference< XControl > & xCont
 
     // register at the event attacher
     Reference< XFormComponent >  xComp(xControl->getModel(), UNO_QUERY);
-    if ( xComp.is() && m_xModelAsIndex.is() )
+    if ( !(xComp.is() && m_xModelAsIndex.is()) )
+        return;
+
+    // and look for the position of the ControlModel in it
+    sal_uInt32 nPos = m_xModelAsIndex->getCount();
+    Reference< XFormComponent > xTemp;
+    for( ; nPos; )
     {
-        // and look for the position of the ControlModel in it
-        sal_uInt32 nPos = m_xModelAsIndex->getCount();
-        Reference< XFormComponent > xTemp;
-        for( ; nPos; )
+        m_xModelAsIndex->getByIndex(--nPos) >>= xTemp;
+        if (xComp.get() == xTemp.get())
         {
-            m_xModelAsIndex->getByIndex(--nPos) >>= xTemp;
-            if (xComp.get() == xTemp.get())
-            {
-                m_xModelAsManager->detach( nPos, Reference<XInterface>( xControl, UNO_QUERY ) );
-                break;
-            }
+            m_xModelAsManager->detach( nPos, Reference<XInterface>( xControl, UNO_QUERY ) );
+            break;
         }
     }
 }
@@ -2115,48 +2115,48 @@ void FormController::setControlLock(const Reference< XControl > & xControl)
     // a. if the entire record is locked
     // b. if the associated field is locked
     Reference< XBoundControl >  xBound(xControl, UNO_QUERY);
-    if (xBound.is() &&
+    if (!(xBound.is() &&
         ( (bLocked && bLocked != bool(xBound->getLock())) ||
-          !bLocked))    // always uncheck individual fields when unlocking
+          !bLocked)))    // always uncheck individual fields when unlocking
+        return;
+
+    // there is a data source
+    Reference< XPropertySet >  xSet(xControl->getModel(), UNO_QUERY);
+    if (!(xSet.is() && ::comphelper::hasProperty(FM_PROP_BOUNDFIELD, xSet)))
+        return;
+
+    // what about the ReadOnly and Enable properties
+    bool bTouch = true;
+    if (::comphelper::hasProperty(FM_PROP_ENABLED, xSet))
+        bTouch = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ENABLED));
+    if (::comphelper::hasProperty(FM_PROP_READONLY, xSet))
+        bTouch = !::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_READONLY));
+
+    if (!bTouch)
+        return;
+
+    Reference< XPropertySet >  xField;
+    xSet->getPropertyValue(FM_PROP_BOUNDFIELD) >>= xField;
+    if (!xField.is())
+        return;
+
+    if (bLocked)
+        xBound->setLock(bLocked);
+    else
     {
-        // there is a data source
-        Reference< XPropertySet >  xSet(xControl->getModel(), UNO_QUERY);
-        if (xSet.is() && ::comphelper::hasProperty(FM_PROP_BOUNDFIELD, xSet))
+        try
         {
-            // what about the ReadOnly and Enable properties
-            bool bTouch = true;
-            if (::comphelper::hasProperty(FM_PROP_ENABLED, xSet))
-                bTouch = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ENABLED));
-            if (::comphelper::hasProperty(FM_PROP_READONLY, xSet))
-                bTouch = !::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_READONLY));
-
-            if (bTouch)
-            {
-                Reference< XPropertySet >  xField;
-                xSet->getPropertyValue(FM_PROP_BOUNDFIELD) >>= xField;
-                if (xField.is())
-                {
-                    if (bLocked)
-                        xBound->setLock(bLocked);
-                    else
-                    {
-                        try
-                        {
-                            Any aVal = xField->getPropertyValue(FM_PROP_ISREADONLY);
-                            if (aVal.hasValue() && ::comphelper::getBOOL(aVal))
-                                xBound->setLock(true);
-                            else
-                                xBound->setLock(bLocked);
-                        }
-                        catch( const Exception& )
-                        {
-                            DBG_UNHANDLED_EXCEPTION("svx");
-                        }
-
-                    }
-                }
-            }
+            Any aVal = xField->getPropertyValue(FM_PROP_ISREADONLY);
+            if (aVal.hasValue() && ::comphelper::getBOOL(aVal))
+                xBound->setLock(true);
+            else
+                xBound->setLock(bLocked);
         }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION("svx");
+        }
+
     }
 }
 
@@ -2360,23 +2360,23 @@ void FormController::implControlInserted( const Reference< XControl>& _rxControl
     if ( xInterception.is() )
         createInterceptor( xInterception );
 
-    if ( _rxControl.is() )
+    if ( !_rxControl.is() )
+        return;
+
+    Reference< XControlModel > xModel( _rxControl->getModel() );
+
+    // we want to know about the reset of the model of our controls
+    // (for correctly resetting m_bModified)
+    Reference< XReset >  xReset( xModel, UNO_QUERY );
+    if ( xReset.is() )
+        xReset->addResetListener( this );
+
+    // and we want to know about the validity, to visually indicate it
+    Reference< XValidatableFormComponent > xValidatable( xModel, UNO_QUERY );
+    if ( xValidatable.is() )
     {
-        Reference< XControlModel > xModel( _rxControl->getModel() );
-
-        // we want to know about the reset of the model of our controls
-        // (for correctly resetting m_bModified)
-        Reference< XReset >  xReset( xModel, UNO_QUERY );
-        if ( xReset.is() )
-            xReset->addResetListener( this );
-
-        // and we want to know about the validity, to visually indicate it
-        Reference< XValidatableFormComponent > xValidatable( xModel, UNO_QUERY );
-        if ( xValidatable.is() )
-        {
-            xValidatable->addFormComponentValidityListener( this );
-            m_aControlBorderManager.validityChanged( _rxControl, xValidatable );
-        }
+        xValidatable->addFormComponentValidityListener( this );
+        m_aControlBorderManager.validityChanged( _rxControl, xValidatable );
     }
 
 }

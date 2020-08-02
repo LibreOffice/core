@@ -465,39 +465,39 @@ void FrameSelectorImpl::InitBorderGeometry()
     maBottom.AddClickRect( tools::Rectangle( mnLine1 - nClO, mnLine3 - nClH, mnLine3 + nClO, mnLine3 + nClO ) );
 
     /*  Diagonal frame borders use the remaining space between outer and inner frame borders. */
-    if( mbTLBR || mbBLTR )
-    {
-        for( nCol = 0, nCols = maArray.GetColCount(); nCol < nCols; ++nCol )
-        {
-            for( nRow = 0, nRows = maArray.GetRowCount(); nRow < nRows; ++nRow )
-            {
-                // the usable area between horizontal/vertical frame borders of current quadrant
-                const basegfx::B2DRange aCellRange(maArray.GetCellRange( nCol, nRow, true ));
-                const tools::Rectangle aRect(
-                    basegfx::fround(aCellRange.getMinX()) + nClV + 1, basegfx::fround(aCellRange.getMinY()) + nClH + 1,
-                    basegfx::fround(aCellRange.getMaxX()) - nClV + 1, basegfx::fround(aCellRange.getMaxY()) - nClH + 1);
+    if( !(mbTLBR || mbBLTR) )
+        return;
 
-                /*  Both diagonal frame borders enabled. */
-                if( mbTLBR && mbBLTR )
-                {
-                    // single areas
-                    Point aMid( aRect.Center() );
-                    maTLBR.AddClickRect( tools::Rectangle( aRect.TopLeft(), aMid ) );
-                    maTLBR.AddClickRect( tools::Rectangle( aMid + Point( 1, 1 ), aRect.BottomRight() ) );
-                    maBLTR.AddClickRect( tools::Rectangle( aRect.Left(), aMid.Y() + 1, aMid.X(), aRect.Bottom() ) );
-                    maBLTR.AddClickRect( tools::Rectangle( aMid.X() + 1, aRect.Top(), aRect.Right(), aMid.Y() ) );
-                    // centered rectangle for both frame borders
-                    tools::Rectangle aMidRect( aRect.TopLeft(), Size( aRect.GetWidth() / 3, aRect.GetHeight() / 3 ) );
-                    aMidRect.Move( (aRect.GetWidth() - aMidRect.GetWidth()) / 2, (aRect.GetHeight() - aMidRect.GetHeight()) / 2 );
-                    maTLBR.AddClickRect( aMidRect );
-                    maBLTR.AddClickRect( aMidRect );
-                }
-                /*  One of the diagonal frame borders enabled - use entire rectangle. */
-                else if( mbTLBR && !mbBLTR )    // top-left to bottom-right only
-                    maTLBR.AddClickRect( aRect );
-                else if( !mbTLBR && mbBLTR )    // bottom-left to top-right only
-                    maBLTR.AddClickRect( aRect );
+    for( nCol = 0, nCols = maArray.GetColCount(); nCol < nCols; ++nCol )
+    {
+        for( nRow = 0, nRows = maArray.GetRowCount(); nRow < nRows; ++nRow )
+        {
+            // the usable area between horizontal/vertical frame borders of current quadrant
+            const basegfx::B2DRange aCellRange(maArray.GetCellRange( nCol, nRow, true ));
+            const tools::Rectangle aRect(
+                basegfx::fround(aCellRange.getMinX()) + nClV + 1, basegfx::fround(aCellRange.getMinY()) + nClH + 1,
+                basegfx::fround(aCellRange.getMaxX()) - nClV + 1, basegfx::fround(aCellRange.getMaxY()) - nClH + 1);
+
+            /*  Both diagonal frame borders enabled. */
+            if( mbTLBR && mbBLTR )
+            {
+                // single areas
+                Point aMid( aRect.Center() );
+                maTLBR.AddClickRect( tools::Rectangle( aRect.TopLeft(), aMid ) );
+                maTLBR.AddClickRect( tools::Rectangle( aMid + Point( 1, 1 ), aRect.BottomRight() ) );
+                maBLTR.AddClickRect( tools::Rectangle( aRect.Left(), aMid.Y() + 1, aMid.X(), aRect.Bottom() ) );
+                maBLTR.AddClickRect( tools::Rectangle( aMid.X() + 1, aRect.Top(), aRect.Right(), aMid.Y() ) );
+                // centered rectangle for both frame borders
+                tools::Rectangle aMidRect( aRect.TopLeft(), Size( aRect.GetWidth() / 3, aRect.GetHeight() / 3 ) );
+                aMidRect.Move( (aRect.GetWidth() - aMidRect.GetWidth()) / 2, (aRect.GetHeight() - aMidRect.GetHeight()) / 2 );
+                maTLBR.AddClickRect( aMidRect );
+                maBLTR.AddClickRect( aMidRect );
             }
+            /*  One of the diagonal frame borders enabled - use entire rectangle. */
+            else if( mbTLBR && !mbBLTR )    // top-left to bottom-right only
+                maTLBR.AddClickRect( aRect );
+            else if( !mbTLBR && mbBLTR )    // bottom-left to top-right only
+                maBLTR.AddClickRect( aRect );
         }
     }
 }

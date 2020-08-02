@@ -58,18 +58,18 @@ static void generateImports(std::ostream & o, ProgramOptions const & options,
         else
             o << "import com.sun.star.lib.uno.helper.WeakBase;\n";
     }
-    if (!propertyhelper.isEmpty()) {
-        if (propertyhelper == "_") {
-            o << "import com.sun.star.lib.uno.helper.PropertySet;\n";
-            o << "import com.sun.star.beans.PropertyAttribute;\n";
-        } else {
-            o << "import com.sun.star.uno.Type;\n";
-            o << "import com.sun.star.uno.Any;\n";
-            o << "import com.sun.star.beans.Ambiguous;\n";
-            o << "import com.sun.star.beans.Defaulted;\n";
-            o << "import com.sun.star.beans.Optional;\n";
-            o << "import com.sun.star.lib.uno.helper.PropertySetMixin;\n";
-        }
+    if (propertyhelper.isEmpty())        return;
+
+    if (propertyhelper == "_") {
+        o << "import com.sun.star.lib.uno.helper.PropertySet;\n";
+        o << "import com.sun.star.beans.PropertyAttribute;\n";
+    } else {
+        o << "import com.sun.star.uno.Type;\n";
+        o << "import com.sun.star.uno.Any;\n";
+        o << "import com.sun.star.beans.Ambiguous;\n";
+        o << "import com.sun.star.beans.Defaulted;\n";
+        o << "import com.sun.star.beans.Optional;\n";
+        o << "import com.sun.star.lib.uno.helper.PropertySetMixin;\n";
     }
 }
 
@@ -253,26 +253,26 @@ static void registerProperties(std::ostream& o,
                         const AttributeInfo& properties,
                         const OString& indentation)
 {
-    if (!properties.empty()) {
-        bool cast = false;
-        OStringBuffer attributeValue;
-        for (const auto& rProp : properties)
-        {
-            if (rProp.attributes != 0) {
-                cast = checkAttribute(attributeValue, rProp.attributes);
-            } else {
-                cast = true;
-                attributeValue.append('0');
-            }
+    if (properties.empty())        return;
 
-            o << indentation << "registerProperty(\"" << rProp.name
-              << "\", \"m_" << rProp.name << "\",\n"
-              << indentation << "      ";
-            if (cast)
-                o << "(short)";
-
-            o << attributeValue.makeStringAndClear() << ");\n";
+    bool cast = false;
+    OStringBuffer attributeValue;
+    for (const auto& rProp : properties)
+    {
+        if (rProp.attributes != 0) {
+            cast = checkAttribute(attributeValue, rProp.attributes);
+        } else {
+            cast = true;
+            attributeValue.append('0');
         }
+
+        o << indentation << "registerProperty(\"" << rProp.name
+          << "\", \"m_" << rProp.name << "\",\n"
+          << indentation << "      ";
+        if (cast)
+            o << "(short)";
+
+        o << attributeValue.makeStringAndClear() << ");\n";
     }
 }
 

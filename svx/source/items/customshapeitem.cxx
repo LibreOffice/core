@@ -201,37 +201,37 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const OUString& rSequenceName
 
 void SdrCustomShapeGeometryItem::ClearPropertyValue( const OUString& rPropName )
 {
-    if ( aPropSeq.hasElements() )
+    if ( !aPropSeq.hasElements() )
+        return;
+
+    PropertyHashMap::iterator aHashIter( aPropHashMap.find( rPropName ) );
+    if ( aHashIter == aPropHashMap.end() )
+        return;
+
+    css::uno::Any& rSeqAny = aPropSeq[(*aHashIter).second].Value;
+    if (auto pSecSequence
+        = o3tl::tryAccess<css::uno::Sequence<beans::PropertyValue>>(rSeqAny))
     {
-        PropertyHashMap::iterator aHashIter( aPropHashMap.find( rPropName ) );
-        if ( aHashIter != aPropHashMap.end() )
+        for (const auto& rPropVal : *pSecSequence)
         {
-            css::uno::Any& rSeqAny = aPropSeq[(*aHashIter).second].Value;
-            if (auto pSecSequence
-                = o3tl::tryAccess<css::uno::Sequence<beans::PropertyValue>>(rSeqAny))
-            {
-                for (const auto& rPropVal : *pSecSequence)
-                {
-                    auto _aHashIter(aPropPairHashMap.find(PropertyPair(rPropName, rPropVal.Name)));
-                    if (_aHashIter != aPropPairHashMap.end())
-                        aPropPairHashMap.erase(_aHashIter); // removing property from pair hashmap
-                }
-            }
-            sal_Int32 nLength = aPropSeq.getLength();
-            if ( nLength )
-            {
-                sal_Int32 nIndex  = (*aHashIter).second;
-                if ( nIndex != ( nLength - 1 ) )                        // resizing sequence
-                {
-                    PropertyHashMap::iterator aHashIter2( aPropHashMap.find( aPropSeq[ nLength - 1 ].Name ) );
-                    (*aHashIter2).second = nIndex;
-                    aPropSeq[ nIndex ] = aPropSeq[ nLength - 1 ];
-                }
-                aPropSeq.realloc( nLength - 1 );
-            }
-            aPropHashMap.erase( aHashIter );                            // removing property from hashmap
+            auto _aHashIter(aPropPairHashMap.find(PropertyPair(rPropName, rPropVal.Name)));
+            if (_aHashIter != aPropPairHashMap.end())
+                aPropPairHashMap.erase(_aHashIter); // removing property from pair hashmap
         }
     }
+    sal_Int32 nLength = aPropSeq.getLength();
+    if ( nLength )
+    {
+        sal_Int32 nIndex  = (*aHashIter).second;
+        if ( nIndex != ( nLength - 1 ) )                        // resizing sequence
+        {
+            PropertyHashMap::iterator aHashIter2( aPropHashMap.find( aPropSeq[ nLength - 1 ].Name ) );
+            (*aHashIter2).second = nIndex;
+            aPropSeq[ nIndex ] = aPropSeq[ nLength - 1 ];
+        }
+        aPropSeq.realloc( nLength - 1 );
+    }
+    aPropHashMap.erase( aHashIter );                            // removing property from hashmap
 }
 
 SdrCustomShapeGeometryItem::~SdrCustomShapeGeometryItem()

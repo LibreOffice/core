@@ -209,20 +209,20 @@ void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, SdrLayerID nLayer )
     const bool bDrawChart(VOBJ_MODE_SHOW == rOpts.GetObjMode(VOBJ_TYPE_CHART));
     const bool bDrawDraw(VOBJ_MODE_SHOW == rOpts.GetObjMode(VOBJ_TYPE_DRAW));
 
-    if(bDrawOle || bDrawChart || bDrawDraw)
+    if(!(bDrawOle || bDrawChart || bDrawDraw))
+        return;
+
+    ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
+
+    if(pDrView)
     {
-        ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
-
-        if(pDrView)
-        {
-            pDrView->setHideOle(!bDrawOle);
-            pDrView->setHideChart(!bDrawChart);
-            pDrView->setHideDraw(!bDrawDraw);
-            pDrView->setHideFormControl(!bDrawDraw);
-        }
-
-        rOutputData.DrawSelectiveObjects(nLayer);
+        pDrView->setHideOle(!bDrawOle);
+        pDrView->setHideChart(!bDrawChart);
+        pDrView->setHideDraw(!bDrawDraw);
+        pDrView->setHideFormControl(!bDrawDraw);
     }
+
+    rOutputData.DrawSelectiveObjects(nLayer);
 }
 
 void ScGridWindow::DrawSdrGrid( const tools::Rectangle& rDrawingRect, OutputDevice* pContentDev )

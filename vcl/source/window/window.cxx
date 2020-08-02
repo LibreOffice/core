@@ -1565,166 +1565,166 @@ void Window::ImplPosSizeWindow( long nX, long nY,
         }
     }
 
-    if ( bNewPos || bNewSize )
+    if ( !(bNewPos || bNewSize) )
+        return;
+
+    bool bUpdateSysObjPos = false;
+    if ( bNewPos )
+        bUpdateSysObjPos = ImplUpdatePos();
+
+    // the borderwindow always specifies the position for its client window
+    if ( mpWindowImpl->mpBorderWindow )
+        mpWindowImpl->maPos = mpWindowImpl->mpBorderWindow->mpWindowImpl->maPos;
+
+    if ( mpWindowImpl->mpClientWindow )
     {
-        bool bUpdateSysObjPos = false;
+        mpWindowImpl->mpClientWindow->ImplPosSizeWindow( mpWindowImpl->mpClientWindow->mpWindowImpl->mnLeftBorder,
+                                           mpWindowImpl->mpClientWindow->mpWindowImpl->mnTopBorder,
+                                           mnOutWidth-mpWindowImpl->mpClientWindow->mpWindowImpl->mnLeftBorder-mpWindowImpl->mpClientWindow->mpWindowImpl->mnRightBorder,
+                                           mnOutHeight-mpWindowImpl->mpClientWindow->mpWindowImpl->mnTopBorder-mpWindowImpl->mpClientWindow->mpWindowImpl->mnBottomBorder,
+                                           PosSizeFlags::X | PosSizeFlags::Y |
+                                           PosSizeFlags::Width | PosSizeFlags::Height );
+        // If we have a client window, then this is the position
+        // of the Application's floating windows
+        mpWindowImpl->mpClientWindow->mpWindowImpl->maPos = mpWindowImpl->maPos;
         if ( bNewPos )
-            bUpdateSysObjPos = ImplUpdatePos();
-
-        // the borderwindow always specifies the position for its client window
-        if ( mpWindowImpl->mpBorderWindow )
-            mpWindowImpl->maPos = mpWindowImpl->mpBorderWindow->mpWindowImpl->maPos;
-
-        if ( mpWindowImpl->mpClientWindow )
         {
-            mpWindowImpl->mpClientWindow->ImplPosSizeWindow( mpWindowImpl->mpClientWindow->mpWindowImpl->mnLeftBorder,
-                                               mpWindowImpl->mpClientWindow->mpWindowImpl->mnTopBorder,
-                                               mnOutWidth-mpWindowImpl->mpClientWindow->mpWindowImpl->mnLeftBorder-mpWindowImpl->mpClientWindow->mpWindowImpl->mnRightBorder,
-                                               mnOutHeight-mpWindowImpl->mpClientWindow->mpWindowImpl->mnTopBorder-mpWindowImpl->mpClientWindow->mpWindowImpl->mnBottomBorder,
-                                               PosSizeFlags::X | PosSizeFlags::Y |
-                                               PosSizeFlags::Width | PosSizeFlags::Height );
-            // If we have a client window, then this is the position
-            // of the Application's floating windows
-            mpWindowImpl->mpClientWindow->mpWindowImpl->maPos = mpWindowImpl->maPos;
-            if ( bNewPos )
+            if ( mpWindowImpl->mpClientWindow->IsVisible() )
             {
-                if ( mpWindowImpl->mpClientWindow->IsVisible() )
-                {
-                    mpWindowImpl->mpClientWindow->ImplCallMove();
-                }
-                else
-                {
-                    mpWindowImpl->mpClientWindow->mpWindowImpl->mbCallMove = true;
-                }
+                mpWindowImpl->mpClientWindow->ImplCallMove();
+            }
+            else
+            {
+                mpWindowImpl->mpClientWindow->mpWindowImpl->mbCallMove = true;
             }
         }
+    }
 
-        // Move()/Resize() will be called only for Show(), such that
-        // at least one is called before Show()
-        if ( IsVisible() )
+    // Move()/Resize() will be called only for Show(), such that
+    // at least one is called before Show()
+    if ( IsVisible() )
+    {
+        if ( bNewPos )
+        {
+            ImplCallMove();
+        }
+        if ( bNewSize )
+        {
+            ImplCallResize();
+        }
+    }
+    else
+    {
+        if ( bNewPos )
+            mpWindowImpl->mbCallMove = true;
+        if ( bNewSize )
+            mpWindowImpl->mbCallResize = true;
+    }
+
+    bool bUpdateSysObjClip = false;
+    if ( IsReallyVisible() )
+    {
+        if ( bNewPos || bNewSize )
+        {
+            // set Clip-Flag
+            bUpdateSysObjClip = !ImplSetClipFlag( true );
+        }
+
+        // invalidate window content ?
+        if ( bNewPos || (mnOutWidth > nOldOutWidth) || (mnOutHeight > nOldOutHeight) )
         {
             if ( bNewPos )
             {
-                ImplCallMove();
-            }
-            if ( bNewSize )
-            {
-                ImplCallResize();
-            }
-        }
-        else
-        {
-            if ( bNewPos )
-                mpWindowImpl->mbCallMove = true;
-            if ( bNewSize )
-                mpWindowImpl->mbCallResize = true;
-        }
-
-        bool bUpdateSysObjClip = false;
-        if ( IsReallyVisible() )
-        {
-            if ( bNewPos || bNewSize )
-            {
-                // set Clip-Flag
-                bUpdateSysObjClip = !ImplSetClipFlag( true );
-            }
-
-            // invalidate window content ?
-            if ( bNewPos || (mnOutWidth > nOldOutWidth) || (mnOutHeight > nOldOutHeight) )
-            {
-                if ( bNewPos )
-                {
-                    bool bInvalidate = false;
-                    bool bParentPaint = true;
-                    if ( !ImplIsOverlapWindow() )
-                        bParentPaint = mpWindowImpl->mpParent->IsPaintEnabled();
-                    if ( bCopyBits && bParentPaint && !HasPaintEvent() )
-                    {
-                        Point aPoint( mnOutOffX, mnOutOffY );
-                        vcl::Region aRegion( tools::Rectangle( aPoint,
-                                                   Size( mnOutWidth, mnOutHeight ) ) );
-                        if ( mpWindowImpl->mbWinRegion )
-                            aRegion.Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
-                        ImplClipBoundaries( aRegion, false, true );
-                        if ( !pOverlapRegion->IsEmpty() )
-                        {
-                            pOverlapRegion->Move( mnOutOffX-nOldOutOffX, mnOutOffY-nOldOutOffY );
-                            aRegion.Exclude( *pOverlapRegion );
-                        }
-                        if ( !aRegion.IsEmpty() )
-                        {
-                            // adapt Paint areas
-                            ImplMoveAllInvalidateRegions( tools::Rectangle( Point( nOldOutOffX, nOldOutOffY ),
-                                                                     Size( nOldOutWidth, nOldOutHeight ) ),
-                                                          mnOutOffX-nOldOutOffX, mnOutOffY-nOldOutOffY,
-                                                          true );
-                            SalGraphics* pGraphics = ImplGetFrameGraphics();
-                            if ( pGraphics )
-                            {
-
-                                OutputDevice *pOutDev = GetOutDev();
-                                const bool bSelectClipRegion = pOutDev->SelectClipRegion( aRegion, pGraphics );
-                                if ( bSelectClipRegion )
-                                {
-                                    pGraphics->CopyArea( mnOutOffX, mnOutOffY,
-                                                         nOldOutOffX, nOldOutOffY,
-                                                         nOldOutWidth, nOldOutHeight,
-                                                         this );
-                                }
-                                else
-                                    bInvalidate = true;
-                            }
-                            else
-                                bInvalidate = true;
-                            if ( !bInvalidate )
-                            {
-                                if ( !pOverlapRegion->IsEmpty() )
-                                    ImplInvalidateFrameRegion( pOverlapRegion.get(), InvalidateFlags::Children );
-                            }
-                        }
-                        else
-                            bInvalidate = true;
-                    }
-                    else
-                        bInvalidate = true;
-                    if ( bInvalidate )
-                        ImplInvalidateFrameRegion( nullptr, InvalidateFlags::Children );
-                }
-                else
+                bool bInvalidate = false;
+                bool bParentPaint = true;
+                if ( !ImplIsOverlapWindow() )
+                    bParentPaint = mpWindowImpl->mpParent->IsPaintEnabled();
+                if ( bCopyBits && bParentPaint && !HasPaintEvent() )
                 {
                     Point aPoint( mnOutOffX, mnOutOffY );
                     vcl::Region aRegion( tools::Rectangle( aPoint,
                                                Size( mnOutWidth, mnOutHeight ) ) );
-                    aRegion.Exclude( *pOldRegion );
                     if ( mpWindowImpl->mbWinRegion )
                         aRegion.Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
                     ImplClipBoundaries( aRegion, false, true );
+                    if ( !pOverlapRegion->IsEmpty() )
+                    {
+                        pOverlapRegion->Move( mnOutOffX-nOldOutOffX, mnOutOffY-nOldOutOffY );
+                        aRegion.Exclude( *pOverlapRegion );
+                    }
                     if ( !aRegion.IsEmpty() )
-                        ImplInvalidateFrameRegion( &aRegion, InvalidateFlags::Children );
-                }
-            }
+                    {
+                        // adapt Paint areas
+                        ImplMoveAllInvalidateRegions( tools::Rectangle( Point( nOldOutOffX, nOldOutOffY ),
+                                                                 Size( nOldOutWidth, nOldOutHeight ) ),
+                                                      mnOutOffX-nOldOutOffX, mnOutOffY-nOldOutOffY,
+                                                      true );
+                        SalGraphics* pGraphics = ImplGetFrameGraphics();
+                        if ( pGraphics )
+                        {
 
-            // invalidate Parent or Overlaps
-            if ( bNewPos ||
-                 (mnOutWidth < nOldOutWidth) || (mnOutHeight < nOldOutHeight) )
+                            OutputDevice *pOutDev = GetOutDev();
+                            const bool bSelectClipRegion = pOutDev->SelectClipRegion( aRegion, pGraphics );
+                            if ( bSelectClipRegion )
+                            {
+                                pGraphics->CopyArea( mnOutOffX, mnOutOffY,
+                                                     nOldOutOffX, nOldOutOffY,
+                                                     nOldOutWidth, nOldOutHeight,
+                                                     this );
+                            }
+                            else
+                                bInvalidate = true;
+                        }
+                        else
+                            bInvalidate = true;
+                        if ( !bInvalidate )
+                        {
+                            if ( !pOverlapRegion->IsEmpty() )
+                                ImplInvalidateFrameRegion( pOverlapRegion.get(), InvalidateFlags::Children );
+                        }
+                    }
+                    else
+                        bInvalidate = true;
+                }
+                else
+                    bInvalidate = true;
+                if ( bInvalidate )
+                    ImplInvalidateFrameRegion( nullptr, InvalidateFlags::Children );
+            }
+            else
             {
-                vcl::Region aRegion( *pOldRegion );
-                if ( !mpWindowImpl->mbPaintTransparent )
-                    ImplExcludeWindowRegion( aRegion );
+                Point aPoint( mnOutOffX, mnOutOffY );
+                vcl::Region aRegion( tools::Rectangle( aPoint,
+                                           Size( mnOutWidth, mnOutHeight ) ) );
+                aRegion.Exclude( *pOldRegion );
+                if ( mpWindowImpl->mbWinRegion )
+                    aRegion.Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
                 ImplClipBoundaries( aRegion, false, true );
-                if ( !aRegion.IsEmpty() && !mpWindowImpl->mpBorderWindow )
-                    ImplInvalidateParentFrameRegion( aRegion );
+                if ( !aRegion.IsEmpty() )
+                    ImplInvalidateFrameRegion( &aRegion, InvalidateFlags::Children );
             }
         }
 
-        // adapt system objects
-        if ( bUpdateSysObjClip )
-            ImplUpdateSysObjClip();
-        if ( bUpdateSysObjPos )
-            ImplUpdateSysObjPos();
-        if ( bNewSize && mpWindowImpl->mpSysObj )
-            mpWindowImpl->mpSysObj->SetPosSize( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight );
+        // invalidate Parent or Overlaps
+        if ( bNewPos ||
+             (mnOutWidth < nOldOutWidth) || (mnOutHeight < nOldOutHeight) )
+        {
+            vcl::Region aRegion( *pOldRegion );
+            if ( !mpWindowImpl->mbPaintTransparent )
+                ImplExcludeWindowRegion( aRegion );
+            ImplClipBoundaries( aRegion, false, true );
+            if ( !aRegion.IsEmpty() && !mpWindowImpl->mpBorderWindow )
+                ImplInvalidateParentFrameRegion( aRegion );
+        }
     }
+
+    // adapt system objects
+    if ( bUpdateSysObjClip )
+        ImplUpdateSysObjClip();
+    if ( bUpdateSysObjPos )
+        ImplUpdateSysObjPos();
+    if ( bNewSize && mpWindowImpl->mpSysObj )
+        mpWindowImpl->mpSysObj->SetPosSize( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight );
 }
 
 void Window::ImplNewInputContext()
@@ -1967,62 +1967,62 @@ void Window::SetStyle( WinBits nStyle )
 void Window::SetExtendedStyle( WindowExtendedStyle nExtendedStyle )
 {
 
-    if ( mpWindowImpl->mnExtendedStyle != nExtendedStyle )
-    {
-        vcl::Window* pWindow = ImplGetBorderWindow();
-        if( ! pWindow )
-            pWindow = this;
-        if( pWindow->mpWindowImpl->mbFrame )
-        {
-            SalExtStyle nExt = 0;
-            if( nExtendedStyle & WindowExtendedStyle::Document )
-                nExt |= SAL_FRAME_EXT_STYLE_DOCUMENT;
-            if( nExtendedStyle & WindowExtendedStyle::DocModified )
-                nExt |= SAL_FRAME_EXT_STYLE_DOCMODIFIED;
+    if ( mpWindowImpl->mnExtendedStyle == nExtendedStyle )
+        return;
 
-            pWindow->ImplGetFrame()->SetExtendedFrameStyle( nExt );
-        }
-        mpWindowImpl->mnExtendedStyle = nExtendedStyle;
+    vcl::Window* pWindow = ImplGetBorderWindow();
+    if( ! pWindow )
+        pWindow = this;
+    if( pWindow->mpWindowImpl->mbFrame )
+    {
+        SalExtStyle nExt = 0;
+        if( nExtendedStyle & WindowExtendedStyle::Document )
+            nExt |= SAL_FRAME_EXT_STYLE_DOCUMENT;
+        if( nExtendedStyle & WindowExtendedStyle::DocModified )
+            nExt |= SAL_FRAME_EXT_STYLE_DOCMODIFIED;
+
+        pWindow->ImplGetFrame()->SetExtendedFrameStyle( nExt );
     }
+    mpWindowImpl->mnExtendedStyle = nExtendedStyle;
 }
 
 void Window::SetBorderStyle( WindowBorderStyle nBorderStyle )
 {
 
-    if ( mpWindowImpl->mpBorderWindow )
-    {
-        if( nBorderStyle == WindowBorderStyle::REMOVEBORDER &&
-            ! mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame &&
-            mpWindowImpl->mpBorderWindow->mpWindowImpl->mpParent
-            )
-        {
-            // this is a little awkward: some controls (e.g. svtools ProgressBar)
-            // cannot avoid getting constructed with WB_BORDER but want to disable
-            // borders in case of NWF drawing. So they need a method to remove their border window
-            VclPtr<vcl::Window> pBorderWin = mpWindowImpl->mpBorderWindow;
-            // remove us as border window's client
-            pBorderWin->mpWindowImpl->mpClientWindow = nullptr;
-            mpWindowImpl->mpBorderWindow = nullptr;
-            mpWindowImpl->mpRealParent = pBorderWin->mpWindowImpl->mpParent;
-            // reparent us above the border window
-            SetParent( pBorderWin->mpWindowImpl->mpParent );
-            // set us to the position and size of our previous border
-            Point aBorderPos( pBorderWin->GetPosPixel() );
-            Size aBorderSize( pBorderWin->GetSizePixel() );
-            setPosSizePixel( aBorderPos.X(), aBorderPos.Y(), aBorderSize.Width(), aBorderSize.Height() );
-            // release border window
-            pBorderWin.disposeAndClear();
+    if ( !mpWindowImpl->mpBorderWindow )
+        return;
 
-            // set new style bits
-            SetStyle( GetStyle() & (~WB_BORDER) );
-        }
+    if( nBorderStyle == WindowBorderStyle::REMOVEBORDER &&
+        ! mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame &&
+        mpWindowImpl->mpBorderWindow->mpWindowImpl->mpParent
+        )
+    {
+        // this is a little awkward: some controls (e.g. svtools ProgressBar)
+        // cannot avoid getting constructed with WB_BORDER but want to disable
+        // borders in case of NWF drawing. So they need a method to remove their border window
+        VclPtr<vcl::Window> pBorderWin = mpWindowImpl->mpBorderWindow;
+        // remove us as border window's client
+        pBorderWin->mpWindowImpl->mpClientWindow = nullptr;
+        mpWindowImpl->mpBorderWindow = nullptr;
+        mpWindowImpl->mpRealParent = pBorderWin->mpWindowImpl->mpParent;
+        // reparent us above the border window
+        SetParent( pBorderWin->mpWindowImpl->mpParent );
+        // set us to the position and size of our previous border
+        Point aBorderPos( pBorderWin->GetPosPixel() );
+        Size aBorderSize( pBorderWin->GetSizePixel() );
+        setPosSizePixel( aBorderPos.X(), aBorderPos.Y(), aBorderSize.Width(), aBorderSize.Height() );
+        // release border window
+        pBorderWin.disposeAndClear();
+
+        // set new style bits
+        SetStyle( GetStyle() & (~WB_BORDER) );
+    }
+    else
+    {
+        if ( mpWindowImpl->mpBorderWindow->GetType() == WindowType::BORDERWINDOW )
+            static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetBorderStyle( nBorderStyle );
         else
-        {
-            if ( mpWindowImpl->mpBorderWindow->GetType() == WindowType::BORDERWINDOW )
-                static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetBorderStyle( nBorderStyle );
-            else
-                mpWindowImpl->mpBorderWindow->SetBorderStyle( nBorderStyle );
-        }
+            mpWindowImpl->mpBorderWindow->SetBorderStyle( nBorderStyle );
     }
 }
 
@@ -2608,19 +2608,19 @@ void Window::EnableInput( bool bEnable, const vcl::Window* pExcludeWindow )
     }
 
     // the same for ownerdraw floating windows
-    if( mpWindowImpl->mbFrame )
+    if( !mpWindowImpl->mbFrame )
+        return;
+
+    ::std::vector< VclPtr<vcl::Window> >& rList = mpWindowImpl->mpFrameData->maOwnerDrawList;
+    for (auto const& elem : rList)
     {
-        ::std::vector< VclPtr<vcl::Window> >& rList = mpWindowImpl->mpFrameData->maOwnerDrawList;
-        for (auto const& elem : rList)
+        // Is Window in the path from this window
+        if ( ImplGetFirstOverlapWindow()->ImplIsWindowOrChild( elem, true ) )
         {
-            // Is Window in the path from this window
-            if ( ImplGetFirstOverlapWindow()->ImplIsWindowOrChild( elem, true ) )
-            {
-                // Is Window not in the exclude window path or not the
-                // exclude window, then change the status
-                if ( !pExcludeWindow || !pExcludeWindow->ImplIsWindowOrChild( elem, true ) )
-                    elem->EnableInput( bEnable );
-            }
+            // Is Window not in the exclude window path or not the
+            // exclude window, then change the status
+            if ( !pExcludeWindow || !pExcludeWindow->ImplIsWindowOrChild( elem, true ) )
+                elem->EnableInput( bEnable );
         }
     }
 }
@@ -2685,27 +2685,27 @@ void Window::SetActivateMode( ActivateModeFlags nMode )
     if ( mpWindowImpl->mpBorderWindow )
         mpWindowImpl->mpBorderWindow->SetActivateMode( nMode );
 
-    if ( mpWindowImpl->mnActivateMode != nMode )
-    {
-        mpWindowImpl->mnActivateMode = nMode;
+    if ( mpWindowImpl->mnActivateMode == nMode )
+        return;
 
-        // possibly trigger Deactivate/Activate
-        if ( mpWindowImpl->mnActivateMode != ActivateModeFlags::NONE )
+    mpWindowImpl->mnActivateMode = nMode;
+
+    // possibly trigger Deactivate/Activate
+    if ( mpWindowImpl->mnActivateMode != ActivateModeFlags::NONE )
+    {
+        if ( (mpWindowImpl->mbActive || (GetType() == WindowType::BORDERWINDOW)) &&
+             !HasChildPathFocus( true ) )
         {
-            if ( (mpWindowImpl->mbActive || (GetType() == WindowType::BORDERWINDOW)) &&
-                 !HasChildPathFocus( true ) )
-            {
-                mpWindowImpl->mbActive = false;
-                Deactivate();
-            }
+            mpWindowImpl->mbActive = false;
+            Deactivate();
         }
-        else
+    }
+    else
+    {
+        if ( !mpWindowImpl->mbActive || (GetType() == WindowType::BORDERWINDOW) )
         {
-            if ( !mpWindowImpl->mbActive || (GetType() == WindowType::BORDERWINDOW) )
-            {
-                mpWindowImpl->mbActive = true;
-                Activate();
-            }
+            mpWindowImpl->mbActive = true;
+            Activate();
         }
     }
 }
@@ -3427,20 +3427,20 @@ void Window::ImplCallDeactivateListeners( vcl::Window *pNew )
 void Window::ImplCallActivateListeners( vcl::Window *pOld )
 {
     // no activation if the old active window is my child
-    if ( !pOld || !ImplIsChild( pOld ) )
-    {
-        VclPtr<vcl::Window> xWindow(this);
-        CallEventListeners( VclEventId::WindowActivate, pOld );
-        if( xWindow->IsDisposed() )
-            return;
+    if ( pOld && ImplIsChild( pOld ))
+        return;
 
-        if ( ImplGetParent() )
-            ImplGetParent()->ImplCallActivateListeners( pOld );
-        else if( (mpWindowImpl->mnStyle & WB_INTROWIN) == 0 )
-        {
-            // top level frame reached: store hint for DefModalDialogParent
-            ImplGetSVData()->maFrameData.mpActiveApplicationFrame = mpWindowImpl->mpFrameWindow;
-        }
+    VclPtr<vcl::Window> xWindow(this);
+    CallEventListeners( VclEventId::WindowActivate, pOld );
+    if( xWindow->IsDisposed() )
+        return;
+
+    if ( ImplGetParent() )
+        ImplGetParent()->ImplCallActivateListeners( pOld );
+    else if( (mpWindowImpl->mnStyle & WB_INTROWIN) == 0 )
+    {
+        // top level frame reached: store hint for DefModalDialogParent
+        ImplGetSVData()->maFrameData.mpActiveApplicationFrame = mpWindowImpl->mpFrameWindow;
     }
 }
 

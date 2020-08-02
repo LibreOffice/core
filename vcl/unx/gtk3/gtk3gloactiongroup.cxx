@@ -282,32 +282,32 @@ g_lo_action_group_insert_stateful (GLOActionGroup     *group,
 
     GLOAction* old_action = G_LO_ACTION (g_hash_table_lookup (group->priv->table, action_name));
 
-    if (old_action == nullptr || old_action->item_id != item_id)
-    {
-        if (old_action != nullptr)
-            g_lo_action_group_remove (group, action_name);
+    if (old_action != nullptr && old_action->item_id == item_id)
+        return;
 
-        GLOAction* action = g_lo_action_new();
+    if (old_action != nullptr)
+        g_lo_action_group_remove (group, action_name);
 
-        g_hash_table_insert (group->priv->table, g_strdup (action_name), action);
+    GLOAction* action = g_lo_action_new();
 
-        action->item_id = item_id;
-        action->submenu = submenu;
+    g_hash_table_insert (group->priv->table, g_strdup (action_name), action);
 
-        if (parameter_type)
-            action->parameter_type = const_cast<GVariantType*>(parameter_type);
+    action->item_id = item_id;
+    action->submenu = submenu;
 
-        if (state_type)
-            action->state_type = const_cast<GVariantType*>(state_type);
+    if (parameter_type)
+        action->parameter_type = const_cast<GVariantType*>(parameter_type);
 
-        if (state_hint)
-            action->state_hint = g_variant_ref_sink (state_hint);
+    if (state_type)
+        action->state_type = const_cast<GVariantType*>(state_type);
 
-        if (state)
-            action->state = g_variant_ref_sink (state);
+    if (state_hint)
+        action->state_hint = g_variant_ref_sink (state_hint);
 
-        g_action_group_action_added (G_ACTION_GROUP (group), action_name);
-    }
+    if (state)
+        action->state = g_variant_ref_sink (state);
+
+    g_action_group_action_added (G_ACTION_GROUP (group), action_name);
 }
 
 static void

@@ -278,20 +278,20 @@ void SAL_CALL ScVbaEventListener::windowActivated( const lang::EventObject& rEve
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    if( !mbDisposed )
+    if( mbDisposed )
+        return;
+
+    uno::Reference< awt::XWindow > xWindow( rEvent.Source, uno::UNO_QUERY );
+    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
+    // do not fire activation event multiple time for the same window
+    if( pWindow && (pWindow != mpActiveWindow) )
     {
-        uno::Reference< awt::XWindow > xWindow( rEvent.Source, uno::UNO_QUERY );
-        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
-        // do not fire activation event multiple time for the same window
-        if( pWindow && (pWindow != mpActiveWindow) )
-        {
-            // if another window is active, fire deactivation event first
-            if( mpActiveWindow )
-                processWindowActivateEvent( mpActiveWindow, false );
-            // fire activation event for the new window
-            processWindowActivateEvent( pWindow, true );
-            mpActiveWindow = pWindow;
-        }
+        // if another window is active, fire deactivation event first
+        if( mpActiveWindow )
+            processWindowActivateEvent( mpActiveWindow, false );
+        // fire activation event for the new window
+        processWindowActivateEvent( pWindow, true );
+        mpActiveWindow = pWindow;
     }
 }
 

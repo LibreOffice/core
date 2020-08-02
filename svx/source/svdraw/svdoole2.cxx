@@ -225,61 +225,61 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObj
     SolarMutexGuard aGuard;
 
     // the code currently makes sense only in case there is no other client
-    if ( mpObj && mpObj->GetAspect() != embed::Aspects::MSOLE_ICON && aEvent.EventName == "OnVisAreaChanged"
-      && mpObj->GetObjRef().is() && mpObj->GetObjRef()->getClientSite() == uno::Reference< embed::XEmbeddedClient >( this ) )
+    if ( !(mpObj && mpObj->GetAspect() != embed::Aspects::MSOLE_ICON && aEvent.EventName == "OnVisAreaChanged"
+      && mpObj->GetObjRef().is() && mpObj->GetObjRef()->getClientSite() == uno::Reference< embed::XEmbeddedClient >( this )) )
+        return;
+
+    try
     {
+        MapUnit aContainerMapUnit( MapUnit::Map100thMM );
+        uno::Reference< embed::XVisualObject > xParentVis( mpObj->GetParentXModel(), uno::UNO_QUERY );
+        if ( xParentVis.is() )
+            aContainerMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xParentVis->getMapUnit( mpObj->GetAspect() ) );
+
+        MapUnit aObjMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( mpObj->GetObjRef()->getMapUnit( mpObj->GetAspect() ) );
+
+        tools::Rectangle          aVisArea;
+        awt::Size aSz;
         try
         {
-            MapUnit aContainerMapUnit( MapUnit::Map100thMM );
-            uno::Reference< embed::XVisualObject > xParentVis( mpObj->GetParentXModel(), uno::UNO_QUERY );
-            if ( xParentVis.is() )
-                aContainerMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xParentVis->getMapUnit( mpObj->GetAspect() ) );
-
-            MapUnit aObjMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( mpObj->GetObjRef()->getMapUnit( mpObj->GetAspect() ) );
-
-            tools::Rectangle          aVisArea;
-            awt::Size aSz;
-            try
-            {
-                aSz = mpObj->GetObjRef()->getVisualAreaSize( mpObj->GetAspect() );
-            }
-            catch( embed::NoVisualAreaSizeException& )
-            {
-                OSL_FAIL( "No visual area size!" );
-                aSz.Width = 5000;
-                aSz.Height = 5000;
-            }
-            catch( uno::Exception& )
-            {
-                OSL_FAIL( "Unexpected exception!" );
-                aSz.Width = 5000;
-                aSz.Height = 5000;
-            }
-
-            aVisArea.SetSize( Size( aSz.Width, aSz.Height ) );
-            aVisArea = OutputDevice::LogicToLogic(aVisArea, MapMode(aObjMapUnit), MapMode(aContainerMapUnit));
-            Size aScaledSize( static_cast< long >( m_aScaleWidth * Fraction( aVisArea.GetWidth() ) ),
-                                static_cast< long >( m_aScaleHeight * Fraction( aVisArea.GetHeight() ) ) );
-            tools::Rectangle aLogicRect( mpObj->GetLogicRect() );
-
-            // react to the change if the difference is bigger than one pixel
-            Size aPixelDiff =
-                Application::GetDefaultDevice()->LogicToPixel(
-                    Size( aLogicRect.GetWidth() - aScaledSize.Width(),
-                          aLogicRect.GetHeight() - aScaledSize.Height() ),
-                    MapMode(aContainerMapUnit));
-            if( aPixelDiff.Width() || aPixelDiff.Height() )
-            {
-                mpObj->SetLogicRect( tools::Rectangle( aLogicRect.TopLeft(), aScaledSize ) );
-                mpObj->BroadcastObjectChange();
-            }
-            else
-                mpObj->ActionChanged();
+            aSz = mpObj->GetObjRef()->getVisualAreaSize( mpObj->GetAspect() );
+        }
+        catch( embed::NoVisualAreaSizeException& )
+        {
+            OSL_FAIL( "No visual area size!" );
+            aSz.Width = 5000;
+            aSz.Height = 5000;
         }
         catch( uno::Exception& )
         {
             OSL_FAIL( "Unexpected exception!" );
+            aSz.Width = 5000;
+            aSz.Height = 5000;
         }
+
+        aVisArea.SetSize( Size( aSz.Width, aSz.Height ) );
+        aVisArea = OutputDevice::LogicToLogic(aVisArea, MapMode(aObjMapUnit), MapMode(aContainerMapUnit));
+        Size aScaledSize( static_cast< long >( m_aScaleWidth * Fraction( aVisArea.GetWidth() ) ),
+                            static_cast< long >( m_aScaleHeight * Fraction( aVisArea.GetHeight() ) ) );
+        tools::Rectangle aLogicRect( mpObj->GetLogicRect() );
+
+        // react to the change if the difference is bigger than one pixel
+        Size aPixelDiff =
+            Application::GetDefaultDevice()->LogicToPixel(
+                Size( aLogicRect.GetWidth() - aScaledSize.Width(),
+                      aLogicRect.GetHeight() - aScaledSize.Height() ),
+                MapMode(aContainerMapUnit));
+        if( aPixelDiff.Width() || aPixelDiff.Height() )
+        {
+            mpObj->SetLogicRect( tools::Rectangle( aLogicRect.TopLeft(), aScaledSize ) );
+            mpObj->BroadcastObjectChange();
+        }
+        else
+            mpObj->ActionChanged();
+    }
+    catch( uno::Exception& )
+    {
+        OSL_FAIL( "Unexpected exception!" );
     }
 }
 
@@ -492,32 +492,32 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::changedPlacement( const awt::Rectangl
     tools::Rectangle aNewLogicRect = Application::GetDefaultDevice()->PixelToLogic(aNewPixelRect, MapMode(aContainerMapUnit));
     tools::Rectangle aLogicRect = impl_getScaledRect_nothrow();
 
-    if ( aNewLogicRect != aLogicRect )
+    if ( aNewLogicRect == aLogicRect )
+        return;
+
+    // the calculation of the object area has not changed the object size
+    // it should be done here then
+    //SfxBooleanFlagGuard aGuard( m_bResizeNoScale, true );
+
+    // new size of the object area without scaling
+    Size aNewObjSize( long( aNewLogicRect.GetWidth() / m_aScaleWidth ),
+                      long( aNewLogicRect.GetHeight() / m_aScaleHeight ) );
+
+    // now remove scaling from new placement and keep this at the new object area
+    aNewLogicRect.SetSize( aNewObjSize );
+    // react to the change if the difference is bigger than one pixel
+    Size aPixelDiff =
+        Application::GetDefaultDevice()->LogicToPixel(
+            Size( aLogicRect.GetWidth() - aNewObjSize.Width(),
+                  aLogicRect.GetHeight() - aNewObjSize.Height() ),
+            MapMode(aContainerMapUnit));
+    if( aPixelDiff.Width() || aPixelDiff.Height() )
     {
-        // the calculation of the object area has not changed the object size
-        // it should be done here then
-        //SfxBooleanFlagGuard aGuard( m_bResizeNoScale, true );
-
-        // new size of the object area without scaling
-        Size aNewObjSize( long( aNewLogicRect.GetWidth() / m_aScaleWidth ),
-                          long( aNewLogicRect.GetHeight() / m_aScaleHeight ) );
-
-        // now remove scaling from new placement and keep this at the new object area
-        aNewLogicRect.SetSize( aNewObjSize );
-        // react to the change if the difference is bigger than one pixel
-        Size aPixelDiff =
-            Application::GetDefaultDevice()->LogicToPixel(
-                Size( aLogicRect.GetWidth() - aNewObjSize.Width(),
-                      aLogicRect.GetHeight() - aNewObjSize.Height() ),
-                MapMode(aContainerMapUnit));
-        if( aPixelDiff.Width() || aPixelDiff.Height() )
-        {
-            mpObj->SetLogicRect( tools::Rectangle( aLogicRect.TopLeft(), aNewObjSize ) );
-            mpObj->BroadcastObjectChange();
-        }
-        else
-            mpObj->ActionChanged();
+        mpObj->SetLogicRect( tools::Rectangle( aLogicRect.TopLeft(), aNewObjSize ) );
+        mpObj->BroadcastObjectChange();
     }
+    else
+        mpObj->ActionChanged();
 }
 // XWindowSupplier
 
@@ -883,23 +883,23 @@ void SdrOle2Obj::BreakFileLink_Impl()
 {
     uno::Reference<document::XStorageBasedDocument> xDoc(getSdrModelFromSdrObject().getUnoModel(), uno::UNO_QUERY);
 
-    if ( xDoc.is() )
+    if ( !xDoc.is() )
+        return;
+
+    uno::Reference< embed::XStorage > xStorage = xDoc->getDocumentStorage();
+    if ( !xStorage.is() )
+        return;
+
+    try
     {
-        uno::Reference< embed::XStorage > xStorage = xDoc->getDocumentStorage();
-        if ( xStorage.is() )
-        {
-            try
-            {
-                uno::Reference< embed::XLinkageSupport > xLinkSupport( mpImpl->mxObjRef.GetObject(), uno::UNO_QUERY_THROW );
-                xLinkSupport->breakLink( xStorage, mpImpl->aPersistName );
-                DisconnectFileLink_Impl();
-                mpImpl->maLinkURL.clear();
-            }
-            catch( css::uno::Exception& )
-            {
-                TOOLS_WARN_EXCEPTION( "svx", "SdrOle2Obj::BreakFileLink_Impl()" );
-            }
-        }
+        uno::Reference< embed::XLinkageSupport > xLinkSupport( mpImpl->mxObjRef.GetObject(), uno::UNO_QUERY_THROW );
+        xLinkSupport->breakLink( xStorage, mpImpl->aPersistName );
+        DisconnectFileLink_Impl();
+        mpImpl->maLinkURL.clear();
+    }
+    catch( css::uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION( "svx", "SdrOle2Obj::BreakFileLink_Impl()" );
     }
 }
 
@@ -916,105 +916,105 @@ void SdrOle2Obj::DisconnectFileLink_Impl()
 
 void SdrOle2Obj::CheckFileLink_Impl()
 {
-    if (mpImpl->mxObjRef.GetObject().is() && !mpImpl->mpObjectLink)
+    if (!(mpImpl->mxObjRef.GetObject().is() && !mpImpl->mpObjectLink))
+        return;
+
+    try
     {
-        try
+        uno::Reference< embed::XLinkageSupport > xLinkSupport( mpImpl->mxObjRef.GetObject(), uno::UNO_QUERY );
+
+        if ( xLinkSupport.is() && xLinkSupport->isLink() )
         {
-            uno::Reference< embed::XLinkageSupport > xLinkSupport( mpImpl->mxObjRef.GetObject(), uno::UNO_QUERY );
+            OUString aLinkURL = xLinkSupport->getLinkURL();
 
-            if ( xLinkSupport.is() && xLinkSupport->isLink() )
+            if ( !aLinkURL.isEmpty() )
             {
-                OUString aLinkURL = xLinkSupport->getLinkURL();
+                // this is a file link so the model link manager should handle it
+                sfx2::LinkManager* pLinkManager(getSdrModelFromSdrObject().GetLinkManager());
 
-                if ( !aLinkURL.isEmpty() )
+                if ( pLinkManager )
                 {
-                    // this is a file link so the model link manager should handle it
-                    sfx2::LinkManager* pLinkManager(getSdrModelFromSdrObject().GetLinkManager());
-
-                    if ( pLinkManager )
-                    {
-                        mpImpl->mpObjectLink = new SdrEmbedObjectLink( this );
-                        mpImpl->maLinkURL = aLinkURL;
-                        pLinkManager->InsertFileLink( *mpImpl->mpObjectLink, sfx2::SvBaseLinkObjectType::ClientOle, aLinkURL );
-                        mpImpl->mpObjectLink->Connect();
-                    }
+                    mpImpl->mpObjectLink = new SdrEmbedObjectLink( this );
+                    mpImpl->maLinkURL = aLinkURL;
+                    pLinkManager->InsertFileLink( *mpImpl->mpObjectLink, sfx2::SvBaseLinkObjectType::ClientOle, aLinkURL );
+                    mpImpl->mpObjectLink->Connect();
                 }
             }
         }
-        catch (const css::uno::Exception&)
-        {
-            TOOLS_WARN_EXCEPTION("svx", "SdrOle2Obj::CheckFileLink_Impl()");
-        }
+    }
+    catch (const css::uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("svx", "SdrOle2Obj::CheckFileLink_Impl()");
     }
 }
 
 void SdrOle2Obj::Connect_Impl()
 {
-    if(!mpImpl->aPersistName.isEmpty() )
+    if(mpImpl->aPersistName.isEmpty() )
+        return;
+
+    try
     {
-        try
+        ::comphelper::IEmbeddedHelper* pPers(getSdrModelFromSdrObject().GetPersist());
+
+        if ( pPers )
         {
-            ::comphelper::IEmbeddedHelper* pPers(getSdrModelFromSdrObject().GetPersist());
+            comphelper::EmbeddedObjectContainer& rContainer = pPers->getEmbeddedObjectContainer();
 
-            if ( pPers )
+            if ( !rContainer.HasEmbeddedObject( mpImpl->aPersistName )
+              || ( mpImpl->mxObjRef.is() && !rContainer.HasEmbeddedObject( mpImpl->mxObjRef.GetObject() ) ) )
             {
-                comphelper::EmbeddedObjectContainer& rContainer = pPers->getEmbeddedObjectContainer();
-
-                if ( !rContainer.HasEmbeddedObject( mpImpl->aPersistName )
-                  || ( mpImpl->mxObjRef.is() && !rContainer.HasEmbeddedObject( mpImpl->mxObjRef.GetObject() ) ) )
+                // object not known to container document
+                // No object -> disaster!
+                DBG_ASSERT( mpImpl->mxObjRef.is(), "No object in connect!");
+                if ( mpImpl->mxObjRef.is() )
                 {
-                    // object not known to container document
-                    // No object -> disaster!
-                    DBG_ASSERT( mpImpl->mxObjRef.is(), "No object in connect!");
-                    if ( mpImpl->mxObjRef.is() )
-                    {
-                        // object came from the outside, now add it to the container
-                        OUString aTmp;
-                        rContainer.InsertEmbeddedObject( mpImpl->mxObjRef.GetObject(), aTmp );
-                        mpImpl->aPersistName = aTmp;
-                    }
-                }
-                else if ( !mpImpl->mxObjRef.is() )
-                {
-                    mpImpl->mxObjRef.Assign( rContainer.GetEmbeddedObject( mpImpl->aPersistName ), mpImpl->mxObjRef.GetViewAspect() );
-                    mpImpl->mbTypeAsked = false;
-                }
-
-                if ( mpImpl->mxObjRef.GetObject().is() )
-                {
-                    mpImpl->mxObjRef.AssignToContainer( &rContainer, mpImpl->aPersistName );
-                    mpImpl->mbConnected = true;
-                    mpImpl->mxObjRef.Lock();
+                    // object came from the outside, now add it to the container
+                    OUString aTmp;
+                    rContainer.InsertEmbeddedObject( mpImpl->mxObjRef.GetObject(), aTmp );
+                    mpImpl->aPersistName = aTmp;
                 }
             }
-
-            if ( mpImpl->mxObjRef.is() )
+            else if ( !mpImpl->mxObjRef.is() )
             {
-                if ( !mpImpl->mxLightClient.is() )
-                    mpImpl->mxLightClient = new SdrLightEmbeddedClient_Impl( this );
+                mpImpl->mxObjRef.Assign( rContainer.GetEmbeddedObject( mpImpl->aPersistName ), mpImpl->mxObjRef.GetViewAspect() );
+                mpImpl->mbTypeAsked = false;
+            }
 
-                mpImpl->mxObjRef->addStateChangeListener( mpImpl->mxLightClient.get() );
-                mpImpl->mxObjRef->addEventListener( uno::Reference< document::XEventListener >( mpImpl->mxLightClient.get() ) );
-
-                if ( mpImpl->mxObjRef->getCurrentState() != embed::EmbedStates::LOADED )
-                    GetSdrGlobalData().GetOLEObjCache().InsertObj(this);
-
-                CheckFileLink_Impl();
-
-                uno::Reference< container::XChild > xChild( mpImpl->mxObjRef.GetObject(), uno::UNO_QUERY );
-                if( xChild.is() )
-                {
-                    uno::Reference< uno::XInterface > xParent( getSdrModelFromSdrObject().getUnoModel());
-                    if( xParent.is())
-                        xChild->setParent( getSdrModelFromSdrObject().getUnoModel() );
-                }
-
+            if ( mpImpl->mxObjRef.GetObject().is() )
+            {
+                mpImpl->mxObjRef.AssignToContainer( &rContainer, mpImpl->aPersistName );
+                mpImpl->mbConnected = true;
+                mpImpl->mxObjRef.Lock();
             }
         }
-        catch( css::uno::Exception& )
+
+        if ( mpImpl->mxObjRef.is() )
         {
-            TOOLS_WARN_EXCEPTION( "svx", "SdrOle2Obj::Connect_Impl()" );
+            if ( !mpImpl->mxLightClient.is() )
+                mpImpl->mxLightClient = new SdrLightEmbeddedClient_Impl( this );
+
+            mpImpl->mxObjRef->addStateChangeListener( mpImpl->mxLightClient.get() );
+            mpImpl->mxObjRef->addEventListener( uno::Reference< document::XEventListener >( mpImpl->mxLightClient.get() ) );
+
+            if ( mpImpl->mxObjRef->getCurrentState() != embed::EmbedStates::LOADED )
+                GetSdrGlobalData().GetOLEObjCache().InsertObj(this);
+
+            CheckFileLink_Impl();
+
+            uno::Reference< container::XChild > xChild( mpImpl->mxObjRef.GetObject(), uno::UNO_QUERY );
+            if( xChild.is() )
+            {
+                uno::Reference< uno::XInterface > xParent( getSdrModelFromSdrObject().getUnoModel());
+                if( xParent.is())
+                    xChild->setParent( getSdrModelFromSdrObject().getUnoModel() );
+            }
+
         }
+    }
+    catch( css::uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION( "svx", "SdrOle2Obj::Connect_Impl()" );
     }
 }
 
@@ -1025,20 +1025,20 @@ void SdrOle2Obj::ObjectLoaded()
 
 void SdrOle2Obj::AddListeners_Impl()
 {
-    if( mpImpl->mxObjRef.is() && mpImpl->mxObjRef->getCurrentState() != embed::EmbedStates::LOADED )
-    {
-        // register modify listener
-        if (!mpImpl->mxModifyListener.is())
-        {
-            mpImpl->mxModifyListener = new SvxUnoShapeModifyListener(this);
-        }
+    if( !(mpImpl->mxObjRef.is() && mpImpl->mxObjRef->getCurrentState() != embed::EmbedStates::LOADED) )
+        return;
 
-        uno::Reference< util::XModifyBroadcaster > xBC( getXModel(), uno::UNO_QUERY );
-        if (xBC.is())
-        {
-            uno::Reference<util::XModifyListener> xListener(mpImpl->mxModifyListener.get());
-            xBC->addModifyListener( xListener );
-        }
+    // register modify listener
+    if (!mpImpl->mxModifyListener.is())
+    {
+        mpImpl->mxModifyListener = new SvxUnoShapeModifyListener(this);
+    }
+
+    uno::Reference< util::XModifyBroadcaster > xBC( getXModel(), uno::UNO_QUERY );
+    if (xBC.is())
+    {
+        uno::Reference<util::XModifyListener> xListener(mpImpl->mxModifyListener.get());
+        xBC->addModifyListener( xListener );
     }
 }
 
@@ -1059,25 +1059,25 @@ void SdrOle2Obj::Disconnect()
 
 void SdrOle2Obj::RemoveListeners_Impl()
 {
-    if ( mpImpl->mxObjRef.is() && !mpImpl->aPersistName.isEmpty() )
+    if ( !(mpImpl->mxObjRef.is() && !mpImpl->aPersistName.isEmpty()) )
+        return;
+
+    try
     {
-        try
+        sal_Int32 nState = mpImpl->mxObjRef->getCurrentState();
+        if ( nState != embed::EmbedStates::LOADED )
         {
-            sal_Int32 nState = mpImpl->mxObjRef->getCurrentState();
-            if ( nState != embed::EmbedStates::LOADED )
+            uno::Reference< util::XModifyBroadcaster > xBC( getXModel(), uno::UNO_QUERY );
+            if (xBC.is() && mpImpl->mxModifyListener.is())
             {
-                uno::Reference< util::XModifyBroadcaster > xBC( getXModel(), uno::UNO_QUERY );
-                if (xBC.is() && mpImpl->mxModifyListener.is())
-                {
-                    uno::Reference<util::XModifyListener> xListener(mpImpl->mxModifyListener.get());
-                    xBC->removeModifyListener( xListener );
-                }
+                uno::Reference<util::XModifyListener> xListener(mpImpl->mxModifyListener.get());
+                xBC->removeModifyListener( xListener );
             }
         }
-        catch( css::uno::Exception& )
-        {
-            TOOLS_WARN_EXCEPTION( "svx",  "SdrOle2Obj::RemoveListeners_Impl()" );
-        }
+    }
+    catch( css::uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION( "svx",  "SdrOle2Obj::RemoveListeners_Impl()" );
     }
 }
 
@@ -1446,149 +1446,149 @@ void SdrOle2Obj::ImpSetVisAreaSize()
 
     // the object area of an embedded object was changed, e.g. by user interaction an a selected object
     GetObjRef();
-    if (mpImpl->mxObjRef.is())
+    if (!mpImpl->mxObjRef.is())
+        return;
+
+    sal_Int64 nMiscStatus = mpImpl->mxObjRef->getStatus( GetAspect() );
+
+    // the client is required to get access to scaling
+    SfxInPlaceClient* pClient(
+        SfxInPlaceClient::GetClient(
+            dynamic_cast<SfxObjectShell*>(
+                getSdrModelFromSdrObject().GetPersist()),
+                mpImpl->mxObjRef.GetObject()));
+    const bool bHasOwnClient(
+        mpImpl->mxLightClient.is() &&
+        mpImpl->mxObjRef->getClientSite() == uno::Reference< embed::XEmbeddedClient >( mpImpl->mxLightClient.get() ) );
+
+    if ( pClient || bHasOwnClient )
     {
-        sal_Int64 nMiscStatus = mpImpl->mxObjRef->getStatus( GetAspect() );
-
-        // the client is required to get access to scaling
-        SfxInPlaceClient* pClient(
-            SfxInPlaceClient::GetClient(
-                dynamic_cast<SfxObjectShell*>(
-                    getSdrModelFromSdrObject().GetPersist()),
-                    mpImpl->mxObjRef.GetObject()));
-        const bool bHasOwnClient(
-            mpImpl->mxLightClient.is() &&
-            mpImpl->mxObjRef->getClientSite() == uno::Reference< embed::XEmbeddedClient >( mpImpl->mxLightClient.get() ) );
-
-        if ( pClient || bHasOwnClient )
+        // TODO: IMHO we need to do similar things when object is UIActive or OutplaceActive?!
+        if ( ((nMiscStatus & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE) &&
+                svt::EmbeddedObjectRef::TryRunningState( mpImpl->mxObjRef.GetObject() ))
+                || mpImpl->mxObjRef->getCurrentState() == embed::EmbedStates::INPLACE_ACTIVE
+                )
         {
-            // TODO: IMHO we need to do similar things when object is UIActive or OutplaceActive?!
-            if ( ((nMiscStatus & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE) &&
-                    svt::EmbeddedObjectRef::TryRunningState( mpImpl->mxObjRef.GetObject() ))
-                    || mpImpl->mxObjRef->getCurrentState() == embed::EmbedStates::INPLACE_ACTIVE
-                    )
+            Fraction aScaleWidth;
+            Fraction aScaleHeight;
+            if ( pClient )
             {
-                Fraction aScaleWidth;
-                Fraction aScaleHeight;
-                if ( pClient )
-                {
-                    aScaleWidth = pClient->GetScaleWidth();
-                    aScaleHeight = pClient->GetScaleHeight();
-                }
-                else
-                {
-                    aScaleWidth = mpImpl->mxLightClient->GetScaleWidth();
-                    aScaleHeight = mpImpl->mxLightClient->GetScaleHeight();
-                }
-
-                // The object wants to resize itself (f.e. Chart wants to recalculate the layout)
-                // or object is inplace active and so has a window that must be resized also
-                // In these cases the change in the object area size will be reflected in a change of the
-                // objects' visual area. The scaling will not change, but it might exist already and must
-                // be used in calculations
-                MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( mpImpl->mxObjRef->getMapUnit( GetAspect() ) );
-                Size aVisSize( static_cast<long>( Fraction( maRect.GetWidth() ) / aScaleWidth ),
-                                static_cast<long>( Fraction( maRect.GetHeight() ) / aScaleHeight ) );
-
-                aVisSize = OutputDevice::LogicToLogic(
-                    aVisSize,
-                    MapMode(getSdrModelFromSdrObject().GetScaleUnit()),
-                    MapMode(aMapUnit));
-                awt::Size aSz;
-                aSz.Width = aVisSize.Width();
-                aSz.Height = aVisSize.Height();
-                mpImpl->mxObjRef->setVisualAreaSize( GetAspect(), aSz );
-
-                try
-                {
-                    aSz = mpImpl->mxObjRef->getVisualAreaSize( GetAspect() );
-                }
-                catch( embed::NoVisualAreaSizeException& )
-                {}
-
-                tools::Rectangle aAcceptedVisArea;
-                aAcceptedVisArea.SetSize( Size( static_cast<long>( Fraction( long( aSz.Width ) ) * aScaleWidth ),
-                                                static_cast<long>( Fraction( long( aSz.Height ) ) * aScaleHeight ) ) );
-                if (aVisSize != aAcceptedVisArea.GetSize())
-                {
-                    // server changed VisArea to its liking and the VisArea is different than the suggested one
-                    // store the new value as given by the object
-                    MapUnit aNewMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( mpImpl->mxObjRef->getMapUnit( GetAspect() ) );
-                    maRect.SetSize(
-                        OutputDevice::LogicToLogic(
-                            aAcceptedVisArea.GetSize(),
-                            MapMode(aNewMapUnit),
-                            MapMode(getSdrModelFromSdrObject().GetScaleUnit())));
-                }
-
-                // make the new object area known to the client
-                // compared to the "else" branch aRect might have been changed by the object and no additional scaling was applied
-                // WHY this -> OSL_ASSERT( pClient );
-                if( pClient )
-                    pClient->SetObjArea(maRect);
-
-                // we need a new replacement image as the object has resized itself
-
-                //#i79578# don't request a new replacement image for charts to often
-                //a chart sends a modified call to the framework if it was changed
-                //thus the replacement update is already handled there
-                if( !IsChart() )
-                    mpImpl->mxObjRef.UpdateReplacement();
+                aScaleWidth = pClient->GetScaleWidth();
+                aScaleHeight = pClient->GetScaleHeight();
             }
             else
             {
-                // The object isn't active and does not want to resize itself so the changed object area size
-                // will be reflected in a changed object scaling
-                Fraction aScaleWidth;
-                Fraction aScaleHeight;
-                Size aObjAreaSize;
-                if ( CalculateNewScaling( aScaleWidth, aScaleHeight, aObjAreaSize ) )
+                aScaleWidth = mpImpl->mxLightClient->GetScaleWidth();
+                aScaleHeight = mpImpl->mxLightClient->GetScaleHeight();
+            }
+
+            // The object wants to resize itself (f.e. Chart wants to recalculate the layout)
+            // or object is inplace active and so has a window that must be resized also
+            // In these cases the change in the object area size will be reflected in a change of the
+            // objects' visual area. The scaling will not change, but it might exist already and must
+            // be used in calculations
+            MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( mpImpl->mxObjRef->getMapUnit( GetAspect() ) );
+            Size aVisSize( static_cast<long>( Fraction( maRect.GetWidth() ) / aScaleWidth ),
+                            static_cast<long>( Fraction( maRect.GetHeight() ) / aScaleHeight ) );
+
+            aVisSize = OutputDevice::LogicToLogic(
+                aVisSize,
+                MapMode(getSdrModelFromSdrObject().GetScaleUnit()),
+                MapMode(aMapUnit));
+            awt::Size aSz;
+            aSz.Width = aVisSize.Width();
+            aSz.Height = aVisSize.Height();
+            mpImpl->mxObjRef->setVisualAreaSize( GetAspect(), aSz );
+
+            try
+            {
+                aSz = mpImpl->mxObjRef->getVisualAreaSize( GetAspect() );
+            }
+            catch( embed::NoVisualAreaSizeException& )
+            {}
+
+            tools::Rectangle aAcceptedVisArea;
+            aAcceptedVisArea.SetSize( Size( static_cast<long>( Fraction( long( aSz.Width ) ) * aScaleWidth ),
+                                            static_cast<long>( Fraction( long( aSz.Height ) ) * aScaleHeight ) ) );
+            if (aVisSize != aAcceptedVisArea.GetSize())
+            {
+                // server changed VisArea to its liking and the VisArea is different than the suggested one
+                // store the new value as given by the object
+                MapUnit aNewMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( mpImpl->mxObjRef->getMapUnit( GetAspect() ) );
+                maRect.SetSize(
+                    OutputDevice::LogicToLogic(
+                        aAcceptedVisArea.GetSize(),
+                        MapMode(aNewMapUnit),
+                        MapMode(getSdrModelFromSdrObject().GetScaleUnit())));
+            }
+
+            // make the new object area known to the client
+            // compared to the "else" branch aRect might have been changed by the object and no additional scaling was applied
+            // WHY this -> OSL_ASSERT( pClient );
+            if( pClient )
+                pClient->SetObjArea(maRect);
+
+            // we need a new replacement image as the object has resized itself
+
+            //#i79578# don't request a new replacement image for charts to often
+            //a chart sends a modified call to the framework if it was changed
+            //thus the replacement update is already handled there
+            if( !IsChart() )
+                mpImpl->mxObjRef.UpdateReplacement();
+        }
+        else
+        {
+            // The object isn't active and does not want to resize itself so the changed object area size
+            // will be reflected in a changed object scaling
+            Fraction aScaleWidth;
+            Fraction aScaleHeight;
+            Size aObjAreaSize;
+            if ( CalculateNewScaling( aScaleWidth, aScaleHeight, aObjAreaSize ) )
+            {
+                if ( pClient )
                 {
-                    if ( pClient )
-                    {
-                        tools::Rectangle aScaleRect(maRect.TopLeft(), aObjAreaSize);
-                        pClient->SetObjAreaAndScale( aScaleRect, aScaleWidth, aScaleHeight);
-                    }
-                    else
-                    {
-                        mpImpl->mxLightClient->SetSizeScale( aScaleWidth, aScaleHeight );
-                    }
+                    tools::Rectangle aScaleRect(maRect.TopLeft(), aObjAreaSize);
+                    pClient->SetObjAreaAndScale( aScaleRect, aScaleWidth, aScaleHeight);
+                }
+                else
+                {
+                    mpImpl->mxLightClient->SetSizeScale( aScaleWidth, aScaleHeight );
                 }
             }
         }
-        else if( (nMiscStatus & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE) &&
-            svt::EmbeddedObjectRef::TryRunningState( mpImpl->mxObjRef.GetObject() ) )
+    }
+    else if( (nMiscStatus & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE) &&
+        svt::EmbeddedObjectRef::TryRunningState( mpImpl->mxObjRef.GetObject() ) )
+    {
+        //also handle not sfx based ole objects e.g. charts
+        //#i83860# resizing charts in impress distorts fonts
+        uno::Reference< embed::XVisualObject > xVisualObject( getXModel(), uno::UNO_QUERY );
+        if( xVisualObject.is() )
         {
-            //also handle not sfx based ole objects e.g. charts
-            //#i83860# resizing charts in impress distorts fonts
-            uno::Reference< embed::XVisualObject > xVisualObject( getXModel(), uno::UNO_QUERY );
-            if( xVisualObject.is() )
-            {
-                const MapUnit aMapUnit(
-                    VCLUnoHelper::UnoEmbed2VCLMapUnit(
-                        mpImpl->mxObjRef->getMapUnit(GetAspect())));
-                const Point aTL( maRect.TopLeft() );
-                const Point aBR( maRect.BottomRight() );
-                const Point aTL2(
-                    OutputDevice::LogicToLogic(
-                        aTL,
-                        MapMode(getSdrModelFromSdrObject().GetScaleUnit()),
-                        MapMode(aMapUnit)));
-                const Point aBR2(
-                    OutputDevice::LogicToLogic(
-                        aBR,
-                        MapMode(getSdrModelFromSdrObject().GetScaleUnit()),
-                        MapMode(aMapUnit)));
-                const tools::Rectangle aNewRect(
-                    aTL2,
-                    aBR2);
+            const MapUnit aMapUnit(
+                VCLUnoHelper::UnoEmbed2VCLMapUnit(
+                    mpImpl->mxObjRef->getMapUnit(GetAspect())));
+            const Point aTL( maRect.TopLeft() );
+            const Point aBR( maRect.BottomRight() );
+            const Point aTL2(
+                OutputDevice::LogicToLogic(
+                    aTL,
+                    MapMode(getSdrModelFromSdrObject().GetScaleUnit()),
+                    MapMode(aMapUnit)));
+            const Point aBR2(
+                OutputDevice::LogicToLogic(
+                    aBR,
+                    MapMode(getSdrModelFromSdrObject().GetScaleUnit()),
+                    MapMode(aMapUnit)));
+            const tools::Rectangle aNewRect(
+                aTL2,
+                aBR2);
 
-                xVisualObject->setVisualAreaSize(
-                    GetAspect(),
-                    awt::Size(
-                        aNewRect.GetWidth(),
-                        aNewRect.GetHeight()));
-            }
+            xVisualObject->setVisualAreaSize(
+                GetAspect(),
+                awt::Size(
+                    aNewRect.GetWidth(),
+                    aNewRect.GetHeight()));
         }
     }
 }

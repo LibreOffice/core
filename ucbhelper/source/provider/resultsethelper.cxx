@@ -231,30 +231,30 @@ void ResultSetImplHelper::init( bool bStatic )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    if ( !m_bInitDone )
+    if ( m_bInitDone )
+        return;
+
+    if ( bStatic )
     {
-        if ( bStatic )
-        {
-            // virtual... derived class fills m_xResultSet1
-            initStatic();
+        // virtual... derived class fills m_xResultSet1
+        initStatic();
 
-            OSL_ENSURE( m_xResultSet1.is(),
-                        "ResultSetImplHelper::init - No 1st result set!" );
-            m_bStatic = true;
-        }
-        else
-        {
-            // virtual... derived class fills m_xResultSet1 and m_xResultSet2
-            initDynamic();
-
-            OSL_ENSURE( m_xResultSet1.is(),
-                        "ResultSetImplHelper::init - No 1st result set!" );
-            OSL_ENSURE( m_xResultSet2.is(),
-                        "ResultSetImplHelper::init - No 2nd result set!" );
-            m_bStatic = false;
-        }
-        m_bInitDone = true;
+        OSL_ENSURE( m_xResultSet1.is(),
+                    "ResultSetImplHelper::init - No 1st result set!" );
+        m_bStatic = true;
     }
+    else
+    {
+        // virtual... derived class fills m_xResultSet1 and m_xResultSet2
+        initDynamic();
+
+        OSL_ENSURE( m_xResultSet1.is(),
+                    "ResultSetImplHelper::init - No 1st result set!" );
+        OSL_ENSURE( m_xResultSet2.is(),
+                    "ResultSetImplHelper::init - No 2nd result set!" );
+        m_bStatic = false;
+    }
+    m_bInitDone = true;
 }
 
 } // namespace ucbhelper

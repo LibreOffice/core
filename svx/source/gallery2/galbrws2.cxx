@@ -495,25 +495,25 @@ void GalleryBrowser2::ShowContextMenu(const CommandEvent& rCEvt)
     Point aSelPos;
     const sal_uInt32 nItemId = ImplGetSelectedItemId( rCEvt.IsMouseEvent() ? &aMousePos : nullptr, aSelPos );
 
-    if( mpCurTheme && nItemId && ( nItemId <= mpCurTheme->GetObjectCount() ) )
-    {
-        ImplSelectItemId( nItemId );
+    if( !(mpCurTheme && nItemId && ( nItemId <= mpCurTheme->GetObjectCount() )) )
+        return;
 
-        css::uno::Reference< css::frame::XFrame > xFrame( GetFrame() );
-        if ( xFrame.is() )
-        {
-            weld::Widget* pParent = GetViewWindow();
-            mnCurActionPos = nItemId - 1;
-            rtl::Reference< GalleryThemePopup > xPopup(
-                new GalleryThemePopup(
-                    pParent,
-                    mpCurTheme,
-                    mnCurActionPos,
-                    GALLERYBROWSERMODE_PREVIEW == GetMode(),
-                    this ) );
-            xPopup->ExecutePopup(pParent, aSelPos);
-        }
-    }
+    ImplSelectItemId( nItemId );
+
+    css::uno::Reference< css::frame::XFrame > xFrame( GetFrame() );
+    if ( !xFrame.is() )
+        return;
+
+    weld::Widget* pParent = GetViewWindow();
+    mnCurActionPos = nItemId - 1;
+    rtl::Reference< GalleryThemePopup > xPopup(
+        new GalleryThemePopup(
+            pParent,
+            mpCurTheme,
+            mnCurActionPos,
+            GALLERYBROWSERMODE_PREVIEW == GetMode(),
+            this ) );
+    xPopup->ExecutePopup(pParent, aSelPos);
 }
 
 bool GalleryBrowser2::ViewBoxHasFocus() const
@@ -630,83 +630,83 @@ void GalleryBrowser2::SelectTheme( const OUString& rThemeName )
 
 void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
 {
-    if( GetMode() != eMode )
-    {
-        meLastMode = GetMode();
+    if( GetMode() == eMode )
+        return;
 
-        switch( eMode )
+    meLastMode = GetMode();
+
+    switch( eMode )
+    {
+        case GALLERYBROWSERMODE_ICON:
         {
-            case GALLERYBROWSERMODE_ICON:
+            mxListView->hide();
+
+            mxPreview->Hide();
+            mxPreview->SetGraphic( Graphic() );
+            GalleryPreview::PreviewMedia( INetURLObject() );
+
+            mxIconView->Show();
+
+            mxIconButton->set_sensitive(true);
+            mxListButton->set_sensitive(true);
+
+            mxIconButton->set_active(true);
+            mxListButton->set_active(false);
+        }
+        break;
+
+        case GALLERYBROWSERMODE_LIST:
+        {
+            mxIconView->Hide();
+
+            mxPreview->Hide();
+            mxPreview->SetGraphic( Graphic() );
+            GalleryPreview::PreviewMedia( INetURLObject() );
+
+            mxListView->show();
+            UpdateRows(true);
+
+            mxIconButton->set_sensitive(true);
+            mxListButton->set_sensitive(true);
+
+            mxIconButton->set_active(false);
+            mxListButton->set_active(true);
+        }
+        break;
+
+        case GALLERYBROWSERMODE_PREVIEW:
+        {
+            Graphic     aGraphic;
+            Point       aSelPos;
+            const sal_uInt32 nItemId = ImplGetSelectedItemId( nullptr, aSelPos );
+
+            if( nItemId )
             {
+                const sal_uInt32 nPos = nItemId - 1;
+
+                mxIconView->Hide();
                 mxListView->hide();
 
-                mxPreview->Hide();
-                mxPreview->SetGraphic( Graphic() );
-                GalleryPreview::PreviewMedia( INetURLObject() );
+                if( mpCurTheme )
+                    mpCurTheme->GetGraphic( nPos, aGraphic );
 
-                mxIconView->Show();
+                mxPreview->SetGraphic( aGraphic );
+                mxPreview->Show();
 
-                mxIconButton->set_sensitive(true);
-                mxListButton->set_sensitive(true);
+                if( mpCurTheme && mpCurTheme->GetObjectKind( nPos ) == SgaObjKind::Sound )
+                    GalleryPreview::PreviewMedia( mpCurTheme->GetObjectURL( nPos ) );
 
-                mxIconButton->set_active(true);
-                mxListButton->set_active(false);
+                mxIconButton->set_sensitive(false);
+                mxListButton->set_sensitive(false);
             }
-            break;
-
-            case GALLERYBROWSERMODE_LIST:
-            {
-                mxIconView->Hide();
-
-                mxPreview->Hide();
-                mxPreview->SetGraphic( Graphic() );
-                GalleryPreview::PreviewMedia( INetURLObject() );
-
-                mxListView->show();
-                UpdateRows(true);
-
-                mxIconButton->set_sensitive(true);
-                mxListButton->set_sensitive(true);
-
-                mxIconButton->set_active(false);
-                mxListButton->set_active(true);
-            }
-            break;
-
-            case GALLERYBROWSERMODE_PREVIEW:
-            {
-                Graphic     aGraphic;
-                Point       aSelPos;
-                const sal_uInt32 nItemId = ImplGetSelectedItemId( nullptr, aSelPos );
-
-                if( nItemId )
-                {
-                    const sal_uInt32 nPos = nItemId - 1;
-
-                    mxIconView->Hide();
-                    mxListView->hide();
-
-                    if( mpCurTheme )
-                        mpCurTheme->GetGraphic( nPos, aGraphic );
-
-                    mxPreview->SetGraphic( aGraphic );
-                    mxPreview->Show();
-
-                    if( mpCurTheme && mpCurTheme->GetObjectKind( nPos ) == SgaObjKind::Sound )
-                        GalleryPreview::PreviewMedia( mpCurTheme->GetObjectURL( nPos ) );
-
-                    mxIconButton->set_sensitive(false);
-                    mxListButton->set_sensitive(false);
-                }
-            }
-            break;
-
-            default:
-                break;
         }
+        break;
 
-        GalleryBrowser2::meInitMode = meMode = eMode;
+        default:
+            break;
     }
+
+    GalleryBrowser2::meInitMode = meMode = eMode;
 }
 
 weld::Widget* GalleryBrowser2::GetViewWindow() const
@@ -728,51 +728,51 @@ weld::Widget* GalleryBrowser2::GetViewWindow() const
 
 void GalleryBrowser2::Travel( GalleryBrowserTravel eTravel )
 {
-    if( mpCurTheme )
+    if( !mpCurTheme )
+        return;
+
+    Point       aSelPos;
+    const sal_uInt32 nItemId = ImplGetSelectedItemId( nullptr, aSelPos );
+
+    if( !nItemId )
+        return;
+
+    sal_uInt32 nNewItemId = nItemId;
+
+    switch( eTravel )
     {
-        Point       aSelPos;
-        const sal_uInt32 nItemId = ImplGetSelectedItemId( nullptr, aSelPos );
-
-        if( nItemId )
-        {
-            sal_uInt32 nNewItemId = nItemId;
-
-            switch( eTravel )
-            {
-                case GalleryBrowserTravel::First:     nNewItemId = 1; break;
-                case GalleryBrowserTravel::Last:      nNewItemId = mpCurTheme->GetObjectCount(); break;
-                case GalleryBrowserTravel::Previous:  nNewItemId--; break;
-                case GalleryBrowserTravel::Next:      nNewItemId++; break;
-                default:
-                    break;
-            }
-
-            if( nNewItemId < 1 )
-                nNewItemId = 1;
-            else if( nNewItemId > mpCurTheme->GetObjectCount() )
-                nNewItemId = mpCurTheme->GetObjectCount();
-
-            if( nNewItemId != nItemId )
-            {
-                ImplSelectItemId( nNewItemId );
-                ImplUpdateInfoBar();
-
-                if( GALLERYBROWSERMODE_PREVIEW == GetMode() )
-                {
-                    Graphic     aGraphic;
-                    const sal_uInt32 nPos = nNewItemId - 1;
-
-                    mpCurTheme->GetGraphic( nPos, aGraphic );
-                    mxPreview->SetGraphic( aGraphic );
-
-                    if( SgaObjKind::Sound == mpCurTheme->GetObjectKind( nPos ) )
-                        GalleryPreview::PreviewMedia( mpCurTheme->GetObjectURL( nPos ) );
-
-                    mxPreview->Invalidate();
-                }
-            }
-        }
+        case GalleryBrowserTravel::First:     nNewItemId = 1; break;
+        case GalleryBrowserTravel::Last:      nNewItemId = mpCurTheme->GetObjectCount(); break;
+        case GalleryBrowserTravel::Previous:  nNewItemId--; break;
+        case GalleryBrowserTravel::Next:      nNewItemId++; break;
+        default:
+            break;
     }
+
+    if( nNewItemId < 1 )
+        nNewItemId = 1;
+    else if( nNewItemId > mpCurTheme->GetObjectCount() )
+        nNewItemId = mpCurTheme->GetObjectCount();
+
+    if( nNewItemId == nItemId )
+        return;
+
+    ImplSelectItemId( nNewItemId );
+    ImplUpdateInfoBar();
+
+    if( GALLERYBROWSERMODE_PREVIEW != GetMode() )
+        return;
+
+    Graphic     aGraphic;
+    const sal_uInt32 nPos = nNewItemId - 1;
+
+    mpCurTheme->GetGraphic( nPos, aGraphic );
+    mxPreview->SetGraphic( aGraphic );
+
+    if( SgaObjKind::Sound == mpCurTheme->GetObjectKind( nPos ) )
+        GalleryPreview::PreviewMedia( mpCurTheme->GetObjectURL( nPos ) );
+
+    mxPreview->Invalidate();
 }
 
 void GalleryBrowser2::ImplUpdateViews( sal_uInt16 nSelectionId )
@@ -1099,61 +1099,61 @@ void GalleryBrowser2::Execute(const OString &rIdent)
     Point       aSelPos;
     const sal_uInt32 nItemId = ImplGetSelectedItemId( nullptr, aSelPos );
 
-    if( mpCurTheme && nItemId )
+    if( !(mpCurTheme && nItemId) )
+        return;
+
+    mnCurActionPos = nItemId - 1;
+
+    if (rIdent == "preview")
+        SetMode( ( GALLERYBROWSERMODE_PREVIEW != GetMode() ) ? GALLERYBROWSERMODE_PREVIEW : meLastMode );
+    else if (rIdent == "delete")
     {
-        mnCurActionPos = nItemId - 1;
-
-        if (rIdent == "preview")
-            SetMode( ( GALLERYBROWSERMODE_PREVIEW != GetMode() ) ? GALLERYBROWSERMODE_PREVIEW : meLastMode );
-        else if (rIdent == "delete")
+        if (!mpCurTheme->IsReadOnly())
         {
-            if (!mpCurTheme->IsReadOnly())
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetViewWindow(), "svx/ui/querydeleteobjectdialog.ui"));
+            std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("QueryDeleteObjectDialog"));
+            if (xQuery->run() == RET_YES)
             {
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetViewWindow(), "svx/ui/querydeleteobjectdialog.ui"));
-                std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("QueryDeleteObjectDialog"));
-                if (xQuery->run() == RET_YES)
+                mpCurTheme->RemoveObject( mnCurActionPos );
+            }
+        }
+    }
+    else if (rIdent == "title")
+    {
+        std::unique_ptr<SgaObject> pObj = mpCurTheme->AcquireObject( mnCurActionPos );
+
+        if( pObj )
+        {
+            const OUString  aOldTitle( GetItemText( *pObj, GalleryItemFlags::Title ) );
+
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            ScopedVclPtr<AbstractTitleDialog> aDlg(pFact->CreateTitleDialog(GetViewWindow(), aOldTitle));
+            if( aDlg->Execute() == RET_OK )
+            {
+                OUString aNewTitle( aDlg->GetTitle() );
+
+                if( ( aNewTitle.isEmpty() && !pObj->GetTitle().isEmpty() ) || ( aNewTitle != aOldTitle ) )
                 {
-                    mpCurTheme->RemoveObject( mnCurActionPos );
+                    if( aNewTitle.isEmpty() )
+                        aNewTitle = "__<empty>__";
+
+                    pObj->SetTitle( aNewTitle );
+                    mpCurTheme->InsertObject( *pObj );
                 }
             }
         }
-        else if (rIdent == "title")
+    }
+    else if (rIdent == "copy")
+    {
+        mpCurTheme->CopyToClipboard(mnCurActionPos);
+    }
+    else if (rIdent == "paste")
+    {
+        if( !mpCurTheme->IsReadOnly() )
         {
-            std::unique_ptr<SgaObject> pObj = mpCurTheme->AcquireObject( mnCurActionPos );
-
-            if( pObj )
-            {
-                const OUString  aOldTitle( GetItemText( *pObj, GalleryItemFlags::Title ) );
-
-                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractTitleDialog> aDlg(pFact->CreateTitleDialog(GetViewWindow(), aOldTitle));
-                if( aDlg->Execute() == RET_OK )
-                {
-                    OUString aNewTitle( aDlg->GetTitle() );
-
-                    if( ( aNewTitle.isEmpty() && !pObj->GetTitle().isEmpty() ) || ( aNewTitle != aOldTitle ) )
-                    {
-                        if( aNewTitle.isEmpty() )
-                            aNewTitle = "__<empty>__";
-
-                        pObj->SetTitle( aNewTitle );
-                        mpCurTheme->InsertObject( *pObj );
-                    }
-                }
-            }
-        }
-        else if (rIdent == "copy")
-        {
-            mpCurTheme->CopyToClipboard(mnCurActionPos);
-        }
-        else if (rIdent == "paste")
-        {
-            if( !mpCurTheme->IsReadOnly() )
-            {
-                TransferableDataHelper aDataHelper(TransferableDataHelper::CreateFromClipboard(GetSystemClipboard()));
-                mpCurTheme->InsertTransferable( aDataHelper.GetTransferable(), mnCurActionPos );
-             }
-        }
+            TransferableDataHelper aDataHelper(TransferableDataHelper::CreateFromClipboard(GetSystemClipboard()));
+            mpCurTheme->InsertTransferable( aDataHelper.GetTransferable(), mnCurActionPos );
+         }
     }
 }
 

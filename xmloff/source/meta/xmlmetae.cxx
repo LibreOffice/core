@@ -251,47 +251,47 @@ void SvXMLMetaExport::MExport_()
     const uno::Sequence< beans::NamedValue > aDocStatistic =
             mxDocProps->getDocumentStatistics();
     // write document statistic if there is any provided
-    if ( aDocStatistic.hasElements() )
+    if ( !aDocStatistic.hasElements() )
+        return;
+
+    for ( const auto& rDocStat : aDocStatistic )
     {
-        for ( const auto& rDocStat : aDocStatistic )
+        sal_Int32 nValue = 0;
+        if ( rDocStat.Value >>= nValue )
         {
-            sal_Int32 nValue = 0;
-            if ( rDocStat.Value >>= nValue )
+            OUString aValue = OUString::number( nValue );
+            if ( rDocStat.Name == "TableCount" )
+                mrExport.AddAttribute(
+                    XML_NAMESPACE_META, XML_TABLE_COUNT, aValue );
+            else if ( rDocStat.Name == "ObjectCount" )
+                mrExport.AddAttribute(
+                    XML_NAMESPACE_META, XML_OBJECT_COUNT, aValue );
+            else if ( rDocStat.Name == "ImageCount" )
+                mrExport.AddAttribute(
+                    XML_NAMESPACE_META, XML_IMAGE_COUNT, aValue );
+            else if ( rDocStat.Name == "PageCount" )
+                mrExport.AddAttribute(
+                    XML_NAMESPACE_META, XML_PAGE_COUNT, aValue );
+            else if ( rDocStat.Name == "ParagraphCount" )
+                mrExport.AddAttribute(
+                    XML_NAMESPACE_META, XML_PARAGRAPH_COUNT, aValue );
+            else if ( rDocStat.Name == "WordCount" )
+                mrExport.AddAttribute(
+                    XML_NAMESPACE_META, XML_WORD_COUNT, aValue );
+            else if ( rDocStat.Name == "CharacterCount" )
+                mrExport.AddAttribute(
+                    XML_NAMESPACE_META, XML_CHARACTER_COUNT, aValue );
+            else if ( rDocStat.Name == "CellCount" )
+                mrExport.AddAttribute(
+                    XML_NAMESPACE_META, XML_CELL_COUNT, aValue );
+            else
             {
-                OUString aValue = OUString::number( nValue );
-                if ( rDocStat.Name == "TableCount" )
-                    mrExport.AddAttribute(
-                        XML_NAMESPACE_META, XML_TABLE_COUNT, aValue );
-                else if ( rDocStat.Name == "ObjectCount" )
-                    mrExport.AddAttribute(
-                        XML_NAMESPACE_META, XML_OBJECT_COUNT, aValue );
-                else if ( rDocStat.Name == "ImageCount" )
-                    mrExport.AddAttribute(
-                        XML_NAMESPACE_META, XML_IMAGE_COUNT, aValue );
-                else if ( rDocStat.Name == "PageCount" )
-                    mrExport.AddAttribute(
-                        XML_NAMESPACE_META, XML_PAGE_COUNT, aValue );
-                else if ( rDocStat.Name == "ParagraphCount" )
-                    mrExport.AddAttribute(
-                        XML_NAMESPACE_META, XML_PARAGRAPH_COUNT, aValue );
-                else if ( rDocStat.Name == "WordCount" )
-                    mrExport.AddAttribute(
-                        XML_NAMESPACE_META, XML_WORD_COUNT, aValue );
-                else if ( rDocStat.Name == "CharacterCount" )
-                    mrExport.AddAttribute(
-                        XML_NAMESPACE_META, XML_CHARACTER_COUNT, aValue );
-                else if ( rDocStat.Name == "CellCount" )
-                    mrExport.AddAttribute(
-                        XML_NAMESPACE_META, XML_CELL_COUNT, aValue );
-                else
-                {
-                    SAL_WARN("xmloff", "Unknown statistic value!");
-                }
+                SAL_WARN("xmloff", "Unknown statistic value!");
             }
         }
-        SvXMLElementExport aElem( mrExport,
-            XML_NAMESPACE_META, XML_DOCUMENT_STATISTIC, true, true );
     }
+    SvXMLElementExport aElem( mrExport,
+        XML_NAMESPACE_META, XML_DOCUMENT_STATISTIC, true, true );
 }
 
 const char s_xmlns[] = "xmlns";

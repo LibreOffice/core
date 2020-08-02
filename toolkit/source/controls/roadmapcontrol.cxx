@@ -297,22 +297,22 @@ static void lcl_throwIndexOutOfBoundsException( )
         Reference< XPropertySet > xPropertySet( static_cast<XAggregation*>(static_cast<cppu::OWeakAggObject*>(this)), UNO_QUERY );
         sal_Int16 n_CurrentItemID = GetCurrentItemID( xPropertySet );
         Any aAny;
-        if ( Index <= n_CurrentItemID )
+        if ( Index > n_CurrentItemID )
+            return;
+
+        if ( n_CurrentItemID >= static_cast<sal_Int32>(maRoadmapItems.size()) )
         {
-            if ( n_CurrentItemID >= static_cast<sal_Int32>(maRoadmapItems.size()) )
-            {
-                n_CurrentItemID = sal::static_int_cast< sal_Int16 >(
-                    maRoadmapItems.size()-1);
-                if ( n_CurrentItemID < 0 )
-                    return;
-                aAny <<= n_CurrentItemID;
-            }
-            else if (Index == n_CurrentItemID)
-                aAny <<= sal_Int16(-1);
-            else if( Index < n_CurrentItemID)
-                aAny <<= static_cast<sal_Int16>( n_CurrentItemID - 1 );
-            xPropertySet->setPropertyValue( GetPropertyName( BASEPROPERTY_CURRENTITEMID ), aAny );
+            n_CurrentItemID = sal::static_int_cast< sal_Int16 >(
+                maRoadmapItems.size()-1);
+            if ( n_CurrentItemID < 0 )
+                return;
+            aAny <<= n_CurrentItemID;
         }
+        else if (Index == n_CurrentItemID)
+            aAny <<= sal_Int16(-1);
+        else if( Index < n_CurrentItemID)
+            aAny <<= static_cast<sal_Int16>( n_CurrentItemID - 1 );
+        xPropertySet->setPropertyValue( GetPropertyName( BASEPROPERTY_CURRENTITEMID ), aAny );
     }
 
 

@@ -248,40 +248,40 @@ void FmXUndoEnvironment::ModeChanged()
     if ( !rModel.GetObjectShell() )
         return;
 
-    if (bReadOnly != (rModel.GetObjectShell()->IsReadOnly() || rModel.GetObjectShell()->IsReadOnlyUI()))
+    if (bReadOnly == (rModel.GetObjectShell()->IsReadOnly() || rModel.GetObjectShell()->IsReadOnlyUI()))
+        return;
+
+    bReadOnly = !bReadOnly;
+
+    sal_uInt16 nCount = rModel.GetPageCount();
+    sal_uInt16 i;
+    for (i = 0; i < nCount; i++)
     {
-        bReadOnly = !bReadOnly;
-
-        sal_uInt16 nCount = rModel.GetPageCount();
-        sal_uInt16 i;
-        for (i = 0; i < nCount; i++)
+        FmFormPage* pPage = dynamic_cast<FmFormPage*>( rModel.GetPage(i)  );
+        if ( pPage )
         {
-            FmFormPage* pPage = dynamic_cast<FmFormPage*>( rModel.GetPage(i)  );
-            if ( pPage )
-            {
-                Reference< css::form::XForms > xForms = pPage->GetForms( false ).get();
-                if ( xForms.is() )
-                    TogglePropertyListening( xForms );
-            }
+            Reference< css::form::XForms > xForms = pPage->GetForms( false ).get();
+            if ( xForms.is() )
+                TogglePropertyListening( xForms );
         }
-
-        nCount = rModel.GetMasterPageCount();
-        for (i = 0; i < nCount; i++)
-        {
-            FmFormPage* pPage = dynamic_cast<FmFormPage*>( rModel.GetMasterPage(i)  );
-            if ( pPage )
-            {
-                Reference< css::form::XForms > xForms = pPage->GetForms( false ).get();
-                if ( xForms.is() )
-                    TogglePropertyListening( xForms );
-            }
-        }
-
-        if (!bReadOnly)
-            StartListening(rModel);
-        else
-            EndListening(rModel);
     }
+
+    nCount = rModel.GetMasterPageCount();
+    for (i = 0; i < nCount; i++)
+    {
+        FmFormPage* pPage = dynamic_cast<FmFormPage*>( rModel.GetMasterPage(i)  );
+        if ( pPage )
+        {
+            Reference< css::form::XForms > xForms = pPage->GetForms( false ).get();
+            if ( xForms.is() )
+                TogglePropertyListening( xForms );
+        }
+    }
+
+    if (!bReadOnly)
+        StartListening(rModel);
+    else
+        EndListening(rModel);
 }
 
 
@@ -395,51 +395,51 @@ void FmXUndoEnvironment::Inserted(FmFormObj* pObj)
     // is the control still assigned to a form
     Reference< XInterface >  xModel(pObj->GetUnoControlModel(), UNO_QUERY);
     Reference< XFormComponent >  xContent(xModel, UNO_QUERY);
-    if (xContent.is() && pObj->getSdrPageFromSdrObject())
+    if (!(xContent.is() && pObj->getSdrPageFromSdrObject()))
+        return;
+
+    // if the component doesn't belong to a form, yet, find one to insert into
+    if (!xContent->getParent().is())
     {
-        // if the component doesn't belong to a form, yet, find one to insert into
-        if (!xContent->getParent().is())
+        try
         {
-            try
+            const Reference< XIndexContainer >& xObjectParent = pObj->GetOriginalParent();
+
+            FmFormPage& rPage(dynamic_cast< FmFormPage& >( *pObj->getSdrPageFromSdrObject()));
+            Reference< XIndexAccess >  xForms( rPage.GetForms(), UNO_QUERY_THROW );
+
+            Reference< XIndexContainer > xNewParent;
+            Reference< XForm >           xForm;
+            sal_Int32 nPos = -1;
+            if ( lcl_searchElement( xForms, xObjectParent ) )
             {
-                const Reference< XIndexContainer >& xObjectParent = pObj->GetOriginalParent();
-
-                FmFormPage& rPage(dynamic_cast< FmFormPage& >( *pObj->getSdrPageFromSdrObject()));
-                Reference< XIndexAccess >  xForms( rPage.GetForms(), UNO_QUERY_THROW );
-
-                Reference< XIndexContainer > xNewParent;
-                Reference< XForm >           xForm;
-                sal_Int32 nPos = -1;
-                if ( lcl_searchElement( xForms, xObjectParent ) )
-                {
-                    // the form which was the parent of the object when it was removed is still
-                    // part of the form component hierarchy of the current page
-                    xNewParent = xObjectParent;
-                    xForm.set( xNewParent, UNO_QUERY_THROW );
-                    nPos = ::std::min( pObj->GetOriginalIndex(), xNewParent->getCount() );
-                }
-                else
-                {
-                    xForm.set( rPage.GetImpl().findPlaceInFormComponentHierarchy( xContent ), UNO_SET_THROW );
-                    xNewParent.set( xForm, UNO_QUERY_THROW );
-                    nPos = xNewParent->getCount();
-                }
-
-                FmFormPageImpl::setUniqueName( xContent, xForm );
-                xNewParent->insertByIndex( nPos, makeAny( xContent ) );
-
-                Reference< XEventAttacherManager >  xManager( xNewParent, UNO_QUERY_THROW );
-                xManager->registerScriptEvents( nPos, pObj->GetOriginalEvents() );
+                // the form which was the parent of the object when it was removed is still
+                // part of the form component hierarchy of the current page
+                xNewParent = xObjectParent;
+                xForm.set( xNewParent, UNO_QUERY_THROW );
+                nPos = ::std::min( pObj->GetOriginalIndex(), xNewParent->getCount() );
             }
-            catch( const Exception& )
+            else
             {
-                DBG_UNHANDLED_EXCEPTION("svx");
+                xForm.set( rPage.GetImpl().findPlaceInFormComponentHierarchy( xContent ), UNO_SET_THROW );
+                xNewParent.set( xForm, UNO_QUERY_THROW );
+                nPos = xNewParent->getCount();
             }
+
+            FmFormPageImpl::setUniqueName( xContent, xForm );
+            xNewParent->insertByIndex( nPos, makeAny( xContent ) );
+
+            Reference< XEventAttacherManager >  xManager( xNewParent, UNO_QUERY_THROW );
+            xManager->registerScriptEvents( nPos, pObj->GetOriginalEvents() );
         }
-
-        // reset FormObject
-        pObj->ClearObjEnv();
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION("svx");
+        }
     }
+
+    // reset FormObject
+    pObj->ClearObjEnv();
 }
 
 
@@ -472,38 +472,37 @@ void FmXUndoEnvironment::Removed(FmFormObj* pObj)
 
     // is the control still assigned to a form
     Reference< XFormComponent >  xContent(pObj->GetUnoControlModel(), UNO_QUERY);
-    if (xContent.is())
+    if (!xContent.is())
+        return;
+
+    // The object is taken out of a list.
+    // If a father exists, the object is removed at the father and
+    // noted at the FormObject!
+
+    // If the object is reinserted and a parent exists, this parent is set though.
+    Reference< XIndexContainer >  xForm(xContent->getParent(), UNO_QUERY);
+    if (!xForm.is())
+        return;
+
+    Reference< XIndexAccess >  xIndexAccess(xForm.get());
+    // determine which position the child was at
+    const sal_Int32 nPos = getElementPos(xIndexAccess, xContent);
+    if (nPos < 0)
+        return;
+
+    Sequence< ScriptEventDescriptor > aEvts;
+    Reference< XEventAttacherManager >  xManager(xForm, UNO_QUERY);
+    if (xManager.is())
+        aEvts = xManager->getScriptEvents(nPos);
+
+    try
     {
-        // The object is taken out of a list.
-        // If a father exists, the object is removed at the father and
-        // noted at the FormObject!
-
-        // If the object is reinserted and a parent exists, this parent is set though.
-        Reference< XIndexContainer >  xForm(xContent->getParent(), UNO_QUERY);
-        if (xForm.is())
-        {
-            Reference< XIndexAccess >  xIndexAccess(xForm.get());
-            // determine which position the child was at
-            const sal_Int32 nPos = getElementPos(xIndexAccess, xContent);
-            if (nPos >= 0)
-            {
-                Sequence< ScriptEventDescriptor > aEvts;
-                Reference< XEventAttacherManager >  xManager(xForm, UNO_QUERY);
-                if (xManager.is())
-                    aEvts = xManager->getScriptEvents(nPos);
-
-                try
-                {
-                    pObj->SetObjEnv(xForm, nPos, aEvts);
-                    xForm->removeByIndex(nPos);
-                }
-                catch(Exception&)
-                {
-                    DBG_UNHANDLED_EXCEPTION("svx");
-                }
-
-            }
-        }
+        pObj->SetObjEnv(xForm, nPos, aEvts);
+        xForm->removeByIndex(nPos);
+    }
+    catch(Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
 }
 
@@ -977,19 +976,19 @@ void FmUndoPropertyAction::Undo()
 {
     FmXUndoEnvironment& rEnv = static_cast<FmFormModel&>(rMod).GetUndoEnv();
 
-    if (xObj.is() && !rEnv.IsLocked())
+    if (!(xObj.is() && !rEnv.IsLocked()))
+        return;
+
+    rEnv.Lock();
+    try
     {
-        rEnv.Lock();
-        try
-        {
-            xObj->setPropertyValue( aPropertyName, aOldValue );
-        }
-        catch( const Exception& )
-        {
-            TOOLS_WARN_EXCEPTION( "svx", "FmUndoPropertyAction::Undo" );
-        }
-        rEnv.UnLock();
+        xObj->setPropertyValue( aPropertyName, aOldValue );
     }
+    catch( const Exception& )
+    {
+        TOOLS_WARN_EXCEPTION( "svx", "FmUndoPropertyAction::Undo" );
+    }
+    rEnv.UnLock();
 }
 
 
@@ -997,19 +996,19 @@ void FmUndoPropertyAction::Redo()
 {
     FmXUndoEnvironment& rEnv = static_cast<FmFormModel&>(rMod).GetUndoEnv();
 
-    if (xObj.is() && !rEnv.IsLocked())
+    if (!(xObj.is() && !rEnv.IsLocked()))
+        return;
+
+    rEnv.Lock();
+    try
     {
-        rEnv.Lock();
-        try
-        {
-            xObj->setPropertyValue( aPropertyName, aNewValue );
-        }
-        catch( const Exception& )
-        {
-            TOOLS_WARN_EXCEPTION( "svx", "FmUndoPropertyAction::Redo" );
-        }
-        rEnv.UnLock();
+        xObj->setPropertyValue( aPropertyName, aNewValue );
     }
+    catch( const Exception& )
+    {
+        TOOLS_WARN_EXCEPTION( "svx", "FmUndoPropertyAction::Redo" );
+    }
+    rEnv.UnLock();
 }
 
 
@@ -1034,25 +1033,25 @@ FmUndoContainerAction::FmUndoContainerAction(FmFormModel& _rMod,
         // some old code suggested this could be a valid argument. However, this code was
         // buggy, and it *seemed* that nobody used it - so it was removed.
 
-    if ( xCont.is() && xElem.is() )
-    {
-        // normalize
-        m_xElement = xElem;
-        if ( m_eAction == Removed )
-        {
-            if (m_nIndex >= 0)
-            {
-                Reference< XEventAttacherManager >  xManager( xCont, UNO_QUERY );
-                if ( xManager.is() )
-                    m_aEvents = xManager->getScriptEvents(m_nIndex);
-            }
-            else
-                m_xElement = nullptr;
+    if ( !(xCont.is() && xElem.is()) )
+        return;
 
-            // we now own the element
-            m_xOwnElement = m_xElement;
-        }
+    // normalize
+    m_xElement = xElem;
+    if ( m_eAction != Removed )
+        return;
+
+    if (m_nIndex >= 0)
+    {
+        Reference< XEventAttacherManager >  xManager( xCont, UNO_QUERY );
+        if ( xManager.is() )
+            m_aEvents = xManager->getScriptEvents(m_nIndex);
     }
+    else
+        m_xElement = nullptr;
+
+    // we now own the element
+    m_xOwnElement = m_xElement;
 }
 
 
@@ -1079,30 +1078,30 @@ void FmUndoContainerAction::DisposeElement( const Reference< XInterface > & xEle
 
 void FmUndoContainerAction::implReInsert( )
 {
-    if ( m_xContainer->getCount() >= m_nIndex )
+    if ( m_xContainer->getCount() < m_nIndex )
+        return;
+
+    // insert the element
+    Any aVal;
+    if ( m_xContainer->getElementType() == cppu::UnoType<XFormComponent>::get() )
     {
-        // insert the element
-        Any aVal;
-        if ( m_xContainer->getElementType() == cppu::UnoType<XFormComponent>::get() )
-        {
-            aVal <<= Reference< XFormComponent >( m_xElement, UNO_QUERY );
-        }
-        else
-        {
-            aVal <<= Reference< XForm >( m_xElement, UNO_QUERY );
-        }
-        m_xContainer->insertByIndex( m_nIndex, aVal );
-
-        OSL_ENSURE( getElementPos( m_xContainer.get(), m_xElement ) == m_nIndex, "FmUndoContainerAction::implReInsert: insertion did not work!" );
-
-        // register the events
-        Reference< XEventAttacherManager >  xManager( m_xContainer, UNO_QUERY );
-        if ( xManager.is() )
-            xManager->registerScriptEvents( m_nIndex, m_aEvents );
-
-        // we don't own the object anymore
-        m_xOwnElement = nullptr;
+        aVal <<= Reference< XFormComponent >( m_xElement, UNO_QUERY );
     }
+    else
+    {
+        aVal <<= Reference< XForm >( m_xElement, UNO_QUERY );
+    }
+    m_xContainer->insertByIndex( m_nIndex, aVal );
+
+    OSL_ENSURE( getElementPos( m_xContainer.get(), m_xElement ) == m_nIndex, "FmUndoContainerAction::implReInsert: insertion did not work!" );
+
+    // register the events
+    Reference< XEventAttacherManager >  xManager( m_xContainer, UNO_QUERY );
+    if ( xManager.is() )
+        xManager->registerScriptEvents( m_nIndex, m_aEvents );
+
+    // we don't own the object anymore
+    m_xOwnElement = nullptr;
 }
 
 
@@ -1138,56 +1137,56 @@ void FmUndoContainerAction::Undo()
 {
     FmXUndoEnvironment& rEnv = static_cast< FmFormModel& >( rMod ).GetUndoEnv();
 
-    if ( m_xContainer.is() && !rEnv.IsLocked() && m_xElement.is() )
-    {
-        rEnv.Lock();
-        try
-        {
-            switch ( m_eAction )
-            {
-            case Inserted:
-                implReRemove();
-                break;
+    if ( !(m_xContainer.is() && !rEnv.IsLocked() && m_xElement.is()) )
+        return;
 
-            case Removed:
-                implReInsert();
-                break;
-            }
-        }
-        catch( const Exception& )
+    rEnv.Lock();
+    try
+    {
+        switch ( m_eAction )
         {
-            TOOLS_WARN_EXCEPTION( "svx", "FmUndoContainerAction::Undo" );
+        case Inserted:
+            implReRemove();
+            break;
+
+        case Removed:
+            implReInsert();
+            break;
         }
-        rEnv.UnLock();
     }
+    catch( const Exception& )
+    {
+        TOOLS_WARN_EXCEPTION( "svx", "FmUndoContainerAction::Undo" );
+    }
+    rEnv.UnLock();
 }
 
 
 void FmUndoContainerAction::Redo()
 {
     FmXUndoEnvironment& rEnv = static_cast< FmFormModel& >( rMod ).GetUndoEnv();
-    if ( m_xContainer.is() && !rEnv.IsLocked() && m_xElement.is() )
-    {
-        rEnv.Lock();
-        try
-        {
-            switch ( m_eAction )
-            {
-            case Inserted:
-                implReInsert();
-                break;
+    if ( !(m_xContainer.is() && !rEnv.IsLocked() && m_xElement.is()) )
+        return;
 
-            case Removed:
-                implReRemove();
-                break;
-            }
-        }
-        catch( const Exception& )
+    rEnv.Lock();
+    try
+    {
+        switch ( m_eAction )
         {
-            TOOLS_WARN_EXCEPTION( "svx", "FmUndoContainerAction::Redo" );
+        case Inserted:
+            implReInsert();
+            break;
+
+        case Removed:
+            implReRemove();
+            break;
         }
-        rEnv.UnLock();
     }
+    catch( const Exception& )
+    {
+        TOOLS_WARN_EXCEPTION( "svx", "FmUndoContainerAction::Redo" );
+    }
+    rEnv.UnLock();
 }
 
 

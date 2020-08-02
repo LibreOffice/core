@@ -305,35 +305,35 @@ void SpinField::ImplInit(vcl::Window* pParent, WinBits nWinStyle)
 {
     Edit::ImplInit( pParent, nWinStyle );
 
-    if (nWinStyle & (WB_SPIN | WB_DROPDOWN))
+    if (!(nWinStyle & (WB_SPIN | WB_DROPDOWN)))
+        return;
+
+    mbSpin = true;
+
+    // Some themes want external spin buttons, therefore the main
+    // spinfield should not overdraw the border between its encapsulated
+    // edit field and the spin buttons
+    if ((nWinStyle & WB_SPIN) && ImplUseNativeBorder(*this, nWinStyle))
     {
-        mbSpin = true;
-
-        // Some themes want external spin buttons, therefore the main
-        // spinfield should not overdraw the border between its encapsulated
-        // edit field and the spin buttons
-        if ((nWinStyle & WB_SPIN) && ImplUseNativeBorder(*this, nWinStyle))
-        {
-            SetBackground();
-            mpEdit.set(VclPtr<Edit>::Create(this, WB_NOBORDER));
-            mpEdit->SetBackground();
-        }
-        else
-            mpEdit.set(VclPtr<Edit>::Create(this, WB_NOBORDER));
-
-        mpEdit->EnableRTL(false);
-        mpEdit->SetPosPixel(Point());
-        mpEdit->Show();
-
-        SetSubEdit(mpEdit);
-
-        maRepeatTimer.SetInvokeHandler(LINK( this, SpinField, ImplTimeout));
-        maRepeatTimer.SetTimeout(MouseSettings::GetButtonStartRepeat());
-        if (nWinStyle & WB_REPEAT)
-            mbRepeat = true;
-
-        SetCompoundControl(true);
+        SetBackground();
+        mpEdit.set(VclPtr<Edit>::Create(this, WB_NOBORDER));
+        mpEdit->SetBackground();
     }
+    else
+        mpEdit.set(VclPtr<Edit>::Create(this, WB_NOBORDER));
+
+    mpEdit->EnableRTL(false);
+    mpEdit->SetPosPixel(Point());
+    mpEdit->Show();
+
+    SetSubEdit(mpEdit);
+
+    maRepeatTimer.SetInvokeHandler(LINK( this, SpinField, ImplTimeout));
+    maRepeatTimer.SetTimeout(MouseSettings::GetButtonStartRepeat());
+    if (nWinStyle & WB_REPEAT)
+        mbRepeat = true;
+
+    SetCompoundControl(true);
 }
 
 SpinField::SpinField(vcl::Window* pParent, WinBits nWinStyle, WindowType nType) :
@@ -686,63 +686,63 @@ void SpinField::ImplCalcButtonAreas(OutputDevice* pDev, const Size& rOutSz, tool
 
 void SpinField::Resize()
 {
-    if (mbSpin)
+    if (!mbSpin)
+        return;
+
+    Control::Resize();
+    Size aSize = GetOutputSizePixel();
+    bool bSubEditPositioned = false;
+
+    if (GetStyle() & (WB_SPIN | WB_DROPDOWN))
     {
-        Control::Resize();
-        Size aSize = GetOutputSizePixel();
-        bool bSubEditPositioned = false;
+        ImplCalcButtonAreas( this, aSize, maDropDownRect, maUpperRect, maLowerRect );
 
-        if (GetStyle() & (WB_SPIN | WB_DROPDOWN))
+        ImplControlValue aControlValue;
+        Point aPoint;
+        tools::Rectangle aContent, aBound;
+
+        // use the full extent of the control
+        vcl::Window *pBorder = GetWindow( GetWindowType::Border );
+        tools::Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
+
+        // adjust position and size of the edit field
+        if (GetNativeControlRegion(ControlType::Spinbox, ControlPart::SubEdit, aArea, ControlState::NONE,
+                                   aControlValue, aBound, aContent) &&
+            // there is just no useful native support for spinfields with dropdown
+            !(GetStyle() & WB_DROPDOWN))
         {
-            ImplCalcButtonAreas( this, aSize, maDropDownRect, maUpperRect, maLowerRect );
+            // convert back from border space to local coordinates
+            aPoint = pBorder->ScreenToOutputPixel(OutputToScreenPixel(aPoint));
+            aContent.Move(-aPoint.X(), -aPoint.Y());
 
-            ImplControlValue aControlValue;
-            Point aPoint;
-            tools::Rectangle aContent, aBound;
-
-            // use the full extent of the control
-            vcl::Window *pBorder = GetWindow( GetWindowType::Border );
-            tools::Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
-
-            // adjust position and size of the edit field
-            if (GetNativeControlRegion(ControlType::Spinbox, ControlPart::SubEdit, aArea, ControlState::NONE,
-                                       aControlValue, aBound, aContent) &&
-                // there is just no useful native support for spinfields with dropdown
-                !(GetStyle() & WB_DROPDOWN))
+            // use the themes drop down size
+            mpEdit->SetPosPixel( aContent.TopLeft() );
+            bSubEditPositioned = true;
+            aSize = aContent.GetSize();
+        }
+        else
+        {
+            if (maUpperRect.IsEmpty())
             {
-                // convert back from border space to local coordinates
-                aPoint = pBorder->ScreenToOutputPixel(OutputToScreenPixel(aPoint));
-                aContent.Move(-aPoint.X(), -aPoint.Y());
-
-                // use the themes drop down size
-                mpEdit->SetPosPixel( aContent.TopLeft() );
-                bSubEditPositioned = true;
-                aSize = aContent.GetSize();
+                SAL_WARN_IF( maDropDownRect.IsEmpty(), "vcl", "SpinField::Resize: SPIN && DROPDOWN, but all empty rects?" );
+                aSize.setWidth( maDropDownRect.Left() );
             }
             else
-            {
-                if (maUpperRect.IsEmpty())
-                {
-                    SAL_WARN_IF( maDropDownRect.IsEmpty(), "vcl", "SpinField::Resize: SPIN && DROPDOWN, but all empty rects?" );
-                    aSize.setWidth( maDropDownRect.Left() );
-                }
-                else
-                    aSize.setWidth( maUpperRect.Left() );
-            }
+                aSize.setWidth( maUpperRect.Left() );
         }
-
-        if (!bSubEditPositioned)
-        {
-            // this moves our sub edit if RTL gets switched
-            mpEdit->SetPosPixel(Point());
-        }
-        mpEdit->SetSizePixel(aSize);
-
-        if (GetStyle() & WB_SPIN)
-            Invalidate(tools::Rectangle(maUpperRect.TopLeft(), maLowerRect.BottomRight()));
-        if (GetStyle() & WB_DROPDOWN)
-            Invalidate(maDropDownRect);
     }
+
+    if (!bSubEditPositioned)
+    {
+        // this moves our sub edit if RTL gets switched
+        mpEdit->SetPosPixel(Point());
+    }
+    mpEdit->SetSizePixel(aSize);
+
+    if (GetStyle() & WB_SPIN)
+        Invalidate(tools::Rectangle(maUpperRect.TopLeft(), maLowerRect.BottomRight()));
+    if (GetStyle() & WB_DROPDOWN)
+        Invalidate(maDropDownRect);
 }
 
 void SpinField::StateChanged(StateChangedType nType)

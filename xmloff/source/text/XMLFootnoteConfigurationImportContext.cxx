@@ -320,25 +320,25 @@ SvXMLImportContextRef XMLFootnoteConfigurationImportContext::CreateChildContext(
 void XMLFootnoteConfigurationImportContext::Finish( bool bOverwrite )
 {
 
-    if (bOverwrite)
+    if (!bOverwrite)
+        return;
+
+    if (bIsEndnote)
     {
-        if (bIsEndnote)
+        Reference<XEndnotesSupplier> xSupplier(
+            GetImport().GetModel(), UNO_QUERY);
+        if (xSupplier.is())
         {
-            Reference<XEndnotesSupplier> xSupplier(
-                GetImport().GetModel(), UNO_QUERY);
-            if (xSupplier.is())
-            {
-                ProcessSettings(xSupplier->getEndnoteSettings());
-            }
+            ProcessSettings(xSupplier->getEndnoteSettings());
         }
-        else
+    }
+    else
+    {
+        Reference<XFootnotesSupplier> xSupplier(
+            GetImport().GetModel(), UNO_QUERY);
+        if (xSupplier.is())
         {
-            Reference<XFootnotesSupplier> xSupplier(
-                GetImport().GetModel(), UNO_QUERY);
-            if (xSupplier.is())
-            {
-                ProcessSettings(xSupplier->getFootnoteSettings());
-            }
+            ProcessSettings(xSupplier->getFootnoteSettings());
         }
     }
     // else: ignore (there's only one configuration, so we can only overwrite)

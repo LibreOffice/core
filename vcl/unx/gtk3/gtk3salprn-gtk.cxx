@@ -707,33 +707,33 @@ GtkPrintDialog::impl_initPrintContent(uno::Sequence<sal_Bool> const& i_rDisabled
     beans::PropertyValue* const pPrintContent(
             m_rController.getValue(OUString("PrintContent")));
 
-    if (pPrintContent)
+    if (!pPrintContent)
+        return;
+
+    sal_Int32 nSelectionType(0);
+    pPrintContent->Value >>= nSelectionType;
+    GtkPrintSettings* const pSettings(getSettings());
+    GtkPrintPages ePrintPages(GTK_PRINT_PAGES_ALL);
+    switch (nSelectionType)
     {
-        sal_Int32 nSelectionType(0);
-        pPrintContent->Value >>= nSelectionType;
-        GtkPrintSettings* const pSettings(getSettings());
-        GtkPrintPages ePrintPages(GTK_PRINT_PAGES_ALL);
-        switch (nSelectionType)
-        {
-            case 0:
-                ePrintPages = GTK_PRINT_PAGES_ALL;
-                break;
-            case 1:
-                ePrintPages = GTK_PRINT_PAGES_RANGES;
-                break;
-            case 2:
-                if (m_xWrapper->supportsPrintSelection())
-                    ePrintPages = GTK_PRINT_PAGES_SELECTION;
-                else
-                    SAL_INFO("vcl.gtk", "the application wants to print a selection, but the present gtk version does not support it");
-                break;
-            default:
-                SAL_WARN("vcl.gtk", "unexpected selection type: " << nSelectionType);
-        }
-        m_xWrapper->print_settings_set_print_pages(pSettings, ePrintPages);
-        m_xWrapper->print_unix_dialog_set_settings(pDialog, pSettings);
-        g_object_unref(G_OBJECT(pSettings));
+        case 0:
+            ePrintPages = GTK_PRINT_PAGES_ALL;
+            break;
+        case 1:
+            ePrintPages = GTK_PRINT_PAGES_RANGES;
+            break;
+        case 2:
+            if (m_xWrapper->supportsPrintSelection())
+                ePrintPages = GTK_PRINT_PAGES_SELECTION;
+            else
+                SAL_INFO("vcl.gtk", "the application wants to print a selection, but the present gtk version does not support it");
+            break;
+        default:
+            SAL_WARN("vcl.gtk", "unexpected selection type: " << nSelectionType);
     }
+    m_xWrapper->print_settings_set_print_pages(pSettings, ePrintPages);
+    m_xWrapper->print_unix_dialog_set_settings(pDialog, pSettings);
+    g_object_unref(G_OBJECT(pSettings));
 }
 
 void
@@ -778,18 +778,18 @@ GtkPrintDialog::impl_UIOption_CheckHdl(GtkWidget* const i_pWidget)
 void
 GtkPrintDialog::impl_UIOption_RadioHdl(GtkWidget* const i_pWidget)
 {
-    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(i_pWidget)))
+    if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(i_pWidget)))
+        return;
+
+    beans::PropertyValue* const pVal = impl_queryPropertyValue(i_pWidget);
+    std::map<GtkWidget*, sal_Int32>::const_iterator it = m_aControlToNumValMap.find(i_pWidget);
+    if (pVal && it != m_aControlToNumValMap.end())
     {
-        beans::PropertyValue* const pVal = impl_queryPropertyValue(i_pWidget);
-        std::map<GtkWidget*, sal_Int32>::const_iterator it = m_aControlToNumValMap.find(i_pWidget);
-        if (pVal && it != m_aControlToNumValMap.end())
-        {
 
-            const sal_Int32 nVal = it->second;
-            pVal->Value <<= nVal;
+        const sal_Int32 nVal = it->second;
+        pVal->Value <<= nVal;
 
-            impl_checkOptionalControlDependencies();
-        }
+        impl_checkOptionalControlDependencies();
     }
 }
 

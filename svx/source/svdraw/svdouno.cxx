@@ -297,21 +297,21 @@ void SdrUnoObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
 {
     SdrRectObj::NbcResize(rRef,xFact,yFact);
 
-    if (aGeo.nShearAngle!=0 || aGeo.nRotationAngle!=0)
-    {
-        // small correctors
-        if (aGeo.nRotationAngle>=9000 && aGeo.nRotationAngle<27000)
-        {
-            maRect.Move(maRect.Left()-maRect.Right(),maRect.Top()-maRect.Bottom());
-        }
+    if (aGeo.nShearAngle==0 && aGeo.nRotationAngle==0)
+        return;
 
-        aGeo.nRotationAngle  = 0;
-        aGeo.nShearAngle = 0;
-        aGeo.nSin       = 0.0;
-        aGeo.nCos       = 1.0;
-        aGeo.nTan       = 0.0;
-        SetRectsDirty();
+    // small correctors
+    if (aGeo.nRotationAngle>=9000 && aGeo.nRotationAngle<27000)
+    {
+        maRect.Move(maRect.Left()-maRect.Right(),maRect.Top()-maRect.Bottom());
     }
+
+    aGeo.nRotationAngle  = 0;
+    aGeo.nShearAngle = 0;
+    aGeo.nSin       = 0.0;
+    aGeo.nCos       = 1.0;
+    aGeo.nTan       = 0.0;
+    SetRectsDirty();
 }
 
 

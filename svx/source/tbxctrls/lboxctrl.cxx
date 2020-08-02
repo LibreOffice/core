@@ -208,22 +208,22 @@ IMPL_LINK_NOARG(SvxPopupWindowListBox, ActivateHdl, weld::TreeView&, bool)
 void SvxUndoRedoControl::Do(sal_Int16 nCount)
 {
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-    if ( xDispatchProvider.is() )
-    {
-        css::util::URL aTargetURL;
-        Reference < XURLTransformer > xTrans( URLTransformer::create(::comphelper::getProcessComponentContext()) );
-        aTargetURL.Complete = m_aCommandURL;
-        xTrans->parseStrict( aTargetURL );
+    if ( !xDispatchProvider.is() )
+        return;
 
-        Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
-        if ( xDispatch.is() )
-        {
-            INetURLObject aObj( m_aCommandURL );
-            Sequence< PropertyValue > aArgs( 1 );
-            aArgs[0].Name = aObj.GetURLPath();
-            aArgs[0].Value <<= nCount;
-            xDispatch->dispatch(aTargetURL, aArgs);
-        }
+    css::util::URL aTargetURL;
+    Reference < XURLTransformer > xTrans( URLTransformer::create(::comphelper::getProcessComponentContext()) );
+    aTargetURL.Complete = m_aCommandURL;
+    xTrans->parseStrict( aTargetURL );
+
+    Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
+    if ( xDispatch.is() )
+    {
+        INetURLObject aObj( m_aCommandURL );
+        Sequence< PropertyValue > aArgs( 1 );
+        aArgs[0].Name = aObj.GetURLPath();
+        aArgs[0].Value <<= nCount;
+        xDispatch->dispatch(aTargetURL, aArgs);
     }
 }
 

@@ -456,26 +456,26 @@ namespace
 void ApplyConstraintToLayout(const Constraint& rConstraint, LayoutPropertyMap& rProperties)
 {
     const LayoutPropertyMap::const_iterator aRef = rProperties.find(rConstraint.msRefForName);
-    if (aRef != rProperties.end())
+    if (aRef == rProperties.end())
+        return;
+
+    const LayoutProperty::const_iterator aRefType = aRef->second.find(rConstraint.mnRefType);
+    if (aRefType != aRef->second.end())
+        rProperties[rConstraint.msForName][rConstraint.mnType]
+            = aRefType->second * rConstraint.mfFactor;
+    else
     {
-        const LayoutProperty::const_iterator aRefType = aRef->second.find(rConstraint.mnRefType);
-        if (aRefType != aRef->second.end())
-            rProperties[rConstraint.msForName][rConstraint.mnType]
-                = aRefType->second * rConstraint.mfFactor;
+        // Values are never in EMU, while oox::drawingml::Shape position and size are always in
+        // EMU.
+        double fUnitFactor = 0;
+        if (isFontUnit(rConstraint.mnRefType))
+            // Points -> EMU.
+            fUnitFactor = EMU_PER_PT;
         else
-        {
-            // Values are never in EMU, while oox::drawingml::Shape position and size are always in
-            // EMU.
-            double fUnitFactor = 0;
-            if (isFontUnit(rConstraint.mnRefType))
-                // Points -> EMU.
-                fUnitFactor = EMU_PER_PT;
-            else
-                // Millimeters -> EMU.
-                fUnitFactor = EMU_PER_HMM * 100;
-            rProperties[rConstraint.msForName][rConstraint.mnType]
-                = rConstraint.mfValue * fUnitFactor;
-        }
+            // Millimeters -> EMU.
+            fUnitFactor = EMU_PER_HMM * 100;
+        rProperties[rConstraint.msForName][rConstraint.mnType]
+            = rConstraint.mfValue * fUnitFactor;
     }
 }
 }

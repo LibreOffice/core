@@ -354,71 +354,71 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
 {
     IMapUserData* pUserData = static_cast<IMapUserData*>( rObj.GetUserData( 0 ) );
 
-    if ( pUserData )
+    if ( !pUserData )
+        return;
+
+    OUString        aURL;
+    OUString        aAltText;
+    OUString        aDesc;
+    OUString        aTarget;
+    IMapObjectPtr   pIMapObj = pUserData->GetObject();
+    bool        bActive = true;
+
+    if ( pIMapObj )
     {
-        OUString        aURL;
-        OUString        aAltText;
-        OUString        aDesc;
-        OUString        aTarget;
-        IMapObjectPtr   pIMapObj = pUserData->GetObject();
-        bool        bActive = true;
+        aURL = pIMapObj->GetURL();
+        aAltText = pIMapObj->GetAltText();
+        aDesc = pIMapObj->GetDesc();
+        aTarget = pIMapObj->GetTarget();
+        bActive = pIMapObj->IsActive();
+    }
 
-        if ( pIMapObj )
+    switch( rObj.GetObjIdentifier() )
+    {
+        case OBJ_RECT:
         {
-            aURL = pIMapObj->GetURL();
-            aAltText = pIMapObj->GetAltText();
-            aDesc = pIMapObj->GetDesc();
-            aTarget = pIMapObj->GetTarget();
-            bActive = pIMapObj->IsActive();
+            pUserData->ReplaceObject( std::make_shared<IMapRectangleObject>( static_cast<const SdrRectObj&>(rObj).GetLogicRect(),
+                      aURL, aAltText, aDesc, aTarget, "", bActive, false ) );
         }
+        break;
 
-        switch( rObj.GetObjIdentifier() )
+        case OBJ_CIRC:
         {
-            case OBJ_RECT:
-            {
-                pUserData->ReplaceObject( std::make_shared<IMapRectangleObject>( static_cast<const SdrRectObj&>(rObj).GetLogicRect(),
-                          aURL, aAltText, aDesc, aTarget, "", bActive, false ) );
-            }
-            break;
+            const SdrCircObj& rCircObj = static_cast<const SdrCircObj&>(rObj);
+            SdrPathObj* pPathObj = static_cast<SdrPathObj*>( rCircObj.ConvertToPolyObj( false, false ).release() );
+            tools::Polygon aPoly(pPathObj->GetPathPoly().getB2DPolygon(0));
 
-            case OBJ_CIRC:
-            {
-                const SdrCircObj& rCircObj = static_cast<const SdrCircObj&>(rObj);
-                SdrPathObj* pPathObj = static_cast<SdrPathObj*>( rCircObj.ConvertToPolyObj( false, false ).release() );
-                tools::Polygon aPoly(pPathObj->GetPathPoly().getB2DPolygon(0));
+            auto pObj = std::make_shared<IMapPolygonObject>( aPoly, aURL, aAltText, aDesc, aTarget, "", bActive, false );
+            pObj->SetExtraEllipse( aPoly.GetBoundRect() );
 
+            // was only created by us temporarily
+            // always use SdrObject::Free(...) for SdrObjects (!)
+            SdrObject* pTemp(pPathObj);
+            SdrObject::Free(pTemp);
+
+            pUserData->ReplaceObject( pObj );
+        }
+        break;
+
+        case OBJ_POLY:
+        case OBJ_FREEFILL:
+        case OBJ_PATHPOLY:
+        case OBJ_PATHFILL:
+        {
+            const SdrPathObj& rPathObj = static_cast<const SdrPathObj&>(rObj);
+            const basegfx::B2DPolyPolygon& rXPolyPoly = rPathObj.GetPathPoly();
+
+            if ( rXPolyPoly.count() )
+            {
+                tools::Polygon aPoly(rPathObj.GetPathPoly().getB2DPolygon(0));
                 auto pObj = std::make_shared<IMapPolygonObject>( aPoly, aURL, aAltText, aDesc, aTarget, "", bActive, false );
-                pObj->SetExtraEllipse( aPoly.GetBoundRect() );
-
-                // was only created by us temporarily
-                // always use SdrObject::Free(...) for SdrObjects (!)
-                SdrObject* pTemp(pPathObj);
-                SdrObject::Free(pTemp);
-
                 pUserData->ReplaceObject( pObj );
             }
-            break;
-
-            case OBJ_POLY:
-            case OBJ_FREEFILL:
-            case OBJ_PATHPOLY:
-            case OBJ_PATHFILL:
-            {
-                const SdrPathObj& rPathObj = static_cast<const SdrPathObj&>(rObj);
-                const basegfx::B2DPolyPolygon& rXPolyPoly = rPathObj.GetPathPoly();
-
-                if ( rXPolyPoly.count() )
-                {
-                    tools::Polygon aPoly(rPathObj.GetPathPoly().getB2DPolygon(0));
-                    auto pObj = std::make_shared<IMapPolygonObject>( aPoly, aURL, aAltText, aDesc, aTarget, "", bActive, false );
-                    pUserData->ReplaceObject( pObj );
-                }
-            }
-            break;
-
-            default:
-            break;
         }
+        break;
+
+        default:
+        break;
     }
 }
 
@@ -601,58 +601,58 @@ void IMapWindow::SetCurrentObjState( bool bActive )
 {
     SdrObject* pObj = GetSelectedSdrObject();
 
-    if ( pObj )
+    if ( !pObj )
+        return;
+
+    SfxItemSet aSet( pModel->GetItemPool() );
+
+    GetIMapObj( pObj )->SetActive( bActive );
+
+    aSet.Put( XFillColorItem( "", TRANSCOL ) );
+
+    if ( !bActive )
     {
-        SfxItemSet aSet( pModel->GetItemPool() );
-
-        GetIMapObj( pObj )->SetActive( bActive );
-
-        aSet.Put( XFillColorItem( "", TRANSCOL ) );
-
-        if ( !bActive )
-        {
-            aSet.Put( XFillTransparenceItem( 100 ) );
-            aSet.Put( XLineColorItem( "", COL_RED ) );
-        }
-        else
-        {
-            aSet.Put( XFillTransparenceItem( 50 ) );
-            aSet.Put( XLineColorItem( "", COL_BLACK ) );
-        }
-
-        pView->SetAttributes( aSet );
+        aSet.Put( XFillTransparenceItem( 100 ) );
+        aSet.Put( XLineColorItem( "", COL_RED ) );
     }
+    else
+    {
+        aSet.Put( XFillTransparenceItem( 50 ) );
+        aSet.Put( XLineColorItem( "", COL_BLACK ) );
+    }
+
+    pView->SetAttributes( aSet );
 }
 
 void IMapWindow::UpdateInfo( bool bNewObj )
 {
-    if ( aInfoLink.IsSet() )
+    if ( !aInfoLink.IsSet() )
+        return;
+
+    const SdrObject*    pSdrObj = GetSelectedSdrObject();
+    const IMapObject*   pIMapObj = pSdrObj ? GetIMapObj( pSdrObj ) : nullptr;
+
+    aInfo.bNewObj = bNewObj;
+
+    if ( pIMapObj )
     {
-        const SdrObject*    pSdrObj = GetSelectedSdrObject();
-        const IMapObject*   pIMapObj = pSdrObj ? GetIMapObj( pSdrObj ) : nullptr;
-
-        aInfo.bNewObj = bNewObj;
-
-        if ( pIMapObj )
-        {
-            aInfo.bOneMarked = true;
-            aInfo.aMarkURL = pIMapObj->GetURL();
-            aInfo.aMarkAltText = pIMapObj->GetAltText();
-            aInfo.aMarkTarget = pIMapObj->GetTarget();
-            aInfo.bActivated = pIMapObj->IsActive();
-            aInfoLink.Call( *this );
-        }
-        else
-        {
-            aInfo.aMarkURL.clear();
-            aInfo.aMarkAltText.clear();
-            aInfo.aMarkTarget.clear();
-            aInfo.bOneMarked = false;
-            aInfo.bActivated = false;
-        }
-
+        aInfo.bOneMarked = true;
+        aInfo.aMarkURL = pIMapObj->GetURL();
+        aInfo.aMarkAltText = pIMapObj->GetAltText();
+        aInfo.aMarkTarget = pIMapObj->GetTarget();
+        aInfo.bActivated = pIMapObj->IsActive();
         aInfoLink.Call( *this );
     }
+    else
+    {
+        aInfo.aMarkURL.clear();
+        aInfo.aMarkAltText.clear();
+        aInfo.aMarkTarget.clear();
+        aInfo.bOneMarked = false;
+        aInfo.bActivated = false;
+    }
+
+    aInfoLink.Call( *this );
 }
 
 void IMapWindow::DoMacroAssign()
@@ -690,33 +690,33 @@ void IMapWindow::DoPropertyDialog()
 {
     SdrObject*  pSdrObj = GetSelectedSdrObject();
 
-    if ( pSdrObj )
+    if ( !pSdrObj )
+        return;
+
+    IMapObject* pIMapObj = GetIMapObj( pSdrObj );
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    ScopedVclPtr<AbstractURLDlg> aDlg(pFact->CreateURLDialog(GetDrawingArea(), pIMapObj->GetURL(), pIMapObj->GetAltText(), pIMapObj->GetDesc(),
+                                    pIMapObj->GetTarget(), pIMapObj->GetName(), aTargetList));
+    if ( aDlg->Execute() != RET_OK )
+        return;
+
+    const OUString aURLText( aDlg->GetURL() );
+
+    if ( !aURLText.isEmpty() )
     {
-        IMapObject* pIMapObj = GetIMapObj( pSdrObj );
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractURLDlg> aDlg(pFact->CreateURLDialog(GetDrawingArea(), pIMapObj->GetURL(), pIMapObj->GetAltText(), pIMapObj->GetDesc(),
-                                        pIMapObj->GetTarget(), pIMapObj->GetName(), aTargetList));
-        if ( aDlg->Execute() == RET_OK )
-        {
-            const OUString aURLText( aDlg->GetURL() );
-
-            if ( !aURLText.isEmpty() )
-            {
-                INetURLObject aObj( aURLText, INetProtocol::File );
-                DBG_ASSERT( aObj.GetProtocol() != INetProtocol::NotValid, "Invalid URL" );
-                pIMapObj->SetURL( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
-            }
-            else
-                pIMapObj->SetURL( aURLText );
-
-            pIMapObj->SetAltText( aDlg->GetAltText() );
-            pIMapObj->SetDesc( aDlg->GetDesc() );
-            pIMapObj->SetTarget( aDlg->GetTarget() );
-            pIMapObj->SetName( aDlg->GetName() );
-            pModel->SetChanged();
-            UpdateInfo( true );
-        }
+        INetURLObject aObj( aURLText, INetProtocol::File );
+        DBG_ASSERT( aObj.GetProtocol() != INetProtocol::NotValid, "Invalid URL" );
+        pIMapObj->SetURL( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     }
+    else
+        pIMapObj->SetURL( aURLText );
+
+    pIMapObj->SetAltText( aDlg->GetAltText() );
+    pIMapObj->SetDesc( aDlg->GetDesc() );
+    pIMapObj->SetTarget( aDlg->GetTarget() );
+    pIMapObj->SetName( aDlg->GetName() );
+    pModel->SetChanged();
+    UpdateInfo( true );
 }
 
 void IMapWindow::MenuSelectHdl(const OString& rId)

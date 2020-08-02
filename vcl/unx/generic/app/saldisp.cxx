@@ -712,21 +712,21 @@ unsigned int GetKeySymMask(Display* dpy, KeySym nKeySym)
 
 void SalDisplay::SimulateKeyPress( sal_uInt16 nKeyCode )
 {
-    if (nKeyCode == KEY_CAPSLOCK)
-    {
-        Display* dpy = GetDisplay();
-        if (!InitXkb(dpy))
-            return;
+    if (nKeyCode != KEY_CAPSLOCK)
+        return;
 
-        unsigned int nMask = GetKeySymMask(dpy, XK_Caps_Lock);
-        XkbStateRec xkbState;
-        XkbGetState(dpy, XkbUseCoreKbd, &xkbState);
-        unsigned int nCapsLockState = xkbState.locked_mods & nMask;
-        if (nCapsLockState)
-            XkbLockModifiers (dpy, XkbUseCoreKbd, nMask, 0);
-        else
-            XkbLockModifiers (dpy, XkbUseCoreKbd, nMask, nMask);
-    }
+    Display* dpy = GetDisplay();
+    if (!InitXkb(dpy))
+        return;
+
+    unsigned int nMask = GetKeySymMask(dpy, XK_Caps_Lock);
+    XkbStateRec xkbState;
+    XkbGetState(dpy, XkbUseCoreKbd, &xkbState);
+    unsigned int nCapsLockState = xkbState.locked_mods & nMask;
+    if (nCapsLockState)
+        XkbLockModifiers (dpy, XkbUseCoreKbd, nMask, 0);
+    else
+        XkbLockModifiers (dpy, XkbUseCoreKbd, nMask, nMask);
 }
 
 KeyIndicatorState SalDisplay::GetIndicatorState() const
@@ -2288,28 +2288,28 @@ void SalDisplay::InitXinerama()
         return; // multiple screens mean no xinerama
     }
 #if defined(USE_XINERAMA_XORG)
-    if( XineramaIsActive( pDisp_ ) )
+    if( !XineramaIsActive( pDisp_ ) )
+        return;
+
+    int nFramebuffers = 1;
+    XineramaScreenInfo* pScreens = XineramaQueryScreens( pDisp_, &nFramebuffers );
+    if( !pScreens )
+        return;
+
+    if( nFramebuffers > 1 )
     {
-        int nFramebuffers = 1;
-        XineramaScreenInfo* pScreens = XineramaQueryScreens( pDisp_, &nFramebuffers );
-        if( pScreens )
+        m_aXineramaScreens = std::vector<tools::Rectangle>();
+        m_aXineramaScreenIndexMap = std::vector<int>(nFramebuffers);
+        for( int i = 0; i < nFramebuffers; i++ )
         {
-            if( nFramebuffers > 1 )
-            {
-                m_aXineramaScreens = std::vector<tools::Rectangle>();
-                m_aXineramaScreenIndexMap = std::vector<int>(nFramebuffers);
-                for( int i = 0; i < nFramebuffers; i++ )
-                {
-                    addXineramaScreenUnique( i, pScreens[i].x_org,
-                                             pScreens[i].y_org,
-                                             pScreens[i].width,
-                                             pScreens[i].height );
-                }
-                m_bXinerama = m_aXineramaScreens.size() > 1;
-            }
-            XFree( pScreens );
+            addXineramaScreenUnique( i, pScreens[i].x_org,
+                                     pScreens[i].y_org,
+                                     pScreens[i].width,
+                                     pScreens[i].height );
         }
+        m_bXinerama = m_aXineramaScreens.size() > 1;
     }
+    XFree( pScreens );
 #endif
 #if OSL_DEBUG_LEVEL > 1
     if( m_bXinerama )
@@ -2395,61 +2395,61 @@ SalVisual::SalVisual():
 SalVisual::SalVisual( const XVisualInfo* pXVI )
 {
     *static_cast<XVisualInfo*>(this) = *pXVI;
-    if( GetClass() == TrueColor )
-    {
-        nRedShift_      = sal_Shift( red_mask );
-        nGreenShift_    = sal_Shift( green_mask );
-        nBlueShift_     = sal_Shift( blue_mask );
+    if( GetClass() != TrueColor )
+        return;
 
-        nRedBits_       = sal_significantBits( red_mask );
-        nGreenBits_     = sal_significantBits( green_mask );
-        nBlueBits_      = sal_significantBits( blue_mask );
+    nRedShift_      = sal_Shift( red_mask );
+    nGreenShift_    = sal_Shift( green_mask );
+    nBlueShift_     = sal_Shift( blue_mask );
 
-        if( GetDepth() == 24 )
-            if( red_mask == 0xFF0000 )
-                if( green_mask == 0xFF00 )
-                    if( blue_mask  == 0xFF )
-                        eRGBMode_ = SalRGB::RGB;
-                    else
-                        eRGBMode_ = SalRGB::otherSalRGB;
-                else if( blue_mask  == 0xFF00 )
-                    if( green_mask == 0xFF )
-                        eRGBMode_ = SalRGB::RBG;
-                    else
-                        eRGBMode_ = SalRGB::otherSalRGB;
+    nRedBits_       = sal_significantBits( red_mask );
+    nGreenBits_     = sal_significantBits( green_mask );
+    nBlueBits_      = sal_significantBits( blue_mask );
+
+    if( GetDepth() == 24 )
+        if( red_mask == 0xFF0000 )
+            if( green_mask == 0xFF00 )
+                if( blue_mask  == 0xFF )
+                    eRGBMode_ = SalRGB::RGB;
                 else
                     eRGBMode_ = SalRGB::otherSalRGB;
-            else if( green_mask == 0xFF0000 )
-                if( red_mask == 0xFF00 )
-                    if( blue_mask  == 0xFF )
-                        eRGBMode_ = SalRGB::GRB;
-                    else
-                        eRGBMode_ = SalRGB::otherSalRGB;
-                else if( blue_mask == 0xFF00 )
-                    if( red_mask  == 0xFF )
-                        eRGBMode_ = SalRGB::GBR;
-                    else
-                        eRGBMode_ = SalRGB::otherSalRGB;
+            else if( blue_mask  == 0xFF00 )
+                if( green_mask == 0xFF )
+                    eRGBMode_ = SalRGB::RBG;
                 else
                     eRGBMode_ = SalRGB::otherSalRGB;
-            else if( blue_mask == 0xFF0000 )
-                if( red_mask == 0xFF00 )
-                    if( green_mask  == 0xFF )
-                        eRGBMode_ = SalRGB::BRG;
-                    else
-                        eRGBMode_ = SalRGB::otherSalRGB;
-                else if( green_mask == 0xFF00 )
-                    if( red_mask == 0xFF )
-                        eRGBMode_ = SalRGB::BGR;
-                    else
-                        eRGBMode_ = SalRGB::otherSalRGB;
+            else
+                eRGBMode_ = SalRGB::otherSalRGB;
+        else if( green_mask == 0xFF0000 )
+            if( red_mask == 0xFF00 )
+                if( blue_mask  == 0xFF )
+                    eRGBMode_ = SalRGB::GRB;
+                else
+                    eRGBMode_ = SalRGB::otherSalRGB;
+            else if( blue_mask == 0xFF00 )
+                if( red_mask  == 0xFF )
+                    eRGBMode_ = SalRGB::GBR;
+                else
+                    eRGBMode_ = SalRGB::otherSalRGB;
+            else
+                eRGBMode_ = SalRGB::otherSalRGB;
+        else if( blue_mask == 0xFF0000 )
+            if( red_mask == 0xFF00 )
+                if( green_mask  == 0xFF )
+                    eRGBMode_ = SalRGB::BRG;
+                else
+                    eRGBMode_ = SalRGB::otherSalRGB;
+            else if( green_mask == 0xFF00 )
+                if( red_mask == 0xFF )
+                    eRGBMode_ = SalRGB::BGR;
                 else
                     eRGBMode_ = SalRGB::otherSalRGB;
             else
                 eRGBMode_ = SalRGB::otherSalRGB;
         else
             eRGBMode_ = SalRGB::otherSalRGB;
-    }
+    else
+        eRGBMode_ = SalRGB::otherSalRGB;
 }
 
 // Converts the order of bytes of a Pixel into bytes of a Color

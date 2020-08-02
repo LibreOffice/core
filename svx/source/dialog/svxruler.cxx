@@ -700,28 +700,28 @@ void SvxRuler::Update(
                 sal_uInt16 nSID) //Slot Id to identify NULL items
 {
     /* Set new value for column view */
-    if(bActive)
+    if(!bActive)
+        return;
+
+    if(pItem)
     {
-        if(pItem)
-        {
-            mxColumnItem.reset(new SvxColumnItem(*pItem));
-            mxRulerImpl->bIsTableRows = (pItem->Which() == SID_RULER_ROWS || pItem->Which() == SID_RULER_ROWS_VERTICAL);
-            if(!bHorz && !mxRulerImpl->bIsTableRows)
-                mxColumnItem->SetWhich(SID_RULER_BORDERS_VERTICAL);
-        }
-        else if(mxColumnItem && mxColumnItem->Which() == nSID)
-        //there are two groups of column items table/frame columns and table rows
-        //both can occur in vertical or horizontal mode
-        //the horizontal ruler handles the SID_RULER_BORDERS and SID_RULER_ROWS_VERTICAL
-        //and the vertical handles SID_RULER_BORDERS_VERTICAL and SID_RULER_ROWS
-        //if mxColumnItem is already set with one of the ids then a NULL pItem argument
-        //must not delete it
-        {
-            mxColumnItem.reset();
-            mxRulerImpl->bIsTableRows = false;
-        }
-        StartListening_Impl();
+        mxColumnItem.reset(new SvxColumnItem(*pItem));
+        mxRulerImpl->bIsTableRows = (pItem->Which() == SID_RULER_ROWS || pItem->Which() == SID_RULER_ROWS_VERTICAL);
+        if(!bHorz && !mxRulerImpl->bIsTableRows)
+            mxColumnItem->SetWhich(SID_RULER_BORDERS_VERTICAL);
     }
+    else if(mxColumnItem && mxColumnItem->Which() == nSID)
+    //there are two groups of column items table/frame columns and table rows
+    //both can occur in vertical or horizontal mode
+    //the horizontal ruler handles the SID_RULER_BORDERS and SID_RULER_ROWS_VERTICAL
+    //and the vertical handles SID_RULER_BORDERS_VERTICAL and SID_RULER_ROWS
+    //if mxColumnItem is already set with one of the ids then a NULL pItem argument
+    //must not delete it
+    {
+        mxColumnItem.reset();
+        mxRulerImpl->bIsTableRows = false;
+    }
+    StartListening_Impl();
 }
 
 
@@ -1094,20 +1094,20 @@ void SvxRuler::UpdateTabs()
 void SvxRuler::Update(const SvxTabStopItem *pItem) // new value for tabs
 {
     /* Store new value for tabs; delete old ones if possible */
-    if(bActive)
+    if(!bActive)
+        return;
+
+    if(pItem)
     {
-        if(pItem)
-        {
-            mxTabStopItem.reset(new SvxTabStopItem(*pItem));
-            if(!bHorz)
-                mxTabStopItem->SetWhich(SID_ATTR_TABSTOP_VERTICAL);
-        }
-        else
-        {
-            mxTabStopItem.reset();
-        }
-        StartListening_Impl();
+        mxTabStopItem.reset(new SvxTabStopItem(*pItem));
+        if(!bHorz)
+            mxTabStopItem->SetWhich(SID_ATTR_TABSTOP_VERTICAL);
     }
+    else
+    {
+        mxTabStopItem.reset();
+    }
+    StartListening_Impl();
 }
 
 void SvxRuler::Update(const SvxObjectItem *pItem) // new value for objects
@@ -2475,35 +2475,35 @@ void SvxRuler::Click()
         pBindings->Update( SID_ATTR_PARA_LRSPACE_VERTICAL );
     }
     bool bRTL = mxRulerImpl->pTextRTLItem && mxRulerImpl->pTextRTLItem->GetValue();
-    if(mxTabStopItem &&
-       (nFlags & SvxRulerSupportFlags::TABS) == SvxRulerSupportFlags::TABS)
-    {
-        bool bContentProtected = mxRulerImpl->aProtectItem->IsContentProtected();
-        if( bContentProtected ) return;
-        const long lPos = GetClickPos();
-        if((bRTL && lPos < std::min(GetFirstLineIndent(), GetLeftIndent()) && lPos > GetRightIndent()) ||
-            (!bRTL && lPos > std::min(GetFirstLineIndent(), GetLeftIndent()) && lPos < GetRightIndent()))
-        {
-            //convert position in left-to-right text
-            long nTabPos;
-    //#i24363# tab stops relative to indent
-            if(bRTL)
-                nTabPos = ( mxRulerImpl->bIsTabsRelativeToIndent ?
-                            GetLeftIndent() :
-                            ConvertHPosPixel( GetRightFrameMargin() + lAppNullOffset ) ) -
-                          lPos;
-            else
-                nTabPos = lPos -
-                          ( mxRulerImpl->bIsTabsRelativeToIndent ?
-                            GetLeftIndent() :
-                            ConvertHPosPixel( GetLeftFrameMargin() + lAppNullOffset ));
+    if(!(mxTabStopItem &&
+       (nFlags & SvxRulerSupportFlags::TABS) == SvxRulerSupportFlags::TABS))
+        return;
 
-            SvxTabStop aTabStop(ConvertHPosLogic(nTabPos),
-                                ToAttrTab_Impl(nDefTabType));
-            mxTabStopItem->Insert(aTabStop);
-            UpdateTabs();
-        }
-    }
+    bool bContentProtected = mxRulerImpl->aProtectItem->IsContentProtected();
+    if( bContentProtected ) return;
+    const long lPos = GetClickPos();
+    if(!((bRTL && lPos < std::min(GetFirstLineIndent(), GetLeftIndent()) && lPos > GetRightIndent()) ||
+        (!bRTL && lPos > std::min(GetFirstLineIndent(), GetLeftIndent()) && lPos < GetRightIndent())))
+        return;
+
+    //convert position in left-to-right text
+    long nTabPos;
+//#i24363# tab stops relative to indent
+    if(bRTL)
+        nTabPos = ( mxRulerImpl->bIsTabsRelativeToIndent ?
+                    GetLeftIndent() :
+                    ConvertHPosPixel( GetRightFrameMargin() + lAppNullOffset ) ) -
+                  lPos;
+    else
+        nTabPos = lPos -
+                  ( mxRulerImpl->bIsTabsRelativeToIndent ?
+                    GetLeftIndent() :
+                    ConvertHPosPixel( GetLeftFrameMargin() + lAppNullOffset ));
+
+    SvxTabStop aTabStop(ConvertHPosLogic(nTabPos),
+                        ToAttrTab_Impl(nDefTabType));
+    mxTabStopItem->Insert(aTabStop);
+    UpdateTabs();
 }
 
 void SvxRuler::CalcMinMax()

@@ -277,22 +277,22 @@ SdrModel& SdrObject::getSdrModelFromSdrObject() const
 
 void SdrObject::setParentOfSdrObject(SdrObjList* pNewObjList)
 {
-    if(getParentSdrObjListFromSdrObject() != pNewObjList)
+    if(getParentSdrObjListFromSdrObject() == pNewObjList)
+        return;
+
+    // remember current page
+    SdrPage* pOldPage(getSdrPageFromSdrObject());
+
+    // set new parent
+    mpParentOfSdrObject = pNewObjList;
+
+    // get new page
+    SdrPage* pNewPage(getSdrPageFromSdrObject());
+
+    // broadcast page change over objects if needed
+    if(pOldPage != pNewPage)
     {
-        // remember current page
-        SdrPage* pOldPage(getSdrPageFromSdrObject());
-
-        // set new parent
-        mpParentOfSdrObject = pNewObjList;
-
-        // get new page
-        SdrPage* pNewPage(getSdrPageFromSdrObject());
-
-        // broadcast page change over objects if needed
-        if(pOldPage != pNewPage)
-        {
-            handlePageChange(pOldPage, pNewPage);
-        }
+        handlePageChange(pOldPage, pNewPage);
     }
 }
 
@@ -668,31 +668,31 @@ void SdrObject::SetName(const OUString& rStr)
         ImpForcePlusData();
     }
 
-    if(pPlusData && pPlusData->aObjName != rStr)
+    if(!(pPlusData && pPlusData->aObjName != rStr))
+        return;
+
+    // Undo/Redo for setting object's name (#i73249#)
+    bool bUndo( false );
+    if ( getSdrModelFromSdrObject().IsUndoEnabled() )
     {
-        // Undo/Redo for setting object's name (#i73249#)
-        bool bUndo( false );
-        if ( getSdrModelFromSdrObject().IsUndoEnabled() )
-        {
-            bUndo = true;
-            std::unique_ptr<SdrUndoAction> pUndoAction =
-                    SdrUndoFactory::CreateUndoObjectStrAttr(
-                                                    *this,
-                                                    SdrUndoObjStrAttr::ObjStrAttrType::Name,
-                                                    GetName(),
-                                                    rStr );
-            getSdrModelFromSdrObject().BegUndo( pUndoAction->GetComment() );
-            getSdrModelFromSdrObject().AddUndo( std::move(pUndoAction) );
-        }
-        pPlusData->aObjName = rStr;
-        // Undo/Redo for setting object's name (#i73249#)
-        if ( bUndo )
-        {
-            getSdrModelFromSdrObject().EndUndo();
-        }
-        SetChanged();
-        BroadcastObjectChange();
+        bUndo = true;
+        std::unique_ptr<SdrUndoAction> pUndoAction =
+                SdrUndoFactory::CreateUndoObjectStrAttr(
+                                                *this,
+                                                SdrUndoObjStrAttr::ObjStrAttrType::Name,
+                                                GetName(),
+                                                rStr );
+        getSdrModelFromSdrObject().BegUndo( pUndoAction->GetComment() );
+        getSdrModelFromSdrObject().AddUndo( std::move(pUndoAction) );
     }
+    pPlusData->aObjName = rStr;
+    // Undo/Redo for setting object's name (#i73249#)
+    if ( bUndo )
+    {
+        getSdrModelFromSdrObject().EndUndo();
+    }
+    SetChanged();
+    BroadcastObjectChange();
 }
 
 OUString SdrObject::GetName() const
@@ -712,31 +712,31 @@ void SdrObject::SetTitle(const OUString& rStr)
         ImpForcePlusData();
     }
 
-    if(pPlusData && pPlusData->aObjTitle != rStr)
+    if(!(pPlusData && pPlusData->aObjTitle != rStr))
+        return;
+
+    // Undo/Redo for setting object's title (#i73249#)
+    bool bUndo( false );
+    if ( getSdrModelFromSdrObject().IsUndoEnabled() )
     {
-        // Undo/Redo for setting object's title (#i73249#)
-        bool bUndo( false );
-        if ( getSdrModelFromSdrObject().IsUndoEnabled() )
-        {
-            bUndo = true;
-            std::unique_ptr<SdrUndoAction> pUndoAction =
-                    SdrUndoFactory::CreateUndoObjectStrAttr(
-                                                    *this,
-                                                    SdrUndoObjStrAttr::ObjStrAttrType::Title,
-                                                    GetTitle(),
-                                                    rStr );
-            getSdrModelFromSdrObject().BegUndo( pUndoAction->GetComment() );
-            getSdrModelFromSdrObject().AddUndo( std::move(pUndoAction) );
-        }
-        pPlusData->aObjTitle = rStr;
-        // Undo/Redo for setting object's title (#i73249#)
-        if ( bUndo )
-        {
-            getSdrModelFromSdrObject().EndUndo();
-        }
-        SetChanged();
-        BroadcastObjectChange();
+        bUndo = true;
+        std::unique_ptr<SdrUndoAction> pUndoAction =
+                SdrUndoFactory::CreateUndoObjectStrAttr(
+                                                *this,
+                                                SdrUndoObjStrAttr::ObjStrAttrType::Title,
+                                                GetTitle(),
+                                                rStr );
+        getSdrModelFromSdrObject().BegUndo( pUndoAction->GetComment() );
+        getSdrModelFromSdrObject().AddUndo( std::move(pUndoAction) );
     }
+    pPlusData->aObjTitle = rStr;
+    // Undo/Redo for setting object's title (#i73249#)
+    if ( bUndo )
+    {
+        getSdrModelFromSdrObject().EndUndo();
+    }
+    SetChanged();
+    BroadcastObjectChange();
 }
 
 OUString SdrObject::GetTitle() const
@@ -756,31 +756,31 @@ void SdrObject::SetDescription(const OUString& rStr)
         ImpForcePlusData();
     }
 
-    if(pPlusData && pPlusData->aObjDescription != rStr)
+    if(!(pPlusData && pPlusData->aObjDescription != rStr))
+        return;
+
+    // Undo/Redo for setting object's description (#i73249#)
+    bool bUndo( false );
+    if ( getSdrModelFromSdrObject().IsUndoEnabled() )
     {
-        // Undo/Redo for setting object's description (#i73249#)
-        bool bUndo( false );
-        if ( getSdrModelFromSdrObject().IsUndoEnabled() )
-        {
-            bUndo = true;
-            std::unique_ptr<SdrUndoAction> pUndoAction =
-                    SdrUndoFactory::CreateUndoObjectStrAttr(
-                                                    *this,
-                                                    SdrUndoObjStrAttr::ObjStrAttrType::Description,
-                                                    GetDescription(),
-                                                    rStr );
-            getSdrModelFromSdrObject().BegUndo( pUndoAction->GetComment() );
-            getSdrModelFromSdrObject().AddUndo( std::move(pUndoAction) );
-        }
-        pPlusData->aObjDescription = rStr;
-        // Undo/Redo for setting object's description (#i73249#)
-        if ( bUndo )
-        {
-            getSdrModelFromSdrObject().EndUndo();
-        }
-        SetChanged();
-        BroadcastObjectChange();
+        bUndo = true;
+        std::unique_ptr<SdrUndoAction> pUndoAction =
+                SdrUndoFactory::CreateUndoObjectStrAttr(
+                                                *this,
+                                                SdrUndoObjStrAttr::ObjStrAttrType::Description,
+                                                GetDescription(),
+                                                rStr );
+        getSdrModelFromSdrObject().BegUndo( pUndoAction->GetComment() );
+        getSdrModelFromSdrObject().AddUndo( std::move(pUndoAction) );
     }
+    pPlusData->aObjDescription = rStr;
+    // Undo/Redo for setting object's description (#i73249#)
+    if ( bUndo )
+    {
+        getSdrModelFromSdrObject().EndUndo();
+    }
+    SetChanged();
+    BroadcastObjectChange();
 }
 
 OUString SdrObject::GetDescription() const
@@ -877,28 +877,28 @@ void SdrObject::RecalcBoundRect()
         return;
 
     // central new method which will calculate the BoundRect using primitive geometry
-    if(aOutRect.IsEmpty())
+    if(!aOutRect.IsEmpty())
+        return;
+
+    // Use view-independent data - we do not want any connections
+    // to e.g. GridOffset in SdrObject-level
+    const drawinglayer::primitive2d::Primitive2DContainer& xPrimitives(GetViewContact().getViewIndependentPrimitive2DContainer());
+
+    if(xPrimitives.empty())
+        return;
+
+    // use neutral ViewInformation and get the range of the primitives
+    const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+    const basegfx::B2DRange aRange(xPrimitives.getB2DRange(aViewInformation2D));
+
+    if(!aRange.isEmpty())
     {
-        // Use view-independent data - we do not want any connections
-        // to e.g. GridOffset in SdrObject-level
-        const drawinglayer::primitive2d::Primitive2DContainer& xPrimitives(GetViewContact().getViewIndependentPrimitive2DContainer());
-
-        if(!xPrimitives.empty())
-        {
-            // use neutral ViewInformation and get the range of the primitives
-            const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-            const basegfx::B2DRange aRange(xPrimitives.getB2DRange(aViewInformation2D));
-
-            if(!aRange.isEmpty())
-            {
-                aOutRect = tools::Rectangle(
-                    static_cast<long>(floor(aRange.getMinX())),
-                    static_cast<long>(floor(aRange.getMinY())),
-                    static_cast<long>(ceil(aRange.getMaxX())),
-                    static_cast<long>(ceil(aRange.getMaxY())));
-                return;
-            }
-        }
+        aOutRect = tools::Rectangle(
+            static_cast<long>(floor(aRange.getMinX())),
+            static_cast<long>(floor(aRange.getMinY())),
+            static_cast<long>(ceil(aRange.getMaxX())),
+            static_cast<long>(ceil(aRange.getMaxY())));
+        return;
     }
 }
 
@@ -910,19 +910,19 @@ void SdrObject::BroadcastObjectChange() const
     bool bPlusDataBroadcast(pPlusData && pPlusData->pBroadcast);
     bool bObjectChange(IsInserted());
 
-    if(bPlusDataBroadcast || bObjectChange)
+    if(!(bPlusDataBroadcast || bObjectChange))
+        return;
+
+    SdrHint aHint(SdrHintKind::ObjectChange, *this);
+
+    if(bPlusDataBroadcast)
     {
-        SdrHint aHint(SdrHintKind::ObjectChange, *this);
+        pPlusData->pBroadcast->Broadcast(aHint);
+    }
 
-        if(bPlusDataBroadcast)
-        {
-            pPlusData->pBroadcast->Broadcast(aHint);
-        }
-
-        if(bObjectChange)
-        {
-            getSdrModelFromSdrObject().Broadcast(aHint);
-        }
+    if(bObjectChange)
+    {
+        getSdrModelFromSdrObject().Broadcast(aHint);
     }
 }
 
@@ -1483,20 +1483,21 @@ void SdrObject::NbcCrop(const basegfx::B2DPoint& /*aRef*/, double /*fxFact*/, do
 
 void SdrObject::Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative)
 {
-    if (xFact.GetNumerator()!=xFact.GetDenominator() || yFact.GetNumerator()!=yFact.GetDenominator()) {
-        if (bUnsetRelative)
-        {
-            mpImpl->mnRelativeWidth.reset();
-            mpImpl->meRelativeWidthRelation = text::RelOrientation::PAGE_FRAME;
-            mpImpl->meRelativeHeightRelation = text::RelOrientation::PAGE_FRAME;
-            mpImpl->mnRelativeHeight.reset();
-        }
-        tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
-        NbcResize(rRef,xFact,yFact);
-        SetChanged();
-        BroadcastObjectChange();
-        SendUserCall(SdrUserCallType::Resize,aBoundRect0);
+    if (xFact.GetNumerator() == xFact.GetDenominator() && yFact.GetNumerator() == yFact.GetDenominator())
+        return;
+
+    if (bUnsetRelative)
+    {
+        mpImpl->mnRelativeWidth.reset();
+        mpImpl->meRelativeWidthRelation = text::RelOrientation::PAGE_FRAME;
+        mpImpl->meRelativeHeightRelation = text::RelOrientation::PAGE_FRAME;
+        mpImpl->mnRelativeHeight.reset();
     }
+    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    NbcResize(rRef,xFact,yFact);
+    SetChanged();
+    BroadcastObjectChange();
+    SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
 void SdrObject::Crop(const basegfx::B2DPoint& rRef, double fxFact, double fyFact)
@@ -2278,21 +2279,21 @@ static void extractLineContourFromPrimitive2DSequence(
     rExtractedHairlines.clear();
     rExtractedLineFills.clear();
 
-    if(!rxSequence.empty())
-    {
-        // use neutral ViewInformation
-        const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+    if(rxSequence.empty())
+        return;
 
-        // create extractor, process and get result
-        drawinglayer::processor2d::LineGeometryExtractor2D aExtractor(aViewInformation2D);
-        aExtractor.process(rxSequence);
+    // use neutral ViewInformation
+    const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
 
-        // copy line results
-        rExtractedHairlines = aExtractor.getExtractedHairlines();
+    // create extractor, process and get result
+    drawinglayer::processor2d::LineGeometryExtractor2D aExtractor(aViewInformation2D);
+    aExtractor.process(rxSequence);
 
-        // copy fill rsults
-        rExtractedLineFills = aExtractor.getExtractedLineFills();
-    }
+    // copy line results
+    rExtractedHairlines = aExtractor.getExtractedHairlines();
+
+    // copy fill rsults
+    rExtractedLineFills = aExtractor.getExtractedLineFills();
 }
 
 

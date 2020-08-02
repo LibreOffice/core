@@ -81,37 +81,37 @@ TaskPaneList::~TaskPaneList()
 
 void TaskPaneList::AddWindow( vcl::Window *pWindow )
 {
-    if( pWindow )
+    if( !pWindow )
+        return;
+
+    auto insertionPos = dynamic_cast<MenuBarWindow*>(pWindow) ? mTaskPanes.begin() : mTaskPanes.end();
+    for ( auto p = mTaskPanes.begin(); p != mTaskPanes.end(); ++p )
     {
-        auto insertionPos = dynamic_cast<MenuBarWindow*>(pWindow) ? mTaskPanes.begin() : mTaskPanes.end();
-        for ( auto p = mTaskPanes.begin(); p != mTaskPanes.end(); ++p )
+        if ( *p == pWindow )
+            // avoid duplicates
+            return;
+
+        // If the new window is the child of an existing pane window, or vice versa,
+        // ensure that in our pane list, *first* the child window appears, *then*
+        // the ancestor window.
+        // This is necessary for HandleKeyEvent: There, the list is traveled from the
+        // beginning, until the first window is found which has the ChildPathFocus. Now
+        // if this would be the ancestor window of another pane window, this would fudge
+        // the result
+        if ( pWindow->IsWindowOrChild( *p ) )
         {
-            if ( *p == pWindow )
-                // avoid duplicates
-                return;
-
-            // If the new window is the child of an existing pane window, or vice versa,
-            // ensure that in our pane list, *first* the child window appears, *then*
-            // the ancestor window.
-            // This is necessary for HandleKeyEvent: There, the list is traveled from the
-            // beginning, until the first window is found which has the ChildPathFocus. Now
-            // if this would be the ancestor window of another pane window, this would fudge
-            // the result
-            if ( pWindow->IsWindowOrChild( *p ) )
-            {
-                insertionPos = p + 1;
-                break;
-            }
-            if ( (*p)->IsWindowOrChild( pWindow ) )
-            {
-                insertionPos = p;
-                break;
-            }
+            insertionPos = p + 1;
+            break;
         }
-
-        mTaskPanes.insert( insertionPos, pWindow );
-        pWindow->ImplIsInTaskPaneList( true );
+        if ( (*p)->IsWindowOrChild( pWindow ) )
+        {
+            insertionPos = p;
+            break;
+        }
     }
+
+    mTaskPanes.insert( insertionPos, pWindow );
+    pWindow->ImplIsInTaskPaneList( true );
 }
 
 void TaskPaneList::RemoveWindow( vcl::Window *pWindow )

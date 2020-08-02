@@ -366,51 +366,51 @@ void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
     if (nTemp < 10)
         rBuffer.append( '0');
     rBuffer.append( sal_Int32( nTemp));
-    if (bHasTime || bAddTimeIf0AM)
+    if (!(bHasTime || bAddTimeIf0AM))
+        return;
+
+    double fCount;
+    if (nDays > 0)
+        fCount = ::rtl::math::approxFloor (log10(static_cast<double>(nDays))) + 1;
+    else if (nDays < 0)
+        fCount = ::rtl::math::approxFloor (log10(static_cast<double>(nDays * -1))) + 1;
+    else
+        fCount = 0.0;
+    const int nDigits = sal_Int16(fCount) + 4;  // +4 for *86400 in seconds
+    const int nFractionDecimals = std::max( XML_MAXDIGITSCOUNT_TIME - nDigits, 0);
+
+    sal_uInt16 nHour, nMinute, nSecond;
+    double fFractionOfSecond;
+    // Pass the original date+time value for proper scaling and rounding.
+    tools::Time::GetClock( fDateTime, nHour, nMinute, nSecond, fFractionOfSecond, nFractionDecimals);
+
+    rBuffer.append( 'T');
+    if (nHour < 10)
+        rBuffer.append( '0');
+    rBuffer.append( sal_Int32( nHour));
+    rBuffer.append( ':');
+    if (nMinute < 10)
+        rBuffer.append( '0');
+    rBuffer.append( sal_Int32( nMinute));
+    rBuffer.append( ':');
+    if (nSecond < 10)
+        rBuffer.append( '0');
+    rBuffer.append( sal_Int32( nSecond));
+    if (!nFractionDecimals)
+        return;
+
+    // nFractionDecimals+1 to not round up what GetClock() carefully
+    // truncated.
+    OUString aFraction( ::rtl::math::doubleToUString( fFractionOfSecond,
+                rtl_math_StringFormat_F,
+                nFractionDecimals + 1, '.', true));
+    const sal_Int32 nLen = aFraction.getLength();
+    if ( nLen > 2 )
     {
-        double fCount;
-        if (nDays > 0)
-            fCount = ::rtl::math::approxFloor (log10(static_cast<double>(nDays))) + 1;
-        else if (nDays < 0)
-            fCount = ::rtl::math::approxFloor (log10(static_cast<double>(nDays * -1))) + 1;
-        else
-            fCount = 0.0;
-        const int nDigits = sal_Int16(fCount) + 4;  // +4 for *86400 in seconds
-        const int nFractionDecimals = std::max( XML_MAXDIGITSCOUNT_TIME - nDigits, 0);
-
-        sal_uInt16 nHour, nMinute, nSecond;
-        double fFractionOfSecond;
-        // Pass the original date+time value for proper scaling and rounding.
-        tools::Time::GetClock( fDateTime, nHour, nMinute, nSecond, fFractionOfSecond, nFractionDecimals);
-
-        rBuffer.append( 'T');
-        if (nHour < 10)
-            rBuffer.append( '0');
-        rBuffer.append( sal_Int32( nHour));
-        rBuffer.append( ':');
-        if (nMinute < 10)
-            rBuffer.append( '0');
-        rBuffer.append( sal_Int32( nMinute));
-        rBuffer.append( ':');
-        if (nSecond < 10)
-            rBuffer.append( '0');
-        rBuffer.append( sal_Int32( nSecond));
-        if (nFractionDecimals)
-        {
-            // nFractionDecimals+1 to not round up what GetClock() carefully
-            // truncated.
-            OUString aFraction( ::rtl::math::doubleToUString( fFractionOfSecond,
-                        rtl_math_StringFormat_F,
-                        nFractionDecimals + 1, '.', true));
-            const sal_Int32 nLen = aFraction.getLength();
-            if ( nLen > 2 )
-            {
-                // Truncate nFractionDecimals+1 digit if it was not rounded to zero.
-                const sal_Int32 nCount = nLen - 2 - static_cast<int>(nLen > nFractionDecimals + 2);
-                rBuffer.append( '.');
-                rBuffer.append( std::u16string_view(aFraction).substr(2, nCount));     // strip 0.
-            }
-        }
+        // Truncate nFractionDecimals+1 digit if it was not rounded to zero.
+        const sal_Int32 nCount = nLen - 2 - static_cast<int>(nLen > nFractionDecimals + 2);
+        rBuffer.append( '.');
+        rBuffer.append( std::u16string_view(aFraction).substr(2, nCount));     // strip 0.
     }
 }
 
@@ -701,19 +701,19 @@ void SvXMLUnitConverter::convertPropertySet(uno::Sequence<beans::PropertyValue>&
                     const uno::Reference<beans::XPropertySet>& aProperties)
 {
     uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = aProperties->getPropertySetInfo();
-    if (xPropertySetInfo.is())
+    if (!xPropertySetInfo.is())
+        return;
+
+    const uno::Sequence< beans::Property > aProps = xPropertySetInfo->getProperties();
+    if (aProps.hasElements())
     {
-        const uno::Sequence< beans::Property > aProps = xPropertySetInfo->getProperties();
-        if (aProps.hasElements())
+        rProps.realloc(aProps.getLength());
+        beans::PropertyValue* pProps = rProps.getArray();
+        for (const auto& rProp : aProps)
         {
-            rProps.realloc(aProps.getLength());
-            beans::PropertyValue* pProps = rProps.getArray();
-            for (const auto& rProp : aProps)
-            {
-                pProps->Name = rProp.Name;
-                pProps->Value = aProperties->getPropertyValue(rProp.Name);
-                ++pProps;
-            }
+            pProps->Name = rProp.Name;
+            pProps->Value = aProperties->getPropertyValue(rProp.Name);
+            ++pProps;
         }
     }
 }

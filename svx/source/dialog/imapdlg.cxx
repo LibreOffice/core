@@ -374,27 +374,27 @@ void SvxIMapDlg::DoOpen()
     aDlg.SetCurrentFilter( aFilter );
     aDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
 
-    if( aDlg.Execute() == ERRCODE_NONE )
+    if( aDlg.Execute() != ERRCODE_NONE )
+        return;
+
+    INetURLObject aURL( aDlg.GetPath() );
+    DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
+    std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ ));
+
+    if( pIStm )
     {
-        INetURLObject aURL( aDlg.GetPath() );
-        DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
-        std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ ));
+        aLoadIMap.Read( *pIStm, IMAP_FORMAT_DETECT );
 
-        if( pIStm )
+        if( pIStm->GetError() )
         {
-            aLoadIMap.Read( *pIStm, IMAP_FORMAT_DETECT );
-
-            if( pIStm->GetError() )
-            {
-                SfxErrorContext eEC(ERRCTX_ERROR, m_xDialog.get());
-                ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
-            }
-            else
-                m_xIMapWnd->SetImageMap( aLoadIMap );
+            SfxErrorContext eEC(ERRCTX_ERROR, m_xDialog.get());
+            ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
         }
-
-        m_xIMapWnd->Invalidate();
+        else
+            m_xIMapWnd->SetImageMap( aLoadIMap );
     }
+
+    m_xIMapWnd->Invalidate();
 }
 
 bool SvxIMapDlg::DoSave()

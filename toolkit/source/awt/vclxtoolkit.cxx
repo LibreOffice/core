@@ -2396,27 +2396,27 @@ void VCLXToolkit::callTopWindowListeners(
 {
     vcl::Window * pWindow
           = static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow();
-    if (pWindow->IsTopWindow())
+    if (!pWindow->IsTopWindow())
+        return;
+
+    std::vector< css::uno::Reference< css::uno::XInterface > >
+          aListeners(m_aTopWindowListeners.getElements());
+    if (aListeners.empty())
+        return;
+
+    css::lang::EventObject aAwtEvent(
+        static_cast< css::awt::XWindow * >(pWindow->GetWindowPeer()));
+    for (const css::uno::Reference<XInterface> & i : aListeners)
     {
-        std::vector< css::uno::Reference< css::uno::XInterface > >
-              aListeners(m_aTopWindowListeners.getElements());
-        if (!aListeners.empty())
+        css::uno::Reference< css::awt::XTopWindowListener >
+              xListener(i, css::uno::UNO_QUERY);
+        try
         {
-            css::lang::EventObject aAwtEvent(
-                static_cast< css::awt::XWindow * >(pWindow->GetWindowPeer()));
-            for (const css::uno::Reference<XInterface> & i : aListeners)
-            {
-                css::uno::Reference< css::awt::XTopWindowListener >
-                      xListener(i, css::uno::UNO_QUERY);
-                try
-                {
-                    (xListener.get()->*pFn)(aAwtEvent);
-                }
-                catch (const css::uno::RuntimeException &)
-                {
-                    DBG_UNHANDLED_EXCEPTION("toolkit");
-                }
-            }
+            (xListener.get()->*pFn)(aAwtEvent);
+        }
+        catch (const css::uno::RuntimeException &)
+        {
+            DBG_UNHANDLED_EXCEPTION("toolkit");
         }
     }
 }
@@ -2471,43 +2471,43 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
 {
     vcl::Window * pWindow
           = static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow();
-    if (pWindow->IsTopWindow())
-    {
-        std::vector< css::uno::Reference< css::uno::XInterface > >
-              aListeners(m_aFocusListeners.getElements());
-        if (!aListeners.empty())
+    if (!pWindow->IsTopWindow())
+        return;
+
+    std::vector< css::uno::Reference< css::uno::XInterface > >
+          aListeners(m_aFocusListeners.getElements());
+    if (aListeners.empty())
+        return;
+
+    // Ignore the interior of compound controls when determining the
+    // window that gets the focus next (see implementation in
+    // vclxwindow.cxx for mapping between VCL and UNO AWT event):
+    css::uno::Reference< css::uno::XInterface > xNext;
+    vcl::Window * pFocus = ::Application::GetFocusWindow();
+    for (vcl::Window * p = pFocus; p != nullptr; p = p->GetParent())
+        if (!p->IsCompoundControl())
         {
-            // Ignore the interior of compound controls when determining the
-            // window that gets the focus next (see implementation in
-            // vclxwindow.cxx for mapping between VCL and UNO AWT event):
-            css::uno::Reference< css::uno::XInterface > xNext;
-            vcl::Window * pFocus = ::Application::GetFocusWindow();
-            for (vcl::Window * p = pFocus; p != nullptr; p = p->GetParent())
-                if (!p->IsCompoundControl())
-                {
-                    pFocus = p;
-                    break;
-                }
-            if (pFocus != nullptr)
-                xNext = pFocus->GetComponentInterface();
-            css::awt::FocusEvent aAwtEvent(
-                static_cast< css::awt::XWindow * >(pWindow->GetWindowPeer()),
-                static_cast<sal_Int16>(pWindow->GetGetFocusFlags()),
-                xNext, false);
-            for (const css::uno::Reference<XInterface> & i : aListeners)
-            {
-                css::uno::Reference< css::awt::XFocusListener > xListener(
-                    i, css::uno::UNO_QUERY);
-                try
-                {
-                    bGained ? xListener->focusGained(aAwtEvent)
-                        : xListener->focusLost(aAwtEvent);
-                }
-                catch (const css::uno::RuntimeException &)
-                {
-                    DBG_UNHANDLED_EXCEPTION("toolkit");
-                }
-            }
+            pFocus = p;
+            break;
+        }
+    if (pFocus != nullptr)
+        xNext = pFocus->GetComponentInterface();
+    css::awt::FocusEvent aAwtEvent(
+        static_cast< css::awt::XWindow * >(pWindow->GetWindowPeer()),
+        static_cast<sal_Int16>(pWindow->GetGetFocusFlags()),
+        xNext, false);
+    for (const css::uno::Reference<XInterface> & i : aListeners)
+    {
+        css::uno::Reference< css::awt::XFocusListener > xListener(
+            i, css::uno::UNO_QUERY);
+        try
+        {
+            bGained ? xListener->focusGained(aAwtEvent)
+                : xListener->focusLost(aAwtEvent);
+        }
+        catch (const css::uno::RuntimeException &)
+        {
+            DBG_UNHANDLED_EXCEPTION("toolkit");
         }
     }
 }

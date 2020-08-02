@@ -448,53 +448,53 @@ void ScOptSolverDlg::SetActive()
 
 void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
 {
-    if( mpEdActive )
+    if( !mpEdActive )
+        return;
+
+    if ( rRef.aStart != rRef.aEnd )
+        RefInputStart(mpEdActive);
+
+    // "target"/"value": single cell
+    bool bSingle = ( mpEdActive == m_xEdObjectiveCell.get() || mpEdActive == m_xEdTargetValue.get() );
+
+    OUString aStr;
+    ScAddress aAdr = rRef.aStart;
+    ScRange aNewRef( rRef );
+    if ( bSingle )
+        aNewRef.aEnd = aAdr;
+
+    OUString aName;
+    if ( rDocP.GetRangeAtBlock( aNewRef, &aName ) )            // named range: show name
+        aStr = aName;
+    else                                                        // format cell/range reference
     {
-        if ( rRef.aStart != rRef.aEnd )
-            RefInputStart(mpEdActive);
-
-        // "target"/"value": single cell
-        bool bSingle = ( mpEdActive == m_xEdObjectiveCell.get() || mpEdActive == m_xEdTargetValue.get() );
-
-        OUString aStr;
-        ScAddress aAdr = rRef.aStart;
-        ScRange aNewRef( rRef );
+        ScRefFlags nFmt = ( aAdr.Tab() == mnCurTab ) ? ScRefFlags::ADDR_ABS : ScRefFlags::ADDR_ABS_3D;
         if ( bSingle )
-            aNewRef.aEnd = aAdr;
-
-        OUString aName;
-        if ( rDocP.GetRangeAtBlock( aNewRef, &aName ) )            // named range: show name
-            aStr = aName;
-        else                                                        // format cell/range reference
-        {
-            ScRefFlags nFmt = ( aAdr.Tab() == mnCurTab ) ? ScRefFlags::ADDR_ABS : ScRefFlags::ADDR_ABS_3D;
-            if ( bSingle )
-                aStr = aAdr.Format(nFmt, &rDocP, rDocP.GetAddressConvention());
-            else
-                aStr = rRef.Format(rDocP, nFmt | ScRefFlags::RANGE_ABS, rDocP.GetAddressConvention());
-        }
-
-        // variable cells can be several ranges, so only the selection is replaced
-        if ( mpEdActive == m_xEdVariableCells.get() )
-        {
-            OUString aVal = mpEdActive->GetText();
-            Selection aSel = mpEdActive->GetSelection();
-            aSel.Justify();
-            aVal = aVal.replaceAt( aSel.Min(), aSel.Len(), aStr );
-            Selection aNewSel( aSel.Min(), aSel.Min()+aStr.getLength() );
-            mpEdActive->SetRefString( aVal );
-            mpEdActive->SetSelection( aNewSel );
-        }
+            aStr = aAdr.Format(nFmt, &rDocP, rDocP.GetAddressConvention());
         else
-            mpEdActive->SetRefString( aStr );
-
-        ReadConditions();
-        EnableButtons();
-
-        // select "Value of" if a ref is input into "target" edit
-        if ( mpEdActive == m_xEdTargetValue.get() )
-            m_xRbValue->set_active(true);
+            aStr = rRef.Format(rDocP, nFmt | ScRefFlags::RANGE_ABS, rDocP.GetAddressConvention());
     }
+
+    // variable cells can be several ranges, so only the selection is replaced
+    if ( mpEdActive == m_xEdVariableCells.get() )
+    {
+        OUString aVal = mpEdActive->GetText();
+        Selection aSel = mpEdActive->GetSelection();
+        aSel.Justify();
+        aVal = aVal.replaceAt( aSel.Min(), aSel.Len(), aStr );
+        Selection aNewSel( aSel.Min(), aSel.Min()+aStr.getLength() );
+        mpEdActive->SetRefString( aVal );
+        mpEdActive->SetSelection( aNewSel );
+    }
+    else
+        mpEdActive->SetRefString( aStr );
+
+    ReadConditions();
+    EnableButtons();
+
+    // select "Value of" if a ref is input into "target" edit
+    if ( mpEdActive == m_xEdTargetValue.get() )
+        m_xRbValue->set_active(true);
 }
 
 bool ScOptSolverDlg::IsRefInputMode() const

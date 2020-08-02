@@ -745,20 +745,20 @@ void ScNamedRangesObj::removeActionLock()
 void ScNamedRangesObj::setActionLocks( sal_Int16 nLock )
 {
     SolarMutexGuard aGuard;
-    if ( nLock >= 0 )
+    if ( nLock < 0 )
+        return;
+
+    ScDocument& rDoc = pDocShell->GetDocument();
+    sal_Int16 nLockCount = rDoc.GetNamedRangesLockCount();
+    if ( nLock == 0 && nLockCount > 0 )
     {
-        ScDocument& rDoc = pDocShell->GetDocument();
-        sal_Int16 nLockCount = rDoc.GetNamedRangesLockCount();
-        if ( nLock == 0 && nLockCount > 0 )
-        {
-            unlock();
-        }
-        if ( nLock > 0 && nLockCount == 0 )
-        {
-            lock();
-        }
-        rDoc.SetNamedRangesLockCount( nLock );
+        unlock();
     }
+    if ( nLock > 0 && nLockCount == 0 )
+    {
+        lock();
+    }
+    rDoc.SetNamedRangesLockCount( nLock );
 }
 
 sal_Int16 ScNamedRangesObj::resetActionLocks()
@@ -926,39 +926,39 @@ ScRangePair* ScLabelRangeObj::GetData_Impl()
 
 void ScLabelRangeObj::Modify_Impl( const ScRange* pLabel, const ScRange* pData )
 {
-    if (pDocShell)
-    {
-        ScDocument& rDoc = pDocShell->GetDocument();
-        ScRangePairList* pOldList = bColumn ? rDoc.GetColNameRanges() : rDoc.GetRowNameRanges();
-        if (pOldList)
-        {
-            ScRangePairListRef xNewList(pOldList->Clone());
-            ScRangePair* pEntry = xNewList->Find( aRange );
-            if (pEntry)
-            {
-                if ( pLabel )
-                    pEntry->GetRange(0) = *pLabel;
-                if ( pData )
-                    pEntry->GetRange(1) = *pData;
+    if (!pDocShell)
+        return;
 
-                xNewList->Join( *pEntry, true );
+    ScDocument& rDoc = pDocShell->GetDocument();
+    ScRangePairList* pOldList = bColumn ? rDoc.GetColNameRanges() : rDoc.GetRowNameRanges();
+    if (!pOldList)
+        return;
 
-                if (bColumn)
-                    rDoc.GetColNameRangesRef() = xNewList;
-                else
-                    rDoc.GetRowNameRangesRef() = xNewList;
+    ScRangePairListRef xNewList(pOldList->Clone());
+    ScRangePair* pEntry = xNewList->Find( aRange );
+    if (!pEntry)
+        return;
 
-                rDoc.CompileColRowNameFormula();
-                pDocShell->PostPaint( 0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::Grid );
-                pDocShell->SetDocumentModified();
+    if ( pLabel )
+        pEntry->GetRange(0) = *pLabel;
+    if ( pData )
+        pEntry->GetRange(1) = *pData;
 
-                //! Undo ?!?! (here and from dialog)
+    xNewList->Join( *pEntry, true );
 
-                if ( pLabel )
-                    aRange = *pLabel;   // adapt object to find range again
-            }
-        }
-    }
+    if (bColumn)
+        rDoc.GetColNameRangesRef() = xNewList;
+    else
+        rDoc.GetRowNameRangesRef() = xNewList;
+
+    rDoc.CompileColRowNameFormula();
+    pDocShell->PostPaint( 0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::Grid );
+    pDocShell->SetDocumentModified();
+
+    //! Undo ?!?! (here and from dialog)
+
+    if ( pLabel )
+        aRange = *pLabel;   // adapt object to find range again
 }
 
 // sheet::XLabelRange
@@ -1045,32 +1045,32 @@ void SAL_CALL ScLabelRangesObj::addNew( const table::CellRangeAddress& aLabelAre
                                 const table::CellRangeAddress& aDataArea )
 {
     SolarMutexGuard aGuard;
-    if (pDocShell)
-    {
-        ScDocument& rDoc = pDocShell->GetDocument();
-        ScRangePairList* pOldList = bColumn ? rDoc.GetColNameRanges() : rDoc.GetRowNameRanges();
-        if (pOldList)
-        {
-            ScRangePairListRef xNewList(pOldList->Clone());
+    if (!pDocShell)
+        return;
 
-            ScRange aLabelRange;
-            ScRange aDataRange;
-            ScUnoConversion::FillScRange( aLabelRange, aLabelArea );
-            ScUnoConversion::FillScRange( aDataRange,  aDataArea );
-            xNewList->Join( ScRangePair( aLabelRange, aDataRange ) );
+    ScDocument& rDoc = pDocShell->GetDocument();
+    ScRangePairList* pOldList = bColumn ? rDoc.GetColNameRanges() : rDoc.GetRowNameRanges();
+    if (!pOldList)
+        return;
 
-            if (bColumn)
-                rDoc.GetColNameRangesRef() = xNewList;
-            else
-                rDoc.GetRowNameRangesRef() = xNewList;
+    ScRangePairListRef xNewList(pOldList->Clone());
 
-            rDoc.CompileColRowNameFormula();
-            pDocShell->PostPaint( 0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::Grid );
-            pDocShell->SetDocumentModified();
+    ScRange aLabelRange;
+    ScRange aDataRange;
+    ScUnoConversion::FillScRange( aLabelRange, aLabelArea );
+    ScUnoConversion::FillScRange( aDataRange,  aDataArea );
+    xNewList->Join( ScRangePair( aLabelRange, aDataRange ) );
 
-            //! Undo ?!?! (here and from dialog)
-        }
-    }
+    if (bColumn)
+        rDoc.GetColNameRangesRef() = xNewList;
+    else
+        rDoc.GetRowNameRangesRef() = xNewList;
+
+    rDoc.CompileColRowNameFormula();
+    pDocShell->PostPaint( 0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::Grid );
+    pDocShell->SetDocumentModified();
+
+    //! Undo ?!?! (here and from dialog)
 }
 
 void SAL_CALL ScLabelRangesObj::removeByIndex( sal_Int32 nIndex )

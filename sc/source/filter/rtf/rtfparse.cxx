@@ -124,30 +124,30 @@ bool ScRTFParser::SeekTwips( sal_uInt16 nTwips, SCCOL* pCol )
 
 void ScRTFParser::ColAdjust()
 {
-    if ( nStartAdjust != sal_uLong(~0) )
+    if ( nStartAdjust == sal_uLong(~0) )
+        return;
+
+    SCCOL nCol = 0;
+    for (size_t i = nStartAdjust, nListSize = maList.size(); i < nListSize; ++i)
     {
-        SCCOL nCol = 0;
-        for (size_t i = nStartAdjust, nListSize = maList.size(); i < nListSize; ++i)
+        auto& pE = maList[i];
+        if ( pE->nCol == 0 )
+            nCol = 0;
+        pE->nCol = nCol;
+        if ( pE->nColOverlap > 1 )
+            nCol = nCol + pE->nColOverlap; // Merged cells with \clmrg
+        else
         {
-            auto& pE = maList[i];
-            if ( pE->nCol == 0 )
-                nCol = 0;
-            pE->nCol = nCol;
-            if ( pE->nColOverlap > 1 )
-                nCol = nCol + pE->nColOverlap; // Merged cells with \clmrg
-            else
-            {
-                SeekTwips( pE->nTwips, &nCol );
-                if ( ++nCol <= pE->nCol )
-                    nCol = pE->nCol + 1; // Moved cell X
-                pE->nColOverlap = nCol - pE->nCol; // Merged cells without \clmrg
-            }
-            if ( nCol > nColMax )
-                nColMax = nCol;
+            SeekTwips( pE->nTwips, &nCol );
+            if ( ++nCol <= pE->nCol )
+                nCol = pE->nCol + 1; // Moved cell X
+            pE->nColOverlap = nCol - pE->nCol; // Merged cells without \clmrg
         }
-        nStartAdjust = sal_uLong(~0);
-        aColTwips.clear();
+        if ( nCol > nColMax )
+            nColMax = nCol;
     }
+    nStartAdjust = sal_uLong(~0);
+    aColTwips.clear();
 }
 
 IMPL_LINK( ScRTFParser, RTFImportHdl, RtfImportInfo&, rInfo, void )

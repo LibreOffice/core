@@ -79,109 +79,109 @@ SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport, const Reference< XFa
     if( xPresentationSupplier.is() )
         mpImpl->mxPresProps.set( xPresentationSupplier->getPresentation(), UNO_QUERY );
 
-    if( mpImpl->mxPresProps.is() )
+    if( !mpImpl->mxPresProps.is() )
+        return;
+
+    bool bAll = true;
+    uno::Any aAny;
+    // Per ODF this is default, but we did it wrong before LO 6.0 (tdf#108824)
+    bool bIsMouseVisible = true;
+    if (rImport.getGeneratorVersion() < SvXMLImport::LO_6x)
+        bIsMouseVisible = false;
+
+    // read attributes
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        bool bAll = true;
-        uno::Any aAny;
-        // Per ODF this is default, but we did it wrong before LO 6.0 (tdf#108824)
-        bool bIsMouseVisible = true;
-        if (rImport.getGeneratorVersion() < SvXMLImport::LO_6x)
-            bIsMouseVisible = false;
+        OUString sValue = aIter.toString();
 
-        // read attributes
-        for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
+        switch( aIter.getToken() )
         {
-            OUString sValue = aIter.toString();
-
-            switch( aIter.getToken() )
+            case XML_ELEMENT(PRESENTATION, XML_START_PAGE):
             {
-                case XML_ELEMENT(PRESENTATION, XML_START_PAGE):
-                {
-                    mpImpl->mxPresProps->setPropertyValue("FirstPage", Any(sValue) );
-                    bAll = false;
-                    break;
-                }
-                case XML_ELEMENT(PRESENTATION, XML_SHOW):
-                {
-                    mpImpl->maCustomShowName = sValue;
-                    bAll = false;
-                    break;
-                }
-                case XML_ELEMENT(PRESENTATION, XML_PAUSE):
-                {
-                    Duration aDuration;
-                    if (!::sax::Converter::convertDuration(aDuration,  sValue))
-                        continue;
+                mpImpl->mxPresProps->setPropertyValue("FirstPage", Any(sValue) );
+                bAll = false;
+                break;
+            }
+            case XML_ELEMENT(PRESENTATION, XML_SHOW):
+            {
+                mpImpl->maCustomShowName = sValue;
+                bAll = false;
+                break;
+            }
+            case XML_ELEMENT(PRESENTATION, XML_PAUSE):
+            {
+                Duration aDuration;
+                if (!::sax::Converter::convertDuration(aDuration,  sValue))
+                    continue;
 
-                    const sal_Int32 nMS = (aDuration.Hours * 60 +
-                            aDuration.Minutes) * 60 + aDuration.Seconds;
-                    mpImpl->mxPresProps->setPropertyValue("Pause", Any(nMS) );
-                    break;
-                }
-                case XML_ELEMENT(PRESENTATION, XML_ANIMATIONS):
-                {
-                    aAny <<= IsXMLToken( sValue, XML_ENABLED );
-                    mpImpl->mxPresProps->setPropertyValue("AllowAnimations", aAny );
-                    break;
-                }
-                case XML_ELEMENT(PRESENTATION, XML_STAY_ON_TOP):
-                {
-                    aAny <<= IsXMLToken( sValue, XML_TRUE );
-                    mpImpl->mxPresProps->setPropertyValue("IsAlwaysOnTop", aAny );
-                    break;
-                }
-                case XML_ELEMENT(PRESENTATION, XML_FORCE_MANUAL):
-                {
-                    aAny <<= IsXMLToken( sValue, XML_TRUE );
-                    mpImpl->mxPresProps->setPropertyValue("IsAutomatic", aAny );
-                    break;
-                }
-                case XML_ELEMENT(PRESENTATION, XML_ENDLESS):
-                {
-                    aAny <<= IsXMLToken( sValue, XML_TRUE );
-                    mpImpl->mxPresProps->setPropertyValue("IsEndless", aAny );
-                    break;
-                }
-                case XML_ELEMENT(PRESENTATION, XML_FULL_SCREEN):
-                {
-                    aAny <<= IsXMLToken( sValue, XML_TRUE );
-                    mpImpl->mxPresProps->setPropertyValue("IsFullScreen", aAny );
-                    break;
-                }
-                case XML_ELEMENT(PRESENTATION, XML_MOUSE_VISIBLE):
-                {
-                    bIsMouseVisible = IsXMLToken( sValue, XML_TRUE );
-                    break;
-                }
-                case XML_ELEMENT(PRESENTATION, XML_START_WITH_NAVIGATOR):
-                {
-                    aAny <<= IsXMLToken( sValue, XML_TRUE );
-                    mpImpl->mxPresProps->setPropertyValue("StartWithNavigator", aAny );
-                    break;
-                }
-                case XML_ELEMENT(PRESENTATION, XML_MOUSE_AS_PEN):
-                {
-                    aAny <<= IsXMLToken( sValue, XML_TRUE );
-                    mpImpl->mxPresProps->setPropertyValue("UsePen", aAny );
-                    break;
-                }
-                case XML_ELEMENT(PRESENTATION, XML_TRANSITION_ON_CLICK):
-                {
-                    aAny <<= IsXMLToken( sValue, XML_ENABLED );
-                    mpImpl->mxPresProps->setPropertyValue("IsTransitionOnClick", aAny );
-                    break;
-                }
-                case XML_ELEMENT(PRESENTATION, XML_SHOW_LOGO):
-                {
-                    aAny <<= IsXMLToken( sValue, XML_TRUE );
-                    mpImpl->mxPresProps->setPropertyValue("IsShowLogo", aAny );
-                    break;
-                }
+                const sal_Int32 nMS = (aDuration.Hours * 60 +
+                        aDuration.Minutes) * 60 + aDuration.Seconds;
+                mpImpl->mxPresProps->setPropertyValue("Pause", Any(nMS) );
+                break;
+            }
+            case XML_ELEMENT(PRESENTATION, XML_ANIMATIONS):
+            {
+                aAny <<= IsXMLToken( sValue, XML_ENABLED );
+                mpImpl->mxPresProps->setPropertyValue("AllowAnimations", aAny );
+                break;
+            }
+            case XML_ELEMENT(PRESENTATION, XML_STAY_ON_TOP):
+            {
+                aAny <<= IsXMLToken( sValue, XML_TRUE );
+                mpImpl->mxPresProps->setPropertyValue("IsAlwaysOnTop", aAny );
+                break;
+            }
+            case XML_ELEMENT(PRESENTATION, XML_FORCE_MANUAL):
+            {
+                aAny <<= IsXMLToken( sValue, XML_TRUE );
+                mpImpl->mxPresProps->setPropertyValue("IsAutomatic", aAny );
+                break;
+            }
+            case XML_ELEMENT(PRESENTATION, XML_ENDLESS):
+            {
+                aAny <<= IsXMLToken( sValue, XML_TRUE );
+                mpImpl->mxPresProps->setPropertyValue("IsEndless", aAny );
+                break;
+            }
+            case XML_ELEMENT(PRESENTATION, XML_FULL_SCREEN):
+            {
+                aAny <<= IsXMLToken( sValue, XML_TRUE );
+                mpImpl->mxPresProps->setPropertyValue("IsFullScreen", aAny );
+                break;
+            }
+            case XML_ELEMENT(PRESENTATION, XML_MOUSE_VISIBLE):
+            {
+                bIsMouseVisible = IsXMLToken( sValue, XML_TRUE );
+                break;
+            }
+            case XML_ELEMENT(PRESENTATION, XML_START_WITH_NAVIGATOR):
+            {
+                aAny <<= IsXMLToken( sValue, XML_TRUE );
+                mpImpl->mxPresProps->setPropertyValue("StartWithNavigator", aAny );
+                break;
+            }
+            case XML_ELEMENT(PRESENTATION, XML_MOUSE_AS_PEN):
+            {
+                aAny <<= IsXMLToken( sValue, XML_TRUE );
+                mpImpl->mxPresProps->setPropertyValue("UsePen", aAny );
+                break;
+            }
+            case XML_ELEMENT(PRESENTATION, XML_TRANSITION_ON_CLICK):
+            {
+                aAny <<= IsXMLToken( sValue, XML_ENABLED );
+                mpImpl->mxPresProps->setPropertyValue("IsTransitionOnClick", aAny );
+                break;
+            }
+            case XML_ELEMENT(PRESENTATION, XML_SHOW_LOGO):
+            {
+                aAny <<= IsXMLToken( sValue, XML_TRUE );
+                mpImpl->mxPresProps->setPropertyValue("IsShowLogo", aAny );
+                break;
             }
         }
-        mpImpl->mxPresProps->setPropertyValue("IsShowAll", Any(bAll) );
-        mpImpl->mxPresProps->setPropertyValue("IsMouseVisible", Any(bIsMouseVisible) );
     }
+    mpImpl->mxPresProps->setPropertyValue("IsShowAll", Any(bAll) );
+    mpImpl->mxPresProps->setPropertyValue("IsMouseVisible", Any(bIsMouseVisible) );
 }
 
 SdXMLShowsContext::~SdXMLShowsContext()

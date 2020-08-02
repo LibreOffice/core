@@ -68,36 +68,36 @@ void ScSimpleRefDlg::Init()
 // shown as the new selection in the reference field.
 void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
 {
-    if (m_xEdAssign->GetWidget()->get_sensitive())
+    if (!m_xEdAssign->GetWidget()->get_sensitive())
+        return;
+
+    if ( rRef.aStart != rRef.aEnd )
+        RefInputStart(m_xEdAssign.get());
+
+    theCurArea = rRef;
+    OUString aRefStr;
+    if ( bSingleCell )
     {
-        if ( rRef.aStart != rRef.aEnd )
-            RefInputStart(m_xEdAssign.get());
-
-        theCurArea = rRef;
-        OUString aRefStr;
-        if ( bSingleCell )
-        {
-            ScAddress aAdr = rRef.aStart;
-            aRefStr = aAdr.Format(ScRefFlags::ADDR_ABS_3D, &rDocP, rDocP.GetAddressConvention());
-        }
-        else
-            aRefStr = theCurArea.Format(rDocP, ScRefFlags::RANGE_ABS_3D, rDocP.GetAddressConvention());
-
-        if ( bMultiSelection )
-        {
-            OUString aVal = m_xEdAssign->GetText();
-            Selection aSel = m_xEdAssign->GetSelection();
-            aSel.Justify();
-            aVal = aVal.replaceAt( aSel.Min(), aSel.Len(), aRefStr );
-            Selection aNewSel( aSel.Min(), aSel.Min()+aRefStr.getLength() );
-            m_xEdAssign->SetRefString( aVal );
-            m_xEdAssign->SetSelection( aNewSel );
-        }
-        else
-            m_xEdAssign->SetRefString( aRefStr );
-
-        aChangeHdl.Call( aRefStr );
+        ScAddress aAdr = rRef.aStart;
+        aRefStr = aAdr.Format(ScRefFlags::ADDR_ABS_3D, &rDocP, rDocP.GetAddressConvention());
     }
+    else
+        aRefStr = theCurArea.Format(rDocP, ScRefFlags::RANGE_ABS_3D, rDocP.GetAddressConvention());
+
+    if ( bMultiSelection )
+    {
+        OUString aVal = m_xEdAssign->GetText();
+        Selection aSel = m_xEdAssign->GetSelection();
+        aSel.Justify();
+        aVal = aVal.replaceAt( aSel.Min(), aSel.Len(), aRefStr );
+        Selection aNewSel( aSel.Min(), aSel.Min()+aRefStr.getLength() );
+        m_xEdAssign->SetRefString( aVal );
+        m_xEdAssign->SetSelection( aNewSel );
+    }
+    else
+        m_xEdAssign->SetRefString( aRefStr );
+
+    aChangeHdl.Call( aRefStr );
 }
 
 void ScSimpleRefDlg::Close()

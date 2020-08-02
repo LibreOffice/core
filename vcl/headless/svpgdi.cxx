@@ -618,19 +618,19 @@ namespace
             }
         }
 
-        if(!rSurface)
-        {
-            // create data on-demand
-            rSurface = std::make_shared<BitmapHelper>(rSourceBitmap);
+        if(rSurface)
+            return;
 
-            if(bBufferSource)
-            {
-                // add to buffering mechanism to potentially reuse next time
-                const SvpSalBitmap& rSrcBmp(static_cast<const SvpSalBitmap&>(rSourceBitmap));
-                rSrcBmp.addOrReplaceSystemDependentData<SystemDependentData_BitmapHelper>(
-                    ImplGetSystemDependentDataManager(),
-                    rSurface);
-            }
+        // create data on-demand
+        rSurface = std::make_shared<BitmapHelper>(rSourceBitmap);
+
+        if(bBufferSource)
+        {
+            // add to buffering mechanism to potentially reuse next time
+            const SvpSalBitmap& rSrcBmp(static_cast<const SvpSalBitmap&>(rSourceBitmap));
+            rSrcBmp.addOrReplaceSystemDependentData<SystemDependentData_BitmapHelper>(
+                ImplGetSystemDependentDataManager(),
+                rSurface);
         }
     }
 
@@ -655,19 +655,19 @@ namespace
             }
         }
 
-        if(!rMask)
-        {
-            // create data on-demand
-            rMask = std::make_shared<MaskHelper>(rMaskBitmap);
+        if(rMask)
+            return;
 
-            if(bBufferMask)
-            {
-                // add to buffering mechanism to potentially reuse next time
-                const SvpSalBitmap& rSrcBmp(static_cast<const SvpSalBitmap&>(rMaskBitmap));
-                rSrcBmp.addOrReplaceSystemDependentData<SystemDependentData_MaskHelper>(
-                    ImplGetSystemDependentDataManager(),
-                    rMask);
-            }
+        // create data on-demand
+        rMask = std::make_shared<MaskHelper>(rMaskBitmap);
+
+        if(bBufferMask)
+        {
+            // add to buffering mechanism to potentially reuse next time
+            const SvpSalBitmap& rSrcBmp(static_cast<const SvpSalBitmap&>(rMaskBitmap));
+            rSrcBmp.addOrReplaceSystemDependentData<SystemDependentData_MaskHelper>(
+                ImplGetSystemDependentDataManager(),
+                rMask);
         }
     }
 }

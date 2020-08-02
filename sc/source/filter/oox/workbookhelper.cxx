@@ -611,26 +611,25 @@ void WorkbookGlobals::initialize()
 void WorkbookGlobals::finalize()
 {
     // set some document properties needed after import
-    if( mrBaseFilter.isImportFilter() )
-    {
-        // #i74668# do not insert default sheets
-        mpDocShell->SetEmpty(false);
-        // enable automatic update of linked sheets and DDE links
-        mpDoc->EnableExecuteLink(true);
-        // #i79826# enable updating automatic row height after loading the document
-        mpDoc->UnlockAdjustHeight();
+    if( !mrBaseFilter.isImportFilter() )
+        return;
 
-        // #i76026# enable Undo after loading the document
-        mpDoc->EnableUndo(true);
+    // #i74668# do not insert default sheets
+    mpDocShell->SetEmpty(false);
+    // enable automatic update of linked sheets and DDE links
+    mpDoc->EnableExecuteLink(true);
+    // #i79826# enable updating automatic row height after loading the document
+    mpDoc->UnlockAdjustHeight();
 
-        // disable editing read-only documents (e.g. from read-only files)
-        mpDoc->EnableChangeReadOnly(false);
-        // #111099# open forms in alive mode (has no effect, if no controls in document)
-        ScDrawLayer* pModel = mpDoc->GetDrawLayer();
-        if (pModel)
-            pModel->SetOpenInDesignMode(false);
+    // #i76026# enable Undo after loading the document
+    mpDoc->EnableUndo(true);
 
-    }
+    // disable editing read-only documents (e.g. from read-only files)
+    mpDoc->EnableChangeReadOnly(false);
+    // #111099# open forms in alive mode (has no effect, if no controls in document)
+    ScDrawLayer* pModel = mpDoc->GetDrawLayer();
+    if (pModel)
+        pModel->SetOpenInDesignMode(false);
 }
 
 
@@ -723,56 +722,56 @@ void WorkbookHelper::finalizeWorkbookImport()
 
     // set selected sheet and positionleft/positiontop for OLE objects
     Reference<XViewDataSupplier> xViewDataSupplier(getDocument(), UNO_QUERY);
-    if (xViewDataSupplier.is())
+    if (!xViewDataSupplier.is())
+        return;
+
+    Reference<XIndexAccess> xIndexAccess(xViewDataSupplier->getViewData());
+    if (!(xIndexAccess.is() && xIndexAccess->getCount() > 0))
+        return;
+
+    Sequence< PropertyValue > aSeq;
+    if (!(xIndexAccess->getByIndex(0) >>= aSeq))
+        return;
+
+    OUString sTabName;
+    Reference< XNameAccess > xSheetsNC;
+    for (const auto& rProp : std::as_const(aSeq))
     {
-        Reference<XIndexAccess> xIndexAccess(xViewDataSupplier->getViewData());
-        if (xIndexAccess.is() && xIndexAccess->getCount() > 0)
+        OUString sName(rProp.Name);
+        if (sName == SC_ACTIVETABLE)
         {
-            Sequence< PropertyValue > aSeq;
-            if (xIndexAccess->getByIndex(0) >>= aSeq)
+            if(rProp.Value >>= sTabName)
             {
-                OUString sTabName;
-                Reference< XNameAccess > xSheetsNC;
-                for (const auto& rProp : std::as_const(aSeq))
-                {
-                    OUString sName(rProp.Name);
-                    if (sName == SC_ACTIVETABLE)
-                    {
-                        if(rProp.Value >>= sTabName)
-                        {
-                            SCTAB nTab(0);
-                            if (getScDocument().GetTable(sTabName, nTab))
-                                getScDocument().SetVisibleTab(nTab);
-                        }
-                    }
-                    else if (sName == SC_TABLES)
-                    {
-                        rProp.Value >>= xSheetsNC;
-                    }
-                }
-                if (xSheetsNC.is() && xSheetsNC->hasByName(sTabName))
-                {
-                    Sequence<PropertyValue> aProperties;
-                    Any aAny = xSheetsNC->getByName(sTabName);
-                    if ( aAny >>= aProperties )
-                    {
-                        for (const auto& rProp : std::as_const(aProperties))
-                        {
-                            OUString sName(rProp.Name);
-                            if (sName == SC_POSITIONLEFT)
-                            {
-                                SCCOL nPosLeft = *o3tl::doAccess<SCCOL>(rProp.Value);
-                                getScDocument().SetPosLeft(nPosLeft);
-                            }
-                            else if (sName == SC_POSITIONTOP)
-                            {
-                                SCROW nPosTop = *o3tl::doAccess<SCROW>(rProp.Value);
-                                getScDocument().SetPosTop(nPosTop);
-                            }
-                        }
-                    }
-                }
+                SCTAB nTab(0);
+                if (getScDocument().GetTable(sTabName, nTab))
+                    getScDocument().SetVisibleTab(nTab);
             }
+        }
+        else if (sName == SC_TABLES)
+        {
+            rProp.Value >>= xSheetsNC;
+        }
+    }
+    if (!(xSheetsNC.is() && xSheetsNC->hasByName(sTabName)))
+        return;
+
+    Sequence<PropertyValue> aProperties;
+    Any aAny = xSheetsNC->getByName(sTabName);
+    if ( !(aAny >>= aProperties) )
+        return;
+
+    for (const auto& rProp : std::as_const(aProperties))
+    {
+        OUString sName(rProp.Name);
+        if (sName == SC_POSITIONLEFT)
+        {
+            SCCOL nPosLeft = *o3tl::doAccess<SCCOL>(rProp.Value);
+            getScDocument().SetPosLeft(nPosLeft);
+        }
+        else if (sName == SC_POSITIONTOP)
+        {
+            SCROW nPosTop = *o3tl::doAccess<SCROW>(rProp.Value);
+            getScDocument().SetPosTop(nPosTop);
         }
     }
 }

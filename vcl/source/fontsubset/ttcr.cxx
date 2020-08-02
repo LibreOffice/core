@@ -166,24 +166,24 @@ void AddTable(TrueTypeCreator *_this, TrueTypeTable *table)
 
 void RemoveTable(TrueTypeCreator *_this, sal_uInt32 tag)
 {
-    if (listCount(_this->tables))
-    {
-        listToFirst(_this->tables);
-        int done = 0;
-        do {
-            if (static_cast<TrueTypeTable *>(listCurrent(_this->tables))->tag == tag)
+    if (!listCount(_this->tables))
+        return;
+
+    listToFirst(_this->tables);
+    int done = 0;
+    do {
+        if (static_cast<TrueTypeTable *>(listCurrent(_this->tables))->tag == tag)
+        {
+            listRemove(_this->tables);
+        }
+        else
+        {
+            if (listNext(_this->tables))
             {
-                listRemove(_this->tables);
+                done = 1;
             }
-            else
-            {
-                if (listNext(_this->tables))
-                {
-                    done = 1;
-                }
-            }
-        } while (!done);
-    }
+        }
+    } while (!done);
 }
 
 static void ProcessTables(TrueTypeCreator *);
@@ -430,21 +430,21 @@ static void TrueTypeTableDispose_glyf(TrueTypeTable *_this)
 
 static void TrueTypeTableDispose_cmap(TrueTypeTable *_this)
 {
-    if (_this) {
-        table_cmap *t = static_cast<table_cmap *>(_this->data);
-        if (t) {
-            CmapSubTable *s = t->s;
-            if (s) {
-                for (sal_uInt32 i = 0; i < t->m; i++) {
-                    if (s[i].xc) free(s[i].xc);
-                    if (s[i].xg) free(s[i].xg);
-                }
-                free(s);
+    if (!_this)        return;
+
+    table_cmap *t = static_cast<table_cmap *>(_this->data);
+    if (t) {
+        CmapSubTable *s = t->s;
+        if (s) {
+            for (sal_uInt32 i = 0; i < t->m; i++) {
+                if (s[i].xc) free(s[i].xc);
+                if (s[i].xg) free(s[i].xg);
             }
-            free(t);
+            free(s);
         }
-        free(_this);
+        free(t);
     }
+    free(_this);
 }
 
 static void TrueTypeTableDispose_name(TrueTypeTable *_this)
@@ -457,23 +457,23 @@ static void TrueTypeTableDispose_name(TrueTypeTable *_this)
 
 static void TrueTypeTableDispose_post(TrueTypeTable *_this)
 {
-    if (_this) {
-        tdata_post *p = static_cast<tdata_post *>(_this->data);
-        if (p) {
-            if (p->format == 0x00030000) {
-                /* do nothing */
-            } else {
-                SAL_WARN("vcl.fonts", "Unsupported format of a 'post' table: "
-                        << std::setfill('0')
-                        << std::setw(8)
-                        << std::hex
-                        << std::uppercase
-                        << static_cast<int>(p->format) << ".");
-            }
-            free(p);
+    if (!_this)        return;
+
+    tdata_post *p = static_cast<tdata_post *>(_this->data);
+    if (p) {
+        if (p->format == 0x00030000) {
+            /* do nothing */
+        } else {
+            SAL_WARN("vcl.fonts", "Unsupported format of a 'post' table: "
+                    << std::setfill('0')
+                    << std::setw(8)
+                    << std::hex
+                    << std::uppercase
+                    << static_cast<int>(p->format) << ".");
         }
-        free(_this);
+        free(p);
     }
+    free(_this);
 }
 
 /* destructor vtable */

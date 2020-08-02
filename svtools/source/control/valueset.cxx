@@ -760,54 +760,54 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
         Invalidate();
     }
 
-    if( ImplHasAccessibleListeners() )
+    if( !ImplHasAccessibleListeners() )
+        return;
+
+    // focus event (deselect)
+    if( nOldItem )
     {
-        // focus event (deselect)
-        if( nOldItem )
+        const size_t nPos = GetItemPos( nItemId );
+
+        if( nPos != VALUESET_ITEM_NOTFOUND )
         {
-            const size_t nPos = GetItemPos( nItemId );
+            ValueItemAcc* pItemAcc = ValueItemAcc::getImplementation(
+                mItemList[nPos]->GetAccessible( false/*bIsTransientChildrenDisabled*/ ) );
 
-            if( nPos != VALUESET_ITEM_NOTFOUND )
+            if( pItemAcc )
             {
-                ValueItemAcc* pItemAcc = ValueItemAcc::getImplementation(
-                    mItemList[nPos]->GetAccessible( false/*bIsTransientChildrenDisabled*/ ) );
-
-                if( pItemAcc )
-                {
-                    Any aOldAny;
-                    Any aNewAny;
-                    aOldAny <<= Reference<XInterface>(static_cast<cppu::OWeakObject*>(pItemAcc));
-                    ImplFireAccessibleEvent(AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny );
-                }
+                Any aOldAny;
+                Any aNewAny;
+                aOldAny <<= Reference<XInterface>(static_cast<cppu::OWeakObject*>(pItemAcc));
+                ImplFireAccessibleEvent(AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny );
             }
         }
+    }
 
-        // focus event (select)
-        const size_t nPos = GetItemPos( mnSelItemId );
+    // focus event (select)
+    const size_t nPos = GetItemPos( mnSelItemId );
 
-        ValueSetItem* pItem;
-        if( nPos != VALUESET_ITEM_NOTFOUND )
-            pItem = mItemList[nPos].get();
-        else
-            pItem = mpNoneItem.get();
+    ValueSetItem* pItem;
+    if( nPos != VALUESET_ITEM_NOTFOUND )
+        pItem = mItemList[nPos].get();
+    else
+        pItem = mpNoneItem.get();
 
-        ValueItemAcc* pItemAcc = nullptr;
-        if (pItem != nullptr)
-            pItemAcc = ValueItemAcc::getImplementation( pItem->GetAccessible( false/*bIsTransientChildrenDisabled*/ ) );
+    ValueItemAcc* pItemAcc = nullptr;
+    if (pItem != nullptr)
+        pItemAcc = ValueItemAcc::getImplementation( pItem->GetAccessible( false/*bIsTransientChildrenDisabled*/ ) );
 
-        if( pItemAcc )
-        {
-            Any aOldAny;
-            Any aNewAny;
-            aNewAny <<= Reference<XInterface>(static_cast<cppu::OWeakObject*>(pItemAcc));
-            ImplFireAccessibleEvent(AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny);
-        }
-
-        // selection event
+    if( pItemAcc )
+    {
         Any aOldAny;
         Any aNewAny;
-        ImplFireAccessibleEvent(AccessibleEventId::SELECTION_CHANGED, aOldAny, aNewAny);
+        aNewAny <<= Reference<XInterface>(static_cast<cppu::OWeakObject*>(pItemAcc));
+        ImplFireAccessibleEvent(AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny);
     }
+
+    // selection event
+    Any aOldAny;
+    Any aNewAny;
+    ImplFireAccessibleEvent(AccessibleEventId::SELECTION_CHANGED, aOldAny, aNewAny);
 }
 
 void ValueSet::SetNoSelection()

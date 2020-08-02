@@ -380,26 +380,26 @@ void vcl::Region::ImplCreatePolyPolyRegion( const tools::PolyPolygon& rPolyPoly 
 {
     const sal_uInt16 nPolyCount = rPolyPoly.Count();
 
-    if(nPolyCount)
+    if(!nPolyCount)
+        return;
+
+    // polypolygon empty? -> empty region
+    const tools::Rectangle aRect(rPolyPoly.GetBoundRect());
+
+    if(aRect.IsEmpty())
+        return;
+
+    // width OR height == 1 ? => Rectangular region
+    if((1 == aRect.GetWidth()) || (1 == aRect.GetHeight()) || rPolyPoly.IsRect())
     {
-        // polypolygon empty? -> empty region
-        const tools::Rectangle aRect(rPolyPoly.GetBoundRect());
-
-        if(!aRect.IsEmpty())
-        {
-            // width OR height == 1 ? => Rectangular region
-            if((1 == aRect.GetWidth()) || (1 == aRect.GetHeight()) || rPolyPoly.IsRect())
-            {
-                mpRegionBand = std::make_shared<RegionBand>(aRect);
-            }
-            else
-            {
-                mpPolyPolygon = std::make_shared<tools::PolyPolygon>(rPolyPoly);
-            }
-
-            mbIsNull = false;
-        }
+        mpRegionBand = std::make_shared<RegionBand>(aRect);
     }
+    else
+    {
+        mpPolyPolygon = std::make_shared<tools::PolyPolygon>(rPolyPoly);
+    }
+
+    mbIsNull = false;
 }
 
 void vcl::Region::ImplCreatePolyPolyRegion( const basegfx::B2DPolyPolygon& rPolyPoly )

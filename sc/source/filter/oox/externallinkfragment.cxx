@@ -63,23 +63,23 @@ ContextHandlerRef ExternalSheetDataContext::onCreateContext( sal_Int32 nElement,
 
 void ExternalSheetDataContext::onCharacters( const OUString& rChars )
 {
-    if( isCurrentElement( XLS_TOKEN( v ) ) )
+    if( !isCurrentElement( XLS_TOKEN( v ) ) )
+        return;
+
+    switch( mnCurrType )
     {
-        switch( mnCurrType )
-        {
-            case XML_b:
-            case XML_n:
-                setCellValue( Any( rChars.toDouble() ) );
-            break;
-            case XML_e:
-                setCellValue( Any( BiffHelper::calcDoubleFromError( getUnitConverter().calcBiffErrorCode( rChars ) ) ) );
-            break;
-            case XML_str:
-                setCellValue( Any( rChars ) );
-            break;
-        }
-        mnCurrType = XML_TOKEN_INVALID;
+        case XML_b:
+        case XML_n:
+            setCellValue( Any( rChars.toDouble() ) );
+        break;
+        case XML_e:
+            setCellValue( Any( BiffHelper::calcDoubleFromError( getUnitConverter().calcBiffErrorCode( rChars ) ) ) );
+        break;
+        case XML_str:
+            setCellValue( Any( rChars ) );
+        break;
     }
+    mnCurrType = XML_TOKEN_INVALID;
 }
 
 ContextHandlerRef ExternalSheetDataContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
@@ -246,7 +246,10 @@ void ExternalLinkFragment::onCharacters( const OUString& rChars )
 
 void ExternalLinkFragment::onEndElement()
 {
-    if( isCurrentElement( XLS_TOKEN( value ) ) && mxExtName ) switch( mnResultType )
+    if( !(isCurrentElement( XLS_TOKEN( value ) ) && mxExtName) )
+        return;
+
+    switch( mnResultType )
     {
         case XML_b:
             mxExtName->appendResultValue( maResultValue.toDouble() );

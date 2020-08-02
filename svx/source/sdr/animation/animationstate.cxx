@@ -72,35 +72,35 @@ namespace sdr::animation
 
             // getSmallestNextTime will be zero when animation ended. If not zero, a next step
             // exists
-            if(!::basegfx::fTools::equalZero(fNextTime))
+            if(::basegfx::fTools::equalZero(fNextTime))
+                return;
+
+            // next time point exists, use it
+            sal_uInt32 nNextTime;
+
+            if(fNextTime >= double(0xffffff00))
             {
-                // next time point exists, use it
-                sal_uInt32 nNextTime;
-
-                if(fNextTime >= double(0xffffff00))
-                {
-                    // take care for very late points in time, e.g. when a text animation stops
-                    // in a defined AnimationEntryFixed with endless (0xffffffff) duration
-                    nNextTime = GetTime() + (1000 * 60 * 60); // one hour, works with vcl timers, 0xffffff00 was too much...
-                }
-                else
-                {
-                    nNextTime = static_cast<sal_uInt32>(fNextTime);
-                }
-
-                // ensure step forward in integer timing, the floating step difference maybe smaller than 1.0. Use
-                // at least 25ms for next step
-                const sal_uInt32 nMinimumStepTime(static_cast<sal_uInt32>(fCurrentTime) + 25);
-
-                if(nNextTime <= nMinimumStepTime)
-                {
-                    nNextTime = nMinimumStepTime;
-                }
-
-                // set time and reactivate by re-adding to the scheduler
-                SetTime(nNextTime);
-                mrVOContact.GetObjectContact().getPrimitiveAnimator().InsertEvent(*this);
+                // take care for very late points in time, e.g. when a text animation stops
+                // in a defined AnimationEntryFixed with endless (0xffffffff) duration
+                nNextTime = GetTime() + (1000 * 60 * 60); // one hour, works with vcl timers, 0xffffff00 was too much...
             }
+            else
+            {
+                nNextTime = static_cast<sal_uInt32>(fNextTime);
+            }
+
+            // ensure step forward in integer timing, the floating step difference maybe smaller than 1.0. Use
+            // at least 25ms for next step
+            const sal_uInt32 nMinimumStepTime(static_cast<sal_uInt32>(fCurrentTime) + 25);
+
+            if(nNextTime <= nMinimumStepTime)
+            {
+                nNextTime = nMinimumStepTime;
+            }
+
+            // set time and reactivate by re-adding to the scheduler
+            SetTime(nNextTime);
+            mrVOContact.GetObjectContact().getPrimitiveAnimator().InsertEvent(*this);
         }
 
         PrimitiveAnimation::PrimitiveAnimation(sdr::contact::ViewObjectContact& rVOContact, const drawinglayer::primitive2d::Primitive2DContainer& rAnimatedPrimitives)

@@ -183,45 +183,45 @@ void ScGridMerger::AddVerLine(bool bWorksInPixels, long nX, long nY1, long nY2, 
 
 void ScGridMerger::Flush()
 {
-    if (nCount)
-    {
-        if (bVertical)
-        {
-            if ( nCount == 1 )
-                pDev->DrawLine( Point( nVarStart, nFixStart ), Point( nVarStart, nFixEnd ) );
-            else
-            {
-                long nVarEnd = nVarStart + ( nCount - 1 ) * nVarDiff;
-                if ( nVarDiff < 0 )
-                {
-                    //  nVarDiff is negative in RTL layout mode
-                    //  Change the positions so DrawGrid is called with a positive distance
-                    //  (nVarStart / nVarDiff can be modified, aren't used after Flush)
+    if (!nCount)
+        return;
 
-                    nVarDiff = -nVarDiff;
-                    long nTemp = nVarStart;
-                    nVarStart = nVarEnd;
-                    nVarEnd = nTemp;
-                }
-                pDev->DrawGrid( tools::Rectangle( nVarStart, nFixStart, nVarEnd, nFixEnd ),
-                                Size( nVarDiff, nFixEnd - nFixStart ),
-                                DrawGridFlags::VertLines );
-            }
-        }
+    if (bVertical)
+    {
+        if ( nCount == 1 )
+            pDev->DrawLine( Point( nVarStart, nFixStart ), Point( nVarStart, nFixEnd ) );
         else
         {
-            if ( nCount == 1 )
-                pDev->DrawLine( Point( nFixStart, nVarStart ), Point( nFixEnd, nVarStart ) );
-            else
+            long nVarEnd = nVarStart + ( nCount - 1 ) * nVarDiff;
+            if ( nVarDiff < 0 )
             {
-                long nVarEnd = nVarStart + ( nCount - 1 ) * nVarDiff;
-                pDev->DrawGrid( tools::Rectangle( nFixStart, nVarStart, nFixEnd, nVarEnd ),
-                                Size( nFixEnd - nFixStart, nVarDiff ),
-                                DrawGridFlags::HorzLines );
+                //  nVarDiff is negative in RTL layout mode
+                //  Change the positions so DrawGrid is called with a positive distance
+                //  (nVarStart / nVarDiff can be modified, aren't used after Flush)
+
+                nVarDiff = -nVarDiff;
+                long nTemp = nVarStart;
+                nVarStart = nVarEnd;
+                nVarEnd = nTemp;
             }
+            pDev->DrawGrid( tools::Rectangle( nVarStart, nFixStart, nVarEnd, nFixEnd ),
+                            Size( nVarDiff, nFixEnd - nFixStart ),
+                            DrawGridFlags::VertLines );
         }
-        nCount = 0;
     }
+    else
+    {
+        if ( nCount == 1 )
+            pDev->DrawLine( Point( nFixStart, nVarStart ), Point( nFixEnd, nVarStart ) );
+        else
+        {
+            long nVarEnd = nVarStart + ( nCount - 1 ) * nVarDiff;
+            pDev->DrawGrid( tools::Rectangle( nFixStart, nVarStart, nFixEnd, nVarEnd ),
+                            Size( nFixEnd - nFixStart, nVarDiff ),
+                            DrawGridFlags::HorzLines );
+        }
+    }
+    nCount = 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

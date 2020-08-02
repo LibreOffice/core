@@ -1424,29 +1424,29 @@ void SdrView::onAccessibilityOptionsChanged()
 
 void SdrView::SetMasterPagePaintCaching(bool bOn)
 {
-    if(mbMasterPagePaintCaching != bOn)
+    if(mbMasterPagePaintCaching == bOn)
+        return;
+
+    mbMasterPagePaintCaching = bOn;
+
+    // reset at all SdrPageWindows
+    SdrPageView* pPageView = GetSdrPageView();
+
+    if(!pPageView)
+        return;
+
+    for(sal_uInt32 b(0); b < pPageView->PageWindowCount(); b++)
     {
-        mbMasterPagePaintCaching = bOn;
+        SdrPageWindow* pPageWindow = pPageView->GetPageWindow(b);
+        assert(pPageWindow && "SdrView::SetMasterPagePaintCaching: Corrupt SdrPageWindow list (!)");
 
-        // reset at all SdrPageWindows
-        SdrPageView* pPageView = GetSdrPageView();
-
-        if(pPageView)
-        {
-            for(sal_uInt32 b(0); b < pPageView->PageWindowCount(); b++)
-            {
-                SdrPageWindow* pPageWindow = pPageView->GetPageWindow(b);
-                assert(pPageWindow && "SdrView::SetMasterPagePaintCaching: Corrupt SdrPageWindow list (!)");
-
-                // force deletion of ObjectContact, so at re-display all VOCs
-                // will be re-created with updated flag setting
-                pPageWindow->ResetObjectContact();
-            }
-
-            // force redraw of this view
-            pPageView->InvalidateAllWin();
-        }
+        // force deletion of ObjectContact, so at re-display all VOCs
+        // will be re-created with updated flag setting
+        pPageWindow->ResetObjectContact();
     }
+
+    // force redraw of this view
+    pPageView->InvalidateAllWin();
 }
 
 // Default ObjectContact is ObjectContactOfPageView

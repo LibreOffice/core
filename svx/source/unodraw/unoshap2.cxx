@@ -1718,48 +1718,48 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
 
     SvxShape::setPropertyValue( aPropertyName, aValue );
 
-    if ( bCustomShapeGeometry )
+    if ( !bCustomShapeGeometry )
+        return;
+
+    static_cast<SdrObjCustomShape*>(pObject)->MergeDefaultAttributes();
+    tools::Rectangle aRect( pObject->GetSnapRect() );
+
+    // #i38892#
+    bool bNeedsMirrorX = static_cast<SdrObjCustomShape*>(pObject)->IsMirroredX() != bMirroredX;
+    bool bNeedsMirrorY = static_cast<SdrObjCustomShape*>(pObject)->IsMirroredY() != bMirroredY;
+
+    std::unique_ptr< SdrGluePointList > pListCopy;
+    if( bNeedsMirrorX || bNeedsMirrorY )
     {
-        static_cast<SdrObjCustomShape*>(pObject)->MergeDefaultAttributes();
-        tools::Rectangle aRect( pObject->GetSnapRect() );
+        const SdrGluePointList* pList = pObject->GetGluePointList();
+        if( pList )
+            pListCopy.reset( new SdrGluePointList(*pList) );
+    }
 
-        // #i38892#
-        bool bNeedsMirrorX = static_cast<SdrObjCustomShape*>(pObject)->IsMirroredX() != bMirroredX;
-        bool bNeedsMirrorY = static_cast<SdrObjCustomShape*>(pObject)->IsMirroredY() != bMirroredY;
+    if ( bNeedsMirrorX )
+    {
+        Point aTop( ( aRect.Left() + aRect.Right() ) >> 1, aRect.Top() );
+        Point aBottom( aTop.X(), aTop.Y() + 1000 );
+        pObject->NbcMirror( aTop, aBottom );
+        // NbcMirroring is flipping the current mirror state,
+        // so we have to set the correct state again
+        static_cast<SdrObjCustomShape*>(pObject)->SetMirroredX( !bMirroredX );
+    }
+    if ( bNeedsMirrorY )
+    {
+        Point aLeft( aRect.Left(), ( aRect.Top() + aRect.Bottom() ) >> 1 );
+        Point aRight( aLeft.X() + 1000, aLeft.Y() );
+        pObject->NbcMirror( aLeft, aRight );
+        // NbcMirroring is flipping the current mirror state,
+        // so we have to set the correct state again
+        static_cast<SdrObjCustomShape*>(pObject)->SetMirroredY( !bMirroredY );
+    }
 
-        std::unique_ptr< SdrGluePointList > pListCopy;
-        if( bNeedsMirrorX || bNeedsMirrorY )
-        {
-            const SdrGluePointList* pList = pObject->GetGluePointList();
-            if( pList )
-                pListCopy.reset( new SdrGluePointList(*pList) );
-        }
-
-        if ( bNeedsMirrorX )
-        {
-            Point aTop( ( aRect.Left() + aRect.Right() ) >> 1, aRect.Top() );
-            Point aBottom( aTop.X(), aTop.Y() + 1000 );
-            pObject->NbcMirror( aTop, aBottom );
-            // NbcMirroring is flipping the current mirror state,
-            // so we have to set the correct state again
-            static_cast<SdrObjCustomShape*>(pObject)->SetMirroredX( !bMirroredX );
-        }
-        if ( bNeedsMirrorY )
-        {
-            Point aLeft( aRect.Left(), ( aRect.Top() + aRect.Bottom() ) >> 1 );
-            Point aRight( aLeft.X() + 1000, aLeft.Y() );
-            pObject->NbcMirror( aLeft, aRight );
-            // NbcMirroring is flipping the current mirror state,
-            // so we have to set the correct state again
-            static_cast<SdrObjCustomShape*>(pObject)->SetMirroredY( !bMirroredY );
-        }
-
-        if( pListCopy )
-        {
-            SdrGluePointList* pNewList = const_cast< SdrGluePointList* >( pObject->GetGluePointList() );
-            if(pNewList)
-                *pNewList = *pListCopy;
-        }
+    if( pListCopy )
+    {
+        SdrGluePointList* pNewList = const_cast< SdrGluePointList* >( pObject->GetGluePointList() );
+        if(pNewList)
+            *pNewList = *pListCopy;
     }
 }
 

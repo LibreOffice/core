@@ -405,32 +405,32 @@ void ImplUpdateSeparators( const OUString& rOldDecSep, const OUString& rNewDecSe
     bool bChangeDec = (rOldDecSep != rNewDecSep);
     bool bChangeTh = (rOldThSep != rNewThSep );
 
-    if( bChangeDec || bChangeTh )
-    {
-        bool bUpdateMode = pEdit->IsUpdateMode();
-        pEdit->SetUpdateMode( false );
-        OUString aText = pEdit->GetText();
-        ImplUpdateSeparatorString( aText, rOldDecSep, rNewDecSep, rOldThSep, rNewThSep );
-        pEdit->SetText( aText );
+    if( !(bChangeDec || bChangeTh) )
+        return;
 
-        ComboBox* pCombo = dynamic_cast<ComboBox*>(pEdit);
-        if( pCombo )
+    bool bUpdateMode = pEdit->IsUpdateMode();
+    pEdit->SetUpdateMode( false );
+    OUString aText = pEdit->GetText();
+    ImplUpdateSeparatorString( aText, rOldDecSep, rNewDecSep, rOldThSep, rNewThSep );
+    pEdit->SetText( aText );
+
+    ComboBox* pCombo = dynamic_cast<ComboBox*>(pEdit);
+    if( pCombo )
+    {
+        // update box entries
+        sal_Int32 nEntryCount = pCombo->GetEntryCount();
+        for ( sal_Int32 i=0; i < nEntryCount; i++ )
         {
-            // update box entries
-            sal_Int32 nEntryCount = pCombo->GetEntryCount();
-            for ( sal_Int32 i=0; i < nEntryCount; i++ )
-            {
-                aText = pCombo->GetEntry( i );
-                void* pEntryData = pCombo->GetEntryData( i );
-                ImplUpdateSeparatorString( aText, rOldDecSep, rNewDecSep, rOldThSep, rNewThSep );
-                pCombo->RemoveEntryAt(i);
-                pCombo->InsertEntry( aText, i );
-                pCombo->SetEntryData( i, pEntryData );
-            }
+            aText = pCombo->GetEntry( i );
+            void* pEntryData = pCombo->GetEntryData( i );
+            ImplUpdateSeparatorString( aText, rOldDecSep, rNewDecSep, rOldThSep, rNewThSep );
+            pCombo->RemoveEntryAt(i);
+            pCombo->InsertEntry( aText, i );
+            pCombo->SetEntryData( i, pEntryData );
         }
-        if( bUpdateMode )
-            pEdit->SetUpdateMode( bUpdateMode );
     }
+    if( bUpdateMode )
+        pEdit->SetUpdateMode( bUpdateMode );
 }
 
 } // namespace
@@ -733,34 +733,34 @@ void NumericFormatter::FieldLast()
 
 void NumericFormatter::ImplNewFieldValue( sal_Int64 nNewValue )
 {
-    if ( GetField() )
+    if ( !GetField() )
+        return;
+
+    // !!! We should check why we do not validate in ImplSetUserValue() if the value was
+    // changed. This should be done there as well since otherwise the call to Modify would not
+    // be allowed. Anyway, the paths from ImplNewFieldValue, ImplSetUserValue, and ImplSetText
+    // should be checked and clearly traced (with comment) in order to find out what happens.
+
+    Selection aSelection = GetField()->GetSelection();
+    aSelection.Justify();
+    OUString aText = GetField()->GetText();
+    // leave it as is if selected until end
+    if ( static_cast<sal_Int32>(aSelection.Max()) == aText.getLength() )
     {
-        // !!! We should check why we do not validate in ImplSetUserValue() if the value was
-        // changed. This should be done there as well since otherwise the call to Modify would not
-        // be allowed. Anyway, the paths from ImplNewFieldValue, ImplSetUserValue, and ImplSetText
-        // should be checked and clearly traced (with comment) in order to find out what happens.
+        if ( !aSelection.Len() )
+            aSelection.Min() = SELECTION_MAX;
+        aSelection.Max() = SELECTION_MAX;
+    }
 
-        Selection aSelection = GetField()->GetSelection();
-        aSelection.Justify();
-        OUString aText = GetField()->GetText();
-        // leave it as is if selected until end
-        if ( static_cast<sal_Int32>(aSelection.Max()) == aText.getLength() )
-        {
-            if ( !aSelection.Len() )
-                aSelection.Min() = SELECTION_MAX;
-            aSelection.Max() = SELECTION_MAX;
-        }
+    sal_Int64 nOldLastValue  = mnLastValue;
+    ImplSetUserValue( nNewValue, &aSelection );
+    mnLastValue = nOldLastValue;
 
-        sal_Int64 nOldLastValue  = mnLastValue;
-        ImplSetUserValue( nNewValue, &aSelection );
-        mnLastValue = nOldLastValue;
-
-        // Modify during Edit is only set during KeyInput
-        if ( GetField()->GetText() != aText )
-        {
-            GetField()->SetModifyFlag();
-            GetField()->Modify();
-        }
+    // Modify during Edit is only set during KeyInput
+    if ( GetField()->GetText() != aText )
+    {
+        GetField()->SetModifyFlag();
+        GetField()->Modify();
     }
 }
 

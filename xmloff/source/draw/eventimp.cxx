@@ -102,29 +102,29 @@ public:
 XMLEventSoundContext::XMLEventSoundContext( SvXMLImport& rImp, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, SdXMLEventContext* pParent )
 : SvXMLImportContext( rImp, nPrfx, rLocalName )
 {
-    if( pParent && nPrfx == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_SOUND ) )
-    {
-        const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-        for(sal_Int16 i=0; i < nAttrCount; i++)
-        {
-            OUString sAttrName = xAttrList->getNameByIndex( i );
-            OUString aAttrLocalName;
-            sal_uInt16 nAttrPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aAttrLocalName );
-            OUString sValue = xAttrList->getValueByIndex( i );
+    if( !(pParent && nPrfx == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_SOUND )) )
+        return;
 
-            switch( nAttrPrefix )
+    const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for(sal_Int16 i=0; i < nAttrCount; i++)
+    {
+        OUString sAttrName = xAttrList->getNameByIndex( i );
+        OUString aAttrLocalName;
+        sal_uInt16 nAttrPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aAttrLocalName );
+        OUString sValue = xAttrList->getValueByIndex( i );
+
+        switch( nAttrPrefix )
+        {
+        case XML_NAMESPACE_XLINK:
+            if( IsXMLToken( aAttrLocalName, XML_HREF ) )
             {
-            case XML_NAMESPACE_XLINK:
-                if( IsXMLToken( aAttrLocalName, XML_HREF ) )
-                {
-                    pParent->maData.msSoundURL = rImp.GetAbsoluteReference(sValue);
-                }
-                break;
-            case XML_NAMESPACE_PRESENTATION:
-                if( IsXMLToken( aAttrLocalName, XML_PLAY_FULL ) )
-                {
-                    pParent->maData.mbPlayFull = IsXMLToken( sValue, XML_TRUE );
-                }
+                pParent->maData.msSoundURL = rImp.GetAbsoluteReference(sValue);
+            }
+            break;
+        case XML_NAMESPACE_PRESENTATION:
+            if( IsXMLToken( aAttrLocalName, XML_PLAY_FULL ) )
+            {
+                pParent->maData.mbPlayFull = IsXMLToken( sValue, XML_TRUE );
             }
         }
     }

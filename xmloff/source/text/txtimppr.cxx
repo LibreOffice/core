@@ -333,21 +333,21 @@ void lcl_SeparateBorder(
     else
         pBorderWidths[nIndex]->mnIndex = -1;
 
-    if( pBorders[nIndex] && pBorderWidths[nIndex] )
-    {
-        table::BorderLine2 aBorderLine;
-        pBorders[nIndex]->maValue >>= aBorderLine;
+    if( !(pBorders[nIndex] && pBorderWidths[nIndex]) )
+        return;
 
-        table::BorderLine2 aBorderLineWidth;
-        pBorderWidths[nIndex]->maValue >>= aBorderLineWidth;
+    table::BorderLine2 aBorderLine;
+    pBorders[nIndex]->maValue >>= aBorderLine;
 
-        aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;
-        aBorderLine.InnerLineWidth = aBorderLineWidth.InnerLineWidth;
-        aBorderLine.LineDistance = aBorderLineWidth.LineDistance;
-        aBorderLine.LineWidth = aBorderLineWidth.LineWidth;
+    table::BorderLine2 aBorderLineWidth;
+    pBorderWidths[nIndex]->maValue >>= aBorderLineWidth;
 
-        pBorders[nIndex]->maValue <<= aBorderLine;
-    }
+    aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;
+    aBorderLine.InnerLineWidth = aBorderLineWidth.InnerLineWidth;
+    aBorderLine.LineDistance = aBorderLineWidth.LineDistance;
+    aBorderLine.LineWidth = aBorderLineWidth.LineWidth;
+
+    pBorders[nIndex]->maValue <<= aBorderLine;
 }
 
 }
@@ -814,32 +814,32 @@ void XMLTextImportPropertyMapper::finished(
         }
     }
 
-    if( bHasAnyWidth )
+    if( !bHasAnyWidth )
+        return;
+
+    if( nWidthTypeIndex == -2 )
     {
-        if( nWidthTypeIndex == -2 )
+        const_cast < XMLTextImportPropertyMapper * > ( this )
+            ->nWidthTypeIndex  = -1;
+        sal_Int32 nCount = getPropertySetMapper()->GetEntryCount();
+        for( sal_Int32 j=0; j < nCount; j++ )
         {
-            const_cast < XMLTextImportPropertyMapper * > ( this )
-                ->nWidthTypeIndex  = -1;
-            sal_Int32 nCount = getPropertySetMapper()->GetEntryCount();
-            for( sal_Int32 j=0; j < nCount; j++ )
+            if( CTF_FRAMEWIDTH_TYPE  == getPropertySetMapper()
+                    ->GetEntryContextId( j ) )
             {
-                if( CTF_FRAMEWIDTH_TYPE  == getPropertySetMapper()
-                        ->GetEntryContextId( j ) )
-                {
-                    const_cast < XMLTextImportPropertyMapper * > ( this )
-                        ->nWidthTypeIndex = j;
-                    break;
-                }
+                const_cast < XMLTextImportPropertyMapper * > ( this )
+                    ->nWidthTypeIndex = j;
+                break;
             }
         }
-        if( nWidthTypeIndex != -1 )
-        {
-            XMLPropertyState aSizeTypeState( nWidthTypeIndex );
-            aSizeTypeState.maValue <<= static_cast<sal_Int16>( bHasAnyMinWidth
-                                                        ? SizeType::MIN
-                                                        : SizeType::FIX);
-            rProperties.push_back( aSizeTypeState );
-        }
+    }
+    if( nWidthTypeIndex != -1 )
+    {
+        XMLPropertyState aSizeTypeState( nWidthTypeIndex );
+        aSizeTypeState.maValue <<= static_cast<sal_Int16>( bHasAnyMinWidth
+                                                    ? SizeType::MIN
+                                                    : SizeType::FIX);
+        rProperties.push_back( aSizeTypeState );
     }
 
     // DO NOT USE ITERATORS/POINTERS INTO THE rProperties-VECTOR AFTER

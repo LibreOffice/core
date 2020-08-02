@@ -28,26 +28,26 @@ using namespace ::com::sun::star::uno;
 
 XMLTransformerActions::XMLTransformerActions( XMLTransformerActionInit const *pInit )
 {
-    if( pInit )
+    if( !pInit )
+        return;
+
+    XMLTransformerActions::key_type aKey;
+    XMLTransformerActions::mapped_type aData;
+    while( pInit->m_nActionType != XML_TACTION_EOT )
     {
-        XMLTransformerActions::key_type aKey;
-        XMLTransformerActions::mapped_type aData;
-        while( pInit->m_nActionType != XML_TACTION_EOT )
-        {
-            aKey.m_nPrefix = pInit->m_nPrefix;
-            aKey.SetLocalName( pInit->m_eLocalName );
+        aKey.m_nPrefix = pInit->m_nPrefix;
+        aKey.SetLocalName( pInit->m_eLocalName );
 
-            OSL_ENSURE( find( aKey ) == end(), "duplicate action map entry" );
+        OSL_ENSURE( find( aKey ) == end(), "duplicate action map entry" );
 
-            aData.m_nActionType  = pInit->m_nActionType;
-            aData.m_nParam1 = pInit->m_nParam1;
-            aData.m_nParam2 = pInit->m_nParam2;
-            aData.m_nParam3 = pInit->m_nParam3;
-            XMLTransformerActions::value_type aVal( aKey, aData );
+        aData.m_nActionType  = pInit->m_nActionType;
+        aData.m_nParam1 = pInit->m_nParam1;
+        aData.m_nParam2 = pInit->m_nParam2;
+        aData.m_nParam3 = pInit->m_nParam3;
+        XMLTransformerActions::value_type aVal( aKey, aData );
 
-            insert( aVal );
-            ++pInit;
-        }
+        insert( aVal );
+        ++pInit;
     }
 }
 
@@ -57,27 +57,27 @@ XMLTransformerActions::~XMLTransformerActions()
 
 void XMLTransformerActions::Add( XMLTransformerActionInit const *pInit )
 {
-    if( pInit )
-    {
-        XMLTransformerActions::key_type aKey;
-        XMLTransformerActions::mapped_type aData;
-        while( pInit->m_nActionType != XML_TACTION_EOT )
-        {
-            aKey.m_nPrefix = pInit->m_nPrefix;
-            aKey.SetLocalName( pInit->m_eLocalName );
-            XMLTransformerActions::iterator aIter = find( aKey );
-            if( aIter == end() )
-            {
-                aData.m_nActionType  = pInit->m_nActionType;
-                aData.m_nParam1 = pInit->m_nParam1;
-                aData.m_nParam2 = pInit->m_nParam2;
-                aData.m_nParam3 = pInit->m_nParam3;
-                XMLTransformerActions::value_type aVal( aKey, aData );
-                insert( aVal );
-            }
+    if( !pInit )
+        return;
 
-            ++pInit;
+    XMLTransformerActions::key_type aKey;
+    XMLTransformerActions::mapped_type aData;
+    while( pInit->m_nActionType != XML_TACTION_EOT )
+    {
+        aKey.m_nPrefix = pInit->m_nPrefix;
+        aKey.SetLocalName( pInit->m_eLocalName );
+        XMLTransformerActions::iterator aIter = find( aKey );
+        if( aIter == end() )
+        {
+            aData.m_nActionType  = pInit->m_nActionType;
+            aData.m_nParam1 = pInit->m_nParam1;
+            aData.m_nParam2 = pInit->m_nParam2;
+            aData.m_nParam3 = pInit->m_nParam3;
+            XMLTransformerActions::value_type aVal( aKey, aData );
+            insert( aVal );
         }
+
+        ++pInit;
     }
 }
 

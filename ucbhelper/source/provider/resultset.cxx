@@ -1404,22 +1404,22 @@ PropertySetInfo::PropertySetInfo(
     : m_pProps( new uno::Sequence< beans::Property >( nProps ) )
 {
 
-    if ( nProps )
+    if ( !nProps )
+        return;
+
+    const PropertyInfo* pEntry = pProps;
+    beans::Property* pProperties = m_pProps->getArray();
+
+    for ( sal_Int32 n = 0; n < nProps; ++n )
     {
-        const PropertyInfo* pEntry = pProps;
-        beans::Property* pProperties = m_pProps->getArray();
+        beans::Property& rProp = pProperties[ n ];
 
-        for ( sal_Int32 n = 0; n < nProps; ++n )
-        {
-            beans::Property& rProp = pProperties[ n ];
+        rProp.Name       = OUString::createFromAscii( pEntry->pName );
+        rProp.Handle     = pEntry->nHandle;
+        rProp.Type       = pEntry->pGetCppuType();
+        rProp.Attributes = pEntry->nAttributes;
 
-            rProp.Name       = OUString::createFromAscii( pEntry->pName );
-            rProp.Handle     = pEntry->nHandle;
-            rProp.Type       = pEntry->pGetCppuType();
-            rProp.Attributes = pEntry->nAttributes;
-
-            pEntry++;
-        }
+        pEntry++;
     }
 }
 

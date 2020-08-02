@@ -182,80 +182,80 @@ void XMLSectionExport::ExportSectionEnd(
     bool bAutoStyles)
 {
     // no end section for styles
-    if (!bAutoStyles)
+    if (bAutoStyles)
+        return;
+
+    enum XMLTokenEnum eElement = XML_TOKEN_INVALID;
+
+    // export index or regular section end
+    Reference<XDocumentIndex> xIndex;
+    if (GetIndex(rSection, xIndex))
     {
-        enum XMLTokenEnum eElement = XML_TOKEN_INVALID;
-
-        // export index or regular section end
-        Reference<XDocumentIndex> xIndex;
-        if (GetIndex(rSection, xIndex))
+        if (xIndex.is())
         {
-            if (xIndex.is())
-            {
-                // index end: close index body element
-                GetExport().EndElement( XML_NAMESPACE_TEXT, XML_INDEX_BODY,
-                                        true );
-                GetExport().IgnorableWhitespace();
-
-                switch (MapSectionType(xIndex->getServiceName()))
-                {
-                    case TEXT_SECTION_TYPE_TOC:
-                        eElement = XML_TABLE_OF_CONTENT;
-                        break;
-
-                    case TEXT_SECTION_TYPE_ILLUSTRATION:
-                        eElement = XML_ILLUSTRATION_INDEX;
-                        break;
-
-                    case TEXT_SECTION_TYPE_ALPHABETICAL:
-                        eElement = XML_ALPHABETICAL_INDEX;
-                        break;
-
-                    case TEXT_SECTION_TYPE_TABLE:
-                        eElement = XML_TABLE_INDEX;
-                        break;
-
-                    case TEXT_SECTION_TYPE_OBJECT:
-                        eElement = XML_OBJECT_INDEX;
-                        break;
-
-                    case TEXT_SECTION_TYPE_USER:
-                        eElement = XML_USER_INDEX;
-                        break;
-
-                    case TEXT_SECTION_TYPE_BIBLIOGRAPHY:
-                        eElement = XML_BIBLIOGRAPHY;
-                        break;
-
-                    default:
-                        OSL_FAIL("unknown index type");
-                        // default: skip index!
-                        break;
-                }
-            }
-            else
-            {
-                eElement = XML_INDEX_TITLE;
-            }
-        }
-        else
-        {
-            eElement = XML_SECTION;
-        }
-
-        if (XML_TOKEN_INVALID != eElement)
-        {
-            // any old attributes?
-            GetExport().CheckAttrList();
-
-            // element surrounded by whitespace
-            GetExport().EndElement( XML_NAMESPACE_TEXT, eElement, true);
+            // index end: close index body element
+            GetExport().EndElement( XML_NAMESPACE_TEXT, XML_INDEX_BODY,
+                                    true );
             GetExport().IgnorableWhitespace();
+
+            switch (MapSectionType(xIndex->getServiceName()))
+            {
+                case TEXT_SECTION_TYPE_TOC:
+                    eElement = XML_TABLE_OF_CONTENT;
+                    break;
+
+                case TEXT_SECTION_TYPE_ILLUSTRATION:
+                    eElement = XML_ILLUSTRATION_INDEX;
+                    break;
+
+                case TEXT_SECTION_TYPE_ALPHABETICAL:
+                    eElement = XML_ALPHABETICAL_INDEX;
+                    break;
+
+                case TEXT_SECTION_TYPE_TABLE:
+                    eElement = XML_TABLE_INDEX;
+                    break;
+
+                case TEXT_SECTION_TYPE_OBJECT:
+                    eElement = XML_OBJECT_INDEX;
+                    break;
+
+                case TEXT_SECTION_TYPE_USER:
+                    eElement = XML_USER_INDEX;
+                    break;
+
+                case TEXT_SECTION_TYPE_BIBLIOGRAPHY:
+                    eElement = XML_BIBLIOGRAPHY;
+                    break;
+
+                default:
+                    OSL_FAIL("unknown index type");
+                    // default: skip index!
+                    break;
+            }
         }
         else
         {
-            OSL_FAIL("Need element name!");
+            eElement = XML_INDEX_TITLE;
         }
+    }
+    else
+    {
+        eElement = XML_SECTION;
+    }
+
+    if (XML_TOKEN_INVALID != eElement)
+    {
+        // any old attributes?
+        GetExport().CheckAttrList();
+
+        // element surrounded by whitespace
+        GetExport().EndElement( XML_NAMESPACE_TEXT, eElement, true);
+        GetExport().IgnorableWhitespace();
+    }
+    else
+    {
+        OSL_FAIL("Need element name!");
     }
     // else: autostyles -> ignore
 }
@@ -1385,116 +1385,116 @@ void XMLSectionExport::ExportIndexTemplateElement(
     }
 
     // ... and write Element
-    if (eElement != XML_TOKEN_INVALID)
+    if (eElement == XML_TOKEN_INVALID)
+        return;
+
+    // character style (for most templates)
+    if (bCharStyleOK)
     {
-        // character style (for most templates)
-        if (bCharStyleOK)
+        switch (nTokenType)
         {
-            switch (nTokenType)
-            {
-                case TOK_TTYPE_ENTRY_TEXT:
-                case TOK_TTYPE_TEXT:
-                case TOK_TTYPE_PAGE_NUMBER:
-                case TOK_TTYPE_ENTRY_NUMBER:
-                case TOK_TTYPE_HYPERLINK_START:
-                case TOK_TTYPE_HYPERLINK_END:
-                case TOK_TTYPE_BIBLIOGRAPHY:
-                case TOK_TTYPE_CHAPTER_INFO:
-                case TOK_TTYPE_TAB_STOP:
-                    GetExport().AddAttribute(XML_NAMESPACE_TEXT,
-                                             XML_STYLE_NAME,
-                                 GetExport().EncodeStyleName( sCharStyle) );
-                    break;
-                default:
-                    ; // nothing: no character style
-                    break;
-            }
-        }
-
-        // tab properties
-        if (TOK_TTYPE_TAB_STOP == nTokenType)
-        {
-            // tab type
-            GetExport().AddAttribute(XML_NAMESPACE_STYLE, XML_TYPE,
-                                     bRightAligned ? XML_RIGHT : XML_LEFT);
-
-            if (bTabPositionOK && (! bRightAligned))
-            {
-                // position for left tabs (convert to measure)
-                OUStringBuffer sBuf;
-                GetExport().GetMM100UnitConverter().convertMeasureToXML(sBuf,
-                                                                 nTabPosition);
-                GetExport().AddAttribute(XML_NAMESPACE_STYLE,
-                                         XML_POSITION,
-                                         sBuf.makeStringAndClear());
-            }
-
-            // fill char ("leader char")
-            if (bFillCharOK && !sFillChar.isEmpty())
-            {
-                GetExport().AddAttribute(XML_NAMESPACE_STYLE,
-                                         XML_LEADER_CHAR, sFillChar);
-            }
-
-            // #i21237#
-            if (bWithTabStopOK && ! bWithTabStop)
-            {
-                   GetExport().AddAttribute(XML_NAMESPACE_STYLE,
-                                         XML_WITH_TAB,
-                                         XML_FALSE);
-            }
-        }
-
-        // bibliography data
-        if (TOK_TTYPE_BIBLIOGRAPHY == nTokenType)
-        {
-            OSL_ENSURE(bBibliographyDataOK, "need bibl data");
-            OUStringBuffer sBuf;
-            if (SvXMLUnitConverter::convertEnum( sBuf, nBibliographyData,
-                                                 aBibliographyDataFieldMap ) )
-            {
+            case TOK_TTYPE_ENTRY_TEXT:
+            case TOK_TTYPE_TEXT:
+            case TOK_TTYPE_PAGE_NUMBER:
+            case TOK_TTYPE_ENTRY_NUMBER:
+            case TOK_TTYPE_HYPERLINK_START:
+            case TOK_TTYPE_HYPERLINK_END:
+            case TOK_TTYPE_BIBLIOGRAPHY:
+            case TOK_TTYPE_CHAPTER_INFO:
+            case TOK_TTYPE_TAB_STOP:
                 GetExport().AddAttribute(XML_NAMESPACE_TEXT,
-                                         XML_BIBLIOGRAPHY_DATA_FIELD,
-                                         sBuf.makeStringAndClear());
-            }
+                                         XML_STYLE_NAME,
+                             GetExport().EncodeStyleName( sCharStyle) );
+                break;
+            default:
+                ; // nothing: no character style
+                break;
+        }
+    }
+
+    // tab properties
+    if (TOK_TTYPE_TAB_STOP == nTokenType)
+    {
+        // tab type
+        GetExport().AddAttribute(XML_NAMESPACE_STYLE, XML_TYPE,
+                                 bRightAligned ? XML_RIGHT : XML_LEFT);
+
+        if (bTabPositionOK && (! bRightAligned))
+        {
+            // position for left tabs (convert to measure)
+            OUStringBuffer sBuf;
+            GetExport().GetMM100UnitConverter().convertMeasureToXML(sBuf,
+                                                             nTabPosition);
+            GetExport().AddAttribute(XML_NAMESPACE_STYLE,
+                                     XML_POSITION,
+                                     sBuf.makeStringAndClear());
         }
 
-        // chapter info
-        if (TOK_TTYPE_CHAPTER_INFO == nTokenType)
+        // fill char ("leader char")
+        if (bFillCharOK && !sFillChar.isEmpty())
         {
-            OSL_ENSURE(bChapterFormatOK, "need chapter info");
+            GetExport().AddAttribute(XML_NAMESPACE_STYLE,
+                                     XML_LEADER_CHAR, sFillChar);
+        }
+
+        // #i21237#
+        if (bWithTabStopOK && ! bWithTabStop)
+        {
+               GetExport().AddAttribute(XML_NAMESPACE_STYLE,
+                                     XML_WITH_TAB,
+                                     XML_FALSE);
+        }
+    }
+
+    // bibliography data
+    if (TOK_TTYPE_BIBLIOGRAPHY == nTokenType)
+    {
+        OSL_ENSURE(bBibliographyDataOK, "need bibl data");
+        OUStringBuffer sBuf;
+        if (SvXMLUnitConverter::convertEnum( sBuf, nBibliographyData,
+                                             aBibliographyDataFieldMap ) )
+        {
+            GetExport().AddAttribute(XML_NAMESPACE_TEXT,
+                                     XML_BIBLIOGRAPHY_DATA_FIELD,
+                                     sBuf.makeStringAndClear());
+        }
+    }
+
+    // chapter info
+    if (TOK_TTYPE_CHAPTER_INFO == nTokenType)
+    {
+        OSL_ENSURE(bChapterFormatOK, "need chapter info");
+        GetExport().AddAttribute(
+            XML_NAMESPACE_TEXT, XML_DISPLAY,
+            XMLTextFieldExport::MapChapterDisplayFormat(nChapterFormat));
+//---> i53420
+        if (bLevelOK)
+            GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_OUTLINE_LEVEL,
+                                 OUString::number(nLevel));
+    }
+
+//--->i53420
+    if (TOK_TTYPE_ENTRY_NUMBER == nTokenType)
+    {
+        if (bChapterFormatOK)
             GetExport().AddAttribute(
                 XML_NAMESPACE_TEXT, XML_DISPLAY,
                 XMLTextFieldExport::MapChapterDisplayFormat(nChapterFormat));
-//---> i53420
-            if (bLevelOK)
-                GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_OUTLINE_LEVEL,
-                                     OUString::number(nLevel));
-        }
 
-//--->i53420
-        if (TOK_TTYPE_ENTRY_NUMBER == nTokenType)
-        {
-            if (bChapterFormatOK)
-                GetExport().AddAttribute(
-                    XML_NAMESPACE_TEXT, XML_DISPLAY,
-                    XMLTextFieldExport::MapChapterDisplayFormat(nChapterFormat));
+        if (bLevelOK)
+            GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_OUTLINE_LEVEL,
+                                 OUString::number(nLevel));
+    }
+    // export template
+    SvXMLElementExport aTemplateElement(GetExport(), nNamespace,
+                                        GetXMLToken(eElement),
+                                        true, false)
+        ;
 
-            if (bLevelOK)
-                GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_OUTLINE_LEVEL,
-                                     OUString::number(nLevel));
-        }
-        // export template
-        SvXMLElementExport aTemplateElement(GetExport(), nNamespace,
-                                            GetXMLToken(eElement),
-                                            true, false)
-            ;
-
-        // entry text or span element: write text
-        if (TOK_TTYPE_TEXT == nTokenType)
-        {
-            GetExport().Characters(sText);
-        }
+    // entry text or span element: write text
+    if (TOK_TTYPE_TEXT == nTokenType)
+    {
+        GetExport().Characters(sText);
     }
 }
 
@@ -1570,101 +1570,101 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
     // first: get field master (via text field supplier)
     Reference<XTextFieldsSupplier> xTextFieldsSupp( rExport.GetModel(),
                                                     UNO_QUERY );
-    if ( xTextFieldsSupp.is() )
+    if ( !xTextFieldsSupp.is() )
+        return;
+
+    const OUString sFieldMaster_Bibliography("com.sun.star.text.FieldMaster.Bibliography");
+
+    // get bibliography field master
+    Reference<XNameAccess> xMasters =
+        xTextFieldsSupp->getTextFieldMasters();
+    if ( !xMasters->hasByName(sFieldMaster_Bibliography) )
+        return;
+
+    Any aAny =
+        xMasters->getByName(sFieldMaster_Bibliography);
+    Reference<XPropertySet> xPropSet;
+    aAny >>= xPropSet;
+
+    OSL_ENSURE( xPropSet.is(), "field master must have XPropSet" );
+
+    OUString sTmp;
+
+    aAny = xPropSet->getPropertyValue("BracketBefore");
+    aAny >>= sTmp;
+    rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_PREFIX, sTmp);
+
+    aAny = xPropSet->getPropertyValue("BracketAfter");
+    aAny >>= sTmp;
+    rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_SUFFIX, sTmp);
+
+    aAny = xPropSet->getPropertyValue("IsNumberEntries");
+    if (*o3tl::doAccess<bool>(aAny))
     {
-        const OUString sFieldMaster_Bibliography("com.sun.star.text.FieldMaster.Bibliography");
+        rExport.AddAttribute(XML_NAMESPACE_TEXT,
+                             XML_NUMBERED_ENTRIES, XML_TRUE);
+    }
 
-        // get bibliography field master
-        Reference<XNameAccess> xMasters =
-            xTextFieldsSupp->getTextFieldMasters();
-        if ( xMasters->hasByName(sFieldMaster_Bibliography) )
+    aAny = xPropSet->getPropertyValue("IsSortByPosition");
+    if (! *o3tl::doAccess<bool>(aAny))
+    {
+        rExport.AddAttribute(XML_NAMESPACE_TEXT,
+                             XML_SORT_BY_POSITION, XML_FALSE);
+    }
+
+    // sort algorithm
+    aAny = xPropSet->getPropertyValue("SortAlgorithm");
+    OUString sAlgorithm;
+    aAny >>= sAlgorithm;
+    if( !sAlgorithm.isEmpty() )
+    {
+        rExport.AddAttribute( XML_NAMESPACE_TEXT,
+                              XML_SORT_ALGORITHM, sAlgorithm );
+    }
+
+    // locale
+    aAny = xPropSet->getPropertyValue("Locale");
+    Locale aLocale;
+    aAny >>= aLocale;
+    rExport.AddLanguageTagAttributes( XML_NAMESPACE_FO, XML_NAMESPACE_STYLE, aLocale, true);
+
+    // configuration element
+    SvXMLElementExport aElement(rExport, XML_NAMESPACE_TEXT,
+                                XML_BIBLIOGRAPHY_CONFIGURATION,
+                                true, true);
+
+    // sort keys
+    aAny = xPropSet->getPropertyValue("SortKeys");
+    Sequence<Sequence<PropertyValue> > aKeys;
+    aAny >>= aKeys;
+    for(const Sequence<PropertyValue> & rKey : std::as_const(aKeys))
+    {
+        for(const PropertyValue& rValue : rKey)
         {
-            Any aAny =
-                xMasters->getByName(sFieldMaster_Bibliography);
-            Reference<XPropertySet> xPropSet;
-            aAny >>= xPropSet;
-
-            OSL_ENSURE( xPropSet.is(), "field master must have XPropSet" );
-
-            OUString sTmp;
-
-            aAny = xPropSet->getPropertyValue("BracketBefore");
-            aAny >>= sTmp;
-            rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_PREFIX, sTmp);
-
-            aAny = xPropSet->getPropertyValue("BracketAfter");
-            aAny >>= sTmp;
-            rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_SUFFIX, sTmp);
-
-            aAny = xPropSet->getPropertyValue("IsNumberEntries");
-            if (*o3tl::doAccess<bool>(aAny))
+            if (rValue.Name == "SortKey")
             {
-                rExport.AddAttribute(XML_NAMESPACE_TEXT,
-                                     XML_NUMBERED_ENTRIES, XML_TRUE);
-            }
-
-            aAny = xPropSet->getPropertyValue("IsSortByPosition");
-            if (! *o3tl::doAccess<bool>(aAny))
-            {
-                rExport.AddAttribute(XML_NAMESPACE_TEXT,
-                                     XML_SORT_BY_POSITION, XML_FALSE);
-            }
-
-            // sort algorithm
-            aAny = xPropSet->getPropertyValue("SortAlgorithm");
-            OUString sAlgorithm;
-            aAny >>= sAlgorithm;
-            if( !sAlgorithm.isEmpty() )
-            {
-                rExport.AddAttribute( XML_NAMESPACE_TEXT,
-                                      XML_SORT_ALGORITHM, sAlgorithm );
-            }
-
-            // locale
-            aAny = xPropSet->getPropertyValue("Locale");
-            Locale aLocale;
-            aAny >>= aLocale;
-            rExport.AddLanguageTagAttributes( XML_NAMESPACE_FO, XML_NAMESPACE_STYLE, aLocale, true);
-
-            // configuration element
-            SvXMLElementExport aElement(rExport, XML_NAMESPACE_TEXT,
-                                        XML_BIBLIOGRAPHY_CONFIGURATION,
-                                        true, true);
-
-            // sort keys
-            aAny = xPropSet->getPropertyValue("SortKeys");
-            Sequence<Sequence<PropertyValue> > aKeys;
-            aAny >>= aKeys;
-            for(const Sequence<PropertyValue> & rKey : std::as_const(aKeys))
-            {
-                for(const PropertyValue& rValue : rKey)
+                sal_Int16 nKey = 0;
+                rValue.Value >>= nKey;
+                OUStringBuffer sBuf;
+                if (SvXMLUnitConverter::convertEnum( sBuf, nKey,
+                                         aBibliographyDataFieldMap ) )
                 {
-                    if (rValue.Name == "SortKey")
-                    {
-                        sal_Int16 nKey = 0;
-                        rValue.Value >>= nKey;
-                        OUStringBuffer sBuf;
-                        if (SvXMLUnitConverter::convertEnum( sBuf, nKey,
-                                                 aBibliographyDataFieldMap ) )
-                        {
-                            rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_KEY,
-                                                 sBuf.makeStringAndClear());
-                        }
-                    }
-                    else if (rValue.Name == "IsSortAscending")
-                    {
-                        bool bTmp = *o3tl::doAccess<bool>(rValue.Value);
-                        rExport.AddAttribute(XML_NAMESPACE_TEXT,
-                                             XML_SORT_ASCENDING,
-                                             bTmp ? XML_TRUE : XML_FALSE);
-                    }
+                    rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_KEY,
+                                         sBuf.makeStringAndClear());
                 }
-
-                SvXMLElementExport aKeyElem(rExport,
-                                            XML_NAMESPACE_TEXT, XML_SORT_KEY,
-                                            true, true);
+            }
+            else if (rValue.Name == "IsSortAscending")
+            {
+                bool bTmp = *o3tl::doAccess<bool>(rValue.Value);
+                rExport.AddAttribute(XML_NAMESPACE_TEXT,
+                                     XML_SORT_ASCENDING,
+                                     bTmp ? XML_TRUE : XML_FALSE);
             }
         }
+
+        SvXMLElementExport aKeyElem(rExport,
+                                    XML_NAMESPACE_TEXT, XML_SORT_KEY,
+                                    true, true);
     }
 }
 

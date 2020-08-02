@@ -62,20 +62,20 @@ void SdrPolyEditView::ImpCheckPolyPossibilities()
     ImpResetPolyPossibilityFlags();
     const size_t nMarkCount(GetMarkedObjectCount());
 
-    if(nMarkCount && !ImpIsFrameHandles())
-    {
-        bool b1stSmooth(true);
-        bool b1stSegm(true);
-        bool bCurve(false);
-        bool bSmoothFuz(false);
-        bool bSegmFuz(false);
-        basegfx::B2VectorContinuity eSmooth = basegfx::B2VectorContinuity::NONE;
+    if(!(nMarkCount && !ImpIsFrameHandles()))
+        return;
 
-        for(size_t nMarkNum = 0; nMarkNum < nMarkCount; ++nMarkNum)
-        {
-            SdrMark* pM = GetSdrMarkByIndex(nMarkNum);
-            CheckPolyPossibilitiesHelper( pM, b1stSmooth, b1stSegm, bCurve, bSmoothFuz, bSegmFuz, eSmooth );
-        }
+    bool b1stSmooth(true);
+    bool b1stSegm(true);
+    bool bCurve(false);
+    bool bSmoothFuz(false);
+    bool bSegmFuz(false);
+    basegfx::B2VectorContinuity eSmooth = basegfx::B2VectorContinuity::NONE;
+
+    for(size_t nMarkNum = 0; nMarkNum < nMarkCount; ++nMarkNum)
+    {
+        SdrMark* pM = GetSdrMarkByIndex(nMarkNum);
+        CheckPolyPossibilitiesHelper( pM, b1stSmooth, b1stSegm, bCurve, bSmoothFuz, bSegmFuz, eSmooth );
     }
 }
 
@@ -189,69 +189,69 @@ void SdrPolyEditView::SetMarkedPointsSmooth(SdrPathSmoothKind eKind)
         return;
     }
 
-    if(HasMarkedPoints())
+    if(!HasMarkedPoints())
+        return;
+
+    SortMarkedObjects();
+
+    const bool bUndo = IsUndoEnabled();
+    if( bUndo )
+        BegUndo(SvxResId(STR_EditSetPointsSmooth), GetDescriptionOfMarkedPoints());
+    const size_t nMarkCount(GetMarkedObjectCount());
+
+    for(size_t nMarkNum(nMarkCount); nMarkNum > 0;)
     {
-        SortMarkedObjects();
+        --nMarkNum;
+        SdrMark* pM = GetSdrMarkByIndex(nMarkNum);
+        SdrPathObj* pPath = dynamic_cast< SdrPathObj* >( pM->GetMarkedSdrObj() );
+        if (!pPath)
+            continue;
 
-        const bool bUndo = IsUndoEnabled();
-        if( bUndo )
-            BegUndo(SvxResId(STR_EditSetPointsSmooth), GetDescriptionOfMarkedPoints());
-        const size_t nMarkCount(GetMarkedObjectCount());
-
-        for(size_t nMarkNum(nMarkCount); nMarkNum > 0;)
+        SdrUShortCont& rPts = pM->GetMarkedPoints();
+        PolyPolygonEditor aEditor(pPath->GetPathPoly());
+        if (aEditor.SetPointsSmooth(eFlags, rPts))
         {
-            --nMarkNum;
-            SdrMark* pM = GetSdrMarkByIndex(nMarkNum);
-            SdrPathObj* pPath = dynamic_cast< SdrPathObj* >( pM->GetMarkedSdrObj() );
-            if (!pPath)
-                continue;
-
-            SdrUShortCont& rPts = pM->GetMarkedPoints();
-            PolyPolygonEditor aEditor(pPath->GetPathPoly());
-            if (aEditor.SetPointsSmooth(eFlags, rPts))
-            {
-                if( bUndo )
-                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pPath));
-                pPath->SetPathPoly(aEditor.GetPolyPolygon());
-            }
+            if( bUndo )
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pPath));
+            pPath->SetPathPoly(aEditor.GetPolyPolygon());
         }
-
-        if( bUndo )
-            EndUndo();
     }
+
+    if( bUndo )
+        EndUndo();
 }
 
 void SdrPolyEditView::SetMarkedSegmentsKind(SdrPathSegmentKind eKind)
 {
-    if(HasMarkedPoints())
+    if(!HasMarkedPoints())
+        return;
+
+    SortMarkedObjects();
+
+    const bool bUndo = IsUndoEnabled();
+    if( bUndo )
+        BegUndo(SvxResId(STR_EditSetSegmentsKind), GetDescriptionOfMarkedPoints());
+    const size_t nMarkCount(GetMarkedObjectCount());
+
+    for(size_t nMarkNum=nMarkCount; nMarkNum > 0;)
     {
-        SortMarkedObjects();
-
-        const bool bUndo = IsUndoEnabled();
-        if( bUndo )
-            BegUndo(SvxResId(STR_EditSetSegmentsKind), GetDescriptionOfMarkedPoints());
-        const size_t nMarkCount(GetMarkedObjectCount());
-
-        for(size_t nMarkNum=nMarkCount; nMarkNum > 0;)
+        --nMarkNum;
+        SdrMark* pM = GetSdrMarkByIndex(nMarkNum);
+        SdrPathObj* pPath = dynamic_cast< SdrPathObj* >( pM->GetMarkedSdrObj() );
+        if (!pPath)
+            continue;
+        SdrUShortCont& rPts = pM->GetMarkedPoints();
+        PolyPolygonEditor aEditor( pPath->GetPathPoly());
+        if (aEditor.SetSegmentsKind(eKind, rPts))
         {
-            --nMarkNum;
-            SdrMark* pM = GetSdrMarkByIndex(nMarkNum);
-            SdrPathObj* pPath = dynamic_cast< SdrPathObj* >( pM->GetMarkedSdrObj() );
-            if (!pPath)
-                continue;
-            SdrUShortCont& rPts = pM->GetMarkedPoints();
-            PolyPolygonEditor aEditor( pPath->GetPathPoly());
-            if (aEditor.SetSegmentsKind(eKind, rPts))
-            {
-                if( bUndo )
-                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pPath));
-                pPath->SetPathPoly(aEditor.GetPolyPolygon());
-            }
+            if( bUndo )
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pPath));
+            pPath->SetPathPoly(aEditor.GetPolyPolygon());
         }
-
-        if( bUndo )
-            EndUndo();
     }
+
+    if( bUndo )
+        EndUndo();
 }
 
 bool SdrPolyEditView::IsSetMarkedPointsSmoothPossible() const
@@ -285,131 +285,131 @@ bool SdrPolyEditView::IsDeleteMarkedPointsPossible() const
 
 void SdrPolyEditView::DeleteMarkedPoints()
 {
-    if (HasMarkedPoints())
+    if (!HasMarkedPoints())
+        return;
+
+    BrkAction();
+    SortMarkedObjects();
+    const size_t nMarkCount=GetMarkedObjectCount();
+
+    const bool bUndo = IsUndoEnabled();
+    if( bUndo )
     {
-        BrkAction();
-        SortMarkedObjects();
-        const size_t nMarkCount=GetMarkedObjectCount();
+        // Description
+        BegUndo(SvxResId(STR_EditDelete),GetDescriptionOfMarkedPoints(),SdrRepeatFunc::Delete);
+    }
 
-        const bool bUndo = IsUndoEnabled();
-        if( bUndo )
+    for (size_t nMarkNum=nMarkCount; nMarkNum>0;)
+    {
+        --nMarkNum;
+        SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
+        SdrPathObj* pPath = dynamic_cast< SdrPathObj* >( pM->GetMarkedSdrObj() );
+        if (!pPath)
+            continue;
+
+        SdrUShortCont& rPts = pM->GetMarkedPoints();
+        PolyPolygonEditor aEditor( pPath->GetPathPoly());
+        if (aEditor.DeletePoints(rPts))
         {
-            // Description
-            BegUndo(SvxResId(STR_EditDelete),GetDescriptionOfMarkedPoints(),SdrRepeatFunc::Delete);
-        }
-
-        for (size_t nMarkNum=nMarkCount; nMarkNum>0;)
-        {
-            --nMarkNum;
-            SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
-            SdrPathObj* pPath = dynamic_cast< SdrPathObj* >( pM->GetMarkedSdrObj() );
-            if (!pPath)
-                continue;
-
-            SdrUShortCont& rPts = pM->GetMarkedPoints();
-            PolyPolygonEditor aEditor( pPath->GetPathPoly());
-            if (aEditor.DeletePoints(rPts))
+            if( aEditor.GetPolyPolygon().count() )
             {
-                if( aEditor.GetPolyPolygon().count() )
+                if( bUndo )
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pPath ));
+                pPath->SetPathPoly( aEditor.GetPolyPolygon() );
+            }
+            else
+            {
+                if( bUndo )
+                    AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pPath ) );
+                pM->GetPageView()->GetObjList()->RemoveObject(pPath->GetOrdNum());
+                if( !bUndo )
                 {
-                    if( bUndo )
-                        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pPath ));
-                    pPath->SetPathPoly( aEditor.GetPolyPolygon() );
-                }
-                else
-                {
-                    if( bUndo )
-                        AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pPath ) );
-                    pM->GetPageView()->GetObjList()->RemoveObject(pPath->GetOrdNum());
-                    if( !bUndo )
-                    {
-                        SdrObject* pObj = pPath;
-                        SdrObject::Free(pObj);
-                    }
+                    SdrObject* pObj = pPath;
+                    SdrObject::Free(pObj);
                 }
             }
         }
-
-        if( bUndo )
-            EndUndo();
-        UnmarkAllPoints();
-        MarkListHasChanged();
     }
+
+    if( bUndo )
+        EndUndo();
+    UnmarkAllPoints();
+    MarkListHasChanged();
 }
 
 void SdrPolyEditView::RipUpAtMarkedPoints()
 {
-    if(HasMarkedPoints())
+    if(!HasMarkedPoints())
+        return;
+
+    SortMarkedObjects();
+    const size_t nMarkCount(GetMarkedObjectCount());
+
+    const bool bUndo = IsUndoEnabled();
+    if( bUndo )
+        BegUndo(SvxResId(STR_EditRipUp), GetDescriptionOfMarkedPoints());
+
+    for(size_t nMarkNum = nMarkCount; nMarkNum > 0;)
     {
-        SortMarkedObjects();
-        const size_t nMarkCount(GetMarkedObjectCount());
+        --nMarkNum;
+        SdrMark* pM = GetSdrMarkByIndex(nMarkNum);
+        SdrPathObj* pObj = dynamic_cast<SdrPathObj*>( pM->GetMarkedSdrObj() );
+        if (!pObj)
+            continue;
 
-        const bool bUndo = IsUndoEnabled();
+        SdrUShortCont& rPts = pM->GetMarkedPoints();
+
         if( bUndo )
-            BegUndo(SvxResId(STR_EditRipUp), GetDescriptionOfMarkedPoints());
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
+        bool bCorrectionFlag(false);
+        sal_uInt32 nMax(pObj->GetHdlCount());
 
-        for(size_t nMarkNum = nMarkCount; nMarkNum > 0;)
+        for(SdrUShortCont::const_reverse_iterator it = rPts.rbegin(); it != rPts.rend(); ++it)
         {
-            --nMarkNum;
-            SdrMark* pM = GetSdrMarkByIndex(nMarkNum);
-            SdrPathObj* pObj = dynamic_cast<SdrPathObj*>( pM->GetMarkedSdrObj() );
-            if (!pObj)
-                continue;
+            sal_uInt32 nNewPt0Idx(0);
+            SdrObject* pNewObj = pObj->RipPoint(*it, nNewPt0Idx);
 
-            SdrUShortCont& rPts = pM->GetMarkedPoints();
-
-            if( bUndo )
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
-            bool bCorrectionFlag(false);
-            sal_uInt32 nMax(pObj->GetHdlCount());
-
-            for(SdrUShortCont::const_reverse_iterator it = rPts.rbegin(); it != rPts.rend(); ++it)
+            if(pNewObj)
             {
-                sal_uInt32 nNewPt0Idx(0);
-                SdrObject* pNewObj = pObj->RipPoint(*it, nNewPt0Idx);
+                pM->GetPageView()->GetObjList()->InsertObject(pNewObj, pObj->GetOrdNum() + 1);
+                if( bUndo )
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pNewObj));
+                MarkObj(pNewObj, pM->GetPageView(), false, true);
+            }
 
-                if(pNewObj)
+            if(nNewPt0Idx)
+            {
+                // correction necessary?
+                DBG_ASSERT(!bCorrectionFlag,"Multiple index corrections at SdrPolyEditView::RipUp().");
+                if(!bCorrectionFlag)
                 {
-                    pM->GetPageView()->GetObjList()->InsertObject(pNewObj, pObj->GetOrdNum() + 1);
-                    if( bUndo )
-                        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pNewObj));
-                    MarkObj(pNewObj, pM->GetPageView(), false, true);
-                }
+                    bCorrectionFlag = true;
 
-                if(nNewPt0Idx)
-                {
-                    // correction necessary?
-                    DBG_ASSERT(!bCorrectionFlag,"Multiple index corrections at SdrPolyEditView::RipUp().");
-                    if(!bCorrectionFlag)
+                    SdrUShortCont aReplaceSet;
+                    for(const auto& rPt : rPts)
                     {
-                        bCorrectionFlag = true;
+                        sal_uInt32 nPntNum(rPt);
+                        nPntNum += nNewPt0Idx;
 
-                        SdrUShortCont aReplaceSet;
-                        for(const auto& rPt : rPts)
+                        if(nPntNum >= nMax)
                         {
-                            sal_uInt32 nPntNum(rPt);
-                            nPntNum += nNewPt0Idx;
-
-                            if(nPntNum >= nMax)
-                            {
-                                nPntNum -= nMax;
-                            }
-
-                            aReplaceSet.insert( static_cast<sal_uInt16>(nPntNum) );
+                            nPntNum -= nMax;
                         }
-                        rPts.swap(aReplaceSet);
 
-                        it = rPts.rbegin();
+                        aReplaceSet.insert( static_cast<sal_uInt16>(nPntNum) );
                     }
+                    rPts.swap(aReplaceSet);
+
+                    it = rPts.rbegin();
                 }
             }
         }
-
-        UnmarkAllPoints();
-        if( bUndo )
-            EndUndo();
-        MarkListHasChanged();
     }
+
+    UnmarkAllPoints();
+    if( bUndo )
+        EndUndo();
+    MarkListHasChanged();
 }
 
 bool SdrPolyEditView::IsRipUpAtMarkedPointsPossible() const

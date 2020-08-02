@@ -89,19 +89,19 @@ void GalleryBrowser1::ImplInsertThemeEntry( const GalleryThemeEntry* pEntry )
 {
     static const bool bShowHiddenThemes = ( getenv( "GALLERY_SHOW_HIDDEN_THEMES" ) != nullptr );
 
-    if( pEntry && ( !pEntry->IsHidden() || bShowHiddenThemes ) )
-    {
-        const OUString* pImage;
+    if( !(pEntry && ( !pEntry->IsHidden() || bShowHiddenThemes )) )
+        return;
 
-        if( pEntry->IsReadOnly() )
-            pImage = &aImgReadOnly;
-        else if( pEntry->IsDefault() )
-            pImage = &aImgDefault;
-        else
-            pImage = &aImgNormal;
+    const OUString* pImage;
 
-        mxThemes->append("", pEntry->GetThemeName(), *pImage);
-    }
+    if( pEntry->IsReadOnly() )
+        pImage = &aImgReadOnly;
+    else if( pEntry->IsDefault() )
+        pImage = &aImgDefault;
+    else
+        pImage = &aImgNormal;
+
+    mxThemes->append("", pEntry->GetThemeName(), *pImage);
 }
 
 void GalleryBrowser1::ImplFillExchangeData( const GalleryTheme* pThm, ExchangeData& rData )
@@ -135,37 +135,37 @@ void GalleryBrowser1::ImplGetExecuteVector(std::vector<OString>& o_aExec)
 {
     GalleryTheme*           pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
 
-    if( pTheme )
+    if( !pTheme )
+        return;
+
+    bool                bUpdateAllowed, bRenameAllowed, bRemoveAllowed;
+    static const bool   bIdDialog = ( getenv( "GALLERY_ENABLE_ID_DIALOG" ) != nullptr );
+
+    if( pTheme->IsReadOnly() )
+        bUpdateAllowed = bRenameAllowed = bRemoveAllowed = false;
+    else if( pTheme->IsDefault() )
     {
-        bool                bUpdateAllowed, bRenameAllowed, bRemoveAllowed;
-        static const bool   bIdDialog = ( getenv( "GALLERY_ENABLE_ID_DIALOG" ) != nullptr );
-
-        if( pTheme->IsReadOnly() )
-            bUpdateAllowed = bRenameAllowed = bRemoveAllowed = false;
-        else if( pTheme->IsDefault() )
-        {
-            bUpdateAllowed = bRenameAllowed = true;
-            bRemoveAllowed = false;
-        }
-        else
-            bUpdateAllowed = bRenameAllowed = bRemoveAllowed = true;
-
-        if( bUpdateAllowed && pTheme->GetObjectCount() )
-            o_aExec.emplace_back("update");
-
-        if( bRenameAllowed )
-            o_aExec.emplace_back("rename");
-
-        if( bRemoveAllowed )
-            o_aExec.emplace_back("delete");
-
-        if( bIdDialog && !pTheme->IsReadOnly() )
-            o_aExec.emplace_back("assign");
-
-        o_aExec.emplace_back("properties");
-
-        mpGallery->ReleaseTheme( pTheme, *this );
+        bUpdateAllowed = bRenameAllowed = true;
+        bRemoveAllowed = false;
     }
+    else
+        bUpdateAllowed = bRenameAllowed = bRemoveAllowed = true;
+
+    if( bUpdateAllowed && pTheme->GetObjectCount() )
+        o_aExec.emplace_back("update");
+
+    if( bRenameAllowed )
+        o_aExec.emplace_back("rename");
+
+    if( bRemoveAllowed )
+        o_aExec.emplace_back("delete");
+
+    if( bIdDialog && !pTheme->IsReadOnly() )
+        o_aExec.emplace_back("assign");
+
+    o_aExec.emplace_back("properties");
+
+    mpGallery->ReleaseTheme( pTheme, *this );
 }
 
 void GalleryBrowser1::ImplGalleryThemeProperties( const OUString & rThemeName, bool bCreateNew )

@@ -549,73 +549,73 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
         }
     }
 
-    if ( pObj )
+    if ( !pObj )
+        return;
+
+    sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
+
+    if (!(nSdrObjKind == OBJ_TEXT ||
+        nSdrObjKind == OBJ_TITLETEXT ||
+        nSdrObjKind == OBJ_OUTLINETEXT ||
+        dynamic_cast<const SdrTextObj*>( pObj) !=  nullptr))
+        return;
+
+    SdrPageView* pPV = pView->GetSdrPageView();
+
+    if ( !pObj->HasTextEdit() )
+        return;
+
+    std::unique_ptr<SdrOutliner> pO = MakeOutliner();
+    lcl_UpdateHyphenator( *pO, pObj );
+
+    //  vertical flag:
+    //  deduced from slot ids only if text object has no content
+
+    sal_uInt16 nSlotID = aSfxRequest.GetSlot();
+    bool bVertical = ( nSlotID == SID_DRAW_TEXT_VERTICAL );
+    OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
+    if ( pOPO )
+        bVertical = pOPO->IsVertical();     // content wins
+    pO->SetVertical( bVertical );
+
+    //!??  without returned Outliner the defaults are not correct ???!?
+    auto pOTemp = pO.get();
+    if ( !pView->SdrBeginTextEdit(pObj, pPV, pWindow, true, pO.release()) )
+        return;
+
+    //  Toggle out of paste mode if we are in it, otherwise
+    //  pressing return in this object will instead go to the
+    //  sheet and be considered an overwrite-cell instruction
+    rViewShell.GetViewData().SetPasteMode(ScPasteFlags::NONE);
+    rViewShell.UpdateCopySourceOverlay();
+
+    //  EditEngine-UndoManager anmelden
+    rViewShell.SetDrawTextUndo( &pOTemp->GetUndoManager() );
+
+    pView->SetEditMode();
+
+    //  set text cursor to click position or to end,
+    //  pass initial key event to outliner view
+    if ( !(pMousePixel || bCursorToEnd || pInitialKey) )
+        return;
+
+    OutlinerView* pOLV = pView->GetTextEditOutlinerView();
+    if (pOLV)
     {
-        sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
-
-        if (nSdrObjKind == OBJ_TEXT ||
-            nSdrObjKind == OBJ_TITLETEXT ||
-            nSdrObjKind == OBJ_OUTLINETEXT ||
-            dynamic_cast<const SdrTextObj*>( pObj) !=  nullptr)
+        if ( pMousePixel )
         {
-            SdrPageView* pPV = pView->GetSdrPageView();
-
-            if ( pObj->HasTextEdit() )
-            {
-                std::unique_ptr<SdrOutliner> pO = MakeOutliner();
-                lcl_UpdateHyphenator( *pO, pObj );
-
-                //  vertical flag:
-                //  deduced from slot ids only if text object has no content
-
-                sal_uInt16 nSlotID = aSfxRequest.GetSlot();
-                bool bVertical = ( nSlotID == SID_DRAW_TEXT_VERTICAL );
-                OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
-                if ( pOPO )
-                    bVertical = pOPO->IsVertical();     // content wins
-                pO->SetVertical( bVertical );
-
-                //!??  without returned Outliner the defaults are not correct ???!?
-                auto pOTemp = pO.get();
-                if ( pView->SdrBeginTextEdit(pObj, pPV, pWindow, true, pO.release()) )
-                {
-                    //  Toggle out of paste mode if we are in it, otherwise
-                    //  pressing return in this object will instead go to the
-                    //  sheet and be considered an overwrite-cell instruction
-                    rViewShell.GetViewData().SetPasteMode(ScPasteFlags::NONE);
-                    rViewShell.UpdateCopySourceOverlay();
-
-                    //  EditEngine-UndoManager anmelden
-                    rViewShell.SetDrawTextUndo( &pOTemp->GetUndoManager() );
-
-                    pView->SetEditMode();
-
-                    //  set text cursor to click position or to end,
-                    //  pass initial key event to outliner view
-                    if ( pMousePixel || bCursorToEnd || pInitialKey )
-                    {
-                        OutlinerView* pOLV = pView->GetTextEditOutlinerView();
-                        if (pOLV)
-                        {
-                            if ( pMousePixel )
-                            {
-                                MouseEvent aEditEvt( *pMousePixel, 1, MouseEventModifiers::SYNTHETIC, MOUSE_LEFT, 0 );
-                                pOLV->MouseButtonDown(aEditEvt);
-                                pOLV->MouseButtonUp(aEditEvt);
-                            }
-                            else if ( bCursorToEnd )
-                            {
-                                ESelection aNewSelection(EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND, EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND);
-                                pOLV->SetSelection(aNewSelection);
-                            }
-
-                            if ( pInitialKey )
-                                pOLV->PostKeyEvent( *pInitialKey );
-                        }
-                    }
-                }
-            }
+            MouseEvent aEditEvt( *pMousePixel, 1, MouseEventModifiers::SYNTHETIC, MOUSE_LEFT, 0 );
+            pOLV->MouseButtonDown(aEditEvt);
+            pOLV->MouseButtonUp(aEditEvt);
         }
+        else if ( bCursorToEnd )
+        {
+            ESelection aNewSelection(EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND, EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND);
+            pOLV->SetSelection(aNewSelection);
+        }
+
+        if ( pInitialKey )
+            pOLV->PostKeyEvent( *pInitialKey );
     }
 }
 

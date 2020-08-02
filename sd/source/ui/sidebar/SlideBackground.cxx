@@ -1080,18 +1080,18 @@ IMPL_LINK_NOARG(SlideBackground, PaperSizeModifyHdl, weld::ComboBox&, void)
                                                 { &aSizeItem, mpPageItem.get(), &aFitObjs });
 
     // Notify LOK clients of the page size change.
-    if (comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
     {
-        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-        while (pViewShell)
+        if (pViewShell->GetDocId() == mrBase.GetDocId())
         {
-            if (pViewShell->GetDocId() == mrBase.GetDocId())
-            {
-                SdXImpressDocument* pDoc = comphelper::getUnoTunnelImplementation<SdXImpressDocument>(pViewShell->GetCurrentDocument());
-                SfxLokHelper::notifyDocumentSizeChangedAllViews(pDoc);
-            }
-            pViewShell = SfxViewShell::GetNext(*pViewShell);
+            SdXImpressDocument* pDoc = comphelper::getUnoTunnelImplementation<SdXImpressDocument>(pViewShell->GetCurrentDocument());
+            SfxLokHelper::notifyDocumentSizeChangedAllViews(pDoc);
         }
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }
 

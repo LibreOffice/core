@@ -596,35 +596,35 @@ void ScViewFunc::EnterValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& r
     ScDocument* pDoc = GetViewData().GetDocument();
     ScDocShell* pDocSh = GetViewData().GetDocShell();
 
-    if ( pDoc && pDocSh )
+    if ( !(pDoc && pDocSh) )
+        return;
+
+    bool bUndo(pDoc->IsUndoEnabled());
+    ScDocShellModificator aModificator( *pDocSh );
+
+    ScEditableTester aTester( pDoc, nTab, nCol,nRow, nCol,nRow );
+    if (aTester.IsEditable())
     {
-        bool bUndo(pDoc->IsUndoEnabled());
-        ScDocShellModificator aModificator( *pDocSh );
+        ScAddress aPos( nCol, nRow, nTab );
+        ScCellValue aUndoCell;
+        if (bUndo)
+            aUndoCell.assign(*pDoc, aPos);
 
-        ScEditableTester aTester( pDoc, nTab, nCol,nRow, nCol,nRow );
-        if (aTester.IsEditable())
+        pDoc->SetValue( nCol, nRow, nTab, rValue );
+
+        // because of ChangeTrack after change in document
+        if (bUndo)
         {
-            ScAddress aPos( nCol, nRow, nTab );
-            ScCellValue aUndoCell;
-            if (bUndo)
-                aUndoCell.assign(*pDoc, aPos);
-
-            pDoc->SetValue( nCol, nRow, nTab, rValue );
-
-            // because of ChangeTrack after change in document
-            if (bUndo)
-            {
-                pDocSh->GetUndoManager()->AddUndoAction(
-                    std::make_unique<ScUndoEnterValue>(pDocSh, aPos, aUndoCell, rValue));
-            }
-
-            pDocSh->PostPaintCell( aPos );
-            pDocSh->UpdateOle(&GetViewData());
-            aModificator.SetDocumentModified();
+            pDocSh->GetUndoManager()->AddUndoAction(
+                std::make_unique<ScUndoEnterValue>(pDocSh, aPos, aUndoCell, rValue));
         }
-        else
-            ErrorMessage(aTester.GetMessageId());
+
+        pDocSh->PostPaintCell( aPos );
+        pDocSh->UpdateOle(&GetViewData());
+        aModificator.SetDocumentModified();
     }
+    else
+        ErrorMessage(aTester.GetMessageId());
 }
 
 void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
@@ -2301,26 +2301,27 @@ void ScViewFunc::SetWidthOrHeight(
             aModificator.SetDocumentModified();
     }
 
-    if ( bWidth )
+    if ( !bWidth )
+        return;
+
+    ScModelObj* pModelObj = HelperNotifyChanges::getMustPropagateChangesModel(*pDocSh);
+    if (!pModelObj)
+        return;
+
+    ScRangeList aChangeRanges;
+    for (const SCTAB& nTab : aMarkData)
     {
-        if (ScModelObj* pModelObj = HelperNotifyChanges::getMustPropagateChangesModel(*pDocSh))
+        for (const sc::ColRowSpan & rRange : rRanges)
         {
-            ScRangeList aChangeRanges;
-            for (const SCTAB& nTab : aMarkData)
+            SCCOL nStartCol = rRange.mnStart;
+            SCCOL nEndCol   = rRange.mnEnd;
+            for ( SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol )
             {
-                for (const sc::ColRowSpan & rRange : rRanges)
-                {
-                    SCCOL nStartCol = rRange.mnStart;
-                    SCCOL nEndCol   = rRange.mnEnd;
-                    for ( SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol )
-                    {
-                        aChangeRanges.push_back( ScRange( nCol, 0, nTab ) );
-                    }
-                }
+                aChangeRanges.push_back( ScRange( nCol, 0, nTab ) );
             }
-            HelperNotifyChanges::Notify(*pModelObj, aChangeRanges, "column-resize");
         }
     }
+    HelperNotifyChanges::Notify(*pModelObj, aChangeRanges, "column-resize");
 }
 
 //  column width/row height (via marked range)

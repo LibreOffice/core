@@ -995,18 +995,18 @@ typedef ::std::list< ScRange > ListOfScRange;
 */
 void lclAddToListOfScRange( ListOfScRange& rList, const uno::Any& rArg )
 {
-    if( rArg.hasValue() )
+    if( !rArg.hasValue() )
+        return;
+
+    uno::Reference< excel::XRange > xRange( rArg, uno::UNO_QUERY_THROW );
+    uno::Reference< XCollection > xCol( xRange->Areas( uno::Any() ), uno::UNO_QUERY_THROW );
+    for( sal_Int32 nIdx = 1, nCount = xCol->getCount(); nIdx <= nCount; ++nIdx )
     {
-        uno::Reference< excel::XRange > xRange( rArg, uno::UNO_QUERY_THROW );
-        uno::Reference< XCollection > xCol( xRange->Areas( uno::Any() ), uno::UNO_QUERY_THROW );
-        for( sal_Int32 nIdx = 1, nCount = xCol->getCount(); nIdx <= nCount; ++nIdx )
-        {
-            uno::Reference< excel::XRange > xAreaRange( xCol->Item( uno::Any( nIdx ), uno::Any() ), uno::UNO_QUERY_THROW );
-            uno::Reference< sheet::XCellRangeAddressable > xAddressable( xAreaRange->getCellRange(), uno::UNO_QUERY_THROW );
-            ScRange aScRange;
-            ScUnoConversion::FillScRange( aScRange, xAddressable->getRangeAddress() );
-            rList.push_back( aScRange );
-        }
+        uno::Reference< excel::XRange > xAreaRange( xCol->Item( uno::Any( nIdx ), uno::Any() ), uno::UNO_QUERY_THROW );
+        uno::Reference< sheet::XCellRangeAddressable > xAddressable( xAreaRange->getCellRange(), uno::UNO_QUERY_THROW );
+        ScRange aScRange;
+        ScUnoConversion::FillScRange( aScRange, xAddressable->getRangeAddress() );
+        rList.push_back( aScRange );
     }
 }
 
@@ -1105,34 +1105,34 @@ void lclIntersectRanges( ListOfScRange& rList, const uno::Any& rArg )
     ListOfScRange aList2;
     lclAddToListOfScRange( aList2, rArg );
     // do nothing, if the passed list is already empty
-    if( !rList.empty() && !aList2.empty() )
+    if( rList.empty() || aList2.empty() )
+        return;
+
+    // save original list in a local
+    ListOfScRange aList1;
+    aList1.swap( rList );
+    // join ranges from passed argument
+    lclJoinRanges( aList2 );
+    // calculate intersection of the ranges in both lists
+    for( const auto& rOuterItem : aList1 )
     {
-        // save original list in a local
-        ListOfScRange aList1;
-        aList1.swap( rList );
-        // join ranges from passed argument
-        lclJoinRanges( aList2 );
-        // calculate intersection of the ranges in both lists
-        for( const auto& rOuterItem : aList1 )
+        for( const auto& rInnerItem : aList2 )
         {
-            for( const auto& rInnerItem : aList2 )
+            if( rOuterItem.Intersects( rInnerItem ) )
             {
-                if( rOuterItem.Intersects( rInnerItem ) )
-                {
-                    ScRange aIsectRange(
-                        std::max( rOuterItem.aStart.Col(), rInnerItem.aStart.Col() ),
-                        std::max( rOuterItem.aStart.Row(), rInnerItem.aStart.Row() ),
-                        std::max( rOuterItem.aStart.Tab(), rInnerItem.aStart.Tab() ),
-                        std::min( rOuterItem.aEnd.Col(),   rInnerItem.aEnd.Col() ),
-                        std::min( rOuterItem.aEnd.Row(),   rInnerItem.aEnd.Row() ),
-                        std::min( rOuterItem.aEnd.Tab(),   rInnerItem.aEnd.Tab() ) );
-                    rList.push_back( aIsectRange );
-                }
+                ScRange aIsectRange(
+                    std::max( rOuterItem.aStart.Col(), rInnerItem.aStart.Col() ),
+                    std::max( rOuterItem.aStart.Row(), rInnerItem.aStart.Row() ),
+                    std::max( rOuterItem.aStart.Tab(), rInnerItem.aStart.Tab() ),
+                    std::min( rOuterItem.aEnd.Col(),   rInnerItem.aEnd.Col() ),
+                    std::min( rOuterItem.aEnd.Row(),   rInnerItem.aEnd.Row() ),
+                    std::min( rOuterItem.aEnd.Tab(),   rInnerItem.aEnd.Tab() ) );
+                rList.push_back( aIsectRange );
             }
         }
-        // again, join the result ranges
-        lclJoinRanges( rList );
     }
+    // again, join the result ranges
+    lclJoinRanges( rList );
 }
 
 /** Creates a VBA Range object from the passed list of ranges.

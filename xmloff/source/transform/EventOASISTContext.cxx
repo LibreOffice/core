@@ -49,24 +49,24 @@ public:
 
 XMLTransformerOASISEventMap_Impl::XMLTransformerOASISEventMap_Impl( XMLTransformerEventMapEntry const *pInit )
 {
-    if( pInit )
+    if( !pInit )
+        return;
+
+    XMLTransformerOASISEventMap_Impl::key_type aKey;
+    XMLTransformerOASISEventMap_Impl::mapped_type aData;
+    while( pInit->m_pOASISName )
     {
-        XMLTransformerOASISEventMap_Impl::key_type aKey;
-        XMLTransformerOASISEventMap_Impl::mapped_type aData;
-        while( pInit->m_pOASISName )
-        {
-            aKey.m_nPrefix = pInit->m_nOASISPrefix;
-            aKey.m_aLocalName = OUString::createFromAscii(pInit->m_pOASISName);
+        aKey.m_nPrefix = pInit->m_nOASISPrefix;
+        aKey.m_aLocalName = OUString::createFromAscii(pInit->m_pOASISName);
 
-            OSL_ENSURE( find( aKey ) == end(), "duplicate event map entry" );
+        OSL_ENSURE( find( aKey ) == end(), "duplicate event map entry" );
 
-            aData = OUString::createFromAscii(pInit->m_pOOoName);
+        aData = OUString::createFromAscii(pInit->m_pOOoName);
 
-            XMLTransformerOASISEventMap_Impl::value_type aVal( aKey, aData );
+        XMLTransformerOASISEventMap_Impl::value_type aVal( aKey, aData );
 
-            insert( aVal );
-            ++pInit;
-        }
+        insert( aVal );
+        ++pInit;
     }
 }
 

@@ -119,21 +119,22 @@ private:
 void
 XclImpPalette::ExportPalette()
 {
-    if( SfxObjectShell* pDocShell = mrRoot.GetDocShell() )
-    {
-        // copy values in color palette
-        sal_Int16 nColors =  maColorTable.size();
-        ColorVec aColors;
-        aColors.resize( nColors );
-        for( sal_uInt16 nIndex = 0; nIndex < nColors; ++nIndex )
-            aColors[ nIndex ] = GetColor( nIndex );
+    SfxObjectShell* pDocShell = mrRoot.GetDocShell();
+    if(!pDocShell)
+        return;
 
-        uno::Reference< beans::XPropertySet > xProps( pDocShell->GetModel(), uno::UNO_QUERY );
-        if ( xProps.is() )
-        {
-            uno::Reference< container::XIndexAccess > xIndex( new PaletteIndex( aColors ) );
-            xProps->setPropertyValue( "ColorPalette", uno::makeAny( xIndex ) );
-        }
+    // copy values in color palette
+    sal_Int16 nColors =  maColorTable.size();
+    ColorVec aColors;
+    aColors.resize( nColors );
+    for( sal_uInt16 nIndex = 0; nIndex < nColors; ++nIndex )
+        aColors[ nIndex ] = GetColor( nIndex );
+
+    uno::Reference< beans::XPropertySet > xProps( pDocShell->GetModel(), uno::UNO_QUERY );
+    if ( xProps.is() )
+    {
+        uno::Reference< container::XIndexAccess > xIndex( new PaletteIndex( aColors ) );
+        xProps->setPropertyValue( "ColorPalette", uno::makeAny( xIndex ) );
     }
 
 }
@@ -469,43 +470,44 @@ void XclImpFont::GuessScriptType()
     mbHasAsian = mbHasCmplx = false;
 
     // find the script types for which the font contains characters
-    if( OutputDevice* pPrinter = GetPrinter() )
-    {
-        vcl::Font aFont( maData.maName, Size( 0, 10 ) );
-        FontCharMapRef xFontCharMap;
+    OutputDevice* pPrinter = GetPrinter();
+    if(!pPrinter)
+        return;
 
-        pPrinter->SetFont( aFont );
-        if( pPrinter->GetFontCharMap( xFontCharMap ) )
-        {
-            // CJK fonts
-            mbHasAsian =
-                xFontCharMap->HasChar( 0x3041 ) ||   // 3040-309F: Hiragana
-                xFontCharMap->HasChar( 0x30A1 ) ||   // 30A0-30FF: Katakana
-                xFontCharMap->HasChar( 0x3111 ) ||   // 3100-312F: Bopomofo
-                xFontCharMap->HasChar( 0x3131 ) ||   // 3130-318F: Hangul Compatibility Jamo
-                xFontCharMap->HasChar( 0x3301 ) ||   // 3300-33FF: CJK Compatibility
-                xFontCharMap->HasChar( 0x3401 ) ||   // 3400-4DBF: CJK Unified Ideographs Extension A
-                xFontCharMap->HasChar( 0x4E01 ) ||   // 4E00-9FFF: CJK Unified Ideographs
-                xFontCharMap->HasChar( 0x7E01 ) ||   // 4E00-9FFF: CJK Unified Ideographs
-                xFontCharMap->HasChar( 0xA001 ) ||   // A001-A48F: Yi Syllables
-                xFontCharMap->HasChar( 0xAC01 ) ||   // AC00-D7AF: Hangul Syllables
-                xFontCharMap->HasChar( 0xCC01 ) ||   // AC00-D7AF: Hangul Syllables
-                xFontCharMap->HasChar( 0xF901 ) ||   // F900-FAFF: CJK Compatibility Ideographs
-                xFontCharMap->HasChar( 0xFF71 );     // FF00-FFEF: Halfwidth/Fullwidth Forms
-            // CTL fonts
-            mbHasCmplx =
-                xFontCharMap->HasChar( 0x05D1 ) ||   // 0590-05FF: Hebrew
-                xFontCharMap->HasChar( 0x0631 ) ||   // 0600-06FF: Arabic
-                xFontCharMap->HasChar( 0x0721 ) ||   // 0700-074F: Syriac
-                xFontCharMap->HasChar( 0x0911 ) ||   // 0900-0DFF: Indic scripts
-                xFontCharMap->HasChar( 0x0E01 ) ||   // 0E00-0E7F: Thai
-                xFontCharMap->HasChar( 0xFB21 ) ||   // FB1D-FB4F: Hebrew Presentation Forms
-                xFontCharMap->HasChar( 0xFB51 ) ||   // FB50-FDFF: Arabic Presentation Forms-A
-                xFontCharMap->HasChar( 0xFE71 );     // FE70-FEFF: Arabic Presentation Forms-B
-            // Western fonts
-            mbHasWstrn = (!mbHasAsian && !mbHasCmplx) || xFontCharMap->HasChar( 'A' );
-        }
-    }
+    vcl::Font aFont( maData.maName, Size( 0, 10 ) );
+    FontCharMapRef xFontCharMap;
+
+    pPrinter->SetFont( aFont );
+    if( !pPrinter->GetFontCharMap( xFontCharMap ) )
+        return;
+
+    // CJK fonts
+    mbHasAsian =
+        xFontCharMap->HasChar( 0x3041 ) ||   // 3040-309F: Hiragana
+        xFontCharMap->HasChar( 0x30A1 ) ||   // 30A0-30FF: Katakana
+        xFontCharMap->HasChar( 0x3111 ) ||   // 3100-312F: Bopomofo
+        xFontCharMap->HasChar( 0x3131 ) ||   // 3130-318F: Hangul Compatibility Jamo
+        xFontCharMap->HasChar( 0x3301 ) ||   // 3300-33FF: CJK Compatibility
+        xFontCharMap->HasChar( 0x3401 ) ||   // 3400-4DBF: CJK Unified Ideographs Extension A
+        xFontCharMap->HasChar( 0x4E01 ) ||   // 4E00-9FFF: CJK Unified Ideographs
+        xFontCharMap->HasChar( 0x7E01 ) ||   // 4E00-9FFF: CJK Unified Ideographs
+        xFontCharMap->HasChar( 0xA001 ) ||   // A001-A48F: Yi Syllables
+        xFontCharMap->HasChar( 0xAC01 ) ||   // AC00-D7AF: Hangul Syllables
+        xFontCharMap->HasChar( 0xCC01 ) ||   // AC00-D7AF: Hangul Syllables
+        xFontCharMap->HasChar( 0xF901 ) ||   // F900-FAFF: CJK Compatibility Ideographs
+        xFontCharMap->HasChar( 0xFF71 );     // FF00-FFEF: Halfwidth/Fullwidth Forms
+    // CTL fonts
+    mbHasCmplx =
+        xFontCharMap->HasChar( 0x05D1 ) ||   // 0590-05FF: Hebrew
+        xFontCharMap->HasChar( 0x0631 ) ||   // 0600-06FF: Arabic
+        xFontCharMap->HasChar( 0x0721 ) ||   // 0700-074F: Syriac
+        xFontCharMap->HasChar( 0x0911 ) ||   // 0900-0DFF: Indic scripts
+        xFontCharMap->HasChar( 0x0E01 ) ||   // 0E00-0E7F: Thai
+        xFontCharMap->HasChar( 0xFB21 ) ||   // FB1D-FB4F: Hebrew Presentation Forms
+        xFontCharMap->HasChar( 0xFB51 ) ||   // FB50-FDFF: Arabic Presentation Forms-A
+        xFontCharMap->HasChar( 0xFE71 );     // FE70-FEFF: Arabic Presentation Forms-B
+    // Western fonts
+    mbHasWstrn = (!mbHasAsian && !mbHasCmplx) || xFontCharMap->HasChar( 'A' );
 }
 
 XclImpFontBuffer::XclImpFontBuffer( const XclImpRoot& rRoot ) :
@@ -988,21 +990,21 @@ void XclImpCellBorder::FillToItemSet( SfxItemSet& rItemSet, const XclImpPalette&
             aBoxItem.SetLine( &aLine, SvxBoxItemLine::BOTTOM );
         ScfTools::PutItem( rItemSet, aBoxItem, bSkipPoolDefs );
     }
-    if( mbDiagUsed )
+    if( !mbDiagUsed )
+        return;
+
+    SvxLineItem aTLBRItem( ATTR_BORDER_TLBR );
+    SvxLineItem aBLTRItem( ATTR_BORDER_BLTR );
+    ::editeng::SvxBorderLine aLine;
+    if( lclConvertBorderLine( aLine, rPalette, mnDiagLine, mnDiagColor ) )
     {
-        SvxLineItem aTLBRItem( ATTR_BORDER_TLBR );
-        SvxLineItem aBLTRItem( ATTR_BORDER_BLTR );
-        ::editeng::SvxBorderLine aLine;
-        if( lclConvertBorderLine( aLine, rPalette, mnDiagLine, mnDiagColor ) )
-        {
-            if( mbDiagTLtoBR )
-                aTLBRItem.SetLine( &aLine );
-            if( mbDiagBLtoTR )
-                aBLTRItem.SetLine( &aLine );
-        }
-        ScfTools::PutItem( rItemSet, aTLBRItem, bSkipPoolDefs );
-        ScfTools::PutItem( rItemSet, aBLTRItem, bSkipPoolDefs );
+        if( mbDiagTLtoBR )
+            aTLBRItem.SetLine( &aLine );
+        if( mbDiagBLtoTR )
+            aBLTRItem.SetLine( &aLine );
     }
+    ScfTools::PutItem( rItemSet, aTLBRItem, bSkipPoolDefs );
+    ScfTools::PutItem( rItemSet, aBLTRItem, bSkipPoolDefs );
 }
 
 XclImpCellArea::XclImpCellArea()
@@ -1070,24 +1072,24 @@ void XclImpCellArea::FillFromCF8( sal_uInt16 nPattern, sal_uInt16 nColor, sal_uI
 
 void XclImpCellArea::FillToItemSet( SfxItemSet& rItemSet, const XclImpPalette& rPalette, bool bSkipPoolDefs ) const
 {
-    if( mbPattUsed )    // colors may be both unused in cond. formats
+    if( !mbPattUsed )    // colors may be both unused in cond. formats
+        return;
+
+    SvxBrushItem aBrushItem( ATTR_BACKGROUND );
+
+    // do not use IsTransparent() - old Calc filter writes transparency with different color indexes
+    if( mnPattern == EXC_PATT_NONE )
     {
-        SvxBrushItem aBrushItem( ATTR_BACKGROUND );
-
-        // do not use IsTransparent() - old Calc filter writes transparency with different color indexes
-        if( mnPattern == EXC_PATT_NONE )
-        {
-            aBrushItem.SetColor( COL_TRANSPARENT );
-        }
-        else
-        {
-            Color aFore( rPalette.GetColor( mbForeUsed ? mnForeColor : EXC_COLOR_WINDOWTEXT ) );
-            Color aBack( rPalette.GetColor( mbBackUsed ? mnBackColor : EXC_COLOR_WINDOWBACK ) );
-            aBrushItem.SetColor( XclTools::GetPatternColor( aFore, aBack, mnPattern ) );
-        }
-
-        ScfTools::PutItem( rItemSet, aBrushItem, bSkipPoolDefs );
+        aBrushItem.SetColor( COL_TRANSPARENT );
     }
+    else
+    {
+        Color aFore( rPalette.GetColor( mbForeUsed ? mnForeColor : EXC_COLOR_WINDOWTEXT ) );
+        Color aBack( rPalette.GetColor( mbBackUsed ? mnBackColor : EXC_COLOR_WINDOWBACK ) );
+        aBrushItem.SetColor( XclTools::GetPatternColor( aFore, aBack, mnPattern ) );
+    }
+
+    ScfTools::PutItem( rItemSet, aBrushItem, bSkipPoolDefs );
 }
 
 XclImpXF::XclImpXF( const XclImpRoot& rRoot ) :
@@ -1375,31 +1377,31 @@ void XclImpXF::ApplyPatternToAttrVector(
     }
 
     // Make sure we skip unnamed styles.
-    if (rPat.GetStyleName())
+    if (!rPat.GetStyleName())
+        return;
+
+    // Check for a gap between the last entry and this one.
+    bool bHasGap = false;
+    if (rAttrs.empty() && nRow1 > 0)
+        // First attribute range doesn't start at row 0.
+        bHasGap = true;
+
+    if (!rAttrs.empty() && rAttrs.back().nEndRow + 1 < nRow1)
+        bHasGap = true;
+
+    if (bHasGap)
     {
-        // Check for a gap between the last entry and this one.
-        bool bHasGap = false;
-        if (rAttrs.empty() && nRow1 > 0)
-            // First attribute range doesn't start at row 0.
-            bHasGap = true;
-
-        if (!rAttrs.empty() && rAttrs.back().nEndRow + 1 < nRow1)
-            bHasGap = true;
-
-        if (bHasGap)
-        {
-            // Fill this gap with the default pattern.
-            ScAttrEntry aEntry;
-            aEntry.nEndRow = nRow1 - 1;
-            aEntry.pPattern = rDoc.GetDefPattern();
-            rAttrs.push_back(aEntry);
-        }
-
+        // Fill this gap with the default pattern.
         ScAttrEntry aEntry;
-        aEntry.nEndRow = nRow2;
-        aEntry.pPattern = &rDoc.GetPool()->Put(rPat);
+        aEntry.nEndRow = nRow1 - 1;
+        aEntry.pPattern = rDoc.GetDefPattern();
         rAttrs.push_back(aEntry);
     }
+
+    ScAttrEntry aEntry;
+    aEntry.nEndRow = nRow2;
+    aEntry.pPattern = &rDoc.GetPool()->Put(rPat);
+    rAttrs.push_back(aEntry);
 }
 
 void XclImpXF::ApplyPattern(
@@ -1900,18 +1902,18 @@ void XclImpXFRangeBuffer::SetXF( const ScAddress& rScPos, sal_uInt16 nXFIndex, X
 
     // set "center across selection" and "fill" attribute for all following empty cells
     // ignore it on row default XFs
-    if( eMode != xlXFModeRow )
+    if( eMode == xlXFModeRow )
+        return;
+
+    const XclImpXF* pXF = GetXFBuffer().GetXF( nXFIndex );
+    if( pXF && ((pXF->GetHorAlign() == EXC_XF_HOR_CENTER_AS) || (pXF->GetHorAlign() == EXC_XF_HOR_FILL)) )
     {
-        const XclImpXF* pXF = GetXFBuffer().GetXF( nXFIndex );
-        if( pXF && ((pXF->GetHorAlign() == EXC_XF_HOR_CENTER_AS) || (pXF->GetHorAlign() == EXC_XF_HOR_FILL)) )
-        {
-            // expand last merged range if this attribute is set repeatedly
-            ScRange* pRange = maMergeList.empty() ? nullptr : &maMergeList.back();
-            if (pRange && (pRange->aEnd.Row() == nScRow) && (pRange->aEnd.Col() + 1 == nScCol) && (eMode == xlXFModeBlank))
-                pRange->aEnd.IncCol();
-            else if( eMode != xlXFModeBlank )   // do not merge empty cells
-                maMergeList.push_back( ScRange( nScCol, nScRow, 0 ) );
-        }
+        // expand last merged range if this attribute is set repeatedly
+        ScRange* pRange = maMergeList.empty() ? nullptr : &maMergeList.back();
+        if (pRange && (pRange->aEnd.Row() == nScRow) && (pRange->aEnd.Col() + 1 == nScCol) && (eMode == xlXFModeBlank))
+            pRange->aEnd.IncCol();
+        else if( eMode != xlXFModeBlank )   // do not merge empty cells
+            maMergeList.push_back( ScRange( nScCol, nScRow, 0 ) );
     }
 }
 

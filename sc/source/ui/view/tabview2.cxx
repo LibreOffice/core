@@ -273,27 +273,27 @@ void moveCursorByMergedCell(
                 --rRow;
         }
     }
-    if (nMovY < 0)
-    {
-        SCROW nOld = rRow;
-        if (bOriginMerged)
-        {
-            if (nOrigY > 0 && nOrigY <= rRow && rRow < nOrigY + nRowSpan - 1)
-                // Block end is still within the merged region.  Push it outside.
-                rRow = nOrigY - 1;
-        }
-        else
-        {
-            pDoc->SkipOverlapped(rCol, rRow, nTab);
-        }
+    if (nMovY >= 0)
+        return;
 
-        if (nOld > rRow)
-        {
-            // The block end has moved.  Check the protection setting and move back if needed.
-            checkBoundary(pDoc, rCol, rRow);
-            if (!isCellQualified(pDoc, rCol, rRow, nTab, bSelectLocked, bSelectUnlocked))
-                ++rRow;
-        }
+    SCROW nOld = rRow;
+    if (bOriginMerged)
+    {
+        if (nOrigY > 0 && nOrigY <= rRow && rRow < nOrigY + nRowSpan - 1)
+            // Block end is still within the merged region.  Push it outside.
+            rRow = nOrigY - 1;
+    }
+    else
+    {
+        pDoc->SkipOverlapped(rCol, rRow, nTab);
+    }
+
+    if (nOld > rRow)
+    {
+        // The block end has moved.  Check the protection setting and move back if needed.
+        checkBoundary(pDoc, rCol, rRow);
+        if (!isCellQualified(pDoc, rCol, rRow, nTab, bSelectLocked, bSelectUnlocked))
+            ++rRow;
     }
 }
 
@@ -330,79 +330,79 @@ bool ScTabView::IsMarking( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 
 void ScTabView::InitOwnBlockMode()
 {
-    if (!IsBlockMode())
-    {
-        // when there is no (old) selection anymore, delete anchor in SelectionEngine:
-        ScMarkData& rMark = aViewData.GetMarkData();
-        if (!rMark.IsMarked() && !rMark.IsMultiMarked())
-            GetSelEngine()->CursorPosChanging( false, false );
+    if (IsBlockMode())
+        return;
 
-        meBlockMode = Own;
-        nBlockStartX = 0;
-        nBlockStartY = 0;
-        nBlockStartZ = 0;
-        nBlockEndX = 0;
-        nBlockEndY = 0;
-        nBlockEndZ = 0;
+    // when there is no (old) selection anymore, delete anchor in SelectionEngine:
+    ScMarkData& rMark = aViewData.GetMarkData();
+    if (!rMark.IsMarked() && !rMark.IsMultiMarked())
+        GetSelEngine()->CursorPosChanging( false, false );
 
-        SelectionChanged();     // status is checked with mark set
-    }
+    meBlockMode = Own;
+    nBlockStartX = 0;
+    nBlockStartY = 0;
+    nBlockStartZ = 0;
+    nBlockEndX = 0;
+    nBlockEndY = 0;
+    nBlockEndZ = 0;
+
+    SelectionChanged();     // status is checked with mark set
 }
 
 void ScTabView::InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                                bool bTestNeg, bool bCols, bool bRows, bool bForceNeg )
 {
-    if (!IsBlockMode())
+    if (IsBlockMode())
+        return;
+
+    auto pDoc = aViewData.GetDocument();
+    if (!pDoc->ValidCol(nCurX)) nCurX = pDoc->MaxCol();
+    if (!pDoc->ValidRow(nCurY)) nCurY = pDoc->MaxRow();
+
+    ScMarkData& rMark = aViewData.GetMarkData();
+    SCTAB nTab = aViewData.GetTabNo();
+
+    //  unmark part?
+    if (bForceNeg)
+        bBlockNeg = true;
+    else if (bTestNeg)
     {
-        auto pDoc = aViewData.GetDocument();
-        if (!pDoc->ValidCol(nCurX)) nCurX = pDoc->MaxCol();
-        if (!pDoc->ValidRow(nCurY)) nCurY = pDoc->MaxRow();
-
-        ScMarkData& rMark = aViewData.GetMarkData();
-        SCTAB nTab = aViewData.GetTabNo();
-
-        //  unmark part?
-        if (bForceNeg)
-            bBlockNeg = true;
-        else if (bTestNeg)
-        {
-            if ( bCols )
-                bBlockNeg = rMark.IsColumnMarked( nCurX );
-            else if ( bRows )
-                bBlockNeg = rMark.IsRowMarked( nCurY );
-            else
-                bBlockNeg = rMark.IsCellMarked( nCurX, nCurY );
-        }
+        if ( bCols )
+            bBlockNeg = rMark.IsColumnMarked( nCurX );
+        else if ( bRows )
+            bBlockNeg = rMark.IsRowMarked( nCurY );
         else
-            bBlockNeg = false;
-        rMark.SetMarkNegative(bBlockNeg);
-
-        meBlockMode = Normal;
-        bBlockCols = bCols;
-        bBlockRows = bRows;
-        nBlockStartX = nBlockStartXOrig = nCurX;
-        nBlockStartY = nBlockStartYOrig = nCurY;
-        nBlockStartZ = nCurZ;
-        nBlockEndX = nOldCurX = nBlockStartX;
-        nBlockEndY = nOldCurY = nBlockStartY;
-        nBlockEndZ = nBlockStartZ;
-
-        if (bBlockCols)
-        {
-            nBlockStartY = nBlockStartYOrig = 0;
-            nBlockEndY = pDoc->MaxRow();
-        }
-
-        if (bBlockRows)
-        {
-            nBlockStartX = nBlockStartXOrig = 0;
-            nBlockEndX = pDoc->MaxCol();
-        }
-
-        rMark.SetMarkArea( ScRange( nBlockStartX,nBlockStartY, nTab, nBlockEndX,nBlockEndY, nTab ) );
-
-        UpdateSelectionOverlay();
+            bBlockNeg = rMark.IsCellMarked( nCurX, nCurY );
     }
+    else
+        bBlockNeg = false;
+    rMark.SetMarkNegative(bBlockNeg);
+
+    meBlockMode = Normal;
+    bBlockCols = bCols;
+    bBlockRows = bRows;
+    nBlockStartX = nBlockStartXOrig = nCurX;
+    nBlockStartY = nBlockStartYOrig = nCurY;
+    nBlockStartZ = nCurZ;
+    nBlockEndX = nOldCurX = nBlockStartX;
+    nBlockEndY = nOldCurY = nBlockStartY;
+    nBlockEndZ = nBlockStartZ;
+
+    if (bBlockCols)
+    {
+        nBlockStartY = nBlockStartYOrig = 0;
+        nBlockEndY = pDoc->MaxRow();
+    }
+
+    if (bBlockRows)
+    {
+        nBlockStartX = nBlockStartXOrig = 0;
+        nBlockEndX = pDoc->MaxCol();
+    }
+
+    rMark.SetMarkArea( ScRange( nBlockStartX,nBlockStartY, nTab, nBlockEndX,nBlockEndY, nTab ) );
+
+    UpdateSelectionOverlay();
 }
 
 void ScTabView::DoneBlockMode( bool bContinue )
@@ -411,33 +411,33 @@ void ScTabView::DoneBlockMode( bool bContinue )
     // because the other engine does not have any anchor.
     // bMoveIsShift prevents the selection to be canceled.
 
-    if (IsBlockMode() && !bMoveIsShift)
+    if (!(IsBlockMode() && !bMoveIsShift))
+        return;
+
+    ScMarkData& rMark = aViewData.GetMarkData();
+    bool bFlag = rMark.GetMarkingFlag();
+    rMark.SetMarking(false);
+
+    if (bBlockNeg && !bContinue)
+        rMark.MarkToMulti();
+
+    if (bContinue)
+        rMark.MarkToMulti();
+    else
     {
-        ScMarkData& rMark = aViewData.GetMarkData();
-        bool bFlag = rMark.GetMarkingFlag();
-        rMark.SetMarking(false);
-
-        if (bBlockNeg && !bContinue)
-            rMark.MarkToMulti();
-
-        if (bContinue)
-            rMark.MarkToMulti();
+        // the sheet may be invalid at this point because DoneBlockMode from SetTabNo is
+        // called (for example, when the current sheet is closed from another View)
+        SCTAB nTab = aViewData.GetTabNo();
+        ScDocument* pDoc = aViewData.GetDocument();
+        if ( pDoc->HasTable(nTab) )
+            PaintBlock( true );                             // true -> delete block
         else
-        {
-            // the sheet may be invalid at this point because DoneBlockMode from SetTabNo is
-            // called (for example, when the current sheet is closed from another View)
-            SCTAB nTab = aViewData.GetTabNo();
-            ScDocument* pDoc = aViewData.GetDocument();
-            if ( pDoc->HasTable(nTab) )
-                PaintBlock( true );                             // true -> delete block
-            else
-                rMark.ResetMark();
-        }
-        meBlockMode = None;
-
-        rMark.SetMarking(bFlag);
-        rMark.SetMarkNegative(false);
+            rMark.ResetMark();
     }
+    meBlockMode = None;
+
+    rMark.SetMarking(bFlag);
+    rMark.SetMarkNegative(false);
 }
 
 bool ScTabView::IsBlockMode() const
@@ -1012,52 +1012,52 @@ void ScTabView::PaintBlock( bool bReset )
     ScMarkData& rMark = aViewData.GetMarkData();
     SCTAB nTab = aViewData.GetTabNo();
     bool bMulti = rMark.IsMultiMarked();
-    if (rMark.IsMarked() || bMulti)
+    if (!(rMark.IsMarked() || bMulti))
+        return;
+
+    ScRange aMarkRange;
+    HideAllCursors();
+    if (bMulti)
     {
-        ScRange aMarkRange;
-        HideAllCursors();
-        if (bMulti)
+        bool bFlag = rMark.GetMarkingFlag();
+        rMark.SetMarking(false);
+        rMark.MarkToMulti();
+        rMark.GetMultiMarkArea(aMarkRange);
+        rMark.MarkToSimple();
+        rMark.SetMarking(bFlag);
+    }
+    else
+        rMark.GetMarkArea(aMarkRange);
+
+    nBlockStartX = aMarkRange.aStart.Col();
+    nBlockStartY = aMarkRange.aStart.Row();
+    nBlockStartZ = aMarkRange.aStart.Tab();
+    nBlockEndX = aMarkRange.aEnd.Col();
+    nBlockEndY = aMarkRange.aEnd.Row();
+    nBlockEndZ = aMarkRange.aEnd.Tab();
+
+    bool bDidReset = false;
+
+    if ( nTab>=nBlockStartZ && nTab<=nBlockEndZ )
+    {
+        if ( bReset )
         {
-            bool bFlag = rMark.GetMarkingFlag();
-            rMark.SetMarking(false);
-            rMark.MarkToMulti();
-            rMark.GetMultiMarkArea(aMarkRange);
-            rMark.MarkToSimple();
-            rMark.SetMarking(bFlag);
+            // Inverting when deleting only on active View
+            if ( aViewData.IsActive() )
+            {
+                rMark.ResetMark();
+                UpdateSelectionOverlay();
+                bDidReset = true;
+            }
         }
         else
-            rMark.GetMarkArea(aMarkRange);
-
-        nBlockStartX = aMarkRange.aStart.Col();
-        nBlockStartY = aMarkRange.aStart.Row();
-        nBlockStartZ = aMarkRange.aStart.Tab();
-        nBlockEndX = aMarkRange.aEnd.Col();
-        nBlockEndY = aMarkRange.aEnd.Row();
-        nBlockEndZ = aMarkRange.aEnd.Tab();
-
-        bool bDidReset = false;
-
-        if ( nTab>=nBlockStartZ && nTab<=nBlockEndZ )
-        {
-            if ( bReset )
-            {
-                // Inverting when deleting only on active View
-                if ( aViewData.IsActive() )
-                {
-                    rMark.ResetMark();
-                    UpdateSelectionOverlay();
-                    bDidReset = true;
-                }
-            }
-            else
-                PaintMarks( nBlockStartX, nBlockStartY, nBlockEndX, nBlockEndY );
-        }
-
-        if ( bReset && !bDidReset )
-            rMark.ResetMark();
-
-        ShowAllCursors();
+            PaintMarks( nBlockStartX, nBlockStartY, nBlockEndX, nBlockEndY );
     }
+
+    if ( bReset && !bDidReset )
+        rMark.ResetMark();
+
+    ShowAllCursors();
 }
 
 void ScTabView::SelectAll( bool bContinue )
@@ -1392,19 +1392,19 @@ void ScTabView::HideNoteMarker()
 
 void ScTabView::MakeDrawLayer()
 {
-    if (!pDrawView)
+    if (pDrawView)
+        return;
+
+    aViewData.GetDocShell()->MakeDrawLayer();
+
+    // pDrawView is set per Notify
+    OSL_ENSURE(pDrawView,"ScTabView::MakeDrawLayer does not work");
+
+    for(VclPtr<ScGridWindow> & pWin : pGridWin)
     {
-        aViewData.GetDocShell()->MakeDrawLayer();
-
-        // pDrawView is set per Notify
-        OSL_ENSURE(pDrawView,"ScTabView::MakeDrawLayer does not work");
-
-        for(VclPtr<ScGridWindow> & pWin : pGridWin)
+        if(pWin)
         {
-            if(pWin)
-            {
-                pWin->DrawLayerCreated();
-            }
+            pWin->DrawLayerCreated();
         }
     }
 }

@@ -203,25 +203,25 @@ FT_FaceRec_* FreetypeFontInfo::GetFaceFT()
 void FreetypeFont::SetFontVariationsOnHBFont(hb_font_t* pHbFace) const
 {
     sal_uInt32 nFaceVariation = mxFontInfo->GetFontFaceVariation();
-    if (maFaceFT && nFaceVariation)
+    if (!(maFaceFT && nFaceVariation))
+        return;
+
+    FT_MM_Var *pFtMMVar;
+    if (FT_Get_MM_Var(maFaceFT, &pFtMMVar) != 0)
+        return;
+
+    if (nFaceVariation <= pFtMMVar->num_namedstyles)
     {
-        FT_MM_Var *pFtMMVar;
-        if (FT_Get_MM_Var(maFaceFT, &pFtMMVar) == 0)
+        FT_Var_Named_Style *instance = &pFtMMVar->namedstyle[nFaceVariation - 1];
+        std::vector<hb_variation_t> aVariations(pFtMMVar->num_axis);
+        for (FT_UInt i = 0; i < pFtMMVar->num_axis; ++i)
         {
-            if (nFaceVariation <= pFtMMVar->num_namedstyles)
-            {
-                FT_Var_Named_Style *instance = &pFtMMVar->namedstyle[nFaceVariation - 1];
-                std::vector<hb_variation_t> aVariations(pFtMMVar->num_axis);
-                for (FT_UInt i = 0; i < pFtMMVar->num_axis; ++i)
-                {
-                    aVariations[i].tag = pFtMMVar->axis[i].tag;
-                    aVariations[i].value = instance->coords[i] / 65536.0;
-                }
-                hb_font_set_variations(pHbFace, aVariations.data(), aVariations.size());
-            }
-            dlFT_Done_MM_Var(aLibFT, pFtMMVar);
+            aVariations[i].tag = pFtMMVar->axis[i].tag;
+            aVariations[i].value = instance->coords[i] / 65536.0;
         }
+        hb_font_set_variations(pHbFace, aVariations.data(), aVariations.size());
     }
+    dlFT_Done_MM_Var(aLibFT, pFtMMVar);
 }
 
 void FreetypeFontInfo::ReleaseFaceFT()

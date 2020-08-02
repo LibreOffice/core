@@ -148,51 +148,51 @@ void SdrMarkList::ForceSort() const
 
 void SdrMarkList::ImpForceSort()
 {
-    if(!mbSorted)
+    if(mbSorted)
+        return;
+
+    mbSorted = true;
+    size_t nCount = maList.size();
+
+    // remove invalid
+    if(nCount > 0 )
     {
-        mbSorted = true;
-        size_t nCount = maList.size();
+        maList.erase(std::remove_if(maList.begin(), maList.end(),
+            [](std::unique_ptr<SdrMark>& rItem) { return rItem->GetMarkedSdrObj() == nullptr; }),
+            maList.end());
+        nCount = maList.size();
+    }
 
-        // remove invalid
-        if(nCount > 0 )
+    if(nCount <= 1)
+        return;
+
+    std::sort(maList.begin(), maList.end(), ImpSdrMarkListSorter);
+
+    // remove duplicates
+    if(maList.size() <= 1)
+        return;
+
+    SdrMark* pCurrent = maList.back().get();
+    for (size_t count = maList.size() - 1; count; --count)
+    {
+        size_t i = count - 1;
+        SdrMark* pCmp = maList[i].get();
+        assert(pCurrent->GetMarkedSdrObj());
+        if(pCurrent->GetMarkedSdrObj() == pCmp->GetMarkedSdrObj())
         {
-            maList.erase(std::remove_if(maList.begin(), maList.end(),
-                [](std::unique_ptr<SdrMark>& rItem) { return rItem->GetMarkedSdrObj() == nullptr; }),
-                maList.end());
-            nCount = maList.size();
+            // Con1/Con2 Merging
+            if(pCmp->IsCon1())
+                pCurrent->SetCon1(true);
+
+            if(pCmp->IsCon2())
+                pCurrent->SetCon2(true);
+
+            // delete pCmp
+            maList.erase(maList.begin() + i);
         }
-
-        if(nCount > 1)
+        else
         {
-            std::sort(maList.begin(), maList.end(), ImpSdrMarkListSorter);
-
-            // remove duplicates
-            if(maList.size() > 1)
-            {
-                SdrMark* pCurrent = maList.back().get();
-                for (size_t count = maList.size() - 1; count; --count)
-                {
-                    size_t i = count - 1;
-                    SdrMark* pCmp = maList[i].get();
-                    assert(pCurrent->GetMarkedSdrObj());
-                    if(pCurrent->GetMarkedSdrObj() == pCmp->GetMarkedSdrObj())
-                    {
-                        // Con1/Con2 Merging
-                        if(pCmp->IsCon1())
-                            pCurrent->SetCon1(true);
-
-                        if(pCmp->IsCon2())
-                            pCurrent->SetCon2(true);
-
-                        // delete pCmp
-                        maList.erase(maList.begin() + i);
-                    }
-                    else
-                    {
-                        pCurrent = pCmp;
-                    }
-                }
-            }
+            pCurrent = pCmp;
         }
     }
 }
@@ -694,96 +694,96 @@ namespace sdr
 
     void ViewSelection::ImplCollectCompleteSelection(SdrObject* pObj)
     {
-        if(pObj)
+        if(!pObj)
+            return;
+
+        bool bIsGroup(pObj->IsGroupObject());
+
+        if(bIsGroup && dynamic_cast< const E3dObject* >(pObj) != nullptr && dynamic_cast< const E3dScene* >(pObj) == nullptr)
         {
-            bool bIsGroup(pObj->IsGroupObject());
-
-            if(bIsGroup && dynamic_cast< const E3dObject* >(pObj) != nullptr && dynamic_cast< const E3dScene* >(pObj) == nullptr)
-            {
-                bIsGroup = false;
-            }
-
-            if(bIsGroup)
-            {
-                SdrObjList* pList = pObj->GetSubList();
-
-                for(size_t a = 0; a < pList->GetObjCount(); ++a)
-                {
-                    SdrObject* pObj2 = pList->GetObj(a);
-                    ImplCollectCompleteSelection(pObj2);
-                }
-            }
-
-            maAllMarkedObjects.push_back(pObj);
+            bIsGroup = false;
         }
+
+        if(bIsGroup)
+        {
+            SdrObjList* pList = pObj->GetSubList();
+
+            for(size_t a = 0; a < pList->GetObjCount(); ++a)
+            {
+                SdrObject* pObj2 = pList->GetObj(a);
+                ImplCollectCompleteSelection(pObj2);
+            }
+        }
+
+        maAllMarkedObjects.push_back(pObj);
     }
 
     void ViewSelection::ImpForceEdgesOfMarkedNodes()
     {
-        if(mbEdgesOfMarkedNodesDirty)
+        if(!mbEdgesOfMarkedNodesDirty)
+            return;
+
+        mbEdgesOfMarkedNodesDirty = false;
+        maMarkedObjectList.ForceSort();
+        maEdgesOfMarkedNodes.Clear();
+        maMarkedEdgesOfMarkedNodes.Clear();
+        maAllMarkedObjects.clear();
+
+        // GetMarkCount after ForceSort
+        const size_t nMarkCount(maMarkedObjectList.GetMarkCount());
+
+        for(size_t a = 0; a < nMarkCount; ++a)
         {
-            mbEdgesOfMarkedNodesDirty = false;
-            maMarkedObjectList.ForceSort();
-            maEdgesOfMarkedNodes.Clear();
-            maMarkedEdgesOfMarkedNodes.Clear();
-            maAllMarkedObjects.clear();
+            SdrObject* pCandidate = maMarkedObjectList.GetMark(a)->GetMarkedSdrObj();
 
-            // GetMarkCount after ForceSort
-            const size_t nMarkCount(maMarkedObjectList.GetMarkCount());
-
-            for(size_t a = 0; a < nMarkCount; ++a)
+            if(pCandidate)
             {
-                SdrObject* pCandidate = maMarkedObjectList.GetMark(a)->GetMarkedSdrObj();
+                // build transitive hull
+                ImplCollectCompleteSelection(pCandidate);
 
-                if(pCandidate)
+                // travel over broadcaster/listener to access edges connected to the selected object
+                const SfxBroadcaster* pBC = pCandidate->GetBroadcaster();
+
+                if(pBC)
                 {
-                    // build transitive hull
-                    ImplCollectCompleteSelection(pCandidate);
+                    const size_t nLstCnt(pBC->GetSizeOfVector());
 
-                    // travel over broadcaster/listener to access edges connected to the selected object
-                    const SfxBroadcaster* pBC = pCandidate->GetBroadcaster();
-
-                    if(pBC)
+                    for(size_t nl=0; nl < nLstCnt; ++nl)
                     {
-                        const size_t nLstCnt(pBC->GetSizeOfVector());
+                        SfxListener* pLst = pBC->GetListener(nl);
+                        SdrEdgeObj* pEdge = dynamic_cast<SdrEdgeObj*>( pLst );
 
-                        for(size_t nl=0; nl < nLstCnt; ++nl)
+                        if(pEdge && pEdge->IsInserted() && pEdge->getSdrPageFromSdrObject() == pCandidate->getSdrPageFromSdrObject())
                         {
-                            SfxListener* pLst = pBC->GetListener(nl);
-                            SdrEdgeObj* pEdge = dynamic_cast<SdrEdgeObj*>( pLst );
+                            SdrMark aM(pEdge, maMarkedObjectList.GetMark(a)->GetPageView());
 
-                            if(pEdge && pEdge->IsInserted() && pEdge->getSdrPageFromSdrObject() == pCandidate->getSdrPageFromSdrObject())
+                            if(pEdge->GetConnectedNode(true) == pCandidate)
                             {
-                                SdrMark aM(pEdge, maMarkedObjectList.GetMark(a)->GetPageView());
+                                aM.SetCon1(true);
+                            }
 
-                                if(pEdge->GetConnectedNode(true) == pCandidate)
-                                {
-                                    aM.SetCon1(true);
-                                }
+                            if(pEdge->GetConnectedNode(false) == pCandidate)
+                            {
+                                aM.SetCon2(true);
+                            }
 
-                                if(pEdge->GetConnectedNode(false) == pCandidate)
-                                {
-                                    aM.SetCon2(true);
-                                }
-
-                                if(SAL_MAX_SIZE == maMarkedObjectList.FindObject(pEdge))
-                                {
-                                    // check if it itself is selected
-                                    maEdgesOfMarkedNodes.InsertEntry(aM);
-                                }
-                                else
-                                {
-                                    maMarkedEdgesOfMarkedNodes.InsertEntry(aM);
-                                }
+                            if(SAL_MAX_SIZE == maMarkedObjectList.FindObject(pEdge))
+                            {
+                                // check if it itself is selected
+                                maEdgesOfMarkedNodes.InsertEntry(aM);
+                            }
+                            else
+                            {
+                                maMarkedEdgesOfMarkedNodes.InsertEntry(aM);
                             }
                         }
                     }
                 }
             }
-
-            maEdgesOfMarkedNodes.ForceSort();
-            maMarkedEdgesOfMarkedNodes.ForceSort();
         }
+
+        maEdgesOfMarkedNodes.ForceSort();
+        maMarkedEdgesOfMarkedNodes.ForceSort();
     }
 } // end of namespace sdr
 

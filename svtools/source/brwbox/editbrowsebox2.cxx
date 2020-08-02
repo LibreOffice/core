@@ -146,24 +146,24 @@ void EditBrowseBox::DetermineFocus( const GetFocusFlags _nGetFocusFlags )
     long nRows = GetRowCount();
     sal_uInt16 nCols = ColCount();
 
-    if ( ( nRows > 0 ) && ( nCols > 0 ) )
+    if (( nRows <= 0 ) || ( nCols <= 0 ))
+        return;
+
+    if ( _nGetFocusFlags & GetFocusFlags::Forward )
     {
-        if ( _nGetFocusFlags & GetFocusFlags::Forward )
+        if ( GetColumnId( 0 ) != HandleColumnId )
         {
-            if ( GetColumnId( 0 ) != HandleColumnId )
-            {
-                GoToRowColumnId( 0, GetColumnId( 0 ) );
-            }
-            else
-            {   // the first column is the handle column -> not focussable
-                if ( nCols > 1 )
-                    GoToRowColumnId( 0, GetColumnId( 1 ) );
-            }
+            GoToRowColumnId( 0, GetColumnId( 0 ) );
         }
-        else if ( _nGetFocusFlags & GetFocusFlags::Backward )
-        {
-            GoToRowColumnId( nRows - 1, GetColumnId( nCols -1 ) );
+        else
+        {   // the first column is the handle column -> not focussable
+            if ( nCols > 1 )
+                GoToRowColumnId( 0, GetColumnId( 1 ) );
         }
+    }
+    else if ( _nGetFocusFlags & GetFocusFlags::Backward )
+    {
+        GoToRowColumnId( nRows - 1, GetColumnId( nCols -1 ) );
     }
 }
 

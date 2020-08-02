@@ -445,20 +445,20 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::addAccessibleEventListener( const R
 
 void SAL_CALL SvxGraphCtrlAccessibleContext::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
 {
-    if (xListener.is())
-    {
-        ::SolarMutexGuard aGuard;
+    if (!xListener.is())
+        return;
 
-        sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, xListener );
-        if ( !nListenerCount )
-        {
-            // no listeners anymore
-            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-            // and at least to us not firing any events anymore, in case somebody calls
-            // NotifyAccessibleEvent, again
-            comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
-            mnClientId = 0;
-        }
+    ::SolarMutexGuard aGuard;
+
+    sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, xListener );
+    if ( !nListenerCount )
+    {
+        // no listeners anymore
+        // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
+        // and at least to us not firing any events anymore, in case somebody calls
+        // NotifyAccessibleEvent, again
+        comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
+        mnClientId = 0;
     }
 }
 
@@ -598,25 +598,25 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::deselectAccessibleChild( sal_Int32 
 
     checkChildIndexOnSelection( nIndex );
 
-    if( mpView )
+    if( !mpView )
+        return;
+
+    const SdrMarkList& rList = mpView->GetMarkedObjectList();
+
+    SdrObject* pObj = getSdrObject( nIndex );
+    if( !pObj )
+        return;
+
+    SdrMarkList aRefList( rList );
+
+    SdrPageView* pPV = mpView->GetSdrPageView();
+    mpView->UnmarkAllObj( pPV );
+
+    const size_t nCount = aRefList.GetMarkCount();
+    for( size_t nMark = 0; nMark < nCount; ++nMark )
     {
-        const SdrMarkList& rList = mpView->GetMarkedObjectList();
-
-        SdrObject* pObj = getSdrObject( nIndex );
-        if( pObj )
-        {
-            SdrMarkList aRefList( rList );
-
-            SdrPageView* pPV = mpView->GetSdrPageView();
-            mpView->UnmarkAllObj( pPV );
-
-            const size_t nCount = aRefList.GetMarkCount();
-            for( size_t nMark = 0; nMark < nCount; ++nMark )
-            {
-                if( aRefList.GetMark(nMark)->GetMarkedSdrObj() != pObj )
-                    mpView->MarkObj( aRefList.GetMark(nMark)->GetMarkedSdrObj(), pPV );
-            }
-        }
+        if( aRefList.GetMark(nMark)->GetMarkedSdrObj() != pObj )
+            mpView->MarkObj( aRefList.GetMark(nMark)->GetMarkedSdrObj(), pPV );
     }
 }
 

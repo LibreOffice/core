@@ -1314,21 +1314,21 @@ css::uno::Any SAL_CALL ContentEventListener_Impl::queryInterface( const css::uno
 // virtual
 void SAL_CALL ContentEventListener_Impl::contentEvent( const ContentEvent& evt )
 {
-    if ( evt.Source == m_rContent.m_xContent )
+    if ( evt.Source != m_rContent.m_xContent )
+        return;
+
+    switch ( evt.Action )
     {
-        switch ( evt.Action )
-        {
-            case ContentAction::DELETED:
-                m_rContent.reinit( Reference< XContent >() );
-                break;
+        case ContentAction::DELETED:
+            m_rContent.reinit( Reference< XContent >() );
+            break;
 
-            case ContentAction::EXCHANGED:
-                m_rContent.reinit( evt.Content );
-                break;
+        case ContentAction::EXCHANGED:
+            m_rContent.reinit( evt.Content );
+            break;
 
-            default:
-                break;
-        }
+        default:
+            break;
     }
 }
 

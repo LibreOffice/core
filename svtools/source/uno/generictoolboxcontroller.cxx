@@ -180,27 +180,27 @@ void GenericToolboxController::statusChanged( const FeatureStateEvent& Event )
         m_xToolbox->SetItemBits( m_nID, nItemBits );
     }
 
-    if (m_pToolbox)
+    if (!m_pToolbox)
+        return;
+
+    OString sId = m_aCommandURL.toUtf8();
+
+    m_pToolbox->set_item_sensitive(sId, Event.IsEnabled);
+
+    bool        bValue;
+    OUString    aStrValue;
+
+    if ( Event.State >>= bValue )
     {
-        OString sId = m_aCommandURL.toUtf8();
-
-        m_pToolbox->set_item_sensitive(sId, Event.IsEnabled);
-
-        bool        bValue;
-        OUString    aStrValue;
-
-        if ( Event.State >>= bValue )
-        {
-            // Boolean, treat it as checked/unchecked
-            m_pToolbox->set_item_active(sId, bValue);
-        }
-        else if ( Event.State >>= aStrValue )
-        {
-            m_pToolbox->set_item_label(sId, aStrValue);
-        }
-        else
-            m_pToolbox->set_item_active(sId, false);
+        // Boolean, treat it as checked/unchecked
+        m_pToolbox->set_item_active(sId, bValue);
     }
+    else if ( Event.State >>= aStrValue )
+    {
+        m_pToolbox->set_item_label(sId, aStrValue);
+    }
+    else
+        m_pToolbox->set_item_active(sId, false);
 }
 
 IMPL_STATIC_LINK( GenericToolboxController, ExecuteHdl_Impl, void*, p, void )

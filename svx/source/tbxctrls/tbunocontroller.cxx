@@ -422,41 +422,41 @@ void SAL_CALL FontHeightToolBoxControl::dispose()
 void SAL_CALL FontHeightToolBoxControl::statusChanged(
     const frame::FeatureStateEvent& rEvent )
 {
-    if ( m_pBox )
-    {
-        SolarMutexGuard aSolarMutexGuard;
-        if (rEvent.FeatureURL.Path == "FontHeight")
-        {
-            if ( rEvent.IsEnabled )
-            {
-                m_pBox->set_sensitive(true);
-                frame::status::FontHeight aFontHeight;
-                if ( rEvent.State >>= aFontHeight )
-                    m_pBox->statusChanged_Impl( long( 10. * aFontHeight.Height ), false );
-                else
-                    m_pBox->statusChanged_Impl( long( -1 ), true );
-            }
-            else
-            {
-                m_pBox->set_sensitive(false);
-                m_pBox->statusChanged_Impl( long( -1 ), true );
-            }
+    if ( !m_pBox )
+        return;
 
-            if (m_pToolbar)
-                m_pToolbar->set_item_sensitive(m_aCommandURL.toUtf8(), rEvent.IsEnabled);
-            else
-            {
-                ToolBox* pToolBox = nullptr;
-                sal_uInt16 nId = 0;
-                if (getToolboxId(nId, &pToolBox))
-                    pToolBox->EnableItem(nId, rEvent.IsEnabled);
-            }
-        }
-        else if ( rEvent.FeatureURL.Path == "CharFontName" )
+    SolarMutexGuard aSolarMutexGuard;
+    if (rEvent.FeatureURL.Path == "FontHeight")
+    {
+        if ( rEvent.IsEnabled )
         {
-            if ( rEvent.State >>= m_aCurrentFont )
-                m_pBox->UpdateFont( m_aCurrentFont );
+            m_pBox->set_sensitive(true);
+            frame::status::FontHeight aFontHeight;
+            if ( rEvent.State >>= aFontHeight )
+                m_pBox->statusChanged_Impl( long( 10. * aFontHeight.Height ), false );
+            else
+                m_pBox->statusChanged_Impl( long( -1 ), true );
         }
+        else
+        {
+            m_pBox->set_sensitive(false);
+            m_pBox->statusChanged_Impl( long( -1 ), true );
+        }
+
+        if (m_pToolbar)
+            m_pToolbar->set_item_sensitive(m_aCommandURL.toUtf8(), rEvent.IsEnabled);
+        else
+        {
+            ToolBox* pToolBox = nullptr;
+            sal_uInt16 nId = 0;
+            if (getToolboxId(nId, &pToolBox))
+                pToolBox->EnableItem(nId, rEvent.IsEnabled);
+        }
+    }
+    else if ( rEvent.FeatureURL.Path == "CharFontName" )
+    {
+        if ( rEvent.State >>= m_aCurrentFont )
+            m_pBox->UpdateFont( m_aCurrentFont );
     }
 }
 

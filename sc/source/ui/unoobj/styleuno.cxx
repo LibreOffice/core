@@ -586,29 +586,29 @@ void ScStyleFamiliesObj::loadStylesFromDocShell( ScDocShell* pSource,
                         const uno::Sequence<beans::PropertyValue>& aOptions )
 {
 
-    if ( pSource && pDocShell )
+    if ( !(pSource && pDocShell) )
+        return;
+
+    //  collect options
+
+    bool bLoadReplace = true;           // defaults
+    bool bLoadCellStyles = true;
+    bool bLoadPageStyles = true;
+
+    for (const beans::PropertyValue& rProp : aOptions)
     {
-        //  collect options
+        OUString aPropName(rProp.Name);
 
-        bool bLoadReplace = true;           // defaults
-        bool bLoadCellStyles = true;
-        bool bLoadPageStyles = true;
-
-        for (const beans::PropertyValue& rProp : aOptions)
-        {
-            OUString aPropName(rProp.Name);
-
-            if (aPropName == SC_UNONAME_OVERWSTL)
-                bLoadReplace = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
-            else if (aPropName == SC_UNONAME_LOADCELL)
-                bLoadCellStyles = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
-            else if (aPropName == SC_UNONAME_LOADPAGE)
-                bLoadPageStyles = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
-        }
-
-        pDocShell->LoadStylesArgs( *pSource, bLoadReplace, bLoadCellStyles, bLoadPageStyles );
-        pDocShell->SetDocumentModified();   // paint is inside LoadStyles
+        if (aPropName == SC_UNONAME_OVERWSTL)
+            bLoadReplace = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
+        else if (aPropName == SC_UNONAME_LOADCELL)
+            bLoadCellStyles = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
+        else if (aPropName == SC_UNONAME_LOADPAGE)
+            bLoadPageStyles = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
     }
+
+    pDocShell->LoadStylesArgs( *pSource, bLoadReplace, bLoadCellStyles, bLoadPageStyles );
+    pDocShell->SetDocumentModified();   // paint is inside LoadStyles
 }
 
 ScStyleFamilyObj::ScStyleFamilyObj(ScDocShell* pDocSh, SfxStyleFamily eFam) :
@@ -1026,46 +1026,46 @@ void SAL_CALL ScStyleObj::setParentStyle( const OUString& rParentStyle )
 {
     SolarMutexGuard aGuard;
     SfxStyleSheetBase* pStyle = GetStyle_Impl();
-    if (pStyle)
+    if (!pStyle)
+        return;
+
+    //  cell styles cannot be modified if any sheet is protected
+    if ( eFamily == SfxStyleFamily::Para && lcl_AnyTabProtected( pDocShell->GetDocument() ) )
+        return;         //! exception?
+
+    //! DocFunc function??
+    //! Undo ?????????????
+
+    OUString aString(ScStyleNameConversion::ProgrammaticToDisplayName( rParentStyle, eFamily ));
+    bool bOk = pStyle->SetParent( aString );
+    if (!bOk)
+        return;
+
+    //  as by setPropertyValue
+
+    ScDocument& rDoc = pDocShell->GetDocument();
+    if ( eFamily == SfxStyleFamily::Para )
     {
-        //  cell styles cannot be modified if any sheet is protected
-        if ( eFamily == SfxStyleFamily::Para && lcl_AnyTabProtected( pDocShell->GetDocument() ) )
-            return;         //! exception?
+        // update line height
 
-        //! DocFunc function??
-        //! Undo ?????????????
+        ScopedVclPtrInstance< VirtualDevice > pVDev;
+        Point aLogic = pVDev->LogicToPixel( Point(1000,1000), MapMode(MapUnit::MapTwip));
+        double nPPTX = aLogic.X() / 1000.0;
+        double nPPTY = aLogic.Y() / 1000.0;
+        Fraction aZoom(1,1);
+        rDoc.StyleSheetChanged( pStyle, false, pVDev, nPPTX, nPPTY, aZoom, aZoom );
 
-        OUString aString(ScStyleNameConversion::ProgrammaticToDisplayName( rParentStyle, eFamily ));
-        bool bOk = pStyle->SetParent( aString );
-        if (bOk)
+        if (!rDoc.IsImportingXML())
         {
-            //  as by setPropertyValue
-
-            ScDocument& rDoc = pDocShell->GetDocument();
-            if ( eFamily == SfxStyleFamily::Para )
-            {
-                // update line height
-
-                ScopedVclPtrInstance< VirtualDevice > pVDev;
-                Point aLogic = pVDev->LogicToPixel( Point(1000,1000), MapMode(MapUnit::MapTwip));
-                double nPPTX = aLogic.X() / 1000.0;
-                double nPPTY = aLogic.Y() / 1000.0;
-                Fraction aZoom(1,1);
-                rDoc.StyleSheetChanged( pStyle, false, pVDev, nPPTX, nPPTY, aZoom, aZoom );
-
-                if (!rDoc.IsImportingXML())
-                {
-                    pDocShell->PostPaint( 0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Left );
-                    pDocShell->SetDocumentModified();
-                }
-            }
-            else
-            {
-                //! ModifyStyleSheet on document (save old values)
-
-                pDocShell->PageStyleModified( aStyleName, true );
-            }
+            pDocShell->PostPaint( 0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Left );
+            pDocShell->SetDocumentModified();
         }
+    }
+    else
+    {
+        //! ModifyStyleSheet on document (save old values)
+
+        pDocShell->PageStyleModified( aStyleName, true );
     }
 }
 
@@ -1084,34 +1084,34 @@ void SAL_CALL ScStyleObj::setName( const OUString& aNewName )
 {
     SolarMutexGuard aGuard;
     SfxStyleSheetBase* pStyle = GetStyle_Impl();
-    if (pStyle)
+    if (!pStyle)
+        return;
+
+    //  cell styles cannot be renamed if any sheet is protected
+    if ( eFamily == SfxStyleFamily::Para && lcl_AnyTabProtected( pDocShell->GetDocument() ) )
+        return;         //! exception?
+
+    //! DocFunc function??
+    //! Undo ?????????????
+
+    bool bOk = pStyle->SetName( aNewName );
+    if (!bOk)
+        return;
+
+    aStyleName = aNewName;       //! notify other objects for this style?
+
+    ScDocument& rDoc = pDocShell->GetDocument();
+    if ( eFamily == SfxStyleFamily::Para && !rDoc.IsImportingXML() )
+        rDoc.GetPool()->CellStyleCreated( aNewName, &rDoc );
+
+    //  cell styles = 2, page styles = 4
+    sal_uInt16 nId = ( eFamily == SfxStyleFamily::Para ) ?
+                    SID_STYLE_FAMILY2 : SID_STYLE_FAMILY4;
+    SfxBindings* pBindings = pDocShell->GetViewBindings();
+    if (pBindings)
     {
-        //  cell styles cannot be renamed if any sheet is protected
-        if ( eFamily == SfxStyleFamily::Para && lcl_AnyTabProtected( pDocShell->GetDocument() ) )
-            return;         //! exception?
-
-        //! DocFunc function??
-        //! Undo ?????????????
-
-        bool bOk = pStyle->SetName( aNewName );
-        if (bOk)
-        {
-            aStyleName = aNewName;       //! notify other objects for this style?
-
-            ScDocument& rDoc = pDocShell->GetDocument();
-            if ( eFamily == SfxStyleFamily::Para && !rDoc.IsImportingXML() )
-                rDoc.GetPool()->CellStyleCreated( aNewName, &rDoc );
-
-            //  cell styles = 2, page styles = 4
-            sal_uInt16 nId = ( eFamily == SfxStyleFamily::Para ) ?
-                            SID_STYLE_FAMILY2 : SID_STYLE_FAMILY4;
-            SfxBindings* pBindings = pDocShell->GetViewBindings();
-            if (pBindings)
-            {
-                pBindings->Invalidate( nId );
-                pBindings->Invalidate( SID_STYLE_APPLY );
-            }
-        }
+        pBindings->Invalidate( nId );
+        pBindings->Invalidate( SID_STYLE_APPLY );
     }
 }
 
@@ -1386,47 +1386,47 @@ void SAL_CALL ScStyleObj::setAllPropertiesToDefault()
     SolarMutexGuard aGuard;
 
     SfxStyleSheetBase* pStyle = GetStyle_Impl();
-    if ( pStyle )
+    if ( !pStyle )
+        return;
+
+    //  cell styles cannot be modified if any sheet is protected
+    if ( eFamily == SfxStyleFamily::Para && lcl_AnyTabProtected( pDocShell->GetDocument() ) )
+        throw uno::RuntimeException();
+
+    SfxItemSet& rSet = pStyle->GetItemSet();
+    rSet.ClearItem();                               // set all items to default
+
+    //! merge with SetOneProperty
+
+    ScDocument& rDoc = pDocShell->GetDocument();
+    if ( eFamily == SfxStyleFamily::Para )
     {
-        //  cell styles cannot be modified if any sheet is protected
-        if ( eFamily == SfxStyleFamily::Para && lcl_AnyTabProtected( pDocShell->GetDocument() ) )
-            throw uno::RuntimeException();
+        //  row heights
 
-        SfxItemSet& rSet = pStyle->GetItemSet();
-        rSet.ClearItem();                               // set all items to default
+        ScopedVclPtrInstance< VirtualDevice > pVDev;
+        Point aLogic = pVDev->LogicToPixel(Point(1000,1000), MapMode(MapUnit::MapTwip));
+        double nPPTX = aLogic.X() / 1000.0;
+        double nPPTY = aLogic.Y() / 1000.0;
+        Fraction aZoom(1,1);
+        rDoc.StyleSheetChanged( pStyle, false, pVDev, nPPTX, nPPTY, aZoom, aZoom );
 
-        //! merge with SetOneProperty
-
-        ScDocument& rDoc = pDocShell->GetDocument();
-        if ( eFamily == SfxStyleFamily::Para )
+        if (!rDoc.IsImportingXML())
         {
-            //  row heights
-
-            ScopedVclPtrInstance< VirtualDevice > pVDev;
-            Point aLogic = pVDev->LogicToPixel(Point(1000,1000), MapMode(MapUnit::MapTwip));
-            double nPPTX = aLogic.X() / 1000.0;
-            double nPPTY = aLogic.Y() / 1000.0;
-            Fraction aZoom(1,1);
-            rDoc.StyleSheetChanged( pStyle, false, pVDev, nPPTX, nPPTY, aZoom, aZoom );
-
-            if (!rDoc.IsImportingXML())
-            {
-                pDocShell->PostPaint( 0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Left );
-                pDocShell->SetDocumentModified();
-            }
+            pDocShell->PostPaint( 0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Left );
+            pDocShell->SetDocumentModified();
         }
-        else
-        {
-            // #i22448# apply the default BoxInfoItem for page styles again
-            // (same content as in ScStyleSheet::GetItemSet, to control the dialog)
-            SvxBoxInfoItem aBoxInfoItem( ATTR_BORDER_INNER );
-            aBoxInfoItem.SetTable( false );
-            aBoxInfoItem.SetDist( true );
-            aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::DISTANCE );
-            rSet.Put( aBoxInfoItem );
+    }
+    else
+    {
+        // #i22448# apply the default BoxInfoItem for page styles again
+        // (same content as in ScStyleSheet::GetItemSet, to control the dialog)
+        SvxBoxInfoItem aBoxInfoItem( ATTR_BORDER_INNER );
+        aBoxInfoItem.SetTable( false );
+        aBoxInfoItem.SetDist( true );
+        aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::DISTANCE );
+        rSet.Put( aBoxInfoItem );
 
-            pDocShell->PageStyleModified( aStyleName, true );
-        }
+        pDocShell->PageStyleModified( aStyleName, true );
     }
 }
 
@@ -1466,308 +1466,308 @@ void SAL_CALL ScStyleObj::setPropertyValue( const OUString& aPropertyName, const
 void ScStyleObj::setPropertyValue_Impl( const OUString& rPropertyName, const SfxItemPropertySimpleEntry* pEntry, const uno::Any* pValue )
 {
     SfxStyleSheetBase* pStyle = GetStyle_Impl( true );
-    if ( pStyle && pEntry )
-    {
-        //  cell styles cannot be modified if any sheet is protected
-        if ( eFamily == SfxStyleFamily::Para && lcl_AnyTabProtected( pDocShell->GetDocument() ) )
-            throw uno::RuntimeException();
+    if ( !(pStyle && pEntry) )
+        return;
 
-        SfxItemSet& rSet = pStyle->GetItemSet();    // change directly in active Style
-        bool bDone = false;
-        if ( eFamily == SfxStyleFamily::Page )
+    //  cell styles cannot be modified if any sheet is protected
+    if ( eFamily == SfxStyleFamily::Para && lcl_AnyTabProtected( pDocShell->GetDocument() ) )
+        throw uno::RuntimeException();
+
+    SfxItemSet& rSet = pStyle->GetItemSet();    // change directly in active Style
+    bool bDone = false;
+    if ( eFamily == SfxStyleFamily::Page )
+    {
+        if(pEntry->nWID == SC_WID_UNO_HEADERSET)
         {
-            if(pEntry->nWID == SC_WID_UNO_HEADERSET)
+            const SfxItemPropertySimpleEntry* pHeaderEntry = lcl_GetHeaderStyleMap()->getByName( rPropertyName );
+            if ( pHeaderEntry ) // only item-WIDs in header/footer map
             {
-                const SfxItemPropertySimpleEntry* pHeaderEntry = lcl_GetHeaderStyleMap()->getByName( rPropertyName );
-                if ( pHeaderEntry ) // only item-WIDs in header/footer map
-                {
-                    SvxSetItem aNewHeader( rSet.Get(ATTR_PAGE_HEADERSET) );
-                    if (pValue)
-                        pPropSet->setPropertyValue( *pHeaderEntry, *pValue, aNewHeader.GetItemSet() );
-                    else
-                        aNewHeader.GetItemSet().ClearItem( pHeaderEntry->nWID );
-                    rSet.Put( aNewHeader );
-                    bDone = true;
-                }
-            }
-            else if(pEntry->nWID == SC_WID_UNO_FOOTERSET)
-            {
-                const SfxItemPropertySimpleEntry* pFooterEntry = lcl_GetFooterStyleMap()->getByName( rPropertyName );
-                if ( pFooterEntry ) // only item-WIDs in header/footer map
-                {
-                    SvxSetItem aNewFooter( rSet.Get(ATTR_PAGE_FOOTERSET) );
-                    if (pValue)
-                        pPropSet->setPropertyValue( *pFooterEntry, *pValue, aNewFooter.GetItemSet() );
-                    else
-                        aNewFooter.GetItemSet().ClearItem( pFooterEntry->nWID );
-                    rSet.Put( aNewFooter );
-                    bDone = true;
-                }
+                SvxSetItem aNewHeader( rSet.Get(ATTR_PAGE_HEADERSET) );
+                if (pValue)
+                    pPropSet->setPropertyValue( *pHeaderEntry, *pValue, aNewHeader.GetItemSet() );
+                else
+                    aNewHeader.GetItemSet().ClearItem( pHeaderEntry->nWID );
+                rSet.Put( aNewHeader );
+                bDone = true;
             }
         }
-        if (!bDone)
+        else if(pEntry->nWID == SC_WID_UNO_FOOTERSET)
         {
-            if (IsScItemWid(pEntry->nWID))
+            const SfxItemPropertySimpleEntry* pFooterEntry = lcl_GetFooterStyleMap()->getByName( rPropertyName );
+            if ( pFooterEntry ) // only item-WIDs in header/footer map
             {
+                SvxSetItem aNewFooter( rSet.Get(ATTR_PAGE_FOOTERSET) );
                 if (pValue)
+                    pPropSet->setPropertyValue( *pFooterEntry, *pValue, aNewFooter.GetItemSet() );
+                else
+                    aNewFooter.GetItemSet().ClearItem( pFooterEntry->nWID );
+                rSet.Put( aNewFooter );
+                bDone = true;
+            }
+        }
+    }
+    if (!bDone)
+    {
+        if (IsScItemWid(pEntry->nWID))
+        {
+            if (pValue)
+            {
+                switch (pEntry->nWID)     // special item handling
                 {
-                    switch (pEntry->nWID)     // special item handling
-                    {
-                        case ATTR_VALUE_FORMAT:
+                    case ATTR_VALUE_FORMAT:
+                        {
+                            // language for number formats
+                            SvNumberFormatter* pFormatter
+                                = pDocShell->GetDocument().GetFormatTable();
+                            sal_uInt32 nOldFormat = rSet.Get(ATTR_VALUE_FORMAT).GetValue();
+                            LanguageType eOldLang
+                                = rSet.Get(ATTR_LANGUAGE_FORMAT).GetLanguage();
+                            pFormatter->GetFormatForLanguageIfBuiltIn(nOldFormat, eOldLang);
+
+                            sal_uInt32 nNewFormat = 0;
+                            *pValue >>= nNewFormat;
+                            rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nNewFormat));
+
+                            const SvNumberformat* pNewEntry = pFormatter->GetEntry(nNewFormat);
+                            LanguageType eNewLang
+                                = pNewEntry ? pNewEntry->GetLanguage() : LANGUAGE_DONTKNOW;
+                            if (eNewLang != eOldLang && eNewLang != LANGUAGE_DONTKNOW)
+                                rSet.Put(SvxLanguageItem(eNewLang, ATTR_LANGUAGE_FORMAT));
+
+                            //! keep default state of number format if only language changed?
+                        }
+                        break;
+                    case ATTR_INDENT:
+                        {
+                            sal_Int16 nVal = 0;
+                            *pValue >>= nVal;
+                            rSet.Put(ScIndentItem(static_cast<sal_uInt16>(HMMToTwips(nVal))));
+                        }
+                        break;
+                    case ATTR_ROTATE_VALUE:
+                        {
+                            sal_Int32 nRotVal = 0;
+                            if (*pValue >>= nRotVal)
                             {
-                                // language for number formats
-                                SvNumberFormatter* pFormatter
-                                    = pDocShell->GetDocument().GetFormatTable();
-                                sal_uInt32 nOldFormat = rSet.Get(ATTR_VALUE_FORMAT).GetValue();
-                                LanguageType eOldLang
-                                    = rSet.Get(ATTR_LANGUAGE_FORMAT).GetLanguage();
-                                pFormatter->GetFormatForLanguageIfBuiltIn(nOldFormat, eOldLang);
-
-                                sal_uInt32 nNewFormat = 0;
-                                *pValue >>= nNewFormat;
-                                rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nNewFormat));
-
-                                const SvNumberformat* pNewEntry = pFormatter->GetEntry(nNewFormat);
-                                LanguageType eNewLang
-                                    = pNewEntry ? pNewEntry->GetLanguage() : LANGUAGE_DONTKNOW;
-                                if (eNewLang != eOldLang && eNewLang != LANGUAGE_DONTKNOW)
-                                    rSet.Put(SvxLanguageItem(eNewLang, ATTR_LANGUAGE_FORMAT));
-
-                                //! keep default state of number format if only language changed?
+                                //  stored value is always between 0 and 360 deg.
+                                nRotVal %= 36000;
+                                if (nRotVal < 0)
+                                    nRotVal += 36000;
+                                rSet.Put(ScRotateValueItem(nRotVal));
                             }
-                            break;
-                        case ATTR_INDENT:
+                        }
+                        break;
+                    case ATTR_STACKED:
+                        {
+                            table::CellOrientation eOrient;
+                            if (*pValue >>= eOrient)
                             {
-                                sal_Int16 nVal = 0;
-                                *pValue >>= nVal;
-                                rSet.Put(ScIndentItem(static_cast<sal_uInt16>(HMMToTwips(nVal))));
-                            }
-                            break;
-                        case ATTR_ROTATE_VALUE:
-                            {
-                                sal_Int32 nRotVal = 0;
-                                if (*pValue >>= nRotVal)
+                                switch (eOrient)
                                 {
-                                    //  stored value is always between 0 and 360 deg.
-                                    nRotVal %= 36000;
-                                    if (nRotVal < 0)
-                                        nRotVal += 36000;
-                                    rSet.Put(ScRotateValueItem(nRotVal));
-                                }
-                            }
-                            break;
-                        case ATTR_STACKED:
-                            {
-                                table::CellOrientation eOrient;
-                                if (*pValue >>= eOrient)
-                                {
-                                    switch (eOrient)
+                                    case table::CellOrientation_STANDARD:
+                                        rSet.Put(ScVerticalStackCell(false));
+                                    break;
+                                    case table::CellOrientation_TOPBOTTOM:
+                                        rSet.Put(ScVerticalStackCell(false));
+                                        rSet.Put(ScRotateValueItem(27000));
+                                    break;
+                                    case table::CellOrientation_BOTTOMTOP:
+                                        rSet.Put(ScVerticalStackCell(false));
+                                        rSet.Put(ScRotateValueItem(9000));
+                                    break;
+                                    case table::CellOrientation_STACKED:
+                                        rSet.Put(ScVerticalStackCell(true));
+                                    break;
+                                    default:
                                     {
-                                        case table::CellOrientation_STANDARD:
-                                            rSet.Put(ScVerticalStackCell(false));
-                                        break;
-                                        case table::CellOrientation_TOPBOTTOM:
-                                            rSet.Put(ScVerticalStackCell(false));
-                                            rSet.Put(ScRotateValueItem(27000));
-                                        break;
-                                        case table::CellOrientation_BOTTOMTOP:
-                                            rSet.Put(ScVerticalStackCell(false));
-                                            rSet.Put(ScRotateValueItem(9000));
-                                        break;
-                                        case table::CellOrientation_STACKED:
-                                            rSet.Put(ScVerticalStackCell(true));
-                                        break;
-                                        default:
-                                        {
-                                            // added to avoid warnings
-                                        }
+                                        // added to avoid warnings
                                     }
                                 }
                             }
-                            break;
-                        case ATTR_PAGE_SCALE:
-                        case ATTR_PAGE_SCALETOPAGES:
+                        }
+                        break;
+                    case ATTR_PAGE_SCALE:
+                    case ATTR_PAGE_SCALETOPAGES:
+                        {
+                            rSet.ClearItem(ATTR_PAGE_SCALETOPAGES);
+                            rSet.ClearItem(ATTR_PAGE_SCALE);
+                            rSet.ClearItem(ATTR_PAGE_SCALETO);
+                            sal_Int16 nVal = 0;
+                            *pValue >>= nVal;
+                            rSet.Put(SfxUInt16Item(pEntry->nWID, nVal));
+                        }
+                        break;
+                    case ATTR_PAGE_FIRSTPAGENO:
+                        {
+                            sal_Int16 nVal = 0;
+                            *pValue >>= nVal;
+                            rSet.Put(SfxUInt16Item(ATTR_PAGE_FIRSTPAGENO, nVal));
+                        }
+                        break;
+                    case ATTR_PAGE_CHARTS:
+                    case ATTR_PAGE_OBJECTS:
+                    case ATTR_PAGE_DRAWINGS:
+                        {
+                            bool bBool = false;
+                            *pValue >>= bBool;
+                            //! need to define sal_Bool-MID for ScViewObjectModeItem?
+                            rSet.Put(ScViewObjectModeItem(
+                                pEntry->nWID, bBool ? VOBJ_MODE_SHOW : VOBJ_MODE_HIDE));
+                        }
+                        break;
+                    case ATTR_PAGE_PAPERBIN:
+                        {
+                            sal_uInt8 nTray = PAPERBIN_PRINTER_SETTINGS;
+                            bool bFound = false;
+
+                            OUString aName;
+                            if (*pValue >>= aName)
                             {
+                                if (aName == SC_PAPERBIN_DEFAULTNAME)
+                                    bFound = true;
+                                else
+                                {
+                                    Printer* pPrinter = pDocShell->GetPrinter();
+                                    if (pPrinter)
+                                    {
+                                        const sal_uInt16 nCount = pPrinter->GetPaperBinCount();
+                                        for (sal_uInt16 i = 0; i < nCount; i++)
+                                            if (aName == pPrinter->GetPaperBinName(i))
+                                            {
+                                                nTray = static_cast<sal_uInt8>(i);
+                                                bFound = true;
+                                                break;
+                                            }
+                                    }
+                                }
+                            }
+                            if (!bFound)
+                                throw lang::IllegalArgumentException();
+
+                            rSet.Put(SvxPaperBinItem(ATTR_PAGE_PAPERBIN, nTray));
+
+                        }
+                        break;
+                    case ATTR_PAGE_SCALETO:
+                        {
+                            sal_Int16 nPages = 0;
+                            if (*pValue >>= nPages)
+                            {
+                                ScPageScaleToItem aItem = rSet.Get(ATTR_PAGE_SCALETO);
+                                if (rPropertyName == SC_UNO_PAGE_SCALETOX)
+                                    aItem.SetWidth(static_cast<sal_uInt16>(nPages));
+                                else
+                                    aItem.SetHeight(static_cast<sal_uInt16>(nPages));
+                                rSet.Put(aItem);
                                 rSet.ClearItem(ATTR_PAGE_SCALETOPAGES);
                                 rSet.ClearItem(ATTR_PAGE_SCALE);
-                                rSet.ClearItem(ATTR_PAGE_SCALETO);
-                                sal_Int16 nVal = 0;
-                                *pValue >>= nVal;
-                                rSet.Put(SfxUInt16Item(pEntry->nWID, nVal));
                             }
-                            break;
-                        case ATTR_PAGE_FIRSTPAGENO:
-                            {
-                                sal_Int16 nVal = 0;
-                                *pValue >>= nVal;
-                                rSet.Put(SfxUInt16Item(ATTR_PAGE_FIRSTPAGENO, nVal));
-                            }
-                            break;
-                        case ATTR_PAGE_CHARTS:
-                        case ATTR_PAGE_OBJECTS:
-                        case ATTR_PAGE_DRAWINGS:
-                            {
-                                bool bBool = false;
-                                *pValue >>= bBool;
-                                //! need to define sal_Bool-MID for ScViewObjectModeItem?
-                                rSet.Put(ScViewObjectModeItem(
-                                    pEntry->nWID, bBool ? VOBJ_MODE_SHOW : VOBJ_MODE_HIDE));
-                            }
-                            break;
-                        case ATTR_PAGE_PAPERBIN:
-                            {
-                                sal_uInt8 nTray = PAPERBIN_PRINTER_SETTINGS;
-                                bool bFound = false;
+                        }
+                        break;
+                    case ATTR_HIDDEN:
+                        {
+                            bool bHidden = false;
+                            if (*pValue >>= bHidden)
+                                pStyle->SetHidden(bHidden);
+                        }
+                        break;
+                    default:
+                        // default items with wrong Slot-ID are not working in SfxItemPropertySet3
+                        //! change Slot-IDs...
+                        if (rSet.GetPool()->GetSlotId(pEntry->nWID) == pEntry->nWID
+                            && rSet.GetItemState(pEntry->nWID, false) == SfxItemState::DEFAULT)
+                        {
+                            rSet.Put(rSet.Get(pEntry->nWID));
+                        }
+                        pPropSet->setPropertyValue(*pEntry, *pValue, rSet);
+                }
+            }
+            else
+            {
+                rSet.ClearItem(pEntry->nWID);
+                // language for number formats
+                if (pEntry->nWID == ATTR_VALUE_FORMAT)
+                    rSet.ClearItem(ATTR_LANGUAGE_FORMAT);
 
-                                OUString aName;
-                                if (*pValue >>= aName)
-                                {
-                                    if (aName == SC_PAPERBIN_DEFAULTNAME)
-                                        bFound = true;
-                                    else
-                                    {
-                                        Printer* pPrinter = pDocShell->GetPrinter();
-                                        if (pPrinter)
-                                        {
-                                            const sal_uInt16 nCount = pPrinter->GetPaperBinCount();
-                                            for (sal_uInt16 i = 0; i < nCount; i++)
-                                                if (aName == pPrinter->GetPaperBinName(i))
-                                                {
-                                                    nTray = static_cast<sal_uInt8>(i);
-                                                    bFound = true;
-                                                    break;
-                                                }
-                                        }
-                                    }
-                                }
-                                if (!bFound)
-                                    throw lang::IllegalArgumentException();
-
-                                rSet.Put(SvxPaperBinItem(ATTR_PAGE_PAPERBIN, nTray));
-
-                            }
-                            break;
-                        case ATTR_PAGE_SCALETO:
+                //! for ATTR_ROTATE_VALUE, also reset ATTR_ORIENTATION?
+            }
+        }
+        else if (IsScUnoWid(pEntry->nWID))
+        {
+            switch (pEntry->nWID)
+            {
+                case SC_WID_UNO_TBLBORD:
+                    {
+                        if (pValue)
+                        {
+                            table::TableBorder aBorder;
+                            if (*pValue >>= aBorder)
                             {
-                                sal_Int16 nPages = 0;
-                                if (*pValue >>= nPages)
-                                {
-                                    ScPageScaleToItem aItem = rSet.Get(ATTR_PAGE_SCALETO);
-                                    if (rPropertyName == SC_UNO_PAGE_SCALETOX)
-                                        aItem.SetWidth(static_cast<sal_uInt16>(nPages));
-                                    else
-                                        aItem.SetHeight(static_cast<sal_uInt16>(nPages));
-                                    rSet.Put(aItem);
-                                    rSet.ClearItem(ATTR_PAGE_SCALETOPAGES);
-                                    rSet.ClearItem(ATTR_PAGE_SCALE);
-                                }
+                                SvxBoxItem aOuter(ATTR_BORDER);
+                                SvxBoxInfoItem aInner(ATTR_BORDER_INNER);
+                                ScHelperFunctions::FillBoxItems(aOuter, aInner, aBorder);
+                                rSet.Put(aOuter);
                             }
-                            break;
-                        case ATTR_HIDDEN:
-                            {
-                                bool bHidden = false;
-                                if (*pValue >>= bHidden)
-                                    pStyle->SetHidden(bHidden);
-                            }
-                            break;
-                        default:
-                            // default items with wrong Slot-ID are not working in SfxItemPropertySet3
-                            //! change Slot-IDs...
-                            if (rSet.GetPool()->GetSlotId(pEntry->nWID) == pEntry->nWID
-                                && rSet.GetItemState(pEntry->nWID, false) == SfxItemState::DEFAULT)
-                            {
-                                rSet.Put(rSet.Get(pEntry->nWID));
-                            }
-                            pPropSet->setPropertyValue(*pEntry, *pValue, rSet);
+                        }
+                        else
+                        {
+                            rSet.ClearItem(ATTR_BORDER);
+                        }
                     }
-                }
-                else
-                {
-                    rSet.ClearItem(pEntry->nWID);
-                    // language for number formats
-                    if (pEntry->nWID == ATTR_VALUE_FORMAT)
-                        rSet.ClearItem(ATTR_LANGUAGE_FORMAT);
-
-                    //! for ATTR_ROTATE_VALUE, also reset ATTR_ORIENTATION?
-                }
-            }
-            else if (IsScUnoWid(pEntry->nWID))
-            {
-                switch (pEntry->nWID)
-                {
-                    case SC_WID_UNO_TBLBORD:
+                    break;
+                case SC_WID_UNO_TBLBORD2:
+                    {
+                        if (pValue)
                         {
-                            if (pValue)
+                            table::TableBorder2 aBorder2;
+                            if (*pValue >>= aBorder2)
                             {
-                                table::TableBorder aBorder;
-                                if (*pValue >>= aBorder)
-                                {
-                                    SvxBoxItem aOuter(ATTR_BORDER);
-                                    SvxBoxInfoItem aInner(ATTR_BORDER_INNER);
-                                    ScHelperFunctions::FillBoxItems(aOuter, aInner, aBorder);
-                                    rSet.Put(aOuter);
-                                }
-                            }
-                            else
-                            {
-                                rSet.ClearItem(ATTR_BORDER);
+                                SvxBoxItem aOuter(ATTR_BORDER);
+                                SvxBoxInfoItem aInner(ATTR_BORDER_INNER);
+                                ScHelperFunctions::FillBoxItems(aOuter, aInner, aBorder2);
+                                rSet.Put(aOuter);
                             }
                         }
-                        break;
-                    case SC_WID_UNO_TBLBORD2:
+                        else
                         {
-                            if (pValue)
-                            {
-                                table::TableBorder2 aBorder2;
-                                if (*pValue >>= aBorder2)
-                                {
-                                    SvxBoxItem aOuter(ATTR_BORDER);
-                                    SvxBoxInfoItem aInner(ATTR_BORDER_INNER);
-                                    ScHelperFunctions::FillBoxItems(aOuter, aInner, aBorder2);
-                                    rSet.Put(aOuter);
-                                }
-                            }
-                            else
-                            {
-                                rSet.ClearItem(ATTR_BORDER);
-                            }
+                            rSet.ClearItem(ATTR_BORDER);
                         }
-                        break;
-                }
+                    }
+                    break;
             }
         }
+    }
 
-        //! DocFunc-??
-        //! Undo ??
+    //! DocFunc-??
+    //! Undo ??
 
-        ScDocument& rDoc = pDocShell->GetDocument();
-        if ( eFamily == SfxStyleFamily::Para )
+    ScDocument& rDoc = pDocShell->GetDocument();
+    if ( eFamily == SfxStyleFamily::Para )
+    {
+        // If we are loading, we can delay line height calculcation, because we are going to re-calc all of those
+        // after load.
+        if (pDocShell && !pDocShell->IsLoading())
         {
-            // If we are loading, we can delay line height calculcation, because we are going to re-calc all of those
-            // after load.
-            if (pDocShell && !pDocShell->IsLoading())
+            // update line height
+            ScopedVclPtrInstance< VirtualDevice > pVDev;
+            Point aLogic = pVDev->LogicToPixel(Point(1000,1000), MapMode(MapUnit::MapTwip));
+            double nPPTX = aLogic.X() / 1000.0;
+            double nPPTY = aLogic.Y() / 1000.0;
+            Fraction aZoom(1,1);
+            rDoc.StyleSheetChanged( pStyle, false, pVDev, nPPTX, nPPTY, aZoom, aZoom );
+
+            if (!rDoc.IsImportingXML())
             {
-                // update line height
-                ScopedVclPtrInstance< VirtualDevice > pVDev;
-                Point aLogic = pVDev->LogicToPixel(Point(1000,1000), MapMode(MapUnit::MapTwip));
-                double nPPTX = aLogic.X() / 1000.0;
-                double nPPTY = aLogic.Y() / 1000.0;
-                Fraction aZoom(1,1);
-                rDoc.StyleSheetChanged( pStyle, false, pVDev, nPPTX, nPPTY, aZoom, aZoom );
-
-                if (!rDoc.IsImportingXML())
-                {
-                    pDocShell->PostPaint( 0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Left );
-                    pDocShell->SetDocumentModified();
-                }
+                pDocShell->PostPaint( 0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Left );
+                pDocShell->SetDocumentModified();
             }
         }
-        else
-        {
-            //! ModifyStyleSheet on document (save old values)
+    }
+    else
+    {
+        //! ModifyStyleSheet on document (save old values)
 
-            pDocShell->PageStyleModified( aStyleName, true );
-        }
+        pDocShell->PageStyleModified( aStyleName, true );
     }
 }
 

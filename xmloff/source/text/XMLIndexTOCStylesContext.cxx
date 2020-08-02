@@ -85,26 +85,26 @@ void XMLIndexTOCStylesContext::StartElement(
 void XMLIndexTOCStylesContext::EndElement()
 {
     // if valid...
-    if (nOutlineLevel >= 0)
+    if (nOutlineLevel < 0)
+        return;
+
+    // copy vector into sequence
+    const sal_Int32 nCount = aStyleNames.size();
+    Sequence<OUString> aStyleNamesSequence(nCount);
+    for(sal_Int32 i = 0; i < nCount; i++)
     {
-        // copy vector into sequence
-        const sal_Int32 nCount = aStyleNames.size();
-        Sequence<OUString> aStyleNamesSequence(nCount);
-        for(sal_Int32 i = 0; i < nCount; i++)
-        {
-            aStyleNamesSequence[i] = GetImport().GetStyleDisplayName(
-                            XmlStyleFamily::TEXT_PARAGRAPH,
-                               aStyleNames[i] );
-        }
-
-        // get index replace
-        Any aAny = rTOCPropertySet->getPropertyValue("LevelParagraphStyles");
-        Reference<XIndexReplace> xIndexReplace;
-        aAny >>= xIndexReplace;
-
-        // set style names
-        xIndexReplace->replaceByIndex(nOutlineLevel, Any(aStyleNamesSequence));
+        aStyleNamesSequence[i] = GetImport().GetStyleDisplayName(
+                        XmlStyleFamily::TEXT_PARAGRAPH,
+                           aStyleNames[i] );
     }
+
+    // get index replace
+    Any aAny = rTOCPropertySet->getPropertyValue("LevelParagraphStyles");
+    Reference<XIndexReplace> xIndexReplace;
+    aAny >>= xIndexReplace;
+
+    // set style names
+    xIndexReplace->replaceByIndex(nOutlineLevel, Any(aStyleNamesSequence));
 }
 
 SvXMLImportContextRef XMLIndexTOCStylesContext::CreateChildContext(

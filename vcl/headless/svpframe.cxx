@@ -310,27 +310,27 @@ void SvpSalFrame::SetWindowState( const SalFrameState *pState )
         return;
 
     // Request for position or size change
-    if (pState->mnMask & FRAMESTATE_MASK_GEOMETRY)
-    {
-        long nX = maGeometry.nX;
-        long nY = maGeometry.nY;
-        long nWidth = maGeometry.nWidth;
-        long nHeight = maGeometry.nHeight;
+    if (!(pState->mnMask & FRAMESTATE_MASK_GEOMETRY))
+        return;
 
-        // change requested properties
-        if (pState->mnMask & WindowStateMask::X)
-            nX = pState->mnX;
-        if (pState->mnMask & WindowStateMask::Y)
-            nY = pState->mnY;
-        if (pState->mnMask & WindowStateMask::Width)
-            nWidth = pState->mnWidth;
-        if (pState->mnMask & WindowStateMask::Height)
-            nHeight = pState->mnHeight;
+    long nX = maGeometry.nX;
+    long nY = maGeometry.nY;
+    long nWidth = maGeometry.nWidth;
+    long nHeight = maGeometry.nHeight;
 
-        SetPosSize( nX, nY, nWidth, nHeight,
-                    SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y |
-                    SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
-    }
+    // change requested properties
+    if (pState->mnMask & WindowStateMask::X)
+        nX = pState->mnX;
+    if (pState->mnMask & WindowStateMask::Y)
+        nY = pState->mnY;
+    if (pState->mnMask & WindowStateMask::Width)
+        nWidth = pState->mnWidth;
+    if (pState->mnMask & WindowStateMask::Height)
+        nHeight = pState->mnHeight;
+
+    SetPosSize( nX, nY, nWidth, nHeight,
+                SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y |
+                SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
 }
 
 bool SvpSalFrame::GetWindowState( SalFrameState* pState )

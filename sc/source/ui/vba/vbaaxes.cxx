@@ -95,26 +95,26 @@ class AxisIndexWrapper : public ::cppu::WeakImplHelper< container::XIndexAccess 
 public:
     AxisIndexWrapper( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< excel::XChart >& xChart ) : mxContext( xContext ), mxChart( xChart )
     {
-        if ( mxChart.is() )
-        {
-            ScVbaChart* pChart = static_cast< ScVbaChart* >( mxChart.get() );
-            // primary
-            bool bBool = false;
-            uno::Reference< beans::XPropertySet > xDiagramPropertySet( pChart->xDiagramPropertySet() );
-            if ( ( xDiagramPropertySet->getPropertyValue("HasXAxis") >>= bBool )  && bBool )
-                mCoordinates.emplace_back( xlPrimary, xlCategory );
-            if ( ( xDiagramPropertySet->getPropertyValue("HasYAxis") >>= bBool )  && bBool )
-                mCoordinates.emplace_back( xlPrimary, xlSeriesAxis );
+        if ( !mxChart.is() )
+            return;
 
-            if (  pChart->is3D() )
-                mCoordinates.emplace_back( xlPrimary, xlValue );
+        ScVbaChart* pChart = static_cast< ScVbaChart* >( mxChart.get() );
+        // primary
+        bool bBool = false;
+        uno::Reference< beans::XPropertySet > xDiagramPropertySet( pChart->xDiagramPropertySet() );
+        if ( ( xDiagramPropertySet->getPropertyValue("HasXAxis") >>= bBool )  && bBool )
+            mCoordinates.emplace_back( xlPrimary, xlCategory );
+        if ( ( xDiagramPropertySet->getPropertyValue("HasYAxis") >>= bBool )  && bBool )
+            mCoordinates.emplace_back( xlPrimary, xlSeriesAxis );
 
-            // secondary
-            if ( ( xDiagramPropertySet->getPropertyValue("HasSecondaryXAxis") >>= bBool )  && bBool )
-                mCoordinates.emplace_back( xlSecondary, xlCategory );
-            if ( ( xDiagramPropertySet->getPropertyValue("HasSecondaryYAxis") >>= bBool )  && bBool )
-                mCoordinates.emplace_back( xlSecondary, xlSeriesAxis );
-        }
+        if (  pChart->is3D() )
+            mCoordinates.emplace_back( xlPrimary, xlValue );
+
+        // secondary
+        if ( ( xDiagramPropertySet->getPropertyValue("HasSecondaryXAxis") >>= bBool )  && bBool )
+            mCoordinates.emplace_back( xlSecondary, xlCategory );
+        if ( ( xDiagramPropertySet->getPropertyValue("HasSecondaryYAxis") >>= bBool )  && bBool )
+            mCoordinates.emplace_back( xlSecondary, xlSeriesAxis );
 
     }
     virtual ::sal_Int32 SAL_CALL getCount() override { return mCoordinates.size(); }

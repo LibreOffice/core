@@ -268,41 +268,41 @@ void SvtPathOptions_Impl::SetPath( SvtPathOptions::Paths ePath, const OUString& 
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if ( ePath < SvtPathOptions::PATH_COUNT )
+    if ( ePath >= SvtPathOptions::PATH_COUNT )
+        return;
+
+    OUString    aResult;
+    OUString    aNewValue;
+    Any         a;
+
+    switch ( ePath )
     {
-        OUString    aResult;
-        OUString    aNewValue;
-        Any         a;
-
-        switch ( ePath )
+        case SvtPathOptions::PATH_ADDIN:
+        case SvtPathOptions::PATH_FILTER:
+        case SvtPathOptions::PATH_HELP:
+        case SvtPathOptions::PATH_MODULE:
+        case SvtPathOptions::PATH_PLUGIN:
+        case SvtPathOptions::PATH_STORAGE:
         {
-            case SvtPathOptions::PATH_ADDIN:
-            case SvtPathOptions::PATH_FILTER:
-            case SvtPathOptions::PATH_HELP:
-            case SvtPathOptions::PATH_MODULE:
-            case SvtPathOptions::PATH_PLUGIN:
-            case SvtPathOptions::PATH_STORAGE:
-            {
-                // These office paths have to be convert back to UCB-URL's
-                osl::FileBase::getFileURLFromSystemPath( rNewPath, aResult );
-                aNewValue = aResult;
-            }
-            break;
+            // These office paths have to be convert back to UCB-URL's
+            osl::FileBase::getFileURLFromSystemPath( rNewPath, aResult );
+            aNewValue = aResult;
+        }
+        break;
 
-            default:
-                aNewValue = rNewPath;
-        }
+        default:
+            aNewValue = rNewPath;
+    }
 
-        // Resubstitution is done by the service itself using the substitution service
-        a <<= aNewValue;
-        try
-        {
-            m_xPathSettings->setFastPropertyValue( m_aMapEnumToPropHandle[ static_cast<sal_Int32>(ePath)], a );
-        }
-        catch (const Exception&)
-        {
-            TOOLS_WARN_EXCEPTION("unotools.config", "SetPath");
-        }
+    // Resubstitution is done by the service itself using the substitution service
+    a <<= aNewValue;
+    try
+    {
+        m_xPathSettings->setFastPropertyValue( m_aMapEnumToPropHandle[ static_cast<sal_Int32>(ePath)], a );
+    }
+    catch (const Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("unotools.config", "SetPath");
     }
 }
 

@@ -210,43 +210,43 @@ const basegfx::B2DRange& ViewObjectContact::getObjectRange() const
 
 void ViewObjectContact::ActionChanged()
 {
-    if(!mbLazyInvalidate)
+    if(mbLazyInvalidate)
+        return;
+
+    // set local flag
+    mbLazyInvalidate = true;
+
+    // force ObjectRange
+    getObjectRange();
+
+    if(!maObjectRange.isEmpty())
     {
-        // set local flag
-        mbLazyInvalidate = true;
+        // invalidate current valid range
+        GetObjectContact().InvalidatePartOfView(maObjectRange);
 
-        // force ObjectRange
-        getObjectRange();
-
-        if(!maObjectRange.isEmpty())
-        {
-            // invalidate current valid range
-            GetObjectContact().InvalidatePartOfView(maObjectRange);
-
-            // reset ObjectRange, it needs to be recalculated
-            maObjectRange.reset();
-        }
-
-        // register at OC for lazy invalidate
-        GetObjectContact().setLazyInvalidate(*this);
+        // reset ObjectRange, it needs to be recalculated
+        maObjectRange.reset();
     }
+
+    // register at OC for lazy invalidate
+    GetObjectContact().setLazyInvalidate(*this);
 }
 
 void ViewObjectContact::triggerLazyInvalidate()
 {
-    if(mbLazyInvalidate)
+    if(!mbLazyInvalidate)
+        return;
+
+    // reset flag
+    mbLazyInvalidate = false;
+
+    // force ObjectRange
+    getObjectRange();
+
+    if(!maObjectRange.isEmpty())
     {
-        // reset flag
-        mbLazyInvalidate = false;
-
-        // force ObjectRange
-        getObjectRange();
-
-        if(!maObjectRange.isEmpty())
-        {
-            // invalidate current valid range
-            GetObjectContact().InvalidatePartOfView(maObjectRange);
-        }
+        // invalidate current valid range
+        GetObjectContact().InvalidatePartOfView(maObjectRange);
     }
 }
 
@@ -268,22 +268,22 @@ void ViewObjectContact::checkForPrimitive2DAnimations()
     mpPrimitiveAnimation.reset();
 
     // check for animated primitives
-    if(!mxPrimitive2DSequence.empty())
+    if(mxPrimitive2DSequence.empty())
+        return;
+
+    const bool bTextAnimationAllowed(GetObjectContact().IsTextAnimationAllowed());
+    const bool bGraphicAnimationAllowed(GetObjectContact().IsGraphicAnimationAllowed());
+
+    if(bTextAnimationAllowed || bGraphicAnimationAllowed)
     {
-        const bool bTextAnimationAllowed(GetObjectContact().IsTextAnimationAllowed());
-        const bool bGraphicAnimationAllowed(GetObjectContact().IsGraphicAnimationAllowed());
+        AnimatedExtractingProcessor2D aAnimatedExtractor(GetObjectContact().getViewInformation2D(),
+            bTextAnimationAllowed, bGraphicAnimationAllowed);
+        aAnimatedExtractor.process(mxPrimitive2DSequence);
 
-        if(bTextAnimationAllowed || bGraphicAnimationAllowed)
+        if(!aAnimatedExtractor.getPrimitive2DSequence().empty())
         {
-            AnimatedExtractingProcessor2D aAnimatedExtractor(GetObjectContact().getViewInformation2D(),
-                bTextAnimationAllowed, bGraphicAnimationAllowed);
-            aAnimatedExtractor.process(mxPrimitive2DSequence);
-
-            if(!aAnimatedExtractor.getPrimitive2DSequence().empty())
-            {
-                // derived primitiveList is animated, setup new PrimitiveAnimation
-                mpPrimitiveAnimation.reset( new sdr::animation::PrimitiveAnimation(*this, aAnimatedExtractor.getPrimitive2DSequence()) );
-            }
+            // derived primitiveList is animated, setup new PrimitiveAnimation
+            mpPrimitiveAnimation.reset( new sdr::animation::PrimitiveAnimation(*this, aAnimatedExtractor.getPrimitive2DSequence()) );
         }
     }
 }

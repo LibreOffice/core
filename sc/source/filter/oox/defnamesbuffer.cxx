@@ -272,52 +272,55 @@ void DefinedName::convertFormula( const css::uno::Sequence<css::sheet::ExternalL
     Sequence< FormulaToken > aFTokenSeq;
     ScTokenConversion::ConvertToTokenSequence( getScDocument(), aFTokenSeq, *pTokenArray );
     // set built-in names (print ranges, repeated titles, filter ranges)
-    if( !isGlobalName() ) switch( mcBuiltinId )
+    if( isGlobalName() )
+        return;
+
+    switch( mcBuiltinId )
     {
-        case BIFF_DEFNAME_PRINTAREA:
+    case BIFF_DEFNAME_PRINTAREA:
+    {
+        Reference< XPrintAreas > xPrintAreas( getSheetFromDoc( mnCalcSheet ), UNO_QUERY );
+        ScRangeList aPrintRanges;
+        getFormulaParser().extractCellRangeList( aPrintRanges, aFTokenSeq, mnCalcSheet );
+        if( xPrintAreas.is() && !aPrintRanges.empty() )
+            xPrintAreas->setPrintAreas( AddressConverter::toApiSequence(aPrintRanges) );
+    }
+    break;
+    case BIFF_DEFNAME_PRINTTITLES:
+    {
+        Reference< XPrintAreas > xPrintAreas( getSheetFromDoc( mnCalcSheet ), UNO_QUERY );
+        ScRangeList aTitleRanges;
+        getFormulaParser().extractCellRangeList( aTitleRanges, aFTokenSeq, mnCalcSheet );
+        if( xPrintAreas.is() && !aTitleRanges.empty() )
         {
-            Reference< XPrintAreas > xPrintAreas( getSheetFromDoc( mnCalcSheet ), UNO_QUERY );
-            ScRangeList aPrintRanges;
-            getFormulaParser().extractCellRangeList( aPrintRanges, aFTokenSeq, mnCalcSheet );
-            if( xPrintAreas.is() && !aPrintRanges.empty() )
-                xPrintAreas->setPrintAreas( AddressConverter::toApiSequence(aPrintRanges) );
-        }
-        break;
-        case BIFF_DEFNAME_PRINTTITLES:
-        {
-            Reference< XPrintAreas > xPrintAreas( getSheetFromDoc( mnCalcSheet ), UNO_QUERY );
-            ScRangeList aTitleRanges;
-            getFormulaParser().extractCellRangeList( aTitleRanges, aFTokenSeq, mnCalcSheet );
-            if( xPrintAreas.is() && !aTitleRanges.empty() )
+            bool bHasRowTitles = false;
+            bool bHasColTitles = false;
+            const ScAddress& rMaxPos = getAddressConverter().getMaxAddress();
+            for (size_t i = 0, nSize = aTitleRanges.size(); i < nSize; ++i)
             {
-                bool bHasRowTitles = false;
-                bool bHasColTitles = false;
-                const ScAddress& rMaxPos = getAddressConverter().getMaxAddress();
-                for (size_t i = 0, nSize = aTitleRanges.size(); i < nSize; ++i)
+                const ScRange& rRange = aTitleRanges[i];
+                bool bFullRow = (rRange.aStart.Col() == 0) && ( rRange.aEnd.Col() >= rMaxPos.Col() );
+                bool bFullCol = (rRange.aStart.Row() == 0) && ( rRange.aEnd.Row() >= rMaxPos.Row() );
+                if( !bHasRowTitles && bFullRow && !bFullCol )
                 {
-                    const ScRange& rRange = aTitleRanges[i];
-                    bool bFullRow = (rRange.aStart.Col() == 0) && ( rRange.aEnd.Col() >= rMaxPos.Col() );
-                    bool bFullCol = (rRange.aStart.Row() == 0) && ( rRange.aEnd.Row() >= rMaxPos.Row() );
-                    if( !bHasRowTitles && bFullRow && !bFullCol )
-                    {
-                        xPrintAreas->setTitleRows( CellRangeAddress(rRange.aStart.Tab(),
-                                                                    rRange.aStart.Col(), rRange.aStart.Row(),
-                                                                    rRange.aEnd.Col(), rRange.aEnd.Row()) );
-                        xPrintAreas->setPrintTitleRows( true );
-                        bHasRowTitles = true;
-                    }
-                    else if( !bHasColTitles && bFullCol && !bFullRow )
-                    {
-                        xPrintAreas->setTitleColumns( CellRangeAddress(rRange.aStart.Tab(),
-                                                                       rRange.aStart.Col(), rRange.aStart.Row(),
-                                                                       rRange.aEnd.Col(), rRange.aEnd.Row()) );
-                        xPrintAreas->setPrintTitleColumns( true );
-                        bHasColTitles = true;
-                    }
+                    xPrintAreas->setTitleRows( CellRangeAddress(rRange.aStart.Tab(),
+                                                                rRange.aStart.Col(), rRange.aStart.Row(),
+                                                                rRange.aEnd.Col(), rRange.aEnd.Row()) );
+                    xPrintAreas->setPrintTitleRows( true );
+                    bHasRowTitles = true;
+                }
+                else if( !bHasColTitles && bFullCol && !bFullRow )
+                {
+                    xPrintAreas->setTitleColumns( CellRangeAddress(rRange.aStart.Tab(),
+                                                                   rRange.aStart.Col(), rRange.aStart.Row(),
+                                                                   rRange.aEnd.Col(), rRange.aEnd.Row()) );
+                    xPrintAreas->setPrintTitleColumns( true );
+                    bHasColTitles = true;
                 }
             }
         }
-        break;
+    }
+    break;
     }
 }
 

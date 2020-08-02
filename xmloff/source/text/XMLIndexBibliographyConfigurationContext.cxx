@@ -204,41 +204,41 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(bool)
     // first: get field master
     // (we'll create one, and get the only master for this type)
     Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),UNO_QUERY);
-    if( xFactory.is() )
+    if( !xFactory.is() )
+        return;
+
+    Sequence<OUString> aServices = xFactory->getAvailableServiceNames();
+    // here we should use a method which compares in reverse order if available
+    if (comphelper::findValue(aServices, gsFieldMaster_Bibliography) == -1)
+        return;
+
+    Reference<XInterface> xIfc =
+        xFactory->createInstance(gsFieldMaster_Bibliography);
+    if( !xIfc.is() )
+        return;
+
+    Reference<XPropertySet> xPropSet( xIfc, UNO_QUERY );
+    Any aAny;
+
+    xPropSet->setPropertyValue(gsBracketAfter, Any(sSuffix));
+    xPropSet->setPropertyValue(gsBracketBefore, Any(sPrefix));
+    xPropSet->setPropertyValue(gsIsNumberEntries, Any(bNumberedEntries));
+    xPropSet->setPropertyValue(gsIsSortByPosition, Any(bSortByPosition));
+
+    if( !maLanguageTagODF.isEmpty() )
     {
-        Sequence<OUString> aServices = xFactory->getAvailableServiceNames();
-        // here we should use a method which compares in reverse order if available
-        if (comphelper::findValue(aServices, gsFieldMaster_Bibliography) != -1)
-        {
-            Reference<XInterface> xIfc =
-                xFactory->createInstance(gsFieldMaster_Bibliography);
-            if( xIfc.is() )
-            {
-                Reference<XPropertySet> xPropSet( xIfc, UNO_QUERY );
-                Any aAny;
-
-                xPropSet->setPropertyValue(gsBracketAfter, Any(sSuffix));
-                xPropSet->setPropertyValue(gsBracketBefore, Any(sPrefix));
-                xPropSet->setPropertyValue(gsIsNumberEntries, Any(bNumberedEntries));
-                xPropSet->setPropertyValue(gsIsSortByPosition, Any(bSortByPosition));
-
-                if( !maLanguageTagODF.isEmpty() )
-                {
-                    aAny <<= maLanguageTagODF.getLanguageTag().getLocale( false);
-                    xPropSet->setPropertyValue(gsLocale, aAny);
-                }
-
-                if( !sAlgorithm.isEmpty() )
-                {
-                    xPropSet->setPropertyValue(gsSortAlgorithm, Any(sAlgorithm));
-                }
-
-                Sequence<Sequence<PropertyValue> > aKeysSeq = comphelper::containerToSequence(aSortKeys);
-                xPropSet->setPropertyValue(gsSortKeys, Any(aKeysSeq));
-            }
-            // else: can't get FieldMaster -> ignore
-        }
+        aAny <<= maLanguageTagODF.getLanguageTag().getLocale( false);
+        xPropSet->setPropertyValue(gsLocale, aAny);
     }
+
+    if( !sAlgorithm.isEmpty() )
+    {
+        xPropSet->setPropertyValue(gsSortAlgorithm, Any(sAlgorithm));
+    }
+
+    Sequence<Sequence<PropertyValue> > aKeysSeq = comphelper::containerToSequence(aSortKeys);
+    xPropSet->setPropertyValue(gsSortKeys, Any(aKeysSeq));
+    // else: can't get FieldMaster -> ignore
     // else: can't even get Factory -> ignore
 }
 

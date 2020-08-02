@@ -480,30 +480,30 @@ void SAL_CALL ScAutoFormatObj::setPropertyValue(
 {
     SolarMutexGuard aGuard;
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
-    if (IsInserted() && nFormatIndex < pFormats->size())
-    {
-        ScAutoFormatData* pData = pFormats->findByIndex(nFormatIndex);
-        OSL_ENSURE(pData,"AutoFormat data not available");
+    if (!(IsInserted() && nFormatIndex < pFormats->size()))
+        return;
 
-        bool bBool;
-        if (aPropertyName == SC_UNONAME_INCBACK && (aValue >>= bBool))
-            pData->SetIncludeBackground( bBool );
-        else if (aPropertyName == SC_UNONAME_INCBORD && (aValue >>= bBool))
-            pData->SetIncludeFrame( bBool );
-        else if (aPropertyName == SC_UNONAME_INCFONT && (aValue >>= bBool))
-            pData->SetIncludeFont( bBool );
-        else if (aPropertyName == SC_UNONAME_INCJUST && (aValue >>= bBool))
-            pData->SetIncludeJustify( bBool );
-        else if (aPropertyName == SC_UNONAME_INCNUM && (aValue >>= bBool))
-            pData->SetIncludeValueFormat( bBool );
-        else if (aPropertyName == SC_UNONAME_INCWIDTH && (aValue >>= bBool))
-            pData->SetIncludeWidthHeight( bBool );
+    ScAutoFormatData* pData = pFormats->findByIndex(nFormatIndex);
+    OSL_ENSURE(pData,"AutoFormat data not available");
 
-        // else error
+    bool bBool;
+    if (aPropertyName == SC_UNONAME_INCBACK && (aValue >>= bBool))
+        pData->SetIncludeBackground( bBool );
+    else if (aPropertyName == SC_UNONAME_INCBORD && (aValue >>= bBool))
+        pData->SetIncludeFrame( bBool );
+    else if (aPropertyName == SC_UNONAME_INCFONT && (aValue >>= bBool))
+        pData->SetIncludeFont( bBool );
+    else if (aPropertyName == SC_UNONAME_INCJUST && (aValue >>= bBool))
+        pData->SetIncludeJustify( bBool );
+    else if (aPropertyName == SC_UNONAME_INCNUM && (aValue >>= bBool))
+        pData->SetIncludeValueFormat( bBool );
+    else if (aPropertyName == SC_UNONAME_INCWIDTH && (aValue >>= bBool))
+        pData->SetIncludeWidthHeight( bBool );
 
-        //! notify to other objects
-        pFormats->SetSaveLater(true);
-    }
+    // else error
+
+    //! notify to other objects
+    pFormats->SetSaveLater(true);
 }
 
 uno::Any SAL_CALL ScAutoFormatObj::getPropertyValue( const OUString& aPropertyName )
@@ -572,95 +572,95 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
     const SfxItemPropertySimpleEntry* pEntry =
             aPropSet.getPropertyMap().getByName( aPropertyName );
 
-    if ( pEntry && pEntry->nWID && nFormatIndex < pFormats->size() )
+    if ( !(pEntry && pEntry->nWID && nFormatIndex < pFormats->size()) )
+        return;
+
+    ScAutoFormatData* pData = pFormats->findByIndex(nFormatIndex);
+
+    if ( IsScItemWid( pEntry->nWID ) )
     {
-        ScAutoFormatData* pData = pFormats->findByIndex(nFormatIndex);
-
-        if ( IsScItemWid( pEntry->nWID ) )
+        if( const SfxPoolItem* pItem = pData->GetItem( nFieldIndex, pEntry->nWID ) )
         {
-            if( const SfxPoolItem* pItem = pData->GetItem( nFieldIndex, pEntry->nWID ) )
-            {
-                bool bDone = false;
+            bool bDone = false;
 
-                switch( pEntry->nWID )
+            switch( pEntry->nWID )
+            {
+                case ATTR_STACKED:
                 {
-                    case ATTR_STACKED:
+                    table::CellOrientation eOrient;
+                    if( aValue >>= eOrient )
                     {
-                        table::CellOrientation eOrient;
-                        if( aValue >>= eOrient )
+                        switch( eOrient )
                         {
-                            switch( eOrient )
+                            case table::CellOrientation_STANDARD:
+                                pData->PutItem( nFieldIndex, ScVerticalStackCell( false ) );
+                            break;
+                            case table::CellOrientation_TOPBOTTOM:
+                                pData->PutItem( nFieldIndex, ScVerticalStackCell( false ) );
+                                pData->PutItem( nFieldIndex, ScRotateValueItem( 27000 ) );
+                            break;
+                            case table::CellOrientation_BOTTOMTOP:
+                                pData->PutItem( nFieldIndex, ScVerticalStackCell( false ) );
+                                pData->PutItem( nFieldIndex, ScRotateValueItem( 9000 ) );
+                            break;
+                            case table::CellOrientation_STACKED:
+                                pData->PutItem( nFieldIndex, ScVerticalStackCell( true ) );
+                            break;
+                            default:
                             {
-                                case table::CellOrientation_STANDARD:
-                                    pData->PutItem( nFieldIndex, ScVerticalStackCell( false ) );
-                                break;
-                                case table::CellOrientation_TOPBOTTOM:
-                                    pData->PutItem( nFieldIndex, ScVerticalStackCell( false ) );
-                                    pData->PutItem( nFieldIndex, ScRotateValueItem( 27000 ) );
-                                break;
-                                case table::CellOrientation_BOTTOMTOP:
-                                    pData->PutItem( nFieldIndex, ScVerticalStackCell( false ) );
-                                    pData->PutItem( nFieldIndex, ScRotateValueItem( 9000 ) );
-                                break;
-                                case table::CellOrientation_STACKED:
-                                    pData->PutItem( nFieldIndex, ScVerticalStackCell( true ) );
-                                break;
-                                default:
-                                {
-                                    // added to avoid warnings
-                                }
+                                // added to avoid warnings
                             }
-                            bDone = true;
                         }
+                        bDone = true;
                     }
-                    break;
-                    default:
-                        std::unique_ptr<SfxPoolItem> pNewItem(pItem->Clone());
-                        bDone = pNewItem->PutValue( aValue, pEntry->nMemberId );
-                        if (bDone)
-                            pData->PutItem( nFieldIndex, *pNewItem );
                 }
-
-                if (bDone)
-                    //! Notify to other objects?
-                    pFormats->SetSaveLater(true);
+                break;
+                default:
+                    std::unique_ptr<SfxPoolItem> pNewItem(pItem->Clone());
+                    bDone = pNewItem->PutValue( aValue, pEntry->nMemberId );
+                    if (bDone)
+                        pData->PutItem( nFieldIndex, *pNewItem );
             }
+
+            if (bDone)
+                //! Notify to other objects?
+                pFormats->SetSaveLater(true);
         }
-        else
+    }
+    else
+    {
+        switch (pEntry->nWID)
         {
-            switch (pEntry->nWID)
-            {
-                case SC_WID_UNO_TBLBORD:
+            case SC_WID_UNO_TBLBORD:
+                {
+                    table::TableBorder aBorder;
+                    if ( aValue >>= aBorder )   // empty = nothing to do
                     {
-                        table::TableBorder aBorder;
-                        if ( aValue >>= aBorder )   // empty = nothing to do
-                        {
-                            SvxBoxItem aOuter(ATTR_BORDER);
-                            SvxBoxInfoItem aInner(ATTR_BORDER_INNER);
-                            ScHelperFunctions::FillBoxItems( aOuter, aInner, aBorder );
-                            pData->PutItem( nFieldIndex, aOuter );
+                        SvxBoxItem aOuter(ATTR_BORDER);
+                        SvxBoxInfoItem aInner(ATTR_BORDER_INNER);
+                        ScHelperFunctions::FillBoxItems( aOuter, aInner, aBorder );
+                        pData->PutItem( nFieldIndex, aOuter );
 
-                            //! Notify for other objects?
-                            pFormats->SetSaveLater(true);
-                        }
+                        //! Notify for other objects?
+                        pFormats->SetSaveLater(true);
                     }
-                    break;
-                case SC_WID_UNO_TBLBORD2:
+                }
+                break;
+            case SC_WID_UNO_TBLBORD2:
+                {
+                    table::TableBorder2 aBorder2;
+                    if ( aValue >>= aBorder2 )   // empty = nothing to do
                     {
-                        table::TableBorder2 aBorder2;
-                        if ( aValue >>= aBorder2 )   // empty = nothing to do
-                        {
-                            SvxBoxItem aOuter(ATTR_BORDER);
-                            SvxBoxInfoItem aInner(ATTR_BORDER_INNER);
-                            ScHelperFunctions::FillBoxItems( aOuter, aInner, aBorder2 );
-                            pData->PutItem( nFieldIndex, aOuter );
+                        SvxBoxItem aOuter(ATTR_BORDER);
+                        SvxBoxInfoItem aInner(ATTR_BORDER_INNER);
+                        ScHelperFunctions::FillBoxItems( aOuter, aInner, aBorder2 );
+                        pData->PutItem( nFieldIndex, aOuter );
 
-                            //! Notify for other objects?
-                            pFormats->SetSaveLater(true);
-                        }
+                        //! Notify for other objects?
+                        pFormats->SetSaveLater(true);
                     }
-                    break;
-            }
+                }
+                break;
         }
     }
 }

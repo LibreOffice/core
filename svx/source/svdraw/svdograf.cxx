@@ -1059,43 +1059,43 @@ void SdrGrafObj::AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrink
                                             mpGraphicObject->GetPrefMapMode(),
                                             MapMode( MapUnit::Map100thMM ) );
 
-    if( !aSize.IsEmpty() )
+    if( aSize.IsEmpty() )
+        return;
+
+    Point aPos( rMaxRect.TopLeft() );
+
+    // if the graphic is too large, fit it to page
+    if ( (!bShrinkOnly                          ||
+         ( aSize.Height() > aMaxSize.Height() ) ||
+         ( aSize.Width()  > aMaxSize.Width()  ) )&&
+         aSize.Height() && aMaxSize.Height() )
     {
-        Point aPos( rMaxRect.TopLeft() );
+        float fGrfWH =  static_cast<float>(aSize.Width()) /
+                        static_cast<float>(aSize.Height());
+        float fWinWH =  static_cast<float>(aMaxSize.Width()) /
+                        static_cast<float>(aMaxSize.Height());
 
-        // if the graphic is too large, fit it to page
-        if ( (!bShrinkOnly                          ||
-             ( aSize.Height() > aMaxSize.Height() ) ||
-             ( aSize.Width()  > aMaxSize.Width()  ) )&&
-             aSize.Height() && aMaxSize.Height() )
+        // Scale graphic to page size
+        if ( fGrfWH < fWinWH )
         {
-            float fGrfWH =  static_cast<float>(aSize.Width()) /
-                            static_cast<float>(aSize.Height());
-            float fWinWH =  static_cast<float>(aMaxSize.Width()) /
-                            static_cast<float>(aMaxSize.Height());
-
-            // Scale graphic to page size
-            if ( fGrfWH < fWinWH )
-            {
-                aSize.setWidth( static_cast<long>(aMaxSize.Height() * fGrfWH) );
-                aSize.setHeight( aMaxSize.Height() );
-            }
-            else if ( fGrfWH > 0.F )
-            {
-                aSize.setWidth( aMaxSize.Width() );
-                aSize.setHeight( static_cast<long>(aMaxSize.Width() / fGrfWH) );
-            }
-
-            aPos = rMaxRect.Center();
+            aSize.setWidth( static_cast<long>(aMaxSize.Height() * fGrfWH) );
+            aSize.setHeight( aMaxSize.Height() );
+        }
+        else if ( fGrfWH > 0.F )
+        {
+            aSize.setWidth( aMaxSize.Width() );
+            aSize.setHeight( static_cast<long>(aMaxSize.Width() / fGrfWH) );
         }
 
-        if( bShrinkOnly )
-            aPos = maRect.TopLeft();
-
-        aPos.AdjustX( -(aSize.Width() / 2) );
-        aPos.AdjustY( -(aSize.Height() / 2) );
-        SetLogicRect( tools::Rectangle( aPos, aSize ) );
+        aPos = rMaxRect.Center();
     }
+
+    if( bShrinkOnly )
+        aPos = maRect.TopLeft();
+
+    aPos.AdjustX( -(aSize.Width() / 2) );
+    aPos.AdjustY( -(aSize.Height() / 2) );
+    SetLogicRect( tools::Rectangle( aPos, aSize ) );
 }
 
 void SdrGrafObj::SetGrafAnimationAllowed(bool bNew)

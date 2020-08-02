@@ -197,27 +197,27 @@ void ScreenshotTest::dumpDialogToPath(weld::Builder& rBuilder)
 
 void ScreenshotTest::dumpDialogToPath(const OString& rUIXMLDescription)
 {
-    if (!rUIXMLDescription.isEmpty())
-    {
-        bool bNonConforming = rUIXMLDescription == "modules/swriter/ui/sidebarstylepresets.ui" ||
-                              rUIXMLDescription == "modules/swriter/ui/sidebartheme.ui" ||
-                              rUIXMLDescription == "modules/swriter/ui/notebookbar.ui" ||
-                              rUIXMLDescription == "modules/scalc/ui/sidebaralignment.ui" ||
-                              rUIXMLDescription == "modules/scalc/ui/sidebarcellappearance.ui" ||
-                              rUIXMLDescription == "modules/scalc/ui/sidebarnumberformat.ui" ||
-                              rUIXMLDescription == "sfx/ui/helpbookmarkpage.ui" ||
-                              rUIXMLDescription == "sfx/ui/helpcontentpage.ui" ||
-                              rUIXMLDescription == "sfx/ui/helpindexpage.ui" ||
-                              rUIXMLDescription == "sfx/ui/helpsearchpage.ui" ||
-                              rUIXMLDescription == "sfx/ui/startcenter.ui" ||
-                              rUIXMLDescription == "svx/ui/datanavigator.ui" ||
-                              rUIXMLDescription == "svx/ui/xformspage.ui" ||
-                              rUIXMLDescription == "modules/dbreport/ui/conditionwin.ui";
-        if (bNonConforming) // skip these broken ones
-            return;
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(mxParentWidget.get(), OStringToOUString(rUIXMLDescription, RTL_TEXTENCODING_UTF8)));
-        dumpDialogToPath(*xBuilder);
-    }
+    if (rUIXMLDescription.isEmpty())
+        return;
+
+    bool bNonConforming = rUIXMLDescription == "modules/swriter/ui/sidebarstylepresets.ui" ||
+                          rUIXMLDescription == "modules/swriter/ui/sidebartheme.ui" ||
+                          rUIXMLDescription == "modules/swriter/ui/notebookbar.ui" ||
+                          rUIXMLDescription == "modules/scalc/ui/sidebaralignment.ui" ||
+                          rUIXMLDescription == "modules/scalc/ui/sidebarcellappearance.ui" ||
+                          rUIXMLDescription == "modules/scalc/ui/sidebarnumberformat.ui" ||
+                          rUIXMLDescription == "sfx/ui/helpbookmarkpage.ui" ||
+                          rUIXMLDescription == "sfx/ui/helpcontentpage.ui" ||
+                          rUIXMLDescription == "sfx/ui/helpindexpage.ui" ||
+                          rUIXMLDescription == "sfx/ui/helpsearchpage.ui" ||
+                          rUIXMLDescription == "sfx/ui/startcenter.ui" ||
+                          rUIXMLDescription == "svx/ui/datanavigator.ui" ||
+                          rUIXMLDescription == "svx/ui/xformspage.ui" ||
+                          rUIXMLDescription == "modules/dbreport/ui/conditionwin.ui";
+    if (bNonConforming) // skip these broken ones
+        return;
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(mxParentWidget.get(), OStringToOUString(rUIXMLDescription, RTL_TEXTENCODING_UTF8)));
+    dumpDialogToPath(*xBuilder);
 }
 
 void ScreenshotTest::processAllKnownDialogs()

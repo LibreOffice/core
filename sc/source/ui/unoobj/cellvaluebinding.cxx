@@ -348,42 +348,42 @@ namespace calc
         OUString sPropName( "NumberFormat" );
         Reference<XPropertySet> xCellProp( m_xCell, UNO_QUERY );
         Reference<XNumberFormatsSupplier> xSupplier( m_xDocument, UNO_QUERY );
-        if ( xSupplier.is() && xCellProp.is() )
+        if ( !(xSupplier.is() && xCellProp.is()) )
+            return;
+
+        Reference<XNumberFormats> xFormats(xSupplier->getNumberFormats());
+        Reference<XNumberFormatTypes> xTypes( xFormats, UNO_QUERY );
+        if ( !xTypes.is() )
+            return;
+
+        lang::Locale aLocale;
+        bool bWasBoolean = false;
+
+        sal_Int32 nOldIndex = ::comphelper::getINT32( xCellProp->getPropertyValue( sPropName ) );
+        Reference<XPropertySet> xOldFormat;
+        try
         {
-            Reference<XNumberFormats> xFormats(xSupplier->getNumberFormats());
-            Reference<XNumberFormatTypes> xTypes( xFormats, UNO_QUERY );
-            if ( xTypes.is() )
-            {
-                lang::Locale aLocale;
-                bool bWasBoolean = false;
+            xOldFormat.set(xFormats->getByKey( nOldIndex ));
+        }
+        catch ( Exception& )
+        {
+            // non-existing format - can happen, use defaults
+        }
+        if ( xOldFormat.is() )
+        {
+            // use the locale of the existing format
+            xOldFormat->getPropertyValue("Locale") >>= aLocale;
 
-                sal_Int32 nOldIndex = ::comphelper::getINT32( xCellProp->getPropertyValue( sPropName ) );
-                Reference<XPropertySet> xOldFormat;
-                try
-                {
-                    xOldFormat.set(xFormats->getByKey( nOldIndex ));
-                }
-                catch ( Exception& )
-                {
-                    // non-existing format - can happen, use defaults
-                }
-                if ( xOldFormat.is() )
-                {
-                    // use the locale of the existing format
-                    xOldFormat->getPropertyValue("Locale") >>= aLocale;
+            sal_Int16 nOldType = ::comphelper::getINT16(
+                xOldFormat->getPropertyValue("Type") );
+            if ( nOldType & NumberFormat::LOGICAL )
+                bWasBoolean = true;
+        }
 
-                    sal_Int16 nOldType = ::comphelper::getINT16(
-                        xOldFormat->getPropertyValue("Type") );
-                    if ( nOldType & NumberFormat::LOGICAL )
-                        bWasBoolean = true;
-                }
-
-                if ( !bWasBoolean )
-                {
-                    sal_Int32 nNewIndex = xTypes->getStandardFormat( NumberFormat::LOGICAL, aLocale );
-                    xCellProp->setPropertyValue( sPropName, makeAny( nNewIndex ) );
-                }
-            }
+        if ( !bWasBoolean )
+        {
+            sal_Int32 nNewIndex = xTypes->getStandardFormat( NumberFormat::LOGICAL, aLocale );
+            xCellProp->setPropertyValue( sPropName, makeAny( nNewIndex ) );
         }
     }
 

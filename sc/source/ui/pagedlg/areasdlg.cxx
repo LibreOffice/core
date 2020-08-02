@@ -165,33 +165,33 @@ bool ScPrintAreasDlg::IsTableLocked() const
 
 void ScPrintAreasDlg::SetReference( const ScRange& rRef, ScDocument& /* rDoc */ )
 {
-    if ( m_pRefInputEdit )
+    if ( !m_pRefInputEdit )
+        return;
+
+    if ( rRef.aStart != rRef.aEnd )
+        RefInputStart( m_pRefInputEdit );
+
+    OUString  aStr;
+    const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
+
+    if (m_xEdPrintArea.get() == m_pRefInputEdit)
     {
-        if ( rRef.aStart != rRef.aEnd )
-            RefInputStart( m_pRefInputEdit );
-
-        OUString  aStr;
-        const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-
-        if (m_xEdPrintArea.get() == m_pRefInputEdit)
-        {
-            aStr = rRef.Format(*pDoc, ScRefFlags::RANGE_ABS, eConv);
-            OUString aVal = m_xEdPrintArea->GetText();
-            Selection aSel = m_xEdPrintArea->GetSelection();
-            aSel.Justify();
-            aVal = aVal.replaceAt( aSel.Min(), aSel.Len(), aStr );
-            Selection aNewSel( aSel.Min(), aSel.Min()+aStr.getLength() );
-            m_xEdPrintArea->SetRefString( aVal );
-            m_xEdPrintArea->SetSelection( aNewSel );
-        }
-        else
-        {
-            bool bRow = ( m_xEdRepeatRow.get() == m_pRefInputEdit );
-            lcl_GetRepeatRangeString(&rRef, *pDoc, bRow, aStr);
-            m_pRefInputEdit->SetRefString( aStr );
-        }
-        Impl_ModifyHdl( *m_pRefInputEdit );
+        aStr = rRef.Format(*pDoc, ScRefFlags::RANGE_ABS, eConv);
+        OUString aVal = m_xEdPrintArea->GetText();
+        Selection aSel = m_xEdPrintArea->GetSelection();
+        aSel.Justify();
+        aVal = aVal.replaceAt( aSel.Min(), aSel.Len(), aStr );
+        Selection aNewSel( aSel.Min(), aSel.Min()+aStr.getLength() );
+        m_xEdPrintArea->SetRefString( aVal );
+        m_xEdPrintArea->SetSelection( aNewSel );
     }
+    else
+    {
+        bool bRow = ( m_xEdRepeatRow.get() == m_pRefInputEdit );
+        lcl_GetRepeatRangeString(&rRef, *pDoc, bRow, aStr);
+        m_pRefInputEdit->SetRefString( aStr );
+    }
+    Impl_ModifyHdl( *m_pRefInputEdit );
 }
 
 void ScPrintAreasDlg::AddRefEntry()

@@ -523,90 +523,92 @@ void SdrObjGroup::SetLogicRect(const tools::Rectangle& rRect)
 
 void SdrObjGroup::Move(const Size& rSiz)
 {
-    if (rSiz.Width()!=0 || rSiz.Height()!=0) {
-        tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
-        aRefPoint.Move(rSiz);
-        const size_t nObjCount(GetObjCount());
+    if (rSiz.Width()==0 && rSiz.Height()==0)
+        return;
 
-        if(0 != nObjCount)
-        {
-            // first move the connectors, then everything else
-            for (size_t i=0; i<nObjCount; ++i)
-            {
-                SdrObject* pObj(GetObj(i));
-                if (pObj->IsEdgeObj())
-                    pObj->Move(rSiz);
-            }
+    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    aRefPoint.Move(rSiz);
+    const size_t nObjCount(GetObjCount());
 
-            for (size_t i=0; i<nObjCount; ++i)
-            {
-                SdrObject* pObj(GetObj(i));
-                if (!pObj->IsEdgeObj())
-                    pObj->Move(rSiz);
-            }
-        }
-        else
+    if(0 != nObjCount)
+    {
+        // first move the connectors, then everything else
+        for (size_t i=0; i<nObjCount; ++i)
         {
-            aOutRect.Move(rSiz);
-            SetRectsDirty();
+            SdrObject* pObj(GetObj(i));
+            if (pObj->IsEdgeObj())
+                pObj->Move(rSiz);
         }
 
-        SetChanged();
-        BroadcastObjectChange();
-        SendUserCall(SdrUserCallType::MoveOnly,aBoundRect0);
+        for (size_t i=0; i<nObjCount; ++i)
+        {
+            SdrObject* pObj(GetObj(i));
+            if (!pObj->IsEdgeObj())
+                pObj->Move(rSiz);
+        }
     }
+    else
+    {
+        aOutRect.Move(rSiz);
+        SetRectsDirty();
+    }
+
+    SetChanged();
+    BroadcastObjectChange();
+    SendUserCall(SdrUserCallType::MoveOnly,aBoundRect0);
 }
 
 
 void SdrObjGroup::Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative)
 {
-    if (xFact.GetNumerator()!=xFact.GetDenominator() || yFact.GetNumerator()!=yFact.GetDenominator()) {
-        bool bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
-        bool bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
-        if (bXMirr || bYMirr) {
-            Point aRef1(GetSnapRect().Center());
-            if (bXMirr) {
-                Point aRef2(aRef1);
-                aRef2.AdjustY( 1 );
-                NbcMirrorGluePoints(aRef1,aRef2);
-            }
-            if (bYMirr) {
-                Point aRef2(aRef1);
-                aRef2.AdjustX( 1 );
-                NbcMirrorGluePoints(aRef1,aRef2);
-            }
-        }
-        tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
-        ResizePoint(aRefPoint,rRef,xFact,yFact);
-        const size_t nObjCount(GetObjCount());
+    if (xFact.GetNumerator()==xFact.GetDenominator() && yFact.GetNumerator()==yFact.GetDenominator())
+        return;
 
-        if(0 != nObjCount)
-        {
-            // move the connectors first, everything else afterwards
-            for (size_t i=0; i<nObjCount; ++i)
-            {
-                SdrObject* pObj(GetObj(i));
-                if (pObj->IsEdgeObj())
-                    pObj->Resize(rRef,xFact,yFact,bUnsetRelative);
-            }
-
-            for (size_t i=0; i<nObjCount; ++i)
-            {
-                SdrObject* pObj(GetObj(i));
-                if (!pObj->IsEdgeObj())
-                    pObj->Resize(rRef,xFact,yFact,bUnsetRelative);
-            }
+    bool bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
+    bool bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
+    if (bXMirr || bYMirr) {
+        Point aRef1(GetSnapRect().Center());
+        if (bXMirr) {
+            Point aRef2(aRef1);
+            aRef2.AdjustY( 1 );
+            NbcMirrorGluePoints(aRef1,aRef2);
         }
-        else
-        {
-            ResizeRect(aOutRect,rRef,xFact,yFact);
-            SetRectsDirty();
+        if (bYMirr) {
+            Point aRef2(aRef1);
+            aRef2.AdjustX( 1 );
+            NbcMirrorGluePoints(aRef1,aRef2);
         }
-
-        SetChanged();
-        BroadcastObjectChange();
-        SendUserCall(SdrUserCallType::Resize,aBoundRect0);
     }
+    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    ResizePoint(aRefPoint,rRef,xFact,yFact);
+    const size_t nObjCount(GetObjCount());
+
+    if(0 != nObjCount)
+    {
+        // move the connectors first, everything else afterwards
+        for (size_t i=0; i<nObjCount; ++i)
+        {
+            SdrObject* pObj(GetObj(i));
+            if (pObj->IsEdgeObj())
+                pObj->Resize(rRef,xFact,yFact,bUnsetRelative);
+        }
+
+        for (size_t i=0; i<nObjCount; ++i)
+        {
+            SdrObject* pObj(GetObj(i));
+            if (!pObj->IsEdgeObj())
+                pObj->Resize(rRef,xFact,yFact,bUnsetRelative);
+        }
+    }
+    else
+    {
+        ResizeRect(aOutRect,rRef,xFact,yFact);
+        SetRectsDirty();
+    }
+
+    SetChanged();
+    BroadcastObjectChange();
+    SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
 

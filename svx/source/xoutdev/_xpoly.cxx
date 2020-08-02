@@ -113,31 +113,31 @@ void ImpXPolygon::Resize( sal_uInt16 nNewSize, bool bDeletePoints )
     memset( pFlagAry.get(), 0, nSize );
 
     // copy if needed
-    if( nOldSize )
-    {
-        if( nOldSize < nSize )
-        {
-            memcpy( pPointAry.get(), pOldPointAry, nOldSize*sizeof( Point ) );
-            memcpy( pFlagAry.get(),  pOldFlagAry, nOldSize );
-        }
-        else
-        {
-            memcpy( pPointAry.get(), pOldPointAry, nSize*sizeof( Point ) );
-            memcpy( pFlagAry.get(), pOldFlagAry, nSize );
+    if( !nOldSize )
+        return;
 
-            // adjust number of valid points
-            if( nPoints > nSize )
-                nPoints = nSize;
-        }
-        if ( bDeletePoints )
-        {
-            delete[] pOldPointAry;
-            pOldPointAry = nullptr;
-        }
-        else
-            bDeleteOldPoints = true;
-        delete[] pOldFlagAry;
+    if( nOldSize < nSize )
+    {
+        memcpy( pPointAry.get(), pOldPointAry, nOldSize*sizeof( Point ) );
+        memcpy( pFlagAry.get(),  pOldFlagAry, nOldSize );
     }
+    else
+    {
+        memcpy( pPointAry.get(), pOldPointAry, nSize*sizeof( Point ) );
+        memcpy( pFlagAry.get(), pOldFlagAry, nSize );
+
+        // adjust number of valid points
+        if( nPoints > nSize )
+            nPoints = nSize;
+    }
+    if ( bDeletePoints )
+    {
+        delete[] pOldPointAry;
+        pOldPointAry = nullptr;
+    }
+    else
+        bDeleteOldPoints = true;
+    delete[] pOldFlagAry;
 }
 
 void ImpXPolygon::InsertSpace( sal_uInt16 nPos, sal_uInt16 nCount )
@@ -169,20 +169,20 @@ void ImpXPolygon::Remove( sal_uInt16 nPos, sal_uInt16 nCount )
 {
     CheckPointDelete();
 
-    if( (nPos + nCount) <= nPoints )
-    {
-        sal_uInt16 nMove = nPoints - nPos - nCount;
+    if( (nPos + nCount) > nPoints )
+        return;
 
-        if( nMove )
-        {
-            memmove( &pPointAry[nPos], &pPointAry[nPos+nCount],
-                     nMove * sizeof(Point) );
-            memmove( &pFlagAry[nPos], &pFlagAry[nPos+nCount], nMove );
-        }
-        std::fill(pPointAry.get() + (nPoints - nCount), pPointAry.get() + nPoints, Point());
-        memset( &pFlagAry [nPoints - nCount], 0, nCount );
-        nPoints = nPoints - nCount;
+    sal_uInt16 nMove = nPoints - nPos - nCount;
+
+    if( nMove )
+    {
+        memmove( &pPointAry[nPos], &pPointAry[nPos+nCount],
+                 nMove * sizeof(Point) );
+        memmove( &pFlagAry[nPos], &pFlagAry[nPos+nCount], nMove );
     }
+    std::fill(pPointAry.get() + (nPoints - nCount), pPointAry.get() + nPoints, Point());
+    memset( &pFlagAry [nPoints - nCount], 0, nCount );
+    nPoints = nPoints - nCount;
 }
 
 void ImpXPolygon::CheckPointDelete() const

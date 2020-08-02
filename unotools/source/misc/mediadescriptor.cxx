@@ -432,23 +432,23 @@ void MediaDescriptor::setComponentDataEntry( const OUString& rName, const css::u
 void MediaDescriptor::clearComponentDataEntry( const OUString& rName )
 {
     comphelper::SequenceAsHashMap::iterator aPropertyIter = find( PROP_COMPONENTDATA() );
-    if( aPropertyIter != end() )
+    if( aPropertyIter == end() )
+        return;
+
+    css::uno::Any& rCompDataAny = aPropertyIter->second;
+    bool bHasNamedValues = rCompDataAny.has< css::uno::Sequence< css::beans::NamedValue > >();
+    bool bHasPropValues = rCompDataAny.has< css::uno::Sequence< css::beans::PropertyValue > >();
+    OSL_ENSURE( bHasNamedValues || bHasPropValues, "MediaDescriptor::clearComponentDataEntry - incompatible 'ComponentData' property in media descriptor" );
+    if( bHasNamedValues || bHasPropValues )
     {
-        css::uno::Any& rCompDataAny = aPropertyIter->second;
-        bool bHasNamedValues = rCompDataAny.has< css::uno::Sequence< css::beans::NamedValue > >();
-        bool bHasPropValues = rCompDataAny.has< css::uno::Sequence< css::beans::PropertyValue > >();
-        OSL_ENSURE( bHasNamedValues || bHasPropValues, "MediaDescriptor::clearComponentDataEntry - incompatible 'ComponentData' property in media descriptor" );
-        if( bHasNamedValues || bHasPropValues )
-        {
-            // remove the value with the passed name
-            comphelper::SequenceAsHashMap aCompDataMap( rCompDataAny );
-            aCompDataMap.erase( rName );
-            // write back the sequence, or remove it completely if it is empty
-            if( aCompDataMap.empty() )
-                erase( aPropertyIter );
-            else
-                rCompDataAny = aCompDataMap.getAsConstAny( bHasPropValues );
-        }
+        // remove the value with the passed name
+        comphelper::SequenceAsHashMap aCompDataMap( rCompDataAny );
+        aCompDataMap.erase( rName );
+        // write back the sequence, or remove it completely if it is empty
+        if( aCompDataMap.empty() )
+            erase( aPropertyIter );
+        else
+            rCompDataAny = aCompDataMap.getAsConstAny( bHasPropValues );
     }
 }
 

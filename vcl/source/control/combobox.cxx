@@ -479,23 +479,23 @@ IMPL_LINK_NOARG(ComboBox::Impl, ImplDoubleClickHdl, ImplListBoxWindow*, void)
 
 void ComboBox::ToggleDropDown()
 {
-    if( IsDropDownBox() )
+    if( !IsDropDownBox() )
+        return;
+
+    if (m_pImpl->m_pFloatWin->IsInPopupMode())
+        m_pImpl->m_pFloatWin->EndPopupMode();
+    else
     {
-        if (m_pImpl->m_pFloatWin->IsInPopupMode())
-            m_pImpl->m_pFloatWin->EndPopupMode();
+        m_pImpl->m_pSubEdit->GrabFocus();
+        if (!m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount())
+            m_pImpl->ImplUpdateFloatSelection();
         else
-        {
-            m_pImpl->m_pSubEdit->GrabFocus();
-            if (!m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount())
-                m_pImpl->ImplUpdateFloatSelection();
-            else
-                m_pImpl->m_pImplLB->SelectEntry( 0 , true );
-            CallEventListeners( VclEventId::DropdownPreOpen );
-            m_pImpl->m_pBtn->SetPressed( true );
-            SetSelection( Selection( 0, SELECTION_MAX ) );
-            m_pImpl->m_pFloatWin->StartFloat( true );
-            CallEventListeners( VclEventId::DropdownOpen );
-        }
+            m_pImpl->m_pImplLB->SelectEntry( 0 , true );
+        CallEventListeners( VclEventId::DropdownPreOpen );
+        m_pImpl->m_pBtn->SetPressed( true );
+        SetSelection( Selection( 0, SELECTION_MAX ) );
+        m_pImpl->m_pFloatWin->StartFloat( true );
+        CallEventListeners( VclEventId::DropdownOpen );
     }
 }
 
@@ -693,22 +693,22 @@ void ComboBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Control::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DataChangedEventType::FONTS) ||
+    if ( !((rDCEvt.GetType() == DataChangedEventType::FONTS) ||
          (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
-    {
-        if (m_pImpl->m_pBtn)
-        {
-            m_pImpl->m_pBtn->SetSettings( GetSettings() );
-            ImplInitDropDownButton( m_pImpl->m_pBtn );
-        }
-        Resize();
-        m_pImpl->m_pImplLB->Resize(); // not called by ComboBox::Resize() if ImplLB is unchanged
+          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))) )
+        return;
 
-        SetBackground();    // due to a hack in Window::UpdateSettings the background must be reset
-                            // otherwise it will overpaint NWF drawn comboboxes
+    if (m_pImpl->m_pBtn)
+    {
+        m_pImpl->m_pBtn->SetSettings( GetSettings() );
+        ImplInitDropDownButton( m_pImpl->m_pBtn );
     }
+    Resize();
+    m_pImpl->m_pImplLB->Resize(); // not called by ComboBox::Resize() if ImplLB is unchanged
+
+    SetBackground();    // due to a hack in Window::UpdateSettings the background must be reset
+                        // otherwise it will overpaint NWF drawn comboboxes
 }
 
 bool ComboBox::EventNotify( NotifyEvent& rNEvt )

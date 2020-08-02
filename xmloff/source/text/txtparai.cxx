@@ -117,27 +117,27 @@ XMLCharContext::XMLCharContext(
     ,m_nCount(1)
     ,m_c(c)
 {
-    if( bCount )
-    {
-        const SvXMLNamespaceMap& rMap = GetImport().GetNamespaceMap();
-        sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-        for( sal_Int16 i=0; i < nAttrCount; i++ )
-        {
-            const OUString& rAttrName = xAttrList->getNameByIndex( i );
+    if( !bCount )
+        return;
 
-            OUString aLocalName;
-            sal_uInt16 nPrefix =rMap.GetKeyByAttrName( rAttrName,&aLocalName );
-            if( XML_NAMESPACE_TEXT == nPrefix &&
-                IsXMLToken( aLocalName, XML_C ) )
+    const SvXMLNamespaceMap& rMap = GetImport().GetNamespaceMap();
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    {
+        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+
+        OUString aLocalName;
+        sal_uInt16 nPrefix =rMap.GetKeyByAttrName( rAttrName,&aLocalName );
+        if( XML_NAMESPACE_TEXT == nPrefix &&
+            IsXMLToken( aLocalName, XML_C ) )
+        {
+            sal_Int32 nTmp = xAttrList->getValueByIndex(i).toInt32();
+            if( nTmp > 0 )
             {
-                sal_Int32 nTmp = xAttrList->getValueByIndex(i).toInt32();
-                if( nTmp > 0 )
-                {
-                    if( nTmp > SAL_MAX_UINT16 )
-                        m_nCount = SAL_MAX_UINT16;
-                    else
-                        m_nCount = static_cast<sal_uInt16>(nTmp);
-                }
+                if( nTmp > SAL_MAX_UINT16 )
+                    m_nCount = SAL_MAX_UINT16;
+                else
+                    m_nCount = static_cast<sal_uInt16>(nTmp);
             }
         }
     }
@@ -153,24 +153,24 @@ XMLCharContext::XMLCharContext(
     ,m_nCount(1)
     ,m_c(c)
 {
-    if( bCount )
+    if( !bCount )
+        return;
+
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
+        if( aIter.getToken() == XML_ELEMENT(TEXT, XML_C) )
         {
-            if( aIter.getToken() == XML_ELEMENT(TEXT, XML_C) )
+            sal_Int32 nTmp = aIter.toInt32();
+            if( nTmp > 0 )
             {
-                sal_Int32 nTmp = aIter.toInt32();
-                if( nTmp > 0 )
-                {
-                    if( nTmp > SAL_MAX_UINT16 )
-                        m_nCount = SAL_MAX_UINT16;
-                    else
-                        m_nCount = static_cast<sal_uInt16>(nTmp);
-                }
+                if( nTmp > SAL_MAX_UINT16 )
+                    m_nCount = SAL_MAX_UINT16;
+                else
+                    m_nCount = static_cast<sal_uInt16>(nTmp);
             }
-            else
-                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << " = " << aIter.toString());
         }
+        else
+            SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << " = " << aIter.toString());
     }
 }
 
@@ -352,23 +352,23 @@ XMLEndReferenceContext_Impl::XMLEndReferenceContext_Impl(
     OUString sName;
 
     // borrow from XMLStartReferenceContext_Impl
-    if (XMLStartReferenceContext_Impl::FindName(GetImport(), xAttrList, sName))
+    if (!XMLStartReferenceContext_Impl::FindName(GetImport(), xAttrList, sName))
+        return;
+
+    // search for reference start
+    for (const auto& rHintPtr : rHints.GetHints())
     {
-        // search for reference start
-        for (const auto& rHintPtr : rHints.GetHints())
+        XMLHint_Impl *const pHint = rHintPtr.get();
+        if ( pHint->IsReference() &&
+             sName == static_cast<XMLReferenceHint_Impl *>(pHint)->GetRefName() )
         {
-            XMLHint_Impl *const pHint = rHintPtr.get();
-            if ( pHint->IsReference() &&
-                 sName == static_cast<XMLReferenceHint_Impl *>(pHint)->GetRefName() )
-            {
-                // set end and stop searching
-                pHint->SetEnd(GetImport().GetTextImport()->
-                                     GetCursor()->getStart() );
-                break;
-            }
+            // set end and stop searching
+            pHint->SetEnd(GetImport().GetTextImport()->
+                                 GetCursor()->getStart() );
+            break;
         }
-        // else: no start (in this paragraph) -> ignore
     }
+    // else: no start (in this paragraph) -> ignore
 }
 
 namespace {

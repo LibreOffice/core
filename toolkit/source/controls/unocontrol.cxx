@@ -250,39 +250,39 @@ void UnoControl::ImplSetPeerProperty( const OUString& rPropName, const Any& rVal
     // releases our mutex before calling here in)
     // That's why this additional check
 
-    if ( mxVclWindowPeer.is() )
-    {
-        Any aConvertedValue( rVal );
+    if ( !mxVclWindowPeer.is() )
+        return;
 
-        if ( mpData->bLocalizationSupport )
+    Any aConvertedValue( rVal );
+
+    if ( mpData->bLocalizationSupport )
+    {
+        // We now support a mapping for language dependent properties. This is the
+        // central method to implement it.
+        if( rPropName == "Text"            ||
+            rPropName == "Label"           ||
+            rPropName == "Title"           ||
+            rPropName == "HelpText"        ||
+            rPropName == "CurrencySymbol"  ||
+            rPropName == "StringItemList"  )
         {
-            // We now support a mapping for language dependent properties. This is the
-            // central method to implement it.
-            if( rPropName == "Text"            ||
-                rPropName == "Label"           ||
-                rPropName == "Title"           ||
-                rPropName == "HelpText"        ||
-                rPropName == "CurrencySymbol"  ||
-                rPropName == "StringItemList"  )
+            OUString aValue;
+            uno::Sequence< OUString > aSeqValue;
+            if ( aConvertedValue >>= aValue )
             {
-                OUString aValue;
-                uno::Sequence< OUString > aSeqValue;
-                if ( aConvertedValue >>= aValue )
-                {
-                    if ( ImplCheckLocalize( aValue ) )
-                        aConvertedValue <<= aValue;
-                }
-                else if ( aConvertedValue >>= aSeqValue )
-                {
-                    for ( auto& rValue : aSeqValue )
-                        ImplCheckLocalize( rValue );
-                    aConvertedValue <<= aSeqValue;
-                }
+                if ( ImplCheckLocalize( aValue ) )
+                    aConvertedValue <<= aValue;
+            }
+            else if ( aConvertedValue >>= aSeqValue )
+            {
+                for ( auto& rValue : aSeqValue )
+                    ImplCheckLocalize( rValue );
+                aConvertedValue <<= aSeqValue;
             }
         }
-
-        mxVclWindowPeer->setProperty( rPropName, aConvertedValue );
     }
+
+    mxVclWindowPeer->setProperty( rPropName, aConvertedValue );
 }
 
 void UnoControl::PrepareWindowDescriptor( WindowDescriptor& )

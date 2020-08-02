@@ -194,155 +194,155 @@ namespace sdr::overlay
             // stop timer
             maBufferIdle.Stop();
 
-            if(!maBufferRememberedRangePixel.isEmpty())
+            if(maBufferRememberedRangePixel.isEmpty())
+                return;
+
+            // logic size for impDrawMember call
+            basegfx::B2DRange aBufferRememberedRangeLogic(
+                maBufferRememberedRangePixel.getMinX(), maBufferRememberedRangePixel.getMinY(),
+                maBufferRememberedRangePixel.getMaxX(), maBufferRememberedRangePixel.getMaxY());
+            aBufferRememberedRangeLogic.transform(getOutputDevice().GetInverseViewTransformation());
+
+            // prepare cursor handling
+            const bool bTargetIsWindow(OUTDEV_WINDOW == mrOutputDevice.GetOutDevType());
+            bool bCursorWasEnabled(false);
+
+            // #i80730# switch off VCL cursor during overlay refresh
+            if(bTargetIsWindow)
             {
-                // logic size for impDrawMember call
-                basegfx::B2DRange aBufferRememberedRangeLogic(
+                vcl::Window& rWindow = static_cast< vcl::Window& >(mrOutputDevice);
+                vcl::Cursor* pCursor = rWindow.GetCursor();
+
+                if(pCursor && pCursor->IsVisible())
+                {
+                    pCursor->Hide();
+                    bCursorWasEnabled = true;
+                }
+            }
+
+            // refresh with prerendering
+            {
+                // #i73602# ensure valid and sized mpOutputBufferDevice
+                const Size aDestinationSizePixel(mpBufferDevice->GetOutputSizePixel());
+                const Size aOutputBufferSizePixel(mpOutputBufferDevice->GetOutputSizePixel());
+
+                if(aDestinationSizePixel != aOutputBufferSizePixel)
+                {
+                    mpOutputBufferDevice->SetOutputSizePixel(aDestinationSizePixel);
+                }
+
+                mpOutputBufferDevice->SetMapMode(getOutputDevice().GetMapMode());
+                mpOutputBufferDevice->EnableMapMode(false);
+                mpOutputBufferDevice->SetDrawMode(mpBufferDevice->GetDrawMode());
+                mpOutputBufferDevice->SetSettings(mpBufferDevice->GetSettings());
+                mpOutputBufferDevice->SetAntialiasing(mpBufferDevice->GetAntialiasing());
+
+                // calculate sizes
+                tools::Rectangle aRegionRectanglePixel(
                     maBufferRememberedRangePixel.getMinX(), maBufferRememberedRangePixel.getMinY(),
                     maBufferRememberedRangePixel.getMaxX(), maBufferRememberedRangePixel.getMaxY());
-                aBufferRememberedRangeLogic.transform(getOutputDevice().GetInverseViewTransformation());
 
-                // prepare cursor handling
-                const bool bTargetIsWindow(OUTDEV_WINDOW == mrOutputDevice.GetOutDevType());
-                bool bCursorWasEnabled(false);
-
-                // #i80730# switch off VCL cursor during overlay refresh
-                if(bTargetIsWindow)
+                // truncate aRegionRectanglePixel to destination pixel size, more does
+                // not need to be prepared since destination is a buffer for a window. So,
+                // maximum size indirectly shall be limited to getOutputDevice().GetOutputSizePixel()
+                if(aRegionRectanglePixel.Left() < 0)
                 {
-                    vcl::Window& rWindow = static_cast< vcl::Window& >(mrOutputDevice);
-                    vcl::Cursor* pCursor = rWindow.GetCursor();
-
-                    if(pCursor && pCursor->IsVisible())
-                    {
-                        pCursor->Hide();
-                        bCursorWasEnabled = true;
-                    }
+                    aRegionRectanglePixel.SetLeft( 0 );
                 }
 
-                // refresh with prerendering
+                if(aRegionRectanglePixel.Top() < 0)
                 {
-                    // #i73602# ensure valid and sized mpOutputBufferDevice
-                    const Size aDestinationSizePixel(mpBufferDevice->GetOutputSizePixel());
-                    const Size aOutputBufferSizePixel(mpOutputBufferDevice->GetOutputSizePixel());
-
-                    if(aDestinationSizePixel != aOutputBufferSizePixel)
-                    {
-                        mpOutputBufferDevice->SetOutputSizePixel(aDestinationSizePixel);
-                    }
-
-                    mpOutputBufferDevice->SetMapMode(getOutputDevice().GetMapMode());
-                    mpOutputBufferDevice->EnableMapMode(false);
-                    mpOutputBufferDevice->SetDrawMode(mpBufferDevice->GetDrawMode());
-                    mpOutputBufferDevice->SetSettings(mpBufferDevice->GetSettings());
-                    mpOutputBufferDevice->SetAntialiasing(mpBufferDevice->GetAntialiasing());
-
-                    // calculate sizes
-                    tools::Rectangle aRegionRectanglePixel(
-                        maBufferRememberedRangePixel.getMinX(), maBufferRememberedRangePixel.getMinY(),
-                        maBufferRememberedRangePixel.getMaxX(), maBufferRememberedRangePixel.getMaxY());
-
-                    // truncate aRegionRectanglePixel to destination pixel size, more does
-                    // not need to be prepared since destination is a buffer for a window. So,
-                    // maximum size indirectly shall be limited to getOutputDevice().GetOutputSizePixel()
-                    if(aRegionRectanglePixel.Left() < 0)
-                    {
-                        aRegionRectanglePixel.SetLeft( 0 );
-                    }
-
-                    if(aRegionRectanglePixel.Top() < 0)
-                    {
-                        aRegionRectanglePixel.SetTop( 0 );
-                    }
-
-                    if(aRegionRectanglePixel.Right() > aDestinationSizePixel.getWidth())
-                    {
-                        aRegionRectanglePixel.SetRight( aDestinationSizePixel.getWidth() );
-                    }
-
-                    if(aRegionRectanglePixel.Bottom() > aDestinationSizePixel.getHeight())
-                    {
-                        aRegionRectanglePixel.SetBottom( aDestinationSizePixel.getHeight() );
-                    }
-
-                    // get sizes
-                    const Point aTopLeft(aRegionRectanglePixel.TopLeft());
-                    const Size aSize(aRegionRectanglePixel.GetSize());
-
-                    {
-                        const bool bMapModeWasEnabledDest(mpBufferDevice->IsMapModeEnabled());
-                        mpBufferDevice->EnableMapMode(false);
-
-                        mpOutputBufferDevice->DrawOutDev(
-                            aTopLeft, aSize, // destination
-                            aTopLeft, aSize, // source
-                            *mpBufferDevice);
-
-                        // restore MapModes
-                        mpBufferDevice->EnableMapMode(bMapModeWasEnabledDest);
-                    }
-
-                    // paint overlay content for remembered region, use
-                    // method from base class directly
-                    mpOutputBufferDevice->EnableMapMode();
-                    OverlayManager::ImpDrawMembers(aBufferRememberedRangeLogic, *mpOutputBufferDevice);
-                    mpOutputBufferDevice->EnableMapMode(false);
-
-                    // copy to output
-                    {
-                        const bool bMapModeWasEnabledDest(getOutputDevice().IsMapModeEnabled());
-                        getOutputDevice().EnableMapMode(false);
-
-                        getOutputDevice().DrawOutDev(
-                            aTopLeft, aSize, // destination
-                            aTopLeft, aSize, // source
-                            *mpOutputBufferDevice);
-
-                        // debug
-                        /*getOutputDevice().SetLineCOL_RED);
-                        getOutputDevice().SetFillColor();
-                        getOutputDevice().DrawRect(Rectangle(aTopLeft, aSize));*/
-
-                        // restore MapModes
-                        getOutputDevice().EnableMapMode(bMapModeWasEnabledDest);
-                    }
+                    aRegionRectanglePixel.SetTop( 0 );
                 }
 
-                // VCL hack for transparent child windows
-                // Problem is e.g. a radiobutton form control in life mode. The used window
-                // is a transparence vcl childwindow. This flag only allows the parent window to
-                // paint into the child windows area, but there is no mechanism which takes
-                // care for a repaint of the child window. A transparent child window is NOT
-                // a window which always keeps it's content consistent over the parent, but it's
-                // more like just a paint flag for the parent.
-                // To get the update, the windows in question are updated manually here.
-                if(bTargetIsWindow)
+                if(aRegionRectanglePixel.Right() > aDestinationSizePixel.getWidth())
                 {
-                    vcl::Window& rWindow = static_cast< vcl::Window& >(mrOutputDevice);
-
-                    const tools::Rectangle aRegionRectanglePixel(
-                        maBufferRememberedRangePixel.getMinX(),
-                        maBufferRememberedRangePixel.getMinY(),
-                        maBufferRememberedRangePixel.getMaxX(),
-                        maBufferRememberedRangePixel.getMaxY());
-                    PaintTransparentChildren(rWindow, aRegionRectanglePixel);
+                    aRegionRectanglePixel.SetRight( aDestinationSizePixel.getWidth() );
                 }
 
-                // #i80730# restore visibility of VCL cursor
-                if(bCursorWasEnabled)
+                if(aRegionRectanglePixel.Bottom() > aDestinationSizePixel.getHeight())
                 {
-                    vcl::Window& rWindow = static_cast< vcl::Window& >(mrOutputDevice);
-                    vcl::Cursor* pCursor = rWindow.GetCursor();
-
-                    if(pCursor)
-                    {
-                        // check if cursor still exists. It may have been deleted from someone
-                        pCursor->Show();
-                    }
+                    aRegionRectanglePixel.SetBottom( aDestinationSizePixel.getHeight() );
                 }
 
-                // forget remembered Region
-                maBufferRememberedRangePixel.reset();
+                // get sizes
+                const Point aTopLeft(aRegionRectanglePixel.TopLeft());
+                const Size aSize(aRegionRectanglePixel.GetSize());
+
+                {
+                    const bool bMapModeWasEnabledDest(mpBufferDevice->IsMapModeEnabled());
+                    mpBufferDevice->EnableMapMode(false);
+
+                    mpOutputBufferDevice->DrawOutDev(
+                        aTopLeft, aSize, // destination
+                        aTopLeft, aSize, // source
+                        *mpBufferDevice);
+
+                    // restore MapModes
+                    mpBufferDevice->EnableMapMode(bMapModeWasEnabledDest);
+                }
+
+                // paint overlay content for remembered region, use
+                // method from base class directly
+                mpOutputBufferDevice->EnableMapMode();
+                OverlayManager::ImpDrawMembers(aBufferRememberedRangeLogic, *mpOutputBufferDevice);
+                mpOutputBufferDevice->EnableMapMode(false);
+
+                // copy to output
+                {
+                    const bool bMapModeWasEnabledDest(getOutputDevice().IsMapModeEnabled());
+                    getOutputDevice().EnableMapMode(false);
+
+                    getOutputDevice().DrawOutDev(
+                        aTopLeft, aSize, // destination
+                        aTopLeft, aSize, // source
+                        *mpOutputBufferDevice);
+
+                    // debug
+                    /*getOutputDevice().SetLineCOL_RED);
+                    getOutputDevice().SetFillColor();
+                    getOutputDevice().DrawRect(Rectangle(aTopLeft, aSize));*/
+
+                    // restore MapModes
+                    getOutputDevice().EnableMapMode(bMapModeWasEnabledDest);
+                }
             }
+
+            // VCL hack for transparent child windows
+            // Problem is e.g. a radiobutton form control in life mode. The used window
+            // is a transparence vcl childwindow. This flag only allows the parent window to
+            // paint into the child windows area, but there is no mechanism which takes
+            // care for a repaint of the child window. A transparent child window is NOT
+            // a window which always keeps it's content consistent over the parent, but it's
+            // more like just a paint flag for the parent.
+            // To get the update, the windows in question are updated manually here.
+            if(bTargetIsWindow)
+            {
+                vcl::Window& rWindow = static_cast< vcl::Window& >(mrOutputDevice);
+
+                const tools::Rectangle aRegionRectanglePixel(
+                    maBufferRememberedRangePixel.getMinX(),
+                    maBufferRememberedRangePixel.getMinY(),
+                    maBufferRememberedRangePixel.getMaxX(),
+                    maBufferRememberedRangePixel.getMaxY());
+                PaintTransparentChildren(rWindow, aRegionRectanglePixel);
+            }
+
+            // #i80730# restore visibility of VCL cursor
+            if(bCursorWasEnabled)
+            {
+                vcl::Window& rWindow = static_cast< vcl::Window& >(mrOutputDevice);
+                vcl::Cursor* pCursor = rWindow.GetCursor();
+
+                if(pCursor)
+                {
+                    // check if cursor still exists. It may have been deleted from someone
+                    pCursor->Show();
+                }
+            }
+
+            // forget remembered Region
+            maBufferRememberedRangePixel.reset();
         }
 
         OverlayManagerBuffered::OverlayManagerBuffered(
@@ -396,43 +396,43 @@ namespace sdr::overlay
 
         void OverlayManagerBuffered::invalidateRange(const basegfx::B2DRange& rRange)
         {
-            if(!rRange.isEmpty())
+            if(rRange.isEmpty())
+                return;
+
+            // buffered output, do not invalidate but use the timer
+            // to trigger a timer event for refresh
+            maBufferIdle.Start();
+
+            // add the discrete range to the remembered region
+            // #i75163# use double precision and floor/ceil rounding to get overlapped pixel region, even
+            // when the given logic region has a width/height of 0.0. This does NOT work with LogicToPixel
+            // since it just transforms the top left and bottom right points equally without taking
+            // discrete pixel coverage into account. An empty B2DRange and thus empty logic Rectangle translated
+            // to an also empty discrete pixel rectangle - what is wrong.
+            basegfx::B2DRange aDiscreteRange(rRange);
+            aDiscreteRange.transform(getOutputDevice().GetViewTransformation());
+
+            if(maDrawinglayerOpt.IsAntiAliasing())
             {
-                // buffered output, do not invalidate but use the timer
-                // to trigger a timer event for refresh
-                maBufferIdle.Start();
+                // assume AA needs one pixel more and invalidate one pixel more
+                const double fDiscreteOne(getDiscreteOne());
+                const basegfx::B2IPoint aTopLeft(
+                    static_cast<sal_Int32>(floor(aDiscreteRange.getMinX() - fDiscreteOne)),
+                    static_cast<sal_Int32>(floor(aDiscreteRange.getMinY() - fDiscreteOne)));
+                const basegfx::B2IPoint aBottomRight(
+                    static_cast<sal_Int32>(ceil(aDiscreteRange.getMaxX() + fDiscreteOne)),
+                    static_cast<sal_Int32>(ceil(aDiscreteRange.getMaxY() + fDiscreteOne)));
 
-                // add the discrete range to the remembered region
-                // #i75163# use double precision and floor/ceil rounding to get overlapped pixel region, even
-                // when the given logic region has a width/height of 0.0. This does NOT work with LogicToPixel
-                // since it just transforms the top left and bottom right points equally without taking
-                // discrete pixel coverage into account. An empty B2DRange and thus empty logic Rectangle translated
-                // to an also empty discrete pixel rectangle - what is wrong.
-                basegfx::B2DRange aDiscreteRange(rRange);
-                aDiscreteRange.transform(getOutputDevice().GetViewTransformation());
+                maBufferRememberedRangePixel.expand(aTopLeft);
+                maBufferRememberedRangePixel.expand(aBottomRight);
+            }
+            else
+            {
+                const basegfx::B2IPoint aTopLeft(static_cast<sal_Int32>(floor(aDiscreteRange.getMinX())), static_cast<sal_Int32>(floor(aDiscreteRange.getMinY())));
+                const basegfx::B2IPoint aBottomRight(static_cast<sal_Int32>(ceil(aDiscreteRange.getMaxX())), static_cast<sal_Int32>(ceil(aDiscreteRange.getMaxY())));
 
-                if(maDrawinglayerOpt.IsAntiAliasing())
-                {
-                    // assume AA needs one pixel more and invalidate one pixel more
-                    const double fDiscreteOne(getDiscreteOne());
-                    const basegfx::B2IPoint aTopLeft(
-                        static_cast<sal_Int32>(floor(aDiscreteRange.getMinX() - fDiscreteOne)),
-                        static_cast<sal_Int32>(floor(aDiscreteRange.getMinY() - fDiscreteOne)));
-                    const basegfx::B2IPoint aBottomRight(
-                        static_cast<sal_Int32>(ceil(aDiscreteRange.getMaxX() + fDiscreteOne)),
-                        static_cast<sal_Int32>(ceil(aDiscreteRange.getMaxY() + fDiscreteOne)));
-
-                    maBufferRememberedRangePixel.expand(aTopLeft);
-                    maBufferRememberedRangePixel.expand(aBottomRight);
-                }
-                else
-                {
-                    const basegfx::B2IPoint aTopLeft(static_cast<sal_Int32>(floor(aDiscreteRange.getMinX())), static_cast<sal_Int32>(floor(aDiscreteRange.getMinY())));
-                    const basegfx::B2IPoint aBottomRight(static_cast<sal_Int32>(ceil(aDiscreteRange.getMaxX())), static_cast<sal_Int32>(ceil(aDiscreteRange.getMaxY())));
-
-                    maBufferRememberedRangePixel.expand(aTopLeft);
-                    maBufferRememberedRangePixel.expand(aBottomRight);
-                }
+                maBufferRememberedRangePixel.expand(aTopLeft);
+                maBufferRememberedRangePixel.expand(aBottomRight);
             }
         }
 } // end of namespace

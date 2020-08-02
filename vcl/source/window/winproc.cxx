@@ -162,30 +162,30 @@ static bool ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rMousePo
 static void ImplHandleMouseHelpRequest( vcl::Window* pChild, const Point& rMousePos )
 {
     ImplSVHelpData& aHelpData = ImplGetSVHelpData();
-    if ( !aHelpData.mpHelpWin ||
-         !( aHelpData.mpHelpWin->IsWindowOrChild( pChild ) ||
-           pChild->IsWindowOrChild( aHelpData.mpHelpWin ) ) )
+    if ( aHelpData.mpHelpWin &&
+         ( aHelpData.mpHelpWin->IsWindowOrChild( pChild ) ||
+           pChild->IsWindowOrChild( aHelpData.mpHelpWin ) ))
+        return;
+
+    HelpEventMode nHelpMode = HelpEventMode::NONE;
+    if ( aHelpData.mbQuickHelp )
+        nHelpMode = HelpEventMode::QUICK;
+    if ( aHelpData.mbBalloonHelp )
+        nHelpMode |= HelpEventMode::BALLOON;
+    if ( !(bool(nHelpMode)) )
+        return;
+
+    if ( pChild->IsInputEnabled() && !pChild->IsInModalMode() )
     {
-        HelpEventMode nHelpMode = HelpEventMode::NONE;
-        if ( aHelpData.mbQuickHelp )
-            nHelpMode = HelpEventMode::QUICK;
-        if ( aHelpData.mbBalloonHelp )
-            nHelpMode |= HelpEventMode::BALLOON;
-        if ( bool(nHelpMode) )
-        {
-            if ( pChild->IsInputEnabled() && !pChild->IsInModalMode() )
-            {
-                HelpEvent aHelpEvent( rMousePos, nHelpMode );
-                aHelpData.mbRequestingHelp = true;
-                pChild->RequestHelp( aHelpEvent );
-                aHelpData.mbRequestingHelp = false;
-            }
-            // #104172# do not kill keyboard activated tooltips
-            else if ( aHelpData.mpHelpWin && !aHelpData.mbKeyboardHelp)
-            {
-                ImplDestroyHelpWindow( true );
-            }
-        }
+        HelpEvent aHelpEvent( rMousePos, nHelpMode );
+        aHelpData.mbRequestingHelp = true;
+        pChild->RequestHelp( aHelpEvent );
+        aHelpData.mbRequestingHelp = false;
+    }
+    // #104172# do not kill keyboard activated tooltips
+    else if ( aHelpData.mpHelpWin && !aHelpData.mbKeyboardHelp)
+    {
+        ImplDestroyHelpWindow( true );
     }
 }
 
@@ -2323,25 +2323,25 @@ static void ImplHandleSalQueryCharPosition( vcl::Window *pWindow,
             pChild = ImplGetKeyInputWindow( pWindow );
     }
 
-    if( pChild )
-    {
-        ImplCallCommand( pChild, CommandEventId::QueryCharPosition );
+    if( !pChild )
+        return;
 
-        ImplWinData* pWinData = pChild->ImplGetWinData();
-        if ( pWinData->mpCompositionCharRects && pEvt->mnCharPos < o3tl::make_unsigned( pWinData->mnCompositionCharRects ) )
-        {
-            const OutputDevice *pChildOutDev = pChild->GetOutDev();
-            const tools::Rectangle& aRect = pWinData->mpCompositionCharRects[ pEvt->mnCharPos ];
-            tools::Rectangle aDeviceRect = pChildOutDev->ImplLogicToDevicePixel( aRect );
-            Point aAbsScreenPos = pChild->OutputToAbsoluteScreenPixel( pChild->ScreenToOutputPixel(aDeviceRect.TopLeft()) );
-            pEvt->mnCursorBoundX = aAbsScreenPos.X();
-            pEvt->mnCursorBoundY = aAbsScreenPos.Y();
-            pEvt->mnCursorBoundWidth = aDeviceRect.GetWidth();
-            pEvt->mnCursorBoundHeight = aDeviceRect.GetHeight();
-            pEvt->mbVertical = pWinData->mbVertical;
-            pEvt->mbValid = true;
-        }
-    }
+    ImplCallCommand( pChild, CommandEventId::QueryCharPosition );
+
+    ImplWinData* pWinData = pChild->ImplGetWinData();
+    if ( !(pWinData->mpCompositionCharRects && pEvt->mnCharPos < o3tl::make_unsigned( pWinData->mnCompositionCharRects )) )
+        return;
+
+    const OutputDevice *pChildOutDev = pChild->GetOutDev();
+    const tools::Rectangle& aRect = pWinData->mpCompositionCharRects[ pEvt->mnCharPos ];
+    tools::Rectangle aDeviceRect = pChildOutDev->ImplLogicToDevicePixel( aRect );
+    Point aAbsScreenPos = pChild->OutputToAbsoluteScreenPixel( pChild->ScreenToOutputPixel(aDeviceRect.TopLeft()) );
+    pEvt->mnCursorBoundX = aAbsScreenPos.X();
+    pEvt->mnCursorBoundY = aAbsScreenPos.Y();
+    pEvt->mnCursorBoundWidth = aDeviceRect.GetWidth();
+    pEvt->mnCursorBoundHeight = aDeviceRect.GetHeight();
+    pEvt->mbVertical = pWinData->mbVertical;
+    pEvt->mbValid = true;
 }
 
 bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pEvent )

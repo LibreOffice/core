@@ -172,18 +172,18 @@ IMPL_LINK(MasterPagesSelector, RightClickHandler, const MouseEvent&, rEvent, voi
     mxPreviewValueSet->GrabFocus ();
     mxPreviewValueSet->ReleaseMouse();
     SfxViewFrame* pViewFrame = mrBase.GetViewFrame();
-    if (pViewFrame != nullptr)
+    if (pViewFrame == nullptr)
+        return;
+
+    SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
+    if (pDispatcher != nullptr)
     {
-        SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
-        if (pDispatcher != nullptr)
+        sal_uInt16 nIndex = mxPreviewValueSet->GetItemId (rEvent.GetPosPixel());
+        if (nIndex > 0)
         {
-            sal_uInt16 nIndex = mxPreviewValueSet->GetItemId (rEvent.GetPosPixel());
-            if (nIndex > 0)
-            {
-                mxPreviewValueSet->SelectItem (nIndex);
-                // Now do the actual display of the context menu
-                ShowContextMenu(&rEvent.GetPosPixel());
-            }
+            mxPreviewValueSet->SelectItem (nIndex);
+            // Now do the actual display of the context menu
+            ShowContextMenu(&rEvent.GetPosPixel());
         }
     }
 }
@@ -193,35 +193,35 @@ void MasterPagesSelector::ShowContextMenu(const Point* pPos)
     // Use the currently selected item and show the popup menu in its
     // center.
     const sal_uInt16 nIndex = mxPreviewValueSet->GetSelectedItemId();
-    if (nIndex > 0)
+    if (nIndex <= 0)
+        return;
+
+    // The position of the upper left corner of the context menu is
+    // taken either from the mouse position (when the command was sent
+    // as reaction to a right click) or in the center of the selected
+    // item (when the command was sent as reaction to Shift+F10.)
+    Point aPosition;
+    if (!pPos)
     {
-        // The position of the upper left corner of the context menu is
-        // taken either from the mouse position (when the command was sent
-        // as reaction to a right click) or in the center of the selected
-        // item (when the command was sent as reaction to Shift+F10.)
-        Point aPosition;
-        if (!pPos)
-        {
-            ::tools::Rectangle aBBox (mxPreviewValueSet->GetItemRect(nIndex));
-            aPosition = aBBox.Center();
-        }
-        else
-            aPosition = *pPos;
-
-        // Setup the menu.
-        VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), GetContextMenuUIFile(), "");
-        VclPtr<PopupMenu> pMenu(aBuilder.get_menu("menu"));
-        FloatingWindow* pMenuWindow = dynamic_cast<FloatingWindow*>(pMenu->GetWindow());
-        if (pMenuWindow != nullptr)
-            pMenuWindow->SetPopupModeFlags(
-                pMenuWindow->GetPopupModeFlags() | FloatWinPopupFlags::NoMouseUpClose);
-        pMenu->SetSelectHdl(LINK(this, MasterPagesSelector, OnMenuItemSelected));
-
-        ProcessPopupMenu(*pMenu);
-
-        // Show the menu.
-        pMenu->Execute(this, ::tools::Rectangle(aPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
+        ::tools::Rectangle aBBox (mxPreviewValueSet->GetItemRect(nIndex));
+        aPosition = aBBox.Center();
     }
+    else
+        aPosition = *pPos;
+
+    // Setup the menu.
+    VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), GetContextMenuUIFile(), "");
+    VclPtr<PopupMenu> pMenu(aBuilder.get_menu("menu"));
+    FloatingWindow* pMenuWindow = dynamic_cast<FloatingWindow*>(pMenu->GetWindow());
+    if (pMenuWindow != nullptr)
+        pMenuWindow->SetPopupModeFlags(
+            pMenuWindow->GetPopupModeFlags() | FloatWinPopupFlags::NoMouseUpClose);
+    pMenu->SetSelectHdl(LINK(this, MasterPagesSelector, OnMenuItemSelected));
+
+    ProcessPopupMenu(*pMenu);
+
+    // Show the menu.
+    pMenu->Execute(this, ::tools::Rectangle(aPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
 }
 
 void MasterPagesSelector::Command (const CommandEvent& rEvent)

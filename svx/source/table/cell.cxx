@@ -470,27 +470,27 @@ void Cell::mergeContent( const CellRef& xSourceCell )
 {
     SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
 
-    if( xSourceCell->hasText() )
+    if( !xSourceCell->hasText() )
+        return;
+
+    SdrOutliner& rOutliner=rTableObj.ImpGetDrawOutliner();
+    rOutliner.SetUpdateMode(true);
+
+    if( hasText() )
     {
-        SdrOutliner& rOutliner=rTableObj.ImpGetDrawOutliner();
-        rOutliner.SetUpdateMode(true);
-
-        if( hasText() )
-        {
-            rOutliner.SetText(*GetOutlinerParaObject());
-            rOutliner.AddText(*xSourceCell->GetOutlinerParaObject());
-        }
-        else
-        {
-            rOutliner.SetText(*xSourceCell->GetOutlinerParaObject());
-        }
-
-        SetOutlinerParaObject( rOutliner.CreateParaObject() );
-        rOutliner.Clear();
-        xSourceCell->SetOutlinerParaObject(rOutliner.CreateParaObject());
-        rOutliner.Clear();
-        SetStyleSheet( GetStyleSheet(), true );
+        rOutliner.SetText(*GetOutlinerParaObject());
+        rOutliner.AddText(*xSourceCell->GetOutlinerParaObject());
     }
+    else
+    {
+        rOutliner.SetText(*xSourceCell->GetOutlinerParaObject());
+    }
+
+    SetOutlinerParaObject( rOutliner.CreateParaObject() );
+    rOutliner.Clear();
+    xSourceCell->SetOutlinerParaObject(rOutliner.CreateParaObject());
+    rOutliner.Clear();
+    SetStyleSheet( GetStyleSheet(), true );
 }
 
 
@@ -516,26 +516,26 @@ void Cell::cloneFrom( const CellRef& xCell )
 
 void Cell::replaceContentAndFormating( const CellRef& xSourceCell )
 {
-    if( xSourceCell.is() && mpProperties )
+    if( !(xSourceCell.is() && mpProperties) )
+        return;
+
+    mpProperties->SetMergedItemSet( xSourceCell->GetObjectItemSet() );
+
+    // tdf#118354 OutlinerParaObject may be nullptr, do not dereference when
+    // not set (!)
+    if(nullptr != xSourceCell->GetOutlinerParaObject())
     {
-        mpProperties->SetMergedItemSet( xSourceCell->GetObjectItemSet() );
+        SetOutlinerParaObject( std::make_unique<OutlinerParaObject>(*xSourceCell->GetOutlinerParaObject()) );
+    }
 
-        // tdf#118354 OutlinerParaObject may be nullptr, do not dereference when
-        // not set (!)
-        if(nullptr != xSourceCell->GetOutlinerParaObject())
-        {
-            SetOutlinerParaObject( std::make_unique<OutlinerParaObject>(*xSourceCell->GetOutlinerParaObject()) );
-        }
+    SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
+    SdrTableObj& rSourceTableObj = dynamic_cast< SdrTableObj& >( xSourceCell->GetObject() );
 
-        SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
-        SdrTableObj& rSourceTableObj = dynamic_cast< SdrTableObj& >( xSourceCell->GetObject() );
-
-        if(&rSourceTableObj.getSdrModelFromSdrObject() != &rTableObj.getSdrModelFromSdrObject())
-        {
-            // TTTT should not happen - if, then a clone may be needed
-            // Maybe add an assertion here later
-            SetStyleSheet( nullptr, true );
-        }
+    if(&rSourceTableObj.getSdrModelFromSdrObject() != &rTableObj.getSdrModelFromSdrObject())
+    {
+        // TTTT should not happen - if, then a clone may be needed
+        // Maybe add an assertion here later
+        SetStyleSheet( nullptr, true );
     }
 }
 
@@ -552,21 +552,21 @@ void Cell::setMerged()
 
 void Cell::copyFormatFrom( const CellRef& xSourceCell )
 {
-    if( xSourceCell.is() && mpProperties )
+    if( !(xSourceCell.is() && mpProperties) )
+        return;
+
+    mpProperties->SetMergedItemSet( xSourceCell->GetObjectItemSet() );
+    SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
+    SdrTableObj& rSourceTableObj = dynamic_cast< SdrTableObj& >( xSourceCell->GetObject() );
+
+    if(&rSourceTableObj.getSdrModelFromSdrObject() != &rTableObj.getSdrModelFromSdrObject())
     {
-        mpProperties->SetMergedItemSet( xSourceCell->GetObjectItemSet() );
-        SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
-        SdrTableObj& rSourceTableObj = dynamic_cast< SdrTableObj& >( xSourceCell->GetObject() );
-
-        if(&rSourceTableObj.getSdrModelFromSdrObject() != &rTableObj.getSdrModelFromSdrObject())
-        {
-            // TTTT should not happen - if, then a clone may be needed
-            // Maybe add an assertion here later
-            SetStyleSheet( nullptr, true );
-        }
-
-        notifyModified();
+        // TTTT should not happen - if, then a clone may be needed
+        // Maybe add an assertion here later
+        SetStyleSheet( nullptr, true );
     }
+
+    notifyModified();
 }
 
 
@@ -1589,21 +1589,21 @@ void SAL_CALL Cell::setAllPropertiesToDefault()
     SdrOutliner& rOutliner = GetObject().ImpGetDrawOutliner();
 
     OutlinerParaObject* pParaObj = GetOutlinerParaObject();
-    if( pParaObj )
+    if( !pParaObj )
+        return;
+
+    rOutliner.SetText(*pParaObj);
+    sal_Int32 nParaCount(rOutliner.GetParagraphCount());
+
+    if(nParaCount)
     {
-        rOutliner.SetText(*pParaObj);
-        sal_Int32 nParaCount(rOutliner.GetParagraphCount());
+        ESelection aSelection( 0, 0, EE_PARA_ALL, EE_TEXTPOS_ALL);
+        rOutliner.RemoveAttribs(aSelection, true, 0);
 
-        if(nParaCount)
-        {
-            ESelection aSelection( 0, 0, EE_PARA_ALL, EE_TEXTPOS_ALL);
-            rOutliner.RemoveAttribs(aSelection, true, 0);
+        std::unique_ptr<OutlinerParaObject> pTemp = rOutliner.CreateParaObject(0, nParaCount);
+        rOutliner.Clear();
 
-            std::unique_ptr<OutlinerParaObject> pTemp = rOutliner.CreateParaObject(0, nParaCount);
-            rOutliner.Clear();
-
-            SetOutlinerParaObject(std::move(pTemp));
-        }
+        SetOutlinerParaObject(std::move(pTemp));
     }
 }
 

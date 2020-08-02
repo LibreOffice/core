@@ -643,21 +643,21 @@ void ExcTable::FillAsEmptyTable( SCTAB nCodeNameIdx )
 {
     InitializeTable( mnScTab );
 
-    if( HasVbaStorage() && (nCodeNameIdx < GetExtDocOptions().GetCodeNameCount()) )
+    if( !(HasVbaStorage() && (nCodeNameIdx < GetExtDocOptions().GetCodeNameCount())) )
+        return;
+
+    if( GetBiff() <= EXC_BIFF5 )
     {
-        if( GetBiff() <= EXC_BIFF5 )
-        {
-            Add( new ExcBof );
-        }
-        else
-        {
-            Add( new ExcBof8 );
-            Add( new XclCodename( GetExtDocOptions().GetCodeName( nCodeNameIdx ) ) );
-        }
-        // sheet view settings: WINDOW2, SCL, PANE, SELECTION
-        aRecList.AppendNewRecord( new XclExpTabViewSettings( GetRoot(), mnScTab ) );
-        Add( new ExcEof );
+        Add( new ExcBof );
     }
+    else
+    {
+        Add( new ExcBof8 );
+        Add( new XclCodename( GetExtDocOptions().GetCodeName( nCodeNameIdx ) ) );
+    }
+    // sheet view settings: WINDOW2, SCL, PANE, SELECTION
+    aRecList.AppendNewRecord( new XclExpTabViewSettings( GetRoot(), mnScTab ) );
+    Add( new ExcEof );
 }
 
 void ExcTable::Write( XclExpStream& rStrm )

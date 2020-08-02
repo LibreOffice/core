@@ -1692,50 +1692,50 @@ void PrintDialog::updateWindowFromProperty( const OUString& i_rProperty )
 {
     beans::PropertyValue* pValue = maPController->getValue( i_rProperty );
     auto it = maPropertyToWindowMap.find( i_rProperty );
-    if( pValue && it != maPropertyToWindowMap.end() )
+    if( !(pValue && it != maPropertyToWindowMap.end()) )
+        return;
+
+    const auto& rWindows( it->second );
+    if(  rWindows.empty() )
+        return;
+
+    bool bVal = false;
+    sal_Int32 nVal = -1;
+    if( pValue->Value >>= bVal )
     {
-        const auto& rWindows( it->second );
-        if( ! rWindows.empty() )
+        // we should have a CheckBox for this one
+        weld::CheckButton* pBox = dynamic_cast<weld::CheckButton*>(rWindows.front());
+        if( pBox )
         {
-            bool bVal = false;
-            sal_Int32 nVal = -1;
-            if( pValue->Value >>= bVal )
-            {
-                // we should have a CheckBox for this one
-                weld::CheckButton* pBox = dynamic_cast<weld::CheckButton*>(rWindows.front());
-                if( pBox )
-                {
-                    pBox->set_active( bVal );
-                }
-                else if ( i_rProperty == "PrintProspect" )
-                {
-                    // EVIL special case
-                    if( bVal )
-                        mxBrochureBtn->set_active(true);
-                    else
-                        mxPagesBtn->set_active(true);
-                }
-                else
-                {
-                    SAL_WARN( "vcl", "missing a checkbox" );
-                }
-            }
-            else if( pValue->Value >>= nVal )
-            {
-                // this could be a ListBox or a RadioButtonGroup
-                weld::ComboBox* pList = dynamic_cast<weld::ComboBox*>(rWindows.front());
-                if( pList )
-                {
-                    pList->set_active( static_cast< sal_uInt16 >(nVal) );
-                }
-                else if( nVal >= 0 && nVal < sal_Int32(rWindows.size() ) )
-                {
-                    weld::RadioButton* pBtn = dynamic_cast<weld::RadioButton*>(rWindows[nVal]);
-                    SAL_WARN_IF( !pBtn, "vcl", "unexpected control for property" );
-                    if( pBtn )
-                        pBtn->set_active(true);
-                }
-            }
+            pBox->set_active( bVal );
+        }
+        else if ( i_rProperty == "PrintProspect" )
+        {
+            // EVIL special case
+            if( bVal )
+                mxBrochureBtn->set_active(true);
+            else
+                mxPagesBtn->set_active(true);
+        }
+        else
+        {
+            SAL_WARN( "vcl", "missing a checkbox" );
+        }
+    }
+    else if( pValue->Value >>= nVal )
+    {
+        // this could be a ListBox or a RadioButtonGroup
+        weld::ComboBox* pList = dynamic_cast<weld::ComboBox*>(rWindows.front());
+        if( pList )
+        {
+            pList->set_active( static_cast< sal_uInt16 >(nVal) );
+        }
+        else if( nVal >= 0 && nVal < sal_Int32(rWindows.size() ) )
+        {
+            weld::RadioButton* pBtn = dynamic_cast<weld::RadioButton*>(rWindows[nVal]);
+            SAL_WARN_IF( !pBtn, "vcl", "unexpected control for property" );
+            if( pBtn )
+                pBtn->set_active(true);
         }
     }
 }
@@ -2048,54 +2048,54 @@ IMPL_LINK( PrintDialog, UIOption_RadioHdl, weld::ToggleButton&, i_rBtn, void )
     // this handler gets called for all radiobuttons that get unchecked, too
     // however we only want one notification for the new value (that is for
     // the button that gets checked)
-    if( i_rBtn.get_active() )
-    {
-        PropertyValue* pVal = getValueForWindow( &i_rBtn );
-        auto it = maControlToNumValMap.find( &i_rBtn );
-        if( pVal && it != maControlToNumValMap.end() )
-        {
-            makeEnabled( &i_rBtn );
+    if( !i_rBtn.get_active() )
+        return;
 
-            sal_Int32 nVal = it->second;
-            pVal->Value <<= nVal;
+    PropertyValue* pVal = getValueForWindow( &i_rBtn );
+    auto it = maControlToNumValMap.find( &i_rBtn );
+    if( !(pVal && it != maControlToNumValMap.end()) )
+        return;
 
-            updateOrientationBox();
+    makeEnabled( &i_rBtn );
 
-            checkOptionalControlDependencies();
+    sal_Int32 nVal = it->second;
+    pVal->Value <<= nVal;
 
-            // tdf#41205 give focus to the page range edit if the corresponding radio button was selected
-            if (pVal->Name == "PrintContent" && mxPageRangesRadioButton->get_active())
-                mxPageRangeEdit->grab_focus();
+    updateOrientationBox();
 
-            // update preview and page settings
-            preparePreview(false);
-        }
-    }
+    checkOptionalControlDependencies();
+
+    // tdf#41205 give focus to the page range edit if the corresponding radio button was selected
+    if (pVal->Name == "PrintContent" && mxPageRangesRadioButton->get_active())
+        mxPageRangeEdit->grab_focus();
+
+    // update preview and page settings
+    preparePreview(false);
 }
 
 IMPL_LINK( PrintDialog, UIOption_SelectHdl, weld::ComboBox&, i_rBox, void )
 {
     PropertyValue* pVal = getValueForWindow( &i_rBox );
-    if( pVal )
-    {
-        makeEnabled( &i_rBox );
+    if( !pVal )
+        return;
 
-        sal_Int32 nVal( i_rBox.get_active() );
-        pVal->Value <<= nVal;
+    makeEnabled( &i_rBox );
 
-        //If we are in impress we start in print slides mode and get a
-        //maFirstPageSize for slides which are usually landscape mode, if we
-        //change to notes which are usually in portrait mode, and then visit
-        //n-up print, we will assume notes are in landscape unless we throw
-        //away maFirstPageSize when we change page content type
-        if (pVal->Name == "PageContentType")
-            maFirstPageSize = Size();
+    sal_Int32 nVal( i_rBox.get_active() );
+    pVal->Value <<= nVal;
 
-        checkOptionalControlDependencies();
+    //If we are in impress we start in print slides mode and get a
+    //maFirstPageSize for slides which are usually landscape mode, if we
+    //change to notes which are usually in portrait mode, and then visit
+    //n-up print, we will assume notes are in landscape unless we throw
+    //away maFirstPageSize when we change page content type
+    if (pVal->Name == "PageContentType")
+        maFirstPageSize = Size();
 
-        // update preview and page settings
-        preparePreview(false);
-    }
+    checkOptionalControlDependencies();
+
+    // update preview and page settings
+    preparePreview(false);
 }
 
 IMPL_LINK( PrintDialog, UIOption_SpinModifyHdl, weld::SpinButton&, i_rBox, void )

@@ -217,34 +217,34 @@ LayoutToolbarMenu::LayoutToolbarMenu(SlideLayoutController* pControl, weld::Widg
         mxFrame2->show();
     }
 
-    if( eMode == DrawViewMode_DRAW )
+    if( eMode != DrawViewMode_DRAW )
+        return;
+
+    if( !mxFrame.is() )
+        return;
+
+    OUString sSlotStr;
+
+    if( bInsertPage )
+        sSlotStr = ".uno:DuplicatePage";
+    else
+        sSlotStr = ".uno:Undo";
+
+    css::uno::Reference<css::graphic::XGraphic> xSlotImage = vcl::CommandInfoProvider::GetXGraphicForCommand(sSlotStr, mxFrame);
+
+    OUString sSlotTitle;
+    if( bInsertPage )
     {
-        if( mxFrame.is() )
-        {
-            OUString sSlotStr;
-
-            if( bInsertPage )
-                sSlotStr = ".uno:DuplicatePage";
-            else
-                sSlotStr = ".uno:Undo";
-
-            css::uno::Reference<css::graphic::XGraphic> xSlotImage = vcl::CommandInfoProvider::GetXGraphicForCommand(sSlotStr, mxFrame);
-
-            OUString sSlotTitle;
-            if( bInsertPage )
-            {
-                auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(sSlotStr, mxControl->getModuleName());
-                sSlotTitle = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
-            }
-            else
-                sSlotTitle = SdResId( STR_RESET_LAYOUT );
-
-            mxMoreButton->set_label(sSlotTitle);
-            mxMoreButton->set_image(xSlotImage);
-            mxMoreButton->connect_clicked(LINK(this, LayoutToolbarMenu, SelectToolbarMenuHdl));
-            mxMoreButton->show();
-        }
+        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(sSlotStr, mxControl->getModuleName());
+        sSlotTitle = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
     }
+    else
+        sSlotTitle = SdResId( STR_RESET_LAYOUT );
+
+    mxMoreButton->set_label(sSlotTitle);
+    mxMoreButton->set_image(xSlotImage);
+    mxMoreButton->connect_clicked(LINK(this, LayoutToolbarMenu, SelectToolbarMenuHdl));
+    mxMoreButton->show();
 }
 
 IMPL_LINK(LayoutToolbarMenu, SelectValueSetHdl, ValueSet*, pLayoutSet, void)

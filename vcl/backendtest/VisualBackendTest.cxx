@@ -127,18 +127,18 @@ public:
         else if(nCode == KEY_SPACE)
             mnTest++;
 
-        if (nCode == KEY_BACKSPACE || nCode == KEY_SPACE)
+        if (nCode != KEY_BACKSPACE && nCode != KEY_SPACE)
+            return;
+
+        if (mnTest % gnNumberOfTests == gnNumberOfTests - 1)
         {
-            if (mnTest % gnNumberOfTests == gnNumberOfTests - 1)
-            {
-                mbAnimate = true;
-                maUpdateTimer.Start();
-            }
-            else
-            {
-                mbAnimate = false;
-                Invalidate();
-            }
+            mbAnimate = true;
+            maUpdateTimer.Start();
+        }
+        else
+        {
+            mbAnimate = false;
+            Invalidate();
         }
     }
 

@@ -157,23 +157,23 @@ FormViewPageWindowAdapter::FormViewPageWindowAdapter( const css::uno::Reference<
     // create an XFormController for every form
     FmFormPage* pFormPage = dynamic_cast< FmFormPage* >( _rWindow.GetPageView().GetPage() );
     DBG_ASSERT( pFormPage, "FormViewPageWindowAdapter::FormViewPageWindowAdapter: no FmFormPage found!" );
-    if ( pFormPage )
+    if ( !pFormPage )
+        return;
+
+    try
     {
-        try
+        Reference< XIndexAccess > xForms( pFormPage->GetForms(), UNO_QUERY_THROW );
+        sal_uInt32 nLength = xForms->getCount();
+        for (sal_uInt32 i = 0; i < nLength; i++)
         {
-            Reference< XIndexAccess > xForms( pFormPage->GetForms(), UNO_QUERY_THROW );
-            sal_uInt32 nLength = xForms->getCount();
-            for (sal_uInt32 i = 0; i < nLength; i++)
-            {
-                Reference< XForm > xForm( xForms->getByIndex(i), UNO_QUERY );
-                if ( xForm.is() )
-                    setController( xForm, nullptr );
-            }
+            Reference< XForm > xForm( xForms->getByIndex(i), UNO_QUERY );
+            if ( xForm.is() )
+                setController( xForm, nullptr );
         }
-        catch (const Exception&)
-        {
-            DBG_UNHANDLED_EXCEPTION("svx");
-        }
+    }
+    catch (const Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
 }
 
@@ -688,48 +688,48 @@ IMPL_LINK_NOARG(FmXFormView, OnActivate, void*, void)
     }
 
     // setting the controller to activate
-    if (m_pView->GetFormShell() && m_pView->GetActualOutDev() && m_pView->GetActualOutDev()->GetOutDevType() == OUTDEV_WINDOW)
+    if (!(m_pView->GetFormShell() && m_pView->GetActualOutDev() && m_pView->GetActualOutDev()->GetOutDevType() == OUTDEV_WINDOW))
+        return;
+
+    FmXFormShell* const pShImpl =  m_pView->GetFormShell()->GetImpl();
+
+    if(!pShImpl)
+        return;
+
+    find_active_databaseform fad(pShImpl->getActiveController_Lock());
+
+    vcl::Window* pWindow = const_cast<vcl::Window*>(static_cast<const vcl::Window*>(m_pView->GetActualOutDev()));
+    PFormViewPageWindowAdapter pAdapter = m_aPageWindowAdapters.empty() ? nullptr : m_aPageWindowAdapters[0];
+    for (const auto& rpPageWindowAdapter : m_aPageWindowAdapters)
     {
-        FmXFormShell* const pShImpl =  m_pView->GetFormShell()->GetImpl();
-
-        if(!pShImpl)
-            return;
-
-        find_active_databaseform fad(pShImpl->getActiveController_Lock());
-
-        vcl::Window* pWindow = const_cast<vcl::Window*>(static_cast<const vcl::Window*>(m_pView->GetActualOutDev()));
-        PFormViewPageWindowAdapter pAdapter = m_aPageWindowAdapters.empty() ? nullptr : m_aPageWindowAdapters[0];
-        for (const auto& rpPageWindowAdapter : m_aPageWindowAdapters)
-        {
-            if ( pWindow == rpPageWindowAdapter->getWindow() )
-                pAdapter = rpPageWindowAdapter;
-        }
-
-        if ( pAdapter.is() )
-        {
-            Reference< XFormController > xControllerToActivate;
-            for (const Reference< XFormController > & xController : pAdapter->GetList())
-            {
-                if ( !xController.is() )
-                    continue;
-
-                {
-                    Reference< XFormController > xActiveController(fad(xController));
-                    if (xActiveController.is())
-                    {
-                        xControllerToActivate = xActiveController;
-                        break;
-                    }
-                }
-
-                if(xControllerToActivate.is() || !isActivableDatabaseForm(xController))
-                    continue;
-
-                xControllerToActivate = xController;
-            }
-            pShImpl->setActiveController_Lock(xControllerToActivate);
-        }
+        if ( pWindow == rpPageWindowAdapter->getWindow() )
+            pAdapter = rpPageWindowAdapter;
     }
+
+    if ( !pAdapter.is() )
+        return;
+
+    Reference< XFormController > xControllerToActivate;
+    for (const Reference< XFormController > & xController : pAdapter->GetList())
+    {
+        if ( !xController.is() )
+            continue;
+
+        {
+            Reference< XFormController > xActiveController(fad(xController));
+            if (xActiveController.is())
+            {
+                xControllerToActivate = xActiveController;
+                break;
+            }
+        }
+
+        if(xControllerToActivate.is() || !isActivableDatabaseForm(xController))
+            continue;
+
+        xControllerToActivate = xController;
+    }
+    pShImpl->setActiveController_Lock(xControllerToActivate);
 }
 
 
@@ -1811,82 +1811,82 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
 
     const SdrMarkList& rCurrentList = m_pView->GetMarkedObjectList();
     FmFormPage* pPage = GetFormShell() ? GetFormShell()->GetCurPage() : nullptr;
-    if (pPage)
-    {
-        if (rCurrentList.GetMarkCount())
-        {   // there is a current mark ... hmm. Is it a subset of the mark we remembered in saveMarkList?
-            bool bMisMatch = false;
+    if (!pPage)
+        return;
 
-            // loop through all current marks
-            const size_t nCurrentCount = rCurrentList.GetMarkCount();
-            for ( size_t i=0; i<nCurrentCount && !bMisMatch; ++i )
-            {
-                const SdrObject* pCurrentMarked = rCurrentList.GetMark( i )->GetMarkedSdrObj();
+    if (rCurrentList.GetMarkCount())
+    {   // there is a current mark ... hmm. Is it a subset of the mark we remembered in saveMarkList?
+        bool bMisMatch = false;
 
-                // loop through all saved marks, check for equality
-                bool bFound = false;
-                const size_t nSavedCount = m_aMark.GetMarkCount();
-                for ( size_t j=0; j<nSavedCount && !bFound; ++j )
-                {
-                    if ( m_aMark.GetMark( j )->GetMarkedSdrObj() == pCurrentMarked )
-                        bFound = true;
-                }
-
-                // did not find a current mark in the saved marks
-                if ( !bFound )
-                    bMisMatch = true;
-            }
-
-            if ( bMisMatch )
-            {
-                m_aMark.Clear();
-                _rRestoredMarkList = rCurrentList;
-                return;
-            }
-        }
-        // it is important that the objects of the mark list are not accessed,
-        // because they can be already destroyed
-        SdrPageView* pCurPageView = m_pView->GetSdrPageView();
-        SdrObjListIter aPageIter( pPage );
-        bool bFound = true;
-
-        // do all objects still exist
-        const size_t nCount = m_aMark.GetMarkCount();
-        for (size_t i = 0; i < nCount && bFound; ++i)
+        // loop through all current marks
+        const size_t nCurrentCount = rCurrentList.GetMarkCount();
+        for ( size_t i=0; i<nCurrentCount && !bMisMatch; ++i )
         {
-            SdrMark*   pMark = m_aMark.GetMark(i);
-            SdrObject* pObj  = pMark->GetMarkedSdrObj();
-            if (pObj->IsGroupObject())
-            {
-                SdrObjListIter aIter(pObj->GetSubList());
-                while (aIter.IsMore() && bFound)
-                    bFound = lcl_hasObject(aPageIter, aIter.Next());
-            }
-            else
-                bFound = lcl_hasObject(aPageIter, pObj);
+            const SdrObject* pCurrentMarked = rCurrentList.GetMark( i )->GetMarkedSdrObj();
 
-            bFound = bFound && pCurPageView == pMark->GetPageView();
+            // loop through all saved marks, check for equality
+            bool bFound = false;
+            const size_t nSavedCount = m_aMark.GetMarkCount();
+            for ( size_t j=0; j<nSavedCount && !bFound; ++j )
+            {
+                if ( m_aMark.GetMark( j )->GetMarkedSdrObj() == pCurrentMarked )
+                    bFound = true;
+            }
+
+            // did not find a current mark in the saved marks
+            if ( !bFound )
+                bMisMatch = true;
         }
 
-        if (bFound)
+        if ( bMisMatch )
         {
-            // evaluate the LastObject
-            if (nCount) // now mark the objects
-            {
-                for (size_t i = 0; i < nCount; ++i)
-                {
-                    SdrMark* pMark = m_aMark.GetMark(i);
-                    SdrObject* pObj = pMark->GetMarkedSdrObj();
-                    if ( pObj->GetObjInventor() == SdrInventor::FmForm )
-                        if ( !m_pView->IsObjMarked( pObj ) )
-                            m_pView->MarkObj( pObj, pMark->GetPageView() );
-                }
-
-                _rRestoredMarkList = m_aMark;
-            }
+            m_aMark.Clear();
+            _rRestoredMarkList = rCurrentList;
+            return;
         }
-        m_aMark.Clear();
     }
+    // it is important that the objects of the mark list are not accessed,
+    // because they can be already destroyed
+    SdrPageView* pCurPageView = m_pView->GetSdrPageView();
+    SdrObjListIter aPageIter( pPage );
+    bool bFound = true;
+
+    // do all objects still exist
+    const size_t nCount = m_aMark.GetMarkCount();
+    for (size_t i = 0; i < nCount && bFound; ++i)
+    {
+        SdrMark*   pMark = m_aMark.GetMark(i);
+        SdrObject* pObj  = pMark->GetMarkedSdrObj();
+        if (pObj->IsGroupObject())
+        {
+            SdrObjListIter aIter(pObj->GetSubList());
+            while (aIter.IsMore() && bFound)
+                bFound = lcl_hasObject(aPageIter, aIter.Next());
+        }
+        else
+            bFound = lcl_hasObject(aPageIter, pObj);
+
+        bFound = bFound && pCurPageView == pMark->GetPageView();
+    }
+
+    if (bFound)
+    {
+        // evaluate the LastObject
+        if (nCount) // now mark the objects
+        {
+            for (size_t i = 0; i < nCount; ++i)
+            {
+                SdrMark* pMark = m_aMark.GetMark(i);
+                SdrObject* pObj = pMark->GetMarkedSdrObj();
+                if ( pObj->GetObjInventor() == SdrInventor::FmForm )
+                    if ( !m_pView->IsObjMarked( pObj ) )
+                        m_pView->MarkObj( pObj, pMark->GetPageView() );
+            }
+
+            _rRestoredMarkList = m_aMark;
+        }
+    }
+    m_aMark.Clear();
 }
 
 void SAL_CALL FmXFormView::focusGained( const FocusEvent& /*e*/ )

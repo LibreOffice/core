@@ -251,23 +251,22 @@ void CheckVariables::CheckSubArgumentIsNan( std::stringstream& ss,
         ss << vSubArguments[i]->GenSlidingWindowDeclRef();
         ss << ";\n";
     }
-    if (vSubArguments[i]->GetFormulaToken()->GetType() == formula::svDouble ||
-        vSubArguments[i]->GetFormulaToken()->GetOpCode() != ocPush)
-    {
-        ss << "    if(";
-        ss << "isnan(";
-        ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-        ss << "))\n";
-        ss << "        tmp";
-        ss << i;
-        ss << "=0;\n    else \n";
-        ss << "        tmp";
-        ss << i;
-        ss << "=";
-        ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-        ss << ";\n";
+    if (vSubArguments[i]->GetFormulaToken()->GetType() != formula::svDouble &&
+        vSubArguments[i]->GetFormulaToken()->GetOpCode() == ocPush)
+        return;
 
-    }
+    ss << "    if(";
+    ss << "isnan(";
+    ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+    ss << "))\n";
+    ss << "        tmp";
+    ss << i;
+    ss << "=0;\n    else \n";
+    ss << "        tmp";
+    ss << i;
+    ss << "=";
+    ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+    ss << ";\n";
 
 }
 

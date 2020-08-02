@@ -284,21 +284,21 @@ void XclExpStream::CopyFromStream(SvStream& rInStrm, sal_uInt64 const nBytes)
 {
     sal_uInt64 const nRemaining(rInStrm.remainingSize());
     sal_uInt64 nBytesLeft = ::std::min(nBytes, nRemaining);
-    if( nBytesLeft > 0 )
-    {
-        const std::size_t nMaxBuffer = 4096;
-        std::unique_ptr<sal_uInt8[]> pBuffer(
-            new sal_uInt8[ ::std::min<std::size_t>(nBytesLeft, nMaxBuffer) ]);
-        bool bValid = true;
+    if( nBytesLeft <= 0 )
+        return;
 
-        while( bValid && (nBytesLeft > 0) )
-        {
-            std::size_t nWriteLen = ::std::min<std::size_t>(nBytesLeft, nMaxBuffer);
-            rInStrm.ReadBytes(pBuffer.get(), nWriteLen);
-            std::size_t nWriteRet = Write( pBuffer.get(), nWriteLen );
-            bValid = (nWriteLen == nWriteRet);
-            nBytesLeft -= nWriteRet;
-        }
+    const std::size_t nMaxBuffer = 4096;
+    std::unique_ptr<sal_uInt8[]> pBuffer(
+        new sal_uInt8[ ::std::min<std::size_t>(nBytesLeft, nMaxBuffer) ]);
+    bool bValid = true;
+
+    while( bValid && (nBytesLeft > 0) )
+    {
+        std::size_t nWriteLen = ::std::min<std::size_t>(nBytesLeft, nMaxBuffer);
+        rInStrm.ReadBytes(pBuffer.get(), nWriteLen);
+        std::size_t nWriteRet = Write( pBuffer.get(), nWriteLen );
+        bValid = (nWriteLen == nWriteRet);
+        nBytesLeft -= nWriteRet;
     }
 }
 
@@ -545,25 +545,25 @@ void XclExpBiff8Encrypter::Init( const Sequence< NamedValue >& rEncryptionData )
 {
     mbValid = false;
 
-    if( maCodec.InitCodec( rEncryptionData ) )
-    {
-        maCodec.GetDocId( mpnDocId );
+    if( !maCodec.InitCodec( rEncryptionData ) )
+        return;
 
-        // generate the salt here
-        rtlRandomPool aRandomPool = rtl_random_createPool ();
-        rtl_random_getBytes( aRandomPool, mpnSalt, 16 );
-        rtl_random_destroyPool( aRandomPool );
+    maCodec.GetDocId( mpnDocId );
 
-        memset( mpnSaltDigest, 0, sizeof( mpnSaltDigest ) );
+    // generate the salt here
+    rtlRandomPool aRandomPool = rtl_random_createPool ();
+    rtl_random_getBytes( aRandomPool, mpnSalt, 16 );
+    rtl_random_destroyPool( aRandomPool );
 
-        // generate salt hash.
-        ::msfilter::MSCodec_Std97 aCodec;
-        aCodec.InitCodec( rEncryptionData );
-        aCodec.CreateSaltDigest( mpnSalt, mpnSaltDigest );
+    memset( mpnSaltDigest, 0, sizeof( mpnSaltDigest ) );
 
-        // verify to make sure it's in good shape.
-        mbValid = maCodec.VerifyKey( mpnSalt, mpnSaltDigest );
-    }
+    // generate salt hash.
+    ::msfilter::MSCodec_Std97 aCodec;
+    aCodec.InitCodec( rEncryptionData );
+    aCodec.CreateSaltDigest( mpnSalt, mpnSaltDigest );
+
+    // verify to make sure it's in good shape.
+    mbValid = maCodec.VerifyKey( mpnSalt, mpnSaltDigest );
 }
 
 sal_uInt32 XclExpBiff8Encrypter::GetBlockPos( std::size_t nStrmPos )

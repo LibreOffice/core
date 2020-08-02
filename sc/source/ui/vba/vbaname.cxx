@@ -106,18 +106,17 @@ void  ScVbaName::setContent( const OUString& rContent, const formula::FormulaGra
 
     // We should be able to do the below by just setting calling SetCode on pNamedRange
     // right?
-    if ( pNamedRange && pNamedRange->pDocShell )
-    {
+    if ( !(pNamedRange && pNamedRange->pDocShell) )
+        return;
 
-        ScDocument& rDoc = pNamedRange->pDocShell->GetDocument();
-        ScRangeData* pOldData = pNamedRange->GetRangeData_Impl();
-        if (pOldData)
-        {
-            // Shorter way of doing this ?
-            ScCompiler aComp( &rDoc, pOldData->GetPos(), eGrammar );
-            std::unique_ptr<ScTokenArray> pArray(aComp.CompileString(sContent));
-            pOldData->SetCode(*pArray);
-        }
+    ScDocument& rDoc = pNamedRange->pDocShell->GetDocument();
+    ScRangeData* pOldData = pNamedRange->GetRangeData_Impl();
+    if (pOldData)
+    {
+        // Shorter way of doing this ?
+        ScCompiler aComp( &rDoc, pOldData->GetPos(), eGrammar );
+        std::unique_ptr<ScTokenArray> pArray(aComp.CompileString(sContent));
+        pOldData->SetCode(*pArray);
     }
 }
 

@@ -55,24 +55,24 @@ void ScDBFunc::GotoDBArea( const OUString& rDBName )
     ScDocument* pDoc = GetViewData().GetDocument();
     ScDBCollection* pDBCol = pDoc->GetDBCollection();
     ScDBData* pData = pDBCol->getNamedDBs().findByUpperName(ScGlobal::getCharClassPtr()->uppercase(rDBName));
-    if (pData)
-    {
-        SCTAB nTab = 0;
-        SCCOL nStartCol = 0;
-        SCROW nStartRow = 0;
-        SCCOL nEndCol = 0;
-        SCROW nEndRow = 0;
+    if (!pData)
+        return;
 
-        pData->GetArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow );
-        SetTabNo( nTab );
+    SCTAB nTab = 0;
+    SCCOL nStartCol = 0;
+    SCROW nStartRow = 0;
+    SCCOL nEndCol = 0;
+    SCROW nEndRow = 0;
 
-        MoveCursorAbs( nStartCol, nStartRow, SC_FOLLOW_JUMP,
-                       false, false );  // bShift,bControl
-        DoneBlockMode();
-        InitBlockMode( nStartCol, nStartRow, nTab );
-        MarkCursor( nEndCol, nEndRow, nTab );
-        SelectionChanged();
-    }
+    pData->GetArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow );
+    SetTabNo( nTab );
+
+    MoveCursorAbs( nStartCol, nStartRow, SC_FOLLOW_JUMP,
+                   false, false );  // bShift,bControl
+    DoneBlockMode();
+    InitBlockMode( nStartCol, nStartRow, nTab );
+    MarkCursor( nEndCol, nEndRow, nTab );
+    SelectionChanged();
 }
 
 //  search current datarange for sort / filter
@@ -237,37 +237,37 @@ void ScDBFunc::Query( const ScQueryParam& rQueryParam, const ScRange* pAdvSource
     ScDBDocFunc aDBDocFunc( *pDocSh );
     bool bSuccess = aDBDocFunc.Query( nTab, rQueryParam, pAdvSource, bRecord, false );
 
-    if (bSuccess)
+    if (!bSuccess)
+        return;
+
+    bool bCopy = !rQueryParam.bInplace;
+    if (bCopy)
     {
-        bool bCopy = !rQueryParam.bInplace;
-        if (bCopy)
+        //  mark target range (data base range has been set up if applicable)
+        ScDocument& rDoc = pDocSh->GetDocument();
+        ScDBData* pDestData = rDoc.GetDBAtCursor(
+                                        rQueryParam.nDestCol, rQueryParam.nDestRow,
+                                        rQueryParam.nDestTab, ScDBDataPortion::TOP_LEFT );
+        if (pDestData)
         {
-            //  mark target range (data base range has been set up if applicable)
-            ScDocument& rDoc = pDocSh->GetDocument();
-            ScDBData* pDestData = rDoc.GetDBAtCursor(
-                                            rQueryParam.nDestCol, rQueryParam.nDestRow,
-                                            rQueryParam.nDestTab, ScDBDataPortion::TOP_LEFT );
-            if (pDestData)
-            {
-                ScRange aDestRange;
-                pDestData->GetArea(aDestRange);
-                MarkRange( aDestRange );
-            }
+            ScRange aDestRange;
+            pDestData->GetArea(aDestRange);
+            MarkRange( aDestRange );
         }
-
-        if (!bCopy)
-        {
-            ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
-                GetViewData().GetViewShell(),
-                false /* bColumns */, true /* bRows */,
-                false /* bSizes*/, true /* bHidden */, true /* bFiltered */,
-                false /* bGroups */, nTab);
-            UpdateScrollBars(ROW_HEADER);
-            SelectionChanged();     // for attribute states (filtered rows are ignored)
-        }
-
-        GetViewData().GetBindings().Invalidate( SID_UNFILTER );
     }
+
+    if (!bCopy)
+    {
+        ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+            GetViewData().GetViewShell(),
+            false /* bColumns */, true /* bRows */,
+            false /* bSizes*/, true /* bHidden */, true /* bFiltered */,
+            false /* bGroups */, nTab);
+        UpdateScrollBars(ROW_HEADER);
+        SelectionChanged();     // for attribute states (filtered rows are ignored)
+    }
+
+    GetViewData().GetBindings().Invalidate( SID_UNFILTER );
 }
 
 //  autofilter-buttons show / hide

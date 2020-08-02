@@ -347,129 +347,129 @@ void SdXMLImExTransform2D::SetString(const OUString& rNew, const SvXMLUnitConver
     msString = rNew;
     maList.clear();
 
-    if(!msString.isEmpty())
+    if(msString.isEmpty())
+        return;
+
+    const OUString aStr = msString;
+    const sal_Int32 nLen(aStr.getLength());
+
+    const OUString aString_rotate( "rotate" );
+    const OUString aString_scale( "scale" );
+    const OUString aString_translate( "translate" );
+    const OUString aString_skewX( "skewX" );
+    const OUString aString_skewY( "skewY" );
+    const OUString aString_matrix( "matrix" );
+
+    sal_Int32 nPos(0);
+
+    while(nPos < nLen)
     {
-        const OUString aStr = msString;
-        const sal_Int32 nLen(aStr.getLength());
+        // skip spaces
+        Imp_SkipSpaces(aStr, nPos, nLen);
 
-        const OUString aString_rotate( "rotate" );
-        const OUString aString_scale( "scale" );
-        const OUString aString_translate( "translate" );
-        const OUString aString_skewX( "skewX" );
-        const OUString aString_skewY( "skewY" );
-        const OUString aString_matrix( "matrix" );
-
-        sal_Int32 nPos(0);
-
-        while(nPos < nLen)
+        // look for tag
+        if(nPos < nLen)
         {
-            // skip spaces
-            Imp_SkipSpaces(aStr, nPos, nLen);
-
-            // look for tag
-            if(nPos < nLen)
+            if(nPos == aStr.indexOf(aString_rotate, nPos))
             {
-                if(nPos == aStr.indexOf(aString_rotate, nPos))
-                {
-                    double fValue(0.0);
-                    nPos += 6;
-                    Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
-                    fValue = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, fValue);
-                    if(fValue != 0.0)
-                        maList.push_back(std::make_shared<ImpSdXMLExpTransObj2DRotate>(fValue));
+                double fValue(0.0);
+                nPos += 6;
+                Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
+                fValue = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, fValue);
+                if(fValue != 0.0)
+                    maList.push_back(std::make_shared<ImpSdXMLExpTransObj2DRotate>(fValue));
 
-                    Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
-                }
-                else if(nPos == aStr.indexOf(aString_scale, nPos))
-                {
-                    ::basegfx::B2DTuple aValue(1.0, 1.0);
-                    nPos += 5;
-                    Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
-                    aValue.setX(Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.getX()));
-                    Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
-                    aValue.setY(Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.getY()));
+                Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
+            }
+            else if(nPos == aStr.indexOf(aString_scale, nPos))
+            {
+                ::basegfx::B2DTuple aValue(1.0, 1.0);
+                nPos += 5;
+                Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
+                aValue.setX(Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.getX()));
+                Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
+                aValue.setY(Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.getY()));
 
-                    if(aValue.getX() != 1.0 || aValue.getY() != 1.0)
-                        maList.push_back(std::make_shared<ImpSdXMLExpTransObj2DScale>(aValue));
+                if(aValue.getX() != 1.0 || aValue.getY() != 1.0)
+                    maList.push_back(std::make_shared<ImpSdXMLExpTransObj2DScale>(aValue));
 
-                    Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
-                }
-                else if(nPos == aStr.indexOf(aString_translate, nPos))
-                {
-                    ::basegfx::B2DTuple aValue;
-                    nPos += 9;
-                    Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
-                    aValue.setX(Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.getX(), true));
-                    Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
-                    aValue.setY(Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.getY(), true));
+                Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
+            }
+            else if(nPos == aStr.indexOf(aString_translate, nPos))
+            {
+                ::basegfx::B2DTuple aValue;
+                nPos += 9;
+                Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
+                aValue.setX(Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.getX(), true));
+                Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
+                aValue.setY(Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.getY(), true));
 
-                    if(!aValue.equalZero())
-                        maList.push_back(std::make_shared<ImpSdXMLExpTransObj2DTranslate>(aValue));
+                if(!aValue.equalZero())
+                    maList.push_back(std::make_shared<ImpSdXMLExpTransObj2DTranslate>(aValue));
 
-                    Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
-                }
-                else if(nPos == aStr.indexOf(aString_skewX, nPos))
-                {
-                    double fValue(0.0);
-                    nPos += 5;
-                    Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
-                    fValue = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, fValue);
-                    if(fValue != 0.0)
-                        maList.push_back(std::make_shared<ImpSdXMLExpTransObj2DSkewX>(fValue));
+                Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
+            }
+            else if(nPos == aStr.indexOf(aString_skewX, nPos))
+            {
+                double fValue(0.0);
+                nPos += 5;
+                Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
+                fValue = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, fValue);
+                if(fValue != 0.0)
+                    maList.push_back(std::make_shared<ImpSdXMLExpTransObj2DSkewX>(fValue));
 
-                    Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
-                }
-                else if(nPos == aStr.indexOf(aString_skewY, nPos))
-                {
-                    double fValue(0.0);
-                    nPos += 5;
-                    Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
-                    fValue = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, fValue);
-                    if(fValue != 0.0)
-                        maList.push_back(std::make_shared<ImpSdXMLExpTransObj2DSkewY>(fValue));
+                Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
+            }
+            else if(nPos == aStr.indexOf(aString_skewY, nPos))
+            {
+                double fValue(0.0);
+                nPos += 5;
+                Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
+                fValue = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, fValue);
+                if(fValue != 0.0)
+                    maList.push_back(std::make_shared<ImpSdXMLExpTransObj2DSkewY>(fValue));
 
-                    Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
-                }
-                else if(nPos == aStr.indexOf(aString_matrix, nPos))
-                {
-                    ::basegfx::B2DHomMatrix aValue;
+                Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
+            }
+            else if(nPos == aStr.indexOf(aString_matrix, nPos))
+            {
+                ::basegfx::B2DHomMatrix aValue;
 
-                    nPos += 6;
-                    Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
+                nPos += 6;
+                Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
 
-                    // a
-                    aValue.set(0, 0, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(0, 0)));
-                    Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
+                // a
+                aValue.set(0, 0, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(0, 0)));
+                Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // b
-                    aValue.set(1, 0, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(1, 0)));
-                    Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
+                // b
+                aValue.set(1, 0, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(1, 0)));
+                Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // c
-                    aValue.set(0, 1, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(0, 1)));
-                    Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
+                // c
+                aValue.set(0, 1, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(0, 1)));
+                Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // d
-                    aValue.set(1, 1, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(1, 1)));
-                    Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
+                // d
+                aValue.set(1, 1, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(1, 1)));
+                Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // e
-                    aValue.set(0, 2, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(0, 2), true));
-                    Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
+                // e
+                aValue.set(0, 2, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(0, 2), true));
+                Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // f
-                    aValue.set(1, 2, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(1, 2), true));
-                    Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
+                // f
+                aValue.set(1, 2, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(1, 2), true));
+                Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    if(!aValue.isIdentity())
-                        maList.push_back(std::make_shared<ImpSdXMLExpTransObj2DMatrix>(aValue));
+                if(!aValue.isIdentity())
+                    maList.push_back(std::make_shared<ImpSdXMLExpTransObj2DMatrix>(aValue));
 
-                    Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
-                }
-                else
-                {
-                    nPos++;
-                }
+                Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
+            }
+            else
+            {
+                nPos++;
             }
         }
     }
@@ -754,162 +754,162 @@ void SdXMLImExTransform3D::SetString(const OUString& rNew, const SvXMLUnitConver
     msString = rNew;
     maList.clear();
 
-    if(!msString.isEmpty())
+    if(msString.isEmpty())
+        return;
+
+    const OUString aStr = msString;
+    const sal_Int32 nLen(aStr.getLength());
+
+    const OUString aString_rotatex( "rotatex" );
+    const OUString aString_rotatey( "rotatey" );
+    const OUString aString_rotatez( "rotatez" );
+    const OUString aString_scale( "scale" );
+    const OUString aString_translate( "translate" );
+    const OUString aString_matrix( "matrix" );
+
+    sal_Int32 nPos(0);
+
+    while(nPos < nLen)
     {
-        const OUString aStr = msString;
-        const sal_Int32 nLen(aStr.getLength());
+        // skip spaces
+        Imp_SkipSpaces(aStr, nPos, nLen);
 
-        const OUString aString_rotatex( "rotatex" );
-        const OUString aString_rotatey( "rotatey" );
-        const OUString aString_rotatez( "rotatez" );
-        const OUString aString_scale( "scale" );
-        const OUString aString_translate( "translate" );
-        const OUString aString_matrix( "matrix" );
-
-        sal_Int32 nPos(0);
-
-        while(nPos < nLen)
+        // look for tag
+        if(nPos < nLen)
         {
-            // skip spaces
-            Imp_SkipSpaces(aStr, nPos, nLen);
-
-            // look for tag
-            if(nPos < nLen)
+            if(nPos == aStr.indexOf(aString_rotatex, nPos))
             {
-                if(nPos == aStr.indexOf(aString_rotatex, nPos))
-                {
-                    double fValue(0.0);
+                double fValue(0.0);
 
-                    nPos += 7;
-                    Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
-                    fValue = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, fValue);
-                    if(fValue != 0.0)
-                        maList.push_back(std::make_shared<ImpSdXMLExpTransObj3DRotateX>(basegfx::deg2rad(fValue)));
+                nPos += 7;
+                Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
+                fValue = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, fValue);
+                if(fValue != 0.0)
+                    maList.push_back(std::make_shared<ImpSdXMLExpTransObj3DRotateX>(basegfx::deg2rad(fValue)));
 
-                    Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
-                }
-                else if(nPos == aStr.indexOf(aString_rotatey, nPos))
-                {
-                    double fValue(0.0);
+                Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
+            }
+            else if(nPos == aStr.indexOf(aString_rotatey, nPos))
+            {
+                double fValue(0.0);
 
-                    nPos += 7;
-                    Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
-                    fValue = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, fValue);
-                    if(fValue != 0.0)
-                        maList.push_back(std::make_shared<ImpSdXMLExpTransObj3DRotateY>(basegfx::deg2rad(fValue)));
+                nPos += 7;
+                Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
+                fValue = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, fValue);
+                if(fValue != 0.0)
+                    maList.push_back(std::make_shared<ImpSdXMLExpTransObj3DRotateY>(basegfx::deg2rad(fValue)));
 
-                    Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
-                }
-                else if(nPos == aStr.indexOf(aString_rotatez, nPos))
-                {
-                    double fValue(0.0);
+                Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
+            }
+            else if(nPos == aStr.indexOf(aString_rotatez, nPos))
+            {
+                double fValue(0.0);
 
-                    nPos += 7;
-                    Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
-                    fValue = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, fValue);
-                    if(fValue != 0.0)
-                        maList.push_back(std::make_shared<ImpSdXMLExpTransObj3DRotateZ>(basegfx::deg2rad(fValue)));
+                nPos += 7;
+                Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
+                fValue = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, fValue);
+                if(fValue != 0.0)
+                    maList.push_back(std::make_shared<ImpSdXMLExpTransObj3DRotateZ>(basegfx::deg2rad(fValue)));
 
-                    Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
-                }
-                else if(nPos == aStr.indexOf(aString_scale, nPos))
-                {
-                    ::basegfx::B3DTuple aValue(1.0, 1.0, 1.0);
+                Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
+            }
+            else if(nPos == aStr.indexOf(aString_scale, nPos))
+            {
+                ::basegfx::B3DTuple aValue(1.0, 1.0, 1.0);
 
-                    nPos += 5;
-                    Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
-                    aValue.setX(Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.getX()));
-                    Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
-                    aValue.setY(Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.getY()));
-                    Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
-                    aValue.setZ(Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.getZ()));
+                nPos += 5;
+                Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
+                aValue.setX(Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.getX()));
+                Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
+                aValue.setY(Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.getY()));
+                Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
+                aValue.setZ(Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.getZ()));
 
-                    if(1.0 != aValue.getX() || 1.0 != aValue.getY() || 1.0 != aValue.getZ())
-                        maList.push_back(std::make_shared<ImpSdXMLExpTransObj3DScale>(aValue));
+                if(1.0 != aValue.getX() || 1.0 != aValue.getY() || 1.0 != aValue.getZ())
+                    maList.push_back(std::make_shared<ImpSdXMLExpTransObj3DScale>(aValue));
 
-                    Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
-                }
-                else if(nPos == aStr.indexOf(aString_translate, nPos))
-                {
-                    ::basegfx::B3DTuple aValue;
+                Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
+            }
+            else if(nPos == aStr.indexOf(aString_translate, nPos))
+            {
+                ::basegfx::B3DTuple aValue;
 
-                    nPos += 9;
-                    Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
-                    aValue.setX(Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.getX(), true));
-                    Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
-                    aValue.setY(Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.getY(), true));
-                    Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
-                    aValue.setZ(Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.getZ(), true));
+                nPos += 9;
+                Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
+                aValue.setX(Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.getX(), true));
+                Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
+                aValue.setY(Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.getY(), true));
+                Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
+                aValue.setZ(Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.getZ(), true));
 
-                    if(!aValue.equalZero())
-                        maList.push_back(std::make_shared<ImpSdXMLExpTransObj3DTranslate>(aValue));
+                if(!aValue.equalZero())
+                    maList.push_back(std::make_shared<ImpSdXMLExpTransObj3DTranslate>(aValue));
 
-                    Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
-                }
-                else if(nPos == aStr.indexOf(aString_matrix, nPos))
-                {
-                    ::basegfx::B3DHomMatrix aValue;
+                Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
+            }
+            else if(nPos == aStr.indexOf(aString_matrix, nPos))
+            {
+                ::basegfx::B3DHomMatrix aValue;
 
-                    nPos += 6;
-                    Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
+                nPos += 6;
+                Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
 
-                    // a
-                    aValue.set(0, 0, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(0, 0)));
-                    Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
+                // a
+                aValue.set(0, 0, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(0, 0)));
+                Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // b
-                    aValue.set(1, 0, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(1, 0)));
-                    Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
+                // b
+                aValue.set(1, 0, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(1, 0)));
+                Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // c
-                    aValue.set(2, 0, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(2, 0)));
-                    Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
+                // c
+                aValue.set(2, 0, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(2, 0)));
+                Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // d
-                    aValue.set(0, 1, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(0, 1)));
-                    Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
+                // d
+                aValue.set(0, 1, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(0, 1)));
+                Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // e
-                    aValue.set(1, 1, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(1, 1)));
-                    Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
+                // e
+                aValue.set(1, 1, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(1, 1)));
+                Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // f
-                    aValue.set(2, 1, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(2, 1)));
-                    Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
+                // f
+                aValue.set(2, 1, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(2, 1)));
+                Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // g
-                    aValue.set(0, 2, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(0, 2)));
-                    Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
+                // g
+                aValue.set(0, 2, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(0, 2)));
+                Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // h
-                    aValue.set(1, 2, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(1, 2)));
-                    Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
+                // h
+                aValue.set(1, 2, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(1, 2)));
+                Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // i
-                    aValue.set(2, 2, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(2, 2)));
-                    Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
+                // i
+                aValue.set(2, 2, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(2, 2)));
+                Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // j
-                    aValue.set(0, 3, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(0, 3), true));
-                    Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
+                // j
+                aValue.set(0, 3, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(0, 3), true));
+                Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // k
-                    aValue.set(1, 3, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(1, 3), true));
-                    Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
+                // k
+                aValue.set(1, 3, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(1, 3), true));
+                Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // l
-                    aValue.set(2, 3, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(2, 3), true));
-                    Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
+                // l
+                aValue.set(2, 3, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(2, 3), true));
+                Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    if(!aValue.isIdentity())
-                        maList.push_back(std::make_shared<ImpSdXMLExpTransObj3DMatrix>(aValue));
+                if(!aValue.isIdentity())
+                    maList.push_back(std::make_shared<ImpSdXMLExpTransObj3DMatrix>(aValue));
 
-                    Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
-                }
-                else
-                {
-                    nPos++;
-                }
+                Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
+            }
+            else
+            {
+                nPos++;
             }
         }
     }

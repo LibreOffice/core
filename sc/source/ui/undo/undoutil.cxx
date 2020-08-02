@@ -35,19 +35,19 @@ void ScUndoUtil::MarkSimpleBlock( const ScDocShell* pDocShell,
         return;
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-    if (pViewShell)
-    {
-        SCTAB nViewTab = pViewShell->GetViewData().GetTabNo();
-        if ( nViewTab < nStartZ || nViewTab > nEndZ )
-            pViewShell->SetTabNo( nStartZ );
+    if (!pViewShell)
+        return;
 
-        pViewShell->DoneBlockMode();
-        pViewShell->MoveCursorAbs( nStartX, nStartY, SC_FOLLOW_JUMP, false, false );
-        pViewShell->InitOwnBlockMode();
-        pViewShell->GetViewData().GetMarkData().
-                SetMarkArea( ScRange( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ) );
-        pViewShell->MarkDataChanged();
-    }
+    SCTAB nViewTab = pViewShell->GetViewData().GetTabNo();
+    if ( nViewTab < nStartZ || nViewTab > nEndZ )
+        pViewShell->SetTabNo( nStartZ );
+
+    pViewShell->DoneBlockMode();
+    pViewShell->MoveCursorAbs( nStartX, nStartY, SC_FOLLOW_JUMP, false, false );
+    pViewShell->InitOwnBlockMode();
+    pViewShell->GetViewData().GetMarkData().
+            SetMarkArea( ScRange( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ) );
+    pViewShell->MarkDataChanged();
 }
 
 void ScUndoUtil::MarkSimpleBlock( const ScDocShell* pDocShell,

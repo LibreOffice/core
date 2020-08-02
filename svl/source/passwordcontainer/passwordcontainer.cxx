@@ -926,23 +926,23 @@ void SAL_CALL PasswordContainer::removePersistent( const OUString& aURL, const O
     auto aNPIter = std::find_if(aIter->second.begin(), aIter->second.end(),
         [&aName](const NamePassRecord& rNPRecord) { return rNPRecord.GetUserName() == aName; });
 
-    if (aNPIter != aIter->second.end())
+    if (aNPIter == aIter->second.end())
+        return;
+
+    if( aNPIter->HasPasswords( PERSISTENT_RECORD ) )
     {
-        if( aNPIter->HasPasswords( PERSISTENT_RECORD ) )
-        {
-            // TODO/LATER: should the password be converted to MemoryPassword?
-            aNPIter->RemovePasswords( PERSISTENT_RECORD );
+        // TODO/LATER: should the password be converted to MemoryPassword?
+        aNPIter->RemovePasswords( PERSISTENT_RECORD );
 
-            if ( m_pStorageFile )
-                m_pStorageFile->remove( aURL, aName ); // remove record ( aURL, aName )
-        }
-
-        if( !aNPIter->HasPasswords( MEMORY_RECORD ) )
-            aIter->second.erase( aNPIter );
-
-        if( aIter->second.empty() )
-            m_aContainer.erase( aIter );
+        if ( m_pStorageFile )
+            m_pStorageFile->remove( aURL, aName ); // remove record ( aURL, aName )
     }
+
+    if( !aNPIter->HasPasswords( MEMORY_RECORD ) )
+        aIter->second.erase( aNPIter );
+
+    if( aIter->second.empty() )
+        m_aContainer.erase( aIter );
 }
 
 void SAL_CALL PasswordContainer::removeAllPersistent()

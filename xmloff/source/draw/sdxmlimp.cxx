@@ -407,25 +407,25 @@ void SAL_CALL SdXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
     SvXMLImport::initialize( aArguments );
 
     uno::Reference< beans::XPropertySet > xInfoSet( getImportInfo() );
-    if( xInfoSet.is() )
+    if( !xInfoSet.is() )
+        return;
+
+    uno::Reference< beans::XPropertySetInfo > xInfoSetInfo( xInfoSet->getPropertySetInfo() );
+
+    if( xInfoSetInfo->hasPropertyByName( gsPageLayouts ) )
+        xInfoSet->getPropertyValue( gsPageLayouts ) >>= mxPageLayouts;
+
+    if( xInfoSetInfo->hasPropertyByName( gsPreview ) )
+        xInfoSet->getPropertyValue( gsPreview ) >>= mbPreview;
+
+    OUString const sOrganizerMode(
+        "OrganizerMode");
+    if (xInfoSetInfo->hasPropertyByName(sOrganizerMode))
     {
-        uno::Reference< beans::XPropertySetInfo > xInfoSetInfo( xInfoSet->getPropertySetInfo() );
-
-        if( xInfoSetInfo->hasPropertyByName( gsPageLayouts ) )
-            xInfoSet->getPropertyValue( gsPageLayouts ) >>= mxPageLayouts;
-
-        if( xInfoSetInfo->hasPropertyByName( gsPreview ) )
-            xInfoSet->getPropertyValue( gsPreview ) >>= mbPreview;
-
-        OUString const sOrganizerMode(
-            "OrganizerMode");
-        if (xInfoSetInfo->hasPropertyByName(sOrganizerMode))
+        bool bStyleOnly(false);
+        if (xInfoSet->getPropertyValue(sOrganizerMode) >>= bStyleOnly)
         {
-            bool bStyleOnly(false);
-            if (xInfoSet->getPropertyValue(sOrganizerMode) >>= bStyleOnly)
-            {
-                mbLoadDoc = !bStyleOnly;
-            }
+            mbLoadDoc = !bStyleOnly;
         }
     }
 }

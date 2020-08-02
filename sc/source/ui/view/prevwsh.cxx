@@ -380,39 +380,39 @@ void ScPreviewShell::UpdateScrollBars()
         pHorScroll->SetThumbPos( aOfs.X() );
     }
 
-    if( pVerScroll )
-    {
-        long nPageNo     = pPreview->GetPageNo();
-        long nTotalPages = pPreview->GetTotalPages();
+    if( !pVerScroll )
+        return;
 
-        nMaxVertPos = aPageSize.Height() - aWindowSize.Height();
-        pVerScroll->SetLineSize( aWindowSize.Height() / 16  );
-        pVerScroll->SetPageSize( aWindowSize.Height() );
-        pVerScroll->SetVisibleSize( aWindowSize.Height() );
-        if ( nMaxVertPos < 0 )
-        {
-            //  page smaller than window -> center (but put scrollbar to 0)
-            aOfs.setY( 0 );
-            pPreview->SetYOffset( nMaxVertPos / 2 );
-            pVerScroll->SetThumbPos( nPageNo * aWindowSize.Height() );
-            pVerScroll->SetRange( Range( 0, aWindowSize.Height() * nTotalPages ));
-        }
-        else if (aOfs.Y() < 0)
-        {
-            //  page larger than window -> never use negative offset
-            pVerScroll->SetRange( Range( 0, aPageSize.Height() ) );
-            aOfs.setY( 0 );
-            pPreview->SetYOffset( 0 );
-            pVerScroll->SetThumbPos( aOfs.Y() );
-        }
-        else if (aOfs.Y() > nMaxVertPos )
-        {
-            //  limit offset to align with window bottom
-            pVerScroll->SetRange( Range( 0, aPageSize.Height() ) );
-            aOfs.setY( nMaxVertPos );
-            pPreview->SetYOffset( nMaxVertPos );
-            pVerScroll->SetThumbPos( aOfs.Y() );
-        }
+    long nPageNo     = pPreview->GetPageNo();
+    long nTotalPages = pPreview->GetTotalPages();
+
+    nMaxVertPos = aPageSize.Height() - aWindowSize.Height();
+    pVerScroll->SetLineSize( aWindowSize.Height() / 16  );
+    pVerScroll->SetPageSize( aWindowSize.Height() );
+    pVerScroll->SetVisibleSize( aWindowSize.Height() );
+    if ( nMaxVertPos < 0 )
+    {
+        //  page smaller than window -> center (but put scrollbar to 0)
+        aOfs.setY( 0 );
+        pPreview->SetYOffset( nMaxVertPos / 2 );
+        pVerScroll->SetThumbPos( nPageNo * aWindowSize.Height() );
+        pVerScroll->SetRange( Range( 0, aWindowSize.Height() * nTotalPages ));
+    }
+    else if (aOfs.Y() < 0)
+    {
+        //  page larger than window -> never use negative offset
+        pVerScroll->SetRange( Range( 0, aPageSize.Height() ) );
+        aOfs.setY( 0 );
+        pPreview->SetYOffset( 0 );
+        pVerScroll->SetThumbPos( aOfs.Y() );
+    }
+    else if (aOfs.Y() > nMaxVertPos )
+    {
+        //  limit offset to align with window bottom
+        pVerScroll->SetRange( Range( 0, aPageSize.Height() ) );
+        aOfs.setY( nMaxVertPos );
+        pPreview->SetYOffset( nMaxVertPos );
+        pVerScroll->SetThumbPos( aOfs.Y() );
     }
 }
 

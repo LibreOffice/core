@@ -474,26 +474,26 @@ void XclExpTabViewSettings::SaveXml( XclExpXmlStream& rStrm )
 void XclExpTabViewSettings::CreateSelectionData( sal_uInt8 nPane,
         const ScAddress& rCursor, const ScRangeList& rSelection )
 {
-    if( maData.HasPane( nPane ) )
+    if( !maData.HasPane( nPane ) )
+        return;
+
+    XclSelectionData& rSelData = maData.CreateSelectionData( nPane );
+
+    // first step: use top-left visible cell as cursor
+    rSelData.maXclCursor.mnCol = ((nPane == EXC_PANE_TOPLEFT) || (nPane == EXC_PANE_BOTTOMLEFT)) ?
+        maData.maFirstXclPos.mnCol : maData.maSecondXclPos.mnCol;
+    rSelData.maXclCursor.mnRow = ((nPane == EXC_PANE_TOPLEFT) || (nPane == EXC_PANE_TOPRIGHT)) ?
+        maData.maFirstXclPos.mnRow : maData.maSecondXclPos.mnRow;
+
+    // second step, active pane: create actual selection data with current cursor position
+    if( nPane == maData.mnActivePane )
     {
-        XclSelectionData& rSelData = maData.CreateSelectionData( nPane );
-
-        // first step: use top-left visible cell as cursor
-        rSelData.maXclCursor.mnCol = ((nPane == EXC_PANE_TOPLEFT) || (nPane == EXC_PANE_BOTTOMLEFT)) ?
-            maData.maFirstXclPos.mnCol : maData.maSecondXclPos.mnCol;
-        rSelData.maXclCursor.mnRow = ((nPane == EXC_PANE_TOPLEFT) || (nPane == EXC_PANE_TOPRIGHT)) ?
-            maData.maFirstXclPos.mnRow : maData.maSecondXclPos.mnRow;
-
-        // second step, active pane: create actual selection data with current cursor position
-        if( nPane == maData.mnActivePane )
-        {
-            XclExpAddressConverter& rAddrConv = GetAddressConverter();
-            // cursor position (keep top-left pane position from above, if rCursor is invalid)
-            if( (rCursor.Col() >= 0) && (rCursor.Row() >= 0) )
-                rSelData.maXclCursor = rAddrConv.CreateValidAddress( rCursor, false );
-            // selection
-            rAddrConv.ConvertRangeList( rSelData.maXclSelection, rSelection, false );
-        }
+        XclExpAddressConverter& rAddrConv = GetAddressConverter();
+        // cursor position (keep top-left pane position from above, if rCursor is invalid)
+        if( (rCursor.Col() >= 0) && (rCursor.Row() >= 0) )
+            rSelData.maXclCursor = rAddrConv.CreateValidAddress( rCursor, false );
+        // selection
+        rAddrConv.ConvertRangeList( rSelData.maXclSelection, rSelection, false );
     }
 }
 

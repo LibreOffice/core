@@ -127,19 +127,19 @@ SdrPageWindow::~SdrPageWindow()
     // #i26631#
     ResetObjectContact();
 
-    if (mpImpl->mxControlContainer.is())
-    {
-        auto & rView = static_cast<SdrPaintView &>(GetPageView().GetView());
+    if (!mpImpl->mxControlContainer.is())
+        return;
 
-        // notify derived views
-        FmFormView* pViewAsFormView = dynamic_cast< FmFormView* >( &rView );
-        if ( pViewAsFormView )
-            pViewAsFormView->RemoveControlContainer(mpImpl->mxControlContainer);
+    auto & rView = static_cast<SdrPaintView &>(GetPageView().GetView());
 
-        // dispose the control container
-        uno::Reference< lang::XComponent > xComponent(mpImpl->mxControlContainer, uno::UNO_QUERY);
-        xComponent->dispose();
-    }
+    // notify derived views
+    FmFormView* pViewAsFormView = dynamic_cast< FmFormView* >( &rView );
+    if ( pViewAsFormView )
+        pViewAsFormView->RemoveControlContainer(mpImpl->mxControlContainer);
+
+    // dispose the control container
+    uno::Reference< lang::XComponent > xComponent(mpImpl->mxControlContainer, uno::UNO_QUERY);
+    xComponent->dispose();
 }
 
 SdrPageView& SdrPageWindow::GetPageView() const

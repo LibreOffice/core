@@ -720,57 +720,57 @@ void SvxXMLNumRuleExport::exportOutline()
                                                         UNO_QUERY );
     SAL_WARN_IF( !xCNSupplier.is(), "xmloff", "no chapter numbering supplier" );
 
-    if( xCNSupplier.is() )
-    {
-        Reference< XIndexReplace > xNumRule( xCNSupplier->getChapterNumberingRules() );
-        SAL_WARN_IF( !xNumRule.is(), "xmloff", "no chapter numbering rules" );
+    if( !xCNSupplier.is() )
+        return;
 
-        if( xNumRule.is() )
+    Reference< XIndexReplace > xNumRule( xCNSupplier->getChapterNumberingRules() );
+    SAL_WARN_IF( !xNumRule.is(), "xmloff", "no chapter numbering rules" );
+
+    if( !xNumRule.is() )
+        return;
+
+    /* Outline style has property style:name since ODF 1.2
+       Thus, export this property and adjust fix for issue #i69627# (#i90780#)
+    */
+    OUString sOutlineStyleName;
+    {
+        Reference<XPropertySet> xNumRulePropSet(
+            xCNSupplier->getChapterNumberingRules(), UNO_QUERY );
+        if (xNumRulePropSet.is())
         {
-            /* Outline style has property style:name since ODF 1.2
-               Thus, export this property and adjust fix for issue #i69627# (#i90780#)
-            */
-            OUString sOutlineStyleName;
-            {
-                Reference<XPropertySet> xNumRulePropSet(
-                    xCNSupplier->getChapterNumberingRules(), UNO_QUERY );
-                if (xNumRulePropSet.is())
-                {
-                    xNumRulePropSet->getPropertyValue( "Name" ) >>= sOutlineStyleName;
-                }
-            }
-            const SvtSaveOptions::ODFSaneDefaultVersion nODFVersion =
-                                                GetExport().getSaneDefaultVersion();
-            if ((nODFVersion == SvtSaveOptions::ODFSVER_010 ||
-                 nODFVersion == SvtSaveOptions::ODFSVER_011)
-                && GetExport().writeOutlineStyleAsNormalListStyle())
-            {
-                exportNumberingRule( sOutlineStyleName, false, xNumRule );
-            }
-            else
-            {
-                if (nODFVersion != SvtSaveOptions::ODFSVER_010 &&
-                    nODFVersion != SvtSaveOptions::ODFSVER_011)
-                {
-                    // style:name="..."
-                    GetExport().CheckAttrList();
-                    if ( !sOutlineStyleName.isEmpty() )
-                     {
-                        bool bEncoded = false;
-                        GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NAME,
-                                        GetExport().EncodeStyleName( sOutlineStyleName,
-                                                                     &bEncoded ) );
-                        if( bEncoded )
-                            GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                                      XML_DISPLAY_NAME,
-                                                      sOutlineStyleName );
-                    }
-                }
-                SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
-                                          XML_OUTLINE_STYLE, true, true );
-                exportLevelStyles( xNumRule, true );
+            xNumRulePropSet->getPropertyValue( "Name" ) >>= sOutlineStyleName;
+        }
+    }
+    const SvtSaveOptions::ODFSaneDefaultVersion nODFVersion =
+                                        GetExport().getSaneDefaultVersion();
+    if ((nODFVersion == SvtSaveOptions::ODFSVER_010 ||
+         nODFVersion == SvtSaveOptions::ODFSVER_011)
+        && GetExport().writeOutlineStyleAsNormalListStyle())
+    {
+        exportNumberingRule( sOutlineStyleName, false, xNumRule );
+    }
+    else
+    {
+        if (nODFVersion != SvtSaveOptions::ODFSVER_010 &&
+            nODFVersion != SvtSaveOptions::ODFSVER_011)
+        {
+            // style:name="..."
+            GetExport().CheckAttrList();
+            if ( !sOutlineStyleName.isEmpty() )
+             {
+                bool bEncoded = false;
+                GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NAME,
+                                GetExport().EncodeStyleName( sOutlineStyleName,
+                                                             &bEncoded ) );
+                if( bEncoded )
+                    GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                              XML_DISPLAY_NAME,
+                                              sOutlineStyleName );
             }
         }
+        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
+                                  XML_OUTLINE_STYLE, true, true );
+        exportLevelStyles( xNumRule, true );
     }
 }
 
@@ -783,40 +783,40 @@ void SvxXMLNumRuleExport::exportStyles( bool bUsed,
 
     Reference< XStyleFamiliesSupplier > xFamiliesSupp( GetExport().GetModel(), UNO_QUERY );
     SAL_WARN_IF( !xFamiliesSupp.is(), "xmloff", "No XStyleFamiliesSupplier from XModel for export!" );
-    if( xFamiliesSupp.is() )
+    if( !xFamiliesSupp.is() )
+        return;
+
+    Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
+    SAL_WARN_IF( !xFamiliesSupp.is(), "xmloff", "getStyleFamilies() from XModel failed for export!" );
+
+    if( !xFamilies.is() )
+        return;
+
+    const OUString aNumberStyleName( "NumberingStyles" );
+
+    Reference< XIndexAccess > xStyles;
+    if( !xFamilies->hasByName( aNumberStyleName ) )
+        return;
+
+    xFamilies->getByName( aNumberStyleName ) >>= xStyles;
+
+    SAL_WARN_IF( !xStyles.is(), "xmloff", "Style not found for export!" );
+
+    if( !xStyles.is() )
+        return;
+
+    const sal_Int32 nStyles = xStyles->getCount();
+
+    for( sal_Int32 i=0; i < nStyles; i++ )
     {
-        Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
-        SAL_WARN_IF( !xFamiliesSupp.is(), "xmloff", "getStyleFamilies() from XModel failed for export!" );
+        Reference< XStyle > xStyle;
+        xStyles->getByIndex( i ) >>= xStyle;
 
-        if( xFamilies.is() )
+        if( !bUsed || xStyle->isInUse() )
         {
-            const OUString aNumberStyleName( "NumberingStyles" );
-
-            Reference< XIndexAccess > xStyles;
-            if( xFamilies->hasByName( aNumberStyleName ) )
-            {
-                xFamilies->getByName( aNumberStyleName ) >>= xStyles;
-
-                SAL_WARN_IF( !xStyles.is(), "xmloff", "Style not found for export!" );
-
-                if( xStyles.is() )
-                {
-                    const sal_Int32 nStyles = xStyles->getCount();
-
-                    for( sal_Int32 i=0; i < nStyles; i++ )
-                    {
-                        Reference< XStyle > xStyle;
-                        xStyles->getByIndex( i ) >>= xStyle;
-
-                        if( !bUsed || xStyle->isInUse() )
-                        {
-                            exportStyle( xStyle );
-                            if( pPool )
-                                pPool->RegisterName( xStyle->getName() );
-                        }
-                    }
-                }
-            }
+            exportStyle( xStyle );
+            if( pPool )
+                pPool->RegisterName( xStyle->getName() );
         }
     }
 }

@@ -310,43 +310,43 @@ void SdrEdgeObj::ImpSetEdgeInfoToAttr()
         nVals[1] = bHor2 ? aEdgeInfo.aObj2Line2.X() : aEdgeInfo.aObj2Line2.Y();
     }
 
-    if(n != nValCnt || nVals[0] != nVal1 || nVals[1] != nVal2 || nVals[2] != nVal3)
+    if(!(n != nValCnt || nVals[0] != nVal1 || nVals[1] != nVal2 || nVals[2] != nVal3))
+        return;
+
+    // Here no more notifying is necessary, just local changes are OK.
+    if(n != nValCnt)
     {
-        // Here no more notifying is necessary, just local changes are OK.
-        if(n != nValCnt)
-        {
-            GetProperties().SetObjectItemDirect(SdrEdgeLineDeltaCountItem(n));
-        }
+        GetProperties().SetObjectItemDirect(SdrEdgeLineDeltaCountItem(n));
+    }
 
-        if(nVals[0] != nVal1)
-        {
-            GetProperties().SetObjectItemDirect(makeSdrEdgeLine1DeltaItem(nVals[0]));
-        }
+    if(nVals[0] != nVal1)
+    {
+        GetProperties().SetObjectItemDirect(makeSdrEdgeLine1DeltaItem(nVals[0]));
+    }
 
-        if(nVals[1] != nVal2)
-        {
-            GetProperties().SetObjectItemDirect(makeSdrEdgeLine2DeltaItem(nVals[1]));
-        }
+    if(nVals[1] != nVal2)
+    {
+        GetProperties().SetObjectItemDirect(makeSdrEdgeLine2DeltaItem(nVals[1]));
+    }
 
-        if(nVals[2] != nVal3)
-        {
-            GetProperties().SetObjectItemDirect(makeSdrEdgeLine3DeltaItem(nVals[2]));
-        }
+    if(nVals[2] != nVal3)
+    {
+        GetProperties().SetObjectItemDirect(makeSdrEdgeLine3DeltaItem(nVals[2]));
+    }
 
-        if(n < 3)
-        {
-            GetProperties().ClearObjectItemDirect(SDRATTR_EDGELINE3DELTA);
-        }
+    if(n < 3)
+    {
+        GetProperties().ClearObjectItemDirect(SDRATTR_EDGELINE3DELTA);
+    }
 
-        if(n < 2)
-        {
-            GetProperties().ClearObjectItemDirect(SDRATTR_EDGELINE2DELTA);
-        }
+    if(n < 2)
+    {
+        GetProperties().ClearObjectItemDirect(SDRATTR_EDGELINE2DELTA);
+    }
 
-        if(n < 1)
-        {
-            GetProperties().ClearObjectItemDirect(SDRATTR_EDGELINE1DELTA);
-        }
+    if(n < 1)
+    {
+        GetProperties().ClearObjectItemDirect(SDRATTR_EDGELINE1DELTA);
     }
 }
 
@@ -1597,29 +1597,30 @@ void SdrEdgeObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         bEdgeTrackUserDefined = false;
     }
     SdrTextObj::Notify(rBC,rHint);
-    if (nNotifyingCount==0) { // a locking flag
-        nNotifyingCount++;
-        const SdrHint* pSdrHint = ( rHint.GetId() == SfxHintId::ThisIsAnSdrHint ? static_cast<const SdrHint*>(&rHint) : nullptr );
+    if (nNotifyingCount!=0)return;
 
-        if (bDataChg) { // StyleSheet changed
-            ImpSetAttrToEdgeInfo(); // when changing templates, copy values from Pool to aEdgeInfo
-        }
-        if (bDataChg                                ||
-            (bObj1 && aCon1.pObj->getSdrPageFromSdrObject() == getSdrPageFromSdrObject()) ||
-            (bObj2 && aCon2.pObj->getSdrPageFromSdrObject() == getSdrPageFromSdrObject()) ||
-            (pSdrHint && pSdrHint->GetKind()==SdrHintKind::ObjectRemoved))
-        {
-            // broadcasting only, if on the same page
-            tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetCurrentBoundRect();
-            ImpDirtyEdgeTrack();
+// a locking flag
+    nNotifyingCount++;
+    const SdrHint* pSdrHint = ( rHint.GetId() == SfxHintId::ThisIsAnSdrHint ? static_cast<const SdrHint*>(&rHint) : nullptr );
 
-            // only redraw here, object hasn't actually changed
-            ActionChanged();
-
-            SendUserCall(SdrUserCallType::Resize,aBoundRect0);
-        }
-        nNotifyingCount--;
+    if (bDataChg) { // StyleSheet changed
+        ImpSetAttrToEdgeInfo(); // when changing templates, copy values from Pool to aEdgeInfo
     }
+    if (bDataChg                                ||
+        (bObj1 && aCon1.pObj->getSdrPageFromSdrObject() == getSdrPageFromSdrObject()) ||
+        (bObj2 && aCon2.pObj->getSdrPageFromSdrObject() == getSdrPageFromSdrObject()) ||
+        (pSdrHint && pSdrHint->GetKind()==SdrHintKind::ObjectRemoved))
+    {
+        // broadcasting only, if on the same page
+        tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetCurrentBoundRect();
+        ImpDirtyEdgeTrack();
+
+        // only redraw here, object hasn't actually changed
+        ActionChanged();
+
+        SendUserCall(SdrUserCallType::Resize,aBoundRect0);
+    }
+    nNotifyingCount--;
 }
 
 /** updates edges that are connected to the edges of this object
@@ -2243,28 +2244,28 @@ void SdrEdgeObj::NbcSetSnapRect(const tools::Rectangle& rRect)
 {
     const tools::Rectangle aOld(GetSnapRect());
 
-    if(aOld != rRect)
+    if(aOld == rRect)
+        return;
+
+    if (maRect.IsEmpty() && 0 == pEdgeTrack->GetPointCount())
     {
-        if (maRect.IsEmpty() && 0 == pEdgeTrack->GetPointCount())
-        {
-            // #i110629# When initializing, do not scale on empty Rectangle; this
-            // will mirror the underlying text object (!)
-            maRect = rRect;
-            maSnapRect = rRect;
-        }
-        else
-        {
-            long nMulX = rRect.Right()  - rRect.Left();
-            long nDivX = aOld.Right()   - aOld.Left();
-            long nMulY = rRect.Bottom() - rRect.Top();
-            long nDivY = aOld.Bottom()  - aOld.Top();
-            if ( nDivX == 0 ) { nMulX = 1; nDivX = 1; }
-            if ( nDivY == 0 ) { nMulY = 1; nDivY = 1; }
-            Fraction aX(nMulX, nDivX);
-            Fraction aY(nMulY, nDivY);
-            NbcResize(aOld.TopLeft(), aX, aY);
-            NbcMove(Size(rRect.Left() - aOld.Left(), rRect.Top() - aOld.Top()));
-        }
+        // #i110629# When initializing, do not scale on empty Rectangle; this
+        // will mirror the underlying text object (!)
+        maRect = rRect;
+        maSnapRect = rRect;
+    }
+    else
+    {
+        long nMulX = rRect.Right()  - rRect.Left();
+        long nDivX = aOld.Right()   - aOld.Left();
+        long nMulY = rRect.Bottom() - rRect.Top();
+        long nDivY = aOld.Bottom()  - aOld.Top();
+        if ( nDivX == 0 ) { nMulX = 1; nDivX = 1; }
+        if ( nDivY == 0 ) { nMulY = 1; nDivY = 1; }
+        Fraction aX(nMulX, nDivX);
+        Fraction aY(nMulY, nDivY);
+        NbcResize(aOld.TopLeft(), aX, aY);
+        NbcMove(Size(rRect.Left() - aOld.Left(), rRect.Top() - aOld.Top()));
     }
 }
 

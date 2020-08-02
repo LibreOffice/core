@@ -1112,7 +1112,10 @@ void TableLayouter::DistributeColumns( ::tools::Rectangle& rArea,
                                        const bool bOptimize,
                                        const bool bMinimize )
 {
-    if( mxTable.is() ) try
+    if( !mxTable.is() )
+        return;
+
+    try
     {
         const sal_Int32 nColCount = getColumnCount();
         Reference< XTableColumns > xCols( mxTable->getColumns(), UNO_SET_THROW );
@@ -1206,7 +1209,10 @@ void TableLayouter::DistributeRows( ::tools::Rectangle& rArea,
                                     const bool bOptimize,
                                     const bool bMinimize )
 {
-    if( mxTable.is() ) try
+    if( !mxTable.is() )
+        return;
+
+    try
     {
         const sal_Int32 nRowCount = mxTable->getRowCount();
         Reference< XTableRows > xRows( mxTable->getRows(), UNO_SET_THROW );

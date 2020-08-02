@@ -269,36 +269,36 @@ void ScSheetLinkObj::setFileName(const OUString& rNewName)
 {
     SolarMutexGuard aGuard;
     ScTableLink* pLink = GetLink_Impl();
+    if (!pLink)
+        return;
+
+    //  pLink->Refresh with a new file name confuses sfx2::LinkManager
+    //  therefore we transplant the sheets manually and create new links with UpdateLinks
+
+    OUString aNewStr(ScGlobal::GetAbsDocName( rNewName, pDocShell ));
+
+    //  first transplant the sheets
+
+    ScDocument& rDoc = pDocShell->GetDocument();
+    SCTAB nTabCount = rDoc.GetTableCount();
+    for (SCTAB nTab=0; nTab<nTabCount; nTab++)
+        if ( rDoc.IsLinked(nTab) && rDoc.GetLinkDoc(nTab) == aFileName )  // old file
+            rDoc.SetLink( nTab, rDoc.GetLinkMode(nTab), aNewStr,
+                            rDoc.GetLinkFlt(nTab), rDoc.GetLinkOpt(nTab),
+                            rDoc.GetLinkTab(nTab),
+                            rDoc.GetLinkRefreshDelay(nTab) );  // only change the file
+
+    //  update links
+    //! Undo !!!
+
+    pDocShell->UpdateLinks();   // remove old links, possibly set up new ones
+
+    //  copy data
+
+    aFileName = aNewStr;
+    pLink = GetLink_Impl();     // new link with new name
     if (pLink)
-    {
-        //  pLink->Refresh with a new file name confuses sfx2::LinkManager
-        //  therefore we transplant the sheets manually and create new links with UpdateLinks
-
-        OUString aNewStr(ScGlobal::GetAbsDocName( rNewName, pDocShell ));
-
-        //  first transplant the sheets
-
-        ScDocument& rDoc = pDocShell->GetDocument();
-        SCTAB nTabCount = rDoc.GetTableCount();
-        for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-            if ( rDoc.IsLinked(nTab) && rDoc.GetLinkDoc(nTab) == aFileName )  // old file
-                rDoc.SetLink( nTab, rDoc.GetLinkMode(nTab), aNewStr,
-                                rDoc.GetLinkFlt(nTab), rDoc.GetLinkOpt(nTab),
-                                rDoc.GetLinkTab(nTab),
-                                rDoc.GetLinkRefreshDelay(nTab) );  // only change the file
-
-        //  update links
-        //! Undo !!!
-
-        pDocShell->UpdateLinks();   // remove old links, possibly set up new ones
-
-        //  copy data
-
-        aFileName = aNewStr;
-        pLink = GetLink_Impl();     // new link with new name
-        if (pLink)
-            pLink->Update();        // incl. paint & undo for data
-    }
+        pLink->Update();        // incl. paint & undo for data
 }
 
 OUString ScSheetLinkObj::getFilter() const
@@ -617,41 +617,41 @@ void ScAreaLinkObj::Modify_Impl( const OUString* pNewFile, const OUString* pNewF
                                  const table::CellRangeAddress* pNewDest )
 {
     ScAreaLink* pLink = lcl_GetAreaLink(pDocShell, nPos);
-    if (pLink)
+    if (!pLink)
+        return;
+
+    OUString aFile    (pLink->GetFile());
+    OUString aFilter  (pLink->GetFilter());
+    OUString aOptions (pLink->GetOptions());
+    OUString aSource  (pLink->GetSource());
+    ScRange aDest   (pLink->GetDestArea());
+    sal_uLong nRefresh  = pLink->GetRefreshDelay();
+
+    //! Undo delete
+    //! Undo merge
+
+    sfx2::LinkManager* pLinkManager = pDocShell->GetDocument().GetLinkManager();
+    pLinkManager->Remove( pLink );
+    pLink = nullptr;   // deleted along with remove
+
+    bool bFitBlock = true;          // move, if the size changes with update
+    if (pNewFile)
     {
-        OUString aFile    (pLink->GetFile());
-        OUString aFilter  (pLink->GetFilter());
-        OUString aOptions (pLink->GetOptions());
-        OUString aSource  (pLink->GetSource());
-        ScRange aDest   (pLink->GetDestArea());
-        sal_uLong nRefresh  = pLink->GetRefreshDelay();
-
-        //! Undo delete
-        //! Undo merge
-
-        sfx2::LinkManager* pLinkManager = pDocShell->GetDocument().GetLinkManager();
-        pLinkManager->Remove( pLink );
-        pLink = nullptr;   // deleted along with remove
-
-        bool bFitBlock = true;          // move, if the size changes with update
-        if (pNewFile)
-        {
-            aFile = ScGlobal::GetAbsDocName( *pNewFile, pDocShell );    //! in InsertAreaLink?
-        }
-        if (pNewFilter)
-            aFilter = *pNewFilter;
-        if (pNewOptions)
-            aOptions = *pNewOptions;
-        if (pNewSource)
-            aSource = *pNewSource;
-        if (pNewDest)
-        {
-            ScUnoConversion::FillScRange( aDest, *pNewDest );
-            bFitBlock = false;  // new range was specified -> do not move the content
-        }
-        pDocShell->GetDocFunc().InsertAreaLink( aFile, aFilter, aOptions, aSource,
-                                                aDest, nRefresh, bFitBlock, true );
+        aFile = ScGlobal::GetAbsDocName( *pNewFile, pDocShell );    //! in InsertAreaLink?
     }
+    if (pNewFilter)
+        aFilter = *pNewFilter;
+    if (pNewOptions)
+        aOptions = *pNewOptions;
+    if (pNewSource)
+        aSource = *pNewSource;
+    if (pNewDest)
+    {
+        ScUnoConversion::FillScRange( aDest, *pNewDest );
+        bFitBlock = false;  // new range was specified -> do not move the content
+    }
+    pDocShell->GetDocFunc().InsertAreaLink( aFile, aFilter, aOptions, aSource,
+                                            aDest, nRefresh, bFitBlock, true );
 }
 
 void ScAreaLinkObj::ModifyRefreshDelay_Impl( sal_Int32 nRefresh )

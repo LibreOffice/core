@@ -499,24 +499,24 @@ void XclObj::Save( XclExpStream& rStrm )
 
 void XclObj::WriteSubRecs( XclExpStream& rStrm )
 {
-    if( mnObjType == EXC_OBJTYPE_NOTE )
-    {
-        // FtNts subrecord
-        AddRecSize( 26 );
-        // ft, cb
-        rStrm << EXC_ID_OBJNTS << sal_uInt16(0x0016);
-        sal_uInt8 aGUID[16];
-        rtl_createUuid( aGUID, nullptr, false );
-        // guid
-        rStrm.SetSliceSize( 16 );
-        for( int i = 0; i < 16; i++ )
-            rStrm << aGUID[i];
-        rStrm.SetSliceSize( 0 );
-        // fSharedNote
-        rStrm << sal_uInt16(0);
-        // unused
-        rStrm.WriteZeroBytes( 4 );
-    }
+    if( mnObjType != EXC_OBJTYPE_NOTE )
+        return;
+
+    // FtNts subrecord
+    AddRecSize( 26 );
+    // ft, cb
+    rStrm << EXC_ID_OBJNTS << sal_uInt16(0x0016);
+    sal_uInt8 aGUID[16];
+    rtl_createUuid( aGUID, nullptr, false );
+    // guid
+    rStrm.SetSliceSize( 16 );
+    for( int i = 0; i < 16; i++ )
+        rStrm << aGUID[i];
+    rStrm.SetSliceSize( 0 );
+    // fSharedNote
+    rStrm << sal_uInt16(0);
+    // unused
+    rStrm.WriteZeroBytes( 4 );
 }
 
 void XclObj::SaveTextRecs( XclExpStream& rStrm )
@@ -890,35 +890,35 @@ XclTxo::XclTxo( const XclExpRoot& rRoot, const EditTextObject& rEditObj, SdrObje
     mnHorAlign( EXC_OBJ_HOR_LEFT ),
     mnVerAlign( EXC_OBJ_VER_TOP )
 {
-    if(pCaption)
+    if(!pCaption)
+        return;
+
+    // Excel has one alignment per NoteObject while Calc supports
+    // one alignment per paragraph - use the first paragraph
+    // alignment (if set) as our overall alignment.
+    OUString aParaText( rEditObj.GetText( 0 ) );
+    if( !aParaText.isEmpty() )
     {
-        // Excel has one alignment per NoteObject while Calc supports
-        // one alignment per paragraph - use the first paragraph
-        // alignment (if set) as our overall alignment.
-        OUString aParaText( rEditObj.GetText( 0 ) );
-        if( !aParaText.isEmpty() )
+        const SfxItemSet& aSet( rEditObj.GetParaAttribs( 0));
+        const SfxPoolItem* pItem = nullptr;
+        if( aSet.GetItemState( EE_PARA_JUST, true, &pItem ) == SfxItemState::SET )
         {
-            const SfxItemSet& aSet( rEditObj.GetParaAttribs( 0));
-            const SfxPoolItem* pItem = nullptr;
-            if( aSet.GetItemState( EE_PARA_JUST, true, &pItem ) == SfxItemState::SET )
-            {
-                SvxAdjust eEEAlign = static_cast< const SvxAdjustItem& >( *pItem ).GetAdjust();
-                pCaption->SetMergedItem( SvxAdjustItem( eEEAlign, EE_PARA_JUST ) );
-            }
+            SvxAdjust eEEAlign = static_cast< const SvxAdjustItem& >( *pItem ).GetAdjust();
+            pCaption->SetMergedItem( SvxAdjustItem( eEEAlign, EE_PARA_JUST ) );
         }
-        const SfxItemSet& rItemSet = pCaption->GetMergedItemSet();
-
-        // horizontal alignment
-        SetHorAlign( lcl_GetHorAlignFromItemSet( rItemSet ) );
-
-        // vertical alignment
-        SetVerAlign( lcl_GetVerAlignFromItemSet( rItemSet ) );
-
-        // orientation alignment
-        const SvxWritingModeItem& rItem = rItemSet.Get( SDRATTR_TEXTDIRECTION );
-        if( rItem.GetValue() == css::text::WritingMode_TB_RL )
-            mnRotation = EXC_OBJ_ORIENT_90CW;
     }
+    const SfxItemSet& rItemSet = pCaption->GetMergedItemSet();
+
+    // horizontal alignment
+    SetHorAlign( lcl_GetHorAlignFromItemSet( rItemSet ) );
+
+    // vertical alignment
+    SetVerAlign( lcl_GetVerAlignFromItemSet( rItemSet ) );
+
+    // orientation alignment
+    const SvxWritingModeItem& rItem = rItemSet.Get( SDRATTR_TEXTDIRECTION );
+    if( rItem.GetValue() == css::text::WritingMode_TB_RL )
+        mnRotation = EXC_OBJ_ORIENT_90CW;
 }
 
 void XclTxo::SaveCont( XclExpStream& rStrm )
@@ -943,21 +943,21 @@ void XclTxo::Save( XclExpStream& rStrm )
     ExcRecord::Save( rStrm );
 
     // CONTINUE records are only written if there is some text
-    if( !mpString->IsEmpty() )
-    {
-        // CONTINUE for character array
-        rStrm.StartRecord( EXC_ID_CONT, mpString->GetBufferSize() + 1 );
-        rStrm << static_cast< sal_uInt8 >( mpString->GetFlagField() & EXC_STRF_16BIT ); // only Unicode flag
-        mpString->WriteBuffer( rStrm );
-        rStrm.EndRecord();
+    if( mpString->IsEmpty() )
+        return;
 
-        // CONTINUE for formatting runs
-        rStrm.StartRecord( EXC_ID_CONT, 8 * mpString->GetFormatsCount() );
-        const XclFormatRunVec& rFormats = mpString->GetFormats();
-        for( const auto& rFormat : rFormats )
-            rStrm << rFormat.mnChar << rFormat.mnFontIdx << sal_uInt32( 0 );
-        rStrm.EndRecord();
-    }
+    // CONTINUE for character array
+    rStrm.StartRecord( EXC_ID_CONT, mpString->GetBufferSize() + 1 );
+    rStrm << static_cast< sal_uInt8 >( mpString->GetFlagField() & EXC_STRF_16BIT ); // only Unicode flag
+    mpString->WriteBuffer( rStrm );
+    rStrm.EndRecord();
+
+    // CONTINUE for formatting runs
+    rStrm.StartRecord( EXC_ID_CONT, 8 * mpString->GetFormatsCount() );
+    const XclFormatRunVec& rFormats = mpString->GetFormats();
+    for( const auto& rFormat : rFormats )
+        rStrm << rFormat.mnChar << rFormat.mnFontIdx << sal_uInt32( 0 );
+    rStrm.EndRecord();
 }
 
 sal_uInt16 XclTxo::GetNum() const
@@ -993,59 +993,59 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
     sprintf( aBuf, "%08X", static_cast< unsigned int >( nPictureId ) );
     aStorageName += OUString::createFromAscii(aBuf);
     tools::SvRef<SotStorage>    xOleStg = pRootStorage->OpenSotStorage( aStorageName );
-    if( xOleStg.is() )
-    {
-        uno::Reference < embed::XEmbeddedObject > xObj( static_cast<const SdrOle2Obj&>(rOleObj).GetObjRef() );
-        if ( xObj.is() )
-        {
-            // set version to "old" version, because it must be
-            // saved in MS notation.
-            sal_uInt32                  nFl = 0;
-            const SvtFilterOptions& rFltOpts = SvtFilterOptions::Get();
-            if( rFltOpts.IsMath2MathType() )
-                nFl |= OLE_STARMATH_2_MATHTYPE;
+    if( !xOleStg.is() )
+        return;
 
-            if( rFltOpts.IsWriter2WinWord() )
-                nFl |= OLE_STARWRITER_2_WINWORD;
+    uno::Reference < embed::XEmbeddedObject > xObj( static_cast<const SdrOle2Obj&>(rOleObj).GetObjRef() );
+    if ( !xObj.is() )
+        return;
 
-            if( rFltOpts.IsCalc2Excel() )
-                nFl |= OLE_STARCALC_2_EXCEL;
+    // set version to "old" version, because it must be
+    // saved in MS notation.
+    sal_uInt32                  nFl = 0;
+    const SvtFilterOptions& rFltOpts = SvtFilterOptions::Get();
+    if( rFltOpts.IsMath2MathType() )
+        nFl |= OLE_STARMATH_2_MATHTYPE;
 
-            if( rFltOpts.IsImpress2PowerPoint() )
-                nFl |= OLE_STARIMPRESS_2_POWERPOINT;
+    if( rFltOpts.IsWriter2WinWord() )
+        nFl |= OLE_STARWRITER_2_WINWORD;
 
-            SvxMSExportOLEObjects   aOLEExpFilt( nFl );
-            aOLEExpFilt.ExportOLEObject( xObj, *xOleStg );
+    if( rFltOpts.IsCalc2Excel() )
+        nFl |= OLE_STARCALC_2_EXCEL;
 
-            // OBJCF subrecord, undocumented as usual
-            rStrm.StartRecord( EXC_ID_OBJCF, 2 );
-            rStrm << sal_uInt16(0x0002);
-            rStrm.EndRecord();
+    if( rFltOpts.IsImpress2PowerPoint() )
+        nFl |= OLE_STARIMPRESS_2_POWERPOINT;
 
-            // OBJFLAGS subrecord, undocumented as usual
-            rStrm.StartRecord( EXC_ID_OBJFLAGS, 2 );
-            sal_uInt16 nFlags = EXC_OBJ_PIC_MANUALSIZE;
-            ::set_flag( nFlags, EXC_OBJ_PIC_SYMBOL, static_cast<const SdrOle2Obj&>(rOleObj).GetAspect() == embed::Aspects::MSOLE_ICON );
-            rStrm << nFlags;
-            rStrm.EndRecord();
+    SvxMSExportOLEObjects   aOLEExpFilt( nFl );
+    aOLEExpFilt.ExportOLEObject( xObj, *xOleStg );
 
-            // OBJPICTFMLA subrecord, undocumented as usual
-            XclExpString aName( xOleStg->GetUserName() );
-            sal_uInt16 nPadLen = static_cast<sal_uInt16>(aName.GetSize() & 0x01);
-            sal_uInt16 nFmlaLen = static_cast< sal_uInt16 >( 12 + aName.GetSize() + nPadLen );
-            sal_uInt16 nSubRecLen = nFmlaLen + 6;
+    // OBJCF subrecord, undocumented as usual
+    rStrm.StartRecord( EXC_ID_OBJCF, 2 );
+    rStrm << sal_uInt16(0x0002);
+    rStrm.EndRecord();
 
-            rStrm.StartRecord( EXC_ID_OBJPICTFMLA, nSubRecLen );
-            rStrm   << nFmlaLen
-                    << sal_uInt16( 5 ) << sal_uInt32( 0 ) << sal_uInt8( 2 )
-                    << sal_uInt32( 0 ) << sal_uInt8( 3 )
-                    << aName;
-            if( nPadLen )
-                rStrm << sal_uInt8( 0 );       // pad byte
-            rStrm << nPictureId;
-            rStrm.EndRecord();
-        }
-    }
+    // OBJFLAGS subrecord, undocumented as usual
+    rStrm.StartRecord( EXC_ID_OBJFLAGS, 2 );
+    sal_uInt16 nFlags = EXC_OBJ_PIC_MANUALSIZE;
+    ::set_flag( nFlags, EXC_OBJ_PIC_SYMBOL, static_cast<const SdrOle2Obj&>(rOleObj).GetAspect() == embed::Aspects::MSOLE_ICON );
+    rStrm << nFlags;
+    rStrm.EndRecord();
+
+    // OBJPICTFMLA subrecord, undocumented as usual
+    XclExpString aName( xOleStg->GetUserName() );
+    sal_uInt16 nPadLen = static_cast<sal_uInt16>(aName.GetSize() & 0x01);
+    sal_uInt16 nFmlaLen = static_cast< sal_uInt16 >( 12 + aName.GetSize() + nPadLen );
+    sal_uInt16 nSubRecLen = nFmlaLen + 6;
+
+    rStrm.StartRecord( EXC_ID_OBJPICTFMLA, nSubRecLen );
+    rStrm   << nFmlaLen
+            << sal_uInt16( 5 ) << sal_uInt32( 0 ) << sal_uInt8( 2 )
+            << sal_uInt32( 0 ) << sal_uInt8( 3 )
+            << aName;
+    if( nPadLen )
+        rStrm << sal_uInt8( 0 );       // pad byte
+    rStrm << nPictureId;
+    rStrm.EndRecord();
 }
 
 void XclObjOle::Save( XclExpStream& rStrm )

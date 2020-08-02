@@ -44,30 +44,30 @@ void SchXMLAutoStylePoolP::exportStyleAttributes(
     SvXMLAutoStylePoolP::exportStyleAttributes( rAttrList, nFamily, rProperties,
                                                 rPropExp, rUnitConverter, rNamespaceMap );
 
-    if( nFamily == XmlStyleFamily::SCH_CHART_ID )
-    {
-        for( const auto& rProp : rProperties )
-        {
-            if( rProp.mnIndex == -1 )
-                continue;
+    if( nFamily != XmlStyleFamily::SCH_CHART_ID )
+        return;
 
-            rtl::Reference< XMLPropertySetMapper > aPropMapper =
-                mrSchXMLExport.GetPropertySetMapper();
-            sal_Int16 nContextID = aPropMapper->GetEntryContextId( rProp.mnIndex );
-            if( nContextID == XML_SCH_CONTEXT_SPECIAL_NUMBER_FORMAT )
+    for( const auto& rProp : rProperties )
+    {
+        if( rProp.mnIndex == -1 )
+            continue;
+
+        rtl::Reference< XMLPropertySetMapper > aPropMapper =
+            mrSchXMLExport.GetPropertySetMapper();
+        sal_Int16 nContextID = aPropMapper->GetEntryContextId( rProp.mnIndex );
+        if( nContextID == XML_SCH_CONTEXT_SPECIAL_NUMBER_FORMAT )
+        {
+            sal_Int32 nNumberFormat = -1;
+            if( ( rProp.maValue >>= nNumberFormat ) &&
+                ( nNumberFormat != -1 ))
             {
-                sal_Int32 nNumberFormat = -1;
-                if( ( rProp.maValue >>= nNumberFormat ) &&
-                    ( nNumberFormat != -1 ))
+                OUString sAttrValue = mrSchXMLExport.getDataStyleName( nNumberFormat );
+                if( !sAttrValue.isEmpty() )
                 {
-                    OUString sAttrValue = mrSchXMLExport.getDataStyleName( nNumberFormat );
-                    if( !sAttrValue.isEmpty() )
-                    {
-                        mrSchXMLExport.AddAttribute(
-                            aPropMapper->GetEntryNameSpace( rProp.mnIndex ),
-                            aPropMapper->GetEntryXMLName( rProp.mnIndex ),
-                            sAttrValue );
-                    }
+                    mrSchXMLExport.AddAttribute(
+                        aPropMapper->GetEntryNameSpace( rProp.mnIndex ),
+                        aPropMapper->GetEntryXMLName( rProp.mnIndex ),
+                        sAttrValue );
                 }
             }
         }

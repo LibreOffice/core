@@ -70,18 +70,18 @@ void AccessibleCell::Init()
 {
     SdrView* pView = maShapeTreeInfo.GetSdrView();
     const vcl::Window* pWindow = maShapeTreeInfo.GetWindow ();
-    if( (pView != nullptr) && (pWindow != nullptr) && mxCell.is())
-    {
-        // create AccessibleTextHelper to handle this shape's text
-        if( mxCell->CanCreateEditOutlinerParaObject() || mxCell->GetOutlinerParaObject() != nullptr )
-        {
-            // non-empty text -> use full-fledged edit source right away
+    if( !((pView != nullptr) && (pWindow != nullptr) && mxCell.is()))
+        return;
 
-            mpText.reset( new AccessibleTextHelper( std::make_unique<SvxTextEditSource>(mxCell->GetObject(), mxCell.get(), *pView, *pWindow) ) );
-            if( mxCell.is() && mxCell->IsActiveCell() )
-                mpText->SetFocus();
-            mpText->SetEventSource(this);
-        }
+    // create AccessibleTextHelper to handle this shape's text
+    if( mxCell->CanCreateEditOutlinerParaObject() || mxCell->GetOutlinerParaObject() != nullptr )
+    {
+        // non-empty text -> use full-fledged edit source right away
+
+        mpText.reset( new AccessibleTextHelper( std::make_unique<SvxTextEditSource>(mxCell->GetObject(), mxCell.get(), *pView, *pWindow) ) );
+        if( mxCell.is() && mxCell->IsActiveCell() )
+            mpText->SetFocus();
+        mpText->SetEventSource(this);
     }
 }
 

@@ -213,86 +213,86 @@ void StyleItemController::DrawEntry(vcl::RenderContext& rRenderContext)
     SfxStyleSheetBasePool* pPool = pShell->GetStyleSheetPool();
     SfxStyleSheetBase* pStyle = nullptr;
 
-    if (pPool)
+    if (!pPool)
+        return;
+
+    pStyle = pPool->First(m_eStyleFamily);
+    while (pStyle && pStyle->GetName() != m_aStyleName)
+        pStyle = pPool->Next();
+
+    if (!pStyle)
+        return;
+
+    Size aSize(rRenderContext.GetOutputSizePixel());
+    tools::Rectangle aFullRect(Point(0, 0), aSize);
+    aSize = Size(aSize.getWidth() - 6, aSize.getHeight() - 6);
+    tools::Rectangle aContentRect(aFullRect);
+
+    Color aOriginalColor = rRenderContext.GetFillColor();
+    Color aOriginalLineColor = rRenderContext.GetLineColor();
+    vcl::Region aOriginalClipRegion(aFullRect);
+
+    if (m_bSelected)
     {
-        pStyle = pPool->First(m_eStyleFamily);
-        while (pStyle && pStyle->GetName() != m_aStyleName)
-            pStyle = pPool->Next();
-
-        if (!pStyle)
-            return;
-
-        Size aSize(rRenderContext.GetOutputSizePixel());
-        tools::Rectangle aFullRect(Point(0, 0), aSize);
-        aSize = Size(aSize.getWidth() - 6, aSize.getHeight() - 6);
-        tools::Rectangle aContentRect(aFullRect);
-
-        Color aOriginalColor = rRenderContext.GetFillColor();
-        Color aOriginalLineColor = rRenderContext.GetLineColor();
-        vcl::Region aOriginalClipRegion(aFullRect);
-
-        if (m_bSelected)
-        {
-            aContentRect = tools::Rectangle(Point(3, 3), aSize);
-            DrawSelection(rRenderContext);
-        }
-
-        DrawContentBackground(rRenderContext, aContentRect, aOriginalColor);
-
-        vcl::Region aClipRegion(aContentRect);
-        rRenderContext.SetClipRegion(aClipRegion);
-
-        std::unique_ptr<const SfxItemSet> const pItemSet(pStyle->GetItemSetForPreview());
-        if (!pItemSet)
-            return;
-
-        Color aFontHighlight = COL_AUTO;
-
-        const SvxFontItem* const pFontItem = pItemSet->GetItem<SvxFontItem>(SID_ATTR_CHAR_FONT);
-        const SvxFontHeightItem* const pFontHeightItem
-            = pItemSet->GetItem<SvxFontHeightItem>(SID_ATTR_CHAR_FONTHEIGHT);
-
-        if (pFontItem && pFontHeightItem)
-        {
-            Size aFontSize(0, pFontHeightItem->GetHeight());
-            Size aPixelSize(rRenderContext.LogicToPixel(aFontSize, MapMode(pShell->GetMapUnit())));
-
-            SvxFont aFont = GetFontFromItems(pFontItem, aPixelSize, pItemSet);
-            rRenderContext.SetFont(aFont);
-
-            Color aFontCol = GetTextColorFromItemSet(pItemSet);
-            if (aFontCol != COL_AUTO)
-                rRenderContext.SetTextColor(aFontCol);
-
-            aFontHighlight = GetHighlightColorFromItemSet(pItemSet);
-
-            css::drawing::FillStyle style = GetFillStyleFromItemSet(pItemSet);
-
-            switch (style)
-            {
-                case css::drawing::FillStyle_SOLID:
-                {
-                    Color aBackCol = GetBackgroundColorFromItemSet(pItemSet);
-                    if (aBackCol != COL_AUTO)
-                        DrawContentBackground(rRenderContext, aContentRect, aBackCol);
-                }
-                break;
-
-                default:
-                    break;
-                    //TODO Draw the other background styles: gradient, hatching and bitmap
-            }
-        }
-
-        if (aFontHighlight != COL_AUTO)
-            DrawHighlight(rRenderContext, aFontHighlight);
-
-        DrawText(rRenderContext);
-
-        rRenderContext.SetFillColor(aOriginalColor);
-        rRenderContext.SetLineColor(aOriginalLineColor);
-        rRenderContext.SetClipRegion(aOriginalClipRegion);
+        aContentRect = tools::Rectangle(Point(3, 3), aSize);
+        DrawSelection(rRenderContext);
     }
+
+    DrawContentBackground(rRenderContext, aContentRect, aOriginalColor);
+
+    vcl::Region aClipRegion(aContentRect);
+    rRenderContext.SetClipRegion(aClipRegion);
+
+    std::unique_ptr<const SfxItemSet> const pItemSet(pStyle->GetItemSetForPreview());
+    if (!pItemSet)
+        return;
+
+    Color aFontHighlight = COL_AUTO;
+
+    const SvxFontItem* const pFontItem = pItemSet->GetItem<SvxFontItem>(SID_ATTR_CHAR_FONT);
+    const SvxFontHeightItem* const pFontHeightItem
+        = pItemSet->GetItem<SvxFontHeightItem>(SID_ATTR_CHAR_FONTHEIGHT);
+
+    if (pFontItem && pFontHeightItem)
+    {
+        Size aFontSize(0, pFontHeightItem->GetHeight());
+        Size aPixelSize(rRenderContext.LogicToPixel(aFontSize, MapMode(pShell->GetMapUnit())));
+
+        SvxFont aFont = GetFontFromItems(pFontItem, aPixelSize, pItemSet);
+        rRenderContext.SetFont(aFont);
+
+        Color aFontCol = GetTextColorFromItemSet(pItemSet);
+        if (aFontCol != COL_AUTO)
+            rRenderContext.SetTextColor(aFontCol);
+
+        aFontHighlight = GetHighlightColorFromItemSet(pItemSet);
+
+        css::drawing::FillStyle style = GetFillStyleFromItemSet(pItemSet);
+
+        switch (style)
+        {
+            case css::drawing::FillStyle_SOLID:
+            {
+                Color aBackCol = GetBackgroundColorFromItemSet(pItemSet);
+                if (aBackCol != COL_AUTO)
+                    DrawContentBackground(rRenderContext, aContentRect, aBackCol);
+            }
+            break;
+
+            default:
+                break;
+                //TODO Draw the other background styles: gradient, hatching and bitmap
+        }
+    }
+
+    if (aFontHighlight != COL_AUTO)
+        DrawHighlight(rRenderContext, aFontHighlight);
+
+    DrawText(rRenderContext);
+
+    rRenderContext.SetFillColor(aOriginalColor);
+    rRenderContext.SetLineColor(aOriginalLineColor);
+    rRenderContext.SetClipRegion(aOriginalClipRegion);
 }
 
 void StyleItemController::DrawContentBackground(vcl::RenderContext& rRenderContext,
@@ -409,19 +409,19 @@ void StylesPreviewWindow_Base::Select(const OUString& rStyleName)
 
 void StylesPreviewWindow_Base::MakeCurrentStyleVisible()
 {
-    if (m_aAllStyles.size())
-    {
-        unsigned nNewIterator = m_nStyleIterator;
-        auto aFound = std::find(m_aAllStyles.begin(), m_aAllStyles.end(), m_sSelectedStyle);
-        if (aFound != m_aAllStyles.end())
-            nNewIterator = aFound - m_aAllStyles.begin();
+    if (!m_aAllStyles.size())
+        return;
 
-        bool bIsAlreadyVisible
-            = nNewIterator >= m_nStyleIterator % m_aAllStyles.size()
-              && nNewIterator < m_nStyleIterator % m_aAllStyles.size() + STYLES_COUNT;
-        if (!bIsAlreadyVisible)
-            m_nStyleIterator = nNewIterator;
-    }
+    unsigned nNewIterator = m_nStyleIterator;
+    auto aFound = std::find(m_aAllStyles.begin(), m_aAllStyles.end(), m_sSelectedStyle);
+    if (aFound != m_aAllStyles.end())
+        nNewIterator = aFound - m_aAllStyles.begin();
+
+    bool bIsAlreadyVisible
+        = nNewIterator >= m_nStyleIterator % m_aAllStyles.size()
+          && nNewIterator < m_nStyleIterator % m_aAllStyles.size() + STYLES_COUNT;
+    if (!bIsAlreadyVisible)
+        m_nStyleIterator = nNewIterator;
 }
 
 void StylesPreviewWindow_Base::Update()
