@@ -55,8 +55,33 @@
 #include <lib/init.hxx>
 #include <svx/svxids.hrc>
 
+#include <cppunit/TestAssert.h>
+
 using namespace com::sun::star;
 using namespace desktop;
+
+static LibreOfficeKitDocumentType getDocumentTypeFromName(const char* pName)
+{
+    CPPUNIT_ASSERT_MESSAGE("Document name must be valid.", pName != nullptr);
+
+    const std::string name(pName);
+    CPPUNIT_ASSERT_MESSAGE("Document name must include extension.", name.size() > 4);
+
+    const auto it = name.rfind('.');
+    if (it != std::string::npos)
+    {
+        const std::string ext = name.substr(it);
+
+        if (ext == ".ods")
+            return LOK_DOCTYPE_SPREADSHEET;
+
+        if (ext == ".odp")
+            return LOK_DOCTYPE_PRESENTATION;
+    }
+
+    CPPUNIT_ASSERT_MESSAGE("Document name must include extension.", it != std::string::npos);
+    return LOK_DOCTYPE_TEXT;
+}
 
 class DesktopLOKTest : public UnoApiTest
 {
@@ -78,22 +103,38 @@ public:
         UnoApiTest::setUp();
         mxDesktop.set(frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
         SfxApplication::GetOrCreate();
-    };
+    }
 
     virtual void tearDown() override
     {
-        if (m_pDocument)
-            m_pDocument->pClass->registerCallback(m_pDocument.get(), nullptr, nullptr);
         closeDoc();
 
         UnoApiTest::tearDown();
 
         comphelper::LibreOfficeKit::setActive(false);
-    };
+    }
+
+    std::pair<std::unique_ptr<LibLODocument_Impl>, uno::Reference<lang::XComponent>>
+    loadDocImpl(const char* pName, LibreOfficeKitDocumentType eType);
+
+private:
+    std::pair<std::unique_ptr<LibLODocument_Impl>, uno::Reference<lang::XComponent>>
+    loadDocImpl(const char* pName);
+
+public:
+    std::pair<std::unique_ptr<LibLODocument_Impl>, uno::Reference<lang::XComponent>>
+    loadDocUrlImpl(const OUString& rFileURL, LibreOfficeKitDocumentType eType);
 
     LibLODocument_Impl* loadDocUrl(const OUString& rFileURL, LibreOfficeKitDocumentType eType);
-    LibLODocument_Impl* loadDoc(const char* pName, LibreOfficeKitDocumentType eType = LOK_DOCTYPE_TEXT);
-    void closeDoc();
+    LibLODocument_Impl* loadDoc(const char* pName, LibreOfficeKitDocumentType eType);
+    LibLODocument_Impl* loadDoc(const char* pName)
+    {
+        return loadDoc(pName, getDocumentTypeFromName(pName));
+    }
+
+    void closeDoc(std::unique_ptr<LibLODocument_Impl>& loDocument,
+                  uno::Reference<lang::XComponent>& xComponent);
+    void closeDoc() { closeDoc(m_pDocument, mxComponent); }
     static void callback(int nType, const char* pPayload, void* pData);
     void callbackImpl(int nType, const char* pPayload);
 
@@ -261,7 +302,8 @@ static Control* GetFocusControl(vcl::Window const * pParent)
     return nullptr;
 }
 
-LibLODocument_Impl* DesktopLOKTest::loadDocUrl(const OUString& rFileURL, LibreOfficeKitDocumentType eType)
+std::pair<std::unique_ptr<LibLODocument_Impl>, uno::Reference<lang::XComponent>>
+DesktopLOKTest::loadDocUrlImpl(const OUString& rFileURL, LibreOfficeKitDocumentType eType)
 {
     OUString aService;
     switch (eType)
@@ -279,28 +321,54 @@ LibLODocument_Impl* DesktopLOKTest::loadDocUrl(const OUString& rFileURL, LibreOf
         CPPUNIT_ASSERT(false);
         break;
     }
-    mxComponent = loadFromDesktop(rFileURL, aService);
-    if (!mxComponent.is())
-    {
-        CPPUNIT_ASSERT(false);
-    }
-    m_pDocument.reset(new LibLODocument_Impl(mxComponent));
+
+    uno::Reference<lang::XComponent> xComponent = loadFromDesktop(rFileURL, aService);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    std::unique_ptr<LibLODocument_Impl> pDocument(new LibLODocument_Impl(xComponent));
+
+    return std::make_pair(std::move(pDocument), xComponent);
+}
+
+std::pair<std::unique_ptr<LibLODocument_Impl>, uno::Reference<lang::XComponent>>
+DesktopLOKTest::loadDocImpl(const char* pName, LibreOfficeKitDocumentType eType)
+{
+    OUString aFileURL;
+    createFileURL(OUString::createFromAscii(pName), aFileURL);
+    return loadDocUrlImpl(aFileURL, eType);
+}
+
+std::pair<std::unique_ptr<LibLODocument_Impl>, uno::Reference<lang::XComponent>>
+DesktopLOKTest::loadDocImpl(const char* pName)
+{
+    return loadDocImpl(pName, getDocumentTypeFromName(pName));
+}
+
+LibLODocument_Impl* DesktopLOKTest::loadDocUrl(const OUString& rFileURL, LibreOfficeKitDocumentType eType)
+{
+    std::tie(m_pDocument, mxComponent) = loadDocUrlImpl(rFileURL, eType);
     return m_pDocument.get();
 }
 
 LibLODocument_Impl* DesktopLOKTest::loadDoc(const char* pName, LibreOfficeKitDocumentType eType)
 {
-    OUString aFileURL;
-    createFileURL(OUString::createFromAscii(pName), aFileURL);
-    return loadDocUrl(aFileURL, eType);
+    std::tie(m_pDocument, mxComponent) = loadDocImpl(pName, eType);
+    return m_pDocument.get();
 }
 
-void DesktopLOKTest::closeDoc()
+void DesktopLOKTest::closeDoc(std::unique_ptr<LibLODocument_Impl>& pDocument,
+                              uno::Reference<lang::XComponent>& xComponent)
 {
-    if (mxComponent.is())
+    if (pDocument)
     {
-        closeDocument(mxComponent);
-        mxComponent.clear();
+        pDocument->pClass->registerCallback(pDocument.get(), nullptr, nullptr);
+        pDocument.reset();
+    }
+
+    if (xComponent.is())
+    {
+        closeDocument(xComponent);
+        xComponent.clear();
     }
 }
 
@@ -2431,8 +2499,7 @@ void DesktopLOKTest::testInsertCertificate_DER_ODT()
     CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "odt", nullptr));
     closeDoc();
 
-    mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
-    pDocument = new LibLODocument_Impl(mxComponent);
+    pDocument = loadDocUrl(aTempFile.GetURL(), LOK_DOCTYPE_TEXT);
 
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(mxComponent.is());
@@ -2482,8 +2549,7 @@ void DesktopLOKTest::testInsertCertificate_PEM_ODT()
     CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "odt", nullptr));
     closeDoc();
 
-    mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
-    pDocument = new LibLODocument_Impl(mxComponent);
+    pDocument = loadDocUrl(aTempFile.GetURL(), LOK_DOCTYPE_TEXT);
 
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(mxComponent.is());
@@ -2540,8 +2606,7 @@ void DesktopLOKTest::testInsertCertificate_PEM_DOCX()
     CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "docx", nullptr));
     closeDoc();
 
-    mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
-    pDocument = new LibLODocument_Impl(mxComponent);
+    pDocument = loadDocUrl(aTempFile.GetURL(), LOK_DOCTYPE_TEXT);
 
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(mxComponent.is());
