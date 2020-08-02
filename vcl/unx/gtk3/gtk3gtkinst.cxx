@@ -1768,6 +1768,17 @@ namespace
             gtk_size_group_add_widget(pSizeGroup, pReplacement);
         }
 
+        // tdf#135368 change the mnemonic to point to our replacement
+        GList* pLabels = gtk_widget_list_mnemonic_labels(pWidget);
+        for (GList* pLabel = g_list_first(pLabels); pLabel; pLabel = g_list_next(pLabel))
+        {
+            GtkWidget* pLabelWidget = static_cast<GtkWidget*>(pLabel->data);
+            if (!GTK_IS_LABEL(pLabelWidget))
+                continue;
+            gtk_label_set_mnemonic_widget(GTK_LABEL(pLabelWidget), pReplacement);
+        }
+        g_list_free(pLabels);
+
         gtk_container_add(GTK_CONTAINER(pParent), pReplacement);
 
         if (GTK_IS_GRID(pParent))
@@ -14169,6 +14180,21 @@ private:
         }
     }
 
+    void signal_combo_mnemonic_activate()
+    {
+        if (m_pEntry)
+            gtk_widget_grab_focus(m_pEntry);
+        else
+            gtk_widget_grab_focus(m_pToggleButton);
+    }
+
+    static gboolean signalComboMnemonicActivate(GtkWidget*, gboolean, gpointer widget)
+    {
+        GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
+        pThis->signal_combo_mnemonic_activate();
+        return true;
+    }
+
 public:
     GtkInstanceComboBox(GtkBuilder* pComboBuilder, GtkComboBox* pComboBox, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(gtk_builder_get_object(pComboBuilder, "box")), pBuilder, bTakeOwnership)
@@ -14296,6 +14322,8 @@ public:
 
         if (nActive != -1)
             tree_view_set_cursor(nActive);
+
+        g_signal_connect(getContainer(), "mnemonic-activate", G_CALLBACK(signalComboMnemonicActivate), this);
 
         g_signal_connect(m_pMenuWindow, "grab-broken-event", G_CALLBACK(signalGrabBroken), this);
         g_signal_connect(m_pMenuWindow, "button-press-event", G_CALLBACK(signalButtonPress), this);
