@@ -5257,6 +5257,22 @@ SfxVoidItem ToolbarMode SID_TOOLBAR_MODE
     GroupId = SfxGroupId::Application;
 ]
 
+SfxVoidItem ToolbarModeUI SID_TOOLBAR_MODE_UI
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Application;
+]
+
 SfxVoidItem AvailableToolbars SID_AVAILABLE_TOOLBARS
 (SfxStringItem Toolbar SID_AVAILABLE_TOOLBARS)
 [
