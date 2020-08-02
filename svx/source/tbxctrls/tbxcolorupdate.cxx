@@ -188,7 +188,7 @@ namespace svx
 
         if (bIsTransparent)
         {
-            pVirDev->SetFillColor(Color(255, 0, 0, 0));
+            pVirDev->SetFillColor();
         }
         else
         {
