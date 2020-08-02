@@ -60,26 +60,26 @@ const uno::Reference< uno::XComponentContext >& xContext, const OUString& sDocCt
     mxContext = ::cppu::createComponentContext(
                         aHandlerContextInfo,
                         SAL_N_ELEMENTS( aHandlerContextInfo ), nullptr );
-    if ( aSrvMgr.is() )
+    if ( !aSrvMgr.is() )
+        return;
+
+    try
     {
-        try
-        {
-            uno::Reference< beans::XPropertySet >(
-                aSrvMgr, uno::UNO_QUERY_THROW )->
-                setPropertyValue( "DefaultContext", uno::makeAny( mxContext ) );
-        }
-        catch ( uno::RuntimeException & )
-        {
-            throw;
-        }
-        catch ( uno::Exception & )
-        {
-            uno::Any e(cppu::getCaughtException());
-            throw lang::WrappedTargetRuntimeException(
-                ("VbaGlobalsBase ctor, setting OServiceManagerWrapper"
-                 " DefaultContext failed"),
-                uno::Reference< uno::XInterface >(), e);
-        }
+        uno::Reference< beans::XPropertySet >(
+            aSrvMgr, uno::UNO_QUERY_THROW )->
+            setPropertyValue( "DefaultContext", uno::makeAny( mxContext ) );
+    }
+    catch ( uno::RuntimeException & )
+    {
+        throw;
+    }
+    catch ( uno::Exception & )
+    {
+        uno::Any e(cppu::getCaughtException());
+        throw lang::WrappedTargetRuntimeException(
+            ("VbaGlobalsBase ctor, setting OServiceManagerWrapper"
+             " DefaultContext failed"),
+            uno::Reference< uno::XInterface >(), e);
     }
 }
 

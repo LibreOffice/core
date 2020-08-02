@@ -88,47 +88,47 @@ uno::Any ListPropListener::getValueEvent()
 void
 ListControlHelper::AddItem( const uno::Any& pvargItem, const uno::Any& pvargIndex )
 {
-    if ( pvargItem.hasValue()  )
+    if ( !pvargItem.hasValue()  )
+        return;
+
+    uno::Sequence< OUString > sList;
+    m_xProps->getPropertyValue( "StringItemList" ) >>= sList;
+
+    sal_Int32 nIndex = sList.getLength();
+
+    if ( pvargIndex.hasValue() )
+        pvargIndex >>= nIndex;
+
+    OUString sString = getAnyAsString( pvargItem );
+
+    // if no index specified or item is to be appended to end of
+    // list just realloc the array and set the last item
+    if ( nIndex  == sList.getLength() )
     {
-        uno::Sequence< OUString > sList;
-        m_xProps->getPropertyValue( "StringItemList" ) >>= sList;
-
-        sal_Int32 nIndex = sList.getLength();
-
-        if ( pvargIndex.hasValue() )
-            pvargIndex >>= nIndex;
-
-        OUString sString = getAnyAsString( pvargItem );
-
-        // if no index specified or item is to be appended to end of
-        // list just realloc the array and set the last item
-        if ( nIndex  == sList.getLength() )
-        {
-            sal_Int32 nOldSize = sList.getLength();
-            sList.realloc( nOldSize + 1 );
-            sList[ nOldSize ] = sString;
-        }
-        else
-        {
-            // just copy those elements above the one to be inserted
-            std::vector< OUString > sVec;
-            // reserve just the amount we need to copy
-            sVec.reserve( sList.getLength() - nIndex + 1);
-
-            // insert the new element
-            sVec.push_back( sString );
-
-            // point at first element to copy
-            sVec.insert( sVec.end(), std::next(sList.begin(), nIndex), sList.end() );
-
-            sList.realloc(  sList.getLength() + 1 );
-
-            // point at first element to be overwritten
-            std::copy(sVec.begin(), sVec.end(), std::next(sList.begin(), nIndex));
-        }
-
-        m_xProps->setPropertyValue( "StringItemList", uno::makeAny( sList ) );
+        sal_Int32 nOldSize = sList.getLength();
+        sList.realloc( nOldSize + 1 );
+        sList[ nOldSize ] = sString;
     }
+    else
+    {
+        // just copy those elements above the one to be inserted
+        std::vector< OUString > sVec;
+        // reserve just the amount we need to copy
+        sVec.reserve( sList.getLength() - nIndex + 1);
+
+        // insert the new element
+        sVec.push_back( sString );
+
+        // point at first element to copy
+        sVec.insert( sVec.end(), std::next(sList.begin(), nIndex), sList.end() );
+
+        sList.realloc(  sList.getLength() + 1 );
+
+        // point at first element to be overwritten
+        std::copy(sVec.begin(), sVec.end(), std::next(sList.begin(), nIndex));
+    }
+
+    m_xProps->setPropertyValue( "StringItemList", uno::makeAny( sList ) );
 }
 
 void
@@ -136,25 +136,25 @@ ListControlHelper::removeItem( const uno::Any& index )
 {
     sal_Int32 nIndex = 0;
     // for int index
-    if ( index >>= nIndex  )
-    {
-        uno::Sequence< OUString > sList;
-        m_xProps->getPropertyValue( "StringItemList" ) >>= sList;
-        if( nIndex < 0 || nIndex > ( sList.getLength() - 1 ) )
-            throw uno::RuntimeException( "Invalid index" , uno::Reference< uno::XInterface > () );
-        if( sList.hasElements() )
-        {
-            if( sList.getLength() == 1 )
-            {
-                Clear();
-                return;
-            }
+    if ( !(index >>= nIndex)  )
+        return;
 
-            comphelper::removeElementAt(sList, nIndex);
+    uno::Sequence< OUString > sList;
+    m_xProps->getPropertyValue( "StringItemList" ) >>= sList;
+    if( nIndex < 0 || nIndex > ( sList.getLength() - 1 ) )
+        throw uno::RuntimeException( "Invalid index" , uno::Reference< uno::XInterface > () );
+    if( sList.hasElements() )
+    {
+        if( sList.getLength() == 1 )
+        {
+            Clear();
+            return;
         }
 
-        m_xProps->setPropertyValue( "StringItemList", uno::makeAny( sList ) );
+        comphelper::removeElementAt(sList, nIndex);
     }
+
+    m_xProps->setPropertyValue( "StringItemList", uno::makeAny( sList ) );
 }
 
 void

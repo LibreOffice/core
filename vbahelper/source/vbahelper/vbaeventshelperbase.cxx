@@ -289,7 +289,9 @@ OUString VbaEventsHelperBase::getEventHandlerPath( const EventHandlerInfo& rInfo
 
 void VbaEventsHelperBase::ensureVBALibrary()
 {
-    if( !mxModuleInfos.is() ) try
+    if( mxModuleInfos.is() ) return;
+
+    try
     {
         maLibraryName = getDefaultProjectName( mpShell );
         if( maLibraryName.isEmpty() )

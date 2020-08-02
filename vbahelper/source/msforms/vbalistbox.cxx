@@ -200,22 +200,22 @@ ScVbaListBox::setValueEvent( const uno::Any& value )
             return;
         }
     }
-    if( bValue )
+    if( !bValue )
+        return;
+
+    if( getMultiSelect() )
     {
-        if( getMultiSelect() )
-        {
-            nList.realloc( nLength + 1 );
-            nList[nLength] = nIndex;
-        }
-        else
-        {
-            nList.realloc( 1 );
-            nList[0] = nIndex;
-        }
-        //m_xProps->setPropertyValue( sSourceName, uno::makeAny( nList ) );
-        fireClickEvent();
-        m_xProps->setPropertyValue( "SelectedItems", uno::makeAny( nList ) );
+        nList.realloc( nLength + 1 );
+        nList[nLength] = nIndex;
     }
+    else
+    {
+        nList.realloc( 1 );
+        nList[0] = nIndex;
+    }
+    //m_xProps->setPropertyValue( sSourceName, uno::makeAny( nList ) );
+    fireClickEvent();
+    m_xProps->setPropertyValue( "SelectedItems", uno::makeAny( nList ) );
 }
 
 // this is called when something like the following vba code is used

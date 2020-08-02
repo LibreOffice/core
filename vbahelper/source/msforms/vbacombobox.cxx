@@ -66,21 +66,21 @@ void SAL_CALL
 ScVbaComboBox::setListIndex( const uno::Any& _value )
 {
     sal_Int16 nIndex = 0;
-    if( _value >>= nIndex )
-    {
-        sal_Int32 nOldIndex = -1;
-        getListIndex() >>= nOldIndex;
-        uno::Sequence< OUString > sItems;
-        m_xProps->getPropertyValue( "StringItemList" ) >>= sItems;
-        if( ( nIndex >= 0 ) && ( sItems.getLength() > nIndex ) )
-        {
-            OUString sText = sItems[ nIndex ];
-            m_xProps->setPropertyValue( "Text", uno::makeAny( sText ) );
+    if( !(_value >>= nIndex) )
+        return;
 
-            // fire the _Change event
-            if( nOldIndex != nIndex )
-                fireClickEvent();
-        }
+    sal_Int32 nOldIndex = -1;
+    getListIndex() >>= nOldIndex;
+    uno::Sequence< OUString > sItems;
+    m_xProps->getPropertyValue( "StringItemList" ) >>= sItems;
+    if( ( nIndex >= 0 ) && ( sItems.getLength() > nIndex ) )
+    {
+        OUString sText = sItems[ nIndex ];
+        m_xProps->setPropertyValue( "Text", uno::makeAny( sText ) );
+
+        // fire the _Change event
+        if( nOldIndex != nIndex )
+            fireClickEvent();
     }
 }
 

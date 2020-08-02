@@ -392,21 +392,21 @@ void PrintOutHelper( SfxViewShell const * pViewShell, const uno::Any& From, cons
     aArgs.Put( sfxAsync, sfxAsync.Which() );
     SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
 
-    if ( pDispatcher )
+    if ( !pDispatcher )
+        return;
+
+    if ( bPreview )
     {
-        if ( bPreview )
+        if ( !pViewFrame->GetFrame().IsInPlace() )
         {
-            if ( !pViewFrame->GetFrame().IsInPlace() )
-            {
-                // #TODO is this necessary ( calc specific )
+            // #TODO is this necessary ( calc specific )
 //                  SC_MOD()->InputEnterHandler();
-                pViewFrame->GetDispatcher()->Execute( SID_VIEWSHELL1, SfxCallMode::SYNCHRON );
-                WaitUntilPreviewIsClosed( pViewFrame );
-            }
+            pViewFrame->GetDispatcher()->Execute( SID_VIEWSHELL1, SfxCallMode::SYNCHRON );
+            WaitUntilPreviewIsClosed( pViewFrame );
         }
-        else
-            pDispatcher->Execute( sal_uInt16(SID_PRINTDOC), SfxCallMode::SYNCHRON, aArgs );
     }
+    else
+        pDispatcher->Execute( sal_uInt16(SID_PRINTDOC), SfxCallMode::SYNCHRON, aArgs );
 
 
     // #FIXME #TODO
