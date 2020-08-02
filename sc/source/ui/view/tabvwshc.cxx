@@ -520,7 +520,8 @@ void ScTabViewShell::notifyAllViewsHeaderInvalidation(const SfxViewShell* pForVi
     while (pViewShell)
     {
         ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
-        if (pTabViewShell && pViewShell->GetDocId() == pForViewShell->GetDocId() && (nCurrentTabIndex == -1 || pTabViewShell->getPart() == nCurrentTabIndex))
+        if (pTabViewShell && pViewShell->GetDocId() == pForViewShell->GetDocId()
+            && (nCurrentTabIndex == -1 || pTabViewShell->getPart() == nCurrentTabIndex))
         {
             pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_HEADER, aPayload.getStr());
         }

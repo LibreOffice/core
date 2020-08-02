@@ -165,6 +165,9 @@ friend class SfxPrinterController;
     LanguageTag                 maLOKLocale;
     LOKDeviceFormFactor         maLOKDeviceFormFactor;
 
+    /// Used to set the DocId at construction time. See SetCurrentDocId.
+    static ViewShellDocId       mnCurrentDocId;
+
 protected:
     virtual void                Activate(bool IsMDIActivate) override;
     virtual void                Deactivate(bool IsMDIActivate) override;
@@ -339,8 +342,18 @@ public:
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
     /// See OutlinerViewShell::GetViewShellId().
     ViewShellId GetViewShellId() const override;
-    void SetDocId(ViewShellDocId nId) override;
+
+    /// Set the current DocId, which is used by Mobile LOKit to
+    /// load multiple documents and yet identify the views of each.
+    /// There are events that are fired while creating a new view,
+    /// and if we don't have a DocId, we can't know which other views
+    /// within the same document (if any) should get those events.
+    /// By setting this static value, we are able to set the DocId
+    /// of each SfxViewShell at construction time.
+    static void SetCurrentDocId(ViewShellDocId nId);
+    /// Get the DocId used by Mobile LOKit to load multiple documents.
     ViewShellDocId GetDocId() const override;
+
     /// See OutlinerViewShell::NotifyOtherViews().
     void NotifyOtherViews(int nType, const OString& rKey, const OString& rPayload) override;
     /// See OutlinerViewShell::NotifyOtherView().
