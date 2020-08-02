@@ -45,19 +45,21 @@ class SFX2_DLLPUBLIC SfxLokHelper
 {
 public:
     /// Create a new view shell from the current view frame.
+    /// This assumes a single document is ever loaded.
     static int createView();
+    /// Create a new view shell for the given DocId, for multi-document support.
+    static int createView(int nDocId);
     /// Destroy a view shell from the global shell list.
     static void destroyView(int nId);
     /// Set a view shell as current one.
     static void setView(int nId);
     /// Get the currently active view.
     static int getView(const SfxViewShell* pViewShell = nullptr);
-    /// Get the number of views of the current object shell.
-    static std::size_t getViewsCount();
-    /// Get viewIds of views of the current object shell.
-    static bool getViewIds(int* pArray, size_t nSize);
-    /// Set the document id of the currently active view
-    static void setDocumentIdOfView(int nId);
+    /// Get the number of views of the current DocId.
+    static std::size_t getViewsCount(int nDocId);
+    /// Get viewIds of views of the current DocId.
+    static bool getViewIds(int nDocId, int* pArray, size_t nSize);
+
     /// Get the document id for a view
     static int getDocumentIdOfView(int nViewId);
     /// Get the default language that should be used for views
@@ -125,6 +127,9 @@ public:
     /// A special value to signify 'infinity'.
     /// This value is chosen such that sal_Int32 will not overflow when manipulated.
     static const tools::Long MaxTwips = 1e9;
+
+private:
+    static int createView(SfxViewFrame* pViewFrame, ViewShellDocId docId);
 };
 
 template<typename ViewShellType, typename FunctionType>

@@ -56,7 +56,10 @@ public:
         --m_nDisabled;
     }
 
-    static bool disabled() { return m_nDisabled != 0; }
+    static inline bool disabled()
+    {
+        return !comphelper::LibreOfficeKit::isActive() || m_nDisabled != 0;
+    }
 
 private:
     static int m_nDisabled;
@@ -71,28 +74,57 @@ LanguageTag g_defaultLanguageTag("en-US", true);
 LOKDeviceFormFactor g_deviceFormFactor = LOKDeviceFormFactor::UNKNOWN;
 }
 
-int SfxLokHelper::createView()
+int SfxLokHelper::createView(SfxViewFrame* pViewFrame, ViewShellDocId docId)
 {
-    SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
+    assert(docId >= ViewShellDocId(0) && "Cannot createView for invalid (negative) DocId.");
+
     if (pViewFrame == nullptr)
         return -1;
-    SfxViewShell* pPrevViewShell = SfxViewShell::Current();
-    ViewShellDocId nId;
-    if (pPrevViewShell)
-        nId = pPrevViewShell->GetDocId();
+
+    SfxViewShell::SetCurrentDocId(docId);
     SfxRequest aRequest(pViewFrame, SID_NEWWINDOW);
     pViewFrame->ExecView_Impl(aRequest);
     SfxViewShell* pViewShell = SfxViewShell::Current();
     if (pViewShell == nullptr)
         return -1;
-    if (pPrevViewShell)
-        pViewShell->SetDocId(nId);
+
+    assert(pViewShell->GetDocId() == docId && "DocId must be already set!");
     return static_cast<sal_Int32>(pViewShell->GetViewShellId());
+}
+
+int SfxLokHelper::createView()
+{
+    // Assumes a single document, or at least that the
+    // current view belongs to the document on which the
+    // view will be created.
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (pViewShell == nullptr)
+        return -1;
+
+    return createView(pViewShell->GetViewFrame(), pViewShell->GetDocId());
+}
+
+int SfxLokHelper::createView(int nDocId)
+{
+    const SfxApplication* pApp = SfxApplication::Get();
+    if (pApp == nullptr)
+        return -1;
+
+    // Find a shell with the given DocId.
+    const ViewShellDocId docId(nDocId);
+    for (const SfxViewShell* pViewShell : pApp->GetViewShells_Impl())
+    {
+        if (pViewShell->GetDocId() == docId)
+            return createView(pViewShell->GetViewFrame(), docId);
+    }
+
+    // No frame with nDocId found.
+    return -1;
 }
 
 void SfxLokHelper::destroyView(int nId)
 {
-    SfxApplication* pApp = SfxApplication::Get();
+    const SfxApplication* pApp = SfxApplication::Get();
     if (pApp == nullptr)
         return;
 
@@ -157,14 +189,15 @@ int SfxLokHelper::getView(const SfxViewShell* pViewShell)
     return static_cast<sal_Int32>(pViewShell->GetViewShellId());
 }
 
-std::size_t SfxLokHelper::getViewsCount()
+std::size_t SfxLokHelper::getViewsCount(int nDocId)
 {
+    assert(nDocId != -1 && "Cannot getViewsCount for invalid DocId -1");
+
     SfxApplication* pApp = SfxApplication::Get();
     if (!pApp)
         return 0;
 
-    const SfxViewShell* const pCurrentViewShell = SfxViewShell::Current();
-    const ViewShellDocId nCurrentDocId = pCurrentViewShell ? pCurrentViewShell->GetDocId() : ViewShellDocId(-1);
+    const ViewShellDocId nCurrentDocId(nDocId);
     std::size_t n = 0;
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
@@ -173,40 +206,36 @@ std::size_t SfxLokHelper::getViewsCount()
             n++;
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
+
     return n;
 }
 
-bool SfxLokHelper::getViewIds(int* pArray, size_t nSize)
+bool SfxLokHelper::getViewIds(int nDocId, int* pArray, size_t nSize)
 {
+    assert(nDocId != -1 && "Cannot getViewsIds for invalid DocId -1");
+
     SfxApplication* pApp = SfxApplication::Get();
     if (!pApp)
         return false;
 
-    const SfxViewShell* const pCurrentViewShell = SfxViewShell::Current();
-    const ViewShellDocId nCurrentDocId = pCurrentViewShell ? pCurrentViewShell->GetDocId() : ViewShellDocId(-1);
+    const ViewShellDocId nCurrentDocId(nDocId);
     std::size_t n = 0;
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
-        if (n == nSize)
-            return false;
         if (pViewShell->GetDocId() == nCurrentDocId)
         {
+            if (n == nSize)
+                return false;
+
             pArray[n] = static_cast<sal_Int32>(pViewShell->GetViewShellId());
             n++;
         }
+
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
-    return true;
-}
 
-void SfxLokHelper::setDocumentIdOfView(int nId)
-{
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    assert(pViewShell);
-    if (!pViewShell)
-        return;
-    pViewShell->SetDocId(ViewShellDocId(nId));
+    return true;
 }
 
 int SfxLokHelper::getDocumentIdOfView(int nViewId)
@@ -336,14 +365,25 @@ void SfxLokHelper::notifyOtherView(const SfxViewShell* pThisView, SfxViewShell c
 void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType, const OString& rKey,
                                     const OString& rPayload)
 {
+    assert(pThisView != nullptr && "pThisView must be valid");
     if (DisableCallbacks::disabled())
         return;
 
+    // Cache the payload so we only have to generate it once, at most.
+    OString aPayload;
+
+    const ViewShellDocId nCurrentDocId = pThisView->GetDocId();
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
-        if (pViewShell != pThisView && pViewShell->GetDocId() == pThisView-> GetDocId())
-            notifyOtherView(pThisView, pViewShell, nType, rKey, rPayload);
+        if (pViewShell != pThisView && nCurrentDocId == pViewShell->GetDocId())
+        {
+            // Payload is only dependent on pThisView.
+            if (aPayload.isEmpty())
+                aPayload = lcl_generateJSON(pThisView, rKey, rPayload);
+
+            pViewShell->libreOfficeKitViewCallback(nType, aPayload.getStr());
+        }
 
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
@@ -352,17 +392,25 @@ void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType, co
 void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType,
                                     const boost::property_tree::ptree& rTree)
 {
-    if (SfxLokHelper::getViewsCount() <= 1 || DisableCallbacks::disabled())
+    assert(pThisView != nullptr && "pThisView must be valid");
+    if (DisableCallbacks::disabled())
         return;
 
-    // Payload is only dependent on pThisView.
-    OString aPayload = lcl_generateJSON(pThisView, rTree);
+    // Cache the payload so we only have to generate it once, at most.
+    OString aPayload;
 
+    const ViewShellDocId nCurrentDocId = pThisView->GetDocId();
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
-        if (pViewShell != pThisView)
+        if (pViewShell != pThisView && nCurrentDocId == pViewShell->GetDocId())
+        {
+            // Payload is only dependent on pThisView.
+            if (aPayload.isEmpty())
+                aPayload = lcl_generateJSON(pThisView, rTree);
+
             pViewShell->libreOfficeKitViewCallback(nType, aPayload.getStr());
+        }
 
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
@@ -414,7 +462,7 @@ void SfxLokHelper::notifyWindow(const SfxViewShell* pThisView,
 {
     assert(pThisView != nullptr && "pThisView must be valid");
 
-    if (SfxLokHelper::getViewsCount() <= 0 || nLOKWindowId == 0 || DisableCallbacks::disabled())
+    if (nLOKWindowId == 0 || DisableCallbacks::disabled())
         return;
 
     OStringBuffer aPayload;
@@ -453,7 +501,7 @@ void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, const OStri
 
 void SfxLokHelper::notifyDocumentSizeChanged(SfxViewShell const* pThisView, const OString& rPayload, vcl::ITiledRenderable* pDoc, bool bInvalidateAll)
 {
-    if (!pDoc || pDoc->isDisposed() || !comphelper::LibreOfficeKit::isActive() || DisableCallbacks::disabled())
+    if (!pDoc || pDoc->isDisposed() || DisableCallbacks::disabled())
         return;
 
     if (bInvalidateAll)
@@ -470,7 +518,7 @@ void SfxLokHelper::notifyDocumentSizeChanged(SfxViewShell const* pThisView, cons
 
 void SfxLokHelper::notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc, bool bInvalidateAll)
 {
-    if (!comphelper::LibreOfficeKit::isActive() || DisableCallbacks::disabled())
+    if (DisableCallbacks::disabled())
         return;
 
     // FIXME: Do we know whether it is the views for the document that is in the "current" view that has changed?
