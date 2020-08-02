@@ -272,6 +272,7 @@ class SvxSearchItem;
 #define SID_REPLACEABLE                     (SID_SFX_START + 1739)
 #define SID_ADDITIONS_DIALOG                (SID_SFX_START + 1740)
 #define SID_ADDITIONS_TAG                   (SID_SFX_START + 1741)
+#define SID_TOOLBAR_MODE_UI                 (SID_SFX_START + 1742)
 
 //      SID_SFX_free_END                    (SID_SFX_START + 3999)
 
