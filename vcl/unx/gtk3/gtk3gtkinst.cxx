@@ -10339,11 +10339,12 @@ public:
 
     virtual bool get_sort_order() const override
     {
+        int nSortColumn;
         GtkSortType eSortType;
 
         GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
-        gtk_tree_sortable_get_sort_column_id(pSortable, nullptr, &eSortType);
-        return eSortType == GTK_SORT_ASCENDING;
+        gtk_tree_sortable_get_sort_column_id(pSortable, &nSortColumn, &eSortType);
+        return nSortColumn != GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID && eSortType == GTK_SORT_ASCENDING;
     }
 
     virtual void set_sort_indicator(TriState eState, int col) override
