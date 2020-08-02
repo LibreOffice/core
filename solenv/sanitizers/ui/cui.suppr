@@ -276,3 +276,4 @@ cui/uiconfig/ui/wordcompletionpage.ui://GtkSpinButton[@id='maxentries'] duplicat
 cui/uiconfig/ui/bulletandposition.ui://GtkToggleButton[@id='left'] button-no-label
 cui/uiconfig/ui/bulletandposition.ui://GtkToggleButton[@id='center'] button-no-label
 cui/uiconfig/ui/bulletandposition.ui://GtkToggleButton[@id='right'] button-no-label
+cui/uiconfig/ui/toolbarmodedialog.ui://GtkLabel[@id='lbInfo'] orphan-label
