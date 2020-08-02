@@ -210,6 +210,7 @@ enum SvxNumType : sal_Int16
     SVX_NUM_ARABIC_ZERO3          = css::style::NumberingType::ARABIC_ZERO3,
     SVX_NUM_ARABIC_ZERO4          = css::style::NumberingType::ARABIC_ZERO4,
     SVX_NUM_ARABIC_ZERO5          = css::style::NumberingType::ARABIC_ZERO5,
+    SVX_NUM_SZEKELY_ROVAS         = css::style::NumberingType::SZEKELY_ROVAS
 };
 
 #endif

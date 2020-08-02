@@ -520,6 +520,12 @@ published constants NumberingType
         @since LibreOffice 7.0
      */
     const short ARABIC_ZERO5 = 67;
+
+    /** Numbering is in Szekely rovas (Old Hungarian) numerals
+
+        @since LibreOffice 7.1
+     */
+    const short SZEKELY_ROVAS = 68;
 };
 
 

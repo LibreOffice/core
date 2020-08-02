@@ -2537,6 +2537,20 @@ DECLARE_ODFEXPORT_TEST(testArabicZero5Numbering, "arabic-zero5-numbering.odt")
                          aMap["NumberingType"].get<sal_uInt16>());
 }
 
+DECLARE_ODFEXPORT_TEST(testRovasNumbering, "rovas-numbering.odt")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    auto xNumberingRules
+        = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), "NumberingRules");
+    comphelper::SequenceAsHashMap aMap(xNumberingRules->getByIndex(0));
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 68
+    // - Actual  : 4
+    // i.e. numbering type was ARABIC, not SZEKELY_ROVAS.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(style::NumberingType::SZEKELY_ROVAS),
+                         aMap["NumberingType"].get<sal_uInt16>());
+}
+
 DECLARE_ODFEXPORT_TEST(testPageContentBottom, "page-content-bottom.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
