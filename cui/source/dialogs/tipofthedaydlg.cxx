@@ -24,6 +24,7 @@
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <tipoftheday.hrc>
+
 #include <vcl/graphicfilter.hxx>
 #include <vcl/help.hxx>
 #include <vcl/virdev.hxx>
@@ -31,6 +32,10 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/resmgr.hxx>
 #include <unotools/configmgr.hxx>
+
+#include <sfx2/dispatch.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/sfxsids.hrc>
 
 TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/tipofthedaydialog.ui", "TipOfTheDayDialog")
@@ -102,6 +107,14 @@ void TipOfTheDayDialog::UpdateTip()
     {
         m_pLink->set_visible(false);
     }
+    else if (aLink.startsWith(".uno:"))
+    {
+        //TODO: link doesn't accept .uno: at the beginning
+        m_pLink->set_uri(aLink);
+        m_pLink->set_label(CuiResId(STR_UNO_LINK));
+        m_pLink->set_visible(true);
+        m_pLink->connect_activate_link(Link<weld::LinkButton&, bool>());
+    }
     else if (aLink.startsWith("http"))
     {
         // Links may have some %PRODUCTVERSION which need to be expanded
@@ -149,13 +162,26 @@ void TipOfTheDayDialog::UpdateTip()
 
 IMPL_LINK_NOARG(TipOfTheDayDialog, OnLinkClick, weld::LinkButton&, bool)
 {
-    Application::GetHelp()->Start(aLink, static_cast<weld::Widget*>(nullptr));
+    if (aLink.startsWith("http"))
+    {
+        Application::GetHelp()->Start(aLink, static_cast<weld::Widget*>(nullptr));
+    }
+    else if (aLink.startsWith(".uno:"))
+    {
+        SfxObjectShell* pCurrentShell = SfxObjectShell::Current();
+        if (!pCurrentShell)
+            return false;
+        SfxDispatcher* pDispatcher = pCurrentShell->GetDispatcher();
+        if (!pDispatcher)
+            return false;
+        pDispatcher->Execute( SID_TOOLBAR_MODE_UI, SfxCallMode::API);
+    }
     return true;
 }
 
 IMPL_LINK_NOARG(TipOfTheDayDialog, OnNextClick, weld::Button&, void)
 {
-    nCurrentTip++; //zeroed at updatetip when out of range
+    nCurrentTip = 0;//++; //zeroed at updatetip when out of range
     UpdateTip();
 }
 
