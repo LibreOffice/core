@@ -15,6 +15,7 @@ $(eval $(call gb_Package_add_files_with_dir,tipoftheday_images,$(LIBO_SHARE_FOLD
 	tipoftheday_c.png \
 	tipoftheday_i.png \
 	tipoftheday_d.png \
+	toolbarmode.png \
 ))
 
 # vim: set noet sw=4 ts=4:
