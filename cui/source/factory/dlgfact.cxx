@@ -1428,11 +1428,6 @@ short AbstractAdditionsDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
-short AbstractTipOfTheDayDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
 short AbstractDiagramDialog_Impl::Execute()
 {
     return m_xDlg->run();
@@ -1703,10 +1698,11 @@ AbstractDialogFactory_Impl::CreateAboutDialog(weld::Window* pParent)
         std::make_unique<AboutDialog>(pParent));
 }
 
-VclPtr<AbstractTipOfTheDayDialog>
+VclPtr<VclAbstractDialog>
 AbstractDialogFactory_Impl::CreateTipOfTheDayDialog(weld::Window* pParent)
 {
-    return VclPtr<AbstractTipOfTheDayDialog_Impl>::Create(std::make_unique<TipOfTheDayDialog>(pParent));
+    return VclPtr<CuiAbstractController_Impl>::Create(
+        std::make_unique<TipOfTheDayDialog>(pParent));
 }
 
 VclPtr<AbstractDiagramDialog>
