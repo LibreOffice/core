@@ -179,6 +179,7 @@
       <menu:menuitem menu:id=".uno:BrowseView" menu:style="radio"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ToolbarMode"/>
+      <menu:menuitem menu:id=".uno:ToolbarModeUI"/>
       <menu:menuitem menu:id=".uno:AvailableToolbars" menu:style="text"/>
       <menu:menuitem menu:id=".uno:StatusBarVisible" menu:style="text"/>
       <menu:menuseparator/>

@@ -147,6 +147,7 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/dialogs/splitcelldlg \
     cui/source/dialogs/srchxtra \
     cui/source/dialogs/thesdlg \
+    cui/source/dialogs/toolbarmodedlg \
     cui/source/dialogs/zoom \
     cui/source/factory/cuiexp \
     cui/source/factory/cuiresmgr \
