@@ -86,6 +86,9 @@ void SwAccessibleCell::GetStates( ::utl::AccessibleStateSetHelper& rStateSet )
     //Add resizable state to table cell.
     rStateSet.AddState( AccessibleStateType::RESIZABLE );
 
+    if (IsDisposing()) // tdf#135098
+        return;
+
     // SELECTED
     if( IsSelected() )
     {
