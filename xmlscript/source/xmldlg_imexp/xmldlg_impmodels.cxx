@@ -1844,14 +1844,13 @@ Reference< xml::input::XElement > GridControlElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
     {
         throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
     }
+
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
+
 }
 
 void GridControlElement::endElement()

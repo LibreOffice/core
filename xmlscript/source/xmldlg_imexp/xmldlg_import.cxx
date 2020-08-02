@@ -220,22 +220,22 @@ void StyleElement::importBorderStyle(
     _inited |= 0x4;
 
     OUString aValue;
-    if (getStringAttr(&aValue, "border", _xAttributes, m_xImport->XMLNS_DIALOGS_UID ))
-        {
-        if ( aValue == "none" )
-            _border = BORDER_NONE;
-        else if ( aValue == "3d" )
-            _border = BORDER_3D;
-        else if ( aValue == "simple" )
-            _border = BORDER_SIMPLE;
-        else {
-            _border = BORDER_SIMPLE_COLOR;
-            _borderColor = toInt32(aValue);
-        }
+    if (!getStringAttr(&aValue, "border", _xAttributes, m_xImport->XMLNS_DIALOGS_UID ))
+        return;
 
-        _hasValue |= 0x4;
-        importBorderStyle(xProps); // write values
+    if ( aValue == "none" )
+        _border = BORDER_NONE;
+    else if ( aValue == "3d" )
+        _border = BORDER_3D;
+    else if ( aValue == "simple" )
+        _border = BORDER_SIMPLE;
+    else {
+        _border = BORDER_SIMPLE_COLOR;
+        _borderColor = toInt32(aValue);
     }
+
+    _hasValue |= 0x4;
+    importBorderStyle(xProps); // write values
 }
 
 void StyleElement::importVisualEffectStyle(
@@ -252,26 +252,26 @@ void StyleElement::importVisualEffectStyle(
     _inited |= 0x40;
 
     OUString aValue;
-    if (getStringAttr( &aValue, "look", _xAttributes, m_xImport->XMLNS_DIALOGS_UID ))
-    {
-        if ( aValue == "none" )
-        {
-            _visualEffect = awt::VisualEffect::NONE;
-        }
-        else if ( aValue == "3d" )
-        {
-            _visualEffect = awt::VisualEffect::LOOK3D;
-        }
-        else if ( aValue == "simple" )
-        {
-            _visualEffect = awt::VisualEffect::FLAT;
-        }
-        else
-            OSL_ASSERT( false );
+    if (!getStringAttr( &aValue, "look", _xAttributes, m_xImport->XMLNS_DIALOGS_UID ))
+        return;
 
-        _hasValue |= 0x40;
-        xProps->setPropertyValue( "VisualEffect", makeAny(_visualEffect) );
+    if ( aValue == "none" )
+    {
+        _visualEffect = awt::VisualEffect::NONE;
     }
+    else if ( aValue == "3d" )
+    {
+        _visualEffect = awt::VisualEffect::LOOK3D;
+    }
+    else if ( aValue == "simple" )
+    {
+        _visualEffect = awt::VisualEffect::FLAT;
+    }
+    else
+        OSL_ASSERT( false );
+
+    _hasValue |= 0x40;
+    xProps->setPropertyValue( "VisualEffect", makeAny(_visualEffect) );
 }
 
 void StyleElement::setFontProperties(
@@ -1435,111 +1435,111 @@ void ImportContext::importEvents(
 {
     Reference< script::XScriptEventsSupplier > xSupplier(
         _xControlModel, UNO_QUERY );
-    if (xSupplier.is())
+    if (!xSupplier.is())
+        return;
+
+    Reference< container::XNameContainer > xEvents( xSupplier->getEvents() );
+    if (!xEvents.is())
+        return;
+
+    for (const auto & rEvent : rEvents)
     {
-        Reference< container::XNameContainer > xEvents( xSupplier->getEvents() );
-        if (xEvents.is())
+        script::ScriptEventDescriptor descr;
+
+        EventElement * pEventElement = static_cast< EventElement * >( rEvent.get() );
+        sal_Int32 nUid = pEventElement->getUid();
+        OUString aLocalName( pEventElement->getLocalName() );
+        Reference< xml::input::XAttributes > xAttributes( pEventElement->getAttributes() );
+
+        // nowadays script events
+        if (_pImport->XMLNS_SCRIPT_UID == nUid)
         {
-            for (const auto & rEvent : rEvents)
+            if (!getStringAttr( &descr.ScriptType, "language"  , xAttributes, _pImport->XMLNS_SCRIPT_UID ) ||
+                !getStringAttr( &descr.ScriptCode, "macro-name", xAttributes, _pImport->XMLNS_SCRIPT_UID ))
             {
-                script::ScriptEventDescriptor descr;
-
-                EventElement * pEventElement = static_cast< EventElement * >( rEvent.get() );
-                sal_Int32 nUid = pEventElement->getUid();
-                OUString aLocalName( pEventElement->getLocalName() );
-                Reference< xml::input::XAttributes > xAttributes( pEventElement->getAttributes() );
-
-                // nowadays script events
-                if (_pImport->XMLNS_SCRIPT_UID == nUid)
+                throw xml::sax::SAXException( "missing language or macro-name attribute(s) of event!", Reference< XInterface >(), Any() );
+            }
+            if ( descr.ScriptType == "StarBasic" )
+            {
+                OUString aLocation;
+                if (getStringAttr( &aLocation, "location", xAttributes, _pImport->XMLNS_SCRIPT_UID ))
                 {
-                    if (!getStringAttr( &descr.ScriptType, "language"  , xAttributes, _pImport->XMLNS_SCRIPT_UID ) ||
-                        !getStringAttr( &descr.ScriptCode, "macro-name", xAttributes, _pImport->XMLNS_SCRIPT_UID ))
-                    {
-                        throw xml::sax::SAXException( "missing language or macro-name attribute(s) of event!", Reference< XInterface >(), Any() );
-                    }
-                    if ( descr.ScriptType == "StarBasic" )
-                    {
-                        OUString aLocation;
-                        if (getStringAttr( &aLocation, "location", xAttributes, _pImport->XMLNS_SCRIPT_UID ))
-                        {
-                            // prepend location
-                            descr.ScriptCode = aLocation + ":" + descr.ScriptCode;
-                        }
-                    }
-                    else if ( descr.ScriptType == "Script" )
-                    {
-                        // Check if there is a protocol, if not assume
-                        // this is an early scripting framework url ( without
-                        // the protocol ) and fix it up!!
-                        if ( descr.ScriptCode.indexOf( ':' ) == -1 )
-                        {
-                            descr.ScriptCode = "vnd.sun.start.script:" + descr.ScriptCode;
-                        }
-                    }
-
-                    // script:event element
-                    if ( aLocalName == "event" )
-                    {
-                        OUString aEventName;
-                        if (! getStringAttr( &aEventName, "event-name", xAttributes, _pImport->XMLNS_SCRIPT_UID ))
-                        {
-                            throw xml::sax::SAXException( "missing event-name attribute!", Reference< XInterface >(), Any() );
-                        }
-
-                        // lookup in table
-                        OString str( OUStringToOString( aEventName, RTL_TEXTENCODING_ASCII_US ) );
-                        StringTriple const * p = g_pEventTranslations;
-                        while (p->first)
-                        {
-                            if (0 == ::rtl_str_compare( p->third, str.getStr() ))
-                            {
-                                descr.ListenerType = OUString(
-                                    p->first, ::rtl_str_getLength( p->first ),
-                                    RTL_TEXTENCODING_ASCII_US );
-                                descr.EventMethod = OUString(
-                                    p->second, ::rtl_str_getLength( p->second ),
-                                    RTL_TEXTENCODING_ASCII_US );
-                                break;
-                            }
-                            ++p;
-                        }
-
-                        if (! p->first)
-                        {
-                            throw xml::sax::SAXException( "no matching event-name found!", Reference< XInterface >(), Any() );
-                        }
-                    }
-                    else // script:listener-event element
-                    {
-                        SAL_WARN_IF( aLocalName != "listener-event", "xmlscript.xmldlg", "aLocalName != listener-event" );
-
-                        if (!getStringAttr( &descr.ListenerType, "listener-type"  , xAttributes, _pImport->XMLNS_SCRIPT_UID ) ||
-                            !getStringAttr( &descr.EventMethod , "listener-method", xAttributes, _pImport->XMLNS_SCRIPT_UID ))
-                        {
-                            throw xml::sax::SAXException("missing listener-type or listener-method attribute(s)!", Reference< XInterface >(), Any() );
-                        }
-                        // optional listener param
-                        getStringAttr( &descr.AddListenerParam,  "listener-param", xAttributes, _pImport->XMLNS_SCRIPT_UID );
-                    }
+                    // prepend location
+                    descr.ScriptCode = aLocation + ":" + descr.ScriptCode;
                 }
-                else // deprecated dlg:event element
+            }
+            else if ( descr.ScriptType == "Script" )
+            {
+                // Check if there is a protocol, if not assume
+                // this is an early scripting framework url ( without
+                // the protocol ) and fix it up!!
+                if ( descr.ScriptCode.indexOf( ':' ) == -1 )
                 {
-                    SAL_WARN_IF( _pImport->XMLNS_DIALOGS_UID != nUid || aLocalName != "event", "xmlscript.xmldlg", "_pImport->XMLNS_DIALOGS_UID != nUid || aLocalName != \"event\"" );
+                    descr.ScriptCode = "vnd.sun.start.script:" + descr.ScriptCode;
+                }
+            }
 
-                    if (!getStringAttr( &descr.ListenerType, "listener-type", xAttributes, _pImport->XMLNS_DIALOGS_UID ) ||
-                        !getStringAttr( &descr.EventMethod,  "event-method",  xAttributes, _pImport->XMLNS_DIALOGS_UID ))
-                    {
-                        throw xml::sax::SAXException("missing listener-type or event-method attribute(s)!", Reference< XInterface >(), Any() );
-                    }
-
-                    getStringAttr( &descr.ScriptType, "script-type", xAttributes, _pImport->XMLNS_DIALOGS_UID );
-                    getStringAttr( &descr.ScriptCode, "script-code", xAttributes, _pImport->XMLNS_DIALOGS_UID );
-                    getStringAttr( &descr.AddListenerParam, "param", xAttributes, _pImport->XMLNS_DIALOGS_UID );
+            // script:event element
+            if ( aLocalName == "event" )
+            {
+                OUString aEventName;
+                if (! getStringAttr( &aEventName, "event-name", xAttributes, _pImport->XMLNS_SCRIPT_UID ))
+                {
+                    throw xml::sax::SAXException( "missing event-name attribute!", Reference< XInterface >(), Any() );
                 }
 
-                xEvents->insertByName( descr.ListenerType + "::" + descr.EventMethod, makeAny( descr ) );
+                // lookup in table
+                OString str( OUStringToOString( aEventName, RTL_TEXTENCODING_ASCII_US ) );
+                StringTriple const * p = g_pEventTranslations;
+                while (p->first)
+                {
+                    if (0 == ::rtl_str_compare( p->third, str.getStr() ))
+                    {
+                        descr.ListenerType = OUString(
+                            p->first, ::rtl_str_getLength( p->first ),
+                            RTL_TEXTENCODING_ASCII_US );
+                        descr.EventMethod = OUString(
+                            p->second, ::rtl_str_getLength( p->second ),
+                            RTL_TEXTENCODING_ASCII_US );
+                        break;
+                    }
+                    ++p;
+                }
+
+                if (! p->first)
+                {
+                    throw xml::sax::SAXException( "no matching event-name found!", Reference< XInterface >(), Any() );
+                }
+            }
+            else // script:listener-event element
+            {
+                SAL_WARN_IF( aLocalName != "listener-event", "xmlscript.xmldlg", "aLocalName != listener-event" );
+
+                if (!getStringAttr( &descr.ListenerType, "listener-type"  , xAttributes, _pImport->XMLNS_SCRIPT_UID ) ||
+                    !getStringAttr( &descr.EventMethod , "listener-method", xAttributes, _pImport->XMLNS_SCRIPT_UID ))
+                {
+                    throw xml::sax::SAXException("missing listener-type or listener-method attribute(s)!", Reference< XInterface >(), Any() );
+                }
+                // optional listener param
+                getStringAttr( &descr.AddListenerParam,  "listener-param", xAttributes, _pImport->XMLNS_SCRIPT_UID );
             }
         }
+        else // deprecated dlg:event element
+        {
+            SAL_WARN_IF( _pImport->XMLNS_DIALOGS_UID != nUid || aLocalName != "event", "xmlscript.xmldlg", "_pImport->XMLNS_DIALOGS_UID != nUid || aLocalName != \"event\"" );
+
+            if (!getStringAttr( &descr.ListenerType, "listener-type", xAttributes, _pImport->XMLNS_DIALOGS_UID ) ||
+                !getStringAttr( &descr.EventMethod,  "event-method",  xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+            {
+                throw xml::sax::SAXException("missing listener-type or event-method attribute(s)!", Reference< XInterface >(), Any() );
+            }
+
+            getStringAttr( &descr.ScriptType, "script-type", xAttributes, _pImport->XMLNS_DIALOGS_UID );
+            getStringAttr( &descr.ScriptCode, "script-code", xAttributes, _pImport->XMLNS_DIALOGS_UID );
+            getStringAttr( &descr.AddListenerParam, "param", xAttributes, _pImport->XMLNS_DIALOGS_UID );
+        }
+
+        xEvents->insertByName( descr.ListenerType + "::" + descr.EventMethod, makeAny( descr ) );
     }
 }
 void ImportContext::importScollableSettings(
