@@ -14,6 +14,8 @@
 #include <i18nutil/unicode.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <list>
+#include <map>
 
 // This should only be used when a commonly used font incorrectly declares its
 // coverage. If you add a font here, please leave a note explaining the issue
@@ -99,18 +101,6 @@ static UScriptCode lcl_getHardCodedScriptNameForFont (const OutputDevice &rDevic
     {
         // These fonts claim support for ARMENIAN and a bunch of other stuff they don't support
         return USCRIPT_SIMPLIFIED_HAN;
-    }
-    else if (rName.startsWith("Noto")) {
-        // These fonts claim support for CJK(Chinese-Japanese-Korean) languages.
-        if (rName.indexOf(" KR") > 0 || rName.indexOf("Korean") > 0) {
-            return USCRIPT_KOREAN;
-        } else if (rName.indexOf(" JP") > 0 || rName.indexOf("Japanese") > 0) {
-            return USCRIPT_JAPANESE;
-        } else if (rName.indexOf(" SC") > 0 || rName.indexOf("S Chinese") > 0) {
-            return USCRIPT_SIMPLIFIED_HAN;
-        } else if (rName.indexOf(" TC") > 0 || rName.indexOf(" HK") > 0 || rName.indexOf("T Chinese") > 0) {
-            return USCRIPT_TRADITIONAL_HAN;
-        }
     }
     return USCRIPT_INVALID_CODE;
 }
@@ -1226,6 +1216,13 @@ namespace
     }
 }
 
+const std::map<UScriptCode, std::list<OUString>> distCjkMap =
+{
+    { USCRIPT_KOREAN,  { " KR", "Korean"} },   // Korean
+    { USCRIPT_JAPANESE, {" JP", "Japanese"} } , // Japanese
+    { USCRIPT_SIMPLIFIED_HAN, {" SC", " GB", "S Chinese"} }, // Simplified Chinese Family
+    { USCRIPT_TRADITIONAL_HAN, {" TC", " HC", " TW", " HK", " MO", "T Chinese"} }// Traditional Chinese Family
+};
 namespace
 {
     UScriptCode attemptToDisambiguateHan(UScriptCode eScript, OutputDevice const &rDevice)
@@ -1237,34 +1234,55 @@ namespace
 
             bool bKore = false, bJpan = false, bHant = false, bHans = false;
 
-            static const sal_Unicode aKorean[] = { 0x3131 };
+            static const sal_Unicode aKorean[] = { 0x4E6D, 0x4E76, 0x596C };
             OUString sKorean(aKorean, SAL_N_ELEMENTS(aKorean));
             if (-1 == rDevice.HasGlyphs(rFont, sKorean))
                 bKore = true;
 
-            static const sal_Unicode aJapanese[] = { 0x3007, 0x9F9D };
+            static const sal_Unicode aJapanese[] = { 0x5968, 0x67A0, 0x9D8F };
             OUString sJapanese(aJapanese, SAL_N_ELEMENTS(aJapanese));
             if (-1 == rDevice.HasGlyphs(rFont, sJapanese))
                 bJpan = true;
 
-            static const sal_Unicode aTraditionalChinese[] = { 0x570B };
+            static const sal_Unicode aTraditionalChinese[] = { 0x555F, 0x96DE };
             OUString sTraditionalChinese(aTraditionalChinese, SAL_N_ELEMENTS(aTraditionalChinese));
             if (-1 == rDevice.HasGlyphs(rFont, sTraditionalChinese))
                 bHant = true;
 
-            static const sal_Unicode aSimplifiedChinese[] = { 0x56FD };
+            static const sal_Unicode aSimplifiedChinese[] = { 0x4E61, 0x542F, 0x5956 };
             OUString sSimplifiedChinese(aSimplifiedChinese, SAL_N_ELEMENTS(aSimplifiedChinese));
             if (-1 == rDevice.HasGlyphs(rFont, sSimplifiedChinese))
                 bHans = true;
 
-            if (bKore && !bJpan && !bHans)
+            if (bKore && !bJpan && !bHans && !bHant) {
                 eScript = USCRIPT_KOREAN;
-            else if (bJpan && !bKore && !bHans)
+                return eScript;
+            }
+            else if (bJpan && !bKore && !bHans && !bHant) {
                 eScript = USCRIPT_JAPANESE;
-            else if (bHant && !bHans && !bKore && !bJpan)
-                eScript = USCRIPT_TRADITIONAL_HAN;
-            else if (bHans && !bHant && !bKore && !bJpan)
+                return eScript;
+            }
+            else if (bHans && !bHant && !bKore && !bJpan) {
                 eScript = USCRIPT_SIMPLIFIED_HAN;
+                return eScript;
+            }
+            else if (bHant && !bHans && !bKore && !bJpan) {
+                eScript = USCRIPT_TRADITIONAL_HAN;
+                return eScript;
+            }
+
+            // for the last time, Check the ISO code strings or font specific strings
+            const OUString &rName = rDevice.GetFont().GetFamilyName();
+            std::map<UScriptCode, std::list<OUString>>::const_iterator distCjkMapIt;
+            for (distCjkMapIt = distCjkMap.begin(); distCjkMapIt != distCjkMap.end(); ++distCjkMapIt) {
+                std::list<OUString> cjkCodeList = distCjkMapIt->second;
+                std::list<OUString>::const_iterator cjkPtr;
+                for (cjkPtr = cjkCodeList.begin(); cjkPtr != cjkCodeList.end(); ++cjkPtr) {
+                    if (rName.indexOf(*cjkPtr) > 0) {
+                        return distCjkMapIt->first;
+                    }
+                }
+            }
             //otherwise fall-through as USCRIPT_HAN and expect a combined Hant/Hans preview
         }
         return eScript;
