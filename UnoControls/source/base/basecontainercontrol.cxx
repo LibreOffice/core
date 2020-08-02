@@ -114,18 +114,18 @@ Any SAL_CALL BaseContainerControl::queryAggregation( const Type& aType )
 void SAL_CALL BaseContainerControl::createPeer( const   Reference< XToolkit >&      xToolkit    ,
                                                 const   Reference< XWindowPeer >&   xParent     )
 {
-    if ( !getPeer().is() )
+    if ( getPeer().is() )
+        return;
+
+    // create own peer
+    BaseControl::createPeer( xToolkit, xParent );
+
+    // create peers at all children
+    Sequence< Reference< XControl > >   seqControlList  = getControls();
+
+    for ( auto& rxControl : seqControlList )
     {
-        // create own peer
-        BaseControl::createPeer( xToolkit, xParent );
-
-        // create peers at all children
-        Sequence< Reference< XControl > >   seqControlList  = getControls();
-
-        for ( auto& rxControl : seqControlList )
-        {
-            rxControl->createPeer( xToolkit, getPeer() );
-        }
+        rxControl->createPeer( xToolkit, getPeer() );
     }
 }
 
@@ -221,22 +221,22 @@ void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Re
     // Send message to all listener
     OInterfaceContainerHelper* pInterfaceContainer = m_aListeners.getContainer( cppu::UnoType<XContainerListener>::get());
 
-    if (pInterfaceContainer)
+    if (!pInterfaceContainer)
+        return;
+
+    // Build event
+    ContainerEvent  aEvent;
+
+    aEvent.Source   = *this;
+    aEvent.Element <<= rControl;
+
+    // Get all listener
+    OInterfaceIteratorHelper    aIterator (*pInterfaceContainer);
+
+    // Send event
+    while ( aIterator.hasMoreElements() )
     {
-        // Build event
-        ContainerEvent  aEvent;
-
-        aEvent.Source   = *this;
-        aEvent.Element <<= rControl;
-
-        // Get all listener
-        OInterfaceIteratorHelper    aIterator (*pInterfaceContainer);
-
-        // Send event
-        while ( aIterator.hasMoreElements() )
-        {
-            static_cast<XContainerListener*>(aIterator.next())->elementInserted (aEvent);
-        }
+        static_cast<XContainerListener*>(aIterator.next())->elementInserted (aEvent);
     }
 }
 
@@ -244,46 +244,46 @@ void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Re
 
 void SAL_CALL BaseContainerControl::removeControl ( const Reference< XControl > & rControl )
 {
-    if ( rControl.is() )
+    if ( !rControl.is() )
+        return;
+
+    // Ready for multithreading
+    MutexGuard aGuard (m_aMutex);
+
+    size_t nControls = maControlInfoList.size();
+
+    for ( size_t n = 0; n < nControls; n++ )
     {
-        // Ready for multithreading
-        MutexGuard aGuard (m_aMutex);
-
-        size_t nControls = maControlInfoList.size();
-
-        for ( size_t n = 0; n < nControls; n++ )
+        // Search for right control
+        IMPL_ControlInfo* pControl = maControlInfoList[ n ].get();
+        if ( rControl == pControl->xControl )
         {
-            // Search for right control
-            IMPL_ControlInfo* pControl = maControlInfoList[ n ].get();
-            if ( rControl == pControl->xControl )
+            //.is it found ... remove listener from control
+            pControl->xControl->removeEventListener (static_cast< XEventListener* >( static_cast< XWindowListener* >( this ) ));
+            pControl->xControl->setContext          ( Reference< XInterface >  ()   );
+
+            // ... free memory
+            maControlInfoList.erase(maControlInfoList.begin() + n);
+
+            // Send message to all other listener
+            OInterfaceContainerHelper * pInterfaceContainer = m_aListeners.getContainer( cppu::UnoType<XContainerListener>::get());
+
+            if (pInterfaceContainer)
             {
-                //.is it found ... remove listener from control
-                pControl->xControl->removeEventListener (static_cast< XEventListener* >( static_cast< XWindowListener* >( this ) ));
-                pControl->xControl->setContext          ( Reference< XInterface >  ()   );
+                ContainerEvent  aEvent;
 
-                // ... free memory
-                maControlInfoList.erase(maControlInfoList.begin() + n);
+                aEvent.Source    = *this;
+                aEvent.Element <<= rControl;
 
-                // Send message to all other listener
-                OInterfaceContainerHelper * pInterfaceContainer = m_aListeners.getContainer( cppu::UnoType<XContainerListener>::get());
+                OInterfaceIteratorHelper    aIterator (*pInterfaceContainer);
 
-                if (pInterfaceContainer)
+                while ( aIterator.hasMoreElements() )
                 {
-                    ContainerEvent  aEvent;
-
-                    aEvent.Source    = *this;
-                    aEvent.Element <<= rControl;
-
-                    OInterfaceIteratorHelper    aIterator (*pInterfaceContainer);
-
-                    while ( aIterator.hasMoreElements() )
-                    {
-                        static_cast<XContainerListener*>(aIterator.next())->elementRemoved (aEvent);
-                    }
+                    static_cast<XContainerListener*>(aIterator.next())->elementRemoved (aEvent);
                 }
-                // Break "for" !
-                break;
             }
+            // Break "for" !
+            break;
         }
     }
 }

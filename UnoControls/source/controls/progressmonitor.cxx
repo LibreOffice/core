@@ -238,35 +238,35 @@ void SAL_CALL ProgressMonitor::removeText ( const OUString& rTopic, sal_Bool bbe
     // Search the topic ...
     IMPL_TextlistItem* pSearchItem = impl_searchTopic ( rTopic, bbeforeProgress );
 
-    if ( pSearchItem != nullptr )
+    if ( pSearchItem == nullptr )
+        return;
+
+    // Ready for multithreading
+    MutexGuard aGuard ( m_aMutex );
+
+    // ... delete item from right list ...
+    if ( bbeforeProgress )
     {
-        // Ready for multithreading
-        MutexGuard aGuard ( m_aMutex );
-
-        // ... delete item from right list ...
-        if ( bbeforeProgress )
-        {
-            auto itr = std::find_if( maTextlist_Top.begin(), maTextlist_Top.end(),
-                            [&] (std::unique_ptr<IMPL_TextlistItem> const &p)
-                            { return p.get() == pSearchItem; } );
-            if (itr != maTextlist_Top.end())
-                maTextlist_Top.erase(itr);
-        }
-        else
-        {
-            auto itr = std::find_if( maTextlist_Bottom.begin(), maTextlist_Bottom.end(),
-                            [&] (std::unique_ptr<IMPL_TextlistItem> const &p)
-                            { return p.get() == pSearchItem; } );
-            if (itr != maTextlist_Bottom.end())
-                maTextlist_Bottom.erase(itr);
-        }
-
-        delete pSearchItem;
-
-        // ... and update window.
-        impl_rebuildFixedText   ();
-        impl_recalcLayout       ();
+        auto itr = std::find_if( maTextlist_Top.begin(), maTextlist_Top.end(),
+                        [&] (std::unique_ptr<IMPL_TextlistItem> const &p)
+                        { return p.get() == pSearchItem; } );
+        if (itr != maTextlist_Top.end())
+            maTextlist_Top.erase(itr);
     }
+    else
+    {
+        auto itr = std::find_if( maTextlist_Bottom.begin(), maTextlist_Bottom.end(),
+                        [&] (std::unique_ptr<IMPL_TextlistItem> const &p)
+                        { return p.get() == pSearchItem; } );
+        if (itr != maTextlist_Bottom.end())
+            maTextlist_Bottom.erase(itr);
+    }
+
+    delete pSearchItem;
+
+    // ... and update window.
+    impl_rebuildFixedText   ();
+    impl_recalcLayout       ();
 }
 
 //  XProgressMonitor
@@ -533,27 +533,27 @@ void SAL_CALL ProgressMonitor::setPosSize ( sal_Int32 nX, sal_Int32 nY, sal_Int3
 //  protected method
 void ProgressMonitor::impl_paint ( sal_Int32 nX, sal_Int32 nY, const css::uno::Reference< XGraphics > & rGraphics )
 {
-    if (rGraphics.is())
-    {
-        // Ready for multithreading
-        MutexGuard aGuard ( m_aMutex );
+    if (!rGraphics.is())
+        return;
 
-        // paint shadowed border around the progressmonitor
-        rGraphics->setLineColor ( PROGRESSMONITOR_LINECOLOR_SHADOW                                                              );
-        rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, impl_getWidth()-1, nY                  );
-        rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, nX               , impl_getHeight()-1  );
+    // Ready for multithreading
+    MutexGuard aGuard ( m_aMutex );
 
-        rGraphics->setLineColor ( PROGRESSMONITOR_LINECOLOR_BRIGHT                          );
-        rGraphics->drawLine     ( nX, nY, impl_getWidth(), nY               );
-        rGraphics->drawLine     ( nX, nY, nX             , impl_getHeight() );
+    // paint shadowed border around the progressmonitor
+    rGraphics->setLineColor ( PROGRESSMONITOR_LINECOLOR_SHADOW                                                              );
+    rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, impl_getWidth()-1, nY                  );
+    rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, nX               , impl_getHeight()-1  );
 
-        // Paint 3D-line
-        rGraphics->setLineColor ( PROGRESSMONITOR_LINECOLOR_SHADOW  );
-        rGraphics->drawLine     ( m_a3DLine.X, m_a3DLine.Y, m_a3DLine.X+m_a3DLine.Width, m_a3DLine.Y );
+    rGraphics->setLineColor ( PROGRESSMONITOR_LINECOLOR_BRIGHT                          );
+    rGraphics->drawLine     ( nX, nY, impl_getWidth(), nY               );
+    rGraphics->drawLine     ( nX, nY, nX             , impl_getHeight() );
 
-        rGraphics->setLineColor ( PROGRESSMONITOR_LINECOLOR_BRIGHT  );
-        rGraphics->drawLine     ( m_a3DLine.X, m_a3DLine.Y+1, m_a3DLine.X+m_a3DLine.Width, m_a3DLine.Y+1 );
-    }
+    // Paint 3D-line
+    rGraphics->setLineColor ( PROGRESSMONITOR_LINECOLOR_SHADOW  );
+    rGraphics->drawLine     ( m_a3DLine.X, m_a3DLine.Y, m_a3DLine.X+m_a3DLine.Width, m_a3DLine.Y );
+
+    rGraphics->setLineColor ( PROGRESSMONITOR_LINECOLOR_BRIGHT  );
+    rGraphics->drawLine     ( m_a3DLine.X, m_a3DLine.Y+1, m_a3DLine.X+m_a3DLine.Width, m_a3DLine.Y+1 );
 }
 
 //  private method
@@ -761,19 +761,19 @@ void ProgressMonitor::impl_rebuildFixedText ()
     }
 
     // Rebuild right site of text
-    if (m_xText_Bottom.is())
+    if (!m_xText_Bottom.is())
+        return;
+
+    OUStringBuffer aCollectString;
+
+    // Collect all topics from list and format text.
+    // "\n" MUST BE at the end of line!!! => Else ... topic and his text are not in the same line!!!
+    for (auto const & pSearchItem : maTextlist_Bottom)
     {
-        OUStringBuffer aCollectString;
-
-        // Collect all topics from list and format text.
-        // "\n" MUST BE at the end of line!!! => Else ... topic and his text are not in the same line!!!
-        for (auto const & pSearchItem : maTextlist_Bottom)
-        {
-            aCollectString.append(pSearchItem->sText).append("\n");
-        }
-
-        m_xText_Bottom->setText ( aCollectString.makeStringAndClear() );
+        aCollectString.append(pSearchItem->sText).append("\n");
     }
+
+    m_xText_Bottom->setText ( aCollectString.makeStringAndClear() );
 }
 
 //  private method

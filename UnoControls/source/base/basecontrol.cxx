@@ -261,54 +261,54 @@ void SAL_CALL BaseControl::createPeer(  const   Reference< XToolkit >&      xToo
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
 
-    if ( !m_xPeer.is() )
+    if ( m_xPeer.is() )
+        return;
+
+    // use method "BaseControl::getWindowDescriptor()" to change window attributes!
+    WindowDescriptor aDescriptor = impl_getWindowDescriptor( xParentPeer );
+
+    if ( m_bVisible )
     {
-        // use method "BaseControl::getWindowDescriptor()" to change window attributes!
-        WindowDescriptor aDescriptor = impl_getWindowDescriptor( xParentPeer );
-
-        if ( m_bVisible )
-        {
-            aDescriptor.WindowAttributes |= WindowAttribute::SHOW;
-        }
-
-        // very slow under remote conditions!
-        // create the window on the server
-        Reference< XToolkit > xLocalToolkit = xToolkit;
-        if ( !xLocalToolkit.is() )
-        {
-            // but first create well known toolkit, if it not exist
-            xLocalToolkit.set( Toolkit::create(m_xComponentContext), UNO_QUERY_THROW );
-        }
-        m_xPeer         = xLocalToolkit->createWindow( aDescriptor );
-        m_xPeerWindow.set( m_xPeer, UNO_QUERY );
-
-        if ( m_xPeerWindow.is() )
-        {
-            if ( m_xMultiplexer.is() )
-            {
-                m_xMultiplexer->setPeer( m_xPeerWindow );
-            }
-
-            // create new reference to xgraphics for painting on a peer
-            // and add a paint listener
-            Reference< XDevice > xDevice( m_xPeerWindow, UNO_QUERY );
-
-            if ( xDevice.is() )
-            {
-                m_xGraphicsPeer = xDevice->createGraphics();
-            }
-
-            if ( m_xGraphicsPeer.is() )
-            {
-                addPaintListener( this );
-                addWindowListener( this );
-            }
-
-            m_xPeerWindow->setPosSize(  m_nX, m_nY, m_nWidth, m_nHeight, PosSize::POSSIZE   );
-            m_xPeerWindow->setEnable(   m_bEnable                                           );
-            m_xPeerWindow->setVisible(  m_bVisible && !m_bInDesignMode                      );
-        }
+        aDescriptor.WindowAttributes |= WindowAttribute::SHOW;
     }
+
+    // very slow under remote conditions!
+    // create the window on the server
+    Reference< XToolkit > xLocalToolkit = xToolkit;
+    if ( !xLocalToolkit.is() )
+    {
+        // but first create well known toolkit, if it not exist
+        xLocalToolkit.set( Toolkit::create(m_xComponentContext), UNO_QUERY_THROW );
+    }
+    m_xPeer         = xLocalToolkit->createWindow( aDescriptor );
+    m_xPeerWindow.set( m_xPeer, UNO_QUERY );
+
+    if ( !m_xPeerWindow.is() )
+        return;
+
+    if ( m_xMultiplexer.is() )
+    {
+        m_xMultiplexer->setPeer( m_xPeerWindow );
+    }
+
+    // create new reference to xgraphics for painting on a peer
+    // and add a paint listener
+    Reference< XDevice > xDevice( m_xPeerWindow, UNO_QUERY );
+
+    if ( xDevice.is() )
+    {
+        m_xGraphicsPeer = xDevice->createGraphics();
+    }
+
+    if ( m_xGraphicsPeer.is() )
+    {
+        addPaintListener( this );
+        addWindowListener( this );
+    }
+
+    m_xPeerWindow->setPosSize(  m_nX, m_nY, m_nWidth, m_nHeight, PosSize::POSSIZE   );
+    m_xPeerWindow->setEnable(   m_bEnable                                           );
+    m_xPeerWindow->setVisible(  m_bVisible && !m_bInDesignMode                      );
 }
 
 //  XControl
