@@ -85,18 +85,18 @@ ScVbaUserForm::Show(  )
         aRet = m_xDialog->execute();
     }
     SAL_INFO("vbahelper", "ScVbaUserForm::Show() execute returned " << aRet);
-    if ( mbDispose )
+    if ( !mbDispose )
+        return;
+
+    try
     {
-        try
-        {
-            uno::Reference< lang::XComponent > xComp( m_xDialog, uno::UNO_QUERY_THROW );
-            m_xDialog = nullptr;
-            xComp->dispose();
-            mbDispose = false;
-        }
-        catch( uno::Exception& )
-        {
-        }
+        uno::Reference< lang::XComponent > xComp( m_xDialog, uno::UNO_QUERY_THROW );
+        m_xDialog = nullptr;
+        xComp->dispose();
+        mbDispose = false;
+    }
+    catch( uno::Exception& )
+    {
     }
 }
 
