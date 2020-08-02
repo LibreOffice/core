@@ -28,7 +28,7 @@
 #include <unointerfaceproxy.hxx>
 #include <vtables.hxx>
 
-#include "msci.hxx"
+#include <msvc/except.hxx>
 
 using namespace ::com::sun::star;
 
@@ -259,7 +259,7 @@ void cpp_call(
             (sal_Int32 *)pCppStackStart,
             (pCppStack - pCppStackStart) / sizeof(sal_Int32) );
     }
-    __except (CPPU_CURRENT_NAMESPACE::msci_filterCppException(
+    __except (msvc_filterCppException(
                   GetExceptionInformation(),
                   *ppUnoExc, pThis->getBridge()->getCpp2Uno() ))
    {

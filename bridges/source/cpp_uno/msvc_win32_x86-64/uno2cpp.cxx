@@ -31,7 +31,7 @@
 #include <unointerfaceproxy.hxx>
 #include <vtables.hxx>
 
-#include "mscx.hxx"
+#include <msvc/except.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
@@ -221,7 +221,7 @@ bool cpp_call(
                           aCppArgs[24].i, aCppArgs[25].i, aCppArgs[26].i, aCppArgs[27].i,
                           aCppArgs[28].i, aCppArgs[29].i, aCppArgs[30].i, aCppArgs[31].i );
     }
-    __except (CPPU_CURRENT_NAMESPACE::mscx_filterCppException(
+    __except (msvc_filterCppException(
                   GetExceptionInformation(),
                   *ppUnoExc, pThis->getBridge()->getCpp2Uno() ))
    {

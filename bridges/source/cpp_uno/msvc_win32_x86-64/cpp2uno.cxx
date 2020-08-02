@@ -31,7 +31,7 @@
 #include <vtablefactory.hxx>
 
 #include "call.hxx"
-#include "mscx.hxx"
+#include <msvc/amd64.hxx>
 
 using namespace ::com::sun::star;
 
@@ -154,7 +154,7 @@ static typelib_TypeClass cpp2uno_call(
         if (pReturnTD)
             TYPELIB_DANGER_RELEASE(pReturnTD);
 
-        CPPU_CURRENT_NAMESPACE::mscx_raiseException(
+        msvc_raiseException(
             &aUnoExc, pThis->getBridge()->getUno2Cpp()); // has to destruct the any
 
         // is here for dummy
@@ -341,6 +341,7 @@ extern "C" typelib_TypeClass cpp_vtable_call(
 }
 
 int const codeSnippetSize = 48;
+typedef enum { REGPARAM_INT, REGPARAM_FLT } RegParamKind;
 
 extern "C" char privateSnippetExecutor;
 
@@ -352,7 +353,7 @@ extern "C" char privateSnippetExecutor;
 
 static unsigned char * codeSnippet(
     unsigned char * code,
-    CPPU_CURRENT_NAMESPACE::RegParamKind param_kind[4],
+    RegParamKind param_kind[4],
     sal_Int32 nFunctionIndex,
     sal_Int32 nVtableOffset )
 {
@@ -360,7 +361,7 @@ static unsigned char * codeSnippet(
     unsigned char *p = code;
 
     // Spill parameters
-    if ( param_kind[0] == CPPU_CURRENT_NAMESPACE::REGPARAM_INT )
+    if (param_kind[0] == REGPARAM_INT)
     {
         // mov qword ptr 8[rsp], rcx
         *p++ = 0x48; *p++ = 0x89; *p++ = 0x4C; *p++ = 0x24; *p++ = 0x08;
@@ -370,7 +371,7 @@ static unsigned char * codeSnippet(
         // movsd qword ptr 8[rsp], xmm0
         *p++ = 0xF2; *p++ = 0x0F; *p++ = 0x11; *p++ = 0x44; *p++ = 0x24; *p++ = 0x08;
     }
-    if ( param_kind[1] == CPPU_CURRENT_NAMESPACE::REGPARAM_INT )
+    if ( param_kind[1] == REGPARAM_INT )
     {
         // mov qword ptr 16[rsp], rdx
         *p++ = 0x48; *p++ = 0x89; *p++ = 0x54; *p++ = 0x24; *p++ = 0x10;
@@ -380,7 +381,7 @@ static unsigned char * codeSnippet(
         // movsd qword ptr 16[rsp], xmm1
         *p++ = 0xF2; *p++ = 0x0F; *p++ = 0x11; *p++ = 0x4C; *p++ = 0x24; *p++ = 0x10;
     }
-    if ( param_kind[2] == CPPU_CURRENT_NAMESPACE::REGPARAM_INT )
+    if ( param_kind[2] == REGPARAM_INT )
     {
         // mov qword ptr 24[rsp], r8
         *p++ = 0x4C; *p++ = 0x89; *p++ = 0x44; *p++ = 0x24; *p++ = 0x18;
@@ -390,7 +391,7 @@ static unsigned char * codeSnippet(
         // movsd qword ptr 24[rsp], xmm2
         *p++ = 0xF2; *p++ = 0x0F; *p++ = 0x11; *p++ = 0x54; *p++ = 0x24; *p++ = 0x18;
     }
-    if ( param_kind[3] == CPPU_CURRENT_NAMESPACE::REGPARAM_INT )
+    if ( param_kind[3] == REGPARAM_INT )
     {
         // mov qword ptr 32[rsp], r9
         *p++ = 0x4C;*p++ = 0x89; *p++ = 0x4C; *p++ = 0x24; *p++ = 0x20;
@@ -443,8 +444,7 @@ bridges::cpp_uno::shared::VtableFactory::initializeBlock(
         type_info * rtti;
         Rtti():
             n0(0), n1(0), n2(0),
-            rtti(CPPU_CURRENT_NAMESPACE::mscx_getRTTI(
-                     "com.sun.star.uno.XInterface"))
+            rtti(RTTInfos::get("com.sun.star.uno.XInterface"))
         {}
     };
     static Rtti rtti;
@@ -471,11 +471,11 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
         TYPELIB_DANGER_GET( &pTD, type->ppMembers[ member ] );
         assert(pTD);
 
-        CPPU_CURRENT_NAMESPACE::RegParamKind param_kind[4];
+        RegParamKind param_kind[4];
         int nr = 0;
 
         for (int i = 0; i < 4; ++i)
-            param_kind[i] = CPPU_CURRENT_NAMESPACE::REGPARAM_INT;
+            param_kind[i] = REGPARAM_INT;
 
         // 'this'
         ++nr;
@@ -498,7 +498,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                 // Setter
                 if ( pAttrTD->eTypeClass == typelib_TypeClass_FLOAT ||
                      pAttrTD->eTypeClass == typelib_TypeClass_DOUBLE )
-                    param_kind[nr++] = CPPU_CURRENT_NAMESPACE::REGPARAM_FLT;
+                    param_kind[nr++] = REGPARAM_FLT;
 
                 TYPELIB_DANGER_RELEASE( pAttrTD );
 
@@ -530,7 +530,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
 
                 if ( pParamTD->eTypeClass == typelib_TypeClass_FLOAT ||
                      pParamTD->eTypeClass == typelib_TypeClass_DOUBLE )
-                    param_kind[nr] = CPPU_CURRENT_NAMESPACE::REGPARAM_FLT;
+                    param_kind[nr] = REGPARAM_FLT;
 
                 TYPELIB_DANGER_RELEASE( pParamTD );
             }

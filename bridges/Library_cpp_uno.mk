@@ -271,6 +271,12 @@ $(eval $(call gb_Library_add_exception_objects,$(gb_CPPU_ENV)_uno,\
 			bridges/source/cpp_uno/shared/vtables \
 	))
 
+ifeq ($(COM),MSC)
+$(eval $(call gb_Library_add_exception_objects,$(gb_CPPU_ENV)_uno,\
+    bridges/source/cpp_uno/msvc_shared/except \
+))
+endif
+
 $(eval $(call gb_Library_add_cxxobjects,$(gb_CPPU_ENV)_uno,\
 			bridges/source/cpp_uno/shared/cppinterfaceproxy \
 			, $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
