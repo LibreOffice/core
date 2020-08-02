@@ -348,25 +348,25 @@ void OOXMLStreamImpl::init()
     bool bFound = lcl_getTarget(mxRelationshipAccess,
                                 mnStreamType, msId, msTarget);
 
-    if (bFound)
+    if (!bFound)
+        return;
+
+    sal_Int32 nLastIndex = msTarget.lastIndexOf('/');
+    if (nLastIndex >= 0)
+        msPath = msTarget.copy(0, nLastIndex + 1);
+
+    uno::Reference<embed::XHierarchicalStorageAccess>
+        xHierarchicalStorageAccess(mxStorage, uno::UNO_QUERY);
+
+    if (xHierarchicalStorageAccess.is())
     {
-        sal_Int32 nLastIndex = msTarget.lastIndexOf('/');
-        if (nLastIndex >= 0)
-            msPath = msTarget.copy(0, nLastIndex + 1);
-
-        uno::Reference<embed::XHierarchicalStorageAccess>
-            xHierarchicalStorageAccess(mxStorage, uno::UNO_QUERY);
-
-        if (xHierarchicalStorageAccess.is())
-        {
-            uno::Any aAny(xHierarchicalStorageAccess->
-                          openStreamElementByHierarchicalName
-                          (msTarget, embed::ElementModes::SEEKABLEREAD));
-            aAny >>= mxDocumentStream;
-            // Non-cached ID lookup works by accessing mxDocumentStream as an embed::XRelationshipAccess.
-            // So when it changes, we should empty the cache.
-            maIdCache.clear();
-        }
+        uno::Any aAny(xHierarchicalStorageAccess->
+                      openStreamElementByHierarchicalName
+                      (msTarget, embed::ElementModes::SEEKABLEREAD));
+        aAny >>= mxDocumentStream;
+        // Non-cached ID lookup works by accessing mxDocumentStream as an embed::XRelationshipAccess.
+        // So when it changes, we should empty the cache.
+        maIdCache.clear();
     }
 }
 

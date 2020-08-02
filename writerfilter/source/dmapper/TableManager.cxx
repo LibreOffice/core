@@ -328,27 +328,27 @@ void TableManager::endParagraphGroup()
 
     mnTableDepth = mnTableDepthNew;
 
-    if (mnTableDepth > 0)
+    if (mnTableDepth <= 0)
+        return;
+
+    if (isRowEnd())
     {
-        if (isRowEnd())
-        {
-            endOfRowAction();
-            mTableDataStack.top()->endRow(getRowProps());
-            mState.resetRowProps();
-        }
-
-        else if (isInCell())
-        {
-            ensureOpenCell(getCellProps());
-
-            if (mState.isCellEnd())
-            {
-                endOfCellAction();
-                closeCell(getHandle());
-            }
-        }
-        mState.resetCellProps();
+        endOfRowAction();
+        mTableDataStack.top()->endRow(getRowProps());
+        mState.resetRowProps();
     }
+
+    else if (isInCell())
+    {
+        ensureOpenCell(getCellProps());
+
+        if (mState.isCellEnd())
+        {
+            endOfCellAction();
+            closeCell(getHandle());
+        }
+    }
+    mState.resetCellProps();
 }
 
 void TableManager::startParagraphGroup()

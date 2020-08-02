@@ -381,25 +381,25 @@ void RTFDocumentImpl::outputSettingsTable()
 
 void RTFDocumentImpl::checkFirstRun()
 {
-    if (m_bFirstRun)
-    {
-        outputSettingsTable();
-        // start initial paragraph
-        m_bFirstRun = false;
-        assert(!m_bNeedSect || m_bFirstRunException);
-        setNeedSect(true); // first call that succeeds
+    if (!m_bFirstRun)
+        return;
 
-        // set the requested default font, if there are none
-        RTFValue::Pointer_t pFont
-            = getNestedAttribute(m_aDefaultState.getCharacterSprms(),
-                                 NS_ooxml::LN_EG_RPrBase_rFonts, NS_ooxml::LN_CT_Fonts_ascii);
-        RTFValue::Pointer_t pCurrentFont
-            = getNestedAttribute(m_aStates.top().getCharacterSprms(),
-                                 NS_ooxml::LN_EG_RPrBase_rFonts, NS_ooxml::LN_CT_Fonts_ascii);
-        if (pFont && !pCurrentFont)
-            putNestedAttribute(m_aStates.top().getCharacterSprms(), NS_ooxml::LN_EG_RPrBase_rFonts,
-                               NS_ooxml::LN_CT_Fonts_ascii, pFont);
-    }
+    outputSettingsTable();
+    // start initial paragraph
+    m_bFirstRun = false;
+    assert(!m_bNeedSect || m_bFirstRunException);
+    setNeedSect(true); // first call that succeeds
+
+    // set the requested default font, if there are none
+    RTFValue::Pointer_t pFont
+        = getNestedAttribute(m_aDefaultState.getCharacterSprms(), NS_ooxml::LN_EG_RPrBase_rFonts,
+                             NS_ooxml::LN_CT_Fonts_ascii);
+    RTFValue::Pointer_t pCurrentFont
+        = getNestedAttribute(m_aStates.top().getCharacterSprms(), NS_ooxml::LN_EG_RPrBase_rFonts,
+                             NS_ooxml::LN_CT_Fonts_ascii);
+    if (pFont && !pCurrentFont)
+        putNestedAttribute(m_aStates.top().getCharacterSprms(), NS_ooxml::LN_EG_RPrBase_rFonts,
+                           NS_ooxml::LN_CT_Fonts_ascii, pFont);
 }
 
 void RTFDocumentImpl::setNeedPar(bool bNeedPar) { m_bNeedPar = bNeedPar; }
@@ -540,45 +540,45 @@ RTFDocumentImpl::getProperties(const RTFSprms& rAttributes, RTFSprms const& rSpr
 
 void RTFDocumentImpl::checkNeedPap()
 {
-    if (m_bNeedPap)
+    if (!m_bNeedPap)
+        return;
+
+    m_bNeedPap = false; // reset early, so we can avoid recursion when calling ourselves
+
+    if (m_aStates.empty())
+        return;
+
+    if (!m_aStates.top().getCurrentBuffer())
     {
-        m_bNeedPap = false; // reset early, so we can avoid recursion when calling ourselves
+        writerfilter::Reference<Properties>::Pointer_t const pParagraphProperties(getProperties(
+            m_aStates.top().getParagraphAttributes(), m_aStates.top().getParagraphSprms(),
+            NS_ooxml::LN_Value_ST_StyleType_paragraph));
 
-        if (m_aStates.empty())
-            return;
-
-        if (!m_aStates.top().getCurrentBuffer())
+        // Writer will ignore a page break before a text frame, so guard it with empty paragraphs
+        bool hasBreakBeforeFrame
+            = m_aStates.top().getFrame().hasProperties()
+              && m_aStates.top().getParagraphSprms().find(NS_ooxml::LN_CT_PPrBase_pageBreakBefore);
+        if (hasBreakBeforeFrame)
         {
-            writerfilter::Reference<Properties>::Pointer_t const pParagraphProperties(getProperties(
-                m_aStates.top().getParagraphAttributes(), m_aStates.top().getParagraphSprms(),
-                NS_ooxml::LN_Value_ST_StyleType_paragraph));
-
-            // Writer will ignore a page break before a text frame, so guard it with empty paragraphs
-            bool hasBreakBeforeFrame = m_aStates.top().getFrame().hasProperties()
-                                       && m_aStates.top().getParagraphSprms().find(
-                                              NS_ooxml::LN_CT_PPrBase_pageBreakBefore);
-            if (hasBreakBeforeFrame)
-            {
-                dispatchSymbol(RTF_PAR);
-                m_bNeedPap = false;
-            }
-            Mapper().props(pParagraphProperties);
-            if (hasBreakBeforeFrame)
-                dispatchSymbol(RTF_PAR);
-
-            if (m_aStates.top().getFrame().hasProperties())
-            {
-                writerfilter::Reference<Properties>::Pointer_t const pFrameProperties(
-                    new RTFReferenceProperties(RTFSprms(), m_aStates.top().getFrame().getSprms()));
-                Mapper().props(pFrameProperties);
-            }
+            dispatchSymbol(RTF_PAR);
+            m_bNeedPap = false;
         }
-        else
+        Mapper().props(pParagraphProperties);
+        if (hasBreakBeforeFrame)
+            dispatchSymbol(RTF_PAR);
+
+        if (m_aStates.top().getFrame().hasProperties())
         {
-            auto pValue = new RTFValue(m_aStates.top().getParagraphAttributes(),
-                                       m_aStates.top().getParagraphSprms());
-            bufferProperties(*m_aStates.top().getCurrentBuffer(), pValue, nullptr);
+            writerfilter::Reference<Properties>::Pointer_t const pFrameProperties(
+                new RTFReferenceProperties(RTFSprms(), m_aStates.top().getFrame().getSprms()));
+            Mapper().props(pFrameProperties);
         }
+    }
+    else
+    {
+        auto pValue = new RTFValue(m_aStates.top().getParagraphAttributes(),
+                                   m_aStates.top().getParagraphSprms());
+        bufferProperties(*m_aStates.top().getCurrentBuffer(), pValue, nullptr);
     }
 }
 
