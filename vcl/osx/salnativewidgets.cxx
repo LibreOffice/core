@@ -233,7 +233,7 @@ bool AquaSalGraphics::hitTestNativeControl(ControlType nType, ControlPart nPart,
 UInt32 AquaSalGraphics::getState(ControlState nState)
 {
 
-    // there are non key windows which are childs of key windows, e.g. autofilter configuration dialog or sidebar dropdown dialogs.
+    // there are non key windows which are children of key windows, e.g. autofilter configuration dialog or sidebar dropdown dialogs.
     // To handle these windows correctly, parent frame's key window state is considered here additionally.
 
     const bool bDrawActive = mpFrame == nullptr || [mpFrame->getNSWindow() isKeyWindow]
