@@ -155,6 +155,10 @@ interface Application
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
+    SID_TOOLBAR_MODE_UI
+    [
+        ExecMethod = MiscExec_Impl ;
+    ]
     SID_AVAILABLE_TOOLBARS
     [
         ExecMethod = MiscExec_Impl ;
