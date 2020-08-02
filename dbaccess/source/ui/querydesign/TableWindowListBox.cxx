@@ -37,25 +37,30 @@ using namespace ::com::sun::star::datatransfer;
 
 OJoinExchangeData::OJoinExchangeData(OTableWindowListBox* pBox)
     : pListBox(pBox)
-    , pEntry(pBox->FirstSelected())
-{ }
+    , nEntry(pBox->get_widget().get_selected_index())
+{
+}
 
 const sal_uLong SCROLLING_TIMESPAN = 500;
 const long LISTBOX_SCROLLING_AREA = 6;
+
 OTableWindowListBox::OTableWindowListBox( OTableWindow* pParent )
-    :SvTreeListBox( pParent, WB_HASBUTTONS | WB_BORDER)
-    ,m_aMousePos( Point(0,0) )
-    ,m_pTabWin( pParent )
-    ,m_nDropEvent(nullptr)
-    ,m_nUiEvent(nullptr)
-    ,m_bReallyScrolled( false )
+    : InterimItemWindow(pParent, "dbaccess/ui/tablelistbox.ui", "TableListBox")
+    , m_xTreeView(m_xBuilder->weld_tree_view("treeview"))
+    , m_xDragDropTargetHelper(new TableWindowListBoxHelper(*this, m_xTreeView->get_drop_target()))
+    , m_aMousePos( Point(0,0) )
+    , m_pTabWin( pParent )
+    , m_nDropEvent(nullptr)
+    , m_nUiEvent(nullptr)
+    , m_bReallyScrolled( false )
 {
     m_aScrollTimer.SetTimeout( SCROLLING_TIMESPAN );
-    SetDoubleClickHdl( LINK(this, OTableWindowListBox, OnDoubleClick) );
+    m_xTreeView->connect_row_activated(LINK(this, OTableWindowListBox, OnDoubleClick));
 
-    SetSelectionMode(SelectionMode::Single);
-
-    SetHighlightRange( );
+    m_xHelper.set(new OJoinExchObj);
+    rtl::Reference<TransferDataContainer> xHelper(m_xHelper.get());
+    m_xTreeView->enable_drag_source(xHelper, DND_ACTION_LINK);
+    m_xTreeView->connect_drag_begin(LINK(this, OTableWindowListBox, DragBeginHdl));
 }
 
 void OTableWindowListBox::dragFinished( )
@@ -82,14 +87,14 @@ void OTableWindowListBox::dispose()
     if( m_aScrollTimer.IsActive() )
         m_aScrollTimer.Stop();
     m_pTabWin.clear();
-    SvTreeListBox::dispose();
+    m_xDragDropTargetHelper.reset();
+    m_xTreeView.reset();
+    InterimItemWindow::dispose();
 }
 
-SvTreeListEntry* OTableWindowListBox::GetEntryFromText( const OUString& rEntryText )
+int OTableWindowListBox::GetEntryFromText( const OUString& rEntryText )
 {
     // iterate through the list
-    SvTreeList* pTreeList = GetModel();
-    SvTreeListEntry* pEntry = pTreeList->First();
     OJoinDesignView* pView = m_pTabWin->getDesignView();
     OJoinController& rController = pView->getController();
 
@@ -103,22 +108,20 @@ SvTreeListEntry* OTableWindowListBox::GetEntryFromText( const OUString& rEntryTe
             if(xMeta.is())
                 bCase = xMeta->supportsMixedCaseQuotedIdentifiers();
         }
-        while( pEntry )
+        for (int nEntry = 0, nCount = m_xTreeView->n_children(); nEntry < nCount; ++nEntry)
         {
-            if(bCase ? rEntryText == GetEntryText(pEntry) : rEntryText.equalsIgnoreAsciiCase(GetEntryText(pEntry)))
-            {
-                return pEntry;
-            }
-            pEntry = pTreeList->Next(pEntry);
+            if (bCase ? rEntryText == m_xTreeView->get_text(nEntry) : rEntryText.equalsIgnoreAsciiCase(m_xTreeView->get_text(nEntry)))
+                return nEntry;
         }
     }
     catch(SQLException&)
     {
     }
 
-    return nullptr;
+    return -1;
 }
 
+#if 0
 void OTableWindowListBox::NotifyScrolled()
 {
     m_bReallyScrolled = true;
@@ -168,9 +171,11 @@ bool OTableWindowListBox::PreNotify(NotifyEvent& rNEvt)
         return SvTreeListBox::PreNotify(rNEvt);
     return true;
 }
+#endif
 
 IMPL_LINK_NOARG( OTableWindowListBox, ScrollUpHdl, Timer*, void )
 {
+#if 0
     SvTreeListEntry* pEntry = GetEntry( m_aMousePos );
     if( !pEntry )
         return;
@@ -181,10 +186,12 @@ IMPL_LINK_NOARG( OTableWindowListBox, ScrollUpHdl, Timer*, void )
         pEntry = GetEntry( m_aMousePos );
         Select( pEntry );
     }
+#endif
 }
 
 IMPL_LINK_NOARG( OTableWindowListBox, ScrollDownHdl, Timer*, void )
 {
+#if 0
     SvTreeListEntry* pEntry = GetEntry( m_aMousePos );
     if( !pEntry )
         return;
@@ -195,42 +202,54 @@ IMPL_LINK_NOARG( OTableWindowListBox, ScrollDownHdl, Timer*, void )
         pEntry = GetEntry( m_aMousePos );
         Select( pEntry );
     }
+#endif
 }
 
-void OTableWindowListBox::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
+IMPL_LINK(OTableWindowListBox, DragBeginHdl, bool&, rUnsetDragIcon, bool)
 {
+    rUnsetDragIcon = false;
+    if (m_xTreeView->get_selected_index() == -1)
+    {
+        // no drag without a field
+        return true;
+    }
+
     OJoinTableView* pCont = m_pTabWin->getTableView();
     if (!pCont->getDesignView()->getController().isReadOnly() && pCont->getDesignView()->getController().isConnected())
     {
         // asterisk was not allowed to be copied to selection browsebox
-        bool bFirstNotAllowed = FirstSelected() == First() && m_pTabWin->GetData()->IsShowAll();
-        EndSelection();
+        bool bFirstNotAllowed = m_xTreeView->is_selected(0) && m_pTabWin->GetData()->IsShowAll();
+//TODO        EndSelection();
         // create a description of the source
         OJoinExchangeData jxdSource(this);
-        // put it into an exchange object
-        rtl::Reference<OJoinExchObj> pJoin = new OJoinExchObj(jxdSource,bFirstNotAllowed);
-        pJoin->StartDrag(this, DND_ACTION_LINK, this);
+        // update the exchange object
+        m_xHelper->setDescriptors(jxdSource, bFirstNotAllowed);
+
+        return false;
     }
+
+    return true;
 }
 
 sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
 {
     sal_Int8 nDND_Action = DND_ACTION_NONE;
     // check the format
-    if ( !OJoinExchObj::isFormatAvailable(GetDataFlavorExVector(),SotClipboardFormatId::SBA_TABID) // this means that the first entry is to be dragged
-        && OJoinExchObj::isFormatAvailable(GetDataFlavorExVector()) )
+    if ( !OJoinExchObj::isFormatAvailable(m_xDragDropTargetHelper->GetDataFlavorExVector(),SotClipboardFormatId::SBA_TABID) // this means that the first entry is to be dragged
+        && OJoinExchObj::isFormatAvailable(m_xDragDropTargetHelper->GetDataFlavorExVector()) )
     {   // don't drop into the window if it's the drag source itself
 
         // remove the selection if the dragging operation is leaving the window
         if (_rEvt.mbLeaving)
-            SelectAll(false);
+            m_xTreeView->unselect_all();
         else
         {
             // hit test
             m_aMousePos = _rEvt.maPosPixel;
             Size aOutputSize = GetOutputSizePixel();
-            SvTreeListEntry* pEntry = GetEntry( m_aMousePos );
-            if( !pEntry )
+
+            std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
+            if (!m_xTreeView->get_dest_row_at_pos(m_aMousePos, xEntry.get(), false))
                 return DND_ACTION_NONE;
 
             // Scrolling Areas
@@ -263,12 +282,11 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
             }
 
             // automatically select right entry when dragging
-            if ((FirstSelected() != pEntry) || NextSelected(FirstSelected()))
-                SelectAll(false);
-            Select(pEntry);
+            m_xTreeView->unselect_all();
+            m_xTreeView->select(*xEntry);
 
             // one cannot drop on the first (*) entry
-            if(!( m_pTabWin->GetData()->IsShowAll() && (pEntry==First()) ))
+            if(!( m_pTabWin->GetData()->IsShowAll() && (m_xTreeView->get_iter_index_in_parent(*xEntry) == 0) ))
                 nDND_Action = DND_ACTION_LINK;
         }
     }
@@ -318,37 +336,37 @@ sal_Int8 OTableWindowListBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 
 void OTableWindowListBox::LoseFocus()
 {
-    if(m_pTabWin)
+    if (m_pTabWin)
         m_pTabWin->setActive(false);
-    SvTreeListBox::LoseFocus();
+    InterimItemWindow::LoseFocus();
 }
 
 void OTableWindowListBox::GetFocus()
 {
-    if(m_pTabWin)
+    if (m_pTabWin)
         m_pTabWin->setActive();
 
-    if (GetCurEntry() != nullptr)
+    std::unique_ptr<weld::TreeIter> xCurrent = m_xTreeView->make_iterator();
+    if (m_xTreeView->get_cursor(xCurrent.get()))
     {
-        if ( GetSelectionCount() == 0 || GetCurEntry() != FirstSelected() )
-        {
-            if ( FirstSelected() )
-                Select(FirstSelected(), false);
-            Select(GetCurEntry());
-        }
-        else
-            ShowFocusRect(FirstSelected());
+        m_xTreeView->unselect_all();
+        m_xTreeView->select(*xCurrent);
     }
-    SvTreeListBox::GetFocus();
+
+    InterimItemWindow::GetFocus();
 }
 
-IMPL_LINK_NOARG( OTableWindowListBox, OnDoubleClick, SvTreeListBox *, bool )
+IMPL_LINK_NOARG(OTableWindowListBox, OnDoubleClick, weld::TreeView&, bool)
 {
     // tell my parent
     vcl::Window* pParent = Window::GetParent();
     OSL_ENSURE(pParent != nullptr, "OTableWindowListBox::OnDoubleClick : have no Parent !");
 
-    static_cast<OTableWindow*>(pParent)->OnEntryDoubleClicked(GetHdlEntry());
+    std::unique_ptr<weld::TreeIter> xCurrent = m_xTreeView->make_iterator();
+    if (!m_xTreeView->get_cursor(xCurrent.get()))
+        return false;
+
+    static_cast<OTableWindow*>(pParent)->OnEntryDoubleClicked(*xCurrent);
 
     return false;
 }
@@ -363,7 +381,7 @@ void OTableWindowListBox::Command(const CommandEvent& rEvt)
             break;
         }
         default:
-            SvTreeListBox::Command(rEvt);
+            InterimItemWindow::Command(rEvt);
     }
 }
 

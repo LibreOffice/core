@@ -528,8 +528,10 @@ void OQueryTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJ
     OQueryTableWindow* pDestWin = static_cast< OQueryTableWindow*>(jxdDest.pListBox->GetTabWin());
 
     OUString aSourceFieldName, aDestFieldName;
-    aSourceFieldName    = jxdSource.pListBox->GetEntryText(jxdSource.pEntry);
-    aDestFieldName      = jxdDest.pListBox->GetEntryText(jxdDest.pEntry);
+    weld::TreeView& rSourceTreeView = jxdSource.pListBox->get_widget();
+    aSourceFieldName    = rSourceTreeView.get_text(jxdSource.nEntry);
+    weld::TreeView& rDestTreeView = jxdDest.pListBox->get_widget();
+    aDestFieldName      = rDestTreeView.get_text(jxdDest.nEntry);
 
     OTableConnection* pConn = GetTabConn(pSourceWin,pDestWin,true);
     if ( !pConn )
@@ -541,9 +543,9 @@ void OQueryTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJ
 
         // Get name/position of both affected fields ...
         // Source
-        nSourceFieldIndex = jxdSource.pListBox->GetModel()->GetAbsPos(jxdSource.pEntry);
+        nSourceFieldIndex = jxdSource.nEntry;
         // Dest
-        nDestFieldIndex = jxdDest.pListBox->GetModel()->GetAbsPos(jxdDest.pEntry);
+        nDestFieldIndex = jxdDest.nEntry;
 
         // ... and set them
         xNewConnectionData->SetFieldIndex(JTCS_FROM, nSourceFieldIndex);

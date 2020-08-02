@@ -25,6 +25,7 @@
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <comphelper/sequence.hxx>
+#include <vcl/vclevent.hxx>
 
 namespace dbaui
 {

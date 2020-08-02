@@ -30,7 +30,7 @@ namespace dbaui
     // OJoinExchObj: Additional data to create Joins in the JoinShell
 
     typedef ::cppu::ImplHelper1< css::lang::XUnoTunnel > OJoinExchObj_Base;
-    class OJoinExchObj final : public TransferableHelper, public OJoinExchObj_Base
+    class OJoinExchObj final : public TransferDataContainer, public OJoinExchObj_Base
     {
         bool                m_bFirstEntry;
 
@@ -41,6 +41,8 @@ namespace dbaui
 
     public:
         OJoinExchObj(const OJoinExchangeData& jxdSource, bool _bFirstEntry);
+        void setDescriptors(const OJoinExchangeData& jxdSource, bool _bFirstEntry);
+        OJoinExchObj();
 
 
         // XInterface
@@ -61,8 +63,6 @@ namespace dbaui
         virtual void                AddSupportedFormats() override;
         virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
         virtual void                DragFinished( sal_Int8 nDropAction ) override;
-
-        using TransferableHelper::StartDrag;
     };
 }
 #endif

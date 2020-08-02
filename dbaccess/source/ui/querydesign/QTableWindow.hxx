@@ -51,7 +51,7 @@ namespace dbaui
 
     protected:
 
-        virtual void    OnEntryDoubleClicked(SvTreeListEntry* pEntry) override;
+        virtual void    OnEntryDoubleClicked(weld::TreeIter& rEntry) override;
             // is called from DoubleClickHdl of the ListBox
         /** delete the user data with the equal type as created within createUserData
             @param  _pUserData

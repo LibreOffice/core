@@ -178,8 +178,10 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
                                                                                    pDestWin->GetData());
 
     // the names of the affected fields
-    OUString sSourceFieldName = jxdSource.pListBox->GetEntryText(jxdSource.pEntry);
-    OUString sDestFieldName = jxdDest.pListBox->GetEntryText(jxdDest.pEntry);
+    weld::TreeView& rSourceTreeView = jxdSource.pListBox->get_widget();
+    OUString sSourceFieldName = rSourceTreeView.get_text(jxdSource.nEntry);
+    weld::TreeView& rDestTreeView = jxdDest.pListBox->get_widget();
+    OUString sDestFieldName = rDestTreeView.get_text(jxdDest.nEntry);
 
     // the number of PKey-Fields in the source
     const Reference< XNameAccess> xPrimaryKeyColumns = getPrimaryKeyColumns_throw(pSourceWin->GetData()->getTable());
