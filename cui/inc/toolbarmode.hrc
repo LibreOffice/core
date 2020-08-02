@@ -1,0 +1,37 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#pragma once
+
+#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+
+#include <rtl/ustring.hxx>
+#include <tuple>
+
+/*
+ Description, ui file name, preview file name
+*/
+const std::tuple<const char*, OUString, OUString> TOOLBARMODES_ARRAY[] =
+{
+    { NC_("RID_CUI_TOOLBARMODES", "Standard user interface with menu, toolbar, and collapsed sidebar. Intended to user who are familiar with the classic interface."), "Default", "default.png"},
+    { NC_("RID_CUI_TOOLBARMODES", "Standard user interface but with only one toolbar. Intended for use on small screens."), "Single", "single.png"},
+    { NC_("RID_CUI_TOOLBARMODES", "Standard user interface with expanded sidebar. Expert users who want to quickly change many different properties are advised to use this UI."), "Sidebar", "sidebar.png"},
+    { NC_("RID_CUI_TOOLBARMODES", "The Tabbed user interface is the most similar to the Ribbons used by Microsoft. It organize functions in tabs and makes the main menu obsolete."), "notebookbar.ui", "notebookbar.png"},
+    { NC_("RID_CUI_TOOLBARMODES", "The Tabbed Compact variant aims to be familiar with Microsoft's interface having at the same time a short interface for small screen sizes."), "notebookbar_compact.ui",  "notebookbar_compact.png"},
+    { NC_("RID_CUI_TOOLBARMODES", "The Groupedbar Compact variant provides access to functions in groups with most frequently used features in icons and less often used in a dropdown menu. The compact variant favors vertical size."), "notebookbar_groupedbar_compact.ui", "notebookbar_groupedbar_compact.png"},
+    { NC_("RID_CUI_TOOLBARMODES", "The Groupedbar interface provides access to functions in groups with most frequently used features in icons and less often used in a dropdown menu. The full variant favors functions and is slighly larger than other variants."), "notebookbar_groupedbar_full.ui", "notebookbar_groupedbar_full.png"},
+    { NC_("RID_CUI_TOOLBARMODES", "The Contextual Single interface shows functions in a single line toolbar with contextual depending content."), "notebookbar_single.ui", "notebookbar_single.png"},
+    { NC_("RID_CUI_TOOLBARMODES", "The Contextual Groups interface focus on beginners. It exposes to the most frequently used functions on groups with the core action as large icon and a couple of small additional features. All functions have a label. Depending on the context an additional section provides access to those functions."), "notebookbar_groups.ui", "notebookbar_groups.png"},
+};
+
+//hide experimental UIs
+constexpr int nContextSingle = 7;
+constexpr int nContextGroup = 8;
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
