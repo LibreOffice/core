@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af1bece4_1793ab91",
+        "filename": "include/sfx2/strings.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-08-02T09:40:13Z",
+      "side": 1,
+      "message": "Discussion on BZ",
+      "range": {
+        "startLine": 168,
+        "startChar": 88,
+        "endLine": 168,
+        "endChar": 121
+      },
+      "revId": "1e8621b666a4eba59db4f3fb03439829b199dbb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
