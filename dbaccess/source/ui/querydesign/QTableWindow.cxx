@@ -105,22 +105,20 @@ void OQueryTableWindow::deleteUserData(void*& _pUserData)
     _pUserData = nullptr;
 }
 
-void OQueryTableWindow::OnEntryDoubleClicked(SvTreeListEntry* pEntry)
+void OQueryTableWindow::OnEntryDoubleClicked(weld::TreeIter& rEntry)
 {
-    OSL_ENSURE(pEntry != nullptr, "OQueryTableWindow::OnEntryDoubleClicked : pEntry must not be NULL !");
-        // you could also scan that and then return, but like this it could possibly hint to faults at the caller
-
     if (getTableView()->getDesignView()->getController().isReadOnly())
         return;
 
-    OTableFieldInfo* pInf = static_cast<OTableFieldInfo*>(pEntry->GetUserData());
+    weld::TreeView& rTreeView = m_xListBox->get_widget();
+    OTableFieldInfo* pInf = reinterpret_cast<OTableFieldInfo*>(rTreeView.get_id(rEntry).toUInt64());
     OSL_ENSURE(pInf != nullptr, "OQueryTableWindow::OnEntryDoubleClicked : field doesn't have FieldInfo !");
 
     // build up DragInfo
-    OTableFieldDescRef aInfo = new OTableFieldDesc(GetTableName(), m_xListBox->GetEntryText(pEntry));
+    OTableFieldDescRef aInfo = new OTableFieldDesc(GetTableName(), rTreeView.get_text(rEntry));
     aInfo->SetTabWindow(this);
     aInfo->SetAlias(GetAliasName());
-    aInfo->SetFieldIndex(m_xListBox->GetModel()->GetAbsPos(pEntry));
+    aInfo->SetFieldIndex(rTreeView.get_iter_index_in_parent(rEntry));
     aInfo->SetDataType(pInf->GetDataType());
 
     // and insert corresponding field
@@ -135,29 +133,31 @@ bool OQueryTableWindow::ExistsField(const OUString& strFieldName, OTableFieldDes
     bool bExists = false;
     if(xConnection.is())
     {
-        SvTreeListEntry* pEntry = m_xListBox->First();
+        weld::TreeView& rTreeView = m_xListBox->get_widget();
+        std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator());
+        bool bEntry = rTreeView.get_iter_first(*xEntry);
         try
         {
             Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
             ::comphelper::UStringMixEqual bCase(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers());
 
-            while (pEntry)
+            while (bEntry)
             {
-                if (bCase(strFieldName,m_xListBox->GetEntryText(pEntry)))
+                if (bCase(strFieldName, rTreeView.get_text(*xEntry)))
                 {
-                    OTableFieldInfo* pInf = static_cast<OTableFieldInfo*>(pEntry->GetUserData());
+                    OTableFieldInfo* pInf = reinterpret_cast<OTableFieldInfo*>(rTreeView.get_id(*xEntry).toUInt64());
                     assert(pInf && "OQueryTableWindow::ExistsField : field doesn't have FieldInfo !");
 
                     rInfo->SetTabWindow(this);
                     rInfo->SetField(strFieldName);
                     rInfo->SetTable(GetTableName());
                     rInfo->SetAlias(GetAliasName());
-                    rInfo->SetFieldIndex(m_xListBox->GetModel()->GetAbsPos(pEntry));
+                    rInfo->SetFieldIndex(rTreeView.get_iter_index_in_parent(*xEntry));
                     rInfo->SetDataType(pInf->GetDataType());
                     bExists = true;
                     break;
                 }
-                pEntry = m_xListBox->Next(pEntry);
+                bEntry = rTreeView.iter_next(*xEntry);
             }
         }
         catch(SQLException&)

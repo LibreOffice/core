@@ -28,12 +28,16 @@ namespace dbaui
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::datatransfer;
 
-    OJoinExchObj::OJoinExchObj(const OJoinExchangeData& jxdSource,bool _bFirstEntry)
-        :m_bFirstEntry(_bFirstEntry)
-        ,m_jxdSourceDescription(jxdSource)
-        ,m_pDragListener(nullptr)
+    void OJoinExchObj::setDescriptors(const OJoinExchangeData& jxdSource,bool _bFirstEntry)
     {
-        // add available types to list
+        m_bFirstEntry = _bFirstEntry;
+        m_jxdSourceDescription = jxdSource;
+    }
+
+    OJoinExchObj::OJoinExchObj()
+        : m_bFirstEntry(false)
+        , m_pDragListener(nullptr)
+    {
     }
 
     OJoinExchObj::~OJoinExchObj()
@@ -43,7 +47,7 @@ namespace dbaui
     void OJoinExchObj::StartDrag( vcl::Window* _pWindow, sal_Int8 _nDragSourceActions, IDragTransferableListener* _pListener )
     {
         m_pDragListener = _pListener;
-        TransferableHelper::StartDrag(_pWindow, _nDragSourceActions);
+        TransferDataContainer::StartDrag(_pWindow, _nDragSourceActions);
     }
 
     void OJoinExchObj::DragFinished( sal_Int8 /*nDropAction*/ )
@@ -108,7 +112,7 @@ namespace dbaui
 
     Any SAL_CALL OJoinExchObj::queryInterface( const Type& _rType )
     {
-        Any aReturn = TransferableHelper::queryInterface(_rType);
+        Any aReturn = TransferDataContainer::queryInterface(_rType);
         if (!aReturn.hasValue())
             aReturn = OJoinExchObj_Base::queryInterface(_rType);
         return aReturn;
@@ -116,12 +120,12 @@ namespace dbaui
 
     void SAL_CALL OJoinExchObj::acquire(  ) throw()
     {
-        TransferableHelper::acquire( );
+        TransferDataContainer::acquire( );
     }
 
     void SAL_CALL OJoinExchObj::release(  ) throw()
     {
-        TransferableHelper::release( );
+        TransferDataContainer::release( );
     }
 
 }   // namespace dbaui
