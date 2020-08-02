@@ -163,29 +163,6 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
             UNO_QUERY);
     }
 
-    // Initialize the controller with eg a service factory.
-    Reference<lang::XInitialization> xInitialization (xController, UNO_QUERY);
-    if (/*!bFactoryHasController &&*/ xInitialization.is())
-    {
-        beans::PropertyValue aPropValue;
-        std::vector<Any> aPropertyVector;
-
-        aPropValue.Name = "Frame";
-        aPropValue.Value <<= rxFrame;
-        aPropertyVector.push_back(makeAny(aPropValue));
-
-        aPropValue.Name = "ServiceManager";
-        aPropValue.Value <<= ::comphelper::getProcessServiceFactory();
-        aPropertyVector.push_back(makeAny(aPropValue));
-
-        aPropValue.Name = "CommandURL";
-        aPropValue.Value <<= rsCommandName;
-        aPropertyVector.push_back(makeAny(aPropValue));
-
-        Sequence<Any> aArgs (comphelper::containerToSequence(aPropertyVector));
-        xInitialization->initialize(aArgs);
-    }
-
     if (xController.is())
     {
         xController->createItemWindow(xWidget);
