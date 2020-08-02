@@ -217,7 +217,7 @@ void SAL_CALL SfxClipboardChangeListener::changedContents( const datatransfer::c
 
 sal_uInt32 SfxViewShell_Impl::m_nLastViewShellId = 0;
 
-SfxViewShell_Impl::SfxViewShell_Impl(SfxViewShellFlags const nFlags)
+SfxViewShell_Impl::SfxViewShell_Impl(SfxViewShellFlags const nFlags, ViewShellDocId nDocId)
 : aInterceptorContainer( aMutex )
 ,   m_bHasPrintOptions(nFlags & SfxViewShellFlags::HAS_PRINTOPTIONS)
 ,   m_nFamily(0xFFFF)   // undefined, default set by TemplateDialog
@@ -225,7 +225,7 @@ SfxViewShell_Impl::SfxViewShell_Impl(SfxViewShellFlags const nFlags)
 ,   m_pLibreOfficeKitViewData(nullptr)
 ,   m_bTiledSearching(false)
 ,   m_nViewShellId(SfxViewShell_Impl::m_nLastViewShellId++)
-,   m_nDocId(-1)
+,   m_nDocId(nDocId)
 {
 }
 
@@ -1058,6 +1058,7 @@ void SfxViewShell::SetWindow
     //SfxGetpApp()->GrabFocus( pWindow );
 }
 
+ViewShellDocId SfxViewShell::mnCurrentDocId(0);
 
 SfxViewShell::SfxViewShell
 (
@@ -1067,7 +1068,7 @@ SfxViewShell::SfxViewShell
 )
 
 :   SfxShell(this)
-,   pImpl( new SfxViewShell_Impl(nFlags) )
+,   pImpl( new SfxViewShell_Impl(nFlags, SfxViewShell::mnCurrentDocId) )
 ,   pFrame(pViewFrame)
 ,   pWindow(nullptr)
 ,   bNoNewWindow( nFlags & SfxViewShellFlags::NO_NEWWINDOW )
@@ -1542,14 +1543,14 @@ ViewShellId SfxViewShell::GetViewShellId() const
     return pImpl->m_nViewShellId;
 }
 
-void SfxViewShell::SetDocId(ViewShellDocId nId)
+void SfxViewShell::SetCurrentDocId(ViewShellDocId nId)
 {
-    assert(static_cast<int>(pImpl->m_nDocId) == -1);
-    pImpl->m_nDocId = nId;
+    mnCurrentDocId = nId;
 }
 
 ViewShellDocId SfxViewShell::GetDocId() const
 {
+    assert(pImpl->m_nDocId >= ViewShellDocId(0) && "m_nDocId should have been initialized, but it is invalid.");
     return pImpl->m_nDocId;
 }
 
