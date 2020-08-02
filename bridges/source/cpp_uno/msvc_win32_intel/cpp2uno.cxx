@@ -30,7 +30,7 @@
 #include "types.hxx"
 #include "vtablefactory.hxx"
 
-#include "msci.hxx"
+#include <msvc/x86.hxx>
 
 using namespace ::com::sun::star;
 
@@ -167,7 +167,7 @@ static inline typelib_TypeClass cpp2uno_call(
         if (pReturnTD)
             TYPELIB_DANGER_RELEASE(pReturnTD);
 
-        CPPU_CURRENT_NAMESPACE::msci_raiseException(
+        msvc_raiseException(
             &aUnoExc, pThis->getBridge()->getUno2Cpp()); // has to destruct the any
 
         // is here for dummy
@@ -451,8 +451,7 @@ bridges::cpp_uno::shared::VtableFactory::initializeBlock(
         type_info * rtti;
         Rtti():
             n0(0), n1(0), n2(0),
-            rtti(CPPU_CURRENT_NAMESPACE::msci_getRTTI(
-                     "com.sun.star.uno.XInterface"))
+            rtti(RTTInfos::get("com.sun.star.uno.XInterface"))
         {}
     };
     static Rtti rtti;

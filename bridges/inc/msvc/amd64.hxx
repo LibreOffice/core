@@ -16,34 +16,44 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #pragma once
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include <msvc/except.hxx>
 
-#include <rtl/ustring.hxx>
+#pragma pack(push, 8)
 
-
-class type_info;
-typedef struct _uno_Any uno_Any;
-typedef struct _uno_Mapping uno_Mapping;
-
-namespace CPPU_CURRENT_NAMESPACE
+struct ExceptionType final
 {
+    sal_Int32 _n0; // flags
+    sal_uInt32 _pTypeInfo; // typeinfo
+    sal_Int32 _n1, _n2, _n3; // thiscast
+    sal_Int32 _n4; // object_size
+    sal_uInt32 _pCopyCtor; // copyctor
+    ExceptionTypeInfo exc_type_info;
 
-const DWORD MSVC_ExceptionCode = 0xe06d7363;
-const long MSVC_magic_number = 0x19930520L;
+    explicit ExceptionType(unsigned char* pCode, sal_uInt64 pCodeBase,
+                           typelib_TypeDescription* pTD) throw();
 
-typedef enum { REGPARAM_INT, REGPARAM_FLT } RegParamKind;
+    ExceptionType(const ExceptionType&) = delete;
+    ExceptionType& operator=(const ExceptionType&) = delete;
+};
 
-type_info * mscx_getRTTI( OUString const & rUNOname );
+struct RaiseInfo final
+{
+    sal_Int32 _n0;
+    sal_uInt32 _pDtor;
+    sal_Int32 _n2;
+    sal_uInt32 _types;
 
-int mscx_filterCppException(
-    EXCEPTION_POINTERS * pPointers, uno_Any * pUnoExc, uno_Mapping * pCpp2Uno );
+    // Additional fields
+    typelib_TypeDescription* _pTD;
+    unsigned char* _code;
+    sal_uInt64 _codeBase;
 
-void mscx_raiseException(
-    uno_Any * pUnoExc, uno_Mapping * pUno2Cpp );
+    explicit RaiseInfo(typelib_TypeDescription* pTD) throw();
+};
 
-}
+#pragma pack(pop)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
