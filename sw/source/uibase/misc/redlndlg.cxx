@@ -149,6 +149,7 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(const std::shared_ptr<weld::Window>& rPar
     , m_bInhibitActivate(false)
     , m_xTabPagesCTRL(new SvxAcceptChgCtr(pContentArea, m_xParentDlg.get(), pBuilder))
     , m_xPopup(pBuilder->weld_menu("writermenu"))
+    , m_xSortMenu(pBuilder->weld_menu("writersortmenu"))
 {
     m_xTabPagesCTRL->set_help_id(HID_REDLINE_CTRL);
     m_pTPView = m_xTabPagesCTRL->GetViewPage();
@@ -1028,7 +1029,7 @@ IMPL_LINK(SwRedlineAcceptDlg, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (nColumn == -1)
         nColumn = 4;
     for (sal_Int32 i = 0; i < 5; ++i)
-        m_xPopup->set_active("writersort" + OString::number(i), i == nColumn);
+        m_xSortMenu->set_active("writersort" + OString::number(i), i == nColumn);
 
     OString sCommand = m_xPopup->popup_at_rect(&rTreeView, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
 

@@ -81,7 +81,7 @@ class ScAcceptChgDlg final : public SfxModelessDialogController
     SvxRedlinTable* pTheView; // #i48648 now SvHeaderTabListBox
 
     std::unique_ptr<weld::Container> m_xContentArea;
-    std::unique_ptr<weld::Menu> m_xPopup;
+    std::unique_ptr<weld::Menu> m_xPopup, m_xSortMenu;
     std::unique_ptr<SvxAcceptChgCtr> m_xAcceptChgCtr;
 
     void            Init();

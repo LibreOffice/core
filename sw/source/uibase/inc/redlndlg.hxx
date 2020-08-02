@@ -74,7 +74,7 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg final
     bool                    m_bInhibitActivate;
 
     std::unique_ptr<SvxAcceptChgCtr> m_xTabPagesCTRL;
-    std::unique_ptr<weld::Menu> m_xPopup;
+    std::unique_ptr<weld::Menu> m_xPopup, m_xSortMenu;
     SvxTPView* m_pTPView;
     SvxRedlinTable* m_pTable; // PB 2006/02/02 #i48648 now SvHeaderTabListBox
 
