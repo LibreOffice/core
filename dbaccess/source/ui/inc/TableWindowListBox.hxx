@@ -19,8 +19,8 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEWINDOWLISTBOX_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEWINDOWLISTBOX_HXX
 
-#include <vcl/treelistbox.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include "callbacks.hxx"
 
 struct AcceptDropEvent;
@@ -32,10 +32,10 @@ namespace dbaui
     {
     public:
         VclPtr<OTableWindowListBox>    pListBox;       // the ListBox inside the same (you can get the TabWin and the WinName out of it)
-        SvTreeListEntry*            pEntry;         // the entry, which was dragged or to which was dropped on
+        int                            nEntry;         // the entry, which was dragged or to which was dropped on
 
         OJoinExchangeData(OTableWindowListBox* pBox);
-        OJoinExchangeData() : pListBox(nullptr), pEntry(nullptr) { }
+        OJoinExchangeData() : pListBox(nullptr), nEntry(-1) { }
     };
     struct OJoinDropData
     {
@@ -45,10 +45,12 @@ namespace dbaui
 
     class OTableWindow;
     class OTableWindowListBox
-            :public SvTreeListBox
-            ,public IDragTransferableListener
+            : public InterimItemWindow
+            , public IDragTransferableListener
     {
-        DECL_LINK( OnDoubleClick, SvTreeListBox*, bool );
+        std::unique_ptr<weld::TreeView> m_xTreeView;
+
+        DECL_LINK( OnDoubleClick, weld::TreeView&, bool );
         DECL_LINK( ScrollUpHdl, Timer*, void );
         DECL_LINK( ScrollDownHdl, Timer*, void );
         DECL_LINK( DropHdl, void*, void );
@@ -67,32 +69,35 @@ namespace dbaui
     protected:
         virtual void LoseFocus() override;
         virtual void GetFocus() override;
+#if 0
         virtual void NotifyScrolled() override;
         virtual void NotifyEndScroll() override;
 
         virtual bool PreNotify(NotifyEvent& rNEvt) override;
+#endif
 
         virtual void dragFinished( ) override;
-
 
     public:
         OTableWindowListBox(OTableWindow* pParent);
         virtual ~OTableWindowListBox() override;
         virtual void dispose() override;
 
+        const weld::TreeView& get_widget() const { return *m_xTreeView; }
+        weld::TreeView& get_widget() { return *m_xTreeView; }
+
+#if 0
         // DnD stuff
         virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
         virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;
         virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
+#endif
 
         // window
         virtual void Command(const CommandEvent& rEvt) override;
 
         OTableWindow* GetTabWin(){ return m_pTabWin; }
-        SvTreeListEntry* GetEntryFromText( const OUString& rEntryText );
-
-    private:
-        using SvTreeListBox::ExecuteDrop;
+        int GetEntryFromText( const OUString& rEntryText );
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEWINDOWLISTBOX_HXX

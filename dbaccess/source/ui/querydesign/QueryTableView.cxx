@@ -524,6 +524,7 @@ void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& 
 
 void OQueryTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest)
 {
+#if 0
     OQueryTableWindow* pSourceWin = static_cast< OQueryTableWindow*>(jxdSource.pListBox->GetTabWin());
     OQueryTableWindow* pDestWin = static_cast< OQueryTableWindow*>(jxdDest.pListBox->GetTabWin());
 
@@ -569,6 +570,7 @@ void OQueryTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJ
 
         connectionModified(this,pConn,false);
     }
+#endif
 }
 
 void OQueryTableView::ConnDoubleClicked(VclPtr<OTableConnection>& rConnection)

@@ -127,7 +127,8 @@ void OTableWindowTitle::MouseButtonDown( const MouseEvent& rEvt )
             Size aSize(GetTextWidth(GetText()) + 20,
                         m_pTabWin->GetSizePixel().Height() - m_pTabWin->GetListBox()->GetSizePixel().Height());
 
-            aSize.AdjustHeight((m_pTabWin->GetListBox()->GetEntryCount() + 2) * m_pTabWin->GetListBox()->GetEntryHeight() );
+            weld::TreeView& rTreeView = m_pTabWin->GetListBox()->get_widget();
+            aSize.AdjustHeight(rTreeView.get_height_rows(rTreeView.n_children() + 2));
             if(m_pTabWin->GetSizePixel() != aSize)
             {
                 m_pTabWin->SetSizePixel(aSize);
