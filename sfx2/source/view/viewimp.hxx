@@ -54,9 +54,9 @@ struct SfxViewShell_Impl
     bool m_bTiledSearching;
     static sal_uInt32 m_nLastViewShellId;
     const ViewShellId m_nViewShellId;
-    ViewShellDocId m_nDocId;
+    const ViewShellDocId m_nDocId;
 
-    explicit SfxViewShell_Impl(SfxViewShellFlags const nFlags);
+    explicit SfxViewShell_Impl(SfxViewShellFlags const nFlags, ViewShellDocId nDocId);
     ~SfxViewShell_Impl();
 
     std::vector< SfxInPlaceClient* >* GetIPClients_Impl(bool bCreate = true) const;
