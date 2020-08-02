@@ -236,25 +236,25 @@ void DocumentDigitalSignatures::initialize( const Sequence< Any >& aArguments)
 
     m_nArgumentsCount = aArguments.getLength();
 
-    if (aArguments.hasElements())
-    {
-        if (!(aArguments[0] >>= m_sODFVersion))
-            throw css::lang::IllegalArgumentException(
-                "DocumentDigitalSignatures::initialize: the first arguments must be a string",
-                static_cast<XInitialization*>(this), 0);
+    if (!aArguments.hasElements())
+        return;
 
-        if (aArguments.getLength() == 2
-            && !(aArguments[1] >>= m_bHasDocumentSignature))
-            throw css::lang::IllegalArgumentException(
-                "DocumentDigitalSignatures::initialize: the second arguments must be a bool",
-                static_cast<XInitialization*>(this), 1);
+    if (!(aArguments[0] >>= m_sODFVersion))
+        throw css::lang::IllegalArgumentException(
+            "DocumentDigitalSignatures::initialize: the first arguments must be a string",
+            static_cast<XInitialization*>(this), 0);
 
-        //the Version is supported as of ODF1.2, so for and 1.1 document or older we will receive the
-        //an empty string. In this case we set it to ODFVER_010_TEXT. Then we can later check easily
-        //if initialize was called. Only then m_sODFVersion.getLength() is greater than 0
-        if (m_sODFVersion.isEmpty())
-            m_sODFVersion = ODFVER_010_TEXT;
-    }
+    if (aArguments.getLength() == 2
+        && !(aArguments[1] >>= m_bHasDocumentSignature))
+        throw css::lang::IllegalArgumentException(
+            "DocumentDigitalSignatures::initialize: the second arguments must be a bool",
+            static_cast<XInitialization*>(this), 1);
+
+    //the Version is supported as of ODF1.2, so for and 1.1 document or older we will receive the
+    //an empty string. In this case we set it to ODFVER_010_TEXT. Then we can later check easily
+    //if initialize was called. Only then m_sODFVersion.getLength() is greater than 0
+    if (m_sODFVersion.isEmpty())
+        m_sODFVersion = ODFVER_010_TEXT;
 }
 
 OUString DocumentDigitalSignatures::getImplementationName()

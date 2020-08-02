@@ -125,18 +125,18 @@ void XSecController::switchGpgSignature()
 #if HAVE_FEATURE_GPGME
     // swap signature verifier for the Gpg one
     m_xXMLSignature.set(new XMLSignature_GpgImpl());
-    if (!m_vInternalSignatureInformations.empty())
+    if (m_vInternalSignatureInformations.empty())
+        return;
+
+    SignatureVerifierImpl* pImpl=
+        dynamic_cast<SignatureVerifierImpl*>(
+            m_vInternalSignatureInformations.back().xReferenceResolvedListener.get());
+    if (pImpl)
     {
-        SignatureVerifierImpl* pImpl=
-            dynamic_cast<SignatureVerifierImpl*>(
-                m_vInternalSignatureInformations.back().xReferenceResolvedListener.get());
-        if (pImpl)
-        {
-            css::uno::Reference<css::xml::crypto::XSEInitializer> xGpgSEInitializer(
-                new SEInitializerGpg());
-            pImpl->updateSignature(new XMLSignature_GpgImpl(),
-                                   xGpgSEInitializer->createSecurityContext(OUString()));
-        }
+        css::uno::Reference<css::xml::crypto::XSEInitializer> xGpgSEInitializer(
+            new SEInitializerGpg());
+        pImpl->updateSignature(new XMLSignature_GpgImpl(),
+                               xGpgSEInitializer->createSecurityContext(OUString()));
     }
 #else
     (void) this;
@@ -197,28 +197,28 @@ void XSecController::setReferenceCount() const
     const InternalSignatureInformation &isi =
         m_vInternalSignatureInformations.back();
 
-    if ( isi.xReferenceResolvedListener.is() )
+    if ( !isi.xReferenceResolvedListener.is() )
+        return;
+
+    const SignatureReferenceInformations &refInfors = isi.signatureInfor.vSignatureReferenceInfors;
+
+    int refNum = refInfors.size();
+    sal_Int32 referenceCount = 0;
+
+    for(int i=0 ; i<refNum; ++i)
     {
-        const SignatureReferenceInformations &refInfors = isi.signatureInfor.vSignatureReferenceInfors;
-
-        int refNum = refInfors.size();
-        sal_Int32 referenceCount = 0;
-
-        for(int i=0 ; i<refNum; ++i)
+        if (refInfors[i].nType == SignatureReferenceType::SAMEDOCUMENT )
+        /*
+         * same-document reference
+         */
         {
-            if (refInfors[i].nType == SignatureReferenceType::SAMEDOCUMENT )
-            /*
-             * same-document reference
-             */
-            {
-                referenceCount++;
-            }
+            referenceCount++;
         }
-
-        css::uno::Reference<css::xml::crypto::sax::XReferenceCollector> xReferenceCollector
-            (isi.xReferenceResolvedListener, css::uno::UNO_QUERY);
-        xReferenceCollector->setReferenceCount( referenceCount );
     }
+
+    css::uno::Reference<css::xml::crypto::sax::XReferenceCollector> xReferenceCollector
+        (isi.xReferenceResolvedListener, css::uno::UNO_QUERY);
+    xReferenceCollector->setReferenceCount( referenceCount );
 }
 
 void XSecController::setX509IssuerName( OUString const & ouX509IssuerName )
@@ -455,55 +455,55 @@ void XSecController::collectToVerify( const OUString& referenceId )
 {
     /* SAL_WARN_IF( !m_xSAXEventKeeper.is(), "xmlsecurity", "the SAXEventKeeper is NULL" ); */
 
-    if ( m_eStatusOfSecurityComponents == InitializationState::INITIALIZED )
+    if ( m_eStatusOfSecurityComponents != InitializationState::INITIALIZED )
     /*
      * if all security components are ready, verify the signature.
      */
+        return;
+
+    bool bJustChainingOn = false;
+    css::uno::Reference< css::xml::sax::XDocumentHandler > xHandler;
+
+    int i,j;
+    int sigNum = m_vInternalSignatureInformations.size();
+
+    for (i=0; i<sigNum; ++i)
     {
-        bool bJustChainingOn = false;
-        css::uno::Reference< css::xml::sax::XDocumentHandler > xHandler;
+        InternalSignatureInformation& isi = m_vInternalSignatureInformations[i];
+        SignatureReferenceInformations& vReferenceInfors = isi.signatureInfor.vSignatureReferenceInfors;
+        int refNum = vReferenceInfors.size();
 
-        int i,j;
-        int sigNum = m_vInternalSignatureInformations.size();
-
-        for (i=0; i<sigNum; ++i)
+        for (j=0; j<refNum; ++j)
         {
-            InternalSignatureInformation& isi = m_vInternalSignatureInformations[i];
-            SignatureReferenceInformations& vReferenceInfors = isi.signatureInfor.vSignatureReferenceInfors;
-            int refNum = vReferenceInfors.size();
+            SignatureReferenceInformation &refInfor = vReferenceInfors[j];
 
-            for (j=0; j<refNum; ++j)
+            if (refInfor.ouURI == referenceId)
             {
-                SignatureReferenceInformation &refInfor = vReferenceInfors[j];
-
-                if (refInfor.ouURI == referenceId)
+                if (chainOn())
                 {
-                    if (chainOn())
-                    {
-                        bJustChainingOn = true;
-                        xHandler = m_xSAXEventKeeper->setNextHandler(nullptr);
-                    }
-
-                    sal_Int32 nKeeperId = m_xSAXEventKeeper->addSecurityElementCollector(
-                        css::xml::crypto::sax::ElementMarkPriority_BEFOREMODIFY, false );
-
-                    css::uno::Reference<css::xml::crypto::sax::XReferenceCollector> xReferenceCollector
-                        ( isi.xReferenceResolvedListener, css::uno::UNO_QUERY );
-
-                    m_xSAXEventKeeper->setSecurityId(nKeeperId, isi.signatureInfor.nSecurityId);
-                    m_xSAXEventKeeper->addReferenceResolvedListener( nKeeperId, isi.xReferenceResolvedListener);
-                    xReferenceCollector->setReferenceId( nKeeperId );
-
-                    isi.vKeeperIds[j] = nKeeperId;
-                    break;
+                    bJustChainingOn = true;
+                    xHandler = m_xSAXEventKeeper->setNextHandler(nullptr);
                 }
+
+                sal_Int32 nKeeperId = m_xSAXEventKeeper->addSecurityElementCollector(
+                    css::xml::crypto::sax::ElementMarkPriority_BEFOREMODIFY, false );
+
+                css::uno::Reference<css::xml::crypto::sax::XReferenceCollector> xReferenceCollector
+                    ( isi.xReferenceResolvedListener, css::uno::UNO_QUERY );
+
+                m_xSAXEventKeeper->setSecurityId(nKeeperId, isi.signatureInfor.nSecurityId);
+                m_xSAXEventKeeper->addReferenceResolvedListener( nKeeperId, isi.xReferenceResolvedListener);
+                xReferenceCollector->setReferenceId( nKeeperId );
+
+                isi.vKeeperIds[j] = nKeeperId;
+                break;
             }
         }
+    }
 
-        if ( bJustChainingOn )
-        {
-            m_xSAXEventKeeper->setNextHandler(xHandler);
-        }
+    if ( bJustChainingOn )
+    {
+        m_xSAXEventKeeper->setNextHandler(xHandler);
     }
 }
 

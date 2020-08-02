@@ -130,20 +130,20 @@ void deleteRootsModule()
     }
     SECMOD_ReleaseReadLock(lock);
 
-    if (RootsModule)
+    if (!RootsModule)
+        return;
+
+    PRInt32 modType;
+    if (SECSuccess == SECMOD_DeleteModule(RootsModule->commonName, &modType))
     {
-        PRInt32 modType;
-        if (SECSuccess == SECMOD_DeleteModule(RootsModule->commonName, &modType))
-        {
-            SAL_INFO("xmlsecurity.xmlsec", "Deleted module \"" << RootsModule->commonName << "\".");
-        }
-        else
-        {
-            SAL_INFO("xmlsecurity.xmlsec", "Failed to delete \"" << RootsModule->commonName << "\": " << RootsModule->dllName);
-        }
-        SECMOD_DestroyModule(RootsModule);
-        RootsModule = nullptr;
+        SAL_INFO("xmlsecurity.xmlsec", "Deleted module \"" << RootsModule->commonName << "\".");
     }
+    else
+    {
+        SAL_INFO("xmlsecurity.xmlsec", "Failed to delete \"" << RootsModule->commonName << "\": " << RootsModule->dllName);
+    }
+    SECMOD_DestroyModule(RootsModule);
+    RootsModule = nullptr;
 }
 
 #endif

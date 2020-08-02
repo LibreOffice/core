@@ -83,22 +83,22 @@ void SAXEventKeeperImpl::setCurrentBufferNode(BufferNode* pBufferNode)
  *  pBufferNode - a BufferNode which will be the new active BufferNode
  ******************************************************************************/
 {
-    if (pBufferNode != m_pCurrentBufferNode)
+    if (pBufferNode == m_pCurrentBufferNode)
+        return;
+
+    if ( m_pCurrentBufferNode == m_pRootBufferNode.get() &&
+         m_xSAXEventKeeperStatusChangeListener.is())
     {
-        if ( m_pCurrentBufferNode == m_pRootBufferNode.get() &&
-             m_xSAXEventKeeperStatusChangeListener.is())
-        {
-            m_xSAXEventKeeperStatusChangeListener->collectionStatusChanged(true);
-        }
-
-        if (pBufferNode->getParent() == nullptr)
-        {
-            m_pCurrentBufferNode->addChild(std::unique_ptr<BufferNode>(pBufferNode));
-            pBufferNode->setParent(m_pCurrentBufferNode);
-        }
-
-        m_pCurrentBufferNode = pBufferNode;
+        m_xSAXEventKeeperStatusChangeListener->collectionStatusChanged(true);
     }
+
+    if (pBufferNode->getParent() == nullptr)
+    {
+        m_pCurrentBufferNode->addChild(std::unique_ptr<BufferNode>(pBufferNode));
+        pBufferNode->setParent(m_pCurrentBufferNode);
+    }
+
+    m_pCurrentBufferNode = pBufferNode;
 }
 
 BufferNode* SAXEventKeeperImpl::addNewElementMarkBuffers()
@@ -389,110 +389,109 @@ void SAXEventKeeperImpl::smashBufferNode(
  *  needed by the Blocker to be deleted.
  ******************************************************************************/
 {
-    if (!pBufferNode->hasAnything())
+    if (pBufferNode->hasAnything())
+        return;
+
+    BufferNode* pParent = const_cast<BufferNode*>(pBufferNode->getParent());
+
+    /*
+     * delete the XML data
+     */
+    if (pParent == m_pRootBufferNode.get())
     {
-        BufferNode* pParent = const_cast<BufferNode*>(pBufferNode->getParent());
+        bool bIsNotBlocking = (m_pCurrentBlockingBufferNode == nullptr);
+        bool bIsBlockInside = false;
+        bool bIsBlockingAfterward = false;
 
         /*
-         * delete the XML data
+         * If this is a blocker, then remove any out-element data
+         * which caused by blocking. The removal process will stop
+         * at the next blocker to avoid removing any useful data.
          */
-        if (pParent == m_pRootBufferNode.get())
+        if (bClearRoot)
         {
-            bool bIsNotBlocking = (m_pCurrentBlockingBufferNode == nullptr);
-            bool bIsBlockInside = false;
-            bool bIsBlockingAfterward = false;
+            css::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > >
+                aChildElements = collectChildWorkingElement(m_pRootBufferNode.get());
 
             /*
-             * If this is a blocker, then remove any out-element data
-             * which caused by blocking. The removal process will stop
-             * at the next blocker to avoid removing any useful data.
+             * the clearUselessData only clearup the content in the
+             * node, not the node itself.
              */
-            if (bClearRoot)
-            {
-                css::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > >
-                    aChildElements = collectChildWorkingElement(m_pRootBufferNode.get());
-
-                /*
-                 * the clearUselessData only clearup the content in the
-                 * node, not the node itself.
-                 */
-                m_xXMLDocument->clearUselessData(m_pRootBufferNode->getXMLElement(),
-                    aChildElements,
-                    bIsNotBlocking?nullptr:
-                                   (m_pCurrentBlockingBufferNode->getXMLElement()));
-
-                /*
-                 * remove the node if it is empty, then if its parent is also
-                 * empty, remove it, then if the next parent is also empty,
-                 * remove it,..., until parent become null.
-                 */
-                m_xXMLDocument->collapse( m_pRootBufferNode->getXMLElement() );
-            }
+            m_xXMLDocument->clearUselessData(m_pRootBufferNode->getXMLElement(),
+                aChildElements,
+                bIsNotBlocking?nullptr:
+                               (m_pCurrentBlockingBufferNode->getXMLElement()));
 
             /*
-             * if blocking, check the relationship between this BufferNode and
-             * the current blocking BufferNode.
+             * remove the node if it is empty, then if its parent is also
+             * empty, remove it, then if the next parent is also empty,
+             * remove it,..., until parent become null.
              */
-            if ( !bIsNotBlocking )
-            {
-                /*
-                 * the current blocking BufferNode is a descendant of this BufferNode.
-                 */
-                bIsBlockInside = (nullptr != pBufferNode->isAncestor(m_pCurrentBlockingBufferNode));
-
-                /*
-                 * the current blocking BufferNode locates behind this BufferNode in tree
-                 * order.
-                 */
-                bIsBlockingAfterward = pBufferNode->isPrevious(m_pCurrentBlockingBufferNode);
-            }
-
-            /*
-             * this BufferNode's working element needs to be deleted only when
-             * 1. there is no blocking, or
-             * 2. the current blocking BufferNode is a descendant of this BufferNode,
-             *    (then in the BufferNode's working element, the useless data before the blocking
-             *     element should be deleted.) or
-             * 3. the current blocking BufferNode is locates behind this BufferNode in tree,
-             *    (then the useless data between the blocking element and the working element
-             *     should be deleted.).
-             * Otherwise, this working element should not be deleted.
-             */
-            if ( bIsNotBlocking || bIsBlockInside || bIsBlockingAfterward )
-            {
-                css::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > >
-                    aChildElements = collectChildWorkingElement(pBufferNode);
-
-                /*
-                 * the clearUselessData only clearup the content in the
-                 * node, not the node itself.
-                 */
-                m_xXMLDocument->clearUselessData(pBufferNode->getXMLElement(),
-                    aChildElements,
-                    bIsBlockInside?(m_pCurrentBlockingBufferNode->getXMLElement()):
-                               nullptr);
-
-                /*
-                 * remove the node if it is empty, then if its parent is also
-                 * empty, remove it, then if the next parent is also empty,
-                 * remove it,..., until parent become null.
-                 */
-                m_xXMLDocument->collapse( pBufferNode->getXMLElement() );
-            }
+            m_xXMLDocument->collapse( m_pRootBufferNode->getXMLElement() );
         }
 
-        sal_Int32 nIndex = pParent->indexOfChild(pBufferNode);
-
-        std::vector< std::unique_ptr<BufferNode> > vChildren = pBufferNode->releaseChildren();
-        pParent->removeChild(pBufferNode); // delete buffernode
-
-        for( auto& i : vChildren )
+        /*
+         * if blocking, check the relationship between this BufferNode and
+         * the current blocking BufferNode.
+         */
+        if ( !bIsNotBlocking )
         {
-            i->setParent(pParent);
-            pParent->addChild(std::move(i), nIndex);
-            nIndex++;
+            /*
+             * the current blocking BufferNode is a descendant of this BufferNode.
+             */
+            bIsBlockInside = (nullptr != pBufferNode->isAncestor(m_pCurrentBlockingBufferNode));
+
+            /*
+             * the current blocking BufferNode locates behind this BufferNode in tree
+             * order.
+             */
+            bIsBlockingAfterward = pBufferNode->isPrevious(m_pCurrentBlockingBufferNode);
         }
 
+        /*
+         * this BufferNode's working element needs to be deleted only when
+         * 1. there is no blocking, or
+         * 2. the current blocking BufferNode is a descendant of this BufferNode,
+         *    (then in the BufferNode's working element, the useless data before the blocking
+         *     element should be deleted.) or
+         * 3. the current blocking BufferNode is locates behind this BufferNode in tree,
+         *    (then the useless data between the blocking element and the working element
+         *     should be deleted.).
+         * Otherwise, this working element should not be deleted.
+         */
+        if ( bIsNotBlocking || bIsBlockInside || bIsBlockingAfterward )
+        {
+            css::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > >
+                aChildElements = collectChildWorkingElement(pBufferNode);
+
+            /*
+             * the clearUselessData only clearup the content in the
+             * node, not the node itself.
+             */
+            m_xXMLDocument->clearUselessData(pBufferNode->getXMLElement(),
+                aChildElements,
+                bIsBlockInside?(m_pCurrentBlockingBufferNode->getXMLElement()):
+                           nullptr);
+
+            /*
+             * remove the node if it is empty, then if its parent is also
+             * empty, remove it, then if the next parent is also empty,
+             * remove it,..., until parent become null.
+             */
+            m_xXMLDocument->collapse( pBufferNode->getXMLElement() );
+        }
+    }
+
+    sal_Int32 nIndex = pParent->indexOfChild(pBufferNode);
+
+    std::vector< std::unique_ptr<BufferNode> > vChildren = pBufferNode->releaseChildren();
+    pParent->removeChild(pBufferNode); // delete buffernode
+
+    for( auto& i : vChildren )
+    {
+        i->setParent(pParent);
+        pParent->addChild(std::move(i), nIndex);
+        nIndex++;
     }
 }
 
@@ -1072,18 +1071,18 @@ void SAL_CALL SAXEventKeeperImpl::endElement( const OUString& aName )
 
 void SAL_CALL SAXEventKeeperImpl::characters( const OUString& aChars )
 {
-    if (!m_bIsForwarding)
-    {
-        if ((m_pCurrentBlockingBufferNode == nullptr) && m_xNextHandler.is())
-        {
-            m_xNextHandler->characters(aChars);
-        }
+    if (m_bIsForwarding)
+        return;
 
-        if ((m_pCurrentBlockingBufferNode != nullptr) ||
-            (m_pCurrentBufferNode != m_pRootBufferNode.get()))
-        {
-            m_xCompressedDocumentHandler->compressedCharacters(aChars);
-        }
+    if ((m_pCurrentBlockingBufferNode == nullptr) && m_xNextHandler.is())
+    {
+        m_xNextHandler->characters(aChars);
+    }
+
+    if ((m_pCurrentBlockingBufferNode != nullptr) ||
+        (m_pCurrentBufferNode != m_pRootBufferNode.get()))
+    {
+        m_xCompressedDocumentHandler->compressedCharacters(aChars);
     }
 }
 
@@ -1095,18 +1094,18 @@ void SAL_CALL SAXEventKeeperImpl::ignorableWhitespace( const OUString& aWhitespa
 void SAL_CALL SAXEventKeeperImpl::processingInstruction(
     const OUString& aTarget, const OUString& aData )
 {
-    if (!m_bIsForwarding)
-    {
-        if ((m_pCurrentBlockingBufferNode == nullptr) && m_xNextHandler.is())
-        {
-            m_xNextHandler->processingInstruction(aTarget, aData);
-        }
+    if (m_bIsForwarding)
+        return;
 
-        if ((m_pCurrentBlockingBufferNode != nullptr) ||
-            (m_pCurrentBufferNode != m_pRootBufferNode.get()))
-        {
-            m_xCompressedDocumentHandler->compressedProcessingInstruction(aTarget, aData);
-        }
+    if ((m_pCurrentBlockingBufferNode == nullptr) && m_xNextHandler.is())
+    {
+        m_xNextHandler->processingInstruction(aTarget, aData);
+    }
+
+    if ((m_pCurrentBlockingBufferNode != nullptr) ||
+        (m_pCurrentBufferNode != m_pRootBufferNode.get()))
+    {
+        m_xCompressedDocumentHandler->compressedProcessingInstruction(aTarget, aData);
     }
 }
 

@@ -196,22 +196,22 @@ void XSecController::createXSecComponent( )
 
     bSuccess &= m_xSAXEventKeeper.is();
 
-    if (bSuccess)
+    if (!bSuccess)
     /*
      * SAXEventKeeper created successfully.
      */
-    {
-        css::uno::Sequence <css::uno::Any> arg(1);
-        arg[0] <<= uno::Reference<xml::wrapper::XXMLDocumentWrapper>(m_xXMLDocumentWrapper.get());
-        m_xSAXEventKeeper->initialize(arg);
+        return;
 
-        css::uno::Reference< css::xml::crypto::sax::XSAXEventKeeperStatusChangeListener >
-            xStatusChangeListener = this;
+    css::uno::Sequence <css::uno::Any> arg(1);
+    arg[0] <<= uno::Reference<xml::wrapper::XXMLDocumentWrapper>(m_xXMLDocumentWrapper.get());
+    m_xSAXEventKeeper->initialize(arg);
 
-        m_xSAXEventKeeper->addSAXEventKeeperStatusChangeListener( xStatusChangeListener );
+    css::uno::Reference< css::xml::crypto::sax::XSAXEventKeeperStatusChangeListener >
+        xStatusChangeListener = this;
 
-        m_eStatusOfSecurityComponents = InitializationState::INITIALIZED;
-    }
+    m_xSAXEventKeeper->addSAXEventKeeperStatusChangeListener( xStatusChangeListener );
+
+    m_eStatusOfSecurityComponents = InitializationState::INITIALIZED;
 }
 
 bool XSecController::chainOn()
@@ -313,33 +313,33 @@ void XSecController::chainOff()
  *  chainOff -- disconnects the SAXEventKeeper from the SAX chain.
  ******************************************************************************/
 {
-    if (!m_bIsSAXEventKeeperSticky )
+    if (m_bIsSAXEventKeeperSticky )
+        return;
+
+    if (!m_bIsSAXEventKeeperConnected)
+        return;
+
+    m_xSAXEventKeeper->setNextHandler( nullptr );
+
+    if ( m_xPreviousNodeOnSAXChain.is() )
     {
-        if (m_bIsSAXEventKeeperConnected)
+        if ( m_bIsPreviousNodeInitializable )
         {
-            m_xSAXEventKeeper->setNextHandler( nullptr );
+            css::uno::Reference< css::lang::XInitialization > xInitialization
+                (m_xPreviousNodeOnSAXChain, css::uno::UNO_QUERY);
 
-            if ( m_xPreviousNodeOnSAXChain.is() )
-            {
-                if ( m_bIsPreviousNodeInitializable )
-                {
-                    css::uno::Reference< css::lang::XInitialization > xInitialization
-                        (m_xPreviousNodeOnSAXChain, css::uno::UNO_QUERY);
-
-                    css::uno::Sequence<css::uno::Any> aArgs( 1 );
-                    aArgs[0] <<= uno::Reference<xml::sax::XDocumentHandler>();
-                    xInitialization->initialize(aArgs);
-                }
-                else
-                {
-                    css::uno::Reference< css::xml::sax::XParser > xParser(m_xPreviousNodeOnSAXChain, css::uno::UNO_QUERY);
-                    xParser->setDocumentHandler(uno::Reference<xml::sax::XDocumentHandler>());
-                }
-            }
-
-            m_bIsSAXEventKeeperConnected = false;
+            css::uno::Sequence<css::uno::Any> aArgs( 1 );
+            aArgs[0] <<= uno::Reference<xml::sax::XDocumentHandler>();
+            xInitialization->initialize(aArgs);
+        }
+        else
+        {
+            css::uno::Reference< css::xml::sax::XParser > xParser(m_xPreviousNodeOnSAXChain, css::uno::UNO_QUERY);
+            xParser->setDocumentHandler(uno::Reference<xml::sax::XDocumentHandler>());
         }
     }
+
+    m_bIsSAXEventKeeperConnected = false;
 }
 
 void XSecController::checkChainingStatus()

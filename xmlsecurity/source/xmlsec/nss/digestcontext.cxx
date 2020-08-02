@@ -45,22 +45,22 @@ void SAL_CALL ODigestContext::updateDigest( const uno::Sequence< ::sal_Int8 >& a
     if ( m_bDisposed )
         throw lang::DisposedException();
 
-    if ( !m_b1KData || m_nDigested < 1024 )
+    if (m_b1KData && m_nDigested >= 1024)
+        return;
+
+    uno::Sequence< sal_Int8 > aToDigest = aData;
+    if ( m_b1KData && m_nDigested + aData.getLength() > 1024 )
+        aToDigest.realloc( 1024 - m_nDigested );
+
+    if ( PK11_DigestOp( m_pContext, reinterpret_cast< const unsigned char* >( aToDigest.getConstArray() ), aToDigest.getLength() ) != SECSuccess )
     {
-        uno::Sequence< sal_Int8 > aToDigest = aData;
-        if ( m_b1KData && m_nDigested + aData.getLength() > 1024 )
-            aToDigest.realloc( 1024 - m_nDigested );
-
-        if ( PK11_DigestOp( m_pContext, reinterpret_cast< const unsigned char* >( aToDigest.getConstArray() ), aToDigest.getLength() ) != SECSuccess )
-        {
-            PK11_DestroyContext( m_pContext, PR_TRUE );
-            m_pContext = nullptr;
-            m_bBroken = true;
-            throw uno::RuntimeException();
-        }
-
-        m_nDigested += aToDigest.getLength();
+        PK11_DestroyContext( m_pContext, PR_TRUE );
+        m_pContext = nullptr;
+        m_bBroken = true;
+        throw uno::RuntimeException();
     }
+
+    m_nDigested += aToDigest.getLength();
 }
 
 uno::Sequence< ::sal_Int8 > SAL_CALL ODigestContext::finalizeDigestAndDispose()

@@ -86,37 +86,37 @@ void SignatureEngine::tryToPerform( )
  *  5. sets the "accomplishment" flag.
  ******************************************************************************/
 {
-    if (checkReady())
+    if (!checkReady())
+        return;
+
+    rtl::Reference<XMLSignatureTemplateImpl> xSignatureTemplate = new XMLSignatureTemplateImpl();
+
+    css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >
+        xXMLElement = m_xSAXEventKeeper->getElement( m_nIdOfTemplateEC );
+
+    xSignatureTemplate->setTemplate(xXMLElement);
+
+    for( const auto i : m_vReferenceIds )
     {
-        rtl::Reference<XMLSignatureTemplateImpl> xSignatureTemplate = new XMLSignatureTemplateImpl();
-
-        css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >
-            xXMLElement = m_xSAXEventKeeper->getElement( m_nIdOfTemplateEC );
-
-        xSignatureTemplate->setTemplate(xXMLElement);
-
-        for( const auto i : m_vReferenceIds )
-        {
-            xXMLElement = m_xSAXEventKeeper->getElement( i );
-            xSignatureTemplate->setTarget(xXMLElement);
-        }
-
-        /*
-         * set the Uri binding
-         */
-        xSignatureTemplate->setBinding( this );
-
-        startEngine(xSignatureTemplate);
-
-        /*
-         * done
-         */
-        clearUp( );
-
-        notifyResultListener();
-
-        m_bMissionDone = true;
+        xXMLElement = m_xSAXEventKeeper->getElement( i );
+        xSignatureTemplate->setTarget(xXMLElement);
     }
+
+    /*
+     * set the Uri binding
+     */
+    xSignatureTemplate->setBinding( this );
+
+    startEngine(xSignatureTemplate);
+
+    /*
+     * done
+     */
+    clearUp( );
+
+    notifyResultListener();
+
+    m_bMissionDone = true;
 }
 
 void SignatureEngine::clearUp( ) const
