@@ -26,7 +26,6 @@
 #include <tools/link.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
-#include <about.hxx>
 #include <cfgutil.hxx>
 #include <cui/cuicharmap.hxx>
 #include <cuifmsearch.hxx>
@@ -58,7 +57,6 @@
 #include <SpellDialog.hxx>
 #include <srchxtra.hxx>
 #include <thesdlg.hxx>
-#include <tipofthedaydlg.hxx>
 #include <transfrm.hxx>
 #include <zoom.hxx>
 #include <AdditionsDialog.hxx>
@@ -740,20 +738,6 @@ public:
     virtual short Execute() override;
 };
 
-class AboutDialog;
-class AbstractAboutDialog_Impl : public AbstractAboutDialog
-{
-protected:
-    std::unique_ptr<AboutDialog> m_xDlg;
-
-public:
-    explicit AbstractAboutDialog_Impl(std::unique_ptr<AboutDialog> p)
-        : m_xDlg(std::move(p))
-    {
-    }
-    virtual short Execute() override;
-};
-
 class AbstractAdditionsDialog_Impl : public AbstractAdditionsDialog
 {
 protected:
@@ -761,20 +745,6 @@ protected:
 
 public:
     explicit AbstractAdditionsDialog_Impl(std::unique_ptr<AdditionsDialog> p)
-        : m_xDlg(std::move(p))
-    {
-    }
-    virtual short Execute() override;
-};
-
-class TipOfTheDayDialog;
-class AbstractTipOfTheDayDialog_Impl : public AbstractTipOfTheDayDialog
-{
-protected:
-    std::unique_ptr<TipOfTheDayDialog> m_xDlg;
-
-public:
-    explicit AbstractTipOfTheDayDialog_Impl(std::unique_ptr<TipOfTheDayDialog> p)
         : m_xDlg(std::move(p))
     {
     }
@@ -984,9 +954,9 @@ public:
     virtual VclPtr<AbstractAdditionsDialog>
     CreateAdditionsDialog(weld::Window* pParent, const OUString& sAdditionsTag) override;
 
-    virtual VclPtr<AbstractAboutDialog> CreateAboutDialog(weld::Window* pParent) override;
+    virtual VclPtr<VclAbstractDialog> CreateAboutDialog(weld::Window* pParent) override;
 
-    virtual VclPtr<AbstractTipOfTheDayDialog> CreateTipOfTheDayDialog(weld::Window* pParent) override;
+    virtual VclPtr<VclAbstractDialog> CreateTipOfTheDayDialog(weld::Window* pParent) override;
 
     virtual VclPtr<AbstractDiagramDialog> CreateDiagramDialog(
         weld::Window* pParent,

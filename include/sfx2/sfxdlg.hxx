@@ -143,6 +143,10 @@ public:
 
     virtual VclPtr<VclAbstractDialog>  CreateOptionsDialog(
         weld::Window* pParent, const OUString& rExtensionId ) = 0;
+
+    virtual VclPtr<VclAbstractDialog> CreateAboutDialog(weld::Window* _pParent) = 0;
+
+    virtual VclPtr<VclAbstractDialog> CreateTipOfTheDayDialog(weld::Window* _pParent) = 0;
 };
 
 #endif
