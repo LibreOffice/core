@@ -98,6 +98,7 @@ ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Windo
     , bUseColor(false)
     , m_xContentArea(m_xDialog->weld_content_area())
     , m_xPopup(m_xBuilder->weld_menu("calcmenu"))
+    , m_xSortMenu(m_xBuilder->weld_menu("calcsortmenu"))
 {
     m_xAcceptChgCtr.reset(new SvxAcceptChgCtr(m_xContentArea.get(), m_xDialog.get(), m_xBuilder.get()));
     nAcceptCount=0;
@@ -1611,7 +1612,7 @@ IMPL_LINK(ScAcceptChgDlg, CommandHdl, const CommandEvent&, rCEvt, bool)
 
     int nSortedCol = rTreeView.get_sort_column();
     for (sal_Int32 i = 0; i < 5; ++i)
-        m_xPopup->set_active("calcsort" + OString::number(i), i == nSortedCol);
+        m_xSortMenu->set_active("calcsort" + OString::number(i), i == nSortedCol);
 
     m_xPopup->set_sensitive("calcedit", false);
 

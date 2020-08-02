@@ -151,7 +151,7 @@
         <property name="label" translatable="yes" context="acceptrejectchangesdialog|calcsort">Sorting</property>
         <property name="use_underline">True</property>
         <child type="submenu">
-          <object class="GtkMenu">
+          <object class="GtkMenu" id="calcsortmenu">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
@@ -220,7 +220,7 @@
         <property name="label" translatable="yes" context="acceptrejectchangesdialog|writersort">Sort By</property>
         <property name="use_underline">True</property>
         <child type="submenu">
-          <object class="GtkMenu">
+          <object class="GtkMenu" id="writersortmenu">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
