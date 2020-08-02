@@ -942,6 +942,11 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                result += lcl_formatArabicZero(number, 5);
                break;
 
+          case SZEKELY_ROVAS: // Old Hungarian
+               natNum = NativeNumberMode::NATNUM12;
+               locale.Language = "hu-Hung";
+               break;
+
           default:
                OSL_ASSERT(false);
                throw IllegalArgumentException();
@@ -1036,8 +1041,9 @@ const Supported_NumberingType aSupportedTypes[] =
         {style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_SR,   S_CYR_A ", " S_CYR_B ", .., " S_CYR_A S_CYR_A ", " S_CYR_A S_CYR_B ", ... (sr)", LANG_ALL},
         {style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_SR, C_CYR_A ", " C_CYR_B ", .., " C_CYR_A S_CYR_A ", " C_CYR_B S_CYR_B ", ... (sr)", LANG_ALL},
         {style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_SR, S_CYR_A ", " S_CYR_B ", .., " S_CYR_A S_CYR_A ", " S_CYR_B S_CYR_B ", ... (sr)", LANG_ALL},
-        {style::NumberingType::CHARS_PERSIAN,   nullptr, LANG_CTL},
+        {style::NumberingType::CHARS_PERSIAN,        nullptr, LANG_CTL},
         {style::NumberingType::CHARS_PERSIAN_WORD,   nullptr, LANG_CTL},
+        {style::NumberingType::SZEKELY_ROVAS,        nullptr, LANG_CTL},
         {style::NumberingType::CHARS_GREEK_UPPER_LETTER,   C_GR_A ", " C_GR_B ", ... (gr)", LANG_ALL},
         {style::NumberingType::CHARS_GREEK_LOWER_LETTER,   S_GR_A ", " S_GR_B ", ... (gr)", LANG_ALL},
         {style::NumberingType::ARABIC_ZERO, "01, 02, 03, ...", LANG_ALL},
