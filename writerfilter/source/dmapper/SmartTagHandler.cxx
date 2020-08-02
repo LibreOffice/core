@@ -86,41 +86,40 @@ void SmartTagHandler::setElement(const OUString& rElement) { m_aElement = rEleme
 
 void SmartTagHandler::handle(const uno::Reference<text::XTextRange>& xParagraph)
 {
-    if (!m_aURI.isEmpty() && !m_aElement.isEmpty() && !m_aAttributes.empty())
+    if (!(!m_aURI.isEmpty() && !m_aElement.isEmpty() && !m_aAttributes.empty()))
+        return;
+
+    uno::Reference<rdf::XResource> xSubject(xParagraph, uno::UNO_QUERY);
+
+    for (const std::pair<OUString, OUString>& rAttribute : m_aAttributes)
     {
-        uno::Reference<rdf::XResource> xSubject(xParagraph, uno::UNO_QUERY);
+        OUString aTypeNS = rAttribute.first;
+        OUString aMetadataFilePath = lcl_getTypePath(aTypeNS);
+        if (aMetadataFilePath.isEmpty())
+            continue;
 
-        for (const std::pair<OUString, OUString>& rAttribute : m_aAttributes)
+        uno::Reference<rdf::XURI> xType = rdf::URI::create(m_xComponentContext, aTypeNS);
+        uno::Sequence<uno::Reference<rdf::XURI>> aGraphNames
+            = m_xDocumentMetadataAccess->getMetadataGraphsWithType(xType);
+        uno::Reference<rdf::XURI> xGraphName;
+        if (aGraphNames.hasElements())
+            xGraphName = aGraphNames[0];
+        else
         {
-            OUString aTypeNS = rAttribute.first;
-            OUString aMetadataFilePath = lcl_getTypePath(aTypeNS);
-            if (aMetadataFilePath.isEmpty())
-                continue;
-
-            uno::Reference<rdf::XURI> xType = rdf::URI::create(m_xComponentContext, aTypeNS);
-            uno::Sequence<uno::Reference<rdf::XURI>> aGraphNames
-                = m_xDocumentMetadataAccess->getMetadataGraphsWithType(xType);
-            uno::Reference<rdf::XURI> xGraphName;
-            if (aGraphNames.hasElements())
-                xGraphName = aGraphNames[0];
-            else
-            {
-                uno::Sequence<uno::Reference<rdf::XURI>> xTypes = { xType };
-                xGraphName = m_xDocumentMetadataAccess->addMetadataFile(aMetadataFilePath, xTypes);
-            }
-            uno::Reference<rdf::XNamedGraph> xGraph
-                = m_xDocumentMetadataAccess->getRDFRepository()->getGraph(xGraphName);
-            uno::Reference<rdf::XURI> xKey
-                = rdf::URI::create(m_xComponentContext, rAttribute.first);
-            uno::Reference<rdf::XLiteral> xValue
-                = rdf::Literal::create(m_xComponentContext, rAttribute.second);
-            xGraph->addStatement(xSubject, xKey, xValue);
+            uno::Sequence<uno::Reference<rdf::XURI>> xTypes = { xType };
+            xGraphName = m_xDocumentMetadataAccess->addMetadataFile(aMetadataFilePath, xTypes);
         }
-
-        m_aURI.clear();
-        m_aElement.clear();
-        m_aAttributes.clear();
+        uno::Reference<rdf::XNamedGraph> xGraph
+            = m_xDocumentMetadataAccess->getRDFRepository()->getGraph(xGraphName);
+        uno::Reference<rdf::XURI> xKey = rdf::URI::create(m_xComponentContext, rAttribute.first);
+        uno::Reference<rdf::XLiteral> xValue
+            = rdf::Literal::create(m_xComponentContext, rAttribute.second);
+        xGraph->addStatement(xSubject, xKey, xValue);
     }
+
+    m_aURI.clear();
+    m_aElement.clear();
+    m_aAttributes.clear();
 }
 
 } // namespace writerfilter::dmapper

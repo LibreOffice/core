@@ -145,51 +145,50 @@ void SdtHelper::createDateContentControl()
             xCrsr = xTextAppend->createTextCursorByRange(xTextAppend);
         }
     }
-    if (xCrsr.is())
-    {
-        try
-        {
-            xCrsr->gotoRange(m_xDateFieldStartRange, false);
-            bool bIsInTable
-                = (m_rDM_Impl.hasTableManager() && m_rDM_Impl.getTableManager().isInTable())
-                  || (m_rDM_Impl.m_nTableDepth > 0);
-            if (bIsInTable)
-                xCrsr->goRight(1, false);
-            xCrsr->gotoEnd(true);
-        }
-        catch (uno::Exception&)
-        {
-            OSL_ENSURE(false, "Cannot get the right text range for date field");
-            return;
-        }
+    if (!xCrsr.is())
+        return;
 
-        uno::Reference<uno::XInterface> xFieldInterface
-            = m_rDM_Impl.GetTextFactory()->createInstance("com.sun.star.text.Fieldmark");
-        uno::Reference<text::XFormField> xFormField(xFieldInterface, uno::UNO_QUERY);
-        uno::Reference<text::XTextContent> xToInsert(xFormField, uno::UNO_QUERY);
-        if (xFormField.is() && xToInsert.is())
-        {
-            xToInsert->attach(uno::Reference<text::XTextRange>(xCrsr, uno::UNO_QUERY_THROW));
-            xFormField->setFieldType(ODF_FORMDATE);
-            uno::Reference<container::XNameContainer> xNameCont = xFormField->getParameters();
-            if (xNameCont.is())
-            {
-                OUString sDateFormat = m_sDateFormat.makeStringAndClear();
-                // Replace quotation mark used for marking static strings in date format
-                sDateFormat = sDateFormat.replaceAll("'", "\"");
-                xNameCont->insertByName(ODF_FORMDATE_DATEFORMAT, uno::makeAny(sDateFormat));
-                xNameCont->insertByName(ODF_FORMDATE_DATEFORMAT_LANGUAGE,
-                                        uno::makeAny(m_sLocale.makeStringAndClear()));
-            }
-            OUString sFullDate = m_sDate.makeStringAndClear();
-            if (!sFullDate.isEmpty())
-            {
-                sal_Int32 nTimeSep = sFullDate.indexOf("T");
-                if (nTimeSep != -1)
-                    sFullDate = sFullDate.copy(0, nTimeSep);
-                xNameCont->insertByName(ODF_FORMDATE_CURRENTDATE, uno::makeAny(sFullDate));
-            }
-        }
+    try
+    {
+        xCrsr->gotoRange(m_xDateFieldStartRange, false);
+        bool bIsInTable = (m_rDM_Impl.hasTableManager() && m_rDM_Impl.getTableManager().isInTable())
+                          || (m_rDM_Impl.m_nTableDepth > 0);
+        if (bIsInTable)
+            xCrsr->goRight(1, false);
+        xCrsr->gotoEnd(true);
+    }
+    catch (uno::Exception&)
+    {
+        OSL_ENSURE(false, "Cannot get the right text range for date field");
+        return;
+    }
+
+    uno::Reference<uno::XInterface> xFieldInterface
+        = m_rDM_Impl.GetTextFactory()->createInstance("com.sun.star.text.Fieldmark");
+    uno::Reference<text::XFormField> xFormField(xFieldInterface, uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xToInsert(xFormField, uno::UNO_QUERY);
+    if (!(xFormField.is() && xToInsert.is()))
+        return;
+
+    xToInsert->attach(uno::Reference<text::XTextRange>(xCrsr, uno::UNO_QUERY_THROW));
+    xFormField->setFieldType(ODF_FORMDATE);
+    uno::Reference<container::XNameContainer> xNameCont = xFormField->getParameters();
+    if (xNameCont.is())
+    {
+        OUString sDateFormat = m_sDateFormat.makeStringAndClear();
+        // Replace quotation mark used for marking static strings in date format
+        sDateFormat = sDateFormat.replaceAll("'", "\"");
+        xNameCont->insertByName(ODF_FORMDATE_DATEFORMAT, uno::makeAny(sDateFormat));
+        xNameCont->insertByName(ODF_FORMDATE_DATEFORMAT_LANGUAGE,
+                                uno::makeAny(m_sLocale.makeStringAndClear()));
+    }
+    OUString sFullDate = m_sDate.makeStringAndClear();
+    if (!sFullDate.isEmpty())
+    {
+        sal_Int32 nTimeSep = sFullDate.indexOf("T");
+        if (nTimeSep != -1)
+            sFullDate = sFullDate.copy(0, nTimeSep);
+        xNameCont->insertByName(ODF_FORMDATE_CURRENTDATE, uno::makeAny(sFullDate));
     }
 }
 

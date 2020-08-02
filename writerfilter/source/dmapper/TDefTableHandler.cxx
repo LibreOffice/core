@@ -310,80 +310,80 @@ void TDefTableHandler::lcl_attribute(Id rName, Value & rVal)
 
 void TDefTableHandler::localResolve(Id rName, const writerfilter::Reference<Properties>::Pointer_t& pProperties)
 {
-    if( pProperties )
+    if( !pProperties )
+        return;
+
+    m_nLineWidth = m_nLineType = m_nLineColor = 0;
+    std::vector<beans::PropertyValue> aSavedGrabBag;
+    if (!m_aInteropGrabBagName.isEmpty())
     {
-        m_nLineWidth = m_nLineType = m_nLineColor = 0;
-        std::vector<beans::PropertyValue> aSavedGrabBag;
-        if (!m_aInteropGrabBagName.isEmpty())
-        {
-            aSavedGrabBag = m_aInteropGrabBag;
-            m_aInteropGrabBag.clear();
-        }
-        pProperties->resolve( *this );
-        table::BorderLine2 aBorderLine;
-        ConversionHelper::MakeBorderLine(m_nLineWidth, m_nLineType, m_nLineColor, aBorderLine, /*bIsOOXML=*/true);
-        const bool rtl = false; // TODO
-        switch( rName )
-        {
-            case NS_ooxml::LN_CT_TcBorders_top:
-                m_aTopBorderLines.push_back(aBorderLine);
-                if (!m_aInteropGrabBagName.isEmpty())
-                    aSavedGrabBag.push_back(getInteropGrabBag("top"));
-            break;
-            case NS_ooxml::LN_CT_TcBorders_start:
-                if( rtl )
-                    m_aRightBorderLines.push_back(aBorderLine);
-                else
-                    m_aLeftBorderLines.push_back(aBorderLine);
-                if (!m_aInteropGrabBagName.isEmpty())
-                    aSavedGrabBag.push_back(getInteropGrabBag("start"));
-            break;
-            case NS_ooxml::LN_CT_TcBorders_left:
-                m_aLeftBorderLines.push_back(aBorderLine);
-                if (!m_aInteropGrabBagName.isEmpty())
-                    aSavedGrabBag.push_back(getInteropGrabBag("left"));
-            break;
-            case NS_ooxml::LN_CT_TcBorders_bottom:
-                m_aBottomBorderLines.push_back(aBorderLine);
-                if (!m_aInteropGrabBagName.isEmpty())
-                    aSavedGrabBag.push_back(getInteropGrabBag("bottom"));
-            break;
-            case NS_ooxml::LN_CT_TcBorders_end:
-                if( rtl )
-                    m_aLeftBorderLines.push_back(aBorderLine);
-                else
-                    m_aRightBorderLines.push_back(aBorderLine);
-                if (!m_aInteropGrabBagName.isEmpty())
-                    aSavedGrabBag.push_back(getInteropGrabBag("end"));
-            break;
-            case NS_ooxml::LN_CT_TcBorders_right:
-                m_aRightBorderLines.push_back(aBorderLine);
-                if (!m_aInteropGrabBagName.isEmpty())
-                    aSavedGrabBag.push_back(getInteropGrabBag("right"));
-            break;
-            case NS_ooxml::LN_CT_TcBorders_insideH:
-                m_aInsideHBorderLines.push_back(aBorderLine);
-                if (!m_aInteropGrabBagName.isEmpty())
-                    aSavedGrabBag.push_back(getInteropGrabBag("insideH"));
-            break;
-            case NS_ooxml::LN_CT_TcBorders_insideV:
-                m_aInsideVBorderLines.push_back(aBorderLine);
-                if (!m_aInteropGrabBagName.isEmpty())
-                    aSavedGrabBag.push_back(getInteropGrabBag("insideV"));
-            break;
-            case NS_ooxml::LN_CT_TcBorders_tl2br:
-                if (!m_aInteropGrabBagName.isEmpty())
-                    aSavedGrabBag.push_back(getInteropGrabBag("tl2br"));
-            break;
-            case NS_ooxml::LN_CT_TcBorders_tr2bl:
-                if (!m_aInteropGrabBagName.isEmpty())
-                    aSavedGrabBag.push_back(getInteropGrabBag("tr2bl"));
-            break;
-            default:;
-        }
-        if (!m_aInteropGrabBagName.isEmpty())
-            m_aInteropGrabBag = aSavedGrabBag;
+        aSavedGrabBag = m_aInteropGrabBag;
+        m_aInteropGrabBag.clear();
     }
+    pProperties->resolve( *this );
+    table::BorderLine2 aBorderLine;
+    ConversionHelper::MakeBorderLine(m_nLineWidth, m_nLineType, m_nLineColor, aBorderLine, /*bIsOOXML=*/true);
+    const bool rtl = false; // TODO
+    switch( rName )
+    {
+        case NS_ooxml::LN_CT_TcBorders_top:
+            m_aTopBorderLines.push_back(aBorderLine);
+            if (!m_aInteropGrabBagName.isEmpty())
+                aSavedGrabBag.push_back(getInteropGrabBag("top"));
+        break;
+        case NS_ooxml::LN_CT_TcBorders_start:
+            if( rtl )
+                m_aRightBorderLines.push_back(aBorderLine);
+            else
+                m_aLeftBorderLines.push_back(aBorderLine);
+            if (!m_aInteropGrabBagName.isEmpty())
+                aSavedGrabBag.push_back(getInteropGrabBag("start"));
+        break;
+        case NS_ooxml::LN_CT_TcBorders_left:
+            m_aLeftBorderLines.push_back(aBorderLine);
+            if (!m_aInteropGrabBagName.isEmpty())
+                aSavedGrabBag.push_back(getInteropGrabBag("left"));
+        break;
+        case NS_ooxml::LN_CT_TcBorders_bottom:
+            m_aBottomBorderLines.push_back(aBorderLine);
+            if (!m_aInteropGrabBagName.isEmpty())
+                aSavedGrabBag.push_back(getInteropGrabBag("bottom"));
+        break;
+        case NS_ooxml::LN_CT_TcBorders_end:
+            if( rtl )
+                m_aLeftBorderLines.push_back(aBorderLine);
+            else
+                m_aRightBorderLines.push_back(aBorderLine);
+            if (!m_aInteropGrabBagName.isEmpty())
+                aSavedGrabBag.push_back(getInteropGrabBag("end"));
+        break;
+        case NS_ooxml::LN_CT_TcBorders_right:
+            m_aRightBorderLines.push_back(aBorderLine);
+            if (!m_aInteropGrabBagName.isEmpty())
+                aSavedGrabBag.push_back(getInteropGrabBag("right"));
+        break;
+        case NS_ooxml::LN_CT_TcBorders_insideH:
+            m_aInsideHBorderLines.push_back(aBorderLine);
+            if (!m_aInteropGrabBagName.isEmpty())
+                aSavedGrabBag.push_back(getInteropGrabBag("insideH"));
+        break;
+        case NS_ooxml::LN_CT_TcBorders_insideV:
+            m_aInsideVBorderLines.push_back(aBorderLine);
+            if (!m_aInteropGrabBagName.isEmpty())
+                aSavedGrabBag.push_back(getInteropGrabBag("insideV"));
+        break;
+        case NS_ooxml::LN_CT_TcBorders_tl2br:
+            if (!m_aInteropGrabBagName.isEmpty())
+                aSavedGrabBag.push_back(getInteropGrabBag("tl2br"));
+        break;
+        case NS_ooxml::LN_CT_TcBorders_tr2bl:
+            if (!m_aInteropGrabBagName.isEmpty())
+                aSavedGrabBag.push_back(getInteropGrabBag("tr2bl"));
+        break;
+        default:;
+    }
+    if (!m_aInteropGrabBagName.isEmpty())
+        m_aInteropGrabBag = aSavedGrabBag;
 }
 
 

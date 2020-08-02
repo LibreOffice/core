@@ -217,80 +217,80 @@ void FormControlHelper::processField(uno::Reference<text::XFormField> const& xFo
 
     uno::Reference<container::XNameContainer> xNameCont = xFormField->getParameters();
     uno::Reference<container::XNamed> xNamed( xFormField, uno::UNO_QUERY );
-    if ( m_pFFData && xNamed.is() && xNameCont.is() )
+    if ( !(m_pFFData && xNamed.is() && xNameCont.is()) )
+        return;
+
+    OUString sTmp = m_pFFData->getEntryMacro();
+    if ( !sTmp.isEmpty() )
+        xNameCont->insertByName( "EntryMacro", uno::makeAny(sTmp) );
+    sTmp = m_pFFData->getExitMacro();
+    if ( !sTmp.isEmpty() )
+        xNameCont->insertByName( "ExitMacro", uno::makeAny(sTmp) );
+
+    sTmp = m_pFFData->getHelpText();
+    if ( !sTmp.isEmpty() )
+        xNameCont->insertByName( "Help", uno::makeAny(sTmp) );
+
+    sTmp = m_pFFData->getStatusText();
+    if ( !sTmp.isEmpty() )
+        xNameCont->insertByName( "Hint", uno::makeAny(sTmp) );
+
+    if (m_pImpl->m_eFieldId == FIELD_FORMTEXT )
     {
-        OUString sTmp = m_pFFData->getEntryMacro();
-        if ( !sTmp.isEmpty() )
-            xNameCont->insertByName( "EntryMacro", uno::makeAny(sTmp) );
-        sTmp = m_pFFData->getExitMacro();
-        if ( !sTmp.isEmpty() )
-            xNameCont->insertByName( "ExitMacro", uno::makeAny(sTmp) );
-
-        sTmp = m_pFFData->getHelpText();
-        if ( !sTmp.isEmpty() )
-            xNameCont->insertByName( "Help", uno::makeAny(sTmp) );
-
-        sTmp = m_pFFData->getStatusText();
-        if ( !sTmp.isEmpty() )
-            xNameCont->insertByName( "Hint", uno::makeAny(sTmp) );
-
-        if (m_pImpl->m_eFieldId == FIELD_FORMTEXT )
+        sTmp = m_pFFData->getName();
+        try
         {
-            sTmp = m_pFFData->getName();
-            try
-            {
-                if ( !sTmp.isEmpty() )
-                    xNamed->setName( sTmp );
-            }
-            catch ( uno::Exception& )
-            {
-                TOOLS_INFO_EXCEPTION("writerfilter", "Set Formfield name failed");
-            }
-
-            sTmp = m_pFFData->getTextType();
             if ( !sTmp.isEmpty() )
-                xNameCont->insertByName( "Type", uno::makeAny(sTmp) );
-
-            const sal_uInt16 nMaxLength = m_pFFData->getTextMaxLength();
-            if ( nMaxLength )
-            {
-                xNameCont->insertByName( "MaxLength", uno::makeAny(nMaxLength) );
-            }
-
-            sTmp = m_pFFData->getTextDefault();
-            if ( !sTmp.isEmpty() )
-                xNameCont->insertByName( "Content", uno::makeAny(sTmp) );
-
-            sTmp = m_pFFData->getTextFormat();
-            if ( !sTmp.isEmpty() )
-                xNameCont->insertByName( "Format", uno::makeAny(sTmp) );
+                xNamed->setName( sTmp );
         }
-        else if (m_pImpl->m_eFieldId == FIELD_FORMCHECKBOX )
+        catch ( uno::Exception& )
         {
-            uno::Reference<beans::XPropertySet> xPropSet(xFormField, uno::UNO_QUERY);
-            uno::Any aAny;
-            aAny <<= m_pFFData->getCheckboxChecked();
-            if ( xPropSet.is() )
-                xPropSet->setPropertyValue("Checked", aAny);
+            TOOLS_INFO_EXCEPTION("writerfilter", "Set Formfield name failed");
         }
-        else if (m_pImpl->m_eFieldId == FIELD_FORMDROPDOWN )
+
+        sTmp = m_pFFData->getTextType();
+        if ( !sTmp.isEmpty() )
+            xNameCont->insertByName( "Type", uno::makeAny(sTmp) );
+
+        const sal_uInt16 nMaxLength = m_pFFData->getTextMaxLength();
+        if ( nMaxLength )
         {
-            const FFDataHandler::DropDownEntries_t& rEntries = m_pFFData->getDropDownEntries();
-            if (!rEntries.empty())
+            xNameCont->insertByName( "MaxLength", uno::makeAny(nMaxLength) );
+        }
+
+        sTmp = m_pFFData->getTextDefault();
+        if ( !sTmp.isEmpty() )
+            xNameCont->insertByName( "Content", uno::makeAny(sTmp) );
+
+        sTmp = m_pFFData->getTextFormat();
+        if ( !sTmp.isEmpty() )
+            xNameCont->insertByName( "Format", uno::makeAny(sTmp) );
+    }
+    else if (m_pImpl->m_eFieldId == FIELD_FORMCHECKBOX )
+    {
+        uno::Reference<beans::XPropertySet> xPropSet(xFormField, uno::UNO_QUERY);
+        uno::Any aAny;
+        aAny <<= m_pFFData->getCheckboxChecked();
+        if ( xPropSet.is() )
+            xPropSet->setPropertyValue("Checked", aAny);
+    }
+    else if (m_pImpl->m_eFieldId == FIELD_FORMDROPDOWN )
+    {
+        const FFDataHandler::DropDownEntries_t& rEntries = m_pFFData->getDropDownEntries();
+        if (!rEntries.empty())
+        {
+            if ( xNameCont->hasByName(ODF_FORMDROPDOWN_LISTENTRY) )
+                xNameCont->replaceByName(ODF_FORMDROPDOWN_LISTENTRY, uno::makeAny(comphelper::containerToSequence(rEntries)));
+            else
+                xNameCont->insertByName(ODF_FORMDROPDOWN_LISTENTRY, uno::makeAny(comphelper::containerToSequence(rEntries)));
+
+            sal_Int32 nResult = m_pFFData->getDropDownResult().toInt32();
+            if ( nResult )
             {
-                if ( xNameCont->hasByName(ODF_FORMDROPDOWN_LISTENTRY) )
-                    xNameCont->replaceByName(ODF_FORMDROPDOWN_LISTENTRY, uno::makeAny(comphelper::containerToSequence(rEntries)));
+                if ( xNameCont->hasByName(ODF_FORMDROPDOWN_RESULT) )
+                    xNameCont->replaceByName(ODF_FORMDROPDOWN_RESULT, uno::makeAny( nResult ) );
                 else
-                    xNameCont->insertByName(ODF_FORMDROPDOWN_LISTENTRY, uno::makeAny(comphelper::containerToSequence(rEntries)));
-
-                sal_Int32 nResult = m_pFFData->getDropDownResult().toInt32();
-                if ( nResult )
-                {
-                    if ( xNameCont->hasByName(ODF_FORMDROPDOWN_RESULT) )
-                        xNameCont->replaceByName(ODF_FORMDROPDOWN_RESULT, uno::makeAny( nResult ) );
-                    else
-                        xNameCont->insertByName(ODF_FORMDROPDOWN_RESULT, uno::makeAny( nResult ) );
-                }
+                    xNameCont->insertByName(ODF_FORMDROPDOWN_RESULT, uno::makeAny( nResult ) );
             }
         }
     }

@@ -333,20 +333,20 @@ Token_t OOXMLFastContextHandler::getToken() const
 
 void OOXMLFastContextHandler::sendTableDepth() const
 {
-    if (mnTableDepth > 0)
-    {
-        OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
-        {
-            OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(mnTableDepth);
-            pProps->add(NS_ooxml::LN_tblDepth, pVal, OOXMLProperty::SPRM);
-        }
-        {
-            OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(1);
-            pProps->add(NS_ooxml::LN_inTbl, pVal, OOXMLProperty::SPRM);
-        }
+    if (mnTableDepth <= 0)
+        return;
 
-        mpStream->props(pProps.get());
+    OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
+    {
+        OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(mnTableDepth);
+        pProps->add(NS_ooxml::LN_tblDepth, pVal, OOXMLProperty::SPRM);
     }
+    {
+        OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(1);
+        pProps->add(NS_ooxml::LN_inTbl, pVal, OOXMLProperty::SPRM);
+    }
+
+    mpStream->props(pProps.get());
 }
 
 void OOXMLFastContextHandler::setHandle()
@@ -357,25 +357,25 @@ void OOXMLFastContextHandler::setHandle()
 
 void OOXMLFastContextHandler::startCharacterGroup()
 {
-    if (isForwardEvents())
+    if (!isForwardEvents())
+        return;
+
+    if (mpParserState->isInCharacterGroup())
+        endCharacterGroup();
+
+    if (! mpParserState->isInParagraphGroup())
+        startParagraphGroup();
+
+    if (! mpParserState->isInCharacterGroup())
     {
-        if (mpParserState->isInCharacterGroup())
-            endCharacterGroup();
-
-        if (! mpParserState->isInParagraphGroup())
-            startParagraphGroup();
-
-        if (! mpParserState->isInCharacterGroup())
-        {
-            mpStream->startCharacterGroup();
-            mpParserState->setInCharacterGroup(true);
-            mpParserState->resolveCharacterProperties(*mpStream);
-        }
-
-        // tdf#108714 : if we have a postponed break information,
-        // then apply it now, before any other paragraph content.
-        mpParserState->resolvePostponedBreak(*mpStream);
+        mpStream->startCharacterGroup();
+        mpParserState->setInCharacterGroup(true);
+        mpParserState->resolveCharacterProperties(*mpStream);
     }
+
+    // tdf#108714 : if we have a postponed break information,
+    // then apply it now, before any other paragraph content.
+    mpParserState->resolvePostponedBreak(*mpStream);
 }
 
 void OOXMLFastContextHandler::endCharacterGroup()
@@ -393,19 +393,19 @@ void OOXMLFastContextHandler::popBiDiEmbedLevel() {}
 
 void OOXMLFastContextHandler::startParagraphGroup()
 {
-    if (isForwardEvents())
+    if (!isForwardEvents())
+        return;
+
+    if (mpParserState->isInParagraphGroup())
+        endParagraphGroup();
+
+    if (! mpParserState->isInSectionGroup())
+        startSectionGroup();
+
+    if (! mpParserState->isInParagraphGroup())
     {
-        if (mpParserState->isInParagraphGroup())
-            endParagraphGroup();
-
-        if (! mpParserState->isInSectionGroup())
-            startSectionGroup();
-
-        if (! mpParserState->isInParagraphGroup())
-        {
-            mpStream->startParagraphGroup();
-            mpParserState->setInParagraphGroup(true);
-        }
+        mpStream->startParagraphGroup();
+        mpParserState->setInParagraphGroup(true);
     }
 }
 
@@ -650,21 +650,21 @@ OUString TrimXMLWhitespace(const OUString & sText)
 
 void OOXMLFastContextHandler::text(const OUString & sText)
 {
-    if (isForwardEvents())
+    if (!isForwardEvents())
+        return;
+
+    // tdf#108806: CRLFs in XML were converted to \n before this point.
+    // These must be converted to spaces before further processing.
+    OUString sNormalizedText = sText.replaceAll("\n", " ");
+    // tdf#108995: by default, leading and trailing white space is ignored;
+    // tabs are converted to spaces
+    if (!IsPreserveSpace())
     {
-        // tdf#108806: CRLFs in XML were converted to \n before this point.
-        // These must be converted to spaces before further processing.
-        OUString sNormalizedText = sText.replaceAll("\n", " ");
-        // tdf#108995: by default, leading and trailing white space is ignored;
-        // tabs are converted to spaces
-        if (!IsPreserveSpace())
-        {
-            sNormalizedText = TrimXMLWhitespace(sNormalizedText).replaceAll("\t", " ");
-        }
-        mpStream->utext(reinterpret_cast < const sal_uInt8 * >
-                        (sNormalizedText.getStr()),
-                        sNormalizedText.getLength());
+        sNormalizedText = TrimXMLWhitespace(sNormalizedText).replaceAll("\t", " ");
     }
+    mpStream->utext(reinterpret_cast < const sal_uInt8 * >
+                    (sNormalizedText.getStr()),
+                    sNormalizedText.getLength());
 }
 
 void OOXMLFastContextHandler::positionOffset(const OUString& rText)
@@ -886,23 +886,23 @@ void OOXMLFastContextHandler::sendPropertyToParent()
 
 void OOXMLFastContextHandler::sendPropertiesToParent()
 {
-    if (mpParent != nullptr)
+    if (mpParent == nullptr)
+        return;
+
+    OOXMLPropertySet::Pointer_t pParentProps(mpParent->getPropertySet());
+
+    if (!pParentProps)
+        return;
+
+    OOXMLPropertySet::Pointer_t pProps(getPropertySet());
+
+    if (pProps)
     {
-        OOXMLPropertySet::Pointer_t pParentProps(mpParent->getPropertySet());
+        OOXMLValue::Pointer_t pValue
+            (new OOXMLPropertySetValue(getPropertySet()));
 
-        if (pParentProps)
-        {
-            OOXMLPropertySet::Pointer_t pProps(getPropertySet());
+        pParentProps->add(getId(), pValue, OOXMLProperty::SPRM);
 
-            if (pProps)
-            {
-                OOXMLValue::Pointer_t pValue
-                    (new OOXMLPropertySetValue(getPropertySet()));
-
-                pParentProps->add(getId(), pValue, OOXMLProperty::SPRM);
-
-            }
-        }
     }
 }
 
@@ -1393,28 +1393,28 @@ void OOXMLFastContextHandlerTextTableCell::startCell()
 
 void OOXMLFastContextHandlerTextTableCell::endCell()
 {
-    if (isForwardEvents())
-    {
-        OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
-        {
-            OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(mnTableDepth);
-            pProps->add(NS_ooxml::LN_tblDepth, pVal, OOXMLProperty::SPRM);
-        }
-        {
-            OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(1);
-            pProps->add(NS_ooxml::LN_inTbl, pVal, OOXMLProperty::SPRM);
-        }
-        {
-            OOXMLValue::Pointer_t pVal = OOXMLBooleanValue::Create(mnTableDepth > 0);
-            pProps->add(NS_ooxml::LN_tblCell, pVal, OOXMLProperty::SPRM);
-        }
-        {
-            OOXMLValue::Pointer_t pVal = OOXMLBooleanValue::Create(mnTableDepth > 0);
-            pProps->add(NS_ooxml::LN_tcEnd, pVal, OOXMLProperty::SPRM);
-        }
+    if (!isForwardEvents())
+        return;
 
-        mpStream->props(pProps.get());
+    OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
+    {
+        OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(mnTableDepth);
+        pProps->add(NS_ooxml::LN_tblDepth, pVal, OOXMLProperty::SPRM);
     }
+    {
+        OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(1);
+        pProps->add(NS_ooxml::LN_inTbl, pVal, OOXMLProperty::SPRM);
+    }
+    {
+        OOXMLValue::Pointer_t pVal = OOXMLBooleanValue::Create(mnTableDepth > 0);
+        pProps->add(NS_ooxml::LN_tblCell, pVal, OOXMLProperty::SPRM);
+    }
+    {
+        OOXMLValue::Pointer_t pVal = OOXMLBooleanValue::Create(mnTableDepth > 0);
+        pProps->add(NS_ooxml::LN_tcEnd, pVal, OOXMLProperty::SPRM);
+    }
+
+    mpStream->props(pProps.get());
 }
 
 /*
@@ -1678,59 +1678,57 @@ void OOXMLFastContextHandlerShape::setToken(Token_t nToken)
 
 void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
 {
-    if ( mrShapeContext.is() && !m_bShapeSent )
+    if ( !(mrShapeContext.is() && !m_bShapeSent) )
+        return;
+
+    awt::Point aPosition = mpStream->getPositionOffset();
+    mrShapeContext->setPosition(aPosition);
+    uno::Reference<drawing::XShape> xShape(mrShapeContext->getShape());
+    m_bShapeSent = true;
+    if (!xShape.is())
+        return;
+
+    OOXMLValue::Pointer_t
+        pValue(new OOXMLShapeValue(xShape));
+    newProperty(NS_ooxml::LN_shape, pValue);
+
+    bool bIsPicture = Element == ( NMSP_dmlPicture | XML_pic );
+
+    //tdf#87569: Fix table layout with correcting anchoring
+    //If anchored object is in table, Word calculates its position from cell border
+    //instead of page (what is set in the sample document)
+    uno::Reference<beans::XPropertySet> xShapePropSet(xShape, uno::UNO_QUERY);
+    if (mnTableDepth > 0 && xShapePropSet.is() && mbIsVMLfound) //if we had a table
     {
-        awt::Point aPosition = mpStream->getPositionOffset();
-        mrShapeContext->setPosition(aPosition);
-        uno::Reference<drawing::XShape> xShape(mrShapeContext->getShape());
-        m_bShapeSent = true;
-        if (xShape.is())
-        {
-            OOXMLValue::Pointer_t
-                pValue(new OOXMLShapeValue(xShape));
-            newProperty(NS_ooxml::LN_shape, pValue);
-
-            bool bIsPicture = Element == ( NMSP_dmlPicture | XML_pic );
-
-            //tdf#87569: Fix table layout with correcting anchoring
-            //If anchored object is in table, Word calculates its position from cell border
-            //instead of page (what is set in the sample document)
-            uno::Reference<beans::XPropertySet> xShapePropSet(xShape, uno::UNO_QUERY);
-            if (mnTableDepth > 0 && xShapePropSet.is() && mbIsVMLfound) //if we had a table
-            {
-                xShapePropSet->setPropertyValue(dmapper::getPropertyName(dmapper::PROP_FOLLOW_TEXT_FLOW),
-                                                uno::makeAny(mbAllowInCell));
-            }
-            // Notify the dmapper that the shape is ready to use
-            if ( !bIsPicture )
-            {
-                mpStream->startShape( xShape );
-                m_bShapeStarted = true;
-            }
-        }
+        xShapePropSet->setPropertyValue(dmapper::getPropertyName(dmapper::PROP_FOLLOW_TEXT_FLOW),
+                                        uno::makeAny(mbAllowInCell));
+    }
+    // Notify the dmapper that the shape is ready to use
+    if ( !bIsPicture )
+    {
+        mpStream->startShape( xShape );
+        m_bShapeStarted = true;
     }
 }
 
 void OOXMLFastContextHandlerShape::lcl_endFastElement
 (Token_t Element)
 {
-    if (isForwardEvents())
+    if (!isForwardEvents())
+        return;
+
+    if (mrShapeContext.is())
     {
-
-        if (mrShapeContext.is())
-        {
-            mrShapeContext->endFastElement(Element);
-            sendShape( Element );
-        }
-
-        OOXMLFastContextHandlerProperties::lcl_endFastElement(Element);
-
-        // Ending the shape should be the last thing to do
-        bool bIsPicture = Element == ( NMSP_dmlPicture | XML_pic );
-        if ( !bIsPicture && m_bShapeStarted)
-            mpStream->endShape( );
-
+        mrShapeContext->endFastElement(Element);
+        sendShape( Element );
     }
+
+    OOXMLFastContextHandlerProperties::lcl_endFastElement(Element);
+
+    // Ending the shape should be the last thing to do
+    bool bIsPicture = Element == ( NMSP_dmlPicture | XML_pic );
+    if ( !bIsPicture && m_bShapeStarted)
+        mpStream->endShape( );
 }
 
 void SAL_CALL OOXMLFastContextHandlerShape::endUnknownElement
@@ -2159,34 +2157,34 @@ void OOXMLFastContextHandlerMath::process()
 // to RTLD_GLOBAL, so most probably a gcc bug.
     oox::FormulaImportBase& import = dynamic_cast<oox::FormulaImportBase&>(dynamic_cast<SfxBaseModel&>(*component));
     import.readFormulaOoxml(buffer);
-    if (isForwardEvents())
+    if (!isForwardEvents())
+        return;
+
+    OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
+    OOXMLValue::Pointer_t pVal( new OOXMLStarMathValue( ref ));
+    if (mbIsMathPara)
     {
-        OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
-        OOXMLValue::Pointer_t pVal( new OOXMLStarMathValue( ref ));
-        if (mbIsMathPara)
+        switch (mnMathJcVal)
         {
-            switch (mnMathJcVal)
-            {
-                case eMathParaJc::CENTER:
-                    pProps->add(NS_ooxml::LN_Value_math_ST_Jc_centerGroup, pVal,
-                                OOXMLProperty::ATTRIBUTE);
-                    break;
-                case eMathParaJc::LEFT:
-                    pProps->add(NS_ooxml::LN_Value_math_ST_Jc_left, pVal,
-                                OOXMLProperty::ATTRIBUTE);
-                    break;
-                case eMathParaJc::RIGHT:
-                    pProps->add(NS_ooxml::LN_Value_math_ST_Jc_right, pVal,
-                                OOXMLProperty::ATTRIBUTE);
-                    break;
-                default:
-                    break;
-            }
+            case eMathParaJc::CENTER:
+                pProps->add(NS_ooxml::LN_Value_math_ST_Jc_centerGroup, pVal,
+                            OOXMLProperty::ATTRIBUTE);
+                break;
+            case eMathParaJc::LEFT:
+                pProps->add(NS_ooxml::LN_Value_math_ST_Jc_left, pVal,
+                            OOXMLProperty::ATTRIBUTE);
+                break;
+            case eMathParaJc::RIGHT:
+                pProps->add(NS_ooxml::LN_Value_math_ST_Jc_right, pVal,
+                            OOXMLProperty::ATTRIBUTE);
+                break;
+            default:
+                break;
         }
-        else
-            pProps->add(NS_ooxml::LN_starmath, pVal, OOXMLProperty::ATTRIBUTE);
-        mpStream->props( pProps.get() );
     }
+    else
+        pProps->add(NS_ooxml::LN_starmath, pVal, OOXMLProperty::ATTRIBUTE);
+    mpStream->props( pProps.get() );
 }
 
 }

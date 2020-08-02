@@ -331,23 +331,23 @@ void PropertyMap::dumpXml() const
 
 void PropertyMap::InsertProps( const PropertyMapPtr& rMap, const bool bOverwrite )
 {
-    if ( rMap )
+    if ( !rMap )
+        return;
+
+    for ( const auto& rPropPair : rMap->m_vMap )
     {
-        for ( const auto& rPropPair : rMap->m_vMap )
+        if ( bOverwrite || !m_vMap.count(rPropPair.first) )
         {
-            if ( bOverwrite || !m_vMap.count(rPropPair.first) )
-            {
-                if ( !bOverwrite && !rPropPair.second.getIsDocDefault() )
-                    m_vMap.insert(std::make_pair(rPropPair.first, PropValue(rPropPair.second.getValue(), rPropPair.second.getGrabBagType(), true)));
-                else
-                    m_vMap[rPropPair.first] = rPropPair.second;
-            }
+            if ( !bOverwrite && !rPropPair.second.getIsDocDefault() )
+                m_vMap.insert(std::make_pair(rPropPair.first, PropValue(rPropPair.second.getValue(), rPropPair.second.getGrabBagType(), true)));
+            else
+                m_vMap[rPropPair.first] = rPropPair.second;
         }
-
-        insertTableProperties( rMap.get(), bOverwrite );
-
-        Invalidate();
     }
+
+    insertTableProperties( rMap.get(), bOverwrite );
+
+    Invalidate();
 }
 
 void PropertyMap::insertTableProperties( const PropertyMap*, const bool )
@@ -892,22 +892,22 @@ void SectionPropertyMap::CopyHeaderFooter( const uno::Reference< beans::XPropert
         xPrevStyle->getPropertyValue( sFooterIsShared ) >>= bFooterIsShared;
     }
 
-    if ( bHasPrevFooter )
+    if ( !bHasPrevFooter )
+        return;
+
+    uno::Reference< beans::XMultiPropertySet > xMultiSet( xStyle, uno::UNO_QUERY_THROW );
+    uno::Sequence<OUString> aProperties { sFooterIsOn, sFooterIsShared };
+    uno::Sequence<uno::Any> aValues { uno::makeAny( true ), uno::makeAny( bFooterIsShared ) };
+    xMultiSet->setPropertyValues( aProperties, aValues );
+    if ( !bOmitRightFooter )
     {
-        uno::Reference< beans::XMultiPropertySet > xMultiSet( xStyle, uno::UNO_QUERY_THROW );
-        uno::Sequence<OUString> aProperties { sFooterIsOn, sFooterIsShared };
-        uno::Sequence<uno::Any> aValues { uno::makeAny( true ), uno::makeAny( bFooterIsShared ) };
-        xMultiSet->setPropertyValues( aProperties, aValues );
-        if ( !bOmitRightFooter )
-        {
-            CopyHeaderFooterTextProperty( xPrevStyle, xStyle,
-                PROP_FOOTER_TEXT );
-        }
-        if ( !bFooterIsShared && !bOmitLeftFooter )
-        {
-            CopyHeaderFooterTextProperty( xPrevStyle, xStyle,
-                PROP_FOOTER_TEXT_LEFT );
-        }
+        CopyHeaderFooterTextProperty( xPrevStyle, xStyle,
+            PROP_FOOTER_TEXT );
+    }
+    if ( !bFooterIsShared && !bOmitLeftFooter )
+    {
+        CopyHeaderFooterTextProperty( xPrevStyle, xStyle,
+            PROP_FOOTER_TEXT_LEFT );
     }
 }
 

@@ -575,23 +575,23 @@ string OOXMLHexValue::toString() const
 OOXMLHexColorValue::OOXMLHexColorValue(const char * pValue)
     : OOXMLHexValue(sal_uInt32(COL_AUTO))
 {
-    if (strcmp(pValue, "auto"))
-    {
-        mnValue = rtl_str_toUInt32(pValue, 16);
+    if (!strcmp(pValue, "auto"))
+        return;
 
-        // Convert hash-encoded values (like #FF0080)
-        const sal_Int32 nLen = strlen(pValue);
-        if ( !mnValue && nLen > 1 && pValue[0] == '#' )
+    mnValue = rtl_str_toUInt32(pValue, 16);
+
+    // Convert hash-encoded values (like #FF0080)
+    const sal_Int32 nLen = strlen(pValue);
+    if ( !mnValue && nLen > 1 && pValue[0] == '#' )
+    {
+        sal_Int32 nColor(COL_AUTO);
+        // Word appears to require strict 6 digit length, else it ignores it
+        if ( nLen == 7 )
         {
-            sal_Int32 nColor(COL_AUTO);
-            // Word appears to require strict 6 digit length, else it ignores it
-            if ( nLen == 7 )
-            {
-                const OUString sHashColor(pValue, nLen, RTL_TEXTENCODING_ASCII_US);
-                sax::Converter::convertColor( nColor, sHashColor );
-            }
-            mnValue = nColor;
+            const OUString sHashColor(pValue, nLen, RTL_TEXTENCODING_ASCII_US);
+            sax::Converter::convertColor( nColor, sHashColor );
         }
+        mnValue = nColor;
     }
 }
 
