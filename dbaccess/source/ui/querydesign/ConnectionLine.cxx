@@ -55,7 +55,7 @@ namespace
         tools::Rectangle aReturn;
         if ( pListBox )
         {
-            const long nRowHeight = pListBox->GetEntryHeight();
+            const long nRowHeight = pListBox->get_widget().get_height_rows(1);
             aReturn.SetTop( _aConnPos.Y() - nRowHeight );
             aReturn.SetBottom( aReturn.Top() + nRowHeight );
             if (_aDescrLinePos.X() < _aConnPos.X())
@@ -74,27 +74,32 @@ namespace
     }
     /** calcPointsYValue calculate the points Y value in relation to the listbox entry
             @param  _pWin           the corresponding window
-            @param  _pEntry         the source or dest entry
+            @param  _nEntry         the source or dest entry
             @param  _rNewConPos     (in/out) the connection pos
             @param  _rNewDescrPos   (in/out) the description pos
     */
-    void calcPointsYValue(const OTableWindow* _pWin,SvTreeListEntry* _pEntry,Point& _rNewConPos,Point& _rNewDescrPos)
+    void calcPointsYValue(const OTableWindow* _pWin, int _nEntry, Point& _rNewConPos, Point& _rNewDescrPos)
     {
         const OTableWindowListBox* pListBox = _pWin->GetListBox();
         _rNewConPos.setY( _pWin->GetPosPixel().Y() );
-        if ( _pEntry )
+        if (_nEntry != -1)
         {
-            const long nRowHeight = pListBox->GetEntryHeight();
             _rNewConPos.AdjustY(pListBox->GetPosPixel().Y() );
-            long nEntryPos = pListBox->GetEntryPosition( _pEntry ).Y();
+            const weld::TreeView& rTreeView = pListBox->get_widget();
+            std::unique_ptr<weld::TreeIter> xEntry = rTreeView.make_iterator();
+            rTreeView.get_iter_first(*xEntry);
+            rTreeView.iter_nth_sibling(*xEntry, _nEntry);
+            auto nEntryPos = rTreeView.get_row_area(*xEntry).Center().Y();
 
             if( nEntryPos >= 0 )
             {
-                _rNewConPos.AdjustY(nEntryPos );
-                _rNewConPos.AdjustY(static_cast<long>( 0.5 * nRowHeight ) );
+                _rNewConPos.AdjustY(nEntryPos);
             }
             else
+            {
+                const auto nRowHeight = rTreeView.get_height_rows(1);
                 _rNewConPos.AdjustY( -static_cast<long>( 0.5 * nRowHeight ) );
+            }
 
             long nListBoxBottom = _pWin->GetPosPixel().Y()
                                     + pListBox->GetPosPixel().Y()
@@ -213,8 +218,8 @@ bool OConnectionLine::RecalcLine()
     if( !pSourceWin || !pDestWin )
         return false;
 
-    SvTreeListEntry* pSourceEntry = pSourceWin->GetListBox()->GetEntryFromText( GetData()->GetSourceFieldName() );
-    SvTreeListEntry* pDestEntry = pDestWin->GetListBox()->GetEntryFromText( GetData()->GetDestFieldName() );
+    int nSourceEntry = pSourceWin->GetListBox()->GetEntryFromText( GetData()->GetSourceFieldName() );
+    int nDestEntry = pDestWin->GetListBox()->GetEntryFromText( GetData()->GetDestFieldName() );
 
     // determine X-coordinates
     Point aSourceCenter( 0, 0 );
@@ -239,17 +244,17 @@ bool OConnectionLine::RecalcLine()
         pSecondDescrPos = &m_aDestDescrLinePos;
     }
 
-    if ( pFirstWin == pSecondWin && pSourceEntry != pDestEntry )
+    if (pFirstWin == pSecondWin && nSourceEntry != nDestEntry)
         calcPointX2(pFirstWin,*pFirstConPos,*pFirstDescrPos);
     else
         calcPointX1(pFirstWin,*pFirstConPos,*pFirstDescrPos);
     calcPointX2(pSecondWin,*pSecondConPos,*pSecondDescrPos);
 
     // determine aSourceConnPosY
-    calcPointsYValue(pSourceWin,pSourceEntry,m_aSourceConnPos,m_aSourceDescrLinePos);
+    calcPointsYValue(pSourceWin, nSourceEntry, m_aSourceConnPos,m_aSourceDescrLinePos);
 
     // determine aDestConnPosY
-    calcPointsYValue(pDestWin,pDestEntry,m_aDestConnPos,m_aDestDescrLinePos);
+    calcPointsYValue(pDestWin, nDestEntry, m_aDestConnPos,m_aDestDescrLinePos);
 
     return true;
 }

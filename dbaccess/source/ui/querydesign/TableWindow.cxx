@@ -123,7 +123,7 @@ void OTableWindow::dispose()
 {
     if (m_xListBox)
     {
-        OSL_ENSURE(m_xListBox->GetEntryCount()==0,"Forgot to call EmptyListbox()!");
+        OSL_ENSURE(m_xListBox->get_widget().n_children()==0,"Forgot to call EmptyListbox()!");
     }
     m_xListBox.disposeAndClear();
     if ( m_pContainerListener.is() )
@@ -179,7 +179,10 @@ void OTableWindow::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
 
 void OTableWindow::FillListBox()
 {
-    m_xListBox->Clear();
+    clearListBox();
+    weld::TreeView& rTreeView = m_xListBox->get_widget();
+    assert(!rTreeView.n_children());
+
     if ( !m_pContainerListener.is() )
     {
         Reference< XContainer> xContainer(m_pData->getColumns(),UNO_QUERY);
@@ -188,12 +191,11 @@ void OTableWindow::FillListBox()
     }
 
     // mark all primary keys with special image
-    Image aPrimKeyImage(StockImage::Yes, BMP_PRIMARY_KEY);
+    OUString aPrimKeyImage(BMP_PRIMARY_KEY);
 
     if (GetData()->IsShowAll())
     {
-        SvTreeListEntry* pEntry = m_xListBox->InsertEntry( OUString("*") );
-        pEntry->SetUserData( createUserData(nullptr,false) );
+        rTreeView.append(OUString::number(reinterpret_cast<sal_uInt64>(createUserData(nullptr,false))), OUString("*"));
     }
 
     Reference<XNameAccess> xPKeyColumns;
@@ -214,20 +216,22 @@ void OTableWindow::FillListBox()
             const OUString* pIter = aColumns.getConstArray();
             const OUString* pEnd = pIter + aColumns.getLength();
 
-            SvTreeListEntry* pEntry = nullptr;
             for (; pIter != pEnd; ++pIter)
             {
                 bool bPrimaryKeyColumn = xPKeyColumns.is() && xPKeyColumns->hasByName( *pIter );
+
+                OUString sId;
+                Reference<XPropertySet> xColumn(xColumns->getByName(*pIter),UNO_QUERY);
+                if (xColumn.is())
+                    sId = OUString::number(reinterpret_cast<sal_uInt64>(createUserData(xColumn, bPrimaryKeyColumn)));
+
+                rTreeView.append(sId, *pIter);
+
                 // is this column in the primary key
                 if ( bPrimaryKeyColumn )
-                    pEntry = m_xListBox->InsertEntry(*pIter, aPrimKeyImage, aPrimKeyImage);
-                else
-                    pEntry = m_xListBox->InsertEntry(*pIter);
-
-                Reference<XPropertySet> xColumn(xColumns->getByName(*pIter),UNO_QUERY);
-                if ( xColumn.is() )
-                    pEntry->SetUserData( createUserData(xColumn,bPrimaryKeyColumn) );
+                    rTreeView.set_image(rTreeView.n_children() - 1, aPrimKeyImage);
             }
+
         }
     }
     catch(Exception&)
@@ -252,16 +256,14 @@ void OTableWindow::clearListBox()
     if ( !m_xListBox )
         return;
 
-    SvTreeListEntry* pEntry = m_xListBox->First();
-
-    while(pEntry)
-    {
-        void* pUserData = pEntry->GetUserData();
+    weld::TreeView& rTreeView = m_xListBox->get_widget();
+    rTreeView.all_foreach([this, &rTreeView](weld::TreeIter& rEntry){
+        void* pUserData = reinterpret_cast<void*>(rTreeView.get_id(rEntry).toUInt64());
         deleteUserData(pUserData);
-        SvTreeListEntry* pNextEntry = m_xListBox->Next(pEntry);
-        m_xListBox->GetModel()->Remove(pEntry);
-        pEntry = pNextEntry;
-    }
+        return false;
+    });
+
+    rTreeView.clear();
 }
 
 void OTableWindow::impl_updateImage()
@@ -287,8 +289,8 @@ bool OTableWindow::Init()
     if ( !m_xListBox )
     {
         m_xListBox = VclPtr<OTableWindowListBox>::Create(this);
-        OSL_ENSURE( m_xListBox != nullptr, "OTableWindow::Init() : CreateListBox returned NULL !" );
-        m_xListBox->SetSelectionMode( SelectionMode::Multiple );
+        assert(m_xListBox && "OTableWindow::Init() : CreateListBox returned NULL !");
+        m_xListBox->get_widget().set_selection_mode(SelectionMode::Multiple);
     }
 
     // Set the title
@@ -298,9 +300,8 @@ bool OTableWindow::Init()
     m_xListBox->Show();
 
     // add the fields to the ListBox
-    clearListBox();
     FillListBox();
-    m_xListBox->SelectAll( false );
+    m_xListBox->get_widget().unselect_all();
 
     impl_updateImage();
 
@@ -475,8 +476,12 @@ void OTableWindow::GetFocus()
 void OTableWindow::setActive(bool _bActive)
 {
     SetBoldTitle( _bActive );
-    if (!_bActive && m_xListBox && m_xListBox->GetSelectionCount() != 0)
-        m_xListBox->SelectAll(false);
+    if (_bActive || !m_xListBox)
+        return;
+
+    weld::TreeView& rTreeView = m_xListBox->get_widget();
+    if (rTreeView.get_selected_index() != -1)
+        rTreeView.unselect_all();
 }
 
 void OTableWindow::Remove()
@@ -513,17 +518,13 @@ bool OTableWindow::ExistsAConn() const
 void OTableWindow::EnumValidFields(std::vector< OUString>& arrstrFields)
 {
     arrstrFields.clear();
+    weld::TreeView& rTreeView = m_xListBox->get_widget();
+
     // This default implementation counts every item in the ListBox ... for any other behaviour it must be over-written
-    if ( m_xListBox )
-    {
-        arrstrFields.reserve(m_xListBox->GetEntryCount());
-        SvTreeListEntry* pEntryLoop = m_xListBox->First();
-        while (pEntryLoop)
-        {
-            arrstrFields.push_back(m_xListBox->GetEntryText(pEntryLoop));
-            pEntryLoop = m_xListBox->Next(pEntryLoop);
-        }
-    }
+    rTreeView.all_foreach([&rTreeView, &arrstrFields](weld::TreeIter& rEntry){
+        arrstrFields.push_back(rTreeView.get_text(rEntry));
+        return false;
+    });
 }
 
 void OTableWindow::StateChanged( StateChangedType nType )
@@ -567,9 +568,10 @@ void OTableWindow::Command(const CommandEvent& rEvt)
                     ptWhere = rEvt.GetMousePosPixel();
                 else
                 {
-                    SvTreeListEntry* pCurrent = m_xListBox->GetCurEntry();
-                    if ( pCurrent )
-                        ptWhere = m_xListBox->GetEntryPosition(pCurrent);
+                    weld::TreeView& rTreeView = m_xListBox->get_widget();
+                    std::unique_ptr<weld::TreeIter> xCurrent = rTreeView.make_iterator();
+                    if (rTreeView.get_cursor(xCurrent.get()))
+                        ptWhere = rTreeView.get_row_area(*xCurrent).Center();
                     else
                         ptWhere = m_xTitle->GetPosPixel();
                 }

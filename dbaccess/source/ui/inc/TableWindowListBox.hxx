@@ -19,8 +19,8 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEWINDOWLISTBOX_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEWINDOWLISTBOX_HXX
 
-#include <vcl/treelistbox.hxx>
-#include <vcl/timer.hxx>
+#include <vcl/transfer.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include "callbacks.hxx"
 
 struct AcceptDropEvent;
@@ -32,67 +32,88 @@ namespace dbaui
     {
     public:
         VclPtr<OTableWindowListBox>    pListBox;       // the ListBox inside the same (you can get the TabWin and the WinName out of it)
-        SvTreeListEntry*            pEntry;         // the entry, which was dragged or to which was dropped on
+        int                            nEntry;         // the entry, which was dragged or to which was dropped on
 
         OJoinExchangeData(OTableWindowListBox* pBox);
-        OJoinExchangeData() : pListBox(nullptr), pEntry(nullptr) { }
+        OJoinExchangeData() : pListBox(nullptr), nEntry(-1) { }
     };
+
     struct OJoinDropData
     {
         OJoinExchangeData aSource;
         OJoinExchangeData aDest;
     };
 
+    class OJoinExchObj;
     class OTableWindow;
+    class TableWindowListBoxHelper;
+
     class OTableWindowListBox
-            :public SvTreeListBox
-            ,public IDragTransferableListener
+            : public InterimItemWindow
+            , public IDragTransferableListener
     {
-        DECL_LINK( OnDoubleClick, SvTreeListBox*, bool );
-        DECL_LINK( ScrollUpHdl, Timer*, void );
-        DECL_LINK( ScrollDownHdl, Timer*, void );
+        std::unique_ptr<weld::TreeView> m_xTreeView;
+        std::unique_ptr<TableWindowListBoxHelper> m_xDragDropTargetHelper;
+
+        DECL_LINK( OnDoubleClick, weld::TreeView&, bool );
         DECL_LINK( DropHdl, void*, void );
         DECL_LINK( LookForUiHdl, void*, void );
+        DECL_LINK( DragBeginHdl, bool&, bool );
+        DECL_LINK( ScrollHdl, weld::TreeView&, void );
 
-        Timer                       m_aScrollTimer;
-        Point                       m_aMousePos;
+        rtl::Reference<OJoinExchObj> m_xHelper;
 
         VclPtr<OTableWindow>        m_pTabWin;
         ImplSVEvent *               m_nDropEvent;
         ImplSVEvent *               m_nUiEvent;
         OJoinDropData               m_aDropInfo;
 
-        bool                        m_bReallyScrolled : 1;
-
     protected:
         virtual void LoseFocus() override;
         virtual void GetFocus() override;
-        virtual void NotifyScrolled() override;
-        virtual void NotifyEndScroll() override;
-
-        virtual bool PreNotify(NotifyEvent& rNEvt) override;
 
         virtual void dragFinished( ) override;
-
 
     public:
         OTableWindowListBox(OTableWindow* pParent);
         virtual ~OTableWindowListBox() override;
         virtual void dispose() override;
 
+        const weld::TreeView& get_widget() const { return *m_xTreeView; }
+        weld::TreeView& get_widget() { return *m_xTreeView; }
+
         // DnD stuff
-        virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
-        virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;
-        virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
+        sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt);
+        sal_Int8 ExecuteDrop(const ExecuteDropEvent& rEvt);
 
         // window
         virtual void Command(const CommandEvent& rEvt) override;
 
         OTableWindow* GetTabWin(){ return m_pTabWin; }
-        SvTreeListEntry* GetEntryFromText( const OUString& rEntryText );
+        int GetEntryFromText( const OUString& rEntryText );
+    };
 
+    class TableWindowListBoxHelper : public DropTargetHelper
+    {
     private:
-        using SvTreeListBox::ExecuteDrop;
+        OTableWindowListBox& m_rParent;
+
+        virtual sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt) override
+        {
+            return m_rParent.AcceptDrop(rEvt);
+        }
+
+        virtual sal_Int8 ExecuteDrop(const ExecuteDropEvent& rEvt) override
+        {
+            return m_rParent.ExecuteDrop(rEvt);
+        }
+
+    public:
+        TableWindowListBoxHelper(OTableWindowListBox& rParent, const css::uno::Reference<css::datatransfer::dnd::XDropTarget>& rDropTarget)
+            : DropTargetHelper(rDropTarget)
+            , m_rParent(rParent)
+        {
+        }
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEWINDOWLISTBOX_HXX

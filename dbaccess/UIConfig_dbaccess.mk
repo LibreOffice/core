@@ -70,6 +70,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/sqlexception \
     dbaccess/uiconfig/ui/tabledesignrowmenu \
     dbaccess/uiconfig/ui/tabledesignsavemodifieddialog \
+    dbaccess/uiconfig/ui/tablelistbox \
     dbaccess/uiconfig/ui/tablesfilterdialog \
     dbaccess/uiconfig/ui/tablesfilterpage \
     dbaccess/uiconfig/ui/tablesjoindialog \

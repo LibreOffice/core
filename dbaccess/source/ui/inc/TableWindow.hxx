@@ -90,7 +90,7 @@ namespace dbaui
         void FillListBox();
             // called at EACH Init
 
-        virtual void OnEntryDoubleClicked(SvTreeListEntry* /*pEntry*/) { }
+        virtual void OnEntryDoubleClicked(weld::TreeIter& /*rEntry*/) { }
             // called from the DoubleClickHdl of the ListBox
 
         /** HandleKeyInput tries to handle the KeyEvent. Movement or deletion
