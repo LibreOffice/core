@@ -962,6 +962,15 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             bDone = true;
             break;
         }
+        case SID_TOOLBAR_MODE_UI:
+        {
+            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+            ScopedVclPtr<VclAbstractDialog> pDlg(
+                pFact->CreateToolbarmodeDialog(rReq.GetFrameWeld()));
+            pDlg->Execute();
+            bDone = true;
+            break;
+        }
         case SID_AVAILABLE_TOOLBARS:
         {
             const SfxStringItem* pToolbarName = rReq.GetArg<SfxStringItem>(SID_AVAILABLE_TOOLBARS);

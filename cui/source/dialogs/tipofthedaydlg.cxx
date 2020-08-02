@@ -17,18 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 #include <tipofthedaydlg.hxx>
-
-#include <dialmgr.hxx>
-#include <officecfg/Office/Common.hxx>
-#include <osl/file.hxx>
-#include <rtl/bootstrap.hxx>
 #include <tipoftheday.hrc>
+
 #include <vcl/graphicfilter.hxx>
 #include <vcl/help.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
+
+#include <comphelper/dispatchcommand.hxx>
+#include <comphelper/propertysequence.hxx>
+#include <dialmgr.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <officecfg/Office/Common.hxx>
+#include <osl/file.hxx>
+#include <rtl/bootstrap.hxx>
 #include <unotools/resmgr.hxx>
 #include <unotools/configmgr.hxx>
 
@@ -108,6 +112,13 @@ void TipOfTheDayDialog::UpdateTip()
     {
         m_pLink->set_visible(false);
     }
+    else if (aLink.startsWith(".uno:"))
+    {
+        m_pLink->set_uri(CuiResId(STR_UNO_EXECUTE).replaceFirst("%COMMAND", aLink));
+        m_pLink->set_label(CuiResId(STR_UNO_LINK));
+        m_pLink->set_visible(true);
+        m_pLink->connect_activate_link(LINK(this, TipOfTheDayDialog, OnLinkClick));
+    }
     else if (aLink.startsWith("http"))
     {
         // Links may have some %PRODUCTVERSION which need to be expanded
@@ -155,7 +166,15 @@ void TipOfTheDayDialog::UpdateTip()
 
 IMPL_LINK_NOARG(TipOfTheDayDialog, OnLinkClick, weld::LinkButton&, bool)
 {
-    Application::GetHelp()->Start(aLink, static_cast<weld::Widget*>(nullptr));
+    if (aLink.startsWith("http"))
+    {
+        Application::GetHelp()->Start(aLink, static_cast<weld::Widget*>(nullptr));
+    }
+    else if (aLink.startsWith(".uno:"))
+    {
+        comphelper::dispatchCommand(aLink, {});
+        TipOfTheDayDialog::response(RET_OK);
+    }
     return true;
 }
 
