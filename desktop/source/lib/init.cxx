@@ -1217,6 +1217,8 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
     : mxComponent(xComponent)
     , mnDocumentId(nDocumentId)
 {
+    assert(nDocumentId != -1 && "Cannot set mnDocumentId to -1");
+
     if (!(m_pDocumentClass = gDocumentClass.lock()))
     {
         m_pDocumentClass.reset(new LibreOfficeKitDocumentClass);
@@ -2265,7 +2267,6 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         LibLODocument_Impl* pDocument = new LibLODocument_Impl(xComponent, nDocumentIdCounter++);
 
         // After loading the document, its initial view is the "current" view.
-        SfxLokHelper::setDocumentIdOfView(pDocument->mnDocumentId);
         if (pLib->mpCallback)
         {
             int nState = doc_getSignatureState(pDocument);
@@ -3298,13 +3299,13 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
 
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
-    int nView = SfxLokHelper::getView();
+    const int nView = SfxLokHelper::getView();
     if (nView < 0)
         return;
 
+    const size_t nId = nView;
     if (pCallback != nullptr)
     {
-        size_t nId = nView;
         for (auto& pair : pDocument->mpCallbackFlushHandlers)
         {
             if (pair.first == nId)
@@ -3315,7 +3316,6 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
     }
     else
     {
-        size_t nId = nView;
         for (auto& pair : pDocument->mpCallbackFlushHandlers)
         {
             if (pair.first == nId)
@@ -3329,7 +3329,6 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
 
     if (pCallback != nullptr)
     {
-        size_t nId = nView;
         for (const auto& pair : pDocument->mpCallbackFlushHandlers)
         {
             if (pair.first == nId)
@@ -3337,11 +3336,19 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
 
             pDocument->mpCallbackFlushHandlers[nView]->addViewStates(pair.first);
         }
-    }
 
-    if (SfxViewShell* pViewShell = SfxViewShell::Current())
+        if (SfxViewShell* pViewShell = SfxViewShell::Current())
+        {
+            pViewShell->registerLibreOfficeKitViewCallback(
+                CallbackFlushHandler::callback, pDocument->mpCallbackFlushHandlers[nView].get());
+        }
+    }
+    else
     {
-        pViewShell->registerLibreOfficeKitViewCallback(CallbackFlushHandler::callback, pDocument->mpCallbackFlushHandlers[nView].get());
+        if (SfxViewShell* pViewShell = SfxViewShell::Current())
+        {
+            pViewShell->registerLibreOfficeKitViewCallback(nullptr, nullptr);
+        }
     }
 }
 
@@ -5070,7 +5077,8 @@ static int doc_createViewWithOptions(LibreOfficeKitDocument* pThis,
     const OUString aDeviceFormFactor = extractParameter(aOptions, "DeviceFormFactor");
     SfxLokHelper::setDeviceFormFactor(aDeviceFormFactor);
 
-    int nId = SfxLokHelper::createView();
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    const int nId = SfxLokHelper::createView(pDocument->mnDocumentId);
 
 #ifdef IOS
     (void) pThis;
@@ -5118,24 +5126,26 @@ static int doc_getView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
     return SfxLokHelper::getView();
 }
 
-static int doc_getViewsCount(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
+static int doc_getViewsCount(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis)
 {
     comphelper::ProfileZone aZone("doc_getViewsCount");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    return SfxLokHelper::getViewsCount();
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    return SfxLokHelper::getViewsCount(pDocument->mnDocumentId);
 }
 
-static bool doc_getViewIds(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int* pArray, size_t nSize)
+static bool doc_getViewIds(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis, int* pArray, size_t nSize)
 {
     comphelper::ProfileZone aZone("doc_getViewsIds");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    return SfxLokHelper::getViewIds(pArray, nSize);
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    return SfxLokHelper::getViewIds(pDocument->mnDocumentId, pArray, nSize);
 }
 
 static void doc_setViewLanguage(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId, const char* language)
