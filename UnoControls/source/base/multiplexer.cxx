@@ -153,25 +153,25 @@ void SAL_CALL OMRCListenerMultiplexerHelper::release() throw()
 void OMRCListenerMultiplexerHelper::setPeer( const Reference< XWindow >& xPeer )
 {
     MutexGuard aGuard( m_aMutex );
-    if( m_xPeer != xPeer )
+    if( m_xPeer == xPeer )
+        return;
+
+    if( m_xPeer.is() )
     {
-        if( m_xPeer.is() )
-        {
-            // get all types from the listener added to the peer
-            const Sequence< Type >    aContainedTypes = m_aListenerHolder.getContainedTypes();
-            // loop over all listener types and remove the listeners from the peer
-            for( const auto& rContainedType : aContainedTypes )
-                impl_unadviseFromPeer( m_xPeer, rContainedType );
-        }
-        m_xPeer = xPeer;
-        if( m_xPeer.is() )
-        {
-            // get all types from the listener added to the peer
-            const Sequence< Type >    aContainedTypes = m_aListenerHolder.getContainedTypes();
-            // loop over all listener types and add the listeners to the peer
-            for( const auto& rContainedType : aContainedTypes )
-                impl_adviseToPeer( m_xPeer, rContainedType );
-        }
+        // get all types from the listener added to the peer
+        const Sequence< Type >    aContainedTypes = m_aListenerHolder.getContainedTypes();
+        // loop over all listener types and remove the listeners from the peer
+        for( const auto& rContainedType : aContainedTypes )
+            impl_unadviseFromPeer( m_xPeer, rContainedType );
+    }
+    m_xPeer = xPeer;
+    if( m_xPeer.is() )
+    {
+        // get all types from the listener added to the peer
+        const Sequence< Type >    aContainedTypes = m_aListenerHolder.getContainedTypes();
+        // loop over all listener types and add the listeners to the peer
+        for( const auto& rContainedType : aContainedTypes )
+            impl_adviseToPeer( m_xPeer, rContainedType );
     }
 }
 

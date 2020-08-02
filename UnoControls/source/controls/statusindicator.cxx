@@ -364,35 +364,35 @@ void StatusIndicator::impl_paint ( sal_Int32 nX, sal_Int32 nY, const css::uno::R
 {
     // This paint method is not buffered!
     // Every request paint the completely control. (But only, if peer exist)
-     if ( rGraphics.is () )
-    {
-        MutexGuard  aGuard (m_aMutex);
+    if ( !rGraphics.is () )
+        return;
 
-        // background = gray
-        css::uno::Reference< XWindowPeer > xPeer( impl_getPeerWindow(), UNO_QUERY );
-        if( xPeer.is() )
-            xPeer->setBackground( STATUSINDICATOR_BACKGROUNDCOLOR );
+    MutexGuard  aGuard (m_aMutex);
 
-        // FixedText background = gray
-        css::uno::Reference< XControl > xTextControl( m_xText, UNO_QUERY );
-        xPeer = xTextControl->getPeer();
-        if( xPeer.is() )
-            xPeer->setBackground( STATUSINDICATOR_BACKGROUNDCOLOR );
+    // background = gray
+    css::uno::Reference< XWindowPeer > xPeer( impl_getPeerWindow(), UNO_QUERY );
+    if( xPeer.is() )
+        xPeer->setBackground( STATUSINDICATOR_BACKGROUNDCOLOR );
 
-        // Progress background = gray
-        xPeer = m_xProgressBar->getPeer();
-        if( xPeer.is() )
-            xPeer->setBackground( STATUSINDICATOR_BACKGROUNDCOLOR );
+    // FixedText background = gray
+    css::uno::Reference< XControl > xTextControl( m_xText, UNO_QUERY );
+    xPeer = xTextControl->getPeer();
+    if( xPeer.is() )
+        xPeer->setBackground( STATUSINDICATOR_BACKGROUNDCOLOR );
 
-        // paint shadow border
-        rGraphics->setLineColor ( STATUSINDICATOR_LINECOLOR_BRIGHT                          );
-        rGraphics->drawLine     ( nX, nY, impl_getWidth(), nY               );
-        rGraphics->drawLine     ( nX, nY, nX             , impl_getHeight() );
+    // Progress background = gray
+    xPeer = m_xProgressBar->getPeer();
+    if( xPeer.is() )
+        xPeer->setBackground( STATUSINDICATOR_BACKGROUNDCOLOR );
 
-        rGraphics->setLineColor ( STATUSINDICATOR_LINECOLOR_SHADOW                                                              );
-        rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, impl_getWidth()-1, nY                  );
-        rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, nX               , impl_getHeight()-1  );
-    }
+    // paint shadow border
+    rGraphics->setLineColor ( STATUSINDICATOR_LINECOLOR_BRIGHT                          );
+    rGraphics->drawLine     ( nX, nY, impl_getWidth(), nY               );
+    rGraphics->drawLine     ( nX, nY, nX             , impl_getHeight() );
+
+    rGraphics->setLineColor ( STATUSINDICATOR_LINECOLOR_SHADOW                                                              );
+    rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, impl_getWidth()-1, nY                  );
+    rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, nX               , impl_getHeight()-1  );
 }
 
 //  protected method
