@@ -89,6 +89,7 @@
 #include <hyphen.hxx>
 #include <thesdlg.hxx>
 #include <tipofthedaydlg.hxx>
+#include <toolbarmodedlg.hxx>
 #include <DiagramDialog.hxx>
 
 using namespace ::com::sun::star;
@@ -1698,6 +1699,13 @@ AbstractDialogFactory_Impl::CreateTipOfTheDayDialog(weld::Window* pParent)
 {
     return VclPtr<CuiAbstractController_Impl>::Create(
         std::make_unique<TipOfTheDayDialog>(pParent));
+}
+
+VclPtr<VclAbstractDialog>
+AbstractDialogFactory_Impl::CreateToolbarmodeDialog(weld::Window* pParent)
+{
+    return VclPtr<CuiAbstractController_Impl>::Create(
+        std::make_unique<ToolbarmodeDialog>(pParent));
 }
 
 VclPtr<AbstractDiagramDialog>

@@ -1,0 +1,23 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+
+#ifndef INCLUDED_CUI_INC_TOOLBARMODE_HRC
+#define INCLUDED_CUI_INC_TOOLBARMODE_HRC
+
+#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+
+const char* RID_SVXSTR_TOOLBARMODES[] =
+{
+    NC_("RID_SVXSTR_TOOLBARMODES", "Standard user interface with menu, toolbar, and collapsed sidebar. Intended to user who are familiar with the classic interface."),
+    NC_("RID_SVXSTR_TOOLBARMODES", "Standard user interface but with only one toolbar. Intended for use on small screens."),
+    NC_("RID_SVXSTR_TOOLBARMODES", "Standard user interface with expanded sidebar. Expert users who want to quickly change many different properties are advised to use this UI."),
+    NC_("RID_SVXSTR_TOOLBARMODES", "Notebookbar Tabbed"),
+    NC_("RID_SVXSTR_TOOLBARMODES", "Notebookbar Tabbed Compact"),
+    NC_("RID_SVXSTR_TOOLBARMODES", "Notebookbar Groupedbar Compact"),
+    NC_("RID_SVXSTR_TOOLBARMODES", "Notebookbar Groupedbar (Full)"),
+    NC_("RID_SVXSTR_TOOLBARMODES", "Notebookbar Contextual Single"),
+    NC_("RID_SVXSTR_TOOLBARMODES", "Notebookbar Contextual Groups")
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
