@@ -342,7 +342,13 @@ def remove_links_from_zip_list(zip_list, links):
 
     for link in links.keys():
         if link in zip_list:
+            module = zip_list[link]
             del zip_list[link]
+            # tdf#135369 if we removed something that is a link to a real file
+            # from our list of images to pack, but that real image is not in
+            # the list of images to pack, add it in instead now
+            if links[link] not in zip_list:
+                zip_list[links[link]] = module
 
     LOGGER.debug("Cleaned zip list:\n%s", "\n".join(zip_list))
 

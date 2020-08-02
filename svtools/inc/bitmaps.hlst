@@ -123,5 +123,4 @@
 
 #define BMP_TAB_LOCK "cmd/sc_lock.png"
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
