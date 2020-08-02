@@ -137,12 +137,6 @@ protected:
     virtual ~AbstractAdditionsDialog() override = default;
 };
 
-class VCL_DLLPUBLIC AbstractTipOfTheDayDialog : public VclAbstractDialog
-{
-protected:
-    virtual ~AbstractTipOfTheDayDialog() override = default;
-};
-
 /** Edit Diagram dialog */
 class VCL_DLLPUBLIC AbstractDiagramDialog : public VclAbstractDialog
 {
@@ -192,10 +186,6 @@ public:
     // create additions dialog
     virtual VclPtr<AbstractAdditionsDialog>
         CreateAdditionsDialog(weld::Window* pParent, const OUString& sAdditionsTag) = 0;
-
-    // create info dialog to show tip-of-the-day
-    virtual VclPtr<AbstractTipOfTheDayDialog>
-    CreateTipOfTheDayDialog(weld::Window* pParent) = 0;
 
     virtual VclPtr<AbstractDiagramDialog> CreateDiagramDialog(
         weld::Window* pParent,

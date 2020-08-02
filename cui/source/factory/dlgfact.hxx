@@ -767,20 +767,6 @@ public:
     virtual short Execute() override;
 };
 
-class TipOfTheDayDialog;
-class AbstractTipOfTheDayDialog_Impl : public AbstractTipOfTheDayDialog
-{
-protected:
-    std::unique_ptr<TipOfTheDayDialog> m_xDlg;
-
-public:
-    explicit AbstractTipOfTheDayDialog_Impl(std::unique_ptr<TipOfTheDayDialog> p)
-        : m_xDlg(std::move(p))
-    {
-    }
-    virtual short Execute() override;
-};
-
 class DiagramDialog;
 
 /** Edit Diagram dialog */
@@ -986,7 +972,7 @@ public:
 
     virtual VclPtr<AbstractAboutDialog> CreateAboutDialog(weld::Window* pParent) override;
 
-    virtual VclPtr<AbstractTipOfTheDayDialog> CreateTipOfTheDayDialog(weld::Window* pParent) override;
+    virtual VclPtr<VclAbstractDialog> CreateTipOfTheDayDialog(weld::Window* pParent) override;
 
     virtual VclPtr<AbstractDiagramDialog> CreateDiagramDialog(
         weld::Window* pParent,
