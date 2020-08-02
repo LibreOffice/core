@@ -400,4 +400,6 @@
 #define RID_SVXSTR_ADDITIONS_LOADING                NC_("RID_SVXSTR_ADDITIONS_LOADING", "Loading...")
 #define RID_SVXSTR_ADDITIONS_DIALOG_TITLE_PREFIX    NC_("RID_SVXSTR_ADDITIONS_DIALOG_TITLE_PREFIX", "Extensions")
 
+#define RID_SVXSTR_UI_APPLYALL                      NC_("RID_SVXSTR_UI_APPLYALL", "Apply to %MODULE")
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
