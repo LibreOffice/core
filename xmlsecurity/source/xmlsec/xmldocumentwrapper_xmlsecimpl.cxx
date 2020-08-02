@@ -669,41 +669,41 @@ void SAL_CALL XMLDocumentWrapper_XmlSecImpl::collapse( const uno::Reference< css
 
 void SAL_CALL XMLDocumentWrapper_XmlSecImpl::getTree( const uno::Reference< css::xml::sax::XDocumentHandler >& handler )
 {
-    if (m_pRootElement != nullptr)
+    if (m_pRootElement == nullptr)
+        return;
+
+    xmlNodePtr pTempCurrentElement = m_pCurrentElement;
+    sal_Int32 nTempCurrentPosition = m_nCurrentPosition;
+
+    m_pCurrentElement = m_pRootElement;
+
+    m_nCurrentPosition = NODEPOSITION_STARTELEMENT;
+
+    while(true)
     {
-        xmlNodePtr pTempCurrentElement = m_pCurrentElement;
-        sal_Int32 nTempCurrentPosition = m_nCurrentPosition;
-
-        m_pCurrentElement = m_pRootElement;
-
-        m_nCurrentPosition = NODEPOSITION_STARTELEMENT;
-
-        while(true)
+        switch (m_nCurrentPosition)
         {
-            switch (m_nCurrentPosition)
-            {
-            case NODEPOSITION_STARTELEMENT:
-                sendStartElement(nullptr, handler, m_pCurrentElement);
-                break;
-            case NODEPOSITION_ENDELEMENT:
-                sendEndElement(nullptr, handler, m_pCurrentElement);
-                break;
-            case NODEPOSITION_NORMAL:
-                sendNode(nullptr, handler, m_pCurrentElement);
-                break;
-            }
-
-            if ( (m_pCurrentElement == m_pRootElement) && (m_nCurrentPosition == NODEPOSITION_ENDELEMENT ))
-            {
-                break;
-            }
-
-            getNextSAXEvent();
+        case NODEPOSITION_STARTELEMENT:
+            sendStartElement(nullptr, handler, m_pCurrentElement);
+            break;
+        case NODEPOSITION_ENDELEMENT:
+            sendEndElement(nullptr, handler, m_pCurrentElement);
+            break;
+        case NODEPOSITION_NORMAL:
+            sendNode(nullptr, handler, m_pCurrentElement);
+            break;
         }
 
-        m_pCurrentElement = pTempCurrentElement;
-        m_nCurrentPosition = nTempCurrentPosition;
+        if ( (m_pCurrentElement == m_pRootElement) && (m_nCurrentPosition == NODEPOSITION_ENDELEMENT ))
+        {
+            break;
+        }
+
+        getNextSAXEvent();
     }
+
+    m_pCurrentElement = pTempCurrentElement;
+    m_nCurrentPosition = nTempCurrentPosition;
 }
 
 void SAL_CALL XMLDocumentWrapper_XmlSecImpl::generateSAXEvents(

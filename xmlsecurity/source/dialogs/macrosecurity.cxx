@@ -209,41 +209,41 @@ void MacroSecurityTrustedSourcesTP::ShowBrokenCertificateError(const OUString& r
 IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, ViewCertPBHdl, weld::Button&, void)
 {
     int nEntry = m_xTrustCertLB->get_selected_index();
-    if (nEntry != -1)
+    if (nEntry == -1)
+        return;
+
+    const sal_uInt16 nSelected = m_xTrustCertLB->get_id(nEntry).toUInt32();
+    uno::Reference< css::security::XCertificate > xCert;
+    try
     {
-        const sal_uInt16 nSelected = m_xTrustCertLB->get_id(nEntry).toUInt32();
-        uno::Reference< css::security::XCertificate > xCert;
+        xCert = m_pDlg->m_xSecurityEnvironment->getCertificate(m_aTrustedAuthors[nSelected][0],
+                        xmlsecurity::numericStringToBigInteger(m_aTrustedAuthors[nSelected][1]));
+    }
+    catch (...)
+    {
+        TOOLS_WARN_EXCEPTION("xmlsecurity.dialogs", "matching certificate not found for: " << m_aTrustedAuthors[nSelected][0]);
+    }
+
+    if (!xCert.is())
+    {
         try
         {
-            xCert = m_pDlg->m_xSecurityEnvironment->getCertificate(m_aTrustedAuthors[nSelected][0],
-                            xmlsecurity::numericStringToBigInteger(m_aTrustedAuthors[nSelected][1]));
+            xCert = m_pDlg->m_xSecurityEnvironment->createCertificateFromAscii(m_aTrustedAuthors[nSelected][2]);
         }
         catch (...)
         {
-            TOOLS_WARN_EXCEPTION("xmlsecurity.dialogs", "matching certificate not found for: " << m_aTrustedAuthors[nSelected][0]);
+            TOOLS_WARN_EXCEPTION("xmlsecurity.dialogs", "certificate data couldn't be parsed: " << m_aTrustedAuthors[nSelected][2]);
         }
-
-        if (!xCert.is())
-        {
-            try
-            {
-                xCert = m_pDlg->m_xSecurityEnvironment->createCertificateFromAscii(m_aTrustedAuthors[nSelected][2]);
-            }
-            catch (...)
-            {
-                TOOLS_WARN_EXCEPTION("xmlsecurity.dialogs", "certificate data couldn't be parsed: " << m_aTrustedAuthors[nSelected][2]);
-            }
-        }
-
-        if ( xCert.is() )
-        {
-            CertificateViewer aViewer(m_pDlg->getDialog(), m_pDlg->m_xSecurityEnvironment, xCert, false, nullptr);
-            aViewer.run();
-        }
-        else
-            // should never happen, as we parsed the certificate data when we added it!
-            ShowBrokenCertificateError(m_aTrustedAuthors[nSelected][2]);
     }
+
+    if ( xCert.is() )
+    {
+        CertificateViewer aViewer(m_pDlg->getDialog(), m_pDlg->m_xSecurityEnvironment, xCert, false, nullptr);
+        aViewer.run();
+    }
+    else
+        // should never happen, as we parsed the certificate data when we added it!
+        ShowBrokenCertificateError(m_aTrustedAuthors[nSelected][2]);
 }
 
 IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, RemoveCertPBHdl, weld::Button&, void)
@@ -298,20 +298,20 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, AddLocPBHdl, weld::Button&, void)
 IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, RemoveLocPBHdl, weld::Button&, void)
 {
     sal_Int32 nSel = m_xTrustFileLocLB->get_selected_index();
-    if (nSel != -1)
+    if (nSel == -1)
+        return;
+
+    m_xTrustFileLocLB->remove(nSel);
+    // Trusted Path could not be removed (#i33584#)
+    // after remove an entry, select another one if exists
+    int nNewCount = m_xTrustFileLocLB->n_children();
+    if (nNewCount > 0)
     {
-        m_xTrustFileLocLB->remove(nSel);
-        // Trusted Path could not be removed (#i33584#)
-        // after remove an entry, select another one if exists
-        int nNewCount = m_xTrustFileLocLB->n_children();
-        if (nNewCount > 0)
-        {
-            if (nSel >= nNewCount)
-                nSel = nNewCount - 1;
-            m_xTrustFileLocLB->select(nSel);
-        }
-        ImplCheckButtons();
+        if (nSel >= nNewCount)
+            nSel = nNewCount - 1;
+        m_xTrustFileLocLB->select(nSel);
     }
+    ImplCheckButtons();
 }
 
 IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, TrustCertLBSelectHdl, weld::TreeView&, void)
@@ -330,32 +330,32 @@ void MacroSecurityTrustedSourcesTP::FillCertLB(const bool bShowWarnings)
 
     sal_uInt32 nEntries = m_aTrustedAuthors.getLength();
 
-    if ( nEntries && m_pDlg->m_xSecurityEnvironment.is() )
-    {
-        for( sal_uInt32 nEntry = 0 ; nEntry < nEntries ; ++nEntry )
-        {
-            css::uno::Sequence< OUString >&              rEntry = m_aTrustedAuthors[ nEntry ];
+    if ( !(nEntries && m_pDlg->m_xSecurityEnvironment.is()) )
+        return;
 
-            try
+    for( sal_uInt32 nEntry = 0 ; nEntry < nEntries ; ++nEntry )
+    {
+        css::uno::Sequence< OUString >&              rEntry = m_aTrustedAuthors[ nEntry ];
+
+        try
+        {
+            // create from RawData
+            uno::Reference< css::security::XCertificate > xCert = m_pDlg->m_xSecurityEnvironment->createCertificateFromAscii(rEntry[2]);
+            m_xTrustCertLB->append(OUString::number(nEntry), xmlsec::GetContentPart(xCert->getSubjectName(), xCert->getCertificateKind()));
+            m_xTrustCertLB->set_text(nEntry, xmlsec::GetContentPart(xCert->getIssuerName(), xCert->getCertificateKind()), 1);
+            m_xTrustCertLB->set_text(nEntry, utl::GetDateTimeString(xCert->getNotValidAfter()), 2);
+        }
+        catch (...)
+        {
+            if (bShowWarnings)
             {
-                // create from RawData
-                uno::Reference< css::security::XCertificate > xCert = m_pDlg->m_xSecurityEnvironment->createCertificateFromAscii(rEntry[2]);
-                m_xTrustCertLB->append(OUString::number(nEntry), xmlsec::GetContentPart(xCert->getSubjectName(), xCert->getCertificateKind()));
-                m_xTrustCertLB->set_text(nEntry, xmlsec::GetContentPart(xCert->getIssuerName(), xCert->getCertificateKind()), 1);
-                m_xTrustCertLB->set_text(nEntry, utl::GetDateTimeString(xCert->getNotValidAfter()), 2);
-            }
-            catch (...)
-            {
-                if (bShowWarnings)
-                {
-                    TOOLS_WARN_EXCEPTION("xmlsecurity.dialogs", "certificate data couldn't be parsed: " << rEntry[2]);
-                    OUString sData = rEntry[2];
-                    css::uno::Any tools_warn_exception(DbgGetCaughtException());
-                    OUString sException = OStringToOUString(exceptionToString(tools_warn_exception), RTL_TEXTENCODING_UTF8);
-                    if (!sException.isEmpty())
-                        sData +=  " / " + sException;
-                    ShowBrokenCertificateError(sData);
-                }
+                TOOLS_WARN_EXCEPTION("xmlsecurity.dialogs", "certificate data couldn't be parsed: " << rEntry[2]);
+                OUString sData = rEntry[2];
+                css::uno::Any tools_warn_exception(DbgGetCaughtException());
+                OUString sException = OStringToOUString(exceptionToString(tools_warn_exception), RTL_TEXTENCODING_UTF8);
+                if (!sException.isEmpty())
+                    sData +=  " / " + sException;
+                ShowBrokenCertificateError(sData);
             }
         }
     }

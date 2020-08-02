@@ -497,19 +497,19 @@ void OOXMLSecExporter::Impl::writeSignatureLineImages()
         m_xDocumentHandler->characters(aGraphicInBase64);
         m_xDocumentHandler->endElement("Object");
     }
-    if (m_rInformation.aInvalidSignatureImage.is())
-    {
-        rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
-        pAttributeList->AddAttribute("Id", "idInvalidSigLnImg");
-        m_xDocumentHandler->startElement(
-            "Object", uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
-        OUString aGraphicInBase64;
-        Graphic aGraphic(m_rInformation.aInvalidSignatureImage);
-        if (!XOutBitmap::GraphicToBase64(aGraphic, aGraphicInBase64, false, ConvertDataFormat::EMF))
-            SAL_WARN("xmlsecurity.helper", "could not convert graphic to base64");
-        m_xDocumentHandler->characters(aGraphicInBase64);
-        m_xDocumentHandler->endElement("Object");
-    }
+    if (!m_rInformation.aInvalidSignatureImage.is())
+        return;
+
+    rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+    pAttributeList->AddAttribute("Id", "idInvalidSigLnImg");
+    m_xDocumentHandler->startElement(
+        "Object", uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
+    OUString aGraphicInBase64;
+    Graphic aGraphic(m_rInformation.aInvalidSignatureImage);
+    if (!XOutBitmap::GraphicToBase64(aGraphic, aGraphicInBase64, false, ConvertDataFormat::EMF))
+        SAL_WARN("xmlsecurity.helper", "could not convert graphic to base64");
+    m_xDocumentHandler->characters(aGraphicInBase64);
+    m_xDocumentHandler->endElement("Object");
 }
 
 OOXMLSecExporter::OOXMLSecExporter(

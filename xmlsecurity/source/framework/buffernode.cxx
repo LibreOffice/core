@@ -666,60 +666,60 @@ void BufferNode::elementCollectorNotify()
  *          BufferNode.
  ******************************************************************************/
 {
-    if (!m_vElementCollectors.empty())
+    if (m_vElementCollectors.empty())
+        return;
+
+    css::xml::crypto::sax::ElementMarkPriority nMaxPriority = css::xml::crypto::sax::ElementMarkPriority_MINIMUM;
+    css::xml::crypto::sax::ElementMarkPriority nPriority;
+
+    /*
+     * get the max priority among ElementCollectors on this BufferNode
+     */
+    for( const ElementCollector* pElementCollector : m_vElementCollectors )
     {
-        css::xml::crypto::sax::ElementMarkPriority nMaxPriority = css::xml::crypto::sax::ElementMarkPriority_MINIMUM;
-        css::xml::crypto::sax::ElementMarkPriority nPriority;
+        nPriority = pElementCollector->getPriority();
+        if (nPriority > nMaxPriority)
+        {
+            nMaxPriority = nPriority;
+        }
+    }
+
+    std::vector< const ElementCollector* > vElementCollectors( m_vElementCollectors );
+
+    for( const ElementCollector* ii : vElementCollectors )
+    {
+        ElementCollector* pElementCollector = const_cast<ElementCollector*>(ii);
+        nPriority = pElementCollector->getPriority();
+        bool bToModify = pElementCollector->getModify();
 
         /*
-         * get the max priority among ElementCollectors on this BufferNode
+         * Only ElementCollector with the max priority can
+         * perform notify operation.
+         * Moreover, if any blocker exists in the subtree of
+         * this BufferNode, this ElementCollector can't do notify
+         * unless its priority is BEFOREMODIFY.
          */
-        for( const ElementCollector* pElementCollector : m_vElementCollectors )
+        if (nPriority == nMaxPriority &&
+            (nPriority == css::xml::crypto::sax::ElementMarkPriority_BEFOREMODIFY ||
+             !isBlockerInSubTreeIncluded(pElementCollector->getSecurityId())))
         {
-            nPriority = pElementCollector->getPriority();
-            if (nPriority > nMaxPriority)
-            {
-                nMaxPriority = nPriority;
-            }
-        }
-
-        std::vector< const ElementCollector* > vElementCollectors( m_vElementCollectors );
-
-        for( const ElementCollector* ii : vElementCollectors )
-        {
-            ElementCollector* pElementCollector = const_cast<ElementCollector*>(ii);
-            nPriority = pElementCollector->getPriority();
-            bool bToModify = pElementCollector->getModify();
-
             /*
-             * Only ElementCollector with the max priority can
-             * perform notify operation.
-             * Moreover, if any blocker exists in the subtree of
-             * this BufferNode, this ElementCollector can't do notify
-             * unless its priority is BEFOREMODIFY.
+             * If this ElementCollector will modify the buffered element, then
+             * special attention must be paid.
+             *
+             * If there is any ElementCollector in the subtree or any ancestor
+             * ElementCollector with PRI_BEFPREMODIFY priority, this
+             * ElementCollector can't perform notify operation, otherwise, it
+             * will destroy the buffered element, in turn, ElementCollectors
+             * mentioned above can't perform their mission.
              */
-            if (nPriority == nMaxPriority &&
-                (nPriority == css::xml::crypto::sax::ElementMarkPriority_BEFOREMODIFY ||
-                 !isBlockerInSubTreeIncluded(pElementCollector->getSecurityId())))
+            //if (!(nMaxPriority == css::xml::crypto::sax::ElementMarkPriority_PRI_MODIFY &&
+            if (!(bToModify &&
+                 (isECInSubTreeIncluded(pElementCollector->getSecurityId()) ||
+                  isECOfBeforeModifyInAncestorIncluded(pElementCollector->getSecurityId()))
+               ))
             {
-                /*
-                 * If this ElementCollector will modify the buffered element, then
-                 * special attention must be paid.
-                 *
-                 * If there is any ElementCollector in the subtree or any ancestor
-                 * ElementCollector with PRI_BEFPREMODIFY priority, this
-                 * ElementCollector can't perform notify operation, otherwise, it
-                 * will destroy the buffered element, in turn, ElementCollectors
-                 * mentioned above can't perform their mission.
-                 */
-                //if (!(nMaxPriority == css::xml::crypto::sax::ElementMarkPriority_PRI_MODIFY &&
-                if (!(bToModify &&
-                     (isECInSubTreeIncluded(pElementCollector->getSecurityId()) ||
-                      isECOfBeforeModifyInAncestorIncluded(pElementCollector->getSecurityId()))
-                   ))
-                {
-                    pElementCollector->notifyListener();
-                }
+                pElementCollector->notifyListener();
             }
         }
     }

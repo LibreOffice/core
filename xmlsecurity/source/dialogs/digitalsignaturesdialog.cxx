@@ -428,24 +428,24 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, RemoveButtonHdl, weld::Button&, void)
     if (!canRemove())
         return;
     int nEntry = m_xSignaturesLB->get_selected_index();
-    if (nEntry != -1)
+    if (nEntry == -1)
+        return;
+
+    try
     {
-        try
-        {
-            sal_uInt16 nSelected = m_xSignaturesLB->get_id(nEntry).toUInt32();
-            maSignatureManager.remove(nSelected);
+        sal_uInt16 nSelected = m_xSignaturesLB->get_id(nEntry).toUInt32();
+        maSignatureManager.remove(nSelected);
 
-            mbSignaturesChanged = true;
+        mbSignaturesChanged = true;
 
-            ImplFillSignaturesBox();
-        }
-        catch ( uno::Exception& )
-        {
-            OSL_FAIL( "Exception while removing a signature!" );
-            // Don't keep invalid entries...
-            ImplGetSignatureInformations(/*bUseTempStream=*/true, /*bCacheLastSignature=*/true);
-            ImplFillSignaturesBox();
-        }
+        ImplFillSignaturesBox();
+    }
+    catch ( uno::Exception& )
+    {
+        OSL_FAIL( "Exception while removing a signature!" );
+        // Don't keep invalid entries...
+        ImplGetSignatureInformations(/*bUseTempStream=*/true, /*bCacheLastSignature=*/true);
+        ImplFillSignaturesBox();
     }
 }
 
@@ -730,25 +730,25 @@ void DigitalSignaturesDialog::ImplGetSignatureInformations(bool bUseTempStream, 
 void DigitalSignaturesDialog::ImplShowSignaturesDetails()
 {
     int nEntry = m_xSignaturesLB->get_selected_index();
-    if (nEntry != -1)
-    {
-        sal_uInt16 nSelected = m_xSignaturesLB->get_id(nEntry).toUInt32();
-        const SignatureInformation& rInfo = maSignatureManager.getCurrentSignatureInformations()[ nSelected ];
-        uno::Reference<security::XCertificate> xCert = getCertificate(rInfo);
+    if (nEntry == -1)
+        return;
 
-        if ( xCert.is() )
-        {
-            uno::Reference<xml::crypto::XSecurityEnvironment> xSecEnv = getSecurityEnvironmentForCertificate(xCert);
-            CertificateViewer aViewer(m_xDialog.get(), xSecEnv, xCert, false, nullptr);
-            aViewer.run();
-        }
-        else
-        {
-            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
-                                                          VclMessageType::Info, VclButtonsType::Ok,
-                                                          XsResId(STR_XMLSECDLG_NO_CERT_FOUND)));
-            xInfoBox->run();
-        }
+    sal_uInt16 nSelected = m_xSignaturesLB->get_id(nEntry).toUInt32();
+    const SignatureInformation& rInfo = maSignatureManager.getCurrentSignatureInformations()[ nSelected ];
+    uno::Reference<security::XCertificate> xCert = getCertificate(rInfo);
+
+    if ( xCert.is() )
+    {
+        uno::Reference<xml::crypto::XSecurityEnvironment> xSecEnv = getSecurityEnvironmentForCertificate(xCert);
+        CertificateViewer aViewer(m_xDialog.get(), xSecEnv, xCert, false, nullptr);
+        aViewer.run();
+    }
+    else
+    {
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      XsResId(STR_XMLSECDLG_NO_CERT_FOUND)));
+        xInfoBox->run();
     }
 }
 

@@ -271,48 +271,48 @@ CertificateViewerCertPathTP::CertificateViewerCertPathTP(weld::Container* pParen
 
 void CertificateViewerCertPathTP::ActivatePage()
 {
-    if ( !mbFirstActivateDone )
+    if ( mbFirstActivateDone )
+        return;
+
+    mbFirstActivateDone = true;
+    Sequence< Reference< security::XCertificate > > aCertPath =
+        mpParent->mxSecurityEnvironment->buildCertificatePath( mpParent->mxCert );
+    const Reference< security::XCertificate >* pCertPath = aCertPath.getConstArray();
+
+    sal_Int32 i, nCnt = aCertPath.getLength();
+    std::unique_ptr<weld::TreeIter> xParent;
+    for (i = nCnt-1; i >= 0; i--)
     {
-        mbFirstActivateDone = true;
-        Sequence< Reference< security::XCertificate > > aCertPath =
-            mpParent->mxSecurityEnvironment->buildCertificatePath( mpParent->mxCert );
-        const Reference< security::XCertificate >* pCertPath = aCertPath.getConstArray();
-
-        sal_Int32 i, nCnt = aCertPath.getLength();
-        std::unique_ptr<weld::TreeIter> xParent;
-        for (i = nCnt-1; i >= 0; i--)
+        const Reference< security::XCertificate > rCert = pCertPath[ i ];
+        OUString sName = xmlsec::GetContentPart( rCert->getSubjectName(), rCert->getCertificateKind() );
+        //Verify the certificate
+        sal_Int32 certStatus = mpDlg->mxSecurityEnvironment->verifyCertificate(rCert,
+             Sequence<Reference<css::security::XCertificate> >());
+        bool bCertValid = certStatus == css::security::CertificateValidity::VALID;
+        InsertCert(xParent.get(), sName, rCert, bCertValid);
+        if (!xParent)
         {
-            const Reference< security::XCertificate > rCert = pCertPath[ i ];
-            OUString sName = xmlsec::GetContentPart( rCert->getSubjectName(), rCert->getCertificateKind() );
-            //Verify the certificate
-            sal_Int32 certStatus = mpDlg->mxSecurityEnvironment->verifyCertificate(rCert,
-                 Sequence<Reference<css::security::XCertificate> >());
-            bool bCertValid = certStatus == css::security::CertificateValidity::VALID;
-            InsertCert(xParent.get(), sName, rCert, bCertValid);
-            if (!xParent)
-            {
-                xParent = mxCertPathLB->make_iterator();
-                (void)mxCertPathLB->get_iter_first(*xParent);
-            }
-            else
-            {
-                (void)mxCertPathLB->iter_children(*xParent);
-            }
+            xParent = mxCertPathLB->make_iterator();
+            (void)mxCertPathLB->get_iter_first(*xParent);
         }
-
-        if (xParent)
-            mxCertPathLB->select(*xParent);
-        mxViewCertPB->set_sensitive(false); // Own certificate selected
-
-        while (xParent)
+        else
         {
-            mxCertPathLB->expand_row(*xParent);
-            if (!mxCertPathLB->iter_parent(*xParent))
-                xParent.reset();
+            (void)mxCertPathLB->iter_children(*xParent);
         }
-
-        CertSelectHdl(*mxCertPathLB);
     }
+
+    if (xParent)
+        mxCertPathLB->select(*xParent);
+    mxViewCertPB->set_sensitive(false); // Own certificate selected
+
+    while (xParent)
+    {
+        mxCertPathLB->expand_row(*xParent);
+        if (!mxCertPathLB->iter_parent(*xParent))
+            xParent.reset();
+    }
+
+    CertSelectHdl(*mxCertPathLB);
 }
 
 IMPL_LINK_NOARG(CertificateViewerCertPathTP, ViewCertHdl, weld::Button&, void)

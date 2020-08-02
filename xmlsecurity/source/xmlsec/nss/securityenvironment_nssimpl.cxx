@@ -195,21 +195,21 @@ void SecurityEnvironment_NssImpl::setCertDb( CERTCertDBHandle* aCertDb ) {
 }
 
 void SecurityEnvironment_NssImpl::adoptSymKey( PK11SymKey* aSymKey ) {
-    if( aSymKey != nullptr ) {
-        //First try to find the key in the list
-        if (std::find(m_tSymKeyList.begin(), m_tSymKeyList.end(), aSymKey) != m_tSymKeyList.end())
-            return;
+    if( aSymKey == nullptr )        return;
 
-        //If we do not find the key in the list, add a new node
-        PK11SymKey* symkey = PK11_ReferenceSymKey( aSymKey ) ;
-        if( symkey == nullptr )
-            throw RuntimeException() ;
+    //First try to find the key in the list
+    if (std::find(m_tSymKeyList.begin(), m_tSymKeyList.end(), aSymKey) != m_tSymKeyList.end())
+        return;
 
-        try {
-            m_tSymKeyList.push_back( symkey ) ;
-        } catch ( Exception& ) {
-            PK11_FreeSymKey( symkey ) ;
-        }
+    //If we do not find the key in the list, add a new node
+    PK11SymKey* symkey = PK11_ReferenceSymKey( aSymKey ) ;
+    if( symkey == nullptr )
+        throw RuntimeException() ;
+
+    try {
+        m_tSymKeyList.push_back( symkey ) ;
+    } catch ( Exception& ) {
+        PK11_FreeSymKey( symkey ) ;
     }
 }
 
@@ -222,18 +222,19 @@ void SecurityEnvironment_NssImpl::updateSlots()
     m_tSymKeyList.clear();
 
     PK11SlotList * soltList = PK11_GetAllTokens( CKM_INVALID_MECHANISM, PR_FALSE, PR_FALSE, nullptr ) ;
-    if( soltList != nullptr )
-    {
-        for (PK11SlotListElement* soltEle = soltList->head ; soltEle != nullptr; soltEle = soltEle->next)
-        {
-            PK11SlotInfo * pSlot = soltEle->slot ;
+    if( soltList == nullptr )
+        return;
 
-            if(pSlot != nullptr)
-            {
-                SAL_INFO(
-                    "xmlsecurity.xmlsec",
-                    "Found a slot: SlotName=" << PK11_GetSlotName(pSlot)
-                        << ", TokenName=" << PK11_GetTokenName(pSlot));
+    for (PK11SlotListElement* soltEle = soltList->head ; soltEle != nullptr; soltEle = soltEle->next)
+    {
+        PK11SlotInfo * pSlot = soltEle->slot ;
+
+        if(pSlot != nullptr)
+        {
+            SAL_INFO(
+                "xmlsecurity.xmlsec",
+                "Found a slot: SlotName=" << PK11_GetSlotName(pSlot)
+                    << ", TokenName=" << PK11_GetTokenName(pSlot));
 
 //The following code which is commented out checks if a slot, that is a smart card for example, is
 //              able to generate a symmetric key of type CKM_DES3_CBC. If this fails then this token
@@ -245,27 +246,26 @@ void SecurityEnvironment_NssImpl::updateSlots()
 //              By doing this, the encryption may fail if a smart card is being used which does not
 //              support this key generation.
 //
-                PK11SymKey * pSymKey = PK11_KeyGen( pSlot , CKM_DES3_CBC, nullptr, 128, nullptr ) ;
+            PK11SymKey * pSymKey = PK11_KeyGen( pSlot , CKM_DES3_CBC, nullptr, 128, nullptr ) ;
 //              if( pSymKey == NULL )
 //              {
 //                  PK11_FreeSlot( pSlot ) ;
 //                  SAL_INFO( "xmlsecurity", "XMLSEC: Error - pSymKey is NULL" );
 //                  continue;
 //              }
-                addCryptoSlot(pSlot);
-                PK11_FreeSlot( pSlot ) ;
-                pSlot = nullptr;
+            addCryptoSlot(pSlot);
+            PK11_FreeSlot( pSlot ) ;
+            pSlot = nullptr;
 
-                if (pSymKey != nullptr)
-                {
-                    adoptSymKey( pSymKey ) ;
-                    PK11_FreeSymKey( pSymKey ) ;
-                    pSymKey = nullptr;
-                }
+            if (pSymKey != nullptr)
+            {
+                adoptSymKey( pSymKey ) ;
+                PK11_FreeSymKey( pSymKey ) ;
+                pSymKey = nullptr;
+            }
 
-            }// end of if(pSlot != NULL)
-        }// end of for
-    }// end of if( soltList != NULL )
+        }// end of if(pSlot != NULL)
+    }// end of for
 }
 
 Sequence< Reference < XCertificate > >
