@@ -24,6 +24,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Package_opengl_shader \
     Package_theme_definitions \
     Package_tipoftheday \
+    Package_toolbarmode \
     UIConfig_vcl \
     $(if $(filter WNT,$(OS)), \
         Package_opengl_denylist ) \
