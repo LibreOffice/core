@@ -583,69 +583,69 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
             Control::KeyInput( rKEvt );
     }
 
-    if ( pNext )
-    {
-        if (aKeyCode.IsShift() && bValidRange)
-        {
-            std::pair<size_t,size_t> aRange;
-            size_t nSelPos = mpStartSelRange - mFilteredItemList.begin();
+    if ( !pNext )
+        return;
 
-            if (nLastPos < nSelPos)
+    if (aKeyCode.IsShift() && bValidRange)
+    {
+        std::pair<size_t,size_t> aRange;
+        size_t nSelPos = mpStartSelRange - mFilteredItemList.begin();
+
+        if (nLastPos < nSelPos)
+        {
+            if (nNextPos > nLastPos)
             {
-                if (nNextPos > nLastPos)
-                {
-                    if ( nNextPos > nSelPos)
-                        aRange = std::make_pair(nLastPos,nNextPos);
-                    else
-                        aRange = std::make_pair(nLastPos,nNextPos-1);
-                }
+                if ( nNextPos > nSelPos)
+                    aRange = std::make_pair(nLastPos,nNextPos);
                 else
-                    aRange = std::make_pair(nNextPos,nLastPos-1);
-            }
-            else if (nLastPos == nSelPos)
-            {
-                if (nNextPos > nLastPos)
-                    aRange = std::make_pair(nLastPos+1,nNextPos);
-                else
-                    aRange = std::make_pair(nNextPos,nLastPos-1);
+                    aRange = std::make_pair(nLastPos,nNextPos-1);
             }
             else
-            {
-                if (nNextPos > nLastPos)
-                    aRange = std::make_pair(nLastPos+1,nNextPos);
-                else
-                {
-                    if ( nNextPos < nSelPos)
-                        aRange = std::make_pair(nNextPos,nLastPos);
-                    else
-                        aRange = std::make_pair(nNextPos+1,nLastPos);
-                }
-            }
-
-            for (size_t i = aRange.first; i <= aRange.second; ++i)
-            {
-                if (i != nSelPos)
-                {
-                    ThumbnailViewItem *pCurItem = mFilteredItemList[i];
-
-                    pCurItem->setSelection(!pCurItem->isSelected());
-
-                    if (pCurItem->isVisible())
-                        DrawItem(pCurItem);
-                }
-            }
+                aRange = std::make_pair(nNextPos,nLastPos-1);
         }
-        else if (!aKeyCode.IsShift())
+        else if (nLastPos == nSelPos)
         {
-            deselectItems();
-            SelectItem(pNext->mnId);
-
-            //Mark it as the selection range start position
-            mpStartSelRange = mFilteredItemList.begin() + nNextPos;
+            if (nNextPos > nLastPos)
+                aRange = std::make_pair(nLastPos+1,nNextPos);
+            else
+                aRange = std::make_pair(nNextPos,nLastPos-1);
+        }
+        else
+        {
+            if (nNextPos > nLastPos)
+                aRange = std::make_pair(nLastPos+1,nNextPos);
+            else
+            {
+                if ( nNextPos < nSelPos)
+                    aRange = std::make_pair(nNextPos,nLastPos);
+                else
+                    aRange = std::make_pair(nNextPos+1,nLastPos);
+            }
         }
 
-        MakeItemVisible(pNext->mnId);
+        for (size_t i = aRange.first; i <= aRange.second; ++i)
+        {
+            if (i != nSelPos)
+            {
+                ThumbnailViewItem *pCurItem = mFilteredItemList[i];
+
+                pCurItem->setSelection(!pCurItem->isSelected());
+
+                if (pCurItem->isVisible())
+                    DrawItem(pCurItem);
+            }
+        }
     }
+    else if (!aKeyCode.IsShift())
+    {
+        deselectItems();
+        SelectItem(pNext->mnId);
+
+        //Mark it as the selection range start position
+        mpStartSelRange = mFilteredItemList.begin() + nNextPos;
+    }
+
+    MakeItemVisible(pNext->mnId);
 }
 
 void ThumbnailView::MakeItemVisible( sal_uInt16 nItemId )
@@ -698,82 +698,82 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
         return;
     }
 
-    if(rMEvt.GetClicks() == 1)
+    if(rMEvt.GetClicks() != 1)
+        return;
+
+    if (rMEvt.IsMod1())
     {
-        if (rMEvt.IsMod1())
+        //Keep selected item group state and just invert current desired one state
+        pItem->setSelection(!pItem->isSelected());
+
+        //This one becomes the selection range start position if it changes its state to selected otherwise resets it
+        mpStartSelRange = pItem->isSelected() ? mFilteredItemList.begin() + nPos : mFilteredItemList.end();
+    }
+    else if (rMEvt.IsShift() && mpStartSelRange != mFilteredItemList.end())
+    {
+        std::pair<size_t,size_t> aNewRange;
+        aNewRange.first = mpStartSelRange - mFilteredItemList.begin();
+        aNewRange.second = nPos;
+
+        if (aNewRange.first > aNewRange.second)
+            std::swap(aNewRange.first,aNewRange.second);
+
+        //Deselect the ones outside of it
+        for (size_t i = 0, n = mFilteredItemList.size(); i < n; ++i)
         {
-            //Keep selected item group state and just invert current desired one state
-            pItem->setSelection(!pItem->isSelected());
+            ThumbnailViewItem *pCurItem  = mFilteredItemList[i];
 
-            //This one becomes the selection range start position if it changes its state to selected otherwise resets it
-            mpStartSelRange = pItem->isSelected() ? mFilteredItemList.begin() + nPos : mFilteredItemList.end();
-        }
-        else if (rMEvt.IsShift() && mpStartSelRange != mFilteredItemList.end())
-        {
-            std::pair<size_t,size_t> aNewRange;
-            aNewRange.first = mpStartSelRange - mFilteredItemList.begin();
-            aNewRange.second = nPos;
-
-            if (aNewRange.first > aNewRange.second)
-                std::swap(aNewRange.first,aNewRange.second);
-
-            //Deselect the ones outside of it
-            for (size_t i = 0, n = mFilteredItemList.size(); i < n; ++i)
+            if (pCurItem->isSelected() && (i < aNewRange.first || i > aNewRange.second))
             {
-                ThumbnailViewItem *pCurItem  = mFilteredItemList[i];
+                pCurItem->setSelection(false);
 
-                if (pCurItem->isSelected() && (i < aNewRange.first || i > aNewRange.second))
+                if (pCurItem->isVisible())
+                    DrawItem(pCurItem);
+            }
+        }
+
+        size_t nSelPos = mpStartSelRange - mFilteredItemList.begin();
+
+        //Select the items between start range and the selected item
+        if (nSelPos != nPos)
+        {
+            int dir = nSelPos < nPos ? 1 : -1;
+            size_t nCurPos = nSelPos + dir;
+
+            while (nCurPos != nPos)
+            {
+                ThumbnailViewItem *pCurItem  = mFilteredItemList[nCurPos];
+
+                if (!pCurItem->isSelected())
                 {
-                    pCurItem->setSelection(false);
+                    pCurItem->setSelection(true);
 
                     if (pCurItem->isVisible())
                         DrawItem(pCurItem);
                 }
+
+                nCurPos += dir;
             }
-
-            size_t nSelPos = mpStartSelRange - mFilteredItemList.begin();
-
-            //Select the items between start range and the selected item
-            if (nSelPos != nPos)
-            {
-                int dir = nSelPos < nPos ? 1 : -1;
-                size_t nCurPos = nSelPos + dir;
-
-                while (nCurPos != nPos)
-                {
-                    ThumbnailViewItem *pCurItem  = mFilteredItemList[nCurPos];
-
-                    if (!pCurItem->isSelected())
-                    {
-                        pCurItem->setSelection(true);
-
-                        if (pCurItem->isVisible())
-                            DrawItem(pCurItem);
-                    }
-
-                    nCurPos += dir;
-                }
-            }
-
-            pItem->setSelection(true);
-        }
-        else
-        {
-            //If we got a group of selected items deselect the rest and only keep the desired one
-            //mark items as not selected to not fire unnecessary change state events.
-            pItem->setSelection(false);
-            deselectItems();
-            pItem->setSelection(true);
-
-            //Mark as initial selection range position and reset end one
-            mpStartSelRange = mFilteredItemList.begin() + nPos;
         }
 
-        if (!pItem->isHighlighted())
-            DrawItem(pItem);
-
-        //fire accessible event??
+        pItem->setSelection(true);
     }
+    else
+    {
+        //If we got a group of selected items deselect the rest and only keep the desired one
+        //mark items as not selected to not fire unnecessary change state events.
+        pItem->setSelection(false);
+        deselectItems();
+        pItem->setSelection(true);
+
+        //Mark as initial selection range position and reset end one
+        mpStartSelRange = mFilteredItemList.begin() + nPos;
+    }
+
+    if (!pItem->isHighlighted())
+        DrawItem(pItem);
+
+    //fire accessible event??
 }
 
 void ThumbnailView::Command( const CommandEvent& rCEvt )

@@ -278,23 +278,23 @@ void SfxRedactionHelper::showRedactionToolbar(const SfxViewFrame* pViewFrame)
     Reference<css::beans::XPropertySet> xPropSet(xFrame, UNO_QUERY);
     Reference<css::frame::XLayoutManager> xLayoutManager;
 
-    if (xPropSet.is())
+    if (!xPropSet.is())
+        return;
+
+    try
     {
-        try
-        {
-            Any aValue = xPropSet->getPropertyValue("LayoutManager");
-            aValue >>= xLayoutManager;
-            xLayoutManager->createElement("private:resource/toolbar/redactionbar");
-            xLayoutManager->showElement("private:resource/toolbar/redactionbar");
-        }
-        catch (const css::uno::RuntimeException&)
-        {
-            throw;
-        }
-        catch (css::uno::Exception&)
-        {
-            SAL_WARN("sfx.doc", "Exception while trying to show the Redaction Toolbar!");
-        }
+        Any aValue = xPropSet->getPropertyValue("LayoutManager");
+        aValue >>= xLayoutManager;
+        xLayoutManager->createElement("private:resource/toolbar/redactionbar");
+        xLayoutManager->showElement("private:resource/toolbar/redactionbar");
+    }
+    catch (const css::uno::RuntimeException&)
+    {
+        throw;
+    }
+    catch (css::uno::Exception&)
+    {
+        SAL_WARN("sfx.doc", "Exception while trying to show the Redaction Toolbar!");
     }
 }
 
