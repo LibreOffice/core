@@ -145,6 +145,8 @@ public:
         weld::Window* pParent, const OUString& rExtensionId ) = 0;
 
     virtual VclPtr<VclAbstractDialog> CreateTipOfTheDayDialog(weld::Window* _pParent) = 0;
+
+    virtual VclPtr<VclAbstractDialog> CreateToolbarmodeDialog(weld::Window* _pParent) = 0;
 };
 
 #endif
