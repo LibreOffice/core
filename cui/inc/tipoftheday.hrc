@@ -44,6 +44,7 @@
 
 const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
 {
+     { NC_("RID_CUI_TIPOFTHEDAY", "%PRODUCTNAME offers a variety of user interface options to make you feel at home"), ".uno:ToolbarModeUI", "toolbarmode.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Need to allow changes to parts of a read-only document in Writer? Insert frames or sections that can authorize changes."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/swriter/guide/section_edit.html", "tipoftheday_w.png"}, //local help missing
      { NC_("RID_CUI_TIPOFTHEDAY", "To print the notes of your slides go to File ▸ Print ▸ Impress tab and select Notes under Document ▸ Type."), "", "tipoftheday_i.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To start temporarily with a fresh user profile, or to restore a non-working %PRODUCTNAME, use Help ▸ Restart in Safe Mode."), "svx/ui/safemodedialog/SafeModeDialog", ""}, //https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/shared/01/profile_safe_mode.html
@@ -270,6 +271,8 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
 
 #define STR_HELP_LINK                   NC_("STR_HELP_LINK", "%PRODUCTNAME Help")
 #define STR_MORE_LINK                   NC_("STR_MORE_LINK", "More info")
+#define STR_UNO_LINK                    NC_("STR_UNO_LINK", "Run this action now...")
+#define STR_UNO_EXECUTE                 NC_("STR_UNO_EXECUTE", "Execute the command %COMMAND") //tooltip for STR_UNO_LINK
 #define STR_TITLE                       NC_("STR_TITLE", "Tip of the Day")
 #define STR_CMD                         NC_("STR_CMD", "⌘ Cmd") //use narrow no-break space U+202F here
 #define STR_CTRL                        NC_("STR_CTRL", "Ctrl")
