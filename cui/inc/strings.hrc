@@ -399,6 +399,17 @@
 #define RID_SVXSTR_ADDITIONS_LOADING                NC_("RID_SVXSTR_ADDITIONS_LOADING", "Loading...")
 #define RID_SVXSTR_ADDITIONS_NORESULTS              NC_("ID_SVXSTR_ADDITIONS_NORESULTS", "No results found")
 #define RID_SVXSTR_ADDITIONS_DIALOG_TITLE_PREFIX    NC_("RID_SVXSTR_ADDITIONS_DIALOG_TITLE_PREFIX", "Extensions")
+
+#define RID_SVXSTR_TOOLBARMODE_DEFAULT              NC_("RID_SVXSTR_TOOLBARMODE_DEFAULT", "Standard user interface with menu, toolbar, and collapsed sidebar. Intended to user who are familiar with the classic interface.")
+#define RID_SVXSTR_TOOLBARMODE_SINGLE               NC_("RID_SVXSTR_TOOLBARMODE_SINGLE", "Standard user interface but with only one toolbar. Intended for use on small screens.")
+#define RID_SVXSTR_TOOLBARMODE_SIDEBAR              NC_("RID_SVXSTR_TOOLBARMODE_SIDEBAR", "Standard user interface with expanded sidebar. Expert users who want to quickly change many different properties are supposed to use this UI.")
+#define RID_SVXSTR_TOOLBARMODE_NBTabbed             NC_("RID_SVXSTR_TOOLBARMODE_NBTabbed", "Notebookbar Tabbed")
+#define RID_SVXSTR_TOOLBARMODE_NBTabbedCompact      NC_("RID_SVXSTR_TOOLBARMODE_NBTabbedCompact", "Notebookbar Tabbed Compact")
+#define RID_SVXSTR_TOOLBARMODE_NBGroupedCompact     NC_("RID_SVXSTR_TOOLBARMODE_NBGroupedCompact", "Notebookbar Groupedbar Compact")
+#define RID_SVXSTR_TOOLBARMODE_NBGroupedFull        NC_("RID_SVXSTR_TOOLBARMODE_NBGroupedFull", "Notebookbar Groupedbar (Full)")
+#define RID_SVXSTR_TOOLBARMODE_NBSingle             NC_("RID_SVXSTR_TOOLBARMODE_NBSingle", "Notebookbar Contextual Single")
+#define RID_SVXSTR_TOOLBARMODE_NBGroups             NC_("RID_SVXSTR_TOOLBARMODE_NBGroups", "Notebookbar Contextual Groups")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
