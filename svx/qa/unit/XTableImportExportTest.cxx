@@ -10,6 +10,7 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
+#include <unotest/bootstrapfixturebase.hxx>
 
 #include <sal/types.h>
 #include <sfx2/app.hxx>
