@@ -363,23 +363,23 @@ SalI18N_InputContext::Unmap()
 void
 SalI18N_InputContext::Map( SalFrame *pFrame )
 {
-    if( mbUseable )
-    {
-        if( pFrame )
-        {
-            if ( maContext == nullptr )
-            {
-                SalI18N_InputMethod *pInputMethod;
-                pInputMethod = vcl_sal::getSalDisplay(GetGenericUnixSalData())->GetInputMethod();
+    if( !mbUseable )
+        return;
 
-                maContext = XCreateIC( pInputMethod->GetMethod(),
-                                       XNVaNestedList, mpAttributes,
-                                       nullptr );
-            }
-            if( maClientData.pFrame != pFrame )
-                SetICFocus( pFrame );
-        }
+    if( !pFrame )
+        return;
+
+    if ( maContext == nullptr )
+    {
+        SalI18N_InputMethod *pInputMethod;
+        pInputMethod = vcl_sal::getSalDisplay(GetGenericUnixSalData())->GetInputMethod();
+
+        maContext = XCreateIC( pInputMethod->GetMethod(),
+                               XNVaNestedList, mpAttributes,
+                               nullptr );
     }
+    if( maClientData.pFrame != pFrame )
+        SetICFocus( pFrame );
 }
 
 // Handle DestroyCallbacks
@@ -541,28 +541,28 @@ SalI18N_InputContext::UpdateSpotLocation()
 void
 SalI18N_InputContext::SetICFocus( SalFrame* pFocusFrame )
 {
-    if ( mbUseable && (maContext != nullptr)  )
+    if ( !(mbUseable && (maContext != nullptr))  )
+        return;
+
+    maClientData.pFrame = pFocusFrame;
+
+    const SystemEnvData* pEnv   = pFocusFrame->GetSystemData();
+    ::Window  aClientWindow  = pEnv->aShellWindow;
+    ::Window  aFocusWindow   = pEnv->aWindow;
+
+    XSetICValues( maContext,
+                  XNFocusWindow,       aFocusWindow,
+                  XNClientWindow,      aClientWindow,
+                  nullptr );
+
+    if( maClientData.aInputEv.mpTextAttr )
     {
-        maClientData.pFrame = pFocusFrame;
-
-        const SystemEnvData* pEnv   = pFocusFrame->GetSystemData();
-        ::Window  aClientWindow  = pEnv->aShellWindow;
-        ::Window  aFocusWindow   = pEnv->aWindow;
-
-        XSetICValues( maContext,
-                      XNFocusWindow,       aFocusWindow,
-                      XNClientWindow,      aClientWindow,
-                      nullptr );
-
-        if( maClientData.aInputEv.mpTextAttr )
-        {
-            sendEmptyCommit(pFocusFrame);
-            // begin preedit again
-            vcl_sal::getSalDisplay(GetGenericUnixSalData())->SendInternalEvent( pFocusFrame, &maClientData.aInputEv, SalEvent::ExtTextInput );
-        }
-
-        XSetICFocus( maContext );
+        sendEmptyCommit(pFocusFrame);
+        // begin preedit again
+        vcl_sal::getSalDisplay(GetGenericUnixSalData())->SendInternalEvent( pFocusFrame, &maClientData.aInputEv, SalEvent::ExtTextInput );
     }
+
+    XSetICFocus( maContext );
 }
 
 void
@@ -583,20 +583,20 @@ SalI18N_InputContext::UnsetICFocus()
 void
 SalI18N_InputContext::EndExtTextInput()
 {
-    if ( mbUseable && (maContext != nullptr) && maClientData.pFrame )
+    if ( !mbUseable || (maContext == nullptr) || !maClientData.pFrame )
+        return;
+
+    vcl::DeletionListener aDel( maClientData.pFrame );
+    // delete preedit in sal (commit an empty string)
+    sendEmptyCommit( maClientData.pFrame );
+    if( ! aDel.isDeleted() )
     {
-        vcl::DeletionListener aDel( maClientData.pFrame );
-        // delete preedit in sal (commit an empty string)
-        sendEmptyCommit( maClientData.pFrame );
-        if( ! aDel.isDeleted() )
+        // mark previous preedit state again (will e.g. be sent at focus gain)
+        maClientData.aInputEv.mpTextAttr = maClientData.aInputFlags.data();
+        if( static_cast<X11SalFrame*>(maClientData.pFrame)->hasFocus() )
         {
-            // mark previous preedit state again (will e.g. be sent at focus gain)
-            maClientData.aInputEv.mpTextAttr = maClientData.aInputFlags.data();
-            if( static_cast<X11SalFrame*>(maClientData.pFrame)->hasFocus() )
-            {
-                // begin preedit again
-                vcl_sal::getSalDisplay(GetGenericUnixSalData())->SendInternalEvent( maClientData.pFrame, &maClientData.aInputEv, SalEvent::ExtTextInput );
-            }
+            // begin preedit again
+            vcl_sal::getSalDisplay(GetGenericUnixSalData())->SendInternalEvent( maClientData.pFrame, &maClientData.aInputEv, SalEvent::ExtTextInput );
         }
     }
 }

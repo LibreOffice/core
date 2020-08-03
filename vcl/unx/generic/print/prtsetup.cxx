@@ -199,21 +199,21 @@ void RTSPaperPage::update()
         m_xSlotBox->set_sensitive( false );
     }
 
-    if ( m_pParent->m_aJobData.meSetupMode == PrinterSetupMode::SingleJob )
-    {
-        m_xCbFromSetup->show();
+    if ( m_pParent->m_aJobData.meSetupMode != PrinterSetupMode::SingleJob )
+        return;
 
-        if ( m_pParent->m_aJobData.m_bPapersizeFromSetup )
-            m_xCbFromSetup->set_active(m_pParent->m_aJobData.m_bPapersizeFromSetup);
-        // disable those, unless user wants to use papersize from printer prefs
-        // as they have no influence on what's going to be printed anyway
-        else
-        {
-            m_xPaperText->set_sensitive( false );
-            m_xPaperBox->set_sensitive( false );
-            m_xOrientText->set_sensitive( false );
-            m_xOrientBox->set_sensitive( false );
-        }
+    m_xCbFromSetup->show();
+
+    if ( m_pParent->m_aJobData.m_bPapersizeFromSetup )
+        m_xCbFromSetup->set_active(m_pParent->m_aJobData.m_bPapersizeFromSetup);
+    // disable those, unless user wants to use papersize from printer prefs
+    // as they have no influence on what's going to be printed anyway
+    else
+    {
+        m_xPaperText->set_sensitive( false );
+        m_xPaperBox->set_sensitive( false );
+        m_xOrientText->set_sensitive( false );
+        m_xOrientBox->set_sensitive( false );
     }
 }
 
@@ -335,28 +335,28 @@ RTSDevicePage::RTSDevicePage(weld::Widget* pPage, RTSDialog* pParent)
         m_xDepthBox->set_active(1);
 
     // fill ppd boxes
-    if( m_pParent->m_aJobData.m_pParser )
-    {
-        for( int i = 0; i < m_pParent->m_aJobData.m_pParser->getKeys(); i++ )
-        {
-            const PPDKey* pKey = m_pParent->m_aJobData.m_pParser->getKey( i );
+    if( !m_pParent->m_aJobData.m_pParser )
+        return;
 
-            // skip options already shown somewhere else
-            // also skip options from the "InstallableOptions" PPD group
-            // Options in that group define hardware features that are not
-            // job-specific and should better be handled in the system-wide
-            // printer configuration. Keyword is defined in PPD specification
-            // (version 4.3), section 5.4.
-            if( pKey->isUIKey()                   &&
-                pKey->getKey() != "PageSize"      &&
-                pKey->getKey() != "InputSlot"     &&
-                pKey->getKey() != "PageRegion"    &&
-                pKey->getKey() != "Duplex"        &&
-                pKey->getGroup() != "InstallableOptions")
-            {
-                OUString aEntry( m_pParent->m_aJobData.m_pParser->translateKey( pKey->getKey() ) );
-                m_xPPDKeyBox->append(OUString::number(reinterpret_cast<sal_Int64>(pKey)), aEntry);
-            }
+    for( int i = 0; i < m_pParent->m_aJobData.m_pParser->getKeys(); i++ )
+    {
+        const PPDKey* pKey = m_pParent->m_aJobData.m_pParser->getKey( i );
+
+        // skip options already shown somewhere else
+        // also skip options from the "InstallableOptions" PPD group
+        // Options in that group define hardware features that are not
+        // job-specific and should better be handled in the system-wide
+        // printer configuration. Keyword is defined in PPD specification
+        // (version 4.3), section 5.4.
+        if( pKey->isUIKey()                   &&
+            pKey->getKey() != "PageSize"      &&
+            pKey->getKey() != "InputSlot"     &&
+            pKey->getKey() != "PageRegion"    &&
+            pKey->getKey() != "Duplex"        &&
+            pKey->getGroup() != "InstallableOptions")
+        {
+            OUString aEntry( m_pParent->m_aJobData.m_pParser->translateKey( pKey->getKey() ) );
+            m_xPPDKeyBox->append(OUString::number(reinterpret_cast<sal_Int64>(pKey)), aEntry);
         }
     }
 }

@@ -852,25 +852,26 @@ ImplSalDDB::ImplSalDDB( XImage* pImage, Drawable aDrawable,
     SalDisplay* pSalDisp = vcl_sal::getSalDisplay(GetGenericUnixSalData());
     Display*    pXDisp = pSalDisp->GetDisplay();
 
-    if( (maPixmap = limitXCreatePixmap( pXDisp, aDrawable, ImplGetWidth(), ImplGetHeight(), ImplGetDepth() )) )
+    maPixmap = limitXCreatePixmap( pXDisp, aDrawable, ImplGetWidth(), ImplGetHeight(), ImplGetDepth() );
+    if (!maPixmap)
+        return;
+
+    XGCValues   aValues;
+    GC          aGC;
+    int         nValues = GCFunction;
+
+    aValues.function = GXcopy;
+
+    if( 1 == mnDepth )
     {
-        XGCValues   aValues;
-        GC          aGC;
-        int         nValues = GCFunction;
-
-        aValues.function = GXcopy;
-
-        if( 1 == mnDepth )
-        {
-            nValues |= ( GCForeground | GCBackground );
-            aValues.foreground = 1;
-            aValues.background = 0;
-        }
-
-        aGC = XCreateGC( pXDisp, maPixmap, nValues, &aValues );
-        XPutImage( pXDisp, maPixmap, aGC, pImage, 0, 0, 0, 0, maTwoRect.mnDestWidth, maTwoRect.mnDestHeight );
-        XFreeGC( pXDisp, aGC );
+        nValues |= ( GCForeground | GCBackground );
+        aValues.foreground = 1;
+        aValues.background = 0;
     }
+
+    aGC = XCreateGC( pXDisp, maPixmap, nValues, &aValues );
+    XPutImage( pXDisp, maPixmap, aGC, pImage, 0, 0, 0, 0, maTwoRect.mnDestWidth, maTwoRect.mnDestHeight );
+    XFreeGC( pXDisp, aGC );
 }
 
 ImplSalDDB::ImplSalDDB(

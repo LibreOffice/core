@@ -286,37 +286,37 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
             }
         }
     }
-    if( m_aWMName.isEmpty() )
+    if( !m_aWMName.isEmpty() )
+        return;
+
+    Atom aTTAPlatform = XInternAtom( m_pDisplay, "TTA_CLIENT_PLATFORM", True );
+    if( aTTAPlatform == None ||
+        XGetWindowProperty( m_pDisplay,
+                            m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
+                            aTTAPlatform,
+                            0, 32,
+                            False,
+                            XA_STRING,
+                            &aRealType,
+                            &nFormat,
+                            &nItems,
+                            &nBytesLeft,
+                            &pProperty ) != 0 )
+        return;
+
+    if( aRealType == XA_STRING )
     {
-        Atom aTTAPlatform = XInternAtom( m_pDisplay, "TTA_CLIENT_PLATFORM", True );
-        if( aTTAPlatform != None &&
-            XGetWindowProperty( m_pDisplay,
-                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
-                                aTTAPlatform,
-                                0, 32,
-                                False,
-                                XA_STRING,
-                                &aRealType,
-                                &nFormat,
-                                &nItems,
-                                &nBytesLeft,
-                                &pProperty ) == 0 )
-        {
-            if( aRealType == XA_STRING )
-            {
-                m_aWMName = "Tarantella";
-                // #i62319# pretend that AlwaysOnTop works since
-                // the alwaysontop workaround in salframe.cxx results
-                // in a raise/lower loop on a Windows tarantella client
-                // FIXME: this property contains an identification string that
-                // in theory should be good enough to recognize running on a
-                // Windows client; however this string does not seem to be
-                // documented as well as the property itself.
-                m_bEnableAlwaysOnTopWorks = true;
-            }
-            XFree( pProperty );
-        }
+        m_aWMName = "Tarantella";
+        // #i62319# pretend that AlwaysOnTop works since
+        // the alwaysontop workaround in salframe.cxx results
+        // in a raise/lower loop on a Windows tarantella client
+        // FIXME: this property contains an identification string that
+        // in theory should be good enough to recognize running on a
+        // Windows client; however this string does not seem to be
+        // documented as well as the property itself.
+        m_bEnableAlwaysOnTopWorks = true;
     }
+    XFree( pProperty );
 }
 
 /*
@@ -1066,104 +1066,104 @@ void NetWMAdaptor::setWMName( X11SalFrame* pFrame, const OUString& rWMName ) con
  */
 void NetWMAdaptor::setNetWMState( X11SalFrame* pFrame ) const
 {
-    if( m_aWMAtoms[ NET_WM_STATE ] )
+    if( !(m_aWMAtoms[ NET_WM_STATE ]) )
+        return;
+
+    Atom aStateAtoms[ 10 ];
+    int nStateAtoms = 0;
+
+    // set NET_WM_STATE_MODAL
+    if( pFrame->mbMaximizedVert
+        && m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_VERT ] )
+        aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_VERT ];
+    if( pFrame->mbMaximizedHorz
+        && m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_HORZ ] )
+        aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_HORZ ];
+    if( pFrame->bAlwaysOnTop_ && m_aWMAtoms[ NET_WM_STATE_STAYS_ON_TOP ] )
+        aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_STAYS_ON_TOP ];
+    if( pFrame->mbShaded && m_aWMAtoms[ NET_WM_STATE_SHADED ] )
+        aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_SHADED ];
+    if( pFrame->mbFullScreen && m_aWMAtoms[ NET_WM_STATE_FULLSCREEN ] )
+        aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_FULLSCREEN ];
+    if( pFrame->meWindowType == WMWindowType::Utility && m_aWMAtoms[ NET_WM_STATE_SKIP_TASKBAR ] )
+        aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_SKIP_TASKBAR ];
+
+    if( nStateAtoms )
     {
-        Atom aStateAtoms[ 10 ];
-        int nStateAtoms = 0;
+        XChangeProperty( m_pDisplay,
+                         pFrame->GetShellWindow(),
+                         m_aWMAtoms[ NET_WM_STATE ],
+                         XA_ATOM,
+                         32,
+                         PropModeReplace,
+                         reinterpret_cast<unsigned char*>(aStateAtoms),
+                         nStateAtoms
+                         );
+    }
+    else
+        XDeleteProperty( m_pDisplay,
+                         pFrame->GetShellWindow(),
+                         m_aWMAtoms[ NET_WM_STATE ] );
+    if( !(pFrame->mbMaximizedHorz
+       && pFrame->mbMaximizedVert
+       && ! ( pFrame->nStyle_ & SalFrameStyleFlags::SIZEABLE )) )
+        return;
 
-        // set NET_WM_STATE_MODAL
-        if( pFrame->mbMaximizedVert
-            && m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_VERT ] )
-            aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_VERT ];
-        if( pFrame->mbMaximizedHorz
-            && m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_HORZ ] )
-            aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_HORZ ];
-        if( pFrame->bAlwaysOnTop_ && m_aWMAtoms[ NET_WM_STATE_STAYS_ON_TOP ] )
-            aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_STAYS_ON_TOP ];
-        if( pFrame->mbShaded && m_aWMAtoms[ NET_WM_STATE_SHADED ] )
-            aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_SHADED ];
-        if( pFrame->mbFullScreen && m_aWMAtoms[ NET_WM_STATE_FULLSCREEN ] )
-            aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_FULLSCREEN ];
-        if( pFrame->meWindowType == WMWindowType::Utility && m_aWMAtoms[ NET_WM_STATE_SKIP_TASKBAR ] )
-            aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_SKIP_TASKBAR ];
+    /*
+     *  for maximizing use NorthWestGravity (including decoration)
+     */
+    XSizeHints  hints;
+    long        supplied;
+    bool bHint = false;
+    if( XGetWMNormalHints( m_pDisplay,
+                           pFrame->GetShellWindow(),
+                           &hints,
+                           &supplied ) )
+    {
+        bHint = true;
+        hints.flags |= PWinGravity;
+        hints.win_gravity = NorthWestGravity;
+        XSetWMNormalHints( m_pDisplay,
+                           pFrame->GetShellWindow(),
+                           &hints );
+        XSync( m_pDisplay, False );
+    }
 
-        if( nStateAtoms )
-        {
-            XChangeProperty( m_pDisplay,
-                             pFrame->GetShellWindow(),
-                             m_aWMAtoms[ NET_WM_STATE ],
-                             XA_ATOM,
-                             32,
-                             PropModeReplace,
-                             reinterpret_cast<unsigned char*>(aStateAtoms),
-                             nStateAtoms
-                             );
-        }
-        else
-            XDeleteProperty( m_pDisplay,
-                             pFrame->GetShellWindow(),
-                             m_aWMAtoms[ NET_WM_STATE ] );
-        if( pFrame->mbMaximizedHorz
-           && pFrame->mbMaximizedVert
-           && ! ( pFrame->nStyle_ & SalFrameStyleFlags::SIZEABLE ) )
-        {
-            /*
-             *  for maximizing use NorthWestGravity (including decoration)
-             */
-            XSizeHints  hints;
-            long        supplied;
-            bool bHint = false;
-            if( XGetWMNormalHints( m_pDisplay,
-                                   pFrame->GetShellWindow(),
-                                   &hints,
-                                   &supplied ) )
-            {
-                bHint = true;
-                hints.flags |= PWinGravity;
-                hints.win_gravity = NorthWestGravity;
-                XSetWMNormalHints( m_pDisplay,
-                                   pFrame->GetShellWindow(),
-                                   &hints );
-                XSync( m_pDisplay, False );
-            }
+    // SetPosSize necessary to set width/height, min/max w/h
+    sal_Int32 nCurrent = 0;
+    /*
+     *  get current desktop here if work areas have different size
+     *  (does this happen on any platform ?)
+     */
+    if( ! m_bEqualWorkAreas )
+    {
+        nCurrent = getCurrentWorkArea();
+        if( nCurrent < 0 )
+            nCurrent = 0;
+    }
+    tools::Rectangle aPosSize = m_aWMWorkAreas[nCurrent];
+    const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
+    aPosSize = tools::Rectangle( Point( aPosSize.Left() + rGeom.nLeftDecoration,
+                                 aPosSize.Top()  + rGeom.nTopDecoration ),
+                          Size( aPosSize.GetWidth()
+                                - rGeom.nLeftDecoration
+                                - rGeom.nRightDecoration,
+                                aPosSize.GetHeight()
+                                - rGeom.nTopDecoration
+                                - rGeom.nBottomDecoration )
+                          );
+    pFrame->SetPosSize( aPosSize );
 
-            // SetPosSize necessary to set width/height, min/max w/h
-            sal_Int32 nCurrent = 0;
-            /*
-             *  get current desktop here if work areas have different size
-             *  (does this happen on any platform ?)
-             */
-            if( ! m_bEqualWorkAreas )
-            {
-                nCurrent = getCurrentWorkArea();
-                if( nCurrent < 0 )
-                    nCurrent = 0;
-            }
-            tools::Rectangle aPosSize = m_aWMWorkAreas[nCurrent];
-            const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
-            aPosSize = tools::Rectangle( Point( aPosSize.Left() + rGeom.nLeftDecoration,
-                                         aPosSize.Top()  + rGeom.nTopDecoration ),
-                                  Size( aPosSize.GetWidth()
-                                        - rGeom.nLeftDecoration
-                                        - rGeom.nRightDecoration,
-                                        aPosSize.GetHeight()
-                                        - rGeom.nTopDecoration
-                                        - rGeom.nBottomDecoration )
-                                  );
-            pFrame->SetPosSize( aPosSize );
-
-            /*
-             *  reset gravity hint to static gravity
-             *  (this should not move window according to ICCCM)
-             */
-            if( bHint && pFrame->nShowState_ != SHOWSTATE_UNKNOWN )
-            {
-                hints.win_gravity = StaticGravity;
-                XSetWMNormalHints( m_pDisplay,
-                                   pFrame->GetShellWindow(),
-                                   &hints );
-            }
-        }
+    /*
+     *  reset gravity hint to static gravity
+     *  (this should not move window according to ICCCM)
+     */
+    if( bHint && pFrame->nShowState_ != SHOWSTATE_UNKNOWN )
+    {
+        hints.win_gravity = StaticGravity;
+        XSetWMNormalHints( m_pDisplay,
+                           pFrame->GetShellWindow(),
+                           &hints );
     }
 }
 
@@ -1173,87 +1173,87 @@ void NetWMAdaptor::setNetWMState( X11SalFrame* pFrame ) const
  */
 void GnomeWMAdaptor::setGnomeWMState( X11SalFrame* pFrame ) const
 {
-    if( m_aWMAtoms[ WIN_STATE ] )
+    if( !(m_aWMAtoms[ WIN_STATE ]) )
+        return;
+
+    sal_uInt32 nWinWMState = 0;
+
+    if( pFrame->mbMaximizedVert )
+        nWinWMState |= 1 << 2;
+    if( pFrame->mbMaximizedHorz )
+        nWinWMState |= 1 << 3;
+    if( pFrame->mbShaded )
+        nWinWMState |= 1 << 5;
+
+    XChangeProperty( m_pDisplay,
+                     pFrame->GetShellWindow(),
+                     m_aWMAtoms[ WIN_STATE ],
+                     XA_CARDINAL,
+                     32,
+                     PropModeReplace,
+                     reinterpret_cast<unsigned char*>(&nWinWMState),
+                     1
+                     );
+    if( !(pFrame->mbMaximizedHorz
+       && pFrame->mbMaximizedVert
+       && ! ( pFrame->nStyle_ & SalFrameStyleFlags::SIZEABLE )) )
+        return;
+
+    /*
+     *  for maximizing use NorthWestGravity (including decoration)
+     */
+    XSizeHints  hints;
+    long        supplied;
+    bool bHint = false;
+    if( XGetWMNormalHints( m_pDisplay,
+                           pFrame->GetShellWindow(),
+                           &hints,
+                           &supplied ) )
     {
-        sal_uInt32 nWinWMState = 0;
+        bHint = true;
+        hints.flags |= PWinGravity;
+        hints.win_gravity = NorthWestGravity;
+        XSetWMNormalHints( m_pDisplay,
+                           pFrame->GetShellWindow(),
+                           &hints );
+        XSync( m_pDisplay, False );
+    }
 
-        if( pFrame->mbMaximizedVert )
-            nWinWMState |= 1 << 2;
-        if( pFrame->mbMaximizedHorz )
-            nWinWMState |= 1 << 3;
-        if( pFrame->mbShaded )
-            nWinWMState |= 1 << 5;
+    // SetPosSize necessary to set width/height, min/max w/h
+    sal_Int32 nCurrent = 0;
+    /*
+     *  get current desktop here if work areas have different size
+     *  (does this happen on any platform ?)
+     */
+    if( ! m_bEqualWorkAreas )
+    {
+        nCurrent = getCurrentWorkArea();
+        if( nCurrent < 0 )
+            nCurrent = 0;
+    }
+    tools::Rectangle aPosSize = m_aWMWorkAreas[nCurrent];
+    const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
+    aPosSize = tools::Rectangle( Point( aPosSize.Left() + rGeom.nLeftDecoration,
+                                 aPosSize.Top()  + rGeom.nTopDecoration ),
+                          Size( aPosSize.GetWidth()
+                                - rGeom.nLeftDecoration
+                                - rGeom.nRightDecoration,
+                                aPosSize.GetHeight()
+                                - rGeom.nTopDecoration
+                                - rGeom.nBottomDecoration )
+                          );
+    pFrame->SetPosSize( aPosSize );
 
-        XChangeProperty( m_pDisplay,
-                         pFrame->GetShellWindow(),
-                         m_aWMAtoms[ WIN_STATE ],
-                         XA_CARDINAL,
-                         32,
-                         PropModeReplace,
-                         reinterpret_cast<unsigned char*>(&nWinWMState),
-                         1
-                         );
-        if( pFrame->mbMaximizedHorz
-           && pFrame->mbMaximizedVert
-           && ! ( pFrame->nStyle_ & SalFrameStyleFlags::SIZEABLE ) )
-        {
-            /*
-             *  for maximizing use NorthWestGravity (including decoration)
-             */
-            XSizeHints  hints;
-            long        supplied;
-            bool bHint = false;
-            if( XGetWMNormalHints( m_pDisplay,
-                                   pFrame->GetShellWindow(),
-                                   &hints,
-                                   &supplied ) )
-            {
-                bHint = true;
-                hints.flags |= PWinGravity;
-                hints.win_gravity = NorthWestGravity;
-                XSetWMNormalHints( m_pDisplay,
-                                   pFrame->GetShellWindow(),
-                                   &hints );
-                XSync( m_pDisplay, False );
-            }
-
-            // SetPosSize necessary to set width/height, min/max w/h
-            sal_Int32 nCurrent = 0;
-            /*
-             *  get current desktop here if work areas have different size
-             *  (does this happen on any platform ?)
-             */
-            if( ! m_bEqualWorkAreas )
-            {
-                nCurrent = getCurrentWorkArea();
-                if( nCurrent < 0 )
-                    nCurrent = 0;
-            }
-            tools::Rectangle aPosSize = m_aWMWorkAreas[nCurrent];
-            const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
-            aPosSize = tools::Rectangle( Point( aPosSize.Left() + rGeom.nLeftDecoration,
-                                         aPosSize.Top()  + rGeom.nTopDecoration ),
-                                  Size( aPosSize.GetWidth()
-                                        - rGeom.nLeftDecoration
-                                        - rGeom.nRightDecoration,
-                                        aPosSize.GetHeight()
-                                        - rGeom.nTopDecoration
-                                        - rGeom.nBottomDecoration )
-                                  );
-            pFrame->SetPosSize( aPosSize );
-
-            /*
-             *  reset gravity hint to static gravity
-             *  (this should not move window according to ICCCM)
-             */
-            if( bHint && pFrame->nShowState_ != SHOWSTATE_UNKNOWN )
-            {
-                hints.win_gravity = StaticGravity;
-                XSetWMNormalHints( m_pDisplay,
-                                   pFrame->GetShellWindow(),
-                                   &hints );
-            }
-        }
+    /*
+     *  reset gravity hint to static gravity
+     *  (this should not move window according to ICCCM)
+     */
+    if( bHint && pFrame->nShowState_ != SHOWSTATE_UNKNOWN )
+    {
+        hints.win_gravity = StaticGravity;
+        XSetWMNormalHints( m_pDisplay,
+                           pFrame->GetShellWindow(),
+                           &hints );
     }
 }
 
@@ -1660,32 +1660,32 @@ void WMAdaptor::enableAlwaysOnTop( X11SalFrame*, bool /*bEnable*/ ) const
 void NetWMAdaptor::enableAlwaysOnTop( X11SalFrame* pFrame, bool bEnable ) const
 {
     pFrame->bAlwaysOnTop_ = bEnable;
-    if( m_aWMAtoms[ NET_WM_STATE_STAYS_ON_TOP ] )
+    if( !(m_aWMAtoms[ NET_WM_STATE_STAYS_ON_TOP ]) )
+        return;
+
+    if( pFrame->bMapped_ )
     {
-        if( pFrame->bMapped_ )
-        {
-            // window already mapped, send WM a message
-            XEvent aEvent;
-            aEvent.type                 = ClientMessage;
-            aEvent.xclient.display      = m_pDisplay;
-            aEvent.xclient.window       = pFrame->GetShellWindow();
-            aEvent.xclient.message_type = m_aWMAtoms[ NET_WM_STATE ];
-            aEvent.xclient.format       = 32;
-            aEvent.xclient.data.l[0]    = bEnable ? 1 : 0;
-            aEvent.xclient.data.l[1]    = m_aWMAtoms[ NET_WM_STATE_STAYS_ON_TOP ];
-            aEvent.xclient.data.l[2]    = 0;
-            aEvent.xclient.data.l[3]    = 0;
-            aEvent.xclient.data.l[4]    = 0;
-            XSendEvent( m_pDisplay,
-                        m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
-                        False,
-                        SubstructureNotifyMask | SubstructureRedirectMask,
-                        &aEvent
-                        );
-        }
-        else
-            setNetWMState( pFrame );
+        // window already mapped, send WM a message
+        XEvent aEvent;
+        aEvent.type                 = ClientMessage;
+        aEvent.xclient.display      = m_pDisplay;
+        aEvent.xclient.window       = pFrame->GetShellWindow();
+        aEvent.xclient.message_type = m_aWMAtoms[ NET_WM_STATE ];
+        aEvent.xclient.format       = 32;
+        aEvent.xclient.data.l[0]    = bEnable ? 1 : 0;
+        aEvent.xclient.data.l[1]    = m_aWMAtoms[ NET_WM_STATE_STAYS_ON_TOP ];
+        aEvent.xclient.data.l[2]    = 0;
+        aEvent.xclient.data.l[3]    = 0;
+        aEvent.xclient.data.l[4]    = 0;
+        XSendEvent( m_pDisplay,
+                    m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
+                    False,
+                    SubstructureNotifyMask | SubstructureRedirectMask,
+                    &aEvent
+                    );
     }
+    else
+        setNetWMState( pFrame );
 }
 
 /*
@@ -1694,42 +1694,42 @@ void NetWMAdaptor::enableAlwaysOnTop( X11SalFrame* pFrame, bool bEnable ) const
 void GnomeWMAdaptor::enableAlwaysOnTop( X11SalFrame* pFrame, bool bEnable ) const
 {
     pFrame->bAlwaysOnTop_ = bEnable;
-    if( m_aWMAtoms[ WIN_LAYER ] )
+    if( !(m_aWMAtoms[ WIN_LAYER ]) )
+        return;
+
+    if( pFrame->bMapped_ )
     {
-        if( pFrame->bMapped_ )
-        {
-            // window already mapped, send WM a message
-            XEvent aEvent;
-            aEvent.type                 = ClientMessage;
-            aEvent.xclient.display      = m_pDisplay;
-            aEvent.xclient.window       = pFrame->GetShellWindow();
-            aEvent.xclient.message_type = m_aWMAtoms[ WIN_LAYER ];
-            aEvent.xclient.format       = 32;
-            aEvent.xclient.data.l[0]    = bEnable ? 6 : 4;
-            aEvent.xclient.data.l[1]    = 0;
-            aEvent.xclient.data.l[2]    = 0;
-            aEvent.xclient.data.l[3]    = 0;
-            aEvent.xclient.data.l[4]    = 0;
-            XSendEvent( m_pDisplay,
-                        m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
-                        False,
-                        SubstructureNotifyMask | SubstructureRedirectMask,
-                        &aEvent
-                        );
-        }
-        else
-        {
-            sal_uInt32 nNewLayer = bEnable ? 6 : 4;
-            XChangeProperty( m_pDisplay,
-                             pFrame->GetShellWindow(),
-                             m_aWMAtoms[ WIN_LAYER ],
-                             XA_CARDINAL,
-                             32,
-                             PropModeReplace,
-                             reinterpret_cast<unsigned char*>(&nNewLayer),
-                             1
-                             );
-        }
+        // window already mapped, send WM a message
+        XEvent aEvent;
+        aEvent.type                 = ClientMessage;
+        aEvent.xclient.display      = m_pDisplay;
+        aEvent.xclient.window       = pFrame->GetShellWindow();
+        aEvent.xclient.message_type = m_aWMAtoms[ WIN_LAYER ];
+        aEvent.xclient.format       = 32;
+        aEvent.xclient.data.l[0]    = bEnable ? 6 : 4;
+        aEvent.xclient.data.l[1]    = 0;
+        aEvent.xclient.data.l[2]    = 0;
+        aEvent.xclient.data.l[3]    = 0;
+        aEvent.xclient.data.l[4]    = 0;
+        XSendEvent( m_pDisplay,
+                    m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
+                    False,
+                    SubstructureNotifyMask | SubstructureRedirectMask,
+                    &aEvent
+                    );
+    }
+    else
+    {
+        sal_uInt32 nNewLayer = bEnable ? 6 : 4;
+        XChangeProperty( m_pDisplay,
+                         pFrame->GetShellWindow(),
+                         m_aWMAtoms[ WIN_LAYER ],
+                         XA_CARDINAL,
+                         32,
+                         PropModeReplace,
+                         reinterpret_cast<unsigned char*>(&nNewLayer),
+                         1
+                         );
     }
 }
 
@@ -1738,22 +1738,22 @@ void GnomeWMAdaptor::enableAlwaysOnTop( X11SalFrame* pFrame, bool bEnable ) cons
  */
 void WMAdaptor::changeReferenceFrame( X11SalFrame* pFrame, X11SalFrame const * pReferenceFrame ) const
 {
-    if( ! ( pFrame->nStyle_ & SalFrameStyleFlags::PLUG )
+    if( !(! ( pFrame->nStyle_ & SalFrameStyleFlags::PLUG )
         && ! pFrame->IsOverrideRedirect()
-        && ! pFrame->IsFloatGrabWindow()
+        && ! pFrame->IsFloatGrabWindow())
         )
+        return;
+
+    ::Window aTransient = pFrame->pDisplay_->GetRootWindow( pFrame->GetScreenNumber() );
+    pFrame->mbTransientForRoot = true;
+    if( pReferenceFrame )
     {
-        ::Window aTransient = pFrame->pDisplay_->GetRootWindow( pFrame->GetScreenNumber() );
-        pFrame->mbTransientForRoot = true;
-        if( pReferenceFrame )
-        {
-            aTransient = pReferenceFrame->GetShellWindow();
-            pFrame->mbTransientForRoot = false;
-        }
-        XSetTransientForHint( m_pDisplay,
-                              pFrame->GetShellWindow(),
-                              aTransient );
+        aTransient = pReferenceFrame->GetShellWindow();
+        pFrame->mbTransientForRoot = false;
     }
+    XSetTransientForHint( m_pDisplay,
+                          pFrame->GetShellWindow(),
+                          aTransient );
 }
 
 /*
@@ -1918,38 +1918,38 @@ void WMAdaptor::shade( X11SalFrame*, bool /*bToShaded*/ ) const
  */
 void NetWMAdaptor::shade( X11SalFrame* pFrame, bool bToShaded ) const
 {
-    if( m_aWMAtoms[ NET_WM_STATE ]
+    if( !(m_aWMAtoms[ NET_WM_STATE ]
         && m_aWMAtoms[ NET_WM_STATE_SHADED ]
-        && ( pFrame->nStyle_ & ~SalFrameStyleFlags::DEFAULT )
+        && ( pFrame->nStyle_ & ~SalFrameStyleFlags::DEFAULT ))
         )
+        return;
+
+    pFrame->mbShaded = bToShaded;
+    if( pFrame->bMapped_ )
     {
-        pFrame->mbShaded = bToShaded;
-        if( pFrame->bMapped_ )
-        {
-            // window already mapped, send WM a message
-            XEvent aEvent;
-            aEvent.type                 = ClientMessage;
-            aEvent.xclient.display      = m_pDisplay;
-            aEvent.xclient.window       = pFrame->GetShellWindow();
-            aEvent.xclient.message_type = m_aWMAtoms[ NET_WM_STATE ];
-            aEvent.xclient.format       = 32;
-            aEvent.xclient.data.l[0]    = bToShaded ? 1 : 0;
-            aEvent.xclient.data.l[1]    = m_aWMAtoms[ NET_WM_STATE_SHADED ];
-            aEvent.xclient.data.l[2]    = 0;
-            aEvent.xclient.data.l[3]    = 0;
-            aEvent.xclient.data.l[4]    = 0;
-            XSendEvent( m_pDisplay,
-                        m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
-                        False,
-                        SubstructureNotifyMask | SubstructureRedirectMask,
-                        &aEvent
-                        );
-        }
-        else
-        {
-            // window not mapped yet, set _NET_WM_STATE directly
-            setNetWMState( pFrame );
-        }
+        // window already mapped, send WM a message
+        XEvent aEvent;
+        aEvent.type                 = ClientMessage;
+        aEvent.xclient.display      = m_pDisplay;
+        aEvent.xclient.window       = pFrame->GetShellWindow();
+        aEvent.xclient.message_type = m_aWMAtoms[ NET_WM_STATE ];
+        aEvent.xclient.format       = 32;
+        aEvent.xclient.data.l[0]    = bToShaded ? 1 : 0;
+        aEvent.xclient.data.l[1]    = m_aWMAtoms[ NET_WM_STATE_SHADED ];
+        aEvent.xclient.data.l[2]    = 0;
+        aEvent.xclient.data.l[3]    = 0;
+        aEvent.xclient.data.l[4]    = 0;
+        XSendEvent( m_pDisplay,
+                    m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
+                    False,
+                    SubstructureNotifyMask | SubstructureRedirectMask,
+                    &aEvent
+                    );
+    }
+    else
+    {
+        // window not mapped yet, set _NET_WM_STATE directly
+        setNetWMState( pFrame );
     }
 }
 
@@ -1958,33 +1958,33 @@ void NetWMAdaptor::shade( X11SalFrame* pFrame, bool bToShaded ) const
  */
 void GnomeWMAdaptor::shade( X11SalFrame* pFrame, bool bToShaded ) const
 {
-    if( m_aWMAtoms[ WIN_STATE ] )
+    if( !(m_aWMAtoms[ WIN_STATE ]) )
+        return;
+
+    pFrame->mbShaded = bToShaded;
+    if( pFrame->bMapped_ )
     {
-        pFrame->mbShaded = bToShaded;
-        if( pFrame->bMapped_ )
-        {
-            // window already mapped, send WM a message
-            XEvent aEvent;
-            aEvent.type                 = ClientMessage;
-            aEvent.xclient.display      = m_pDisplay;
-            aEvent.xclient.window       = pFrame->GetShellWindow();
-            aEvent.xclient.message_type = m_aWMAtoms[ WIN_STATE ];
-            aEvent.xclient.format       = 32;
-            aEvent.xclient.data.l[0]    = (1<<5);
-            aEvent.xclient.data.l[1]    = bToShaded ? (1<<5) : 0;
-            aEvent.xclient.data.l[2]    = 0;
-            aEvent.xclient.data.l[3]    = 0;
-            aEvent.xclient.data.l[4]    = 0;
-            XSendEvent( m_pDisplay,
-                        m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
-                        False,
-                        SubstructureNotifyMask | SubstructureRedirectMask,
-                        &aEvent
-                        );
-        }
-        else
-            setGnomeWMState( pFrame );
+        // window already mapped, send WM a message
+        XEvent aEvent;
+        aEvent.type                 = ClientMessage;
+        aEvent.xclient.display      = m_pDisplay;
+        aEvent.xclient.window       = pFrame->GetShellWindow();
+        aEvent.xclient.message_type = m_aWMAtoms[ WIN_STATE ];
+        aEvent.xclient.format       = 32;
+        aEvent.xclient.data.l[0]    = (1<<5);
+        aEvent.xclient.data.l[1]    = bToShaded ? (1<<5) : 0;
+        aEvent.xclient.data.l[2]    = 0;
+        aEvent.xclient.data.l[3]    = 0;
+        aEvent.xclient.data.l[4]    = 0;
+        XSendEvent( m_pDisplay,
+                    m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
+                    False,
+                    SubstructureNotifyMask | SubstructureRedirectMask,
+                    &aEvent
+                    );
     }
+    else
+        setGnomeWMState( pFrame );
 }
 
 /*
@@ -2236,19 +2236,19 @@ void NetWMAdaptor::setUserTime( X11SalFrame* i_pFrame, long i_nUserTime ) const
  */
 void WMAdaptor::setPID( X11SalFrame const * i_pFrame ) const
 {
-    if( m_aWMAtoms[NET_WM_PID] )
-    {
-        long nPID = static_cast<long>(getpid());
-        XChangeProperty( m_pDisplay,
-                         i_pFrame->GetShellWindow(),
-                         m_aWMAtoms[NET_WM_PID],
-                         XA_CARDINAL,
-                         32,
-                         PropModeReplace,
-                         reinterpret_cast<unsigned char*>(&nPID),
-                         1
-                         );
-    }
+    if( !(m_aWMAtoms[NET_WM_PID]) )
+        return;
+
+    long nPID = static_cast<long>(getpid());
+    XChangeProperty( m_pDisplay,
+                     i_pFrame->GetShellWindow(),
+                     m_aWMAtoms[NET_WM_PID],
+                     XA_CARDINAL,
+                     32,
+                     PropModeReplace,
+                     reinterpret_cast<unsigned char*>(&nPID),
+                     1
+                     );
 }
 
 /*
@@ -2263,21 +2263,21 @@ void WMAdaptor::setClientMachine( X11SalFrame const * i_pFrame ) const
 
 void WMAdaptor::answerPing( X11SalFrame const * i_pFrame, XClientMessageEvent const * i_pEvent ) const
 {
-    if( m_aWMAtoms[NET_WM_PING] &&
-        i_pEvent->message_type == m_aWMAtoms[ WM_PROTOCOLS ] &&
-        static_cast<Atom>(i_pEvent->data.l[0]) == m_aWMAtoms[ NET_WM_PING ] )
-    {
-        XEvent aEvent;
-        aEvent.xclient = *i_pEvent;
-        aEvent.xclient.window = m_pSalDisplay->GetRootWindow( i_pFrame->GetScreenNumber() );
-        XSendEvent( m_pDisplay,
-                    m_pSalDisplay->GetRootWindow( i_pFrame->GetScreenNumber() ),
-                    False,
-                    SubstructureNotifyMask | SubstructureRedirectMask,
-                    &aEvent
-                    );
-        XFlush( m_pDisplay );
-    }
+    if( !m_aWMAtoms[NET_WM_PING] ||
+        i_pEvent->message_type != m_aWMAtoms[ WM_PROTOCOLS ] ||
+        static_cast<Atom>(i_pEvent->data.l[0]) != m_aWMAtoms[ NET_WM_PING ] )
+        return;
+
+    XEvent aEvent;
+    aEvent.xclient = *i_pEvent;
+    aEvent.xclient.window = m_pSalDisplay->GetRootWindow( i_pFrame->GetScreenNumber() );
+    XSendEvent( m_pDisplay,
+                m_pSalDisplay->GetRootWindow( i_pFrame->GetScreenNumber() ),
+                False,
+                SubstructureNotifyMask | SubstructureRedirectMask,
+                &aEvent
+                );
+    XFlush( m_pDisplay );
 }
 
 void WMAdaptor::activateWindow( X11SalFrame const *pFrame, Time nTimestamp )

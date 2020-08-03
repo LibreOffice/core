@@ -235,19 +235,19 @@ void CUPSManager::runDests()
     if( (p_http=httpConnectEncrypt(
              cupsServer(),
              ippPort(),
-             cupsEncryption())) != nullptr )
-    {
-        int nDests = cupsGetDests2(p_http,  &pDests);
-        SAL_INFO("vcl.unx.print", "came out of cupsGetDests");
+             cupsEncryption())) == nullptr )
+        return;
 
-        osl::MutexGuard aGuard( m_aCUPSMutex );
-        m_nDests = nDests;
-        m_pDests = pDests;
-        m_bNewDests = true;
-        SAL_INFO("vcl.unx.print", "finished cupsGetDests");
+    int nDests = cupsGetDests2(p_http,  &pDests);
+    SAL_INFO("vcl.unx.print", "came out of cupsGetDests");
 
-        httpClose(p_http);
-    }
+    osl::MutexGuard aGuard( m_aCUPSMutex );
+    m_nDests = nDests;
+    m_pDests = pDests;
+    m_bNewDests = true;
+    SAL_INFO("vcl.unx.print", "finished cupsGetDests");
+
+    httpClose(p_http);
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
 #endif

@@ -131,47 +131,47 @@ void SalDisplay::processRandREvent( XEvent* pEvent )
 {
 #ifdef USE_RANDR
     XConfigureEvent* pCnfEvent=reinterpret_cast<XConfigureEvent*>(pEvent);
-    if( pWrapper && pWrapper->XRRRootToScreen(GetDisplay(),pCnfEvent->window) != -1 )
+    if( !pWrapper || pWrapper->XRRRootToScreen(GetDisplay(),pCnfEvent->window) == -1 )
+        return;
+
+    int nRet = pWrapper->XRRUpdateConfiguration( pEvent );
+    if( nRet != 1 || pEvent->type == ConfigureNotify) // this should then be a XRRScreenChangeNotifyEvent
+        return;
+
+    // update screens
+    bool bNotify = false;
+    for(ScreenData & rScreen : m_aScreens)
     {
-        int nRet = pWrapper->XRRUpdateConfiguration( pEvent );
-        if( nRet == 1 && pEvent->type != ConfigureNotify) // this should then be a XRRScreenChangeNotifyEvent
+        if( rScreen.m_bInit )
         {
-            // update screens
-            bool bNotify = false;
-            for(ScreenData & rScreen : m_aScreens)
-            {
-                if( rScreen.m_bInit )
-                {
-                    XRRScreenConfiguration *pConfig = nullptr;
-                    XRRScreenSize *pSizes = nullptr;
-                    int nSizes = 0;
-                    Rotation nRot = 0;
-                    SizeID nId = 0;
+            XRRScreenConfiguration *pConfig = nullptr;
+            XRRScreenSize *pSizes = nullptr;
+            int nSizes = 0;
+            Rotation nRot = 0;
+            SizeID nId = 0;
 
-                    pConfig = pWrapper->XRRGetScreenInfo( GetDisplay(), rScreen.m_aRoot );
-                    nId = pWrapper->XRRConfigCurrentConfiguration( pConfig, &nRot );
-                    pSizes = pWrapper->XRRConfigSizes( pConfig, &nSizes );
-                    XRRScreenSize *pTargetSize = pSizes + nId;
+            pConfig = pWrapper->XRRGetScreenInfo( GetDisplay(), rScreen.m_aRoot );
+            nId = pWrapper->XRRConfigCurrentConfiguration( pConfig, &nRot );
+            pSizes = pWrapper->XRRConfigSizes( pConfig, &nSizes );
+            XRRScreenSize *pTargetSize = pSizes + nId;
 
-                    bNotify = bNotify ||
-                              rScreen.m_aSize.Width() != pTargetSize->width ||
-                              rScreen.m_aSize.Height() != pTargetSize->height;
+            bNotify = bNotify ||
+                      rScreen.m_aSize.Width() != pTargetSize->width ||
+                      rScreen.m_aSize.Height() != pTargetSize->height;
 
-                    rScreen.m_aSize = Size( pTargetSize->width, pTargetSize->height );
+            rScreen.m_aSize = Size( pTargetSize->width, pTargetSize->height );
 
-                    pWrapper->XRRFreeScreenConfigInfo( pConfig );
+            pWrapper->XRRFreeScreenConfigInfo( pConfig );
 
 #if OSL_DEBUG_LEVEL > 1
-                    SAL_INFO("vcl.app", "screen " << nId
-                            << " changed to size " << (int)pTargetSize->width
-                            << "x" << (int)pTargetSize->height);
+            SAL_INFO("vcl.app", "screen " << nId
+                    << " changed to size " << (int)pTargetSize->width
+                    << "x" << (int)pTargetSize->height);
 #endif
-                }
-            }
-            if( bNotify )
-                emitDisplayChanged();
         }
     }
+    if( bNotify )
+        emitDisplayChanged();
 #else
     (void)this;
     (void)pEvent;

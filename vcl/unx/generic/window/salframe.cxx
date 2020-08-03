@@ -144,20 +144,20 @@ bool X11SalFrame::IsFloatGrabWindow() const
 
 void X11SalFrame::setXEmbedInfo()
 {
-    if( m_bXEmbed )
-    {
-        long aInfo[2];
-        aInfo[0] = 1; // XEMBED protocol version
-        aInfo[1] = (bMapped_ ? 1 : 0); // XEMBED_MAPPED
-        XChangeProperty( pDisplay_->GetDisplay(),
-                         mhWindow,
-                         pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::XEMBED_INFO ),
-                         pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::XEMBED_INFO ),
-                         32,
-                         PropModeReplace,
-                         reinterpret_cast<unsigned char*>(aInfo),
-                         SAL_N_ELEMENTS(aInfo) );
-    }
+    if( !m_bXEmbed )
+        return;
+
+    long aInfo[2];
+    aInfo[0] = 1; // XEMBED protocol version
+    aInfo[1] = (bMapped_ ? 1 : 0); // XEMBED_MAPPED
+    XChangeProperty( pDisplay_->GetDisplay(),
+                     mhWindow,
+                     pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::XEMBED_INFO ),
+                     pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::XEMBED_INFO ),
+                     32,
+                     PropModeReplace,
+                     reinterpret_cast<unsigned char*>(aInfo),
+                     SAL_N_ELEMENTS(aInfo) );
 }
 
 void X11SalFrame::askForXEmbedFocus( sal_Int32 i_nTimeCode )
@@ -1115,50 +1115,52 @@ void X11SalFrame::SetIcon( sal_uInt16 nIcon )
 
 void X11SalFrame::SetMaxClientSize( long nWidth, long nHeight )
 {
-    if( ! IsChildWindow() )
-    {
-        if( GetShellWindow() && (nStyle_ & (SalFrameStyleFlags::FLOAT|SalFrameStyleFlags::OWNERDRAWDECORATION) ) != SalFrameStyleFlags::FLOAT )
-        {
-            XSizeHints* pHints = XAllocSizeHints();
-            long nSupplied = 0;
-            XGetWMNormalHints( GetXDisplay(),
-                               GetShellWindow(),
-                               pHints,
-                               &nSupplied
-                               );
-            pHints->max_width   = nWidth;
-            pHints->max_height  = nHeight;
-            pHints->flags |= PMaxSize;
-            XSetWMNormalHints( GetXDisplay(),
-                               GetShellWindow(),
-                               pHints );
-            XFree( pHints );
-        }
-    }
+    if(  IsChildWindow() )
+        return;
+
+    if( !GetShellWindow() ||
+        (nStyle_ & (SalFrameStyleFlags::FLOAT|SalFrameStyleFlags::OWNERDRAWDECORATION) ) == SalFrameStyleFlags::FLOAT )
+        return;
+
+    XSizeHints* pHints = XAllocSizeHints();
+    long nSupplied = 0;
+    XGetWMNormalHints( GetXDisplay(),
+                       GetShellWindow(),
+                       pHints,
+                       &nSupplied
+                       );
+    pHints->max_width   = nWidth;
+    pHints->max_height  = nHeight;
+    pHints->flags |= PMaxSize;
+    XSetWMNormalHints( GetXDisplay(),
+                       GetShellWindow(),
+                       pHints );
+    XFree( pHints );
 }
 
 void X11SalFrame::SetMinClientSize( long nWidth, long nHeight )
 {
-    if( ! IsChildWindow() )
-    {
-        if( GetShellWindow() && (nStyle_ & (SalFrameStyleFlags::FLOAT|SalFrameStyleFlags::OWNERDRAWDECORATION) ) != SalFrameStyleFlags::FLOAT )
-        {
-            XSizeHints* pHints = XAllocSizeHints();
-            long nSupplied = 0;
-            XGetWMNormalHints( GetXDisplay(),
-                               GetShellWindow(),
-                               pHints,
-                               &nSupplied
-                               );
-            pHints->min_width   = nWidth;
-            pHints->min_height  = nHeight;
-            pHints->flags |= PMinSize;
-            XSetWMNormalHints( GetXDisplay(),
-                               GetShellWindow(),
-                               pHints );
-            XFree( pHints );
-        }
-    }
+    if(  IsChildWindow() )
+        return;
+
+    if( !GetShellWindow() ||
+        (nStyle_ & (SalFrameStyleFlags::FLOAT|SalFrameStyleFlags::OWNERDRAWDECORATION) ) == SalFrameStyleFlags::FLOAT )
+        return;
+
+    XSizeHints* pHints = XAllocSizeHints();
+    long nSupplied = 0;
+    XGetWMNormalHints( GetXDisplay(),
+                       GetShellWindow(),
+                       pHints,
+                       &nSupplied
+                       );
+    pHints->min_width   = nWidth;
+    pHints->min_height  = nHeight;
+    pHints->flags |= PMinSize;
+    XSetWMNormalHints( GetXDisplay(),
+                       GetShellWindow(),
+                       pHints );
+    XFree( pHints );
 }
 
 // Show + Pos (x,y,z) + Size (width,height)
@@ -1756,41 +1758,41 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
     }
 
     // request for status change
-    if (pState->mnMask & WindowStateMask::State)
-    {
-        if (pState->mnState & WindowStateState::Maximized)
-        {
-            nShowState_ = SHOWSTATE_NORMAL;
-            if( ! (pState->mnState & (WindowStateState::MaximizedHorz|WindowStateState::MaximizedVert) ) )
-                Maximize();
-            else
-            {
-                bool bHorz(pState->mnState & WindowStateState::MaximizedHorz);
-                bool bVert(pState->mnState & WindowStateState::MaximizedVert);
-                GetDisplay()->getWMAdaptor()->maximizeFrame( this, bHorz, bVert );
-            }
-            maRestorePosSize.SetLeft( pState->mnX );
-            maRestorePosSize.SetTop( pState->mnY );
-            maRestorePosSize.SetRight( maRestorePosSize.Left() + pState->mnWidth );
-            maRestorePosSize.SetRight( maRestorePosSize.Left() + pState->mnHeight );
-        }
-        else if( mbMaximizedHorz || mbMaximizedVert )
-            GetDisplay()->getWMAdaptor()->maximizeFrame( this, false, false );
+    if (!(pState->mnMask & WindowStateMask::State))
+        return;
 
-        if (pState->mnState & WindowStateState::Minimized)
+    if (pState->mnState & WindowStateState::Maximized)
+    {
+        nShowState_ = SHOWSTATE_NORMAL;
+        if( ! (pState->mnState & (WindowStateState::MaximizedHorz|WindowStateState::MaximizedVert) ) )
+            Maximize();
+        else
         {
-            if (nShowState_ == SHOWSTATE_UNKNOWN)
-                nShowState_ = SHOWSTATE_NORMAL;
-            Minimize();
+            bool bHorz(pState->mnState & WindowStateState::MaximizedHorz);
+            bool bVert(pState->mnState & WindowStateState::MaximizedVert);
+            GetDisplay()->getWMAdaptor()->maximizeFrame( this, bHorz, bVert );
         }
-        if (pState->mnState & WindowStateState::Normal)
-        {
-            if (nShowState_ != SHOWSTATE_NORMAL)
-                Restore();
-        }
-        if (pState->mnState & WindowStateState::Rollup)
-            GetDisplay()->getWMAdaptor()->shade( this, true );
+        maRestorePosSize.SetLeft( pState->mnX );
+        maRestorePosSize.SetTop( pState->mnY );
+        maRestorePosSize.SetRight( maRestorePosSize.Left() + pState->mnWidth );
+        maRestorePosSize.SetRight( maRestorePosSize.Left() + pState->mnHeight );
     }
+    else if( mbMaximizedHorz || mbMaximizedVert )
+        GetDisplay()->getWMAdaptor()->maximizeFrame( this, false, false );
+
+    if (pState->mnState & WindowStateState::Minimized)
+    {
+        if (nShowState_ == SHOWSTATE_UNKNOWN)
+            nShowState_ = SHOWSTATE_NORMAL;
+        Minimize();
+    }
+    if (pState->mnState & WindowStateState::Normal)
+    {
+        if (nShowState_ != SHOWSTATE_NORMAL)
+            Restore();
+    }
+    if (pState->mnState & WindowStateState::Rollup)
+        GetDisplay()->getWMAdaptor()->shade( this, true );
 }
 
 bool X11SalFrame::GetWindowState( SalFrameState* pState )
@@ -1860,45 +1862,45 @@ void X11SalFrame::GetPosSize( tools::Rectangle &rPosSize )
 
 void X11SalFrame::SetSize( const Size &rSize )
 {
-    if( !rSize.IsEmpty() )
+    if( rSize.IsEmpty() )
+        return;
+
+    if( ! ( nStyle_ & SalFrameStyleFlags::SIZEABLE )
+        && ! IsChildWindow()
+        && ( nStyle_ & (SalFrameStyleFlags::FLOAT|SalFrameStyleFlags::OWNERDRAWDECORATION) ) != SalFrameStyleFlags::FLOAT )
     {
-        if( ! ( nStyle_ & SalFrameStyleFlags::SIZEABLE )
-            && ! IsChildWindow()
-            && ( nStyle_ & (SalFrameStyleFlags::FLOAT|SalFrameStyleFlags::OWNERDRAWDECORATION) ) != SalFrameStyleFlags::FLOAT )
-        {
-            XSizeHints* pHints = XAllocSizeHints();
-            long nSupplied = 0;
-            XGetWMNormalHints( GetXDisplay(),
-                               GetShellWindow(),
-                               pHints,
-                               &nSupplied
-                               );
-            pHints->min_width   = rSize.Width();
-            pHints->min_height  = rSize.Height();
-            pHints->max_width   = rSize.Width();
-            pHints->max_height  = rSize.Height();
-            pHints->flags |= PMinSize | PMaxSize;
-            XSetWMNormalHints( GetXDisplay(),
-                               GetShellWindow(),
-                               pHints );
-            XFree( pHints );
-        }
-        XResizeWindow( GetXDisplay(), IsSysChildWindow() ? GetWindow() : GetShellWindow(), rSize.Width(), rSize.Height() );
-        if( GetWindow() != GetShellWindow() )
-        {
-            if( nStyle_ & SalFrameStyleFlags::PLUG )
-                XMoveResizeWindow( GetXDisplay(), GetWindow(), 0, 0, rSize.Width(), rSize.Height() );
-            else
-                XResizeWindow( GetXDisplay(), GetWindow(), rSize.Width(), rSize.Height() );
-        }
-
-        maGeometry.nWidth  = rSize.Width();
-        maGeometry.nHeight = rSize.Height();
-
-        // allow the external status window to reposition
-        if (mbInputFocus && mpInputContext != nullptr)
-            mpInputContext->SetICFocus ( this );
+        XSizeHints* pHints = XAllocSizeHints();
+        long nSupplied = 0;
+        XGetWMNormalHints( GetXDisplay(),
+                           GetShellWindow(),
+                           pHints,
+                           &nSupplied
+                           );
+        pHints->min_width   = rSize.Width();
+        pHints->min_height  = rSize.Height();
+        pHints->max_width   = rSize.Width();
+        pHints->max_height  = rSize.Height();
+        pHints->flags |= PMinSize | PMaxSize;
+        XSetWMNormalHints( GetXDisplay(),
+                           GetShellWindow(),
+                           pHints );
+        XFree( pHints );
     }
+    XResizeWindow( GetXDisplay(), IsSysChildWindow() ? GetWindow() : GetShellWindow(), rSize.Width(), rSize.Height() );
+    if( GetWindow() != GetShellWindow() )
+    {
+        if( nStyle_ & SalFrameStyleFlags::PLUG )
+            XMoveResizeWindow( GetXDisplay(), GetWindow(), 0, 0, rSize.Width(), rSize.Height() );
+        else
+            XResizeWindow( GetXDisplay(), GetWindow(), rSize.Width(), rSize.Height() );
+    }
+
+    maGeometry.nWidth  = rSize.Width();
+    maGeometry.nHeight = rSize.Height();
+
+    // allow the external status window to reposition
+    if (mbInputFocus && mpInputContext != nullptr)
+        mpInputContext->SetICFocus ( this );
 }
 
 void X11SalFrame::SetPosSize( const tools::Rectangle &rPosSize )
@@ -3389,58 +3391,58 @@ bool X11SalFrame::HandleExposeEvent( XEvent const *pEvent )
 
 void X11SalFrame::RestackChildren( ::Window* pTopLevelWindows, int nTopLevelWindows )
 {
-    if( !maChildren.empty() )
-    {
-        int nWindow = nTopLevelWindows;
-        while( nWindow-- )
-            if( pTopLevelWindows[nWindow] == GetStackingWindow() )
-                break;
-        if( nWindow < 0 )
-            return;
+    if( maChildren.empty() )
+        return;
 
-        for (auto const& child : maChildren)
+    int nWindow = nTopLevelWindows;
+    while( nWindow-- )
+        if( pTopLevelWindows[nWindow] == GetStackingWindow() )
+            break;
+    if( nWindow < 0 )
+        return;
+
+    for (auto const& child : maChildren)
+    {
+        if( child->bMapped_ )
         {
-            if( child->bMapped_ )
+            int nChild = nWindow;
+            while( nChild-- )
             {
-                int nChild = nWindow;
-                while( nChild-- )
+                if( pTopLevelWindows[nChild] == child->GetStackingWindow() )
                 {
-                    if( pTopLevelWindows[nChild] == child->GetStackingWindow() )
-                    {
-                        // if a child is behind its parent, place it above the
-                        // parent (for insane WMs like Dtwm and olwm)
-                        XWindowChanges aCfg;
-                        aCfg.sibling    = GetStackingWindow();
-                        aCfg.stack_mode = Above;
-                        XConfigureWindow( GetXDisplay(), child->GetStackingWindow(), CWSibling|CWStackMode, &aCfg );
-                        break;
-                    }
+                    // if a child is behind its parent, place it above the
+                    // parent (for insane WMs like Dtwm and olwm)
+                    XWindowChanges aCfg;
+                    aCfg.sibling    = GetStackingWindow();
+                    aCfg.stack_mode = Above;
+                    XConfigureWindow( GetXDisplay(), child->GetStackingWindow(), CWSibling|CWStackMode, &aCfg );
+                    break;
                 }
             }
         }
-        for (auto const& child : maChildren)
-        {
-            child->RestackChildren( pTopLevelWindows, nTopLevelWindows );
-        }
+    }
+    for (auto const& child : maChildren)
+    {
+        child->RestackChildren( pTopLevelWindows, nTopLevelWindows );
     }
 }
 
 void X11SalFrame::RestackChildren()
 {
-    if( !maChildren.empty() )
+    if( maChildren.empty() )
+        return;
+
+    ::Window aRoot, aParent, *pChildren = nullptr;
+    unsigned int nChildren;
+    if( XQueryTree( GetXDisplay(),
+                    GetDisplay()->GetRootWindow( m_nXScreen ),
+                    &aRoot,
+                    &aParent,
+                    &pChildren,
+                    &nChildren ) )
     {
-        ::Window aRoot, aParent, *pChildren = nullptr;
-        unsigned int nChildren;
-        if( XQueryTree( GetXDisplay(),
-                        GetDisplay()->GetRootWindow( m_nXScreen ),
-                        &aRoot,
-                        &aParent,
-                        &pChildren,
-                        &nChildren ) )
-        {
-            RestackChildren( pChildren, nChildren );
-            XFree( pChildren );
-        }
+        RestackChildren( pChildren, nChildren );
+        XFree( pChildren );
     }
 }
 

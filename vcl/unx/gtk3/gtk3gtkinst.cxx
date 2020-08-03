@@ -5906,38 +5906,38 @@ public:
         g_signal_handler_disconnect(m_pHAdjustment, m_nHAdjustChangedSignalId);
 
         //put it back the way it was
-        if (m_pOrigViewport)
-        {
-            GtkInstanceContainer::disable_notify_events();
+        if (!m_pOrigViewport)
+            return;
 
-            // force in new adjustment to drop the built-in handlers on value-changed
-            // which are getting called eventually by the gtk_container_add call
-            // and which access the scrolled window indicators which, in the case
-            // of user-managed scrolling windows in toolbar popups during popdown
-            // are nullptr causing crashes when the scrolling windows is not at its
-            // initial 0,0 position
-            GtkAdjustment *pVAdjustment = gtk_adjustment_new(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-            gtk_scrolled_window_set_vadjustment(m_pScrolledWindow, pVAdjustment);
-            GtkAdjustment *pHAdjustment = gtk_adjustment_new(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-            gtk_scrolled_window_set_hadjustment(m_pScrolledWindow, pHAdjustment);
+        GtkInstanceContainer::disable_notify_events();
 
-            GtkWidget *pViewport = gtk_bin_get_child(GTK_BIN(m_pScrolledWindow));
-            assert(CRIPPLED_IS_VIEWPORT(pViewport));
-            GtkWidget *pChild = gtk_bin_get_child(GTK_BIN(pViewport));
-            g_object_ref(pChild);
-            gtk_container_remove(GTK_CONTAINER(pViewport), pChild);
-            g_object_ref(pViewport);
-            gtk_container_remove(GTK_CONTAINER(m_pScrolledWindow), pViewport);
+        // force in new adjustment to drop the built-in handlers on value-changed
+        // which are getting called eventually by the gtk_container_add call
+        // and which access the scrolled window indicators which, in the case
+        // of user-managed scrolling windows in toolbar popups during popdown
+        // are nullptr causing crashes when the scrolling windows is not at its
+        // initial 0,0 position
+        GtkAdjustment *pVAdjustment = gtk_adjustment_new(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+        gtk_scrolled_window_set_vadjustment(m_pScrolledWindow, pVAdjustment);
+        GtkAdjustment *pHAdjustment = gtk_adjustment_new(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+        gtk_scrolled_window_set_hadjustment(m_pScrolledWindow, pHAdjustment);
 
-            gtk_container_add(GTK_CONTAINER(m_pScrolledWindow), m_pOrigViewport);
-            g_object_unref(m_pOrigViewport);
-            gtk_container_add(GTK_CONTAINER(m_pOrigViewport), pChild);
-            g_object_unref(pChild);
-            gtk_widget_destroy(pViewport);
-            g_object_unref(pViewport);
-            m_pOrigViewport = nullptr;
-            GtkInstanceContainer::enable_notify_events();
-        }
+        GtkWidget *pViewport = gtk_bin_get_child(GTK_BIN(m_pScrolledWindow));
+        assert(CRIPPLED_IS_VIEWPORT(pViewport));
+        GtkWidget *pChild = gtk_bin_get_child(GTK_BIN(pViewport));
+        g_object_ref(pChild);
+        gtk_container_remove(GTK_CONTAINER(pViewport), pChild);
+        g_object_ref(pViewport);
+        gtk_container_remove(GTK_CONTAINER(m_pScrolledWindow), pViewport);
+
+        gtk_container_add(GTK_CONTAINER(m_pScrolledWindow), m_pOrigViewport);
+        g_object_unref(m_pOrigViewport);
+        gtk_container_add(GTK_CONTAINER(m_pOrigViewport), pChild);
+        g_object_unref(pChild);
+        gtk_widget_destroy(pViewport);
+        g_object_unref(pViewport);
+        m_pOrigViewport = nullptr;
+        GtkInstanceContainer::enable_notify_events();
     }
 };
 
@@ -7549,21 +7549,21 @@ public:
                 break;
             pTopLevelMenu = GTK_MENU(pParent);
         }
-        if (pTopLevelMenu != pMenu)
+        if (pTopLevelMenu == pMenu)
+            return;
+
+        // maybe the toplevel is a menubutton
+        GtkWidget* pAttached = gtk_menu_get_attach_widget(pTopLevelMenu);
+        if (pAttached && GTK_IS_MENU_BUTTON(pAttached))
         {
-            // maybe the toplevel is a menubutton
-            GtkWidget* pAttached = gtk_menu_get_attach_widget(pTopLevelMenu);
-            if (pAttached && GTK_IS_MENU_BUTTON(pAttached))
-            {
-                void* pData = g_object_get_data(G_OBJECT(pAttached), "g-lo-GtkInstanceButton");
-                m_pTopLevelMenuHelper = dynamic_cast<GtkInstanceMenuButton*>(static_cast<GtkInstanceButton*>(pData));
-            }
-            // or maybe a menu
-            if (!m_pTopLevelMenuHelper)
-            {
-                void* pData = g_object_get_data(G_OBJECT(pTopLevelMenu), "g-lo-GtkInstanceMenu");
-                m_pTopLevelMenuHelper = static_cast<GtkInstanceMenu*>(pData);
-            }
+            void* pData = g_object_get_data(G_OBJECT(pAttached), "g-lo-GtkInstanceButton");
+            m_pTopLevelMenuHelper = dynamic_cast<GtkInstanceMenuButton*>(static_cast<GtkInstanceButton*>(pData));
+        }
+        // or maybe a menu
+        if (!m_pTopLevelMenuHelper)
+        {
+            void* pData = g_object_get_data(G_OBJECT(pTopLevelMenu), "g-lo-GtkInstanceMenu");
+            m_pTopLevelMenuHelper = static_cast<GtkInstanceMenu*>(pData);
         }
     }
 
@@ -10531,28 +10531,28 @@ public:
         GtkTreePath* start_path;
         GtkTreePath* end_path;
 
-        if (gtk_tree_view_get_visible_range(m_pTreeView, &start_path, &end_path))
+        if (!gtk_tree_view_get_visible_range(m_pTreeView, &start_path, &end_path))
+            return;
+
+        GtkInstanceTreeIter aGtkIter(nullptr);
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        gtk_tree_model_get_iter(pModel, &aGtkIter.iter, start_path);
+
+        do
         {
-            GtkInstanceTreeIter aGtkIter(nullptr);
-            GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-            gtk_tree_model_get_iter(pModel, &aGtkIter.iter, start_path);
+            if (func(aGtkIter))
+                break;
+            GtkTreePath* path = gtk_tree_model_get_path(pModel, &aGtkIter.iter);
+            bool bContinue = gtk_tree_path_compare(path, end_path) != 0;
+            gtk_tree_path_free(path);
+            if (!bContinue)
+                break;
+            if (!iter_next(aGtkIter))
+                break;
+        } while(true);
 
-            do
-            {
-                if (func(aGtkIter))
-                    break;
-                GtkTreePath* path = gtk_tree_model_get_path(pModel, &aGtkIter.iter);
-                bool bContinue = gtk_tree_path_compare(path, end_path) != 0;
-                gtk_tree_path_free(path);
-                if (!bContinue)
-                    break;
-                if (!iter_next(aGtkIter))
-                    break;
-            } while(true);
-
-            gtk_tree_path_free(start_path);
-            gtk_tree_path_free(end_path);
-        }
+        gtk_tree_path_free(start_path);
+        gtk_tree_path_free(end_path);
     }
 
     virtual void connect_visible_range_changed(const Link<weld::TreeView&, void>& rLink) override
@@ -14166,19 +14166,19 @@ private:
     void signal_overlay_button_crossing(bool bEnter)
     {
         m_bMouseInOverlayButton = bEnter;
-        if (bEnter)
+        if (!bEnter)
+            return;
+
+        if (m_bHoverSelection)
         {
-            if (m_bHoverSelection)
-            {
-                // once toggled button is pressed, turn off hover selection until
-                // mouse leaves the overlay button
-                gtk_tree_view_set_hover_selection(m_pTreeView, false);
-                m_bHoverSelection = false;
-            }
-            int nRow = find_id_including_mru(m_sMenuButtonRow, true);
-            assert(nRow != -1);
-            tree_view_set_cursor(nRow); // select the buttons row
+            // once toggled button is pressed, turn off hover selection until
+            // mouse leaves the overlay button
+            gtk_tree_view_set_hover_selection(m_pTreeView, false);
+            m_bHoverSelection = false;
         }
+        int nRow = find_id_including_mru(m_sMenuButtonRow, true);
+        assert(nRow != -1);
+        tree_view_set_cursor(nRow); // select the buttons row
     }
 
     void signal_combo_mnemonic_activate()
@@ -16177,47 +16177,47 @@ void GtkInstanceWindow::help()
     weld::Widget* pSource = xTemp ? xTemp.get() : this;
     bool bRunNormalHelpRequest = !m_aHelpRequestHdl.IsSet() || m_aHelpRequestHdl.Call(*pSource);
     Help* pHelp = bRunNormalHelpRequest ? Application::GetHelp() : nullptr;
-    if (pHelp)
+    if (!pHelp)
+        return;
+
+    // tdf#126007, there's a nice fallback route for offline help where
+    // the current page of a notebook will get checked when the help
+    // button is pressed and there was no help for the dialog found.
+    //
+    // But for online help that route doesn't get taken, so bodge this here
+    // by using the page help id if available and if the help button itself
+    // was the original id
+    if (m_pBuilder && sHelpId.endsWith("/help"))
     {
-        // tdf#126007, there's a nice fallback route for offline help where
-        // the current page of a notebook will get checked when the help
-        // button is pressed and there was no help for the dialog found.
-        //
-        // But for online help that route doesn't get taken, so bodge this here
-        // by using the page help id if available and if the help button itself
-        // was the original id
-        if (m_pBuilder && sHelpId.endsWith("/help"))
+        OString sPageId = m_pBuilder->get_current_page_help_id();
+        if (!sPageId.isEmpty())
+            sHelpId = sPageId;
+        else
         {
-            OString sPageId = m_pBuilder->get_current_page_help_id();
-            if (!sPageId.isEmpty())
-                sHelpId = sPageId;
-            else
+            // tdf#129068 likewise the help for the wrapping dialog is less
+            // helpful than the help for the content area could be
+            GtkContainer* pContainer = nullptr;
+            if (GTK_IS_DIALOG(m_pWindow))
+                pContainer = GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(m_pWindow)));
+            else if (GTK_IS_ASSISTANT(m_pWindow))
             {
-                // tdf#129068 likewise the help for the wrapping dialog is less
-                // helpful than the help for the content area could be
-                GtkContainer* pContainer = nullptr;
-                if (GTK_IS_DIALOG(m_pWindow))
-                    pContainer = GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(m_pWindow)));
-                else if (GTK_IS_ASSISTANT(m_pWindow))
+                GtkAssistant* pAssistant = GTK_ASSISTANT(m_pWindow);
+                pContainer = GTK_CONTAINER(gtk_assistant_get_nth_page(pAssistant, gtk_assistant_get_current_page(pAssistant)));
+            }
+            if (pContainer)
+            {
+                GList* pChildren = gtk_container_get_children(pContainer);
+                GList* pChild = g_list_first(pChildren);
+                if (pChild)
                 {
-                    GtkAssistant* pAssistant = GTK_ASSISTANT(m_pWindow);
-                    pContainer = GTK_CONTAINER(gtk_assistant_get_nth_page(pAssistant, gtk_assistant_get_current_page(pAssistant)));
+                    GtkWidget* pContentWidget = static_cast<GtkWidget*>(pChild->data);
+                    sHelpId = ::get_help_id(pContentWidget);
                 }
-                if (pContainer)
-                {
-                    GList* pChildren = gtk_container_get_children(pContainer);
-                    GList* pChild = g_list_first(pChildren);
-                    if (pChild)
-                    {
-                        GtkWidget* pContentWidget = static_cast<GtkWidget*>(pChild->data);
-                        sHelpId = ::get_help_id(pContentWidget);
-                    }
-                    g_list_free(pChildren);
-                }
+                g_list_free(pChildren);
             }
         }
-        pHelp->Start(OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), pSource);
     }
+    pHelp->Start(OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), pSource);
 }
 
 //iterate upwards through the hierarchy from this widgets through its parents
