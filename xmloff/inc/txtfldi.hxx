@@ -879,7 +879,7 @@ private:
 class XMLMacroFieldImportContext final : public XMLTextFieldImportContext
 {
     OUString sDescription;
-    SvXMLImportContextRef xEventContext;
+    rtl::Reference<XMLEventsImportContext> xEventContext;
 
     OUString sMacro; // macro for old documents (pre 638i)
 
