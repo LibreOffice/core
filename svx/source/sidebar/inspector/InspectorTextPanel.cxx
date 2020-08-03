@@ -47,7 +47,7 @@ InspectorTextPanel::InspectorTextPanel(vcl::Window* pParent,
     : PanelLayout(pParent, "InspectorTextPanel", "svx/ui/inspectortextpanel.ui", rxFrame)
     , mpListBoxStyles(m_xBuilder->weld_tree_view("listbox_fonts"))
 {
-    mpListBoxStyles->set_size_request(-1, mpListBoxStyles->get_height_rows(25));
+    mpListBoxStyles->set_size_request(-1, -1);
     float fWidth = mpListBoxStyles->get_approximate_digit_width();
     std::vector<int> aWidths;
     aWidths.push_back(fWidth * 34);
