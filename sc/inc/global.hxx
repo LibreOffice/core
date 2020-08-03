@@ -591,7 +591,7 @@ public:
 
     SC_DLLPUBLIC static void Init();                     // during start up
     static void             InitAddIns();
-    static void             Clear();                    // at the end of the program
+    SC_DLLPUBLIC static void Clear();                    // at the end of the program
 
     static void             InitTextHeight(const SfxItemPool* pPool);
     static SvxBrushItem*    GetEmptyBrushItem() { return pEmptyBrushItem; }
