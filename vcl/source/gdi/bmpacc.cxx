@@ -364,70 +364,70 @@ void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,
 
     const sal_uLong nCount = std::min( GetScanlineSize(), nSrcScanlineSize );
 
-    if( nCount )
+    if( !nCount )
+        return;
+
+    if( GetScanlineFormat() == RemoveScanline( nSrcScanlineFormat ) )
+        memcpy(GetScanline(nY), aSrcScanline, nCount);
+    else
     {
-        if( GetScanlineFormat() == RemoveScanline( nSrcScanlineFormat ) )
-            memcpy(GetScanline(nY), aSrcScanline, nCount);
-        else
+        DBG_ASSERT( nFormat != ScanlineFormat::N8BitTcMask &&
+                    nFormat != ScanlineFormat::N32BitTcMask,
+                    "No support for pixel formats with color masks yet!" );
+
+        // TODO: use fastbmp infrastructure
+        FncGetPixel pFncGetPixel;
+
+        switch( nFormat )
         {
-            DBG_ASSERT( nFormat != ScanlineFormat::N8BitTcMask &&
-                        nFormat != ScanlineFormat::N32BitTcMask,
-                        "No support for pixel formats with color masks yet!" );
-
-            // TODO: use fastbmp infrastructure
-            FncGetPixel pFncGetPixel;
-
-            switch( nFormat )
-            {
-                case ScanlineFormat::N1BitMsbPal:    pFncGetPixel = GetPixelForN1BitMsbPal; break;
-                case ScanlineFormat::N1BitLsbPal:    pFncGetPixel = GetPixelForN1BitLsbPal; break;
-                case ScanlineFormat::N4BitMsnPal:    pFncGetPixel = GetPixelForN4BitMsnPal; break;
-                case ScanlineFormat::N4BitLsnPal:    pFncGetPixel = GetPixelForN4BitLsnPal; break;
-                case ScanlineFormat::N8BitPal:        pFncGetPixel = GetPixelForN8BitPal; break;
-                case ScanlineFormat::N8BitTcMask:    pFncGetPixel = GetPixelForN8BitTcMask; break;
-                case ScanlineFormat::N24BitTcBgr:    pFncGetPixel = GetPixelForN24BitTcBgr; break;
-                case ScanlineFormat::N24BitTcRgb:    pFncGetPixel = GetPixelForN24BitTcRgb; break;
-                case ScanlineFormat::N32BitTcAbgr:
-                    if (Bitmap32IsPreMultipled())
-                        pFncGetPixel = GetPixelForN32BitTcAbgr;
-                    else
-                        pFncGetPixel = GetPixelForN32BitTcXbgr;
-                    break;
-                case ScanlineFormat::N32BitTcArgb:
-                    if (Bitmap32IsPreMultipled())
-                        pFncGetPixel = GetPixelForN32BitTcArgb;
-                    else
-                        pFncGetPixel = GetPixelForN32BitTcXrgb;
-                    break;
-                case ScanlineFormat::N32BitTcBgra:
-                    if (Bitmap32IsPreMultipled())
-                        pFncGetPixel = GetPixelForN32BitTcBgra;
-                    else
-                        pFncGetPixel = GetPixelForN32BitTcBgrx;
-                    break;
-                case ScanlineFormat::N32BitTcRgba:
-                    if (Bitmap32IsPreMultipled())
-                        pFncGetPixel = GetPixelForN32BitTcRgba;
-                    else
-                        pFncGetPixel = GetPixelForN32BitTcRgbx;
-                    break;
-                case ScanlineFormat::N32BitTcMask:
-                    pFncGetPixel = GetPixelForN32BitTcMask;
-                    break;
-
-                default:
-                    assert(false);
-                    pFncGetPixel = nullptr;
+            case ScanlineFormat::N1BitMsbPal:    pFncGetPixel = GetPixelForN1BitMsbPal; break;
+            case ScanlineFormat::N1BitLsbPal:    pFncGetPixel = GetPixelForN1BitLsbPal; break;
+            case ScanlineFormat::N4BitMsnPal:    pFncGetPixel = GetPixelForN4BitMsnPal; break;
+            case ScanlineFormat::N4BitLsnPal:    pFncGetPixel = GetPixelForN4BitLsnPal; break;
+            case ScanlineFormat::N8BitPal:        pFncGetPixel = GetPixelForN8BitPal; break;
+            case ScanlineFormat::N8BitTcMask:    pFncGetPixel = GetPixelForN8BitTcMask; break;
+            case ScanlineFormat::N24BitTcBgr:    pFncGetPixel = GetPixelForN24BitTcBgr; break;
+            case ScanlineFormat::N24BitTcRgb:    pFncGetPixel = GetPixelForN24BitTcRgb; break;
+            case ScanlineFormat::N32BitTcAbgr:
+                if (Bitmap32IsPreMultipled())
+                    pFncGetPixel = GetPixelForN32BitTcAbgr;
+                else
+                    pFncGetPixel = GetPixelForN32BitTcXbgr;
                 break;
-            }
+            case ScanlineFormat::N32BitTcArgb:
+                if (Bitmap32IsPreMultipled())
+                    pFncGetPixel = GetPixelForN32BitTcArgb;
+                else
+                    pFncGetPixel = GetPixelForN32BitTcXrgb;
+                break;
+            case ScanlineFormat::N32BitTcBgra:
+                if (Bitmap32IsPreMultipled())
+                    pFncGetPixel = GetPixelForN32BitTcBgra;
+                else
+                    pFncGetPixel = GetPixelForN32BitTcBgrx;
+                break;
+            case ScanlineFormat::N32BitTcRgba:
+                if (Bitmap32IsPreMultipled())
+                    pFncGetPixel = GetPixelForN32BitTcRgba;
+                else
+                    pFncGetPixel = GetPixelForN32BitTcRgbx;
+                break;
+            case ScanlineFormat::N32BitTcMask:
+                pFncGetPixel = GetPixelForN32BitTcMask;
+                break;
 
-            if( pFncGetPixel )
-            {
-                const ColorMask aDummyMask;
-                Scanline pScanline = GetScanline(nY);
-                for (long nX = 0, nWidth = mpBuffer->mnWidth; nX < nWidth; ++nX)
-                    SetPixelOnData(pScanline, nX, pFncGetPixel(aSrcScanline, nX, aDummyMask));
-            }
+            default:
+                assert(false);
+                pFncGetPixel = nullptr;
+            break;
+        }
+
+        if( pFncGetPixel )
+        {
+            const ColorMask aDummyMask;
+            Scanline pScanline = GetScanline(nY);
+            for (long nX = 0, nWidth = mpBuffer->mnWidth; nX < nWidth; ++nX)
+                SetPixelOnData(pScanline, nX, pFncGetPixel(aSrcScanline, nX, aDummyMask));
         }
     }
 }

@@ -1483,22 +1483,22 @@ void MultiSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) cons
     SalLayout& rLayout = *mpLayouts[ 0 ];
     rLayout.GetCaretPositions( nMaxIndex, pCaretXArray );
 
-    if( mnLevel > 1 )
+    if( mnLevel <= 1 )
+        return;
+
+    std::unique_ptr<long[]> const pTempPos(new long[nMaxIndex]);
+    for( int n = 1; n < mnLevel; ++n )
     {
-        std::unique_ptr<long[]> const pTempPos(new long[nMaxIndex]);
-        for( int n = 1; n < mnLevel; ++n )
-        {
-            mpLayouts[ n ]->GetCaretPositions( nMaxIndex, pTempPos.get() );
-            double fUnitMul = mnUnitsPerPixel;
-            fUnitMul /= mpLayouts[n]->GetUnitsPerPixel();
-            for( int i = 0; i < nMaxIndex; ++i )
-                if( pTempPos[i] >= 0 )
-                {
-                    long w = pTempPos[i];
-                    w = static_cast<long>(w*fUnitMul + 0.5);
-                    pCaretXArray[i] = w;
-                }
-        }
+        mpLayouts[ n ]->GetCaretPositions( nMaxIndex, pTempPos.get() );
+        double fUnitMul = mnUnitsPerPixel;
+        fUnitMul /= mpLayouts[n]->GetUnitsPerPixel();
+        for( int i = 0; i < nMaxIndex; ++i )
+            if( pTempPos[i] >= 0 )
+            {
+                long w = pTempPos[i];
+                w = static_cast<long>(w*fUnitMul + 0.5);
+                pCaretXArray[i] = w;
+            }
     }
 }
 

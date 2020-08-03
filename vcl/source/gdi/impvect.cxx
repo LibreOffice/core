@@ -747,34 +747,34 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
 
 void ImplLimitPolyPoly( tools::PolyPolygon& rPolyPoly )
 {
-    if( rPolyPoly.Count() > VECT_POLY_MAX )
+    if( rPolyPoly.Count() <= VECT_POLY_MAX )
+        return;
+
+    tools::PolyPolygon aNewPolyPoly;
+    long        nReduce = 0;
+    sal_uInt16      nNewCount;
+
+    do
     {
-        tools::PolyPolygon aNewPolyPoly;
-        long        nReduce = 0;
-        sal_uInt16      nNewCount;
+        aNewPolyPoly.Clear();
+        nReduce++;
 
-        do
+        for( sal_uInt16 i = 0, nCount = rPolyPoly.Count(); i < nCount; i++ )
         {
-            aNewPolyPoly.Clear();
-            nReduce++;
+            const tools::Rectangle aBound( rPolyPoly[ i ].GetBoundRect() );
 
-            for( sal_uInt16 i = 0, nCount = rPolyPoly.Count(); i < nCount; i++ )
+            if( aBound.GetWidth() > nReduce && aBound.GetHeight() > nReduce )
             {
-                const tools::Rectangle aBound( rPolyPoly[ i ].GetBoundRect() );
-
-                if( aBound.GetWidth() > nReduce && aBound.GetHeight() > nReduce )
-                {
-                    if( rPolyPoly[ i ].GetSize() )
-                        aNewPolyPoly.Insert( rPolyPoly[ i ] );
-                }
+                if( rPolyPoly[ i ].GetSize() )
+                    aNewPolyPoly.Insert( rPolyPoly[ i ] );
             }
-
-            nNewCount = aNewPolyPoly.Count();
         }
-        while( nNewCount > VECT_POLY_MAX );
 
-        rPolyPoly = aNewPolyPoly;
+        nNewCount = aNewPolyPoly.Count();
     }
+    while( nNewCount > VECT_POLY_MAX );
+
+    rPolyPoly = aNewPolyPoly;
 }
 
 ImplVectMap* ImplExpand( BitmapReadAccess* pRAcc, const Color& rColor )

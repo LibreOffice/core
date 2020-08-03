@@ -769,45 +769,45 @@ void GenericSalLayout::ApplyDXArray(const ImplLayoutArgs& rArgs)
     }
 
     // Insert Kashida glyphs.
-    if (bKashidaJustify && !pKashidas.empty())
+    if (!bKashidaJustify || pKashidas.empty())
+        return;
+
+    size_t nInserted = 0;
+    for (auto const& pKashida : pKashidas)
     {
-        size_t nInserted = 0;
-        for (auto const& pKashida : pKashidas)
+        auto pGlyphIter = m_GlyphItems.Impl()->begin() + nInserted + pKashida.first;
+
+        // The total Kashida width.
+        DeviceCoordinate nTotalWidth = pKashida.second;
+
+        // Number of times to repeat each Kashida.
+        int nCopies = 1;
+        if (nTotalWidth > nKashidaWidth)
+            nCopies = nTotalWidth / nKashidaWidth;
+
+        // See if we can improve the fit by adding an extra Kashidas and
+        // squeezing them together a bit.
+        DeviceCoordinate nOverlap = 0;
+        DeviceCoordinate nShortfall = nTotalWidth - nKashidaWidth * nCopies;
+        if (nShortfall > 0)
         {
-            auto pGlyphIter = m_GlyphItems.Impl()->begin() + nInserted + pKashida.first;
+            ++nCopies;
+            DeviceCoordinate nExcess = nCopies * nKashidaWidth - nTotalWidth;
+            if (nExcess > 0)
+                nOverlap = nExcess / (nCopies - 1);
+        }
 
-            // The total Kashida width.
-            DeviceCoordinate nTotalWidth = pKashida.second;
-
-            // Number of times to repeat each Kashida.
-            int nCopies = 1;
-            if (nTotalWidth > nKashidaWidth)
-                nCopies = nTotalWidth / nKashidaWidth;
-
-            // See if we can improve the fit by adding an extra Kashidas and
-            // squeezing them together a bit.
-            DeviceCoordinate nOverlap = 0;
-            DeviceCoordinate nShortfall = nTotalWidth - nKashidaWidth * nCopies;
-            if (nShortfall > 0)
-            {
-                ++nCopies;
-                DeviceCoordinate nExcess = nCopies * nKashidaWidth - nTotalWidth;
-                if (nExcess > 0)
-                    nOverlap = nExcess / (nCopies - 1);
-            }
-
-            Point aPos(pGlyphIter->m_aLinearPos.getX() - nTotalWidth, 0);
-            int nCharPos = pGlyphIter->charPos();
-            GlyphItemFlags const nFlags = GlyphItemFlags::IS_IN_CLUSTER | GlyphItemFlags::IS_RTL_GLYPH;
-            while (nCopies--)
-            {
-                GlyphItem aKashida(nCharPos, 0, nKashidaIndex, aPos, nFlags, nKashidaWidth, 0, &GetFont());
-                pGlyphIter = m_GlyphItems.Impl()->insert(pGlyphIter, aKashida);
-                aPos.AdjustX(nKashidaWidth );
-                aPos.AdjustX( -nOverlap );
-                ++pGlyphIter;
-                ++nInserted;
-            }
+        Point aPos(pGlyphIter->m_aLinearPos.getX() - nTotalWidth, 0);
+        int nCharPos = pGlyphIter->charPos();
+        GlyphItemFlags const nFlags = GlyphItemFlags::IS_IN_CLUSTER | GlyphItemFlags::IS_RTL_GLYPH;
+        while (nCopies--)
+        {
+            GlyphItem aKashida(nCharPos, 0, nKashidaIndex, aPos, nFlags, nKashidaWidth, 0, &GetFont());
+            pGlyphIter = m_GlyphItems.Impl()->insert(pGlyphIter, aKashida);
+            aPos.AdjustX(nKashidaWidth );
+            aPos.AdjustX( -nOverlap );
+            ++pGlyphIter;
+            ++nInserted;
         }
     }
 }

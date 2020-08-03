@@ -153,124 +153,124 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
     }
 
     const Size aSizePixel( aBitmapEx.GetSizePixel() );
-    if ( aSizePixel.Width() && aSizePixel.Height() )
+    if ( !(aSizePixel.Width() && aSizePixel.Height()) )
+        return;
+
+    if( m_aContext.ColorMode == PDFWriter::DrawGreyscale )
     {
-        if( m_aContext.ColorMode == PDFWriter::DrawGreyscale )
+        BmpConversion eConv = BmpConversion::N8BitGreys;
+        int nDepth = aBitmapEx.GetBitmap().GetBitCount();
+        if( nDepth <= 4 )
+            eConv = BmpConversion::N4BitGreys;
+        if( nDepth > 1 )
+            aBitmapEx.Convert( eConv );
+    }
+    bool bUseJPGCompression = !i_rContext.m_bOnlyLosslessCompression;
+    if ( bIsPng || ( aSizePixel.Width() < 32 ) || ( aSizePixel.Height() < 32 ) )
+        bUseJPGCompression = false;
+
+    auto   pStrm=std::make_shared<SvMemoryStream>();
+    Bitmap aMask;
+
+    bool bTrueColorJPG = true;
+    if ( bUseJPGCompression )
+    {
+        // TODO this checks could be done much earlier, saving us
+        // from trying conversion & stores before...
+        if ( !aBitmapEx.IsTransparent() )
         {
-            BmpConversion eConv = BmpConversion::N8BitGreys;
-            int nDepth = aBitmapEx.GetBitmap().GetBitCount();
-            if( nDepth <= 4 )
-                eConv = BmpConversion::N4BitGreys;
-            if( nDepth > 1 )
-                aBitmapEx.Convert( eConv );
+            const auto& rCacheEntry=m_aPDFBmpCache.find(
+                aBitmapEx.GetChecksum());
+            if ( rCacheEntry != m_aPDFBmpCache.end() )
+            {
+                m_rOuterFace.DrawJPGBitmap( *rCacheEntry->second, true, aSizePixel,
+                                            tools::Rectangle( aPoint, aSize ), aMask, i_Graphic );
+                return;
+            }
         }
-        bool bUseJPGCompression = !i_rContext.m_bOnlyLosslessCompression;
-        if ( bIsPng || ( aSizePixel.Width() < 32 ) || ( aSizePixel.Height() < 32 ) )
-            bUseJPGCompression = false;
-
-        auto   pStrm=std::make_shared<SvMemoryStream>();
-        Bitmap aMask;
-
-        bool bTrueColorJPG = true;
-        if ( bUseJPGCompression )
+        sal_uInt32 nZippedFileSize = 0; // sj: we will calculate the filesize of a zipped bitmap
+        if ( !bIsJpeg )                 // to determine if jpeg compression is useful
         {
-            // TODO this checks could be done much earlier, saving us
-            // from trying conversion & stores before...
-            if ( !aBitmapEx.IsTransparent() )
-            {
-                const auto& rCacheEntry=m_aPDFBmpCache.find(
-                    aBitmapEx.GetChecksum());
-                if ( rCacheEntry != m_aPDFBmpCache.end() )
-                {
-                    m_rOuterFace.DrawJPGBitmap( *rCacheEntry->second, true, aSizePixel,
-                                                tools::Rectangle( aPoint, aSize ), aMask, i_Graphic );
-                    return;
-                }
-            }
-            sal_uInt32 nZippedFileSize = 0; // sj: we will calculate the filesize of a zipped bitmap
-            if ( !bIsJpeg )                 // to determine if jpeg compression is useful
-            {
-                SvMemoryStream aTemp;
-                aTemp.SetCompressMode( aTemp.GetCompressMode() | SvStreamCompressFlags::ZBITMAP );
-                aTemp.SetVersion( SOFFICE_FILEFORMAT_40 );  // sj: up from version 40 our bitmap stream operator
-                WriteDIBBitmapEx(aBitmapEx, aTemp); // is capable of zlib stream compression
-                nZippedFileSize = aTemp.TellEnd();
-            }
-            if ( aBitmapEx.IsTransparent() )
-            {
-                if ( aBitmapEx.IsAlpha() )
-                    aMask = aBitmapEx.GetAlpha().GetBitmap();
-                else
-                    aMask = aBitmapEx.GetMask();
-            }
-            Graphic         aGraphic( aBitmapEx.GetBitmap() );
+            SvMemoryStream aTemp;
+            aTemp.SetCompressMode( aTemp.GetCompressMode() | SvStreamCompressFlags::ZBITMAP );
+            aTemp.SetVersion( SOFFICE_FILEFORMAT_40 );  // sj: up from version 40 our bitmap stream operator
+            WriteDIBBitmapEx(aBitmapEx, aTemp); // is capable of zlib stream compression
+            nZippedFileSize = aTemp.TellEnd();
+        }
+        if ( aBitmapEx.IsTransparent() )
+        {
+            if ( aBitmapEx.IsAlpha() )
+                aMask = aBitmapEx.GetAlpha().GetBitmap();
+            else
+                aMask = aBitmapEx.GetMask();
+        }
+        Graphic         aGraphic( aBitmapEx.GetBitmap() );
 
-            Sequence< PropertyValue > aFilterData( 2 );
-            aFilterData[ 0 ].Name = "Quality";
-            aFilterData[ 0 ].Value <<= sal_Int32(i_rContext.m_nJPEGQuality);
-            aFilterData[ 1 ].Name = "ColorMode";
-            aFilterData[ 1 ].Value <<= sal_Int32(0);
+        Sequence< PropertyValue > aFilterData( 2 );
+        aFilterData[ 0 ].Name = "Quality";
+        aFilterData[ 0 ].Value <<= sal_Int32(i_rContext.m_nJPEGQuality);
+        aFilterData[ 1 ].Name = "ColorMode";
+        aFilterData[ 1 ].Value <<= sal_Int32(0);
 
-            try
-            {
-                uno::Reference < io::XStream > xStream = new utl::OStreamWrapper( *pStrm );
-                uno::Reference< io::XSeekable > xSeekable( xStream, UNO_QUERY_THROW );
-                uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
-                uno::Reference< graphic::XGraphicProvider > xGraphicProvider( graphic::GraphicProvider::create(xContext) );
-                uno::Reference< graphic::XGraphic > xGraphic( aGraphic.GetXGraphic() );
-                uno::Reference < io::XOutputStream > xOut( xStream->getOutputStream() );
-                uno::Sequence< beans::PropertyValue > aOutMediaProperties( 3 );
-                aOutMediaProperties[0].Name = "OutputStream";
-                aOutMediaProperties[0].Value <<= xOut;
-                aOutMediaProperties[1].Name = "MimeType";
-                aOutMediaProperties[1].Value <<= OUString("image/jpeg");
-                aOutMediaProperties[2].Name = "FilterData";
-                aOutMediaProperties[2].Value <<= aFilterData;
-                xGraphicProvider->storeGraphic( xGraphic, aOutMediaProperties );
-                xOut->flush();
-                if ( !bIsJpeg && xSeekable->getLength() > nZippedFileSize )
-                {
-                    bUseJPGCompression = false;
-                }
-                else
-                {
-                    pStrm->Seek( STREAM_SEEK_TO_END );
-
-                    xSeekable->seek( 0 );
-                    Sequence< PropertyValue > aArgs( 1 );
-                    aArgs[ 0 ].Name = "InputStream";
-                    aArgs[ 0 ].Value <<= xStream;
-                    uno::Reference< XPropertySet > xPropSet( xGraphicProvider->queryGraphicDescriptor( aArgs ) );
-                    if ( xPropSet.is() )
-                    {
-                        sal_Int16 nBitsPerPixel = 24;
-                        if ( xPropSet->getPropertyValue("BitsPerPixel") >>= nBitsPerPixel )
-                        {
-                            bTrueColorJPG = nBitsPerPixel != 8;
-                        }
-                    }
-                }
-            }
-            catch( uno::Exception& )
+        try
+        {
+            uno::Reference < io::XStream > xStream = new utl::OStreamWrapper( *pStrm );
+            uno::Reference< io::XSeekable > xSeekable( xStream, UNO_QUERY_THROW );
+            uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+            uno::Reference< graphic::XGraphicProvider > xGraphicProvider( graphic::GraphicProvider::create(xContext) );
+            uno::Reference< graphic::XGraphic > xGraphic( aGraphic.GetXGraphic() );
+            uno::Reference < io::XOutputStream > xOut( xStream->getOutputStream() );
+            uno::Sequence< beans::PropertyValue > aOutMediaProperties( 3 );
+            aOutMediaProperties[0].Name = "OutputStream";
+            aOutMediaProperties[0].Value <<= xOut;
+            aOutMediaProperties[1].Name = "MimeType";
+            aOutMediaProperties[1].Value <<= OUString("image/jpeg");
+            aOutMediaProperties[2].Name = "FilterData";
+            aOutMediaProperties[2].Value <<= aFilterData;
+            xGraphicProvider->storeGraphic( xGraphic, aOutMediaProperties );
+            xOut->flush();
+            if ( !bIsJpeg && xSeekable->getLength() > nZippedFileSize )
             {
                 bUseJPGCompression = false;
             }
-        }
-        if ( bUseJPGCompression )
-        {
-            m_rOuterFace.DrawJPGBitmap( *pStrm, bTrueColorJPG, aSizePixel, tools::Rectangle( aPoint, aSize ), aMask, i_Graphic );
-            if (!aBitmapEx.IsTransparent() && bTrueColorJPG)
+            else
             {
-                // Cache last jpeg export
-                m_aPDFBmpCache.insert(
-                    {aBitmapEx.GetChecksum(), pStrm});
+                pStrm->Seek( STREAM_SEEK_TO_END );
+
+                xSeekable->seek( 0 );
+                Sequence< PropertyValue > aArgs( 1 );
+                aArgs[ 0 ].Name = "InputStream";
+                aArgs[ 0 ].Value <<= xStream;
+                uno::Reference< XPropertySet > xPropSet( xGraphicProvider->queryGraphicDescriptor( aArgs ) );
+                if ( xPropSet.is() )
+                {
+                    sal_Int16 nBitsPerPixel = 24;
+                    if ( xPropSet->getPropertyValue("BitsPerPixel") >>= nBitsPerPixel )
+                    {
+                        bTrueColorJPG = nBitsPerPixel != 8;
+                    }
+                }
             }
         }
-        else if ( aBitmapEx.IsTransparent() )
-            m_rOuterFace.DrawBitmapEx( aPoint, aSize, aBitmapEx );
-        else
-            m_rOuterFace.DrawBitmap( aPoint, aSize, aBitmapEx.GetBitmap(), i_Graphic );
+        catch( uno::Exception& )
+        {
+            bUseJPGCompression = false;
+        }
     }
+    if ( bUseJPGCompression )
+    {
+        m_rOuterFace.DrawJPGBitmap( *pStrm, bTrueColorJPG, aSizePixel, tools::Rectangle( aPoint, aSize ), aMask, i_Graphic );
+        if (!aBitmapEx.IsTransparent() && bTrueColorJPG)
+        {
+            // Cache last jpeg export
+            m_aPDFBmpCache.insert(
+                {aBitmapEx.GetChecksum(), pStrm});
+        }
+    }
+    else if ( aBitmapEx.IsTransparent() )
+        m_rOuterFace.DrawBitmapEx( aPoint, aSize, aBitmapEx );
+    else
+        m_rOuterFace.DrawBitmap( aPoint, aSize, aBitmapEx.GetBitmap(), i_Graphic );
 
 }
 
@@ -1090,41 +1090,41 @@ EncHashTransporter* EncHashTransporter::getEncHashTransporter( const uno::Refere
 
 void PDFWriterImpl::checkAndEnableStreamEncryption( sal_Int32 nObject )
 {
-    if( m_aContext.Encryption.Encrypt() )
-    {
-        m_bEncryptThisStream = true;
-        sal_Int32 i = m_nKeyLength;
-        m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>(nObject);
-        m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>( nObject >> 8 );
-        m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>( nObject >> 16 );
-        // the other location of m_nEncryptionKey is already set to 0, our fixed generation number
-        // do the MD5 hash
-        ::std::vector<unsigned char> const nMD5Sum(::comphelper::Hash::calculateHash(
-            m_aContext.Encryption.EncryptionKey.data(), i+2, ::comphelper::HashType::MD5));
-        // the i+2 to take into account the generation number, always zero
-        // initialize the RC4 with the key
-        // key length: see algorithm 3.1, step 4: (N+5) max 16
-        rtl_cipher_initARCFOUR( m_aCipher, rtl_Cipher_DirectionEncode, nMD5Sum.data(), m_nRC4KeyLength, nullptr, 0 );
-    }
+    if( !m_aContext.Encryption.Encrypt() )
+        return;
+
+    m_bEncryptThisStream = true;
+    sal_Int32 i = m_nKeyLength;
+    m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>(nObject);
+    m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>( nObject >> 8 );
+    m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>( nObject >> 16 );
+    // the other location of m_nEncryptionKey is already set to 0, our fixed generation number
+    // do the MD5 hash
+    ::std::vector<unsigned char> const nMD5Sum(::comphelper::Hash::calculateHash(
+        m_aContext.Encryption.EncryptionKey.data(), i+2, ::comphelper::HashType::MD5));
+    // the i+2 to take into account the generation number, always zero
+    // initialize the RC4 with the key
+    // key length: see algorithm 3.1, step 4: (N+5) max 16
+    rtl_cipher_initARCFOUR( m_aCipher, rtl_Cipher_DirectionEncode, nMD5Sum.data(), m_nRC4KeyLength, nullptr, 0 );
 }
 
 void PDFWriterImpl::enableStringEncryption( sal_Int32 nObject )
 {
-    if( m_aContext.Encryption.Encrypt() )
-    {
-        sal_Int32 i = m_nKeyLength;
-        m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>(nObject);
-        m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>( nObject >> 8 );
-        m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>( nObject >> 16 );
-        // the other location of m_nEncryptionKey is already set to 0, our fixed generation number
-        // do the MD5 hash
-        // the i+2 to take into account the generation number, always zero
-        ::std::vector<unsigned char> const nMD5Sum(::comphelper::Hash::calculateHash(
-            m_aContext.Encryption.EncryptionKey.data(), i+2, ::comphelper::HashType::MD5));
-        // initialize the RC4 with the key
-        // key length: see algorithm 3.1, step 4: (N+5) max 16
-        rtl_cipher_initARCFOUR( m_aCipher, rtl_Cipher_DirectionEncode, nMD5Sum.data(), m_nRC4KeyLength, nullptr, 0 );
-    }
+    if( !m_aContext.Encryption.Encrypt() )
+        return;
+
+    sal_Int32 i = m_nKeyLength;
+    m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>(nObject);
+    m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>( nObject >> 8 );
+    m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>( nObject >> 16 );
+    // the other location of m_nEncryptionKey is already set to 0, our fixed generation number
+    // do the MD5 hash
+    // the i+2 to take into account the generation number, always zero
+    ::std::vector<unsigned char> const nMD5Sum(::comphelper::Hash::calculateHash(
+        m_aContext.Encryption.EncryptionKey.data(), i+2, ::comphelper::HashType::MD5));
+    // initialize the RC4 with the key
+    // key length: see algorithm 3.1, step 4: (N+5) max 16
+    rtl_cipher_initARCFOUR( m_aCipher, rtl_Cipher_DirectionEncode, nMD5Sum.data(), m_nRC4KeyLength, nullptr, 0 );
 }
 
 /* init the encryption engine

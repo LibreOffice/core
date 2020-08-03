@@ -794,54 +794,54 @@ bool Bitmap::HasFastScale()
 void Bitmap::AdaptBitCount(Bitmap& rNew) const
 {
     // aNew is the result of some operation; adapt it's BitCount to the original (this)
-    if(GetBitCount() != rNew.GetBitCount())
+    if(GetBitCount() == rNew.GetBitCount())
+        return;
+
+    switch(GetBitCount())
     {
-        switch(GetBitCount())
+        case 1:
         {
-            case 1:
+            rNew.Convert(BmpConversion::N1BitThreshold);
+            break;
+        }
+        case 4:
+        {
+            if(HasGreyPaletteAny())
             {
-                rNew.Convert(BmpConversion::N1BitThreshold);
-                break;
+                rNew.Convert(BmpConversion::N4BitGreys);
             }
-            case 4:
+            else
             {
-                if(HasGreyPaletteAny())
-                {
-                    rNew.Convert(BmpConversion::N4BitGreys);
-                }
-                else
-                {
-                    rNew.Convert(BmpConversion::N4BitColors);
-                }
-                break;
+                rNew.Convert(BmpConversion::N4BitColors);
             }
-            case 8:
+            break;
+        }
+        case 8:
+        {
+            if(HasGreyPaletteAny())
             {
-                if(HasGreyPaletteAny())
-                {
-                    rNew.Convert(BmpConversion::N8BitGreys);
-                }
-                else
-                {
-                    rNew.Convert(BmpConversion::N8BitColors);
-                }
-                break;
+                rNew.Convert(BmpConversion::N8BitGreys);
             }
-            case 24:
+            else
             {
-                rNew.Convert(BmpConversion::N24Bit);
-                break;
+                rNew.Convert(BmpConversion::N8BitColors);
             }
-            case 32:
-            {
-                rNew.Convert(BmpConversion::N32Bit);
-                break;
-            }
-            default:
-            {
-                SAL_WARN("vcl", "BitDepth adaptation failed, from " << rNew.GetBitCount() << " to " << GetBitCount());
-                break;
-            }
+            break;
+        }
+        case 24:
+        {
+            rNew.Convert(BmpConversion::N24Bit);
+            break;
+        }
+        case 32:
+        {
+            rNew.Convert(BmpConversion::N32Bit);
+            break;
+        }
+        default:
+        {
+            SAL_WARN("vcl", "BitDepth adaptation failed, from " << rNew.GetBitCount() << " to " << GetBitCount());
+            break;
         }
     }
 }

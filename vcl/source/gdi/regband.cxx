@@ -87,28 +87,28 @@ ImplRegionBand::ImplRegionBand(
         pSep = pSep->mpNextSep;
     }
 
-    if ( ! bIgnorePoints)
+    if (  bIgnorePoints)
+        return;
+
+    // Copy points.
+    ImplRegionBandPoint* pPoint = rRegionBand.mpFirstBandPoint;
+    ImplRegionBandPoint* pPrevPointCopy = nullptr;
+    while (pPoint != nullptr)
     {
-        // Copy points.
-        ImplRegionBandPoint* pPoint = rRegionBand.mpFirstBandPoint;
-        ImplRegionBandPoint* pPrevPointCopy = nullptr;
-        while (pPoint != nullptr)
-        {
-            ImplRegionBandPoint* pPointCopy = new ImplRegionBandPoint;
-            pPointCopy->mpNextBandPoint = nullptr;
-            pPointCopy->mnX = pPoint->mnX;
-            pPointCopy->mnLineId = pPoint->mnLineId;
-            pPointCopy->mbEndPoint = pPoint->mbEndPoint;
-            pPointCopy->meLineType = pPoint->meLineType;
+        ImplRegionBandPoint* pPointCopy = new ImplRegionBandPoint;
+        pPointCopy->mpNextBandPoint = nullptr;
+        pPointCopy->mnX = pPoint->mnX;
+        pPointCopy->mnLineId = pPoint->mnLineId;
+        pPointCopy->mbEndPoint = pPoint->mbEndPoint;
+        pPointCopy->meLineType = pPoint->meLineType;
 
-            if (pPrevPointCopy != nullptr)
-                pPrevPointCopy->mpNextBandPoint = pPointCopy;
-            else
-                mpFirstBandPoint = pPointCopy;
+        if (pPrevPointCopy != nullptr)
+            pPrevPointCopy->mpNextBandPoint = pPointCopy;
+        else
+            mpFirstBandPoint = pPointCopy;
 
-            pPrevPointCopy = pPointCopy;
-            pPoint = pPoint->mpNextBandPoint;
-        }
+        pPrevPointCopy = pPointCopy;
+        pPoint = pPoint->mpNextBandPoint;
     }
 }
 

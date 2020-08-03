@@ -979,32 +979,32 @@ void MetaPolyPolygonAction::Read( SvStream& rIStm, ImplMetaReadData* )
     VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadPolyPolygon( rIStm, maPolyPoly );                // Version 1
 
-    if ( aCompat.GetVersion() >= 2 )    // Version 2
+    if ( aCompat.GetVersion() < 2 )    // Version 2
+        return;
+
+    sal_uInt16 nNumberOfComplexPolygons(0);
+    rIStm.ReadUInt16( nNumberOfComplexPolygons );
+    const size_t nMinRecordSize = sizeof(sal_uInt16);
+    const size_t nMaxRecords = rIStm.remainingSize() / nMinRecordSize;
+    if (nNumberOfComplexPolygons > nMaxRecords)
     {
-        sal_uInt16 nNumberOfComplexPolygons(0);
-        rIStm.ReadUInt16( nNumberOfComplexPolygons );
-        const size_t nMinRecordSize = sizeof(sal_uInt16);
-        const size_t nMaxRecords = rIStm.remainingSize() / nMinRecordSize;
-        if (nNumberOfComplexPolygons > nMaxRecords)
+        SAL_WARN("vcl.gdi", "Parsing error: " << nMaxRecords <<
+                 " max possible entries, but " << nNumberOfComplexPolygons << " claimed, truncating");
+        nNumberOfComplexPolygons = nMaxRecords;
+    }
+    for (sal_uInt16 i = 0; i < nNumberOfComplexPolygons; ++i)
+    {
+        sal_uInt16 nIndex(0);
+        rIStm.ReadUInt16( nIndex );
+        tools::Polygon aPoly;
+        aPoly.Read( rIStm );
+        if (nIndex >= maPolyPoly.Count())
         {
-            SAL_WARN("vcl.gdi", "Parsing error: " << nMaxRecords <<
-                     " max possible entries, but " << nNumberOfComplexPolygons << " claimed, truncating");
-            nNumberOfComplexPolygons = nMaxRecords;
+            SAL_WARN("vcl.gdi", "svm contains polygon index " << nIndex
+                     << " outside possible range " << maPolyPoly.Count());
+            continue;
         }
-        for (sal_uInt16 i = 0; i < nNumberOfComplexPolygons; ++i)
-        {
-            sal_uInt16 nIndex(0);
-            rIStm.ReadUInt16( nIndex );
-            tools::Polygon aPoly;
-            aPoly.Read( rIStm );
-            if (nIndex >= maPolyPoly.Count())
-            {
-                SAL_WARN("vcl.gdi", "svm contains polygon index " << nIndex
-                         << " outside possible range " << maPolyPoly.Count());
-                continue;
-            }
-            maPolyPoly.Replace( aPoly, nIndex );
-        }
+        maPolyPoly.Replace( aPoly, nIndex );
     }
 }
 
@@ -3183,54 +3183,54 @@ rtl::Reference<MetaAction> MetaCommentAction::Clone()
 
 void MetaCommentAction::Move( long nXMove, long nYMove )
 {
-    if ( nXMove || nYMove )
+    if ( !(nXMove || nYMove) )
+        return;
+
+    if ( !(mnDataSize && mpData) )
+        return;
+
+    bool bPathStroke = (maComment == "XPATHSTROKE_SEQ_BEGIN");
+    if ( !(bPathStroke || maComment == "XPATHFILL_SEQ_BEGIN") )
+        return;
+
+    SvMemoryStream  aMemStm( static_cast<void*>(mpData.get()), mnDataSize, StreamMode::READ );
+    SvMemoryStream  aDest;
+    if ( bPathStroke )
     {
-        if ( mnDataSize && mpData )
-        {
-            bool bPathStroke = (maComment == "XPATHSTROKE_SEQ_BEGIN");
-            if ( bPathStroke || maComment == "XPATHFILL_SEQ_BEGIN" )
-            {
-                SvMemoryStream  aMemStm( static_cast<void*>(mpData.get()), mnDataSize, StreamMode::READ );
-                SvMemoryStream  aDest;
-                if ( bPathStroke )
-                {
-                    SvtGraphicStroke aStroke;
-                    ReadSvtGraphicStroke( aMemStm, aStroke );
+        SvtGraphicStroke aStroke;
+        ReadSvtGraphicStroke( aMemStm, aStroke );
 
-                    tools::Polygon aPath;
-                    aStroke.getPath( aPath );
-                    aPath.Move( nXMove, nYMove );
-                    aStroke.setPath( aPath );
+        tools::Polygon aPath;
+        aStroke.getPath( aPath );
+        aPath.Move( nXMove, nYMove );
+        aStroke.setPath( aPath );
 
-                    tools::PolyPolygon aStartArrow;
-                    aStroke.getStartArrow(aStartArrow);
-                    aStartArrow.Move(nXMove, nYMove);
-                    aStroke.setStartArrow(aStartArrow);
+        tools::PolyPolygon aStartArrow;
+        aStroke.getStartArrow(aStartArrow);
+        aStartArrow.Move(nXMove, nYMove);
+        aStroke.setStartArrow(aStartArrow);
 
-                    tools::PolyPolygon aEndArrow;
-                    aStroke.getEndArrow(aEndArrow);
-                    aEndArrow.Move(nXMove, nYMove);
-                    aStroke.setEndArrow(aEndArrow);
+        tools::PolyPolygon aEndArrow;
+        aStroke.getEndArrow(aEndArrow);
+        aEndArrow.Move(nXMove, nYMove);
+        aStroke.setEndArrow(aEndArrow);
 
-                    WriteSvtGraphicStroke( aDest, aStroke );
-                }
-                else
-                {
-                    SvtGraphicFill aFill;
-                    ReadSvtGraphicFill( aMemStm, aFill );
-
-                    tools::PolyPolygon aPath;
-                    aFill.getPath( aPath );
-                    aPath.Move( nXMove, nYMove );
-                    aFill.setPath( aPath );
-
-                    WriteSvtGraphicFill( aDest, aFill );
-                }
-                mpData.reset();
-                ImplInitDynamicData( static_cast<const sal_uInt8*>( aDest.GetData() ), aDest.Tell() );
-            }
-        }
+        WriteSvtGraphicStroke( aDest, aStroke );
     }
+    else
+    {
+        SvtGraphicFill aFill;
+        ReadSvtGraphicFill( aMemStm, aFill );
+
+        tools::PolyPolygon aPath;
+        aFill.getPath( aPath );
+        aPath.Move( nXMove, nYMove );
+        aFill.setPath( aPath );
+
+        WriteSvtGraphicFill( aDest, aFill );
+    }
+    mpData.reset();
+    ImplInitDynamicData( static_cast<const sal_uInt8*>( aDest.GetData() ), aDest.Tell() );
 }
 
 // SJ: 25.07.06 #i56656# we are not able to mirror certain kind of
@@ -3239,62 +3239,62 @@ void MetaCommentAction::Move( long nXMove, long nYMove )
 // FIXME: fake comment to apply the next hunk in the right location
 void MetaCommentAction::Scale( double fXScale, double fYScale )
 {
-    if ( ( fXScale != 1.0 ) || ( fYScale != 1.0 ) )
+    if (( fXScale == 1.0 ) && ( fYScale == 1.0 ))
+        return;
+
+    if ( !(mnDataSize && mpData) )
+        return;
+
+    bool bPathStroke = (maComment == "XPATHSTROKE_SEQ_BEGIN");
+    if ( bPathStroke || maComment == "XPATHFILL_SEQ_BEGIN" )
     {
-        if ( mnDataSize && mpData )
+        SvMemoryStream  aMemStm( static_cast<void*>(mpData.get()), mnDataSize, StreamMode::READ );
+        SvMemoryStream  aDest;
+        if ( bPathStroke )
         {
-            bool bPathStroke = (maComment == "XPATHSTROKE_SEQ_BEGIN");
-            if ( bPathStroke || maComment == "XPATHFILL_SEQ_BEGIN" )
-            {
-                SvMemoryStream  aMemStm( static_cast<void*>(mpData.get()), mnDataSize, StreamMode::READ );
-                SvMemoryStream  aDest;
-                if ( bPathStroke )
-                {
-                    SvtGraphicStroke aStroke;
-                    ReadSvtGraphicStroke( aMemStm, aStroke );
-                    aStroke.scale( fXScale, fYScale );
-                    WriteSvtGraphicStroke( aDest, aStroke );
-                }
-                else
-                {
-                    SvtGraphicFill aFill;
-                    ReadSvtGraphicFill( aMemStm, aFill );
-                    tools::PolyPolygon aPath;
-                    aFill.getPath( aPath );
-                    aPath.Scale( fXScale, fYScale );
-                    aFill.setPath( aPath );
-                    WriteSvtGraphicFill( aDest, aFill );
-                }
-                mpData.reset();
-                ImplInitDynamicData( static_cast<const sal_uInt8*>( aDest.GetData() ), aDest.Tell() );
-            } else if( maComment == "EMF_PLUS_HEADER_INFO" ){
-                SvMemoryStream  aMemStm( static_cast<void*>(mpData.get()), mnDataSize, StreamMode::READ );
-                SvMemoryStream  aDest;
-
-                sal_Int32 nLeft(0), nRight(0), nTop(0), nBottom(0);
-                sal_Int32 nPixX(0), nPixY(0), nMillX(0), nMillY(0);
-                float m11(0), m12(0), m21(0), m22(0), mdx(0), mdy(0);
-
-                // read data
-                aMemStm.ReadInt32( nLeft ).ReadInt32( nTop ).ReadInt32( nRight ).ReadInt32( nBottom );
-                aMemStm.ReadInt32( nPixX ).ReadInt32( nPixY ).ReadInt32( nMillX ).ReadInt32( nMillY );
-                aMemStm.ReadFloat( m11 ).ReadFloat( m12 ).ReadFloat( m21 ).ReadFloat( m22 ).ReadFloat( mdx ).ReadFloat( mdy );
-
-                // add scale to the transformation
-                m11 *= fXScale;
-                m12 *= fXScale;
-                m22 *= fYScale;
-                m21 *= fYScale;
-
-                // prepare new data
-                aDest.WriteInt32( nLeft ).WriteInt32( nTop ).WriteInt32( nRight ).WriteInt32( nBottom );
-                aDest.WriteInt32( nPixX ).WriteInt32( nPixY ).WriteInt32( nMillX ).WriteInt32( nMillY );
-                aDest.WriteFloat( m11 ).WriteFloat( m12 ).WriteFloat( m21 ).WriteFloat( m22 ).WriteFloat( mdx ).WriteFloat( mdy );
-
-                // save them
-                ImplInitDynamicData( static_cast<const sal_uInt8*>( aDest.GetData() ), aDest.Tell() );
-            }
+            SvtGraphicStroke aStroke;
+            ReadSvtGraphicStroke( aMemStm, aStroke );
+            aStroke.scale( fXScale, fYScale );
+            WriteSvtGraphicStroke( aDest, aStroke );
         }
+        else
+        {
+            SvtGraphicFill aFill;
+            ReadSvtGraphicFill( aMemStm, aFill );
+            tools::PolyPolygon aPath;
+            aFill.getPath( aPath );
+            aPath.Scale( fXScale, fYScale );
+            aFill.setPath( aPath );
+            WriteSvtGraphicFill( aDest, aFill );
+        }
+        mpData.reset();
+        ImplInitDynamicData( static_cast<const sal_uInt8*>( aDest.GetData() ), aDest.Tell() );
+    } else if( maComment == "EMF_PLUS_HEADER_INFO" ){
+        SvMemoryStream  aMemStm( static_cast<void*>(mpData.get()), mnDataSize, StreamMode::READ );
+        SvMemoryStream  aDest;
+
+        sal_Int32 nLeft(0), nRight(0), nTop(0), nBottom(0);
+        sal_Int32 nPixX(0), nPixY(0), nMillX(0), nMillY(0);
+        float m11(0), m12(0), m21(0), m22(0), mdx(0), mdy(0);
+
+        // read data
+        aMemStm.ReadInt32( nLeft ).ReadInt32( nTop ).ReadInt32( nRight ).ReadInt32( nBottom );
+        aMemStm.ReadInt32( nPixX ).ReadInt32( nPixY ).ReadInt32( nMillX ).ReadInt32( nMillY );
+        aMemStm.ReadFloat( m11 ).ReadFloat( m12 ).ReadFloat( m21 ).ReadFloat( m22 ).ReadFloat( mdx ).ReadFloat( mdy );
+
+        // add scale to the transformation
+        m11 *= fXScale;
+        m12 *= fXScale;
+        m22 *= fYScale;
+        m21 *= fYScale;
+
+        // prepare new data
+        aDest.WriteInt32( nLeft ).WriteInt32( nTop ).WriteInt32( nRight ).WriteInt32( nBottom );
+        aDest.WriteInt32( nPixX ).WriteInt32( nPixY ).WriteInt32( nMillX ).WriteInt32( nMillY );
+        aDest.WriteFloat( m11 ).WriteFloat( m12 ).WriteFloat( m21 ).WriteFloat( m22 ).WriteFloat( mdx ).WriteFloat( mdy );
+
+        // save them
+        ImplInitDynamicData( static_cast<const sal_uInt8*>( aDest.GetData() ), aDest.Tell() );
     }
 }
 
