@@ -20,6 +20,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,cppunit,\
 	external/cppunit/enable-win32-debug.patch \
 	external/cppunit/rtti.patch.0 \
 	external/cppunit/order.patch.0 \
+	external/cppunit/windows-arm64.patch.1 \
 ))
 ifeq ($(DISABLE_DYNLOADING),TRUE)
 $(eval $(call gb_UnpackedTarball_add_patches,cppunit,\
