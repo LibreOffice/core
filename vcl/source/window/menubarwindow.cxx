@@ -277,108 +277,108 @@ IMPL_LINK( MenuBarWindow, ShowHideListener, VclWindowEvent&, rEvent, void )
 void MenuBarWindow::ImplCreatePopup( bool bPreSelectFirst )
 {
     MenuItemData* pItemData = m_pMenu ? m_pMenu->GetItemList()->GetDataFromPos( m_nHighlightedItem ) : nullptr;
-    if ( pItemData )
+    if ( !pItemData )
+        return;
+
+    m_bIgnoreFirstMove = true;
+    if ( m_pActivePopup && ( m_pActivePopup != pItemData->pSubMenu ) )
     {
-        m_bIgnoreFirstMove = true;
-        if ( m_pActivePopup && ( m_pActivePopup != pItemData->pSubMenu ) )
+        KillActivePopup();
+    }
+    if ( !(pItemData->bEnabled && pItemData->pSubMenu && ( m_nHighlightedItem != ITEMPOS_INVALID ) &&
+         ( pItemData->pSubMenu != m_pActivePopup )) )
+        return;
+
+    m_pActivePopup = static_cast<PopupMenu*>(pItemData->pSubMenu.get());
+    long nX = 0;
+    MenuItemData* pData = nullptr;
+    for ( sal_uLong n = 0; n < m_nHighlightedItem; n++ )
+    {
+        pData = m_pMenu->GetItemList()->GetDataFromPos( n );
+        nX += pData->aSz.Width();
+    }
+    pData = m_pMenu->pItemList->GetDataFromPos( m_nHighlightedItem );
+    Point aItemTopLeft( nX, 0 );
+    Point aItemBottomRight( aItemTopLeft );
+    aItemBottomRight.AdjustX(pData->aSz.Width() );
+
+    if (pData->bHiddenOnGUI)
+    {
+        mpParentPopup.disposeAndClear();
+        mpParentPopup = VclPtr<PopupMenu>::Create();
+        m_pActivePopup = mpParentPopup.get();
+
+        for (sal_uInt16 i = m_nHighlightedItem; i < m_pMenu->GetItemCount(); ++i)
         {
-            KillActivePopup();
-        }
-        if ( pItemData->bEnabled && pItemData->pSubMenu && ( m_nHighlightedItem != ITEMPOS_INVALID ) &&
-             ( pItemData->pSubMenu != m_pActivePopup ) )
-        {
-            m_pActivePopup = static_cast<PopupMenu*>(pItemData->pSubMenu.get());
-            long nX = 0;
-            MenuItemData* pData = nullptr;
-            for ( sal_uLong n = 0; n < m_nHighlightedItem; n++ )
-            {
-                pData = m_pMenu->GetItemList()->GetDataFromPos( n );
-                nX += pData->aSz.Width();
-            }
-            pData = m_pMenu->pItemList->GetDataFromPos( m_nHighlightedItem );
-            Point aItemTopLeft( nX, 0 );
-            Point aItemBottomRight( aItemTopLeft );
-            aItemBottomRight.AdjustX(pData->aSz.Width() );
+            sal_uInt16 nId = m_pMenu->GetItemId(i);
 
-            if (pData->bHiddenOnGUI)
-            {
-                mpParentPopup.disposeAndClear();
-                mpParentPopup = VclPtr<PopupMenu>::Create();
-                m_pActivePopup = mpParentPopup.get();
+            MenuItemData* pParentItemData = m_pMenu->GetItemList()->GetData(nId);
+            assert(pParentItemData);
+            mpParentPopup->InsertItem(nId, pParentItemData->aText, pParentItemData->nBits, pParentItemData->sIdent);
+            mpParentPopup->SetHelpId(nId, pParentItemData->aHelpId);
+            mpParentPopup->SetHelpText(nId, pParentItemData->aHelpText);
+            mpParentPopup->SetAccelKey(nId, pParentItemData->aAccelKey);
+            mpParentPopup->SetItemCommand(nId, pParentItemData->aCommandStr);
+            mpParentPopup->SetHelpCommand(nId, pParentItemData->aHelpCommandStr);
 
-                for (sal_uInt16 i = m_nHighlightedItem; i < m_pMenu->GetItemCount(); ++i)
-                {
-                    sal_uInt16 nId = m_pMenu->GetItemId(i);
-
-                    MenuItemData* pParentItemData = m_pMenu->GetItemList()->GetData(nId);
-                    assert(pParentItemData);
-                    mpParentPopup->InsertItem(nId, pParentItemData->aText, pParentItemData->nBits, pParentItemData->sIdent);
-                    mpParentPopup->SetHelpId(nId, pParentItemData->aHelpId);
-                    mpParentPopup->SetHelpText(nId, pParentItemData->aHelpText);
-                    mpParentPopup->SetAccelKey(nId, pParentItemData->aAccelKey);
-                    mpParentPopup->SetItemCommand(nId, pParentItemData->aCommandStr);
-                    mpParentPopup->SetHelpCommand(nId, pParentItemData->aHelpCommandStr);
-
-                    PopupMenu* pPopup = m_pMenu->GetPopupMenu(nId);
-                    mpParentPopup->SetPopupMenu(nId, pPopup);
-                }
-            }
-            // the menu bar could have height 0 in fullscreen mode:
-            // so do not use always WindowHeight, as ItemHeight < WindowHeight.
-            if ( GetSizePixel().Height() )
-            {
-                // #107747# give menuitems the height of the menubar
-                aItemBottomRight.AdjustY(GetOutputSizePixel().Height()-1 );
-            }
-
-            // ImplExecute is not modal...
-            // #99071# do not grab the focus, otherwise it will be restored to the menubar
-            // when the frame is reactivated later
-            //GrabFocus();
-            m_pActivePopup->ImplExecute( this, tools::Rectangle( aItemTopLeft, aItemBottomRight ), FloatWinPopupFlags::Down | FloatWinPopupFlags::NoHorzPlacement, m_pMenu, bPreSelectFirst );
-            // does not have a window, if aborted before or if there are no entries
-            if ( m_pActivePopup->ImplGetFloatingWindow() )
-                m_pActivePopup->ImplGetFloatingWindow()->AddPopupModeWindow( this );
-            else
-                m_pActivePopup = nullptr;
+            PopupMenu* pPopup = m_pMenu->GetPopupMenu(nId);
+            mpParentPopup->SetPopupMenu(nId, pPopup);
         }
     }
+    // the menu bar could have height 0 in fullscreen mode:
+    // so do not use always WindowHeight, as ItemHeight < WindowHeight.
+    if ( GetSizePixel().Height() )
+    {
+        // #107747# give menuitems the height of the menubar
+        aItemBottomRight.AdjustY(GetOutputSizePixel().Height()-1 );
+    }
+
+    // ImplExecute is not modal...
+    // #99071# do not grab the focus, otherwise it will be restored to the menubar
+    // when the frame is reactivated later
+    //GrabFocus();
+    m_pActivePopup->ImplExecute( this, tools::Rectangle( aItemTopLeft, aItemBottomRight ), FloatWinPopupFlags::Down | FloatWinPopupFlags::NoHorzPlacement, m_pMenu, bPreSelectFirst );
+    // does not have a window, if aborted before or if there are no entries
+    if ( m_pActivePopup->ImplGetFloatingWindow() )
+        m_pActivePopup->ImplGetFloatingWindow()->AddPopupModeWindow( this );
+    else
+        m_pActivePopup = nullptr;
 }
 
 void MenuBarWindow::KillActivePopup()
 {
-    if ( m_pActivePopup )
+    if ( !m_pActivePopup )
+        return;
+
+    if( m_pActivePopup->pWindow )
+        if( static_cast<FloatingWindow *>(m_pActivePopup->pWindow.get())->IsInCleanUp() )
+            return; // kill it later
+
+    if ( m_pActivePopup->bInCallback )
+        m_pActivePopup->bCanceled = true;
+
+    m_pActivePopup->bInCallback = true;
+    m_pActivePopup->Deactivate();
+    m_pActivePopup->bInCallback = false;
+    // check for pActivePopup, if stopped by deactivate...
+    if ( m_pActivePopup->ImplGetWindow() )
     {
-        if( m_pActivePopup->pWindow )
-            if( static_cast<FloatingWindow *>(m_pActivePopup->pWindow.get())->IsInCleanUp() )
-                return; // kill it later
-
-        if ( m_pActivePopup->bInCallback )
-            m_pActivePopup->bCanceled = true;
-
-        m_pActivePopup->bInCallback = true;
-        m_pActivePopup->Deactivate();
-        m_pActivePopup->bInCallback = false;
-        // check for pActivePopup, if stopped by deactivate...
-        if ( m_pActivePopup->ImplGetWindow() )
+        if (mpParentPopup)
         {
-            if (mpParentPopup)
+            for (sal_uInt16 i = 0; i < mpParentPopup->GetItemCount(); ++i)
             {
-                for (sal_uInt16 i = 0; i < mpParentPopup->GetItemCount(); ++i)
-                {
-                    sal_uInt16 nId = mpParentPopup->GetItemId(i);
-                    MenuItemData* pParentItemData = mpParentPopup->GetItemList()->GetData(nId);
-                    assert(pParentItemData);
-                    pParentItemData->pSubMenu = nullptr;
-                }
+                sal_uInt16 nId = mpParentPopup->GetItemId(i);
+                MenuItemData* pParentItemData = mpParentPopup->GetItemList()->GetData(nId);
+                assert(pParentItemData);
+                pParentItemData->pSubMenu = nullptr;
             }
-            m_pActivePopup->ImplGetFloatingWindow()->StopExecute();
-            m_pActivePopup->ImplGetFloatingWindow()->doShutdown();
-            m_pActivePopup->pWindow->SetParentToDefaultWindow();
-            m_pActivePopup->pWindow.disposeAndClear();
         }
-        m_pActivePopup = nullptr;
+        m_pActivePopup->ImplGetFloatingWindow()->StopExecute();
+        m_pActivePopup->ImplGetFloatingWindow()->doShutdown();
+        m_pActivePopup->pWindow->SetParentToDefaultWindow();
+        m_pActivePopup->pWindow.disposeAndClear();
     }
+    m_pActivePopup = nullptr;
 }
 
 void MenuBarWindow::PopupClosed( Menu const * pPopup )
@@ -1096,20 +1096,20 @@ void MenuBarWindow::ApplySettings(vcl::RenderContext& rRenderContext)
 
 void MenuBarWindow::ImplInitStyleSettings()
 {
-    if (IsNativeControlSupported(ControlType::Menubar, ControlPart::MenuItem) &&
-        IsNativeControlSupported(ControlType::Menubar, ControlPart::Entire))
+    if (!(IsNativeControlSupported(ControlType::Menubar, ControlPart::MenuItem) &&
+        IsNativeControlSupported(ControlType::Menubar, ControlPart::Entire)))
+        return;
+
+    AllSettings aSettings(GetSettings());
+    ImplGetFrame()->UpdateSettings(aSettings); // to update persona
+    StyleSettings aStyle(aSettings.GetStyleSettings());
+    Color aHighlightTextColor = ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor;
+    if (aHighlightTextColor != COL_TRANSPARENT)
     {
-        AllSettings aSettings(GetSettings());
-        ImplGetFrame()->UpdateSettings(aSettings); // to update persona
-        StyleSettings aStyle(aSettings.GetStyleSettings());
-        Color aHighlightTextColor = ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor;
-        if (aHighlightTextColor != COL_TRANSPARENT)
-        {
-            aStyle.SetMenuHighlightTextColor(aHighlightTextColor);
-        }
-        aSettings.SetStyleSettings(aStyle);
-        OutputDevice::SetSettings(aSettings);
+        aStyle.SetMenuHighlightTextColor(aHighlightTextColor);
     }
+    aSettings.SetStyleSettings(aStyle);
+    OutputDevice::SetSettings(aSettings);
 }
 
 void MenuBarWindow::DataChanged( const DataChangedEvent& rDCEvt )

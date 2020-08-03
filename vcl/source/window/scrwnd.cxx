@@ -128,22 +128,22 @@ void ImplWheelWindow::ImplCreateImageList()
 
 void ImplWheelWindow::ImplSetWheelMode( WheelMode nWheelMode )
 {
-    if( nWheelMode != mnWheelMode )
+    if( nWheelMode == mnWheelMode )
+        return;
+
+    mnWheelMode = nWheelMode;
+
+    if( WheelMode::NONE == mnWheelMode )
     {
-        mnWheelMode = nWheelMode;
+        if( IsVisible() )
+            Hide();
+    }
+    else
+    {
+        if( !IsVisible() )
+            Show();
 
-        if( WheelMode::NONE == mnWheelMode )
-        {
-            if( IsVisible() )
-                Hide();
-        }
-        else
-        {
-            if( !IsVisible() )
-                Show();
-
-            Invalidate();
-        }
+        Invalidate();
     }
 }
 

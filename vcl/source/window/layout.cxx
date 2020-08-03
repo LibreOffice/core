@@ -2049,19 +2049,19 @@ void VclScrolledWindow::Paint(vcl::RenderContext& rRenderContext, const tools::R
 void VclViewport::setAllocation(const Size &rAllocation)
 {
     vcl::Window *pChild = get_child();
-    if (pChild && pChild->IsVisible())
+    if (!(pChild && pChild->IsVisible()))
+        return;
+
+    Size aReq(getLayoutRequisition(*pChild));
+    aReq.setWidth( std::max(aReq.Width(), rAllocation.Width()) );
+    aReq.setHeight( std::max(aReq.Height(), rAllocation.Height()) );
+    Point aKeepPos(pChild->GetPosPixel());
+    if (m_bInitialAllocation)
     {
-        Size aReq(getLayoutRequisition(*pChild));
-        aReq.setWidth( std::max(aReq.Width(), rAllocation.Width()) );
-        aReq.setHeight( std::max(aReq.Height(), rAllocation.Height()) );
-        Point aKeepPos(pChild->GetPosPixel());
-        if (m_bInitialAllocation)
-        {
-            aKeepPos = Point(0, 0);
-            m_bInitialAllocation = false;
-        }
-        setLayoutAllocation(*pChild, aKeepPos, aReq);
+        aKeepPos = Point(0, 0);
+        m_bInitialAllocation = false;
     }
+    setLayoutAllocation(*pChild, aKeepPos, aReq);
 }
 
 const vcl::Window *VclEventBox::get_child() const
@@ -2181,126 +2181,126 @@ void MessageDialog::create_message_area()
 {
     setDeferredProperties();
 
-    if (!m_pGrid)
+    if (m_pGrid)
+        return;
+
+    VclContainer *pContainer = get_content_area();
+    assert(pContainer);
+
+    m_pGrid.set( VclPtr<VclGrid>::Create(pContainer) );
+    m_pGrid->reorderWithinParent(0);
+    m_pGrid->set_column_spacing(12);
+    m_pMessageBox.set(VclPtr<VclVBox>::Create(m_pGrid));
+    m_pMessageBox->set_grid_left_attach(1);
+    m_pMessageBox->set_grid_top_attach(0);
+    m_pMessageBox->set_spacing(GetTextHeight());
+
+    m_pImage = VclPtr<FixedImage>::Create(m_pGrid, WB_CENTER | WB_VCENTER | WB_3DLOOK);
+    switch (m_eMessageType)
     {
-        VclContainer *pContainer = get_content_area();
-        assert(pContainer);
-
-        m_pGrid.set( VclPtr<VclGrid>::Create(pContainer) );
-        m_pGrid->reorderWithinParent(0);
-        m_pGrid->set_column_spacing(12);
-        m_pMessageBox.set(VclPtr<VclVBox>::Create(m_pGrid));
-        m_pMessageBox->set_grid_left_attach(1);
-        m_pMessageBox->set_grid_top_attach(0);
-        m_pMessageBox->set_spacing(GetTextHeight());
-
-        m_pImage = VclPtr<FixedImage>::Create(m_pGrid, WB_CENTER | WB_VCENTER | WB_3DLOOK);
-        switch (m_eMessageType)
-        {
-            case VclMessageType::Info:
-                m_pImage->SetImage(GetStandardInfoBoxImage());
-                break;
-            case VclMessageType::Warning:
-                m_pImage->SetImage(GetStandardWarningBoxImage());
-                break;
-            case VclMessageType::Question:
-                m_pImage->SetImage(GetStandardQueryBoxImage());
-                break;
-            case VclMessageType::Error:
-                m_pImage->SetImage(GetStandardErrorBoxImage());
-                break;
-        }
-        m_pImage->set_grid_left_attach(0);
-        m_pImage->set_grid_top_attach(0);
-        m_pImage->set_valign(VclAlign::Start);
-        m_pImage->Show();
-
-        WinBits nWinStyle = WB_CLIPCHILDREN | WB_LEFT | WB_VCENTER | WB_NOLABEL | WB_NOTABSTOP;
-
-        bool bHasSecondaryText = !m_sSecondaryString.isEmpty();
-
-        m_pPrimaryMessage = VclPtr<VclMultiLineEdit>::Create(m_pMessageBox, nWinStyle);
-        m_pPrimaryMessage->SetPaintTransparent(true);
-        m_pPrimaryMessage->EnableCursor(false);
-
-        m_pPrimaryMessage->set_hexpand(true);
-        m_pPrimaryMessage->SetText(m_sPrimaryString);
-        m_pPrimaryMessage->Show(!m_sPrimaryString.isEmpty());
-
-        m_pSecondaryMessage = VclPtr<VclMultiLineEdit>::Create(m_pMessageBox, nWinStyle);
-        m_pSecondaryMessage->SetPaintTransparent(true);
-        m_pSecondaryMessage->EnableCursor(false);
-        m_pSecondaryMessage->set_hexpand(true);
-        m_pSecondaryMessage->SetText(m_sSecondaryString);
-        m_pSecondaryMessage->Show(bHasSecondaryText);
-
-        MessageDialog::SetMessagesWidths(this, m_pPrimaryMessage, bHasSecondaryText ? m_pSecondaryMessage.get() : nullptr);
-
-        VclButtonBox *pButtonBox = get_action_area();
-        assert(pButtonBox);
-
-        VclPtr<PushButton> pBtn;
-        short nDefaultResponse = get_default_response();
-        switch (m_eButtonsType)
-        {
-            case VclButtonsType::NONE:
-                break;
-            case VclButtonsType::Ok:
-                pBtn.set( VclPtr<OKButton>::Create(pButtonBox) );
-                pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
-                pBtn->Show();
-                pBtn->set_id("ok");
-                add_button(pBtn, RET_OK, true);
-                nDefaultResponse = RET_OK;
-                break;
-            case VclButtonsType::Close:
-                pBtn.set( VclPtr<CloseButton>::Create(pButtonBox) );
-                pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
-                pBtn->Show();
-                pBtn->set_id("close");
-                add_button(pBtn, RET_CLOSE, true);
-                nDefaultResponse = RET_CLOSE;
-                break;
-            case VclButtonsType::Cancel:
-                pBtn.set( VclPtr<CancelButton>::Create(pButtonBox) );
-                pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
-                pBtn->Show();
-                pBtn->set_id("cancel");
-                add_button(pBtn, RET_CANCEL, true);
-                nDefaultResponse = RET_CANCEL;
-                break;
-            case VclButtonsType::YesNo:
-                pBtn = VclPtr<PushButton>::Create(pButtonBox);
-                pBtn->SetText(GetStandardText(StandardButtonType::Yes));
-                pBtn->Show();
-                pBtn->set_id("yes");
-                add_button(pBtn, RET_YES, true);
-
-                pBtn.set( VclPtr<PushButton>::Create(pButtonBox) );
-                pBtn->SetText(GetStandardText(StandardButtonType::No));
-                pBtn->Show();
-                pBtn->set_id("no");
-                add_button(pBtn, RET_NO, true);
-                nDefaultResponse = RET_NO;
-                break;
-            case VclButtonsType::OkCancel:
-                pBtn.set( VclPtr<OKButton>::Create(pButtonBox) );
-                pBtn->Show();
-                pBtn->set_id("ok");
-                add_button(pBtn, RET_OK, true);
-
-                pBtn.set( VclPtr<CancelButton>::Create(pButtonBox) );
-                pBtn->Show();
-                pBtn->set_id("cancel");
-                add_button(pBtn, RET_CANCEL, true);
-                nDefaultResponse = RET_CANCEL;
-                break;
-        }
-        set_default_response(nDefaultResponse);
-        sort_native_button_order(*pButtonBox);
-        m_pMessageBox->Show();
-        m_pGrid->Show();
+        case VclMessageType::Info:
+            m_pImage->SetImage(GetStandardInfoBoxImage());
+            break;
+        case VclMessageType::Warning:
+            m_pImage->SetImage(GetStandardWarningBoxImage());
+            break;
+        case VclMessageType::Question:
+            m_pImage->SetImage(GetStandardQueryBoxImage());
+            break;
+        case VclMessageType::Error:
+            m_pImage->SetImage(GetStandardErrorBoxImage());
+            break;
     }
+    m_pImage->set_grid_left_attach(0);
+    m_pImage->set_grid_top_attach(0);
+    m_pImage->set_valign(VclAlign::Start);
+    m_pImage->Show();
+
+    WinBits nWinStyle = WB_CLIPCHILDREN | WB_LEFT | WB_VCENTER | WB_NOLABEL | WB_NOTABSTOP;
+
+    bool bHasSecondaryText = !m_sSecondaryString.isEmpty();
+
+    m_pPrimaryMessage = VclPtr<VclMultiLineEdit>::Create(m_pMessageBox, nWinStyle);
+    m_pPrimaryMessage->SetPaintTransparent(true);
+    m_pPrimaryMessage->EnableCursor(false);
+
+    m_pPrimaryMessage->set_hexpand(true);
+    m_pPrimaryMessage->SetText(m_sPrimaryString);
+    m_pPrimaryMessage->Show(!m_sPrimaryString.isEmpty());
+
+    m_pSecondaryMessage = VclPtr<VclMultiLineEdit>::Create(m_pMessageBox, nWinStyle);
+    m_pSecondaryMessage->SetPaintTransparent(true);
+    m_pSecondaryMessage->EnableCursor(false);
+    m_pSecondaryMessage->set_hexpand(true);
+    m_pSecondaryMessage->SetText(m_sSecondaryString);
+    m_pSecondaryMessage->Show(bHasSecondaryText);
+
+    MessageDialog::SetMessagesWidths(this, m_pPrimaryMessage, bHasSecondaryText ? m_pSecondaryMessage.get() : nullptr);
+
+    VclButtonBox *pButtonBox = get_action_area();
+    assert(pButtonBox);
+
+    VclPtr<PushButton> pBtn;
+    short nDefaultResponse = get_default_response();
+    switch (m_eButtonsType)
+    {
+        case VclButtonsType::NONE:
+            break;
+        case VclButtonsType::Ok:
+            pBtn.set( VclPtr<OKButton>::Create(pButtonBox) );
+            pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
+            pBtn->Show();
+            pBtn->set_id("ok");
+            add_button(pBtn, RET_OK, true);
+            nDefaultResponse = RET_OK;
+            break;
+        case VclButtonsType::Close:
+            pBtn.set( VclPtr<CloseButton>::Create(pButtonBox) );
+            pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
+            pBtn->Show();
+            pBtn->set_id("close");
+            add_button(pBtn, RET_CLOSE, true);
+            nDefaultResponse = RET_CLOSE;
+            break;
+        case VclButtonsType::Cancel:
+            pBtn.set( VclPtr<CancelButton>::Create(pButtonBox) );
+            pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
+            pBtn->Show();
+            pBtn->set_id("cancel");
+            add_button(pBtn, RET_CANCEL, true);
+            nDefaultResponse = RET_CANCEL;
+            break;
+        case VclButtonsType::YesNo:
+            pBtn = VclPtr<PushButton>::Create(pButtonBox);
+            pBtn->SetText(GetStandardText(StandardButtonType::Yes));
+            pBtn->Show();
+            pBtn->set_id("yes");
+            add_button(pBtn, RET_YES, true);
+
+            pBtn.set( VclPtr<PushButton>::Create(pButtonBox) );
+            pBtn->SetText(GetStandardText(StandardButtonType::No));
+            pBtn->Show();
+            pBtn->set_id("no");
+            add_button(pBtn, RET_NO, true);
+            nDefaultResponse = RET_NO;
+            break;
+        case VclButtonsType::OkCancel:
+            pBtn.set( VclPtr<OKButton>::Create(pButtonBox) );
+            pBtn->Show();
+            pBtn->set_id("ok");
+            add_button(pBtn, RET_OK, true);
+
+            pBtn.set( VclPtr<CancelButton>::Create(pButtonBox) );
+            pBtn->Show();
+            pBtn->set_id("cancel");
+            add_button(pBtn, RET_CANCEL, true);
+            nDefaultResponse = RET_CANCEL;
+            break;
+    }
+    set_default_response(nDefaultResponse);
+    sort_native_button_order(*pButtonBox);
+    m_pMessageBox->Show();
+    m_pGrid->Show();
 }
 
 void MessageDialog::create_owned_areas()

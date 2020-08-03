@@ -1899,32 +1899,32 @@ void ImplBorderWindow::UpdateView( bool bNewView, const Size& rNewOutSize )
 
 void ImplBorderWindow::InvalidateBorder()
 {
-    if ( IsReallyVisible() )
+    if ( !IsReallyVisible() )
+        return;
+
+    // invalidate only if we have a border
+    sal_Int32 nLeftBorder;
+    sal_Int32 nTopBorder;
+    sal_Int32 nRightBorder;
+    sal_Int32 nBottomBorder;
+    mpBorderView->GetBorder( nLeftBorder, nTopBorder, nRightBorder, nBottomBorder );
+    if ( !(nLeftBorder || nTopBorder || nRightBorder || nBottomBorder) )
+        return;
+
+    tools::Rectangle   aWinRect( Point( 0, 0 ), GetOutputSizePixel() );
+    vcl::Region      aRegion( aWinRect );
+    aWinRect.AdjustLeft(nLeftBorder );
+    aWinRect.AdjustTop(nTopBorder );
+    aWinRect.AdjustRight( -nRightBorder );
+    aWinRect.AdjustBottom( -nBottomBorder );
+    // no output area anymore, now invalidate all
+    if ( (aWinRect.Right() < aWinRect.Left()) ||
+         (aWinRect.Bottom() < aWinRect.Top()) )
+        Invalidate( InvalidateFlags::NoChildren );
+    else
     {
-        // invalidate only if we have a border
-        sal_Int32 nLeftBorder;
-        sal_Int32 nTopBorder;
-        sal_Int32 nRightBorder;
-        sal_Int32 nBottomBorder;
-        mpBorderView->GetBorder( nLeftBorder, nTopBorder, nRightBorder, nBottomBorder );
-        if ( nLeftBorder || nTopBorder || nRightBorder || nBottomBorder )
-        {
-            tools::Rectangle   aWinRect( Point( 0, 0 ), GetOutputSizePixel() );
-            vcl::Region      aRegion( aWinRect );
-            aWinRect.AdjustLeft(nLeftBorder );
-            aWinRect.AdjustTop(nTopBorder );
-            aWinRect.AdjustRight( -nRightBorder );
-            aWinRect.AdjustBottom( -nBottomBorder );
-            // no output area anymore, now invalidate all
-            if ( (aWinRect.Right() < aWinRect.Left()) ||
-                 (aWinRect.Bottom() < aWinRect.Top()) )
-                Invalidate( InvalidateFlags::NoChildren );
-            else
-            {
-                aRegion.Exclude( aWinRect );
-                Invalidate( aRegion, InvalidateFlags::NoChildren );
-            }
-        }
+        aRegion.Exclude( aWinRect );
+        Invalidate( aRegion, InvalidateFlags::NoChildren );
     }
 }
 

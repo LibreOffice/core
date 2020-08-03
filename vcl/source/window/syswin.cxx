@@ -902,66 +902,66 @@ OString SystemWindow::GetWindowState( WindowStateMask nMask ) const
 
 void SystemWindow::SetMenuBar(MenuBar* pMenuBar)
 {
-    if ( mpMenuBar != pMenuBar )
+    if ( mpMenuBar == pMenuBar )
+        return;
+
+    MenuBar* pOldMenuBar = mpMenuBar;
+    vcl::Window*  pOldWindow = nullptr;
+    VclPtr<vcl::Window> pNewWindow;
+    mpMenuBar = pMenuBar;
+
+    if ( mpWindowImpl->mpBorderWindow && (mpWindowImpl->mpBorderWindow->GetType() == WindowType::BORDERWINDOW) )
     {
-        MenuBar* pOldMenuBar = mpMenuBar;
-        vcl::Window*  pOldWindow = nullptr;
-        VclPtr<vcl::Window> pNewWindow;
-        mpMenuBar = pMenuBar;
-
-        if ( mpWindowImpl->mpBorderWindow && (mpWindowImpl->mpBorderWindow->GetType() == WindowType::BORDERWINDOW) )
+        if ( pOldMenuBar )
+            pOldWindow = pOldMenuBar->ImplGetWindow();
+        else
+            pOldWindow = nullptr;
+        if ( pOldWindow )
         {
-            if ( pOldMenuBar )
-                pOldWindow = pOldMenuBar->ImplGetWindow();
-            else
-                pOldWindow = nullptr;
-            if ( pOldWindow )
-            {
-                CallEventListeners( VclEventId::WindowMenubarRemoved, static_cast<void*>(pOldMenuBar) );
-                pOldWindow->SetAccessible( css::uno::Reference< css::accessibility::XAccessible >() );
-            }
-            if ( pMenuBar )
-            {
-                SAL_WARN_IF( pMenuBar->pWindow, "vcl", "SystemWindow::SetMenuBar() - MenuBars can only set in one SystemWindow at time" );
+            CallEventListeners( VclEventId::WindowMenubarRemoved, static_cast<void*>(pOldMenuBar) );
+            pOldWindow->SetAccessible( css::uno::Reference< css::accessibility::XAccessible >() );
+        }
+        if ( pMenuBar )
+        {
+            SAL_WARN_IF( pMenuBar->pWindow, "vcl", "SystemWindow::SetMenuBar() - MenuBars can only set in one SystemWindow at time" );
 
-                pNewWindow = MenuBar::ImplCreate(mpWindowImpl->mpBorderWindow, pOldWindow, pMenuBar);
-                static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetMenuBarWindow(pNewWindow);
+            pNewWindow = MenuBar::ImplCreate(mpWindowImpl->mpBorderWindow, pOldWindow, pMenuBar);
+            static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetMenuBarWindow(pNewWindow);
 
-                CallEventListeners( VclEventId::WindowMenubarAdded, static_cast<void*>(pMenuBar) );
-            }
-            else
-                static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetMenuBarWindow( nullptr );
-            ImplToBottomChild();
-            if ( pOldMenuBar )
-            {
-                bool bDelete = (pMenuBar == nullptr);
-                if( bDelete && pOldWindow )
-                {
-                    if( mpImplData->mpTaskPaneList )
-                        mpImplData->mpTaskPaneList->RemoveWindow( pOldWindow );
-                }
-                MenuBar::ImplDestroy( pOldMenuBar, bDelete );
-                if( bDelete )
-                    pOldWindow = nullptr;  // will be deleted in MenuBar::ImplDestroy,
-            }
-
+            CallEventListeners( VclEventId::WindowMenubarAdded, static_cast<void*>(pMenuBar) );
         }
         else
+            static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetMenuBarWindow( nullptr );
+        ImplToBottomChild();
+        if ( pOldMenuBar )
         {
-            if( pMenuBar )
-                pNewWindow = pMenuBar->ImplGetWindow();
-            if( pOldMenuBar )
-                pOldWindow = pOldMenuBar->ImplGetWindow();
+            bool bDelete = (pMenuBar == nullptr);
+            if( bDelete && pOldWindow )
+            {
+                if( mpImplData->mpTaskPaneList )
+                    mpImplData->mpTaskPaneList->RemoveWindow( pOldWindow );
+            }
+            MenuBar::ImplDestroy( pOldMenuBar, bDelete );
+            if( bDelete )
+                pOldWindow = nullptr;  // will be deleted in MenuBar::ImplDestroy,
         }
 
-        // update taskpane list to make menubar accessible
-        if( mpImplData->mpTaskPaneList )
-        {
-            if( pOldWindow )
-                mpImplData->mpTaskPaneList->RemoveWindow( pOldWindow );
-            if( pNewWindow )
-                mpImplData->mpTaskPaneList->AddWindow( pNewWindow );
-        }
+    }
+    else
+    {
+        if( pMenuBar )
+            pNewWindow = pMenuBar->ImplGetWindow();
+        if( pOldMenuBar )
+            pOldWindow = pOldMenuBar->ImplGetWindow();
+    }
+
+    // update taskpane list to make menubar accessible
+    if( mpImplData->mpTaskPaneList )
+    {
+        if( pOldWindow )
+            mpImplData->mpTaskPaneList->RemoveWindow( pOldWindow );
+        if( pNewWindow )
+            mpImplData->mpTaskPaneList->AddWindow( pNewWindow );
     }
 }
 

@@ -90,25 +90,25 @@ ParentClipMode Window::GetParentClipMode() const
 
 void Window::ExpandPaintClipRegion( const vcl::Region& rRegion )
 {
-    if( mpWindowImpl->mpPaintRegion )
+    if( !mpWindowImpl->mpPaintRegion )
+        return;
+
+    vcl::Region aPixRegion = LogicToPixel( rRegion );
+    vcl::Region aDevPixRegion = ImplPixelToDevicePixel( aPixRegion );
+
+    vcl::Region aWinChildRegion = *ImplGetWinChildClipRegion();
+    // only this region is in frame coordinates, so re-mirror it
+    if( ImplIsAntiparallel() )
     {
-        vcl::Region aPixRegion = LogicToPixel( rRegion );
-        vcl::Region aDevPixRegion = ImplPixelToDevicePixel( aPixRegion );
+        const OutputDevice *pOutDev = GetOutDev();
+        pOutDev->ReMirror( aWinChildRegion );
+    }
 
-        vcl::Region aWinChildRegion = *ImplGetWinChildClipRegion();
-        // only this region is in frame coordinates, so re-mirror it
-        if( ImplIsAntiparallel() )
-        {
-            const OutputDevice *pOutDev = GetOutDev();
-            pOutDev->ReMirror( aWinChildRegion );
-        }
-
-        aDevPixRegion.Intersect( aWinChildRegion );
-        if( ! aDevPixRegion.IsEmpty() )
-        {
-            mpWindowImpl->mpPaintRegion->Union( aDevPixRegion );
-            mbInitClipRegion = true;
-        }
+    aDevPixRegion.Intersect( aWinChildRegion );
+    if( ! aDevPixRegion.IsEmpty() )
+    {
+        mpWindowImpl->mpPaintRegion->Union( aDevPixRegion );
+        mbInitClipRegion = true;
     }
 }
 
@@ -659,19 +659,19 @@ void Window::ImplCalcOverlapRegion( const tools::Rectangle& rSourceRect, vcl::Re
         while ( pWindow );
     }
 
-    if ( bChildren )
+    if ( !bChildren )
+        return;
+
+    pWindow = mpWindowImpl->mpFirstChild;
+    while ( pWindow )
     {
-        pWindow = mpWindowImpl->mpFirstChild;
-        while ( pWindow )
+        if ( pWindow->mpWindowImpl->mbReallyVisible )
         {
-            if ( pWindow->mpWindowImpl->mbReallyVisible )
-            {
-                aTempRegion = aRegion;
-                pWindow->ImplIntersectWindowRegion( aTempRegion );
-                rRegion.Union( aTempRegion );
-            }
-            pWindow = pWindow->mpWindowImpl->mpNext;
+            aTempRegion = aRegion;
+            pWindow->ImplIntersectWindowRegion( aTempRegion );
+            rRegion.Union( aTempRegion );
         }
+        pWindow = pWindow->mpWindowImpl->mpNext;
     }
 }
 

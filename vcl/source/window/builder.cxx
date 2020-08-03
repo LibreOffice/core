@@ -1465,19 +1465,19 @@ void VclBuilder::extractBuffer(const OString &id, stringmap &rMap)
 void VclBuilder::extractStock(const OString &id, stringmap &rMap)
 {
     VclBuilder::stringmap::iterator aFind = rMap.find(OString("stock"));
+    if (aFind == rMap.end())
+        return;
+
+    stockinfo aInfo;
+    aInfo.m_sStock = aFind->second;
+    rMap.erase(aFind);
+    aFind = rMap.find(OString("icon-size"));
     if (aFind != rMap.end())
     {
-        stockinfo aInfo;
-        aInfo.m_sStock = aFind->second;
+        aInfo.m_nSize = aFind->second.toInt32();
         rMap.erase(aFind);
-        aFind = rMap.find(OString("icon-size"));
-        if (aFind != rMap.end())
-        {
-            aInfo.m_nSize = aFind->second.toInt32();
-            rMap.erase(aFind);
-        }
-        m_pParserState->m_aStockMap[id] = aInfo;
     }
+    m_pParserState->m_aStockMap[id] = aInfo;
 }
 
 void VclBuilder::extractButtonImage(const OString &id, stringmap &rMap, bool bRadio)

@@ -72,39 +72,38 @@ static void CreateNotebookBarToolBox(vcl::Window* pNotebookbarToolBox,
 {
     sal_uInt16 nItemId = 0;
     ToolBox* pToolbox = dynamic_cast<ToolBox*>(pNotebookbarToolBox);
-    if (pToolbox)
+    if (!pToolbox)
+        return;
+
+    pToolbox->InsertSeparator();
+    pToolbox->Show();
+    Size aSize(0, 0);
+    Image sImage;
+    pToolbox->InsertItem(aAddonNotebookBarItem.sCommandURL, m_xFrame, ToolBoxItemBits::NONE, aSize);
+    nItemId = pToolbox->GetItemId(aAddonNotebookBarItem.sCommandURL);
+    pToolbox->SetItemCommand(nItemId, aAddonNotebookBarItem.sCommandURL);
+    pToolbox->SetQuickHelpText(nItemId, aAddonNotebookBarItem.sLabel);
+
+    if (nIter < aImageVec.size())
     {
-        pToolbox->InsertSeparator();
-        pToolbox->Show();
-        Size aSize(0, 0);
-        Image sImage;
-        pToolbox->InsertItem(aAddonNotebookBarItem.sCommandURL, m_xFrame, ToolBoxItemBits::NONE,
-                             aSize);
-        nItemId = pToolbox->GetItemId(aAddonNotebookBarItem.sCommandURL);
-        pToolbox->SetItemCommand(nItemId, aAddonNotebookBarItem.sCommandURL);
-        pToolbox->SetQuickHelpText(nItemId, aAddonNotebookBarItem.sLabel);
-
-        if (nIter < aImageVec.size())
+        sImage = aImageVec[nIter];
+        if (!sImage)
         {
-            sImage = aImageVec[nIter];
-            if (!sImage)
-            {
-                sImage = vcl::CommandInfoProvider::GetImageForCommand(
-                    aAddonNotebookBarItem.sImageIdentifier, m_xFrame);
-            }
+            sImage = vcl::CommandInfoProvider::GetImageForCommand(
+                aAddonNotebookBarItem.sImageIdentifier, m_xFrame);
         }
-
-        if (aAddonNotebookBarItem.sStyle == STYLE_TEXT)
-            pToolbox->SetItemText(nItemId, aAddonNotebookBarItem.sLabel);
-        else if (aAddonNotebookBarItem.sStyle == STYLE_ICON)
-            pToolbox->SetItemImage(nItemId, sImage);
-        else
-        {
-            pToolbox->SetItemText(nItemId, aAddonNotebookBarItem.sLabel);
-            pToolbox->SetItemImage(nItemId, sImage);
-        }
-        pToolbox->Show();
     }
+
+    if (aAddonNotebookBarItem.sStyle == STYLE_TEXT)
+        pToolbox->SetItemText(nItemId, aAddonNotebookBarItem.sLabel);
+    else if (aAddonNotebookBarItem.sStyle == STYLE_ICON)
+        pToolbox->SetItemImage(nItemId, sImage);
+    else
+    {
+        pToolbox->SetItemText(nItemId, aAddonNotebookBarItem.sLabel);
+        pToolbox->SetItemImage(nItemId, sImage);
+    }
+    pToolbox->Show();
 }
 
 NotebookBarAddonsMerger::NotebookBarAddonsMerger() {}
