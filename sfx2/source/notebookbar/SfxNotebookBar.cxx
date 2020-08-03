@@ -30,6 +30,7 @@
 #include <framework/addonsoptions.hxx>
 #include <vcl/NotebookBarAddonsMerger.hxx>
 #include <vector>
+#include <map>
 #include <vcl/WeldedTabbedNotebookbar.hxx>
 
 using namespace sfx2;
@@ -366,13 +367,16 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
         if ((!sFile.isEmpty() && bChangedFile) || !pNotebookBar || !pNotebookBar->IsVisible()
             || bReloadNotebookbar || comphelper::LibreOfficeKit::isActive())
         {
+            const SfxViewShell* pViewShell = SfxViewShell::Current();
+
             // Notebookbar was loaded too early what caused:
             //   * in LOK: Paste Special feature was incorrectly initialized
             // Skip first request so Notebookbar will be initialized after document was loaded
-            static bool bSkipFirstInit = true;
-            if (comphelper::LibreOfficeKit::isActive() && bSkipFirstInit)
+            static std::map<const void*, bool> bSkippedFirstInit;
+            if (comphelper::LibreOfficeKit::isActive()
+                && bSkippedFirstInit.find(pViewShell) == bSkippedFirstInit.end())
             {
-                bSkipFirstInit = false;
+                bSkippedFirstInit[pViewShell] = true;
                 return false;
             }
 
@@ -393,7 +397,6 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
             pNotebookBar = pSysWindow->GetNotebookBar();
             pNotebookBar->Show();
 
-            const SfxViewShell* pViewShell = SfxViewShell::Current();
 
             bool hasWeldedWrapper = m_pNotebookBarWeldedWrapper.find(pViewShell) != m_pNotebookBarWeldedWrapper.end();
             if ((!hasWeldedWrapper || bReloadNotebookbar) && pNotebookBar->IsWelded())
