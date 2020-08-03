@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "287d9fb2_9c753ac4",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-03T13:25:51Z",
+      "side": 1,
+      "message": "here To should also start with a capital. And now you don\u0027t convert to RID, do you? Something like\n\n    PropertyNameToUIName",
+      "range": {
+        "startLine": 79,
+        "startChar": 28,
+        "endLine": 79,
+        "endChar": 33
+      },
+      "revId": "18bc3c9897d09273836db5bdd51ff12c19a7183e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
