@@ -125,12 +125,6 @@ protected:
     virtual ~AbstractQrCodeGenDialog() override = default;
 };
 
-class VCL_DLLPUBLIC AbstractAboutDialog : public VclAbstractDialog
-{
-protected:
-    virtual ~AbstractAboutDialog() override = default;
-};
-
 class VCL_DLLPUBLIC AbstractAdditionsDialog : public VclAbstractDialog
 {
 protected:
@@ -178,10 +172,6 @@ public:
     // creates instance of ScreenshotAnnotationDlg from cui
     virtual VclPtr<AbstractScreenshotAnnotationDlg> CreateScreenshotAnnotationDlg(
         weld::Dialog& rParentDialog) = 0;
-
-    // create about dialog
-    virtual VclPtr<AbstractAboutDialog>
-    CreateAboutDialog(weld::Window* pParent) = 0;
 
     // create additions dialog
     virtual VclPtr<AbstractAdditionsDialog>

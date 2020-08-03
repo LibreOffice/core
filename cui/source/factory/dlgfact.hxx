@@ -740,20 +740,6 @@ public:
     virtual short Execute() override;
 };
 
-class AboutDialog;
-class AbstractAboutDialog_Impl : public AbstractAboutDialog
-{
-protected:
-    std::unique_ptr<AboutDialog> m_xDlg;
-
-public:
-    explicit AbstractAboutDialog_Impl(std::unique_ptr<AboutDialog> p)
-        : m_xDlg(std::move(p))
-    {
-    }
-    virtual short Execute() override;
-};
-
 class AbstractAdditionsDialog_Impl : public AbstractAdditionsDialog
 {
 protected:
@@ -970,7 +956,7 @@ public:
     virtual VclPtr<AbstractAdditionsDialog>
     CreateAdditionsDialog(weld::Window* pParent, const OUString& sAdditionsTag) override;
 
-    virtual VclPtr<AbstractAboutDialog> CreateAboutDialog(weld::Window* pParent) override;
+    virtual VclPtr<VclAbstractDialog> CreateAboutDialog(weld::Window* pParent) override;
 
     virtual VclPtr<VclAbstractDialog> CreateTipOfTheDayDialog(weld::Window* pParent) override;
 
