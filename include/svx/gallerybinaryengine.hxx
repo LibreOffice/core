@@ -24,6 +24,7 @@
 #include <svx/svxdllapi.h>
 #include <svx/fmmodel.hxx>
 #include <svx/gallerystoragelocations.hxx>
+#include <svx/galleryfilestorage.hxx>
 #include <tools/urlobj.hxx>
 #include <sot/storage.hxx>
 
@@ -39,7 +40,7 @@ struct GalleryObject;
 class FmFormModel;
 class GalleryTheme;
 
-class SVXCORE_DLLPUBLIC GalleryBinaryEngine
+class SVXCORE_DLLPUBLIC GalleryBinaryEngine : public GalleryFileStorage
 {
 private:
     tools::SvRef<SotStorage> m_aSvDrawStorageRef;

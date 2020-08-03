@@ -156,6 +156,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/gallery2/gallerybinaryengineentry \
     svx/source/gallery2/gallerystoragelocations \
     svx/source/gallery2/galleryobjectcollection \
+    svx/source/gallery2/galleryfilestorage \
     svx/source/items/chrtitem \
     svx/source/items/clipfmtitem \
     svx/source/items/customshapeitem \
