@@ -85,6 +85,7 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/dispatch/popupmenudispatcher \
     framework/source/dispatch/servicehandler \
     framework/source/dispatch/systemexec \
+    framework/source/dispatch/quickstart \
     framework/source/helper/dockingareadefaultacceptor \
     framework/source/helper/ocomponentaccess \
     framework/source/helper/ocomponentenumeration \

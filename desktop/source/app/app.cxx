@@ -123,6 +123,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/window.hxx>
 #include "langselect.hxx"
+#include <framework/quickstart.hxx>
 
 #if defined MACOSX
 #include <errno.h>
@@ -1242,6 +1243,8 @@ int Desktop::Main()
 
     CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
 
+    framework::SetIsQuickstart(rCmdLineArgs.IsQuickstart());
+
     Translate::SetReadStringHook(ReplaceStringHookProc);
 
     // Startup screen
@@ -1536,9 +1539,16 @@ int Desktop::Main()
 
         SetSplashScreenProgress(80);
 
+        // REVIEW QUESTION:
+        // Originally I wanted to hide this ifdef inside InitializeQuickstartMode(),
+        // thinking that it will show the intent a bit better.
+        // But then compiler complains about unused function parameter (rxContext).
+        // Is putting ifdef here okay?
+#if defined(ENABLE_QUICKSTART_APPLET)
         if ( !rCmdLineArgs.IsInvisible() &&
              !rCmdLineArgs.IsNoQuickstart() )
             InitializeQuickstartMode( xContext );
+#endif
 
         try
         {
