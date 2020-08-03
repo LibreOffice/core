@@ -341,9 +341,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             }
             else if ( oArg == "quickstart" )
             {
-#if defined(ENABLE_QUICKSTART_APPLET)
                 m_quickstart = true;
-#endif
                 m_noquickstart = false;
             }
             else if ( oArg == "quickstart=no" )
