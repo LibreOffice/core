@@ -23,6 +23,7 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <svx/inspectorproperties.hrc>
 
 using namespace css;
 
