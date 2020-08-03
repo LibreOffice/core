@@ -39,6 +39,8 @@ namespace jfw_plugin
 #define JFW_PLUGIN_ARCH "sparc"
 #elif defined X86_64
 #define JFW_PLUGIN_ARCH "amd64"
+#elif defined ARM64
+#define JFW_PLUGIN_ARCH "arm64"
 #elif defined INTEL
 #define JFW_PLUGIN_ARCH "i386"
 #elif defined POWERPC64
