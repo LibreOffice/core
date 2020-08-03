@@ -2122,39 +2122,39 @@ void SAL_CALL UnoControlListBoxModel::setFastPropertyValue_NoBroadcast( sal_Int3
 {
     UnoControlModel::setFastPropertyValue_NoBroadcast( nHandle, rValue );
 
-    if ( nHandle == BASEPROPERTY_STRINGITEMLIST )
-    {
-        // reset selection
-        uno::Sequence<sal_Int16> aSeq;
-        setDependentFastPropertyValue( BASEPROPERTY_SELECTEDITEMS, uno::Any(aSeq) );
+    if ( nHandle != BASEPROPERTY_STRINGITEMLIST )
+        return;
 
-        if ( !m_xData->m_bSettingLegacyProperty )
-        {
-            // synchronize the legacy StringItemList property with our list items
-            Sequence< OUString > aStringItemList;
-            Any aPropValue;
-            getFastPropertyValue( aPropValue, BASEPROPERTY_STRINGITEMLIST );
-            OSL_VERIFY( aPropValue >>= aStringItemList );
+    // reset selection
+    uno::Sequence<sal_Int16> aSeq;
+    setDependentFastPropertyValue( BASEPROPERTY_SELECTEDITEMS, uno::Any(aSeq) );
 
-            ::std::vector< ListItem > aItems( aStringItemList.getLength() );
-            ::std::transform(
-                aStringItemList.begin(),
-                aStringItemList.end(),
-                aItems.begin(),
-                CreateListItem()
-            );
-            m_xData->setAllItems( aItems );
+    if ( m_xData->m_bSettingLegacyProperty )
+        return;
 
-            // since an XItemListListener does not have a "all items modified" or some such method,
-            // we simulate this by notifying removal of all items, followed by insertion of all new
-            // items
-            lang::EventObject aEvent;
-            aEvent.Source = *this;
-            m_aItemListListeners.notifyEach( &XItemListListener::itemListChanged, aEvent );
-            // TODO: OPropertySetHelper calls into this method with the mutex locked ...
-            // which is wrong for the above notifications ...
-        }
-    }
+    // synchronize the legacy StringItemList property with our list items
+    Sequence< OUString > aStringItemList;
+    Any aPropValue;
+    getFastPropertyValue( aPropValue, BASEPROPERTY_STRINGITEMLIST );
+    OSL_VERIFY( aPropValue >>= aStringItemList );
+
+    ::std::vector< ListItem > aItems( aStringItemList.getLength() );
+    ::std::transform(
+        aStringItemList.begin(),
+        aStringItemList.end(),
+        aItems.begin(),
+        CreateListItem()
+    );
+    m_xData->setAllItems( aItems );
+
+    // since an XItemListListener does not have a "all items modified" or some such method,
+    // we simulate this by notifying removal of all items, followed by insertion of all new
+    // items
+    lang::EventObject aEvent;
+    aEvent.Source = *this;
+    m_aItemListListeners.notifyEach( &XItemListListener::itemListChanged, aEvent );
+    // TODO: OPropertySetHelper calls into this method with the mutex locked ...
+    // which is wrong for the above notifications ...
 }
 
 
@@ -2638,23 +2638,23 @@ void UnoListBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount )
     uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     sal_uInt16 nOldLen = static_cast<sal_uInt16>(aSeq.getLength());
-    if ( nOldLen && ( nPos < nOldLen ) )
-    {
-        if ( nCount > ( nOldLen-nPos ) )
-            nCount = nOldLen-nPos;
+    if ( !(nOldLen && ( nPos < nOldLen )) )
+        return;
 
-        sal_uInt16 nNewLen = nOldLen - nCount;
+    if ( nCount > ( nOldLen-nPos ) )
+        nCount = nOldLen-nPos;
 
-        uno::Sequence< OUString> aNewSeq( nNewLen );
+    sal_uInt16 nNewLen = nOldLen - nCount;
 
-        // Items before the Remove-Position
-        std::copy(aSeq.begin(), std::next(aSeq.begin(), nPos), aNewSeq.begin());
+    uno::Sequence< OUString> aNewSeq( nNewLen );
 
-        // Rest of Items
-        std::copy(std::next(aSeq.begin(), nPos + nCount), aSeq.end(), std::next(aNewSeq.begin(), nPos));
+    // Items before the Remove-Position
+    std::copy(aSeq.begin(), std::next(aSeq.begin(), nPos), aNewSeq.begin());
 
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), uno::Any(aNewSeq), true );
-    }
+    // Rest of Items
+    std::copy(std::next(aSeq.begin(), nPos + nCount), aSeq.end(), std::next(aNewSeq.begin(), nPos));
+
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), uno::Any(aNewSeq), true );
 }
 
 sal_Int16 UnoListBoxControl::getItemCount()
@@ -2937,32 +2937,32 @@ void SAL_CALL UnoControlComboBoxModel::setFastPropertyValue_NoBroadcast( sal_Int
 {
     UnoControlModel::setFastPropertyValue_NoBroadcast( nHandle, rValue );
 
-    if ( nHandle == BASEPROPERTY_STRINGITEMLIST && !m_xData->m_bSettingLegacyProperty)
-    {
-        // synchronize the legacy StringItemList property with our list items
-        Sequence< OUString > aStringItemList;
-        Any aPropValue;
-        getFastPropertyValue( aPropValue, BASEPROPERTY_STRINGITEMLIST );
-        OSL_VERIFY( aPropValue >>= aStringItemList );
+    if (nHandle != BASEPROPERTY_STRINGITEMLIST || m_xData->m_bSettingLegacyProperty)
+        return;
 
-        ::std::vector< ListItem > aItems( aStringItemList.getLength() );
-        ::std::transform(
-            aStringItemList.begin(),
-            aStringItemList.end(),
-            aItems.begin(),
-            CreateListItem()
-        );
-        m_xData->setAllItems( aItems );
+    // synchronize the legacy StringItemList property with our list items
+    Sequence< OUString > aStringItemList;
+    Any aPropValue;
+    getFastPropertyValue( aPropValue, BASEPROPERTY_STRINGITEMLIST );
+    OSL_VERIFY( aPropValue >>= aStringItemList );
 
-        // since an XItemListListener does not have a "all items modified" or some such method,
-        // we simulate this by notifying removal of all items, followed by insertion of all new
-        // items
-        lang::EventObject aEvent;
-        aEvent.Source = *this;
-        m_aItemListListeners.notifyEach( &XItemListListener::itemListChanged, aEvent );
-        // TODO: OPropertySetHelper calls into this method with the mutex locked ...
-        // which is wrong for the above notifications ...
-    }
+    ::std::vector< ListItem > aItems( aStringItemList.getLength() );
+    ::std::transform(
+        aStringItemList.begin(),
+        aStringItemList.end(),
+        aItems.begin(),
+        CreateListItem()
+    );
+    m_xData->setAllItems( aItems );
+
+    // since an XItemListListener does not have a "all items modified" or some such method,
+    // we simulate this by notifying removal of all items, followed by insertion of all new
+    // items
+    lang::EventObject aEvent;
+    aEvent.Source = *this;
+    m_aItemListListeners.notifyEach( &XItemListListener::itemListChanged, aEvent );
+    // TODO: OPropertySetHelper calls into this method with the mutex locked ...
+    // which is wrong for the above notifications ...
 }
 
 uno::Any UnoControlComboBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -3231,23 +3231,23 @@ void UnoComboBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount )
     uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     sal_uInt16 nOldLen = static_cast<sal_uInt16>(aSeq.getLength());
-    if ( nOldLen && ( nPos < nOldLen ) )
-    {
-        if ( nCount > ( nOldLen-nPos ) )
-            nCount = nOldLen-nPos;
+    if ( !nOldLen || ( nPos >= nOldLen ) )
+        return;
 
-        sal_uInt16 nNewLen = nOldLen - nCount;
+    if ( nCount > ( nOldLen-nPos ) )
+        nCount = nOldLen-nPos;
 
-        uno::Sequence< OUString> aNewSeq( nNewLen );
+    sal_uInt16 nNewLen = nOldLen - nCount;
 
-        // items before the deletion position
-        std::copy(aSeq.begin(), std::next(aSeq.begin(), nPos), aNewSeq.begin());
+    uno::Sequence< OUString> aNewSeq( nNewLen );
 
-        // remainder of old items
-        std::copy(std::next(aSeq.begin(), nPos + nCount), aSeq.end(), std::next(aNewSeq.begin(), nPos));
+    // items before the deletion position
+    std::copy(aSeq.begin(), std::next(aSeq.begin(), nPos), aNewSeq.begin());
 
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), uno::Any(aNewSeq), true );
-    }
+    // remainder of old items
+    std::copy(std::next(aSeq.begin(), nPos + nCount), aSeq.end(), std::next(aNewSeq.begin(), nPos));
+
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), uno::Any(aNewSeq), true );
 }
 
 sal_Int16 UnoComboBoxControl::getItemCount()

@@ -88,79 +88,79 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclMenuEvent&, rMenuEvent, void )
 {
     DBG_ASSERT( rMenuEvent.GetMenu() && mpMenu, "Menu???" );
 
-    if ( rMenuEvent.GetMenu() == mpMenu )  // Also called for the root menu
+    if ( rMenuEvent.GetMenu() != mpMenu )  // Also called for the root menu
+        return;
+
+    switch ( rMenuEvent.GetId() )
     {
-        switch ( rMenuEvent.GetId() )
+        case VclEventId::MenuSelect:
         {
-            case VclEventId::MenuSelect:
+            if ( maMenuListeners.getLength() )
             {
-                if ( maMenuListeners.getLength() )
-                {
-                    css::awt::MenuEvent aEvent;
-                    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
-                    aEvent.MenuId = mpMenu->GetCurItemId();
-                    maMenuListeners.itemSelected( aEvent );
-                }
+                css::awt::MenuEvent aEvent;
+                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.MenuId = mpMenu->GetCurItemId();
+                maMenuListeners.itemSelected( aEvent );
             }
-            break;
-            case VclEventId::ObjectDying:
+        }
+        break;
+        case VclEventId::ObjectDying:
+        {
+            mpMenu = nullptr;
+        }
+        break;
+        case VclEventId::MenuHighlight:
+        {
+            if ( maMenuListeners.getLength() )
             {
-                mpMenu = nullptr;
+                css::awt::MenuEvent aEvent;
+                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.MenuId = mpMenu->GetCurItemId();
+                maMenuListeners.itemHighlighted( aEvent );
             }
-            break;
-            case VclEventId::MenuHighlight:
+        }
+        break;
+        case VclEventId::MenuActivate:
+        {
+            if ( maMenuListeners.getLength() )
             {
-                if ( maMenuListeners.getLength() )
-                {
-                    css::awt::MenuEvent aEvent;
-                    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
-                    aEvent.MenuId = mpMenu->GetCurItemId();
-                    maMenuListeners.itemHighlighted( aEvent );
-                }
+                css::awt::MenuEvent aEvent;
+                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.MenuId = mpMenu->GetCurItemId();
+                maMenuListeners.itemActivated( aEvent );
             }
-            break;
-            case VclEventId::MenuActivate:
+        }
+        break;
+        case VclEventId::MenuDeactivate:
+        {
+            if ( maMenuListeners.getLength() )
             {
-                if ( maMenuListeners.getLength() )
-                {
-                    css::awt::MenuEvent aEvent;
-                    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
-                    aEvent.MenuId = mpMenu->GetCurItemId();
-                    maMenuListeners.itemActivated( aEvent );
-                }
+                css::awt::MenuEvent aEvent;
+                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.MenuId = mpMenu->GetCurItemId();
+                maMenuListeners.itemDeactivated( aEvent );
             }
-            break;
-            case VclEventId::MenuDeactivate:
-            {
-                if ( maMenuListeners.getLength() )
-                {
-                    css::awt::MenuEvent aEvent;
-                    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
-                    aEvent.MenuId = mpMenu->GetCurItemId();
-                    maMenuListeners.itemDeactivated( aEvent );
-                }
-            }
-            break;
+        }
+        break;
 
-            // ignore accessibility events
-            case VclEventId::MenuEnable:
-            case VclEventId::MenuInsertItem:
-            case VclEventId::MenuRemoveItem:
-            case VclEventId::MenuSubmenuActivate:
-            case VclEventId::MenuSubmenuDeactivate:
-            case VclEventId::MenuSubmenuChanged:
-            case VclEventId::MenuDehighlight:
-            case VclEventId::MenuDisable:
-            case VclEventId::MenuItemTextChanged:
-            case VclEventId::MenuItemChecked:
-            case VclEventId::MenuItemUnchecked:
-            case VclEventId::MenuShow:
-            case VclEventId::MenuHide:
-            break;
+        // ignore accessibility events
+        case VclEventId::MenuEnable:
+        case VclEventId::MenuInsertItem:
+        case VclEventId::MenuRemoveItem:
+        case VclEventId::MenuSubmenuActivate:
+        case VclEventId::MenuSubmenuDeactivate:
+        case VclEventId::MenuSubmenuChanged:
+        case VclEventId::MenuDehighlight:
+        case VclEventId::MenuDisable:
+        case VclEventId::MenuItemTextChanged:
+        case VclEventId::MenuItemChecked:
+        case VclEventId::MenuItemUnchecked:
+        case VclEventId::MenuShow:
+        case VclEventId::MenuHide:
+        break;
 
-            default:    OSL_FAIL( "MenuEventListener - Unknown event!" );
-       }
-    }
+        default:    OSL_FAIL( "MenuEventListener - Unknown event!" );
+   }
 }
 
 

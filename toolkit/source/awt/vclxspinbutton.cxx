@@ -234,45 +234,45 @@ namespace toolkit
         sal_Int32 nValue = 0;
         bool  bIsLongValue = ( Value >>= nValue );
 
-        if ( GetWindow() )
+        if ( !GetWindow() )
+            return;
+
+        sal_uInt16 nPropertyId = GetPropertyId( PropertyName );
+        switch ( nPropertyId )
         {
-            sal_uInt16 nPropertyId = GetPropertyId( PropertyName );
-            switch ( nPropertyId )
-            {
-            case BASEPROPERTY_BACKGROUNDCOLOR:
-                // the default implementation of the base class doesn't work here, since our
-                // interpretation for this property is slightly different
-                setButtonLikeFaceColor( GetWindow(), Value);
-                break;
+        case BASEPROPERTY_BACKGROUNDCOLOR:
+            // the default implementation of the base class doesn't work here, since our
+            // interpretation for this property is slightly different
+            setButtonLikeFaceColor( GetWindow(), Value);
+            break;
 
-            case BASEPROPERTY_SPINVALUE:
-                if ( bIsLongValue )
-                    setValue( nValue );
-                break;
+        case BASEPROPERTY_SPINVALUE:
+            if ( bIsLongValue )
+                setValue( nValue );
+            break;
 
-            case BASEPROPERTY_SPINVALUE_MIN:
-                if ( bIsLongValue )
-                    setMinimum( nValue );
-                break;
+        case BASEPROPERTY_SPINVALUE_MIN:
+            if ( bIsLongValue )
+                setMinimum( nValue );
+            break;
 
-            case BASEPROPERTY_SPINVALUE_MAX:
-                if ( bIsLongValue )
-                    setMaximum( nValue );
-                break;
+        case BASEPROPERTY_SPINVALUE_MAX:
+            if ( bIsLongValue )
+                setMaximum( nValue );
+            break;
 
-            case BASEPROPERTY_SPININCREMENT:
-                if ( bIsLongValue )
-                    setSpinIncrement( nValue );
-                break;
+        case BASEPROPERTY_SPININCREMENT:
+            if ( bIsLongValue )
+                setSpinIncrement( nValue );
+            break;
 
-            case BASEPROPERTY_ORIENTATION:
-                if ( bIsLongValue )
-                    lcl_modifyStyle( GetWindow(), WB_HSCROLL, nValue == ScrollBarOrientation::HORIZONTAL );
-                break;
+        case BASEPROPERTY_ORIENTATION:
+            if ( bIsLongValue )
+                lcl_modifyStyle( GetWindow(), WB_HSCROLL, nValue == ScrollBarOrientation::HORIZONTAL );
+            break;
 
-            default:
-                VCLXWindow::setProperty( PropertyName, Value );
-            }
+        default:
+            VCLXWindow::setProperty( PropertyName, Value );
         }
     }
 

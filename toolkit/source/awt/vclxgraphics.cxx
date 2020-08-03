@@ -98,30 +98,30 @@ void VCLXGraphics::initAttrs()
 
 void VCLXGraphics::InitOutputDevice( InitOutDevFlags nFlags )
 {
-    if(mpOutputDevice)
+    if(!mpOutputDevice)
+        return;
+
+    SolarMutexGuard aVclGuard;
+
+    if ( nFlags & InitOutDevFlags::FONT )
     {
-        SolarMutexGuard aVclGuard;
-
-        if ( nFlags & InitOutDevFlags::FONT )
-        {
-            mpOutputDevice->SetFont( maFont );
-            mpOutputDevice->SetTextColor( maTextColor );
-            mpOutputDevice->SetTextFillColor( maTextFillColor );
-        }
-
-        if ( nFlags & InitOutDevFlags::COLORS )
-        {
-            mpOutputDevice->SetLineColor( maLineColor );
-            mpOutputDevice->SetFillColor( maFillColor );
-        }
-
-        mpOutputDevice->SetRasterOp( meRasterOp );
-
-        if( mpClipRegion )
-            mpOutputDevice->SetClipRegion( *mpClipRegion );
-        else
-            mpOutputDevice->SetClipRegion();
+        mpOutputDevice->SetFont( maFont );
+        mpOutputDevice->SetTextColor( maTextColor );
+        mpOutputDevice->SetTextFillColor( maTextFillColor );
     }
+
+    if ( nFlags & InitOutDevFlags::COLORS )
+    {
+        mpOutputDevice->SetLineColor( maLineColor );
+        mpOutputDevice->SetFillColor( maFillColor );
+    }
+
+    mpOutputDevice->SetRasterOp( meRasterOp );
+
+    if( mpClipRegion )
+        mpOutputDevice->SetClipRegion( *mpClipRegion );
+    else
+        mpOutputDevice->SetClipRegion();
 }
 
 uno::Reference< awt::XDevice > VCLXGraphics::getDevice()
@@ -274,32 +274,32 @@ void VCLXGraphics::draw( const uno::Reference< awt::XDisplayBitmap >& rxBitmapHa
 {
     SolarMutexGuard aGuard;
 
-    if( mpOutputDevice )
+    if( !mpOutputDevice )
+        return;
+
+    InitOutputDevice( InitOutDevFlags::NONE);
+    uno::Reference< awt::XBitmap > xBitmap( rxBitmapHandle, uno::UNO_QUERY );
+    BitmapEx aBmpEx = VCLUnoHelper::GetBitmap( xBitmap );
+
+    Point aPos(nDestX - nSourceX, nDestY - nSourceY);
+    Size aSz = aBmpEx.GetSizePixel();
+
+    if(nDestWidth != nSourceWidth)
     {
-        InitOutputDevice( InitOutDevFlags::NONE);
-        uno::Reference< awt::XBitmap > xBitmap( rxBitmapHandle, uno::UNO_QUERY );
-        BitmapEx aBmpEx = VCLUnoHelper::GetBitmap( xBitmap );
-
-        Point aPos(nDestX - nSourceX, nDestY - nSourceY);
-        Size aSz = aBmpEx.GetSizePixel();
-
-        if(nDestWidth != nSourceWidth)
-        {
-            float zoomX = static_cast<float>(nDestWidth) / static_cast<float>(nSourceWidth);
-            aSz.setWidth( static_cast<long>(static_cast<float>(aSz.Width()) * zoomX) );
-        }
-
-        if(nDestHeight != nSourceHeight)
-        {
-            float zoomY = static_cast<float>(nDestHeight) / static_cast<float>(nSourceHeight);
-            aSz.setHeight( static_cast<long>(static_cast<float>(aSz.Height()) * zoomY) );
-        }
-
-        if(nSourceX || nSourceY || aSz.Width() != nSourceWidth || aSz.Height() != nSourceHeight)
-            mpOutputDevice->IntersectClipRegion(vcl::Region(tools::Rectangle(nDestX, nDestY, nDestX + nDestWidth - 1, nDestY + nDestHeight - 1)));
-
-        mpOutputDevice->DrawBitmapEx( aPos, aSz, aBmpEx );
+        float zoomX = static_cast<float>(nDestWidth) / static_cast<float>(nSourceWidth);
+        aSz.setWidth( static_cast<long>(static_cast<float>(aSz.Width()) * zoomX) );
     }
+
+    if(nDestHeight != nSourceHeight)
+    {
+        float zoomY = static_cast<float>(nDestHeight) / static_cast<float>(nSourceHeight);
+        aSz.setHeight( static_cast<long>(static_cast<float>(aSz.Height()) * zoomY) );
+    }
+
+    if(nSourceX || nSourceY || aSz.Width() != nSourceWidth || aSz.Height() != nSourceHeight)
+        mpOutputDevice->IntersectClipRegion(vcl::Region(tools::Rectangle(nDestX, nDestY, nDestX + nDestWidth - 1, nDestY + nDestHeight - 1)));
+
+    mpOutputDevice->DrawBitmapEx( aPos, aSz, aBmpEx );
 }
 
 void VCLXGraphics::drawPixel( sal_Int32 x, sal_Int32 y )
@@ -432,19 +432,19 @@ void VCLXGraphics::drawGradient( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_
 {
     SolarMutexGuard aGuard;
 
-    if( mpOutputDevice )
-    {
-        InitOutputDevice( InitOutDevFlags::COLORS );
-        Gradient aGradient(static_cast<GradientStyle>(rGradient.Style), Color(rGradient.StartColor), Color(rGradient.EndColor));
-        aGradient.SetAngle(rGradient.Angle);
-        aGradient.SetBorder(rGradient.Border);
-        aGradient.SetOfsX(rGradient.XOffset);
-        aGradient.SetOfsY(rGradient.YOffset);
-        aGradient.SetStartIntensity(rGradient.StartIntensity);
-        aGradient.SetEndIntensity(rGradient.EndIntensity);
-        aGradient.SetSteps(rGradient.StepCount);
-        mpOutputDevice->DrawGradient( tools::Rectangle( Point( x, y ), Size( width, height ) ), aGradient );
-    }
+    if( !mpOutputDevice )
+        return;
+
+    InitOutputDevice( InitOutDevFlags::COLORS );
+    Gradient aGradient(static_cast<GradientStyle>(rGradient.Style), Color(rGradient.StartColor), Color(rGradient.EndColor));
+    aGradient.SetAngle(rGradient.Angle);
+    aGradient.SetBorder(rGradient.Border);
+    aGradient.SetOfsX(rGradient.XOffset);
+    aGradient.SetOfsY(rGradient.YOffset);
+    aGradient.SetStartIntensity(rGradient.StartIntensity);
+    aGradient.SetEndIntensity(rGradient.EndIntensity);
+    aGradient.SetSteps(rGradient.StepCount);
+    mpOutputDevice->DrawGradient( tools::Rectangle( Point( x, y ), Size( width, height ) ), aGradient );
 }
 
 void VCLXGraphics::drawText( sal_Int32 x, sal_Int32 y, const OUString& rText )

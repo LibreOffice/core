@@ -140,22 +140,22 @@ void VCLXTabPageContainer::ProcessWindowEvent( const VclWindowEvent& _rVclWindow
 {
     SolarMutexClearableGuard aGuard;
     VclPtr<TabControl> pTabControl = GetAs<TabControl>();
-    if ( pTabControl )
+    if ( !pTabControl )
+        return;
+
+    switch ( _rVclWindowEvent.GetId() )
     {
-        switch ( _rVclWindowEvent.GetId() )
+        case VclEventId::TabpageActivate:
         {
-            case VclEventId::TabpageActivate:
-            {
-                sal_uLong page = reinterpret_cast<sal_uLong>(_rVclWindowEvent.GetData());
-                awt::tab::TabPageActivatedEvent aEvent(nullptr,page);
-                m_aTabPageListeners.tabPageActivated(aEvent);
-                break;
-            }
-            default:
-                aGuard.clear();
-                VCLXWindow::ProcessWindowEvent( _rVclWindowEvent );
-                break;
+            sal_uLong page = reinterpret_cast<sal_uLong>(_rVclWindowEvent.GetData());
+            awt::tab::TabPageActivatedEvent aEvent(nullptr,page);
+            m_aTabPageListeners.tabPageActivated(aEvent);
+            break;
         }
+        default:
+            aGuard.clear();
+            VCLXWindow::ProcessWindowEvent( _rVclWindowEvent );
+            break;
     }
 }
 void SAL_CALL VCLXTabPageContainer::disposing( const css::lang::EventObject& /*Source*/ )

@@ -489,42 +489,42 @@ void VCLXButton::setProperty( const OUString& PropertyName, const css::uno::Any&
     SolarMutexGuard aGuard;
 
     VclPtr< Button > pButton = GetAs< Button >();
-    if ( pButton )
+    if ( !pButton )
+        return;
+
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
     {
-        sal_uInt16 nPropType = GetPropertyId( PropertyName );
-        switch ( nPropType )
+        case BASEPROPERTY_FOCUSONCLICK:
+            ::toolkit::adjustBooleanWindowStyle( Value, pButton, WB_NOPOINTERFOCUS, true );
+            break;
+
+        case BASEPROPERTY_TOGGLE:
+            ::toolkit::adjustBooleanWindowStyle( Value, pButton, WB_TOGGLE, false );
+            break;
+
+        case BASEPROPERTY_DEFAULTBUTTON:
         {
-            case BASEPROPERTY_FOCUSONCLICK:
-                ::toolkit::adjustBooleanWindowStyle( Value, pButton, WB_NOPOINTERFOCUS, true );
-                break;
-
-            case BASEPROPERTY_TOGGLE:
-                ::toolkit::adjustBooleanWindowStyle( Value, pButton, WB_TOGGLE, false );
-                break;
-
-            case BASEPROPERTY_DEFAULTBUTTON:
+            WinBits nStyle = pButton->GetStyle() | WB_DEFBUTTON;
+            bool b = bool();
+            if ( ( Value >>= b ) && !b )
+                nStyle &= ~WB_DEFBUTTON;
+            pButton->SetStyle( nStyle );
+        }
+        break;
+        case BASEPROPERTY_STATE:
+        {
+            if ( GetWindow()->GetType() == WindowType::PUSHBUTTON )
             {
-                WinBits nStyle = pButton->GetStyle() | WB_DEFBUTTON;
-                bool b = bool();
-                if ( ( Value >>= b ) && !b )
-                    nStyle &= ~WB_DEFBUTTON;
-                pButton->SetStyle( nStyle );
+                sal_Int16 n = sal_Int16();
+                if ( Value >>= n )
+                    static_cast<PushButton*>(pButton.get())->SetState( static_cast<TriState>(n) );
             }
-            break;
-            case BASEPROPERTY_STATE:
-            {
-                if ( GetWindow()->GetType() == WindowType::PUSHBUTTON )
-                {
-                    sal_Int16 n = sal_Int16();
-                    if ( Value >>= n )
-                        static_cast<PushButton*>(pButton.get())->SetState( static_cast<TriState>(n) );
-                }
-            }
-            break;
-            default:
-            {
-                VCLXGraphicControl::setProperty( PropertyName, Value );
-            }
+        }
+        break;
+        default:
+        {
+            VCLXGraphicControl::setProperty( PropertyName, Value );
         }
     }
 }
@@ -864,27 +864,27 @@ void VCLXCheckBox::setState( sal_Int16 n )
     SolarMutexGuard aGuard;
 
     VclPtr< CheckBox> pCheckBox = GetAs< CheckBox >();
-    if ( pCheckBox)
+    if ( !pCheckBox)
+        return;
+
+    TriState eState;
+    switch ( n )
     {
-        TriState eState;
-        switch ( n )
-        {
-            case 0:     eState = TRISTATE_FALSE;     break;
-            case 1:     eState = TRISTATE_TRUE;       break;
-            case 2:     eState = TRISTATE_INDET;    break;
-            default:    eState = TRISTATE_FALSE;
-        }
-        pCheckBox->SetState( eState );
-
-        // #105198# call C++ click listeners (needed for accessibility)
-        // pCheckBox->GetClickHdl().Call( pCheckBox );
-
-        // #107218# Call same virtual methods and listeners like VCL would do after user interaction
-        SetSynthesizingVCLEvent( true );
-        pCheckBox->Toggle();
-        pCheckBox->Click();
-        SetSynthesizingVCLEvent( false );
+        case 0:     eState = TRISTATE_FALSE;     break;
+        case 1:     eState = TRISTATE_TRUE;       break;
+        case 2:     eState = TRISTATE_INDET;    break;
+        default:    eState = TRISTATE_FALSE;
     }
+    pCheckBox->SetState( eState );
+
+    // #105198# call C++ click listeners (needed for accessibility)
+    // pCheckBox->GetClickHdl().Call( pCheckBox );
+
+    // #107218# Call same virtual methods and listeners like VCL would do after user interaction
+    SetSynthesizingVCLEvent( true );
+    pCheckBox->Toggle();
+    pCheckBox->Click();
+    SetSynthesizingVCLEvent( false );
 }
 
 sal_Int16 VCLXCheckBox::getState()
@@ -954,33 +954,33 @@ void VCLXCheckBox::setProperty( const OUString& PropertyName, const css::uno::An
     SolarMutexGuard aGuard;
 
     VclPtr< CheckBox > pCheckBox = GetAs< CheckBox >();
-    if ( pCheckBox )
-    {
-        sal_uInt16 nPropType = GetPropertyId( PropertyName );
-        switch ( nPropType )
-        {
-            case BASEPROPERTY_VISUALEFFECT:
-                ::toolkit::setVisualEffect( Value, pCheckBox );
-                break;
+    if ( !pCheckBox )
+        return;
 
-            case BASEPROPERTY_TRISTATE:
-            {
-                bool b = bool();
-                if ( Value >>= b )
-                     pCheckBox->EnableTriState( b );
-            }
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
+    {
+        case BASEPROPERTY_VISUALEFFECT:
+            ::toolkit::setVisualEffect( Value, pCheckBox );
             break;
-            case BASEPROPERTY_STATE:
-            {
-                sal_Int16 n = sal_Int16();
-                if ( Value >>= n )
-                    setState( n );
-            }
-            break;
-            default:
-            {
-                VCLXGraphicControl::setProperty( PropertyName, Value );
-            }
+
+        case BASEPROPERTY_TRISTATE:
+        {
+            bool b = bool();
+            if ( Value >>= b )
+                 pCheckBox->EnableTriState( b );
+        }
+        break;
+        case BASEPROPERTY_STATE:
+        {
+            sal_Int16 n = sal_Int16();
+            if ( Value >>= n )
+                setState( n );
+        }
+        break;
+        default:
+        {
+            VCLXGraphicControl::setProperty( PropertyName, Value );
         }
     }
 }
@@ -1132,39 +1132,39 @@ void VCLXRadioButton::setProperty( const OUString& PropertyName, const css::uno:
     SolarMutexGuard aGuard;
 
     VclPtr< RadioButton > pButton = GetAs< RadioButton >();
-    if ( pButton )
-    {
-        sal_uInt16 nPropType = GetPropertyId( PropertyName );
-        switch ( nPropType )
-        {
-            case BASEPROPERTY_VISUALEFFECT:
-                ::toolkit::setVisualEffect( Value, pButton );
-                break;
+    if ( !pButton )
+        return;
 
-            case BASEPROPERTY_STATE:
-            {
-                sal_Int16 n = sal_Int16();
-                if ( Value >>= n )
-                {
-                    bool b = n != 0;
-                    if ( pButton->IsRadioCheckEnabled() )
-                        pButton->Check( b );
-                    else
-                        pButton->SetState( b );
-                }
-            }
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
+    {
+        case BASEPROPERTY_VISUALEFFECT:
+            ::toolkit::setVisualEffect( Value, pButton );
             break;
-            case BASEPROPERTY_AUTOTOGGLE:
+
+        case BASEPROPERTY_STATE:
+        {
+            sal_Int16 n = sal_Int16();
+            if ( Value >>= n )
             {
-                bool b = bool();
-                if ( Value >>= b )
-                    pButton->EnableRadioCheck( b );
+                bool b = n != 0;
+                if ( pButton->IsRadioCheckEnabled() )
+                    pButton->Check( b );
+                else
+                    pButton->SetState( b );
             }
-            break;
-            default:
-            {
-                VCLXGraphicControl::setProperty( PropertyName, Value );
-            }
+        }
+        break;
+        case BASEPROPERTY_AUTOTOGGLE:
+        {
+            bool b = bool();
+            if ( Value >>= b )
+                pButton->EnableRadioCheck( b );
+        }
+        break;
+        default:
+        {
+            VCLXGraphicControl::setProperty( PropertyName, Value );
         }
     }
 }
@@ -1570,20 +1570,20 @@ void VCLXListBox::addItems( const css::uno::Sequence< OUString>& aItems, sal_Int
 {
     SolarMutexGuard aGuard;
     VclPtr< ListBox > pBox = GetAs< ListBox >();
-    if ( pBox )
-    {
-        sal_uInt16 nP = nPos;
-        for ( auto const & item : aItems )
-        {
-            if ( nP == 0xFFFF )
-            {
-                OSL_FAIL( "VCLXListBox::addItems: too many entries!" );
-                // skip remaining entries, list cannot hold them, anyway
-                break;
-            }
+    if ( !pBox )
+        return;
 
-            pBox->InsertEntry( item, nP++ );
+    sal_uInt16 nP = nPos;
+    for ( auto const & item : aItems )
+    {
+        if ( nP == 0xFFFF )
+        {
+            OSL_FAIL( "VCLXListBox::addItems: too many entries!" );
+            // skip remaining entries, list cannot hold them, anyway
+            break;
         }
+
+        pBox->InsertEntry( item, nP++ );
     }
 }
 
@@ -1710,40 +1710,40 @@ void VCLXListBox::selectItemsPos( const css::uno::Sequence<sal_Int16>& aPosition
     SolarMutexGuard aGuard;
 
     VclPtr< ListBox > pBox = GetAs< ListBox >();
-    if ( pBox )
+    if ( !pBox )
+        return;
+
+    std::vector<sal_Int32> aPositionVec;
+    aPositionVec.reserve(aPositions.getLength());
+
+    bool bChanged = false;
+    for ( auto n = aPositions.getLength(); n; )
     {
-        std::vector<sal_Int32> aPositionVec;
-        aPositionVec.reserve(aPositions.getLength());
-
-        bool bChanged = false;
-        for ( auto n = aPositions.getLength(); n; )
+        const auto nPos = aPositions.getConstArray()[--n];
+        if ( pBox->IsEntryPosSelected( nPos ) != bool(bSelect) )
         {
-            const auto nPos = aPositions.getConstArray()[--n];
-            if ( pBox->IsEntryPosSelected( nPos ) != bool(bSelect) )
-            {
-                aPositionVec.push_back(nPos);
-                bChanged = true;
-            }
-        }
-
-        if ( bChanged )
-        {
-            bool bOrigUpdateMode = pBox->IsUpdateMode();
-            pBox->SetUpdateMode(false);
-
-            pBox->SelectEntriesPos(aPositionVec, bSelect);
-
-            pBox->SetUpdateMode(bOrigUpdateMode);
-
-            // VCL doesn't call select handler after API call.
-            // ImplCallItemListeners();
-
-            // #107218# Call same listeners like VCL would do after user interaction
-            SetSynthesizingVCLEvent( true );
-            pBox->Select();
-            SetSynthesizingVCLEvent( false );
+            aPositionVec.push_back(nPos);
+            bChanged = true;
         }
     }
+
+    if ( !bChanged )
+        return;
+
+    bool bOrigUpdateMode = pBox->IsUpdateMode();
+    pBox->SetUpdateMode(false);
+
+    pBox->SelectEntriesPos(aPositionVec, bSelect);
+
+    pBox->SetUpdateMode(bOrigUpdateMode);
+
+    // VCL doesn't call select handler after API call.
+    // ImplCallItemListeners();
+
+    // #107218# Call same listeners like VCL would do after user interaction
+    SetSynthesizingVCLEvent( true );
+    pBox->Select();
+    SetSynthesizingVCLEvent( false );
 }
 
 void VCLXListBox::selectItem( const OUString& rItemText, sal_Bool bSelect )
@@ -1861,74 +1861,74 @@ void VCLXListBox::setProperty( const OUString& PropertyName, const css::uno::Any
 {
     SolarMutexGuard aGuard;
     VclPtr< ListBox > pListBox = GetAs< ListBox >();
-    if ( pListBox )
+    if ( !pListBox )
+        return;
+
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
     {
-        sal_uInt16 nPropType = GetPropertyId( PropertyName );
-        switch ( nPropType )
+        case BASEPROPERTY_ITEM_SEPARATOR_POS:
         {
-            case BASEPROPERTY_ITEM_SEPARATOR_POS:
-            {
-                sal_Int16 nSeparatorPos(0);
-                if ( Value >>= nSeparatorPos )
-                    pListBox->SetSeparatorPos( nSeparatorPos );
-            }
+            sal_Int16 nSeparatorPos(0);
+            if ( Value >>= nSeparatorPos )
+                pListBox->SetSeparatorPos( nSeparatorPos );
+        }
+        break;
+        case BASEPROPERTY_READONLY:
+        {
+            bool b = false;
+            if ( Value >>= b )
+                 pListBox->SetReadOnly( b);
+        }
+        break;
+        case BASEPROPERTY_MULTISELECTION:
+        {
+            bool b = false;
+            if ( Value >>= b )
+                 pListBox->EnableMultiSelection( b );
+        }
+        break;
+        case BASEPROPERTY_MULTISELECTION_SIMPLEMODE:
+            ::toolkit::adjustBooleanWindowStyle( Value, pListBox, WB_SIMPLEMODE, false );
             break;
-            case BASEPROPERTY_READONLY:
+        case BASEPROPERTY_LINECOUNT:
+        {
+            sal_Int16 n = 0;
+            if ( Value >>= n )
+                 pListBox->SetDropDownLineCount( n );
+        }
+        break;
+        case BASEPROPERTY_STRINGITEMLIST:
+        {
+            css::uno::Sequence< OUString> aItems;
+            if ( Value >>= aItems )
             {
-                bool b = false;
-                if ( Value >>= b )
-                     pListBox->SetReadOnly( b);
+                pListBox->Clear();
+                addItems( aItems, 0 );
             }
-            break;
-            case BASEPROPERTY_MULTISELECTION:
+        }
+        break;
+        case BASEPROPERTY_SELECTEDITEMS:
+        {
+            css::uno::Sequence<sal_Int16> aItems;
+            if ( Value >>= aItems )
             {
-                bool b = false;
-                if ( Value >>= b )
-                     pListBox->EnableMultiSelection( b );
-            }
-            break;
-            case BASEPROPERTY_MULTISELECTION_SIMPLEMODE:
-                ::toolkit::adjustBooleanWindowStyle( Value, pListBox, WB_SIMPLEMODE, false );
-                break;
-            case BASEPROPERTY_LINECOUNT:
-            {
-                sal_Int16 n = 0;
-                if ( Value >>= n )
-                     pListBox->SetDropDownLineCount( n );
-            }
-            break;
-            case BASEPROPERTY_STRINGITEMLIST:
-            {
-                css::uno::Sequence< OUString> aItems;
-                if ( Value >>= aItems )
-                {
-                    pListBox->Clear();
-                    addItems( aItems, 0 );
-                }
-            }
-            break;
-            case BASEPROPERTY_SELECTEDITEMS:
-            {
-                css::uno::Sequence<sal_Int16> aItems;
-                if ( Value >>= aItems )
-                {
-                    for ( auto n = pListBox->GetEntryCount(); n; )
-                        pListBox->SelectEntryPos( --n, false );
+                for ( auto n = pListBox->GetEntryCount(); n; )
+                    pListBox->SelectEntryPos( --n, false );
 
-                    if ( aItems.hasElements() )
-                        selectItemsPos( aItems, true );
-                    else
-                        pListBox->SetNoSelection();
+                if ( aItems.hasElements() )
+                    selectItemsPos( aItems, true );
+                else
+                    pListBox->SetNoSelection();
 
-                    if ( !pListBox->GetSelectedEntryCount() )
-                        pListBox->SetTopEntry( 0 );
-                }
+                if ( !pListBox->GetSelectedEntryCount() )
+                    pListBox->SetTopEntry( 0 );
             }
-            break;
-            default:
-            {
-                VCLXWindow::setProperty( PropertyName, Value );
-            }
+        }
+        break;
+        default:
+        {
+            VCLXWindow::setProperty( PropertyName, Value );
         }
     }
 }
@@ -2409,40 +2409,40 @@ void SAL_CALL VCLXDialog::setProperty(
 {
     SolarMutexGuard aGuard;
     VclPtr< Dialog > pDialog = GetAs< Dialog >();
-    if ( pDialog )
+    if ( !pDialog )
+        return;
+
+    bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
+
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
     {
-        bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
-
-        sal_uInt16 nPropType = GetPropertyId( PropertyName );
-        switch ( nPropType )
+        case BASEPROPERTY_GRAPHIC:
         {
-            case BASEPROPERTY_GRAPHIC:
+            Reference< XGraphic > xGraphic;
+            if (( Value >>= xGraphic ) && xGraphic.is() )
             {
-                Reference< XGraphic > xGraphic;
-                if (( Value >>= xGraphic ) && xGraphic.is() )
-                {
-                    Graphic aImage(xGraphic);
+                Graphic aImage(xGraphic);
 
-                    Wallpaper aWallpaper(aImage.GetBitmapEx());
-                    aWallpaper.SetStyle( WallpaperStyle::Scale );
-                    pDialog->SetBackground( aWallpaper );
-                }
-                else if ( bVoid || !xGraphic.is() )
-                {
-                    Color aColor = pDialog->GetControlBackground();
-                    if ( aColor == COL_AUTO )
-                        aColor = pDialog->GetSettings().GetStyleSettings().GetDialogColor();
-
-                    Wallpaper aWallpaper( aColor );
-                    pDialog->SetBackground( aWallpaper );
-                }
+                Wallpaper aWallpaper(aImage.GetBitmapEx());
+                aWallpaper.SetStyle( WallpaperStyle::Scale );
+                pDialog->SetBackground( aWallpaper );
             }
-            break;
-
-            default:
+            else if ( bVoid || !xGraphic.is() )
             {
-                VCLXContainer::setProperty( PropertyName, Value );
+                Color aColor = pDialog->GetControlBackground();
+                if ( aColor == COL_AUTO )
+                    aColor = pDialog->GetSettings().GetStyleSettings().GetDialogColor();
+
+                Wallpaper aWallpaper( aColor );
+                pDialog->SetBackground( aWallpaper );
             }
+        }
+        break;
+
+        default:
+        {
+            VCLXContainer::setProperty( PropertyName, Value );
         }
     }
 }
@@ -2540,51 +2540,51 @@ void SAL_CALL VCLXMultiPage::setProperty(
     SolarMutexGuard aGuard;
 
     VclPtr< TabControl > pTabControl = GetAs< TabControl >();
-    if ( pTabControl )
+    if ( !pTabControl )
+        return;
+
+    bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
+
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
     {
-        bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
-
-        sal_uInt16 nPropType = GetPropertyId( PropertyName );
-        switch ( nPropType )
+        case BASEPROPERTY_MULTIPAGEVALUE:
         {
-            case BASEPROPERTY_MULTIPAGEVALUE:
-            {
-                SAL_INFO("toolkit", "***MULTIPAGE VALUE");
-                sal_Int32 nId(0);
-                Value >>= nId;
-                // when the multipage is created we attempt to set the activepage
-                // but no pages created
-                if ( nId && nId <= getWindows().getLength() )
-                    activateTab( nId );
-                break;
-            }
-            case BASEPROPERTY_GRAPHIC:
-            {
-                Reference< XGraphic > xGraphic;
-                if (( Value >>= xGraphic ) && xGraphic.is() )
-                {
-                    Graphic aImage(xGraphic);
-
-                    Wallpaper aWallpaper(aImage.GetBitmapEx());
-                    aWallpaper.SetStyle( WallpaperStyle::Scale );
-                    pTabControl->SetBackground( aWallpaper );
-                }
-                else if ( bVoid || !xGraphic.is() )
-                {
-                    Color aColor = pTabControl->GetControlBackground();
-                    if ( aColor == COL_AUTO )
-                        aColor = pTabControl->GetSettings().GetStyleSettings().GetDialogColor();
-
-                    Wallpaper aWallpaper( aColor );
-                    pTabControl->SetBackground( aWallpaper );
-                }
-            }
+            SAL_INFO("toolkit", "***MULTIPAGE VALUE");
+            sal_Int32 nId(0);
+            Value >>= nId;
+            // when the multipage is created we attempt to set the activepage
+            // but no pages created
+            if ( nId && nId <= getWindows().getLength() )
+                activateTab( nId );
             break;
-
-            default:
+        }
+        case BASEPROPERTY_GRAPHIC:
+        {
+            Reference< XGraphic > xGraphic;
+            if (( Value >>= xGraphic ) && xGraphic.is() )
             {
-                VCLXContainer::setProperty( PropertyName, Value );
+                Graphic aImage(xGraphic);
+
+                Wallpaper aWallpaper(aImage.GetBitmapEx());
+                aWallpaper.SetStyle( WallpaperStyle::Scale );
+                pTabControl->SetBackground( aWallpaper );
             }
+            else if ( bVoid || !xGraphic.is() )
+            {
+                Color aColor = pTabControl->GetControlBackground();
+                if ( aColor == COL_AUTO )
+                    aColor = pTabControl->GetSettings().GetStyleSettings().GetDialogColor();
+
+                Wallpaper aWallpaper( aColor );
+                pTabControl->SetBackground( aWallpaper );
+            }
+        }
+        break;
+
+        default:
+        {
+            VCLXContainer::setProperty( PropertyName, Value );
         }
     }
 }
@@ -2763,49 +2763,49 @@ void SAL_CALL VCLXTabPage::setProperty(
 {
     SolarMutexGuard aGuard;
     VclPtr< TabPage > pTabPage = GetAs< TabPage >();
-    if ( pTabPage )
+    if ( !pTabPage )
+        return;
+
+    bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
+
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
     {
-        bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
-
-        sal_uInt16 nPropType = GetPropertyId( PropertyName );
-        switch ( nPropType )
+        case BASEPROPERTY_GRAPHIC:
         {
-            case BASEPROPERTY_GRAPHIC:
+            Reference< XGraphic > xGraphic;
+            if (( Value >>= xGraphic ) && xGraphic.is() )
             {
-                Reference< XGraphic > xGraphic;
-                if (( Value >>= xGraphic ) && xGraphic.is() )
-                {
-                    Graphic aImage(xGraphic);
+                Graphic aImage(xGraphic);
 
-                    Wallpaper aWallpaper(aImage.GetBitmapEx());
-                    aWallpaper.SetStyle( WallpaperStyle::Scale );
-                    pTabPage->SetBackground( aWallpaper );
-                }
-                else if ( bVoid || !xGraphic.is() )
-                {
-                    Color aColor = pTabPage->GetControlBackground();
-                    if ( aColor == COL_AUTO )
-                        aColor = pTabPage->GetSettings().GetStyleSettings().GetDialogColor();
+                Wallpaper aWallpaper(aImage.GetBitmapEx());
+                aWallpaper.SetStyle( WallpaperStyle::Scale );
+                pTabPage->SetBackground( aWallpaper );
+            }
+            else if ( bVoid || !xGraphic.is() )
+            {
+                Color aColor = pTabPage->GetControlBackground();
+                if ( aColor == COL_AUTO )
+                    aColor = pTabPage->GetSettings().GetStyleSettings().GetDialogColor();
 
-                    Wallpaper aWallpaper( aColor );
-                    pTabPage->SetBackground( aWallpaper );
+                Wallpaper aWallpaper( aColor );
+                pTabPage->SetBackground( aWallpaper );
+            }
+        }
+        break;
+        case BASEPROPERTY_TITLE:
+            {
+                OUString sTitle;
+                if ( Value >>= sTitle )
+                {
+                    pTabPage->SetText(sTitle);
                 }
             }
             break;
-            case BASEPROPERTY_TITLE:
-                {
-                    OUString sTitle;
-                    if ( Value >>= sTitle )
-                    {
-                        pTabPage->SetText(sTitle);
-                    }
-                }
-                break;
 
-            default:
-            {
-                VCLXContainer::setProperty( PropertyName, Value );
-            }
+        default:
+        {
+            VCLXContainer::setProperty( PropertyName, Value );
         }
     }
 }
@@ -2953,20 +2953,20 @@ void VCLXFixedHyperlink::setAlignment( sal_Int16 nAlign )
     SolarMutexGuard aGuard;
 
     VclPtr< vcl::Window > pWindow = GetWindow();
-    if ( pWindow )
-    {
-        WinBits nNewBits = 0;
-        if ( nAlign == css::awt::TextAlign::LEFT )
-            nNewBits = WB_LEFT;
-        else if ( nAlign == css::awt::TextAlign::CENTER )
-            nNewBits = WB_CENTER;
-        else
-            nNewBits = WB_RIGHT;
+    if ( !pWindow )
+        return;
 
-        WinBits nStyle = pWindow->GetStyle();
-        nStyle &= ~(WB_LEFT|WB_CENTER|WB_RIGHT);
-        pWindow->SetStyle( nStyle | nNewBits );
-    }
+    WinBits nNewBits = 0;
+    if ( nAlign == css::awt::TextAlign::LEFT )
+        nNewBits = WB_LEFT;
+    else if ( nAlign == css::awt::TextAlign::CENTER )
+        nNewBits = WB_CENTER;
+    else
+        nNewBits = WB_RIGHT;
+
+    WinBits nStyle = pWindow->GetStyle();
+    nStyle &= ~(WB_LEFT|WB_CENTER|WB_RIGHT);
+    pWindow->SetStyle( nStyle | nNewBits );
 }
 
 sal_Int16 VCLXFixedHyperlink::getAlignment()
@@ -3037,31 +3037,31 @@ void VCLXFixedHyperlink::setProperty( const OUString& PropertyName, const css::u
     SolarMutexGuard aGuard;
 
     VclPtr< FixedHyperlink > pBase = GetAs< FixedHyperlink >();
-    if ( pBase )
+    if ( !pBase )
+        return;
+
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
     {
-        sal_uInt16 nPropType = GetPropertyId( PropertyName );
-        switch ( nPropType )
+        case BASEPROPERTY_LABEL:
         {
-            case BASEPROPERTY_LABEL:
-            {
-                OUString sNewLabel;
-                if ( Value >>= sNewLabel )
-                    pBase->SetText(sNewLabel);
-                break;
-            }
+            OUString sNewLabel;
+            if ( Value >>= sNewLabel )
+                pBase->SetText(sNewLabel);
+            break;
+        }
 
-            case BASEPROPERTY_URL:
-            {
-                OUString sNewURL;
-                if ( Value >>= sNewURL )
-                    pBase->SetURL( sNewURL );
-                break;
-            }
+        case BASEPROPERTY_URL:
+        {
+            OUString sNewURL;
+            if ( Value >>= sNewURL )
+                pBase->SetURL( sNewURL );
+            break;
+        }
 
-            default:
-            {
-                VCLXWindow::setProperty( PropertyName, Value );
-            }
+        default:
+        {
+            VCLXWindow::setProperty( PropertyName, Value );
         }
     }
 }
@@ -3205,20 +3205,20 @@ void VCLXFixedText::setAlignment( sal_Int16 nAlign )
     SolarMutexGuard aGuard;
 
     VclPtr< vcl::Window > pWindow = GetWindow();
-    if ( pWindow )
-    {
-        WinBits nNewBits = 0;
-        if ( nAlign == css::awt::TextAlign::LEFT )
-            nNewBits = WB_LEFT;
-        else if ( nAlign == css::awt::TextAlign::CENTER )
-            nNewBits = WB_CENTER;
-        else
-            nNewBits = WB_RIGHT;
+    if ( !pWindow )
+        return;
 
-        WinBits nStyle = pWindow->GetStyle();
-        nStyle &= ~(WB_LEFT|WB_CENTER|WB_RIGHT);
-        pWindow->SetStyle( nStyle | nNewBits );
-    }
+    WinBits nNewBits = 0;
+    if ( nAlign == css::awt::TextAlign::LEFT )
+        nNewBits = WB_LEFT;
+    else if ( nAlign == css::awt::TextAlign::CENTER )
+        nNewBits = WB_CENTER;
+    else
+        nNewBits = WB_RIGHT;
+
+    WinBits nStyle = pWindow->GetStyle();
+    nStyle &= ~(WB_LEFT|WB_CENTER|WB_RIGHT);
+    pWindow->SetStyle( nStyle | nNewBits );
 }
 
 sal_Int16 VCLXFixedText::getAlignment()
@@ -3510,112 +3510,112 @@ void VCLXScrollBar::setProperty( const OUString& PropertyName, const css::uno::A
     SolarMutexGuard aGuard;
 
     VclPtr< ScrollBar > pScrollBar = GetAs< ScrollBar >();
-    if ( pScrollBar )
+    if ( !pScrollBar )
+        return;
+
+    bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
+
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
     {
-        bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
-
-        sal_uInt16 nPropType = GetPropertyId( PropertyName );
-        switch ( nPropType )
+        case BASEPROPERTY_LIVE_SCROLL:
         {
-            case BASEPROPERTY_LIVE_SCROLL:
+            bool bDo = false;
+            if ( !bVoid )
             {
-                bool bDo = false;
-                if ( !bVoid )
-                {
-                    OSL_VERIFY( Value >>= bDo );
-                }
-                AllSettings aSettings( pScrollBar->GetSettings() );
-                StyleSettings aStyle( aSettings.GetStyleSettings() );
-                DragFullOptions nDragOptions = aStyle.GetDragFullOptions();
-                if ( bDo )
-                    nDragOptions |= DragFullOptions::Scroll;
-                else
-                    nDragOptions &= ~DragFullOptions::Scroll;
-                aStyle.SetDragFullOptions( nDragOptions );
-                aSettings.SetStyleSettings( aStyle );
-                pScrollBar->SetSettings( aSettings );
+                OSL_VERIFY( Value >>= bDo );
             }
-            break;
+            AllSettings aSettings( pScrollBar->GetSettings() );
+            StyleSettings aStyle( aSettings.GetStyleSettings() );
+            DragFullOptions nDragOptions = aStyle.GetDragFullOptions();
+            if ( bDo )
+                nDragOptions |= DragFullOptions::Scroll;
+            else
+                nDragOptions &= ~DragFullOptions::Scroll;
+            aStyle.SetDragFullOptions( nDragOptions );
+            aSettings.SetStyleSettings( aStyle );
+            pScrollBar->SetSettings( aSettings );
+        }
+        break;
 
-            case BASEPROPERTY_SCROLLVALUE:
+        case BASEPROPERTY_SCROLLVALUE:
+        {
+            if ( !bVoid )
             {
-                if ( !bVoid )
+                sal_Int32 n = 0;
+                if ( Value >>= n )
+                    setValue( n );
+            }
+        }
+        break;
+        case BASEPROPERTY_SCROLLVALUE_MAX:
+        case BASEPROPERTY_SCROLLVALUE_MIN:
+        {
+            if ( !bVoid )
+            {
+                sal_Int32 n = 0;
+                if ( Value >>= n )
                 {
-                    sal_Int32 n = 0;
-                    if ( Value >>= n )
-                        setValue( n );
+                    if ( nPropType == BASEPROPERTY_SCROLLVALUE_MAX )
+                        setMaximum( n );
+                    else
+                        setMinimum( n );
                 }
             }
-            break;
-            case BASEPROPERTY_SCROLLVALUE_MAX:
-            case BASEPROPERTY_SCROLLVALUE_MIN:
+        }
+        break;
+        case BASEPROPERTY_LINEINCREMENT:
+        {
+            if ( !bVoid )
             {
-                if ( !bVoid )
-                {
-                    sal_Int32 n = 0;
-                    if ( Value >>= n )
-                    {
-                        if ( nPropType == BASEPROPERTY_SCROLLVALUE_MAX )
-                            setMaximum( n );
-                        else
-                            setMinimum( n );
-                    }
-                }
+                sal_Int32 n = 0;
+                if ( Value >>= n )
+                    setLineIncrement( n );
             }
-            break;
-            case BASEPROPERTY_LINEINCREMENT:
+        }
+        break;
+        case BASEPROPERTY_BLOCKINCREMENT:
+        {
+            if ( !bVoid )
             {
-                if ( !bVoid )
-                {
-                    sal_Int32 n = 0;
-                    if ( Value >>= n )
-                        setLineIncrement( n );
-                }
+                sal_Int32 n = 0;
+                if ( Value >>= n )
+                    setBlockIncrement( n );
             }
-            break;
-            case BASEPROPERTY_BLOCKINCREMENT:
+        }
+        break;
+        case BASEPROPERTY_VISIBLESIZE:
+        {
+            if ( !bVoid )
             {
-                if ( !bVoid )
-                {
-                    sal_Int32 n = 0;
-                    if ( Value >>= n )
-                        setBlockIncrement( n );
-                }
+                sal_Int32 n = 0;
+                if ( Value >>= n )
+                    setVisibleSize( n );
             }
-            break;
-            case BASEPROPERTY_VISIBLESIZE:
+        }
+        break;
+        case BASEPROPERTY_ORIENTATION:
+        {
+            if ( !bVoid )
             {
-                if ( !bVoid )
-                {
-                    sal_Int32 n = 0;
-                    if ( Value >>= n )
-                        setVisibleSize( n );
-                }
+                sal_Int32 n = 0;
+                if ( Value >>= n )
+                    setOrientation( n );
             }
-            break;
-            case BASEPROPERTY_ORIENTATION:
-            {
-                if ( !bVoid )
-                {
-                    sal_Int32 n = 0;
-                    if ( Value >>= n )
-                        setOrientation( n );
-                }
-            }
-            break;
+        }
+        break;
 
-            case BASEPROPERTY_BACKGROUNDCOLOR:
-            {
-                // the default implementation of the base class doesn't work here, since our
-                // interpretation for this property is slightly different
-                ::toolkit::setButtonLikeFaceColor( pScrollBar, Value);
-            }
-            break;
+        case BASEPROPERTY_BACKGROUNDCOLOR:
+        {
+            // the default implementation of the base class doesn't work here, since our
+            // interpretation for this property is slightly different
+            ::toolkit::setButtonLikeFaceColor( pScrollBar, Value);
+        }
+        break;
 
-            default:
-            {
-                VCLXWindow::setProperty( PropertyName, Value );
-            }
+        default:
+        {
+            VCLXWindow::setProperty( PropertyName, Value );
         }
     }
 }
@@ -3970,42 +3970,42 @@ void VCLXEdit::setProperty( const OUString& PropertyName, const css::uno::Any& V
     SolarMutexGuard aGuard;
 
     VclPtr< Edit > pEdit = GetAs< Edit >();
-    if ( pEdit )
-    {
-        sal_uInt16 nPropType = GetPropertyId( PropertyName );
-        switch ( nPropType )
-        {
-            case BASEPROPERTY_HIDEINACTIVESELECTION:
-                ::toolkit::adjustBooleanWindowStyle( Value, pEdit, WB_NOHIDESELECTION, true );
-                if ( pEdit->GetSubEdit() )
-                    ::toolkit::adjustBooleanWindowStyle( Value, pEdit->GetSubEdit(), WB_NOHIDESELECTION, true );
-                break;
+    if ( !pEdit )
+        return;
 
-            case BASEPROPERTY_READONLY:
-            {
-                bool b = bool();
-                if ( Value >>= b )
-                     pEdit->SetReadOnly( b );
-            }
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
+    {
+        case BASEPROPERTY_HIDEINACTIVESELECTION:
+            ::toolkit::adjustBooleanWindowStyle( Value, pEdit, WB_NOHIDESELECTION, true );
+            if ( pEdit->GetSubEdit() )
+                ::toolkit::adjustBooleanWindowStyle( Value, pEdit->GetSubEdit(), WB_NOHIDESELECTION, true );
             break;
-            case BASEPROPERTY_ECHOCHAR:
-            {
-                sal_Int16 n = sal_Int16();
-                if ( Value >>= n )
-                     pEdit->SetEchoChar( n );
-            }
-            break;
-            case BASEPROPERTY_MAXTEXTLEN:
-            {
-                sal_Int16 n = sal_Int16();
-                if ( Value >>= n )
-                     pEdit->SetMaxTextLen( n );
-            }
-            break;
-            default:
-            {
-                VCLXWindow::setProperty( PropertyName, Value );
-            }
+
+        case BASEPROPERTY_READONLY:
+        {
+            bool b = bool();
+            if ( Value >>= b )
+                 pEdit->SetReadOnly( b );
+        }
+        break;
+        case BASEPROPERTY_ECHOCHAR:
+        {
+            sal_Int16 n = sal_Int16();
+            if ( Value >>= n )
+                 pEdit->SetEchoChar( n );
+        }
+        break;
+        case BASEPROPERTY_MAXTEXTLEN:
+        {
+            sal_Int16 n = sal_Int16();
+            if ( Value >>= n )
+                 pEdit->SetMaxTextLen( n );
+        }
+        break;
+        default:
+        {
+            VCLXWindow::setProperty( PropertyName, Value );
         }
     }
 }
@@ -4237,18 +4237,18 @@ void VCLXComboBox::addItems( const css::uno::Sequence< OUString>& aItems, sal_In
     SolarMutexGuard aGuard;
 
     VclPtr< ComboBox > pBox = GetAs< ComboBox >();
-    if ( pBox )
+    if ( !pBox )
+        return;
+
+    sal_uInt16 nP = nPos;
+    for ( const auto& rItem : aItems )
     {
-        sal_uInt16 nP = nPos;
-        for ( const auto& rItem : aItems )
+        pBox->InsertEntry( rItem, nP );
+        if ( nP == 0xFFFF )
         {
-            pBox->InsertEntry( rItem, nP );
-            if ( nP == 0xFFFF )
-            {
-                OSL_FAIL( "VCLXComboBox::addItems: too many entries!" );
-                // skip remaining entries, list cannot hold them, anyway
-                break;
-            }
+            OSL_FAIL( "VCLXComboBox::addItems: too many entries!" );
+            // skip remaining entries, list cannot hold them, anyway
+            break;
         }
     }
 }
@@ -4328,52 +4328,52 @@ void VCLXComboBox::setProperty( const OUString& PropertyName, const css::uno::An
     SolarMutexGuard aGuard;
 
     VclPtr< ComboBox > pComboBox = GetAs< ComboBox >();
-    if ( pComboBox )
-    {
-        sal_uInt16 nPropType = GetPropertyId( PropertyName );
-        switch ( nPropType )
-        {
-            case BASEPROPERTY_LINECOUNT:
-            {
-                sal_Int16 n = sal_Int16();
-                if ( Value >>= n )
-                     pComboBox->SetDropDownLineCount( n );
-            }
-            break;
-            case BASEPROPERTY_AUTOCOMPLETE:
-            {
-                sal_Int16 n = sal_Int16();
-                if ( Value >>= n )
-                     pComboBox->EnableAutocomplete( n != 0 );
-                else
-                {
-                    bool b = bool();
-                    if ( Value >>= b )
-                        pComboBox->EnableAutocomplete( b );
-                }
-            }
-            break;
-            case BASEPROPERTY_STRINGITEMLIST:
-            {
-                css::uno::Sequence< OUString> aItems;
-                if ( Value >>= aItems )
-                {
-                    pComboBox->Clear();
-                    addItems( aItems, 0 );
-                }
-            }
-            break;
-            default:
-            {
-                VCLXEdit::setProperty( PropertyName, Value );
+    if ( !pComboBox )
+        return;
 
-                // #109385# SetBorderStyle is not virtual
-                if ( nPropType == BASEPROPERTY_BORDER )
-                {
-                    sal_uInt16 nBorder = sal_uInt16();
-                    if ( (Value >>= nBorder) && nBorder != 0 )
-                        pComboBox->SetBorderStyle( static_cast<WindowBorderStyle>(nBorder) );
-                }
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
+    {
+        case BASEPROPERTY_LINECOUNT:
+        {
+            sal_Int16 n = sal_Int16();
+            if ( Value >>= n )
+                 pComboBox->SetDropDownLineCount( n );
+        }
+        break;
+        case BASEPROPERTY_AUTOCOMPLETE:
+        {
+            sal_Int16 n = sal_Int16();
+            if ( Value >>= n )
+                 pComboBox->EnableAutocomplete( n != 0 );
+            else
+            {
+                bool b = bool();
+                if ( Value >>= b )
+                    pComboBox->EnableAutocomplete( b );
+            }
+        }
+        break;
+        case BASEPROPERTY_STRINGITEMLIST:
+        {
+            css::uno::Sequence< OUString> aItems;
+            if ( Value >>= aItems )
+            {
+                pComboBox->Clear();
+                addItems( aItems, 0 );
+            }
+        }
+        break;
+        default:
+        {
+            VCLXEdit::setProperty( PropertyName, Value );
+
+            // #109385# SetBorderStyle is not virtual
+            if ( nPropType == BASEPROPERTY_BORDER )
+            {
+                sal_uInt16 nBorder = sal_uInt16();
+                if ( (Value >>= nBorder) && nBorder != 0 )
+                    pComboBox->SetBorderStyle( static_cast<WindowBorderStyle>(nBorder) );
             }
         }
     }
@@ -4666,36 +4666,36 @@ void VCLXFormattedSpinField::setProperty( const OUString& PropertyName, const cs
     SolarMutexGuard aGuard;
 
     FormatterBase* pFormatter = GetFormatter();
-    if ( pFormatter )
+    if ( !pFormatter )
+        return;
+
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
     {
-        sal_uInt16 nPropType = GetPropertyId( PropertyName );
-        switch ( nPropType )
+        case BASEPROPERTY_SPIN:
         {
-            case BASEPROPERTY_SPIN:
+            bool b = bool();
+            if ( Value >>= b )
             {
-                bool b = bool();
-                if ( Value >>= b )
-                {
-                    WinBits nStyle = GetWindow()->GetStyle() | WB_SPIN;
-                    if ( !b )
-                        nStyle &= ~WB_SPIN;
-                    GetWindow()->SetStyle( nStyle );
-                }
+                WinBits nStyle = GetWindow()->GetStyle() | WB_SPIN;
+                if ( !b )
+                    nStyle &= ~WB_SPIN;
+                GetWindow()->SetStyle( nStyle );
             }
-            break;
-            case BASEPROPERTY_STRICTFORMAT:
+        }
+        break;
+        case BASEPROPERTY_STRICTFORMAT:
+        {
+            bool b = bool();
+            if ( Value >>= b )
             {
-                bool b = bool();
-                if ( Value >>= b )
-                {
-                     pFormatter->SetStrictFormat( b );
-                }
+                 pFormatter->SetStrictFormat( b );
             }
-            break;
-            default:
-            {
-                VCLXSpinField::setProperty( PropertyName, Value );
-            }
+        }
+        break;
+        default:
+        {
+            VCLXSpinField::setProperty( PropertyName, Value );
         }
     }
 }
@@ -4814,67 +4814,67 @@ void VCLXDateField::setProperty( const OUString& PropertyName, const css::uno::A
 {
     SolarMutexGuard aGuard;
 
-    if ( GetWindow() )
-    {
-        bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
+    if ( !(GetWindow()) )
+        return;
 
-        sal_uInt16 nPropType = GetPropertyId( PropertyName );
-        switch ( nPropType )
+    bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
+
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
+    {
+        case BASEPROPERTY_DATE:
         {
-            case BASEPROPERTY_DATE:
+            if ( bVoid )
             {
-                if ( bVoid )
-                {
-                    GetAs< DateField >()->EnableEmptyFieldValue( true );
-                    GetAs< DateField >()->SetEmptyFieldValue();
-                }
-                else
-                {
-                    util::Date d;
-                    if ( Value >>= d )
-                         setDate( d );
-                }
+                GetAs< DateField >()->EnableEmptyFieldValue( true );
+                GetAs< DateField >()->SetEmptyFieldValue();
             }
-            break;
-            case BASEPROPERTY_DATEMIN:
+            else
             {
                 util::Date d;
                 if ( Value >>= d )
-                     setMin( d );
+                     setDate( d );
             }
-            break;
-            case BASEPROPERTY_DATEMAX:
-            {
-                util::Date d;
-                if ( Value >>= d )
-                     setMax( d );
-            }
-            break;
-            case BASEPROPERTY_EXTDATEFORMAT:
-            {
-                sal_Int16 n = sal_Int16();
-                if ( Value >>= n )
-                    GetAs< DateField >()->SetExtDateFormat( static_cast<ExtDateFieldFormat>(n) );
-            }
-            break;
-            case BASEPROPERTY_DATESHOWCENTURY:
-            {
-                bool b = bool();
-                if ( Value >>= b )
-                     GetAs< DateField >()->SetShowDateCentury( b );
-            }
-            break;
-            case BASEPROPERTY_ENFORCE_FORMAT:
-            {
-                bool bEnforce( true );
-                OSL_VERIFY( Value >>= bEnforce );
-                GetAs< DateField >()->EnforceValidValue( bEnforce );
-            }
-            break;
-            default:
-            {
-                VCLXFormattedSpinField::setProperty( PropertyName, Value );
-            }
+        }
+        break;
+        case BASEPROPERTY_DATEMIN:
+        {
+            util::Date d;
+            if ( Value >>= d )
+                 setMin( d );
+        }
+        break;
+        case BASEPROPERTY_DATEMAX:
+        {
+            util::Date d;
+            if ( Value >>= d )
+                 setMax( d );
+        }
+        break;
+        case BASEPROPERTY_EXTDATEFORMAT:
+        {
+            sal_Int16 n = sal_Int16();
+            if ( Value >>= n )
+                GetAs< DateField >()->SetExtDateFormat( static_cast<ExtDateFieldFormat>(n) );
+        }
+        break;
+        case BASEPROPERTY_DATESHOWCENTURY:
+        {
+            bool b = bool();
+            if ( Value >>= b )
+                 GetAs< DateField >()->SetShowDateCentury( b );
+        }
+        break;
+        case BASEPROPERTY_ENFORCE_FORMAT:
+        {
+            bool bEnforce( true );
+            OSL_VERIFY( Value >>= bEnforce );
+            GetAs< DateField >()->EnforceValidValue( bEnforce );
+        }
+        break;
+        default:
+        {
+            VCLXFormattedSpinField::setProperty( PropertyName, Value );
         }
     }
 }
@@ -5303,60 +5303,60 @@ void VCLXTimeField::setProperty( const OUString& PropertyName, const css::uno::A
 {
     SolarMutexGuard aGuard;
 
-    if ( GetWindow() )
-    {
-        bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
+    if ( !(GetWindow()) )
+        return;
 
-        sal_uInt16 nPropType = GetPropertyId( PropertyName );
-        switch ( nPropType )
+    bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
+
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
+    {
+        case BASEPROPERTY_TIME:
         {
-            case BASEPROPERTY_TIME:
+            if ( bVoid )
             {
-                if ( bVoid )
-                {
-                    GetAs< TimeField >()->EnableEmptyFieldValue( true );
-                    GetAs< TimeField >()->SetEmptyFieldValue();
-                }
-                else
-                {
-                    util::Time t;
-                    if ( Value >>= t )
-                         setTime( t );
-                }
+                GetAs< TimeField >()->EnableEmptyFieldValue( true );
+                GetAs< TimeField >()->SetEmptyFieldValue();
             }
-            break;
-            case BASEPROPERTY_TIMEMIN:
+            else
             {
                 util::Time t;
                 if ( Value >>= t )
-                     setMin( t );
+                     setTime( t );
             }
-            break;
-            case BASEPROPERTY_TIMEMAX:
-            {
-                util::Time t;
-                if ( Value >>= t )
-                     setMax( t );
-            }
-            break;
-            case BASEPROPERTY_EXTTIMEFORMAT:
-            {
-                sal_Int16 n = sal_Int16();
-                if ( Value >>= n )
-                    GetAs< TimeField >()->SetExtFormat( static_cast<ExtTimeFieldFormat>(n) );
-            }
-            break;
-            case BASEPROPERTY_ENFORCE_FORMAT:
-            {
-                bool bEnforce( true );
-                OSL_VERIFY( Value >>= bEnforce );
-                GetAs< TimeField >()->EnforceValidValue( bEnforce );
-            }
-            break;
-            default:
-            {
-                VCLXFormattedSpinField::setProperty( PropertyName, Value );
-            }
+        }
+        break;
+        case BASEPROPERTY_TIMEMIN:
+        {
+            util::Time t;
+            if ( Value >>= t )
+                 setMin( t );
+        }
+        break;
+        case BASEPROPERTY_TIMEMAX:
+        {
+            util::Time t;
+            if ( Value >>= t )
+                 setMax( t );
+        }
+        break;
+        case BASEPROPERTY_EXTTIMEFORMAT:
+        {
+            sal_Int16 n = sal_Int16();
+            if ( Value >>= n )
+                GetAs< TimeField >()->SetExtFormat( static_cast<ExtTimeFieldFormat>(n) );
+        }
+        break;
+        case BASEPROPERTY_ENFORCE_FORMAT:
+        {
+            bool bEnforce( true );
+            OSL_VERIFY( Value >>= bEnforce );
+            GetAs< TimeField >()->EnforceValidValue( bEnforce );
+        }
+        break;
+        default:
+        {
+            VCLXFormattedSpinField::setProperty( PropertyName, Value );
         }
     }
 }
@@ -5473,23 +5473,23 @@ void VCLXNumericField::setValue( double Value )
     SolarMutexGuard aGuard;
 
     NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
-    if ( pNumericFormatter )
-    {
-        // shift long value using decimal digits
-        // (e.g., input 105 using 2 digits returns 1,05)
-        // Thus, to set a value of 1,05, insert 105 and 2 digits
-        pNumericFormatter->SetValue(
-            static_cast<long>(ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() )) );
+    if ( !pNumericFormatter )
+        return;
 
-        // #107218# Call same listeners like VCL would do after user interaction
-        VclPtr< Edit > pEdit = GetAs< Edit >();
-        if ( pEdit )
-        {
-            SetSynthesizingVCLEvent( true );
-            pEdit->SetModifyFlag();
-            pEdit->Modify();
-            SetSynthesizingVCLEvent( false );
-        }
+    // shift long value using decimal digits
+    // (e.g., input 105 using 2 digits returns 1,05)
+    // Thus, to set a value of 1,05, insert 105 and 2 digits
+    pNumericFormatter->SetValue(
+        static_cast<long>(ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() )) );
+
+    // #107218# Call same listeners like VCL would do after user interaction
+    VclPtr< Edit > pEdit = GetAs< Edit >();
+    if ( pEdit )
+    {
+        SetSynthesizingVCLEvent( true );
+        pEdit->SetModifyFlag();
+        pEdit->Modify();
+        SetSynthesizingVCLEvent( false );
     }
 }
 
@@ -5638,75 +5638,75 @@ void VCLXNumericField::setProperty( const OUString& PropertyName, const css::uno
 {
     SolarMutexGuard aGuard;
 
-    if ( GetWindow() )
-    {
-        bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
+    if ( !(GetWindow()) )
+        return;
 
-        sal_uInt16 nPropType = GetPropertyId( PropertyName );
-        switch ( nPropType )
+    bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
+
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
+    {
+        case BASEPROPERTY_VALUE_DOUBLE:
         {
-            case BASEPROPERTY_VALUE_DOUBLE:
+            if ( bVoid )
             {
-                if ( bVoid )
-                {
-                    NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
-                    if (!pNumericFormatter)
-                        return;
-                    pNumericFormatter->EnableEmptyFieldValue( true );
-                    pNumericFormatter->SetEmptyFieldValue();
-                }
-                else
-                {
-                    double d = 0;
-                    if ( Value >>= d )
-                         setValue( d );
-                }
+                NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
+                if (!pNumericFormatter)
+                    return;
+                pNumericFormatter->EnableEmptyFieldValue( true );
+                pNumericFormatter->SetEmptyFieldValue();
             }
-            break;
-            case BASEPROPERTY_VALUEMIN_DOUBLE:
+            else
             {
                 double d = 0;
                 if ( Value >>= d )
-                     setMin( d );
+                     setValue( d );
             }
-            break;
-            case BASEPROPERTY_VALUEMAX_DOUBLE:
+        }
+        break;
+        case BASEPROPERTY_VALUEMIN_DOUBLE:
+        {
+            double d = 0;
+            if ( Value >>= d )
+                 setMin( d );
+        }
+        break;
+        case BASEPROPERTY_VALUEMAX_DOUBLE:
+        {
+            double d = 0;
+            if ( Value >>= d )
+                 setMax( d );
+        }
+        break;
+        case BASEPROPERTY_VALUESTEP_DOUBLE:
+        {
+            double d = 0;
+            if ( Value >>= d )
+                 setSpinSize( d );
+        }
+        break;
+        case BASEPROPERTY_DECIMALACCURACY:
+        {
+            sal_Int16 n = sal_Int16();
+            if ( Value >>= n )
+                 setDecimalDigits( n );
+        }
+        break;
+        case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
+        {
+            bool b = bool();
+            if ( Value >>= b )
             {
-                double d = 0;
-                if ( Value >>= d )
-                     setMax( d );
+                NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
+                if (!pNumericFormatter)
+                    return;
+                pNumericFormatter->SetUseThousandSep( b );
             }
-            break;
-            case BASEPROPERTY_VALUESTEP_DOUBLE:
-            {
-                double d = 0;
-                if ( Value >>= d )
-                     setSpinSize( d );
-            }
-            break;
-            case BASEPROPERTY_DECIMALACCURACY:
-            {
-                sal_Int16 n = sal_Int16();
-                if ( Value >>= n )
-                     setDecimalDigits( n );
-            }
-            break;
-            case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
-            {
-                bool b = bool();
-                if ( Value >>= b )
-                {
-                    NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
-                    if (!pNumericFormatter)
-                        return;
-                    pNumericFormatter->SetUseThousandSep( b );
-                }
-            }
-            break;
-            default:
-            {
-                VCLXFormattedSpinField::setProperty( PropertyName, Value );
-            }
+        }
+        break;
+        default:
+        {
+            VCLXFormattedSpinField::setProperty( PropertyName, Value );
         }
     }
 }
@@ -5940,49 +5940,49 @@ void VCLXMetricField::setProperty( const OUString& PropertyName, const css::uno:
 {
     SolarMutexGuard aGuard;
 
-    if ( GetWindow() )
+    if ( !(GetWindow()) )
+        return;
+
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
     {
-        sal_uInt16 nPropType = GetPropertyId( PropertyName );
-        switch ( nPropType )
+        case BASEPROPERTY_DECIMALACCURACY:
         {
-            case BASEPROPERTY_DECIMALACCURACY:
-            {
-                sal_Int16 n = 0;
-                if ( Value >>= n )
-                     setDecimalDigits( n );
-                break;
-            }
-            case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
-            {
-                bool b = false;
-                if ( Value >>= b )
-                {
-                    NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
-                    if (!pNumericFormatter)
-                        return;
-                    pNumericFormatter->SetUseThousandSep( b );
-                }
-            }
+            sal_Int16 n = 0;
+            if ( Value >>= n )
+                 setDecimalDigits( n );
             break;
-            case BASEPROPERTY_UNIT:
+        }
+        case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
+        {
+            bool b = false;
+            if ( Value >>= b )
             {
-                sal_uInt16 nVal = 0;
-                if ( Value >>= nVal )
-                    GetAs< MetricField >()->SetUnit( static_cast<FieldUnit>(nVal) );
-                break;
+                NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
+                if (!pNumericFormatter)
+                    return;
+                pNumericFormatter->SetUseThousandSep( b );
             }
-            case BASEPROPERTY_CUSTOMUNITTEXT:
-            {
-                OUString aStr;
-                if ( Value >>= aStr )
-                    GetAs< MetricField >()->SetCustomUnitText( aStr );
-                break;
-            }
-            default:
-            {
-                VCLXFormattedSpinField::setProperty( PropertyName, Value );
-                break;
-            }
+        }
+        break;
+        case BASEPROPERTY_UNIT:
+        {
+            sal_uInt16 nVal = 0;
+            if ( Value >>= nVal )
+                GetAs< MetricField >()->SetUnit( static_cast<FieldUnit>(nVal) );
+            break;
+        }
+        case BASEPROPERTY_CUSTOMUNITTEXT:
+        {
+            OUString aStr;
+            if ( Value >>= aStr )
+                GetAs< MetricField >()->SetCustomUnitText( aStr );
+            break;
+        }
+        default:
+        {
+            VCLXFormattedSpinField::setProperty( PropertyName, Value );
+            break;
         }
     }
 }
@@ -6135,31 +6135,31 @@ void VCLXPatternField::setProperty( const OUString& PropertyName, const css::uno
 {
     SolarMutexGuard aGuard;
 
-    if ( GetWindow() )
+    if ( !(GetWindow()) )
+        return;
+
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
     {
-        sal_uInt16 nPropType = GetPropertyId( PropertyName );
-        switch ( nPropType )
+        case BASEPROPERTY_EDITMASK:
+        case BASEPROPERTY_LITERALMASK:
         {
-            case BASEPROPERTY_EDITMASK:
-            case BASEPROPERTY_LITERALMASK:
+            OUString aString;
+            if ( Value >>= aString )
             {
-                OUString aString;
-                if ( Value >>= aString )
-                {
-                    OUString aEditMask, aLiteralMask;
-                    getMasks( aEditMask, aLiteralMask );
-                    if ( nPropType == BASEPROPERTY_EDITMASK )
-                        aEditMask = aString;
-                    else
-                        aLiteralMask = aString;
-                    setMasks( aEditMask, aLiteralMask );
-                }
+                OUString aEditMask, aLiteralMask;
+                getMasks( aEditMask, aLiteralMask );
+                if ( nPropType == BASEPROPERTY_EDITMASK )
+                    aEditMask = aString;
+                else
+                    aLiteralMask = aString;
+                setMasks( aEditMask, aLiteralMask );
             }
-            break;
-            default:
-            {
-                VCLXFormattedSpinField::setProperty( PropertyName, Value );
-            }
+        }
+        break;
+        default:
+        {
+            VCLXFormattedSpinField::setProperty( PropertyName, Value );
         }
     }
 }
