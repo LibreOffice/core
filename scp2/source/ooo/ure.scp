@@ -81,7 +81,7 @@ End
 
 // Private Dynamic Libraries:
 
-#if defined _MSC_VER
+#if defined _MSC_VER && ! defined _ARM64_
 File gid_File_Dl_Cli_Ure_Assembly
     TXT_FILE_BODY;
     Styles = (PACKED, ASSEMBLY);
