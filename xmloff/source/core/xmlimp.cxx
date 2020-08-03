@@ -433,13 +433,13 @@ void SvXMLImport::cleanup() throw ()
     while (!maFastContexts.empty())
     {
         if (SvXMLStylesContext* pStylesContext = dynamic_cast<SvXMLStylesContext*>(maFastContexts.top().get()))
-            pStylesContext->Clear();
+            pStylesContext->dispose();
         maFastContexts.pop();
     }
     while (!maContexts.empty())
     {
         if (SvXMLStylesContext* pStylesContext = dynamic_cast<SvXMLStylesContext*>(maContexts.top().get()))
-            pStylesContext->Clear();
+            pStylesContext->dispose();
         maContexts.pop();
     }
     if( mxTextImport )
@@ -627,13 +627,13 @@ void SAL_CALL SvXMLImport::endDocument()
     }
 
     if( mxFontDecls.is() )
-        static_cast<SvXMLStylesContext *>(mxFontDecls.get())->Clear();
+        static_cast<SvXMLStylesContext *>(mxFontDecls.get())->dispose();
     if( mxStyles.is() )
-        static_cast<SvXMLStylesContext *>(mxStyles.get())->Clear();
+        static_cast<SvXMLStylesContext *>(mxStyles.get())->dispose();
     if( mxAutoStyles.is() )
-        static_cast<SvXMLStylesContext *>(mxAutoStyles.get())->Clear();
+        static_cast<SvXMLStylesContext *>(mxAutoStyles.get())->dispose();
     if( mxMasterStyles.is() )
-        static_cast<SvXMLStylesContext *>(mxMasterStyles.get())->Clear();
+        static_cast<SvXMLStylesContext *>(mxMasterStyles.get())->dispose();
 
     // possible form-layer related knittings which can only be done when
     // the whole document exists
@@ -1622,14 +1622,14 @@ XMLEventImportHelper& SvXMLImport::GetEventImport()
 void SvXMLImport::SetFontDecls( XMLFontStylesContext *pFontDecls )
 {
     if (mxFontDecls.is())
-        static_cast<SvXMLStylesContext*>(mxFontDecls.get())->Clear();
+        static_cast<SvXMLStylesContext*>(mxFontDecls.get())->dispose();
     mxFontDecls = pFontDecls;
 }
 
 void SvXMLImport::SetStyles( SvXMLStylesContext *pStyles )
 {
     if (mxStyles.is())
-        static_cast<SvXMLStylesContext*>(mxStyles.get())->Clear();
+        static_cast<SvXMLStylesContext*>(mxStyles.get())->dispose();
     mxStyles = pStyles;
 }
 
@@ -1653,7 +1653,7 @@ void SvXMLImport::SetAutoStyles( SvXMLStylesContext *pAutoStyles )
         }
     }
     if (mxAutoStyles.is())
-        static_cast<SvXMLStylesContext*>(mxAutoStyles.get())->Clear();
+        static_cast<SvXMLStylesContext*>(mxAutoStyles.get())->dispose();
     mxAutoStyles = pAutoStyles;
     GetTextImport()->SetAutoStyles( pAutoStyles );
     GetShapeImport()->SetAutoStylesContext( pAutoStyles );
@@ -1664,7 +1664,7 @@ void SvXMLImport::SetAutoStyles( SvXMLStylesContext *pAutoStyles )
 void SvXMLImport::SetMasterStyles( SvXMLStylesContext *pMasterStyles )
 {
     if (mxMasterStyles.is())
-        static_cast<SvXMLStylesContext*>(mxMasterStyles.get())->Clear();
+        static_cast<SvXMLStylesContext*>(mxMasterStyles.get())->dispose();
     mxMasterStyles = pMasterStyles;
 }
 
@@ -1873,13 +1873,13 @@ void SvXMLImport::SetError(
 void SvXMLImport::DisposingModel()
 {
     if( mxFontDecls.is() )
-        static_cast<SvXMLStylesContext *>(mxFontDecls.get())->Clear();
+        static_cast<SvXMLStylesContext *>(mxFontDecls.get())->dispose();
     if( mxStyles.is() )
-        static_cast<SvXMLStylesContext *>(mxStyles.get())->Clear();
+        static_cast<SvXMLStylesContext *>(mxStyles.get())->dispose();
     if( mxAutoStyles.is() )
-        static_cast<SvXMLStylesContext *>(mxAutoStyles.get())->Clear();
+        static_cast<SvXMLStylesContext *>(mxAutoStyles.get())->dispose();
     if( mxMasterStyles.is() )
-        static_cast<SvXMLStylesContext *>(mxMasterStyles.get())->Clear();
+        static_cast<SvXMLStylesContext *>(mxMasterStyles.get())->dispose();
 
     mxModel.set(nullptr);
     mxEventListener.set(nullptr);

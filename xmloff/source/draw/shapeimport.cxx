@@ -166,10 +166,10 @@ XMLShapeImportHelper::~XMLShapeImportHelper()
 
     // Styles or AutoStyles context?
     if(mxStylesContext.is())
-        mxStylesContext->Clear();
+        mxStylesContext->dispose();
 
     if(mxAutoStylesContext.is())
-        mxAutoStylesContext->Clear();
+        mxAutoStylesContext->dispose();
 }
 
 const SvXMLTokenMap& XMLShapeImportHelper::GetGroupShapeElemTokenMap()

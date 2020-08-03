@@ -1051,7 +1051,7 @@ XMLTextImportHelper::~XMLTextImportHelper()
 void XMLTextImportHelper::dispose()
 {
     if (m_xImpl->m_xAutoStyles)
-        static_cast<SvXMLStylesContext *>(m_xImpl->m_xAutoStyles.get())->Clear();
+        static_cast<SvXMLStylesContext *>(m_xImpl->m_xAutoStyles.get())->dispose();
 }
 
 SvXMLImportPropertyMapper *XMLTextImportHelper::CreateShapeExtPropMapper(SvXMLImport& rImport)

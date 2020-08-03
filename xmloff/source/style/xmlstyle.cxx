@@ -276,7 +276,7 @@ public:
     }
 
     inline void AddStyle( SvXMLStyleContext *pStyle );
-    void Clear();
+    void dispose();
 
     const SvXMLStyleContext *FindStyleChildContext( XmlStyleFamily nFamily,
                                                     const OUString& rName,
@@ -298,7 +298,7 @@ inline void SvXMLStylesContext_Impl::AddStyle( SvXMLStyleContext *pStyle )
     FlushIndex();
 }
 
-void SvXMLStylesContext_Impl::Clear()
+void SvXMLStylesContext_Impl::dispose()
 {
     FlushIndex();
     aStyles.clear();
@@ -806,9 +806,9 @@ void SvXMLStylesContext::AddStyle(SvXMLStyleContext& rNew)
     mpImpl->AddStyle( &rNew );
 }
 
-void SvXMLStylesContext::Clear()
+void SvXMLStylesContext::dispose()
 {
-    mpImpl->Clear();
+    mpImpl->dispose();
 }
 
 void SvXMLStylesContext::CopyAutoStylesToDoc()
