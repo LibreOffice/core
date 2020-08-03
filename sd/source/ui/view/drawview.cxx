@@ -294,112 +294,112 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
 
 void DrawView::SetMasterAttributes( SdrObject* pObject, const SdPage& rPage, SfxItemSet rSet, SfxStyleSheetBasePool* pStShPool, bool& bOk, bool bMaster, bool bSlide )
 {
-   SdrInventor nInv    = pObject->GetObjInventor();
+    SdrInventor nInv    = pObject->GetObjInventor();
 
-   if (nInv == SdrInventor::Default)
-   {
-        sal_uInt16 eObjKind = pObject->GetObjIdentifier();
-        PresObjKind ePresObjKind = rPage.GetPresObjKind(pObject);
-        if (bSlide && eObjKind == OBJ_TEXT)
+    if (nInv != SdrInventor::Default)
+        return;
+
+    sal_uInt16 eObjKind = pObject->GetObjIdentifier();
+    PresObjKind ePresObjKind = rPage.GetPresObjKind(pObject);
+    if (bSlide && eObjKind == OBJ_TEXT)
+    {
+        // Presentation object (except outline)
+        SfxStyleSheet* pSheet = rPage.GetTextStyleSheetForObject(pObject);
+        DBG_ASSERT(pSheet, "StyleSheet not found");
+
+        SfxItemSet aTempSet( pSheet->GetItemSet() );
+        aTempSet.Put( rSet );
+        aTempSet.ClearInvalidItems();
+
+        // Undo-Action
+        mpDocSh->GetUndoManager()->AddUndoAction(
+            std::make_unique<StyleSheetUndoAction>(&mrDoc, pSheet, &aTempSet));
+
+        pSheet->GetItemSet().Put(aTempSet,false);
+        pSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
+        bOk = true;
+    }
+
+    if (!bSlide &&
+        (ePresObjKind == PresObjKind::Title ||
+         ePresObjKind == PresObjKind::Notes))
+    {
+        // Presentation object (except outline)
+        SfxStyleSheet* pSheet = rPage.GetStyleSheetForPresObj( ePresObjKind );
+        DBG_ASSERT(pSheet, "StyleSheet not found");
+
+        SfxItemSet aTempSet( pSheet->GetItemSet() );
+        aTempSet.Put( rSet );
+        aTempSet.ClearInvalidItems();
+
+        // Undo-Action
+        mpDocSh->GetUndoManager()->AddUndoAction(
+            std::make_unique<StyleSheetUndoAction>(&mrDoc, pSheet, &aTempSet));
+
+        pSheet->GetItemSet().Put(aTempSet,false);
+        pSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
+        bOk = true;
+    }
+    else if (eObjKind == OBJ_OUTLINETEXT)
+    {
+        if (bMaster)
         {
-            // Presentation object (except outline)
-            SfxStyleSheet* pSheet = rPage.GetTextStyleSheetForObject(pObject);
-            DBG_ASSERT(pSheet, "StyleSheet not found");
-
-            SfxItemSet aTempSet( pSheet->GetItemSet() );
-            aTempSet.Put( rSet );
-            aTempSet.ClearInvalidItems();
-
-            // Undo-Action
-            mpDocSh->GetUndoManager()->AddUndoAction(
-                std::make_unique<StyleSheetUndoAction>(&mrDoc, pSheet, &aTempSet));
-
-            pSheet->GetItemSet().Put(aTempSet,false);
-            pSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
-            bOk = true;
-        }
-
-        if (!bSlide &&
-            (ePresObjKind == PresObjKind::Title ||
-             ePresObjKind == PresObjKind::Notes))
-        {
-            // Presentation object (except outline)
-            SfxStyleSheet* pSheet = rPage.GetStyleSheetForPresObj( ePresObjKind );
-            DBG_ASSERT(pSheet, "StyleSheet not found");
-
-            SfxItemSet aTempSet( pSheet->GetItemSet() );
-            aTempSet.Put( rSet );
-            aTempSet.ClearInvalidItems();
-
-            // Undo-Action
-            mpDocSh->GetUndoManager()->AddUndoAction(
-                std::make_unique<StyleSheetUndoAction>(&mrDoc, pSheet, &aTempSet));
-
-            pSheet->GetItemSet().Put(aTempSet,false);
-            pSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
-            bOk = true;
-        }
-        else if (eObjKind == OBJ_OUTLINETEXT)
-        {
-            if (bMaster)
+            // Presentation object outline
+            for (sal_uInt16 nLevel = 9; nLevel > 0; nLevel--)
             {
-                // Presentation object outline
-                for (sal_uInt16 nLevel = 9; nLevel > 0; nLevel--)
+                OUString aName = rPage.GetLayoutName() + " " +
+                    OUString::number(nLevel);
+                SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>(pStShPool->
+                                    Find(aName, SfxStyleFamily::Page));
+                DBG_ASSERT(pSheet, "StyleSheet not found");
+
+                SfxItemSet aTempSet( pSheet->GetItemSet() );
+
+                if( nLevel > 1 )
                 {
-                    OUString aName = rPage.GetLayoutName() + " " +
-                        OUString::number(nLevel);
-                    SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>(pStShPool->
-                                        Find(aName, SfxStyleFamily::Page));
-                    DBG_ASSERT(pSheet, "StyleSheet not found");
-
-                    SfxItemSet aTempSet( pSheet->GetItemSet() );
-
-                    if( nLevel > 1 )
+                    // for all levels over 1, clear all items that will be
+                    // hard set to level 1
+                    SfxWhichIter aWhichIter(rSet);
+                    sal_uInt16 nWhich(aWhichIter.FirstWhich());
+                    while( nWhich )
                     {
-                        // for all levels over 1, clear all items that will be
-                        // hard set to level 1
-                        SfxWhichIter aWhichIter(rSet);
-                        sal_uInt16 nWhich(aWhichIter.FirstWhich());
-                        while( nWhich )
-                        {
-                            if( SfxItemState::SET == rSet.GetItemState( nWhich ) )
-                                aTempSet.ClearItem( nWhich );
-                            nWhich = aWhichIter.NextWhich();
-                        }
-
-                    }
-                    else
-                    {
-                        // put the items hard into level one
-                        aTempSet.Put( rSet );
+                        if( SfxItemState::SET == rSet.GetItemState( nWhich ) )
+                            aTempSet.ClearItem( nWhich );
+                        nWhich = aWhichIter.NextWhich();
                     }
 
-                    aTempSet.ClearInvalidItems();
-
-                    // Undo-Action
-                    mpDocSh->GetUndoManager()->AddUndoAction(
-                        std::make_unique<StyleSheetUndoAction>(&mrDoc, pSheet, &aTempSet));
-
-                    pSheet->GetItemSet().Set(aTempSet,false);
-                    pSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
                 }
-
-                // remove all hard set items from shape that are now set in style
-                SfxWhichIter aWhichIter(rSet);
-                sal_uInt16 nWhich(aWhichIter.FirstWhich());
-                while( nWhich )
+                else
                 {
-                    if( SfxItemState::SET == rSet.GetItemState( nWhich ) )
-                        pObject->ClearMergedItem( nWhich );
-                    nWhich = aWhichIter.NextWhich();
+                    // put the items hard into level one
+                    aTempSet.Put( rSet );
                 }
+
+                aTempSet.ClearInvalidItems();
+
+                // Undo-Action
+                mpDocSh->GetUndoManager()->AddUndoAction(
+                    std::make_unique<StyleSheetUndoAction>(&mrDoc, pSheet, &aTempSet));
+
+                pSheet->GetItemSet().Set(aTempSet,false);
+                pSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
             }
-            else
-                pObject->SetMergedItemSet(rSet);
 
-            bOk = true;
+            // remove all hard set items from shape that are now set in style
+            SfxWhichIter aWhichIter(rSet);
+            sal_uInt16 nWhich(aWhichIter.FirstWhich());
+            while( nWhich )
+            {
+                if( SfxItemState::SET == rSet.GetItemState( nWhich ) )
+                    pObject->ClearMergedItem( nWhich );
+                nWhich = aWhichIter.NextWhich();
+            }
         }
-   }
+        else
+            pObject->SetMergedItemSet(rSet);
+
+        bOk = true;
+    }
 }
 
 /**
