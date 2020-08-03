@@ -2773,6 +2773,22 @@ static void doc_iniUnoCommands ()
         OUString(".uno:RejectTrackedChange"),
         OUString(".uno:ShowResolvedAnnotations"),
         OUString(".uno:FreezePanesColumn"),
+        OUString(".uno:InsertBreak"),
+        OUString(".uno:InsertEndnote"),
+        OUString(".uno:InsertFootnote"),
+        OUString(".uno:InsertReferenceField"),
+        OUString(".uno:InsertBookmark"),
+        OUString(".uno:InsertAuthoritiesEntry"),
+        OUString(".uno:InsertMultiIndex"),
+        OUString(".uno:InsertField"),
+        OUString(".uno:InsertPageNumberField"),
+        OUString(".uno:InsertPageCountField"),
+        OUString(".uno:InsertDateField"),
+        OUString(".uno:InsertTitleField"),
+        OUString(".uno:InsertFieldCtrl"),
+        OUString(".uno:CharmapControl"),
+        OUString(".uno:EnterGroup"),
+        OUString(".uno:LeaveGroup"),
         OUString(".uno:FreezePanesRow")
     };
 
