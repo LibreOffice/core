@@ -926,9 +926,21 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
 
                 LayoutProperty& rProperty = aProperties[rConstraint.msForName];
                 if (rConstraint.mnType == XML_w)
+                {
                     rProperty[XML_w] = rShape->getSize().Width * rConstraint.mfFactor;
+                    if (rProperty[XML_w] > rShape->getSize().Width)
+                    {
+                        rProperty[XML_w] = rShape->getSize().Width;
+                    }
+                }
                 if (rConstraint.mnType == XML_h)
+                {
                     rProperty[XML_h] = rShape->getSize().Height * rConstraint.mfFactor;
+                    if (rProperty[XML_h] > rShape->getSize().Height)
+                    {
+                        rProperty[XML_h] = rShape->getSize().Height;
+                    }
+                }
 
                 // TODO: get values from differently named constraints as well
                 if (rConstraint.msForName == "sp" || rConstraint.msForName == "space" || rConstraint.msForName == "sibTrans")
