@@ -16,6 +16,24 @@
       "revId": "cb21c44b01a640fc121c034346d70a02ef67cdb2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec7360aa_5104ed9c",
+        "filename": "offapi/com/sun/star/sheet/DocumentSettings.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-08-03T09:50:50Z",
+      "side": 1,
+      "message": "The feature was added in 2008 [1], and the uno property is available since then.\nI\u0027d say this does not need an extra @since tag.\n\n[1] https://cgit.freedesktop.org/libreoffice/core/log/?qt\u003dgrep\u0026q\u003dcws+calcshare",
+      "parentUuid": "2c5301ff_6b1565a4",
+      "revId": "cb21c44b01a640fc121c034346d70a02ef67cdb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
