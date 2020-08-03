@@ -1862,7 +1862,7 @@ void Chart2ImportTest::testTdf115107()
     CPPUNIT_ASSERT_EQUAL(OUString("line"), aFields[5]->getString());
     aFields[5]->getPropertyValue("CharHeight") >>= nFontSize;
     aFields[5]->getPropertyValue("CharColor") >>= nFontColor;
-    CPPUNIT_ASSERT_EQUAL(static_cast<float>(13), nFontSize);
+    CPPUNIT_ASSERT_EQUAL(static_cast<float>(11.97), nFontSize);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(0xbf9000), nFontColor);
 
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_NEWLINE, aFields[6]->getFieldType());

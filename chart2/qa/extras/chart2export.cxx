@@ -173,6 +173,7 @@ public:
     void testTdf133191();
     void testTdf132594();
     void testTdf134255();
+    void testTdf134977();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -309,6 +310,7 @@ public:
     CPPUNIT_TEST(testTdf133191);
     CPPUNIT_TEST(testTdf132594);
     CPPUNIT_TEST(testTdf134255);
+    CPPUNIT_TEST(testTdf134977);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2238,7 +2240,7 @@ void Chart2ExportTest::testCustomDataLabel()
     CPPUNIT_ASSERT_EQUAL(OUString("line"), aFields[5]->getString());
     aFields[5]->getPropertyValue("CharHeight") >>= nFontSize;
     aFields[5]->getPropertyValue("CharColor") >>= nFontColor;
-    CPPUNIT_ASSERT_EQUAL(static_cast<float>(13), nFontSize);
+    CPPUNIT_ASSERT_EQUAL(static_cast<float>(11.97), nFontSize);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(0xbf9000), nFontColor);
 
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_NEWLINE, aFields[6]->getFieldType());
@@ -2835,6 +2837,28 @@ void Chart2ExportTest::testTdf134255()
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:txPr/a:bodyPr", "wrap", "square");
+}
+
+void Chart2ExportTest::testTdf134977()
+{
+    load("/chart2/qa/extras/data/xlsx/", "custom_data_label.xlsx");
+
+    //import test
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    Reference< chart2::XDataSeries > xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
+    CPPUNIT_ASSERT(xDataSeries.is());
+    uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
+    uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aFields;
+    float nFontSize;
+    xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
+    aFields[0]->getPropertyValue("CharHeight") >>= nFontSize;
+    CPPUNIT_ASSERT_EQUAL(static_cast<float>(9), nFontSize);
+
+    //export test
+    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart","Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:dLbl/c:tx/c:rich/a:p/a:r/a:rPr", "sz", "900");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
