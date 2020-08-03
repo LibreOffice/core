@@ -118,18 +118,18 @@ public:
  */
 class SwTextFly
 {
-    const SwPageFrame                * pPage;
+    const SwPageFrame                * m_pPage;
     const SwAnchoredObject           * mpCurrAnchoredObj;
     const SwTextFrame                * m_pCurrFrame;
     const SwTextFrame                * m_pMaster;
     std::unique_ptr<SwAnchoredObjList> mpAnchoredObjList;
 
-    long nMinBottom;
-    long nNextTop;  /// Stores the upper edge of the "next" frame
+    long m_nMinBottom;
+    long m_nNextTop;  /// Stores the upper edge of the "next" frame
     sal_uLong m_nCurrFrameNodeIndex;
 
-    bool bOn : 1;
-    bool bTopRule: 1;
+    bool m_bOn : 1;
+    bool m_bTopRule: 1;
     bool mbIgnoreCurrentFrame: 1;
     bool mbIgnoreContour: 1;
 
@@ -307,35 +307,35 @@ inline SwAnchoredObjList* SwTextFly::GetAnchoredObjList() const
 
 inline void SwTextFly::SetTopRule()
 {
-    bTopRule = false;
+    m_bTopRule = false;
 }
 
 inline bool SwTextFly::IsOn() const
 {
-    return bOn;
+    return m_bOn;
 }
 
 inline bool SwTextFly::Relax( const SwRect &rRect )
 {
-    if (bOn)
+    if (m_bOn)
     {
-        bOn = IsAnyFrame( rRect );
+        m_bOn = IsAnyFrame( rRect );
     }
-    return bOn;
+    return m_bOn;
 }
 
 inline bool SwTextFly::Relax()
 {
-    if (bOn)
+    if (m_bOn)
     {
-        bOn = IsAnyFrame();
+        m_bOn = IsAnyFrame();
     }
-    return bOn;
+    return m_bOn;
 }
 
 inline SwTwips SwTextFly::GetMinBottom() const
 {
-    return mpAnchoredObjList ? nMinBottom : CalcMinBottom();
+    return mpAnchoredObjList ? m_nMinBottom : CalcMinBottom();
 }
 
 inline const SwTextFrame* SwTextFly::GetMaster() const
@@ -345,17 +345,17 @@ inline const SwTextFrame* SwTextFly::GetMaster() const
 
 inline long SwTextFly::GetNextTop() const
 {
-    return nNextTop;
+    return m_nNextTop;
 }
 
 inline void SwTextFly::SetNextTop( long nNew ) const
 {
-    const_cast<SwTextFly*>(this)->nNextTop = nNew;
+    const_cast<SwTextFly*>(this)->m_nNextTop = nNew;
 }
 
 inline SwRect SwTextFly::GetFrame( const SwRect &rRect ) const
 {
-    return bOn ? GetFrame_( rRect ) : SwRect();
+    return m_bOn ? GetFrame_( rRect ) : SwRect();
 }
 
 inline void SwTextFly::SetIgnoreCurrentFrame( bool bNew )

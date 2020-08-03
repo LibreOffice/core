@@ -80,13 +80,13 @@ SwHTMLTableLayoutCnts::SwHTMLTableLayoutCnts(const SwStartNode *pSttNd,
                                              std::shared_ptr<SwHTMLTableLayout> const& rTab,
                                              bool bNoBrTag,
                                              std::shared_ptr<SwHTMLTableLayoutCnts> const& rNxt ) :
-    xNext( rNxt ), pBox( nullptr ), xTable( rTab ), pStartNode( pSttNd ),
-    nPass1Done( 0 ), nWidthSet( 0 ), bNoBreakTag( bNoBrTag )
+    m_xNext( rNxt ), m_pBox( nullptr ), m_xTable( rTab ), m_pStartNode( pSttNd ),
+    m_nPass1Done( 0 ), m_nWidthSet( 0 ), m_bNoBreakTag( bNoBrTag )
 {}
 
 const SwStartNode *SwHTMLTableLayoutCnts::GetStartNode() const
 {
-    return pBox ? pBox->GetSttNd() : pStartNode;
+    return m_pBox ? m_pBox->GetSttNd() : m_pStartNode;
 }
 
 SwHTMLTableLayoutCell::SwHTMLTableLayoutCell(std::shared_ptr<SwHTMLTableLayoutCnts> const& rCnts,
@@ -102,11 +102,11 @@ SwHTMLTableLayoutCell::SwHTMLTableLayoutCell(std::shared_ptr<SwHTMLTableLayoutCn
 SwHTMLTableLayoutColumn::SwHTMLTableLayoutColumn( sal_uInt16 nWidth,
                                                   bool bRelWidth,
                                                   bool bLBorder ) :
-    nMinNoAlign(MINLAY), nMaxNoAlign(MINLAY), nAbsMinNoAlign(MINLAY),
-    nMin(0), nMax(0),
-    nAbsColWidth(0), nRelColWidth(0),
-    nWidthOption( nWidth ), bRelWidthOption( bRelWidth ),
-    bLeftBorder( bLBorder )
+    m_nMinNoAlign(MINLAY), m_nMaxNoAlign(MINLAY), m_nAbsMinNoAlign(MINLAY),
+    m_nMin(0), m_nMax(0),
+    m_nAbsColWidth(0), m_nRelColWidth(0),
+    m_nWidthOption( nWidth ), m_bRelWidthOption( bRelWidth ),
+    m_bLeftBorder( bLBorder )
 {}
 
 SwHTMLTableLayoutConstraints::SwHTMLTableLayoutConstraints(sal_uLong nMin, sal_uLong nMax,

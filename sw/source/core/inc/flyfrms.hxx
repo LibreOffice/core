@@ -195,7 +195,7 @@ public:
 // Flys that are bound to a character in Content
 class SwFlyInContentFrame : public SwFlyFrame
 {
-    Point aRef;  // relative to this point AbsPos is being calculated
+    Point m_aRef;  // relative to this point AbsPos is being calculated
 
     virtual void DestroyImpl() override;
     virtual ~SwFlyInContentFrame() override;
@@ -215,7 +215,7 @@ public:
 
     void SetRefPoint( const Point& rPoint, const Point &rRelAttr,
         const Point &rRelPos );
-    const Point &GetRefPoint() const { return aRef; }
+    const Point &GetRefPoint() const { return m_aRef; }
     Point const & GetRelPos() const;
 
     // (26.11.93, see tabfrm.hxx, but might also be valid for others)
@@ -226,7 +226,7 @@ public:
     void RegistFlys();
 
     //see layact.cxx
-    void AddRefOfst( long nOfst ) { aRef.AdjustY( nOfst ); }
+    void AddRefOfst( long nOfst ) { m_aRef.AdjustY( nOfst ); }
 
     // #i26791#
     virtual void MakeObjPos() override;
