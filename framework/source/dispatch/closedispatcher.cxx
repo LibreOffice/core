@@ -353,9 +353,19 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
             {
                 if (bHasActiveConnections)
                     bCloseFrame = true;
-                else if (eOperation == E_CLOSE_FRAME)
+                else if (eOperation == E_CLOSE_FRAME) {
+#if defined(ENABLE_QUICKSTART_APPLET)
                     bTerminateApp = true;
-                else if( SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::STARTMODULE) )
+#else
+                    // REVIEW QUESTION: this condition would not compile since we can't include desktop header inside framework code
+                    // What would be the proper way to pass the args to this component?
+                    if (Desktop::GetCommandLineArgs().IsQuickstart()) {
+                        bCloseFrame = true;
+                    } else {
+                        bTerminateApp = true;
+                    }
+#endif
+                } else if( SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::STARTMODULE) )
                     bEstablishBackingMode = true;
                 else
                     bTerminateApp = true;

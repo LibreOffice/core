@@ -1536,9 +1536,15 @@ int Desktop::Main()
 
         SetSplashScreenProgress(80);
 
+        // REVIEW QUESTION: originally I wanted to hide this ifdef inside InitializeQuickstartMode(),
+        // thinking that it will show the intent a bit better.
+        // But then compiler complains about unused function parameter (rxContext).
+        // Is putting ifdef here okay?
+#if defined(ENABLE_QUICKSTART_APPLET)
         if ( !rCmdLineArgs.IsInvisible() &&
              !rCmdLineArgs.IsNoQuickstart() )
             InitializeQuickstartMode( xContext );
+#endif
 
         try
         {
