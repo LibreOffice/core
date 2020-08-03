@@ -593,7 +593,7 @@ bool WriteOnlyVars::TraverseIfStmt(IfStmt* ifStmt)
 
 void WriteOnlyVars::checkIfReadFrom(const VarDecl* varDecl, const Expr* memberExpr)
 {
-    auto parentsRange = getParents(*memberExpr);
+    auto parentsRange = compiler.getASTContext().getParents(*memberExpr);
     const Stmt* child = memberExpr;
     const Stmt* parent
         = parentsRange.begin() == parentsRange.end() ? nullptr : parentsRange.begin()->get<Stmt>();
@@ -602,7 +602,7 @@ void WriteOnlyVars::checkIfReadFrom(const VarDecl* varDecl, const Expr* memberEx
     bool bDump = false;
     auto walkupUp = [&]() {
         child = parent;
-        auto parentsRange = getParents(*parent);
+        auto parentsRange = compiler.getASTContext().getParents(*parent);
         parent = parentsRange.begin() == parentsRange.end() ? nullptr
                                                             : parentsRange.begin()->get<Stmt>();
     };
@@ -611,7 +611,7 @@ void WriteOnlyVars::checkIfReadFrom(const VarDecl* varDecl, const Expr* memberEx
         if (!parent)
         {
             // check if we're inside a CXXCtorInitializer or a VarDecl
-            auto parentsRange = getParents(*child);
+            auto parentsRange = compiler.getASTContext().getParents(*child);
             if (parentsRange.begin() != parentsRange.end())
             {
                 const Decl* decl = parentsRange.begin()->get<Decl>();
@@ -810,7 +810,7 @@ void WriteOnlyVars::checkIfWrittenTo(const VarDecl* varDecl, const Expr* memberE
         != insideConditionalCheckOfMemberSet.end())
         return;
 
-    auto parentsRange = getParents(*memberExpr);
+    auto parentsRange = compiler.getASTContext().getParents(*memberExpr);
     const Stmt* child = memberExpr;
     const Stmt* parent
         = parentsRange.begin() == parentsRange.end() ? nullptr : parentsRange.begin()->get<Stmt>();
@@ -819,7 +819,7 @@ void WriteOnlyVars::checkIfWrittenTo(const VarDecl* varDecl, const Expr* memberE
     bool bDump = false;
     auto walkupUp = [&]() {
         child = parent;
-        auto parentsRange = getParents(*parent);
+        auto parentsRange = compiler.getASTContext().getParents(*parent);
         parent = parentsRange.begin() == parentsRange.end() ? nullptr
                                                             : parentsRange.begin()->get<Stmt>();
     };
@@ -829,7 +829,7 @@ void WriteOnlyVars::checkIfWrittenTo(const VarDecl* varDecl, const Expr* memberE
         {
             // check if we have an expression like
             //    int& r = var;
-            auto parentsRange = getParents(*child);
+            auto parentsRange = compiler.getASTContext().getParents(*child);
             if (parentsRange.begin() != parentsRange.end())
             {
                 auto varDecl = dyn_cast_or_null<VarDecl>(parentsRange.begin()->get<Decl>());

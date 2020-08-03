@@ -194,7 +194,7 @@ bool ConstMethod::checkIfCanBeConst(const Stmt* stmt, const CXXMethodDecl* cxxMe
 {
     const Stmt* parent = getParentStmt( stmt );
     if (!parent) {
-        auto parentsRange = getParents(*stmt);
+        auto parentsRange = compiler.getASTContext().getParents(*stmt);
         if ( parentsRange.begin() == parentsRange.end())
             return true;
         auto varDecl = dyn_cast_or_null<VarDecl>(parentsRange.begin()->get<Decl>());

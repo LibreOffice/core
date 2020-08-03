@@ -304,7 +304,7 @@ bool ConstVars::VisitDeclRefExpr(const DeclRefExpr* declRefExpr)
 
 void ConstVars::check(const VarDecl* varDecl, const Expr* memberExpr)
 {
-    auto parentsRange = getParents(*memberExpr);
+    auto parentsRange = compiler.getASTContext().getParents(*memberExpr);
     const Stmt* child = memberExpr;
     const Stmt* parent
         = parentsRange.begin() == parentsRange.end() ? nullptr : parentsRange.begin()->get<Stmt>();
@@ -315,7 +315,7 @@ void ConstVars::check(const VarDecl* varDecl, const Expr* memberExpr)
     bool bDump = false;
     auto walkUp = [&]() {
         child = parent;
-        auto parentsRange = getParents(*parent);
+        auto parentsRange = compiler.getASTContext().getParents(*parent);
         parent = parentsRange.begin() == parentsRange.end() ? nullptr
                                                             : parentsRange.begin()->get<Stmt>();
     };
@@ -325,7 +325,7 @@ void ConstVars::check(const VarDecl* varDecl, const Expr* memberExpr)
         {
             // check if we have an expression like
             //    int& r = var;
-            auto parentsRange = getParents(*child);
+            auto parentsRange = compiler.getASTContext().getParents(*child);
             if (parentsRange.begin() != parentsRange.end())
             {
                 auto varDecl = dyn_cast_or_null<VarDecl>(parentsRange.begin()->get<Decl>());
@@ -334,7 +334,7 @@ void ConstVars::check(const VarDecl* varDecl, const Expr* memberExpr)
                     if (varDecl->isImplicit())
                     {
                         // so we can walk up from inside a for-range stmt
-                        parentsRange = getParents(*varDecl);
+                        parentsRange = compiler.getASTContext().getParents(*varDecl);
                         if (parentsRange.begin() != parentsRange.end())
                             parent = parentsRange.begin()->get<Stmt>();
                     }

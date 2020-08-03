@@ -267,7 +267,7 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
     if (!parent)
     {
         // check if we're inside a CXXCtorInitializer
-        auto parentsRange = getParents(*stmt);
+        auto parentsRange = compiler.getASTContext().getParents(*stmt);
         if ( parentsRange.begin() != parentsRange.end())
         {
             if (auto cxxConstructorDecl = dyn_cast_or_null<CXXConstructorDecl>(parentsRange.begin()->get<Decl>()))
