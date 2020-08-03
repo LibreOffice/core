@@ -1545,6 +1545,11 @@ void SdImportTestSmartArt::testLinearRule()
     // - Expected: 3160
     // - Actual  : 8770
     // i.e. there was unexpected spacing on the left of the arrow.
+    // Then the imporoved version of the test document failed with:
+    // - Expected: 3160
+    // - Actual  : 19828
+    // i.e. the spacing on the left of the arrow was so large that the shape was mostly outside the
+    // slide.
     sal_Int32 nGroupLeft = xGroup->getPosition().X;
     sal_Int32 nArrowLeft = xShape->getPosition().X;
     CPPUNIT_ASSERT_EQUAL(nGroupLeft, nArrowLeft);
