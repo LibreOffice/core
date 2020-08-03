@@ -402,60 +402,60 @@ void SAL_CALL ContentImplHelper::addProperty(
     OSL_ENSURE( xSet.is(),
                 "ContentImplHelper::addProperty - No property set!" );
 
-    if ( xSet.is() )
+    if ( !xSet.is() )
+        return;
+
+    uno::Reference< beans::XPropertyContainer > xContainer(
+        xSet, uno::UNO_QUERY );
+
+    OSL_ENSURE(
+        xContainer.is(),
+        "ContentImplHelper::addProperty - No property container!" );
+
+    if ( !xContainer.is() )
+        return;
+
+    // Property is always removable.
+    Attributes |= beans::PropertyAttribute::REMOVABLE;
+
+    try
     {
-        uno::Reference< beans::XPropertyContainer > xContainer(
-            xSet, uno::UNO_QUERY );
+        xContainer->addProperty( Name, Attributes, DefaultValue );
+    }
+    catch ( beans::PropertyExistException const & )
+    {
+        OSL_FAIL( "ContentImplHelper::addProperty - Exists!" );
+        throw;
+    }
+    catch ( beans::IllegalTypeException const & )
+    {
+        OSL_FAIL( "ContentImplHelper::addProperty - Wrong Type!" );
+        throw;
+    }
+    catch ( lang::IllegalArgumentException const & )
+    {
+        OSL_FAIL( "ContentImplHelper::addProperty - Illegal Arg!" );
+        throw;
+    }
 
-        OSL_ENSURE(
-            xContainer.is(),
-            "ContentImplHelper::addProperty - No property container!" );
+    // Success!
 
-        if ( xContainer.is() )
-        {
-            // Property is always removable.
-            Attributes |= beans::PropertyAttribute::REMOVABLE;
+    if ( m_pImpl->m_xPropSetInfo.is() )
+    {
+        // Info cached in propertyset info is invalid now!
+        m_pImpl->m_xPropSetInfo->reset();
+    }
 
-            try
-            {
-                xContainer->addProperty( Name, Attributes, DefaultValue );
-            }
-            catch ( beans::PropertyExistException const & )
-            {
-                OSL_FAIL( "ContentImplHelper::addProperty - Exists!" );
-                throw;
-            }
-            catch ( beans::IllegalTypeException const & )
-            {
-                OSL_FAIL( "ContentImplHelper::addProperty - Wrong Type!" );
-                throw;
-            }
-            catch ( lang::IllegalArgumentException const & )
-            {
-                OSL_FAIL( "ContentImplHelper::addProperty - Illegal Arg!" );
-                throw;
-            }
-
-            // Success!
-
-            if ( m_pImpl->m_xPropSetInfo.is() )
-            {
-                // Info cached in propertyset info is invalid now!
-                m_pImpl->m_xPropSetInfo->reset();
-            }
-
-            // Notify propertyset info change listeners.
-            if ( m_pImpl->m_pPropSetChangeListeners &&
-                 m_pImpl->m_pPropSetChangeListeners->getLength() )
-            {
-                beans::PropertySetInfoChangeEvent evt(
-                            static_cast< cppu::OWeakObject * >( this ),
-                            Name,
-                            -1, // No handle available
-                            beans::PropertySetInfoChange::PROPERTY_INSERTED );
-                notifyPropertySetInfoChange( evt );
-            }
-        }
+    // Notify propertyset info change listeners.
+    if ( m_pImpl->m_pPropSetChangeListeners &&
+         m_pImpl->m_pPropSetChangeListeners->getLength() )
+    {
+        beans::PropertySetInfoChangeEvent evt(
+                    static_cast< cppu::OWeakObject * >( this ),
+                    Name,
+                    -1, // No handle available
+                    beans::PropertySetInfoChange::PROPERTY_INSERTED );
+        notifyPropertySetInfoChange( evt );
     }
 }
 
@@ -490,68 +490,68 @@ void SAL_CALL ContentImplHelper::removeProperty( const OUString& Name )
     // Open persistent property set, if exists.
     uno::Reference< css::ucb::XPersistentPropertySet > xSet(
         getAdditionalPropertySet( false ) );
-    if ( xSet.is() )
+    if ( !xSet.is() )
+        return;
+
+    uno::Reference< beans::XPropertyContainer > xContainer(
+        xSet, uno::UNO_QUERY );
+
+    OSL_ENSURE(
+        xContainer.is(),
+        "ContentImplHelper::removeProperty - No property container!" );
+
+    if ( !xContainer.is() )
+        return;
+
+    try
     {
-        uno::Reference< beans::XPropertyContainer > xContainer(
-            xSet, uno::UNO_QUERY );
+        xContainer->removeProperty( Name );
+    }
+    catch ( beans::UnknownPropertyException const & )
+    {
+        OSL_FAIL( "ContentImplHelper::removeProperty - Unknown!" );
+        throw;
+    }
+    catch ( beans::NotRemoveableException const & )
+    {
+        OSL_FAIL(
+            "ContentImplHelper::removeProperty - Unremovable!" );
+        throw;
+    }
 
-        OSL_ENSURE(
-            xContainer.is(),
-            "ContentImplHelper::removeProperty - No property container!" );
+    xContainer = nullptr;
 
-        if ( xContainer.is() )
+    // Success!
+
+    if ( !xSet->getPropertySetInfo()->getProperties().hasElements() )
+    {
+        // Remove empty propertyset from registry.
+        uno::Reference< css::ucb::XPropertySetRegistry >
+            xReg = xSet->getRegistry();
+        if ( xReg.is() )
         {
-            try
-            {
-                xContainer->removeProperty( Name );
-            }
-            catch ( beans::UnknownPropertyException const & )
-            {
-                OSL_FAIL( "ContentImplHelper::removeProperty - Unknown!" );
-                throw;
-            }
-            catch ( beans::NotRemoveableException const & )
-            {
-                OSL_FAIL(
-                    "ContentImplHelper::removeProperty - Unremovable!" );
-                throw;
-            }
-
-            xContainer = nullptr;
-
-            // Success!
-
-            if ( !xSet->getPropertySetInfo()->getProperties().hasElements() )
-            {
-                // Remove empty propertyset from registry.
-                uno::Reference< css::ucb::XPropertySetRegistry >
-                    xReg = xSet->getRegistry();
-                if ( xReg.is() )
-                {
-                    OUString aKey( xSet->getKey() );
-                    xSet = nullptr;
-                    xReg->removePropertySet( aKey );
-                }
-            }
-
-            if ( m_pImpl->m_xPropSetInfo.is() )
-            {
-                // Info cached in propertyset info is invalid now!
-                m_pImpl->m_xPropSetInfo->reset();
-            }
-
-            // Notify propertyset info change listeners.
-            if ( m_pImpl->m_pPropSetChangeListeners &&
-                 m_pImpl->m_pPropSetChangeListeners->getLength() )
-            {
-                beans::PropertySetInfoChangeEvent evt(
-                            static_cast< cppu::OWeakObject * >( this ),
-                            Name,
-                            -1, // No handle available
-                            beans::PropertySetInfoChange::PROPERTY_REMOVED );
-                notifyPropertySetInfoChange( evt );
-            }
+            OUString aKey( xSet->getKey() );
+            xSet = nullptr;
+            xReg->removePropertySet( aKey );
         }
+    }
+
+    if ( m_pImpl->m_xPropSetInfo.is() )
+    {
+        // Info cached in propertyset info is invalid now!
+        m_pImpl->m_xPropSetInfo->reset();
+    }
+
+    // Notify propertyset info change listeners.
+    if ( m_pImpl->m_pPropSetChangeListeners &&
+         m_pImpl->m_pPropSetChangeListeners->getLength() )
+    {
+        beans::PropertySetInfoChangeEvent evt(
+                    static_cast< cppu::OWeakObject * >( this ),
+                    Name,
+                    -1, // No handle available
+                    beans::PropertySetInfoChange::PROPERTY_REMOVED );
+        notifyPropertySetInfoChange( evt );
     }
 }
 
@@ -644,75 +644,75 @@ void ContentImplHelper::notifyPropertiesChange(
         return;
 
     sal_Int32 nCount = evt.getLength();
-    if ( nCount )
+    if ( !nCount )
+        return;
+
+    // First, notify listeners interested in changes of every property.
+    cppu::OInterfaceContainerHelper* pAllPropsContainer
+        = m_pImpl->m_pPropertyChangeListeners->getContainer(
+            OUString() );
+    if ( pAllPropsContainer )
     {
-        // First, notify listeners interested in changes of every property.
-        cppu::OInterfaceContainerHelper* pAllPropsContainer
-            = m_pImpl->m_pPropertyChangeListeners->getContainer(
-                OUString() );
-        if ( pAllPropsContainer )
+        cppu::OInterfaceIteratorHelper aIter( *pAllPropsContainer );
+        while ( aIter.hasMoreElements() )
         {
-            cppu::OInterfaceIteratorHelper aIter( *pAllPropsContainer );
+            // Propagate event.
+            uno::Reference< beans::XPropertiesChangeListener > xListener(
+                aIter.next(), uno::UNO_QUERY );
+            if ( xListener.is() )
+                xListener->propertiesChange( evt );
+        }
+    }
+
+    PropertiesEventListenerMap aListeners;
+
+    for ( const beans::PropertyChangeEvent& rEvent : evt )
+    {
+        const OUString& rName = rEvent.PropertyName;
+
+        cppu::OInterfaceContainerHelper* pPropsContainer
+            = m_pImpl->m_pPropertyChangeListeners->getContainer( rName );
+        if ( pPropsContainer )
+        {
+            cppu::OInterfaceIteratorHelper aIter( *pPropsContainer );
             while ( aIter.hasMoreElements() )
             {
-                // Propagate event.
-                uno::Reference< beans::XPropertiesChangeListener > xListener(
-                    aIter.next(), uno::UNO_QUERY );
-                if ( xListener.is() )
-                    xListener->propertiesChange( evt );
-            }
-        }
+                PropertyEventSequence* p = nullptr;
 
-        PropertiesEventListenerMap aListeners;
-
-        for ( const beans::PropertyChangeEvent& rEvent : evt )
-        {
-            const OUString& rName = rEvent.PropertyName;
-
-            cppu::OInterfaceContainerHelper* pPropsContainer
-                = m_pImpl->m_pPropertyChangeListeners->getContainer( rName );
-            if ( pPropsContainer )
-            {
-                cppu::OInterfaceIteratorHelper aIter( *pPropsContainer );
-                while ( aIter.hasMoreElements() )
+                beans::XPropertiesChangeListener* pListener =
+                    static_cast< beans::XPropertiesChangeListener * >(
+                                                        aIter.next() );
+                PropertiesEventListenerMap::iterator it =
+                        aListeners.find( pListener );
+                if ( it == aListeners.end() )
                 {
-                    PropertyEventSequence* p = nullptr;
-
-                    beans::XPropertiesChangeListener* pListener =
-                        static_cast< beans::XPropertiesChangeListener * >(
-                                                            aIter.next() );
-                    PropertiesEventListenerMap::iterator it =
-                            aListeners.find( pListener );
-                    if ( it == aListeners.end() )
-                    {
-                        // Not in map - create and insert new entry.
-                        p = &aListeners.emplace( pListener, PropertyEventSequence(nCount)).first->second;
-                    }
-                    else
-                        p = &it->second;
-
-                    if ( p )
-                        p->append( rEvent );
+                    // Not in map - create and insert new entry.
+                    p = &aListeners.emplace( pListener, PropertyEventSequence(nCount)).first->second;
                 }
+                else
+                    p = &it->second;
+
+                if ( p )
+                    p->append( rEvent );
             }
         }
+    }
 
-        // Notify listeners.
-        PropertiesEventListenerMap::iterator it = aListeners.begin();
-        while ( !aListeners.empty() )
-        {
-            beans::XPropertiesChangeListener* pListener =
-                static_cast< beans::XPropertiesChangeListener * >( (*it).first );
-            PropertyEventSequence pSeq = std::move(it->second);
+    // Notify listeners.
+    PropertiesEventListenerMap::iterator it = aListeners.begin();
+    while ( !aListeners.empty() )
+    {
+        beans::XPropertiesChangeListener* pListener =
+            static_cast< beans::XPropertiesChangeListener * >( (*it).first );
+        PropertyEventSequence pSeq = std::move(it->second);
 
-            // Remove current element.
-            aListeners.erase( it );
+        // Remove current element.
+        aListeners.erase( it );
 
-            // Propagate event.
-            pListener->propertiesChange( pSeq.getEvents() );
+        // Propagate event.
+        pListener->propertiesChange( pSeq.getEvents() );
 
-            it = aListeners.begin();
-        }
+        it = aListeners.begin();
     }
 }
 
