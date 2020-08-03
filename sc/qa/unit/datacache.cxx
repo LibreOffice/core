@@ -31,12 +31,13 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 public:
-    virtual void setUp() override
+    ScCacheTest()
     {
         utl::ConfigManager::EnableFuzzing();
         ScDLL::Init();
         ScGlobal::Init();
     }
+    ~ScCacheTest() { ScGlobal::Clear(); }
 };
 
 void ScCacheTest::testCacheSimple()
