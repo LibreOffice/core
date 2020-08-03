@@ -1554,6 +1554,12 @@ void SdImportTestSmartArt::testLinearRule()
     sal_Int32 nArrowLeft = xShape->getPosition().X;
     CPPUNIT_ASSERT_EQUAL(nGroupLeft, nArrowLeft);
 
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected less or equal than: 10092
+    // - Actual  : 20183
+    // i.e. the arrow height was larger than the canvas given to the smartart on slide 1.
+    CPPUNIT_ASSERT_LESSEQUAL(static_cast<sal_Int32>(10092), xShape->getSize().Height);
+
     xDocShRef->DoClose();
 }
 
