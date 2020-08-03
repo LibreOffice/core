@@ -819,104 +819,104 @@ void InternetProxyDecider_Impl::setNoProxyList(
 
     m_aNoProxyList.clear();
 
-    if ( !rNoProxyList.isEmpty() )
+    if ( rNoProxyList.isEmpty() )
+        return;
+
+    // List of connection endpoints hostname[:port],
+    // separated by semicolon. Wildcards allowed.
+
+    sal_Int32 nPos = 0;
+    sal_Int32 nEnd = rNoProxyList.indexOf( ';' );
+    sal_Int32 nLen = rNoProxyList.getLength();
+
+    do
     {
-        // List of connection endpoints hostname[:port],
-        // separated by semicolon. Wildcards allowed.
+        if ( nEnd == -1 )
+            nEnd = nLen;
 
-        sal_Int32 nPos = 0;
-        sal_Int32 nEnd = rNoProxyList.indexOf( ';' );
-        sal_Int32 nLen = rNoProxyList.getLength();
+        OUString aToken = rNoProxyList.copy( nPos, nEnd - nPos );
 
-        do
+        if ( !aToken.isEmpty() )
         {
-            if ( nEnd == -1 )
-                nEnd = nLen;
+            OUString aServer;
+            OUString aPort;
 
-            OUString aToken = rNoProxyList.copy( nPos, nEnd - nPos );
+            // numerical IPv6 address?
+            bool bIPv6Address = false;
+            sal_Int32 nClosedBracketPos = aToken.indexOf( ']' );
+            if ( nClosedBracketPos == -1 )
+                nClosedBracketPos = 0;
+            else
+                bIPv6Address = true;
 
-            if ( !aToken.isEmpty() )
+            sal_Int32 nColonPos = aToken.indexOf( ':', nClosedBracketPos );
+            if ( nColonPos == -1 )
             {
-                OUString aServer;
-                OUString aPort;
-
-                // numerical IPv6 address?
-                bool bIPv6Address = false;
-                sal_Int32 nClosedBracketPos = aToken.indexOf( ']' );
-                if ( nClosedBracketPos == -1 )
-                    nClosedBracketPos = 0;
-                else
-                    bIPv6Address = true;
-
-                sal_Int32 nColonPos = aToken.indexOf( ':', nClosedBracketPos );
-                if ( nColonPos == -1 )
+                // No port given, server pattern equals current token
+                aPort = "*";
+                if ( aToken.indexOf( '*' ) == -1 )
                 {
-                    // No port given, server pattern equals current token
-                    aPort = "*";
-                    if ( aToken.indexOf( '*' ) == -1 )
-                    {
-                        // pattern describes exactly one server
-                        aServer = aToken;
-                    }
-
-                    aToken += ":*";
-                }
-                else
-                {
-                    // Port given, extract server pattern
-                    sal_Int32 nAsteriskPos = aToken.indexOf( '*' );
-                    aPort = aToken.copy( nColonPos + 1 );
-                    if ( nAsteriskPos < nColonPos )
-                    {
-                        // pattern describes exactly one server
-                        aServer = aToken.copy( 0, nColonPos );
-                    }
+                    // pattern describes exactly one server
+                    aServer = aToken;
                 }
 
-                OUStringBuffer aFullyQualifiedHost;
-                if ( !aServer.isEmpty() )
+                aToken += ":*";
+            }
+            else
+            {
+                // Port given, extract server pattern
+                sal_Int32 nAsteriskPos = aToken.indexOf( '*' );
+                aPort = aToken.copy( nColonPos + 1 );
+                if ( nAsteriskPos < nColonPos )
                 {
-                    // Remember fully qualified server name if current list
-                    // entry specifies exactly one non-fully qualified server
-                    // name.
+                    // pattern describes exactly one server
+                    aServer = aToken.copy( 0, nColonPos );
+                }
+            }
 
-                    // remove square brackets from host name in case it's
-                    // a numerical IPv6 address.
+            OUStringBuffer aFullyQualifiedHost;
+            if ( !aServer.isEmpty() )
+            {
+                // Remember fully qualified server name if current list
+                // entry specifies exactly one non-fully qualified server
+                // name.
+
+                // remove square brackets from host name in case it's
+                // a numerical IPv6 address.
+                if ( bIPv6Address )
+                    aServer = aServer.copy( 1, aServer.getLength() - 2 );
+
+                // This might be quite expensive (DNS lookup).
+                const osl::SocketAddr aAddr( aServer, 0 );
+                OUString aTmp = aAddr.getHostname().toAsciiLowerCase();
+                if ( aTmp != aServer.toAsciiLowerCase() )
+                {
                     if ( bIPv6Address )
-                        aServer = aServer.copy( 1, aServer.getLength() - 2 );
-
-                    // This might be quite expensive (DNS lookup).
-                    const osl::SocketAddr aAddr( aServer, 0 );
-                    OUString aTmp = aAddr.getHostname().toAsciiLowerCase();
-                    if ( aTmp != aServer.toAsciiLowerCase() )
                     {
-                        if ( bIPv6Address )
-                        {
-                            aFullyQualifiedHost.append( "[" );
-                            aFullyQualifiedHost.append( aTmp );
-                            aFullyQualifiedHost.append( "]" );
-                        }
-                        else
-                        {
-                            aFullyQualifiedHost.append( aTmp );
-                        }
-                        aFullyQualifiedHost.append( ":" );
-                        aFullyQualifiedHost.append( aPort );
+                        aFullyQualifiedHost.append( "[" );
+                        aFullyQualifiedHost.append( aTmp );
+                        aFullyQualifiedHost.append( "]" );
                     }
+                    else
+                    {
+                        aFullyQualifiedHost.append( aTmp );
+                    }
+                    aFullyQualifiedHost.append( ":" );
+                    aFullyQualifiedHost.append( aPort );
                 }
-
-                m_aNoProxyList.emplace_back( WildCard( aToken ),
-                                      WildCard( aFullyQualifiedHost.makeStringAndClear() ) );
             }
 
-            if ( nEnd != nLen )
-            {
-                nPos = nEnd + 1;
-                nEnd = rNoProxyList.indexOf( ';', nPos );
-            }
+            m_aNoProxyList.emplace_back( WildCard( aToken ),
+                                  WildCard( aFullyQualifiedHost.makeStringAndClear() ) );
         }
-        while ( nEnd != nLen );
+
+        if ( nEnd != nLen )
+        {
+            nPos = nEnd + 1;
+            nEnd = rNoProxyList.indexOf( ';', nPos );
+        }
     }
+    while ( nEnd != nLen );
 }
 
 } // namespace proxydecider_impl

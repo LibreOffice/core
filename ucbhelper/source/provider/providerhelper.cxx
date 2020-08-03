@@ -181,19 +181,19 @@ void ContentProviderImplHelper::queryExistingContents(
 void ContentProviderImplHelper::registerNewContent(
     const uno::Reference< ucb::XContent > & xContent )
 {
-    if ( xContent.is() )
-    {
-        osl::MutexGuard aGuard( m_aMutex );
+    if ( !xContent.is() )
+        return;
 
-        cleanupRegisteredContents();
+    osl::MutexGuard aGuard( m_aMutex );
 
-        const OUString aURL(
-            xContent->getIdentifier()->getContentIdentifier() );
-        ucbhelper_impl::Contents::const_iterator it
-            = m_pImpl->m_aContents.find( aURL );
-        if ( it == m_pImpl->m_aContents.end() )
-            m_pImpl->m_aContents[ aURL ] = xContent;
-    }
+    cleanupRegisteredContents();
+
+    const OUString aURL(
+        xContent->getIdentifier()->getContentIdentifier() );
+    ucbhelper_impl::Contents::const_iterator it
+        = m_pImpl->m_aContents.find( aURL );
+    if ( it == m_pImpl->m_aContents.end() )
+        m_pImpl->m_aContents[ aURL ] = xContent;
 }
 
 uno::Reference< css::ucb::XPropertySetRegistry >

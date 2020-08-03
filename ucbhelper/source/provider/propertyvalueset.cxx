@@ -604,53 +604,53 @@ void PropertyValueSet::appendVoid( const OUString& rPropName )
 void PropertyValueSet::appendPropertySet(
                                 const Reference< XPropertySet >& rxSet )
 {
-    if ( rxSet.is() )
+    if ( !rxSet.is() )
+        return;
+
+    Reference< XPropertySetInfo > xInfo = rxSet->getPropertySetInfo();
+    if ( !xInfo.is() )
+        return;
+
+    const Sequence< Property > aProps = xInfo->getProperties();
+
+    Reference< XPropertyAccess > xPropertyAccess( rxSet, UNO_QUERY );
+    if ( xPropertyAccess.is() )
     {
-        Reference< XPropertySetInfo > xInfo = rxSet->getPropertySetInfo();
-        if ( xInfo.is() )
+        // Efficient: Get all prop values with one ( remote) call.
+
+        const Sequence< css::beans::PropertyValue > aPropValues
+            = xPropertyAccess->getPropertyValues();
+
+        for ( const css::beans::PropertyValue& rPropValue : aPropValues )
         {
-            const Sequence< Property > aProps = xInfo->getProperties();
-
-            Reference< XPropertyAccess > xPropertyAccess( rxSet, UNO_QUERY );
-            if ( xPropertyAccess.is() )
+            // Find info for current property value.
+            auto pProp = std::find_if(aProps.begin(), aProps.end(),
+                [&rPropValue](const Property& rProp) { return rProp.Name == rPropValue.Name; });
+            if (pProp != aProps.end())
             {
-                // Efficient: Get all prop values with one ( remote) call.
-
-                const Sequence< css::beans::PropertyValue > aPropValues
-                    = xPropertyAccess->getPropertyValues();
-
-                for ( const css::beans::PropertyValue& rPropValue : aPropValues )
-                {
-                    // Find info for current property value.
-                    auto pProp = std::find_if(aProps.begin(), aProps.end(),
-                        [&rPropValue](const Property& rProp) { return rProp.Name == rPropValue.Name; });
-                    if (pProp != aProps.end())
-                    {
-                        // Found!
-                        appendObject( *pProp, rPropValue.Value );
-                    }
-                }
+                // Found!
+                appendObject( *pProp, rPropValue.Value );
             }
-            else
+        }
+    }
+    else
+    {
+        // Get every single prop value with one ( remote) call.
+
+        for ( const Property& rProp : aProps )
+        {
+            try
             {
-                // Get every single prop value with one ( remote) call.
+                Any aValue = rxSet->getPropertyValue( rProp.Name );
 
-                for ( const Property& rProp : aProps )
-                {
-                    try
-                    {
-                        Any aValue = rxSet->getPropertyValue( rProp.Name );
-
-                        if ( aValue.hasValue() )
-                            appendObject( rProp, aValue );
-                    }
-                    catch (const UnknownPropertyException&)
-                    {
-                    }
-                    catch (const WrappedTargetException&)
-                    {
-                    }
-                }
+                if ( aValue.hasValue() )
+                    appendObject( rProp, aValue );
+            }
+            catch (const UnknownPropertyException&)
+            {
+            }
+            catch (const WrappedTargetException&)
+            {
             }
         }
     }
