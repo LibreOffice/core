@@ -639,18 +639,18 @@ void Content::getFileInfo(
     css::uno::Reference<css::ucb::XCommandEnvironment> const & env, GFileInfo ** info, bool fail)
 {
     assert(info != nullptr);
-    if (*info == nullptr)
+    if (*info != nullptr)
+        return;
+
+    GError * err = nullptr;
+    *info = getGFileInfo(env, &err);
+    if (*info == nullptr && !mbTransient && fail)
     {
-        GError * err = nullptr;
-        *info = getGFileInfo(env, &err);
-        if (*info == nullptr && !mbTransient && fail)
-        {
-            ucbhelper::cancelCommandExecution(mapGIOError(err), env);
-        }
-        else if (err != nullptr)
-        {
-            g_error_free(err);
-        }
+        ucbhelper::cancelCommandExecution(mapGIOError(err), env);
+    }
+    else if (err != nullptr)
+    {
+        g_error_free(err);
     }
 }
 

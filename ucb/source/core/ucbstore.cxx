@@ -568,18 +568,18 @@ void PropertySetRegistry::remove( PersistentPropertySet* pSet )
 {
     OUString key( pSet->getKey() );
 
-    if ( !key.isEmpty() )
+    if ( key.isEmpty() )
+        return;
+
+    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+
+    PropertySetMap_Impl& rSets = m_pImpl->m_aPropSets;
+
+    PropertySetMap_Impl::iterator it = rSets.find( key );
+    if ( it != rSets.end() )
     {
-        osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
-
-        PropertySetMap_Impl& rSets = m_pImpl->m_aPropSets;
-
-        PropertySetMap_Impl::iterator it = rSets.find( key );
-        if ( it != rSets.end() )
-        {
-            // Found.
-            rSets.erase( it );
-        }
+        // Found.
+        rSets.erase( it );
     }
 }
 

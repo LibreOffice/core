@@ -94,21 +94,21 @@ Storage::Storage( const uno::Reference< uno::XComponentContext > & rxContext,
     OSL_ENSURE( m_xAggProxy.is(),
                 "Storage::Storage: Wrapped storage cannot be aggregated!" );
 
-    if ( m_xAggProxy.is() )
-    {
-        osl_atomic_increment( &m_refCount );
-        {
-            // Solaris compiler problem:
-            // Extra block to enforce destruction of temporary object created
-            // in next statement _before_ osl_atomic_decrement is
-            // called.  Otherwise 'this' will destroy itself even before ctor
-            // is completed (See impl. of XInterface::release())!
+    if ( !m_xAggProxy.is() )
+        return;
 
-            m_xAggProxy->setDelegator(
-                static_cast< cppu::OWeakObject * >( this ) );
-        }
-        osl_atomic_decrement( &m_refCount );
+    osl_atomic_increment( &m_refCount );
+    {
+        // Solaris compiler problem:
+        // Extra block to enforce destruction of temporary object created
+        // in next statement _before_ osl_atomic_decrement is
+        // called.  Otherwise 'this' will destroy itself even before ctor
+        // is completed (See impl. of XInterface::release())!
+
+        m_xAggProxy->setDelegator(
+            static_cast< cppu::OWeakObject * >( this ) );
     }
+    osl_atomic_decrement( &m_refCount );
 }
 
 
@@ -119,24 +119,24 @@ Storage::~Storage()
         m_xAggProxy->setDelegator( uno::Reference< uno::XInterface >() );
 
     // Never dispose a document storage. Not owner!
-    if ( !m_bIsDocumentStorage )
+    if ( m_bIsDocumentStorage )
+        return;
+
+    if ( !m_xWrappedComponent.is() )
+        return;
+
+    // "Auto-dispose"...
+    try
     {
-        if ( m_xWrappedComponent.is() )
-        {
-            // "Auto-dispose"...
-            try
-            {
-                m_xWrappedComponent->dispose();
-            }
-            catch ( lang::DisposedException const & )
-            {
-                // might happen.
-            }
-            catch ( ... )
-            {
-                OSL_FAIL( "Storage::~Storage - Caught exception!" );
-            }
-        }
+        m_xWrappedComponent->dispose();
+    }
+    catch ( lang::DisposedException const & )
+    {
+        // might happen.
+    }
+    catch ( ... )
+    {
+        OSL_FAIL( "Storage::~Storage - Caught exception!" );
     }
 }
 
@@ -399,24 +399,24 @@ void SAL_CALL Storage::commit()
     // Would lead in writing the whole document to disk.
 
     uno::Reference< embed::XStorage > xParentStorage = getParentStorage();
-    if ( xParentStorage.is() )
+    if ( !xParentStorage.is() )
+        return;
+
+    OSL_ENSURE( m_xWrappedTransObj.is(), "No XTransactedObject interface!" );
+
+    if ( !m_xWrappedTransObj.is() )
+        return;
+
+    m_xWrappedTransObj->commit();
+
+    if ( !isParentARootStorage() )
     {
-        OSL_ENSURE( m_xWrappedTransObj.is(), "No XTransactedObject interface!" );
+        uno::Reference< embed::XTransactedObject > xParentTA(
+            xParentStorage, uno::UNO_QUERY );
+        OSL_ENSURE( xParentTA.is(), "No XTransactedObject interface!" );
 
-        if ( m_xWrappedTransObj.is() )
-        {
-            m_xWrappedTransObj->commit();
-
-            if ( !isParentARootStorage() )
-            {
-                uno::Reference< embed::XTransactedObject > xParentTA(
-                    xParentStorage, uno::UNO_QUERY );
-                OSL_ENSURE( xParentTA.is(), "No XTransactedObject interface!" );
-
-                if ( xParentTA.is() )
-                    xParentTA->commit();
-            }
-        }
+        if ( xParentTA.is() )
+            xParentTA->commit();
     }
 }
 
@@ -425,24 +425,24 @@ void SAL_CALL Storage::commit()
 void SAL_CALL Storage::revert()
 {
     uno::Reference< embed::XStorage > xParentStorage = getParentStorage();
-    if ( xParentStorage.is() )
+    if ( !xParentStorage.is() )
+        return;
+
+    OSL_ENSURE( m_xWrappedTransObj.is(), "No XTransactedObject interface!" );
+
+    if ( !m_xWrappedTransObj.is() )
+        return;
+
+    m_xWrappedTransObj->revert();
+
+    if ( !isParentARootStorage() )
     {
-        OSL_ENSURE( m_xWrappedTransObj.is(), "No XTransactedObject interface!" );
+        uno::Reference< embed::XTransactedObject > xParentTA(
+            xParentStorage, uno::UNO_QUERY );
+        OSL_ENSURE( xParentTA.is(), "No XTransactedObject interface!" );
 
-        if ( m_xWrappedTransObj.is() )
-        {
-            m_xWrappedTransObj->revert();
-
-            if ( !isParentARootStorage() )
-            {
-                uno::Reference< embed::XTransactedObject > xParentTA(
-                    xParentStorage, uno::UNO_QUERY );
-                OSL_ENSURE( xParentTA.is(), "No XTransactedObject interface!" );
-
-                if ( xParentTA.is() )
-                    xParentTA->revert();
-            }
-        }
+        if ( xParentTA.is() )
+            xParentTA->revert();
     }
 }
 
@@ -484,21 +484,21 @@ OutputStream::OutputStream(
     OSL_ENSURE( m_xAggProxy.is(),
             "OutputStream::OutputStream: Wrapped stream cannot be aggregated!" );
 
-    if ( m_xAggProxy.is() )
-    {
-        osl_atomic_increment( &m_refCount );
-        {
-            // Solaris compiler problem:
-            // Extra block to enforce destruction of temporary object created
-            // in next statement _before_ osl_atomic_decrement is
-            // called.  Otherwise 'this' will destroy itself even before ctor
-            // is completed (See impl. of XInterface::release())!
+    if ( !m_xAggProxy.is() )
+        return;
 
-            m_xAggProxy->setDelegator(
-                static_cast< cppu::OWeakObject * >( this ) );
-        }
-        osl_atomic_decrement( &m_refCount );
+    osl_atomic_increment( &m_refCount );
+    {
+        // Solaris compiler problem:
+        // Extra block to enforce destruction of temporary object created
+        // in next statement _before_ osl_atomic_decrement is
+        // called.  Otherwise 'this' will destroy itself even before ctor
+        // is completed (See impl. of XInterface::release())!
+
+        m_xAggProxy->setDelegator(
+            static_cast< cppu::OWeakObject * >( this ) );
     }
+    osl_atomic_decrement( &m_refCount );
 }
 
 
@@ -649,21 +649,21 @@ Stream::Stream(
     OSL_ENSURE( m_xAggProxy.is(),
             "OutputStream::OutputStream: Wrapped stream cannot be aggregated!" );
 
-    if ( m_xAggProxy.is() )
-    {
-        osl_atomic_increment( &m_refCount );
-        {
-            // Solaris compiler problem:
-            // Extra block to enforce destruction of temporary object created
-            // in next statement _before_ osl_atomic_decrement is
-            // called.  Otherwise 'this' will destroy itself even before ctor
-            // is completed (See impl. of XInterface::release())!
+    if ( !m_xAggProxy.is() )
+        return;
 
-            m_xAggProxy->setDelegator(
-                static_cast< cppu::OWeakObject * >( this ) );
-        }
-        osl_atomic_decrement( &m_refCount );
+    osl_atomic_increment( &m_refCount );
+    {
+        // Solaris compiler problem:
+        // Extra block to enforce destruction of temporary object created
+        // in next statement _before_ osl_atomic_decrement is
+        // called.  Otherwise 'this' will destroy itself even before ctor
+        // is completed (See impl. of XInterface::release())!
+
+        m_xAggProxy->setDelegator(
+            static_cast< cppu::OWeakObject * >( this ) );
     }
+    osl_atomic_decrement( &m_refCount );
 }
 
 

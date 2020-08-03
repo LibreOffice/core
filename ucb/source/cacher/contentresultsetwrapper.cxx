@@ -539,27 +539,27 @@ void SAL_CALL ContentResultSetWrapper::addPropertyChangeListener( const OUString
     bool bNeedRegister = !m_pPropertyChangeListeners->
                         getContainedTypes().hasElements();
     m_pPropertyChangeListeners->addInterface( aPropertyName, xListener );
-    if( bNeedRegister )
+    if( !bNeedRegister )
+        return;
+
+    impl_init_xPropertySetOrigin();
     {
-        impl_init_xPropertySetOrigin();
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        if( !m_xPropertySetOrigin.is() )
         {
-            osl::Guard< osl::Mutex > aGuard( m_aMutex );
-            if( !m_xPropertySetOrigin.is() )
-            {
-                OSL_FAIL( "broadcaster was disposed already" );
-                return;
-            }
+            OSL_FAIL( "broadcaster was disposed already" );
+            return;
         }
-        try
-        {
-            m_xPropertySetOrigin->addPropertyChangeListener(
-                OUString(), static_cast< XPropertyChangeListener * >( m_xMyListenerImpl.get() ) );
-        }
-        catch( Exception& )
-        {
-            m_pPropertyChangeListeners->removeInterface( aPropertyName, xListener );
-            throw;
-        }
+    }
+    try
+    {
+        m_xPropertySetOrigin->addPropertyChangeListener(
+            OUString(), static_cast< XPropertyChangeListener * >( m_xMyListenerImpl.get() ) );
+    }
+    catch( Exception& )
+    {
+        m_pPropertyChangeListeners->removeInterface( aPropertyName, xListener );
+        throw;
     }
 }
 
@@ -584,27 +584,27 @@ void SAL_CALL ContentResultSetWrapper::addVetoableChangeListener( const OUString
     bool bNeedRegister = !m_pVetoableChangeListeners->
                         getContainedTypes().hasElements();
     m_pVetoableChangeListeners->addInterface( rPropertyName, xListener );
-    if( bNeedRegister )
+    if( !bNeedRegister )
+        return;
+
+    impl_init_xPropertySetOrigin();
     {
-        impl_init_xPropertySetOrigin();
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        if( !m_xPropertySetOrigin.is() )
         {
-            osl::Guard< osl::Mutex > aGuard( m_aMutex );
-            if( !m_xPropertySetOrigin.is() )
-            {
-                OSL_FAIL( "broadcaster was disposed already" );
-                return;
-            }
+            OSL_FAIL( "broadcaster was disposed already" );
+            return;
         }
-        try
-        {
-            m_xPropertySetOrigin->addVetoableChangeListener(
-                OUString(), static_cast< XVetoableChangeListener * >( m_xMyListenerImpl.get() ) );
-        }
-        catch( Exception& )
-        {
-            m_pVetoableChangeListeners->removeInterface( rPropertyName, xListener );
-            throw;
-        }
+    }
+    try
+    {
+        m_xPropertySetOrigin->addVetoableChangeListener(
+            OUString(), static_cast< XVetoableChangeListener * >( m_xMyListenerImpl.get() ) );
+    }
+    catch( Exception& )
+    {
+        m_pVetoableChangeListeners->removeInterface( rPropertyName, xListener );
+        throw;
     }
 }
 
@@ -638,26 +638,26 @@ void SAL_CALL ContentResultSetWrapper::removePropertyChangeListener( const OUStr
 
     m_pPropertyChangeListeners->removeInterface( rPropertyName, xListener );
 
-    if( !m_pPropertyChangeListeners->getContainedTypes().hasElements() )
+    if( m_pPropertyChangeListeners->getContainedTypes().hasElements() )
+        return;
+
+    impl_init_xPropertySetOrigin();
     {
-        impl_init_xPropertySetOrigin();
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        if( !m_xPropertySetOrigin.is() )
         {
-            osl::Guard< osl::Mutex > aGuard( m_aMutex );
-            if( !m_xPropertySetOrigin.is() )
-            {
-                OSL_FAIL( "broadcaster was disposed already" );
-                return;
-            }
+            OSL_FAIL( "broadcaster was disposed already" );
+            return;
         }
-        try
-        {
-            m_xPropertySetOrigin->removePropertyChangeListener(
-                OUString(), static_cast< XPropertyChangeListener * >( m_xMyListenerImpl.get() ) );
-        }
-        catch( Exception& )
-        {
-            OSL_FAIL( "could not remove PropertyChangeListener" );
-        }
+    }
+    try
+    {
+        m_xPropertySetOrigin->removePropertyChangeListener(
+            OUString(), static_cast< XPropertyChangeListener * >( m_xMyListenerImpl.get() ) );
+    }
+    catch( Exception& )
+    {
+        OSL_FAIL( "could not remove PropertyChangeListener" );
     }
 }
 
@@ -691,26 +691,26 @@ void SAL_CALL ContentResultSetWrapper::removeVetoableChangeListener( const OUStr
 
     m_pVetoableChangeListeners->removeInterface( rPropertyName, xListener );
 
-    if( !m_pVetoableChangeListeners->getContainedTypes().hasElements() )
+    if( m_pVetoableChangeListeners->getContainedTypes().hasElements() )
+        return;
+
+    impl_init_xPropertySetOrigin();
     {
-        impl_init_xPropertySetOrigin();
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        if( !m_xPropertySetOrigin.is() )
         {
-            osl::Guard< osl::Mutex > aGuard( m_aMutex );
-            if( !m_xPropertySetOrigin.is() )
-            {
-                OSL_FAIL( "broadcaster was disposed already" );
-                return;
-            }
+            OSL_FAIL( "broadcaster was disposed already" );
+            return;
         }
-        try
-        {
-            m_xPropertySetOrigin->removeVetoableChangeListener(
-                OUString(), static_cast< XVetoableChangeListener * >( m_xMyListenerImpl.get() ) );
-        }
-        catch( Exception& )
-        {
-            OSL_FAIL( "could not remove VetoableChangeListener" );
-        }
+    }
+    try
+    {
+        m_xPropertySetOrigin->removeVetoableChangeListener(
+            OUString(), static_cast< XVetoableChangeListener * >( m_xMyListenerImpl.get() ) );
+    }
+    catch( Exception& )
+    {
+        OSL_FAIL( "could not remove VetoableChangeListener" );
     }
 }
 

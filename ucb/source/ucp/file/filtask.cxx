@@ -2194,43 +2194,41 @@ TaskManager::getMaskFromProperties(
 void
 TaskManager::load( const ContentMap::iterator& it, bool create )
 {
-    if( ( ! it->second.xS.is() ||
-          ! it->second.xC.is() ||
-          ! it->second.xA.is() )
-        && m_xFileRegistry.is() )
+    if(  ( it->second.xS.is() && it->second.xC.is() && it->second.xA.is() )
+        || !m_xFileRegistry.is() )
+        return;
+
+
+    uno::Reference< ucb::XPersistentPropertySet > xS = m_xFileRegistry->openPropertySet( it->first,create );
+    if( xS.is() )
     {
+        uno::Reference< beans::XPropertyContainer > xC( xS,uno::UNO_QUERY );
+        uno::Reference< beans::XPropertyAccess >    xA( xS,uno::UNO_QUERY );
 
-        uno::Reference< ucb::XPersistentPropertySet > xS = m_xFileRegistry->openPropertySet( it->first,create );
-        if( xS.is() )
+        it->second.xS = xS;
+        it->second.xC = xC;
+        it->second.xA = xA;
+
+        // Now put in all values in the storage in the local hash;
+
+        PropertySet& properties = it->second.properties;
+        const uno::Sequence< beans::Property > seq = xS->getPropertySetInfo()->getProperties();
+
+        for( const auto& rProp : seq )
         {
-            uno::Reference< beans::XPropertyContainer > xC( xS,uno::UNO_QUERY );
-            uno::Reference< beans::XPropertyAccess >    xA( xS,uno::UNO_QUERY );
-
-            it->second.xS = xS;
-            it->second.xC = xC;
-            it->second.xA = xA;
-
-            // Now put in all values in the storage in the local hash;
-
-            PropertySet& properties = it->second.properties;
-            const uno::Sequence< beans::Property > seq = xS->getPropertySetInfo()->getProperties();
-
-            for( const auto& rProp : seq )
-            {
-                MyProperty readProp( false,
-                                     rProp.Name,
-                                     rProp.Handle,
-                                     rProp.Type,
-                                     xS->getPropertyValue( rProp.Name ),
-                                     beans::PropertyState_DIRECT_VALUE,
-                                     rProp.Attributes );
-                properties.insert( readProp );
-            }
+            MyProperty readProp( false,
+                                 rProp.Name,
+                                 rProp.Handle,
+                                 rProp.Type,
+                                 xS->getPropertyValue( rProp.Name ),
+                                 beans::PropertyState_DIRECT_VALUE,
+                                 rProp.Attributes );
+            properties.insert( readProp );
         }
-        else if( create )
-        {
-            // Catastrophic error
-        }
+    }
+    else if( create )
+    {
+        // Catastrophic error
     }
 }
 
