@@ -21,6 +21,7 @@
 #include <pattern/frame.hxx>
 #include <framework/framelistanalyzer.hxx>
 #include <services.h>
+#include <framework/quickstart.hxx>
 
 #include <com/sun/star/bridge/BridgeFactory.hpp>
 #include <com/sun/star/bridge/XBridgeFactory2.hpp>
@@ -353,9 +354,17 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
             {
                 if (bHasActiveConnections)
                     bCloseFrame = true;
-                else if (eOperation == E_CLOSE_FRAME)
+                else if (eOperation == E_CLOSE_FRAME) {
+#if defined(ENABLE_QUICKSTART_APPLET)
                     bTerminateApp = true;
-                else if( SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::STARTMODULE) )
+#else
+                    if (framework::GetIsQuickstart()) {
+                        bCloseFrame = true;
+                    } else {
+                        bTerminateApp = true;
+                    }
+#endif
+                } else if( SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::STARTMODULE) )
                     bEstablishBackingMode = true;
                 else
                     bTerminateApp = true;
