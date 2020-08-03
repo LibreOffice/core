@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "66d26436_09b8633b",
+        "filename": "include/svx/inspectorproperties.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-03T08:15:42Z",
+      "side": 1,
+      "message": "By convention, this should either be RID_BORDER_DISTANCE (same as the define name), or some string common for all related entries (so in this case, something like \"RID_ATTRIBUTE_NAMES_MAP\" would fit).",
+      "range": {
+        "startLine": 31,
+        "startChar": 65,
+        "endLine": 31,
+        "endChar": 79
+      },
+      "revId": "0563f792a9b146d814d614261233e3001adce6d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
