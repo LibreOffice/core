@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee7ed0cd_3d78c126",
+        "filename": "oox/source/ppt/pptshapecontext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-08-03T07:13:12Z",
+      "side": 1,
+      "message": "Just delete these I guess.",
+      "range": {
+        "startLine": 72,
+        "startChar": 52,
+        "endLine": 72,
+        "endChar": 63
+      },
+      "revId": "3382f0e3c0fd57a1f98f04b00ac11a566f890706",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
