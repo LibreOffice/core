@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "39199e05_70952cbe",
+        "filename": "sw/inc/inspectorproperties.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-08-03T15:44:33Z",
+      "side": 1,
+      "message": "Translators will have a hard time. Shall we make this \"Difference\"?",
+      "range": {
+        "startLine": 52,
+        "startChar": 97,
+        "endLine": 52,
+        "endChar": 101
+      },
+      "revId": "296f57532126aa6577e2193ce1bd0cafdfabe960",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a46401d2_377f3c66",
+        "filename": "sw/inc/inspectorproperties.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-08-03T15:44:33Z",
+      "side": 1,
+      "message": "Untranslatable",
+      "range": {
+        "startLine": 79,
+        "startChar": 97,
+        "endLine": 79,
+        "endChar": 113
+      },
+      "revId": "296f57532126aa6577e2193ce1bd0cafdfabe960",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "487a6b80_5ce62c8b",
+        "filename": "sw/inc/inspectorproperties.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-08-03T15:44:33Z",
+      "side": 1,
+      "message": "Property?",
+      "range": {
+        "startLine": 93,
+        "startChar": 97,
+        "endLine": 93,
+        "endChar": 101
+      },
+      "revId": "296f57532126aa6577e2193ce1bd0cafdfabe960",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8e2ce3f_49c6ad50",
+        "filename": "sw/inc/inspectorproperties.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-08-03T15:44:33Z",
+      "side": 1,
+      "message": "Para(graph)?",
+      "range": {
+        "startLine": 177,
+        "startChar": 92,
+        "endLine": 177,
+        "endChar": 95
+      },
+      "revId": "296f57532126aa6577e2193ce1bd0cafdfabe960",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc3f78f2_d0c6b75c",
+        "filename": "sw/inc/inspectorproperties.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-08-03T15:44:33Z",
+      "side": 1,
+      "message": "Hm...",
+      "range": {
+        "startLine": 229,
+        "startChar": 92,
+        "endLine": 229,
+        "endChar": 96
+      },
+      "revId": "296f57532126aa6577e2193ce1bd0cafdfabe960",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2755db0c_b199f97e",
+        "filename": "sw/inc/inspectorproperties.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-08-03T15:44:33Z",
+      "side": 1,
+      "message": "Rubinred adjustment or Red stone :-)",
+      "range": {
+        "startLine": 230,
+        "startChar": 92,
+        "endLine": 230,
+        "endChar": 96
+      },
+      "revId": "296f57532126aa6577e2193ce1bd0cafdfabe960",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
