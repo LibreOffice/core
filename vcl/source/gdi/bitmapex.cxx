@@ -456,21 +456,21 @@ void BitmapEx::Expand( sal_uLong nDX, sal_uLong nDY, bool bExpandTransparent )
 {
     bool bRet = false;
 
-    if( !!maBitmap )
+    if( !maBitmap )
+        return;
+
+    bRet = maBitmap.Expand( nDX, nDY );
+
+    if( bRet && ( meTransparent == TransparentType::Bitmap ) && !!maMask )
     {
-        bRet = maBitmap.Expand( nDX, nDY );
-
-        if( bRet && ( meTransparent == TransparentType::Bitmap ) && !!maMask )
-        {
-            Color aColor( bExpandTransparent ? COL_WHITE : COL_BLACK );
-            maMask.Expand( nDX, nDY, &aColor );
-        }
-
-        SetSizePixel(maBitmap.GetSizePixel());
-
-        SAL_WARN_IF(!!maMask && maBitmap.GetSizePixel() != maMask.GetSizePixel(), "vcl",
-                    "BitmapEx::Expand(): size mismatch for bitmap and alpha mask.");
+        Color aColor( bExpandTransparent ? COL_WHITE : COL_BLACK );
+        maMask.Expand( nDX, nDY, &aColor );
     }
+
+    SetSizePixel(maBitmap.GetSizePixel());
+
+    SAL_WARN_IF(!!maMask && maBitmap.GetSizePixel() != maMask.GetSizePixel(), "vcl",
+                "BitmapEx::Expand(): size mismatch for bitmap and alpha mask.");
 }
 
 bool BitmapEx::CopyPixel( const tools::Rectangle& rRectDst, const tools::Rectangle& rRectSrc,
@@ -1539,18 +1539,18 @@ void BitmapEx::setAlphaFrom( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo )
     BitmapScopedWriteAccess pWriteAccess(aAlphaMask);
     Bitmap::ScopedReadAccess pReadAccess(maBitmap);
     assert( pReadAccess.get() && pWriteAccess.get() );
-    if ( pReadAccess.get() && pWriteAccess.get() )
+    if ( !(pReadAccess.get() && pWriteAccess.get()) )
+        return;
+
+    for ( long nY = 0; nY < pReadAccess->Height(); nY++ )
     {
-        for ( long nY = 0; nY < pReadAccess->Height(); nY++ )
+        Scanline pScanline = pWriteAccess->GetScanline( nY );
+        Scanline pScanlineRead = pReadAccess->GetScanline( nY );
+        for ( long nX = 0; nX < pReadAccess->Width(); nX++ )
         {
-            Scanline pScanline = pWriteAccess->GetScanline( nY );
-            Scanline pScanlineRead = pReadAccess->GetScanline( nY );
-            for ( long nX = 0; nX < pReadAccess->Width(); nX++ )
-            {
-                const sal_uInt8 cIndex = pReadAccess->GetPixelFromData( pScanlineRead, nX ).GetIndex();
-                if ( cIndex == cIndexFrom )
-                    pWriteAccess->SetPixelOnData( pScanline, nX, BitmapColor(nAlphaTo) );
-            }
+            const sal_uInt8 cIndex = pReadAccess->GetPixelFromData( pScanlineRead, nX ).GetIndex();
+            if ( cIndex == cIndexFrom )
+                pWriteAccess->SetPixelOnData( pScanline, nX, BitmapColor(nAlphaTo) );
         }
     }
 }

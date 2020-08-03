@@ -199,63 +199,63 @@ void LineInfo::applyToB2DPolyPolygon(
 {
     o_rFillPolyPolygon.clear();
 
-    if(io_rLinePolyPolygon.count())
+    if(!io_rLinePolyPolygon.count())
+        return;
+
+    if(LineStyle::Dash == GetStyle())
     {
-        if(LineStyle::Dash == GetStyle())
+        ::std::vector< double > fDotDashArray;
+        const double fDashLen(GetDashLen());
+        const double fDotLen(GetDotLen());
+        const double fDistance(GetDistance());
+
+        for(sal_uInt16 a(0); a < GetDashCount(); a++)
         {
-            ::std::vector< double > fDotDashArray;
-            const double fDashLen(GetDashLen());
-            const double fDotLen(GetDotLen());
-            const double fDistance(GetDistance());
-
-            for(sal_uInt16 a(0); a < GetDashCount(); a++)
-            {
-                fDotDashArray.push_back(fDashLen);
-                fDotDashArray.push_back(fDistance);
-            }
-
-            for(sal_uInt16 b(0); b < GetDotCount(); b++)
-            {
-                fDotDashArray.push_back(fDotLen);
-                fDotDashArray.push_back(fDistance);
-            }
-
-            const double fAccumulated(::std::accumulate(fDotDashArray.begin(), fDotDashArray.end(), 0.0));
-
-            if(fAccumulated > 0.0)
-            {
-                basegfx::B2DPolyPolygon aResult;
-
-                for(auto const& rPolygon : io_rLinePolyPolygon)
-                {
-                    basegfx::B2DPolyPolygon aLineTraget;
-                    basegfx::utils::applyLineDashing(
-                        rPolygon,
-                        fDotDashArray,
-                        &aLineTraget);
-                    aResult.append(aLineTraget);
-                }
-
-                io_rLinePolyPolygon = aResult;
-            }
+            fDotDashArray.push_back(fDashLen);
+            fDotDashArray.push_back(fDistance);
         }
 
-        if(GetWidth() > 1 && io_rLinePolyPolygon.count())
+        for(sal_uInt16 b(0); b < GetDotCount(); b++)
         {
-            const double fHalfLineWidth((GetWidth() * 0.5) + 0.5);
+            fDotDashArray.push_back(fDotLen);
+            fDotDashArray.push_back(fDistance);
+        }
+
+        const double fAccumulated(::std::accumulate(fDotDashArray.begin(), fDotDashArray.end(), 0.0));
+
+        if(fAccumulated > 0.0)
+        {
+            basegfx::B2DPolyPolygon aResult;
 
             for(auto const& rPolygon : io_rLinePolyPolygon)
             {
-                o_rFillPolyPolygon.append(basegfx::utils::createAreaGeometry(
+                basegfx::B2DPolyPolygon aLineTraget;
+                basegfx::utils::applyLineDashing(
                     rPolygon,
-                    fHalfLineWidth,
-                    GetLineJoin(),
-                    GetLineCap()));
+                    fDotDashArray,
+                    &aLineTraget);
+                aResult.append(aLineTraget);
             }
 
-            io_rLinePolyPolygon.clear();
+            io_rLinePolyPolygon = aResult;
         }
     }
+
+    if(!(GetWidth() > 1 && io_rLinePolyPolygon.count()))
+        return;
+
+    const double fHalfLineWidth((GetWidth() * 0.5) + 0.5);
+
+    for(auto const& rPolygon : io_rLinePolyPolygon)
+    {
+        o_rFillPolyPolygon.append(basegfx::utils::createAreaGeometry(
+            rPolygon,
+            fHalfLineWidth,
+            GetLineJoin(),
+            GetLineCap()));
+    }
+
+    io_rLinePolyPolygon.clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -82,21 +82,21 @@ void AlphaMask::Replace( const Bitmap& rMask, sal_uInt8 cReplaceTransparency )
     Bitmap::ScopedReadAccess pMaskAcc( const_cast<Bitmap&>(rMask) );
     AlphaScopedWriteAccess pAcc(*this);
 
-    if( pMaskAcc && pAcc )
-    {
-        const BitmapColor   aReplace( cReplaceTransparency );
-        const long          nWidth = std::min( pMaskAcc->Width(), pAcc->Width() );
-        const long          nHeight = std::min( pMaskAcc->Height(), pAcc->Height() );
-        const BitmapColor   aMaskWhite( pMaskAcc->GetBestMatchingColor( COL_WHITE ) );
+    if( !(pMaskAcc && pAcc) )
+        return;
 
-        for( long nY = 0; nY < nHeight; nY++ )
-        {
-            Scanline pScanline = pAcc->GetScanline(nY);
-            Scanline pScanlineMask = pMaskAcc->GetScanline(nY);
-            for( long nX = 0; nX < nWidth; nX++ )
-                if( pMaskAcc->GetPixelFromData( pScanlineMask, nX ) == aMaskWhite )
-                    pAcc->SetPixelOnData( pScanline, nX, aReplace );
-        }
+    const BitmapColor   aReplace( cReplaceTransparency );
+    const long          nWidth = std::min( pMaskAcc->Width(), pAcc->Width() );
+    const long          nHeight = std::min( pMaskAcc->Height(), pAcc->Height() );
+    const BitmapColor   aMaskWhite( pMaskAcc->GetBestMatchingColor( COL_WHITE ) );
+
+    for( long nY = 0; nY < nHeight; nY++ )
+    {
+        Scanline pScanline = pAcc->GetScanline(nY);
+        Scanline pScanlineMask = pMaskAcc->GetScanline(nY);
+        for( long nX = 0; nX < nWidth; nX++ )
+            if( pMaskAcc->GetPixelFromData( pScanlineMask, nX ) == aMaskWhite )
+                pAcc->SetPixelOnData( pScanline, nX, aReplace );
     }
 }
 
@@ -104,35 +104,35 @@ void AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransp
 {
     AlphaScopedWriteAccess pAcc(*this);
 
-    if( pAcc && pAcc->GetBitCount() == 8 )
+    if( !(pAcc && pAcc->GetBitCount() == 8) )
+        return;
+
+    const long nWidth = pAcc->Width(), nHeight = pAcc->Height();
+
+    if( pAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal )
     {
-        const long nWidth = pAcc->Width(), nHeight = pAcc->Height();
-
-        if( pAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal )
+        for( long nY = 0; nY < nHeight; nY++ )
         {
-            for( long nY = 0; nY < nHeight; nY++ )
-            {
-                Scanline pScan = pAcc->GetScanline( nY );
+            Scanline pScan = pAcc->GetScanline( nY );
 
-                for( long nX = 0; nX < nWidth; nX++, pScan++ )
-                {
-                    if( *pScan == cSearchTransparency )
-                        *pScan = cReplaceTransparency;
-                }
+            for( long nX = 0; nX < nWidth; nX++, pScan++ )
+            {
+                if( *pScan == cSearchTransparency )
+                    *pScan = cReplaceTransparency;
             }
         }
-        else
-        {
-            BitmapColor aReplace( cReplaceTransparency );
+    }
+    else
+    {
+        BitmapColor aReplace( cReplaceTransparency );
 
-            for( long nY = 0; nY < nHeight; nY++ )
+        for( long nY = 0; nY < nHeight; nY++ )
+        {
+            Scanline pScanline = pAcc->GetScanline(nY);
+            for( long nX = 0; nX < nWidth; nX++ )
             {
-                Scanline pScanline = pAcc->GetScanline(nY);
-                for( long nX = 0; nX < nWidth; nX++ )
-                {
-                    if( pAcc->GetIndexFromData( pScanline, nX ) == cSearchTransparency )
-                        pAcc->SetPixelOnData( pScanline, nX, aReplace );
-                }
+                if( pAcc->GetIndexFromData( pScanline, nX ) == cSearchTransparency )
+                    pAcc->SetPixelOnData( pScanline, nX, aReplace );
             }
         }
     }
@@ -143,23 +143,23 @@ void AlphaMask::BlendWith(const Bitmap& rOther)
     AlphaMask aOther(rOther); // to 8 bits
     Bitmap::ScopedReadAccess pOtherAcc(aOther);
     AlphaScopedWriteAccess pAcc(*this);
-    if (pOtherAcc && pAcc && pOtherAcc->GetBitCount() == 8 && pAcc->GetBitCount() == 8)
+    if (!(pOtherAcc && pAcc && pOtherAcc->GetBitCount() == 8 && pAcc->GetBitCount() == 8))
+        return;
+
+    const long nHeight = std::min(pOtherAcc->Height(), pAcc->Height());
+    const long nWidth = std::min(pOtherAcc->Width(), pAcc->Width());
+    for (long y = 0; y < nHeight; ++y)
     {
-        const long nHeight = std::min(pOtherAcc->Height(), pAcc->Height());
-        const long nWidth = std::min(pOtherAcc->Width(), pAcc->Width());
-        for (long y = 0; y < nHeight; ++y)
+        Scanline scanline = pAcc->GetScanline( y );
+        ConstScanline otherScanline = pOtherAcc->GetScanline( y );
+        for (long x = 0; x < nWidth; ++x)
         {
-            Scanline scanline = pAcc->GetScanline( y );
-            ConstScanline otherScanline = pOtherAcc->GetScanline( y );
-            for (long x = 0; x < nWidth; ++x)
-            {
-                // Use sal_uInt16 for following multiplication
-                const sal_uInt16 nGrey1 = *scanline;
-                const sal_uInt16 nGrey2 = *otherScanline;
-                *scanline = static_cast<sal_uInt8>(nGrey1 + nGrey2 - nGrey1 * nGrey2 / 255);
-                ++scanline;
-                ++otherScanline;
-            }
+            // Use sal_uInt16 for following multiplication
+            const sal_uInt16 nGrey1 = *scanline;
+            const sal_uInt16 nGrey2 = *otherScanline;
+            *scanline = static_cast<sal_uInt8>(nGrey1 + nGrey2 - nGrey1 * nGrey2 / 255);
+            ++scanline;
+            ++otherScanline;
         }
     }
 }

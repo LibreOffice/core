@@ -324,67 +324,67 @@ void GDIMetaFile::Record( OutputDevice* pOut )
 
 void GDIMetaFile::Play( GDIMetaFile& rMtf )
 {
-    if ( !m_bRecord && !rMtf.m_bRecord )
+    if (m_bRecord || rMtf.m_bRecord)
+        return;
+
+    MetaAction* pAction = GetCurAction();
+    const size_t nObjCount = m_aList.size();
+
+    rMtf.UseCanvas( rMtf.GetUseCanvas() || m_bUseCanvas );
+
+    for( size_t nCurPos = m_nCurrentActionElement; nCurPos < nObjCount; nCurPos++ )
     {
-        MetaAction* pAction = GetCurAction();
-        const size_t nObjCount = m_aList.size();
-
-        rMtf.UseCanvas( rMtf.GetUseCanvas() || m_bUseCanvas );
-
-        for( size_t nCurPos = m_nCurrentActionElement; nCurPos < nObjCount; nCurPos++ )
+        if( pAction )
         {
-            if( pAction )
-            {
-                rMtf.AddAction( pAction );
-            }
-
-            pAction = NextAction();
+            rMtf.AddAction( pAction );
         }
+
+        pAction = NextAction();
     }
 }
 
 void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
 {
-    if( !m_bRecord )
-    {
-        MetaAction* pAction = GetCurAction();
-        const size_t nObjCount = m_aList.size();
-        size_t  nSyncCount = pOut->GetSyncCount();
+    if( m_bRecord )
+        return;
 
-        if( nPos > nObjCount )
-            nPos = nObjCount;
+    MetaAction* pAction = GetCurAction();
+    const size_t nObjCount = m_aList.size();
+    size_t  nSyncCount = pOut->GetSyncCount();
 
-        // #i23407# Set backwards-compatible text language and layout mode
-        // This is necessary, since old metafiles don't even know of these
-        // recent add-ons. Newer metafiles must of course explicitly set
-        // those states.
-        pOut->Push( PushFlags::TEXTLAYOUTMODE|PushFlags::TEXTLANGUAGE );
-        pOut->SetLayoutMode( ComplexTextLayoutFlags::Default );
-        pOut->SetDigitLanguage( LANGUAGE_SYSTEM );
+    if( nPos > nObjCount )
+        nPos = nObjCount;
 
-        SAL_INFO( "vcl.gdi", "GDIMetaFile::Play on device of size: " << pOut->GetOutputSizePixel().Width() << " " << pOut->GetOutputSizePixel().Height());
+    // #i23407# Set backwards-compatible text language and layout mode
+    // This is necessary, since old metafiles don't even know of these
+    // recent add-ons. Newer metafiles must of course explicitly set
+    // those states.
+    pOut->Push( PushFlags::TEXTLAYOUTMODE|PushFlags::TEXTLANGUAGE );
+    pOut->SetLayoutMode( ComplexTextLayoutFlags::Default );
+    pOut->SetDigitLanguage( LANGUAGE_SYSTEM );
 
-        if( !ImplPlayWithRenderer( pOut, Point(0,0), pOut->GetOutputSize() ) ) {
-            size_t  i  = 0;
-            for( size_t nCurPos = m_nCurrentActionElement; nCurPos < nPos; nCurPos++ )
+    SAL_INFO( "vcl.gdi", "GDIMetaFile::Play on device of size: " << pOut->GetOutputSizePixel().Width() << " " << pOut->GetOutputSizePixel().Height());
+
+    if( !ImplPlayWithRenderer( pOut, Point(0,0), pOut->GetOutputSize() ) ) {
+        size_t  i  = 0;
+        for( size_t nCurPos = m_nCurrentActionElement; nCurPos < nPos; nCurPos++ )
+        {
+            if( pAction )
             {
-                if( pAction )
+                pAction->Execute( pOut );
+
+                // flush output from time to time
+                if( i++ > nSyncCount )
                 {
-                    pAction->Execute( pOut );
-
-                    // flush output from time to time
-                    if( i++ > nSyncCount )
-                    {
-                        static_cast<vcl::Window*>( pOut )->Flush();
-                        i = 0;
-                    }
+                    static_cast<vcl::Window*>( pOut )->Flush();
+                    i = 0;
                 }
-
-                pAction = NextAction();
             }
+
+            pAction = NextAction();
         }
-        pOut->Pop();
     }
+    pOut->Pop();
 }
 
 bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, Size rLogicDestSize )
@@ -520,21 +520,21 @@ void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
 
 void GDIMetaFile::Pause( bool _bPause )
 {
-    if( m_bRecord )
-    {
-        if( _bPause )
-        {
-            if( !m_bPause )
-                Linker( m_pOutDev, false );
-        }
-        else
-        {
-            if( m_bPause )
-                Linker( m_pOutDev, true );
-        }
+    if( !m_bRecord )
+        return;
 
-        m_bPause = _bPause;
+    if( _bPause )
+    {
+        if( !m_bPause )
+            Linker( m_pOutDev, false );
     }
+    else
+    {
+        if( m_bPause )
+            Linker( m_pOutDev, true );
+    }
+
+    m_bPause = _bPause;
 }
 
 void GDIMetaFile::Stop()
@@ -1287,20 +1287,20 @@ static void ImplActionBounds( tools::Rectangle& o_rOutBounds,
     tools::Rectangle aBounds( i_rInBounds );
     if( ! i_rInBounds.IsEmpty() && ! i_rClipStack.empty() && ! i_rClipStack.back().IsEmpty() )
         aBounds.Intersection( i_rClipStack.back() );
-    if( ! aBounds.IsEmpty() )
-    {
-        if( ! o_rOutBounds.IsEmpty() )
-            o_rOutBounds.Union( aBounds );
-        else
-            o_rOutBounds = aBounds;
+    if(  aBounds.IsEmpty() )
+        return;
 
-        if(o_pHairline)
-        {
-            if( ! o_pHairline->IsEmpty() )
-                o_pHairline->Union( aBounds );
-            else
-                *o_pHairline = aBounds;
-        }
+    if( ! o_rOutBounds.IsEmpty() )
+        o_rOutBounds.Union( aBounds );
+    else
+        o_rOutBounds = aBounds;
+
+    if(o_pHairline)
+    {
+        if( ! o_pHairline->IsEmpty() )
+            o_pHairline->Union( aBounds );
+        else
+            *o_pHairline = aBounds;
     }
 }
 

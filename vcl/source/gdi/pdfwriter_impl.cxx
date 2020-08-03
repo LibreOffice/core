@@ -525,39 +525,39 @@ void appendDouble( double fValue, OStringBuffer& rBuffer, sal_Int32 nPrecision =
     if( bNeg && ( nInt || nFrac ) )
         rBuffer.append( '-' );
     rBuffer.append( nInt );
-    if( nFrac )
+    if( !nFrac )
+        return;
+
+    int i;
+    rBuffer.append( '.' );
+    sal_Int64 nBound = static_cast<sal_Int64>(pow( 10.0, nPrecision - 1.0 )+0.5);
+    for ( i = 0; ( i < nPrecision ) && nFrac; i++ )
     {
-        int i;
-        rBuffer.append( '.' );
-        sal_Int64 nBound = static_cast<sal_Int64>(pow( 10.0, nPrecision - 1.0 )+0.5);
-        for ( i = 0; ( i < nPrecision ) && nFrac; i++ )
-        {
-            sal_Int64 nNumb = nFrac / nBound;
-            nFrac -= nNumb * nBound;
-            rBuffer.append( nNumb );
-            nBound /= 10;
-        }
+        sal_Int64 nNumb = nFrac / nBound;
+        nFrac -= nNumb * nBound;
+        rBuffer.append( nNumb );
+        nBound /= 10;
     }
 }
 
 void appendColor( const Color& rColor, OStringBuffer& rBuffer, bool bConvertToGrey )
 {
 
-    if( rColor != COL_TRANSPARENT )
+    if( rColor == COL_TRANSPARENT )
+        return;
+
+    if( bConvertToGrey )
     {
-        if( bConvertToGrey )
-        {
-            sal_uInt8 cByte = rColor.GetLuminance();
-            appendDouble( static_cast<double>(cByte) / 255.0, rBuffer );
-        }
-        else
-        {
-            appendDouble( static_cast<double>(rColor.GetRed()) / 255.0, rBuffer );
-            rBuffer.append( ' ' );
-            appendDouble( static_cast<double>(rColor.GetGreen()) / 255.0, rBuffer );
-            rBuffer.append( ' ' );
-            appendDouble( static_cast<double>(rColor.GetBlue()) / 255.0, rBuffer );
-        }
+        sal_uInt8 cByte = rColor.GetLuminance();
+        appendDouble( static_cast<double>(cByte) / 255.0, rBuffer );
+    }
+    else
+    {
+        appendDouble( static_cast<double>(rColor.GetRed()) / 255.0, rBuffer );
+        rBuffer.append( ' ' );
+        appendDouble( static_cast<double>(rColor.GetGreen()) / 255.0, rBuffer );
+        rBuffer.append( ' ' );
+        appendDouble( static_cast<double>(rColor.GetBlue()) / 255.0, rBuffer );
     }
 }
 
@@ -924,42 +924,42 @@ void PDFPage::appendPolygon( const tools::Polygon& rPoly, OStringBuffer& rBuffer
      *  #108582# applications do weird things
      */
     sal_uInt32 nBufLen = rBuffer.getLength();
-    if( nPoints > 0 )
+    if( nPoints <= 0 )
+        return;
+
+    const PolyFlags* pFlagArray = rPoly.GetConstFlagAry();
+    appendPoint( rPoly[0], rBuffer );
+    rBuffer.append( " m\n" );
+    for( sal_uInt16 i = 1; i < nPoints; i++ )
     {
-        const PolyFlags* pFlagArray = rPoly.GetConstFlagAry();
-        appendPoint( rPoly[0], rBuffer );
-        rBuffer.append( " m\n" );
-        for( sal_uInt16 i = 1; i < nPoints; i++ )
+        if( pFlagArray && pFlagArray[i] == PolyFlags::Control && nPoints-i > 2 )
         {
-            if( pFlagArray && pFlagArray[i] == PolyFlags::Control && nPoints-i > 2 )
-            {
-                // bezier
-                SAL_WARN_IF( pFlagArray[i+1] != PolyFlags::Control || pFlagArray[i+2] == PolyFlags::Control, "vcl.pdfwriter", "unexpected sequence of control points" );
-                appendPoint( rPoly[i], rBuffer );
-                rBuffer.append( " " );
-                appendPoint( rPoly[i+1], rBuffer );
-                rBuffer.append( " " );
-                appendPoint( rPoly[i+2], rBuffer );
-                rBuffer.append( " c" );
-                i += 2; // add additionally consumed points
-            }
-            else
-            {
-                // line
-                appendPoint( rPoly[i], rBuffer );
-                rBuffer.append( " l" );
-            }
-            if( (rBuffer.getLength() - nBufLen) > 65 )
-            {
-                rBuffer.append( "\n" );
-                nBufLen = rBuffer.getLength();
-            }
-            else
-                rBuffer.append( " " );
+            // bezier
+            SAL_WARN_IF( pFlagArray[i+1] != PolyFlags::Control || pFlagArray[i+2] == PolyFlags::Control, "vcl.pdfwriter", "unexpected sequence of control points" );
+            appendPoint( rPoly[i], rBuffer );
+            rBuffer.append( " " );
+            appendPoint( rPoly[i+1], rBuffer );
+            rBuffer.append( " " );
+            appendPoint( rPoly[i+2], rBuffer );
+            rBuffer.append( " c" );
+            i += 2; // add additionally consumed points
         }
-        if( bClose )
-            rBuffer.append( "h\n" );
+        else
+        {
+            // line
+            appendPoint( rPoly[i], rBuffer );
+            rBuffer.append( " l" );
+        }
+        if( (rBuffer.getLength() - nBufLen) > 65 )
+        {
+            rBuffer.append( "\n" );
+            nBufLen = rBuffer.getLength();
+        }
+        else
+            rBuffer.append( " " );
     }
+    if( bClose )
+        rBuffer.append( "h\n" );
 }
 
 void PDFPage::appendPolygon( const basegfx::B2DPolygon& rPoly, OStringBuffer& rBuffer ) const
@@ -982,59 +982,59 @@ void PDFPage::appendPolygon( const basegfx::B2DPolygon& rPoly, OStringBuffer& rB
         return;
     }
     sal_uInt32 nPoints = aPoly.count();
-    if( nPoints > 0 )
+    if( nPoints <= 0 )
+        return;
+
+    sal_uInt32 nBufLen = rBuffer.getLength();
+    basegfx::B2DPoint aLastPoint( aPoly.getB2DPoint( 0 ) );
+    appendPixelPoint( aLastPoint, rBuffer );
+    rBuffer.append( " m\n" );
+    for( sal_uInt32 i = 1; i <= nPoints; i++ )
     {
-        sal_uInt32 nBufLen = rBuffer.getLength();
-        basegfx::B2DPoint aLastPoint( aPoly.getB2DPoint( 0 ) );
-        appendPixelPoint( aLastPoint, rBuffer );
-        rBuffer.append( " m\n" );
-        for( sal_uInt32 i = 1; i <= nPoints; i++ )
+        if( i != nPoints || aPoly.isClosed() )
         {
-            if( i != nPoints || aPoly.isClosed() )
+            sal_uInt32 nCurPoint  = i % nPoints;
+            sal_uInt32 nLastPoint = i-1;
+            basegfx::B2DPoint aPoint( aPoly.getB2DPoint( nCurPoint ) );
+            if( aPoly.isNextControlPointUsed( nLastPoint ) &&
+                aPoly.isPrevControlPointUsed( nCurPoint ) )
             {
-                sal_uInt32 nCurPoint  = i % nPoints;
-                sal_uInt32 nLastPoint = i-1;
-                basegfx::B2DPoint aPoint( aPoly.getB2DPoint( nCurPoint ) );
-                if( aPoly.isNextControlPointUsed( nLastPoint ) &&
-                    aPoly.isPrevControlPointUsed( nCurPoint ) )
-                {
-                    appendPixelPoint( aPoly.getNextControlPoint( nLastPoint ), rBuffer );
-                    rBuffer.append( ' ' );
-                    appendPixelPoint( aPoly.getPrevControlPoint( nCurPoint ), rBuffer );
-                    rBuffer.append( ' ' );
-                    appendPixelPoint( aPoint, rBuffer );
-                    rBuffer.append( " c" );
-                }
-                else if( aPoly.isNextControlPointUsed( nLastPoint ) )
-                {
-                    appendPixelPoint( aPoly.getNextControlPoint( nLastPoint ), rBuffer );
-                    rBuffer.append( ' ' );
-                    appendPixelPoint( aPoint, rBuffer );
-                    rBuffer.append( " y" );
-                }
-                else if( aPoly.isPrevControlPointUsed( nCurPoint ) )
-                {
-                    appendPixelPoint( aPoly.getPrevControlPoint( nCurPoint ), rBuffer );
-                    rBuffer.append( ' ' );
-                    appendPixelPoint( aPoint, rBuffer );
-                    rBuffer.append( " v" );
-                }
-                else
-                {
-                    appendPixelPoint( aPoint, rBuffer );
-                    rBuffer.append( " l" );
-                }
-                if( (rBuffer.getLength() - nBufLen) > 65 )
-                {
-                    rBuffer.append( "\n" );
-                    nBufLen = rBuffer.getLength();
-                }
-                else
-                    rBuffer.append( " " );
+                appendPixelPoint( aPoly.getNextControlPoint( nLastPoint ), rBuffer );
+                rBuffer.append( ' ' );
+                appendPixelPoint( aPoly.getPrevControlPoint( nCurPoint ), rBuffer );
+                rBuffer.append( ' ' );
+                appendPixelPoint( aPoint, rBuffer );
+                rBuffer.append( " c" );
             }
+            else if( aPoly.isNextControlPointUsed( nLastPoint ) )
+            {
+                appendPixelPoint( aPoly.getNextControlPoint( nLastPoint ), rBuffer );
+                rBuffer.append( ' ' );
+                appendPixelPoint( aPoint, rBuffer );
+                rBuffer.append( " y" );
+            }
+            else if( aPoly.isPrevControlPointUsed( nCurPoint ) )
+            {
+                appendPixelPoint( aPoly.getPrevControlPoint( nCurPoint ), rBuffer );
+                rBuffer.append( ' ' );
+                appendPixelPoint( aPoint, rBuffer );
+                rBuffer.append( " v" );
+            }
+            else
+            {
+                appendPixelPoint( aPoint, rBuffer );
+                rBuffer.append( " l" );
+            }
+            if( (rBuffer.getLength() - nBufLen) > 65 )
+            {
+                rBuffer.append( "\n" );
+                nBufLen = rBuffer.getLength();
+            }
+            else
+                rBuffer.append( " " );
         }
-        rBuffer.append( "h\n" );
     }
+    rBuffer.append( "h\n" );
 }
 
 void PDFPage::appendPolyPolygon( const tools::PolyPolygon& rPolyPoly, OStringBuffer& rBuffer ) const
@@ -7339,31 +7339,31 @@ void PDFWriterImpl::drawTransparent( const tools::PolyPolygon& rPolyPoly, sal_uI
 
 void PDFWriterImpl::pushResource( ResourceKind eKind, const OString& rResource, sal_Int32 nObject )
 {
-    if( nObject >= 0 )
+    if( nObject < 0 )
+        return;
+
+    switch( eKind )
     {
-        switch( eKind )
-        {
-            case ResourceKind::XObject:
-                m_aGlobalResourceDict.m_aXObjects[ rResource ] = nObject;
-                if( ! m_aOutputStreams.empty() )
-                    m_aOutputStreams.front().m_aResourceDict.m_aXObjects[ rResource ] = nObject;
-                break;
-            case ResourceKind::ExtGState:
-                m_aGlobalResourceDict.m_aExtGStates[ rResource ] = nObject;
-                if( ! m_aOutputStreams.empty() )
-                    m_aOutputStreams.front().m_aResourceDict.m_aExtGStates[ rResource ] = nObject;
-                break;
-            case ResourceKind::Shading:
-                m_aGlobalResourceDict.m_aShadings[ rResource ] = nObject;
-                if( ! m_aOutputStreams.empty() )
-                    m_aOutputStreams.front().m_aResourceDict.m_aShadings[ rResource ] = nObject;
-                break;
-            case ResourceKind::Pattern:
-                m_aGlobalResourceDict.m_aPatterns[ rResource ] = nObject;
-                if( ! m_aOutputStreams.empty() )
-                    m_aOutputStreams.front().m_aResourceDict.m_aPatterns[ rResource ] = nObject;
-                break;
-        }
+        case ResourceKind::XObject:
+            m_aGlobalResourceDict.m_aXObjects[ rResource ] = nObject;
+            if( ! m_aOutputStreams.empty() )
+                m_aOutputStreams.front().m_aResourceDict.m_aXObjects[ rResource ] = nObject;
+            break;
+        case ResourceKind::ExtGState:
+            m_aGlobalResourceDict.m_aExtGStates[ rResource ] = nObject;
+            if( ! m_aOutputStreams.empty() )
+                m_aOutputStreams.front().m_aResourceDict.m_aExtGStates[ rResource ] = nObject;
+            break;
+        case ResourceKind::Shading:
+            m_aGlobalResourceDict.m_aShadings[ rResource ] = nObject;
+            if( ! m_aOutputStreams.empty() )
+                m_aOutputStreams.front().m_aResourceDict.m_aShadings[ rResource ] = nObject;
+            break;
+        case ResourceKind::Pattern:
+            m_aGlobalResourceDict.m_aPatterns[ rResource ] = nObject;
+            if( ! m_aOutputStreams.empty() )
+                m_aOutputStreams.front().m_aResourceDict.m_aPatterns[ rResource ] = nObject;
+            break;
     }
 }
 
@@ -7979,21 +7979,21 @@ void PDFWriterImpl::drawPolyLine( const tools::Polygon& rPoly, const PDFWriter::
     }
     writeBuffer( "Q\n", 2 );
 
-    if( rInfo.m_fTransparency != 0.0 )
+    if( rInfo.m_fTransparency == 0.0 )
+        return;
+
+    // FIXME: actually this may be incorrect with bezier polygons
+    tools::Rectangle aBoundRect( rPoly.GetBoundRect() );
+    // avoid clipping with thick lines
+    if( rInfo.m_fLineWidth > 0.0 )
     {
-        // FIXME: actually this may be incorrect with bezier polygons
-        tools::Rectangle aBoundRect( rPoly.GetBoundRect() );
-        // avoid clipping with thick lines
-        if( rInfo.m_fLineWidth > 0.0 )
-        {
-            sal_Int32 nLW = sal_Int32(rInfo.m_fLineWidth);
-            aBoundRect.AdjustTop( -nLW );
-            aBoundRect.AdjustLeft( -nLW );
-            aBoundRect.AdjustRight(nLW );
-            aBoundRect.AdjustBottom(nLW );
-        }
-        endTransparencyGroup( aBoundRect, static_cast<sal_uInt16>(100.0*rInfo.m_fTransparency) );
+        sal_Int32 nLW = sal_Int32(rInfo.m_fLineWidth);
+        aBoundRect.AdjustTop( -nLW );
+        aBoundRect.AdjustLeft( -nLW );
+        aBoundRect.AdjustRight(nLW );
+        aBoundRect.AdjustBottom(nLW );
     }
+    endTransparencyGroup( aBoundRect, static_cast<sal_uInt16>(100.0*rInfo.m_fTransparency) );
 }
 
 void PDFWriterImpl::drawPixel( const Point& rPoint, const Color& rColor )
@@ -9698,31 +9698,31 @@ void PDFWriterImpl::setClipRegion( const basegfx::B2DPolyPolygon& rRegion )
 
 void PDFWriterImpl::moveClipRegion( sal_Int32 nX, sal_Int32 nY )
 {
-    if( m_aGraphicsStack.front().m_bClipRegion && m_aGraphicsStack.front().m_aClipRegion.count() )
+    if( !(m_aGraphicsStack.front().m_bClipRegion && m_aGraphicsStack.front().m_aClipRegion.count()) )
+        return;
+
+    // tdf#130150 improve coordinate manipulations to double precision transformations
+    basegfx::B2DHomMatrix aConvertA;
+
+    if(MapUnit::MapPixel == m_aGraphicsStack.front().m_aMapMode.GetMapUnit())
     {
-        // tdf#130150 improve coordinate manipulations to double precision transformations
-        basegfx::B2DHomMatrix aConvertA;
-
-        if(MapUnit::MapPixel == m_aGraphicsStack.front().m_aMapMode.GetMapUnit())
-        {
-            aConvertA = GetInverseViewTransformation(m_aMapMode);
-        }
-        else
-        {
-            aConvertA = LogicToLogic(m_aGraphicsStack.front().m_aMapMode, m_aMapMode);
-        }
-
-        basegfx::B2DPoint aB2DPointA(nX, nY);
-        basegfx::B2DPoint aB2DPointB(0.0, 0.0);
-        aB2DPointA *= aConvertA;
-        aB2DPointB *= aConvertA;
-        aB2DPointA -= aB2DPointB;
-        basegfx::B2DHomMatrix aMat;
-
-        aMat.translate(aB2DPointA.getX(), aB2DPointA.getY());
-        m_aGraphicsStack.front().m_aClipRegion.transform( aMat );
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::ClipRegion;
+        aConvertA = GetInverseViewTransformation(m_aMapMode);
     }
+    else
+    {
+        aConvertA = LogicToLogic(m_aGraphicsStack.front().m_aMapMode, m_aMapMode);
+    }
+
+    basegfx::B2DPoint aB2DPointA(nX, nY);
+    basegfx::B2DPoint aB2DPointB(0.0, 0.0);
+    aB2DPointA *= aConvertA;
+    aB2DPointB *= aConvertA;
+    aB2DPointA -= aB2DPointB;
+    basegfx::B2DHomMatrix aMat;
+
+    aMat.translate(aB2DPointA.getX(), aB2DPointA.getY());
+    m_aGraphicsStack.front().m_aClipRegion.transform( aMat );
+    m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::ClipRegion;
 }
 
 void PDFWriterImpl::intersectClipRegion( const tools::Rectangle& rRect )
@@ -10269,62 +10269,62 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
         }
     }
 
-    if( rEle.m_nOwnElement != rEle.m_nParentElement )
+    if( rEle.m_nOwnElement == rEle.m_nParentElement )
+        return;
+
+    if( rEle.m_aKids.empty() )
+        return;
+
+    if( rEle.m_aKids.size() <= ncMaxPDFArraySize )        return;
+
+    //then we need to add the containers for the kids elements
+    // a list to be used for the new kid element
+    std::list< PDFStructureElementKid > aNewKids;
+    std::list< sal_Int32 > aNewChildren;
+
+    // add Div in RoleMap, in case no one else did (TODO: is it needed? Is it dangerous?)
+    OString aAliasName("Div");
+    addRoleMap(aAliasName, PDFWriter::Division);
+
+    while( rEle.m_aKids.size() > ncMaxPDFArraySize )
     {
-        if( !rEle.m_aKids.empty() )
+        sal_Int32 nCurrentStructElement = rEle.m_nOwnElement;
+        sal_Int32 nNewId = sal_Int32(m_aStructure.size());
+        m_aStructure.emplace_back( );
+        PDFStructureElement& rEleNew = m_aStructure.back();
+        rEleNew.m_aAlias            = aAliasName;
+        rEleNew.m_eType             = PDFWriter::Division; // a new Div type container
+        rEleNew.m_nOwnElement       = nNewId;
+        rEleNew.m_nParentElement    = nCurrentStructElement;
+        //inherit the same page as the first child to be reparented
+        rEleNew.m_nFirstPageObject  = m_aStructure[ rEle.m_aChildren.front() ].m_nFirstPageObject;
+        rEleNew.m_nObject           = createObject();//assign a PDF object number
+        //add the object to the kid list of the parent
+        aNewKids.emplace_back( rEleNew.m_nObject );
+        aNewChildren.push_back( nNewId );
+
+        std::list< sal_Int32 >::iterator aChildEndIt( rEle.m_aChildren.begin() );
+        std::list< PDFStructureElementKid >::iterator aKidEndIt( rEle.m_aKids.begin() );
+        advance( aChildEndIt, ncMaxPDFArraySize );
+        advance( aKidEndIt, ncMaxPDFArraySize );
+
+        rEleNew.m_aKids.splice( rEleNew.m_aKids.begin(),
+                                rEle.m_aKids,
+                                rEle.m_aKids.begin(),
+                                aKidEndIt );
+        rEleNew.m_aChildren.splice( rEleNew.m_aChildren.begin(),
+                                    rEle.m_aChildren,
+                                    rEle.m_aChildren.begin(),
+                                    aChildEndIt );
+        // set the kid's new parent
+        for (auto const& child : rEleNew.m_aChildren)
         {
-            if( rEle.m_aKids.size() > ncMaxPDFArraySize ) {
-                //then we need to add the containers for the kids elements
-                // a list to be used for the new kid element
-                std::list< PDFStructureElementKid > aNewKids;
-                std::list< sal_Int32 > aNewChildren;
-
-                // add Div in RoleMap, in case no one else did (TODO: is it needed? Is it dangerous?)
-                OString aAliasName("Div");
-                addRoleMap(aAliasName, PDFWriter::Division);
-
-                while( rEle.m_aKids.size() > ncMaxPDFArraySize )
-                {
-                    sal_Int32 nCurrentStructElement = rEle.m_nOwnElement;
-                    sal_Int32 nNewId = sal_Int32(m_aStructure.size());
-                    m_aStructure.emplace_back( );
-                    PDFStructureElement& rEleNew = m_aStructure.back();
-                    rEleNew.m_aAlias            = aAliasName;
-                    rEleNew.m_eType             = PDFWriter::Division; // a new Div type container
-                    rEleNew.m_nOwnElement       = nNewId;
-                    rEleNew.m_nParentElement    = nCurrentStructElement;
-                    //inherit the same page as the first child to be reparented
-                    rEleNew.m_nFirstPageObject  = m_aStructure[ rEle.m_aChildren.front() ].m_nFirstPageObject;
-                    rEleNew.m_nObject           = createObject();//assign a PDF object number
-                    //add the object to the kid list of the parent
-                    aNewKids.emplace_back( rEleNew.m_nObject );
-                    aNewChildren.push_back( nNewId );
-
-                    std::list< sal_Int32 >::iterator aChildEndIt( rEle.m_aChildren.begin() );
-                    std::list< PDFStructureElementKid >::iterator aKidEndIt( rEle.m_aKids.begin() );
-                    advance( aChildEndIt, ncMaxPDFArraySize );
-                    advance( aKidEndIt, ncMaxPDFArraySize );
-
-                    rEleNew.m_aKids.splice( rEleNew.m_aKids.begin(),
-                                            rEle.m_aKids,
-                                            rEle.m_aKids.begin(),
-                                            aKidEndIt );
-                    rEleNew.m_aChildren.splice( rEleNew.m_aChildren.begin(),
-                                                rEle.m_aChildren,
-                                                rEle.m_aChildren.begin(),
-                                                aChildEndIt );
-                    // set the kid's new parent
-                    for (auto const& child : rEleNew.m_aChildren)
-                    {
-                        m_aStructure[ child ].m_nParentElement = nNewId;
-                    }
-                }
-                //finally add the new kids resulting from the container added
-                rEle.m_aKids.insert( rEle.m_aKids.begin(), aNewKids.begin(), aNewKids.end() );
-                rEle.m_aChildren.insert( rEle.m_aChildren.begin(), aNewChildren.begin(), aNewChildren.end() );
-            }
+            m_aStructure[ child ].m_nParentElement = nNewId;
         }
     }
+    //finally add the new kids resulting from the container added
+    rEle.m_aKids.insert( rEle.m_aKids.begin(), aNewKids.begin(), aNewKids.end() );
+    rEle.m_aChildren.insert( rEle.m_aChildren.begin(), aNewChildren.begin(), aNewChildren.end() );
 }
 
 bool PDFWriterImpl::setCurrentStructureElement( sal_Int32 nEle )
@@ -10692,18 +10692,18 @@ void PDFWriterImpl::setStructureBoundingBox( const tools::Rectangle& rRect )
     if( nPageNr < 0 || nPageNr >= static_cast<sal_Int32>(m_aPages.size()) || !m_aContext.Tagged )
         return;
 
-    if( m_nCurrentStructElement > 0 && m_bEmitStructure )
+    if( !(m_nCurrentStructElement > 0 && m_bEmitStructure) )
+        return;
+
+    PDFWriter::StructElement eType = m_aStructure[ m_nCurrentStructElement ].m_eType;
+    if( eType == PDFWriter::Figure      ||
+        eType == PDFWriter::Formula     ||
+        eType == PDFWriter::Form        ||
+        eType == PDFWriter::Table )
     {
-        PDFWriter::StructElement eType = m_aStructure[ m_nCurrentStructElement ].m_eType;
-        if( eType == PDFWriter::Figure      ||
-            eType == PDFWriter::Formula     ||
-            eType == PDFWriter::Form        ||
-            eType == PDFWriter::Table )
-        {
-            m_aStructure[ m_nCurrentStructElement ].m_aBBox = rRect;
-            // convert to default user space now, since the mapmode may change
-            m_aPages[nPageNr].convertRect( m_aStructure[ m_nCurrentStructElement ].m_aBBox );
-        }
+        m_aStructure[ m_nCurrentStructElement ].m_aBBox = rRect;
+        // convert to default user space now, since the mapmode may change
+        m_aPages[nPageNr].convertRect( m_aStructure[ m_nCurrentStructElement ].m_aBBox );
     }
 }
 

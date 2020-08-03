@@ -1252,26 +1252,26 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup )
     // If the printer supports landscape orientation, check paper sizes again
     // with landscape orientation. This is necessary as a printer driver provides
     // all paper sizes with portrait orientation only!!
-    if ( rData.GetPaperFormat() == PAPER_USER &&
+    if ( !(rData.GetPaperFormat() == PAPER_USER &&
          nLandscapeAngle != 0 &&
-         HasSupport( PrinterSupport::SetOrientation ))
+         HasSupport( PrinterSupport::SetOrientation )))
+        return;
+
+    const long nRotatedWidth = rData.GetPaperHeight();
+    const long nRotatedHeight = rData.GetPaperWidth();
+    PaperInfo aRotatedInfo(nRotatedWidth, nRotatedHeight);
+
+    for ( int i = 0; i < nPaperCount; i++ )
     {
-        const long nRotatedWidth = rData.GetPaperHeight();
-        const long nRotatedHeight = rData.GetPaperWidth();
-        PaperInfo aRotatedInfo(nRotatedWidth, nRotatedHeight);
+        const PaperInfo& rPaperInfo = GetPaperInfo( i );
 
-        for ( int i = 0; i < nPaperCount; i++ )
+        if ( aRotatedInfo.sloppyEqual( rPaperInfo ) )
         {
-            const PaperInfo& rPaperInfo = GetPaperInfo( i );
-
-            if ( aRotatedInfo.sloppyEqual( rPaperInfo ) )
-            {
-                rData.SetPaperFormat(
-                    ImplGetPaperFormat( rPaperInfo.getWidth(),
-                        rPaperInfo.getHeight() ));
-                rData.SetOrientation( Orientation::Landscape );
-                return;
-            }
+            rData.SetPaperFormat(
+                ImplGetPaperFormat( rPaperInfo.getWidth(),
+                    rPaperInfo.getHeight() ));
+            rData.SetOrientation( Orientation::Landscape );
+            return;
         }
     }
 }
@@ -1281,37 +1281,37 @@ void Printer::SetPaper( Paper ePaper )
     if ( mbInPrintPage )
         return;
 
-    if ( maJobSetup.ImplGetConstData().GetPaperFormat() != ePaper )
+    if ( maJobSetup.ImplGetConstData().GetPaperFormat() == ePaper )
+        return;
+
+    JobSetup      aJobSetup = maJobSetup;
+    ImplJobSetup& rData = aJobSetup.ImplGetData();
+
+    rData.SetPaperFormat( ePaper );
+    if ( ePaper != PAPER_USER )
     {
-        JobSetup      aJobSetup = maJobSetup;
-        ImplJobSetup& rData = aJobSetup.ImplGetData();
+        PaperInfo aInfo(ePaper);
+        rData.SetPaperWidth( aInfo.getWidth() );
+        rData.SetPaperHeight( aInfo.getHeight() );
+    }
 
-        rData.SetPaperFormat( ePaper );
-        if ( ePaper != PAPER_USER )
-        {
-            PaperInfo aInfo(ePaper);
-            rData.SetPaperWidth( aInfo.getWidth() );
-            rData.SetPaperHeight( aInfo.getHeight() );
-        }
+    if ( IsDisplayPrinter() )
+    {
+        mbNewJobSetup = true;
+        maJobSetup = aJobSetup;
+        return;
+    }
 
-        if ( IsDisplayPrinter() )
-        {
-            mbNewJobSetup = true;
-            maJobSetup = aJobSetup;
-            return;
-        }
-
-        ReleaseGraphics();
-        if ( ePaper == PAPER_USER )
-            ImplFindPaperFormatForUserSize( aJobSetup );
-        if ( mpInfoPrinter->SetData( JobSetFlags::PAPERSIZE | JobSetFlags::ORIENTATION, &rData ))
-        {
-            ImplUpdateJobSetupPaper( aJobSetup );
-            mbNewJobSetup = true;
-            maJobSetup = aJobSetup;
-            ImplUpdatePageData();
-            ImplUpdateFontList();
-        }
+    ReleaseGraphics();
+    if ( ePaper == PAPER_USER )
+        ImplFindPaperFormatForUserSize( aJobSetup );
+    if ( mpInfoPrinter->SetData( JobSetFlags::PAPERSIZE | JobSetFlags::ORIENTATION, &rData ))
+    {
+        ImplUpdateJobSetupPaper( aJobSetup );
+        mbNewJobSetup = true;
+        maJobSetup = aJobSetup;
+        ImplUpdatePageData();
+        ImplUpdateFontList();
     }
 }
 
@@ -1433,29 +1433,29 @@ void Printer::SetDuplexMode( DuplexMode eDuplex )
     if ( mbInPrintPage )
         return;
 
-    if ( maJobSetup.ImplGetConstData().GetDuplexMode() != eDuplex )
+    if ( maJobSetup.ImplGetConstData().GetDuplexMode() == eDuplex )
+        return;
+
+    JobSetup      aJobSetup = maJobSetup;
+    ImplJobSetup& rData = aJobSetup.ImplGetData();
+
+    rData.SetDuplexMode( eDuplex );
+
+    if ( IsDisplayPrinter() )
     {
-        JobSetup      aJobSetup = maJobSetup;
-        ImplJobSetup& rData = aJobSetup.ImplGetData();
+        mbNewJobSetup = true;
+        maJobSetup = aJobSetup;
+        return;
+    }
 
-        rData.SetDuplexMode( eDuplex );
-
-        if ( IsDisplayPrinter() )
-        {
-            mbNewJobSetup = true;
-            maJobSetup = aJobSetup;
-            return;
-        }
-
-        ReleaseGraphics();
-        if ( mpInfoPrinter->SetData( JobSetFlags::DUPLEXMODE, &rData ) )
-        {
-            ImplUpdateJobSetupPaper( aJobSetup );
-            mbNewJobSetup = true;
-            maJobSetup = aJobSetup;
-            ImplUpdatePageData();
-            ImplUpdateFontList();
-        }
+    ReleaseGraphics();
+    if ( mpInfoPrinter->SetData( JobSetFlags::DUPLEXMODE, &rData ) )
+    {
+        ImplUpdateJobSetupPaper( aJobSetup );
+        mbNewJobSetup = true;
+        maJobSetup = aJobSetup;
+        ImplUpdatePageData();
+        ImplUpdateFontList();
     }
 }
 
@@ -1539,21 +1539,21 @@ void Printer::ImplStartPage()
     if ( !IsJobActive() )
         return;
 
-    if ( mpPrinter )
-    {
-        SalGraphics* pGraphics = mpPrinter->StartPage( &maJobSetup.ImplGetData(),
-                                                       mbNewJobSetup );
-        if ( pGraphics )
-        {
-            ReleaseGraphics();
-            mpJobGraphics = pGraphics;
-        }
-        mbDevOutput = true;
+    if ( !mpPrinter )
+        return;
 
-        // PrintJob not aborted ???
-        if ( IsJobActive() )
-            mbInPrintPage = true;
+    SalGraphics* pGraphics = mpPrinter->StartPage( &maJobSetup.ImplGetData(),
+                                                   mbNewJobSetup );
+    if ( pGraphics )
+    {
+        ReleaseGraphics();
+        mpJobGraphics = pGraphics;
     }
+    mbDevOutput = true;
+
+    // PrintJob not aborted ???
+    if ( IsJobActive() )
+        mbInPrintPage = true;
 }
 
 void Printer::ImplEndPage()
@@ -1579,35 +1579,35 @@ void Printer::updatePrinters()
     ImplSVData*         pSVData = ImplGetSVData();
     ImplPrnQueueList*   pPrnList = pSVData->maGDIData.mpPrinterQueueList.get();
 
-    if ( pPrnList )
+    if ( !pPrnList )
+        return;
+
+    std::unique_ptr<ImplPrnQueueList> pNewList(new ImplPrnQueueList);
+    pSVData->mpDefInst->GetPrinterQueueInfo( pNewList.get() );
+
+    bool bChanged = pPrnList->m_aQueueInfos.size() != pNewList->m_aQueueInfos.size();
+    for( decltype(pPrnList->m_aQueueInfos)::size_type i = 0; ! bChanged && i < pPrnList->m_aQueueInfos.size(); i++ )
     {
-        std::unique_ptr<ImplPrnQueueList> pNewList(new ImplPrnQueueList);
-        pSVData->mpDefInst->GetPrinterQueueInfo( pNewList.get() );
-
-        bool bChanged = pPrnList->m_aQueueInfos.size() != pNewList->m_aQueueInfos.size();
-        for( decltype(pPrnList->m_aQueueInfos)::size_type i = 0; ! bChanged && i < pPrnList->m_aQueueInfos.size(); i++ )
+        ImplPrnQueueData& rInfo     = pPrnList->m_aQueueInfos[i];
+        ImplPrnQueueData& rNewInfo  = pNewList->m_aQueueInfos[i];
+        if( ! rInfo.mpSalQueueInfo || ! rNewInfo.mpSalQueueInfo || // sanity check
+            rInfo.mpSalQueueInfo->maPrinterName != rNewInfo.mpSalQueueInfo->maPrinterName )
         {
-            ImplPrnQueueData& rInfo     = pPrnList->m_aQueueInfos[i];
-            ImplPrnQueueData& rNewInfo  = pNewList->m_aQueueInfos[i];
-            if( ! rInfo.mpSalQueueInfo || ! rNewInfo.mpSalQueueInfo || // sanity check
-                rInfo.mpSalQueueInfo->maPrinterName != rNewInfo.mpSalQueueInfo->maPrinterName )
-            {
-                bChanged = true;
-            }
+            bChanged = true;
         }
-        if( bChanged )
-        {
-            ImplDeletePrnQueueList();
-            pSVData->maGDIData.mpPrinterQueueList = std::move(pNewList);
+    }
+    if( !bChanged )
+        return;
 
-            Application* pApp = GetpApp();
-            if( pApp )
-            {
-                DataChangedEvent aDCEvt( DataChangedEventType::PRINTER );
-                Application::ImplCallEventListenersApplicationDataChanged(&aDCEvt);
-                Application::NotifyAllWindows( aDCEvt );
-            }
-        }
+    ImplDeletePrnQueueList();
+    pSVData->maGDIData.mpPrinterQueueList = std::move(pNewList);
+
+    Application* pApp = GetpApp();
+    if( pApp )
+    {
+        DataChangedEvent aDCEvt( DataChangedEventType::PRINTER );
+        Application::ImplCallEventListenersApplicationDataChanged(&aDCEvt);
+        Application::NotifyAllWindows( aDCEvt );
     }
 }
 

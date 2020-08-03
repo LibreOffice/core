@@ -177,83 +177,83 @@ void VectorGraphicData::ensureReplacement()
 
 void VectorGraphicData::ensureSequenceAndRange()
 {
-    if (!mbSequenceCreated && maVectorGraphicDataArray.hasElements())
+    if (mbSequenceCreated || !maVectorGraphicDataArray.hasElements())
+        return;
+
+    // import SVG to maSequence, also set maRange
+    maRange.reset();
+
+    // create Vector Graphic Data interpreter
+    uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
+
+    switch (getVectorGraphicDataType())
     {
-        // import SVG to maSequence, also set maRange
-        maRange.reset();
-
-        // create Vector Graphic Data interpreter
-        uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
-
-        switch (getVectorGraphicDataType())
+        case VectorGraphicDataType::Svg:
         {
-            case VectorGraphicDataType::Svg:
-            {
-                const uno::Reference< graphic::XSvgParser > xSvgParser = graphic::SvgTools::create(xContext);
-                const uno::Reference< io::XInputStream > myInputStream(new comphelper::SequenceInputStream(maVectorGraphicDataArray));
+            const uno::Reference< graphic::XSvgParser > xSvgParser = graphic::SvgTools::create(xContext);
+            const uno::Reference< io::XInputStream > myInputStream(new comphelper::SequenceInputStream(maVectorGraphicDataArray));
 
-                if (myInputStream.is())
-                    maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xSvgParser->getDecomposition(myInputStream, maPath));
+            if (myInputStream.is())
+                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xSvgParser->getDecomposition(myInputStream, maPath));
 
-                break;
-            }
-            case VectorGraphicDataType::Emf:
-            case VectorGraphicDataType::Wmf:
-            {
-                const uno::Reference< graphic::XEmfParser > xEmfParser = graphic::EmfTools::create(xContext);
-                const uno::Reference< io::XInputStream > myInputStream(new comphelper::SequenceInputStream(maVectorGraphicDataArray));
-                uno::Sequence< ::beans::PropertyValue > aSequence;
-
-                if (mpExternalHeader)
-                {
-                    aSequence = mpExternalHeader->getSequence();
-                }
-
-                if (myInputStream.is())
-                    maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xEmfParser->getDecomposition(myInputStream, maPath, aSequence));
-
-                break;
-            }
-            case VectorGraphicDataType::Pdf:
-            {
-                const uno::Reference<graphic::XPdfDecomposer> xPdfDecomposer = graphic::PdfTools::create(xContext);
-                uno::Sequence<beans::PropertyValue> aDecompositionParameters = comphelper::InitPropertySequence({
-                    {"PageIndex", uno::makeAny<sal_Int32>(mnPageIndex)},
-                });
-                auto xPrimitive2D = xPdfDecomposer->getDecomposition(maVectorGraphicDataArray, aDecompositionParameters);
-                maSequence = comphelper::sequenceToContainer<std::deque<uno::Reference<graphic::XPrimitive2D>>>(xPrimitive2D);
-
-                break;
-            }
+            break;
         }
-
-        if(!maSequence.empty())
+        case VectorGraphicDataType::Emf:
+        case VectorGraphicDataType::Wmf:
         {
-            const sal_Int32 nCount(maSequence.size());
-            geometry::RealRectangle2D aRealRect;
-            uno::Sequence< beans::PropertyValue > aViewParameters;
+            const uno::Reference< graphic::XEmfParser > xEmfParser = graphic::EmfTools::create(xContext);
+            const uno::Reference< io::XInputStream > myInputStream(new comphelper::SequenceInputStream(maVectorGraphicDataArray));
+            uno::Sequence< ::beans::PropertyValue > aSequence;
 
-            for(sal_Int32 a(0); a < nCount; a++)
+            if (mpExternalHeader)
             {
-                // get reference
-                const css::uno::Reference< css::graphic::XPrimitive2D > xReference(maSequence[a]);
-
-                if(xReference.is())
-                {
-                    aRealRect = xReference->getRange(aViewParameters);
-
-                    maRange.expand(
-                        basegfx::B2DRange(
-                            aRealRect.X1,
-                            aRealRect.Y1,
-                            aRealRect.X2,
-                            aRealRect.Y2));
-                }
+                aSequence = mpExternalHeader->getSequence();
             }
+
+            if (myInputStream.is())
+                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xEmfParser->getDecomposition(myInputStream, maPath, aSequence));
+
+            break;
         }
-        mNestedBitmapSize = estimateSize(maSequence);
-        mbSequenceCreated = true;
+        case VectorGraphicDataType::Pdf:
+        {
+            const uno::Reference<graphic::XPdfDecomposer> xPdfDecomposer = graphic::PdfTools::create(xContext);
+            uno::Sequence<beans::PropertyValue> aDecompositionParameters = comphelper::InitPropertySequence({
+                {"PageIndex", uno::makeAny<sal_Int32>(mnPageIndex)},
+            });
+            auto xPrimitive2D = xPdfDecomposer->getDecomposition(maVectorGraphicDataArray, aDecompositionParameters);
+            maSequence = comphelper::sequenceToContainer<std::deque<uno::Reference<graphic::XPrimitive2D>>>(xPrimitive2D);
+
+            break;
+        }
     }
+
+    if(!maSequence.empty())
+    {
+        const sal_Int32 nCount(maSequence.size());
+        geometry::RealRectangle2D aRealRect;
+        uno::Sequence< beans::PropertyValue > aViewParameters;
+
+        for(sal_Int32 a(0); a < nCount; a++)
+        {
+            // get reference
+            const css::uno::Reference< css::graphic::XPrimitive2D > xReference(maSequence[a]);
+
+            if(xReference.is())
+            {
+                aRealRect = xReference->getRange(aViewParameters);
+
+                maRange.expand(
+                    basegfx::B2DRange(
+                        aRealRect.X1,
+                        aRealRect.Y1,
+                        aRealRect.X2,
+                        aRealRect.Y2));
+            }
+        }
+    }
+    mNestedBitmapSize = estimateSize(maSequence);
+    mbSequenceCreated = true;
 }
 
 auto VectorGraphicData::getSizeBytes() const -> std::pair<State, size_t>
