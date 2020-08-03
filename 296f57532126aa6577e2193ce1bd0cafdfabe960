@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ec57b664_2f2f1cbf",
+        "filename": "sw/inc/inspectorproperties.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-03T15:53:21Z",
+      "side": 1,
+      "message": "Shivam: if in doubt (and better always), look at the definitions of the properties in respective .idl",
+      "parentUuid": "39199e05_70952cbe",
+      "range": {
+        "startLine": 52,
+        "startChar": 97,
+        "endLine": 52,
+        "endChar": 101
+      },
+      "revId": "296f57532126aa6577e2193ce1bd0cafdfabe960",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a46401d2_377f3c66",
         "filename": "sw/inc/inspectorproperties.hrc",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2020-08-03T15:44:33Z",
       "side": 1,
       "message": "Untranslatable",
+      "range": {
+        "startLine": 79,
+        "startChar": 97,
+        "endLine": 79,
+        "endChar": 113
+      },
+      "revId": "296f57532126aa6577e2193ce1bd0cafdfabe960",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "972180fa_2e5121f0",
+        "filename": "sw/inc/inspectorproperties.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-03T15:53:21Z",
+      "side": 1,
+      "message": "Interoperability grab bag (a list of properties from the source file that we do not understand, but keep to save to avoid losing unsupported properties on round-trip)",
+      "parentUuid": "a46401d2_377f3c66",
       "range": {
         "startLine": 79,
         "startChar": 97,
@@ -128,6 +176,30 @@
       "writtenOn": "2020-08-03T15:44:33Z",
       "side": 1,
       "message": "Rubinred adjustment or Red stone :-)",
+      "range": {
+        "startLine": 230,
+        "startChar": 92,
+        "endLine": 230,
+        "endChar": 96
+      },
+      "revId": "296f57532126aa6577e2193ce1bd0cafdfabe960",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e441c25_3bf80043",
+        "filename": "sw/inc/inspectorproperties.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-03T15:53:21Z",
+      "side": 1,
+      "message": "Ruby is a proper term - see en.wikipedia.org/wiki/Ruby_character",
+      "parentUuid": "2755db0c_b199f97e",
       "range": {
         "startLine": 230,
         "startChar": 92,
