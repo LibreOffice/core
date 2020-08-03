@@ -30,6 +30,7 @@ $(eval $(call gb_Module_add_check_targets,xmloff,\
 	$(if $(MERGELIBS),, \
 		CppunitTest_xmloff_uxmloff) \
 	CppunitTest_xmloff_style \
+	CppunitTest_xmloff_text \
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,xmloff,\
