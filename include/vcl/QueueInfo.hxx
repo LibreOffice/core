@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_QUEUEINFO_HXX
-#define INCLUDED_VCL_QUEUEINFO_HXX
+#pragma once
 
 #include <config_options.h>
 
@@ -52,6 +51,5 @@ public:
     sal_uInt32 GetJobs() const;
 };
 
-#endif // INCLUDED_VCL_QUEUEINFO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

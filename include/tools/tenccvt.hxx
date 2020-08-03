@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_TOOLS_TENCCVT_HXX
-#define INCLUDED_TOOLS_TENCCVT_HXX
+#pragma once
 
 #include <rtl/textenc.h>
 #include <tools/toolsdllapi.h>
@@ -53,6 +52,5 @@ TOOLS_DLLPUBLIC rtl_TextEncoding GetSOStoreTextEncoding( rtl_TextEncoding eEncod
  */
 TOOLS_DLLPUBLIC rtl_TextEncoding getBestMSEncodingByChar(sal_Unicode c);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

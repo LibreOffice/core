@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOTOOLS_STREAMHELPER_HXX
-#define INCLUDED_UNOTOOLS_STREAMHELPER_HXX
+#pragma once
 
 #include <unotools/unotoolsdllapi.h>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -61,6 +60,5 @@ public:
 
 }   // namespace utl
 
-#endif // _UNOTOOLS_STREAM_WRAPPER_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

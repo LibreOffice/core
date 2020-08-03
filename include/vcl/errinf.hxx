@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_ERRINF_HXX
-#define INCLUDED_VCL_ERRINF_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <vcl/errcode.hxx>
@@ -211,6 +210,5 @@ private:
 
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

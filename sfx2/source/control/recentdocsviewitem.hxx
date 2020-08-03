@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SFX2_RECENTDOCSVIEWITEM_HXX
-#define INCLUDED_SFX2_RECENTDOCSVIEWITEM_HXX
+#pragma once
 
 #include <thumbnailviewitem.hxx>
 
@@ -62,6 +61,5 @@ private:
     BitmapEx m_aRemoveRecentBitmapHighlighted;
 };
 
-#endif // INCLUDED_SFX2_RECENTDOCSVIEWITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

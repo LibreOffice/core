@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SALCTYPE_HXX
-#define INCLUDED_VCL_SALCTYPE_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -58,6 +57,5 @@ typedef sal_uLong (*SALGRFCVTPROC)( void* pInst,
                                 ConvertDataFormat nInFormat, void* pInBuffer, sal_uLong nInBufSize,
                                 ConvertDataFormat nOutFormat, void** ppOutBuffer );
 
-#endif // INCLUDED_VCL_SALCTYPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

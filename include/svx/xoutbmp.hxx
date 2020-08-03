@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_XOUTBMP_HXX
-#define INCLUDED_SVX_XOUTBMP_HXX
+#pragma once
 
 #include <vcl/graph.hxx>
 #include <vcl/errcode.hxx>
@@ -71,6 +70,5 @@ public:
                                        const css::uno::Sequence< css::beans::PropertyValue >* pFilterData );
 };
 
-#endif // INCLUDED_SVX_XOUTBMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COMPHELPER_THREADPOOL_HXX
-#define INCLUDED_COMPHELPER_THREADPOOL_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <rtl/ref.hxx>
@@ -102,6 +101,5 @@ private:
 
 } // namespace comphelper
 
-#endif // INCLUDED_COMPHELPER_THREADPOOL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

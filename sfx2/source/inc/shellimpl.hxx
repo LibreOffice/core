@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_SHELLIMPL_HXX
-#define INCLUDED_SFX2_SHELLIMPL_HXX
+#pragma once
 
 #include <cstdlib>
 #include <vector>
@@ -91,6 +90,5 @@ public:
     size_t size() const;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

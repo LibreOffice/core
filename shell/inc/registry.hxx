@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SHELL_INC_INTERNAL_REGISTRY_HXX
-#define INCLUDED_SHELL_INC_INTERNAL_REGISTRY_HXX
+#pragma once
 
 
 // registry helper functions
@@ -53,6 +52,5 @@ Filepath_t ClsidToString(const CLSID& clsid);
 bool QueryRegistryKey(HKEY RootKey, const Filepath_char_t* KeyName, const Filepath_char_t* ValueName, Filepath_char_t *pszData, DWORD dwBufLen);
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

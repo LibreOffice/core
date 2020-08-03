@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_BITMAPBUFFER_HXX
-#define INCLUDED_VCL_BITMAPBUFFER_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <vcl/BitmapPalette.hxx>
@@ -43,6 +42,5 @@ VCL_DLLPUBLIC std::unique_ptr<BitmapBuffer> StretchAndConvert(
     const BitmapBuffer& rSrcBuffer, const SalTwoRect& rTwoRect,
     ScanlineFormat nDstBitmapFormat, const BitmapPalette* pDstPal = nullptr, const ColorMask* pDstMask = nullptr );
 
-#endif // INCLUDED_VCL_BITMAPBUFFER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

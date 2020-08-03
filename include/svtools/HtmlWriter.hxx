@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SVTOOLS_HTMLWRITER_HXX
-#define INCLUDED_SVTOOLS_HTMLWRITER_HXX
+#pragma once
 
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
@@ -57,6 +56,5 @@ public:
     void characters(const OString& rChars);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

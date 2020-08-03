@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_WMFEXTERNAL_HXX
-#define INCLUDED_VCL_WMFEXTERNAL_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -51,6 +50,5 @@ struct VCL_DLLPUBLIC WmfExternal
     bool setSequence(const css::uno::Sequence< css::beans::PropertyValue >& rSequence);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_OOX_CRYPTO_STANDARD2007ENGINE_HXX
-#define INCLUDED_OOX_CRYPTO_STANDARD2007ENGINE_HXX
+#pragma once
 
 #include <oox/dllapi.h>
 #include <oox/crypto/CryptoEngine.hxx>
@@ -56,6 +55,5 @@ public:
 
 } // namespace oox::crypto
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

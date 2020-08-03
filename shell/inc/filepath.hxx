@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SHELL_INC_INTERNAL_FILEPATH_HXX
-#define INCLUDED_SHELL_INC_INTERNAL_FILEPATH_HXX
+#pragma once
 
 
 // typedefs to allow using Unicode paths on Windows
@@ -24,6 +23,5 @@ typedef char Filepath_char_t;
 typedef std::string Filepath_t;
 #endif
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

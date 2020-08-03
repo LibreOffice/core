@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMBEDDEDOBJ_SOURCE_MSOLE_XDIALOGCREATOR_HXX
-#define INCLUDED_EMBEDDEDOBJ_SOURCE_MSOLE_XDIALOGCREATOR_HXX
+#pragma once
 
 #include <com/sun/star/embed/XInsertObjectDialog.hpp>
 #include <com/sun/star/embed/XEmbedObjectClipboardCreator.hpp>
@@ -58,6 +57,5 @@ public:
 
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

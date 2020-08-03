@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SDTAGITM_HXX
-#define INCLUDED_SVX_SDTAGITM_HXX
+#pragma once
 
 #include <svx/sdooitm.hxx>
 #include <svx/svddef.hxx>
@@ -30,6 +29,5 @@ inline SdrOnOffItem makeSdrTextAutoGrowWidthItem(bool bAuto) {
     return SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH, bAuto);
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

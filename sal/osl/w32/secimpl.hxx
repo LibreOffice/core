@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_OSL_W32_SECIMPL_HXX
-#define INCLUDED_SAL_OSL_W32_SECIMPL_HXX
+#pragma once
 
 #include <winnetwk.h>
 
@@ -34,6 +33,5 @@ typedef struct {
     NETRESOURCEW *m_pNetResource;
 } oslSecurityImpl;
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

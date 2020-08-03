@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XLCONTENT_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_XLCONTENT_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -184,6 +183,5 @@ const sal_uInt16 EXC_ID_WQTABLES            = 0x0804;
 
 const sal_uInt16 EXC_ID_EXTLST              = 0x9988;       /// it is just a random number
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

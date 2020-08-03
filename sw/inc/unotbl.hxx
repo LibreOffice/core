@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_UNOTBL_HXX
-#define INCLUDED_SW_INC_UNOTBL_HXX
+#pragma once
 
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -511,6 +510,5 @@ int sw_CompareCellsByColFirst( const OUString &rCellName1, const OUString &rCell
 
 int sw_CompareCellsByRowFirst( const OUString &rCellName1, const OUString &rCellName2 );
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

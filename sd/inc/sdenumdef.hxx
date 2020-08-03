@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_SDENUMDEF_HXX
-#define INCLUDED_SD_INC_SDENUMDEF_HXX
+#pragma once
 
 #define RET_SNAP_DELETE 111
 
 enum class SnapKind { Horizontal, Vertical, Point };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SOURCE_SBX_SBXCONV_HXX
-#define INCLUDED_BASIC_SOURCE_SBX_SBXCONV_HXX
+#pragma once
 
 #include "sbxdec.hxx"
 #include <basic/sbx.hxx>
@@ -127,6 +126,5 @@ void    ImpPutBool( SbxValues*, sal_Int16 );
 SbxArray* StringToByteArray(const OUString& rStr);
 OUString ByteArrayToString(SbxArray* pArr);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

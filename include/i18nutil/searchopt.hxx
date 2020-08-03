@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_I18NUTIL_SEARCHOPT_HXX
-#define INCLUDED_I18NUTIL_SEARCHOPT_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <com/sun/star/lang/Locale.hpp>
@@ -136,6 +135,5 @@ struct SAL_WARN_UNUSED SearchOptions2 : public SearchOptions {
 
 }; // namespace
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

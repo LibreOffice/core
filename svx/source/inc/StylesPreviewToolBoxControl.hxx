@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_INC_STYLES_PREVIEW_TOOLBOX_CONTROL_HXX
-#define INCLUDED_SVX_SOURCE_INC_STYLES_PREVIEW_TOOLBOX_CONTROL_HXX
+#pragma once
 
 #include <svx/svxdllapi.h>
 #include <sfx2/tbxctrl.hxx>
@@ -66,6 +65,5 @@ private:
     void InitializeStyles(const css::uno::Reference<css::frame::XModel>& xModel);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

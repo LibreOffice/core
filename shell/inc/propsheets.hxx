@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SHELL_INC_INTERNAL_PROPSHEETS_HXX
-#define INCLUDED_SHELL_INC_INTERNAL_PROPSHEETS_HXX
+#pragma once
 
 #include "metainforeader.hxx"
 
@@ -78,6 +77,5 @@ private:
     Filepath_char_t m_szFileName[MAX_PATH];
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_UNOTEST_DIRECTORIES_HXX
-#define INCLUDED_UNOTEST_DIRECTORIES_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -45,6 +44,5 @@ public:
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

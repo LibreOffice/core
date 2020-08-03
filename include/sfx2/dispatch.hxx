@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX2_DISPATCH_HXX
-#define INCLUDED_SFX2_DISPATCH_HXX
+#pragma once
 
 #include <memory>
 #include <sal/config.h>
@@ -174,6 +173,5 @@ public:
     static boost::property_tree::ptree fillPopupMenu(Menu* pMenu);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

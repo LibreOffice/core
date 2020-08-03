@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_QA_INC_STRINGHELPER_HXX
-#define INCLUDED_SAL_QA_INC_STRINGHELPER_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
@@ -28,6 +27,5 @@ inline void operator <<= (OString& _rAsciiString, OUString const & _rUnicodeStri
     _rAsciiString = OUStringToOString(_rUnicodeString,RTL_TEXTENCODING_ASCII_US);
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

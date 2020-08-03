@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COMPHELPER_UNIQUE_DISPOSING_PTR_HXX
-#define INCLUDED_COMPHELPER_UNIQUE_DISPOSING_PTR_HXX
+#pragma once
 
 #include <memory>
 #include <cppuhelper/implbase.hxx>
@@ -181,6 +180,5 @@ public:
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_SHAPE3DPROPERTIES_HXX
-#define INCLUDED_OOX_DRAWINGML_SHAPE3DPROPERTIES_HXX
+#pragma once
 
 #include <oox/drawingml/color.hxx>
 #include <oox/helper/helper.hxx>
@@ -82,6 +81,5 @@ struct Shape3DProperties
 
 } // namespace oox::drawingml
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

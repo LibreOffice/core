@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_WELDUTILS_HXX
-#define INCLUDED_VCL_WELDUTILS_HXX
+#pragma once
 
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -366,6 +365,5 @@ VCL_DLLPUBLIC bool IsEntryVisible(const weld::TreeView& rTreeView, const weld::T
 VCL_DLLPUBLIC void RemoveParentKeepChildren(weld::TreeView& rTreeView, weld::TreeIter& rParent);
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

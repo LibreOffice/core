@@ -57,8 +57,7 @@
  * @file
  * Breaks of paragraph.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFBREAKS_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFBREAKS_HXX
+#pragma once
 
 #include <xfilter/ixfattrlist.hxx>
 #include <xfilter/ixfstream.hxx>
@@ -132,5 +131,4 @@ inline bool operator!=(XFBreaks const & b1, XFBreaks const & b2)
     return !(b1==b2);
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

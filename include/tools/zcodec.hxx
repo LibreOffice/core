@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLS_ZCODEC_HXX
-#define INCLUDED_TOOLS_ZCODEC_HXX
+#pragma once
 
 #include <tools/toolsdllapi.h>
 
@@ -73,6 +72,5 @@ public:
     size_t          GetBreak() const;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

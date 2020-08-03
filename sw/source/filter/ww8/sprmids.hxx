@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_SPRMIDS_HXX
-#define INCLUDED_SW_SOURCE_FILTER_WW8_SPRMIDS_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -622,6 +621,5 @@ using PicBrcBottom = sprmPic<0x0A, 1, SPRA::operand_varlen_6>; // 0xCE0A
 using PicBrcRight = sprmPic<0x0B, 1, SPRA::operand_varlen_6>; // 0xCE0B
 }
 
-#endif // INCLUDED_SW_SOURCE_FILTER_WW8_SPRMIDS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

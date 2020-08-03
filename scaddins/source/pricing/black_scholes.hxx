@@ -11,8 +11,7 @@
  */
 
 
-#ifndef INCLUDED_SCADDINS_SOURCE_PRICING_BLACK_SCHOLES_HXX
-#define INCLUDED_SCADDINS_SOURCE_PRICING_BLACK_SCHOLES_HXX
+#pragma once
 
 // options prices and greeks in the Black-Scholes model
 // also known as TV (theoretical value)
@@ -144,6 +143,5 @@ double prob_in_money(double S, double vol, double mu,
 } // namespace sca
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

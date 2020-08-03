@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DTRANS_SOURCE_WIN32_DTOBJ_FMTFILTER_HXX
-#define INCLUDED_DTRANS_SOURCE_WIN32_DTOBJ_FMTFILTER_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -82,6 +81,5 @@ css::uno::Sequence< sal_Int8 > TextHtmlToHTMLFormat( css::uno::Sequence< sal_Int
 */
 css::uno::Sequence< sal_Int8 > CF_HDROPToFileList(HGLOBAL hGlobal);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

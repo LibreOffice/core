@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_FILTER_HTML_HTMLPUBLISHMODE_HXX
-#define INCLUDED_SD_SOURCE_FILTER_HTML_HTMLPUBLISHMODE_HXX
+#pragma once
 
 enum HtmlPublishMode
 {
@@ -29,6 +28,5 @@ enum HtmlPublishMode
     PUBLISH_SINGLE_DOCUMENT
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

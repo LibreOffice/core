@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SOURCE_INC_PARSER_HXX
-#define INCLUDED_BASIC_SOURCE_INC_PARSER_HXX
+#pragma once
 
 #include "expr.hxx"
 #include "codegen.hxx"
@@ -139,6 +138,5 @@ public:
 };
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

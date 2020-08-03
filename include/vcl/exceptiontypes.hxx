@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_EXCEPTIONTYPES_HXX
-#define INCLUDED_VCL_EXCEPTIONTYPES_HXX
+#pragma once
 
 enum class ExceptionCategory {
     NONE, ResourceNotLoaded, System, UserInterface
 };
 
-#endif // INCLUDED_VCL_EXCEPTIONTYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

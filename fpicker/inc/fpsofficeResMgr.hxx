@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_FPICKER_SOURCE_OFFICE_FPSOFFICERESMGR_HXX
-#define INCLUDED_FPICKER_SOURCE_OFFICE_FPSOFFICERESMGR_HXX
+#pragma once
 
 #include <unotools/resmgr.hxx>
 
@@ -16,6 +15,5 @@ inline OUString FpsResId(const char* pId)
     return Translate::get(pId, Translate::Create("fps"));
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

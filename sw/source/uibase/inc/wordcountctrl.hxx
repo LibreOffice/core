@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_WORDCOUNTCTRL_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_WORDCOUNTCTRL_HXX
+#pragma once
 
 #include <sfx2/stbitem.hxx>
 
@@ -32,6 +31,5 @@ public:
 
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

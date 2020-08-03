@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_XLNTRIT_HXX
-#define INCLUDED_SVX_XLNTRIT_HXX
+#pragma once
 
 #include <svl/intitem.hxx>
 #include <svx/svxdllapi.h>
@@ -40,6 +39,5 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

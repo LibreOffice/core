@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMPHELPER_PROPERTYCONTAINERHELPER_HXX
-#define INCLUDED_COMPHELPER_PROPERTYCONTAINERHELPER_HXX
+#pragma once
 
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/beans/Property.hpp>
@@ -190,6 +189,5 @@ private:
 }   // namespace comphelper
 
 
-#endif // INCLUDED_COMPHELPER_PROPERTYCONTAINERHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

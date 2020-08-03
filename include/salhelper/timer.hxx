@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_SALHELPER_TIMER_HXX
-#define INCLUDED_SALHELPER_TIMER_HXX
+#pragma once
 
 #include "salhelper/simplereferenceobject.hxx"
 #include "osl/time.h"
@@ -217,6 +216,5 @@ private:
 
 }
 
-#endif // INCLUDED_SALHELPER_TIMER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

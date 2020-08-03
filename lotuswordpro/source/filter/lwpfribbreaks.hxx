@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBBREAKS_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBBREAKS_HXX
+#pragma once
 
 #include <lwpfrib.hxx>
 #include "lwppara.hxx"
@@ -96,6 +95,5 @@ public:
     void RegisterBreakStyle(LwpPara* pPara);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

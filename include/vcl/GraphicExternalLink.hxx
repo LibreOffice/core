@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_GRAPHIC_EXTERNAL_LINK_HXX
-#define INCLUDED_VCL_GRAPHIC_EXTERNAL_LINK_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <rtl/ustring.hxx>
@@ -26,6 +25,5 @@ public:
     }
 };
 
-#endif // INCLUDED_VCL_GRAPHIC_EXTERNAL_LINK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_SVTOOLS_SAMPLETEXT_HXX
-#define INCLUDED_SVTOOLS_SAMPLETEXT_HXX
+#pragma once
 
 #include <svtools/svtdllapi.h>
 #include <rtl/ustring.hxx>
@@ -37,5 +36,4 @@ OUString makeShortMinimalTextForScript(UScriptCode eScript);
 SVT_DLLPUBLIC OUString makeRepresentativeTextForFont(sal_Int16 nScriptType, const vcl::Font &rFont);
 
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPLAYPIECE_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPLAYPIECE_HXX
+#pragma once
 
 #include "lwppiece.hxx"
 #include <lwpbasetype.hxx>
@@ -363,6 +362,5 @@ private:
     LwpLayoutRelativityGuts m_RelGuts;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

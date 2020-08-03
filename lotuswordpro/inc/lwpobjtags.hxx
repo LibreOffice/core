@@ -53,8 +53,7 @@
  *
  *
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_LWPOBJTAGS_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_LWPOBJTAGS_HXX
+#pragma once
 
 // file header object
 #define TAG_AMI             0x3750574CUL        // "LWP7"
@@ -232,6 +231,5 @@
 #define TAG_AMIKAKEPIECE            0x63504b41UL    // "AKPc"
 #define TAG_TABPIECE                0x63506254UL    // "TbPc"
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

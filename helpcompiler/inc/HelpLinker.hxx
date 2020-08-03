@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_HELPCOMPILER_INC_HELPLINKER_HXX
-#define INCLUDED_HELPCOMPILER_INC_HELPLINKER_HXX
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -92,6 +91,5 @@ private:
         const std::string& jarfileB, const std::string& titleB );
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

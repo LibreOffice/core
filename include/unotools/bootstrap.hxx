@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOTOOLS_BOOTSTRAP_HXX
-#define INCLUDED_UNOTOOLS_BOOTSTRAP_HXX
+#pragma once
 
 #include <unotools/unotoolsdllapi.h>
 #include <rtl/ustring.hxx>
@@ -118,6 +117,5 @@ namespace utl
     };
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

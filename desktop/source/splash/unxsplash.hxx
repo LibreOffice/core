@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_SPLASH_UNXSPLASH_HXX
-#define INCLUDED_DESKTOP_SOURCE_SPLASH_UNXSPLASH_HXX
+#pragma once
 
 #include <stdio.h>
 
@@ -58,6 +57,5 @@ public:
 
 }
 
-#endif // INCLUDED_DESKTOP_SOURCE_SPLASH_UNXSPLASH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

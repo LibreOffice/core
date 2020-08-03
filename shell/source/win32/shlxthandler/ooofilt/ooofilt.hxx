@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SHELL_SOURCE_WIN32_SHLXTHANDLER_OOOFILT_OOOFILT_HXX
-#define INCLUDED_SHELL_SOURCE_WIN32_SHLXTHANDLER_OOOFILT_OOOFILT_HXX
+#pragma once
 
 #include <types.hxx>
 
@@ -190,6 +189,5 @@ private:
     long m_lRefs;           // Reference count
 };
 
-#endif // INCLUDED_SHELL_SOURCE_WIN32_SHLXTHANDLER_OOOFILT_OOOFILT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

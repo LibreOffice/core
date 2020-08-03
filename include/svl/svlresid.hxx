@@ -7,14 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVL_SVTRESID_HXX
-#define INCLUDED_SVL_SVTRESID_HXX
+#pragma once
 
 #include <svl/svldllapi.h>
 #include <rtl/ustring.hxx>
 
 SVL_DLLPUBLIC OUString SvlResId(const char* pId);
 
-#endif // INCLUDED_SVL_SVTRESID_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

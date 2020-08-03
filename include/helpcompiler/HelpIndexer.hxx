@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_HELPCOMPILER_HELPINDEXER_HXX
-#define INCLUDED_HELPCOMPILER_HELPINDEXER_HXX
+#pragma once
 
 #include <helpcompiler/dllapi.h>
 
@@ -84,6 +83,5 @@ class L10N_DLLPUBLIC HelpIndexer {
     static lucene::util::Reader *helpFileReader(OUString const & path);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

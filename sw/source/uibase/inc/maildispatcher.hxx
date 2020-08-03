@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_MAILDISPATCHER_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_MAILDISPATCHER_HXX
+#pragma once
 
 #include <com/sun/star/mail/XSmtpService.hpp>
 #include <com/sun/star/mail/XMailMessage.hpp>
@@ -154,6 +153,5 @@ private:
     bool m_bShutdownRequested;
 };
 
-#endif // INCLUDED_SW_SOURCE_UIBASE_INC_MAILDISPATCHER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

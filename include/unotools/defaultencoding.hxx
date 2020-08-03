@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_UNOTOOLS_DEFAULTENCODING_HXX
-#define INCLUDED_UNOTOOLS_DEFAULTENCODING_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -26,6 +25,5 @@ A BCP-47 language tag string.
 */
 UNOTOOLS_DLLPUBLIC OUString utl_getLocaleForGlobalDefaultEncoding();
 
-#endif // INCLUDED_UNOTOOLS_DEFAULTENCODING_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

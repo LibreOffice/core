@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_UNOEDHLP_HXX
-#define INCLUDED_EDITENG_UNOEDHLP_HXX
+#pragma once
 
 #include <memory>
 #include <tools/solar.h>
@@ -152,6 +151,5 @@ public:
 
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

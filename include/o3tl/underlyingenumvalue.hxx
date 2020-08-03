@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_O3TL_UNDERLYINGENUMVALUE_HXX
-#define INCLUDED_O3TL_UNDERLYINGENUMVALUE_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -23,6 +22,5 @@ template <typename T> constexpr std::underlying_type_t<T> underlyingEnumValue(T 
 }
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

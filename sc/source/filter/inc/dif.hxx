@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_DIF_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_DIF_HXX
+#pragma once
 
 #include <map>
 #include <memory>
@@ -164,6 +163,5 @@ private:
     std::map<SCCOL, std::unique_ptr<DifColumn>> maColMap;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

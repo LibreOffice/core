@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVL_ISETHINT_HXX
-#define INCLUDED_SVL_ISETHINT_HXX
+#pragma once
 
 #include <svl/svldllapi.h>
 #include <svl/hint.hxx>
@@ -37,6 +36,5 @@ public:
     const SfxItemSet&   GetItemSet() const { return *_pItemSet; }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

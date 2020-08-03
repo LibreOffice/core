@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_BITMAPACCESSMODE_HXX
-#define INCLUDED_VCL_BITMAPACCESSMODE_HXX
+#pragma once
 
 enum class BitmapAccessMode
 {
@@ -27,6 +26,5 @@ enum class BitmapAccessMode
     Write
 };
 
-#endif // INCLUDED_VCL_BITMAPACCESSMODE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

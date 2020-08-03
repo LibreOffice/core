@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COMPHELPER_SIMPLEFILEACCESSINTERACTION_HXX
-#define INCLUDED_COMPHELPER_SIMPLEFILEACCESSINTERACTION_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <ucbhelper/interceptedinteraction.hxx>
@@ -47,6 +46,5 @@ private:
 
 };
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

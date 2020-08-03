@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_SOURCE_INC_PAUSEEVENTHANDLER_HXX
-#define INCLUDED_SLIDESHOW_SOURCE_INC_PAUSEEVENTHANDLER_HXX
+#pragma once
 
 #include <memory>
 
@@ -58,6 +57,5 @@ namespace slideshow::internal
 
 }
 
-#endif // INCLUDED_SLIDESHOW_SOURCE_INC_PAUSEEVENTHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

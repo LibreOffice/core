@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_SCOPEDSTATES_HXX
-#define INCLUDED_VCL_SCOPEDSTATES_HXX
+#pragma once
 
 #include <vcl/outdev.hxx>
 
@@ -36,6 +35,5 @@ public:
 };
 }
 
-#endif // INCLUDED_VCL_SCOPEDSTATES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

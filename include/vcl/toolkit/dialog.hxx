@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_DIALOG_HXX
-#define INCLUDED_VCL_DIALOG_HXX
+#pragma once
 
 #if !defined(VCL_DLLIMPLEMENTATION) && !defined(TOOLKIT_DLLIMPLEMENTATION) && !defined(VCL_INTERNALS)
 #error "don't use this in new code"
@@ -156,6 +155,5 @@ public:
     vcl::Window*    get_widget_for_response(int nResponse);
 };
 
-#endif // INCLUDED_VCL_DIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

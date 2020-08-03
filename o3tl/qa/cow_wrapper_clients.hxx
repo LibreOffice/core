@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_O3TL_QA_COW_WRAPPER_CLIENTS_HXX
-#define INCLUDED_O3TL_QA_COW_WRAPPER_CLIENTS_HXX
+#pragma once
 
 #include <o3tl/cow_wrapper.hxx>
 #include <cppunit/extensions/HelperMacros.h>
@@ -205,6 +204,5 @@ inline std::basic_ostream<charT, traits> & operator <<(
 
 } // namespace o3tltests
 
-#endif // INCLUDED_O3TL_QA_COW_WRAPPER_CLIENTS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

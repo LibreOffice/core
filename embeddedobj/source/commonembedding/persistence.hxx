@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMBEDDEDOBJ_SOURCE_COMMONEMBEDDING_PERSISTENCE_HXX
-#define INCLUDED_EMBEDDEDOBJ_SOURCE_COMMONEMBEDDING_PERSISTENCE_HXX
+#pragma once
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
@@ -26,6 +25,5 @@ css::uno::Sequence< css::beans::PropertyValue > GetValuableArgs_Impl( const css:
                                                             bool bCanUseDocumentBaseURL );
 
 
-#endif // INCLUDED_EMBEDDEDOBJ_SOURCE_COMMONEMBEDDING_PERSISTENCE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

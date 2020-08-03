@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SAL_INC_INTERNAL_SIGNALSHARED_HXX
-#define INCLUDED_SAL_INC_INTERNAL_SIGNALSHARED_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <osl/signal.h>
@@ -38,5 +37,4 @@ oslSignalAction callSignalHandler(oslSignalInfo* pInfo);
 bool onInitSignal();
 bool onDeInitSignal();
 
-#endif
 

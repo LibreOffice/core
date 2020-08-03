@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_FILTER_XML_SDTRANSFORM_HXX
-#define INCLUDED_SD_SOURCE_FILTER_XML_SDTRANSFORM_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -26,6 +25,5 @@
 
 void TransformOOo2xDocument(SdDrawDocument* pDocument);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_UNX_GTK_FPICKER_SALGTKPICKER_HXX
-#define INCLUDED_VCL_UNX_GTK_FPICKER_SALGTKPICKER_HXX
+#pragma once
 
 #include <osl/mutex.hxx>
 #include <tools/link.hxx>
@@ -112,6 +111,5 @@ public:
     static GtkWindow* GetTransientFor();
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

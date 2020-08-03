@@ -8,8 +8,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_XSLTFILTER_OLEHANDLER_HXX
-#define INCLUDED_FILTER_SOURCE_XSLTFILTER_OLEHANDLER_HXX
+#pragma once
 #include <cstdio>
 #include <cstring>
 #include <list>
@@ -90,6 +89,5 @@ namespace XSLT
     };
 }
 
-#endif // INCLUDED_FILTER_SOURCE_XSLTFILTER_OLEHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

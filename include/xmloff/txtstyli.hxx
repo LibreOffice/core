@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_XMLOFF_TXTSTYLI_HXX
-#define INCLUDED_XMLOFF_TXTSTYLI_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
@@ -95,6 +94,5 @@ public:
     const ::std::vector< XMLPropertyState > & GetProperties_() { return GetProperties(); }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

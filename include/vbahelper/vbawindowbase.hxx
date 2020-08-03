@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VBAHELPER_VBAWINDOWBASE_HXX
-#define INCLUDED_VBAHELPER_VBAWINDOWBASE_HXX
+#pragma once
 
 #include <exception>
 
@@ -96,6 +95,5 @@ private:
     css::uno::WeakReference< css::awt::XWindow > m_xWindow;
 };
 
-#endif // INCLUDED_VBAHELPER_VBAWINDOWBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

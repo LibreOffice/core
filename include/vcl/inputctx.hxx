@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INPUTCTX_HXX
-#define INCLUDED_VCL_INPUTCTX_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <vcl/font.hxx>
@@ -76,6 +75,5 @@ inline bool InputContext::operator==( const InputContext& rInputContext ) const
             (maFont     == rInputContext.maFont));
 }
 
-#endif // INCLUDED_VCL_INPUTCTX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

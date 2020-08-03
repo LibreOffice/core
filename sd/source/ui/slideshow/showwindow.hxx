@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_SLIDESHOW_SHOWWINDOW_HXX
-#define INCLUDED_SD_SOURCE_UI_SLIDESHOW_SHOWWINDOW_HXX
+#pragma once
 
 #include <rtl/ref.hxx>
 #include <sal/types.h>
@@ -108,6 +107,5 @@ private:
 
 } // end of namespace sd
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_COLRDLG_HXX
-#define INCLUDED_SVTOOLS_COLRDLG_HXX
+#pragma once
 
 #include <svtools/svtdllapi.h>
 #include <tools/color.hxx>
@@ -50,6 +49,5 @@ private:
     svtools::ColorPickerMode meMode;
 };
 
-#endif // INCLUDED_SVTOOLS_COLRDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

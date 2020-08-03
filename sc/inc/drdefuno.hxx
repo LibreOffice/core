@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_DRDEFUNO_HXX
-#define INCLUDED_SC_INC_DRDEFUNO_HXX
+#pragma once
 
 #include <svx/unopool.hxx>
 #include <svl/lstner.hxx>
@@ -40,6 +39,5 @@ public:
     virtual SfxItemPool*    getModelPool( bool bReadOnly ) throw() override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

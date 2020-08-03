@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCBHELPER_FD_INPUTSTREAM_HXX
-#define INCLUDED_UCBHELPER_FD_INPUTSTREAM_HXX
+#pragma once
 
 #include <osl/file.h>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -88,6 +87,5 @@ namespace ucbhelper
     };
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

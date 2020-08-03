@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_OPENGL_OPENGLCONTEXT_HXX
-#define INCLUDED_VCL_OPENGL_OPENGLCONTEXT_HXX
+#pragma once
 
 #include <epoxy/gl.h>
 
@@ -183,6 +182,5 @@ public:
     OpenGLContext *mpNextContext;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

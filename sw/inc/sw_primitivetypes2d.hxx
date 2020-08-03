@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_SW_PRIMITIVETYPES2D_HXX
-#define INCLUDED_SW_INC_SW_PRIMITIVETYPES2D_HXX
+#pragma once
 
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 
@@ -27,6 +26,5 @@
 #define PRIMITIVE2D_ID_SWSIDEBARSHADOWPRIMITIVE     (PRIMITIVE2D_ID_RANGE_SW| 2)
 #define PRIMITIVE2D_ID_SWBORDERRECTANGLERIMITIVE    (PRIMITIVE2D_ID_RANGE_SW| 3)
 
-#endif // INCLUDED_SW_INC_SW_PRIMITIVETYPES2D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

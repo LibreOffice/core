@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_WIDGETTHEMETYPES_HXX
-#define INCLUDED_VCL_INC_WIDGETTHEMETYPES_HXX
+#pragma once
 
 #include <o3tl/typed_flags_set.hxx>
 
@@ -230,6 +229,5 @@ enum class ButtonValue {
     Mixed
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

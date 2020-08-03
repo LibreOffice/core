@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype - footnote
  */
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBFRAME_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBFRAME_HXX
+#pragma once
 
 #include <lwpfrib.hxx>
 #include "lwppara.hxx"
@@ -90,6 +89,5 @@ private:
     LwpObjectID m_objLayout;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

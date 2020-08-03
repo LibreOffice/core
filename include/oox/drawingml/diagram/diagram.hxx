@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_DIAGRAM_DIAGRAM_HXX
-#define INCLUDED_OOX_DRAWINGML_DIAGRAM_DIAGRAM_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <oox/core/xmlfilterbase.hxx>
@@ -58,6 +57,5 @@ OOX_DLLPUBLIC void reloadDiagram(SdrObject* pObj, core::XmlFilterBase& rFilter);
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

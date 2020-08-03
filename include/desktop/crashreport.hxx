@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DESKTOP_CRASHREPORT_HXX
-#define INCLUDED_DESKTOP_CRASHREPORT_HXX
+#pragma once
 
 #include <desktop/dllapi.h>
 
@@ -90,6 +89,5 @@ private:
 #endif // HAVE_FEATURE_BREAKPAD
 };
 
-#endif // INCLUDED_DESKTOP_CRASHREPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

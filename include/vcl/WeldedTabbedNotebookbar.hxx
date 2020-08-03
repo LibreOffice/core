@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SFX2_NOTEBOOKBAR_WRITERTABBEDNOTEBOOKBAR_HXX
-#define INCLUDED_SFX2_NOTEBOOKBAR_WRITERTABBEDNOTEBOOKBAR_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <rtl/ustring.hxx>
@@ -30,6 +29,5 @@ public:
                             sal_uInt64 nWindowId);
 };
 
-#endif // INCLUDED_SFX2_NOTEBOOKBAR_SFXNOTEBOOKBAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

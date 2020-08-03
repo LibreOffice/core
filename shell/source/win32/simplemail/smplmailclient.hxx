@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SHELL_SOURCE_WIN32_SIMPLEMAIL_SMPLMAILCLIENT_HXX
-#define INCLUDED_SHELL_SOURCE_WIN32_SIMPLEMAIL_SMPLMAILCLIENT_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -45,6 +44,5 @@ private:
     std::vector< std::unique_ptr<utl::TempFile> > maAttachmentFiles;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

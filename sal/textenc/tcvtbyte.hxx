@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SAL_TEXTENC_TCVTBYTE_HXX
-#define INCLUDED_SAL_TEXTENC_TCVTBYTE_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -30,6 +29,5 @@ sal_Size ImplUpperCharToUnicode(
     sal_Size nSrcBytes, sal_Unicode * pDestBuf, sal_Size nDestChars,
     sal_uInt32 nFlags, sal_uInt32 * pInfo, sal_Size * pSrcCvtBytes);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

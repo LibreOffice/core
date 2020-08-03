@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMBEDSERV_SOURCE_EMBED_GUID_HXX
-#define INCLUDED_EMBEDSERV_SOURCE_EMBED_GUID_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -34,6 +33,5 @@ std::u16string_view getServiceNameFromGUID_Impl( GUID const * );
 
 wchar_t const * getStorageTypeFromGUID_Impl( GUID const * guid );
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

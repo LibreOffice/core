@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOTOOLS_OPTIONS_HXX
-#define INCLUDED_UNOTOOLS_OPTIONS_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <unotools/unotoolsdllapi.h>
@@ -109,6 +108,5 @@ protected:
 
 } }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

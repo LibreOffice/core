@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_TEST_CPPUNITASSERTHELPER_HXX
-#define INCLUDED_TEST_CPPUNITASSERTHELPER_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -99,6 +98,5 @@ template <> struct assertion_traits<css::table::CellRangeAddress>
 
 CPPUNIT_NS_END
 
-#endif // INCLUDED_TEST_CPPUNITASSERTHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

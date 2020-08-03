@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_XMLOFF_XFORMSIMPORT_HXX
-#define INCLUDED_XMLOFF_XFORMSIMPORT_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
@@ -71,7 +70,6 @@ void XMLOFF_DLLPUBLIC applyXFormsSettings(
         const css::uno::Sequence< css::beans::PropertyValue >& _rSettings
     );
 
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

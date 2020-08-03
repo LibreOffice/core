@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMPHELPER_DOCPASSWORDREQUEST_HXX
-#define INCLUDED_COMPHELPER_DOCPASSWORDREQUEST_HXX
+#pragma once
 
 #include <comphelper/comphelperdllapi.h>
 #include <com/sun/star/task/PasswordRequestMode.hpp>
@@ -105,6 +104,5 @@ private:
 
 } // namespace comphelper
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

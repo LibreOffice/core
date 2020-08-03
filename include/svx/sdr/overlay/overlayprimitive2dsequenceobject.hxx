@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SDR_OVERLAY_OVERLAYPRIMITIVE2DSEQUENCEOBJECT_HXX
-#define INCLUDED_SVX_SDR_OVERLAY_OVERLAYPRIMITIVE2DSEQUENCEOBJECT_HXX
+#pragma once
 
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
@@ -43,6 +42,5 @@ namespace sdr::overlay
 } // end of namespace sdr::overlay
 
 
-#endif // INCLUDED_SVX_SDR_OVERLAY_OVERLAYPRIMITIVE2DSEQUENCEOBJECT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

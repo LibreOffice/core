@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COMPHELPER_PARALLELSORT_HXX
-#define INCLUDED_COMPHELPER_PARALLELSORT_HXX
+#pragma once
 
 #include <comphelper/threadpool.hxx>
 #include <tools/cpuid.hxx>
@@ -367,6 +366,5 @@ void parallelSort(const RandItr aBegin, const RandItr aEnd, Compare aComp = Comp
 
 } // namespace comphelper
 
-#endif // INCLUDED_COMPHELPER_PARALLELSORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

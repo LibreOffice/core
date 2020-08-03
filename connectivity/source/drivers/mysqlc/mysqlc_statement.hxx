@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_MYSQLC_SOURCE_MYSQLC_STATEMENT_HXX
-#define INCLUDED_MYSQLC_SOURCE_MYSQLC_STATEMENT_HXX
+#pragma once
 
 #include "mysqlc_connection.hxx"
 #include "mysqlc_subcomponent.hxx"
@@ -172,6 +171,5 @@ public:
     // css::uno::Sequence<sal_Int32> SAL_CALL executeBatch() override;
 };
 }
-#endif // INCLUDED_MYSQLC_SOURCE_MYSQLC_STATEMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

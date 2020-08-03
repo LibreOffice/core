@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SVXERR_HXX
-#define INCLUDED_SVX_SVXERR_HXX
+#pragma once
 
 #include <vcl/errcode.hxx>
 #include <svtools/ehdl.hxx>
@@ -57,6 +56,5 @@ public:
 SVX_DLLPUBLIC extern const ErrMsgCode RID_SVXERRCODE[];
 SVX_DLLPUBLIC extern const ErrMsgCode RID_SVXERRCTX[];
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

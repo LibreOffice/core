@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CPPUHELPER_COMPBASE6_HXX
-#define INCLUDED_CPPUHELPER_COMPBASE6_HXX
+#pragma once
 
 #include "cppuhelper/implbase6.hxx"
 #include "cppuhelper/compbase_ex.hxx"
@@ -143,6 +142,5 @@ namespace cppu
     };
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

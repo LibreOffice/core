@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_TEXTFRAMEINDEX_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_TEXTFRAMEINDEX_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <o3tl/strong_int.hxx>
@@ -21,6 +20,5 @@
  */
 typedef o3tl::strong_int<sal_Int32, struct Tag_TextFrameIndex> TextFrameIndex;
 
-#endif // INCLUDED_SW_SOURCE_CORE_INC_TEXTFRAMEINDEX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

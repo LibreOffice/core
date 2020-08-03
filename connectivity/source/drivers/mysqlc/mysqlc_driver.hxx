@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_MYSQLC_SOURCE_MYSQLC_DRIVER_HXX
-#define INCLUDED_MYSQLC_SOURCE_MYSQLC_DRIVER_HXX
+#pragma once
 
 #include "mysqlc_connection.hxx"
 
@@ -87,6 +86,5 @@ public:
 
 } /* connectivity::mysqlc */
 
-#endif // INCLUDED_MYSQLC_SOURCE_MYSQLC_DRIVER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

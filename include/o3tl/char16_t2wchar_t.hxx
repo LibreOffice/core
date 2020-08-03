@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_O3TL_CHAR16_T2WCHAR_T_HXX
-#define INCLUDED_O3TL_CHAR16_T2WCHAR_T_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -54,6 +53,5 @@ inline char16_t const * toU(wchar_t const * p)
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

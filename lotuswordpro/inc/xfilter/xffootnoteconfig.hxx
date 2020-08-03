@@ -57,8 +57,7 @@
  * @file
  * Footnote config.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFOOTNOTECONFIG_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFOOTNOTECONFIG_HXX
+#pragma once
 
 #include <xfilter/ixfattrlist.hxx>
 #include <xfilter/xfstyle.hxx>
@@ -221,5 +220,4 @@ inline void XFFootnoteConfig::ToXml(IXFStream *pStrm)
 
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

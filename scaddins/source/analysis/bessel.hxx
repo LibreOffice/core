@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SCADDINS_SOURCE_ANALYSIS_BESSEL_HXX
-#define INCLUDED_SCADDINS_SOURCE_ANALYSIS_BESSEL_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -58,6 +57,5 @@ double BesselK( double x, sal_Int32 n );
 
 } // namespace sca::analysis
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

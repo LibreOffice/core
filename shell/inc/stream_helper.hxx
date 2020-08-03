@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SHELL_INC_INTERNAL_STREAM_HELPER_HXX
-#define INCLUDED_SHELL_INC_INTERNAL_STREAM_HELPER_HXX
+#pragma once
 
 #include "types.hxx"
 #include "filepath.hxx"
@@ -49,6 +48,5 @@ private:
     FILE *file;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_HELPER_CONTAINERHELPER_HXX
-#define INCLUDED_OOX_HELPER_CONTAINERHELPER_HXX
+#pragma once
 
 #include <cstddef>
 #include <vector>
@@ -314,6 +313,5 @@ template< typename MatrixType >
 
 } // namespace oox
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

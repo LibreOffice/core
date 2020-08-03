@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_DBLOADER2_HXX
-#define INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_DBLOADER2_HXX
+#pragma once
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
@@ -43,6 +42,5 @@ public:
     virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& Descriptor ) override;
 };
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

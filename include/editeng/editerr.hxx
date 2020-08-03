@@ -16,14 +16,12 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_EDITENG_EDITERR_HXX
-#define INCLUDED_EDITENG_EDITERR_HXX
+#pragma once
 
 #include <vcl/errcode.hxx>
 
 #define ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS    ErrCode(ErrCodeArea::Svx, 2)
 #define ERRCODE_SVX_GRAPHIC_WRONG_FILEFORMAT   ErrCode(ErrCodeArea::Svx, ErrCodeClass::Read, 8)
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

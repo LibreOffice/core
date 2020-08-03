@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SLIDESHOW_SOURCE_INC_MEDIAFILEMANAGER_HXX
-#define INCLUDED_SLIDESHOW_SOURCE_INC_MEDIAFILEMANAGER_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -29,6 +28,5 @@ public:
     virtual std::shared_ptr<avmedia::MediaTempFile> getMediaTempFile(const OUString& aUrl) = 0;
 };
 }
-#endif // INCLUDED_SLIDESHOW_SOURCE_INC_MEDIAFILEMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

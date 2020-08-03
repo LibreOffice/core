@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMBEDSERV_SOURCE_INC_EMBEDDOCACCESS_HXX
-#define INCLUDED_EMBEDSERV_SOURCE_INC_EMBEDDOCACCESS_HXX
+#pragma once
 
 #define OLESERV_SAVEOBJECT      1
 #define OLESERV_CLOSE           2
@@ -75,6 +74,5 @@ class EmbeddedDocumentInstanceAccess_Impl : public ::cppu::OWeakObject
     void ClearEmbedDocument();
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

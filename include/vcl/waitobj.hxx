@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_WAITOBJ_HXX
-#define INCLUDED_VCL_WAITOBJ_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
@@ -54,6 +53,5 @@ public:
     bool isBusy() const { return !m_aBusyStack.empty(); }
 };
 
-#endif // INCLUDED_VCL_WAITOBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

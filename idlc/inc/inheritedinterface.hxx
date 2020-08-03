@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_IDLC_INC_INHERITEDINTERFACE_HXX
-#define INCLUDED_IDLC_INC_INHERITEDINTERFACE_HXX
+#pragma once
 
 #include "idlc.hxx"
 
@@ -50,6 +49,5 @@ private:
     OUString documentation;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

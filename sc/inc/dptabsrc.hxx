@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_DPTABSRC_HXX
-#define INCLUDED_SC_INC_DPTABSRC_HXX
+#pragma once
 
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 #include <com/sun/star/sheet/XHierarchiesSupplier.hpp>
@@ -656,6 +655,5 @@ public:
     bool getShowDetails() const { return bShowDet;}
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_SVTOOLS_DOCUMENTTOGRAPHICRENDERER_HXX
-#define INCLUDED_SVTOOLS_DOCUMENTTOGRAPHICRENDERER_HXX
+#pragma once
 
 #include <vector>
 
@@ -106,6 +105,5 @@ public:
     bool isImpress() const;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

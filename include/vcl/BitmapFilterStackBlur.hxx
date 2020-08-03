@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_BITMAPFILTERSTACKBLUR_HXX
-#define INCLUDED_VCL_BITMAPFILTERSTACKBLUR_HXX
+#pragma once
 
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
@@ -28,6 +27,5 @@ public:
     Bitmap filter(Bitmap const& rBitmap) const;
 };
 
-#endif // INCLUDED_VCL_BITMAPFILTERSTACKBLUR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

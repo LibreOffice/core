@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX2_CHALIGN_HXX
-#define INCLUDED_SFX2_CHALIGN_HXX
+#pragma once
 
 // New order: first, navigation bar, then vertically docked child windows
 // (Explorer!), then horizontally docked child windows (Browser!),
@@ -50,6 +49,5 @@ inline bool SfxChildAlignValid( SfxChildAlignment eAlign )
     return ( eAlign >= SfxChildAlignment::HIGHESTTOP && eAlign <= SfxChildAlignment::NOALIGNMENT );
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_IDLC_INC_ASTSCOPE_HXX
-#define INCLUDED_IDLC_INC_ASTSCOPE_HXX
+#pragma once
 
 #include "idlc.hxx"
 
@@ -65,6 +64,5 @@ private:
     NodeType    m_nodeType;
 };
 
-#endif // INCLUDED_IDLC_INC_ASTSCOPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_SALSESSION_HXX
-#define INCLUDED_VCL_INC_SALSESSION_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 
@@ -108,6 +107,5 @@ public:
     virtual bool cancelShutdown() = 0;
 };
 
-#endif // INCLUDED_VCL_INC_SALSESSION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_JOINTABLEVIEW_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_INC_JOINTABLEVIEW_HXX
+#pragma once
 
 #include <vcl/window.hxx>
 #include <vcl/timer.hxx>
@@ -322,6 +321,5 @@ namespace dbaui
         using Window::Scroll;
     };
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

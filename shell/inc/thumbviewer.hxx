@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SHELL_INC_INTERNAL_THUMBVIEWER_HXX
-#define INCLUDED_SHELL_INC_INTERNAL_THUMBVIEWER_HXX
+#pragma once
 
 #include <objidl.h>
 #include <shlobj.h>
@@ -94,6 +93,5 @@ private:
     Gdiplus::Bitmap* signet_;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

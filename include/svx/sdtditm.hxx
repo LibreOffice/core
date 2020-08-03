@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SDTDITM_HXX
-#define INCLUDED_SVX_SDTDITM_HXX
+#pragma once
 
 #include <svx/sdmetitm.hxx>
 #include <svx/svddef.hxx>
@@ -38,6 +37,5 @@ inline SdrMetricItem makeSdrTextLowerDistItem(long mnHeight) {
     return SdrMetricItem(SDRATTR_TEXT_LOWERDIST, mnHeight);
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

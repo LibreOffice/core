@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_XMLOFF_CONTEXTID_HXX
-#define INCLUDED_XMLOFF_CONTEXTID_HXX
+#pragma once
 
 /** These defines determine the unique ids for XML style-context-id's
     used in the SvXMLAutoStylePoolP.
@@ -43,6 +42,5 @@
 
 #define CTF_ALIEN_ATTRIBUTE_IMPORT  0x00007fff
 
-#endif // INCLUDED_XMLOFF_CONTEXTID_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

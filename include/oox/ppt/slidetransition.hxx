@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_OOX_PPT_SLIDETRANSITION_HXX
-#define INCLUDED_OOX_PPT_SLIDETRANSITION_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
@@ -77,6 +76,5 @@ namespace oox::ppt {
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

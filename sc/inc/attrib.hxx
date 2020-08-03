@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_ATTRIB_HXX
-#define INCLUDED_SC_INC_ATTRIB_HXX
+#pragma once
 
 #include <memory>
 #include <svl/poolitem.hxx>
@@ -357,6 +356,5 @@ public:
                                   const IntlWrapper& rIntl) const override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

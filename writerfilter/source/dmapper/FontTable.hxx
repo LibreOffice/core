@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_FONTTABLE_HXX
-#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_FONTTABLE_HXX
+#pragma once
 
 #include <memory>
 #include "LoggedResources.hxx"
@@ -97,6 +96,5 @@ private:
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

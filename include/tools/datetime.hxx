@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_TOOLS_DATETIME_HXX
-#define INCLUDED_TOOLS_DATETIME_HXX
+#pragma once
 
 #include <tools/toolsdllapi.h>
 #include <tools/date.hxx>
@@ -126,6 +125,5 @@ inline std::basic_ostream<charT, traits> & operator <<(
         std::setw(9) << std::setfill('0') << datetime.GetNanoSec();
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

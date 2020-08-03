@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_FILLCTRL_HXX
-#define INCLUDED_SVX_FILLCTRL_HXX
+#pragma once
 
 #include <memory>
 #include <vcl/InterimItemWindow.hxx>
@@ -104,6 +103,5 @@ public:
     virtual ~FillControl() override;
 };
 
-#endif // INCLUDED_SVX_FILLCTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

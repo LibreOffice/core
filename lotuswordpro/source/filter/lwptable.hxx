@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype - table object
  */
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTABLE_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTABLE_HXX
+#pragma once
 
 #include <lwpobjhdr.hxx>
 #include <lwpobjid.hxx>
@@ -182,6 +181,5 @@ private:
     sal_uInt16 GetNumIndexRows() const;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

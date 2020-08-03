@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_TOXE_HXX
-#define INCLUDED_SW_INC_TOXE_HXX
+#pragma once
 
 enum SwTOXSearch
 {
@@ -117,6 +116,5 @@ enum ToxAuthorityField
     AUTH_FIELD_END
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

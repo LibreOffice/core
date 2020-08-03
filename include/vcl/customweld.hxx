@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_CUSTOMWELD_HXX
-#define INCLUDED_VCL_CUSTOMWELD_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 
@@ -157,6 +156,5 @@ public:
     void set_tooltip_text(const OUString& rTip) { m_xDrawingArea->set_tooltip_text(rTip); }
 };
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

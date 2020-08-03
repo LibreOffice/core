@@ -57,8 +57,7 @@
  * @file
  * Hyperlink object for OOo xml filter.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFHYPERLINK_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFHYPERLINK_HXX
+#pragma once
 
 #include <xfilter/ixfstream.hxx>
 #include <xfilter/ixfattrlist.hxx>
@@ -124,5 +123,4 @@ inline void XFHyperlink::ToXml(IXFStream *pStrm)
     pStrm->EndElement( "text:a" );
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

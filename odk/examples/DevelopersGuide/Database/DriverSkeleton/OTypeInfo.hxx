@@ -33,8 +33,7 @@
  *
  *************************************************************************/
 
-#ifndef INCLUDED_EXAMPLES_DATABASE_DRIVERSKELETON_OTYPEINFO_HXX
-#define INCLUDED_EXAMPLES_DATABASE_DRIVERSKELETON_OTYPEINFO_HXX
+#pragma once
 
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -95,6 +94,5 @@ namespace connectivity
     };
 }
 
-#endif // INCLUDED_EXAMPLES_DATABASE_DRIVERSKELETON_OTYPEINFO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

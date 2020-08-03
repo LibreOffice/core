@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_NOTEBOOKBARCONTEXTCONTROL_HXX
-#define INCLUDED_VCL_NOTEBOOKBARCONTEXTCONTROL_HXX
+#pragma once
 
 #include <vcl/EnumContext.hxx>
 
@@ -19,6 +18,5 @@ public:
     virtual void SetContext( vcl::EnumContext::Context eContext ) = 0;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

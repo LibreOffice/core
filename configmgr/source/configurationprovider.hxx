@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONFIGMGR_SOURCE_CONFIGURATIONPROVIDER_HXX
-#define INCLUDED_CONFIGMGR_SOURCE_CONFIGURATIONPROVIDER_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -40,6 +39,5 @@ css::uno::Reference< css::uno::XInterface > createDefault(
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

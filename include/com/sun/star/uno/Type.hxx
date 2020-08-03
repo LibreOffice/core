@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_COM_SUN_STAR_UNO_TYPE_HXX
-#define INCLUDED_COM_SUN_STAR_UNO_TYPE_HXX
+#pragma once
 
 #include "sal/config.h"
 
@@ -214,6 +213,5 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType< sal_Unicode >()
     return ::cppu::UnoType< ::cppu::UnoCharType >::get();
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

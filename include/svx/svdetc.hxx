@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDETC_HXX
-#define INCLUDED_SVX_SVDETC_HXX
+#pragma once
 
 #include <editeng/outliner.hxx>
 #include <svx/svxdllapi.h>
@@ -206,6 +205,5 @@ class SdrObjEditView;
 SVXCORE_DLLPUBLIC Color GetTextEditBackgroundColor(const SdrObjEditView& rView);
 
 
-#endif // INCLUDED_SVX_SVDETC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

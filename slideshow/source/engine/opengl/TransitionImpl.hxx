@@ -25,8 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef INCLUDED_OGLTRANS_TRANSITIONIMPL_HXX_
-#define INCLUDED_OGLTRANS_TRANSITIONIMPL_HXX_
+#pragma once
 
 #include <config_lgpl.h>
 #include <epoxy/gl.h>
@@ -377,6 +376,5 @@ private:
     std::vector<Vertex> Vertices;
 };
 
-#endif // INCLUDED_SLIDESHOW_TRANSITION_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

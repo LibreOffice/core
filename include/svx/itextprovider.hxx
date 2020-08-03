@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVX_ITEXTPROVIDER_HXX
-#define INCLUDED_SVX_ITEXTPROVIDER_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -37,6 +36,5 @@ namespace svx
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

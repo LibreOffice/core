@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_ICONTHEMEINFO_HXX
-#define INCLUDED_VCL_ICONTHEMEINFO_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <tools/gen.hxx>
@@ -96,4 +95,3 @@ private:
 } // namespace vcl
 
 
-#endif // INCLUDED_VCL_ICONTHEMEINFO_HXX

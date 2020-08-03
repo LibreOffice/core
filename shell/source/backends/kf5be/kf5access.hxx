@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SHELL_SOURCE_BACKENDS_KF5BE_KF5ACCESS_HXX
-#define INCLUDED_SHELL_SOURCE_BACKENDS_KF5BE_KF5ACCESS_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -34,6 +33,5 @@ namespace kf5access
 css::beans::Optional<css::uno::Any> getValue(OUString const& id);
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

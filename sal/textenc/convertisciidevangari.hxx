@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SAL_TEXTENC_CONVERTISCIIDEVANGARI_HXX
-#define INCLUDED_SAL_TEXTENC_CONVERTISCIIDEVANGARI_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -34,6 +33,5 @@ void ImplResetUnicodeToIsciiDevanagariContext(void * pContext);
 
 void ImplDestroyUnicodeToIsciiDevanagariContext(void * pContext);
 
-#endif // INCLUDED_SAL_TEXTENC_CONVERTISCIIDEVANGARI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

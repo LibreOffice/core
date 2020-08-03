@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_OPENGL_FIXEDTEXTUREATLAS_HXX
-#define INCLUDED_VCL_INC_OPENGL_FIXEDTEXTUREATLAS_HXX
+#pragma once
 
 #include <memory>
 #include <opengl/texture.hxx>
@@ -42,6 +41,5 @@ public:
     }
 };
 
-#endif // INCLUDED_VCL_INC_OPENGL_FIXEDTEXTUREATLAS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

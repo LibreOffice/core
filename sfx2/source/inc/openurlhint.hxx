@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_STRINGHINT_HXX
-#define INCLUDED_SFX2_STRINGHINT_HXX
+#pragma once
 
 #include <svl/hint.hxx>
 #include <rtl/ustring.hxx>
@@ -33,6 +32,5 @@ public:
     virtual ~SfxOpenUrlHint() override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

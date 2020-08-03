@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MRESULTSETMETADATA_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MRESULTSETMETADATA_HXX
+#pragma once
 
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -81,6 +80,5 @@ namespace connectivity::mork
 
 }
 
-#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MRESULTSETMETADATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

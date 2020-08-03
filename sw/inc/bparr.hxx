@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_BPARR_HXX
-#define INCLUDED_SW_INC_BPARR_HXX
+#pragma once
 
 #include <assert.h>
 
@@ -105,6 +104,5 @@ inline BigPtrArray& BigPtrEntry::GetArray() const
     return *m_pBlock->pBigArr;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SPIN_HXX
-#define INCLUDED_VCL_SPIN_HXX
+#pragma once
 
 #if !defined(VCL_DLLIMPLEMENTATION) && !defined(TOOLKIT_DLLIMPLEMENTATION) && !defined(VCL_INTERNALS)
 #error "don't use this in new code"
@@ -96,6 +95,5 @@ private:
     }
 };
 
-#endif // INCLUDED_VCL_SPIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

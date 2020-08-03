@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_IO_SOURCE_ACCEPTOR_ACCEPTOR_HXX
-#define INCLUDED_IO_SOURCE_ACCEPTOR_ACCEPTOR_HXX
+#pragma once
 
 #include <osl/pipe.hxx>
 #include <osl/socket.hxx>
@@ -71,6 +70,5 @@ namespace io_acceptor {
 
 }
 
-#endif // INCLUDED_IO_SOURCE_ACCEPTOR_ACCEPTOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

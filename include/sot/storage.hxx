@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SOT_STORAGE_HXX
-#define INCLUDED_SOT_STORAGE_HXX
+#pragma once
 
 #include <sot/object.hxx>
 #include <tools/stream.hxx>
@@ -160,6 +159,5 @@ public:
     static sal_Int32 GetVersion(css::uno::Reference<css::embed::XStorage> const & xStorage);
 };
 
-#endif // INCLUDED_SOT_STORAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

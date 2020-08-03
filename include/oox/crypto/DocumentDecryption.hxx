@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_OOX_CRYPTO_DOCUMENTDECRYPTION_HXX
-#define INCLUDED_OOX_CRYPTO_DOCUMENTDECRYPTION_HXX
+#pragma once
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -49,6 +48,5 @@ public:
 
 } // namespace oox::crypto
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

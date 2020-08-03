@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_LABIMG_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_LABIMG_HXX
+#pragma once
 
 #include <svl/poolitem.hxx>
 #include <unotools/configitem.hxx>
@@ -120,6 +119,5 @@ public:
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

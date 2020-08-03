@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_XGRAD_HXX
-#define INCLUDED_SVX_XGRAD_HXX
+#pragma once
 
 #include <tools/color.hxx>
 #include <svx/svxdllapi.h>
@@ -78,6 +77,5 @@ public:
     static XGradient fromJSON(const OUString& rJSON);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

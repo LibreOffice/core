@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_PACKAGE_SOURCE_XSTOR_OHIERARCHYHOLDER_HXX
-#define INCLUDED_PACKAGE_SOURCE_XSTOR_OHIERARCHYHOLDER_HXX
+#pragma once
 
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactionListener.hpp>
@@ -111,6 +110,5 @@ public:
     void RemoveStreamHierarchically( std::vector<OUString>& aListPath );
 };
 
-#endif // _OHIERARCHYHOLDER
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

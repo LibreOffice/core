@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_MISC_API_HXX
-#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_MISC_API_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <sal/types.h>
@@ -29,6 +28,5 @@
 #define DESKTOP_DEPLOYMENTMISC_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
 #endif
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

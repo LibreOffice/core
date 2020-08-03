@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_DLG_CONDITION_HXX
-#define INCLUDED_REPORTDESIGN_SOURCE_UI_DLG_CONDITION_HXX
+#pragma once
 
 #include <conditionalexpression.hxx>
 
@@ -177,6 +176,5 @@ namespace rptui
 
 } // namespace rptui
 
-#endif // INCLUDED_REPORTDESIGN_SOURCE_UI_DLG_CONDITION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

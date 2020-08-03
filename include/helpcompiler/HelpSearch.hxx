@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_HELPCOMPILER_HELPSEARCH_HXX
-#define INCLUDED_HELPCOMPILER_HELPSEARCH_HXX
+#pragma once
 
 #include <helpcompiler/dllapi.h>
 
@@ -37,6 +36,5 @@ class L10N_DLLPUBLIC HelpSearch{
             std::vector<OUString> &rDocuments, std::vector<float> &rScores);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

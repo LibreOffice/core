@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_MODULEPCR_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_MODULEPCR_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -27,6 +26,5 @@ namespace pcr
     OUString PcrRes(const char* pId);
 } // namespace pcr
 
-#endif // _ INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_MODULEPCR_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

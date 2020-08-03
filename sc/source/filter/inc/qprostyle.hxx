@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_QPROSTYLE_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_QPROSTYLE_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
@@ -53,6 +52,5 @@ class ScQProStyle
     void setFont( sal_uInt16 nIndex, sal_uInt8 nData )
         { if (nIndex < maxsize) maFont[ nIndex ] = nData; }
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

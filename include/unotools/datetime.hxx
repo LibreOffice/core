@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_UNOTOOLS_DATETIME_HXX
-#define INCLUDED_UNOTOOLS_DATETIME_HXX
+#pragma once
 
 //= conversions UNO3.TimeClass <-> Tools.TimeClass (Date/Time/DateTime)
 #include <unotools/unotoolsdllapi.h>
@@ -54,6 +53,5 @@ namespace utl
 
 }   // namespace utl
 
-#endif // INCLUDED_UNOTOOLS_DATETIME_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

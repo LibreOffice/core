@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CPPUHELPER_SOURCE_PATHS_HXX
-#define INCLUDED_CPPUHELPER_SOURCE_PATHS_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
@@ -35,6 +34,5 @@ void decodeRdbUri(OUString * uri, bool * optional, bool * directory);
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

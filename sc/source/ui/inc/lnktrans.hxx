@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_LNKTRANS_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_LNKTRANS_HXX
+#pragma once
 
 #include <vcl/transfer.hxx>
 #include <rtl/ustring.hxx>
@@ -40,6 +39,5 @@ public:
     virtual void        DragFinished( sal_Int8 nDropAction ) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

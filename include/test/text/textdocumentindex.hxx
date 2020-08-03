@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_TEST_TEXT_DOCUMENTINDEXTEST_HXX
-#define INCLUDED_TEST_TEXT_DOCUMENTINDEXTEST_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -25,6 +24,5 @@ public:
 };
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

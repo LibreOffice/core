@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMPHELPER_OFOPXMLHELPER_HXX
-#define INCLUDED_COMPHELPER_OFOPXMLHELPER_HXX
+#pragma once
 
 #include <com/sun/star/uno/Sequence.h>
 
@@ -92,6 +91,5 @@ namespace comphelper::OFOPXMLHelper {
 
 } // namespace comphelper::OFOPXMLHelper
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

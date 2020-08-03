@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SDASITM_HXX
-#define INCLUDED_SVX_SDASITM_HXX
+#pragma once
 
 #include <svx/svddef.hxx>
 #include <svx/sdooitm.hxx>
@@ -94,6 +93,5 @@ size_t SdrCustomShapeGeometryItem::PropertyPairHash::operator()( const SdrCustom
     return hash;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

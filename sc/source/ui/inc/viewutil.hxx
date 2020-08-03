@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SC_SOURCE_UI_INC_VIEWUTIL_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_VIEWUTIL_HXX
+#pragma once
 
 #include <address.hxx>
 #include <sal/types.h>
@@ -86,6 +85,5 @@ public:
     bool    GetDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

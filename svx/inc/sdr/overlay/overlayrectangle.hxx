@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_INC_SDR_OVERLAY_OVERLAYRECTANGLE_HXX
-#define INCLUDED_SVX_INC_SDR_OVERLAY_OVERLAYRECTANGLE_HXX
+#pragma once
 
 #include <svx/sdr/overlay/overlayobject.hxx>
 
@@ -60,6 +59,5 @@ namespace sdr::overlay
         };
 } // end of namespace sdr::overlay
 
-#endif // INCLUDED_SVX_INC_SDR_OVERLAY_OVERLAYRECTANGLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

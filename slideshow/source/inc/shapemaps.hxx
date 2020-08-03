@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_SOURCE_INC_SHAPEMAPS_HXX
-#define INCLUDED_SLIDESHOW_SOURCE_INC_SHAPEMAPS_HXX
+#pragma once
 
 #include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -43,6 +42,5 @@ namespace slideshow::internal
 
 }
 
-#endif // INCLUDED_SLIDESHOW_SOURCE_INC_SHAPEMAPS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_VIEWDATAENTRY_HXX
-#define INCLUDED_VCL_VIEWDATAENTRY_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <tools/solar.h>
@@ -82,6 +81,5 @@ public:
     SvViewDataItem& GetItem(size_t nPos);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

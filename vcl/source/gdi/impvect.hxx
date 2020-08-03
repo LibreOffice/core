@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SOURCE_GDI_IMPVECT_HXX
-#define INCLUDED_VCL_SOURCE_GDI_IMPVECT_HXX
+#pragma once
 
 #include <vcl/gdimtf.hxx>
 
@@ -30,6 +29,5 @@ namespace ImplVectorizer
                             sal_uInt8 cReduce, const Link<long,void>* pProgress );
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

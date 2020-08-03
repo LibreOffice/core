@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_TOOLS_HELPERS_HXX
-#define INCLUDED_TOOLS_HELPERS_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <sal/types.h>
@@ -126,6 +125,5 @@ inline sal_Int64 sanitiseMm100ToTwip(sal_Int64 n)
     return n / 127; // 127 is 2,540 100th-mm divided by 20pts
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_CAIROTEXTRENDER_HXX
-#define INCLUDED_VCL_INC_UNX_CAIROTEXTRENDER_HXX
+#pragma once
 
 #include <unx/freetypetextrender.hxx>
 
@@ -37,6 +36,5 @@ public:
     virtual void                DrawTextLayout(const GenericSalLayout&, const SalGraphics&) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

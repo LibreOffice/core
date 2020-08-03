@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_CHART_DATASOURCECONVERTER_HXX
-#define INCLUDED_OOX_DRAWINGML_CHART_DATASOURCECONVERTER_HXX
+#pragma once
 
 #include <drawingml/chart/converterbase.hxx>
 
@@ -59,6 +58,5 @@ public:
 
 } // namespace oox::drawingml::chart
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

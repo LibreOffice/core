@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX2_DOCFAC_HXX
-#define INCLUDED_SFX2_DOCFAC_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
@@ -91,6 +90,5 @@ public:                                                                     \
         static SfxObjectFactory aObjectFactory(GlobName, ShortName); \
         return aObjectFactory;                                              \
     }
-#endif // INCLUDED_SFX2_DOCFAC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

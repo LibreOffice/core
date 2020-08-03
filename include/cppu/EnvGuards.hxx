@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CPPU_ENVGUARDS_HXX
-#define INCLUDED_CPPU_ENVGUARDS_HXX
+#pragma once
 
 #include "uno/environment.hxx"
 
@@ -98,6 +97,5 @@ namespace cppu
     };
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SFX2_DIALOGHELPER_HXX
-#define INCLUDED_SFX2_DIALOGHELPER_HXX
+#pragma once
 
 #include <sfx2/dllapi.h>
 #include <rtl/ustring.hxx>
@@ -36,6 +35,5 @@ OUString SFX2_DLLPUBLIC getWidestTime(const LocaleDataWrapper& rWrapper);
 
 OUString SFX2_DLLPUBLIC formatTime(const DateTime& rDateTime, const LocaleDataWrapper& rWrapper);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

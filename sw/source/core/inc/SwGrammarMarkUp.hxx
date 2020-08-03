@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_SWGRAMMARMARKUP_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_SWGRAMMARMARKUP_HXX
+#pragma once
 
 #include "wrong.hxx"
 #include <vector>
@@ -63,6 +62,5 @@ public:
     sal_Int32 getSentenceEnd( sal_Int32 nPos );
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

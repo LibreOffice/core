@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_TREE_DRAWTREEVISITING_HXX
-#define INCLUDED_SDEXT_SOURCE_PDFIMPORT_TREE_DRAWTREEVISITING_HXX
+#pragma once
 
 #include <treevisiting.hxx>
 
@@ -112,6 +111,5 @@ namespace pdfi
     };
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

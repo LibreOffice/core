@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBALISTCONTROLHELPER_HXX
-#define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBALISTCONTROLHELPER_HXX
+#pragma once
 
 #include <vbahelper/vbahelper.hxx>
 
@@ -42,6 +41,5 @@ public:
     void Clear(  );
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

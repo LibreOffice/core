@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SETUP_NATIVE_SOURCE_WIN32_CUSTOMACTIONS_SHELLEXTENSIONS_SHLXTMSI_HXX
-#define INCLUDED_SETUP_NATIVE_SOURCE_WIN32_CUSTOMACTIONS_SHELLEXTENSIONS_SHLXTMSI_HXX
+#pragma once
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -54,6 +53,5 @@ static inline void UnsetMsiPropertyW( MSIHANDLE handle, const std::wstring& sPro
     MsiSetPropertyW( handle, sProperty.c_str(), nullptr );
 }
 
-#endif // INCLUDED_SETUP_NATIVE_SOURCE_WIN32_CUSTOMACTIONS_SHELLEXTENSIONS_SHLXTMSI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

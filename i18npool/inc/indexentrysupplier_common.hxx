@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_I18NPOOL_INC_INDEXENTRYSUPPLIER_COMMON_HXX
-#define INCLUDED_I18NPOOL_INC_INDEXENTRYSUPPLIER_COMMON_HXX
+#pragma once
 
 #include <com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -91,6 +90,5 @@ protected:
 };
 
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

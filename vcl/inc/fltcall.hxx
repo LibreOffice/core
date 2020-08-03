@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_FLTCALL_HXX
-#define INCLUDED_VCL_FLTCALL_HXX
+#pragma once
 
 class FilterConfigItem;
 class SvStream;
@@ -32,6 +31,5 @@ typedef bool (*PFilterCall)(SvStream & rStream, Graphic & rGraphic,
     // pOptionsConfig can be NULL; if not, the group of the config is already set
     // and may not be changed by this filter!
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XEVIEW_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_XEVIEW_HXX
+#pragma once
 
 #include "xerecord.hxx"
 #include "xlview.hxx"
@@ -162,6 +161,5 @@ private:
     bool                mbHasTabSettings;   /// It's false for embedded OLE spreadsheets.
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

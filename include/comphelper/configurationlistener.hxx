@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COMPHELPER_CONFIGURATIONLISTENER_HXX
-#define INCLUDED_COMPHELPER_CONFIGURATIONLISTENER_HXX
+#pragma once
 
 #include <vector>
 #include <comphelper/comphelperdllapi.h>
@@ -111,6 +110,5 @@ template< typename uno_type > ConfigurationListenerProperty< uno_type >::~Config
 
 } // namespace comphelper
 
-#endif // INCLUDED_COMPHELPER_CONFIGURATIONLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

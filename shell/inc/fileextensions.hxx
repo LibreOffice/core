@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SHELL_INC_INTERNAL_FILEEXTENSIONS_HXX
-#define INCLUDED_SHELL_INC_INTERNAL_FILEEXTENSIONS_HXX
+#pragma once
 
 #include "global.hxx"
 
@@ -57,6 +56,5 @@ enum File_Type_t { UNKNOWN, WRITER, CALC, DRAW, IMPRESS, MATH, WEB, DATABASE };
 
 File_Type_t get_file_type(const Filepath_t& file_name);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

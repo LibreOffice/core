@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_CHARTHELPER_HXX
-#define INCLUDED_SVX_CHARTHELPER_HXX
+#pragma once
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <sal/types.h>
@@ -56,6 +55,5 @@ public:
         const css::uno::Reference < css::embed::XEmbeddedObject > & xEmbObj);
 };
 
-#endif // INCLUDED_SVX_CHARTHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

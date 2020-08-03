@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_CLONE_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_CLONE_HXX
+#pragma once
 
 namespace detail
 {
@@ -66,6 +65,5 @@ T* clone(T* const other)
     return other ? ::detail::cloner<T, ::detail::has_clone<T>::value>::clone(other) : 0;
 }
 
-#endif // INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_CLONE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

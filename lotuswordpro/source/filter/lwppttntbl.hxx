@@ -59,8 +59,7 @@
  *  WordPro Pattern Table
  */
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPTTNTBL_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPTTNTBL_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -140,6 +139,5 @@ const sal_uInt8 s_pLwpPatternTab[][8] = {                //Id  Name
     { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF },//2  SolidBackground
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

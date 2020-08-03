@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_LINGUISTIC_SOURCE_HHCONVDIC_HXX
-#define INCLUDED_LINGUISTIC_SOURCE_HHCONVDIC_HXX
+#pragma once
 
 #include "convdic.hxx"
 
@@ -43,6 +42,5 @@ public:
 };
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

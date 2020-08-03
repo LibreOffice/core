@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_TXTATTR_HXX
-#define INCLUDED_VCL_TXTATTR_HXX
+#pragma once
 
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
@@ -184,6 +183,5 @@ inline bool TextCharAttrib::IsEmpty() const
     return mnStart == mnEnd;
 }
 
-#endif // INCLUDED_VCL_TXTATTR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

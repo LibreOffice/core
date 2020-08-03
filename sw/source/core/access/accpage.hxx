@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCPAGE_HXX
-#define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCPAGE_HXX
+#pragma once
 
 #include "acccontext.hxx"
 
@@ -72,6 +71,5 @@ public:
     virtual bool HasCursor() override;   // required by map to remember that object
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVL_INETTYPE_HXX
-#define INCLUDED_SVL_INETTYPE_HXX
+#pragma once
 
 #include <svl/svldllapi.h>
 #include <tools/inetmime.hxx>
@@ -231,6 +230,5 @@ public:
                       INetContentTypeParameterList * pParameters = nullptr);
 };
 
-#endif // INCLUDED_SVL_INETTYPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

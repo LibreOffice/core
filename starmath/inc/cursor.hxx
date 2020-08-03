@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_STARMATH_INC_CURSOR_HXX
-#define INCLUDED_STARMATH_INC_CURSOR_HXX
+#pragma once
 
 #include "node.hxx"
 #include "caret.hxx"
@@ -422,6 +421,5 @@ private:
 };
 
 
-#endif // INCLUDED_STARMATH_INC_CURSOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

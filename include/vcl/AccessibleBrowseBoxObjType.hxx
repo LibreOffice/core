@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_VCL_ACCESSIBLEBROWSEBOXOBJTYPE_HXX
-#define INCLUDED_VCL_ACCESSIBLEBROWSEBOXOBJTYPE_HXX
+#pragma once
 
 namespace vcl {
 
@@ -39,6 +38,5 @@ enum AccessibleBrowseBoxObjType
 
 } // namespace svt
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

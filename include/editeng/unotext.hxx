@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_UNOTEXT_HXX
-#define INCLUDED_EDITENG_UNOTEXT_HXX
+#pragma once
 
 #include <memory>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -668,6 +667,5 @@ const SfxItemPropertyMapEntry* ImplGetSvxUnoOutlinerTextCursorPropertyMap();
 const SvxItemPropertySet* ImplGetSvxTextPortionSvxPropertySet();
 const SfxItemPropertyMapEntry* ImplGetSvxTextPortionPropertyMap();
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

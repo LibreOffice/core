@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_SCRWIN_HXX
-#define INCLUDED_SVTOOLS_SCRWIN_HXX
+#pragma once
 
 #include <svtools/svtdllapi.h>
 #include <vcl/window.hxx>
@@ -67,6 +66,5 @@ private:
     SVT_DLLPRIVATE Size         GetOutputSizePixel() const;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

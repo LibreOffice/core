@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CHART2_WORKBENCH_ADDIN_SAMPLEADDIN_HXX
-#define INCLUDED_CHART2_WORKBENCH_ADDIN_SAMPLEADDIN_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 
@@ -150,6 +149,5 @@ public:
         throw( css::uno::RuntimeException );
 };
 
-#endif // INCLUDED_CHART2_WORKBENCH_ADDIN_SAMPLEADDIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

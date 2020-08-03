@@ -6,8 +6,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_RTFSTRINGBUFFER_HXX
-#define INCLUDED_SW_SOURCE_FILTER_WW8_RTFSTRINGBUFFER_HXX
+#pragma once
 
 #include <rtl/strbuf.hxx>
 #include <vector>
@@ -64,6 +63,5 @@ private:
     Values_t m_aValues;
 };
 
-#endif // INCLUDED_SW_SOURCE_FILTER_WW8_RTFSTRINGBUFFER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SETUP_NATIVE_SOURCE_WIN32_CUSTOMACTIONS_TOOLS_SETERROR_HXX
-#define INCLUDED_SETUP_NATIVE_SOURCE_WIN32_CUSTOMACTIONS_TOOLS_SETERROR_HXX
+#pragma once
 
 
 // list of own error codes
@@ -31,6 +30,5 @@
 
 void SetMsiErrorCode( int nErrorCode );
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

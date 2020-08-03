@@ -53,8 +53,7 @@
  *
  *
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPLAYOUTDEF_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPLAYOUTDEF_HXX
+#pragma once
 
 #define STYLE_AUTOLINK      0x01UL  /* content span's to next container */
 #define STYLE_SELECTABLE    0x02UL  /* selectable container */
@@ -168,6 +167,5 @@
 #define TEXT_ORIENT_RLBT            2       // right to left, bottom to top
 #define TEXT_ORIENT_BTLR            3       // bottom to top, left to right
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

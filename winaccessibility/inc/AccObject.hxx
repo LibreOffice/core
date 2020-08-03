@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WINACCESSIBILITY_INC_ACCOBJECT_HXX
-#define INCLUDED_WINACCESSIBILITY_INC_ACCOBJECT_HXX
+#pragma once
 
 #include <vector>
 #include <map>
@@ -138,6 +137,5 @@ public:
     void  setLocalizedResourceString();
 };
 
-#endif // INCLUDED_WINACCESSIBILITY_INC_ACCOBJECT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_HWPFILTER_SOURCE_ATTRIBUTES_HXX
-#define INCLUDED_HWPFILTER_SOURCE_ATTRIBUTES_HXX
+#pragma once
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -55,7 +54,6 @@ private:
     std::unique_ptr<AttributeListImpl_impl> m_pImpl;
 };
 
-#endif // INCLUDED_HWPFILTER_SOURCE_ATTRIBUTES_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

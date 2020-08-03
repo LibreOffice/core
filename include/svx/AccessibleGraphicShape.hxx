@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_ACCESSIBLEGRAPHICSHAPE_HXX
-#define INCLUDED_SVX_ACCESSIBLEGRAPHICSHAPE_HXX
+#pragma once
 
 #include <com/sun/star/accessibility/XAccessibleImage.hpp>
 #include <com/sun/star/uno/Any.hxx>
@@ -100,6 +99,5 @@ private:
 
 } // end of namespace accessibility
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

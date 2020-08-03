@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVX_SOURCE_DIALOG_CRASHREPORTDLG_HXX
-#define INCLUDED_SVX_SOURCE_DIALOG_CRASHREPORTDLG_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 
@@ -33,6 +32,5 @@ private:
     DECL_LINK(BtnHdl, weld::Button&, void);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

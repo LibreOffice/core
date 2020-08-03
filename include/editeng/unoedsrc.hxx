@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_UNOEDSRC_HXX
-#define INCLUDED_EDITENG_UNOEDSRC_HXX
+#pragma once
 
 #include <i18nlangtag/lang.h>
 #include <rtl/ustring.hxx>
@@ -528,6 +527,5 @@ public:
 
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

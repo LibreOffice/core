@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype - row layouts
  */
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPROWLAYOUT_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPROWLAYOUT_HXX
+#pragma once
 
 #include "lwplayout.hxx"
 #include "lwptablelayout.hxx"
@@ -126,6 +125,5 @@ private:
     LwpObjectID cRowLayout;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

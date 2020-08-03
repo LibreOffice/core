@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_BITMAPSEPIAFILTER_HXX
-#define INCLUDED_VCL_BITMAPSEPIAFILTER_HXX
+#pragma once
 
 #include <vcl/BitmapFilter.hxx>
 
@@ -33,6 +32,5 @@ private:
     sal_uInt16 mnSepiaPercent;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

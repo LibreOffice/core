@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_OOX_HELPER_GRABBAGSTACK_HXX
-#define INCLUDED_OOX_HELPER_GRABBAGSTACK_HXX
+#pragma once
 
 #include <stack>
 #include <vector>
@@ -56,6 +55,5 @@ public:
 
 } // namespace oox
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

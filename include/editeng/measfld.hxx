@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_MEASFLD_HXX
-#define INCLUDED_EDITENG_MEASFLD_HXX
+#pragma once
 
 #include <editeng/flditem.hxx>
 #include <editeng/editengdllapi.h>
@@ -43,6 +42,5 @@ public:
 };
 
 
-#endif // INCLUDED_EDITENG_MEASFLD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -58,8 +58,7 @@
  *  definitions for all object types VO_TYPE
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_INC_LWPDEFS_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_LWPDEFS_HXX
+#pragma once
 
 #define BAD_OFFSET 0xFFFFFFFFUL
 #define BAD_ATOM (sal_Int32(-1))              // Invalid Atom ID
@@ -206,6 +205,5 @@ enum VO_TYPE
     VO_INVALID = -1
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

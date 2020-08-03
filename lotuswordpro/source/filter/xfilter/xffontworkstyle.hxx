@@ -58,8 +58,7 @@
  * Style of Fontwork object.
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFONTWORKSTYLE_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFONTWORKSTYLE_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <xfilter/xfdefs.hxx>
@@ -116,6 +115,5 @@ inline enumXFFWAdjust XFFontWorkStyle::GetAdjustType() const
     return m_eAdjustType;
 }
 
-#endif // INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFONTWORKSTYLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

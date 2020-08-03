@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_ROOT_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_ROOT_HXX
+#pragma once
 
 #include <address.hxx>
 #include "flttypes.hxx"
@@ -77,6 +76,5 @@ protected:
     ExcRoot( const ExcRoot& rCopy ) : pExcRoot( rCopy.pExcRoot ) {}
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

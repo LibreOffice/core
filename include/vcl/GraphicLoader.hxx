@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_GRAPHIC_LOADER_HXX
-#define INCLUDED_VCL_GRAPHIC_LOADER_HXX
+#pragma once
 
 #include <vcl/graph.hxx>
 
@@ -22,6 +21,5 @@ namespace vcl::graphic
 Graphic VCL_DLLPUBLIC loadFromURL(OUString const& rURL, weld::Window* pParentWin = nullptr);
 } // end vcl::graphic
 
-#endif // INCLUDED_VCL_GRAPHIC_TOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

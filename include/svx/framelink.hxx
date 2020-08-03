@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_FRAMELINK_HXX
-#define INCLUDED_SVX_FRAMELINK_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <tools/color.hxx>
@@ -200,5 +199,4 @@ inline bool operator>( const Style& rL, const Style& rR ) { return rR.operator<(
 }
 
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

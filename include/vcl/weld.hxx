@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_WELD_HXX
-#define INCLUDED_VCL_WELD_HXX
+#pragma once
 
 #include <basegfx/range/b2irange.hxx>
 #include <rtl/ustring.hxx>
@@ -2352,6 +2351,5 @@ public:
     virtual ~AssistantController() override;
 };
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

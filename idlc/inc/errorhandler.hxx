@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_IDLC_INC_ERRORHANDLER_HXX
-#define INCLUDED_IDLC_INC_ERRORHANDLER_HXX
+#pragma once
 
 #include "astdeclaration.hxx"
 #include "astexpression.hxx"
@@ -113,6 +112,5 @@ public:
     static bool checkPublished(AstDeclaration const * decl, bool bOptional=false);
 };
 
-#endif // INCLUDED_IDLC_INC_ERRORHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

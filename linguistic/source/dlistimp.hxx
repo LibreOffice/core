@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_LINGUISTIC_SOURCE_DLISTIMP_HXX
-#define INCLUDED_LINGUISTIC_SOURCE_DLISTIMP_HXX
+#pragma once
 
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -115,6 +114,5 @@ public:
     void    SaveDics();
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

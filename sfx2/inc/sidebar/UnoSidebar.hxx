@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SFX2_SIDEBAR_SIDEBAR_HXX
-#define INCLUDED_SFX2_SIDEBAR_SIDEBAR_HXX
+#pragma once
 
 #include <com/sun/star/ui/XSidebarProvider.hpp>
 
@@ -49,6 +48,5 @@ public:
 
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

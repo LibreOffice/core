@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_SOURCE_INC_VIEWLAYER_HXX
-#define INCLUDED_SLIDESHOW_SOURCE_INC_VIEWLAYER_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <memory>
@@ -168,6 +167,5 @@ namespace slideshow::internal
         typedef std::shared_ptr< ViewLayer > ViewLayerSharedPtr;
 }
 
-#endif // INCLUDED_SLIDESHOW_SOURCE_INC_VIEWLAYER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

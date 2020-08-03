@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SW_SOURCE_FILTER_HTML_HTMLATR_HXX
-#define INCLUDED_SW_SOURCE_FILTER_HTML_HTMLATR_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -16,6 +15,5 @@ struct HTMLOutEvent;
 
 extern HTMLOutEvent const aAnchorEventTable[];
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

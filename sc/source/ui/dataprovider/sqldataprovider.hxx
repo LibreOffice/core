@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_DATAPROVIDER_SQLDATAPROVIDER_HXX
-#define INCLUDED_SC_SOURCE_UI_DATAPROVIDER_SQLDATAPROVIDER_HXX
+#pragma once
 
 #include <dataprovider.hxx>
 
@@ -36,6 +35,5 @@ public:
 };
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SAL_OSL_W32_THREAD_HXX
-#define INCLUDED_SAL_OSL_W32_THREAD_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -20,6 +19,5 @@ extern DWORD g_dwTLSTextEncodingIndex;
 
 extern CRITICAL_SECTION g_ThreadKeyListCS;
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_GESTUREEVENT_HXX
-#define INCLUDED_VCL_GESTUREEVENT_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 
@@ -56,6 +55,5 @@ public:
     }
 };
 
-#endif // INCLUDED_VCL_GESTUREEVENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

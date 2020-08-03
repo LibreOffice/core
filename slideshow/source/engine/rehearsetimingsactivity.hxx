@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_REHEARSETIMINGSACTIVITY_HXX
-#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_REHEARSETIMINGSACTIVITY_HXX
+#pragma once
 
 #include <activity.hxx>
 #include <activitiesqueue.hxx>
@@ -136,6 +135,5 @@ private:
 
 } // namespace presentation::internal
 
-#endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_REHEARSETIMINGSACTIVITY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

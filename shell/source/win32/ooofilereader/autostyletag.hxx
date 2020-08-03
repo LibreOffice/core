@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_SHELL_SOURCE_WIN32_OOOFILEREADER_AUTOSTYLETAG_HXX
-#define INCLUDED_SHELL_SOURCE_WIN32_OOOFILEREADER_AUTOSTYLETAG_HXX
+#pragma once
 
 #include "itag.hxx"
 
@@ -61,6 +60,5 @@ class CAutoStyleTag : public ITag
         StyleLocalePair_t m_CurrentStyleLocalePair;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

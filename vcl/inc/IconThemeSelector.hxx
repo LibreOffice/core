@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_ICONTHEMESELECTOR_HXX
-#define INCLUDED_VCL_ICONTHEMESELECTOR_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -92,6 +91,5 @@ private:
 
 } /* namespace vcl */
 
-#endif // INCLUDED_VCL_ICONTHEMESELECTOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

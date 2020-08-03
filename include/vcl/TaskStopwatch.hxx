@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_TASK_STOPWATCH_HXX
-#define INCLUDED_VCL_TASK_STOPWATCH_HXX
+#pragma once
 
 #include <tools/time.hxx>
 #include <vcl/dllapi.h>
@@ -118,6 +117,5 @@ public:
     static void setTimeSlice(unsigned int nTimeSlice) { m_nTimeSlice = nTimeSlice; }
 };
 
-#endif // INCLUDED_VCL_TASK_STOPWATCH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

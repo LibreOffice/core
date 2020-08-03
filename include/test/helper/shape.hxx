@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_TEST_HELPER_SHAPE_HXX
-#define INCLUDED_TEST_HELPER_SHAPE_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <sal/types.h>
@@ -85,6 +84,5 @@ css::uno::Reference<css::drawing::XShape>
 } // namespace helper
 } // namespace apitest
 
-#endif // INCLUDED_TEST_HELPER_SHAPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

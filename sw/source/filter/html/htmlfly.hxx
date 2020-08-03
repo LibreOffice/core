@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_FILTER_HTML_HTMLFLY_HXX
-#define INCLUDED_SW_SOURCE_FILTER_HTML_HTMLFLY_HXX
+#pragma once
 
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -126,6 +125,5 @@ class SwHTMLPosFlyFrames
                 o3tl::find_partialorder_ptrequals>
 {};
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COMPHELPER_XMLTOOLS_HXX
-#define INCLUDED_COMPHELPER_XMLTOOLS_HXX
+#pragma once
 
 #include <rtl/string.hxx>
 #include <comphelper/comphelperdllapi.h>
@@ -19,6 +18,5 @@ namespace comphelper::xml
         COMPHELPER_DLLPUBLIC OString generateGUIDString();
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

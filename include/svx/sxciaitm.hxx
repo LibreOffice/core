@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SXCIAITM_HXX
-#define INCLUDED_SVX_SXCIAITM_HXX
+#pragma once
 
 #include <svx/svddef.hxx>
 #include <svx/sdangitm.hxx>
@@ -30,6 +29,5 @@ inline SdrAngleItem makeSdrCircEndAngleItem(long nAngle) {
     return SdrAngleItem(SDRATTR_CIRCENDANGLE, nAngle);
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_JVMACCESS_CLASSPATH_HXX
-#define INCLUDED_JVMACCESS_CLASSPATH_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -73,6 +72,5 @@ JVMACCESS_DLLPUBLIC jobjectArray translateToUrls(
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

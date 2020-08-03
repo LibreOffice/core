@@ -34,8 +34,7 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_STATICS_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_STATICS_HXX
+#pragma once
 
 #include <unordered_map>
 #include <vector>
@@ -239,6 +238,5 @@ private:
 Statics & getStatics();
 
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

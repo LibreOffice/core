@@ -58,8 +58,7 @@
  *  LwpDocument header file
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDOC_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDOC_HXX
+#pragma once
 
 #include <config_lgpl.h>
 #include "lwplnopts.hxx"
@@ -225,6 +224,5 @@ public:
     void Parse(IXFStream* pOutputStream) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

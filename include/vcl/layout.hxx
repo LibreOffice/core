@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_LAYOUT_HXX
-#define INCLUDED_VCL_LAYOUT_HXX
+#pragma once
 
 #include <config_options.h>
 #include <vcl/dllapi.h>
@@ -866,6 +865,5 @@ vcl::Window* getNonLayoutParent(vcl::Window *pParent);
 //Sort ok/cancel etc buttons in platform order
 void sort_native_button_order(VclBox& rContainer);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

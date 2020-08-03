@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_XMLTYPES_HXX
-#define INCLUDED_XMLOFF_XMLTYPES_HXX
+#pragma once
 
 
 // Flags to specify how to im/export the property
@@ -293,6 +292,5 @@
 #define XML_TYPE_GRAPHIC                (XML_TEXT_TYPES_START + 127)
 #define XML_SW_TYPE_PRESPAGE_BACKSIZE   (XML_TEXT_TYPES_START + 128)
 
-#endif // INCLUDED_XMLOFF_XMLTYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

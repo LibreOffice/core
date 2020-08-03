@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVL_NFSYMBOL_HXX
-#define INCLUDED_SVL_NFSYMBOL_HXX
+#pragma once
 
 /* ATTENTION! If new types arrive that had its content previously handled as
  * SYMBOLTYPE_STRING, they have to be added at several places in zforscan.cxx
@@ -58,6 +57,5 @@ enum NfSymbolType
 
 }   // namespace svt
 
-#endif // INCLUDED_SVL_NFSYMBOL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

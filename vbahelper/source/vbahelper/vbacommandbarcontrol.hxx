@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_VBAHELPER_SOURCE_VBAHELPER_VBACOMMANDBARCONTROL_HXX
-#define INCLUDED_VBAHELPER_SOURCE_VBAHELPER_VBACOMMANDBARCONTROL_HXX
+#pragma once
 
 #include <ooo/vba/XCommandBarControl.hpp>
 #include <ooo/vba/XCommandBarPopup.hpp>
@@ -106,6 +105,5 @@ public:
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 };
 
-#endif // INCLUDED_VBAHELPER_SOURCE_VBAHELPER_VBACOMMANDBARCONTROL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

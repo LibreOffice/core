@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVL_SOURCE_NUMBERS_SUPSERVS_HXX
-#define INCLUDED_SVL_SOURCE_NUMBERS_SUPSERVS_HXX
+#pragma once
 
 #include <svl/numuno.hxx>
 #include <svl/zforlist.hxx>
@@ -75,6 +74,5 @@ public:
 };
 
 
-#endif // INCLUDED_SVL_SOURCE_NUMBERS_SUPSERVS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INTROWIN_HXX
-#define INCLUDED_VCL_INTROWIN_HXX
+#pragma once
 
 #include <config_options.h>
 #include <vcl/dllapi.h>
@@ -36,6 +35,5 @@ public:
 
 };
 
-#endif // INCLUDED_VCL_INTROWIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

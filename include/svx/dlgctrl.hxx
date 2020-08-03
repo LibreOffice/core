@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_DLGCTRL_HXX
-#define INCLUDED_SVX_DLGCTRL_HXX
+#pragma once
 
 #include <sfx2/tabdlg.hxx>
 #include <svx/svxdllapi.h>
@@ -407,6 +406,5 @@ SVX_DLLPUBLIC void limitWidthForSidebar(SvxRelativeField& rMetricSpinButton);
 //tdf#130197 Give this toolbar a width as if it had 5 standard toolbutton entries
 SVX_DLLPUBLIC void padWidthForSidebar(weld::Toolbar& rToolbar, const css::uno::Reference<css::frame::XFrame>& rFrame);
 
-#endif // INCLUDED_SVX_DLGCTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

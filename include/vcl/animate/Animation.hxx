@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_ANIMATE_ANIMATION_HXX
-#define INCLUDED_VCL_ANIMATE_ANIMATION_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <vcl/timer.hxx>
@@ -112,6 +111,5 @@ private:
     DECL_DLLPRIVATE_LINK(ImplTimeoutHdl, Timer*, void);
 };
 
-#endif // INCLUDED_VCL_ANIMATE_ANIMATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

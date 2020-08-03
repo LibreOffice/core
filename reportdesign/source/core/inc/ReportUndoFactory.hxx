@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_REPORTUNDOFACTORY_HXX
-#define INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_REPORTUNDOFACTORY_HXX
+#pragma once
 
 #include <svx/svdundo.hxx>
 #include <memory>
@@ -69,6 +68,5 @@ namespace rptui
 } // rptui
 
 
-#endif // INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_REPORTUNDOFACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_RTL_STRINGCONCAT_HXX
-#define INCLUDED_RTL_STRINGCONCAT_HXX
+#pragma once
 
 // This file is only included from LIBO_INTERNAL_ONLY
 
@@ -550,4 +549,3 @@ struct ToStringHelper< OUStringView >
 
 } // namespace
 
-#endif

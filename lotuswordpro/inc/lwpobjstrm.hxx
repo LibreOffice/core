@@ -59,8 +59,7 @@
  *  stream for one LwpObject body data
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_INC_LWPOBJSTRM_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_LWPOBJSTRM_HXX
+#pragma once
 
 #include <config_lgpl.h>
 
@@ -122,6 +121,5 @@ inline LwpSvStream *LwpObjectStream::GetStream()
 {
     return m_pStrm;
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

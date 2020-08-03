@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SALGTYPE_HXX
-#define INCLUDED_VCL_SALGTYPE_HXX
+#pragma once
 
 #include <o3tl/typed_flags_set.hxx>
 #include <tools/color.hxx>
@@ -91,6 +90,5 @@ namespace o3tl
     template<> struct typed_flags<SalInvert> : is_typed_flags<SalInvert, 0x03> {};
 }
 
-#endif // INCLUDED_VCL_SALGTYPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -57,8 +57,7 @@
  * @file
  * Footer style,exist in page-master object.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFOOTERSTYLE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFOOTERSTYLE_HXX
+#pragma once
 
 #include <xfilter/xfheaderstyle.hxx>
 #include <xfilter/xfmargins.hxx>
@@ -81,5 +80,4 @@ public:
     }
 };
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

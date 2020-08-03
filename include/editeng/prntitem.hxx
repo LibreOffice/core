@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_EDITENG_PRNTITEM_HXX
-#define INCLUDED_EDITENG_PRNTITEM_HXX
+#pragma once
 
 #include <svl/eitem.hxx>
 #include <editeng/editengdllapi.h>
@@ -50,6 +49,5 @@ inline SvxPrintItem::SvxPrintItem( const sal_uInt16 nId, const bool bPrt )
     : SfxBoolItem( nId, bPrt )
 {}
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

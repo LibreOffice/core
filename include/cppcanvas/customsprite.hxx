@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CPPCANVAS_CUSTOMSPRITE_HXX
-#define INCLUDED_CPPCANVAS_CUSTOMSPRITE_HXX
+#pragma once
 
 #include <cppcanvas/sprite.hxx>
 #include <cppcanvas/canvas.hxx>
@@ -39,6 +38,5 @@ namespace cppcanvas
     typedef std::shared_ptr< ::cppcanvas::CustomSprite > CustomSpriteSharedPtr;
 }
 
-#endif // INCLUDED_CPPCANVAS_CUSTOMSPRITE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

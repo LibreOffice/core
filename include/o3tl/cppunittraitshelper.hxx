@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_O3TL_CPPUNITTRAITSHELPER_HXX
-#define INCLUDED_O3TL_CPPUNITTRAITSHELPER_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -22,6 +21,5 @@ template <> inline std::string CppUnit::assertion_traits<char16_t>::toString(cha
     return assertion_traits<unsigned>::toString(unsigned(x));
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

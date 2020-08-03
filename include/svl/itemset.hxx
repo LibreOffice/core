@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVL_ITEMSET_HXX
-#define INCLUDED_SVL_ITEMSET_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -260,6 +259,5 @@ protected:
     virtual const SfxPoolItem*  PutImpl( const SfxPoolItem&, sal_uInt16 nWhich, bool bPassingOwnership ) override;
 };
 
-#endif // INCLUDED_SVL_ITEMSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

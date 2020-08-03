@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_ANALYSISOFVARIANCEDIALOG_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_ANALYSISOFVARIANCEDIALOG_HXX
+#pragma once
 
 #include <address.hxx>
 #include "viewdata.hxx"
@@ -59,6 +58,5 @@ protected:
     virtual ScRange ApplyOutput(ScDocShell* pDocShell) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

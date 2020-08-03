@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SHELL_SOURCE_WIN32_SHLXTHANDLER_OOOFILT_PROPSPEC_HXX
-#define INCLUDED_SHELL_SOURCE_WIN32_SHLXTHANDLER_OOOFILT_PROPSPEC_HXX
+#pragma once
 
 //+-------------------------------------------------------------------------
 //  File:       propspec.hxx
@@ -122,6 +121,5 @@ inline BOOL CFullPropSpec::IsPropertyPropid() const
     return _psProperty.ulKind == PRSPEC_PROPID;
 }
 
-#endif // INCLUDED_SHELL_SOURCE_WIN32_SHLXTHANDLER_OOOFILT_PROPSPEC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

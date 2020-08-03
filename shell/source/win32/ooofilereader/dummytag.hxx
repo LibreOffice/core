@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_SHELL_SOURCE_WIN32_OOOFILEREADER_DUMMYTAG_HXX
-#define INCLUDED_SHELL_SOURCE_WIN32_OOOFILEREADER_DUMMYTAG_HXX
+#pragma once
 
 #include "itag.hxx"
 
@@ -50,6 +49,5 @@ class CDummyTag : public ITag
 };
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

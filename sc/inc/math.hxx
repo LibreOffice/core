@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_MATH_HXX
-#define INCLUDED_SC_INC_MATH_HXX
+#pragma once
 
 #include <formula/errorcodes.hxx>
 #include <rtl/math.hxx>
@@ -75,6 +74,5 @@ double power( const double& fVal1, const double& fVal2 );
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_TESTTOOLS_SOURCE_BRIDGETEST_DLLAPI_HXX
-#define INCLUDED_TESTTOOLS_SOURCE_BRIDGETEST_DLLAPI_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -20,6 +19,5 @@
 #define LO_DLLPUBLIC_TESTTOOLS SAL_DLLPUBLIC_IMPORT
 #endif
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

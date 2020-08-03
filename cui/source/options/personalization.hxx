@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CUI_SOURCE_OPTIONS_PERSONALIZATION_HXX
-#define INCLUDED_CUI_SOURCE_OPTIONS_PERSONALIZATION_HXX
+#pragma once
 
 #include <sfx2/tabdlg.hxx>
 #include <vector>
@@ -60,6 +59,5 @@ private:
     DECL_LINK(DefaultPersona, weld::Button&, void);
 };
 
-#endif // INCLUDED_CUI_SOURCE_OPTIONS_PERSONALIZATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

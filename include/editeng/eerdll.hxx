@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_EERDLL_HXX
-#define INCLUDED_EDITENG_EERDLL_HXX
+#pragma once
 
 #include <editeng/editengdllapi.h>
 #include <rtl/ustring.hxx>
@@ -46,6 +45,5 @@ public:
     static EditDLL& Get();
 };
 
-#endif // INCLUDED_EDITENG_EERDLL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

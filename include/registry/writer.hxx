@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REGISTRY_WRITER_HXX
-#define INCLUDED_REGISTRY_WRITER_HXX
+#pragma once
 
 #include <registry/writer.h>
 #include <registry/refltype.hxx>
@@ -286,6 +285,5 @@ private:
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

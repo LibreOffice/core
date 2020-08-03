@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMPHELPER_ACCESSIBLEKEYBINDINGHELPER_HXX
-#define INCLUDED_COMPHELPER_ACCESSIBLEKEYBINDINGHELPER_HXX
+#pragma once
 
 #include <com/sun/star/accessibility/XAccessibleKeyBinding.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -68,6 +67,5 @@ namespace comphelper
 }   // namespace comphelper
 
 
-#endif // INCLUDED_COMPHELPER_ACCESSIBLEKEYBINDINGHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

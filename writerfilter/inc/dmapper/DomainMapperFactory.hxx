@@ -6,8 +6,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WRITERFILTER_INC_DMAPPER_DOMAINMAPPERFACTORY_HXX
-#define INCLUDED_WRITERFILTER_INC_DMAPPER_DOMAINMAPPERFACTORY_HXX
+#pragma once
 
 #include <vector>
 
@@ -46,6 +45,5 @@ splitFieldCommand(const OUString& rCommand);
 
 } // namespace writerfilter::dmapper
 
-#endif // INCLUDED_WRITERFILTER_INC_DMAPPER_DOMAINMAPPERFACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

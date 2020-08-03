@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_RANGESEQ_HXX
-#define INCLUDED_SC_INC_RANGESEQ_HXX
+#pragma once
 
 #include "types.hxx"
 #include <com/sun/star/uno/TypeClass.hpp>
@@ -101,6 +100,5 @@ public:
                             sal_uInt16 nEncoding );
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

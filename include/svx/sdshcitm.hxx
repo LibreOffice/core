@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SDSHCITM_HXX
-#define INCLUDED_SVX_SDSHCITM_HXX
+#pragma once
 
 #include <svx/xcolit.hxx>
 #include <svx/svddef.hxx>
@@ -26,6 +25,5 @@ inline XColorItem makeSdrShadowColorItem(const Color& rTheColor) {
     return XColorItem(SDRATTR_SHADOWCOLOR, rTheColor);
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

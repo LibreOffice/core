@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_VECTORGRAPHICDATA_HXX
-#define INCLUDED_VCL_VECTORGRAPHICDATA_HXX
+#pragma once
 
 #include <basegfx/range/b2drange.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -116,6 +115,5 @@ public:
     bool isPrimitiveSequenceCreated() const { return mbSequenceCreated; }
 };
 
-#endif // INCLUDED_VCL_VECTORGRAPHICDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

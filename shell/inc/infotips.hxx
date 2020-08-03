@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SHELL_INC_INTERNAL_INFOTIPS_HXX
-#define INCLUDED_SHELL_INC_INTERNAL_INFOTIPS_HXX
+#pragma once
 
 #include <objidl.h>
 #include <shlobj.h>
@@ -83,6 +82,5 @@ private:
     std::wstring    m_FileNameOnly;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_GLOB_HXX
-#define INCLUDED_SD_INC_GLOB_HXX
+#pragma once
 
 #define SD_IF_SDAPP                     SFX_INTERFACE_SD_START + SfxInterfaceId(0)
 #define SD_IF_SDDRAWDOCSHELL            SFX_INTERFACE_SD_START + SfxInterfaceId(1)
@@ -51,6 +50,5 @@
 #define SD_OPTION_MORPHING  "Morph"
 #define SD_OPTION_VECTORIZE "Vectorize"
 
-#endif // _ INCLUDED_SD_INC_GLOB_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_I18NPOOL_INC_INDEXENTRYSUPPLIER_JA_PHONETIC_HXX
-#define INCLUDED_I18NPOOL_INC_INDEXENTRYSUPPLIER_JA_PHONETIC_HXX
+#pragma once
 
 #include "indexentrysupplier_common.hxx"
 
@@ -60,6 +59,5 @@ INDEXENTRYSUPPLIER_JA_PHONETIC( ja_phonetic_alphanumeric_last_by_syllable,   " (
 INDEXENTRYSUPPLIER_JA_PHONETIC( ja_phonetic_alphanumeric_last_by_consonant,  " (alphanumeric last) (grouped by consonant)" )
 
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_OSL_W32_PATH_HELPER_HXX
-#define INCLUDED_SAL_OSL_W32_PATH_HELPER_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -120,6 +119,5 @@ public:
 
 } // end namespace osl
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

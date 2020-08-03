@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SAL_BACKTRACE_HXX
-#define INCLUDED_SAL_BACKTRACE_HXX
+#pragma once
 
 #include "sal/config.h"
 #include "sal/saldllapi.h"
@@ -45,6 +44,5 @@ SAL_DLLPUBLIC OUString backtrace_to_string(BacktraceState* backtraceState);
 
 #endif
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_INC_TREEVISITOR_HXX
-#define INCLUDED_SVX_SOURCE_INC_TREEVISITOR_HXX
+#pragma once
 
 #include <stack>
 
@@ -99,6 +98,5 @@ bool TreeVisitor< ELEMENT, NODEINFO, PROCESSOR >::do_step()
     return false;
 }
 
-#endif // INCLUDED_SVX_SOURCE_INC_TREEVISITOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

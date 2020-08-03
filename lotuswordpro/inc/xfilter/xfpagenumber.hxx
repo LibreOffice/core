@@ -57,8 +57,7 @@
  * @file
  * Page number field.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFPAGENUMBER_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFPAGENUMBER_HXX
+#pragma once
 
 #include <xfilter/xfcontent.hxx>
 #include <xfilter/xfnumfmt.hxx>
@@ -94,5 +93,4 @@ inline void XFPageNumber::ToXml(IXFStream *pStrm)
     pStrm->EndElement( "text:page-number" );
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

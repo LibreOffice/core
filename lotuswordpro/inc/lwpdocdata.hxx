@@ -53,8 +53,7 @@
  *
  *
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_LWPDOCDATA_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_LWPDOCDATA_HXX
+#pragma once
 #include <config_lgpl.h>
 #include "lwpobj.hxx"
 #include "lwpatomholder.hxx"
@@ -177,6 +176,5 @@ public:
     void Read() override;
     void Parse(IXFStream* pOutputStream) override;
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

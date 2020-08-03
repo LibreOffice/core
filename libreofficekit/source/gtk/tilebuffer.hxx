@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_TILEBUFFER_HXX
-#define INCLUDED_TILEBUFFER_HXX
+#pragma once
 
 #include <cairo.h>
 #include <gio/gio.h>
@@ -273,6 +272,5 @@ struct LOEvent
     static void destroy(void* pMemory);
 };
 
-#endif // INCLUDED_TILEBUFFER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_OSL_W32_GMUTEX_HXX
-#define INCLUDED_SAL_OSL_W32_GMUTEX_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -26,6 +25,5 @@
 
 extern oslMutex g_Mutex;
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

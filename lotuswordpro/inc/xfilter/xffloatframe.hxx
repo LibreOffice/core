@@ -57,8 +57,7 @@
  * @file
  * Float frame whose anchor is page.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFLOATFRAME_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFLOATFRAME_HXX
+#pragma once
 
 #include <xfilter/xfframe.hxx>
 
@@ -85,6 +84,5 @@ private:
     bool    m_bAll;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

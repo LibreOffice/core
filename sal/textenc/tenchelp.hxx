@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_TEXTENC_TENCHELP_HXX
-#define INCLUDED_SAL_TEXTENC_TENCHELP_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -245,6 +244,5 @@ sal_Size ImplUnicodeToUTF7( const void* pData, void* pContext,
                             sal_uInt32 nFlags, sal_uInt32* pInfo,
                             sal_Size* pSrcCvtChars );
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

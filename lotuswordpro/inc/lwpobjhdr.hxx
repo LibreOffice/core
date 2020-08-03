@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_INC_LWPOBJHDR_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_LWPOBJHDR_HXX
+#pragma once
 
 #include <config_lgpl.h>
 #include "lwpobjid.hxx"
@@ -131,6 +130,5 @@ inline bool LwpObjectHeader::IsCompressed() const
 {
     return m_bCompressed;
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

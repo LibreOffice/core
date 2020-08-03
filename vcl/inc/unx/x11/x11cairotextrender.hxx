@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_UNX_GENERIC_GDI_X11CAIROTEXTRENDER_HXX
-#define INCLUDED_VCL_UNX_GENERIC_GDI_X11CAIROTEXTRENDER_HXX
+#pragma once
 
 #include <unx/cairotextrender.hxx>
 #include <unx/salgdi.h>
@@ -41,6 +40,5 @@ public:
     virtual void releaseCairoContext(cairo_t* cr) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

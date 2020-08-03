@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SBXCORE_HXX
-#define INCLUDED_BASIC_SBXCORE_HXX
+#pragma once
 
 #include <basic/basicdllapi.h>
 #include <basic/sbxdef.hxx>
@@ -128,6 +127,5 @@ inline bool SbxBase::IsHidden() const
 inline bool SbxBase::IsVisible() const
 { return IsReset( SbxFlagBits::Invisible ); }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

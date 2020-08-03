@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_SALHELPER_CONDITION_HXX
-#define INCLUDED_SALHELPER_CONDITION_HXX
+#pragma once
 
 
 #include "osl/conditn.hxx"
@@ -107,6 +106,5 @@ namespace salhelper
 }   // namespace salhelper
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

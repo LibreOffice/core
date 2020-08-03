@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_EEITEM_HXX
-#define INCLUDED_EDITENG_EEITEM_HXX
+#pragma once
 
 #include <svl/solar.hrc>
 #include <svl/typedwhich.hxx>
@@ -142,6 +141,5 @@ constexpr sal_uInt16 EE_ITEMS_END       (EE_FEATURE_END);
 
 constexpr sal_uInt16 EDITITEMCOUNT (EE_ITEMS_END - EE_ITEMS_START + 1);
 
-#endif // _ INCLUDED_EDITENG_EEITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

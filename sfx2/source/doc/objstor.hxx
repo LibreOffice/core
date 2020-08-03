@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_SOURCE_DOC_OBJSTOR_HXX
-#define INCLUDED_SFX2_SOURCE_DOC_OBJSTOR_HXX
+#pragma once
 
 #include <com/sun/star/frame/XModel.hpp>
 
 void impl_addToModelCollection(const css::uno::Reference<css::frame::XModel>& xModel);
 
-#endif // INCLUDED_SFX2_SOURCE_DOC_OBJSTOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

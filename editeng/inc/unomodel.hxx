@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_UNOMODEL_HXX
-#define INCLUDED_EDITENG_UNOMODEL_HXX
+#pragma once
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
@@ -66,6 +65,5 @@ public:
 
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

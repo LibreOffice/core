@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SDR_OVERLAY_OVERLAYOBJECT_HXX
-#define INCLUDED_SVX_SDR_OVERLAY_OVERLAYOBJECT_HXX
+#pragma once
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>
@@ -192,6 +191,5 @@ namespace sdr::overlay
 
 } // end of namespace sdr::overlay
 
-#endif // INCLUDED_SVX_SDR_OVERLAY_OVERLAYOBJECT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

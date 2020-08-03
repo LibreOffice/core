@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SDSHTITM_HXX
-#define INCLUDED_SVX_SDSHTITM_HXX
+#pragma once
 
 #include <svx/sdprcitm.hxx>
 #include <svx/svddef.hxx>
@@ -26,6 +25,5 @@ inline SdrPercentItem makeSdrShadowTransparenceItem(sal_uInt16 nTransp) {
     return SdrPercentItem(SDRATTR_SHADOWTRANSPARENCE, nTransp);
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

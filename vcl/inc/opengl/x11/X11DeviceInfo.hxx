@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_OPENGL_X11_X11DEVICEINFO_HXX
-#define INCLUDED_VCL_INC_OPENGL_X11_X11DEVICEINFO_HXX
+#pragma once
 
 #include <opengl/DeviceInfo.hxx>
 
@@ -70,6 +69,5 @@ public:
 
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

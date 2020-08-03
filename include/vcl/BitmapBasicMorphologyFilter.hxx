@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_BITMAPBASICMORPHOLOGYFILTER_HXX
-#define INCLUDED_VCL_BITMAPBASICMORPHOLOGYFILTER_HXX
+#pragma once
 
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
@@ -66,6 +65,5 @@ public:
     }
 };
 
-#endif // INCLUDED_VCL_BITMAPBASICMORPHOLOGYFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

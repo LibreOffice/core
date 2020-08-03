@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_WATERMARKDIALOG_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_WATERMARKDIALOG_HXX
+#pragma once
 
 #include <sfx2/bindings.hxx>
 #include <vcl/weld.hxx>
@@ -35,6 +34,5 @@ private:
     std::unique_ptr<ColorListBox> m_xColor;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

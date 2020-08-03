@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_CPPUOPTIONS_HXX
-#define INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_CPPUOPTIONS_HXX
+#pragma once
 
 #include <codemaker/options.hxx>
 
@@ -37,6 +36,5 @@ public:
 protected:
 };
 
-#endif // INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_CPPUOPTIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

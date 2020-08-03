@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_LINGUISTIC_LNGPROPS_HXX
-#define INCLUDED_LINGUISTIC_LNGPROPS_HXX
+#pragma once
 
 // maximal number of suggestions to be returned in spelling  context-menu
 // (may not include results added by looking up user dictionaries)
 #define UPN_MAX_NUMBER_OF_SUGGESTIONS       "MaxNumberOfSuggestions"
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SALHELPER_SINGLETONREF_HXX
-#define INCLUDED_SALHELPER_SINGLETONREF_HXX
+#pragma once
 
 #include "sal/config.h"
 
@@ -194,6 +193,5 @@ sal_Int32 SingletonRef< SingletonClass >::m_nRef = 0;
 
 } // namespace salhelper
 
-#endif // INCLUDED_SALHELPER_SINGLETONREF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

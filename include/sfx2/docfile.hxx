@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_DOCFILE_HXX
-#define INCLUDED_SFX2_DOCFILE_HXX
+#pragma once
 
 #include <memory>
 #include <sal/config.h>
@@ -294,6 +293,5 @@ private:
 
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

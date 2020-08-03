@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAPIVOTTABLES_HXX
-#define INCLUDED_SC_SOURCE_UI_VBA_VBAPIVOTTABLES_HXX
+#pragma once
 
 #include <ooo/vba/excel/XPivotTables.hpp>
 
@@ -47,6 +46,5 @@ public:
 
 };
 
-#endif //SC_VBA_PIVOTTABLES
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

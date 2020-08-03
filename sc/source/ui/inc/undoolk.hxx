@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_UNDOOLK_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_UNDOOLK_HXX
+#pragma once
 
 class SdrUndoAction;
 class ScDocument;
@@ -28,6 +27,5 @@ void            DoSdrUndoAction     ( SdrUndoAction* pUndoAction, ScDocument* pD
 void            RedoSdrUndoAction   ( SdrUndoAction* pUndoAction );
 void            EnableDrawAdjust    ( ScDocument* pDoc, bool bEnable );
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_OSX_KEYBOARDFOCUSLISTENER_HXX
-#define INCLUDED_VCL_INC_OSX_KEYBOARDFOCUSLISTENER_HXX
+#pragma once
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
@@ -32,6 +31,5 @@ public:
     virtual void focusedObjectChanged(const css::uno::Reference< css::accessibility::XAccessible >& xAccessible) = 0;
 };
 
-#endif // INCLUDED_VCL_INC_OSX_KEYBOARDFOCUSLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

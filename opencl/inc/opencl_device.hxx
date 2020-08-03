@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_OPENCL_INC_OPENCL_DEVICE_HXX
-#define INCLUDED_OPENCL_INC_OPENCL_DEVICE_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -19,6 +18,5 @@ ds_device const & getDeviceSelection(OUString const & pFileName, bool bForceSele
 
 void releaseOpenCLEnv( openclwrapper::GPUEnv *gpuInfo );
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

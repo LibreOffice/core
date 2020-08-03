@@ -29,8 +29,7 @@
  * Strba and Thorsten Behrens
  */
 
-#ifndef INCLUDED_O3TL_FUNCTIONAL_HXX
-#define INCLUDED_O3TL_FUNCTIONAL_HXX
+#pragma once
 
 namespace o3tl
 {
@@ -58,6 +57,5 @@ struct select2nd
 
 }   // namespace o3tl
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDDEF_HXX
-#define INCLUDED_SVX_SVDDEF_HXX
+#pragma once
 
 #include <svx/xdef.hxx>
 #include <svl/typedwhich.hxx>
@@ -428,6 +427,5 @@ constexpr sal_uInt16                  SDRATTR_SOFTEDGE_LAST(SDRATTR_SOFTEDGE_RAD
 
 constexpr sal_uInt16 SDRATTR_END (SDRATTR_SOFTEDGE_LAST);      /* 1357 */ /* 1333 V4+++*/ /* 1243 V4+++*/  /*1213*/ /*1085*/ /*1040*/ /*Pool V2: 1123,V1: 1065 */
 
-#endif // INCLUDED_SVX_SVDDEF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

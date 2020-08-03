@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_TEST_CALLGRIND_HXX
-#define INCLUDED_TEST_CALLGRIND_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <test/testdllapi.hxx>
@@ -16,6 +15,5 @@
 void OOO_DLLPUBLIC_TEST callgrindStart();
 void OOO_DLLPUBLIC_TEST callgrindDump(const char* name);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

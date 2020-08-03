@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDOMEAS_HXX
-#define INCLUDED_SVX_SVDOMEAS_HXX
+#pragma once
 
 #include <svx/svdotext.hxx>
 #include <svx/svxdllapi.h>
@@ -196,6 +195,5 @@ public:
 // -> during Copy, etc. use the respective code of the connectors?!?
 // this probably will be pretty complicated ...
 
-#endif // INCLUDED_SVX_SVDOMEAS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
