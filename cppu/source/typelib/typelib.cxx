@@ -1366,68 +1366,68 @@ extern "C" void SAL_CALL typelib_typedescription_release(
 {
     sal_Int32 ref = osl_atomic_decrement( &pTD->nRefCount );
     OSL_ASSERT(ref >= 0);
-    if (0 == ref)
+    if (0 != ref)
+        return;
+
+    TypeDescriptor_Init_Impl &rInit = Init::get();
+    if( TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( pTD->eTypeClass ) )
     {
-        TypeDescriptor_Init_Impl &rInit = Init::get();
-        if( TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( pTD->eTypeClass ) )
+        if( pTD->pWeakRef )
         {
-            if( pTD->pWeakRef )
             {
-                {
                 MutexGuard aGuard( rInit.getMutex() );
                 // remove this description from the weak reference
                 pTD->pWeakRef->pType = nullptr;
-                }
-                typelib_typedescriptionreference_release( pTD->pWeakRef );
             }
+            typelib_typedescriptionreference_release( pTD->pWeakRef );
         }
-        else
+    }
+    else
+    {
+        // this description is a reference too, so remove it from the hash table
+        if( rInit.pWeakMap )
         {
-            // this description is a reference too, so remove it from the hash table
-            if( rInit.pWeakMap )
+            MutexGuard aGuard( rInit.getMutex() );
+            WeakMap_Impl::iterator aIt = rInit.pWeakMap->find( pTD->pTypeName->buffer );
+            if( aIt != rInit.pWeakMap->end() && static_cast<void *>((*aIt).second) == static_cast<void *>(pTD) )
             {
-                MutexGuard aGuard( rInit.getMutex() );
-                WeakMap_Impl::iterator aIt = rInit.pWeakMap->find( pTD->pTypeName->buffer );
-                if( aIt != rInit.pWeakMap->end() && static_cast<void *>((*aIt).second) == static_cast<void *>(pTD) )
-                {
-                    // remove only if it contains the same object
-                    rInit.pWeakMap->erase( aIt );
-                }
+                // remove only if it contains the same object
+                rInit.pWeakMap->erase( aIt );
             }
         }
+    }
 
-        typelib_typedescription_destructExtendedMembers( pTD );
-        rtl_uString_release( pTD->pTypeName );
+    typelib_typedescription_destructExtendedMembers( pTD );
+    rtl_uString_release( pTD->pTypeName );
 
 #if OSL_DEBUG_LEVEL > 0
-        switch( pTD->eTypeClass )
-        {
-        case typelib_TypeClass_SEQUENCE:
-            osl_atomic_decrement( &rInit.nIndirectTypeDescriptionCount );
-            break;
-        case typelib_TypeClass_STRUCT:
-        case typelib_TypeClass_EXCEPTION:
-            osl_atomic_decrement( &rInit.nCompoundTypeDescriptionCount );
-            break;
-        case typelib_TypeClass_INTERFACE:
-            osl_atomic_decrement( &rInit.nInterfaceTypeDescriptionCount );
-            break;
-        case typelib_TypeClass_INTERFACE_METHOD:
-            osl_atomic_decrement( &rInit.nInterfaceMethodTypeDescriptionCount );
-            break;
-        case typelib_TypeClass_INTERFACE_ATTRIBUTE:
-            osl_atomic_decrement( &rInit.nInterfaceAttributeTypeDescriptionCount );
-            break;
-        case typelib_TypeClass_ENUM:
-            osl_atomic_decrement( &rInit.nEnumTypeDescriptionCount );
-            break;
-        default:
-            osl_atomic_decrement( &rInit.nTypeDescriptionCount );
-        }
+    switch( pTD->eTypeClass )
+    {
+    case typelib_TypeClass_SEQUENCE:
+        osl_atomic_decrement( &rInit.nIndirectTypeDescriptionCount );
+        break;
+    case typelib_TypeClass_STRUCT:
+    case typelib_TypeClass_EXCEPTION:
+        osl_atomic_decrement( &rInit.nCompoundTypeDescriptionCount );
+        break;
+    case typelib_TypeClass_INTERFACE:
+        osl_atomic_decrement( &rInit.nInterfaceTypeDescriptionCount );
+        break;
+    case typelib_TypeClass_INTERFACE_METHOD:
+        osl_atomic_decrement( &rInit.nInterfaceMethodTypeDescriptionCount );
+        break;
+    case typelib_TypeClass_INTERFACE_ATTRIBUTE:
+        osl_atomic_decrement( &rInit.nInterfaceAttributeTypeDescriptionCount );
+        break;
+    case typelib_TypeClass_ENUM:
+        osl_atomic_decrement( &rInit.nEnumTypeDescriptionCount );
+        break;
+    default:
+        osl_atomic_decrement( &rInit.nTypeDescriptionCount );
+    }
 #endif
 
-        freeTypeDescription(pTD);
-    }
+    freeTypeDescription(pTD);
 }
 
 

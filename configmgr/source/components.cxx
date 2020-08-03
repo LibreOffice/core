@@ -271,23 +271,24 @@ void Components::addModification(std::vector<OUString> const & path) {
 
 void Components::writeModifications() {
 
-    if (!data_.modifications.empty()) {
-        switch (modificationTarget_) {
-        case ModificationTarget::None:
-            break;
-        case ModificationTarget::File:
-            if (!writeThread_.is()) {
-                writeThread_ = new WriteThread(
-                    &writeThread_, *this, modificationFileUrl_, data_);
-                writeThread_->launch();
-            }
-            break;
-        case ModificationTarget::Dconf:
-#if ENABLE_DCONF
-            dconf::writeModifications(*this, data_);
-#endif
-            break;
+    if (data_.modifications.empty())
+        return;
+
+    switch (modificationTarget_) {
+    case ModificationTarget::None:
+        break;
+    case ModificationTarget::File:
+        if (!writeThread_.is()) {
+            writeThread_ = new WriteThread(
+                &writeThread_, *this, modificationFileUrl_, data_);
+            writeThread_->launch();
         }
+        break;
+    case ModificationTarget::Dconf:
+#if ENABLE_DCONF
+        dconf::writeModifications(*this, data_);
+#endif
+        break;
     }
 }
 
@@ -349,38 +350,39 @@ void Components::removeExtensionXcuFile(
     assert(modifications != nullptr);
     rtl::Reference< Data::ExtensionXcu > item(
         data_.removeExtensionXcuAdditions(fileUri));
-    if (item.is()) {
-        for (Additions::reverse_iterator i(item->additions.rbegin());
-             i != item->additions.rend(); ++i)
+    if (!item.is())
+        return;
+
+    for (Additions::reverse_iterator i(item->additions.rbegin());
+         i != item->additions.rend(); ++i)
+    {
+        rtl::Reference< Node > parent;
+        NodeMap const * map = &data_.getComponents();
+        rtl::Reference< Node > node;
+        for (auto const& j : *i)
         {
-            rtl::Reference< Node > parent;
-            NodeMap const * map = &data_.getComponents();
-            rtl::Reference< Node > node;
-            for (auto const& j : *i)
-            {
-                parent = node;
-                node = map->findNode(Data::NO_LAYER, j);
-                if (!node.is()) {
-                    break;
-                }
-                map = &node->getMembers();
+            parent = node;
+            node = map->findNode(Data::NO_LAYER, j);
+            if (!node.is()) {
+                break;
             }
-            if (node.is()) {
-                assert(parent.is());
-                if (parent->kind() == Node::KIND_SET) {
-                    assert(
-                        node->kind() == Node::KIND_GROUP ||
-                        node->kind() == Node::KIND_SET);
-                    if (canRemoveFromLayer(item->layer, node)) {
-                        parent->getMembers().erase(i->back());
-                        data_.modifications.remove(*i);
-                        modifications->add(*i);
-                    }
+            map = &node->getMembers();
+        }
+        if (node.is()) {
+            assert(parent.is());
+            if (parent->kind() == Node::KIND_SET) {
+                assert(
+                    node->kind() == Node::KIND_GROUP ||
+                    node->kind() == Node::KIND_SET);
+                if (canRemoveFromLayer(item->layer, node)) {
+                    parent->getMembers().erase(i->back());
+                    data_.modifications.remove(*i);
+                    modifications->add(*i);
                 }
             }
         }
-        writeModifications();
     }
+    writeModifications();
 }
 
 void Components::insertModificationXcuFile(
@@ -825,31 +827,31 @@ void Components::parseXcsXcuIniLayer(
     // Check if ini file exists (otherwise .override would still read global
     // SCHEMA/DATA variables, which could interfere with unrelated environment
     // variables):
-    if (rtl::Bootstrap(url).getHandle() != nullptr) {
-        OUStringBuffer prefix("${.override:");
-        for (sal_Int32 i = 0; i != url.getLength(); ++i) {
-            sal_Unicode c = url[i];
-            switch (c) {
-            case '$':
-            case ':':
-            case '\\':
-                prefix.append('\\');
-                [[fallthrough]];
-            default:
-                prefix.append(c);
-            }
+    if (rtl::Bootstrap(url).getHandle() == nullptr)        return;
+
+    OUStringBuffer prefix("${.override:");
+    for (sal_Int32 i = 0; i != url.getLength(); ++i) {
+        sal_Unicode c = url[i];
+        switch (c) {
+        case '$':
+        case ':':
+        case '\\':
+            prefix.append('\\');
+            [[fallthrough]];
+        default:
+            prefix.append(c);
         }
-        prefix.append(':');
-        OUString urls(prefix.toString() + "SCHEMA}");
-        rtl::Bootstrap::expandMacros(urls);
-        if (!urls.isEmpty()) {
-            parseFileList(layer, &parseXcsFile, urls, false);
-        }
-        urls = prefix.makeStringAndClear() + "DATA}";
-        rtl::Bootstrap::expandMacros(urls);
-        if (!urls.isEmpty()) {
-            parseFileList(layer + 1, &parseXcuFile, urls, recordAdditions);
-        }
+    }
+    prefix.append(':');
+    OUString urls(prefix.toString() + "SCHEMA}");
+    rtl::Bootstrap::expandMacros(urls);
+    if (!urls.isEmpty()) {
+        parseFileList(layer, &parseXcsFile, urls, false);
+    }
+    urls = prefix.makeStringAndClear() + "DATA}";
+    rtl::Bootstrap::expandMacros(urls);
+    if (!urls.isEmpty()) {
+        parseFileList(layer + 1, &parseXcuFile, urls, recordAdditions);
     }
 }
 

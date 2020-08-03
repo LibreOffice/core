@@ -70,27 +70,27 @@ oneToOneMappingWithFlag::~oneToOneMappingWithFlag()
 
 void oneToOneMappingWithFlag::makeIndex()
 {
-    if( !mbHasIndex && mpTableWF )
+    if( mbHasIndex || !mpTableWF )
+        return;
+
+    int current = -1;
+
+    for( size_t k = 0; k < mnSize; k++ )
     {
-        int current = -1;
-
-        for( size_t k = 0; k < mnSize; k++ )
+        const int high = (mpTableWF[k].first >> 8) & 0xFF;
+        const int low  = (mpTableWF[k].first)      & 0xFF;
+        if( high != current )
         {
-            const int high = (mpTableWF[k].first >> 8) & 0xFF;
-            const int low  = (mpTableWF[k].first)      & 0xFF;
-            if( high != current )
-            {
-                current = high;
-                mpIndex[high].reset(new UnicodePairWithFlag const *[256]);
+            current = high;
+            mpIndex[high].reset(new UnicodePairWithFlag const *[256]);
 
-                for (int j = 0; j < 256; ++j)
-                    mpIndex[high][j] = nullptr;
-            }
-            mpIndex[high][low] = &mpTableWF[k];
+            for (int j = 0; j < 256; ++j)
+                mpIndex[high][j] = nullptr;
         }
-
-        mbHasIndex = true;
+        mpIndex[high][low] = &mpTableWF[k];
     }
+
+    mbHasIndex = true;
 }
 
 sal_Unicode oneToOneMappingWithFlag::find( const sal_Unicode nKey ) const
