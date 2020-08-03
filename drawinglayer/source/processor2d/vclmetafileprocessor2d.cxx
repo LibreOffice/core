@@ -26,6 +26,7 @@
 #include <tools/stream.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
+#include <config_global.h>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -2386,7 +2387,11 @@ VclMetafileProcessor2D::CreateBufferDevice(const basegfx::B2DRange& rCandidateRa
     else
         pBufferDevice.disposeAndClear();
 
+#if HAVE_P1155R3
+    return pBufferDevice;
+#else
     return std::move(pBufferDevice);
+#endif
 }
 
 void VclMetafileProcessor2D::processPrimitive2DOnPixelProcessor(
