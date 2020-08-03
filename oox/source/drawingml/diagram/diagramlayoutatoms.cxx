@@ -963,14 +963,11 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                         {
                             fCount -= 1.0;
 
+                            bool bIsDependency = false;
+                            double fFactor = 0;
                             for (const auto& rConstraint : rConstraints)
                             {
                                 if (rConstraint.msForName != aCurrShape->getInternalName())
-                                {
-                                    continue;
-                                }
-
-                                if (aChildrenToShrink.find(rConstraint.msRefForName) == aChildrenToShrink.end())
                                 {
                                     continue;
                                 }
@@ -979,7 +976,21 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                                 {
                                     continue;
                                 }
+                                if ((nDir == XML_fromL || nDir == XML_fromR) && rConstraint.mnType == XML_w)
+                                {
+                                    fFactor = rConstraint.mfFactor;
+                                }
+
                                 if ((nDir == XML_fromT || nDir == XML_fromB) && rConstraint.mnType != XML_h)
+                                {
+                                    continue;
+                                }
+                                if ((nDir == XML_fromT || nDir == XML_fromB) && rConstraint.mnType == XML_h)
+                                {
+                                    fFactor = rConstraint.mfFactor;
+                                }
+
+                                if (aChildrenToShrink.find(rConstraint.msRefForName) == aChildrenToShrink.end())
                                 {
                                     continue;
                                 }
@@ -988,7 +999,28 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                                 // other child which will be scaled.
                                 fCount += rConstraint.mfFactor;
                                 aChildrenToShrinkDeps.insert(aCurrShape->getInternalName());
+                                bIsDependency = true;
                                 break;
+                            }
+
+                            if (!bIsDependency && aCurrShape->getServiceName() == "com.sun.star.drawing.GroupShape")
+                            {
+                                bool bScaleDownEmptySpacing = false;
+                                if (nDir == XML_fromL || nDir == XML_fromR)
+                                {
+                                    oox::OptValue<sal_Int32> oWidth = findProperty(aProperties, aCurrShape->getInternalName(), XML_w);
+                                    bScaleDownEmptySpacing = oWidth.has() && oWidth.get() > 0;
+                                }
+                                if (!bScaleDownEmptySpacing && (nDir == XML_fromT || nDir == XML_fromB))
+                                {
+                                    oox::OptValue<sal_Int32> oHeight = findProperty(aProperties, aCurrShape->getInternalName(), XML_h);
+                                    bScaleDownEmptySpacing = oHeight.has() && oHeight.get() > 0;
+                                }
+                                if (bScaleDownEmptySpacing && aCurrShape->getChildren().empty())
+                                {
+                                    fCount += fFactor;
+                                    aChildrenToShrinkDeps.insert(aCurrShape->getInternalName());
+                                }
                             }
                         }
                     }
@@ -1083,6 +1115,14 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                     aCurrPos.Y = (rShape->getSize().Height - aSize.Height) / 2;
                 if (nIncY)
                     aCurrPos.X = (rShape->getSize().Width - aSize.Width) / 2;
+                if (aCurrPos.X < 0)
+                {
+                    aCurrPos.X = 0;
+                }
+                if (aCurrPos.Y < 0)
+                {
+                    aCurrPos.Y = 0;
+                }
 
                 aCurrShape->setPosition(aCurrPos);
 
