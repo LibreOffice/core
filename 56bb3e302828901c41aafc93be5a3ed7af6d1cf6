@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b3b4f1ed_76459331",
+        "filename": "sw/inc/inspectorproperties.hrc",
+        "patchSetId": 7
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-08-03T17:13:02Z",
+      "side": 1,
+      "message": "How about dropping the \"Grab Bag\"? No one understand this tech-talk (but user likely never face it anyway).",
+      "range": {
+        "startLine": 79,
+        "startChar": 114,
+        "endLine": 79,
+        "endChar": 122
+      },
+      "revId": "56bb3e302828901c41aafc93be5a3ed7af6d1cf6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
