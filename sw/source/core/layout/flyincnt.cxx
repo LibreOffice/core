@@ -63,13 +63,13 @@ void SwFlyInContentFrame::SetRefPoint( const Point& rPoint,
                                  const Point& rRelPos )
 {
     // OD 2004-05-27 #i26791# - member <aRelPos> moved to <SwAnchoredObject>
-    OSL_ENSURE( rPoint != aRef || rRelAttr != GetCurrRelPos(), "SetRefPoint: no change" );
+    OSL_ENSURE( rPoint != m_aRef || rRelAttr != GetCurrRelPos(), "SetRefPoint: no change" );
     std::unique_ptr<SwFlyNotify, o3tl::default_delete<SwFlyNotify>> xNotify;
     // No notify at a locked fly frame, if a fly frame is locked, there's
     // already a SwFlyNotify object on the stack (MakeAll).
     if( !IsLocked() )
         xNotify.reset(new SwFlyNotify( this ));
-    aRef = rPoint;
+    m_aRef = rPoint;
     SetCurrRelPos( rRelAttr );
     SwRectFnSet aRectFnSet(GetAnchorFrame());
 

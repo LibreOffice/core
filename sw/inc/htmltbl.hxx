@@ -37,47 +37,47 @@ class SwFrameFormat;
 
 class SwHTMLTableLayoutCnts
 {
-    std::shared_ptr<SwHTMLTableLayoutCnts> xNext;   ///< The next content.
+    std::shared_ptr<SwHTMLTableLayoutCnts> m_xNext;   ///< The next content.
 
     /// Only one of the following two pointers may be set!
-    SwTableBox *pBox;               ///< A Box.
-    std::shared_ptr<SwHTMLTableLayout> xTable;      ///< A "table within a table".
+    SwTableBox *m_pBox;               ///< A Box.
+    std::shared_ptr<SwHTMLTableLayout> m_xTable;      ///< A "table within a table".
 
     /** During first run there are still no boxes. In this case
        pStartNode is used instead of pBox. */
-    const SwStartNode *pStartNode;
+    const SwStartNode *m_pStartNode;
 
     /** The following counters indicate how often a pass has been
         done for this content. Therefore they are compared against
         a reference value. If 255 is reached the continue with 0.
         This avoids reinitialization on every resize. */
-    sal_uInt8 nPass1Done;           ///< How many times has Pass 1 been called?
-    sal_uInt8 nWidthSet;            ///< How many times has the width been set?
+    sal_uInt8 m_nPass1Done;           ///< How many times has Pass 1 been called?
+    sal_uInt8 m_nWidthSet;            ///< How many times has the width been set?
 
-    bool bNoBreakTag;           ///< <NOBR>-Tag over complete content.
+    bool m_bNoBreakTag;           ///< <NOBR>-Tag over complete content.
 
 public:
 
     SwHTMLTableLayoutCnts(const SwStartNode* pSttNd, std::shared_ptr<SwHTMLTableLayout> const& rTab,
                           bool bNoBreakTag, std::shared_ptr<SwHTMLTableLayoutCnts> const& rNxt);
 
-    void SetTableBox( SwTableBox *pBx ) { pBox = pBx; }
-    SwTableBox *GetTableBox() const { return pBox; }
+    void SetTableBox( SwTableBox *pBx ) { m_pBox = pBx; }
+    SwTableBox *GetTableBox() const { return m_pBox; }
 
-    SwHTMLTableLayout *GetTable() const { return xTable.get(); }
+    SwHTMLTableLayout *GetTable() const { return m_xTable.get(); }
 
     const SwStartNode *GetStartNode() const;
 
     /// Calculation of next node.
-    const std::shared_ptr<SwHTMLTableLayoutCnts>& GetNext() const { return xNext; }
+    const std::shared_ptr<SwHTMLTableLayoutCnts>& GetNext() const { return m_xNext; }
 
-    void SetWidthSet( sal_uInt8 nRef ) { nWidthSet = nRef; }
-    bool IsWidthSet( sal_uInt8 nRef ) const { return nRef==nWidthSet; }
+    void SetWidthSet( sal_uInt8 nRef ) { m_nWidthSet = nRef; }
+    bool IsWidthSet( sal_uInt8 nRef ) const { return nRef==m_nWidthSet; }
 
-    void SetPass1Done( sal_uInt8 nRef ) { nPass1Done = nRef; }
-    bool IsPass1Done( sal_uInt8 nRef ) const { return nRef==nPass1Done; }
+    void SetPass1Done( sal_uInt8 nRef ) { m_nPass1Done = nRef; }
+    bool IsPass1Done( sal_uInt8 nRef ) const { return nRef==m_nPass1Done; }
 
-    bool HasNoBreakTag() const { return bNoBreakTag; }
+    bool HasNoBreakTag() const { return m_bNoBreakTag; }
 };
 
 class SwHTMLTableLayoutCell
@@ -119,19 +119,19 @@ class SwHTMLTableLayoutColumn
 {
 
     /// Interim values of AutoLayoutPass1,
-    sal_uLong nMinNoAlign, nMaxNoAlign, nAbsMinNoAlign;
+    sal_uLong m_nMinNoAlign, m_nMaxNoAlign, m_nAbsMinNoAlign;
 
     /// Results of AutoLayoutPass1
-    sal_uLong nMin, nMax;
+    sal_uLong m_nMin, m_nMax;
 
     /// Results of Pass 2.
-    sal_uInt16 nAbsColWidth;                ///< In Twips.
-    sal_uInt16 nRelColWidth;                ///< In Twips or relative to USHRT_MAX.
+    sal_uInt16 m_nAbsColWidth;                ///< In Twips.
+    sal_uInt16 m_nRelColWidth;                ///< In Twips or relative to USHRT_MAX.
 
-    sal_uInt16 nWidthOption;                ///< Options of <COL> or <TD>/<TH>.
+    sal_uInt16 m_nWidthOption;                ///< Options of <COL> or <TD>/<TH>.
 
-    bool bRelWidthOption : 1;
-    bool bLeftBorder : 1;
+    bool m_bRelWidthOption : 1;
+    bool m_bLeftBorder : 1;
 
 public:
 
@@ -141,29 +141,29 @@ public:
     inline void MergeCellWidthOption( sal_uInt16 nWidth, bool bPercent );
     inline void SetWidthOption( sal_uInt16 nWidth );
 
-    sal_uInt16 GetWidthOption() const { return nWidthOption; }
-    bool IsRelWidthOption() const { return bRelWidthOption; }
+    sal_uInt16 GetWidthOption() const { return m_nWidthOption; }
+    bool IsRelWidthOption() const { return m_bRelWidthOption; }
 
     inline void MergeMinMaxNoAlign( sal_uLong nMin, sal_uLong nMax, sal_uLong nAbsMin );
-    sal_uLong GetMinNoAlign() const { return nMinNoAlign; }
-    sal_uLong GetMaxNoAlign() const { return nMaxNoAlign; }
-    sal_uLong GetAbsMinNoAlign() const { return nAbsMinNoAlign; }
+    sal_uLong GetMinNoAlign() const { return m_nMinNoAlign; }
+    sal_uLong GetMaxNoAlign() const { return m_nMaxNoAlign; }
+    sal_uLong GetAbsMinNoAlign() const { return m_nAbsMinNoAlign; }
     inline void ClearPass1Info( bool bWidthOpt );
 
     inline void SetMinMax( sal_uLong nMin, sal_uLong nMax );
-    void SetMax( sal_uLong nVal ) { nMax = nVal; }
-    void AddToMin( sal_uLong nVal ) { nMin += nVal; }
-    void AddToMax( sal_uLong nVal ) { nMax += nVal; }
-    sal_uLong GetMin() const { return nMin; }
-    sal_uLong GetMax() const { return nMax; }
+    void SetMax( sal_uLong nVal ) { m_nMax = nVal; }
+    void AddToMin( sal_uLong nVal ) { m_nMin += nVal; }
+    void AddToMax( sal_uLong nVal ) { m_nMax += nVal; }
+    sal_uLong GetMin() const { return m_nMin; }
+    sal_uLong GetMax() const { return m_nMax; }
 
-    void SetAbsColWidth( sal_uInt16 nWidth ) { nAbsColWidth = nWidth; }
-    sal_uInt16 GetAbsColWidth() const { return nAbsColWidth; }
+    void SetAbsColWidth( sal_uInt16 nWidth ) { m_nAbsColWidth = nWidth; }
+    sal_uInt16 GetAbsColWidth() const { return m_nAbsColWidth; }
 
-    void SetRelColWidth( sal_uInt16 nWidth ) { nRelColWidth = nWidth; }
-    sal_uInt16 GetRelColWidth() const { return nRelColWidth; }
+    void SetRelColWidth( sal_uInt16 nWidth ) { m_nRelColWidth = nWidth; }
+    sal_uInt16 GetRelColWidth() const { return m_nRelColWidth; }
 
-    bool HasLeftBorder() const { return bLeftBorder; }
+    bool HasLeftBorder() const { return m_bLeftBorder; }
 };
 
 class SwHTMLTableLayout
@@ -348,40 +348,40 @@ inline void SwHTMLTableLayoutCell::SetProtected()
 inline void SwHTMLTableLayoutColumn::MergeMinMaxNoAlign( sal_uLong nCMin,
     sal_uLong nCMax,    sal_uLong nAbsMin )
 {
-    if( nCMin > nMinNoAlign )
-        nMinNoAlign = nCMin;
-    if( nCMax > nMaxNoAlign )
-        nMaxNoAlign = nCMax;
-    if( nAbsMin > nAbsMinNoAlign )
-        nAbsMinNoAlign = nAbsMin;
+    if( nCMin > m_nMinNoAlign )
+        m_nMinNoAlign = nCMin;
+    if( nCMax > m_nMaxNoAlign )
+        m_nMaxNoAlign = nCMax;
+    if( nAbsMin > m_nAbsMinNoAlign )
+        m_nAbsMinNoAlign = nAbsMin;
 }
 
 inline void SwHTMLTableLayoutColumn::ClearPass1Info( bool bWidthOpt )
 {
-    nMinNoAlign = nMaxNoAlign = nAbsMinNoAlign = MINLAY;
-    nMin = nMax = 0;
+    m_nMinNoAlign = m_nMaxNoAlign = m_nAbsMinNoAlign = MINLAY;
+    m_nMin = m_nMax = 0;
     if( bWidthOpt )
     {
-        nWidthOption = 0;
-        bRelWidthOption = false;
+        m_nWidthOption = 0;
+        m_bRelWidthOption = false;
     }
 }
 
 inline void SwHTMLTableLayoutColumn::MergeCellWidthOption(
     sal_uInt16 nWidth, bool bRel )
 {
-    if( !nWidthOption ||
-        (bRel==bRelWidthOption && nWidthOption < nWidth) )
+    if( !m_nWidthOption ||
+        (bRel==m_bRelWidthOption && m_nWidthOption < nWidth) )
     {
-        nWidthOption = nWidth;
-        bRelWidthOption = bRel;
+        m_nWidthOption = nWidth;
+        m_bRelWidthOption = bRel;
     }
 }
 
 inline void SwHTMLTableLayoutColumn::SetMinMax( sal_uLong nMn, sal_uLong nMx )
 {
-    nMin = nMn;
-    nMax = nMx;
+    m_nMin = nMn;
+    m_nMax = nMx;
 }
 
 inline sal_uInt16 SwHTMLTableLayout::GetInhCellSpace( sal_uInt16 nCol,
@@ -403,8 +403,8 @@ inline SwHTMLTableLayoutColumn *SwHTMLTableLayout::GetColumn( sal_uInt16 nCol ) 
 
 inline void SwHTMLTableLayoutColumn::SetWidthOption( sal_uInt16 nWidth )
 {
-    nWidthOption = nWidth;
-    bRelWidthOption = true;
+    m_nWidthOption = nWidth;
+    m_bRelWidthOption = true;
 }
 
 inline void SwHTMLTableLayout::SetColumn( std::unique_ptr<SwHTMLTableLayoutColumn> pCol, sal_uInt16 nCol )
