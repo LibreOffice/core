@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a69e9f40_fcd246c8",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-08-03T13:23:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39e089cd_e6172bb1",
+      "range": {
+        "startLine": 81,
+        "startChar": 54,
+        "endLine": 81,
+        "endChar": 55
+      },
+      "revId": "9edf3eb2bcaf8d820b8807b6ddd816b5bdc69d57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2411b571_b9dbb3d7",
         "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "b97961e1_ea83d622",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-08-03T13:23:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2411b571_b9dbb3d7",
+      "range": {
+        "startLine": 298,
+        "startChar": 46,
+        "endLine": 298,
+        "endChar": 47
+      },
+      "revId": "9edf3eb2bcaf8d820b8807b6ddd816b5bdc69d57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1930aa9e_01986fff",
         "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
         "patchSetId": 3
@@ -68,6 +116,30 @@
       "revId": "9edf3eb2bcaf8d820b8807b6ddd816b5bdc69d57",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4323a3df_b2b08b32",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-08-03T13:23:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1930aa9e_01986fff",
+      "range": {
+        "startLine": 301,
+        "startChar": 11,
+        "endLine": 301,
+        "endChar": 22
+      },
+      "revId": "9edf3eb2bcaf8d820b8807b6ddd816b5bdc69d57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
