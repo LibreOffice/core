@@ -134,19 +134,19 @@ namespace ucb::ucp::ext
             }
         }
 
-        if ( m_eExtContentType != E_ROOT )
-        {
-            const OUString sRootURL = ContentProvider::getRootURL();
-            m_sExtensionId = sURL.copy( sRootURL.getLength() );
+        if ( m_eExtContentType == E_ROOT )
+            return;
 
-            const sal_Int32 nNextSep = m_sExtensionId.indexOf( '/' );
-            if ( nNextSep > -1 )
-            {
-                m_sPathIntoExtension = m_sExtensionId.copy( nNextSep + 1 );
-                m_sExtensionId = m_sExtensionId.copy( 0, nNextSep );
-            }
-            m_sExtensionId = Content::decodeIdentifier( m_sExtensionId );
+        const OUString sRootURL = ContentProvider::getRootURL();
+        m_sExtensionId = sURL.copy( sRootURL.getLength() );
+
+        const sal_Int32 nNextSep = m_sExtensionId.indexOf( '/' );
+        if ( nNextSep > -1 )
+        {
+            m_sPathIntoExtension = m_sExtensionId.copy( nNextSep + 1 );
+            m_sExtensionId = m_sExtensionId.copy( 0, nNextSep );
         }
+        m_sExtensionId = Content::decodeIdentifier( m_sExtensionId );
     }
 
 
@@ -607,19 +607,19 @@ namespace ucb::ucp::ext
             return;
 
         m_aContentType = ContentProvider::getArtificialNodeContentType();
-        if ( m_eExtContentType == E_EXTENSION_CONTENT )
+        if ( m_eExtContentType != E_EXTENSION_CONTENT )
+            return;
+
+        try
         {
-            try
-            {
-                Sequence< Property > aProps(1);
-                aProps[0].Name = "ContentType";
-                Reference< XRow > xRow( getPropertyValues( aProps, nullptr ), UNO_SET_THROW );
-                m_aContentType = xRow->getString(1);
-            }
-            catch( const Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION("ucb.ucp.ext");
-            }
+            Sequence< Property > aProps(1);
+            aProps[0].Name = "ContentType";
+            Reference< XRow > xRow( getPropertyValues( aProps, nullptr ), UNO_SET_THROW );
+            m_aContentType = xRow->getString(1);
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION("ucb.ucp.ext");
         }
     }
 

@@ -1259,137 +1259,137 @@ namespace cmis
         }
 
         // For transient content, the URL is the one of the parent
-        if ( m_bTransient )
+        if ( !m_bTransient )
+            return;
+
+        OUString sNewPath;
+
+        // Try to get the object from the server if there is any
+        libcmis::FolderPtr pFolder;
+        try
         {
-            OUString sNewPath;
+            pFolder = boost::dynamic_pointer_cast< libcmis::Folder >( getObject( xEnv ) );
+        }
+        catch ( const libcmis::Exception& )
+        {
+        }
 
-            // Try to get the object from the server if there is any
-            libcmis::FolderPtr pFolder;
-            try
+        if ( pFolder == nullptr )
+            return;
+
+        libcmis::ObjectPtr object;
+        map< string, libcmis::PropertyPtr >::iterator it = m_pObjectProps.find( "cmis:name" );
+        if ( it == m_pObjectProps.end( ) )
+        {
+            ucbhelper::cancelCommandExecution( uno::makeAny
+                ( uno::RuntimeException( "Missing name property",
+                    static_cast< cppu::OWeakObject * >( this ) ) ),
+                xEnv );
+        }
+        string newName = it->second->getStrings( ).front( );
+        string newPath = OUSTR_TO_STDSTR( m_sObjectPath );
+        if ( !newPath.empty( ) && newPath[ newPath.size( ) - 1 ] != '/' )
+            newPath += "/";
+        newPath += newName;
+        try
+        {
+            if ( !m_sObjectId.isEmpty( ) )
+                object = getSession( xEnv )->getObject( OUSTR_TO_STDSTR( m_sObjectId) );
+            else
+                object = getSession( xEnv )->getObjectByPath( newPath );
+            sNewPath = STD_TO_OUSTR( newPath );
+        }
+        catch ( const libcmis::Exception& )
+        {
+            // Nothing matched the path
+        }
+
+        if ( nullptr != object.get( ) )
+        {
+            // Are the base type matching?
+            if ( object->getBaseType( ) != m_pObjectType->getBaseType( )->getId() )
             {
-                pFolder = boost::dynamic_pointer_cast< libcmis::Folder >( getObject( xEnv ) );
-            }
-            catch ( const libcmis::Exception& )
-            {
+                ucbhelper::cancelCommandExecution( uno::makeAny
+                    ( uno::RuntimeException( "Can't change a folder into a document and vice-versa.",
+                        static_cast< cppu::OWeakObject * >( this ) ) ),
+                    xEnv );
             }
 
-            if ( pFolder != nullptr )
+            // Update the existing object if it's a document
+            libcmis::Document* document = dynamic_cast< libcmis::Document* >( object.get( ) );
+            if ( nullptr != document )
             {
-                libcmis::ObjectPtr object;
-                map< string, libcmis::PropertyPtr >::iterator it = m_pObjectProps.find( "cmis:name" );
-                if ( it == m_pObjectProps.end( ) )
+                boost::shared_ptr< ostream > pOut( new ostringstream ( ios_base::binary | ios_base::in | ios_base::out ) );
+                uno::Reference < io::XOutputStream > xOutput = new StdOutputStream( pOut );
+                copyData( xInputStream, xOutput );
+                try
+                {
+                    document->setContentStream( pOut, OUSTR_TO_STDSTR( rMimeType ), string( ), bReplaceExisting );
+                }
+                catch ( const libcmis::Exception& )
                 {
                     ucbhelper::cancelCommandExecution( uno::makeAny
-                        ( uno::RuntimeException( "Missing name property",
+                        ( uno::RuntimeException( "Error when setting document content",
                             static_cast< cppu::OWeakObject * >( this ) ) ),
                         xEnv );
                 }
-                string newName = it->second->getStrings( ).front( );
-                string newPath = OUSTR_TO_STDSTR( m_sObjectPath );
-                if ( !newPath.empty( ) && newPath[ newPath.size( ) - 1 ] != '/' )
-                    newPath += "/";
-                newPath += newName;
+            }
+        }
+        else
+        {
+            // We need to create a brand new object... either folder or document
+            bool bIsFolder = getObjectType( xEnv )->getBaseType( )->getId( ) == "cmis:folder";
+            setCmisProperty( "cmis:objectTypeId", getObjectType( xEnv )->getId( ), xEnv );
+
+            if ( bIsFolder )
+            {
                 try
                 {
-                    if ( !m_sObjectId.isEmpty( ) )
-                        object = getSession( xEnv )->getObject( OUSTR_TO_STDSTR( m_sObjectId) );
-                    else
-                        object = getSession( xEnv )->getObjectByPath( newPath );
+                    pFolder->createFolder( m_pObjectProps );
                     sNewPath = STD_TO_OUSTR( newPath );
                 }
                 catch ( const libcmis::Exception& )
                 {
-                    // Nothing matched the path
+                    ucbhelper::cancelCommandExecution( uno::makeAny
+                        ( uno::RuntimeException( "Error when creating folder",
+                            static_cast< cppu::OWeakObject * >( this ) ) ),
+                        xEnv );
                 }
-
-                if ( nullptr != object.get( ) )
+            }
+            else
+            {
+                boost::shared_ptr< ostream > pOut( new ostringstream ( ios_base::binary | ios_base::in | ios_base::out ) );
+                uno::Reference < io::XOutputStream > xOutput = new StdOutputStream( pOut );
+                copyData( xInputStream, xOutput );
+                try
                 {
-                    // Are the base type matching?
-                    if ( object->getBaseType( ) != m_pObjectType->getBaseType( )->getId() )
-                    {
-                        ucbhelper::cancelCommandExecution( uno::makeAny
-                            ( uno::RuntimeException( "Can't change a folder into a document and vice-versa.",
-                                static_cast< cppu::OWeakObject * >( this ) ) ),
-                            xEnv );
-                    }
-
-                    // Update the existing object if it's a document
-                    libcmis::Document* document = dynamic_cast< libcmis::Document* >( object.get( ) );
-                    if ( nullptr != document )
-                    {
-                        boost::shared_ptr< ostream > pOut( new ostringstream ( ios_base::binary | ios_base::in | ios_base::out ) );
-                        uno::Reference < io::XOutputStream > xOutput = new StdOutputStream( pOut );
-                        copyData( xInputStream, xOutput );
-                        try
-                        {
-                            document->setContentStream( pOut, OUSTR_TO_STDSTR( rMimeType ), string( ), bReplaceExisting );
-                        }
-                        catch ( const libcmis::Exception& )
-                        {
-                            ucbhelper::cancelCommandExecution( uno::makeAny
-                                ( uno::RuntimeException( "Error when setting document content",
-                                    static_cast< cppu::OWeakObject * >( this ) ) ),
-                                xEnv );
-                        }
-                    }
+                    pFolder->createDocument( m_pObjectProps, pOut, OUSTR_TO_STDSTR( rMimeType ), string() );
+                    sNewPath = STD_TO_OUSTR( newPath );
                 }
-                else
+                catch ( const libcmis::Exception& )
                 {
-                    // We need to create a brand new object... either folder or document
-                    bool bIsFolder = getObjectType( xEnv )->getBaseType( )->getId( ) == "cmis:folder";
-                    setCmisProperty( "cmis:objectTypeId", getObjectType( xEnv )->getId( ), xEnv );
-
-                    if ( bIsFolder )
-                    {
-                        try
-                        {
-                            pFolder->createFolder( m_pObjectProps );
-                            sNewPath = STD_TO_OUSTR( newPath );
-                        }
-                        catch ( const libcmis::Exception& )
-                        {
-                            ucbhelper::cancelCommandExecution( uno::makeAny
-                                ( uno::RuntimeException( "Error when creating folder",
-                                    static_cast< cppu::OWeakObject * >( this ) ) ),
-                                xEnv );
-                        }
-                    }
-                    else
-                    {
-                        boost::shared_ptr< ostream > pOut( new ostringstream ( ios_base::binary | ios_base::in | ios_base::out ) );
-                        uno::Reference < io::XOutputStream > xOutput = new StdOutputStream( pOut );
-                        copyData( xInputStream, xOutput );
-                        try
-                        {
-                            pFolder->createDocument( m_pObjectProps, pOut, OUSTR_TO_STDSTR( rMimeType ), string() );
-                            sNewPath = STD_TO_OUSTR( newPath );
-                        }
-                        catch ( const libcmis::Exception& )
-                        {
-                            ucbhelper::cancelCommandExecution( uno::makeAny
-                                ( uno::RuntimeException( "Error when creating document",
-                                    static_cast< cppu::OWeakObject * >( this ) ) ),
-                                xEnv );
-                        }
-                    }
-                }
-
-                if ( !sNewPath.isEmpty( ) || !m_sObjectId.isEmpty( ) )
-                {
-                    // Update the current content: it's no longer transient
-                    m_sObjectPath = sNewPath;
-                    URL aUrl( m_sURL );
-                    aUrl.setObjectPath( m_sObjectPath );
-                    aUrl.setObjectId( m_sObjectId );
-                    m_sURL = aUrl.asString( );
-                    m_pObject.reset( );
-                    m_pObjectType.reset( );
-                    m_pObjectProps.clear( );
-                    m_bTransient = false;
-                    inserted();
+                    ucbhelper::cancelCommandExecution( uno::makeAny
+                        ( uno::RuntimeException( "Error when creating document",
+                            static_cast< cppu::OWeakObject * >( this ) ) ),
+                        xEnv );
                 }
             }
         }
+
+        if ( sNewPath.isEmpty( ) && m_sObjectId.isEmpty( ) )
+            return;
+
+        // Update the current content: it's no longer transient
+        m_sObjectPath = sNewPath;
+        URL aUrl( m_sURL );
+        aUrl.setObjectPath( m_sObjectPath );
+        aUrl.setObjectId( m_sObjectId );
+        m_sURL = aUrl.asString( );
+        m_pObject.reset( );
+        m_pObjectType.reset( );
+        m_pObjectProps.clear( );
+        m_bTransient = false;
+        inserted();
     }
 
     const int TRANSFER_BUFFER_SIZE = 65536;
@@ -2043,28 +2043,28 @@ namespace cmis
 
     void Content::setCmisProperty(const std::string& rName, const std::string& rValue, const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     {
-        if ( getObjectType( xEnv ).get( ) )
+        if ( !getObjectType( xEnv ).get( ) )
+            return;
+
+        map< string, libcmis::PropertyPtr >::iterator propIt = m_pObjectProps.find(rName);
+        vector< string > values;
+        values.push_back(rValue);
+
+        if ( propIt == m_pObjectProps.end( ) && getObjectType( xEnv ).get( ) )
         {
-            map< string, libcmis::PropertyPtr >::iterator propIt = m_pObjectProps.find(rName);
-            vector< string > values;
-            values.push_back(rValue);
+            map< string, libcmis::PropertyTypePtr > propsTypes = getObjectType( xEnv )->getPropertiesTypes( );
+            map< string, libcmis::PropertyTypePtr >::iterator typeIt = propsTypes.find(rName);
 
-            if ( propIt == m_pObjectProps.end( ) && getObjectType( xEnv ).get( ) )
+            if ( typeIt != propsTypes.end( ) )
             {
-                map< string, libcmis::PropertyTypePtr > propsTypes = getObjectType( xEnv )->getPropertiesTypes( );
-                map< string, libcmis::PropertyTypePtr >::iterator typeIt = propsTypes.find(rName);
-
-                if ( typeIt != propsTypes.end( ) )
-                {
-                    libcmis::PropertyTypePtr propType = typeIt->second;
-                    libcmis::PropertyPtr property( new libcmis::Property( propType, values ) );
-                    m_pObjectProps.insert(pair< string, libcmis::PropertyPtr >(rName, property));
-                }
+                libcmis::PropertyTypePtr propType = typeIt->second;
+                libcmis::PropertyPtr property( new libcmis::Property( propType, values ) );
+                m_pObjectProps.insert(pair< string, libcmis::PropertyPtr >(rName, property));
             }
-            else if ( propIt != m_pObjectProps.end( ) )
-            {
-                propIt->second->setValues( values );
-            }
+        }
+        else if ( propIt != m_pObjectProps.end( ) )
+        {
+            propIt->second->setValues( values );
         }
     }
 }

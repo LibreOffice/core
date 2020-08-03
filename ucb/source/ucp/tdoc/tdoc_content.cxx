@@ -1749,19 +1749,19 @@ void Content::notifyChildRemoved( const OUString & rRelativeChildUri )
     uno::Reference< ucb::XContent > xChild
         = queryChildContent( rRelativeChildUri );
 
-    if ( xChild.is() )
-    {
-        // callback follows!
-        aGuard.clear();
+    if ( !xChild.is() )
+        return;
 
-        // Notify "REMOVED" event.
-        ucb::ContentEvent aEvt(
-            static_cast< cppu::OWeakObject * >( this ),
-            ucb::ContentAction::REMOVED,
-            xChild,
-            getIdentifier() );
-        notifyContentEvent( aEvt );
-    }
+    // callback follows!
+    aGuard.clear();
+
+    // Notify "REMOVED" event.
+    ucb::ContentEvent aEvt(
+        static_cast< cppu::OWeakObject * >( this ),
+        ucb::ContentAction::REMOVED,
+        xChild,
+        getIdentifier() );
+    notifyContentEvent( aEvt );
 }
 
 
@@ -1773,19 +1773,19 @@ void Content::notifyChildInserted( const OUString & rRelativeChildUri )
     uno::Reference< ucb::XContent > xChild
         = queryChildContent( rRelativeChildUri );
 
-    if ( xChild.is() )
-    {
-        // callback follows!
-        aGuard.clear();
+    if ( !xChild.is() )
+        return;
 
-        // Notify "INSERTED" event.
-        ucb::ContentEvent aEvt(
-            static_cast< cppu::OWeakObject * >( this ),
-            ucb::ContentAction::INSERTED,
-            xChild,
-            getIdentifier() );
-        notifyContentEvent( aEvt );
-    }
+    // callback follows!
+    aGuard.clear();
+
+    // Notify "INSERTED" event.
+    ucb::ContentEvent aEvt(
+        static_cast< cppu::OWeakObject * >( this ),
+        ucb::ContentAction::INSERTED,
+        xChild,
+        getIdentifier() );
+    notifyContentEvent( aEvt );
 }
 
 
@@ -2030,75 +2030,74 @@ void Content::transfer(
     // Remove source, if requested
 
 
-    if ( rInfo.MoveData )
+    if ( !rInfo.MoveData )
+        return;
+
+    rtl::Reference< Content > xSource;
+    try
     {
-        rtl::Reference< Content > xSource;
-        try
+        uno::Reference< ucb::XContentIdentifier >
+            xSourceId = new ::ucbhelper::ContentIdentifier( rInfo.SourceURL );
+
+        // Note: The static cast is okay here, because its sure
+        //       that m_xProvider is always the ContentProvider.
+        xSource = static_cast< Content * >(
+            m_xProvider->queryContent( xSourceId ).get() );
+    }
+    catch ( ucb::IllegalIdentifierException const & )
+    {
+        // queryContent
+    }
+
+    if ( !xSource.is() )
+    {
+        uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            uno::Reference< ucb::XContentIdentifier >
-                xSourceId = new ::ucbhelper::ContentIdentifier( rInfo.SourceURL );
+            {"Uri", uno::Any(rInfo.SourceURL)}
+        }));
+        ucbhelper::cancelCommandExecution(
+            ucb::IOErrorCode_CANT_READ,
+            aArgs,
+            xEnv,
+            "Cannot instantiate target object!",
+            this );
+        // Unreachable
+    }
 
-            // Note: The static cast is okay here, because its sure
-            //       that m_xProvider is always the ContentProvider.
-            xSource = static_cast< Content * >(
-                m_xProvider->queryContent( xSourceId ).get() );
-        }
-        catch ( ucb::IllegalIdentifierException const & )
+    // Propagate destruction (recursively).
+    xSource->destroy( true, xEnv );
+
+    // Remove all persistent data of source and its children.
+    if ( !xSource->removeData() )
+    {
+        uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            // queryContent
-        }
+            {"Uri", uno::Any(rInfo.SourceURL)}
+        }));
+        ucbhelper::cancelCommandExecution(
+            ucb::IOErrorCode_CANT_WRITE,
+            aArgs,
+            xEnv,
+            "Cannot remove persistent data of source object!",
+            this );
+        // Unreachable
+    }
 
-        if ( !xSource.is() )
-        {
-            uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
-            {
-                {"Uri", uno::Any(rInfo.SourceURL)}
-            }));
-            ucbhelper::cancelCommandExecution(
-                ucb::IOErrorCode_CANT_READ,
-                aArgs,
-                xEnv,
-                "Cannot instantiate target object!",
-                this );
-            // Unreachable
-        }
+    // Remove own and all children's Additional Core Properties.
+    if ( xSource->removeAdditionalPropertySet() )
+        return;
 
-        // Propagate destruction (recursively).
-        xSource->destroy( true, xEnv );
-
-        // Remove all persistent data of source and its children.
-        if ( !xSource->removeData() )
-        {
-            uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
-            {
-                {"Uri", uno::Any(rInfo.SourceURL)}
-            }));
-            ucbhelper::cancelCommandExecution(
-                ucb::IOErrorCode_CANT_WRITE,
-                aArgs,
-                xEnv,
-                "Cannot remove persistent data of source object!",
-                this );
-            // Unreachable
-        }
-
-        // Remove own and all children's Additional Core Properties.
-        if ( !xSource->removeAdditionalPropertySet() )
-        {
-            uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
-            {
-                {"Uri", uno::Any(rInfo.SourceURL)}
-            }));
-            ucbhelper::cancelCommandExecution(
-                ucb::IOErrorCode_CANT_WRITE,
-                aArgs,
-                xEnv,
-                "Cannot remove additional properties of source object!",
-                this );
-            // Unreachable
-        }
-
-    } // rInfo.MoveData
+    uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+    {
+        {"Uri", uno::Any(rInfo.SourceURL)}
+    }));
+    ucbhelper::cancelCommandExecution(
+        ucb::IOErrorCode_CANT_WRITE,
+        aArgs,
+        xEnv,
+        "Cannot remove additional properties of source object!",
+        this );
+    // Unreachable
 }
 
 
