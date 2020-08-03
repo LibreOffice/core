@@ -1418,11 +1418,6 @@ short SvxMacroAssignDialog::Execute()
     return m_xDialog->run();
 }
 
-short AbstractAboutDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
 short AbstractAdditionsDialog_Impl::Execute()
 {
     return m_xDlg->run();
@@ -1691,10 +1686,10 @@ VclPtr<AbstractAdditionsDialog> AbstractDialogFactory_Impl::CreateAdditionsDialo
 #endif
 }
 
-VclPtr<AbstractAboutDialog>
+VclPtr<VclAbstractDialog>
 AbstractDialogFactory_Impl::CreateAboutDialog(weld::Window* pParent)
 {
-    return VclPtr<AbstractAboutDialog_Impl>::Create(
+    return VclPtr<CuiAbstractController_Impl>::Create(
         std::make_unique<AboutDialog>(pParent));
 }
 
