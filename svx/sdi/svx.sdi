@@ -124,7 +124,7 @@ SfxBoolItem AlignCenter SID_OBJECT_ALIGN_CENTER
 ]
 
 
-SfxVoidItem AlignDown SID_OBJECT_ALIGN_DOWN
+SfxBoolItem AlignDown SID_OBJECT_ALIGN_DOWN
 ()
 [
     AutoUpdate = FALSE,
@@ -179,7 +179,7 @@ SvxAdjustItem Alignment SID_ATTR_PARA_ADJUST
 ]
 
 
-SfxVoidItem AlignMiddle SID_OBJECT_ALIGN_MIDDLE
+SfxBoolItem AlignMiddle SID_OBJECT_ALIGN_MIDDLE
 ()
 [
     AutoUpdate = FALSE,
@@ -215,7 +215,7 @@ SfxBoolItem ObjectAlignRight SID_OBJECT_ALIGN_RIGHT
 ]
 
 
-SfxVoidItem AlignUp SID_OBJECT_ALIGN_UP
+SfxBoolItem AlignUp SID_OBJECT_ALIGN_UP
 ()
 [
     AutoUpdate = FALSE,
