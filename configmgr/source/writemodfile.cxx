@@ -75,19 +75,20 @@ OString convertToUtf8(std::u16string_view text) {
 } // anonymous namespace
 
 TempFile::~TempFile() {
-    if (handle != nullptr) {
-        if (!closed) {
-            oslFileError e = osl_closeFile(handle);
-            if (e != osl_File_E_None) {
-                SAL_WARN("configmgr", "osl_closeFile failed with " << +e);
-            }
+    if (handle == nullptr)
+        return;
+
+    if (!closed) {
+        oslFileError e = osl_closeFile(handle);
+        if (e != osl_File_E_None) {
+            SAL_WARN("configmgr", "osl_closeFile failed with " << +e);
         }
-        osl::FileBase::RC e = osl::File::remove(url);
-        if (e != osl::FileBase::E_None) {
-            SAL_WARN(
-                "configmgr",
-                "osl::File::remove(" << url << ") failed with " << +e);
-        }
+    }
+    osl::FileBase::RC e = osl::File::remove(url);
+    if (e != osl::FileBase::E_None) {
+        SAL_WARN(
+            "configmgr",
+            "osl::File::remove(" << url << ") failed with " << +e);
     }
 }
 

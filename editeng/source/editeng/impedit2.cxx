@@ -4185,18 +4185,18 @@ void ImpEditEngine::CalcHeight( ParaPortion* pPortion )
     // I find it not so good, but Writer3 feature:
     // Check if distance by LineSpacing > Lower: this value is not
     // stuck in the height of PrevPortion.
-    if ( !pPrev->IsInvalid() )
+    if ( pPrev->IsInvalid() )
+        return;
+
+    nExtraSpace = GetYValue( lcl_CalcExtraSpace( rPrevLSItem ) );
+    if ( nExtraSpace > nPrevLower )
     {
-        nExtraSpace = GetYValue( lcl_CalcExtraSpace( rPrevLSItem ) );
-        if ( nExtraSpace > nPrevLower )
+        sal_uInt16 nMoreLower = nExtraSpace - nPrevLower;
+        // Paragraph becomes 'bigger', 'grows' downwards:
+        if ( nMoreLower > pPortion->nFirstLineOffset )
         {
-            sal_uInt16 nMoreLower = nExtraSpace - nPrevLower;
-            // Paragraph becomes 'bigger', 'grows' downwards:
-            if ( nMoreLower > pPortion->nFirstLineOffset )
-            {
-                pPortion->nHeight += ( nMoreLower - pPortion->nFirstLineOffset );
-                pPortion->nFirstLineOffset = nMoreLower;
-            }
+            pPortion->nHeight += ( nMoreLower - pPortion->nFirstLineOffset );
+            pPortion->nFirstLineOffset = nMoreLower;
         }
     }
 }

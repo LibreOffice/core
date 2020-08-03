@@ -75,17 +75,18 @@ void RootAccess::initBroadcaster(
     std::vector< css::util::ElementChange > changes;
     initBroadcasterAndChanges(
         modifications, broadcaster, changesListeners_.empty() ? nullptr : &changes);
-    if (!changes.empty()) {
-        css::util::ChangesSet set(comphelper::containerToSequence(changes));
-        for (auto const& changesListener : changesListeners_)
-        {
-            cppu::OWeakObject* pSource = this;
-            css::uno::Reference< css::uno::XInterface > xBase( pSource, css::uno::UNO_QUERY );
-            broadcaster->addChangesNotification(
-                changesListener,
-                css::util::ChangesEvent(
-                    pSource, css::uno::Any( xBase ), set));
-        }
+    if (changes.empty())
+        return;
+
+    css::util::ChangesSet set(comphelper::containerToSequence(changes));
+    for (auto const& changesListener : changesListeners_)
+    {
+        cppu::OWeakObject* pSource = this;
+        css::uno::Reference< css::uno::XInterface > xBase( pSource, css::uno::UNO_QUERY );
+        broadcaster->addChangesNotification(
+            changesListener,
+            css::util::ChangesEvent(
+                pSource, css::uno::Any( xBase ), set));
     }
 }
 

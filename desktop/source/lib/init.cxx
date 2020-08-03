@@ -3644,84 +3644,84 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned long
     if (!pWindow && nWindowId >= 1000000000 /* why unsigned? */)
         pWindow = getSidebarWindow();
 
-    if (aMap.find("id") != aMap.end())
+    if (aMap.find("id") == aMap.end())
+        return;
+
+    static const OUString sClickAction("CLICK");
+    static const OUString sSelectAction("SELECT");
+    static const OUString sClearAction("CLEAR");
+    static const OUString sTypeAction("TYPE");
+    static const OUString sUpAction("UP");
+    static const OUString sDownAction("DOWN");
+    static const OUString sValue("VALUE");
+
+    bool bIsWeldedDialog = false;
+
+    try
     {
-        static const OUString sClickAction("CLICK");
-        static const OUString sSelectAction("SELECT");
-        static const OUString sClearAction("CLEAR");
-        static const OUString sTypeAction("TYPE");
-        static const OUString sUpAction("UP");
-        static const OUString sDownAction("DOWN");
-        static const OUString sValue("VALUE");
+        OString sControlId = OUStringToOString(aMap["id"], RTL_TEXTENCODING_ASCII_US);
 
-        bool bIsWeldedDialog = false;
+        bIsWeldedDialog = jsdialog::ExecuteAction(nWindowId, sControlId, aMap);
+        if (!bIsWeldedDialog)
+            bIsWeldedDialog = jsdialog::ExecuteAction(reinterpret_cast<sal_uInt64>(SfxViewShell::Current()),
+                                                      sControlId, aMap);
 
-        try
+        if (!pWindow)
         {
-            OString sControlId = OUStringToOString(aMap["id"], RTL_TEXTENCODING_ASCII_US);
+            SetLastExceptionMsg("Document doesn't support dialog rendering, or window not found.");
+            return;
+        }
 
-            bIsWeldedDialog = jsdialog::ExecuteAction(nWindowId, sControlId, aMap);
-            if (!bIsWeldedDialog)
-                bIsWeldedDialog = jsdialog::ExecuteAction(reinterpret_cast<sal_uInt64>(SfxViewShell::Current()),
-                                                          sControlId, aMap);
+        if (!bIsWeldedDialog)
+        {
+            WindowUIObject aUIObject(pWindow);
+            std::unique_ptr<UIObject> pUIWindow(aUIObject.get_child(aMap["id"]));
+            if (pUIWindow) {
+                bool bIsClickAction = false;
 
-            if (!pWindow)
-            {
-                SetLastExceptionMsg("Document doesn't support dialog rendering, or window not found.");
-                return;
-            }
+                if (aMap.find("cmd") != aMap.end()) {
+                    if (aMap["cmd"] == "selected")
+                    {
+                        aMap["POS"] = aMap["data"];
+                        aMap["TEXT"] = aMap["data"];
 
-            if (!bIsWeldedDialog)
-            {
-                WindowUIObject aUIObject(pWindow);
-                std::unique_ptr<UIObject> pUIWindow(aUIObject.get_child(aMap["id"]));
-                if (pUIWindow) {
-                    bool bIsClickAction = false;
+                        pUIWindow->execute(sSelectAction, aMap);
+                    }
+                    else if (aMap["cmd"] == "plus")
+                    {
+                        pUIWindow->execute(sUpAction, aMap);
+                    }
+                    else if (aMap["cmd"] == "minus")
+                    {
+                        pUIWindow->execute(sDownAction, aMap);
+                    }
+                    else if (aMap["cmd"] == "set")
+                    {
+                        aMap["TEXT"] = aMap["data"];
 
-                    if (aMap.find("cmd") != aMap.end()) {
-                        if (aMap["cmd"] == "selected")
-                        {
-                            aMap["POS"] = aMap["data"];
-                            aMap["TEXT"] = aMap["data"];
-
-                            pUIWindow->execute(sSelectAction, aMap);
-                        }
-                        else if (aMap["cmd"] == "plus")
-                        {
-                            pUIWindow->execute(sUpAction, aMap);
-                        }
-                        else if (aMap["cmd"] == "minus")
-                        {
-                            pUIWindow->execute(sDownAction, aMap);
-                        }
-                        else if (aMap["cmd"] == "set")
-                        {
-                            aMap["TEXT"] = aMap["data"];
-
-                            pUIWindow->execute(sClearAction, aMap);
-                            pUIWindow->execute(sTypeAction, aMap);
-                        }
-                        else if (aMap["cmd"] == "value")
-                        {
-                            aMap["VALUE"] = aMap["data"];
-                            pUIWindow->execute(sValue, aMap);
-                        }
-                        else
-                            bIsClickAction = true;
+                        pUIWindow->execute(sClearAction, aMap);
+                        pUIWindow->execute(sTypeAction, aMap);
+                    }
+                    else if (aMap["cmd"] == "value")
+                    {
+                        aMap["VALUE"] = aMap["data"];
+                        pUIWindow->execute(sValue, aMap);
                     }
                     else
                         bIsClickAction = true;
-
-                    if (bIsClickAction)
-                        pUIWindow->execute(sClickAction, aMap);
                 }
-            }
-        } catch(...) {}
+                else
+                    bIsClickAction = true;
 
-        // force resend
-        if (!bIsWeldedDialog)
-            pWindow->Resize();
-    }
+                if (bIsClickAction)
+                    pUIWindow->execute(sClickAction, aMap);
+            }
+        }
+    } catch(...) {}
+
+    // force resend
+    if (!bIsWeldedDialog)
+        pWindow->Resize();
 }
 
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pCommand, const char* pArguments, bool bNotifyWhenFinished)
