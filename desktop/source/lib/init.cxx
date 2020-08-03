@@ -2789,6 +2789,9 @@ static void doc_iniUnoCommands ()
         OUString(".uno:CharmapControl"),
         OUString(".uno:EnterGroup"),
         OUString(".uno:LeaveGroup"),
+        OUString(".uno:AlignUp"),
+        OUString(".uno:AlignMiddle"),
+        OUString(".uno:AlignDown"),
         OUString(".uno:FreezePanesRow")
     };
 
