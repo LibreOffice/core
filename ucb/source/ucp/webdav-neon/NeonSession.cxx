@@ -2007,47 +2007,47 @@ void runResponseHeaderHandler( void * userdata,
     OUString aHeader(value, strlen(value), RTL_TEXTENCODING_ASCII_US);
     sal_Int32 nPos = aHeader.indexOf( ':' );
 
-    if ( nPos != -1 )
+    if ( nPos == -1 )
+        return;
+
+    OUString aHeaderName( aHeader.copy( 0, nPos ) );
+
+    NeonRequestContext * pCtx
+        = static_cast< NeonRequestContext * >( userdata );
+
+    // Note: Empty vector means that all headers are requested.
+    bool bIncludeIt = pCtx->pHeaderNames->empty();
+
+    if ( !bIncludeIt )
     {
-        OUString aHeaderName( aHeader.copy( 0, nPos ) );
+        // Check whether this header was requested.
+        auto it = std::find_if(pCtx->pHeaderNames->cbegin(), pCtx->pHeaderNames->cend(),
+            [&aHeaderName](const OUString& rName) {
+                // header names are case insensitive
+                return rName.equalsIgnoreAsciiCase( aHeaderName ); });
 
-        NeonRequestContext * pCtx
-            = static_cast< NeonRequestContext * >( userdata );
-
-        // Note: Empty vector means that all headers are requested.
-        bool bIncludeIt = pCtx->pHeaderNames->empty();
-
-        if ( !bIncludeIt )
+        if ( it != pCtx->pHeaderNames->end() )
         {
-            // Check whether this header was requested.
-            auto it = std::find_if(pCtx->pHeaderNames->cbegin(), pCtx->pHeaderNames->cend(),
-                [&aHeaderName](const OUString& rName) {
-                    // header names are case insensitive
-                    return rName.equalsIgnoreAsciiCase( aHeaderName ); });
-
-            if ( it != pCtx->pHeaderNames->end() )
-            {
-                aHeaderName = *it;
-                bIncludeIt = true;
-            }
-        }
-
-        if ( bIncludeIt )
-        {
-            // Create & set the PropertyValue
-            DAVPropertyValue thePropertyValue;
-            // header names are case insensitive, so are the
-            // corresponding property names.
-            thePropertyValue.Name = aHeaderName.toAsciiLowerCase();
-            thePropertyValue.IsCaseSensitive = false;
-
-            if ( nPos < aHeader.getLength() )
-                thePropertyValue.Value <<= aHeader.copy( nPos + 1 ).trim();
-
-            // Add the newly created PropertyValue
-            pCtx->pResource->properties.push_back( thePropertyValue );
+            aHeaderName = *it;
+            bIncludeIt = true;
         }
     }
+
+    if ( !bIncludeIt )
+        return;
+
+    // Create & set the PropertyValue
+    DAVPropertyValue thePropertyValue;
+    // header names are case insensitive, so are the
+    // corresponding property names.
+    thePropertyValue.Name = aHeaderName.toAsciiLowerCase();
+    thePropertyValue.IsCaseSensitive = false;
+
+    if ( nPos < aHeader.getLength() )
+        thePropertyValue.Value <<= aHeader.copy( nPos + 1 ).trim();
+
+    // Add the newly created PropertyValue
+    pCtx->pResource->properties.push_back( thePropertyValue );
 }
 
 } // namespace

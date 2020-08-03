@@ -175,19 +175,19 @@ void DAVOptionsCache::setHeadAllowed( const OUString & rURL, const bool HeadAllo
     normalizeURLLastChar( aEncodedUrl );
 
     DAVOptionsMap::iterator it = m_aTheCache.find( aEncodedUrl );
-    if ( it != m_aTheCache.end() )
+    if ( it == m_aTheCache.end() )
+        return;
+
+    // first check for stale
+    TimeValue t1;
+    osl_getSystemTime( &t1 );
+    if( (*it).second.getStaleTime() < t1.Seconds )
     {
-        // first check for stale
-        TimeValue t1;
-        osl_getSystemTime( &t1 );
-        if( (*it).second.getStaleTime() < t1.Seconds )
-        {
-            m_aTheCache.erase( it );
-            return;
-        }
-        // check if the resource was present on server
-        (*it).second.setHeadAllowed( HeadAllowed );
+        m_aTheCache.erase( it );
+        return;
     }
+    // check if the resource was present on server
+    (*it).second.setHeadAllowed( HeadAllowed );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

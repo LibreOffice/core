@@ -665,37 +665,37 @@ void SAL_CALL UniversalContentBroker::abort( sal_Int32 )
 // virtual
 void SAL_CALL UniversalContentBroker::changesOccurred( const util::ChangesEvent& Event )
 {
-    if ( Event.Changes.hasElements() )
+    if ( !Event.Changes.hasElements() )
+        return;
+
+    uno::Reference< container::XHierarchicalNameAccess > xHierNameAccess;
+    Event.Base >>= xHierNameAccess;
+
+    OSL_ASSERT( xHierNameAccess.is() );
+
+    ContentProviderDataList aData;
+    for ( const util::ElementChange& rElem : Event.Changes )
     {
-        uno::Reference< container::XHierarchicalNameAccess > xHierNameAccess;
-        Event.Base >>= xHierNameAccess;
+        OUString aKey;
+        rElem.Accessor >>= aKey;
 
-        OSL_ASSERT( xHierNameAccess.is() );
+        ContentProviderData aInfo;
 
-        ContentProviderDataList aData;
-        for ( const util::ElementChange& rElem : Event.Changes )
+        // Removal of UCPs from the configuration leads to changesOccurred
+        // notifications, too, but it is hard to tell for a given
+        // ElementChange whether it is an addition or a removal, so as a
+        // heuristic consider as removals those that cause a
+        // NoSuchElementException in createContentProviderData.
+
+        // For now, removal of UCPs from the configuration is simply ignored
+        // (and not reflected in the UCB's data structures):
+        if (createContentProviderData(aKey, xHierNameAccess, aInfo))
         {
-            OUString aKey;
-            rElem.Accessor >>= aKey;
-
-            ContentProviderData aInfo;
-
-            // Removal of UCPs from the configuration leads to changesOccurred
-            // notifications, too, but it is hard to tell for a given
-            // ElementChange whether it is an addition or a removal, so as a
-            // heuristic consider as removals those that cause a
-            // NoSuchElementException in createContentProviderData.
-
-            // For now, removal of UCPs from the configuration is simply ignored
-            // (and not reflected in the UCB's data structures):
-            if (createContentProviderData(aKey, xHierNameAccess, aInfo))
-            {
-                aData.push_back(aInfo);
-            }
+            aData.push_back(aInfo);
         }
-
-        prepareAndRegister(aData);
     }
+
+    prepareAndRegister(aData);
 }
 
 

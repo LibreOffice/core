@@ -1701,29 +1701,29 @@ void HierarchyContent::transfer(
     // 5) Destroy source ( when moving only ) .
 
 
-    if ( rInfo.MoveData )
+    if ( !rInfo.MoveData )
+        return;
+
+    xSource->destroy( true, xEnv );
+
+    // Remove all persistent data of source and its children.
+    if ( !xSource->removeData() )
     {
-        xSource->destroy( true, xEnv );
-
-        // Remove all persistent data of source and its children.
-        if ( !xSource->removeData() )
+        uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
-            {
-                {"Uri", uno::Any(xSource->m_xIdentifier->getContentIdentifier())}
-            }));
-            ucbhelper::cancelCommandExecution(
-                ucb::IOErrorCode_CANT_WRITE,
-                aArgs,
-                xEnv,
-                "Cannot remove persistent data of source object!",
-                this );
-            // Unreachable
-        }
-
-        // Remove own and all children's Additional Core Properties.
-        xSource->removeAdditionalPropertySet();
+            {"Uri", uno::Any(xSource->m_xIdentifier->getContentIdentifier())}
+        }));
+        ucbhelper::cancelCommandExecution(
+            ucb::IOErrorCode_CANT_WRITE,
+            aArgs,
+            xEnv,
+            "Cannot remove persistent data of source object!",
+            this );
+        // Unreachable
     }
+
+    // Remove own and all children's Additional Core Properties.
+    xSource->removeAdditionalPropertySet();
 }
 
 
