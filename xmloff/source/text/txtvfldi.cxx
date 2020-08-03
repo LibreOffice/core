@@ -46,6 +46,7 @@
 
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <tools/debug.hxx>
 
@@ -1013,27 +1014,34 @@ void XMLDatabaseDisplayImportContext::EndElement()
                     if (xTextContent.is())
                     {
                         // insert, set field properties and exit!
-                        GetImportHelper().InsertTextContent(xTextContent);
-
-                        // prepare field: format from database?
-                        bool bTmp = !aValueHelper.IsFormatOK();
-                        xField->setPropertyValue("DataBaseFormat", Any(bTmp));
-
-                        // value, value-type and format done by value helper
-                        aValueHelper.PrepareField(xField);
-
-                        // visibility
-                        if( bDisplayOK )
+                        try
                         {
-                            xField->setPropertyValue(sAPI_is_visible, Any(bDisplay));
+                            GetImportHelper().InsertTextContent(xTextContent);
+
+                            // prepare field: format from database?
+                            bool bTmp = !aValueHelper.IsFormatOK();
+                            xField->setPropertyValue("DataBaseFormat", Any(bTmp));
+
+                            // value, value-type and format done by value helper
+                            aValueHelper.PrepareField(xField);
+
+                            // visibility
+                            if( bDisplayOK )
+                            {
+                                xField->setPropertyValue(sAPI_is_visible, Any(bDisplay));
+                            }
+
+                            // set presentation
+                            aAny <<= GetContent();
+                            xField->setPropertyValue(sAPI_current_presentation, aAny);
+
+                            // success!
+                            return;
                         }
-
-                        // set presentation
-                        aAny <<= GetContent();
-                        xField->setPropertyValue(sAPI_current_presentation, aAny);
-
-                        // success!
-                        return;
+                        catch (const lang::IllegalArgumentException& rException)
+                        {
+                            SAL_WARN("xmloff.text", "Failed to insert text content: " << rException.Message);
+                        }
                     }
                 }
             }
