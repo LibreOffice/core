@@ -209,7 +209,8 @@ class SvXMLStyleIndex_Impl
 {
     OUString               sName;
     XmlStyleFamily         nFamily;
-    const rtl::Reference<SvXMLStyleContext> mxStyle;
+    // we deliberately don't use a reference here, to avoid creating a ref-count-cycle
+    SvXMLStyleContext*     mpStyle;
 
 public:
 
@@ -222,13 +223,13 @@ public:
     SvXMLStyleIndex_Impl( const rtl::Reference<SvXMLStyleContext> &rStl ) :
         sName( rStl->GetName() ),
         nFamily( rStl->GetFamily() ),
-        mxStyle ( rStl )
+        mpStyle ( rStl.get() )
     {
     }
 
     const OUString& GetName() const { return sName; }
     XmlStyleFamily GetFamily() const { return nFamily; }
-    const SvXMLStyleContext *GetStyle() const { return mxStyle.get(); }
+    const SvXMLStyleContext *GetStyle() const { return mpStyle; }
 };
 
 struct SvXMLStyleIndexCmp_Impl
