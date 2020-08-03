@@ -35,11 +35,11 @@ class XMLFontStyleContextFontFace : public SvXMLStyleContext
     css::uno::Any aPitch;
     css::uno::Any aEnc;
 
-    SvXMLImportContextRef xStyles;
+    rtl::Reference<XMLFontStylesContext> xStyles;
 
     XMLFontStylesContext *GetStyles()
     {
-        return static_cast<XMLFontStylesContext *>(xStyles.get());
+        return xStyles.get();
     }
 
 public:

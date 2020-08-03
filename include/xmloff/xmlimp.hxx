@@ -196,10 +196,10 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public cppu::WeakImplHelper<
     rtl::Reference< SchXMLImportHelper >              mxChartImport;
     rtl::Reference< ::xmloff::OFormLayerXMLImport >   mxFormImport;
 
-    SvXMLImportContextRef mxFontDecls;
-    SvXMLImportContextRef mxStyles;
-    SvXMLImportContextRef mxAutoStyles;
-    SvXMLImportContextRef mxMasterStyles;
+    rtl::Reference<XMLFontStylesContext> mxFontDecls;
+    rtl::Reference<SvXMLStylesContext> mxStyles;
+    rtl::Reference<SvXMLStylesContext> mxAutoStyles;
+    rtl::Reference<SvXMLStylesContext> mxMasterStyles;
 
     css::uno::Reference< css::container::XNameContainer > mxGradientHelper;
     css::uno::Reference< css::container::XNameContainer > mxHatchHelper;

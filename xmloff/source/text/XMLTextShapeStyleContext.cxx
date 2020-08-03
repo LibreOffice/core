@@ -189,9 +189,9 @@ SvXMLImportContextRef XMLTextShapeStyleContext::CreateChildContext(
     {
         // create and remember events import context
         // (for delayed processing of events)
-        xContext = new XMLEventsImportContext( GetImport(), nPrefix,
+        xEventContext = new XMLEventsImportContext( GetImport(), nPrefix,
                                                    rLocalName);
-        xEventContext = xContext;
+        xContext = xEventContext;
     }
 
     if (!xContext)
@@ -222,7 +222,7 @@ void XMLTextShapeStyleContext::CreateAndInsert( bool bOverwrite )
     {
         // set event supplier and release reference to context
         Reference<XEventsSupplier> xEventsSupplier(xStyle, UNO_QUERY);
-        static_cast<XMLEventsImportContext *>(xEventContext.get())->SetEvents(xEventsSupplier);
+        xEventContext->SetEvents(xEventsSupplier);
         xEventContext = nullptr;
     }
 }

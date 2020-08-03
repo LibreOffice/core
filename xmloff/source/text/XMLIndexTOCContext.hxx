@@ -43,7 +43,7 @@ enum IndexTypeEnum
     TEXT_INDEX_UNKNOWN
 };
 
-
+class XMLIndexBodyContext;
 /**
  * Import all indices.
  *
@@ -61,7 +61,7 @@ class XMLIndexTOCContext : public SvXMLImportContext
 
     bool bValid;
 
-    SvXMLImportContextRef xBodyContextRef;
+    rtl::Reference<XMLIndexBodyContext> xBodyContextRef;
 
 public:
 

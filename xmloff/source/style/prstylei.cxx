@@ -211,8 +211,7 @@ SvXMLImportContextRef XMLPropStyleContext::CreateChildContext(
     if( nFamily )
     {
         rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
-            static_cast<SvXMLStylesContext *>(mxStyles.get())->GetImportPropertyMapper(
-                                                        GetFamily() );
+            mxStyles->GetImportPropertyMapper( GetFamily() );
         if( xImpPrMap.is() )
             xContext = new SvXMLPropertySetContext( GetImport(), nPrefix,
                                                     rLocalName, xAttrList,
@@ -232,8 +231,7 @@ void XMLPropStyleContext::FillPropertySet(
             const Reference< XPropertySet > & rPropSet )
 {
     rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
-        static_cast<SvXMLStylesContext *>(mxStyles.get())->GetImportPropertyMapper(
-                                                                GetFamily() );
+        mxStyles->GetImportPropertyMapper( GetFamily() );
     SAL_WARN_IF( !xImpPrMap.is(), "xmloff", "There is the import prop mapper" );
     if( xImpPrMap.is() )
         xImpPrMap->FillPropertySet( maProperties, rPropSet );
@@ -247,8 +245,7 @@ Reference < XStyle > XMLPropStyleContext::Create()
 {
     Reference < XStyle > xNewStyle;
 
-    OUString sServiceName(
-        static_cast<SvXMLStylesContext *>(mxStyles.get())->GetServiceName( GetFamily() ) );
+    OUString sServiceName = mxStyles->GetServiceName( GetFamily() );
     if( !sServiceName.isEmpty() )
     {
         Reference< XMultiServiceFactory > xFactory( GetImport().GetModel(),
@@ -267,7 +264,7 @@ Reference < XStyle > XMLPropStyleContext::Create()
 
 void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
 {
-    SvXMLStylesContext* pSvXMLStylesContext = static_cast< SvXMLStylesContext* >(mxStyles.get());
+    SvXMLStylesContext* pSvXMLStylesContext = mxStyles.get();
     rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap = pSvXMLStylesContext->GetImportPropertyMapper(GetFamily());
     OSL_ENSURE(xImpPrMap.is(), "There is no import prop mapper");
 
@@ -460,8 +457,7 @@ void XMLPropStyleContext::Finish( bool bOverwrite )
         return;
 
     // The families container must exist
-    Reference < XNameContainer > xFamilies =
-        static_cast<SvXMLStylesContext *>(mxStyles.get())->GetStylesContainer( GetFamily() );
+    Reference < XNameContainer > xFamilies = mxStyles->GetStylesContainer( GetFamily() );
     SAL_WARN_IF( !xFamilies.is(), "xmloff", "Families lost" );
     if( !xFamilies.is() )
         return;

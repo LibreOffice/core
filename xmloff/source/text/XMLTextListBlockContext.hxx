@@ -34,7 +34,7 @@ class XMLTextListBlockContext : public SvXMLImportContext
     // text:style-name property of <list> element
     OUString         msListStyleName;
 
-    SvXMLImportContextRef   mxParentListBlock;
+    rtl::Reference<XMLTextListBlockContext> mxParentListBlock;
 
     sal_Int16               mnLevel;
     bool                mbRestartNumbering;

@@ -2436,10 +2436,10 @@ SvXMLImportContextRef XMLMacroFieldImportContext::CreateChildContext(
          IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
     {
         // create events context and remember it!
-        xContext = new XMLEventsImportContext(
+        xEventContext = new XMLEventsImportContext(
             GetImport(), nPrefix, rLocalName );
-        xEventContext = xContext;
         bValid = true;
+        return xEventContext;
     }
 
     return xContext;
@@ -2479,8 +2479,7 @@ void XMLMacroFieldImportContext::PrepareField(
     if ( xEventContext.is() )
     {
         // get event sequence
-        XMLEventsImportContext* pEvents =
-            static_cast<XMLEventsImportContext*>(xEventContext.get());
+        XMLEventsImportContext* pEvents = xEventContext.get();
         Sequence<PropertyValue> aValues;
         pEvents->GetEventSequence( "OnClick", aValues );
 

@@ -42,7 +42,7 @@ class XMLOFF_DLLPUBLIC XMLPropStyleContext : public SvXMLStyleContext
 private:
     ::std::vector< XMLPropertyState >          maProperties;
     css::uno::Reference < css::style::XStyle > mxStyle;
-    SvXMLImportContextRef                      mxStyles;
+    rtl::Reference<SvXMLStylesContext>         mxStyles;
 
     XMLPropStyleContext(XMLPropStyleContext const &) = delete;
     XMLPropStyleContext& operator =(XMLPropStyleContext const &) = delete;
@@ -77,7 +77,7 @@ protected:
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
                                const OUString& rLocalName,
                                const OUString& rValue ) override;
-    SvXMLStylesContext *GetStyles() { return static_cast<SvXMLStylesContext *>(mxStyles.get()); }
+    SvXMLStylesContext *GetStyles() { return mxStyles.get(); }
     ::std::vector< XMLPropertyState > & GetProperties() { return maProperties; }
 
     // Override this method to create a new style. It's called by
