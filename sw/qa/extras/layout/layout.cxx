@@ -3474,6 +3474,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf115094)
     CPPUNIT_ASSERT_LESS(nTopOfB2Anchored, nTopOfB2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf112290)
+{
+    SwDoc* pDoc = createDoc("tdf112290.docx");
+    CPPUNIT_ASSERT(pDoc);
+    auto pXml = parseLayoutDump();
+    assertXPath(pXml, "/root/page/body/txt/LineBreak[2]", "Line", "Xxxx Xxxx");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf122607)
 {
     createDoc("tdf122607.odt");
