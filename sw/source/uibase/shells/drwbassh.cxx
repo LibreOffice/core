@@ -701,6 +701,8 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
                     bool bDisableHoriz = false;
                     bool bHoriz = (nWhich == SID_OBJECT_ALIGN_LEFT || nWhich == SID_OBJECT_ALIGN_CENTER ||
                             nWhich == SID_OBJECT_ALIGN_RIGHT);
+                    bool bVert = (nWhich == SID_OBJECT_ALIGN_UP || nWhich == SID_OBJECT_ALIGN_MIDDLE ||
+                            nWhich == SID_OBJECT_ALIGN_DOWN);
                     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                     if ( !rSh.IsAlignPossible() || bProtected )
                     {
@@ -743,6 +745,30 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
                         SwFrameFormat* pFrameFormat = FindFrameFormat(pObj);
                         SwFormatHoriOrient aHOrient(pFrameFormat->GetFormatAttr(RES_HORI_ORIENT));
                         rSet.Put(SfxBoolItem(nWhich, aHOrient.GetHoriOrient() == nHoriOrient));
+                    }
+
+                    if (bVert && !bDisableThis && rMarkList.GetMarkCount() == 1)
+                    {
+                        sal_Int16 nVertOrient = -1;
+                        switch(nWhich)
+                        {
+                            case SID_OBJECT_ALIGN_UP:
+                                nVertOrient = text::VertOrientation::TOP;
+                                break;
+                            case SID_OBJECT_ALIGN_MIDDLE:
+                                nVertOrient = text::VertOrientation::CENTER;
+                                break;
+                            case SID_OBJECT_ALIGN_DOWN:
+                                nVertOrient = text::VertOrientation::BOTTOM;
+                                break;
+                            default:
+                                break;
+                        }
+
+                        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                        SwFrameFormat* pFrameFormat = FindFrameFormat(pObj);
+                        SwFormatVertOrient aVOrient(pFrameFormat->GetFormatAttr(RES_VERT_ORIENT));
+                        rSet.Put(SfxBoolItem(nWhich, aVOrient.GetVertOrient() == nVertOrient));
                     }
                 }
                 break;
