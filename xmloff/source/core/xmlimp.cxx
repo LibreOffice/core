@@ -442,6 +442,8 @@ void SvXMLImport::cleanup() throw ()
             pStylesContext->Clear();
         maContexts.pop();
     }
+    if( mxTextImport )
+        mxTextImport->dispose();
     mxTextImport.clear(); // XMLRedlineImportHelper needs model
     DisposingModel();
 }

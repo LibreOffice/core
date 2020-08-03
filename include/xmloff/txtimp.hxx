@@ -398,6 +398,8 @@ public:
 
     virtual ~XMLTextImportHelper() override;
 
+    void dispose();
+
     void SetCursor(
             const css::uno::Reference< css::text::XTextCursor >& rCursor );
     void ResetCursor();
