@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b68b48de_4929609c",
+        "filename": "sw/inc/inspectorproperties.hrc",
+        "patchSetId": 5
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-03T15:24:29Z",
+      "side": 1,
+      "message": "All \"Hyper Links\" should be together, right? And of course, the \"U R L\" :-P",
+      "range": {
+        "startLine": 158,
+        "startChar": 92,
+        "endLine": 158,
+        "endChar": 108
+      },
+      "revId": "08c3b4e156a202ace5f26a6fdb9a32bc4af4e0a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
