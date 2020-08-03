@@ -2713,6 +2713,11 @@ sal_Bool SAL_CALL SlideshowImpl::isRunning(  )
     return mxShow.is();
 }
 
+sal_Bool SAL_CALL SlideshowImpl::isEnded(  )
+{
+    return (mpShowWindow->GetShowWindowMode() == SHOWWINDOWMODE_END);
+}
+
 void SAL_CALL SlideshowImpl::gotoNextEffect(  )
 {
     SolarMutexGuard aSolarGuard;

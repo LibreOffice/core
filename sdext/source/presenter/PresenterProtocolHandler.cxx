@@ -549,8 +549,7 @@ bool GotoNextEffectCommand::IsEnabled() const
     if ( ! mpPresenterController->GetSlideShowController().is())
         return false;
 
-    return ( mpPresenterController->GetSlideShowController()->getNextSlideIndex() < mpPresenterController->GetSlideShowController()->getSlideCount() );
-
+    return ( !mpPresenterController->GetSlideShowController()->isEnded() );
 }
 
 //===== GotoNextSlide =========================================================

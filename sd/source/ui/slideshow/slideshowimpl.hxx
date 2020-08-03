@@ -175,6 +175,7 @@ public:
     virtual sal_Bool SAL_CALL isEndless(  ) override;
     virtual sal_Bool SAL_CALL isFullScreen(  ) override;
     virtual css::uno::Reference< css::presentation::XSlideShow > SAL_CALL getSlideShow(  ) override;
+    sal_Bool SAL_CALL isEnded(  );
 
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) override;
