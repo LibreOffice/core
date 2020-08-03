@@ -1136,6 +1136,22 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "FormatLine" ||
              aEvent.FeatureURL.Path == "FormatColumns" ||
              aEvent.FeatureURL.Path == "Watermark" ||
+             aEvent.FeatureURL.Path == "InsertBreak" ||
+             aEvent.FeatureURL.Path == "InsertEndnote" ||
+             aEvent.FeatureURL.Path == "InsertFootnote" ||
+             aEvent.FeatureURL.Path == "InsertReferenceField" ||
+             aEvent.FeatureURL.Path == "InsertBookmark" ||
+             aEvent.FeatureURL.Path == "InsertAuthoritiesEntry" ||
+             aEvent.FeatureURL.Path == "InsertMultiIndex" ||
+             aEvent.FeatureURL.Path == "InsertField" ||
+             aEvent.FeatureURL.Path == "InsertPageNumberField" ||
+             aEvent.FeatureURL.Path == "InsertPageCountField" ||
+             aEvent.FeatureURL.Path == "InsertDateField" ||
+             aEvent.FeatureURL.Path == "InsertTitleField" ||
+             aEvent.FeatureURL.Path == "InsertFieldCtrl" ||
+             aEvent.FeatureURL.Path == "CharmapControl" ||
+             aEvent.FeatureURL.Path == "EnterGroup" ||
+             aEvent.FeatureURL.Path == "LeaveGroup" ||
              aEvent.FeatureURL.Path == "ResetAttributes")
     {
         aBuffer.append(aEvent.IsEnabled ? OUStringLiteral("enabled") : OUStringLiteral("disabled"));
