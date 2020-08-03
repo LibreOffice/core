@@ -916,19 +916,19 @@ void CustomAnimationList::append( CustomAnimationEffectPtr pEffect )
 static void selectShape(weld::TreeView* pTreeList, const Reference< XShape >& xShape )
 {
     std::unique_ptr<weld::TreeIter> xEntry = pTreeList->make_iterator();
-    if (pTreeList->get_iter_first(*xEntry))
+    if (!pTreeList->get_iter_first(*xEntry))
+        return;
+
+    do
     {
-        do
+        CustomAnimationListEntryItem* pEntry = reinterpret_cast<CustomAnimationListEntryItem*>(pTreeList->get_id(*xEntry).toInt64());
+        CustomAnimationEffectPtr pEffect(pEntry->getEffect());
+        if (pEffect)
         {
-            CustomAnimationListEntryItem* pEntry = reinterpret_cast<CustomAnimationListEntryItem*>(pTreeList->get_id(*xEntry).toInt64());
-            CustomAnimationEffectPtr pEffect(pEntry->getEffect());
-            if (pEffect)
-            {
-                if (pEffect->getTarget() == xShape)
-                    pTreeList->select(*xEntry);
-            }
-        } while (pTreeList->iter_next(*xEntry));
-    }
+            if (pEffect->getTarget() == xShape)
+                pTreeList->select(*xEntry);
+        }
+    } while (pTreeList->iter_next(*xEntry));
 }
 
 void CustomAnimationList::onSelectionChanged(const Any& rSelection)

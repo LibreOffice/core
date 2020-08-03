@@ -358,22 +358,22 @@ IMPL_LINK(SdNavigatorWin, MenuSelectHdl, const OString&, rIdent, void)
     sal_uInt32 nMenuId = rIdent.toUInt32();
 
     NavigatorDragType eDT = static_cast<NavigatorDragType>(nMenuId);
-    if( meDragType != eDT )
+    if( meDragType == eDT )
+        return;
+
+    meDragType = eDT;
+    SetDragImage();
+
+    if( meDragType == NAVIGATOR_DRAGTYPE_URL )
     {
-        meDragType = eDT;
-        SetDragImage();
+        // patch, prevents endless loop
+        if (mxTlbObjects->count_selected_rows() > 1)
+            mxTlbObjects->unselect_all();
 
-        if( meDragType == NAVIGATOR_DRAGTYPE_URL )
-        {
-            // patch, prevents endless loop
-            if (mxTlbObjects->count_selected_rows() > 1)
-                mxTlbObjects->unselect_all();
-
-            mxTlbObjects->set_selection_mode(SelectionMode::Single);
-        }
-        else
-            mxTlbObjects->set_selection_mode(SelectionMode::Multiple);
+        mxTlbObjects->set_selection_mode(SelectionMode::Single);
     }
+    else
+        mxTlbObjects->set_selection_mode(SelectionMode::Multiple);
 }
 
 IMPL_LINK( SdNavigatorWin, ShapeFilterCallback, const OString&, rIdent, void )
@@ -390,19 +390,19 @@ IMPL_LINK( SdNavigatorWin, ShapeFilterCallback, const OString&, rIdent, void )
 
     // Remember the selection in the FrameView.
     NavDocInfo* pInfo = GetDocInfo();
-    if (pInfo != nullptr)
+    if (pInfo == nullptr)
+        return;
+
+    ::sd::DrawDocShell* pDocShell = pInfo->mpDocShell;
+    if (pDocShell != nullptr)
     {
-        ::sd::DrawDocShell* pDocShell = pInfo->mpDocShell;
-        if (pDocShell != nullptr)
+        ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
+        if (pViewShell != nullptr)
         {
-            ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
-            if (pViewShell != nullptr)
+            ::sd::FrameView* pFrameView = pViewShell->GetFrameView();
+            if (pFrameView != nullptr)
             {
-                ::sd::FrameView* pFrameView = pViewShell->GetFrameView();
-                if (pFrameView != nullptr)
-                {
-                    pFrameView->SetIsNavigatorShowingAllShapes(bShowAllShapes);
-                }
+                pFrameView->SetIsNavigatorShowingAllShapes(bShowAllShapes);
             }
         }
     }

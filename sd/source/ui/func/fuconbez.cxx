@@ -111,29 +111,29 @@ void FuConstructBezierPolygon::DoExecute( SfxRequest& rReq )
     if( SfxItemState::SET == pArgs->GetItemState( SID_ADD_MOTION_PATH, true, &pPoolItem ) )
         maTargets = static_cast<const SfxUnoAnyItem*>( pPoolItem )->GetValue();
 
-    if (nSlotId == SID_DRAW_FREELINE_NOFILL)
-    {
-        const SfxUInt16Item* pTransparence  = rReq.GetArg<SfxUInt16Item>(FN_PARAM_1);
-        const SfxStringItem* pColor         = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
-        const SfxUInt16Item* pWidth         = rReq.GetArg<SfxUInt16Item>(FN_PARAM_3);
-        const SfxStringItem* pShapeName     = rReq.GetArg<SfxStringItem>(SID_SHAPE_NAME);
+    if (nSlotId != SID_DRAW_FREELINE_NOFILL)
+        return;
 
-        if (pTransparence && pTransparence->GetValue() > 0)
-        {
-            mnTransparence = pTransparence->GetValue();
-        }
-        if (pColor && !pColor->GetValue().isEmpty())
-        {
-            msColor = pColor->GetValue();
-        }
-        if (pWidth && pWidth->GetValue() > 0)
-        {
-            mnWidth = pWidth->GetValue();
-        }
-        if (pShapeName && !pShapeName->GetValue().isEmpty())
-        {
-            msShapeName = pShapeName->GetValue();
-        }
+    const SfxUInt16Item* pTransparence  = rReq.GetArg<SfxUInt16Item>(FN_PARAM_1);
+    const SfxStringItem* pColor         = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
+    const SfxUInt16Item* pWidth         = rReq.GetArg<SfxUInt16Item>(FN_PARAM_3);
+    const SfxStringItem* pShapeName     = rReq.GetArg<SfxStringItem>(SID_SHAPE_NAME);
+
+    if (pTransparence && pTransparence->GetValue() > 0)
+    {
+        mnTransparence = pTransparence->GetValue();
+    }
+    if (pColor && !pColor->GetValue().isEmpty())
+    {
+        msColor = pColor->GetValue();
+    }
+    if (pWidth && pWidth->GetValue() > 0)
+    {
+        mnWidth = pWidth->GetValue();
+    }
+    if (pShapeName && !pShapeName->GetValue().isEmpty())
+    {
+        msShapeName = pShapeName->GetValue();
     }
 }
 
