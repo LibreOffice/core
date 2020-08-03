@@ -821,97 +821,96 @@ IMPL_LINK(SvxBulletAndPositionDlg, GraphicHdl_Impl, const OString&, rIdent, void
             }
         }
     }
-    if (bSucc)
+    if (!bSucc)
+        return;
+
+    aSize = OutputDevice::LogicToLogic(aSize, MapMode(MapUnit::Map100thMM), MapMode(eCoreUnit));
+
+    sal_uInt16 nMask = 1;
+    for (sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
     {
-        aSize = OutputDevice::LogicToLogic(aSize, MapMode(MapUnit::Map100thMM), MapMode(eCoreUnit));
-
-        sal_uInt16 nMask = 1;
-        for (sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
+        if (nActNumLvl & nMask)
         {
-            if (nActNumLvl & nMask)
-            {
-                SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
-                aNumFmt.SetCharFormatName(m_sNumCharFmtName);
-                aNumFmt.SetGraphic(aGrfName);
+            SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
+            aNumFmt.SetCharFormatName(m_sNumCharFmtName);
+            aNumFmt.SetGraphic(aGrfName);
 
-                // set size for a later comparison
-                const SvxBrushItem* pBrushItem = aNumFmt.GetBrush();
-                // initiate asynchronous loading
-                sal_Int16 eOrient = aNumFmt.GetVertOrient();
-                aNumFmt.SetGraphicBrush(pBrushItem, &aSize, &eOrient);
-                aInitSize[i] = aNumFmt.GetGraphicSize();
+            // set size for a later comparison
+            const SvxBrushItem* pBrushItem = aNumFmt.GetBrush();
+            // initiate asynchronous loading
+            sal_Int16 eOrient = aNumFmt.GetVertOrient();
+            aNumFmt.SetGraphicBrush(pBrushItem, &aSize, &eOrient);
+            aInitSize[i] = aNumFmt.GetGraphicSize();
 
-                pActNum->SetLevel(i, aNumFmt);
-            }
-            nMask <<= 1;
+            pActNum->SetLevel(i, aNumFmt);
         }
-        m_xRatioCB->set_sensitive(true);
-        m_xWidthFT->set_sensitive(true);
-        m_xHeightFT->set_sensitive(true);
-        m_xWidthMF->set_sensitive(true);
-        m_xHeightMF->set_sensitive(true);
-        SetMetricValue(*m_xWidthMF, aSize.Width(), eCoreUnit);
-        SetMetricValue(*m_xHeightMF, aSize.Height(), eCoreUnit);
-
-        SetModified();
-        //needed due to asynchronous loading of graphics in the SvxBrushItem
-        aInvalidateTimer.Start();
+        nMask <<= 1;
     }
+    m_xRatioCB->set_sensitive(true);
+    m_xWidthFT->set_sensitive(true);
+    m_xHeightFT->set_sensitive(true);
+    m_xWidthMF->set_sensitive(true);
+    m_xHeightMF->set_sensitive(true);
+    SetMetricValue(*m_xWidthMF, aSize.Width(), eCoreUnit);
+    SetMetricValue(*m_xHeightMF, aSize.Height(), eCoreUnit);
+
+    SetModified();
+    //needed due to asynchronous loading of graphics in the SvxBrushItem
+    aInvalidateTimer.Start();
 }
 
 IMPL_LINK_NOARG(SvxBulletAndPositionDlg, PopupActivateHdl_Impl, weld::ToggleButton&, void)
 {
-    if (!m_xGalleryMenu)
+    if (m_xGalleryMenu)
+        return;
+
+    m_xGalleryMenu = m_xBuilder->weld_menu("gallerysubmenu");
+    weld::WaitObject aWait(p_Window);
+
+    if (!GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, aGrfNames))
+        return;
+
+    GalleryExplorer::BeginLocking(GALLERY_THEME_BULLETS);
+
+    Graphic aGraphic;
+    OUString sGrfName;
+    ScopedVclPtrInstance<VirtualDevice> pVD;
+    size_t i = 0;
+    for (const auto& grfName : aGrfNames)
     {
-        m_xGalleryMenu = m_xBuilder->weld_menu("gallerysubmenu");
-        weld::WaitObject aWait(p_Window);
-
-        if (GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, aGrfNames))
+        sGrfName = grfName;
+        OUString sItemId = "gallery" + OUString::number(i);
+        INetURLObject aObj(sGrfName);
+        if (aObj.GetProtocol() == INetProtocol::File)
+            sGrfName = aObj.PathToFileName();
+        if (GalleryExplorer::GetGraphicObj(GALLERY_THEME_BULLETS, i, &aGraphic))
         {
-            GalleryExplorer::BeginLocking(GALLERY_THEME_BULLETS);
-
-            Graphic aGraphic;
-            OUString sGrfName;
-            ScopedVclPtrInstance<VirtualDevice> pVD;
-            size_t i = 0;
-            for (const auto& grfName : aGrfNames)
+            BitmapEx aBitmap(aGraphic.GetBitmapEx());
+            Size aSize(aBitmap.GetSizePixel());
+            if (aSize.Width() > MAX_BMP_WIDTH || aSize.Height() > MAX_BMP_HEIGHT)
             {
-                sGrfName = grfName;
-                OUString sItemId = "gallery" + OUString::number(i);
-                INetURLObject aObj(sGrfName);
-                if (aObj.GetProtocol() == INetProtocol::File)
-                    sGrfName = aObj.PathToFileName();
-                if (GalleryExplorer::GetGraphicObj(GALLERY_THEME_BULLETS, i, &aGraphic))
-                {
-                    BitmapEx aBitmap(aGraphic.GetBitmapEx());
-                    Size aSize(aBitmap.GetSizePixel());
-                    if (aSize.Width() > MAX_BMP_WIDTH || aSize.Height() > MAX_BMP_HEIGHT)
-                    {
-                        bool bWidth = aSize.Width() > aSize.Height();
-                        double nScale
-                            = bWidth ? double(MAX_BMP_WIDTH) / static_cast<double>(aSize.Width())
-                                     : double(MAX_BMP_HEIGHT) / static_cast<double>(aSize.Height());
-                        aBitmap.Scale(nScale, nScale);
-                    }
-                    pVD->SetOutputSizePixel(aBitmap.GetSizePixel(), false);
-                    pVD->DrawBitmapEx(Point(), aBitmap);
-
-                    // We want to show only icon names not full path.
-                    aObj.removeExtension();
-                    OUString sIconName
-                        = aObj.GetLastName(INetURLObject::DecodeMechanism::WithCharset);
-
-                    m_xGalleryMenu->append(sItemId, sIconName, *pVD);
-                }
-                else
-                {
-                    m_xGalleryMenu->append(sItemId, sGrfName);
-                }
-                ++i;
+                bool bWidth = aSize.Width() > aSize.Height();
+                double nScale = bWidth
+                                    ? double(MAX_BMP_WIDTH) / static_cast<double>(aSize.Width())
+                                    : double(MAX_BMP_HEIGHT) / static_cast<double>(aSize.Height());
+                aBitmap.Scale(nScale, nScale);
             }
-            GalleryExplorer::EndLocking(GALLERY_THEME_BULLETS);
+            pVD->SetOutputSizePixel(aBitmap.GetSizePixel(), false);
+            pVD->DrawBitmapEx(Point(), aBitmap);
+
+            // We want to show only icon names not full path.
+            aObj.removeExtension();
+            OUString sIconName = aObj.GetLastName(INetURLObject::DecodeMechanism::WithCharset);
+
+            m_xGalleryMenu->append(sItemId, sIconName, *pVD);
         }
+        else
+        {
+            m_xGalleryMenu->append(sItemId, sGrfName);
+        }
+        ++i;
     }
+    GalleryExplorer::EndLocking(GALLERY_THEME_BULLETS);
 }
 
 IMPL_LINK_NOARG(SvxBulletAndPositionDlg, BulletHdl_Impl, weld::Button&, void)
@@ -950,26 +949,26 @@ IMPL_LINK_NOARG(SvxBulletAndPositionDlg, BulletHdl_Impl, weld::Button&, void)
         aMap.SetCharFont(aActBulletFont);
     if (bSameBullet)
         aMap.SetChar(cBullet);
-    if (aMap.run() == RET_OK)
+    if (aMap.run() != RET_OK)
+        return;
+
+    // change Font Numrules
+    aActBulletFont = aMap.GetCharFont();
+
+    sal_uInt16 _nMask = 1;
+    for (sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
     {
-        // change Font Numrules
-        aActBulletFont = aMap.GetCharFont();
-
-        sal_uInt16 _nMask = 1;
-        for (sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
+        if (nActNumLvl & _nMask)
         {
-            if (nActNumLvl & _nMask)
-            {
-                SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
-                aNumFmt.SetBulletFont(&aActBulletFont);
-                aNumFmt.SetBulletChar(static_cast<sal_Unicode>(aMap.GetChar()));
-                pActNum->SetLevel(i, aNumFmt);
-            }
-            _nMask <<= 1;
+            SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
+            aNumFmt.SetBulletFont(&aActBulletFont);
+            aNumFmt.SetBulletChar(static_cast<sal_Unicode>(aMap.GetChar()));
+            pActNum->SetLevel(i, aNumFmt);
         }
-
-        SetModified();
+        _nMask <<= 1;
     }
+
+    SetModified();
 }
 
 IMPL_LINK(SvxBulletAndPositionDlg, SizeHdl_Impl, weld::MetricSpinButton&, rField, void)
