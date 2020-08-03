@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_BRWCTRLR_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_INC_BRWCTRLR_HXX
+#pragma once
 
 #include <dbaccess/genericcontroller.hxx>
 #include "brwview.hxx"
@@ -330,7 +329,5 @@ namespace dbaui
         DECL_LINK( OnAsyncDisplayError, void*, void );
     };
 }
-
-#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_BRWCTRLR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

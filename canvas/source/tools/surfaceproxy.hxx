@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_SOURCE_TOOLS_SURFACEPROXY_HXX
-#define INCLUDED_CANVAS_SOURCE_TOOLS_SURFACEPROXY_HXX
+#pragma once
 
 #include <rendering/isurfaceproxy.hxx>
 #include <rendering/icolorbuffer.hxx>
@@ -115,7 +114,5 @@ namespace canvas
         std::shared_ptr<canvas::IColorBuffer> mpBuffer;
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

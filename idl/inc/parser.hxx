@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_IDL_INC_PARSER_HXX
-#define INCLUDED_IDL_INC_PARSER_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include "types.hxx"
@@ -66,7 +65,5 @@ public:
     void         Read(SvStringHashEntry const *);
     bool         ReadIf(SvStringHashEntry const *);
 };
-
-#endif // INCLUDED_IDL_INC_PARSER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

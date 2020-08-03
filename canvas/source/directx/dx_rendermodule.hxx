@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_SOURCE_DIRECTX_DX_RENDERMODULE_HXX
-#define INCLUDED_CANVAS_SOURCE_DIRECTX_DX_RENDERMODULE_HXX
+#pragma once
 
 #include <basegfx/vector/b2ivector.hxx>
 #include <basegfx/range/b2irectangle.hxx>
@@ -77,7 +76,5 @@ namespace dxcanvas
      */
     IDXRenderModuleSharedPtr createRenderModule( const vcl::Window& rParent );
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_SWXMLSECTIONLIST_HXX
-#define INCLUDED_SW_INC_SWXMLSECTIONLIST_HXX
+#pragma once
 
 #include <xmloff/xmlimp.hxx>
 
@@ -36,7 +35,5 @@ private:
     virtual SvXMLImportContext *CreateFastContext( sal_Int32 Element,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SFX2_ACCESSIBILITYCHECKDIALOG_HXX
-#define INCLUDED_SFX2_ACCESSIBILITYCHECKDIALOG_HXX
+#pragma once
 
 #include <sfx2/dllapi.h>
 #include <sfx2/AccessibilityIssue.hxx>
@@ -31,7 +30,5 @@ public:
 };
 
 } // end sfx namespace
-
-#endif // INCLUDED_SFX2_ACCESSIBILITYCHECKDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

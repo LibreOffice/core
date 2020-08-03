@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_SDIOCMPT_HXX
-#define INCLUDED_SD_INC_SDIOCMPT_HXX
+#pragma once
 
 #include <tools/stream.hxx>
 #include "sddllapi.h"
@@ -54,7 +53,5 @@ public:
                        sal_uInt16 nVer = SDIOCOMPAT_VERSIONDONTKNOW);
             ~SdIOCompat();
 };
-
-#endif // INCLUDED_SD_INC_SDIOCMPT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

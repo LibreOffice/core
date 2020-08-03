@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype - table object
  */
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPNUMERICFMT_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPNUMERICFMT_HXX
+#pragma once
 
 #include <map>
 
@@ -299,7 +298,5 @@ private:
 
     LwpNumericFormat cNumerics;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

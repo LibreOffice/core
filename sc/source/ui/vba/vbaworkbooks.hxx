@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAWORKBOOKS_HXX
-#define INCLUDED_SC_SOURCE_UI_VBA_VBAWORKBOOKS_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/excel/XWorkbooks.hpp>
@@ -49,7 +48,5 @@ public:
     virtual void SAL_CALL Close(  ) override;
     virtual css::uno::Any SAL_CALL Open( const OUString& Filename, const css::uno::Any& UpdateLinks, const css::uno::Any& ReadOnly, const css::uno::Any& Format, const css::uno::Any& Password, const css::uno::Any& WriteResPassword, const css::uno::Any& IgnoreReadOnlyRecommended, const css::uno::Any& Origin, const css::uno::Any& Delimiter, const css::uno::Any& Editable, const css::uno::Any& Notify, const css::uno::Any& Converter, const css::uno::Any& AddToMru ) override;
 };
-
-#endif // INCLUDED_SC_SOURCE_UI_VBA_VBAWORKBOOKS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

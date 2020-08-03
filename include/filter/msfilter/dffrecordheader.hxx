@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_MSFILTER_DFFRECORDHEADER_HXX
-#define INCLUDED_FILTER_MSFILTER_DFFRECORDHEADER_HXX
+#pragma once
 
 #include <filter/msfilter/msfilterdllapi.h>
 #include <svx/msdffdef.hxx>
@@ -60,5 +59,4 @@ public:
     MSFILTER_DLLPUBLIC friend bool ReadDffRecordHeader(SvStream& rIn, DffRecordHeader& rRec);
 };
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

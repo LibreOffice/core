@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_VCL_INC_CHECKSUM_HXX
-#define INCLUDED_VCL_INC_CHECKSUM_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <sal/types.h>
@@ -78,7 +77,5 @@ inline BitmapChecksum vcl_get_checksum (
     return static_cast<BitmapChecksum>(vcl_crc64( Checksum, Data, DatLen ));
 }
 
-
-#endif // INCLUDED_VCL_INC_CHECKSUM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

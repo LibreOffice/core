@@ -17,14 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_SOURCE_UNO_UNFORED_INTERNAL_HXX
-#define INCLUDED_EDITENG_SOURCE_UNO_UNFORED_INTERNAL_HXX
+#pragma once
 
 #include <editeng/editeng.hxx>
 
 SfxItemState GetSvxEditEngineItemState( EditEngine const & rEditEngine, const ESelection& rSel, sal_uInt16 nWhich );
 
-
-#endif // INCLUDED_EDITENG_SOURCE_UNO_UNFORED_INTERNAL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

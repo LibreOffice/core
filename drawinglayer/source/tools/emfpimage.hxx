@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPIMAGE_HXX
-#define INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPIMAGE_HXX
+#pragma once
 
 #include "emfphelperdata.hxx"
 #include <vcl/graph.hxx>
@@ -45,7 +44,5 @@ namespace emfplushelper
         void Read(SvMemoryStream &s, sal_uInt32 dataSize, bool bUseWholeStream);
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

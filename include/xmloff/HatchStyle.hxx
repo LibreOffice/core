@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_HATCHSTYLE_HXX
-#define INCLUDED_XMLOFF_HATCHSTYLE_HXX
+#pragma once
 
 #include <config_options.h>
 #include <sal/config.h>
@@ -58,7 +57,5 @@ public:
 
     void exportXML( const OUString& rStrName, const css::uno::Any& rValue );
 };
-
-#endif // _XMLOFF_HATCHELEMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

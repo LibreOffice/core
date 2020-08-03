@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CPPU_SOURCE_UNO_CASCADE_MAPPING_HXX
-#define INCLUDED_CPPU_SOURCE_UNO_CASCADE_MAPPING_HXX
+#pragma once
 
 #include <uno/environment.h>
 #include <uno/mapping.h>
@@ -29,7 +28,5 @@ void getCascadeMapping(uno_Mapping     ** ppMapping,
                        uno_Environment  * pFrom,
                        uno_Environment  * pTo,
                        rtl_uString      * pAddPurpose );
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

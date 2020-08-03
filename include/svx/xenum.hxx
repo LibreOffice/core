@@ -17,15 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_XENUM_HXX
-#define INCLUDED_SVX_XENUM_HXX
+#pragma once
 
 
 enum class XFormTextStyle   { Rotate, Upright, SlantX, SlantY, NONE };
 enum class XFormTextAdjust  { Left, Right, AutoSize, Center };
 enum class XFormTextShadow  { NONE, Normal, Slant };
 
-
-#endif // INCLUDED_SVX_XENUM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

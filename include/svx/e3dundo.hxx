@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_E3DUNDO_HXX
-#define INCLUDED_SVX_E3DUNDO_HXX
+#pragma once
 
 #include <svl/itemset.hxx>
 #include <svx/svdundo.hxx>
@@ -101,7 +100,5 @@ private:
         virtual void Undo() override;
         virtual void Redo() override;
 };
-
-#endif // INCLUDED_SVX_E3DUNDO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

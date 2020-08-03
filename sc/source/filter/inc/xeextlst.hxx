@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XEEXTLST_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_XEEXTLST_HXX
+#pragma once
 
 #include "xerecord.hxx"
 #include "xeroot.hxx"
@@ -204,7 +203,5 @@ private:
 };
 
 typedef rtl::Reference< XclExtLst > XclExtLstRef;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

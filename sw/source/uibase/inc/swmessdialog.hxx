@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_SWMESSDIALOG_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_SWMESSDIALOG_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 
@@ -21,7 +20,5 @@ public:
     SwMessageAndEditDialog(weld::Window* pParent, const OString& rID,
         const OUString& rUIXMLDescription);
 };
-
-#endif // INCLUDED_SW_SOURCE_UIBASE_INC_SWMESSDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

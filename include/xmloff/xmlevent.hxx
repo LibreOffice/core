@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_XMLEVENT_HXX
-#define INCLUDED_XMLOFF_XMLEVENT_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -135,7 +134,5 @@ public:
         const OUString& rApiEventName) = 0;
 };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

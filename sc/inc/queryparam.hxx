@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_QUERYPARAM_HXX
-#define INCLUDED_SC_INC_QUERYPARAM_HXX
+#pragma once
 
 #include <unotools/textsearch.hxx>
 #include "address.hxx"
@@ -202,7 +201,5 @@ struct ScDBQueryParamMatrix final : public ScDBQueryParamBase
 
     virtual bool IsValidFieldIndex() const override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

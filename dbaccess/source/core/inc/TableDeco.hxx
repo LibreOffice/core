@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_TABLEDECO_HXX
-#define INCLUDED_DBACCESS_SOURCE_CORE_INC_TABLEDECO_HXX
+#pragma once
 
 #include <memory>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
@@ -161,6 +160,5 @@ namespace dbaccess
         using ODataSettings::getFastPropertyValue;
     };
 }
-#endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_TABLEDECO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

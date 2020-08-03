@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_EXTENSIONCMDQUEUE_HXX
-#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_EXTENSIONCMDQUEUE_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -97,7 +96,5 @@ void handleInteractionRequest( const css::uno::Reference< css::uno::XComponentCo
                                const css::uno::Reference< css::task::XInteractionRequest > & xRequest );
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

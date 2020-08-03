@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NSTATEMENT_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NSTATEMENT_HXX
+#pragma once
 
 #include <com/sun/star/sdbc/XStatement.hpp>
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
@@ -270,7 +269,5 @@ namespace connectivity::evoab
         };
 }
 
-
-#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NSTATEMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

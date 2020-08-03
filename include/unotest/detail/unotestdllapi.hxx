@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOTEST_DETAIL_UNOTESTDLLAPI_HXX
-#define INCLUDED_UNOTEST_DETAIL_UNOTESTDLLAPI_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <sal/types.h>
@@ -27,8 +26,6 @@
 #define OOO_DLLPUBLIC_UNOTEST SAL_DLLPUBLIC_EXPORT
 #else
 #define OOO_DLLPUBLIC_UNOTEST SAL_DLLPUBLIC_IMPORT
-#endif
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

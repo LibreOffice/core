@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_BUTTON_HXX
-#define INCLUDED_VCL_BUTTON_HXX
+#pragma once
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -334,7 +333,5 @@ public:
 
     virtual FactoryFunction GetUITestFactory() const override;
 };
-
-#endif // INCLUDED_VCL_BUTTON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

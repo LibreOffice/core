@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_QA_UNIT_HELPER_CSV_HANDLER_HXX
-#define INCLUDED_SC_QA_UNIT_HELPER_CSV_HANDLER_HXX
+#pragma once
 
 #include "qahelper.hxx"
 
@@ -199,7 +198,5 @@ private:
     SCROW mnRow;
     SCTAB mnTab;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

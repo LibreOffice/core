@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_CELLMERGEOPTION_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_CELLMERGEOPTION_HXX
+#pragma once
 
 #include <address.hxx>
 
@@ -31,7 +30,5 @@ struct ScCellMergeOption
     ScRange getSingleRange(SCTAB nTab) const;
     ScRange getFirstSingleRange() const;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

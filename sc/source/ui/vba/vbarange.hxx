@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBARANGE_HXX
-#define INCLUDED_SC_SOURCE_UI_VBA_VBARANGE_HXX
+#pragma once
 
 #include <ooo/vba/excel/XRange.hpp>
 
@@ -317,7 +316,5 @@ public:
 bool getScRangeListForAddress( const OUString& sName, ScDocShell* pDocSh, const ScRange& refRange,
                                ScRangeList& aCellRanges,
                                formula::FormulaGrammar::AddressConvention aConv = formula::FormulaGrammar::CONV_XL_A1 );
-
-#endif // INCLUDED_SC_SOURCE_UI_VBA_VBARANGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

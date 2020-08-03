@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_VBAHELPER_VBATEXTFRAME_HXX
-#define INCLUDED_VBAHELPER_VBATEXTFRAME_HXX
+#pragma once
 
 #include <exception>
 
@@ -73,7 +72,5 @@ public:
     virtual css::uno::Any SAL_CALL Characters(  ) override;
 
 };
-
-#endif//SC_ INCLUDED_VBAHELPER_VBATEXTFRAME_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_BASEPROCESSOR3D_HXX
-#define INCLUDED_DRAWINGLAYER_PROCESSOR3D_BASEPROCESSOR3D_HXX
+#pragma once
 
 #include <drawinglayer/drawinglayerdllapi.h>
 
@@ -65,7 +64,5 @@ namespace drawinglayer::processor3d
 
 } // end of namespace drawinglayer::processor3d
 
-
-#endif //_DRAWINGLAYER_PROCESSOR3D_BASEPROCESSOR3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

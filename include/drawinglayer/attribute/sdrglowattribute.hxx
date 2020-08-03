@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRGLOWATTRIBUTE_HXX
-#define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRGLOWATTRIBUTE_HXX
+#pragma once
 
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <tools/color.hxx>
@@ -39,7 +38,5 @@ public:
 };
 
 } // end of namespace drawinglayer::attribute
-
-#endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRGLOWATTRIBUTE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

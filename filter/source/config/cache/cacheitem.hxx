@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CACHEITEM_HXX
-#define INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CACHEITEM_HXX
+#pragma once
 
 #include <unordered_map>
 #include <com/sun/star/uno/Sequence.h>
@@ -188,7 +187,5 @@ struct FlatDetectionInfo
 typedef ::std::vector< FlatDetectionInfo > FlatDetection;
 
 } // namespace filter::config
-
-#endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CACHEITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

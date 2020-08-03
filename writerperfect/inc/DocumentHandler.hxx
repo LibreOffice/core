@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WRITERPERFECT_DOCUMENTHANDLER_HXX
-#define INCLUDED_WRITERPERFECT_DOCUMENTHANDLER_HXX
+#pragma once
 
 #include <libodfgen/libodfgen.hxx>
 
@@ -47,7 +46,5 @@ private:
     css::uno::Reference<css::xml::sax::XDocumentHandler> mxHandler;
 };
 }
-
-#endif // INCLUDED_WRITERPERFECT_DOCUMENTHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

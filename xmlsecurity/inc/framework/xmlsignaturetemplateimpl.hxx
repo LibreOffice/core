@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_INC_FRAMEWORK_XMLSIGNATURETEMPLATEIMPL_HXX
-#define INCLUDED_XMLSECURITY_INC_FRAMEWORK_XMLSIGNATURETEMPLATEIMPL_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
@@ -92,7 +91,5 @@ class XMLSignatureTemplateImpl final : public ::cppu::WeakImplHelper<
         /// @throws css::uno::RuntimeException
         static css::uno::Reference< css::uno::XInterface > impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
 };
-
-#endif  // INCLUDED_XMLSECURITY_INC_FRAMEWORK_XMLSIGNATURETEMPLATEIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

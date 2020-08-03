@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_TABLE_VIEWCONTACTOFTABLEOBJ_HXX
-#define INCLUDED_SVX_SOURCE_TABLE_VIEWCONTACTOFTABLEOBJ_HXX
+#pragma once
 
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 #include <svx/svdotable.hxx>
@@ -38,7 +37,5 @@ namespace sdr::contact
             virtual ~ViewContactOfTableObj() override;
         };
 } // end of namespace sdr::contact
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

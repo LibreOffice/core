@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_INCLUDE_VCL_IMAGETREE_HXX
-#define INCLUDED_INCLUDE_VCL_IMAGETREE_HXX
+#pragma once
 
 #include <memory>
 #include <sal/config.h>
@@ -82,7 +81,5 @@ public:
      *  be too late for the destructors of the bitmaps in maIconCache)*/
     VCL_DLLPUBLIC void shutdown();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

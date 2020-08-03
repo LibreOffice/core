@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_LOK_HXX
-#define INCLUDED_VCL_LOK_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <vcl/dllapi.h>
@@ -21,7 +20,5 @@ void VCL_DLLPUBLIC registerPollCallbacks(LibreOfficeKitPollCallback pPollCallbac
                                          LibreOfficeKitWakeCallback pWakeCallback, void* pData);
 void VCL_DLLPUBLIC unregisterPollCallbacks();
 }
-
-#endif // INCLUDE_VCL_LOK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

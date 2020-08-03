@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_UNOLINGU_HXX
-#define INCLUDED_EDITENG_UNOLINGU_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -125,8 +124,6 @@ public:
 
 EDITENG_DLLPUBLIC short SvxDicError(weld::Window *pParent, linguistic::DictionaryError nError);
 
-
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

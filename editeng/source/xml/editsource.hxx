@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_SOURCE_XML_EDITSOURCE_HXX
-#define INCLUDED_EDITENG_SOURCE_XML_EDITSOURCE_HXX
+#pragma once
 
 #include <editeng/unoedsrc.hxx>
 
@@ -40,7 +39,5 @@ private:
 
     rtl::Reference<SvxEditEngineSourceImpl> mxImpl;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOTOOLS_COLLATORWRAPPER_HXX
-#define INCLUDED_UNOTOOLS_COLLATORWRAPPER_HXX
+#pragma once
 
 #include <unotools/unotoolsdllapi.h>
 #include <com/sun/star/uno/Reference.hxx>
@@ -58,7 +57,5 @@ class UNOTOOLS_DLLPUBLIC CollatorWrapper
                 const OUString& rAlgorithm,
                 const css::lang::Locale& rLocale, sal_Int32 nOption);
 };
-
-#endif // INCLUDED_UNOTOOLS_COLLATORWRAPPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

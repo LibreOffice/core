@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_APP_DISPATCHWATCHER_HXX
-#define INCLUDED_DESKTOP_SOURCE_APP_DISPATCHWATCHER_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
@@ -84,7 +83,5 @@ class DispatchWatcher : public ::cppu::WeakImplHelper< css::frame::XDispatchResu
 };
 
 }
-
-#endif // INCLUDED_DESKTOP_SOURCE_APP_DISPATCHWATCHER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

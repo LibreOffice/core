@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_TPCALC_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_TPCALC_HXX
+#pragma once
 
 #include <sfx2/tabdlg.hxx>
 #include "editfield.hxx"
@@ -71,7 +70,5 @@ private:
     DECL_LINK( RadioClickHdl, weld::Button&, void );
     DECL_LINK( CheckClickHdl, weld::ToggleButton&, void );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

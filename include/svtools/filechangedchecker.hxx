@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVTOOLS_FILECHANGEDCHECKER_HXX
-#define INCLUDED_SVTOOLS_FILECHANGEDCHECKER_HXX
+#pragma once
 
 #include <config_options.h>
 #include <svtools/svtdllapi.h>
@@ -43,5 +42,3 @@ public:
     FileChangedChecker(const OUString& rFilename,
             const ::std::function<void ()>& rCallback);
 };
-
-#endif

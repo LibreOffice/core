@@ -17,13 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DTRANS_SOURCE_INC_WINCLIP_HXX
-#define INCLUDED_DTRANS_SOURCE_INC_WINCLIP_HXX
+#pragma once
 
 #include <sal/types.h>
 
 const sal_Int32 CF_INVALID = 0;
-
-#endif // INCLUDED_DTRANS_SOURCE_INC_WINCLIP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

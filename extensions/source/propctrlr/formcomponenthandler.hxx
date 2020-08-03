@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_FORMCOMPONENTHANDLER_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_FORMCOMPONENTHANDLER_HXX
+#pragma once
 
 #include <memory>
 #include "propertyhandler.hxx"
@@ -432,7 +431,5 @@ namespace pcr
 
 } // namespace pcr
 
-
-#endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_FORMCOMPONENTHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

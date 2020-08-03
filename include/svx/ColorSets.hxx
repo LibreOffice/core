@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SVX_COLORSETS_HXX
-#define INCLUDED_SVX_COLORSETS_HXX
+#pragma once
 
 #include <vector>
 
@@ -65,7 +64,5 @@ public:
 };
 
 } // end of namespace svx
-
-#endif // INCLUDED_SVX_COLORSETS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

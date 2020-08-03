@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WRITERPERFECT_SOURCE_WRITER_EPUBEXPORTFILTER_HXX
-#define INCLUDED_WRITERPERFECT_SOURCE_WRITER_EPUBEXPORTFILTER_HXX
+#pragma once
 
 #include <vector>
 
@@ -68,7 +67,5 @@ private:
 };
 
 } // namespace writerperfect
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

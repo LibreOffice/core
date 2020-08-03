@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CODEMAKER_SOURCE_JAVAMAKER_JAVATYPE_HXX
-#define INCLUDED_CODEMAKER_SOURCE_JAVAMAKER_JAVATYPE_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -32,7 +31,5 @@ class TypeManager;
 void produce(
     OUString const & name, rtl::Reference< TypeManager > const & manager,
     codemaker::GeneratedTypeSet & generated, JavaOptions const & options);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOXML_SOURCE_DOM_CHILDLIST_HXX
-#define INCLUDED_UNOXML_SOURCE_DOM_CHILDLIST_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <rtl/ref.hxx>
@@ -56,7 +55,5 @@ namespace DOM
         virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL item(sal_Int32 index) override;
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

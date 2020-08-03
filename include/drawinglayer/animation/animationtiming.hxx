@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_ANIMATION_ANIMATIONTIMING_HXX
-#define INCLUDED_DRAWINGLAYER_ANIMATION_ANIMATIONTIMING_HXX
+#pragma once
 
 #include <drawinglayer/drawinglayerdllapi.h>
 
@@ -126,7 +125,5 @@ namespace drawinglayer::animation
 
 } // end of namespace drawinglayer::animation
 
-
-#endif //INCLUDED_DRAWINGLAYER_ANIMATION_ANIMATIONTIMING_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

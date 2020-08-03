@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_COLUMNDEF_HXX
-#define INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_COLUMNDEF_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <vector>
@@ -44,7 +43,5 @@ public:
     OUString const& getDefault() const { return m_sDefaultValue; }
 };
 }
-
-#endif // INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_COLUMNDEF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

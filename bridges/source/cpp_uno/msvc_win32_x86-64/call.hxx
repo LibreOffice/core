@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BRIDGES_SOURCE_CPP_UNO_MSVC_WIN32_X86_64_CALL_HXX
-#define INCLUDED_BRIDGES_SOURCE_CPP_UNO_MSVC_WIN32_X86_64_CALL_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -26,7 +25,5 @@
 #include <typelib/typeclass.h>
 
 extern "C" typelib_TypeClass cpp_vtable_call(sal_Int64 nOffsetAndIndex, void** pStack);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

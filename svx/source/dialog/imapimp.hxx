@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_SVX_SOURCE_DIALOG_IMAPIMP_HXX
-#define INCLUDED_SVX_SOURCE_DIALOG_IMAPIMP_HXX
+#pragma once
 
 #include <svx/imapdlg.hxx>
 #include <vcl/graph.hxx>
@@ -44,7 +43,5 @@ public:
     }
 };
 
-
-#endif // _IMAPIMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

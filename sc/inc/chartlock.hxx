@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_CHARTLOCK_HXX
-#define INCLUDED_SC_INC_CHARTLOCK_HXX
+#pragma once
 
 #include <vcl/timer.hxx>
 
@@ -69,7 +68,5 @@ private:
 
     ScTemporaryChartLock( const ScTemporaryChartLock& ) = delete;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

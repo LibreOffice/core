@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_WINDOWSTATE_HXX
-#define INCLUDED_VCL_WINDOWSTATE_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <vcl/vclenum.hxx>
@@ -77,7 +76,5 @@ public:
 
     OString ToStr() const;
 };
-
-#endif // INCLUDED_VCL_WINDOWSTATE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

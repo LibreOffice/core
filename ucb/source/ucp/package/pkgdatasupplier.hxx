@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_PACKAGE_PKGDATASUPPLIER_HXX
-#define INCLUDED_UCB_SOURCE_UCP_PACKAGE_PKGDATASUPPLIER_HXX
+#pragma once
 
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultset.hxx>
@@ -62,7 +61,5 @@ public:
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

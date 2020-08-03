@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPSTRINGFORMAT_HXX
-#define INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPSTRINGFORMAT_HXX
+#pragma once
 
 #include "emfphelperdata.hxx"
 
@@ -101,7 +100,5 @@ namespace emfplushelper
         bool BypassGDI()             const { return stringFormatFlags & 0x80000000;}
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

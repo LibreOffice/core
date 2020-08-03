@@ -57,8 +57,7 @@
 * @file
 * Styles for ordered list and unordered list.
 ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFLISTSTYLE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFLISTSTYLE_HXX
+#pragma once
 
 #include <xfilter/xfstyle.hxx>
 #include <xfilter/xfnumfmt.hxx>
@@ -254,7 +253,5 @@ inline void XFListLevel::SetMinLabelDistance(double distance)
 {
     m_fMinLabelDistance = distance;
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

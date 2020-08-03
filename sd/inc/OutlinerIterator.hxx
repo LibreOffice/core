@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_OUTLINERITERATOR_HXX
-#define INCLUDED_SD_INC_OUTLINERITERATOR_HXX
+#pragma once
 
 #include <svx/svdobj.hxx>
 
@@ -311,7 +310,5 @@ public:
 };
 
 } } // end of namespace ::sd::outliner
-
-#endif // _ INCLUDED_SD_INC_OUTLINERITERATOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

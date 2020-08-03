@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_POINTERSYMBOL_HXX
-#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_POINTERSYMBOL_HXX
+#pragma once
 
 #include <com/sun/star/rendering/XBitmap.hpp>
 #include <cppcanvas/sprite.hxx>
@@ -71,7 +70,5 @@ private:
 };
 
 } // namespace presentation::internal
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

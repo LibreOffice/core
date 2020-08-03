@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMBEDDEDOBJ_SOURCE_MSOLE_ADVISESINK_HXX
-#define INCLUDED_EMBEDDEDOBJ_SOURCE_MSOLE_ADVISESINK_HXX
+#pragma once
 
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
@@ -48,7 +47,5 @@ public:
     STDMETHODIMP_(void)  OnSave() override;
     STDMETHODIMP_(void)  OnClose() override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

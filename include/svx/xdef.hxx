@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_XDEF_HXX
-#define INCLUDED_SVX_XDEF_HXX
+#pragma once
 
 
 #include <svl/typedwhich.hxx>
@@ -143,7 +142,5 @@ constexpr TypedWhichId<XFormTextShadowTranspItem> XATTR_FORMTXTSHDWTRANSP (XATTR
 constexpr sal_uInt16                              XATTR_TEXT_LAST         (XATTR_FORMTXTSHDWTRANSP);
 
 constexpr sal_uInt16 XATTR_END = XATTR_TEXT_LAST;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

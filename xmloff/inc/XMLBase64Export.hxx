@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_XMLOFF_INC_XMLBASE64EXPORT_HXX
-#define INCLUDED_XMLOFF_INC_XMLBASE64EXPORT_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.h>
 #include <xmloff/xmltoken.hxx>
@@ -42,7 +41,5 @@ public:
             const css::uno::Reference < css::io::XInputStream > & rIn );
 };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

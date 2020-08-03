@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_SKIA_TEXTRENDER_HXX
-#define INCLUDED_VCL_INC_SKIA_TEXTRENDER_HXX
+#pragma once
 
 #include <unx/freetypetextrender.hxx>
 
@@ -34,7 +33,5 @@ public:
 private:
     sk_sp<SkFontMgr> fontManager;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

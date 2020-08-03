@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCTABLE_HXX
-#define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCTABLE_HXX
+#pragma once
 
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <com/sun/star/accessibility/XAccessibleTableSelection.hpp>
@@ -275,6 +274,5 @@ public:
         getImplementationName() override;
 
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

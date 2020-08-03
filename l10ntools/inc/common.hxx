@@ -9,8 +9,7 @@
 
 // Methods used by all of executables
 
-#ifndef INCLUDED_L10NTOOLS_INC_COMMON_HXX
-#define INCLUDED_L10NTOOLS_INC_COMMON_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -52,7 +51,5 @@ void writePoEntry(
     const OString& rHelpText, const OString& rText, const PoEntry::TYPE eType = PoEntry::TTEXT );
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SETTINGSEXPORTHELPER_HXX
-#define INCLUDED_XMLOFF_SETTINGSEXPORTHELPER_HXX
+#pragma once
 
 #include <xmloff/dllapi.h>
 
@@ -91,7 +90,5 @@ public:
         const css::uno::Sequence<css::beans::PropertyValue>& aProps,
         const OUString& rName) const;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

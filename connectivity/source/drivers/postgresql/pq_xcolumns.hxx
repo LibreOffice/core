@@ -34,8 +34,7 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XCOLUMNS_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XCOLUMNS_HXX
+#pragma once
 
 #include "pq_xcontainer.hxx"
 #include "pq_xbase.hxx"
@@ -113,6 +112,5 @@ public: // XDataDescriptorFactory
 };
 
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

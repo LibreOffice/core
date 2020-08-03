@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_LINKENUM_HXX
-#define INCLUDED_SW_INC_LINKENUM_HXX
+#pragma once
 
 enum UpdateLinks
 {
@@ -26,7 +25,5 @@ enum UpdateLinks
     AUTOMATIC,
     GLOBALSETTING
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

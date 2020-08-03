@@ -17,13 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_UNX_GTK_A11Y_ATKUTIL_HXX
-#define INCLUDED_VCL_UNX_GTK_A11Y_ATKUTIL_HXX
+#pragma once
 
 #include <atk/atk.h>
 
 void ooo_atk_util_ensure_event_listener();
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

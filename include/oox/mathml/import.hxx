@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_OOX_MATHML_IMPORT_HXX
-#define INCLUDED_OOX_MATHML_IMPORT_HXX
+#pragma once
 
 #include <oox/dllapi.h>
 #include <rtl/ref.hxx>
@@ -45,7 +44,5 @@ namespace drawingml { class TextParagraph; }
         core::ContextHandler const& rParent, drawingml::TextParagraph & rPara);
 
 } // namespace
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

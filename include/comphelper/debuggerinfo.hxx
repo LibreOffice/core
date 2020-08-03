@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COMPHELPER_DEBUGINFO_HXX
-#define INCLUDED_COMPHELPER_DEBUGINFO_HXX
+#pragma once
 
 #include <comphelper/comphelperdllapi.h>
 
@@ -32,7 +31,5 @@ COMPHELPER_DLLPUBLIC bool isDebuggerAttached();
 //        if( RUNNING_ON_VALGRIND )
 
 } // namespace comphelper
-
-#endif // INCLUDED_COMPHELPER_DEBUGINFO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

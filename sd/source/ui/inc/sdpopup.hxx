@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_INC_SDPOPUP_HXX
-#define INCLUDED_SD_SOURCE_UI_INC_SDPOPUP_HXX
+#pragma once
 
 #include <i18nlangtag/lang.h>
 #include <vcl/menu.hxx>
@@ -43,7 +42,5 @@ public:
 
     SvxFieldData*       GetField();
 };
-
-#endif // INCLUDED_SD_SOURCE_UI_INC_SDPOPUP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

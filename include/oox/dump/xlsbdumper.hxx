@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DUMP_XLSBDUMPER_HXX
-#define INCLUDED_OOX_DUMP_XLSBDUMPER_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <oox/dump/dumperbase.hxx>
@@ -84,7 +83,6 @@ protected:
 
 } // namespace oox::dmp::xlsb
 
-#endif
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

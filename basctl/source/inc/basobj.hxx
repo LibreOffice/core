@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_BASCTL_SOURCE_INC_BASOBJ_HXX
-#define INCLUDED_BASCTL_SOURCE_INC_BASOBJ_HXX
+#pragma once
 
 #include "scriptdocument.hxx"
 
@@ -102,7 +101,5 @@ namespace basctl
     void            MarkDocumentModified( const ScriptDocument& rDocument );
 
 } // namespace basctl
-
-#endif // INCLUDED_BASCTL_SOURCE_INC_BASOBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

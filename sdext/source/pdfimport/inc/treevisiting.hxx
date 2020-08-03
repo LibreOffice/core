@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_TREEVISITING_HXX
-#define INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_TREEVISITING_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <list>
@@ -56,7 +55,5 @@ namespace pdfi
     typedef std::shared_ptr<ElementTreeVisitor> ElementTreeVisitorSharedPtr;
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

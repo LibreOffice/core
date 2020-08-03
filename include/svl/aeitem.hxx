@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVL_AEITEM_HXX
-#define INCLUDED_SVL_AEITEM_HXX
+#pragma once
 
 #include <config_options.h>
 #include <svl/svldllapi.h>
@@ -40,7 +39,5 @@ public:
     virtual SfxAllEnumItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( SfxPoolItem const & ) const override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

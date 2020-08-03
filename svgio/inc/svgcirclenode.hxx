@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVGIO_INC_SVGCIRCLENODE_HXX
-#define INCLUDED_SVGIO_INC_SVGCIRCLENODE_HXX
+#pragma once
 
 #include "svgnode.hxx"
 #include "svgstyleattributes.hxx"
@@ -64,7 +63,5 @@ namespace svgio::svgreader
         };
 
 } // end of namespace svgio::svgreader
-
-#endif // INCLUDED_SVGIO_INC_SVGCIRCLENODE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

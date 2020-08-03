@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_IMPFONTCHARMAP_HXX
-#define INCLUDED_VCL_INC_IMPFONTCHARMAP_HXX
+#pragma once
 
 #include <tools/ref.hxx>
 #include <vcl/dllapi.h>
@@ -52,7 +51,5 @@ private:
 };
 
 bool VCL_DLLPUBLIC ParseCMAP( const unsigned char* pRawData, int nRawLength, CmapResult& );
-
-#endif // INCLUDED_VCL_INC_IMPFONTCHARMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

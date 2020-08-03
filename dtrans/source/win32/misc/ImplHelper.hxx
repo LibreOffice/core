@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DTRANS_SOURCE_WIN32_MISC_IMPLHELPER_HXX
-#define INCLUDED_DTRANS_SOURCE_WIN32_MISC_IMPLHELPER_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -71,7 +70,5 @@ bool IsOEMCP( sal_uInt32 codepage );
 // converts a codepage into a string representation
 
 OUString cptostr( sal_uInt32 codepage );
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

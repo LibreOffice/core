@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SDGGAITM_HXX
-#define INCLUDED_SVX_SDGGAITM_HXX
+#pragma once
 
 #include <svl/intitem.hxx>
 #include <svx/svddef.hxx>
@@ -40,7 +39,5 @@ public:
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };
-
-#endif // INCLUDED_SVX_SDGGAITM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

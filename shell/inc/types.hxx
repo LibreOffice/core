@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SHELL_INC_INTERNAL_TYPES_HXX
-#define INCLUDED_SHELL_INC_INTERNAL_TYPES_HXX
+#pragma once
 
 #include <string>
 #include <map>
@@ -73,7 +72,5 @@ public:
     virtual long stell () = 0;
     virtual long sseek (long offset, int origin) = 0;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVX_SIGNATURELINEHELPER_HXX
-#define INCLUDED_SVX_SIGNATURELINEHELPER_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
@@ -60,7 +59,5 @@ SVX_DLLPUBLIC void
 setShapeCertificate(SdrView* pView,
                     const css::uno::Reference<css::security::XCertificate>& xCertificate);
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

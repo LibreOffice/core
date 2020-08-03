@@ -53,8 +53,7 @@
  *
  *
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_UTLIST_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_UTLIST_HXX
+#pragma once
 
 namespace OpenStormBento
 {
@@ -115,6 +114,5 @@ public: // Methods
     virtual ~CUtOwningList() override;
 };
 }//end namespace OpenStormBento
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

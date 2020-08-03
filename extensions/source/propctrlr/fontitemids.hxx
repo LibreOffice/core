@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_FONTITEMIDS_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_FONTITEMIDS_HXX
+#pragma once
 
 #define CFID_FONT               1
 #define CFID_HEIGHT             2
@@ -45,7 +44,5 @@
 
 #define CFID_FIRST_ITEM_ID  CFID_FONT
 #define CFID_LAST_ITEM_ID   CFID_FONTLIST
-
-#endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_FONTITEMIDS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

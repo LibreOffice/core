@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVGIO_INC_SVGDOCUMENT_HXX
-#define INCLUDED_SVGIO_INC_SVGDOCUMENT_HXX
+#pragma once
 
 #include "svgnode.hxx"
 #include <memory>
@@ -76,7 +75,5 @@ namespace svgio::svgreader
         };
 
 } // end of namespace svgio::svgreader
-
-#endif // INCLUDED_SVGIO_INC_SVGDOCUMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

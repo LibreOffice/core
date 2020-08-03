@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DOCUMENTCONTAINER_HXX
-#define INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DOCUMENTCONTAINER_HXX
+#pragma once
 
 #include <definitioncontainer.hxx>
 #include <cppuhelper/implbase5.hxx>
@@ -134,7 +133,5 @@ protected:
 };
 
 }   // namespace dbaccess
-
-#endif // INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DOCUMENTCONTAINER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

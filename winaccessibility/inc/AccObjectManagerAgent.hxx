@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WINACCESSIBILITY_INC_ACCOBJECTMANAGERAGENT_HXX
-#define INCLUDED_WINACCESSIBILITY_INC_ACCOBJECTMANAGERAGENT_HXX
+#pragma once
 
 #include <memory>
 
@@ -99,7 +98,5 @@ public:
     sal_Int64 Get_ToATInterface(sal_Int64 hWnd, sal_Int64 lParam, sal_Int64 wParam);
 
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

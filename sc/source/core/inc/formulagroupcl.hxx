@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_SOURCE_CORE_INC_FORMULAGROUPCL_HXX
-#define INCLUDED_SC_SOURCE_CORE_INC_FORMULAGROUPCL_HXX
+#pragma once
 
 #include <formulagroup.hxx>
 
@@ -26,7 +25,5 @@ public:
 };
 
 } // namespace sc::opencl
-
-#endif // INCLUDED_SC_SOURCE_CORE_INC_FORMULAGROUPCL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

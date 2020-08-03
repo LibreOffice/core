@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SFX2_TOOLBARIDS_HXX
-#define INCLUDED_SFX2_TOOLBARIDS_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -71,7 +70,5 @@ enum class ToolbarId : sal_uInt32
     Graphic_Objectbar = 25054,
     Media_Objectbar = 25060
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

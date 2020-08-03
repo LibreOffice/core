@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_WIN_WINGDIIMPL_HXX
-#define INCLUDED_VCL_INC_WIN_WINGDIIMPL_HXX
+#pragma once
 
 #include <win/salgdi.h>
 #include <ControlCacheKey.hxx>
@@ -55,7 +54,5 @@ public:
         abort();
     };
 };
-
-#endif // INCLUDED_VCL_INC_WIN_WINGDIIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

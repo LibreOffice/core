@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SOURCE_INC_RTLPROTO_HXX
-#define INCLUDED_BASIC_SOURCE_INC_RTLPROTO_HXX
+#pragma once
 
 #include <basic/sbstar.hxx>
 
@@ -359,7 +358,5 @@ extern void SbRtl_Partition(StarBASIC * pBasic, SbxArray & rPar, bool bWrite); /
 
 extern double Now_Impl();
 extern void Wait_Impl( bool bDurationBased, SbxArray& rPar );
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

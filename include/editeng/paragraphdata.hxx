@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_PARAGRAPHDATA_HXX
-#define INCLUDED_EDITENG_PARAGRAPHDATA_HXX
+#pragma once
 
 #include <vector>
 #include <sal/types.h>
@@ -42,7 +41,5 @@ public:
 };
 
 typedef ::std::vector< ParagraphData > ParagraphDataVector;
-
-#endif // INCLUDED_EDITENG_PARAGRAPHDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

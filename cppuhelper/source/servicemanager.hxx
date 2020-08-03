@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CPPUHELPER_SOURCE_SERVICEMANAGER_HXX
-#define INCLUDED_CPPUHELPER_SOURCE_SERVICEMANAGER_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -345,7 +344,5 @@ private:
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

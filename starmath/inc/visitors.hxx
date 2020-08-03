@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_STARMATH_INC_VISITORS_HXX
-#define INCLUDED_STARMATH_INC_VISITORS_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -456,7 +455,5 @@ private:
     /** Output text generated from the pNodes */
     OUStringBuffer maCmdText;
 };
-
-#endif // INCLUDED_STARMATH_INC_VISITORS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

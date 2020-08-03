@@ -8,8 +8,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SAX_TOOLS_DOCUMENTHANDLERADAPTER_HXX
-#define INCLUDED_SAX_TOOLS_DOCUMENTHANDLERADAPTER_HXX
+#pragma once
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
@@ -210,5 +209,4 @@ namespace sax
         css::uno::Reference< css::xml::sax::XExtendedDocumentHandler > m_handler;
     };
 }
-#endif // INCLUDED_SAX_TOOLS_DOCUMENTHANDLERADAPTER_HXX
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CHART2_SOURCE_INC_REGRESSIONCURVEHELPER_HXX
-#define INCLUDED_CHART2_SOURCE_INC_REGRESSIONCURVEHELPER_HXX
+#pragma once
 
 #include <svx/chrtitem.hxx>
 #include "charttoolsdllapi.hxx"
@@ -174,7 +173,5 @@ namespace chart::RegressionCurveHelper
     OOO_DLLPUBLIC_CHARTTOOLS bool hasEquation(const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
 } //  namespace chart
-
-#endif // INCLUDED_CHART2_SOURCE_INC_REGRESSIONCURVEHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

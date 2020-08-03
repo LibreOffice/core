@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVTOOLS_LANGHELP_HXX
-#define INCLUDED_SVTOOLS_LANGHELP_HXX
+#pragma once
 
 #include <svtools/svtdllapi.h>
 
@@ -26,7 +25,5 @@ SVT_DLLPUBLIC void localizeWebserviceURI( OUString& io_rURI );
 
 OUString SVT_DLLPUBLIC getInstalledLocaleForLanguage(css::uno::Sequence<OUString> const & installed, OUString const & locale);
 OUString SVT_DLLPUBLIC getInstalledLocaleForSystemUILanguage(css::uno::Sequence<OUString> const & installed, bool bRequestInstallIfMissing, const OUString& rPreferredLocale = OUString());
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

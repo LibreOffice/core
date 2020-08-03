@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABDRIVER_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABDRIVER_HXX
+#pragma once
 
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -159,7 +158,5 @@ namespace connectivity::macab
         };
 
 }
-
-#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABDRIVER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

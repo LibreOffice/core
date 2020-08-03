@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_FILTER_XML_XMLBRSHI_HXX
-#define INCLUDED_SW_SOURCE_FILTER_XML_XMLBRSHI_HXX
+#pragma once
 
 #include <memory>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -74,7 +73,5 @@ public:
 
     const SvxBrushItem& GetItem() const { return *pItem; }
 };
-
-#endif  //  _XMLBRSHI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

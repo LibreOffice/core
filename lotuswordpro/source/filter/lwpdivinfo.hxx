@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDIVINFO_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDIVINFO_HXX
+#pragma once
 
 #include <config_lgpl.h>
 
@@ -151,7 +150,5 @@ inline bool LwpDivInfo::IsGotoable() const
 {
     return HasContents() && (IsScrollable() || IsOleDivision());
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

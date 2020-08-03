@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SYSWIN_HXX
-#define INCLUDED_VCL_SYSWIN_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <vcl/builder.hxx>
@@ -223,7 +222,5 @@ inline void SystemWindow::SetIdleDebugName( const char *pDebugName )
 {
     maLayoutIdle.SetDebugName( pDebugName );
 }
-
-#endif // INCLUDED_VCL_SYSWIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

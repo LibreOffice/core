@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CUI_SOURCE_INC_PAGE_HXX
-#define INCLUDED_CUI_SOURCE_INC_PAGE_HXX
+#pragma once
 
 #include <sfx2/tabdlg.hxx>
 #include <svx/pagectrl.hxx>
@@ -179,7 +178,5 @@ public:
     void                SetCollectionList(const std::vector<OUString> &aList);
     virtual void        PageCreated(const SfxAllItemSet& aSet) override;
 };
-
-#endif // INCLUDED_CUI_SOURCE_INC_PAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

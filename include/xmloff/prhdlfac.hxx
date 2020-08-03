@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_PRHDLFAC_HXX
-#define INCLUDED_XMLOFF_PRHDLFAC_HXX
+#pragma once
 
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
@@ -100,7 +99,5 @@ private:
         basic XML-types */
     SAL_DLLPRIVATE const XMLPropertyHandler* GetBasicHandler( sal_Int32 nType ) const;
 };
-
-#endif // INCLUDED_XMLOFF_PRHDLFAC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

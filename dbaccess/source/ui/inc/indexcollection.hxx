@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_INDEXCOLLECTION_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_INC_INDEXCOLLECTION_HXX
+#pragma once
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -91,7 +90,5 @@ namespace dbaui
     };
 
 }   // namespace dbaui
-
-#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_INDEXCOLLECTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

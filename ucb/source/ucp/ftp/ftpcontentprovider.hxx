@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_FTP_FTPCONTENTPROVIDER_HXX
-#define INCLUDED_UCB_SOURCE_UCP_FTP_FTPCONTENTPROVIDER_HXX
+#pragma once
 
 #include <vector>
 #include <ucbhelper/proxydecider.hxx>
@@ -104,7 +103,5 @@ namespace ftp
     };  // end class FTPContentProvider
 
 }       // end namespace ftp
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

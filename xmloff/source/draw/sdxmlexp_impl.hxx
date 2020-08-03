@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_DRAW_SDXMLEXP_IMPL_HXX
-#define INCLUDED_XMLOFF_SOURCE_DRAW_SDXMLEXP_IMPL_HXX
+#pragma once
 
 #include <xmloff/xmlexp.hxx>
 
@@ -175,7 +174,5 @@ public:
     virtual void exportAutoDataStyles() override;
     virtual OUString getDataStyleName(const sal_Int32 nNumberFormat, bool bTimeFormat = false ) const override;
 };
-
-#endif  //  _SDXMLEXP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

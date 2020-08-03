@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMBEDSERV_SOURCE_INC_EMBEDDOC_HXX
-#define INCLUDED_EMBEDSERV_SOURCE_INC_EMBEDDOC_HXX
+#pragma once
 
 #include "common.h"
 #include <oleidl.h>
@@ -189,7 +188,5 @@ public:
         m_bValue = false;
     }
 };
-
-#endif // INCLUDED_EMBEDSERV_SOURCE_INC_EMBEDDOC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

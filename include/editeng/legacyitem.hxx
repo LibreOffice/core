@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_EDITENG_LEGACYITEM_HXX
-#define INCLUDED_EDITENG_LEGACYITEM_HXX
+#pragma once
 
 #include <config_options.h>
 #include <editeng/editengdllapi.h>
@@ -187,7 +186,5 @@ namespace legacy
         EDITENG_DLLPUBLIC SvStream& Store(const SvxShadowItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
     }
 }
-
-#endif // INCLUDED_EDITENG_LEGACYITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

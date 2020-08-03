@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DTRANS_SOURCE_WIN32_FTRANSL_FTRANSL_HXX
-#define INCLUDED_DTRANS_SOURCE_WIN32_FTRANSL_FTRANSL_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -56,7 +55,5 @@ public:
 private:
     const css::uno::Reference< css::uno::XComponentContext >  m_xContext;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

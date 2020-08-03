@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_GTK3_CAIRO_HXX
-#define INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_GTK3_CAIRO_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -43,7 +42,5 @@ namespace cairo {
     };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

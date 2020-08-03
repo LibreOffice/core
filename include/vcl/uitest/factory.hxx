@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_UITEST_FACTORY_HXX
-#define INCLUDED_VCL_UITEST_FACTORY_HXX
+#pragma once
 
 #include <memory>
 #include <functional>
@@ -22,7 +21,5 @@ class Window;
 class UIObject;
 
 typedef std::function<std::unique_ptr<UIObject>(vcl::Window*)> FactoryFunction;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

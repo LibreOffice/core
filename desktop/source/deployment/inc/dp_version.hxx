@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_VERSION_HXX
-#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_VERSION_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -33,7 +32,5 @@ enum Order { LESS, EQUAL, GREATER };
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC Order compareVersions(
     OUString const & version1, OUString const & version2);
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

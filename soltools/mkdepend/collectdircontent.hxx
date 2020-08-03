@@ -1,6 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-#ifndef INCLUDED_SOLTOOLS_MKDEPEND_COLLECTDIRCONTENT_HXX
-#define INCLUDED_SOLTOOLS_MKDEPEND_COLLECTDIRCONTENT_HXX
+#pragma once
 
 #if defined __cplusplus
 
@@ -53,8 +52,6 @@ int call_IncludesCollection_exists(struct IncludesCollection* m, const char* fil
 
 #if defined __cplusplus
 }
-#endif
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_GTK_GTKFRAME_HXX
-#define INCLUDED_VCL_INC_UNX_GTK_GTKFRAME_HXX
+#pragma once
 
 #include <cairo.h>
 #include <gdk/gdk.h>
@@ -555,7 +554,5 @@ enum GdkAnchorHints
   GDK_ANCHOR_RESIZE   = GDK_ANCHOR_RESIZE_X | GDK_ANCHOR_RESIZE_Y
 };
 #endif
-
-#endif // INCLUDED_VCL_INC_UNX_GTK_GTKFRAME_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

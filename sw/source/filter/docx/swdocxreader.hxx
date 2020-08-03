@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_FILTER_DOCX_SWDOCXREADER_HXX
-#define INCLUDED_SW_SOURCE_FILTER_DOCX_SWDOCXREADER_HXX
+#pragma once
 
 #include <shellio.hxx>
 
@@ -36,7 +35,5 @@ private:
 
     static bool MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

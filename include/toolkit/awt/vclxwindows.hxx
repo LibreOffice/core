@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_AWT_VCLXWINDOWS_HXX
-#define INCLUDED_TOOLKIT_AWT_VCLXWINDOWS_HXX
+#pragma once
 
 #include <config_options.h>
 #include <toolkit/dllapi.h>
@@ -1362,7 +1361,5 @@ public:
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
-
-#endif // INCLUDED_TOOLKIT_AWT_VCLXWINDOWS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

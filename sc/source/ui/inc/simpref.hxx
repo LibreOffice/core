@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_SIMPREF_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_SIMPREF_HXX
+#pragma once
 
 #include "anyrefdg.hxx"
 
@@ -75,7 +74,5 @@ public:
 
     void            SetFlags( bool bSetCloseOnButtonUp, bool bSetSingleCell, bool bSetMultiSelection );
 };
-
-#endif // INCLUDED_SC_SOURCE_UI_INC_SIMPREF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

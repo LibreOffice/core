@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CPPU_SOURCE_HELPER_PURPENV_PROXY_HXX
-#define INCLUDED_CPPU_SOURCE_HELPER_PURPENV_PROXY_HXX
+#pragma once
 
 #include <osl/interlck.h>
 
@@ -73,7 +72,5 @@ public:
 };
 
 extern "C" void Proxy_free(uno_ExtEnvironment * pEnv, void * pProxy) SAL_THROW_EXTERN_C();
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

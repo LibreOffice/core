@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_LINUX_ALPHA_SHARE_HXX
-#define INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_LINUX_ALPHA_SHARE_HXX
+#pragma once
 
 #include "uno/mapping.h"
 
@@ -85,5 +84,4 @@ namespace axp
     enum axplimits { MAX_WORDS_IN_REGS = 6, MAX_GPR_REGS = 6, MAX_SSE_REGS = 6 };
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

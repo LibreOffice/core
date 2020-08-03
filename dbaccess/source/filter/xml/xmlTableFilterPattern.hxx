@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLTABLEFILTERPATTERN_HXX
-#define INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLTABLEFILTERPATTERN_HXX
+#pragma once
 
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/xmlictxt.hxx>
@@ -43,7 +42,5 @@ namespace dbaxml
         virtual void SAL_CALL characters( const OUString& rChars ) override;
     };
 } // namespace dbaxml
-
-#endif // INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLTABLEFILTERPATTERN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

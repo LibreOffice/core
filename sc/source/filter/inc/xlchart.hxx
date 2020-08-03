@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XLCHART_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_XLCHART_HXX
+#pragma once
 
 #include <tools/gen.hxx>
 #include "fapihelper.hxx"
@@ -1434,7 +1433,5 @@ struct XclChRootData
     css::uno::Reference< css::drawing::XShape >
                         GetTitleShape( const XclChTextKey& rTitleKey ) const;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_TOOLS_FILEUTIL_HXX
-#define INCLUDED_TOOLS_FILEUTIL_HXX
+#pragma once
 
 #include <tools/toolsdllapi.h>
 #include <rtl/ustring.hxx>
@@ -20,7 +19,5 @@ namespace tools
 // Currently only implemented for Windows; on other platforms, returns false.
 TOOLS_DLLPUBLIC bool IsMappedWebDAVPath(const OUString& rURL, OUString* pRealURL = nullptr);
 }
-
-#endif // INCLUDED_TOOLS_FILEUTIL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

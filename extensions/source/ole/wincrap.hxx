@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_OLE_WINCRAP_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_OLE_WINCRAP_HXX
+#pragma once
 
 /* wrap all includes that need to be wrapped by prewin.h/postwin.h here */
 
@@ -61,7 +60,5 @@ extern CComModule _Module;
 #include <olectl.h>
 
 #include <postwin.h>
-
-#endif // INCLUDED_EXTENSIONS_SOURCE_OLE_WINCRAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

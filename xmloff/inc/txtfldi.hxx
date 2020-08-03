@@ -23,8 +23,7 @@
  *  (except variable related + database display field: see txtvfldi.hxx)
  */
 
-#ifndef INCLUDED_XMLOFF_INC_TXTFLDI_HXX
-#define INCLUDED_XMLOFF_INC_TXTFLDI_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -1273,7 +1272,5 @@ public:
     virtual void PrepareField(
         const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

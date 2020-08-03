@@ -53,8 +53,7 @@
  *
  *
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_FIRST_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_FIRST_HXX
+#pragma once
 
 #include "bento.hxx"
 
@@ -70,7 +69,5 @@ CBenNamedObject * FindNamedObject(CUtList * pList, const OString& rName,
 CBenIDListElmt * FindID(CUtList * pList, BenObjectID ObjectID,
   CUtListElmt ** ppPrev);
 } // end namespace
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

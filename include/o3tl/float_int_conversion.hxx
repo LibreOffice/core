@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_O3TL_FLOAT_INT_CONVERSION_HXX
-#define INCLUDED_O3TL_FLOAT_INT_CONVERSION_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -51,7 +50,5 @@ template <typename F> std::enable_if_t<std::is_floating_point_v<F>, F> roundAway
     return value >= 0 ? std::ceil(value) : std::floor(value);
 }
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

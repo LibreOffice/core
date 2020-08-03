@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_GRADIENT_HXX
-#define INCLUDED_VCL_GRADIENT_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <vcl/dllapi.h>
@@ -82,7 +81,5 @@ public:
     bool            operator!=( const Gradient& rGradient ) const
                         { return !(Gradient::operator==( rGradient )); }
 };
-
-#endif // INCLUDED_VCL_GRADIENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

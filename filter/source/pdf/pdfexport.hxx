@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_PDF_PDFEXPORT_HXX
-#define INCLUDED_FILTER_SOURCE_PDF_PDFEXPORT_HXX
+#pragma once
 
 #include <tools/multisel.hxx>
 #include <vcl/pdfwriter.hxx>
@@ -142,7 +141,5 @@ public:
 
     void                showErrors( const std::set<vcl::PDFWriter::ErrorCode>& );
 };
-
-#endif // INCLUDED_FILTER_SOURCE_PDF_PDFEXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

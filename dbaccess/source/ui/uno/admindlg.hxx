@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_UNO_ADMINDLG_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_UNO_ADMINDLG_HXX
+#pragma once
 
 #include <unoadmin.hxx>
 
@@ -53,7 +52,5 @@ private:
 };
 
 }   // namespace dbaui
-
-#endif // INCLUDED_DBACCESS_SOURCE_UI_UNO_ADMINDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

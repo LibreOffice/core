@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_SCUIIMOPTDLG_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_SCUIIMOPTDLG_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 
@@ -72,7 +71,5 @@ private:
     DECL_LINK(FixedWidthHdl, weld::ToggleButton&, void);
     DECL_LINK(DoubleClickHdl, weld::TreeView&, bool);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

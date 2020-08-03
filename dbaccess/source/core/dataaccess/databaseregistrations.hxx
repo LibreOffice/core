@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DATABASEREGISTRATIONS_HXX
-#define INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DATABASEREGISTRATIONS_HXX
+#pragma once
 
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -30,7 +29,5 @@ namespace dbaccess
         createDataSourceRegistrations( const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
 
 } // namespace dbaccess
-
-#endif // INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DATABASEREGISTRATIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

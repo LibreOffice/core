@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SYSDATA_HXX
-#define INCLUDED_VCL_SYSDATA_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -180,7 +179,5 @@ struct SystemWindowData
     bool            bClipUsingNativeWidget; // default is false, true will attempt to clip the childwindow with a native widget
 #endif
 };
-
-#endif // INCLUDED_VCL_SYSDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

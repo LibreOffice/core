@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SHELL_INC_INTERNAL_COLUMNINFO_HXX
-#define INCLUDED_SHELL_INC_INTERNAL_COLUMNINFO_HXX
+#pragma once
 
 #include <shlobj.h>
 
@@ -55,7 +54,5 @@ public:
 private:
     long    m_RefCnt;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

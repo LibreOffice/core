@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_ENHANCEDCUSTOMSHAPEGEOMETRY_HXX
-#define INCLUDED_SVX_ENHANCEDCUSTOMSHAPEGEOMETRY_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <svx/msdffdef.hxx>
@@ -99,7 +98,5 @@ SVXCORE_DLLPUBLIC sal_Int16     GetCustomShapeConnectionTypeDefault( MSO_SPT eSp
 SVXCORE_DLLPUBLIC bool          IsCustomShapeStrokedByDefault( MSO_SPT eSpType );
 
 SVXCORE_DLLPUBLIC const mso_CustomShape*    GetCustomShapeContent( MSO_SPT eSpType );
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_JAVAEDIT_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_JAVAEDIT_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 
@@ -73,7 +72,5 @@ public:
     bool IsNew() const { return m_bNew; }
     bool IsUpdate() const;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

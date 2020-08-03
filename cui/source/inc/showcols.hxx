@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CUI_SOURCE_INC_SHOWCOLS_HXX
-#define INCLUDED_CUI_SOURCE_INC_SHOWCOLS_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -42,7 +41,5 @@ public:
 private:
     DECL_LINK(OnClickedOk, weld::Button&, void);
 };
-
-#endif // INCLUDED_CUI_SOURCE_INC_SHOWCOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

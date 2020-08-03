@@ -57,8 +57,7 @@
  * @file
  * Date style. The date format for date field.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDATESTYLE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDATESTYLE_HXX
+#pragma once
 
 #include <xfilter/xfstyle.hxx>
 #include <xfilter/xftimestyle.hxx>
@@ -198,7 +197,5 @@ inline void XFDateStyle::AddAmPm()
     part->SetPartType(enumXFDateAmPm);
     m_aParts.AddStyle(std::move(part));
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

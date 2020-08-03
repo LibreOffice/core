@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BRIDGES_INC_TYPES_HXX
-#define INCLUDED_BRIDGES_INC_TYPES_HXX
+#pragma once
 
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
@@ -65,7 +64,5 @@ bool isSimpleType(typelib_TypeDescription const * type);
 bool relatesToInterfaceType(typelib_TypeDescription const * type);
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_OUTLINER_HXX
-#define INCLUDED_SD_INC_OUTLINER_HXX
+#pragma once
 
 #include <svx/svdoutl.hxx>
 #include "pres.hxx"
@@ -528,7 +527,5 @@ private:
     */
     weld::Window* GetMessageBoxParent();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

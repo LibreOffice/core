@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REPORTDESIGN_INC_RPTMODEL_HXX
-#define INCLUDED_REPORTDESIGN_INC_RPTMODEL_HXX
+#pragma once
 
 #include "dllapi.h"
 #include <svx/svdmodel.hxx>
@@ -86,7 +85,5 @@ public:
     css::uno::Reference< css::uno::XInterface > createShape(const OUString& aServiceSpecifier,css::uno::Reference< css::drawing::XShape >& _rShape,sal_Int32 nOrientation = -1);
 };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

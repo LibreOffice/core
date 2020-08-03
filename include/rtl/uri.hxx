@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_RTL_URI_HXX
-#define INCLUDED_RTL_URI_HXX
+#pragma once
 
 #include "rtl/malformeduriexception.hxx"
 #include "rtl/uri.h"
@@ -128,7 +127,5 @@ inline rtl::OUString Uri::convertRelToAbs(rtl::OUString const & rBaseUriRef,
 }
 
 }
-
-#endif // INCLUDED_RTL_URI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

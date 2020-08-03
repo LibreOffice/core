@@ -57,8 +57,7 @@
  * @file
  * Border object,now only used by paragraph object.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFBORDERS_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFBORDERS_HXX
+#pragma once
 
 #include <xfilter/ixfstream.hxx>
 #include <xfilter/xfcolor.hxx>
@@ -186,5 +185,4 @@ private:
     XFBorder    m_aBorderBottom;
 };
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_STATISTICSINPUTOUTPUTDIALOG_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_STATISTICSINPUTOUTPUTDIALOG_HXX
+#pragma once
 
 #include <address.hxx>
 #include "anyrefdg.hxx"
@@ -86,7 +85,5 @@ private:
     DECL_LINK( RefInputModifyHandler, formula::RefEdit&, void );
 };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

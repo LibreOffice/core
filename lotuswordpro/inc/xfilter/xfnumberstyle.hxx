@@ -57,8 +57,7 @@
  * @file
  * Number style for table cell.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFNUMBERSTYLE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFNUMBERSTYLE_HXX
+#pragma once
 
 #include <xfilter/xfstyle.hxx>
 #include <xfilter/xfcolor.hxx>
@@ -149,5 +148,4 @@ inline void XFNumberStyle::SetSurfix(const OUString& surfix)
 }
 
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

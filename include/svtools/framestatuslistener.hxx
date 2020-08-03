@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_FRAMESTATUSLISTENER_HXX
-#define INCLUDED_SVTOOLS_FRAMESTATUSLISTENER_HXX
+#pragma once
 
 #include <com/sun/star/frame/XFrameActionListener.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
@@ -88,7 +87,5 @@ class FrameStatusListener : public css::frame::XStatusListener,
 };
 
 }
-
-#endif // INCLUDED_SVTOOLS_FRAMESTATUSLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

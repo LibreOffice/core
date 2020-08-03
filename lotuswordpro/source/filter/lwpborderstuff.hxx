@@ -57,8 +57,7 @@
 * @file
 * Border stuff of Wordpro.
 ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBORDERSTUFF_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBORDERSTUFF_HXX
+#pragma once
 
 #include <lwpcolor.hxx>
 
@@ -109,7 +108,5 @@ private:
     LwpColor        m_aColorBottom;
 
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

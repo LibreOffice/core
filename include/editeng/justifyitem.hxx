@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_JUSTIFYITEM_HXX
-#define INCLUDED_EDITENG_JUSTIFYITEM_HXX
+#pragma once
 
 #include <editeng/editengdllapi.h>
 #include <editeng/svxenum.hxx>
@@ -98,7 +97,5 @@ public:
     static OUString          GetValueText( SvxCellJustifyMethod nVal );
     virtual SvxJustifyMethodItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

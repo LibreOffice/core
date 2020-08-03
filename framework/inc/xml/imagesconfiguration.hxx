@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_XML_IMAGESCONFIGURATION_HXX
-#define INCLUDED_FRAMEWORK_INC_XML_IMAGESCONFIGURATION_HXX
+#pragma once
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -51,7 +50,5 @@ class ImagesConfiguration
 };
 
 } // namespace framework
-
-#endif // __FRAMEWORK_CLASSES_IMAGES
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

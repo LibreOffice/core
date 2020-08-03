@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_RANGESEQ_HXX
-#define INCLUDED_SC_INC_RANGESEQ_HXX
+#pragma once
 
 #include "types.hxx"
 #include <com/sun/star/uno/TypeClass.hpp>
@@ -100,7 +99,5 @@ public:
     static bool GetString( OUString& rString, const css::uno::Any& rAny,
                             sal_uInt16 nEncoding );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

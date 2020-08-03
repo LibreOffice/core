@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMPHELPER_PROPERTY_HXX
-#define INCLUDED_COMPHELPER_PROPERTY_HXX
+#pragma once
 
 #include <cppuhelper/proptypehlp.hxx>
 #include <comphelper/extract.hxx>
@@ -125,7 +124,5 @@ tryPropertyValueEnum(css::uno::Any& /*out*/_rConvertedValue, css::uno::Any& /*ou
 COMPHELPER_DLLPUBLIC bool tryPropertyValue(css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, const css::uno::Any& _rValueToSet, const css::uno::Any& _rCurrentValue, const css::uno::Type& _rExpectedType);
 
 }
-
-#endif // INCLUDED_COMPHELPER_PROPERTY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SFX2_WELDUTILS_HXX
-#define INCLUDED_SFX2_WELDUTILS_HXX
+#pragma once
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
@@ -59,7 +58,5 @@ public:
     void dispose();
     ~ToolbarUnoDispatcher();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

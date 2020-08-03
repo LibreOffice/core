@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLEPREVIEWTABLE_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLEPREVIEWTABLE_HXX
+#pragma once
 
 #include "AccessibleContextBase.hxx"
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
@@ -131,7 +130,5 @@ private:
 
     void    FillTableInfo() const;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_QUOTEDSTRING_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_QUOTEDSTRING_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <file/filedllapi.hxx>
@@ -43,7 +42,5 @@ namespace connectivity
         operator OUString&() { return m_sString; }
     };
 }
-
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_QUOTEDSTRING_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

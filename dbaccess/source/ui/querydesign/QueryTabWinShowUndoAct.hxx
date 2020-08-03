@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QUERYTABWINSHOWUNDOACT_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QUERYTABWINSHOWUNDOACT_HXX
+#pragma once
 
 #include "QueryTabWinUndoAct.hxx"
 
@@ -48,6 +47,5 @@ namespace dbaui
         virtual void    Redo() override;
     };
 }
-#endif // INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QUERYTABWINSHOWUNDOACT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

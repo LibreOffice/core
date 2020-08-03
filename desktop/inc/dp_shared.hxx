@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_SHARED_HXX
-#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_SHARED_HXX
+#pragma once
 
 #include <rtl/instance.hxx>
 #include <unotools/resmgr.hxx>
@@ -38,7 +37,5 @@ inline OUString DpResId(const char* pId)
 {
     return Translate::get(pId, dp::DeploymentLocale::get());
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

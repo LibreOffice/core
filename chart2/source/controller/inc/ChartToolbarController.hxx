@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_CHARTTOOLBARCONTROLLER_HXX
-#define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_CHARTTOOLBARCONTROLLER_HXX
+#pragma once
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -78,7 +77,5 @@ private:
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

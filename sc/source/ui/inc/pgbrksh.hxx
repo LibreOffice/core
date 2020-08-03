@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_PGBRKSH_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_PGBRKSH_HXX
+#pragma once
 
 #include <sfx2/shell.hxx>
 
@@ -40,7 +39,5 @@ public:
     ScPageBreakShell(ScTabViewShell* pView);
     virtual ~ScPageBreakShell() override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

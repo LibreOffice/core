@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_XMLOFF_XMLTEXTMASTERPAGECONTEXT_HXX
-#define INCLUDED_XMLOFF_XMLTEXTMASTERPAGECONTEXT_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
@@ -78,7 +77,5 @@ struct ContextID_Index_Pair;
 
 XMLOFF_DLLPUBLIC extern ContextID_Index_Pair const g_MasterPageContextIDs[];
 XMLOFF_DLLPUBLIC extern XmlStyleFamily const g_MasterPageFamilies[];
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

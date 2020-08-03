@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLTABLESHAPEIMPORTHELPER_HXX
-#define INCLUDED_SC_SOURCE_FILTER_XML_XMLTABLESHAPEIMPORTHELPER_HXX
+#pragma once
 
 #include <xmloff/shapeimport.hxx>
 #include <svx/svdtypes.hxx>
@@ -49,7 +48,5 @@ public:
 
     ScXMLAnnotationContext* GetAnnotationContext() const    { return pAnnotationContext; }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

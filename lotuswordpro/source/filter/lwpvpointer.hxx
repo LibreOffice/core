@@ -60,8 +60,7 @@
  * CVersionedGointer, so use one class
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPVPOINTER_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPVPOINTER_HXX
+#pragma once
 
 #include <lwpobj.hxx>
 class LwpVersionedPointer final : public LwpObject
@@ -77,6 +76,5 @@ private:
     LwpObjectID m_PointerID;
     virtual ~LwpVersionedPointer() override {}
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

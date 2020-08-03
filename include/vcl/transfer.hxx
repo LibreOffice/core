@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_TRANSFER_HXX
-#define INCLUDED_VCL_TRANSFER_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <tools/globname.hxx>
@@ -513,7 +512,5 @@ public:
 
 css::uno::Reference<css::datatransfer::clipboard::XClipboard> VCL_DLLPUBLIC GetSystemClipboard();
 css::uno::Reference<css::datatransfer::clipboard::XClipboard> VCL_DLLPUBLIC GetSystemPrimarySelection();
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_SOURCE_TOOLS_PAGE_HXX
-#define INCLUDED_CANVAS_SOURCE_TOOLS_PAGE_HXX
+#pragma once
 
 #include <basegfx/vector/b2isize.hxx>
 #include <basegfx/range/b2irectangle.hxx>
@@ -144,7 +143,5 @@ namespace canvas
         ::basegfx::B2IPoint   maSourceOffset;
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

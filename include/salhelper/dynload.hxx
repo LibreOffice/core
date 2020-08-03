@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SALHELPER_DYNLOAD_HXX
-#define INCLUDED_SALHELPER_DYNLOAD_HXX
+#pragma once
 
 #include "sal/types.h"
 #include "rtl/ustring.hxx"
@@ -199,7 +198,5 @@ template<class API>
 ORealDynamicLoader* ODynamicLoader<API>::m_pStaticLoader = NULL;
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

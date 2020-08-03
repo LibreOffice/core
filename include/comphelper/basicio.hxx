@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMPHELPER_BASICIO_HXX
-#define INCLUDED_COMPHELPER_BASICIO_HXX
+#pragma once
 
 #include <com/sun/star/io/XObjectOutputStream.hpp>
 #include <com/sun/star/io/XObjectInputStream.hpp>
@@ -82,7 +81,5 @@ const css::uno::Reference<css::io::XObjectOutputStream>& operator << (const css:
 
 }   // namespace comphelper
 
-
-#endif // INCLUDED_COMPHELPER_BASICIO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

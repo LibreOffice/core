@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_UNO_COLUMNMODEL_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_UNO_COLUMNMODEL_HXX
+#pragma once
 
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -92,6 +91,5 @@ public:
 };
 
 }   // namespace dbaui
-#endif // INCLUDED_DBACCESS_SOURCE_UI_UNO_COLUMNMODEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

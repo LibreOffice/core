@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_RELATIONDESIGNVIEW_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_INC_RELATIONDESIGNVIEW_HXX
+#pragma once
 
 #include "JoinDesignView.hxx"
 
@@ -41,7 +40,6 @@ namespace dbaui
         virtual void GetFocus() override;
     };
 }
-#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_RELATIONDESIGNVIEW_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

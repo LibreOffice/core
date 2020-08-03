@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_UNDOCELL_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_UNDOCELL_HXX
+#pragma once
 
 #include "undobase.hxx"
 #include <detdata.hxx>
@@ -366,7 +365,5 @@ public:
 };
 
 } // namespace sc
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

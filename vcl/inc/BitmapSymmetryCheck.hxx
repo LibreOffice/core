@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_BITMAPSYMMETRYCHECK_HXX
-#define INCLUDED_VCL_INC_BITMAPSYMMETRYCHECK_HXX
+#pragma once
 
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapaccess.hxx>
@@ -25,7 +24,5 @@ public:
 private:
     static bool checkImpl(BitmapReadAccess const * pReadAccess);
 };
-
-#endif // INCLUDED_VCL_INC_BITMAPSYMMETRYCHECK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

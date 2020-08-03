@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_CHRTITEM_HXX
-#define INCLUDED_SVX_CHRTITEM_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -146,7 +145,5 @@ public:
 
     double GetValue() const { return fVal; }
 };
-
-#endif // INCLUDED_SVX_CHRTITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

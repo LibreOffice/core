@@ -54,8 +54,7 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFTEXTCONTENT_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFTEXTCONTENT_HXX
+#pragma once
 
 #include <xfilter/xfcontent.hxx>
 
@@ -87,7 +86,5 @@ public:
 private:
     OUString m_strText;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

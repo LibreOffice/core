@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_LBOXCTRL_HXX
-#define INCLUDED_SVX_LBOXCTRL_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <vector>
@@ -54,7 +53,5 @@ public:
 
     void SetInfo(sal_Int32 nCount);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

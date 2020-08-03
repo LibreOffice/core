@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_OPENGL_WIN_WINDEVICEINFO_HXX
-#define INCLUDED_VCL_OPENGL_WIN_WINDEVICEINFO_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 
@@ -97,7 +96,5 @@ public:
         return maDeviceString;
     }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

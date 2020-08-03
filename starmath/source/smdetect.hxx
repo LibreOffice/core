@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_STARMATH_SOURCE_SMDETECT_HXX
-#define INCLUDED_STARMATH_SOURCE_SMDETECT_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
@@ -43,7 +42,5 @@ public:
     // XExtendedFilterDetect
     virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& lDescriptor ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

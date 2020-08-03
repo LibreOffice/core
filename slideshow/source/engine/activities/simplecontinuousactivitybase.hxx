@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_ACTIVITIES_SIMPLECONTINUOUSACTIVITYBASE_HXX
-#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_ACTIVITIES_SIMPLECONTINUOUSACTIVITYBASE_HXX
+#pragma once
 
 #include "activitybase.hxx"
 #include <canvas/elapsedtime.hxx>
@@ -73,7 +72,5 @@ namespace slideshow::internal
         };
 
 }
-
-#endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ACTIVITIES_SIMPLECONTINUOUSACTIVITYBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

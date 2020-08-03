@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_O3TL_RUNTIMETOOUSTRING_HXX
-#define INCLUDED_O3TL_RUNTIMETOOUSTRING_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -42,7 +41,5 @@ inline OUString runtimeToOUString(char const * runtimeString) {
 }
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

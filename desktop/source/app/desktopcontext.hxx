@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_APP_DESKTOPCONTEXT_HXX
-#define INCLUDED_DESKTOP_SOURCE_APP_DESKTOPCONTEXT_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/XCurrentContext.hpp>
@@ -37,7 +36,5 @@ namespace desktop
             css::uno::Reference< css::uno::XCurrentContext > m_xNextContext;
     };
 }
-
-#endif // INCLUDED_DESKTOP_SOURCE_APP_DESKTOPCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

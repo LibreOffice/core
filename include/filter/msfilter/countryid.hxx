@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_FILTER_MSFILTER_COUNTRYID_HXX
-#define INCLUDED_FILTER_MSFILTER_COUNTRYID_HXX
+#pragma once
 
 #include <filter/msfilter/msfilterdllapi.h>
 #include <i18nlangtag/lang.h>
@@ -301,7 +300,5 @@ MSFILTER_DLLPUBLIC LanguageType ConvertCountryToLanguage( CountryId eCountry );
 
 }
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
 
-#ifndef INCLUDED_SVX_SVDOBJUSERDATALIST_HXX
-#define INCLUDED_SVX_SVDOBJUSERDATALIST_HXX
+#pragma once
 
 #include <svx/svdobj.hxx>
 
@@ -31,7 +30,5 @@ public:
     void AppendUserData(std::unique_ptr<SdrObjUserData> pData);
     void DeleteUserData(size_t nNum);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

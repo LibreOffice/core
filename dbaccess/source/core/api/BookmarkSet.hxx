@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_CORE_API_BOOKMARKSET_HXX
-#define INCLUDED_DBACCESS_SOURCE_CORE_API_BOOKMARKSET_HXX
+#pragma once
 
 #include "CacheSet.hxx"
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
@@ -54,6 +53,5 @@ namespace dbaccess
         virtual void deleteRow(const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable   ) override;
     };
 }
-#endif // INCLUDED_DBACCESS_SOURCE_CORE_API_BOOKMARKSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

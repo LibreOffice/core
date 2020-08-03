@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SAL_TEXTENC_TCVTUTF8_HXX
-#define INCLUDED_SAL_TEXTENC_TCVTUTF8_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -35,7 +34,5 @@ sal_Size ImplConvertUnicodeToUtf8(
     void const * pData, void * pContext, sal_Unicode const * pSrcBuf,
     sal_Size nSrcChars, char * pDestBuf, sal_Size nDestBytes, sal_uInt32 nFlags,
     sal_uInt32 * pInfo, sal_Size* pSrcCvtChars);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

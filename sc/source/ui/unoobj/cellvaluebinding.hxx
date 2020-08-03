@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_UNOOBJ_CELLVALUEBINDING_HXX
-#define INCLUDED_SC_SOURCE_UI_UNOOBJ_CELLVALUEBINDING_HXX
+#pragma once
 
 #include <com/sun/star/form/binding/XValueBinding.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
@@ -143,7 +142,5 @@ namespace calc
     };
 
 }   // namespace calc
-
-#endif // INCLUDED_SC_SOURCE_UI_UNOOBJ_CELLVALUEBINDING_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

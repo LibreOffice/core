@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_ACCESSIBILITYHINTS_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_ACCESSIBILITYHINTS_HXX
+#pragma once
 
 #include "viewdata.hxx"
 #include <svl/hint.hxx>
@@ -54,7 +53,5 @@ public:
 
     ScSplitPos  GetNewGridWin() const { return eNewGridWin; }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

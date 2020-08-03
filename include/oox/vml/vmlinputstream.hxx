@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_VML_VMLINPUTSTREAM_HXX
-#define INCLUDED_OOX_VML_VMLINPUTSTREAM_HXX
+#pragma once
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/uno/Any.hxx>
@@ -89,7 +88,5 @@ private:
 
 
 } // namespace oox::vml
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

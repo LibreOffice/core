@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_DOCREDLN_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_DOCREDLN_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -27,8 +26,6 @@
 class SwDoc;
 
 void sw_DebugRedline( const SwDoc* pDoc );
-
-#endif
 
 #endif
 

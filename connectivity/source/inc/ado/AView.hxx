@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AVIEW_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AVIEW_HXX
+#pragma once
 
 #include <connectivity/sdbcx/VView.hxx>
 #include <ado/Awrapadox.hxx>
@@ -48,7 +47,5 @@ namespace connectivity::ado
             WpADOView getImpl() const { return m_aView;}
         };
 }
-
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

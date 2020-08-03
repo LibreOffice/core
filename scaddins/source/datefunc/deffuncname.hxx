@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SCADDINS_SOURCE_DATEFUNC_DEFFUNCTIONNAME_HXX
-#define INCLUDED_SCADDINS_SOURCE_DATEFUNC_DEFFUNCTIONNAME_HXX
+#pragma once
 
 static const char* DATE_DEFFUNCNAME_DiffWeeks[2] =
 {
@@ -67,7 +66,5 @@ static const char* DATE_DEFFUNCNAME_Rot13[2] =
     "ROT13",
     "ROT13"
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

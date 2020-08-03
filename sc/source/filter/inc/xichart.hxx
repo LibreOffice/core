@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XICHART_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_XICHART_HXX
+#pragma once
 
 #include <salhelper/simplereferenceobject.hxx>
 #include <set>
@@ -1430,7 +1429,5 @@ private:
     bool                mbOwnTab;           /// true = own sheet; false = embedded object.
     bool                mbIsPivotChart;     /// true = chart is based on a pivot table.
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

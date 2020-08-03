@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REGISTRY_SOURCE_REFLWRIT_HXX
-#define INCLUDED_REGISTRY_SOURCE_REFLWRIT_HXX
+#pragma once
 
 #include <registry/types.hxx>
 #include <rtl/ustring.hxx>
@@ -97,7 +96,5 @@ private:
     /// stores the handle of an implementation class
     TypeWriterImpl                                               m_hImpl;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

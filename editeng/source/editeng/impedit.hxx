@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_EDITENG_SOURCE_EDITENG_IMPEDIT_HXX
-#define INCLUDED_EDITENG_SOURCE_EDITENG_IMPEDIT_HXX
+#pragma once
 
 #include <eerdll2.hxx>
 #include <editdoc.hxx>
@@ -1289,8 +1288,6 @@ void ConvertItem( std::unique_ptr<SfxPoolItem>& rPoolItem, MapUnit eSourceUnit, 
 void ConvertAndPutItems( SfxItemSet& rDest, const SfxItemSet& rSource, const MapUnit* pSourceUnit = nullptr, const MapUnit* pDestUnit = nullptr );
 AsianCompressionFlags GetCharTypeForCompression( sal_Unicode cChar );
 Point Rotate( const Point& rPoint, short nOrientation, const Point& rOrigin );
-
-#endif // INCLUDED_EDITENG_SOURCE_EDITENG_IMPEDIT_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

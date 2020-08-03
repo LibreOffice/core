@@ -1,5 +1,4 @@
-#ifndef INCLUDED_SD_SOURCE_UI_REMOTECONTROL_WINNETWORKSERVICE_HXX
-#define INCLUDED_SD_SOURCE_UI_REMOTECONTROL_WINNETWORKSERVICE_HXX
+#pragma once
 
 #include <string>
 #undef WB_LEFT
@@ -22,4 +21,3 @@ namespace sd{
 
     };
 }
-#endif

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_MENUBARWRAPPER_HXX
-#define INCLUDED_FRAMEWORK_INC_UIELEMENT_MENUBARWRAPPER_HXX
+#pragma once
 
 #include <helper/uiconfigelementwrapperbase.hxx>
 #include <uielement/menubarmanager.hxx>
@@ -79,7 +78,5 @@ class MenuBarWrapper final : public UIConfigElementWrapperBase,
 };
 
 } // namespace framework
-
-#endif // INCLUDED_FRAMEWORK_INC_UIELEMENT_MENUBARWRAPPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

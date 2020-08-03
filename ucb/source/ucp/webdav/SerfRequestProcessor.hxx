@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFREQUESTPROCESSOR_HXX
-#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFREQUESTPROCESSOR_HXX
+#pragma once
 
 #include <apr_errno.h>
 #include <apr_pools.h>
@@ -185,7 +184,5 @@ public:
 };
 
 } // namespace http_dav_ucp
-
-#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFREQUESTPROCESSOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

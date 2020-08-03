@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DTRANS_TEST_WIN32_DND_TARGETLISTENER_HXX
-#define INCLUDED_DTRANS_TEST_WIN32_DND_TARGETLISTENER_HXX
+#pragma once
 
 #if defined _MSC_VER
 #pragma warning(push,1)
@@ -61,7 +60,5 @@ public:
     virtual void SAL_CALL dropActionChanged( const DropTargetDragEvent& dtde )
         throw(RuntimeException);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

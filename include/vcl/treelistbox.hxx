@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_TREELISTBOX_HXX
-#define INCLUDED_VCL_TREELISTBOX_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 
@@ -732,7 +731,5 @@ public:
 
     void            SetDragHelper(rtl::Reference<TransferDataContainer>& rHelper, sal_uInt8 eDNDConstants);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

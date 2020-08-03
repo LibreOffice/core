@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 // MyEDITENG, due to exported EditEng
-#ifndef INCLUDED_EDITENG_EDITENG_HXX
-#define INCLUDED_EDITENG_EDITENG_HXX
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -635,7 +634,5 @@ public:
     static void DumpData(const EditEngine* pEE, bool bInfoBox);
 #endif
 };
-
-#endif // INCLUDED_EDITENG_EDITENG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

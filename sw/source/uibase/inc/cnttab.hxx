@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_CNTTAB_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_CNTTAB_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -51,7 +50,5 @@ struct CurTOXType
 
     CurTOXType (TOXTypes t) : eType (t), nIndex (0) {};
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

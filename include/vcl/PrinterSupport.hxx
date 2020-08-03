@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_PRINTERSUPPORT_HXX
-#define INCLUDED_VCL_PRINTERSUPPORT_HXX
+#pragma once
 
 enum class PrinterSupport
 {
@@ -28,7 +27,5 @@ enum class PrinterSupport
     CollateCopy,
     SetupDialog
 };
-
-#endif // INCLUDED_VCL_PRINTERSUPPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

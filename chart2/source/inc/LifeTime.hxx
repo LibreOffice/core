@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CHART2_SOURCE_INC_LIFETIME_HXX
-#define INCLUDED_CHART2_SOURCE_INC_LIFETIME_HXX
+#pragma once
 
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
@@ -210,6 +209,5 @@ public:
 };
 
 }//end namespace apphelper
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CHART2_SOURCE_VIEW_INC_CONFIGACCESS_HXX
-#define INCLUDED_CHART2_SOURCE_VIEW_INC_CONFIGACCESS_HXX
+#pragma once
 
 namespace chart::ConfigAccess
 {
@@ -32,6 +31,5 @@ namespace chart::ConfigAccess
 bool getUseErrorRectangle();
 
 } //namespace chart::ConfigAccess
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

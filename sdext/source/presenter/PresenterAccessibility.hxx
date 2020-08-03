@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERACCESSIBILITY_HXX
-#define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERACCESSIBILITY_HXX
+#pragma once
 
 #include "PresenterPaneContainer.hxx"
 
@@ -109,7 +108,5 @@ private:
 };
 
 } // end of namespace ::sd::presenter
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

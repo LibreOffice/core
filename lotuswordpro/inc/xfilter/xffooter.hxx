@@ -57,8 +57,7 @@
  * @file
  * Footer object.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFOOTER_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFOOTER_HXX
+#pragma once
 
 #include <xfilter/ixfattrlist.hxx>
 #include <xfilter/ixfstream.hxx>
@@ -82,7 +81,5 @@ public:
         pStrm->EndElement( "style:footer" );
     }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

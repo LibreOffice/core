@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVTOOLS_UNOEVENT_HXX
-#define INCLUDED_SVTOOLS_UNOEVENT_HXX
+#pragma once
 
 #include <svtools/svtdllapi.h>
 #include <com/sun/star/container/XNameReplace.hpp>
@@ -256,7 +255,5 @@ public:
 
     void copyMacrosIntoTable(SvxMacroTableDtor& aFmt);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

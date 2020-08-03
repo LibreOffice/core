@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_BITMAPPALETTE_HXX
-#define INCLUDED_VCL_BITMAPPALETTE_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <vcl/BitmapColor.hxx>
@@ -133,7 +132,5 @@ public:
     /// Returns true if the palette is a grey palette (may not be 8-bit).
     bool IsGreyPaletteAny() const;
 };
-
-#endif // INCLUDED_VCL_BITMAPPALETTE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

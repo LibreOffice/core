@@ -58,8 +58,7 @@
  *  all classes for LwpUIDocument
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPUIDOC_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPUIDOC_HXX
+#pragma once
 
 #include <config_lgpl.h>
 
@@ -146,7 +145,5 @@ private:
 public:
     void Read(LwpObjectStream *pStrm);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

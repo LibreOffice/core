@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_SVX_SOURCE_SIDEBAR_SOFTEDGE_SOFTEDGEPROPERTYPANEL_HXX
-#define INCLUDED_SVX_SOURCE_SIDEBAR_SOFTEDGE_SOFTEDGEPROPERTYPANEL_HXX
+#pragma once
 
 #include <vcl/vclptr.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
@@ -50,7 +49,5 @@ private:
     DECL_LINK(ModifySoftEdgeRadiusHdl, weld::MetricSpinButton&, void);
 };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

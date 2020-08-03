@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_FAPIHELPER_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_FAPIHELPER_HXX
+#pragma once
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -291,7 +290,5 @@ ScfPropSetHelper& operator<<( ScfPropSetHelper& rPropSetHelper, const Type& rVal
     rPropSetHelper.WriteValue( rValue );
     return rPropSetHelper;
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

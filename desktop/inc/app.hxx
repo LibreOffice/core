@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_INC_APP_HXX
-#define INCLUDED_DESKTOP_INC_APP_HXX
+#pragma once
 
 #include <optional>
 #include <sal/log.hxx>
@@ -177,7 +176,5 @@ OUString GetURL_Impl(
 OUString ReplaceStringHookProc(const OUString& rStr);
 
 }
-
-#endif // INCLUDED_DESKTOP_INC_APP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

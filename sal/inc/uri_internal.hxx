@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_INC_URI_INTERNAL_HXX
-#define INCLUDED_SAL_INC_URI_INTERNAL_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -34,7 +33,5 @@ enum EscapeType
 sal_uInt32 readUcs4(sal_Unicode const** pBegin, sal_Unicode const* pEnd, bool bEncoded,
                     rtl_TextEncoding eCharset, EscapeType* pType);
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

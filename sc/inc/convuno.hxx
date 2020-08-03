@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_CONVUNO_HXX
-#define INCLUDED_SC_INC_CONVUNO_HXX
+#pragma once
 
 #include <algorithm>
 #include <i18nlangtag/lang.h>
@@ -113,7 +112,5 @@ inline bool ScUnoConversion::Contains(
         (rApiOuter.StartColumn <= rApiInner.StartColumn) && (rApiInner.EndColumn <= rApiOuter.EndColumn) &&
         (rApiOuter.StartRow <= rApiInner.StartRow) && (rApiInner.EndRow <= rApiOuter.EndRow);
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

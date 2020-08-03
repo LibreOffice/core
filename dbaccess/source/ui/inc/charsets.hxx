@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_CHARSETS_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_INC_CHARSETS_HXX
+#pragma once
 
 #include <connectivity/dbcharset.hxx>
 #include <rtl/ustring.hxx>
@@ -102,7 +101,5 @@ namespace dbaui
     };
 
 }   // namespace dbaui
-
-#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_CHARSETS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_VCL_INC_REGIONBAND_HXX
-#define INCLUDED_VCL_INC_REGIONBAND_HXX
+#pragma once
 
 #include <vcl/region.hxx>
 
@@ -76,7 +75,5 @@ public:
     sal_uInt32 getRectangleCount() const; // only users are Region::Intersect, Region::IsRectangle and PSWriter::ImplBmp
     void GetRegionRectangles(RectangleVector& rTarget) const;
 };
-
-#endif // INCLUDED_VCL_INC_REGIONBAND_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

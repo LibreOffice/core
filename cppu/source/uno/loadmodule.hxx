@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CPPU_SOURCE_UNO_LOADMODULE_HXX
-#define INCLUDED_CPPU_SOURCE_UNO_LOADMODULE_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
@@ -42,7 +41,5 @@ bool loadModule(osl::Module & rModule, OUString const & name);
 #endif
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

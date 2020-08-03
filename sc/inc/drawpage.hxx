@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_DRAWPAGE_HXX
-#define INCLUDED_SC_INC_DRAWPAGE_HXX
+#pragma once
 
 #include <svx/fmpage.hxx>
 
@@ -37,7 +36,5 @@ public:
 
     virtual css::uno::Reference<css::uno::XInterface> createUnoPage() override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

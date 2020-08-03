@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_LOOKUPCACHE_HXX
-#define INCLUDED_SC_INC_LOOKUPCACHE_HXX
+#pragma once
 
 #include "address.hxx"
 #include <svl/listener.hxx>
@@ -206,7 +205,5 @@ struct ScLookupCacheMap
     std::unordered_map< ScRange, std::unique_ptr<ScLookupCache>, ScLookupCache::Hash > aCacheMap;
 };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

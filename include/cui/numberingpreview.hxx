@@ -1,5 +1,4 @@
-#ifndef INCLUDED_CUI_NUMBERINGPREVIEW_HXX
-#define INCLUDED_CUI_NUMBERINGPREVIEW_HXX
+#pragma once
 
 #include <cui/cuidllapi.h>
 #include <editeng/numitem.hxx>
@@ -27,5 +26,3 @@ public:
     void SetPositionMode() { bPosition = true; }
     void SetLevel(sal_uInt16 nSet) { nActLevel = nSet; }
 };
-
-#endif

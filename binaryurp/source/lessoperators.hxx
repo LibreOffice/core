@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BINARYURP_SOURCE_LESSOPERATORS_HXX
-#define INCLUDED_BINARYURP_SOURCE_LESSOPERATORS_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -36,7 +35,5 @@ namespace rtl {
 bool operator <(ByteSequence const & left, ByteSequence const & right);
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

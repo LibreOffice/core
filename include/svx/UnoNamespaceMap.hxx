@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_UNONAMESPACEMAP_HXX
-#define INCLUDED_SVX_UNONAMESPACEMAP_HXX
+#pragma once
 
 #include <com/sun/star/uno/XInterface.hpp>
 #include <svx/svxdllapi.h>
@@ -30,7 +29,5 @@ namespace svx {
 SVX_DLLPUBLIC css::uno::Reference< css::uno::XInterface > NamespaceMap_createInstance( sal_uInt16* pWhichIds, SfxItemPool* pPool );
 
 }
-
-#endif // INCLUDED_SVX_UNONAMESPACEMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

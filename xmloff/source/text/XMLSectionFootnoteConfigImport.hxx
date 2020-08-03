@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLSECTIONFOOTNOTECONFIGIMPORT_HXX
-#define INCLUDED_XMLOFF_SOURCE_TEXT_XMLSECTIONFOOTNOTECONFIGIMPORT_HXX
+#pragma once
 
 #include <xmloff/xmlictxt.hxx>
 #include <rtl/ref.hxx>
@@ -59,7 +58,5 @@ public:
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList ) override;
 
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

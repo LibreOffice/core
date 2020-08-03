@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_VCL_SVLBITM_HXX
-#define INCLUDED_VCL_SVLBITM_HXX
+#pragma once
 
 #include <memory>
 #include <vcl/dllapi.h>
@@ -282,7 +281,5 @@ inline const Image& SvLBoxContextBmp::GetBitmap2() const
     Image& rImage = const_cast<SvLBoxContextBmp*>(this)->implGetImageStore(false);
     return rImage;
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

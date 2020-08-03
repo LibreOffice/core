@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_MSFILTER_ESCHEREX_HXX
-#define INCLUDED_FILTER_MSFILTER_ESCHEREX_HXX
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -1217,7 +1216,5 @@ private:
     EscherEx&           operator=( const EscherEx& ) = delete;
 };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

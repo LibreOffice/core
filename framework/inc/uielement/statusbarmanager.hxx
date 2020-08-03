@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_STATUSBARMANAGER_HXX
-#define INCLUDED_FRAMEWORK_INC_UIELEMENT_STATUSBARMANAGER_HXX
+#pragma once
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStatusbarController.hpp>
@@ -100,7 +99,5 @@ class StatusBarManager final: public ::cppu::WeakImplHelper<
 };
 
 }
-
-#endif // INCLUDED_FRAMEWORK_INC_UIELEMENT_STATUSBARMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

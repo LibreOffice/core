@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_SIGNATURESTATE_HXX
-#define INCLUDED_SFX2_SIGNATURESTATE_HXX
+#pragma once
 
 #include <sfx2/dllapi.h>
 
@@ -48,7 +47,5 @@ namespace DocumentSignatures
 SFX2_DLLPUBLIC SignatureState
 getSignatureState(const css::uno::Sequence<css::security::DocumentSignatureInformation>& aInfos);
 }
-
-#endif // INCLUDED_SFX2_SIGNATURESTATE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

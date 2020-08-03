@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_CORE_BINARYCODEC_HXX
-#define INCLUDED_OOX_CORE_BINARYCODEC_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -36,7 +35,5 @@ namespace oox::core::CodecHelper
     /** Returns the password hash if it is in the required 16-bit limit. */
     OOX_DLLPUBLIC sal_uInt16   getPasswordHash( const AttributeList& rAttribs, sal_Int32 nElement );
 } // namespace oox::core::CodecHelper
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLEDOCUMENT_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLEDOCUMENT_HXX
+#pragma once
 
 #include "AccessibleDocumentBase.hxx"
 #include "viewdata.hxx"
@@ -260,7 +259,5 @@ public:
 
     virtual sal_Int32 SAL_CALL getBackground(  ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

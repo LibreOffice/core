@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMFIO_INC_EMFREADER_HXX
-#define INCLUDED_EMFIO_INC_EMFREADER_HXX
+#pragma once
 
 #include "mtftools.hxx"
 
@@ -54,7 +53,5 @@ namespace emfio
         void ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC);
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

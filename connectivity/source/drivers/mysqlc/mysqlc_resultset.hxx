@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_MYSQLC_SOURCE_MYSQLC_RESULTSET_HXX
-#define INCLUDED_MYSQLC_SOURCE_MYSQLC_RESULTSET_HXX
+#pragma once
 
 #include "mysqlc_preparedstatement.hxx"
 #include "mysqlc_statement.hxx"
@@ -272,6 +271,5 @@ private:
 };
 
 } /* connectivity::mysqlc */
-#endif // CONNECTIVITY_SRESULTSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

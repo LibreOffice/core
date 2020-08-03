@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_INC_DEFAULTSOPTIONS_HXX
-#define INCLUDED_SC_INC_DEFAULTSOPTIONS_HXX
+#pragma once
 
 #include <svl/poolitem.hxx>
 #include <unotools/configitem.hxx>
@@ -75,7 +74,5 @@ public:
 
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

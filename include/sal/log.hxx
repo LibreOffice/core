@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SAL_LOG_HXX
-#define INCLUDED_SAL_LOG_HXX
+#pragma once
 
 #include "sal/config.h"
 
@@ -410,7 +409,5 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
     } while (false)
 
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

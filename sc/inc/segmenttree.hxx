@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_SEGMENTTREE_HXX
-#define INCLUDED_SC_INC_SEGMENTTREE_HXX
+#pragma once
 
 #include "types.hxx"
 #include <rtl/string.hxx>
@@ -157,7 +156,5 @@ public:
 private:
     ::std::unique_ptr<ScFlatUInt16SegmentsImpl> mpImpl;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

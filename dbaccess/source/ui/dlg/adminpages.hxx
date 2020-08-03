@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_DLG_ADMINPAGES_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_DLG_ADMINPAGES_HXX
+#pragma once
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/wizardmachine.hxx>
@@ -230,7 +229,5 @@ namespace dbaui
         DECL_LINK(OnTestConnectionButtonClickHdl, weld::Button&, void);
     };
 }   // namespace dbaui
-
-#endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_ADMINPAGES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

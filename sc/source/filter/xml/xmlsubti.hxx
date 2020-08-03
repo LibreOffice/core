@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLSUBTI_HXX
-#define INCLUDED_SC_SOURCE_FILTER_XML_XMLSUBTI_HXX
+#pragma once
 
 #include "XMLTableShapeResizer.hxx"
 #include <formula/grammar.hxx>
@@ -105,7 +104,5 @@ public:
                                             const formula::FormulaGrammar::Grammar );
     bool                                IsPartOfMatrix( const ScAddress& rScAddress) const;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

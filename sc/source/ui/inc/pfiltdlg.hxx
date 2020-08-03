@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_PFILTDLG_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_PFILTDLG_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 #include <address.hxx>
@@ -90,7 +89,5 @@ private:
     DECL_LINK( ValModifyHdl, weld::ComboBox&, void );
     DECL_LINK( CheckBoxHdl, weld::Button&, void );
 };
-
-#endif // INCLUDED_SC_SOURCE_UI_INC_PFILTDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

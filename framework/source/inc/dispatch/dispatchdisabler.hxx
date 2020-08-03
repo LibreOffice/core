@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_FRAMEWORK_INC_SERVICES_DISPATCH_DISABLER_HXX
-#define INCLUDED_FRAMEWORK_INC_SERVICES_DISPATCH_DISABLER_HXX
+#pragma once
 
 #include <set>
 
@@ -93,7 +92,5 @@ public:
 };
 
 } // namespace framework
-
-#endif // INCLUDED_FRAMEWORK_INC_SERVICES_DISPATCH_DISABLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

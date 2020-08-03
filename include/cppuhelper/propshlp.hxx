@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CPPUHELPER_PROPSHLP_HXX
-#define INCLUDED_CPPUHELPER_PROPSHLP_HXX
+#pragma once
 
 #include "rtl/alloc.h"
 
@@ -719,7 +718,6 @@ protected:
 };
 
 } // end namespace cppuhelper
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_MACROSMENUCONTROLLER_HXX
-#define INCLUDED_FRAMEWORK_INC_UIELEMENT_MACROSMENUCONTROLLER_HXX
+#pragma once
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <svtools/popupmenucontrollerbase.hxx>
@@ -52,7 +51,5 @@ namespace framework
             void addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 startItemId );
     };
 }
-
-#endif // INCLUDED_FRAMEWORK_INC_UIELEMENT_MACROSMENUCONTROLLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

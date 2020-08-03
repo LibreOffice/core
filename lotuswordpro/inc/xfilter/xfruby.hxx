@@ -57,8 +57,7 @@
  * @file
  * ruby text.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFRUBY_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFRUBY_HXX
+#pragma once
 
 #include <xfilter/ixfattrlist.hxx>
 #include <xfilter/xfcontent.hxx>
@@ -108,5 +107,4 @@ void XFRubyEnd::ToXml(IXFStream *pStrm)
     pStrm->EndElement( "text:ruby" );
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

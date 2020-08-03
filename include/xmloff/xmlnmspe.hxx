@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_XMLNMSPE_HXX
-#define INCLUDED_XMLOFF_XMLNMSPE_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -126,7 +125,5 @@ constexpr sal_uInt16 XML_NAMESPACE_NUMBER_SO52 = XML_OLD_NAMESPACE_BASE +       
 constexpr sal_uInt16 XML_NAMESPACE_PRESENTATION_SO52 = XML_OLD_NAMESPACE_BASE +   9;
 constexpr sal_uInt16 XML_NAMESPACE_CHART_SO52 = XML_OLD_NAMESPACE_BASE +         10;
 constexpr sal_uInt16 XML_NAMESPACE_SMIL_SO52 = XML_OLD_NAMESPACE_BASE +          11;
-
-#endif // INCLUDED_XMLOFF_XMLNMSPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

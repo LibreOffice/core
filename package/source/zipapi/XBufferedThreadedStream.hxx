@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_PACKAGE_SOURCE_ZIPAPI_XBUFFEREDTHREADEDSTREAM_HXX
-#define INCLUDED_PACKAGE_SOURCE_ZIPAPI_XBUFFEREDTHREADEDSTREAM_HXX
+#pragma once
 
 #include <salhelper/thread.hxx>
 #include "XUnbufferedStream.hxx"
@@ -75,6 +74,5 @@ public:
     virtual sal_Int32 SAL_CALL available(  ) override;
     virtual void SAL_CALL closeInput(  ) override;
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

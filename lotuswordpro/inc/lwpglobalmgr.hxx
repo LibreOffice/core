@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_INC_LWPGLOBALMGR_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_LWPGLOBALMGR_HXX
+#pragma once
 
 #include <memory>
 #include <map>
@@ -99,5 +98,4 @@ private:
     std::map<sal_uInt16, std::unique_ptr<LwpEditorAttr>> m_EditorAttrMap;
 };
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

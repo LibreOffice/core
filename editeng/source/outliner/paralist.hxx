@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_SOURCE_OUTLINER_PARALIST_HXX
-#define INCLUDED_EDITENG_SOURCE_OUTLINER_PARALIST_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <sal/log.hxx>
@@ -79,7 +78,5 @@ private:
     Link<Paragraph&,void> aVisibleStateChangedHdl;
     std::vector<std::unique_ptr<Paragraph>> maEntries;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

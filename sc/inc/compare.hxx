@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_COMPARE_HXX
-#define INCLUDED_SC_INC_COMPARE_HXX
+#pragma once
 
 #include "queryentry.hxx"
 
@@ -78,7 +77,5 @@ double CompareFunc( double fCell1, double fCell2 );
 double CompareEmptyToNumericFunc( double fCell2 );
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

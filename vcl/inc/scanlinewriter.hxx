@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_SCANLINEWRITER_HXX
-#define INCLUDED_VCL_INC_SCANLINEWRITER_HXX
+#pragma once
 
 #include <vcl/bitmap.hxx>
 #include <vcl/BitmapPalette.hxx>
@@ -84,7 +83,5 @@ public:
 };
 
 } // namespace vcl
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

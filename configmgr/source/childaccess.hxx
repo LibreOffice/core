@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONFIGMGR_SOURCE_CHILDACCESS_HXX
-#define INCLUDED_CONFIGMGR_SOURCE_CHILDACCESS_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -133,7 +132,5 @@ private:
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

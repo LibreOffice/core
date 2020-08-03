@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FPICKER_SOURCE_AQUA_AQUAFILEPICKERDELEGATE_HXX
-#define INCLUDED_FPICKER_SOURCE_AQUA_AQUAFILEPICKERDELEGATE_HXX
+#pragma once
 
 #include <premac.h>
 #include <Cocoa/Cocoa.h>
@@ -45,7 +44,5 @@ class FilterHelper;
 - (void)autoextensionChanged:(id)sender;
 
 @end
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

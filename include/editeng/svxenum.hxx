@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_EDITENG_SVXENUM_HXX
-#define INCLUDED_EDITENG_SVXENUM_HXX
+#pragma once
 
 #include <com/sun/star/style/NumberingType.hpp>
 
@@ -211,7 +210,5 @@ enum SvxNumType : sal_Int16
     SVX_NUM_ARABIC_ZERO4          = css::style::NumberingType::ARABIC_ZERO4,
     SVX_NUM_ARABIC_ZERO5          = css::style::NumberingType::ARABIC_ZERO5,
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

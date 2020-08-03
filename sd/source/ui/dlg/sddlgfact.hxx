@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SD_SOURCE_UI_DLG_SDDLGFACT_HXX
-#define INCLUDED_SD_SOURCE_UI_DLG_SDDLGFACT_HXX
+#pragma once
 
 #include <sdabstdlg.hxx>
 #include <sfx2/basedlgs.hxx>
@@ -446,7 +445,5 @@ public:
     virtual CreateTabPage               GetSdOptionsSnapTabPageCreatorFunc() override;
 
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

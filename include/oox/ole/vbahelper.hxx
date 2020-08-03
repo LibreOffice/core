@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_OLE_VBAHELPER_HXX
-#define INCLUDED_OOX_OLE_VBAHELPER_HXX
+#pragma once
 
 #include <oox/helper/binarystreambase.hxx>
 #include <rtl/ustring.hxx>
@@ -85,7 +84,5 @@ namespace VbaHelper
 
 
 } // namespace oox::ole
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

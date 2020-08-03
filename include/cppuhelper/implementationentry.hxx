@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CPPUHELPER_IMPLEMENTATIONENTRY_HXX
-#define INCLUDED_CPPUHELPER_IMPLEMENTATIONENTRY_HXX
+#pragma once
 
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/cppuhelperdllapi.h"
@@ -106,6 +105,5 @@ CPPUHELPER_DLLPUBLIC void *component_getFactoryHelper(
     const struct ImplementationEntry entries[] );
 
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

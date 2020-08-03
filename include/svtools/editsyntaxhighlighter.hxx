@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_EDITSYNTAXHIGHLIGHTER_HXX
-#define INCLUDED_SVTOOLS_EDITSYNTAXHIGHLIGHTER_HXX
+#pragma once
 
 #include <comphelper/syntaxhighlight.hxx>
 #include <vcl/vclmedit.hxx>
@@ -49,7 +48,5 @@ class SVT_DLLPUBLIC MultiLineEditSyntaxHighlight : public VclMultiLineEdit
 
         Color GetColorValue(TokenType aToken);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

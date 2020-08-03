@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_INC_DOCUMENTSIGNATUREMANAGER_HXX
-#define INCLUDED_XMLSECURITY_INC_DOCUMENTSIGNATUREMANAGER_HXX
+#pragma once
 
 #include "xmlsecuritydllapi.h"
 
@@ -132,7 +131,5 @@ public:
         return maCurrentSignatureInformations;
     }
 };
-
-#endif // INCLUDED_XMLSECURITY_INC_DOCUMENTSIGNATUREMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

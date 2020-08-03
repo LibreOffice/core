@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_SUBTOTAL_HXX
-#define INCLUDED_SC_INC_SUBTOTAL_HXX
+#pragma once
 
 #include "global.hxx"
 
@@ -79,7 +78,5 @@ private:
     double&         getValueRef()   { return maWelford.mfMean; }
     sal_uInt64&     getCountRef()   { return maWelford.mnCount; }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

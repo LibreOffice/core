@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_RESULTSETBASE_HXX
-#define INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_RESULTSETBASE_HXX
+#pragma once
 
 #include <vector>
 #include <memory>
@@ -398,7 +397,5 @@ namespace chelp {
 
 } // end namespace fileaccess
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

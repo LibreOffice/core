@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SVX_WELDEDITVIEW_HXX
-#define INCLUDED_SVX_WELDEDITVIEW_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <svx/svxdllapi.h>
@@ -76,7 +75,5 @@ protected:
         return GetDrawingArea()->get_ref_device();
     }
 };
-
-#endif // INCLUDED_SVX_WELDEDITVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

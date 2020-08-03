@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_BASIC_QA_CPPUNIT_BASICTEST_HXX
-#define INCLUDED_BASIC_QA_CPPUNIT_BASICTEST_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <cppunit/TestFixture.h>
@@ -49,7 +48,5 @@ public:
     bool HasError() const;
     const ErrCode& getError() const;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

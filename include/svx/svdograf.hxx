@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDOGRAF_HXX
-#define INCLUDED_SVX_SVDOGRAF_HXX
+#pragma once
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -291,7 +290,5 @@ public:
         return mpQrCode.get();
     };
 };
-
-#endif // INCLUDED_SVX_SVDOGRAF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

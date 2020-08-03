@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVTOOLS_AUTHFALLBACKDLG_HXX
-#define INCLUDED_SVTOOLS_AUTHFALLBACKDLG_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 
@@ -36,5 +35,3 @@ private:
     DECL_LINK(OKHdl, weld::Button&, void);
     DECL_LINK(CancelHdl, weld::Button&, void);
 };
-
-#endif // INCLUDED_SVTOOLS_AUTHFALLBACKDLG_HXX

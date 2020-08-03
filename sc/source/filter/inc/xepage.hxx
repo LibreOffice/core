@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XEPAGE_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_XEPAGE_HXX
+#pragma once
 
 #include "xerecord.hxx"
 #include "xlpage.hxx"
@@ -121,7 +120,5 @@ public:
 private:
     XclPageData         maData;         /// Page settings data.
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SAL_BACKTRACE_HXX
-#define INCLUDED_SAL_BACKTRACE_HXX
+#pragma once
 
 #include "sal/config.h"
 #include "sal/saldllapi.h"
@@ -42,8 +41,6 @@ SAL_DLLPUBLIC std::unique_ptr<BacktraceState> backtrace_get(
 SAL_DLLPUBLIC OUString backtrace_to_string(BacktraceState* backtraceState);
 
 }
-
-#endif
 
 #endif
 

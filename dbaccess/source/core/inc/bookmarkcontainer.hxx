@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_BOOKMARKCONTAINER_HXX
-#define INCLUDED_DBACCESS_SOURCE_CORE_INC_BOOKMARKCONTAINER_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -145,7 +144,5 @@ inline  bool OBookmarkContainer::checkExistence(const OUString& _rName)
 }
 
 }   // namespace dbaccess
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_OOX_CRYPTO_STRONGENCRYPTINDATASPACE_HXX
-#define INCLUDED_OOX_CRYPTO_STRONGENCRYPTINDATASPACE_HXX
+#pragma once
 
 #include <oox/dllapi.h>
 #include <cppuhelper/implbase.hxx>
@@ -67,7 +66,5 @@ public:
 };
 
 } // namespace oox::crypto
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

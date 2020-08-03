@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLPROPERTYMAPPINGCONTEXT_HXX
-#define INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLPROPERTYMAPPINGCONTEXT_HXX
+#pragma once
 
 #include "transporttypes.hxx"
 #include <xmloff/xmlictxt.hxx>
@@ -42,7 +41,5 @@ private:
     tSchXMLLSequencesPerIndex& mrLSequencesPerIndex;
 
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

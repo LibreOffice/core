@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SVX_CLASSIFICATIONCOMMON_HXX
-#define INCLUDED_SVX_CLASSIFICATIONCOMMON_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <svx/svxdllapi.h>
@@ -59,7 +58,5 @@ insertCreationOrigin(css::uno::Reference<css::beans::XPropertyContainer> const& 
                      sfx::ClassificationCreationOrigin eOrigin);
 
 } // end svx::classification namespace
-
-#endif // INCLUDED_SVX_CLASSIFICATIONCOMMON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

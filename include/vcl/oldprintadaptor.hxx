@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_OLDPRINTADAPTOR_HXX
-#define INCLUDED_VCL_OLDPRINTADAPTOR_HXX
+#pragma once
 
 #include <config_options.h>
 #include <memory>
@@ -47,7 +46,5 @@ namespace vcl
         virtual void printPage( int i_nPage ) const override;
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

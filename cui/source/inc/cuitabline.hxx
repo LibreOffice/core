@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CUI_SOURCE_INC_CUITABLINE_HXX
-#define INCLUDED_CUI_SOURCE_INC_CUITABLINE_HXX
+#pragma once
 
 #include <vector>
 #include <editeng/brushitem.hxx>
@@ -372,7 +371,5 @@ public:
 
     void    SetLineEndChgd( ChangeType* pIn ) { pnLineEndListState = pIn; }
 };
-
-#endif // INCLUDED_CUI_SOURCE_INC_CUITABLINE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

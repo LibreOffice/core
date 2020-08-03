@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_SHELL_SLIDESORTERSERVICE_HXX
-#define INCLUDED_SD_SOURCE_UI_SLIDESORTER_SHELL_SLIDESORTERSERVICE_HXX
+#pragma once
 
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/drawing/XSlideSorterBase.hpp>
@@ -152,7 +151,5 @@ private:
 };
 
 } // end of namespace ::sd::slidesorter
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

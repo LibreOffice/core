@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_PNTLOCK_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_PNTLOCK_HXX
+#pragma once
 
 #include <rangelst.hxx>
 
@@ -53,7 +52,5 @@ public:
     void            SetDocLevel(sal_uInt16 nNew)
                         { nDocLevel = nNew; }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

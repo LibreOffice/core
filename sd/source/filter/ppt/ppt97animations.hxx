@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_FILTER_PPT_PPT97ANIMATIONS_HXX
-#define INCLUDED_SD_SOURCE_FILTER_PPT_PPT97ANIMATIONS_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -153,7 +152,5 @@ private: //private member
     mutable bool            m_bHasSpecialDuration;
     mutable double          m_fDurationInSeconds;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

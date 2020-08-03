@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SOURCE_DIALOG_SRCHCTRL_HXX
-#define INCLUDED_SVX_SOURCE_DIALOG_SRCHCTRL_HXX
+#pragma once
 
 #include <sfx2/ctrlitem.hxx>
 class SvxSearchDialog;
@@ -33,7 +32,5 @@ public:
     SvxSearchController( sal_uInt16 nId, SfxBindings& rBnd, SvxSearchDialog& rDlg );
 };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

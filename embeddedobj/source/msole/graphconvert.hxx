@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMBEDDEDOBJ_SOURCE_MSOLE_GRAPHCONVERT_HXX
-#define INCLUDED_EMBEDDEDOBJ_SOURCE_MSOLE_GRAPHCONVERT_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -30,7 +29,5 @@ namespace com::sun::star::uno { class Any; }
 bool ConvertBufferToFormat(
     void * pBuf, sal_uInt32 nBufSize, OUString const & aFormatShortName,
     css::uno::Any & aResult);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

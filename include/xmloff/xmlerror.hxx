@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_XMLERROR_HXX
-#define INCLUDED_XMLOFF_XMLERROR_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -134,7 +133,5 @@ public:
     /// @throws css::xml::sax::SAXParseException
     void ThrowErrorAsSAXException( sal_Int32 nIdMask );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_UCB_SOURCE_UCP_FILE_FILPRP_HXX
-#define INCLUDED_UCB_SOURCE_UCP_FILE_FILPRP_HXX
+#pragma once
 
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -50,7 +49,5 @@ class XPropertySetInfo_impl : public cppu::WeakImplHelper<
         css::uno::Sequence< css::beans::Property >           m_seq;
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

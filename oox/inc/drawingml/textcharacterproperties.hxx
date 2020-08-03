@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_TEXTCHARACTERPROPERTIES_HXX
-#define INCLUDED_OOX_DRAWINGML_TEXTCHARACTERPROPERTIES_HXX
+#pragma once
 
 #include <oox/helper/helper.hxx>
 #include <oox/helper/propertymap.hxx>
@@ -82,7 +81,5 @@ struct TextCharacterProperties
 
 
 } // namespace oox::drawingml
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

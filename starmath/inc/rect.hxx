@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_STARMATH_INC_RECT_HXX
-#define INCLUDED_STARMATH_INC_RECT_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -213,7 +212,5 @@ inline tools::Rectangle SmRect::AsRectangle() const
 {
     return tools::Rectangle(Point(GetItalicLeft(), GetTop()), GetItalicSize());
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

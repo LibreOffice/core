@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_INCLUDE_SFX2_SIDEBAR_SIDEBARUPDATEMODEL_HXX
-#define INCLUDED_INCLUDE_SFX2_SIDEBAR_SIDEBARUPDATEMODEL_HXX
+#pragma once
 
 #include <sfx2/dllapi.h>
 
@@ -25,7 +24,5 @@ public:
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

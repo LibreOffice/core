@@ -17,13 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBRESID_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBRESID_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
 OUString BibResId(const char* pId);
-
-#endif // INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBRESID_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

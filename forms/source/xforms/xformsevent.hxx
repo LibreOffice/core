@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_FORMS_SOURCE_XFORMS_XFORMSEVENT_HXX
-#define INCLUDED_FORMS_SOURCE_XFORMS_XFORMSEVENT_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <cppuhelper/implbase.hxx>
@@ -65,7 +64,5 @@ class XFormsEventConcrete : public cppu::WeakImplHelper< XFormsEvent > {
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

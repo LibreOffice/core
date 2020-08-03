@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_DRAWMODELBROADCASTER_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_DRAWMODELBROADCASTER_HXX
+#pragma once
 
 #include <svl/lstner.hxx>
 #include <comphelper/interfacecontainer3.hxx>
@@ -51,7 +50,5 @@ public:
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

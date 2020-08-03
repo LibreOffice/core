@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_CLASSES_RESOURCE_HXX
-#define INCLUDED_FRAMEWORK_INC_CLASSES_RESOURCE_HXX
+#pragma once
 
 #define MENUITEM_TOOLBAR_VISIBLEBUTTON          1
 #define MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR       2
@@ -27,7 +26,5 @@
 #define MENUITEM_TOOLBAR_DOCKALLTOOLBAR         5
 #define MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION    6
 #define MENUITEM_TOOLBAR_CLOSE                  7
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

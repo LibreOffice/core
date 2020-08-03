@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVTOOLS_ACCESSIBILITYOPTIONS_HXX
-#define INCLUDED_SVTOOLS_ACCESSIBILITYOPTIONS_HXX
+#pragma once
 
 #include <svtools/svtdllapi.h>
 #include <unotools/options.hxx>
@@ -44,7 +43,5 @@ public:
 
     void        SetVCLSettings();
 };
-
-#endif // #ifndef INCLUDED_SVTOOLS_ACCESSIBILITYOPTIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -5,8 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WRITERPERFECT_SOURCE_IMPRESS_KEYNOTEIMPORTFILTER_HXX
-#define INCLUDED_WRITERPERFECT_SOURCE_IMPRESS_KEYNOTEIMPORTFILTER_HXX
+#pragma once
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 
@@ -38,7 +37,5 @@ private:
     virtual bool doImportDocument(weld::Window* pParent, librevenge::RVNGInputStream& rInput,
                                   OdpGenerator& rGenerator, utl::MediaDescriptor&) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

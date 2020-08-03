@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_SKIA_SKIAHELPER_HXX
-#define INCLUDED_VCL_SKIA_SKIAHELPER_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 
@@ -35,7 +34,5 @@ VCL_DLLPUBLIC void cleanup();
 #endif // HAVE_FEATURE_SKIA
 
 } // namespace
-
-#endif // INCLUDED_VCL_SKIA_SKIAHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

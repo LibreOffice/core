@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_O3TL_SPAN_HXX
-#define INCLUDED_O3TL_SPAN_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -82,8 +81,6 @@ private:
 };
 
 } // namespace o3tl
-
-#endif
 
 #endif
 

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DTABLES_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DTABLES_HXX
+#pragma once
 
 #include <file/FTables.hxx>
 
@@ -43,6 +42,5 @@ namespace connectivity::dbase
         };
 
 }
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DTABLES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

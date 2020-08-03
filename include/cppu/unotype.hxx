@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CPPU_UNOTYPE_HXX
-#define INCLUDED_CPPU_UNOTYPE_HXX
+#pragma once
 
 #include "sal/config.h"
 
@@ -402,7 +401,5 @@ getTypeFavourChar(css::uno::Sequence< T > const *);
 /// @endcond
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

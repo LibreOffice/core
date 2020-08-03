@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_INC_ORCUSFILTERS_HXX
-#define INCLUDED_SC_INC_ORCUSFILTERS_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <memory>
@@ -65,7 +64,5 @@ public:
 
     virtual void importXML(const ScOrcusImportXMLParam& rParam) = 0;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

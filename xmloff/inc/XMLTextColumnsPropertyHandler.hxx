@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_INC_XMLTEXTCOLUMNSPROPERTYHANDLER_HXX
-#define INCLUDED_XMLOFF_INC_XMLTEXTCOLUMNSPROPERTYHANDLER_HXX
+#pragma once
 
 #include <xmloff/xmlprhdl.hxx>
 
@@ -44,7 +43,5 @@ public:
             const css::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

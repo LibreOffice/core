@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCB_SOURCE_SORTER_SORTRESULT_HXX
-#define INCLUDED_UCB_SOURCE_SORTER_SORTRESULT_HXX
+#pragma once
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -329,7 +328,5 @@ public:
                                   const css::uno::Reference<
                                       css::beans::XVetoableChangeListener >& aListener ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OSL_MUTEX_HXX
-#define INCLUDED_OSL_MUTEX_HXX
+#pragma once
 
 #include "osl/mutex.h"
 
@@ -247,7 +246,5 @@ namespace osl
     typedef ClearableGuard<Mutex> ClearableMutexGuard;
     typedef ResettableGuard< Mutex > ResettableMutexGuard;
 }
-
-#endif // INCLUDED_OSL_MUTEX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_CBNUMBERFORMAT_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_CBNUMBERFORMAT_HXX
+#pragma once
 
 #include <vcl/InterimItemWindow.hxx>
 
@@ -39,7 +38,5 @@ private:
     DECL_STATIC_LINK(ScNumberFormat, NumFormatSelectHdl, weld::ComboBox&, void);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

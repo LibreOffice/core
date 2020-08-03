@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DTRANS_SOURCE_WIN32_DTOBJ_XTDATAOBJECT_HXX
-#define INCLUDED_DTRANS_SOURCE_WIN32_DTOBJ_XTDATAOBJECT_HXX
+#pragma once
 
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
@@ -131,7 +130,5 @@ private:
 };
 
 typedef CEnumFormatEtc *PCEnumFormatEtc;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

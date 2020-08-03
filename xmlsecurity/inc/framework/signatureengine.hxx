@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_INC_FRAMEWORK_SIGNATUREENGINE_HXX
-#define INCLUDED_XMLSECURITY_INC_FRAMEWORK_SIGNATUREENGINE_HXX
+#pragma once
 
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedListener.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceCollector.hpp>
@@ -113,7 +112,5 @@ public:
     virtual css::uno::Reference< css::io::XInputStream >
         SAL_CALL getUriBinding( const OUString& uri ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

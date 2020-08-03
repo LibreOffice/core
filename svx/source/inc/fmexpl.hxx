@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SOURCE_INC_FMEXPL_HXX
-#define INCLUDED_SVX_SOURCE_INC_FMEXPL_HXX
+#pragma once
 
 #include <config_options.h>
 #include <svl/lstner.hxx>
@@ -547,7 +546,5 @@ namespace svxform
         SFX_DECL_CHILDWINDOW( NavigatorFrameManager );
     };
 }
-
-#endif // INCLUDED_SVX_SOURCE_INC_FMEXPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

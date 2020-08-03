@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_SCRIPTINFO_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_SCRIPTINFO_HXX
+#pragma once
 
 #include <vector>
 #include <deque>
@@ -393,7 +392,5 @@ namespace o3tl
 template<> struct typed_flags<SwScriptInfo::MarkKind> : is_typed_flags<SwScriptInfo::MarkKind, 0x07> {};
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_SCITEMS_HXX
-#define INCLUDED_SC_INC_SCITEMS_HXX
+#pragma once
 
 #include <svl/typedwhich.hxx>
 
@@ -223,7 +222,5 @@ constexpr sal_uInt16 ATTR_ENDINDEX(ATTR_HIDDEN);        // end of pool-range
 #define SID_SCATTR_PAGE_FORMULAS        ATTR_PAGE_FORMULAS
 #define SID_SCATTR_PAGE_NULLVALS        ATTR_PAGE_NULLVALS
 #define SID_SCATTR_PAGE_SCALETO         ATTR_PAGE_SCALETO
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

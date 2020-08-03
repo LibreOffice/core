@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_EXTENSIONS_SOURCE_OLE_UNOCONVERSIONUTILITIES_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_OLE_UNOCONVERSIONUTILITIES_HXX
+#pragma once
 
 #include <memory>
 #include <com/sun/star/script/XInvocationAdapterFactory.hpp>
@@ -2354,7 +2353,5 @@ inline void reduceRange( Any& any)
         any.setValue( &shortVal, cppu::UnoType<sal_Int16>::get());
     }
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

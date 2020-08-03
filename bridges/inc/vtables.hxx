@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BRIDGES_INC_VTABLES_HXX
-#define INCLUDED_BRIDGES_INC_VTABLES_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <typelib/typedescription.h>
@@ -96,7 +95,5 @@ VtableSlot getVtableSlot(
     typelib_InterfaceMethodTypeDescription const * ifcMember);
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

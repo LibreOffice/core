@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_FILTER_SOURCE_XSLTDIALOG_XMLFILTERTABPAGEXSLT_HXX
-#define INCLUDED_FILTER_SOURCE_XSLTDIALOG_XMLFILTERTABPAGEXSLT_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 #include <svtools/inettbc.hxx>
@@ -54,7 +53,5 @@ public:
     std::unique_ptr<weld::Button>  m_xPBImportTemplate;
     std::unique_ptr<weld::CheckButton> m_xCBNeedsXSLT2;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

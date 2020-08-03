@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_INCLUDE_VCL_SVTACCESSIBLEFACTORY_HXX
-#define INCLUDED_INCLUDE_VCL_SVTACCESSIBLEFACTORY_HXX
+#pragma once
 
 #include <config_options.h>
 #include <vcl/dllapi.h>
@@ -53,7 +52,5 @@ namespace vcl
         void ensureInitialized();
     };
 }   // namespace svt
-
-#endif // INCLUDED_INCLUDE_VCL_SVTACCESSIBLEFACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

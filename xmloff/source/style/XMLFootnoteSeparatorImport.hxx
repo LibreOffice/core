@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_STYLE_XMLFOOTNOTESEPARATORIMPORT_HXX
-#define INCLUDED_XMLOFF_SOURCE_STYLE_XMLFOOTNOTESEPARATORIMPORT_HXX
+#pragma once
 
 #include <xmloff/xmlictxt.hxx>
 #include <rtl/ref.hxx>
@@ -59,7 +58,5 @@ public:
     virtual void StartElement(
         const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

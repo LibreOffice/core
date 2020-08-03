@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_BUILDER_FACTORY_HXX
-#define INCLUDED_VCL_BUILDER_FACTORY_HXX
+#pragma once
 
 #include <vcl/vclptr.hxx>
 #include <vcl/builder.hxx>
@@ -45,7 +44,5 @@
 
 #define VCL_BUILDER_FACTORY_EXTERN(typeName) \
     extern "C" void make##typeName(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

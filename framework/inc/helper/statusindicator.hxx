@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_HELPER_STATUSINDICATOR_HXX
-#define INCLUDED_FRAMEWORK_INC_HELPER_STATUSINDICATOR_HXX
+#pragma once
 
 // include files of own module
 #include <helper/statusindicatorfactory.hxx>
@@ -100,7 +99,5 @@ class StatusIndicator final : public  ::cppu::WeakImplHelper< css::task::XStatus
 }; // class StatusIndicator
 
 } // namespace framework
-
-#endif // INCLUDED_FRAMEWORK_INC_HELPER_STATUSINDICATOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

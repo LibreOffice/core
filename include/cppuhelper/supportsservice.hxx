@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CPPUHELPER_SUPPORTSSERVICE_HXX
-#define INCLUDED_CPPUHELPER_SUPPORTSSERVICE_HXX
+#pragma once
 
 #include "sal/config.h"
 
@@ -43,7 +42,5 @@ bool CPPUHELPER_DLLPUBLIC supportsService(
     rtl::OUString const & name);
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_GALMISC_HXX
-#define INCLUDED_SVX_GALMISC_HXX
+#pragma once
 
 #include <vcl/imap.hxx>
 #include <svl/hint.hxx>
@@ -198,5 +197,4 @@ struct GalleryObject;
 
 INetURLObject ImplGetURL(const GalleryObject* pObject);
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

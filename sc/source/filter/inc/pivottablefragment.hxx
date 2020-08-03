@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_PIVOTTABLEFRAGMENT_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_PIVOTTABLEFRAGMENT_HXX
+#pragma once
 
 #include "excelhandlers.hxx"
 #include "worksheethelper.hxx"
@@ -80,7 +79,5 @@ private:
 };
 
 } // namespace oox::xls
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

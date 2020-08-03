@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_EXTERNALSHAPEBASE_HXX
-#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_EXTERNALSHAPEBASE_HXX
+#pragma once
 
 #include <iexternalmediashapebase.hxx>
 #include <unoview.hxx>
@@ -123,7 +122,5 @@ namespace slideshow::internal
             ::basegfx::B2DRectangle                                                 maBounds;
         };
 }
-
-#endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_EXTERNALSHAPEBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_FMSRCIMP_HXX
-#define INCLUDED_SVX_FMSRCIMP_HXX
+#pragma once
 
 #include <svx/fmtools.hxx>
 #include <svx/svxdllapi.h>
@@ -343,7 +342,5 @@ private:
     // is used by SearchThread, after the return from this handler the thread removes itself
     DECL_LINK(OnNewRecordCount, sal_Int32, void);
 };
-
-#endif // INCLUDED_SVX_FMSRCIMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

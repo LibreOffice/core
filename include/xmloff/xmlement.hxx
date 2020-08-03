@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_XMLEMENT_HXX
-#define INCLUDED_XMLOFF_XMLEMENT_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <xmloff/xmltoken.hxx>
@@ -80,7 +79,5 @@ public:
     sal_Int32    GetNameLength() const { return nNameLength; }
     EnumT        GetValue() const { return static_cast<EnumT>(nValue); }
 };
-
-#endif // INCLUDED_XMLOFF_XMLEMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_INC_UNDORANGENAME_HXX
-#define INCLUDED_SC_INC_UNDORANGENAME_HXX
+#pragma once
 
 #include <undobase.hxx>
 
@@ -60,7 +59,5 @@ private:
     std::unique_ptr<ScRangeData> mpRangeData;
     SCTAB mnTab;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

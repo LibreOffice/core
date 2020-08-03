@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_SDBCORETOOLS_HXX
-#define INCLUDED_DBACCESS_SOURCE_CORE_INC_SDBCORETOOLS_HXX
+#pragma once
 
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -52,7 +51,5 @@ namespace dbaccess
     }
 
 }   // namespace dbaccess
-
-#endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_SDBCORETOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

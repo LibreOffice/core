@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVL_RNGITEM_HXX
-#define INCLUDED_SVL_RNGITEM_HXX
+#pragma once
 
 #include <svl/svldllapi.h>
 #include <svl/poolitem.hxx>
@@ -42,7 +41,5 @@ public:
     virtual SfxRangeItem*       Clone( SfxItemPool *pPool = nullptr ) const override;
 };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

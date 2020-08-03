@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVGIO_INC_SVGTOKEN_HXX
-#define INCLUDED_SVGIO_INC_SVGTOKEN_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -186,7 +185,5 @@ namespace svgio::svgreader
         OUString getStrDesc();
 
 } // end of namespace svgio::svgreader
-
-#endif // INCLUDED_SVGIO_INC_SVGTOKEN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

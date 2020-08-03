@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DATASOURCE_HXX
-#define INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DATASOURCE_HXX
+#pragma once
 
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -216,7 +215,5 @@ protected:
 };
 
 }   // namespace dbaccess
-
-#endif // _DBA_COREDATAACCESS_DATALINK_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

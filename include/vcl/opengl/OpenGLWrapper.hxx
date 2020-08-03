@@ -9,8 +9,7 @@
 
 // Fully wrapped methods that have no exotic GL header deps.
 
-#ifndef INCLUDED_VCL_OPENGL_OPENGLWRAPPER_HXX
-#define INCLUDED_VCL_OPENGL_OPENGLWRAPPER_HXX
+#pragma once
 
 #include <config_features.h>
 #include <vcl/dllapi.h>
@@ -37,5 +36,3 @@ struct VCL_DLLPUBLIC OpenGLWrapper
     }
 #endif
 };
-
-#endif // INCLUDED_VCL_OPENGL_OPENGLWRAPPER_HXX

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_TABCOL_HXX
-#define INCLUDED_SW_INC_TABCOL_HXX
+#pragma once
 
 #include <vector>
 #include <memory>
@@ -97,7 +96,5 @@ struct SwColCache {
     SwTabFrame const* pLastTabFrame = nullptr;
     SwFrame const* pLastCellFrame = nullptr;
 };
-
-#endif // INCLUDED_SW_INC_TABCOL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

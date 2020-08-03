@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_EXCIMP8_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_EXCIMP8_HXX
+#pragma once
 
 #include "imp_op.hxx"
 #include "root.hxx"
@@ -112,7 +111,5 @@ private:
     typedef std::shared_ptr<XclImpAutoFilterData> XclImpAutoFilterSharePtr;
     std::vector<XclImpAutoFilterSharePtr> maFilters;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

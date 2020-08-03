@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_IMPOCTREE_HXX
-#define INCLUDED_VCL_INC_IMPOCTREE_HXX
+#pragma once
 
 #include "Octree.hxx"
 
@@ -103,7 +102,5 @@ inline BitmapColor ImpErrorQuad::ImplGetColor()
     return BitmapColor(std::clamp(nRed, 0L, 8160L) >> 5, std::clamp(nGreen, 0L, 8160L) >> 5,
                        std::clamp(nBlue, 0L, 8160L) >> 5);
 }
-
-#endif // INCLUDED_VCL_INC_IMPOCTREE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

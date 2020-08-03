@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_SOURCE_INC_RECFLOAT_HXX
-#define INCLUDED_SFX2_SOURCE_INC_RECFLOAT_HXX
+#pragma once
 
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/childwin.hxx>
@@ -49,7 +48,5 @@ public:
     virtual ~SfxRecordingFloat_Impl() override;
     virtual void FillInfo(SfxChildWinInfo& rInfo) const override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

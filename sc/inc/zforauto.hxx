@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_ZFORAUTO_HXX
-#define INCLUDED_SC_INC_ZFORAUTO_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <i18nlangtag/lang.h>
@@ -46,7 +45,5 @@ public:
     }
     LanguageType GetLanguage() const { return eLanguage; }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

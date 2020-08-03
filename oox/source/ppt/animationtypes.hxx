@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_SOURCE_PPT_ANIMATIONTYPES_HXX
-#define INCLUDED_OOX_SOURCE_PPT_ANIMATIONTYPES_HXX
+#pragma once
 
 #include <com/sun/star/uno/Any.hxx>
 
@@ -30,7 +29,5 @@ css::uno::Any GetTime( const OUString & val );
 css::uno::Any GetTimeAnimateValueTime( const OUString & val );
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CPPUHELPER_IMPLBASE_EX_PRE_HXX
-#define INCLUDED_CPPUHELPER_IMPLBASE_EX_PRE_HXX
+#pragma once
 
 /// @cond INTERNAL
 
@@ -27,7 +26,5 @@
 #define __IFC_EX_TYPE_INIT( class_cast, N ) __IFC_EX_TYPE_INIT_NAME( class_cast, Ifc##N )
 
 /// @endcond
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

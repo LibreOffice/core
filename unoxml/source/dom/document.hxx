@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOXML_SOURCE_DOM_DOCUMENT_HXX
-#define INCLUDED_UNOXML_SOURCE_DOM_DOCUMENT_HXX
+#pragma once
 
 #include <set>
 #include <memory>
@@ -334,7 +333,5 @@ namespace DOM
                                              const css::uno::Sequence< css::beans::Pair< OUString, sal_Int32 > >& namespaces ) override;
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

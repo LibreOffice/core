@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_IDOCUMENTUNDOREDO_HXX
-#define INCLUDED_SW_INC_IDOCUMENTUNDOREDO_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -284,7 +283,5 @@ private:
 };
 
 } // namespace sw
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

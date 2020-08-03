@@ -7,8 +7,7 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
 
-#ifndef INCLUDED_CUI_SOURCE_INC_DIAGRAMDIALOG_HXX
-#define INCLUDED_CUI_SOURCE_INC_DIAGRAMDIALOG_HXX
+#pragma once
 
 #include <tools/link.hxx>
 #include <vcl/weld.hxx>
@@ -36,7 +35,5 @@ private:
 
     void populateTree(const weld::TreeIter* pParent, const OUString& rParentId);
 };
-
-#endif // INCLUDED_CUI_SOURCE_INC_DIAGRAMDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

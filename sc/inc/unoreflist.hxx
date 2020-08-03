@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_UNOREFLIST_HXX
-#define INCLUDED_SC_INC_UNOREFLIST_HXX
+#pragma once
 
 #include <vector>
 #include <svl/hint.hxx>
@@ -68,7 +67,5 @@ public:
     sal_Int64   GetObjectId() const         { return aEntry.nObjectId; }
     const ScRangeList& GetRanges() const    { return aEntry.aRanges; }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

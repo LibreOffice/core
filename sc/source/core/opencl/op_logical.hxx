@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_SOURCE_CORE_OPENCL_OP_LOGICAL_HXX
-#define INCLUDED_SC_SOURCE_CORE_OPENCL_OP_LOGICAL_HXX
+#pragma once
 
 #include "opbase.hxx"
 
@@ -55,7 +54,5 @@ public:
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_INC_FRAMEWORK_SAXEVENTKEEPERIMPL_HXX
-#define INCLUDED_XMLSECURITY_INC_FRAMEWORK_SAXEVENTKEEPERIMPL_HXX
+#pragma once
 
 #include <com/sun/star/xml/crypto/sax/XSecuritySAXEventKeeper.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedBroadcaster.hpp>
@@ -287,8 +286,6 @@ OUString SAXEventKeeperImpl_getImplementationName();
 
 /// @throws css::uno::RuntimeException
 css::uno::Sequence< OUString > SAXEventKeeperImpl_getSupportedServiceNames(  );
-
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

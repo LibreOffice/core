@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_CONFIG_CACHE_FILTERCACHE_HXX
-#define INCLUDED_FILTER_SOURCE_CONFIG_CACHE_FILTERCACHE_HXX
+#pragma once
 
 #include <memory>
 
@@ -937,7 +936,5 @@ class FilterCache : public BaseLock
 struct TheFilterCache: public rtl::Static<FilterCache, TheFilterCache> {};
 
 } // namespace filter::config
-
-#endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_FILTERCACHE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

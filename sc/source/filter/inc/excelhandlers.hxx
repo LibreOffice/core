@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_EXCELHANDLERS_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_EXCELHANDLERS_HXX
+#pragma once
 
 #include <oox/core/fragmenthandler2.hxx>
 #include <oox/core/contexthandler2.hxx>
@@ -77,7 +76,5 @@ public:
 
 
 } // namespace oox::xls
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

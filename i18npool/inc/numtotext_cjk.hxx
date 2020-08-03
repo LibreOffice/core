@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_I18NPOOL_INC_NUMTOTEXT_CJK_HXX
-#define INCLUDED_I18NPOOL_INC_NUMTOTEXT_CJK_HXX
+#pragma once
 
 #include "transliteration_Numeric.hxx"
 
@@ -65,7 +64,5 @@ TRANSLITERATION_NUMTOTEXT_CJK ( HangulCircledSyllable_ko )
 #undef TRANSLITERATION_NUMTOTEXT
 
 }
-
-#endif // INCLUDED_I18NPOOL_INC_NUMTOTEXT_CJK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_SOURCE_CONTROL_THUMBPOS_HXX
-#define INCLUDED_VCL_SOURCE_CONTROL_THUMBPOS_HXX
+#pragma once
 
 inline long ImplMulDiv( long nNumber, long nNumerator, long nDenominator )
 {
@@ -17,7 +16,5 @@ inline long ImplMulDiv( long nNumber, long nNumerator, long nDenominator )
     double n = (static_cast<double>(nNumber) * static_cast<double>(nNumerator)) / static_cast<double>(nDenominator);
     return static_cast<long>(n);
 }
-
-#endif // INCLUDED_VCL_SOURCE_CONTROL_THUMBPOS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

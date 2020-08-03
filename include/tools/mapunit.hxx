@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLS_MAPUNIT_HXX
-#define INCLUDED_TOOLS_MAPUNIT_HXX
+#pragma once
 
 enum class MapUnit
 {
@@ -31,7 +30,5 @@ enum class MapUnit
     LAST = MapRelative,
     LASTENUMDUMMY // used as an error return
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

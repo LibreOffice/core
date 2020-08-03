@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_HFFRM_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_HFFRM_HXX
+#pragma once
 
 #include "layfrm.hxx"
 
@@ -52,7 +51,5 @@ class SwFooterFrame: public SwHeadFootFrame
 public:
     SwFooterFrame( SwFrameFormat* pFrame, SwFrame* pSib ) : SwHeadFootFrame(pFrame, pSib, SwFrameType::Footer) {};
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

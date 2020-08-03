@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CUI_SOURCE_INC_CUIGALDLG_HXX
-#define INCLUDED_CUI_SOURCE_INC_CUIGALDLG_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -271,7 +270,5 @@ public:
 
     static std::unique_ptr<SfxTabPage>  Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);
 };
-
-#endif // INCLUDED_CUI_SOURCE_INC_CUIGALDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

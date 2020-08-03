@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_INC_CHARMAPPOPUP_HXX
-#define INCLUDED_SFX2_INC_CHARMAPPOPUP_HXX
+#pragma once
 
 #include <svtools/popupwindowcontroller.hxx>
 
@@ -38,7 +37,5 @@ public:
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

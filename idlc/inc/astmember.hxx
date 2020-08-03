@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_IDLC_INC_ASTMEMBER_HXX
-#define INCLUDED_IDLC_INC_ASTMEMBER_HXX
+#pragma once
 
 #include "astdeclaration.hxx"
 
@@ -42,7 +41,5 @@ protected:
 private:
     AstType const * m_pType;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

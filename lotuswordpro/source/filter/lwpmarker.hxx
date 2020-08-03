@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPMARKER_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPMARKER_HXX
+#pragma once
 
 #include <lwpobjid.hxx>
 #include "lwpdlvlist.hxx"
@@ -260,6 +259,5 @@ private:
     OUString m_RubyStyle;
     OUString m_TextStyle;
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

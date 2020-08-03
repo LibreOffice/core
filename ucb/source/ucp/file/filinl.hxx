@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_UCB_SOURCE_UCP_FILE_FILINL_HXX
-#define INCLUDED_UCB_SOURCE_UCP_FILE_FILINL_HXX
+#pragma once
 
 inline const bool& TaskManager::MyProperty::IsNative() const
 {
@@ -51,7 +50,5 @@ inline void TaskManager::MyProperty::setState( const css::beans::PropertyState& 
 {
     const_cast<MyProperty*>(this)->State = theState;
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

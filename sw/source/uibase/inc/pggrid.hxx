@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_PGGRID_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_PGGRID_HXX
+#pragma once
 
 #include <sfx2/tabdlg.hxx>
 #include "colex.hxx"
@@ -85,7 +84,5 @@ public:
     virtual void    ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

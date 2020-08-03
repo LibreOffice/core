@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVL_LEGACYITEM_HXX
-#define INCLUDED_SVL_LEGACYITEM_HXX
+#pragma once
 
 #include <svl/svldllapi.h>
 
@@ -46,7 +45,5 @@ namespace legacy
         SVL_DLLPUBLIC SvStream& Store(const CntInt32Item& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
     }
 }
-
-#endif // INCLUDED_SVL_LEGACYITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

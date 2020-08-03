@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_EXTLISTBOX_HXX
-#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_EXTLISTBOX_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <vcl/customweld.hxx>
@@ -211,7 +210,5 @@ public:
 };
 
 }
-
-#endif // INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_EXTLISTBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

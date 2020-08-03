@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COMPHELPER_AUTOMATIONINVOKEDZONE_HXX
-#define INCLUDED_COMPHELPER_AUTOMATIONINVOKEDZONE_HXX
+#pragma once
 
 #include <comphelper/comphelperdllapi.h>
 
@@ -30,7 +29,5 @@ public:
     static bool isActive();
 };
 }
-
-#endif // INCLUDED_COMPHELPER_AUTOMATIONINVOKEDZONE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

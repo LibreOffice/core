@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_SBAMULTIPLEX_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_INC_SBAMULTIPLEX_HXX
+#pragma once
 
 #include <com/sun/star/beans/XVetoableChangeListener.hpp>
 #include <com/sun/star/form/XDatabaseParameterListener.hpp>
@@ -391,7 +390,5 @@ namespace dbaui
     // the SbaXPropertiesChangeMultiplexer doesn't care about the property names a listener logs on for, it simply
     // forwards _all_ changes to _all_ listeners
 }
-
-#endif // _SBA_MULTIPLEXER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

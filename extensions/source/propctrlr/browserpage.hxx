@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_BROWSERPAGE_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_BROWSERPAGE_HXX
+#pragma once
 
 #include <o3tl/deleter.hxx>
 #include "browserlistbox.hxx"
@@ -58,7 +57,5 @@ namespace pcr
         }
     };
 } // namespace pcr
-
-#endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_BROWSERPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

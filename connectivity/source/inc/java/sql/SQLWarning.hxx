@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_SQLWARNING_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_SQLWARNING_HXX
+#pragma once
 
 #include <java/sql/SQLException.hxx>
 
@@ -46,6 +45,5 @@ namespace connectivity
             : java_sql_SQLException(_rW,_rContext) {}
     };
 }
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_SQLWARNING_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

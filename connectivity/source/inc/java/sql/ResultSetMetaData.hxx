@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_RESULTSETMETADATA_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_RESULTSETMETADATA_HXX
+#pragma once
 
 #include <java/lang/Object.hxx>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
@@ -67,6 +66,5 @@ namespace connectivity
         virtual OUString SAL_CALL getColumnServiceName( sal_Int32 column ) override;
     };
 }
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_RESULTSETMETADATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

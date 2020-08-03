@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_FIELDVALUES_HXX
-#define INCLUDED_VCL_FIELDVALUES_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <rtl/ustring.hxx>
@@ -69,7 +68,5 @@ inline double ConvertDoubleValue(sal_Int64 nValue, sal_uInt16 nDecDigits, MapUni
     return ConvertDoubleValue(static_cast<double>(nValue), nDecDigits, eInUnit, eOutUnit);
 }
 }
-
-#endif // INCLUDED_VCL_FIELDVALUES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

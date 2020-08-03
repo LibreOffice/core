@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_INPUTSTREAM_HXX
-#define INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_INPUTSTREAM_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
@@ -93,7 +92,5 @@ namespace chelp {
 
 
 } // end namespace XInputStream_impl
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

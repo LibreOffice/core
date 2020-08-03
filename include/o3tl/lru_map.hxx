@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_O3TL_LRU_MAP_HXX
-#define INCLUDED_O3TL_LRU_MAP_HXX
+#pragma once
 
 #include <cassert>
 #include <list>
@@ -179,7 +178,5 @@ public:
 };
 
 }
-
-#endif /* INCLUDED_O3TL_LRU_MAP_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

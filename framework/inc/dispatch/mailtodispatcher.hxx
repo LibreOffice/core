@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_DISPATCH_MAILTODISPATCHER_HXX
-#define INCLUDED_FRAMEWORK_INC_DISPATCH_MAILTODISPATCHER_HXX
+#pragma once
 
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -93,7 +92,5 @@ class MailToDispatcher final : public  ::cppu::WeakImplHelper<
 };      //  class MailToDispatcher
 
 }       //  namespace framework
-
-#endif // INCLUDED_FRAMEWORK_INC_DISPATCH_MAILTODISPATCHER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

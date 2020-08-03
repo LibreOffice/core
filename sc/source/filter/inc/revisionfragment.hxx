@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_OOX_XLS_REVISIONFRAGMENT_HXX
-#define INCLUDED_SC_OOX_XLS_REVISIONFRAGMENT_HXX
+#pragma once
 
 #include "excelhandlers.hxx"
 #include <memory>
@@ -72,8 +71,6 @@ private:
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_WRONG_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_WRONG_HXX
+#pragma once
 
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/container/XStringKeyMap.hpp>
@@ -407,7 +406,5 @@ public:
 };
 
 } // namespace sw
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

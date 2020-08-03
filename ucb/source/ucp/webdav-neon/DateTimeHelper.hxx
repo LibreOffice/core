@@ -26,8 +26,7 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_DATETIMEHELPER_HXX
-#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_DATETIMEHELPER_HXX
+#pragma once
 
 #include <config_lgpl.h>
 #include <sal/types.h>
@@ -58,7 +57,5 @@ public:
 };
 
 } // namespace webdav_ucp
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

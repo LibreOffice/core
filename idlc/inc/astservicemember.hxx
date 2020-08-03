@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_IDLC_INC_ASTSERVICEMEMBER_HXX
-#define INCLUDED_IDLC_INC_ASTSERVICEMEMBER_HXX
+#pragma once
 
 #include "astservice.hxx"
 
@@ -39,7 +38,5 @@ private:
     const sal_uInt32    m_flags;
     AstService*         m_pRealService;
 };
-
-#endif // INCLUDED_IDLC_INC_ASTSERVICEMEMBER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

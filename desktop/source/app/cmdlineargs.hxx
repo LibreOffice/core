@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_APP_CMDLINEARGS_HXX
-#define INCLUDED_DESKTOP_SOURCE_APP_CMDLINEARGS_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -186,7 +185,5 @@ class CommandLineArgs
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

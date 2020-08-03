@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLSECTIONEXPORT_HXX
-#define INCLUDED_XMLOFF_SOURCE_TEXT_XMLSECTIONEXPORT_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -259,7 +258,5 @@ private:
         bool bDefault,
         bool bInvert = false);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

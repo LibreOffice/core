@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SXCECITM_HXX
-#define INCLUDED_SVX_SXCECITM_HXX
+#pragma once
 
 #include <svl/eitem.hxx>
 #include <svx/svddef.hxx>
@@ -92,7 +91,5 @@ public:
         return new SdrCaptionEscAbsItem(*this);
     }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

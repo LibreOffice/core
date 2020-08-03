@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOXML_SOURCE_XPATH_XPATHAPI_HXX
-#define INCLUDED_UNOXML_SOURCE_XPATH_XPATHAPI_HXX
+#pragma once
 
 #include <map>
 #include <vector>
@@ -104,7 +103,5 @@ namespace XPath
 
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

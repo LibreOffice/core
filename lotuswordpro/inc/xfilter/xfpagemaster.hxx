@@ -58,8 +58,7 @@
  * Page master used bye XFMasterPage.
  * It is the real object to define header and footer of pages.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFPAGEMASTER_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFPAGEMASTER_HXX
+#pragma once
 
 #include <xfilter/xfstyle.hxx>
 #include <xfilter/xfcolor.hxx>
@@ -153,7 +152,5 @@ inline void XFPageMaster::SetTextDir(enumXFTextDir dir)
 {
     m_eTextDir = dir;
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

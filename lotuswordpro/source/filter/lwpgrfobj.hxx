@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPGRFOBJ_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPGRFOBJ_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <config_lgpl.h>
@@ -125,7 +124,5 @@ public:
     sal_Int16 IsLinked() const { return m_bIsLinked;}
     const OUString& GetLinkedFilePath() const { return m_LinkedFilePath;}
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

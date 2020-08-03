@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_MNEMONIC_HXX
-#define INCLUDED_VCL_MNEMONIC_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.h>
 #include <rtl/ustring.hxx>
@@ -69,7 +68,5 @@ public:
     // returns a string where all '~'-characters and CJK mnemonics of the form (~A) are completely removed
     static OUString EraseAllMnemonicChars( const OUString& rStr );
 };
-
-#endif // INCLUDED_VCL_MNEMONIC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

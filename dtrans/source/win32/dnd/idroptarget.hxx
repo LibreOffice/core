@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DTRANS_SOURCE_WIN32_DND_IDROPTARGET_HXX
-#define INCLUDED_DTRANS_SOURCE_WIN32_DND_IDROPTARGET_HXX
+#pragma once
 
 #include "target.hxx"
 
@@ -62,6 +61,5 @@ public:
             /* [out][in] */ DWORD __RPC_FAR *pdwEffect) override;
 
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

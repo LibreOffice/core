@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_STYLEUNO_HXX
-#define INCLUDED_SC_INC_STYLEUNO_HXX
+#pragma once
 
 #include <svl/lstner.hxx>
 #include <svl/style.hxx>
@@ -267,7 +266,5 @@ public:
                             // XUnoTunnel
     UNO3_GETIMPLEMENTATION_DECL(ScStyleObj)
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

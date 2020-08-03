@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_MARKDATA_HXX
-#define INCLUDED_SC_INC_MARKDATA_HXX
+#pragma once
 
 #include "address.hxx"
 #include "rangelst.hxx"
@@ -164,7 +163,5 @@ public:
     const_iterator end() const;
     const_reverse_iterator rbegin() const;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

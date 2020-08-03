@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLETABLEBASE_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLETABLEBASE_HXX
+#pragma once
 
 #include "AccessibleContextBase.hxx"
 #include <address.hxx>
@@ -231,7 +230,5 @@ protected:
 
     void CommitTableModelChange(sal_Int32 nStartRow, sal_Int32 nStartCol, sal_Int32 nEndRow, sal_Int32 nEndCol, sal_uInt16 nId);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_TIMER_HXX
-#define INCLUDED_VCL_TIMER_HXX
+#pragma once
 
 #include <tools/link.hxx>
 #include <vcl/task.hxx>
@@ -77,7 +76,5 @@ public:
 
 /// Value suitable as a timeout user input into an EditBox to an expensive update
 #define EDIT_UPDATEDATA_TIMEOUT     350
-
-#endif // INCLUDED_VCL_TIMER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

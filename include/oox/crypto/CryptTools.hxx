@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_CRYPTO_CRYPTTOOLS_HXX
-#define INCLUDED_OOX_CRYPTO_CRYPTTOOLS_HXX
+#pragma once
 
 #include <oox/dllapi.h>
 #include <sal/types.h>
@@ -114,7 +113,5 @@ public:
 
 
 } // namespace oox::crypto
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

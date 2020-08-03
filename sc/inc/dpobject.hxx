@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_DPOBJECT_HXX
-#define INCLUDED_SC_INC_DPOBJECT_HXX
+#pragma once
 
 #include "scdllapi.h"
 #include "global.hxx"
@@ -450,7 +449,5 @@ private:
 };
 
 bool operator<(const ScDPCollection::DBType& left, const ScDPCollection::DBType& right);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

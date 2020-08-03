@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_OPENCL_INC_CLEW_SETUP_HXX
-#define INCLUDED_OPENCL_INC_CLEW_SETUP_HXX
+#pragma once
 
 #ifdef _WIN32
 #include <prewin.h>
@@ -18,8 +17,6 @@
 #define OPENCL_DLL_NAME nullptr
 #else
 #define OPENCL_DLL_NAME "libOpenCL.so.1"
-#endif
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

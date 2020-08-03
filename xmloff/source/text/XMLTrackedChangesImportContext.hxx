@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLTRACKEDCHANGESIMPORTCONTEXT_HXX
-#define INCLUDED_XMLOFF_SOURCE_TEXT_XMLTRACKEDCHANGESIMPORTCONTEXT_HXX
+#pragma once
 
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -51,7 +50,5 @@ public:
         const OUString& rLocalName,
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

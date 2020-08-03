@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_DOCOPTIO_HXX
-#define INCLUDED_SC_INC_DOCOPTIO_HXX
+#pragma once
 
 #include <unotools/textsearch.hxx>
 #include <svl/poolitem.hxx>
@@ -172,7 +171,5 @@ public:
 
     void    SetOptions( const ScDocOptions& rNew );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_TYPESERIALIZER_HXX
-#define INCLUDED_VCL_INC_TYPESERIALIZER_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <tools/GenericTypeSerializer.hxx>
@@ -46,7 +45,5 @@ public:
     void readGraphic(Graphic& rGraphic);
     void writeGraphic(const Graphic& rGraphic);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

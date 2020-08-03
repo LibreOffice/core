@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CPPUHELPER_IMPLBASE7_HXX
-#define INCLUDED_CPPUHELPER_IMPLBASE7_HXX
+#pragma once
 
 #include "cppuhelper/implbase_ex.hxx"
 #include "rtl/instance.hxx"
@@ -304,7 +303,5 @@ namespace cppu
             { return ImplHelper_getImplementationId( cd::get() ); }
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

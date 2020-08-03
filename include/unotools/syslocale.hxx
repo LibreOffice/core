@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOTOOLS_SYSLOCALE_HXX
-#define INCLUDED_UNOTOOLS_SYSLOCALE_HXX
+#pragma once
 
 #include <unotools/unotoolsdllapi.h>
 #include <rtl/textenc.h>
@@ -73,7 +72,5 @@ public:
      */
     static  rtl_TextEncoding    GetBestMimeEncoding();
 };
-
-#endif  // INCLUDED_SVTOOLS_SYSLOCALE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

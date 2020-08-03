@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_SFXSTATUSLISTENER_HXX
-#define INCLUDED_SFX2_SFXSTATUSLISTENER_HXX
+#pragma once
 
 #include <config_options.h>
 #include <sal/config.h>
@@ -69,7 +68,5 @@ class UNLESS_MERGELIBS(SFX2_DLLPUBLIC) SfxStatusListener : public cppu::WeakImpl
         css::uno::Reference< css::frame::XDispatchProvider >  m_xDispatchProvider;
         css::uno::Reference< css::frame::XDispatch >          m_xDispatch;
 };
-
-#endif // INCLUDED_SFX2_SFXSTATUSLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_DISPATCH_DISPATCHPROVIDER_HXX
-#define INCLUDED_FRAMEWORK_INC_DISPATCH_DISPATCHPROVIDER_HXX
+#pragma once
 
 #include <classes/protocolhandlercache.hxx>
 
@@ -110,7 +109,5 @@ class DispatchProvider final : public ::cppu::WeakImplHelper< css::frame::XDispa
 }; // class DispatchProvider
 
 } // namespace framework
-
-#endif // INCLUDED_FRAMEWORK_INC_DISPATCH_DISPATCHPROVIDER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

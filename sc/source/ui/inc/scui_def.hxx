@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_SCUI_DEF_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_SCUI_DEF_HXX
+#pragma once
 
 #include <o3tl/typed_flags_set.hxx>
 
@@ -66,6 +65,5 @@ namespace o3tl {
 #define BTN_EXTEND_RANGE       150
 #define BTN_CURRENT_SELECTION  151
 #define SCRET_REMOVE    0x42 //from subtdlg.hxx
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

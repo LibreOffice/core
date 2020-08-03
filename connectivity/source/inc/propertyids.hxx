@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_PROPERTYIDS_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_PROPERTYIDS_HXX
+#pragma once
 
 // this define has to be set to split the names into different dll's or so's
 // every dll has his own set of property names
@@ -106,7 +105,5 @@ namespace dbtools
 #define PROPERTY_ID_FIELDTYPE                       59
 #define PROPERTY_ID_VALUE                           60
 #define PROPERTY_ID_ACTIVE_CONNECTION               61
-
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_PROPERTYIDS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

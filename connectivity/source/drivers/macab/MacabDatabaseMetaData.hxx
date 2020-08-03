@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABDATABASEMETADATA_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABDATABASEMETADATA_HXX
+#pragma once
 
 #include "MacabConnection.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
@@ -192,7 +191,5 @@ namespace connectivity::macab
             virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection(  ) override;
         };
 }
-
-#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABDATABASEMETADATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

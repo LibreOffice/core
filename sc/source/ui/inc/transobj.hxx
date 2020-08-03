@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_TRANSOBJ_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_TRANSOBJ_HXX
+#pragma once
 
 #include <vcl/transfer.hxx>
 #include <address.hxx>
@@ -109,7 +108,5 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const com::sun::star::uno::Sequence< sal_Int8 >& rId ) override;
     static const com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

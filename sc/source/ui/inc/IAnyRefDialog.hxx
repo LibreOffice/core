@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SC_SOURCE_UI_INC_IANYREFDIALOG_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_IANYREFDIALOG_HXX
+#pragma once
 
 #include <formula/IControlReferenceHandler.hxx>
 
@@ -45,7 +44,5 @@ public:
     virtual void SetActive() = 0;
     virtual void ViewShellChanged() = 0;
 };
-
-#endif // INCLUDED_SC_SOURCE_UI_INC_IANYREFDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

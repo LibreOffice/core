@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOXML_SOURCE_DOM_DOMIMPLEMENTATION_HXX
-#define INCLUDED_UNOXML_SOURCE_DOM_DOMIMPLEMENTATION_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -58,6 +57,5 @@ namespace DOM
         virtual sal_Bool SAL_CALL hasFeature(const OUString& feature, const OUString& ver) override;
         };
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

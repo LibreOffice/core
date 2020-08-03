@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_FPICKER_SOURCE_OFFICE_FPDIALOGBASE_HXX
-#define INCLUDED_FPICKER_SOURCE_OFFICE_FPDIALOGBASE_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 #include <com/sun/star/beans/StringPair.hpp>
@@ -109,7 +108,5 @@ public:
 #define CTRL_STATE_CHANGED      4
 #define DIALOG_SIZE_CHANGED     5
 
-
-#endif // INCLUDED_FPICKER_SOURCE_OFFICE_IODLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

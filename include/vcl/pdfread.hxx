@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_SOURCE_FILTER_IPDF_PDFREAD_HXX
-#define INCLUDED_VCL_SOURCE_FILTER_IPDF_PDFREAD_HXX
+#pragma once
 
 #include <vector>
 #include <tools/gen.hxx>
@@ -64,7 +63,5 @@ struct PDFGraphicResult
 VCL_DLLPUBLIC size_t ImportPDFUnloaded(const OUString& rURL,
                                        std::vector<PDFGraphicResult>& rGraphics);
 }
-
-#endif // INCLUDED_VCL_SOURCE_FILTER_IPDF_PDFREAD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

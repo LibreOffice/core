@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLEXTERNALTABI_HXX
-#define INCLUDED_SC_SOURCE_FILTER_XML_XMLEXTERNALTABI_HXX
+#pragma once
 
 #include <rtl/ustrbuf.hxx>
 #include "importcontext.hxx"
@@ -129,7 +128,5 @@ private:
 
     OUStringBuffer   maCellStrBuf;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

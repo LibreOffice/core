@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_QA_UNIT_HELPER_SHARED_TEST_IMPL_HXX
-#define INCLUDED_SC_QA_UNIT_HELPER_SHARED_TEST_IMPL_HXX
+#pragma once
 
 #include <memory>
 #include <colorscale.hxx>
@@ -286,7 +285,5 @@ void testCeilingFloor_Impl( ScDocument& rDoc )
             isFormulaWithoutError( rDoc, aPos));
     CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(aPos));
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

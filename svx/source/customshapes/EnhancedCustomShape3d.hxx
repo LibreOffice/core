@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_CUSTOMSHAPES_ENHANCEDCUSTOMSHAPE3D_HXX
-#define INCLUDED_SVX_SOURCE_CUSTOMSHAPES_ENHANCEDCUSTOMSHAPE3D_HXX
+#pragma once
 
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <basegfx/point/b3dpoint.hxx>
@@ -68,7 +67,5 @@ public:
         const SdrObject* pShape2d,
         const SdrObjCustomShape& rSdrObjCustomShape);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

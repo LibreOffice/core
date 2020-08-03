@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_RTL_BYTESEQ_HXX
-#define INCLUDED_RTL_BYTESEQ_HXX
+#pragma once
 
 #include "rtl/byteseq.h"
 
@@ -135,6 +134,5 @@ inline bool ByteSequence::operator != ( const ByteSequence & rSeq ) const
 }
 
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_SPIN_HXX
-#define INCLUDED_VCL_INC_SPIN_HXX
+#pragma once
 
 #include <vcl/window.hxx>
 
@@ -37,7 +36,5 @@ void ImplDrawUpDownButtons(vcl::RenderContext& rRenderContext,
                            bool bUpperIn, bool bLowerIn, bool bUpperEnabled, bool bLowerEnabled,
                            bool bHorz, bool bMirrorHorz = false);
 
-
-#endif // INCLUDED_VCL_INC_SPIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

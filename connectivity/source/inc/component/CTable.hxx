@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CTABLE_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CTABLE_HXX
+#pragma once
 
 #include <file/FTable.hxx>
 
@@ -63,7 +62,5 @@ namespace connectivity::component
         };
 
 }
-
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CTABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

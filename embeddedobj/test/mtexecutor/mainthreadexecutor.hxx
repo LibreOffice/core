@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMBEDDEDOBJ_TEST_MTEXECUTOR_MAINTHREADEXECUTOR_HXX
-#define INCLUDED_EMBEDDEDOBJ_TEST_MTEXECUTOR_MAINTHREADEXECUTOR_HXX
+#pragma once
 
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -70,7 +69,5 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException);
 
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_MSCRYPT_X509CERTIFICATE_MSCRYPTIMPL_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_MSCRYPT_X509CERTIFICATE_MSCRYPTIMPL_HXX
+#pragma once
 
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
@@ -93,7 +92,5 @@ class X509Certificate_MSCryptImpl : public ::cppu::WeakImplHelper<
         virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
         virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 } ;
-
-#endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_MSCRYPT_X509CERTIFICATE_MSCRYPTIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

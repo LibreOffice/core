@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_INC_SDXFER_HXX
-#define INCLUDED_SD_SOURCE_UI_INC_SDXFER_HXX
+#pragma once
 
 #include <vcl/transfer.hxx>
 #include <vcl/vclptr.hxx>
@@ -144,7 +143,5 @@ private:
     void                            CreateData();
 
 };
-
-#endif // INCLUDED_SD_SOURCE_UI_INC_SDXFER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

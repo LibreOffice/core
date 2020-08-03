@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CHART2_SOURCE_INC_CHARTVIEW_CHARTSFXITEMIDS_HXX
-#define INCLUDED_CHART2_SOURCE_INC_CHARTVIEW_CHARTSFXITEMIDS_HXX
+#pragma once
 
 #include <svl/typedwhich.hxx>
 
@@ -222,7 +221,5 @@ constexpr sal_uInt16 SCHATTR_END (SCHATTR_REGRESSION_END);
 #define CHART_AXIS_PRIMARY_Z    3
 #define CHART_AXIS_SECONDARY_Y  4
 #define CHART_AXIS_SECONDARY_X  5
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

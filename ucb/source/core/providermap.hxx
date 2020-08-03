@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCB_SOURCE_CORE_PROVIDERMAP_HXX
-#define INCLUDED_UCB_SOURCE_CORE_PROVIDERMAP_HXX
+#pragma once
 
 #include <deque>
 #include <com/sun/star/uno/Reference.h>
@@ -60,7 +59,5 @@ typedef std::deque< ProviderListEntry_Impl > ProviderList_Impl;
 
 
 typedef ucb_impl::RegexpMap< ProviderList_Impl > ProviderMap_Impl;
-
-#endif // INCLUDED_UCB_SOURCE_CORE_PROVIDERMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

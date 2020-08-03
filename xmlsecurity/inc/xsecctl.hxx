@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_HELPER_XSECCTL_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_HELPER_XSECCTL_HXX
+#pragma once
 
 #include <svl/sigstruct.hxx>
 
@@ -399,7 +398,5 @@ public:
     /// Exports an OOXML signature, called by WriteOOXMLSignature().
     void exportOOXMLSignature(const css::uno::Reference<css::embed::XStorage>& xRootStorage, const css::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler, const SignatureInformation& rInformation);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

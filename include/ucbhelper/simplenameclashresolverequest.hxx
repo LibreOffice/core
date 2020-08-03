@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCBHELPER_SIMPLENAMECLASHRESOLVEREQUEST_HXX
-#define INCLUDED_UCBHELPER_SIMPLENAMECLASHRESOLVEREQUEST_HXX
+#pragma once
 
 #include <config_options.h>
 #include <rtl/ref.hxx>
@@ -66,7 +65,5 @@ public:
 };
 
 } // namespace ucbhelper
-
-#endif /* ! INCLUDED_UCBHELPER_SIMPLENAMECLASHRESOLVEREQUEST_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

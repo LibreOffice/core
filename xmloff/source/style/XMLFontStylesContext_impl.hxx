@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_STYLE_XMLFONTSTYLESCONTEXT_IMPL_HXX
-#define INCLUDED_XMLOFF_SOURCE_STYLE_XMLFONTSTYLESCONTEXT_IMPL_HXX
+#pragma once
 
 #include <xmloff/xmlstyle.hxx>
 
@@ -132,7 +131,5 @@ public:
     void SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
         const OUString& rValue ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

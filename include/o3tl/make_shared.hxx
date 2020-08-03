@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_O3TL_MAKE_SHARED_HXX
-#define INCLUDED_O3TL_MAKE_SHARED_HXX
+#pragma once
 
 #include <o3tl/deleter.hxx>
 #include <memory>
@@ -42,7 +41,5 @@ std::shared_ptr<T> make_shared(Args&&... args)
 }
 
 } // namespace o3tl
-
-#endif // INCLUDED_O3TL_MAKE_SHARED_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

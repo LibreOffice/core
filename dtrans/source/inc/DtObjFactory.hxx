@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DTRANS_SOURCE_INC_DTOBJFACTORY_HXX
-#define INCLUDED_DTRANS_SOURCE_INC_DTOBJFACTORY_HXX
+#pragma once
 
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -30,7 +29,5 @@ namespace CDTransObjFactory
     IDataObjectPtr createDataObjFromTransferable( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                                                    const css::uno::Reference< css::datatransfer::XTransferable >& refXTransferable );
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

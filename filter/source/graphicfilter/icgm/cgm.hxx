@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ICGM_CGM_HXX
-#define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ICGM_CGM_HXX
+#pragma once
 
 #include <com/sun/star/frame/XModel.hpp>
 
@@ -137,6 +136,5 @@ class CGM
         bool                Write( SvStream& rIStm );
 
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

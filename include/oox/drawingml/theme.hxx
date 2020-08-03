@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_THEME_HXX
-#define INCLUDED_OOX_DRAWINGML_THEME_HXX
+#pragma once
 
 #include <functional>
 
@@ -115,7 +114,5 @@ private:
 
 
 } // namespace oox::drawingml
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,8 +34,7 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XTABLE_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XTABLE_HXX
+#pragma once
 
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/propshlp.hxx>
@@ -163,7 +162,5 @@ public: // XDataDescriptorFactory
 
 }
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

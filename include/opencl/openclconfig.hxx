@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_OPENCL_OPENCLCONFIG_HXX
-#define INCLUDED_OPENCL_OPENCLCONFIG_HXX
+#pragma once
 
 #include <ostream>
 #include <set>
@@ -94,7 +93,5 @@ struct OPENCL_DLLPUBLIC OpenCLConfig
 OPENCL_DLLPUBLIC std::ostream& operator<<(std::ostream& rStream, const OpenCLConfig& rConfig);
 OPENCL_DLLPUBLIC std::ostream& operator<<(std::ostream& rStream, const OpenCLConfig::ImplMatcher& rImpl);
 OPENCL_DLLPUBLIC std::ostream& operator<<(std::ostream& rStream, const OpenCLConfig::ImplMatcherSet& rSet);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

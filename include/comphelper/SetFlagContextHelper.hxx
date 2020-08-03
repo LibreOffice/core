@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COMPHELPER_SETFLAGCONTEXTHELPER_HXX
-#define INCLUDED_COMPHELPER_SETFLAGCONTEXTHELPER_HXX
+#pragma once
 
 #include <com/sun/star/uno/XCurrentContext.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -65,7 +64,5 @@ inline bool IsContextFlagActive(const OUString& sName)
 }
 
 } // namespace comphelper
-
-#endif // INCLUDED_COMPHELPER_SETFLAGCONTEXTHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

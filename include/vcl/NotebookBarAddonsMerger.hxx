@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_NOTEBOOKBARADDONSMERGER_HXX
-#define INCLUDED_VCL_NOTEBOOKBARADDONSMERGER_HXX
+#pragma once
 
 #include <vcl/builder.hxx>
 #include <vcl/window.hxx>
@@ -71,7 +70,5 @@ public:
                                            const OString& sItemIdName,
                                            NotebookBarAddonsItem& aNotebookBarAddonsItem);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

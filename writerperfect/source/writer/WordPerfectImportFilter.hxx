@@ -7,8 +7,7 @@
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
-#ifndef INCLUDED_WRITERPERFECT_SOURCE_WRITER_WORDPERFECTIMPORTFILTER_HXX
-#define INCLUDED_WRITERPERFECT_SOURCE_WRITER_WORDPERFECTIMPORTFILTER_HXX
+#pragma once
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
@@ -60,7 +59,5 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

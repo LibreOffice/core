@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_UITEST_EVENTDESCRIPTION_HXX
-#define INCLUDED_VCL_UITEST_EVENTDESCRIPTION_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <map>
@@ -18,7 +17,5 @@ struct EventDescription
     OUString aKeyWord, aAction, aID, aParent;
     std::map<OUString, OUString> aParameters;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

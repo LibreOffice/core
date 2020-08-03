@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CONTENTHANDLERFACTORY_HXX
-#define INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CONTENTHANDLERFACTORY_HXX
+#pragma once
 
 #include "basecontainer.hxx"
 #include <com/sun/star/frame/XLoaderFactory.hpp>
@@ -96,7 +95,5 @@ class ContentHandlerFactory : public ::cppu::ImplInheritanceHelper< BaseContaine
 };
 
 } // namespace filter::config
-
-#endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CONTENTHANDLERFACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

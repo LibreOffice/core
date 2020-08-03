@@ -17,13 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMBEDDEDOBJ_SOURCE_COMMONEMBEDDING_EMBEDOBJ_HXX
-#define INCLUDED_EMBEDDEDOBJ_SOURCE_COMMONEMBEDDING_EMBEDOBJ_HXX
+#pragma once
 
 #include <com/sun/star/awt/Rectangle.hpp>
 
 css::awt::Rectangle GetRectangleInterception( const css::awt::Rectangle& aRect1, const css::awt::Rectangle& aRect2 );
-
-#endif // INCLUDED_EMBEDDEDOBJ_SOURCE_COMMONEMBEDDING_EMBEDOBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

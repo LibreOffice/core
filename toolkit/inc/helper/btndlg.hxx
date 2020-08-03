@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_BTNDLG_HXX
-#define INCLUDED_VCL_BTNDLG_HXX
+#pragma once
 
 #include <vcl/toolkit/dialog.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -83,7 +82,5 @@ private:
     void             ImplPosControls();
 
 };
-
-#endif // INCLUDED_VCL_BTNDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

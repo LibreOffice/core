@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_DRWTRANS_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_DRWTRANS_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <vcl/transfer.hxx>
@@ -96,7 +95,5 @@ public:
 
     const ScRangeListVector& GetProtectedChartRangesVector() const { return m_aProtectedChartRangesVector; }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

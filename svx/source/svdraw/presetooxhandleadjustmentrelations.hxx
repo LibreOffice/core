@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVX_SOURCE_SVDRAW_PRESETOOXHANDLEADJUSTMENTRELATIONS_HXX
-#define INCLUDED_SVX_SOURCE_SVDRAW_PRESETOOXHANDLEADJUSTMENTRELATIONS_HXX
+#pragma once
 #include <rtl/ustring.hxx>
 
 namespace PresetOOXHandleAdj
@@ -23,7 +22,5 @@ void GetOOXHandleAdjRelation(
     sal_Int32& rSecondAdjValueIndex /* index in sequence from property "AdjustmentValues" */
 );
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

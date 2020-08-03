@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_UNX_GTK_A11Y_ATKLISTENER_HXX
-#define INCLUDED_VCL_UNX_GTK_A11Y_ATKLISTENER_HXX
+#pragma once
 
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -65,7 +64,5 @@ private:
     void handleInvalidateChildren(
         const css::uno::Reference< css::accessibility::XAccessibleContext >& rxParent);
 };
-
-#endif // INCLUDED_VCL_UNX_GTK_A11Y_ATKLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

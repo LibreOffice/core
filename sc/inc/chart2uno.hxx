@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_CHART2UNO_HXX
-#define INCLUDED_SC_INC_CHART2UNO_HXX
+#pragma once
 
 #include "cellsuno.hxx"
 #include "rangelst.hxx"
@@ -390,7 +389,5 @@ private:
     SCTAB mnCurrentTab;
 
 };
-
-#endif // INCLUDED_SC_INC_CHART2UNO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
