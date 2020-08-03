@@ -30,8 +30,6 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    void getNewDocShell(ScDocShellRef& rDocShellRef);
-
     void testSUMIFS();
     void testDivision();
     void testVLOOKUP();
@@ -148,7 +146,10 @@ void ScParallelismTest::setUp()
 
     ScDLL::Init();
 
-    getNewDocShell(m_xDocShell);
+    m_xDocShell = new ScDocShell(
+        SfxModelFlags::EMBEDDED_OBJECT |
+        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
+        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
     m_pDoc = &m_xDocShell->GetDocument();
 
     sc::FormulaGroupInterpreter::disableOpenCL_UnitTestsOnly();
@@ -164,15 +165,9 @@ void ScParallelismTest::tearDown()
     if (!m_bThreadingFlagCfg)
         setThreadingFlag(false);
 
+    m_xDocShell->DoClose();
+    m_xDocShell.clear();
     test::BootstrapFixture::tearDown();
-}
-
-void ScParallelismTest::getNewDocShell( ScDocShellRef& rDocShellRef )
-{
-    rDocShellRef = new ScDocShell(
-        SfxModelFlags::EMBEDDED_OBJECT |
-        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
-        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
 }
 
 void ScParallelismTest::testSUMIFS()

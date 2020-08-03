@@ -105,6 +105,7 @@ void Test::setUp()
 
 void Test::tearDown()
 {
+    m_xDocShRef->DoClose();
     m_xDocShRef.clear();
     BootstrapFixture::tearDown();
 }

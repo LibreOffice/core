@@ -57,6 +57,7 @@ void ScAddressTest::setUp()
 
 void ScAddressTest::tearDown()
 {
+    m_xDocShRef->DoClose();
     m_xDocShRef.clear();
     BootstrapFixture::tearDown();
 }
