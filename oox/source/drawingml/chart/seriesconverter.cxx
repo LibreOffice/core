@@ -322,6 +322,7 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
 
                     // Store properties
                     oox::PropertySet aPropertySet( xCustomLabel );
+                    convertTextProperty( aPropertySet, getFormatter(), mrModel.mxText->mxTextBody );
                     pRun->getTextCharacterProperties().pushToPropSet( aPropertySet, getFilter() );
 
                     TextField* pField = nullptr;
