@@ -204,7 +204,7 @@ bool UnusedVariableMore::checkifUnused(Stmt const* stmt, VarDecl const* varDecl)
     if (!parent)
     {
         // check if we're inside a CXXCtorInitializer
-        auto parentsRange = getParents(*stmt);
+        auto parentsRange = compiler.getASTContext().getParents(*stmt);
         if (parentsRange.begin() != parentsRange.end())
         {
             auto parentDecl = parentsRange.begin()->get<Decl>();

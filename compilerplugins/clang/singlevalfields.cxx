@@ -315,7 +315,7 @@ void SingleValFields::walkPotentialAssign( const DeclaratorDecl* fieldOrVarDecl,
 
     while (!bPotentiallyAssignedTo) {
         // check for field being accessed by a reference variable e.g. Foo& f = m.foo;
-        auto parentsList = getParents(*child);
+        auto parentsList = compiler.getASTContext().getParents(*child);
         auto it = parentsList.begin();
         if (it != parentsList.end()) {
             const VarDecl *varDecl = it->get<VarDecl>();
