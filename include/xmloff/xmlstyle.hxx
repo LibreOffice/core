@@ -238,7 +238,7 @@ public:
 
     // This method must be called to release the references to all styles
     // that are stored in the context.
-    void Clear();
+    void dispose();
     bool IsAutomaticStyle() const;
 };
 
