@@ -361,27 +361,27 @@ void SelectionEngine::Command( const CommandEvent& rCEvt )
     if ( !pFunctionSet || aWTimer.IsActive() )
         return;
     aWTimer.Stop();
-    if ( rCEvt.GetCommand() == CommandEventId::StartDrag )
+    if ( rCEvt.GetCommand() != CommandEventId::StartDrag )
+        return;
+
+    nFlags |= SelectionEngineFlags::CMDEVT;
+    if ( nFlags & SelectionEngineFlags::DRG_ENAB )
     {
-        nFlags |= SelectionEngineFlags::CMDEVT;
-        if ( nFlags & SelectionEngineFlags::DRG_ENAB )
+        SAL_WARN_IF( !rCEvt.IsMouseEvent(), "vcl", "STARTDRAG: Not a MouseEvent" );
+        if ( pFunctionSet->IsSelectionAtPoint( rCEvt.GetMousePosPixel() ) )
         {
-            SAL_WARN_IF( !rCEvt.IsMouseEvent(), "vcl", "STARTDRAG: Not a MouseEvent" );
-            if ( pFunctionSet->IsSelectionAtPoint( rCEvt.GetMousePosPixel() ) )
-            {
-                aLastMove = MouseEvent( rCEvt.GetMousePosPixel(),
-                               aLastMove.GetClicks(), aLastMove.GetMode(),
-                               aLastMove.GetButtons(), aLastMove.GetModifier() );
-                pFunctionSet->BeginDrag();
-                const SelectionEngineFlags nMask = SelectionEngineFlags::CMDEVT|SelectionEngineFlags::WAIT_UPEVT|SelectionEngineFlags::IN_SEL;
-                nFlags &= ~nMask;
-            }
-            else
-                nFlags &= ~SelectionEngineFlags::CMDEVT;
+            aLastMove = MouseEvent( rCEvt.GetMousePosPixel(),
+                           aLastMove.GetClicks(), aLastMove.GetMode(),
+                           aLastMove.GetButtons(), aLastMove.GetModifier() );
+            pFunctionSet->BeginDrag();
+            const SelectionEngineFlags nMask = SelectionEngineFlags::CMDEVT|SelectionEngineFlags::WAIT_UPEVT|SelectionEngineFlags::IN_SEL;
+            nFlags &= ~nMask;
         }
         else
             nFlags &= ~SelectionEngineFlags::CMDEVT;
     }
+    else
+        nFlags &= ~SelectionEngineFlags::CMDEVT;
 }
 
 void SelectionEngine::SetUpdateInterval( sal_uLong nInterval )

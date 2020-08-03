@@ -187,80 +187,81 @@ void vcl::Cursor::ImplRestore()
 
 void vcl::Cursor::ImplDoShow( bool bDrawDirect, bool bRestore )
 {
-    if ( mbVisible )
+    if ( !mbVisible )
+        return;
+
+    vcl::Window* pWindow;
+    if ( mpWindow )
+        pWindow = mpWindow;
+    else
     {
-        vcl::Window* pWindow;
-        if ( mpWindow )
-            pWindow = mpWindow;
-        else
-        {
-            // show the cursor, if there is an active window and the cursor
-            // has been selected in this window
-            pWindow = Application::GetFocusWindow();
-            if (!pWindow || !pWindow->mpWindowImpl || (pWindow->mpWindowImpl->mpCursor != this)
-                || pWindow->mpWindowImpl->mbInPaint
-                || !pWindow->mpWindowImpl->mpFrameData->mbHasFocus)
-                pWindow = nullptr;
-        }
+        // show the cursor, if there is an active window and the cursor
+        // has been selected in this window
+        pWindow = Application::GetFocusWindow();
+        if (!pWindow || !pWindow->mpWindowImpl || (pWindow->mpWindowImpl->mpCursor != this)
+            || pWindow->mpWindowImpl->mbInPaint
+            || !pWindow->mpWindowImpl->mpFrameData->mbHasFocus)
+            pWindow = nullptr;
+    }
 
-        if ( pWindow )
-        {
-            if ( !mpData )
-            {
-                mpData.reset( new ImplCursorData );
-                mpData->mbCurVisible = false;
-                mpData->maTimer.SetInvokeHandler( LINK( this, Cursor, ImplTimerHdl ) );
-                mpData->maTimer.SetDebugName( "vcl ImplCursorData maTimer" );
-            }
+    if ( !pWindow )
+        return;
 
-            mpData->mpWindow    = pWindow;
-            mpData->mnStyle     = mnStyle;
-            if ( bDrawDirect || bRestore )
-                ImplDraw();
+    if ( !mpData )
+    {
+        mpData.reset( new ImplCursorData );
+        mpData->mbCurVisible = false;
+        mpData->maTimer.SetInvokeHandler( LINK( this, Cursor, ImplTimerHdl ) );
+        mpData->maTimer.SetDebugName( "vcl ImplCursorData maTimer" );
+    }
 
-            if ( !mpWindow && ! ( ! bDrawDirect && mpData->maTimer.IsActive()) )
-            {
-                mpData->maTimer.SetTimeout( pWindow->GetSettings().GetStyleSettings().GetCursorBlinkTime() );
-                if ( mpData->maTimer.GetTimeout() != STYLE_CURSOR_NOBLINKTIME )
-                    mpData->maTimer.Start();
-                else if ( !mpData->mbCurVisible )
-                    ImplDraw();
-                LOKNotify( pWindow, "cursor_invalidate" );
-                LOKNotify( pWindow, "cursor_visible" );
-            }
-        }
+    mpData->mpWindow    = pWindow;
+    mpData->mnStyle     = mnStyle;
+    if ( bDrawDirect || bRestore )
+        ImplDraw();
+
+    if ( !mpWindow && ! ( ! bDrawDirect && mpData->maTimer.IsActive()) )
+    {
+        mpData->maTimer.SetTimeout( pWindow->GetSettings().GetStyleSettings().GetCursorBlinkTime() );
+        if ( mpData->maTimer.GetTimeout() != STYLE_CURSOR_NOBLINKTIME )
+            mpData->maTimer.Start();
+        else if ( !mpData->mbCurVisible )
+            ImplDraw();
+        LOKNotify( pWindow, "cursor_invalidate" );
+        LOKNotify( pWindow, "cursor_visible" );
     }
 }
 
 void vcl::Cursor::LOKNotify( vcl::Window* pWindow, const OUString& rAction )
 {
-    if (VclPtr<vcl::Window> pParent = pWindow->GetParentWithLOKNotifier())
+    VclPtr<vcl::Window> pParent = pWindow->GetParentWithLOKNotifier();
+    if (!pParent)
+        return;
+
+    assert(pWindow && "Cannot notify without a window");
+    assert(mpData && "Require ImplCursorData");
+    assert(comphelper::LibreOfficeKit::isActive());
+
+    if (comphelper::LibreOfficeKit::isDialogPainting())
+        return;
+
+    const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
+    std::vector<vcl::LOKPayloadItem> aItems;
+    if (rAction == "cursor_visible")
+        aItems.emplace_back("visible", mpData->mbCurVisible ? "true" : "false");
+    else if (rAction == "cursor_invalidate")
     {
-        assert(pWindow && "Cannot notify without a window");
-        assert(mpData && "Require ImplCursorData");
-        assert(comphelper::LibreOfficeKit::isActive());
+        const long nX = pWindow->GetOutOffXPixel() + pWindow->LogicToPixel(GetPos()).X() - pParent->GetOutOffXPixel();
+        const long nY = pWindow->GetOutOffYPixel() + pWindow->LogicToPixel(GetPos()).Y() - pParent->GetOutOffYPixel();
+        Size aSize = pWindow->LogicToPixel(GetSize());
+        if (!aSize.Width())
+            aSize.setWidth( pWindow->GetSettings().GetStyleSettings().GetCursorSize() );
 
-        if (comphelper::LibreOfficeKit::isDialogPainting())
-            return;
-
-        const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
-        std::vector<vcl::LOKPayloadItem> aItems;
-        if (rAction == "cursor_visible")
-            aItems.emplace_back("visible", mpData->mbCurVisible ? "true" : "false");
-        else if (rAction == "cursor_invalidate")
-        {
-            const long nX = pWindow->GetOutOffXPixel() + pWindow->LogicToPixel(GetPos()).X() - pParent->GetOutOffXPixel();
-            const long nY = pWindow->GetOutOffYPixel() + pWindow->LogicToPixel(GetPos()).Y() - pParent->GetOutOffYPixel();
-            Size aSize = pWindow->LogicToPixel(GetSize());
-            if (!aSize.Width())
-                aSize.setWidth( pWindow->GetSettings().GetStyleSettings().GetCursorSize() );
-
-            const tools::Rectangle aRect(Point(nX, nY), aSize);
-            aItems.emplace_back("rectangle", aRect.toString());
-        }
-
-        pNotifier->notifyWindow(pParent->GetLOKWindowId(), rAction, aItems);
+        const tools::Rectangle aRect(Point(nX, nY), aSize);
+        aItems.emplace_back("rectangle", aRect.toString());
     }
+
+    pNotifier->notifyWindow(pParent->GetLOKWindowId(), rAction, aItems);
 }
 
 bool vcl::Cursor::ImplDoHide( bool bSuspend )
@@ -304,18 +305,18 @@ bool vcl::Cursor::ImplSuspend()
 
 void vcl::Cursor::ImplNew()
 {
-    if ( mbVisible && mpData && mpData->mpWindow )
-    {
-        if ( mpData->mbCurVisible )
-            ImplRestore();
+    if ( !(mbVisible && mpData && mpData->mpWindow) )
+        return;
 
-        ImplDraw();
-        if ( !mpWindow )
-        {
-            LOKNotify( mpData->mpWindow, "cursor_invalidate" );
-            if ( mpData->maTimer.GetTimeout() != STYLE_CURSOR_NOBLINKTIME )
-                mpData->maTimer.Start();
-        }
+    if ( mpData->mbCurVisible )
+        ImplRestore();
+
+    ImplDraw();
+    if ( !mpWindow )
+    {
+        LOKNotify( mpData->mpWindow, "cursor_invalidate" );
+        if ( mpData->maTimer.GetTimeout() != STYLE_CURSOR_NOBLINKTIME )
+            mpData->maTimer.Start();
     }
 }
 

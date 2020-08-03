@@ -271,50 +271,50 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
         pWindowImpl->maInvalidateRegion.Intersect(*pWinChildClipRegion);
     }
     pWindowImpl->mnPaintFlags = ImplPaintFlags::NONE;
-    if (!pWindowImpl->maInvalidateRegion.IsEmpty())
+    if (pWindowImpl->maInvalidateRegion.IsEmpty())
+        return;
+
+#if HAVE_FEATURE_OPENGL
+    VCL_GL_INFO("PaintHelper::DoPaint on " <<
+                typeid( *m_pWindow ).name() << " '" << m_pWindow->GetText() << "' begin");
+#endif
+    // double-buffering: setup the buffer if it does not exist
+    if (!pFrameData->mbInBufferedPaint && m_pWindow->SupportsDoubleBuffering())
+        StartBufferedPaint();
+
+    // double-buffering: if this window does not support double-buffering,
+    // but we are in the middle of double-buffered paint, we might be
+    // losing information
+    if (pFrameData->mbInBufferedPaint && !m_pWindow->SupportsDoubleBuffering())
+        SAL_WARN("vcl.window", "non-double buffered window in the double-buffered hierarchy, painting directly: " << typeid(*m_pWindow.get()).name());
+
+    if (pFrameData->mbInBufferedPaint && m_pWindow->SupportsDoubleBuffering())
     {
-#if HAVE_FEATURE_OPENGL
-        VCL_GL_INFO("PaintHelper::DoPaint on " <<
-                    typeid( *m_pWindow ).name() << " '" << m_pWindow->GetText() << "' begin");
-#endif
-        // double-buffering: setup the buffer if it does not exist
-        if (!pFrameData->mbInBufferedPaint && m_pWindow->SupportsDoubleBuffering())
-            StartBufferedPaint();
+        // double-buffering
+        vcl::PaintBufferGuard g(pFrameData, m_pWindow);
+        m_pWindow->ApplySettings(*pFrameData->mpBuffer);
 
-        // double-buffering: if this window does not support double-buffering,
-        // but we are in the middle of double-buffered paint, we might be
-        // losing information
-        if (pFrameData->mbInBufferedPaint && !m_pWindow->SupportsDoubleBuffering())
-            SAL_WARN("vcl.window", "non-double buffered window in the double-buffered hierarchy, painting directly: " << typeid(*m_pWindow.get()).name());
-
-        if (pFrameData->mbInBufferedPaint && m_pWindow->SupportsDoubleBuffering())
-        {
-            // double-buffering
-            vcl::PaintBufferGuard g(pFrameData, m_pWindow);
-            m_pWindow->ApplySettings(*pFrameData->mpBuffer);
-
-            m_pWindow->PushPaintHelper(this, *pFrameData->mpBuffer);
-            m_pWindow->Paint(*pFrameData->mpBuffer, m_aPaintRect);
-            pFrameData->maBufferedRect.Union(m_aPaintRect);
-        }
-        else
-        {
-            // direct painting
-            Wallpaper aBackground = m_pWindow->GetBackground();
-            m_pWindow->ApplySettings(*m_pWindow);
-            // Restore bitmap background if it was lost.
-            if (aBackground.IsBitmap() && !m_pWindow->GetBackground().IsBitmap())
-            {
-                m_pWindow->SetBackground(aBackground);
-            }
-            m_pWindow->PushPaintHelper(this, *m_pWindow);
-            m_pWindow->Paint(*m_pWindow, m_aPaintRect);
-        }
-#if HAVE_FEATURE_OPENGL
-        VCL_GL_INFO("PaintHelper::DoPaint end on " <<
-                    typeid( *m_pWindow ).name() << " '" << m_pWindow->GetText() << "'");
-#endif
+        m_pWindow->PushPaintHelper(this, *pFrameData->mpBuffer);
+        m_pWindow->Paint(*pFrameData->mpBuffer, m_aPaintRect);
+        pFrameData->maBufferedRect.Union(m_aPaintRect);
     }
+    else
+    {
+        // direct painting
+        Wallpaper aBackground = m_pWindow->GetBackground();
+        m_pWindow->ApplySettings(*m_pWindow);
+        // Restore bitmap background if it was lost.
+        if (aBackground.IsBitmap() && !m_pWindow->GetBackground().IsBitmap())
+        {
+            m_pWindow->SetBackground(aBackground);
+        }
+        m_pWindow->PushPaintHelper(this, *m_pWindow);
+        m_pWindow->Paint(*m_pWindow, m_aPaintRect);
+    }
+#if HAVE_FEATURE_OPENGL
+    VCL_GL_INFO("PaintHelper::DoPaint end on " <<
+                typeid( *m_pWindow ).name() << " '" << m_pWindow->GetText() << "'");
+#endif
 }
 
 namespace vcl
@@ -883,33 +883,33 @@ void Window::ImplMoveAllInvalidateRegions( const tools::Rectangle& rRect,
     // also shift Paint-Region when paints need processing
     ImplMoveInvalidateRegion( rRect, nHorzScroll, nVertScroll, bChildren );
     // Paint-Region should be shifted, as drawn by the parents
-    if ( !ImplIsOverlapWindow() )
+    if ( ImplIsOverlapWindow() )
+        return;
+
+    vcl::Region  aPaintAllRegion;
+    vcl::Window* pPaintAllWindow = this;
+    do
     {
-        vcl::Region  aPaintAllRegion;
-        vcl::Window* pPaintAllWindow = this;
-        do
+        pPaintAllWindow = pPaintAllWindow->ImplGetParent();
+        if ( pPaintAllWindow->mpWindowImpl->mnPaintFlags & ImplPaintFlags::PaintAllChildren )
         {
-            pPaintAllWindow = pPaintAllWindow->ImplGetParent();
-            if ( pPaintAllWindow->mpWindowImpl->mnPaintFlags & ImplPaintFlags::PaintAllChildren )
+            if ( pPaintAllWindow->mpWindowImpl->mnPaintFlags & ImplPaintFlags::PaintAll )
             {
-                if ( pPaintAllWindow->mpWindowImpl->mnPaintFlags & ImplPaintFlags::PaintAll )
-                {
-                    aPaintAllRegion.SetEmpty();
-                    break;
-                }
-                else
-                    aPaintAllRegion.Union( pPaintAllWindow->mpWindowImpl->maInvalidateRegion );
+                aPaintAllRegion.SetEmpty();
+                break;
             }
+            else
+                aPaintAllRegion.Union( pPaintAllWindow->mpWindowImpl->maInvalidateRegion );
         }
-        while ( !pPaintAllWindow->ImplIsOverlapWindow() );
-        if ( !aPaintAllRegion.IsEmpty() )
-        {
-            aPaintAllRegion.Move( nHorzScroll, nVertScroll );
-            InvalidateFlags nPaintFlags = InvalidateFlags::NONE;
-            if ( bChildren )
-                nPaintFlags |= InvalidateFlags::Children;
-            ImplInvalidateFrameRegion( &aPaintAllRegion, nPaintFlags );
-        }
+    }
+    while ( !pPaintAllWindow->ImplIsOverlapWindow() );
+    if ( !aPaintAllRegion.IsEmpty() )
+    {
+        aPaintAllRegion.Move( nHorzScroll, nVertScroll );
+        InvalidateFlags nPaintFlags = InvalidateFlags::NONE;
+        if ( bChildren )
+            nPaintFlags |= InvalidateFlags::Children;
+        ImplInvalidateFrameRegion( &aPaintAllRegion, nPaintFlags );
     }
 }
 

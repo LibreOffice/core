@@ -2334,26 +2334,26 @@ void ToolBox::ImplFormat( bool bResize )
 
 IMPL_LINK_NOARG(ToolBox, ImplDropdownLongClickHdl, Timer *, void)
 {
-    if (mnCurPos != ITEM_NOTFOUND &&
-        (mpData->m_aItems[ mnCurPos ].mnBits & ToolBoxItemBits::DROPDOWN))
+    if (mnCurPos == ITEM_NOTFOUND ||
+        !(mpData->m_aItems[ mnCurPos ].mnBits & ToolBoxItemBits::DROPDOWN))
+        return;
+
+    mpData->mbDropDownByKeyboard = false;
+    mpData->maDropdownClickHdl.Call( this );
+
+    // do not reset data if the dropdown handler opened a floating window
+    // see ImplFloatControl()
+    if( !mpFloatWin )
     {
-        mpData->mbDropDownByKeyboard = false;
-        mpData->maDropdownClickHdl.Call( this );
+        // no floater was opened
+        Deactivate();
+        InvalidateItem(mnCurPos);
 
-        // do not reset data if the dropdown handler opened a floating window
-        // see ImplFloatControl()
-        if( !mpFloatWin )
-        {
-            // no floater was opened
-            Deactivate();
-            InvalidateItem(mnCurPos);
-
-            mnCurPos         = ITEM_NOTFOUND;
-            mnCurItemId      = 0;
-            mnDownItemId     = 0;
-            mnMouseModifier  = 0;
-            mnHighItemId     = 0;
-        }
+        mnCurPos         = ITEM_NOTFOUND;
+        mnCurItemId      = 0;
+        mnDownItemId     = 0;
+        mnMouseModifier  = 0;
+        mnHighItemId     = 0;
     }
 }
 
@@ -2430,32 +2430,32 @@ static void ImplDrawDropdownArrow(vcl::RenderContext& rRenderContext, const tool
 
 void ToolBox::ImplDrawMenuButton(vcl::RenderContext& rRenderContext, bool bHighlight)
 {
-    if (!mpData->maMenubuttonItem.maRect.IsEmpty())
-    {
-        // #i53937# paint menu button only if necessary
-        if (!ImplHasClippedItems())
-            return;
+    if (mpData->maMenubuttonItem.maRect.IsEmpty())
+        return;
 
-        // execute pending paint requests
-        ImplCheckUpdate();
+    // #i53937# paint menu button only if necessary
+    if (!ImplHasClippedItems())
+        return;
 
-        rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+    // execute pending paint requests
+    ImplCheckUpdate();
 
-        // draw the 'more' indicator / button (>>)
-        ImplErase(rRenderContext, mpData->maMenubuttonItem.maRect, bHighlight);
+    rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
 
-        if (bHighlight)
-            ImplDrawButton(rRenderContext, mpData->maMenubuttonItem.maRect, 2, false, true, false );
+    // draw the 'more' indicator / button (>>)
+    ImplErase(rRenderContext, mpData->maMenubuttonItem.maRect, bHighlight);
 
-        if (ImplHasClippedItems())
-            ImplDrawMoreIndicator(rRenderContext, mpData->maMenubuttonItem.maRect);
+    if (bHighlight)
+        ImplDrawButton(rRenderContext, mpData->maMenubuttonItem.maRect, 2, false, true, false );
 
-        // store highlight state
-        mpData->mbMenubuttonSelected = bHighlight;
+    if (ImplHasClippedItems())
+        ImplDrawMoreIndicator(rRenderContext, mpData->maMenubuttonItem.maRect);
 
-        // restore colors
-        rRenderContext.Pop();
-    }
+    // store highlight state
+    mpData->mbMenubuttonSelected = bHighlight;
+
+    // restore colors
+    rRenderContext.Pop();
 }
 
 void ToolBox::ImplDrawSpin(vcl::RenderContext& rRenderContext)
@@ -2503,25 +2503,25 @@ void ToolBox::ImplDrawSeparator(vcl::RenderContext& rRenderContext, ImplToolItem
     }
 
     /* Draw the widget only if it can't be drawn natively. */
-    if (!bNativeOk)
+    if (bNativeOk)
+        return;
+
+    long nCenterPos, nSlim;
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    rRenderContext.SetLineColor(rStyleSettings.GetSeparatorColor());
+    if (IsHorizontal())
     {
-        long nCenterPos, nSlim;
-        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-        rRenderContext.SetLineColor(rStyleSettings.GetSeparatorColor());
-        if (IsHorizontal())
-        {
-            nSlim = (pItem->maRect.Bottom() - pItem->maRect.Top ()) / 4;
-            nCenterPos = pItem->maRect.Center().X();
-            rRenderContext.DrawLine(Point(nCenterPos, pItem->maRect.Top() + nSlim),
-                                    Point(nCenterPos, pItem->maRect.Bottom() - nSlim));
-        }
-        else
-        {
-            nSlim = (pItem->maRect.Right() - pItem->maRect.Left ()) / 4;
-            nCenterPos = pItem->maRect.Center().Y();
-            rRenderContext.DrawLine(Point(pItem->maRect.Left() + nSlim, nCenterPos),
-                                    Point(pItem->maRect.Right() - nSlim, nCenterPos));
-        }
+        nSlim = (pItem->maRect.Bottom() - pItem->maRect.Top ()) / 4;
+        nCenterPos = pItem->maRect.Center().X();
+        rRenderContext.DrawLine(Point(nCenterPos, pItem->maRect.Top() + nSlim),
+                                Point(nCenterPos, pItem->maRect.Bottom() - nSlim));
+    }
+    else
+    {
+        nSlim = (pItem->maRect.Right() - pItem->maRect.Left ()) / 4;
+        nCenterPos = pItem->maRect.Center().Y();
+        rRenderContext.DrawLine(Point(pItem->maRect.Left() + nSlim, nCenterPos),
+                                Point(pItem->maRect.Right() - nSlim, nCenterPos));
     }
 }
 
@@ -2768,31 +2768,31 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
     }
 
     // paint optional drop down arrow
-    if (bDropDown)
+    if (!bDropDown)
+        return;
+
+    bool bSetColor = true;
+    if ( !pItem->mbEnabled || !IsEnabled() )
     {
-        bool bSetColor = true;
-        if ( !pItem->mbEnabled || !IsEnabled() )
-        {
-            bSetColor = false;
-            rRenderContext.SetFillColor(rStyleSettings.GetShadowColor());
-        }
-
-        // dropdown only will be painted without inner border
-        if( (pItem->mnBits & ToolBoxItemBits::DROPDOWNONLY) != ToolBoxItemBits::DROPDOWNONLY )
-        {
-            ImplErase(rRenderContext, aDropDownRect, nHighlight != 0, bHasOpenPopup);
-
-            if( nHighlight != 0 || (pItem->meState == TRISTATE_TRUE) )
-            {
-                if( bHasOpenPopup )
-                    ImplDrawFloatwinBorder(rRenderContext, pItem);
-                else
-                    ImplDrawButton(rRenderContext, aDropDownRect, nHighlight, pItem->meState == TRISTATE_TRUE,
-                                   pItem->mbEnabled && IsEnabled(), false);
-            }
-        }
-        ImplDrawDropdownArrow(rRenderContext, aDropDownRect, bSetColor, bRotate);
+        bSetColor = false;
+        rRenderContext.SetFillColor(rStyleSettings.GetShadowColor());
     }
+
+    // dropdown only will be painted without inner border
+    if( (pItem->mnBits & ToolBoxItemBits::DROPDOWNONLY) != ToolBoxItemBits::DROPDOWNONLY )
+    {
+        ImplErase(rRenderContext, aDropDownRect, nHighlight != 0, bHasOpenPopup);
+
+        if( nHighlight != 0 || (pItem->meState == TRISTATE_TRUE) )
+        {
+            if( bHasOpenPopup )
+                ImplDrawFloatwinBorder(rRenderContext, pItem);
+            else
+                ImplDrawButton(rRenderContext, aDropDownRect, nHighlight, pItem->meState == TRISTATE_TRUE,
+                               pItem->mbEnabled && IsEnabled(), false);
+        }
+    }
+    ImplDrawDropdownArrow(rRenderContext, aDropDownRect, bSetColor, bRotate);
 }
 
 void ToolBox::ImplDrawFloatwinBorder(vcl::RenderContext& rRenderContext, ImplToolItem const * pItem)
@@ -3579,28 +3579,28 @@ void ToolBox::Resize()
     }
 
     // redraw border
-    if ( mnWinStyle & WB_BORDER )
-    {
-        // as otherwise, when painting we might think we have to re-draw everything
-        if ( mbFormat && IsReallyVisible() )
-            Invalidate();
-        else
-        {
-            if ( mnRightBorder )
-            {
-                if ( nOldDX > mnDX )
-                    Invalidate( tools::Rectangle( mnDX-mnRightBorder-1, 0, mnDX, mnDY ) );
-                else
-                    Invalidate( tools::Rectangle( nOldDX-mnRightBorder-1, 0, nOldDX, nOldDY ) );
-            }
+    if ( !(mnWinStyle & WB_BORDER) )
+        return;
 
-            if ( mnBottomBorder )
-            {
-                if ( nOldDY > mnDY )
-                    Invalidate( tools::Rectangle( 0, mnDY-mnBottomBorder-1, mnDX, mnDY ) );
-                else
-                    Invalidate( tools::Rectangle( 0, nOldDY-mnBottomBorder-1, nOldDX, nOldDY ) );
-            }
+    // as otherwise, when painting we might think we have to re-draw everything
+    if ( mbFormat && IsReallyVisible() )
+        Invalidate();
+    else
+    {
+        if ( mnRightBorder )
+        {
+            if ( nOldDX > mnDX )
+                Invalidate( tools::Rectangle( mnDX-mnRightBorder-1, 0, mnDX, mnDY ) );
+            else
+                Invalidate( tools::Rectangle( nOldDX-mnRightBorder-1, 0, nOldDX, nOldDY ) );
+        }
+
+        if ( mnBottomBorder )
+        {
+            if ( nOldDY > mnDY )
+                Invalidate( tools::Rectangle( 0, mnDY-mnBottomBorder-1, mnDX, mnDY ) );
+            else
+                Invalidate( tools::Rectangle( 0, nOldDY-mnBottomBorder-1, nOldDX, nOldDY ) );
         }
     }
 }
@@ -3867,23 +3867,23 @@ void ToolBox::DataChanged( const DataChangedEvent& rDCEvt )
 void ToolBox::statusChanged( const css::frame::FeatureStateEvent& Event )
 {
     // Update image mirroring/rotation
-    if ( Event.FeatureURL.Complete == ".uno:ImageOrientation" )
+    if ( Event.FeatureURL.Complete != ".uno:ImageOrientation" )
+        return;
+
+    SfxImageItem aItem( 1 );
+    aItem.PutValue( Event.State, 0 );
+
+    mbImagesMirrored = aItem.IsMirrored();
+    mnImagesRotationAngle = aItem.GetRotation();
+
+    // update image orientation
+    OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(mpStatusListener->getFrame()));
+    for (auto const& item : mpData->m_aItems)
     {
-        SfxImageItem aItem( 1 );
-        aItem.PutValue( Event.State, 0 );
-
-        mbImagesMirrored = aItem.IsMirrored();
-        mnImagesRotationAngle = aItem.GetRotation();
-
-        // update image orientation
-        OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(mpStatusListener->getFrame()));
-        for (auto const& item : mpData->m_aItems)
-        {
-            if (vcl::CommandInfoProvider::IsMirrored(item.maCommandStr, aModuleName))
-                SetItemImageMirrorMode(item.mnId, mbImagesMirrored);
-            if (vcl::CommandInfoProvider::IsRotated(item.maCommandStr, aModuleName))
-                SetItemImageAngle(item.mnId, mnImagesRotationAngle);
-        }
+        if (vcl::CommandInfoProvider::IsMirrored(item.maCommandStr, aModuleName))
+            SetItemImageMirrorMode(item.mnId, mbImagesMirrored);
+        if (vcl::CommandInfoProvider::IsRotated(item.maCommandStr, aModuleName))
+            SetItemImageAngle(item.mnId, mnImagesRotationAngle);
     }
 }
 

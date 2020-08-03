@@ -657,35 +657,35 @@ void StatusBar::ImplCalcProgressRect()
 void StatusBar::MouseButtonDown( const MouseEvent& rMEvt )
 {
     // trigger toolbox only for left mouse button
-    if ( rMEvt.IsLeft() )
+    if ( !rMEvt.IsLeft() )
+        return;
+
+    Point  aMousePos = rMEvt.GetPosPixel();
+
+    // search for clicked item
+    for ( size_t i = 0; i < mvItemList.size(); ++i )
     {
-        Point  aMousePos = rMEvt.GetPosPixel();
-
-        // search for clicked item
-        for ( size_t i = 0; i < mvItemList.size(); ++i )
+        ImplStatusItem* pItem = mvItemList[ i ].get();
+        // check item for being clicked
+        if ( ImplGetItemRectPos( sal_uInt16(i) ).IsInside( aMousePos ) )
         {
-            ImplStatusItem* pItem = mvItemList[ i ].get();
-            // check item for being clicked
-            if ( ImplGetItemRectPos( sal_uInt16(i) ).IsInside( aMousePos ) )
-            {
-                mnCurItemId = pItem->mnId;
-                if ( rMEvt.GetClicks() == 2 )
-                    DoubleClick();
-                else
-                    Click();
-                mnCurItemId = 0;
+            mnCurItemId = pItem->mnId;
+            if ( rMEvt.GetClicks() == 2 )
+                DoubleClick();
+            else
+                Click();
+            mnCurItemId = 0;
 
-                // Item found
-                return;
-            }
+            // Item found
+            return;
         }
-
-        // if there's no item, trigger Click or DoubleClick
-        if ( rMEvt.GetClicks() == 2 )
-            DoubleClick();
-        else
-            Click();
     }
+
+    // if there's no item, trigger Click or DoubleClick
+    if ( rMEvt.GetClicks() == 2 )
+        DoubleClick();
+    else
+        Click();
 }
 
 void StatusBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
@@ -845,32 +845,32 @@ void StatusBar::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
 
-    if (  (rDCEvt.GetType() == DataChangedEventType::DISPLAY         )
+    if (  !((rDCEvt.GetType() == DataChangedEventType::DISPLAY         )
        || (rDCEvt.GetType() == DataChangedEventType::FONTS           )
        || (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION)
        || (  (rDCEvt.GetType() == DataChangedEventType::SETTINGS)
           && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE )
-          )
+          ))
        )
-    {
-        mbFormat = true;
-        ImplInitSettings();
-        long nFudge = GetTextHeight() / 4;
-        for (auto & pItem : mvItemList)
-        {
-            long nWidth = GetTextWidth( pItem->maText ) + nFudge;
-            if( nWidth > pItem->mnWidth + STATUSBAR_OFFSET )
-                pItem->mnWidth = nWidth + STATUSBAR_OFFSET;
+        return;
 
-            pItem->mxLayoutCache.reset();
-        }
-        Size aSize = GetSizePixel();
-        // do not disturb current width, since
-        // CalcWindowSizePixel calculates a minimum width
-        aSize.setHeight( CalcWindowSizePixel().Height() );
-        SetSizePixel( aSize );
-        Invalidate();
+    mbFormat = true;
+    ImplInitSettings();
+    long nFudge = GetTextHeight() / 4;
+    for (auto & pItem : mvItemList)
+    {
+        long nWidth = GetTextWidth( pItem->maText ) + nFudge;
+        if( nWidth > pItem->mnWidth + STATUSBAR_OFFSET )
+            pItem->mnWidth = nWidth + STATUSBAR_OFFSET;
+
+        pItem->mxLayoutCache.reset();
     }
+    Size aSize = GetSizePixel();
+    // do not disturb current width, since
+    // CalcWindowSizePixel calculates a minimum width
+    aSize.setHeight( CalcWindowSizePixel().Height() );
+    SetSizePixel( aSize );
+    Invalidate();
 }
 
 void StatusBar::Click()
@@ -948,19 +948,19 @@ void StatusBar::ShowItem( sal_uInt16 nItemId )
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
 
-    if ( nPos != STATUSBAR_ITEM_NOTFOUND )
+    if ( nPos == STATUSBAR_ITEM_NOTFOUND )
+        return;
+
+    ImplStatusItem* pItem = mvItemList[ nPos ].get();
+    if ( !pItem->mbVisible )
     {
-        ImplStatusItem* pItem = mvItemList[ nPos ].get();
-        if ( !pItem->mbVisible )
-        {
-            pItem->mbVisible = true;
+        pItem->mbVisible = true;
 
-            mbFormat = true;
-            if ( ImplIsItemUpdate() )
-                Invalidate();
+        mbFormat = true;
+        if ( ImplIsItemUpdate() )
+            Invalidate();
 
-            CallEventListeners( VclEventId::StatusbarShowItem, reinterpret_cast<void*>(nItemId) );
-        }
+        CallEventListeners( VclEventId::StatusbarShowItem, reinterpret_cast<void*>(nItemId) );
     }
 }
 
@@ -968,19 +968,19 @@ void StatusBar::HideItem( sal_uInt16 nItemId )
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
 
-    if ( nPos != STATUSBAR_ITEM_NOTFOUND )
+    if ( nPos == STATUSBAR_ITEM_NOTFOUND )
+        return;
+
+    ImplStatusItem* pItem = mvItemList[ nPos ].get();
+    if ( pItem->mbVisible )
     {
-        ImplStatusItem* pItem = mvItemList[ nPos ].get();
-        if ( pItem->mbVisible )
-        {
-            pItem->mbVisible = false;
+        pItem->mbVisible = false;
 
-            mbFormat = true;
-            if ( ImplIsItemUpdate() )
-                Invalidate();
+        mbFormat = true;
+        if ( ImplIsItemUpdate() )
+            Invalidate();
 
-            CallEventListeners( VclEventId::StatusbarHideItem, reinterpret_cast<void*>(nItemId) );
-        }
+        CallEventListeners( VclEventId::StatusbarHideItem, reinterpret_cast<void*>(nItemId) );
     }
 }
 
@@ -1132,50 +1132,50 @@ void StatusBar::SetItemText( sal_uInt16 nItemId, const OUString& rText, int nCha
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
 
-    if ( nPos != STATUSBAR_ITEM_NOTFOUND )
+    if ( nPos == STATUSBAR_ITEM_NOTFOUND )
+        return;
+
+    ImplStatusItem* pItem = mvItemList[ nPos ].get();
+
+    if ( pItem->maText == rText )
+        return;
+
+    pItem->maText = rText;
+
+    // adjust item width - see also DataChanged()
+    long nFudge = GetTextHeight()/4;
+
+    long nWidth;
+    if (nCharsWidth != -1)
     {
-        ImplStatusItem* pItem = mvItemList[ nPos ].get();
+        std::unique_ptr<SalLayout> pSalLayout = ImplLayout("0",0,-1);
+        const SalLayoutGlyphs* pGlyphs = pSalLayout ? pSalLayout->GetGlyphs() : nullptr;
+        nWidth = GetTextWidth("0",0,-1,nullptr,pGlyphs );
+        nWidth = nWidth * nCharsWidth + nFudge;
+    }
+    else
+    {
+        std::unique_ptr<SalLayout> pSalLayout = ImplLayout(pItem->maText,0,-1);
+        const SalLayoutGlyphs* pGlyphs = pSalLayout ? pSalLayout->GetGlyphs() : nullptr;
+        nWidth = GetTextWidth( pItem->maText,0,-1,nullptr,pGlyphs ) + nFudge;
+        // Store the calculated layout.
+        pItem->mxLayoutCache = std::move(pSalLayout);
+    }
 
-        if ( pItem->maText != rText )
-        {
-            pItem->maText = rText;
+    if( (nWidth > pItem->mnWidth + STATUSBAR_OFFSET) ||
+        ((nWidth < pItem->mnWidth) && (mnDX - STATUSBAR_OFFSET) < mnItemsWidth  ))
+    {
+        pItem->mnWidth = nWidth + STATUSBAR_OFFSET;
+        ImplFormat();
+        Invalidate();
+    }
 
-            // adjust item width - see also DataChanged()
-            long nFudge = GetTextHeight()/4;
-
-            long nWidth;
-            if (nCharsWidth != -1)
-            {
-                std::unique_ptr<SalLayout> pSalLayout = ImplLayout("0",0,-1);
-                const SalLayoutGlyphs* pGlyphs = pSalLayout ? pSalLayout->GetGlyphs() : nullptr;
-                nWidth = GetTextWidth("0",0,-1,nullptr,pGlyphs );
-                nWidth = nWidth * nCharsWidth + nFudge;
-            }
-            else
-            {
-                std::unique_ptr<SalLayout> pSalLayout = ImplLayout(pItem->maText,0,-1);
-                const SalLayoutGlyphs* pGlyphs = pSalLayout ? pSalLayout->GetGlyphs() : nullptr;
-                nWidth = GetTextWidth( pItem->maText,0,-1,nullptr,pGlyphs ) + nFudge;
-                // Store the calculated layout.
-                pItem->mxLayoutCache = std::move(pSalLayout);
-            }
-
-            if( (nWidth > pItem->mnWidth + STATUSBAR_OFFSET) ||
-                ((nWidth < pItem->mnWidth) && (mnDX - STATUSBAR_OFFSET) < mnItemsWidth  ))
-            {
-                pItem->mnWidth = nWidth + STATUSBAR_OFFSET;
-                ImplFormat();
-                Invalidate();
-            }
-
-            // re-draw item if StatusBar is visible and UpdateMode active
-            if ( pItem->mbVisible && !mbFormat && ImplIsItemUpdate() )
-            {
-                tools::Rectangle aRect = ImplGetItemRectPos(nPos);
-                Invalidate(aRect);
-                PaintImmediately();
-            }
-        }
+    // re-draw item if StatusBar is visible and UpdateMode active
+    if ( pItem->mbVisible && !mbFormat && ImplIsItemUpdate() )
+    {
+        tools::Rectangle aRect = ImplGetItemRectPos(nPos);
+        Invalidate(aRect);
+        PaintImmediately();
     }
 }
 
@@ -1215,21 +1215,21 @@ void StatusBar::SetItemData( sal_uInt16 nItemId, void* pNewData )
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
 
-    if ( nPos != STATUSBAR_ITEM_NOTFOUND )
-    {
-        ImplStatusItem* pItem = mvItemList[ nPos ].get();
-        // invalidate cache
-        pItem->mxLayoutCache.reset();
-        pItem->mpUserData = pNewData;
+    if ( nPos == STATUSBAR_ITEM_NOTFOUND )
+        return;
 
-        // call Draw-Item if it's a User-Item
-        if ( (pItem->mnBits & StatusBarItemBits::UserDraw) && pItem->mbVisible &&
-             !mbFormat && ImplIsItemUpdate() )
-        {
-            tools::Rectangle aRect = ImplGetItemRectPos(nPos);
-            Invalidate(aRect, InvalidateFlags::NoErase);
-            PaintImmediately();
-        }
+    ImplStatusItem* pItem = mvItemList[ nPos ].get();
+    // invalidate cache
+    pItem->mxLayoutCache.reset();
+    pItem->mpUserData = pNewData;
+
+    // call Draw-Item if it's a User-Item
+    if ( (pItem->mnBits & StatusBarItemBits::UserDraw) && pItem->mbVisible &&
+         !mbFormat && ImplIsItemUpdate() )
+    {
+        tools::Rectangle aRect = ImplGetItemRectPos(nPos);
+        Invalidate(aRect, InvalidateFlags::NoErase);
+        PaintImmediately();
     }
 }
 

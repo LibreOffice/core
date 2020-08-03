@@ -732,22 +732,22 @@ void FloatingWindow::PopupModeEnd()
 
 void FloatingWindow::SetTitleType( FloatWinTitleType nTitle )
 {
-    if ( (mnTitle != nTitle) && mpWindowImpl->mpBorderWindow )
-    {
-        mnTitle = nTitle;
-        Size aOutSize = GetOutputSizePixel();
-        BorderWindowTitleType nTitleStyle;
-        if ( nTitle == FloatWinTitleType::Normal )
-            nTitleStyle = BorderWindowTitleType::Small;
-        else if ( nTitle == FloatWinTitleType::TearOff )
-            nTitleStyle = BorderWindowTitleType::Tearoff;
-        else if ( nTitle == FloatWinTitleType::Popup )
-            nTitleStyle = BorderWindowTitleType::Popup;
-        else // nTitle == FloatWinTitleType::NONE
-            nTitleStyle = BorderWindowTitleType::NONE;
-        static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetTitleType( nTitleStyle, aOutSize );
-        static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
-    }
+    if ( (mnTitle == nTitle) || !mpWindowImpl->mpBorderWindow )
+        return;
+
+    mnTitle = nTitle;
+    Size aOutSize = GetOutputSizePixel();
+    BorderWindowTitleType nTitleStyle;
+    if ( nTitle == FloatWinTitleType::Normal )
+        nTitleStyle = BorderWindowTitleType::Small;
+    else if ( nTitle == FloatWinTitleType::TearOff )
+        nTitleStyle = BorderWindowTitleType::Tearoff;
+    else if ( nTitle == FloatWinTitleType::Popup )
+        nTitleStyle = BorderWindowTitleType::Popup;
+    else // nTitle == FloatWinTitleType::NONE
+        nTitleStyle = BorderWindowTitleType::NONE;
+    static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetTitleType( nTitleStyle, aOutSize );
+    static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
 }
 
 void FloatingWindow::StartPopupMode( const tools::Rectangle& rRect, FloatWinPopupFlags nFlags )

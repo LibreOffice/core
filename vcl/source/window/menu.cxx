@@ -907,33 +907,33 @@ void Menu::EnableItem( sal_uInt16 nItemId, bool bEnable )
     size_t          nPos;
     MenuItemData*   pItemData = pItemList->GetData( nItemId, nPos );
 
-    if ( pItemData && ( pItemData->bEnabled != bEnable ) )
+    if ( !(pItemData && ( pItemData->bEnabled != bEnable )) )
+        return;
+
+    pItemData->bEnabled = bEnable;
+
+    vcl::Window* pWin = ImplGetWindow();
+    if ( pWin && pWin->IsVisible() )
     {
-        pItemData->bEnabled = bEnable;
-
-        vcl::Window* pWin = ImplGetWindow();
-        if ( pWin && pWin->IsVisible() )
+        SAL_WARN_IF(!IsMenuBar(), "vcl", "Menu::EnableItem - Popup visible!" );
+        long nX = 0;
+        size_t nCount = pItemList->size();
+        for ( size_t n = 0; n < nCount; n++ )
         {
-            SAL_WARN_IF(!IsMenuBar(), "vcl", "Menu::EnableItem - Popup visible!" );
-            long nX = 0;
-            size_t nCount = pItemList->size();
-            for ( size_t n = 0; n < nCount; n++ )
+            MenuItemData* pData = pItemList->GetDataFromPos( n );
+            if ( n == nPos )
             {
-                MenuItemData* pData = pItemList->GetDataFromPos( n );
-                if ( n == nPos )
-                {
-                    pWin->Invalidate( tools::Rectangle( Point( nX, 0 ), Size( pData->aSz.Width(), pData->aSz.Height() ) ) );
-                    break;
-                }
-                nX += pData->aSz.Width();
+                pWin->Invalidate( tools::Rectangle( Point( nX, 0 ), Size( pData->aSz.Width(), pData->aSz.Height() ) ) );
+                break;
             }
+            nX += pData->aSz.Width();
         }
-        // update native menu
-        if( ImplGetSalMenu() )
-            ImplGetSalMenu()->EnableItem( nPos, bEnable );
-
-        ImplCallEventListeners( bEnable ? VclEventId::MenuEnable : VclEventId::MenuDisable, nPos );
     }
+    // update native menu
+    if( ImplGetSalMenu() )
+        ImplGetSalMenu()->EnableItem( nPos, bEnable );
+
+    ImplCallEventListeners( bEnable ? VclEventId::MenuEnable : VclEventId::MenuDisable, nPos );
 }
 
 bool Menu::IsItemEnabled( sal_uInt16 nItemId ) const
@@ -953,20 +953,20 @@ void Menu::ShowItem( sal_uInt16 nItemId, bool bVisible )
     MenuItemData*   pData = pItemList->GetData( nItemId, nPos );
 
     SAL_WARN_IF(IsMenuBar() && !bVisible , "vcl", "Menu::ShowItem - ignored for menu bar entries!");
-    if (!IsMenuBar()&& pData && (pData->bVisible != bVisible))
-    {
-        vcl::Window* pWin = ImplGetWindow();
-        if ( pWin && pWin->IsVisible() )
-        {
-            SAL_WARN( "vcl", "Menu::ShowItem - ignored for visible popups!" );
-            return;
-        }
-        pData->bVisible = bVisible;
+    if (IsMenuBar() || !pData || (pData->bVisible == bVisible))
+        return;
 
-        // update native menu
-        if( ImplGetSalMenu() )
-            ImplGetSalMenu()->ShowItem( nPos, bVisible );
+    vcl::Window* pWin = ImplGetWindow();
+    if ( pWin && pWin->IsVisible() )
+    {
+        SAL_WARN( "vcl", "Menu::ShowItem - ignored for visible popups!" );
+        return;
     }
+    pData->bVisible = bVisible;
+
+    // update native menu
+    if( ImplGetSalMenu() )
+        ImplGetSalMenu()->ShowItem( nPos, bVisible );
 }
 
 void Menu::SetItemText( sal_uInt16 nItemId, const OUString& rStr )
@@ -977,27 +977,27 @@ void Menu::SetItemText( sal_uInt16 nItemId, const OUString& rStr )
     if ( !pData )
         return;
 
-    if ( rStr != pData->aText )
+    if ( rStr == pData->aText )
+        return;
+
+    pData->aText = rStr;
+    // Clear layout for aText.
+    pData->aTextGlyphs.Invalidate();
+    ImplSetMenuItemData( pData );
+    // update native menu
+    if( ImplGetSalMenu() && pData->pSalMenuItem )
+        ImplGetSalMenu()->SetItemText( nPos, pData->pSalMenuItem.get(), rStr );
+
+    vcl::Window* pWin = ImplGetWindow();
+    mpLayoutData.reset();
+    if (pWin && IsMenuBar())
     {
-        pData->aText = rStr;
-        // Clear layout for aText.
-        pData->aTextGlyphs.Invalidate();
-        ImplSetMenuItemData( pData );
-        // update native menu
-        if( ImplGetSalMenu() && pData->pSalMenuItem )
-            ImplGetSalMenu()->SetItemText( nPos, pData->pSalMenuItem.get(), rStr );
-
-        vcl::Window* pWin = ImplGetWindow();
-        mpLayoutData.reset();
-        if (pWin && IsMenuBar())
-        {
-            ImplCalcSize( pWin );
-            if ( pWin->IsVisible() )
-                pWin->Invalidate();
-        }
-
-        ImplCallEventListeners( VclEventId::MenuItemTextChanged, nPos );
+        ImplCalcSize( pWin );
+        if ( pWin->IsVisible() )
+            pWin->Invalidate();
     }
+
+    ImplCallEventListeners( VclEventId::MenuItemTextChanged, nPos );
 }
 
 OUString Menu::GetItemText( sal_uInt16 nItemId ) const
@@ -2215,19 +2215,19 @@ void Menu::ImplKillLayoutData() const
 
 void Menu::ImplFillLayoutData() const
 {
-    if (pWindow && pWindow->IsReallyVisible())
+    if (!(pWindow && pWindow->IsReallyVisible()))
+        return;
+
+    mpLayoutData.reset(new MenuLayoutData);
+    if (IsMenuBar())
     {
-        mpLayoutData.reset(new MenuLayoutData);
-        if (IsMenuBar())
-        {
-            ImplPaint(*pWindow, pWindow->GetOutputSizePixel(), 0, 0, nullptr, false, true); // FIXME
-        }
-        else
-        {
-            MenuFloatingWindow* pFloat = static_cast<MenuFloatingWindow*>(pWindow.get());
-            ImplPaint(*pWindow, pWindow->GetOutputSizePixel(), pFloat->nScrollerHeight, pFloat->ImplGetStartY(),
-                      nullptr, false, true); //FIXME
-        }
+        ImplPaint(*pWindow, pWindow->GetOutputSizePixel(), 0, 0, nullptr, false, true); // FIXME
+    }
+    else
+    {
+        MenuFloatingWindow* pFloat = static_cast<MenuFloatingWindow*>(pWindow.get());
+        ImplPaint(*pWindow, pWindow->GetOutputSizePixel(), pFloat->nScrollerHeight, pFloat->ImplGetStartY(),
+                  nullptr, false, true); //FIXME
     }
 }
 
@@ -2325,18 +2325,18 @@ bool Menu::IsHighlighted( sal_uInt16 nItemPos ) const
 
 void Menu::HighlightItem( sal_uInt16 nItemPos )
 {
-    if ( pWindow )
+    if ( !pWindow )
+        return;
+
+    if (IsMenuBar())
     {
-        if (IsMenuBar())
-        {
-            MenuBarWindow* pMenuWin = static_cast< MenuBarWindow* >( pWindow.get() );
-            pMenuWin->SetAutoPopup( false );
-            pMenuWin->ChangeHighlightItem( nItemPos, false );
-        }
-        else
-        {
-            static_cast< MenuFloatingWindow* >( pWindow.get() )->ChangeHighlightItem( nItemPos, false );
-        }
+        MenuBarWindow* pMenuWin = static_cast< MenuBarWindow* >( pWindow.get() );
+        pMenuWin->SetAutoPopup( false );
+        pMenuWin->ChangeHighlightItem( nItemPos, false );
+    }
+    else
+    {
+        static_cast< MenuFloatingWindow* >( pWindow.get() )->ChangeHighlightItem( nItemPos, false );
     }
 }
 
@@ -2531,24 +2531,24 @@ bool MenuBar::ImplHandleCmdEvent( const CommandEvent& rCEvent )
 
 void MenuBar::SelectItem(sal_uInt16 nId)
 {
-    if (pWindow)
-    {
-        pWindow->GrabFocus();
-        nId = GetItemPos( nId );
+    if (!pWindow)
+        return;
 
-        MenuBarWindow* pMenuWin = getMenuBarWindow();
-        if (pMenuWin)
+    pWindow->GrabFocus();
+    nId = GetItemPos( nId );
+
+    MenuBarWindow* pMenuWin = getMenuBarWindow();
+    if (pMenuWin)
+    {
+        // #99705# popup the selected menu
+        pMenuWin->SetAutoPopup( true );
+        if (ITEMPOS_INVALID != pMenuWin->GetHighlightedItem())
         {
-            // #99705# popup the selected menu
-            pMenuWin->SetAutoPopup( true );
-            if (ITEMPOS_INVALID != pMenuWin->GetHighlightedItem())
-            {
-                pMenuWin->KillActivePopup();
-                pMenuWin->ChangeHighlightItem( ITEMPOS_INVALID, false );
-            }
-            if (nId != ITEMPOS_INVALID)
-                pMenuWin->ChangeHighlightItem( nId, false );
+            pMenuWin->KillActivePopup();
+            pMenuWin->ChangeHighlightItem( ITEMPOS_INVALID, false );
         }
+        if (nId != ITEMPOS_INVALID)
+            pMenuWin->ChangeHighlightItem( nId, false );
     }
 }
 
@@ -2726,32 +2726,32 @@ void PopupMenu::EndExecute()
 
 void PopupMenu::SelectItem(sal_uInt16 nId)
 {
-    if ( ImplGetWindow() )
-    {
-        if( nId != ITEMPOS_INVALID )
-        {
-            size_t nPos = 0;
-            MenuItemData* pData = GetItemList()->GetData( nId, nPos );
-            if (pData && pData->pSubMenu)
-                ImplGetFloatingWindow()->ChangeHighlightItem( nPos, true );
-            else
-                ImplGetFloatingWindow()->EndExecute( nId );
-        }
-        else
-        {
-            MenuFloatingWindow* pFloat = ImplGetFloatingWindow();
-            pFloat->GrabFocus();
+    if ( !ImplGetWindow() )
+        return;
 
-            for( size_t nPos = 0; nPos < GetItemList()->size(); nPos++ )
+    if( nId != ITEMPOS_INVALID )
+    {
+        size_t nPos = 0;
+        MenuItemData* pData = GetItemList()->GetData( nId, nPos );
+        if (pData && pData->pSubMenu)
+            ImplGetFloatingWindow()->ChangeHighlightItem( nPos, true );
+        else
+            ImplGetFloatingWindow()->EndExecute( nId );
+    }
+    else
+    {
+        MenuFloatingWindow* pFloat = ImplGetFloatingWindow();
+        pFloat->GrabFocus();
+
+        for( size_t nPos = 0; nPos < GetItemList()->size(); nPos++ )
+        {
+            MenuItemData* pData = GetItemList()->GetDataFromPos( nPos );
+            if( pData->pSubMenu )
             {
-                MenuItemData* pData = GetItemList()->GetDataFromPos( nPos );
-                if( pData->pSubMenu )
-                {
-                    pFloat->KillActivePopup();
-                }
+                pFloat->KillActivePopup();
             }
-            pFloat->ChangeHighlightItem( ITEMPOS_INVALID, false );
         }
+        pFloat->ChangeHighlightItem( ITEMPOS_INVALID, false );
     }
 }
 

@@ -324,59 +324,59 @@ IMPL_LINK( MenuFloatingWindow, HighlightChanged, Timer*, pTimer, void )
         return;
 
     MenuItemData* pItemData = pMenu->pItemList->GetDataFromPos( nHighlightedItem );
-    if ( pItemData )
+    if ( !pItemData )
+        return;
+
+    if ( pActivePopup && ( pActivePopup != pItemData->pSubMenu ) )
     {
-        if ( pActivePopup && ( pActivePopup != pItemData->pSubMenu ) )
-        {
-            FloatWinPopupFlags nOldFlags = GetPopupModeFlags();
-            SetPopupModeFlags( GetPopupModeFlags() | FloatWinPopupFlags::NoAppFocusClose );
-            KillActivePopup();
-            SetPopupModeFlags( nOldFlags );
-        }
-        if ( pItemData->bEnabled && pItemData->pSubMenu && pItemData->pSubMenu->GetItemCount() && ( pItemData->pSubMenu != pActivePopup ) )
-        {
-            pActivePopup = static_cast<PopupMenu*>(pItemData->pSubMenu.get());
-            long nY = nScrollerHeight+ImplGetStartY();
-            MenuItemData* pData = nullptr;
-            for ( sal_uLong n = 0; n < nHighlightedItem; n++ )
-            {
-                pData = pMenu->pItemList->GetDataFromPos( n );
-                nY += pData->aSz.Height();
-            }
-            pData = pMenu->pItemList->GetDataFromPos( nHighlightedItem );
-            Size MySize = GetOutputSizePixel();
-            Point aItemTopLeft( 0, nY );
-            Point aItemBottomRight( aItemTopLeft );
-            aItemBottomRight.AdjustX(MySize.Width() );
-            aItemBottomRight.AdjustY(pData->aSz.Height() );
-
-            // shift the popups a little
-            aItemTopLeft.AdjustX(2 );
-            aItemBottomRight.AdjustX( -2 );
-            if ( nHighlightedItem )
-                aItemTopLeft.AdjustY( -2 );
-            else
-            {
-                sal_Int32 nL, nT, nR, nB;
-                GetBorder( nL, nT, nR, nB );
-                aItemTopLeft.AdjustY( -nT );
-            }
-
-            // pTest: crash due to Reschedule() in call of Activate()
-            // Also it is prevented that submenus are displayed which
-            // were for long in Activate Rescheduled and which should not be
-            // displayed now.
-            Menu* pTest = pActivePopup;
-            FloatWinPopupFlags nOldFlags = GetPopupModeFlags();
-            SetPopupModeFlags( GetPopupModeFlags() | FloatWinPopupFlags::NoAppFocusClose );
-            sal_uInt16 nRet = pActivePopup->ImplExecute( this, tools::Rectangle( aItemTopLeft, aItemBottomRight ), FloatWinPopupFlags::Right, pMenu, pTimer == nullptr );
-            SetPopupModeFlags( nOldFlags );
-
-            // nRet != 0, if it was stopped during Activate()...
-            if ( !nRet && ( pActivePopup == pTest ) && pActivePopup->ImplGetWindow() )
-                pActivePopup->ImplGetFloatingWindow()->AddPopupModeWindow( this );
-        }
+        FloatWinPopupFlags nOldFlags = GetPopupModeFlags();
+        SetPopupModeFlags( GetPopupModeFlags() | FloatWinPopupFlags::NoAppFocusClose );
+        KillActivePopup();
+        SetPopupModeFlags( nOldFlags );
     }
+    if ( !(pItemData->bEnabled && pItemData->pSubMenu && pItemData->pSubMenu->GetItemCount() && ( pItemData->pSubMenu != pActivePopup )) )
+        return;
+
+    pActivePopup = static_cast<PopupMenu*>(pItemData->pSubMenu.get());
+    long nY = nScrollerHeight+ImplGetStartY();
+    MenuItemData* pData = nullptr;
+    for ( sal_uLong n = 0; n < nHighlightedItem; n++ )
+    {
+        pData = pMenu->pItemList->GetDataFromPos( n );
+        nY += pData->aSz.Height();
+    }
+    pData = pMenu->pItemList->GetDataFromPos( nHighlightedItem );
+    Size MySize = GetOutputSizePixel();
+    Point aItemTopLeft( 0, nY );
+    Point aItemBottomRight( aItemTopLeft );
+    aItemBottomRight.AdjustX(MySize.Width() );
+    aItemBottomRight.AdjustY(pData->aSz.Height() );
+
+    // shift the popups a little
+    aItemTopLeft.AdjustX(2 );
+    aItemBottomRight.AdjustX( -2 );
+    if ( nHighlightedItem )
+        aItemTopLeft.AdjustY( -2 );
+    else
+    {
+        sal_Int32 nL, nT, nR, nB;
+        GetBorder( nL, nT, nR, nB );
+        aItemTopLeft.AdjustY( -nT );
+    }
+
+    // pTest: crash due to Reschedule() in call of Activate()
+    // Also it is prevented that submenus are displayed which
+    // were for long in Activate Rescheduled and which should not be
+    // displayed now.
+    Menu* pTest = pActivePopup;
+    FloatWinPopupFlags nOldFlags = GetPopupModeFlags();
+    SetPopupModeFlags( GetPopupModeFlags() | FloatWinPopupFlags::NoAppFocusClose );
+    sal_uInt16 nRet = pActivePopup->ImplExecute( this, tools::Rectangle( aItemTopLeft, aItemBottomRight ), FloatWinPopupFlags::Right, pMenu, pTimer == nullptr );
+    SetPopupModeFlags( nOldFlags );
+
+    // nRet != 0, if it was stopped during Activate()...
+    if ( !nRet && ( pActivePopup == pTest ) && pActivePopup->ImplGetWindow() )
+        pActivePopup->ImplGetFloatingWindow()->AddPopupModeWindow( this );
 }
 
 IMPL_LINK_NOARG(MenuFloatingWindow, SubmenuClose, Timer *, void)
@@ -479,30 +479,30 @@ void MenuFloatingWindow::StopExecute()
 
 void MenuFloatingWindow::KillActivePopup( PopupMenu* pThisOnly )
 {
-    if ( pActivePopup && ( !pThisOnly || ( pThisOnly == pActivePopup ) ) )
+    if ( !pActivePopup || ( pThisOnly && ( pThisOnly != pActivePopup ) ) )
+        return;
+
+    if( pActivePopup->pWindow )
+        if( static_cast<FloatingWindow *>(pActivePopup->pWindow.get())->IsInCleanUp() )
+            return; // kill it later
+    if ( pActivePopup->bInCallback )
+        pActivePopup->bCanceled = true;
+
+    // For all actions pActivePopup = 0, if e.g.
+    // PopupModeEndHdl the popups to destroy were called synchronous
+    PopupMenu* pPopup = pActivePopup;
+    pActivePopup = nullptr;
+    pPopup->bInCallback = true;
+    pPopup->Deactivate();
+    pPopup->bInCallback = false;
+    if ( pPopup->ImplGetWindow() )
     {
-        if( pActivePopup->pWindow )
-            if( static_cast<FloatingWindow *>(pActivePopup->pWindow.get())->IsInCleanUp() )
-                return; // kill it later
-        if ( pActivePopup->bInCallback )
-            pActivePopup->bCanceled = true;
+        pPopup->ImplGetFloatingWindow()->StopExecute();
+        pPopup->ImplGetFloatingWindow()->doShutdown();
+        pPopup->pWindow->SetParentToDefaultWindow();
+        pPopup->pWindow.disposeAndClear();
 
-        // For all actions pActivePopup = 0, if e.g.
-        // PopupModeEndHdl the popups to destroy were called synchronous
-        PopupMenu* pPopup = pActivePopup;
-        pActivePopup = nullptr;
-        pPopup->bInCallback = true;
-        pPopup->Deactivate();
-        pPopup->bInCallback = false;
-        if ( pPopup->ImplGetWindow() )
-        {
-            pPopup->ImplGetFloatingWindow()->StopExecute();
-            pPopup->ImplGetFloatingWindow()->doShutdown();
-            pPopup->pWindow->SetParentToDefaultWindow();
-            pPopup->pWindow.disposeAndClear();
-
-            PaintImmediately();
-        }
+        PaintImmediately();
     }
 }
 
@@ -527,21 +527,21 @@ void MenuFloatingWindow::EndExecute()
 
     pCleanUpFrom->StopExecute();
 
-    if ( nItem != ITEMPOS_INVALID && pM )
-    {
-        MenuItemData* pItemData = pM->GetItemList()->GetDataFromPos( nItem );
-        if ( pItemData && !pItemData->bIsTemporary )
-        {
-            pM->nSelectedId = pItemData->nId;
-            pM->sSelectedIdent = pItemData->sIdent;
-            if (pStart)
-            {
-                pStart->nSelectedId = pItemData->nId;
-                pStart->sSelectedIdent = pItemData->sIdent;
-            }
+    if ( !(nItem != ITEMPOS_INVALID && pM) )
+        return;
 
-            pM->ImplSelect();
+    MenuItemData* pItemData = pM->GetItemList()->GetDataFromPos( nItem );
+    if ( pItemData && !pItemData->bIsTemporary )
+    {
+        pM->nSelectedId = pItemData->nId;
+        pM->sSelectedIdent = pItemData->sIdent;
+        if (pStart)
+        {
+            pStart->nSelectedId = pItemData->nId;
+            pStart->sSelectedIdent = pItemData->sIdent;
         }
+
+        pM->ImplSelect();
     }
 }
 
@@ -576,20 +576,20 @@ void MenuFloatingWindow::MouseButtonUp( const MouseEvent& rMEvt )
     // as it will be too late after EndExecute
     sal_uInt16 _nMBDownPos = nMBDownPos;
     nMBDownPos = ITEMPOS_INVALID;
-    if ( pData && pData->bEnabled && ( pData->eType != MenuItemType::SEPARATOR ) )
+    if ( !(pData && pData->bEnabled && ( pData->eType != MenuItemType::SEPARATOR )) )
+        return;
+
+    if ( !pData->pSubMenu )
     {
-        if ( !pData->pSubMenu )
-        {
+        EndExecute();
+    }
+    else if ( ( pData->nBits & MenuItemBits::POPUPSELECT ) && ( nHighlightedItem == _nMBDownPos ) && ( rMEvt.GetClicks() == 2 ) )
+    {
+        // not when clicked over the arrow...
+        Size aSz = GetOutputSizePixel();
+        long nFontHeight = GetTextHeight();
+        if ( rMEvt.GetPosPixel().X() < ( aSz.Width() - nFontHeight - nFontHeight/4 ) )
             EndExecute();
-        }
-        else if ( ( pData->nBits & MenuItemBits::POPUPSELECT ) && ( nHighlightedItem == _nMBDownPos ) && ( rMEvt.GetClicks() == 2 ) )
-        {
-            // not when clicked over the arrow...
-            Size aSz = GetOutputSizePixel();
-            long nFontHeight = GetTextHeight();
-            if ( rMEvt.GetPosPixel().X() < ( aSz.Width() - nFontHeight - nFontHeight/4 ) )
-                EndExecute();
-        }
     }
 
 }
@@ -713,23 +713,23 @@ void MenuFloatingWindow::ImplScroll( const Point& rMousePos )
         nDelta = nMouseY - ( aOutSz.Height() - nY );
     }
 
-    if ( nDelta )
-    {
-        aScrollTimer.Stop();    // if scrolled through MouseMove.
-        long nTimeout;
-        if ( nDelta < 3 )
-            nTimeout = 200;
-        else if ( nDelta < 5 )
-            nTimeout = 100;
-        else if ( nDelta < 8 )
-            nTimeout = 70;
-        else if ( nDelta < 12 )
-            nTimeout = 40;
-        else
-            nTimeout = 20;
-        aScrollTimer.SetTimeout( nTimeout );
-        aScrollTimer.Start();
-    }
+    if ( !nDelta )
+        return;
+
+    aScrollTimer.Stop();    // if scrolled through MouseMove.
+    long nTimeout;
+    if ( nDelta < 3 )
+        nTimeout = 200;
+    else if ( nDelta < 5 )
+        nTimeout = 100;
+    else if ( nDelta < 8 )
+        nTimeout = 70;
+    else if ( nDelta < 12 )
+        nTimeout = 40;
+    else
+        nTimeout = 20;
+    aScrollTimer.SetTimeout( nTimeout );
+    aScrollTimer.Start();
 }
 void MenuFloatingWindow::ChangeHighlightItem( sal_uInt16 n, bool bStartPopupTimer )
 {
