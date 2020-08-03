@@ -33,8 +33,9 @@ public:
  */
 void HSQLDBTest::testEmptyDBConnection()
 {
+    auto const file = createTempCopy("hsqldb_empty.odb");
     uno::Reference< XOfficeDatabaseDocument > xDocument =
-        getDocumentForFileName("hsqldb_empty.odb");
+        getDocumentForUrl(file.GetURL());
 
     getConnectionForDocument(xDocument);
 
