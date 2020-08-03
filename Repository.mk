@@ -546,7 +546,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,ure, \
 	affine_uno_uno \
-	$(if $(filter MSC,$(COM)),cli_uno) \
+	$(if $(filter MSC,$(COM)),$(if $(filter-out ARM64,$(CPUNAME)),cli_uno)) \
 	i18nlangtag \
 	$(if $(ENABLE_JAVA), \
 		java_uno \
