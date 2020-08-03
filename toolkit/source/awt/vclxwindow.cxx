@@ -905,37 +905,37 @@ void VCLXWindow::dispose(  )
 
     mpImpl->mxViewGraphics = nullptr;
 
-    if ( !mpImpl->mbDisposing )
+    if ( mpImpl->mbDisposing )
+        return;
+
+    mpImpl->mbDisposing = true;
+
+    mpImpl->disposing();
+
+    if ( GetWindow() )
     {
-        mpImpl->mbDisposing = true;
-
-        mpImpl->disposing();
-
-        if ( GetWindow() )
-        {
-            VclPtr<OutputDevice> pOutDev = GetOutputDevice();
-            SetWindow( nullptr );  // so that handlers are logged off, if necessary (virtual)
-            SetOutputDevice( nullptr );
-            pOutDev.disposeAndClear();
-        }
-
-        // #i14103# dispose the accessible context after the window has been destroyed,
-        // otherwise the old value in the child event fired in VCLXAccessibleComponent::ProcessWindowEvent()
-        // for VclEventId::WindowChildDestroyed contains a reference to an already disposed accessible object
-        try
-        {
-            css::uno::Reference< css::lang::XComponent > xComponent( mpImpl->mxAccessibleContext, css::uno::UNO_QUERY );
-            if ( xComponent.is() )
-                xComponent->dispose();
-        }
-        catch ( const css::uno::Exception& )
-        {
-            OSL_FAIL( "VCLXWindow::dispose: could not dispose the accessible context!" );
-        }
-        mpImpl->mxAccessibleContext.clear();
-
-        mpImpl->mbDisposing = false;
+        VclPtr<OutputDevice> pOutDev = GetOutputDevice();
+        SetWindow( nullptr );  // so that handlers are logged off, if necessary (virtual)
+        SetOutputDevice( nullptr );
+        pOutDev.disposeAndClear();
     }
+
+    // #i14103# dispose the accessible context after the window has been destroyed,
+    // otherwise the old value in the child event fired in VCLXAccessibleComponent::ProcessWindowEvent()
+    // for VclEventId::WindowChildDestroyed contains a reference to an already disposed accessible object
+    try
+    {
+        css::uno::Reference< css::lang::XComponent > xComponent( mpImpl->mxAccessibleContext, css::uno::UNO_QUERY );
+        if ( xComponent.is() )
+            xComponent->dispose();
+    }
+    catch ( const css::uno::Exception& )
+    {
+        OSL_FAIL( "VCLXWindow::dispose: could not dispose the accessible context!" );
+    }
+    mpImpl->mxAccessibleContext.clear();
+
+    mpImpl->mbDisposing = false;
 }
 
 void VCLXWindow::addEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener )
@@ -1123,19 +1123,19 @@ void VCLXWindow::setBackground( sal_Int32 nColor )
 {
     SolarMutexGuard aGuard;
 
-    if ( GetWindow() )
-    {
-        Color aColor(nColor);
-        GetWindow()->SetBackground( aColor );
-        GetWindow()->SetControlBackground( aColor );
+    if ( !GetWindow() )
+        return;
 
-        WindowType eWinType = GetWindow()->GetType();
-        if ( ( eWinType == WindowType::WINDOW ) ||
-             ( eWinType == WindowType::WORKWINDOW ) ||
-             ( eWinType == WindowType::FLOATINGWINDOW ) )
-        {
-            GetWindow()->Invalidate();
-        }
+    Color aColor(nColor);
+    GetWindow()->SetBackground( aColor );
+    GetWindow()->SetControlBackground( aColor );
+
+    WindowType eWinType = GetWindow()->GetType();
+    if ( ( eWinType == WindowType::WINDOW ) ||
+         ( eWinType == WindowType::WORKWINDOW ) ||
+         ( eWinType == WindowType::FLOATINGWINDOW ) )
+    {
+        GetWindow()->Invalidate();
     }
 }
 
@@ -1215,29 +1215,28 @@ void VCLXWindow::getStyles( sal_Int16 nType, css::awt::FontDescriptor& Font, sal
 {
     SolarMutexGuard aGuard;
 
-    if ( GetWindow() )
+    if ( !GetWindow() )
+        return;
+
+    const StyleSettings& rStyleSettings = GetWindow()->GetSettings().GetStyleSettings();
+
+    switch ( nType )
     {
-        const StyleSettings& rStyleSettings = GetWindow()->GetSettings().GetStyleSettings();
-
-        switch ( nType )
+        case css::awt::Style::FRAME:
         {
-            case css::awt::Style::FRAME:
-            {
-                Font = VCLUnoHelper::CreateFontDescriptor( rStyleSettings.GetAppFont() );
-                ForegroundColor = sal_Int32(rStyleSettings.GetWindowTextColor());
-                BackgroundColor = sal_Int32(rStyleSettings.GetWindowColor());
-            }
-            break;
-            case css::awt::Style::DIALOG:
-            {
-                Font = VCLUnoHelper::CreateFontDescriptor( rStyleSettings.GetAppFont() );
-                ForegroundColor = sal_Int32(rStyleSettings.GetDialogTextColor());
-                BackgroundColor = sal_Int32(rStyleSettings.GetDialogColor());
-            }
-            break;
-            default: OSL_FAIL( "VCLWindow::getStyles() - unknown Type" );
+            Font = VCLUnoHelper::CreateFontDescriptor( rStyleSettings.GetAppFont() );
+            ForegroundColor = sal_Int32(rStyleSettings.GetWindowTextColor());
+            BackgroundColor = sal_Int32(rStyleSettings.GetWindowColor());
         }
-
+        break;
+        case css::awt::Style::DIALOG:
+        {
+            Font = VCLUnoHelper::CreateFontDescriptor( rStyleSettings.GetAppFont() );
+            ForegroundColor = sal_Int32(rStyleSettings.GetDialogTextColor());
+            BackgroundColor = sal_Int32(rStyleSettings.GetDialogColor());
+        }
+        break;
+        default: OSL_FAIL( "VCLWindow::getStyles() - unknown Type" );
     }
 }
 
@@ -2208,82 +2207,82 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY )
     if ( !pWindow )
         return;
 
-    if ( isDesignMode() || mpImpl->isEnableVisible() )
+    if ( !(isDesignMode() || mpImpl->isEnableVisible()) )
+        return;
+
+    OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( mpImpl->mxViewGraphics );
+    if (!pDev)
+        pDev = pWindow->GetParent();
+    TabPage* pTabPage = dynamic_cast< TabPage* >( pWindow.get() );
+    if ( pTabPage )
     {
-        OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( mpImpl->mxViewGraphics );
-        if (!pDev)
-            pDev = pWindow->GetParent();
-        TabPage* pTabPage = dynamic_cast< TabPage* >( pWindow.get() );
-        if ( pTabPage )
-        {
-            Point aPos( nX, nY );
-            aPos = pDev->PixelToLogic( aPos );
-            pTabPage->Draw( pDev, aPos, DrawFlags::NONE );
-            return;
-        }
-
         Point aPos( nX, nY );
+        aPos = pDev->PixelToLogic( aPos );
+        pTabPage->Draw( pDev, aPos, DrawFlags::NONE );
+        return;
+    }
 
-        if ( pWindow->GetParent() && !pWindow->IsSystemWindow() && ( pWindow->GetParent() == pDev ) )
+    Point aPos( nX, nY );
+
+    if ( pWindow->GetParent() && !pWindow->IsSystemWindow() && ( pWindow->GetParent() == pDev ) )
+    {
+        // #i40647# don't draw here if this is a recursive call
+        // sometimes this is called recursively, because the Update call on the parent
+        // (strangely) triggers another paint. Prevent a stack overflow here
+        // Yes, this is only fixing symptoms for the moment...
+        // #i40647# / 2005-01-18 / frank.schoenheit@sun.com
+        if ( !mpImpl->getDrawingOntoParent_ref() )
         {
-            // #i40647# don't draw here if this is a recursive call
-            // sometimes this is called recursively, because the Update call on the parent
-            // (strangely) triggers another paint. Prevent a stack overflow here
-            // Yes, this is only fixing symptoms for the moment...
-            // #i40647# / 2005-01-18 / frank.schoenheit@sun.com
-            if ( !mpImpl->getDrawingOntoParent_ref() )
+            ::comphelper::FlagGuard aDrawingflagGuard( mpImpl->getDrawingOntoParent_ref() );
+
+            bool bWasVisible = pWindow->IsVisible();
+            Point aOldPos( pWindow->GetPosPixel() );
+
+            if ( bWasVisible && aOldPos == aPos )
             {
-                ::comphelper::FlagGuard aDrawingflagGuard( mpImpl->getDrawingOntoParent_ref() );
-
-                bool bWasVisible = pWindow->IsVisible();
-                Point aOldPos( pWindow->GetPosPixel() );
-
-                if ( bWasVisible && aOldPos == aPos )
-                {
-                    pWindow->PaintImmediately();
-                    return;
-                }
-
-                pWindow->SetPosPixel( aPos );
-
-                // Update parent first to avoid painting the parent upon the update
-                // of this window, as it may otherwise cause the parent
-                // to hide this window again
-                if( pWindow->GetParent() )
-                    pWindow->GetParent()->PaintImmediately();
-
-                pWindow->Show();
                 pWindow->PaintImmediately();
-                pWindow->SetParentUpdateMode( false );
-                pWindow->Hide();
-                pWindow->SetParentUpdateMode( true );
-
-                pWindow->SetPosPixel( aOldPos );
-                if ( bWasVisible )
-                    pWindow->Show();
+                return;
             }
+
+            pWindow->SetPosPixel( aPos );
+
+            // Update parent first to avoid painting the parent upon the update
+            // of this window, as it may otherwise cause the parent
+            // to hide this window again
+            if( pWindow->GetParent() )
+                pWindow->GetParent()->PaintImmediately();
+
+            pWindow->Show();
+            pWindow->PaintImmediately();
+            pWindow->SetParentUpdateMode( false );
+            pWindow->Hide();
+            pWindow->SetParentUpdateMode( true );
+
+            pWindow->SetPosPixel( aOldPos );
+            if ( bWasVisible )
+                pWindow->Show();
         }
-        else if ( pDev )
-        {
-            Point aP = pDev->PixelToLogic( aPos );
+    }
+    else if ( pDev )
+    {
+        Point aP = pDev->PixelToLogic( aPos );
 
-            vcl::PDFExtOutDevData* pPDFExport   = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
-            bool bDrawSimple =    ( pDev->GetOutDevType() == OUTDEV_PRINTER )
-                               || ( pDev->GetOutDevViewType() == OutDevViewType::PrintPreview )
-                               || ( pPDFExport != nullptr );
-            if ( bDrawSimple )
-            {
-                pWindow->Draw( pDev, aP, DrawFlags::NoControls );
-            }
-            else
-            {
-                bool bOldNW =pWindow->IsNativeWidgetEnabled();
-                if( bOldNW )
-                    pWindow->EnableNativeWidget(false);
-                pWindow->PaintToDevice( pDev, aP );
-                if( bOldNW )
-                    pWindow->EnableNativeWidget();
-            }
+        vcl::PDFExtOutDevData* pPDFExport   = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
+        bool bDrawSimple =    ( pDev->GetOutDevType() == OUTDEV_PRINTER )
+                           || ( pDev->GetOutDevViewType() == OutDevViewType::PrintPreview )
+                           || ( pPDFExport != nullptr );
+        if ( bDrawSimple )
+        {
+            pWindow->Draw( pDev, aP, DrawFlags::NoControls );
+        }
+        else
+        {
+            bool bOldNW =pWindow->IsNativeWidgetEnabled();
+            if( bOldNW )
+                pWindow->EnableNativeWidget(false);
+            pWindow->PaintToDevice( pDev, aP );
+            if( bOldNW )
+                pWindow->EnableNativeWidget();
         }
     }
 }

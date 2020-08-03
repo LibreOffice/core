@@ -352,28 +352,28 @@ VclPtr<vcl::Window> VCLXAccessibleComponent::GetWindow() const
 void VCLXAccessibleComponent::FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet )
 {
     VclPtr<vcl::Window> pWindow = GetWindow();
-    if ( pWindow )
+    if ( !pWindow )
+        return;
+
+    vcl::Window *pLabeledBy = pWindow->GetAccessibleRelationLabeledBy();
+    if ( pLabeledBy && pLabeledBy != pWindow )
     {
-        vcl::Window *pLabeledBy = pWindow->GetAccessibleRelationLabeledBy();
-        if ( pLabeledBy && pLabeledBy != pWindow )
-        {
-            uno::Sequence< uno::Reference< uno::XInterface > > aSequence { pLabeledBy->GetAccessible() };
-            rRelationSet.AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::LABELED_BY, aSequence ) );
-        }
+        uno::Sequence< uno::Reference< uno::XInterface > > aSequence { pLabeledBy->GetAccessible() };
+        rRelationSet.AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::LABELED_BY, aSequence ) );
+    }
 
-        vcl::Window* pLabelFor = pWindow->GetAccessibleRelationLabelFor();
-        if ( pLabelFor && pLabelFor != pWindow )
-        {
-            uno::Sequence< uno::Reference< uno::XInterface > > aSequence { pLabelFor->GetAccessible() };
-            rRelationSet.AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::LABEL_FOR, aSequence ) );
-        }
+    vcl::Window* pLabelFor = pWindow->GetAccessibleRelationLabelFor();
+    if ( pLabelFor && pLabelFor != pWindow )
+    {
+        uno::Sequence< uno::Reference< uno::XInterface > > aSequence { pLabelFor->GetAccessible() };
+        rRelationSet.AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::LABEL_FOR, aSequence ) );
+    }
 
-        vcl::Window* pMemberOf = pWindow->GetAccessibleRelationMemberOf();
-        if ( pMemberOf && pMemberOf != pWindow )
-        {
-            uno::Sequence< uno::Reference< uno::XInterface > > aSequence { pMemberOf->GetAccessible() };
-            rRelationSet.AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::MEMBER_OF, aSequence ) );
-        }
+    vcl::Window* pMemberOf = pWindow->GetAccessibleRelationMemberOf();
+    if ( pMemberOf && pMemberOf != pWindow )
+    {
+        uno::Sequence< uno::Reference< uno::XInterface > > aSequence { pMemberOf->GetAccessible() };
+        rRelationSet.AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::MEMBER_OF, aSequence ) );
     }
 }
 

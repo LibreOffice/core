@@ -164,19 +164,19 @@ void UnoWrapper::SetWindowInterface( vcl::Window* pWindow, css::uno::Reference< 
     VCLXWindow* pVCLXWindow = comphelper::getUnoTunnelImplementation<VCLXWindow>( xIFace );
 
     DBG_ASSERT( pVCLXWindow, "SetComponentInterface - unsupported type" );
-    if ( pVCLXWindow )
+    if ( !pVCLXWindow )
+        return;
+
+    css::uno::Reference< css::awt::XWindowPeer> xPeer = pWindow->GetWindowPeer();
+    if( xPeer.is() )
     {
-        css::uno::Reference< css::awt::XWindowPeer> xPeer = pWindow->GetWindowPeer();
-        if( xPeer.is() )
-        {
-            bool bSameInstance( pVCLXWindow == dynamic_cast< VCLXWindow* >( xPeer.get() ));
-            DBG_ASSERT( bSameInstance, "UnoWrapper::SetWindowInterface: there already *is* a WindowInterface for this window!" );
-            if ( bSameInstance )
-                return;
-        }
-        pVCLXWindow->SetWindow( pWindow );
-        pWindow->SetWindowPeer( xIFace, pVCLXWindow );
+        bool bSameInstance( pVCLXWindow == dynamic_cast< VCLXWindow* >( xPeer.get() ));
+        DBG_ASSERT( bSameInstance, "UnoWrapper::SetWindowInterface: there already *is* a WindowInterface for this window!" );
+        if ( bSameInstance )
+            return;
     }
+    pVCLXWindow->SetWindow( pWindow );
+    pWindow->SetWindowPeer( xIFace, pVCLXWindow );
 }
 
 css::uno::Reference< css::awt::XGraphics> UnoWrapper::CreateGraphics( OutputDevice* pOutDev )

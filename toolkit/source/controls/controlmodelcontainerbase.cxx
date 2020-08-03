@@ -1100,24 +1100,24 @@ void ResourceListener::startListening(
         // --- SAFE ---
     }
 
-    if ( rResource.is() )
-    {
-        try
-        {
-            rResource->addModifyListener( this );
+    if ( !rResource.is() )
+        return;
 
-            // --- SAFE ---
-            ::osl::ResettableGuard < ::osl::Mutex > aGuard( m_aMutex );
-            m_bListening = true;
-            // --- SAFE ---
-        }
-        catch (const RuntimeException&)
-        {
-            throw;
-        }
-        catch (const Exception&)
-        {
-        }
+    try
+    {
+        rResource->addModifyListener( this );
+
+        // --- SAFE ---
+        ::osl::ResettableGuard < ::osl::Mutex > aGuard( m_aMutex );
+        m_bListening = true;
+        // --- SAFE ---
+    }
+    catch (const RuntimeException&)
+    {
+        throw;
+    }
+    catch (const Exception&)
+    {
     }
 }
 
@@ -1132,26 +1132,26 @@ void ResourceListener::stopListening()
     aGuard.clear();
     // --- SAFE ---
 
-    if ( xModifyBroadcaster.is() )
-    {
-        try
-        {
-            // --- SAFE ---
-            aGuard.reset();
-            m_bListening = false;
-            m_xResource.clear();
-            aGuard.clear();
-            // --- SAFE ---
+    if ( !xModifyBroadcaster.is() )
+        return;
 
-            xModifyBroadcaster->removeModifyListener( this );
-        }
-        catch (const RuntimeException&)
-        {
-            throw;
-        }
-        catch (const Exception&)
-        {
-        }
+    try
+    {
+        // --- SAFE ---
+        aGuard.reset();
+        m_bListening = false;
+        m_xResource.clear();
+        aGuard.clear();
+        // --- SAFE ---
+
+        xModifyBroadcaster->removeModifyListener( this );
+    }
+    catch (const RuntimeException&)
+    {
+        throw;
+    }
+    catch (const Exception&)
+    {
     }
 }
 
@@ -1167,19 +1167,19 @@ void SAL_CALL ResourceListener::modified(
     aGuard.clear();
     // --- SAFE ---
 
-    if ( xListener.is() )
+    if ( !xListener.is() )
+        return;
+
+    try
     {
-        try
-        {
-            xListener->modified( aEvent );
-        }
-        catch (const RuntimeException&)
-        {
-            throw;
-        }
-        catch (const Exception&)
-        {
-        }
+        xListener->modified( aEvent );
+    }
+    catch (const RuntimeException&)
+    {
+        throw;
+    }
+    catch (const Exception&)
+    {
     }
 }
 
@@ -1610,20 +1610,20 @@ void ControlContainerBase::addingControl( const Reference< XControl >& _rxContro
     SolarMutexGuard aGuard;
     UnoControlContainer::addingControl( _rxControl );
 
-    if ( _rxControl.is() )
-    {
-        Reference< XMultiPropertySet > xProps( _rxControl->getModel(), UNO_QUERY );
-        if ( xProps.is() )
-        {
-            const Sequence< OUString > aNames {
-              "PositionX",
-              "PositionY",
-              "Width",
-              "Height"
-            };
+    if ( !_rxControl.is() )
+        return;
 
-            xProps->addPropertiesChangeListener( aNames, this );
-        }
+    Reference< XMultiPropertySet > xProps( _rxControl->getModel(), UNO_QUERY );
+    if ( xProps.is() )
+    {
+        const Sequence< OUString > aNames {
+          "PositionX",
+          "PositionY",
+          "Width",
+          "Height"
+        };
+
+        xProps->addPropertiesChangeListener( aNames, this );
     }
 }
 

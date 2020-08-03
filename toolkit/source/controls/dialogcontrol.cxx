@@ -349,26 +349,25 @@ void UnoDialogControl::createPeer( const Reference< XToolkit > & rxToolkit, cons
     UnoControlContainer::createPeer( rxToolkit, rParentPeer );
 
     Reference < XTopWindow > xTW( getPeer(), UNO_QUERY );
-    if ( xTW.is() )
+    if ( !xTW.is() )
+        return;
+
+    xTW->setMenuBar( mxMenuBar );
+
+    if ( !mbWindowListener )
     {
-        xTW->setMenuBar( mxMenuBar );
-
-        if ( !mbWindowListener )
-        {
-            Reference< XWindowListener > xWL( static_cast< cppu::OWeakObject*>( this ), UNO_QUERY );
-            addWindowListener( xWL );
-            mbWindowListener = true;
-        }
-
-        if ( maTopWindowListeners.getLength() )
-            xTW->addTopWindowListener( &maTopWindowListeners );
-        // there must be a better way than doing this, we can't
-        // process the scrolltop & scrollleft in XDialog because
-        // the children haven't been added when those props are applied
-        ImplSetPeerProperty( GetPropertyName( BASEPROPERTY_SCROLLTOP ), ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLTOP ) ) );
-        ImplSetPeerProperty( GetPropertyName( BASEPROPERTY_SCROLLLEFT ), ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLLEFT ) ) );
-
+        Reference< XWindowListener > xWL( static_cast< cppu::OWeakObject*>( this ), UNO_QUERY );
+        addWindowListener( xWL );
+        mbWindowListener = true;
     }
+
+    if ( maTopWindowListeners.getLength() )
+        xTW->addTopWindowListener( &maTopWindowListeners );
+    // there must be a better way than doing this, we can't
+    // process the scrolltop & scrollleft in XDialog because
+    // the children haven't been added when those props are applied
+    ImplSetPeerProperty( GetPropertyName( BASEPROPERTY_SCROLLTOP ), ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLTOP ) ) );
+    ImplSetPeerProperty( GetPropertyName( BASEPROPERTY_SCROLLLEFT ), ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLLEFT ) ) );
 }
 
 OUString UnoDialogControl::getImplementationName()
@@ -1046,46 +1045,46 @@ void UnoFrameControl::ImplSetPosSize( Reference< XControl >& rxCtrl )
 
     ControlContainerBase::ImplSetPosSize( rxCtrl );
     Reference < XWindow > xW( rxCtrl, UNO_QUERY );
-    if ( !bOwnCtrl && xW.is() && !sTitle.isEmpty() )
-    {
-        awt::Rectangle aSizePos = xW->getPosSize();
+    if ( bOwnCtrl || !xW.is() || sTitle.isEmpty() )
+        return;
 
-        sal_Int32 nX = aSizePos.X, nY = aSizePos.Y, nWidth = aSizePos.Width, nHeight = aSizePos.Height;
-        // Retrieve the values set by the base class
-        OutputDevice*pOutDev = Application::GetDefaultDevice();
-        if ( pOutDev )
+    awt::Rectangle aSizePos = xW->getPosSize();
+
+    sal_Int32 nX = aSizePos.X, nY = aSizePos.Y, nWidth = aSizePos.Width, nHeight = aSizePos.Height;
+    // Retrieve the values set by the base class
+    OutputDevice*pOutDev = Application::GetDefaultDevice();
+    if ( pOutDev )
+    {
+        // Adjust Y based on height of Title
+        ::tools::Rectangle aRect = pOutDev->GetTextRect( {}, sTitle );
+        nY = nY + ( aRect.GetHeight() / 2 );
+    }
+    else
+    {
+        Reference< XWindowPeer > xPeer = ImplGetCompatiblePeer();
+        Reference< XDevice > xD( xPeer, UNO_QUERY );
+
+        SimpleFontMetric aFM;
+        FontDescriptor aFD;
+        Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_FONTDESCRIPTOR ) );
+
+        aVal >>= aFD;
+        if ( !aFD.StyleName.isEmpty() )
         {
-            // Adjust Y based on height of Title
-            ::tools::Rectangle aRect = pOutDev->GetTextRect( {}, sTitle );
-            nY = nY + ( aRect.GetHeight() / 2 );
+            Reference< XFont > xFont = xD->getFont( aFD );
+            aFM = xFont->getFontMetric();
         }
         else
         {
-            Reference< XWindowPeer > xPeer = ImplGetCompatiblePeer();
-            Reference< XDevice > xD( xPeer, UNO_QUERY );
-
-            SimpleFontMetric aFM;
-            FontDescriptor aFD;
-            Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_FONTDESCRIPTOR ) );
-
-            aVal >>= aFD;
-            if ( !aFD.StyleName.isEmpty() )
-            {
-                Reference< XFont > xFont = xD->getFont( aFD );
-                aFM = xFont->getFontMetric();
-            }
-            else
-            {
-                Reference< XGraphics > xG = xD->createGraphics();
-                aFM = xG->getFontMetric();
-            }
-
-            sal_Int16 nH = aFM.Ascent + aFM.Descent;
-            // offset y based on height of font ( not sure if my guess at the correct calculation is correct here )
-            nY = nY + ( nH / 8); // how do I test this
+            Reference< XGraphics > xG = xD->createGraphics();
+            aFM = xG->getFontMetric();
         }
-        xW->setPosSize( nX, nY, nWidth, nHeight, PosSize::POSSIZE );
+
+        sal_Int16 nH = aFM.Ascent + aFM.Descent;
+        // offset y based on height of font ( not sure if my guess at the correct calculation is correct here )
+        nY = nY + ( nH / 8); // how do I test this
     }
+    xW->setPosSize( nX, nY, nWidth, nHeight, PosSize::POSSIZE );
 }
 
 // ------------- UnoFrameModel -----------------
