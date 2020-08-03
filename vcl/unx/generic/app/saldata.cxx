@@ -318,39 +318,39 @@ SalXLib::SalXLib()
     m_pDisplay              = nullptr;
 
     m_pTimeoutFDS[0] = m_pTimeoutFDS[1] = -1;
-    if (pipe (m_pTimeoutFDS) != -1)
+    if (pipe (m_pTimeoutFDS) == -1)
+        return;
+
+    // initialize 'wakeup' pipe.
+    int flags;
+
+    // set close-on-exec descriptor flag.
+    if ((flags = fcntl (m_pTimeoutFDS[0], F_GETFD)) != -1)
     {
-        // initialize 'wakeup' pipe.
-        int flags;
-
-        // set close-on-exec descriptor flag.
-        if ((flags = fcntl (m_pTimeoutFDS[0], F_GETFD)) != -1)
-        {
-            flags |= FD_CLOEXEC;
-            (void)fcntl(m_pTimeoutFDS[0], F_SETFD, flags);
-        }
-        if ((flags = fcntl (m_pTimeoutFDS[1], F_GETFD)) != -1)
-        {
-            flags |= FD_CLOEXEC;
-            (void)fcntl(m_pTimeoutFDS[1], F_SETFD, flags);
-        }
-
-        // set non-blocking I/O flag.
-        if ((flags = fcntl (m_pTimeoutFDS[0], F_GETFL)) != -1)
-        {
-            flags |= O_NONBLOCK;
-            (void)fcntl(m_pTimeoutFDS[0], F_SETFL, flags);
-        }
-        if ((flags = fcntl (m_pTimeoutFDS[1], F_GETFL)) != -1)
-        {
-            flags |= O_NONBLOCK;
-            (void)fcntl(m_pTimeoutFDS[1], F_SETFL, flags);
-        }
-
-        // insert [0] into read descriptor set.
-        FD_SET( m_pTimeoutFDS[0], &aReadFDS_ );
-        nFDs_ = m_pTimeoutFDS[0] + 1;
+        flags |= FD_CLOEXEC;
+        (void)fcntl(m_pTimeoutFDS[0], F_SETFD, flags);
     }
+    if ((flags = fcntl (m_pTimeoutFDS[1], F_GETFD)) != -1)
+    {
+        flags |= FD_CLOEXEC;
+        (void)fcntl(m_pTimeoutFDS[1], F_SETFD, flags);
+    }
+
+    // set non-blocking I/O flag.
+    if ((flags = fcntl (m_pTimeoutFDS[0], F_GETFL)) != -1)
+    {
+        flags |= O_NONBLOCK;
+        (void)fcntl(m_pTimeoutFDS[0], F_SETFL, flags);
+    }
+    if ((flags = fcntl (m_pTimeoutFDS[1], F_GETFL)) != -1)
+    {
+        flags |= O_NONBLOCK;
+        (void)fcntl(m_pTimeoutFDS[1], F_SETFL, flags);
+    }
+
+    // insert [0] into read descriptor set.
+    FD_SET( m_pTimeoutFDS[0], &aReadFDS_ );
+    nFDs_ = m_pTimeoutFDS[0] + 1;
 }
 
 SalXLib::~SalXLib()

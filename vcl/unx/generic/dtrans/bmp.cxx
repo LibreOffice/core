@@ -401,20 +401,20 @@ PixmapHolder::PixmapHolder( Display* pDisplay )
         << std::showbase << std::hex
         << m_aColormap);
 #endif
-    if( m_aInfo.c_class == TrueColor )
-    {
-        int nRedShift2(0);
-        int nGreenShift2(0);
-        int nBlueShift2(0);
-        int nRedSig, nGreenSig, nBlueSig;
-        getShift( m_aInfo.red_mask, m_nRedShift, nRedSig, nRedShift2 );
-        getShift( m_aInfo.green_mask, m_nGreenShift, nGreenSig, nGreenShift2 );
-        getShift( m_aInfo.blue_mask, m_nBlueShift, nBlueSig, nBlueShift2 );
+    if( m_aInfo.c_class != TrueColor )
+        return;
 
-        m_nBlueShift2Mask = nBlueShift2 ? ~static_cast<unsigned long>((1<<nBlueShift2)-1) : ~0L;
-        m_nGreenShift2Mask = nGreenShift2 ? ~static_cast<unsigned long>((1<<nGreenShift2)-1) : ~0L;
-        m_nRedShift2Mask = nRedShift2 ? ~static_cast<unsigned long>((1<<nRedShift2)-1) : ~0L;
-    }
+    int nRedShift2(0);
+    int nGreenShift2(0);
+    int nBlueShift2(0);
+    int nRedSig, nGreenSig, nBlueSig;
+    getShift( m_aInfo.red_mask, m_nRedShift, nRedSig, nRedShift2 );
+    getShift( m_aInfo.green_mask, m_nGreenShift, nGreenSig, nGreenShift2 );
+    getShift( m_aInfo.blue_mask, m_nBlueShift, nBlueSig, nBlueShift2 );
+
+    m_nBlueShift2Mask = nBlueShift2 ? ~static_cast<unsigned long>((1<<nBlueShift2)-1) : ~0L;
+    m_nGreenShift2Mask = nGreenShift2 ? ~static_cast<unsigned long>((1<<nGreenShift2)-1) : ~0L;
+    m_nRedShift2Mask = nRedShift2 ? ~static_cast<unsigned long>((1<<nRedShift2)-1) : ~0L;
 }
 
 PixmapHolder::~PixmapHolder()

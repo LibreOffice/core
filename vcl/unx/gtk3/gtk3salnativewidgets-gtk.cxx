@@ -1049,31 +1049,31 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
                          arrowRect.Left(), arrowRect.Top(),
                          MIN(arrowRect.GetWidth(), arrowRect.GetHeight()) );
     }
-    if ( has_forward )
-    {
-        stateFlags = NWConvertVCLStateToGTKState(rScrollbarVal.mnButton2State);
-        if ( forwardButtonInsensitive )
-            stateFlags = GTK_STATE_FLAG_INSENSITIVE;
+    if ( !has_forward )
+        return;
 
-        GtkStyleContext* pScrollbarButtonStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
-                                                 mpVScrollbarButtonStyle : mpHScrollbarButtonStyle;
+    stateFlags = NWConvertVCLStateToGTKState(rScrollbarVal.mnButton2State);
+    if ( forwardButtonInsensitive )
+        stateFlags = GTK_STATE_FLAG_INSENSITIVE;
 
-        gtk_style_context_set_state(pScrollbarButtonStyle, stateFlags);
+    GtkStyleContext* pScrollbarButtonStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
+                                             mpVScrollbarButtonStyle : mpHScrollbarButtonStyle;
 
-        gtk_render_background(pScrollbarButtonStyle, cr,
-                       button22BoundRect.Left(), button22BoundRect.Top(),
-                       button22BoundRect.GetWidth(), button22BoundRect.GetHeight() );
-        gtk_render_frame(pScrollbarButtonStyle, cr,
-                       button22BoundRect.Left(), button22BoundRect.Top(),
-                       button22BoundRect.GetWidth(), button22BoundRect.GetHeight() );
+    gtk_style_context_set_state(pScrollbarButtonStyle, stateFlags);
 
-        // ----------------- ARROW 2
-        NWCalcArrowRect( button22BoundRect, arrowRect );
-        gtk_render_arrow(pScrollbarButtonStyle, cr,
-                         arrow2Angle,
-                         arrowRect.Left(), arrowRect.Top(),
-                         MIN(arrowRect.GetWidth(), arrowRect.GetHeight()) );
-    }
+    gtk_render_background(pScrollbarButtonStyle, cr,
+                   button22BoundRect.Left(), button22BoundRect.Top(),
+                   button22BoundRect.GetWidth(), button22BoundRect.GetHeight() );
+    gtk_render_frame(pScrollbarButtonStyle, cr,
+                   button22BoundRect.Left(), button22BoundRect.Top(),
+                   button22BoundRect.GetWidth(), button22BoundRect.GetHeight() );
+
+    // ----------------- ARROW 2
+    NWCalcArrowRect( button22BoundRect, arrowRect );
+    gtk_render_arrow(pScrollbarButtonStyle, cr,
+                     arrow2Angle,
+                     arrowRect.Left(), arrowRect.Top(),
+                     MIN(arrowRect.GetWidth(), arrowRect.GetHeight()) );
 }
 
 void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,

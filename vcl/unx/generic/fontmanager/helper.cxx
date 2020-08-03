@@ -153,20 +153,20 @@ void psp::getPrinterPathList( std::vector< OUString >& rPathList, const char* pS
     }
     #endif
 
-    if( rPathList.empty() )
+    if( !rPathList.empty() )
+        return;
+
+    // last resort: next to program file (mainly for setup)
+    OUString aExe;
+    if( osl_getExecutableFile( &aExe.pData ) == osl_Process_E_None )
     {
-        // last resort: next to program file (mainly for setup)
-        OUString aExe;
-        if( osl_getExecutableFile( &aExe.pData ) == osl_Process_E_None )
+        INetURLObject aDir( aExe );
+        aDir.removeSegment();
+        aExe = aDir.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+        OUString aSysPath;
+        if( osl_getSystemPathFromFileURL( aExe.pData, &aSysPath.pData ) == osl_File_E_None )
         {
-            INetURLObject aDir( aExe );
-            aDir.removeSegment();
-            aExe = aDir.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-            OUString aSysPath;
-            if( osl_getSystemPathFromFileURL( aExe.pData, &aSysPath.pData ) == osl_File_E_None )
-            {
-                rPathList.push_back( aSysPath );
-            }
+            rPathList.push_back( aSysPath );
         }
     }
 }

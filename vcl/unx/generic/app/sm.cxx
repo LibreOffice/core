@@ -450,20 +450,20 @@ void SessionManagerClient::saveDone()
 {
     SAL_INFO("vcl.sm", "SessionManagerClient::saveDone");
 
-    if( m_pSmcConnection )
-    {
-        assert(m_xICEConnectionObserver);
-        osl::MutexGuard g(m_xICEConnectionObserver->m_ICEMutex);
-        //SmcSetProperties( m_pSmcConnection, 1, &ppSmProps[ eCloneCommand ] );
-        // this message-handling is now equal to kate and plasma desktop
-        SmcSetProperties( m_pSmcConnection, 1, &ppSmProps[ eRestartCommand ] );
-        SmcDeleteProperties( m_pSmcConnection, 1, &ppSmDel[ eDiscardCommand ] );
-        SmcSetProperties( m_pSmcConnection, 1, &ppSmProps[ eRestartStyleHint ] );
+    if( !m_pSmcConnection )
+        return;
 
-        SmcSaveYourselfDone( m_pSmcConnection, True );
-        SAL_INFO("vcl.sm.debug", "  sent SmRestartHint = " << (*pSmRestartHint) );
-        m_bDocSaveDone = true;
-    }
+    assert(m_xICEConnectionObserver);
+    osl::MutexGuard g(m_xICEConnectionObserver->m_ICEMutex);
+    //SmcSetProperties( m_pSmcConnection, 1, &ppSmProps[ eCloneCommand ] );
+    // this message-handling is now equal to kate and plasma desktop
+    SmcSetProperties( m_pSmcConnection, 1, &ppSmProps[ eRestartCommand ] );
+    SmcDeleteProperties( m_pSmcConnection, 1, &ppSmDel[ eDiscardCommand ] );
+    SmcSetProperties( m_pSmcConnection, 1, &ppSmProps[ eRestartStyleHint ] );
+
+    SmcSaveYourselfDone( m_pSmcConnection, True );
+    SAL_INFO("vcl.sm.debug", "  sent SmRestartHint = " << (*pSmRestartHint) );
+    m_bDocSaveDone = true;
 }
 
 void SessionManagerClient::open(SalSession * pSession)
@@ -553,19 +553,19 @@ void SessionManagerClient::close()
 {
     SAL_INFO("vcl.sm", "SessionManagerClient::close");
 
-    if( m_pSmcConnection )
+    if( !m_pSmcConnection )
+        return;
+
+    SAL_INFO("vcl.sm.debug", "  attempting SmcCloseConnection");
+    assert(m_xICEConnectionObserver);
     {
-        SAL_INFO("vcl.sm.debug", "  attempting SmcCloseConnection");
-        assert(m_xICEConnectionObserver);
-        {
-            osl::MutexGuard g(m_xICEConnectionObserver->m_ICEMutex);
-            SmcCloseConnection( m_pSmcConnection, 0, nullptr );
-            SAL_INFO("vcl.sm", "  SmcCloseConnection closed");
-        }
-        m_xICEConnectionObserver->deactivate();
-        m_xICEConnectionObserver.reset();
-        m_pSmcConnection = nullptr;
+        osl::MutexGuard g(m_xICEConnectionObserver->m_ICEMutex);
+        SmcCloseConnection( m_pSmcConnection, 0, nullptr );
+        SAL_INFO("vcl.sm", "  SmcCloseConnection closed");
     }
+    m_xICEConnectionObserver->deactivate();
+    m_xICEConnectionObserver.reset();
+    m_pSmcConnection = nullptr;
 }
 
 bool SessionManagerClient::queryInteraction()

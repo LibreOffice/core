@@ -307,27 +307,28 @@ void PPDDecompressStream::Open( const OUString& i_rFile )
     mpFileStream->Seek( 0 );
 
     // check for compress'ed or gzip'ed file
-    if( aLine.getLength() > 1 && static_cast<unsigned char>(aLine[0]) == 0x1f
-        && static_cast<unsigned char>(aLine[1]) == 0x8b /* check for gzip */ )
+    if( aLine.getLength() <= 1 ||
+        static_cast<unsigned char>(aLine[0]) != 0x1f ||
+        static_cast<unsigned char>(aLine[1]) != 0x8b /* check for gzip */ )
+        return;
+
+    // so let's try to decompress the stream
+    mpMemStream.reset( new SvMemoryStream( 4096, 4096 ) );
+    ZCodec aCodec;
+    aCodec.BeginCompression( ZCODEC_DEFAULT_COMPRESSION, /*gzLib*/true );
+    long nComp = aCodec.Decompress( *mpFileStream, *mpMemStream );
+    aCodec.EndCompression();
+    if( nComp < 0 )
     {
-        // so let's try to decompress the stream
-        mpMemStream.reset( new SvMemoryStream( 4096, 4096 ) );
-        ZCodec aCodec;
-        aCodec.BeginCompression( ZCODEC_DEFAULT_COMPRESSION, /*gzLib*/true );
-        long nComp = aCodec.Decompress( *mpFileStream, *mpMemStream );
-        aCodec.EndCompression();
-        if( nComp < 0 )
-        {
-            // decompression failed, must be an uncompressed stream after all
-            mpMemStream.reset();
-            mpFileStream->Seek( 0 );
-        }
-        else
-        {
-            // compression successful, can get rid of file stream
-            mpFileStream.reset();
-            mpMemStream->Seek( 0 );
-        }
+        // decompression failed, must be an uncompressed stream after all
+        mpMemStream.reset();
+        mpFileStream->Seek( 0 );
+    }
+    else
+    {
+        // compression successful, can get rid of file stream
+        mpFileStream.reset();
+        mpMemStream->Seek( 0 );
     }
 }
 
@@ -387,49 +388,49 @@ void PPDParser::scanPPDDir( const OUString& rDir )
     PPDCache &rPPDCache = thePPDCache::get();
 
     osl::Directory aDir( rDir );
-    if ( aDir.open() == osl::FileBase::E_None )
+    if ( aDir.open() != osl::FileBase::E_None )
+        return;
+
+    osl::DirectoryItem aItem;
+
+    INetURLObject aPPDDir(rDir);
+    while( aDir.getNextItem( aItem ) == osl::FileBase::E_None )
     {
-        osl::DirectoryItem aItem;
-
-        INetURLObject aPPDDir(rDir);
-        while( aDir.getNextItem( aItem ) == osl::FileBase::E_None )
+        osl::FileStatus aStatus( osl_FileStatus_Mask_FileName );
+        if( aItem.getFileStatus( aStatus ) == osl::FileBase::E_None )
         {
-            osl::FileStatus aStatus( osl_FileStatus_Mask_FileName );
-            if( aItem.getFileStatus( aStatus ) == osl::FileBase::E_None )
+            OUString aFileURL, aFileName;
+            osl::FileStatus::Type eType = osl::FileStatus::Unknown;
+            OUString aURL = rDir + "/" + aStatus.getFileName();
+
+            if(resolveLink( aURL, aFileURL, aFileName, eType ) == osl::FileBase::E_None)
             {
-                OUString aFileURL, aFileName;
-                osl::FileStatus::Type eType = osl::FileStatus::Unknown;
-                OUString aURL = rDir + "/" + aStatus.getFileName();
-
-                if(resolveLink( aURL, aFileURL, aFileName, eType ) == osl::FileBase::E_None)
+                if( eType == osl::FileStatus::Regular )
                 {
-                    if( eType == osl::FileStatus::Regular )
-                    {
-                        INetURLObject aPPDFile = aPPDDir;
-                        aPPDFile.Append( aFileName );
+                    INetURLObject aPPDFile = aPPDDir;
+                    aPPDFile.Append( aFileName );
 
-                        // match extension
-                        for(const suffix_t & rSuffix : pSuffixes)
+                    // match extension
+                    for(const suffix_t & rSuffix : pSuffixes)
+                    {
+                        if( aFileName.getLength() > rSuffix.nSuffixLen )
                         {
-                            if( aFileName.getLength() > rSuffix.nSuffixLen )
+                            if( aFileName.endsWithIgnoreAsciiCaseAsciiL( rSuffix.pSuffix, rSuffix.nSuffixLen ) )
                             {
-                                if( aFileName.endsWithIgnoreAsciiCaseAsciiL( rSuffix.pSuffix, rSuffix.nSuffixLen ) )
-                                {
-                                    (*rPPDCache.pAllPPDFiles)[ aFileName.copy( 0, aFileName.getLength() - rSuffix.nSuffixLen ) ] = aPPDFile.PathToFileName();
-                                    break;
-                                }
+                                (*rPPDCache.pAllPPDFiles)[ aFileName.copy( 0, aFileName.getLength() - rSuffix.nSuffixLen ) ] = aPPDFile.PathToFileName();
+                                break;
                             }
                         }
                     }
-                    else if( eType == osl::FileStatus::Directory )
-                    {
-                        scanPPDDir( aFileURL );
-                    }
+                }
+                else if( eType == osl::FileStatus::Directory )
+                {
+                    scanPPDDir( aFileURL );
                 }
             }
         }
-        aDir.close();
     }
+    aDir.close();
 }
 
 void PPDParser::initPPDFiles(PPDCache &rPPDCache)
@@ -447,21 +448,21 @@ void PPDParser::initPPDFiles(PPDCache &rPPDCache)
         INetURLObject aPPDDir( path, INetProtocol::File, INetURLObject::EncodeMechanism::All );
         scanPPDDir( aPPDDir.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     }
-    if( rPPDCache.pAllPPDFiles->find( OUString( "SGENPRT" ) ) == rPPDCache.pAllPPDFiles->end() )
+    if( rPPDCache.pAllPPDFiles->find( OUString( "SGENPRT" ) ) != rPPDCache.pAllPPDFiles->end() )
+        return;
+
+    // last try: search in directory of executable (mainly for setup)
+    OUString aExe;
+    if( osl_getExecutableFile( &aExe.pData ) == osl_Process_E_None )
     {
-        // last try: search in directory of executable (mainly for setup)
-        OUString aExe;
-        if( osl_getExecutableFile( &aExe.pData ) == osl_Process_E_None )
-        {
-            INetURLObject aDir( aExe );
-            aDir.removeSegment();
-            SAL_INFO("vcl.unx.print", "scanning last chance dir: "
-                    << aDir.GetMainURL(INetURLObject::DecodeMechanism::NONE));
-            scanPPDDir( aDir.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
-            SAL_INFO("vcl.unx.print", "SGENPRT "
-                    << (rPPDCache.pAllPPDFiles->find("SGENPRT") ==
-                        rPPDCache.pAllPPDFiles->end() ? "not found" : "found"));
-        }
+        INetURLObject aDir( aExe );
+        aDir.removeSegment();
+        SAL_INFO("vcl.unx.print", "scanning last chance dir: "
+                << aDir.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+        scanPPDDir( aDir.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+        SAL_INFO("vcl.unx.print", "SGENPRT "
+                << (rPPDCache.pAllPPDFiles->find("SGENPRT") ==
+                    rPPDCache.pAllPPDFiles->end() ? "not found" : "found"));
     }
 }
 
@@ -1964,23 +1965,23 @@ void PPDContext::getPageSize( OUString& rPaper, int& rWidth, int& rHeight ) cons
     rPaper  = "A4";
     rWidth  = 595;
     rHeight = 842;
-    if( m_pParser )
+    if( !m_pParser )
+        return;
+
+    const PPDKey* pKey = m_pParser->getKey( "PageSize" );
+    if( !pKey )
+        return;
+
+    const PPDValue* pValue = getValue( pKey );
+    if( pValue )
     {
-        const PPDKey* pKey = m_pParser->getKey( "PageSize" );
-        if( pKey )
-        {
-            const PPDValue* pValue = getValue( pKey );
-            if( pValue )
-            {
-                rPaper = pValue->m_aOption;
-                m_pParser->getPaperDimension( rPaper, rWidth, rHeight );
-            }
-            else
-            {
-                rPaper = m_pParser->getDefaultPaperDimension();
-                m_pParser->getDefaultPaperDimension( rWidth, rHeight );
-            }
-        }
+        rPaper = pValue->m_aOption;
+        m_pParser->getPaperDimension( rPaper, rWidth, rHeight );
+    }
+    else
+    {
+        rPaper = m_pParser->getDefaultPaperDimension();
+        m_pParser->getDefaultPaperDimension( rWidth, rHeight );
     }
 }
 

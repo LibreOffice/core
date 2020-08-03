@@ -352,22 +352,22 @@ static bool createPdf( const OUString& rToFile, const OUString& rFromFile, const
 void SalGenericInstance::configurePspInfoPrinter(PspSalInfoPrinter *pPrinter,
     SalPrinterQueueInfo const * pQueueInfo, ImplJobSetup* pJobSetup)
 {
-    if( pJobSetup )
-    {
-        PrinterInfoManager& rManager( PrinterInfoManager::get() );
-        PrinterInfo aInfo( rManager.getPrinterInfo( pQueueInfo->maPrinterName ) );
-        pPrinter->m_aJobData = aInfo;
-        pPrinter->m_aPrinterGfx.Init( pPrinter->m_aJobData );
+    if( !pJobSetup )
+        return;
 
-        if( pJobSetup->GetDriverData() )
-            JobData::constructFromStreamBuffer( pJobSetup->GetDriverData(),
-                                                pJobSetup->GetDriverDataLen(), aInfo );
+    PrinterInfoManager& rManager( PrinterInfoManager::get() );
+    PrinterInfo aInfo( rManager.getPrinterInfo( pQueueInfo->maPrinterName ) );
+    pPrinter->m_aJobData = aInfo;
+    pPrinter->m_aPrinterGfx.Init( pPrinter->m_aJobData );
 
-        pJobSetup->SetSystem( JOBSETUP_SYSTEM_UNIX );
-        pJobSetup->SetPrinterName( pQueueInfo->maPrinterName );
-        pJobSetup->SetDriver( aInfo.m_aDriverName );
-        copyJobDataToJobSetup( pJobSetup, aInfo );
-    }
+    if( pJobSetup->GetDriverData() )
+        JobData::constructFromStreamBuffer( pJobSetup->GetDriverData(),
+                                            pJobSetup->GetDriverDataLen(), aInfo );
+
+    pJobSetup->SetSystem( JOBSETUP_SYSTEM_UNIX );
+    pJobSetup->SetPrinterName( pQueueInfo->maPrinterName );
+    pJobSetup->SetDriver( aInfo.m_aDriverName );
+    copyJobDataToJobSetup( pJobSetup, aInfo );
 }
 
 SalInfoPrinter* SalGenericInstance::CreateInfoPrinter( SalPrinterQueueInfo*    pQueueInfo,
@@ -451,20 +451,20 @@ void PspSalInfoPrinter::InitPaperFormats( const ImplJobSetup* )
     m_aPaperFormats.clear();
     m_bPapersInit = true;
 
-    if( m_aJobData.m_pParser )
+    if( !m_aJobData.m_pParser )
+        return;
+
+    const PPDKey* pKey = m_aJobData.m_pParser->getKey( "PageSize" );
+    if( pKey )
     {
-        const PPDKey* pKey = m_aJobData.m_pParser->getKey( "PageSize" );
-        if( pKey )
+        int nValues = pKey->countValues();
+        for( int i = 0; i < nValues; i++ )
         {
-            int nValues = pKey->countValues();
-            for( int i = 0; i < nValues; i++ )
-            {
-                const PPDValue* pValue = pKey->getValue( i );
-                int nWidth = 0, nHeight = 0;
-                m_aJobData.m_pParser->getPaperDimension( pValue->m_aOption, nWidth, nHeight );
-                PaperInfo aInfo(PtTo10Mu( nWidth ), PtTo10Mu( nHeight ));
-                m_aPaperFormats.push_back( aInfo );
-            }
+            const PPDValue* pValue = pKey->getValue( i );
+            int nWidth = 0, nHeight = 0;
+            m_aJobData.m_pParser->getPaperDimension( pValue->m_aOption, nWidth, nHeight );
+            PaperInfo aInfo(PtTo10Mu( nWidth ), PtTo10Mu( nHeight ));
+            m_aPaperFormats.push_back( aInfo );
         }
     }
 }

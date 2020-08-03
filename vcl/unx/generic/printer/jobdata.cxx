@@ -64,23 +64,23 @@ void JobData::setCollate( bool bCollate )
         return;
     }
     const PPDParser* pParser = m_aContext.getParser();
-    if( pParser )
+    if( !pParser )
+        return;
+
+    const PPDKey* pKey = pParser->getKey( "Collate" );
+    if( !pKey )
+        return;
+
+    const PPDValue* pVal = nullptr;
+    if( bCollate )
+        pVal = pKey->getValue( "True" );
+    else
     {
-        const PPDKey* pKey = pParser->getKey( "Collate" );
-        if( pKey )
-        {
-            const PPDValue* pVal = nullptr;
-            if( bCollate )
-                pVal = pKey->getValue( "True" );
-            else
-            {
-                pVal = pKey->getValue( "False" );
-                if( ! pVal )
-                    pVal = pKey->getValue( "None" );
-            }
-            m_aContext.setValue( pKey, pVal );
-        }
+        pVal = pKey->getValue( "False" );
+        if( ! pVal )
+            pVal = pKey->getValue( "None" );
     }
+    m_aContext.setValue( pKey, pVal );
 }
 
 void JobData::setPaper( int i_nWidth, int i_nHeight )

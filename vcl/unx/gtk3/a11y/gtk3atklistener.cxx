@@ -98,21 +98,21 @@ extern "C" {
 // XEventListener implementation
 void AtkListener::disposing( const lang::EventObject& )
 {
-    if( mpWrapper )
-    {
-        AtkObject *atk_obj = ATK_OBJECT( mpWrapper );
+    if( !mpWrapper )
+        return;
 
-        // Release all interface references to avoid shutdown problems with
-        // global mutex
-        atk_object_wrapper_dispose( mpWrapper );
+    AtkObject *atk_obj = ATK_OBJECT( mpWrapper );
 
-        g_idle_add( reinterpret_cast<GSourceFunc>(idle_defunc_state_change),
-                    g_object_ref( G_OBJECT( atk_obj ) ) );
+    // Release all interface references to avoid shutdown problems with
+    // global mutex
+    atk_object_wrapper_dispose( mpWrapper );
 
-        // Release the wrapper object so that it can vanish ..
-        g_object_unref( mpWrapper );
-        mpWrapper = nullptr;
-    }
+    g_idle_add( reinterpret_cast<GSourceFunc>(idle_defunc_state_change),
+                g_object_ref( G_OBJECT( atk_obj ) ) );
+
+    // Release the wrapper object so that it can vanish ..
+    g_object_unref( mpWrapper );
+    mpWrapper = nullptr;
 }
 
 /*****************************************************************************/
@@ -134,32 +134,32 @@ void AtkListener::updateChildList(
     m_aChildList.clear();
 
     uno::Reference< accessibility::XAccessibleStateSet > xStateSet = pContext->getAccessibleStateSet();
-    if( xStateSet.is()
+    if( !(xStateSet.is()
         && !xStateSet->contains(accessibility::AccessibleStateType::DEFUNC)
-        && !xStateSet->contains(accessibility::AccessibleStateType::MANAGES_DESCENDANTS) )
+        && !xStateSet->contains(accessibility::AccessibleStateType::MANAGES_DESCENDANTS)) )
+        return;
+
+    css::uno::Reference<css::accessibility::XAccessibleContext3> xContext3(pContext, css::uno::UNO_QUERY);
+    if (xContext3.is())
     {
-        css::uno::Reference<css::accessibility::XAccessibleContext3> xContext3(pContext, css::uno::UNO_QUERY);
-        if (xContext3.is())
+        m_aChildList = comphelper::sequenceToContainer<std::vector<css::uno::Reference< css::accessibility::XAccessible >>>(xContext3->getAccessibleChildren());
+    }
+    else
+    {
+        sal_Int32 nChildren = pContext->getAccessibleChildCount();
+        m_aChildList.resize(nChildren);
+        for(sal_Int32 n = 0; n < nChildren; n++)
         {
-            m_aChildList = comphelper::sequenceToContainer<std::vector<css::uno::Reference< css::accessibility::XAccessible >>>(xContext3->getAccessibleChildren());
-        }
-        else
-        {
-            sal_Int32 nChildren = pContext->getAccessibleChildCount();
-            m_aChildList.resize(nChildren);
-            for(sal_Int32 n = 0; n < nChildren; n++)
+            try
             {
-                try
-                {
-                    m_aChildList[n] = pContext->getAccessibleChild(n);
-                }
-                catch (lang::IndexOutOfBoundsException const&)
-                {
-                    sal_Int32 nChildren2 = pContext->getAccessibleChildCount();
-                    assert(nChildren2 <= n && "consistency?");
-                    m_aChildList.resize(std::min(nChildren2, n));
-                    break;
-                }
+                m_aChildList[n] = pContext->getAccessibleChild(n);
+            }
+            catch (lang::IndexOutOfBoundsException const&)
+            {
+                sal_Int32 nChildren2 = pContext->getAccessibleChildCount();
+                assert(nChildren2 <= n && "consistency?");
+                m_aChildList.resize(std::min(nChildren2, n));
+                break;
             }
         }
     }
@@ -212,25 +212,25 @@ void AtkListener::handleChildRemoved(
     //    0. child, which breaks somehow on vanishing list boxes.
     // Ignoring "remove" events for objects not in the m_aChildList
     // for now.
-    if( nIndex >= 0 )
+    if( nIndex < 0 )
+        return;
+
+    uno::Reference<accessibility::XAccessibleEventBroadcaster> xBroadcaster(
+        rxChild->getAccessibleContext(), uno::UNO_QUERY);
+
+    if (xBroadcaster.is())
     {
-        uno::Reference<accessibility::XAccessibleEventBroadcaster> xBroadcaster(
-            rxChild->getAccessibleContext(), uno::UNO_QUERY);
+        uno::Reference<accessibility::XAccessibleEventListener> xListener(this);
+        xBroadcaster->removeAccessibleEventListener(xListener);
+    }
 
-        if (xBroadcaster.is())
-        {
-            uno::Reference<accessibility::XAccessibleEventListener> xListener(this);
-            xBroadcaster->removeAccessibleEventListener(xListener);
-        }
+    updateChildList(rxParent);
 
-        updateChildList(rxParent);
-
-        AtkObject * pChild = atk_object_wrapper_ref( rxChild, false );
-        if( pChild )
-        {
-            atk_object_wrapper_remove_child( mpWrapper, pChild, nIndex );
-            g_object_unref( pChild );
-        }
+    AtkObject * pChild = atk_object_wrapper_ref( rxChild, false );
+    if( pChild )
+    {
+        atk_object_wrapper_remove_child( mpWrapper, pChild, nIndex );
+        g_object_unref( pChild );
     }
 }
 

@@ -597,26 +597,26 @@ void on_registrar_unavailable( GDBusConnection * /*connection*/,
 
 void GtkSalFrame::EnsureAppMenuWatch()
 {
-    if ( !m_nWatcherId )
+    if ( m_nWatcherId )
+        return;
+
+    // Get a DBus session connection.
+    if ( pSessionBus == nullptr )
     {
-        // Get a DBus session connection.
+        pSessionBus = g_bus_get_sync( G_BUS_TYPE_SESSION, nullptr, nullptr );
+
         if ( pSessionBus == nullptr )
-        {
-            pSessionBus = g_bus_get_sync( G_BUS_TYPE_SESSION, nullptr, nullptr );
-
-            if ( pSessionBus == nullptr )
-                return;
-        }
-
-        // Publish the menu only if AppMenu registrar is available.
-        m_nWatcherId = g_bus_watch_name_on_connection( pSessionBus,
-                                                       "com.canonical.AppMenu.Registrar",
-                                                       G_BUS_NAME_WATCHER_FLAGS_NONE,
-                                                       on_registrar_available,
-                                                       on_registrar_unavailable,
-                                                       this,
-                                                       nullptr );
+            return;
     }
+
+    // Publish the menu only if AppMenu registrar is available.
+    m_nWatcherId = g_bus_watch_name_on_connection( pSessionBus,
+                                                   "com.canonical.AppMenu.Registrar",
+                                                   G_BUS_NAME_WATCHER_FLAGS_NONE,
+                                                   on_registrar_available,
+                                                   on_registrar_unavailable,
+                                                   this,
+                                                   nullptr );
 }
 
 void GtkSalFrame::InvalidateGraphics()
@@ -1307,82 +1307,82 @@ void GtkSalFrame::SetDefaultSize()
 
 void GtkSalFrame::Show( bool bVisible, bool /*bNoActivate*/ )
 {
-    if( m_pWindow )
+    if( !m_pWindow )
+        return;
+
+    if( bVisible )
     {
-        if( bVisible )
+        getDisplay()->startupNotificationCompleted();
+
+        if( m_bDefaultPos )
+            Center();
+        if( m_bDefaultSize )
+            SetDefaultSize();
+        setMinMaxSize();
+
+        if (isFloatGrabWindow() && !getDisplay()->GetCaptureFrame())
         {
-            getDisplay()->startupNotificationCompleted();
-
-            if( m_bDefaultPos )
-                Center();
-            if( m_bDefaultSize )
-                SetDefaultSize();
-            setMinMaxSize();
-
-            if (isFloatGrabWindow() && !getDisplay()->GetCaptureFrame())
-            {
-                m_pParent->grabPointer(true, true, true);
-                m_pParent->addGrabLevel();
-            }
+            m_pParent->grabPointer(true, true, true);
+            m_pParent->addGrabLevel();
+        }
 
 #if defined(GDK_WINDOWING_WAYLAND)
-            /*
-             rhbz#1334915, gnome#779143, tdf#100158
-             https://gitlab.gnome.org/GNOME/gtk/-/issues/767
+        /*
+         rhbz#1334915, gnome#779143, tdf#100158
+         https://gitlab.gnome.org/GNOME/gtk/-/issues/767
 
-             before gdk_wayland_window_set_application_id was available gtk
-             under wayland lacked a way to change the app_id of a window, so
-             brute force everything as a startcenter when initially shown to at
-             least get the default LibreOffice icon and not the broken app icon
-            */
-            static bool bAppIdImmutable = DLSYM_GDK_IS_WAYLAND_DISPLAY(getGdkDisplay()) &&
-                                          !dlsym(nullptr, "gdk_wayland_window_set_application_id");
-            if (bAppIdImmutable)
-            {
-                OString sOrigName(g_get_prgname());
-                g_set_prgname("libreoffice-startcenter");
-                gtk_widget_show(m_pWindow);
-                g_set_prgname(sOrigName.getStr());
-            }
-            else
-            {
-                gtk_widget_show(m_pWindow);
-            }
-#else
+         before gdk_wayland_window_set_application_id was available gtk
+         under wayland lacked a way to change the app_id of a window, so
+         brute force everything as a startcenter when initially shown to at
+         least get the default LibreOffice icon and not the broken app icon
+        */
+        static bool bAppIdImmutable = DLSYM_GDK_IS_WAYLAND_DISPLAY(getGdkDisplay()) &&
+                                      !dlsym(nullptr, "gdk_wayland_window_set_application_id");
+        if (bAppIdImmutable)
+        {
+            OString sOrigName(g_get_prgname());
+            g_set_prgname("libreoffice-startcenter");
             gtk_widget_show(m_pWindow);
-#endif
-
-            if( isFloatGrabWindow() )
-            {
-                m_nFloats++;
-                if (!getDisplay()->GetCaptureFrame())
-                {
-                    grabPointer(true, true, true);
-                    addGrabLevel();
-                }
-                // #i44068# reset parent's IM context
-                if( m_pParent )
-                    m_pParent->EndExtTextInput(EndExtTextInputFlags::NONE);
-            }
+            g_set_prgname(sOrigName.getStr());
         }
         else
         {
-            if( isFloatGrabWindow() )
-            {
-                m_nFloats--;
-                if (!getDisplay()->GetCaptureFrame())
-                {
-                    removeGrabLevel();
-                    grabPointer(false, true, false);
-                    m_pParent->removeGrabLevel();
-                    bool bParentIsFloatGrabWindow = m_pParent->isFloatGrabWindow();
-                    m_pParent->grabPointer(bParentIsFloatGrabWindow, true, bParentIsFloatGrabWindow);
-                }
-            }
-            gtk_widget_hide( m_pWindow );
-            if( m_pIMHandler )
-                m_pIMHandler->focusChanged( false );
+            gtk_widget_show(m_pWindow);
         }
+#else
+        gtk_widget_show(m_pWindow);
+#endif
+
+        if( isFloatGrabWindow() )
+        {
+            m_nFloats++;
+            if (!getDisplay()->GetCaptureFrame())
+            {
+                grabPointer(true, true, true);
+                addGrabLevel();
+            }
+            // #i44068# reset parent's IM context
+            if( m_pParent )
+                m_pParent->EndExtTextInput(EndExtTextInputFlags::NONE);
+        }
+    }
+    else
+    {
+        if( isFloatGrabWindow() )
+        {
+            m_nFloats--;
+            if (!getDisplay()->GetCaptureFrame())
+            {
+                removeGrabLevel();
+                grabPointer(false, true, false);
+                m_pParent->removeGrabLevel();
+                bool bParentIsFloatGrabWindow = m_pParent->isFloatGrabWindow();
+                m_pParent->grabPointer(bParentIsFloatGrabWindow, true, bParentIsFloatGrabWindow);
+            }
+        }
+        gtk_widget_hide( m_pWindow );
+        if( m_pIMHandler )
+            m_pIMHandler->focusChanged( false );
     }
 }
 
@@ -1393,52 +1393,52 @@ void GtkSalFrame::setMinMaxSize()
      *  whether they should is undefined. So don't set the max size hint
      *  for a full screen window.
     */
-    if( m_pWindow && ! isChild() )
+    if( !m_pWindow || isChild() )
+        return;
+
+    GdkGeometry aGeo;
+    int aHints = 0;
+    if( m_nStyle & SalFrameStyleFlags::SIZEABLE )
     {
-        GdkGeometry aGeo;
-        int aHints = 0;
-        if( m_nStyle & SalFrameStyleFlags::SIZEABLE )
+        if( m_aMinSize.Width() && m_aMinSize.Height() && ! m_bFullscreen )
         {
-            if( m_aMinSize.Width() && m_aMinSize.Height() && ! m_bFullscreen )
-            {
-                aGeo.min_width  = m_aMinSize.Width();
-                aGeo.min_height = m_aMinSize.Height();
-                aHints |= GDK_HINT_MIN_SIZE;
-            }
-            if( m_aMaxSize.Width() && m_aMaxSize.Height() && ! m_bFullscreen )
-            {
-                aGeo.max_width  = m_aMaxSize.Width();
-                aGeo.max_height = m_aMaxSize.Height();
-                aHints |= GDK_HINT_MAX_SIZE;
-            }
+            aGeo.min_width  = m_aMinSize.Width();
+            aGeo.min_height = m_aMinSize.Height();
+            aHints |= GDK_HINT_MIN_SIZE;
         }
-        else
+        if( m_aMaxSize.Width() && m_aMaxSize.Height() && ! m_bFullscreen )
         {
-            if (!m_bFullscreen && m_nWidthRequest && m_nHeightRequest)
-            {
-                aGeo.min_width = m_nWidthRequest;
-                aGeo.min_height = m_nHeightRequest;
-                aHints |= GDK_HINT_MIN_SIZE;
-
-                aGeo.max_width = m_nWidthRequest;
-                aGeo.max_height = m_nHeightRequest;
-                aHints |= GDK_HINT_MAX_SIZE;
-            }
-        }
-
-        if( m_bFullscreen && m_aMaxSize.Width() && m_aMaxSize.Height() )
-        {
-            aGeo.max_width = m_aMaxSize.Width();
+            aGeo.max_width  = m_aMaxSize.Width();
             aGeo.max_height = m_aMaxSize.Height();
             aHints |= GDK_HINT_MAX_SIZE;
         }
-        if( aHints )
+    }
+    else
+    {
+        if (!m_bFullscreen && m_nWidthRequest && m_nHeightRequest)
         {
-            gtk_window_set_geometry_hints( GTK_WINDOW(m_pWindow),
-                                           nullptr,
-                                           &aGeo,
-                                           GdkWindowHints( aHints ) );
+            aGeo.min_width = m_nWidthRequest;
+            aGeo.min_height = m_nHeightRequest;
+            aHints |= GDK_HINT_MIN_SIZE;
+
+            aGeo.max_width = m_nWidthRequest;
+            aGeo.max_height = m_nHeightRequest;
+            aHints |= GDK_HINT_MAX_SIZE;
         }
+    }
+
+    if( m_bFullscreen && m_aMaxSize.Width() && m_aMaxSize.Height() )
+    {
+        aGeo.max_width = m_aMaxSize.Width();
+        aGeo.max_height = m_aMaxSize.Height();
+        aHints |= GDK_HINT_MAX_SIZE;
+    }
+    if( aHints )
+    {
+        gtk_window_set_geometry_hints( GTK_WINDOW(m_pWindow),
+                                       nullptr,
+                                       &aGeo,
+                                       GdkWindowHints( aHints ) );
     }
 }
 
@@ -1466,29 +1466,29 @@ void GtkSalFrame::SetMinClientSize( long nWidth, long nHeight )
 void GtkSalFrame::AllocateFrame()
 {
     basegfx::B2IVector aFrameSize( maGeometry.nWidth, maGeometry.nHeight );
-    if (!m_pSurface || m_aFrameSize.getX() != aFrameSize.getX() ||
-                       m_aFrameSize.getY() != aFrameSize.getY() )
-    {
-        if( aFrameSize.getX() == 0 )
-            aFrameSize.setX( 1 );
-        if( aFrameSize.getY() == 0 )
-            aFrameSize.setY( 1 );
+    if (m_pSurface && m_aFrameSize.getX() == aFrameSize.getX() &&
+                      m_aFrameSize.getY() == aFrameSize.getY() )
+        return;
 
-        if (m_pSurface)
-            cairo_surface_destroy(m_pSurface);
+    if( aFrameSize.getX() == 0 )
+        aFrameSize.setX( 1 );
+    if( aFrameSize.getY() == 0 )
+        aFrameSize.setY( 1 );
 
-        m_pSurface = gdk_window_create_similar_surface(gtk_widget_get_window(m_pWindow),
-                                                       CAIRO_CONTENT_COLOR_ALPHA,
-                                                       aFrameSize.getX(),
-                                                       aFrameSize.getY());
-        m_aFrameSize = aFrameSize;
+    if (m_pSurface)
+        cairo_surface_destroy(m_pSurface);
 
-        cairo_surface_set_user_data(m_pSurface, SvpSalGraphics::getDamageKey(), &m_aDamageHandler, nullptr);
-        SAL_INFO("vcl.gtk3", "allocated Frame size of " << maGeometry.nWidth << " x " << maGeometry.nHeight);
+    m_pSurface = gdk_window_create_similar_surface(gtk_widget_get_window(m_pWindow),
+                                                   CAIRO_CONTENT_COLOR_ALPHA,
+                                                   aFrameSize.getX(),
+                                                   aFrameSize.getY());
+    m_aFrameSize = aFrameSize;
 
-        if (m_pGraphics)
-            m_pGraphics->setSurface(m_pSurface, m_aFrameSize);
-    }
+    cairo_surface_set_user_data(m_pSurface, SvpSalGraphics::getDamageKey(), &m_aDamageHandler, nullptr);
+    SAL_INFO("vcl.gtk3", "allocated Frame size of " << maGeometry.nWidth << " x " << maGeometry.nHeight);
+
+    if (m_pGraphics)
+        m_pGraphics->setSurface(m_pSurface, m_aFrameSize);
 }
 
 void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags )
@@ -1950,41 +1950,41 @@ void GtkSalFrame::UpdateLastInputEventTime(guint32 nUserInputTime)
 
 void GtkSalFrame::ToTop( SalFrameToTop nFlags )
 {
-    if( m_pWindow )
+    if( !m_pWindow )
+        return;
+
+    if( isChild( false ) )
+        GrabFocus();
+    else if( gtk_widget_get_mapped( m_pWindow ) )
     {
-        if( isChild( false ) )
-            GrabFocus();
-        else if( gtk_widget_get_mapped( m_pWindow ) )
-        {
-            if (!(nFlags & SalFrameToTop::GrabFocusOnly))
-                gtk_window_present_with_time(GTK_WINDOW(m_pWindow), GetLastInputEventTime());
-            else
-                gdk_window_focus(gtk_widget_get_window(m_pWindow), GetLastInputEventTime());
-            GrabFocus();
-        }
+        if (!(nFlags & SalFrameToTop::GrabFocusOnly))
+            gtk_window_present_with_time(GTK_WINDOW(m_pWindow), GetLastInputEventTime());
         else
-        {
-            if( nFlags & SalFrameToTop::RestoreWhenMin )
-                gtk_window_present( GTK_WINDOW(m_pWindow) );
-        }
+            gdk_window_focus(gtk_widget_get_window(m_pWindow), GetLastInputEventTime());
+        GrabFocus();
+    }
+    else
+    {
+        if( nFlags & SalFrameToTop::RestoreWhenMin )
+            gtk_window_present( GTK_WINDOW(m_pWindow) );
     }
 }
 
 void GtkSalFrame::SetPointer( PointerStyle ePointerStyle )
 {
-    if( m_pWindow && ePointerStyle != m_ePointerStyle )
-    {
-        m_ePointerStyle = ePointerStyle;
-        GdkCursor *pCursor = getDisplay()->getCursor( ePointerStyle );
-        gdk_window_set_cursor( gtk_widget_get_window(m_pWindow), pCursor );
-        m_pCurrentCursor = pCursor;
+    if( !m_pWindow || ePointerStyle == m_ePointerStyle )
+        return;
 
-        // #i80791# use grabPointer the same way as CaptureMouse, respective float grab
-        if( getDisplay()->MouseCaptured( this ) )
-            grabPointer( true, false, false );
-        else if( m_nFloats > 0 )
-            grabPointer( true, false, true );
-    }
+    m_ePointerStyle = ePointerStyle;
+    GdkCursor *pCursor = getDisplay()->getCursor( ePointerStyle );
+    gdk_window_set_cursor( gtk_widget_get_window(m_pWindow), pCursor );
+    m_pCurrentCursor = pCursor;
+
+    // #i80791# use grabPointer the same way as CaptureMouse, respective float grab
+    if( getDisplay()->MouseCaptured( this ) )
+        grabPointer( true, false, false );
+    else if( m_nFloats > 0 )
+        grabPointer( true, false, true );
 }
 
 void GtkSalFrame::grabPointer( bool bGrab, bool bKeyboardAlso, bool bOwnerEvents )
@@ -2969,42 +2969,42 @@ void GtkSalFrame::signalRealize(GtkWidget*, gpointer frame)
     static auto window_move_to_rect = reinterpret_cast<void (*) (GdkWindow*, const GdkRectangle*, GdkGravity,
                                                                  GdkGravity, GdkAnchorHints, gint, gint)>(
                                                                     dlsym(nullptr, "gdk_window_move_to_rect"));
-    if (window_move_to_rect)
+    if (!window_move_to_rect)
+        return;
+
+    GdkGravity rect_anchor = GDK_GRAVITY_SOUTH_WEST, menu_anchor = GDK_GRAVITY_NORTH_WEST;
+
+    if (pThis->m_nFloatFlags & FloatWinPopupFlags::Left)
     {
-        GdkGravity rect_anchor = GDK_GRAVITY_SOUTH_WEST, menu_anchor = GDK_GRAVITY_NORTH_WEST;
-
-        if (pThis->m_nFloatFlags & FloatWinPopupFlags::Left)
-        {
-            rect_anchor = GDK_GRAVITY_NORTH_WEST;
-            menu_anchor = GDK_GRAVITY_NORTH_EAST;
-        }
-        else if (pThis->m_nFloatFlags & FloatWinPopupFlags::Up)
-        {
-            rect_anchor = GDK_GRAVITY_NORTH_WEST;
-            menu_anchor = GDK_GRAVITY_SOUTH_WEST;
-        }
-        else if (pThis->m_nFloatFlags & FloatWinPopupFlags::Right)
-        {
-            rect_anchor = GDK_GRAVITY_NORTH_EAST;
-        }
-
-        VclPtr<vcl::Window> pVclParent = pThis->GetWindow()->GetParent();
-        if (pVclParent->HasMirroredGraphics() && pVclParent->IsRTLEnabled())
-        {
-            swapDirection(rect_anchor);
-            swapDirection(menu_anchor);
-        }
-
-        tools::Rectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(pVclParent, pThis->m_aFloatRect);
-        if (gdk_window_get_window_type(gtk_widget_get_window(pThis->m_pParent->m_pWindow)) != GDK_WINDOW_TOPLEVEL)
-            aFloatRect.Move(-pThis->m_pParent->maGeometry.nX, -pThis->m_pParent->maGeometry.nY);
-
-        GdkRectangle rect {static_cast<int>(aFloatRect.Left()), static_cast<int>(aFloatRect.Top()),
-                           static_cast<int>(aFloatRect.GetWidth()), static_cast<int>(aFloatRect.GetHeight())};
-
-        GdkWindow* gdkWindow = gtk_widget_get_window(pThis->m_pWindow);
-        window_move_to_rect(gdkWindow, &rect, rect_anchor, menu_anchor, static_cast<GdkAnchorHints>(GDK_ANCHOR_FLIP | GDK_ANCHOR_SLIDE), 0, 0);
+        rect_anchor = GDK_GRAVITY_NORTH_WEST;
+        menu_anchor = GDK_GRAVITY_NORTH_EAST;
     }
+    else if (pThis->m_nFloatFlags & FloatWinPopupFlags::Up)
+    {
+        rect_anchor = GDK_GRAVITY_NORTH_WEST;
+        menu_anchor = GDK_GRAVITY_SOUTH_WEST;
+    }
+    else if (pThis->m_nFloatFlags & FloatWinPopupFlags::Right)
+    {
+        rect_anchor = GDK_GRAVITY_NORTH_EAST;
+    }
+
+    VclPtr<vcl::Window> pVclParent = pThis->GetWindow()->GetParent();
+    if (pVclParent->HasMirroredGraphics() && pVclParent->IsRTLEnabled())
+    {
+        swapDirection(rect_anchor);
+        swapDirection(menu_anchor);
+    }
+
+    tools::Rectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(pVclParent, pThis->m_aFloatRect);
+    if (gdk_window_get_window_type(gtk_widget_get_window(pThis->m_pParent->m_pWindow)) != GDK_WINDOW_TOPLEVEL)
+        aFloatRect.Move(-pThis->m_pParent->maGeometry.nX, -pThis->m_pParent->maGeometry.nY);
+
+    GdkRectangle rect {static_cast<int>(aFloatRect.Left()), static_cast<int>(aFloatRect.Top()),
+                       static_cast<int>(aFloatRect.GetWidth()), static_cast<int>(aFloatRect.GetHeight())};
+
+    GdkWindow* gdkWindow = gtk_widget_get_window(pThis->m_pWindow);
+    window_move_to_rect(gdkWindow, &rect, rect_anchor, menu_anchor, static_cast<GdkAnchorHints>(GDK_ANCHOR_FLIP | GDK_ANCHOR_SLIDE), 0, 0);
 }
 
 gboolean GtkSalFrame::signalConfigure(GtkWidget*, GdkEventConfigure* pEvent, gpointer frame)
@@ -3749,19 +3749,19 @@ void GtkDropTarget::signalDragLeave(GtkWidget* pWidget, GdkDragContext* /*contex
 void GtkSalFrame::signalDestroy( GtkWidget* pObj, gpointer frame )
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-    if( pObj == pThis->m_pWindow )
-    {
-        pThis->m_aDamageHandler.damaged = nullptr;
-        pThis->m_aDamageHandler.handle = nullptr;
-        if (pThis->m_pSurface)
-            cairo_surface_set_user_data(pThis->m_pSurface, SvpSalGraphics::getDamageKey(), nullptr, nullptr);
-        pThis->m_pFixedContainer = nullptr;
-        pThis->m_pEventBox = nullptr;
-        pThis->m_pTopLevelGrid = nullptr;
-        pThis->m_pWindow = nullptr;
-        pThis->m_xFrameWeld.reset();
-        pThis->InvalidateGraphics();
-    }
+    if( pObj != pThis->m_pWindow )
+        return;
+
+    pThis->m_aDamageHandler.damaged = nullptr;
+    pThis->m_aDamageHandler.handle = nullptr;
+    if (pThis->m_pSurface)
+        cairo_surface_set_user_data(pThis->m_pSurface, SvpSalGraphics::getDamageKey(), nullptr, nullptr);
+    pThis->m_pFixedContainer = nullptr;
+    pThis->m_pEventBox = nullptr;
+    pThis->m_pTopLevelGrid = nullptr;
+    pThis->m_pWindow = nullptr;
+    pThis->m_xFrameWeld.reset();
+    pThis->InvalidateGraphics();
 }
 
 // GtkSalFrame::IMHandler
@@ -3863,20 +3863,20 @@ void GtkSalFrame::IMHandler::endExtTextInput( EndExtTextInputFlags /*nFlags*/ )
 {
     gtk_im_context_reset ( m_pIMContext );
 
-    if( m_aInputEvent.mpTextAttr )
+    if( !m_aInputEvent.mpTextAttr )
+        return;
+
+    vcl::DeletionListener aDel( m_pFrame );
+    // delete preedit in sal (commit an empty string)
+    sendEmptyCommit();
+    if( ! aDel.isDeleted() )
     {
-        vcl::DeletionListener aDel( m_pFrame );
-        // delete preedit in sal (commit an empty string)
-        sendEmptyCommit();
-        if( ! aDel.isDeleted() )
+        // mark previous preedit state again (will e.g. be sent at focus gain)
+        m_aInputEvent.mpTextAttr = m_aInputFlags.data();
+        if( m_bFocused )
         {
-            // mark previous preedit state again (will e.g. be sent at focus gain)
-            m_aInputEvent.mpTextAttr = m_aInputFlags.data();
-            if( m_bFocused )
-            {
-                // begin preedit again
-                GtkSalFrame::getDisplay()->SendInternalEvent( m_pFrame, &m_aInputEvent, SalEvent::ExtTextInput );
-            }
+            // begin preedit again
+            GtkSalFrame::getDisplay()->SendInternalEvent( m_pFrame, &m_aInputEvent, SalEvent::ExtTextInput );
         }
     }
 }

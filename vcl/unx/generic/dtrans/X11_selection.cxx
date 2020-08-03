@@ -345,113 +345,113 @@ void SelectionManager::initialize( const Sequence< Any >& arguments )
             m_xDisplayConnection->addEventHandler( Any(), this, ~0 );
     }
 
-    if( ! m_pDisplay )
+    if( m_pDisplay )
+        return;
+
+    OUString aUDisplay;
+    if( m_xDisplayConnection.is() )
     {
-        OUString aUDisplay;
-        if( m_xDisplayConnection.is() )
-        {
-            Any aIdentifier = m_xDisplayConnection->getIdentifier();
-            aIdentifier >>= aUDisplay;
-        }
+        Any aIdentifier = m_xDisplayConnection->getIdentifier();
+        aIdentifier >>= aUDisplay;
+    }
 
-        OString aDisplayName( OUStringToOString( aUDisplay, RTL_TEXTENCODING_ISO_8859_1 ) );
+    OString aDisplayName( OUStringToOString( aUDisplay, RTL_TEXTENCODING_ISO_8859_1 ) );
 
-        m_pDisplay = XOpenDisplay( aDisplayName.isEmpty() ? nullptr : aDisplayName.getStr());
+    m_pDisplay = XOpenDisplay( aDisplayName.isEmpty() ? nullptr : aDisplayName.getStr());
 
-        if( m_pDisplay )
-        {
+    if( !m_pDisplay )
+        return;
+
 #ifdef SYNCHRONIZE
-            XSynchronize( m_pDisplay, True );
+    XSynchronize( m_pDisplay, True );
 #endif
-            // special targets
-            m_nTARGETSAtom      = getAtom( "TARGETS" );
-            m_nTIMESTAMPAtom    = getAtom( "TIMESTAMP" );
-            m_nTEXTAtom         = getAtom( "TEXT" );
-            m_nINCRAtom         = getAtom( "INCR" );
-            m_nCOMPOUNDAtom     = getAtom( "COMPOUND_TEXT" );
-            m_nMULTIPLEAtom     = getAtom( "MULTIPLE" );
-            m_nImageBmpAtom     = getAtom( "image/bmp" );
+    // special targets
+    m_nTARGETSAtom      = getAtom( "TARGETS" );
+    m_nTIMESTAMPAtom    = getAtom( "TIMESTAMP" );
+    m_nTEXTAtom         = getAtom( "TEXT" );
+    m_nINCRAtom         = getAtom( "INCR" );
+    m_nCOMPOUNDAtom     = getAtom( "COMPOUND_TEXT" );
+    m_nMULTIPLEAtom     = getAtom( "MULTIPLE" );
+    m_nImageBmpAtom     = getAtom( "image/bmp" );
 
-            // Atoms for Xdnd protocol
-            m_nXdndAware        = getAtom( "XdndAware" );
-            m_nXdndEnter        = getAtom( "XdndEnter" );
-            m_nXdndLeave        = getAtom( "XdndLeave" );
-            m_nXdndPosition     = getAtom( "XdndPosition" );
-            m_nXdndStatus       = getAtom( "XdndStatus" );
-            m_nXdndDrop         = getAtom( "XdndDrop" );
-            m_nXdndFinished     = getAtom( "XdndFinished" );
-            m_nXdndSelection    = getAtom( "XdndSelection" );
-            m_nXdndTypeList     = getAtom( "XdndTypeList" );
-            m_nXdndProxy        = getAtom( "XdndProxy" );
-            m_nXdndActionCopy   = getAtom( "XdndActionCopy" );
-            m_nXdndActionMove   = getAtom( "XdndActionMove" );
-            m_nXdndActionLink   = getAtom( "XdndActionLink" );
-            m_nXdndActionAsk    = getAtom( "XdndActionAsk" );
+    // Atoms for Xdnd protocol
+    m_nXdndAware        = getAtom( "XdndAware" );
+    m_nXdndEnter        = getAtom( "XdndEnter" );
+    m_nXdndLeave        = getAtom( "XdndLeave" );
+    m_nXdndPosition     = getAtom( "XdndPosition" );
+    m_nXdndStatus       = getAtom( "XdndStatus" );
+    m_nXdndDrop         = getAtom( "XdndDrop" );
+    m_nXdndFinished     = getAtom( "XdndFinished" );
+    m_nXdndSelection    = getAtom( "XdndSelection" );
+    m_nXdndTypeList     = getAtom( "XdndTypeList" );
+    m_nXdndProxy        = getAtom( "XdndProxy" );
+    m_nXdndActionCopy   = getAtom( "XdndActionCopy" );
+    m_nXdndActionMove   = getAtom( "XdndActionMove" );
+    m_nXdndActionLink   = getAtom( "XdndActionLink" );
+    m_nXdndActionAsk    = getAtom( "XdndActionAsk" );
 
-            // initialize map with member none
-            m_aAtomToString[ 0 ]= "None";
-            m_aAtomToString[ XA_PRIMARY ] = "PRIMARY";
+    // initialize map with member none
+    m_aAtomToString[ 0 ]= "None";
+    m_aAtomToString[ XA_PRIMARY ] = "PRIMARY";
 
-            // create a (invisible) message window
-            m_aWindow = XCreateSimpleWindow( m_pDisplay, DefaultRootWindow( m_pDisplay ),
-                                             10, 10, 10, 10, 0, 0, 1 );
+    // create a (invisible) message window
+    m_aWindow = XCreateSimpleWindow( m_pDisplay, DefaultRootWindow( m_pDisplay ),
+                                     10, 10, 10, 10, 0, 0, 1 );
 
-            // initialize threshold for incremental transfers
-            // ICCCM says it should be smaller that the max request size
-            // which in turn is guaranteed to be at least 16k bytes
-            m_nIncrementalThreshold = XMaxRequestSize( m_pDisplay ) - 1024;
+    // initialize threshold for incremental transfers
+    // ICCCM says it should be smaller that the max request size
+    // which in turn is guaranteed to be at least 16k bytes
+    m_nIncrementalThreshold = XMaxRequestSize( m_pDisplay ) - 1024;
 
-            if( m_aWindow )
-            {
-                // initialize default cursors
-                m_aMoveCursor = createCursor( movedata_curs_bits,
-                                              movedata_mask_bits,
-                                              movedata_curs_width,
-                                              movedata_curs_height,
-                                              movedata_curs_x_hot,
-                                              movedata_curs_y_hot );
-                m_aCopyCursor = createCursor( copydata_curs_bits,
-                                              copydata_mask_bits,
-                                              copydata_curs_width,
-                                              copydata_curs_height,
-                                              copydata_curs_x_hot,
-                                              copydata_curs_y_hot );
-                m_aLinkCursor = createCursor( linkdata_curs_bits,
-                                              linkdata_mask_bits,
-                                              linkdata_curs_width,
-                                              linkdata_curs_height,
-                                              linkdata_curs_x_hot,
-                                              linkdata_curs_y_hot );
-                m_aNoneCursor = createCursor( nodrop_curs_bits,
-                                              nodrop_mask_bits,
-                                              nodrop_curs_width,
-                                              nodrop_curs_height,
-                                              nodrop_curs_x_hot,
-                                              nodrop_curs_y_hot );
+    if( !m_aWindow )
+        return;
 
-                // just interested in SelectionClear/Notify/Request and PropertyChange
-                XSelectInput( m_pDisplay, m_aWindow, PropertyChangeMask );
-                // create the transferable for Drag operations
-                m_xDropTransferable = new X11Transferable( *this, m_nXdndSelection );
-                registerHandler( m_nXdndSelection, *this );
+    // initialize default cursors
+    m_aMoveCursor = createCursor( movedata_curs_bits,
+                                  movedata_mask_bits,
+                                  movedata_curs_width,
+                                  movedata_curs_height,
+                                  movedata_curs_x_hot,
+                                  movedata_curs_y_hot );
+    m_aCopyCursor = createCursor( copydata_curs_bits,
+                                  copydata_mask_bits,
+                                  copydata_curs_width,
+                                  copydata_curs_height,
+                                  copydata_curs_x_hot,
+                                  copydata_curs_y_hot );
+    m_aLinkCursor = createCursor( linkdata_curs_bits,
+                                  linkdata_mask_bits,
+                                  linkdata_curs_width,
+                                  linkdata_curs_height,
+                                  linkdata_curs_x_hot,
+                                  linkdata_curs_y_hot );
+    m_aNoneCursor = createCursor( nodrop_curs_bits,
+                                  nodrop_mask_bits,
+                                  nodrop_curs_width,
+                                  nodrop_curs_height,
+                                  nodrop_curs_x_hot,
+                                  nodrop_curs_y_hot );
 
-                m_aThread = osl_createSuspendedThread( call_SelectionManager_run, this );
-                if( m_aThread )
-                    osl_resumeThread( m_aThread );
+    // just interested in SelectionClear/Notify/Request and PropertyChange
+    XSelectInput( m_pDisplay, m_aWindow, PropertyChangeMask );
+    // create the transferable for Drag operations
+    m_xDropTransferable = new X11Transferable( *this, m_nXdndSelection );
+    registerHandler( m_nXdndSelection, *this );
+
+    m_aThread = osl_createSuspendedThread( call_SelectionManager_run, this );
+    if( m_aThread )
+        osl_resumeThread( m_aThread );
 #if OSL_DEBUG_LEVEL > 1
-                else
-                    SAL_WARN("vcl.unx.dtrans", "SelectionManager::initialize: "
-                            << "creation of dispatch thread failed !.");
+    else
+        SAL_WARN("vcl.unx.dtrans", "SelectionManager::initialize: "
+                << "creation of dispatch thread failed !.");
 #endif
 
-                if (pipe(m_EndThreadPipe) != 0) {
+    if (pipe(m_EndThreadPipe) != 0) {
 #if OSL_DEBUG_LEVEL > 1
-                    SAL_WARN("vcl.unx.dtrans", "Failed to create endThreadPipe.");
+        SAL_WARN("vcl.unx.dtrans", "Failed to create endThreadPipe.");
 #endif
-                    m_EndThreadPipe[0] = m_EndThreadPipe[1] = 0;
-                }
-            }
-        }
+        m_EndThreadPipe[0] = m_EndThreadPipe[1] = 0;
     }
 }
 
@@ -492,29 +492,29 @@ SelectionManager::~SelectionManager()
     SAL_INFO("vcl.unx.dtrans", "shutting down SelectionManager.");
 #endif
 
-    if( m_pDisplay )
-    {
-        deregisterHandler( m_nXdndSelection );
-        // destroy message window
-        if( m_aWindow )
-            XDestroyWindow( m_pDisplay, m_aWindow );
-        // release cursors
-        if (m_aMoveCursor != None)
-            XFreeCursor(m_pDisplay, m_aMoveCursor);
-        if (m_aCopyCursor != None)
-            XFreeCursor(m_pDisplay, m_aCopyCursor);
-        if (m_aLinkCursor != None)
-            XFreeCursor(m_pDisplay, m_aLinkCursor);
-        if (m_aNoneCursor != None)
-            XFreeCursor(m_pDisplay, m_aNoneCursor);
+    if( !m_pDisplay )
+        return;
 
-        // paranoia setting, the drag thread should have
-        // done that already
-        XUngrabPointer( m_pDisplay, CurrentTime );
-        XUngrabKeyboard( m_pDisplay, CurrentTime );
+    deregisterHandler( m_nXdndSelection );
+    // destroy message window
+    if( m_aWindow )
+        XDestroyWindow( m_pDisplay, m_aWindow );
+    // release cursors
+    if (m_aMoveCursor != None)
+        XFreeCursor(m_pDisplay, m_aMoveCursor);
+    if (m_aCopyCursor != None)
+        XFreeCursor(m_pDisplay, m_aCopyCursor);
+    if (m_aLinkCursor != None)
+        XFreeCursor(m_pDisplay, m_aLinkCursor);
+    if (m_aNoneCursor != None)
+        XFreeCursor(m_pDisplay, m_aNoneCursor);
 
-        XCloseDisplay( m_pDisplay );
-    }
+    // paranoia setting, the drag thread should have
+    // done that already
+    XUngrabPointer( m_pDisplay, CurrentTime );
+    XUngrabKeyboard( m_pDisplay, CurrentTime );
+
+    XCloseDisplay( m_pDisplay );
 }
 
 SelectionAdaptor* SelectionManager::getAdaptor( Atom selection )
@@ -2919,44 +2919,44 @@ bool SelectionManager::handleDragEvent( XEvent const & rMessage )
 
 void SelectionManager::accept( sal_Int8 dragOperation, ::Window aDropWindow )
 {
-    if( aDropWindow == m_aCurrentDropWindow )
-    {
+    if( aDropWindow != m_aCurrentDropWindow )
+        return;
+
 #if OSL_DEBUG_LEVEL > 1
-        SAL_INFO("vcl.unx.dtrans", "accept: " << std::hex << dragOperation);
+    SAL_INFO("vcl.unx.dtrans", "accept: " << std::hex << dragOperation);
 #endif
-        Atom nAction = None;
-        dragOperation &= (DNDConstants::ACTION_MOVE | DNDConstants::ACTION_COPY | DNDConstants::ACTION_LINK);
-        if( dragOperation & DNDConstants::ACTION_MOVE )
-            nAction = m_nXdndActionMove;
-        else if( dragOperation & DNDConstants::ACTION_COPY )
-            nAction = m_nXdndActionCopy;
-        else if( dragOperation & DNDConstants::ACTION_LINK )
-            nAction = m_nXdndActionLink;
-        m_bLastDropAccepted = true;
-        sendDragStatus( nAction );
-    }
+    Atom nAction = None;
+    dragOperation &= (DNDConstants::ACTION_MOVE | DNDConstants::ACTION_COPY | DNDConstants::ACTION_LINK);
+    if( dragOperation & DNDConstants::ACTION_MOVE )
+        nAction = m_nXdndActionMove;
+    else if( dragOperation & DNDConstants::ACTION_COPY )
+        nAction = m_nXdndActionCopy;
+    else if( dragOperation & DNDConstants::ACTION_LINK )
+        nAction = m_nXdndActionLink;
+    m_bLastDropAccepted = true;
+    sendDragStatus( nAction );
 }
 
 void SelectionManager::reject( ::Window aDropWindow )
 {
-    if( aDropWindow == m_aCurrentDropWindow )
-    {
+    if( aDropWindow != m_aCurrentDropWindow )
+        return;
+
 #if OSL_DEBUG_LEVEL > 1
-        SAL_INFO("vcl.unx.dtrans", "reject.");
+    SAL_INFO("vcl.unx.dtrans", "reject.");
 #endif
-        m_bLastDropAccepted = false;
-        sendDragStatus( None );
-        if( m_bDropSent && m_xDragSourceListener.is() )
-        {
-            DragSourceDropEvent dsde;
-            dsde.Source             = static_cast< OWeakObject* >(this);
-            dsde.DragSourceContext  = new DragSourceContext( m_aDropWindow, *this );
-            dsde.DragSource         = static_cast< XDragSource* >(this);
-            dsde.DropAction         = DNDConstants::ACTION_NONE;
-            dsde.DropSuccess        = false;
-            m_xDragSourceListener->dragDropEnd( dsde );
-            m_xDragSourceListener.clear();
-        }
+    m_bLastDropAccepted = false;
+    sendDragStatus( None );
+    if( m_bDropSent && m_xDragSourceListener.is() )
+    {
+        DragSourceDropEvent dsde;
+        dsde.Source             = static_cast< OWeakObject* >(this);
+        dsde.DragSourceContext  = new DragSourceContext( m_aDropWindow, *this );
+        dsde.DragSource         = static_cast< XDragSource* >(this);
+        dsde.DropAction         = DNDConstants::ACTION_NONE;
+        dsde.DropSuccess        = false;
+        m_xDragSourceListener->dragDropEnd( dsde );
+        m_xDragSourceListener.clear();
     }
 }
 

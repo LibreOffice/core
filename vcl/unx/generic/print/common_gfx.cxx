@@ -476,49 +476,49 @@ PrinterGfx::DrawPolyLineBezier (sal_uInt32 nPoints, const Point* pPath, const Po
     const sal_uInt32 nBezString= 1024;
     char pString[nBezString];
 
-    if ( nPoints > 1 && maLineColor.Is() && pPath )
+    if ( nPoints <= 1 || !maLineColor.Is() || !pPath )
+        return;
+
+    PSSetColor (maLineColor);
+    PSSetColor ();
+    PSSetLineWidth ();
+
+    snprintf(pString, nBezString, "%li %li moveto\n", pPath[0].X(), pPath[0].Y());
+    WritePS(mpPageBody, pString);
+
+    // Handle the drawing of mixed lines mixed with curves
+    // - a normal point followed by a normal point is a line
+    // - a normal point followed by 2 control points and a normal point is a curve
+    for (unsigned int i=1; i<nPoints;)
     {
-        PSSetColor (maLineColor);
-        PSSetColor ();
-        PSSetLineWidth ();
-
-        snprintf(pString, nBezString, "%li %li moveto\n", pPath[0].X(), pPath[0].Y());
-        WritePS(mpPageBody, pString);
-
-        // Handle the drawing of mixed lines mixed with curves
-        // - a normal point followed by a normal point is a line
-        // - a normal point followed by 2 control points and a normal point is a curve
-        for (unsigned int i=1; i<nPoints;)
+        if (pFlgAry[i] != PolyFlags::Control) //If the next point is a PolyFlags::Normal, we're drawing a line
         {
-            if (pFlgAry[i] != PolyFlags::Control) //If the next point is a PolyFlags::Normal, we're drawing a line
-            {
-                snprintf(pString, nBezString, "%li %li lineto\n", pPath[i].X(), pPath[i].Y());
-                i++;
-            }
-            else //Otherwise we're drawing a spline
-            {
-                if (i+2 >= nPoints)
-                    return; //Error: wrong sequence of control/normal points somehow
-                if ((pFlgAry[i] == PolyFlags::Control) && (pFlgAry[i+1] == PolyFlags::Control) &&
-                    (pFlgAry[i+2] != PolyFlags::Control))
-                {
-                    snprintf(pString, nBezString, "%li %li %li %li %li %li curveto\n",
-                             pPath[i].X(), pPath[i].Y(),
-                             pPath[i+1].X(), pPath[i+1].Y(),
-                             pPath[i+2].X(), pPath[i+2].Y());
-                }
-                else
-                {
-                    OSL_FAIL( "PrinterGfx::DrawPolyLineBezier: Strange output" );
-                }
-                i+=3;
-            }
-            WritePS(mpPageBody, pString);
+            snprintf(pString, nBezString, "%li %li lineto\n", pPath[i].X(), pPath[i].Y());
+            i++;
         }
-
-        // now draw outlines
-        WritePS (mpPageBody, "stroke\n");
+        else //Otherwise we're drawing a spline
+        {
+            if (i+2 >= nPoints)
+                return; //Error: wrong sequence of control/normal points somehow
+            if ((pFlgAry[i] == PolyFlags::Control) && (pFlgAry[i+1] == PolyFlags::Control) &&
+                (pFlgAry[i+2] != PolyFlags::Control))
+            {
+                snprintf(pString, nBezString, "%li %li %li %li %li %li curveto\n",
+                         pPath[i].X(), pPath[i].Y(),
+                         pPath[i+1].X(), pPath[i+1].Y(),
+                         pPath[i+2].X(), pPath[i+2].Y());
+            }
+            else
+            {
+                OSL_FAIL( "PrinterGfx::DrawPolyLineBezier: Strange output" );
+            }
+            i+=3;
+        }
+        WritePS(mpPageBody, pString);
     }
+
+    // now draw outlines
+    WritePS (mpPageBody, "stroke\n");
 }
 
 void
@@ -683,34 +683,34 @@ PrinterGfx::PSSetColor ()
 {
     PrinterColor& rColor( maVirtualStatus.maColor );
 
-    if( currentState().maColor != rColor )
+    if( currentState().maColor == rColor )
+        return;
+
+    currentState().maColor = rColor;
+
+    OStringBuffer pBuffer;
+
+    if( mbColor )
     {
-        currentState().maColor = rColor;
-
-        OStringBuffer pBuffer;
-
-        if( mbColor )
-        {
-            psp::getValueOfDouble (pBuffer,
-                                            static_cast<double>(rColor.GetRed()) / 255.0, 5);
-            psp::appendStr (" ", pBuffer);
-            psp::getValueOfDouble (pBuffer,
-                                            static_cast<double>(rColor.GetGreen()) / 255.0, 5);
-            psp::appendStr (" ", pBuffer);
-            psp::getValueOfDouble (pBuffer,
-                                            static_cast<double>(rColor.GetBlue()) / 255.0, 5);
-            psp::appendStr (" setrgbcolor\n", pBuffer );
-        }
-        else
-        {
-            Color aColor( rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue() );
-            sal_uInt8 nCol = aColor.GetLuminance();
-            psp::getValueOfDouble( pBuffer, static_cast<double>(nCol) / 255.0, 5 );
-            psp::appendStr( " setgray\n", pBuffer );
-        }
-
-        WritePS (mpPageBody, pBuffer.makeStringAndClear());
+        psp::getValueOfDouble (pBuffer,
+                                        static_cast<double>(rColor.GetRed()) / 255.0, 5);
+        psp::appendStr (" ", pBuffer);
+        psp::getValueOfDouble (pBuffer,
+                                        static_cast<double>(rColor.GetGreen()) / 255.0, 5);
+        psp::appendStr (" ", pBuffer);
+        psp::getValueOfDouble (pBuffer,
+                                        static_cast<double>(rColor.GetBlue()) / 255.0, 5);
+        psp::appendStr (" setrgbcolor\n", pBuffer );
     }
+    else
+    {
+        Color aColor( rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue() );
+        sal_uInt8 nCol = aColor.GetLuminance();
+        psp::getValueOfDouble( pBuffer, static_cast<double>(nCol) / 255.0, 5 );
+        psp::appendStr( " setgray\n", pBuffer );
+    }
+
+    WritePS (mpPageBody, pBuffer.makeStringAndClear());
 }
 
 void

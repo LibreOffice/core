@@ -1344,32 +1344,32 @@ void GtkSalMenu::ShowItem( unsigned nPos, bool bShow )
 void GtkSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OUString& rText )
 {
     SolarMutexGuard aGuard;
-    if ( bUnityMode && !mbInActivateCallback && !mbNeedsUpdate && GetTopLevel()->mbMenuBar && ( nPos < maItems.size() ) )
+    if ( !bUnityMode || mbInActivateCallback || mbNeedsUpdate || !GetTopLevel()->mbMenuBar || ( nPos >= maItems.size() ) )
+        return;
+
+    gchar* pCommand = GetCommandForItem( static_cast< GtkSalMenuItem* >( pSalMenuItem ) );
+
+    gint nSectionsCount = g_menu_model_get_n_items( mpMenuModel );
+    for ( gint nSection = 0; nSection < nSectionsCount; ++nSection )
     {
-        gchar* pCommand = GetCommandForItem( static_cast< GtkSalMenuItem* >( pSalMenuItem ) );
-
-        gint nSectionsCount = g_menu_model_get_n_items( mpMenuModel );
-        for ( gint nSection = 0; nSection < nSectionsCount; ++nSection )
+        gint nItemsCount = g_lo_menu_get_n_items_from_section( G_LO_MENU( mpMenuModel ), nSection );
+        for ( gint nItem = 0; nItem < nItemsCount; ++nItem )
         {
-            gint nItemsCount = g_lo_menu_get_n_items_from_section( G_LO_MENU( mpMenuModel ), nSection );
-            for ( gint nItem = 0; nItem < nItemsCount; ++nItem )
+            gchar* pCommandFromModel = g_lo_menu_get_command_from_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItem );
+
+            if ( !g_strcmp0( pCommandFromModel, pCommand ) )
             {
-                gchar* pCommandFromModel = g_lo_menu_get_command_from_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItem );
-
-                if ( !g_strcmp0( pCommandFromModel, pCommand ) )
-                {
-                    NativeSetItemText( nSection, nItem, rText );
-                    g_free( pCommandFromModel );
-                    g_free( pCommand );
-                    return;
-                }
-
+                NativeSetItemText( nSection, nItem, rText );
                 g_free( pCommandFromModel );
+                g_free( pCommand );
+                return;
             }
-        }
 
-        g_free( pCommand );
+            g_free( pCommandFromModel );
+        }
     }
+
+    g_free( pCommand );
 }
 
 void GtkSalMenu::SetItemImage( unsigned, SalMenuItem*, const Image& )

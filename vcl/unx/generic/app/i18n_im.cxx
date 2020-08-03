@@ -192,35 +192,35 @@ SalI18N_InputMethod::SetLocale()
 {
     // check whether we want an Input Method engine, if we don't we
     // do not need to set the locale
-    if ( mbUseable )
+    if ( !mbUseable )
+        return;
+
+    char *locale = SetSystemLocale( "" );
+    if ( (!IsXWindowCompatibleLocale(locale)) || IsPosixLocale(locale) )
     {
-        char *locale = SetSystemLocale( "" );
-        if ( (!IsXWindowCompatibleLocale(locale)) || IsPosixLocale(locale) )
-        {
-            osl_setThreadTextEncoding (RTL_TEXTENCODING_ISO_8859_1);
-            locale = SetSystemLocale( "en_US" );
+        osl_setThreadTextEncoding (RTL_TEXTENCODING_ISO_8859_1);
+        locale = SetSystemLocale( "en_US" );
 #ifdef __sun
-            SetSystemEnvironment( "en_US" );
+        SetSystemEnvironment( "en_US" );
+#endif
+        if (! IsXWindowCompatibleLocale(locale))
+        {
+            locale = SetSystemLocale( "C" );
+#ifdef __sun
+            SetSystemEnvironment( "C" );
 #endif
             if (! IsXWindowCompatibleLocale(locale))
-            {
-                locale = SetSystemLocale( "C" );
-#ifdef __sun
-                SetSystemEnvironment( "C" );
-#endif
-                if (! IsXWindowCompatibleLocale(locale))
-                    mbUseable = False;
-            }
+                mbUseable = False;
         }
+    }
 
-        // must not fail if mbUseable since XSupportsLocale() asserts success
-        if ( mbUseable && XSetLocaleModifiers("") == nullptr )
-        {
-            SAL_WARN("vcl.app",
-                    "I18N: Can't set X modifiers for locale \""
-                    << locale << "\".");
-            mbUseable = False;
-        }
+    // must not fail if mbUseable since XSupportsLocale() asserts success
+    if ( mbUseable && XSetLocaleModifiers("") == nullptr )
+    {
+        SAL_WARN("vcl.app",
+                "I18N: Can't set X modifiers for locale \""
+                << locale << "\".");
+        mbUseable = False;
     }
 }
 

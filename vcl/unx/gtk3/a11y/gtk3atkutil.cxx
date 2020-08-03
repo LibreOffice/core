@@ -317,20 +317,20 @@ void DocumentFocusListener::attachRecursive(
 
     // If not already done, add the broadcaster to the list and attach as listener.
     const uno::Reference< uno::XInterface >& xInterface = xBroadcaster;
-    if( m_aRefList.insert(xInterface).second )
+    if( !m_aRefList.insert(xInterface).second )
+        return;
+
+    xBroadcaster->addAccessibleEventListener(static_cast< accessibility::XAccessibleEventListener *>(this));
+
+    if( ! xStateSet->contains(accessibility::AccessibleStateType::MANAGES_DESCENDANTS ) )
     {
-        xBroadcaster->addAccessibleEventListener(static_cast< accessibility::XAccessibleEventListener *>(this));
-
-        if( ! xStateSet->contains(accessibility::AccessibleStateType::MANAGES_DESCENDANTS ) )
+        sal_Int32 n, nmax = xContext->getAccessibleChildCount();
+        for( n = 0; n < nmax; n++ )
         {
-            sal_Int32 n, nmax = xContext->getAccessibleChildCount();
-            for( n = 0; n < nmax; n++ )
-            {
-                uno::Reference< accessibility::XAccessible > xChild( xContext->getAccessibleChild( n ) );
+            uno::Reference< accessibility::XAccessible > xChild( xContext->getAccessibleChild( n ) );
 
-                if( xChild.is() )
-                    attachRecursive(xChild);
-            }
+            if( xChild.is() )
+                attachRecursive(xChild);
         }
     }
 }
@@ -370,20 +370,20 @@ void DocumentFocusListener::detachRecursive(
 {
     uno::Reference< accessibility::XAccessibleEventBroadcaster > xBroadcaster(xContext, uno::UNO_QUERY);
 
-    if( xBroadcaster.is() && 0 < m_aRefList.erase(xBroadcaster) )
+    if( !xBroadcaster.is() || 0 >= m_aRefList.erase(xBroadcaster) )
+        return;
+
+    xBroadcaster->removeAccessibleEventListener(static_cast< accessibility::XAccessibleEventListener *>(this));
+
+    if( ! xStateSet->contains(accessibility::AccessibleStateType::MANAGES_DESCENDANTS ) )
     {
-        xBroadcaster->removeAccessibleEventListener(static_cast< accessibility::XAccessibleEventListener *>(this));
-
-        if( ! xStateSet->contains(accessibility::AccessibleStateType::MANAGES_DESCENDANTS ) )
+        sal_Int32 n, nmax = xContext->getAccessibleChildCount();
+        for( n = 0; n < nmax; n++ )
         {
-            sal_Int32 n, nmax = xContext->getAccessibleChildCount();
-            for( n = 0; n < nmax; n++ )
-            {
-                uno::Reference< accessibility::XAccessible > xChild( xContext->getAccessibleChild( n ) );
+            uno::Reference< accessibility::XAccessible > xChild( xContext->getAccessibleChild( n ) );
 
-                if( xChild.is() )
-                    detachRecursive(xChild);
-            }
+            if( xChild.is() )
+                detachRecursive(xChild);
         }
     }
 }
