@@ -31,53 +31,50 @@ using namespace editeng;
 namespace svx::frame
 {
 
-// Classes
-void Style::implEnsureImplStyle()
+Style::Style()
 {
-    if(!maImplStyle)
-    {
-        maImplStyle = std::make_shared<implStyle>();
-    }
+    Clear();
 }
 
-Style::Style() :
-    maImplStyle()
+Style::Style( double nP, double nD, double nS, SvxBorderLineStyle nType, double fScale )
 {
-}
-
-Style::Style( double nP, double nD, double nS, SvxBorderLineStyle nType, double fScale ) :
-    maImplStyle(std::make_shared<implStyle>())
-{
-    maImplStyle->mnType = nType;
-    maImplStyle->mfPatternScale = fScale;
+    Clear();
+    mnType = nType;
+    mfPatternScale = fScale;
     Set( nP, nD, nS );
 }
 
-Style::Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor, double nP, double nD, double nS, SvxBorderLineStyle nType, double fScale ) :
-    maImplStyle(std::make_shared<implStyle>())
+Style::Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor, double nP, double nD, double nS, SvxBorderLineStyle nType, double fScale )
 {
-    maImplStyle->mnType = nType;
-    maImplStyle->mfPatternScale = fScale;
+    Clear();
+    mnType = nType;
+    mfPatternScale = fScale;
     Set( rColorPrim, rColorSecn, rColorGap, bUseGapColor, nP, nD, nS );
 }
 
-Style::Style( const editeng::SvxBorderLine* pBorder, double fScale ) :
-    maImplStyle()
+Style::Style( const editeng::SvxBorderLine* pBorder, double fScale )
 {
+    Clear();
     if(nullptr != pBorder)
     {
-        maImplStyle = std::make_shared<implStyle>();
-        maImplStyle->mfPatternScale = fScale;
+        mfPatternScale = fScale;
         Set( pBorder, fScale );
     }
 }
 
 void Style::Clear()
 {
-    if(maImplStyle)
-    {
-        maImplStyle.reset();
-    }
+    maColorPrim = Color();
+    maColorSecn = Color();
+    maColorGap = Color();
+    mbUseGapColor = false;
+    meRefMode = RefMode::Centered;
+    mfPrim = 0.0;
+    mfDist = 0.0;
+    mfSecn = 0.0;
+    mfPatternScale = 1.0;
+    mnType = SvxBorderLineStyle::SOLID;
+    mbWordTableCell = false;
 }
 
 void Style::Set( double nP, double nD, double nS )
@@ -89,21 +86,17 @@ void Style::Set( double nP, double nD, double nS )
         >0  0   >0      nP      0       0
         >0  >0  >0      nP      nD      nS
      */
-    implEnsureImplStyle();
-    implStyle* pTarget = maImplStyle.get();
-    pTarget->mfPrim = rtl::math::round(nP ? nP : nS, 2);
-    pTarget->mfDist = rtl::math::round((nP && nS) ? nD : 0, 2);
-    pTarget->mfSecn = rtl::math::round((nP && nD) ? nS : 0, 2);
+    mfPrim = rtl::math::round(nP ? nP : nS, 2);
+    mfDist = rtl::math::round((nP && nS) ? nD : 0, 2);
+    mfSecn = rtl::math::round((nP && nD) ? nS : 0, 2);
 }
 
 void Style::Set( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor, double nP, double nD, double nS )
 {
-    implEnsureImplStyle();
-    implStyle* pTarget = maImplStyle.get();
-    pTarget->maColorPrim = rColorPrim;
-    pTarget->maColorSecn = rColorSecn;
-    pTarget->maColorGap = rColorGap;
-    pTarget->mbUseGapColor = bUseGapColor;
+    maColorPrim = rColorPrim;
+    maColorSecn = rColorSecn;
+    maColorGap = rColorGap;
+    mbUseGapColor = bUseGapColor;
     Set( nP, nD, nS );
 }
 
@@ -115,19 +108,17 @@ void Style::Set( const SvxBorderLine* pBorder, double fScale, sal_uInt16 nMaxWid
         return;
     }
 
-    implEnsureImplStyle();
-    implStyle* pTarget = maImplStyle.get();
-    pTarget->maColorPrim = pBorder->GetColorOut();
-    pTarget->maColorSecn = pBorder->GetColorIn();
-    pTarget->maColorGap = pBorder->GetColorGap();
-    pTarget->mbUseGapColor = pBorder->HasGapColor();
+    maColorPrim = pBorder->GetColorOut();
+    maColorSecn = pBorder->GetColorIn();
+    maColorGap = pBorder->GetColorGap();
+    mbUseGapColor = pBorder->HasGapColor();
 
     const sal_uInt16 nPrim(pBorder->GetOutWidth());
     const sal_uInt16 nDist(pBorder->GetDistance());
     const sal_uInt16 nSecn(pBorder->GetInWidth());
 
-    pTarget->mnType = pBorder->GetBorderLineStyle();
-    pTarget->mfPatternScale = fScale;
+    mnType = pBorder->GetBorderLineStyle();
+    mfPatternScale = fScale;
 
     if( !nSecn )    // no or single frame border
     {
@@ -141,148 +132,57 @@ void Style::Set( const SvxBorderLine* pBorder, double fScale, sal_uInt16 nMaxWid
 
         if( nPixWidth > GetWidth() )
         {
-            pTarget->mfDist = nPixWidth - pTarget->mfPrim - pTarget->mfSecn;
+            mfDist = nPixWidth - mfPrim - mfSecn;
         }
 
         // Shrink the style if it is too thick for the control.
         while( GetWidth() > nMaxWidth )
         {
             // First decrease space between lines.
-            if (pTarget->mfDist)
+            if (mfDist)
             {
-                --(pTarget->mfDist);
+                --mfDist;
                 continue;
             }
 
             // Still too thick? Decrease the line widths.
-            if (pTarget->mfPrim != 0.0 && rtl::math::approxEqual(pTarget->mfPrim, pTarget->mfSecn))
+            if (mfPrim != 0.0 && rtl::math::approxEqual(mfPrim, mfSecn))
             {
                 // Both lines equal - decrease both to keep symmetry.
-                --(pTarget->mfPrim);
-                --(pTarget->mfSecn);
+                --mfPrim;
+                --mfSecn;
                 continue;
             }
 
             // Decrease each line for itself
-            if (pTarget->mfPrim)
-            {
-                --(pTarget->mfPrim);
-            }
+            if (mfPrim)
+                --mfPrim;
 
-            if ((GetWidth() > nMaxWidth) && pTarget->mfSecn != 0.0)
-            {
-                --(pTarget->mfSecn);
-            }
+            if ((GetWidth() > nMaxWidth) && mfSecn != 0.0)
+                --mfSecn;
         }
     }
-}
-
-void Style::SetRefMode( RefMode eRefMode )
-{
-    if(!maImplStyle)
-    {
-        if(RefMode::Centered == eRefMode)
-        {
-            return;
-        }
-
-        implEnsureImplStyle();
-    }
-
-    maImplStyle->meRefMode = eRefMode;
-}
-
-void Style::SetColorPrim( const Color& rColor )
-{
-    if(!maImplStyle)
-    {
-        if(Color() == rColor)
-        {
-            return;
-        }
-
-        implEnsureImplStyle();
-    }
-
-    maImplStyle->maColorPrim = rColor;
-}
-
-void Style::SetColorSecn( const Color& rColor )
-{
-    if(!maImplStyle)
-    {
-        if(Color() == rColor)
-        {
-            return;
-        }
-
-        implEnsureImplStyle();
-    }
-
-    maImplStyle->maColorSecn = rColor;
-}
-
-void Style::SetType( SvxBorderLineStyle nType )
-{
-    if(!maImplStyle)
-    {
-        if(SvxBorderLineStyle::SOLID == nType)
-        {
-            return;
-        }
-
-        implEnsureImplStyle();
-    }
-
-    maImplStyle->mnType = nType;
 }
 
 Style& Style::MirrorSelf()
 {
-    if(!maImplStyle)
+    if (mfSecn)
     {
-        return *this;
-    }
-
-    implStyle* pTarget = maImplStyle.get();
-
-    if (pTarget->mfSecn)
-    {
-        std::swap( pTarget->mfPrim, pTarget->mfSecn );
+        std::swap( mfPrim, mfSecn );
         // also need to swap colors
-        std::swap( pTarget->maColorPrim, pTarget->maColorSecn );
+        std::swap( maColorPrim, maColorSecn );
     }
 
-    if( pTarget->meRefMode != RefMode::Centered )
+    if( meRefMode != RefMode::Centered )
     {
-        pTarget->meRefMode = (pTarget->meRefMode == RefMode::Begin) ? RefMode::End : RefMode::Begin;
+        meRefMode = (meRefMode == RefMode::Begin) ? RefMode::End : RefMode::Begin;
     }
 
     return *this;
 }
 
-void Style::SetWordTableCell(bool bWordTableCell)
-{
-    if (!maImplStyle)
-    {
-        implEnsureImplStyle();
-    }
-
-    maImplStyle->mbWordTableCell = bWordTableCell;
-}
-
 bool Style::operator==( const Style& rOther) const
 {
-    if(!maImplStyle && !rOther.maImplStyle)
-    {
-        return true;
-    }
-
-    if(maImplStyle && rOther.maImplStyle && maImplStyle.get() == rOther.maImplStyle.get())
-    {
-        return true;
-    }
-
     return (Prim() == rOther.Prim()
         && Dist() == rOther.Dist()
         && Secn() == rOther.Secn()
@@ -391,13 +291,7 @@ double GetWordTableCellBorderWeight(const Style& rStyle)
 
 bool Style::operator<( const Style& rOther) const
 {
-    if(!maImplStyle && !rOther.maImplStyle)
-    {
-        // are equal
-        return false;
-    }
-
-    if (maImplStyle && maImplStyle->mbWordTableCell)
+    if (mbWordTableCell)
     {
         // The below code would first compare based on the border width, Word compares based on its
         // calculated weight, do that in the compat case.

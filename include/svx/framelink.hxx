@@ -35,7 +35,7 @@ namespace svx::frame {
 
 /** Specifies how the reference points for frame borders are used.
  */
-enum class RefMode
+enum class RefMode : sal_uInt8
 {
     /** Frame borders are drawn centered to the reference points. */
     Centered,
@@ -100,45 +100,17 @@ enum class RefMode
 class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC Style
 {
 private:
-    class implStyle
-    {
-    private:
-        friend class Style;
-
-        Color               maColorPrim;
-        Color               maColorSecn;
-        Color               maColorGap;
-        bool                mbUseGapColor;
-        RefMode             meRefMode;  /// Reference point handling for this frame border.
-        double              mfPrim;     /// Width of primary (single, left, or top) line.
-        double              mfDist;     /// Distance between primary and secondary line.
-        double              mfSecn;     /// Width of secondary (right or bottom) line.
-        double              mfPatternScale; /// Scale used for line pattern spacing.
-        SvxBorderLineStyle  mnType;
-        bool mbWordTableCell;
-
-    public:
-        /** Constructs an invisible frame style. */
-        explicit implStyle() :
-            maColorPrim(),
-            maColorSecn(),
-            maColorGap(),
-            mbUseGapColor(false),
-            meRefMode(RefMode::Centered),
-            mfPrim(0.0),
-            mfDist(0.0),
-            mfSecn(0.0),
-            mfPatternScale(1.0),
-            mnType(SvxBorderLineStyle::SOLID),
-            mbWordTableCell(false)
-        {}
-    };
-
-    /// the impl class holding the data
-    std::shared_ptr< implStyle >        maImplStyle;
-
-    /// call to set maImplStyle on demand
-    void implEnsureImplStyle();
+    Color               maColorPrim;
+    Color               maColorSecn;
+    Color               maColorGap;
+    double              mfPrim;     /// Width of primary (single, left, or top) line.
+    double              mfDist;     /// Distance between primary and secondary line.
+    double              mfSecn;     /// Width of secondary (right or bottom) line.
+    double              mfPatternScale; /// Scale used for line pattern spacing.
+    RefMode             meRefMode;  /// Reference point handling for this frame border.
+    SvxBorderLineStyle  mnType;
+    bool                mbWordTableCell : 1;
+    bool                mbUseGapColor : 1;
 
 public:
     /** Constructs an invisible frame style. */
@@ -150,23 +122,23 @@ public:
     /** Constructs a frame style from the passed SvxBorderLine struct. */
     explicit Style( const editeng::SvxBorderLine* pBorder, double fScale );
 
-    RefMode GetRefMode() const { if(!maImplStyle) return RefMode::Centered; return maImplStyle->meRefMode; }
-    Color GetColorPrim() const { if(!maImplStyle) return Color(); return maImplStyle->maColorPrim; }
-    Color GetColorSecn() const { if(!maImplStyle) return Color(); return maImplStyle->maColorSecn; }
-    Color GetColorGap() const { if(!maImplStyle) return Color(); return maImplStyle->maColorGap; }
-    bool UseGapColor() const { if(!maImplStyle) return false; return maImplStyle->mbUseGapColor; }
-    double Prim() const { if(!maImplStyle) return 0.0; return maImplStyle->mfPrim; }
-    double Dist() const { if(!maImplStyle) return 0.0; return maImplStyle->mfDist; }
-    double Secn() const { if(!maImplStyle) return 0.0; return maImplStyle->mfSecn; }
-    double PatternScale() const { if(!maImplStyle) return 1.0; return maImplStyle->mfPatternScale;}
-    SvxBorderLineStyle Type() const { if(!maImplStyle) return SvxBorderLineStyle::SOLID; return maImplStyle->mnType; }
+    RefMode GetRefMode() const { return meRefMode; }
+    Color GetColorPrim() const { return maColorPrim; }
+    Color GetColorSecn() const { return maColorSecn; }
+    Color GetColorGap() const { return maColorGap; }
+    bool UseGapColor() const { return mbUseGapColor; }
+    double Prim() const { return mfPrim; }
+    double Dist() const { return mfDist; }
+    double Secn() const { return mfSecn; }
+    double PatternScale() const { return mfPatternScale;}
+    SvxBorderLineStyle Type() const { return mnType; }
 
     /// Check if this style is used - this depends on it having any width definition.
     /// As can be seen in the definition comment above, Prim() *must* be non zero to have a width
-    bool IsUsed() const { if(!maImplStyle) return false; return 0.0 != maImplStyle->mfPrim; }
+    bool IsUsed() const { return 0.0 != mfPrim; }
 
     /** Returns the total width of this frame style. */
-    double GetWidth() const { if(!maImplStyle) return 0.0; implStyle* pTarget = maImplStyle.get(); return pTarget->mfPrim + pTarget->mfDist + pTarget->mfSecn; }
+    double GetWidth() const { return mfPrim + mfDist + mfSecn; }
 
     /** Sets the frame style to invisible state. */
     void Clear();
@@ -178,18 +150,18 @@ public:
     void Set( const editeng::SvxBorderLine* pBorder, double fScale, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 );
 
     /** Sets a new reference point handling mode, does not modify other settings. */
-    void SetRefMode( RefMode eRefMode );
+    void SetRefMode( RefMode eRefMode ) { meRefMode = eRefMode; }
     /** Sets a new color, does not modify other settings. */
-    void SetColorPrim( const Color& rColor );
-    void SetColorSecn( const Color& rColor );
+    void SetColorPrim( const Color& rColor ) { maColorPrim = rColor; }
+    void SetColorSecn( const Color& rColor ) { maColorSecn = rColor; }
     /** Sets whether to use dotted style for single hair lines. */
-    void SetType( SvxBorderLineStyle nType );
+    void SetType( SvxBorderLineStyle nType ) { mnType = nType; }
 
     /** Mirrors this style (exchanges primary and secondary), if it is a double frame style. */
     Style& MirrorSelf();
 
     /** Enables the Word-compatible Style comparison code. */
-    void SetWordTableCell(bool bWordTableCell);
+    void SetWordTableCell(bool bWordTableCell) { mbWordTableCell = bWordTableCell; }
 
     bool operator==( const Style& rOther) const;
     bool operator<( const Style& rOther) const;
