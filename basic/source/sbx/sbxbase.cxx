@@ -48,9 +48,6 @@ SbxAppData::~SbxAppData()
     pBasicFormater.reset();
     // basic manager repository must be destroyed before factories
     mrImplRepository.clear();
-    // we need to move stuff out otherwise the destruction of the factories
-    // calls back into SbxBase::RemoveFactory and sees partially destructed data
-    std::move(m_Factories);
 }
 
 SbxBase::SbxBase()
