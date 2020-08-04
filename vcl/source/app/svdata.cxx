@@ -388,19 +388,19 @@ void SetSVWinData(ImplSVWinData* pSVWinData)
     ImplSVData* pSVData = ImplGetSVData();
     assert(pSVData != nullptr);
 
-    if (pSVData->mpWinData != pSVWinData)
-    {
-        // If current one is the static, clean it up to avoid having lingering references.
-        if (pSVData->mpWinData == &private_aImplSVWinData::get())
-        {
-            pSVData->mpWinData->mpFocusWin.reset();
-        }
+    if (pSVData->mpWinData == pSVWinData)
+        return;
 
-        pSVData->mpWinData = pSVWinData;
-        if (pSVData->mpWinData == nullptr)
-        {
-            pSVData->mpWinData = &private_aImplSVWinData::get(); // Never leave it null.
-        }
+    // If current one is the static, clean it up to avoid having lingering references.
+    if (pSVData->mpWinData == &private_aImplSVWinData::get())
+    {
+        pSVData->mpWinData->mpFocusWin.reset();
+    }
+
+    pSVData->mpWinData = pSVWinData;
+    if (pSVData->mpWinData == nullptr)
+    {
+        pSVData->mpWinData = &private_aImplSVWinData::get(); // Never leave it null.
     }
 }
 
@@ -453,19 +453,19 @@ void SetSVHelpData(ImplSVHelpData* pSVHelpData)
         return;
 
     ImplSVData* pSVData = ImplGetSVData();
-    if (pSVData->mpHelpData != pSVHelpData)
-    {
-        // If current one is the static, clean it up to avoid having lingering references.
-        if (pSVData->mpHelpData == &private_aImplSVHelpData::get())
-        {
-            pSVData->mpHelpData->mpHelpWin.reset();
-        }
+    if (pSVData->mpHelpData == pSVHelpData)
+        return;
 
-        pSVData->mpHelpData = pSVHelpData;
-        if (pSVData->mpHelpData == nullptr)
-        {
-            pSVData->mpHelpData = &private_aImplSVHelpData::get(); // Never leave it null.
-        }
+    // If current one is the static, clean it up to avoid having lingering references.
+    if (pSVData->mpHelpData == &private_aImplSVHelpData::get())
+    {
+        pSVData->mpHelpData->mpHelpWin.reset();
+    }
+
+    pSVData->mpHelpData = pSVHelpData;
+    if (pSVData->mpHelpData == nullptr)
+    {
+        pSVData->mpHelpData = &private_aImplSVHelpData::get(); // Never leave it null.
     }
 }
 

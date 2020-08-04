@@ -1205,28 +1205,28 @@ public:
 void CollectChildren(const vcl::Window& rCurrent, const basegfx::B2IPoint& rTopLeft,
                      weld::ScreenShotCollection& rControlDataCollection)
 {
-    if (rCurrent.IsVisible())
+    if (!rCurrent.IsVisible())
+        return;
+
+    const Point aCurrentPos(rCurrent.GetPosPixel());
+    const Size aCurrentSize(rCurrent.GetSizePixel());
+    const basegfx::B2IPoint aCurrentTopLeft(rTopLeft.getX() + aCurrentPos.X(),
+                                            rTopLeft.getY() + aCurrentPos.Y());
+    const basegfx::B2IRange aCurrentRange(
+        aCurrentTopLeft,
+        aCurrentTopLeft + basegfx::B2IPoint(aCurrentSize.Width(), aCurrentSize.Height()));
+
+    if (!aCurrentRange.isEmpty())
     {
-        const Point aCurrentPos(rCurrent.GetPosPixel());
-        const Size aCurrentSize(rCurrent.GetSizePixel());
-        const basegfx::B2IPoint aCurrentTopLeft(rTopLeft.getX() + aCurrentPos.X(),
-                                                rTopLeft.getY() + aCurrentPos.Y());
-        const basegfx::B2IRange aCurrentRange(
-            aCurrentTopLeft,
-            aCurrentTopLeft + basegfx::B2IPoint(aCurrentSize.Width(), aCurrentSize.Height()));
+        rControlDataCollection.emplace_back(rCurrent.GetHelpId(), aCurrentRange);
+    }
 
-        if (!aCurrentRange.isEmpty())
+    for (sal_uInt16 a(0); a < rCurrent.GetChildCount(); a++)
+    {
+        vcl::Window* pChild = rCurrent.GetChild(a);
+        if (nullptr != pChild)
         {
-            rControlDataCollection.emplace_back(rCurrent.GetHelpId(), aCurrentRange);
-        }
-
-        for (sal_uInt16 a(0); a < rCurrent.GetChildCount(); a++)
-        {
-            vcl::Window* pChild = rCurrent.GetChild(a);
-            if (nullptr != pChild)
-            {
-                CollectChildren(*pChild, aCurrentTopLeft, rControlDataCollection);
-            }
+            CollectChildren(*pChild, aCurrentTopLeft, rControlDataCollection);
         }
     }
 }
@@ -4651,21 +4651,22 @@ public:
         assert(col >= 0 && "cannot sort on expander column");
 
         LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get());
-        if (HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr)
+        HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr;
+        if (!pHeaderBar)
+            return;
+
+        sal_uInt16 nTextId = pHeaderBar->GetItemId(col);
+        HeaderBarItemBits nBits = pHeaderBar->GetItemBits(nTextId);
+        nBits &= ~HeaderBarItemBits::UPARROW;
+        nBits &= ~HeaderBarItemBits::DOWNARROW;
+        if (eState != TRISTATE_INDET)
         {
-            sal_uInt16 nTextId = pHeaderBar->GetItemId(col);
-            HeaderBarItemBits nBits = pHeaderBar->GetItemBits(nTextId);
-            nBits &= ~HeaderBarItemBits::UPARROW;
-            nBits &= ~HeaderBarItemBits::DOWNARROW;
-            if (eState != TRISTATE_INDET)
-            {
-                if (eState == TRISTATE_TRUE)
-                    nBits |= HeaderBarItemBits::DOWNARROW;
-                else
-                    nBits |= HeaderBarItemBits::UPARROW;
-            }
-            pHeaderBar->SetItemBits(nTextId, nBits);
+            if (eState == TRISTATE_TRUE)
+                nBits |= HeaderBarItemBits::DOWNARROW;
+            else
+                nBits |= HeaderBarItemBits::UPARROW;
         }
+        pHeaderBar->SetItemBits(nTextId, nBits);
     }
 
     virtual TriState get_sort_indicator(int col) const override
@@ -6381,25 +6382,25 @@ IMPL_LINK(SalInstanceEntryTreeView, KeyPressListener, VclWindowEvent&, rEvent, v
         return;
     const KeyEvent& rKeyEvent = *static_cast<KeyEvent*>(rEvent.GetData());
     sal_uInt16 nKeyCode = rKeyEvent.GetKeyCode().GetCode();
-    if (nKeyCode == KEY_UP || nKeyCode == KEY_DOWN || nKeyCode == KEY_PAGEUP
-        || nKeyCode == KEY_PAGEDOWN)
+    if (!(nKeyCode == KEY_UP || nKeyCode == KEY_DOWN || nKeyCode == KEY_PAGEUP
+        || nKeyCode == KEY_PAGEDOWN))
+        return;
+
+    m_pTreeView->disable_notify_events();
+    auto& rListBox = m_pTreeView->getTreeView();
+    if (!rListBox.FirstSelected())
     {
-        m_pTreeView->disable_notify_events();
-        auto& rListBox = m_pTreeView->getTreeView();
-        if (!rListBox.FirstSelected())
-        {
-            if (SvTreeListEntry* pEntry = rListBox.First())
-                rListBox.Select(pEntry, true);
-        }
-        else
-            rListBox.KeyInput(rKeyEvent);
-        m_xEntry->set_text(m_xTreeView->get_selected_text());
-        m_xEntry->select_region(0, -1);
-        m_pTreeView->enable_notify_events();
-        m_bTreeChange = true;
-        m_pEntry->fire_signal_changed();
-        m_bTreeChange = false;
+        if (SvTreeListEntry* pEntry = rListBox.First())
+            rListBox.Select(pEntry, true);
     }
+    else
+        rListBox.KeyInput(rKeyEvent);
+    m_xEntry->set_text(m_xTreeView->get_selected_text());
+    m_xEntry->select_region(0, -1);
+    m_pTreeView->enable_notify_events();
+    m_bTreeChange = true;
+    m_pEntry->fire_signal_changed();
+    m_bTreeChange = false;
 }
 
 IMPL_LINK(SalInstanceEntryTreeView, AutocompleteHdl, Edit&, rEdit, void)
@@ -6853,37 +6854,37 @@ void SalInstanceWindow::help()
     weld::Widget* pSource = xTemp ? xTemp.get() : this;
     bool bRunNormalHelpRequest = !m_aHelpRequestHdl.IsSet() || m_aHelpRequestHdl.Call(*pSource);
     Help* pHelp = bRunNormalHelpRequest ? Application::GetHelp() : nullptr;
-    if (pHelp)
+    if (!pHelp)
+        return;
+
+    // tdf#126007, there's a nice fallback route for offline help where
+    // the current page of a notebook will get checked when the help
+    // button is pressed and there was no help for the dialog found.
+    //
+    // But for online help that route doesn't get taken, so bodge this here
+    // by using the page help id if available and if the help button itself
+    // was the original id
+    if (m_pBuilder && sHelpId.endsWith("/help"))
     {
-        // tdf#126007, there's a nice fallback route for offline help where
-        // the current page of a notebook will get checked when the help
-        // button is pressed and there was no help for the dialog found.
-        //
-        // But for online help that route doesn't get taken, so bodge this here
-        // by using the page help id if available and if the help button itself
-        // was the original id
-        if (m_pBuilder && sHelpId.endsWith("/help"))
+        OString sPageId = m_pBuilder->get_current_page_help_id();
+        if (!sPageId.isEmpty())
+            sHelpId = sPageId;
+        else
         {
-            OString sPageId = m_pBuilder->get_current_page_help_id();
-            if (!sPageId.isEmpty())
-                sHelpId = sPageId;
-            else
+            // tdf#129068 likewise the help for the wrapping dialog is less
+            // helpful than the help for the content area could be
+            vcl::Window* pContentArea = nullptr;
+            if (::Dialog* pDialog = dynamic_cast<::Dialog*>(m_xWindow.get()))
+                pContentArea = pDialog->get_content_area();
+            if (pContentArea)
             {
-                // tdf#129068 likewise the help for the wrapping dialog is less
-                // helpful than the help for the content area could be
-                vcl::Window* pContentArea = nullptr;
-                if (::Dialog* pDialog = dynamic_cast<::Dialog*>(m_xWindow.get()))
-                    pContentArea = pDialog->get_content_area();
-                if (pContentArea)
-                {
-                    vcl::Window* pContentWidget = pContentArea->GetWindow(GetWindowType::LastChild);
-                    if (pContentWidget)
-                        sHelpId = pContentWidget->GetHelpId();
-                }
+                vcl::Window* pContentWidget = pContentArea->GetWindow(GetWindowType::LastChild);
+                if (pContentWidget)
+                    sHelpId = pContentWidget->GetHelpId();
             }
         }
-        pHelp->Start(OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), pSource);
     }
+    pHelp->Start(OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), pSource);
 }
 
 //iterate upwards through the hierarchy from this widgets through its parents

@@ -402,19 +402,19 @@ void HelpTextWindow::Paint( vcl::RenderContext& rRenderContext, const tools::Rec
     }
 
     // border
-    if (!bNativeOK)
+    if (bNativeOK)
+        return;
+
+    Size aSz = GetOutputSizePixel();
+    rRenderContext.DrawRect(tools::Rectangle(Point(), aSz));
+    if (mnHelpWinStyle == HELPWINSTYLE_BALLOON)
     {
-        Size aSz = GetOutputSizePixel();
-        rRenderContext.DrawRect(tools::Rectangle(Point(), aSz));
-        if (mnHelpWinStyle == HELPWINSTYLE_BALLOON)
-        {
-            aSz.AdjustWidth( -2 );
-            aSz.AdjustHeight( -2 );
-            Color aColor(rRenderContext.GetLineColor());
-            rRenderContext.SetLineColor(COL_GRAY);
-            rRenderContext.DrawRect(tools::Rectangle(Point(1, 1), aSz));
-            rRenderContext.SetLineColor(aColor);
-        }
+        aSz.AdjustWidth( -2 );
+        aSz.AdjustHeight( -2 );
+        Color aColor(rRenderContext.GetLineColor());
+        rRenderContext.SetLineColor(COL_GRAY);
+        rRenderContext.DrawRect(tools::Rectangle(Point(1, 1), aSz));
+        rRenderContext.SetLineColor(aColor);
     }
 }
 

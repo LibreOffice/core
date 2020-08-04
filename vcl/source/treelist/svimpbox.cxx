@@ -514,22 +514,22 @@ void SvImpLBox::InvalidateEntriesFrom( long nY ) const
 
 void SvImpLBox::InvalidateEntry( long nY ) const
 {
-    if( !(m_nFlags & LBoxFlags::InPaint ))
-    {
-        tools::Rectangle aRect( GetVisibleArea() );
-        long nMaxBottom = aRect.Bottom();
-        aRect.SetTop( nY );
-        aRect.SetBottom( nY ); aRect.AdjustBottom(m_pView->GetEntryHeight() );
-        if( aRect.Top() > nMaxBottom )
-            return;
-        if( aRect.Bottom() > nMaxBottom )
-            aRect.SetBottom( nMaxBottom );
-        if (m_pView->SupportsDoubleBuffering())
-            // Perform full paint when flicker is to be avoided explicitly.
-            m_pView->Invalidate();
-        else
-            m_pView->Invalidate(aRect);
-    }
+    if( m_nFlags & LBoxFlags::InPaint )
+        return;
+
+    tools::Rectangle aRect( GetVisibleArea() );
+    long nMaxBottom = aRect.Bottom();
+    aRect.SetTop( nY );
+    aRect.SetBottom( nY ); aRect.AdjustBottom(m_pView->GetEntryHeight() );
+    if( aRect.Top() > nMaxBottom )
+        return;
+    if( aRect.Bottom() > nMaxBottom )
+        aRect.SetBottom( nMaxBottom );
+    if (m_pView->SupportsDoubleBuffering())
+        // Perform full paint when flicker is to be avoided explicitly.
+        m_pView->Invalidate();
+    else
+        m_pView->Invalidate(aRect);
 }
 
 void SvImpLBox::InvalidateEntry( SvTreeListEntry* pEntry )
@@ -2089,33 +2089,33 @@ void SvImpLBox::ExpandAll()
 void SvImpLBox::CollapseTo(SvTreeListEntry* pParentToCollapse)
 {
     // collapse all parents until we get to the given parent to collapse
-    if (pParentToCollapse)
-    {
-        sal_uInt16 nRefDepth;
-        // special case explorer: if the root only has a single
-        // entry, don't collapse the root entry
-        if (m_pTree->GetChildList(nullptr).size() < 2)
-        {
-            nRefDepth = 1;
-            pParentToCollapse = m_pCursor;
-            while (m_pTree->GetParent(pParentToCollapse)
-                   && m_pTree->GetDepth(m_pTree->GetParent(pParentToCollapse)) > 0)
-            {
-                pParentToCollapse = m_pTree->GetParent(pParentToCollapse);
-            }
-        }
-        else
-            nRefDepth = m_pTree->GetDepth(pParentToCollapse);
+    if (!pParentToCollapse)
+        return;
 
-        if (m_pView->IsExpanded(pParentToCollapse))
-            m_pView->Collapse(pParentToCollapse);
-        SvTreeListEntry* pCur = m_pTree->Next(pParentToCollapse);
-        while (pCur && m_pTree->GetDepth(pCur) > nRefDepth)
+    sal_uInt16 nRefDepth;
+    // special case explorer: if the root only has a single
+    // entry, don't collapse the root entry
+    if (m_pTree->GetChildList(nullptr).size() < 2)
+    {
+        nRefDepth = 1;
+        pParentToCollapse = m_pCursor;
+        while (m_pTree->GetParent(pParentToCollapse)
+               && m_pTree->GetDepth(m_pTree->GetParent(pParentToCollapse)) > 0)
         {
-            if (pCur->HasChildren() && m_pView->IsExpanded(pCur))
-                m_pView->Collapse(pCur);
-            pCur = m_pTree->Next(pCur);
+            pParentToCollapse = m_pTree->GetParent(pParentToCollapse);
         }
+    }
+    else
+        nRefDepth = m_pTree->GetDepth(pParentToCollapse);
+
+    if (m_pView->IsExpanded(pParentToCollapse))
+        m_pView->Collapse(pParentToCollapse);
+    SvTreeListEntry* pCur = m_pTree->Next(pParentToCollapse);
+    while (pCur && m_pTree->GetDepth(pCur) > nRefDepth)
+    {
+        if (pCur->HasChildren() && m_pView->IsExpanded(pCur))
+            m_pView->Collapse(pCur);
+        pCur = m_pTree->Next(pCur);
     }
 }
 

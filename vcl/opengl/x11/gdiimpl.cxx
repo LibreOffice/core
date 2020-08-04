@@ -431,21 +431,21 @@ void X11OpenGLContext::makeCurrent()
 
 void X11OpenGLContext::destroyCurrentContext()
 {
-    if(m_aGLWin.ctx)
-    {
-        std::vector<GLXContext>::iterator itr = std::remove( g_vShareList.begin(), g_vShareList.end(), m_aGLWin.ctx );
-        if (itr != g_vShareList.end())
-            g_vShareList.erase(itr);
+    if(!m_aGLWin.ctx)
+        return;
 
-        glXMakeCurrent(m_aGLWin.dpy, None, nullptr);
-        g_bAnyCurrent = false;
-        if( glGetError() != GL_NO_ERROR )
-        {
-            SAL_WARN("vcl.opengl", "glError: " << glGetError());
-        }
-        glXDestroyContext(m_aGLWin.dpy, m_aGLWin.ctx);
-        m_aGLWin.ctx = nullptr;
+    std::vector<GLXContext>::iterator itr = std::remove( g_vShareList.begin(), g_vShareList.end(), m_aGLWin.ctx );
+    if (itr != g_vShareList.end())
+        g_vShareList.erase(itr);
+
+    glXMakeCurrent(m_aGLWin.dpy, None, nullptr);
+    g_bAnyCurrent = false;
+    if( glGetError() != GL_NO_ERROR )
+    {
+        SAL_WARN("vcl.opengl", "glError: " << glGetError());
     }
+    glXDestroyContext(m_aGLWin.dpy, m_aGLWin.ctx);
+    m_aGLWin.ctx = nullptr;
 }
 
 void X11OpenGLContext::init(Display* dpy, Window win, int screen)

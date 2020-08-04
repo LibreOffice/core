@@ -302,27 +302,27 @@ void GIFReader::ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount )
     std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ nLen ]);
     std::size_t nRead = rIStm.ReadBytes(pBuf.get(), nLen);
     nCount = nRead/3UL;
-    if( NO_PENDING( rIStm ) )
+    if( !(NO_PENDING( rIStm )) )
+        return;
+
+    sal_uInt8* pTmp = pBuf.get();
+
+    for (sal_uLong i = 0; i < nCount; ++i)
     {
-        sal_uInt8* pTmp = pBuf.get();
+        BitmapColor& rColor = (*pPal)[i];
 
-        for (sal_uLong i = 0; i < nCount; ++i)
-        {
-            BitmapColor& rColor = (*pPal)[i];
+        rColor.SetRed( *pTmp++ );
+        rColor.SetGreen( *pTmp++ );
+        rColor.SetBlue( *pTmp++ );
+    }
 
-            rColor.SetRed( *pTmp++ );
-            rColor.SetGreen( *pTmp++ );
-            rColor.SetBlue( *pTmp++ );
-        }
+    // if possible accommodate some standard colours
+    if( nCount < 256 )
+    {
+        (*pPal)[ 255UL ] = COL_WHITE;
 
-        // if possible accommodate some standard colours
-        if( nCount < 256 )
-        {
-            (*pPal)[ 255UL ] = COL_WHITE;
-
-            if( nCount < 255 )
-                (*pPal)[ 254UL ] = COL_BLACK;
-        }
+        if( nCount < 255 )
+            (*pPal)[ 254UL ] = COL_BLACK;
     }
 }
 

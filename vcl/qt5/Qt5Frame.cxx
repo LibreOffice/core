@@ -547,35 +547,35 @@ void Qt5Frame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt1
         }
     }
 
-    if (nFlags & (SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y))
+    if (!(nFlags & (SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y)))
+        return;
+
+    if (m_pParent)
     {
-        if (m_pParent)
-        {
-            const SalFrameGeometry& aParentGeometry = m_pParent->maGeometry;
-            if (QGuiApplication::isRightToLeft())
-                nX = aParentGeometry.nX + aParentGeometry.nWidth - nX - maGeometry.nWidth - 1;
-            else
-                nX += aParentGeometry.nX;
-            nY += aParentGeometry.nY;
+        const SalFrameGeometry& aParentGeometry = m_pParent->maGeometry;
+        if (QGuiApplication::isRightToLeft())
+            nX = aParentGeometry.nX + aParentGeometry.nWidth - nX - maGeometry.nWidth - 1;
+        else
+            nX += aParentGeometry.nX;
+        nY += aParentGeometry.nY;
 
-            Qt5MainWindow* pTopLevel = m_pParent->GetTopLevelWindow();
-            if (pTopLevel && pTopLevel->menuBar() && pTopLevel->menuBar()->isVisible())
-                nY += round(pTopLevel->menuBar()->geometry().height() * devicePixelRatioF());
-        }
-
-        if (!(nFlags & SAL_FRAME_POSSIZE_X))
-            nX = maGeometry.nX;
-        else if (!(nFlags & SAL_FRAME_POSSIZE_Y))
-            nY = maGeometry.nY;
-
-        // assume the reposition happened
-        // needed for calculations and will eventually be corrected by events later
-        maGeometry.nX = nX;
-        maGeometry.nY = nY;
-
-        m_bDefaultPos = false;
-        asChild()->move(round(nX / devicePixelRatioF()), round(nY / devicePixelRatioF()));
+        Qt5MainWindow* pTopLevel = m_pParent->GetTopLevelWindow();
+        if (pTopLevel && pTopLevel->menuBar() && pTopLevel->menuBar()->isVisible())
+            nY += round(pTopLevel->menuBar()->geometry().height() * devicePixelRatioF());
     }
+
+    if (!(nFlags & SAL_FRAME_POSSIZE_X))
+        nX = maGeometry.nX;
+    else if (!(nFlags & SAL_FRAME_POSSIZE_Y))
+        nY = maGeometry.nY;
+
+    // assume the reposition happened
+    // needed for calculations and will eventually be corrected by events later
+    maGeometry.nX = nX;
+    maGeometry.nY = nY;
+
+    m_bDefaultPos = false;
+    asChild()->move(round(nX / devicePixelRatioF()), round(nY / devicePixelRatioF()));
 }
 
 void Qt5Frame::GetClientSize(long& rWidth, long& rHeight)
@@ -600,25 +600,25 @@ SalFrame* Qt5Frame::GetParent() const { return m_pParent; }
 
 void Qt5Frame::SetModal(bool bModal)
 {
-    if (isWindow())
-    {
-        auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
-        assert(pSalInst);
-        pSalInst->RunInMainThread([this, bModal]() {
+    if (!isWindow())
+        return;
 
-            QWidget* const pChild = asChild();
-            const bool bWasVisible = pChild->isVisible();
+    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    pSalInst->RunInMainThread([this, bModal]() {
 
-            // modality change is only effective if the window is hidden
-            if (bWasVisible)
-                pChild->hide();
+        QWidget* const pChild = asChild();
+        const bool bWasVisible = pChild->isVisible();
 
-            pChild->setWindowModality(bModal ? Qt::WindowModal : Qt::NonModal);
+        // modality change is only effective if the window is hidden
+        if (bWasVisible)
+            pChild->hide();
 
-            if (bWasVisible)
-                pChild->show();
-        });
-    }
+        pChild->setWindowModality(bModal ? Qt::WindowModal : Qt::NonModal);
+
+        if (bWasVisible)
+            pChild->show();
+    });
 }
 
 bool Qt5Frame::GetModal() const { return isWindow() && windowHandle()->isModal(); }
@@ -1189,52 +1189,52 @@ void Qt5Frame::EndSetClipRegion() { m_bNullRegion = false; }
 
 void Qt5Frame::SetScreenNumber(unsigned int nScreen)
 {
-    if (isWindow())
+    if (!isWindow())
+        return;
+
+    QWindow* const pWindow = windowHandle();
+    if (!pWindow)
+        return;
+
+    QList<QScreen*> screens = QApplication::screens();
+    if (static_cast<int>(nScreen) < screens.size() || m_bFullScreenSpanAll)
     {
-        QWindow* const pWindow = windowHandle();
-        if (pWindow)
+        QRect screenGeo;
+
+        if (!m_bFullScreenSpanAll)
         {
-            QList<QScreen*> screens = QApplication::screens();
-            if (static_cast<int>(nScreen) < screens.size() || m_bFullScreenSpanAll)
-            {
-                QRect screenGeo;
-
-                if (!m_bFullScreenSpanAll)
-                {
-                    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                    screenGeo = QApplication::desktop()->screenGeometry(nScreen);
-                    SAL_WNODEPRECATED_DECLARATIONS_POP
-                    pWindow->setScreen(QApplication::screens()[nScreen]);
-                }
-                else // special case: fullscreen over all available screens
-                {
-                    assert(m_bFullScreen);
-                    // left-most screen
-                    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                    int nLeftScreen = QApplication::desktop()->screenNumber(QPoint(0, 0));
-                    SAL_WNODEPRECATED_DECLARATIONS_POP
-                    // entire virtual desktop
-                    screenGeo = QApplication::screens()[nLeftScreen]->availableVirtualGeometry();
-                    pWindow->setScreen(QApplication::screens()[nLeftScreen]);
-                    pWindow->setGeometry(screenGeo);
-                    nScreen = nLeftScreen;
-                }
-
-                // setScreen by itself has no effect, explicitly move the widget to
-                // the new screen
-                asChild()->move(screenGeo.topLeft());
-            }
-            else
-            {
-                // index outta bounds, use primary screen
-                QScreen* primaryScreen = QApplication::primaryScreen();
-                pWindow->setScreen(primaryScreen);
-                nScreen = static_cast<sal_uInt32>(screenNumber(primaryScreen));
-            }
-
-            maGeometry.nDisplayScreenNumber = nScreen;
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
+            screenGeo = QApplication::desktop()->screenGeometry(nScreen);
+            SAL_WNODEPRECATED_DECLARATIONS_POP
+            pWindow->setScreen(QApplication::screens()[nScreen]);
         }
+        else // special case: fullscreen over all available screens
+        {
+            assert(m_bFullScreen);
+            // left-most screen
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
+            int nLeftScreen = QApplication::desktop()->screenNumber(QPoint(0, 0));
+            SAL_WNODEPRECATED_DECLARATIONS_POP
+            // entire virtual desktop
+            screenGeo = QApplication::screens()[nLeftScreen]->availableVirtualGeometry();
+            pWindow->setScreen(QApplication::screens()[nLeftScreen]);
+            pWindow->setGeometry(screenGeo);
+            nScreen = nLeftScreen;
+        }
+
+        // setScreen by itself has no effect, explicitly move the widget to
+        // the new screen
+        asChild()->move(screenGeo.topLeft());
     }
+    else
+    {
+        // index outta bounds, use primary screen
+        QScreen* primaryScreen = QApplication::primaryScreen();
+        pWindow->setScreen(primaryScreen);
+        nScreen = static_cast<sal_uInt32>(screenNumber(primaryScreen));
+    }
+
+    maGeometry.nDisplayScreenNumber = nScreen;
 }
 
 void Qt5Frame::SetApplicationID(const OUString& rWMClass)

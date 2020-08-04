@@ -120,21 +120,21 @@ void SkiaSalBitmap::CreateBitmapData()
     // and a VCL bitmap can change its grayscale status simply by changing the palette.
     // Moreover creating SkImage from SkBitmap does a data copy unless the bitmap is immutable.
     // So just always store pixels in our buffer and convert as necessary.
-    if (mScanlineSize != 0 && mPixelsSize.Height() != 0)
-    {
-        size_t allocate = mScanlineSize * mPixelsSize.Height();
+    if (mScanlineSize == 0 || mPixelsSize.Height() == 0)
+        return;
+
+    size_t allocate = mScanlineSize * mPixelsSize.Height();
 #ifdef DBG_UTIL
-        allocate += sizeof(CANARY);
+    allocate += sizeof(CANARY);
 #endif
-        mBuffer = boost::make_shared_noinit<sal_uInt8[]>(allocate);
+    mBuffer = boost::make_shared_noinit<sal_uInt8[]>(allocate);
 #ifdef DBG_UTIL
-        // fill with random garbage
-        sal_uInt8* buffer = mBuffer.get();
-        for (size_t i = 0; i < allocate; i++)
-            buffer[i] = (i & 0xFF);
-        memcpy(buffer + allocate - sizeof(CANARY), CANARY, sizeof(CANARY));
+    // fill with random garbage
+    sal_uInt8* buffer = mBuffer.get();
+    for (size_t i = 0; i < allocate; i++)
+        buffer[i] = (i & 0xFF);
+    memcpy(buffer + allocate - sizeof(CANARY), CANARY, sizeof(CANARY));
 #endif
-    }
 }
 
 bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp)

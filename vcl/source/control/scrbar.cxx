@@ -799,34 +799,34 @@ void ScrollBar::ImplDragThumb( const Point& rMousePos )
         nMovePix = rMousePos.Y()-(maThumbRect.Top()+mnMouseOff);
 
     // Move thumb if necessary
-    if ( nMovePix )
-    {
-        mnThumbPixPos += nMovePix;
-        if ( mnThumbPixPos < 0 )
-            mnThumbPixPos = 0;
-        if ( mnThumbPixPos > (mnThumbPixRange-mnThumbPixSize) )
-            mnThumbPixPos = mnThumbPixRange-mnThumbPixSize;
-        long nOldPos = mnThumbPos;
-        mnThumbPos = ImplCalcThumbPos( mnThumbPixPos );
-        ImplUpdateRects();
-        if ( mbFullDrag && (nOldPos != mnThumbPos) )
-        {
-            // When dragging in windows the repaint request gets starved so dragging
-            // the scrollbar feels slower than it actually is. Let's force an immediate
-            // repaint of the scrollbar.
-            if (SupportsDoubleBuffering())
-            {
-                Invalidate();
-                PaintImmediately();
-            }
-            else
-                ImplDraw(*this);
+    if ( !nMovePix )
+        return;
 
-            mnDelta = mnThumbPos-nOldPos;
-            Scroll();
-            mnDelta = 0;
-        }
+    mnThumbPixPos += nMovePix;
+    if ( mnThumbPixPos < 0 )
+        mnThumbPixPos = 0;
+    if ( mnThumbPixPos > (mnThumbPixRange-mnThumbPixSize) )
+        mnThumbPixPos = mnThumbPixRange-mnThumbPixSize;
+    long nOldPos = mnThumbPos;
+    mnThumbPos = ImplCalcThumbPos( mnThumbPixPos );
+    ImplUpdateRects();
+    if ( !(mbFullDrag && (nOldPos != mnThumbPos)) )
+        return;
+
+    // When dragging in windows the repaint request gets starved so dragging
+    // the scrollbar feels slower than it actually is. Let's force an immediate
+    // repaint of the scrollbar.
+    if (SupportsDoubleBuffering())
+    {
+        Invalidate();
+        PaintImmediately();
     }
+    else
+        ImplDraw(*this);
+
+    mnDelta = mnThumbPos-nOldPos;
+    Scroll();
+    mnDelta = 0;
 }
 
 void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
@@ -951,19 +951,19 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
     }
 
     // Should we start Tracking?
-    if ( meScrollType != ScrollType::DontKnow )
-    {
-        // store original position for cancel and EndScroll delta
-        mnStartPos = mnThumbPos;
-        // #92906# Call StartTracking() before ImplDoMouseAction(), otherwise
-        // MouseButtonUp() / EndTracking() may be called if somebody is spending
-        // a lot of time in the scroll handler
-        StartTracking( nTrackFlags );
-        ImplDoMouseAction( rMousePos );
+    if ( meScrollType == ScrollType::DontKnow )
+        return;
 
-        if( bDragToMouse )
-            ImplDragThumb( rMousePos );
-    }
+    // store original position for cancel and EndScroll delta
+    mnStartPos = mnThumbPos;
+    // #92906# Call StartTracking() before ImplDoMouseAction(), otherwise
+    // MouseButtonUp() / EndTracking() may be called if somebody is spending
+    // a lot of time in the scroll handler
+    StartTracking( nTrackFlags );
+    ImplDoMouseAction( rMousePos );
+
+    if( bDragToMouse )
+        ImplDragThumb( rMousePos );
 
 }
 
@@ -1344,20 +1344,19 @@ void ScrollBar::SetRange( const Range& rRange )
     long nNewMaxRange = aRange.Max();
 
     // If Range differs, set a new one
-    if ( (mnMinRange != nNewMinRange) ||
-         (mnMaxRange != nNewMaxRange) )
-    {
-        mnMinRange = nNewMinRange;
-        mnMaxRange = nNewMaxRange;
+    if ( (mnMinRange == nNewMinRange) && (mnMaxRange == nNewMaxRange))
+        return;
 
-        // Adapt Thumb
-        if ( mnThumbPos > mnMaxRange-mnVisibleSize )
-            mnThumbPos = mnMaxRange-mnVisibleSize;
-        if ( mnThumbPos < mnMinRange )
-            mnThumbPos = mnMinRange;
+    mnMinRange = nNewMinRange;
+    mnMaxRange = nNewMaxRange;
 
-        CompatStateChanged( StateChangedType::Data );
-    }
+    // Adapt Thumb
+    if ( mnThumbPos > mnMaxRange-mnVisibleSize )
+        mnThumbPos = mnMaxRange-mnVisibleSize;
+    if ( mnThumbPos < mnMinRange )
+        mnThumbPos = mnMinRange;
+
+    CompatStateChanged( StateChangedType::Data );
 }
 
 void ScrollBar::SetThumbPos( long nNewThumbPos )

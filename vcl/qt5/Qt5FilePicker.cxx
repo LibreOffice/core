@@ -823,31 +823,31 @@ void SAL_CALL Qt5FilePicker::initialize(const uno::Sequence<uno::Any>& args)
     css::uno::Reference<css::awt::XWindow> xParentWindow;
     if (args.getLength() > 1)
         args[1] >>= xParentWindow;
-    if (xParentWindow.is())
-    {
-        css::uno::Reference<css::awt::XSystemDependentWindowPeer> xSysWinPeer(xParentWindow,
-                                                                              css::uno::UNO_QUERY);
-        if (xSysWinPeer.is())
-        {
-            // the sal_*Int8 handling is strange, but it's public API - no way around
-            css::uno::Sequence<sal_Int8> aProcessIdent(16);
-            rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8*>(aProcessIdent.getArray()));
-            uno::Any aAny = xSysWinPeer->getWindowHandle(
-                aProcessIdent, css::lang::SystemDependent::SYSTEM_XWINDOW);
-            css::awt::SystemDependentXWindow xSysWin;
-            aAny >>= xSysWin;
+    if (!xParentWindow.is())
+        return;
 
-            const auto& pFrames = pSalInst->getFrames();
-            const long aWindowHandle = xSysWin.WindowHandle;
-            const auto it = std::find_if(pFrames.begin(), pFrames.end(),
-                                         [&aWindowHandle](auto pFrame) -> bool {
-                                             const SystemEnvData* pData = pFrame->GetSystemData();
-                                             return pData && long(pData->aWindow) == aWindowHandle;
-                                         });
-            if (it != pFrames.end())
-                m_pParentWidget = static_cast<Qt5Frame*>(*it)->asChild();
-        }
-    }
+    css::uno::Reference<css::awt::XSystemDependentWindowPeer> xSysWinPeer(xParentWindow,
+                                                                          css::uno::UNO_QUERY);
+    if (!xSysWinPeer.is())
+        return;
+
+    // the sal_*Int8 handling is strange, but it's public API - no way around
+    css::uno::Sequence<sal_Int8> aProcessIdent(16);
+    rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8*>(aProcessIdent.getArray()));
+    uno::Any aAny
+        = xSysWinPeer->getWindowHandle(aProcessIdent, css::lang::SystemDependent::SYSTEM_XWINDOW);
+    css::awt::SystemDependentXWindow xSysWin;
+    aAny >>= xSysWin;
+
+    const auto& pFrames = pSalInst->getFrames();
+    const long aWindowHandle = xSysWin.WindowHandle;
+    const auto it
+        = std::find_if(pFrames.begin(), pFrames.end(), [&aWindowHandle](auto pFrame) -> bool {
+              const SystemEnvData* pData = pFrame->GetSystemData();
+              return pData && long(pData->aWindow) == aWindowHandle;
+          });
+    if (it != pFrames.end())
+        m_pParentWidget = static_cast<Qt5Frame*>(*it)->asChild();
 }
 
 void SAL_CALL Qt5FilePicker::cancel() { m_pFileDialog->reject(); }

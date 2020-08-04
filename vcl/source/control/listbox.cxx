@@ -213,31 +213,31 @@ IMPL_LINK_NOARG(ListBox, ImplCancelHdl, LinkParamNone*, void)
 
 IMPL_LINK( ListBox, ImplSelectionChangedHdl, sal_Int32, nChanged, void )
 {
-    if ( !mpImplLB->IsTrackingSelect() )
+    if ( mpImplLB->IsTrackingSelect() )
+        return;
+
+    const ImplEntryList* pEntryList = mpImplLB->GetEntryList();
+    if ( pEntryList->IsEntryPosSelected( nChanged ) )
     {
-        const ImplEntryList* pEntryList = mpImplLB->GetEntryList();
-        if ( pEntryList->IsEntryPosSelected( nChanged ) )
+        // FIXME? This should've been turned into an ImplPaintEntry some time ago...
+        if ( nChanged < pEntryList->GetMRUCount() )
+            nChanged = pEntryList->FindEntry( pEntryList->GetEntryText( nChanged ) );
+        mpImplWin->SetItemPos( nChanged );
+        mpImplWin->SetString( mpImplLB->GetEntryList()->GetEntryText( nChanged ) );
+        if( mpImplLB->GetEntryList()->HasImages() )
         {
-            // FIXME? This should've been turned into an ImplPaintEntry some time ago...
-            if ( nChanged < pEntryList->GetMRUCount() )
-                nChanged = pEntryList->FindEntry( pEntryList->GetEntryText( nChanged ) );
-            mpImplWin->SetItemPos( nChanged );
-            mpImplWin->SetString( mpImplLB->GetEntryList()->GetEntryText( nChanged ) );
-            if( mpImplLB->GetEntryList()->HasImages() )
-            {
-                Image aImage = mpImplLB->GetEntryList()->GetEntryImage( nChanged );
-                mpImplWin->SetImage( aImage );
-            }
-        }
-        else
-        {
-            mpImplWin->SetItemPos( LISTBOX_ENTRY_NOTFOUND );
-            mpImplWin->SetString( OUString() );
-            Image aImage;
+            Image aImage = mpImplLB->GetEntryList()->GetEntryImage( nChanged );
             mpImplWin->SetImage( aImage );
         }
-        mpImplWin->Invalidate();
     }
+    else
+    {
+        mpImplWin->SetItemPos( LISTBOX_ENTRY_NOTFOUND );
+        mpImplWin->SetString( OUString() );
+        Image aImage;
+        mpImplWin->SetImage( aImage );
+    }
+    mpImplWin->Invalidate();
 }
 
 IMPL_LINK_NOARG(ListBox, ImplDoubleClickHdl, ImplListBoxWindow*, void)
@@ -247,20 +247,20 @@ IMPL_LINK_NOARG(ListBox, ImplDoubleClickHdl, ImplListBoxWindow*, void)
 
 IMPL_LINK_NOARG(ListBox, ImplClickBtnHdl, void*, void)
 {
-    if( !mpFloatWin->IsInPopupMode() )
-    {
-        CallEventListeners( VclEventId::DropdownPreOpen );
-        mpImplWin->GrabFocus();
-        mpBtn->SetPressed( true );
-        mpFloatWin->StartFloat( true );
-        CallEventListeners( VclEventId::DropdownOpen );
+    if( mpFloatWin->IsInPopupMode() )
+        return;
 
-        ImplClearLayoutData();
-        if( mpImplLB )
-            mpImplLB->GetMainWindow()->ImplClearLayoutData();
-        if( mpImplWin )
-            mpImplWin->ImplClearLayoutData();
-    }
+    CallEventListeners( VclEventId::DropdownPreOpen );
+    mpImplWin->GrabFocus();
+    mpBtn->SetPressed( true );
+    mpFloatWin->StartFloat( true );
+    CallEventListeners( VclEventId::DropdownOpen );
+
+    ImplClearLayoutData();
+    if( mpImplLB )
+        mpImplLB->GetMainWindow()->ImplClearLayoutData();
+    if( mpImplWin )
+        mpImplWin->ImplClearLayoutData();
 }
 
 IMPL_LINK_NOARG(ListBox, ImplPopupModeEndHdl, FloatingWindow*, void)
@@ -295,18 +295,18 @@ IMPL_LINK_NOARG(ListBox, ImplPopupModeEndHdl, FloatingWindow*, void)
 
 void ListBox::ToggleDropDown()
 {
-    if( IsDropDownBox() )
+    if( !IsDropDownBox() )
+        return;
+
+    if( mpFloatWin->IsInPopupMode() )
+        mpFloatWin->EndPopupMode();
+    else
     {
-        if( mpFloatWin->IsInPopupMode() )
-            mpFloatWin->EndPopupMode();
-        else
-        {
-            CallEventListeners( VclEventId::DropdownPreOpen );
-            mpImplWin->GrabFocus();
-            mpBtn->SetPressed( true );
-            mpFloatWin->StartFloat( true );
-            CallEventListeners( VclEventId::DropdownOpen );
-        }
+        CallEventListeners( VclEventId::DropdownPreOpen );
+        mpImplWin->GrabFocus();
+        mpBtn->SetPressed( true );
+        mpFloatWin->StartFloat( true );
+        CallEventListeners( VclEventId::DropdownOpen );
     }
 }
 
@@ -470,28 +470,28 @@ void ListBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Control::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DataChangedEventType::FONTS) ||
+    if ( !((rDCEvt.GetType() == DataChangedEventType::FONTS) ||
          (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
+          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))) )
+        return;
+
+    SetBackground();    // Due to a hack in Window::UpdateSettings the background must be reset
+                        // otherwise it will overpaint NWF drawn listboxes
+    Resize();
+    mpImplLB->Resize(); // Is not called by ListBox::Resize() if the ImplLB does not change
+
+    if ( mpImplWin )
     {
-        SetBackground();    // Due to a hack in Window::UpdateSettings the background must be reset
-                            // otherwise it will overpaint NWF drawn listboxes
-        Resize();
-        mpImplLB->Resize(); // Is not called by ListBox::Resize() if the ImplLB does not change
+        mpImplWin->SetSettings( GetSettings() ); // If not yet set...
+        mpImplWin->ApplySettings(*mpImplWin);
 
-        if ( mpImplWin )
-        {
-            mpImplWin->SetSettings( GetSettings() ); // If not yet set...
-            mpImplWin->ApplySettings(*mpImplWin);
-
-            mpBtn->SetSettings( GetSettings() );
-            ImplInitDropDownButton( mpBtn );
-        }
-
-        if ( IsDropDownBox() )
-            Invalidate();
+        mpBtn->SetSettings( GetSettings() );
+        ImplInitDropDownButton( mpBtn );
     }
+
+    if ( IsDropDownBox() )
+        Invalidate();
 }
 
 void ListBox::EnableAutoSize( bool bAuto )

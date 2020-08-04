@@ -401,27 +401,27 @@ static void ImplPatternProcessStrictModify( Edit* pEdit,
                                                        rLiteralMask,
                                                        bSameMask);
 
-    if ( aNewText != aText )
+    if ( aNewText == aText )
+        return;
+
+    // adjust selection such that it remains at the end if it was there before
+    Selection aSel = pEdit->GetSelection();
+    sal_Int64 nMaxSel = std::max( aSel.Min(), aSel.Max() );
+    if ( nMaxSel >= aText.getLength() )
     {
-        // adjust selection such that it remains at the end if it was there before
-        Selection aSel = pEdit->GetSelection();
-        sal_Int64 nMaxSel = std::max( aSel.Min(), aSel.Max() );
-        if ( nMaxSel >= aText.getLength() )
+        sal_Int32 nMaxPos = aNewText.getLength();
+        ImplPatternMaxPos(aNewText, rEditMask, 0, bSameMask, nMaxSel, nMaxPos);
+        if ( aSel.Min() == aSel.Max() )
         {
-            sal_Int32 nMaxPos = aNewText.getLength();
-            ImplPatternMaxPos(aNewText, rEditMask, 0, bSameMask, nMaxSel, nMaxPos);
-            if ( aSel.Min() == aSel.Max() )
-            {
-                aSel.Min() = nMaxPos;
-                aSel.Max() = aSel.Min();
-            }
-            else if ( aSel.Min() > aSel.Max() )
-                aSel.Min() = nMaxPos;
-            else
-                aSel.Max() = nMaxPos;
+            aSel.Min() = nMaxPos;
+            aSel.Max() = aSel.Min();
         }
-        pEdit->SetText( aNewText, aSel );
+        else if ( aSel.Min() > aSel.Max() )
+            aSel.Min() = nMaxPos;
+        else
+            aSel.Max() = nMaxPos;
     }
+    pEdit->SetText( aNewText, aSel );
 }
 
 static void ImplPatternProcessStrictModify( weld::Entry& rEntry,
@@ -435,30 +435,30 @@ static void ImplPatternProcessStrictModify( weld::Entry& rEntry,
                                                        rLiteralMask,
                                                        bSameMask);
 
-    if (aNewText != aText)
-    {
-        // adjust selection such that it remains at the end if it was there before
-        int nStartPos, nEndPos;
-        rEntry.get_selection_bounds(nStartPos, nEndPos);
+    if (aNewText == aText)
+        return;
 
-        int nMaxSel = std::max(nStartPos, nEndPos);
-        if (nMaxSel >= aText.getLength())
+    // adjust selection such that it remains at the end if it was there before
+    int nStartPos, nEndPos;
+    rEntry.get_selection_bounds(nStartPos, nEndPos);
+
+    int nMaxSel = std::max(nStartPos, nEndPos);
+    if (nMaxSel >= aText.getLength())
+    {
+        sal_Int32 nMaxPos = aNewText.getLength();
+        ImplPatternMaxPos(aNewText, rEditMask, 0, bSameMask, nMaxSel, nMaxPos);
+        if (nStartPos == nEndPos)
         {
-            sal_Int32 nMaxPos = aNewText.getLength();
-            ImplPatternMaxPos(aNewText, rEditMask, 0, bSameMask, nMaxSel, nMaxPos);
-            if (nStartPos == nEndPos)
-            {
-                nStartPos = nMaxPos;
-                nEndPos = nMaxPos;
-            }
-            else if (nStartPos > nMaxPos)
-                nStartPos = nMaxPos;
-            else
-                nEndPos = nMaxPos;
+            nStartPos = nMaxPos;
+            nEndPos = nMaxPos;
         }
-        rEntry.set_text(aNewText);
-        rEntry.select_region(nStartPos, nEndPos);
+        else if (nStartPos > nMaxPos)
+            nStartPos = nMaxPos;
+        else
+            nEndPos = nMaxPos;
     }
+    rEntry.set_text(aNewText);
+    rEntry.select_region(nStartPos, nEndPos);
 }
 
 static sal_Int32 ImplPatternLeftPos(const OString& rEditMask, sal_Int32 nCursorPos)
@@ -1555,19 +1555,19 @@ static void ImplDateIncrementYear( Date& rDate, bool bUp )
         if ( nYear > SAL_MIN_INT16 )
             rDate.SetYear( rDate.GetPrevYear() );
     }
-    if (nMonth == 2)
+    if (nMonth != 2)
+        return;
+
+    // Handle February 29 from leap year to non-leap year.
+    sal_uInt16 nDay = rDate.GetDay();
+    if (nDay > 28)
     {
-        // Handle February 29 from leap year to non-leap year.
-        sal_uInt16 nDay = rDate.GetDay();
-        if (nDay > 28)
-        {
-            // The check would not be necessary if it was guaranteed that the
-            // date was valid before and actually was a leap year,
-            // de-/incrementing a leap year with 29 always results in 28.
-            sal_uInt16 nDaysInMonth = Date::GetDaysInMonth( nMonth, rDate.GetYear());
-            if (nDay > nDaysInMonth)
-                rDate.SetDay( nDaysInMonth);
-        }
+        // The check would not be necessary if it was guaranteed that the
+        // date was valid before and actually was a leap year,
+        // de-/incrementing a leap year with 29 always results in 28.
+        sal_uInt16 nDaysInMonth = Date::GetDaysInMonth( nMonth, rDate.GetYear());
+        if (nDay > nDaysInMonth)
+            rDate.SetDay( nDaysInMonth);
     }
 }
 
@@ -1609,67 +1609,67 @@ int DateFormatter::GetDateArea(ExtDateFieldFormat eFormat, const OUString& rText
 void DateField::ImplDateSpinArea( bool bUp )
 {
     // increment days if all is selected
-    if ( GetField() )
+    if ( !GetField() )
+        return;
+
+    Date aDate( GetDate() );
+    Selection aSelection = GetField()->GetSelection();
+    aSelection.Justify();
+    OUString aText( GetText() );
+    if ( static_cast<sal_Int32>(aSelection.Len()) == aText.getLength() )
+        ImplDateIncrementDay( aDate, bUp );
+    else
     {
-        Date aDate( GetDate() );
-        Selection aSelection = GetField()->GetSelection();
-        aSelection.Justify();
-        OUString aText( GetText() );
-        if ( static_cast<sal_Int32>(aSelection.Len()) == aText.getLength() )
-            ImplDateIncrementDay( aDate, bUp );
-        else
+        ExtDateFieldFormat eFormat = GetExtDateFormat( true );
+        sal_Int8 nDateArea = GetDateArea(eFormat, aText, aSelection.Max(), ImplGetLocaleDataWrapper());
+
+        switch( eFormat )
         {
-            ExtDateFieldFormat eFormat = GetExtDateFormat( true );
-            sal_Int8 nDateArea = GetDateArea(eFormat, aText, aSelection.Max(), ImplGetLocaleDataWrapper());
-
-            switch( eFormat )
+            case ExtDateFieldFormat::ShortMMDDYY:
+            case ExtDateFieldFormat::ShortMMDDYYYY:
+            switch( nDateArea )
             {
-                case ExtDateFieldFormat::ShortMMDDYY:
-                case ExtDateFieldFormat::ShortMMDDYYYY:
-                switch( nDateArea )
-                {
-                    case 1: ImplDateIncrementMonth( aDate, bUp );
-                            break;
-                    case 2: ImplDateIncrementDay( aDate, bUp );
-                            break;
-                    case 3: ImplDateIncrementYear( aDate, bUp );
-                            break;
-                }
-                break;
-                case ExtDateFieldFormat::ShortDDMMYY:
-                case ExtDateFieldFormat::ShortDDMMYYYY:
-                switch( nDateArea )
-                {
-                    case 1: ImplDateIncrementDay( aDate, bUp );
-                            break;
-                    case 2: ImplDateIncrementMonth( aDate, bUp );
-                            break;
-                    case 3: ImplDateIncrementYear( aDate, bUp );
-                            break;
-                }
-                break;
-                case ExtDateFieldFormat::ShortYYMMDD:
-                case ExtDateFieldFormat::ShortYYYYMMDD:
-                case ExtDateFieldFormat::ShortYYMMDD_DIN5008:
-                case ExtDateFieldFormat::ShortYYYYMMDD_DIN5008:
-                switch( nDateArea )
-                {
-                    case 1: ImplDateIncrementYear( aDate, bUp );
-                            break;
-                    case 2: ImplDateIncrementMonth( aDate, bUp );
-                            break;
-                    case 3: ImplDateIncrementDay( aDate, bUp );
-                            break;
-                }
-                break;
-                default:
-                    OSL_FAIL( "invalid conversion" );
-                    break;
+                case 1: ImplDateIncrementMonth( aDate, bUp );
+                        break;
+                case 2: ImplDateIncrementDay( aDate, bUp );
+                        break;
+                case 3: ImplDateIncrementYear( aDate, bUp );
+                        break;
             }
+            break;
+            case ExtDateFieldFormat::ShortDDMMYY:
+            case ExtDateFieldFormat::ShortDDMMYYYY:
+            switch( nDateArea )
+            {
+                case 1: ImplDateIncrementDay( aDate, bUp );
+                        break;
+                case 2: ImplDateIncrementMonth( aDate, bUp );
+                        break;
+                case 3: ImplDateIncrementYear( aDate, bUp );
+                        break;
+            }
+            break;
+            case ExtDateFieldFormat::ShortYYMMDD:
+            case ExtDateFieldFormat::ShortYYYYMMDD:
+            case ExtDateFieldFormat::ShortYYMMDD_DIN5008:
+            case ExtDateFieldFormat::ShortYYYYMMDD_DIN5008:
+            switch( nDateArea )
+            {
+                case 1: ImplDateIncrementYear( aDate, bUp );
+                        break;
+                case 2: ImplDateIncrementMonth( aDate, bUp );
+                        break;
+                case 3: ImplDateIncrementDay( aDate, bUp );
+                        break;
+            }
+            break;
+            default:
+                OSL_FAIL( "invalid conversion" );
+                break;
         }
-
-        ImplNewFieldValue( aDate );
     }
+
+    ImplNewFieldValue( aDate );
 }
 
 DateFormatter::DateFormatter(Edit* pEdit)
@@ -1832,30 +1832,30 @@ void DateFormatter::ImplSetUserDate( const Date& rNewDate, Selection const * pNe
 
 void DateFormatter::ImplNewFieldValue( const Date& rDate )
 {
-    if ( GetField() )
+    if ( !GetField() )
+        return;
+
+    Selection aSelection = GetField()->GetSelection();
+    aSelection.Justify();
+    OUString aText = GetField()->GetText();
+
+    // If selected until the end then keep it that way
+    if ( static_cast<sal_Int32>(aSelection.Max()) == aText.getLength() )
     {
-        Selection aSelection = GetField()->GetSelection();
-        aSelection.Justify();
-        OUString aText = GetField()->GetText();
+        if ( !aSelection.Len() )
+            aSelection.Min() = SELECTION_MAX;
+        aSelection.Max() = SELECTION_MAX;
+    }
 
-        // If selected until the end then keep it that way
-        if ( static_cast<sal_Int32>(aSelection.Max()) == aText.getLength() )
-        {
-            if ( !aSelection.Len() )
-                aSelection.Min() = SELECTION_MAX;
-            aSelection.Max() = SELECTION_MAX;
-        }
+    Date aOldLastDate  = maLastDate;
+    ImplSetUserDate( rDate, &aSelection );
+    maLastDate = aOldLastDate;
 
-        Date aOldLastDate  = maLastDate;
-        ImplSetUserDate( rDate, &aSelection );
-        maLastDate = aOldLastDate;
-
-        // Modify at Edit is only set at KeyInput
-        if ( GetField()->GetText() != aText )
-        {
-            GetField()->SetModifyFlag();
-            GetField()->Modify();
-        }
+    // Modify at Edit is only set at KeyInput
+    if ( GetField()->GetText() != aText )
+    {
+        GetField()->SetModifyFlag();
+        GetField()->Modify();
     }
 }
 
@@ -2695,30 +2695,30 @@ void TimeFormatter::SetTime( const tools::Time& rNewTime )
 
 void TimeFormatter::ImplNewFieldValue( const tools::Time& rTime )
 {
-    if ( GetField() )
+    if ( !GetField() )
+        return;
+
+    Selection aSelection = GetField()->GetSelection();
+    aSelection.Justify();
+    OUString aText = GetField()->GetText();
+
+    // If selected until the end then keep it that way
+    if ( static_cast<sal_Int32>(aSelection.Max()) == aText.getLength() )
     {
-        Selection aSelection = GetField()->GetSelection();
-        aSelection.Justify();
-        OUString aText = GetField()->GetText();
+        if ( !aSelection.Len() )
+            aSelection.Min() = SELECTION_MAX;
+        aSelection.Max() = SELECTION_MAX;
+    }
 
-        // If selected until the end then keep it that way
-        if ( static_cast<sal_Int32>(aSelection.Max()) == aText.getLength() )
-        {
-            if ( !aSelection.Len() )
-                aSelection.Min() = SELECTION_MAX;
-            aSelection.Max() = SELECTION_MAX;
-        }
+    tools::Time aOldLastTime = maLastTime;
+    ImplSetUserTime( rTime, &aSelection );
+    maLastTime = aOldLastTime;
 
-        tools::Time aOldLastTime = maLastTime;
-        ImplSetUserTime( rTime, &aSelection );
-        maLastTime = aOldLastTime;
-
-        // Modify at Edit is only set at KeyInput
-        if ( GetField()->GetText() != aText )
-        {
-            GetField()->SetModifyFlag();
-            GetField()->Modify();
-        }
+    // Modify at Edit is only set at KeyInput
+    if ( GetField()->GetText() != aText )
+    {
+        GetField()->SetModifyFlag();
+        GetField()->Modify();
     }
 }
 
