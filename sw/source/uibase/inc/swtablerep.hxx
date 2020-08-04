@@ -51,6 +51,11 @@ public:
     SwTableRep( const SwTabCols& rTabCol );
     ~SwTableRep();
 
+    SwTableRep( const SwTableRep& rCopy ) = default;
+    SwTableRep( SwTableRep&& rCopy ) = default;
+    SwTableRep& operator=(const SwTableRep& rCopy) = default;
+    SwTableRep& operator=(SwTableRep&& rCopy) = default;
+
     bool        FillTabCols( SwTabCols& rTabCol ) const;
 
     SwTwips     GetLeftSpace() const            {return m_nLeftSpace;}
