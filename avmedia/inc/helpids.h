@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_AVMEDIA_INC_HELPIDS_H
-#define INCLUDED_AVMEDIA_INC_HELPIDS_H
+#pragma once
 
 #define HID_AVMEDIA_TOOLBOXITEM_PLAY                       "AVMEDIA_HID_AVMEDIA_TOOLBOXITEM_PLAY"
 #define HID_AVMEDIA_TOOLBOXITEM_PAUSE                      "AVMEDIA_HID_AVMEDIA_TOOLBOXITEM_PAUSE"
@@ -31,7 +30,5 @@
 #define HID_AVMEDIA_TIMEEDIT                               "AVMEDIA_HID_AVMEDIA_TIMEEDIT"
 #define HID_AVMEDIA_VOLUMESLIDER                           "AVMEDIA_HID_AVMEDIA_VOLUMESLIDER"
 #define HID_AVMEDIA_PLAYERWINDOW                           "AVMEDIA_HID_AVMEDIA_PLAYERWINDOW"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_AVMEDIA_INC_STRINGS_HRC
-#define INCLUDED_AVMEDIA_INC_STRINGS_HRC
+#pragma once
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
@@ -44,7 +43,5 @@
 #define AVMEDIA_STR_ALL_FILES       NC_("AVMEDIA_STR_ALL_FILES", "All files")
 #define AVMEDIA_STR_ERR_URL         NC_("AVMEDIA_STR_ERR_URL", "The format of the selected file is not supported.")
 #define AVMEDIA_STR_ZOOM_TOOLTIP    NC_("AVMEDIA_STR_ZOOM_TOOLTIP", "View")
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

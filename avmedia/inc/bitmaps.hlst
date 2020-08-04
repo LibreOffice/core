@@ -7,12 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_AVMEDIA_INC_BITMAPS_HRC
-#define INCLUDED_AVMEDIA_INC_BITMAPS_HRC
+#pragma once
 
 #define AVMEDIA_BMP_AUDIOLOGO       "avmedia/res/avaudiologo.png"
 #define AVMEDIA_BMP_EMPTYLOGO       "avmedia/res/avemptylogo.png"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
