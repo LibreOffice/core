@@ -30,6 +30,7 @@ struct ImplSVEvent;
 class SwFormatTablePage : public SfxTabPage
 {
     SwTableRep*     pTableData;
+    std::unique_ptr<SwTableRep> m_xOrigTableData;
     SwTwips         nSaveWidth;
     SwTwips         nMinTableWidth;
     bool            bModified;
@@ -84,8 +85,8 @@ public:
 
 class SwTableColumnPage : public SfxTabPage
 {
-    SwTableRep*     m_pOrigTableData;
-    std::unique_ptr<SwTableRep> m_xTableData;
+    SwTableRep*     m_pTableData;
+    std::unique_ptr<SwTableRep> m_xOrigTableData;
     ImplSVEvent*    m_pSizeHdlEvent;
     SwTwips         m_nTableWidth;
     SwTwips         m_nMinWidth;
