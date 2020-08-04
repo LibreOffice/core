@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASCTL_SOURCE_BASICIDE_BASICBOX_HXX
-#define INCLUDED_BASCTL_SOURCE_BASICIDE_BASICBOX_HXX
+#pragma once
 
 #include <svl/stritem.hxx>
 #include <sfx2/tbxctrl.hxx>
@@ -272,7 +271,5 @@ private:
 };
 
 } // namespace basctl
-
-#endif // INCLUDED_BASCTL_SOURCE_BASICIDE_BASICBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
