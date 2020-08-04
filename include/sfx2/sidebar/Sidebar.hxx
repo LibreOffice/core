@@ -21,6 +21,7 @@
 #define INCLUDED_SFX2_SIDEBAR_SIDEBAR_HXX
 
 #include <sfx2/dllapi.h>
+#include <sfx2/viewfrm.hxx>
 #include <rtl/ustring.hxx>
 
 namespace com::sun::star::frame { class XFrame; }
@@ -34,6 +35,8 @@ namespace sfx2::sidebar {
 class SFX2_DLLPUBLIC Sidebar
 {
 public:
+    static void ToggleDeck(const OUString& rsDeckId, SfxViewFrame *pViewFrame);
+
     /** Switch to the deck that contains the specified panel and make
         sure that the panel is visible (expanded and scrolled into the
         visible area.)

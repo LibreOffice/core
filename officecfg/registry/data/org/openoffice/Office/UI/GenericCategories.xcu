@@ -150,6 +150,11 @@
           <value xml:lang="en-US">Controls</value>
         </prop>
       </node>
+      <node oor:name="26" oor:op="replace">
+        <prop oor:name="Name" oor:type="xs:string">
+          <value xml:lang="en-US">Sidebar</value>
+        </prop>
+      </node>
     </node>
   </node>
 </oor:component-data>

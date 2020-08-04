@@ -133,6 +133,9 @@ using ::com::sun::star::container::XIndexContainer;
 #define ShellClass_SfxViewFrame
 #include <sfxslots.hxx>
 
+#include <unordered_map>
+#include <sfx2/sidebar/SidebarController.hxx>
+
 SFX_IMPL_SUPERCLASS_INTERFACE(SfxViewFrame,SfxShell)
 
 void SfxViewFrame::InitInterface_Impl()
@@ -3087,6 +3090,13 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
     }
 }
 
+static std::unordered_map<sal_uInt16, OUString> aDeckMap = {
+    { SID_PROPERTY_DECK, "PropertyDeck" },
+    { SID_STYLELIST_DECK, "StyleListDeck" },
+    { SID_GALLERY_DECK, "GalleryDeck" },
+    { SID_NAVIGATOR_DECK, "NavigatorDeck" }
+};
+
 /*  [Description]
 
     This method can be included in the Execute method for the on- and off-
@@ -3153,6 +3163,12 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
 
         ::sfx2::sidebar::Sidebar::ShowPanel("StyleListPanel",
                                             GetFrame().GetFrameInterface(), true);
+        rReq.Done();
+        return;
+    }
+    else if (aDeckMap.find(nSID) != aDeckMap.end())
+    {
+        ::sfx2::sidebar::Sidebar::ToggleDeck(aDeckMap[nSID], this);
         rReq.Done();
         return;
     }

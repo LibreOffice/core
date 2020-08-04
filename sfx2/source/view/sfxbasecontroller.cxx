@@ -135,6 +135,7 @@ sal_Int16 MapGroupIDToCommandGroup( SfxGroupId nGroupID )
         { SfxGroupId::Modify        ,   frame::CommandGroup::MODIFY         },
         { SfxGroupId::Drawing       ,   frame::CommandGroup::DRAWING        },
         { SfxGroupId::Controls      ,   frame::CommandGroup::CONTROLS       },
+        { SfxGroupId::Sidebar       ,   frame::CommandGroup::SIDEBAR        },
     };
 
 

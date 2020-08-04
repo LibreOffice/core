@@ -2897,6 +2897,38 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:PropertyDeck" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Properties Deck</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:StyleListDeck" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Styles Deck</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:GalleryDeck" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Gallery Deck</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:NavigatorDeck" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Navigator Deck</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+      </node>
       <node oor:name=".uno:OutlineRight" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Demote</value>

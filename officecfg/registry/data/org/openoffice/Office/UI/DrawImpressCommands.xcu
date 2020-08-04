@@ -2513,6 +2513,38 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:ShapesDeck" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Shapes Deck</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SdSlideTransitionDeck" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Slide Transistion Deck</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SdCustomAnimationDeck" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Custom Animation Deck</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SdMasterPagesDeck" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Master Slides Deck</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+      </node>
     </node>
   </node>
 </oor:component-data>

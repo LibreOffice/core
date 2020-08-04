@@ -128,6 +128,7 @@
 #define STR_GID_MODIFY                          NC_("STR_GID_MODIFY", "Modify")
 #define STR_GID_DRAWING                         NC_("STR_GID_DRAWING", "Drawing")
 #define STR_GID_CONTROLS                        NC_("STR_GID_CONTROLS", "Controls")
+#define STR_GID_SIDEBAR                         NC_("STR_GID_SIDEBAR", "Sidebar")
 #define STR_QUITAPP                             NC_("STR_QUITAPP", "E~xit %PRODUCTNAME")
 #define RID_STR_HELP                            NC_("RID_STR_HELP", "Help")
 #define RID_STR_HLPFILENOTEXIST                 NC_("RID_STR_HLPFILENOTEXIST", "The help file for this topic is not installed.")

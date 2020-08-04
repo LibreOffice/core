@@ -134,6 +134,10 @@ published constants CommandGroup
     /** specifies commands that are related to controls.
      */
     const short CONTROLS = 25;
+
+    /** specifies commands that are related to sidebar.
+     */
+    const short SIDEBAR = 26;
 };
 
 

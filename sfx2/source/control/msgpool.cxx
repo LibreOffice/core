@@ -105,6 +105,8 @@ namespace
             return STR_GID_DRAWING;
         else if (nId == SfxGroupId::Controls)
             return STR_GID_CONTROLS;
+        else if (nId == SfxGroupId::Sidebar)
+            return STR_GID_SIDEBAR;
         return nullptr;
     }
 }
