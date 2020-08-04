@@ -313,6 +313,30 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <value xml:lang="en-US" install:module="unxwnt">.uno:OptionsTreeDialog</value>
         </prop>
       </node>
+      <node oor:name="1_MOD1_MOD2" oor:op="replace">
+        <prop oor:name="Command">
+          <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+          <value xml:lang="en-US">.uno:PropertiesDeck</value>
+        </prop>
+      </node>
+      <node oor:name="2_MOD1_MOD2" oor:op="replace">
+        <prop oor:name="Command">
+          <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+          <value xml:lang="en-US">.uno:StylesDeck</value>
+        </prop>
+      </node>
+      <node oor:name="3_MOD1_MOD2" oor:op="replace">
+        <prop oor:name="Command">
+          <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+          <value xml:lang="en-US">.uno:GalleryDeck</value>
+        </prop>
+      </node>
+      <node oor:name="4_MOD1_MOD2" oor:op="replace">
+        <prop oor:name="Command">
+          <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+          <value xml:lang="en-US">.uno:NavigatorDeck</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="Modules">
       <node oor:name="com.sun.star.script.BasicIDE" oor:op="replace">
@@ -550,6 +574,12 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
         </node>
       </node>
       <node oor:name="com.sun.star.sheet.SpreadsheetDocument" oor:op="replace">
+        <node oor:name="5_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:FunctionsDeck</value>
+          </prop>
+        </node>
         <node oor:name="O_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -1550,6 +1580,12 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
         </node>
       </node>
       <node oor:name="com.sun.star.drawing.DrawingDocument" oor:op="replace">
+        <node oor:name="5_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:ShapesDeck</value>
+          </prop>
+        </node>
         <node oor:name="1_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -2784,6 +2820,24 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
         </node>
       </node>
       <node oor:name="com.sun.star.presentation.PresentationDocument" oor:op="replace">
+        <node oor:name="5_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:SlideTransitionDeck</value>
+          </prop>
+        </node>
+        <node oor:name="6_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:CustomAnimationDeck</value>
+          </prop>
+        </node>
+        <node oor:name="7_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:MasterPagesDeck</value>
+          </prop>
+        </node>
         <node oor:name="PAGEDOWN" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -5814,6 +5868,12 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="sv">.uno:Grow</value>
             <value xml:lang="de">.uno:Grow</value>
+          </prop>
+        </node>
+        <node oor:name="5_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:WriterPageDeck</value>
           </prop>
         </node>
         <node oor:name="ADD_MOD1" oor:op="replace">

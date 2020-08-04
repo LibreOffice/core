@@ -54,6 +54,7 @@
 #include <IDocumentRedlineAccess.hxx>
 
 #include <doc.hxx>
+#include <sfx2/sidebar/Sidebar.hxx>
 
 using namespace ::com::sun::star;
 
@@ -69,6 +70,14 @@ void SwView::GetState(SfxItemSet &rSet)
     {
         switch(nWhich)
         {
+            case SID_WRITERPAGE_DECK:
+            {
+                OUString deckId;
+                if (nWhich == SID_WRITERPAGE_DECK)
+                    deckId = "WriterPageDeck";
+                rSet.Put(SfxBoolItem(nWhich, sfx2::sidebar::Sidebar::IsDeckVisible(deckId, GetViewFrame())));
+            }
+            break;  
             case FN_TOGGLE_OUTLINE_CONTENT_VISIBILITY:
             {
                 bool bDisable(true);
