@@ -1953,7 +1953,7 @@ void VerticalSeparator::Paint (
     awt::Rectangle aBBox (GetBoundingBox());
 
     rendering::RenderState aRenderState(
-        geometry::AffineMatrix2D(1,0,0, 0,1,0),
+        geometry::AffineMatrix2D(1,0,aBBox.X, 0,1,aBBox.Y),
         nullptr,
         Sequence<double>(4),
         rendering::CompositeOperation::OVER);
@@ -1964,8 +1964,13 @@ void VerticalSeparator::Paint (
             PresenterCanvasHelper::SetDeviceColor(aRenderState, pFont->mnColor);
     }
 
-    rxCanvas->fillPolyPolygon(
-        PresenterGeometryHelper::CreatePolygon(aBBox, rxCanvas->getDevice()),
+    OUString separator = "bitmaps/Separator.png";
+    Reference<rendering::XBitmap> xBitmap(mpToolBar->GetPresenterController()->GetPresenterHelper()->loadBitmap(separator, rxCanvas));
+    if (!xBitmap.is())
+        return;
+
+    rxCanvas->drawBitmap(
+        xBitmap,
         rViewState,
         aRenderState);
 }
