@@ -36,20 +36,20 @@ SwTableRep::SwTableRep( const SwTabCols& rTabCol )
     m_bColsChanged(false)
 {
     m_nAllCols = m_nColCount = rTabCol.Count();
-    m_pTColumns.reset( new TColumn[ m_nColCount + 1 ] );
+    m_aTColumns.resize(m_nColCount + 1);
     SwTwips nStart = 0,
             nEnd;
     for( sal_uInt16 i = 0; i < m_nAllCols; ++i )
     {
         nEnd  = rTabCol[ i ] - rTabCol.GetLeft();
-        m_pTColumns[ i ].nWidth = nEnd - nStart;
-        m_pTColumns[ i ].bVisible = !rTabCol.IsHidden(i);
-        if(!m_pTColumns[ i ].bVisible)
+        m_aTColumns[ i ].nWidth = nEnd - nStart;
+        m_aTColumns[ i ].bVisible = !rTabCol.IsHidden(i);
+        if(!m_aTColumns[ i ].bVisible)
             m_nColCount --;
         nStart = nEnd;
     }
-    m_pTColumns[ m_nAllCols ].nWidth = rTabCol.GetRight() - rTabCol.GetLeft() - nStart;
-    m_pTColumns[ m_nAllCols ].bVisible = true;
+    m_aTColumns[ m_nAllCols ].nWidth = rTabCol.GetRight() - rTabCol.GetLeft() - nStart;
+    m_aTColumns[ m_nAllCols ].bVisible = true;
     m_nColCount++;
     m_nAllCols++;
 }
@@ -66,7 +66,7 @@ bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
     bool bSingleLine = false;
 
     for ( size_t i = 0; i < rTabCols.Count(); ++i )
-        if(!m_pTColumns[i].bVisible)
+        if(!m_aTColumns[i].bVisible)
         {
             bSingleLine = true;
             break;
@@ -109,7 +109,7 @@ bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
             }
             while((bFirst || !bOld ) && nNewPos < m_nAllCols )
             {
-                nNew += m_pTColumns[nNewPos].nWidth;
+                nNew += m_aTColumns[nNewPos].nWidth;
                 nNewPos++;
                 if(pOldTColumns[nNewPos - 1].bVisible)
                     break;
@@ -127,10 +127,10 @@ bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
     {
         for ( sal_uInt16 i = 0; i < m_nAllCols - 1; ++i )
         {
-            nPos += m_pTColumns[i].nWidth;
+            nPos += m_aTColumns[i].nWidth;
             rTabCols[i] = nPos + rTabCols.GetLeft();
-            rTabCols.SetHidden( i, !m_pTColumns[i].bVisible );
-            rTabCols.SetRight(nLeft + m_pTColumns[m_nAllCols - 1].nWidth + nPos);
+            rTabCols.SetHidden( i, !m_aTColumns[i].bVisible );
+            rTabCols.SetRight(nLeft + m_aTColumns[m_nAllCols - 1].nWidth + nPos);
         }
     }
 

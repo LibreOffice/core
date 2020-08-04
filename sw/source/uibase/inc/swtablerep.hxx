@@ -27,7 +27,7 @@ class SwTabCols;
 struct TColumn;
 class SW_DLLPUBLIC SwTableRep
 {
-    std::unique_ptr<TColumn[]> m_pTColumns;
+    std::vector<TColumn> m_aTColumns;
 
     SwTwips     m_nTableWidth;
     SwTwips     m_nSpace;
@@ -77,7 +77,7 @@ public:
     SwTwips     GetSpace() const                { return m_nSpace;}
     void        SetSpace(SwTwips nSet)          {m_nSpace = nSet;}
 
-    TColumn*    GetColumns() const              {return m_pTColumns.get();}
+    TColumn*    GetColumns()                    {return m_aTColumns.data();}
 };
 #endif
 
