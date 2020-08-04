@@ -1152,16 +1152,6 @@ void UnusedFields::checkTouchedFromOutside(const FieldDecl* fieldDecl, const Exp
 
     // it's touched from somewhere outside a class
     if (!methodDecl) {
-        if (fieldDecl->getName() == "m_pShell")
-        {
-            if (memberExprParentFunction)
-                memberExprParentFunction->dump();
-            memberExpr->dump();
-            const Decl *decl = loplugin::getFunctionDeclContext(compiler.getASTContext(), memberExpr);
-            if (decl)
-                decl->dump();
-            std::cout << "site1" << std::endl;
-        }
         touchedFromOutsideSet.insert(fieldInfo);
         return;
     }
