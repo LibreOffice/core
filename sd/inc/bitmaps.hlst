@@ -104,6 +104,7 @@
 #define BMP_PRESENTERSCREEN_BORDER_ACTIVE_LEFT                  "sd/res/presenterscreen-BorderActiveLeft.png"
 #define BMP_PRESENTERSCREEN_BUTTON_HELP_NORMAL                  "sd/res/presenterscreen-ButtonHelpNormal.png"
 #define BMP_PRESENTERSCREEN_BUTTON_EXIT_PRESENTER_NORMAL        "sd/res/presenterscreen-ButtonExitPresenterNormal.png"
+#define BMP_PRESENTERSCREEN_SEPARATOR                           "sd/res/presenterscreen-Separator.png"
 #define BMP_PRESENTERSCREEN_BORDER_ACTIVE_BOTTOM_CALLOUT        "sd/res/presenterscreen-BorderActiveBottomCallout.png"
 #define BMP_PRESENTERSCREEN_BORDER_TOOLBAR_LEFT                 "sd/res/presenterscreen-BorderToolbarLeft.png"
 #define BMP_PRESENTERSCREEN_BUTTON_SLIDE_SORTER_NORMAL          "sd/res/presenterscreen-ButtonSlideSorterNormal.png"
