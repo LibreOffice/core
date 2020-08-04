@@ -373,6 +373,7 @@ sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet, boo
                 pItem = nullptr;
 
             SwFormatHoriOrient aOldH( rFormat.GetHoriOrient() );
+            bool bPutOldH(false);
 
             if( text::HoriOrientation::NONE == aOldH.GetHoriOrient() && ( !pItem ||
                 aOldH.GetPos() == static_cast<const SwFormatHoriOrient*>(pItem)->GetPos() ))
@@ -387,6 +388,22 @@ sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet, boo
                     aOldH.SetRelationOrient( pH->GetRelationOrient() );
                 }
                 aOldH.SetPos( nPos );
+                bPutOldH = true;
+            }
+            if (nNew == RndStdIds::FLY_AT_PAGE)
+            {
+                sal_Int16 nRelOrient(pItem
+                    ? static_cast<const SwFormatHoriOrient*>(pItem)->GetRelationOrient()
+                    : aOldH.GetRelationOrient());
+                if (sw::GetAtPageRelOrientation(nRelOrient, false))
+                {
+                    SAL_INFO("sw.ui", "fixing horizontal RelOrientation for at-page anchor");
+                    aOldH.SetRelationOrient(nRelOrient);
+                    bPutOldH = true;
+                }
+            }
+            if (bPutOldH)
+            {
                 rSet.Put( aOldH );
             }
 
@@ -916,6 +933,17 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                 // of attributes (method call <SetAttr(..)>) takes care of the
                 // invalidation of the object position.
                 SetAttr( aNewAnch, *pContact->GetFormat() );
+                if (aNewAnch.GetAnchorId() == RndStdIds::FLY_AT_PAGE)
+                {
+                    SwFormatHoriOrient item(pContact->GetFormat()->GetHoriOrient());
+                    sal_Int16 nRelOrient(item.GetRelationOrient());
+                    if (sw::GetAtPageRelOrientation(nRelOrient, false))
+                    {
+                        SAL_INFO("sw.ui", "fixing horizontal RelOrientation for at-page anchor");
+                        item.SetRelationOrient(text::RelOrientation::PAGE_FRAME);
+                        SetAttr(item, *pContact->GetFormat());
+                    }
+                }
                 if ( _bPosCorr )
                 {
                     // #i33313# - consider not connected 'virtual' drawing
