@@ -233,88 +233,88 @@ SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( "Office.Common/Pa
     EnableNotification( aNames );
     const Any* pValues = aValues.getConstArray();
     DBG_ASSERT( aValues.getLength() == aNames.getLength(), "GetProperties failed" );
-    if ( aValues.getLength() == aNames.getLength() )
+    if ( aValues.getLength() != aNames.getLength() )
+        return;
+
+    SvtPathOptions aPathOpt;
+    OUString aTempStr;
+    OUStringBuffer aFullPathBuf;
+
+    for ( int nProp = 0; nProp < aNames.getLength(); nProp++ )
     {
-        SvtPathOptions aPathOpt;
-        OUString aTempStr;
-        OUStringBuffer aFullPathBuf;
-
-        for ( int nProp = 0; nProp < aNames.getLength(); nProp++ )
+        if ( pValues[nProp].hasValue() )
         {
-            if ( pValues[nProp].hasValue() )
+            switch ( pValues[nProp].getValueTypeClass() )
             {
-                switch ( pValues[nProp].getValueTypeClass() )
+                case css::uno::TypeClass_STRING :
                 {
-                    case css::uno::TypeClass_STRING :
+                    // multi paths
+                    if ( pValues[nProp] >>= aTempStr )
+                        aFullPathBuf = aPathOpt.SubstituteVariable( aTempStr );
+                    else
                     {
-                        // multi paths
-                        if ( pValues[nProp] >>= aTempStr )
-                            aFullPathBuf = aPathOpt.SubstituteVariable( aTempStr );
-                        else
-                        {
-                            SAL_WARN( "unotools.config", "any operator >>= failed" );
-                        }
-                        break;
+                        SAL_WARN( "unotools.config", "any operator >>= failed" );
                     }
-
-                    case css::uno::TypeClass_SEQUENCE :
-                    {
-                        // single paths
-                        aFullPathBuf.setLength(0);
-                        Sequence < OUString > aList;
-                        if ( pValues[nProp] >>= aList )
-                        {
-                            sal_Int32 nCount = aList.getLength();
-                            for ( sal_Int32 nPosition = 0; nPosition < nCount; ++nPosition )
-                            {
-                                aFullPathBuf.append(aPathOpt.SubstituteVariable( aList[ nPosition ] ));
-                                if ( nPosition < nCount-1 )
-                                    aFullPathBuf.append(";");
-                            }
-                        }
-                        else
-                        {
-                            SAL_WARN( "unotools.config", "any operator >>= failed" );
-                        }
-                        break;
-                    }
-
-                    default:
-                    {
-                        SAL_WARN( "unotools.config", "Wrong any type" );
-                    }
+                    break;
                 }
 
-                auto aFullPath = aFullPathBuf.makeStringAndClear();
-                switch ( nProp )
+                case css::uno::TypeClass_SEQUENCE :
                 {
-                    case DEFAULTPATH_ADDIN:            m_aAddinPath = aFullPath;         break;
-                    case DEFAULTPATH_AUTOCORRECT:      m_aAutoCorrectPath = aFullPath;   break;
-                    case DEFAULTPATH_AUTOTEXT:         m_aAutoTextPath = aFullPath;      break;
-                    case DEFAULTPATH_BACKUP:           m_aBackupPath = aFullPath;        break;
-                    case DEFAULTPATH_BASIC:            m_aBasicPath = aFullPath;         break;
-                    case DEFAULTPATH_BITMAP:           m_aBitmapPath = aFullPath;        break;
-                    case DEFAULTPATH_CONFIG:           m_aConfigPath = aFullPath;        break;
-                    case DEFAULTPATH_DICTIONARY:       m_aDictionaryPath = aFullPath;    break;
-                    case DEFAULTPATH_FAVORITES:        m_aFavoritesPath = aFullPath;     break;
-                    case DEFAULTPATH_FILTER:           m_aFilterPath = aFullPath;        break;
-                    case DEFAULTPATH_GALLERY:          m_aGalleryPath = aFullPath;       break;
-                    case DEFAULTPATH_GRAPHIC:          m_aGraphicPath = aFullPath;       break;
-                    case DEFAULTPATH_HELP:             m_aHelpPath = aFullPath;          break;
-                    case DEFAULTPATH_LINGUISTIC:       m_aLinguisticPath = aFullPath;    break;
-                    case DEFAULTPATH_MODULE:           m_aModulePath = aFullPath;        break;
-                    case DEFAULTPATH_PALETTE:          m_aPalettePath = aFullPath;       break;
-                    case DEFAULTPATH_PLUGIN:           m_aPluginPath = aFullPath;        break;
-                    case DEFAULTPATH_TEMP:             m_aTempPath = aFullPath;          break;
-                    case DEFAULTPATH_TEMPLATE:         m_aTemplatePath = aFullPath;      break;
-                    case DEFAULTPATH_USERCONFIG:       m_aUserConfigPath = aFullPath;    break;
-                    case DEFAULTPATH_WORK:             m_aWorkPath = aFullPath;          break;
-                    case DEFAULTPATH_CLASSIFICATION:   m_aClassificationPath = aFullPath;break;
-                    case DEFAULTPATH_USERDICTIONARY:   break;
-
-                    default:
-                        SAL_WARN( "unotools.config", "invalid index to load a default path" );
+                    // single paths
+                    aFullPathBuf.setLength(0);
+                    Sequence < OUString > aList;
+                    if ( pValues[nProp] >>= aList )
+                    {
+                        sal_Int32 nCount = aList.getLength();
+                        for ( sal_Int32 nPosition = 0; nPosition < nCount; ++nPosition )
+                        {
+                            aFullPathBuf.append(aPathOpt.SubstituteVariable( aList[ nPosition ] ));
+                            if ( nPosition < nCount-1 )
+                                aFullPathBuf.append(";");
+                        }
+                    }
+                    else
+                    {
+                        SAL_WARN( "unotools.config", "any operator >>= failed" );
+                    }
+                    break;
                 }
+
+                default:
+                {
+                    SAL_WARN( "unotools.config", "Wrong any type" );
+                }
+            }
+
+            auto aFullPath = aFullPathBuf.makeStringAndClear();
+            switch ( nProp )
+            {
+                case DEFAULTPATH_ADDIN:            m_aAddinPath = aFullPath;         break;
+                case DEFAULTPATH_AUTOCORRECT:      m_aAutoCorrectPath = aFullPath;   break;
+                case DEFAULTPATH_AUTOTEXT:         m_aAutoTextPath = aFullPath;      break;
+                case DEFAULTPATH_BACKUP:           m_aBackupPath = aFullPath;        break;
+                case DEFAULTPATH_BASIC:            m_aBasicPath = aFullPath;         break;
+                case DEFAULTPATH_BITMAP:           m_aBitmapPath = aFullPath;        break;
+                case DEFAULTPATH_CONFIG:           m_aConfigPath = aFullPath;        break;
+                case DEFAULTPATH_DICTIONARY:       m_aDictionaryPath = aFullPath;    break;
+                case DEFAULTPATH_FAVORITES:        m_aFavoritesPath = aFullPath;     break;
+                case DEFAULTPATH_FILTER:           m_aFilterPath = aFullPath;        break;
+                case DEFAULTPATH_GALLERY:          m_aGalleryPath = aFullPath;       break;
+                case DEFAULTPATH_GRAPHIC:          m_aGraphicPath = aFullPath;       break;
+                case DEFAULTPATH_HELP:             m_aHelpPath = aFullPath;          break;
+                case DEFAULTPATH_LINGUISTIC:       m_aLinguisticPath = aFullPath;    break;
+                case DEFAULTPATH_MODULE:           m_aModulePath = aFullPath;        break;
+                case DEFAULTPATH_PALETTE:          m_aPalettePath = aFullPath;       break;
+                case DEFAULTPATH_PLUGIN:           m_aPluginPath = aFullPath;        break;
+                case DEFAULTPATH_TEMP:             m_aTempPath = aFullPath;          break;
+                case DEFAULTPATH_TEMPLATE:         m_aTemplatePath = aFullPath;      break;
+                case DEFAULTPATH_USERCONFIG:       m_aUserConfigPath = aFullPath;    break;
+                case DEFAULTPATH_WORK:             m_aWorkPath = aFullPath;          break;
+                case DEFAULTPATH_CLASSIFICATION:   m_aClassificationPath = aFullPath;break;
+                case DEFAULTPATH_USERDICTIONARY:   break;
+
+                default:
+                    SAL_WARN( "unotools.config", "invalid index to load a default path" );
             }
         }
     }
