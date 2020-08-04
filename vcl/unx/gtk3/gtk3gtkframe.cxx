@@ -712,7 +712,7 @@ void GtkSalFrame::moveWindow( long nX, long nY )
     if( isChild( false ) )
     {
         GtkWidget* pParent = m_pParent ? gtk_widget_get_parent(m_pWindow) : nullptr;
-        // tdf#130414 its possible that we were reparented and are no longer inside
+        // tdf#130414 it's possible that we were reparented and are no longer inside
         // our original GtkFixed parent
         if (pParent && GTK_IS_FIXED(pParent))
         {
