@@ -13,7 +13,7 @@
 
 bool OpenGLGlobalWinGlyphCache::AllocateTexture(WinGlyphDrawElement& rElement, CompatibleDC* dc)
 {
-    assert(rElement.maTexture.get() == nullptr);
+    assert(!rElement.maTexture);
     assert(dynamic_cast<OpenGLCompatibleDC*>(dc));
     OpenGLCompatibleDC* odc = static_cast<OpenGLCompatibleDC*>(dc);
     OpenGLCompatibleDC::Texture* texture = new OpenGLCompatibleDC::Texture;

@@ -279,7 +279,7 @@ OOdbcManagement::OOdbcManagement(const Link<void*,void>& rAsyncFinishCallback)
 OOdbcManagement::~OOdbcManagement()
 {
     // wait for our thread to be finished
-    if ( m_pProcessWait.get() )
+    if ( m_pProcessWait )
         m_pProcessWait->join();
 }
 
@@ -305,19 +305,19 @@ bool OOdbcManagement::manageDataSources_async()
 
 void OOdbcManagement::disableCallback()
 {
-    if (m_pProcessWait.get())
+    if (m_pProcessWait)
         m_pProcessWait->disableCallback();
 }
 
 void OOdbcManagement::receivedCallback()
 {
-    if (m_pProcessWait.get())
+    if (m_pProcessWait)
         m_pProcessWait->receivedCallback();
 }
 
 bool OOdbcManagement::isRunning() const
 {
-    return ( m_pProcessWait.get() && m_pProcessWait->isRunning() );
+    return ( m_pProcessWait && m_pProcessWait->isRunning() );
 }
 
 #endif // HAVE_ODBC_ADMINISTRATION
