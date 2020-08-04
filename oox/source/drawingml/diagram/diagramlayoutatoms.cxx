@@ -1146,6 +1146,28 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                 if (aCurrShape->getSubType() == XML_conn)
                     aCurrShape->setRotation(nConnectorAngle * PER_DEGREE);
             }
+
+            // Newer shapes are behind older ones by default. Reverse this if requested.
+            sal_Int32 nChildOrder = XML_b;
+            const LayoutNode* pParentLayoutNode = nullptr;
+            for (LayoutAtomPtr pAtom = getParent(); pAtom; pAtom = pAtom->getParent())
+            {
+                auto pLayoutNode = dynamic_cast<LayoutNode*>(pAtom.get());
+                if (pLayoutNode)
+                {
+                    pParentLayoutNode = pLayoutNode;
+                    break;
+                }
+            }
+            if (pParentLayoutNode)
+            {
+                nChildOrder = pParentLayoutNode->getChildOrder();
+            }
+            if (nChildOrder == XML_t)
+            {
+                std::reverse(rShape->getChildren().begin(), rShape->getChildren().end());
+            }
+
             break;
         }
 
