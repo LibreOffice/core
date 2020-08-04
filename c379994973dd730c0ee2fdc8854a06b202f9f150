@@ -46,6 +46,30 @@
       "revId": "c379994973dd730c0ee2fdc8854a06b202f9f150",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "462d5f0b_97be9890",
+        "filename": "sdext/source/presenter/PresenterProtocolHandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-04T13:40:00Z",
+      "side": 0,
+      "message": "I don\u0027t think I commented about that. And I actually tested now what I suggested, and no, that doesn\u0027t work (the button doesn\u0027t get disabled).\n\nThe problem is that the code that now disables the button gets called from under SlideshowImpl::displayCurrentSlide; and that function doesn\u0027t get called from SlideshowImpl::gotoNextSlide when going to the end scene (\"click to exit presentation\").\n\nSome proper mechanism is needed to notify the button on disabled state; it has a command with state IIUC (vnd.org.libreoffice.presenterscreen:NextEffect), so should be doable.\n\nSo calling PresenterProtocolHandler::Dispatch::dispatch with URL set to \"vnd.org.libreoffice.presenterscreen:NextEffect\", and argument setting it to disabled, should be something to implement; then make sure that the button listens to it (currently Element::UpdateState for some reason adds listener, then removes listener ... maybe that\u0027s OK, but then we need to call the PresenterController::UpdateViews, or PresenterToolBar::setCurrentPage, or PresenterToolBar::UpdateSlideNumber manually)...",
+      "parentUuid": "dc452e88_413f2322",
+      "range": {
+        "startLine": 552,
+        "startChar": 82,
+        "endLine": 552,
+        "endChar": 83
+      },
+      "revId": "c379994973dd730c0ee2fdc8854a06b202f9f150",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
