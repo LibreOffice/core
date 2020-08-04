@@ -787,7 +787,11 @@ void SwAnchoredDrawObject::AdjustPositioningAttr( const SwFrame* _pNewAnchorFram
         nVertRelPos = aObjRect.Top() - aAnchorPos.Y();
     }
 
-    GetFrameFormat().SetFormatAttr( SwFormatHoriOrient( nHoriRelPos, text::HoriOrientation::NONE, text::RelOrientation::FRAME ) );
+    assert(GetFrameFormat().GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PAGE);
+    GetFrameFormat().SetFormatAttr( SwFormatHoriOrient( nHoriRelPos, text::HoriOrientation::NONE,
+        GetFrameFormat().GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PAGE
+            ? text::RelOrientation::PAGE_FRAME
+            : text::RelOrientation::FRAME ) );
     GetFrameFormat().SetFormatAttr( SwFormatVertOrient( nVertRelPos, text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
 }
 

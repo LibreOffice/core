@@ -916,6 +916,22 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                 // of attributes (method call <SetAttr(..)>) takes care of the
                 // invalidation of the object position.
                 SetAttr( aNewAnch, *pContact->GetFormat() );
+                if (aNewAnch.GetAnchorId() == RndStdIds::FLY_AT_PAGE)
+                {
+                    SwFormatHoriOrient item(pContact->GetFormat()->GetHoriOrient());
+                    switch (item.GetRelationOrient())
+                    {
+                        case text::RelOrientation::CHAR:
+                        case text::RelOrientation::FRAME:
+                        case text::RelOrientation::PRINT_AREA:
+                        case text::RelOrientation::FRAME_LEFT:
+                        case text::RelOrientation::FRAME_RIGHT:
+                            SAL_INFO("sw.ui", "fixing horizontal RelOrientation for at-page anchor");
+                            item.SetRelationOrient(text::RelOrientation::PAGE_FRAME);
+                            SetAttr(item, *pContact->GetFormat());
+                            break;
+                    }
+                }
                 if ( _bPosCorr )
                 {
                     // #i33313# - consider not connected 'virtual' drawing
