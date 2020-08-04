@@ -27,12 +27,6 @@ class SwWrtShell;
 class SwTableRep;
 struct ImplSVEvent;
 
-struct TColumn
-{
-    SwTwips nWidth;
-    bool    bVisible;
-};
-
 class SwFormatTablePage : public SfxTabPage
 {
     SwTableRep*     pTableData;
