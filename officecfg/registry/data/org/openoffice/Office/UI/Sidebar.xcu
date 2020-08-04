@@ -57,7 +57,7 @@
           </value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>450</value>
+          <value>600</value>
         </prop>
         <prop oor:name="IsExperimental" oor:type="xs:boolean">
           <value>true</value>
@@ -80,7 +80,7 @@
           </value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>100</value>
+          <value>500</value>
         </prop>
       </node>
 
@@ -100,7 +100,7 @@
           </value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>200</value>
+          <value>500</value>
         </prop>
       </node>
 
@@ -141,7 +141,7 @@
           </value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>160</value>
+          <value>700</value>
         </prop>
       </node>
 
@@ -161,7 +161,7 @@
           </value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>140</value>
+          <value>600</value>
         </prop>
       </node>
 
@@ -181,7 +181,7 @@
           </value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>120</value>
+          <value>500</value>
         </prop>
       </node>
 
@@ -288,7 +288,7 @@
           </value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>700</value>
+          <value>600</value>
         </prop>
         <prop oor:name="IsExperimental" oor:type="xs:boolean">
           <value>true</value>

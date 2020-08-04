@@ -270,14 +270,6 @@ bool SidebarDockingWindow::EventNotify(NotifyEvent& rEvent)
             mpAccel->init(comphelper::getProcessComponentContext(), mpSidebarController->getXFrame());
         }
         const OUString aCommand(mpAccel->findCommand(svt::AcceleratorExecute::st_VCLKey2AWTKey(rKeyCode)));
-        if (".uno:DesignerDialog" == aCommand)
-        {
-            std::shared_ptr<PanelDescriptor> xPanelDescriptor =
-                    mpSidebarController->GetResourceManager()->GetPanelDescriptor( "StyleListPanel" );
-            if ( xPanelDescriptor && mpSidebarController->IsDeckVisible( xPanelDescriptor->msDeckId ) )
-                Close();
-            return true;
-        }
         if (".uno:Undo" == aCommand || ".uno:Redo" == aCommand)
         {
             comphelper::dispatchCommand(aCommand, {});
