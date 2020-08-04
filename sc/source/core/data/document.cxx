@@ -85,6 +85,7 @@
 #include <compressedarray.hxx>
 #include <docsh.hxx>
 #include <brdcst.hxx>
+#include <recursionhelper.hxx>
 
 #include <formula/vectortoken.hxx>
 
@@ -6809,15 +6810,15 @@ ScRecursionHelper& ScDocument::GetRecursionHelper()
 {
     if (!IsThreadedGroupCalcInProgress())
     {
-        if (!maNonThreaded.pRecursionHelper)
-            maNonThreaded.pRecursionHelper = CreateRecursionHelperInstance();
-        return *maNonThreaded.pRecursionHelper;
+        if (!maNonThreaded.xRecursionHelper)
+            maNonThreaded.xRecursionHelper = std::make_unique<ScRecursionHelper>();
+        return *maNonThreaded.xRecursionHelper;
     }
     else
     {
-        if (!maThreadSpecific.pRecursionHelper)
-            maThreadSpecific.pRecursionHelper = CreateRecursionHelperInstance();
-        return *maThreadSpecific.pRecursionHelper;
+        if (!maThreadSpecific.xRecursionHelper)
+            maThreadSpecific.xRecursionHelper = std::make_unique<ScRecursionHelper>();
+        return *maThreadSpecific.xRecursionHelper;
     }
 }
 
@@ -6831,6 +6832,12 @@ void ScDocumentThreadSpecific::MergeBackIntoNonThreadedData(ScDocumentThreadSpec
 {
     // What about recursion helper and lookup cache?
 }
+
+ScDocumentThreadSpecific::ScDocumentThreadSpecific()
+    : pContext(nullptr)
+{}
+
+ScDocumentThreadSpecific::~ScDocumentThreadSpecific() {}
 
 void ScDocument::SetupFromNonThreadedContext(ScInterpreterContext& /*threadedContext*/, int /*threadNumber*/)
 {

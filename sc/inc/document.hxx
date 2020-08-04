@@ -296,14 +296,11 @@ const sal_uInt8 SC_DDE_IGNOREMODE    = 255;       /// For usage in FindDdeLink()
 // During threaded calculation fields being mutated are kept in this struct
 struct ScDocumentThreadSpecific
 {
-    ScRecursionHelper*      pRecursionHelper;               // information for recursive and iterative cell formulas
+    std::unique_ptr<ScRecursionHelper> xRecursionHelper; // information for recursive and iterative cell formulas
     ScInterpreterContext* pContext;  // references the context passed around for easier access
 
-    ScDocumentThreadSpecific()
-        : pRecursionHelper(nullptr)
-        , pContext(nullptr)
-    {
-    }
+    ScDocumentThreadSpecific();
+    ~ScDocumentThreadSpecific();
 
     // To be called in the thread at start
     static void SetupFromNonThreadedData(const ScDocumentThreadSpecific& rNonThreadedData);
@@ -2224,8 +2221,6 @@ private:
                                         ScProgress* pProgress, sal_uLong nProAdd );
 
     DECL_LINK(TrackTimeHdl, Timer *, void);
-
-    static ScRecursionHelper*   CreateRecursionHelperInstance();
 
     /** Adjust a range to available sheets.
 
