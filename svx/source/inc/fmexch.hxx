@@ -99,7 +99,6 @@ namespace svxform
 
         void        prepareDrag( );
 
-        void        startDrag(vcl::Window* pDragSource, sal_Int8 nDragSourceActions);
         void        copyToClipboard( ) const;
 
         bool    isDragSource() const { return m_xTransferable.is() && m_xTransferable->isDragging(); }

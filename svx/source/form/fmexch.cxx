@@ -327,12 +327,6 @@ namespace svxform
         implReset();
     }
 
-    void OLocalExchangeHelper::startDrag(vcl::Window* pDragSource, sal_Int8 nDragSourceActions)
-    {
-        DBG_ASSERT(m_xTransferable.is(), "OLocalExchangeHelper::startDrag: not prepared!");
-        m_xTransferable->startDrag( pDragSource, nDragSourceActions, OLocalExchange::GrantAccess() );
-    }
-
     void OLocalExchangeHelper::copyToClipboard( ) const
     {
         DBG_ASSERT( m_xTransferable.is(), "OLocalExchangeHelper::copyToClipboard: not prepared!" );

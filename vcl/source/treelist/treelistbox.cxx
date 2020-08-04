@@ -1059,11 +1059,6 @@ bool SvTreeListBox::HandleKeyInput( const KeyEvent& _rKEvt )
     return false;
 }
 
-bool SvTreeListBox::EditingCanceled() const
-{
-    return pEdCtrl && pEdCtrl->EditingCanceled();
-}
-
 
 //JP 28.3.2001: new Drag & Drop API
 sal_Int8 SvTreeListBox::AcceptDrop( const AcceptDropEvent& rEvt )

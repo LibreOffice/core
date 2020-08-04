@@ -295,7 +295,6 @@ protected:
     std::unique_ptr<SvInplaceEdit2>  pEdCtrl;
     void            EditText( const OUString&, const tools::Rectangle&,const Selection&);
     void            CancelTextEditing();
-    bool            EditingCanceled() const;
 
     // InitViewData is called right after CreateViewData
     // The Entry is has not yet been added to the View in InitViewData!
