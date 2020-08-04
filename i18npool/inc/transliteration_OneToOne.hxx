@@ -68,8 +68,8 @@ public: \
 };
 
 TRANSLITERATION_ONETOONE( fullwidthToHalfwidth )
-TRANSLITERATION_ONETOONE( fullwidthKatakanaToHalfwidthKatakana )
-TRANSLITERATION_ONETOONE( fullwidthToHalfwidthLikeASC )
+TRANSLITERATION_ONETOONE( FULLWIDTHKATAKANA_HALFWIDTHKATAKANA )
+TRANSLITERATION_ONETOONE( FULLWIDTH_HALFWIDTH_LIKE_ASC )
 
 class halfwidthToFullwidth final : public transliteration_OneToOne
 {
@@ -78,17 +78,17 @@ public:
     OUString
     transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 >& offset, bool useOffset ) override;
 };
-class halfwidthKatakanaToFullwidthKatakana final : public transliteration_OneToOne
+class HALFWIDTHKATAKANA_FULLWIDTHKATAKANA final : public transliteration_OneToOne
 {
 public:
-    halfwidthKatakanaToFullwidthKatakana();
+    HALFWIDTHKATAKANA_FULLWIDTHKATAKANA();
     OUString
     transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 >& offset, bool useOffset ) override;
 };
-class halfwidthToFullwidthLikeJIS final : public transliteration_OneToOne
+class HALFWIDTH_FULLWIDTH_LIKE_JIS final : public transliteration_OneToOne
 {
 public:
-    halfwidthToFullwidthLikeJIS();
+    HALFWIDTH_FULLWIDTH_LIKE_JIS();
     OUString
     transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 >& offset, bool useOffset ) override;
 };

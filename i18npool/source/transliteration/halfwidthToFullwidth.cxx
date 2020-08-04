@@ -45,7 +45,7 @@ halfwidthToFullwidth::transliterateImpl( const OUString& inStr, sal_Int32 startP
     return i18nutil::widthfolding::compose_ja_voiced_sound_marks ( newStr, 0, newStr.getLength(), offset, useOffset );
 }
 
-halfwidthKatakanaToFullwidthKatakana::halfwidthKatakanaToFullwidthKatakana()
+HALFWIDTHKATAKANA_FULLWIDTHKATAKANA::HALFWIDTHKATAKANA_FULLWIDTHKATAKANA()
 {
     func = nullptr;
     table = &i18nutil::widthfolding::gethalfKana2fullKanaTable();
@@ -54,7 +54,7 @@ halfwidthKatakanaToFullwidthKatakana::halfwidthKatakanaToFullwidthKatakana()
 }
 
 OUString
-halfwidthKatakanaToFullwidthKatakana::transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset )
+HALFWIDTHKATAKANA_FULLWIDTHKATAKANA::transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset )
 {
     // One to One mapping
     const OUString& newStr = transliteration_OneToOne::transliterateImpl( inStr, startPos, nCount, offset, false);
@@ -63,7 +63,7 @@ halfwidthKatakanaToFullwidthKatakana::transliterateImpl( const OUString& inStr, 
     return i18nutil::widthfolding::compose_ja_voiced_sound_marks ( newStr, 0, newStr.getLength(), offset, useOffset );
 }
 
-halfwidthToFullwidthLikeJIS::halfwidthToFullwidthLikeJIS()
+HALFWIDTH_FULLWIDTH_LIKE_JIS::HALFWIDTH_FULLWIDTH_LIKE_JIS()
 {
     func = nullptr;
     table = &i18nutil::widthfolding::gethalf2fullTableForJIS();
@@ -72,7 +72,7 @@ halfwidthToFullwidthLikeJIS::halfwidthToFullwidthLikeJIS()
 }
 
 OUString
-halfwidthToFullwidthLikeJIS::transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset )
+HALFWIDTH_FULLWIDTH_LIKE_JIS::transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset )
 {
     // One to One mapping
     const OUString& newStr = transliteration_OneToOne::transliterateImpl( inStr, startPos, nCount, offset, false);

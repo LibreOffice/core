@@ -227,41 +227,49 @@
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
   <implementation name="com.sun.star.i18n.Transliteration.CharToNumLower_zh_CN">
+      constructor="i18npool_CharToNumLower_zh_CN_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.Transliteration.CharToNumLower_zh_TW">
+  <implementation name="com.sun.star.i18n.Transliteration.CharToNumLower_zh_TW"
+      constructor="i18npool_CharToNumLower_zh_TW_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
   <implementation name="com.sun.star.i18n.Transliteration.CharToNumUpper_ko"
       constructor="i18npool_CharToNumUpper_ko_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.Transliteration.CharToNumUpper_zh_CN">
+  <implementation name="com.sun.star.i18n.Transliteration.CharToNumUpper_zh_CN"
+      constructor="i18npool_CharToNumUpper_zh_CN_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.Transliteration.CharToNumUpper_zh_TW">
+  <implementation name="com.sun.star.i18n.Transliteration.CharToNumUpper_zh_TW"
+      constructor="i18npool_CharToNumUpper_zh_TW_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
   <implementation name="com.sun.star.i18n.Transliteration.CharToNum_th"
       constructor="i18npool_CharToNum_th_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.Transliteration.FULLWIDTHKATAKANA_HALFWIDTHKATAKANA">
+  <implementation name="com.sun.star.i18n.Transliteration.FULLWIDTHKATAKANA_HALFWIDTHKATAKANA"
+      constructor="i18npool_FULLWIDTHKATAKANA_HALFWIDTHKATAKANA_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
   <implementation name="com.sun.star.i18n.Transliteration.FULLWIDTH_HALFWIDTH">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.Transliteration.FULLWIDTH_HALFWIDTH_LIKE_ASC">
+  <implementation name="com.sun.star.i18n.Transliteration.FULLWIDTH_HALFWIDTH_LIKE_ASC"
+      constructor="i18npool_FULLWIDTH_HALFWIDTH_LIKE_ASC_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.Transliteration.HALFWIDTHKATAKANA_FULLWIDTHKATAKANA">
+  <implementation name="com.sun.star.i18n.Transliteration.HALFWIDTHKATAKANA_FULLWIDTHKATAKANA"
+      constructor="i18npool_HALFWIDTHKATAKANA_FULLWIDTHKATAKANA_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
   <implementation name="com.sun.star.i18n.Transliteration.HALFWIDTH_FULLWIDTH">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.Transliteration.HALFWIDTH_FULLWIDTH_LIKE_JIS">
+  <implementation name="com.sun.star.i18n.Transliteration.HALFWIDTH_FULLWIDTH_LIKE_JIS"
+      constructor="i18npool_HALFWIDTH_FULLWIDTH_LIKE_JIS_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
   <implementation name="com.sun.star.i18n.Transliteration.HIRAGANA_KATAKANA">
@@ -333,7 +341,8 @@
   <implementation name="com.sun.star.i18n.Transliteration.NumToTextAIUFullWidth_ja_JP">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.Transliteration.NumToTextAIUHalfWidth_ja_JP">
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextAIUHalfWidth_ja_JP"
+      constructor="i18npool_NumToTextAIUHalfWidth_ja_JP_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
   <implementation name="com.sun.star.i18n.Transliteration.NumToTextCircledNumber">
@@ -346,12 +355,15 @@
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
   <implementation name="com.sun.star.i18n.Transliteration.NumToTextFormalHangul_ko">
+      constructor="i18npool_NumToTextFormalHangul_ko_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.Transliteration.NumToTextFormalLower_ko">
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextFormalLower_ko"
+      constructor="i18npool_NumToTextFormalLower_ko_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.Transliteration.NumToTextFormalUpper_ko">
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextFormalUpper_ko"
+      constructor="i18npool_NumToTextFormalUpper_ko_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
   <implementation name="com.sun.star.i18n.Transliteration.NumToTextFullwidth_ja_JP">
@@ -369,30 +381,39 @@
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
   <implementation name="com.sun.star.i18n.Transliteration.NumToTextHangulCircledJamo_ko">
+      constructor="i18npool_NumToTextHangulCircledJamo_ko_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.Transliteration.NumToTextHangulCircledSyllable_ko">
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextHangulCircledSyllable_ko"
+      constructor="i18npool_NumToTextHangulCircledSyllable_ko_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.Transliteration.NumToTextHangulJamo_ko">
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextHangulJamo_ko"
+      constructor="i18npool_NumToTextHangulJamo_ko_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.Transliteration.NumToTextHangulSyllable_ko">
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextHangulSyllable_ko"
+      constructor="i18npool_NumToTextHangulSyllable_ko_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.Transliteration.NumToTextIROHAFullWidth_ja_JP">
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextIROHAFullWidth_ja_JP"
+      constructor="i18npool_NumToTextIROHAFullWidth_ja_JP_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.Transliteration.NumToTextIROHAHalfWidth_ja_JP">
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextIROHAHalfWidth_ja_JP"
+      constructor="i18npool_NumToTextIROHAHalfWidth_ja_JP_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.Transliteration.NumToTextInformalHangul_ko">
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextInformalHangul_ko"
+      constructor="i18npool_NumToTextInformalHangul_ko_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.Transliteration.NumToTextInformalLower_ko">
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextInformalLower_ko"
+      constructor="i18npool_NumToTextInformalLower_ko_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.Transliteration.NumToTextInformalUpper_ko">
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextInformalUpper_ko"
+      constructor="i18npool_NumToTextInformalUpper_ko_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
   <implementation name="com.sun.star.i18n.Transliteration.NumToTextKanjiLongModern_ja_JP">

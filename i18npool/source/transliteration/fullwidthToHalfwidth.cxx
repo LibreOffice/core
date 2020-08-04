@@ -62,7 +62,7 @@ fullwidthToHalfwidth::transliterateChar2Char( sal_Unicode inChar)
     return transliteration_OneToOne::transliterateChar2Char(inChar);
 }
 
-fullwidthKatakanaToHalfwidthKatakana::fullwidthKatakanaToHalfwidthKatakana()
+FULLWIDTHKATAKANA_HALFWIDTHKATAKANA::FULLWIDTHKATAKANA_HALFWIDTHKATAKANA()
 {
     func = nullptr;
     table = &i18nutil::widthfolding::getfullKana2halfKanaTable();
@@ -74,7 +74,7 @@ fullwidthKatakanaToHalfwidthKatakana::fullwidthKatakanaToHalfwidthKatakana()
  * Transliterate fullwidth katakana to halfwidth katakana.
  */
 OUString
-fullwidthKatakanaToHalfwidthKatakana::transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset )
+FULLWIDTHKATAKANA_HALFWIDTHKATAKANA::transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset )
 {
     // Decomposition: GA --> KA + voice-mark
     const OUString& newStr = i18nutil::widthfolding::decompose_ja_voiced_sound_marks (inStr, startPos, nCount, offset, useOffset);
@@ -84,7 +84,7 @@ fullwidthKatakanaToHalfwidthKatakana::transliterateImpl( const OUString& inStr, 
 }
 
 sal_Unicode SAL_CALL
-fullwidthKatakanaToHalfwidthKatakana::transliterateChar2Char( sal_Unicode inChar )
+FULLWIDTHKATAKANA_HALFWIDTHKATAKANA::transliterateChar2Char( sal_Unicode inChar )
 {
     sal_Unicode newChar = i18nutil::widthfolding::decompose_ja_voiced_sound_marksChar2Char (inChar);
     if (newChar == 0xFFFF)
@@ -92,7 +92,7 @@ fullwidthKatakanaToHalfwidthKatakana::transliterateChar2Char( sal_Unicode inChar
     return transliteration_OneToOne::transliterateChar2Char(inChar);
 }
 
-fullwidthToHalfwidthLikeASC::fullwidthToHalfwidthLikeASC()
+FULLWIDTH_HALFWIDTH_LIKE_ASC::FULLWIDTH_HALFWIDTH_LIKE_ASC()
 {
     func = nullptr;
     table = &i18nutil::widthfolding::getfull2halfTableForASC();
@@ -104,7 +104,7 @@ fullwidthToHalfwidthLikeASC::fullwidthToHalfwidthLikeASC()
  * Transliterate fullwidth to halfwidth like Excel's ASC function.
  */
 OUString
-fullwidthToHalfwidthLikeASC::transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset )
+FULLWIDTH_HALFWIDTH_LIKE_ASC::transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset )
 {
     // Decomposition: GA --> KA + voice-mark
     const OUString& newStr = i18nutil::widthfolding::decompose_ja_voiced_sound_marks (inStr, startPos, nCount, offset, useOffset);
@@ -114,7 +114,7 @@ fullwidthToHalfwidthLikeASC::transliterateImpl( const OUString& inStr, sal_Int32
 }
 
 sal_Unicode SAL_CALL
-fullwidthToHalfwidthLikeASC::transliterateChar2Char( sal_Unicode inChar )
+FULLWIDTH_HALFWIDTH_LIKE_ASC::transliterateChar2Char( sal_Unicode inChar )
 {
     sal_Unicode newChar = i18nutil::widthfolding::decompose_ja_voiced_sound_marksChar2Char (inChar);
     if (newChar == 0xFFFF)
