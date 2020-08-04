@@ -285,13 +285,14 @@ public:
 
 class AbstractScGroupDlg_Impl :  public AbstractScGroupDlg
 {
-    std::unique_ptr<ScGroupDlg> m_xDlg;
+    std::shared_ptr<ScGroupDlg> m_xDlg;
 public:
-    explicit AbstractScGroupDlg_Impl(std::unique_ptr<ScGroupDlg> p)
+    explicit AbstractScGroupDlg_Impl(std::shared_ptr<ScGroupDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
     virtual bool GetColsChecked() const override;
 };
 

@@ -1165,11 +1165,20 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     {
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                        ScopedVclPtr<AbstractScGroupDlg> pDlg(pFact->CreateAbstractScGroupDlg(pTabViewShell->GetFrameWeld()));
-                        if ( pDlg->Execute() == RET_OK )
-                            bColumns = pDlg->GetColsChecked();
-                        else
-                            bOk = false;
+                        VclPtr<AbstractScGroupDlg> pDlg(pFact->CreateAbstractScGroupDlg(pTabViewShell->GetFrameWeld()));
+
+                        pDlg->StartExecuteAsync(
+                            [pDlg, pTabViewShell] (sal_Int32 nResult) {
+                                if( RET_OK == nResult )
+                                {
+                                    bool bColumn = pDlg->GetColsChecked();
+                                    pTabViewShell->MakeOutline( bColumn );
+                                }
+                                pDlg->disposeOnce();
+                            }
+                        );
+
+                        bOk = false;
                     }
                 }
                 if (bOk)
@@ -1223,11 +1232,20 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     {
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                        ScopedVclPtr<AbstractScGroupDlg> pDlg(pFact->CreateAbstractScGroupDlg(pTabViewShell->GetFrameWeld(), true));
-                        if ( pDlg->Execute() == RET_OK )
-                            bColumns = pDlg->GetColsChecked();
-                        else
-                            bOk = false;
+                        VclPtr<AbstractScGroupDlg> pDlg(pFact->CreateAbstractScGroupDlg(pTabViewShell->GetFrameWeld(), true));
+
+                        pDlg->StartExecuteAsync(
+                            [pDlg, pTabViewShell] (sal_Int32 nResult) {
+                                if( RET_OK == nResult )
+                                {
+                                    bool bColumn = pDlg->GetColsChecked();
+                                    pTabViewShell->RemoveOutline( bColumn );
+                                }
+                                pDlg->disposeOnce();
+                            }
+                        );
+
+                        bOk = false;
                     }
                     else if ( bColPoss )
                         bColumns = true;
