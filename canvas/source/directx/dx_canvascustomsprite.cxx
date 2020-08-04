@@ -43,7 +43,7 @@ namespace dxcanvas
         mpSpriteCanvas( rRefDevice ),
         mpSurface()
     {
-        ENSURE_OR_THROW( rRefDevice.get(),
+        ENSURE_OR_THROW( rRefDevice,
                          "CanvasCustomSprite::CanvasCustomSprite(): Invalid sprite canvas" );
 
         mpSurface.reset(
