@@ -707,7 +707,7 @@ DeactivateRC SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
 //Description: Page column configuration
 SwTableColumnPage::SwTableColumnPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "modules/swriter/ui/tablecolumnpage.ui", "TableColumnPage", &rSet)
-    , m_pTableData(nullptr)
+    , m_pOrigTableData(nullptr)
     , m_pSizeHdlEvent(nullptr)
     , m_nTableWidth(0)
     , m_nMinWidth(MINLAY)
@@ -792,17 +792,18 @@ void  SwTableColumnPage::Reset( const SfxItemSet* )
     const SfxPoolItem* pItem;
     if(SfxItemState::SET == rSet.GetItemState( FN_TABLE_REP, false, &pItem ))
     {
-        m_pTableData = static_cast<SwTableRep*>(static_cast<const SwPtrItem*>( pItem)->GetValue());
-        m_nNoOfVisibleCols = m_pTableData->GetColCount();
-        m_nNoOfCols = m_pTableData->GetAllColCount();
-        m_nTableWidth = m_pTableData->GetAlign() != text::HoriOrientation::FULL &&
-                            m_pTableData->GetAlign() != text::HoriOrientation::LEFT_AND_WIDTH?
-                        m_pTableData->GetWidth() : m_pTableData->GetSpace();
+        m_pOrigTableData = static_cast<SwTableRep*>(static_cast<const SwPtrItem*>( pItem)->GetValue());
+        m_xTableData.reset(new SwTableRep(*m_pOrigTableData));
+        m_nNoOfVisibleCols = m_xTableData->GetColCount();
+        m_nNoOfCols = m_xTableData->GetAllColCount();
+        m_nTableWidth = m_xTableData->GetAlign() != text::HoriOrientation::FULL &&
+                            m_xTableData->GetAlign() != text::HoriOrientation::LEFT_AND_WIDTH?
+                        m_xTableData->GetWidth() : m_xTableData->GetSpace();
 
         for( sal_uInt16 i = 0; i < m_nNoOfCols; i++ )
         {
-            if( m_pTableData->GetColumns()[i].nWidth  < m_nMinWidth )
-                    m_nMinWidth = m_pTableData->GetColumns()[i].nWidth;
+            if( m_xTableData->GetColumns()[i].nWidth  < m_nMinWidth )
+                    m_nMinWidth = m_xTableData->GetColumns()[i].nWidth;
         }
         sal_Int64 nMinTwips = m_aFieldArr[0].NormalizePercent( m_nMinWidth );
         sal_Int64 nMaxTwips = m_aFieldArr[0].NormalizePercent( m_nTableWidth );
@@ -914,7 +915,7 @@ bool SwTableColumnPage::FillItemSet( SfxItemSet* )
 
     if (m_bModified)
     {
-        m_pTableData->SetColsChanged();
+        m_xTableData->SetColsChanged();
     }
     return m_bModified;
 }
@@ -950,7 +951,7 @@ void SwTableColumnPage::UpdateCols( sal_uInt16 nCurrentPos )
 
     for( sal_uInt16 i = 0; i < m_nNoOfCols; i++ )
     {
-        nSum += (m_pTableData->GetColumns())[i].nWidth;
+        nSum += (m_xTableData->GetColumns())[i].nWidth;
     }
     SwTwips nDiff = nSum - m_nTableWidth;
 
@@ -1001,11 +1002,11 @@ void SwTableColumnPage::UpdateCols( sal_uInt16 nCurrentPos )
     {
         //Difference is balanced by the width of the table,
         //other columns remain unchanged.
-        OSL_ENSURE(nDiff <= m_pTableData->GetSpace() - m_nTableWidth, "wrong maximum" );
-        SwTwips nActSpace = m_pTableData->GetSpace() - m_nTableWidth;
+        OSL_ENSURE(nDiff <= m_xTableData->GetSpace() - m_nTableWidth, "wrong maximum" );
+        SwTwips nActSpace = m_xTableData->GetSpace() - m_nTableWidth;
         if(nDiff > nActSpace)
         {
-            m_nTableWidth = m_pTableData->GetSpace();
+            m_nTableWidth = m_xTableData->GetSpace();
             SetVisibleWidth(nCurrentPos, GetVisibleWidth(nCurrentPos) - nDiff + nActSpace );
         }
         else
@@ -1017,11 +1018,11 @@ void SwTableColumnPage::UpdateCols( sal_uInt16 nCurrentPos )
     {
         //All columns will be changed proportionally with,
         //the table width is adjusted accordingly.
-        OSL_ENSURE(nDiff * m_nNoOfVisibleCols <= m_pTableData->GetSpace() - m_nTableWidth, "wrong maximum" );
+        OSL_ENSURE(nDiff * m_nNoOfVisibleCols <= m_xTableData->GetSpace() - m_nTableWidth, "wrong maximum" );
         long nAdd = nDiff;
-        if(nDiff * m_nNoOfVisibleCols > m_pTableData->GetSpace() - m_nTableWidth)
+        if(nDiff * m_nNoOfVisibleCols > m_xTableData->GetSpace() - m_nTableWidth)
         {
-            nAdd = (m_pTableData->GetSpace() - m_nTableWidth) / m_nNoOfVisibleCols;
+            nAdd = (m_xTableData->GetSpace() - m_nTableWidth) / m_nNoOfVisibleCols;
             SetVisibleWidth(nCurrentPos, GetVisibleWidth(nCurrentPos) - nDiff + nAdd );
             nDiff = nAdd;
         }
@@ -1047,7 +1048,7 @@ void SwTableColumnPage::UpdateCols( sal_uInt16 nCurrentPos )
     }
 
     if(!m_bPercentMode)
-        m_xSpaceED->set_value(m_xSpaceED->normalize(m_pTableData->GetSpace() - m_nTableWidth), FieldUnit::TWIP);
+        m_xSpaceED->set_value(m_xSpaceED->normalize(m_xTableData->GetSpace() - m_nTableWidth), FieldUnit::TWIP);
 
     for( sal_uInt16 i = 0; ( i < m_nNoOfVisibleCols ) && ( i < m_nMetFields ); i++)
     {
@@ -1058,26 +1059,26 @@ void SwTableColumnPage::UpdateCols( sal_uInt16 nCurrentPos )
 
 void SwTableColumnPage::ActivatePage( const SfxItemSet& )
 {
-    m_bPercentMode = m_pTableData->GetWidthPercent() != 0;
+    m_bPercentMode = m_xTableData->GetWidthPercent() != 0;
     for( sal_uInt16 i = 0; (i < m_nMetFields) && (i < m_nNoOfVisibleCols); i++ )
     {
-        m_aFieldArr[i].SetRefValue(m_pTableData->GetWidth());
+        m_aFieldArr[i].SetRefValue(m_xTableData->GetWidth());
         m_aFieldArr[i].ShowPercent( m_bPercentMode );
     }
 
-    const sal_uInt16 nTableAlign = m_pTableData->GetAlign();
-    if((text::HoriOrientation::FULL != nTableAlign && m_nTableWidth != m_pTableData->GetWidth()) ||
-    (text::HoriOrientation::FULL == nTableAlign && m_nTableWidth != m_pTableData->GetSpace()))
+    const sal_uInt16 nTableAlign = m_xTableData->GetAlign();
+    if((text::HoriOrientation::FULL != nTableAlign && m_nTableWidth != m_xTableData->GetWidth()) ||
+    (text::HoriOrientation::FULL == nTableAlign && m_nTableWidth != m_xTableData->GetSpace()))
     {
         m_nTableWidth = text::HoriOrientation::FULL == nTableAlign ?
-                                    m_pTableData->GetSpace() :
-                                        m_pTableData->GetWidth();
+                                    m_xTableData->GetSpace() :
+                                        m_xTableData->GetWidth();
         UpdateCols(0);
     }
     m_bModifyTable = true;
-    if (m_pTableData->GetWidthPercent() ||
+    if (m_xTableData->GetWidthPercent() ||
                 text::HoriOrientation::FULL == nTableAlign ||
-                        m_pTableData->IsLineSelected()  )
+                        m_xTableData->IsLineSelected()  )
         m_bModifyTable = false;
     if (m_bPercentMode)
     {
@@ -1095,7 +1096,7 @@ void SwTableColumnPage::ActivatePage( const SfxItemSet& )
     m_xProportionalCB->set_sensitive(!m_bPercentMode && m_bModifyTable );
 
     m_xSpaceED->set_value(m_xSpaceED->normalize(
-                m_pTableData->GetSpace() - m_nTableWidth), FieldUnit::TWIP);
+                m_xTableData->GetSpace() - m_nTableWidth), FieldUnit::TWIP);
 
 }
 
@@ -1104,59 +1105,60 @@ DeactivateRC SwTableColumnPage::DeactivatePage( SfxItemSet* _pSet )
     if(_pSet)
     {
         FillItemSet(_pSet);
-        if(text::HoriOrientation::FULL != m_pTableData->GetAlign() && m_pTableData->GetWidth() != m_nTableWidth)
+        if(text::HoriOrientation::FULL != m_xTableData->GetAlign() && m_xTableData->GetWidth() != m_nTableWidth)
         {
-            m_pTableData->SetWidth(m_nTableWidth);
-            SwTwips nDiff = m_pTableData->GetSpace() - m_pTableData->GetWidth() -
-                            m_pTableData->GetLeftSpace() - m_pTableData->GetRightSpace();
-            switch( m_pTableData->GetAlign()  )
+            m_xTableData->SetWidth(m_nTableWidth);
+            SwTwips nDiff = m_xTableData->GetSpace() - m_xTableData->GetWidth() -
+                            m_xTableData->GetLeftSpace() - m_xTableData->GetRightSpace();
+            switch( m_xTableData->GetAlign()  )
             {
                 case text::HoriOrientation::RIGHT:
-                    m_pTableData->SetLeftSpace(m_pTableData->GetLeftSpace() + nDiff);
+                    m_xTableData->SetLeftSpace(m_xTableData->GetLeftSpace() + nDiff);
                 break;
                 case text::HoriOrientation::LEFT:
-                    m_pTableData->SetRightSpace(m_pTableData->GetRightSpace() + nDiff);
+                    m_xTableData->SetRightSpace(m_xTableData->GetRightSpace() + nDiff);
                 break;
                 case text::HoriOrientation::NONE:
                 {
                     SwTwips nDiff2 = nDiff/2;
                     if( nDiff > 0 ||
-                        (-nDiff2 < m_pTableData->GetRightSpace() && - nDiff2 < m_pTableData->GetLeftSpace()))
+                        (-nDiff2 < m_xTableData->GetRightSpace() && - nDiff2 < m_xTableData->GetLeftSpace()))
                     {
-                        m_pTableData->SetRightSpace(m_pTableData->GetRightSpace() + nDiff2);
-                        m_pTableData->SetLeftSpace(m_pTableData->GetLeftSpace() + nDiff2);
+                        m_xTableData->SetRightSpace(m_xTableData->GetRightSpace() + nDiff2);
+                        m_xTableData->SetLeftSpace(m_xTableData->GetLeftSpace() + nDiff2);
                     }
                     else
                     {
-                        if(m_pTableData->GetRightSpace() > m_pTableData->GetLeftSpace())
+                        if(m_xTableData->GetRightSpace() > m_xTableData->GetLeftSpace())
                         {
-                            m_pTableData->SetLeftSpace(0);
-                            m_pTableData->SetRightSpace(m_pTableData->GetSpace() - m_pTableData->GetWidth());
+                            m_xTableData->SetLeftSpace(0);
+                            m_xTableData->SetRightSpace(m_xTableData->GetSpace() - m_xTableData->GetWidth());
                         }
                         else
                         {
-                            m_pTableData->SetRightSpace(0);
-                            m_pTableData->SetLeftSpace(m_pTableData->GetSpace() - m_pTableData->GetWidth());
+                            m_xTableData->SetRightSpace(0);
+                            m_xTableData->SetLeftSpace(m_xTableData->GetSpace() - m_xTableData->GetWidth());
                         }
                     }
                 }
                 break;
                 case text::HoriOrientation::CENTER:
-                    m_pTableData->SetRightSpace(m_pTableData->GetRightSpace() + nDiff/2);
-                    m_pTableData->SetLeftSpace(m_pTableData->GetLeftSpace() + nDiff/2);
+                    m_xTableData->SetRightSpace(m_xTableData->GetRightSpace() + nDiff/2);
+                    m_xTableData->SetLeftSpace(m_xTableData->GetLeftSpace() + nDiff/2);
                 break;
                 case text::HoriOrientation::LEFT_AND_WIDTH :
-                    if(nDiff > m_pTableData->GetRightSpace())
+                    if(nDiff > m_xTableData->GetRightSpace())
                     {
-                        m_pTableData->SetLeftSpace(m_pTableData->GetSpace() - m_pTableData->GetWidth());
+                        m_xTableData->SetLeftSpace(m_xTableData->GetSpace() - m_xTableData->GetWidth());
                     }
-                    m_pTableData->SetRightSpace(
-                        m_pTableData->GetSpace() - m_pTableData->GetWidth() - m_pTableData->GetLeftSpace());
+                    m_xTableData->SetRightSpace(
+                        m_xTableData->GetSpace() - m_xTableData->GetWidth() - m_xTableData->GetLeftSpace());
                 break;
             }
-            m_pTableData->SetWidthChanged();
+            m_xTableData->SetWidthChanged();
         }
-        _pSet->Put(SwPtrItem( FN_TABLE_REP, m_pTableData ));
+        *m_pOrigTableData = *m_xTableData;
+        _pSet->Put(SwPtrItem( FN_TABLE_REP, m_pOrigTableData ));
     }
     return DeactivateRC::LeavePage;
 }
@@ -1167,14 +1169,14 @@ SwTwips  SwTableColumnPage::GetVisibleWidth(sal_uInt16 nPos)
 
     while( nPos )
     {
-        if(m_pTableData->GetColumns()[i].bVisible)
+        if(m_xTableData->GetColumns()[i].bVisible)
             nPos--;
         i++;
     }
-    SwTwips nReturn = m_pTableData->GetColumns()[i].nWidth;
+    SwTwips nReturn = m_xTableData->GetColumns()[i].nWidth;
     OSL_ENSURE(i < m_nNoOfCols, "Array index out of range");
-    while(!m_pTableData->GetColumns()[i].bVisible && (i + 1) < m_nNoOfCols)
-        nReturn += m_pTableData->GetColumns()[++i].nWidth;
+    while(!m_xTableData->GetColumns()[i].bVisible && (i + 1) < m_nNoOfCols)
+        nReturn += m_xTableData->GetColumns()[++i].nWidth;
 
     return nReturn;
 }
@@ -1184,14 +1186,14 @@ void SwTableColumnPage::SetVisibleWidth(sal_uInt16 nPos, SwTwips nNewWidth)
     sal_uInt16 i=0;
     while( nPos )
     {
-        if(m_pTableData->GetColumns()[i].bVisible)
+        if(m_xTableData->GetColumns()[i].bVisible)
             nPos--;
         i++;
     }
     OSL_ENSURE(i < m_nNoOfCols, "Array index out of range");
-    m_pTableData->GetColumns()[i].nWidth = nNewWidth;
-    while(!m_pTableData->GetColumns()[i].bVisible && (i + 1) < m_nNoOfCols)
-        m_pTableData->GetColumns()[++i].nWidth = 0;
+    m_xTableData->GetColumns()[i].nWidth = nNewWidth;
+    while(!m_xTableData->GetColumns()[i].bVisible && (i + 1) < m_nNoOfCols)
+        m_xTableData->GetColumns()[++i].nWidth = 0;
 
 }
 
