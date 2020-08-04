@@ -2793,6 +2793,12 @@ static void doc_iniUnoCommands ()
         OUString(".uno:AlignMiddle"),
         OUString(".uno:AlignDown"),
         OUString(".uno:TraceChangeMode"),
+        OUString(".uno:Combine"),
+        OUString(".uno:Merge"),
+        OUString(".uno:Dismantle"),
+        OUString(".uno:Substract"),
+        OUString(".uno:DistributeSelection"),
+        OUString(".uno:Intersect"),
         OUString(".uno:FreezePanesRow")
     };
 
