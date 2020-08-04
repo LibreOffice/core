@@ -24,7 +24,7 @@
 // "libstdc++: P1423R3 char8_t remediation (2/4)" for -std=c++2a; TODO: the checks here and the
 // relevant code in loplugin:getstr should eventually be removed once support for the deleted
 // operators is widespread):
-#if __cplusplus > 201703L && defined __GLIBCXX__
+#if __cplusplus > 201703L && (defined __GLIBCXX__ || defined _MSC_VER)
 #define HAVE_DELETED_OPERATORS true
 #else
 #define HAVE_DELETED_OPERATORS false
