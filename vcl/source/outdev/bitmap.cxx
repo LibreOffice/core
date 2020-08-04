@@ -644,60 +644,60 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
         aOutPt.AdjustY( -(aOutSz.Height() - 1) );
     }
 
-    if (!aDstRect.Intersection(tools::Rectangle(aOutPt, aOutSz)).IsEmpty())
+    if (aDstRect.Intersection(tools::Rectangle(aOutPt, aOutSz)).IsEmpty())
+        return;
+
+    static const char* pDisableNative = getenv( "SAL_DISABLE_NATIVE_ALPHA");
+    bool bTryDirectPaint(!pDisableNative && !bHMirr && !bVMirr);
+
+    if (bTryDirectPaint)
     {
-        static const char* pDisableNative = getenv( "SAL_DISABLE_NATIVE_ALPHA");
-        bool bTryDirectPaint(!pDisableNative && !bHMirr && !bVMirr);
+        Point aRelPt = aOutPt + Point(mnOutOffX, mnOutOffY);
+        SalTwoRect aTR(
+            rSrcPtPixel.X(), rSrcPtPixel.Y(),
+            rSrcSizePixel.Width(), rSrcSizePixel.Height(),
+            aRelPt.X(), aRelPt.Y(),
+            aOutSz.Width(), aOutSz.Height());
 
-        if (bTryDirectPaint)
+        SalBitmap* pSalSrcBmp = rBmp.ImplGetSalBitmap().get();
+        SalBitmap* pSalAlphaBmp = rAlpha.ImplGetSalBitmap().get();
+
+        // #i83087# Naturally, system alpha blending (SalGraphics::DrawAlphaBitmap) cannot work
+        // with separate alpha VDev
+
+        // try to blend the alpha bitmap with the alpha virtual device
+        if (mpAlphaVDev)
         {
-            Point aRelPt = aOutPt + Point(mnOutOffX, mnOutOffY);
-            SalTwoRect aTR(
-                rSrcPtPixel.X(), rSrcPtPixel.Y(),
-                rSrcSizePixel.Width(), rSrcSizePixel.Height(),
-                aRelPt.X(), aRelPt.Y(),
-                aOutSz.Width(), aOutSz.Height());
-
-            SalBitmap* pSalSrcBmp = rBmp.ImplGetSalBitmap().get();
-            SalBitmap* pSalAlphaBmp = rAlpha.ImplGetSalBitmap().get();
-
-            // #i83087# Naturally, system alpha blending (SalGraphics::DrawAlphaBitmap) cannot work
-            // with separate alpha VDev
-
-            // try to blend the alpha bitmap with the alpha virtual device
-            if (mpAlphaVDev)
+            Bitmap aAlphaBitmap( mpAlphaVDev->GetBitmap( aRelPt, aOutSz ) );
+            if (SalBitmap* pSalAlphaBmp2 = aAlphaBitmap.ImplGetSalBitmap().get())
             {
-                Bitmap aAlphaBitmap( mpAlphaVDev->GetBitmap( aRelPt, aOutSz ) );
-                if (SalBitmap* pSalAlphaBmp2 = aAlphaBitmap.ImplGetSalBitmap().get())
+                if (mpGraphics->BlendAlphaBitmap(aTR, *pSalSrcBmp, *pSalAlphaBmp, *pSalAlphaBmp2, this))
                 {
-                    if (mpGraphics->BlendAlphaBitmap(aTR, *pSalSrcBmp, *pSalAlphaBmp, *pSalAlphaBmp2, this))
-                    {
-                        mpAlphaVDev->BlendBitmap(aTR, rAlpha);
-                        return;
-                    }
+                    mpAlphaVDev->BlendBitmap(aTR, rAlpha);
+                    return;
                 }
             }
-            else
-            {
-                if (mpGraphics->DrawAlphaBitmap(aTR, *pSalSrcBmp, *pSalAlphaBmp, this))
-                    return;
-            }
         }
-
-        // we need to make sure OpenGL never reaches this slow code path
-
-        assert(!SkiaHelper::isVCLSkiaEnabled());
-#if HAVE_FEATURE_OPENGL
-        assert(!OpenGLHelper::isVCLOpenGLEnabled());
-#endif
-        tools::Rectangle aBmpRect(Point(), rBmp.GetSizePixel());
-        if (!aBmpRect.Intersection(tools::Rectangle(rSrcPtPixel, rSrcSizePixel)).IsEmpty())
+        else
         {
-            Point     auxOutPt(LogicToPixel(rDestPt));
-            Size      auxOutSz(LogicToPixel(rDestSize));
-
-            DrawDeviceAlphaBitmapSlowPath(rBmp, rAlpha, aDstRect, aBmpRect, auxOutSz, auxOutPt);
+            if (mpGraphics->DrawAlphaBitmap(aTR, *pSalSrcBmp, *pSalAlphaBmp, this))
+                return;
         }
+    }
+
+    // we need to make sure OpenGL never reaches this slow code path
+
+    assert(!SkiaHelper::isVCLSkiaEnabled());
+#if HAVE_FEATURE_OPENGL
+    assert(!OpenGLHelper::isVCLOpenGLEnabled());
+#endif
+    tools::Rectangle aBmpRect(Point(), rBmp.GetSizePixel());
+    if (!aBmpRect.Intersection(tools::Rectangle(rSrcPtPixel, rSrcSizePixel)).IsEmpty())
+    {
+        Point     auxOutPt(LogicToPixel(rDestPt));
+        Size      auxOutSz(LogicToPixel(rDestSize));
+
+        DrawDeviceAlphaBitmapSlowPath(rBmp, rAlpha, aDstRect, aBmpRect, auxOutSz, auxOutPt);
     }
 }
 
@@ -1350,88 +1350,88 @@ void OutputDevice::DrawTransformedBitmapEx(
             return;
     }
 
-    if(!aVisibleRange.isEmpty())
+    if(aVisibleRange.isEmpty())
+        return;
+
+    BitmapEx aTransformed(rBitmapEx);
+
+    // #122923# when the result needs an alpha channel due to being rotated or sheared
+    // and thus uncovering areas, add these channels so that the own transformer (used
+    // in getTransformed) also creates a transformed alpha channel
+    if(!aTransformed.IsTransparent() && (bSheared || bRotated))
     {
-        BitmapEx aTransformed(rBitmapEx);
+        // parts will be uncovered, extend aTransformed with a mask bitmap
+        const Bitmap aContent(aTransformed.GetBitmap());
 
-        // #122923# when the result needs an alpha channel due to being rotated or sheared
-        // and thus uncovering areas, add these channels so that the own transformer (used
-        // in getTransformed) also creates a transformed alpha channel
-        if(!aTransformed.IsTransparent() && (bSheared || bRotated))
-        {
-            // parts will be uncovered, extend aTransformed with a mask bitmap
-            const Bitmap aContent(aTransformed.GetBitmap());
+        AlphaMask aMaskBmp(aContent.GetSizePixel());
+        aMaskBmp.Erase(0);
 
-            AlphaMask aMaskBmp(aContent.GetSizePixel());
-            aMaskBmp.Erase(0);
-
-            aTransformed = BitmapEx(aContent, aMaskBmp);
-        }
-
-        // Remove scaling from aFulltransform: we transform due to shearing or rotation, scaling
-        // will happen according to aDestSize.
-        basegfx::B2DVector aFullScale, aFullTranslate;
-        double fFullRotate, fFullShearX;
-        aFullTransform.decompose(aFullScale, aFullTranslate, fFullRotate, fFullShearX);
-        // Require positive scaling, negative scaling would loose horizontal or vertical flip.
-        if (aFullScale.getX() > 0 && aFullScale.getY() > 0)
-        {
-            basegfx::B2DHomMatrix aTransform = basegfx::utils::createScaleB2DHomMatrix(
-                rOriginalSizePixel.getWidth() / aFullScale.getX(),
-                rOriginalSizePixel.getHeight() / aFullScale.getY());
-            aFullTransform *= aTransform;
-        }
-
-        double fSourceRatio = 1.0;
-        if (rOriginalSizePixel.getHeight() != 0)
-        {
-            fSourceRatio = rOriginalSizePixel.getWidth() / rOriginalSizePixel.getHeight();
-        }
-        double fTargetRatio = 1.0;
-        if (aFullScale.getY() != 0)
-        {
-            fTargetRatio = aFullScale.getX() / aFullScale.getY();
-        }
-        bool bAspectRatioKept = rtl::math::approxEqual(fSourceRatio, fTargetRatio);
-        if (bSheared || !bAspectRatioKept)
-        {
-            // Not only rotation, or scaling does not keep aspect ratio.
-            aTransformed = aTransformed.getTransformed(
-                aFullTransform,
-                aVisibleRange,
-                fMaximumArea);
-        }
-        else
-        {
-            // Just rotation, can do that directly.
-            fFullRotate = fmod(fFullRotate * -1, F_2PI);
-            if (fFullRotate < 0)
-            {
-                fFullRotate += F_2PI;
-            }
-            long nAngle10 = basegfx::fround(basegfx::rad2deg(fFullRotate) * 10);
-            aTransformed.Rotate(nAngle10, COL_TRANSPARENT);
-        }
-        basegfx::B2DRange aTargetRange(0.0, 0.0, 1.0, 1.0);
-
-        // get logic object target range
-        aTargetRange.transform(rTransformation);
-
-        // get from unified/relative VisibleRange to logoc one
-        aVisibleRange.transform(
-            basegfx::utils::createScaleTranslateB2DHomMatrix(
-                aTargetRange.getRange(),
-                aTargetRange.getMinimum()));
-
-        // extract point and size; do not remove size, the bitmap may have been prepared reduced by purpose
-        // #i124580# the correct DestSize needs to be calculated based on MaxXY values
-        const Point aDestPt(basegfx::fround(aVisibleRange.getMinX()), basegfx::fround(aVisibleRange.getMinY()));
-        const Size aDestSize(
-            basegfx::fround(aVisibleRange.getMaxX()) - aDestPt.X(),
-            basegfx::fround(aVisibleRange.getMaxY()) - aDestPt.Y());
-
-        DrawBitmapEx(aDestPt, aDestSize, aTransformed);
+        aTransformed = BitmapEx(aContent, aMaskBmp);
     }
+
+    // Remove scaling from aFulltransform: we transform due to shearing or rotation, scaling
+    // will happen according to aDestSize.
+    basegfx::B2DVector aFullScale, aFullTranslate;
+    double fFullRotate, fFullShearX;
+    aFullTransform.decompose(aFullScale, aFullTranslate, fFullRotate, fFullShearX);
+    // Require positive scaling, negative scaling would loose horizontal or vertical flip.
+    if (aFullScale.getX() > 0 && aFullScale.getY() > 0)
+    {
+        basegfx::B2DHomMatrix aTransform = basegfx::utils::createScaleB2DHomMatrix(
+            rOriginalSizePixel.getWidth() / aFullScale.getX(),
+            rOriginalSizePixel.getHeight() / aFullScale.getY());
+        aFullTransform *= aTransform;
+    }
+
+    double fSourceRatio = 1.0;
+    if (rOriginalSizePixel.getHeight() != 0)
+    {
+        fSourceRatio = rOriginalSizePixel.getWidth() / rOriginalSizePixel.getHeight();
+    }
+    double fTargetRatio = 1.0;
+    if (aFullScale.getY() != 0)
+    {
+        fTargetRatio = aFullScale.getX() / aFullScale.getY();
+    }
+    bool bAspectRatioKept = rtl::math::approxEqual(fSourceRatio, fTargetRatio);
+    if (bSheared || !bAspectRatioKept)
+    {
+        // Not only rotation, or scaling does not keep aspect ratio.
+        aTransformed = aTransformed.getTransformed(
+            aFullTransform,
+            aVisibleRange,
+            fMaximumArea);
+    }
+    else
+    {
+        // Just rotation, can do that directly.
+        fFullRotate = fmod(fFullRotate * -1, F_2PI);
+        if (fFullRotate < 0)
+        {
+            fFullRotate += F_2PI;
+        }
+        long nAngle10 = basegfx::fround(basegfx::rad2deg(fFullRotate) * 10);
+        aTransformed.Rotate(nAngle10, COL_TRANSPARENT);
+    }
+    basegfx::B2DRange aTargetRange(0.0, 0.0, 1.0, 1.0);
+
+    // get logic object target range
+    aTargetRange.transform(rTransformation);
+
+    // get from unified/relative VisibleRange to logoc one
+    aVisibleRange.transform(
+        basegfx::utils::createScaleTranslateB2DHomMatrix(
+            aTargetRange.getRange(),
+            aTargetRange.getMinimum()));
+
+    // extract point and size; do not remove size, the bitmap may have been prepared reduced by purpose
+    // #i124580# the correct DestSize needs to be calculated based on MaxXY values
+    const Point aDestPt(basegfx::fround(aVisibleRange.getMinX()), basegfx::fround(aVisibleRange.getMinY()));
+    const Size aDestSize(
+        basegfx::fround(aVisibleRange.getMaxX()) - aDestPt.X(),
+        basegfx::fround(aVisibleRange.getMaxY()) - aDestPt.Y());
+
+    DrawBitmapEx(aDestPt, aDestSize, aTransformed);
 }
 
 void OutputDevice::DrawShadowBitmapEx(

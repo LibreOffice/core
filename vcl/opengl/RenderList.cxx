@@ -127,24 +127,24 @@ void appendPolyLine(vcl::LineBuilder& rBuilder, const basegfx::B2DPolygon& rPoly
         }
     }
 
-    if (!bClosed && nPoints >= 2 && (eLineCap == css::drawing::LineCap_ROUND || eLineCap == css::drawing::LineCap_SQUARE))
+    if (bClosed || nPoints < 2 || (eLineCap != css::drawing::LineCap_ROUND && eLineCap != css::drawing::LineCap_SQUARE))
+        return;
+
+    glm::vec2 aBeginCapPoint1(rPolygon.getB2DPoint(0).getX(), rPolygon.getB2DPoint(0).getY());
+    glm::vec2 aBeginCapPoint2(rPolygon.getB2DPoint(1).getX(), rPolygon.getB2DPoint(1).getY());
+
+    glm::vec2 aEndCapPoint1(rPolygon.getB2DPoint(nPoints - 1).getX(), rPolygon.getB2DPoint(nPoints - 1).getY());
+    glm::vec2 aEndCapPoint2(rPolygon.getB2DPoint(nPoints - 2).getX(), rPolygon.getB2DPoint(nPoints - 2).getY());
+
+    if (eLineCap == css::drawing::LineCap_ROUND)
     {
-        glm::vec2 aBeginCapPoint1(rPolygon.getB2DPoint(0).getX(), rPolygon.getB2DPoint(0).getY());
-        glm::vec2 aBeginCapPoint2(rPolygon.getB2DPoint(1).getX(), rPolygon.getB2DPoint(1).getY());
-
-        glm::vec2 aEndCapPoint1(rPolygon.getB2DPoint(nPoints - 1).getX(), rPolygon.getB2DPoint(nPoints - 1).getY());
-        glm::vec2 aEndCapPoint2(rPolygon.getB2DPoint(nPoints - 2).getX(), rPolygon.getB2DPoint(nPoints - 2).getY());
-
-        if (eLineCap == css::drawing::LineCap_ROUND)
-        {
-            rBuilder.appendRoundLineCapVertices(aBeginCapPoint1, aBeginCapPoint2);
-            rBuilder.appendRoundLineCapVertices(aEndCapPoint1, aEndCapPoint2);
-        }
-        else if (eLineCap == css::drawing::LineCap_SQUARE)
-        {
-            rBuilder.appendSquareLineCapVertices(aBeginCapPoint1, aBeginCapPoint2);
-            rBuilder.appendSquareLineCapVertices(aEndCapPoint1, aEndCapPoint2);
-        }
+        rBuilder.appendRoundLineCapVertices(aBeginCapPoint1, aBeginCapPoint2);
+        rBuilder.appendRoundLineCapVertices(aEndCapPoint1, aEndCapPoint2);
+    }
+    else if (eLineCap == css::drawing::LineCap_SQUARE)
+    {
+        rBuilder.appendSquareLineCapVertices(aBeginCapPoint1, aBeginCapPoint2);
+        rBuilder.appendSquareLineCapVertices(aEndCapPoint1, aEndCapPoint2);
     }
 }
 
@@ -237,23 +237,23 @@ void RenderList::addDrawRectangle(long nX, long nY, long nWidth, long nHeight, d
                     fX1 - 0.5f, fY2 - 0.5f, fX2 + 0.5f, fY2 + 0.5f, nLineColor, fTransparency);
     }
 
-    if (nFillColor != SALCOLOR_NONE)
+    if (nFillColor == SALCOLOR_NONE)
+        return;
+
+    if (nLineColor == SALCOLOR_NONE)
     {
-        if (nLineColor == SALCOLOR_NONE)
-        {
-            appendRectangle(rRenderParameter.maVertices, rRenderParameter.maIndices,
-                        fX1 - 0.5f, fY1 - 0.5f, fX1 + 0.5f, fY2 + 0.5f, nFillColor, fTransparency);
-            appendRectangle(rRenderParameter.maVertices, rRenderParameter.maIndices,
-                        fX1 - 0.5f, fY1 - 0.5f, fX2 + 0.5f, fY1 + 0.5f, nFillColor, fTransparency);
-            appendRectangle(rRenderParameter.maVertices, rRenderParameter.maIndices,
-                        fX2 - 0.5f, fY1 - 0.5f, fX2 + 0.5f, fY2 + 0.5f, nFillColor, fTransparency);
-            appendRectangle(rRenderParameter.maVertices, rRenderParameter.maIndices,
-                        fX1 - 0.5f, fY2 - 0.5f, fX2 + 0.5f, fY2 + 0.5f, nFillColor, fTransparency);
-        }
-        // Draw rectangle fill with fill color
         appendRectangle(rRenderParameter.maVertices, rRenderParameter.maIndices,
-                        fX1 + 0.5f, fY1 + 0.5f, fX2 - 0.5f, fY2 - 0.5f, nFillColor, fTransparency);
+                    fX1 - 0.5f, fY1 - 0.5f, fX1 + 0.5f, fY2 + 0.5f, nFillColor, fTransparency);
+        appendRectangle(rRenderParameter.maVertices, rRenderParameter.maIndices,
+                    fX1 - 0.5f, fY1 - 0.5f, fX2 + 0.5f, fY1 + 0.5f, nFillColor, fTransparency);
+        appendRectangle(rRenderParameter.maVertices, rRenderParameter.maIndices,
+                    fX2 - 0.5f, fY1 - 0.5f, fX2 + 0.5f, fY2 + 0.5f, nFillColor, fTransparency);
+        appendRectangle(rRenderParameter.maVertices, rRenderParameter.maIndices,
+                    fX1 - 0.5f, fY2 - 0.5f, fX2 + 0.5f, fY2 + 0.5f, nFillColor, fTransparency);
     }
+    // Draw rectangle fill with fill color
+    appendRectangle(rRenderParameter.maVertices, rRenderParameter.maIndices,
+                    fX1 + 0.5f, fY1 + 0.5f, fX2 - 0.5f, fY2 - 0.5f, nFillColor, fTransparency);
 }
 
 void RenderList::addDrawLine(long nX1, long nY1, long nX2, long nY2, Color nLineColor, bool bUseAA)
@@ -311,39 +311,39 @@ void RenderList::addDrawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon,
         }
     }
 
-    if (nLineColor != SALCOLOR_NONE || bUseAA)
+    if (nLineColor == SALCOLOR_NONE && !bUseAA)
+        return;
+
+    RenderParameters& rLineRenderParameter = maRenderEntries.back().maLineParameters;
+    Color nColor = (nLineColor == SALCOLOR_NONE) ? nFillColor : nLineColor;
+
+    vcl::LineBuilder aBuilder(rLineRenderParameter.maVertices, rLineRenderParameter.maIndices,
+                              nColor, fTransparency, 1.0f, bUseAA);
+
+    for (const basegfx::B2DPolygon& rPolygon : rPolyPolygon)
     {
-        RenderParameters& rLineRenderParameter = maRenderEntries.back().maLineParameters;
-        Color nColor = (nLineColor == SALCOLOR_NONE) ? nFillColor : nLineColor;
+        basegfx::B2DPolygon aPolygon(rPolygon);
+        if (rPolygon.areControlPointsUsed())
+            aPolygon = rPolygon.getDefaultAdaptiveSubdivision();
 
-        vcl::LineBuilder aBuilder(rLineRenderParameter.maVertices, rLineRenderParameter.maIndices,
-                                  nColor, fTransparency, 1.0f, bUseAA);
+        sal_uInt32 nPoints = aPolygon.count();
+        if (nPoints <= 1)
+            continue;
 
-        for (const basegfx::B2DPolygon& rPolygon : rPolyPolygon)
+        GLfloat x1, y1, x2, y2;
+        sal_uInt32 index1, index2;
+
+        for (sal_uInt32 i = 0; i <= nPoints; ++i)
         {
-            basegfx::B2DPolygon aPolygon(rPolygon);
-            if (rPolygon.areControlPointsUsed())
-                aPolygon = rPolygon.getDefaultAdaptiveSubdivision();
+            index1 =  i      % nPoints;
+            index2 = (i + 1) % nPoints;
 
-            sal_uInt32 nPoints = aPolygon.count();
-            if (nPoints <= 1)
-                continue;
+            x1 = aPolygon.getB2DPoint(index1).getX();
+            y1 = aPolygon.getB2DPoint(index1).getY();
+            x2 = aPolygon.getB2DPoint(index2).getX();
+            y2 = aPolygon.getB2DPoint(index2).getY();
 
-            GLfloat x1, y1, x2, y2;
-            sal_uInt32 index1, index2;
-
-            for (sal_uInt32 i = 0; i <= nPoints; ++i)
-            {
-                index1 =  i      % nPoints;
-                index2 = (i + 1) % nPoints;
-
-                x1 = aPolygon.getB2DPoint(index1).getX();
-                y1 = aPolygon.getB2DPoint(index1).getY();
-                x2 = aPolygon.getB2DPoint(index2).getX();
-                y2 = aPolygon.getB2DPoint(index2).getY();
-
-                aBuilder.appendLine(glm::vec2(x1, y1), glm::vec2(x2, y2));
-            }
+            aBuilder.appendLine(glm::vec2(x1, y1), glm::vec2(x2, y2));
         }
     }
 }

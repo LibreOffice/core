@@ -1769,21 +1769,21 @@ public:
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override
     {
         mrRenderer.SetSizePixel(GetSizePixel());
-        if (!mrRenderer.MouseButtonDown(rMEvt))
-        {
-            if (testThreads)
-            { // render this window asynchronously in a new thread
-                sal_uInt32 nDelaySecs = 0;
-                if (rMEvt.GetButtons() & MOUSE_RIGHT)
-                    nDelaySecs = 5;
-                mxThread = new RenderThread(*this, nDelaySecs);
-            }
-            else
-            { // spawn another window
-                VclPtrInstance<DemoWin> pNewWin(mrRenderer, testThreads);
-                pNewWin->SetText("Another interactive VCL demo window");
-                pNewWin->Show();
-            }
+        if (mrRenderer.MouseButtonDown(rMEvt))
+            return;
+
+        if (testThreads)
+        { // render this window asynchronously in a new thread
+            sal_uInt32 nDelaySecs = 0;
+            if (rMEvt.GetButtons() & MOUSE_RIGHT)
+                nDelaySecs = 5;
+            mxThread = new RenderThread(*this, nDelaySecs);
+        }
+        else
+        { // spawn another window
+            VclPtrInstance<DemoWin> pNewWin(mrRenderer, testThreads);
+            pNewWin->SetText("Another interactive VCL demo window");
+            pNewWin->Show();
         }
     }
     virtual void KeyInput(const KeyEvent& rKEvt) override

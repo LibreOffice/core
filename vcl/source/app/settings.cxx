@@ -2864,20 +2864,20 @@ void AllSettings::SetLanguageTag(const OUString& rLanguage, bool bCanonicalize)
 
 void AllSettings::SetLanguageTag( const LanguageTag& rLanguageTag )
 {
-    if (mxData->maLocale != rLanguageTag)
+    if (mxData->maLocale == rLanguageTag)
+        return;
+
+    CopyData();
+
+    mxData->maLocale = rLanguageTag;
+
+    if ( mxData->mpLocaleDataWrapper )
     {
-        CopyData();
-
-        mxData->maLocale = rLanguageTag;
-
-        if ( mxData->mpLocaleDataWrapper )
-        {
-            mxData->mpLocaleDataWrapper.reset();
-        }
-        if ( mxData->mpI18nHelper )
-        {
-            mxData->mpI18nHelper.reset();
-        }
+        mxData->mpLocaleDataWrapper.reset();
+    }
+    if ( mxData->mpI18nHelper )
+    {
+        mxData->mpI18nHelper.reset();
     }
 }
 

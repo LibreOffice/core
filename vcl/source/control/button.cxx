@@ -633,30 +633,30 @@ void PushButton::ImplInitSettings( bool bBackground )
 {
     Button::ImplInitSettings();
 
-    if ( bBackground )
-    {
-        SetBackground();
-        // #i38498#: do not check for GetParent()->IsChildTransparentModeEnabled()
-        // otherwise the formcontrol button will be overdrawn due to ParentClipMode::NoClip
-        // for radio and checkbox this is ok as they should appear transparent in documents
-        if ( IsNativeControlSupported( ControlType::Pushbutton, ControlPart::Entire ) ||
-             (GetStyle() & WB_FLATBUTTON) != 0 )
-        {
-            EnableChildTransparentMode();
-            SetParentClipMode( ParentClipMode::NoClip );
-            SetPaintTransparent( true );
+    if ( !bBackground )
+        return;
 
-            if ((GetStyle() & WB_FLATBUTTON) == 0)
-                mpWindowImpl->mbUseNativeFocus = ImplGetSVData()->maNWFData.mbNoFocusRects;
-            else
-                mpWindowImpl->mbUseNativeFocus = ImplGetSVData()->maNWFData.mbNoFocusRectsForFlatButtons;
-        }
+    SetBackground();
+    // #i38498#: do not check for GetParent()->IsChildTransparentModeEnabled()
+    // otherwise the formcontrol button will be overdrawn due to ParentClipMode::NoClip
+    // for radio and checkbox this is ok as they should appear transparent in documents
+    if ( IsNativeControlSupported( ControlType::Pushbutton, ControlPart::Entire ) ||
+         (GetStyle() & WB_FLATBUTTON) != 0 )
+    {
+        EnableChildTransparentMode();
+        SetParentClipMode( ParentClipMode::NoClip );
+        SetPaintTransparent( true );
+
+        if ((GetStyle() & WB_FLATBUTTON) == 0)
+            mpWindowImpl->mbUseNativeFocus = ImplGetSVData()->maNWFData.mbNoFocusRects;
         else
-        {
-            EnableChildTransparentMode( false );
-            SetParentClipMode();
-            SetPaintTransparent( false );
-        }
+            mpWindowImpl->mbUseNativeFocus = ImplGetSVData()->maNWFData.mbNoFocusRectsForFlatButtons;
+    }
+    else
+    {
+        EnableChildTransparentMode( false );
+        SetParentClipMode();
+        SetPaintTransparent( false );
     }
 }
 
@@ -1032,31 +1032,31 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
             ShowFocus(ImplGetFocusRect());
     }
 
-    if (!bNativeOK)
+    if (bNativeOK)
+        return;
+
+    // draw PushButtonFrame, aInRect has content size afterwards
+    if (GetStyle() & WB_FLATBUTTON)
     {
-        // draw PushButtonFrame, aInRect has content size afterwards
-        if (GetStyle() & WB_FLATBUTTON)
-        {
-            tools::Rectangle aTempRect(aInRect);
-            if (bRollOver)
-                ImplDrawPushButtonFrame(rRenderContext, aTempRect, nButtonStyle);
-            aInRect.AdjustLeft(2 );
-            aInRect.AdjustTop(2 );
-            aInRect.AdjustRight( -2 );
-            aInRect.AdjustBottom( -2 );
-        }
-        else
-        {
-            ImplDrawPushButtonFrame(rRenderContext, aInRect, nButtonStyle);
-        }
+        tools::Rectangle aTempRect(aInRect);
+        if (bRollOver)
+            ImplDrawPushButtonFrame(rRenderContext, aTempRect, nButtonStyle);
+        aInRect.AdjustLeft(2 );
+        aInRect.AdjustTop(2 );
+        aInRect.AdjustRight( -2 );
+        aInRect.AdjustBottom( -2 );
+    }
+    else
+    {
+        ImplDrawPushButtonFrame(rRenderContext, aInRect, nButtonStyle);
+    }
 
-        // draw content
-        ImplDrawPushButtonContent(&rRenderContext, DrawFlags::NONE, aInRect, bDrawMenuSep, nButtonStyle);
+    // draw content
+    ImplDrawPushButtonContent(&rRenderContext, DrawFlags::NONE, aInRect, bDrawMenuSep, nButtonStyle);
 
-        if (HasFocus())
-        {
-            ShowFocus(ImplGetFocusRect());
-        }
+    if (HasFocus())
+    {
+        ShowFocus(ImplGetFocusRect());
     }
 }
 
@@ -1137,22 +1137,22 @@ PushButton::PushButton( vcl::Window* pParent, WinBits nStyle ) :
 
 void PushButton::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( rMEvt.IsLeft() &&
-         ImplHitTestPushButton( this, rMEvt.GetPosPixel() ) )
-    {
-        StartTrackingFlags nTrackFlags = StartTrackingFlags::NONE;
+    if ( !(rMEvt.IsLeft() &&
+         ImplHitTestPushButton( this, rMEvt.GetPosPixel() )) )
+        return;
 
-        if ( ( GetStyle() & WB_REPEAT ) &&
-             ! ( GetStyle() & WB_TOGGLE ) )
-            nTrackFlags |= StartTrackingFlags::ButtonRepeat;
+    StartTrackingFlags nTrackFlags = StartTrackingFlags::NONE;
 
-        GetButtonState() |= DrawButtonFlags::Pressed;
-        Invalidate();
-        StartTracking( nTrackFlags );
+    if ( ( GetStyle() & WB_REPEAT ) &&
+         ! ( GetStyle() & WB_TOGGLE ) )
+        nTrackFlags |= StartTrackingFlags::ButtonRepeat;
 
-        if ( nTrackFlags & StartTrackingFlags::ButtonRepeat )
-            Click();
-    }
+    GetButtonState() |= DrawButtonFlags::Pressed;
+    Invalidate();
+    StartTracking( nTrackFlags );
+
+    if ( nTrackFlags & StartTrackingFlags::ButtonRepeat )
+        Click();
 }
 
 void PushButton::Tracking( const TrackingEvent& rTEvt )
@@ -1504,25 +1504,25 @@ void PushButton::SetDropDown( PushButtonDropdownStyle nStyle )
 
 void PushButton::SetState( TriState eState )
 {
-    if ( meState != eState )
-    {
-        meState = eState;
-        if ( meState == TRISTATE_FALSE )
-            GetButtonState() &= ~DrawButtonFlags(DrawButtonFlags::Checked | DrawButtonFlags::DontKnow);
-        else if ( meState == TRISTATE_TRUE )
-        {
-            GetButtonState() &= ~DrawButtonFlags::DontKnow;
-            GetButtonState() |= DrawButtonFlags::Checked;
-        }
-        else // TRISTATE_INDET
-        {
-            GetButtonState() &= ~DrawButtonFlags::Checked;
-            GetButtonState() |= DrawButtonFlags::DontKnow;
-        }
+    if ( meState == eState )
+        return;
 
-        CompatStateChanged( StateChangedType::State );
-        Toggle();
+    meState = eState;
+    if ( meState == TRISTATE_FALSE )
+        GetButtonState() &= ~DrawButtonFlags(DrawButtonFlags::Checked | DrawButtonFlags::DontKnow);
+    else if ( meState == TRISTATE_TRUE )
+    {
+        GetButtonState() &= ~DrawButtonFlags::DontKnow;
+        GetButtonState() |= DrawButtonFlags::Checked;
     }
+    else // TRISTATE_INDET
+    {
+        GetButtonState() &= ~DrawButtonFlags::Checked;
+        GetButtonState() |= DrawButtonFlags::DontKnow;
+    }
+
+    CompatStateChanged( StateChangedType::State );
+    Toggle();
 }
 
 void PushButton::statusChanged(const css::frame::FeatureStateEvent& rEvent)
@@ -1806,30 +1806,30 @@ void RadioButton::ImplInitSettings( bool bBackground )
 {
     Button::ImplInitSettings();
 
-    if ( bBackground )
-    {
-        vcl::Window* pParent = GetParent();
-        if ( !IsControlBackground() &&
-            (pParent->IsChildTransparentModeEnabled() || IsNativeControlSupported( ControlType::Radiobutton, ControlPart::Entire ) ) )
-        {
-            EnableChildTransparentMode();
-            SetParentClipMode( ParentClipMode::NoClip );
-            SetPaintTransparent( true );
-            SetBackground();
-            if( IsNativeControlSupported( ControlType::Radiobutton, ControlPart::Entire ) )
-                mpWindowImpl->mbUseNativeFocus = ImplGetSVData()->maNWFData.mbNoFocusRects;
-        }
-        else
-        {
-            EnableChildTransparentMode( false );
-            SetParentClipMode();
-            SetPaintTransparent( false );
+    if ( !bBackground )
+        return;
 
-            if ( IsControlBackground() )
-                SetBackground( GetControlBackground() );
-            else
-                SetBackground( pParent->GetBackground() );
-        }
+    vcl::Window* pParent = GetParent();
+    if ( !IsControlBackground() &&
+        (pParent->IsChildTransparentModeEnabled() || IsNativeControlSupported( ControlType::Radiobutton, ControlPart::Entire ) ) )
+    {
+        EnableChildTransparentMode();
+        SetParentClipMode( ParentClipMode::NoClip );
+        SetPaintTransparent( true );
+        SetBackground();
+        if( IsNativeControlSupported( ControlType::Radiobutton, ControlPart::Entire ) )
+            mpWindowImpl->mbUseNativeFocus = ImplGetSVData()->maNWFData.mbNoFocusRects;
+    }
+    else
+    {
+        EnableChildTransparentMode( false );
+        SetParentClipMode();
+        SetPaintTransparent( false );
+
+        if ( IsControlBackground() )
+            SetBackground( GetControlBackground() );
+        else
+            SetBackground( pParent->GetBackground() );
     }
 }
 
@@ -1860,92 +1860,92 @@ void RadioButton::ImplDrawRadioButtonState(vcl::RenderContext& rRenderContext)
                                                      nState, aControlValue, OUString());
     }
 
-    if (!bNativeOK)
+    if (bNativeOK)
+        return;
+
+    if (!maImage)
     {
-        if (!maImage)
-        {
-            DrawButtonFlags nStyle = GetButtonState();
-            if (!IsEnabled())
-                nStyle |= DrawButtonFlags::Disabled;
-            if (mbChecked)
-                nStyle |= DrawButtonFlags::Checked;
-            Image aImage = GetRadioImage(rRenderContext.GetSettings(), nStyle);
-            if (IsZoom())
-                rRenderContext.DrawImage(maStateRect.TopLeft(), maStateRect.GetSize(), aImage);
-            else
-                rRenderContext.DrawImage(maStateRect.TopLeft(), aImage);
-        }
+        DrawButtonFlags nStyle = GetButtonState();
+        if (!IsEnabled())
+            nStyle |= DrawButtonFlags::Disabled;
+        if (mbChecked)
+            nStyle |= DrawButtonFlags::Checked;
+        Image aImage = GetRadioImage(rRenderContext.GetSettings(), nStyle);
+        if (IsZoom())
+            rRenderContext.DrawImage(maStateRect.TopLeft(), maStateRect.GetSize(), aImage);
         else
+            rRenderContext.DrawImage(maStateRect.TopLeft(), aImage);
+    }
+    else
+    {
+        HideFocus();
+
+        DecorationView aDecoView(&rRenderContext);
+        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+        tools::Rectangle aImageRect  = maStateRect;
+        Size aImageSize = maImage.GetSizePixel();
+        bool bEnabled = IsEnabled();
+
+        aImageSize.setWidth( CalcZoom(aImageSize.Width()) );
+        aImageSize.setHeight( CalcZoom(aImageSize.Height()) );
+
+        aImageRect.AdjustLeft( 1 );
+        aImageRect.AdjustTop( 1 );
+        aImageRect.AdjustRight( -1 );
+        aImageRect.AdjustBottom( -1 );
+
+        // display border and selection status
+        aImageRect = aDecoView.DrawFrame(aImageRect, DrawFrameStyle::DoubleIn);
+        if ((GetButtonState() & DrawButtonFlags::Pressed) || !bEnabled)
+            rRenderContext.SetFillColor( rStyleSettings.GetFaceColor());
+        else
+            rRenderContext.SetFillColor(rStyleSettings.GetFieldColor());
+        rRenderContext.SetLineColor();
+        rRenderContext.DrawRect(aImageRect);
+
+        // display image
+        DrawImageFlags nImageStyle = DrawImageFlags::NONE;
+        if (!bEnabled)
+            nImageStyle |= DrawImageFlags::Disable;
+
+        Image* pImage = &maImage;
+
+        Point aImagePos(aImageRect.TopLeft());
+        aImagePos.AdjustX((aImageRect.GetWidth() - aImageSize.Width()) / 2 );
+        aImagePos.AdjustY((aImageRect.GetHeight() - aImageSize.Height()) / 2 );
+        if (IsZoom())
+            rRenderContext.DrawImage(aImagePos, aImageSize, *pImage, nImageStyle);
+        else
+            rRenderContext.DrawImage(aImagePos, *pImage, nImageStyle);
+
+        aImageRect.AdjustLeft( 1 );
+        aImageRect.AdjustTop( 1 );
+        aImageRect.AdjustRight( -1 );
+        aImageRect.AdjustBottom( -1 );
+
+        ImplSetFocusRect(aImageRect);
+
+        if (mbChecked)
         {
-            HideFocus();
-
-            DecorationView aDecoView(&rRenderContext);
-            const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-            tools::Rectangle aImageRect  = maStateRect;
-            Size aImageSize = maImage.GetSizePixel();
-            bool bEnabled = IsEnabled();
-
-            aImageSize.setWidth( CalcZoom(aImageSize.Width()) );
-            aImageSize.setHeight( CalcZoom(aImageSize.Height()) );
-
-            aImageRect.AdjustLeft( 1 );
-            aImageRect.AdjustTop( 1 );
-            aImageRect.AdjustRight( -1 );
-            aImageRect.AdjustBottom( -1 );
-
-            // display border and selection status
-            aImageRect = aDecoView.DrawFrame(aImageRect, DrawFrameStyle::DoubleIn);
-            if ((GetButtonState() & DrawButtonFlags::Pressed) || !bEnabled)
-                rRenderContext.SetFillColor( rStyleSettings.GetFaceColor());
-            else
-                rRenderContext.SetFillColor(rStyleSettings.GetFieldColor());
-            rRenderContext.SetLineColor();
-            rRenderContext.DrawRect(aImageRect);
-
-            // display image
-            DrawImageFlags nImageStyle = DrawImageFlags::NONE;
-            if (!bEnabled)
-                nImageStyle |= DrawImageFlags::Disable;
-
-            Image* pImage = &maImage;
-
-            Point aImagePos(aImageRect.TopLeft());
-            aImagePos.AdjustX((aImageRect.GetWidth() - aImageSize.Width()) / 2 );
-            aImagePos.AdjustY((aImageRect.GetHeight() - aImageSize.Height()) / 2 );
-            if (IsZoom())
-                rRenderContext.DrawImage(aImagePos, aImageSize, *pImage, nImageStyle);
-            else
-                rRenderContext.DrawImage(aImagePos, *pImage, nImageStyle);
-
-            aImageRect.AdjustLeft( 1 );
-            aImageRect.AdjustTop( 1 );
-            aImageRect.AdjustRight( -1 );
-            aImageRect.AdjustBottom( -1 );
-
-            ImplSetFocusRect(aImageRect);
-
-            if (mbChecked)
+            rRenderContext.SetLineColor(rStyleSettings.GetHighlightColor());
+            rRenderContext.SetFillColor();
+            if ((aImageSize.Width() >= 20) || (aImageSize.Height() >= 20))
             {
-                rRenderContext.SetLineColor(rStyleSettings.GetHighlightColor());
-                rRenderContext.SetFillColor();
-                if ((aImageSize.Width() >= 20) || (aImageSize.Height() >= 20))
-                {
-                    aImageRect.AdjustLeft( 1 );
-                    aImageRect.AdjustTop( 1 );
-                    aImageRect.AdjustRight( -1 );
-                    aImageRect.AdjustBottom( -1 );
-                }
-                rRenderContext.DrawRect(aImageRect);
                 aImageRect.AdjustLeft( 1 );
                 aImageRect.AdjustTop( 1 );
                 aImageRect.AdjustRight( -1 );
                 aImageRect.AdjustBottom( -1 );
-                rRenderContext.DrawRect(aImageRect);
             }
-
-            if (HasFocus())
-                ShowFocus(ImplGetFocusRect());
+            rRenderContext.DrawRect(aImageRect);
+            aImageRect.AdjustLeft( 1 );
+            aImageRect.AdjustTop( 1 );
+            aImageRect.AdjustRight( -1 );
+            aImageRect.AdjustBottom( -1 );
+            rRenderContext.DrawRect(aImageRect);
         }
+
+        if (HasFocus())
+            ShowFocus(ImplGetFocusRect());
     }
 }
 
@@ -2605,19 +2605,19 @@ void RadioButton::Check( bool bCheck )
     else
         mpWindowImpl->mnStyle &= ~WB_TABSTOP;
 
-    if ( mbChecked != bCheck )
-    {
-        mbChecked = bCheck;
-        VclPtr<vcl::Window> xWindow = this;
-        CompatStateChanged( StateChangedType::State );
-        if ( xWindow->IsDisposed() )
-            return;
-        if ( bCheck && mbRadioCheck )
-            ImplUncheckAllOther();
-        if ( xWindow->IsDisposed() )
-            return;
-        Toggle();
-    }
+    if ( mbChecked == bCheck )
+        return;
+
+    mbChecked = bCheck;
+    VclPtr<vcl::Window> xWindow = this;
+    CompatStateChanged( StateChangedType::State );
+    if ( xWindow->IsDisposed() )
+        return;
+    if ( bCheck && mbRadioCheck )
+        ImplUncheckAllOther();
+    if ( xWindow->IsDisposed() )
+        return;
+    Toggle();
 }
 
 long RadioButton::ImplGetImageToTextDistance() const
@@ -2893,30 +2893,30 @@ void CheckBox::ImplInitSettings( bool bBackground )
 {
     Button::ImplInitSettings();
 
-    if ( bBackground )
-    {
-        vcl::Window* pParent = GetParent();
-        if ( !IsControlBackground() &&
-            (pParent->IsChildTransparentModeEnabled() || IsNativeControlSupported( ControlType::Checkbox, ControlPart::Entire ) ) )
-        {
-            EnableChildTransparentMode();
-            SetParentClipMode( ParentClipMode::NoClip );
-            SetPaintTransparent( true );
-            SetBackground();
-            if( IsNativeControlSupported( ControlType::Checkbox, ControlPart::Entire ) )
-                ImplGetWindowImpl()->mbUseNativeFocus = ImplGetSVData()->maNWFData.mbNoFocusRects;
-        }
-        else
-        {
-            EnableChildTransparentMode( false );
-            SetParentClipMode();
-            SetPaintTransparent( false );
+    if ( !bBackground )
+        return;
 
-            if ( IsControlBackground() )
-                SetBackground( GetControlBackground() );
-            else
-                SetBackground( pParent->GetBackground() );
-        }
+    vcl::Window* pParent = GetParent();
+    if ( !IsControlBackground() &&
+        (pParent->IsChildTransparentModeEnabled() || IsNativeControlSupported( ControlType::Checkbox, ControlPart::Entire ) ) )
+    {
+        EnableChildTransparentMode();
+        SetParentClipMode( ParentClipMode::NoClip );
+        SetPaintTransparent( true );
+        SetBackground();
+        if( IsNativeControlSupported( ControlType::Checkbox, ControlPart::Entire ) )
+            ImplGetWindowImpl()->mbUseNativeFocus = ImplGetSVData()->maNWFData.mbNoFocusRects;
+    }
+    else
+    {
+        EnableChildTransparentMode( false );
+        SetParentClipMode();
+        SetPaintTransparent( false );
+
+        if ( IsControlBackground() )
+            SetBackground( GetControlBackground() );
+        else
+            SetBackground( pParent->GetBackground() );
     }
 }
 
@@ -2950,21 +2950,21 @@ void CheckBox::ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext)
                                                      nState, aControlValue, OUString());
     }
 
-    if (!bNativeOK)
-    {
-        DrawButtonFlags nStyle = GetButtonState();
-        if (!IsEnabled())
-            nStyle |= DrawButtonFlags::Disabled;
-        if (meState == TRISTATE_INDET)
-            nStyle |= DrawButtonFlags::DontKnow;
-        else if (meState == TRISTATE_TRUE)
-            nStyle |= DrawButtonFlags::Checked;
-        Image aImage = GetCheckImage(GetSettings(), nStyle);
-        if (IsZoom())
-            rRenderContext.DrawImage(maStateRect.TopLeft(), maStateRect.GetSize(), aImage);
-        else
-            rRenderContext.DrawImage(maStateRect.TopLeft(), aImage);
-    }
+    if (bNativeOK)
+        return;
+
+    DrawButtonFlags nStyle = GetButtonState();
+    if (!IsEnabled())
+        nStyle |= DrawButtonFlags::Disabled;
+    if (meState == TRISTATE_INDET)
+        nStyle |= DrawButtonFlags::DontKnow;
+    else if (meState == TRISTATE_TRUE)
+        nStyle |= DrawButtonFlags::Checked;
+    Image aImage = GetCheckImage(GetSettings(), nStyle);
+    if (IsZoom())
+        rRenderContext.DrawImage(maStateRect.TopLeft(), maStateRect.GetSize(), aImage);
+    else
+        rRenderContext.DrawImage(maStateRect.TopLeft(), aImage);
 }
 
 void CheckBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,

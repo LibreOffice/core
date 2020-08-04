@@ -845,22 +845,22 @@ void OpenGLZone::hardDisable()
 {
     // protect ourselves from double calling etc.
     static bool bDisabled = false;
-    if (!bDisabled)
-    {
-        bDisabled = true;
+    if (bDisabled)
+        return;
 
-        // Disable the OpenGL support
-        std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::VCL::UseOpenGL::set(false,  xChanges);
-        xChanges->commit();
+    bDisabled = true;
 
-        // Force synchronous config write
-        css::uno::Reference< css::util::XFlushable >(
-            css::configuration::theDefaultProvider::get(
-                comphelper::getProcessComponentContext()),
-            css::uno::UNO_QUERY_THROW)->flush();
-    }
+    // Disable the OpenGL support
+    std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::VCL::UseOpenGL::set(false,  xChanges);
+    xChanges->commit();
+
+    // Force synchronous config write
+    css::uno::Reference< css::util::XFlushable >(
+        css::configuration::theDefaultProvider::get(
+            comphelper::getProcessComponentContext()),
+        css::uno::UNO_QUERY_THROW)->flush();
 }
 
 void OpenGLZone::relaxWatchdogTimings()

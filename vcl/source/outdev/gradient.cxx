@@ -176,70 +176,70 @@ void OutputDevice::DrawGradientToMetafile ( const tools::PolyPolygon& rPolyPoly,
     if ( !mpMetaFile )
         return;
 
-    if ( rPolyPoly.Count() && rPolyPoly[ 0 ].GetSize() )
+    if ( !(rPolyPoly.Count() && rPolyPoly[ 0 ].GetSize()) )
+        return;
+
+    Gradient aGradient( rGradient );
+
+    if ( mnDrawMode & DrawModeFlags::GrayGradient )
     {
-        Gradient aGradient( rGradient );
-
-        if ( mnDrawMode & DrawModeFlags::GrayGradient )
-        {
-            SetGrayscaleColors( aGradient );
-        }
-
-        const tools::Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
-
-        if ( rPolyPoly.IsRect() )
-        {
-            mpMetaFile->AddAction( new MetaGradientAction( aBoundRect, aGradient ) );
-        }
-        else
-        {
-            mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_BEGIN" ) );
-            mpMetaFile->AddAction( new MetaGradientExAction( rPolyPoly, rGradient ) );
-
-            ClipAndDrawGradientMetafile ( rGradient, rPolyPoly );
-
-            mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_END" ) );
-        }
-
-        if( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
-            return;
-
-        // Clip and then draw the gradient
-        if( !tools::Rectangle( PixelToLogic( Point() ), GetOutputSize() ).IsEmpty() )
-        {
-            // convert rectangle to pixels
-            tools::Rectangle aRect( ImplLogicToDevicePixel( aBoundRect ) );
-            aRect.Justify();
-
-            // do nothing if the rectangle is empty
-            if ( !aRect.IsEmpty() )
-            {
-                if( !mbOutputClipped )
-                {
-                    // calculate step count if necessary
-                    if ( !aGradient.GetSteps() )
-                        aGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
-
-                    if ( rPolyPoly.IsRect() )
-                    {
-                        // because we draw with no border line, we have to expand gradient
-                        // rect to avoid missing lines on the right and bottom edge
-                        aRect.AdjustLeft( -1 );
-                        aRect.AdjustTop( -1 );
-                        aRect.AdjustRight( 1 );
-                        aRect.AdjustBottom( 1 );
-                    }
-
-                    // if the clipping polypolygon is a rectangle, then it's the same size as the bounding of the
-                    // polypolygon, so pass in a NULL for the clipping parameter
-                    if( aGradient.GetStyle() == GradientStyle::Linear || rGradient.GetStyle() == GradientStyle::Axial )
-                        DrawLinearGradientToMetafile( aRect, aGradient );
-                    else
-                        DrawComplexGradientToMetafile( aRect, aGradient );
-                }
-            }
-        }
+        SetGrayscaleColors( aGradient );
     }
+
+    const tools::Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
+
+    if ( rPolyPoly.IsRect() )
+    {
+        mpMetaFile->AddAction( new MetaGradientAction( aBoundRect, aGradient ) );
+    }
+    else
+    {
+        mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_BEGIN" ) );
+        mpMetaFile->AddAction( new MetaGradientExAction( rPolyPoly, rGradient ) );
+
+        ClipAndDrawGradientMetafile ( rGradient, rPolyPoly );
+
+        mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_END" ) );
+    }
+
+    if( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
+        return;
+
+    // Clip and then draw the gradient
+    if( tools::Rectangle( PixelToLogic( Point() ), GetOutputSize() ).IsEmpty() )
+        return;
+
+    // convert rectangle to pixels
+    tools::Rectangle aRect( ImplLogicToDevicePixel( aBoundRect ) );
+    aRect.Justify();
+
+    // do nothing if the rectangle is empty
+    if ( aRect.IsEmpty() )
+        return;
+
+    if( mbOutputClipped )
+        return;
+
+    // calculate step count if necessary
+    if ( !aGradient.GetSteps() )
+        aGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
+
+    if ( rPolyPoly.IsRect() )
+    {
+        // because we draw with no border line, we have to expand gradient
+        // rect to avoid missing lines on the right and bottom edge
+        aRect.AdjustLeft( -1 );
+        aRect.AdjustTop( -1 );
+        aRect.AdjustRight( 1 );
+        aRect.AdjustBottom( 1 );
+    }
+
+    // if the clipping polypolygon is a rectangle, then it's the same size as the bounding of the
+    // polypolygon, so pass in a NULL for the clipping parameter
+    if( aGradient.GetStyle() == GradientStyle::Linear || rGradient.GetStyle() == GradientStyle::Axial )
+        DrawLinearGradientToMetafile( aRect, aGradient );
+    else
+        DrawComplexGradientToMetafile( aRect, aGradient );
 }
 
 namespace
@@ -592,26 +592,26 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
     }
 
     // we should draw last inner Polygon if we output PolyPolygon
-    if( xPolyPoly )
+    if( !xPolyPoly )
+        return;
+
+    const tools::Polygon& rPoly = xPolyPoly->GetObject( 1 );
+
+    if( rPoly.GetBoundRect().IsEmpty() )
+        return;
+
+    // #107349# Paint last polygon with end color only if loop
+    // has generated output. Otherwise, the current
+    // (i.e. start) color is taken, to generate _any_ output.
+    if( bPaintLastPolygon )
     {
-        const tools::Polygon& rPoly = xPolyPoly->GetObject( 1 );
-
-        if( !rPoly.GetBoundRect().IsEmpty() )
-        {
-            // #107349# Paint last polygon with end color only if loop
-            // has generated output. Otherwise, the current
-            // (i.e. start) color is taken, to generate _any_ output.
-            if( bPaintLastPolygon )
-            {
-                nRed = GetGradientColorValue( nEndRed );
-                nGreen = GetGradientColorValue( nEndGreen );
-                nBlue = GetGradientColorValue( nEndBlue );
-            }
-
-            mpGraphics->SetFillColor( Color( nRed, nGreen, nBlue ) );
-            ImplDrawPolygon( rPoly, pClixPolyPoly );
-        }
+        nRed = GetGradientColorValue( nEndRed );
+        nGreen = GetGradientColorValue( nEndGreen );
+        nBlue = GetGradientColorValue( nEndBlue );
     }
+
+    mpGraphics->SetFillColor( Color( nRed, nGreen, nBlue ) );
+    ImplDrawPolygon( rPoly, pClixPolyPoly );
 }
 
 void OutputDevice::DrawLinearGradientToMetafile( const tools::Rectangle& rRect,
@@ -916,21 +916,21 @@ void OutputDevice::DrawComplexGradientToMetafile( const tools::Rectangle& rRect,
 
     const tools::Polygon& rPoly = xPolyPoly->GetObject( 1 );
 
-    if( !rPoly.GetBoundRect().IsEmpty() )
-    {
-        // #107349# Paint last polygon with end color only if loop
-        // has generated output. Otherwise, the current
-        // (i.e. start) color is taken, to generate _any_ output.
-        if( bPaintLastPolygon )
-        {
-            nRed = GetGradientColorValue( nEndRed );
-            nGreen = GetGradientColorValue( nEndGreen );
-            nBlue = GetGradientColorValue( nEndBlue );
-        }
+    if( rPoly.GetBoundRect().IsEmpty() )
+        return;
 
-        mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
-        mpMetaFile->AddAction( new MetaPolygonAction( rPoly ) );
+    // #107349# Paint last polygon with end color only if loop
+    // has generated output. Otherwise, the current
+    // (i.e. start) color is taken, to generate _any_ output.
+    if( bPaintLastPolygon )
+    {
+        nRed = GetGradientColorValue( nEndRed );
+        nGreen = GetGradientColorValue( nEndGreen );
+        nBlue = GetGradientColorValue( nEndBlue );
     }
+
+    mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
+    mpMetaFile->AddAction( new MetaPolygonAction( rPoly ) );
 }
 
 long OutputDevice::GetGradientStepCount( long nMinRect )

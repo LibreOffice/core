@@ -879,46 +879,46 @@ void ImplListBoxWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
 void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
 {
-    if (!rMEvt.IsLeaveWindow() && !mbMulti && IsMouseMoveSelect() && mpEntryList->GetEntryCount())
+    if (rMEvt.IsLeaveWindow() || mbMulti || !IsMouseMoveSelect() || !mpEntryList->GetEntryCount())
+        return;
+
+    tools::Rectangle aRect( Point(), GetOutputSizePixel() );
+    if( !aRect.IsInside( rMEvt.GetPosPixel() ) )
+        return;
+
+    if ( IsMouseMoveSelect() )
     {
-        tools::Rectangle aRect( Point(), GetOutputSizePixel() );
-        if( aRect.IsInside( rMEvt.GetPosPixel() ) )
+        sal_Int32 nSelect = GetEntryPosForPoint( rMEvt.GetPosPixel() );
+        if( nSelect == LISTBOX_ENTRY_NOTFOUND )
+            nSelect = mpEntryList->GetEntryCount() - 1;
+        nSelect = std::min( nSelect, GetLastVisibleEntry() );
+        nSelect = std::min( nSelect, static_cast<sal_Int32>( mpEntryList->GetEntryCount() - 1 ) );
+        // Select only visible Entries with MouseMove, otherwise Tracking...
+        if ( IsVisible( nSelect ) &&
+            mpEntryList->IsEntrySelectable( nSelect ) &&
+            ( ( nSelect != mnCurrentPos ) || !GetEntryList()->GetSelectedEntryCount() || ( nSelect != GetEntryList()->GetSelectedEntryPos( 0 ) ) ) )
         {
-            if ( IsMouseMoveSelect() )
+            mbTrackingSelect = true;
+            if ( SelectEntries( nSelect, LET_TRACKING ) )
             {
-                sal_Int32 nSelect = GetEntryPosForPoint( rMEvt.GetPosPixel() );
-                if( nSelect == LISTBOX_ENTRY_NOTFOUND )
-                    nSelect = mpEntryList->GetEntryCount() - 1;
-                nSelect = std::min( nSelect, GetLastVisibleEntry() );
-                nSelect = std::min( nSelect, static_cast<sal_Int32>( mpEntryList->GetEntryCount() - 1 ) );
-                // Select only visible Entries with MouseMove, otherwise Tracking...
-                if ( IsVisible( nSelect ) &&
-                    mpEntryList->IsEntrySelectable( nSelect ) &&
-                    ( ( nSelect != mnCurrentPos ) || !GetEntryList()->GetSelectedEntryCount() || ( nSelect != GetEntryList()->GetSelectedEntryPos( 0 ) ) ) )
-                {
-                    mbTrackingSelect = true;
-                    if ( SelectEntries( nSelect, LET_TRACKING ) )
-                    {
-                        // When list box selection change by mouse move, notify
-                        // VclEventId::ListboxSelect vcl event.
-                        maListItemSelectHdl.Call(nullptr);
-                    }
-                    mbTrackingSelect = false;
-                }
+                // When list box selection change by mouse move, notify
+                // VclEventId::ListboxSelect vcl event.
+                maListItemSelectHdl.Call(nullptr);
             }
-
-            // if the DD button was pressed and someone moved into the ListBox
-            // with the mouse button pressed...
-            if ( rMEvt.IsLeft() && !rMEvt.IsSynthetic() )
-            {
-                if ( !mbMulti && GetEntryList()->GetSelectedEntryCount() )
-                    mnTrackingSaveSelection = GetEntryList()->GetSelectedEntryPos( 0 );
-                else
-                    mnTrackingSaveSelection = LISTBOX_ENTRY_NOTFOUND;
-
-                StartTracking( StartTrackingFlags::ScrollRepeat );
-            }
+            mbTrackingSelect = false;
         }
+    }
+
+    // if the DD button was pressed and someone moved into the ListBox
+    // with the mouse button pressed...
+    if ( rMEvt.IsLeft() && !rMEvt.IsSynthetic() )
+    {
+        if ( !mbMulti && GetEntryList()->GetSelectedEntryCount() )
+            mnTrackingSaveSelection = GetEntryList()->GetSelectedEntryPos( 0 );
+        else
+            mnTrackingSaveSelection = LISTBOX_ENTRY_NOTFOUND;
+
+        StartTracking( StartTrackingFlags::ScrollRepeat );
     }
 }
 
@@ -933,51 +933,51 @@ void ImplListBoxWindow::DeselectAll()
 
 void ImplListBoxWindow::SelectEntry( sal_Int32 nPos, bool bSelect )
 {
-    if( (mpEntryList->IsEntryPosSelected( nPos ) != bSelect) && mpEntryList->IsEntrySelectable( nPos ) )
+    if( (mpEntryList->IsEntryPosSelected( nPos ) == bSelect) || !mpEntryList->IsEntrySelectable( nPos ) )
+        return;
+
+    ImplHideFocusRect();
+    if( bSelect )
     {
-        ImplHideFocusRect();
-        if( bSelect )
+        if( !mbMulti )
         {
-            if( !mbMulti )
+            // deselect the selected entry
+            sal_Int32 nDeselect = GetEntryList()->GetSelectedEntryPos( 0 );
+            if( nDeselect != LISTBOX_ENTRY_NOTFOUND )
             {
-                // deselect the selected entry
-                sal_Int32 nDeselect = GetEntryList()->GetSelectedEntryPos( 0 );
-                if( nDeselect != LISTBOX_ENTRY_NOTFOUND )
-                {
-                    //SelectEntryPos( nDeselect, false );
-                    GetEntryList()->SelectEntry( nDeselect, false );
-                    if (IsUpdateMode() && IsReallyVisible())
-                        Invalidate();
-                }
-            }
-            mpEntryList->SelectEntry( nPos, true );
-            mnCurrentPos = nPos;
-            if ( ( nPos != LISTBOX_ENTRY_NOTFOUND ) && IsUpdateMode() )
-            {
-                Invalidate();
-                if ( !IsVisible( nPos ) )
-                {
-                    ImplClearLayoutData();
-                    sal_Int32 nVisibleEntries = GetLastVisibleEntry()-mnTop;
-                    if ( !nVisibleEntries || !IsReallyVisible() || ( nPos < GetTopEntry() ) )
-                    {
-                        Resize();
-                        ShowProminentEntry( nPos );
-                    }
-                    else
-                    {
-                        ShowProminentEntry( nPos );
-                    }
-                }
+                //SelectEntryPos( nDeselect, false );
+                GetEntryList()->SelectEntry( nDeselect, false );
+                if (IsUpdateMode() && IsReallyVisible())
+                    Invalidate();
             }
         }
-        else
+        mpEntryList->SelectEntry( nPos, true );
+        mnCurrentPos = nPos;
+        if ( ( nPos != LISTBOX_ENTRY_NOTFOUND ) && IsUpdateMode() )
         {
-            mpEntryList->SelectEntry( nPos, false );
             Invalidate();
+            if ( !IsVisible( nPos ) )
+            {
+                ImplClearLayoutData();
+                sal_Int32 nVisibleEntries = GetLastVisibleEntry()-mnTop;
+                if ( !nVisibleEntries || !IsReallyVisible() || ( nPos < GetTopEntry() ) )
+                {
+                    Resize();
+                    ShowProminentEntry( nPos );
+                }
+                else
+                {
+                    ShowProminentEntry( nPos );
+                }
+            }
         }
-        mbSelectionChanged = true;
     }
+    else
+    {
+        mpEntryList->SelectEntry( nPos, false );
+        Invalidate();
+    }
+    mbSelectionChanged = true;
 }
 
 bool ImplListBoxWindow::SelectEntries( sal_Int32 nSelect, LB_EVENT_TYPE eLET, bool bShift, bool bCtrl, bool bSelectPosChange /*=FALSE*/ )
@@ -1859,19 +1859,19 @@ void ImplListBoxWindow::SetTopEntry( sal_Int32 nTop )
     while( nTop > 0 && mpEntryList->GetAddedHeight( nLastEntry, nTop-1 ) + pLast->getHeightWithMargin() <= nWHeight )
         nTop--;
 
-    if ( nTop != mnTop )
-    {
-        ImplClearLayoutData();
-        long nDiff = mpEntryList->GetAddedHeight( mnTop, nTop );
-        PaintImmediately();
-        ImplHideFocusRect();
-        mnTop = nTop;
-        Scroll( 0, nDiff );
-        PaintImmediately();
-        if( HasFocus() )
-            ImplShowFocusRect();
-        maScrollHdl.Call( this );
-    }
+    if ( nTop == mnTop )
+        return;
+
+    ImplClearLayoutData();
+    long nDiff = mpEntryList->GetAddedHeight( mnTop, nTop );
+    PaintImmediately();
+    ImplHideFocusRect();
+    mnTop = nTop;
+    Scroll( 0, nDiff );
+    PaintImmediately();
+    if( HasFocus() )
+        ImplShowFocusRect();
+    maScrollHdl.Call( this );
 }
 
 void ImplListBoxWindow::ShowProminentEntry( sal_Int32 nEntryPos )

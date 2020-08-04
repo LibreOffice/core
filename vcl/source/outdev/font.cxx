@@ -525,18 +525,18 @@ void OutputDevice::ImplClearAllFontData(bool bNewFontLists)
 
     // clear global font lists to have them updated
     pSVData->maGDIData.mxScreenFontCache->Invalidate();
-    if ( bNewFontLists )
+    if ( !bNewFontLists )
+        return;
+
+    pSVData->maGDIData.mxScreenFontList->Clear();
+    vcl::Window * pFrame = pSVData->maFrameData.mpFirstFrame;
+    if ( pFrame )
     {
-        pSVData->maGDIData.mxScreenFontList->Clear();
-        vcl::Window * pFrame = pSVData->maFrameData.mpFirstFrame;
-        if ( pFrame )
+        if ( pFrame->AcquireGraphics() )
         {
-            if ( pFrame->AcquireGraphics() )
-            {
-                OutputDevice *pDevice = pFrame;
-                pDevice->mpGraphics->ClearDevFontCache();
-                pDevice->mpGraphics->GetDevFontList(pFrame->mpWindowImpl->mpFrameData->mxFontCollection.get());
-            }
+            OutputDevice *pDevice = pFrame;
+            pDevice->mpGraphics->ClearDevFontCache();
+            pDevice->mpGraphics->GetDevFontList(pFrame->mpWindowImpl->mpFrameData->mxFontCollection.get());
         }
     }
 }
@@ -908,23 +908,23 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
 
 void OutputDevice::ImplInitFontList() const
 {
+    if( mxFontCollection->Count() )
+        return;
+
+    if( !(mpGraphics || AcquireGraphics()) )
+        return;
+
+    SAL_INFO( "vcl.gdi", "OutputDevice::ImplInitFontList()" );
+    mpGraphics->GetDevFontList(mxFontCollection.get());
+
+    // There is absolutely no way there should be no fonts available on the device
     if( !mxFontCollection->Count() )
     {
-        if( mpGraphics || AcquireGraphics() )
-        {
-            SAL_INFO( "vcl.gdi", "OutputDevice::ImplInitFontList()" );
-            mpGraphics->GetDevFontList(mxFontCollection.get());
-
-            // There is absolutely no way there should be no fonts available on the device
-            if( !mxFontCollection->Count() )
-            {
-                OUString aError( "Application error: no fonts and no vcl resource found on your system" );
-                OUString aResStr(VclResId(SV_ACCESSERROR_NO_FONTS));
-                if (!aResStr.isEmpty())
-                    aError = aResStr;
-                Application::Abort(aError);
-            }
-        }
+        OUString aError( "Application error: no fonts and no vcl resource found on your system" );
+        OUString aResStr(VclResId(SV_ACCESSERROR_NO_FONTS));
+        if (!aResStr.isEmpty())
+            aError = aResStr;
+        Application::Abort(aError);
     }
 }
 

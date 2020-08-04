@@ -356,21 +356,21 @@ void Qt5Menu::RemoveItem(unsigned nPos)
 {
     SolarMutexGuard aGuard;
 
-    if (nPos < maItems.size())
+    if (nPos >= maItems.size())
+        return;
+
+    Qt5MenuItem* pItem = maItems[nPos];
+    pItem->mpAction.reset();
+    pItem->mpMenu.reset();
+
+    maItems.erase(maItems.begin() + nPos);
+
+    // Recalculate action groups if necessary:
+    // if separator between two QActionGroups was removed,
+    // it may be needed to merge them
+    if (nPos > 0)
     {
-        Qt5MenuItem* pItem = maItems[nPos];
-        pItem->mpAction.reset();
-        pItem->mpMenu.reset();
-
-        maItems.erase(maItems.begin() + nPos);
-
-        // Recalculate action groups if necessary:
-        // if separator between two QActionGroups was removed,
-        // it may be needed to merge them
-        if (nPos > 0)
-        {
-            ReinitializeActionGroup(nPos - 1);
-        }
+        ReinitializeActionGroup(nPos - 1);
     }
 }
 
@@ -421,26 +421,26 @@ void Qt5Menu::SetFrame(const SalFrame* pFrame)
     mpFrame->SetMenu(this);
 
     Qt5MainWindow* pMainWindow = mpFrame->GetTopLevelWindow();
-    if (pMainWindow)
+    if (!pMainWindow)
+        return;
+
+    mpQMenuBar = pMainWindow->menuBar();
+    if (mpQMenuBar)
     {
-        mpQMenuBar = pMainWindow->menuBar();
-        if (mpQMenuBar)
+        mpQMenuBar->clear();
+        QPushButton* pButton
+            = static_cast<QPushButton*>(mpQMenuBar->cornerWidget(Qt::TopRightCorner));
+        if (pButton && ((mpCloseButton != pButton) || !maCloseButtonConnection))
         {
-            mpQMenuBar->clear();
-            QPushButton* pButton
-                = static_cast<QPushButton*>(mpQMenuBar->cornerWidget(Qt::TopRightCorner));
-            if (pButton && ((mpCloseButton != pButton) || !maCloseButtonConnection))
-            {
-                maCloseButtonConnection
-                    = connect(pButton, &QPushButton::clicked, this, &Qt5Menu::slotCloseDocument);
-                mpCloseButton = pButton;
-            }
+            maCloseButtonConnection
+                = connect(pButton, &QPushButton::clicked, this, &Qt5Menu::slotCloseDocument);
+            mpCloseButton = pButton;
         }
-
-        mpQMenu = nullptr;
-
-        DoFullMenuUpdate(mpVCLMenu);
     }
+
+    mpQMenu = nullptr;
+
+    DoFullMenuUpdate(mpVCLMenu);
 }
 
 void Qt5Menu::DoFullMenuUpdate(Menu* pMenuBar)
@@ -578,21 +578,21 @@ const Qt5Frame* Qt5Menu::GetFrame() const
 
 void Qt5Menu::slotMenuTriggered(Qt5MenuItem* pQItem)
 {
-    if (pQItem)
-    {
-        Qt5Menu* pSalMenu = pQItem->mpParentMenu;
-        Qt5Menu* pTopLevel = pSalMenu->GetTopLevel();
+    if (!pQItem)
+        return;
 
-        Menu* pMenu = pSalMenu->GetMenu();
-        auto mnId = pQItem->mnId;
+    Qt5Menu* pSalMenu = pQItem->mpParentMenu;
+    Qt5Menu* pTopLevel = pSalMenu->GetTopLevel();
 
-        // HACK to allow HandleMenuCommandEvent to "not-set" the checked button
-        // LO expects a signal before an item state change, so reset the check item
-        if (pQItem->mpAction->isCheckable()
-            && (!pQItem->mpActionGroup || pQItem->mpActionGroup->actions().size() <= 1))
-            pQItem->mpAction->setChecked(!pQItem->mpAction->isChecked());
-        pTopLevel->GetMenu()->HandleMenuCommandEvent(pMenu, mnId);
-    }
+    Menu* pMenu = pSalMenu->GetMenu();
+    auto mnId = pQItem->mnId;
+
+    // HACK to allow HandleMenuCommandEvent to "not-set" the checked button
+    // LO expects a signal before an item state change, so reset the check item
+    if (pQItem->mpAction->isCheckable()
+        && (!pQItem->mpActionGroup || pQItem->mpActionGroup->actions().size() <= 1))
+        pQItem->mpAction->setChecked(!pQItem->mpAction->isChecked());
+    pTopLevel->GetMenu()->HandleMenuCommandEvent(pMenu, mnId);
 }
 
 void Qt5Menu::slotMenuAboutToShow(Qt5MenuItem* pQItem)

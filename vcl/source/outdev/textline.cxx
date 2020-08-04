@@ -330,176 +330,176 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
         break;
     }
 
-    if ( nLineHeight )
+    if ( !nLineHeight )
+        return;
+
+    if ( mbLineColor || mbInitLineColor )
     {
-        if ( mbLineColor || mbInitLineColor )
+        mpGraphics->SetLineColor();
+        mbInitLineColor = true;
+    }
+    mpGraphics->SetFillColor( aColor );
+    mbInitFillColor = true;
+
+    long nLeft = nDistX;
+
+    switch ( eTextLine )
+    {
+    case LINESTYLE_SINGLE:
+    case LINESTYLE_BOLD:
+        ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nWidth, nLineHeight );
+        break;
+    case LINESTYLE_DOUBLE:
+        ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos,  nWidth, nLineHeight );
+        ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos2, nWidth, nLineHeight );
+        break;
+    case LINESTYLE_DOTTED:
+    case LINESTYLE_BOLDDOTTED:
         {
-            mpGraphics->SetLineColor();
-            mbInitLineColor = true;
+            long nDotWidth = nLineHeight*mnDPIY;
+            nDotWidth += mnDPIY/2;
+            nDotWidth /= mnDPIY;
+
+            long nTempWidth = nDotWidth;
+            long nEnd = nLeft+nWidth;
+            while ( nLeft < nEnd )
+            {
+                if ( nLeft+nTempWidth > nEnd )
+                    nTempWidth = nEnd-nLeft;
+
+                ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nTempWidth, nLineHeight );
+                nLeft += nDotWidth*2;
+            }
         }
-        mpGraphics->SetFillColor( aColor );
-        mbInitFillColor = true;
-
-        long nLeft = nDistX;
-
-        switch ( eTextLine )
+        break;
+    case LINESTYLE_DASH:
+    case LINESTYLE_LONGDASH:
+    case LINESTYLE_BOLDDASH:
+    case LINESTYLE_BOLDLONGDASH:
         {
-        case LINESTYLE_SINGLE:
-        case LINESTYLE_BOLD:
-            ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nWidth, nLineHeight );
-            break;
-        case LINESTYLE_DOUBLE:
-            ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos,  nWidth, nLineHeight );
-            ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos2, nWidth, nLineHeight );
-            break;
-        case LINESTYLE_DOTTED:
-        case LINESTYLE_BOLDDOTTED:
+            long nDotWidth = nLineHeight*mnDPIY;
+            nDotWidth += mnDPIY/2;
+            nDotWidth /= mnDPIY;
+
+            long nMinDashWidth;
+            long nMinSpaceWidth;
+            long nSpaceWidth;
+            long nDashWidth;
+            if ( (eTextLine == LINESTYLE_LONGDASH) ||
+                 (eTextLine == LINESTYLE_BOLDLONGDASH) )
             {
-                long nDotWidth = nLineHeight*mnDPIY;
-                nDotWidth += mnDPIY/2;
-                nDotWidth /= mnDPIY;
-
-                long nTempWidth = nDotWidth;
-                long nEnd = nLeft+nWidth;
-                while ( nLeft < nEnd )
-                {
-                    if ( nLeft+nTempWidth > nEnd )
-                        nTempWidth = nEnd-nLeft;
-
-                    ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nTempWidth, nLineHeight );
-                    nLeft += nDotWidth*2;
-                }
+                nMinDashWidth = nDotWidth*6;
+                nMinSpaceWidth = nDotWidth*2;
+                nDashWidth = 200;
+                nSpaceWidth = 100;
             }
-            break;
-        case LINESTYLE_DASH:
-        case LINESTYLE_LONGDASH:
-        case LINESTYLE_BOLDDASH:
-        case LINESTYLE_BOLDLONGDASH:
+            else
             {
-                long nDotWidth = nLineHeight*mnDPIY;
-                nDotWidth += mnDPIY/2;
-                nDotWidth /= mnDPIY;
-
-                long nMinDashWidth;
-                long nMinSpaceWidth;
-                long nSpaceWidth;
-                long nDashWidth;
-                if ( (eTextLine == LINESTYLE_LONGDASH) ||
-                     (eTextLine == LINESTYLE_BOLDLONGDASH) )
-                {
-                    nMinDashWidth = nDotWidth*6;
-                    nMinSpaceWidth = nDotWidth*2;
-                    nDashWidth = 200;
-                    nSpaceWidth = 100;
-                }
-                else
-                {
-                    nMinDashWidth = nDotWidth*4;
-                    nMinSpaceWidth = (nDotWidth*150)/100;
-                    nDashWidth = 100;
-                    nSpaceWidth = 50;
-                }
-                nDashWidth = ((nDashWidth*mnDPIX)+1270)/2540;
-                nSpaceWidth = ((nSpaceWidth*mnDPIX)+1270)/2540;
-                // DashWidth will be increased if the line is getting too thick
-                // in proportion to the line's length
-                if ( nDashWidth < nMinDashWidth )
-                    nDashWidth = nMinDashWidth;
-                if ( nSpaceWidth < nMinSpaceWidth )
-                    nSpaceWidth = nMinSpaceWidth;
-
-                long nTempWidth = nDashWidth;
-                long nEnd = nLeft+nWidth;
-                while ( nLeft < nEnd )
-                {
-                    if ( nLeft+nTempWidth > nEnd )
-                        nTempWidth = nEnd-nLeft;
-                    ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nTempWidth, nLineHeight );
-                    nLeft += nDashWidth+nSpaceWidth;
-                }
+                nMinDashWidth = nDotWidth*4;
+                nMinSpaceWidth = (nDotWidth*150)/100;
+                nDashWidth = 100;
+                nSpaceWidth = 50;
             }
-            break;
-        case LINESTYLE_DASHDOT:
-        case LINESTYLE_BOLDDASHDOT:
+            nDashWidth = ((nDashWidth*mnDPIX)+1270)/2540;
+            nSpaceWidth = ((nSpaceWidth*mnDPIX)+1270)/2540;
+            // DashWidth will be increased if the line is getting too thick
+            // in proportion to the line's length
+            if ( nDashWidth < nMinDashWidth )
+                nDashWidth = nMinDashWidth;
+            if ( nSpaceWidth < nMinSpaceWidth )
+                nSpaceWidth = nMinSpaceWidth;
+
+            long nTempWidth = nDashWidth;
+            long nEnd = nLeft+nWidth;
+            while ( nLeft < nEnd )
             {
-                long nDotWidth = nLineHeight*mnDPIY;
-                nDotWidth += mnDPIY/2;
-                nDotWidth /= mnDPIY;
-
-                long nDashWidth = ((100*mnDPIX)+1270)/2540;
-                long nMinDashWidth = nDotWidth*4;
-                // DashWidth will be increased if the line is getting too thick
-                // in proportion to the line's length
-                if ( nDashWidth < nMinDashWidth )
-                    nDashWidth = nMinDashWidth;
-
-                long nTempDotWidth = nDotWidth;
-                long nTempDashWidth = nDashWidth;
-                long nEnd = nLeft+nWidth;
-                while ( nLeft < nEnd )
-                {
-                    if ( nLeft+nTempDotWidth > nEnd )
-                        nTempDotWidth = nEnd-nLeft;
-
-                    ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nTempDotWidth, nLineHeight );
-                    nLeft += nDotWidth*2;
-                    if ( nLeft > nEnd )
-                        break;
-
-                    if ( nLeft+nTempDashWidth > nEnd )
-                        nTempDashWidth = nEnd-nLeft;
-
-                    ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nTempDashWidth, nLineHeight );
-                    nLeft += nDashWidth+nDotWidth;
-                }
+                if ( nLeft+nTempWidth > nEnd )
+                    nTempWidth = nEnd-nLeft;
+                ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nTempWidth, nLineHeight );
+                nLeft += nDashWidth+nSpaceWidth;
             }
-            break;
-        case LINESTYLE_DASHDOTDOT:
-        case LINESTYLE_BOLDDASHDOTDOT:
-            {
-                long nDotWidth = nLineHeight*mnDPIY;
-                nDotWidth += mnDPIY/2;
-                nDotWidth /= mnDPIY;
-
-                long nDashWidth = ((100*mnDPIX)+1270)/2540;
-                long nMinDashWidth = nDotWidth*4;
-                // DashWidth will be increased if the line is getting too thick
-                // in proportion to the line's length
-                if ( nDashWidth < nMinDashWidth )
-                    nDashWidth = nMinDashWidth;
-
-                long nTempDotWidth = nDotWidth;
-                long nTempDashWidth = nDashWidth;
-                long nEnd = nLeft+nWidth;
-                while ( nLeft < nEnd )
-                {
-                    if ( nLeft+nTempDotWidth > nEnd )
-                        nTempDotWidth = nEnd-nLeft;
-
-                    ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nTempDotWidth, nLineHeight );
-                    nLeft += nDotWidth*2;
-                    if ( nLeft > nEnd )
-                        break;
-
-                    if ( nLeft+nTempDotWidth > nEnd )
-                        nTempDotWidth = nEnd-nLeft;
-
-                    ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nTempDotWidth, nLineHeight );
-                    nLeft += nDotWidth*2;
-                    if ( nLeft > nEnd )
-                        break;
-
-                    if ( nLeft+nTempDashWidth > nEnd )
-                        nTempDashWidth = nEnd-nLeft;
-
-                    ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nTempDashWidth, nLineHeight );
-                    nLeft += nDashWidth+nDotWidth;
-                }
-            }
-            break;
-        default:
-            break;
         }
+        break;
+    case LINESTYLE_DASHDOT:
+    case LINESTYLE_BOLDDASHDOT:
+        {
+            long nDotWidth = nLineHeight*mnDPIY;
+            nDotWidth += mnDPIY/2;
+            nDotWidth /= mnDPIY;
+
+            long nDashWidth = ((100*mnDPIX)+1270)/2540;
+            long nMinDashWidth = nDotWidth*4;
+            // DashWidth will be increased if the line is getting too thick
+            // in proportion to the line's length
+            if ( nDashWidth < nMinDashWidth )
+                nDashWidth = nMinDashWidth;
+
+            long nTempDotWidth = nDotWidth;
+            long nTempDashWidth = nDashWidth;
+            long nEnd = nLeft+nWidth;
+            while ( nLeft < nEnd )
+            {
+                if ( nLeft+nTempDotWidth > nEnd )
+                    nTempDotWidth = nEnd-nLeft;
+
+                ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nTempDotWidth, nLineHeight );
+                nLeft += nDotWidth*2;
+                if ( nLeft > nEnd )
+                    break;
+
+                if ( nLeft+nTempDashWidth > nEnd )
+                    nTempDashWidth = nEnd-nLeft;
+
+                ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nTempDashWidth, nLineHeight );
+                nLeft += nDashWidth+nDotWidth;
+            }
+        }
+        break;
+    case LINESTYLE_DASHDOTDOT:
+    case LINESTYLE_BOLDDASHDOTDOT:
+        {
+            long nDotWidth = nLineHeight*mnDPIY;
+            nDotWidth += mnDPIY/2;
+            nDotWidth /= mnDPIY;
+
+            long nDashWidth = ((100*mnDPIX)+1270)/2540;
+            long nMinDashWidth = nDotWidth*4;
+            // DashWidth will be increased if the line is getting too thick
+            // in proportion to the line's length
+            if ( nDashWidth < nMinDashWidth )
+                nDashWidth = nMinDashWidth;
+
+            long nTempDotWidth = nDotWidth;
+            long nTempDashWidth = nDashWidth;
+            long nEnd = nLeft+nWidth;
+            while ( nLeft < nEnd )
+            {
+                if ( nLeft+nTempDotWidth > nEnd )
+                    nTempDotWidth = nEnd-nLeft;
+
+                ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nTempDotWidth, nLineHeight );
+                nLeft += nDotWidth*2;
+                if ( nLeft > nEnd )
+                    break;
+
+                if ( nLeft+nTempDotWidth > nEnd )
+                    nTempDotWidth = nEnd-nLeft;
+
+                ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nTempDotWidth, nLineHeight );
+                nLeft += nDotWidth*2;
+                if ( nLeft > nEnd )
+                    break;
+
+                if ( nLeft+nTempDashWidth > nEnd )
+                    nTempDashWidth = nEnd-nLeft;
+
+                ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nTempDashWidth, nLineHeight );
+                nLeft += nDashWidth+nDotWidth;
+            }
+        }
+        break;
+    default:
+        break;
     }
 }
 
@@ -537,31 +537,31 @@ void OutputDevice::ImplDrawStrikeoutLine( long nBaseX, long nBaseY,
         break;
     }
 
-    if ( nLineHeight )
+    if ( !nLineHeight )
+        return;
+
+    if ( mbLineColor || mbInitLineColor )
     {
-        if ( mbLineColor || mbInitLineColor )
-        {
-            mpGraphics->SetLineColor();
-            mbInitLineColor = true;
-        }
-        mpGraphics->SetFillColor( aColor );
-        mbInitFillColor = true;
+        mpGraphics->SetLineColor();
+        mbInitLineColor = true;
+    }
+    mpGraphics->SetFillColor( aColor );
+    mbInitFillColor = true;
 
-        const long& nLeft = nDistX;
+    const long& nLeft = nDistX;
 
-        switch ( eStrikeout )
-        {
-        case STRIKEOUT_SINGLE:
-        case STRIKEOUT_BOLD:
-            ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nWidth, nLineHeight );
-            break;
-        case STRIKEOUT_DOUBLE:
-            ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nWidth, nLineHeight );
-            ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos2, nWidth, nLineHeight );
-            break;
-        default:
-            break;
-        }
+    switch ( eStrikeout )
+    {
+    case STRIKEOUT_SINGLE:
+    case STRIKEOUT_BOLD:
+        ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nWidth, nLineHeight );
+        break;
+    case STRIKEOUT_DOUBLE:
+        ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nWidth, nLineHeight );
+        ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos2, nWidth, nLineHeight );
+        break;
+    default:
+        break;
     }
 }
 

@@ -36,23 +36,23 @@ namespace
 void Shorten (OUString& rString)
 {
     auto const nLen = rString.getLength();
-    if (nLen > 48)
-    {
-        // If possible, we don't break a word, hence first we look for a space.
-        // Space before the ellipsis:
-        auto iFirst = rString.lastIndexOf(' ', 32);
-        if (iFirst == -1 || iFirst < 16)
-            iFirst = 24; // not possible
-        // Space after the ellipsis:
-        auto iLast = rString.indexOf(' ', nLen - 16);
-        if (iLast == -1 || iLast > nLen - 4)
-            iLast = nLen - 8; // not possible
-        // finally:
-        rString =
-            rString.copy(0, iFirst + 1) +
-            "..." +
-            rString.copy(iLast);
-    }
+    if (nLen <= 48)
+        return;
+
+    // If possible, we don't break a word, hence first we look for a space.
+    // Space before the ellipsis:
+    auto iFirst = rString.lastIndexOf(' ', 32);
+    if (iFirst == -1 || iFirst < 16)
+        iFirst = 24; // not possible
+    // Space after the ellipsis:
+    auto iLast = rString.indexOf(' ', nLen - 16);
+    if (iLast == -1 || iLast > nLen - 4)
+        iLast = nLen - 8; // not possible
+    // finally:
+    rString =
+        rString.copy(0, iFirst + 1) +
+        "..." +
+        rString.copy(iLast);
 }
 
 } // namespace

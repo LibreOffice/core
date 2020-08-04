@@ -157,61 +157,61 @@ void FilterConfigCache::ImplInit()
     Reference< XNameAccess > xTypeAccess  ( openConfig("types"  ), UNO_QUERY );
     Reference< XNameAccess > xFilterAccess( openConfig("filters"), UNO_QUERY );
 
-    if ( xTypeAccess.is() && xFilterAccess.is() )
+    if ( !(xTypeAccess.is() && xFilterAccess.is()) )
+        return;
+
+    const Sequence< OUString > lAllFilter = xFilterAccess->getElementNames();
+
+    for ( const OUString& sInternalFilterName : lAllFilter )
     {
-        const Sequence< OUString > lAllFilter = xFilterAccess->getElementNames();
+        Reference< XPropertySet > xFilterSet;
+        xFilterAccess->getByName( sInternalFilterName ) >>= xFilterSet;
+        if (!xFilterSet.is())
+            continue;
 
-        for ( const OUString& sInternalFilterName : lAllFilter )
-        {
-            Reference< XPropertySet > xFilterSet;
-            xFilterAccess->getByName( sInternalFilterName ) >>= xFilterSet;
-            if (!xFilterSet.is())
-                continue;
+        FilterConfigCacheEntry aEntry;
 
-            FilterConfigCacheEntry aEntry;
+        aEntry.sInternalFilterName = sInternalFilterName;
+        xFilterSet->getPropertyValue(STYPE) >>= aEntry.sType;
+        xFilterSet->getPropertyValue(SUINAME) >>= aEntry.sUIName;
+        xFilterSet->getPropertyValue(SREALFILTERNAME) >>= aEntry.sFilterType;
+        Sequence< OUString > lFlags;
+        xFilterSet->getPropertyValue(SFLAGS) >>= lFlags;
+        if (lFlags.getLength()!=1 || lFlags[0].isEmpty())
+            continue;
+        if (lFlags[0].equalsIgnoreAsciiCase("import"))
+            aEntry.nFlags = 1;
+        else if (lFlags[0].equalsIgnoreAsciiCase("export"))
+            aEntry.nFlags = 2;
 
-            aEntry.sInternalFilterName = sInternalFilterName;
-            xFilterSet->getPropertyValue(STYPE) >>= aEntry.sType;
-            xFilterSet->getPropertyValue(SUINAME) >>= aEntry.sUIName;
-            xFilterSet->getPropertyValue(SREALFILTERNAME) >>= aEntry.sFilterType;
-            Sequence< OUString > lFlags;
-            xFilterSet->getPropertyValue(SFLAGS) >>= lFlags;
-            if (lFlags.getLength()!=1 || lFlags[0].isEmpty())
-                continue;
-            if (lFlags[0].equalsIgnoreAsciiCase("import"))
-                aEntry.nFlags = 1;
-            else if (lFlags[0].equalsIgnoreAsciiCase("export"))
-                aEntry.nFlags = 2;
+        OUString sFormatName;
+        xFilterSet->getPropertyValue(SFORMATNAME) >>= sFormatName;
+        aEntry.CreateFilterName( sFormatName );
 
-            OUString sFormatName;
-            xFilterSet->getPropertyValue(SFORMATNAME) >>= sFormatName;
-            aEntry.CreateFilterName( sFormatName );
+        Reference< XPropertySet > xTypeSet;
+        xTypeAccess->getByName( aEntry.sType ) >>= xTypeSet;
+        if (!xTypeSet.is())
+            continue;
 
-            Reference< XPropertySet > xTypeSet;
-            xTypeAccess->getByName( aEntry.sType ) >>= xTypeSet;
-            if (!xTypeSet.is())
-                continue;
+        xTypeSet->getPropertyValue(SMEDIATYPE) >>= aEntry.sMediaType;
+        css::uno::Sequence<OUString> tmp;
+        if (xTypeSet->getPropertyValue(SEXTENSIONS) >>= tmp)
+            aEntry.lExtensionList = comphelper::sequenceToContainer<std::vector<OUString>>(tmp);
 
-            xTypeSet->getPropertyValue(SMEDIATYPE) >>= aEntry.sMediaType;
-            css::uno::Sequence<OUString> tmp;
-            if (xTypeSet->getPropertyValue(SEXTENSIONS) >>= tmp)
-                aEntry.lExtensionList = comphelper::sequenceToContainer<std::vector<OUString>>(tmp);
+        // The first extension will be used
+        // to generate our internal FilterType ( BMP, WMF ... )
+        OUString aExtension( aEntry.GetShortName() );
+        if (aExtension.getLength() != 3)
+            continue;
 
-            // The first extension will be used
-            // to generate our internal FilterType ( BMP, WMF ... )
-            OUString aExtension( aEntry.GetShortName() );
-            if (aExtension.getLength() != 3)
-                continue;
+        if ( aEntry.nFlags & 1 )
+            aImport.push_back( aEntry );
+        if ( aEntry.nFlags & 2 )
+            aExport.push_back( aEntry );
 
-            if ( aEntry.nFlags & 1 )
-                aImport.push_back( aEntry );
-            if ( aEntry.nFlags & 2 )
-                aExport.push_back( aEntry );
-
-            // bFilterEntryCreated!?
-            if (!( aEntry.nFlags & 3 ))
-                continue; //? Entry was already inserted ... but following code will be suppressed?!
-        }
+        // bFilterEntryCreated!?
+        if (!( aEntry.nFlags & 3 ))
+            continue; //? Entry was already inserted ... but following code will be suppressed?!
     }
 };
 

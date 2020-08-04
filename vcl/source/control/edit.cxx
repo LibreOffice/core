@@ -888,34 +888,34 @@ void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, bool 
 void Edit::ImplSetText( const OUString& rText, const Selection* pNewSelection )
 {
     // we delete text by "selecting" the old text completely then calling InsertText; this is flicker free
-    if ( ( rText.getLength() <= mnMaxTextLen ) &&
-         ( (rText != maText.getStr()) || (pNewSelection && (*pNewSelection != maSelection)) ) )
+    if ( ( rText.getLength() > mnMaxTextLen ) ||
+         ( rText == maText.getStr() && (!pNewSelection || (*pNewSelection == maSelection)) ) )
+        return;
+
+    ImplClearLayoutData();
+    maSelection.Min() = 0;
+    maSelection.Max() = maText.getLength();
+    if ( mnXOffset || HasPaintEvent() )
     {
-        ImplClearLayoutData();
-        maSelection.Min() = 0;
-        maSelection.Max() = maText.getLength();
-        if ( mnXOffset || HasPaintEvent() )
-        {
-            mnXOffset = 0;
-            maText = ImplGetValidString( rText );
+        mnXOffset = 0;
+        maText = ImplGetValidString( rText );
 
-            // #i54929# recalculate mnXOffset before ImplSetSelection,
-            // else cursor ends up in wrong position
-            ImplAlign();
+        // #i54929# recalculate mnXOffset before ImplSetSelection,
+        // else cursor ends up in wrong position
+        ImplAlign();
 
-            if ( pNewSelection )
-                ImplSetSelection( *pNewSelection, false );
+        if ( pNewSelection )
+            ImplSetSelection( *pNewSelection, false );
 
-            if ( mnXOffset && !pNewSelection )
-                maSelection.Max() = 0;
+        if ( mnXOffset && !pNewSelection )
+            maSelection.Max() = 0;
 
-            Invalidate();
-        }
-        else
-            ImplInsertText( rText, pNewSelection );
-
-        CallEventListeners( VclEventId::EditModify );
+        Invalidate();
     }
+    else
+        ImplInsertText( rText, pNewSelection );
+
+    CallEventListeners( VclEventId::EditModify );
 }
 
 ControlType Edit::ImplGetNativeControlType() const
@@ -994,58 +994,58 @@ void Edit::ImplPaintBorder(vcl::RenderContext const & rRenderContext)
     if (SupportsDoubleBuffering())
         return;
 
-    if (ImplUseNativeBorder(rRenderContext, GetStyle()) || IsPaintTransparent())
+    if (!(ImplUseNativeBorder(rRenderContext, GetStyle()) || IsPaintTransparent()))
+        return;
+
+    // draw the inner part by painting the whole control using its border window
+    vcl::Window* pBorder = GetWindow(GetWindowType::Border);
+    if (pBorder == this)
     {
-        // draw the inner part by painting the whole control using its border window
-        vcl::Window* pBorder = GetWindow(GetWindowType::Border);
+        // we have no border, use parent
+        vcl::Window* pControl = mbIsSubEdit ? GetParent() : this;
+        pBorder = pControl->GetWindow(GetWindowType::Border);
         if (pBorder == this)
+            pBorder = GetParent();
+    }
+
+    if (!pBorder)
+        return;
+
+    // set proper clipping region to not overdraw the whole control
+    vcl::Region aClipRgn = GetPaintRegion();
+    if (!aClipRgn.IsNull())
+    {
+        // transform clipping region to border window's coordinate system
+        if (IsRTLEnabled() != pBorder->IsRTLEnabled() && AllSettings::GetLayoutRTL())
         {
-            // we have no border, use parent
-            vcl::Window* pControl = mbIsSubEdit ? GetParent() : this;
-            pBorder = pControl->GetWindow(GetWindowType::Border);
-            if (pBorder == this)
-                pBorder = GetParent();
+            // need to mirror in case border is not RTL but edit is (or vice versa)
+
+            // mirror
+            tools::Rectangle aBounds(aClipRgn.GetBoundRect());
+            int xNew = GetOutputSizePixel().Width() - aBounds.GetWidth() - aBounds.Left();
+            aClipRgn.Move(xNew - aBounds.Left(), 0);
+
+            // move offset of border window
+            Point aBorderOffs = pBorder->ScreenToOutputPixel(OutputToScreenPixel(Point()));
+            aClipRgn.Move(aBorderOffs.X(), aBorderOffs.Y());
+        }
+        else
+        {
+            // normal case
+            Point aBorderOffs = pBorder->ScreenToOutputPixel(OutputToScreenPixel(Point()));
+            aClipRgn.Move(aBorderOffs.X(), aBorderOffs.Y());
         }
 
-        if (pBorder)
-        {
-            // set proper clipping region to not overdraw the whole control
-            vcl::Region aClipRgn = GetPaintRegion();
-            if (!aClipRgn.IsNull())
-            {
-                // transform clipping region to border window's coordinate system
-                if (IsRTLEnabled() != pBorder->IsRTLEnabled() && AllSettings::GetLayoutRTL())
-                {
-                    // need to mirror in case border is not RTL but edit is (or vice versa)
+        vcl::Region oldRgn(pBorder->GetClipRegion());
+        pBorder->SetClipRegion(aClipRgn);
 
-                    // mirror
-                    tools::Rectangle aBounds(aClipRgn.GetBoundRect());
-                    int xNew = GetOutputSizePixel().Width() - aBounds.GetWidth() - aBounds.Left();
-                    aClipRgn.Move(xNew - aBounds.Left(), 0);
+        pBorder->Paint(*pBorder, tools::Rectangle());
 
-                    // move offset of border window
-                    Point aBorderOffs = pBorder->ScreenToOutputPixel(OutputToScreenPixel(Point()));
-                    aClipRgn.Move(aBorderOffs.X(), aBorderOffs.Y());
-                }
-                else
-                {
-                    // normal case
-                    Point aBorderOffs = pBorder->ScreenToOutputPixel(OutputToScreenPixel(Point()));
-                    aClipRgn.Move(aBorderOffs.X(), aBorderOffs.Y());
-                }
-
-                vcl::Region oldRgn(pBorder->GetClipRegion());
-                pBorder->SetClipRegion(aClipRgn);
-
-                pBorder->Paint(*pBorder, tools::Rectangle());
-
-                pBorder->SetClipRegion(oldRgn);
-            }
-            else
-            {
-                pBorder->Paint(*pBorder, tools::Rectangle());
-            }
-        }
+        pBorder->SetClipRegion(oldRgn);
+    }
+    else
+    {
+        pBorder->Paint(*pBorder, tools::Rectangle());
     }
 }
 
@@ -1269,40 +1269,40 @@ void Edit::ImplCopy( uno::Reference< datatransfer::clipboard::XClipboard > const
 
 void Edit::ImplPaste( uno::Reference< datatransfer::clipboard::XClipboard > const & rxClipboard )
 {
-    if ( rxClipboard.is() )
-    {
-        uno::Reference< datatransfer::XTransferable > xDataObj;
+    if ( !rxClipboard.is() )
+        return;
 
-        try
-            {
-                SolarMutexReleaser aReleaser;
-                xDataObj = rxClipboard->getContents();
-            }
-        catch( const css::uno::Exception& )
-            {
-            }
+    uno::Reference< datatransfer::XTransferable > xDataObj;
 
-        if ( xDataObj.is() )
+    try
         {
-            datatransfer::DataFlavor aFlavor;
-            SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
-            try
-            {
-                uno::Any aData = xDataObj->getTransferData( aFlavor );
-                OUString aText;
-                aData >>= aText;
-
-                Selection aSelection(maSelection);
-                aSelection.Justify();
-                if (ImplTruncateToMaxLen(aText, aSelection.Len()))
-                    ShowTruncationWarning(GetFrameWeld());
-
-                ReplaceSelected( aText );
-            }
-            catch( const css::uno::Exception& )
-            {
-            }
+            SolarMutexReleaser aReleaser;
+            xDataObj = rxClipboard->getContents();
         }
+    catch( const css::uno::Exception& )
+        {
+        }
+
+    if ( !xDataObj.is() )
+        return;
+
+    datatransfer::DataFlavor aFlavor;
+    SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
+    try
+    {
+        uno::Any aData = xDataObj->getTransferData( aFlavor );
+        OUString aText;
+        aData >>= aText;
+
+        Selection aSelection(maSelection);
+        aSelection.Justify();
+        if (ImplTruncateToMaxLen(aText, aSelection.Len()))
+            ShowTruncationWarning(GetFrameWeld());
+
+        ReplaceSelected( aText );
+    }
+    catch( const css::uno::Exception& )
+    {
     }
 }
 
@@ -2732,36 +2732,35 @@ void Edit::dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent
 {
     SolarMutexGuard aVclGuard;
 
-    if ( !IsTracking() && maSelection.Len() &&
-         !mbPassword && (!mpDDInfo || !mpDDInfo->bStarterOfDD) ) // no repeated D&D
-    {
-        Selection aSel( maSelection );
-        aSel.Justify();
+    if ( !(!IsTracking() && maSelection.Len() &&
+         !mbPassword && (!mpDDInfo || !mpDDInfo->bStarterOfDD)) ) // no repeated D&D
+        return;
 
-        // only if mouse in the selection...
-        Point aMousePos( rDGE.DragOriginX, rDGE.DragOriginY );
-        sal_Int32 nCharPos = ImplGetCharPos( aMousePos );
-        if ( (nCharPos >= aSel.Min()) && (nCharPos < aSel.Max()) )
-        {
-            if ( !mpDDInfo )
-                mpDDInfo.reset(new DDInfo);
+    Selection aSel( maSelection );
+    aSel.Justify();
 
-            mpDDInfo->bStarterOfDD = true;
-            mpDDInfo->aDndStartSel = aSel;
+    // only if mouse in the selection...
+    Point aMousePos( rDGE.DragOriginX, rDGE.DragOriginY );
+    sal_Int32 nCharPos = ImplGetCharPos( aMousePos );
+    if ( (nCharPos < aSel.Min()) || (nCharPos >= aSel.Max()) )
+        return;
 
-            if ( IsTracking() )
-                EndTracking();  // before D&D disable tracking
+    if ( !mpDDInfo )
+        mpDDInfo.reset(new DDInfo);
 
-            vcl::unohelper::TextDataObject* pDataObj = new vcl::unohelper::TextDataObject( GetSelected() );
-            sal_Int8 nActions = datatransfer::dnd::DNDConstants::ACTION_COPY;
-            if ( !IsReadOnly() )
-                nActions |= datatransfer::dnd::DNDConstants::ACTION_MOVE;
-            rDGE.DragSource->startDrag( rDGE, nActions, 0 /*cursor*/, 0 /*image*/, pDataObj, mxDnDListener );
-            if ( GetCursor() )
-                GetCursor()->Hide();
+    mpDDInfo->bStarterOfDD = true;
+    mpDDInfo->aDndStartSel = aSel;
 
-        }
-    }
+    if ( IsTracking() )
+        EndTracking();  // before D&D disable tracking
+
+    vcl::unohelper::TextDataObject* pDataObj = new vcl::unohelper::TextDataObject( GetSelected() );
+    sal_Int8 nActions = datatransfer::dnd::DNDConstants::ACTION_COPY;
+    if ( !IsReadOnly() )
+        nActions |= datatransfer::dnd::DNDConstants::ACTION_MOVE;
+    rDGE.DragSource->startDrag( rDGE, nActions, 0 /*cursor*/, 0 /*image*/, pDataObj, mxDnDListener );
+    if ( GetCursor() )
+        GetCursor()->Hide();
 }
 
 // css::datatransfer::dnd::XDragSourceListener

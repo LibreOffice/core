@@ -145,52 +145,52 @@ static sk_app::VulkanWindowContext::SharedGrContext getTemporaryGrContext();
 static void checkDeviceDenylisted(bool blockDisable = false)
 {
     static bool done = false;
-    if (!done)
-    {
-        SkiaZone zone;
+    if (done)
+        return;
 
-        switch (renderMethodToUse())
+    SkiaZone zone;
+
+    switch (renderMethodToUse())
+    {
+        case RenderVulkan:
         {
-            case RenderVulkan:
+            // First try if a GrContext already exists.
+            sk_app::VulkanWindowContext::SharedGrContext grContext
+                = sk_app::VulkanWindowContext::getSharedGrContext();
+            if (!grContext.getGrContext())
             {
-                // First try if a GrContext already exists.
-                sk_app::VulkanWindowContext::SharedGrContext grContext
-                    = sk_app::VulkanWindowContext::getSharedGrContext();
-                if (!grContext.getGrContext())
-                {
-                    // This function is called from isVclSkiaEnabled(), which
-                    // may be called when deciding which X11 visual to use,
-                    // and that visual is normally needed when creating
-                    // Skia's VulkanWindowContext, which is needed for the GrContext.
-                    // Avoid the loop by creating a temporary GrContext
-                    // that will use the default X11 visual (that shouldn't matter
-                    // for just finding out information about Vulkan) and destroying
-                    // the temporary context will clean up again.
-                    grContext = getTemporaryGrContext();
-                }
-                bool denylisted = true; // assume the worst
-                if (grContext.getGrContext()) // Vulkan was initialized properly
-                {
-                    denylisted = isVulkanDenylisted(
-                        sk_app::VulkanWindowContext::getPhysDeviceProperties());
-                    SAL_INFO("vcl.skia", "Vulkan denylisted: " << denylisted);
-                }
-                else
-                    SAL_INFO("vcl.skia", "Vulkan could not be initialized");
-                if (denylisted && !blockDisable)
-                {
-                    disableRenderMethod(RenderVulkan);
-                    writeSkiaRasterInfo();
-                }
-                break;
+                // This function is called from isVclSkiaEnabled(), which
+                // may be called when deciding which X11 visual to use,
+                // and that visual is normally needed when creating
+                // Skia's VulkanWindowContext, which is needed for the GrContext.
+                // Avoid the loop by creating a temporary GrContext
+                // that will use the default X11 visual (that shouldn't matter
+                // for just finding out information about Vulkan) and destroying
+                // the temporary context will clean up again.
+                grContext = getTemporaryGrContext();
             }
-            case RenderRaster:
-                SAL_INFO("vcl.skia", "Using Skia raster mode");
+            bool denylisted = true; // assume the worst
+            if (grContext.getGrContext()) // Vulkan was initialized properly
+            {
+                denylisted
+                    = isVulkanDenylisted(sk_app::VulkanWindowContext::getPhysDeviceProperties());
+                SAL_INFO("vcl.skia", "Vulkan denylisted: " << denylisted);
+            }
+            else
+                SAL_INFO("vcl.skia", "Vulkan could not be initialized");
+            if (denylisted && !blockDisable)
+            {
+                disableRenderMethod(RenderVulkan);
                 writeSkiaRasterInfo();
-                return; // software, never denylisted
+            }
+            break;
         }
-        done = true;
+        case RenderRaster:
+            SAL_INFO("vcl.skia", "Using Skia raster mode");
+            writeSkiaRasterInfo();
+            return; // software, never denylisted
     }
+    done = true;
 }
 
 static bool skiaSupportedByBackend = false;
