@@ -132,6 +132,19 @@ bool MakeShared::VisitCXXConstructExpr(CXXConstructExpr const* constructExpr)
         return true;
     else if (isa<CXXNullPtrLiteralExpr>(arg0))
         return true;
+    else if (auto const call = dyn_cast<CallExpr>(arg0))
+    {
+        if (auto const decl = call->getDirectCallee())
+        {
+            // Don't warn about cases where e.g. the Bitmap* result of calling Windows'
+            // Bitmap::FromBITMAPINFO is wrapped in a shared_ptr:
+            if (decl->getReturnType()->isPointerType()
+                && compiler.getSourceManager().isInSystemHeader(decl->getLocation()))
+            {
+                return true;
+            }
+        }
+    }
 
     StringRef fn = getFilenameOfLocation(
         compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(constructExpr)));
