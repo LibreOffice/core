@@ -1593,16 +1593,11 @@ bool SVGFilter::implExportMasterPages( const std::vector< Reference< css::drawin
     {
         if( rxPages[i].is() )
         {
-            Reference< css::drawing::XShapes > xShapes( rxPages[i], UNO_QUERY );
+            // add id attribute
+            const OUString & sPageId = implGetValidIDFromInterface( rxPages[i] );
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sPageId );
 
-            if( xShapes.is() )
-            {
-                // add id attribute
-                const OUString & sPageId = implGetValidIDFromInterface( rxPages[i] );
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sPageId );
-
-                bRet = implExportPage( sPageId, rxPages[i], xShapes, true /* is a master page */ ) || bRet;
-            }
+            bRet = implExportPage( sPageId, rxPages[i], rxPages[i], true /* is a master page */ ) || bRet;
         }
     }
     return bRet;
@@ -1654,7 +1649,7 @@ void SVGFilter::implExportDrawPages( const std::vector< Reference< css::drawing:
             }
             else
             {
-                xShapes.set( rxPages[i], UNO_QUERY );
+                xShapes = rxPages[i];
             }
 
             if( xShapes.is() )
