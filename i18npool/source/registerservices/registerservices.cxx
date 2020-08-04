@@ -202,10 +202,12 @@ IMPL_UNO_CONSTRUCTOR( NumToCharEastIndic_ar )
 IMPL_CREATEINSTANCE( NumToCharIndic_hi )
 IMPL_CREATEINSTANCE( NumToChar_th )
 
-IMPL_CREATEINSTANCE( CharToNumLower_zh_CN )
-IMPL_CREATEINSTANCE( CharToNumUpper_zh_CN )
-IMPL_CREATEINSTANCE( CharToNumLower_zh_TW )
-IMPL_CREATEINSTANCE( CharToNumUpper_zh_TW )
+#if WITH_LOCALE_ALL || WITH_LOCALE_zh
+IMPL_UNO_CONSTRUCTOR (CharToNumUpper_zh_CN)
+IMPL_UNO_CONSTRUCTOR (CharToNumLower_zh_CN)
+IMPL_UNO_CONSTRUCTOR (CharToNumUpper_zh_TW)
+IMPL_UNO_CONSTRUCTOR (CharToNumLower_zh_TW)
+#endif
 #if WITH_LOCALE_ALL || WITH_LOCALE_ja
 IMPL_UNO_CONSTRUCTOR( CharToNumFullwidth )
 IMPL_UNO_CONSTRUCTOR( CharToNumKanjiShort_ja_JP )
@@ -239,12 +241,14 @@ IMPL_CREATEINSTANCE( NumToTextKanjiLongModern_ja_JP )
 IMPL_CREATEINSTANCE( NumToTextKanjiLongTraditional_ja_JP )
 IMPL_CREATEINSTANCE( NumToTextKanjiShortModern_ja_JP )
 IMPL_CREATEINSTANCE( NumToTextKanjiShortTraditional_ja_JP )
-IMPL_CREATEINSTANCE( NumToTextFormalHangul_ko )
-IMPL_CREATEINSTANCE( NumToTextFormalLower_ko )
-IMPL_CREATEINSTANCE( NumToTextFormalUpper_ko )
-IMPL_CREATEINSTANCE( NumToTextInformalHangul_ko )
-IMPL_CREATEINSTANCE( NumToTextInformalUpper_ko )
-IMPL_CREATEINSTANCE( NumToTextInformalLower_ko )
+#if WITH_LOCALE_ALL || WITH_LOCALE_ko
+IMPL_UNO_CONSTRUCTOR (NumToTextInformalHangul_ko)
+IMPL_UNO_CONSTRUCTOR (NumToTextInformalLower_ko)
+IMPL_UNO_CONSTRUCTOR (NumToTextInformalUpper_ko)
+IMPL_UNO_CONSTRUCTOR (NumToTextFormalHangul_ko)
+IMPL_UNO_CONSTRUCTOR (NumToTextFormalLower_ko)
+IMPL_UNO_CONSTRUCTOR (NumToTextFormalUpper_ko)
+#endif
 
 IMPL_CREATEINSTANCE( TextToNumLower_zh_CN )
 IMPL_CREATEINSTANCE( TextToNumUpper_zh_CN )
@@ -260,22 +264,28 @@ IMPL_CREATEINSTANCE( TextToNumInformalUpper_ko )
 IMPL_CREATEINSTANCE( TextToNumInformalLower_ko )
 
 IMPL_CREATEINSTANCE( NumToTextDate_zh )
-IMPL_CREATEINSTANCE( NumToTextAIUFullWidth_ja_JP )
-IMPL_CREATEINSTANCE( NumToTextAIUHalfWidth_ja_JP )
-IMPL_CREATEINSTANCE( NumToTextIROHAFullWidth_ja_JP )
-IMPL_CREATEINSTANCE( NumToTextIROHAHalfWidth_ja_JP )
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja
+IMPL_UNO_CONSTRUCTOR (NumToTextAIUFullWidth_ja_JP)
+IMPL_UNO_CONSTRUCTOR (NumToTextAIUHalfWidth_ja_JP)
+IMPL_UNO_CONSTRUCTOR (NumToTextIROHAFullWidth_ja_JP)
+IMPL_UNO_CONSTRUCTOR (NumToTextIROHAHalfWidth_ja_JP)
+#endif
 IMPL_CREATEINSTANCE( NumToTextCircledNumber )
-IMPL_CREATEINSTANCE( NumToTextHangulJamo_ko )
-IMPL_CREATEINSTANCE( NumToTextHangulSyllable_ko )
-IMPL_CREATEINSTANCE( NumToTextHangulCircledJamo_ko )
-IMPL_CREATEINSTANCE( NumToTextHangulCircledSyllable_ko )
+#if WITH_LOCALE_ALL || WITH_LOCALE_ko
+IMPL_UNO_CONSTRUCTOR (NumToTextHangulJamo_ko)
+IMPL_UNO_CONSTRUCTOR (NumToTextHangulSyllable_ko)
+IMPL_UNO_CONSTRUCTOR (NumToTextHangulCircledJamo_ko)
+IMPL_UNO_CONSTRUCTOR (NumToTextHangulCircledSyllable_ko)
+#endif
 IMPL_CREATEINSTANCE( NumToTextTianGan_zh )
 IMPL_CREATEINSTANCE( NumToTextDiZi_zh )
 
-IMPL_CREATEINSTANCE( fullwidthKatakanaToHalfwidthKatakana )
-IMPL_CREATEINSTANCE( halfwidthKatakanaToFullwidthKatakana )
-IMPL_CREATEINSTANCE( fullwidthToHalfwidthLikeASC )
-IMPL_CREATEINSTANCE( halfwidthToFullwidthLikeJIS )
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja
+IMPL_UNO_CONSTRUCTOR (FULLWIDTHKATAKANA_HALFWIDTHKATAKANA)
+IMPL_UNO_CONSTRUCTOR (HALFWIDTHKATAKANA_FULLWIDTHKATAKANA)
+IMPL_UNO_CONSTRUCTOR (FULLWIDTH_HALFWIDTH_LIKE_ASC)
+IMPL_UNO_CONSTRUCTOR (HALFWIDTH_FULLWIDTH_LIKE_JIS)
+#endif
 
 namespace {
 
@@ -372,13 +382,6 @@ const InstancesArray aInstances[] = {
     IMPL_TRANSLITERATION_ITEM (NumToChar_th),
 #endif
 
-#if WITH_LOCALE_ALL || WITH_LOCALE_zh
-    IMPL_TRANSLITERATION_ITEM (CharToNumUpper_zh_CN),
-    IMPL_TRANSLITERATION_ITEM (CharToNumLower_zh_CN),
-    IMPL_TRANSLITERATION_ITEM (CharToNumUpper_zh_TW),
-    IMPL_TRANSLITERATION_ITEM (CharToNumLower_zh_TW),
-#endif
-
 #if WITH_LOCALE_ALL || WITH_LOCALE_ja
     IMPL_TRANSLITERATION_ITEM (NumToTextFullwidth_ja_JP),
 #endif
@@ -390,14 +393,6 @@ const InstancesArray aInstances[] = {
     IMPL_TRANSLITERATION_ITEM (NumToTextKanjiLongTraditional_ja_JP),
     IMPL_TRANSLITERATION_ITEM (NumToTextKanjiShortModern_ja_JP),
     IMPL_TRANSLITERATION_ITEM (NumToTextKanjiShortTraditional_ja_JP),
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ko
-    IMPL_TRANSLITERATION_ITEM (NumToTextInformalHangul_ko),
-    IMPL_TRANSLITERATION_ITEM (NumToTextInformalLower_ko),
-    IMPL_TRANSLITERATION_ITEM (NumToTextInformalUpper_ko),
-    IMPL_TRANSLITERATION_ITEM (NumToTextFormalHangul_ko),
-    IMPL_TRANSLITERATION_ITEM (NumToTextFormalLower_ko),
-    IMPL_TRANSLITERATION_ITEM (NumToTextFormalUpper_ko),
 #endif
 
 #if WITH_LOCALE_ALL || WITH_LOCALE_zh
@@ -422,38 +417,12 @@ const InstancesArray aInstances[] = {
 #if WITH_LOCALE_ALL || WITH_LOCALE_zh
     IMPL_TRANSLITERATION_ITEM (NumToTextDate_zh),
 #endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ja
-    IMPL_TRANSLITERATION_ITEM (NumToTextAIUFullWidth_ja_JP),
-    IMPL_TRANSLITERATION_ITEM (NumToTextAIUHalfWidth_ja_JP),
-    IMPL_TRANSLITERATION_ITEM (NumToTextIROHAFullWidth_ja_JP),
-    IMPL_TRANSLITERATION_ITEM (NumToTextIROHAHalfWidth_ja_JP),
-#endif
     IMPL_TRANSLITERATION_ITEM (NumToTextCircledNumber),
-#if WITH_LOCALE_ALL || WITH_LOCALE_ko
-    IMPL_TRANSLITERATION_ITEM (NumToTextHangulJamo_ko),
-    IMPL_TRANSLITERATION_ITEM (NumToTextHangulSyllable_ko),
-    IMPL_TRANSLITERATION_ITEM (NumToTextHangulCircledJamo_ko),
-    IMPL_TRANSLITERATION_ITEM (NumToTextHangulCircledSyllable_ko),
-#endif
 #if WITH_LOCALE_ALL || WITH_LOCALE_zh
     IMPL_TRANSLITERATION_ITEM (NumToTextTianGan_zh),
     IMPL_TRANSLITERATION_ITEM (NumToTextDiZi_zh),
 #endif
 
-#if WITH_LOCALE_ALL || WITH_LOCALE_ja
-    {   TRLT_SERVICELNAME_L10N,
-        TRLT_IMPLNAME_PREFIX  "FULLWIDTHKATAKANA_HALFWIDTHKATAKANA",
-        &fullwidthKatakanaToHalfwidthKatakana_CreateInstance },
-    {   TRLT_SERVICELNAME_L10N,
-        TRLT_IMPLNAME_PREFIX  "HALFWIDTHKATAKANA_FULLWIDTHKATAKANA",
-        &halfwidthKatakanaToFullwidthKatakana_CreateInstance },
-    {   TRLT_SERVICELNAME_L10N,
-        TRLT_IMPLNAME_PREFIX  "FULLWIDTH_HALFWIDTH_LIKE_ASC",
-        &fullwidthToHalfwidthLikeASC_CreateInstance },
-    {   TRLT_SERVICELNAME_L10N,
-        TRLT_IMPLNAME_PREFIX  "HALFWIDTH_FULLWIDTH_LIKE_JIS",
-        &halfwidthToFullwidthLikeJIS_CreateInstance },
-#endif
 // add here new services !!
     { nullptr, nullptr, nullptr }
 };
