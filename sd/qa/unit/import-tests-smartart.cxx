@@ -1532,8 +1532,9 @@ void SdImportTestSmartArt::testLinearRule()
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-linear-rule.pptx"), PPTX);
 
     uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
-    // Last child, then again last child.
-    uno::Reference<drawing::XShape> xShape = getChildShape(getChildShape(xGroup, 1), 3);
+    // Last child, then first child inside that.
+    // It is first as backgroundArrow is last, but chOrder="t" is set to reverse the order.
+    uno::Reference<drawing::XShape> xShape = getChildShape(getChildShape(xGroup, 1), 0);
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected greater than: 17500 (19867)

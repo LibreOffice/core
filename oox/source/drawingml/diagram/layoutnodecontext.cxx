@@ -198,7 +198,24 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
     {
         LayoutNodePtr pNode = std::make_shared<LayoutNode>(mpNode->getLayoutNode().getDiagram());
         LayoutAtom::connect(mpNode, pNode);
-        pNode->setChildOrder( rAttribs.getToken( XML_chOrder, XML_b ) );
+
+        if (rAttribs.hasAttribute(XML_chOrder))
+        {
+            pNode->setChildOrder(rAttribs.getToken(XML_chOrder, XML_b));
+        }
+        else
+        {
+            for (LayoutAtomPtr pAtom = mpNode; pAtom; pAtom = pAtom->getParent())
+            {
+                auto pLayoutNode = dynamic_cast<LayoutNode*>(pAtom.get());
+                if (pLayoutNode)
+                {
+                    pNode->setChildOrder(pLayoutNode->getChildOrder());
+                    break;
+                }
+            }
+        }
+
         pNode->setMoveWith( rAttribs.getString( XML_moveWith ).get() );
         pNode->setStyleLabel( rAttribs.getString( XML_styleLbl ).get() );
         return new LayoutNodeContext( *this, rAttribs, pNode );

@@ -271,6 +271,7 @@ public:
         { msStyleLabel = sLabel; }
     void setChildOrder( sal_Int32 nOrder )
         { mnChildOrder = nOrder; }
+    sal_Int32 getChildOrder() const { return mnChildOrder; }
     void setExistingShape( const ShapePtr& pShape )
         { mpExistingShape = pShape; }
     const ShapePtr& getExistingShape() const
