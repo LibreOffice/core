@@ -293,16 +293,13 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
 
         sal_uInt16 nPageCount = 0;
 
-        if( !bMasterView )
+        if( !bMasterView && (pPage && (pPage->GetPageKind() == PageKind::Handout) && pViewSh) )
         {
-            if( pPage && (pPage->GetPageKind() == PageKind::Handout) && pViewSh )
-            {
-                nPageCount = pViewSh->GetPrintedHandoutPageCount();
-            }
-            else if( pDoc )
-            {
-                nPageCount = pDoc->GetActiveSdPageCount();
-            }
+            nPageCount = pViewSh->GetPrintedHandoutPageCount();
+        }
+        else if( pDoc )
+        {
+            nPageCount = pDoc->GetActiveSdPageCount();
         }
 
         if( nPageCount > 0 )
