@@ -2921,8 +2921,8 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkIndex( sal_Int32 nCharInde
         sal_Int32 nPos = 0;
         SwTextNode const* pNode(nullptr);
         const SwTextAttr *pHt = aHIter.next(&pNode);
-        while (pHt && !(nIdx >= pTextFrame->MapModelToView(pNode, pHt->GetStart())
-                     && nIdx < pTextFrame->MapModelToView(pNode, pHt->GetAnyEnd())))
+        while (pHt && (nIdx < pTextFrame->MapModelToView(pNode, pHt->GetStart())
+                       || nIdx >= pTextFrame->MapModelToView(pNode, pHt->GetAnyEnd())))
         {
             pHt = aHIter.next(&pNode);
             nPos++;

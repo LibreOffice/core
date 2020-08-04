@@ -636,7 +636,7 @@ bool BackendImpl::PackageImpl::checkLicense(
         OUString sLicense = getTextFromURL(xCmdEnv, sHref);
         ////determine who has to agree to the license
         //check correct value for attribute
-        if ( ! (simplLicAttr->acceptBy == "user" || simplLicAttr->acceptBy == "admin"))
+        if ( simplLicAttr->acceptBy != "user" && simplLicAttr->acceptBy != "admin")
             throw css::deployment::DeploymentException(
                 "Could not obtain attribute simple-license@accept-by or it has no valid value", nullptr, Any());
 

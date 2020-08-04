@@ -159,7 +159,7 @@ void printEntries(SvxEntries* entries)
 bool
 SvxConfigPage::CanConfig( const OUString& aModuleId )
 {
-    return !(aModuleId == "com.sun.star.script.BasicIDE" || aModuleId == "com.sun.star.frame.Bibliography");
+    return aModuleId != "com.sun.star.script.BasicIDE" && aModuleId != "com.sun.star.frame.Bibliography";
 }
 
 static std::unique_ptr<SfxTabPage> CreateSvxMenuConfigPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet )

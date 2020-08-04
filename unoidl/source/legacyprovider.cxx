@@ -628,10 +628,10 @@ rtl::Reference< Entity > readEntity(
                                      + sub.getName()));
                             }
                             if ((mode & RT_PARAM_REST) != 0
-                                && !(m == 1
-                                     && ((reader.getMethodParameterTypeName(
+                                && (m != 1
+                                     || ((reader.getMethodParameterTypeName(
                                               j, 0))
-                                         == "any")))
+                                         != "any")))
                             {
                                 throw FileFormatException(
                                     key.getRegistryName(),

@@ -708,8 +708,8 @@ Sequence< Type > SAL_CALL ODbaseTable::getTypes(  )
     const Type* pEnd = pBegin + aTypes.getLength();
     for(;pBegin != pEnd;++pBegin)
     {
-        if(!(*pBegin == cppu::UnoType<XKeysSupplier>::get()||
-            *pBegin == cppu::UnoType<XDataDescriptorFactory>::get()))
+        if(*pBegin != cppu::UnoType<XKeysSupplier>::get() &&
+           *pBegin != cppu::UnoType<XDataDescriptorFactory>::get())
         {
             aOwnTypes.push_back(*pBegin);
         }

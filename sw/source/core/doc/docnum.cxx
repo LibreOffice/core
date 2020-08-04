@@ -2119,7 +2119,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, long const nOffset,
                 }
 
                 if( pOwnRedl &&
-                    !( pRStt->nNode <= aIdx && aIdx <= pREnd->nNode ))
+                    ( pRStt->nNode > aIdx || aIdx > pREnd->nNode ))
                 {
                     // it's not in itself, so don't move it
                     pOwnRedl = nullptr;

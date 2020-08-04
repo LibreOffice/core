@@ -302,7 +302,7 @@ bool SimplifyBool::VisitUnaryOperator(UnaryOperator const * expr) {
                     if (binaryOp->isComparisonOp())
                         return expr;
                 if (auto cxxOpCall = dyn_cast<CXXOperatorCallExpr>(expr))
-                    if (cxxOpCall->getOperator() == OO_ExclaimEqual)
+                    if (cxxOpCall->isComparisonOp())
                         return expr;
                 return (Expr const*)nullptr;
             };
