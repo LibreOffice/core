@@ -8075,3 +8075,20 @@ SfxUInt32Item TableColumWidth SID_ATTR_TABLE_COLUMN_WIDTH
     ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Table;
 ]
+
+SfxVoidItem WriterPageDeck SID_WRITERPAGE_DECK
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::View;
+]

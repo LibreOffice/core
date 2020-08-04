@@ -18,6 +18,27 @@
 
 interface Window
 {
+    SID_PROPERTIES_DECK
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_STYLES_DECK
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_GALLERY_DECK
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_NAVIGATOR_DECK
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+
     SID_HYPERLINK_DIALOG
     [
         ExecMethod = ChildWindowExecute ;

@@ -18,6 +18,11 @@
 
 interface BaseTextEditView
 {
+    SID_WRITERPAGE_DECK
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
     FN_TOGGLE_OUTLINE_CONTENT_VISIBILITY
     [
         ExecMethod = Execute ;
