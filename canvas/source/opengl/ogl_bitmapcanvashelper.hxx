@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CANVAS_SOURCE_OPENGL_OGL_BITMAPCANVASHELPER_HXX
-#define INCLUDED_CANVAS_SOURCE_OPENGL_OGL_BITMAPCANVASHELPER_HXX
+#pragma once
 
 #include <com/sun/star/geometry/IntegerPoint2D.hpp>
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
@@ -68,7 +67,5 @@ namespace oglcanvas
         css::geometry::IntegerSize2D maSize;
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

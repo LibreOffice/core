@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_SOURCE_DIRECTX_DX_VCLTOOLS_HXX
-#define INCLUDED_CANVAS_SOURCE_DIRECTX_DX_VCLTOOLS_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/util/TriState.hpp>
@@ -43,7 +42,5 @@ namespace dxcanvas::tools
                                              css::rendering::XBitmap >&   xBitmap );
 }
 
-
-#endif // INCLUDED_CANVAS_SOURCE_DIRECTX_DX_VCLTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

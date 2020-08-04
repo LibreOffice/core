@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_SOURCE_DIRECTX_DX_BITMAPPROVIDER_HXX
-#define INCLUDED_CANVAS_SOURCE_DIRECTX_DX_BITMAPPROVIDER_HXX
+#pragma once
 
 #include "dx_ibitmap.hxx"
 #include <memory>
@@ -31,7 +30,5 @@ namespace dxcanvas
         virtual IBitmapSharedPtr getBitmap() const = 0;
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
