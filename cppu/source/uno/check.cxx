@@ -133,11 +133,6 @@ struct Char3 : public Char2
 {
     char c3 CPPU_GCC3_ALIGN( Char2 );
 };
-struct Char4
-{
-    Char3 chars;
-    char c;
-};
 enum Enum
 {
     v = SAL_MAX_ENUM
@@ -257,6 +252,12 @@ static_assert(sizeof(second) == sizeof(int), "sizeof(second) != sizeof(int)");
 #endif
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
+
+struct Char4
+{
+    Char3 chars;
+    char c;
+};
 
 #define OFFSET_OF( s, m ) reinterpret_cast< size_t >(reinterpret_cast<char *>(&reinterpret_cast<s *>(16)->m) -16)
 
