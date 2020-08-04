@@ -60,7 +60,7 @@ namespace dxcanvas
     {
         ENSURE_OR_THROW( rTarget,
                           "BitmapCanvasHelper::setTarget(): Invalid target" );
-        ENSURE_OR_THROW( !mpTarget.get(),
+        ENSURE_OR_THROW( !mpTarget,
                           "BitmapCanvasHelper::setTarget(): target set, old target would be overwritten" );
 
         mpTarget = rTarget;
@@ -72,7 +72,7 @@ namespace dxcanvas
     {
         ENSURE_OR_THROW( rTarget,
                          "BitmapCanvasHelper::setTarget(): invalid target" );
-        ENSURE_OR_THROW( !mpTarget.get(),
+        ENSURE_OR_THROW( !mpTarget,
                          "BitmapCanvasHelper::setTarget(): target set, old target would be overwritten" );
 
         mpTarget = rTarget;
