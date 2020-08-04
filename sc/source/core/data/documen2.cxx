@@ -387,8 +387,8 @@ ScDocument::~ScDocument()
     mxPoolHelper.clear();
 
     pScriptTypeData.reset();
-    delete maNonThreaded.pRecursionHelper;
-    delete maThreadSpecific.pRecursionHelper;
+    maNonThreaded.xRecursionHelper.reset();
+    maThreadSpecific.xRecursionHelper.reset();
 
     pPreviewFont.reset();
     SAL_WARN_IF( pAutoNameCache, "sc.core", "AutoNameCache still set in dtor" );
@@ -1146,11 +1146,6 @@ void ScDocument::DisposeFieldEditEngine(std::unique_ptr<ScFieldEditEngine>& rpEd
     }
     else
         rpEditEngine.reset();
-}
-
-ScRecursionHelper* ScDocument::CreateRecursionHelperInstance()
-{
-    return new ScRecursionHelper;
 }
 
 ScLookupCache & ScDocument::GetLookupCache( const ScRange & rRange, ScInterpreterContext* pContext )
