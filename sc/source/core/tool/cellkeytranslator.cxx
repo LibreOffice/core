@@ -166,7 +166,7 @@ void ScCellKeywordTranslator::transKeyword(OUString& rName, const lang::Locale* 
         spInstance.reset( new ScCellKeywordTranslator );
 
     LanguageType nLang = pLocale ?
-        LanguageTag(*pLocale).makeFallback().getLanguageType() : ScGlobal::pSysLocale->GetLanguageTag().getLanguageType();
+        LanguageTag(*pLocale).makeFallback().getLanguageType() : ScGlobal::xSysLocale->GetLanguageTag().getLanguageType();
     Sequence<sal_Int32> aOffsets;
     rName = spInstance->maTransWrapper.transliterate(rName, nLang, 0, rName.getLength(), &aOffsets);
     lclMatchKeyword(rName, spInstance->maStringNameMap, eOpCode, pLocale);

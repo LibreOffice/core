@@ -164,7 +164,7 @@ double CompareFunc( const Compare& rComp, CompareOptions* pOptions )
                 }
                 else
                 {
-                    const LanguageType nLang = ScGlobal::pSysLocale->GetLanguageTag().getLanguageType();
+                    const LanguageType nLang = ScGlobal::xSysLocale->GetLanguageTag().getLanguageType();
                     OUString aCell( pTransliteration->transliterate(
                                 rCell1.maStr.getString(), nLang, 0,
                                 rCell1.maStr.getLength(), nullptr));

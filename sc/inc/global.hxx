@@ -510,10 +510,10 @@ class ScGlobal
     static std::map<const char*, OUString>* pRscString;
     static OUString*        pStrScDoc;
     static SC_DLLPUBLIC const OUString aEmptyOUString;
-    static OUString*        pStrClipDocName;
-    static SvxBrushItem*    pEmptyBrushItem;
-    static SvxBrushItem*    pButtonBrushItem;
-    static SvxBrushItem*    pEmbeddedBrushItem;
+    static OUString         aStrClipDocName;
+    static std::unique_ptr<SvxBrushItem> xEmptyBrushItem;
+    static std::unique_ptr<SvxBrushItem> xButtonBrushItem;
+    static std::unique_ptr<SvxBrushItem> xEmbeddedBrushItem;
 
     static ScFunctionList*  pStarCalcFunctionList;
     static ScFunctionMgr*   pStarCalcFunctionMgr;
@@ -536,7 +536,7 @@ class ScGlobal
     static void                 InitPPT();
 
 public:
-    static SvtSysLocale*        pSysLocale;
+    static std::unique_ptr<SvtSysLocale> xSysLocale;
     SC_DLLPUBLIC static const LocaleDataWrapper* getLocaleDataPtr();
     SC_DLLPUBLIC static const CharClass* getCharClassPtr();
 
@@ -594,7 +594,7 @@ public:
     SC_DLLPUBLIC static void Clear();                    // at the end of the program
 
     static void             InitTextHeight(const SfxItemPool* pPool);
-    static SvxBrushItem*    GetEmptyBrushItem() { return pEmptyBrushItem; }
+    static SvxBrushItem*    GetEmptyBrushItem() { return xEmptyBrushItem.get(); }
     static SvxBrushItem*    GetButtonBrushItem();
     static const OUString&  GetEmptyOUString() { return aEmptyOUString; }
 

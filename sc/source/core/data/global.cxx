@@ -79,7 +79,7 @@ std::atomic<ScUnoAddInCollection*> ScGlobal::pAddInCollection(nullptr);
 ScUserList*     ScGlobal::pUserList = nullptr;
 LanguageType    ScGlobal::eLnge = LANGUAGE_SYSTEM;
 std::atomic<css::lang::Locale*> ScGlobal::pLocale(nullptr);
-SvtSysLocale*   ScGlobal::pSysLocale = nullptr;
+std::unique_ptr<SvtSysLocale>   ScGlobal::xSysLocale;
 CalendarWrapper* ScGlobal::pCalendar = nullptr;
 std::atomic<CollatorWrapper*> ScGlobal::pCollator(nullptr);
 std::atomic<CollatorWrapper*> ScGlobal::pCaseCollator(nullptr);
@@ -87,11 +87,11 @@ std::atomic<::utl::TransliterationWrapper*> ScGlobal::pTransliteration(nullptr);
 std::atomic<::utl::TransliterationWrapper*> ScGlobal::pCaseTransliteration(nullptr);
 css::uno::Reference< css::i18n::XOrdinalSuffix> ScGlobal::xOrdinalSuffix;
 const OUString  ScGlobal::aEmptyOUString;
-OUString*       ScGlobal::pStrClipDocName = nullptr;
+OUString        ScGlobal::aStrClipDocName;
 
-SvxBrushItem*   ScGlobal::pEmptyBrushItem = nullptr;
-SvxBrushItem*   ScGlobal::pButtonBrushItem = nullptr;
-SvxBrushItem*   ScGlobal::pEmbeddedBrushItem = nullptr;
+std::unique_ptr<SvxBrushItem> ScGlobal::xEmptyBrushItem;
+std::unique_ptr<SvxBrushItem> ScGlobal::xButtonBrushItem;
+std::unique_ptr<SvxBrushItem> ScGlobal::xEmbeddedBrushItem;
 
 ScFunctionList* ScGlobal::pStarCalcFunctionList = nullptr;
 ScFunctionMgr*  ScGlobal::pStarCalcFunctionMgr  = nullptr;
@@ -430,8 +430,8 @@ OUString ScGlobal::GetLongErrorString(FormulaError nErr)
 SvxBrushItem* ScGlobal::GetButtonBrushItem()
 {
     assert(!bThreadedGroupCalcInProgress);
-    pButtonBrushItem->SetColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
-    return pButtonBrushItem;
+    xButtonBrushItem->SetColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
+    return xButtonBrushItem.get();
 }
 
 void ScGlobal::Init()
@@ -441,11 +441,11 @@ void ScGlobal::Init()
     // FIXME: So remove this variable?
     eLnge = LANGUAGE_SYSTEM;
 
-    pSysLocale = new SvtSysLocale;
+    xSysLocale = std::make_unique<SvtSysLocale>();
 
-    pEmptyBrushItem = new SvxBrushItem( COL_TRANSPARENT, ATTR_BACKGROUND );
-    pButtonBrushItem = new SvxBrushItem( Color(), ATTR_BACKGROUND );
-    pEmbeddedBrushItem = new SvxBrushItem( COL_LIGHTCYAN, ATTR_BACKGROUND );
+    xEmptyBrushItem = std::make_unique<SvxBrushItem>( COL_TRANSPARENT, ATTR_BACKGROUND );
+    xButtonBrushItem = std::make_unique<SvxBrushItem>( Color(), ATTR_BACKGROUND );
+    xEmbeddedBrushItem = std::make_unique<SvxBrushItem>( COL_LIGHTCYAN, ATTR_BACKGROUND );
 
     InitPPT();
     //ScCompiler::InitSymbolsNative();
@@ -456,8 +456,7 @@ void ScGlobal::Init()
 
     InitAddIns();
 
-    pStrClipDocName = new OUString( ScResId( SCSTR_NONAME ) );
-    *pStrClipDocName += "1";
+    aStrClipDocName = ScResId( SCSTR_NONAME ) + "1";
 
     //  ScDocumentPool::InitVersionMaps() has been called earlier already
 }
@@ -485,13 +484,13 @@ void ScGlobal::InitPPT()
 
 const OUString& ScGlobal::GetClipDocName()
 {
-    return *pStrClipDocName;
+    return aStrClipDocName;
 }
 
 void ScGlobal::SetClipDocName( const OUString& rNew )
 {
     assert(!bThreadedGroupCalcInProgress);
-    *pStrClipDocName = rNew;
+    aStrClipDocName = rNew;
 }
 
 void ScGlobal::InitTextHeight(const SfxItemPool* pPool)
@@ -541,18 +540,17 @@ void ScGlobal::Clear()
     ScCompiler::DeInit();
     ScInterpreter::GlobalExit(); // Delete static Stack
 
-    DELETEZ(pEmptyBrushItem);
-    DELETEZ(pButtonBrushItem);
-    DELETEZ(pEmbeddedBrushItem);
+    xEmptyBrushItem.reset();
+    xButtonBrushItem.reset();
+    xEmbeddedBrushItem.reset();
     DELETEZ(pEnglishFormatter);
     delete pCaseTransliteration.load(); pCaseTransliteration = nullptr;
     delete pTransliteration.load(); pTransliteration = nullptr;
     delete pCaseCollator.load(); pCaseCollator = nullptr;
     delete pCollator.load(); pCollator = nullptr;
     DELETEZ(pCalendar);
-    DELETEZ(pSysLocale);
+    xSysLocale.reset();
     delete pLocale.load(); pLocale = nullptr;
-    DELETEZ(pStrClipDocName);
 
     delete pUnitConverter.load(); pUnitConverter = nullptr;
     DELETEZ(pFieldEditEngine);
@@ -1009,19 +1007,19 @@ utl::TransliterationWrapper* ScGlobal::GetpTransliteration()
 const LocaleDataWrapper* ScGlobal::getLocaleDataPtr()
 {
     OSL_ENSURE(
-        pSysLocale,
+        xSysLocale,
         "ScGlobal::getLocaleDataPtr() called before ScGlobal::Init()");
 
-    return pSysLocale->GetLocaleDataPtr();
+    return xSysLocale->GetLocaleDataPtr();
 }
 
 const CharClass* ScGlobal::getCharClassPtr()
 {
     OSL_ENSURE(
-        pSysLocale,
+        xSysLocale,
         "ScGlobal::getCharClassPtr() called before ScGlobal::Init()");
 
-    return pSysLocale->GetCharClassPtr();
+    return xSysLocale->GetCharClassPtr();
 }
 
 CalendarWrapper*     ScGlobal::GetCalendar()
