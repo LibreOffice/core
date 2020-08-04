@@ -864,9 +864,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
                     else if ( aPropName == "Suffix" )
                         sSuffix = *o3tl::doAccess<OUString>(rPropValue.Value);
 #ifdef DBG_UTIL
-                    else if ( ! (
-                            ( aPropName == "SymbolTextDistance" )
-                        ||  ( aPropName == "GraphicBitmap" ) ) )
+                    else if ( aPropName != "SymbolTextDistance" && aPropName != "GraphicBitmap" )
                     {
                         OSL_FAIL( "Unknown Property" );
                     }

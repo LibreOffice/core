@@ -255,12 +255,6 @@ static bool isAssignmentOp(clang::OverloadedOperatorKind Opc)
            || Opc == OO_AmpEqual || Opc == OO_CaretEqual || Opc == OO_PipeEqual;
 }
 
-static bool isComparisonOp(clang::OverloadedOperatorKind op)
-{
-    return op == OO_Less || op == OO_Greater || op == OO_LessEqual || op == OO_GreaterEqual
-           || op == OO_EqualEqual || op == OO_ExclaimEqual;
-}
-
 static const Expr* IgnoreImplicitAndConversionOperator(const Expr* expr)
 {
     expr = compat::IgnoreImplicit(expr);
@@ -570,7 +564,7 @@ void BuriedAssign::MarkConditionForControlLoops(Expr const* expr)
     else if (auto cxxOper = dyn_cast<CXXOperatorCallExpr>(expr))
     {
         // handle: ((xxx = foo()) != error)
-        if (isComparisonOp(cxxOper->getOperator()))
+        if (compat::isComparisonOp(cxxOper))
         {
             MarkIfAssignment(compat::IgnoreImplicit(cxxOper->getArg(0))->IgnoreParens());
             MarkIfAssignment(compat::IgnoreImplicit(cxxOper->getArg(1))->IgnoreParens());
