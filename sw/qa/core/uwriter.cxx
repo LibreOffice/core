@@ -43,6 +43,7 @@
 #include <sfx2/docfile.hxx>
 
 #include <xmloff/odffields.hxx>
+#include <osl/process.h>
 
 #include <breakit.hxx>
 #include <doc.hxx>
@@ -1075,6 +1076,10 @@ getRandomPosition(SwDoc *pDoc, int /* nOffset */)
 
 void SwDocTest::randomTest()
 {
+    OUString aEnvKey("SAL_RAND_REPEATABLE");
+    OUString aEnvValue("1");
+    osl_setEnvironment(aEnvKey.pData, aEnvValue.pData);
+
     CPPUNIT_ASSERT_MESSAGE("SwDoc::IsRedlineOn()", !m_pDoc->getIDocumentRedlineAccess().IsRedlineOn());
     RedlineFlags modes[] = {
         RedlineFlags::On,
