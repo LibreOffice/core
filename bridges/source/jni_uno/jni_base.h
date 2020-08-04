@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BRIDGES_SOURCE_JNI_UNO_JNI_BASE_H
-#define INCLUDED_BRIDGES_SOURCE_JNI_UNO_JNI_BASE_H
+#pragma once
 
 #include <sal/config.h>
 
@@ -254,7 +253,5 @@ inline TypeDescr::TypeDescr( typelib_TypeDescriptionReference * td_ref )
 }
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

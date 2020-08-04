@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BRIDGES_INC_EXCEPT_HXX
-#define INCLUDED_BRIDGES_INC_EXCEPT_HXX
+#pragma once
 
 // extern "C" void** __cdecl __current_exception()
 // is defined in MSVS14.0/VC/crt/src/vcruntime/frame.cpp:
@@ -33,7 +32,5 @@
 //void*              _curexception;    // current exception
 //[...]
 extern "C" void** __current_exception();
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
