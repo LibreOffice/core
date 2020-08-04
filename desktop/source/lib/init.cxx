@@ -2792,6 +2792,7 @@ static void doc_iniUnoCommands ()
         OUString(".uno:AlignUp"),
         OUString(".uno:AlignMiddle"),
         OUString(".uno:AlignDown"),
+        OUString(".uno:TraceChangeMode"),
         OUString(".uno:FreezePanesRow")
     };
 
