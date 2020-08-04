@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_INC_SBSTDOBJ_HXX
-#define INCLUDED_BASIC_INC_SBSTDOBJ_HXX
+#pragma once
 
 #include <basic/sbxobj.hxx>
 #include <vcl/graph.hxx>
@@ -103,7 +102,5 @@ public:
 
     SbStdClipboard();
 };
-
-#endif // INCLUDED_BASIC_INC_SBSTDOBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

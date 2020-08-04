@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_BASIC_SOURCE_INC_SBUNOOBJ_HXX
-#define INCLUDED_BASIC_SOURCE_INC_SBUNOOBJ_HXX
+#pragma once
 
 #include <basic/sbxobj.hxx>
 #include <basic/sbxmeth.hxx>
@@ -389,7 +388,5 @@ SbUnoObject* createOLEObject_Impl( const OUString& aType );
 bool handleToStringForCOMObjects( SbxObject* pObj, SbxValue* pVal );
 
 void registerComListenerVariableForBasic( SbxVariable* pVar, StarBASIC* pBasic );
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

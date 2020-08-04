@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_INC_STRINGS_HRC
-#define INCLUDED_BASIC_INC_STRINGS_HRC
+#pragma once
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
@@ -155,7 +154,5 @@ std::pair<const char*, ErrCode> const RID_BASIC_START[] =
     { NC_("RID_BASIC_START", "$(ARG1)"), ERRCODE_BASIC_COMPAT },
     { nullptr, ERRCODE_NONE }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
