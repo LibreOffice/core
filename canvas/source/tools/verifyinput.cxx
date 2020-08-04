@@ -394,15 +394,11 @@ namespace canvas::tools
                 {
                     if( !std::isfinite( rVal ) || rVal < 0.0 )
                     {
-#if OSL_DEBUG_LEVEL > 0
                         throw lang::IllegalArgumentException(
                             OUString::createFromAscii(mpStr) +
                             ": verifyInput(): one of stroke attributes' DashArray value out of range (is " +
                             OUString::number(rVal) + ")",
                             mrIf, mnArgPos );
-#else
-                        throw lang::IllegalArgumentException();
-#endif
                     }
                 }
 
