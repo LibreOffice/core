@@ -222,6 +222,7 @@ sw/uiconfig/swriter/ui/tocindexpage.ui://GtkButton[@id='styles'] missing-label-f
 sw/uiconfig/swriter/ui/tocstylespage.ui://GtkButton[@id='assign'] button-no-label
 sw/uiconfig/swriter/ui/tablecolumnpage.ui://GtkButton[@id='back'] button-no-label
 sw/uiconfig/swriter/ui/tablecolumnpage.ui://GtkButton[@id='next'] button-no-label
+sw/uiconfig/swriter/ui/tablecolumnpage.ui://GtkSpinButton[@id='spacefmt'] no-labelled-by
 sw/uiconfig/swriter/ui/tablepreviewdialog.ui://GtkLabel[@id='description'] orphan-label
 sw/uiconfig/swriter/ui/tabletextflowpage.ui://GtkSpinButton[@id='pagenonf'] missing-label-for
 sw/uiconfig/swriter/ui/tabletextflowpage.ui://GtkLabel[@id='label39'] orphan-label
