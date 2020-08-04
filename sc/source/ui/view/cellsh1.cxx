@@ -1165,11 +1165,20 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     {
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                        ScopedVclPtr<AbstractScGroupDlg> pDlg(pFact->CreateAbstractScGroupDlg(pTabViewShell->GetFrameWeld()));
-                        if ( pDlg->Execute() == RET_OK )
-                            bColumns = pDlg->GetColsChecked();
-                        else
-                            bOk = false;
+                        std::shared_ptr<AbstractScGroupDlg> pDlg(pFact->CreateAbstractScGroupDlg(pTabViewShell->GetFrameWeld()));
+                        std::shared_ptr<weld::DialogController> pDialogController(pDlg->getDialogController());
+
+                        weld::DialogController::runAsync(pDialogController,
+                            [pDlg, pTabViewShell] (sal_Int32 nResult) {
+                                if( RET_OK == nResult )
+                                {
+                                    bool bColumn = pDlg->GetColsChecked();
+                                    pTabViewShell->MakeOutline( bColumn );
+                                }
+                            }
+                        );
+
+                        bOk = false;
                     }
                 }
                 if (bOk)
@@ -1223,11 +1232,20 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     {
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                        ScopedVclPtr<AbstractScGroupDlg> pDlg(pFact->CreateAbstractScGroupDlg(pTabViewShell->GetFrameWeld(), true));
-                        if ( pDlg->Execute() == RET_OK )
-                            bColumns = pDlg->GetColsChecked();
-                        else
-                            bOk = false;
+                        std::shared_ptr<AbstractScGroupDlg> pDlg(pFact->CreateAbstractScGroupDlg(pTabViewShell->GetFrameWeld(), true));
+                        std::shared_ptr<weld::DialogController> pDialogController(pDlg->getDialogController());
+
+                        weld::DialogController::runAsync(pDialogController,
+                            [pDlg, pTabViewShell] (sal_Int32 nResult) {
+                                if( RET_OK == nResult )
+                                {
+                                    bool bColumn = pDlg->GetColsChecked();
+                                    pTabViewShell->RemoveOutline( bColumn );
+                                }
+                            }
+                        );
+
+                        bOk = false;
                     }
                     else if ( bColPoss )
                         bColumns = true;

@@ -285,14 +285,14 @@ public:
 
 class AbstractScGroupDlg_Impl :  public AbstractScGroupDlg
 {
-    std::unique_ptr<ScGroupDlg> m_xDlg;
+    std::shared_ptr<weld::DialogController> m_xDlg;
 public:
-    explicit AbstractScGroupDlg_Impl(std::unique_ptr<ScGroupDlg> p)
+    explicit AbstractScGroupDlg_Impl(std::shared_ptr<ScGroupDlg> p)
         : m_xDlg(std::move(p))
     {
     }
-    virtual short Execute() override;
     virtual bool GetColsChecked() const override;
+    virtual std::shared_ptr<weld::DialogController> getDialogController() override { return m_xDlg; }
 };
 
 class AbstractScInsertCellDlg_Impl : public AbstractScInsertCellDlg
@@ -716,7 +716,7 @@ public:
                                                             SCSIZE          nSelectHeight,
                                                             SCSIZE          nSelectWidth,
                                                             sal_uInt16       nPossDir) override;
-    virtual VclPtr<AbstractScGroupDlg> CreateAbstractScGroupDlg(weld::Window* pParent, bool bUnGroup = false) override;
+    virtual std::shared_ptr<AbstractScGroupDlg> CreateAbstractScGroupDlg(weld::Window* pParent, bool bUnGroup = false) override;
 
     virtual VclPtr<AbstractScInsertCellDlg> CreateScInsertCellDlg(weld::Window* pParent,
                                                                   bool bDisallowCellMove) override;

@@ -147,11 +147,6 @@ short AbstractScFillSeriesDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-short AbstractScGroupDlg_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
 short AbstractScInsertCellDlg_Impl::Execute()
 {
     return m_xDlg->run();
@@ -485,7 +480,11 @@ void    AbstractScFillSeriesDlg_Impl::SetEdStartValEnabled(bool bFlag)
 
 bool AbstractScGroupDlg_Impl::GetColsChecked() const
 {
-    return m_xDlg->GetColsChecked();
+    ScGroupDlg* pDlg = dynamic_cast<ScGroupDlg*>(m_xDlg.get());
+    if (pDlg)
+        return pDlg->GetColsChecked();
+
+    return false;
 }
 
 InsCellCmd  AbstractScInsertCellDlg_Impl::GetInsCellCmd() const
@@ -1022,9 +1021,9 @@ VclPtr<AbstractScFillSeriesDlg> ScAbstractDialogFactory_Impl::CreateScFillSeries
     return VclPtr<AbstractScFillSeriesDlg_Impl>::Create(std::make_unique<ScFillSeriesDlg>(pParent, rDocument,eFillDir, eFillCmd,eFillDateCmd, aStartStr,fStep,fMax,nSelectHeight,nSelectWidth,nPossDir));
 }
 
-VclPtr<AbstractScGroupDlg> ScAbstractDialogFactory_Impl::CreateAbstractScGroupDlg(weld::Window* pParent, bool bUnGroup)
+std::shared_ptr<AbstractScGroupDlg> ScAbstractDialogFactory_Impl::CreateAbstractScGroupDlg(weld::Window* pParent, bool bUnGroup)
 {
-    return VclPtr<AbstractScGroupDlg_Impl>::Create(std::make_unique<ScGroupDlg>(pParent, bUnGroup, true/*bRows*/));
+    return std::make_shared<AbstractScGroupDlg_Impl>(std::make_shared<ScGroupDlg>(pParent, bUnGroup, true/*bRows*/));
 }
 
 VclPtr<AbstractScInsertCellDlg> ScAbstractDialogFactory_Impl::CreateScInsertCellDlg(weld::Window* pParent,

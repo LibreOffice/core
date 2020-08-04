@@ -171,12 +171,13 @@ public:
     virtual void        SetEdStartValEnabled(bool bFlag) = 0;
 };
 
-class AbstractScGroupDlg :  public VclAbstractDialog
+class AbstractScGroupDlg
 {
 protected:
-    virtual             ~AbstractScGroupDlg() override = default;
+    virtual             ~AbstractScGroupDlg() = default;
 public:
     virtual bool GetColsChecked() const = 0;
+    virtual std::shared_ptr<weld::DialogController> getDialogController() = 0;
 };
 
 class AbstractScInsertCellDlg : public VclAbstractDialog
@@ -445,7 +446,7 @@ public:
                                                             SCSIZE          nSelectWidth,
                                                             sal_uInt16          nPossDir) = 0;
 
-    virtual VclPtr<AbstractScGroupDlg> CreateAbstractScGroupDlg(weld::Window* pParent, bool bUnGroup = false) = 0;
+    virtual std::shared_ptr<AbstractScGroupDlg> CreateAbstractScGroupDlg(weld::Window* pParent, bool bUnGroup = false) = 0;
 
     virtual VclPtr<AbstractScInsertCellDlg> CreateScInsertCellDlg(weld::Window* pParent,
                                                              bool bDisallowCellMove) = 0;
