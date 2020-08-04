@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_LINUX_X86_64_RTTI_HXX
-#define INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_LINUX_X86_64_RTTI_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -31,7 +30,5 @@ namespace x86_64 {
 std::type_info * getRtti(typelib_TypeDescription const & type);
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

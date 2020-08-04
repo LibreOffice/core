@@ -17,15 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_LINUX_INTEL_CALL_HXX
-#define INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_LINUX_INTEL_CALL_HXX
+#pragma once
 
 #include <sal/config.h>
 
 extern "C" void cpp_vtable_call(
     int nFunctionIndex, int nVtableOffset, void ** pCallStack,
     void * pRegisterReturn);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_LINUX_X86_64_ABI_HXX
-#define INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_LINUX_X86_64_ABI_HXX
+#pragma once
 
 // This is an implementation of the x86-64 ABI as described in 'System V
 // Application Binary Interface, AMD64 Architecture Processor Supplement'
@@ -55,7 +54,5 @@ bool return_in_hidden_param( typelib_TypeDescriptionReference *pTypeRef ) throw 
 void fill_struct( typelib_TypeDescriptionReference *pTypeRef, const sal_uInt64* pGPR, const double* pSSE, void *pStruct ) throw ();
 
 } // namespace x86_64
-
-#endif // INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_LINUX_X86_64_ABI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
