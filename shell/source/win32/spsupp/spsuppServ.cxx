@@ -87,7 +87,7 @@ BOOL APIENTRY DllMain( HANDLE hinstDLL,
 
 namespace {
     // {F1924D0C-9B35-4A46-BCDE-CFEF2CE67A17}
-    static const IID CLSID_spsupp =
+    const IID CLSID_spsupp =
     { 0xf1924d0c, 0x9b35, 0x4a46, { 0xbc, 0xde, 0xcf, 0xef, 0x2c, 0xe6, 0x7a, 0x17 } };
 }
 

@@ -31,7 +31,7 @@ struct osl_file_error_entry
 
 }
 
-static const struct osl_file_error_entry errtable[] = {
+const struct osl_file_error_entry errtable[] = {
   {  ERROR_SUCCESS,                osl_File_E_None     },  /* 0 */
   {  ERROR_INVALID_FUNCTION,       osl_File_E_INVAL    },  /* 1 */
   {  ERROR_FILE_NOT_FOUND,         osl_File_E_NOENT    },  /* 2 */

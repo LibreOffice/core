@@ -62,11 +62,11 @@ static const WCHAR* g_Extensions[] =
     nullptr
 };
 
-static const int WORD_START = 0;
-static const int EXCEL_START = 9;
-static const int POWERPOINT_START = 20;
-static const int VISIO_START = 30;
-static const int VISIO_END = 32;
+const int WORD_START = 0;
+const int EXCEL_START = 9;
+const int POWERPOINT_START = 20;
+const int VISIO_START = 30;
+const int VISIO_END = 32;
 
 //    ".xlam",    // Office Excel 2007 XML macro-enabled add-in
 //    ".ppam",    // Office PowerPoint 2007 macro-enabled XML add-in

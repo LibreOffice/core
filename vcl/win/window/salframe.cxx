@@ -525,7 +525,7 @@ HWND ImplSalReCreateHWND( HWND hWndParent, HWND oldhWnd, bool bAsChild )
 // translation table from System keycodes into StartView keycodes
 #define KEY_TAB_SIZE     146
 
-static const sal_uInt16 aImplTranslateKeyTab[KEY_TAB_SIZE] =
+const sal_uInt16 aImplTranslateKeyTab[KEY_TAB_SIZE] =
 {
     // StarView-Code      System-Code                         Index
     0,                    //                                  0

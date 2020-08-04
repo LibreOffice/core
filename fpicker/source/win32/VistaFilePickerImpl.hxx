@@ -47,40 +47,40 @@ namespace vista{
 // types, const etcpp
 
 
-static const ::sal_Int32 FEATURE_AUTOEXTENSION  =    1;
-static const ::sal_Int32 FEATURE_PASSWORD       =    2;
-static const ::sal_Int32 FEATURE_FILTEROPTIONS  =    4;
-static const ::sal_Int32 FEATURE_SELECTION      =    8;
-static const ::sal_Int32 FEATURE_TEMPLATE       =   16;
-static const ::sal_Int32 FEATURE_LINK           =   32;
-static const ::sal_Int32 FEATURE_PREVIEW        =   64;
-static const ::sal_Int32 FEATURE_IMAGETEMPLATE  =  128;
-static const ::sal_Int32 FEATURE_PLAY           =  256;
-static const ::sal_Int32 FEATURE_READONLY       =  512;
-static const ::sal_Int32 FEATURE_VERSION        = 1024;
-static const ::sal_Int32 FEATURE_GPGPASSWORD    = 2048;
-static const ::sal_Int32 FEATURE_IMAGEANCHOR    = 4096;
+const ::sal_Int32 FEATURE_AUTOEXTENSION  =    1;
+const ::sal_Int32 FEATURE_PASSWORD       =    2;
+const ::sal_Int32 FEATURE_FILTEROPTIONS  =    4;
+const ::sal_Int32 FEATURE_SELECTION      =    8;
+const ::sal_Int32 FEATURE_TEMPLATE       =   16;
+const ::sal_Int32 FEATURE_LINK           =   32;
+const ::sal_Int32 FEATURE_PREVIEW        =   64;
+const ::sal_Int32 FEATURE_IMAGETEMPLATE  =  128;
+const ::sal_Int32 FEATURE_PLAY           =  256;
+const ::sal_Int32 FEATURE_READONLY       =  512;
+const ::sal_Int32 FEATURE_VERSION        = 1024;
+const ::sal_Int32 FEATURE_GPGPASSWORD    = 2048;
+const ::sal_Int32 FEATURE_IMAGEANCHOR    = 4096;
 
-static const OUString PROP_PICKER_LISTENER("picker_listener"   ); // [XFilePickerListenert]
-static const OUString PROP_DIALOG_SHOW_RESULT("dialog_show_result" ); // [sal_Bool] true=OK, false=CANCEL
-static const OUString PROP_SELECTED_FILES("selected_files"     ); // [seq< OUString >] contains all user selected files (can be empty!)
-static const OUString PROP_MULTISELECTION_MODE("multiselection_mode"); // [sal_Bool] true=ON, false=OFF
-static const OUString PROP_TITLE("title"              ); // [OUString]
-static const OUString PROP_FILENAME("filename"          ); // [OUString]
-static const OUString PROP_DIRECTORY("directory"          ); // [OUString]
-static const OUString PROP_FEATURES("features"           ); // [sal_Int32]
-static const OUString PROP_TEMPLATE_DESCR("templatedescription"); // [sal_Int32]
-static const OUString PROP_FILTER_TITLE("filter_title"       ); // [OUString]
-static const OUString PROP_FILTER_VALUE("filter_value"       ); // [OUString]
-static const OUString PROP_FILTER_GROUP("filter-group"       ); // [seq< css:beans::StringPair >] contains a group of filters
+const OUString PROP_PICKER_LISTENER("picker_listener"   ); // [XFilePickerListenert]
+const OUString PROP_DIALOG_SHOW_RESULT("dialog_show_result" ); // [sal_Bool] true=OK, false=CANCEL
+const OUString PROP_SELECTED_FILES("selected_files"     ); // [seq< OUString >] contains all user selected files (can be empty!)
+const OUString PROP_MULTISELECTION_MODE("multiselection_mode"); // [sal_Bool] true=ON, false=OFF
+const OUString PROP_TITLE("title"              ); // [OUString]
+const OUString PROP_FILENAME("filename"          ); // [OUString]
+const OUString PROP_DIRECTORY("directory"          ); // [OUString]
+const OUString PROP_FEATURES("features"           ); // [sal_Int32]
+const OUString PROP_TEMPLATE_DESCR("templatedescription"); // [sal_Int32]
+const OUString PROP_FILTER_TITLE("filter_title"       ); // [OUString]
+const OUString PROP_FILTER_VALUE("filter_value"       ); // [OUString]
+const OUString PROP_FILTER_GROUP("filter-group"       ); // [seq< css:beans::StringPair >] contains a group of filters
 
-static const OUString PROP_CONTROL_ID("control_id"         ); // [sal_Int16]
-static const OUString PROP_CONTROL_ACTION("control_action"     ); // [sal_Int16]
-static const OUString PROP_CONTROL_VALUE("control_value"      ); // [Any]
-static const OUString PROP_CONTROL_LABEL("control_label"      ); // [OUString]
-static const OUString PROP_CONTROL_ENABLE("control_enable"     ); // [sal_Bool] true=ON, false=OFF
-static const OUString PROP_PARENT_WINDOW("ParentWindow"); //[css::awt::XWindow] preferred parent window
-static const OUString STRING_SEPARATOR("------------------------------------------" );
+const OUString PROP_CONTROL_ID("control_id"         ); // [sal_Int16]
+const OUString PROP_CONTROL_ACTION("control_action"     ); // [sal_Int16]
+const OUString PROP_CONTROL_VALUE("control_value"      ); // [Any]
+const OUString PROP_CONTROL_LABEL("control_label"      ); // [OUString]
+const OUString PROP_CONTROL_ENABLE("control_enable"     ); // [sal_Bool] true=ON, false=OFF
+const OUString PROP_PARENT_WINDOW("ParentWindow"); //[css::awt::XWindow] preferred parent window
+const OUString STRING_SEPARATOR("------------------------------------------" );
 
 
 /** native implementation of the file picker on Vista and upcoming windows versions.

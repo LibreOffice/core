@@ -89,7 +89,7 @@ FormatEntry::FormatEntry(
 // format number we can stop if we find the first
 // CF_INVALID
 
-static const std::vector< FormatEntry > g_TranslTable {
+const std::vector< FormatEntry > g_TranslTable {
     //SotClipboardFormatId::DIF
         FormatEntry("application/x-openoffice-dif;windows_formatname=\"DIF\"", "DIF", "DIF", CF_DIF, CPPUTYPE_DEFAULT),
     // SotClipboardFormatId::BITMAP

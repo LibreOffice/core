@@ -65,7 +65,7 @@
 
 using namespace vcl;
 
-static const int MAXFONTHEIGHT = 2048;
+const int MAXFONTHEIGHT = 2048;
 
 static FIXED FixedFromDouble( double d )
 {
@@ -254,7 +254,7 @@ namespace
 // with a font that is supported and always available.
 // Based on:
 // https://dxr.mozilla.org/mozilla-esr10/source/gfx/thebes/gfxDWriteFontList.cpp#1057
-static const std::map<OUString, OUString> aBitmapFontSubs =
+const std::map<OUString, OUString> aBitmapFontSubs =
 {
     { "MS Sans Serif", "Microsoft Sans Serif" },
     { "MS Serif",      "Times New Roman" },
