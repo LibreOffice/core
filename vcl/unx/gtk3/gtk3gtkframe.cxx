@@ -3552,7 +3552,7 @@ gboolean GtkDropTarget::signalDragDrop(GtkWidget* pWidget, GdkDragContext* conte
 #ifndef NDEBUG
     bool res =
 #endif
-        g_idle_remove_by_data(this);
+    g_idle_remove_by_data(this);
     assert(res);
 
     css::datatransfer::dnd::DropTargetDropEvent aEvent;
