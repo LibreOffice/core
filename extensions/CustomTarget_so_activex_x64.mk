@@ -18,7 +18,8 @@ $(call gb_CustomTarget_get_target,extensions/source/activex) : \
 	$(call gb_CustomTarget_get_workdir,extensions/source/activex)/so_activex.cxx \
 
 $(call gb_CustomTarget_get_workdir,extensions/source/activex)/% : \
-		$(SRCDIR)/extensions/source/activex/%
+		$(SRCDIR)/extensions/source/activex/% \
+		| $(call gb_CustomTarget_get_workdir,extensions/source/activex)/.dir
 	cp $< $@
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:
