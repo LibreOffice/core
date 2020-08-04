@@ -220,9 +220,14 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
     //-usebbfrominput forces pstoedit to take the original ps bounding box
     //as the bounding box as it sees it, instead of calculating its own
     //which also doesn't work for this example
+    //
+    //Under Linux, positioning of letters within pstoedit is very approximate.
+    //Using the -nfw option delegates the positioning to the reader, and we
+    //will do a proper job.  The option is ignored on Windows.
     OUString arg1("-usebbfrominput");   //-usebbfrominput use the original ps bounding box
     OUString arg2("-f");
-    OUString arg3("emf:-OO -drawbb");   //-drawbb mark out the bounding box extent with bg pixels
+    OUString arg3("emf:-OO -drawbb -nfw"); //-drawbb mark out the bounding box extent with bg pixels
+                                           //-nfw delegate letter placement to us
     rtl_uString *args[] =
     {
         arg1.pData, arg2.pData, arg3.pData, input.pData, output.pData
