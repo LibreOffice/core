@@ -26,23 +26,23 @@ void SkiaZone::hardDisable()
 {
     // protect ourselves from double calling etc.
     static bool bDisabled = false;
-    if (!bDisabled)
-    {
-        bDisabled = true;
+    if (bDisabled)
+        return;
 
-        // Instead of disabling Skia as a whole, only force the CPU-based
-        // raster mode, which should be safe as it does not use drivers.
-        std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::VCL::ForceSkiaRaster::set(true, xChanges);
-        xChanges->commit();
+    bDisabled = true;
 
-        // Force synchronous config write
-        css::uno::Reference<css::util::XFlushable>(
-            css::configuration::theDefaultProvider::get(comphelper::getProcessComponentContext()),
-            css::uno::UNO_QUERY_THROW)
-            ->flush();
-    }
+    // Instead of disabling Skia as a whole, only force the CPU-based
+    // raster mode, which should be safe as it does not use drivers.
+    std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::VCL::ForceSkiaRaster::set(true, xChanges);
+    xChanges->commit();
+
+    // Force synchronous config write
+    css::uno::Reference<css::util::XFlushable>(
+        css::configuration::theDefaultProvider::get(comphelper::getProcessComponentContext()),
+        css::uno::UNO_QUERY_THROW)
+        ->flush();
 }
 
 void SkiaZone::checkDebug(int nUnchanged, const CrashWatchdogTimingsValues& aTimingValues)

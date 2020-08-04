@@ -25,30 +25,30 @@ CustomWidgetDraw::CustomWidgetDraw(SvpSalGraphics& rGraphics)
 {
 #ifndef DISABLE_DYNLOADING
     static bool s_bMissingLibrary = false;
-    if (!s_pWidgetImplementation && !s_bMissingLibrary)
+    if (s_pWidgetImplementation || s_bMissingLibrary)
+        return;
+
+    OUString aUrl("${LO_LIB_DIR}/" SVLIBRARY("vcl_widget_theme"));
+    rtl::Bootstrap::expandMacros(aUrl);
+    osl::Module aLibrary;
+    aLibrary.load(aUrl, SAL_LOADMODULE_GLOBAL);
+    auto fCreateWidgetThemeLibraryFunction
+        = reinterpret_cast<vcl::WidgetThemeLibrary*(SAL_CALL*)()>(
+            aLibrary.getFunctionSymbol("CreateWidgetThemeLibrary"));
+    aLibrary.release();
+
+    if (fCreateWidgetThemeLibraryFunction)
+        s_pWidgetImplementation = (*fCreateWidgetThemeLibraryFunction)();
+
+    // Init
+    if (s_pWidgetImplementation)
     {
-        OUString aUrl("${LO_LIB_DIR}/" SVLIBRARY("vcl_widget_theme"));
-        rtl::Bootstrap::expandMacros(aUrl);
-        osl::Module aLibrary;
-        aLibrary.load(aUrl, SAL_LOADMODULE_GLOBAL);
-        auto fCreateWidgetThemeLibraryFunction
-            = reinterpret_cast<vcl::WidgetThemeLibrary*(SAL_CALL*)()>(
-                aLibrary.getFunctionSymbol("CreateWidgetThemeLibrary"));
-        aLibrary.release();
-
-        if (fCreateWidgetThemeLibraryFunction)
-            s_pWidgetImplementation = (*fCreateWidgetThemeLibraryFunction)();
-
-        // Init
-        if (s_pWidgetImplementation)
-        {
-            ImplSVData* pSVData = ImplGetSVData();
-            pSVData->maNWFData.mbNoFocusRects = true;
-            pSVData->maNWFData.mbNoFocusRectsForFlatButtons = true;
-        }
-        else
-            s_bMissingLibrary = true;
+        ImplSVData* pSVData = ImplGetSVData();
+        pSVData->maNWFData.mbNoFocusRects = true;
+        pSVData->maNWFData.mbNoFocusRectsForFlatButtons = true;
     }
+    else
+        s_bMissingLibrary = true;
 #endif
 }
 

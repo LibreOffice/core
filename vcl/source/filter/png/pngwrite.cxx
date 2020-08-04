@@ -112,135 +112,64 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBitmapEx,
     , mnBBP(0)
     , mbTrueAlpha(false)
 {
-    if (!rBitmapEx.IsEmpty())
+    if (rBitmapEx.IsEmpty())
+        return;
+
+    BitmapEx aBitmapEx;
+
+    if (rBitmapEx.GetBitmap().GetBitCount() == 32)
     {
-        BitmapEx aBitmapEx;
+        if (!vcl::bitmap::convertBitmap32To24Plus8(rBitmapEx, aBitmapEx))
+            return;
+    }
+    else
+    {
+        aBitmapEx = rBitmapEx;
+    }
 
-        if (rBitmapEx.GetBitmap().GetBitCount() == 32)
+    Bitmap aBmp(aBitmapEx.GetBitmap());
+
+    mnMaxChunkSize = std::numeric_limits<sal_uInt32>::max();
+
+    if (pFilterData)
+    {
+        for (const auto& rPropVal : *pFilterData)
         {
-            if (!vcl::bitmap::convertBitmap32To24Plus8(rBitmapEx, aBitmapEx))
-                return;
-        }
-        else
-        {
-            aBitmapEx = rBitmapEx;
-        }
-
-        Bitmap aBmp(aBitmapEx.GetBitmap());
-
-        mnMaxChunkSize = std::numeric_limits<sal_uInt32>::max();
-
-        if (pFilterData)
-        {
-            for (const auto& rPropVal : *pFilterData)
+            if (rPropVal.Name == "Compression")
+                rPropVal.Value >>= mnCompLevel;
+            else if (rPropVal.Name == "Interlaced")
+                rPropVal.Value >>= mnInterlaced;
+            else if (rPropVal.Name == "MaxChunkSize")
             {
-                if (rPropVal.Name == "Compression")
-                    rPropVal.Value >>= mnCompLevel;
-                else if (rPropVal.Name == "Interlaced")
-                    rPropVal.Value >>= mnInterlaced;
-                else if (rPropVal.Name == "MaxChunkSize")
-                {
-                    sal_Int32 nVal = 0;
-                    if (rPropVal.Value >>= nVal)
-                        mnMaxChunkSize = static_cast<sal_uInt32>(nVal);
-                }
+                sal_Int32 nVal = 0;
+                if (rPropVal.Value >>= nVal)
+                    mnMaxChunkSize = static_cast<sal_uInt32>(nVal);
             }
         }
-        mnBitsPerPixel = static_cast<sal_uInt8>(aBmp.GetBitCount());
+    }
+    mnBitsPerPixel = static_cast<sal_uInt8>(aBmp.GetBitCount());
 
-        if (aBitmapEx.IsTransparent())
+    if (aBitmapEx.IsTransparent())
+    {
+        if (mnBitsPerPixel <= 8 && aBitmapEx.IsAlpha())
         {
-            if (mnBitsPerPixel <= 8 && aBitmapEx.IsAlpha())
-            {
-                aBmp.Convert( BmpConversion::N24Bit );
-                mnBitsPerPixel = 24;
-            }
-
-            if (mnBitsPerPixel <= 8) // transparent palette
-            {
-                aBmp.Convert(BmpConversion::N8BitTrans);
-                aBmp.Replace(aBitmapEx.GetMask(), BMP_COL_TRANS);
-                mnBitsPerPixel = 8;
-                mpAccess = Bitmap::ScopedReadAccess(aBmp);
-                if (mpAccess)
-                {
-                    if (ImplWriteHeader())
-                    {
-                        ImplWritepHYs(aBitmapEx);
-                        ImplWritePalette();
-                        ImplWriteTransparent();
-                        ImplWriteIDAT();
-                    }
-                    mpAccess.reset();
-                }
-                else
-                {
-                    mbStatus = false;
-                }
-            }
-            else
-            {
-                mpAccess = Bitmap::ScopedReadAccess(aBmp); // true RGB with alphachannel
-                if (mpAccess)
-                {
-                    mbTrueAlpha = aBitmapEx.IsAlpha();
-                    if (mbTrueAlpha)
-                    {
-                        AlphaMask aMask(aBitmapEx.GetAlpha());
-                        mpMaskAccess = aMask.AcquireReadAccess();
-                        if (mpMaskAccess)
-                        {
-                            if (ImplWriteHeader())
-                            {
-                                ImplWritepHYs(aBitmapEx);
-                                ImplWriteIDAT();
-                            }
-                            aMask.ReleaseAccess(mpMaskAccess);
-                            mpMaskAccess = nullptr;
-                        }
-                        else
-                        {
-                            mbStatus = false;
-                        }
-                    }
-                    else
-                    {
-                        Bitmap aMask(aBitmapEx.GetMask());
-                        mpMaskAccess = aMask.AcquireReadAccess();
-                        if (mpMaskAccess)
-                        {
-                            if (ImplWriteHeader())
-                            {
-                                ImplWritepHYs(aBitmapEx);
-                                ImplWriteIDAT();
-                            }
-                            Bitmap::ReleaseAccess(mpMaskAccess);
-                            mpMaskAccess = nullptr;
-                        }
-                        else
-                        {
-                            mbStatus = false;
-                        }
-                    }
-                    mpAccess.reset();
-                }
-                else
-                {
-                    mbStatus = false;
-                }
-            }
+            aBmp.Convert( BmpConversion::N24Bit );
+            mnBitsPerPixel = 24;
         }
-        else
+
+        if (mnBitsPerPixel <= 8) // transparent palette
         {
-            mpAccess = Bitmap::ScopedReadAccess(aBmp); // palette + RGB without alphachannel
+            aBmp.Convert(BmpConversion::N8BitTrans);
+            aBmp.Replace(aBitmapEx.GetMask(), BMP_COL_TRANS);
+            mnBitsPerPixel = 8;
+            mpAccess = Bitmap::ScopedReadAccess(aBmp);
             if (mpAccess)
             {
                 if (ImplWriteHeader())
                 {
                     ImplWritepHYs(aBitmapEx);
-                    if (mpAccess->HasPalette())
-                        ImplWritePalette();
-
+                    ImplWritePalette();
+                    ImplWriteTransparent();
                     ImplWriteIDAT();
                 }
                 mpAccess.reset();
@@ -250,11 +179,82 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBitmapEx,
                 mbStatus = false;
             }
         }
-
-        if (mbStatus)
+        else
         {
-            ImplOpenChunk(PNGCHUNK_IEND); // create an IEND chunk
+            mpAccess = Bitmap::ScopedReadAccess(aBmp); // true RGB with alphachannel
+            if (mpAccess)
+            {
+                mbTrueAlpha = aBitmapEx.IsAlpha();
+                if (mbTrueAlpha)
+                {
+                    AlphaMask aMask(aBitmapEx.GetAlpha());
+                    mpMaskAccess = aMask.AcquireReadAccess();
+                    if (mpMaskAccess)
+                    {
+                        if (ImplWriteHeader())
+                        {
+                            ImplWritepHYs(aBitmapEx);
+                            ImplWriteIDAT();
+                        }
+                        aMask.ReleaseAccess(mpMaskAccess);
+                        mpMaskAccess = nullptr;
+                    }
+                    else
+                    {
+                        mbStatus = false;
+                    }
+                }
+                else
+                {
+                    Bitmap aMask(aBitmapEx.GetMask());
+                    mpMaskAccess = aMask.AcquireReadAccess();
+                    if (mpMaskAccess)
+                    {
+                        if (ImplWriteHeader())
+                        {
+                            ImplWritepHYs(aBitmapEx);
+                            ImplWriteIDAT();
+                        }
+                        Bitmap::ReleaseAccess(mpMaskAccess);
+                        mpMaskAccess = nullptr;
+                    }
+                    else
+                    {
+                        mbStatus = false;
+                    }
+                }
+                mpAccess.reset();
+            }
+            else
+            {
+                mbStatus = false;
+            }
         }
+    }
+    else
+    {
+        mpAccess = Bitmap::ScopedReadAccess(aBmp); // palette + RGB without alphachannel
+        if (mpAccess)
+        {
+            if (ImplWriteHeader())
+            {
+                ImplWritepHYs(aBitmapEx);
+                if (mpAccess->HasPalette())
+                    ImplWritePalette();
+
+                ImplWriteIDAT();
+            }
+            mpAccess.reset();
+        }
+        else
+        {
+            mbStatus = false;
+        }
+    }
+
+    if (mbStatus)
+    {
+        ImplOpenChunk(PNGCHUNK_IEND); // create an IEND chunk
     }
 }
 
@@ -359,19 +359,19 @@ void PNGWriterImpl::ImplWriteTransparent()
 
 void PNGWriterImpl::ImplWritepHYs(const BitmapEx& rBmpEx)
 {
-    if (rBmpEx.GetPrefMapMode().GetMapUnit() == MapUnit::Map100thMM)
-    {
-        Size aPrefSize(rBmpEx.GetPrefSize());
+    if (rBmpEx.GetPrefMapMode().GetMapUnit() != MapUnit::Map100thMM)
+        return;
 
-        if (aPrefSize.Width() && aPrefSize.Height() && mnWidth && mnHeight)
-        {
-            ImplOpenChunk(PNGCHUNK_pHYs);
-            sal_uInt32 nPrefSizeX = static_cast<sal_uInt32>(100000.0 / (static_cast<double>(aPrefSize.Width()) / mnWidth) + 0.5);
-            sal_uInt32 nPrefSizeY = static_cast<sal_uInt32>(100000.0 / (static_cast<double>(aPrefSize.Height()) / mnHeight) + 0.5);
-            ImplWriteChunk(nPrefSizeX);
-            ImplWriteChunk(nPrefSizeY);
-            ImplWriteChunk(sal_uInt8(1)); // nMapUnit
-        }
+    Size aPrefSize(rBmpEx.GetPrefSize());
+
+    if (aPrefSize.Width() && aPrefSize.Height() && mnWidth && mnHeight)
+    {
+        ImplOpenChunk(PNGCHUNK_pHYs);
+        sal_uInt32 nPrefSizeX = static_cast<sal_uInt32>(100000.0 / (static_cast<double>(aPrefSize.Width()) / mnWidth) + 0.5);
+        sal_uInt32 nPrefSizeY = static_cast<sal_uInt32>(100000.0 / (static_cast<double>(aPrefSize.Height()) / mnHeight) + 0.5);
+        ImplWriteChunk(nPrefSizeX);
+        ImplWriteChunk(nPrefSizeY);
+        ImplWriteChunk(sal_uInt8(1)); // nMapUnit
     }
 }
 

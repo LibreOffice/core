@@ -143,34 +143,34 @@ void TabControl::ImplInitSettings( bool bBackground )
 {
     Control::ImplInitSettings();
 
-    if ( bBackground )
+    if ( !bBackground )
+        return;
+
+    vcl::Window* pParent = GetParent();
+    if ( !IsControlBackground() &&
+        (pParent->IsChildTransparentModeEnabled()
+        || IsNativeControlSupported(ControlType::TabPane, ControlPart::Entire)
+        || IsNativeControlSupported(ControlType::TabItem, ControlPart::Entire) ) )
+
     {
-        vcl::Window* pParent = GetParent();
-        if ( !IsControlBackground() &&
-            (pParent->IsChildTransparentModeEnabled()
-            || IsNativeControlSupported(ControlType::TabPane, ControlPart::Entire)
-            || IsNativeControlSupported(ControlType::TabItem, ControlPart::Entire) ) )
+        // set transparent mode for NWF tabcontrols to have
+        // the background always cleared properly
+        EnableChildTransparentMode();
+        SetParentClipMode( ParentClipMode::NoClip );
+        SetPaintTransparent( true );
+        SetBackground();
+        ImplGetWindowImpl()->mbUseNativeFocus = ImplGetSVData()->maNWFData.mbNoFocusRects;
+    }
+    else
+    {
+        EnableChildTransparentMode( false );
+        SetParentClipMode();
+        SetPaintTransparent( false );
 
-        {
-            // set transparent mode for NWF tabcontrols to have
-            // the background always cleared properly
-            EnableChildTransparentMode();
-            SetParentClipMode( ParentClipMode::NoClip );
-            SetPaintTransparent( true );
-            SetBackground();
-            ImplGetWindowImpl()->mbUseNativeFocus = ImplGetSVData()->maNWFData.mbNoFocusRects;
-        }
+        if ( IsControlBackground() )
+            SetBackground( GetControlBackground() );
         else
-        {
-            EnableChildTransparentMode( false );
-            SetParentClipMode();
-            SetPaintTransparent( false );
-
-            if ( IsControlBackground() )
-                SetBackground( GetControlBackground() );
-            else
-                SetBackground( pParent->GetBackground() );
-        }
+            SetBackground( pParent->GetBackground() );
     }
 }
 
@@ -1674,68 +1674,68 @@ void TabControl::RemovePage( sal_uInt16 nPageId )
     sal_uInt16 nPos = GetPagePos( nPageId );
 
     // does the item exist ?
-    if ( nPos != TAB_PAGE_NOTFOUND )
+    if ( nPos == TAB_PAGE_NOTFOUND )
+        return;
+
+    //remove page item
+    std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin() + nPos;
+    bool bIsCurrentPage = (it->id() == mnCurPageId);
+    mpTabCtrlData->maItemList.erase( it );
+    if( mpTabCtrlData->mpListBox )
     {
-        //remove page item
-        std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin() + nPos;
-        bool bIsCurrentPage = (it->id() == mnCurPageId);
-        mpTabCtrlData->maItemList.erase( it );
-        if( mpTabCtrlData->mpListBox )
-        {
-            mpTabCtrlData->mpListBox->RemoveEntry( nPos );
-            mpTabCtrlData->mpListBox->SetDropDownLineCount( mpTabCtrlData->mpListBox->GetEntryCount() );
-        }
-
-        // If current page is removed, then first page gets the current page
-        if ( bIsCurrentPage  )
-        {
-            mnCurPageId = 0;
-
-            if( ! mpTabCtrlData->maItemList.empty() )
-            {
-                // don't do this by simply setting mnCurPageId to pFirstItem->id()
-                // this leaves a lot of stuff (such trivia as _showing_ the new current page) undone
-                // instead, call SetCurPageId
-                // without this, the next (outside) call to SetCurPageId with the id of the first page
-                // will result in doing nothing (as we assume that nothing changed, then), and the page
-                // will never be shown.
-                // 86875 - 05/11/2001 - frank.schoenheit@germany.sun.com
-
-                SetCurPageId(mpTabCtrlData->maItemList[0].id());
-            }
-        }
-
-        mbFormat = true;
-        if ( IsUpdateMode() )
-            Invalidate();
-
-        ImplFreeLayoutData();
-
-        CallEventListeners( VclEventId::TabpageRemoved, reinterpret_cast<void*>(nPageId) );
+        mpTabCtrlData->mpListBox->RemoveEntry( nPos );
+        mpTabCtrlData->mpListBox->SetDropDownLineCount( mpTabCtrlData->mpListBox->GetEntryCount() );
     }
+
+    // If current page is removed, then first page gets the current page
+    if ( bIsCurrentPage  )
+    {
+        mnCurPageId = 0;
+
+        if( ! mpTabCtrlData->maItemList.empty() )
+        {
+            // don't do this by simply setting mnCurPageId to pFirstItem->id()
+            // this leaves a lot of stuff (such trivia as _showing_ the new current page) undone
+            // instead, call SetCurPageId
+            // without this, the next (outside) call to SetCurPageId with the id of the first page
+            // will result in doing nothing (as we assume that nothing changed, then), and the page
+            // will never be shown.
+            // 86875 - 05/11/2001 - frank.schoenheit@germany.sun.com
+
+            SetCurPageId(mpTabCtrlData->maItemList[0].id());
+        }
+    }
+
+    mbFormat = true;
+    if ( IsUpdateMode() )
+        Invalidate();
+
+    ImplFreeLayoutData();
+
+    CallEventListeners( VclEventId::TabpageRemoved, reinterpret_cast<void*>(nPageId) );
 }
 
 void TabControl::SetPageEnabled( sal_uInt16 i_nPageId, bool i_bEnable )
 {
     ImplTabItem* pItem = ImplGetItem( i_nPageId );
 
-    if (pItem && pItem->m_bEnabled != i_bEnable)
-    {
-        pItem->m_bEnabled = i_bEnable;
-        if (!pItem->m_bVisible)
-            return;
+    if (!pItem || pItem->m_bEnabled == i_bEnable)
+        return;
 
-        mbFormat = true;
-        if( mpTabCtrlData->mpListBox )
-            mpTabCtrlData->mpListBox->SetEntryFlags( GetPagePos( i_nPageId ),
-                                                     i_bEnable ? ListBoxEntryFlags::NONE : (ListBoxEntryFlags::DisableSelection | ListBoxEntryFlags::DrawDisabled) );
+    pItem->m_bEnabled = i_bEnable;
+    if (!pItem->m_bVisible)
+        return;
 
-        // SetCurPageId will change to a valid page
-        if (pItem->id() == mnCurPageId)
-            SetCurPageId( mnCurPageId );
-        else if ( IsUpdateMode() )
-            Invalidate();
-    }
+    mbFormat = true;
+    if( mpTabCtrlData->mpListBox )
+        mpTabCtrlData->mpListBox->SetEntryFlags( GetPagePos( i_nPageId ),
+                                                 i_bEnable ? ListBoxEntryFlags::NONE : (ListBoxEntryFlags::DisableSelection | ListBoxEntryFlags::DrawDisabled) );
+
+    // SetCurPageId will change to a valid page
+    if (pItem->id() == mnCurPageId)
+        SetCurPageId( mnCurPageId );
+    else if ( IsUpdateMode() )
+        Invalidate();
 }
 
 void TabControl::SetPageVisible( sal_uInt16 nPageId, bool bVisible )
@@ -1814,25 +1814,25 @@ void TabControl::SetCurPageId( sal_uInt16 nPageId )
             break;
     }
 
-    if( nPos != TAB_PAGE_NOTFOUND )
-    {
-        nPageId = mpTabCtrlData->maItemList[nPos].id();
-        if ( nPageId == mnCurPageId )
-        {
-            if ( mnActPageId )
-                mnActPageId = nPageId;
-            return;
-        }
+    if( nPos == TAB_PAGE_NOTFOUND )
+        return;
 
+    nPageId = mpTabCtrlData->maItemList[nPos].id();
+    if ( nPageId == mnCurPageId )
+    {
         if ( mnActPageId )
             mnActPageId = nPageId;
-        else
-        {
-            mbFormat = true;
-            sal_uInt16 nOldId = mnCurPageId;
-            mnCurPageId = nPageId;
-            ImplChangeTabPage( nPageId, nOldId );
-        }
+        return;
+    }
+
+    if ( mnActPageId )
+        mnActPageId = nPageId;
+    else
+    {
+        mbFormat = true;
+        sal_uInt16 nOldId = mnCurPageId;
+        mnCurPageId = nPageId;
+        ImplChangeTabPage( nPageId, nOldId );
     }
 }
 
@@ -1846,23 +1846,23 @@ sal_uInt16 TabControl::GetCurPageId() const
 
 void TabControl::SelectTabPage( sal_uInt16 nPageId )
 {
-    if ( nPageId && (nPageId != mnCurPageId) )
-    {
-        ImplFreeLayoutData();
+    if ( !nPageId || (nPageId == mnCurPageId) )
+        return;
 
-        CallEventListeners( VclEventId::TabpageDeactivate, reinterpret_cast<void*>(mnCurPageId) );
-        if ( DeactivatePage() )
-        {
-            mnActPageId = nPageId;
-            ActivatePage();
-            // Page could have been switched by the Activate handler
-            nPageId = mnActPageId;
-            mnActPageId = 0;
-            SetCurPageId( nPageId );
-            if( mpTabCtrlData->mpListBox )
-                mpTabCtrlData->mpListBox->SelectEntryPos( GetPagePos( nPageId ) );
-            CallEventListeners( VclEventId::TabpageActivate, reinterpret_cast<void*>(nPageId) );
-        }
+    ImplFreeLayoutData();
+
+    CallEventListeners( VclEventId::TabpageDeactivate, reinterpret_cast<void*>(mnCurPageId) );
+    if ( DeactivatePage() )
+    {
+        mnActPageId = nPageId;
+        ActivatePage();
+        // Page could have been switched by the Activate handler
+        nPageId = mnActPageId;
+        mnActPageId = 0;
+        SetCurPageId( nPageId );
+        if( mpTabCtrlData->mpListBox )
+            mpTabCtrlData->mpListBox->SelectEntryPos( GetPagePos( nPageId ) );
+        CallEventListeners( VclEventId::TabpageActivate, reinterpret_cast<void*>(nPageId) );
     }
 }
 
@@ -1870,25 +1870,25 @@ void TabControl::SetTabPage( sal_uInt16 nPageId, TabPage* pTabPage )
 {
     ImplTabItem* pItem = ImplGetItem( nPageId );
 
-    if ( pItem && (pItem->mpTabPage.get() != pTabPage) )
+    if ( !pItem || (pItem->mpTabPage.get() == pTabPage) )
+        return;
+
+    if ( pTabPage )
     {
-        if ( pTabPage )
-        {
-            if ( IsDefaultSize() )
-                SetTabPageSizePixel( pTabPage->GetSizePixel() );
+        if ( IsDefaultSize() )
+            SetTabPageSizePixel( pTabPage->GetSizePixel() );
 
-            // only set here, so that Resize does not reposition TabPage
-            pItem->mpTabPage = pTabPage;
-            queue_resize();
+        // only set here, so that Resize does not reposition TabPage
+        pItem->mpTabPage = pTabPage;
+        queue_resize();
 
-            if (pItem->id() == mnCurPageId)
-                ImplChangeTabPage(pItem->id(), 0);
-        }
-        else
-        {
-            pItem->mpTabPage = nullptr;
-            queue_resize();
-        }
+        if (pItem->id() == mnCurPageId)
+            ImplChangeTabPage(pItem->id(), 0);
+    }
+    else
+    {
+        pItem->mpTabPage = nullptr;
+        queue_resize();
     }
 }
 
@@ -1906,21 +1906,21 @@ void TabControl::SetPageText( sal_uInt16 nPageId, const OUString& rText )
 {
     ImplTabItem* pItem = ImplGetItem( nPageId );
 
-    if ( pItem && pItem->maText != rText )
+    if ( !pItem || pItem->maText == rText )
+        return;
+
+    pItem->maText = rText;
+    mbFormat = true;
+    if( mpTabCtrlData->mpListBox )
     {
-        pItem->maText = rText;
-        mbFormat = true;
-        if( mpTabCtrlData->mpListBox )
-        {
-            sal_uInt16 nPos = GetPagePos( nPageId );
-            mpTabCtrlData->mpListBox->RemoveEntry( nPos );
-            mpTabCtrlData->mpListBox->InsertEntry( rText, nPos );
-        }
-        if ( IsUpdateMode() )
-            Invalidate();
-        ImplFreeLayoutData();
-        CallEventListeners( VclEventId::TabpagePageTextChanged, reinterpret_cast<void*>(nPageId) );
+        sal_uInt16 nPos = GetPagePos( nPageId );
+        mpTabCtrlData->mpListBox->RemoveEntry( nPos );
+        mpTabCtrlData->mpListBox->InsertEntry( rText, nPos );
     }
+    if ( IsUpdateMode() )
+        Invalidate();
+    ImplFreeLayoutData();
+    CallEventListeners( VclEventId::TabpagePageTextChanged, reinterpret_cast<void*>(nPageId) );
 }
 
 OUString const & TabControl::GetPageText( sal_uInt16 nPageId ) const
@@ -2203,38 +2203,38 @@ NotebookbarTabControlBase::~NotebookbarTabControlBase()
 
 void NotebookbarTabControlBase::SetContext( vcl::EnumContext::Context eContext )
 {
-    if (eLastContext != eContext)
+    if (eLastContext == eContext)
+        return;
+
+    bool bHandled = false;
+
+    for (int nChild = 0; nChild < GetPageCount(); ++nChild)
     {
-        bool bHandled = false;
+        sal_uInt16 nPageId = TabControl::GetPageId(nChild);
+        TabPage* pPage = GetTabPage(nPageId);
 
-        for (int nChild = 0; nChild < GetPageCount(); ++nChild)
+        if (pPage)
         {
-            sal_uInt16 nPageId = TabControl::GetPageId(nChild);
-            TabPage* pPage = GetTabPage(nPageId);
+            SetPageVisible(nPageId, pPage->HasContext(eContext) || pPage->HasContext(vcl::EnumContext::Context::Any));
 
-            if (pPage)
+            if (!bHandled && bLastContextWasSupported
+                && pPage->HasContext(vcl::EnumContext::Context::Default))
             {
-                SetPageVisible(nPageId, pPage->HasContext(eContext) || pPage->HasContext(vcl::EnumContext::Context::Any));
+                SetCurPageId(nPageId);
+            }
 
-                if (!bHandled && bLastContextWasSupported
-                    && pPage->HasContext(vcl::EnumContext::Context::Default))
-                {
-                    SetCurPageId(nPageId);
-                }
-
-                if (pPage->HasContext(eContext) && eContext != vcl::EnumContext::Context::Any)
-                {
-                    SetCurPageId(nPageId);
-                    bHandled = true;
-                    bLastContextWasSupported = true;
-                }
+            if (pPage->HasContext(eContext) && eContext != vcl::EnumContext::Context::Any)
+            {
+                SetCurPageId(nPageId);
+                bHandled = true;
+                bLastContextWasSupported = true;
             }
         }
-
-        if (!bHandled)
-            bLastContextWasSupported = false;
-        eLastContext = eContext;
     }
+
+    if (!bHandled)
+        bLastContextWasSupported = false;
+    eLastContext = eContext;
 }
 
 void NotebookbarTabControlBase::dispose()

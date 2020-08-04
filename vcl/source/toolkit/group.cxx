@@ -57,29 +57,29 @@ void GroupBox::ImplInitSettings( bool bBackground )
 {
     Control::ImplInitSettings();
 
-    if ( bBackground )
-    {
-        vcl::Window* pParent = GetParent();
-        if ( (pParent->IsChildTransparentModeEnabled() ||
-              !(pParent->GetStyle() & WB_CLIPCHILDREN) ) &&
-             !IsControlBackground() )
-        {
-            EnableChildTransparentMode();
-            SetParentClipMode( ParentClipMode::NoClip );
-            SetPaintTransparent( true );
-            SetBackground();
-        }
-        else
-        {
-            EnableChildTransparentMode( false );
-            SetParentClipMode();
-            SetPaintTransparent( false );
+    if ( !bBackground )
+        return;
 
-            if ( IsControlBackground() )
-                SetBackground( GetControlBackground() );
-            else
-                SetBackground( pParent->GetBackground() );
-        }
+    vcl::Window* pParent = GetParent();
+    if ( (pParent->IsChildTransparentModeEnabled() ||
+          !(pParent->GetStyle() & WB_CLIPCHILDREN) ) &&
+         !IsControlBackground() )
+    {
+        EnableChildTransparentMode();
+        SetParentClipMode( ParentClipMode::NoClip );
+        SetPaintTransparent( true );
+        SetBackground();
+    }
+    else
+    {
+        EnableChildTransparentMode( false );
+        SetParentClipMode();
+        SetPaintTransparent( false );
+
+        if ( IsControlBackground() )
+            SetBackground( GetControlBackground() );
+        else
+            SetBackground( pParent->GetBackground() );
     }
 }
 

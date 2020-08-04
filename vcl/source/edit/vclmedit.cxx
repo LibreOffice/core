@@ -845,23 +845,23 @@ void TextWindow::Command( const CommandEvent& rCEvt )
 void TextWindow::GetFocus()
 {
     Window::GetFocus();
-    if ( !mbActivePopup )
+    if ( mbActivePopup )
+        return;
+
+    bool bGotoCursor = !mpExtTextView->IsReadOnly();
+    if ( mbFocusSelectionHide && IsReallyVisible()
+            && ( mbSelectOnTab &&
+                (!mbInMBDown || ( GetSettings().GetStyleSettings().GetSelectionOptions() & SelectionOptions::Focus ) )) )
     {
-        bool bGotoCursor = !mpExtTextView->IsReadOnly();
-        if ( mbFocusSelectionHide && IsReallyVisible()
-                && ( mbSelectOnTab &&
-                    (!mbInMBDown || ( GetSettings().GetStyleSettings().GetSelectionOptions() & SelectionOptions::Focus ) )) )
-        {
-            // select everything, but do not scroll
-            bool bAutoScroll = mpExtTextView->IsAutoScroll();
-            mpExtTextView->SetAutoScroll( false );
-            mpExtTextView->SetSelection( TextSelection( TextPaM( 0, 0 ), TextPaM( TEXT_PARA_ALL, TEXT_INDEX_ALL ) ) );
-            mpExtTextView->SetAutoScroll( bAutoScroll );
-            bGotoCursor = false;
-        }
-        mpExtTextView->SetPaintSelection( true );
-        mpExtTextView->ShowCursor( bGotoCursor );
+        // select everything, but do not scroll
+        bool bAutoScroll = mpExtTextView->IsAutoScroll();
+        mpExtTextView->SetAutoScroll( false );
+        mpExtTextView->SetSelection( TextSelection( TextPaM( 0, 0 ), TextPaM( TEXT_PARA_ALL, TEXT_INDEX_ALL ) ) );
+        mpExtTextView->SetAutoScroll( bAutoScroll );
+        bGotoCursor = false;
     }
+    mpExtTextView->SetPaintSelection( true );
+    mpExtTextView->ShowCursor( bGotoCursor );
 }
 
 void TextWindow::LoseFocus()
@@ -986,25 +986,25 @@ void VclMultiLineEdit::ImplInitSettings(bool bBackground)
     pImpVclMEdit->GetTextWindow()->GetTextEngine()->SetFont(TheFont);
     pImpVclMEdit->GetTextWindow()->SetTextColor(aTextColor);
 
-    if (bBackground)
+    if (!bBackground)
+        return;
+
+    if (IsPaintTransparent())
     {
-        if (IsPaintTransparent())
-        {
-            pImpVclMEdit->GetTextWindow()->SetPaintTransparent(true);
-            pImpVclMEdit->GetTextWindow()->SetBackground();
-            pImpVclMEdit->GetTextWindow()->SetControlBackground();
-            SetBackground();
-            SetControlBackground();
-        }
+        pImpVclMEdit->GetTextWindow()->SetPaintTransparent(true);
+        pImpVclMEdit->GetTextWindow()->SetBackground();
+        pImpVclMEdit->GetTextWindow()->SetControlBackground();
+        SetBackground();
+        SetControlBackground();
+    }
+    else
+    {
+        if (IsControlBackground())
+            pImpVclMEdit->GetTextWindow()->SetBackground(GetControlBackground());
         else
-        {
-            if (IsControlBackground())
-                pImpVclMEdit->GetTextWindow()->SetBackground(GetControlBackground());
-            else
-                pImpVclMEdit->GetTextWindow()->SetBackground(rStyleSettings.GetFieldColor());
-            // also adjust for VclMultiLineEdit as the TextComponent might hide Scrollbars
-            SetBackground(pImpVclMEdit->GetTextWindow()->GetBackground());
-        }
+            pImpVclMEdit->GetTextWindow()->SetBackground(rStyleSettings.GetFieldColor());
+        // also adjust for VclMultiLineEdit as the TextComponent might hide Scrollbars
+        SetBackground(pImpVclMEdit->GetTextWindow()->GetBackground());
     }
 }
 

@@ -415,37 +415,37 @@ bool EMFWriter::ImplPrepareHandleSelect( sal_uInt32& rHandle, sal_uLong nSelectT
 
 void EMFWriter::ImplCheckLineAttr()
 {
-    if( mbLineChanged && ImplPrepareHandleSelect( mnLineHandle, LINE_SELECT ) )
-    {
-        sal_uInt32 nStyle = maVDev->IsLineColor() ? 0 : 5;
+    if( !(mbLineChanged && ImplPrepareHandleSelect( mnLineHandle, LINE_SELECT )) )
+        return;
 
-        ImplBeginRecord( WIN_EMR_CREATEPEN );
-        m_rStm.WriteUInt32( mnLineHandle ).WriteUInt32( nStyle ).WriteUInt32( 0/*nWidth*/ ).WriteUInt32( 0/*nHeight*/ );
-        ImplWriteColor( maVDev->GetLineColor() );
-        ImplEndRecord();
+    sal_uInt32 nStyle = maVDev->IsLineColor() ? 0 : 5;
 
-        ImplBeginRecord( WIN_EMR_SELECTOBJECT );
-        m_rStm.WriteUInt32( mnLineHandle );
-        ImplEndRecord();
-    }
+    ImplBeginRecord( WIN_EMR_CREATEPEN );
+    m_rStm.WriteUInt32( mnLineHandle ).WriteUInt32( nStyle ).WriteUInt32( 0/*nWidth*/ ).WriteUInt32( 0/*nHeight*/ );
+    ImplWriteColor( maVDev->GetLineColor() );
+    ImplEndRecord();
+
+    ImplBeginRecord( WIN_EMR_SELECTOBJECT );
+    m_rStm.WriteUInt32( mnLineHandle );
+    ImplEndRecord();
 }
 
 void EMFWriter::ImplCheckFillAttr()
 {
-    if( mbFillChanged && ImplPrepareHandleSelect( mnFillHandle, FILL_SELECT ) )
-    {
-        sal_uInt32 nStyle = maVDev->IsFillColor() ? 0 : 1;
+    if( !(mbFillChanged && ImplPrepareHandleSelect( mnFillHandle, FILL_SELECT )) )
+        return;
 
-        ImplBeginRecord( WIN_EMR_CREATEBRUSHINDIRECT );
-        m_rStm.WriteUInt32( mnFillHandle ).WriteUInt32( nStyle );
-        ImplWriteColor( maVDev->GetFillColor() );
-        m_rStm.WriteUInt32( 0/*nPatternStyle*/ );
-        ImplEndRecord();
+    sal_uInt32 nStyle = maVDev->IsFillColor() ? 0 : 1;
 
-        ImplBeginRecord( WIN_EMR_SELECTOBJECT );
-        m_rStm.WriteUInt32( mnFillHandle );
-        ImplEndRecord();
-    }
+    ImplBeginRecord( WIN_EMR_CREATEBRUSHINDIRECT );
+    m_rStm.WriteUInt32( mnFillHandle ).WriteUInt32( nStyle );
+    ImplWriteColor( maVDev->GetFillColor() );
+    m_rStm.WriteUInt32( 0/*nPatternStyle*/ );
+    ImplEndRecord();
+
+    ImplBeginRecord( WIN_EMR_SELECTOBJECT );
+    m_rStm.WriteUInt32( mnFillHandle );
+    ImplEndRecord();
 }
 
 void EMFWriter::ImplCheckTextAttr()
@@ -618,26 +618,26 @@ void EMFWriter::ImplWriteRect( const tools::Rectangle& rRect )
 
 void EMFWriter::ImplWritePolygonRecord( const tools::Polygon& rPoly, bool bClose )
 {
-    if( rPoly.GetSize() )
+    if( !rPoly.GetSize() )
+        return;
+
+    if( rPoly.HasFlags() )
+        ImplWritePath( rPoly, bClose );
+    else
     {
-        if( rPoly.HasFlags() )
-            ImplWritePath( rPoly, bClose );
-        else
-        {
-            if( bClose )
-                ImplCheckFillAttr();
+        if( bClose )
+            ImplCheckFillAttr();
 
-            ImplCheckLineAttr();
+        ImplCheckLineAttr();
 
-            ImplBeginRecord( bClose ? WIN_EMR_POLYGON : WIN_EMR_POLYLINE );
-            ImplWriteRect( rPoly.GetBoundRect() );
-            m_rStm.WriteUInt32( rPoly.GetSize() );
+        ImplBeginRecord( bClose ? WIN_EMR_POLYGON : WIN_EMR_POLYLINE );
+        ImplWriteRect( rPoly.GetBoundRect() );
+        m_rStm.WriteUInt32( rPoly.GetSize() );
 
-            for( sal_uInt16 i = 0; i < rPoly.GetSize(); i++ )
-                ImplWritePoint( rPoly[ i ] );
+        for( sal_uInt16 i = 0; i < rPoly.GetSize(); i++ )
+            ImplWritePoint( rPoly[ i ] );
 
-            ImplEndRecord();
-        }
+        ImplEndRecord();
     }
 }
 
@@ -645,46 +645,46 @@ void EMFWriter::ImplWritePolyPolygonRecord( const tools::PolyPolygon& rPolyPoly 
 {
     sal_uInt16 n, i, nPolyCount = rPolyPoly.Count();
 
-    if( nPolyCount )
+    if( !nPolyCount )
+        return;
+
+    if( 1 == nPolyCount )
+        ImplWritePolygonRecord( rPolyPoly[ 0 ], true );
+    else
     {
-        if( 1 == nPolyCount )
-            ImplWritePolygonRecord( rPolyPoly[ 0 ], true );
-        else
+        bool    bHasFlags = false;
+        sal_uInt32  nTotalPoints = 0;
+
+        for( i = 0; i < nPolyCount; i++ )
         {
-            bool    bHasFlags = false;
-            sal_uInt32  nTotalPoints = 0;
+            nTotalPoints += rPolyPoly[ i ].GetSize();
+            if ( rPolyPoly[ i ].HasFlags() )
+                bHasFlags = true;
+        }
+        if( nTotalPoints )
+        {
+            if ( bHasFlags )
+                ImplWritePath( rPolyPoly, true );
+            else
+            {
+                ImplCheckFillAttr();
+                ImplCheckLineAttr();
 
-            for( i = 0; i < nPolyCount; i++ )
-            {
-                nTotalPoints += rPolyPoly[ i ].GetSize();
-                if ( rPolyPoly[ i ].HasFlags() )
-                    bHasFlags = true;
-            }
-            if( nTotalPoints )
-            {
-                if ( bHasFlags )
-                    ImplWritePath( rPolyPoly, true );
-                else
+                ImplBeginRecord( WIN_EMR_POLYPOLYGON );
+                ImplWriteRect( rPolyPoly.GetBoundRect() );
+                m_rStm.WriteUInt32( nPolyCount ).WriteUInt32( nTotalPoints );
+
+                for( i = 0; i < nPolyCount; i++ )
+                    m_rStm.WriteUInt32( rPolyPoly[ i ].GetSize() );
+
+                for( i = 0; i < nPolyCount; i++ )
                 {
-                    ImplCheckFillAttr();
-                    ImplCheckLineAttr();
+                    const tools::Polygon& rPoly = rPolyPoly[ i ];
 
-                    ImplBeginRecord( WIN_EMR_POLYPOLYGON );
-                    ImplWriteRect( rPolyPoly.GetBoundRect() );
-                    m_rStm.WriteUInt32( nPolyCount ).WriteUInt32( nTotalPoints );
-
-                    for( i = 0; i < nPolyCount; i++ )
-                        m_rStm.WriteUInt32( rPolyPoly[ i ].GetSize() );
-
-                    for( i = 0; i < nPolyCount; i++ )
-                    {
-                        const tools::Polygon& rPoly = rPolyPoly[ i ];
-
-                        for( n = 0; n < rPoly.GetSize(); n++ )
-                            ImplWritePoint( rPoly[ n ] );
-                    }
-                    ImplEndRecord();
+                    for( n = 0; n < rPoly.GetSize(); n++ )
+                        ImplWritePoint( rPoly[ n ] );
                 }
+                ImplEndRecord();
             }
         }
     }
@@ -911,38 +911,38 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, c
 
 void EMFWriter::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon)
 {
-    if(rLinePolygon.count())
+    if(!rLinePolygon.count())
+        return;
+
+    basegfx::B2DPolyPolygon aLinePolyPolygon(rLinePolygon);
+    basegfx::B2DPolyPolygon aFillPolyPolygon;
+
+    rInfo.applyToB2DPolyPolygon(aLinePolyPolygon, aFillPolyPolygon);
+
+    if(aLinePolyPolygon.count())
     {
-        basegfx::B2DPolyPolygon aLinePolyPolygon(rLinePolygon);
-        basegfx::B2DPolyPolygon aFillPolyPolygon;
-
-        rInfo.applyToB2DPolyPolygon(aLinePolyPolygon, aFillPolyPolygon);
-
-        if(aLinePolyPolygon.count())
+        for(auto const& rB2DPolygon : aLinePolyPolygon)
         {
-            for(auto const& rB2DPolygon : aLinePolyPolygon)
-            {
-                ImplWritePolygonRecord( tools::Polygon(rB2DPolygon), false );
-            }
-        }
-
-        if(aFillPolyPolygon.count())
-        {
-            const Color aOldLineColor(maVDev->GetLineColor());
-            const Color aOldFillColor(maVDev->GetFillColor());
-
-            maVDev->SetLineColor();
-            maVDev->SetFillColor(aOldLineColor);
-
-            for(auto const& rB2DPolygon : aFillPolyPolygon)
-            {
-                ImplWritePolyPolygonRecord(tools::PolyPolygon( tools::Polygon(rB2DPolygon) ));
-            }
-
-            maVDev->SetLineColor(aOldLineColor);
-            maVDev->SetFillColor(aOldFillColor);
+            ImplWritePolygonRecord( tools::Polygon(rB2DPolygon), false );
         }
     }
+
+    if(!aFillPolyPolygon.count())
+        return;
+
+    const Color aOldLineColor(maVDev->GetLineColor());
+    const Color aOldFillColor(maVDev->GetFillColor());
+
+    maVDev->SetLineColor();
+    maVDev->SetFillColor(aOldLineColor);
+
+    for(auto const& rB2DPolygon : aFillPolyPolygon)
+    {
+        ImplWritePolyPolygonRecord(tools::PolyPolygon( tools::Polygon(rB2DPolygon) ));
+    }
+
+    maVDev->SetLineColor(aOldLineColor);
+    maVDev->SetFillColor(aOldFillColor);
 }
 
 void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )

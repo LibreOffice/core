@@ -731,27 +731,27 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoin
     mpProgram->DrawArrays(GL_TRIANGLE_FAN, aVertices);
     CHECK_GL_ERROR();
 
-    if( !blockAA && mrParent.getAntiAliasB2DDraw())
-    {
-        // Make the edges antialiased by drawing the edge lines again with AA.
-        // TODO: If transparent drawing is set up, drawing the lines themselves twice
-        // may be a problem, if that is a real problem, the polygon areas itself needs to be
-        // masked out for this or something.
+    if( blockAA || !mrParent.getAntiAliasB2DDraw())
+        return;
+
+    // Make the edges antialiased by drawing the edge lines again with AA.
+    // TODO: If transparent drawing is set up, drawing the lines themselves twice
+    // may be a problem, if that is a real problem, the polygon areas itself needs to be
+    // masked out for this or something.
 #ifdef DBG_UTIL
-        assert( mProgramIsSolidColor );
+    assert( mProgramIsSolidColor );
 #endif
-        Color lastSolidColor = mProgramSolidColor;
-        double lastSolidTransparency = mProgramSolidTransparency;
-        if (UseLine(lastSolidColor, lastSolidTransparency, 1.0f, true))
+    Color lastSolidColor = mProgramSolidColor;
+    double lastSolidTransparency = mProgramSolidTransparency;
+    if (UseLine(lastSolidColor, lastSolidTransparency, 1.0f, true))
+    {
+        for( i = 0; i < nPoints; ++i )
         {
-            for( i = 0; i < nPoints; ++i )
-            {
-                const SalPoint& rPt1 = pPtAry[ i ];
-                const SalPoint& rPt2 = pPtAry[ ( i + 1 ) % nPoints ];
-                DrawLineSegment(rPt1.mnX, rPt1.mnY, rPt2.mnX, rPt2.mnY);
-            }
-            UseSolid( lastSolidColor, lastSolidTransparency );
+            const SalPoint& rPt1 = pPtAry[ i ];
+            const SalPoint& rPt2 = pPtAry[ ( i + 1 ) % nPoints ];
+            DrawLineSegment(rPt1.mnX, rPt1.mnY, rPt2.mnX, rPt2.mnY);
         }
+        UseSolid( lastSolidColor, lastSolidTransparency );
     }
 }
 
@@ -776,27 +776,27 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( const tools::Polygon& rPolygon, b
     mpProgram->DrawArrays(GL_TRIANGLE_FAN, aVertices);
     CHECK_GL_ERROR();
 
-    if( !blockAA && mrParent.getAntiAliasB2DDraw())
-    {
-        // Make the edges antialiased by drawing the edge lines again with AA.
-        // TODO: If transparent drawing is set up, drawing the lines themselves twice
-        // may be a problem, if that is a real problem, the polygon areas itself needs to be
-        // masked out for this or something.
+    if( blockAA || !mrParent.getAntiAliasB2DDraw())
+        return;
+
+    // Make the edges antialiased by drawing the edge lines again with AA.
+    // TODO: If transparent drawing is set up, drawing the lines themselves twice
+    // may be a problem, if that is a real problem, the polygon areas itself needs to be
+    // masked out for this or something.
 #ifdef DBG_UTIL
-        assert( mProgramIsSolidColor );
+    assert( mProgramIsSolidColor );
 #endif
-        Color lastSolidColor = mProgramSolidColor;
-        double lastSolidTransparency = mProgramSolidTransparency;
-        if (UseLine(lastSolidColor, lastSolidTransparency, 1.0f, true))
+    Color lastSolidColor = mProgramSolidColor;
+    double lastSolidTransparency = mProgramSolidTransparency;
+    if (UseLine(lastSolidColor, lastSolidTransparency, 1.0f, true))
+    {
+        for( i = 0; i < nPoints; ++i )
         {
-            for( i = 0; i < nPoints; ++i )
-            {
-                const Point& rPt1 = rPolygon.GetPoint( i );
-                const Point& rPt2 = rPolygon.GetPoint(( i + 1 ) % nPoints );
-                DrawLineSegment(rPt1.getX(), rPt1.getY(), rPt2.getX(), rPt2.getY());
-            }
-            UseSolid( lastSolidColor, lastSolidTransparency );
+            const Point& rPt1 = rPolygon.GetPoint( i );
+            const Point& rPt2 = rPolygon.GetPoint(( i + 1 ) % nPoints );
+            DrawLineSegment(rPt1.getX(), rPt1.getY(), rPt2.getX(), rPt2.getY());
         }
+        UseSolid( lastSolidColor, lastSolidTransparency );
     }
 }
 
@@ -828,27 +828,27 @@ void OpenGLSalGraphicsImpl::DrawTrapezoid( const basegfx::B2DTrapezoid& trapezoi
     mpProgram->DrawArrays(GL_TRIANGLE_FAN, aVertices);
     CHECK_GL_ERROR();
 
-    if( !blockAA && mrParent.getAntiAliasB2DDraw())
-    {
-        // Make the edges antialiased by drawing the edge lines again with AA.
-        // TODO: If transparent drawing is set up, drawing the lines themselves twice
-        // may be a problem, if that is a real problem, the polygon areas itself needs to be
-        // masked out for this or something.
+    if( blockAA || !mrParent.getAntiAliasB2DDraw())
+        return;
+
+    // Make the edges antialiased by drawing the edge lines again with AA.
+    // TODO: If transparent drawing is set up, drawing the lines themselves twice
+    // may be a problem, if that is a real problem, the polygon areas itself needs to be
+    // masked out for this or something.
 #ifdef DBG_UTIL
-        assert( mProgramIsSolidColor );
+    assert( mProgramIsSolidColor );
 #endif
-        Color lastSolidColor = mProgramSolidColor;
-        double lastSolidTransparency = mProgramSolidTransparency;
-        if (UseLine(lastSolidColor, lastSolidTransparency, 1.0f, true))
+    Color lastSolidColor = mProgramSolidColor;
+    double lastSolidTransparency = mProgramSolidTransparency;
+    if (UseLine(lastSolidColor, lastSolidTransparency, 1.0f, true))
+    {
+        for( i = 0; i < nPoints; ++i )
         {
-            for( i = 0; i < nPoints; ++i )
-            {
-                const basegfx::B2DPoint& rPt1 = rPolygon.getB2DPoint( i );
-                const basegfx::B2DPoint& rPt2 = rPolygon.getB2DPoint(( i + 1 ) % nPoints );
-                DrawLineSegment(rPt1.getX(), rPt1.getY(), rPt2.getX(), rPt2.getY());
-            }
-            UseSolid( lastSolidColor, lastSolidTransparency );
+            const basegfx::B2DPoint& rPt1 = rPolygon.getB2DPoint( i );
+            const basegfx::B2DPoint& rPt2 = rPolygon.getB2DPoint(( i + 1 ) % nPoints );
+            DrawLineSegment(rPt1.getX(), rPt1.getY(), rPt2.getX(), rPt2.getY());
         }
+        UseSolid( lastSolidColor, lastSolidTransparency );
     }
 }
 

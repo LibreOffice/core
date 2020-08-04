@@ -169,39 +169,39 @@ GLuint ImplOpenGLTexture::AddStencil()
 ImplOpenGLTexture::~ImplOpenGLTexture()
 {
     VCL_GL_INFO( "~OpenGLTexture " << mnTexture );
-    if( mnTexture != 0 )
+    if( mnTexture == 0 )
+        return;
+
+    // During shutdown GL is already de-initialized, so we should not try to create a new context.
+    OpenGLZone aZone;
+    rtl::Reference<OpenGLContext> xContext = OpenGLContext::getVCLContext(false);
+    if( xContext.is() )
     {
-        // During shutdown GL is already de-initialized, so we should not try to create a new context.
-        OpenGLZone aZone;
-        rtl::Reference<OpenGLContext> xContext = OpenGLContext::getVCLContext(false);
-        if( xContext.is() )
+        // FIXME: this is really not optimal performance-wise.
+
+        // Check we have been correctly un-bound from all framebuffers.
+        ImplSVData* pSVData = ImplGetSVData();
+        rtl::Reference<OpenGLContext> pContext = pSVData->maGDIData.mpLastContext;
+
+        if( pContext.is() )
         {
-            // FIXME: this is really not optimal performance-wise.
-
-            // Check we have been correctly un-bound from all framebuffers.
-            ImplSVData* pSVData = ImplGetSVData();
-            rtl::Reference<OpenGLContext> pContext = pSVData->maGDIData.mpLastContext;
-
-            if( pContext.is() )
-            {
-                pContext->makeCurrent();
-                pContext->UnbindTextureFromFramebuffers( mnTexture );
-            }
-
-            if( mnOptStencil != 0 )
-            {
-                glDeleteRenderbuffers( 1, &mnOptStencil );
-                mnOptStencil = 0;
-            }
-            auto& rState = pContext->state();
-            rState.texture().unbindAndDelete(mnTexture);
-            mnTexture = 0;
+            pContext->makeCurrent();
+            pContext->UnbindTextureFromFramebuffers( mnTexture );
         }
-        else
+
+        if( mnOptStencil != 0 )
         {
+            glDeleteRenderbuffers( 1, &mnOptStencil );
             mnOptStencil = 0;
-            mnTexture = 0;
         }
+        auto& rState = pContext->state();
+        rState.texture().unbindAndDelete(mnTexture);
+        mnTexture = 0;
+    }
+    else
+    {
+        mnOptStencil = 0;
+        mnTexture = 0;
     }
 }
 

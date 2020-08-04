@@ -394,40 +394,40 @@ BmpMirrorFlags AdjustTwoRect( SalTwoRect& rTwoRect, const Size& rSizePix )
 
 void AdjustTwoRect( SalTwoRect& rTwoRect, const tools::Rectangle& rValidSrcRect )
 {
-    if( ( rTwoRect.mnSrcX < rValidSrcRect.Left() ) || ( rTwoRect.mnSrcX >= rValidSrcRect.Right() ) ||
+    if( !(( rTwoRect.mnSrcX < rValidSrcRect.Left() ) || ( rTwoRect.mnSrcX >= rValidSrcRect.Right() ) ||
         ( rTwoRect.mnSrcY < rValidSrcRect.Top() ) || ( rTwoRect.mnSrcY >= rValidSrcRect.Bottom() ) ||
         ( ( rTwoRect.mnSrcX + rTwoRect.mnSrcWidth ) > rValidSrcRect.Right() ) ||
-        ( ( rTwoRect.mnSrcY + rTwoRect.mnSrcHeight ) > rValidSrcRect.Bottom() ) )
+        ( ( rTwoRect.mnSrcY + rTwoRect.mnSrcHeight ) > rValidSrcRect.Bottom() )) )
+        return;
+
+    const tools::Rectangle aSourceRect( Point( rTwoRect.mnSrcX, rTwoRect.mnSrcY ),
+                                 Size( rTwoRect.mnSrcWidth, rTwoRect.mnSrcHeight ) );
+    tools::Rectangle aCropRect( aSourceRect );
+
+    aCropRect.Intersection( rValidSrcRect );
+
+    if( aCropRect.IsEmpty() )
     {
-        const tools::Rectangle aSourceRect( Point( rTwoRect.mnSrcX, rTwoRect.mnSrcY ),
-                                     Size( rTwoRect.mnSrcWidth, rTwoRect.mnSrcHeight ) );
-        tools::Rectangle aCropRect( aSourceRect );
+        rTwoRect.mnSrcWidth = rTwoRect.mnSrcHeight = rTwoRect.mnDestWidth = rTwoRect.mnDestHeight = 0;
+    }
+    else
+    {
+        const double fFactorX = ( rTwoRect.mnSrcWidth > 1 ) ? static_cast<double>( rTwoRect.mnDestWidth - 1 ) / ( rTwoRect.mnSrcWidth - 1 ) : 0.0;
+        const double fFactorY = ( rTwoRect.mnSrcHeight > 1 ) ? static_cast<double>( rTwoRect.mnDestHeight - 1 ) / ( rTwoRect.mnSrcHeight - 1 ) : 0.0;
 
-        aCropRect.Intersection( rValidSrcRect );
+        const long nDstX1 = rTwoRect.mnDestX + FRound( fFactorX * ( aCropRect.Left() - rTwoRect.mnSrcX ) );
+        const long nDstY1 = rTwoRect.mnDestY + FRound( fFactorY * ( aCropRect.Top() - rTwoRect.mnSrcY ) );
+        const long nDstX2 = rTwoRect.mnDestX + FRound( fFactorX * ( aCropRect.Right() - rTwoRect.mnSrcX ) );
+        const long nDstY2 = rTwoRect.mnDestY + FRound( fFactorY * ( aCropRect.Bottom() - rTwoRect.mnSrcY ) );
 
-        if( aCropRect.IsEmpty() )
-        {
-            rTwoRect.mnSrcWidth = rTwoRect.mnSrcHeight = rTwoRect.mnDestWidth = rTwoRect.mnDestHeight = 0;
-        }
-        else
-        {
-            const double fFactorX = ( rTwoRect.mnSrcWidth > 1 ) ? static_cast<double>( rTwoRect.mnDestWidth - 1 ) / ( rTwoRect.mnSrcWidth - 1 ) : 0.0;
-            const double fFactorY = ( rTwoRect.mnSrcHeight > 1 ) ? static_cast<double>( rTwoRect.mnDestHeight - 1 ) / ( rTwoRect.mnSrcHeight - 1 ) : 0.0;
-
-            const long nDstX1 = rTwoRect.mnDestX + FRound( fFactorX * ( aCropRect.Left() - rTwoRect.mnSrcX ) );
-            const long nDstY1 = rTwoRect.mnDestY + FRound( fFactorY * ( aCropRect.Top() - rTwoRect.mnSrcY ) );
-            const long nDstX2 = rTwoRect.mnDestX + FRound( fFactorX * ( aCropRect.Right() - rTwoRect.mnSrcX ) );
-            const long nDstY2 = rTwoRect.mnDestY + FRound( fFactorY * ( aCropRect.Bottom() - rTwoRect.mnSrcY ) );
-
-            rTwoRect.mnSrcX = aCropRect.Left();
-            rTwoRect.mnSrcY = aCropRect.Top();
-            rTwoRect.mnSrcWidth = aCropRect.GetWidth();
-            rTwoRect.mnSrcHeight = aCropRect.GetHeight();
-            rTwoRect.mnDestX = nDstX1;
-            rTwoRect.mnDestY = nDstY1;
-            rTwoRect.mnDestWidth = nDstX2 - nDstX1 + 1;
-            rTwoRect.mnDestHeight = nDstY2 - nDstY1 + 1;
-        }
+        rTwoRect.mnSrcX = aCropRect.Left();
+        rTwoRect.mnSrcY = aCropRect.Top();
+        rTwoRect.mnSrcWidth = aCropRect.GetWidth();
+        rTwoRect.mnSrcHeight = aCropRect.GetHeight();
+        rTwoRect.mnDestX = nDstX1;
+        rTwoRect.mnDestY = nDstY1;
+        rTwoRect.mnDestWidth = nDstX2 - nDstX1 + 1;
+        rTwoRect.mnDestHeight = nDstY2 - nDstY1 + 1;
     }
 }
 

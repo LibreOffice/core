@@ -304,95 +304,95 @@ void TextView::ImpHighlight( const TextSelection& rSel )
 {
     TextSelection aSel( rSel );
     aSel.Justify();
-    if ( aSel.HasRange() && !mpImpl->mpTextEngine->IsInUndo() && mpImpl->mpTextEngine->GetUpdateMode() )
+    if ( !(aSel.HasRange() && !mpImpl->mpTextEngine->IsInUndo() && mpImpl->mpTextEngine->GetUpdateMode()) )
+        return;
+
+    mpImpl->mpCursor->Hide();
+
+    SAL_WARN_IF( mpImpl->mpTextEngine->mpIdleFormatter->IsActive(), "vcl", "ImpHighlight: Not formatted!" );
+
+    tools::Rectangle aVisArea( mpImpl->maStartDocPos, mpImpl->mpWindow->GetOutputSizePixel() );
+    long nY = 0;
+    const sal_uInt32 nStartPara = aSel.GetStart().GetPara();
+    const sal_uInt32 nEndPara = aSel.GetEnd().GetPara();
+    for ( sal_uInt32 nPara = 0; nPara <= nEndPara; ++nPara )
     {
-        mpImpl->mpCursor->Hide();
-
-        SAL_WARN_IF( mpImpl->mpTextEngine->mpIdleFormatter->IsActive(), "vcl", "ImpHighlight: Not formatted!" );
-
-        tools::Rectangle aVisArea( mpImpl->maStartDocPos, mpImpl->mpWindow->GetOutputSizePixel() );
-        long nY = 0;
-        const sal_uInt32 nStartPara = aSel.GetStart().GetPara();
-        const sal_uInt32 nEndPara = aSel.GetEnd().GetPara();
-        for ( sal_uInt32 nPara = 0; nPara <= nEndPara; ++nPara )
+        const long nParaHeight = mpImpl->mpTextEngine->CalcParaHeight( nPara );
+        if ( ( nPara >= nStartPara ) && ( ( nY + nParaHeight ) > aVisArea.Top() ) )
         {
-            const long nParaHeight = mpImpl->mpTextEngine->CalcParaHeight( nPara );
-            if ( ( nPara >= nStartPara ) && ( ( nY + nParaHeight ) > aVisArea.Top() ) )
+            TEParaPortion* pTEParaPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( nPara );
+            std::vector<TextLine>::size_type nStartLine = 0;
+            std::vector<TextLine>::size_type nEndLine = pTEParaPortion->GetLines().size() -1;
+            if ( nPara == nStartPara )
+                nStartLine = pTEParaPortion->GetLineNumber( aSel.GetStart().GetIndex(), false );
+            if ( nPara == nEndPara )
+                nEndLine = pTEParaPortion->GetLineNumber( aSel.GetEnd().GetIndex(), true );
+
+            // iterate over all lines
+            for ( std::vector<TextLine>::size_type nLine = nStartLine; nLine <= nEndLine; nLine++ )
             {
-                TEParaPortion* pTEParaPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( nPara );
-                std::vector<TextLine>::size_type nStartLine = 0;
-                std::vector<TextLine>::size_type nEndLine = pTEParaPortion->GetLines().size() -1;
-                if ( nPara == nStartPara )
-                    nStartLine = pTEParaPortion->GetLineNumber( aSel.GetStart().GetIndex(), false );
-                if ( nPara == nEndPara )
-                    nEndLine = pTEParaPortion->GetLineNumber( aSel.GetEnd().GetIndex(), true );
+                TextLine& rLine = pTEParaPortion->GetLines()[ nLine ];
+                sal_Int32 nStartIndex = rLine.GetStart();
+                sal_Int32 nEndIndex = rLine.GetEnd();
+                if ( ( nPara == nStartPara ) && ( nLine == nStartLine ) )
+                    nStartIndex = aSel.GetStart().GetIndex();
+                if ( ( nPara == nEndPara ) && ( nLine == nEndLine ) )
+                    nEndIndex = aSel.GetEnd().GetIndex();
 
-                // iterate over all lines
-                for ( std::vector<TextLine>::size_type nLine = nStartLine; nLine <= nEndLine; nLine++ )
+                // possible if at the beginning of a wrapped line
+                if ( nEndIndex < nStartIndex )
+                    nEndIndex = nStartIndex;
+
+                tools::Rectangle aTmpRect( mpImpl->mpTextEngine->GetEditCursor( TextPaM( nPara, nStartIndex ), false ) );
+                aTmpRect.AdjustTop(nY );
+                aTmpRect.AdjustBottom(nY );
+                Point aTopLeft( aTmpRect.TopLeft() );
+
+                aTmpRect = mpImpl->mpTextEngine->GetEditCursor( TextPaM( nPara, nEndIndex ), true );
+                aTmpRect.AdjustTop(nY );
+                aTmpRect.AdjustBottom(nY );
+                Point aBottomRight( aTmpRect.BottomRight() );
+                aBottomRight.AdjustX( -1 );
+
+                // only paint if in the visible region
+                if ( ( aTopLeft.X() < aBottomRight.X() ) && ( aBottomRight.Y() >= aVisArea.Top() ) )
                 {
-                    TextLine& rLine = pTEParaPortion->GetLines()[ nLine ];
-                    sal_Int32 nStartIndex = rLine.GetStart();
-                    sal_Int32 nEndIndex = rLine.GetEnd();
-                    if ( ( nPara == nStartPara ) && ( nLine == nStartLine ) )
-                        nStartIndex = aSel.GetStart().GetIndex();
-                    if ( ( nPara == nEndPara ) && ( nLine == nEndLine ) )
-                        nEndIndex = aSel.GetEnd().GetIndex();
+                    Point aPnt1( GetWindowPos( aTopLeft ) );
+                    Point aPnt2( GetWindowPos( aBottomRight ) );
 
-                    // possible if at the beginning of a wrapped line
-                    if ( nEndIndex < nStartIndex )
-                        nEndIndex = nStartIndex;
-
-                    tools::Rectangle aTmpRect( mpImpl->mpTextEngine->GetEditCursor( TextPaM( nPara, nStartIndex ), false ) );
-                    aTmpRect.AdjustTop(nY );
-                    aTmpRect.AdjustBottom(nY );
-                    Point aTopLeft( aTmpRect.TopLeft() );
-
-                    aTmpRect = mpImpl->mpTextEngine->GetEditCursor( TextPaM( nPara, nEndIndex ), true );
-                    aTmpRect.AdjustTop(nY );
-                    aTmpRect.AdjustBottom(nY );
-                    Point aBottomRight( aTmpRect.BottomRight() );
-                    aBottomRight.AdjustX( -1 );
-
-                    // only paint if in the visible region
-                    if ( ( aTopLeft.X() < aBottomRight.X() ) && ( aBottomRight.Y() >= aVisArea.Top() ) )
-                    {
-                        Point aPnt1( GetWindowPos( aTopLeft ) );
-                        Point aPnt2( GetWindowPos( aBottomRight ) );
-
-                        tools::Rectangle aRect( aPnt1, aPnt2 );
-                        mpImpl->mpWindow->Invert( aRect );
-                    }
+                    tools::Rectangle aRect( aPnt1, aPnt2 );
+                    mpImpl->mpWindow->Invert( aRect );
                 }
             }
-            nY += nParaHeight;
-
-            if ( nY >= aVisArea.Bottom() )
-                break;
         }
+        nY += nParaHeight;
+
+        if ( nY >= aVisArea.Bottom() )
+            break;
     }
 }
 
 void TextView::ImpSetSelection( const TextSelection& rSelection )
 {
-    if (rSelection != mpImpl->maSelection)
-    {
-        bool bCaret = false, bSelection = false;
-        const TextPaM &rEnd = rSelection.GetEnd();
-        const TextPaM &rOldEnd = mpImpl->maSelection.GetEnd();
-        bool bGap = rSelection.HasRange(), bOldGap = mpImpl->maSelection.HasRange();
-        if (rEnd != rOldEnd)
-            bCaret = true;
-        if (bGap || bOldGap)
-            bSelection = true;
+    if (rSelection == mpImpl->maSelection)
+        return;
 
-        mpImpl->maSelection = rSelection;
+    bool bCaret = false, bSelection = false;
+    const TextPaM &rEnd = rSelection.GetEnd();
+    const TextPaM &rOldEnd = mpImpl->maSelection.GetEnd();
+    bool bGap = rSelection.HasRange(), bOldGap = mpImpl->maSelection.HasRange();
+    if (rEnd != rOldEnd)
+        bCaret = true;
+    if (bGap || bOldGap)
+        bSelection = true;
 
-        if (bSelection)
-            mpImpl->mpTextEngine->Broadcast(TextHint(SfxHintId::TextViewSelectionChanged));
+    mpImpl->maSelection = rSelection;
 
-        if (bCaret)
-            mpImpl->mpTextEngine->Broadcast(TextHint(SfxHintId::TextViewCaretChanged));
-    }
+    if (bSelection)
+        mpImpl->mpTextEngine->Broadcast(TextHint(SfxHintId::TextViewSelectionChanged));
+
+    if (bCaret)
+        mpImpl->mpTextEngine->Broadcast(TextHint(SfxHintId::TextViewCaretChanged));
 }
 
 void TextView::ShowSelection()
@@ -414,26 +414,26 @@ void TextView::ImpShowHideSelection(const TextSelection* pRange)
 {
     const TextSelection* pRangeOrSelection = pRange ? pRange : &mpImpl->maSelection;
 
-    if ( pRangeOrSelection->HasRange() )
+    if ( !pRangeOrSelection->HasRange() )
+        return;
+
+    if ( mpImpl->mbHighlightSelection )
     {
-        if ( mpImpl->mbHighlightSelection )
-        {
-            ImpHighlight( *pRangeOrSelection );
-        }
+        ImpHighlight( *pRangeOrSelection );
+    }
+    else
+    {
+        if( mpImpl->mpWindow->IsPaintTransparent() )
+            mpImpl->mpWindow->Invalidate();
         else
         {
-            if( mpImpl->mpWindow->IsPaintTransparent() )
-                mpImpl->mpWindow->Invalidate();
-            else
-            {
-                TextSelection aRange( *pRangeOrSelection );
-                aRange.Justify();
-                bool bVisCursor = mpImpl->mpCursor->IsVisible();
-                mpImpl->mpCursor->Hide();
-                Invalidate();
-                if (bVisCursor)
-                    mpImpl->mpCursor->Show();
-            }
+            TextSelection aRange( *pRangeOrSelection );
+            aRange.Justify();
+            bool bVisCursor = mpImpl->mpCursor->IsVisible();
+            mpImpl->mpCursor->Hide();
+            Invalidate();
+            if (bVisCursor)
+                mpImpl->mpCursor->Show();
         }
     }
 }
@@ -715,42 +715,42 @@ void TextView::MouseButtonDown( const MouseEvent& rMouseEvent )
     mpImpl->mbClickedInSelection = IsSelectionAtPoint( rMouseEvent.GetPosPixel() );
 
     // special cases
-    if ( !rMouseEvent.IsShift() && ( rMouseEvent.GetClicks() >= 2 ) )
+    if ( rMouseEvent.IsShift() || ( rMouseEvent.GetClicks() < 2 ))
+        return;
+
+    if ( rMouseEvent.IsMod2() )
     {
-        if ( rMouseEvent.IsMod2() )
+        HideSelection();
+        ImpSetSelection( mpImpl->maSelection.GetEnd() );
+        SetCursorAtPoint( rMouseEvent.GetPosPixel() );  // not set by SelectionEngine for MOD2
+    }
+
+    if ( rMouseEvent.GetClicks() == 2 )
+    {
+        // select word
+        if ( mpImpl->maSelection.GetEnd().GetIndex() < mpImpl->mpTextEngine->GetTextLen( mpImpl->maSelection.GetEnd().GetPara() ) )
         {
             HideSelection();
-            ImpSetSelection( mpImpl->maSelection.GetEnd() );
-            SetCursorAtPoint( rMouseEvent.GetPosPixel() );  // not set by SelectionEngine for MOD2
+            // tdf#57879 - expand selection to include connector punctuations
+            TextSelection aNewSel;
+            mpImpl->mpTextEngine->GetWord( mpImpl->maSelection.GetEnd(), &aNewSel.GetStart(), &aNewSel.GetEnd() );
+            ImpSetSelection( aNewSel );
+            ShowSelection();
+            ShowCursor();
         }
-
-        if ( rMouseEvent.GetClicks() == 2 )
+    }
+    else if ( rMouseEvent.GetClicks() == 3 )
+    {
+        // select paragraph
+        if ( mpImpl->maSelection.GetStart().GetIndex() || ( mpImpl->maSelection.GetEnd().GetIndex() < mpImpl->mpTextEngine->GetTextLen( mpImpl->maSelection.GetEnd().GetPara() ) ) )
         {
-            // select word
-            if ( mpImpl->maSelection.GetEnd().GetIndex() < mpImpl->mpTextEngine->GetTextLen( mpImpl->maSelection.GetEnd().GetPara() ) )
-            {
-                HideSelection();
-                // tdf#57879 - expand selection to include connector punctuations
-                TextSelection aNewSel;
-                mpImpl->mpTextEngine->GetWord( mpImpl->maSelection.GetEnd(), &aNewSel.GetStart(), &aNewSel.GetEnd() );
-                ImpSetSelection( aNewSel );
-                ShowSelection();
-                ShowCursor();
-            }
-        }
-        else if ( rMouseEvent.GetClicks() == 3 )
-        {
-            // select paragraph
-            if ( mpImpl->maSelection.GetStart().GetIndex() || ( mpImpl->maSelection.GetEnd().GetIndex() < mpImpl->mpTextEngine->GetTextLen( mpImpl->maSelection.GetEnd().GetPara() ) ) )
-            {
-                HideSelection();
-                TextSelection aNewSel( mpImpl->maSelection );
-                aNewSel.GetStart().GetIndex() = 0;
-                aNewSel.GetEnd().GetIndex() = mpImpl->mpTextEngine->mpDoc->GetNodes()[ mpImpl->maSelection.GetEnd().GetPara() ]->GetText().getLength();
-                ImpSetSelection( aNewSel );
-                ShowSelection();
-                ShowCursor();
-            }
+            HideSelection();
+            TextSelection aNewSel( mpImpl->maSelection );
+            aNewSel.GetStart().GetIndex() = 0;
+            aNewSel.GetEnd().GetIndex() = mpImpl->mpTextEngine->mpDoc->GetNodes()[ mpImpl->maSelection.GetEnd().GetPara() ]->GetText().getLength();
+            ImpSetSelection( aNewSel );
+            ShowSelection();
+            ShowCursor();
         }
     }
 }
@@ -970,23 +970,23 @@ void TextView::Cut()
 
 void TextView::Copy( css::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard )
 {
-    if ( rxClipboard.is() )
+    if ( !rxClipboard.is() )
+        return;
+
+    TETextDataObject* pDataObj = new TETextDataObject( GetSelected() );
+
+    SolarMutexReleaser aReleaser;
+
+    try
     {
-        TETextDataObject* pDataObj = new TETextDataObject( GetSelected() );
+        rxClipboard->setContents( pDataObj, nullptr );
 
-        SolarMutexReleaser aReleaser;
-
-        try
-        {
-            rxClipboard->setContents( pDataObj, nullptr );
-
-            css::uno::Reference< css::datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( rxClipboard, css::uno::UNO_QUERY );
-            if( xFlushableClipboard.is() )
-                xFlushableClipboard->flushClipboard();
-        }
-        catch( const css::uno::Exception& )
-        {
-        }
+        css::uno::Reference< css::datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( rxClipboard, css::uno::UNO_QUERY );
+        if( xFlushableClipboard.is() )
+            xFlushableClipboard->flushClipboard();
+    }
+    catch( const css::uno::Exception& )
+    {
     }
 }
 
@@ -998,44 +998,44 @@ void TextView::Copy()
 
 void TextView::Paste( css::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard )
 {
-    if ( rxClipboard.is() )
-    {
-        css::uno::Reference< css::datatransfer::XTransferable > xDataObj;
+    if ( !rxClipboard.is() )
+        return;
 
-        try
-            {
-                SolarMutexReleaser aReleaser;
-                xDataObj = rxClipboard->getContents();
-            }
-        catch( const css::uno::Exception& )
-            {
-            }
+    css::uno::Reference< css::datatransfer::XTransferable > xDataObj;
 
-        if ( xDataObj.is() )
+    try
         {
-            css::datatransfer::DataFlavor aFlavor;
-            SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
-            if ( xDataObj->isDataFlavorSupported( aFlavor ) )
-            {
-                try
-                {
-                    css::uno::Any aData = xDataObj->getTransferData( aFlavor );
-                    OUString aText;
-                    aData >>= aText;
-                    bool bWasTruncated = false;
-                    if( mpImpl->mpTextEngine->GetMaxTextLen() != 0 )
-                        bWasTruncated = ImplTruncateNewText( aText );
-                    InsertText( aText );
-                    mpImpl->mpTextEngine->Broadcast( TextHint( SfxHintId::TextModified ) );
-
-                    if( bWasTruncated )
-                        Edit::ShowTruncationWarning(mpImpl->mpWindow->GetFrameWeld());
-                }
-                catch( const css::datatransfer::UnsupportedFlavorException& )
-                {
-                }
-            }
+            SolarMutexReleaser aReleaser;
+            xDataObj = rxClipboard->getContents();
         }
+    catch( const css::uno::Exception& )
+        {
+        }
+
+    if ( !xDataObj.is() )
+        return;
+
+    css::datatransfer::DataFlavor aFlavor;
+    SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
+    if ( !xDataObj->isDataFlavorSupported( aFlavor ) )
+        return;
+
+    try
+    {
+        css::uno::Any aData = xDataObj->getTransferData( aFlavor );
+        OUString aText;
+        aData >>= aText;
+        bool bWasTruncated = false;
+        if( mpImpl->mpTextEngine->GetMaxTextLen() != 0 )
+            bWasTruncated = ImplTruncateNewText( aText );
+        InsertText( aText );
+        mpImpl->mpTextEngine->Broadcast( TextHint( SfxHintId::TextModified ) );
+
+        if( bWasTruncated )
+            Edit::ShowTruncationWarning(mpImpl->mpWindow->GetFrameWeld());
+    }
+    catch( const css::datatransfer::UnsupportedFlavorException& )
+    {
     }
 }
 
@@ -1804,24 +1804,24 @@ bool TextView::ImplCheckTextLen( const OUString& rNewText )
 
 void TextView::dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent& rDGE )
 {
-    if ( mpImpl->mbClickedInSelection )
-    {
-        SolarMutexGuard aVclGuard;
+    if ( !mpImpl->mbClickedInSelection )
+        return;
 
-        SAL_WARN_IF( !mpImpl->maSelection.HasRange(), "vcl", "TextView::dragGestureRecognized: mpImpl->mbClickedInSelection, but no selection?" );
+    SolarMutexGuard aVclGuard;
 
-        mpImpl->mpDDInfo.reset(new TextDDInfo);
-        mpImpl->mpDDInfo->mbStarterOfDD = true;
+    SAL_WARN_IF( !mpImpl->maSelection.HasRange(), "vcl", "TextView::dragGestureRecognized: mpImpl->mbClickedInSelection, but no selection?" );
 
-        TETextDataObject* pDataObj = new TETextDataObject( GetSelected() );
+    mpImpl->mpDDInfo.reset(new TextDDInfo);
+    mpImpl->mpDDInfo->mbStarterOfDD = true;
 
-        mpImpl->mpCursor->Hide();
+    TETextDataObject* pDataObj = new TETextDataObject( GetSelected() );
 
-        sal_Int8 nActions = css::datatransfer::dnd::DNDConstants::ACTION_COPY;
-        if ( !IsReadOnly() )
-            nActions |= css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
-        rDGE.DragSource->startDrag( rDGE, nActions, 0 /*cursor*/, 0 /*image*/, pDataObj, mpImpl->mxDnDListener );
-    }
+    mpImpl->mpCursor->Hide();
+
+    sal_Int8 nActions = css::datatransfer::dnd::DNDConstants::ACTION_COPY;
+    if ( !IsReadOnly() )
+        nActions |= css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
+    rDGE.DragSource->startDrag( rDGE, nActions, 0 /*cursor*/, 0 /*image*/, pDataObj, mpImpl->mxDnDListener );
 }
 
 void TextView::dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent& )

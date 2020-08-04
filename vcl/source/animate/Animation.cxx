@@ -239,26 +239,26 @@ void Animation::Draw(OutputDevice* pOut, const Point& rDestPt, const Size& rDest
 {
     const size_t nCount = maList.size();
 
-    if (nCount)
+    if (!nCount)
+        return;
+
+    AnimationBitmap* pObj = maList[std::min(mnPos, nCount - 1)].get();
+
+    if (pOut->GetConnectMetaFile() || (pOut->GetOutDevType() == OUTDEV_PRINTER))
+        maList[0]->maBitmapEx.Draw(pOut, rDestPt, rDestSz);
+    else if (ANIMATION_TIMEOUT_ON_CLICK == pObj->mnWait)
+        pObj->maBitmapEx.Draw(pOut, rDestPt, rDestSz);
+    else
     {
-        AnimationBitmap* pObj = maList[std::min(mnPos, nCount - 1)].get();
+        const size_t nOldPos = mnPos;
+        if (mbLoopTerminated)
+            const_cast<Animation*>(this)->mnPos = nCount - 1;
 
-        if (pOut->GetConnectMetaFile() || (pOut->GetOutDevType() == OUTDEV_PRINTER))
-            maList[0]->maBitmapEx.Draw(pOut, rDestPt, rDestSz);
-        else if (ANIMATION_TIMEOUT_ON_CLICK == pObj->mnWait)
-            pObj->maBitmapEx.Draw(pOut, rDestPt, rDestSz);
-        else
         {
-            const size_t nOldPos = mnPos;
-            if (mbLoopTerminated)
-                const_cast<Animation*>(this)->mnPos = nCount - 1;
-
-            {
-                ImplAnimView{ const_cast<Animation*>(this), pOut, rDestPt, rDestSz, 0 };
-            }
-
-            const_cast<Animation*>(this)->mnPos = nOldPos;
+            ImplAnimView{ const_cast<Animation*>(this), pOut, rDestPt, rDestSz, 0 };
         }
+
+        const_cast<Animation*>(this)->mnPos = nOldPos;
     }
 }
 
@@ -499,33 +499,31 @@ void Animation::Mirror(BmpMirrorFlags nMirrorFlags)
 
     bool bRet;
 
-    if (!IsInAnimation() && !maList.empty())
+    if (IsInAnimation() || maList.empty())
+        return;
+
+    bRet = true;
+
+    if (nMirrorFlags == BmpMirrorFlags::NONE)
+        return;
+
+    for (size_t i = 0, n = maList.size(); (i < n) && bRet; ++i)
     {
-        bRet = true;
-
-        if (nMirrorFlags != BmpMirrorFlags::NONE)
+        AnimationBitmap* pStepBmp = maList[i].get();
+        bRet = pStepBmp->maBitmapEx.Mirror(nMirrorFlags);
+        if (bRet)
         {
-            for (size_t i = 0, n = maList.size(); (i < n) && bRet; ++i)
-            {
-                AnimationBitmap* pStepBmp = maList[i].get();
-                bRet = pStepBmp->maBitmapEx.Mirror(nMirrorFlags);
-                if (bRet)
-                {
-                    if (nMirrorFlags & BmpMirrorFlags::Horizontal)
-                        pStepBmp->maPositionPixel.setX(maGlobalSize.Width()
-                                                       - pStepBmp->maPositionPixel.X()
-                                                       - pStepBmp->maSizePixel.Width());
+            if (nMirrorFlags & BmpMirrorFlags::Horizontal)
+                pStepBmp->maPositionPixel.setX(maGlobalSize.Width() - pStepBmp->maPositionPixel.X()
+                                               - pStepBmp->maSizePixel.Width());
 
-                    if (nMirrorFlags & BmpMirrorFlags::Vertical)
-                        pStepBmp->maPositionPixel.setY(maGlobalSize.Height()
-                                                       - pStepBmp->maPositionPixel.Y()
-                                                       - pStepBmp->maSizePixel.Height());
-                }
-            }
-
-            maBitmapEx.Mirror(nMirrorFlags);
+            if (nMirrorFlags & BmpMirrorFlags::Vertical)
+                pStepBmp->maPositionPixel.setY(maGlobalSize.Height() - pStepBmp->maPositionPixel.Y()
+                                               - pStepBmp->maSizePixel.Height());
         }
     }
+
+    maBitmapEx.Mirror(nMirrorFlags);
 }
 
 void Animation::Adjust(short nLuminancePercent, short nContrastPercent, short nChannelRPercent,
@@ -535,20 +533,19 @@ void Animation::Adjust(short nLuminancePercent, short nContrastPercent, short nC
 
     bool bRet;
 
-    if (!IsInAnimation() && !maList.empty())
+    if (IsInAnimation() || maList.empty())
+        return;
+
+    bRet = true;
+
+    for (size_t i = 0, n = maList.size(); (i < n) && bRet; ++i)
     {
-        bRet = true;
-
-        for (size_t i = 0, n = maList.size(); (i < n) && bRet; ++i)
-        {
-            bRet = maList[i]->maBitmapEx.Adjust(nLuminancePercent, nContrastPercent,
-                                                nChannelRPercent, nChannelGPercent,
-                                                nChannelBPercent, fGamma, bInvert);
-        }
-
-        maBitmapEx.Adjust(nLuminancePercent, nContrastPercent, nChannelRPercent, nChannelGPercent,
-                          nChannelBPercent, fGamma, bInvert);
+        bRet = maList[i]->maBitmapEx.Adjust(nLuminancePercent, nContrastPercent, nChannelRPercent,
+                                            nChannelGPercent, nChannelBPercent, fGamma, bInvert);
     }
+
+    maBitmapEx.Adjust(nLuminancePercent, nContrastPercent, nChannelRPercent, nChannelGPercent,
+                      nChannelBPercent, fGamma, bInvert);
 }
 
 SvStream& WriteAnimation(SvStream& rOStm, const Animation& rAnimation)

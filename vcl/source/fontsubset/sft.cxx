@@ -1001,22 +1001,22 @@ static void GetNames(TrueTypeFont *t)
     for( i = 0; t->psname[i] != 0 && bPSNameOK; i++ )
         if( t->psname[ i ] < 33 || (t->psname[ i ] & 0x80) )
             bPSNameOK = false;
-    if( !bPSNameOK )
-    {
-        /* check if family is a suitable replacement */
-        if( t->ufamily && t->family )
-        {
-            bool bReplace = true;
+    if( bPSNameOK )
+        return;
 
-            for( i = 0; t->ufamily[ i ] != 0 && bReplace; i++ )
-                if( t->ufamily[ i ] < 33 || t->ufamily[ i ] > 127 )
-                    bReplace = false;
-            if( bReplace )
-            {
-                free( t->psname );
-                t->psname = strdup( t->family );
-            }
-        }
+    /* check if family is a suitable replacement */
+    if( !(t->ufamily && t->family) )
+        return;
+
+    bool bReplace = true;
+
+    for( i = 0; t->ufamily[ i ] != 0 && bReplace; i++ )
+        if( t->ufamily[ i ] < 33 || t->ufamily[ i ] > 127 )
+            bReplace = false;
+    if( bReplace )
+    {
+        free( t->psname );
+        t->psname = strdup( t->family );
     }
 }
 
@@ -1325,24 +1325,24 @@ static void FindCmap(TrueTypeFont *ttf)
         }
     }
 
-    if (ttf->cmapType != CMAP_NOT_USABLE) {
-        switch (GetUInt16(ttf->cmap, 0)) {
-            case 0: ttf->mapper = getGlyph0; break;
-            case 2: ttf->mapper = getGlyph2; break;
-            case 4: ttf->mapper = getGlyph4; break;
-            case 6: ttf->mapper = getGlyph6; break;
-            case 12: ttf->mapper= getGlyph12; break;
-            default:
+    if (ttf->cmapType == CMAP_NOT_USABLE)        return;
+
+    switch (GetUInt16(ttf->cmap, 0)) {
+        case 0: ttf->mapper = getGlyph0; break;
+        case 2: ttf->mapper = getGlyph2; break;
+        case 4: ttf->mapper = getGlyph4; break;
+        case 6: ttf->mapper = getGlyph6; break;
+        case 12: ttf->mapper= getGlyph12; break;
+        default:
 #if OSL_DEBUG_LEVEL > 1
-                /*- if the cmap table is really broken */
-                SAL_WARN("vcl.fonts", ttf->fname << ": "
-                        << GetUInt16(ttf->cmap, 0)
-                        << " is not a recognized cmap format..");
+            /*- if the cmap table is really broken */
+            SAL_WARN("vcl.fonts", ttf->fname << ": "
+                    << GetUInt16(ttf->cmap, 0)
+                    << " is not a recognized cmap format..");
 #endif
-                ttf->cmapType = CMAP_NOT_USABLE;
-                ttf->cmap = nullptr;
-                ttf->mapper = nullptr;
-        }
+            ttf->cmapType = CMAP_NOT_USABLE;
+            ttf->cmap = nullptr;
+            ttf->mapper = nullptr;
     }
 }
 

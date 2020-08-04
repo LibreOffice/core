@@ -1376,35 +1376,35 @@ void TextEngine::SeekCursor( sal_uInt32 nPara, sal_Int32 nPos, vcl::Font& rFont,
         }
     }
 
-    if ( mpIMEInfos && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetPara() == nPara ) &&
-        ( nPos > mpIMEInfos->aPos.GetIndex() ) && ( nPos <= ( mpIMEInfos->aPos.GetIndex() + mpIMEInfos->nLen ) ) )
+    if ( !(mpIMEInfos && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetPara() == nPara ) &&
+        ( nPos > mpIMEInfos->aPos.GetIndex() ) && ( nPos <= ( mpIMEInfos->aPos.GetIndex() + mpIMEInfos->nLen ) )) )
+        return;
+
+    ExtTextInputAttr nAttr = mpIMEInfos->pAttribs[ nPos - mpIMEInfos->aPos.GetIndex() - 1 ];
+    if ( nAttr & ExtTextInputAttr::Underline )
+        rFont.SetUnderline( LINESTYLE_SINGLE );
+    else if ( nAttr & ExtTextInputAttr::BoldUnderline )
+        rFont.SetUnderline( LINESTYLE_BOLD );
+    else if ( nAttr & ExtTextInputAttr::DottedUnderline )
+        rFont.SetUnderline( LINESTYLE_DOTTED );
+    else if ( nAttr & ExtTextInputAttr::DashDotUnderline )
+        rFont.SetUnderline( LINESTYLE_DOTTED );
+    if ( nAttr & ExtTextInputAttr::RedText )
+        rFont.SetColor( COL_RED );
+    else if ( nAttr & ExtTextInputAttr::HalfToneText )
+        rFont.SetColor( COL_LIGHTGRAY );
+    if ( nAttr & ExtTextInputAttr::Highlight )
     {
-        ExtTextInputAttr nAttr = mpIMEInfos->pAttribs[ nPos - mpIMEInfos->aPos.GetIndex() - 1 ];
-        if ( nAttr & ExtTextInputAttr::Underline )
-            rFont.SetUnderline( LINESTYLE_SINGLE );
-        else if ( nAttr & ExtTextInputAttr::BoldUnderline )
-            rFont.SetUnderline( LINESTYLE_BOLD );
-        else if ( nAttr & ExtTextInputAttr::DottedUnderline )
-            rFont.SetUnderline( LINESTYLE_DOTTED );
-        else if ( nAttr & ExtTextInputAttr::DashDotUnderline )
-            rFont.SetUnderline( LINESTYLE_DOTTED );
-        if ( nAttr & ExtTextInputAttr::RedText )
-            rFont.SetColor( COL_RED );
-        else if ( nAttr & ExtTextInputAttr::HalfToneText )
-            rFont.SetColor( COL_LIGHTGRAY );
-        if ( nAttr & ExtTextInputAttr::Highlight )
-        {
-            const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-            rFont.SetColor( rStyleSettings.GetHighlightTextColor() );
-            rFont.SetFillColor( rStyleSettings.GetHighlightColor() );
-            rFont.SetTransparent( false );
-        }
-        else if ( nAttr & ExtTextInputAttr::GrayWaveline )
-        {
-            rFont.SetUnderline( LINESTYLE_WAVE );
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+        rFont.SetColor( rStyleSettings.GetHighlightTextColor() );
+        rFont.SetFillColor( rStyleSettings.GetHighlightColor() );
+        rFont.SetTransparent( false );
+    }
+    else if ( nAttr & ExtTextInputAttr::GrayWaveline )
+    {
+        rFont.SetUnderline( LINESTYLE_WAVE );
 //          if( pOut )
 //              pOut->SetTextLineColor( COL_LIGHTGRAY );
-        }
     }
 }
 
@@ -2462,20 +2462,20 @@ void TextEngine::Write( SvStream& rOutput )
 
 void TextEngine::RemoveAttribs( sal_uInt32 nPara )
 {
-    if ( nPara < mpDoc->GetNodes().size() )
+    if ( nPara >= mpDoc->GetNodes().size() )
+        return;
+
+    TextNode* pNode = mpDoc->GetNodes()[ nPara ].get();
+    if ( pNode->GetCharAttribs().Count() )
     {
-        TextNode* pNode = mpDoc->GetNodes()[ nPara ].get();
-        if ( pNode->GetCharAttribs().Count() )
-        {
-            pNode->GetCharAttribs().Clear();
+        pNode->GetCharAttribs().Clear();
 
-            TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
-            pTEParaPortion->MarkSelectionInvalid( 0 );
+        TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
+        pTEParaPortion->MarkSelectionInvalid( 0 );
 
-            mbFormatted = false;
+        mbFormatted = false;
 
-            IdleFormatAndUpdate( nullptr, 0xFFFF );
-        }
+        IdleFormatAndUpdate( nullptr, 0xFFFF );
     }
 }
 
@@ -2487,23 +2487,23 @@ void TextEngine::SetAttrib( const TextAttrib& rAttr, sal_uInt32 nPara, sal_Int32
 
     // As TextEngine is currently intended only for TextEditors, there is no Undo for Attributes!
 
-    if ( nPara < mpDoc->GetNodes().size() )
-    {
-        TextNode* pNode = mpDoc->GetNodes()[ nPara ].get();
-        TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
+    if ( nPara >= mpDoc->GetNodes().size() )
+        return;
 
-        const sal_Int32 nMax = pNode->GetText().getLength();
-        if ( nStart > nMax )
-            nStart = nMax;
-        if ( nEnd > nMax )
-            nEnd = nMax;
+    TextNode* pNode = mpDoc->GetNodes()[ nPara ].get();
+    TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
 
-        pNode->GetCharAttribs().InsertAttrib( std::make_unique<TextCharAttrib>( rAttr, nStart, nEnd ) );
-        pTEParaPortion->MarkSelectionInvalid( nStart );
+    const sal_Int32 nMax = pNode->GetText().getLength();
+    if ( nStart > nMax )
+        nStart = nMax;
+    if ( nEnd > nMax )
+        nEnd = nMax;
 
-        mbFormatted = false;
-        IdleFormatAndUpdate( nullptr, 0xFFFF );
-    }
+    pNode->GetCharAttribs().InsertAttrib( std::make_unique<TextCharAttrib>( rAttr, nStart, nEnd ) );
+    pTEParaPortion->MarkSelectionInvalid( nStart );
+
+    mbFormatted = false;
+    IdleFormatAndUpdate( nullptr, 0xFFFF );
 }
 
 void TextEngine::SetTextAlign( TxtAlign eAlign )

@@ -252,27 +252,27 @@ void X11OpenGLDeviceInfo::GetData()
     }
 
     // read major.minor version numbers of the driver (not to be confused with the OpenGL version)
-    if (whereToReadVersionNumbers)
-    {
-        // copy into writable buffer, for tokenization
-        strncpy(buf, whereToReadVersionNumbers, buf_size-1);
-        buf[buf_size-1] = 0;
-        bufptr = buf;
+    if (!whereToReadVersionNumbers)
+        return;
 
-        // now try to read major.minor version numbers. In case of failure, gracefully exit: these numbers have
-        // been initialized as 0 anyways
-        char *token = strtok_wrapper(".", &bufptr);
+    // copy into writable buffer, for tokenization
+    strncpy(buf, whereToReadVersionNumbers, buf_size-1);
+    buf[buf_size-1] = 0;
+    bufptr = buf;
+
+    // now try to read major.minor version numbers. In case of failure, gracefully exit: these numbers have
+    // been initialized as 0 anyways
+    char *token = strtok_wrapper(".", &bufptr);
+    if (token)
+    {
+        mnMajorVersion = strtol(token, nullptr, 10);
+        token = strtok_wrapper(".", &bufptr);
         if (token)
         {
-            mnMajorVersion = strtol(token, nullptr, 10);
+            mnMinorVersion = strtol(token, nullptr, 10);
             token = strtok_wrapper(".", &bufptr);
             if (token)
-            {
-                mnMinorVersion = strtol(token, nullptr, 10);
-                token = strtok_wrapper(".", &bufptr);
-                if (token)
-                    mnRevisionVersion = strtol(token, nullptr, 10);
-            }
+                mnRevisionVersion = strtol(token, nullptr, 10);
         }
     }
 }

@@ -232,34 +232,34 @@ void TEParaPortion::CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormat
 {
     sal_uInt16 nLines = maLines.size();
     SAL_WARN_IF( !nLines, "vcl", "CorrectPortionNumbersFromLine: Empty portion?" );
-    if ( nLastFormattedLine < ( nLines - 1 ) )
+    if ( nLastFormattedLine >= ( nLines - 1 ) )
+        return;
+
+    const TextLine& rLastFormatted = maLines[ nLastFormattedLine ];
+    const TextLine& rUnformatted = maLines[ nLastFormattedLine+1 ];
+    std::ptrdiff_t nPortionDiff = rUnformatted.GetStartPortion() - rLastFormatted.GetEndPortion();
+    sal_Int32 nTextDiff = rUnformatted.GetStart() - rLastFormatted.GetEnd();
+    nTextDiff++;    // LastFormatted.GetEnd() was inclusive => subtracted one too much!
+
+    // The first unformatted one has to start exactly one portion past the last
+    // formatted one.
+    // If a portion got split in the changed row, nLastEnd could be > nNextStart!
+    std::ptrdiff_t nPDiff = -( nPortionDiff-1 );
+    const sal_Int32 nTDiff = -( nTextDiff-1 );
+    if ( !(nPDiff || nTDiff) )
+        return;
+
+    for ( sal_uInt16 nL = nLastFormattedLine+1; nL < nLines; nL++ )
     {
-        const TextLine& rLastFormatted = maLines[ nLastFormattedLine ];
-        const TextLine& rUnformatted = maLines[ nLastFormattedLine+1 ];
-        std::ptrdiff_t nPortionDiff = rUnformatted.GetStartPortion() - rLastFormatted.GetEndPortion();
-        sal_Int32 nTextDiff = rUnformatted.GetStart() - rLastFormatted.GetEnd();
-        nTextDiff++;    // LastFormatted.GetEnd() was inclusive => subtracted one too much!
+        TextLine& rLine = maLines[ nL ];
 
-        // The first unformatted one has to start exactly one portion past the last
-        // formatted one.
-        // If a portion got split in the changed row, nLastEnd could be > nNextStart!
-        std::ptrdiff_t nPDiff = -( nPortionDiff-1 );
-        const sal_Int32 nTDiff = -( nTextDiff-1 );
-        if ( nPDiff || nTDiff )
-        {
-            for ( sal_uInt16 nL = nLastFormattedLine+1; nL < nLines; nL++ )
-            {
-                TextLine& rLine = maLines[ nL ];
+        rLine.SetStartPortion(rLine.GetStartPortion() + nPDiff);
+        rLine.SetEndPortion(rLine.GetEndPortion() + nPDiff);
 
-                rLine.SetStartPortion(rLine.GetStartPortion() + nPDiff);
-                rLine.SetEndPortion(rLine.GetEndPortion() + nPDiff);
+        rLine.SetStart(rLine.GetStart() + nTDiff);
+        rLine.SetEnd(rLine.GetEnd() + nTDiff);
 
-                rLine.SetStart(rLine.GetStart() + nTDiff);
-                rLine.SetEnd(rLine.GetEnd() + nTDiff);
-
-                rLine.SetValid();
-            }
-        }
+        rLine.SetValid();
     }
 }
 

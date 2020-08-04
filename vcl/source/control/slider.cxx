@@ -178,27 +178,27 @@ void Slider::ImplUpdateRects( bool bUpdate )
         maThumbRect.SetEmpty();
     }
 
-    if ( bUpdate )
-    {
-        if ( aOldThumbRect != maThumbRect )
-        {
-            if( bInvalidateAll )
-                Invalidate(InvalidateFlags::NoChildren | InvalidateFlags::NoErase);
-            else
-            {
-                vcl::Region aInvalidRegion( aOldThumbRect );
-                aInvalidRegion.Union( maThumbRect );
+    if ( !bUpdate )
+        return;
 
-                if( !IsBackground() && GetParent() )
-                {
-                    const Point aPos( GetPosPixel() );
-                    aInvalidRegion.Move( aPos.X(), aPos.Y() );
-                    GetParent()->Invalidate( aInvalidRegion, InvalidateFlags::Transparent | InvalidateFlags::Update );
-                }
-                else
-                    Invalidate( aInvalidRegion );
-            }
+    if ( aOldThumbRect == maThumbRect )
+        return;
+
+    if( bInvalidateAll )
+        Invalidate(InvalidateFlags::NoChildren | InvalidateFlags::NoErase);
+    else
+    {
+        vcl::Region aInvalidRegion( aOldThumbRect );
+        aInvalidRegion.Union( maThumbRect );
+
+        if( !IsBackground() && GetParent() )
+        {
+            const Point aPos( GetPosPixel() );
+            aInvalidRegion.Move( aPos.X(), aPos.Y() );
+            GetParent()->Invalidate( aInvalidRegion, InvalidateFlags::Transparent | InvalidateFlags::Update );
         }
+        else
+            Invalidate( aInvalidRegion );
     }
 }
 
@@ -444,21 +444,21 @@ void Slider::ImplDraw(vcl::RenderContext& rRenderContext)
         }
     }
 
-    if (!maThumbRect.IsEmpty())
+    if (maThumbRect.IsEmpty())
+        return;
+
+    if (bEnabled)
     {
-        if (bEnabled)
-        {
-            nStyle = DrawButtonFlags::NONE;
-            if (mnStateFlags & SLIDER_STATE_THUMB_DOWN)
-                nStyle |= DrawButtonFlags::Pressed;
-            aDecoView.DrawButton(maThumbRect, nStyle);
-        }
-        else
-        {
-            rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
-            rRenderContext.SetFillColor(rStyleSettings.GetCheckedColor());
-            rRenderContext.DrawRect(maThumbRect);
-        }
+        nStyle = DrawButtonFlags::NONE;
+        if (mnStateFlags & SLIDER_STATE_THUMB_DOWN)
+            nStyle |= DrawButtonFlags::Pressed;
+        aDecoView.DrawButton(maThumbRect, nStyle);
+    }
+    else
+    {
+        rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+        rRenderContext.SetFillColor(rStyleSettings.GetCheckedColor());
+        rRenderContext.DrawRect(maThumbRect);
     }
 }
 
@@ -604,43 +604,43 @@ void Slider::ImplDoSlideAction( ScrollType eScrollType )
 
 void Slider::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( rMEvt.IsLeft() )
+    if ( !rMEvt.IsLeft() )
+        return;
+
+    const Point&       rMousePos = rMEvt.GetPosPixel();
+    StartTrackingFlags nTrackFlags = StartTrackingFlags::NONE;
+
+    if ( maThumbRect.IsInside( rMousePos ) )
     {
-        const Point&       rMousePos = rMEvt.GetPosPixel();
-        StartTrackingFlags nTrackFlags = StartTrackingFlags::NONE;
+        meScrollType    = ScrollType::Drag;
 
-        if ( maThumbRect.IsInside( rMousePos ) )
-        {
-            meScrollType    = ScrollType::Drag;
+        // calculate additional values
+        Point aCenterPos = maThumbRect.Center();
+        if ( GetStyle() & WB_HORZ )
+            mnMouseOff = rMousePos.X()-aCenterPos.X();
+        else
+            mnMouseOff = rMousePos.Y()-aCenterPos.Y();
+    }
+    else if ( ImplIsPageUp( rMousePos ) )
+    {
+        nTrackFlags = StartTrackingFlags::ButtonRepeat;
+        meScrollType = ScrollType::PageUp;
+    }
+    else if ( ImplIsPageDown( rMousePos ) )
+    {
+        nTrackFlags = StartTrackingFlags::ButtonRepeat;
+        meScrollType = ScrollType::PageDown;
+    }
 
-            // calculate additional values
-            Point aCenterPos = maThumbRect.Center();
-            if ( GetStyle() & WB_HORZ )
-                mnMouseOff = rMousePos.X()-aCenterPos.X();
-            else
-                mnMouseOff = rMousePos.Y()-aCenterPos.Y();
-        }
-        else if ( ImplIsPageUp( rMousePos ) )
-        {
-            nTrackFlags = StartTrackingFlags::ButtonRepeat;
-            meScrollType = ScrollType::PageUp;
-        }
-        else if ( ImplIsPageDown( rMousePos ) )
-        {
-            nTrackFlags = StartTrackingFlags::ButtonRepeat;
-            meScrollType = ScrollType::PageDown;
-        }
+    // Shall we start Tracking?
+    if( meScrollType != ScrollType::DontKnow )
+    {
+        // store Start position for cancel and EndScroll delta
+        mnStartPos = mnThumbPos;
+        ImplDoMouseAction( rMousePos, /*bCallAction*/true );
+        PaintImmediately();
 
-        // Shall we start Tracking?
-        if( meScrollType != ScrollType::DontKnow )
-        {
-            // store Start position for cancel and EndScroll delta
-            mnStartPos = mnThumbPos;
-            ImplDoMouseAction( rMousePos, /*bCallAction*/true );
-            PaintImmediately();
-
-            StartTracking( nTrackFlags );
-        }
+        StartTracking( nTrackFlags );
     }
 }
 
