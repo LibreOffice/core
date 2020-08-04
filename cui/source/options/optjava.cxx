@@ -353,7 +353,7 @@ void SvxJavaOptionsPage::AddJRE( JavaInfo const * _pInfo )
 #if HAVE_FEATURE_JAVA
     int nPos = m_xJavaList->n_children();
     m_xJavaList->append();
-    m_xJavaList->set_toggle(nPos, TRISTATE_FALSE, 0);
+    m_xJavaList->set_toggle(nPos, TRISTATE_FALSE);
     m_xJavaList->set_text(nPos, _pInfo->sVendor, 1);
     m_xJavaList->set_text(nPos, _pInfo->sVersion, 2);
 
@@ -372,7 +372,7 @@ void SvxJavaOptionsPage::HandleCheckEntry(int nCheckedRow)
     for (int i = 0, nCount = m_xJavaList->n_children(); i < nCount; ++i)
     {
         // we have radio button behavior -> so uncheck the other entries
-        m_xJavaList->set_toggle(i, i == nCheckedRow ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
+        m_xJavaList->set_toggle(i, i == nCheckedRow ? TRISTATE_TRUE : TRISTATE_FALSE);
     }
 }
 
@@ -500,7 +500,7 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
     sal_uInt32 nCount = m_xJavaList->n_children();
     for (sal_uInt32 i = 0; i < nCount; ++i)
     {
-        if (m_xJavaList->get_toggle(i, 0) == TRISTATE_TRUE)
+        if (m_xJavaList->get_toggle(i) == TRISTATE_TRUE)
         {
             JavaInfo const * pInfo;
             if ( i < m_parJavaInfo.size() )
