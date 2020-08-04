@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SOURCE_INC_SBJSMOD_HXX
-#define INCLUDED_BASIC_SOURCE_INC_SBJSMOD_HXX
+#pragma once
 
 #include <basic/sbmod.hxx>
 
@@ -34,8 +33,6 @@ public:
     SBX_DECL_PERSIST_NODATA(SBXID_JSCRIPTMOD,1);
     SbJScriptModule();       // hand through
 };
-
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

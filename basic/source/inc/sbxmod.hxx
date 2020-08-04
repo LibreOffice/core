@@ -17,14 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SOURCE_INC_SBXMOD_HXX
-#define INCLUDED_BASIC_SOURCE_INC_SBXMOD_HXX
+#pragma once
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <basic/sbstar.hxx>
 
 css::uno::Reference<css::frame::XModel> getDocumentModel(StarBASIC*);
-
-#endif // INCLUDED_BASIC_SOURCE_INC_SBXMOD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

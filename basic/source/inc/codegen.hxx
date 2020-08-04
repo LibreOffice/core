@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SOURCE_INC_CODEGEN_HXX
-#define INCLUDED_BASIC_SOURCE_INC_CODEGEN_HXX
+#pragma once
 
 class SbiParser;
 class SbModule;
@@ -79,7 +78,5 @@ public:
 // conflict with DefaultId in SbxParamInfo::nUserData
 #define PARAM_INFO_PARAMARRAY       0x0010000
 #define PARAM_INFO_WITHBRACKETS     0x0020000
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

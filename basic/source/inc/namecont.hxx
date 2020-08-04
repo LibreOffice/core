@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SOURCE_INC_NAMECONT_HXX
-#define INCLUDED_BASIC_SOURCE_INC_NAMECONT_HXX
+#pragma once
 
 #include <unordered_map>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -654,7 +653,5 @@ private:
 
 
 }   // namespace basic
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

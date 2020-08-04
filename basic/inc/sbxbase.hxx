@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_INC_SBXBASE_HXX
-#define INCLUDED_BASIC_INC_SBXBASE_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -56,7 +55,5 @@ struct SbxAppData
 SbxAppData& GetSbxData_Impl();
 /** returns true if the SbxAppData is still valid, used to check if we are in shutdown. */
 bool IsSbxData_Impl();
-
-#endif // INCLUDED_BASIC_INC_SBXBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
