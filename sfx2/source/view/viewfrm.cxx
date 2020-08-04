@@ -133,6 +133,9 @@ using ::com::sun::star::container::XIndexContainer;
 #define ShellClass_SfxViewFrame
 #include <sfxslots.hxx>
 
+#include <unordered_map>
+#include <sfx2/sidebar/SidebarController.hxx>
+
 SFX_IMPL_SUPERCLASS_INTERFACE(SfxViewFrame,SfxShell)
 
 void SfxViewFrame::InitInterface_Impl()
@@ -3087,6 +3090,14 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
     }
 }
 
+static std::unordered_map<sal_uInt16, OUString> aDeckMap = {
+    { SID_PROPERTIES_DECK, "PropertyDeck" },
+    { SID_STYLE_DESIGNER, "StyleListDeck" },
+    { SID_STYLES_DECK, "StyleListDeck" },
+    { SID_GALLERY_DECK, "GalleryDeck" },
+    { SID_NAVIGATOR_DECK, "NavigatorDeck" }
+};
+
 /*  [Description]
 
     This method can be included in the Execute method for the on- and off-
@@ -3146,13 +3157,9 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
         rReq.Done();
         return;
     }
-    if (nSID == SID_STYLE_DESIGNER)
+    else if (aDeckMap.find(nSID) != aDeckMap.end())
     {
-        // First make sure that the sidebar is visible
-        ShowChildWindow(SID_SIDEBAR);
-
-        ::sfx2::sidebar::Sidebar::ShowPanel("StyleListPanel",
-                                            GetFrame().GetFrameInterface(), true);
+        ::sfx2::sidebar::Sidebar::ToggleDeck(aDeckMap[nSID], this);
         rReq.Done();
         return;
     }
@@ -3165,7 +3172,10 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
     if ( !pShowItem || bShow != bHasChild )
         ToggleChildWindow( nSID );
 
-    GetBindings().Invalidate( nSID );
+    if ( nSID == SID_SIDEBAR )
+        GetBindings().InvalidateAll(true);
+    else
+        GetBindings().Invalidate( nSID );
 
     // Record if possible.
     if ( nSID == SID_HYPERLINK_DIALOG || nSID == SID_SEARCH_DLG )
@@ -3228,6 +3238,15 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
             else
             {
                 rState.Put( SfxBoolItem( nSID, HasChildWindow( nSID ) ) );
+            }
+        }
+        else if (aDeckMap.find(nSID) != aDeckMap.end())
+        {
+            if (!KnowsChildWindow(SID_SIDEBAR))
+                rState.DisableItem( nSID );
+            else
+            {
+                rState.Put(SfxBoolItem(nSID, sfx2::sidebar::Sidebar::IsDeckVisible(aDeckMap[nSID], this)));
             }
         }
         else if ( KnowsChildWindow(nSID) )

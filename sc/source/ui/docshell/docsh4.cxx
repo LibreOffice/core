@@ -111,6 +111,8 @@ using namespace ::com::sun::star;
 
 #include <svx/xdef.hxx>
 
+#include <sfx2/sidebar/Sidebar.hxx>
+
 void ScDocShell::ReloadAllLinks()
 {
     m_aDocument.SetLinkFormulaNeedingCheck(false);
@@ -190,6 +192,14 @@ void ScDocShell::Execute( SfxRequest& rReq )
     sal_uInt16 nSlot = rReq.GetSlot();
     switch ( nSlot )
     {
+        case SID_FUNCTIONS_DECK:
+        {
+            OUString deckId;
+            if (nSlot == SID_FUNCTIONS_DECK)
+                deckId = "ScFunctionsDeck";
+            ::sfx2::sidebar::Sidebar::ToggleDeck(deckId, GetFrame());
+        }
+        break;
         case SID_SC_SETTEXT:
         {
             const SfxPoolItem* pColItem;
@@ -2023,6 +2033,14 @@ void ScDocShell::GetState( SfxItemSet &rSet )
 
         switch (nWhich)
         {
+            case SID_FUNCTIONS_DECK:
+            {
+                OUString deckId;
+                if (nWhich == SID_FUNCTIONS_DECK)
+                    deckId = "ScFunctionsDeck";
+                rSet.Put(SfxBoolItem(nWhich, sfx2::sidebar::Sidebar::IsDeckVisible(deckId, GetFrame())));
+            }
+            break;
             case FID_AUTO_CALC:
                 if ( m_aDocument.GetHardRecalcState() != ScDocument::HardRecalcState::OFF )
                     rSet.DisableItem( nWhich );

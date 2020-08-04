@@ -61,6 +61,7 @@
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 
+#include <sfx2/bindings.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -871,6 +872,9 @@ void SidebarController::SwitchToDeck (
 
     mpTabBar->UpdateFocusManager(maFocusManager);
     UpdateTitleBarIcons();
+
+    // Let UNO command deck controls know about switch
+    const_cast<SfxBindings&>(mpViewFrame->GetBindings()).InvalidateAll(false);
 }
 
 void SidebarController::notifyDeckTitle(const OUString& targetDeckId)
