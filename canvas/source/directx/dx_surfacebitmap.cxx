@@ -228,7 +228,7 @@ namespace dxcanvas
                     maSize.getY(),
                     PixelFormat32bppARGB
                     );
-            mpGraphics.reset( tools::createGraphicsFromBitmap(mpGDIPlusBitmap) );
+            mpGraphics = tools::createGraphicsFromBitmap(mpGDIPlusBitmap);
 
             // create the colorbuffer object, which is basically a simple
             // wrapper around the directx surface. the colorbuffer is the
