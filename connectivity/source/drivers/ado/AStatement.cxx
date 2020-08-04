@@ -396,7 +396,7 @@ sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const OUString& sql )
     try {
         ADORecordset* pSet = nullptr;
         CHECK_RETURN(m_Command.put_CommandText(sql))
-        CHECK_RETURN(m_Command.Execute(m_RecordsAffected,m_Parameters,adCmdText|adExecuteNoRecords,&pSet))
+        CHECK_RETURN(m_Command.Execute(m_RecordsAffected,m_Parameters,long(adCmdText)|long(adExecuteNoRecords),&pSet))
     }
     catch (SQLWarning& ex) {
 
