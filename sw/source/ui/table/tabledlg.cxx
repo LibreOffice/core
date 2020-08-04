@@ -732,7 +732,8 @@ SwTableColumnPage::SwTableColumnPage(weld::Container* pPage, weld::DialogControl
     , m_xModifyTableCB(m_xBuilder->weld_check_button("adaptwidth"))
     , m_xProportionalCB(m_xBuilder->weld_check_button("adaptcolumns"))
     , m_xSpaceFT(m_xBuilder->weld_label("spaceft"))
-    , m_xSpaceED(m_xBuilder->weld_metric_spin_button("space", FieldUnit::CM))
+    , m_xSpaceSFT(m_xBuilder->weld_label("space"))
+    , m_xSpaceED(m_xBuilder->weld_metric_spin_button("spacefmt", FieldUnit::CM))
     , m_xUpBtn(m_xBuilder->weld_button("next"))
     , m_xDownBtn(m_xBuilder->weld_button("back"))
 {
@@ -1047,8 +1048,13 @@ void SwTableColumnPage::UpdateCols( sal_uInt16 nCurrentPos )
         m_nTableWidth += nAdd;
     }
 
-    if(!m_bPercentMode)
+    if (!m_bPercentMode)
+    {
         m_xSpaceED->set_value(m_xSpaceED->normalize(m_xTableData->GetSpace() - m_nTableWidth), FieldUnit::TWIP);
+        m_xSpaceSFT->set_label(m_xSpaceED->get_text());
+    }
+    else
+        m_xSpaceSFT->set_label(OUString());
 
     for( sal_uInt16 i = 0; ( i < m_nNoOfVisibleCols ) && ( i < m_nMetFields ); i++)
     {
@@ -1091,12 +1097,13 @@ void SwTableColumnPage::ActivatePage( const SfxItemSet& )
         m_xModifyTableCB->set_active(false);
     }
     m_xSpaceFT->set_sensitive(!m_bPercentMode);
-    m_xSpaceED->set_sensitive(!m_bPercentMode);
+    m_xSpaceSFT->set_sensitive(!m_bPercentMode);
     m_xModifyTableCB->set_sensitive( !m_bPercentMode && m_bModifyTable );
     m_xProportionalCB->set_sensitive(!m_bPercentMode && m_bModifyTable );
 
     m_xSpaceED->set_value(m_xSpaceED->normalize(
                 m_xTableData->GetSpace() - m_nTableWidth), FieldUnit::TWIP);
+    m_xSpaceSFT->set_label(m_xSpaceED->get_text());
 
 }
 

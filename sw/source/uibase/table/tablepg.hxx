@@ -103,6 +103,7 @@ class SwTableColumnPage : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xModifyTableCB;
     std::unique_ptr<weld::CheckButton> m_xProportionalCB;
     std::unique_ptr<weld::Label> m_xSpaceFT;
+    std::unique_ptr<weld::Label> m_xSpaceSFT;
     std::unique_ptr<weld::MetricSpinButton> m_xSpaceED;
     std::unique_ptr<weld::Button> m_xUpBtn;
     std::unique_ptr<weld::Button> m_xDownBtn;
