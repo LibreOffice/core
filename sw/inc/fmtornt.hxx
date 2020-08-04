@@ -108,6 +108,12 @@ inline const SwFormatVertOrient &SwFormat::GetVertOrient(bool bInP) const
 inline const SwFormatHoriOrient &SwFormat::GetHoriOrient(bool bInP) const
     { return m_aSet.GetHoriOrient(bInP); }
 
+namespace sw {
+
+    bool GetAtPageRelOrientation(sal_Int16 & rOrientation, bool const isIgnorePrintArea);
+
+}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
