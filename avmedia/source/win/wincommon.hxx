@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_AVMEDIA_SOURCE_WIN_WINCOMMON_HXX
-#define INCLUDED_AVMEDIA_SOURCE_WIN_WINCOMMON_HXX
+#pragma once
 
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
@@ -38,7 +37,5 @@
 #include <com/sun/star/media/XManager.hpp>
 
 #define WM_GRAPHNOTIFY (WM_USER + 567)
-
-#endif // INCLUDED_AVMEDIA_SOURCE_WIN_WINCOMMON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
