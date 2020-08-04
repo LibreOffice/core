@@ -203,6 +203,35 @@ DECLARE_OOXMLEXPORT_TEST(testTdf134063, "tdf134063.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(720), getXPath(pDump, "//page[1]/body/txt[1]/Text[3]", "nWidth").toInt32());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testAtPageShapeRelOrientation, "rotated_shape.fodt")
+{
+    // invalid combination of at-page anchor and horizontal-rel="paragraph"
+    // caused relativeFrom="column" instead of relativeFrom="page"
+
+    xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+
+    assertXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor"
+        "/wp:positionH/wp:posOffset", "-480060");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor"
+        "/wp:positionH", "relativeFrom", "page");
+    assertXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor"
+        "/wp:positionV/wp:posOffset", "8147685");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor"
+        "/wp:positionV", "relativeFrom", "page");
+
+    // same for sw
+    assertXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/w:drawing/wp:anchor"
+        "/wp:positionH/wp:posOffset", "720090");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/w:drawing/wp:anchor"
+        "/wp:positionH", "relativeFrom", "page");
+    assertXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/w:drawing/wp:anchor"
+        "/wp:positionV/wp:posOffset", "1080135");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/w:drawing/wp:anchor"
+        "/wp:positionV", "relativeFrom", "page");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorHeightFromBottomMarginHasFooter,
                          "tdf133070_testRelativeAnchorHeightFromBottomMarginHasFooter.docx")
 {

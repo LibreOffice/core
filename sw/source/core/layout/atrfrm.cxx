@@ -96,6 +96,39 @@
 using namespace ::com::sun::star;
 
 
+namespace sw {
+
+bool GetAtPageRelOrientation(sal_Int16 & rOrientation, bool const isIgnorePrintArea)
+{
+    switch (rOrientation)
+    {
+        case text::RelOrientation::CHAR:
+        case text::RelOrientation::FRAME:
+            rOrientation = text::RelOrientation::PAGE_FRAME;
+            return true;
+        case text::RelOrientation::PRINT_AREA:
+            if (isIgnorePrintArea)
+            {
+                return false;
+            }
+            else
+            {
+                rOrientation = text::RelOrientation::PAGE_PRINT_AREA;
+                return true;
+            }
+        case text::RelOrientation::FRAME_LEFT:
+            rOrientation = text::RelOrientation::PAGE_LEFT;
+            return true;
+        case text::RelOrientation::FRAME_RIGHT:
+            rOrientation = text::RelOrientation::PAGE_RIGHT;
+            return true;
+        default:
+            return false;
+    }
+}
+
+} // namespace sw
+
 SfxPoolItem* SwFormatLineNumber::CreateDefault() { return new SwFormatLineNumber; }
 
 static sal_Int16 lcl_IntToRelation(const uno::Any& rVal)
