@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CANVAS_SOURCE_OPENGL_OGL_BUFFERCONTEXT_HXX
-#define INCLUDED_CANVAS_SOURCE_OPENGL_OGL_BUFFERCONTEXT_HXX
+#pragma once
 
 #include <epoxy/gl.h>
 
@@ -32,7 +31,5 @@ namespace oglcanvas
 
     typedef std::shared_ptr<IBufferContext> IBufferContextSharedPtr;
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

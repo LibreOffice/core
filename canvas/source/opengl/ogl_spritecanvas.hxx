@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CANVAS_SOURCE_OPENGL_OGL_SPRITECANVAS_HXX
-#define INCLUDED_CANVAS_SOURCE_OPENGL_OGL_SPRITECANVAS_HXX
+#pragma once
 
 #include <rtl/ref.hxx>
 
@@ -111,7 +110,5 @@ namespace oglcanvas
 
     typedef ::rtl::Reference< SpriteCanvas > SpriteCanvasRef;
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

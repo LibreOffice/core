@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_SPRITEHELPER_HXX
-#define INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_SPRITEHELPER_HXX
+#pragma once
 
 #include <base/canvascustomspritehelper.hxx>
 
@@ -99,7 +98,5 @@ namespace cairocanvas
         mutable bool              mbTextureDirty;  // when true, texture needs update
     };
 }
-
-#endif // INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_SPRITEHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

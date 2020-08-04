@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_SOURCE_DIRECTX_DX_GDIPLUSUSER_HXX
-#define INCLUDED_CANVAS_SOURCE_DIRECTX_DX_GDIPLUSUSER_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <memory>
@@ -42,7 +41,5 @@ namespace dxcanvas
     typedef GDIPlusUser::GDIPlusUserSharedPtr GDIPlusUserSharedPtr;
 
 }
-
-#endif // INCLUDED_CANVAS_SOURCE_DIRECTX_DX_GDIPLUSUSER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

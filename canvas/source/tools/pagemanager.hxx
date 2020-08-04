@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_SOURCE_TOOLS_PAGEMANAGER_HXX
-#define INCLUDED_CANVAS_SOURCE_TOOLS_PAGEMANAGER_HXX
+#pragma once
 
 #include <basegfx/vector/b2isize.hxx>
 #include <rendering/irendermodule.hxx>
@@ -72,7 +71,5 @@ namespace canvas
 
     typedef std::shared_ptr< PageManager > PageManagerSharedPtr;
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

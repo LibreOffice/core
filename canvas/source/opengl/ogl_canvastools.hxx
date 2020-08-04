@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CANVAS_SOURCE_OPENGL_OGL_CANVASTOOLS_HXX
-#define INCLUDED_CANVAS_SOURCE_OPENGL_OGL_CANVASTOOLS_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <vector>
@@ -34,7 +33,5 @@ namespace oglcanvas
 
     void renderOSD( const std::vector<double>& rNumbers, double scale );
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_SOURCE_DIRECTX_DX_TEXTLAYOUT_DRAWHELPER_HXX
-#define INCLUDED_CANVAS_SOURCE_DIRECTX_DX_TEXTLAYOUT_DRAWHELPER_HXX
+#pragma once
 
 #include <memory>
 
@@ -73,7 +72,5 @@ namespace dxcanvas
         css::uno::Reference< css::rendering::XGraphicDevice > mxGraphicDevice;
     };
 }
-
-#endif // INCLUDED_CANVAS_SOURCE_DIRECTX_DX_TEXTLAYOUT_DRAWHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
