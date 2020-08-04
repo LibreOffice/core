@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b3def9d0_66a646cf",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-08-04T13:30:54Z",
+      "side": 1,
+      "message": "What is the advantage of this setting? It sets the minimum height to 10 lines- and if the sidebar is smaller (less likely than with 25) the tree gets cut and the horizontal scrollbar disappears. It works well for me with -1 \u003d automatic.",
+      "range": {
+        "startLine": 50,
+        "startChar": 42,
+        "endLine": 50,
+        "endChar": 78
+      },
+      "revId": "4cb321b364d3303c24b068847fb6be1f60b12fce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
