@@ -22,6 +22,30 @@
       "revId": "c379994973dd730c0ee2fdc8854a06b202f9f150",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc452e88_413f2322",
+        "filename": "sdext/source/presenter/PresenterProtocolHandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-08-04T13:21:22Z",
+      "side": 0,
+      "message": "As you commented in the previous patch Next will be disabled and stepping through animations is not possible. And I never get a blank screen not a disabled state in my single device/startalways setup.",
+      "parentUuid": "747d36ff_19e95028",
+      "range": {
+        "startLine": 552,
+        "startChar": 82,
+        "endLine": 552,
+        "endChar": 83
+      },
+      "revId": "c379994973dd730c0ee2fdc8854a06b202f9f150",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
