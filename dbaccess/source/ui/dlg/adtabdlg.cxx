@@ -106,12 +106,12 @@ OUString TableListFacade::getSelectedName( OUString& _out_rAliasName ) const
             if (rTableList.iter_parent(*xCatalog))
             {
                 if (!xAll || !xCatalog->equal(*xAll))
-                    aCatalog = rTableList.get_text(*xCatalog);
+                    aCatalog = rTableList.get_text(*xCatalog, 0);
             }
-            aSchema = rTableList.get_text(*xSchema);
+            aSchema = rTableList.get_text(*xSchema, 0);
         }
     }
-    aTableName = rTableList.get_text(*xEntry);
+    aTableName = rTableList.get_text(*xEntry, 0);
 
     OUString aComposedName;
     try
@@ -318,7 +318,7 @@ OUString QueryListFacade::getSelectedName( OUString& _out_rAliasName ) const
     std::unique_ptr<weld::TreeIter> xEntry(m_rQueryList.make_iterator());
     const bool bEntry = m_rQueryList.get_selected(xEntry.get());
     if (bEntry)
-        sSelected = _out_rAliasName = m_rQueryList.get_text(*xEntry);
+        sSelected = _out_rAliasName = m_rQueryList.get_text(*xEntry, 0);
     return sSelected;
 }
 
