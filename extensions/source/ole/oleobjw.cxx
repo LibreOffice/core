@@ -1281,7 +1281,7 @@ uno::Any SAL_CALL IUnknownWrapper::directInvoke( const OUString& aName, const un
 
         // fill the named arguments
         if ( dispparams.cNamedArgs > 0
-          && !( dispparams.cNamedArgs == 1 && pInvkinds[nStep] == INVOKE_PROPERTYPUT ) )
+          && ( dispparams.cNamedArgs != 1 || pInvkinds[nStep] != INVOKE_PROPERTYPUT ) )
         {
             int nSizeAr = dispparams.cNamedArgs + 1;
             if ( pInvkinds[nStep] == INVOKE_PROPERTYPUT )
