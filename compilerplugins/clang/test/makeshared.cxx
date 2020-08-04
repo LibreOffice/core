@@ -43,13 +43,13 @@ void test1()
 
 void test2()
 {
-    // expected-error-re@+1 {{rather use make_shared than constructing from {{.+}} (aka 'unique_ptr<int>') [loplugin:makeshared]}}
+    // expected-error-re@+1 {{rather use make_shared than constructing from {{.*}}'unique_ptr<int>'{{.*}} [loplugin:makeshared]}}
     std::shared_ptr<int> x = std::make_unique<int>(1);
-    // expected-error-re@+1 {{rather use make_shared than constructing from {{.+}} (aka 'unique_ptr<int>') [loplugin:makeshared]}}
+    // expected-error-re@+1 {{rather use make_shared than constructing from {{.*}}'unique_ptr<int>'{{.*}} [loplugin:makeshared]}}
     x = std::make_unique<int>(1);
     (void)x;
 
-    // expected-error-re@+1 {{rather use make_shared than constructing from {{.+}} (aka 'unique_ptr<int>') [loplugin:makeshared]}}
+    // expected-error-re@+1 {{rather use make_shared than constructing from {{.*}}'unique_ptr<int>'{{.*}} [loplugin:makeshared]}}
     std::shared_ptr<int> y(std::make_unique<int>(1));
     (void)y;
 
