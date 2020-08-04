@@ -29,6 +29,35 @@ protected:
     }
 };
 
+DECLARE_OOXMLEXPORT_TEST(testAtPageShapeRelOrientation, "rotated_shape.fodt")
+{
+    // invalid combination of at-page anchor and horizontal-rel="paragraph"
+    // caused relativeFrom="column" instead of relativeFrom="page"
+
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+
+    assertXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor"
+        "/wp:positionH/wp:posOffset", "-480060");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor"
+        "/wp:positionH", "relativeFrom", "page");
+    assertXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor"
+        "/wp:positionV/wp:posOffset", "8147685");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor"
+        "/wp:positionV", "relativeFrom", "page");
+
+    // same for sw
+    assertXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/w:drawing/wp:anchor"
+        "/wp:positionH/wp:posOffset", "720090");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/w:drawing/wp:anchor"
+        "/wp:positionH", "relativeFrom", "page");
+    assertXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/w:drawing/wp:anchor"
+        "/wp:positionV/wp:posOffset", "1080135");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/w:drawing/wp:anchor"
+        "/wp:positionV", "relativeFrom", "page");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf133334_followPgStyle, "tdf133334_followPgStyle.odt")
 {
     CPPUNIT_ASSERT_EQUAL(2, getPages());
