@@ -961,18 +961,18 @@ UcbLockBytes::~UcbLockBytes()
         }
     }
 
-    if ( !m_xInputStream.is() && m_xOutputStream.is() )
+    if ( m_xInputStream.is() || !m_xOutputStream.is() )
+        return;
+
+    try
     {
-        try
-        {
-            m_xOutputStream->closeOutput();
-        }
-        catch (const RuntimeException&)
-        {
-        }
-        catch (const IOException&)
-        {
-        }
+        m_xOutputStream->closeOutput();
+    }
+    catch (const RuntimeException&)
+    {
+    }
+    catch (const IOException&)
+    {
     }
 }
 

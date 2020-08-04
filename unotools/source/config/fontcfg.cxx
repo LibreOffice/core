@@ -974,72 +974,72 @@ ImplFontAttrs FontSubstConfiguration::getSubstType( const css::uno::Reference< X
 void FontSubstConfiguration::readLocaleSubst( const OUString& rBcp47 ) const
 {
     std::unordered_map< OUString, LocaleSubst >::const_iterator it = m_aSubst.find( rBcp47 );
-    if( it != m_aSubst.end() )
+    if( it == m_aSubst.end() )
+        return;
+
+    if(  it->second.bConfigRead )
+        return;
+
+    it->second.bConfigRead = true;
+    Reference< XNameAccess > xNode;
+    try
     {
-        if( ! it->second.bConfigRead )
-        {
-            it->second.bConfigRead = true;
-            Reference< XNameAccess > xNode;
-            try
-            {
-                Any aAny = m_xConfigAccess->getByName( it->second.aConfigLocaleString );
-                aAny >>= xNode;
-            }
-            catch (const NoSuchElementException&)
-            {
-            }
-            catch (const WrappedTargetException&)
-            {
-            }
-            if( xNode.is() )
-            {
-                const Sequence< OUString > aFonts = xNode->getElementNames();
-                int nFonts = aFonts.getLength();
-                // improve performance, heap fragmentation
-                it->second.aSubstAttributes.reserve( nFonts );
-
-                // strings for subst retrieval, construct only once
-                OUString const aSubstFontsStr     ( "SubstFonts" );
-                OUString const aSubstFontsMSStr   ( "SubstFontsMS" );
-                OUString const aSubstWeightStr    ( "FontWeight" );
-                OUString const aSubstWidthStr     ( "FontWidth" );
-                OUString const aSubstTypeStr      ( "FontType" );
-                for( const OUString& rFontName : aFonts )
-                {
-                    Reference< XNameAccess > xFont;
-                    try
-                    {
-                        Any aAny = xNode->getByName( rFontName );
-                        aAny >>= xFont;
-                    }
-                    catch (const NoSuchElementException&)
-                    {
-                    }
-                    catch (const WrappedTargetException&)
-                    {
-                    }
-                    if( ! xFont.is() )
-                    {
-                        SAL_WARN("unotools.config", "did not get font attributes for " << rFontName);
-                        continue;
-                    }
-
-                    FontNameAttr aAttr;
-                    // read subst attributes from config
-                    aAttr.Name = rFontName;
-                    fillSubstVector( xFont, aSubstFontsStr, aAttr.Substitutions );
-                    fillSubstVector( xFont, aSubstFontsMSStr, aAttr.MSSubstitutions );
-                    aAttr.Weight = getSubstWeight( xFont, aSubstWeightStr );
-                    aAttr.Width = getSubstWidth( xFont, aSubstWidthStr );
-                    aAttr.Type = getSubstType( xFont, aSubstTypeStr );
-
-                    // finally insert this entry
-                    it->second.aSubstAttributes.push_back( aAttr );
-                }
-                std::sort( it->second.aSubstAttributes.begin(), it->second.aSubstAttributes.end(), StrictStringSort() );
-            }
-        }
+        Any aAny = m_xConfigAccess->getByName( it->second.aConfigLocaleString );
+        aAny >>= xNode;
     }
+    catch (const NoSuchElementException&)
+    {
+    }
+    catch (const WrappedTargetException&)
+    {
+    }
+    if( !xNode.is() )
+        return;
+
+    const Sequence< OUString > aFonts = xNode->getElementNames();
+    int nFonts = aFonts.getLength();
+    // improve performance, heap fragmentation
+    it->second.aSubstAttributes.reserve( nFonts );
+
+    // strings for subst retrieval, construct only once
+    OUString const aSubstFontsStr     ( "SubstFonts" );
+    OUString const aSubstFontsMSStr   ( "SubstFontsMS" );
+    OUString const aSubstWeightStr    ( "FontWeight" );
+    OUString const aSubstWidthStr     ( "FontWidth" );
+    OUString const aSubstTypeStr      ( "FontType" );
+    for( const OUString& rFontName : aFonts )
+    {
+        Reference< XNameAccess > xFont;
+        try
+        {
+            Any aAny = xNode->getByName( rFontName );
+            aAny >>= xFont;
+        }
+        catch (const NoSuchElementException&)
+        {
+        }
+        catch (const WrappedTargetException&)
+        {
+        }
+        if( ! xFont.is() )
+        {
+            SAL_WARN("unotools.config", "did not get font attributes for " << rFontName);
+            continue;
+        }
+
+        FontNameAttr aAttr;
+        // read subst attributes from config
+        aAttr.Name = rFontName;
+        fillSubstVector( xFont, aSubstFontsStr, aAttr.Substitutions );
+        fillSubstVector( xFont, aSubstFontsMSStr, aAttr.MSSubstitutions );
+        aAttr.Weight = getSubstWeight( xFont, aSubstWeightStr );
+        aAttr.Width = getSubstWidth( xFont, aSubstWidthStr );
+        aAttr.Type = getSubstType( xFont, aSubstTypeStr );
+
+        // finally insert this entry
+        it->second.aSubstAttributes.push_back( aAttr );
+    }
+    std::sort( it->second.aSubstAttributes.begin(), it->second.aSubstAttributes.end(), StrictStringSort() );
 }
 
 const FontNameAttr* FontSubstConfiguration::getSubstInfo( const OUString& rFontName ) const

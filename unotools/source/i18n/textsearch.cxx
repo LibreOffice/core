@@ -305,95 +305,95 @@ bool TextSearch::SearchBackward( const OUString & rStr, sal_Int32* pStart,
 
 void TextSearch::ReplaceBackReferences( OUString& rReplaceStr, const OUString &rStr, const SearchResult& rResult ) const
 {
-    if( rResult.subRegExpressions > 0 )
+    if( rResult.subRegExpressions <= 0 )
+        return;
+
+    sal_Unicode sFndChar;
+    sal_Int32 i;
+    OUStringBuffer sBuff(rReplaceStr.getLength()*4);
+    for(i = 0; i < rReplaceStr.getLength(); i++)
     {
-        sal_Unicode sFndChar;
-        sal_Int32 i;
-        OUStringBuffer sBuff(rReplaceStr.getLength()*4);
-        for(i = 0; i < rReplaceStr.getLength(); i++)
+        if( rReplaceStr[i] == '&')
         {
-            if( rReplaceStr[i] == '&')
-            {
-                sal_Int32 nStart = rResult.startOffset[0];
-                sal_Int32 nLength = rResult.endOffset[0] - rResult.startOffset[0];
-                sBuff.append(std::u16string_view(rStr).substr(nStart, nLength));
-            }
-            else if((i < rReplaceStr.getLength() - 1) && rReplaceStr[i] == '$')
-            {
-                sFndChar = rReplaceStr[ i + 1 ];
-                switch(sFndChar)
-                {   // placeholder for a backward reference?
-                case '0':
-                case '1':
-                case '2':
-                case '3':
-                case '4':
-                case '5':
-                case '6':
-                case '7':
-                case '8':
-                case '9':
-                    {
-                        int j = sFndChar - '0'; // index
-                        if(j < rResult.subRegExpressions)
-                        {
-                            sal_Int32 nSttReg = rResult.startOffset[j];
-                            sal_Int32 nRegLen = rResult.endOffset[j];
-                            if (nSttReg < 0 || nRegLen < 0) // A "not found" optional capture
-                            {
-                                nSttReg = nRegLen = 0; // Copy empty string
-                            }
-                            else if (nRegLen >= nSttReg)
-                            {
-                                nRegLen = nRegLen - nSttReg;
-                            }
-                            else
-                            {
-                                nRegLen = nSttReg - nRegLen;
-                                nSttReg = rResult.endOffset[j];
-                            }
-                            // Copy reference from found string
-                            sBuff.append(std::u16string_view(rStr).substr(nSttReg, nRegLen));
-                        }
-                        i += 1;
-                    }
-                    break;
-                default:
-                    sBuff.append(rReplaceStr[i]);
-                    sBuff.append(rReplaceStr[i+1]);
-                    i += 1;
-                    break;
-                }
-            }
-            else if((i < rReplaceStr.getLength() - 1) && rReplaceStr[i] == '\\')
-            {
-                sFndChar = rReplaceStr[ i+1 ];
-                switch(sFndChar)
+            sal_Int32 nStart = rResult.startOffset[0];
+            sal_Int32 nLength = rResult.endOffset[0] - rResult.startOffset[0];
+            sBuff.append(std::u16string_view(rStr).substr(nStart, nLength));
+        }
+        else if((i < rReplaceStr.getLength() - 1) && rReplaceStr[i] == '$')
+        {
+            sFndChar = rReplaceStr[ i + 1 ];
+            switch(sFndChar)
+            {   // placeholder for a backward reference?
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
                 {
-                case '\\':
-                case '&':
-                case '$':
-                    sBuff.append(sFndChar);
-                    i+=1;
-                    break;
-                case 't':
-                    sBuff.append('\t');
+                    int j = sFndChar - '0'; // index
+                    if(j < rResult.subRegExpressions)
+                    {
+                        sal_Int32 nSttReg = rResult.startOffset[j];
+                        sal_Int32 nRegLen = rResult.endOffset[j];
+                        if (nSttReg < 0 || nRegLen < 0) // A "not found" optional capture
+                        {
+                            nSttReg = nRegLen = 0; // Copy empty string
+                        }
+                        else if (nRegLen >= nSttReg)
+                        {
+                            nRegLen = nRegLen - nSttReg;
+                        }
+                        else
+                        {
+                            nRegLen = nSttReg - nRegLen;
+                            nSttReg = rResult.endOffset[j];
+                        }
+                        // Copy reference from found string
+                        sBuff.append(std::u16string_view(rStr).substr(nSttReg, nRegLen));
+                    }
                     i += 1;
-                    break;
-                default:
-                    sBuff.append(rReplaceStr[i]);
-                    sBuff.append(rReplaceStr[i+1]);
-                    i += 1;
-                    break;
                 }
-            }
-            else
-            {
+                break;
+            default:
                 sBuff.append(rReplaceStr[i]);
+                sBuff.append(rReplaceStr[i+1]);
+                i += 1;
+                break;
             }
         }
-        rReplaceStr = sBuff.makeStringAndClear();
+        else if((i < rReplaceStr.getLength() - 1) && rReplaceStr[i] == '\\')
+        {
+            sFndChar = rReplaceStr[ i+1 ];
+            switch(sFndChar)
+            {
+            case '\\':
+            case '&':
+            case '$':
+                sBuff.append(sFndChar);
+                i+=1;
+                break;
+            case 't':
+                sBuff.append('\t');
+                i += 1;
+                break;
+            default:
+                sBuff.append(rReplaceStr[i]);
+                sBuff.append(rReplaceStr[i+1]);
+                i += 1;
+                break;
+            }
+        }
+        else
+        {
+            sBuff.append(rReplaceStr[i]);
+        }
     }
+    rReplaceStr = sBuff.makeStringAndClear();
 }
 
 }   // namespace utl
