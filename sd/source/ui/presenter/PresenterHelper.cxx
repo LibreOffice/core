@@ -380,7 +380,9 @@ Reference<rendering::XBitmap> SAL_CALL PresenterHelper::loadBitmap (
           BMP_PRESENTERSCREEN_SCROLLBAR_THUMB_TOP_MOUSE_OVER },
         { "bitmaps/ScrollbarThumbTopNormal.png",
           BMP_PRESENTERSCREEN_SCROLLBAR_THUMB_TOP_NORMAL },
-        { "bitmaps/ViewBackground.png", BMP_PRESENTERSCREEN_VIEW_BACKGROUND }
+        { "bitmaps/ViewBackground.png", BMP_PRESENTERSCREEN_VIEW_BACKGROUND },
+        { "bitmaps/Separator.png",
+          BMP_PRESENTERSCREEN_SEPARATOR }
     };
     OUString bmpid;
     for (std::size_t i = 0; i != SAL_N_ELEMENTS(map); ++i) {
