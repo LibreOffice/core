@@ -1004,10 +1004,8 @@ IDispatch* DocumentHolder::GetIDispatch()
 {
     if ( !m_pIDispatch && m_xDocument.is() )
     {
-        const OUString aServiceName (
-                "com.sun.star.bridge.OleBridgeSupplier2" );
         uno::Reference< bridge::XBridgeSupplier2 > xSupplier(
-            m_xFactory->createInstance( aServiceName ), uno::UNO_QUERY );
+            m_xFactory->createInstance( "com.sun.star.bridge.OleBridgeSupplier2" ), uno::UNO_QUERY );
 
         if ( xSupplier.is() )
         {

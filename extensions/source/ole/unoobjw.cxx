@@ -2037,9 +2037,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InterfaceOleWrapper::Invoke(DISPID dispidMembe
     }
     catch(...)
     {
-        OUString message= "InterfaceOleWrapper::Invoke : \n"
-                          "Unexpected exception";
-        writeExcepinfo(pexcepinfo, message);
+        writeExcepinfo(pexcepinfo, "InterfaceOleWrapper::Invoke : \nUnexpected exception");
         ret = DISP_E_EXCEPTION;
     }
 
@@ -2130,9 +2128,7 @@ HRESULT InterfaceOleWrapper::doInvoke( DISPPARAMS * pdispparams, VARIANT * pvarR
     }
     catch( ... )
      {
-        OUString message= "InterfaceOleWrapper::doInvoke : \n"
-                          "Unexpected exception";
-        writeExcepinfo(pexcepinfo, message);
+        writeExcepinfo(pexcepinfo, "InterfaceOleWrapper::doInvoke : \nUnexpected exception");
         ret = DISP_E_EXCEPTION;
      }
     return ret;
@@ -2168,9 +2164,7 @@ HRESULT InterfaceOleWrapper::doGetProperty( DISPPARAMS * /*pdispparams*/, VARIAN
     }
     catch( ... )
     {
-        OUString message= "InterfaceOleWrapper::doInvoke : \n"
-                          "Unexpected exception";
-        writeExcepinfo(pexcepinfo, message);
+        writeExcepinfo(pexcepinfo, "InterfaceOleWrapper::doInvoke : \nUnexpected exception");
         ret = DISP_E_EXCEPTION;
     }
     return  ret;
@@ -2962,9 +2956,7 @@ HRESULT InterfaceOleWrapper::InvokeGeneral( DISPID dispidMember, unsigned short 
     }
     catch( ... )
      {
-        OUString message= "InterfaceOleWrapper::InvokeGeneral : \n"
-                          "Unexpected exception";
-        writeExcepinfo(pexcepinfo, message);
+        writeExcepinfo(pexcepinfo, "InterfaceOleWrapper::InvokeGeneral : \nUnexpected exception");
         ret = DISP_E_EXCEPTION;
      }
     return ret;
@@ -3431,9 +3423,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID di
     }
     catch(...)
     {
-        OUString message= "UnoObjectWrapperRemoteOpt::Invoke : \n"
-                          "Unexpected exception";
-        writeExcepinfo(pexcepinfo, message);
+        writeExcepinfo(pexcepinfo, "UnoObjectWrapperRemoteOpt::Invoke : \nUnexpected exception");
         ret = DISP_E_EXCEPTION;
     }
 

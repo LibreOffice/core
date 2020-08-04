@@ -1805,8 +1805,7 @@ namespace osl_FileStatus
 #else // Windows version
         void getAttributes_004()
         {
-            OUString aUserHiddenFileURL ("file:///c:/AUTOEXEC.BAT");
-            nError = DirectoryItem::get(aUserHiddenFileURL, rItem_hidden);
+            nError = DirectoryItem::get("file:///c:/AUTOEXEC.BAT", rItem_hidden);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("get item fail", osl::FileBase::E_None, nError);
             FileStatus   rFileStatus(osl_FileStatus_Mask_Attributes);
             nError = rItem_hidden.getFileStatus(rFileStatus);

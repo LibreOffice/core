@@ -843,8 +843,7 @@ bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
 
         case SotClipboardFormatId::FILECONTENT:
         {
-            OUString aStr( "[InternetShortcut]\x0aURL=" );
-            maAny <<= ( aStr += rBmk.GetURL() );
+            maAny <<= "[InternetShortcut]\x0aURL=" + rBmk.GetURL();
         }
         break;
 #endif
