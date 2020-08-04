@@ -122,7 +122,7 @@ namespace dxcanvas
     {
         ENSURE_OR_THROW( rTarget,
                           "CanvasHelper::setTarget(): Invalid target" );
-        ENSURE_OR_THROW( !mpGraphicsProvider.get(),
+        ENSURE_OR_THROW( !mpGraphicsProvider,
                           "CanvasHelper::setTarget(): target set, old target would be overwritten" );
 
         mpGraphicsProvider = rTarget;
@@ -133,7 +133,7 @@ namespace dxcanvas
     {
         ENSURE_OR_THROW( rTarget,
                          "CanvasHelper::setTarget(): invalid target" );
-        ENSURE_OR_THROW( !mpGraphicsProvider.get(),
+        ENSURE_OR_THROW( !mpGraphicsProvider,
                          "CanvasHelper::setTarget(): target set, old target would be overwritten" );
 
         mpGraphicsProvider = rTarget;

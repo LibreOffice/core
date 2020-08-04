@@ -395,7 +395,7 @@ void  AccObject::SetValue( Any pAny )
     case HEADING:
     case TABLE_CELL:
 
-        if(pRText.get())
+        if(pRText)
         {
             val = pRText->getText();
         }

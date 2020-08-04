@@ -2183,7 +2183,7 @@ bool WinSalGraphicsImpl::tryDrawBitmapGdiPlus(const SalTwoRect& rTR, const SalBi
         const WinSalBitmap& rSalBitmap = static_cast< const WinSalBitmap& >(rSrcBitmap);
         std::shared_ptr< Gdiplus::Bitmap > aARGB(rSalBitmap.ImplGetGdiPlusBitmap());
 
-        if(aARGB.get())
+        if(aARGB)
         {
             Gdiplus::Graphics aGraphics(mrParent.getHDC());
 
@@ -2236,7 +2236,7 @@ bool WinSalGraphicsImpl::drawAlphaBitmap(
         const WinSalBitmap& rSalAlpha = static_cast< const WinSalBitmap& >(rAlphaBmp);
         std::shared_ptr< Gdiplus::Bitmap > aARGB(rSalBitmap.ImplGetGdiPlusBitmap(&rSalAlpha));
 
-        if(aARGB.get())
+        if(aARGB)
         {
             Gdiplus::Graphics aGraphics(mrParent.getHDC());
 
@@ -2273,7 +2273,7 @@ bool WinSalGraphicsImpl::drawTransformedBitmap(
     const WinSalBitmap* pSalAlpha = static_cast< const WinSalBitmap* >(pAlphaBitmap);
     std::shared_ptr< Gdiplus::Bitmap > aARGB(rSalBitmap.ImplGetGdiPlusBitmap(pSalAlpha));
 
-    if(aARGB.get())
+    if(aARGB)
     {
         const long nSrcWidth(aARGB->GetWidth());
         const long nSrcHeight(aARGB->GetHeight());

@@ -54,7 +54,7 @@ namespace dxcanvas
                              const DXSurfaceBitmapSharedPtr& rBitmap,
                              bool                            bShowSpriteBounds )
     {
-        ENSURE_OR_THROW( rSpriteCanvas.get() &&
+        ENSURE_OR_THROW( rSpriteCanvas &&
                           rRenderModule &&
                           rBitmap,
                           "SpriteHelper::init(): Invalid device, sprite canvas or surface" );
@@ -86,7 +86,7 @@ namespace dxcanvas
     bool SpriteHelper::needRedraw() const
     {
         if( !mpBitmap ||
-            !mpSpriteCanvas.get() )
+            !mpSpriteCanvas )
         {
             return false; // we're disposed, no redraw necessary
         }
@@ -103,7 +103,7 @@ namespace dxcanvas
     void SpriteHelper::redraw( bool& io_bSurfaceDirty ) const
     {
         if( !mpBitmap ||
-            !mpSpriteCanvas.get() )
+            !mpSpriteCanvas )
         {
             return; // we're disposed
         }

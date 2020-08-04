@@ -676,7 +676,7 @@ bool WinSalBitmap::Create( const css::uno::Reference< css::rendering::XBitmapCan
     css::uno::Reference< css::beans::XFastPropertySet >
         xFastPropertySet( rBitmapCanvas, css::uno::UNO_QUERY );
 
-    if( xFastPropertySet.get() ) {
+    if( xFastPropertySet ) {
         css::uno::Sequence< css::uno::Any > args;
 
         if( xFastPropertySet->getFastPropertyValue(bMask ? 2 : 1) >>= args ) {
