@@ -2745,6 +2745,23 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
             aAnchor.SetAnchor( aPam.GetPoint() );
             aFrameSet.Put(aAnchor);
         }
+
+        if (eAnchorId == RndStdIds::FLY_AT_PAGE)
+        {
+            switch (aFrameSet.Get(RES_HORI_ORIENT).GetRelationOrient())
+            {
+                case text::RelOrientation::CHAR:
+                case text::RelOrientation::FRAME:
+                case text::RelOrientation::PRINT_AREA:
+                case text::RelOrientation::FRAME_LEFT:
+                case text::RelOrientation::FRAME_RIGHT:
+                    SAL_WARN("sw.core", "invalid horizontal RelOrientation for at-page anchor");
+                    SwFormatHoriOrient item(aFrameSet.Get(RES_HORI_ORIENT));
+                    item.SetRelationOrient(text::RelOrientation::PAGE_FRAME);
+                    aFrameSet.Put(item);
+                    break;
+            }
+        }
     }
 
     const ::uno::Any* pStyle;

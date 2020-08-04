@@ -1227,6 +1227,27 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     }
                 }
             }
+            else if (pEntry->nWID == RES_HORI_ORIENT
+                && pEntry->nMemberId == MID_HORIORIENT_RELATION
+                && aSet.Get(RES_ANCHOR).GetAnchorId() == RndStdIds::FLY_AT_PAGE)
+            {
+                uno::Any value(aValue);
+                sal_Int16 nVal(text::RelOrientation::FRAME);
+                aValue >>= nVal;
+                switch (nVal)
+                {
+                    case text::RelOrientation::CHAR:
+                    case text::RelOrientation::FRAME:
+                    case text::RelOrientation::PRINT_AREA:
+                    case text::RelOrientation::FRAME_LEFT:
+                    case text::RelOrientation::FRAME_RIGHT:
+                        SAL_WARN("sw.core", "invalid horizontal RelOrientation for at-page anchor");
+                        value <<= sal_Int16(text::RelOrientation::PAGE_FRAME);
+                        break;
+                }
+                m_pPropSet->setPropertyValue( *pEntry, value, aSet );
+                pFormat->SetFormatAttr(aSet);
+            }
             else
             {
                 m_pPropSet->setPropertyValue( *pEntry, aValue, aSet );
