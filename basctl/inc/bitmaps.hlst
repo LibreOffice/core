@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_BASCTL_INC_BITMAPS_HRC
-#define INCLUDED_BASCTL_INC_BITMAPS_HRC
+#pragma once
 
 #define RID_BMP_BRKENABLED      "res/im30838.png"
 #define RID_BMP_BRKDISABLED     "res/im30839.png"
@@ -24,7 +23,5 @@
 #define RID_BMP_DLGLIB          "res/dialogfolder_16.png"
 #define RID_BMP_DLGLIBNOTLOADED "res/dialogfoldernot_16.png"
 #define RID_BMP_DIALOG          "res/im30823.png"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
