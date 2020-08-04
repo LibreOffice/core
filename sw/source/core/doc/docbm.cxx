@@ -1016,8 +1016,8 @@ namespace sw::mark
                     bDeleteMark = rbIsOtherPosInRange
                                   || pMark->IsExpanded()
                                   || pSttIdx == nullptr
-                                  || !( pMark->GetMarkPos().nNode == rStt
-                                        && pMark->GetMarkPos().nContent == *pSttIdx );
+                                  || pMark->GetMarkPos().nNode != rStt
+                                  || pMark->GetMarkPos().nContent != *pSttIdx;
                     break;
                 default:
                     bDeleteMark = true;

@@ -300,6 +300,15 @@ inline clang::QualType getDeclaredReturnType(clang::FunctionDecl const * decl) {
 #endif
 }
 
+// The isComparisonOp method on CXXOperatorCallExpr is not available yet for the clang we require
+inline bool isComparisonOp(clang::CXXOperatorCallExpr const * callExpr)
+{
+    using namespace clang;
+    auto op = callExpr->getOperator();
+    return op == OO_Less || op == OO_Greater || op == OO_LessEqual || op == OO_GreaterEqual
+           || op == OO_EqualEqual || op == OO_ExclaimEqual;
+}
+
 }
 
 #endif

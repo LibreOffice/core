@@ -452,7 +452,8 @@ void SAL_CALL ManifestImport::endElement( const OUString& aName )
     assert(nLevel >= 1);
 
     OUString aConvertedName = ConvertName( aName );
-    if ( !(!aStack.empty() && aStack.rbegin()->m_aConvertedName == aConvertedName) )        return;
+    if ( aStack.empty() || aStack.rbegin()->m_aConvertedName != aConvertedName )
+        return;
 
     if ( aConvertedName == gsFileEntryElement && aStack.back().m_bValid ) {
         // root folder gets KeyInfo entry if any, for PGP encryption

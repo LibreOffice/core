@@ -1509,7 +1509,7 @@ const SwRedlineData* SwWW8AttrIter::GetRunLevelRedline( sal_Int32 nPos )
     if( pCurRedline )
     {
         const SwPosition* pEnd = pCurRedline->End();
-        if (!(pEnd->nNode == rNd && pEnd->nContent.GetIndex() <= nPos))
+        if (pEnd->nNode != rNd || pEnd->nContent.GetIndex() > nPos)
         {
             switch( pCurRedline->GetType() )
             {

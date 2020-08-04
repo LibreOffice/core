@@ -3363,11 +3363,11 @@ void SwXTextDocument::getPostIts(tools::JsonWriter& rJsonWriter)
 void SwXTextDocument::executeFromFieldEvent(const StringMap& aArguments)
 {
     auto aIter = aArguments.find("type");
-    if (!(aIter != aArguments.end() && aIter->second == "drop-down"))
+    if (aIter == aArguments.end() || aIter->second != "drop-down")
         return;
 
     aIter = aArguments.find("cmd");
-    if (!(aIter != aArguments.end() && aIter->second == "selected"))
+    if (aIter == aArguments.end() || aIter->second != "selected")
         return;
 
     aIter = aArguments.find("data");

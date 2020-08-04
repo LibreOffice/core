@@ -984,7 +984,8 @@ void ElementDescriptor::readSelectionTypeAttr( OUString const & rPropName, OUStr
 
     Any aSelectionType ( _xProps->getPropertyValue( rPropName ) );
 
-    if (!(aSelectionType.getValueTypeClass() == TypeClass_ENUM && aSelectionType.getValueType() == cppu::UnoType<view::SelectionType>::get()))
+    if (aSelectionType.getValueTypeClass() != TypeClass_ENUM ||
+        aSelectionType.getValueType() != cppu::UnoType<view::SelectionType>::get())
         return;
 
     ::view::SelectionType eSelectionType;

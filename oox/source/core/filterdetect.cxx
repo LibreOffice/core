@@ -152,8 +152,8 @@ void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
     else if (aType.startsWithIgnoreAsciiCase("http://purl.oclc.org/ooxml/officeDocument"))
         maOOXMLVariant = OOXMLVariant::ISO_Strict;
 
-    if ( !(aType == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" // OOXML Transitional
-            || aType == "http://purl.oclc.org/ooxml/officeDocument/relationships/officeDocument") ) //OOXML strict
+    if ( aType != "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" // OOXML Transitional
+          && aType != "http://purl.oclc.org/ooxml/officeDocument/relationships/officeDocument" ) //OOXML strict
         return;
 
     Reference<XUriReferenceFactory> xFactory = UriReferenceFactory::create( mxContext );

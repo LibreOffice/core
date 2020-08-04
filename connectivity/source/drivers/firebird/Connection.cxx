@@ -791,7 +791,7 @@ void SAL_CALL Connection::documentEventOccured( const DocumentEvent& Event )
     if (!m_bIsEmbedded)
         return;
 
-    if (!(Event.EventName == "OnSave" || Event.EventName == "OnSaveAs"))
+    if (Event.EventName != "OnSave" && Event.EventName != "OnSaveAs")
         return;
 
     commit(); // Commit and close transaction

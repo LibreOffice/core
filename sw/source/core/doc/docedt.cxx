@@ -161,8 +161,8 @@ void SaveFlyInRange( const SwPaM& rPam, const SwPosition& rInsPos,
              (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
             // do not move if the InsPos is in the ContentArea of the Fly
             ( nullptr == ( pContentIdx = pFormat->GetContent().GetContentIdx() ) ||
-              !(*pContentIdx < rInsPos.nNode &&
-                rInsPos.nNode < pContentIdx->GetNode().EndOfSectionIndex())))
+              (*pContentIdx >= rInsPos.nNode ||
+                rInsPos.nNode >= pContentIdx->GetNode().EndOfSectionIndex())))
         {
             bool bInsPos = false;
 

@@ -700,7 +700,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                      !pMap->aName.isEmpty(); ++pMap )
                 {
                     // OUString(UNO_NAME_PAGE_DESC_NAME) should keep its MAYBEVOID flag
-                    if (!(RES_PAGEDESC == pMap->nWID && MID_PAGEDESC_PAGEDESCNAME == pMap->nMemberId))
+                    if (RES_PAGEDESC != pMap->nWID || MID_PAGEDESC_PAGEDESCNAME != pMap->nMemberId)
                         pMap->nFlags &= ~PropertyAttribute::MAYBEVOID;
                 }
             }

@@ -83,8 +83,8 @@ void ImageButtonToolbarController::executeControlCommand( const css::frame::Cont
 {
     SolarMutexGuard aSolarMutexGuard;
     // i73486 to be downward compatible use old and "wrong" also!
-    if( !(rControlCommand.Command == "SetImag" ||
-        rControlCommand.Command == "SetImage") )
+    if( rControlCommand.Command != "SetImag" &&
+        rControlCommand.Command != "SetImage" )
         return;
 
     for ( const NamedValue& rArg : rControlCommand.Arguments )
