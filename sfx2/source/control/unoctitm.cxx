@@ -1158,6 +1158,12 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "CharmapControl" ||
              aEvent.FeatureURL.Path == "EnterGroup" ||
              aEvent.FeatureURL.Path == "LeaveGroup" ||
+             aEvent.FeatureURL.Path == "Combine" ||
+             aEvent.FeatureURL.Path == "Merge" ||
+             aEvent.FeatureURL.Path == "Dismantle" ||
+             aEvent.FeatureURL.Path == "Substract" ||
+             aEvent.FeatureURL.Path == "DistributeSelection" ||
+             aEvent.FeatureURL.Path == "Intersect" ||
              aEvent.FeatureURL.Path == "ResetAttributes")
     {
         aBuffer.append(aEvent.IsEnabled ? OUStringLiteral(u"enabled") : OUStringLiteral(u"disabled"));
