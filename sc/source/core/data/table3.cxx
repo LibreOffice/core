@@ -2612,7 +2612,7 @@ public:
                     {
                         const OUString & rValue = pValueSource1 ? pValueSource1->getString() : *pValueSource2;
                         const OUString aQueryStr = rItem.maString.getString();
-                        const LanguageType nLang = ScGlobal::pSysLocale->GetLanguageTag().getLanguageType();
+                        const LanguageType nLang = ScGlobal::xSysLocale->GetLanguageTag().getLanguageType();
                         setupTransliteratorIfNeeded();
                         const OUString aCell( mpTransliteration->transliterate(
                                             rValue, nLang, 0, rValue.getLength(),
