@@ -29,5 +29,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,gpgmepp, \
     external/gpgmepp/gcc9.patch \
     external/gpgmepp/ubsan.patch \
     external/gpgmepp/c++20.patch \
+    external/gpgmepp/clang-cl.patch \
 ))
 # vim: set noet sw=4 ts=4:
