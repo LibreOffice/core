@@ -178,13 +178,6 @@ namespace dxcanvas
         return maDeviceHelper.getBackBuffer();
     }
 
-    static uno::Reference<uno::XInterface> initCanvas( SpriteCanvas* pCanvas )
-    {
-        uno::Reference<uno::XInterface> xRet(static_cast<cppu::OWeakObject*>(pCanvas));
-        pCanvas->initialize();
-        return xRet;
-    }
-
     extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
     canvas_directx9_SpriteCanvas_get_implementation(
        css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
