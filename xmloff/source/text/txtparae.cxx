@@ -1448,39 +1448,23 @@ void XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
     if ( xAutoStylesSupp.is() )
     {
         Reference< XAutoStyles > xAutoStyleFamilies = xAutoStylesSupp->getAutoStyles();
-        OUString sName;
-        XmlStyleFamily nFamily;
-
-        for ( int i = 0; i < 3; ++i )
-        {
-            if ( 0 == i )
-            {
-                sName = "CharacterStyles" ;
-                nFamily = XmlStyleFamily::TEXT_TEXT;
-            }
-            else if ( 1 == i )
-            {
-                sName = "RubyStyles" ;
-                nFamily = XmlStyleFamily::TEXT_RUBY;
-            }
-            else
-            {
-                sName = "ParagraphStyles" ;
-                nFamily = XmlStyleFamily::TEXT_PARAGRAPH;
-            }
-
-            Any aAny = xAutoStyleFamilies->getByName( sName );
+        const auto collectFamily = [this, &xAutoStyleFamilies](const OUString& sName,
+                                                               XmlStyleFamily nFamily) {
+            Any aAny = xAutoStyleFamilies->getByName(sName);
             Reference< XAutoStyleFamily > xAutoStyles = *o3tl::doAccess<Reference<XAutoStyleFamily>>(aAny);
-            Reference < XEnumeration > xAutoStylesEnum( xAutoStyles->createEnumeration() );
+            Reference < XEnumeration > xAutoStylesEnum(xAutoStyles->createEnumeration());
 
-            while ( xAutoStylesEnum->hasMoreElements() )
+            while (xAutoStylesEnum->hasMoreElements())
             {
                 aAny = xAutoStylesEnum->nextElement();
                 Reference< XAutoStyle > xAutoStyle = *o3tl::doAccess<Reference<XAutoStyle>>(aAny);
-                Reference < XPropertySet > xPSet( xAutoStyle, uno::UNO_QUERY );
-                Add( nFamily, xPSet, nullptr, true );
+                Reference < XPropertySet > xPSet(xAutoStyle, uno::UNO_QUERY);
+                Add(nFamily, xPSet, nullptr, true);
             }
-        }
+        };
+        collectFamily("CharacterStyles", XmlStyleFamily::TEXT_TEXT);
+        collectFamily("RubyStyles", XmlStyleFamily::TEXT_RUBY);
+        collectFamily("ParagraphStyles", XmlStyleFamily::TEXT_PARAGRAPH);
     }
 
     // Export Field AutoStyles:
