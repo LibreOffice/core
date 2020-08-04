@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SOURCE_INC_SBINTERN_HXX
-#define INCLUDED_BASIC_SOURCE_INC_SBINTERN_HXX
+#pragma once
 
 #include <basic/basicdllapi.h>
 #include <basic/sbstar.hxx>
@@ -141,7 +140,5 @@ struct SbiGlobals
 // utility macros and routines
 
 SbiGlobals* GetSbData();
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

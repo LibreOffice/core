@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SOURCE_INC_OPCODES_HXX
-#define INCLUDED_BASIC_SOURCE_INC_OPCODES_HXX
+#pragma once
 
 // An opcode can have a length of 1, 3 or 5 bytes,
 // depending on its numeric value (see below).
@@ -153,7 +152,5 @@ enum class SbiOpcode {
 
     SbOP2_END = FIND_STATIC_
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

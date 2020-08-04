@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SOURCE_INC_DATE_HXX
-#define INCLUDED_BASIC_SOURCE_INC_DATE_HXX
+#pragma once
 
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
@@ -55,7 +54,5 @@ css::util::Time SbxDateToUNOTime( const SbxValue* );
 void SbxDateFromUNOTime( SbxValue*, const css::util::Time& );
 css::util::DateTime SbxDateToUNODateTime( const SbxValue* );
 void SbxDateFromUNODateTime( SbxValue*, const css::util::DateTime& );
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
