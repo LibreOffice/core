@@ -530,10 +530,8 @@ void SAL_CALL
         size_t nCount = rDicList.size();
         for (size_t i = 0;  i < nCount;  i++)
         {
-            uno::Reference< XDictionary > xDic( rDicList[i], UNO_QUERY );
-
             // save (modified) dictionaries
-            uno::Reference< frame::XStorable >  xStor( xDic , UNO_QUERY );
+            uno::Reference< frame::XStorable >  xStor( rDicList[i] , UNO_QUERY );
             if (xStor.is())
             {
                 try
@@ -548,8 +546,8 @@ void SAL_CALL
 
             // release references to (members of) this object hold by
             // dictionaries
-            if (xDic.is())
-                xDic->removeDictionaryEventListener( mxDicEvtLstnrHelper.get() );
+            if (rDicList[i].is())
+                rDicList[i]->removeDictionaryEventListener( mxDicEvtLstnrHelper.get() );
         }
     }
     mxDicEvtLstnrHelper.clear();
