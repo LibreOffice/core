@@ -31,9 +31,9 @@
 #include <sal/log.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
-static const wchar_t UNC_PREFIX[] = L"\\\\";
-static const wchar_t BACKSLASH = '\\';
-static const wchar_t SLASH = '/';
+const wchar_t UNC_PREFIX[] = L"\\\\";
+const wchar_t BACKSLASH = '\\';
+const wchar_t SLASH = '/';
 
 BOOL TimeValueToFileTime(const TimeValue *cpTimeVal, FILETIME *pFTime)
 {

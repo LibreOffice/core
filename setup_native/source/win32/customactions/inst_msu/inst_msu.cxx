@@ -112,7 +112,7 @@ void WriteLogElem(MSIHANDLE hInst, MSIHANDLE hRec, std::ostringstream& sTmpl, UI
     WriteLogElem(hInst, hRec, sTmpl, nField, elem.c_str(), others...);
 }
 
-static std::string sLogPrefix;
+std::string sLogPrefix;
 
 template <class... StrType> void WriteLog(MSIHANDLE hInst, const StrType&... elements)
 {

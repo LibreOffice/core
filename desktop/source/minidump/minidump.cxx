@@ -16,7 +16,7 @@
 
 #include <curl/curl.h>
 
-static const char kUserAgent[] = "Breakpad/1.0 (Linux)";
+const char kUserAgent[] = "Breakpad/1.0 (Linux)";
 
 static std::map<std::string, std::string> readStrings(std::istream& file)
 {

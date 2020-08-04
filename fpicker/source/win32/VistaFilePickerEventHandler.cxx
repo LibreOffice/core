@@ -233,8 +233,8 @@ void VistaFilePickerEventHandler::stopListening()
     }
 }
 
-static const char PROP_CONTROL_ID[] = "control_id";
-static const char PROP_PICKER_LISTENER[] = "picker_listener";
+const char PROP_CONTROL_ID[] = "control_id";
+const char PROP_PICKER_LISTENER[] = "picker_listener";
 
 namespace {
 

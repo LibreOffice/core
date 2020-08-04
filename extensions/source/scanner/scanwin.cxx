@@ -125,7 +125,7 @@ private:
     void Reset(); // cleanup thread and manager
 };
 
-static Twain aTwain;
+Twain aTwain;
 
 Twain::ShimListenerThread::ShimListenerThread(const VclPtr<vcl::Window>& xTopWindow)
     : salhelper::Thread("TWAINShimListenerThread")

@@ -72,7 +72,7 @@ namespace vcl_sal {
     // Every string value in the replacements tables must be in UTF-8
     // but with the UTF-8 bytes encoded, not as such! Be careful!
 
-    static const struct KeysNameReplacement aImplReplacements_Asturian[] =
+    const struct KeysNameReplacement aImplReplacements_Asturian[] =
     {
         { PAPUGA_KEY_BACK, "Retrocesu" },
         { PAPUGA_KEY_ENTER, "Intro" },
@@ -90,7 +90,7 @@ namespace vcl_sal {
         { PAPUGA_KEY_SHIFT, "May\xc3\xba" "s" },
     };
 
-    static const struct KeysNameReplacement aImplReplacements_Catalan[] =
+    const struct KeysNameReplacement aImplReplacements_Catalan[] =
     {
         { PAPUGA_KEY_BACK, "Retroc\xc3\xa9" "s" },
         { PAPUGA_KEY_ENTER, "Retorn" },
@@ -108,7 +108,7 @@ namespace vcl_sal {
         { PAPUGA_KEY_SHIFT, "Maj" },
     };
 
-    static const struct KeysNameReplacement aImplReplacements_Estonian[] =
+    const struct KeysNameReplacement aImplReplacements_Estonian[] =
     {
         { PAPUGA_KEY_RIGHT, "Nool paremale" },
         { PAPUGA_KEY_LEFT, "Nool vasakule" },
@@ -119,7 +119,7 @@ namespace vcl_sal {
         { PAPUGA_KEY_SPACEBAR, "T\xc3\xbc" "hik" },
     };
 
-    static const struct KeysNameReplacement aImplReplacements_Lithuanian[] =
+    const struct KeysNameReplacement aImplReplacements_Lithuanian[] =
     {
         { PAPUGA_KEY_ESC, "Gr" },
         { PAPUGA_KEY_BACK, "Naikinti" },
@@ -140,7 +140,7 @@ namespace vcl_sal {
         { PAPUGA_KEY_ALT, "Alt" },
     };
 
-    static const struct KeysNameReplacement aImplReplacements_Slovenian[] =
+    const struct KeysNameReplacement aImplReplacements_Slovenian[] =
     {
         { PAPUGA_KEY_ESC, "Ube\xc5\xbe" "nica" },
         { PAPUGA_KEY_BACK, "Vra\xc4\x8d" "alka" },
@@ -161,7 +161,7 @@ namespace vcl_sal {
         { PAPUGA_KEY_ALT, "Izmenjalka" },
     };
 
-    static const struct KeysNameReplacement aImplReplacements_Spanish[] =
+    const struct KeysNameReplacement aImplReplacements_Spanish[] =
     {
         { PAPUGA_KEY_BACK, "Retroceso" },
         { PAPUGA_KEY_ENTER, "Intro" },
@@ -179,7 +179,7 @@ namespace vcl_sal {
         { PAPUGA_KEY_SHIFT, "May\xc3\xba" "s" },
     };
 
-    static const struct KeysNameReplacement aImplReplacements_Hungarian[] =
+    const struct KeysNameReplacement aImplReplacements_Hungarian[] =
     {
         { PAPUGA_KEY_RIGHT, "Jobbra" },
         { PAPUGA_KEY_LEFT, "Balra" },
@@ -189,7 +189,7 @@ namespace vcl_sal {
         { PAPUGA_KEY_SPACEBAR, "Sz\xc3\xb3" "k\xc3\xb6" "z" },
     };
 
-    static const struct KeyboardReplacements aKeyboards[] =
+    const struct KeyboardReplacements aKeyboards[] =
     {
         { "ast",aImplReplacements_Asturian, SAL_N_ELEMENTS(aImplReplacements_Asturian) },
         { "ca", aImplReplacements_Catalan, SAL_N_ELEMENTS(aImplReplacements_Catalan) },
