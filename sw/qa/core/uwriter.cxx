@@ -1075,6 +1075,8 @@ getRandomPosition(SwDoc *pDoc, int /* nOffset */)
 
 void SwDocTest::randomTest()
 {
+    setenv("SAL_RAND_REPEATABLE", "1", 1);
+
     CPPUNIT_ASSERT_MESSAGE("SwDoc::IsRedlineOn()", !m_pDoc->getIDocumentRedlineAccess().IsRedlineOn());
     RedlineFlags modes[] = {
         RedlineFlags::On,
