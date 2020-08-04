@@ -483,6 +483,11 @@ void    AbstractScFillSeriesDlg_Impl::SetEdStartValEnabled(bool bFlag)
     m_xDlg->SetEdStartValEnabled(bFlag);
 }
 
+bool AbstractScGroupDlg_Impl::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx)
+{
+    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 bool AbstractScGroupDlg_Impl::GetColsChecked() const
 {
     return m_xDlg->GetColsChecked();
@@ -1024,7 +1029,7 @@ VclPtr<AbstractScFillSeriesDlg> ScAbstractDialogFactory_Impl::CreateScFillSeries
 
 VclPtr<AbstractScGroupDlg> ScAbstractDialogFactory_Impl::CreateAbstractScGroupDlg(weld::Window* pParent, bool bUnGroup)
 {
-    return VclPtr<AbstractScGroupDlg_Impl>::Create(std::make_unique<ScGroupDlg>(pParent, bUnGroup, true/*bRows*/));
+    return VclPtr<AbstractScGroupDlg_Impl>::Create(std::make_shared<ScGroupDlg>(pParent, bUnGroup, true/*bRows*/));
 }
 
 VclPtr<AbstractScInsertCellDlg> ScAbstractDialogFactory_Impl::CreateScInsertCellDlg(weld::Window* pParent,
