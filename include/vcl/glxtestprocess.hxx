@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_INCLUDE_VCL_GLXTESTPROCESS_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <config_features.h>
@@ -30,8 +30,6 @@ void reap_glxtest_process();
 inline bool fire_glxtest_process() { return true; }
 
 inline void reap_glxtest_process() {}
-
-#endif
 
 #endif
 

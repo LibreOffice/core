@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDMODEL_HXX
-#define INCLUDED_SVX_SVDMODEL_HXX
+#pragma once
 
 #include <functional>
 #include <memory>
@@ -606,9 +605,6 @@ public:
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
-
-
-#endif // INCLUDED_SVX_SVDMODEL_HXX
 
 /*
             +-----------+
