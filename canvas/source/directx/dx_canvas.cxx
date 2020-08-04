@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <utility>
 
 #include <sal/log.hxx>
 
@@ -57,7 +58,7 @@ namespace dxcanvas
     {
         GraphicsSharedPtr mpGraphics;
     public:
-        explicit GraphicsProviderImpl( Gdiplus::Graphics* pGraphics ) : mpGraphics( pGraphics ) {}
+        explicit GraphicsProviderImpl( GraphicsSharedPtr && pGraphics ) : mpGraphics( std::move(pGraphics) ) {}
         virtual GraphicsSharedPtr getGraphics() override { return mpGraphics; }
     };
 
@@ -106,7 +107,7 @@ namespace dxcanvas
         maCanvasHelper.setDevice( *this );
         maCanvasHelper.setTarget(
             std::make_shared<GraphicsProviderImpl>(
-                    Gdiplus::Graphics::FromHDC(pSysData->hDC)));
+                    GraphicsSharedPtr(Gdiplus::Graphics::FromHDC(pSysData->hDC))));
 
         maArguments.realloc(0);
     }

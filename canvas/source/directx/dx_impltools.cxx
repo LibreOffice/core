@@ -132,9 +132,9 @@ namespace dxcanvas::tools
             return pRet;
         }
 
-        Gdiplus::Graphics* createGraphicsFromBitmap(const BitmapSharedPtr& rBitmap)
+        GraphicsSharedPtr createGraphicsFromBitmap(const BitmapSharedPtr& rBitmap)
         {
-            Gdiplus::Graphics* pRet = Gdiplus::Graphics::FromImage(rBitmap.get());
+            GraphicsSharedPtr pRet(Gdiplus::Graphics::FromImage(rBitmap.get()));
             if( pRet )
                 setupGraphics( *pRet );
             return pRet;

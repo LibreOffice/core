@@ -71,7 +71,7 @@ namespace dxcanvas
                     PixelFormat24bppRGB);
         }
 
-        mpGraphics.reset( tools::createGraphicsFromBitmap(mpBitmap) );
+        mpGraphics = tools::createGraphicsFromBitmap(mpBitmap);
     }
 
     BitmapSharedPtr DXBitmap::getBitmap() const

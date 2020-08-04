@@ -62,7 +62,7 @@ namespace dxcanvas::tools
         polyPolygonFromXPolyPolygon2D( const css::uno::Reference< css::rendering::XPolyPolygon2D >& );
 
         Gdiplus::Graphics* createGraphicsFromHDC(HDC);
-        Gdiplus::Graphics* createGraphicsFromBitmap(const BitmapSharedPtr&);
+        GraphicsSharedPtr createGraphicsFromBitmap(const BitmapSharedPtr&);
 
         void setupGraphics( Gdiplus::Graphics& rGraphics );
 
