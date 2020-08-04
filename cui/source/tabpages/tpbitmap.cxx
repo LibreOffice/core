@@ -572,10 +572,14 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl, SvxPresetListBox*, void)
 
     if (xQueryBox->run() == RET_YES)
     {
+        sal_uInt16 nNextId = m_xBitmapLB->GetItemId(nPos + 1);
+        if (!nNextId)
+            nNextId = m_xBitmapLB->GetItemId(nPos - 1);
+
         m_pBitmapList->Remove( static_cast<sal_uInt16>(nPos) );
         m_xBitmapLB->RemoveItem( nId );
-        nId = m_xBitmapLB->GetItemId(0);
-        m_xBitmapLB->SelectItem( nId );
+
+        m_xBitmapLB->SelectItem(nNextId);
 
         m_aCtlBitmapPreview.Invalidate();
         ModifyBitmapHdl(m_xBitmapLB.get());
