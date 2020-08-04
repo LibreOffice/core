@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "747d36ff_19e95028",
+        "filename": "sdext/source/presenter/PresenterProtocolHandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-04T12:19:58Z",
+      "side": 0,
+      "message": "Maybe instead just change this to \"\u003e\u003d 0\"?",
+      "range": {
+        "startLine": 552,
+        "startChar": 82,
+        "endLine": 552,
+        "endChar": 83
+      },
+      "revId": "c379994973dd730c0ee2fdc8854a06b202f9f150",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
