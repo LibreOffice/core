@@ -84,7 +84,8 @@ public:
 
 class SwTableColumnPage : public SfxTabPage
 {
-    SwTableRep*     m_pTableData;
+    SwTableRep*     m_pOrigTableData;
+    std::unique_ptr<SwTableRep> m_xTableData;
     ImplSVEvent*    m_pSizeHdlEvent;
     SwTwips         m_nTableWidth;
     SwTwips         m_nMinWidth;
