@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.20.4 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore">
@@ -60,7 +60,9 @@
                     <property name="resizable">True</property>
                     <property name="title" translatable="yes" context="inspectortextpanel|property">Properties</property>
                     <child>
-                      <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                      <object class="GtkCellRendererText" id="cellrenderertext1">
+                        <property name="ellipsize">end</property>
+                      </object>
                       <attributes>
                         <attribute name="sensitive">5</attribute>
                         <attribute name="text">0</attribute>
