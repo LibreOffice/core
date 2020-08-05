@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CODEMAKER_SOURCE_JAVAMAKER_CLASSFILE_HXX
-#define INCLUDED_CODEMAKER_SOURCE_JAVAMAKER_CLASSFILE_HXX
+#pragma once
 
 #include <codemaker/unotype.hxx>
 #include <sal/types.h>
@@ -236,7 +235,5 @@ private:
 };
 
 }
-
-#endif // INCLUDED_CODEMAKER_SOURCE_JAVAMAKER_CLASSFILE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
