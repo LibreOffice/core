@@ -91,6 +91,10 @@ SwFormatTablePage::SwFormatTablePage(weld::Container* pPage, weld::DialogControl
     , m_xTextDirectionLB(new svx::FrameDirectionListBox(m_xBuilder->weld_combo_box("textdirection")))
     , m_xProperties(m_xBuilder->weld_widget("properties"))
 {
+    m_xWidthMF->GetMetricFieldRange(m_nOrigWidthMin, m_nOrigWidthMax);
+    m_xLeftMF->GetMetricFieldRange(m_nOrigLeftMin, m_nOrigLeftMax);
+    m_xRightMF->GetMetricFieldRange(m_nOrigRightMin, m_nOrigRightMax);
+
     //lock these to initial sizes so they don't change on percent to non percent change
     Size aPrefSize(m_xLeftMF->get()->get_preferred_size());
     m_xLeftMF->get()->set_size_request(aPrefSize.Width(), aPrefSize.Height());
@@ -439,6 +443,16 @@ void  SwFormatTablePage::Reset( const SfxItemSet* )
         m_xBottomMF->hide();
         m_xFreeBtn->set_sensitive(false);
     }
+
+    // set back to original state
+    m_xRelWidthCB->set_active(false);
+    m_xWidthMF->ShowPercent(false);
+    m_xLeftMF->ShowPercent(false);
+    m_xRightMF->ShowPercent(false);
+    m_xWidthMF->SetMetricFieldRange(m_nOrigWidthMin, m_nOrigWidthMax);
+    m_xLeftMF->SetMetricFieldRange(m_nOrigLeftMin, m_nOrigLeftMax);
+    m_xRightMF->SetMetricFieldRange(m_nOrigRightMin, m_nOrigRightMax);
+
     FieldUnit aMetric = ::GetDfltMetric(bHtmlMode);
     m_xWidthMF->SetMetric(aMetric);
     m_xRightMF->SetMetric(aMetric);
