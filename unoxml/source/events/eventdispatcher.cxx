@@ -60,20 +60,21 @@ namespace DOM::events {
 
         // get the multimap for the specified type
         auto tIter = pTMap->find(aType);
-        if (tIter != pTMap->end()) {
-            ListenerMap & rMap = tIter->second;
-            // find listeners of specified type for specified node
-            ListenerMap::iterator iter = rMap.find(pNode);
-            while (iter != rMap.end() && iter->first == pNode)
+        if (tIter == pTMap->end())
+            return;
+
+        ListenerMap & rMap = tIter->second;
+        // find listeners of specified type for specified node
+        ListenerMap::iterator iter = rMap.find(pNode);
+        while (iter != rMap.end() && iter->first == pNode)
+        {
+            // erase all references to specified listener
+            if (iter->second.is() && iter->second == aListener)
             {
-                // erase all references to specified listener
-                if (iter->second.is() && iter->second == aListener)
-                {
-                    iter = rMap.erase(iter);
-                }
-                else
-                    ++iter;
+                iter = rMap.erase(iter);
             }
+            else
+                ++iter;
         }
     }
 
@@ -210,38 +211,38 @@ namespace DOM::events {
         // start at the root
         NodeVector_t::const_reverse_iterator rinode =
             const_cast<NodeVector_t const&>(captureVector).rbegin();
-        if (rinode != const_cast<NodeVector_t const&>(captureVector).rend())
+        if (rinode == const_cast<NodeVector_t const&>(captureVector).rend())
+            return;
+
+        // capturing phase:
+        pEvent->m_phase = PhaseType_CAPTURING_PHASE;
+        while (rinode !=
+                const_cast<NodeVector_t const&>(captureVector).rend())
         {
-            // capturing phase:
-            pEvent->m_phase = PhaseType_CAPTURING_PHASE;
-            while (rinode !=
-                    const_cast<NodeVector_t const&>(captureVector).rend())
-            {
-                pEvent->m_currentTarget = rinode->first;
-                callListeners(captureListeners, rinode->second, aType, xEvent);
-                if  (pEvent->m_canceled) return;
-                ++rinode;
-            }
-
-            NodeVector_t::const_iterator inode = captureVector.begin();
-
-            // target phase
-            pEvent->m_phase = PhaseType_AT_TARGET;
-            pEvent->m_currentTarget = inode->first;
-            callListeners(targetListeners, inode->second, aType, xEvent);
+            pEvent->m_currentTarget = rinode->first;
+            callListeners(captureListeners, rinode->second, aType, xEvent);
             if  (pEvent->m_canceled) return;
-            // bubbeling phase
-            ++inode;
-            if (i_xEvent->getBubbles()) {
-                pEvent->m_phase = PhaseType_BUBBLING_PHASE;
-                while (inode != captureVector.end())
-                {
-                    pEvent->m_currentTarget = inode->first;
-                    callListeners(targetListeners,
-                            inode->second, aType, xEvent);
-                    if  (pEvent->m_canceled) return;
-                    ++inode;
-                }
+            ++rinode;
+        }
+
+        NodeVector_t::const_iterator inode = captureVector.begin();
+
+        // target phase
+        pEvent->m_phase = PhaseType_AT_TARGET;
+        pEvent->m_currentTarget = inode->first;
+        callListeners(targetListeners, inode->second, aType, xEvent);
+        if  (pEvent->m_canceled) return;
+        // bubbeling phase
+        ++inode;
+        if (i_xEvent->getBubbles()) {
+            pEvent->m_phase = PhaseType_BUBBLING_PHASE;
+            while (inode != captureVector.end())
+            {
+                pEvent->m_currentTarget = inode->first;
+                callListeners(targetListeners,
+                        inode->second, aType, xEvent);
+                if  (pEvent->m_canceled) return;
+                ++inode;
             }
         }
     }
