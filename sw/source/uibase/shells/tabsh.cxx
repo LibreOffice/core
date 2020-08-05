@@ -422,15 +422,15 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
         if( SfxItemState::SET == rSet.GetItemState( *pIds, false, &pItem))
             aSet.Put( *pItem );
 
-    if( aSet.Count() )
-        rSh.SetTableAttr( aSet );
-
     if(bTabCols)
     {
         rSh.GetTabCols( aTabCols );
         bool bSingleLine = pRep->FillTabCols( aTabCols );
         rSh.SetTabCols( aTabCols, bSingleLine );
     }
+
+    if( aSet.Count() )
+        rSh.SetTableAttr( aSet );
 
     rSh.EndUndo( SwUndoId::TABLE_ATTR );
     rSh.EndAllAction();
