@@ -58,6 +58,8 @@
 #include "gallerydrawmodel.hxx"
 #include <memory>
 
+#include<svx/galleryxmlengine.hxx>
+
 using namespace ::com::sun::star;
 
 GalleryTheme::GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry )
@@ -512,6 +514,8 @@ bool GalleryTheme::GetURL(sal_uInt32 nPos, INetURLObject& rURL)
 
 bool GalleryTheme::InsertURL(const INetURLObject& rURL, sal_uInt32 nInsertPos)
 {
+    GalleryXMLEngine aXMLEngine;
+    aXMLEngine.readZIP();
     Graphic         aGraphic;
     OUString        aFormat;
     std::unique_ptr<SgaObject> pNewObj;
