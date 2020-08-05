@@ -176,17 +176,20 @@ public:
     }
 #ifndef NDEBUG
     virtual ~SkiaFlushIdle() { free(debugname); }
+#endif
     const char* get_debug_name(SkiaSalGraphicsImpl* pGraphics)
     {
+#ifndef NDEBUG
         // Idle keeps just a pointer, so we need to store the string
         debugname = strdup(
             OString("skia idle 0x" + OString::number(reinterpret_cast<sal_uIntPtr>(pGraphics), 16))
                 .getStr());
         return debugname;
-    }
 #else
-    const char* get_debug_name(SkiaSalGraphicsImpl*) { return "skia idle"; }
+        (void)pGraphics;
+        return "skia idle";
 #endif
+    }
 
     virtual void Invoke() override
     {
