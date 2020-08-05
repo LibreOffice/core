@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8fb191b3_42b5e89e",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-08-05T15:06:45Z",
+      "side": 1,
+      "message": "I think its very possible that removing the line entirely gives the same results, but lets push it for the moment seeing as it solves the problem",
+      "revId": "c617f09be3ca5d7aa481b98a5e8ffefc209f0223",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
