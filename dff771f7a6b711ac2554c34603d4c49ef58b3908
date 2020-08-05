@@ -46,6 +46,30 @@
       "revId": "dff771f7a6b711ac2554c34603d4c49ef58b3908",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df64877b_70c86e49",
+        "filename": "include/framework/quickstart.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-05T22:10:29Z",
+      "side": 1,
+      "message": "No please let it be _MSC_VER; I obviously misunderstood :-)",
+      "parentUuid": "d22e5b67_927d3a31",
+      "range": {
+        "startLine": 11,
+        "startChar": 7,
+        "endLine": 11,
+        "endChar": 15
+      },
+      "revId": "dff771f7a6b711ac2554c34603d4c49ef58b3908",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
