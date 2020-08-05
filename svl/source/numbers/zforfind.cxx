@@ -989,6 +989,9 @@ bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
         SAL_WARN( "svl.numbers", "ImpSvNumberInputScan::GetTimeRef: bad number index");
     }
 
+    // 0:123 or 0:0:123 or 0:123:59 is valid
+    bool bAllowDuration = (nHour == 0 && !nAmPm);
+
     if (nAmPm && nHour > 12) // not a valid AM/PM clock time
     {
         bRet = false;
@@ -1009,16 +1012,18 @@ bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
     else if (nIndex - nStartIndex < nCnt)
     {
         nMinute = static_cast<sal_uInt16>(sStrArray[nNums[nIndex++]].toInt32());
-        if (!(eInputOptions & SvNumInputOptions::LAX_TIME)
+        if (!(eInputOptions & SvNumInputOptions::LAX_TIME) && !bAllowDuration
                 && nIndex > 1 && nMinute > 59)
-            bRet = false;   // 1:60 or 1:123 is invalid, 123:1 is valid
+            bRet = false;   // 1:60 or 1:123 is invalid, 123:1 or 0:123 is valid
+        if (bAllowDuration)
+            bAllowDuration = (nMinute == 0);
     }
     if (nIndex - nStartIndex < nCnt)
     {
         nSecond = static_cast<sal_uInt16>(sStrArray[nNums[nIndex++]].toInt32());
-        if (!(eInputOptions & SvNumInputOptions::LAX_TIME)
+        if (!(eInputOptions & SvNumInputOptions::LAX_TIME) && !bAllowDuration
                 && nIndex > 1 && nSecond > 59 && !(nHour == 23 && nMinute == 59 && nSecond == 60))
-            bRet = false;   // 1:60 or 1:123 or 1:1:123 is invalid, 123:1 or 123:1:1 is valid, or leap second
+            bRet = false;   // 1:60 or 1:123 or 1:1:123 is invalid, 123:1 or 123:1:1 or 0:0:123 is valid, or leap second
     }
     if (nIndex - nStartIndex < nCnt)
     {
