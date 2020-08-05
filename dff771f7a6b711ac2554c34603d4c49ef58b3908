@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "082190a8_3383e65a",
+        "filename": "include/framework/quickstart.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-05T21:35:36Z",
+      "side": 1,
+      "message": "Why is _MSC_VER used here? is this relevant which compiler is performing a build?\nI suspect that _WIN32 was meant, specifying the platform?",
+      "range": {
+        "startLine": 11,
+        "startChar": 7,
+        "endLine": 11,
+        "endChar": 15
+      },
+      "revId": "dff771f7a6b711ac2554c34603d4c49ef58b3908",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
