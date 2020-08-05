@@ -44,6 +44,7 @@
 #define RID_STR_CANNOT_DETERMINE_LIBNAME                    NC_("RID_STR_CANNOT_DETERMINE_LIBNAME", "The library name could not be determined.")
 
 #define RID_STR_PACKAGE_BUNDLE                              NC_("RID_STR_PACKAGE_BUNDLE", "Extension")
+#define RID_STR_ALL_SUPPORTED                               NC_("RID_STR_PACKAGE_BUNDLE", "All supported files")
 
 #define RID_STR_DYN_COMPONENT                               NC_("RID_STR_DYN_COMPONENT", "UNO Dynamic Library Component")
 #define RID_STR_JAVA_COMPONENT                              NC_("RID_STR_JAVA_COMPONENT", "UNO Java Component")
