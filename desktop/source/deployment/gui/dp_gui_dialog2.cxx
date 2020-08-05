@@ -635,7 +635,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
     // collect and set filter list:
     typedef std::map< OUString, OUString > t_string2string;
     t_string2string title2filter;
-    OUString sDefaultFilter( StrAllFiles::get() );
+    OUStringBuffer supportedFilters;
 
     const uno::Sequence< uno::Reference< deployment::XPackageTypeInfo > > packageTypes(
         m_pManager->getExtensionManager()->getSupportedPackageTypes() );
@@ -648,6 +648,9 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
             const OUString title( xPackageType->getShortDescription() );
             const std::pair< t_string2string::iterator, bool > insertion(
                 title2filter.emplace( title, filter ) );
+            if (!supportedFilters.isEmpty())
+                supportedFilters.append(';');
+            supportedFilters.append(filter);
             if ( ! insertion.second )
             { // already existing, append extensions:
                 OUStringBuffer buf;
@@ -656,13 +659,12 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
                 buf.append( filter );
                 insertion.first->second = buf.makeStringAndClear();
             }
-            if ( xPackageType->getMediaType() == "application/vnd.sun.star.package-bundle" )
-                sDefaultFilter = title;
         }
     }
 
     // All files at top:
     xFilePicker->appendFilter( StrAllFiles::get(), "*.*" );
+    xFilePicker->appendFilter( DpResId(RID_STR_ALL_SUPPORTED), supportedFilters.makeStringAndClear() );
     // then supported ones:
     for (auto const& elem : title2filter)
     {
@@ -675,7 +677,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
             TOOLS_WARN_EXCEPTION( "desktop", "" );
         }
     }
-    xFilePicker->setCurrentFilter( sDefaultFilter );
+    xFilePicker->setCurrentFilter( DpResId(RID_STR_ALL_SUPPORTED) );
 
     if ( xFilePicker->execute() != ui::dialogs::ExecutableDialogResults::OK )
         return uno::Sequence<OUString>(); // cancelled
