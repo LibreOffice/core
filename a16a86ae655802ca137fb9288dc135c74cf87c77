@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "52d93013_8554ea99",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 4
+      },
+      "lineNbr": 2878,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-08-05T20:17:16Z",
+      "side": 1,
+      "message": "There is no point in explicitly defining ContextLabel when it\u0027s the same as Label (the code will fallback to Label anyway). Things like this just add work for translators.",
+      "revId": "a16a86ae655802ca137fb9288dc135c74cf87c77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01de8c0a_c3c45d93",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 4
+      },
+      "lineNbr": 2881,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-08-05T20:17:16Z",
+      "side": 1,
+      "message": "Don\u0027t see a point in defining these either, unless we actually plan to add this as a button to some toolbar.",
+      "revId": "a16a86ae655802ca137fb9288dc135c74cf87c77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
