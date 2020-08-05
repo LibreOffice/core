@@ -695,18 +695,10 @@ IMPL_LINK_NOARG(SfxAddTargetDialog, SelectTypeHdl, weld::ComboBox&, void)
         m_xLabelContent->set_visible(true);
         m_xContent->set_sensitive(true);
         m_xContent->set_visible(true);
+        m_xWholeWords->set_sensitive(true);
         m_xWholeWords->set_visible(true);
+        m_xCaseSensitive->set_sensitive(true);
         m_xCaseSensitive->set_visible(true);
-        if (m_xType->get_active_id() == "regex")
-        {
-            m_xWholeWords->set_sensitive(false);
-            m_xCaseSensitive->set_sensitive(false);
-        }
-        else
-        {
-            m_xWholeWords->set_sensitive(true);
-            m_xCaseSensitive->set_sensitive(true);
-        }
     }
 }
 
