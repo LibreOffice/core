@@ -3671,8 +3671,12 @@ void XMLTextParagraphExport::recordTrackedChangesNoXText()
         pRedlineExport->SetCurrentXText();
 }
 
+void XMLTextParagraphExport::exportTableAutoStyles() {}
+
 void XMLTextParagraphExport::exportTextAutoStyles()
 {
+    exportTableAutoStyles();
+
     GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_PARAGRAPH );
 
     GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_TEXT );
