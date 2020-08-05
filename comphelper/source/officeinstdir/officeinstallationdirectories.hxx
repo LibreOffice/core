@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMPHELPER_SOURCE_OFFICEINSTDIR_OFFICEINSTALLATIONDIRECTORIES_HXX
-#define INCLUDED_COMPHELPER_SOURCE_OFFICEINSTDIR_OFFICEINSTALLATIONDIRECTORIES_HXX
+#pragma once
 
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -77,7 +76,5 @@ private:
 };
 
 } // namespace comphelper
-
-#endif /* ! INCLUDED_COMPHELPER_SOURCE_OFFICEINSTDIR_OFFICEINSTALLATIONDIRECTORIES_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
