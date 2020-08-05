@@ -2368,4 +2368,56 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
+  <!-- https://issues.oasis-open.org/browse/OFFICE-2096 -->
+  <rng:define name="paragraph-content" combine="choice"
+   xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0">
+    <rng:element name="field:fieldmark-start">
+      <rng:attribute name="text:name">
+        <rng:ref name="string"/>
+      </rng:attribute>
+      <rng:attribute name="field:type">
+        <!-- TODO <rng:ref name="namespacedToken"/> -->
+        <rng:ref name="string"/>
+      </rng:attribute>
+      <rng:zeroOrMore>
+        <rng:element name="field:param">
+          <rng:attribute name="field:name">
+            <rng:ref name="string"/>
+          </rng:attribute>
+          <rng:attribute name="field:value">
+            <rng:ref name="string"/>
+          </rng:attribute>
+        </rng:element>
+      </rng:zeroOrMore>
+    </rng:element>
+  </rng:define>
+  <rng:define name="paragraph-content" combine="choice"
+   xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0">
+    <rng:element name="field:fieldmark-end">
+      <rng:empty/>
+    </rng:element>
+  </rng:define>
+  <rng:define name="paragraph-content" combine="choice"
+   xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0">
+    <rng:element name="field:fieldmark">
+      <rng:attribute name="text:name">
+        <rng:ref name="string"/>
+      </rng:attribute>
+      <rng:attribute name="field:type">
+        <!-- TODO <rng:ref name="namespacedToken"/> -->
+        <rng:ref name="string"/>
+      </rng:attribute>
+      <rng:zeroOrMore>
+        <rng:element name="field:param">
+          <rng:attribute name="field:name">
+            <rng:ref name="string"/>
+          </rng:attribute>
+          <rng:attribute name="field:value">
+            <rng:ref name="string"/>
+          </rng:attribute>
+        </rng:element>
+      </rng:zeroOrMore>
+    </rng:element>
+  </rng:define>
+
 </rng:grammar>
