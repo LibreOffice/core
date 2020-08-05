@@ -1368,7 +1368,7 @@ void OBoundControlModel::disposing()
     // disconnect from our external value binding
     if ( hasExternalValueBinding() )
         disconnectExternalValueBinding();
-    // dito for the validator
+    // ditto for the validator
     if ( hasValidator() )
         disconnectValidator( );
 }

@@ -875,7 +875,7 @@ SwContentNotify::~SwContentNotify()
                     pFESh->CalcAndSetScale( xObj ); // create client
                 }
             }
-            //dito animated graphics
+            // ditto animated graphics
             if ( getFrameArea().HasArea() && static_cast<SwNoTextFrame*>(pCnt)->HasAnimation() )
             {
                 static_cast<SwNoTextFrame*>(pCnt)->StopAnimation();
