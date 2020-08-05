@@ -1916,22 +1916,23 @@ void librdf_Repository::removeStatementsGraph_NoLock(
             "librdf_model_find_statements_in_context failed", *this);
     }
 
-    if (!librdf_stream_end(pStream.get())) {
-        do {
-            librdf_statement *pStmt( librdf_stream_get_object(pStream.get()) );
-            if (!pStmt) {
-                throw rdf::RepositoryException(
-                    "librdf_Repository::removeStatements: "
-                    "librdf_stream_get_object failed", *this);
-            }
-            if (librdf_model_context_remove_statement(m_pModel.get(),
-                    pContext.get(), pStmt)) {
-                throw rdf::RepositoryException(
-                    "librdf_Repository::removeStatements: "
-                    "librdf_model_context_remove_statement failed", *this);
-            }
-        } while (!librdf_stream_next(pStream.get()));
-    }
+    if (librdf_stream_end(pStream.get()))
+        return;
+
+    do {
+        librdf_statement *pStmt( librdf_stream_get_object(pStream.get()) );
+        if (!pStmt) {
+            throw rdf::RepositoryException(
+                "librdf_Repository::removeStatements: "
+                "librdf_stream_get_object failed", *this);
+        }
+        if (librdf_model_context_remove_statement(m_pModel.get(),
+                pContext.get(), pStmt)) {
+            throw rdf::RepositoryException(
+                "librdf_Repository::removeStatements: "
+                "librdf_model_context_remove_statement failed", *this);
+        }
+    } while (!librdf_stream_next(pStream.get()));
 }
 
 std::vector<rdf::Statement>

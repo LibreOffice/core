@@ -225,20 +225,20 @@ namespace DOM
         aElement.set( m_aNodeStack.top()->appendChild(aElement), UNO_QUERY);
         m_aNodeStack.push(aElement);
 
-        if (xAttribs.is())
+        if (!xAttribs.is())
+            return;
+
+        setElementFastAttributes(aElement, xAttribs);
+        const Sequence< css::xml::Attribute > unknownAttribs = xAttribs->getUnknownAttributes();
+        for ( const auto& rUnknownAttrib : unknownAttribs )
         {
-            setElementFastAttributes(aElement, xAttribs);
-            const Sequence< css::xml::Attribute > unknownAttribs = xAttribs->getUnknownAttributes();
-            for ( const auto& rUnknownAttrib : unknownAttribs )
-            {
-                const OUString& rAttrValue = rUnknownAttrib.Value;
-                const OUString& rAttrName = rUnknownAttrib.Name;
-                const OUString& rAttrNamespace = rUnknownAttrib.NamespaceURL;
-                if ( !rAttrNamespace.isEmpty() )
-                    aElement->setAttributeNS( rAttrNamespace, rAttrName, rAttrValue );
-                else
-                    aElement->setAttribute( rAttrName, rAttrValue );
-            }
+            const OUString& rAttrValue = rUnknownAttrib.Value;
+            const OUString& rAttrName = rUnknownAttrib.Name;
+            const OUString& rAttrNamespace = rUnknownAttrib.NamespaceURL;
+            if ( !rAttrNamespace.isEmpty() )
+                aElement->setAttributeNS( rAttrNamespace, rAttrName, rAttrValue );
+            else
+                aElement->setAttribute( rAttrName, rAttrValue );
         }
     }
 

@@ -137,19 +137,20 @@ namespace DOM
     CDocument::RemoveCNode(xmlNodePtr const pNode, CNode const*const pCNode)
     {
         nodemap_t::iterator const i = m_NodeMap.find(pNode);
-        if (i != m_NodeMap.end()) {
-            // #i113681# consider this scenario:
-            // T1 calls ~CNode
-            // T2 calls getCNode:    lookup will find i->second->first invalid
-            //                       so a new CNode is created and inserted
-            // T1 calls removeCNode: i->second->second now points to a
-            //                       different CNode instance!
+        if (i == m_NodeMap.end())
+            return;
 
-            // check that the CNode is the right one
-            CNode *const pCurrent = i->second.second;
-            if (pCurrent == pCNode) {
-                m_NodeMap.erase(i);
-            }
+        // #i113681# consider this scenario:
+        // T1 calls ~CNode
+        // T2 calls getCNode:    lookup will find i->second->first invalid
+        //                       so a new CNode is created and inserted
+        // T1 calls removeCNode: i->second->second now points to a
+        //                       different CNode instance!
+
+        // check that the CNode is the right one
+        CNode *const pCurrent = i->second.second;
+        if (pCurrent == pCNode) {
+            m_NodeMap.erase(i);
         }
     }
 
