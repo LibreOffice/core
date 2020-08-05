@@ -3568,16 +3568,13 @@ $(call gb_LinkTarget_use_libraries,$(1),\
 endef
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
+	gpgmepp \
 	libassuan \
 	libgpg-error \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
 	gpgmepp \
-))
-
-$(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
-	gpgme-w32spawn \
 ))
 
 endif
