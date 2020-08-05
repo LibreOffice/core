@@ -688,9 +688,6 @@ public:
     /// If saving page break is preferred as a paragraph attribute (yes) or as a special character (no).
     virtual bool PreferPageBreakBefore() const = 0;
 
-    /// Text in tables can be postponed except for .doc
-    virtual bool AllowPostponedTextInTable() const { return true; }
-
     /// Guess the script (asian/western).
     ///
     /// Sadly word does not have two different sizes for asian font size and
@@ -1013,8 +1010,6 @@ public:
     virtual MSWordSections& Sections() const override;
 
     virtual bool PreferPageBreakBefore() const override { return true; }
-
-    virtual bool AllowPostponedTextInTable() const override { return false; }
 
     virtual bool FieldsQuoted() const override { return false; }
 

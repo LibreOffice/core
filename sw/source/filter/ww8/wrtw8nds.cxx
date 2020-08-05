@@ -2353,9 +2353,9 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                3) If the anchor is associated with a text node with empty text then we ignore.
                */
             if( rNode.IsTextNode()
+                && GetExportFormat() == MSWordExportBase::ExportFormat::DOCX
                 && aStr != OUStringChar(CH_TXTATR_BREAKWORD) && !aStr.isEmpty()
                     && !rNode.GetFlyFormat()
-                    && !(IsInTable() && !AllowPostponedTextInTable())
                     && aAttrIter.IsAnchorLinkedToThisNode(rNode.GetIndex()) )
             {
                 bPostponeWritingText = true ;
