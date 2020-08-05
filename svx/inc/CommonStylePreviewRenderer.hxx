@@ -31,6 +31,8 @@ class CommonStylePreviewRenderer final : public sfx2::StylePreviewRenderer
     Size maPixelSize;
     OUString maStyleName;
 
+    Size getRenderSize() const;
+
 public:
     CommonStylePreviewRenderer(const SfxObjectShell& rShell, OutputDevice& rOutputDev,
                                SfxStyleSheetBase* pStyle, long nMaxHeight);
