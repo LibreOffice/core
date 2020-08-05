@@ -259,14 +259,14 @@ FrmMap const aHParaHtmlAbsMap[] =
 
 
 constexpr auto VERT_PARA_REL = LB::VertFrame|LB::VertPrintArea|
-                                      LB::RelPageFrame|LB::RelPagePrintArea;
+                                      LB::RelPageFrame|LB::RelPagePrintArea|LB::RelPagePrintAreaBottom;
 
 FrmMap const aVParaMap[] =
 {
     {SvxSwFramePosString::TOP,           SvxSwFramePosString::TOP,            VertOrientation::TOP,       VERT_PARA_REL},
     {SvxSwFramePosString::BOTTOM,        SvxSwFramePosString::BOTTOM,         VertOrientation::BOTTOM,    VERT_PARA_REL},
     {SvxSwFramePosString::CENTER_VERT,   SvxSwFramePosString::CENTER_VERT,    VertOrientation::CENTER,    VERT_PARA_REL},
-    {SvxSwFramePosString::FROMTOP,       SvxSwFramePosString::FROMTOP,        VertOrientation::NONE,      VERT_PARA_REL|LB::RelPagePrintAreaBottom}
+    {SvxSwFramePosString::FROMTOP,       SvxSwFramePosString::FROMTOP,        VertOrientation::NONE,      VERT_PARA_REL}
 };
 
 FrmMap const aVParaHtmlMap[] =
