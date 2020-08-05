@@ -152,7 +152,7 @@ void SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpText )
 #ifndef NDEBUG
             bool inserted =
 #endif
-                rSpzFrameFormats.newDefault( pFlyFormat );
+            rSpzFrameFormats.newDefault( pFlyFormat );
             assert( !inserted && "Fly not contained in Spz-Array" );
         }
 
