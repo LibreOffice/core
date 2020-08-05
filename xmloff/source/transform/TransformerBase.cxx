@@ -297,33 +297,33 @@ rName
 #endif
 )
 {
-    if( !m_vContexts.empty() )
-    {
-        // Get topmost context
-        ::rtl::Reference< XMLTransformerContext > xContext = m_vContexts.back();
+    if( m_vContexts.empty() )
+        return;
+
+    // Get topmost context
+    ::rtl::Reference< XMLTransformerContext > xContext = m_vContexts.back();
 
 #if OSL_DEBUG_LEVEL > 0
-        OSL_ENSURE( xContext->GetQName() == rName,
-                "XMLTransformerBase::endElement: popped context has wrong lname" );
+    OSL_ENSURE( xContext->GetQName() == rName,
+            "XMLTransformerBase::endElement: popped context has wrong lname" );
 #endif
 
-        // Call a EndElement at the current context.
-        xContext->EndElement();
+    // Call a EndElement at the current context.
+    xContext->EndElement();
 
-        // and remove it from the stack.
-        m_vContexts.pop_back();
+    // and remove it from the stack.
+    m_vContexts.pop_back();
 
-        // Get a namespace map to rewind.
-        std::unique_ptr<SvXMLNamespaceMap> pRewindMap = xContext->TakeRewindMap();
+    // Get a namespace map to rewind.
+    std::unique_ptr<SvXMLNamespaceMap> pRewindMap = xContext->TakeRewindMap();
 
-        // Delete the current context.
-        xContext = nullptr;
+    // Delete the current context.
+    xContext = nullptr;
 
-        // Rewind a namespace map.
-        if( pRewindMap )
-        {
-            m_pNamespaceMap = std::move( pRewindMap );
-        }
+    // Rewind a namespace map.
+    if( pRewindMap )
+    {
+        m_pNamespaceMap = std::move( pRewindMap );
     }
 }
 
