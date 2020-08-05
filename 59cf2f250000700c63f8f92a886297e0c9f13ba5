@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47349bda_7e379f9c",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3496,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-08-05T12:35:24Z",
+      "side": 1,
+      "message": "If I right think, we don\u0027t need to modify writerfilter, because this is a sw core problem.",
+      "range": {
+        "startLine": 3479,
+        "startChar": 6,
+        "endLine": 3496,
+        "endChar": 17
+      },
+      "revId": "59cf2f250000700c63f8f92a886297e0c9f13ba5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
