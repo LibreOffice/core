@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">0.5</property>
-    <property name="upper">999.99000000000001</property>
+    <property name="upper">999.99</property>
     <property name="value">2</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment2">
     <property name="upper">999</property>
-    <property name="value">0.10000000000000001</property>
+    <property name="value">0.1</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
@@ -28,8 +28,8 @@
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment5">
-    <property name="upper">999.99000000000001</property>
-    <property name="value">0.10000000000000001</property>
+    <property name="upper">999.99</property>
+    <property name="value">0.1</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
@@ -120,6 +120,7 @@
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
                     <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
                   </object>
@@ -134,6 +135,7 @@
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
                     <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="digits">2</property>
                     <accessibility>
@@ -338,6 +340,7 @@
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
                     <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
                     <property name="adjustment">adjustment4</property>
                   </object>
                   <packing>
@@ -351,6 +354,7 @@
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
                     <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
                     <property name="adjustment">adjustment5</property>
                     <property name="digits">2</property>
                   </object>
@@ -365,6 +369,7 @@
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
                     <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
                     <property name="adjustment">adjustment3</property>
                     <property name="digits">2</property>
                   </object>
