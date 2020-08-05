@@ -386,9 +386,11 @@ namespace emfio
     const sal_uInt32 EMR_COMMENT_ENDGROUP = 0x00000003;
     const sal_uInt32 EMR_COMMENT_MULTIFORMATS = 0x40000004;
     const sal_uInt32 EMR_COMMENT_WINDOWS_METAFILE = 0x80000001;
+#endif
 
     void EmfReader::ReadGDIComment(sal_uInt32 nCommentId)
     {
+#if OSL_DEBUG_LEVEL > 0
         sal_uInt32 nPublicCommentIdentifier;
         mpInputStream->ReadUInt32(nPublicCommentIdentifier);
 
@@ -442,12 +444,10 @@ namespace emfio
                 SAL_WARN("emfio", "\t\tEMR_COMMENT_PUBLIC not implemented, id: 0x" << std::hex << nCommentId << std::dec);
                 break;
         }
-    }
 #else
-    void EmfReader::ReadGDIComment(sal_uInt32)
-    {
-    }
+        (void) nCommentId;
 #endif
+    }
 
     void EmfReader::ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC)
     {

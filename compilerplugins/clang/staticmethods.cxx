@@ -218,6 +218,10 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
         return true;
     }
 
+    if (containsPreprocessingConditionalInclusion((pCXXMethodDecl->getSourceRange()))) {
+        return true;
+    }
+
     report(
         DiagnosticsEngine::Warning,
         "this member function can be declared static",

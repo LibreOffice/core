@@ -101,10 +101,12 @@ private:
     bool ComputeScanlineSize();
     void EraseInternal();
     SkBitmap GetAsSkBitmap() const;
+    void verify() const
 #ifdef DBG_UTIL
-    void verify() const;
+        ;
 #else
-    void verify() const {};
+    {
+    }
 #endif
 
     template <typename charT, typename traits>
