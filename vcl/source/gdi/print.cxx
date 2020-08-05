@@ -1220,13 +1220,16 @@ void Printer::SetPrinterSettingsPreferred( bool bPaperSizeFromSetup)
 }
 
 // Map user paper format to a available printer paper formats
-void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup )
+void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNearest )
 {
     ImplJobSetup& rData = aJobSetup.ImplGetData();
 
     // The angle that a landscape page will be turned counterclockwise wrt to portrait.
     int     nLandscapeAngle = mpInfoPrinter ? mpInfoPrinter->GetLandscapeAngle( &maJobSetup.ImplGetConstData() ) : 900;
+
     int     nPaperCount     = GetPaperInfoCount();
+    bool    bFound = false;
+
     PaperInfo aInfo(rData.GetPaperWidth(), rData.GetPaperHeight());
 
     // Compare all paper formats and get the appropriate one
@@ -1240,7 +1243,8 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup )
                 ImplGetPaperFormat( rPaperInfo.getWidth(),
                     rPaperInfo.getHeight() ));
             rData.SetOrientation( Orientation::Portrait );
-            return;
+            bFound = true;
+            break;
         }
     }
 
@@ -1265,9 +1269,48 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup )
                     ImplGetPaperFormat( rPaperInfo.getWidth(),
                         rPaperInfo.getHeight() ));
                 rData.SetOrientation( Orientation::Landscape );
-                return;
+                bFound = true;
+                break;
             }
         }
+    }
+
+    if( ! bFound && bMatchNearest )
+    {
+         sal_Int64 nBestMatch = SAL_MAX_INT64;
+         int nBestIndex = 0;
+         Orientation eBestOrientation = Orientation::Portrait;
+         for( int i = 0; i < nPaperCount; i++ )
+         {
+             const PaperInfo& rPaperInfo = GetPaperInfo( i );
+
+             // check portrait match
+             sal_Int64 nDX = rData.GetPaperWidth() - rPaperInfo.getWidth();
+             sal_Int64 nDY = rData.GetPaperHeight() - rPaperInfo.getHeight();
+             sal_Int64 nMatch = nDX*nDX + nDY*nDY;
+             if( nMatch < nBestMatch )
+             {
+                 nBestMatch = nMatch;
+                 nBestIndex = i;
+                 eBestOrientation = Orientation::Portrait;
+             }
+
+             // check landscape match
+             nDX = rData.GetPaperWidth() - rPaperInfo.getHeight();
+             nDY = rData.GetPaperHeight() - rPaperInfo.getWidth();
+             nMatch = nDX*nDX + nDY*nDY;
+             if( nMatch < nBestMatch )
+             {
+                 nBestMatch = nMatch;
+                 nBestIndex = i;
+                 eBestOrientation = Orientation::Landscape;
+             }
+         }
+         const PaperInfo& rBestInfo = GetPaperInfo( nBestIndex );
+         rData.SetPaperFormat(
+            ImplGetPaperFormat( rBestInfo.getWidth(),
+                rBestInfo.getHeight() ));
+         rData.SetOrientation(eBestOrientation);
     }
 }
 
@@ -1298,7 +1341,7 @@ void Printer::SetPaper( Paper ePaper )
 
         ReleaseGraphics();
         if ( ePaper == PAPER_USER )
-            ImplFindPaperFormatForUserSize( aJobSetup );
+            ImplFindPaperFormatForUserSize( aJobSetup, false );
         if ( mpInfoPrinter->SetData( JobSetFlags::PAPERSIZE | JobSetFlags::ORIENTATION, &rData ))
         {
             ImplUpdateJobSetupPaper( aJobSetup );
@@ -1311,6 +1354,11 @@ void Printer::SetPaper( Paper ePaper )
 }
 
 bool Printer::SetPaperSizeUser( const Size& rSize )
+{
+    return SetPaperSizeUser( rSize, false );
+}
+
+bool Printer::SetPaperSizeUser( const Size& rSize, bool bMatchNearest )
 {
     if ( mbInPrintPage )
         return false;
@@ -1349,7 +1397,7 @@ bool Printer::SetPaperSizeUser( const Size& rSize )
         }
 
         ReleaseGraphics();
-        ImplFindPaperFormatForUserSize( aJobSetup );
+        ImplFindPaperFormatForUserSize( aJobSetup, bMatchNearest );
 
         // Changing the paper size can also change the orientation!
         if ( mpInfoPrinter->SetData( JobSetFlags::PAPERSIZE | JobSetFlags::ORIENTATION, &rData ))
