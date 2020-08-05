@@ -42,7 +42,7 @@ foreach my $filename (@filenames)
     print($filename . "\n");
     if (!$dry_run)
     {
-        system($command);
+        system($command) == 0 or die "failed to execute \"$command\": $?";
     }
 }
 
