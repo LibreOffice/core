@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ccdba0e3_b44bea71",
+        "filename": "compilerplugins/clang/compat.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-05T08:41:59Z",
+      "side": 1,
+      "message": "Please implement this the same way all the other functions here are implemented, by forwarding to the actual Clang function #if CLANG_VERSION is large enough.  That way, we can easily get rid of this compat function once our Clang baseline is new enough.",
+      "revId": "cda88ec7a43162df37098c4525c33451266a1575",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
