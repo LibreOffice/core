@@ -57,6 +57,8 @@ public:
     void set_accessible_name(const OUString& rStr) { m_pField->set_accessible_name(rStr); }
     void SetMetricFieldMin(int nNewMin) { m_pField->set_min(nNewMin, FieldUnit::NONE); }
     void SetMetricFieldMax(int nNewMax) { m_pField->set_max(nNewMax, FieldUnit::NONE); }
+    void SetMetricFieldRange(int nNewMin, int nNewMax) { m_pField->set_range(nNewMin, nNewMax, FieldUnit::NONE); }
+    void GetMetricFieldRange(int &rOldMin, int& rOldMax) const { m_pField->get_range(rOldMin, rOldMax, FieldUnit::NONE); }
 
     void set_value(int nNewValue, FieldUnit eInUnit = FieldUnit::NONE);
     int get_value(FieldUnit eOutUnit = FieldUnit::NONE);
