@@ -39,6 +39,8 @@
 #include <algorithm>
 #include <svx/dialmgr.hxx>
 
+#include<svx/galleryxmlengine.hxx>
+
 #include <svx/svxdlg.hxx>
 #include <memory>
 #include <bitmaps.hlst>
@@ -469,6 +471,10 @@ IMPL_LINK_NOARG(GalleryBrowser1, SelectThemeHdl, weld::TreeView&, void)
 
 IMPL_LINK_NOARG(GalleryBrowser1, ClickNewThemeHdl, weld::Button&, void)
 {
+    GalleryXMLEngine aXMLEngine;
+    aXMLEngine.readZIP();
+    aXMLEngine.readXML();
+    aXMLEngine.writeXML();
     OUString  aNewTheme( SvxResId(RID_SVXSTR_GALLERY_NEWTHEME) );
     OUString  aName( aNewTheme );
     sal_uInt16 nCount = 0;
