@@ -2297,6 +2297,15 @@ TableMergeErr SwDoc::MergeTable( SwPaM& rPam )
             while( &rPam != ( pTmp = pTmp->GetNext() ))
                 for( int i = 0; i < 2; ++i )
                     pTmp->GetBound( static_cast<bool>(i) ) = *rPam.GetPoint();
+
+            if (SwTableCursor* pTableCursor = dynamic_cast<SwTableCursor*>(&rPam))
+            {
+                // tdf#135098 update selection so rPam's m_SelectedBoxes is updated
+                // to not contain the soon to-be-deleted SwTableBox so if the rPam
+                // is queried via a11y it doesn't claim the deleted cell still
+                // exists
+                pTableCursor->NewTableSelection();
+            }
         }
 
         // Merge them
