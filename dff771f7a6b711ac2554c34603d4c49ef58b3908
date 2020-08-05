@@ -22,6 +22,30 @@
       "revId": "dff771f7a6b711ac2554c34603d4c49ef58b3908",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d22e5b67_927d3a31",
+        "filename": "include/framework/quickstart.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002705
+      },
+      "writtenOn": "2020-08-05T22:08:49Z",
+      "side": 1,
+      "message": "Yes, different compilers use different declarations for symbols that have to be exported from shared library - MSVC uses `__declspec(dllexport)`, while GCC uses `__attribute__((visibility(\"default\")))`. I thought that testing for MSVC directly would convey the meaning a bit clearer. I can change it to `if defined(_WIN32) || defined(_WIN64)` - will it be better?\n\nIn general, using compiler-specific features here to satisfy the linker makes me feel like I\u0027m cutting against the grain somewhere. I\u0027m not much experienced in C++, so maybe somebody can point out a better way.",
+      "parentUuid": "082190a8_3383e65a",
+      "range": {
+        "startLine": 11,
+        "startChar": 7,
+        "endLine": 11,
+        "endChar": 15
+      },
+      "revId": "dff771f7a6b711ac2554c34603d4c49ef58b3908",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
