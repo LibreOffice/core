@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CHART2_INC_BITMAPS_HRC
-#define INCLUDED_CHART2_INC_BITMAPS_HRC
+#pragma once
 
 #define BMP_TYPE_COLUMN                 "chart2/res/typecolumn_16.png"
 #define BMP_TYPE_BAR                    "chart2/res/typebar_16.png"
@@ -132,7 +131,5 @@
 
 #define RID_SVXBMP_LAMP_ON              "svx/res/lighton.png"
 #define RID_SVXBMP_LAMP_OFF             "svx/res/light.png"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

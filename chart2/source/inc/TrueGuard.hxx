@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CHART2_SOURCE_INC_TRUEGUARD_HXX
-#define INCLUDED_CHART2_SOURCE_INC_TRUEGUARD_HXX
+#pragma once
 
 namespace chart
 {
@@ -33,7 +32,5 @@ private:
     bool& m_rbTrueDuringGuardedTime;
 };
 }
-// INCLUDED_CHART2_SOURCE_INC_TRUEGUARD_HXX
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

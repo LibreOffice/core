@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CHART2_SOURCE_INC_DATASERIESHELPER_HXX
-#define INCLUDED_CHART2_SOURCE_INC_DATASERIESHELPER_HXX
+#pragma once
 
 #include "StackMode.hxx"
 #include "charttoolsdllapi.hxx"
@@ -173,8 +172,5 @@ OOO_DLLPUBLIC_CHARTTOOLS void deleteDataLabelsFromSeriesAndAllPoints( const css:
 OOO_DLLPUBLIC_CHARTTOOLS void deleteDataLabelsFromPoint( const css::uno::Reference< css::beans::XPropertySet >& xPointPropertySet );
 
 } //  namespace chart::DataSeriesHelper
-
-// INCLUDED_CHART2_SOURCE_INC_DATASERIESHELPER_HXX
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

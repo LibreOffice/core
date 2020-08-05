@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_ITEMSETWRAPPER_SCHWHICHPAIRS_HXX
-#define INCLUDED_CHART2_SOURCE_CONTROLLER_ITEMSETWRAPPER_SCHWHICHPAIRS_HXX
+#pragma once
 
 #include <svx/svxids.hrc>
 #include <svx/xdef.hxx>
@@ -237,8 +236,5 @@ const sal_uInt16 nRegEquationWhichPairs[] =
     SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_VALUE,   // 10585 - 10585  svx/svxids.hrc
     0
 };
-
-// INCLUDED_CHART2_SOURCE_CONTROLLER_ITEMSETWRAPPER_SCHWHICHPAIRS_HXX
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

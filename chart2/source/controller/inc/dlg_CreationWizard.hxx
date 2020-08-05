@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_CREATIONWIZARD_HXX
-#define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_CREATIONWIZARD_HXX
+#pragma once
 
 #include "TimerTriggeredControllerLock.hxx"
 #include "TabPageNotifiable.hxx"
@@ -74,7 +73,5 @@ private:
 };
 
 } //namespace chart
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

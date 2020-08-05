@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_SIDEBAR_CHARTAXISPANEL_HXX
-#define INCLUDED_CHART2_SOURCE_CONTROLLER_SIDEBAR_CHARTAXISPANEL_HXX
+#pragma once
 
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
@@ -97,7 +96,5 @@ private:
 };
 
 } } // end of namespace ::chart::sidebar
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CHART2_SOURCE_INC_INTERNALDATA_HXX
-#define INCLUDED_CHART2_SOURCE_INC_INTERNALDATA_HXX
+#pragma once
 
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -91,8 +90,6 @@ private:
     tVecVecAny   m_aRowLabels;//outer index is row index, inner index is category level
     tVecVecAny   m_aColumnLabels;//outer index is column index
 };
-
-#endif
 
 } //  namespace chart
 
