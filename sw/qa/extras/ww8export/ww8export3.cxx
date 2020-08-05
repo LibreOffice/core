@@ -318,6 +318,20 @@ DECLARE_WW8EXPORT_TEST(testTdf120225_textControlCrossRef, "tdf120225_textControl
     CPPUNIT_ASSERT_EQUAL(OUString("Text1"), sTextFieldName);
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf134948, "tdf134948.odt")
+{
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Only 1 paragraph", 1, getParagraphs());
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf132726, "tdf132726.odt")
+{
+    uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 1, "What sentence has a yellow background? ");
+    CPPUNIT_ASSERT_EQUAL( COL_AUTO, Color(getProperty<sal_uInt32>(xRun, "CharBackColor")) );
+
+    xRun = getRun(getParagraph(1), 2, "Why, this sentence of course");
+    CPPUNIT_ASSERT_EQUAL( COL_YELLOW, Color(getProperty<sal_uInt32>(xRun, "CharBackColor")) );
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf127316_autoEscapement, "tdf127316_autoEscapement.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
