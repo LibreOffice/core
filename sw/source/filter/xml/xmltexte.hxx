@@ -28,6 +28,7 @@
 class SwXMLExport;
 class SvXMLAutoStylePoolP;
 class SwNoTextNode;
+class SwTableNode;
 namespace com::sun::star::style { class XStyle; }
 
 class SwXMLTextParagraphExport : public XMLTextParagraphExport
@@ -35,6 +36,9 @@ class SwXMLTextParagraphExport : public XMLTextParagraphExport
     const SvGlobalName aAppletClassId;
     const SvGlobalName aPluginClassId;
     const SvGlobalName aIFrameClassId;
+
+    // Collected autostyles for use in exportTextAutoStyles
+    std::vector<const SwTableNode*> maTableNodes;
 
     static SwNoTextNode *GetNoTextNode(
         const css::uno::Reference < css::beans::XPropertySet >& rPropSet );
@@ -49,6 +53,8 @@ protected:
     virtual void exportTable(
         const css::uno::Reference< css::text::XTextContent > & rTextContent,
         bool bAutoStyles, bool bProgress ) override;
+
+    virtual void exportTableAutoStyles() override;
 
 public:
     SwXMLTextParagraphExport(
