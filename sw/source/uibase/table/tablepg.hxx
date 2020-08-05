@@ -61,6 +61,13 @@ class SwFormatTablePage : public SfxTabPage
     std::unique_ptr<svx::FrameDirectionListBox> m_xTextDirectionLB;
     std::unique_ptr<weld::Widget> m_xProperties;
 
+    int m_nOrigWidthMin;
+    int m_nOrigWidthMax;
+    int m_nOrigLeftMin;
+    int m_nOrigLeftMax;
+    int m_nOrigRightMin;
+    int m_nOrigRightMax;
+
     void        Init();
     void        ModifyHdl(const weld::MetricSpinButton& rEdit);
 
