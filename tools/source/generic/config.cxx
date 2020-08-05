@@ -667,31 +667,31 @@ void Config::DeleteGroup(const OString& rGroup)
         pGroup = pGroup->mpNext;
     }
 
-    if ( pGroup )
+    if ( !pGroup )
+        return;
+
+    // Remove all keys
+    ImplKeyData* pTempKey;
+    ImplKeyData* pKey = pGroup->mpFirstKey;
+    while ( pKey )
     {
-        // Remove all keys
-        ImplKeyData* pTempKey;
-        ImplKeyData* pKey = pGroup->mpFirstKey;
-        while ( pKey )
-        {
-            pTempKey = pKey->mpNext;
-            delete pKey;
-            pKey = pTempKey;
-        }
-
-        // Rewire pointers and remove group
-        if ( pPrevGroup )
-            pPrevGroup->mpNext = pGroup->mpNext;
-        else
-            mpData->mpFirstGroup = pGroup->mpNext;
-        delete pGroup;
-
-        // Rewrite config data
-        mpData->mbModified = true;
-
-        mnDataUpdateId = mpData->mnDataUpdateId;
-        mpData->mnDataUpdateId++;
+        pTempKey = pKey->mpNext;
+        delete pKey;
+        pKey = pTempKey;
     }
+
+    // Rewire pointers and remove group
+    if ( pPrevGroup )
+        pPrevGroup->mpNext = pGroup->mpNext;
+    else
+        mpData->mpFirstGroup = pGroup->mpNext;
+    delete pGroup;
+
+    // Rewrite config data
+    mpData->mbModified = true;
+
+    mnDataUpdateId = mpData->mnDataUpdateId;
+    mpData->mnDataUpdateId++;
 }
 
 OString Config::GetGroupName(sal_uInt16 nGroup) const
@@ -787,41 +787,41 @@ void Config::WriteKey(const OString& rKey, const OString& rStr)
 
     // Search key and update value if found
     ImplGroupData* pGroup = ImplGetGroup();
-    if ( pGroup )
+    if ( !pGroup )
+        return;
+
+    ImplKeyData* pPrevKey = nullptr;
+    ImplKeyData* pKey = pGroup->mpFirstKey;
+    while ( pKey )
     {
-        ImplKeyData* pPrevKey = nullptr;
-        ImplKeyData* pKey = pGroup->mpFirstKey;
-        while ( pKey )
-        {
-            if ( !pKey->mbIsComment && pKey->maKey.equalsIgnoreAsciiCase(rKey) )
-                break;
+        if ( !pKey->mbIsComment && pKey->maKey.equalsIgnoreAsciiCase(rKey) )
+            break;
 
-            pPrevKey = pKey;
-            pKey = pKey->mpNext;
-        }
+        pPrevKey = pKey;
+        pKey = pKey->mpNext;
+    }
 
-        bool bNewValue;
-        if ( !pKey )
-        {
-            pKey              = new ImplKeyData;
-            pKey->mpNext      = nullptr;
-            pKey->maKey       = rKey;
-            pKey->mbIsComment = false;
-            if ( pPrevKey )
-                pPrevKey->mpNext = pKey;
-            else
-                pGroup->mpFirstKey = pKey;
-            bNewValue = true;
-        }
+    bool bNewValue;
+    if ( !pKey )
+    {
+        pKey              = new ImplKeyData;
+        pKey->mpNext      = nullptr;
+        pKey->maKey       = rKey;
+        pKey->mbIsComment = false;
+        if ( pPrevKey )
+            pPrevKey->mpNext = pKey;
         else
-            bNewValue = pKey->maValue != rStr;
+            pGroup->mpFirstKey = pKey;
+        bNewValue = true;
+    }
+    else
+        bNewValue = pKey->maValue != rStr;
 
-        if ( bNewValue )
-        {
-            pKey->maValue = rStr;
+    if ( bNewValue )
+    {
+        pKey->maValue = rStr;
 
-            mpData->mbModified = true;
-        }
+        mpData->mbModified = true;
     }
 }
 
@@ -836,30 +836,30 @@ void Config::DeleteKey(const OString& rKey)
 
     // Search key and update value
     ImplGroupData* pGroup = ImplGetGroup();
-    if ( pGroup )
+    if ( !pGroup )
+        return;
+
+    ImplKeyData* pPrevKey = nullptr;
+    ImplKeyData* pKey = pGroup->mpFirstKey;
+    while ( pKey )
     {
-        ImplKeyData* pPrevKey = nullptr;
-        ImplKeyData* pKey = pGroup->mpFirstKey;
-        while ( pKey )
-        {
-            if ( !pKey->mbIsComment && pKey->maKey.equalsIgnoreAsciiCase(rKey) )
-                break;
+        if ( !pKey->mbIsComment && pKey->maKey.equalsIgnoreAsciiCase(rKey) )
+            break;
 
-            pPrevKey = pKey;
-            pKey = pKey->mpNext;
-        }
+        pPrevKey = pKey;
+        pKey = pKey->mpNext;
+    }
 
-        if ( pKey )
-        {
-            // Rewire group pointers and delete
-            if ( pPrevKey )
-                pPrevKey->mpNext = pKey->mpNext;
-            else
-                pGroup->mpFirstKey = pKey->mpNext;
-            delete pKey;
+    if ( pKey )
+    {
+        // Rewire group pointers and delete
+        if ( pPrevKey )
+            pPrevKey->mpNext = pKey->mpNext;
+        else
+            pGroup->mpFirstKey = pKey->mpNext;
+        delete pKey;
 
-            mpData->mbModified = true;
-        }
+        mpData->mbModified = true;
     }
 }
 

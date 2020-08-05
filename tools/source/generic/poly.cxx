@@ -1029,60 +1029,60 @@ void Polygon::Optimize( PolyOptimizeFlags nOptimizeFlags )
 
     sal_uInt16 nSize = mpImplPolygon->mnPoints;
 
-    if( bool(nOptimizeFlags) && nSize )
+    if( !(bool(nOptimizeFlags) && nSize) )
+        return;
+
+    if( nOptimizeFlags & PolyOptimizeFlags::EDGES )
     {
-        if( nOptimizeFlags & PolyOptimizeFlags::EDGES )
-        {
-            const tools::Rectangle aBound( GetBoundRect() );
-            const double    fArea = ( aBound.GetWidth() + aBound.GetHeight() ) * 0.5;
-            const sal_uInt16 nPercent = 50;
+        const tools::Rectangle aBound( GetBoundRect() );
+        const double    fArea = ( aBound.GetWidth() + aBound.GetHeight() ) * 0.5;
+        const sal_uInt16 nPercent = 50;
 
-            Optimize( PolyOptimizeFlags::NO_SAME );
-            ImplReduceEdges( *this, fArea, nPercent );
-        }
-        else if( nOptimizeFlags & PolyOptimizeFlags::NO_SAME )
-        {
-            tools::Polygon aNewPoly;
-            const Point& rFirst = mpImplPolygon->mxPointAry[ 0 ];
+        Optimize( PolyOptimizeFlags::NO_SAME );
+        ImplReduceEdges( *this, fArea, nPercent );
+    }
+    else if( nOptimizeFlags & PolyOptimizeFlags::NO_SAME )
+    {
+        tools::Polygon aNewPoly;
+        const Point& rFirst = mpImplPolygon->mxPointAry[ 0 ];
 
-            while( nSize && ( mpImplPolygon->mxPointAry[ nSize - 1 ] == rFirst ) )
-                nSize--;
-
-            if( nSize > 1 )
-            {
-                sal_uInt16 nLast = 0, nNewCount = 1;
-
-                aNewPoly.SetSize( nSize );
-                aNewPoly[ 0 ] = rFirst;
-
-                for( sal_uInt16 i = 1; i < nSize; i++ )
-                {
-                    if( mpImplPolygon->mxPointAry[ i ] != mpImplPolygon->mxPointAry[ nLast ])
-                    {
-                        nLast = i;
-                        aNewPoly[ nNewCount++ ] = mpImplPolygon->mxPointAry[ i ];
-                    }
-                }
-
-                if( nNewCount == 1 )
-                    aNewPoly.Clear();
-                else
-                    aNewPoly.SetSize( nNewCount );
-            }
-
-            *this = aNewPoly;
-        }
-
-        nSize = mpImplPolygon->mnPoints;
+        while( nSize && ( mpImplPolygon->mxPointAry[ nSize - 1 ] == rFirst ) )
+            nSize--;
 
         if( nSize > 1 )
         {
-            if( ( nOptimizeFlags & PolyOptimizeFlags::CLOSE ) &&
-                ( mpImplPolygon->mxPointAry[ 0 ] != mpImplPolygon->mxPointAry[ nSize - 1 ] ) )
+            sal_uInt16 nLast = 0, nNewCount = 1;
+
+            aNewPoly.SetSize( nSize );
+            aNewPoly[ 0 ] = rFirst;
+
+            for( sal_uInt16 i = 1; i < nSize; i++ )
             {
-                SetSize( mpImplPolygon->mnPoints + 1 );
-                mpImplPolygon->mxPointAry[ mpImplPolygon->mnPoints - 1 ] = mpImplPolygon->mxPointAry[ 0 ];
+                if( mpImplPolygon->mxPointAry[ i ] != mpImplPolygon->mxPointAry[ nLast ])
+                {
+                    nLast = i;
+                    aNewPoly[ nNewCount++ ] = mpImplPolygon->mxPointAry[ i ];
+                }
             }
+
+            if( nNewCount == 1 )
+                aNewPoly.Clear();
+            else
+                aNewPoly.SetSize( nNewCount );
+        }
+
+        *this = aNewPoly;
+    }
+
+    nSize = mpImplPolygon->mnPoints;
+
+    if( nSize > 1 )
+    {
+        if( ( nOptimizeFlags & PolyOptimizeFlags::CLOSE ) &&
+            ( mpImplPolygon->mxPointAry[ 0 ] != mpImplPolygon->mxPointAry[ nSize - 1 ] ) )
+        {
+            SetSize( mpImplPolygon->mnPoints + 1 );
+            mpImplPolygon->mxPointAry[ mpImplPolygon->mnPoints - 1 ] = mpImplPolygon->mxPointAry[ 0 ];
         }
     }
 }
@@ -1719,58 +1719,58 @@ static void impCorrectContinuity(basegfx::B2DPolygon& roPolygon, sal_uInt32 nInd
     const sal_uInt32 nPointCount(roPolygon.count());
     OSL_ENSURE(nIndex < nPointCount, "impCorrectContinuity: index access out of range (!)");
 
-    if(nIndex < nPointCount && (PolyFlags::Smooth == nCFlag || PolyFlags::Symmetric == nCFlag))
+    if(nIndex >= nPointCount || (PolyFlags::Smooth != nCFlag && PolyFlags::Symmetric != nCFlag))
+        return;
+
+    if(!roPolygon.isPrevControlPointUsed(nIndex) || !roPolygon.isNextControlPointUsed(nIndex))
+        return;
+
+    // #i115917# Patch from osnola (modified, thanks for showing the problem)
+
+    // The correction is needed because an integer polygon with control points
+    // is converted to double precision. When C1 or C2 is used the involved vectors
+    // may not have the same directions/lengths since these come from integer coordinates
+    //  and may have been snapped to different nearest integer coordinates. The snap error
+    // is in the range of +-1 in y and y, thus 0.0 <= error <= sqrt(2.0). Nonetheless,
+    // it needs to be corrected to be able to detect the continuity in this points
+    // correctly.
+
+    // We only have the integer data here (already in double precision form, but no mantissa
+    // used), so the best correction is to use:
+
+    // for C1: The longest vector since it potentially has best preserved the original vector.
+    //         Even better the sum of the vectors, weighted by their length. This gives the
+    //         normal vector addition to get the vector itself, lengths need to be preserved.
+    // for C2: The mediated vector(s) since both should be the same, but mirrored
+
+    // extract the point and vectors
+    const basegfx::B2DPoint aPoint(roPolygon.getB2DPoint(nIndex));
+    const basegfx::B2DVector aNext(roPolygon.getNextControlPoint(nIndex) - aPoint);
+    const basegfx::B2DVector aPrev(aPoint - roPolygon.getPrevControlPoint(nIndex));
+
+    // calculate common direction vector, normalize
+    const basegfx::B2DVector aDirection(aNext + aPrev);
+    const double fDirectionLen = aDirection.getLength();
+    if (fDirectionLen == 0.0)
+        return;
+
+    if (PolyFlags::Smooth == nCFlag)
     {
-        if(roPolygon.isPrevControlPointUsed(nIndex) && roPolygon.isNextControlPointUsed(nIndex))
-        {
-            // #i115917# Patch from osnola (modified, thanks for showing the problem)
+        // C1: apply common direction vector, preserve individual lengths
+        const double fInvDirectionLen(1.0 / fDirectionLen);
+        roPolygon.setNextControlPoint(nIndex, basegfx::B2DPoint(aPoint + (aDirection * (aNext.getLength() * fInvDirectionLen))));
+        roPolygon.setPrevControlPoint(nIndex, basegfx::B2DPoint(aPoint - (aDirection * (aPrev.getLength() * fInvDirectionLen))));
+    }
+    else // PolyFlags::Symmetric
+    {
+        // C2: get mediated length. Taking half of the unnormalized direction would be
+        // an approximation, but not correct.
+        const double fMedLength((aNext.getLength() + aPrev.getLength()) * (0.5 / fDirectionLen));
+        const basegfx::B2DVector aScaledDirection(aDirection * fMedLength);
 
-            // The correction is needed because an integer polygon with control points
-            // is converted to double precision. When C1 or C2 is used the involved vectors
-            // may not have the same directions/lengths since these come from integer coordinates
-            //  and may have been snapped to different nearest integer coordinates. The snap error
-            // is in the range of +-1 in y and y, thus 0.0 <= error <= sqrt(2.0). Nonetheless,
-            // it needs to be corrected to be able to detect the continuity in this points
-            // correctly.
-
-            // We only have the integer data here (already in double precision form, but no mantissa
-            // used), so the best correction is to use:
-
-            // for C1: The longest vector since it potentially has best preserved the original vector.
-            //         Even better the sum of the vectors, weighted by their length. This gives the
-            //         normal vector addition to get the vector itself, lengths need to be preserved.
-            // for C2: The mediated vector(s) since both should be the same, but mirrored
-
-            // extract the point and vectors
-            const basegfx::B2DPoint aPoint(roPolygon.getB2DPoint(nIndex));
-            const basegfx::B2DVector aNext(roPolygon.getNextControlPoint(nIndex) - aPoint);
-            const basegfx::B2DVector aPrev(aPoint - roPolygon.getPrevControlPoint(nIndex));
-
-            // calculate common direction vector, normalize
-            const basegfx::B2DVector aDirection(aNext + aPrev);
-            const double fDirectionLen = aDirection.getLength();
-            if (fDirectionLen == 0.0)
-                return;
-
-            if (PolyFlags::Smooth == nCFlag)
-            {
-                // C1: apply common direction vector, preserve individual lengths
-                const double fInvDirectionLen(1.0 / fDirectionLen);
-                roPolygon.setNextControlPoint(nIndex, basegfx::B2DPoint(aPoint + (aDirection * (aNext.getLength() * fInvDirectionLen))));
-                roPolygon.setPrevControlPoint(nIndex, basegfx::B2DPoint(aPoint - (aDirection * (aPrev.getLength() * fInvDirectionLen))));
-            }
-            else // PolyFlags::Symmetric
-            {
-                // C2: get mediated length. Taking half of the unnormalized direction would be
-                // an approximation, but not correct.
-                const double fMedLength((aNext.getLength() + aPrev.getLength()) * (0.5 / fDirectionLen));
-                const basegfx::B2DVector aScaledDirection(aDirection * fMedLength);
-
-                // Bring Direction to correct length and apply
-                roPolygon.setNextControlPoint(nIndex, basegfx::B2DPoint(aPoint + aScaledDirection));
-                roPolygon.setPrevControlPoint(nIndex, basegfx::B2DPoint(aPoint - aScaledDirection));
-            }
-        }
+        // Bring Direction to correct length and apply
+        roPolygon.setNextControlPoint(nIndex, basegfx::B2DPoint(aPoint + aScaledDirection));
+        roPolygon.setPrevControlPoint(nIndex, basegfx::B2DPoint(aPoint - aScaledDirection));
     }
 }
 
