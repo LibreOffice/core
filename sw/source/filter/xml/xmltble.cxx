@@ -1156,6 +1156,13 @@ void SwXMLExport::ExportTable( const SwTableNode& rTableNd )
         lcl_xmltble_ClearName_Line( pLine );
 }
 
+void SwXMLTextParagraphExport::exportTableAutoStyles() {
+    for (const auto* pTableNode : maTableNodes)
+    {
+        static_cast<SwXMLExport&>(GetExport()).ExportTableAutoStyles(*pTableNode);
+    }
+}
+
 void SwXMLTextParagraphExport::exportTable(
         const Reference < XTextContent > & rTextContent,
         bool bAutoStyles, bool _bProgress )
@@ -1193,7 +1200,7 @@ void SwXMLTextParagraphExport::exportTable(
                 // ALL flags are set at the same time.
                 const bool bExportStyles = bool( GetExport().getExportFlags() & SvXMLExportFlags::STYLES );
                 if ( bExportStyles || !pFormat->GetDoc()->IsInHeaderFooter( aIdx ) )
-                    static_cast<SwXMLExport&>(GetExport()).ExportTableAutoStyles( *pTableNd );
+                    maTableNodes.push_back(pTableNd);
             }
             else
             {

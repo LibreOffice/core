@@ -2539,5 +2539,23 @@ DECLARE_ODFEXPORT_TEST(testPageContentBottom, "page-content-bottom.odt")
     CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int16>(xShape, "VertOrientRelation"));
 }
 
+DECLARE_ODFEXPORT_TEST(tdf124470, "tdf124470TableAndEmbeddedUsedFonts.odt")
+{
+    // Table styles were exported out of place, inside font-face-decls.
+    // Without the fix in place, this will fail already in ODF validation:
+    // "content.xml[2,2150]:  Error: tag name "style:style" is not allowed. Possible tag names are: <font-face>"
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPath(pXmlDoc, "/office:document-content/office:font-face-decls/style:style", 0);
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:family='table']", 1);
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:family='table-column']", 2);
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:family='paragraph']", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
