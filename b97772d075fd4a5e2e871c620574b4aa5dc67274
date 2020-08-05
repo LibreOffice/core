@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b3a00ef_ec9a507f",
+        "filename": "svx/source/gallery2/galleryxmlengine.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2020-08-05T10:03:46Z",
+      "side": 1,
+      "message": "it\u0027s url for my local machine, it\u0027s a rough patch",
+      "revId": "b97772d075fd4a5e2e871c620574b4aa5dc67274",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ebcabe4_d5c0d9fa",
+        "filename": "svx/source/gallery2/galleryxmlengine.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2020-08-05T10:03:46Z",
+      "side": 1,
+      "message": "after running this, it shows a dialog box error \"no content provider available for URL \"C:/cygwin/home/adith/lode/dev/core/package/qa/cppunit/data/a2z.zip\"",
+      "range": {
+        "startLine": 34,
+        "startChar": 3,
+        "endLine": 36,
+        "endChar": 64
+      },
+      "revId": "b97772d075fd4a5e2e871c620574b4aa5dc67274",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "873a7fb4_087b7f6c",
+        "filename": "svx/source/gallery2/galtheme.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2020-08-05T10:03:46Z",
+      "side": 1,
+      "message": "this is just to trigger my GalleryXMLEngine code using UI. I will remove it later, it\u0027s for rough use",
+      "revId": "b97772d075fd4a5e2e871c620574b4aa5dc67274",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
