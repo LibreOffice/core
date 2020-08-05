@@ -856,7 +856,7 @@
             <desc>Indicates whether to enlarge or shrink a document's page size while printing to fit the physical paper size.</desc>
             <label>Fit to page</label>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
         <prop oor:name="PageTile" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Draw/Print/Page -->
