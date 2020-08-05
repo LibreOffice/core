@@ -60,30 +60,6 @@ using namespace desktop;
 
 class DesktopLOKTest : public UnoApiTest
 {
-    class Resetter
-    {
-    private:
-        std::function<void ()> m_Func;
-
-    public:
-        Resetter(std::function<void ()> const& rFunc)
-            : m_Func(rFunc)
-        {
-        }
-        ~Resetter()
-        {
-            try
-            {
-                m_Func();
-            }
-            catch (...) // has to be reliable
-            {
-                fprintf(stderr, "resetter failed with exception\n");
-                abort();
-            }
-        }
-    };
-
 public:
     DesktopLOKTest() : UnoApiTest("/desktop/qa/data/"),
     m_nSelectionBeforeSearchResult(0),

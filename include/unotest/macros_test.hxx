@@ -13,6 +13,7 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <functional>
 #include <config_gpgme.h>
 #include <rtl/ustring.hxx>
 #include <unotest/detail/unotestdllapi.hxx>
@@ -38,6 +39,30 @@ namespace unotest {
 class OOO_DLLPUBLIC_UNOTEST MacrosTest
 {
 public:
+    class Resetter
+    {
+    private:
+        std::function<void ()> m_Func;
+
+    public:
+        Resetter(std::function<void ()> const& rFunc)
+            : m_Func(rFunc)
+        {
+        }
+        ~Resetter()
+        {
+            try
+            {
+                m_Func();
+            }
+            catch (...) // has to be reliable
+            {
+                fprintf(stderr, "resetter failed with exception\n");
+                abort();
+            }
+        }
+    };
+
     MacrosTest();
     ~MacrosTest();
 

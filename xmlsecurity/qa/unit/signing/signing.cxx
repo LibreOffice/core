@@ -1221,33 +1221,6 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDropMacroTemplateSignature)
                    SignatureState::NOSIGNATURES, ODFVER_013_TEXT);
 }
 
-namespace
-{
-class Resetter
-{
-private:
-    std::function<void()> m_Func;
-
-public:
-    Resetter(std::function<void()> const& rFunc)
-        : m_Func(rFunc)
-    {
-    }
-    ~Resetter()
-    {
-        try
-        {
-            m_Func();
-        }
-        catch (...) // has to be reliable
-        {
-            fprintf(stderr, "resetter failed with exception\n");
-            abort();
-        }
-    }
-};
-}
-
 /// Test if a macro signature from a OTT 1.0 template is preserved for ODT 1.0
 CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature10)
 {
