@@ -249,15 +249,27 @@ static FrmMap const aHParaHtmlAbsMap[] =
 };
 
 
+<<<<<<< HEAD   (19bbd0 tdf#135918 XLSX DrawingML shape import: fix needless displac)
 static constexpr auto VERT_PARA_REL = LB::VertFrame|LB::VertPrintArea|
                                       LB::RelPageFrame|LB::RelPagePrintArea;
+=======
+constexpr auto VERT_PARA_REL = LB::VertFrame|LB::VertPrintArea|
+                                      LB::RelPageFrame|LB::RelPagePrintArea|LB::RelPagePrintAreaBottom;
+>>>>>>> CHANGE (d54264 tdf#133071 DOCX import: fix vertical alignment to bottom pag)
 
 static FrmMap const aVParaMap[] =
 {
+<<<<<<< HEAD   (19bbd0 tdf#135918 XLSX DrawingML shape import: fix needless displac)
     {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,       VERT_PARA_REL},
     {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::BOTTOM,    VERT_PARA_REL},
     {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::CENTER,    VERT_PARA_REL},
     {SwFPos::FROMTOP,       SwFPos::FROMTOP,        VertOrientation::NONE,      VERT_PARA_REL}
+=======
+    {SvxSwFramePosString::TOP,           SvxSwFramePosString::TOP,            VertOrientation::TOP,       VERT_PARA_REL},
+    {SvxSwFramePosString::BOTTOM,        SvxSwFramePosString::BOTTOM,         VertOrientation::BOTTOM,    VERT_PARA_REL},
+    {SvxSwFramePosString::CENTER_VERT,   SvxSwFramePosString::CENTER_VERT,    VertOrientation::CENTER,    VERT_PARA_REL},
+    {SvxSwFramePosString::FROMTOP,       SvxSwFramePosString::FROMTOP,        VertOrientation::NONE,      VERT_PARA_REL}
+>>>>>>> CHANGE (d54264 tdf#133071 DOCX import: fix vertical alignment to bottom pag)
 };
 
 static FrmMap const aVParaHtmlMap[] =
