@@ -479,6 +479,13 @@ DECLARE_ODFEXPORT_TEST(testTdf131621, "tdf131621.ott")
     CPPUNIT_ASSERT_EQUAL( 1, getPages() );
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf135144, "tdf135144.docx")
+{
+    //Crashes at import time after roundtrip
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+}
+
 DECLARE_ODFEXPORT_TEST(testTdf130950, "tdf130950.odt")
 {
     //Crashes at import time
