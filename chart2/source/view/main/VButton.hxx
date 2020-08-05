@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CHART2_SOURCE_VIEW_MAIN_VBUTTON_HXX
-#define INCLUDED_CHART2_SOURCE_VIEW_MAIN_VBUTTON_HXX
+#pragma once
 
 #include <tools/color.hxx>
 #include <com/sun/star/awt/Point.hpp>
@@ -83,6 +82,5 @@ public:
 };
 
 } //namespace chart
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

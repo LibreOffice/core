@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_DATAEDITOR_HXX
-#define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_DATAEDITOR_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 
@@ -69,7 +68,5 @@ private:
 };
 
 } // namespace chart
-
-#endif // INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_DATAEDITOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

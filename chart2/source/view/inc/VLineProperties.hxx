@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CHART2_SOURCE_VIEW_INC_VLINEPROPERTIES_HXX
-#define INCLUDED_CHART2_SOURCE_VIEW_INC_VLINEPROPERTIES_HXX
+#pragma once
 
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Reference.h>
@@ -44,6 +43,5 @@ struct VLineProperties
 };
 
 } //namespace chart
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

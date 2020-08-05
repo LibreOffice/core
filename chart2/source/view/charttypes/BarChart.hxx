@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CHART2_SOURCE_VIEW_CHARTTYPES_BARCHART_HXX
-#define INCLUDED_CHART2_SOURCE_VIEW_CHARTTYPES_BARCHART_HXX
+#pragma once
 
 #include <memory>
 #include <VSeriesPlotter.hxx>
@@ -68,6 +67,5 @@ private: //member
     css::uno::Sequence< sal_Int32 >      m_aGapwidthSequence;
 };
 } //namespace chart
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_CHARTMODELCLONE_HXX
-#define INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_CHARTMODELCLONE_HXX
+#pragma once
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -70,7 +69,5 @@ namespace chart
     };
 
 } // namespace chart
-
-#endif // INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_CHARTMODELCLONE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

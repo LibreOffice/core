@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_CHARTTYPETEMPLATEPROVIDER_HXX
-#define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_CHARTTYPETEMPLATEPROVIDER_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -37,6 +36,5 @@ public:
 };
 
 } //namespace chart
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

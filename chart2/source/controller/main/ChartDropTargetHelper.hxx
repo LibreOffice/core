@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_CHARTDROPTARGETHELPER_HXX
-#define INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_CHARTDROPTARGETHELPER_HXX
+#pragma once
 
 #include <vcl/transfer.hxx>
 
@@ -51,8 +50,5 @@ private:
 };
 
 } //  namespace chart
-
-// INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_CHARTDROPTARGETHELPER_HXX
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

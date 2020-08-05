@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_SIDEBAR_CHARTSERIESPANEL_HXX
-#define INCLUDED_CHART2_SOURCE_CONTROLLER_SIDEBAR_CHARTSERIESPANEL_HXX
+#pragma once
 
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
@@ -109,7 +108,5 @@ private:
 };
 
 } } // end of namespace ::chart::sidebar
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

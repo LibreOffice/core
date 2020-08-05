@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CHART2_SOURCE_VIEW_CHARTTYPES_PIECHART_HXX
-#define INCLUDED_CHART2_SOURCE_VIEW_CHARTTYPES_PIECHART_HXX
+#pragma once
 
 #include <memory>
 #include <VSeriesPlotter.hxx>
@@ -139,6 +138,5 @@ private: //member
     double m_fMaxOffset;    /// cached max offset value (init'ed to NaN)
 };
 } //namespace chart
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

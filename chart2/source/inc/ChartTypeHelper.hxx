@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CHART2_SOURCE_INC_CHARTTYPEHELPER_HXX
-#define INCLUDED_CHART2_SOURCE_INC_CHARTTYPEHELPER_HXX
+#pragma once
 
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include "charttoolsdllapi.hxx"
@@ -83,6 +82,5 @@ public:
 };
 
 } //namespace chart
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

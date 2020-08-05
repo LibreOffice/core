@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_SIDEBAR_CHARTAREAPANEL_HXX
-#define INCLUDED_CHART2_SOURCE_CONTROLLER_SIDEBAR_CHARTAREAPANEL_HXX
+#pragma once
 
 #include <sfx2/sidebar/SidebarModelUpdate.hxx>
 #include <svx/xfillit0.hxx>
@@ -83,7 +82,5 @@ private:
 };
 
 } } // end of namespace svx::sidebar
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

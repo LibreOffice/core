@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CHART2_SOURCE_MODEL_MAIN_UNDOMANAGER_HXX
-#define INCLUDED_CHART2_SOURCE_MODEL_MAIN_UNDOMANAGER_HXX
+#pragma once
 
 #include <com/sun/star/document/XUndoManager.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
@@ -88,7 +87,5 @@ namespace chart
     };
 
 } // namespace chart
-
-#endif // INCLUDED_CHART2_SOURCE_MODEL_MAIN_UNDOMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

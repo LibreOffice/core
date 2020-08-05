@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_DATABROWSER_HXX
-#define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_DATABROWSER_HXX
+#pragma once
 
 #include <svtools/editbrowsebox.hxx>
 #include <vcl/weld.hxx>
@@ -184,7 +183,5 @@ private:
 };
 
 } // namespace chart
-
-#endif // INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_DATABROWSER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

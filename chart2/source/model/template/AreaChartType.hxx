@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_AREACHARTTYPE_HXX
-#define INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_AREACHARTTYPE_HXX
+#pragma once
 
 #include "ChartType.hxx"
 
@@ -48,8 +47,5 @@ private:
 };
 
 } //  namespace chart
-
-// INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_AREACHARTTYPE_HXX
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
