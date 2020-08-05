@@ -157,7 +157,7 @@ IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, weld::ToggleButton&, rBtn, void 
         m_xLeftMF->SetRefValue(pTableData->GetSpace());
         m_xRightMF->SetRefValue(pTableData->GetSpace());
         m_xLeftMF->SetMetricFieldMin(0); //will be overwritten by the Percentfield
-        m_xRightMF->SetMetricFieldMin(0); //dito
+        m_xRightMF->SetMetricFieldMin(0); //ditto
         m_xLeftMF->SetMetricFieldMax(99);
         m_xRightMF->SetMetricFieldMax(99);
         m_xLeftMF->set_value(m_xLeftMF->NormalizePercent(nLeft ), FieldUnit::TWIP );
