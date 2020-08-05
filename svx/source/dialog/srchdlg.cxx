@@ -1219,6 +1219,8 @@ void SvxSearchDialog::ClickHdl_Impl(const weld::Widget* pCtrl)
 
             if ( m_xRegExpBtn->get_active() )
             {
+                m_xMatchCaseCB->set_active( false );
+                m_xMatchCaseCB->set_sensitive( false );
                 m_xWordBtn->set_active( false );
                 m_xWordBtn->set_sensitive(false);
                 m_xWildcardBtn->set_active( false );
