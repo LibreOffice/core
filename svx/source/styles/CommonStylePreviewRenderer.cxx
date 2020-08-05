@@ -168,7 +168,19 @@ bool CommonStylePreviewRenderer::recalculate()
     }
 
     m_pFont = std::move(pFont);
+    maPixelSize = getRenderSize();
     return true;
+}
+
+Size CommonStylePreviewRenderer::getRenderSize() const
+{
+    assert(m_pFont);
+    Size aPixelSize = m_pFont->GetTextSize(&mrOutputDev, maStyleName);
+
+    if (aPixelSize.Height() > mnMaxHeight)
+        aPixelSize.setHeight( mnMaxHeight );
+
+    return aPixelSize;
 }
 
 bool CommonStylePreviewRenderer::render(const tools::Rectangle& aRectangle, RenderAlign eRenderAlign)
