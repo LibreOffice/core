@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4f260879_3d609039",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-08-05T19:58:35Z",
+      "side": 1,
+      "message": "Why not doing a nullptr comparison against xAllPackages after this line?",
+      "range": {
+        "startLine": 426,
+        "startChar": 10,
+        "endLine": 426,
+        "endChar": 55
+      },
+      "revId": "a155c4c6c64e5df50b51596b479c6c0b716d3c89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "505ba873_d89351cc",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-08-05T19:58:35Z",
+      "side": 1,
+      "message": "You know this value before entering this inner loop, and it doesn\u0027t change ever. So why do you enter the loop in the first place, and iterate over all items in m_aAdditionsItems?\n\nSo, please check for its emptiness BEFORE entering this loop.",
+      "range": {
+        "startLine": 444,
+        "startChar": 24,
+        "endLine": 444,
+        "endChar": 55
+      },
+      "revId": "a155c4c6c64e5df50b51596b479c6c0b716d3c89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6835c8e5_52afff33",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-08-05T19:58:35Z",
+      "side": 1,
+      "message": "Why are we searching in the download url? Doesn\u0027t this \"extensionVersion-\u003egetName()\" has some exactly matchable value already present inside an AdditionInfo item?",
+      "range": {
+        "startLine": 445,
+        "startChar": 28,
+        "endLine": 445,
+        "endChar": 75
+      },
+      "revId": "a155c4c6c64e5df50b51596b479c6c0b716d3c89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a0b703d_aa97d46b",
+        "filename": "cui/source/inc/AdditionsDialog.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-08-05T19:58:35Z",
+      "side": 1,
+      "message": "Why is this public?",
+      "range": {
+        "startLine": 121,
+        "startChar": 60,
+        "endLine": 121,
+        "endChar": 79
+      },
+      "revId": "a155c4c6c64e5df50b51596b479c6c0b716d3c89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc81d2d5_807fae1d",
+        "filename": "cui/source/inc/AdditionsDialog.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-08-05T19:58:35Z",
+      "side": 1,
+      "message": "This is not meant to be called outside this class, right? Why is it public then?",
+      "range": {
+        "startLine": 158,
+        "startChar": 4,
+        "endLine": 158,
+        "endChar": 36
+      },
+      "revId": "a155c4c6c64e5df50b51596b479c6c0b716d3c89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
