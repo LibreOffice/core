@@ -10,6 +10,8 @@
 #ifndef INCLUDED_UNOTEST_MACROS_TEST_HXX
 #define INCLUDED_UNOTEST_MACROS_TEST_HXX
 
+#include <functional>
+
 #include <rtl/ustring.hxx>
 #include <unotest/detail/unotestdllapi.hxx>
 
@@ -27,6 +29,30 @@ namespace unotest {
 class OOO_DLLPUBLIC_UNOTEST MacrosTest
 {
 public:
+    class Resetter
+    {
+    private:
+        std::function<void ()> m_Func;
+
+    public:
+        Resetter(std::function<void ()> const& rFunc)
+            : m_Func(rFunc)
+        {
+        }
+        ~Resetter()
+        {
+            try
+            {
+                m_Func();
+            }
+            catch (...) // has to be reliable
+            {
+                fprintf(stderr, "resetter failed with exception\n");
+                abort();
+            }
+        }
+    };
+
     css::uno::Reference< css::lang::XComponent > loadFromDesktop(const OUString& rURL, const OUString& rDocService = OUString(),
         const css::uno::Sequence<css::beans::PropertyValue>& rExtra_args = css::uno::Sequence<css::beans::PropertyValue>() );
 
