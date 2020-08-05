@@ -146,19 +146,19 @@ void lcl_setSymbolSizeIfNeeded( const uno::Reference< beans::XPropertySet >& xSe
         return;
 
     sal_Int32 nSymbolType = chart::ChartSymbolType::NONE;
-    if( xSeriesOrPointProp.is() && ( xSeriesOrPointProp->getPropertyValue("SymbolType") >>= nSymbolType) )
+    if( !(xSeriesOrPointProp.is() && ( xSeriesOrPointProp->getPropertyValue("SymbolType") >>= nSymbolType)) )
+        return;
+
+    if(chart::ChartSymbolType::NONE!=nSymbolType)
     {
-        if(chart::ChartSymbolType::NONE!=nSymbolType)
+        if( chart::ChartSymbolType::BITMAPURL==nSymbolType )
         {
-            if( chart::ChartSymbolType::BITMAPURL==nSymbolType )
-            {
-                //set special size for graphics to indicate to use the bitmap size itself
-                xSeriesOrPointProp->setPropertyValue("SymbolSize",uno::makeAny( awt::Size(-1,-1) ));
-            }
-            else
-            {
-                lcl_setAutomaticSymbolSize( xSeriesOrPointProp, rImport );
-            }
+            //set special size for graphics to indicate to use the bitmap size itself
+            xSeriesOrPointProp->setPropertyValue("SymbolSize",uno::makeAny( awt::Size(-1,-1) ));
+        }
+        else
+        {
+            lcl_setAutomaticSymbolSize( xSeriesOrPointProp, rImport );
         }
     }
 }
@@ -175,18 +175,18 @@ void lcl_setLinkNumberFormatToSourceIfNeeded( const uno::Reference< beans::XProp
     , const XMLPropStyleContext* pPropStyleContext, const SvXMLStylesContext* pStylesCtxt )
 {
     uno::Any aAny( SchXMLTools::getPropertyFromContext("LinkNumberFormatToSource", pPropStyleContext, pStylesCtxt) );
-    if( !aAny.hasValue() )
-    {
-        if( !xPointProp.is() )
-            return;
+    if( aAny.hasValue() )
+        return;
 
-        bool bLinkToSource = false;
-        if( xPointProp.is() && (xPointProp->getPropertyValue("LinkNumberFormatToSource") >>= bLinkToSource) )
+    if( !xPointProp.is() )
+        return;
+
+    bool bLinkToSource = false;
+    if( xPointProp.is() && (xPointProp->getPropertyValue("LinkNumberFormatToSource") >>= bLinkToSource) )
+    {
+        if( bLinkToSource )
         {
-            if( bLinkToSource )
-            {
-                xPointProp->setPropertyValue("LinkNumberFormatToSource", uno::makeAny(false));
-            }
+            xPointProp->setPropertyValue("LinkNumberFormatToSource", uno::makeAny(false));
         }
     }
 }

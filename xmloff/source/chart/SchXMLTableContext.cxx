@@ -928,118 +928,118 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
     //i91578 display of hidden values (copy paste scenario; use hidden flag during migration to locale table upon paste )
     //remove series that consist only of hidden columns
     Reference< chart2::XInternalDataProvider > xInternalDataProvider( xDataProv, uno::UNO_QUERY );
-    if( xInternalDataProvider.is() && !rTable.aHiddenColumns.empty() )
+    if( !xInternalDataProvider.is() || rTable.aHiddenColumns.empty() )
+        return;
+
+    try
     {
-        try
+        Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xChartDoc->getFirstDiagram(), uno::UNO_QUERY_THROW );
+        const Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems() );
+        for( const auto& rCooSys : aCooSysSeq )
         {
-            Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xChartDoc->getFirstDiagram(), uno::UNO_QUERY_THROW );
-            const Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems() );
-            for( const auto& rCooSys : aCooSysSeq )
+            Reference< chart2::XChartTypeContainer > xCooSysContainer( rCooSys, uno::UNO_QUERY_THROW );
+            const Sequence< Reference< chart2::XChartType > > aChartTypeSeq( xCooSysContainer->getChartTypes());
+            for( const auto& rChartType : aChartTypeSeq )
             {
-                Reference< chart2::XChartTypeContainer > xCooSysContainer( rCooSys, uno::UNO_QUERY_THROW );
-                const Sequence< Reference< chart2::XChartType > > aChartTypeSeq( xCooSysContainer->getChartTypes());
-                for( const auto& rChartType : aChartTypeSeq )
+                Reference< chart2::XDataSeriesContainer > xSeriesContainer( rChartType, uno::UNO_QUERY );
+                if(!xSeriesContainer.is())
+                    continue;
+                const Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xSeriesContainer->getDataSeries() );
+                std::vector< Reference< chart2::XDataSeries > > aRemainingSeries;
+
+                for( const auto& rSeries : aSeriesSeq )
                 {
-                    Reference< chart2::XDataSeriesContainer > xSeriesContainer( rChartType, uno::UNO_QUERY );
-                    if(!xSeriesContainer.is())
-                        continue;
-                    const Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xSeriesContainer->getDataSeries() );
-                    std::vector< Reference< chart2::XDataSeries > > aRemainingSeries;
-
-                    for( const auto& rSeries : aSeriesSeq )
+                    Reference< chart2::data::XDataSource > xDataSource( rSeries, uno::UNO_QUERY );
+                    if( xDataSource.is() )
                     {
-                        Reference< chart2::data::XDataSource > xDataSource( rSeries, uno::UNO_QUERY );
-                        if( xDataSource.is() )
+                        bool bHasUnhiddenColumns = false;
+                        OUString aRange;
+                        const uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences( xDataSource->getDataSequences() );
+                        for( const auto& xLabeledSequence : aSequences )
                         {
-                            bool bHasUnhiddenColumns = false;
-                            OUString aRange;
-                            const uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences( xDataSource->getDataSequences() );
-                            for( const auto& xLabeledSequence : aSequences )
+                            if(!xLabeledSequence.is())
+                                continue;
+                            Reference< chart2::data::XDataSequence > xValues( xLabeledSequence->getValues() );
+                            if( xValues.is() )
                             {
-                                if(!xLabeledSequence.is())
-                                    continue;
-                                Reference< chart2::data::XDataSequence > xValues( xLabeledSequence->getValues() );
-                                if( xValues.is() )
-                                {
-                                    aRange = xValues->getSourceRangeRepresentation();
-                                    if( ::std::find( rTable.aHiddenColumns.begin(), rTable.aHiddenColumns.end(), aRange.toInt32() ) == rTable.aHiddenColumns.end() )
-                                        bHasUnhiddenColumns = true;
-                                }
-                                if( !bHasUnhiddenColumns )
-                                {
-                                    Reference< chart2::data::XDataSequence > xLabel( xLabeledSequence->getLabel() );
-                                    if( xLabel.is() )
-                                    {
-                                        aRange = xLabel->getSourceRangeRepresentation();
-                                        const sal_Int32 nId {aRange.getToken(1, ' ').toInt32()};
-                                        if( ::std::find( rTable.aHiddenColumns.begin(), rTable.aHiddenColumns.end(), nId ) == rTable.aHiddenColumns.end() )
-                                            bHasUnhiddenColumns = true;
-                                    }
-                                }
+                                aRange = xValues->getSourceRangeRepresentation();
+                                if( ::std::find( rTable.aHiddenColumns.begin(), rTable.aHiddenColumns.end(), aRange.toInt32() ) == rTable.aHiddenColumns.end() )
+                                    bHasUnhiddenColumns = true;
                             }
-                            if( bHasUnhiddenColumns )
-                                aRemainingSeries.push_back( rSeries );
-                        }
-                    }
-
-                    if( static_cast<sal_Int32>(aRemainingSeries.size()) != aSeriesSeq.getLength() )
-                    {
-                        //remove the series that have only hidden data
-                        xSeriesContainer->setDataSeries( comphelper::containerToSequence(aRemainingSeries) );
-
-                        //remove unused sequences
-                        Reference< chart2::data::XDataSource > xDataSource( xChartDoc, uno::UNO_QUERY );
-                        if( xDataSource.is() )
-                        {
-                            //first detect which columns are really used
-                            std::map< sal_Int32, bool > aUsageMap;
-                            OUString aRange;
-                            const Sequence< Reference< chart2::data::XLabeledDataSequence > > aUsedSequences( xDataSource->getDataSequences() );
-                            for( const auto& xLabeledSequence : aUsedSequences )
+                            if( !bHasUnhiddenColumns )
                             {
-                                if(!xLabeledSequence.is())
-                                    continue;
-                                Reference< chart2::data::XDataSequence > xValues( xLabeledSequence->getValues() );
-                                if( xValues.is() )
-                                {
-                                    aRange = xValues->getSourceRangeRepresentation();
-                                    sal_Int32 nIndex = aRange.toInt32();
-                                    if( nIndex!=0 || aRange != lcl_aCategoriesRange )
-                                        aUsageMap[nIndex] = true;
-                                }
                                 Reference< chart2::data::XDataSequence > xLabel( xLabeledSequence->getLabel() );
                                 if( xLabel.is() )
                                 {
                                     aRange = xLabel->getSourceRangeRepresentation();
-                                    OUString aSecondToken = aRange.getToken(1, ' ');
-                                    if( !aSecondToken.isEmpty() )
-                                        aUsageMap[aSecondToken.toInt32()] = true;
+                                    const sal_Int32 nId {aRange.getToken(1, ' ').toInt32()};
+                                    if( ::std::find( rTable.aHiddenColumns.begin(), rTable.aHiddenColumns.end(), nId ) == rTable.aHiddenColumns.end() )
+                                        bHasUnhiddenColumns = true;
                                 }
                             }
+                        }
+                        if( bHasUnhiddenColumns )
+                            aRemainingSeries.push_back( rSeries );
+                    }
+                }
 
-                            ::std::vector< sal_Int32 > aSequenceIndexesToDelete;
-                            std::copy_if(rTable.aHiddenColumns.begin(), rTable.aHiddenColumns.end(),
-                                std::back_inserter(aSequenceIndexesToDelete),
-                                [&aUsageMap](sal_Int32 nSequenceIndex) { return aUsageMap.find(nSequenceIndex) == aUsageMap.end(); });
+                if( static_cast<sal_Int32>(aRemainingSeries.size()) != aSeriesSeq.getLength() )
+                {
+                    //remove the series that have only hidden data
+                    xSeriesContainer->setDataSeries( comphelper::containerToSequence(aRemainingSeries) );
 
-                            // delete unnecessary sequences of the internal data
-                            // iterate using greatest index first, so that deletion does not
-                            // shift other sequences that will be deleted later
-                            ::std::sort( aSequenceIndexesToDelete.begin(), aSequenceIndexesToDelete.end());
-                            for( ::std::vector< sal_Int32 >::reverse_iterator aIt(
-                                     aSequenceIndexesToDelete.rbegin()); aIt != aSequenceIndexesToDelete.rend(); ++aIt )
+                    //remove unused sequences
+                    Reference< chart2::data::XDataSource > xDataSource( xChartDoc, uno::UNO_QUERY );
+                    if( xDataSource.is() )
+                    {
+                        //first detect which columns are really used
+                        std::map< sal_Int32, bool > aUsageMap;
+                        OUString aRange;
+                        const Sequence< Reference< chart2::data::XLabeledDataSequence > > aUsedSequences( xDataSource->getDataSequences() );
+                        for( const auto& xLabeledSequence : aUsedSequences )
+                        {
+                            if(!xLabeledSequence.is())
+                                continue;
+                            Reference< chart2::data::XDataSequence > xValues( xLabeledSequence->getValues() );
+                            if( xValues.is() )
                             {
-                                if( *aIt != -1 )
-                                    xInternalDataProvider->deleteSequence( *aIt );
+                                aRange = xValues->getSourceRangeRepresentation();
+                                sal_Int32 nIndex = aRange.toInt32();
+                                if( nIndex!=0 || aRange != lcl_aCategoriesRange )
+                                    aUsageMap[nIndex] = true;
                             }
+                            Reference< chart2::data::XDataSequence > xLabel( xLabeledSequence->getLabel() );
+                            if( xLabel.is() )
+                            {
+                                aRange = xLabel->getSourceRangeRepresentation();
+                                OUString aSecondToken = aRange.getToken(1, ' ');
+                                if( !aSecondToken.isEmpty() )
+                                    aUsageMap[aSecondToken.toInt32()] = true;
+                            }
+                        }
+
+                        ::std::vector< sal_Int32 > aSequenceIndexesToDelete;
+                        std::copy_if(rTable.aHiddenColumns.begin(), rTable.aHiddenColumns.end(),
+                            std::back_inserter(aSequenceIndexesToDelete),
+                            [&aUsageMap](sal_Int32 nSequenceIndex) { return aUsageMap.find(nSequenceIndex) == aUsageMap.end(); });
+
+                        // delete unnecessary sequences of the internal data
+                        // iterate using greatest index first, so that deletion does not
+                        // shift other sequences that will be deleted later
+                        ::std::sort( aSequenceIndexesToDelete.begin(), aSequenceIndexesToDelete.end());
+                        for( ::std::vector< sal_Int32 >::reverse_iterator aIt(
+                                 aSequenceIndexesToDelete.rbegin()); aIt != aSequenceIndexesToDelete.rend(); ++aIt )
+                        {
+                            if( *aIt != -1 )
+                                xInternalDataProvider->deleteSequence( *aIt );
                         }
                     }
                 }
             }
         }
-        catch( const uno::Exception & )
-        {
-        }
+    }
+    catch( const uno::Exception & )
+    {
     }
 }
 
