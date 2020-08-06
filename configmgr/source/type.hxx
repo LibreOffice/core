@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONFIGMGR_SOURCE_TYPE_HXX
-#define INCLUDED_CONFIGMGR_SOURCE_TYPE_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <sal/types.h>
@@ -45,7 +44,5 @@ css::uno::Type const & mapType(Type type);
 Type getDynamicType(css::uno::Any const & value);
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

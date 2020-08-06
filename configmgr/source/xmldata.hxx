@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONFIGMGR_SOURCE_XMLDATA_HXX
-#define INCLUDED_CONFIGMGR_SOURCE_XMLDATA_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -43,7 +42,5 @@ OUString parseTemplateReference(
     OUString const & nodeType, OUString const * defaultTemplateName);
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
