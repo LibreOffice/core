@@ -44,6 +44,7 @@ protected:
 
 private:
     virtual AnimationActivitySharedPtr createActivity() const override;
+    virtual bool enqueueActivity() const override;
 
     css::uno::Reference<css::animations::XAnimateMotion> mxPhysicsMotionNode;
 };

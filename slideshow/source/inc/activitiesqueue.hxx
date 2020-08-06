@@ -57,6 +57,10 @@ namespace slideshow::internal
              */
             bool addActivity( const ActivitySharedPtr& pActivity );
 
+            /** Add the given activity prioritized last in the queue.
+             */
+            bool addTailActivity( const ActivitySharedPtr& pActivity );
+
             /** Process the activities queue.
 
                 This method performs the smallest atomic processing
@@ -93,6 +97,9 @@ namespace slideshow::internal
                                                                  // activities, that still
                                                                  // await processing for this
                                                                  // round
+
+            ActivityQueue           maCurrentTailActivitiesWaiting; // activities that will be
+                                                                    // processed last in the queue
 
             ActivityQueue           maCurrentActivitiesReinsert;    // currently running
                                                                       // activities, that are
