@@ -244,17 +244,13 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Test_TextEffects_StylisticSets_CntxtAlts, "T
 
 }
 
-DECLARE_OOXMLEXPORT_TEST(Test_McIgnorable, "TextEffects_StylisticSets_CntxtAlts.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Test_McIgnorable, "TextEffects_StylisticSets_CntxtAlts.docx")
 {
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
-        return;
 
     assertXPath(pXmlDocument, "/w:document", "Ignorable", "w14 wp14");
 
     xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
-    if (!pXmlStyles)
-        return;
 
     assertXPath(pXmlStyles, "/w:styles", "Ignorable", "w14");
 }
