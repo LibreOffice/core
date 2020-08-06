@@ -511,31 +511,31 @@ bool ColumnsWidget::MouseMove(const MouseEvent& rMEvt)
 
 void ColumnsWidget::UpdateSize_Impl( long nNewCol )
 {
-    if ( nNewCol != nCol )
+    if ( nNewCol == nCol )
+        return;
+
+    Size aWinSize = GetOutputSizePixel();
+
+    Invalidate( tools::Rectangle( 0, aWinSize.Height() - 2,
+                           aWinSize.Width(), aWinSize.Height() ) );
+
+    long nMinCol = 0, nMaxCol = 0;
+
+    if ( nNewCol < nCol )
     {
-        Size aWinSize = GetOutputSizePixel();
-
-        Invalidate( tools::Rectangle( 0, aWinSize.Height() - 2,
-                               aWinSize.Width(), aWinSize.Height() ) );
-
-        long nMinCol = 0, nMaxCol = 0;
-
-        if ( nNewCol < nCol )
-        {
-            nMinCol = nNewCol;
-            nMaxCol = nCol;
-        }
-        else
-        {
-            nMinCol = nCol;
-            nMaxCol = nNewCol;
-        }
-
-        Invalidate( tools::Rectangle( nMinCol*nMX-1, 0,
-                               nMaxCol*nMX+1, aWinSize.Height() - 2 ) );
-        nCol = nNewCol;
-        mrSpinButton.set_value(nCol);
+        nMinCol = nNewCol;
+        nMaxCol = nCol;
     }
+    else
+    {
+        nMinCol = nCol;
+        nMaxCol = nNewCol;
+    }
+
+    Invalidate( tools::Rectangle( nMinCol*nMX-1, 0,
+                           nMaxCol*nMX+1, aWinSize.Height() - 2 ) );
+    nCol = nNewCol;
+    mrSpinButton.set_value(nCol);
 }
 
 bool ColumnsWidget::MouseButtonDown(const MouseEvent&)

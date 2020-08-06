@@ -325,216 +325,216 @@ void SvxFillToolBoxControl::StateChanged(
 
 void SvxFillToolBoxControl::Update()
 {
-    if(mpStyleItem)
+    if(!mpStyleItem)
+        return;
+
+    const drawing::FillStyle eXFS = mpStyleItem->GetValue();
+    SfxObjectShell* pSh = SfxObjectShell::Current();
+
+    switch( eXFS )
     {
-        const drawing::FillStyle eXFS = mpStyleItem->GetValue();
-        SfxObjectShell* pSh = SfxObjectShell::Current();
-
-        switch( eXFS )
+        case drawing::FillStyle_NONE:
         {
-            case drawing::FillStyle_NONE:
-            {
-                mpLbFillAttr->show();
-                mpToolBoxColor->hide();
-                mxFillControl->Resize();
-                break;
-            }
-            case drawing::FillStyle_SOLID:
-            {
-                if(mpColorItem)
-                {
-                    mpLbFillAttr->hide();
-                    mpToolBoxColor->show();
-                    mxFillControl->Resize();
-                }
-                break;
-            }
-            case drawing::FillStyle_GRADIENT:
-            {
-                mpLbFillAttr->show();
-                mpToolBoxColor->hide();
-                mxFillControl->Resize();
-
-                if(pSh && pSh->GetItem(SID_GRADIENT_LIST))
-                {
-                    mpLbFillAttr->set_sensitive(true);
-                    mpLbFillAttr->clear();
-                    SvxFillAttrBox::Fill(*mpLbFillAttr, pSh->GetItem(SID_GRADIENT_LIST)->GetGradientList());
-
-                    if(mpFillGradientItem)
-                    {
-                        const OUString aString(mpFillGradientItem->GetName());
-
-                        mpLbFillAttr->set_active_text(aString);
-
-                        // Check if the entry is not in the list
-                        if (mpLbFillAttr->get_active_text() != aString)
-                        {
-                            sal_Int32 nCount = mpLbFillAttr->get_count();
-                            OUString aTmpStr;
-                            if( nCount > 0 )
-                            {
-                                // Last entry gets tested against temporary entry
-                                aTmpStr = mpLbFillAttr->get_text( nCount - 1 );
-                                if( aTmpStr.startsWith(TMP_STR_BEGIN) &&
-                                    aTmpStr.endsWith(TMP_STR_END) )
-                                {
-                                    mpLbFillAttr->remove(nCount - 1);
-                                }
-                            }
-                            aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
-
-                            XGradientList aGradientList( "", ""/*TODO?*/ );
-                            aGradientList.Insert(std::make_unique<XGradientEntry>(mpFillGradientItem->GetGradientValue(), aTmpStr));
-                            aGradientList.SetDirty( false );
-                            const BitmapEx aBmp = aGradientList.GetUiBitmap( 0 );
-
-                            if (!aBmp.IsEmpty())
-                            {
-                                ScopedVclPtrInstance< VirtualDevice > pVD;
-                                const Size aBmpSize(aBmp.GetSizePixel());
-                                pVD->SetOutputSizePixel(aBmpSize, false);
-                                pVD->DrawBitmapEx(Point(), aBmp);
-                                mpLbFillAttr->append("", aGradientList.Get(0)->GetName(), *pVD);
-                                mpLbFillAttr->set_active(mpLbFillAttr->get_count() - 1);
-                            }
-                        }
-
-                    }
-                    else
-                    {
-                        mpLbFillAttr->set_active(-1);
-                    }
-                }
-                else
-                {
-                    mpLbFillAttr->set_active(-1);
-                }
-                break;
-            }
-            case drawing::FillStyle_HATCH:
-            {
-                mpLbFillAttr->show();
-                mpToolBoxColor->hide();
-                mxFillControl->Resize();
-
-                if(pSh && pSh->GetItem(SID_HATCH_LIST))
-                {
-                    mpLbFillAttr->set_sensitive(true);
-                    mpLbFillAttr->clear();
-                    SvxFillAttrBox::Fill(*mpLbFillAttr, pSh->GetItem(SID_HATCH_LIST)->GetHatchList());
-
-                    if(mpHatchItem)
-                    {
-                        const OUString aString(mpHatchItem->GetName());
-
-                        mpLbFillAttr->set_active_text( aString );
-
-                        // Check if the entry is not in the list
-                        if( mpLbFillAttr->get_active_text() != aString )
-                        {
-                            const sal_Int32 nCount = mpLbFillAttr->get_count();
-                            OUString aTmpStr;
-                            if( nCount > 0 )
-                            {
-                                // Last entry gets tested against temporary entry
-                                aTmpStr = mpLbFillAttr->get_text( nCount - 1 );
-                                if(  aTmpStr.startsWith(TMP_STR_BEGIN) &&
-                                     aTmpStr.endsWith(TMP_STR_END) )
-                                {
-                                    mpLbFillAttr->remove( nCount - 1 );
-                                }
-                            }
-                            aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
-
-                            XHatchList aHatchList( "", ""/*TODO?*/ );
-                            aHatchList.Insert(std::make_unique<XHatchEntry>(mpHatchItem->GetHatchValue(), aTmpStr));
-                            aHatchList.SetDirty( false );
-                            const BitmapEx & aBmp = aHatchList.GetUiBitmap( 0 );
-
-                            if( !aBmp.IsEmpty() )
-                            {
-                                ScopedVclPtrInstance< VirtualDevice > pVD;
-                                const Size aBmpSize(aBmp.GetSizePixel());
-                                pVD->SetOutputSizePixel(aBmpSize, false);
-                                pVD->DrawBitmapEx(Point(), aBmp);
-                                mpLbFillAttr->append("", aHatchList.GetHatch(0)->GetName(), *pVD);
-                                mpLbFillAttr->set_active(mpLbFillAttr->get_count() - 1);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        mpLbFillAttr->set_active(-1);
-                    }
-                }
-                else
-                {
-                    mpLbFillAttr->set_active(-1);
-                }
-                break;
-            }
-            case drawing::FillStyle_BITMAP:
-            {
-                mpLbFillAttr->show();
-                mpToolBoxColor->hide();
-                mxFillControl->Resize();
-
-                if(pSh && pSh->GetItem(SID_BITMAP_LIST))
-                {
-                    mpLbFillAttr->set_sensitive(true);
-                    mpLbFillAttr->clear();
-                    SvxFillAttrBox::Fill(*mpLbFillAttr, pSh->GetItem(SID_BITMAP_LIST)->GetBitmapList());
-
-                    if(mpBitmapItem)
-                    {
-                        const OUString aString(mpBitmapItem->GetName());
-
-                        mpLbFillAttr->set_active_text(aString);
-
-                        // Check if the entry is not in the list
-                        if (mpLbFillAttr->get_active_text() != aString)
-                        {
-                            sal_Int32 nCount = mpLbFillAttr->get_count();
-                            OUString aTmpStr;
-                            if( nCount > 0 )
-                            {
-                                // Last entry gets tested against temporary entry
-                                aTmpStr = mpLbFillAttr->get_text(nCount - 1);
-                                if( aTmpStr.startsWith(TMP_STR_BEGIN) &&
-                                    aTmpStr.endsWith(TMP_STR_END) )
-                                {
-                                    mpLbFillAttr->remove(nCount - 1);
-                                }
-                            }
-                            aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
-
-                            XBitmapListRef xBitmapList =
-                                XPropertyList::AsBitmapList(
-                                    XPropertyList::CreatePropertyList(
-                                        XPropertyListType::Bitmap, "TmpList", ""/*TODO?*/));
-                            xBitmapList->Insert(std::make_unique<XBitmapEntry>(mpBitmapItem->GetGraphicObject(), aTmpStr));
-                            xBitmapList->SetDirty( false );
-                            SvxFillAttrBox::Fill(*mpLbFillAttr, xBitmapList);
-                            mpLbFillAttr->set_active(mpLbFillAttr->get_count() - 1);
-                        }
-
-                    }
-                    else
-                    {
-                        mpLbFillAttr->set_active(-1);
-                    }
-                }
-                else
-                {
-                    mpLbFillAttr->set_active(-1);
-                }
-                break;
-            }
-            default:
-                OSL_ENSURE(false, "Non supported FillType (!)");
+            mpLbFillAttr->show();
+            mpToolBoxColor->hide();
+            mxFillControl->Resize();
             break;
         }
+        case drawing::FillStyle_SOLID:
+        {
+            if(mpColorItem)
+            {
+                mpLbFillAttr->hide();
+                mpToolBoxColor->show();
+                mxFillControl->Resize();
+            }
+            break;
+        }
+        case drawing::FillStyle_GRADIENT:
+        {
+            mpLbFillAttr->show();
+            mpToolBoxColor->hide();
+            mxFillControl->Resize();
+
+            if(pSh && pSh->GetItem(SID_GRADIENT_LIST))
+            {
+                mpLbFillAttr->set_sensitive(true);
+                mpLbFillAttr->clear();
+                SvxFillAttrBox::Fill(*mpLbFillAttr, pSh->GetItem(SID_GRADIENT_LIST)->GetGradientList());
+
+                if(mpFillGradientItem)
+                {
+                    const OUString aString(mpFillGradientItem->GetName());
+
+                    mpLbFillAttr->set_active_text(aString);
+
+                    // Check if the entry is not in the list
+                    if (mpLbFillAttr->get_active_text() != aString)
+                    {
+                        sal_Int32 nCount = mpLbFillAttr->get_count();
+                        OUString aTmpStr;
+                        if( nCount > 0 )
+                        {
+                            // Last entry gets tested against temporary entry
+                            aTmpStr = mpLbFillAttr->get_text( nCount - 1 );
+                            if( aTmpStr.startsWith(TMP_STR_BEGIN) &&
+                                aTmpStr.endsWith(TMP_STR_END) )
+                            {
+                                mpLbFillAttr->remove(nCount - 1);
+                            }
+                        }
+                        aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
+
+                        XGradientList aGradientList( "", ""/*TODO?*/ );
+                        aGradientList.Insert(std::make_unique<XGradientEntry>(mpFillGradientItem->GetGradientValue(), aTmpStr));
+                        aGradientList.SetDirty( false );
+                        const BitmapEx aBmp = aGradientList.GetUiBitmap( 0 );
+
+                        if (!aBmp.IsEmpty())
+                        {
+                            ScopedVclPtrInstance< VirtualDevice > pVD;
+                            const Size aBmpSize(aBmp.GetSizePixel());
+                            pVD->SetOutputSizePixel(aBmpSize, false);
+                            pVD->DrawBitmapEx(Point(), aBmp);
+                            mpLbFillAttr->append("", aGradientList.Get(0)->GetName(), *pVD);
+                            mpLbFillAttr->set_active(mpLbFillAttr->get_count() - 1);
+                        }
+                    }
+
+                }
+                else
+                {
+                    mpLbFillAttr->set_active(-1);
+                }
+            }
+            else
+            {
+                mpLbFillAttr->set_active(-1);
+            }
+            break;
+        }
+        case drawing::FillStyle_HATCH:
+        {
+            mpLbFillAttr->show();
+            mpToolBoxColor->hide();
+            mxFillControl->Resize();
+
+            if(pSh && pSh->GetItem(SID_HATCH_LIST))
+            {
+                mpLbFillAttr->set_sensitive(true);
+                mpLbFillAttr->clear();
+                SvxFillAttrBox::Fill(*mpLbFillAttr, pSh->GetItem(SID_HATCH_LIST)->GetHatchList());
+
+                if(mpHatchItem)
+                {
+                    const OUString aString(mpHatchItem->GetName());
+
+                    mpLbFillAttr->set_active_text( aString );
+
+                    // Check if the entry is not in the list
+                    if( mpLbFillAttr->get_active_text() != aString )
+                    {
+                        const sal_Int32 nCount = mpLbFillAttr->get_count();
+                        OUString aTmpStr;
+                        if( nCount > 0 )
+                        {
+                            // Last entry gets tested against temporary entry
+                            aTmpStr = mpLbFillAttr->get_text( nCount - 1 );
+                            if(  aTmpStr.startsWith(TMP_STR_BEGIN) &&
+                                 aTmpStr.endsWith(TMP_STR_END) )
+                            {
+                                mpLbFillAttr->remove( nCount - 1 );
+                            }
+                        }
+                        aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
+
+                        XHatchList aHatchList( "", ""/*TODO?*/ );
+                        aHatchList.Insert(std::make_unique<XHatchEntry>(mpHatchItem->GetHatchValue(), aTmpStr));
+                        aHatchList.SetDirty( false );
+                        const BitmapEx & aBmp = aHatchList.GetUiBitmap( 0 );
+
+                        if( !aBmp.IsEmpty() )
+                        {
+                            ScopedVclPtrInstance< VirtualDevice > pVD;
+                            const Size aBmpSize(aBmp.GetSizePixel());
+                            pVD->SetOutputSizePixel(aBmpSize, false);
+                            pVD->DrawBitmapEx(Point(), aBmp);
+                            mpLbFillAttr->append("", aHatchList.GetHatch(0)->GetName(), *pVD);
+                            mpLbFillAttr->set_active(mpLbFillAttr->get_count() - 1);
+                        }
+                    }
+                }
+                else
+                {
+                    mpLbFillAttr->set_active(-1);
+                }
+            }
+            else
+            {
+                mpLbFillAttr->set_active(-1);
+            }
+            break;
+        }
+        case drawing::FillStyle_BITMAP:
+        {
+            mpLbFillAttr->show();
+            mpToolBoxColor->hide();
+            mxFillControl->Resize();
+
+            if(pSh && pSh->GetItem(SID_BITMAP_LIST))
+            {
+                mpLbFillAttr->set_sensitive(true);
+                mpLbFillAttr->clear();
+                SvxFillAttrBox::Fill(*mpLbFillAttr, pSh->GetItem(SID_BITMAP_LIST)->GetBitmapList());
+
+                if(mpBitmapItem)
+                {
+                    const OUString aString(mpBitmapItem->GetName());
+
+                    mpLbFillAttr->set_active_text(aString);
+
+                    // Check if the entry is not in the list
+                    if (mpLbFillAttr->get_active_text() != aString)
+                    {
+                        sal_Int32 nCount = mpLbFillAttr->get_count();
+                        OUString aTmpStr;
+                        if( nCount > 0 )
+                        {
+                            // Last entry gets tested against temporary entry
+                            aTmpStr = mpLbFillAttr->get_text(nCount - 1);
+                            if( aTmpStr.startsWith(TMP_STR_BEGIN) &&
+                                aTmpStr.endsWith(TMP_STR_END) )
+                            {
+                                mpLbFillAttr->remove(nCount - 1);
+                            }
+                        }
+                        aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
+
+                        XBitmapListRef xBitmapList =
+                            XPropertyList::AsBitmapList(
+                                XPropertyList::CreatePropertyList(
+                                    XPropertyListType::Bitmap, "TmpList", ""/*TODO?*/));
+                        xBitmapList->Insert(std::make_unique<XBitmapEntry>(mpBitmapItem->GetGraphicObject(), aTmpStr));
+                        xBitmapList->SetDirty( false );
+                        SvxFillAttrBox::Fill(*mpLbFillAttr, xBitmapList);
+                        mpLbFillAttr->set_active(mpLbFillAttr->get_count() - 1);
+                    }
+
+                }
+                else
+                {
+                    mpLbFillAttr->set_active(-1);
+                }
+            }
+            else
+            {
+                mpLbFillAttr->set_active(-1);
+            }
+            break;
+        }
+        default:
+            OSL_ENSURE(false, "Non supported FillType (!)");
+        break;
     }
 
 }
@@ -668,161 +668,161 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, weld::ComboBox&, void)
 {
     const drawing::FillStyle eXFS = static_cast<drawing::FillStyle>(mpLbFillType->get_active());
 
-    if(meLastXFS != eXFS)
+    if(meLastXFS == eXFS)
+        return;
+
+    mpLbFillAttr->clear();
+    SfxObjectShell* pSh = SfxObjectShell::Current();
+    const XFillStyleItem aXFillStyleItem(eXFS);
+
+    // #i122676# Do no longer trigger two Execute calls, one for SID_ATTR_FILL_STYLE
+    // and one for setting the fill attribute itself, but add two SfxPoolItems to the
+    // call to get just one action at the SdrObject and to create only one Undo action, too.
+    // Checked that this works in all apps.
+    switch( eXFS )
     {
-        mpLbFillAttr->clear();
-        SfxObjectShell* pSh = SfxObjectShell::Current();
-        const XFillStyleItem aXFillStyleItem(eXFS);
-
-        // #i122676# Do no longer trigger two Execute calls, one for SID_ATTR_FILL_STYLE
-        // and one for setting the fill attribute itself, but add two SfxPoolItems to the
-        // call to get just one action at the SdrObject and to create only one Undo action, too.
-        // Checked that this works in all apps.
-        switch( eXFS )
+        default:
+        case drawing::FillStyle_NONE:
         {
-            default:
-            case drawing::FillStyle_NONE:
-            {
-                mpLbFillAttr->show();
-                mpToolBoxColor->hide();
-                mpLbFillAttr->set_sensitive(false);
+            mpLbFillAttr->show();
+            mpToolBoxColor->hide();
+            mpLbFillAttr->set_sensitive(false);
 
-                // #i122676# need to call a single SID_ATTR_FILL_STYLE change
-                SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
-                    SID_ATTR_FILL_STYLE, SfxCallMode::RECORD,
-                    { &aXFillStyleItem });
-                break;
-            }
-            case drawing::FillStyle_SOLID:
-            {
-                mpLbFillAttr->hide();
-                mpToolBoxColor->show();
-                const ::Color aColor = mpColorItem->GetColorValue();
-                const XFillColorItem aXFillColorItem( "", aColor );
-
-                // #i122676# change FillStyle and Color in one call
-                SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
-                    SID_ATTR_FILL_COLOR, SfxCallMode::RECORD,
-                    { &aXFillColorItem, &aXFillStyleItem });
-                break;
-            }
-            case drawing::FillStyle_GRADIENT:
-            {
-                mpLbFillAttr->show();
-                mpToolBoxColor->hide();
-
-                if(pSh && pSh->GetItem(SID_GRADIENT_LIST))
-                {
-                    if(!mpLbFillAttr->get_count())
-                    {
-                        mpLbFillAttr->set_sensitive(true);
-                        mpLbFillAttr->clear();
-                        SvxFillAttrBox::Fill(*mpLbFillAttr, pSh->GetItem(SID_GRADIENT_LIST)->GetGradientList());
-                    }
-
-                    if (mnLastPosGradient != -1)
-                    {
-                        const SvxGradientListItem * pItem = pSh->GetItem(SID_GRADIENT_LIST);
-
-                        if(mnLastPosGradient < pItem->GetGradientList()->Count())
-                        {
-                            const XGradient aGradient = pItem->GetGradientList()->GetGradient(mnLastPosGradient)->GetGradient();
-                            const XFillGradientItem aXFillGradientItem(mpLbFillAttr->get_text(mnLastPosGradient), aGradient);
-
-                            // #i122676# change FillStyle and Gradient in one call
-                            SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
-                                SID_ATTR_FILL_GRADIENT, SfxCallMode::RECORD,
-                                { &aXFillGradientItem, &aXFillStyleItem });
-                            mpLbFillAttr->set_active(mnLastPosGradient);
-                        }
-                    }
-                }
-                else
-                {
-                    mpLbFillAttr->set_sensitive(false);
-                }
-                break;
-            }
-            case drawing::FillStyle_HATCH:
-            {
-                mpLbFillAttr->show();
-                mpToolBoxColor->hide();
-
-                if(pSh && pSh->GetItem(SID_HATCH_LIST))
-                {
-                    if(!mpLbFillAttr->get_count())
-                    {
-                        mpLbFillAttr->set_sensitive(true);
-                        mpLbFillAttr->clear();
-                        SvxFillAttrBox::Fill(*mpLbFillAttr, pSh->GetItem(SID_HATCH_LIST)->GetHatchList());
-                    }
-
-                    if (mnLastPosHatch != -1)
-                    {
-                        const SvxHatchListItem * pItem = pSh->GetItem(SID_HATCH_LIST);
-
-                        if(mnLastPosHatch < pItem->GetHatchList()->Count())
-                        {
-                            const XHatch aHatch = pItem->GetHatchList()->GetHatch(mnLastPosHatch)->GetHatch();
-                            const XFillHatchItem aXFillHatchItem(mpLbFillAttr->get_active_text(), aHatch);
-
-                            // #i122676# change FillStyle and Hatch in one call
-                            SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
-                                SID_ATTR_FILL_HATCH, SfxCallMode::RECORD,
-                                { &aXFillHatchItem, &aXFillStyleItem });
-                            mpLbFillAttr->set_active(mnLastPosHatch);
-                        }
-                    }
-                }
-                else
-                {
-                    mpLbFillAttr->set_sensitive(false);
-                }
-                break;
-            }
-            case drawing::FillStyle_BITMAP:
-            {
-                mpLbFillAttr->show();
-                mpToolBoxColor->hide();
-
-                if(pSh && pSh->GetItem(SID_BITMAP_LIST))
-                {
-                    if(!mpLbFillAttr->get_count())
-                    {
-                        mpLbFillAttr->set_sensitive(true);
-                        mpLbFillAttr->clear();
-                        SvxFillAttrBox::Fill(*mpLbFillAttr, pSh->GetItem(SID_BITMAP_LIST)->GetBitmapList());
-                    }
-
-                    if (mnLastPosBitmap != -1)
-                    {
-                        const SvxBitmapListItem * pItem = pSh->GetItem(SID_BITMAP_LIST);
-
-                        if(mnLastPosBitmap < pItem->GetBitmapList()->Count())
-                        {
-                            const XBitmapEntry* pXBitmapEntry = pItem->GetBitmapList()->GetBitmap(mnLastPosBitmap);
-                            const XFillBitmapItem aXFillBitmapItem(mpLbFillAttr->get_active_text(), pXBitmapEntry->GetGraphicObject());
-
-                            // #i122676# change FillStyle and Bitmap in one call
-                            SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
-                                SID_ATTR_FILL_BITMAP, SfxCallMode::RECORD,
-                                { &aXFillBitmapItem, &aXFillStyleItem });
-                            mpLbFillAttr->set_active(mnLastPosBitmap);
-                        }
-                    }
-                }
-                else
-                {
-                    mpLbFillAttr->set_sensitive(false);
-                }
-                break;
-            }
+            // #i122676# need to call a single SID_ATTR_FILL_STYLE change
+            SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
+                SID_ATTR_FILL_STYLE, SfxCallMode::RECORD,
+                { &aXFillStyleItem });
+            break;
         }
+        case drawing::FillStyle_SOLID:
+        {
+            mpLbFillAttr->hide();
+            mpToolBoxColor->show();
+            const ::Color aColor = mpColorItem->GetColorValue();
+            const XFillColorItem aXFillColorItem( "", aColor );
 
-        meLastXFS = eXFS;
+            // #i122676# change FillStyle and Color in one call
+            SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
+                SID_ATTR_FILL_COLOR, SfxCallMode::RECORD,
+                { &aXFillColorItem, &aXFillStyleItem });
+            break;
+        }
+        case drawing::FillStyle_GRADIENT:
+        {
+            mpLbFillAttr->show();
+            mpToolBoxColor->hide();
 
-        mxFillControl->Resize();
+            if(pSh && pSh->GetItem(SID_GRADIENT_LIST))
+            {
+                if(!mpLbFillAttr->get_count())
+                {
+                    mpLbFillAttr->set_sensitive(true);
+                    mpLbFillAttr->clear();
+                    SvxFillAttrBox::Fill(*mpLbFillAttr, pSh->GetItem(SID_GRADIENT_LIST)->GetGradientList());
+                }
+
+                if (mnLastPosGradient != -1)
+                {
+                    const SvxGradientListItem * pItem = pSh->GetItem(SID_GRADIENT_LIST);
+
+                    if(mnLastPosGradient < pItem->GetGradientList()->Count())
+                    {
+                        const XGradient aGradient = pItem->GetGradientList()->GetGradient(mnLastPosGradient)->GetGradient();
+                        const XFillGradientItem aXFillGradientItem(mpLbFillAttr->get_text(mnLastPosGradient), aGradient);
+
+                        // #i122676# change FillStyle and Gradient in one call
+                        SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
+                            SID_ATTR_FILL_GRADIENT, SfxCallMode::RECORD,
+                            { &aXFillGradientItem, &aXFillStyleItem });
+                        mpLbFillAttr->set_active(mnLastPosGradient);
+                    }
+                }
+            }
+            else
+            {
+                mpLbFillAttr->set_sensitive(false);
+            }
+            break;
+        }
+        case drawing::FillStyle_HATCH:
+        {
+            mpLbFillAttr->show();
+            mpToolBoxColor->hide();
+
+            if(pSh && pSh->GetItem(SID_HATCH_LIST))
+            {
+                if(!mpLbFillAttr->get_count())
+                {
+                    mpLbFillAttr->set_sensitive(true);
+                    mpLbFillAttr->clear();
+                    SvxFillAttrBox::Fill(*mpLbFillAttr, pSh->GetItem(SID_HATCH_LIST)->GetHatchList());
+                }
+
+                if (mnLastPosHatch != -1)
+                {
+                    const SvxHatchListItem * pItem = pSh->GetItem(SID_HATCH_LIST);
+
+                    if(mnLastPosHatch < pItem->GetHatchList()->Count())
+                    {
+                        const XHatch aHatch = pItem->GetHatchList()->GetHatch(mnLastPosHatch)->GetHatch();
+                        const XFillHatchItem aXFillHatchItem(mpLbFillAttr->get_active_text(), aHatch);
+
+                        // #i122676# change FillStyle and Hatch in one call
+                        SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
+                            SID_ATTR_FILL_HATCH, SfxCallMode::RECORD,
+                            { &aXFillHatchItem, &aXFillStyleItem });
+                        mpLbFillAttr->set_active(mnLastPosHatch);
+                    }
+                }
+            }
+            else
+            {
+                mpLbFillAttr->set_sensitive(false);
+            }
+            break;
+        }
+        case drawing::FillStyle_BITMAP:
+        {
+            mpLbFillAttr->show();
+            mpToolBoxColor->hide();
+
+            if(pSh && pSh->GetItem(SID_BITMAP_LIST))
+            {
+                if(!mpLbFillAttr->get_count())
+                {
+                    mpLbFillAttr->set_sensitive(true);
+                    mpLbFillAttr->clear();
+                    SvxFillAttrBox::Fill(*mpLbFillAttr, pSh->GetItem(SID_BITMAP_LIST)->GetBitmapList());
+                }
+
+                if (mnLastPosBitmap != -1)
+                {
+                    const SvxBitmapListItem * pItem = pSh->GetItem(SID_BITMAP_LIST);
+
+                    if(mnLastPosBitmap < pItem->GetBitmapList()->Count())
+                    {
+                        const XBitmapEntry* pXBitmapEntry = pItem->GetBitmapList()->GetBitmap(mnLastPosBitmap);
+                        const XFillBitmapItem aXFillBitmapItem(mpLbFillAttr->get_active_text(), pXBitmapEntry->GetGraphicObject());
+
+                        // #i122676# change FillStyle and Bitmap in one call
+                        SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
+                            SID_ATTR_FILL_BITMAP, SfxCallMode::RECORD,
+                            { &aXFillBitmapItem, &aXFillStyleItem });
+                        mpLbFillAttr->set_active(mnLastPosBitmap);
+                    }
+                }
+            }
+            else
+            {
+                mpLbFillAttr->set_sensitive(false);
+            }
+            break;
+        }
     }
+
+    meLastXFS = eXFS;
+
+    mxFillControl->Resize();
 }
 
 IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, weld::ComboBox&, void)

@@ -191,53 +191,53 @@ namespace
 {
     void formatBitmapExToSize(BitmapEx& rBitmapEx, const Size& rSize)
     {
-        if(!rBitmapEx.IsEmpty() && !rSize.IsEmpty())
+        if(rBitmapEx.IsEmpty() || rSize.IsEmpty())
+            return;
+
+        ScopedVclPtrInstance< VirtualDevice > pVirtualDevice;
+        pVirtualDevice->SetOutputSizePixel(rSize);
+
+        if(rBitmapEx.IsTransparent())
         {
-            ScopedVclPtrInstance< VirtualDevice > pVirtualDevice;
-            pVirtualDevice->SetOutputSizePixel(rSize);
+            const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
-            if(rBitmapEx.IsTransparent())
+            if(rStyleSettings.GetPreviewUsesCheckeredBackground())
             {
-                const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+                const Point aNull(0, 0);
+                static const sal_uInt32 nLen(8);
+                static const Color aW(COL_WHITE);
+                static const Color aG(0xef, 0xef, 0xef);
 
-                if(rStyleSettings.GetPreviewUsesCheckeredBackground())
-                {
-                    const Point aNull(0, 0);
-                    static const sal_uInt32 nLen(8);
-                    static const Color aW(COL_WHITE);
-                    static const Color aG(0xef, 0xef, 0xef);
-
-                    pVirtualDevice->DrawCheckered(aNull, rSize, nLen, aW, aG);
-                }
-                else
-                {
-                    pVirtualDevice->SetBackground(rStyleSettings.GetFieldColor());
-                    pVirtualDevice->Erase();
-                }
-            }
-
-            if(rBitmapEx.GetSizePixel().Width() >= rSize.Width() && rBitmapEx.GetSizePixel().Height() >= rSize.Height())
-            {
-                rBitmapEx.Scale(rSize);
-                pVirtualDevice->DrawBitmapEx(Point(0, 0), rBitmapEx);
+                pVirtualDevice->DrawCheckered(aNull, rSize, nLen, aW, aG);
             }
             else
             {
-                const Size aBitmapSize(rBitmapEx.GetSizePixel());
+                pVirtualDevice->SetBackground(rStyleSettings.GetFieldColor());
+                pVirtualDevice->Erase();
+            }
+        }
 
-                for(long y(0); y < rSize.Height(); y += aBitmapSize.Height())
+        if(rBitmapEx.GetSizePixel().Width() >= rSize.Width() && rBitmapEx.GetSizePixel().Height() >= rSize.Height())
+        {
+            rBitmapEx.Scale(rSize);
+            pVirtualDevice->DrawBitmapEx(Point(0, 0), rBitmapEx);
+        }
+        else
+        {
+            const Size aBitmapSize(rBitmapEx.GetSizePixel());
+
+            for(long y(0); y < rSize.Height(); y += aBitmapSize.Height())
+            {
+                for(long x(0); x < rSize.Width(); x += aBitmapSize.Width())
                 {
-                    for(long x(0); x < rSize.Width(); x += aBitmapSize.Width())
-                    {
-                        pVirtualDevice->DrawBitmapEx(
-                            Point(x, y),
-                            rBitmapEx);
-                    }
+                    pVirtualDevice->DrawBitmapEx(
+                        Point(x, y),
+                        rBitmapEx);
                 }
             }
-
-            rBitmapEx = pVirtualDevice->GetBitmapEx(Point(0, 0), rSize);
         }
+
+        rBitmapEx = pVirtualDevice->GetBitmapEx(Point(0, 0), rSize);
     }
 } // end of anonymous namespace
 
