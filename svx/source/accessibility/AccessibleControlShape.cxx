@@ -794,22 +794,22 @@ void AccessibleControlShape::initializeComposedState()
     // get my inner context
     Reference< XAccessibleContext > xInnerContext( m_aControlContext );
     OSL_PRECOND( xInnerContext.is(), "AccessibleControlShape::initializeComposedState: no inner context!" );
-    if ( xInnerContext.is() )
-    {
-        // get all states of the inner context
-        Reference< XAccessibleStateSet > xInnerStates( xInnerContext->getAccessibleStateSet() );
-        OSL_ENSURE( xInnerStates.is(), "AccessibleControlShape::initializeComposedState: no inner states!" );
-        Sequence< sal_Int16 > aInnerStates;
-        if ( xInnerStates.is() )
-            aInnerStates = xInnerStates->getStates();
+    if ( !xInnerContext.is() )
+        return;
 
-        // look which one are to be propagated to the composed context
-        for ( const sal_Int16 nState : aInnerStates )
+    // get all states of the inner context
+    Reference< XAccessibleStateSet > xInnerStates( xInnerContext->getAccessibleStateSet() );
+    OSL_ENSURE( xInnerStates.is(), "AccessibleControlShape::initializeComposedState: no inner states!" );
+    Sequence< sal_Int16 > aInnerStates;
+    if ( xInnerStates.is() )
+        aInnerStates = xInnerStates->getStates();
+
+    // look which one are to be propagated to the composed context
+    for ( const sal_Int16 nState : aInnerStates )
+    {
+        if ( isComposedState( nState ) && !pComposedStates->contains( nState ) )
         {
-            if ( isComposedState( nState ) && !pComposedStates->contains( nState ) )
-            {
-                pComposedStates->AddState( nState );
-            }
+            pComposedStates->AddState( nState );
         }
     }
 }
@@ -829,22 +829,22 @@ void SAL_CALL AccessibleControlShape::elementInserted( const css::container::Con
 
     Reference< XInterface > xNewNormalized( xControl->getModel(), UNO_QUERY );
     Reference< XInterface > xMyModelNormalized( m_xControlModel, UNO_QUERY );
-    if ( xNewNormalized && xMyModelNormalized )
+    if ( !(xNewNormalized && xMyModelNormalized) )
+        return;
+
+    // now finally the control for the model we're responsible for has been inserted into the container
+    Reference< XInterface > xKeepAlive( *this );
+
+    // first, we're not interested in any more container events
+    if ( xContainer.is() )
     {
-        // now finally the control for the model we're responsible for has been inserted into the container
-        Reference< XInterface > xKeepAlive( *this );
-
-        // first, we're not interested in any more container events
-        if ( xContainer.is() )
-        {
-            xContainer->removeContainerListener( this );
-            m_bWaitingForControl = false;
-        }
-
-        // second, we need to replace ourself with a new version, which now can be based on the
-        // control
-        OSL_VERIFY( mpParent->ReplaceChild ( this, mxShape, 0, maShapeTreeInfo ) );
+        xContainer->removeContainerListener( this );
+        m_bWaitingForControl = false;
     }
+
+    // second, we need to replace ourself with a new version, which now can be based on the
+    // control
+    OSL_VERIFY( mpParent->ReplaceChild ( this, mxShape, 0, maShapeTreeInfo ) );
 }
 
 void SAL_CALL AccessibleControlShape::elementRemoved( const css::container::ContainerEvent& )

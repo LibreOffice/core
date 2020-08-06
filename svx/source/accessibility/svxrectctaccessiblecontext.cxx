@@ -333,31 +333,31 @@ void SvxRectCtlAccessibleContext::FireChildFocus( RectPoint eButton )
 void SvxRectCtlAccessibleContext::selectChild( long nNew )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
-    if( nNew != mnSelectedChild )
-    {
-        long    nNumOfChildren = getAccessibleChildCount();
-        if( nNew < nNumOfChildren )
-        {   // valid index
-            SvxRectCtlChildAccessibleContext*   pChild;
-            if( mnSelectedChild != NOCHILDSELECTED )
-            {   // deselect old selected child if one is selected
-                pChild = mvChildren[ mnSelectedChild ].get();
-                if( pChild )
-                    pChild->setStateChecked( false );
-            }
+    if( nNew == mnSelectedChild )
+        return;
 
-            // select new child
-            mnSelectedChild = nNew;
-
-            if( nNew != NOCHILDSELECTED )
-            {
-                if( mvChildren[ nNew ].is() )
-                    mvChildren[ nNew ]->setStateChecked( true );
-            }
+    long    nNumOfChildren = getAccessibleChildCount();
+    if( nNew < nNumOfChildren )
+    {   // valid index
+        SvxRectCtlChildAccessibleContext*   pChild;
+        if( mnSelectedChild != NOCHILDSELECTED )
+        {   // deselect old selected child if one is selected
+            pChild = mvChildren[ mnSelectedChild ].get();
+            if( pChild )
+                pChild->setStateChecked( false );
         }
-        else
-            mnSelectedChild = NOCHILDSELECTED;
+
+        // select new child
+        mnSelectedChild = nNew;
+
+        if( nNew != NOCHILDSELECTED )
+        {
+            if( mvChildren[ nNew ].is() )
+                mvChildren[ nNew ]->setStateChecked( true );
+        }
     }
+    else
+        mnSelectedChild = NOCHILDSELECTED;
 }
 
 void SvxRectCtlAccessibleContext::selectChild(RectPoint eButton )
@@ -611,22 +611,22 @@ awt::Rectangle SvxRectCtlChildAccessibleContext::implGetBounds(  )
 
 void SvxRectCtlChildAccessibleContext::setStateChecked( bool bChecked )
 {
-    if( mbIsChecked != bChecked )
-    {
-        mbIsChecked = bChecked;
+    if( mbIsChecked == bChecked )
+        return;
 
-        Any                             aOld;
-        Any                             aNew;
-        Any&                            rMod = bChecked? aNew : aOld;
+    mbIsChecked = bChecked;
 
-        //Send the STATE_CHANGED(Focused) event to accessible
-        rMod <<= AccessibleStateType::FOCUSED;
-        NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, aOld, aNew);
+    Any                             aOld;
+    Any                             aNew;
+    Any&                            rMod = bChecked? aNew : aOld;
 
-        rMod <<= AccessibleStateType::CHECKED;
+    //Send the STATE_CHANGED(Focused) event to accessible
+    rMod <<= AccessibleStateType::FOCUSED;
+    NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, aOld, aNew);
 
-        NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, aOld, aNew);
-    }
+    rMod <<= AccessibleStateType::CHECKED;
+
+    NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, aOld, aNew);
 }
 
 void SvxRectCtlChildAccessibleContext::FireFocusEvent()
