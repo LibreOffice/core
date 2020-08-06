@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "78f5fb06_7952812a",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 4
+      },
+      "lineNbr": 2878,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-08-06T10:47:54Z",
+      "side": 1,
+      "message": "(fyi, an up to date information on the different label properties can always be found in the schema - https://opengrok.libreoffice.org/xref/core/officecfg/registry/schema/org/openoffice/Office/UI/Commands.xcs?r\u003db399bb87)",
+      "parentUuid": "0cd7953b_22fd55f7",
+      "revId": "a16a86ae655802ca137fb9288dc135c74cf87c77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "01de8c0a_c3c45d93",
         "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
         "patchSetId": 4
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "I may be misunderstanding but isn\u0027t the point of this patch so that the user can place these deck commands in toolbars and menus and assign shortcuts to them?",
       "parentUuid": "01de8c0a_c3c45d93",
+      "revId": "a16a86ae655802ca137fb9288dc135c74cf87c77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6b4ddfc_5e3e0af7",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 4
+      },
+      "lineNbr": 2881,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-08-06T10:47:54Z",
+      "side": 1,
+      "message": "Even if we don\u0027t define \"TooltipLabel\", the command will still work from a toolbar, and will use \"Label\" for the tooltip. I\u0027m just not sure it\u0027s worth investing in something that isn\u0027t in the default UI, just because some user might decide at some point in time to add it. Especially as the main use-case here seems to be able to assign shortcuts, not to add to the UI. But after all that\u0027s a UI/UX topic, and up to our UI/UX experts to decide.",
+      "parentUuid": "f21649c5_1099a2dd",
       "revId": "a16a86ae655802ca137fb9288dc135c74cf87c77",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
