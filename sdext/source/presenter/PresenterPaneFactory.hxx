@@ -49,13 +49,13 @@ class PresenterPaneFactory
       public PresenterPaneFactoryInterfaceBase
 {
 public:
-    static const OUString msCurrentSlidePreviewPaneURL;
-    static const OUString msNextSlidePreviewPaneURL;
-    static const OUString msNotesPaneURL;
-    static const OUString msToolBarPaneURL;
-    static const OUString msSlideSorterPaneURL;
-    static const OUString msHelpPaneURL;
-    static const OUString msOverlayPaneURL;
+    static const OUStringLiteral msCurrentSlidePreviewPaneURL;
+    static const OUStringLiteral msNextSlidePreviewPaneURL;
+    static const OUStringLiteral msNotesPaneURL;
+    static const OUStringLiteral msToolBarPaneURL;
+    static const OUStringLiteral msSlideSorterPaneURL;
+    static const OUStringLiteral msHelpPaneURL;
+    static const OUStringLiteral msOverlayPaneURL;
 
     /** Create a new instance of this class and register it as resource
         factory in the drawing framework of the given controller.

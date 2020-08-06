@@ -56,7 +56,7 @@ class FrameworkHelper
 {
 public:
     // URLs of frequently used panes.
-    static const OUString msPaneURLPrefix;
+    static const OUStringLiteral msPaneURLPrefix;
     static const OUString msCenterPaneURL;
     static const OUString msFullScreenPaneURL;
     static const OUString msLeftImpressPaneURL;
@@ -64,7 +64,7 @@ public:
     static const OUString msSidebarPaneURL;
 
     // URLs of frequently used views.
-    static const OUString msViewURLPrefix;
+    static const OUStringLiteral msViewURLPrefix;
     static const OUString msImpressViewURL;
     static const OUString msDrawViewURL;
     static const OUString msOutlineViewURL;
@@ -75,11 +75,11 @@ public:
     static const OUString msSidebarViewURL;
 
     // URLs of frequently used tool bars.
-    static const OUString msToolBarURLPrefix;
+    static const OUStringLiteral msToolBarURLPrefix;
     static const OUString msViewTabBarURL;
 
     // URLs of task panels.
-    static const OUString msTaskPanelURLPrefix;
+    static const OUStringLiteral msTaskPanelURLPrefix;
     static const OUString msAllMasterPagesTaskPanelURL;
     static const OUString msRecentMasterPagesTaskPanelURL;
     static const OUString msUsedMasterPagesTaskPanelURL;
@@ -89,17 +89,17 @@ public:
     static const OUString msSlideTransitionTaskPanelURL;
 
     // Names of frequently used events.
-    static const OUString msResourceActivationRequestEvent;
-    static const OUString msResourceDeactivationRequestEvent;
-    static const OUString msResourceActivationEvent;
-    static const OUString msResourceDeactivationEvent;
-    static const OUString msResourceDeactivationEndEvent;
-    static const OUString msConfigurationUpdateStartEvent;
-    static const OUString msConfigurationUpdateEndEvent;
+    static const OUStringLiteral msResourceActivationRequestEvent;
+    static const OUStringLiteral msResourceDeactivationRequestEvent;
+    static const OUStringLiteral msResourceActivationEvent;
+    static const OUStringLiteral msResourceDeactivationEvent;
+    static const OUStringLiteral msResourceDeactivationEndEvent;
+    static const OUStringLiteral msConfigurationUpdateStartEvent;
+    static const OUStringLiteral msConfigurationUpdateEndEvent;
 
     // Service names of the common controllers.
-    static const OUString msModuleControllerService;
-    static const OUString msConfigurationControllerService;
+    static const OUStringLiteral msModuleControllerService;
+    static const OUStringLiteral msConfigurationControllerService;
 
     /** Return the FrameworkHelper object that is associated with the given
         ViewShellBase.  If such an object does not yet exist, a new one is

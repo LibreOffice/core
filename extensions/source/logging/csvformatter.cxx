@@ -88,7 +88,7 @@ namespace
 {
     const sal_Unicode quote_char = '"';
     const sal_Unicode comma_char = ',';
-    const OUString dos_newline = "\r\n";
+    const OUStringLiteral dos_newline = "\r\n";
 
     bool needsQuoting(const OUString& str)
     {

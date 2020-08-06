@@ -38,7 +38,7 @@
 
 using namespace ::com::sun::star;
 
-const OUString BookmarkTable::aForbiddenChars("/\\@*?\",#");
+const OUStringLiteral BookmarkTable::aForbiddenChars("/\\@*?\",#");
 const char BookmarkTable::cSeparator(';');
 
 // callback to modify EditBox
@@ -55,9 +55,9 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, ModifyHdl, weld::Entry&, void)
     for (sal_Int32 i = 0; i < BookmarkTable::aForbiddenChars.getLength(); i++)
     {
         const sal_Int32 nTmpLen = sTmp.getLength();
-        sTmp = sTmp.replaceAll(OUStringChar(BookmarkTable::aForbiddenChars[i]), "");
+        sTmp = sTmp.replaceAll(OUStringChar(BookmarkTable::aForbiddenChars.data[i]), "");
         if (sTmp.getLength() != nTmpLen)
-           sMsg += OUStringChar(BookmarkTable::aForbiddenChars[i]);
+           sMsg += OUStringChar(BookmarkTable::aForbiddenChars.data[i]);
     }
     const bool bHasForbiddenChars = sTmp.getLength() != nLen;
     m_xForbiddenChars->set_visible(bHasForbiddenChars);
