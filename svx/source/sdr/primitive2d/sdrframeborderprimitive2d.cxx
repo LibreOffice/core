@@ -207,7 +207,7 @@ namespace
             bool bMirrored,
             double fMinimalDiscreteUnit)
         {
-            if(!(rStyle.IsUsed() && !basegfx::areParallel(rMyVector, rOtherVector)))
+            if(!rStyle.IsUsed() || basegfx::areParallel(rMyVector, rOtherVector))
                 return;
 
             // create angle between both. angle() needs vectors pointing away from the same point,

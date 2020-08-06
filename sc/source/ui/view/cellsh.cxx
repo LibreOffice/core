@@ -271,7 +271,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                 //! is not called, when protected AND matrix, we will have
                 //! to live with this... is caught in Copy-Routine, otherwise
                 //! work is to be done once more
-                if ( !(!bEditable && bOnlyNotBecauseOfMatrix) )
+                if ( bEditable || !bOnlyNotBecauseOfMatrix )
                     bNeedEdit = false;          // allowed when protected/ReadOnly
                 bDisable = GetObjectShell()->isContentExtractionLocked();
                 break;

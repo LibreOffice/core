@@ -958,7 +958,7 @@ void VclProcessor2D::RenderMarkerArrayPrimitive2D(
     const std::vector<basegfx::B2DPoint>& rPositions = rMarkArrayCandidate.getPositions();
     const sal_uInt32 nCount(rPositions.size());
 
-    if (!(nCount && !rMarkArrayCandidate.getMarker().IsEmpty()))
+    if (!nCount || rMarkArrayCandidate.getMarker().IsEmpty())
         return;
 
     // get pixel size

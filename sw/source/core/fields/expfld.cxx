@@ -912,7 +912,7 @@ void SwSetExpField::SetValue(const double& rValue, SwRootFrame const*const pLayo
     {
         SetValue(rValue);
     }
-    if (!(!pLayout || pLayout->IsHideRedlines()))
+    if (pLayout && !pLayout->IsHideRedlines())
         return;
 
     m_fValueRLHidden = rValue;

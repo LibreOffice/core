@@ -327,8 +327,8 @@ static void lcl_formatReferenceLanguage( OUString& rRefText,
         }
     }
     // not a title text starting already with a definitive article
-    if ( !(!sNumbering.startsWith("A ") && !sNumbering.startsWith("Az ") &&
-         !sNumbering.startsWith("a ") && !sNumbering.startsWith("az ")) )
+    if ( sNumbering.startsWith("A ") || sNumbering.startsWith("Az ") ||
+         sNumbering.startsWith("a ") || sNumbering.startsWith("az ") )
         return;
 
     // lowercase, if rReferenceLanguage == "hu", not "Hu"

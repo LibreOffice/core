@@ -916,7 +916,7 @@ void SdrOle2Obj::DisconnectFileLink_Impl()
 
 void SdrOle2Obj::CheckFileLink_Impl()
 {
-    if (!(mpImpl->mxObjRef.GetObject().is() && !mpImpl->mpObjectLink))
+    if (!mpImpl->mxObjRef.GetObject().is() || mpImpl->mpObjectLink)
         return;
 
     try
@@ -1059,7 +1059,7 @@ void SdrOle2Obj::Disconnect()
 
 void SdrOle2Obj::RemoveListeners_Impl()
 {
-    if ( !(mpImpl->mxObjRef.is() && !mpImpl->aPersistName.isEmpty()) )
+    if ( !mpImpl->mxObjRef.is() || mpImpl->aPersistName.isEmpty() )
         return;
 
     try

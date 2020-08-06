@@ -4285,9 +4285,9 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 else
                 {
                     if( !rMEvt.IsSynthetic() &&
-                            !(( MOUSE_LEFT + KEY_MOD1 ==
-                            rMEvt.GetModifier() + rMEvt.GetButtons() ) &&
-                            rSh.Is_FnDragEQBeginDrag() && !rSh.IsAddMode() ))
+                            (( MOUSE_LEFT + KEY_MOD1 != rMEvt.GetModifier() + rMEvt.GetButtons() ) ||
+                             !rSh.Is_FnDragEQBeginDrag() ||
+                             rSh.IsAddMode() ))
                     {
                         rSh.Drag( &aDocPt, false );
 

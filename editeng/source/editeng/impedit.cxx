@@ -871,7 +871,7 @@ void ImpEditView::ResetOutputArea( const tools::Rectangle& rRect )
     SetOutputArea(rRect);
 
     // invalidate surrounding areas if update is true
-    if(!(!aOldArea.IsEmpty() && pEditEngine->pImpEditEngine->GetUpdateMode()))
+    if(aOldArea.IsEmpty() || !pEditEngine->pImpEditEngine->GetUpdateMode())
         return;
 
     // #i119885# use grown area if needed; do when getting bigger OR smaller
@@ -2101,7 +2101,7 @@ void ImpEditView::HideDDCursor()
 
 void ImpEditView::ShowDDCursor( const tools::Rectangle& rRect )
 {
-    if ( !(pDragAndDropInfo && !pDragAndDropInfo->bVisCursor) )
+    if ( !pDragAndDropInfo || pDragAndDropInfo->bVisCursor )
         return;
 
     if (pOutWin && pOutWin->GetCursor())

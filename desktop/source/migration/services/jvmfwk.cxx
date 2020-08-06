@@ -234,7 +234,7 @@ void JavaMigration::migrateJavarc()
     bool bSuccess = javaini.getFrom("Home", sValue);
     OSL_ENSURE(bSuccess, "[Service implementation " IMPL_NAME
                        "] XJob::execute: Could not get Home entry from java.ini/javarc.");
-    if (!(bSuccess && !sValue.isEmpty()))
+    if (!bSuccess || sValue.isEmpty())
         return;
 
     //get the directory

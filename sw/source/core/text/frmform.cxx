@@ -116,7 +116,7 @@ void SwTextFrame::ValidateFrame()
 static void ValidateBodyFrame_( SwFrame *pFrame )
 {
     vcl::RenderContext* pRenderContext = pFrame ? pFrame->getRootFrame()->GetCurrShell()->GetOut() : nullptr;
-    if( !(pFrame && !pFrame->IsCellFrame()) )
+    if( !pFrame || pFrame->IsCellFrame() )
         return;
 
     if( !pFrame->IsBodyFrame() && pFrame->GetUpper() )

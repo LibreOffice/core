@@ -363,7 +363,7 @@ void Ruler::ImplVDrawText(vcl::RenderContext& rRenderContext, long nX, long nY, 
 void Ruler::ImplInvertLines(vcl::RenderContext& rRenderContext)
 {
     // Position lines
-    if (!(!mpData->pLines.empty() && mbActive && !mbDrag && !mbFormat && !(mnUpdateFlags & RULER_UPDATE_LINES)) )
+    if (mpData->pLines.empty() || !mbActive || mbDrag || mbFormat || (mnUpdateFlags & RULER_UPDATE_LINES) )
         return;
 
     long nNullWinOff = mpData->nNullVirOff + mnVirOff;
@@ -1915,7 +1915,7 @@ void Ruler::ImplEndDrag()
 
 void Ruler::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( !(rMEvt.IsLeft() && !IsTracking()) )
+    if ( rMEvt.IsLeft() || IsTracking() )
         return;
 
     Point   aMousePos = rMEvt.GetPosPixel();

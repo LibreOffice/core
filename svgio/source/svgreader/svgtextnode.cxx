@@ -221,7 +221,7 @@ namespace svgio::svgreader
             // SVGTokenTref and SVGTokenTextPath. These increase a given current text position
             const SvgStyleAttributes* pStyle = getSvgStyleAttributes();
 
-            if(!(pStyle && !getChildren().empty()))
+            if(!pStyle || getChildren().empty())
                 return;
 
             const double fOpacity(pStyle->getOpacity().getNumber());

@@ -1680,7 +1680,7 @@ ScDocument* ScCellRangesBase::GetDocument() const
 
 void ScCellRangesBase::InitInsertRange(ScDocShell* pDocSh, const ScRange& rR)
 {
-    if ( !(!pDocShell && pDocSh) )
+    if ( pDocShell || !pDocSh )
         return;
 
     pDocShell = pDocSh;
@@ -3238,7 +3238,7 @@ void SAL_CALL ScCellRangesBase::addChartDataChangeEventListener( const uno::Refe
                                     chart::XChartDataChangeEventListener >& aListener )
 {
     SolarMutexGuard aGuard;
-    if ( !(pDocShell && !aRanges.empty()) )
+    if ( !pDocShell || aRanges.empty() )
         return;
 
     //! test for duplicates ?

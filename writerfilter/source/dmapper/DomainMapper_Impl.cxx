@@ -2071,7 +2071,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
     if( pPropertyMap == m_pTopContext && !deferredCharacterProperties.empty() && (GetTopContextType() == CONTEXT_CHARACTER) )
         processDeferredCharacterProperties();
     uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
-    if (!(xTextAppend.is() && hasTableManager() && !getTableManager().isIgnore()))
+    if (!xTextAppend.is() || !hasTableManager() || getTableManager().isIgnore())
         return;
 
     try
@@ -2179,7 +2179,7 @@ void DomainMapper_Impl::appendTextContent(
         return;
     uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert( m_aTextAppendStack.top().xTextAppend, uno::UNO_QUERY );
     OSL_ENSURE( xTextAppendAndConvert.is(), "trying to append a text content without XTextAppendAndConvert" );
-    if (!(xTextAppendAndConvert.is() && hasTableManager() && !getTableManager().isIgnore()))
+    if (!xTextAppendAndConvert.is() || !hasTableManager() || getTableManager().isIgnore())
         return;
 
     try

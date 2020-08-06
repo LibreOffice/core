@@ -2501,8 +2501,8 @@ void SAL_CALL XFrameImpl::windowDeactivated( const css::lang::EventObject& )
     // is a parent window of the last active Window!
     SolarMutexClearableGuard aSolarGuard;
     vcl::Window* pFocusWindow = Application::GetFocusWindow();
-    if  ( !(xContainerWindow.is() && xParent.is() &&
-          !css::uno::Reference< css::frame::XDesktop >( xParent, css::uno::UNO_QUERY ).is())
+    if  ( !xContainerWindow.is() || !xParent.is() ||
+          css::uno::Reference< css::frame::XDesktop >( xParent, css::uno::UNO_QUERY ).is()
         )
         return;
 

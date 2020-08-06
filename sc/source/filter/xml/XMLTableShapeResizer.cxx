@@ -117,7 +117,7 @@ void ScMyOLEFixer::AddOLE(const uno::Reference <drawing::XShape>& rShape,
 
 void ScMyOLEFixer::FixupOLEs()
 {
-    if (!(!aShapes.empty() && rImport.GetModel().is()))
+    if (aShapes.empty() || !rImport.GetModel().is())
         return;
 
     OUString sPersistName ("PersistName");

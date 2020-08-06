@@ -327,9 +327,9 @@ void SvxPageWindow::drawFillAttributes(vcl::RenderContext& rRenderContext,
 {
     const basegfx::B2DRange aPaintRange = vcl::unotools::b2DRectangleFromRectangle(rPaintRange);
 
-    if(!(!aPaintRange.isEmpty() &&
-       !basegfx::fTools::equalZero(aPaintRange.getWidth()) &&
-       !basegfx::fTools::equalZero(aPaintRange.getHeight())))
+    if(aPaintRange.isEmpty() ||
+       basegfx::fTools::equalZero(aPaintRange.getWidth()) ||
+       basegfx::fTools::equalZero(aPaintRange.getHeight()))
         return;
 
     const basegfx::B2DRange aDefineRange = vcl::unotools::b2DRectangleFromRectangle(rDefineRange);

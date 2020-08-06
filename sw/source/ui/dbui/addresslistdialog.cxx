@@ -397,7 +397,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, EditHdl_Impl, weld::Button&, void)
 {
     int nEntry = m_xListLB->get_selected_index();
     AddressUserData_Impl* pUserData = nEntry != -1 ? reinterpret_cast<AddressUserData_Impl*>(m_xListLB->get_id(nEntry).toInt64()) : nullptr;
-    if (!(pUserData && !pUserData->sURL.isEmpty()))
+    if (!pUserData || pUserData->sURL.isEmpty())
         return;
 
     if(pUserData->xResultSet.is())
