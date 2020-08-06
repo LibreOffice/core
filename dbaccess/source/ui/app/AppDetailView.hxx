@@ -25,6 +25,7 @@
 #include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
 #include <vcl/split.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <vcl/mnemonic.hxx>
 #include <IClipBoardTest.hxx>
 #include "AppTitleWindow.hxx"
@@ -43,39 +44,30 @@ namespace dbaui
     class OAppDetailPageHelper;
     class OTasksWindow;
 
-    class OCreationList : public SvTreeListBox
+    class OCreationList final : public InterimItemWindow
     {
-        OTasksWindow&   m_rTaskWindow;
-
-        // members related to drawing the currently hovered/selected entry
-        SvTreeListEntry*        m_pMouseDownEntry;
-        SvTreeListEntry*        m_pLastActiveEntry;
-        Color                   m_aOriginalBackgroundColor;
-        vcl::Font               m_aOriginalFont;
+        std::unique_ptr<weld::TreeView> m_xTreeView;
+        OTasksWindow& m_rTaskWindow;
+        int m_nCursorIndex;
 
     public:
         explicit OCreationList( OTasksWindow& _rParent );
-        // Window overrides
-        virtual void MouseMove( const MouseEvent& rMEvt ) override;
-        virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
-        virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
-        virtual void KeyInput( const KeyEvent& rKEvt ) override;
-        virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
-        virtual void StartDrag( sal_Int8 _nAction, const Point& _rPosPixel ) override;
+        virtual void dispose() override;
+
+        weld::TreeView& get_widget() { return *m_xTreeView; }
+        const weld::TreeView& get_widget() const { return *m_xTreeView; }
+
         virtual void GetFocus() override;
-        virtual void LoseFocus() override;
 
-        void resetLastActive() { m_pLastActiveEntry = nullptr;}
-
-        void    updateHelpText();
-
-    protected:
-        virtual void        PreparePaint(vcl::RenderContext& rRenderContext, SvTreeListEntry& rEntry) override;
-        virtual tools::Rectangle   GetFocusRect(const SvTreeListEntry* _pEntry, long _nLine) override;
-        virtual void        ModelHasCleared() override;
+        void updateHelpText();
 
     private:
-        void    onSelected( SvTreeListEntry const * _pEntry ) const;
+        DECL_LINK(onSelected, weld::TreeView&, bool);
+        DECL_LINK(OnEntrySelectHdl, weld::TreeView&, void);
+        DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+        DECL_LINK(FocusInHdl, weld::Widget&, void);
+        DECL_LINK(FocusOutHdl, weld::Widget&, void);
+
         /** sets a new current entry, and invalidates the old and the new one, if necessary
             @return <TRUE/> if and only if the "current entry" changed
         */
@@ -107,11 +99,10 @@ namespace dbaui
     {
         VclPtr<OCreationList>               m_aCreation;
         VclPtr<FixedText>                   m_aDescription;
-        VclPtr<FixedText>                   m_aHelpText;
         VclPtr<FixedLine>                   m_aFL;
+        VclPtr<FixedText>                   m_aHelpText;
         VclPtr<OApplicationDetailView>      m_pDetailView;
 
-        DECL_LINK( OnEntrySelectHdl, SvTreeListBox*, void );
         void ImplInitSettings();
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
