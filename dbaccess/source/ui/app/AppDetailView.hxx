@@ -74,10 +74,6 @@ namespace dbaui
         virtual tools::Rectangle   GetFocusRect(const SvTreeListEntry* _pEntry, long _nLine) override;
         virtual void        ModelHasCleared() override;
 
-        // IMnemonicEntryList
-        virtual void        SelectSearchEntry( const void* _pEntry ) override;
-        virtual void        ExecuteSearchEntry( const void* _pEntry ) const override;
-
     private:
         void    onSelected( SvTreeListEntry const * _pEntry ) const;
         /** sets a new current entry, and invalidates the old and the new one, if necessary

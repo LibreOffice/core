@@ -120,28 +120,6 @@ void OCreationList::PreparePaint(vcl::RenderContext& rRenderContext, SvTreeListE
     rEntry.SetBackColor(aEntryBackground.GetColor());
 }
 
-void OCreationList::SelectSearchEntry( const void* _pEntry )
-{
-    SvTreeListEntry* pEntry = const_cast< SvTreeListEntry* >( static_cast< const SvTreeListEntry* >( _pEntry ) );
-    OSL_ENSURE( pEntry, "OCreationList::SelectSearchEntry: invalid entry!" );
-
-    if ( pEntry )
-        setCurrentEntryInvalidate( pEntry );
-
-    if ( !HasChildPathFocus() )
-        GrabFocus();
-}
-
-void OCreationList::ExecuteSearchEntry( const void* _pEntry ) const
-{
-    SvTreeListEntry* pEntry = const_cast< SvTreeListEntry* >( static_cast< const SvTreeListEntry* >( _pEntry ) );
-    OSL_ENSURE( pEntry, "OCreationList::ExecuteSearchEntry: invalid entry!" );
-    OSL_ENSURE( pEntry == GetCurEntry(), "OCreationList::ExecuteSearchEntry: SelectSearchEntry should have been called before!" );
-
-    if ( pEntry )
-        onSelected( pEntry );
-}
-
 tools::Rectangle OCreationList::GetFocusRect(const SvTreeListEntry* _pEntry, long _nLine)
 {
     tools::Rectangle aRect = SvTreeListBox::GetFocusRect( _pEntry, _nLine );

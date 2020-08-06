@@ -930,26 +930,27 @@ void SvTreeListBox::EndEditing( bool bCancel )
     nImpFlags &= ~SvTreeListBoxFlags::IN_EDT;
 }
 
-
-const void* SvTreeListBox::FirstSearchEntry( OUString& _rEntryText ) const
+vcl::StringEntryIdentifier SvTreeListBox::CurrentEntry( OUString& _out_entryText ) const
 {
-    SvTreeListEntry* pEntry = GetCurEntry();
-    if ( pEntry )
-        pEntry = const_cast< SvTreeListEntry* >( static_cast< const SvTreeListEntry* >( NextSearchEntry( pEntry, _rEntryText ) ) );
-    else
+    // always accept the current entry if there is one
+    SvTreeListEntry* pEntry( GetCurEntry() );
+    if (pEntry)
     {
-        pEntry = FirstSelected();
-        if ( !pEntry )
-            pEntry = First();
+        _out_entryText = GetEntryText(pEntry);
+        return pEntry;
     }
 
+    pEntry = FirstSelected();
+    if ( !pEntry )
+        pEntry = First();
+
     if ( pEntry )
-        _rEntryText = GetEntryText( pEntry );
+        _out_entryText = GetEntryText( pEntry );
 
     return pEntry;
 }
 
-const void* SvTreeListBox::NextSearchEntry( const void* _pCurrentSearchEntry, OUString& _rEntryText ) const
+vcl::StringEntryIdentifier SvTreeListBox::NextEntry(vcl::StringEntryIdentifier _pCurrentSearchEntry, OUString& _out_entryText) const
 {
     SvTreeListEntry* pEntry = const_cast< SvTreeListEntry* >( static_cast< const SvTreeListEntry* >( _pCurrentSearchEntry ) );
 
@@ -974,12 +975,12 @@ const void* SvTreeListBox::NextSearchEntry( const void* _pCurrentSearchEntry, OU
         pEntry = First();
 
     if ( pEntry )
-        _rEntryText = GetEntryText( pEntry );
+        _out_entryText = GetEntryText( pEntry );
 
     return pEntry;
 }
 
-void SvTreeListBox::SelectSearchEntry( const void* _pEntry )
+void SvTreeListBox::SelectEntry(vcl::StringEntryIdentifier _pEntry)
 {
     SvTreeListEntry* pEntry = const_cast< SvTreeListEntry* >( static_cast< const SvTreeListEntry* >( _pEntry ) );
     DBG_ASSERT( pEntry, "SvTreeListBox::SelectSearchEntry: invalid entry!" );
@@ -989,33 +990,6 @@ void SvTreeListBox::SelectSearchEntry( const void* _pEntry )
     SelectAll( false );
     SetCurEntry( pEntry );
     Select( pEntry );
-}
-
-void SvTreeListBox::ExecuteSearchEntry( const void* /*_pEntry*/ ) const
-{
-    // nothing to do here, we have no "execution"
-}
-
-vcl::StringEntryIdentifier SvTreeListBox::CurrentEntry( OUString& _out_entryText ) const
-{
-    // always accept the current entry if there is one
-    SvTreeListEntry* pCurrentEntry( GetCurEntry() );
-    if ( pCurrentEntry )
-    {
-        _out_entryText = GetEntryText( pCurrentEntry );
-        return pCurrentEntry;
-    }
-    return FirstSearchEntry( _out_entryText );
-}
-
-vcl::StringEntryIdentifier SvTreeListBox::NextEntry( vcl::StringEntryIdentifier _currentEntry, OUString& _out_entryText ) const
-{
-    return NextSearchEntry( _currentEntry, _out_entryText );
-}
-
-void SvTreeListBox::SelectEntry( vcl::StringEntryIdentifier _entry )
-{
-    SelectSearchEntry( _entry );
 }
 
 bool SvTreeListBox::HandleKeyInput( const KeyEvent& _rKEvt )
