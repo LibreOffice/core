@@ -2068,7 +2068,7 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
         if (bRight)
             mpDev->DrawLine( Point( nMaxX, nMinY ), Point( nMaxX, nMaxY ) );
     }
-    if ( !(bHandle && bRight && bBottom && !comphelper::LibreOfficeKit::isActive()) )
+    if ( !bHandle || !bRight || !bBottom || comphelper::LibreOfficeKit::isActive() )
         return;
 
     mpDev->SetLineColor( rColor );

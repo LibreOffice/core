@@ -566,7 +566,7 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
 
 void SwDBManager::ImportFromConnection(  SwWrtShell* pSh )
 {
-    if(!(m_pImpl->pMergeData && !m_pImpl->pMergeData->bEndOfDB))
+    if(!m_pImpl->pMergeData || m_pImpl->pMergeData->bEndOfDB)
         return;
 
     pSh->StartAllAction();
@@ -628,7 +628,7 @@ static OUString  lcl_FindColumn(const OUString& sFormatStr,sal_uInt16  &nUsedPos
 
 void SwDBManager::ImportDBEntry(SwWrtShell* pSh)
 {
-    if(!(m_pImpl->pMergeData && !m_pImpl->pMergeData->bEndOfDB))
+    if(!m_pImpl->pMergeData || m_pImpl->pMergeData->bEndOfDB)
         return;
 
     uno::Reference< sdbcx::XColumnsSupplier > xColsSupp( m_pImpl->pMergeData->xResultSet, uno::UNO_QUERY );

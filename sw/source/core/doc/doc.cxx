@@ -1221,7 +1221,7 @@ const SwFormatINetFormat* SwDoc::FindINetAttr( const OUString& rName ) const
 void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bImpress )
 {
     const SwOutlineNodes& rOutNds = GetNodes().GetOutLineNds();
-    if( !(pExtDoc && !rOutNds.empty()) )
+    if( !pExtDoc || rOutNds.empty() )
         return;
 
     ::StartProgress( STR_STATSTR_SUMMARY, 0, rOutNds.size(), GetDocShell() );

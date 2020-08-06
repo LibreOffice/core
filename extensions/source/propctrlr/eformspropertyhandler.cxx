@@ -496,7 +496,7 @@ namespace pcr
 
             OSL_ENSURE( xModel.is() && xBinding.is() && !sFacetName.isEmpty(),
                 "EFormsPropertyHandler::onInteractivePropertySelection: something is missing for the dialog initialization!" );
-            if ( !( xModel.is() && xBinding.is() && !sFacetName.isEmpty() ) )
+            if ( !xModel.is() || !xBinding.is() || sFacetName.isEmpty() )
                 return InteractiveSelectionResult_Cancelled;
 
             xDialogProps->setPropertyValue("FormModel", makeAny( xModel ) );

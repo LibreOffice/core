@@ -930,7 +930,7 @@ void TransferableHelper::CopyToClipboard(const Reference<XClipboard>& rClipboard
     if( rClipboard.is() )
         mxClipboard = rClipboard;
 
-    if( !(mxClipboard.is() && !mxTerminateListener.is()) )
+    if( !mxClipboard.is() || mxTerminateListener.is() )
         return;
 
     try
@@ -960,7 +960,7 @@ void TransferableHelper::CopyToClipboard( vcl::Window *pWindow ) const
 
 void TransferableHelper::CopyToSelection(const Reference<XClipboard>& rSelection) const
 {
-    if( !(rSelection.is() && !mxTerminateListener.is()) )
+    if( !rSelection.is() || mxTerminateListener.is() )
         return;
 
     try

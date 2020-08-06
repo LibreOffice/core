@@ -228,7 +228,7 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
          // paras inside cells inside new documents:
         ( pNode->getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) ||
           !m_pFrame->IsInTab() ||
-          ( !nLMWithNum && !(bLabelAlignmentActive && !bListLevelIndentsApplicable) ) ) )
+          ( !nLMWithNum && (!bLabelAlignmentActive || bListLevelIndentsApplicable) ) ) )
     {
         nLeft = m_pFrame->getFramePrintArea().Left() + m_pFrame->getFrameArea().Left();
         if( nLeft >= nRight )   // e.g. with large paragraph indentations in slim table columns
@@ -1444,8 +1444,7 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
     // #i27615#
     if (pCMS && pCMS->m_bInFrontOfLabel)
     {
-        if (! (2 * nX < nWidth && pPor->InNumberGrp() &&
-               !pPor->IsFootnoteNumPortion()))
+        if (2 * nX >= nWidth || !pPor->InNumberGrp() || pPor->IsFootnoteNumPortion())
             pCMS->m_bInFrontOfLabel = false;
     }
 

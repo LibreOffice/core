@@ -228,7 +228,7 @@ void SwLayAction::PaintContent( const SwContentFrame *pCnt,
         PaintContent_( pCnt, pPage, aPaintRect );
     }
 
-    if ( !(pCnt->IsRetouche() && !pCnt->GetNext()) )
+    if ( !pCnt->IsRetouche() || pCnt->GetNext() )
         return;
 
     const SwFrame *pTmp = pCnt;

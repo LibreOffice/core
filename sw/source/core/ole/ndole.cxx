@@ -602,7 +602,7 @@ void SwOLENode::DisconnectFileLink_Impl()
 
 void SwOLENode::CheckFileLink_Impl()
 {
-    if ( !(maOLEObj.m_xOLERef.GetObject().is() && !mpObjectLink) )
+    if ( !maOLEObj.m_xOLERef.GetObject().is() || mpObjectLink )
         return;
 
     try

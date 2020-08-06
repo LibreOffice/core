@@ -111,7 +111,7 @@ void Impl::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
     ::test::testtools::bridgetest::TestPolyStruct< css::uno::Any > arg38;
     bool arg38b;
     css::uno::Reference< css::uno::XInterface > arg39;
-    if (!(arguments.getLength() == 40
+    bool ok = (arguments.getLength() == 40
           && (arguments[0] >>= arg0) && arg0
           && (arguments[1] >>= arg1) && arg1 == SAL_MIN_INT8
           && (arguments[2] >>= arg2) && arg2 == SAL_MIN_INT16
@@ -174,7 +174,8 @@ void Impl::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
           && (arguments[36] >>= arg36) && arg36.member == 10
           && (arguments[37] >>= arg37) && arg37.member
           && (arguments[38] >>= arg38) && (arg38.member >>= arg38b) && arg38b
-          && (arguments[39] >>= arg39) && !arg39.is()))
+          && (arguments[39] >>= arg39) && !arg39.is());
+    if (!ok)
     {
         throw ::test::testtools::bridgetest::BadConstructorArguments();
     }

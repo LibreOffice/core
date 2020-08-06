@@ -138,7 +138,7 @@ void OXMLControlProperty::endFastElement(sal_Int32 )
 {
     if ( m_pContainer )
         m_pContainer->addValue(m_aCharBuffer.makeStringAndClear());
-    if ( !(!m_aSetting.Name.isEmpty() && m_xControl.is()) )
+    if ( m_aSetting.Name.isEmpty() || !m_xControl.is() )
         return;
 
     if ( m_bIsList && !m_aSequence.hasElements() )

@@ -2430,7 +2430,7 @@ void SAL_CALL SlideshowImpl::activate()
 
     maDeactivateTimer.Stop();
 
-    if( !(!mbActive && mxShow.is()) )
+    if( mbActive || !mxShow.is() )
         return;
 
     mbActive = true;

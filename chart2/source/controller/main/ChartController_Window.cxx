@@ -533,7 +533,7 @@ IMPL_LINK_NOARG(ChartController, DoubleClickWaitingHdl, Timer *, void)
 {
     m_bWaitingForDoubleClick = false;
 
-    if( !(!m_bWaitingForMouseUp && m_aSelection.maybeSwitchSelectionAfterSingleClickWasEnsured()) )
+    if( m_bWaitingForMouseUp || !m_aSelection.maybeSwitchSelectionAfterSingleClickWasEnsured() )
         return;
 
     impl_selectObjectAndNotiy();

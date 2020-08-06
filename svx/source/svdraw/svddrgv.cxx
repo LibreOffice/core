@@ -799,7 +799,7 @@ bool SdrDragView::BegInsGluePoint(const Point& rPnt)
 
 void SdrDragView::ShowDragObj()
 {
-    if(!(mpCurrentSdrDragMethod && !maDragStat.IsShown()))
+    if(!mpCurrentSdrDragMethod || maDragStat.IsShown())
         return;
 
     // Changed for the GridOffset stuff: No longer iterate over

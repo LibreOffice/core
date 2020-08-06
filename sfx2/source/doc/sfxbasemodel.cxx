@@ -3028,7 +3028,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
         }
     }
 
-    if ( !(!bSaved && m_pData->m_pObjectShell.is()) )
+    if ( bSaved || !m_pData->m_pObjectShell.is() )
         return;
 
     SfxGetpApp()->NotifyEvent( SfxEventHint( bSaveTo ? SfxEventHintId::SaveToDoc : SfxEventHintId::SaveAsDoc, GlobalEventConfig::GetEventName( bSaveTo ? GlobalEventId::SAVETODOC : GlobalEventId::SAVEASDOC ),

@@ -576,7 +576,7 @@ long Window::GetDrawPixel( OutputDevice const * pDev, long nPixels ) const
 
 static void lcl_HandleScrollHelper( ScrollBar* pScrl, double nN, bool isMultiplyByLineSize )
 {
-    if ( !(pScrl && nN && pScrl->IsEnabled() && pScrl->IsInputEnabled() && ! pScrl->IsInModalMode()) )
+    if ( !pScrl || !nN || !pScrl->IsEnabled() || !pScrl->IsInputEnabled() || pScrl->IsInModalMode() )
         return;
 
     long nNewPos = pScrl->GetThumbPos();
