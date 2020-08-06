@@ -139,35 +139,35 @@ void SdXML3DCubeObjectShapeContext::StartElement(const uno::Reference< xml::sax:
 {
     // create shape
     AddShape( "com.sun.star.drawing.Shape3DCubeObject" );
-    if(mxShape.is())
-    {
-        // add, set style and properties from base shape
-        SetStyle();
-        SdXML3DObjectContext::StartElement(xAttrList);
+    if(!mxShape.is())
+        return;
 
-        // set local parameters on shape
-        uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
-        if(xPropSet.is())
-        {
-            // set parameters
-            drawing::Position3D aPosition3D;
-            drawing::Direction3D aDirection3D;
+    // add, set style and properties from base shape
+    SetStyle();
+    SdXML3DObjectContext::StartElement(xAttrList);
 
-            // convert from min, max to size to be set
-            maMaxEdge = maMaxEdge - maMinEdge;
+    // set local parameters on shape
+    uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+    if(!xPropSet.is())
+        return;
 
-            aPosition3D.PositionX = maMinEdge.getX();
-            aPosition3D.PositionY = maMinEdge.getY();
-            aPosition3D.PositionZ = maMinEdge.getZ();
+    // set parameters
+    drawing::Position3D aPosition3D;
+    drawing::Direction3D aDirection3D;
 
-            aDirection3D.DirectionX = maMaxEdge.getX();
-            aDirection3D.DirectionY = maMaxEdge.getY();
-            aDirection3D.DirectionZ = maMaxEdge.getZ();
+    // convert from min, max to size to be set
+    maMaxEdge = maMaxEdge - maMinEdge;
 
-            xPropSet->setPropertyValue("D3DPosition", uno::Any(aPosition3D));
-            xPropSet->setPropertyValue("D3DSize", uno::Any(aDirection3D));
-        }
-    }
+    aPosition3D.PositionX = maMinEdge.getX();
+    aPosition3D.PositionY = maMinEdge.getY();
+    aPosition3D.PositionZ = maMinEdge.getZ();
+
+    aDirection3D.DirectionX = maMaxEdge.getX();
+    aDirection3D.DirectionY = maMaxEdge.getY();
+    aDirection3D.DirectionZ = maMaxEdge.getZ();
+
+    xPropSet->setPropertyValue("D3DPosition", uno::Any(aPosition3D));
+    xPropSet->setPropertyValue("D3DSize", uno::Any(aDirection3D));
 }
 
 SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
@@ -221,32 +221,32 @@ void SdXML3DSphereObjectShapeContext::StartElement(const uno::Reference< xml::sa
 {
     // create shape
     AddShape( "com.sun.star.drawing.Shape3DSphereObject" );
-    if(mxShape.is())
-    {
-        // add, set style and properties from base shape
-        SetStyle();
-        SdXML3DObjectContext::StartElement(xAttrList);
+    if(!mxShape.is())
+        return;
 
-        // set local parameters on shape
-        uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
-        if(xPropSet.is())
-        {
-            // set parameters
-            drawing::Position3D aPosition3D;
-            drawing::Direction3D aDirection3D;
+    // add, set style and properties from base shape
+    SetStyle();
+    SdXML3DObjectContext::StartElement(xAttrList);
 
-            aPosition3D.PositionX = maCenter.getX();
-            aPosition3D.PositionY = maCenter.getY();
-            aPosition3D.PositionZ = maCenter.getZ();
+    // set local parameters on shape
+    uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+    if(!xPropSet.is())
+        return;
 
-            aDirection3D.DirectionX = maSphereSize.getX();
-            aDirection3D.DirectionY = maSphereSize.getY();
-            aDirection3D.DirectionZ = maSphereSize.getZ();
+    // set parameters
+    drawing::Position3D aPosition3D;
+    drawing::Direction3D aDirection3D;
 
-            xPropSet->setPropertyValue("D3DPosition", uno::Any(aPosition3D));
-            xPropSet->setPropertyValue("D3DSize", uno::Any(aDirection3D));
-        }
-    }
+    aPosition3D.PositionX = maCenter.getX();
+    aPosition3D.PositionY = maCenter.getY();
+    aPosition3D.PositionZ = maCenter.getZ();
+
+    aDirection3D.DirectionX = maSphereSize.getX();
+    aDirection3D.DirectionY = maSphereSize.getY();
+    aDirection3D.DirectionZ = maSphereSize.getZ();
+
+    xPropSet->setPropertyValue("D3DPosition", uno::Any(aPosition3D));
+    xPropSet->setPropertyValue("D3DSize", uno::Any(aDirection3D));
 }
 
 SdXML3DPolygonBasedShapeContext::SdXML3DPolygonBasedShapeContext(
@@ -290,39 +290,39 @@ void SdXML3DPolygonBasedShapeContext::StartElement(const uno::Reference< xml::sa
 {
     uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
 
-    if(xPropSet.is())
+    if(!xPropSet.is())
+        return;
+
+    // set parameters
+    if(!maPoints.isEmpty() && !maViewBox.isEmpty())
     {
-        // set parameters
-        if(!maPoints.isEmpty() && !maViewBox.isEmpty())
+        // import 2d tools::PolyPolygon from svg:d
+        basegfx::B2DPolyPolygon aPolyPolygon;
+
+        if(basegfx::utils::importFromSvgD(aPolyPolygon, maPoints, GetImport().needFixPositionAfterZ(), nullptr))
         {
-            // import 2d tools::PolyPolygon from svg:d
-            basegfx::B2DPolyPolygon aPolyPolygon;
+            // convert to 3D PolyPolygon
+            const basegfx::B3DPolyPolygon aB3DPolyPolygon(
+                basegfx::utils::createB3DPolyPolygonFromB2DPolyPolygon(
+                    aPolyPolygon));
 
-            if(basegfx::utils::importFromSvgD(aPolyPolygon, maPoints, GetImport().needFixPositionAfterZ(), nullptr))
-            {
-                // convert to 3D PolyPolygon
-                const basegfx::B3DPolyPolygon aB3DPolyPolygon(
-                    basegfx::utils::createB3DPolyPolygonFromB2DPolyPolygon(
-                        aPolyPolygon));
+            // convert to UNO API class PolyPolygonShape3D
+            drawing::PolyPolygonShape3D aPolyPolygon3D;
+            basegfx::utils::B3DPolyPolygonToUnoPolyPolygonShape3D(
+                aB3DPolyPolygon,
+                aPolyPolygon3D);
 
-                // convert to UNO API class PolyPolygonShape3D
-                drawing::PolyPolygonShape3D aPolyPolygon3D;
-                basegfx::utils::B3DPolyPolygonToUnoPolyPolygonShape3D(
-                    aB3DPolyPolygon,
-                    aPolyPolygon3D);
-
-                // set polygon data
-                xPropSet->setPropertyValue("D3DPolyPolygon3D", uno::Any(aPolyPolygon3D));
-            }
-            else
-            {
-                OSL_ENSURE(false, "Error on importing svg:d for 3D tools::PolyPolygon (!)");
-            }
+            // set polygon data
+            xPropSet->setPropertyValue("D3DPolyPolygon3D", uno::Any(aPolyPolygon3D));
         }
-
-        // call parent
-        SdXML3DObjectContext::StartElement(xAttrList);
+        else
+        {
+            OSL_ENSURE(false, "Error on importing svg:d for 3D tools::PolyPolygon (!)");
+        }
     }
+
+    // call parent
+    SdXML3DObjectContext::StartElement(xAttrList);
 }
 
 

@@ -489,123 +489,123 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
 void SdXMLShapeContext::AddShape(OUString const & serviceName)
 {
     uno::Reference< lang::XMultiServiceFactory > xServiceFact(GetImport().GetModel(), uno::UNO_QUERY);
-    if(xServiceFact.is())
+    if(!xServiceFact.is())
+        return;
+
+    try
     {
-        try
+        /* Since fix for issue i33294 the Writer model doesn't support
+           com.sun.star.drawing.OLE2Shape anymore.
+           To handle Draw OLE objects it's decided to import these
+           objects as com.sun.star.drawing.OLE2Shape and convert these
+           objects after the import into com.sun.star.drawing.GraphicObjectShape.
+        */
+        uno::Reference< drawing::XShape > xShape;
+        if ( serviceName == "com.sun.star.drawing.OLE2Shape" &&
+             uno::Reference< text::XTextDocument >(GetImport().GetModel(), uno::UNO_QUERY).is() )
         {
-            /* Since fix for issue i33294 the Writer model doesn't support
-               com.sun.star.drawing.OLE2Shape anymore.
-               To handle Draw OLE objects it's decided to import these
-               objects as com.sun.star.drawing.OLE2Shape and convert these
-               objects after the import into com.sun.star.drawing.GraphicObjectShape.
-            */
-            uno::Reference< drawing::XShape > xShape;
-            if ( serviceName == "com.sun.star.drawing.OLE2Shape" &&
-                 uno::Reference< text::XTextDocument >(GetImport().GetModel(), uno::UNO_QUERY).is() )
-            {
-                xShape.set(xServiceFact->createInstance("com.sun.star.drawing.temporaryForXMLImportOLE2Shape"), uno::UNO_QUERY);
-            }
-            else if (serviceName == "com.sun.star.drawing.GraphicObjectShape"
-                     || serviceName == "com.sun.star.drawing.MediaShape"
-                     || serviceName == "com.sun.star.presentation.MediaShape")
-            {
-                css::uno::Sequence<css::uno::Any> args(1);
-                args[0] <<= GetImport().GetDocumentBase();
-                xShape.set( xServiceFact->createInstanceWithArguments(serviceName, args),
-                            css::uno::UNO_QUERY);
-            }
-            else
-            {
-                xShape.set(xServiceFact->createInstance(serviceName), uno::UNO_QUERY);
-            }
-            if( xShape.is() )
-                AddShape( xShape );
+            xShape.set(xServiceFact->createInstance("com.sun.star.drawing.temporaryForXMLImportOLE2Shape"), uno::UNO_QUERY);
         }
-        catch(const uno::Exception& e)
+        else if (serviceName == "com.sun.star.drawing.GraphicObjectShape"
+                 || serviceName == "com.sun.star.drawing.MediaShape"
+                 || serviceName == "com.sun.star.presentation.MediaShape")
         {
-            uno::Sequence<OUString> aSeq { serviceName };
-            GetImport().SetError( XMLERROR_FLAG_ERROR | XMLERROR_API,
-                                  aSeq, e.Message, nullptr );
+            css::uno::Sequence<css::uno::Any> args(1);
+            args[0] <<= GetImport().GetDocumentBase();
+            xShape.set( xServiceFact->createInstanceWithArguments(serviceName, args),
+                        css::uno::UNO_QUERY);
         }
+        else
+        {
+            xShape.set(xServiceFact->createInstance(serviceName), uno::UNO_QUERY);
+        }
+        if( xShape.is() )
+            AddShape( xShape );
+    }
+    catch(const uno::Exception& e)
+    {
+        uno::Sequence<OUString> aSeq { serviceName };
+        GetImport().SetError( XMLERROR_FLAG_ERROR | XMLERROR_API,
+                              aSeq, e.Message, nullptr );
     }
 }
 
 void SdXMLShapeContext::SetTransformation()
 {
-    if(mxShape.is())
+    if(!mxShape.is())
+        return;
+
+    uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+    if(!xPropSet.is())
+        return;
+
+    maUsedTransformation.identity();
+
+    if(maSize.Width != 1 || maSize.Height != 1)
     {
-        uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
-        if(xPropSet.is())
-        {
-            maUsedTransformation.identity();
+        // take care there are no zeros used by error
+        if(0 == maSize.Width)
+            maSize.Width = 1;
+        if(0 == maSize.Height)
+            maSize.Height = 1;
 
-            if(maSize.Width != 1 || maSize.Height != 1)
-            {
-                // take care there are no zeros used by error
-                if(0 == maSize.Width)
-                    maSize.Width = 1;
-                if(0 == maSize.Height)
-                    maSize.Height = 1;
-
-                // set global size. This should always be used.
-                maUsedTransformation.scale(maSize.Width, maSize.Height);
-            }
-
-            if(maPosition.X != 0 || maPosition.Y != 0)
-            {
-                // if global position is used, add it to transformation
-                maUsedTransformation.translate(maPosition.X, maPosition.Y);
-            }
-
-            if(mnTransform.NeedsAction())
-            {
-                // transformation is used, apply to object.
-                // NOTICE: The transformation is applied AFTER evtl. used
-                // global positioning and scaling is used, so any shear or
-                // rotate used herein is applied around the (0,0) position
-                // of the PAGE object !!!
-                ::basegfx::B2DHomMatrix aMat;
-                mnTransform.GetFullTransform(aMat);
-
-                // now add to transformation
-                maUsedTransformation *= aMat;
-            }
-
-            // now set transformation for this object
-
-            // maUsedTransformtion contains the mathematical correct matrix, which if
-            // applied to a unit square would generate the transformed shape. But the property
-            // "Transformation" contains a matrix, which can be used in TRSetBaseGeometry
-            // and would be created by TRGetBaseGeometry. And those use a mathematically wrong
-            // sign for the shearing angle. So we need to adapt the matrix here.
-            basegfx::B2DTuple aScale;
-            basegfx::B2DTuple aTranslate;
-            double fRotate;
-            double fShearX;
-            maUsedTransformation.decompose(aScale, aTranslate, fRotate, fShearX);
-            basegfx::B2DHomMatrix aB2DHomMatrix;
-            aB2DHomMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
-                                        aScale,
-                                        basegfx::fTools::equalZero(fShearX) ? 0.0 : -fShearX,
-                                        basegfx::fTools::equalZero(fRotate) ? 0.0 : fRotate,
-                                    aTranslate);
-            drawing::HomogenMatrix3 aUnoMatrix;
-
-            aUnoMatrix.Line1.Column1 = aB2DHomMatrix.get(0, 0);
-            aUnoMatrix.Line1.Column2 = aB2DHomMatrix.get(0, 1);
-            aUnoMatrix.Line1.Column3 = aB2DHomMatrix.get(0, 2);
-
-            aUnoMatrix.Line2.Column1 = aB2DHomMatrix.get(1, 0);
-            aUnoMatrix.Line2.Column2 = aB2DHomMatrix.get(1, 1);
-            aUnoMatrix.Line2.Column3 = aB2DHomMatrix.get(1, 2);
-
-            aUnoMatrix.Line3.Column1 = aB2DHomMatrix.get(2, 0);
-            aUnoMatrix.Line3.Column2 = aB2DHomMatrix.get(2, 1);
-            aUnoMatrix.Line3.Column3 = aB2DHomMatrix.get(2, 2);
-
-            xPropSet->setPropertyValue("Transformation", Any(aUnoMatrix));
-        }
+        // set global size. This should always be used.
+        maUsedTransformation.scale(maSize.Width, maSize.Height);
     }
+
+    if(maPosition.X != 0 || maPosition.Y != 0)
+    {
+        // if global position is used, add it to transformation
+        maUsedTransformation.translate(maPosition.X, maPosition.Y);
+    }
+
+    if(mnTransform.NeedsAction())
+    {
+        // transformation is used, apply to object.
+        // NOTICE: The transformation is applied AFTER evtl. used
+        // global positioning and scaling is used, so any shear or
+        // rotate used herein is applied around the (0,0) position
+        // of the PAGE object !!!
+        ::basegfx::B2DHomMatrix aMat;
+        mnTransform.GetFullTransform(aMat);
+
+        // now add to transformation
+        maUsedTransformation *= aMat;
+    }
+
+    // now set transformation for this object
+
+    // maUsedTransformtion contains the mathematical correct matrix, which if
+    // applied to a unit square would generate the transformed shape. But the property
+    // "Transformation" contains a matrix, which can be used in TRSetBaseGeometry
+    // and would be created by TRGetBaseGeometry. And those use a mathematically wrong
+    // sign for the shearing angle. So we need to adapt the matrix here.
+    basegfx::B2DTuple aScale;
+    basegfx::B2DTuple aTranslate;
+    double fRotate;
+    double fShearX;
+    maUsedTransformation.decompose(aScale, aTranslate, fRotate, fShearX);
+    basegfx::B2DHomMatrix aB2DHomMatrix;
+    aB2DHomMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
+                                aScale,
+                                basegfx::fTools::equalZero(fShearX) ? 0.0 : -fShearX,
+                                basegfx::fTools::equalZero(fRotate) ? 0.0 : fRotate,
+                            aTranslate);
+    drawing::HomogenMatrix3 aUnoMatrix;
+
+    aUnoMatrix.Line1.Column1 = aB2DHomMatrix.get(0, 0);
+    aUnoMatrix.Line1.Column2 = aB2DHomMatrix.get(0, 1);
+    aUnoMatrix.Line1.Column3 = aB2DHomMatrix.get(0, 2);
+
+    aUnoMatrix.Line2.Column1 = aB2DHomMatrix.get(1, 0);
+    aUnoMatrix.Line2.Column2 = aB2DHomMatrix.get(1, 1);
+    aUnoMatrix.Line2.Column3 = aB2DHomMatrix.get(1, 2);
+
+    aUnoMatrix.Line3.Column1 = aB2DHomMatrix.get(2, 0);
+    aUnoMatrix.Line3.Column2 = aB2DHomMatrix.get(2, 1);
+    aUnoMatrix.Line3.Column3 = aB2DHomMatrix.get(2, 2);
+
+    xPropSet->setPropertyValue("Transformation", Any(aUnoMatrix));
 }
 
 void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
@@ -758,20 +758,20 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
 
 void SdXMLShapeContext::SetLayer()
 {
-    if( !maLayerName.isEmpty() )
+    if( maLayerName.isEmpty() )
+        return;
+
+    try
     {
-        try
+        uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+        if(xPropSet.is() )
         {
-            uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
-            if(xPropSet.is() )
-            {
-                xPropSet->setPropertyValue("LayerName", Any(maLayerName));
-                return;
-            }
+            xPropSet->setPropertyValue("LayerName", Any(maLayerName));
+            return;
         }
-        catch(const uno::Exception&)
-        {
-        }
+    }
+    catch(const uno::Exception&)
+    {
     }
 }
 
@@ -978,32 +978,32 @@ void SdXMLRectShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
 {
     // create rectangle shape
     AddShape("com.sun.star.drawing.RectangleShape");
-    if(mxShape.is())
+    if(!mxShape.is())
+        return;
+
+    // Add, set Style and properties from base shape
+    SetStyle();
+    SetLayer();
+
+    // set pos, size, shear and rotate
+    SetTransformation();
+
+    if(mnRadius)
     {
-        // Add, set Style and properties from base shape
-        SetStyle();
-        SetLayer();
-
-        // set pos, size, shear and rotate
-        SetTransformation();
-
-        if(mnRadius)
+        uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+        if(xPropSet.is())
         {
-            uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
-            if(xPropSet.is())
+            try
             {
-                try
-                {
-                    xPropSet->setPropertyValue("CornerRadius", uno::makeAny( mnRadius ) );
-                }
-                catch(const uno::Exception&)
-                {
-                    DBG_UNHANDLED_EXCEPTION( "xmloff", "setting corner radius");
-                }
+                xPropSet->setPropertyValue("CornerRadius", uno::makeAny( mnRadius ) );
+            }
+            catch(const uno::Exception&)
+            {
+                DBG_UNHANDLED_EXCEPTION( "xmloff", "setting corner radius");
             }
         }
-        SdXMLShapeContext::StartElement(xAttrList);
     }
+    SdXMLShapeContext::StartElement(xAttrList);
 }
 
 
@@ -1210,37 +1210,37 @@ void SdXMLEllipseShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
 {
     // create rectangle shape
     AddShape("com.sun.star.drawing.EllipseShape");
-    if(mxShape.is())
+    if(!mxShape.is())
+        return;
+
+    // Add, set Style and properties from base shape
+    SetStyle();
+    SetLayer();
+
+    if(mnCX != 0 || mnCY != 0 || mnRX != 1 || mnRY != 1)
     {
-        // Add, set Style and properties from base shape
-        SetStyle();
-        SetLayer();
-
-        if(mnCX != 0 || mnCY != 0 || mnRX != 1 || mnRY != 1)
-        {
-            // #i121972# center/radius is used, put to pos and size
-            maSize.Width = 2 * mnRX;
-            maSize.Height = 2 * mnRY;
-            maPosition.X = mnCX - mnRX;
-            maPosition.Y = mnCY - mnRY;
-        }
-
-        // set pos, size, shear and rotate
-        SetTransformation();
-
-        if( meKind != drawing::CircleKind_FULL )
-        {
-            uno::Reference< beans::XPropertySet > xPropSet( mxShape, uno::UNO_QUERY );
-            if( xPropSet.is() )
-            {
-                xPropSet->setPropertyValue("CircleKind", Any( meKind) );
-                xPropSet->setPropertyValue("CircleStartAngle", Any(mnStartAngle) );
-                xPropSet->setPropertyValue("CircleEndAngle", Any(mnEndAngle) );
-            }
-        }
-
-        SdXMLShapeContext::StartElement(xAttrList);
+        // #i121972# center/radius is used, put to pos and size
+        maSize.Width = 2 * mnRX;
+        maSize.Height = 2 * mnRY;
+        maPosition.X = mnCX - mnRX;
+        maPosition.Y = mnCY - mnRY;
     }
+
+    // set pos, size, shear and rotate
+    SetTransformation();
+
+    if( meKind != drawing::CircleKind_FULL )
+    {
+        uno::Reference< beans::XPropertySet > xPropSet( mxShape, uno::UNO_QUERY );
+        if( xPropSet.is() )
+        {
+            xPropSet->setPropertyValue("CircleKind", Any( meKind) );
+            xPropSet->setPropertyValue("CircleStartAngle", Any(mnStartAngle) );
+            xPropSet->setPropertyValue("CircleEndAngle", Any(mnEndAngle) );
+        }
+    }
+
+    SdXMLShapeContext::StartElement(xAttrList);
 }
 
 
@@ -1290,66 +1290,66 @@ void SdXMLPolygonShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     else
         AddShape("com.sun.star.drawing.PolyLineShape");
 
-    if( mxShape.is() )
+    if( !mxShape.is() )
+        return;
+
+    SetStyle();
+    SetLayer();
+
+    // set local parameters on shape
+    uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+    if(xPropSet.is())
     {
-        SetStyle();
-        SetLayer();
-
-        // set local parameters on shape
-        uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
-        if(xPropSet.is())
+        // set polygon
+        if(!maPoints.isEmpty() && !maViewBox.isEmpty())
         {
-            // set polygon
-            if(!maPoints.isEmpty() && !maViewBox.isEmpty())
+            const SdXMLImExViewBox aViewBox(maViewBox, GetImport().GetMM100UnitConverter());
+            basegfx::B2DVector aSize(aViewBox.GetWidth(), aViewBox.GetHeight());
+
+            // Is this correct? It overrides ViewBox stuff; OTOH it makes no
+            // sense to have the geometry content size different from object size
+            if(maSize.Width != 0 && maSize.Height != 0)
             {
-                const SdXMLImExViewBox aViewBox(maViewBox, GetImport().GetMM100UnitConverter());
-                basegfx::B2DVector aSize(aViewBox.GetWidth(), aViewBox.GetHeight());
+                aSize = basegfx::B2DVector(maSize.Width, maSize.Height);
+            }
 
-                // Is this correct? It overrides ViewBox stuff; OTOH it makes no
-                // sense to have the geometry content size different from object size
-                if(maSize.Width != 0 && maSize.Height != 0)
+            basegfx::B2DPolygon aPolygon;
+
+            if(basegfx::utils::importFromSvgPoints(aPolygon, maPoints))
+            {
+                if(aPolygon.count())
                 {
-                    aSize = basegfx::B2DVector(maSize.Width, maSize.Height);
-                }
+                    const basegfx::B2DRange aSourceRange(
+                        aViewBox.GetX(), aViewBox.GetY(),
+                        aViewBox.GetX() + aViewBox.GetWidth(), aViewBox.GetY() + aViewBox.GetHeight());
+                    const basegfx::B2DRange aTargetRange(
+                        aViewBox.GetX(), aViewBox.GetY(),
+                        aViewBox.GetX() + aSize.getX(), aViewBox.GetY() + aSize.getY());
 
-                basegfx::B2DPolygon aPolygon;
-
-                if(basegfx::utils::importFromSvgPoints(aPolygon, maPoints))
-                {
-                    if(aPolygon.count())
+                    if(!aSourceRange.equal(aTargetRange))
                     {
-                        const basegfx::B2DRange aSourceRange(
-                            aViewBox.GetX(), aViewBox.GetY(),
-                            aViewBox.GetX() + aViewBox.GetWidth(), aViewBox.GetY() + aViewBox.GetHeight());
-                        const basegfx::B2DRange aTargetRange(
-                            aViewBox.GetX(), aViewBox.GetY(),
-                            aViewBox.GetX() + aSize.getX(), aViewBox.GetY() + aSize.getY());
-
-                        if(!aSourceRange.equal(aTargetRange))
-                        {
-                            aPolygon.transform(
-                                basegfx::utils::createSourceRangeTargetRangeTransform(
-                                    aSourceRange,
-                                    aTargetRange));
-                        }
-
-                        css::drawing::PointSequenceSequence aPointSequenceSequence;
-                        basegfx::utils::B2DPolyPolygonToUnoPointSequenceSequence(basegfx::B2DPolyPolygon(aPolygon), aPointSequenceSequence);
-                        xPropSet->setPropertyValue("Geometry", Any(aPointSequenceSequence));
-                        // Size is now contained in the point coordinates, adapt maSize for
-                        // to use the correct transformation matrix in SetTransformation()
-                        maSize.Width = 1;
-                        maSize.Height = 1;
+                        aPolygon.transform(
+                            basegfx::utils::createSourceRangeTargetRangeTransform(
+                                aSourceRange,
+                                aTargetRange));
                     }
+
+                    css::drawing::PointSequenceSequence aPointSequenceSequence;
+                    basegfx::utils::B2DPolyPolygonToUnoPointSequenceSequence(basegfx::B2DPolyPolygon(aPolygon), aPointSequenceSequence);
+                    xPropSet->setPropertyValue("Geometry", Any(aPointSequenceSequence));
+                    // Size is now contained in the point coordinates, adapt maSize for
+                    // to use the correct transformation matrix in SetTransformation()
+                    maSize.Width = 1;
+                    maSize.Height = 1;
                 }
             }
         }
-
-        // set pos, size, shear and rotate and get copy of matrix
-        SetTransformation();
-
-        SdXMLShapeContext::StartElement(xAttrList);
     }
+
+    // set pos, size, shear and rotate and get copy of matrix
+    SetTransformation();
+
+    SdXMLShapeContext::StartElement(xAttrList);
 }
 
 
@@ -1391,118 +1391,118 @@ void SdXMLPathShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString
 void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
     // create polygon shape
-    if(!maD.isEmpty())
+    if(maD.isEmpty())
+        return;
+
+    const SdXMLImExViewBox aViewBox(maViewBox, GetImport().GetMM100UnitConverter());
+    basegfx::B2DVector aSize(aViewBox.GetWidth(), aViewBox.GetHeight());
+
+    // Is this correct? It overrides ViewBox stuff; OTOH it makes no
+    // sense to have the geometry content size different from object size
+    if(maSize.Width != 0 && maSize.Height != 0)
     {
-        const SdXMLImExViewBox aViewBox(maViewBox, GetImport().GetMM100UnitConverter());
-        basegfx::B2DVector aSize(aViewBox.GetWidth(), aViewBox.GetHeight());
+        aSize = basegfx::B2DVector(maSize.Width, maSize.Height);
+    }
 
-        // Is this correct? It overrides ViewBox stuff; OTOH it makes no
-        // sense to have the geometry content size different from object size
-        if(maSize.Width != 0 && maSize.Height != 0)
+    basegfx::B2DPolyPolygon aPolyPolygon;
+
+    if(!basegfx::utils::importFromSvgD(aPolyPolygon, maD, GetImport().needFixPositionAfterZ(), nullptr))
+        return;
+
+    if(!aPolyPolygon.count())
+        return;
+
+    const basegfx::B2DRange aSourceRange(
+        aViewBox.GetX(), aViewBox.GetY(),
+        aViewBox.GetX() + aViewBox.GetWidth(), aViewBox.GetY() + aViewBox.GetHeight());
+    const basegfx::B2DRange aTargetRange(
+        aViewBox.GetX(), aViewBox.GetY(),
+        aViewBox.GetX() + aSize.getX(), aViewBox.GetY() + aSize.getY());
+
+    if(!aSourceRange.equal(aTargetRange))
+    {
+        aPolyPolygon.transform(
+            basegfx::utils::createSourceRangeTargetRangeTransform(
+                aSourceRange,
+                aTargetRange));
+    }
+
+    // create shape
+    OUString service;
+
+    if(aPolyPolygon.areControlPointsUsed())
+    {
+        if(aPolyPolygon.isClosed())
         {
-            aSize = basegfx::B2DVector(maSize.Width, maSize.Height);
+            service = "com.sun.star.drawing.ClosedBezierShape";
         }
-
-        basegfx::B2DPolyPolygon aPolyPolygon;
-
-        if(basegfx::utils::importFromSvgD(aPolyPolygon, maD, GetImport().needFixPositionAfterZ(), nullptr))
+        else
         {
-            if(aPolyPolygon.count())
-            {
-                const basegfx::B2DRange aSourceRange(
-                    aViewBox.GetX(), aViewBox.GetY(),
-                    aViewBox.GetX() + aViewBox.GetWidth(), aViewBox.GetY() + aViewBox.GetHeight());
-                const basegfx::B2DRange aTargetRange(
-                    aViewBox.GetX(), aViewBox.GetY(),
-                    aViewBox.GetX() + aSize.getX(), aViewBox.GetY() + aSize.getY());
-
-                if(!aSourceRange.equal(aTargetRange))
-                {
-                    aPolyPolygon.transform(
-                        basegfx::utils::createSourceRangeTargetRangeTransform(
-                            aSourceRange,
-                            aTargetRange));
-                }
-
-                // create shape
-                OUString service;
-
-                if(aPolyPolygon.areControlPointsUsed())
-                {
-                    if(aPolyPolygon.isClosed())
-                    {
-                        service = "com.sun.star.drawing.ClosedBezierShape";
-                    }
-                    else
-                    {
-                        service = "com.sun.star.drawing.OpenBezierShape";
-                    }
-                }
-                else
-                {
-                    if(aPolyPolygon.isClosed())
-                    {
-                        service = "com.sun.star.drawing.PolyPolygonShape";
-                    }
-                    else
-                    {
-                        service = "com.sun.star.drawing.PolyLineShape";
-                    }
-                }
-
-                // Add, set Style and properties from base shape
-                AddShape(service);
-
-                // #89344# test for mxShape.is() and not for mxShapes.is() to support
-                // shape import helper classes WITHOUT XShapes (member mxShapes). This
-                // is used by the writer.
-                if( mxShape.is() )
-                {
-                    SetStyle();
-                    SetLayer();
-
-                    // set local parameters on shape
-                    uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
-
-                    if(xPropSet.is())
-                    {
-                        uno::Any aAny;
-
-                        // set polygon data
-                        if(aPolyPolygon.areControlPointsUsed())
-                        {
-                            drawing::PolyPolygonBezierCoords aSourcePolyPolygon;
-
-                            basegfx::utils::B2DPolyPolygonToUnoPolyPolygonBezierCoords(
-                                aPolyPolygon,
-                                aSourcePolyPolygon);
-                            aAny <<= aSourcePolyPolygon;
-                        }
-                        else
-                        {
-                            drawing::PointSequenceSequence aSourcePolyPolygon;
-
-                            basegfx::utils::B2DPolyPolygonToUnoPointSequenceSequence(
-                                aPolyPolygon,
-                                aSourcePolyPolygon);
-                            aAny <<= aSourcePolyPolygon;
-                        }
-
-                        xPropSet->setPropertyValue("Geometry", aAny);
-                        // Size is now contained in the point coordinates, adapt maSize for
-                        // to use the correct transformation matrix in SetTransformation()
-                        maSize.Width = 1;
-                        maSize.Height = 1;
-                    }
-
-                    // set pos, size, shear and rotate
-                    SetTransformation();
-
-                    SdXMLShapeContext::StartElement(xAttrList);
-                }
-            }
+            service = "com.sun.star.drawing.OpenBezierShape";
         }
     }
+    else
+    {
+        if(aPolyPolygon.isClosed())
+        {
+            service = "com.sun.star.drawing.PolyPolygonShape";
+        }
+        else
+        {
+            service = "com.sun.star.drawing.PolyLineShape";
+        }
+    }
+
+    // Add, set Style and properties from base shape
+    AddShape(service);
+
+    // #89344# test for mxShape.is() and not for mxShapes.is() to support
+    // shape import helper classes WITHOUT XShapes (member mxShapes). This
+    // is used by the writer.
+    if( !mxShape.is() )
+        return;
+
+    SetStyle();
+    SetLayer();
+
+    // set local parameters on shape
+    uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+
+    if(xPropSet.is())
+    {
+        uno::Any aAny;
+
+        // set polygon data
+        if(aPolyPolygon.areControlPointsUsed())
+        {
+            drawing::PolyPolygonBezierCoords aSourcePolyPolygon;
+
+            basegfx::utils::B2DPolyPolygonToUnoPolyPolygonBezierCoords(
+                aPolyPolygon,
+                aSourcePolyPolygon);
+            aAny <<= aSourcePolyPolygon;
+        }
+        else
+        {
+            drawing::PointSequenceSequence aSourcePolyPolygon;
+
+            basegfx::utils::B2DPolyPolygonToUnoPointSequenceSequence(
+                aPolyPolygon,
+                aSourcePolyPolygon);
+            aAny <<= aSourcePolyPolygon;
+        }
+
+        xPropSet->setPropertyValue("Geometry", aAny);
+        // Size is now contained in the point coordinates, adapt maSize for
+        // to use the correct transformation matrix in SetTransformation()
+        maSize.Width = 1;
+        maSize.Height = 1;
+    }
+
+    // set pos, size, shear and rotate
+    SetTransformation();
+
+    SdXMLShapeContext::StartElement(xAttrList);
 }
 
 
@@ -1615,35 +1615,36 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     // Add, set Style and properties from base shape
     AddShape(service);
 
-    if( mxShape.is() )
+    if( !mxShape.is() )
+        return;
+
+    SetStyle();
+    SetLayer();
+
+    if(bIsPresShape)
     {
-        SetStyle();
-        SetLayer();
-
-        if(bIsPresShape)
+        uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
+        if(xProps.is())
         {
-            uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
-            if(xProps.is())
+            uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
+            if( xPropsInfo.is() )
             {
-                uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
-                if( xPropsInfo.is() )
-                {
-                    if( !mbIsPlaceholder && xPropsInfo->hasPropertyByName("IsEmptyPresentationObject"))
-                        xProps->setPropertyValue("IsEmptyPresentationObject", css::uno::Any(false) );
+                if( !mbIsPlaceholder && xPropsInfo->hasPropertyByName("IsEmptyPresentationObject"))
+                    xProps->setPropertyValue("IsEmptyPresentationObject", css::uno::Any(false) );
 
-                    if( mbIsUserTransformed && xPropsInfo->hasPropertyByName("IsPlaceholderDependent"))
-                        xProps->setPropertyValue("IsPlaceholderDependent", css::uno::Any(false) );
-                }
+                if( mbIsUserTransformed && xPropsInfo->hasPropertyByName("IsPlaceholderDependent"))
+                    xProps->setPropertyValue("IsPlaceholderDependent", css::uno::Any(false) );
             }
         }
+    }
 
-        if( bClearText )
-        {
-            uno::Reference< text::XText > xText( mxShape, uno::UNO_QUERY );
-            xText->setString( "" );
-        }
+    if( bClearText )
+    {
+        uno::Reference< text::XText > xText( mxShape, uno::UNO_QUERY );
+        xText->setString( "" );
+    }
 
-        // set parameters on shape
+    // set parameters on shape
 //A AW->CL: Eventually You need to strip scale and translate from the transformation
 //A to reach the same goal again.
 //A     if(!bIsPresShape || mbIsUserTransformed)
@@ -1653,44 +1654,43 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
 //A         SetSizeAndPosition();
 //A     }
 
-        // set pos, size, shear and rotate
-        SetTransformation();
+    // set pos, size, shear and rotate
+    SetTransformation();
 
-        if(mnRadius)
+    if(mnRadius)
+    {
+        uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+        if(xPropSet.is())
         {
-            uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
-            if(xPropSet.is())
+            try
             {
-                try
-                {
-                    xPropSet->setPropertyValue("CornerRadius", uno::makeAny( mnRadius ) );
-                }
-                catch(const uno::Exception&)
-                {
-                    DBG_UNHANDLED_EXCEPTION( "xmloff", "setting corner radius");
-                }
+                xPropSet->setPropertyValue("CornerRadius", uno::makeAny( mnRadius ) );
+            }
+            catch(const uno::Exception&)
+            {
+                DBG_UNHANDLED_EXCEPTION( "xmloff", "setting corner radius");
             }
         }
-
-        if(!maChainNextName.isEmpty())
-        {
-            uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
-            if(xPropSet.is())
-            {
-                try
-                {
-                    xPropSet->setPropertyValue("TextChainNextName",
-                                               uno::makeAny( maChainNextName ) );
-                }
-                catch(const uno::Exception&)
-                {
-                    DBG_UNHANDLED_EXCEPTION( "xmloff", "setting name of next chain link");
-                }
-            }
-        }
-
-        SdXMLShapeContext::StartElement(mxAttrList);
     }
+
+    if(!maChainNextName.isEmpty())
+    {
+        uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+        if(xPropSet.is())
+        {
+            try
+            {
+                xPropSet->setPropertyValue("TextChainNextName",
+                                           uno::makeAny( maChainNextName ) );
+            }
+            catch(const uno::Exception&)
+            {
+                DBG_UNHANDLED_EXCEPTION( "xmloff", "setting name of next chain link");
+            }
+        }
+    }
+
+    SdXMLShapeContext::StartElement(mxAttrList);
 }
 
 
@@ -1729,32 +1729,32 @@ void SdXMLControlShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     // create Control shape
     // add, set style and properties from base shape
     AddShape("com.sun.star.drawing.ControlShape");
-    if( mxShape.is() )
-    {
-        SAL_WARN_IF( !!maFormId.isEmpty(), "xmloff", "draw:control without a form:id attribute!" );
-        if( !maFormId.isEmpty() )
-        {
-            if( GetImport().IsFormsSupported() )
-            {
-                uno::Reference< awt::XControlModel > xControlModel( GetImport().GetFormImport()->lookupControl( maFormId ), uno::UNO_QUERY );
-                if( xControlModel.is() )
-                {
-                    uno::Reference< drawing::XControlShape > xControl( mxShape, uno::UNO_QUERY );
-                    if( xControl.is() )
-                        xControl->setControl(  xControlModel );
+    if( !mxShape.is() )
+        return;
 
-                }
+    SAL_WARN_IF( !!maFormId.isEmpty(), "xmloff", "draw:control without a form:id attribute!" );
+    if( !maFormId.isEmpty() )
+    {
+        if( GetImport().IsFormsSupported() )
+        {
+            uno::Reference< awt::XControlModel > xControlModel( GetImport().GetFormImport()->lookupControl( maFormId ), uno::UNO_QUERY );
+            if( xControlModel.is() )
+            {
+                uno::Reference< drawing::XControlShape > xControl( mxShape, uno::UNO_QUERY );
+                if( xControl.is() )
+                    xControl->setControl(  xControlModel );
+
             }
         }
-
-        SetStyle();
-        SetLayer();
-
-        // set pos, size, shear and rotate
-        SetTransformation();
-
-        SdXMLShapeContext::StartElement(xAttrList);
     }
+
+    SetStyle();
+    SetLayer();
+
+    // set pos, size, shear and rotate
+    SetTransformation();
+
+    SdXMLShapeContext::StartElement(xAttrList);
 }
 
 
@@ -1928,139 +1928,139 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
         bDoAdd = false;
     }
 
-    if(bDoAdd)
+    if(!bDoAdd)
+        return;
+
+    // create Connector shape
+    // add, set style and properties from base shape
+    AddShape("com.sun.star.drawing.ConnectorShape");
+    if(!mxShape.is())
+        return;
+
+    // #121965# if draw:transform is used, apply directly to the start
+    // and end positions before using these
+    if(mnTransform.NeedsAction())
     {
-        // create Connector shape
-        // add, set style and properties from base shape
-        AddShape("com.sun.star.drawing.ConnectorShape");
-        if(mxShape.is())
+        // transformation is used, apply to object.
+        ::basegfx::B2DHomMatrix aMat;
+        mnTransform.GetFullTransform(aMat);
+
+        if(!aMat.isIdentity())
         {
-            // #121965# if draw:transform is used, apply directly to the start
-            // and end positions before using these
-            if(mnTransform.NeedsAction())
-            {
-                // transformation is used, apply to object.
-                ::basegfx::B2DHomMatrix aMat;
-                mnTransform.GetFullTransform(aMat);
+            basegfx::B2DPoint aStart(maStart.X, maStart.Y);
+            basegfx::B2DPoint aEnd(maEnd.X, maEnd.Y);
 
-                if(!aMat.isIdentity())
-                {
-                    basegfx::B2DPoint aStart(maStart.X, maStart.Y);
-                    basegfx::B2DPoint aEnd(maEnd.X, maEnd.Y);
+            aStart = aMat * aStart;
+            aEnd = aMat * aEnd;
 
-                    aStart = aMat * aStart;
-                    aEnd = aMat * aEnd;
-
-                    maStart.X = basegfx::fround(aStart.getX());
-                    maStart.Y = basegfx::fround(aStart.getY());
-                    maEnd.X = basegfx::fround(aEnd.getX());
-                    maEnd.Y = basegfx::fround(aEnd.getY());
-                }
-            }
-
-            // add connection ids
-            if( !maStartShapeId.isEmpty() )
-                GetImport().GetShapeImport()->addShapeConnection( mxShape, true, maStartShapeId, mnStartGlueId );
-            if( !maEndShapeId.isEmpty() )
-                GetImport().GetShapeImport()->addShapeConnection( mxShape, false, maEndShapeId, mnEndGlueId );
-
-            uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
-            if( xProps.is() )
-            {
-                xProps->setPropertyValue("StartPosition", Any(maStart));
-                xProps->setPropertyValue("EndPosition", Any(maEnd) );
-                xProps->setPropertyValue("EdgeKind", Any(mnType) );
-                xProps->setPropertyValue("EdgeLine1Delta", Any(mnDelta1) );
-                xProps->setPropertyValue("EdgeLine2Delta", Any(mnDelta2) );
-                xProps->setPropertyValue("EdgeLine3Delta", Any(mnDelta3) );
-            }
-            SetStyle();
-            SetLayer();
-
-            if ( maPath.hasValue() )
-            {
-                // #i115492#
-                // Ignore svg:d attribute for text documents created by OpenOffice.org
-                // versions before OOo 3.3, because these OOo versions are storing
-                // svg:d values not using the correct unit.
-                bool bApplySVGD( true );
-                if ( uno::Reference< text::XTextDocument >(GetImport().GetModel(), uno::UNO_QUERY).is() )
-                {
-                    sal_Int32 nUPD( 0 );
-                    sal_Int32 nBuild( 0 );
-                    const bool bBuildIdFound = GetImport().getBuildIds( nUPD, nBuild );
-                    if ( GetImport().IsTextDocInOOoFileFormat() ||
-                         ( bBuildIdFound &&
-                           ( ( nUPD == 641 ) || ( nUPD == 645 ) ||  // prior OOo 2.0
-                             ( nUPD == 680 ) ||                     // OOo 2.x
-                             ( nUPD == 300 ) ||                     // OOo 3.0 - OOo 3.0.1
-                             ( nUPD == 310 ) ||                     // OOo 3.1 - OOo 3.1.1
-                             ( nUPD == 320 ) ) ) )                  // OOo 3.2 - OOo 3.2.1
-                    {
-                        bApplySVGD = false;
-                    }
-                }
-
-                if ( bApplySVGD )
-                {
-                    // tdf#83360 use path data only when redundant data of start and end point coordinates of
-                    // path start/end and connector start/end is equal. This is to avoid using erraneous
-                    // or inconsistent path data at import of foreign formats. Office itself always
-                    // writes out a consistent data set. Not using it when there is inconsistency
-                    // is okay since the path data is redundant, buffered data just to avoid recalculation
-                    // of the connector's layout at load time, no real information would be lost.
-                    // A 'connected' end has prio to direct coordinate data in Start/EndPosition
-                    // to the path data (which should have the start/end redundant in the path)
-                    const drawing::PolyPolygonBezierCoords* pSource = static_cast< const drawing::PolyPolygonBezierCoords* >(maPath.getValue());
-                    const sal_uInt32 nSequenceCount(pSource->Coordinates.getLength());
-                    bool bStartEqual(false);
-                    bool bEndEqual(false);
-
-                    if(nSequenceCount)
-                    {
-                        const drawing::PointSequence& rStartSeq = pSource->Coordinates[0];
-                        const sal_uInt32 nStartCount = rStartSeq.getLength();
-
-                        if(nStartCount)
-                        {
-                            const awt::Point& rStartPoint = rStartSeq.getConstArray()[0];
-
-                            if(rStartPoint.X == maStart.X && rStartPoint.Y == maStart.Y)
-                            {
-                                bStartEqual = true;
-                            }
-                        }
-
-                        const drawing::PointSequence& rEndSeq = pSource->Coordinates[nSequenceCount - 1];
-                        const sal_uInt32 nEndCount = rEndSeq.getLength();
-
-                        if(nEndCount)
-                        {
-                            const awt::Point& rEndPoint = rEndSeq.getConstArray()[nEndCount - 1];
-
-                            if(rEndPoint.X == maEnd.X && rEndPoint.Y == maEnd.Y)
-                            {
-                                bEndEqual = true;
-                            }
-                        }
-                    }
-
-                    if(!bStartEqual || !bEndEqual)
-                    {
-                        bApplySVGD = false;
-                    }
-                }
-
-                if ( bApplySVGD )
-                {
-                    assert(maPath.getValueType() == cppu::UnoType<drawing::PolyPolygonBezierCoords>::get());
-                    xProps->setPropertyValue("PolyPolygonBezier", maPath);
-                }
-            }
-
-            SdXMLShapeContext::StartElement(xAttrList);
+            maStart.X = basegfx::fround(aStart.getX());
+            maStart.Y = basegfx::fround(aStart.getY());
+            maEnd.X = basegfx::fround(aEnd.getX());
+            maEnd.Y = basegfx::fround(aEnd.getY());
         }
     }
+
+    // add connection ids
+    if( !maStartShapeId.isEmpty() )
+        GetImport().GetShapeImport()->addShapeConnection( mxShape, true, maStartShapeId, mnStartGlueId );
+    if( !maEndShapeId.isEmpty() )
+        GetImport().GetShapeImport()->addShapeConnection( mxShape, false, maEndShapeId, mnEndGlueId );
+
+    uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
+    if( xProps.is() )
+    {
+        xProps->setPropertyValue("StartPosition", Any(maStart));
+        xProps->setPropertyValue("EndPosition", Any(maEnd) );
+        xProps->setPropertyValue("EdgeKind", Any(mnType) );
+        xProps->setPropertyValue("EdgeLine1Delta", Any(mnDelta1) );
+        xProps->setPropertyValue("EdgeLine2Delta", Any(mnDelta2) );
+        xProps->setPropertyValue("EdgeLine3Delta", Any(mnDelta3) );
+    }
+    SetStyle();
+    SetLayer();
+
+    if ( maPath.hasValue() )
+    {
+        // #i115492#
+        // Ignore svg:d attribute for text documents created by OpenOffice.org
+        // versions before OOo 3.3, because these OOo versions are storing
+        // svg:d values not using the correct unit.
+        bool bApplySVGD( true );
+        if ( uno::Reference< text::XTextDocument >(GetImport().GetModel(), uno::UNO_QUERY).is() )
+        {
+            sal_Int32 nUPD( 0 );
+            sal_Int32 nBuild( 0 );
+            const bool bBuildIdFound = GetImport().getBuildIds( nUPD, nBuild );
+            if ( GetImport().IsTextDocInOOoFileFormat() ||
+                 ( bBuildIdFound &&
+                   ( ( nUPD == 641 ) || ( nUPD == 645 ) ||  // prior OOo 2.0
+                     ( nUPD == 680 ) ||                     // OOo 2.x
+                     ( nUPD == 300 ) ||                     // OOo 3.0 - OOo 3.0.1
+                     ( nUPD == 310 ) ||                     // OOo 3.1 - OOo 3.1.1
+                     ( nUPD == 320 ) ) ) )                  // OOo 3.2 - OOo 3.2.1
+            {
+                bApplySVGD = false;
+            }
+        }
+
+        if ( bApplySVGD )
+        {
+            // tdf#83360 use path data only when redundant data of start and end point coordinates of
+            // path start/end and connector start/end is equal. This is to avoid using erraneous
+            // or inconsistent path data at import of foreign formats. Office itself always
+            // writes out a consistent data set. Not using it when there is inconsistency
+            // is okay since the path data is redundant, buffered data just to avoid recalculation
+            // of the connector's layout at load time, no real information would be lost.
+            // A 'connected' end has prio to direct coordinate data in Start/EndPosition
+            // to the path data (which should have the start/end redundant in the path)
+            const drawing::PolyPolygonBezierCoords* pSource = static_cast< const drawing::PolyPolygonBezierCoords* >(maPath.getValue());
+            const sal_uInt32 nSequenceCount(pSource->Coordinates.getLength());
+            bool bStartEqual(false);
+            bool bEndEqual(false);
+
+            if(nSequenceCount)
+            {
+                const drawing::PointSequence& rStartSeq = pSource->Coordinates[0];
+                const sal_uInt32 nStartCount = rStartSeq.getLength();
+
+                if(nStartCount)
+                {
+                    const awt::Point& rStartPoint = rStartSeq.getConstArray()[0];
+
+                    if(rStartPoint.X == maStart.X && rStartPoint.Y == maStart.Y)
+                    {
+                        bStartEqual = true;
+                    }
+                }
+
+                const drawing::PointSequence& rEndSeq = pSource->Coordinates[nSequenceCount - 1];
+                const sal_uInt32 nEndCount = rEndSeq.getLength();
+
+                if(nEndCount)
+                {
+                    const awt::Point& rEndPoint = rEndSeq.getConstArray()[nEndCount - 1];
+
+                    if(rEndPoint.X == maEnd.X && rEndPoint.Y == maEnd.Y)
+                    {
+                        bEndEqual = true;
+                    }
+                }
+            }
+
+            if(!bStartEqual || !bEndEqual)
+            {
+                bApplySVGD = false;
+            }
+        }
+
+        if ( bApplySVGD )
+        {
+            assert(maPath.getValueType() == cppu::UnoType<drawing::PolyPolygonBezierCoords>::get());
+            xProps->setPropertyValue("PolyPolygonBezier", maPath);
+        }
+    }
+
+    SdXMLShapeContext::StartElement(xAttrList);
 }
 
 
@@ -2123,27 +2123,27 @@ void SdXMLMeasureShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     // create Measure shape
     // add, set style and properties from base shape
     AddShape("com.sun.star.drawing.MeasureShape");
-    if(mxShape.is())
+    if(!mxShape.is())
+        return;
+
+    SetStyle();
+    SetLayer();
+
+    uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
+    if( xProps.is() )
     {
-        SetStyle();
-        SetLayer();
-
-        uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
-        if( xProps.is() )
-        {
-            xProps->setPropertyValue("StartPosition", Any(maStart));
-            xProps->setPropertyValue("EndPosition", Any(maEnd) );
-        }
-
-        // delete pre created fields
-        uno::Reference< text::XText > xText( mxShape, uno::UNO_QUERY );
-        if( xText.is() )
-        {
-            xText->setString( " " );
-        }
-
-        SdXMLShapeContext::StartElement(xAttrList);
+        xProps->setPropertyValue("StartPosition", Any(maStart));
+        xProps->setPropertyValue("EndPosition", Any(maEnd) );
     }
+
+    // delete pre created fields
+    uno::Reference< text::XText > xText( mxShape, uno::UNO_QUERY );
+    if( xText.is() )
+    {
+        xText->setString( " " );
+    }
+
+    SdXMLShapeContext::StartElement(xAttrList);
 }
 
 void SdXMLMeasureShapeContext::EndElement()
@@ -2234,25 +2234,25 @@ void SdXMLPageShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
         }
     }
 
-    if(mxShape.is())
+    if(!mxShape.is())
+        return;
+
+    SetStyle();
+    SetLayer();
+
+    // set pos, size, shear and rotate
+    SetTransformation();
+
+    uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+    if(xPropSet.is())
     {
-        SetStyle();
-        SetLayer();
-
-        // set pos, size, shear and rotate
-        SetTransformation();
-
-        uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
-        if(xPropSet.is())
-        {
-            uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
-            const OUString aPageNumberStr("PageNumber");
-            if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(aPageNumberStr))
-                xPropSet->setPropertyValue(aPageNumberStr, uno::makeAny( mnPageNumber ));
-        }
-
-        SdXMLShapeContext::StartElement(xAttrList);
+        uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
+        const OUString aPageNumberStr("PageNumber");
+        if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(aPageNumberStr))
+            xPropSet->setPropertyValue(aPageNumberStr, uno::makeAny( mnPageNumber ));
     }
+
+    SdXMLShapeContext::StartElement(xAttrList);
 }
 
 
@@ -2278,54 +2278,54 @@ void SdXMLCaptionShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     // create Caption shape
     // add, set style and properties from base shape
     AddShape("com.sun.star.drawing.CaptionShape");
-    if( mxShape.is() )
+    if( !mxShape.is() )
+        return;
+
+    SetStyle();
+    SetLayer();
+
+    uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
+
+    // SJ: If AutoGrowWidthItem is set, SetTransformation will lead to the wrong SnapRect
+    // because NbcAdjustTextFrameWidthAndHeight() is called (text is set later and center alignment
+    // is the default setting, so the top left reference point that is used by the caption point is
+    // no longer correct) There are two ways to solve this problem, temporarily disabling the
+    // autogrowwidth as we are doing here or to apply the CaptionPoint after setting text
+    bool bIsAutoGrowWidth = false;
+    if ( xProps.is() )
     {
-        SetStyle();
-        SetLayer();
-
-        uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
-
-        // SJ: If AutoGrowWidthItem is set, SetTransformation will lead to the wrong SnapRect
-        // because NbcAdjustTextFrameWidthAndHeight() is called (text is set later and center alignment
-        // is the default setting, so the top left reference point that is used by the caption point is
-        // no longer correct) There are two ways to solve this problem, temporarily disabling the
-        // autogrowwidth as we are doing here or to apply the CaptionPoint after setting text
-        bool bIsAutoGrowWidth = false;
-        if ( xProps.is() )
-        {
-            uno::Any aAny( xProps->getPropertyValue("TextAutoGrowWidth") );
-            aAny >>= bIsAutoGrowWidth;
-
-            if ( bIsAutoGrowWidth )
-                xProps->setPropertyValue("TextAutoGrowWidth", uno::makeAny( false ) );
-        }
-
-        // set pos, size, shear and rotate
-        SetTransformation();
-        if( xProps.is() )
-            xProps->setPropertyValue("CaptionPoint", uno::makeAny( maCaptionPoint ) );
+        uno::Any aAny( xProps->getPropertyValue("TextAutoGrowWidth") );
+        aAny >>= bIsAutoGrowWidth;
 
         if ( bIsAutoGrowWidth )
-            xProps->setPropertyValue("TextAutoGrowWidth", uno::makeAny( true ) );
+            xProps->setPropertyValue("TextAutoGrowWidth", uno::makeAny( false ) );
+    }
 
-        if(mnRadius)
+    // set pos, size, shear and rotate
+    SetTransformation();
+    if( xProps.is() )
+        xProps->setPropertyValue("CaptionPoint", uno::makeAny( maCaptionPoint ) );
+
+    if ( bIsAutoGrowWidth )
+        xProps->setPropertyValue("TextAutoGrowWidth", uno::makeAny( true ) );
+
+    if(mnRadius)
+    {
+        uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+        if(xPropSet.is())
         {
-            uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
-            if(xPropSet.is())
+            try
             {
-                try
-                {
-                    xPropSet->setPropertyValue("CornerRadius", uno::makeAny( mnRadius ) );
-                }
-                catch(const uno::Exception&)
-                {
-                    DBG_UNHANDLED_EXCEPTION( "xmloff", "setting corner radius");
-                }
+                xPropSet->setPropertyValue("CornerRadius", uno::makeAny( mnRadius ) );
+            }
+            catch(const uno::Exception&)
+            {
+                DBG_UNHANDLED_EXCEPTION( "xmloff", "setting corner radius");
             }
         }
-
-        SdXMLShapeContext::StartElement(xAttrList);
     }
+
+    SdXMLShapeContext::StartElement(xAttrList);
 }
 
 // this is called from the parent group for each unparsed attribute in the attribute list
@@ -2398,62 +2398,62 @@ void SdXMLGraphicObjectShapeContext::StartElement( const css::uno::Reference< cs
 
     AddShape(service);
 
-    if(mxShape.is())
+    if(!mxShape.is())
+        return;
+
+    SetStyle();
+    SetLayer();
+
+    uno::Reference< beans::XPropertySet > xPropset(mxShape, uno::UNO_QUERY);
+    if(xPropset.is())
     {
-        SetStyle();
-        SetLayer();
-
-        uno::Reference< beans::XPropertySet > xPropset(mxShape, uno::UNO_QUERY);
-        if(xPropset.is())
+        // since OOo 1.x had no line or fill style for graphics, but may create
+        // documents with them, we have to override them here
+        sal_Int32 nUPD, nBuildId;
+        if( GetImport().getBuildIds( nUPD, nBuildId ) && (nUPD == 645) ) try
         {
-            // since OOo 1.x had no line or fill style for graphics, but may create
-            // documents with them, we have to override them here
-            sal_Int32 nUPD, nBuildId;
-            if( GetImport().getBuildIds( nUPD, nBuildId ) && (nUPD == 645) ) try
-            {
-                xPropset->setPropertyValue("FillStyle", Any( FillStyle_NONE ) );
-                xPropset->setPropertyValue("LineStyle", Any( LineStyle_NONE ) );
-            }
-            catch(const Exception&)
-            {
-            }
+            xPropset->setPropertyValue("FillStyle", Any( FillStyle_NONE ) );
+            xPropset->setPropertyValue("LineStyle", Any( LineStyle_NONE ) );
+        }
+        catch(const Exception&)
+        {
+        }
 
-            uno::Reference< beans::XPropertySetInfo > xPropsInfo( xPropset->getPropertySetInfo() );
-            if( xPropsInfo.is() && xPropsInfo->hasPropertyByName("IsEmptyPresentationObject"))
-                xPropset->setPropertyValue("IsEmptyPresentationObject", css::uno::makeAny( mbIsPlaceholder ) );
+        uno::Reference< beans::XPropertySetInfo > xPropsInfo( xPropset->getPropertySetInfo() );
+        if( xPropsInfo.is() && xPropsInfo->hasPropertyByName("IsEmptyPresentationObject"))
+            xPropset->setPropertyValue("IsEmptyPresentationObject", css::uno::makeAny( mbIsPlaceholder ) );
 
-            if( !mbIsPlaceholder )
+        if( !mbIsPlaceholder )
+        {
+            if( !maURL.isEmpty() )
             {
-                if( !maURL.isEmpty() )
+                uno::Reference<graphic::XGraphic> xGraphic = GetImport().loadGraphicByURL(maURL);
+                if (xGraphic.is())
                 {
-                    uno::Reference<graphic::XGraphic> xGraphic = GetImport().loadGraphicByURL(maURL);
-                    if (xGraphic.is())
-                    {
-                        xPropset->setPropertyValue("Graphic", uno::makeAny(xGraphic));
-                    }
+                    xPropset->setPropertyValue("Graphic", uno::makeAny(xGraphic));
                 }
             }
         }
-
-        if(mbIsUserTransformed)
-        {
-            uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
-            if(xProps.is())
-            {
-                uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
-                if( xPropsInfo.is() )
-                {
-                    if( xPropsInfo->hasPropertyByName("IsPlaceholderDependent"))
-                        xProps->setPropertyValue("IsPlaceholderDependent", css::uno::Any(false) );
-                }
-            }
-        }
-
-        // set pos, size, shear and rotate
-        SetTransformation();
-
-        SdXMLShapeContext::StartElement(mxAttrList);
     }
+
+    if(mbIsUserTransformed)
+    {
+        uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
+        if(xProps.is())
+        {
+            uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
+            if( xPropsInfo.is() )
+            {
+                if( xPropsInfo->hasPropertyByName("IsPlaceholderDependent"))
+                    xProps->setPropertyValue("IsPlaceholderDependent", css::uno::Any(false) );
+            }
+        }
+    }
+
+    // set pos, size, shear and rotate
+    SetTransformation();
+
+    SdXMLShapeContext::StartElement(mxAttrList);
 }
 
 void SdXMLGraphicObjectShapeContext::EndElement()
@@ -2527,55 +2527,55 @@ void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
         ? OUString("com.sun.star.presentation.ChartShape")
         : OUString("com.sun.star.drawing.OLE2Shape"));
 
-    if(mxShape.is())
+    if(!mxShape.is())
+        return;
+
+    SetStyle();
+    SetLayer();
+
+    if( !mbIsPlaceholder )
     {
-        SetStyle();
-        SetLayer();
-
-        if( !mbIsPlaceholder )
+        uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
+        if(xProps.is())
         {
-            uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
-            if(xProps.is())
+            uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
+            if( xPropsInfo.is() && xPropsInfo->hasPropertyByName("IsEmptyPresentationObject"))
+                xProps->setPropertyValue("IsEmptyPresentationObject", css::uno::Any(false) );
+
+            uno::Any aAny;
+
+            xProps->setPropertyValue("CLSID", Any(OUString("12DCAE26-281F-416F-a234-c3086127382e")) );
+
+            aAny = xProps->getPropertyValue("Model");
+            uno::Reference< frame::XModel > xChartModel;
+            if( aAny >>= xChartModel )
             {
-                uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
-                if( xPropsInfo.is() && xPropsInfo->hasPropertyByName("IsEmptyPresentationObject"))
-                    xProps->setPropertyValue("IsEmptyPresentationObject", css::uno::Any(false) );
-
-                uno::Any aAny;
-
-                xProps->setPropertyValue("CLSID", Any(OUString("12DCAE26-281F-416F-a234-c3086127382e")) );
-
-                aAny = xProps->getPropertyValue("Model");
-                uno::Reference< frame::XModel > xChartModel;
-                if( aAny >>= xChartModel )
-                {
-                    mxChartContext.set( GetImport().GetChartImport()->CreateChartContext( GetImport(), XML_NAMESPACE_SVG, GetXMLToken(XML_CHART), xChartModel, xAttrList ) );
-                }
+                mxChartContext.set( GetImport().GetChartImport()->CreateChartContext( GetImport(), XML_NAMESPACE_SVG, GetXMLToken(XML_CHART), xChartModel, xAttrList ) );
             }
         }
-
-        if(mbIsUserTransformed)
-        {
-            uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
-            if(xProps.is())
-            {
-                uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
-                if( xPropsInfo.is() )
-                {
-                    if( xPropsInfo->hasPropertyByName("IsPlaceholderDependent"))
-                        xProps->setPropertyValue("IsPlaceholderDependent", css::uno::Any(false) );
-                }
-            }
-        }
-
-        // set pos, size, shear and rotate
-        SetTransformation();
-
-        SdXMLShapeContext::StartElement(xAttrList);
-
-        if( mxChartContext.is() )
-            mxChartContext->StartElement( xAttrList );
     }
+
+    if(mbIsUserTransformed)
+    {
+        uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
+        if(xProps.is())
+        {
+            uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
+            if( xPropsInfo.is() )
+            {
+                if( xPropsInfo->hasPropertyByName("IsPlaceholderDependent"))
+                    xProps->setPropertyValue("IsPlaceholderDependent", css::uno::Any(false) );
+            }
+        }
+    }
+
+    // set pos, size, shear and rotate
+    SetTransformation();
+
+    SdXMLShapeContext::StartElement(xAttrList);
+
+    if( mxChartContext.is() )
+        mxChartContext->StartElement( xAttrList );
 }
 
 void SdXMLChartShapeContext::EndElement()
@@ -2652,61 +2652,61 @@ void SdXMLObjectShapeContext::StartElement( const css::uno::Reference< css::xml:
 
     AddShape(service);
 
-    if( mxShape.is() )
+    if( !mxShape.is() )
+        return;
+
+    SetLayer();
+
+    if(bIsPresShape)
     {
-        SetLayer();
-
-        if(bIsPresShape)
+        uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
+        if(xProps.is())
         {
-            uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
-            if(xProps.is())
+            uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
+            if( xPropsInfo.is() )
             {
-                uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
-                if( xPropsInfo.is() )
-                {
-                    if( !mbIsPlaceholder && xPropsInfo->hasPropertyByName("IsEmptyPresentationObject"))
-                        xProps->setPropertyValue("IsEmptyPresentationObject", css::uno::Any(false) );
+                if( !mbIsPlaceholder && xPropsInfo->hasPropertyByName("IsEmptyPresentationObject"))
+                    xProps->setPropertyValue("IsEmptyPresentationObject", css::uno::Any(false) );
 
-                    if( mbIsUserTransformed && xPropsInfo->hasPropertyByName("IsPlaceholderDependent"))
-                        xProps->setPropertyValue("IsPlaceholderDependent", css::uno::Any(false) );
-                }
+                if( mbIsUserTransformed && xPropsInfo->hasPropertyByName("IsPlaceholderDependent"))
+                    xProps->setPropertyValue("IsPlaceholderDependent", css::uno::Any(false) );
             }
         }
-
-        if( !mbIsPlaceholder && !maHref.isEmpty() )
-        {
-            uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
-
-            if( xProps.is() )
-            {
-                OUString aPersistName = GetImport().ResolveEmbeddedObjectURL( maHref, maCLSID );
-
-                if ( GetImport().IsPackageURL( maHref ) )
-                {
-                    const OUString  sURL( "vnd.sun.star.EmbeddedObject:" );
-
-                    if ( aPersistName.startsWith( sURL ) )
-                        aPersistName = aPersistName.copy( sURL.getLength() );
-
-                    xProps->setPropertyValue("PersistName",
-                                              uno::makeAny( aPersistName ) );
-                }
-                else
-                {
-                    // this is OOo link object
-                    xProps->setPropertyValue("LinkURL",
-                                              uno::makeAny( aPersistName ) );
-                }
-            }
-        }
-
-        // set pos, size, shear and rotate
-        SetTransformation();
-
-        SetStyle();
-
-        GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
     }
+
+    if( !mbIsPlaceholder && !maHref.isEmpty() )
+    {
+        uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
+
+        if( xProps.is() )
+        {
+            OUString aPersistName = GetImport().ResolveEmbeddedObjectURL( maHref, maCLSID );
+
+            if ( GetImport().IsPackageURL( maHref ) )
+            {
+                const OUString  sURL( "vnd.sun.star.EmbeddedObject:" );
+
+                if ( aPersistName.startsWith( sURL ) )
+                    aPersistName = aPersistName.copy( sURL.getLength() );
+
+                xProps->setPropertyValue("PersistName",
+                                          uno::makeAny( aPersistName ) );
+            }
+            else
+            {
+                // this is OOo link object
+                xProps->setPropertyValue("LinkURL",
+                                          uno::makeAny( aPersistName ) );
+            }
+        }
+    }
+
+    // set pos, size, shear and rotate
+    SetTransformation();
+
+    SetStyle();
+
+    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 }
 
 void SdXMLObjectShapeContext::EndElement()
@@ -3016,31 +3016,31 @@ void SdXMLPluginShapeContext::StartElement( const css::uno::Reference< css::xml:
 
     AddShape(service);
 
-    if( mxShape.is() )
+    if( !mxShape.is() )
+        return;
+
+    SetLayer();
+
+    if(bIsPresShape)
     {
-        SetLayer();
-
-        if(bIsPresShape)
+        uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
+        if(xProps.is())
         {
-            uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
-            if(xProps.is())
+            uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
+            if( xPropsInfo.is() )
             {
-                uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
-                if( xPropsInfo.is() )
-                {
-                    if( !mbIsPlaceholder && xPropsInfo->hasPropertyByName("IsEmptyPresentationObject"))
-                        xProps->setPropertyValue("IsEmptyPresentationObject", css::uno::Any(false) );
+                if( !mbIsPlaceholder && xPropsInfo->hasPropertyByName("IsEmptyPresentationObject"))
+                    xProps->setPropertyValue("IsEmptyPresentationObject", css::uno::Any(false) );
 
-                    if( mbIsUserTransformed && xPropsInfo->hasPropertyByName("IsPlaceholderDependent"))
-                        xProps->setPropertyValue("IsPlaceholderDependent", css::uno::Any(false) );
-                }
+                if( mbIsUserTransformed && xPropsInfo->hasPropertyByName("IsPlaceholderDependent"))
+                    xProps->setPropertyValue("IsPlaceholderDependent", css::uno::Any(false) );
             }
         }
-
-        // set pos, size, shear and rotate
-        SetTransformation();
-        GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
     }
+
+    // set pos, size, shear and rotate
+    SetTransformation();
+    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 }
 
 static OUString
@@ -3245,31 +3245,31 @@ void SdXMLFloatingFrameShapeContext::StartElement( const css::uno::Reference< cs
 {
     AddShape("com.sun.star.drawing.FrameShape");
 
-    if( mxShape.is() )
+    if( !mxShape.is() )
+        return;
+
+    SetLayer();
+
+    // set pos, size, shear and rotate
+    SetTransformation();
+
+    uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
+    if( xProps.is() )
     {
-        SetLayer();
-
-        // set pos, size, shear and rotate
-        SetTransformation();
-
-        uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
-        if( xProps.is() )
+        if( !maFrameName.isEmpty() )
         {
-            if( !maFrameName.isEmpty() )
-            {
-                xProps->setPropertyValue("FrameName", Any(maFrameName) );
-            }
-
-            if( !maHref.isEmpty() )
-            {
-                xProps->setPropertyValue("FrameURL", Any(maHref) );
-            }
+            xProps->setPropertyValue("FrameName", Any(maFrameName) );
         }
 
-        SetStyle();
-
-        GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
+        if( !maHref.isEmpty() )
+        {
+            xProps->setPropertyValue("FrameURL", Any(maHref) );
+        }
     }
+
+    SetStyle();
+
+    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 }
 
 // this is called from the parent group for each unparsed attribute in the attribute list
@@ -3342,29 +3342,29 @@ void SdXMLFrameShapeContext::removeGraphicFromImportContext(const SvXMLImportCon
 {
     const SdXMLGraphicObjectShapeContext* pSdXMLGraphicObjectShapeContext = dynamic_cast< const SdXMLGraphicObjectShapeContext* >(&rContext);
 
-    if(pSdXMLGraphicObjectShapeContext)
+    if(!pSdXMLGraphicObjectShapeContext)
+        return;
+
+    try
     {
-        try
+        uno::Reference< container::XChild > xChild(pSdXMLGraphicObjectShapeContext->getShape(), uno::UNO_QUERY_THROW);
+
+        uno::Reference< drawing::XShapes > xParent(xChild->getParent(), uno::UNO_QUERY_THROW);
+
+        // remove from parent
+        xParent->remove(pSdXMLGraphicObjectShapeContext->getShape());
+
+        // dispose
+        uno::Reference< lang::XComponent > xComp(pSdXMLGraphicObjectShapeContext->getShape(), UNO_QUERY);
+
+        if(xComp.is())
         {
-            uno::Reference< container::XChild > xChild(pSdXMLGraphicObjectShapeContext->getShape(), uno::UNO_QUERY_THROW);
-
-            uno::Reference< drawing::XShapes > xParent(xChild->getParent(), uno::UNO_QUERY_THROW);
-
-            // remove from parent
-            xParent->remove(pSdXMLGraphicObjectShapeContext->getShape());
-
-            // dispose
-            uno::Reference< lang::XComponent > xComp(pSdXMLGraphicObjectShapeContext->getShape(), UNO_QUERY);
-
-            if(xComp.is())
-            {
-                xComp->dispose();
-            }
+            xComp->dispose();
         }
-        catch( uno::Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION( "xmloff", "Error in cleanup of multiple graphic object import." );
-        }
+    }
+    catch( uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION( "xmloff", "Error in cleanup of multiple graphic object import." );
     }
 }
 
@@ -3719,36 +3719,36 @@ void SdXMLCustomShapeContext::StartElement( const uno::Reference< xml::sax::XAtt
 {
     // create rectangle shape
     AddShape("com.sun.star.drawing.CustomShape");
-    if ( mxShape.is() )
+    if ( !mxShape.is() )
+        return;
+
+    // Add, set Style and properties from base shape
+    SetStyle();
+    SetLayer();
+
+    // set pos, size, shear and rotate
+    SetTransformation();
+
+    try
     {
-        // Add, set Style and properties from base shape
-        SetStyle();
-        SetLayer();
-
-        // set pos, size, shear and rotate
-        SetTransformation();
-
-        try
+        uno::Reference< beans::XPropertySet > xPropSet( mxShape, uno::UNO_QUERY );
+        if( xPropSet.is() )
         {
-            uno::Reference< beans::XPropertySet > xPropSet( mxShape, uno::UNO_QUERY );
-            if( xPropSet.is() )
+            if ( !maCustomShapeEngine.isEmpty() )
             {
-                if ( !maCustomShapeEngine.isEmpty() )
-                {
-                    xPropSet->setPropertyValue( EASGet( EAS_CustomShapeEngine ), Any(maCustomShapeEngine) );
-                }
-                if ( !maCustomShapeData.isEmpty() )
-                {
-                    xPropSet->setPropertyValue( EASGet( EAS_CustomShapeData ), Any(maCustomShapeData) );
-                }
+                xPropSet->setPropertyValue( EASGet( EAS_CustomShapeEngine ), Any(maCustomShapeEngine) );
+            }
+            if ( !maCustomShapeData.isEmpty() )
+            {
+                xPropSet->setPropertyValue( EASGet( EAS_CustomShapeData ), Any(maCustomShapeData) );
             }
         }
-        catch(const uno::Exception&)
-        {
-            DBG_UNHANDLED_EXCEPTION( "xmloff", "setting enhanced customshape geometry" );
-        }
-        SdXMLShapeContext::StartElement(xAttrList);
     }
+    catch(const uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION( "xmloff", "setting enhanced customshape geometry" );
+    }
+    SdXMLShapeContext::StartElement(xAttrList);
 }
 
 void SdXMLCustomShapeContext::EndElement()
@@ -3918,71 +3918,71 @@ void SdXMLTableShapeContext::StartElement( const css::uno::Reference< css::xml::
 
     AddShape(service);
 
-    if( mxShape.is() )
+    if( !mxShape.is() )
+        return;
+
+    SetLayer();
+
+    uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
+
+    if(bIsPresShape && xProps.is())
     {
-        SetLayer();
-
-        uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
-
-        if(bIsPresShape && xProps.is())
+        uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
+        if( xPropsInfo.is() )
         {
-            uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
-            if( xPropsInfo.is() )
-            {
-                if( !mbIsPlaceholder && xPropsInfo->hasPropertyByName("IsEmptyPresentationObject"))
-                    xProps->setPropertyValue("IsEmptyPresentationObject", css::uno::Any(false) );
+            if( !mbIsPlaceholder && xPropsInfo->hasPropertyByName("IsEmptyPresentationObject"))
+                xProps->setPropertyValue("IsEmptyPresentationObject", css::uno::Any(false) );
 
-                if( mbIsUserTransformed && xPropsInfo->hasPropertyByName("IsPlaceholderDependent"))
-                    xProps->setPropertyValue("IsPlaceholderDependent", css::uno::Any(false) );
-            }
+            if( mbIsUserTransformed && xPropsInfo->hasPropertyByName("IsPlaceholderDependent"))
+                xProps->setPropertyValue("IsPlaceholderDependent", css::uno::Any(false) );
+        }
+    }
+
+    SetStyle();
+
+    if( xProps.is() )
+    {
+        if( !msTemplateStyleName.isEmpty() ) try
+        {
+            Reference< XStyleFamiliesSupplier > xFamiliesSupp( GetImport().GetModel(), UNO_QUERY_THROW );
+            Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
+            Reference< XNameAccess > xTableFamily( xFamilies->getByName( "table" ), UNO_QUERY_THROW );
+            Reference< XStyle > xTableStyle( xTableFamily->getByName( msTemplateStyleName ), UNO_QUERY_THROW );
+            xProps->setPropertyValue("TableTemplate", Any( xTableStyle ) );
+        }
+        catch(const Exception&)
+        {
+            DBG_UNHANDLED_EXCEPTION("xmloff.draw");
         }
 
-        SetStyle();
-
-        if( xProps.is() )
+        const XMLPropertyMapEntry* pEntry = &aXMLTableShapeAttributes[0];
+        for( int i = 0; pEntry->msApiName && (i < 6); i++, pEntry++ )
         {
-            if( !msTemplateStyleName.isEmpty() ) try
+            try
             {
-                Reference< XStyleFamiliesSupplier > xFamiliesSupp( GetImport().GetModel(), UNO_QUERY_THROW );
-                Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
-                Reference< XNameAccess > xTableFamily( xFamilies->getByName( "table" ), UNO_QUERY_THROW );
-                Reference< XStyle > xTableStyle( xTableFamily->getByName( msTemplateStyleName ), UNO_QUERY_THROW );
-                xProps->setPropertyValue("TableTemplate", Any( xTableStyle ) );
+                const OUString sAPIPropertyName( pEntry->msApiName, pEntry->nApiNameLength, RTL_TEXTENCODING_ASCII_US );
+                xProps->setPropertyValue( sAPIPropertyName, Any( maTemplateStylesUsed[i] ) );
             }
             catch(const Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION("xmloff.draw");
             }
-
-            const XMLPropertyMapEntry* pEntry = &aXMLTableShapeAttributes[0];
-            for( int i = 0; pEntry->msApiName && (i < 6); i++, pEntry++ )
-            {
-                try
-                {
-                    const OUString sAPIPropertyName( pEntry->msApiName, pEntry->nApiNameLength, RTL_TEXTENCODING_ASCII_US );
-                    xProps->setPropertyValue( sAPIPropertyName, Any( maTemplateStylesUsed[i] ) );
-                }
-                catch(const Exception&)
-                {
-                    DBG_UNHANDLED_EXCEPTION("xmloff.draw");
-                }
-            }
         }
+    }
 
-        GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
+    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 
-        const rtl::Reference< XMLTableImport >& xTableImport( GetImport().GetShapeImport()->GetShapeTableImport() );
-        if( xTableImport.is() && xProps.is() )
-        {
-            uno::Reference< table::XColumnRowRange > xColumnRowRange(
-                xProps->getPropertyValue("Model"), uno::UNO_QUERY );
+    const rtl::Reference< XMLTableImport >& xTableImport( GetImport().GetShapeImport()->GetShapeTableImport() );
+    if( xTableImport.is() && xProps.is() )
+    {
+        uno::Reference< table::XColumnRowRange > xColumnRowRange(
+            xProps->getPropertyValue("Model"), uno::UNO_QUERY );
 
-            if( xColumnRowRange.is() )
-                mxTableImportContext = xTableImport->CreateTableContext( GetPrefix(), GetLocalName(), xColumnRowRange );
+        if( xColumnRowRange.is() )
+            mxTableImportContext = xTableImport->CreateTableContext( GetPrefix(), GetLocalName(), xColumnRowRange );
 
-            if( mxTableImportContext.is() )
-                mxTableImportContext->StartElement( xAttrList );
-        }
+        if( mxTableImportContext.is() )
+            mxTableImportContext->StartElement( xAttrList );
     }
 }
 

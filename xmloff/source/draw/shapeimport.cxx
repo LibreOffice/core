@@ -747,26 +747,26 @@ void ShapeGroupContext::moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos )
     uno::Reference< beans::XPropertySet > xPropSet;
     aAny >>= xPropSet;
 
-    if( xPropSet.is() && xPropSet->getPropertySetInfo()->hasPropertyByName( "ZOrder" ) )
+    if( !(xPropSet.is() && xPropSet->getPropertySetInfo()->hasPropertyByName( "ZOrder" )) )
+        return;
+
+    xPropSet->setPropertyValue( "ZOrder", uno::Any(nDestPos) );
+
+    for( ZOrderHint& rHint : maZOrderList )
     {
-        xPropSet->setPropertyValue( "ZOrder", uno::Any(nDestPos) );
-
-        for( ZOrderHint& rHint : maZOrderList )
+        if( rHint.nIs < nSourcePos )
         {
-            if( rHint.nIs < nSourcePos )
-            {
-                DBG_ASSERT(rHint.nIs >= nDestPos, "Shape sorting failed" );
-                rHint.nIs++;
-            }
+            DBG_ASSERT(rHint.nIs >= nDestPos, "Shape sorting failed" );
+            rHint.nIs++;
         }
+    }
 
-        for( ZOrderHint& rHint : maUnsortedList )
+    for( ZOrderHint& rHint : maUnsortedList )
+    {
+        if( rHint.nIs < nSourcePos )
         {
-            if( rHint.nIs < nSourcePos )
-            {
-                SAL_WARN_IF( rHint.nIs < nDestPos, "xmloff", "shape sorting failed" );
-                rHint.nIs++;
-            }
+            SAL_WARN_IF( rHint.nIs < nDestPos, "xmloff", "shape sorting failed" );
+            rHint.nIs++;
         }
     }
 }
@@ -917,23 +917,23 @@ void XMLShapeImportHelper::popGroupAndPostProcess()
 
 void XMLShapeImportHelper::shapeWithZIndexAdded( css::uno::Reference< css::drawing::XShape > const & xShape, sal_Int32 nZIndex )
 {
-    if( mpImpl->mpGroupContext)
-    {
-        ZOrderHint aNewHint;
-        aNewHint.nIs = mpImpl->mpGroupContext->mnCurrentZ++;
-        aNewHint.nShould = nZIndex;
-        aNewHint.xShape = xShape;
+    if( !mpImpl->mpGroupContext)
+        return;
 
-        if( nZIndex == -1 )
-        {
-            // don't care, so add to unsorted list
-            mpImpl->mpGroupContext->maUnsortedList.push_back(aNewHint);
-        }
-        else
-        {
-            // insert into sort list
-            mpImpl->mpGroupContext->maZOrderList.push_back(aNewHint);
-        }
+    ZOrderHint aNewHint;
+    aNewHint.nIs = mpImpl->mpGroupContext->mnCurrentZ++;
+    aNewHint.nShould = nZIndex;
+    aNewHint.xShape = xShape;
+
+    if( nZIndex == -1 )
+    {
+        // don't care, so add to unsorted list
+        mpImpl->mpGroupContext->maUnsortedList.push_back(aNewHint);
+    }
+    else
+    {
+        // insert into sort list
+        mpImpl->mpGroupContext->maZOrderList.push_back(aNewHint);
     }
 }
 

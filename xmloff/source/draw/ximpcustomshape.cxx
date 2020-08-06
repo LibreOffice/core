@@ -139,18 +139,18 @@ static void GetDoublePercentage( std::vector< css::beans::PropertyValue >& rDest
 {
     sal_Int16 const eSrcUnit = ::sax::Converter::GetUnitFromString(
             rValue, util::MeasureUnit::MM_100TH);
-    if (util::MeasureUnit::PERCENT == eSrcUnit)
+    if (util::MeasureUnit::PERCENT != eSrcUnit)
+        return;
+
+    rtl_math_ConversionStatus eStatus;
+    double fAttrDouble = ::rtl::math::stringToDouble( rValue,
+        '.', ',', &eStatus );
+    if ( eStatus == rtl_math_ConversionStatus_Ok )
     {
-        rtl_math_ConversionStatus eStatus;
-        double fAttrDouble = ::rtl::math::stringToDouble( rValue,
-            '.', ',', &eStatus );
-        if ( eStatus == rtl_math_ConversionStatus_Ok )
-        {
-            beans::PropertyValue aProp;
-            aProp.Name = EASGet( eDestProp );
-            aProp.Value <<= fAttrDouble;
-            rDest.push_back( aProp );
-        }
+        beans::PropertyValue aProp;
+        aProp.Name = EASGet( eDestProp );
+        aProp.Value <<= fAttrDouble;
+        rDest.push_back( aProp );
     }
 }
 
@@ -478,25 +478,25 @@ static void GetSizeSequence( std::vector< css::beans::PropertyValue >& rDest,
     }
     while ( nIndex >= 0 );
 
-    if ( !vNum.empty() )
-    {
-        uno::Sequence< awt::Size > aSizeSeq((vNum.size() + 1) / 2);
-        std::vector< sal_Int32 >::const_iterator aIter = vNum.begin();
-        std::vector< sal_Int32 >::const_iterator aEnd = vNum.end();
-        awt::Size* pValues = aSizeSeq.getArray();
+    if ( vNum.empty() )
+        return;
 
-        while ( aIter != aEnd ) {
-            pValues->Width = *aIter++;
-            if ( aIter != aEnd )
-                pValues->Height = *aIter++;
-            pValues ++;
-        }
+    uno::Sequence< awt::Size > aSizeSeq((vNum.size() + 1) / 2);
+    std::vector< sal_Int32 >::const_iterator aIter = vNum.begin();
+    std::vector< sal_Int32 >::const_iterator aEnd = vNum.end();
+    awt::Size* pValues = aSizeSeq.getArray();
 
-        beans::PropertyValue aProp;
-        aProp.Name = EASGet( eDestProp );
-        aProp.Value <<= aSizeSeq;
-        rDest.push_back( aProp );
+    while ( aIter != aEnd ) {
+        pValues->Width = *aIter++;
+        if ( aIter != aEnd )
+            pValues->Height = *aIter++;
+        pValues ++;
     }
+
+    beans::PropertyValue aProp;
+    aProp.Name = EASGet( eDestProp );
+    aProp.Value <<= aSizeSeq;
+    rDest.push_back( aProp );
 }
 
 static void GetEnhancedParameter( std::vector< css::beans::PropertyValue >& rDest,              // e.g. draw:handle-position
@@ -862,258 +862,258 @@ static void GetAdjustmentValues( std::vector< css::beans::PropertyValue >& rDest
 void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     sal_Int16 nLength = xAttrList->getLength();
-    if ( nLength )
+    if ( !nLength )
+        return;
+
+    sal_Int32               nAttrNumber;
+    for( sal_Int16 nAttr = 0; nAttr < nLength; nAttr++ )
     {
-        sal_Int32               nAttrNumber;
-        for( sal_Int16 nAttr = 0; nAttr < nLength; nAttr++ )
+        OUString aLocalName;
+        const OUString& rValue = xAttrList->getValueByIndex( nAttr );
+        /* sven fixme, this must be checked! sal_uInt16 nPrefix = */ GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( nAttr ), &aLocalName );
+
+        switch( EASGet( aLocalName ) )
         {
-            OUString aLocalName;
-            const OUString& rValue = xAttrList->getValueByIndex( nAttr );
-            /* sven fixme, this must be checked! sal_uInt16 nPrefix = */ GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( nAttr ), &aLocalName );
-
-            switch( EASGet( aLocalName ) )
+            case EAS_type :
+                GetString( mrCustomShapeGeometry, rValue, EAS_Type );
+            break;
+            case EAS_mirror_horizontal :
+                GetBool( mrCustomShapeGeometry, rValue, EAS_MirroredX );
+            break;
+            case EAS_mirror_vertical :
+                GetBool( mrCustomShapeGeometry, rValue, EAS_MirroredY );
+            break;
+            case EAS_viewBox :
             {
-                case EAS_type :
-                    GetString( mrCustomShapeGeometry, rValue, EAS_Type );
-                break;
-                case EAS_mirror_horizontal :
-                    GetBool( mrCustomShapeGeometry, rValue, EAS_MirroredX );
-                break;
-                case EAS_mirror_vertical :
-                    GetBool( mrCustomShapeGeometry, rValue, EAS_MirroredY );
-                break;
-                case EAS_viewBox :
-                {
-                    SdXMLImExViewBox aViewBox( rValue, GetImport().GetMM100UnitConverter() );
-                    awt::Rectangle aRect( aViewBox.GetX(), aViewBox.GetY(), aViewBox.GetWidth(), aViewBox.GetHeight() );
-                    beans::PropertyValue aProp;
-                    aProp.Name = EASGet( EAS_ViewBox );
-                    aProp.Value <<= aRect;
-                    mrCustomShapeGeometry.push_back( aProp );
-                }
-                break;
-                case EAS_sub_view_size:
-                    GetSizeSequence( maPath, rValue, EAS_SubViewSize );
-                break;
-                case EAS_text_rotate_angle :
-                    GetDouble( mrCustomShapeGeometry, rValue, EAS_TextRotateAngle );
-                break;
-                case EAS_extrusion_allowed :
-                    GetBool( maPath, rValue, EAS_ExtrusionAllowed );
-                break;
-                case EAS_text_path_allowed :
-                    GetBool( maPath, rValue, EAS_TextPathAllowed );
-                break;
-                case EAS_concentric_gradient_fill_allowed :
-                    GetBool( maPath, rValue, EAS_ConcentricGradientFillAllowed );
-                break;
-                case EAS_extrusion :
-                    GetBool( maExtrusion, rValue, EAS_Extrusion );
-                break;
-                case EAS_extrusion_brightness :
-                    GetDoublePercentage( maExtrusion, rValue, EAS_Brightness );
-                break;
-                case EAS_extrusion_depth :
-                {
-                    sal_Int32 nIndex = 0;
-                    css::drawing::EnhancedCustomShapeParameterPair aParameterPair;
-                    css::drawing::EnhancedCustomShapeParameter& rDepth = aParameterPair.First;
-                    if ( GetNextParameter( rDepth, nIndex, rValue ) )
-                    {
-                        css::drawing::EnhancedCustomShapeParameter& rFraction = aParameterPair.Second;
-                        // try to catch the unit for the depth
-                        sal_Int16 const eSrcUnit(
-                            ::sax::Converter::GetUnitFromString(
-                                rValue, util::MeasureUnit::MM_100TH));
-
-                        OUStringBuffer aUnitStr;
-                        double fFactor = ::sax::Converter::GetConversionFactor(
-                            aUnitStr, util::MeasureUnit::MM_100TH, eSrcUnit);
-                        if ( ( fFactor != 1.0 ) && ( fFactor != 0.0 ) )
-                        {
-                            double fDepth(0.0);
-                            if ( rDepth.Value >>= fDepth )
-                            {
-                                fDepth /= fFactor;
-                                rDepth.Value <<= fDepth;
-                            }
-                        }
-                        if ( rValue.matchIgnoreAsciiCase( aUnitStr.toString(), nIndex ) )
-                            nIndex += aUnitStr.getLength();
-
-                        // skipping white spaces
-                        while( ( nIndex < rValue.getLength() ) && rValue[ nIndex ] == ' ' )
-                            nIndex++;
-
-                        if ( GetNextParameter( rFraction, nIndex, rValue ) )
-                        {
-                            beans::PropertyValue aProp;
-                            aProp.Name = EASGet( EAS_Depth );
-                            aProp.Value <<= aParameterPair;
-                            maExtrusion.push_back( aProp );
-                        }
-                    }
-                }
-                break;
-                case EAS_extrusion_diffusion :
-                    GetDoublePercentage( maExtrusion, rValue, EAS_Diffusion );
-                break;
-                case EAS_extrusion_number_of_line_segments :
-                    GetInt32( maExtrusion, rValue, EAS_NumberOfLineSegments );
-                break;
-                case EAS_extrusion_light_face :
-                    GetBool( maExtrusion, rValue, EAS_LightFace );
-                break;
-                case EAS_extrusion_first_light_harsh :
-                    GetBool( maExtrusion, rValue, EAS_FirstLightHarsh );
-                break;
-                case EAS_extrusion_second_light_harsh :
-                    GetBool( maExtrusion, rValue, EAS_SecondLightHarsh );
-                break;
-                case EAS_extrusion_first_light_level :
-                    GetDoublePercentage( maExtrusion, rValue, EAS_FirstLightLevel );
-                break;
-                case EAS_extrusion_second_light_level :
-                    GetDoublePercentage( maExtrusion, rValue, EAS_SecondLightLevel );
-                break;
-                case EAS_extrusion_first_light_direction :
-                    GetB3DVector( maExtrusion, rValue, EAS_FirstLightDirection );
-                break;
-                case EAS_extrusion_second_light_direction :
-                    GetB3DVector( maExtrusion, rValue, EAS_SecondLightDirection );
-                break;
-                case EAS_extrusion_metal :
-                    GetBool( maExtrusion, rValue, EAS_Metal );
-                break;
-                case EAS_shade_mode :
-                {
-                    drawing::ShadeMode eShadeMode( drawing::ShadeMode_FLAT );
-                    if( IsXMLToken( rValue, XML_PHONG ) )
-                        eShadeMode = drawing::ShadeMode_PHONG;
-                    else if ( IsXMLToken( rValue, XML_GOURAUD ) )
-                        eShadeMode = drawing::ShadeMode_SMOOTH;
-                    else if ( IsXMLToken( rValue, XML_DRAFT ) )
-                        eShadeMode = drawing::ShadeMode_DRAFT;
-
-                    beans::PropertyValue aProp;
-                    aProp.Name = EASGet( EAS_ShadeMode );
-                    aProp.Value <<= eShadeMode;
-                    maExtrusion.push_back( aProp );
-                }
-                break;
-                case EAS_extrusion_rotation_angle :
-                    GetEnhancedParameterPair( maExtrusion, rValue, EAS_RotateAngle );
-                break;
-                case EAS_extrusion_rotation_center :
-                    GetB3DVector( maExtrusion, rValue, EAS_RotationCenter );
-                break;
-                case EAS_extrusion_shininess :
-                    GetDoublePercentage( maExtrusion, rValue, EAS_Shininess );
-                break;
-                case EAS_extrusion_skew :
-                    GetEnhancedParameterPair( maExtrusion, rValue, EAS_Skew );
-                break;
-                case EAS_extrusion_specularity :
-                    GetDoublePercentage( maExtrusion, rValue, EAS_Specularity );
-                break;
-                case EAS_projection :
-                {
-                    drawing::ProjectionMode eProjectionMode( drawing::ProjectionMode_PERSPECTIVE );
-                    if( IsXMLToken( rValue, XML_PARALLEL ) )
-                        eProjectionMode = drawing::ProjectionMode_PARALLEL;
-
-                    beans::PropertyValue aProp;
-                    aProp.Name = EASGet( EAS_ProjectionMode );
-                    aProp.Value <<= eProjectionMode;
-                    maExtrusion.push_back( aProp );
-                }
-                break;
-                case EAS_extrusion_viewpoint :
-                    GetPosition3D( maExtrusion, rValue, EAS_ViewPoint, mrUnitConverter );
-                break;
-                case EAS_extrusion_origin :
-                    GetEnhancedParameterPair( maExtrusion, rValue, EAS_Origin );
-                break;
-                case EAS_extrusion_color :
-                    GetBool( maExtrusion, rValue, EAS_Color );
-                break;
-                case EAS_enhanced_path :
-                    GetEnhancedPath( maPath, rValue );
-                break;
-                case EAS_path_stretchpoint_x :
-                {
-                    if (::sax::Converter::convertNumber(nAttrNumber, rValue))
-                    {
-                        beans::PropertyValue aProp;
-                        aProp.Name = EASGet( EAS_StretchX );
-                        aProp.Value <<= nAttrNumber;
-                        maPath.push_back( aProp );
-                    }
-                }
-                break;
-                case EAS_path_stretchpoint_y :
-                {
-                    if (::sax::Converter::convertNumber(nAttrNumber, rValue))
-                    {
-                        beans::PropertyValue aProp;
-                        aProp.Name = EASGet( EAS_StretchY );
-                        aProp.Value <<= nAttrNumber;
-                        maPath.push_back( aProp );
-                    }
-                }
-                break;
-                case EAS_text_areas :
-                    GetEnhancedRectangleSequence( maPath, rValue, EAS_TextFrames );
-                break;
-                case EAS_glue_points :
-                {
-                    sal_Int32 i, nPairs = GetEnhancedParameterPairSequence( maPath, rValue, EAS_GluePoints );
-                    GetImport().GetShapeImport()->moveGluePointMapping( mrxShape, nPairs );
-                    for ( i = 0; i < nPairs; i++ )
-                        GetImport().GetShapeImport()->addGluePointMapping( mrxShape, i + 4, i + 4 );
-                }
-                break;
-                case EAS_glue_point_type :
-                    GetEnum( maPath, rValue, EAS_GluePointType, *aXML_GluePointEnumMap );
-                break;
-                case EAS_glue_point_leaving_directions :
-                    GetDoubleSequence( maPath, rValue, EAS_GluePointLeavingDirections );
-                break;
-                case EAS_text_path :
-                    GetBool( maTextPath, rValue, EAS_TextPath );
-                break;
-                case EAS_text_path_mode :
-                {
-                    css::drawing::EnhancedCustomShapeTextPathMode eTextPathMode( css::drawing::EnhancedCustomShapeTextPathMode_NORMAL );
-                    if( IsXMLToken( rValue, XML_PATH ) )
-                        eTextPathMode = css::drawing::EnhancedCustomShapeTextPathMode_PATH;
-                    else if ( IsXMLToken( rValue, XML_SHAPE ) )
-                        eTextPathMode = css::drawing::EnhancedCustomShapeTextPathMode_SHAPE;
-
-                    beans::PropertyValue aProp;
-                    aProp.Name = EASGet( EAS_TextPathMode );
-                    aProp.Value <<= eTextPathMode;
-                    maTextPath.push_back( aProp );
-                }
-                break;
-                case EAS_text_path_scale :
-                {
-                    bool bScaleX = IsXMLToken( rValue, XML_SHAPE );
-                    beans::PropertyValue aProp;
-                    aProp.Name = EASGet( EAS_ScaleX );
-                    aProp.Value <<= bScaleX;
-                    maTextPath.push_back( aProp );
-                }
-                break;
-                case EAS_text_path_same_letter_heights :
-                    GetBool( maTextPath, rValue, EAS_SameLetterHeights );
-                break;
-                case EAS_modifiers :
-                    GetAdjustmentValues( mrCustomShapeGeometry, rValue );
-                break;
-                default:
-                    break;
+                SdXMLImExViewBox aViewBox( rValue, GetImport().GetMM100UnitConverter() );
+                awt::Rectangle aRect( aViewBox.GetX(), aViewBox.GetY(), aViewBox.GetWidth(), aViewBox.GetHeight() );
+                beans::PropertyValue aProp;
+                aProp.Name = EASGet( EAS_ViewBox );
+                aProp.Value <<= aRect;
+                mrCustomShapeGeometry.push_back( aProp );
             }
+            break;
+            case EAS_sub_view_size:
+                GetSizeSequence( maPath, rValue, EAS_SubViewSize );
+            break;
+            case EAS_text_rotate_angle :
+                GetDouble( mrCustomShapeGeometry, rValue, EAS_TextRotateAngle );
+            break;
+            case EAS_extrusion_allowed :
+                GetBool( maPath, rValue, EAS_ExtrusionAllowed );
+            break;
+            case EAS_text_path_allowed :
+                GetBool( maPath, rValue, EAS_TextPathAllowed );
+            break;
+            case EAS_concentric_gradient_fill_allowed :
+                GetBool( maPath, rValue, EAS_ConcentricGradientFillAllowed );
+            break;
+            case EAS_extrusion :
+                GetBool( maExtrusion, rValue, EAS_Extrusion );
+            break;
+            case EAS_extrusion_brightness :
+                GetDoublePercentage( maExtrusion, rValue, EAS_Brightness );
+            break;
+            case EAS_extrusion_depth :
+            {
+                sal_Int32 nIndex = 0;
+                css::drawing::EnhancedCustomShapeParameterPair aParameterPair;
+                css::drawing::EnhancedCustomShapeParameter& rDepth = aParameterPair.First;
+                if ( GetNextParameter( rDepth, nIndex, rValue ) )
+                {
+                    css::drawing::EnhancedCustomShapeParameter& rFraction = aParameterPair.Second;
+                    // try to catch the unit for the depth
+                    sal_Int16 const eSrcUnit(
+                        ::sax::Converter::GetUnitFromString(
+                            rValue, util::MeasureUnit::MM_100TH));
+
+                    OUStringBuffer aUnitStr;
+                    double fFactor = ::sax::Converter::GetConversionFactor(
+                        aUnitStr, util::MeasureUnit::MM_100TH, eSrcUnit);
+                    if ( ( fFactor != 1.0 ) && ( fFactor != 0.0 ) )
+                    {
+                        double fDepth(0.0);
+                        if ( rDepth.Value >>= fDepth )
+                        {
+                            fDepth /= fFactor;
+                            rDepth.Value <<= fDepth;
+                        }
+                    }
+                    if ( rValue.matchIgnoreAsciiCase( aUnitStr.toString(), nIndex ) )
+                        nIndex += aUnitStr.getLength();
+
+                    // skipping white spaces
+                    while( ( nIndex < rValue.getLength() ) && rValue[ nIndex ] == ' ' )
+                        nIndex++;
+
+                    if ( GetNextParameter( rFraction, nIndex, rValue ) )
+                    {
+                        beans::PropertyValue aProp;
+                        aProp.Name = EASGet( EAS_Depth );
+                        aProp.Value <<= aParameterPair;
+                        maExtrusion.push_back( aProp );
+                    }
+                }
+            }
+            break;
+            case EAS_extrusion_diffusion :
+                GetDoublePercentage( maExtrusion, rValue, EAS_Diffusion );
+            break;
+            case EAS_extrusion_number_of_line_segments :
+                GetInt32( maExtrusion, rValue, EAS_NumberOfLineSegments );
+            break;
+            case EAS_extrusion_light_face :
+                GetBool( maExtrusion, rValue, EAS_LightFace );
+            break;
+            case EAS_extrusion_first_light_harsh :
+                GetBool( maExtrusion, rValue, EAS_FirstLightHarsh );
+            break;
+            case EAS_extrusion_second_light_harsh :
+                GetBool( maExtrusion, rValue, EAS_SecondLightHarsh );
+            break;
+            case EAS_extrusion_first_light_level :
+                GetDoublePercentage( maExtrusion, rValue, EAS_FirstLightLevel );
+            break;
+            case EAS_extrusion_second_light_level :
+                GetDoublePercentage( maExtrusion, rValue, EAS_SecondLightLevel );
+            break;
+            case EAS_extrusion_first_light_direction :
+                GetB3DVector( maExtrusion, rValue, EAS_FirstLightDirection );
+            break;
+            case EAS_extrusion_second_light_direction :
+                GetB3DVector( maExtrusion, rValue, EAS_SecondLightDirection );
+            break;
+            case EAS_extrusion_metal :
+                GetBool( maExtrusion, rValue, EAS_Metal );
+            break;
+            case EAS_shade_mode :
+            {
+                drawing::ShadeMode eShadeMode( drawing::ShadeMode_FLAT );
+                if( IsXMLToken( rValue, XML_PHONG ) )
+                    eShadeMode = drawing::ShadeMode_PHONG;
+                else if ( IsXMLToken( rValue, XML_GOURAUD ) )
+                    eShadeMode = drawing::ShadeMode_SMOOTH;
+                else if ( IsXMLToken( rValue, XML_DRAFT ) )
+                    eShadeMode = drawing::ShadeMode_DRAFT;
+
+                beans::PropertyValue aProp;
+                aProp.Name = EASGet( EAS_ShadeMode );
+                aProp.Value <<= eShadeMode;
+                maExtrusion.push_back( aProp );
+            }
+            break;
+            case EAS_extrusion_rotation_angle :
+                GetEnhancedParameterPair( maExtrusion, rValue, EAS_RotateAngle );
+            break;
+            case EAS_extrusion_rotation_center :
+                GetB3DVector( maExtrusion, rValue, EAS_RotationCenter );
+            break;
+            case EAS_extrusion_shininess :
+                GetDoublePercentage( maExtrusion, rValue, EAS_Shininess );
+            break;
+            case EAS_extrusion_skew :
+                GetEnhancedParameterPair( maExtrusion, rValue, EAS_Skew );
+            break;
+            case EAS_extrusion_specularity :
+                GetDoublePercentage( maExtrusion, rValue, EAS_Specularity );
+            break;
+            case EAS_projection :
+            {
+                drawing::ProjectionMode eProjectionMode( drawing::ProjectionMode_PERSPECTIVE );
+                if( IsXMLToken( rValue, XML_PARALLEL ) )
+                    eProjectionMode = drawing::ProjectionMode_PARALLEL;
+
+                beans::PropertyValue aProp;
+                aProp.Name = EASGet( EAS_ProjectionMode );
+                aProp.Value <<= eProjectionMode;
+                maExtrusion.push_back( aProp );
+            }
+            break;
+            case EAS_extrusion_viewpoint :
+                GetPosition3D( maExtrusion, rValue, EAS_ViewPoint, mrUnitConverter );
+            break;
+            case EAS_extrusion_origin :
+                GetEnhancedParameterPair( maExtrusion, rValue, EAS_Origin );
+            break;
+            case EAS_extrusion_color :
+                GetBool( maExtrusion, rValue, EAS_Color );
+            break;
+            case EAS_enhanced_path :
+                GetEnhancedPath( maPath, rValue );
+            break;
+            case EAS_path_stretchpoint_x :
+            {
+                if (::sax::Converter::convertNumber(nAttrNumber, rValue))
+                {
+                    beans::PropertyValue aProp;
+                    aProp.Name = EASGet( EAS_StretchX );
+                    aProp.Value <<= nAttrNumber;
+                    maPath.push_back( aProp );
+                }
+            }
+            break;
+            case EAS_path_stretchpoint_y :
+            {
+                if (::sax::Converter::convertNumber(nAttrNumber, rValue))
+                {
+                    beans::PropertyValue aProp;
+                    aProp.Name = EASGet( EAS_StretchY );
+                    aProp.Value <<= nAttrNumber;
+                    maPath.push_back( aProp );
+                }
+            }
+            break;
+            case EAS_text_areas :
+                GetEnhancedRectangleSequence( maPath, rValue, EAS_TextFrames );
+            break;
+            case EAS_glue_points :
+            {
+                sal_Int32 i, nPairs = GetEnhancedParameterPairSequence( maPath, rValue, EAS_GluePoints );
+                GetImport().GetShapeImport()->moveGluePointMapping( mrxShape, nPairs );
+                for ( i = 0; i < nPairs; i++ )
+                    GetImport().GetShapeImport()->addGluePointMapping( mrxShape, i + 4, i + 4 );
+            }
+            break;
+            case EAS_glue_point_type :
+                GetEnum( maPath, rValue, EAS_GluePointType, *aXML_GluePointEnumMap );
+            break;
+            case EAS_glue_point_leaving_directions :
+                GetDoubleSequence( maPath, rValue, EAS_GluePointLeavingDirections );
+            break;
+            case EAS_text_path :
+                GetBool( maTextPath, rValue, EAS_TextPath );
+            break;
+            case EAS_text_path_mode :
+            {
+                css::drawing::EnhancedCustomShapeTextPathMode eTextPathMode( css::drawing::EnhancedCustomShapeTextPathMode_NORMAL );
+                if( IsXMLToken( rValue, XML_PATH ) )
+                    eTextPathMode = css::drawing::EnhancedCustomShapeTextPathMode_PATH;
+                else if ( IsXMLToken( rValue, XML_SHAPE ) )
+                    eTextPathMode = css::drawing::EnhancedCustomShapeTextPathMode_SHAPE;
+
+                beans::PropertyValue aProp;
+                aProp.Name = EASGet( EAS_TextPathMode );
+                aProp.Value <<= eTextPathMode;
+                maTextPath.push_back( aProp );
+            }
+            break;
+            case EAS_text_path_scale :
+            {
+                bool bScaleX = IsXMLToken( rValue, XML_SHAPE );
+                beans::PropertyValue aProp;
+                aProp.Name = EASGet( EAS_ScaleX );
+                aProp.Value <<= bScaleX;
+                maTextPath.push_back( aProp );
+            }
+            break;
+            case EAS_text_path_same_letter_heights :
+                GetBool( maTextPath, rValue, EAS_SameLetterHeights );
+            break;
+            case EAS_modifiers :
+                GetAdjustmentValues( mrCustomShapeGeometry, rValue );
+            break;
+            default:
+                break;
         }
     }
 }

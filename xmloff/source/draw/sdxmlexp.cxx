@@ -613,32 +613,32 @@ SdXMLExport::~SdXMLExport()
 
 void SdXMLExport::ImpPrepAutoLayoutInfos()
 {
-    if(IsImpress())
+    if(!IsImpress())
+        return;
+
+    OUString aStr;
+
+    Reference< presentation::XHandoutMasterSupplier > xHandoutSupp( GetModel(), UNO_QUERY );
+    if( xHandoutSupp.is() )
     {
-        OUString aStr;
-
-        Reference< presentation::XHandoutMasterSupplier > xHandoutSupp( GetModel(), UNO_QUERY );
-        if( xHandoutSupp.is() )
+        Reference< XDrawPage > xHandoutPage( xHandoutSupp->getHandoutMasterPage() );
+        if( xHandoutPage.is() )
         {
-            Reference< XDrawPage > xHandoutPage( xHandoutSupp->getHandoutMasterPage() );
-            if( xHandoutPage.is() )
-            {
-                if(ImpPrepAutoLayoutInfo(xHandoutPage, aStr))
-                    maDrawPagesAutoLayoutNames[0] = aStr;
-            }
+            if(ImpPrepAutoLayoutInfo(xHandoutPage, aStr))
+                maDrawPagesAutoLayoutNames[0] = aStr;
         }
+    }
 
-        // prepare name creation
-        for (sal_Int32 nCnt = 0; nCnt < mnDocDrawPageCount; nCnt++)
+    // prepare name creation
+    for (sal_Int32 nCnt = 0; nCnt < mnDocDrawPageCount; nCnt++)
+    {
+        Any aAny(mxDocDrawPages->getByIndex(nCnt));
+        Reference<XDrawPage> xDrawPage;
+
+        if((aAny >>= xDrawPage) && xDrawPage.is())
         {
-            Any aAny(mxDocDrawPages->getByIndex(nCnt));
-            Reference<XDrawPage> xDrawPage;
-
-            if((aAny >>= xDrawPage) && xDrawPage.is())
-            {
-                if(ImpPrepAutoLayoutInfo(xDrawPage, aStr))
-                    maDrawPagesAutoLayoutNames[nCnt+1] = aStr;
-            }
+            if(ImpPrepAutoLayoutInfo(xDrawPage, aStr))
+                maDrawPagesAutoLayoutNames[nCnt+1] = aStr;
         }
     }
 }
@@ -1175,34 +1175,34 @@ void SdXMLExport::ImpPrepPageMasterInfos()
     }
 
     // create page master infos for master pages
-    if(mnDocMasterPageCount)
+    if(!mnDocMasterPageCount)
+        return;
+
+    // look for needed page-masters, create these
+    for (sal_Int32 nMPageId = 0; nMPageId < mnDocMasterPageCount; nMPageId++)
     {
-        // look for needed page-masters, create these
-        for (sal_Int32 nMPageId = 0; nMPageId < mnDocMasterPageCount; nMPageId++)
+        Reference< XDrawPage > xMasterPage( mxDocMasterPages->getByIndex(nMPageId), UNO_QUERY );
+        ImpXMLEXPPageMasterInfo* pNewInfo = nullptr;
+
+        if(xMasterPage.is())
+            pNewInfo = ImpGetOrCreatePageMasterInfo(xMasterPage);
+
+        mvPageMasterUsageList.push_back( pNewInfo );
+
+        // look for page master of handout page
+        if(IsImpress())
         {
-            Reference< XDrawPage > xMasterPage( mxDocMasterPages->getByIndex(nMPageId), UNO_QUERY );
-            ImpXMLEXPPageMasterInfo* pNewInfo = nullptr;
-
-            if(xMasterPage.is())
-                pNewInfo = ImpGetOrCreatePageMasterInfo(xMasterPage);
-
-            mvPageMasterUsageList.push_back( pNewInfo );
-
-            // look for page master of handout page
-            if(IsImpress())
+            pNewInfo = nullptr;
+            Reference< presentation::XPresentationPage > xPresPage(xMasterPage, UNO_QUERY);
+            if(xPresPage.is())
             {
-                pNewInfo = nullptr;
-                Reference< presentation::XPresentationPage > xPresPage(xMasterPage, UNO_QUERY);
-                if(xPresPage.is())
+                Reference< XDrawPage > xNotesPage(xPresPage->getNotesPage());
+                if(xNotesPage.is())
                 {
-                    Reference< XDrawPage > xNotesPage(xPresPage->getNotesPage());
-                    if(xNotesPage.is())
-                    {
-                        pNewInfo = ImpGetOrCreatePageMasterInfo(xNotesPage);
-                    }
+                    pNewInfo = ImpGetOrCreatePageMasterInfo(xNotesPage);
                 }
-                mvNotesPageMasterUsageList.push_back( pNewInfo );
             }
+            mvNotesPageMasterUsageList.push_back( pNewInfo );
         }
     }
 }
@@ -1448,28 +1448,28 @@ void SdXMLExport::ImpWriteHeaderFooterDecls()
         }
     }
 
-    if( !maDateTimeDeclsVector.empty() )
+    if( maDateTimeDeclsVector.empty() )
+        return;
+
+    // export footer decls
+    const OUString aPrefix( gpStrDateTimeTextPrefix );
+    sal_Int32 nIndex = 1;
+    for( const auto& rDecl : maDateTimeDeclsVector )
     {
-        // export footer decls
-        const OUString aPrefix( gpStrDateTimeTextPrefix );
-        sal_Int32 nIndex = 1;
-        for( const auto& rDecl : maDateTimeDeclsVector )
-        {
-            sBuffer.append( aPrefix );
-            sBuffer.append( nIndex );
-            AddAttribute( XML_NAMESPACE_PRESENTATION, XML_NAME, sBuffer.makeStringAndClear());
+        sBuffer.append( aPrefix );
+        sBuffer.append( nIndex );
+        AddAttribute( XML_NAMESPACE_PRESENTATION, XML_NAME, sBuffer.makeStringAndClear());
 
-            AddAttribute( XML_NAMESPACE_PRESENTATION, XML_SOURCE, rDecl.mbFixed ? XML_FIXED : XML_CURRENT_DATE );
+        AddAttribute( XML_NAMESPACE_PRESENTATION, XML_SOURCE, rDecl.mbFixed ? XML_FIXED : XML_CURRENT_DATE );
 
-            if( !rDecl.mbFixed )
-                AddAttribute( XML_NAMESPACE_STYLE, XML_DATA_STYLE_NAME, getDataStyleName( rDecl.mnFormat ) );
+        if( !rDecl.mbFixed )
+            AddAttribute( XML_NAMESPACE_STYLE, XML_DATA_STYLE_NAME, getDataStyleName( rDecl.mnFormat ) );
 
-            SvXMLElementExport aElem(*this, XML_NAMESPACE_PRESENTATION, XML_DATE_TIME_DECL, false, false);
-            if( rDecl.mbFixed )
-                Characters(rDecl.maStrText);
+        SvXMLElementExport aElem(*this, XML_NAMESPACE_PRESENTATION, XML_DATE_TIME_DECL, false, false);
+        if( rDecl.mbFixed )
+            Characters(rDecl.maStrText);
 
-            ++nIndex;
-        }
+        ++nIndex;
     }
 }
 
@@ -1557,45 +1557,45 @@ void SdXMLExport::ImpPrepMasterPageInfos()
         maMasterPagesStyleNames[nCnt] = ImpCreatePresPageStyleName( xDrawPage );
     }
 
-    if( IsImpress() )
+    if( !IsImpress() )
+        return;
+
+    Reference< presentation::XHandoutMasterSupplier > xHandoutSupp( GetModel(), UNO_QUERY );
+    if( xHandoutSupp.is() )
     {
-        Reference< presentation::XHandoutMasterSupplier > xHandoutSupp( GetModel(), UNO_QUERY );
-        if( xHandoutSupp.is() )
+        Reference< XDrawPage > xHandoutPage( xHandoutSupp->getHandoutMasterPage() );
+        if( xHandoutPage.is() )
         {
-            Reference< XDrawPage > xHandoutPage( xHandoutSupp->getHandoutMasterPage() );
-            if( xHandoutPage.is() )
-            {
-                maHandoutPageHeaderFooterSettings = ImpPrepDrawPageHeaderFooterDecls( xHandoutPage );
-                maHandoutMasterStyleName = ImpCreatePresPageStyleName( xHandoutPage, false );
-            }
+            maHandoutPageHeaderFooterSettings = ImpPrepDrawPageHeaderFooterDecls( xHandoutPage );
+            maHandoutMasterStyleName = ImpCreatePresPageStyleName( xHandoutPage, false );
         }
     }
 }
 
 void SdXMLExport::ImpWritePresentationStyles()
 {
-    if(IsImpress())
+    if(!IsImpress())
+        return;
+
+    for (sal_Int32 nCnt = 0; nCnt < mnDocMasterPageCount; nCnt++)
     {
-        for (sal_Int32 nCnt = 0; nCnt < mnDocMasterPageCount; nCnt++)
+        Any aAny(mxDocMasterPages->getByIndex(nCnt));
+        Reference<container::XNamed> xNamed;
+
+        if(aAny >>= xNamed)
         {
-            Any aAny(mxDocMasterPages->getByIndex(nCnt));
-            Reference<container::XNamed> xNamed;
-
-            if(aAny >>= xNamed)
+            // write presentation styles (ONLY if presentation)
+            if(IsImpress() && mxDocStyleFamilies.is() && xNamed.is())
             {
-                // write presentation styles (ONLY if presentation)
-                if(IsImpress() && mxDocStyleFamilies.is() && xNamed.is())
-                {
-                    rtl::Reference<XMLStyleExport> aStEx(new XMLStyleExport(*this, GetAutoStylePool().get()));
-                    const rtl::Reference< SvXMLExportPropertyMapper > aMapperRef( GetPropertySetMapper() );
+                rtl::Reference<XMLStyleExport> aStEx(new XMLStyleExport(*this, GetAutoStylePool().get()));
+                const rtl::Reference< SvXMLExportPropertyMapper > aMapperRef( GetPropertySetMapper() );
 
-                    OUString aPrefix( xNamed->getName() + "-" );
+                OUString aPrefix( xNamed->getName() + "-" );
 
-                    aStEx->exportStyleFamily(xNamed->getName(),
-                        OUString(XML_STYLE_FAMILY_SD_PRESENTATION_NAME),
-                        aMapperRef, false,
-                        XmlStyleFamily::SD_PRESENTATION_ID, &aPrefix);
-                }
+                aStEx->exportStyleFamily(xNamed->getName(),
+                    OUString(XML_STYLE_FAMILY_SD_PRESENTATION_NAME),
+                    aMapperRef, false,
+                    XmlStyleFamily::SD_PRESENTATION_ID, &aPrefix);
             }
         }
     }
@@ -2334,20 +2334,20 @@ void SdXMLExport::ExportMasterStyles_()
 
 void SdXMLExport::exportFormsElement( const Reference< XDrawPage >& xDrawPage )
 {
-    if( xDrawPage.is() )
-    {
-        Reference< form::XFormsSupplier2 > xFormsSupplier( xDrawPage, UNO_QUERY );
-        if ( xFormsSupplier.is() && xFormsSupplier->hasForms() )
-        {
-            // write masterpage
-            ::xmloff::OOfficeFormsExport aForms(*this);
-            GetFormExport()->exportForms( xDrawPage );
-        }
+    if( !xDrawPage.is() )
+        return;
 
-        if(! GetFormExport()->seekPage( xDrawPage ) )
-        {
-            OSL_FAIL( "OFormLayerXMLExport::seekPage failed!" );
-        }
+    Reference< form::XFormsSupplier2 > xFormsSupplier( xDrawPage, UNO_QUERY );
+    if ( xFormsSupplier.is() && xFormsSupplier->hasForms() )
+    {
+        // write masterpage
+        ::xmloff::OOfficeFormsExport aForms(*this);
+        GetFormExport()->exportForms( xDrawPage );
+    }
+
+    if(! GetFormExport()->seekPage( xDrawPage ) )
+    {
+        OSL_FAIL( "OFormLayerXMLExport::seekPage failed!" );
     }
 }
 
@@ -2377,19 +2377,19 @@ void SdXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
 void SdXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& rProps)
 {
     Reference< lang::XMultiServiceFactory > xFac( GetModel(), UNO_QUERY );
-    if( xFac.is() )
-    {
-        Reference< beans::XPropertySet > xProps( xFac->createInstance("com.sun.star.document.Settings"), UNO_QUERY );
-        if( xProps.is() )
-            SvXMLUnitConverter::convertPropertySet( rProps, xProps );
-        DocumentSettingsSerializer *pFilter(dynamic_cast<DocumentSettingsSerializer *>(xProps.get()));
-        if (!pFilter)
-            return;
-        const uno::Reference< embed::XStorage > xStorage(GetTargetStorage());
-        if (!xStorage.is())
-            return;
-        rProps = pFilter->filterStreamsToStorage(xStorage, rProps);
-    }
+    if( !xFac.is() )
+        return;
+
+    Reference< beans::XPropertySet > xProps( xFac->createInstance("com.sun.star.document.Settings"), UNO_QUERY );
+    if( xProps.is() )
+        SvXMLUnitConverter::convertPropertySet( rProps, xProps );
+    DocumentSettingsSerializer *pFilter(dynamic_cast<DocumentSettingsSerializer *>(xProps.get()));
+    if (!pFilter)
+        return;
+    const uno::Reference< embed::XStorage > xStorage(GetTargetStorage());
+    if (!xStorage.is())
+        return;
+    rProps = pFilter->filterStreamsToStorage(xStorage, rProps);
 }
 
 void SdXMLExport::addDataStyle(const sal_Int32 nNumberFormat, bool bTimeFormat )
@@ -2475,7 +2475,9 @@ OUString SdXMLExport::getNavigationOrder( const Reference< XDrawPage >& xDrawPag
 void SdXMLExport::collectAnnotationAutoStyles( const Reference<XDrawPage>& xDrawPage )
 {
     Reference< XAnnotationAccess > xAnnotationAccess( xDrawPage, UNO_QUERY );
-    if( xAnnotationAccess.is() ) try
+    if( !xAnnotationAccess.is() ) return;
+
+    try
     {
         Reference< XAnnotationEnumeration > xAnnotationEnumeration( xAnnotationAccess->createAnnotationEnumeration() );
         if( xAnnotationEnumeration.is() )
@@ -2504,7 +2506,10 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
     }
 
     Reference< XAnnotationAccess > xAnnotationAccess( xDrawPage, UNO_QUERY );
-    if( xAnnotationAccess.is() ) try
+    if( !xAnnotationAccess.is() )
+        return;
+
+    try
     {
         Reference< XAnnotationEnumeration > xAnnotationEnumeration( xAnnotationAccess->createAnnotationEnumeration() );
         if( xAnnotationEnumeration.is() && xAnnotationEnumeration->hasMoreElements() )
