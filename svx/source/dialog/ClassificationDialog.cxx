@@ -311,62 +311,62 @@ void ClassificationDialog::readRecentlyUsed()
     if (!aWalker.open(&aFileStream))
         return;
 
-    if (aWalker.name() == "recentlyUsedClassifications")
+    if (aWalker.name() != "recentlyUsedClassifications")
+        return;
+
+    aWalker.children();
+    while (aWalker.isValid())
     {
-        aWalker.children();
-        while (aWalker.isValid())
+        if (aWalker.name() == "elementGroup")
         {
-            if (aWalker.name() == "elementGroup")
+            std::vector<ClassificationResult> aResults;
+
+            aWalker.children();
+
+            while (aWalker.isValid())
             {
-                std::vector<ClassificationResult> aResults;
-
-                aWalker.children();
-
-                while (aWalker.isValid())
+                if (aWalker.name() == "element")
                 {
-                    if (aWalker.name() == "element")
+                    svx::ClassificationType eType = svx::ClassificationType::TEXT;
+                    OUString sString;
+                    OUString sAbbreviatedString;
+                    OUString sIdentifier;
+
+                    // Convert string to classification type, but continue only if
+                    // conversion was successful.
+                    if (stringToClassificationType(aWalker.attribute("type"), eType))
                     {
-                        svx::ClassificationType eType = svx::ClassificationType::TEXT;
-                        OUString sString;
-                        OUString sAbbreviatedString;
-                        OUString sIdentifier;
+                        aWalker.children();
 
-                        // Convert string to classification type, but continue only if
-                        // conversion was successful.
-                        if (stringToClassificationType(aWalker.attribute("type"), eType))
+                        while (aWalker.isValid())
                         {
-                            aWalker.children();
-
-                            while (aWalker.isValid())
+                            if (aWalker.name() == "string")
                             {
-                                if (aWalker.name() == "string")
-                                {
-                                    sString = OStringToOUString(aWalker.content(), RTL_TEXTENCODING_UTF8);
-                                }
-                                else if (aWalker.name() == "abbreviatedString")
-                                {
-                                    sAbbreviatedString = OStringToOUString(aWalker.content(), RTL_TEXTENCODING_UTF8);
-                                }
-                                else if (aWalker.name() == "identifier")
-                                {
-                                    sIdentifier = OStringToOUString(aWalker.content(), RTL_TEXTENCODING_UTF8);
-                                }
-                                aWalker.next();
+                                sString = OStringToOUString(aWalker.content(), RTL_TEXTENCODING_UTF8);
                             }
-                            aWalker.parent();
-
-                            aResults.push_back({ eType, sString, sAbbreviatedString, sIdentifier });
+                            else if (aWalker.name() == "abbreviatedString")
+                            {
+                                sAbbreviatedString = OStringToOUString(aWalker.content(), RTL_TEXTENCODING_UTF8);
+                            }
+                            else if (aWalker.name() == "identifier")
+                            {
+                                sIdentifier = OStringToOUString(aWalker.content(), RTL_TEXTENCODING_UTF8);
+                            }
+                            aWalker.next();
                         }
+                        aWalker.parent();
+
+                        aResults.push_back({ eType, sString, sAbbreviatedString, sIdentifier });
                     }
-                    aWalker.next();
                 }
-                aWalker.parent();
-                m_aRecentlyUsedValuesCollection.push_back(aResults);
+                aWalker.next();
             }
-            aWalker.next();
+            aWalker.parent();
+            m_aRecentlyUsedValuesCollection.push_back(aResults);
         }
-        aWalker.parent();
+        aWalker.next();
     }
+    aWalker.parent();
 }
 
 void ClassificationDialog::writeRecentlyUsed()

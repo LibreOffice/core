@@ -209,25 +209,25 @@ IMPL_LINK( MaskData, CbxHdl, weld::ToggleButton&, rCbx, void )
         pMask->m_xBtnExec->set_sensitive(false);
 
     // When a checkbox is checked, the pipette is enabled
-    if ( rCbx.get_active() )
-    {
-        MaskSet* pSet = nullptr;
+    if ( !rCbx.get_active() )
+        return;
 
-        if (&rCbx == pMask->m_xCbx1.get())
-            pSet = pMask->m_xQSet1.get();
-        else if (&rCbx == pMask->m_xCbx2.get())
-            pSet = pMask->m_xQSet2.get();
-        else if (&rCbx == pMask->m_xCbx3.get())
-            pSet = pMask->m_xQSet3.get();
-        else // if ( &rCbx == pMask->m_xCbx4 )
-            pSet = pMask->m_xQSet4.get();
+    MaskSet* pSet = nullptr;
 
-        pSet->SelectItem( 1 );
-        pSet->Select();
+    if (&rCbx == pMask->m_xCbx1.get())
+        pSet = pMask->m_xQSet1.get();
+    else if (&rCbx == pMask->m_xCbx2.get())
+        pSet = pMask->m_xQSet2.get();
+    else if (&rCbx == pMask->m_xCbx3.get())
+        pSet = pMask->m_xQSet3.get();
+    else // if ( &rCbx == pMask->m_xCbx4 )
+        pSet = pMask->m_xQSet4.get();
 
-        pMask->m_xTbxPipette->set_item_active("pipette", true);
-        PipetteHdl("pipette");
-    }
+    pSet->SelectItem( 1 );
+    pSet->Select();
+
+    pMask->m_xTbxPipette->set_item_active("pipette", true);
+    PipetteHdl("pipette");
 }
 
 IMPL_LINK( MaskData, CbxTransHdl, weld::ToggleButton&, rCbx, void )

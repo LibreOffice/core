@@ -290,32 +290,32 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
         rRenderContext.SetFont(aFont);
 
     }
-    if (bTable)
+    if (!bTable)
+        return;
+
+    // Paint Table, if necessary center it
+    rRenderContext.SetLineColor(COL_LIGHTGRAY);
+
+    long nW = aRect.GetWidth();
+    long nH = aRect.GetHeight();
+    long const nTW = CELL_WIDTH * 3;
+    long const nTH = CELL_HEIGHT * 3;
+    long _nLeft = bHorz ? aRect.Left() + ((nW - nTW) / 2) : aRect.Left();
+    long _nTop = bVert ? aRect.Top() + ((nH - nTH) / 2) : aRect.Top();
+    tools::Rectangle aCellRect(Point(_nLeft, _nTop),Size(CELL_WIDTH, CELL_HEIGHT));
+
+    for (sal_uInt16 i = 0; i < 3; ++i)
     {
-        // Paint Table, if necessary center it
-        rRenderContext.SetLineColor(COL_LIGHTGRAY);
+        aCellRect.SetLeft( _nLeft );
+        aCellRect.SetRight( _nLeft + CELL_WIDTH );
+        if(i > 0)
+            aCellRect.Move(0,CELL_HEIGHT);
 
-        long nW = aRect.GetWidth();
-        long nH = aRect.GetHeight();
-        long const nTW = CELL_WIDTH * 3;
-        long const nTH = CELL_HEIGHT * 3;
-        long _nLeft = bHorz ? aRect.Left() + ((nW - nTW) / 2) : aRect.Left();
-        long _nTop = bVert ? aRect.Top() + ((nH - nTH) / 2) : aRect.Top();
-        tools::Rectangle aCellRect(Point(_nLeft, _nTop),Size(CELL_WIDTH, CELL_HEIGHT));
-
-        for (sal_uInt16 i = 0; i < 3; ++i)
+        for (sal_uInt16 j = 0; j < 3; ++j)
         {
-            aCellRect.SetLeft( _nLeft );
-            aCellRect.SetRight( _nLeft + CELL_WIDTH );
-            if(i > 0)
-                aCellRect.Move(0,CELL_HEIGHT);
-
-            for (sal_uInt16 j = 0; j < 3; ++j)
-            {
-                if (j > 0)
-                    aCellRect.Move(CELL_WIDTH,0);
-                rRenderContext.DrawRect(aCellRect);
-            }
+            if (j > 0)
+                aCellRect.Move(CELL_WIDTH,0);
+            rRenderContext.DrawRect(aCellRect);
         }
     }
 }
@@ -327,45 +327,45 @@ void SvxPageWindow::drawFillAttributes(vcl::RenderContext& rRenderContext,
 {
     const basegfx::B2DRange aPaintRange = vcl::unotools::b2DRectangleFromRectangle(rPaintRange);
 
-    if(!aPaintRange.isEmpty() &&
+    if(!(!aPaintRange.isEmpty() &&
        !basegfx::fTools::equalZero(aPaintRange.getWidth()) &&
-       !basegfx::fTools::equalZero(aPaintRange.getHeight()))
+       !basegfx::fTools::equalZero(aPaintRange.getHeight())))
+        return;
+
+    const basegfx::B2DRange aDefineRange = vcl::unotools::b2DRectangleFromRectangle(rDefineRange);
+
+    // prepare primitive sequence
+    drawinglayer::primitive2d::Primitive2DContainer aSequence;
+
+    // create fill geometry if there is something to fill
+    if (rFillAttributes && rFillAttributes->isUsed())
     {
-        const basegfx::B2DRange aDefineRange = vcl::unotools::b2DRectangleFromRectangle(rDefineRange);
+        aSequence = rFillAttributes->getPrimitive2DSequence(aPaintRange, aDefineRange);
+    }
 
-        // prepare primitive sequence
-        drawinglayer::primitive2d::Primitive2DContainer aSequence;
+    // create line geometry if a LineColor is set at the target device
+    if (rRenderContext.IsLineColor())
+    {
+        const drawinglayer::primitive2d::Primitive2DReference xOutline(
+            new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+                basegfx::utils::createPolygonFromRect(aPaintRange), rRenderContext.GetLineColor().getBColor()));
 
-        // create fill geometry if there is something to fill
-        if (rFillAttributes && rFillAttributes->isUsed())
-        {
-            aSequence = rFillAttributes->getPrimitive2DSequence(aPaintRange, aDefineRange);
-        }
+        aSequence.push_back(xOutline);
+    }
 
-        // create line geometry if a LineColor is set at the target device
-        if (rRenderContext.IsLineColor())
-        {
-            const drawinglayer::primitive2d::Primitive2DReference xOutline(
-                new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-                    basegfx::utils::createPolygonFromRect(aPaintRange), rRenderContext.GetLineColor().getBColor()));
+    // draw that if we have something to draw
+    if (aSequence.empty())
+        return;
 
-            aSequence.push_back(xOutline);
-        }
+    const drawinglayer::geometry::ViewInformation2D aViewInformation2D(
+                    basegfx::B2DHomMatrix(), rRenderContext.GetViewTransformation(), aPaintRange, nullptr,
+                    0.0, css::uno::Sequence<css::beans::PropertyValue >());
 
-        // draw that if we have something to draw
-        if (!aSequence.empty())
-        {
-            const drawinglayer::geometry::ViewInformation2D aViewInformation2D(
-                            basegfx::B2DHomMatrix(), rRenderContext.GetViewTransformation(), aPaintRange, nullptr,
-                            0.0, css::uno::Sequence<css::beans::PropertyValue >());
-
-            std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
-                drawinglayer::processor2d::createProcessor2DFromOutputDevice(rRenderContext, aViewInformation2D));
-            if (pProcessor)
-            {
-                pProcessor->process(aSequence);
-            }
-        }
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
+        drawinglayer::processor2d::createProcessor2DFromOutputDevice(rRenderContext, aViewInformation2D));
+    if (pProcessor)
+    {
+        pProcessor->process(aSequence);
     }
 }
 

@@ -553,49 +553,49 @@ void SvxFontWorkDialog::SetShadowColor_Impl(const XFormTextShadowColorItem* pIte
 // Enter X-value for shadow in edit field
 void SvxFontWorkDialog::SetShadowXVal_Impl(const XFormTextShadowXValItem* pItem)
 {
-    if (pItem && !m_xMtrFldShadowX->has_focus())
+    if (!pItem || m_xMtrFldShadowX->has_focus())
+        return;
+
+    // #i19251#
+    // sal_Int32 nValue = pItem->GetValue();
+
+    // #i19251#
+    // The two involved fields/items are used double and contain/give different
+    // values regarding to the access method. Thus, here we need to separate the access
+    // methods regarding to the kind of value accessed.
+    if (m_xTbxShadow->get_item_active("slant"))
     {
         // #i19251#
-        // sal_Int32 nValue = pItem->GetValue();
-
-        // #i19251#
-        // The two involved fields/items are used double and contain/give different
-        // values regarding to the access method. Thus, here we need to separate the access
-        // methods regarding to the kind of value accessed.
-        if (m_xTbxShadow->get_item_active("slant"))
-        {
-            // #i19251#
-            // There is no value correction necessary at all, i think this
-            // was only tried to be done without understanding that the two
-            // involved fields/items are used double and contain/give different
-            // values regarding to the access method.
-            // nValue = nValue - ( int( float( nValue ) / 360.0 ) * 360 );
-            m_xMtrFldShadowX->set_value(pItem->GetValue(), FieldUnit::NONE);
-        }
-        else
-        {
-            SetMetricValue(*m_xMtrFldShadowX, pItem->GetValue(), MapUnit::Map100thMM);
-        }
+        // There is no value correction necessary at all, i think this
+        // was only tried to be done without understanding that the two
+        // involved fields/items are used double and contain/give different
+        // values regarding to the access method.
+        // nValue = nValue - ( int( float( nValue ) / 360.0 ) * 360 );
+        m_xMtrFldShadowX->set_value(pItem->GetValue(), FieldUnit::NONE);
+    }
+    else
+    {
+        SetMetricValue(*m_xMtrFldShadowX, pItem->GetValue(), MapUnit::Map100thMM);
     }
 }
 
 // Enter Y-value for shadow in edit field
 void SvxFontWorkDialog::SetShadowYVal_Impl(const XFormTextShadowYValItem* pItem)
 {
-    if (pItem && !m_xMtrFldShadowY->has_focus())
+    if (!pItem || m_xMtrFldShadowY->has_focus())
+        return;
+
+    // #i19251#
+    // The two involved fields/items are used double and contain/give different
+    // values regarding to the access method. Thus, here we need to separate the access
+    // methods regarding to the kind of value accessed.
+    if (m_xTbxShadow->get_item_active("slant"))
     {
-        // #i19251#
-        // The two involved fields/items are used double and contain/give different
-        // values regarding to the access method. Thus, here we need to separate the access
-        // methods regarding to the kind of value accessed.
-        if (m_xTbxShadow->get_item_active("slant"))
-        {
-            m_xMtrFldShadowY->set_value(pItem->GetValue(), FieldUnit::NONE);
-        }
-        else
-        {
-            SetMetricValue(*m_xMtrFldShadowY, pItem->GetValue(), MapUnit::Map100thMM);
-        }
+        m_xMtrFldShadowY->set_value(pItem->GetValue(), FieldUnit::NONE);
+    }
+    else
+    {
+        SetMetricValue(*m_xMtrFldShadowY, pItem->GetValue(), MapUnit::Map100thMM);
     }
 }
 
@@ -606,25 +606,25 @@ IMPL_LINK(SvxFontWorkDialog, SelectStyleHdl_Impl, const OString&, rId, void)
     // override the toolbox behaviour of unchecking the item after second
     // click on it: One of the items has to be checked at all times (when
     // enabled that is.)
-    if (rId == "off" || rId != m_sLastStyleTbxId)
-    {
-        XFormTextStyle eStyle = XFormTextStyle::NONE;
+    if (rId != "off" && rId == m_sLastStyleTbxId)
+        return;
 
-        if (rId == "rotate")
-            eStyle = XFormTextStyle::Rotate;
-        else if (rId == "upright")
-            eStyle = XFormTextStyle::Upright;
-        else if (rId == "hori")
-            eStyle = XFormTextStyle::SlantX;
-        else if (rId == "vert")
-            eStyle = XFormTextStyle::SlantY;
+    XFormTextStyle eStyle = XFormTextStyle::NONE;
 
-        XFormTextStyleItem aItem( eStyle );
-        GetBindings().GetDispatcher()->ExecuteList(SID_FORMTEXT_STYLE,
-                SfxCallMode::RECORD, { &aItem });
-        SetStyle_Impl( &aItem );
-        m_sLastStyleTbxId = rId;
-    }
+    if (rId == "rotate")
+        eStyle = XFormTextStyle::Rotate;
+    else if (rId == "upright")
+        eStyle = XFormTextStyle::Upright;
+    else if (rId == "hori")
+        eStyle = XFormTextStyle::SlantX;
+    else if (rId == "vert")
+        eStyle = XFormTextStyle::SlantY;
+
+    XFormTextStyleItem aItem( eStyle );
+    GetBindings().GetDispatcher()->ExecuteList(SID_FORMTEXT_STYLE,
+            SfxCallMode::RECORD, { &aItem });
+    SetStyle_Impl( &aItem );
+    m_sLastStyleTbxId = rId;
 }
 
 IMPL_LINK(SvxFontWorkDialog, SelectAdjustHdl_Impl, const OString&, rId, void)
