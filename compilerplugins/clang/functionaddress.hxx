@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COMPILERPLUGINS_CLANG_FUNCTIONADDRESS_HXX
-#define INCLUDED_COMPILERPLUGINS_CLANG_FUNCTIONADDRESS_HXX
+#pragma once
 
 #include <clang/AST/RecursiveASTVisitor.h>
 #include <unordered_set>
@@ -117,7 +116,5 @@ private:
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,13 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COMPILERPLUGINS_CLANG_TEST_UNREFFUN_HXX
-#define INCLUDED_COMPILERPLUGINS_CLANG_TEST_UNREFFUN_HXX
+#pragma once
 
 void f();
 
 extern void i();
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

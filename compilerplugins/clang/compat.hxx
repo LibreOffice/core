@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COMPILERPLUGINS_CLANG_COMPAT_HXX
-#define INCLUDED_COMPILERPLUGINS_CLANG_COMPAT_HXX
+#pragma once
 
 #include <cstddef>
 #include <utility>
@@ -309,7 +308,5 @@ inline bool isComparisonOp(clang::CXXOperatorCallExpr const * callExpr)
 }
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
