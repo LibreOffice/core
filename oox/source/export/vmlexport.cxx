@@ -1369,8 +1369,23 @@ sal_Int32 VMLExport::StartShape()
 
         if( pParaObj )
         {
+            uno::Reference<beans::XPropertySet> xPropertySet(const_cast<SdrObject*>(m_pSdrObject)->getUnoShape(), uno::UNO_QUERY);
+            sax_fastparser::FastAttributeList* pTextboxAttrList = FastSerializerHelper::createAttrList();
+            sax_fastparser::XFastAttributeListRef xTextboxAttrList(pTextboxAttrList);
+            if (xPropertySet->getPropertySetInfo()->hasPropertyByName("RotateAngle"))
+            {
+                sal_Int32 nTextRotateAngle = sal_Int32();
+                if (xPropertySet->getPropertyValue("RotateAngle") >>= nTextRotateAngle)
+                {
+                    if (nTextRotateAngle == 9000)
+                    {
+                        pTextboxAttrList->add(XML_style, "mso-layout-flow-alt:bottom-to-top");
+                    }
+                }
+            }
+
             // this is reached only in case some text is attached to the shape
-            m_pSerializer->startElementNS(XML_v, XML_textbox);
+            m_pSerializer->startElementNS(XML_v, XML_textbox, xTextboxAttrList);
             m_pTextExport->WriteOutliner(*pParaObj);
             m_pSerializer->endElementNS(XML_v, XML_textbox);
             if( bOwnParaObj )
