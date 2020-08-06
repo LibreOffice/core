@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e9e39f3e_397d647b",
+        "filename": "slideshow/source/inc/box2dtools.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-08-06T14:00:26Z",
+      "side": 1,
+      "message": "straightened those out - passing a const parameter of a non-POD object as reference is both more idiomatic, and faster (copying a sharedptr is non-trivial \u0026 involves an interlocked counter change...)",
+      "revId": "da1b52474149eff00b223b0a95129bb3223f97c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
