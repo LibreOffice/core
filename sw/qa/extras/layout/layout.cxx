@@ -1239,6 +1239,35 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testNoLineBreakAtSlash)
     assertXPath(pLayout, "/root/page[1]/body/txt[1]/Text[3]", "Portion", "13/c/2, etc.");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf106153)
+{
+    load(DATA_DIRECTORY, "tdf106153.docx");
+    xmlDocUniquePtr pDump = parseLayoutDump();
+
+    const sal_Int64 nPageValLeft = getXPath(pDump, "/root/page/infos/bounds", "left").toInt64();
+    const sal_Int64 nPageValTop = getXPath(pDump, "/root/page/infos/bounds", "top").toInt64();
+    const sal_Int64 nPageValRight = getXPath(pDump, "/root/page/infos/bounds", "right").toInt64();
+    const sal_Int64 nPageValBottom = getXPath(pDump, "/root/page/infos/bounds", "bottom").toInt64();
+
+    const sal_Int64 nShape1ValTop
+        = getXPath(pDump, "/root/page/body/txt/anchored/fly[1]/infos/bounds", "top").toInt64();
+    const sal_Int64 nShape2ValLeft
+        = getXPath(pDump, "/root/page/body/txt/anchored/fly[2]/infos/bounds", "left").toInt64();
+    const sal_Int64 nShape3ValRight
+        = getXPath(pDump, "/root/page/body/txt/anchored/fly[3]/infos/bounds", "right").toInt64();
+    const sal_Int64 nShape4ValBottom
+        = getXPath(pDump, "/root/page/body/txt/anchored/fly[4]/infos/bounds", "bottom").toInt64();
+
+    CPPUNIT_ASSERT_MESSAGE("The whole top textbox is inside the page!",
+                           nPageValTop > nShape1ValTop);
+    CPPUNIT_ASSERT_MESSAGE("The whole left textbox is inside the page!",
+                           nPageValLeft > nShape2ValLeft);
+    CPPUNIT_ASSERT_MESSAGE("The whole right textbox is inside the page!",
+                           nPageValRight < nShape3ValRight);
+    CPPUNIT_ASSERT_MESSAGE("The whole bottom textbox is inside the page!",
+                           nPageValBottom < nShape4ValBottom);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
 {
     loadURL("private:factory/swriter", nullptr);
