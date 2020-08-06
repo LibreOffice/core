@@ -27,7 +27,6 @@
 #include <vector>
 
 #include <vcl/ctrl.hxx>
-#include <vcl/mnemonicengine.hxx>
 #include <vcl/quickselectionengine.hxx>
 #include <vcl/image.hxx>
 #include <tools/gen.hxx>
@@ -180,7 +179,6 @@ class VCL_DLLPUBLIC SvTreeListBox
                 ,public SvListView
                 ,public DropTargetHelper
                 ,public DragSourceHelper
-                ,public vcl::IMnemonicEntryList
                 ,public vcl::ISearchableStringList
 {
     friend class SvImpLBox;
@@ -314,12 +312,6 @@ protected:
     sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt, SvTreeListBox* pSourceView );
 
     void            OnCurrentEntryChanged();
-
-    // IMnemonicEntryList
-    virtual const void* FirstSearchEntry( OUString& _rEntryText ) const override;
-    virtual const void* NextSearchEntry( const void* _pCurrentSearchEntry, OUString& _rEntryText ) const override;
-    virtual void        SelectSearchEntry( const void* _pEntry ) override;
-    virtual void        ExecuteSearchEntry( const void* _pEntry ) const override;
 
     // ISearchableStringList
     virtual vcl::StringEntryIdentifier    CurrentEntry( OUString& _out_entryText ) const override;
