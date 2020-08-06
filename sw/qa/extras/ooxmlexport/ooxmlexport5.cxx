@@ -339,11 +339,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO75431, "fdo75431.docx")
     assertXPath(pXmlDoc, "//w:p/w:pPr/w:sectPr/w:type", "val", "nextPage");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFDO77725, "fdo77725.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO77725, "fdo77725.docx")
 {
     xmlDocUniquePtr pXmlFootnotes = parseExport("word/footnotes.xml");
-    if (!pXmlFootnotes)
-        return;
 
     assertXPath(pXmlFootnotes, "//w:footnotes[1]/w:footnote[3]/w:p[3]/w:r[1]/w:br[1]", 0);
     assertXPath(pXmlFootnotes, "//w:footnotes[1]/w:footnote[3]/w:p[3]/w:r[1]/w:br[2]", 0);
@@ -433,16 +431,11 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testContentTypeOLE, "fdo77759.docx")
         "Excel.Sheet.12");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testfdo78420, "fdo78420.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo78420, "fdo78420.docx")
 {
     xmlDocUniquePtr pXmlHeader = parseExport("word/header2.xml");
 
-    if (!pXmlHeader)
-       return;
-
     xmlDocUniquePtr pXmlHeaderRels = parseExport("word/_rels/header2.xml.rels");
-    if(!pXmlHeaderRels)
-       return;
 
     assertXPath(pXmlHeaderRels,"/rels:Relationships/rels:Relationship[1]","Id","rId1");
 }
@@ -605,8 +598,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo78907,"fdo78907.docx")
     assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/w:br", "type", "page" );
 
     xmlDocUniquePtr pXmlDoc1 = parseExport("word/footer1.xml");
-    if (!pXmlDoc1)
-        return;
     assertXPath ( pXmlDoc1, "/w:ftr[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl", 0 );
 }
 
@@ -691,13 +682,11 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo79969_xlsb, "fdo79969_xlsb.docx")
         "Excel.SheetBinaryMacroEnabled.12");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testfdo80097, "fdo80097.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo80097, "fdo80097.docx")
 {
     //fdo#76635 : Table borders are not getting preserved.
 
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
-        return;
 
     //Table Cell Borders
     assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/w:top[@w:val = 'single']",1);
@@ -714,13 +703,11 @@ DECLARE_OOXMLEXPORT_TEST(testfdo80097, "fdo80097.docx")
     assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/w:insideV",0);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf95033, "tdf95033.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf95033, "tdf95033.docx")
 {
     //tdf#95033 : Table borders defined by row-level tblPrEx are not getting preserved.
 
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
-        return;
 
     //Not disabled table cell borders
     assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[5]/w:tc[1]/w:tcPr/w:tcBorders/w:start[@w:val = 'nil']", 0);
@@ -731,11 +718,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95033, "tdf95033.docx")
     assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[9]/w:tc[2]/w:tcPr/w:tcBorders/w:bottom[@w:val = 'nil']", 0);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf133455, "tdf133455.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf133455, "tdf133455.docx")
 {
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
-        return;
 
     //Not disabled table cell borders
     assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/w:top[@w:val = 'nil']", 0);
@@ -1329,8 +1314,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testZOrderInHeader, "tdf120760_ZOrderInHeade
 {
     // tdf#120760 Check that the Z-Order of the background is smaller than the front shape's.
     xmlDocUniquePtr pXml = parseExport("word/header1.xml");
-    if (!pXml)
-        return;
 
     // Get the Z-Order of the background image and of the shape in front of it.
     sal_Int32 nBackground = getXPath(pXml, "/w:hdr/w:p[1]/w:r[1]/w:drawing/wp:anchor", "relativeHeight").toInt32();
