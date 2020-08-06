@@ -88,45 +88,45 @@ Size ViewObjectContactOfSdrMediaObj::getPreferredSize() const
 void ViewObjectContactOfSdrMediaObj::updateMediaItem( ::avmedia::MediaItem& rItem ) const
 {
 #if HAVE_FEATURE_AVMEDIA
-    if( mpMediaWindow )
+    if( !mpMediaWindow )
+        return;
+
+    mpMediaWindow->updateMediaItem( rItem );
+
+    // show/hide is now dependent of play state
+    if(avmedia::MediaState::Stop == rItem.getState())
     {
-        mpMediaWindow->updateMediaItem( rItem );
+        mpMediaWindow->hide();
+    }
+    else
+    {
+        basegfx::B2DRange aViewRange(getObjectRange());
+        aViewRange.transform(GetObjectContact().getViewInformation2D().getViewTransformation());
 
-        // show/hide is now dependent of play state
-        if(avmedia::MediaState::Stop == rItem.getState())
-        {
-            mpMediaWindow->hide();
-        }
-        else
-        {
-            basegfx::B2DRange aViewRange(getObjectRange());
-            aViewRange.transform(GetObjectContact().getViewInformation2D().getViewTransformation());
+        const tools::Rectangle aViewRectangle(
+            static_cast<sal_Int32>(floor(aViewRange.getMinX())), static_cast<sal_Int32>(floor(aViewRange.getMinY())),
+            static_cast<sal_Int32>(ceil(aViewRange.getMaxX())), static_cast<sal_Int32>(ceil(aViewRange.getMaxY())));
 
-            const tools::Rectangle aViewRectangle(
-                static_cast<sal_Int32>(floor(aViewRange.getMinX())), static_cast<sal_Int32>(floor(aViewRange.getMinY())),
-                static_cast<sal_Int32>(ceil(aViewRange.getMaxX())), static_cast<sal_Int32>(ceil(aViewRange.getMaxY())));
+        // mpMediaWindow contains a SalObject window and gtk won't accept
+        // the size until after the SalObject widget is shown but if we
+        // show it before setting a size then vcl will detect that the
+        // vcl::Window has no size and make it invisible instead. If we
+        // call setPosSize twice with the same size before and after show
+        // then the second attempt is a no-op as vcl caches the size.
 
-            // mpMediaWindow contains a SalObject window and gtk won't accept
-            // the size until after the SalObject widget is shown but if we
-            // show it before setting a size then vcl will detect that the
-            // vcl::Window has no size and make it invisible instead. If we
-            // call setPosSize twice with the same size before and after show
-            // then the second attempt is a no-op as vcl caches the size.
+        // so call it initially with a size arbitrarily 1 pixel wider than
+        // we want so we have an initial size to make vcl happy
+        tools::Rectangle aInitialRect(aViewRectangle);
+        aInitialRect.AdjustRight(1);
+        mpMediaWindow->setPosSize(aInitialRect);
 
-            // so call it initially with a size arbitrarily 1 pixel wider than
-            // we want so we have an initial size to make vcl happy
-            tools::Rectangle aInitialRect(aViewRectangle);
-            aInitialRect.AdjustRight(1);
-            mpMediaWindow->setPosSize(aInitialRect);
+        // then make it visible
+        mpMediaWindow->show();
 
-            // then make it visible
-            mpMediaWindow->show();
-
-            // set the final desired size which is different to let vcl send it
-            // through to gtk which will now accept it as the underlying
-            // m_pSocket of GtkSalObject::SetPosSize is now visible
-            mpMediaWindow->setPosSize(aViewRectangle);
-        }
+        // set the final desired size which is different to let vcl send it
+        // through to gtk which will now accept it as the underlying
+        // m_pSocket of GtkSalObject::SetPosSize is now visible
+        mpMediaWindow->setPosSize(aViewRectangle);
     }
 #else
     (void) rItem;

@@ -1054,28 +1054,28 @@ namespace drawinglayer::primitive2d
                 }
             }
 
-            if(0.0 != rfCornerRadiusY)
+            if(0.0 == rfCornerRadiusY)
+                return;
+
+            const double fHalfObjectHeight(rObjectRange.getHeight() * 0.5);
+
+            if(0.0 != fHalfObjectHeight)
             {
-                const double fHalfObjectHeight(rObjectRange.getHeight() * 0.5);
-
-                if(0.0 != fHalfObjectHeight)
-                {
-                    if(rfCornerRadiusY < 0.0)
-                    {
-                        rfCornerRadiusY = 0.0;
-                    }
-
-                    if(rfCornerRadiusY > fHalfObjectHeight)
-                    {
-                        rfCornerRadiusY = fHalfObjectHeight;
-                    }
-
-                    rfCornerRadiusY /= fHalfObjectHeight;
-                }
-                else
+                if(rfCornerRadiusY < 0.0)
                 {
                     rfCornerRadiusY = 0.0;
                 }
+
+                if(rfCornerRadiusY > fHalfObjectHeight)
+                {
+                    rfCornerRadiusY = fHalfObjectHeight;
+                }
+
+                rfCornerRadiusY /= fHalfObjectHeight;
+            }
+            else
+            {
+                rfCornerRadiusY = 0.0;
             }
         }
 

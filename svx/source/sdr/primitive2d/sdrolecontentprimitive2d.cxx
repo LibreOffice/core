@@ -55,76 +55,76 @@ namespace drawinglayer::primitive2d
                 bScaleContent = true;
             }
 #endif
-            if(GraphicType::NONE != aGraphic.GetType())
+            if(GraphicType::NONE == aGraphic.GetType())
+                return;
+
+            const GraphicObject aGraphicObject(aGraphic);
+            const GraphicAttr aGraphicAttr;
+
+            if(bScaleContent)
             {
-                const GraphicObject aGraphicObject(aGraphic);
-                const GraphicAttr aGraphicAttr;
+                // get transformation atoms
+                basegfx::B2DVector aScale, aTranslate;
+                double fRotate, fShearX;
+                getObjectTransform().decompose(aScale, aTranslate, fRotate, fShearX);
 
-                if(bScaleContent)
+                // get PrefSize from the graphic in 100th mm
+                Size aPrefSize(aGraphic.GetPrefSize());
+
+                if(MapUnit::MapPixel == aGraphic.GetPrefMapMode().GetMapUnit())
                 {
-                    // get transformation atoms
-                    basegfx::B2DVector aScale, aTranslate;
-                    double fRotate, fShearX;
-                    getObjectTransform().decompose(aScale, aTranslate, fRotate, fShearX);
-
-                    // get PrefSize from the graphic in 100th mm
-                    Size aPrefSize(aGraphic.GetPrefSize());
-
-                    if(MapUnit::MapPixel == aGraphic.GetPrefMapMode().GetMapUnit())
-                    {
-                        aPrefSize = Application::GetDefaultDevice()->PixelToLogic(aPrefSize, MapMode(MapUnit::Map100thMM));
-                    }
-                    else
-                    {
-                        aPrefSize = OutputDevice::LogicToLogic(aPrefSize, aGraphic.GetPrefMapMode(), MapMode(MapUnit::Map100thMM));
-                    }
-
-                    const double fOffsetX((aScale.getX() - aPrefSize.getWidth()) / 2.0);
-                    const double fOffsetY((aScale.getY() - aPrefSize.getHeight()) / 2.0);
-
-                    if(basegfx::fTools::moreOrEqual(fOffsetX, 0.0) && basegfx::fTools::moreOrEqual(fOffsetY, 0.0))
-                    {
-                        // if content fits into frame, create it
-                        basegfx::B2DHomMatrix aInnerObjectMatrix(basegfx::utils::createScaleTranslateB2DHomMatrix(
-                            aPrefSize.getWidth(), aPrefSize.getHeight(), fOffsetX, fOffsetY));
-                        aInnerObjectMatrix = basegfx::utils::createShearXRotateTranslateB2DHomMatrix(fShearX, fRotate, aTranslate)
-                            * aInnerObjectMatrix;
-
-                        const drawinglayer::primitive2d::Primitive2DReference aGraphicPrimitive(
-                            new drawinglayer::primitive2d::GraphicPrimitive2D(
-                                aInnerObjectMatrix,
-                                aGraphicObject,
-                                aGraphicAttr));
-                        rContainer.push_back(aGraphicPrimitive);
-                    }
+                    aPrefSize = Application::GetDefaultDevice()->PixelToLogic(aPrefSize, MapMode(MapUnit::Map100thMM));
                 }
                 else
                 {
-                    // create graphic primitive for content
+                    aPrefSize = OutputDevice::LogicToLogic(aPrefSize, aGraphic.GetPrefMapMode(), MapMode(MapUnit::Map100thMM));
+                }
+
+                const double fOffsetX((aScale.getX() - aPrefSize.getWidth()) / 2.0);
+                const double fOffsetY((aScale.getY() - aPrefSize.getHeight()) / 2.0);
+
+                if(basegfx::fTools::moreOrEqual(fOffsetX, 0.0) && basegfx::fTools::moreOrEqual(fOffsetY, 0.0))
+                {
+                    // if content fits into frame, create it
+                    basegfx::B2DHomMatrix aInnerObjectMatrix(basegfx::utils::createScaleTranslateB2DHomMatrix(
+                        aPrefSize.getWidth(), aPrefSize.getHeight(), fOffsetX, fOffsetY));
+                    aInnerObjectMatrix = basegfx::utils::createShearXRotateTranslateB2DHomMatrix(fShearX, fRotate, aTranslate)
+                        * aInnerObjectMatrix;
+
                     const drawinglayer::primitive2d::Primitive2DReference aGraphicPrimitive(
                         new drawinglayer::primitive2d::GraphicPrimitive2D(
-                            getObjectTransform(),
+                            aInnerObjectMatrix,
                             aGraphicObject,
                             aGraphicAttr));
                     rContainer.push_back(aGraphicPrimitive);
                 }
+            }
+            else
+            {
+                // create graphic primitive for content
+                const drawinglayer::primitive2d::Primitive2DReference aGraphicPrimitive(
+                    new drawinglayer::primitive2d::GraphicPrimitive2D(
+                        getObjectTransform(),
+                        aGraphicObject,
+                        aGraphicAttr));
+                rContainer.push_back(aGraphicPrimitive);
+            }
 
-                // a standard gray outline is created for scaled content
-                if(bScaleContent)
-                {
-                    const svtools::ColorConfig aColorConfig;
-                    const svtools::ColorConfigValue aColor(aColorConfig.GetColorValue(svtools::OBJECTBOUNDARIES));
+            // a standard gray outline is created for scaled content
+            if(!bScaleContent)
+                return;
 
-                    if(aColor.bIsVisible)
-                    {
-                        basegfx::B2DPolygon aOutline(basegfx::utils::createUnitPolygon());
-                        const Color aVclColor(aColor.nColor);
-                        aOutline.transform(getObjectTransform());
-                        const drawinglayer::primitive2d::Primitive2DReference xOutline(
-                            new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOutline, aVclColor.getBColor()));
-                        rContainer.push_back(xOutline);
-                    }
-                }
+            const svtools::ColorConfig aColorConfig;
+            const svtools::ColorConfigValue aColor(aColorConfig.GetColorValue(svtools::OBJECTBOUNDARIES));
+
+            if(aColor.bIsVisible)
+            {
+                basegfx::B2DPolygon aOutline(basegfx::utils::createUnitPolygon());
+                const Color aVclColor(aColor.nColor);
+                aOutline.transform(getObjectTransform());
+                const drawinglayer::primitive2d::Primitive2DReference xOutline(
+                    new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOutline, aVclColor.getBColor()));
+                rContainer.push_back(xOutline);
             }
         }
 

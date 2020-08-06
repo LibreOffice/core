@@ -1729,21 +1729,21 @@ namespace sdr::contact {
         ViewObjectContactOfSdrObj::ActionChanged();
         const ControlHolder& rControl(m_pImpl->getExistentControl());
 
-        if(rControl.is() && !rControl.isDesignMode())
+        if(!(rControl.is() && !rControl.isDesignMode()))
+            return;
+
+        // #i93180# if layer visibility has changed and control is in live mode, it is necessary
+        // to correct visibility to make those control vanish on SdrObject LayerID changes
+        const SdrPageView* pSdrPageView = GetObjectContact().TryToGetSdrPageView();
+
+        if(pSdrPageView)
         {
-            // #i93180# if layer visibility has changed and control is in live mode, it is necessary
-            // to correct visibility to make those control vanish on SdrObject LayerID changes
-            const SdrPageView* pSdrPageView = GetObjectContact().TryToGetSdrPageView();
+            const SdrObject& rObject = getSdrObject();
+            const bool bIsLayerVisible( rObject.IsVisible() && pSdrPageView->GetVisibleLayers().IsSet(rObject.GetLayer()));
 
-            if(pSdrPageView)
+            if(rControl.isVisible() != bIsLayerVisible)
             {
-                const SdrObject& rObject = getSdrObject();
-                const bool bIsLayerVisible( rObject.IsVisible() && pSdrPageView->GetVisibleLayers().IsSet(rObject.GetLayer()));
-
-                if(rControl.isVisible() != bIsLayerVisible)
-                {
-                    rControl.setVisible(bIsLayerVisible);
-                }
+                rControl.setVisible(bIsLayerVisible);
             }
         }
     }
