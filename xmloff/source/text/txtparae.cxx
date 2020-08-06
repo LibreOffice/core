@@ -567,105 +567,105 @@ void XMLTextParagraphExport::Add( XmlStyleFamily nFamily,
         }
     }
 
-    if( !aPropStates.empty() )
-    {
-        Reference< XPropertySetInfo > xPropSetInfo(rPropSet->getPropertySetInfo());
-        OUString sParent, sCondParent;
-        sal_uInt16 nIgnoreProps = 0;
-        switch( nFamily )
-        {
-        case XmlStyleFamily::TEXT_PARAGRAPH:
-            if( xPropSetInfo->hasPropertyByName( gsParaStyleName ) )
-            {
-                rPropSet->getPropertyValue( gsParaStyleName ) >>= sParent;
-            }
-            if( xPropSetInfo->hasPropertyByName( gsParaConditionalStyleName ) )
-            {
-                rPropSet->getPropertyValue( gsParaConditionalStyleName ) >>= sCondParent;
-            }
-            if( xPropSetInfo->hasPropertyByName( gsNumberingRules ) )
-            {
-                Reference < XIndexReplace > xNumRule(rPropSet->getPropertyValue( gsNumberingRules ), uno::UNO_QUERY);
-                if( xNumRule.is() && xNumRule->getCount() )
-                {
-                    Reference < XNamed > xNamed( xNumRule, UNO_QUERY );
-                    OUString sName;
-                    if( xNamed.is() )
-                        sName = xNamed->getName();
-                    bool bAdd = sName.isEmpty();
-                    if( !bAdd )
-                    {
-                        Reference < XPropertySet > xNumPropSet( xNumRule,
-                                                                UNO_QUERY );
-                        if( xNumPropSet.is() &&
-                            xNumPropSet->getPropertySetInfo()
-                                       ->hasPropertyByName( "IsAutomatic" ) )
-                        {
-                            bAdd = *o3tl::doAccess<bool>(xNumPropSet->getPropertyValue( "IsAutomatic" ));
-                            // Check on outline style (#i73361#)
-                            if ( bAdd &&
-                                 xNumPropSet->getPropertySetInfo()
-                                           ->hasPropertyByName( "NumberingIsOutline" ) )
-                            {
-                                bAdd = !(*o3tl::doAccess<bool>(xNumPropSet->getPropertyValue( "NumberingIsOutline" )));
-                            }
-                        }
-                        else
-                        {
-                            bAdd = true;
-                        }
-                    }
-                    if( bAdd )
-                        maListAutoPool.Add( xNumRule );
-                }
-            }
-            break;
-        case XmlStyleFamily::TEXT_TEXT:
-            {
-                // Get parent and remove hyperlinks (they aren't of interest)
-                rtl::Reference< XMLPropertySetMapper > xPM(xPropMapper->getPropertySetMapper());
-                for( ::std::vector< XMLPropertyState >::iterator i(aPropStates.begin());
-                      nIgnoreProps < 2 && i != aPropStates.end(); )
-                {
-                    if( i->mnIndex == -1 )
-                    {
-                        ++i;
-                        continue;
-                    }
+    if( aPropStates.empty() )
+        return;
 
-                    switch( xPM->GetEntryContextId(i->mnIndex) )
+    Reference< XPropertySetInfo > xPropSetInfo(rPropSet->getPropertySetInfo());
+    OUString sParent, sCondParent;
+    sal_uInt16 nIgnoreProps = 0;
+    switch( nFamily )
+    {
+    case XmlStyleFamily::TEXT_PARAGRAPH:
+        if( xPropSetInfo->hasPropertyByName( gsParaStyleName ) )
+        {
+            rPropSet->getPropertyValue( gsParaStyleName ) >>= sParent;
+        }
+        if( xPropSetInfo->hasPropertyByName( gsParaConditionalStyleName ) )
+        {
+            rPropSet->getPropertyValue( gsParaConditionalStyleName ) >>= sCondParent;
+        }
+        if( xPropSetInfo->hasPropertyByName( gsNumberingRules ) )
+        {
+            Reference < XIndexReplace > xNumRule(rPropSet->getPropertyValue( gsNumberingRules ), uno::UNO_QUERY);
+            if( xNumRule.is() && xNumRule->getCount() )
+            {
+                Reference < XNamed > xNamed( xNumRule, UNO_QUERY );
+                OUString sName;
+                if( xNamed.is() )
+                    sName = xNamed->getName();
+                bool bAdd = sName.isEmpty();
+                if( !bAdd )
+                {
+                    Reference < XPropertySet > xNumPropSet( xNumRule,
+                                                            UNO_QUERY );
+                    if( xNumPropSet.is() &&
+                        xNumPropSet->getPropertySetInfo()
+                                   ->hasPropertyByName( "IsAutomatic" ) )
                     {
-                    case CTF_CHAR_STYLE_NAME:
-                    case CTF_HYPERLINK_URL:
-                        i->mnIndex = -1;
-                        nIgnoreProps++;
-                        i = aPropStates.erase( i );
-                        break;
-                    default:
-                        ++i;
-                        break;
+                        bAdd = *o3tl::doAccess<bool>(xNumPropSet->getPropertyValue( "IsAutomatic" ));
+                        // Check on outline style (#i73361#)
+                        if ( bAdd &&
+                             xNumPropSet->getPropertySetInfo()
+                                       ->hasPropertyByName( "NumberingIsOutline" ) )
+                        {
+                            bAdd = !(*o3tl::doAccess<bool>(xNumPropSet->getPropertyValue( "NumberingIsOutline" )));
+                        }
+                    }
+                    else
+                    {
+                        bAdd = true;
                     }
                 }
+                if( bAdd )
+                    maListAutoPool.Add( xNumRule );
             }
-            break;
-        case XmlStyleFamily::TEXT_FRAME:
-            if( xPropSetInfo->hasPropertyByName( gsFrameStyleName ) )
-            {
-                rPropSet->getPropertyValue( gsFrameStyleName ) >>= sParent;
-            }
-            break;
-        case XmlStyleFamily::TEXT_SECTION:
-        case XmlStyleFamily::TEXT_RUBY:
-            ; // section styles have no parents
-            break;
-        default: break;
         }
-        if (aPropStates.size() - nIgnoreProps)
+        break;
+    case XmlStyleFamily::TEXT_TEXT:
         {
-            GetAutoStylePool().Add( nFamily, sParent, aPropStates, bDontSeek );
-            if( !sCondParent.isEmpty() && sParent != sCondParent )
-                GetAutoStylePool().Add( nFamily, sCondParent, aPropStates );
+            // Get parent and remove hyperlinks (they aren't of interest)
+            rtl::Reference< XMLPropertySetMapper > xPM(xPropMapper->getPropertySetMapper());
+            for( ::std::vector< XMLPropertyState >::iterator i(aPropStates.begin());
+                  nIgnoreProps < 2 && i != aPropStates.end(); )
+            {
+                if( i->mnIndex == -1 )
+                {
+                    ++i;
+                    continue;
+                }
+
+                switch( xPM->GetEntryContextId(i->mnIndex) )
+                {
+                case CTF_CHAR_STYLE_NAME:
+                case CTF_HYPERLINK_URL:
+                    i->mnIndex = -1;
+                    nIgnoreProps++;
+                    i = aPropStates.erase( i );
+                    break;
+                default:
+                    ++i;
+                    break;
+                }
+            }
         }
+        break;
+    case XmlStyleFamily::TEXT_FRAME:
+        if( xPropSetInfo->hasPropertyByName( gsFrameStyleName ) )
+        {
+            rPropSet->getPropertyValue( gsFrameStyleName ) >>= sParent;
+        }
+        break;
+    case XmlStyleFamily::TEXT_SECTION:
+    case XmlStyleFamily::TEXT_RUBY:
+        ; // section styles have no parents
+        break;
+    default: break;
+    }
+    if (aPropStates.size() - nIgnoreProps)
+    {
+        GetAutoStylePool().Add( nFamily, sParent, aPropStates, bDontSeek );
+        if( !sCondParent.isEmpty() && sParent != sCondParent )
+            GetAutoStylePool().Add( nFamily, sCondParent, aPropStates );
     }
 }
 
@@ -728,33 +728,33 @@ void XMLTextParagraphExport::Add( XmlStyleFamily nFamily,
         }
     }
 
-    if( !aPropStates.empty() )
+    if( aPropStates.empty() )
+        return;
+
+    OUString sParent, sCondParent;
+    switch( nFamily )
     {
-        OUString sParent, sCondParent;
-        switch( nFamily )
+    case XmlStyleFamily::TEXT_PARAGRAPH:
+        if( rPropSetHelper.hasProperty( PARA_STYLE_NAME_AUTO ) )
         {
-        case XmlStyleFamily::TEXT_PARAGRAPH:
-            if( rPropSetHelper.hasProperty( PARA_STYLE_NAME_AUTO ) )
-            {
-                rPropSetHelper.getValue( PARA_STYLE_NAME_AUTO, rPropSet,
-                                                true ) >>= sParent;
-            }
-            if( rPropSetHelper.hasProperty( PARA_CONDITIONAL_STYLE_NAME_AUTO ) )
-            {
-                rPropSetHelper.getValue( PARA_CONDITIONAL_STYLE_NAME_AUTO,
-                                                 rPropSet, true ) >>= sCondParent;
-            }
-
-            break;
-        default: break;
+            rPropSetHelper.getValue( PARA_STYLE_NAME_AUTO, rPropSet,
+                                            true ) >>= sParent;
+        }
+        if( rPropSetHelper.hasProperty( PARA_CONDITIONAL_STYLE_NAME_AUTO ) )
+        {
+            rPropSetHelper.getValue( PARA_CONDITIONAL_STYLE_NAME_AUTO,
+                                             rPropSet, true ) >>= sCondParent;
         }
 
-        if( std::any_of( aPropStates.begin(), aPropStates.end(), lcl_validPropState ) )
-        {
-            GetAutoStylePool().Add( nFamily, sParent, aPropStates );
-            if( !sCondParent.isEmpty() && sParent != sCondParent )
-                GetAutoStylePool().Add( nFamily, sCondParent, aPropStates );
-        }
+        break;
+    default: break;
+    }
+
+    if( std::any_of( aPropStates.begin(), aPropStates.end(), lcl_validPropState ) )
+    {
+        GetAutoStylePool().Add( nFamily, sParent, aPropStates );
+        if( !sCondParent.isEmpty() && sParent != sCondParent )
+            GetAutoStylePool().Add( nFamily, sCondParent, aPropStates );
     }
 }
 
@@ -2430,19 +2430,19 @@ void XMLTextParagraphExport::exportTextField(
 {
     Reference < XPropertySet > xPropSet( rTextRange, UNO_QUERY );
     // non-Writer apps need not support Property TextField, so test first
-    if (xPropSet->getPropertySetInfo()->hasPropertyByName( gsTextField ))
+    if (!xPropSet->getPropertySetInfo()->hasPropertyByName( gsTextField ))
+        return;
+
+    Reference < XTextField > xTxtFld(xPropSet->getPropertyValue( gsTextField ), uno::UNO_QUERY);
+    SAL_WARN_IF( !xTxtFld.is(), "xmloff", "text field missing" );
+    if( xTxtFld.is() )
     {
-        Reference < XTextField > xTxtFld(xPropSet->getPropertyValue( gsTextField ), uno::UNO_QUERY);
-        SAL_WARN_IF( !xTxtFld.is(), "xmloff", "text field missing" );
-        if( xTxtFld.is() )
-        {
-            exportTextField(xTxtFld, bAutoStyles, bIsProgress, true, pPrevCharIsSpace);
-        }
-        else
-        {
-            // write only characters
-            GetExport().Characters(rTextRange->getString());
-        }
+        exportTextField(xTxtFld, bAutoStyles, bIsProgress, true, pPrevCharIsSpace);
+    }
+    else
+    {
+        // write only characters
+        GetExport().Characters(rTextRange->getString());
     }
 }
 
@@ -2484,63 +2484,63 @@ void XMLTextParagraphExport::exportTextMark(
     //  This basically meaningless formatting will now been thrown away
     //  (aka cleaned up), since mib said: ...                   dvo
 
-     if (!bAutoStyles)
+    if (bAutoStyles)
+        return;
+
+    // name element
+    Reference<XNamed> xName(rPropSet->getPropertyValue(rProperty), UNO_QUERY);
+    GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME,
+                             xName->getName());
+
+    // start, end, or point-reference?
+    sal_Int8 nElement;
+    if( *o3tl::doAccess<bool>(rPropSet->getPropertyValue(gsIsCollapsed)) )
     {
-        // name element
-        Reference<XNamed> xName(rPropSet->getPropertyValue(rProperty), UNO_QUERY);
-        GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME,
-                                 xName->getName());
+        nElement = 0;
+    }
+    else
+    {
+        nElement = *o3tl::doAccess<bool>(rPropSet->getPropertyValue(gsIsStart)) ? 1 : 2;
+    }
 
-        // start, end, or point-reference?
-        sal_Int8 nElement;
-        if( *o3tl::doAccess<bool>(rPropSet->getPropertyValue(gsIsCollapsed)) )
-        {
-            nElement = 0;
-        }
-        else
-        {
-            nElement = *o3tl::doAccess<bool>(rPropSet->getPropertyValue(gsIsStart)) ? 1 : 2;
-        }
+    // bookmark, bookmark-start: xml:id and RDFa for RDF metadata
+    if( nElement < 2 ) {
+        GetExport().AddAttributeXmlId(xName);
+        const uno::Reference<text::XTextContent> xTextContent(
+                xName, uno::UNO_QUERY_THROW);
+        GetExport().AddAttributesRDFa(xTextContent);
+    }
 
-        // bookmark, bookmark-start: xml:id and RDFa for RDF metadata
-        if( nElement < 2 ) {
-            GetExport().AddAttributeXmlId(xName);
-            const uno::Reference<text::XTextContent> xTextContent(
-                    xName, uno::UNO_QUERY_THROW);
-            GetExport().AddAttributesRDFa(xTextContent);
-        }
-
-        // bookmark-start: add attributes hidden and condition
-        if (nElement == 1)
+    // bookmark-start: add attributes hidden and condition
+    if (nElement == 1)
+    {
+        Reference<XPropertySet> bkmkProps(rPropSet->getPropertyValue(rProperty), UNO_QUERY);
+        Reference<XPropertySetInfo> bkmkPropInfo = bkmkProps->getPropertySetInfo();
+        OUString sHidden("BookmarkHidden");
+        if (bkmkPropInfo->hasPropertyByName(sHidden))
         {
-            Reference<XPropertySet> bkmkProps(rPropSet->getPropertyValue(rProperty), UNO_QUERY);
-            Reference<XPropertySetInfo> bkmkPropInfo = bkmkProps->getPropertySetInfo();
-            OUString sHidden("BookmarkHidden");
-            if (bkmkPropInfo->hasPropertyByName(sHidden))
+            bool bHidden = false;
+            bkmkProps->getPropertyValue(sHidden) >>= bHidden;
+            if (bHidden)
             {
-                bool bHidden = false;
-                bkmkProps->getPropertyValue(sHidden) >>= bHidden;
-                if (bHidden)
+                GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "hidden", "true");
+                OUString sCondition("BookmarkCondition");
+                if (bkmkPropInfo->hasPropertyByName(sCondition))
                 {
-                    GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "hidden", "true");
-                    OUString sCondition("BookmarkCondition");
-                    if (bkmkPropInfo->hasPropertyByName(sCondition))
-                    {
-                        OUString sBookmarkCondition;
-                        bkmkProps->getPropertyValue(sCondition) >>= sBookmarkCondition;
-                        GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "condition", sBookmarkCondition);
-                    }
+                    OUString sBookmarkCondition;
+                    bkmkProps->getPropertyValue(sCondition) >>= sBookmarkCondition;
+                    GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "condition", sBookmarkCondition);
                 }
             }
         }
-
-        // export element
-        assert(pElements != nullptr);
-        assert(0 <= nElement && nElement <= 2);
-        SvXMLElementExport aElem(GetExport(),
-                                 XML_NAMESPACE_TEXT, pElements[nElement],
-                                 false, false);
     }
+
+    // export element
+    assert(pElements != nullptr);
+    assert(0 <= nElement && nElement <= 2);
+    SvXMLElementExport aElem(GetExport(),
+                             XML_NAMESPACE_TEXT, pElements[nElement],
+                             false, false);
     // else: no styles. (see above)
 }
 
@@ -3645,25 +3645,25 @@ void XMLTextParagraphExport::exportTextDeclarations()
     // get XPropertySet from the document and ask for AutoMarkFileURL.
     // If it exists, export the auto-mark-file element.
     Reference<XPropertySet> xPropertySet( GetExport().GetModel(), UNO_QUERY );
-    if (xPropertySet.is())
+    if (!xPropertySet.is())
+        return;
+
+    OUString sUrl;
+    OUString sIndexAutoMarkFileURL(
+        "IndexAutoMarkFileURL");
+    if (!xPropertySet->getPropertySetInfo()->hasPropertyByName(
+        sIndexAutoMarkFileURL))
+        return;
+
+    xPropertySet->getPropertyValue(sIndexAutoMarkFileURL) >>= sUrl;
+    if (!sUrl.isEmpty())
     {
-        OUString sUrl;
-        OUString sIndexAutoMarkFileURL(
-            "IndexAutoMarkFileURL");
-        if (xPropertySet->getPropertySetInfo()->hasPropertyByName(
-            sIndexAutoMarkFileURL))
-        {
-            xPropertySet->getPropertyValue(sIndexAutoMarkFileURL) >>= sUrl;
-            if (!sUrl.isEmpty())
-            {
-                GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_HREF,
-                                          GetExport().GetRelativeReference(sUrl) );
-                SvXMLElementExport aAutoMarkElement(
-                    GetExport(), XML_NAMESPACE_TEXT,
-                    XML_ALPHABETICAL_INDEX_AUTO_MARK_FILE,
-                    true, true );
-            }
-        }
+        GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_HREF,
+                                  GetExport().GetRelativeReference(sUrl) );
+        SvXMLElementExport aAutoMarkElement(
+            GetExport(), XML_NAMESPACE_TEXT,
+            XML_ALPHABETICAL_INDEX_AUTO_MARK_FILE,
+            true, true );
     }
 }
 

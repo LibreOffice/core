@@ -39,26 +39,26 @@ XMLTextCharStyleNamesElementExport::XMLTextCharStyleNamesElementExport(
     rExport( rExp ),
     nCount( 0 )
 {
-    if( bDoSth )
+    if( !bDoSth )
+        return;
+
+    Any aAny = rPropSet->getPropertyValue( rPropName );
+    Sequence < OUString > aNames;
+    if( !(aAny >>= aNames) )
+        return;
+
+    nCount = aNames.getLength();
+    OSL_ENSURE( nCount > 0, "no char style found" );
+    if ( bAllStyles ) ++nCount;
+    if( nCount > 1 )
     {
-        Any aAny = rPropSet->getPropertyValue( rPropName );
-        Sequence < OUString > aNames;
-        if( aAny >>= aNames )
+        aName = rExport.GetNamespaceMap().GetQNameByKey(
+                        XML_NAMESPACE_TEXT, GetXMLToken(XML_SPAN) );
+        for( sal_Int32 i = 1; i < nCount; ++i )
         {
-            nCount = aNames.getLength();
-            OSL_ENSURE( nCount > 0, "no char style found" );
-            if ( bAllStyles ) ++nCount;
-            if( nCount > 1 )
-            {
-                aName = rExport.GetNamespaceMap().GetQNameByKey(
-                                XML_NAMESPACE_TEXT, GetXMLToken(XML_SPAN) );
-                for( sal_Int32 i = 1; i < nCount; ++i )
-                {
-                    rExport.AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
-                                          rExport.EncodeStyleName( aNames[i - 1] ) );
-                    rExport.StartElement( aName, false );
-                }
-            }
+            rExport.AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
+                                  rExport.EncodeStyleName( aNames[i - 1] ) );
+            rExport.StartElement( aName, false );
         }
     }
 }

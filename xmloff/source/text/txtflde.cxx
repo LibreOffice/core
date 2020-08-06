@@ -2158,56 +2158,56 @@ void XMLTextFieldExport::ExportFieldDeclarations(
     // else: no declarations element
 
     // DDE field masters:
-    if ( !aDdeName.empty() )
+    if ( aDdeName.empty() )
+        return;
+
+    SvXMLElementExport aElem( GetExport(),
+                              XML_NAMESPACE_TEXT,
+                              XML_DDE_CONNECTION_DECLS,
+                              true, true );
+
+    for (const auto& sName : aDdeName)
     {
-        SvXMLElementExport aElem( GetExport(),
-                                  XML_NAMESPACE_TEXT,
-                                  XML_DDE_CONNECTION_DECLS,
-                                  true, true );
+        // get field master property set
+        Reference<XPropertySet> xPropSet;
+        Any aAny = xFieldMasterNameAccess->getByName(sName);
+        aAny >>= xPropSet;
 
-        for (const auto& sName : aDdeName)
+        // check if this connection is being used by a field
+        Reference<XPropertySet> xDummy;
+        if (GetDependentFieldPropertySet(xPropSet, xDummy))
         {
-            // get field master property set
-            Reference<XPropertySet> xPropSet;
-            Any aAny = xFieldMasterNameAccess->getByName(sName);
-            aAny >>= xPropSet;
 
-            // check if this connection is being used by a field
-            Reference<XPropertySet> xDummy;
-            if (GetDependentFieldPropertySet(xPropSet, xDummy))
+            ProcessString(XML_NAME,
+                          GetStringProperty(gsPropertyName, xPropSet),
+                          false, XML_NAMESPACE_OFFICE);
+
+            // export elements; can't use ProcessString because
+            // elements are in office namespace
+            ProcessString(XML_DDE_APPLICATION,
+                          GetStringProperty(gsPropertyDDECommandType,
+                                            xPropSet),
+                          false, XML_NAMESPACE_OFFICE);
+            ProcessString(XML_DDE_TOPIC,
+                          GetStringProperty(gsPropertyDDECommandFile,
+                                            xPropSet),
+                          false, XML_NAMESPACE_OFFICE);
+            ProcessString(XML_DDE_ITEM,
+                          GetStringProperty(gsPropertyDDECommandElement,
+                                            xPropSet),
+                          false, XML_NAMESPACE_OFFICE);
+            bool bIsAutomaticUpdate = GetBoolProperty(
+                gsPropertyIsAutomaticUpdate, xPropSet);
+            if (bIsAutomaticUpdate)
             {
-
-                ProcessString(XML_NAME,
-                              GetStringProperty(gsPropertyName, xPropSet),
-                              false, XML_NAMESPACE_OFFICE);
-
-                // export elements; can't use ProcessString because
-                // elements are in office namespace
-                ProcessString(XML_DDE_APPLICATION,
-                              GetStringProperty(gsPropertyDDECommandType,
-                                                xPropSet),
-                              false, XML_NAMESPACE_OFFICE);
-                ProcessString(XML_DDE_TOPIC,
-                              GetStringProperty(gsPropertyDDECommandFile,
-                                                xPropSet),
-                              false, XML_NAMESPACE_OFFICE);
-                ProcessString(XML_DDE_ITEM,
-                              GetStringProperty(gsPropertyDDECommandElement,
-                                                xPropSet),
-                              false, XML_NAMESPACE_OFFICE);
-                bool bIsAutomaticUpdate = GetBoolProperty(
-                    gsPropertyIsAutomaticUpdate, xPropSet);
-                if (bIsAutomaticUpdate)
-                {
-                    GetExport().AddAttribute(XML_NAMESPACE_OFFICE,
-                                             XML_AUTOMATIC_UPDATE,
-                                             XML_TRUE);
-                }
-
-                ExportElement(XML_DDE_CONNECTION_DECL, true);
+                GetExport().AddAttribute(XML_NAMESPACE_OFFICE,
+                                         XML_AUTOMATIC_UPDATE,
+                                         XML_TRUE);
             }
-            // else: no dependent field -> no export of field declaration
+
+            ExportElement(XML_DDE_CONNECTION_DECL, true);
         }
+        // else: no dependent field -> no export of field declaration
     }
     // else: no declarations element
 }
@@ -2574,22 +2574,22 @@ void XMLTextFieldExport::ProcessIntegerDef(enum XMLTokenEnum eName,
 void XMLTextFieldExport::ProcessNumberingType(sal_Int16 nNumberingType)
 {
     // process only if real format (not: like page descriptor)
-    if (NumberingType::PAGE_DESCRIPTOR != nNumberingType)
-    {
-        OUStringBuffer sTmp( 10 );
-        // number type: num format
-        GetExport().GetMM100UnitConverter().convertNumFormat( sTmp,
-                                                              nNumberingType );
-        GetExport().AddAttribute(XML_NAMESPACE_STYLE, XML_NUM_FORMAT,
-                                      sTmp.makeStringAndClear() );
-        // and letter sync, if applicable
-        SvXMLUnitConverter::convertNumLetterSync( sTmp, nNumberingType );
+    if (NumberingType::PAGE_DESCRIPTOR == nNumberingType)
+        return;
 
-        if (!sTmp.isEmpty())
-        {
-            GetExport().AddAttribute(XML_NAMESPACE_STYLE, XML_NUM_LETTER_SYNC,
-                                     sTmp.makeStringAndClear() );
-        }
+    OUStringBuffer sTmp( 10 );
+    // number type: num format
+    GetExport().GetMM100UnitConverter().convertNumFormat( sTmp,
+                                                          nNumberingType );
+    GetExport().AddAttribute(XML_NAMESPACE_STYLE, XML_NUM_FORMAT,
+                                  sTmp.makeStringAndClear() );
+    // and letter sync, if applicable
+    SvXMLUnitConverter::convertNumLetterSync( sTmp, nNumberingType );
+
+    if (!sTmp.isEmpty())
+    {
+        GetExport().AddAttribute(XML_NAMESPACE_STYLE, XML_NUM_LETTER_SYNC,
+                                 sTmp.makeStringAndClear() );
     }
     // else: like page descriptor => ignore
 }

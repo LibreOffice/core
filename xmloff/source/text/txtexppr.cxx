@@ -328,20 +328,20 @@ void XMLTextExportPropertySetMapper::ContextFontHeightFilter(
             pCharHeightState->maValue.clear();
         }
     }
-    if( pCharDiffHeightState )
+    if( !pCharDiffHeightState )
+        return;
+
+    float nTemp = 0;
+    pCharDiffHeightState->maValue >>= nTemp;
+    if( nTemp == 0. )
     {
-        float nTemp = 0;
-        pCharDiffHeightState->maValue >>= nTemp;
-        if( nTemp == 0. )
-        {
-            pCharDiffHeightState->mnIndex = -1;
-            pCharDiffHeightState->maValue.clear();
-        }
-        else
-        {
-            pCharHeightState->mnIndex = -1;
-            pCharHeightState->maValue.clear();
-        }
+        pCharDiffHeightState->mnIndex = -1;
+        pCharDiffHeightState->maValue.clear();
+    }
+    else
+    {
+        pCharHeightState->mnIndex = -1;
+        pCharHeightState->maValue.clear();
     }
 
 }
@@ -355,20 +355,20 @@ void
 lcl_checkMultiProperty(XMLPropertyState *const pState,
                        XMLPropertyState *const pRelState)
 {
-    if (pState && pRelState)
+    if (!(pState && pRelState))
+        return;
+
+    sal_Int32 nTemp = 0;
+    pRelState->maValue >>= nTemp;
+    if (100 == nTemp)
     {
-        sal_Int32 nTemp = 0;
-        pRelState->maValue >>= nTemp;
-        if (100 == nTemp)
-        {
-            pRelState->mnIndex = -1;
-            pRelState->maValue.clear();
-        }
-        else
-        {
-            pState->mnIndex = -1;
-            pState->maValue.clear();
-        }
+        pRelState->mnIndex = -1;
+        pRelState->maValue.clear();
+    }
+    else
+    {
+        pState->mnIndex = -1;
+        pState->maValue.clear();
     }
 }
 
@@ -466,49 +466,49 @@ void lcl_FilterBorders(
         }
     }
 
-    if( pAllBorderState )
-    {
-        if( pLeftBorderState && pRightBorderState && pTopBorderState && pBottomBorderState )
-        {
-            table::BorderLine2 aLeft, aRight, aTop, aBottom;
+    if( !pAllBorderState )
+        return;
 
-            pLeftBorderState->maValue >>= aLeft;
-            pRightBorderState->maValue >>= aRight;
-            pTopBorderState->maValue >>= aTop;
-            pBottomBorderState->maValue >>= aBottom;
-            if( aLeft.Color == aRight.Color && aLeft.InnerLineWidth == aRight.InnerLineWidth &&
-                aLeft.OuterLineWidth == aRight.OuterLineWidth && aLeft.LineDistance == aRight.LineDistance &&
-                aLeft.LineStyle == aRight.LineStyle &&
-                aLeft.LineWidth == aRight.LineWidth &&
-                aLeft.Color == aTop.Color && aLeft.InnerLineWidth == aTop.InnerLineWidth &&
-                aLeft.OuterLineWidth == aTop.OuterLineWidth && aLeft.LineDistance == aTop.LineDistance &&
-                aLeft.LineStyle == aTop.LineStyle  &&
-                aLeft.LineWidth == aTop.LineWidth  &&
-                aLeft.Color == aBottom.Color && aLeft.InnerLineWidth == aBottom.InnerLineWidth &&
-                aLeft.OuterLineWidth == aBottom.OuterLineWidth && aLeft.LineDistance == aBottom.LineDistance &&
-                aLeft.LineWidth == aBottom.LineWidth &&
-                aLeft.LineStyle == aBottom.LineStyle )
-            {
-                pLeftBorderState->mnIndex = -1;
-                pLeftBorderState->maValue.clear();
-                pRightBorderState->mnIndex = -1;
-                pRightBorderState->maValue.clear();
-                pTopBorderState->mnIndex = -1;
-                pTopBorderState->maValue.clear();
-                pBottomBorderState->mnIndex = -1;
-                pBottomBorderState->maValue.clear();
-            }
-            else
-            {
-                pAllBorderState->mnIndex = -1;
-                pAllBorderState->maValue.clear();
-            }
+    if( pLeftBorderState && pRightBorderState && pTopBorderState && pBottomBorderState )
+    {
+        table::BorderLine2 aLeft, aRight, aTop, aBottom;
+
+        pLeftBorderState->maValue >>= aLeft;
+        pRightBorderState->maValue >>= aRight;
+        pTopBorderState->maValue >>= aTop;
+        pBottomBorderState->maValue >>= aBottom;
+        if( aLeft.Color == aRight.Color && aLeft.InnerLineWidth == aRight.InnerLineWidth &&
+            aLeft.OuterLineWidth == aRight.OuterLineWidth && aLeft.LineDistance == aRight.LineDistance &&
+            aLeft.LineStyle == aRight.LineStyle &&
+            aLeft.LineWidth == aRight.LineWidth &&
+            aLeft.Color == aTop.Color && aLeft.InnerLineWidth == aTop.InnerLineWidth &&
+            aLeft.OuterLineWidth == aTop.OuterLineWidth && aLeft.LineDistance == aTop.LineDistance &&
+            aLeft.LineStyle == aTop.LineStyle  &&
+            aLeft.LineWidth == aTop.LineWidth  &&
+            aLeft.Color == aBottom.Color && aLeft.InnerLineWidth == aBottom.InnerLineWidth &&
+            aLeft.OuterLineWidth == aBottom.OuterLineWidth && aLeft.LineDistance == aBottom.LineDistance &&
+            aLeft.LineWidth == aBottom.LineWidth &&
+            aLeft.LineStyle == aBottom.LineStyle )
+        {
+            pLeftBorderState->mnIndex = -1;
+            pLeftBorderState->maValue.clear();
+            pRightBorderState->mnIndex = -1;
+            pRightBorderState->maValue.clear();
+            pTopBorderState->mnIndex = -1;
+            pTopBorderState->maValue.clear();
+            pBottomBorderState->mnIndex = -1;
+            pBottomBorderState->maValue.clear();
         }
         else
         {
             pAllBorderState->mnIndex = -1;
             pAllBorderState->maValue.clear();
         }
+    }
+    else
+    {
+        pAllBorderState->mnIndex = -1;
+        pAllBorderState->maValue.clear();
     }
 }
 

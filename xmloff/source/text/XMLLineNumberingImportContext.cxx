@@ -198,50 +198,50 @@ void XMLLineNumberingImportContext::CreateAndInsert(bool)
     // we'll try to get the LineNumberingProperties
     Reference<XLineNumberingProperties> xSupplier(GetImport().GetModel(),
                                                   UNO_QUERY);
-    if (xSupplier.is())
+    if (!xSupplier.is())
+        return;
+
+    Reference<XPropertySet> xLineNumbering =
+        xSupplier->getLineNumberingProperties();
+
+    if (!xLineNumbering.is())
+        return;
+
+    Any aAny;
+
+    // set style name (if it exists)
+    if ( GetImport().GetStyles()->FindStyleChildContext(
+                    XmlStyleFamily::TEXT_TEXT, sStyleName ) != nullptr )
     {
-        Reference<XPropertySet> xLineNumbering =
-            xSupplier->getLineNumberingProperties();
-
-        if (xLineNumbering.is())
-        {
-            Any aAny;
-
-            // set style name (if it exists)
-            if ( GetImport().GetStyles()->FindStyleChildContext(
-                            XmlStyleFamily::TEXT_TEXT, sStyleName ) != nullptr )
-            {
-                aAny <<= GetImport().GetStyleDisplayName(
-                            XmlStyleFamily::TEXT_TEXT, sStyleName );
-                xLineNumbering->setPropertyValue(gsCharStyleName, aAny);
-            }
-
-            xLineNumbering->setPropertyValue(gsSeparatorText, Any(sSeparator));
-            xLineNumbering->setPropertyValue(gsDistance, Any(nOffset));
-            xLineNumbering->setPropertyValue(gsNumberPosition, Any(nNumberPosition));
-
-            if (nIncrement >= 0)
-            {
-                xLineNumbering->setPropertyValue(gsInterval, Any(nIncrement));
-            }
-
-            if (nSeparatorIncrement >= 0)
-            {
-                xLineNumbering->setPropertyValue(gsSeparatorInterval, Any(nSeparatorIncrement));
-            }
-
-            xLineNumbering->setPropertyValue(gsIsOn, Any(bNumberLines));
-            xLineNumbering->setPropertyValue(gsCountEmptyLines, Any(bCountEmptyLines));
-            xLineNumbering->setPropertyValue(gsCountLinesInFrames, Any(bCountInFloatingFrames));
-            xLineNumbering->setPropertyValue(gsRestartAtEachPage, Any(bRestartNumbering));
-
-            sal_Int16 nNumType = NumberingType::ARABIC;
-            GetImport().GetMM100UnitConverter().convertNumFormat( nNumType,
-                                                    sNumFormat,
-                                                    sNumLetterSync );
-            xLineNumbering->setPropertyValue(gsNumberingType, Any(nNumType));
-        }
+        aAny <<= GetImport().GetStyleDisplayName(
+                    XmlStyleFamily::TEXT_TEXT, sStyleName );
+        xLineNumbering->setPropertyValue(gsCharStyleName, aAny);
     }
+
+    xLineNumbering->setPropertyValue(gsSeparatorText, Any(sSeparator));
+    xLineNumbering->setPropertyValue(gsDistance, Any(nOffset));
+    xLineNumbering->setPropertyValue(gsNumberPosition, Any(nNumberPosition));
+
+    if (nIncrement >= 0)
+    {
+        xLineNumbering->setPropertyValue(gsInterval, Any(nIncrement));
+    }
+
+    if (nSeparatorIncrement >= 0)
+    {
+        xLineNumbering->setPropertyValue(gsSeparatorInterval, Any(nSeparatorIncrement));
+    }
+
+    xLineNumbering->setPropertyValue(gsIsOn, Any(bNumberLines));
+    xLineNumbering->setPropertyValue(gsCountEmptyLines, Any(bCountEmptyLines));
+    xLineNumbering->setPropertyValue(gsCountLinesInFrames, Any(bCountInFloatingFrames));
+    xLineNumbering->setPropertyValue(gsRestartAtEachPage, Any(bRestartNumbering));
+
+    sal_Int16 nNumType = NumberingType::ARABIC;
+    GetImport().GetMM100UnitConverter().convertNumFormat( nNumType,
+                                            sNumFormat,
+                                            sNumLetterSync );
+    xLineNumbering->setPropertyValue(gsNumberingType, Any(nNumType));
 }
 
 SvXMLImportContextRef XMLLineNumberingImportContext::CreateChildContext(

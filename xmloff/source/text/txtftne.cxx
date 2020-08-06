@@ -339,33 +339,33 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
         true, true);
 
     // two element for footnote content
-    if (!bIsEndnote)
+    if (bIsEndnote)
+        return;
+
+    OUString sTmp;
+
+    // end notice / quo vadis
+    aAny = rFootnoteConfig->getPropertyValue(gsEndNotice);
+    aAny >>= sTmp;
+
+    if (!sTmp.isEmpty())
     {
-        OUString sTmp;
+        SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_TEXT,
+                                 XML_FOOTNOTE_CONTINUATION_NOTICE_FORWARD,
+                                 true, false);
+        GetExport().Characters(sTmp);
+    }
 
-        // end notice / quo vadis
-        aAny = rFootnoteConfig->getPropertyValue(gsEndNotice);
-        aAny >>= sTmp;
+    // begin notice / ergo sum
+    aAny = rFootnoteConfig->getPropertyValue(gsBeginNotice);
+    aAny >>= sTmp;
 
-        if (!sTmp.isEmpty())
-        {
-            SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_TEXT,
-                                     XML_FOOTNOTE_CONTINUATION_NOTICE_FORWARD,
-                                     true, false);
-            GetExport().Characters(sTmp);
-        }
-
-        // begin notice / ergo sum
-        aAny = rFootnoteConfig->getPropertyValue(gsBeginNotice);
-        aAny >>= sTmp;
-
-        if (!sTmp.isEmpty())
-        {
-            SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_TEXT,
-                                     XML_FOOTNOTE_CONTINUATION_NOTICE_BACKWARD,
-                                     true, false);
-            GetExport().Characters(sTmp);
-        }
+    if (!sTmp.isEmpty())
+    {
+        SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_TEXT,
+                                 XML_FOOTNOTE_CONTINUATION_NOTICE_BACKWARD,
+                                 true, false);
+        GetExport().Characters(sTmp);
     }
 }
 

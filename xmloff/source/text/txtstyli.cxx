@@ -355,23 +355,23 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
         }
     }
 
-    if (m_bHasMasterPageName)
-    {
-        OUString sDisplayName(
-            GetImport().GetStyleDisplayName(
-                            XmlStyleFamily::MASTER_PAGE, m_sMasterPageName));
-        // The families container must exist
-        const Reference < XNameContainer >& rPageStyles =
-            GetImport().GetTextImport()->GetPageStyles();
+    if (!m_bHasMasterPageName)
+        return;
 
-        OUString const sPageDescName("PageDescName");
-        if( ( sDisplayName.isEmpty() ||
-              (rPageStyles.is() &&
-               rPageStyles->hasByName( sDisplayName )) ) &&
-            xPropSetInfo->hasPropertyByName( sPageDescName ) )
-        {
-            xPropSet->setPropertyValue( sPageDescName, Any(sDisplayName) );
-        }
+    OUString sDisplayName(
+        GetImport().GetStyleDisplayName(
+                        XmlStyleFamily::MASTER_PAGE, m_sMasterPageName));
+    // The families container must exist
+    const Reference < XNameContainer >& rPageStyles =
+        GetImport().GetTextImport()->GetPageStyles();
+
+    OUString const sPageDescName("PageDescName");
+    if( ( sDisplayName.isEmpty() ||
+          (rPageStyles.is() &&
+           rPageStyles->hasByName( sDisplayName )) ) &&
+        xPropSetInfo->hasPropertyByName( sPageDescName ) )
+    {
+        xPropSet->setPropertyValue( sPageDescName, Any(sDisplayName) );
     }
 }
 

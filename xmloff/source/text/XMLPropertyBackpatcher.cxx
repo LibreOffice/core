@@ -55,22 +55,22 @@ void XMLPropertyBackpatcher<A>::ResolveId(
 
     // backpatch old references, if backpatch list exists
     auto it = aBackpatchListMap.find(sName);
-    if (it != aBackpatchListMap.end())
+    if (it == aBackpatchListMap.end())
+        return;
+
+    // aah, we have a backpatch list!
+    std::unique_ptr<BackpatchListType> pList = std::move(it->second);
+
+    // a) remove list from list map
+    aBackpatchListMap.erase(it);
+
+    // b) for every item, set SequenceNumber
+    //    (and preserve Property, if appropriate)
+    Any aAny;
+    aAny <<= aValue;
+    for(const auto& rBackpatch : *pList)
     {
-        // aah, we have a backpatch list!
-        std::unique_ptr<BackpatchListType> pList = std::move(it->second);
-
-        // a) remove list from list map
-        aBackpatchListMap.erase(it);
-
-        // b) for every item, set SequenceNumber
-        //    (and preserve Property, if appropriate)
-        Any aAny;
-        aAny <<= aValue;
-        for(const auto& rBackpatch : *pList)
-        {
-            rBackpatch->setPropertyValue(sPropertyName, aAny);
-        }
+        rBackpatch->setPropertyValue(sPropertyName, aAny);
     }
     // else: no backpatch list -> then we're finished
 }
