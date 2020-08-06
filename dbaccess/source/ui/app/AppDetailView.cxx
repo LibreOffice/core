@@ -644,20 +644,9 @@ void OApplicationDetailView::impl_createPage( ElementType _eType, const Referenc
     Resize();
 }
 
-const TaskPaneData& OApplicationDetailView::impl_getTaskPaneData( ElementType _eType )
-{
-    if ( m_aTaskPaneData.empty() )
-        m_aTaskPaneData.resize( ELEMENT_COUNT );
-    OSL_ENSURE( ( _eType >= 0 ) && ( _eType < E_ELEMENT_TYPE_COUNT ), "OApplicationDetailView::impl_getTaskPaneData: illegal element type!" );
-    TaskPaneData& rData = m_aTaskPaneData[ _eType ];
+namespace {
 
-    //oj: do not check, otherwise extensions will only be visible after a reload.
-    impl_fillTaskPaneData( _eType, rData );
-
-    return rData;
-}
-
-void OApplicationDetailView::impl_fillTaskPaneData( ElementType _eType, TaskPaneData& _rData ) const
+void impl_fillTaskPaneData(ElementType _eType, TaskPaneData& _rData)
 {
     TaskEntryList& rList( _rData.aTasks );
     rList.clear(); rList.reserve( 4 );
@@ -693,31 +682,21 @@ void OApplicationDetailView::impl_fillTaskPaneData( ElementType _eType, TaskPane
     default:
         OSL_FAIL( "OApplicationDetailView::impl_fillTaskPaneData: illegal element type!" );
     }
+}
 
-    MnemonicGenerator aAllMnemonics( m_aExternalMnemonics );
+}
 
-    // remove the entries which are not enabled currently
-    for (   TaskEntryList::iterator pTask = rList.begin();
-            pTask != rList.end();
-        )
-    {
-        if  (   pTask->bHideWhenDisabled
-            &&  !getBorderWin().getView()->getCommandController().isCommandEnabled( pTask->sUNOCommand )
-            )
-            pTask = rList.erase( pTask );
-        else
-        {
-            aAllMnemonics.RegisterMnemonic( pTask->sTitle );
-            ++pTask;
-        }
-    }
+const TaskPaneData& OApplicationDetailView::impl_getTaskPaneData( ElementType _eType )
+{
+    if ( m_aTaskPaneData.empty() )
+        m_aTaskPaneData.resize( ELEMENT_COUNT );
+    OSL_ENSURE( ( _eType >= 0 ) && ( _eType < E_ELEMENT_TYPE_COUNT ), "OApplicationDetailView::impl_getTaskPaneData: illegal element type!" );
+    TaskPaneData& rData = m_aTaskPaneData[ _eType ];
 
-    // for the remaining entries, assign mnemonics
-    for (auto const& task : rList)
-    {
-        aAllMnemonics.CreateMnemonic(task.sTitle);
-        // don't do this for now, until our task window really supports mnemonics
-    }
+    //oj: do not check, otherwise extensions will only be visible after a reload.
+    impl_fillTaskPaneData( _eType, rData );
+
+    return rData;
 }
 
 OUString OApplicationDetailView::getQualifiedName( SvTreeListEntry* _pEntry ) const
