@@ -56,8 +56,6 @@ using namespace ::com::sun::star::beans;
 using ::com::sun::star::util::URL;
 using ::com::sun::star::sdb::application::NamedDatabaseObject;
 
-#define SPACEBETWEENENTRIES     4
-
 TaskEntry::TaskEntry( const char* _pAsciiUNOCommand, const char* _pHelpID, const char* pTitleResourceID )
     :sUNOCommand( OUString::createFromAscii( _pAsciiUNOCommand ) )
     ,pHelpID( _pHelpID )
@@ -66,268 +64,87 @@ TaskEntry::TaskEntry( const char* _pAsciiUNOCommand, const char* _pHelpID, const
 }
 
 OCreationList::OCreationList( OTasksWindow& _rParent )
-    :SvTreeListBox( &_rParent, WB_TABSTOP | WB_HASBUTTONSATROOT | WB_HASBUTTONS )
-    ,m_rTaskWindow( _rParent )
-    ,m_pMouseDownEntry( nullptr )
-    ,m_pLastActiveEntry( nullptr )
+    : InterimItemWindow(&_rParent, "dbaccess/ui/creationlistbox.ui", "CreationListBox")
+    , m_xTreeView(m_xBuilder->weld_tree_view("treeview"))
+    , m_rTaskWindow( _rParent )
+    , m_nCursorIndex(-1)
 {
-    SetSpaceBetweenEntries(SPACEBETWEENENTRIES);
-    SetSelectionMode( SelectionMode::NONE );
-    SetNoAutoCurEntry( true );
-    SetNodeDefaultImages( );
+    InitControlBase(m_xTreeView.get());
+
+    m_xTreeView->set_help_id(HID_APP_CREATION_LIST);
+    m_xTreeView->connect_row_activated(LINK(this, OCreationList, onSelected));
+    m_xTreeView->connect_changed(LINK(this, OCreationList, OnEntrySelectHdl));
+    m_xTreeView->connect_key_press(LINK(this, OCreationList, KeyInputHdl));
+    m_xTreeView->connect_focus_in(LINK(this, OCreationList, FocusInHdl));
+    m_xTreeView->connect_focus_out(LINK(this, OCreationList, FocusOutHdl));
 }
 
-void OCreationList::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& _rRect )
+IMPL_LINK(OCreationList, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
-    SetBackground();
-
-    if (m_pMouseDownEntry)
-        m_aOriginalFont = rRenderContext.GetFont();
-
-    m_aOriginalBackgroundColor = rRenderContext.GetBackground().GetColor();
-    SvTreeListBox::Paint(rRenderContext, _rRect);
-    rRenderContext.SetBackground(m_aOriginalBackgroundColor);
-
-    if (m_pMouseDownEntry)
-        rRenderContext.SetFont(m_aOriginalFont);
+    return ChildKeyInput(rKEvt);
 }
 
-void OCreationList::PreparePaint(vcl::RenderContext& rRenderContext, SvTreeListEntry& rEntry)
+void OCreationList::dispose()
 {
-    Wallpaper aEntryBackground(m_aOriginalBackgroundColor);
-
-    if (&rEntry == GetCurEntry())
-    {
-        // draw a selection background
-        bool bIsMouseDownEntry = ( &rEntry == m_pMouseDownEntry );
-        vcl::RenderTools::DrawSelectionBackground(rRenderContext, *this, GetBoundingRect(&rEntry),
-                                                  bIsMouseDownEntry ? 1 : 2, false, true, false );
-
-        if (bIsMouseDownEntry)
-        {
-            vcl::Font aFont(rRenderContext.GetFont());
-            aFont.SetColor(rRenderContext.GetSettings().GetStyleSettings().GetHighlightTextColor());
-            rRenderContext.SetFont(aFont);
-        }
-
-        // and temporary set a transparent background, for all the other
-        // paint operations the SvTreeListBox is going to do
-        aEntryBackground = Wallpaper();
-    }
-
-    rRenderContext.SetBackground(aEntryBackground);
-    rEntry.SetBackColor(aEntryBackground.GetColor());
-}
-
-tools::Rectangle OCreationList::GetFocusRect(const SvTreeListEntry* _pEntry, long _nLine)
-{
-    tools::Rectangle aRect = SvTreeListBox::GetFocusRect( _pEntry, _nLine );
-    aRect.SetLeft( 0 );
-
-    // try to let the focus rect start before the bitmap item - this looks better
-    const SvLBoxItem* pBitmapItem = _pEntry->GetFirstItem(SvLBoxItemType::ContextBmp);
-    SvLBoxTab* pTab = pBitmapItem ? GetTab( _pEntry, pBitmapItem ) : nullptr;
-    SvViewDataItem* pItemData = pBitmapItem ? GetViewDataItem( _pEntry, pBitmapItem ) : nullptr;
-    OSL_ENSURE( pTab && pItemData, "OCreationList::GetFocusRect: could not find the first bitmap item!" );
-    if ( pTab && pItemData )
-        aRect.SetLeft( pTab->GetPos() - pItemData->mnWidth / 2 );
-
-    // inflate the rectangle a little bit - looks better, too
-    aRect.SetLeft( std::max< long >( 0, aRect.Left() - 2 ) );
-    aRect.SetRight( std::min< long >( GetOutputSizePixel().Width() - 1, aRect.Right() + 2 ) );
-
-    return aRect;
-}
-
-void OCreationList::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPixel*/ )
-{
-    // don't give this to the base class, it does a ReleaseMouse as very first action
-    // Though I think this is a bug (it should ReleaseMouse only if it is going to do
-    // something with the drag-event), I hesitate to fix it in the current state,
-    // since I don't overlook the consequences, and we're close to 2.0...)
-}
-
-void OCreationList::ModelHasCleared()
-{
-    SvTreeListBox::ModelHasCleared();
-    m_pLastActiveEntry = nullptr;
-    m_pMouseDownEntry = nullptr;
-}
-
-void OCreationList::GetFocus()
-{
-    SvTreeListBox::GetFocus();
-    if ( !GetCurEntry() )
-        setCurrentEntryInvalidate( m_pLastActiveEntry ? m_pLastActiveEntry : GetFirstEntryInView() );
-}
-
-void OCreationList::LoseFocus()
-{
-    SvTreeListBox::LoseFocus();
-    m_pLastActiveEntry = GetCurEntry();
-    setCurrentEntryInvalidate( nullptr );
-}
-
-void OCreationList::MouseButtonDown( const MouseEvent& rMEvt )
-{
-    SvTreeListBox::MouseButtonDown( rMEvt );
-
-    OSL_ENSURE( !m_pMouseDownEntry, "OCreationList::MouseButtonDown: I missed some mouse event!" );
-    m_pMouseDownEntry = GetCurEntry();
-    if ( m_pMouseDownEntry )
-    {
-        InvalidateEntry( m_pMouseDownEntry );
-        CaptureMouse();
-    }
-}
-
-void OCreationList::MouseMove( const MouseEvent& rMEvt )
-{
-    if ( rMEvt.IsLeaveWindow() )
-    {
-        setCurrentEntryInvalidate( nullptr );
-    }
-    else if ( !rMEvt.IsSynthetic() )
-    {
-        SvTreeListEntry* pEntry = GetEntry( rMEvt.GetPosPixel() );
-
-        if ( m_pMouseDownEntry )
-        {
-            // we're currently in a "mouse down" phase
-            OSL_ENSURE( IsMouseCaptured(), "OCreationList::MouseMove: inconsistence (1)!" );
-            if ( pEntry == m_pMouseDownEntry )
-            {
-                setCurrentEntryInvalidate( m_pMouseDownEntry );
-            }
-            else
-            {
-                OSL_ENSURE( ( GetCurEntry() == m_pMouseDownEntry ) || !GetCurEntry(),
-                    "OCreationList::MouseMove: inconsistence (2)!" );
-                setCurrentEntryInvalidate( nullptr );
-            }
-        }
-        else
-        {
-            // the user is simply hovering with the mouse
-            if ( setCurrentEntryInvalidate( pEntry ) )
-            {
-                if ( !m_pMouseDownEntry )
-                    updateHelpText();
-            }
-        }
-    }
-
-    SvTreeListBox::MouseMove(rMEvt);
-}
-
-void OCreationList::MouseButtonUp( const MouseEvent& rMEvt )
-{
-    SvTreeListEntry* pEntry = GetEntry( rMEvt.GetPosPixel() );
-    bool bExecute = false;
-    // Was the mouse released over the active entry?
-    // (i.e. the entry which was under the mouse when the button went down)
-    if ( pEntry && ( m_pMouseDownEntry == pEntry ) )
-    {
-        if ( !rMEvt.IsShift() && !rMEvt.IsMod1() && !rMEvt.IsMod2() && rMEvt.IsLeft() && rMEvt.GetClicks() == 1 )
-            bExecute = true;
-    }
-
-    if ( m_pMouseDownEntry )
-    {
-        OSL_ENSURE( IsMouseCaptured(), "OCreationList::MouseButtonUp: hmmm... no mouse captured, but an active entry?" );
-        ReleaseMouse();
-
-        InvalidateEntry( m_pMouseDownEntry );
-        m_pMouseDownEntry = nullptr;
-    }
-
-    SvTreeListBox::MouseButtonUp( rMEvt );
-
-    if ( bExecute )
-        onSelected( pEntry );
-}
-
-bool OCreationList::setCurrentEntryInvalidate( SvTreeListEntry* _pEntry )
-{
-    if ( GetCurEntry() != _pEntry )
-    {
-        if ( GetCurEntry() )
-            InvalidateEntry( GetCurEntry() );
-        SetCurEntry( _pEntry );
-        if ( GetCurEntry() )
-        {
-            InvalidateEntry( GetCurEntry() );
-            CallEventListeners( VclEventId::ListboxTreeSelect, GetCurEntry() );
-        }
-        updateHelpText();
-        return true;
-    }
-    return false;
+    m_xTreeView.reset();
+    InterimItemWindow::dispose();
 }
 
 void OCreationList::updateHelpText()
 {
     const char* pHelpTextId = nullptr;
-    if ( GetCurEntry() )
-        pHelpTextId = static_cast< TaskEntry* >( GetCurEntry()->GetUserData() )->pHelpID;
+    int nCurEntry = m_xTreeView->get_selected_index();
+    if (nCurEntry != -1)
+        pHelpTextId = reinterpret_cast<TaskEntry*>(m_xTreeView->get_id(nCurEntry).toUInt64())->pHelpID;
     m_rTaskWindow.setHelpText(pHelpTextId);
 }
 
-void OCreationList::onSelected( SvTreeListEntry const * _pEntry ) const
+IMPL_LINK(OCreationList, onSelected, weld::TreeView&, rTreeView, bool)
 {
-    OSL_ENSURE( _pEntry, "OCreationList::onSelected: invalid entry!" );
+    int nCurEntry = rTreeView.get_cursor_index();
+    assert(nCurEntry != -1 && "OCreationList::onSelected: invalid entry!");
     URL aCommand;
-    aCommand.Complete = static_cast< TaskEntry* >( _pEntry->GetUserData() )->sUNOCommand;
+    aCommand.Complete = reinterpret_cast<TaskEntry*>(rTreeView.get_id(nCurEntry).toUInt64())->sUNOCommand;
     m_rTaskWindow.getDetailView()->getBorderWin().getView()->getAppController().executeChecked( aCommand, Sequence< PropertyValue >() );
+
+    return true;
 }
 
-void OCreationList::KeyInput( const KeyEvent& rKEvt )
+void OCreationList::GetFocus()
 {
-    const vcl::KeyCode& rCode = rKEvt.GetKeyCode();
-    if ( !rCode.IsMod1() && !rCode.IsMod2() && !rCode.IsShift() )
-    {
-        if ( rCode.GetCode() == KEY_RETURN )
-        {
-            SvTreeListEntry* pEntry = GetCurEntry() ? GetCurEntry() : FirstSelected();
-            if ( pEntry )
-                onSelected( pEntry );
-            return;
-        }
-    }
-    SvTreeListEntry* pOldCurrent = GetCurEntry();
-    SvTreeListBox::KeyInput(rKEvt);
-    SvTreeListEntry* pNewCurrent = GetCurEntry();
+    InterimItemWindow::GetFocus();
+    if (!m_xTreeView)
+        return;
+    FocusInHdl(*m_xTreeView);
+}
 
-    if ( pOldCurrent != pNewCurrent )
-    {
-        if ( pOldCurrent )
-            InvalidateEntry( pOldCurrent );
-        if ( pNewCurrent )
-        {
-            InvalidateEntry( pNewCurrent );
-            CallEventListeners( VclEventId::ListboxSelect, pNewCurrent );
-        }
-        updateHelpText();
-    }
+IMPL_LINK_NOARG(OCreationList, FocusInHdl, weld::Widget&, void)
+{
+    m_xTreeView->select(m_nCursorIndex != -1 ? m_nCursorIndex : 0);
+}
+
+IMPL_LINK_NOARG(OCreationList, FocusOutHdl, weld::Widget&, void)
+{
+    m_nCursorIndex = m_xTreeView->get_cursor_index();
+    m_xTreeView->unselect_all();
+}
+
+IMPL_LINK_NOARG(OCreationList, OnEntrySelectHdl, weld::TreeView&, void)
+{
+    updateHelpText();
 }
 
 OTasksWindow::OTasksWindow(vcl::Window* _pParent,OApplicationDetailView* _pDetailView)
     : Window(_pParent,WB_DIALOGCONTROL )
     ,m_aCreation(VclPtr<OCreationList>::Create(*this))
     ,m_aDescription(VclPtr<FixedText>::Create(this))
-    ,m_aHelpText(VclPtr<FixedText>::Create(this,WB_WORDBREAK))
     ,m_aFL(VclPtr<FixedLine>::Create(this,WB_VERT))
+    ,m_aHelpText(VclPtr<FixedText>::Create(this,WB_WORDBREAK))
     ,m_pDetailView(_pDetailView)
 {
-    m_aCreation->SetHelpId(HID_APP_CREATION_LIST);
-    m_aCreation->SetSelectHdl(LINK(this, OTasksWindow, OnEntrySelectHdl));
     m_aHelpText->SetHelpId(HID_APP_HELP_TEXT);
     m_aDescription->SetHelpId(HID_APP_DESCRIPTION_TEXT);
     m_aDescription->SetText(DBA_RES(STR_DESCRIPTION));
-
-    Image aFolderImage = ImageProvider::getFolderImage( css::sdb::application::DatabaseObject::FORM );
-    m_aCreation->SetDefaultCollapsedEntryBmp( aFolderImage );
-    m_aCreation->SetDefaultExpandedEntryBmp( aFolderImage );
 
     ImplInitSettings();
 }
@@ -388,22 +205,9 @@ void OTasksWindow::ImplInitSettings()
 void OTasksWindow::setHelpText(const char* pId)
 {
     if (pId)
-    {
-        OUString sText = DBA_RES(pId);
-        m_aHelpText->SetText(sText);
-    }
+        m_aHelpText->SetText(DBA_RES(pId));
     else
-    {
         m_aHelpText->SetText(OUString());
-}
-
-}
-
-IMPL_LINK_NOARG(OTasksWindow, OnEntrySelectHdl, SvTreeListBox*, void)
-{
-    SvTreeListEntry* pEntry = m_aCreation->GetHdlEntry();
-    if ( pEntry )
-        m_aHelpText->SetText(DBA_RES(static_cast<TaskEntry*>(pEntry->GetUserData())->pHelpID));
 }
 
 void OTasksWindow::Resize()
@@ -456,15 +260,13 @@ void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
 
         const Reference< XGraphic >* pImages( aImages.getConstArray() );
 
+        weld::TreeView& rTreeView = m_aCreation->get_widget();
+        size_t nIndex = 0;
         for (auto const& task : _rList)
         {
-            SvTreeListEntry* pEntry = m_aCreation->InsertEntry(task.sTitle);
-            pEntry->SetUserData( new TaskEntry(task) );
-
-            Image aImage( *pImages );
-            m_aCreation->SetExpandedEntryBmp(  pEntry, aImage );
-            m_aCreation->SetCollapsedEntryBmp( pEntry, aImage );
-            ++pImages;
+            OUString sId = OUString::number(reinterpret_cast<sal_uInt64>(new TaskEntry(task)));
+            rTreeView.append(sId, task.sTitle);
+            rTreeView.set_image(nIndex++, *pImages++);
         }
     }
     catch(Exception&)
@@ -472,7 +274,7 @@ void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
     }
 
     m_aCreation->Show();
-    m_aCreation->SelectAll(false);
+    m_aCreation->get_widget().unselect_all();
     m_aHelpText->Show();
     m_aDescription->Show();
     m_aFL->Show();
@@ -482,16 +284,15 @@ void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
 
 void OTasksWindow::Clear()
 {
-    m_aCreation->resetLastActive();
-    SvTreeListEntry* pEntry = m_aCreation->First();
-    while ( pEntry )
-    {
-        delete static_cast< TaskEntry* >( pEntry->GetUserData() );
-        pEntry = m_aCreation->Next(pEntry);
-    }
-    m_aCreation->Clear();
-}
+    weld::TreeView& rTreeView = m_aCreation->get_widget();
+    rTreeView.all_foreach([&rTreeView](weld::TreeIter& rEntry){
+        TaskEntry* pUserData = reinterpret_cast<TaskEntry*>(rTreeView.get_id(rEntry).toUInt64());
+        delete pUserData;
+        return false;
+    });
 
+    rTreeView.clear();
+}
 
 OApplicationDetailView::OApplicationDetailView(OAppBorderWindow& _rParent,PreviewMode _ePreviewMode) : OSplitterView(&_rParent )
     ,m_aHorzSplitter(VclPtr<Splitter>::Create(this))
