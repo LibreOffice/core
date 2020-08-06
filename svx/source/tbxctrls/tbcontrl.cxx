@@ -2861,7 +2861,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
     for (const auto& rStyle : aStyles)
         pBox->append_text(rStyle);
 
-    if (pImpl->bSpecModeWriter || pImpl->bSpecModeCalc)
+    if ((pImpl->bSpecModeWriter || pImpl->bSpecModeCalc) && !comphelper::LibreOfficeKit::isActive())
         pBox->append_text(pImpl->aMore);
 
     pBox->thaw();
