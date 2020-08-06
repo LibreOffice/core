@@ -24,8 +24,16 @@ class AgendaWizardDialogResources(object):
     SECTION_MINUTES = "MINUTES"
 
     def __init__(self):
-        import imp, os
-        imp.load_source('strings', os.path.join(os.path.dirname(__file__), '../common/strings.hrc'))
+        import sys, os
+
+        # imp is deprecated since Python v.3.4
+        if sys.version_info >= (3,3):
+            from importlib.machinery import SourceFileLoader
+            SourceFileLoader('strings', os.path.join(os.path.dirname(__file__), '../common/strings.hrc')).load_module()
+        else:
+            import imp
+            imp.load_source('strings', os.path.join(os.path.dirname(__file__), '../common/strings.hrc'))
+
         import strings
 
         self.resAgendaWizardDialog_title = strings.RID_AGENDAWIZARDDIALOG_START_1
