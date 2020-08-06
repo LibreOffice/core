@@ -177,51 +177,51 @@ bool Svx3DPreviewControl::MouseButtonDown(const MouseEvent& rMEvt)
 
 void Svx3DPreviewControl::SetObjectType(SvxPreviewObjectType nType)
 {
-    if( mnObjectType != nType || !mp3DObj)
+    if(mnObjectType == nType && mp3DObj)
+        return;
+
+    SfxItemSet aSet(mpModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>{});
+    mnObjectType = nType;
+
+    if( mp3DObj )
     {
-        SfxItemSet aSet(mpModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>{});
-        mnObjectType = nType;
-
-        if( mp3DObj )
-        {
-            aSet.Put(mp3DObj->GetMergedItemSet());
-            mpScene->RemoveObject( mp3DObj->GetOrdNum() );
-            // always use SdrObject::Free(...) for SdrObjects (!)
-            SdrObject* pTemp(mp3DObj);
-            SdrObject::Free(pTemp);
-        }
-
-        switch( nType )
-        {
-            case SvxPreviewObjectType::SPHERE:
-            {
-                mp3DObj = new E3dSphereObj(
-                    *mpModel,
-                    mp3DView->Get3DDefaultAttributes(),
-                    basegfx::B3DPoint( 0, 0, 0 ),
-                    basegfx::B3DVector( 5000, 5000, 5000 ));
-            }
-            break;
-
-            case SvxPreviewObjectType::CUBE:
-            {
-                mp3DObj = new E3dCubeObj(
-                    *mpModel,
-                    mp3DView->Get3DDefaultAttributes(),
-                    basegfx::B3DPoint( -2500, -2500, -2500 ),
-                    basegfx::B3DVector( 5000, 5000, 5000 ));
-            }
-            break;
-        }
-
-        if (mp3DObj)
-        {
-            mpScene->InsertObject( mp3DObj );
-            mp3DObj->SetMergedItemSet(aSet);
-        }
-
-        Invalidate();
+        aSet.Put(mp3DObj->GetMergedItemSet());
+        mpScene->RemoveObject( mp3DObj->GetOrdNum() );
+        // always use SdrObject::Free(...) for SdrObjects (!)
+        SdrObject* pTemp(mp3DObj);
+        SdrObject::Free(pTemp);
     }
+
+    switch( nType )
+    {
+        case SvxPreviewObjectType::SPHERE:
+        {
+            mp3DObj = new E3dSphereObj(
+                *mpModel,
+                mp3DView->Get3DDefaultAttributes(),
+                basegfx::B3DPoint( 0, 0, 0 ),
+                basegfx::B3DVector( 5000, 5000, 5000 ));
+        }
+        break;
+
+        case SvxPreviewObjectType::CUBE:
+        {
+            mp3DObj = new E3dCubeObj(
+                *mpModel,
+                mp3DView->Get3DDefaultAttributes(),
+                basegfx::B3DPoint( -2500, -2500, -2500 ),
+                basegfx::B3DVector( 5000, 5000, 5000 ));
+        }
+        break;
+    }
+
+    if (mp3DObj)
+    {
+        mpScene->InsertObject( mp3DObj );
+        mp3DObj->SetMergedItemSet(aSet);
+    }
+
+    Invalidate();
 }
 
 SfxItemSet const & Svx3DPreviewControl::Get3DAttributes() const
@@ -461,65 +461,65 @@ void Svx3DLightControl::AdaptToSelectedLight()
 
 void Svx3DLightControl::TrySelection(Point aPosPixel)
 {
-    if(mpScene)
+    if(!mpScene)
+        return;
+
+    const Point aPosLogic(GetDrawingArea()->get_ref_device().PixelToLogic(aPosPixel));
+    const basegfx::B2DPoint aPoint(aPosLogic.X(), aPosLogic.Y());
+    std::vector< const E3dCompoundObject* > aResult;
+    getAllHit3DObjectsSortedFrontToBack(aPoint, *mpScene, aResult);
+
+    if(aResult.empty())
+        return;
+
+    // exclude expansion object which will be part of
+    // the hits. It's invisible, but for HitTest, it's included
+    const E3dCompoundObject* pResult = nullptr;
+
+    for(auto const & b: aResult)
     {
-        const Point aPosLogic(GetDrawingArea()->get_ref_device().PixelToLogic(aPosPixel));
-        const basegfx::B2DPoint aPoint(aPosLogic.X(), aPosLogic.Y());
-        std::vector< const E3dCompoundObject* > aResult;
-        getAllHit3DObjectsSortedFrontToBack(aPoint, *mpScene, aResult);
-
-        if(!aResult.empty())
+        if(b && b != mpExpansionObject)
         {
-            // exclude expansion object which will be part of
-            // the hits. It's invisible, but for HitTest, it's included
-            const E3dCompoundObject* pResult = nullptr;
+            pResult = b;
+            break;
+        }
+    }
 
-            for(auto const & b: aResult)
+    if(pResult == mp3DObj)
+    {
+        if(!mbGeometrySelected)
+        {
+            mbGeometrySelected = true;
+            maSelectedLight = NO_LIGHT_SELECTED;
+            ConstructLightObjects();
+            AdaptToSelectedLight();
+            Invalidate();
+
+            if(maSelectionChangeCallback.IsSet())
             {
-                if(b && b != mpExpansionObject)
-                {
-                    pResult = b;
-                    break;
-                }
+                maSelectionChangeCallback.Call(this);
             }
+        }
+    }
+    else
+    {
+        sal_uInt32 aNewSelectedLight(NO_LIGHT_SELECTED);
 
-            if(pResult == mp3DObj)
+        for(sal_uInt32 a(0); a < MAX_NUMBER_LIGHTS; a++)
+        {
+            if(maLightObjects[a] && maLightObjects[a] == pResult)
             {
-                if(!mbGeometrySelected)
-                {
-                    mbGeometrySelected = true;
-                    maSelectedLight = NO_LIGHT_SELECTED;
-                    ConstructLightObjects();
-                    AdaptToSelectedLight();
-                    Invalidate();
-
-                    if(maSelectionChangeCallback.IsSet())
-                    {
-                        maSelectionChangeCallback.Call(this);
-                    }
-                }
+                aNewSelectedLight = a;
             }
-            else
+        }
+
+        if(aNewSelectedLight != maSelectedLight)
+        {
+            SelectLight(aNewSelectedLight);
+
+            if(maSelectionChangeCallback.IsSet())
             {
-                sal_uInt32 aNewSelectedLight(NO_LIGHT_SELECTED);
-
-                for(sal_uInt32 a(0); a < MAX_NUMBER_LIGHTS; a++)
-                {
-                    if(maLightObjects[a] && maLightObjects[a] == pResult)
-                    {
-                        aNewSelectedLight = a;
-                    }
-                }
-
-                if(aNewSelectedLight != maSelectedLight)
-                {
-                    SelectLight(aNewSelectedLight);
-
-                    if(maSelectionChangeCallback.IsSet())
-                    {
-                        maSelectionChangeCallback.Call(this);
-                    }
-                }
+                maSelectionChangeCallback.Call(this);
             }
         }
     }
@@ -761,44 +761,44 @@ void Svx3DLightControl::SetPosition(double fHor, double fVer)
             Invalidate();
         }
     }
-    if(IsGeometrySelected())
+    if(!IsGeometrySelected())
+        return;
+
+    if(mfRotateX == fVer && mfRotateY == fHor)
+        return;
+
+    mfRotateX = basegfx::deg2rad(fVer);
+    mfRotateY = basegfx::deg2rad(fHor);
+
+    if(mp3DObj)
     {
-        if(mfRotateX != fVer || mfRotateY != fHor)
-        {
-            mfRotateX = basegfx::deg2rad(fVer);
-            mfRotateY = basegfx::deg2rad(fHor);
+        basegfx::B3DHomMatrix aObjectRotation;
+        aObjectRotation.rotate(mfRotateX, mfRotateY, mfRotateZ);
+        mp3DObj->SetTransform(aObjectRotation);
 
-            if(mp3DObj)
-            {
-                basegfx::B3DHomMatrix aObjectRotation;
-                aObjectRotation.rotate(mfRotateX, mfRotateY, mfRotateZ);
-                mp3DObj->SetTransform(aObjectRotation);
-
-                Invalidate();
-            }
-        }
+        Invalidate();
     }
 }
 
 void Svx3DLightControl::SetRotation(double fRotX, double fRotY, double fRotZ)
 {
-    if(IsGeometrySelected())
+    if(!IsGeometrySelected())
+        return;
+
+    if(fRotX == mfRotateX && fRotY == mfRotateY && fRotZ == mfRotateZ)
+        return;
+
+    mfRotateX = fRotX;
+    mfRotateY = fRotY;
+    mfRotateZ = fRotZ;
+
+    if(mp3DObj)
     {
-        if(fRotX != mfRotateX || fRotY != mfRotateY || fRotZ != mfRotateZ)
-        {
-            mfRotateX = fRotX;
-            mfRotateY = fRotY;
-            mfRotateZ = fRotZ;
+        basegfx::B3DHomMatrix aObjectRotation;
+        aObjectRotation.rotate(mfRotateX, mfRotateY, mfRotateZ);
+        mp3DObj->SetTransform(aObjectRotation);
 
-            if(mp3DObj)
-            {
-                basegfx::B3DHomMatrix aObjectRotation;
-                aObjectRotation.rotate(mfRotateX, mfRotateY, mfRotateZ);
-                mp3DObj->SetTransform(aObjectRotation);
-
-                Invalidate();
-            }
-        }
+        Invalidate();
     }
 }
 

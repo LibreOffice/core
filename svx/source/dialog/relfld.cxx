@@ -34,35 +34,35 @@ SvxRelativeField::SvxRelativeField(std::unique_ptr<weld::MetricSpinButton> pCont
 
 IMPL_LINK_NOARG(SvxRelativeField, ModifyHdl, weld::Entry&, void)
 {
-    if (bRelativeMode)
+    if (!bRelativeMode)
+        return;
+
+    OUString  aStr = m_xSpinButton->get_text();
+    bool      bNewMode = bRelative;
+
+    if ( bRelative )
     {
-        OUString  aStr = m_xSpinButton->get_text();
-        bool      bNewMode = bRelative;
+        const sal_Unicode* pStr = aStr.getStr();
 
-        if ( bRelative )
+        while ( *pStr )
         {
-            const sal_Unicode* pStr = aStr.getStr();
-
-            while ( *pStr )
+            if( ( ( *pStr < '0' ) || ( *pStr > '9' ) ) &&
+                ( *pStr != '%' ) )
             {
-                if( ( ( *pStr < '0' ) || ( *pStr > '9' ) ) &&
-                    ( *pStr != '%' ) )
-                {
-                    bNewMode = false;
-                    break;
-                }
-                pStr++;
+                bNewMode = false;
+                break;
             }
+            pStr++;
         }
-        else
-        {
-            if ( aStr.indexOf( "%" ) != -1 )
-                bNewMode = true;
-        }
-
-        if ( bNewMode != bRelative )
-            SetRelative( bNewMode );
     }
+    else
+    {
+        if ( aStr.indexOf( "%" ) != -1 )
+            bNewMode = true;
+    }
+
+    if ( bNewMode != bRelative )
+        SetRelative( bNewMode );
 }
 
 void SvxRelativeField::EnableRelativeMode(sal_uInt16 nMin, sal_uInt16 nMax)

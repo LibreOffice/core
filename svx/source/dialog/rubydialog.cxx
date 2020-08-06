@@ -139,23 +139,23 @@ SvxRubyData_Impl::~SvxRubyData_Impl()
 
 void SvxRubyData_Impl::SetController(const Reference<XController>& xCtrl)
 {
-    if (xCtrl.get() != xController.get())
-    {
-        try
-        {
-            Reference<XSelectionSupplier> xSelSupp(xController, UNO_QUERY);
-            if (xSelSupp.is())
-                xSelSupp->removeSelectionChangeListener(this);
+    if (xCtrl.get() == xController.get())
+        return;
 
-            bHasSelectionChanged = true;
-            xController = xCtrl;
-            xSelSupp.set(xController, UNO_QUERY);
-            if (xSelSupp.is())
-                xSelSupp->addSelectionChangeListener(this);
-        }
-        catch (const Exception&)
-        {
-        }
+    try
+    {
+        Reference<XSelectionSupplier> xSelSupp(xController, UNO_QUERY);
+        if (xSelSupp.is())
+            xSelSupp->removeSelectionChangeListener(this);
+
+        bHasSelectionChanged = true;
+        xController = xCtrl;
+        xSelSupp.set(xController, UNO_QUERY);
+        if (xSelSupp.is())
+            xSelSupp->addSelectionChangeListener(this);
+    }
+    catch (const Exception&)
+    {
     }
 }
 
@@ -290,73 +290,72 @@ void SvxRubyDialog::Activate()
     SfxViewFrame* pCurFrm = SfxViewFrame::Current();
     Reference< XController > xCtrl = pCurFrm->GetFrame().GetController();
     m_pImpl->SetController(xCtrl);
-    if (m_pImpl->HasSelectionChanged())
+    if (!m_pImpl->HasSelectionChanged())
+        return;
+
+    Reference< XRubySelection > xRubySel = m_pImpl->GetRubySelection();
+    m_pImpl->UpdateRubyValues();
+    EnableControls(xRubySel.is());
+    if (xRubySel.is())
     {
-
-        Reference< XRubySelection > xRubySel = m_pImpl->GetRubySelection();
-        m_pImpl->UpdateRubyValues();
-        EnableControls(xRubySel.is());
-        if (xRubySel.is())
+        Reference< XModel > xModel = m_pImpl->GetModel();
+        const OUString sCharStyleSelect = m_xCharStyleLB->get_active_text();
+        ClearCharStyleList();
+        Reference<XStyleFamiliesSupplier> xSupplier(xModel, UNO_QUERY);
+        if (xSupplier.is())
         {
-            Reference< XModel > xModel = m_pImpl->GetModel();
-            const OUString sCharStyleSelect = m_xCharStyleLB->get_active_text();
-            ClearCharStyleList();
-            Reference<XStyleFamiliesSupplier> xSupplier(xModel, UNO_QUERY);
-            if (xSupplier.is())
+            try
             {
-                try
+                Reference<XNameAccess> xFam = xSupplier->getStyleFamilies();
+                Any aChar = xFam->getByName("CharacterStyles");
+                Reference<XNameContainer> xChar;
+                aChar >>= xChar;
+                Reference<XIndexAccess> xCharIdx(xChar, UNO_QUERY);
+                if (xCharIdx.is())
                 {
-                    Reference<XNameAccess> xFam = xSupplier->getStyleFamilies();
-                    Any aChar = xFam->getByName("CharacterStyles");
-                    Reference<XNameContainer> xChar;
-                    aChar >>= xChar;
-                    Reference<XIndexAccess> xCharIdx(xChar, UNO_QUERY);
-                    if (xCharIdx.is())
+                    OUString sUIName("DisplayName");
+                    for (sal_Int32 nStyle = 0; nStyle < xCharIdx->getCount(); nStyle++)
                     {
-                        OUString sUIName("DisplayName");
-                        for (sal_Int32 nStyle = 0; nStyle < xCharIdx->getCount(); nStyle++)
+                        Any aStyle = xCharIdx->getByIndex(nStyle);
+                        Reference<XStyle> xStyle;
+                        aStyle >>= xStyle;
+                        Reference<XPropertySet> xPrSet(xStyle, UNO_QUERY);
+                        OUString sName, sCoreName;
+                        if (xPrSet.is())
                         {
-                            Any aStyle = xCharIdx->getByIndex(nStyle);
-                            Reference<XStyle> xStyle;
-                            aStyle >>= xStyle;
-                            Reference<XPropertySet> xPrSet(xStyle, UNO_QUERY);
-                            OUString sName, sCoreName;
-                            if (xPrSet.is())
+                            Reference<XPropertySetInfo> xInfo = xPrSet->getPropertySetInfo();
+                            if (xInfo->hasPropertyByName(sUIName))
                             {
-                                Reference<XPropertySetInfo> xInfo = xPrSet->getPropertySetInfo();
-                                if (xInfo->hasPropertyByName(sUIName))
-                                {
-                                    Any aName = xPrSet->getPropertyValue(sUIName);
-                                    aName >>= sName;
-                                }
+                                Any aName = xPrSet->getPropertyValue(sUIName);
+                                aName >>= sName;
                             }
-                            if (xStyle.is())
-                            {
-                                sCoreName = xStyle->getName();
-                                if (sName.isEmpty())
-                                    sName = sCoreName;
-                            }
-                            if (!sName.isEmpty())
-                            {
-                                m_xCharStyleLB->append(sCoreName, sName);
+                        }
+                        if (xStyle.is())
+                        {
+                            sCoreName = xStyle->getName();
+                            if (sName.isEmpty())
+                                sName = sCoreName;
+                        }
+                        if (!sName.isEmpty())
+                        {
+                            m_xCharStyleLB->append(sCoreName, sName);
 
-                            }
                         }
                     }
                 }
-                catch (const Exception&)
-                {
-                    OSL_FAIL("exception in style access");
-                }
-                if (!sCharStyleSelect.isEmpty())
-                    m_xCharStyleLB->set_active_text(sCharStyleSelect);
             }
-            m_xCharStyleLB->set_sensitive(xSupplier.is());
-            m_xCharStyleFT->set_sensitive(xSupplier.is());
+            catch (const Exception&)
+            {
+                OSL_FAIL("exception in style access");
+            }
+            if (!sCharStyleSelect.isEmpty())
+                m_xCharStyleLB->set_active_text(sCharStyleSelect);
         }
-        Update();
-        m_xPreviewWin->Invalidate();
+        m_xCharStyleLB->set_sensitive(xSupplier.is());
+        m_xCharStyleFT->set_sensitive(xSupplier.is());
     }
+    Update();
+    m_xPreviewWin->Invalidate();
 }
 
 void SvxRubyDialog::SetRubyText(sal_Int32 nPos, weld::Entry& rLeft, weld::Entry& rRight)

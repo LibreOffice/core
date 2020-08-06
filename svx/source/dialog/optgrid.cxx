@@ -213,33 +213,32 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
 
     // Metric Change if necessary (as TabPage is in the dialog, where the
     // metric can be set
-    if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_METRIC , false,
+    if( SfxItemState::SET != rSet.GetItemState( SID_ATTR_METRIC , false,
                                     &pAttr ))
-    {
-        const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pAttr);
+        return;
 
-        FieldUnit eFUnit = static_cast<FieldUnit>(static_cast<long>(pItem->GetValue()));
+    const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pAttr);
 
-        if (eFUnit != m_xMtrFldDrawX->get_unit())
-        {
-            // Set Metrics
-            int nMin, nMax;
-            int nVal = m_xMtrFldDrawX->denormalize(m_xMtrFldDrawX->get_value(FieldUnit::TWIP));
+    FieldUnit eFUnit = static_cast<FieldUnit>(static_cast<long>(pItem->GetValue()));
 
-            lcl_GetMinMax(*m_xMtrFldDrawX, nMin, nMax);
-            SetFieldUnit(*m_xMtrFldDrawX, eFUnit, true);
-            lcl_SetMinMax(*m_xMtrFldDrawX, nMin, nMax);
+    if (eFUnit == m_xMtrFldDrawX->get_unit())
+        return;
 
-            m_xMtrFldDrawX->set_value(m_xMtrFldDrawX->normalize(nVal), FieldUnit::TWIP);
+    // Set Metrics
+    int nMin, nMax;
+    int nVal = m_xMtrFldDrawX->denormalize(m_xMtrFldDrawX->get_value(FieldUnit::TWIP));
 
-            nVal = m_xMtrFldDrawY->denormalize(m_xMtrFldDrawY->get_value(FieldUnit::TWIP));
-            lcl_GetMinMax(*m_xMtrFldDrawY, nMin, nMax);
-            SetFieldUnit(*m_xMtrFldDrawY, eFUnit, true);
-            lcl_SetMinMax(*m_xMtrFldDrawY, nMin, nMax);
-            m_xMtrFldDrawY->set_value(m_xMtrFldDrawY->normalize(nVal), FieldUnit::TWIP);
+    lcl_GetMinMax(*m_xMtrFldDrawX, nMin, nMax);
+    SetFieldUnit(*m_xMtrFldDrawX, eFUnit, true);
+    lcl_SetMinMax(*m_xMtrFldDrawX, nMin, nMax);
 
-        }
-    }
+    m_xMtrFldDrawX->set_value(m_xMtrFldDrawX->normalize(nVal), FieldUnit::TWIP);
+
+    nVal = m_xMtrFldDrawY->denormalize(m_xMtrFldDrawY->get_value(FieldUnit::TWIP));
+    lcl_GetMinMax(*m_xMtrFldDrawY, nMin, nMax);
+    SetFieldUnit(*m_xMtrFldDrawY, eFUnit, true);
+    lcl_SetMinMax(*m_xMtrFldDrawY, nMin, nMax);
+    m_xMtrFldDrawY->set_value(m_xMtrFldDrawY->normalize(nVal), FieldUnit::TWIP);
 }
 
 DeactivateRC SvxGridTabPage::DeactivatePage( SfxItemSet* _pSet )
