@@ -35,9 +35,9 @@ namespace framework{
 class JobConst
 {
     public:
-        static const OUString ANSWER_DEACTIVATE_JOB;
-        static const OUString ANSWER_SAVE_ARGUMENTS;
-        static const OUString ANSWER_SEND_DISPATCHRESULT;
+        static const OUStringLiteral ANSWER_DEACTIVATE_JOB;
+        static const OUStringLiteral ANSWER_SAVE_ARGUMENTS;
+        static const OUStringLiteral ANSWER_SEND_DISPATCHRESULT;
 };
 
 } // namespace framework

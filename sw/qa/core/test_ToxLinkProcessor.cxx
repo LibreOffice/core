@@ -40,18 +40,18 @@ public:
         SwGlobals::ensure();
     }
 
-    static const OUString STYLE_NAME_1;
-    static const OUString STYLE_NAME_2;
+    static const OUStringLiteral STYLE_NAME_1;
+    static const OUStringLiteral STYLE_NAME_2;
     static const sal_uInt16 POOL_ID_1;
     static const sal_uInt16 POOL_ID_2;
-    static const OUString URL_1;
-    static const OUString URL_2;
+    static const OUStringLiteral URL_1;
+    static const OUStringLiteral URL_2;
 };
 
-const OUString ToxLinkProcessorTest::STYLE_NAME_1 = "anyStyle1";
-const OUString ToxLinkProcessorTest::STYLE_NAME_2 = "anyStyle2";
-const OUString ToxLinkProcessorTest::URL_1 = "anyUrl1";
-const OUString ToxLinkProcessorTest::URL_2 = "anyUrl2";
+const OUStringLiteral ToxLinkProcessorTest::STYLE_NAME_1 = "anyStyle1";
+const OUStringLiteral ToxLinkProcessorTest::STYLE_NAME_2 = "anyStyle2";
+const OUStringLiteral ToxLinkProcessorTest::URL_1 = "anyUrl1";
+const OUStringLiteral ToxLinkProcessorTest::URL_2 = "anyUrl2";
 const sal_uInt16 ToxLinkProcessorTest::POOL_ID_1 = 42;
 const sal_uInt16 ToxLinkProcessorTest::POOL_ID_2 = 43;
 
@@ -83,8 +83,8 @@ ToxLinkProcessorTest::AddingAndClosingTwoOverlappingLinksResultsInOneClosedLink(
     CPPUNIT_ASSERT_EQUAL(1u, static_cast<unsigned>(sut.m_ClosedLinks.size()));
     CPPUNIT_ASSERT_MESSAGE("no links are open", !sut.m_pStartedLink);
     // backward compatibility: the last start is closed by the first end
-    CPPUNIT_ASSERT_EQUAL(STYLE_NAME_2, sut.m_ClosedLinks[0]->mINetFormat.GetINetFormat());
-    CPPUNIT_ASSERT_EQUAL(URL_1, sut.m_ClosedLinks[0]->mINetFormat.GetValue());
+    CPPUNIT_ASSERT_EQUAL(OUString(STYLE_NAME_2), sut.m_ClosedLinks[0]->mINetFormat.GetINetFormat());
+    CPPUNIT_ASSERT_EQUAL(OUString(URL_1), sut.m_ClosedLinks[0]->mINetFormat.GetValue());
 }
 
 namespace {
@@ -114,8 +114,8 @@ ToxLinkProcessorTest::LinkIsCreatedCorrectly()
     sut.StartNewLink(0, STYLE_NAME_1);
     sut.CloseLink(1, URL_1);
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Style is stored correctly in link", STYLE_NAME_1, sut.m_ClosedLinks.at(0)->mINetFormat.GetVisitedFormat());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Url is stored correctly in link", URL_1, sut.m_ClosedLinks.at(0)->mINetFormat.GetValue());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Style is stored correctly in link", OUString(STYLE_NAME_1), sut.m_ClosedLinks.at(0)->mINetFormat.GetVisitedFormat());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Url is stored correctly in link", OUString(URL_1), sut.m_ClosedLinks.at(0)->mINetFormat.GetValue());
 }
 
 void
@@ -132,18 +132,18 @@ ToxLinkProcessorTest::LinkSequenceIsPreserved()
 
     // check first closed element
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Style is stored correctly in link",
-            STYLE_NAME_2, sut.m_ClosedLinks.at(0)->mINetFormat.GetVisitedFormat());
+            OUString(STYLE_NAME_2), sut.m_ClosedLinks.at(0)->mINetFormat.GetVisitedFormat());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Pool id is stored correctly in link",
             POOL_ID_2, sut.m_ClosedLinks.at(0)->mINetFormat.GetINetFormatId());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Url is stored correctly in link",
-            URL_2, sut.m_ClosedLinks.at(0)->mINetFormat.GetValue());
+            OUString(URL_2), sut.m_ClosedLinks.at(0)->mINetFormat.GetValue());
     // check second closed element
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Style is stored correctly in link",
-            STYLE_NAME_1, sut.m_ClosedLinks.at(1)->mINetFormat.GetVisitedFormat());
+            OUString(STYLE_NAME_1), sut.m_ClosedLinks.at(1)->mINetFormat.GetVisitedFormat());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Pool id is stored correctly in link",
             POOL_ID_1, sut.m_ClosedLinks.at(1)->mINetFormat.GetINetFormatId());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Url is stored correctly in link",
-            URL_1, sut.m_ClosedLinks.at(1)->mINetFormat.GetValue());
+            OUString(URL_1), sut.m_ClosedLinks.at(1)->mINetFormat.GetValue());
 }
 
 // Put the test suite in the registry

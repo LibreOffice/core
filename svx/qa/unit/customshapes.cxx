@@ -29,7 +29,7 @@ using namespace ::com::sun::star;
 
 namespace
 {
-const OUString sDataDirectory("svx/qa/unit/data/");
+const OUStringLiteral sDataDirectory("svx/qa/unit/data/");
 
 /// Tests for svx/source/customshapes/ code.
 class CustomshapesTest : public test::BootstrapFixture, public unotest::MacrosTest

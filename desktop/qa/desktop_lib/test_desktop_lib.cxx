@@ -2739,7 +2739,7 @@ void DesktopLOKTest::testComplexSelection()
 {
     // Start with a blank text file and add contents.
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    static const OString aText("hello world");
+    static const OStringLiteral aText("hello world");
 
     // Certainly not complex.
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(LOK_SELTYPE_NONE), pDocument->pClass->getSelectionType(pDocument));
@@ -2764,7 +2764,7 @@ void DesktopLOKTest::testComplexSelection()
     // Export as plain text, we should get only the text part "hello".
     char* pText = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", nullptr);
     CPPUNIT_ASSERT(pText != nullptr);
-    CPPUNIT_ASSERT_EQUAL(aText, OString(pText));
+    CPPUNIT_ASSERT_EQUAL(OString(aText), OString(pText));
     free(pText);
 
     // Export as rtf, we should also get the image.
@@ -2821,7 +2821,7 @@ void DesktopLOKTest::testCalcSaveAs()
 
 void DesktopLOKTest::testSpellcheckerMultiView()
 {
-    static const OUString aLangISO("en-US");
+    static const OUStringLiteral aLangISO("en-US");
     SvtSysLocaleOptions aSysLocaleOptions;
     aSysLocaleOptions.SetLocaleConfigString(aLangISO);
     aSysLocaleOptions.SetUILocaleConfigString(aLangISO);
