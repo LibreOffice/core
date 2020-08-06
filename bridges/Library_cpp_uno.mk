@@ -21,11 +21,6 @@ $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,gcc3_uno)) : \
 	EXTRAOBJECTLISTS += $(call gb_CustomTarget_get_workdir,bridges/source/cpp_uno/gcc3_linux_arm)/armhelper.objectlist
 endif
 
-else ifeq ($(CPUNAME),ARM64)
-bridges_SELECTED_BRIDGE := gcc3_ios
-bridge_noopt_objects := cpp2uno except uno2cpp
-bridge_asm_objects := ios64_helper
-
 else ifeq ($(CPUNAME),AARCH64)
 
 ifneq ($(filter ANDROID DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
@@ -37,6 +32,14 @@ $(eval $(call gb_Library_add_exception_objects,$(gb_CPPU_ENV)_uno, \
     bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/callvirtualfunction, \
     $(if $(HAVE_GCC_STACK_CLASH_PROTECTION),-fno-stack-clash-protection) \
 ))
+else ifneq ($(filter iOS MACOSX,$(OS)),)
+# For now, use the same bridge for macOS on arm64 as for iOS. But we
+# will eventually obviously want one that does generate code
+# dynamically on macOS.
+bridges_SELECTED_BRIDGE := gcc3_ios
+bridge_noopt_objects := cpp2uno except uno2cpp
+bridge_asm_objects := ios64_helper
+
 endif
 
 else ifeq ($(CPUNAME),AXP)
