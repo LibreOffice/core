@@ -93,6 +93,7 @@ struct SAL_WARN_UNUSED OUStringLiteral
 
     // So we can use this struct in some places interchangeably with OUString
     constexpr sal_Int32 getLength() const { return size; }
+
 };
 
 /// @endcond
