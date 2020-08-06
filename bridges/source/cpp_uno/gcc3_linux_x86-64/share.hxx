@@ -108,6 +108,20 @@ namespace __cxxabiv1 {
 struct __cxa_exception {
 #if defined _LIBCPPABI_VERSION // detect libc++abi
 #if defined __LP64__ || LIBCXXABI_ARM_EHABI
+#if 0
+    // This is a new field added with LLVM 11
+    // <https://github.com/llvm/llvm-project/commit/f2a436058fcbc11291e73badb44e243f61046183>
+    // "[libcxxabi] Insert padding in __cxa_exception struct for compatibility".  The HACK in
+    // fillUnoException (bridges/source/cpp_uno/gcc3_linux_x86-64/except.cxx) tries to find out at
+    // runtime whether a __cxa_exception has this member.  Once we can be sure that we only run
+    // against new libcxxabi that has this member, we can drop the "#if 0" here and drop the hack
+    // in fillUnoException.
+
+    // Now _Unwind_Exception is marked with __attribute__((aligned)),
+    // which implies __cxa_exception is also aligned. Insert padding
+    // in the beginning of the struct, rather than before unwindHeader.
+    void *reserve;
+#endif
     std::size_t referenceCount;
 #endif
 #endif
