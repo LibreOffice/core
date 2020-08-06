@@ -16,6 +16,7 @@
 #include <editeng/opaqitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <svx/svdogrp.hxx>
+#include <svx/svdotext.hxx>
 #include <oox/token/namespaces.hxx>
 #include <textboxhelper.hxx>
 #include <fmtanchr.hxx>
@@ -983,6 +984,24 @@ bool DocxSdrExport::Impl::isSupportedDMLShape(const uno::Reference<drawing::XSha
     return true;
 }
 
+bool lcl_isRotatedText(SdrObject const& rShape, uno::Reference<drawing::XShape> const& xShape)
+{
+    uno::Reference<beans::XPropertySet> const xProps(xShape, uno::UNO_QUERY);
+    sal_Int32 nRotateAngle = sal_Int32();
+    if (!dynamic_cast<SdrTextObj const*>(&rShape)
+        || !xProps->getPropertySetInfo()->hasPropertyByName("RotateAngle")
+        || !(xProps->getPropertyValue("RotateAngle") >>= nRotateAngle))
+    {
+        return false;
+    }
+    if (nRotateAngle == 9000) // is it enough, or should it be any angle != 0?
+    {
+        SAL_INFO("sw.ww8", "HACK: forcing rotated shape to VML only");
+        return true;
+    }
+    return false;
+}
+
 void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj,
                                           const SwFrameFormat& rFrameFormat, int nAnchorId)
 {
@@ -1001,6 +1020,7 @@ void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj,
     // In case we are already inside a DML block, then write the shape only as VML, turn out that's allowed to do.
     // A common service created in util to check for VML shapes which are allowed to have textbox in content
     if ((msfilter::util::HasTextBoxContent(eShapeType)) && Impl::isSupportedDMLShape(xShape)
+        && !lcl_isRotatedText(*sdrObj, xShape)
         && (!bDMLAndVMLDrawingOpen || lcl_isLockedCanvas(xShape))) // Locked canvas is OK inside DML
     {
         m_pImpl->getSerializer()->startElementNS(XML_mc, XML_AlternateContent);
