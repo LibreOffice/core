@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "911bea79_5b72c836",
+        "filename": "sd/source/core/CustomAnimationPreset.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-08-06T23:02:13Z",
+      "side": 1,
+      "message": "Would need some creative souls to come up with a handful of cool animations - you can also have entrance and exit effects obviously, with physics",
+      "revId": "6b626cee0001392f13ea39e3d4659f069b77dcfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b1cb23b_ae70cd5a",
+        "filename": "xmloff/source/draw/animationexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-08-06T23:02:13Z",
+      "side": 1,
+      "message": "careful here, we cannot add elements inside the odf main namespaces - those need to be put in extension namespace (a la loext), and any extension documented in the wiki \u0026 sent upstream to OASIS for standardisation.",
+      "revId": "6b626cee0001392f13ea39e3d4659f069b77dcfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
