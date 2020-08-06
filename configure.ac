@@ -5136,16 +5136,19 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to turn warnings to errors])
 if test -n "$enable_werror" -a "$enable_werror" != "no"; then
     ENABLE_WERROR="TRUE"
+    PYTHONWARNINGS="error"
     AC_MSG_RESULT([yes])
 else
     if test -n "$LODE_HOME" -a -z "$enable_werror"; then
         ENABLE_WERROR="TRUE"
+        PYTHONWARNINGS="error"
         AC_MSG_RESULT([yes])
     else
         AC_MSG_RESULT([no])
     fi
 fi
 AC_SUBST(ENABLE_WERROR)
+AC_SUBST(PYTHONWARNINGS)
 
 dnl Check for --enable-assert-always-abort, set ASSERT_ALWAYS_ABORT
 dnl ===================================================================
