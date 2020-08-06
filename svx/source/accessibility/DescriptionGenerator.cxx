@@ -69,35 +69,35 @@ void DescriptionGenerator::Initialize(const char* pResourceId)
 void DescriptionGenerator::Initialize (const OUString& sPrefix)
 {
     msDescription = sPrefix;
-    if (mxSet.is())
+    if (!mxSet.is())
+        return;
+
     {
-        {
-            SolarMutexGuard aGuard;
+        SolarMutexGuard aGuard;
 
-            msDescription.append(' ');
-            msDescription.append(SvxResId(RID_SVXSTR_A11Y_WITH));
-            msDescription.append(' ');
+        msDescription.append(' ');
+        msDescription.append(SvxResId(RID_SVXSTR_A11Y_WITH));
+        msDescription.append(' ');
 
-            msDescription.append(SvxResId (RID_SVXSTR_A11Y_STYLE));
-            msDescription.append('=');
-        }
+        msDescription.append(SvxResId (RID_SVXSTR_A11Y_STYLE));
+        msDescription.append('=');
+    }
 
-        try
+    try
+    {
+        if (mxSet.is())
         {
-            if (mxSet.is())
-            {
-                uno::Any aValue = mxSet->getPropertyValue ("Style");
-                uno::Reference<container::XNamed> xStyle (aValue, uno::UNO_QUERY);
-                if (xStyle.is())
-                    msDescription.append (xStyle->getName());
-            }
-            else
-                msDescription.append ("<no style>");
+            uno::Any aValue = mxSet->getPropertyValue ("Style");
+            uno::Reference<container::XNamed> xStyle (aValue, uno::UNO_QUERY);
+            if (xStyle.is())
+                msDescription.append (xStyle->getName());
         }
-        catch (const css::beans::UnknownPropertyException &)
-        {
-            msDescription.append ("<unknown>");
-        }
+        else
+            msDescription.append ("<no style>");
+    }
+    catch (const css::beans::UnknownPropertyException &)
+    {
+        msDescription.append ("<unknown>");
     }
 }
 
@@ -113,34 +113,36 @@ void DescriptionGenerator::AddProperty (const OUString& sPropertyName,
     PropertyType aType)
 {
     uno::Reference<beans::XPropertyState> xState (mxShape, uno::UNO_QUERY);
-    if (xState.is()
-        && xState->getPropertyState(sPropertyName)!=beans::PropertyState_DEFAULT_VALUE)
-        if (mxSet.is())
-        {
-            // Append a separator from previous Properties.
-            if ( ! mbIsFirstProperty)
-                msDescription.append(',');
-            else
-            {
-                SolarMutexGuard aGuard;
+    if (!xState.is()
+        || xState->getPropertyState(sPropertyName)==beans::PropertyState_DEFAULT_VALUE)
+        return;
 
-                msDescription.append(' ');
-                msDescription.append(SvxResId(RID_SVXSTR_A11Y_AND));
-                msDescription.append(' ');
-                mbIsFirstProperty = false;
-            }
+    if (!mxSet.is())
+        return;
 
-            // Delegate to type specific property handling.
-            switch (aType)
-            {
-                case PropertyType::Color:
-                    AddColor (sPropertyName);
-                    break;
-                case PropertyType::Integer:
-                    AddInteger (sPropertyName);
-                    break;
-            }
-        }
+    // Append a separator from previous Properties.
+    if ( ! mbIsFirstProperty)
+        msDescription.append(',');
+    else
+    {
+        SolarMutexGuard aGuard;
+
+        msDescription.append(' ');
+        msDescription.append(SvxResId(RID_SVXSTR_A11Y_AND));
+        msDescription.append(' ');
+        mbIsFirstProperty = false;
+    }
+
+    // Delegate to type specific property handling.
+    switch (aType)
+    {
+        case PropertyType::Color:
+            AddColor (sPropertyName);
+            break;
+        case PropertyType::Integer:
+            AddInteger (sPropertyName);
+            break;
+    }
 }
 
 

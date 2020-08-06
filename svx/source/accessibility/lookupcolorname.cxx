@@ -74,23 +74,25 @@ ColorNameMap::ColorNameMap() {
     }
 
     // Fill the map to convert from numerical color values to names.
-    if (xNA.is())
-        for (const auto& rName : std::as_const(aNames))
+    if (!xNA.is())
+        return;
+
+    for (const auto& rName : std::as_const(aNames))
+    {
+        // Get the numerical value for the i-th color name.
+        try
         {
-            // Get the numerical value for the i-th color name.
-            try
-            {
-                css::uno::Any aColor = xNA->getByName(rName);
-                long nColor = 0;
-                aColor >>= nColor;
-                map_[nColor] = rName;
-            }
-            catch (css::uno::RuntimeException const&)
-            {
-                // Ignore the exception: the color who lead to the exception
-                // is not included into the map.
-            }
+            css::uno::Any aColor = xNA->getByName(rName);
+            long nColor = 0;
+            aColor >>= nColor;
+            map_[nColor] = rName;
         }
+        catch (css::uno::RuntimeException const&)
+        {
+            // Ignore the exception: the color who lead to the exception
+            // is not included into the map.
+        }
+    }
 }
 
 OUString ColorNameMap::lookUp(long color) const {

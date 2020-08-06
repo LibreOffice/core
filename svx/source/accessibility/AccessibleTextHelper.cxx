@@ -398,42 +398,42 @@ namespace accessibility
 
         mbThisHasFocus = bHaveFocus;
 
-        if( bOldFocus != bHaveFocus )
+        if( bOldFocus == bHaveFocus )
+            return;
+
+        if( bHaveFocus )
         {
-            if( bHaveFocus )
+            if( mxFrontEnd.is() )
             {
-                if( mxFrontEnd.is() )
+                AccessibleCell* pAccessibleCell = dynamic_cast< AccessibleCell* > ( mxFrontEnd.get() );
+                if ( !pAccessibleCell )
+                    GotPropertyEvent( uno::makeAny(AccessibleStateType::FOCUSED), AccessibleEventId::STATE_CHANGED );
+                else    // the focus event on cell should be fired on table directly
                 {
-                    AccessibleCell* pAccessibleCell = dynamic_cast< AccessibleCell* > ( mxFrontEnd.get() );
-                    if ( !pAccessibleCell )
-                        GotPropertyEvent( uno::makeAny(AccessibleStateType::FOCUSED), AccessibleEventId::STATE_CHANGED );
-                    else    // the focus event on cell should be fired on table directly
-                    {
-                        AccessibleTableShape* pAccTable = pAccessibleCell->GetParentTable();
-                        if (pAccTable)
-                            pAccTable->SetStateDirectly(AccessibleStateType::FOCUSED);
-                    }
+                    AccessibleTableShape* pAccTable = pAccessibleCell->GetParentTable();
+                    if (pAccTable)
+                        pAccTable->SetStateDirectly(AccessibleStateType::FOCUSED);
                 }
-                SAL_INFO("svx", "Parent object received focus" );
             }
-            else
+            SAL_INFO("svx", "Parent object received focus" );
+        }
+        else
+        {
+            // The focus state should be reset directly on table.
+            //LostPropertyEvent( uno::makeAny(AccessibleStateType::FOCUSED), AccessibleEventId::STATE_CHANGED );
+            if( mxFrontEnd.is() )
             {
-                // The focus state should be reset directly on table.
-                //LostPropertyEvent( uno::makeAny(AccessibleStateType::FOCUSED), AccessibleEventId::STATE_CHANGED );
-                if( mxFrontEnd.is() )
+                AccessibleCell* pAccessibleCell = dynamic_cast< AccessibleCell* > ( mxFrontEnd.get() );
+                if ( !pAccessibleCell )
+                    FireEvent( AccessibleEventId::STATE_CHANGED, uno::Any(), uno::makeAny(AccessibleStateType::FOCUSED) );
+                else
                 {
-                    AccessibleCell* pAccessibleCell = dynamic_cast< AccessibleCell* > ( mxFrontEnd.get() );
-                    if ( !pAccessibleCell )
-                        FireEvent( AccessibleEventId::STATE_CHANGED, uno::Any(), uno::makeAny(AccessibleStateType::FOCUSED) );
-                    else
-                    {
-                        AccessibleTableShape* pAccTable = pAccessibleCell->GetParentTable();
-                        if (pAccTable)
-                            pAccTable->ResetStateDirectly(AccessibleStateType::FOCUSED);
-                    }
+                    AccessibleTableShape* pAccTable = pAccessibleCell->GetParentTable();
+                    if (pAccTable)
+                        pAccTable->ResetStateDirectly(AccessibleStateType::FOCUSED);
                 }
-                SAL_INFO("svx", "Parent object lost focus" );
             }
+            SAL_INFO("svx", "Parent object lost focus" );
         }
     }
 
@@ -914,32 +914,32 @@ namespace accessibility
             nLast = nLast + nMiddle - nFirst;
         }
 
-        if( nFirst < nParas && nMiddle < nParas && nLast < nParas )
-        {
-            // since we have no "paragraph index
-            // changed" event on UAA, remove
-            // [first,last] and insert again later (in
-            // UpdateVisibleChildren)
+        if( !(nFirst < nParas && nMiddle < nParas && nLast < nParas) )
+            return;
 
-            // maParaManager.Rotate( nFirst, nMiddle, nLast );
+        // since we have no "paragraph index
+        // changed" event on UAA, remove
+        // [first,last] and insert again later (in
+        // UpdateVisibleChildren)
 
-            // send CHILD_EVENT to affected children
-            ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator begin = maParaManager.begin();
-            ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator end = begin;
+        // maParaManager.Rotate( nFirst, nMiddle, nLast );
 
-            ::std::advance( begin, nFirst );
-            ::std::advance( end, nLast+1 );
+        // send CHILD_EVENT to affected children
+        ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator begin = maParaManager.begin();
+        ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator end = begin;
 
-            // TODO: maybe optimize here in the following way.  If the
-            // number of removed children exceeds a certain threshold,
-            // use InvalidateFlags::Children
-            AccessibleTextHelper_LostChildEvent aFunctor( *this );
+        ::std::advance( begin, nFirst );
+        ::std::advance( end, nLast+1 );
 
-            ::std::for_each( begin, end, aFunctor );
+        // TODO: maybe optimize here in the following way.  If the
+        // number of removed children exceeds a certain threshold,
+        // use InvalidateFlags::Children
+        AccessibleTextHelper_LostChildEvent aFunctor( *this );
 
-            maParaManager.Release(nFirst, nLast+1);
-            // should be no need for UpdateBoundRect, since all affected children are cleared.
-        }
+        ::std::for_each( begin, end, aFunctor );
+
+        maParaManager.Release(nFirst, nLast+1);
+        // should be no need for UpdateBoundRect, since all affected children are cleared.
     }
 
     namespace {
@@ -969,28 +969,27 @@ namespace accessibility
         {}
         void operator()( const SfxHint* pEvent )
         {
-            if( pEvent &&
-                mnParasChanged != -1 )
-            {
-                // determine hint type
-                const TextHint* pTextHint = dynamic_cast<const TextHint*>( pEvent );
-                const SvxEditSourceHint* pEditSourceHint = dynamic_cast<const SvxEditSourceHint*>( pEvent );
+            if( !pEvent || mnParasChanged == -1 )
+                return;
 
-                if( !pEditSourceHint && pTextHint &&
-                    (pTextHint->GetId() == SfxHintId::TextParaInserted ||
-                     pTextHint->GetId() == SfxHintId::TextParaRemoved ) )
-                {
-                    if( pTextHint->GetValue() == EE_PARA_ALL )
-                    {
-                        mnParasChanged = -1;
-                    }
-                    else
-                    {
-                        mnHintId = pTextHint->GetId();
-                        mnParaIndex = pTextHint->GetValue();
-                        ++mnParasChanged;
-                    }
-                }
+            // determine hint type
+            const TextHint* pTextHint = dynamic_cast<const TextHint*>( pEvent );
+            const SvxEditSourceHint* pEditSourceHint = dynamic_cast<const SvxEditSourceHint*>( pEvent );
+
+            if( !(!pEditSourceHint && pTextHint &&
+                (pTextHint->GetId() == SfxHintId::TextParaInserted ||
+                 pTextHint->GetId() == SfxHintId::TextParaRemoved )) )
+                return;
+
+            if( pTextHint->GetValue() == EE_PARA_ALL )
+            {
+                mnParasChanged = -1;
+            }
+            else
+            {
+                mnHintId = pTextHint->GetId();
+                mnParaIndex = pTextHint->GetValue();
+                ++mnParasChanged;
             }
         }
 
@@ -1466,19 +1465,19 @@ namespace accessibility
 
     void AccessibleTextHelper_Impl::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
     {
-        if( getNotifierClientId() != -1 )
+        if( getNotifierClientId() == -1 )
+            return;
+
+        const sal_Int32 nListenerCount = ::comphelper::AccessibleEventNotifier::removeEventListener( getNotifierClientId(), xListener );
+        if ( !nListenerCount )
         {
-            const sal_Int32 nListenerCount = ::comphelper::AccessibleEventNotifier::removeEventListener( getNotifierClientId(), xListener );
-            if ( !nListenerCount )
-            {
-                // no listeners anymore
-                // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-                // and at least to us not firing any events anymore, in case somebody calls
-                // NotifyAccessibleEvent, again
-                ::comphelper::AccessibleEventNotifier::TClientId nId( getNotifierClientId() );
-                mnNotifierClientId = -1;
-                ::comphelper::AccessibleEventNotifier::revokeClient( nId );
-            }
+            // no listeners anymore
+            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
+            // and at least to us not firing any events anymore, in case somebody calls
+            // NotifyAccessibleEvent, again
+            ::comphelper::AccessibleEventNotifier::TClientId nId( getNotifierClientId() );
+            mnNotifierClientId = -1;
+            ::comphelper::AccessibleEventNotifier::revokeClient( nId );
         }
     }
 
