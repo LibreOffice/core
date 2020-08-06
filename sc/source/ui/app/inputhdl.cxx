@@ -3404,7 +3404,7 @@ void ScInputHandler::SetReference( const ScRange& rRef, const ScDocument& rDoc )
 
     DataChanging();                         // Cannot be new
 
-    // Turn around selection if backwards (TODO: Do we really need to do that?)
+    // Turn around selection if backwards.
     if (pTableView)
     {
         ESelection aTabSel = pTableView->GetSelection();
