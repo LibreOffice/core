@@ -531,6 +531,30 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject(
             }
         }
     }
+<<<<<<< HEAD   (cb2397 Weekly version bump: N8)
+=======
+
+    if ( !bDrawObject )
+        return;
+
+    // if there's no viewport set, all fly-frames will be painted,
+    // which is slow, wastes memory, and can cause other trouble.
+    (void) rViewInformation; // suppress "unused parameter" warning
+    assert(comphelper::LibreOfficeKit::isActive() || !rViewInformation.getViewport().isEmpty());
+    if ( m_pFlyFrame->IsFlyInContentFrame() )
+        return;
+
+    // it is also necessary to restore the VCL MapMode from ViewInformation since e.g.
+    // the VCL PixelRenderer resets it at the used OutputDevice. Unfortunately, this
+    // excludes shears and rotates which are not expressible in MapMode.
+    // OD #i102707#
+    // new helper class to restore MapMode - restoration, only if
+    // needed and consideration of paint for meta file creation .
+    RestoreMapMode aRestoreMapModeIfNeeded( pShell );
+
+    // paint the FlyFrame (use standard VCL-Paint)
+    m_pFlyFrame->PaintSwFrame( *pShell->GetOut(), m_pFlyFrame->GetPageFrame()->getFrameArea());
+>>>>>>> CHANGE (b6850b tdf#106153 sw compatibility: fix textboxes exceeding the pag)
 }
 
 void SwVirtFlyDrawObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const

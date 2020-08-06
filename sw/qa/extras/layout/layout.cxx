@@ -1158,6 +1158,99 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf134277)
                                  xmlXPathNodeSetGetLength(pXmlNodes));
 }
 
+<<<<<<< HEAD   (cb2397 Weekly version bump: N8)
+=======
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf116486)
+{
+    SwDoc* pDoc = createDoc("tdf116486.docx");
+    CPPUNIT_ASSERT(pDoc);
+    OUString aTop = parseDump("/root/page/body/txt/Special", "nHeight");
+    CPPUNIT_ASSERT_EQUAL(OUString("4006"), aTop);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128198)
+{
+    SwDoc* pDoc = createDoc("tdf128198-1.docx");
+    CPPUNIT_ASSERT(pDoc);
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+    // the problem was that line 5 was truncated at "this  "
+    // due to the fly anchored in previous paragraph
+    assertXPath(pLayout, "/root/page/body/txt[2]/LineBreak[5]", "Line",
+                "to access any service, any time, anywhere. From this  perspective, satellite "
+                "boasts some ");
+    assertXPath(pLayout, "/root/page/body/txt[2]/LineBreak[6]", "Line", "significant advantages. ");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testNoLineBreakAtSlash)
+{
+    load(DATA_DIRECTORY, "no-line-break-at-slash.fodt");
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+
+    // the line break was between  "Foostrasse 13/c/" and "2"
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pLayout, "/root/page[1]/body/txt[1]/child::*[2]");
+    CPPUNIT_ASSERT_EQUAL(std::string("Text"), std::string(reinterpret_cast<char const*>(
+                                                  pXmlObj->nodesetval->nodeTab[0]->name)));
+    xmlXPathFreeObject(pXmlObj);
+    pXmlObj = getXPathNode(pLayout, "/root/page[1]/body/txt[1]/child::*[3]");
+    CPPUNIT_ASSERT_EQUAL(std::string("LineBreak"), std::string(reinterpret_cast<char const*>(
+                                                       pXmlObj->nodesetval->nodeTab[0]->name)));
+    xmlXPathFreeObject(pXmlObj);
+    pXmlObj = getXPathNode(pLayout, "/root/page[1]/body/txt[1]/child::*[4]");
+    CPPUNIT_ASSERT_EQUAL(std::string("Text"), std::string(reinterpret_cast<char const*>(
+                                                  pXmlObj->nodesetval->nodeTab[0]->name)));
+    xmlXPathFreeObject(pXmlObj);
+    pXmlObj = getXPathNode(pLayout, "/root/page[1]/body/txt[1]/child::*[5]");
+    CPPUNIT_ASSERT_EQUAL(std::string("Special"), std::string(reinterpret_cast<char const*>(
+                                                     pXmlObj->nodesetval->nodeTab[0]->name)));
+    xmlXPathFreeObject(pXmlObj);
+    pXmlObj = getXPathNode(pLayout, "/root/page[1]/body/txt[1]/child::*[6]");
+    CPPUNIT_ASSERT_EQUAL(std::string("Text"), std::string(reinterpret_cast<char const*>(
+                                                  pXmlObj->nodesetval->nodeTab[0]->name)));
+    xmlXPathFreeObject(pXmlObj);
+    pXmlObj = getXPathNode(pLayout, "/root/page[1]/body/txt[1]/child::*[7]");
+    CPPUNIT_ASSERT_EQUAL(std::string("LineBreak"), std::string(reinterpret_cast<char const*>(
+                                                       pXmlObj->nodesetval->nodeTab[0]->name)));
+    xmlXPathFreeObject(pXmlObj);
+    pXmlObj = getXPathNode(pLayout, "/root/page[1]/body/txt[1]/child::*[8]");
+    CPPUNIT_ASSERT_EQUAL(std::string("Finish"), std::string(reinterpret_cast<char const*>(
+                                                    pXmlObj->nodesetval->nodeTab[0]->name)));
+    xmlXPathFreeObject(pXmlObj);
+
+    assertXPath(pLayout, "/root/page[1]/body/txt[1]/Text[1]", "Portion", "Blah blah bla bla bla ");
+    assertXPath(pLayout, "/root/page[1]/body/txt[1]/Text[2]", "Portion", "Foostrasse");
+    assertXPath(pLayout, "/root/page[1]/body/txt[1]/Text[3]", "Portion", "13/c/2, etc.");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf106153)
+{
+    load(DATA_DIRECTORY, "tdf106153.docx");
+    xmlDocUniquePtr pDump = parseLayoutDump();
+
+    const sal_Int64 nPageValLeft = getXPath(pDump, "/root/page/infos/bounds", "left").toInt64();
+    const sal_Int64 nPageValTop = getXPath(pDump, "/root/page/infos/bounds", "top").toInt64();
+    const sal_Int64 nPageValRight = getXPath(pDump, "/root/page/infos/bounds", "right").toInt64();
+    const sal_Int64 nPageValBottom = getXPath(pDump, "/root/page/infos/bounds", "bottom").toInt64();
+
+    const sal_Int64 nShape1ValTop
+        = getXPath(pDump, "/root/page/body/txt/anchored/fly[1]/infos/bounds", "top").toInt64();
+    const sal_Int64 nShape2ValLeft
+        = getXPath(pDump, "/root/page/body/txt/anchored/fly[2]/infos/bounds", "left").toInt64();
+    const sal_Int64 nShape3ValRight
+        = getXPath(pDump, "/root/page/body/txt/anchored/fly[3]/infos/bounds", "right").toInt64();
+    const sal_Int64 nShape4ValBottom
+        = getXPath(pDump, "/root/page/body/txt/anchored/fly[4]/infos/bounds", "bottom").toInt64();
+
+    CPPUNIT_ASSERT_MESSAGE("The whole top textbox is inside the page!",
+                           nPageValTop > nShape1ValTop);
+    CPPUNIT_ASSERT_MESSAGE("The whole left textbox is inside the page!",
+                           nPageValLeft > nShape2ValLeft);
+    CPPUNIT_ASSERT_MESSAGE("The whole right textbox is inside the page!",
+                           nPageValRight < nShape3ValRight);
+    CPPUNIT_ASSERT_MESSAGE("The whole bottom textbox is inside the page!",
+                           nPageValBottom < nShape4ValBottom);
+}
+
+>>>>>>> CHANGE (b6850b tdf#106153 sw compatibility: fix textboxes exceeding the pag)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
 {
     loadURL("private:factory/swriter", nullptr);
