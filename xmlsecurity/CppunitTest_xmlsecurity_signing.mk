@@ -48,6 +48,10 @@ $(eval $(call gb_CppunitTest_use_sdk_api,xmlsecurity_signing))
 $(eval $(call gb_CppunitTest_use_ure,xmlsecurity_signing))
 $(eval $(call gb_CppunitTest_use_vcl,xmlsecurity_signing))
 
+$(eval $(call gb_CppunitTest_use_uiconfigs,xmlsecurity_signing, \
+    svt \
+))
+
 $(eval $(call gb_CppunitTest_use_rdb,xmlsecurity_signing,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,xmlsecurity_signing))
