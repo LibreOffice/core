@@ -107,7 +107,6 @@ void XclExpSetup::SaveXml( XclExpXmlStream& rStrm )
         // pAttrList->add( XML_paperUnits,          "mm" );
     }
     pAttrList->add( XML_scale,              OString::number(  mrData.mnScaling ).getStr() );
-    pAttrList->add( XML_firstPageNumber,    OString::number(  mrData.mnStartPage ).getStr() );
     pAttrList->add( XML_fitToWidth,         OString::number(  mrData.mnFitToWidth ).getStr() );
     pAttrList->add( XML_fitToHeight,        OString::number(  mrData.mnFitToHeight ).getStr() );
     pAttrList->add( XML_pageOrder,          mrData.mbPrintInRows ? "overThenDown" : "downThenOver" );
@@ -119,7 +118,12 @@ void XclExpSetup::SaveXml( XclExpXmlStream& rStrm )
     pAttrList->add( XML_blackAndWhite,      ToPsz( mrData.mbBlackWhite ) );
     pAttrList->add( XML_draft,              ToPsz( mrData.mbDraftQuality ) );
     pAttrList->add( XML_cellComments,       mrData.mbPrintNotes ? "atEnd" : "none" );         // OOXTODO: "asDisplayed"?
-    pAttrList->add( XML_useFirstPageNumber, ToPsz( mrData.mbManualStart ) );
+
+    if ( mrData.mbManualStart )
+    {
+        pAttrList->add( XML_firstPageNumber,    OString::number(  mrData.mnStartPage ).getStr() );
+        pAttrList->add( XML_useFirstPageNumber, ToPsz( mrData.mbManualStart ) );
+    }
     // OOXTODO: XML_errors, // == displayed|blank|dash|NA
     pAttrList->add( XML_horizontalDpi,      OString::number(  mrData.mnHorPrintRes ).getStr() );
     pAttrList->add( XML_verticalDpi,        OString::number(  mrData.mnVerPrintRes ).getStr() );
