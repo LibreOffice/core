@@ -1315,7 +1315,7 @@ void SwTextPaintInfo::DrawBorder( const SwLinePortion &rPor ) const
 void SwTextPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
                                    PortionType nWhich ) const
 {
-    if( !(OnWin() && !IsMulti()) )
+    if( !OnWin() || IsMulti() )
         return;
 
     bool bDraw = false;

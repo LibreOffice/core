@@ -1152,7 +1152,7 @@ void SwHTMLWriter::PrepareFontList( const SvxFontItem& rFontItem,
         }
     }
 
-    if( !(!bContainsKeyword && bGeneric) )
+    if( bContainsKeyword || !bGeneric )
         return;
 
     const char *pStr = nullptr;

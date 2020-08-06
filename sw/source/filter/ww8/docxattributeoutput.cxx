@@ -2333,7 +2333,7 @@ void DocxAttributeOutput::EndField_Impl( const SwTextNode* pNode, sal_Int32 nPos
     bool bIsSetField = rInfos.pField->GetTyp( )->Which( ) == SwFieldIds::SetExp;
     bool bShowRef = bIsSetField && ( nSubType & nsSwExtendedSubType::SUB_INVISIBLE ) == 0;
 
-    if ( !(( !m_sFieldBkm.isEmpty() ) && bShowRef) )
+    if ( m_sFieldBkm.isEmpty() || !bShowRef )
         return;
 
     // Write the field beginning
@@ -8937,7 +8937,7 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         aOutputBorderOptions.aShadowLocation = pShadowItem->GetLocation();
     }
 
-    if ( !(!m_bOpenedSectPr || GetWritingHeaderFooter()))
+    if ( m_bOpenedSectPr && !GetWritingHeaderFooter())
         return;
 
     // Not inside a section

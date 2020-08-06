@@ -655,7 +655,7 @@ static void GetPoint( const tools::Polygon& rPoly, const std::vector< double >& 
     const Point& rPt = rPoly[ nIdx ];
     fx1 = rPt.X();
     fy1 = rPt.Y();
-    if ( !(nIdx && ( aIter != rDistances.end() ) && !rtl::math::approxEqual( *aIter, fX )) )
+    if ( !nIdx || ( aIter == rDistances.end() ) || rtl::math::approxEqual( *aIter, fX ) )
         return;
 
     nIdx = sal::static_int_cast<sal_uInt16>( std::distance( rDistances.begin(), aIter ) );

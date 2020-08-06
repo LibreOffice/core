@@ -653,7 +653,7 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(const ScMyContentAction* pActio
 
     assert(dynamic_cast<ScChangeActionContent*>(pChangeAction));
     ScChangeActionContent* pChangeActionContent = static_cast<ScChangeActionContent*>(pChangeAction);
-    if (!(pChangeActionContent->IsTopContent() && !pChangeActionContent->IsDeletedIn()))
+    if (!pChangeActionContent->IsTopContent() || pChangeActionContent->IsDeletedIn())
         return;
 
     sal_Int32 nCol, nRow, nTab, nCol2, nRow2, nTab2;

@@ -285,7 +285,7 @@ void SdPathHdl::CreateB2dIAObject()
 
     SdrMarkView* pView = pHdlList->GetView();
 
-    if(!(pView && !pView->areMarkHandlesHidden()))
+    if(!pView || pView->areMarkHandlesHidden())
         return;
 
     SdrPageView* pPageView = pView->GetSdrPageView();

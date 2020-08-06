@@ -515,7 +515,7 @@ void VbaProject::importModulesAndForms( StorageBase& rVbaPrjStrg, const GraphicH
 
 void VbaProject::attachMacros()
 {
-    if( !(!maMacroAttachers.empty() && mxContext.is()) )
+    if( maMacroAttachers.empty() || !mxContext.is() )
         return;
 
     try

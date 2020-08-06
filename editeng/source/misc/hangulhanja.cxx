@@ -277,7 +277,7 @@ namespace editeng
     void HangulHanjaConversion_Impl::createDialog()
     {
         DBG_ASSERT( m_bIsInteractive, "createDialog when the conversion should not be interactive?" );
-        if ( !(m_bIsInteractive && !m_pConversionDialog) )
+        if ( !m_bIsInteractive || m_pConversionDialog )
             return;
 
         EditAbstractDialogFactory* pFact = EditAbstractDialogFactory::Create();

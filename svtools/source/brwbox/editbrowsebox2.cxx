@@ -68,7 +68,7 @@ void EditBrowseBox::implCreateActiveAccessible( )
     DBG_ASSERT( IsEditing(), "EditBrowseBox::implCreateActiveAccessible: not to be called if we're not editing currently!" );
     DBG_ASSERT( !m_aImpl->m_xActiveCell.is(), "EditBrowseBox::implCreateActiveAccessible: not to be called if the old one is still alive!" );
 
-    if ( !(!m_aImpl->m_xActiveCell.is() && IsEditing()) )
+    if ( m_aImpl->m_xActiveCell.is() || !IsEditing() )
          return;
 
     Reference< XAccessible > xCont = aController->GetWindow().GetAccessible();

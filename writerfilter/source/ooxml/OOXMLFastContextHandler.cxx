@@ -1678,7 +1678,7 @@ void OOXMLFastContextHandlerShape::setToken(Token_t nToken)
 
 void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
 {
-    if ( !(mrShapeContext.is() && !m_bShapeSent) )
+    if ( !mrShapeContext.is() || m_bShapeSent )
         return;
 
     awt::Point aPosition = mpStream->getPositionOffset();

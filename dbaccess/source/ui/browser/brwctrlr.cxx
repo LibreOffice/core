@@ -2407,7 +2407,7 @@ void SbaXDataBrowserController::LoadFinished(bool /*bWasSynch*/)
 {
     m_nRowSetPrivileges = 0;
 
-    if (!(isValid() && !loadingCancelled()))
+    if (!isValid() || loadingCancelled())
         return;
 
     // obtain cached values

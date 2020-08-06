@@ -112,7 +112,7 @@ OUndoContainerAction::~OUndoContainerAction()
 
     // and the object does not have a parent
     Reference< XChild >  xChild( m_xOwnElement, UNO_QUERY );
-    if ( !(xChild.is() && !xChild->getParent().is()) )
+    if ( !xChild.is() || xChild->getParent().is() )
         return;
 
     OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();

@@ -1388,7 +1388,7 @@ void SbModule::GlobalRunInit( bool bBasicStart )
 {
     // If no Basic-Start, only initialise, if the module is not initialised
     if( !bBasicStart )
-        if( !(pImage && !pImage->bInit) )
+        if( !pImage || pImage->bInit )
             return;
 
     // Initialise GlobalInitErr-Flag for Compiler-Error
@@ -2081,7 +2081,7 @@ ErrCode SbMethod::Call( SbxValue* pRet, SbxVariable* pCaller )
 // #100883 Own Broadcast for SbMethod
 void SbMethod::Broadcast( SfxHintId nHintId )
 {
-    if( !(mpBroadcaster && !IsSet( SbxFlagBits::NoBroadcast )) )
+    if( !mpBroadcaster || IsSet( SbxFlagBits::NoBroadcast ) )
         return;
 
     // Because the method could be called from outside, test here once again

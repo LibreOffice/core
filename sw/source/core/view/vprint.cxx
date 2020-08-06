@@ -102,7 +102,7 @@ void SwPaintQueue::Add( SwViewShell *pNew, const SwRect &rNew )
 
 void SwPaintQueue::Repaint()
 {
-    if (!(!SwRootFrame::IsInPaint() && s_pPaintQueue))
+    if (SwRootFrame::IsInPaint() || !s_pPaintQueue)
         return;
 
     SwQueuedPaint *pPt = s_pPaintQueue;

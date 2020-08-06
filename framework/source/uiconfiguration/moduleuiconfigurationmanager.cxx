@@ -1494,7 +1494,7 @@ void SAL_CALL ModuleUIConfigurationManager::reload()
     if ( m_bDisposed )
         throw DisposedException();
 
-    if ( !(m_xUserConfigStorage.is() && m_bModified && !m_bReadOnly) )
+    if ( !m_xUserConfigStorage.is() || !m_bModified || m_bReadOnly )
         return;
 
     // Try to access our module sub folder
@@ -1537,7 +1537,7 @@ void SAL_CALL ModuleUIConfigurationManager::store()
     if ( m_bDisposed )
         throw DisposedException();
 
-    if ( !(m_xUserConfigStorage.is() && m_bModified && !m_bReadOnly) )
+    if ( !m_xUserConfigStorage.is() || !m_bModified || m_bReadOnly )
         return;
 
     // Try to access our module sub folder
@@ -1569,7 +1569,7 @@ void SAL_CALL ModuleUIConfigurationManager::storeToStorage( const Reference< XSt
     if ( m_bDisposed )
         throw DisposedException();
 
-    if ( !(m_xUserConfigStorage.is() && m_bModified && !m_bReadOnly) )
+    if ( !m_xUserConfigStorage.is() || !m_bModified || m_bReadOnly )
         return;
 
     // Try to access our module sub folder

@@ -287,7 +287,7 @@ void AstInterface::checkInheritedInterfaceClashes(
             return;
         }
     }
-    if (!(direct || !optional))
+    if (!direct && optional)
         return;
 
     for (DeclList::const_iterator i(ifc->getIteratorBegin());

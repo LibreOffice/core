@@ -695,7 +695,7 @@ void VbaFormControl::moveRelative( const AxPairData& rDistance )
 
 void VbaFormControl::moveEmbeddedToAbsoluteParent()
 {
-    if( !(mxSiteModel && !maControls.empty()) )
+    if( !mxSiteModel || maControls.empty() )
         return;
 
     // distance to move is equal to position of this control in its parent

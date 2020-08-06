@@ -91,7 +91,7 @@ void SetProgressState( long nPosition, SwDocShell const *pDocShell )
 
 void EndProgress( SwDocShell const *pDocShell )
 {
-    if( !(pProgressContainer && !SW_MOD()->IsEmbeddedLoadSave()) )
+    if( !pProgressContainer || SW_MOD()->IsEmbeddedLoadSave() )
         return;
 
     SwProgress *pProgress = nullptr;

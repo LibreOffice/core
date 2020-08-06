@@ -568,7 +568,7 @@ void SbaGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rM
 
     // prepend some new items
     bool bColAttrs = (nColId != sal_uInt16(-1)) && (nColId != 0);
-    if ( !(bColAttrs && !bDBIsReadOnly))
+    if ( !bColAttrs || bDBIsReadOnly)
         return;
 
     sal_uInt16 nPos = 0;

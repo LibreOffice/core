@@ -385,7 +385,7 @@ void SvxHyperlinkNewDocTp::DoApply()
     {
     }
 
-    if (!(bCreate && !aStrNewName.isEmpty()))
+    if (!bCreate || aStrNewName.isEmpty())
         return;
 
     ExecuteInfo* pExecuteInfo = new ExecuteInfo;

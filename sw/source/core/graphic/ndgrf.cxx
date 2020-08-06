@@ -839,7 +839,7 @@ void SwGrfNode::ApplyInputStream(
 void SwGrfNode::UpdateLinkWithInputStream()
 {
     // do not work on link, if a <SwapIn> has been triggered.
-    if ( !(!mbInSwapIn && IsLinkedFile()) )
+    if ( mbInSwapIn || !IsLinkedFile() )
         return;
 
     GetLink()->setStreamToLoadFrom( mxInputStream, mbIsStreamReadOnly );

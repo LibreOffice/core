@@ -2094,7 +2094,7 @@ IMPL_LINK(OfaAutoCompleteTabPage, CheckHdl, weld::ToggleButton&, rBox, void)
 void OfaAutoCompleteTabPage::CopyToClipboard() const
 {
     auto rows = m_xLBEntries->get_selected_rows();
-    if (!(m_pAutoCompleteList && !rows.empty()))
+    if (!m_pAutoCompleteList || rows.empty())
         return;
 
     rtl::Reference<TransferDataContainer> pCntnr = new TransferDataContainer;
