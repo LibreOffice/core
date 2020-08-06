@@ -63,7 +63,7 @@ public:
                         MnemonicGenerator(sal_Unicode cMnemonic = MNEMONIC_CHAR);
 
     void                RegisterMnemonic( const OUString& rKey );
-    OUString            CreateMnemonic( const OUString& rKey );
+    SAL_WARN_UNUSED_RESULT OUString CreateMnemonic(const OUString& rKey);
     css::uno::Reference< css::i18n::XCharacterClassification > const & GetCharClass();
 
     // returns a string where all '~'-characters and CJK mnemonics of the form (~A) are completely removed
