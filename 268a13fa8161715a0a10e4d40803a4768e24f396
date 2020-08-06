@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ae2f3906_aeb66db4",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_x86-64/except.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-06T13:55:08Z",
+      "side": 1,
+      "message": "I think the outer #if is irrelevant.  Even if libc++abi\u0027s cxxabi.h defined __cxxabiv1::__cxa_exception, if this code was built against an old libc++abi and run against a new one, we would still need to do the bad hack here.",
+      "revId": "268a13fa8161715a0a10e4d40803a4768e24f396",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f53cf5b_95ce5f76",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_x86-64/except.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-06T13:55:08Z",
+      "side": 1,
+      "message": "I thinks this would need to be\n\n  __cxxabiv1::__cxa_exception",
+      "range": {
+        "startLine": 178,
+        "startChar": 34,
+        "endLine": 178,
+        "endChar": 49
+      },
+      "revId": "268a13fa8161715a0a10e4d40803a4768e24f396",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
