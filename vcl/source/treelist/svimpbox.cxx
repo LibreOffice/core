@@ -2067,6 +2067,10 @@ void SvImpLBox::MouseMove( const MouseEvent& rMEvt)
         if (m_pView->mbHoverSelection)
         {
             if (aPos.X() < 0 || aPos.Y() < 0 || aPos.X() > m_aOutputSize.Width() || aPos.Y() > m_aOutputSize.Height())
+                pEntry = nullptr;
+            else
+                pEntry = GetEntry(aPos);
+            if (!pEntry)
                 m_pView->SelectAll(false);
             else if (!m_pView->IsSelected(pEntry) && IsSelectable(pEntry))
                 m_pView->Select(pEntry);
