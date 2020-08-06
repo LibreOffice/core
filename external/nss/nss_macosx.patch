@@ -71,3 +71,17 @@ diff -ru a/nss/Makefile b/nss/Makefile
  ifdef USE_DEBUG_RTL
  NSPR_CONFIGURE_OPTS += --enable-debug-rtl
  endif
+--- a/a/nspr/pr/include/md/_darwin.h
++++ b/b/nspr/pr/include/md/_darwin.h
+@@ -40,11 +40,7 @@
+ 
+ #undef  HAVE_STACK_GROWING_UP
+ #define HAVE_DLL
+-#if defined(__x86_64__) || TARGET_OS_IPHONE
+ #define USE_DLFCN
+-#else
+-#define USE_MACH_DYLD
+-#endif
+ #define _PR_HAVE_SOCKADDR_LEN
+ #define _PR_STAT_HAS_ST_ATIMESPEC
+ #define _PR_HAVE_LARGE_OFF_T
