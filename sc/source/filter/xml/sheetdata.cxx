@@ -22,6 +22,8 @@
 #include <xmloff/families.hxx>
 #include <xmloff/nmspmap.hxx>
 
+#include <algorithm>
+
 #include <sheetdata.hxx>
 
 ScSheetSaveData::ScSheetSaveData() :
