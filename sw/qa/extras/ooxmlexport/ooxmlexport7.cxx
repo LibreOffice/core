@@ -99,14 +99,14 @@ DECLARE_OOXMLEXPORT_TEST(testDkVert, "dkvert.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(25), getProperty<drawing::Hatch>(xShape, "FillHatch").Distance);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTextWatermark, "textWatermark.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTextWatermark, "textWatermark.docx")
 {
     //The problem was that the watermark ID was not preserved,
     //and Word uses the object ID to identify if it is a watermark.
     //It has to have the 'PowerPlusWaterMarkObject' string in it
     xmlDocUniquePtr pXmlHeader1 = parseExport("word/header1.xml");
     if (!pXmlHeader1)
-       return;
+        return;
 
     assertXPath(pXmlHeader1, "/w:hdr[1]/w:p[1]/w:r[1]/w:pict[1]/v:shape[1]","id","PowerPlusWaterMarkObject93701316");
 
@@ -115,7 +115,7 @@ DECLARE_OOXMLEXPORT_TEST(testTextWatermark, "textWatermark.docx")
     CPPUNIT_ASSERT(!sSpid.isEmpty());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testPictureWatermark, "pictureWatermark.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPictureWatermark, "pictureWatermark.docx")
 {
     //The problem was that the watermark ID was not preserved,
     //and Word uses the object ID to identify if it is a watermark.
@@ -123,7 +123,7 @@ DECLARE_OOXMLEXPORT_TEST(testPictureWatermark, "pictureWatermark.docx")
 
     xmlDocUniquePtr pXmlHeader1 = parseExport("word/header1.xml");
     if (!pXmlHeader1)
-       return;
+        return;
 
     // Check the watermark ID
     assertXPath(pXmlHeader1, "/w:hdr[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Fallback[1]/w:pict[1]/v:shape[1]","id","WordPictureWatermark11962361");
@@ -1123,12 +1123,10 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFlipAndRotateCustomShape, "flip_and_rota
         1701, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[3]/a:pt", "y").toInt32(), 1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf92335, "tdf92335.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf92335, "tdf92335.docx")
 {
     // Don't export redundant ListLabel character styles
     xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
-    if (!pXmlStyles)
-        return;
 
     assertXPath(pXmlStyles, "//w:style[@w:styleId='ListLabel1']", 0);
 }

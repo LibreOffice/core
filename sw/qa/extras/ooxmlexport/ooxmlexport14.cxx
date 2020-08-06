@@ -705,19 +705,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf83309, "tdf83309.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("PortionType::Text"), sNodeType);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf121661, "tdf121661.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121661, "tdf121661.docx")
 {
     xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml");
-    if (!pXmlSettings)
-        return;
     assertXPath(pXmlSettings, "/w:settings/w:hyphenationZone", "val", "851");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf121658, "tdf121658.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121658, "tdf121658.docx")
 {
     xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml");
-    if (!pXmlSettings)
-        return;
     assertXPath(pXmlSettings, "/w:settings/w:doNotHyphenateCaps");
 }
 
@@ -1159,12 +1155,10 @@ DECLARE_OOXMLEXPORT_TEST(testHyphenationAuto, "hyphenation.odt")
     assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:pPrDefault/w:pPr/w:suppressAutoHyphens", "val", "true");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testStrikeoutGroupShapeText, "tdf131776_StrikeoutGroupShapeText.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testStrikeoutGroupShapeText, "tdf131776_StrikeoutGroupShapeText.docx")
 {
     // tdf#131776: Check if strikeout is used in shape group texts
     xmlDocUniquePtr pXml = parseExport("word/document.xml");
-    if (!pXml)
-        return;
 
     // double strike (dstrike)
     //   no "val" attribute
@@ -1211,12 +1205,10 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf131539, "tdf131539.odt")
     CPPUNIT_ASSERT(aXmlVal.indexOf("margin-left:139.95")>-1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testLineWidthRounding, "tdf126363_LineWidthRounding.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testLineWidthRounding, "tdf126363_LineWidthRounding.docx")
 {
     // tdf#126363: check if line with stays the same after export
     xmlDocUniquePtr pXml = parseExport("word/document.xml");
-    if (!pXml)
-        return;
     // this was 57240 (it differs from the original 57150, losing the preset line width)
     assertXPath(pXml, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln", "w", "57150");
 }

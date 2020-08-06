@@ -1083,11 +1083,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127116, "tdf127116.odt")
     CPPUNIT_ASSERT_EQUAL(anchor, bookmarkName);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf127339, "tdf127339.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127339, "tdf127339.docx")
 {
     xmlDocUniquePtr pXmlRels = parseExport("word/_rels/document.xml.rels");
-    if (!pXmlRels)
-        return;
 
     assertXPathNoAttribute(pXmlRels, "/rels:Relationships/rels:Relationship[@Target='#bookmark']", "TargetMode");
 }

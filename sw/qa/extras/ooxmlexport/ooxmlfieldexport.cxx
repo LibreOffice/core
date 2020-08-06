@@ -226,15 +226,13 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCaption4, "TableWithAboveCaptions.docx")
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/w:instrText", " SEQ Table \\* ARABIC ");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFooterContainHyperlink,"footer-contain-hyperlink.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFooterContainHyperlink,"footer-contain-hyperlink.docx")
 {
     // Problem is that footer1.xml.rels contains the empty
     // Target due to which the file get corrupted
     // in MS Office 2007.
     // Check for footer1.xml.rels file.
     xmlDocUniquePtr pXmlRels = parseExport("word/_rels/footer1.xml.rels");
-    if (!pXmlRels)
-        return;
     // Check the value of Target which is http://www.google.com/.
     assertXPath(pXmlRels,"/rels:Relationships/rels:Relationship","Target","http://www.google.com/");
 }
