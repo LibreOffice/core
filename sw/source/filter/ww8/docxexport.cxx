@@ -1447,7 +1447,7 @@ void DocxExport::WriteCustomXml()
     uno::Reference< beans::XPropertySet > xPropSet( m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
-    static const OUString aName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
+    static const OUStringLiteral aName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
     if ( !xPropSetInfo->hasPropertyByName( aName ) )
         return;
 

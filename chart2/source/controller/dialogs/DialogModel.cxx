@@ -54,7 +54,7 @@ using ::com::sun::star::uno::Sequence;
 
 namespace
 {
-const OUString lcl_aLabelRole( "label" );
+const OUStringLiteral lcl_aLabelRole( "label" );
 
 struct lcl_ChartTypeToSeriesCnt
 {
@@ -70,7 +70,7 @@ OUString lcl_ConvertRole( const OUString & rRoleString )
     OUString aResult( rRoleString );
 
     typedef std::map< OUString, OUString > tTranslationMap;
-    static tTranslationMap aTranslationMap =
+    static const tTranslationMap aTranslationMap =
     {
         { "categories", ::chart::SchResId( STR_DATA_ROLE_CATEGORIES ) },
         { "error-bars-x", ::chart::SchResId( STR_DATA_ROLE_X_ERROR ) },

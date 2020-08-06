@@ -520,11 +520,7 @@ void SAL_CALL BibInterceptorHelper::setMasterDispatchProvider( const css::uno::R
 }
 
 
-OUString const gGridName("theGrid");
-OUString const gViewName("theView");
-OUString const gGlobalName("theGlobals");
-OUString const gBeamerSize("theBeamerSize");
-OUString const gViewSize("theViewSize");
+OUStringLiteral const gGridName("theGrid");
 
 BibDataManager::BibDataManager()
     :BibDataManager_Base( GetMutex() )
