@@ -507,7 +507,7 @@ void ScChangeTrackingExportHelper::AddDeletionAttributes(const ScChangeActionDel
         return;
 
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE, OUString::number(nStartSheet));
-    if (!(pDelAction->IsMultiDelete() && !pDelAction->GetDx() && !pDelAction->GetDy()))
+    if (!pDelAction->IsMultiDelete() || pDelAction->GetDx() || pDelAction->GetDy())
         return;
 
     const ScChangeAction* p = pDelAction->GetNext();

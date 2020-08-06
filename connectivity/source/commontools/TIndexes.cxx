@@ -213,7 +213,7 @@ sdbcx::ObjectType OIndexesHelper::appendObject( const OUString& _rForName, const
 void OIndexesHelper::dropObject(sal_Int32 /*_nPos*/,const OUString& _sElementName)
 {
     Reference< XConnection> xConnection = m_pTable->getConnection();
-    if( !(xConnection.is() && !m_pTable->isNew()))
+    if( !xConnection.is() || m_pTable->isNew() )
         return;
 
     if ( m_pTable->getIndexService().is() )

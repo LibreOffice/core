@@ -466,14 +466,13 @@ bool SwTextPortion::Format( SwTextFormatInfo &rInf )
 // rInf.nIdx points to the next word, nIdx-1 is the portion's last char
 void SwTextPortion::FormatEOL( SwTextFormatInfo &rInf )
 {
-    if( !(
-        ( !GetNextPortion() || ( GetNextPortion()->IsKernPortion() &&
-          !GetNextPortion()->GetNextPortion() ) ) &&
-        GetLen() &&
-        rInf.GetIdx() < TextFrameIndex(rInf.GetText().getLength()) &&
-        TextFrameIndex(1) < rInf.GetIdx() &&
-        ' ' == rInf.GetChar(rInf.GetIdx() - TextFrameIndex(1)) &&
-        !rInf.GetLast()->IsHolePortion()) )
+    if( ( GetNextPortion() &&
+          ( !GetNextPortion()->IsKernPortion() || GetNextPortion()->GetNextPortion() ) ) ||
+        !GetLen() ||
+        rInf.GetIdx() >= TextFrameIndex(rInf.GetText().getLength()) ||
+        TextFrameIndex(1) >= rInf.GetIdx() ||
+        ' ' != rInf.GetChar(rInf.GetIdx() - TextFrameIndex(1)) ||
+        rInf.GetLast()->IsHolePortion() )
         return;
 
     // calculate number of blanks

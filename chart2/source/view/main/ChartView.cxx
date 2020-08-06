@@ -2503,7 +2503,7 @@ void ChartView::impl_updateView( bool bCheckLockedCtrler )
     if (bCheckLockedCtrler && mrChartModel.hasControllersLocked())
         return;
 
-    if( !(m_bViewDirty && !m_bInViewUpdate) )
+    if( !m_bViewDirty || m_bInViewUpdate )
         return;
 
     m_bInViewUpdate = true;

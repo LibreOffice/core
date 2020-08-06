@@ -83,7 +83,7 @@ namespace cairocanvas
         const double fAlpha( getAlpha() );
         const ::basegfx::B2DHomMatrix aTransform( getTransformation() );
 
-        if( !(isActive() && !::basegfx::fTools::equalZero( fAlpha )) )
+        if( !isActive() || ::basegfx::fTools::equalZero( fAlpha ) )
             return;
 
         SAL_INFO( "canvas.cairo", "CanvasCustomSprite::redraw called");

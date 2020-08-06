@@ -917,7 +917,7 @@ void SpellDialog::ToplevelFocusChanged()
     *   The only sensible thing would be to call the new Method differently,
     *   e.g. DialogGot/LostFocus or so.
     */
-    if (!(m_xDialog->get_visible() && !bFocusLocked))
+    if (!m_xDialog->get_visible() || bFocusLocked)
         return;
 
     if (m_xDialog->has_toplevel_focus())

@@ -435,8 +435,17 @@ void SAL_CALL ScVbaControls::Remove( const uno::Any& StringKeyOrIndex )
         uno::Reference< lang::XMultiServiceFactory > xModelFactory( mxDialog->getModel(), uno::UNO_QUERY_THROW );
         uno::Reference< container::XNameContainer > xDialogContainer( xModelFactory, uno::UNO_QUERY_THROW );
 
-        if ( !( ( StringKeyOrIndex >>= aControlName ) && !aControlName.isEmpty() )
-          && !( ( StringKeyOrIndex >>= nIndex ) && nIndex >= 0 && nIndex < m_xIndexAccess->getCount() ) )
+        if ( StringKeyOrIndex >>= aControlName )
+        {
+            if ( aControlName.isEmpty() )
+                throw uno::RuntimeException();
+        }
+        else if ( StringKeyOrIndex >>= nIndex )
+        {
+            if (nIndex >= 0 && nIndex < m_xIndexAccess->getCount() )
+                throw uno::RuntimeException();
+        }
+        else
             throw uno::RuntimeException();
 
         uno::Reference< awt::XControl > xControl;

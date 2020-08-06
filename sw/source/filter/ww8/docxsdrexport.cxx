@@ -796,7 +796,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
     }
 
     // No? Then just approximate based on what we have.
-    if (!(isAnchor && !nWrapToken))
+    if (!isAnchor || nWrapToken)
         return;
 
     switch (pFrameFormat->GetSurround().GetValue())

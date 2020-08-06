@@ -3001,7 +3001,7 @@ public:
             if (pEntry)
             {
                 SvNumFormatType nNumFmtType = pEntry->GetType();
-                if (!((nNumFmtType & SvNumFormatType::DATE) && !(nNumFmtType & SvNumFormatType::TIME)))
+                if (!(nNumFmtType & SvNumFormatType::DATE) || (nNumFmtType & SvNumFormatType::TIME))
                     rItem.meType = ScQueryEntry::ByValue;    // not a date only
             }
             else

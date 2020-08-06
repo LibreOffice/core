@@ -911,7 +911,7 @@ void SbiRuntime::Error( ErrCode n, bool bVBATranslationAlreadyDone )
         return;
 
     nError = n;
-    if( !(isVBAEnabled() && !bVBATranslationAlreadyDone) )
+    if( !isVBAEnabled() || bVBATranslationAlreadyDone )
         return;
 
     OUString aMsg = pInst->GetErrorMsg();

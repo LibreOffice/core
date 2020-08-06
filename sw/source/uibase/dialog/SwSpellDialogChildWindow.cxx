@@ -424,7 +424,7 @@ void SwSpellDialogChildWindow::ApplyChangedSentence(const svx::SpellPortions& rC
 {
     SwWrtShell* pWrtShell = GetWrtShell_Impl();
     OSL_ENSURE(!m_pSpellState->m_bInitialCall, "ApplyChangedSentence in initial call or after resume");
-    if(!(pWrtShell && !m_pSpellState->m_bInitialCall))
+    if(!pWrtShell || m_pSpellState->m_bInitialCall)
         return;
 
     ShellMode eSelMode = pWrtShell->GetView().GetShellMode();

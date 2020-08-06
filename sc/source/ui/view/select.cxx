@@ -166,7 +166,7 @@ void ScViewFunctionSet::BeginDrag()
 
     ScMarkData& rMark = pViewData->GetMarkData();
     rMark.MarkToSimple();
-    if ( !(rMark.IsMarked() && !rMark.IsMultiMarked()) )
+    if ( !rMark.IsMarked() || rMark.IsMultiMarked() )
         return;
 
     ScDocumentUniquePtr pClipDoc(new ScDocument( SCDOCMODE_CLIP ));

@@ -280,7 +280,7 @@ void SwBasicEscherEx::PreWriteHyperlinkWithinFly(const SwFrameFormat& rFormat,Es
         return;
 
     const SwFormatURL *pINetFormat = dynamic_cast<const SwFormatURL*>(pItem);
-    if (!(pINetFormat && !pINetFormat->GetURL().isEmpty()))
+    if (!pINetFormat || pINetFormat->GetURL().isEmpty())
         return;
 
     SvMemoryStream aStrm;

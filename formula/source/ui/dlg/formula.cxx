@@ -1548,7 +1548,7 @@ void FormulaDlg_Impl::RefInputStartAfter()
 void FormulaDlg_Impl::RefInputDoneAfter( bool bForced )
 {
     m_xRefBtn->SetStartImage();
-    if (!(bForced || !m_xRefBtn->GetWidget()->get_visible()))
+    if (!bForced && m_xRefBtn->GetWidget()->get_visible())
         return;
 
     m_xEdRef->GetWidget()->hide();

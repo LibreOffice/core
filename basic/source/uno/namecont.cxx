@@ -2299,7 +2299,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
 
     bool bLoaded = pImplLib->mbLoaded;
     pImplLib->mbLoaded = true;
-    if( !(!bLoaded && xNameAccess->hasElements()) )
+    if( bLoaded || !xNameAccess->hasElements() )
         return;
 
     if( pImplLib->mbPasswordProtected )

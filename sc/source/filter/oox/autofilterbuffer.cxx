@@ -666,7 +666,7 @@ void AutoFilterBuffer::finalizeImport( sal_Int16 nSheet )
     // first, try to create an auto filter
     bool bHasAutoFilter = finalizeImport( xDatabaseRange );
     // no success: try to create an advanced filter
-    if( !(!bHasAutoFilter && xDatabaseRange.is()) )
+    if( bHasAutoFilter || !xDatabaseRange.is() )
         return;
 
     // the built-in defined name 'Criteria' must exist

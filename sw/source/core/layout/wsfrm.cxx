@@ -4227,10 +4227,10 @@ void AddRemoveFlysAnchoredToFrameStartingAtNode(
         std::set<sal_uLong> *const pSkipped)
 {
     auto const pMerged(rFrame.GetMergedPara());
-    if (!(pMerged
+    if (!pMerged
         // do this only *once*, for the *last* frame
         // otherwise AppendObj would create multiple frames for fly-frames!
-        && !rFrame.GetFollow()))
+        || rFrame.GetFollow())
         return;
 
     assert(pMerged->pFirstNode->GetIndex() <= rTextNode.GetIndex()

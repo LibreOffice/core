@@ -86,7 +86,7 @@ void SmartTagHandler::setElement(const OUString& rElement) { m_aElement = rEleme
 
 void SmartTagHandler::handle(const uno::Reference<text::XTextRange>& xParagraph)
 {
-    if (!(!m_aURI.isEmpty() && !m_aElement.isEmpty() && !m_aAttributes.empty()))
+    if (m_aURI.isEmpty() || m_aElement.isEmpty() || m_aAttributes.empty())
         return;
 
     uno::Reference<rdf::XResource> xSubject(xParagraph, uno::UNO_QUERY);

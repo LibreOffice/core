@@ -105,7 +105,7 @@ EquidistantTickFactory::EquidistantTickFactory(
 
     m_fOuterMajorTickBorderMin_Scaled = m_fOuterMajorTickBorderMin;
     m_fOuterMajorTickBorderMax_Scaled = m_fOuterMajorTickBorderMax;
-    if(!(!m_rIncrement.PostEquidistant && m_xInverseScaling.is()) )
+    if(m_rIncrement.PostEquidistant || !m_xInverseScaling.is())
         return;
 
     m_fOuterMajorTickBorderMin_Scaled = m_rScale.Scaling->doScaling(m_fOuterMajorTickBorderMin);

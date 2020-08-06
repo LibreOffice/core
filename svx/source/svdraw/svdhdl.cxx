@@ -1134,7 +1134,7 @@ void SdrHdlColor::CreateB2dIAObject()
 
     SdrMarkView* pView = pHdlList->GetView();
 
-    if(!(pView && !pView->areMarkHandlesHidden()))
+    if(!pView || pView->areMarkHandlesHidden())
         return;
 
     SdrPageView* pPageView = pView->GetSdrPageView();
@@ -1286,7 +1286,7 @@ void SdrHdlGradient::CreateB2dIAObject()
 
     SdrMarkView* pView = pHdlList->GetView();
 
-    if(!(pView && !pView->areMarkHandlesHidden()))
+    if(!pView || pView->areMarkHandlesHidden())
         return;
 
     SdrPageView* pPageView = pView->GetSdrPageView();
@@ -1506,7 +1506,7 @@ void SdrHdlBezWgt::CreateB2dIAObject()
 
     SdrMarkView* pView = pHdlList->GetView();
 
-    if(!(pView && !pView->areMarkHandlesHidden()))
+    if(!pView || pView->areMarkHandlesHidden())
         return;
 
     SdrPageView* pPageView = pView->GetSdrPageView();
@@ -1565,7 +1565,7 @@ void E3dVolumeMarker::CreateB2dIAObject()
 
     SdrMarkView* pView = pHdlList->GetView();
 
-    if(!(pView && !pView->areMarkHandlesHidden()))
+    if(!pView || pView->areMarkHandlesHidden())
         return;
 
     SdrPageView* pPageView = pView->GetSdrPageView();
@@ -1731,7 +1731,7 @@ void ImpMeasureHdl::CreateB2dIAObject()
 
     SdrMarkView* pView = pHdlList->GetView();
 
-    if(!(pView && !pView->areMarkHandlesHidden()))
+    if(!pView || pView->areMarkHandlesHidden())
         return;
 
     BitmapColorIndex eColIndex = BitmapColorIndex::LightCyan;
@@ -1805,7 +1805,7 @@ void ImpTextframeHdl::CreateB2dIAObject()
 
     SdrMarkView* pView = pHdlList->GetView();
 
-    if(!(pView && !pView->areMarkHandlesHidden()))
+    if(!pView || pView->areMarkHandlesHidden())
         return;
 
     SdrPageView* pPageView = pView->GetSdrPageView();
@@ -2394,7 +2394,7 @@ void SdrCropHdl::CreateB2dIAObject()
     SdrMarkView* pView = pHdlList ? pHdlList->GetView() : nullptr;
     SdrPageView* pPageView = pView ? pView->GetSdrPageView() : nullptr;
 
-    if( !(pPageView && !pView->areMarkHandlesHidden()) )
+    if( !pPageView || pView->areMarkHandlesHidden() )
         return;
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();

@@ -1455,7 +1455,7 @@ void ScDPResultMember::FillMemberResults(
 
     long nUserSubStart;
     long nUserSubCount = GetSubTotalCount(&nUserSubStart);
-    if ( !(nUserSubCount && pChildDimension && !bSubTotalInTitle) )
+    if ( !nUserSubCount || !pChildDimension || bSubTotalInTitle )
         return;
 
     long nMemberMeasure = nMeasure;
@@ -1581,7 +1581,7 @@ void ScDPResultMember::FillDataResults(
 
     long nUserSubStart;
     long nUserSubCount = GetSubTotalCount(&nUserSubStart);
-    if ( !(nUserSubCount || !bHasChild) )
+    if ( !nUserSubCount && bHasChild )
         return;
 
     // Calculate at least automatic if no subtotals are selected,
@@ -2093,7 +2093,7 @@ void ScDPDataMember::FillDataRow(
 
     long nUserSubStart;
     long nUserSubCount = pRefMember->GetSubTotalCount(&nUserSubStart);
-    if ( !(nUserSubCount || !bHasChild) )
+    if ( !nUserSubCount && bHasChild )
         return;
 
     // Calculate at least automatic if no subtotals are selected,

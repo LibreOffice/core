@@ -3543,10 +3543,10 @@ static drawinglayer::primitive2d::Primitive2DContainer lcl_CreateDashedIndicator
 
 void SwPageFrame::PaintBreak( ) const
 {
-    if ( !(gProp.pSGlobalShell->GetOut()->GetOutDevType() != OUTDEV_PRINTER  &&
-         !gProp.pSGlobalShell->GetViewOptions()->IsPDFExport() &&
-         !gProp.pSGlobalShell->GetViewOptions()->IsReadonly() &&
-         !gProp.pSGlobalShell->IsPreview()) )
+    if ( gProp.pSGlobalShell->GetOut()->GetOutDevType() == OUTDEV_PRINTER  ||
+         gProp.pSGlobalShell->GetViewOptions()->IsPDFExport() ||
+         gProp.pSGlobalShell->GetViewOptions()->IsReadonly() ||
+         gProp.pSGlobalShell->IsPreview() )
         return;
 
     const SwFrame* pBodyFrame = Lower();
@@ -3580,10 +3580,10 @@ void SwPageFrame::PaintBreak( ) const
 
 void SwColumnFrame::PaintBreak( ) const
 {
-    if ( !(gProp.pSGlobalShell->GetOut()->GetOutDevType() != OUTDEV_PRINTER  &&
-         !gProp.pSGlobalShell->GetViewOptions()->IsPDFExport() &&
-         !gProp.pSGlobalShell->GetViewOptions()->IsReadonly() &&
-         !gProp.pSGlobalShell->IsPreview()) )
+    if ( gProp.pSGlobalShell->GetOut()->GetOutDevType() == OUTDEV_PRINTER  ||
+         gProp.pSGlobalShell->GetViewOptions()->IsPDFExport() ||
+         gProp.pSGlobalShell->GetViewOptions()->IsReadonly() ||
+         gProp.pSGlobalShell->IsPreview() )
         return;
 
     const SwFrame* pBodyFrame = Lower();
@@ -5657,7 +5657,7 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
 void SwPageFrame::PaintMarginArea( const SwRect& _rOutputRect,
                                  SwViewShell const * _pViewShell ) const
 {
-    if (  !(_pViewShell->GetWin() && !_pViewShell->GetViewOptions()->getBrowseMode()) )
+    if (  !_pViewShell->GetWin() || _pViewShell->GetViewOptions()->getBrowseMode() )
         return;
 
     // Simplified paint with DrawingLayer FillStyle

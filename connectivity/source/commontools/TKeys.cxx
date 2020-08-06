@@ -264,7 +264,7 @@ OUString OKeysHelper::getDropForeignKey() const
 void OKeysHelper::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
 {
     Reference< XConnection> xConnection = m_pTable->getConnection();
-    if ( !(xConnection.is() && !m_pTable->isNew()) )
+    if ( !xConnection.is() || m_pTable->isNew() )
         return;
 
     Reference<XPropertySet> xKey(getObject(_nPos),UNO_QUERY);

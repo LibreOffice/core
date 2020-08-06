@@ -1886,8 +1886,8 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
 
     vcl::PDFExtOutDevData* pPDFExtOutDevData = dynamic_cast<vcl::PDFExtOutDevData* >( pOut->GetExtOutDevData() );
 
-    if ( !(!( mpDoc->GetSdPage(static_cast<sal_Int16>(nPageNumber)-1, PageKind::Standard)->IsExcluded() ) ||
-        (pPDFExtOutDevData && pPDFExtOutDevData->GetIsExportHiddenSlides())) )
+    if ( mpDoc->GetSdPage(static_cast<sal_Int16>(nPageNumber)-1, PageKind::Standard)->IsExcluded() &&
+        !(pPDFExtOutDevData && pPDFExtOutDevData->GetIsExportHiddenSlides()) )
         return;
 
     if (pPDFExtOutDevData)

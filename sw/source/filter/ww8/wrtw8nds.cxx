@@ -543,7 +543,7 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bWriteCombChars)
 void SwWW8AttrIter::handleToggleProperty(SfxItemSet& rExportSet, const SwFormatCharFormat* pCharFormatItem,
     sal_uInt16 nWhich, const SfxPoolItem* pValue)
 {
-    if (!(!rExportSet.HasItem(nWhich) && pValue))
+    if (rExportSet.HasItem(nWhich) || !pValue)
         return;
 
     bool hasPropertyInCharStyle = false;

@@ -515,13 +515,11 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
                 for (auto pSalFrame : GetDisplay()->getFrames() )
                 {
                     pFrame = static_cast< const X11SalFrame* >( pSalFrame );
-                    if( ! ( pFrame->mpParent
-                            || pFrame->mbFullScreen
-                            || ! ( pFrame->nStyle_ & SalFrameStyleFlags::SIZEABLE )
-                            || ! pFrame->GetUnmirroredGeometry().nWidth
-                            || ! pFrame->GetUnmirroredGeometry().nHeight
-                            )
-                        )
+                    if( !pFrame->mpParent
+                        && !pFrame->mbFullScreen
+                        && ( pFrame->nStyle_ & SalFrameStyleFlags::SIZEABLE )
+                        && pFrame->GetUnmirroredGeometry().nWidth
+                        && pFrame->GetUnmirroredGeometry().nHeight )
                     {
                         bIsDocumentWindow = true;
                         break;

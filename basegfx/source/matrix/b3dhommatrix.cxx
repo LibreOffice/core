@@ -149,7 +149,7 @@ namespace basegfx
 
     void B3DHomMatrix::rotate(double fAngleX,double fAngleY,double fAngleZ)
     {
-        if(!(!fTools::equalZero(fAngleX) || !fTools::equalZero(fAngleY) || !fTools::equalZero(fAngleZ)))
+        if(fTools::equalZero(fAngleX) && fTools::equalZero(fAngleY) && fTools::equalZero(fAngleZ))
             return;
 
         if(!fTools::equalZero(fAngleX))

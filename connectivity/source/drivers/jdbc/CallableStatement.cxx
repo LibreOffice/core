@@ -318,7 +318,7 @@ void java_sql_CallableStatement::createStatement(JNIEnv* /*_pEnv*/)
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java environment has been deleted!");
-    if( !(t.pEnv && !object) )
+    if( !t.pEnv || object )
         return;
 
     // initialize temporary variable

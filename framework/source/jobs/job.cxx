@@ -525,7 +525,7 @@ void Job::impl_startListening()
     }
 
     // listening for model closing
-    if (!(m_xModel.is() && !m_bListenOnModel))
+    if (!m_xModel.is() || m_bListenOnModel)
         return;
 
     try

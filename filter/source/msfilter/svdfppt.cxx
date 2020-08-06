@@ -1725,7 +1725,7 @@ bool PPTConvertOCXControls::InsertControl(
 };
 void PPTConvertOCXControls::GetDrawPage()
 {
-    if( !(!xDrawPage.is() && mxModel.is()) )
+    if( xDrawPage.is() || !mxModel.is() )
         return;
 
     css::uno::Reference< css::drawing::XDrawPages > xDrawPages;

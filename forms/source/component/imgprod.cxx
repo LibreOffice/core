@@ -248,7 +248,7 @@ void ImageProducer::NewDataAvailable()
 
 void ImageProducer::startProduction()
 {
-    if( !(!maConsList.empty() || maDoneHdl.IsSet()) )
+    if( maConsList.empty() && !maDoneHdl.IsSet() )
         return;
 
     bool bNotifyEmptyGraphics = false;

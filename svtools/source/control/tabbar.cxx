@@ -1520,7 +1520,7 @@ void TabBar::ImplPrePaint()
 
     mbFirstFormat = false;
 
-    if (!(mnCurPageId && (mnFirstPos == 0) && !mbDropPos))
+    if (!mnCurPageId || (mnFirstPos != 0) || mbDropPos)
         return;
 
     auto& pItem = mpImpl->mpItemList[GetPagePos(mnCurPageId)];
