@@ -203,11 +203,9 @@ DECLARE_OOXMLEXPORT_TEST(testMsoSpt180, "mso-spt180.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("ooxml-borderCallout1"), aType);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo73550, "fdo73550.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo73550, "fdo73550.docx")
 {
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
-        return;
     // This was wrap="none".
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:rPr/w:rFonts");
 }
@@ -893,12 +891,10 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSdtContent, "SdtContent.docx")
 // Currently LibreOffice exports custom geometry for this up arrow, not preset shape.
 // When LibreOffice can export preset shape with correct modifiers, then this test can be re-enabled.
 
-DECLARE_OOXMLEXPORT_TEST(testFdo76016, "fdo76016.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo76016, "fdo76016.docx")
 {
     // check XML
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "//a:graphic/a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]", "name", "adj1");
     assertXPath(pXmlDoc, "//a:graphic/a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]", "name", "adj2");
 }
@@ -1206,12 +1202,10 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDocxTablePosition, "floating-table-posit
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblpPr", "tblpY", "4611");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testUnderlineGroupShapeText, "tdf123351_UnderlineGroupSapeText.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testUnderlineGroupShapeText, "tdf123351_UnderlineGroupSapeText.docx")
 {
     // tdf#123351: Check if correct underline is used.
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
-        return;
 
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor"
         "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u", "val", "single");
@@ -1260,12 +1254,10 @@ DECLARE_OOXMLEXPORT_TEST(testUnderlineGroupShapeText, "tdf123351_UnderlineGroupS
         "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[2]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u", "val", "single");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testUnderlineColorGroupedShapes, "tdf132491_UnderlineColorGroupedShapes.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testUnderlineColorGroupedShapes, "tdf132491_UnderlineColorGroupedShapes.docx")
 {
     // tdf#132491 : Check if correct color is used for underline.
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
-        return;
     assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
         "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u", "color", "FF0000");
     assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
@@ -1274,22 +1266,18 @@ DECLARE_OOXMLEXPORT_TEST(testUnderlineColorGroupedShapes, "tdf132491_UnderlineCo
         "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[3]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u", "color");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorWidthFromRightMargin, "tdf133670_testRelativeAnchorWidthFromRightMargin.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRelativeAnchorWidthFromRightMargin, "tdf133670_testRelativeAnchorWidthFromRightMargin.docx")
 {
     // tdf#133670 The width was set relative from right margin, but this was handled relative from page width.
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    if (!pXmlDoc)
-        return;
     auto nWidth = getXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "width").toInt32();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2408, nWidth, 1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testAutoFitForLegacyShapes, "tdf112312_AutoFitForLegacyShapes.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAutoFitForLegacyShapes, "tdf112312_AutoFitForLegacyShapes.odt")
 {
     // tdf#112312: check if noAutoFit is used instead of spAutoFit even if the TextAutoGrowHeight is set
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
-        return;
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
         "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:bodyPr/a:noAutofit");
     assertXPathNoAttribute(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
