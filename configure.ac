@@ -599,6 +599,8 @@ SDKDIRNAME=sdk
 
 HOST_PLATFORM="$host"
 
+host_cpu_for_clang="$host_cpu"
+
 case "$host_os" in
 
 solaris*)
@@ -701,11 +703,19 @@ darwin*|macos*) # macOS
 
     # -undefined error is the default
     LINKFLAGSNOUNDEFS=""
-    if test "$host_cpu" = arm64; then
-        # HOST_PLATFORM is used for external projects and their configury occasionally doesn't like
-        # the "macos" part so be sure to use arm64-apple-darwin for now.
-        HOST_PLATFORM=arm64-apple-darwin
-    fi
+    case "$host_cpu" in
+    aarch64|arm64)
+        case "$host_os" in
+        macos*)
+            # HOST_PLATFORM is used for external projects and their configury occasionally doesn't like
+            # the "macos" part so be sure to use aarch64-apple-darwin for now.
+            HOST_PLATFORM=aarch64-apple-darwin
+            ;;
+        esac
+
+        # Apple's Clang uses "arm64"
+        host_cpu_for_clang=arm64
+    esac
 ;;
 
 ios*) # iOS
@@ -743,9 +753,12 @@ ios*) # iOS
     # -undefined error is the default
     LINKFLAGSNOUNDEFS=""
 
-    # HOST_PLATFORM is used for external projects and their configury typically doesn't like the "ios" part,
-    # so use arm64-apple-darwin as before for now.
-    HOST_PLATFORM=arm64-apple-darwin
+    # HOST_PLATFORM is used for external projects and their configury typically doesn't like the "ios"
+    # part, so use aarch64-apple-darwin for now.
+    HOST_PLATFORM=aarch64-apple-darwin
+
+    # Apple's Clang uses "arm64"
+    host_cpu_for_clang=arm64
 ;;
 
 freebsd*)
@@ -3155,13 +3168,13 @@ if test $_os = iOS; then
     AC_MSG_CHECKING([what C compiler to use])
     CC="`xcrun -find clang`"
     CC_BASE=`first_arg_basename "$CC"`
-    CC+=" -arch $host_cpu -isysroot $sysroot $lto $versionmin"
+    CC+=" -arch $host_cpu_for_clang -isysroot $sysroot $lto $versionmin"
     AC_MSG_RESULT([$CC])
 
     AC_MSG_CHECKING([what C++ compiler to use])
     CXX="`xcrun -find clang++`"
     CXX_BASE=`first_arg_basename "$CXX"`
-    CXX+=" -arch $host_cpu $stdlib -isysroot $sysroot $lto $versionmin"
+    CXX+=" -arch $host_cpu_for_clang $stdlib -isysroot $sysroot $lto $versionmin"
     AC_MSG_RESULT([$CXX])
 
     INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
@@ -4347,12 +4360,12 @@ darwin*|macos*)
     P_SEP=:
 
     case "$host_cpu" in
-    arm64)
+    aarch64|arm64)
         if test "$enable_ios_simulator" = "yes"; then
             OS=iOS
         else
-            CPUNAME=ARM64
-            RTL_ARCH=AARCH
+            CPUNAME=AARCH64
+            RTL_ARCH=AARCH64
             PLATFORMID=macosx_arm64
         fi
         ;;
@@ -4378,7 +4391,7 @@ ios*)
     P_SEP=:
 
     case "$host_cpu" in
-    arm64)
+    aarch64|arm64)
         if test "$enable_ios_simulator" = "yes"; then
             AC_MSG_ERROR([iOS simulator is only available in macOS not iOS])
         fi
@@ -4387,8 +4400,8 @@ ios*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
-    CPUNAME=ARM64
-    RTL_ARCH=ARM_EABI
+    CPUNAME=AARCH64
+    RTL_ARCH=AARCH64
     PLATFORMID=ios_arm64
     ;;
 
