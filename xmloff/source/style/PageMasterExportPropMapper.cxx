@@ -177,30 +177,30 @@ void XMLPropertyStateBuffer::ContextFilter( ::std::vector< XMLPropertyState >& )
             lcl_RemoveState( pPMBorderWidthAll );
     }
 
-    if( pPMPaddingAll )
+    if( !pPMPaddingAll )
+        return;
+
+    if( pPMPaddingTop && pPMPaddingBottom && pPMPaddingLeft && pPMPaddingRight )
     {
-        if( pPMPaddingTop && pPMPaddingBottom && pPMPaddingLeft && pPMPaddingRight )
+        sal_Int32 nTop = 0, nBottom = 0, nLeft = 0, nRight = 0;
+
+        pPMPaddingTop->maValue >>= nTop;
+        pPMPaddingBottom->maValue >>= nBottom;
+        pPMPaddingLeft->maValue >>= nLeft;
+        pPMPaddingRight->maValue >>= nRight;
+
+        if( (nTop == nBottom) && (nBottom == nLeft) && (nLeft == nRight) )
         {
-            sal_Int32 nTop = 0, nBottom = 0, nLeft = 0, nRight = 0;
-
-            pPMPaddingTop->maValue >>= nTop;
-            pPMPaddingBottom->maValue >>= nBottom;
-            pPMPaddingLeft->maValue >>= nLeft;
-            pPMPaddingRight->maValue >>= nRight;
-
-            if( (nTop == nBottom) && (nBottom == nLeft) && (nLeft == nRight) )
-            {
-                lcl_RemoveState( pPMPaddingTop );
-                lcl_RemoveState( pPMPaddingBottom );
-                lcl_RemoveState( pPMPaddingLeft );
-                lcl_RemoveState( pPMPaddingRight );
-            }
-            else
-                lcl_RemoveState( pPMPaddingAll );
+            lcl_RemoveState( pPMPaddingTop );
+            lcl_RemoveState( pPMPaddingBottom );
+            lcl_RemoveState( pPMPaddingLeft );
+            lcl_RemoveState( pPMPaddingRight );
         }
         else
             lcl_RemoveState( pPMPaddingAll );
     }
+    else
+        lcl_RemoveState( pPMPaddingAll );
 }
 
 XMLPageMasterExportPropMapper::XMLPageMasterExportPropMapper(

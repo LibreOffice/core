@@ -164,30 +164,30 @@ void XMLBitmapStyleContext::EndElement()
         }
     }
 
-    if (maAny.has<uno::Reference<graphic::XGraphic>>())
+    if (!maAny.has<uno::Reference<graphic::XGraphic>>())
+        return;
+
+    uno::Reference<container::XNameContainer> xBitmapContainer(GetImport().GetBitmapHelper());
+
+    uno::Reference<graphic::XGraphic> xGraphic = maAny.get<uno::Reference<graphic::XGraphic>>();
+    uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
+
+    try
     {
-        uno::Reference<container::XNameContainer> xBitmapContainer(GetImport().GetBitmapHelper());
-
-        uno::Reference<graphic::XGraphic> xGraphic = maAny.get<uno::Reference<graphic::XGraphic>>();
-        uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
-
-        try
+        if (xBitmapContainer.is())
         {
-            if (xBitmapContainer.is())
+            if (xBitmapContainer->hasByName(maStrName))
             {
-                if (xBitmapContainer->hasByName(maStrName))
-                {
-                    xBitmapContainer->replaceByName(maStrName, uno::Any(xBitmap));
-                }
-                else
-                {
-                    xBitmapContainer->insertByName(maStrName, uno::Any(xBitmap));
-                }
+                xBitmapContainer->replaceByName(maStrName, uno::Any(xBitmap));
+            }
+            else
+            {
+                xBitmapContainer->insertByName(maStrName, uno::Any(xBitmap));
             }
         }
-        catch (container::ElementExistException&)
-        {}
     }
+    catch (container::ElementExistException&)
+    {}
 }
 
 bool XMLBitmapStyleContext::IsTransient() const

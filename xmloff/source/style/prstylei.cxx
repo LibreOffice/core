@@ -577,24 +577,24 @@ bool XMLPropStyleContext::doNewDrawingLayerFillStyleDefinitionsExist(
 void XMLPropStyleContext::deactivateOldFillStyleDefinitions(
     const OldFillStyleDefinitionSet& rHashSetOfTags)
 {
-    if(!rHashSetOfTags.empty() && !maProperties.empty())
+    if(rHashSetOfTags.empty() || maProperties.empty())
+        return;
+
+    const rtl::Reference< XMLPropertySetMapper >& rMapper = GetStyles()->GetImportPropertyMapper(GetFamily())->getPropertySetMapper();
+
+    if(!rMapper.is())
+        return;
+
+    for(auto& a : maProperties)
     {
-        const rtl::Reference< XMLPropertySetMapper >& rMapper = GetStyles()->GetImportPropertyMapper(GetFamily())->getPropertySetMapper();
-
-        if(rMapper.is())
+        if(a.mnIndex != -1)
         {
-            for(auto& a : maProperties)
-            {
-                if(a.mnIndex != -1)
-                {
-                    const OUString& rPropName = rMapper->GetEntryAPIName(a.mnIndex);
+            const OUString& rPropName = rMapper->GetEntryAPIName(a.mnIndex);
 
-                    if(rHashSetOfTags.find(rPropName) != rHashSetOfTags.end())
-                    {
-                        // mark entry as inactive
-                        a.mnIndex = -1;
-                    }
-                }
+            if(rHashSetOfTags.find(rPropName) != rHashSetOfTags.end())
+            {
+                // mark entry as inactive
+                a.mnIndex = -1;
             }
         }
     }
@@ -602,46 +602,46 @@ void XMLPropStyleContext::deactivateOldFillStyleDefinitions(
 
 void XMLPropStyleContext::translateNameBasedDrawingLayerFillStyleDefinitionsToStyleDisplayNames()
 {
-    if(!maProperties.empty())
+    if(maProperties.empty())
+        return;
+
+    const rtl::Reference< XMLPropertySetMapper >& rMapper = GetStyles()->GetImportPropertyMapper(GetFamily())->getPropertySetMapper();
+
+    if(!rMapper.is())
+        return;
+
+    static OUString s_FillGradientName("FillGradientName");
+    static OUString s_FillHatchName("FillHatchName");
+    static OUString s_FillBitmapName("FillBitmapName");
+    static OUString s_FillTransparenceGradientName("FillTransparenceGradientName");
+
+    for(auto& a : maProperties)
     {
-        const rtl::Reference< XMLPropertySetMapper >& rMapper = GetStyles()->GetImportPropertyMapper(GetFamily())->getPropertySetMapper();
-
-        if(rMapper.is())
+        if(a.mnIndex != -1)
         {
-            static OUString s_FillGradientName("FillGradientName");
-            static OUString s_FillHatchName("FillHatchName");
-            static OUString s_FillBitmapName("FillBitmapName");
-            static OUString s_FillTransparenceGradientName("FillTransparenceGradientName");
+            const OUString& rPropName = rMapper->GetEntryAPIName(a.mnIndex);
+            XmlStyleFamily aStyleFamily(XmlStyleFamily::DATA_STYLE);
 
-            for(auto& a : maProperties)
+            if(rPropName == s_FillGradientName || rPropName == s_FillTransparenceGradientName)
             {
-                if(a.mnIndex != -1)
-                {
-                    const OUString& rPropName = rMapper->GetEntryAPIName(a.mnIndex);
-                    XmlStyleFamily aStyleFamily(XmlStyleFamily::DATA_STYLE);
+                aStyleFamily = XmlStyleFamily::SD_GRADIENT_ID;
+            }
+            else if(rPropName == s_FillHatchName)
+            {
+                aStyleFamily = XmlStyleFamily::SD_HATCH_ID;
+            }
+            else if(rPropName == s_FillBitmapName)
+            {
+                aStyleFamily = XmlStyleFamily::SD_FILL_IMAGE_ID;
+            }
 
-                    if(rPropName == s_FillGradientName || rPropName == s_FillTransparenceGradientName)
-                    {
-                        aStyleFamily = XmlStyleFamily::SD_GRADIENT_ID;
-                    }
-                    else if(rPropName == s_FillHatchName)
-                    {
-                        aStyleFamily = XmlStyleFamily::SD_HATCH_ID;
-                    }
-                    else if(rPropName == s_FillBitmapName)
-                    {
-                        aStyleFamily = XmlStyleFamily::SD_FILL_IMAGE_ID;
-                    }
+            if(aStyleFamily != XmlStyleFamily::DATA_STYLE)
+            {
+                OUString sStyleName;
 
-                    if(aStyleFamily != XmlStyleFamily::DATA_STYLE)
-                    {
-                        OUString sStyleName;
-
-                        a.maValue >>= sStyleName;
-                        sStyleName = GetImport().GetStyleDisplayName( aStyleFamily, sStyleName );
-                        a.maValue <<= sStyleName;
-                    }
-                }
+                a.maValue >>= sStyleName;
+                sStyleName = GetImport().GetStyleDisplayName( aStyleFamily, sStyleName );
+                a.maValue <<= sStyleName;
             }
         }
     }

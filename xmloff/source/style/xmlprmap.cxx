@@ -103,30 +103,30 @@ XMLPropertySetMapper::XMLPropertySetMapper(
     mpImpl(new Impl(bForExport))
 {
     mpImpl->maHdlFactories.push_back(rFactory);
-    if( pEntries )
-    {
-        const XMLPropertyMapEntry* pIter = pEntries;
+    if( !pEntries )
+        return;
 
-        if (mpImpl->mbOnlyExportMappings)
+    const XMLPropertyMapEntry* pIter = pEntries;
+
+    if (mpImpl->mbOnlyExportMappings)
+    {
+        while( pIter->msApiName )
         {
-            while( pIter->msApiName )
-            {
-                if (!pIter->mbImportOnly)
-                {
-                    XMLPropertySetMapperEntry_Impl aEntry( *pIter, rFactory );
-                    mpImpl->maMapEntries.push_back( aEntry );
-                }
-                ++pIter;
-            }
-        }
-        else
-        {
-            while( pIter->msApiName )
+            if (!pIter->mbImportOnly)
             {
                 XMLPropertySetMapperEntry_Impl aEntry( *pIter, rFactory );
                 mpImpl->maMapEntries.push_back( aEntry );
-                ++pIter;
             }
+            ++pIter;
+        }
+    }
+    else
+    {
+        while( pIter->msApiName )
+        {
+            XMLPropertySetMapperEntry_Impl aEntry( *pIter, rFactory );
+            mpImpl->maMapEntries.push_back( aEntry );
+            ++pIter;
         }
     }
 }
