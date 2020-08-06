@@ -396,21 +396,6 @@ public:
 
     void            Clear();
 
-    /** Enables or disables mnemonic characters in the entry texts.
-
-        If mnemonics are enabled, then entries are selected and made current when
-        there mnemonic character is pressed. If there are multiple entries with the
-        same mnemonic, the selection cycles between them.
-
-        Entries with a collapsed ancestor are not included in the calculation of
-        mnemonics. That is, if you press the accelerator key of an invisible
-        entry, then this entry is *not* selected.
-
-        Be aware that enabling mnemonics gets more expensive as you add to the list.
-    */
-    void            EnableEntryMnemonics();
-    bool            IsEntryMnemonicsEnabled() const;
-
     bool            TextCenterAndClipEnabled() const { return mbCenterAndClipText; }
 
     /** Handles the given key event.

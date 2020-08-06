@@ -226,8 +226,6 @@ void SvLBoxString::Paint(
     }
 
     Size aSize;
-    if (rDev.IsEntryMnemonicsEnabled())
-        nStyle |= DrawTextFlags::Mnemonic;
     if (rDev.TextCenterAndClipEnabled())
     {
         nStyle |= DrawTextFlags::PathEllipsis | DrawTextFlags::Center;

@@ -379,19 +379,14 @@ int SvLBoxItem::CalcWidth(const SvTreeListBox* /*pView*/) const
 
 struct SvTreeListBoxImpl
 {
-    bool m_bEntryMnemonicsEnabled:1;
     bool m_bDoingQuickSelection:1;
 
-    vcl::MnemonicEngine m_aMnemonicEngine;
     vcl::QuickSelectionEngine m_aQuickSelectionEngine;
 
     explicit SvTreeListBoxImpl(SvTreeListBox& _rBox) :
-        m_bEntryMnemonicsEnabled(false),
         m_bDoingQuickSelection(false),
-        m_aMnemonicEngine(_rBox),
         m_aQuickSelectionEngine(_rBox) {}
 };
-
 
 SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
     Control(pParent, nWinStyle | WB_CLIPCHILDREN),
@@ -428,20 +423,6 @@ void SvTreeListBox::Clear()
 {
     if (pModel)
         pModel->Clear();  // Model calls SvTreeListBox::ModelHasCleared()
-}
-
-void SvTreeListBox::EnableEntryMnemonics()
-{
-    if ( IsEntryMnemonicsEnabled() )
-        return;
-
-    mpImpl->m_bEntryMnemonicsEnabled = true;
-    Invalidate();
-}
-
-bool SvTreeListBox::IsEntryMnemonicsEnabled() const
-{
-    return mpImpl->m_bEntryMnemonicsEnabled;
 }
 
 IMPL_LINK( SvTreeListBox, CloneHdl_Impl, SvTreeListEntry*, pEntry, SvTreeListEntry* )
@@ -1041,11 +1022,6 @@ bool SvTreeListBox::HandleKeyInput( const KeyEvent& _rKEvt )
 {
     if ( _rKEvt.GetKeyCode().IsMod1() )
         return false;
-
-    if  (   IsEntryMnemonicsEnabled()
-        &&  mpImpl->m_aMnemonicEngine.HandleKeyEvent( _rKEvt )
-        )
-        return true;
 
     if (mbQuickSearch)
     {
