@@ -46,8 +46,6 @@ protected:
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf133701, "tdf133701.docx")
 {
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
-        return;
 
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "hSpace", "567");
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "vSpace", "284");
@@ -524,14 +522,12 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testImageData, "image_data.docx")
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:shape/v:imagedata", "detectmouseclick").match("t"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo70838, "fdo70838.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo70838, "fdo70838.docx")
 {
     // The problem was that VMLExport::Commit didn't save the correct width and height,
     // and ImplEESdrWriter::ImplFlipBoundingBox made a mistake calculating the position
 
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
-        return;
 
     // Check DML document
 
@@ -710,12 +706,10 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo70942, "fdo70942.docx")
                 "prst", "ellipse");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testDrawinglayerPicPos, "drawinglayer-pic-pos.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDrawinglayerPicPos, "drawinglayer-pic-pos.docx")
 {
     // The problem was that the position of the picture was incorrect, it was shifted towards the bottom right corner.
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
-        return;
 
     OString aXPath("/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:xfrm/a:off");
     // This was 720.
@@ -724,11 +718,9 @@ DECLARE_OOXMLEXPORT_TEST(testDrawinglayerPicPos, "drawinglayer-pic-pos.docx")
     assertXPath(pXmlDocument, aXPath, "y", "0");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testShapeThemePreservation, "shape-theme-preservation.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testShapeThemePreservation, "shape-theme-preservation.docx")
 {
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
-        return;
 
     // check shape style has been preserved
     assertXPath(pXmlDocument,
@@ -873,11 +865,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testLineStyle_DashType, "LineStyle_DashType.
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:prstDash", "val", "sysDot");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testGradientFillPreservation, "gradient-fill-preservation.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testGradientFillPreservation, "gradient-fill-preservation.docx")
 {
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
-        return;
 
     // check rgb colors for every step in the gradient of the first shape
     assertXPath(pXmlDocument,
@@ -972,11 +962,9 @@ DECLARE_OOXMLIMPORT_TEST(testTdf107119, "tdf107119.docx")
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_PARALLEL, getProperty<text::WrapTextMode>(XPropsWrap, "Surround"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf133457, "tdf133457.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf133457, "tdf133457.docx")
 {
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
-        return;
 
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[3]/w:pPr/w:framePr", "vAnchor", "text");
 }
@@ -984,8 +972,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133457, "tdf133457.docx")
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf133924, "tdf133924.docx")
 {
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
-        return;
 
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "wrap", "around");
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:framePr", "wrap", "notBeside");
