@@ -360,7 +360,6 @@ namespace dbaui
                             );
 
         const TaskPaneData& impl_getTaskPaneData( ElementType _eType );
-        void                impl_fillTaskPaneData( ElementType _eType, TaskPaneData& _rData ) const;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_APP_APPDETAILVIEW_HXX
