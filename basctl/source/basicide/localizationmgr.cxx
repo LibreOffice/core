@@ -47,9 +47,9 @@ using namespace ::com::sun::star::resource;
 namespace
 {
 
-OUString const aDot(".");
-OUString const aEsc("&");
-OUString const aSemi(";");
+OUStringLiteral const aDot(".");
+OUStringLiteral const aEsc("&");
+OUStringLiteral const aSemi(";");
 
 } // namespace
 

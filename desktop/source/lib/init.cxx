@@ -3699,13 +3699,13 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned long
     if (aMap.find("id") == aMap.end())
         return;
 
-    static const OUString sClickAction("CLICK");
-    static const OUString sSelectAction("SELECT");
-    static const OUString sClearAction("CLEAR");
-    static const OUString sTypeAction("TYPE");
-    static const OUString sUpAction("UP");
-    static const OUString sDownAction("DOWN");
-    static const OUString sValue("VALUE");
+    static const OUStringLiteral sClickAction("CLICK");
+    static const OUStringLiteral sSelectAction("SELECT");
+    static const OUStringLiteral sClearAction("CLEAR");
+    static const OUStringLiteral sTypeAction("TYPE");
+    static const OUStringLiteral sUpAction("UP");
+    static const OUStringLiteral sDownAction("DOWN");
+    static const OUStringLiteral sValue("VALUE");
 
     bool bIsWeldedDialog = false;
 
@@ -4880,10 +4880,10 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     SetLastExceptionMsg();
 
     OString aCommand(pCommand);
-    static const OString aViewRowColumnHeaders(".uno:ViewRowColumnHeaders");
-    static const OString aSheetGeometryData(".uno:SheetGeometryData");
-    static const OString aCellCursor(".uno:CellCursor");
-    static const OString aFontSubset(".uno:FontSubset&name=");
+    static const OStringLiteral aViewRowColumnHeaders(".uno:ViewRowColumnHeaders");
+    static const OStringLiteral aSheetGeometryData(".uno:SheetGeometryData");
+    static const OStringLiteral aCellCursor(".uno:CellCursor");
+    static const OStringLiteral aFontSubset(".uno:FontSubset&name=");
 
     if (!strcmp(pCommand, ".uno:LanguageStatus"))
     {
