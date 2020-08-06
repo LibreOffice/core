@@ -21,6 +21,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/colwidthdialog \
     dbaccess/uiconfig/ui/connectionpage \
     dbaccess/uiconfig/ui/copytablepage \
+    dbaccess/uiconfig/ui/creationlistbox \
     dbaccess/uiconfig/ui/dbaseindexdialog \
     dbaccess/uiconfig/ui/dbasepage \
     dbaccess/uiconfig/ui/dbwizconnectionpage \
