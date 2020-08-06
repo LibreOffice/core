@@ -58,6 +58,9 @@ bool StringStatic::preRun()
     // has a mix of literals and refs to external OUStrings
     if (loplugin::isSamePathname(fn, SRCDIR "/ucb/source/ucp/webdav-neon/ContentProperties.cxx"))
          return false;
+    // cppunit's ASSERT macros can't handle mixed StringLiteral and String types
+    if (loplugin::isSamePathname(fn, SRCDIR "/basic/qa/cppunit/test_scanner.cxx"))
+        return false;
     return true;
 }
 
@@ -68,7 +71,7 @@ void StringStatic::postRun()
     }
     for (auto const & varDecl : potentialVars) {
         report(DiagnosticsEngine::Warning,
-                "rather declare this using OUStringLiteral or char[]",
+                "rather declare this using OUStringLiteral/OStringLiteral/char[]",
                 varDecl->getLocation())
             << varDecl->getSourceRange();
     }
@@ -76,22 +79,23 @@ void StringStatic::postRun()
 
 bool StringStatic::VisitVarDecl(VarDecl const* varDecl)
 {
-    if (ignoreLocation(varDecl)) {
+    if (ignoreLocation(varDecl))
         return true;
-    }
     QualType qt = varDecl->getType();
-    if (!varDecl->hasGlobalStorage()
-        || !varDecl->isThisDeclarationADefinition()
-        || !qt.isConstQualified()) {
+    if (!varDecl->hasGlobalStorage() && !varDecl->isStaticLocal())
         return true;
-    }
-    if (qt->isArrayType()) {
+    if (!varDecl->isThisDeclarationADefinition()
+        || !qt.isConstQualified())
+        return true;
+    if (qt->isArrayType())
         qt = qt->getAsArrayTypeUnsafe()->getElementType();
-    }
-    if (!loplugin::TypeCheck(qt).Class("OUString").Namespace("rtl").GlobalNamespace()) {
+
+    auto tc = loplugin::TypeCheck(qt);
+    if (!tc.Class("OUString").Namespace("rtl").GlobalNamespace()
+        && !tc.Class("OString").Namespace("rtl").GlobalNamespace())
         return true;
-    }
-    if (varDecl->hasInit()) {
+    if (varDecl->hasInit())
+    {
         Expr const * expr = varDecl->getInit();
         while (true) {
             if (ExprWithCleanups const * exprWithCleanups = dyn_cast<ExprWithCleanups>(expr)) {
@@ -107,7 +111,7 @@ bool StringStatic::VisitVarDecl(VarDecl const* varDecl)
                 expr = bindExpr->getSubExpr();
             }
             else if (CXXConstructExpr const * constructExpr = dyn_cast<CXXConstructExpr>(expr)) {
-                if (constructExpr->getNumArgs() != 1) {
+                if (constructExpr->getNumArgs() == 0) {
                     return true;
                 }
                 expr = constructExpr->getArg(0);

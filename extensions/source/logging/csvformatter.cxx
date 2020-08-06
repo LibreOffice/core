@@ -87,11 +87,11 @@ namespace
 {
     const sal_Unicode quote_char = '"';
     const sal_Unicode comma_char = ',';
-    const OUString dos_newline = "\r\n";
+    const OUStringLiteral dos_newline = "\r\n";
 
     bool needsQuoting(const OUString& str)
     {
-        static const OUString quote_trigger_chars = "\",\n\r";
+        static const OUStringLiteral quote_trigger_chars = "\",\n\r";
         sal_Int32 len = str.getLength();
         for(sal_Int32 i=0; i<len; i++)
             if(quote_trigger_chars.indexOf(str[i])!=-1)
