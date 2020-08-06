@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "4a11cade_f8e36e4f",
+        "filename": "svx/source/gallery2/galleryxmlengine.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2020-08-06T11:34:47Z",
+      "side": 1,
+      "message": "resolved. correct URL: \"file:///C:/cygwin/home/adith/lode/dev/core//package/qa/cppunit/data/a2z.zip\"",
+      "parentUuid": "3ebcabe4_d5c0d9fa",
+      "range": {
+        "startLine": 34,
+        "startChar": 3,
+        "endLine": 36,
+        "endChar": 64
+      },
+      "revId": "b97772d075fd4a5e2e871c620574b4aa5dc67274",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "873a7fb4_087b7f6c",
         "filename": "svx/source/gallery2/galtheme.cxx",
         "patchSetId": 1
