@@ -801,37 +801,37 @@ void SvXMLNumFmtExport::WriteMapElement_Impl( sal_Int32 nOp, double fLimit,
 {
     FinishTextElement_Impl();
 
-    if ( nOp != NUMBERFORMAT_OP_NO )
+    if ( nOp == NUMBERFORMAT_OP_NO )
+        return;
+
+    // style namespace
+
+    OUStringBuffer aCondStr(20);
+    aCondStr.append( "value()" );          //! define constant
+    switch ( nOp )
     {
-        // style namespace
-
-        OUStringBuffer aCondStr(20);
-        aCondStr.append( "value()" );          //! define constant
-        switch ( nOp )
-        {
-            case NUMBERFORMAT_OP_EQ: aCondStr.append( '=' );  break;
-            case NUMBERFORMAT_OP_NE: aCondStr.append( "!=" );          break;
-            case NUMBERFORMAT_OP_LT: aCondStr.append( '<' );  break;
-            case NUMBERFORMAT_OP_LE: aCondStr.append( "<=" );          break;
-            case NUMBERFORMAT_OP_GT: aCondStr.append( '>' );  break;
-            case NUMBERFORMAT_OP_GE: aCondStr.append( ">=" );          break;
-            default:
-                OSL_FAIL("unknown operator");
-        }
-        ::rtl::math::doubleToUStringBuffer( aCondStr, fLimit,
-                rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-                '.', true );
-
-        rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_CONDITION,
-                              aCondStr.makeStringAndClear() );
-
-        rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_APPLY_STYLE_NAME,
-                              rExport.EncodeStyleName( lcl_CreateStyleName( nKey, nPart, false,
-                                                   sPrefix ) ) );
-
-        SvXMLElementExport aElem( rExport, XML_NAMESPACE_STYLE, XML_MAP,
-                                  true, false );
+        case NUMBERFORMAT_OP_EQ: aCondStr.append( '=' );  break;
+        case NUMBERFORMAT_OP_NE: aCondStr.append( "!=" );          break;
+        case NUMBERFORMAT_OP_LT: aCondStr.append( '<' );  break;
+        case NUMBERFORMAT_OP_LE: aCondStr.append( "<=" );          break;
+        case NUMBERFORMAT_OP_GT: aCondStr.append( '>' );  break;
+        case NUMBERFORMAT_OP_GE: aCondStr.append( ">=" );          break;
+        default:
+            OSL_FAIL("unknown operator");
     }
+    ::rtl::math::doubleToUStringBuffer( aCondStr, fLimit,
+            rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
+            '.', true );
+
+    rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_CONDITION,
+                          aCondStr.makeStringAndClear() );
+
+    rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_APPLY_STYLE_NAME,
+                          rExport.EncodeStyleName( lcl_CreateStyleName( nKey, nPart, false,
+                                               sPrefix ) ) );
+
+    SvXMLElementExport aElem( rExport, XML_NAMESPACE_STYLE, XML_MAP,
+                              true, false );
 }
 
 //  for old (automatic) currency formats: parse currency symbol from text
@@ -1725,58 +1725,58 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
 
     //  mapping (conditions) must be last elements
 
-    if (bDefPart)
+    if (!bDefPart)
+        return;
+
+    SvNumberformatLimitOps eOp1, eOp2;
+    double fLimit1, fLimit2;
+    rFormat.GetConditions( eOp1, fLimit1, eOp2, fLimit2 );
+
+    WriteMapElement_Impl( eOp1, fLimit1, nKey, 0 );
+    WriteMapElement_Impl( eOp2, fLimit2, nKey, 1 );
+
+    if ( !rFormat.HasTextFormat() )
+        return;
+
+    //  4th part is for text -> make an "all other numbers" condition for the 3rd part
+    //  by reversing the 2nd condition.
+    //  For a trailing text format like  0;@  that has no conditions
+    //  use a "less or equal than biggest" condition for the number
+    //  part, ODF can't store subformats (style maps) without
+    //  conditions.
+
+    SvNumberformatLimitOps eOp3 = NUMBERFORMAT_OP_NO;
+    double fLimit3 = fLimit2;
+    sal_uInt16 nLastPart = 2;
+    SvNumberformatLimitOps eOpLast = eOp2;
+    if (eOp2 == NUMBERFORMAT_OP_NO)
     {
-        SvNumberformatLimitOps eOp1, eOp2;
-        double fLimit1, fLimit2;
-        rFormat.GetConditions( eOp1, fLimit1, eOp2, fLimit2 );
-
-        WriteMapElement_Impl( eOp1, fLimit1, nKey, 0 );
-        WriteMapElement_Impl( eOp2, fLimit2, nKey, 1 );
-
-        if ( rFormat.HasTextFormat() )
-        {
-            //  4th part is for text -> make an "all other numbers" condition for the 3rd part
-            //  by reversing the 2nd condition.
-            //  For a trailing text format like  0;@  that has no conditions
-            //  use a "less or equal than biggest" condition for the number
-            //  part, ODF can't store subformats (style maps) without
-            //  conditions.
-
-            SvNumberformatLimitOps eOp3 = NUMBERFORMAT_OP_NO;
-            double fLimit3 = fLimit2;
-            sal_uInt16 nLastPart = 2;
-            SvNumberformatLimitOps eOpLast = eOp2;
-            if (eOp2 == NUMBERFORMAT_OP_NO)
-            {
-                eOpLast = eOp1;
-                fLimit3 = fLimit1;
-                nLastPart = (eOp1 == NUMBERFORMAT_OP_NO) ? 0 : 1;
-            }
-            switch ( eOpLast )
-            {
-                case NUMBERFORMAT_OP_EQ: eOp3 = NUMBERFORMAT_OP_NE; break;
-                case NUMBERFORMAT_OP_NE: eOp3 = NUMBERFORMAT_OP_EQ; break;
-                case NUMBERFORMAT_OP_LT: eOp3 = NUMBERFORMAT_OP_GE; break;
-                case NUMBERFORMAT_OP_LE: eOp3 = NUMBERFORMAT_OP_GT; break;
-                case NUMBERFORMAT_OP_GT: eOp3 = NUMBERFORMAT_OP_LE; break;
-                case NUMBERFORMAT_OP_GE: eOp3 = NUMBERFORMAT_OP_LT; break;
-                case NUMBERFORMAT_OP_NO: eOp3 = NUMBERFORMAT_OP_LE; fLimit3 = DBL_MAX; break;
-            }
-
-            if ( fLimit1 == fLimit2 &&
-                    ( ( eOp1 == NUMBERFORMAT_OP_LT && eOp2 == NUMBERFORMAT_OP_GT ) ||
-                      ( eOp1 == NUMBERFORMAT_OP_GT && eOp2 == NUMBERFORMAT_OP_LT ) ) )
-            {
-                //  For <x and >x, add =x as last condition
-                //  (just for readability, <=x would be valid, too)
-
-                eOp3 = NUMBERFORMAT_OP_EQ;
-            }
-
-            WriteMapElement_Impl( eOp3, fLimit3, nKey, nLastPart );
-        }
+        eOpLast = eOp1;
+        fLimit3 = fLimit1;
+        nLastPart = (eOp1 == NUMBERFORMAT_OP_NO) ? 0 : 1;
     }
+    switch ( eOpLast )
+    {
+        case NUMBERFORMAT_OP_EQ: eOp3 = NUMBERFORMAT_OP_NE; break;
+        case NUMBERFORMAT_OP_NE: eOp3 = NUMBERFORMAT_OP_EQ; break;
+        case NUMBERFORMAT_OP_LT: eOp3 = NUMBERFORMAT_OP_GE; break;
+        case NUMBERFORMAT_OP_LE: eOp3 = NUMBERFORMAT_OP_GT; break;
+        case NUMBERFORMAT_OP_GT: eOp3 = NUMBERFORMAT_OP_LE; break;
+        case NUMBERFORMAT_OP_GE: eOp3 = NUMBERFORMAT_OP_LT; break;
+        case NUMBERFORMAT_OP_NO: eOp3 = NUMBERFORMAT_OP_LE; fLimit3 = DBL_MAX; break;
+    }
+
+    if ( fLimit1 == fLimit2 &&
+            ( ( eOp1 == NUMBERFORMAT_OP_LT && eOp2 == NUMBERFORMAT_OP_GT ) ||
+              ( eOp1 == NUMBERFORMAT_OP_GT && eOp2 == NUMBERFORMAT_OP_LT ) ) )
+    {
+        //  For <x and >x, add =x as last condition
+        //  (just for readability, <=x would be valid, too)
+
+        eOp3 = NUMBERFORMAT_OP_EQ;
+    }
+
+    WriteMapElement_Impl( eOp3, fLimit3, nKey, nLastPart );
 }
 
 //  export one format

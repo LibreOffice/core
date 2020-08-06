@@ -207,22 +207,22 @@ XMLPageExport::XMLPageExport(SvXMLExport & rExp)
                                                        UNO_QUERY );
     SAL_WARN_IF( !xFamiliesSupp.is(), "xmloff",
                 "No XStyleFamiliesSupplier from XModel for export!" );
-    if( xFamiliesSupp.is() )
+    if( !xFamiliesSupp.is() )
+        return;
+
+    Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
+    SAL_WARN_IF( !xFamiliesSupp.is(), "xmloff",
+                "getStyleFamilies() from XModel failed for export!" );
+    if( xFamilies.is() )
     {
-        Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
-        SAL_WARN_IF( !xFamiliesSupp.is(), "xmloff",
-                    "getStyleFamilies() from XModel failed for export!" );
-        if( xFamilies.is() )
+        const OUString aPageStyleName("PageStyles");
+
+        if( xFamilies->hasByName( aPageStyleName ) )
         {
-            const OUString aPageStyleName("PageStyles");
+            xPageStyles.set(xFamilies->getByName( aPageStyleName ),uno::UNO_QUERY);
 
-            if( xFamilies->hasByName( aPageStyleName ) )
-            {
-                xPageStyles.set(xFamilies->getByName( aPageStyleName ),uno::UNO_QUERY);
-
-                SAL_WARN_IF( !xPageStyles.is(), "xmloff",
-                            "Page Styles not found for export!" );
-            }
+            SAL_WARN_IF( !xPageStyles.is(), "xmloff",
+                        "Page Styles not found for export!" );
         }
     }
 }
@@ -256,44 +256,44 @@ void XMLPageExport::exportAutoStyles()
 void XMLPageExport::exportDefaultStyle()
 {
     Reference < lang::XMultiServiceFactory > xFactory (GetExport().GetModel(), UNO_QUERY);
-    if (xFactory.is())
+    if (!xFactory.is())
+        return;
+
+    Reference < XPropertySet > xPropSet (xFactory->createInstance ( "com.sun.star.text.Defaults" ), UNO_QUERY);
+    if (!xPropSet.is())
+        return;
+
+    // <style:default-style ...>
+    GetExport().CheckAttrList();
+
+    ::std::vector< XMLPropertyState > aPropStates =
+        xPageMasterExportPropMapper->FilterDefaults( xPropSet );
+
+    bool bExport = false;
+    rtl::Reference < XMLPropertySetMapper > aPropMapper(xPageMasterExportPropMapper->getPropertySetMapper());
+    for( const auto& rProp : aPropStates )
     {
-        Reference < XPropertySet > xPropSet (xFactory->createInstance ( "com.sun.star.text.Defaults" ), UNO_QUERY);
-        if (xPropSet.is())
+        sal_Int16 nContextId    = aPropMapper->GetEntryContextId( rProp.mnIndex );
+        if( nContextId == CTF_PM_STANDARD_MODE )
         {
-            // <style:default-style ...>
-            GetExport().CheckAttrList();
-
-            ::std::vector< XMLPropertyState > aPropStates =
-                xPageMasterExportPropMapper->FilterDefaults( xPropSet );
-
-            bool bExport = false;
-            rtl::Reference < XMLPropertySetMapper > aPropMapper(xPageMasterExportPropMapper->getPropertySetMapper());
-            for( const auto& rProp : aPropStates )
-            {
-                sal_Int16 nContextId    = aPropMapper->GetEntryContextId( rProp.mnIndex );
-                if( nContextId == CTF_PM_STANDARD_MODE )
-                {
-                    bExport = true;
-                    break;
-                }
-            }
-
-            if( bExport )
-            {
-                assert(GetExport().getSaneDefaultVersion()
-                        >= SvtSaveOptions::ODFSVER_012);
-
-                //<style:default-page-layout>
-                SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                          XML_DEFAULT_PAGE_LAYOUT,
-                                          true, true );
-
-                xPageMasterExportPropMapper->exportXML( GetExport(), aPropStates,
-                                             SvXmlExportFlags::IGN_WS );
-            }
+            bExport = true;
+            break;
         }
     }
+
+    if( !bExport )
+        return;
+
+    assert(GetExport().getSaneDefaultVersion()
+            >= SvtSaveOptions::ODFSVER_012);
+
+    //<style:default-page-layout>
+    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
+                              XML_DEFAULT_PAGE_LAYOUT,
+                              true, true );
+
+    xPageMasterExportPropMapper->exportXML( GetExport(), aPropStates,
+                                 SvXmlExportFlags::IGN_WS );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

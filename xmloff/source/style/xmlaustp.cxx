@@ -137,31 +137,31 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
         }
     }
 
-    if( nFamily == XmlStyleFamily::PAGE_MASTER )
+    if( nFamily != XmlStyleFamily::PAGE_MASTER )
+        return;
+
+    for( const auto& rProp : rProperties )
     {
-        for( const auto& rProp : rProperties )
+        if (rProp.mnIndex > -1)
         {
-            if (rProp.mnIndex > -1)
+            const rtl::Reference< XMLPropertySetMapper >& aPropMapper = rPropExp.getPropertySetMapper();
+            sal_Int32 nIndex = rProp.mnIndex;
+            sal_Int16 nContextID = aPropMapper->GetEntryContextId( nIndex );
+            switch( nContextID )
             {
-                const rtl::Reference< XMLPropertySetMapper >& aPropMapper = rPropExp.getPropertySetMapper();
-                sal_Int32 nIndex = rProp.mnIndex;
-                sal_Int16 nContextID = aPropMapper->GetEntryContextId( nIndex );
-                switch( nContextID )
+                case CTF_PM_PAGEUSAGE:
                 {
-                    case CTF_PM_PAGEUSAGE:
+                    OUString sValue;
+                    const XMLPropertyHandler* pPropHdl = aPropMapper->GetPropertyHandler( nIndex );
+                    if( pPropHdl &&
+                        pPropHdl->exportXML( sValue, rProp.maValue,
+                                             GetExport().GetMM100UnitConverter() ) &&
+                        ( ! IsXMLToken( sValue, XML_ALL ) ) )
                     {
-                        OUString sValue;
-                        const XMLPropertyHandler* pPropHdl = aPropMapper->GetPropertyHandler( nIndex );
-                        if( pPropHdl &&
-                            pPropHdl->exportXML( sValue, rProp.maValue,
-                                                 GetExport().GetMM100UnitConverter() ) &&
-                            ( ! IsXMLToken( sValue, XML_ALL ) ) )
-                        {
-                            GetExport().AddAttribute( aPropMapper->GetEntryNameSpace( nIndex ), aPropMapper->GetEntryXMLName( nIndex ), sValue );
-                        }
+                        GetExport().AddAttribute( aPropMapper->GetEntryNameSpace( nIndex ), aPropMapper->GetEntryXMLName( nIndex ), sValue );
                     }
-                    break;
                 }
+                break;
             }
         }
     }
