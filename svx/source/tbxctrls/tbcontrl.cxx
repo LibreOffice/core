@@ -1015,26 +1015,26 @@ void SvxStyleBox_Base::Select(bool bNonTravelSelect)
         while in Dispatch()), accessing members will crash in this case. */
     ReleaseFocus();
 
-    if( bDoIt )
-    {
-        if ( bClear )
-            set_active_or_entry_text(aSearchEntry);
-        m_xWidget->save_value();
+    if( !bDoIt )
+        return;
 
-        Sequence< PropertyValue > aArgs( 2 );
-        aArgs[0].Value  <<= aSearchEntry;
-        aArgs[1].Name   = "Family";
-        aArgs[1].Value  <<= sal_Int16( eStyleFamily );
-        if( bCreateNew )
-        {
-            aArgs[0].Name   = "Param";
-            SfxToolBoxControl::Dispatch( m_xDispatchProvider, ".uno:StyleNewByExample", aArgs);
-        }
-        else
-        {
-            aArgs[0].Name   = "Template";
-            SfxToolBoxControl::Dispatch( m_xDispatchProvider, m_aCommand, aArgs );
-        }
+    if ( bClear )
+        set_active_or_entry_text(aSearchEntry);
+    m_xWidget->save_value();
+
+    Sequence< PropertyValue > aArgs( 2 );
+    aArgs[0].Value  <<= aSearchEntry;
+    aArgs[1].Name   = "Family";
+    aArgs[1].Value  <<= sal_Int16( eStyleFamily );
+    if( bCreateNew )
+    {
+        aArgs[0].Name   = "Param";
+        SfxToolBoxControl::Dispatch( m_xDispatchProvider, ".uno:StyleNewByExample", aArgs);
+    }
+    else
+    {
+        aArgs[0].Name   = "Template";
+        SfxToolBoxControl::Dispatch( m_xDispatchProvider, m_aCommand, aArgs );
     }
 }
 
@@ -1159,128 +1159,128 @@ void SvxStyleBox_Base::SetupEntry(vcl::RenderContext& rRenderContext, sal_Int32 
             m_xWidget->set_item_menu(OString::number(nItem), m_xMenu.get());
     }
 
-    if (nItem > 0 && nItem < m_xWidget->get_count() - 1)
+    if (nItem <= 0 || nItem >= m_xWidget->get_count() - 1)
+        return;
+
+    SfxObjectShell *pShell = SfxObjectShell::Current();
+    SfxStyleSheetBasePool* pPool = pShell->GetStyleSheetPool();
+    SfxStyleSheetBase* pStyle = nullptr;
+
+    if ( pPool )
     {
-        SfxObjectShell *pShell = SfxObjectShell::Current();
-        SfxStyleSheetBasePool* pPool = pShell->GetStyleSheetPool();
-        SfxStyleSheetBase* pStyle = nullptr;
+        pStyle = pPool->First(eStyleFamily);
+        while (pStyle && pStyle->GetName() != rStyleName)
+            pStyle = pPool->Next();
+    }
 
-        if ( pPool )
+    if (!pStyle )
+        return;
+
+    std::unique_ptr<const SfxItemSet> const pItemSet(pStyle->GetItemSetForPreview());
+    if (!pItemSet) return;
+
+    const SvxFontItem * const pFontItem =
+        pItemSet->GetItem<SvxFontItem>(SID_ATTR_CHAR_FONT);
+    const SvxFontHeightItem * const pFontHeightItem =
+        pItemSet->GetItem<SvxFontHeightItem>(SID_ATTR_CHAR_FONTHEIGHT);
+
+    if ( !(pFontItem && pFontHeightItem) )
+        return;
+
+    Size aFontSize( 0, pFontHeightItem->GetHeight() );
+    Size aPixelSize(rRenderContext.LogicToPixel(aFontSize, MapMode(pShell->GetMapUnit())));
+
+    // setup the font properties
+    SvxFont aFont;
+    aFont.SetFamilyName(pFontItem->GetFamilyName());
+    aFont.SetStyleName(pFontItem->GetStyleName());
+    aFont.SetFontSize(aPixelSize);
+
+    const SfxPoolItem *pItem = pItemSet->GetItem( SID_ATTR_CHAR_WEIGHT );
+    if ( pItem )
+        aFont.SetWeight( static_cast< const SvxWeightItem* >( pItem )->GetWeight() );
+
+    pItem = pItemSet->GetItem( SID_ATTR_CHAR_POSTURE );
+    if ( pItem )
+        aFont.SetItalic( static_cast< const SvxPostureItem* >( pItem )->GetPosture() );
+
+    pItem = pItemSet->GetItem( SID_ATTR_CHAR_CONTOUR );
+    if ( pItem )
+        aFont.SetOutline( static_cast< const SvxContourItem* >( pItem )->GetValue() );
+
+    pItem = pItemSet->GetItem( SID_ATTR_CHAR_SHADOWED );
+    if ( pItem )
+        aFont.SetShadow( static_cast< const SvxShadowedItem* >( pItem )->GetValue() );
+
+    pItem = pItemSet->GetItem( SID_ATTR_CHAR_RELIEF );
+    if ( pItem )
+        aFont.SetRelief( static_cast< const SvxCharReliefItem* >( pItem )->GetValue() );
+
+    pItem = pItemSet->GetItem( SID_ATTR_CHAR_UNDERLINE );
+    if ( pItem )
+        aFont.SetUnderline( static_cast< const SvxUnderlineItem* >( pItem )->GetLineStyle() );
+
+    pItem = pItemSet->GetItem( SID_ATTR_CHAR_OVERLINE );
+    if ( pItem )
+        aFont.SetOverline( static_cast< const SvxOverlineItem* >( pItem )->GetValue() );
+
+    pItem = pItemSet->GetItem( SID_ATTR_CHAR_STRIKEOUT );
+    if ( pItem )
+        aFont.SetStrikeout( static_cast< const SvxCrossedOutItem* >( pItem )->GetStrikeout() );
+
+    pItem = pItemSet->GetItem( SID_ATTR_CHAR_CASEMAP );
+    if ( pItem )
+        aFont.SetCaseMap(static_cast<const SvxCaseMapItem*>(pItem)->GetCaseMap());
+
+    pItem = pItemSet->GetItem( SID_ATTR_CHAR_EMPHASISMARK );
+    if ( pItem )
+        aFont.SetEmphasisMark( static_cast< const SvxEmphasisMarkItem* >( pItem )->GetEmphasisMark() );
+
+    // setup the device & draw
+    Color aFontCol = COL_AUTO, aBackCol = COL_AUTO;
+
+    rRenderContext.SetFont(aFont);
+
+    pItem = pItemSet->GetItem( SID_ATTR_CHAR_COLOR );
+    // text color, when nothing is selected
+    if ( (nullptr != pItem) && bIsNotSelected)
+        aFontCol = static_cast< const SvxColorItem* >( pItem )->GetValue();
+
+    drawing::FillStyle style = drawing::FillStyle_NONE;
+    // which kind of Fill style is selected
+    pItem = pItemSet->GetItem( XATTR_FILLSTYLE );
+    // only when ok and not selected
+    if ( (nullptr != pItem) && bIsNotSelected)
+        style = static_cast< const XFillStyleItem* >( pItem )->GetValue();
+
+    switch(style)
+    {
+        case drawing::FillStyle_SOLID:
         {
-            pStyle = pPool->First(eStyleFamily);
-            while (pStyle && pStyle->GetName() != rStyleName)
-                pStyle = pPool->Next();
-        }
+            // set background color
+            pItem = pItemSet->GetItem( XATTR_FILLCOLOR );
+            if ( nullptr != pItem )
+                aBackCol = static_cast< const XFillColorItem* >( pItem )->GetColorValue();
 
-        if (pStyle )
-        {
-            std::unique_ptr<const SfxItemSet> const pItemSet(pStyle->GetItemSetForPreview());
-            if (!pItemSet) return;
-
-            const SvxFontItem * const pFontItem =
-                pItemSet->GetItem<SvxFontItem>(SID_ATTR_CHAR_FONT);
-            const SvxFontHeightItem * const pFontHeightItem =
-                pItemSet->GetItem<SvxFontHeightItem>(SID_ATTR_CHAR_FONTHEIGHT);
-
-            if ( pFontItem && pFontHeightItem )
+            if ( aBackCol != COL_AUTO )
             {
-                Size aFontSize( 0, pFontHeightItem->GetHeight() );
-                Size aPixelSize(rRenderContext.LogicToPixel(aFontSize, MapMode(pShell->GetMapUnit())));
-
-                // setup the font properties
-                SvxFont aFont;
-                aFont.SetFamilyName(pFontItem->GetFamilyName());
-                aFont.SetStyleName(pFontItem->GetStyleName());
-                aFont.SetFontSize(aPixelSize);
-
-                const SfxPoolItem *pItem = pItemSet->GetItem( SID_ATTR_CHAR_WEIGHT );
-                if ( pItem )
-                    aFont.SetWeight( static_cast< const SvxWeightItem* >( pItem )->GetWeight() );
-
-                pItem = pItemSet->GetItem( SID_ATTR_CHAR_POSTURE );
-                if ( pItem )
-                    aFont.SetItalic( static_cast< const SvxPostureItem* >( pItem )->GetPosture() );
-
-                pItem = pItemSet->GetItem( SID_ATTR_CHAR_CONTOUR );
-                if ( pItem )
-                    aFont.SetOutline( static_cast< const SvxContourItem* >( pItem )->GetValue() );
-
-                pItem = pItemSet->GetItem( SID_ATTR_CHAR_SHADOWED );
-                if ( pItem )
-                    aFont.SetShadow( static_cast< const SvxShadowedItem* >( pItem )->GetValue() );
-
-                pItem = pItemSet->GetItem( SID_ATTR_CHAR_RELIEF );
-                if ( pItem )
-                    aFont.SetRelief( static_cast< const SvxCharReliefItem* >( pItem )->GetValue() );
-
-                pItem = pItemSet->GetItem( SID_ATTR_CHAR_UNDERLINE );
-                if ( pItem )
-                    aFont.SetUnderline( static_cast< const SvxUnderlineItem* >( pItem )->GetLineStyle() );
-
-                pItem = pItemSet->GetItem( SID_ATTR_CHAR_OVERLINE );
-                if ( pItem )
-                    aFont.SetOverline( static_cast< const SvxOverlineItem* >( pItem )->GetValue() );
-
-                pItem = pItemSet->GetItem( SID_ATTR_CHAR_STRIKEOUT );
-                if ( pItem )
-                    aFont.SetStrikeout( static_cast< const SvxCrossedOutItem* >( pItem )->GetStrikeout() );
-
-                pItem = pItemSet->GetItem( SID_ATTR_CHAR_CASEMAP );
-                if ( pItem )
-                    aFont.SetCaseMap(static_cast<const SvxCaseMapItem*>(pItem)->GetCaseMap());
-
-                pItem = pItemSet->GetItem( SID_ATTR_CHAR_EMPHASISMARK );
-                if ( pItem )
-                    aFont.SetEmphasisMark( static_cast< const SvxEmphasisMarkItem* >( pItem )->GetEmphasisMark() );
-
-                // setup the device & draw
-                Color aFontCol = COL_AUTO, aBackCol = COL_AUTO;
-
-                rRenderContext.SetFont(aFont);
-
-                pItem = pItemSet->GetItem( SID_ATTR_CHAR_COLOR );
-                // text color, when nothing is selected
-                if ( (nullptr != pItem) && bIsNotSelected)
-                    aFontCol = static_cast< const SvxColorItem* >( pItem )->GetValue();
-
-                drawing::FillStyle style = drawing::FillStyle_NONE;
-                // which kind of Fill style is selected
-                pItem = pItemSet->GetItem( XATTR_FILLSTYLE );
-                // only when ok and not selected
-                if ( (nullptr != pItem) && bIsNotSelected)
-                    style = static_cast< const XFillStyleItem* >( pItem )->GetValue();
-
-                switch(style)
-                {
-                    case drawing::FillStyle_SOLID:
-                    {
-                        // set background color
-                        pItem = pItemSet->GetItem( XATTR_FILLCOLOR );
-                        if ( nullptr != pItem )
-                            aBackCol = static_cast< const XFillColorItem* >( pItem )->GetColorValue();
-
-                        if ( aBackCol != COL_AUTO )
-                        {
-                            rRenderContext.SetFillColor(aBackCol);
-                            rRenderContext.DrawRect(rRect);
-                        }
-                    }
-                    break;
-
-                    default: break;
-                    //TODO Draw the other background styles: gradient, hatching and bitmap
-                }
-
-                // when the font and background color are too similar, adjust the Font-Color
-                if( (aFontCol != COL_AUTO) || (aBackCol != COL_AUTO) )
-                    aFontCol = TestColorsVisible(aFontCol, (aBackCol != COL_AUTO) ? aBackCol : rRenderContext.GetBackground().GetColor());
-
-                // set text color
-                if ( aFontCol != COL_AUTO )
-                    rRenderContext.SetTextColor(aFontCol);
+                rRenderContext.SetFillColor(aBackCol);
+                rRenderContext.DrawRect(rRect);
             }
         }
+        break;
+
+        default: break;
+        //TODO Draw the other background styles: gradient, hatching and bitmap
     }
+
+    // when the font and background color are too similar, adjust the Font-Color
+    if( (aFontCol != COL_AUTO) || (aBackCol != COL_AUTO) )
+        aFontCol = TestColorsVisible(aFontCol, (aBackCol != COL_AUTO) ? aBackCol : rRenderContext.GetBackground().GetColor());
+
+    // set text color
+    if ( aFontCol != COL_AUTO )
+        rRenderContext.SetTextColor(aFontCol);
 }
 
 IMPL_LINK(SvxStyleBox_Base, CustomRenderHdl, weld::ComboBox::render_args, aPayload, void)
@@ -2338,37 +2338,37 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
 
 void SvxFrameWindow_Impl::statusChanged( const css::frame::FeatureStateEvent& rEvent )
 {
-    if ( rEvent.FeatureURL.Complete == ".uno:BorderReducedMode" )
+    if ( rEvent.FeatureURL.Complete != ".uno:BorderReducedMode" )
+        return;
+
+    bool bValue;
+    if ( !(rEvent.State >>= bValue) )
+        return;
+
+    bParagraphMode = bValue;
+    //initial calls mustn't insert or remove elements
+    if(!mxFrameSet->GetItemCount())
+        return;
+
+    bool bTableMode = ( mxFrameSet->GetItemCount() == 12 );
+    bool bResize    = false;
+
+    if ( bTableMode && bParagraphMode )
     {
-        bool bValue;
-        if ( rEvent.State >>= bValue )
-        {
-            bParagraphMode = bValue;
-            //initial calls mustn't insert or remove elements
-            if(mxFrameSet->GetItemCount())
-            {
-                bool bTableMode = ( mxFrameSet->GetItemCount() == 12 );
-                bool bResize    = false;
+        for ( sal_uInt16 i = 9; i < 13; i++ )
+            mxFrameSet->RemoveItem(i);
+        bResize = true;
+    }
+    else if ( !bTableMode && !bParagraphMode )
+    {
+        for ( sal_uInt16 i = 9; i < 13; i++ )
+            mxFrameSet->InsertItem(i, Image(aImgVec[i-1]));
+        bResize = true;
+    }
 
-                if ( bTableMode && bParagraphMode )
-                {
-                    for ( sal_uInt16 i = 9; i < 13; i++ )
-                        mxFrameSet->RemoveItem(i);
-                    bResize = true;
-                }
-                else if ( !bTableMode && !bParagraphMode )
-                {
-                    for ( sal_uInt16 i = 9; i < 13; i++ )
-                        mxFrameSet->InsertItem(i, Image(aImgVec[i-1]));
-                    bResize = true;
-                }
-
-                if ( bResize )
-                {
-                    CalcSizeValueSet();
-                }
-            }
-        }
+    if ( bResize )
+    {
+        CalcSizeValueSet();
     }
 }
 
@@ -2666,19 +2666,19 @@ void SAL_CALL SvxStyleToolBoxControl::initialize(const Sequence<Any>& rArguments
 
     // After initialize we should have a valid frame member where we can retrieve our
     // dispatch provider.
-    if ( m_xFrame.is() )
+    if ( !m_xFrame.is() )
+        return;
+
+    pImpl->InitializeStyles(m_xFrame->getController()->getModel());
+    Reference< XDispatchProvider > xDispatchProvider( m_xFrame->getController(), UNO_QUERY );
+    for ( sal_uInt16 i=0; i<MAX_FAMILIES; i++ )
     {
-        pImpl->InitializeStyles(m_xFrame->getController()->getModel());
-        Reference< XDispatchProvider > xDispatchProvider( m_xFrame->getController(), UNO_QUERY );
-        for ( sal_uInt16 i=0; i<MAX_FAMILIES; i++ )
-        {
-            pBoundItems[i]   = new SfxStyleControllerItem_Impl( xDispatchProvider,
-                                                                SID_STYLE_FAMILY_START + i,
-                                                                OUString::createFromAscii( StyleSlotToStyleCommand[i] ),
-                                                                *this );
-            m_xBoundItems[i].set( static_cast< OWeakObject* >( pBoundItems[i] ), UNO_QUERY );
-            pFamilyState[i]  = nullptr;
-        }
+        pBoundItems[i]   = new SfxStyleControllerItem_Impl( xDispatchProvider,
+                                                            SID_STYLE_FAMILY_START + i,
+                                                            OUString::createFromAscii( StyleSlotToStyleCommand[i] ),
+                                                            *this );
+        m_xBoundItems[i].set( static_cast< OWeakObject* >( pBoundItems[i] ), UNO_QUERY );
+        pFamilyState[i]  = nullptr;
     }
 }
 
@@ -2774,99 +2774,99 @@ void SvxStyleToolBoxControl::FillStyleBox()
     DBG_ASSERT( pStyleSheetPool, "StyleSheetPool not found!" );
     DBG_ASSERT( pBox,            "Control not found!" );
 
-    if ( pStyleSheetPool && pBox && nActFamily!=0xffff )
+    if ( !(pStyleSheetPool && pBox && nActFamily!=0xffff) )
+        return;
+
+    const SfxStyleFamily    eFamily     = GetActFamily();
+    SfxStyleSheetBase*      pStyle      = nullptr;
+    bool                    bDoFill     = false;
+
+    auto xIter = pStyleSheetPool->CreateIterator(eFamily, SfxStyleSearchBits::Used);
+    sal_uInt16 nCount = xIter->Count();
+
+    // Check whether fill is necessary
+    pStyle = xIter->First();
+    //!!! TODO: This condition isn't right any longer, because we always show some default entries
+    //!!! so the list doesn't show the count
+    if ( nCount != pBox->get_count() )
     {
-        const SfxStyleFamily    eFamily     = GetActFamily();
-        SfxStyleSheetBase*      pStyle      = nullptr;
-        bool                    bDoFill     = false;
-
-        auto xIter = pStyleSheetPool->CreateIterator(eFamily, SfxStyleSearchBits::Used);
-        sal_uInt16 nCount = xIter->Count();
-
-        // Check whether fill is necessary
-        pStyle = xIter->First();
-        //!!! TODO: This condition isn't right any longer, because we always show some default entries
-        //!!! so the list doesn't show the count
-        if ( nCount != pBox->get_count() )
+        bDoFill = true;
+    }
+    else
+    {
+        sal_uInt16 i= 0;
+        while ( pStyle && !bDoFill )
         {
-            bDoFill = true;
+            bDoFill = ( pBox->get_text(i) != pStyle->GetName() );
+            pStyle = xIter->Next();
+            i++;
+        }
+    }
+
+    if ( !bDoFill )
+        return;
+
+    OUString aStrSel(pBox->get_active_text());
+    pBox->freeze();
+    pBox->clear();
+
+    std::vector<OUString> aStyles;
+
+    {
+        pStyle = xIter->Next();
+
+        if( pImpl->bSpecModeWriter || pImpl->bSpecModeCalc )
+        {
+            while ( pStyle )
+            {
+                // sort out default styles
+                bool bInsert = true;
+                OUString aName( pStyle->GetName() );
+                for( auto const & _i: pImpl->aDefaultStyles )
+                {
+                    if( _i == aName )
+                    {
+                        bInsert = false;
+                        break;
+                    }
+                }
+
+                if( bInsert )
+                    aStyles.push_back(aName);
+                pStyle = xIter->Next();
+            }
         }
         else
         {
-            sal_uInt16 i= 0;
-            while ( pStyle && !bDoFill )
+            while ( pStyle )
             {
-                bDoFill = ( pBox->get_text(i) != pStyle->GetName() );
+                aStyles.push_back(pStyle->GetName());
                 pStyle = xIter->Next();
-                i++;
             }
-        }
-
-        if ( bDoFill )
-        {
-            OUString aStrSel(pBox->get_active_text());
-            pBox->freeze();
-            pBox->clear();
-
-            std::vector<OUString> aStyles;
-
-            {
-                pStyle = xIter->Next();
-
-                if( pImpl->bSpecModeWriter || pImpl->bSpecModeCalc )
-                {
-                    while ( pStyle )
-                    {
-                        // sort out default styles
-                        bool bInsert = true;
-                        OUString aName( pStyle->GetName() );
-                        for( auto const & _i: pImpl->aDefaultStyles )
-                        {
-                            if( _i == aName )
-                            {
-                                bInsert = false;
-                                break;
-                            }
-                        }
-
-                        if( bInsert )
-                            aStyles.push_back(aName);
-                        pStyle = xIter->Next();
-                    }
-                }
-                else
-                {
-                    while ( pStyle )
-                    {
-                        aStyles.push_back(pStyle->GetName());
-                        pStyle = xIter->Next();
-                    }
-                }
-            }
-
-            if (pImpl->bSpecModeWriter || pImpl->bSpecModeCalc)
-            {
-                pBox->append_text(pImpl->aClearForm);
-                pBox->insert_separator(1, "separator");
-
-                // insert default styles
-                for (const auto &rStyle : pImpl->aDefaultStyles)
-                    pBox->append_text(rStyle);
-            }
-
-            std::sort(aStyles.begin(), aStyles.end());
-
-            for (const auto& rStyle : aStyles)
-                pBox->append_text(rStyle);
-
-            if (pImpl->bSpecModeWriter || pImpl->bSpecModeCalc)
-                pBox->append_text(pImpl->aMore);
-
-            pBox->thaw();
-            pBox->set_active_or_entry_text(aStrSel);
-            pBox->SetFamily( eFamily );
         }
     }
+
+    if (pImpl->bSpecModeWriter || pImpl->bSpecModeCalc)
+    {
+        pBox->append_text(pImpl->aClearForm);
+        pBox->insert_separator(1, "separator");
+
+        // insert default styles
+        for (const auto &rStyle : pImpl->aDefaultStyles)
+            pBox->append_text(rStyle);
+    }
+
+    std::sort(aStyles.begin(), aStyles.end());
+
+    for (const auto& rStyle : aStyles)
+        pBox->append_text(rStyle);
+
+    if (pImpl->bSpecModeWriter || pImpl->bSpecModeCalc)
+        pBox->append_text(pImpl->aMore);
+
+    pBox->thaw();
+    pBox->set_active_or_entry_text(aStrSel);
+    pBox->SetFamily( eFamily );
 }
 
 void SvxStyleToolBoxControl::SelectStyle( const OUString& rStyleName )
@@ -2874,19 +2874,19 @@ void SvxStyleToolBoxControl::SelectStyle( const OUString& rStyleName )
     SvxStyleBox_Base* pBox = pImpl->m_pBox;
     DBG_ASSERT( pBox, "Control not found!" );
 
-    if ( pBox )
-    {
-        OUString aStrSel(pBox->get_active_text());
+    if ( !pBox )
+        return;
 
-        if ( !rStyleName.isEmpty() )
-        {
-            if ( rStyleName != aStrSel )
-                pBox->set_active_or_entry_text( rStyleName );
-        }
-        else
-            pBox->set_active(-1);
-        pBox->save_value();
+    OUString aStrSel(pBox->get_active_text());
+
+    if ( !rStyleName.isEmpty() )
+    {
+        if ( rStyleName != aStrSel )
+            pBox->set_active_or_entry_text( rStyleName );
     }
+    else
+        pBox->set_active(-1);
+    pBox->save_value();
 }
 
 void SvxStyleToolBoxControl::Update()

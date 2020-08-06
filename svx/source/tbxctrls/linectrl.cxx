@@ -87,49 +87,49 @@ void SAL_CALL SvxLineStyleToolBoxControl::statusChanged( const frame::FeatureSta
     m_xBtnUpdater->Update(rEvent);
 
     SfxObjectShell* pSh = SfxObjectShell::Current();
-    if (pSh)
+    if (!pSh)
+        return;
+
+    const SvxDashListItem* pItem = pSh->GetItem( SID_DASH_LIST );
+    if (!pItem)
+        return;
+
+    XDashListRef xList = pItem->GetDashList();
+    int nIndex = m_xBtnUpdater->GetStyleIndex();
+    switch (nIndex)
     {
-        const SvxDashListItem* pItem = pSh->GetItem( SID_DASH_LIST );
-        if (pItem)
+        case -1:
+        case 0:
         {
-            XDashListRef xList = pItem->GetDashList();
-            int nIndex = m_xBtnUpdater->GetStyleIndex();
-            switch (nIndex)
+            BitmapEx aEmpty(xList->GetBitmapForUISolidLine());
+            aEmpty.Erase(Application::GetSettings().GetStyleSettings().GetFieldColor());
+            if (m_pToolbar)
             {
-                case -1:
-                case 0:
-                {
-                    BitmapEx aEmpty(xList->GetBitmapForUISolidLine());
-                    aEmpty.Erase(Application::GetSettings().GetStyleSettings().GetFieldColor());
-                    if (m_pToolbar)
-                    {
-                        Graphic aGraf(aEmpty);
-                        m_pToolbar->set_item_image(sId, aGraf.GetXGraphic());
-                    }
-                    else
-                        pToolBox->SetItemImage(nId, Image(aEmpty));
-                    break;
-                }
-                case 1:
-                    if (m_pToolbar)
-                    {
-                        Graphic aGraf(xList->GetBitmapForUISolidLine());
-                        m_pToolbar->set_item_image(sId, aGraf.GetXGraphic());
-                    }
-                    else
-                        pToolBox->SetItemImage(nId, Image(xList->GetBitmapForUISolidLine()));
-                    break;
-                default:
-                    if (m_pToolbar)
-                    {
-                        Graphic aGraf(xList->GetUiBitmap(nIndex - 2));
-                        m_pToolbar->set_item_image(sId, aGraf.GetXGraphic());
-                    }
-                    else
-                        pToolBox->SetItemImage(nId, Image(xList->GetUiBitmap(nIndex - 2)));
-                    break;
+                Graphic aGraf(aEmpty);
+                m_pToolbar->set_item_image(sId, aGraf.GetXGraphic());
             }
+            else
+                pToolBox->SetItemImage(nId, Image(aEmpty));
+            break;
         }
+        case 1:
+            if (m_pToolbar)
+            {
+                Graphic aGraf(xList->GetBitmapForUISolidLine());
+                m_pToolbar->set_item_image(sId, aGraf.GetXGraphic());
+            }
+            else
+                pToolBox->SetItemImage(nId, Image(xList->GetBitmapForUISolidLine()));
+            break;
+        default:
+            if (m_pToolbar)
+            {
+                Graphic aGraf(xList->GetUiBitmap(nIndex - 2));
+                m_pToolbar->set_item_image(sId, aGraf.GetXGraphic());
+            }
+            else
+                pToolBox->SetItemImage(nId, Image(xList->GetUiBitmap(nIndex - 2)));
+            break;
     }
 }
 
@@ -395,18 +395,18 @@ void SvxLineEndWindow::FillValueSet()
 
 void SvxLineEndWindow::statusChanged( const css::frame::FeatureStateEvent& rEvent )
 {
-    if ( rEvent.FeatureURL.Complete == ".uno:LineEndListState" )
-    {
-        // The list of line ends (LineEndList) has changed
-        css::uno::Reference< css::uno::XWeak > xWeak;
-        if ( rEvent.State >>= xWeak )
-        {
-            mpLineEndList.set( static_cast< XLineEndList* >( xWeak.get() ) );
-            DBG_ASSERT( mpLineEndList.is(), "LineEndList not found" );
+    if ( rEvent.FeatureURL.Complete != ".uno:LineEndListState" )
+        return;
 
-            mxLineEndSet->Clear();
-            FillValueSet();
-        }
+    // The list of line ends (LineEndList) has changed
+    css::uno::Reference< css::uno::XWeak > xWeak;
+    if ( rEvent.State >>= xWeak )
+    {
+        mpLineEndList.set( static_cast< XLineEndList* >( xWeak.get() ) );
+        DBG_ASSERT( mpLineEndList.is(), "LineEndList not found" );
+
+        mxLineEndSet->Clear();
+        FillValueSet();
     }
 }
 
