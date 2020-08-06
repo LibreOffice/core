@@ -10,7 +10,9 @@
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 
+#include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -197,6 +199,31 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testChartDataLabelCharColor)
     // - Actual  : -1
     // i.e. the data label had no explicit (white) color.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffff), nCharColor);
+}
+
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testGradientMultiStepTransparency)
+{
+    // Load a document with a multi-step gradient.
+    OUString aURL
+        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "gradient-multistep-transparency.pptx";
+    load(aURL);
+
+    // Check the end transparency of the gradient.
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Rectangle 4"), xShape->getName());
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    awt::Gradient aTransparence;
+    xShapeProps->getPropertyValue("FillTransparenceGradient") >>= aTransparence;
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 16777215 (0xffffff)
+    // - Actual  : 3487029 (0x353535)
+    // i.e. the end transparency was not 100%, but was 21%, leading to an unexpected visible line on
+    // the right of this shape.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffff), aTransparence.EndColor);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
