@@ -219,22 +219,22 @@ void SdrPageView::PrePaint()
 void SdrPageView::CompleteRedraw(
     SdrPaintWindow& rPaintWindow, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector )
 {
-    if(GetPage())
+    if(!GetPage())
+        return;
+
+    SdrPageWindow* pPageWindow = FindPageWindow(rPaintWindow);
+    std::unique_ptr<SdrPageWindow> pTempPageWindow;
+
+    if(!pPageWindow)
     {
-        SdrPageWindow* pPageWindow = FindPageWindow(rPaintWindow);
-        std::unique_ptr<SdrPageWindow> pTempPageWindow;
-
-        if(!pPageWindow)
-        {
-            // create temp PageWindow
-            pTempPageWindow.reset(new SdrPageWindow(*this, rPaintWindow));
-            pPageWindow = pTempPageWindow.get();
-        }
-
-        // do the redraw
-        pPageWindow->PrepareRedraw(rReg);
-        pPageWindow->RedrawAll(pRedirector);
+        // create temp PageWindow
+        pTempPageWindow.reset(new SdrPageWindow(*this, rPaintWindow));
+        pPageWindow = pTempPageWindow.get();
     }
+
+    // do the redraw
+    pPageWindow->PrepareRedraw(rReg);
+    pPageWindow->RedrawAll(pRedirector);
 }
 
 
@@ -250,87 +250,87 @@ void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget,
         sdr::contact::ViewObjectContactRedirector* pRedirector,
         const tools::Rectangle& rRect, basegfx::B2IRectangle const*const pPageFrame)
 {
-    if(GetPage())
+    if(!GetPage())
+        return;
+
+    if(pGivenTarget)
     {
-        if(pGivenTarget)
+        SdrPageWindow* pKnownTarget = FindPageWindow(*pGivenTarget);
+
+        if(pKnownTarget)
         {
-            SdrPageWindow* pKnownTarget = FindPageWindow(*pGivenTarget);
-
-            if(pKnownTarget)
-            {
-                // paint known target
-                pKnownTarget->RedrawLayer(&nID, pRedirector, nullptr);
-            }
-            else
-            {
-                // #i72752# DrawLayer() uses an OutputDevice different from BeginDrawLayer. This happens
-                // e.g. when SW paints a single text line in text edit mode. Try to use it
-                SdrPageWindow* pPreparedTarget = mpPreparedPageWindow;
-
-                if(pPreparedTarget)
-                {
-                    // if we have a prepared target, do not use a new SdrPageWindow since this
-                    // works but is expensive. Just use a temporary PaintWindow
-                    SdrPaintWindow aTemporaryPaintWindow(mrView, *pGivenTarget);
-
-                    // Copy existing paint region to use the same as prepared in BeginDrawLayer
-                    SdrPaintWindow& rExistingPaintWindow = pPreparedTarget->GetPaintWindow();
-                    const vcl::Region& rExistingRegion = rExistingPaintWindow.GetRedrawRegion();
-                    bool bUseRect(false);
-                    if (!rRect.IsEmpty())
-                    {
-                        vcl::Region r(rExistingRegion);
-                        r.Intersect(rRect);
-                        // fdo#74435: FIXME: visibility check broken if empty
-                        if (!r.IsEmpty())
-                            bUseRect = true;
-                    }
-                    if (!bUseRect)
-                        aTemporaryPaintWindow.SetRedrawRegion(rExistingRegion);
-                    else
-                        aTemporaryPaintWindow.SetRedrawRegion(vcl::Region(rRect));
-                    // patch the ExistingPageWindow
-                    pPreparedTarget->patchPaintWindow(aTemporaryPaintWindow);
-
-                    // redraw the layer
-                    pPreparedTarget->RedrawLayer(&nID, pRedirector, pPageFrame);
-
-                    // restore the ExistingPageWindow
-                    pPreparedTarget->unpatchPaintWindow();
-                }
-                else
-                {
-                    OSL_FAIL("SdrPageView::DrawLayer: Creating temporary SdrPageWindow (ObjectContact), this should never be needed (!)");
-
-                    // None of the known OutputDevices is the target of this paint, use
-                    // a temporary SdrPageWindow for this Redraw.
-                    SdrPaintWindow aTemporaryPaintWindow(mrView, *pGivenTarget);
-                    SdrPageWindow aTemporaryPageWindow(*this, aTemporaryPaintWindow);
-
-                    // #i72752#
-                    // Copy existing paint region if other PageWindows exist, this was created by
-                    // PrepareRedraw() from BeginDrawLayer(). Needs to be used e.g. when suddenly SW
-                    // paints into an unknown device other than the view was created for (e.g. VirtualDevice)
-                    if(PageWindowCount())
-                    {
-                        SdrPageWindow* pExistingPageWindow = GetPageWindow(0);
-                        SdrPaintWindow& rExistingPaintWindow = pExistingPageWindow->GetPaintWindow();
-                        const vcl::Region& rExistingRegion = rExistingPaintWindow.GetRedrawRegion();
-                        aTemporaryPaintWindow.SetRedrawRegion(rExistingRegion);
-                    }
-
-                    aTemporaryPageWindow.RedrawLayer(&nID, pRedirector, nullptr);
-                }
-            }
+            // paint known target
+            pKnownTarget->RedrawLayer(&nID, pRedirector, nullptr);
         }
         else
         {
-            // paint in all known windows
-            for(sal_uInt32 a(0); a < PageWindowCount(); a++)
+            // #i72752# DrawLayer() uses an OutputDevice different from BeginDrawLayer. This happens
+            // e.g. when SW paints a single text line in text edit mode. Try to use it
+            SdrPageWindow* pPreparedTarget = mpPreparedPageWindow;
+
+            if(pPreparedTarget)
             {
-                SdrPageWindow* pTarget = GetPageWindow(a);
-                pTarget->RedrawLayer(&nID, pRedirector, nullptr);
+                // if we have a prepared target, do not use a new SdrPageWindow since this
+                // works but is expensive. Just use a temporary PaintWindow
+                SdrPaintWindow aTemporaryPaintWindow(mrView, *pGivenTarget);
+
+                // Copy existing paint region to use the same as prepared in BeginDrawLayer
+                SdrPaintWindow& rExistingPaintWindow = pPreparedTarget->GetPaintWindow();
+                const vcl::Region& rExistingRegion = rExistingPaintWindow.GetRedrawRegion();
+                bool bUseRect(false);
+                if (!rRect.IsEmpty())
+                {
+                    vcl::Region r(rExistingRegion);
+                    r.Intersect(rRect);
+                    // fdo#74435: FIXME: visibility check broken if empty
+                    if (!r.IsEmpty())
+                        bUseRect = true;
+                }
+                if (!bUseRect)
+                    aTemporaryPaintWindow.SetRedrawRegion(rExistingRegion);
+                else
+                    aTemporaryPaintWindow.SetRedrawRegion(vcl::Region(rRect));
+                // patch the ExistingPageWindow
+                pPreparedTarget->patchPaintWindow(aTemporaryPaintWindow);
+
+                // redraw the layer
+                pPreparedTarget->RedrawLayer(&nID, pRedirector, pPageFrame);
+
+                // restore the ExistingPageWindow
+                pPreparedTarget->unpatchPaintWindow();
             }
+            else
+            {
+                OSL_FAIL("SdrPageView::DrawLayer: Creating temporary SdrPageWindow (ObjectContact), this should never be needed (!)");
+
+                // None of the known OutputDevices is the target of this paint, use
+                // a temporary SdrPageWindow for this Redraw.
+                SdrPaintWindow aTemporaryPaintWindow(mrView, *pGivenTarget);
+                SdrPageWindow aTemporaryPageWindow(*this, aTemporaryPaintWindow);
+
+                // #i72752#
+                // Copy existing paint region if other PageWindows exist, this was created by
+                // PrepareRedraw() from BeginDrawLayer(). Needs to be used e.g. when suddenly SW
+                // paints into an unknown device other than the view was created for (e.g. VirtualDevice)
+                if(PageWindowCount())
+                {
+                    SdrPageWindow* pExistingPageWindow = GetPageWindow(0);
+                    SdrPaintWindow& rExistingPaintWindow = pExistingPageWindow->GetPaintWindow();
+                    const vcl::Region& rExistingRegion = rExistingPaintWindow.GetRedrawRegion();
+                    aTemporaryPaintWindow.SetRedrawRegion(rExistingRegion);
+                }
+
+                aTemporaryPageWindow.RedrawLayer(&nID, pRedirector, nullptr);
+            }
+        }
+    }
+    else
+    {
+        // paint in all known windows
+        for(sal_uInt32 a(0); a < PageWindowCount(); a++)
+        {
+            SdrPageWindow* pTarget = GetPageWindow(a);
+            pTarget->RedrawLayer(&nID, pRedirector, nullptr);
         }
     }
 }
@@ -637,24 +637,24 @@ void SdrPageView::SetPageOrigin(const Point& rOrg)
 
 void SdrPageView::ImpInvalidateHelpLineArea(sal_uInt16 nNum) const
 {
-    if (GetView().IsHlplVisible() && nNum<aHelpLines.GetCount()) {
-        const SdrHelpLine& rHL=aHelpLines[nNum];
+    if (!(GetView().IsHlplVisible() && nNum<aHelpLines.GetCount()))        return;
 
-        for(sal_uInt32 a(0); a < GetView().PaintWindowCount(); a++)
+    const SdrHelpLine& rHL=aHelpLines[nNum];
+
+    for(sal_uInt32 a(0); a < GetView().PaintWindowCount(); a++)
+    {
+        SdrPaintWindow* pCandidate = GetView().GetPaintWindow(a);
+
+        if(pCandidate->OutputToWindow())
         {
-            SdrPaintWindow* pCandidate = GetView().GetPaintWindow(a);
-
-            if(pCandidate->OutputToWindow())
-            {
-                OutputDevice& rOutDev = pCandidate->GetOutputDevice();
-                tools::Rectangle aR(rHL.GetBoundRect(rOutDev));
-                Size aSiz(rOutDev.PixelToLogic(Size(1,1)));
-                aR.AdjustLeft( -(aSiz.Width()) );
-                aR.AdjustRight(aSiz.Width() );
-                aR.AdjustTop( -(aSiz.Height()) );
-                aR.AdjustBottom(aSiz.Height() );
-                const_cast<SdrView&>(GetView()).InvalidateOneWin(rOutDev, aR);
-            }
+            OutputDevice& rOutDev = pCandidate->GetOutputDevice();
+            tools::Rectangle aR(rHL.GetBoundRect(rOutDev));
+            Size aSiz(rOutDev.PixelToLogic(Size(1,1)));
+            aR.AdjustLeft( -(aSiz.Width()) );
+            aR.AdjustRight(aSiz.Width() );
+            aR.AdjustTop( -(aSiz.Height()) );
+            aR.AdjustBottom(aSiz.Height() );
+            const_cast<SdrView&>(GetView()).InvalidateOneWin(rOutDev, aR);
         }
     }
 }
@@ -667,19 +667,20 @@ void SdrPageView::SetHelpLines(const SdrHelpLineList& rHLL)
 
 void SdrPageView::SetHelpLine(sal_uInt16 nNum, const SdrHelpLine& rNewHelpLine)
 {
-    if (nNum<aHelpLines.GetCount() && aHelpLines[nNum]!=rNewHelpLine) {
-        bool bNeedRedraw = true;
-        if (aHelpLines[nNum].GetKind()==rNewHelpLine.GetKind()) {
-            switch (rNewHelpLine.GetKind()) {
-                case SdrHelpLineKind::Vertical  : if (aHelpLines[nNum].GetPos().X()==rNewHelpLine.GetPos().X()) bNeedRedraw = false; break;
-                case SdrHelpLineKind::Horizontal: if (aHelpLines[nNum].GetPos().Y()==rNewHelpLine.GetPos().Y()) bNeedRedraw = false; break;
-                default: break;
-            } // switch
-        }
-        if (bNeedRedraw) ImpInvalidateHelpLineArea(nNum);
-        aHelpLines[nNum]=rNewHelpLine;
-        if (bNeedRedraw) ImpInvalidateHelpLineArea(nNum);
+    if (nNum >= aHelpLines.GetCount() || aHelpLines[nNum] == rNewHelpLine)
+        return;
+
+    bool bNeedRedraw = true;
+    if (aHelpLines[nNum].GetKind()==rNewHelpLine.GetKind()) {
+        switch (rNewHelpLine.GetKind()) {
+            case SdrHelpLineKind::Vertical  : if (aHelpLines[nNum].GetPos().X()==rNewHelpLine.GetPos().X()) bNeedRedraw = false; break;
+            case SdrHelpLineKind::Horizontal: if (aHelpLines[nNum].GetPos().Y()==rNewHelpLine.GetPos().Y()) bNeedRedraw = false; break;
+            default: break;
+        } // switch
     }
+    if (bNeedRedraw) ImpInvalidateHelpLineArea(nNum);
+    aHelpLines[nNum]=rNewHelpLine;
+    if (bNeedRedraw) ImpInvalidateHelpLineArea(nNum);
 }
 
 void SdrPageView::DeleteHelpLine(sal_uInt16 nNum)
@@ -798,34 +799,35 @@ void SdrPageView::LeaveOneGroup()
 
 void SdrPageView::LeaveAllGroup()
 {
-    if (SdrObject* pLastGroup = GetCurrentGroup())
-    {
-        bool bGlueInvalidate = GetView().ImpIsGlueVisible();
+    SdrObject* pLastGroup = GetCurrentGroup();
+    if (!pLastGroup)
+        return;
 
-        if(bGlueInvalidate)
-            GetView().GlueInvalidate();
+    bool bGlueInvalidate = GetView().ImpIsGlueVisible();
 
-        // deselect everything
-        GetView().UnmarkAll();
+    if(bGlueInvalidate)
+        GetView().GlueInvalidate();
 
-        // allocations, pCurrentGroup and pCurrentList always need to be set
-        SetCurrentGroupAndList(nullptr, GetPage());
+    // deselect everything
+    GetView().UnmarkAll();
 
-        // find and select uppermost group
-        while (pLastGroup->getParentSdrObjectFromSdrObject())
-            pLastGroup = pLastGroup->getParentSdrObjectFromSdrObject();
+    // allocations, pCurrentGroup and pCurrentList always need to be set
+    SetCurrentGroupAndList(nullptr, GetPage());
 
-        if (GetView().GetSdrPageView())
-            GetView().MarkObj(pLastGroup, GetView().GetSdrPageView());
+    // find and select uppermost group
+    while (pLastGroup->getParentSdrObjectFromSdrObject())
+        pLastGroup = pLastGroup->getParentSdrObjectFromSdrObject();
 
-        GetView().AdjustMarkHdl();
+    if (GetView().GetSdrPageView())
+        GetView().MarkObj(pLastGroup, GetView().GetSdrPageView());
 
-        // invalidate only when view wants to visualize group entering
-        InvalidateAllWin();
+    GetView().AdjustMarkHdl();
 
-        if(bGlueInvalidate)
-            GetView().GlueInvalidate();
-    }
+    // invalidate only when view wants to visualize group entering
+    InvalidateAllWin();
+
+    if(bGlueInvalidate)
+        GetView().GlueInvalidate();
 }
 
 sal_uInt16 SdrPageView::GetEnteredLevel() const

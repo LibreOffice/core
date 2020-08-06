@@ -40,19 +40,19 @@ void CloneList::AddPair(const SdrObject* pOriginal, SdrObject* pClone)
     if(bCloneIsGroup && dynamic_cast<const E3dObject* >(pClone) != nullptr && dynamic_cast<const E3dScene* >(pClone) == nullptr)
         bCloneIsGroup = false;
 
-    if(bOriginalIsGroup && bCloneIsGroup)
-    {
-        const SdrObjList* pOriginalList = pOriginal->GetSubList();
-        SdrObjList* pCloneList = pClone->GetSubList();
+    if(!(bOriginalIsGroup && bCloneIsGroup))
+        return;
 
-        if(pOriginalList && pCloneList
-            && pOriginalList->GetObjCount() == pCloneList->GetObjCount())
+    const SdrObjList* pOriginalList = pOriginal->GetSubList();
+    SdrObjList* pCloneList = pClone->GetSubList();
+
+    if(pOriginalList && pCloneList
+        && pOriginalList->GetObjCount() == pCloneList->GetObjCount())
+    {
+        for(size_t a = 0; a < pOriginalList->GetObjCount(); ++a)
         {
-            for(size_t a = 0; a < pOriginalList->GetObjCount(); ++a)
-            {
-                // recursive call
-                AddPair(pOriginalList->GetObj(a), pCloneList->GetObj(a));
-            }
+            // recursive call
+            AddPair(pOriginalList->GetObj(a), pCloneList->GetObj(a));
         }
     }
 }

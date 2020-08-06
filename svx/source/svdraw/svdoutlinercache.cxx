@@ -61,32 +61,32 @@ SdrOutlinerCache::~SdrOutlinerCache()
 
 void SdrOutlinerCache::disposeOutliner( std::unique_ptr<SdrOutliner> pOutliner )
 {
-    if( pOutliner )
+    if( !pOutliner )
+        return;
+
+    OutlinerMode nOutlMode = pOutliner->GetOutlinerMode();
+
+    if( OutlinerMode::OutlineObject == nOutlMode )
     {
-        OutlinerMode nOutlMode = pOutliner->GetOutlinerMode();
+        pOutliner->Clear();
+        pOutliner->SetVertical( false );
 
-        if( OutlinerMode::OutlineObject == nOutlMode )
-        {
-            pOutliner->Clear();
-            pOutliner->SetVertical( false );
+        // Deregister on outliner, might be reused from outliner cache
+        pOutliner->SetNotifyHdl( Link<EENotify&,void>() );
+        maModeOutline.emplace_back(std::move(pOutliner));
+    }
+    else if( OutlinerMode::TextObject == nOutlMode )
+    {
+        pOutliner->Clear();
+        pOutliner->SetVertical( false );
 
-            // Deregister on outliner, might be reused from outliner cache
-            pOutliner->SetNotifyHdl( Link<EENotify&,void>() );
-            maModeOutline.emplace_back(std::move(pOutliner));
-        }
-        else if( OutlinerMode::TextObject == nOutlMode )
-        {
-            pOutliner->Clear();
-            pOutliner->SetVertical( false );
-
-            // Deregister on outliner, might be reused from outliner cache
-            pOutliner->SetNotifyHdl( Link<EENotify&,void>() );
-            maModeText.emplace_back(std::move(pOutliner));
-        }
-        else
-        {
-            maActiveOutliners.erase(pOutliner.get());
-        }
+        // Deregister on outliner, might be reused from outliner cache
+        pOutliner->SetNotifyHdl( Link<EENotify&,void>() );
+        maModeText.emplace_back(std::move(pOutliner));
+    }
+    else
+    {
+        maActiveOutliners.erase(pOutliner.get());
     }
 }
 

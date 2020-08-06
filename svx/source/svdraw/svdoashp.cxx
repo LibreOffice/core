@@ -1320,45 +1320,45 @@ void SdrObjCustomShape::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bNoContortion     =true;
 
     // #i37011#
-    if ( mXRenderedCustomShape.is() )
+    if ( !mXRenderedCustomShape.is() )
+        return;
+
+    const SdrObject* pRenderedCustomShape = GetSdrObjectFromXShape( mXRenderedCustomShape );
+    if ( !pRenderedCustomShape )
+        return;
+
+    // #i37262#
+    // Iterate self over the contained objects, since there are combinations of
+    // polygon and curve objects. In that case, aInfo.bCanConvToPath and
+    // aInfo.bCanConvToPoly would be false. What is needed here is an or, not an and.
+    SdrObjListIter aIterator(*pRenderedCustomShape);
+    while(aIterator.IsMore())
     {
-        const SdrObject* pRenderedCustomShape = GetSdrObjectFromXShape( mXRenderedCustomShape );
-        if ( pRenderedCustomShape )
+        SdrObject* pCandidate = aIterator.Next();
+        SdrObjTransformInfoRec aInfo;
+        pCandidate->TakeObjInfo(aInfo);
+
+        // set path and poly conversion if one is possible since
+        // this object will first be broken
+        const bool bCanConvToPathOrPoly(aInfo.bCanConvToPath || aInfo.bCanConvToPoly);
+        if(rInfo.bCanConvToPath != bCanConvToPathOrPoly)
         {
-            // #i37262#
-            // Iterate self over the contained objects, since there are combinations of
-            // polygon and curve objects. In that case, aInfo.bCanConvToPath and
-            // aInfo.bCanConvToPoly would be false. What is needed here is an or, not an and.
-            SdrObjListIter aIterator(*pRenderedCustomShape);
-            while(aIterator.IsMore())
-            {
-                SdrObject* pCandidate = aIterator.Next();
-                SdrObjTransformInfoRec aInfo;
-                pCandidate->TakeObjInfo(aInfo);
+            rInfo.bCanConvToPath = bCanConvToPathOrPoly;
+        }
 
-                // set path and poly conversion if one is possible since
-                // this object will first be broken
-                const bool bCanConvToPathOrPoly(aInfo.bCanConvToPath || aInfo.bCanConvToPoly);
-                if(rInfo.bCanConvToPath != bCanConvToPathOrPoly)
-                {
-                    rInfo.bCanConvToPath = bCanConvToPathOrPoly;
-                }
+        if(rInfo.bCanConvToPoly != bCanConvToPathOrPoly)
+        {
+            rInfo.bCanConvToPoly = bCanConvToPathOrPoly;
+        }
 
-                if(rInfo.bCanConvToPoly != bCanConvToPathOrPoly)
-                {
-                    rInfo.bCanConvToPoly = bCanConvToPathOrPoly;
-                }
+        if(rInfo.bCanConvToContour != aInfo.bCanConvToContour)
+        {
+            rInfo.bCanConvToContour = aInfo.bCanConvToContour;
+        }
 
-                if(rInfo.bCanConvToContour != aInfo.bCanConvToContour)
-                {
-                    rInfo.bCanConvToContour = aInfo.bCanConvToContour;
-                }
-
-                if(rInfo.bShearAllowed != aInfo.bShearAllowed)
-                {
-                    rInfo.bShearAllowed = aInfo.bShearAllowed;
-                }
-            }
+        if(rInfo.bShearAllowed != aInfo.bShearAllowed)
+        {
+            rInfo.bShearAllowed = aInfo.bShearAllowed;
         }
     }
 }
@@ -1372,44 +1372,44 @@ sal_uInt16 SdrObjCustomShape::GetObjIdentifier() const
 // state of the ResizeShapeToFitText flag to correctly set TextMinFrameWidth/Height
 void SdrObjCustomShape::AdaptTextMinSize()
 {
-    if (!getSdrModelFromSdrObject().IsCreatingDataObj() && !getSdrModelFromSdrObject().IsPasteResize())
-    {
-        const bool bResizeShapeToFitText(GetObjectItem(SDRATTR_TEXT_AUTOGROWHEIGHT).GetValue());
-        SfxItemSet aSet(
-            *GetObjectItemSet().GetPool(),
-            svl::Items<SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
-            SDRATTR_TEXT_MINFRAMEWIDTH, SDRATTR_TEXT_AUTOGROWWIDTH>{}); // contains SDRATTR_TEXT_MAXFRAMEWIDTH
-        bool bChanged(false);
+    if (getSdrModelFromSdrObject().IsCreatingDataObj() || getSdrModelFromSdrObject().IsPasteResize())
+        return;
 
-        if(bResizeShapeToFitText)
+    const bool bResizeShapeToFitText(GetObjectItem(SDRATTR_TEXT_AUTOGROWHEIGHT).GetValue());
+    SfxItemSet aSet(
+        *GetObjectItemSet().GetPool(),
+        svl::Items<SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
+        SDRATTR_TEXT_MINFRAMEWIDTH, SDRATTR_TEXT_AUTOGROWWIDTH>{}); // contains SDRATTR_TEXT_MAXFRAMEWIDTH
+    bool bChanged(false);
+
+    if(bResizeShapeToFitText)
+    {
+        // always reset MinWidthHeight to zero to only rely on text size and frame size
+        // to allow resizing being completely dependent on text size only
+        aSet.Put(makeSdrTextMinFrameWidthItem(0));
+        aSet.Put(makeSdrTextMinFrameHeightItem(0));
+        bChanged = true;
+    }
+    else
+    {
+        // recreate from CustomShape-specific TextBounds
+        tools::Rectangle aTextBound(maRect);
+
+        if(GetTextBounds(aTextBound))
         {
-            // always reset MinWidthHeight to zero to only rely on text size and frame size
-            // to allow resizing being completely dependent on text size only
-            aSet.Put(makeSdrTextMinFrameWidthItem(0));
-            aSet.Put(makeSdrTextMinFrameHeightItem(0));
+            const long nHDist(GetTextLeftDistance() + GetTextRightDistance());
+            const long nVDist(GetTextUpperDistance() + GetTextLowerDistance());
+            const long nTWdt(std::max(long(0), static_cast<long>(aTextBound.GetWidth() - 1 - nHDist)));
+            const long nTHgt(std::max(long(0), static_cast<long>(aTextBound.GetHeight() - 1 - nVDist)));
+
+            aSet.Put(makeSdrTextMinFrameWidthItem(nTWdt));
+            aSet.Put(makeSdrTextMinFrameHeightItem(nTHgt));
             bChanged = true;
         }
-        else
-        {
-            // recreate from CustomShape-specific TextBounds
-            tools::Rectangle aTextBound(maRect);
-
-            if(GetTextBounds(aTextBound))
-            {
-                const long nHDist(GetTextLeftDistance() + GetTextRightDistance());
-                const long nVDist(GetTextUpperDistance() + GetTextLowerDistance());
-                const long nTWdt(std::max(long(0), static_cast<long>(aTextBound.GetWidth() - 1 - nHDist)));
-                const long nTHgt(std::max(long(0), static_cast<long>(aTextBound.GetHeight() - 1 - nVDist)));
-
-                aSet.Put(makeSdrTextMinFrameWidthItem(nTWdt));
-                aSet.Put(makeSdrTextMinFrameHeightItem(nTHgt));
-                bChanged = true;
-            }
-        }
-
-        if(bChanged)
-            SetObjectItemSet(aSet);
     }
+
+    if(bChanged)
+        SetObjectItemSet(aSet);
 }
 
 void SdrObjCustomShape::NbcSetSnapRect( const tools::Rectangle& rRect )
@@ -1697,99 +1697,99 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
 {
     const SdrObject* pSdrObject = GetSdrObjectFromCustomShape();
 
-    if(pSdrObject)
+    if(!pSdrObject)
+        return;
+
+    const SdrGluePointList* pSource = pSdrObject->GetGluePointList();
+
+    if(!(pSource && pSource->GetCount()))
+        return;
+
+    if(!SdrTextObj::GetGluePointList())
     {
-        const SdrGluePointList* pSource = pSdrObject->GetGluePointList();
+        SdrTextObj::ForceGluePointList();
+    }
 
-        if(pSource && pSource->GetCount())
+    const SdrGluePointList* pList = SdrTextObj::GetGluePointList();
+
+    if(!pList)
+        return;
+
+    SdrGluePointList aNewList;
+    sal_uInt16 a;
+
+    for(a = 0; a < pSource->GetCount(); a++)
+    {
+        SdrGluePoint aCopy((*pSource)[a]);
+        aCopy.SetUserDefined(false);
+        aNewList.Insert(aCopy);
+    }
+
+    bool bMirroredX = IsMirroredX();
+    bool bMirroredY = IsMirroredY();
+
+    long nShearAngle = aGeo.nShearAngle;
+    double fTan = aGeo.nTan;
+
+    if ( aGeo.nRotationAngle || nShearAngle || bMirroredX || bMirroredY )
+    {
+        tools::Polygon aPoly( maRect );
+        if( nShearAngle )
         {
-            if(!SdrTextObj::GetGluePointList())
-            {
-                SdrTextObj::ForceGluePointList();
-            }
-
-            const SdrGluePointList* pList = SdrTextObj::GetGluePointList();
-
-            if(pList)
-            {
-                SdrGluePointList aNewList;
-                sal_uInt16 a;
-
-                for(a = 0; a < pSource->GetCount(); a++)
-                {
-                    SdrGluePoint aCopy((*pSource)[a]);
-                    aCopy.SetUserDefined(false);
-                    aNewList.Insert(aCopy);
-                }
-
-                bool bMirroredX = IsMirroredX();
-                bool bMirroredY = IsMirroredY();
-
-                long nShearAngle = aGeo.nShearAngle;
-                double fTan = aGeo.nTan;
-
-                if ( aGeo.nRotationAngle || nShearAngle || bMirroredX || bMirroredY )
-                {
-                    tools::Polygon aPoly( maRect );
-                    if( nShearAngle )
-                    {
-                        sal_uInt16 nPointCount=aPoly.GetSize();
-                        for (sal_uInt16 i=0; i<nPointCount; i++)
-                            ShearPoint(aPoly[i],maRect.Center(), fTan );
-                    }
-                    if ( aGeo.nRotationAngle )
-                        aPoly.Rotate( maRect.Center(), aGeo.nRotationAngle / 10 );
-
-                    tools::Rectangle aBoundRect( aPoly.GetBoundRect() );
-                    sal_Int32 nXDiff = aBoundRect.Left() - maRect.Left();
-                    sal_Int32 nYDiff = aBoundRect.Top() - maRect.Top();
-
-                    if (nShearAngle && bMirroredX != bMirroredY)
-                    {
-                        nShearAngle = -nShearAngle;
-                        fTan = -fTan;
-                    }
-
-                    Point aRef( maRect.GetWidth() / 2, maRect.GetHeight() / 2 );
-                    for ( a = 0; a < aNewList.GetCount(); a++ )
-                    {
-                        SdrGluePoint& rPoint = aNewList[ a ];
-                        Point aGlue( rPoint.GetPos() );
-                        if ( nShearAngle )
-                            ShearPoint( aGlue, aRef, fTan );
-
-                        RotatePoint(aGlue, aRef, sin(basegfx::deg2rad(fObjectRotation)),
-                                    cos(basegfx::deg2rad(fObjectRotation)));
-                        if ( bMirroredX )
-                            aGlue.setX( maRect.GetWidth() - aGlue.X() );
-                        if ( bMirroredY )
-                            aGlue.setY( maRect.GetHeight() - aGlue.Y() );
-                        aGlue.AdjustX( -nXDiff );
-                        aGlue.AdjustY( -nYDiff );
-                        rPoint.SetPos( aGlue );
-                    }
-                }
-
-                for(a = 0; a < pList->GetCount(); a++)
-                {
-                    const SdrGluePoint& rCandidate = (*pList)[a];
-
-                    if(rCandidate.IsUserDefined())
-                    {
-                        aNewList.Insert(rCandidate);
-                    }
-                }
-
-                // copy new list to local. This is NOT very convenient behavior, the local
-                // GluePointList should not be set, but we delivered by using GetGluePointList(),
-                // maybe on demand. Since the local object is changed here, this is assumed to
-                // be a result of GetGluePointList and thus the list is copied
-                if(pPlusData)
-                {
-                    pPlusData->SetGluePoints(aNewList);
-                }
-            }
+            sal_uInt16 nPointCount=aPoly.GetSize();
+            for (sal_uInt16 i=0; i<nPointCount; i++)
+                ShearPoint(aPoly[i],maRect.Center(), fTan );
         }
+        if ( aGeo.nRotationAngle )
+            aPoly.Rotate( maRect.Center(), aGeo.nRotationAngle / 10 );
+
+        tools::Rectangle aBoundRect( aPoly.GetBoundRect() );
+        sal_Int32 nXDiff = aBoundRect.Left() - maRect.Left();
+        sal_Int32 nYDiff = aBoundRect.Top() - maRect.Top();
+
+        if (nShearAngle && bMirroredX != bMirroredY)
+        {
+            nShearAngle = -nShearAngle;
+            fTan = -fTan;
+        }
+
+        Point aRef( maRect.GetWidth() / 2, maRect.GetHeight() / 2 );
+        for ( a = 0; a < aNewList.GetCount(); a++ )
+        {
+            SdrGluePoint& rPoint = aNewList[ a ];
+            Point aGlue( rPoint.GetPos() );
+            if ( nShearAngle )
+                ShearPoint( aGlue, aRef, fTan );
+
+            RotatePoint(aGlue, aRef, sin(basegfx::deg2rad(fObjectRotation)),
+                        cos(basegfx::deg2rad(fObjectRotation)));
+            if ( bMirroredX )
+                aGlue.setX( maRect.GetWidth() - aGlue.X() );
+            if ( bMirroredY )
+                aGlue.setY( maRect.GetHeight() - aGlue.Y() );
+            aGlue.AdjustX( -nXDiff );
+            aGlue.AdjustY( -nYDiff );
+            rPoint.SetPos( aGlue );
+        }
+    }
+
+    for(a = 0; a < pList->GetCount(); a++)
+    {
+        const SdrGluePoint& rCandidate = (*pList)[a];
+
+        if(rCandidate.IsUserDefined())
+        {
+            aNewList.Insert(rCandidate);
+        }
+    }
+
+    // copy new list to local. This is NOT very convenient behavior, the local
+    // GluePointList should not be set, but we delivered by using GetGluePointList(),
+    // maybe on demand. Since the local object is changed here, this is assumed to
+    // be a result of GetGluePointList and thus the list is copied
+    if(pPlusData)
+    {
+        pPlusData->SetGluePoints(aNewList);
     }
 }
 
@@ -1909,80 +1909,80 @@ void SdrObjCustomShape::DragResizeCustomShape( const tools::Rectangle& rNewRect 
         if ( aGeo.nRotationAngle )  RotatePoint(aNewPos, aOld.TopLeft(), aGeoStat.nSin, aGeoStat.nCos );
         aNewRect.SetPos( aNewPos );
     }
-    if ( aNewRect != maRect )
+    if ( aNewRect == maRect )
+        return;
+
+    SetLogicRect( aNewRect );
+    InvalidateRenderGeometry();
+
+    if ( rNewRect.Left() > rNewRect.Right() )
     {
-        SetLogicRect( aNewRect );
-        InvalidateRenderGeometry();
+        Point aTop( ( GetSnapRect().Left() + GetSnapRect().Right() ) >> 1, GetSnapRect().Top() );
+        Point aBottom( aTop.X(), aTop.Y() + 1000 );
+        NbcMirror( aTop, aBottom );
+    }
+    if ( rNewRect.Top() > rNewRect.Bottom() )
+    {
+        Point aLeft( GetSnapRect().Left(), ( GetSnapRect().Top() + GetSnapRect().Bottom() ) >> 1 );
+        Point aRight( aLeft.X() + 1000, aLeft.Y() );
+        NbcMirror( aLeft, aRight );
+    }
 
-        if ( rNewRect.Left() > rNewRect.Right() )
+    for (const auto& rInteraction : aInteractionHandles)
+    {
+        try
         {
-            Point aTop( ( GetSnapRect().Left() + GetSnapRect().Right() ) >> 1, GetSnapRect().Top() );
-            Point aBottom( aTop.X(), aTop.Y() + 1000 );
-            NbcMirror( aTop, aBottom );
-        }
-        if ( rNewRect.Top() > rNewRect.Bottom() )
-        {
-            Point aLeft( GetSnapRect().Left(), ( GetSnapRect().Top() + GetSnapRect().Bottom() ) >> 1 );
-            Point aRight( aLeft.X() + 1000, aLeft.Y() );
-            NbcMirror( aLeft, aRight );
-        }
-
-        for (const auto& rInteraction : aInteractionHandles)
-        {
-            try
+            if ( rInteraction.nMode & CustomShapeHandleModes::RESIZE_FIXED )
+                rInteraction.xInteraction->setControllerPosition( rInteraction.aPosition );
+            if ( rInteraction.nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_X ||
+                 rInteraction.nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_NEGX )
             {
-                if ( rInteraction.nMode & CustomShapeHandleModes::RESIZE_FIXED )
-                    rInteraction.xInteraction->setControllerPosition( rInteraction.aPosition );
-                if ( rInteraction.nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_X ||
-                     rInteraction.nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_NEGX )
-                {
-                    if (rInteraction.nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_NEGX)
-                        bOldMirroredX = !bOldMirroredX;
+                if (rInteraction.nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_NEGX)
+                    bOldMirroredX = !bOldMirroredX;
 
-                    sal_Int32 nX;
-                    if ( bOldMirroredX )
-                    {
-                        nX = ( rInteraction.aPosition.X - aOld.Right() );
-                        if ( rNewRect.Left() > rNewRect.Right() )
-                            nX = maRect.Left() - nX;
-                        else
-                            nX += maRect.Right();
-                    }
-                    else
-                    {
-                        nX = ( rInteraction.aPosition.X - aOld.Left() );
-                        if ( rNewRect.Left() > rNewRect.Right() )
-                            nX = maRect.Right() - nX;
-                        else
-                            nX += maRect.Left();
-                    }
-                    rInteraction.xInteraction->setControllerPosition( css::awt::Point( nX, rInteraction.xInteraction->getPosition().Y ) );
-                }
-                if ( rInteraction.nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_Y )
+                sal_Int32 nX;
+                if ( bOldMirroredX )
                 {
-                    sal_Int32 nY;
-                    if ( bOldMirroredY )
-                    {
-                        nY = ( rInteraction.aPosition.Y - aOld.Bottom() );
-                        if ( rNewRect.Top() > rNewRect.Bottom() )
-                            nY = maRect.Top() - nY;
-                        else
-                            nY += maRect.Bottom();
-                    }
+                    nX = ( rInteraction.aPosition.X - aOld.Right() );
+                    if ( rNewRect.Left() > rNewRect.Right() )
+                        nX = maRect.Left() - nX;
                     else
-                    {
-                        nY = ( rInteraction.aPosition.Y - aOld.Top() );
-                        if ( rNewRect.Top() > rNewRect.Bottom() )
-                            nY = maRect.Bottom() - nY;
-                        else
-                            nY += maRect.Top();
-                    }
-                    rInteraction.xInteraction->setControllerPosition( css::awt::Point( rInteraction.xInteraction->getPosition().X, nY ) );
+                        nX += maRect.Right();
                 }
+                else
+                {
+                    nX = ( rInteraction.aPosition.X - aOld.Left() );
+                    if ( rNewRect.Left() > rNewRect.Right() )
+                        nX = maRect.Right() - nX;
+                    else
+                        nX += maRect.Left();
+                }
+                rInteraction.xInteraction->setControllerPosition( css::awt::Point( nX, rInteraction.xInteraction->getPosition().Y ) );
             }
-            catch ( const uno::RuntimeException& )
+            if ( rInteraction.nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_Y )
             {
+                sal_Int32 nY;
+                if ( bOldMirroredY )
+                {
+                    nY = ( rInteraction.aPosition.Y - aOld.Bottom() );
+                    if ( rNewRect.Top() > rNewRect.Bottom() )
+                        nY = maRect.Top() - nY;
+                    else
+                        nY += maRect.Bottom();
+                }
+                else
+                {
+                    nY = ( rInteraction.aPosition.Y - aOld.Top() );
+                    if ( rNewRect.Top() > rNewRect.Bottom() )
+                        nY = maRect.Bottom() - nY;
+                    else
+                        nY += maRect.Top();
+                }
+                rInteraction.xInteraction->setControllerPosition( css::awt::Point( rInteraction.xInteraction->getPosition().X, nY ) );
             }
+        }
+        catch ( const uno::RuntimeException& )
+        {
         }
     }
 }
@@ -1991,40 +1991,40 @@ void SdrObjCustomShape::DragMoveCustomShapeHdl( const Point& rDestination,
         const sal_uInt16 nCustomShapeHdlNum, bool bMoveCalloutRectangle )
 {
     std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles() );
-    if ( nCustomShapeHdlNum < aInteractionHandles.size() )
+    if ( nCustomShapeHdlNum >= aInteractionHandles.size() )
+        return;
+
+    SdrCustomShapeInteraction aInteractionHandle( aInteractionHandles[ nCustomShapeHdlNum ] );
+    if ( !aInteractionHandle.xInteraction.is() )
+        return;
+
+    try
     {
-        SdrCustomShapeInteraction aInteractionHandle( aInteractionHandles[ nCustomShapeHdlNum ] );
-        if ( aInteractionHandle.xInteraction.is() )
+        css::awt::Point aPt( rDestination.X(), rDestination.Y() );
+        if ( aInteractionHandle.nMode & CustomShapeHandleModes::MOVE_SHAPE && bMoveCalloutRectangle )
         {
-            try
+            sal_Int32 nXDiff = aPt.X - aInteractionHandle.aPosition.X;
+            sal_Int32 nYDiff = aPt.Y - aInteractionHandle.aPosition.Y;
+
+            maRect.Move( nXDiff, nYDiff );
+            aOutRect.Move( nXDiff, nYDiff );
+            maSnapRect.Move( nXDiff, nYDiff );
+            SetRectsDirty(true);
+            InvalidateRenderGeometry();
+
+            for (const auto& rInteraction : aInteractionHandles)
             {
-                css::awt::Point aPt( rDestination.X(), rDestination.Y() );
-                if ( aInteractionHandle.nMode & CustomShapeHandleModes::MOVE_SHAPE && bMoveCalloutRectangle )
+                if ( rInteraction.nMode & CustomShapeHandleModes::RESIZE_FIXED )
                 {
-                    sal_Int32 nXDiff = aPt.X - aInteractionHandle.aPosition.X;
-                    sal_Int32 nYDiff = aPt.Y - aInteractionHandle.aPosition.Y;
-
-                    maRect.Move( nXDiff, nYDiff );
-                    aOutRect.Move( nXDiff, nYDiff );
-                    maSnapRect.Move( nXDiff, nYDiff );
-                    SetRectsDirty(true);
-                    InvalidateRenderGeometry();
-
-                    for (const auto& rInteraction : aInteractionHandles)
-                    {
-                        if ( rInteraction.nMode & CustomShapeHandleModes::RESIZE_FIXED )
-                        {
-                            if ( rInteraction.xInteraction.is() )
-                                rInteraction.xInteraction->setControllerPosition( rInteraction.aPosition );
-                        }
-                    }
+                    if ( rInteraction.xInteraction.is() )
+                        rInteraction.xInteraction->setControllerPosition( rInteraction.aPosition );
                 }
-                aInteractionHandle.xInteraction->setControllerPosition( aPt );
-            }
-            catch ( const uno::RuntimeException& )
-            {
             }
         }
+        aInteractionHandle.xInteraction->setControllerPosition( aPt );
+    }
+    catch ( const uno::RuntimeException& )
+    {
     }
 }
 
@@ -2171,55 +2171,55 @@ void SdrObjCustomShape::SetVerticalWriting( bool bVertical )
 
     DBG_ASSERT( pOutlinerParaObject, "SdrTextObj::SetVerticalWriting() without OutlinerParaObject!" );
 
-    if( pOutlinerParaObject )
+    if( !pOutlinerParaObject )
+        return;
+
+    if(pOutlinerParaObject->IsVertical() == bVertical)
+        return;
+
+    // get item settings
+    const SfxItemSet& rSet = GetObjectItemSet();
+
+    // Also exchange horizontal and vertical adjust items
+    SdrTextHorzAdjust eHorz = rSet.Get(SDRATTR_TEXT_HORZADJUST).GetValue();
+    SdrTextVertAdjust eVert = rSet.Get(SDRATTR_TEXT_VERTADJUST).GetValue();
+
+    // rescue object size, SetSnapRect below expects logic rect,
+    // not snap rect.
+    tools::Rectangle aObjectRect = GetLogicRect();
+
+    // prepare ItemSet to set exchanged width and height items
+    SfxItemSet aNewSet(*rSet.GetPool(),
+        svl::Items<SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
+        // Expanded item ranges to also support horizontal and vertical adjust.
+        SDRATTR_TEXT_VERTADJUST, SDRATTR_TEXT_VERTADJUST,
+        SDRATTR_TEXT_AUTOGROWWIDTH, SDRATTR_TEXT_HORZADJUST>{});
+
+    aNewSet.Put(rSet);
+
+    // Exchange horizontal and vertical adjusts
+    switch(eVert)
     {
-        if(pOutlinerParaObject->IsVertical() != bVertical)
-        {
-            // get item settings
-            const SfxItemSet& rSet = GetObjectItemSet();
-
-            // Also exchange horizontal and vertical adjust items
-            SdrTextHorzAdjust eHorz = rSet.Get(SDRATTR_TEXT_HORZADJUST).GetValue();
-            SdrTextVertAdjust eVert = rSet.Get(SDRATTR_TEXT_VERTADJUST).GetValue();
-
-            // rescue object size, SetSnapRect below expects logic rect,
-            // not snap rect.
-            tools::Rectangle aObjectRect = GetLogicRect();
-
-            // prepare ItemSet to set exchanged width and height items
-            SfxItemSet aNewSet(*rSet.GetPool(),
-                svl::Items<SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
-                // Expanded item ranges to also support horizontal and vertical adjust.
-                SDRATTR_TEXT_VERTADJUST, SDRATTR_TEXT_VERTADJUST,
-                SDRATTR_TEXT_AUTOGROWWIDTH, SDRATTR_TEXT_HORZADJUST>{});
-
-            aNewSet.Put(rSet);
-
-            // Exchange horizontal and vertical adjusts
-            switch(eVert)
-            {
-                case SDRTEXTVERTADJUST_TOP: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT)); break;
-                case SDRTEXTVERTADJUST_CENTER: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER)); break;
-                case SDRTEXTVERTADJUST_BOTTOM: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_LEFT)); break;
-                case SDRTEXTVERTADJUST_BLOCK: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_BLOCK)); break;
-            }
-            switch(eHorz)
-            {
-                case SDRTEXTHORZADJUST_LEFT: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_BOTTOM)); break;
-                case SDRTEXTHORZADJUST_CENTER: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER)); break;
-                case SDRTEXTHORZADJUST_RIGHT: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP)); break;
-                case SDRTEXTHORZADJUST_BLOCK: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_BLOCK)); break;
-            }
-
-            pOutlinerParaObject = GetOutlinerParaObject();
-            if ( pOutlinerParaObject )
-                pOutlinerParaObject->SetVertical(bVertical);
-            SetObjectItemSet( aNewSet );
-
-            // restore object size
-            SetSnapRect(aObjectRect);
-        }
+        case SDRTEXTVERTADJUST_TOP: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT)); break;
+        case SDRTEXTVERTADJUST_CENTER: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER)); break;
+        case SDRTEXTVERTADJUST_BOTTOM: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_LEFT)); break;
+        case SDRTEXTVERTADJUST_BLOCK: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_BLOCK)); break;
     }
+    switch(eHorz)
+    {
+        case SDRTEXTHORZADJUST_LEFT: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_BOTTOM)); break;
+        case SDRTEXTHORZADJUST_CENTER: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER)); break;
+        case SDRTEXTHORZADJUST_RIGHT: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP)); break;
+        case SDRTEXTHORZADJUST_BLOCK: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_BLOCK)); break;
+    }
+
+    pOutlinerParaObject = GetOutlinerParaObject();
+    if ( pOutlinerParaObject )
+        pOutlinerParaObject->SetVertical(bVertical);
+    SetObjectItemSet( aNewSet );
+
+    // restore object size
+    SetSnapRect(aObjectRect);
 }
 
 void SdrObjCustomShape::SuggestTextFrameSize(Size aSuggestedTextFrameSize)
@@ -3042,28 +3042,28 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
     }
 
     // Apply flipping from enhanced geometry at center of the shape.
-    if (bIsMirroredX || bIsMirroredY)
-    {
-        // create mathematically matrix for the applied transformations
-        // aScale was in most cases built from a rectangle including edge
-        // and is therefore mathematically too large by 1
-        if (aScale.getX() > 2.0 && aScale.getY() > 2.0)
-            aScale -= basegfx::B2DTuple(1.0, 1.0);
-        basegfx::B2DHomMatrix aMathMat = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
-                        aScale, -fShearX, basegfx::fTools::equalZero(fRotate) ? 0.0 : fRotate,
-                        aTranslate);
-        // Use matrix to get current center
-        basegfx::B2DPoint aCenter(0.5,0.5);
-        aCenter = aMathMat * aCenter;
-        double fCenterX = aCenter.getX();
-        double fCenterY = aCenter.getY();
-        if (bIsMirroredX) // vertical axis
-            Mirror(Point(FRound(fCenterX),FRound(fCenterY)),
-                Point(FRound(fCenterX), FRound(fCenterY + 1000.0)));
-        if (bIsMirroredY) // horizontal axis
-            Mirror(Point(FRound(fCenterX),FRound(fCenterY)),
-                Point(FRound(fCenterX + 1000.0), FRound(fCenterY)));
-    }
+    if (!(bIsMirroredX || bIsMirroredY))
+        return;
+
+    // create mathematically matrix for the applied transformations
+    // aScale was in most cases built from a rectangle including edge
+    // and is therefore mathematically too large by 1
+    if (aScale.getX() > 2.0 && aScale.getY() > 2.0)
+        aScale -= basegfx::B2DTuple(1.0, 1.0);
+    basegfx::B2DHomMatrix aMathMat = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
+                    aScale, -fShearX, basegfx::fTools::equalZero(fRotate) ? 0.0 : fRotate,
+                    aTranslate);
+    // Use matrix to get current center
+    basegfx::B2DPoint aCenter(0.5,0.5);
+    aCenter = aMathMat * aCenter;
+    double fCenterX = aCenter.getX();
+    double fCenterY = aCenter.getY();
+    if (bIsMirroredX) // vertical axis
+        Mirror(Point(FRound(fCenterX),FRound(fCenterY)),
+            Point(FRound(fCenterX), FRound(fCenterY + 1000.0)));
+    if (bIsMirroredY) // horizontal axis
+        Mirror(Point(FRound(fCenterX),FRound(fCenterY)),
+            Point(FRound(fCenterX + 1000.0), FRound(fCenterY)));
 }
 
 // taking fObjectRotation instead of aGeo.nAngle

@@ -528,45 +528,46 @@ bool SdrCreateView::BegCreateCaptionObj(const Point& rPnt, const Size& rObjSiz,
 
 void SdrCreateView::MovCreateObj(const Point& rPnt)
 {
-    if (pCurrentCreate!=nullptr) {
-        Point aPnt(rPnt);
-        if (!maDragStat.IsNoSnap())
-        {
-            aPnt=GetSnapPos(aPnt,pCreatePV);
-        }
-        if (IsOrtho())
-        {
-            if (maDragStat.IsOrtho8Possible()) OrthoDistance8(maDragStat.GetPrev(),aPnt,IsBigOrtho());
-            else if (maDragStat.IsOrtho4Possible()) OrthoDistance4(maDragStat.GetPrev(),aPnt,IsBigOrtho());
-        }
+    if (pCurrentCreate==nullptr)
+        return;
 
-        // If the drag point was limited and Ortho is active, do
-        // the small ortho correction (reduction) -> last parameter to FALSE.
-        bool bDidLimit(ImpLimitToWorkArea(aPnt));
-        if(bDidLimit && IsOrtho())
-        {
-            if(maDragStat.IsOrtho8Possible())
-                OrthoDistance8(maDragStat.GetPrev(), aPnt, false);
-            else if(maDragStat.IsOrtho4Possible())
-                OrthoDistance4(maDragStat.GetPrev(), aPnt, false);
-        }
-
-        if (aPnt==maDragStat.GetNow()) return;
-        bool bIsMinMoved(maDragStat.IsMinMoved());
-        if (maDragStat.CheckMinMoved(aPnt))
-        {
-            if (!bIsMinMoved) maDragStat.NextPoint();
-            maDragStat.NextMove(aPnt);
-            pCurrentCreate->MovCreate(maDragStat);
-
-            // MovCreate changes the object, so use ActionChanged() on it
-            pCurrentCreate->ActionChanged();
-
-            // replace for DrawCreateObjDiff
-            HideCreateObj();
-            ShowCreateObj();
-        }
+    Point aPnt(rPnt);
+    if (!maDragStat.IsNoSnap())
+    {
+        aPnt=GetSnapPos(aPnt,pCreatePV);
     }
+    if (IsOrtho())
+    {
+        if (maDragStat.IsOrtho8Possible()) OrthoDistance8(maDragStat.GetPrev(),aPnt,IsBigOrtho());
+        else if (maDragStat.IsOrtho4Possible()) OrthoDistance4(maDragStat.GetPrev(),aPnt,IsBigOrtho());
+    }
+
+    // If the drag point was limited and Ortho is active, do
+    // the small ortho correction (reduction) -> last parameter to FALSE.
+    bool bDidLimit(ImpLimitToWorkArea(aPnt));
+    if(bDidLimit && IsOrtho())
+    {
+        if(maDragStat.IsOrtho8Possible())
+            OrthoDistance8(maDragStat.GetPrev(), aPnt, false);
+        else if(maDragStat.IsOrtho4Possible())
+            OrthoDistance4(maDragStat.GetPrev(), aPnt, false);
+    }
+
+    if (aPnt==maDragStat.GetNow()) return;
+    bool bIsMinMoved(maDragStat.IsMinMoved());
+    if (!maDragStat.CheckMinMoved(aPnt))
+        return;
+
+    if (!bIsMinMoved) maDragStat.NextPoint();
+    maDragStat.NextMove(aPnt);
+    pCurrentCreate->MovCreate(maDragStat);
+
+    // MovCreate changes the object, so use ActionChanged() on it
+    pCurrentCreate->ActionChanged();
+
+    // replace for DrawCreateObjDiff
+    HideCreateObj();
+    ShowCreateObj();
 }
 
 void SdrCreateView::SetupObjLayer(const SdrPageView* pPageView, const OUString& aActiveLayer, SdrObject* pObj)
@@ -705,24 +706,24 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
 
 void SdrCreateView::BckCreateObj()
 {
-    if (pCurrentCreate!=nullptr)
+    if (pCurrentCreate==nullptr)
+        return;
+
+    if (maDragStat.GetPointCount()<=2 )
     {
-        if (maDragStat.GetPointCount()<=2 )
+        BrkCreateObj();
+    }
+    else
+    {
+        HideCreateObj();
+        maDragStat.PrevPoint();
+        if (pCurrentCreate->BckCreate(maDragStat))
         {
-            BrkCreateObj();
+            ShowCreateObj();
         }
         else
         {
-            HideCreateObj();
-            maDragStat.PrevPoint();
-            if (pCurrentCreate->BckCreate(maDragStat))
-            {
-                ShowCreateObj();
-            }
-            else
-            {
-                BrkCreateObj();
-            }
+            BrkCreateObj();
         }
     }
 }
@@ -741,117 +742,117 @@ void SdrCreateView::BrkCreateObj()
 
 void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
 {
-    if(IsCreateObj() && !maDragStat.IsShown())
-    {
-        if(pCurrentCreate)
-        {
-            // for migration from XOR, replace DrawDragObj here to create
-            // overlay objects instead.
-            bool bUseSolidDragging(IsSolidDragging());
+    if(!(IsCreateObj() && !maDragStat.IsShown()))
+        return;
 
-            // #i101648# check if dragged object is a naked SdrObject (not
-            // a derivation). This is e.g. used in SW Frame construction
-            // as placeholder. Do not use SolidDragging for naked SdrObjects,
-            // they cannot have a valid optical representation
-            if(bUseSolidDragging && OBJ_NONE == pCurrentCreate->GetObjIdentifier())
+    if(pCurrentCreate)
+    {
+        // for migration from XOR, replace DrawDragObj here to create
+        // overlay objects instead.
+        bool bUseSolidDragging(IsSolidDragging());
+
+        // #i101648# check if dragged object is a naked SdrObject (not
+        // a derivation). This is e.g. used in SW Frame construction
+        // as placeholder. Do not use SolidDragging for naked SdrObjects,
+        // they cannot have a valid optical representation
+        if(bUseSolidDragging && OBJ_NONE == pCurrentCreate->GetObjIdentifier())
+        {
+            bUseSolidDragging = false;
+        }
+
+        // check for objects with no fill and no line
+        if(bUseSolidDragging)
+        {
+            const SfxItemSet& rSet = pCurrentCreate->GetMergedItemSet();
+            const drawing::FillStyle eFill(rSet.Get(XATTR_FILLSTYLE).GetValue());
+            const drawing::LineStyle eLine(rSet.Get(XATTR_LINESTYLE).GetValue());
+
+            if(drawing::LineStyle_NONE == eLine && drawing::FillStyle_NONE == eFill)
             {
                 bUseSolidDragging = false;
             }
+        }
 
-            // check for objects with no fill and no line
-            if(bUseSolidDragging)
+        // check for form controls
+        if(bUseSolidDragging)
+        {
+            if(dynamic_cast<const SdrUnoObj*>( pCurrentCreate) !=  nullptr)
             {
-                const SfxItemSet& rSet = pCurrentCreate->GetMergedItemSet();
-                const drawing::FillStyle eFill(rSet.Get(XATTR_FILLSTYLE).GetValue());
-                const drawing::LineStyle eLine(rSet.Get(XATTR_LINESTYLE).GetValue());
+                bUseSolidDragging = false;
+            }
+        }
 
-                if(drawing::LineStyle_NONE == eLine && drawing::FillStyle_NONE == eFill)
+          // #i101781# force to non-solid dragging when not creating a full circle
+        if(bUseSolidDragging)
+        {
+            SdrCircObj* pCircObj = dynamic_cast< SdrCircObj* >(pCurrentCreate);
+
+            if(pCircObj && OBJ_CIRC != pCircObj->GetObjIdentifier())
+            {
+                // #i103058# Allow SolidDragging with four points
+                if(maDragStat.GetPointCount() < 4)
                 {
                     bUseSolidDragging = false;
-                }
-            }
-
-            // check for form controls
-            if(bUseSolidDragging)
-            {
-                if(dynamic_cast<const SdrUnoObj*>( pCurrentCreate) !=  nullptr)
-                {
-                    bUseSolidDragging = false;
-                }
-            }
-
-              // #i101781# force to non-solid dragging when not creating a full circle
-            if(bUseSolidDragging)
-            {
-                SdrCircObj* pCircObj = dynamic_cast< SdrCircObj* >(pCurrentCreate);
-
-                if(pCircObj && OBJ_CIRC != pCircObj->GetObjIdentifier())
-                {
-                    // #i103058# Allow SolidDragging with four points
-                    if(maDragStat.GetPointCount() < 4)
-                    {
-                        bUseSolidDragging = false;
-                    }
-                }
-            }
-
-            if(bUseSolidDragging)
-            {
-                basegfx::B2DPolyPolygon aDragPolyPolygon;
-
-                if(dynamic_cast<const SdrRectObj*>( pCurrentCreate) !=  nullptr)
-                {
-                    // ensure object has some size, necessary for SdrTextObj because
-                    // there are still untested divisions by that sizes
-                    tools::Rectangle aCurrentSnapRect(pCurrentCreate->GetSnapRect());
-
-                    if(aCurrentSnapRect.GetWidth() <= 1 || aCurrentSnapRect.GetHeight() <= 1)
-                    {
-                        tools::Rectangle aNewRect(maDragStat.GetStart(), maDragStat.GetStart() + Point(2, 2));
-                        pCurrentCreate->NbcSetSnapRect(aNewRect);
-                    }
-                }
-
-                if(dynamic_cast<const SdrPathObj*>( pCurrentCreate) !=  nullptr)
-                {
-                    // The up-to-now created path needs to be set at the object to have something
-                    // that can be visualized
-                    SdrPathObj& rPathObj(static_cast<SdrPathObj&>(*pCurrentCreate));
-                    const basegfx::B2DPolyPolygon aCurrentPolyPolygon(rPathObj.getObjectPolyPolygon(maDragStat));
-
-                    if(aCurrentPolyPolygon.count())
-                    {
-                        rPathObj.NbcSetPathPoly(aCurrentPolyPolygon);
-                    }
-
-                    aDragPolyPolygon = rPathObj.getDragPolyPolygon(maDragStat);
-                }
-
-                // use the SdrObject directly for overlay
-                mpCreateViewExtraData->CreateAndShowOverlay(*this, pCurrentCreate, aDragPolyPolygon);
-            }
-            else
-            {
-                const ::basegfx::B2DPolyPolygon aPoly(pCurrentCreate->TakeCreatePoly(maDragStat));
-
-                mpCreateViewExtraData->CreateAndShowOverlay(*this, nullptr, aPoly);
-            }
-
-            // #i101679# Force changed overlay to be shown
-            for(sal_uInt32 a(0); a < PaintWindowCount(); a++)
-            {
-                SdrPaintWindow* pCandidate = GetPaintWindow(a);
-                const rtl::Reference<sdr::overlay::OverlayManager>& xOverlayManager = pCandidate->GetOverlayManager();
-
-                if (xOverlayManager.is())
-                {
-                    xOverlayManager->flush();
                 }
             }
         }
 
-        maDragStat.SetShown(true);
+        if(bUseSolidDragging)
+        {
+            basegfx::B2DPolyPolygon aDragPolyPolygon;
+
+            if(dynamic_cast<const SdrRectObj*>( pCurrentCreate) !=  nullptr)
+            {
+                // ensure object has some size, necessary for SdrTextObj because
+                // there are still untested divisions by that sizes
+                tools::Rectangle aCurrentSnapRect(pCurrentCreate->GetSnapRect());
+
+                if(aCurrentSnapRect.GetWidth() <= 1 || aCurrentSnapRect.GetHeight() <= 1)
+                {
+                    tools::Rectangle aNewRect(maDragStat.GetStart(), maDragStat.GetStart() + Point(2, 2));
+                    pCurrentCreate->NbcSetSnapRect(aNewRect);
+                }
+            }
+
+            if(dynamic_cast<const SdrPathObj*>( pCurrentCreate) !=  nullptr)
+            {
+                // The up-to-now created path needs to be set at the object to have something
+                // that can be visualized
+                SdrPathObj& rPathObj(static_cast<SdrPathObj&>(*pCurrentCreate));
+                const basegfx::B2DPolyPolygon aCurrentPolyPolygon(rPathObj.getObjectPolyPolygon(maDragStat));
+
+                if(aCurrentPolyPolygon.count())
+                {
+                    rPathObj.NbcSetPathPoly(aCurrentPolyPolygon);
+                }
+
+                aDragPolyPolygon = rPathObj.getDragPolyPolygon(maDragStat);
+            }
+
+            // use the SdrObject directly for overlay
+            mpCreateViewExtraData->CreateAndShowOverlay(*this, pCurrentCreate, aDragPolyPolygon);
+        }
+        else
+        {
+            const ::basegfx::B2DPolyPolygon aPoly(pCurrentCreate->TakeCreatePoly(maDragStat));
+
+            mpCreateViewExtraData->CreateAndShowOverlay(*this, nullptr, aPoly);
+        }
+
+        // #i101679# Force changed overlay to be shown
+        for(sal_uInt32 a(0); a < PaintWindowCount(); a++)
+        {
+            SdrPaintWindow* pCandidate = GetPaintWindow(a);
+            const rtl::Reference<sdr::overlay::OverlayManager>& xOverlayManager = pCandidate->GetOverlayManager();
+
+            if (xOverlayManager.is())
+            {
+                xOverlayManager->flush();
+            }
+        }
     }
+
+    maDragStat.SetShown(true);
 }
 
 void SdrCreateView::HideCreateObj()

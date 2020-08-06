@@ -167,43 +167,43 @@ void SdrMediaObj::AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrin
                     MapMode(MapUnit::Map100thMM)) );
     Size aMaxSize( rMaxRect.GetSize() );
 
-    if( !aSize.IsEmpty() )
+    if( aSize.IsEmpty() )
+        return;
+
+    Point aPos( rMaxRect.TopLeft() );
+
+    // if graphic is too large, fit it to the page
+    if ( (!bShrinkOnly                          ||
+         ( aSize.Height() > aMaxSize.Height() ) ||
+         ( aSize.Width()  > aMaxSize.Width()  ) )&&
+         aSize.Height() && aMaxSize.Height() )
     {
-        Point aPos( rMaxRect.TopLeft() );
+        float fGrfWH =  static_cast<float>(aSize.Width()) /
+                        static_cast<float>(aSize.Height());
+        float fWinWH =  static_cast<float>(aMaxSize.Width()) /
+                        static_cast<float>(aMaxSize.Height());
 
-        // if graphic is too large, fit it to the page
-        if ( (!bShrinkOnly                          ||
-             ( aSize.Height() > aMaxSize.Height() ) ||
-             ( aSize.Width()  > aMaxSize.Width()  ) )&&
-             aSize.Height() && aMaxSize.Height() )
+        // scale graphic to page size
+        if ( fGrfWH < fWinWH )
         {
-            float fGrfWH =  static_cast<float>(aSize.Width()) /
-                            static_cast<float>(aSize.Height());
-            float fWinWH =  static_cast<float>(aMaxSize.Width()) /
-                            static_cast<float>(aMaxSize.Height());
-
-            // scale graphic to page size
-            if ( fGrfWH < fWinWH )
-            {
-                aSize.setWidth( static_cast<long>(aMaxSize.Height() * fGrfWH) );
-                aSize.setHeight( aMaxSize.Height() );
-            }
-            else if ( fGrfWH > 0.F )
-            {
-                aSize.setWidth( aMaxSize.Width() );
-                aSize.setHeight( static_cast<long>(aMaxSize.Width() / fGrfWH) );
-            }
-
-            aPos = rMaxRect.Center();
+            aSize.setWidth( static_cast<long>(aMaxSize.Height() * fGrfWH) );
+            aSize.setHeight( aMaxSize.Height() );
+        }
+        else if ( fGrfWH > 0.F )
+        {
+            aSize.setWidth( aMaxSize.Width() );
+            aSize.setHeight( static_cast<long>(aMaxSize.Width() / fGrfWH) );
         }
 
-        if( bShrinkOnly )
-            aPos = maRect.TopLeft();
-
-        aPos.AdjustX( -(aSize.Width() / 2) );
-        aPos.AdjustY( -(aSize.Height() / 2) );
-        SetLogicRect( tools::Rectangle( aPos, aSize ) );
+        aPos = rMaxRect.Center();
     }
+
+    if( bShrinkOnly )
+        aPos = maRect.TopLeft();
+
+    aPos.AdjustX( -(aSize.Width() / 2) );
+    aPos.AdjustY( -(aSize.Height() / 2) );
+    SetLogicRect( tools::Rectangle( aPos, aSize ) );
 }
 
 void SdrMediaObj::setURL( const OUString& rURL, const OUString& rReferer, const OUString& rMimeType )

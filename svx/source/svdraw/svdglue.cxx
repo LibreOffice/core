@@ -28,20 +28,20 @@ const Size aGlueHalfSize(4,4);
 
 void SdrGluePoint::SetReallyAbsolute(bool bOn, const SdrObject& rObj)
 {
-    if ( bReallyAbsolute != bOn )
-    {
-       if ( bOn )
-       {
-           aPos=GetAbsolutePos(rObj);
-           bReallyAbsolute=bOn;
-       }
-       else
-       {
-           bReallyAbsolute=bOn;
-           Point aPt(aPos);
-           SetAbsolutePos(aPt,rObj);
-       }
-    }
+   if ( bReallyAbsolute == bOn )
+       return;
+
+   if ( bOn )
+   {
+       aPos=GetAbsolutePos(rObj);
+       bReallyAbsolute=bOn;
+   }
+   else
+   {
+       bReallyAbsolute=bOn;
+       Point aPt(aPos);
+       SetAbsolutePos(aPt,rObj);
+   }
 }
 
 Point SdrGluePoint::GetAbsolutePos(const SdrObject& rObj) const

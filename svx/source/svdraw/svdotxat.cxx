@@ -292,77 +292,77 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight()
 void SdrTextObj::ImpSetTextStyleSheetListeners()
 {
     SfxStyleSheetBasePool* pStylePool(getSdrModelFromSdrObject().GetStyleSheetPool());
-    if (pStylePool!=nullptr)
+    if (pStylePool==nullptr)
+        return;
+
+    std::vector<OUString> aStyleNames;
+    OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
+    if (pOutlinerParaObject!=nullptr)
     {
-        std::vector<OUString> aStyleNames;
-        OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
-        if (pOutlinerParaObject!=nullptr)
+        // First, we collect all stylesheets contained in the ParaObject in
+        // the container aStyles. The Family is always appended to the name
+        // of the stylesheet.
+        const EditTextObject& rTextObj=pOutlinerParaObject->GetTextObject();
+        OUString aStyleName;
+        SfxStyleFamily eStyleFam;
+        sal_Int32 nParaCnt=rTextObj.GetParagraphCount();
+
+
+        for(sal_Int32 nParaNum(0); nParaNum < nParaCnt; nParaNum++)
         {
-            // First, we collect all stylesheets contained in the ParaObject in
-            // the container aStyles. The Family is always appended to the name
-            // of the stylesheet.
-            const EditTextObject& rTextObj=pOutlinerParaObject->GetTextObject();
-            OUString aStyleName;
-            SfxStyleFamily eStyleFam;
-            sal_Int32 nParaCnt=rTextObj.GetParagraphCount();
+            rTextObj.GetStyleSheet(nParaNum, aStyleName, eStyleFam);
 
-
-            for(sal_Int32 nParaNum(0); nParaNum < nParaCnt; nParaNum++)
+            if (!aStyleName.isEmpty())
             {
-                rTextObj.GetStyleSheet(nParaNum, aStyleName, eStyleFam);
+                AppendFamilyToStyleName(aStyleName, eStyleFam);
 
-                if (!aStyleName.isEmpty())
+                bool bFnd(false);
+                sal_uInt32 nNum(aStyleNames.size());
+
+                while(!bFnd && nNum > 0)
                 {
-                    AppendFamilyToStyleName(aStyleName, eStyleFam);
+                    // we don't want duplicate stylesheets
+                    nNum--;
+                    bFnd = aStyleName == aStyleNames[nNum];
+                }
 
-                    bool bFnd(false);
-                    sal_uInt32 nNum(aStyleNames.size());
-
-                    while(!bFnd && nNum > 0)
-                    {
-                        // we don't want duplicate stylesheets
-                        nNum--;
-                        bFnd = aStyleName == aStyleNames[nNum];
-                    }
-
-                    if(!bFnd)
-                    {
-                        aStyleNames.push_back(aStyleName);
-                    }
+                if(!bFnd)
+                {
+                    aStyleNames.push_back(aStyleName);
                 }
             }
         }
+    }
 
-        // now convert the strings in the vector from names to StyleSheet*
-        o3tl::sorted_vector<SfxStyleSheet*> aStyleSheets;
-        while (!aStyleNames.empty()) {
-            OUString aName = aStyleNames.back();
-            aStyleNames.pop_back();
+    // now convert the strings in the vector from names to StyleSheet*
+    o3tl::sorted_vector<SfxStyleSheet*> aStyleSheets;
+    while (!aStyleNames.empty()) {
+        OUString aName = aStyleNames.back();
+        aStyleNames.pop_back();
 
-            SfxStyleFamily eFam = ReadFamilyFromStyleName(aName);
-            SfxStyleSheetBase* pStyleBase = pStylePool->Find(aName,eFam);
-            SfxStyleSheet* pStyle = dynamic_cast<SfxStyleSheet*>( pStyleBase );
-            if (pStyle!=nullptr && pStyle!=GetStyleSheet()) {
-                aStyleSheets.insert(pStyle);
+        SfxStyleFamily eFam = ReadFamilyFromStyleName(aName);
+        SfxStyleSheetBase* pStyleBase = pStylePool->Find(aName,eFam);
+        SfxStyleSheet* pStyle = dynamic_cast<SfxStyleSheet*>( pStyleBase );
+        if (pStyle!=nullptr && pStyle!=GetStyleSheet()) {
+            aStyleSheets.insert(pStyle);
+        }
+    }
+    // now remove all superfluous stylesheets
+    sal_uInt16 nNum=GetBroadcasterCount();
+    while (nNum>0) {
+        nNum--;
+        SfxBroadcaster* pBroadcast=GetBroadcasterJOE(nNum);
+        SfxStyleSheet* pStyle=dynamic_cast<SfxStyleSheet*>( pBroadcast );
+        if (pStyle!=nullptr && pStyle!=GetStyleSheet()) { // special case for stylesheet of the object
+            if (aStyleSheets.find(pStyle)==aStyleSheets.end()) {
+                EndListening(*pStyle);
             }
         }
-        // now remove all superfluous stylesheets
-        sal_uInt16 nNum=GetBroadcasterCount();
-        while (nNum>0) {
-            nNum--;
-            SfxBroadcaster* pBroadcast=GetBroadcasterJOE(nNum);
-            SfxStyleSheet* pStyle=dynamic_cast<SfxStyleSheet*>( pBroadcast );
-            if (pStyle!=nullptr && pStyle!=GetStyleSheet()) { // special case for stylesheet of the object
-                if (aStyleSheets.find(pStyle)==aStyleSheets.end()) {
-                    EndListening(*pStyle);
-                }
-            }
-        }
-        // and finally, merge all stylesheets that are contained in aStyles with previous broadcasters
-        for(SfxStyleSheet* pStyle : aStyleSheets) {
-            // let StartListening see for itself if there's already a listener registered
-            StartListening(*pStyle, DuplicateHandling::Prevent);
-        }
+    }
+    // and finally, merge all stylesheets that are contained in aStyles with previous broadcasters
+    for(SfxStyleSheet* pStyle : aStyleSheets) {
+        // let StartListening see for itself if there's already a listener registered
+        StartListening(*pStyle, DuplicateHandling::Prevent);
     }
 }
 

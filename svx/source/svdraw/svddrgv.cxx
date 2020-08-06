@@ -513,25 +513,25 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
 
 void SdrDragView::MovDragObj(const Point& rPnt)
 {
-    if (mpCurrentSdrDragMethod)
+    if (!mpCurrentSdrDragMethod)
+        return;
+
+    Point aPnt(rPnt);
+    basegfx::B2DVector aGridOffset(0.0, 0.0);
+
+    // Coordinate maybe affected by GridOffset, so we may need to
+    // adapt to Model-coordinates here
+    if(getPossibleGridOffsetForPosition(
+        aGridOffset,
+        basegfx::B2DPoint(aPnt.X(), aPnt.Y()),
+        GetSdrPageView()))
     {
-        Point aPnt(rPnt);
-        basegfx::B2DVector aGridOffset(0.0, 0.0);
-
-        // Coordinate maybe affected by GridOffset, so we may need to
-        // adapt to Model-coordinates here
-        if(getPossibleGridOffsetForPosition(
-            aGridOffset,
-            basegfx::B2DPoint(aPnt.X(), aPnt.Y()),
-            GetSdrPageView()))
-        {
-            aPnt.AdjustX(basegfx::fround(-aGridOffset.getX()));
-            aPnt.AdjustY(basegfx::fround(-aGridOffset.getY()));
-        }
-
-        ImpLimitToWorkArea(aPnt);
-        mpCurrentSdrDragMethod->MoveSdrDrag(aPnt); // this call already makes a Hide()/Show combination
+        aPnt.AdjustX(basegfx::fround(-aGridOffset.getX()));
+        aPnt.AdjustY(basegfx::fround(-aGridOffset.getY()));
     }
+
+    ImpLimitToWorkArea(aPnt);
+    mpCurrentSdrDragMethod->MoveSdrDrag(aPnt); // this call already makes a Hide()/Show combination
 }
 
 bool SdrDragView::EndDragObj(bool bCopy)
@@ -607,32 +607,32 @@ bool SdrDragView::EndDragObj(bool bCopy)
 
 void SdrDragView::BrkDragObj()
 {
-    if (mpCurrentSdrDragMethod)
+    if (!mpCurrentSdrDragMethod)
+        return;
+
+    mpCurrentSdrDragMethod->CancelSdrDrag();
+
+    mpCurrentSdrDragMethod.reset();
+
+    if (mbInsPolyPoint)
     {
-        mpCurrentSdrDragMethod->CancelSdrDrag();
-
-        mpCurrentSdrDragMethod.reset();
-
-        if (mbInsPolyPoint)
-        {
-            mpInsPointUndo->Undo(); // delete inserted point again
-            delete mpInsPointUndo;
-            mpInsPointUndo=nullptr;
-            SetMarkHandles(nullptr);
-            mbInsPolyPoint=false;
-        }
-
-        if (IsInsertGluePoint())
-        {
-            mpInsPointUndo->Undo(); // delete inserted glue point again
-            delete mpInsPointUndo;
-            mpInsPointUndo=nullptr;
-            SetInsertGluePoint(false);
-        }
-
-        meDragHdl=SdrHdlKind::Move;
-        mpDragHdl=nullptr;
+        mpInsPointUndo->Undo(); // delete inserted point again
+        delete mpInsPointUndo;
+        mpInsPointUndo=nullptr;
+        SetMarkHandles(nullptr);
+        mbInsPolyPoint=false;
     }
+
+    if (IsInsertGluePoint())
+    {
+        mpInsPointUndo->Undo(); // delete inserted glue point again
+        delete mpInsPointUndo;
+        mpInsPointUndo=nullptr;
+        SetInsertGluePoint(false);
+    }
+
+    meDragHdl=SdrHdlKind::Move;
+    mpDragHdl=nullptr;
 }
 
 bool SdrDragView::IsInsObjPointPossible() const
@@ -799,42 +799,42 @@ bool SdrDragView::BegInsGluePoint(const Point& rPnt)
 
 void SdrDragView::ShowDragObj()
 {
-    if(mpCurrentSdrDragMethod && !maDragStat.IsShown())
+    if(!(mpCurrentSdrDragMethod && !maDragStat.IsShown()))
+        return;
+
+    // Changed for the GridOffset stuff: No longer iterate over
+    // SdrPaintWindow(s), but now over SdrPageWindow(s), so doing the
+    // same as the SdrHdl visualizations (see ::CreateB2dIAObject) do.
+    // This is needed to get access to an ObjectContact which is needed
+    // to evtl. process that GridOffset in CreateOverlayGeometry
+    SdrPageView* pPageView(GetSdrPageView());
+
+    if(nullptr != pPageView)
     {
-        // Changed for the GridOffset stuff: No longer iterate over
-        // SdrPaintWindow(s), but now over SdrPageWindow(s), so doing the
-        // same as the SdrHdl visualizations (see ::CreateB2dIAObject) do.
-        // This is needed to get access to an ObjectContact which is needed
-        // to evtl. process that GridOffset in CreateOverlayGeometry
-        SdrPageView* pPageView(GetSdrPageView());
-
-        if(nullptr != pPageView)
+        for(sal_uInt32 a(0); a < pPageView->PageWindowCount(); a++)
         {
-            for(sal_uInt32 a(0); a < pPageView->PageWindowCount(); a++)
+            const SdrPageWindow& rPageWindow(*pPageView->GetPageWindow(a));
+            const SdrPaintWindow& rPaintWindow(rPageWindow.GetPaintWindow());
+
+            if(rPaintWindow.OutputToWindow())
             {
-                const SdrPageWindow& rPageWindow(*pPageView->GetPageWindow(a));
-                const SdrPaintWindow& rPaintWindow(rPageWindow.GetPaintWindow());
+                const rtl::Reference<sdr::overlay::OverlayManager>& xOverlayManager(
+                    rPaintWindow.GetOverlayManager());
 
-                if(rPaintWindow.OutputToWindow())
+                if(xOverlayManager.is())
                 {
-                    const rtl::Reference<sdr::overlay::OverlayManager>& xOverlayManager(
-                        rPaintWindow.GetOverlayManager());
+                    mpCurrentSdrDragMethod->CreateOverlayGeometry(
+                        *xOverlayManager,
+                        rPageWindow.GetObjectContact());
 
-                    if(xOverlayManager.is())
-                    {
-                        mpCurrentSdrDragMethod->CreateOverlayGeometry(
-                            *xOverlayManager,
-                            rPageWindow.GetObjectContact());
-
-                        // #i101679# Force changed overlay to be shown
-                        xOverlayManager->flush();
-                    }
+                    // #i101679# Force changed overlay to be shown
+                    xOverlayManager->flush();
                 }
             }
         }
-
-        maDragStat.SetShown(true);
     }
+
+    maDragStat.SetShown(true);
 }
 
 void SdrDragView::HideDragObj()
@@ -849,28 +849,28 @@ void SdrDragView::HideDragObj()
 
 void SdrDragView::SetNoDragXorPolys(bool bOn)
 {
-    if (IsNoDragXorPolys()!=bOn)
+    if (IsNoDragXorPolys()==bOn)
+        return;
+
+    const bool bDragging(mpCurrentSdrDragMethod);
+    const bool bShown(bDragging && maDragStat.IsShown());
+
+    if(bShown)
     {
-        const bool bDragging(mpCurrentSdrDragMethod);
-        const bool bShown(bDragging && maDragStat.IsShown());
+        HideDragObj();
+    }
 
-        if(bShown)
-        {
-            HideDragObj();
-        }
+    mbNoDragXorPolys = bOn;
 
-        mbNoDragXorPolys = bOn;
+    if(bDragging)
+    {
+        // force recreation of drag content
+        mpCurrentSdrDragMethod->resetSdrDragEntries();
+    }
 
-        if(bDragging)
-        {
-            // force recreation of drag content
-            mpCurrentSdrDragMethod->resetSdrDragEntries();
-        }
-
-        if(bShown)
-        {
-            ShowDragObj();
-        }
+    if(bShown)
+    {
+        ShowDragObj();
     }
 }
 

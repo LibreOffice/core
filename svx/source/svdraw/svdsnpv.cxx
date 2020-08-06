@@ -72,23 +72,23 @@ ImplPageOriginOverlay::ImplPageOriginOverlay(const SdrPaintView& rView, const ba
 
 void ImplPageOriginOverlay::SetPosition(const basegfx::B2DPoint& rNewPosition)
 {
-    if(rNewPosition != maPosition)
+    if(rNewPosition == maPosition)
+        return;
+
+    // apply to OverlayObjects
+    for(sal_uInt32 a(0); a < maObjects.count(); a++)
     {
-        // apply to OverlayObjects
-        for(sal_uInt32 a(0); a < maObjects.count(); a++)
+        sdr::overlay::OverlayCrosshairStriped* pCandidate =
+            static_cast< sdr::overlay::OverlayCrosshairStriped* >(&maObjects.getOverlayObject(a));
+
+        if(pCandidate)
         {
-            sdr::overlay::OverlayCrosshairStriped* pCandidate =
-                static_cast< sdr::overlay::OverlayCrosshairStriped* >(&maObjects.getOverlayObject(a));
-
-            if(pCandidate)
-            {
-                pCandidate->setBasePosition(rNewPosition);
-            }
+            pCandidate->setBasePosition(rNewPosition);
         }
-
-        // remember new position
-        maPosition = rNewPosition;
     }
+
+    // remember new position
+    maPosition = rNewPosition;
 }
 
 
@@ -146,23 +146,23 @@ ImplHelpLineOverlay::ImplHelpLineOverlay(
 
 void ImplHelpLineOverlay::SetPosition(const basegfx::B2DPoint& rNewPosition)
 {
-    if(rNewPosition != maPosition)
+    if(rNewPosition == maPosition)
+        return;
+
+    // apply to OverlayObjects
+    for(sal_uInt32 a(0); a < maObjects.count(); a++)
     {
-        // apply to OverlayObjects
-        for(sal_uInt32 a(0); a < maObjects.count(); a++)
+        sdr::overlay::OverlayHelplineStriped* pCandidate =
+            static_cast< sdr::overlay::OverlayHelplineStriped* >(&maObjects.getOverlayObject(a));
+
+        if(pCandidate)
         {
-            sdr::overlay::OverlayHelplineStriped* pCandidate =
-                static_cast< sdr::overlay::OverlayHelplineStriped* >(&maObjects.getOverlayObject(a));
-
-            if(pCandidate)
-            {
-                pCandidate->setBasePosition(rNewPosition);
-            }
+            pCandidate->setBasePosition(rNewPosition);
         }
-
-        // remember new position
-        maPosition = rNewPosition;
     }
+
+    // remember new position
+    maPosition = rNewPosition;
 }
 
 SdrSnapView::SdrSnapView(
@@ -460,19 +460,19 @@ void SdrSnapView::MovSetPageOrg(const Point& rPnt)
 
 void SdrSnapView::EndSetPageOrg()
 {
-    if(IsSetPageOrg())
+    if(!IsSetPageOrg())
+        return;
+
+    SdrPageView* pPV = GetSdrPageView();
+
+    if(pPV)
     {
-        SdrPageView* pPV = GetSdrPageView();
-
-        if(pPV)
-        {
-            Point aPnt(maDragStat.GetNow());
-            pPV->SetPageOrigin(aPnt);
-        }
-
-        // cleanup
-        BrkSetPageOrg();
+        Point aPnt(maDragStat.GetNow());
+        pPV->SetPageOrigin(aPnt);
     }
+
+    // cleanup
+    BrkSetPageOrg();
 }
 
 void SdrSnapView::BrkSetPageOrg()
