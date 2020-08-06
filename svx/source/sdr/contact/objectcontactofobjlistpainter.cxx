@@ -74,58 +74,58 @@ void ObjectContactOfObjListPainter::ProcessDisplay(DisplayInfo& rDisplayInfo)
 {
     const sal_uInt32 nCount(GetPaintObjectCount());
 
-    if(nCount)
+    if(!nCount)
+        return;
+
+    OutputDevice* pTargetDevice = TryToGetOutputDevice();
+
+    if(!pTargetDevice)
+        return;
+
+    // update current ViewInformation2D at the ObjectContact
+    const GDIMetaFile* pMetaFile = pTargetDevice->GetConnectMetaFile();
+    const bool bOutputToRecordingMetaFile(pMetaFile && pMetaFile->IsRecord() && !pMetaFile->IsPause());
+    basegfx::B2DRange aViewRange;
+
+    // create ViewRange
+    if(!bOutputToRecordingMetaFile)
     {
-        OutputDevice* pTargetDevice = TryToGetOutputDevice();
+        // use visible pixels, but transform to world coordinates
+        const Size aOutputSizePixel(pTargetDevice->GetOutputSizePixel());
+        aViewRange = ::basegfx::B2DRange(0.0, 0.0, aOutputSizePixel.getWidth(), aOutputSizePixel.getHeight());
+        aViewRange.transform(pTargetDevice->GetInverseViewTransformation());
+    }
 
-        if(pTargetDevice)
+    // update local ViewInformation2D
+    const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D(
+        basegfx::B2DHomMatrix(),
+        pTargetDevice->GetViewTransformation(),
+        aViewRange,
+        GetXDrawPageForSdrPage(const_cast< SdrPage* >(mpProcessedPage)),
+        0.0,
+        css::uno::Sequence<css::beans::PropertyValue>());
+    updateViewInformation2D(aNewViewInformation2D);
+
+    // collect primitive data in a sequence; this will already use the updated ViewInformation2D
+    drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence;
+
+    for(sal_uInt32 a(0); a < nCount; a++)
+    {
+        const ViewObjectContact& rViewObjectContact = GetPaintObjectViewContact(a).GetViewObjectContact(*this);
+
+        xPrimitiveSequence.append(rViewObjectContact.getPrimitive2DSequenceHierarchy(rDisplayInfo));
+    }
+
+    // if there is something to show, use a vclProcessor to render it
+    if(!xPrimitiveSequence.empty())
+    {
+        std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(drawinglayer::processor2d::createProcessor2DFromOutputDevice(
+            *pTargetDevice,
+            getViewInformation2D()));
+
+        if(pProcessor2D)
         {
-            // update current ViewInformation2D at the ObjectContact
-            const GDIMetaFile* pMetaFile = pTargetDevice->GetConnectMetaFile();
-            const bool bOutputToRecordingMetaFile(pMetaFile && pMetaFile->IsRecord() && !pMetaFile->IsPause());
-            basegfx::B2DRange aViewRange;
-
-            // create ViewRange
-            if(!bOutputToRecordingMetaFile)
-            {
-                // use visible pixels, but transform to world coordinates
-                const Size aOutputSizePixel(pTargetDevice->GetOutputSizePixel());
-                aViewRange = ::basegfx::B2DRange(0.0, 0.0, aOutputSizePixel.getWidth(), aOutputSizePixel.getHeight());
-                aViewRange.transform(pTargetDevice->GetInverseViewTransformation());
-            }
-
-            // update local ViewInformation2D
-            const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D(
-                basegfx::B2DHomMatrix(),
-                pTargetDevice->GetViewTransformation(),
-                aViewRange,
-                GetXDrawPageForSdrPage(const_cast< SdrPage* >(mpProcessedPage)),
-                0.0,
-                css::uno::Sequence<css::beans::PropertyValue>());
-            updateViewInformation2D(aNewViewInformation2D);
-
-            // collect primitive data in a sequence; this will already use the updated ViewInformation2D
-            drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence;
-
-            for(sal_uInt32 a(0); a < nCount; a++)
-            {
-                const ViewObjectContact& rViewObjectContact = GetPaintObjectViewContact(a).GetViewObjectContact(*this);
-
-                xPrimitiveSequence.append(rViewObjectContact.getPrimitive2DSequenceHierarchy(rDisplayInfo));
-            }
-
-            // if there is something to show, use a vclProcessor to render it
-            if(!xPrimitiveSequence.empty())
-            {
-                std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(drawinglayer::processor2d::createProcessor2DFromOutputDevice(
-                    *pTargetDevice,
-                    getViewInformation2D()));
-
-                if(pProcessor2D)
-                {
-                    pProcessor2D->process(xPrimitiveSequence);
-                }
-            }
+            pProcessor2D->process(xPrimitiveSequence);
         }
     }
 }

@@ -39,52 +39,52 @@ namespace sdr::overlay
         {
             const sal_uInt32 nSize(maOverlayObjects.size());
 
-            if(nSize)
+            if(!nSize)
+                return;
+
+            const AntialiasingFlags nOriginalAA(rDestinationDevice.GetAntialiasing());
+            const bool bIsAntiAliasing(getDrawinglayerOpt().IsAntiAliasing());
+
+            // create processor
+            std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(drawinglayer::processor2d::createProcessor2DFromOutputDevice(
+                rDestinationDevice,
+                getCurrentViewInformation2D()));
+
+            if(pProcessor)
             {
-                const AntialiasingFlags nOriginalAA(rDestinationDevice.GetAntialiasing());
-                const bool bIsAntiAliasing(getDrawinglayerOpt().IsAntiAliasing());
-
-                // create processor
-                std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(drawinglayer::processor2d::createProcessor2DFromOutputDevice(
-                    rDestinationDevice,
-                    getCurrentViewInformation2D()));
-
-                if(pProcessor)
+                for(const auto& rpOverlayObject : maOverlayObjects)
                 {
-                    for(const auto& rpOverlayObject : maOverlayObjects)
+                    OSL_ENSURE(rpOverlayObject, "Corrupted OverlayObject List (!)");
+                    const OverlayObject& rCandidate = *rpOverlayObject;
+
+                    if(rCandidate.isVisible())
                     {
-                        OSL_ENSURE(rpOverlayObject, "Corrupted OverlayObject List (!)");
-                        const OverlayObject& rCandidate = *rpOverlayObject;
+                        const drawinglayer::primitive2d::Primitive2DContainer& rSequence = rCandidate.getOverlayObjectPrimitive2DSequence();
 
-                        if(rCandidate.isVisible())
+                        if(!rSequence.empty())
                         {
-                            const drawinglayer::primitive2d::Primitive2DContainer& rSequence = rCandidate.getOverlayObjectPrimitive2DSequence();
-
-                            if(!rSequence.empty())
+                            if(rRange.overlaps(rCandidate.getBaseRange()))
                             {
-                                if(rRange.overlaps(rCandidate.getBaseRange()))
+                                if(bIsAntiAliasing && rCandidate.allowsAntiAliase())
                                 {
-                                    if(bIsAntiAliasing && rCandidate.allowsAntiAliase())
-                                    {
-                                        rDestinationDevice.SetAntialiasing(nOriginalAA | AntialiasingFlags::EnableB2dDraw);
-                                    }
-                                    else
-                                    {
-                                        rDestinationDevice.SetAntialiasing(nOriginalAA & ~AntialiasingFlags::EnableB2dDraw);
-                                    }
-
-                                    pProcessor->process(rSequence);
+                                    rDestinationDevice.SetAntialiasing(nOriginalAA | AntialiasingFlags::EnableB2dDraw);
                                 }
+                                else
+                                {
+                                    rDestinationDevice.SetAntialiasing(nOriginalAA & ~AntialiasingFlags::EnableB2dDraw);
+                                }
+
+                                pProcessor->process(rSequence);
                             }
                         }
                     }
-
-                    pProcessor.reset();
                 }
 
-                // restore AA settings
-                rDestinationDevice.SetAntialiasing(nOriginalAA);
+                pProcessor.reset();
             }
+
+            // restore AA settings
+            rDestinationDevice.SetAntialiasing(nOriginalAA);
         }
 
         void OverlayManager::ImpStripeDefinitionChanged()
@@ -231,19 +231,19 @@ namespace sdr::overlay
 
         void OverlayManager::completeRedraw(const vcl::Region& rRegion, OutputDevice* pPreRenderDevice) const
         {
-            if(!rRegion.IsEmpty() && !maOverlayObjects.empty())
-            {
-                // check for changed MapModes. That may influence the
-                // logical size of pixel based OverlayObjects (like BitmapHandles)
-                //ImpCheckMapModeChange();
+            if(rRegion.IsEmpty() || maOverlayObjects.empty())
+                return;
 
-                // paint members
-                const tools::Rectangle aRegionBoundRect(rRegion.GetBoundRect());
-                const basegfx::B2DRange aRegionRange = vcl::unotools::b2DRectangleFromRectangle(aRegionBoundRect);
+            // check for changed MapModes. That may influence the
+            // logical size of pixel based OverlayObjects (like BitmapHandles)
+            //ImpCheckMapModeChange();
 
-                OutputDevice& rTarget = pPreRenderDevice ? *pPreRenderDevice : getOutputDevice();
-                ImpDrawMembers(aRegionRange, rTarget);
-            }
+            // paint members
+            const tools::Rectangle aRegionBoundRect(rRegion.GetBoundRect());
+            const basegfx::B2DRange aRegionRange = vcl::unotools::b2DRectangleFromRectangle(aRegionBoundRect);
+
+            OutputDevice& rTarget = pPreRenderDevice ? *pPreRenderDevice : getOutputDevice();
+            ImpDrawMembers(aRegionRange, rTarget);
         }
 
         void OverlayManager::flush()

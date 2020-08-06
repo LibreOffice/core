@@ -201,28 +201,28 @@ namespace sdr::properties
             AttributeProperties::ItemChange( nWhich, pNewItem );
 
             // #i25616#
-            if(XATTR_LINEWIDTH == nWhich && rObj.DoesSupportTextIndentingOnLineWidthChange())
+            if(!(XATTR_LINEWIDTH == nWhich && rObj.DoesSupportTextIndentingOnLineWidthChange()))
+                return;
+
+            const sal_Int32 nNewLineWidth(GetItem(XATTR_LINEWIDTH).GetValue());
+            const sal_Int32 nDifference((nNewLineWidth - nOldLineWidth) / 2);
+
+            if(!nDifference)
+                return;
+
+            const bool bLineVisible(drawing::LineStyle_NONE != GetItem(XATTR_LINESTYLE).GetValue());
+
+            if(bLineVisible)
             {
-                const sal_Int32 nNewLineWidth(GetItem(XATTR_LINEWIDTH).GetValue());
-                const sal_Int32 nDifference((nNewLineWidth - nOldLineWidth) / 2);
+                const sal_Int32 nLeftDist(GetItem(SDRATTR_TEXT_LEFTDIST).GetValue());
+                const sal_Int32 nRightDist(GetItem(SDRATTR_TEXT_RIGHTDIST).GetValue());
+                const sal_Int32 nUpperDist(GetItem(SDRATTR_TEXT_UPPERDIST).GetValue());
+                const sal_Int32 nLowerDist(GetItem(SDRATTR_TEXT_LOWERDIST).GetValue());
 
-                if(nDifference)
-                {
-                    const bool bLineVisible(drawing::LineStyle_NONE != GetItem(XATTR_LINESTYLE).GetValue());
-
-                    if(bLineVisible)
-                    {
-                        const sal_Int32 nLeftDist(GetItem(SDRATTR_TEXT_LEFTDIST).GetValue());
-                        const sal_Int32 nRightDist(GetItem(SDRATTR_TEXT_RIGHTDIST).GetValue());
-                        const sal_Int32 nUpperDist(GetItem(SDRATTR_TEXT_UPPERDIST).GetValue());
-                        const sal_Int32 nLowerDist(GetItem(SDRATTR_TEXT_LOWERDIST).GetValue());
-
-                        SetObjectItemDirect(makeSdrTextLeftDistItem(nLeftDist + nDifference));
-                        SetObjectItemDirect(makeSdrTextRightDistItem(nRightDist + nDifference));
-                        SetObjectItemDirect(makeSdrTextUpperDistItem(nUpperDist + nDifference));
-                        SetObjectItemDirect(makeSdrTextLowerDistItem(nLowerDist + nDifference));
-                    }
-                }
+                SetObjectItemDirect(makeSdrTextLeftDistItem(nLeftDist + nDifference));
+                SetObjectItemDirect(makeSdrTextRightDistItem(nRightDist + nDifference));
+                SetObjectItemDirect(makeSdrTextUpperDistItem(nUpperDist + nDifference));
+                SetObjectItemDirect(makeSdrTextLowerDistItem(nLowerDist + nDifference));
             }
         }
 
@@ -392,133 +392,133 @@ namespace sdr::properties
             // now the standard TextProperties stuff
             SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
 
-            if(!rObj.IsTextEditActive() && !rObj.IsLinkedText())
+            if(rObj.IsTextEditActive() || rObj.IsLinkedText())
+                return;
+
+            std::unique_ptr<Outliner> pOutliner = SdrMakeOutliner(OutlinerMode::OutlineObject, rObj.getSdrModelFromSdrObject());
+            const svx::ITextProvider& rTextProvider(getTextProvider());
+            sal_Int32 nText = rTextProvider.getTextCount();
+            while (nText--)
             {
-                std::unique_ptr<Outliner> pOutliner = SdrMakeOutliner(OutlinerMode::OutlineObject, rObj.getSdrModelFromSdrObject());
-                const svx::ITextProvider& rTextProvider(getTextProvider());
-                sal_Int32 nText = rTextProvider.getTextCount();
-                while (nText--)
+                SdrText* pText = rTextProvider.getText( nText );
+
+                OutlinerParaObject* pParaObj = pText ? pText->GetOutlinerParaObject() : nullptr;
+                if( !pParaObj )
+                    continue;
+
+                pOutliner->SetText(*pParaObj);
+
+                sal_Int32 nParaCount(pOutliner->GetParagraphCount());
+
+                if(nParaCount)
                 {
-                    SdrText* pText = rTextProvider.getText( nText );
+                    bool bBurnIn(false);
 
-                    OutlinerParaObject* pParaObj = pText ? pText->GetOutlinerParaObject() : nullptr;
-                    if( !pParaObj )
-                        continue;
-
-                    pOutliner->SetText(*pParaObj);
-
-                    sal_Int32 nParaCount(pOutliner->GetParagraphCount());
-
-                    if(nParaCount)
+                    for(sal_Int32 nPara = 0; nPara < nParaCount; nPara++)
                     {
-                        bool bBurnIn(false);
+                        SfxStyleSheet* pSheet = pOutliner->GetStyleSheet(nPara);
 
-                        for(sal_Int32 nPara = 0; nPara < nParaCount; nPara++)
+                        if(pSheet)
                         {
-                            SfxStyleSheet* pSheet = pOutliner->GetStyleSheet(nPara);
+                            SfxItemSet aParaSet(pOutliner->GetParaAttribs(nPara));
+                            SfxItemSet aSet(*aParaSet.GetPool());
+                            aSet.Put(pSheet->GetItemSet());
 
-                            if(pSheet)
+                            /** the next code handles a special case for paragraphs that contain a
+                                url field. The color for URL fields is either the system color for
+                                urls or the char color attribute that formats the portion in which the
+                                url field is contained.
+                                When we set a char color attribute to the paragraphs item set from the
+                                styles item set, we would have this char color attribute as an attribute
+                                that is spanned over the complete paragraph after xml import due to some
+                                problems in the xml import (using a XCursor on import so it does not know
+                                the paragraphs and can't set char attributes to paragraphs ).
+
+                                To avoid this, as soon as we try to set a char color attribute from the style
+                                we
+                                1. check if we have at least one url field in this paragraph
+                                2. if we found at least one url field, we span the char color attribute over
+                                all portions that are not url fields and remove the char color attribute
+                                from the paragraphs item set
+                            */
+
+                            bool bHasURL(false);
+
+                            if(aSet.GetItemState(EE_CHAR_COLOR) == SfxItemState::SET)
                             {
-                                SfxItemSet aParaSet(pOutliner->GetParaAttribs(nPara));
-                                SfxItemSet aSet(*aParaSet.GetPool());
-                                aSet.Put(pSheet->GetItemSet());
+                                EditEngine* pEditEngine = const_cast<EditEngine*>(&(pOutliner->GetEditEngine()));
+                                std::vector<EECharAttrib> aAttribs;
+                                pEditEngine->GetCharAttribs(nPara, aAttribs);
 
-                                /** the next code handles a special case for paragraphs that contain a
-                                    url field. The color for URL fields is either the system color for
-                                    urls or the char color attribute that formats the portion in which the
-                                    url field is contained.
-                                    When we set a char color attribute to the paragraphs item set from the
-                                    styles item set, we would have this char color attribute as an attribute
-                                    that is spanned over the complete paragraph after xml import due to some
-                                    problems in the xml import (using a XCursor on import so it does not know
-                                    the paragraphs and can't set char attributes to paragraphs ).
-
-                                    To avoid this, as soon as we try to set a char color attribute from the style
-                                    we
-                                    1. check if we have at least one url field in this paragraph
-                                    2. if we found at least one url field, we span the char color attribute over
-                                    all portions that are not url fields and remove the char color attribute
-                                    from the paragraphs item set
-                                */
-
-                                bool bHasURL(false);
-
-                                if(aSet.GetItemState(EE_CHAR_COLOR) == SfxItemState::SET)
+                                for(const auto& rAttrib : aAttribs)
                                 {
-                                    EditEngine* pEditEngine = const_cast<EditEngine*>(&(pOutliner->GetEditEngine()));
-                                    std::vector<EECharAttrib> aAttribs;
-                                    pEditEngine->GetCharAttribs(nPara, aAttribs);
-
-                                    for(const auto& rAttrib : aAttribs)
+                                    if(rAttrib.pAttr && EE_FEATURE_FIELD == rAttrib.pAttr->Which())
                                     {
-                                        if(rAttrib.pAttr && EE_FEATURE_FIELD == rAttrib.pAttr->Which())
+                                        const SvxFieldItem* pFieldItem = static_cast<const SvxFieldItem*>(rAttrib.pAttr);
+
+                                        if(pFieldItem)
                                         {
-                                            const SvxFieldItem* pFieldItem = static_cast<const SvxFieldItem*>(rAttrib.pAttr);
+                                            const SvxFieldData* pData = pFieldItem->GetField();
 
-                                            if(pFieldItem)
+                                            if(dynamic_cast<const SvxURLField*>( pData))
                                             {
-                                                const SvxFieldData* pData = pFieldItem->GetField();
-
-                                                if(dynamic_cast<const SvxURLField*>( pData))
-                                                {
-                                                    bHasURL = true;
-                                                    break;
-                                                }
+                                                bHasURL = true;
+                                                break;
                                             }
                                         }
                                     }
-
-                                    if(bHasURL)
-                                    {
-                                        SfxItemSet aColorSet(*aSet.GetPool(), svl::Items<EE_CHAR_COLOR, EE_CHAR_COLOR>{} );
-                                        aColorSet.Put(aSet, false);
-
-                                        ESelection aSel(nPara, 0);
-
-                                        for(const auto& rAttrib : aAttribs)
-                                        {
-                                            if(EE_FEATURE_FIELD == rAttrib.pAttr->Which())
-                                            {
-                                                aSel.nEndPos = rAttrib.nStart;
-
-                                                if(aSel.nStartPos != aSel.nEndPos)
-                                                    pEditEngine->QuickSetAttribs(aColorSet, aSel);
-
-                                                aSel.nStartPos = rAttrib.nEnd;
-                                            }
-                                        }
-
-                                        aSel.nEndPos = pEditEngine->GetTextLen(nPara);
-
-                                        if(aSel.nStartPos != aSel.nEndPos)
-                                        {
-                                            pEditEngine->QuickSetAttribs( aColorSet, aSel );
-                                        }
-                                    }
-
                                 }
-
-                                aSet.Put(aParaSet, false);
 
                                 if(bHasURL)
                                 {
-                                    aSet.ClearItem(EE_CHAR_COLOR);
+                                    SfxItemSet aColorSet(*aSet.GetPool(), svl::Items<EE_CHAR_COLOR, EE_CHAR_COLOR>{} );
+                                    aColorSet.Put(aSet, false);
+
+                                    ESelection aSel(nPara, 0);
+
+                                    for(const auto& rAttrib : aAttribs)
+                                    {
+                                        if(EE_FEATURE_FIELD == rAttrib.pAttr->Which())
+                                        {
+                                            aSel.nEndPos = rAttrib.nStart;
+
+                                            if(aSel.nStartPos != aSel.nEndPos)
+                                                pEditEngine->QuickSetAttribs(aColorSet, aSel);
+
+                                            aSel.nStartPos = rAttrib.nEnd;
+                                        }
+                                    }
+
+                                    aSel.nEndPos = pEditEngine->GetTextLen(nPara);
+
+                                    if(aSel.nStartPos != aSel.nEndPos)
+                                    {
+                                        pEditEngine->QuickSetAttribs( aColorSet, aSel );
+                                    }
                                 }
 
-                                pOutliner->SetParaAttribs(nPara, aSet);
-                                bBurnIn = true; // #i51163# Flag was set wrong
                             }
-                        }
 
-                        if(bBurnIn)
-                        {
-                            std::unique_ptr<OutlinerParaObject> pTemp = pOutliner->CreateParaObject(0, nParaCount);
-                            rObj.NbcSetOutlinerParaObjectForText(std::move(pTemp),pText);
+                            aSet.Put(aParaSet, false);
+
+                            if(bHasURL)
+                            {
+                                aSet.ClearItem(EE_CHAR_COLOR);
+                            }
+
+                            pOutliner->SetParaAttribs(nPara, aSet);
+                            bBurnIn = true; // #i51163# Flag was set wrong
                         }
                     }
 
-                    pOutliner->Clear();
+                    if(bBurnIn)
+                    {
+                        std::unique_ptr<OutlinerParaObject> pTemp = pOutliner->CreateParaObject(0, nParaCount);
+                        rObj.NbcSetOutlinerParaObjectForText(std::move(pTemp),pText);
+                    }
                 }
+
+                pOutliner->Clear();
             }
         }
 
@@ -535,66 +535,66 @@ namespace sdr::properties
             AttributeProperties::Notify(rBC, rHint);
 
             SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
-            if(rObj.HasText())
+            if(!rObj.HasText())
+                return;
+
+            const svx::ITextProvider& rTextProvider(getTextProvider());
+            if(dynamic_cast<const SfxStyleSheet *>(&rBC) != nullptr)
             {
-                const svx::ITextProvider& rTextProvider(getTextProvider());
-                if(dynamic_cast<const SfxStyleSheet *>(&rBC) != nullptr)
+                SfxHintId nId(rHint.GetId());
+
+                if(SfxHintId::DataChanged == nId)
                 {
-                    SfxHintId nId(rHint.GetId());
-
-                    if(SfxHintId::DataChanged == nId)
+                    sal_Int32 nText = rTextProvider.getTextCount();
+                    while (nText--)
                     {
-                        sal_Int32 nText = rTextProvider.getTextCount();
-                        while (nText--)
-                        {
-                            OutlinerParaObject* pParaObj = rTextProvider.getText( nText )->GetOutlinerParaObject();
-                            if( pParaObj )
-                                pParaObj->ClearPortionInfo();
-                        }
-                        rObj.SetTextSizeDirty();
+                        OutlinerParaObject* pParaObj = rTextProvider.getText( nText )->GetOutlinerParaObject();
+                        if( pParaObj )
+                            pParaObj->ClearPortionInfo();
+                    }
+                    rObj.SetTextSizeDirty();
 
-                        if(rObj.IsTextFrame() && rObj.NbcAdjustTextFrameWidthAndHeight())
-                        {
-                            // here only repaint wanted
-                            rObj.ActionChanged();
-                            //rObj.BroadcastObjectChange();
-                        }
-
-                        // #i101556# content of StyleSheet has changed -> new version
-                        maVersion++;
+                    if(rObj.IsTextFrame() && rObj.NbcAdjustTextFrameWidthAndHeight())
+                    {
+                        // here only repaint wanted
+                        rObj.ActionChanged();
+                        //rObj.BroadcastObjectChange();
                     }
 
-                    if(SfxHintId::Dying == nId)
+                    // #i101556# content of StyleSheet has changed -> new version
+                    maVersion++;
+                }
+
+                if(SfxHintId::Dying == nId)
+                {
+                    sal_Int32 nText = rTextProvider.getTextCount();
+                    while (nText--)
                     {
-                        sal_Int32 nText = rTextProvider.getTextCount();
-                        while (nText--)
-                        {
-                            OutlinerParaObject* pParaObj = rTextProvider.getText( nText )->GetOutlinerParaObject();
-                            if( pParaObj )
-                                pParaObj->ClearPortionInfo();
-                        }
+                        OutlinerParaObject* pParaObj = rTextProvider.getText( nText )->GetOutlinerParaObject();
+                        if( pParaObj )
+                            pParaObj->ClearPortionInfo();
                     }
                 }
-                else if(dynamic_cast<const SfxStyleSheetBasePool *>(&rBC) != nullptr)
+            }
+            else if(dynamic_cast<const SfxStyleSheetBasePool *>(&rBC) != nullptr)
+            {
+                const SfxStyleSheetModifiedHint* pExtendedHint = dynamic_cast<const SfxStyleSheetModifiedHint*>(&rHint);
+
+                if(pExtendedHint
+                    && SfxHintId::StyleSheetModified == pExtendedHint->GetId())
                 {
-                    const SfxStyleSheetModifiedHint* pExtendedHint = dynamic_cast<const SfxStyleSheetModifiedHint*>(&rHint);
+                    const OUString& aOldName(pExtendedHint->GetOldName());
+                    OUString aNewName(pExtendedHint->GetStyleSheet()->GetName());
+                    SfxStyleFamily eFamily = pExtendedHint->GetStyleSheet()->GetFamily();
 
-                    if(pExtendedHint
-                        && SfxHintId::StyleSheetModified == pExtendedHint->GetId())
+                    if(aOldName != aNewName)
                     {
-                        const OUString& aOldName(pExtendedHint->GetOldName());
-                        OUString aNewName(pExtendedHint->GetStyleSheet()->GetName());
-                        SfxStyleFamily eFamily = pExtendedHint->GetStyleSheet()->GetFamily();
-
-                        if(aOldName != aNewName)
+                        sal_Int32 nText = rTextProvider.getTextCount();
+                        while (nText--)
                         {
-                            sal_Int32 nText = rTextProvider.getTextCount();
-                            while (nText--)
-                            {
-                                OutlinerParaObject* pParaObj = rTextProvider.getText( nText )->GetOutlinerParaObject();
-                                if( pParaObj )
-                                    pParaObj->ChangeStyleSheetName(eFamily, aOldName, aNewName);
-                            }
+                            OutlinerParaObject* pParaObj = rTextProvider.getText( nText )->GetOutlinerParaObject();
+                            if( pParaObj )
+                                pParaObj->ChangeStyleSheetName(eFamily, aOldName, aNewName);
                         }
                     }
                 }

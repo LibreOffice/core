@@ -179,28 +179,28 @@ namespace drawinglayer::attribute
                 mbFormTextMirror(rSet.Get(XATTR_FORMTXTMIRROR).GetValue()),
                 mbFormTextOutline(rSet.Get(XATTR_FORMTXTOUTLINE).GetValue())
             {
-                if(getFormTextOutline())
+                if(!getFormTextOutline())
+                    return;
+
+                const StrokeAttribute aStrokeAttribute(impGetStrokeAttribute(rSet));
+
+                // also need to prepare attributes for outlines
                 {
-                    const StrokeAttribute aStrokeAttribute(impGetStrokeAttribute(rSet));
+                    const LineAttribute aLineAttribute(impGetLineAttribute(false, rSet));
+                    const sal_uInt8 nTransparence(impGetStrokeTransparence(false, rSet));
 
-                    // also need to prepare attributes for outlines
-                    {
-                        const LineAttribute aLineAttribute(impGetLineAttribute(false, rSet));
-                        const sal_uInt8 nTransparence(impGetStrokeTransparence(false, rSet));
+                    maOutline = SdrFormTextOutlineAttribute(
+                        aLineAttribute, aStrokeAttribute, nTransparence);
+                }
 
-                        maOutline = SdrFormTextOutlineAttribute(
-                            aLineAttribute, aStrokeAttribute, nTransparence);
-                    }
+                if(XFormTextShadow::NONE != getFormTextShadow())
+                {
+                    // also need to prepare attributes for shadow outlines
+                    const LineAttribute aLineAttribute(impGetLineAttribute(true, rSet));
+                    const sal_uInt8 nTransparence(impGetStrokeTransparence(true, rSet));
 
-                    if(XFormTextShadow::NONE != getFormTextShadow())
-                    {
-                        // also need to prepare attributes for shadow outlines
-                        const LineAttribute aLineAttribute(impGetLineAttribute(true, rSet));
-                        const sal_uInt8 nTransparence(impGetStrokeTransparence(true, rSet));
-
-                        maShadowOutline = SdrFormTextOutlineAttribute(
-                            aLineAttribute, aStrokeAttribute, nTransparence);
-                    }
+                    maShadowOutline = SdrFormTextOutlineAttribute(
+                        aLineAttribute, aStrokeAttribute, nTransparence);
                 }
             }
 

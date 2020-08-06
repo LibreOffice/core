@@ -85,27 +85,27 @@ namespace sdr::overlay
 
         void OverlayAnimatedBitmapEx::Trigger(sal_uInt32 nTime)
         {
-            if(getOverlayManager())
+            if(!getOverlayManager())
+                return;
+
+            // #i53216# produce event after nTime + x
+            SetTime(nTime + mnBlinkTime);
+
+            // switch state
+            if(mbOverlayState)
             {
-                // #i53216# produce event after nTime + x
-                SetTime(nTime + mnBlinkTime);
-
-                // switch state
-                if(mbOverlayState)
-                {
-                    mbOverlayState = false;
-                }
-                else
-                {
-                    mbOverlayState = true;
-                }
-
-                // re-insert me as event
-                getOverlayManager()->InsertEvent(*this);
-
-                // register change (after change)
-                objectChange();
+                mbOverlayState = false;
             }
+            else
+            {
+                mbOverlayState = true;
+            }
+
+            // re-insert me as event
+            getOverlayManager()->InsertEvent(*this);
+
+            // register change (after change)
+            objectChange();
         }
 
 } // end of namespace
