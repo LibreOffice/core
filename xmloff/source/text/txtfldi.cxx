@@ -636,18 +636,18 @@ void XMLSenderFieldImportContext::PrepareField(
     rPropSet->setPropertyValue(sPropertyFixed, Any(bFixed));
 
     // set content if fixed
-    if (bFixed)
+    if (!bFixed)
+        return;
+
+    // in organizer or styles-only mode: force update
+    if (GetImport().GetTextImport()->IsOrganizerMode() ||
+        GetImport().GetTextImport()->IsStylesOnlyMode()   )
     {
-        // in organizer or styles-only mode: force update
-        if (GetImport().GetTextImport()->IsOrganizerMode() ||
-            GetImport().GetTextImport()->IsStylesOnlyMode()   )
-        {
-            ForceUpdate(rPropSet);
-        }
-        else
-        {
-            rPropSet->setPropertyValue(sPropertyContent, Any(GetContent()));
-        }
+        ForceUpdate(rPropSet);
+    }
+    else
+    {
+        rPropSet->setPropertyValue(sPropertyContent, Any(GetContent()));
     }
 }
 
@@ -699,19 +699,19 @@ void XMLAuthorFieldImportContext::PrepareField(
     rPropSet->setPropertyValue(sPropertyFixed, Any(bFixed));
 
     // set content if fixed
-    if (bFixed)
+    if (!bFixed)
+        return;
+
+    // organizer or styles-only mode: force update
+    if (GetImport().GetTextImport()->IsOrganizerMode() ||
+        GetImport().GetTextImport()->IsStylesOnlyMode()   )
     {
-        // organizer or styles-only mode: force update
-        if (GetImport().GetTextImport()->IsOrganizerMode() ||
-            GetImport().GetTextImport()->IsStylesOnlyMode()   )
-        {
-            ForceUpdate(rPropSet);
-        }
-        else
-        {
-            aAny <<= GetContent();
-            rPropSet->setPropertyValue(sPropertyContent, aAny);
-        }
+        ForceUpdate(rPropSet);
+    }
+    else
+    {
+        aAny <<= GetContent();
+        rPropSet->setPropertyValue(sPropertyContent, aAny);
     }
 }
 
@@ -1500,39 +1500,39 @@ void XMLSimpleDocInfoImportContext::PrepareField(
 {
     //  title field in Calc has no Fixed property
     Reference<XPropertySetInfo> xPropertySetInfo(rPropertySet->getPropertySetInfo());
-    if (xPropertySetInfo->hasPropertyByName(sPropertyFixed))
+    if (!xPropertySetInfo->hasPropertyByName(sPropertyFixed))
+        return;
+
+    Any aAny;
+    rPropertySet->setPropertyValue(sPropertyFixed, Any(bFixed));
+
+    // set Content and CurrentPresentation (if fixed)
+    if (!bFixed)
+        return;
+
+    // in organizer-mode or styles-only-mode, only force update
+    if (GetImport().GetTextImport()->IsOrganizerMode() ||
+        GetImport().GetTextImport()->IsStylesOnlyMode()   )
     {
-        Any aAny;
-        rPropertySet->setPropertyValue(sPropertyFixed, Any(bFixed));
+        ForceUpdate(rPropertySet);
+    }
+    else
+    {
+        // set content (author, if that's the name) and current
+        // presentation
+        aAny <<= GetContent();
 
-        // set Content and CurrentPresentation (if fixed)
-        if (bFixed)
+        if (bFixed && bHasAuthor)
         {
-            // in organizer-mode or styles-only-mode, only force update
-            if (GetImport().GetTextImport()->IsOrganizerMode() ||
-                GetImport().GetTextImport()->IsStylesOnlyMode()   )
-            {
-                ForceUpdate(rPropertySet);
-            }
-            else
-            {
-                // set content (author, if that's the name) and current
-                // presentation
-                aAny <<= GetContent();
-
-                if (bFixed && bHasAuthor)
-                {
-                    rPropertySet->setPropertyValue(sPropertyAuthor, aAny);
-                }
-
-                if (bFixed && bHasContent)
-                {
-                    rPropertySet->setPropertyValue(sPropertyContent, aAny);
-                }
-
-                rPropertySet->setPropertyValue(sPropertyCurrentPresentation, aAny);
-            }
+            rPropertySet->setPropertyValue(sPropertyAuthor, aAny);
         }
+
+        if (bFixed && bHasContent)
+        {
+            rPropertySet->setPropertyValue(sPropertyContent, aAny);
+        }
+
+        rPropertySet->setPropertyValue(sPropertyCurrentPresentation, aAny);
     }
 }
 
@@ -1622,20 +1622,20 @@ void XMLRevisionDocInfoImportContext::PrepareField(
 
     // set revision number
     // if fixed, if not in organizer-mode, if not in styles-only-mode
-    if (bFixed)
+    if (!bFixed)
+        return;
+
+    if ( GetImport().GetTextImport()->IsOrganizerMode() ||
+         GetImport().GetTextImport()->IsStylesOnlyMode()   )
     {
-        if ( GetImport().GetTextImport()->IsOrganizerMode() ||
-             GetImport().GetTextImport()->IsStylesOnlyMode()   )
+        ForceUpdate(rPropertySet);
+    }
+    else
+    {
+        sal_Int32 nTmp;
+        if (::sax::Converter::convertNumber(nTmp, GetContent()))
         {
-            ForceUpdate(rPropertySet);
-        }
-        else
-        {
-            sal_Int32 nTmp;
-            if (::sax::Converter::convertNumber(nTmp, GetContent()))
-            {
-                rPropertySet->setPropertyValue(sPropertyRevision, Any(nTmp));
-            }
+            rPropertySet->setPropertyValue(sPropertyRevision, Any(nTmp));
         }
     }
 }
@@ -2256,21 +2256,21 @@ void XMLCountFieldImportContext::PrepareField(
     // properties optional
     // (only page count, but do for all to save common implementation)
 
-    if (xPropertySet->getPropertySetInfo()->
+    if (!xPropertySet->getPropertySetInfo()->
         hasPropertyByName(sPropertyNumberingType))
+        return;
+
+    sal_Int16 nNumType;
+    if( bNumberFormatOK )
     {
-        sal_Int16 nNumType;
-        if( bNumberFormatOK )
-        {
-            nNumType= style::NumberingType::ARABIC;
-            GetImport().GetMM100UnitConverter().convertNumFormat( nNumType,
-                                                    sNumberFormat,
-                                                    sLetterSync );
-        }
-        else
-            nNumType = style::NumberingType::PAGE_DESCRIPTOR;
-        xPropertySet->setPropertyValue(sPropertyNumberingType, Any(nNumType));
+        nNumType= style::NumberingType::ARABIC;
+        GetImport().GetMM100UnitConverter().convertNumFormat( nNumType,
+                                                sNumberFormat,
+                                                sLetterSync );
     }
+    else
+        nNumType = style::NumberingType::PAGE_DESCRIPTOR;
+    xPropertySet->setPropertyValue(sPropertyNumberingType, Any(nNumType));
 }
 
 const char* XMLCountFieldImportContext::MapTokenToServiceName(
@@ -2777,54 +2777,54 @@ void XMLDdeFieldDeclImportContext::StartElement(
     }
 
     // valid data?
-    if (bNameOK && bCommandApplicationOK && bCommandTopicOK && bCommandItemOK)
+    if (!(bNameOK && bCommandApplicationOK && bCommandTopicOK && bCommandItemOK))
+        return;
+
+    // create DDE TextFieldMaster
+    Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),
+                                             UNO_QUERY);
+    if( !xFactory.is() )
+        return;
+
+    /* #i6432# There might be multiple occurrences of one DDE
+       declaration if it is used in more than one of
+       header/footer/body. createInstance will throw an exception if we
+       try to create the second, third, etc. instance of such a
+       declaration. Thus we ignore the exception. Otherwise this will
+       lead to an unloadable document. */
+    try
     {
-        // create DDE TextFieldMaster
-        Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),
-                                                 UNO_QUERY);
-        if( xFactory.is() )
+        Reference<XInterface> xIfc =
+            xFactory->createInstance(OUStringLiteral(sAPI_fieldmaster_prefix) + sAPI_dde);
+        if( xIfc.is() )
         {
-            /* #i6432# There might be multiple occurrences of one DDE
-               declaration if it is used in more than one of
-               header/footer/body. createInstance will throw an exception if we
-               try to create the second, third, etc. instance of such a
-               declaration. Thus we ignore the exception. Otherwise this will
-               lead to an unloadable document. */
-            try
+            Reference<XPropertySet> xPropSet( xIfc, UNO_QUERY );
+            if (xPropSet.is() &&
+                xPropSet->getPropertySetInfo()->hasPropertyByName(
+                                                                  "DDECommandType"))
             {
-                Reference<XInterface> xIfc =
-                    xFactory->createInstance(OUStringLiteral(sAPI_fieldmaster_prefix) + sAPI_dde);
-                if( xIfc.is() )
-                {
-                    Reference<XPropertySet> xPropSet( xIfc, UNO_QUERY );
-                    if (xPropSet.is() &&
-                        xPropSet->getPropertySetInfo()->hasPropertyByName(
-                                                                          "DDECommandType"))
-                    {
-                        xPropSet->setPropertyValue(sAPI_name, Any(sName));
+                xPropSet->setPropertyValue(sAPI_name, Any(sName));
 
-                        xPropSet->setPropertyValue("DDECommandType", Any(sCommandApplication));
+                xPropSet->setPropertyValue("DDECommandType", Any(sCommandApplication));
 
-                        xPropSet->setPropertyValue("DDECommandFile", Any(sCommandTopic));
+                xPropSet->setPropertyValue("DDECommandFile", Any(sCommandTopic));
 
-                        xPropSet->setPropertyValue("DDECommandElement",
-                                                   Any(sCommandItem));
+                xPropSet->setPropertyValue("DDECommandElement",
+                                           Any(sCommandItem));
 
-                        xPropSet->setPropertyValue("IsAutomaticUpdate",
-                                                   Any(bUpdate));
-                    }
-                    // else: ignore (can't get XPropertySet, or DDE
-                    //               properties are not supported)
-                }
-                // else: ignore
+                xPropSet->setPropertyValue("IsAutomaticUpdate",
+                                           Any(bUpdate));
             }
-            catch (const Exception&)
-            {
-                //ignore
-            }
+            // else: ignore (can't get XPropertySet, or DDE
+            //               properties are not supported)
         }
         // else: ignore
     }
+    catch (const Exception&)
+    {
+        //ignore
+    }
+    // else: ignore
     // else: ignore
 }
 
@@ -2855,51 +2855,45 @@ void XMLDdeFieldImportContext::ProcessAttribute(
 
 void XMLDdeFieldImportContext::EndElement()
 {
-    if (bValid)
+    if (!bValid)
+        return;
+
+    // find master
+    OUString sMasterName = OUStringLiteral(sAPI_fieldmaster_prefix) + sAPI_dde + "." + sName;
+
+    Reference<XTextFieldsSupplier> xTextFieldsSupp(GetImport().GetModel(),
+                                                   UNO_QUERY);
+    Reference<container::XNameAccess> xFieldMasterNameAccess =
+        xTextFieldsSupp->getTextFieldMasters();
+
+    if (!xFieldMasterNameAccess->hasByName(sMasterName))
+        return;
+
+    Reference<XPropertySet> xMaster;
+    Any aAny = xFieldMasterNameAccess->getByName(sMasterName);
+    aAny >>= xMaster;
+    //apply the content to the master
+    xMaster->setPropertyValue( sPropertyContent, uno::makeAny( GetContent()));
+    // master exists: create text field and attach
+    Reference<XPropertySet> xField;
+    OUString sFieldName = OUStringLiteral(sAPI_textfield_prefix) + sAPI_dde;
+    if (!CreateField(xField, sFieldName))
+        return;
+
+    Reference<XDependentTextField> xDepTextField(xField,UNO_QUERY);
+    xDepTextField->attachTextFieldMaster(xMaster);
+
+    // attach field to document
+    Reference<XTextContent> xTextContent(xField, UNO_QUERY);
+    if (xTextContent.is())
     {
-        // find master
-        OUStringBuffer sBuf;
-        sBuf.append(sAPI_fieldmaster_prefix);
-        sBuf.append(sAPI_dde);
-        sBuf.append('.');
-        sBuf.append(sName);
-        OUString sMasterName = sBuf.makeStringAndClear();
+        GetImportHelper().InsertTextContent(xTextContent);
 
-        Reference<XTextFieldsSupplier> xTextFieldsSupp(GetImport().GetModel(),
-                                                       UNO_QUERY);
-        Reference<container::XNameAccess> xFieldMasterNameAccess =
-            xTextFieldsSupp->getTextFieldMasters();
-
-        if (xFieldMasterNameAccess->hasByName(sMasterName))
-        {
-            Reference<XPropertySet> xMaster;
-            Any aAny = xFieldMasterNameAccess->getByName(sMasterName);
-            aAny >>= xMaster;
-            //apply the content to the master
-            xMaster->setPropertyValue( sPropertyContent, uno::makeAny( GetContent()));
-            // master exists: create text field and attach
-            Reference<XPropertySet> xField;
-            sBuf.append(sAPI_textfield_prefix);
-            sBuf.append(sAPI_dde);
-            if (CreateField(xField, sBuf.makeStringAndClear()))
-            {
-                Reference<XDependentTextField> xDepTextField(xField,UNO_QUERY);
-                xDepTextField->attachTextFieldMaster(xMaster);
-
-                // attach field to document
-                Reference<XTextContent> xTextContent(xField, UNO_QUERY);
-                if (xTextContent.is())
-                {
-                    GetImportHelper().InsertTextContent(xTextContent);
-
-                    // we're lucky. nothing else to prepare.
-                }
-                // else: fail, because text content could not be created
-            }
-            // else: fail, because field could not be created
-        }
-        // else: fail, because no master was found (faulty document?!)
+        // we're lucky. nothing else to prepare.
     }
+    // else: fail, because text content could not be created
+    // else: fail, because field could not be created
+    // else: fail, because no master was found (faulty document?!)
     // not valid: ignore
 }
 

@@ -280,60 +280,62 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
     OUString sContourPolyPolygon("ContourPolyPolygon");
     Reference < XPropertySetInfo > xPropSetInfo = rPropSet->getPropertySetInfo();
 
-    if(xPropSetInfo->hasPropertyByName(sContourPolyPolygon) && nWidth > 0 && nHeight > 0 && bPixelWidth == bPixelHeight && (bPath ? sD : sPoints).getLength())
+    if(!xPropSetInfo->hasPropertyByName(sContourPolyPolygon) ||
+        nWidth <= 0 || nHeight <= 0 || bPixelWidth != bPixelHeight ||
+        !(bPath ? sD : sPoints).getLength())
+        return;
+
+    const SdXMLImExViewBox aViewBox( sViewBox, GetImport().GetMM100UnitConverter());
+    basegfx::B2DPolyPolygon aPolyPolygon;
+
+    if( bPath )
     {
-        const SdXMLImExViewBox aViewBox( sViewBox, GetImport().GetMM100UnitConverter());
-        basegfx::B2DPolyPolygon aPolyPolygon;
+        basegfx::utils::importFromSvgD(aPolyPolygon, sD, GetImport().needFixPositionAfterZ(), nullptr);
+    }
+    else
+    {
+        basegfx::B2DPolygon aPolygon;
 
-        if( bPath )
+        if(basegfx::utils::importFromSvgPoints(aPolygon, sPoints))
         {
-            basegfx::utils::importFromSvgD(aPolyPolygon, sD, GetImport().needFixPositionAfterZ(), nullptr);
+            aPolyPolygon = basegfx::B2DPolyPolygon(aPolygon);
         }
-        else
+    }
+
+    if(aPolyPolygon.count())
+    {
+        const basegfx::B2DRange aSourceRange(
+            aViewBox.GetX(), aViewBox.GetY(),
+            aViewBox.GetX() + aViewBox.GetWidth(), aViewBox.GetY() + aViewBox.GetHeight());
+        const basegfx::B2DRange aTargetRange(
+            0.0, 0.0,
+            nWidth, nHeight);
+
+        if(!aSourceRange.equal(aTargetRange))
         {
-            basegfx::B2DPolygon aPolygon;
-
-            if(basegfx::utils::importFromSvgPoints(aPolygon, sPoints))
-            {
-                aPolyPolygon = basegfx::B2DPolyPolygon(aPolygon);
-            }
-        }
-
-        if(aPolyPolygon.count())
-        {
-            const basegfx::B2DRange aSourceRange(
-                aViewBox.GetX(), aViewBox.GetY(),
-                aViewBox.GetX() + aViewBox.GetWidth(), aViewBox.GetY() + aViewBox.GetHeight());
-            const basegfx::B2DRange aTargetRange(
-                0.0, 0.0,
-                nWidth, nHeight);
-
-            if(!aSourceRange.equal(aTargetRange))
-            {
-                aPolyPolygon.transform(
-                    basegfx::utils::createSourceRangeTargetRangeTransform(
-                        aSourceRange,
-                        aTargetRange));
-            }
-
-            css::drawing::PointSequenceSequence aPointSequenceSequence;
-            basegfx::utils::B2DPolyPolygonToUnoPointSequenceSequence(aPolyPolygon, aPointSequenceSequence);
-            xPropSet->setPropertyValue( sContourPolyPolygon, Any(aPointSequenceSequence) );
+            aPolyPolygon.transform(
+                basegfx::utils::createSourceRangeTargetRangeTransform(
+                    aSourceRange,
+                    aTargetRange));
         }
 
-        const OUString sIsPixelContour("IsPixelContour");
+        css::drawing::PointSequenceSequence aPointSequenceSequence;
+        basegfx::utils::B2DPolyPolygonToUnoPointSequenceSequence(aPolyPolygon, aPointSequenceSequence);
+        xPropSet->setPropertyValue( sContourPolyPolygon, Any(aPointSequenceSequence) );
+    }
 
-        if( xPropSetInfo->hasPropertyByName( sIsPixelContour ) )
-        {
-            xPropSet->setPropertyValue( sIsPixelContour, Any(bPixelWidth) );
-        }
+    const OUString sIsPixelContour("IsPixelContour");
 
-        const OUString sIsAutomaticContour("IsAutomaticContour");
+    if( xPropSetInfo->hasPropertyByName( sIsPixelContour ) )
+    {
+        xPropSet->setPropertyValue( sIsPixelContour, Any(bPixelWidth) );
+    }
 
-        if( xPropSetInfo->hasPropertyByName( sIsAutomaticContour ) )
-        {
-            xPropSet->setPropertyValue( sIsAutomaticContour, Any(bAuto) );
-        }
+    const OUString sIsAutomaticContour("IsAutomaticContour");
+
+    if( xPropSetInfo->hasPropertyByName( sIsAutomaticContour ) )
+    {
+        xPropSet->setPropertyValue( sIsAutomaticContour, Any(bAuto) );
     }
 }
 
@@ -731,46 +733,46 @@ void XMLTextFrameContext_Impl::Create()
         GetImport().GetShapeImport()->shapeWithZIndexAdded( xShape, nZIndex );
     }
 
-    if( XML_TEXT_FRAME_TEXTBOX == nType )
-    {
-        xTextImportHelper->ConnectFrameChains( sName, sNextName, xPropSet );
-        Reference < XTextFrame > xTxtFrame( xPropSet, UNO_QUERY );
-        Reference < XText > xTxt = xTxtFrame->getText();
-        xOldTextCursor = xTextImportHelper->GetCursor();
-        xTextImportHelper->SetCursor( xTxt->createTextCursor() );
+    if( XML_TEXT_FRAME_TEXTBOX != nType )
+        return;
 
-        // remember old list item and block (#89892#) and reset them
-        // for the text frame
-        xTextImportHelper->PushListContext();
-        mbListContextPushed = true;
-    }
+    xTextImportHelper->ConnectFrameChains( sName, sNextName, xPropSet );
+    Reference < XTextFrame > xTxtFrame( xPropSet, UNO_QUERY );
+    Reference < XText > xTxt = xTxtFrame->getText();
+    xOldTextCursor = xTextImportHelper->GetCursor();
+    xTextImportHelper->SetCursor( xTxt->createTextCursor() );
+
+    // remember old list item and block (#89892#) and reset them
+    // for the text frame
+    xTextImportHelper->PushListContext();
+    mbListContextPushed = true;
 }
 
 void XMLTextFrameContext::removeGraphicFromImportContext(const SvXMLImportContext& rContext)
 {
     const XMLTextFrameContext_Impl* pXMLTextFrameContext_Impl = dynamic_cast< const XMLTextFrameContext_Impl* >(&rContext);
 
-    if(pXMLTextFrameContext_Impl)
+    if(!pXMLTextFrameContext_Impl)
+        return;
+
+    try
     {
-        try
-        {
-            // just dispose to delete
-            uno::Reference< lang::XComponent > xComp(pXMLTextFrameContext_Impl->GetPropSet(), UNO_QUERY);
+        // just dispose to delete
+        uno::Reference< lang::XComponent > xComp(pXMLTextFrameContext_Impl->GetPropSet(), UNO_QUERY);
 
-            // Inform shape importer about the removal so it can adjust
-            // z-indexes.
-            uno::Reference<drawing::XShape> xShape(xComp, uno::UNO_QUERY);
-            GetImport().GetShapeImport()->shapeRemoved(xShape);
+        // Inform shape importer about the removal so it can adjust
+        // z-indexes.
+        uno::Reference<drawing::XShape> xShape(xComp, uno::UNO_QUERY);
+        GetImport().GetShapeImport()->shapeRemoved(xShape);
 
-            if(xComp.is())
-            {
-                xComp->dispose();
-            }
-        }
-        catch( uno::Exception& )
+        if(xComp.is())
         {
-            OSL_FAIL( "Error in cleanup of multiple graphic object import (!)" );
+            xComp->dispose();
         }
+    }
+    catch( uno::Exception& )
+    {
+        OSL_FAIL( "Error in cleanup of multiple graphic object import (!)" );
     }
 }
 
@@ -1295,20 +1297,20 @@ void XMLTextFrameContext_Impl::SetHyperlink( const OUString& rHRef,
 void XMLTextFrameContext_Impl::SetName()
 {
     Reference<XNamed> xNamed(xPropSet, UNO_QUERY);
-    if (!m_sOrigName.isEmpty() && xNamed.is())
+    if (!(!m_sOrigName.isEmpty() && xNamed.is()))
+        return;
+
+    OUString const name(xNamed->getName());
+    if (name != m_sOrigName)
     {
-        OUString const name(xNamed->getName());
-        if (name != m_sOrigName)
+        try
         {
-            try
-            {
-                xNamed->setName(m_sOrigName);
-            }
-            catch (uno::Exception const&)
-            {   // fdo#71698 document contains 2 frames with same draw:name
-                TOOLS_INFO_EXCEPTION("xmloff.text", "SetName(): exception setting \""
-                        << m_sOrigName << "\"");
-            }
+            xNamed->setName(m_sOrigName);
+        }
+        catch (uno::Exception const&)
+        {   // fdo#71698 document contains 2 frames with same draw:name
+            TOOLS_INFO_EXCEPTION("xmloff.text", "SetName(): exception setting \""
+                    << m_sOrigName << "\"");
         }
     }
 }
@@ -1414,36 +1416,35 @@ void XMLTextFrameContext::EndElement()
         (pMultiContext.is()) ? pMultiContext.get() : m_xImplContext.get();
     XMLTextFrameContext_Impl *pImpl = const_cast<XMLTextFrameContext_Impl*>(dynamic_cast< const XMLTextFrameContext_Impl*>( pContext ));
     assert(!pMultiContext.is() || pImpl);
-    if( pImpl )
-    {
-        pImpl->CreateIfNotThere();
+    if( !pImpl )
+        return;
 
-        // fdo#68839: in case the surviving image was not the first one,
-        // it will have a counter added to its name - set the original name
-        if (pMultiContext.is()) // do this only when necessary; esp. not for text
-        {                  // frames that may have entries in GetRenameMap()!
-            pImpl->SetName();
-        }
+    pImpl->CreateIfNotThere();
 
-        if( !m_sTitle.isEmpty() )
-        {
-            pImpl->SetTitle( m_sTitle );
-        }
-        if( !m_sDesc.isEmpty() )
-        {
-            pImpl->SetDesc( m_sDesc );
-        }
-
-        if( m_pHyperlink )
-        {
-            pImpl->SetHyperlink( m_pHyperlink->GetHRef(), m_pHyperlink->GetName(),
-                          m_pHyperlink->GetTargetFrameName(), m_pHyperlink->GetMap() );
-            m_pHyperlink.reset();
-        }
-
-        GetImport().GetTextImport()->StoreLastImportedFrameName(pImpl->GetOrigName());
-
+    // fdo#68839: in case the surviving image was not the first one,
+    // it will have a counter added to its name - set the original name
+    if (pMultiContext.is()) // do this only when necessary; esp. not for text
+    {                  // frames that may have entries in GetRenameMap()!
+        pImpl->SetName();
     }
+
+    if( !m_sTitle.isEmpty() )
+    {
+        pImpl->SetTitle( m_sTitle );
+    }
+    if( !m_sDesc.isEmpty() )
+    {
+        pImpl->SetDesc( m_sDesc );
+    }
+
+    if( m_pHyperlink )
+    {
+        pImpl->SetHyperlink( m_pHyperlink->GetHRef(), m_pHyperlink->GetName(),
+                      m_pHyperlink->GetTargetFrameName(), m_pHyperlink->GetMap() );
+        m_pHyperlink.reset();
+    }
+
+    GetImport().GetTextImport()->StoreLastImportedFrameName(pImpl->GetOrigName());
 }
 
 SvXMLImportContextRef XMLTextFrameContext::CreateChildContext(

@@ -130,98 +130,98 @@ XMLTextListBlockContext::XMLTextListBlockContext(
     if( !mxNumRules.is() )
         return;
 
-    if ( mnLevel == 0 ) // root <list> element
+    if ( mnLevel != 0 ) // root <list> element
+        return;
+
+    XMLTextListsHelper& rTextListsHelper( mrTxtImport.GetTextListHelper() );
+    // Inconsistent behavior regarding lists (#i92811#)
+    OUString sListStyleDefaultListId;
     {
-        XMLTextListsHelper& rTextListsHelper( mrTxtImport.GetTextListHelper() );
-        // Inconsistent behavior regarding lists (#i92811#)
-        OUString sListStyleDefaultListId;
+        uno::Reference< beans::XPropertySet > xNumRuleProps( mxNumRules, UNO_QUERY );
+        if ( xNumRuleProps.is() )
         {
-            uno::Reference< beans::XPropertySet > xNumRuleProps( mxNumRules, UNO_QUERY );
-            if ( xNumRuleProps.is() )
+            uno::Reference< beans::XPropertySetInfo > xNumRulePropSetInfo(
+                                        xNumRuleProps->getPropertySetInfo());
+            if (xNumRulePropSetInfo.is() &&
+                xNumRulePropSetInfo->hasPropertyByName(
+                     s_PropNameDefaultListId))
             {
-                uno::Reference< beans::XPropertySetInfo > xNumRulePropSetInfo(
-                                            xNumRuleProps->getPropertySetInfo());
-                if (xNumRulePropSetInfo.is() &&
-                    xNumRulePropSetInfo->hasPropertyByName(
-                         s_PropNameDefaultListId))
+                xNumRuleProps->getPropertyValue(s_PropNameDefaultListId)
+                    >>= sListStyleDefaultListId;
+                SAL_WARN_IF( sListStyleDefaultListId.isEmpty(), "xmloff",
+                            "no default list id found at numbering rules instance. Serious defect." );
+            }
+        }
+    }
+    if ( msListId.isEmpty() )  // no text:id property found
+    {
+        sal_Int32 nUPD( 0 );
+        sal_Int32 nBuild( 0 );
+        const bool bBuildIdFound = GetImport().getBuildIds( nUPD, nBuild );
+        if ( rImport.IsTextDocInOOoFileFormat() ||
+             ( bBuildIdFound && nUPD == 680 ) )
+        {
+            /* handling former documents written by OpenOffice.org:
+               use default list id of numbering rules instance, if existing
+               (#i92811#)
+            */
+            if ( !sListStyleDefaultListId.isEmpty() )
+            {
+                msListId = sListStyleDefaultListId;
+                if ( !bIsContinueNumberingAttributePresent &&
+                     !mbRestartNumbering &&
+                     rTextListsHelper.IsListProcessed( msListId ) )
                 {
-                    xNumRuleProps->getPropertyValue(s_PropNameDefaultListId)
-                        >>= sListStyleDefaultListId;
-                    SAL_WARN_IF( sListStyleDefaultListId.isEmpty(), "xmloff",
-                                "no default list id found at numbering rules instance. Serious defect." );
+                    mbRestartNumbering = true;
                 }
             }
         }
-        if ( msListId.isEmpty() )  // no text:id property found
+        if ( msListId.isEmpty() )
         {
-            sal_Int32 nUPD( 0 );
-            sal_Int32 nBuild( 0 );
-            const bool bBuildIdFound = GetImport().getBuildIds( nUPD, nBuild );
-            if ( rImport.IsTextDocInOOoFileFormat() ||
-                 ( bBuildIdFound && nUPD == 680 ) )
-            {
-                /* handling former documents written by OpenOffice.org:
-                   use default list id of numbering rules instance, if existing
-                   (#i92811#)
-                */
-                if ( !sListStyleDefaultListId.isEmpty() )
-                {
-                    msListId = sListStyleDefaultListId;
-                    if ( !bIsContinueNumberingAttributePresent &&
-                         !mbRestartNumbering &&
-                         rTextListsHelper.IsListProcessed( msListId ) )
-                    {
-                        mbRestartNumbering = true;
-                    }
-                }
-            }
-            if ( msListId.isEmpty() )
-            {
-                // generate a new list id for the list
-                msListId = rTextListsHelper.GenerateNewListId();
-            }
+            // generate a new list id for the list
+            msListId = rTextListsHelper.GenerateNewListId();
         }
+    }
 
-        if ( bIsContinueNumberingAttributePresent && !mbRestartNumbering &&
-             msContinueListId.isEmpty() )
+    if ( bIsContinueNumberingAttributePresent && !mbRestartNumbering &&
+         msContinueListId.isEmpty() )
+    {
+        const OUString& Last( rTextListsHelper.GetLastProcessedListId() );
+        if ( rTextListsHelper.GetListStyleOfLastProcessedList() == msListStyleName
+             && Last != msListId )
         {
-            const OUString& Last( rTextListsHelper.GetLastProcessedListId() );
-            if ( rTextListsHelper.GetListStyleOfLastProcessedList() == msListStyleName
-                 && Last != msListId )
-            {
-                msContinueListId = Last;
-            }
+            msContinueListId = Last;
         }
+    }
 
-        if ( !msContinueListId.isEmpty() )
+    if ( !msContinueListId.isEmpty() )
+    {
+        if ( !rTextListsHelper.IsListProcessed( msContinueListId ) )
         {
-            if ( !rTextListsHelper.IsListProcessed( msContinueListId ) )
+            msContinueListId.clear();
+        }
+        else
+        {
+            // search continue list chain for master list and
+            // continue the master list.
+            OUString sTmpStr =
+                rTextListsHelper.GetContinueListIdOfProcessedList( msContinueListId );
+            while ( !sTmpStr.isEmpty() )
             {
-                msContinueListId.clear();
-            }
-            else
-            {
-                // search continue list chain for master list and
-                // continue the master list.
-                OUString sTmpStr =
+                msContinueListId = sTmpStr;
+
+                sTmpStr =
                     rTextListsHelper.GetContinueListIdOfProcessedList( msContinueListId );
-                while ( !sTmpStr.isEmpty() )
-                {
-                    msContinueListId = sTmpStr;
-
-                    sTmpStr =
-                        rTextListsHelper.GetContinueListIdOfProcessedList( msContinueListId );
-                }
             }
         }
+    }
 
-        if ( !rTextListsHelper.IsListProcessed( msListId ) )
-        {
-            // Inconsistent behavior regarding lists (#i92811#)
-            rTextListsHelper.KeepListAsProcessed(
-                msListId, msListStyleName, msContinueListId,
-                sListStyleDefaultListId );
-        }
+    if ( !rTextListsHelper.IsListProcessed( msListId ) )
+    {
+        // Inconsistent behavior regarding lists (#i92811#)
+        rTextListsHelper.KeepListAsProcessed(
+            msListId, msListStyleName, msContinueListId,
+            sListStyleDefaultListId );
     }
 }
 

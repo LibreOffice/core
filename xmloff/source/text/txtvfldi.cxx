@@ -713,96 +713,97 @@ XMLVariableDeclImportContext::XMLVariableDeclImportContext(
     sal_Int8 nNumLevel(-1);
     OUString sName;
 
-    if ( (XML_NAMESPACE_TEXT == nPrfx) &&
-         ( ( IsXMLToken( rLocalName, XML_SEQUENCE_DECL )) ||
-           ( IsXMLToken( rLocalName, XML_VARIABLE_DECL)) ||
-           ( IsXMLToken( rLocalName, XML_USER_FIELD_DECL))    )) {
+    if ( (XML_NAMESPACE_TEXT != nPrfx) ||
+         !( ( IsXMLToken( rLocalName, XML_SEQUENCE_DECL )) ||
+            ( IsXMLToken( rLocalName, XML_VARIABLE_DECL)) ||
+            ( IsXMLToken( rLocalName, XML_USER_FIELD_DECL)) ) )
+        return;
 
-        // TODO: check validity (need name!)
 
-        // parse attributes
-        sal_Int16 nLength = xAttrList->getLength();
-        for(sal_Int16 i=0; i<nLength; i++) {
+    // TODO: check validity (need name!)
 
-            OUString sLocalName;
-            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-                GetKeyByAttrName( xAttrList->getNameByIndex(i), &sLocalName );
+    // parse attributes
+    sal_Int16 nLength = xAttrList->getLength();
+    for(sal_Int16 i=0; i<nLength; i++) {
 
-            sal_uInt16 nToken = rHlp.
-                GetTextFieldAttrTokenMap().Get(nPrefix, sLocalName);
+        OUString sLocalName;
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+            GetKeyByAttrName( xAttrList->getNameByIndex(i), &sLocalName );
 
-            switch (nToken)
-            {
-                case XML_TOK_TEXTFIELD_NAME:
-                    sName = xAttrList->getValueByIndex(i);
-                    break;
-                case XML_TOK_TEXTFIELD_NUMBERING_LEVEL:
-                {
-                    sal_Int32 nLevel;
-                    bool const bRet = ::sax::Converter::convertNumber(
-                        nLevel, xAttrList->getValueByIndex(i), 0,
-                        GetImport().GetTextImport()->GetChapterNumbering()->
-                                                                   getCount());
-                    if (bRet)
-                    {
-                        nNumLevel = static_cast< sal_Int8 >( nLevel-1 ); // API numbers -1..9
-                    }
-                    break;
-                }
-                case XML_TOK_TEXTFIELD_NUMBERING_SEPARATOR:
-                    cSeparationChar =
-                        static_cast<char>(xAttrList->getValueByIndex(i).toChar());
-                    break;
+        sal_uInt16 nToken = rHlp.
+            GetTextFieldAttrTokenMap().Get(nPrefix, sLocalName);
 
-                default:
-                    // delegate to value helper
-                    aValueHelper.ProcessAttribute(nToken,
-                                                  xAttrList->getValueByIndex(i));
-                    break;
-            }
-        }
-
-        Reference<XPropertySet> xFieldMaster;
-        if (FindFieldMaster(xFieldMaster, GetImport(), rHlp,
-                            sName, eVarType))
+        switch (nToken)
         {
-            // now we have a field master: process attributes!
-            Any aAny;
-
-            switch (eVarType)
-            {
-            case VarTypeSequence:
-                xFieldMaster->setPropertyValue("ChapterNumberingLevel", Any(nNumLevel));
-
-                if (nNumLevel >= 0)
-                {
-                    OUString sStr(&cSeparationChar, 1);
-                    xFieldMaster->setPropertyValue(
-                        "NumberingSeparator", Any(sStr));
-                }
+            case XML_TOK_TEXTFIELD_NAME:
+                sName = xAttrList->getValueByIndex(i);
                 break;
-            case VarTypeSimple:
-                {
-                    // set string or non-string SubType (#93192#)
-                    // The SubType was already set in the FindFieldMaster
-                    // method, but it needs to be adjusted if it's a string.
-                    aAny <<= aValueHelper.IsStringValue()
-                        ? SetVariableType::STRING : SetVariableType::VAR;
-                    xFieldMaster->setPropertyValue(sAPI_sub_type, aAny);
-                }
-                break;
-            case VarTypeUserField:
+            case XML_TOK_TEXTFIELD_NUMBERING_LEVEL:
             {
-                bool bTmp = !aValueHelper.IsStringValue();
-                xFieldMaster->setPropertyValue("IsExpression", Any(bTmp));
-                aValueHelper.PrepareField(xFieldMaster);
+                sal_Int32 nLevel;
+                bool const bRet = ::sax::Converter::convertNumber(
+                    nLevel, xAttrList->getValueByIndex(i), 0,
+                    GetImport().GetTextImport()->GetChapterNumbering()->
+                                                               getCount());
+                if (bRet)
+                {
+                    nNumLevel = static_cast< sal_Int8 >( nLevel-1 ); // API numbers -1..9
+                }
                 break;
             }
+            case XML_TOK_TEXTFIELD_NUMBERING_SEPARATOR:
+                cSeparationChar =
+                    static_cast<char>(xAttrList->getValueByIndex(i).toChar());
+                break;
+
             default:
-                OSL_FAIL("unknown varfield type");
-            } // switch
-        } // else: no field master found/constructed
-    } // else: no sequence-decl
+                // delegate to value helper
+                aValueHelper.ProcessAttribute(nToken,
+                                              xAttrList->getValueByIndex(i));
+                break;
+        }
+    }
+
+    Reference<XPropertySet> xFieldMaster;
+    if (!FindFieldMaster(xFieldMaster, GetImport(), rHlp,
+                        sName, eVarType))
+        return;
+
+    // now we have a field master: process attributes!
+    Any aAny;
+
+    switch (eVarType)
+    {
+    case VarTypeSequence:
+        xFieldMaster->setPropertyValue("ChapterNumberingLevel", Any(nNumLevel));
+
+        if (nNumLevel >= 0)
+        {
+            OUString sStr(&cSeparationChar, 1);
+            xFieldMaster->setPropertyValue(
+                "NumberingSeparator", Any(sStr));
+        }
+        break;
+    case VarTypeSimple:
+        {
+            // set string or non-string SubType (#93192#)
+            // The SubType was already set in the FindFieldMaster
+            // method, but it needs to be adjusted if it's a string.
+            aAny <<= aValueHelper.IsStringValue()
+                ? SetVariableType::STRING : SetVariableType::VAR;
+            xFieldMaster->setPropertyValue(sAPI_sub_type, aAny);
+        }
+        break;
+    case VarTypeUserField:
+    {
+        bool bTmp = !aValueHelper.IsStringValue();
+        xFieldMaster->setPropertyValue("IsExpression", Any(bTmp));
+        aValueHelper.PrepareField(xFieldMaster);
+        break;
+    }
+    default:
+        OSL_FAIL("unknown varfield type");
+    } // switch
 }
 
 
