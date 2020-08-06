@@ -1144,7 +1144,7 @@ void SbiRuntime::PushForEach()
     pForStk = p;
 
     SbxVariableRef xObjVar = PopVar();
-    SbxBase* pObj = xObjVar.is() && xObjVar->IsObject() ? xObjVar->GetObject() : nullptr;
+    SbxBase* pObj = xObjVar && xObjVar->GetFullType() == SbxOBJECT ? xObjVar->GetObject() : nullptr;
 
     if (SbxDimArray* pArray = dynamic_cast<SbxDimArray*>(pObj))
     {
@@ -3118,8 +3118,9 @@ void SbiRuntime::StepTESTFOR( sal_uInt32 nOp1 )
         }
         case ForType::Error:
         {
-            // We are in Resume Next mode, and we already had one iteration
+            // We are in Resume Next mode after failed loop initialization
             bEndLoop = true;
+            Error(ERRCODE_BASIC_BAD_PARAMETER);
             break;
         }
     }
