@@ -2638,14 +2638,6 @@ com_sun_star_comp_Impress_XMLOasisSettingsExporter_get_implementation(
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
-com_sun_star_comp_Impress_XMLSettingsExporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
-{
-    return cppu::acquire(
-        new SdXMLExport(pCtx, "XMLImpressSettingsExportOOO", false, SvXMLExportFlags::SETTINGS));
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Impress_XMLExporter_get_implementation(uno::XComponentContext* pCtx,
                                                          uno::Sequence<uno::Any> const& /*rSeq*/)
 {
