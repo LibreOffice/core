@@ -889,11 +889,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119143, "tdf119143.docx")
         sParaText);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf105444, "tdf105444.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf105444, "tdf105444.docx")
 {
     xmlDocUniquePtr pXmlComm = parseExport("word/comments.xml");
-    if (!pXmlComm)
-        return;
     // there is no extra paragraph on Win32, only a single one.
     assertXPath(pXmlComm, "/w:comments/w:comment/w:p", 1);
 }
@@ -1027,12 +1025,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf122594, "tdf122594.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), nCheck);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testLanguageInGroupShape, "tdf131922_LanguageInGroupShape.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testLanguageInGroupShape, "tdf131922_LanguageInGroupShape.docx")
 {
     // tdf#131922: Check if good language is used in shape group texts
     xmlDocUniquePtr pXml = parseExport("word/document.xml");
-    if (!pXml)
-        return;
     assertXPath(pXml,
                 "/w:document/w:body/w:p[7]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/"
                 "a:graphic/a:graphicData/wpg:wgp/"

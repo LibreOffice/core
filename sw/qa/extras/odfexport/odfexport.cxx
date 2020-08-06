@@ -2022,13 +2022,11 @@ DECLARE_ODFEXPORT_TEST(testTableStyles2, "table_styles_2.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), nInt16);
 }
 
-DECLARE_ODFEXPORT_TEST(testTableStyles3, "table_styles_3.odt")
+DECLARE_ODFEXPORT_EXPORTONLY_TEST(testTableStyles3, "table_styles_3.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This test checks if default valued attributes aren't exported.
     xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
-    if (!pXmlDoc)
-        return;
 
     // <style:paragraph-properties>
     // For this element the only exported attributes are: "border-left", "border-bottom"
@@ -2097,13 +2095,11 @@ DECLARE_ODFIMPORT_TEST(testTableStyles4, "table_styles_4.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00ff00), getProperty<sal_Int32>(xCell1Style, "BackColor"));
 }
 
-DECLARE_ODFEXPORT_TEST(testTableStyles5, "table_styles_5.odt")
+DECLARE_ODFEXPORT_EXPORTONLY_TEST(testTableStyles5, "table_styles_5.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Test if cell styles doesn't have a style:parent-style-name attribute.
     xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
-    if (!pXmlDoc)
-        return;
 
     assertXPathNoAttribute(pXmlDoc, "/office:document-styles/office:styles/style:style[@style:display-name='Test style.1']", "parent-style-name");
     assertXPathNoAttribute(pXmlDoc, "/office:document-styles/office:styles/style:style[@style:display-name='Test style.2']", "parent-style-name");
@@ -2453,18 +2449,14 @@ DECLARE_ODFEXPORT_TEST(tdf118502, "tdf118502.odt")
     CPPUNIT_ASSERT(xReplacementGraphic.is());
 }
 
-DECLARE_ODFEXPORT_TEST(tdf99631, "tdf99631.docx")
+DECLARE_ODFEXPORT_EXPORTONLY_TEST(tdf99631, "tdf99631.docx")
 {
     // check import of VisualArea settings of the embedded XLSX OLE objects
     xmlDocUniquePtr pXmlDoc = parseExport("Object 1/settings.xml");
-    if (!pXmlDoc)
-        return;
     assertXPathContent(pXmlDoc, "//config:config-item[@config:name='VisibleAreaWidth']", "4515");
     assertXPathContent(pXmlDoc, "//config:config-item[@config:name='VisibleAreaHeight']", "903");
 
     xmlDocUniquePtr pXmlDoc2 = parseExport("Object 2/settings.xml");
-    if (!pXmlDoc2)
-        return;
     assertXPathContent(pXmlDoc2, "//config:config-item[@config:name='VisibleAreaWidth']", "4515");
     assertXPathContent(pXmlDoc2, "//config:config-item[@config:name='VisibleAreaHeight']", "1354");
 }
