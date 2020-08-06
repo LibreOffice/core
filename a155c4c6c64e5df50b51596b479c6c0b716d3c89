@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "3e3e506c_4a6fb30d",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-08-06T13:02:25Z",
+      "side": 1,
+      "message": "I check the xAllPackages element number because of not existence of is() function in uno::Sequence.",
+      "parentUuid": "78bc36d4_b3d50dfb",
+      "range": {
+        "startLine": 426,
+        "startChar": 10,
+        "endLine": 426,
+        "endChar": 55
+      },
+      "revId": "a155c4c6c64e5df50b51596b479c6c0b716d3c89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "505ba873_d89351cc",
         "filename": "cui/source/dialogs/AdditionsDialog.cxx",
         "patchSetId": 7
