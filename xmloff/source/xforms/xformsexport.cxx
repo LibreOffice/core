@@ -79,19 +79,19 @@ using com::sun::star::util::Duration;
 void exportXForms( SvXMLExport& rExport )
 {
     Reference<XFormsSupplier> xSupplier( rExport.GetModel(), UNO_QUERY );
-    if( xSupplier.is() )
-    {
-        Reference<XNameContainer> xForms = xSupplier->getXForms();
-        if( xForms.is() )
-        {
-            const Sequence<OUString> aNames = xForms->getElementNames();
+    if( !xSupplier.is() )
+        return;
 
-            for( const auto& rName : aNames )
-            {
-                Reference<XPropertySet> xModel( xForms->getByName( rName ),
-                                                UNO_QUERY );
-                exportXFormsModel( rExport, xModel );
-            }
+    Reference<XNameContainer> xForms = xSupplier->getXForms();
+    if( xForms.is() )
+    {
+        const Sequence<OUString> aNames = xForms->getElementNames();
+
+        for( const auto& rName : aNames )
+        {
+            Reference<XPropertySet> xModel( xForms->getByName( rName ),
+                                            UNO_QUERY );
+            exportXFormsModel( rExport, xModel );
         }
     }
 }

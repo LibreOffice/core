@@ -233,42 +233,42 @@ void OFormLayerXMLImport_Impl::applyControlNumberStyle(const Reference< XPropert
         m_xAutoStyles.set(m_rImporter.GetShapeImport()->GetAutoStylesContext());
     }
 
-    if (m_xAutoStyles.is())
+    if (!m_xAutoStyles.is())
+        return;
+
+    const SvXMLStyleContext* pStyle = m_xAutoStyles->FindStyleChildContext(XmlStyleFamily::DATA_STYLE, _rControlNumerStyleName);
+    if (pStyle)
     {
-        const SvXMLStyleContext* pStyle = m_xAutoStyles->FindStyleChildContext(XmlStyleFamily::DATA_STYLE, _rControlNumerStyleName);
-        if (pStyle)
+        const SvXMLNumFormatContext* pDataStyle = static_cast<const SvXMLNumFormatContext*>(pStyle);
+
+        // set this format at the control model
+        try
         {
-            const SvXMLNumFormatContext* pDataStyle = static_cast<const SvXMLNumFormatContext*>(pStyle);
+            // the models number format supplier and formats
+            Reference< XNumberFormatsSupplier > xFormatsSupplier;
+            _rxControlModel->getPropertyValue(PROPERTY_FORMATSSUPPLIER) >>= xFormatsSupplier;
+            Reference< XNumberFormats > xFormats;
+            if (xFormatsSupplier.is())
+                xFormats = xFormatsSupplier->getNumberFormats();
+            OSL_ENSURE(xFormats.is(), "OFormLayerXMLImport_Impl::applyControlNumberStyle: could not obtain the controls number formats!");
 
-            // set this format at the control model
-            try
+            // obtain a key
+            if (xFormats.is())
             {
-                // the models number format supplier and formats
-                Reference< XNumberFormatsSupplier > xFormatsSupplier;
-                _rxControlModel->getPropertyValue(PROPERTY_FORMATSSUPPLIER) >>= xFormatsSupplier;
-                Reference< XNumberFormats > xFormats;
-                if (xFormatsSupplier.is())
-                    xFormats = xFormatsSupplier->getNumberFormats();
-                OSL_ENSURE(xFormats.is(), "OFormLayerXMLImport_Impl::applyControlNumberStyle: could not obtain the controls number formats!");
+                sal_Int32 nFormatKey = const_cast<SvXMLNumFormatContext*>(pDataStyle)->CreateAndInsert( xFormatsSupplier );
+                OSL_ENSURE(-1 != nFormatKey, "OFormLayerXMLImport_Impl::applyControlNumberStyle: could not obtain a format key!");
 
-                // obtain a key
-                if (xFormats.is())
-                {
-                    sal_Int32 nFormatKey = const_cast<SvXMLNumFormatContext*>(pDataStyle)->CreateAndInsert( xFormatsSupplier );
-                    OSL_ENSURE(-1 != nFormatKey, "OFormLayerXMLImport_Impl::applyControlNumberStyle: could not obtain a format key!");
-
-                    // set the format on the control model
-                    _rxControlModel->setPropertyValue(PROPERTY_FORMATKEY, makeAny(nFormatKey));
-                }
-            }
-            catch(const Exception&)
-            {
-                OSL_FAIL("OFormLayerXMLImport_Impl::applyControlNumberStyle: couldn't set the format!");
+                // set the format on the control model
+                _rxControlModel->setPropertyValue(PROPERTY_FORMATKEY, makeAny(nFormatKey));
             }
         }
-        else
-            OSL_FAIL("OFormLayerXMLImport_Impl::applyControlNumberStyle: did not find the style with the given name!");
+        catch(const Exception&)
+        {
+            OSL_FAIL("OFormLayerXMLImport_Impl::applyControlNumberStyle: couldn't set the format!");
+        }
     }
+    else
+        OSL_FAIL("OFormLayerXMLImport_Impl::applyControlNumberStyle: did not find the style with the given name!");
 }
 
 void OFormLayerXMLImport_Impl::registerCellValueBinding( const Reference< XPropertySet >& _rxControlModel, const OUString& _rCellAddress )

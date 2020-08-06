@@ -240,47 +240,47 @@ SvXMLImportContextRef XMLEmbeddedObjectImportContext::CreateChildContext(
 void XMLEmbeddedObjectImportContext::StartElement(
         const Reference< XAttributeList >& rAttrList )
 {
-    if( xHandler.is() )
+    if( !xHandler.is() )
+        return;
+
+    xHandler->startDocument();
+    // #i34042: copy namepspace declarations
+    SvXMLAttributeList *pAttrList = new SvXMLAttributeList( rAttrList );
+    Reference< XAttributeList > xAttrList( pAttrList );
+    const SvXMLNamespaceMap& rNamespaceMap = GetImport().GetNamespaceMap();
+    sal_uInt16 nPos = rNamespaceMap.GetFirstKey();
+    while( USHRT_MAX != nPos )
     {
-        xHandler->startDocument();
-        // #i34042: copy namepspace declarations
-        SvXMLAttributeList *pAttrList = new SvXMLAttributeList( rAttrList );
-        Reference< XAttributeList > xAttrList( pAttrList );
-        const SvXMLNamespaceMap& rNamespaceMap = GetImport().GetNamespaceMap();
-        sal_uInt16 nPos = rNamespaceMap.GetFirstKey();
-        while( USHRT_MAX != nPos )
+        OUString aAttrName( rNamespaceMap.GetAttrNameByKey( nPos ) );
+        if( xAttrList->getValueByName( aAttrName ).isEmpty() )
         {
-            OUString aAttrName( rNamespaceMap.GetAttrNameByKey( nPos ) );
-            if( xAttrList->getValueByName( aAttrName ).isEmpty() )
-            {
-                pAttrList->AddAttribute( aAttrName,
-                                          rNamespaceMap.GetNameByKey( nPos ) );
-            }
-            nPos = rNamespaceMap.GetNextKey( nPos );
+            pAttrList->AddAttribute( aAttrName,
+                                      rNamespaceMap.GetNameByKey( nPos ) );
         }
-        xHandler->startElement( GetImport().GetNamespaceMap().GetQNameByKey(
-                                    GetPrefix(), GetLocalName() ),
-                                xAttrList );
+        nPos = rNamespaceMap.GetNextKey( nPos );
     }
+    xHandler->startElement( GetImport().GetNamespaceMap().GetQNameByKey(
+                                GetPrefix(), GetLocalName() ),
+                            xAttrList );
 }
 
 void XMLEmbeddedObjectImportContext::EndElement()
 {
-    if( xHandler.is() )
-    {
-        xHandler->endElement( GetImport().GetNamespaceMap().GetQNameByKey(
-                                    GetPrefix(), GetLocalName() ) );
-        xHandler->endDocument();
+    if( !xHandler.is() )
+        return;
 
-        try
-        {
-            Reference < XModifiable2 > xModifiable2( xComp, UNO_QUERY_THROW );
-            xModifiable2->enableSetModified();
-            xModifiable2->setModified( true ); // trigger new replacement image generation
-        }
-        catch( Exception& )
-        {
-        }
+    xHandler->endElement( GetImport().GetNamespaceMap().GetQNameByKey(
+                                GetPrefix(), GetLocalName() ) );
+    xHandler->endDocument();
+
+    try
+    {
+        Reference < XModifiable2 > xModifiable2( xComp, UNO_QUERY_THROW );
+        xModifiable2->enableSetModified();
+        xModifiable2->setModified( true ); // trigger new replacement image generation
+    }
+    catch( Exception& )
+    {
     }
 }
 

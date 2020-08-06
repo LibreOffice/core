@@ -272,23 +272,24 @@ namespace xmloff
             }
         }
 
-        if (!bSuccess)
-        {   // no XMultiPropertySet or setting all properties at once failed
-            for ( const auto& rPropValues : m_aValues )
+        if (bSuccess)
+            return;
+
+        // no XMultiPropertySet or setting all properties at once failed
+        for ( const auto& rPropValues : m_aValues )
+        {
+            // this try/catch here is expensive, but because this is just a fallback which should normally not be
+            // used it's acceptable this way ...
+            try
             {
-                // this try/catch here is expensive, but because this is just a fallback which should normally not be
-                // used it's acceptable this way ...
-                try
-                {
-                    m_xElement->setPropertyValue(rPropValues.Name, rPropValues.Value);
-                }
-                catch(const Exception&)
-                {
-                    DBG_UNHANDLED_EXCEPTION("xmloff.forms");
-                    OSL_FAIL(OStringBuffer("OElementImport::implApplySpecificProperties: could not set the property \"").
-                        append(OUStringToOString(rPropValues.Name, RTL_TEXTENCODING_ASCII_US)).
-                        append("\"!").getStr());
-                }
+                m_xElement->setPropertyValue(rPropValues.Name, rPropValues.Value);
+            }
+            catch(const Exception&)
+            {
+                DBG_UNHANDLED_EXCEPTION("xmloff.forms");
+                OSL_FAIL(OStringBuffer("OElementImport::implApplySpecificProperties: could not set the property \"").
+                    append(OUStringToOString(rPropValues.Name, RTL_TEXTENCODING_ASCII_US)).
+                    append("\"!").getStr());
             }
         }
     }
@@ -1099,21 +1100,21 @@ namespace xmloff
             aGraphicProperty.Value <<= m_xGraphic;
             implPushBackPropertyValue(aGraphicProperty);
         }
-        if ( m_bHaveImagePosition )
-        {
-            sal_Int16 nUnoImagePosition = ImagePosition::Centered;
-            if ( m_nImagePosition >= 0 )
-            {
-                OSL_ENSURE( ( m_nImagePosition <= 3 ) && ( m_nImageAlign >= 0 ) && ( m_nImageAlign < 3 ),
-                    "OImagePositionImport::StartElement: unknown image align and/or position!" );
-                nUnoImagePosition = m_nImagePosition * 3 + m_nImageAlign;
-            }
+        if ( !m_bHaveImagePosition )
+            return;
 
-            PropertyValue aImagePosition;
-            aImagePosition.Name = PROPERTY_IMAGE_POSITION;
-            aImagePosition.Value <<= nUnoImagePosition;
-            implPushBackPropertyValue( aImagePosition );
+        sal_Int16 nUnoImagePosition = ImagePosition::Centered;
+        if ( m_nImagePosition >= 0 )
+        {
+            OSL_ENSURE( ( m_nImagePosition <= 3 ) && ( m_nImageAlign >= 0 ) && ( m_nImageAlign < 3 ),
+                "OImagePositionImport::StartElement: unknown image align and/or position!" );
+            nUnoImagePosition = m_nImagePosition * 3 + m_nImageAlign;
         }
+
+        PropertyValue aImagePosition;
+        aImagePosition.Name = PROPERTY_IMAGE_POSITION;
+        aImagePosition.Value <<= nUnoImagePosition;
+        implPushBackPropertyValue( aImagePosition );
     }
 
     //= OReferredControlImport
@@ -1370,37 +1371,37 @@ namespace xmloff
 
     void OTextLikeImport::removeRedundantCurrentValue()
     {
-        if ( m_bEncounteredTextPara )
-        {
-            // In case the text is written in the text:p elements, we need to ignore what we read as
-            // current-value attribute, since it's redundant.
-            // fortunately, OElementImport tagged the value property with the PROPID_CURRENT_VALUE
-            // handle, so we do not need to determine the name of our value property here
-            // (normally, it should be "Text", since no other controls than the edit field should
-            // have the text:p elements)
-            PropertyValueArray::iterator aValuePropertyPos = ::std::find_if(
-                m_aValues.begin(),
-                m_aValues.end(),
-                EqualHandle( PROPID_CURRENT_VALUE )
-            );
-            if ( aValuePropertyPos != m_aValues.end() )
-            {
-                OSL_ENSURE( aValuePropertyPos->Name == PROPERTY_TEXT, "OTextLikeImport::EndElement: text:p was present, but our value property is *not* 'Text'!" );
-                if ( aValuePropertyPos->Name == PROPERTY_TEXT )
-                {
-                    m_aValues.erase(aValuePropertyPos);
-                }
-            }
+        if ( !m_bEncounteredTextPara )
+            return;
 
-            // additionally, we need to set the "RichText" property of our element to sal_True
-            // (the presence of the text:p is used as indicator for the value of the RichText property)
-            bool bHasRichTextProperty = false;
-            if ( m_xInfo.is() )
-                bHasRichTextProperty = m_xInfo->hasPropertyByName( PROPERTY_RICH_TEXT );
-            OSL_ENSURE( bHasRichTextProperty, "OTextLikeImport::EndElement: text:p, but no rich text control?" );
-            if ( bHasRichTextProperty )
-                m_xElement->setPropertyValue( PROPERTY_RICH_TEXT, makeAny( true ) );
+        // In case the text is written in the text:p elements, we need to ignore what we read as
+        // current-value attribute, since it's redundant.
+        // fortunately, OElementImport tagged the value property with the PROPID_CURRENT_VALUE
+        // handle, so we do not need to determine the name of our value property here
+        // (normally, it should be "Text", since no other controls than the edit field should
+        // have the text:p elements)
+        PropertyValueArray::iterator aValuePropertyPos = ::std::find_if(
+            m_aValues.begin(),
+            m_aValues.end(),
+            EqualHandle( PROPID_CURRENT_VALUE )
+        );
+        if ( aValuePropertyPos != m_aValues.end() )
+        {
+            OSL_ENSURE( aValuePropertyPos->Name == PROPERTY_TEXT, "OTextLikeImport::EndElement: text:p was present, but our value property is *not* 'Text'!" );
+            if ( aValuePropertyPos->Name == PROPERTY_TEXT )
+            {
+                m_aValues.erase(aValuePropertyPos);
+            }
         }
+
+        // additionally, we need to set the "RichText" property of our element to sal_True
+        // (the presence of the text:p is used as indicator for the value of the RichText property)
+        bool bHasRichTextProperty = false;
+        if ( m_xInfo.is() )
+            bHasRichTextProperty = m_xInfo->hasPropertyByName( PROPERTY_RICH_TEXT );
+        OSL_ENSURE( bHasRichTextProperty, "OTextLikeImport::EndElement: text:p, but no rich text control?" );
+        if ( bHasRichTextProperty )
+            m_xElement->setPropertyValue( PROPERTY_RICH_TEXT, makeAny( true ) );
         // Note that we do *not* set the RichText property (in case our element has one) to sal_False here
         // since this is the default of this property, anyway.
     }
