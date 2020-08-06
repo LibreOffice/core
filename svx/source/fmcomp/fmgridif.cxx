@@ -459,143 +459,143 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< css::awt::XToolkit >& 
 
     // TODO: why the hell this whole class does not use any mutex?
 
-    if (!getPeer().is())
+    if (getPeer().is())
+        return;
+
+    mbCreatingPeer = true;
+    // mbCreatingPeer is virtually the same as m_nPeerCreationLevel, but it's the base class' method
+    // to prevent recursion.
+
+    vcl::Window* pParentWin = nullptr;
+    if (rParentPeer.is())
     {
-        mbCreatingPeer = true;
-        // mbCreatingPeer is virtually the same as m_nPeerCreationLevel, but it's the base class' method
-        // to prevent recursion.
+        VCLXWindow* pParent = comphelper::getUnoTunnelImplementation<VCLXWindow>(rParentPeer);
+        if (pParent)
+            pParentWin = pParent->GetWindow().get();
+    }
 
-        vcl::Window* pParentWin = nullptr;
-        if (rParentPeer.is())
-        {
-            VCLXWindow* pParent = comphelper::getUnoTunnelImplementation<VCLXWindow>(rParentPeer);
-            if (pParent)
-                pParentWin = pParent->GetWindow().get();
-        }
+    FmXGridPeer* pPeer = imp_CreatePeer(pParentWin);
+    DBG_ASSERT(pPeer != nullptr, "FmXGridControl::createPeer : imp_CreatePeer didn't return a peer !");
+    setPeer( pPeer );
 
-        FmXGridPeer* pPeer = imp_CreatePeer(pParentWin);
-        DBG_ASSERT(pPeer != nullptr, "FmXGridControl::createPeer : imp_CreatePeer didn't return a peer !");
-        setPeer( pPeer );
-
-        // reading the properties from the model
+    // reading the properties from the model
 //      ++m_nPeerCreationLevel;
-        updateFromModel();
+    updateFromModel();
 
-        // consider the following ugly scenario: updateFromModel leads to a propertiesChanges on the Control,
-        // which determines, dat a "critical" property has changed (e.g. "Border") and therefore starts a new
-        // Peer, which lands again here in createPeer we also start a second FmXGridPeer and initialise it.
-        // Then we exit from the first incarnation's updateFromModel and continue working with the pPeer,
-        // that is in fact now already obsolete (as another peer is being started in the second incarnation).
-        // Therefore the effort with the PeerCreationLevel, which ensures that we really use the Peer
-        // created at the deepest level, but first initialise it in the top-level.
+    // consider the following ugly scenario: updateFromModel leads to a propertiesChanges on the Control,
+    // which determines, dat a "critical" property has changed (e.g. "Border") and therefore starts a new
+    // Peer, which lands again here in createPeer we also start a second FmXGridPeer and initialise it.
+    // Then we exit from the first incarnation's updateFromModel and continue working with the pPeer,
+    // that is in fact now already obsolete (as another peer is being started in the second incarnation).
+    // Therefore the effort with the PeerCreationLevel, which ensures that we really use the Peer
+    // created at the deepest level, but first initialise it in the top-level.
 //      if (--m_nPeerCreationLevel == 0)
+    {
+        DBG_ASSERT(getPeer().is(), "FmXGridControl::createPeer : something went wrong ... no top level peer !");
+        pPeer = comphelper::getUnoTunnelImplementation<FmXGridPeer>(getPeer());
+
+        setPosSize( maComponentInfos.nX, maComponentInfos.nY, maComponentInfos.nWidth, maComponentInfos.nHeight, css::awt::PosSize::POSSIZE );
+
+        Reference< XIndexContainer >  xColumns(getModel(), UNO_QUERY);
+        if (xColumns.is())
+            pPeer->setColumns(xColumns);
+
+        if (maComponentInfos.bVisible)
+            pPeer->setVisible(true);
+
+        if (!maComponentInfos.bEnable)
+            pPeer->setEnable(false);
+
+        if (maWindowListeners.getLength())
+            pPeer->addWindowListener( &maWindowListeners );
+
+        if (maFocusListeners.getLength())
+            pPeer->addFocusListener( &maFocusListeners );
+
+        if (maKeyListeners.getLength())
+            pPeer->addKeyListener( &maKeyListeners );
+
+        if (maMouseListeners.getLength())
+            pPeer->addMouseListener( &maMouseListeners );
+
+        if (maMouseMotionListeners.getLength())
+            pPeer->addMouseMotionListener( &maMouseMotionListeners );
+
+        if (maPaintListeners.getLength())
+            pPeer->addPaintListener( &maPaintListeners );
+
+        if (m_aModifyListeners.getLength())
+            pPeer->addModifyListener( &m_aModifyListeners );
+
+        if (m_aUpdateListeners.getLength())
+            pPeer->addUpdateListener( &m_aUpdateListeners );
+
+        if (m_aContainerListeners.getLength())
+            pPeer->addContainerListener( &m_aContainerListeners );
+
+        // forward the design mode
+        bool bForceAlivePeer = m_bInDraw && !maComponentInfos.bVisible;
+        // (we force an alive-mode peer if we're in "draw", cause in this case the peer will be used for drawing in
+        // foreign devices. We ensure this with the visibility check as a living peer is assumed to be noncritical
+        // only if invisible)
+        Any aOldCursorBookmark;
+        if (!mbDesignMode || bForceAlivePeer)
         {
-            DBG_ASSERT(getPeer().is(), "FmXGridControl::createPeer : something went wrong ... no top level peer !");
-            pPeer = comphelper::getUnoTunnelImplementation<FmXGridPeer>(getPeer());
-
-            setPosSize( maComponentInfos.nX, maComponentInfos.nY, maComponentInfos.nWidth, maComponentInfos.nHeight, css::awt::PosSize::POSSIZE );
-
-            Reference< XIndexContainer >  xColumns(getModel(), UNO_QUERY);
-            if (xColumns.is())
-                pPeer->setColumns(xColumns);
-
-            if (maComponentInfos.bVisible)
-                pPeer->setVisible(true);
-
-            if (!maComponentInfos.bEnable)
-                pPeer->setEnable(false);
-
-            if (maWindowListeners.getLength())
-                pPeer->addWindowListener( &maWindowListeners );
-
-            if (maFocusListeners.getLength())
-                pPeer->addFocusListener( &maFocusListeners );
-
-            if (maKeyListeners.getLength())
-                pPeer->addKeyListener( &maKeyListeners );
-
-            if (maMouseListeners.getLength())
-                pPeer->addMouseListener( &maMouseListeners );
-
-            if (maMouseMotionListeners.getLength())
-                pPeer->addMouseMotionListener( &maMouseMotionListeners );
-
-            if (maPaintListeners.getLength())
-                pPeer->addPaintListener( &maPaintListeners );
-
-            if (m_aModifyListeners.getLength())
-                pPeer->addModifyListener( &m_aModifyListeners );
-
-            if (m_aUpdateListeners.getLength())
-                pPeer->addUpdateListener( &m_aUpdateListeners );
-
-            if (m_aContainerListeners.getLength())
-                pPeer->addContainerListener( &m_aContainerListeners );
-
-            // forward the design mode
-            bool bForceAlivePeer = m_bInDraw && !maComponentInfos.bVisible;
-            // (we force an alive-mode peer if we're in "draw", cause in this case the peer will be used for drawing in
-            // foreign devices. We ensure this with the visibility check as a living peer is assumed to be noncritical
-            // only if invisible)
-            Any aOldCursorBookmark;
-            if (!mbDesignMode || bForceAlivePeer)
+            Reference< XFormComponent >  xComp(getModel(), UNO_QUERY);
+            if (xComp.is())
             {
-                Reference< XFormComponent >  xComp(getModel(), UNO_QUERY);
-                if (xComp.is())
+                Reference< XRowSet >  xForm(xComp->getParent(), UNO_QUERY);
+                // is the form alive?
+                // we can see that if the form contains columns
+                Reference< css::sdbcx::XColumnsSupplier >  xColumnsSupplier(xForm, UNO_QUERY);
+                if (xColumnsSupplier.is())
                 {
-                    Reference< XRowSet >  xForm(xComp->getParent(), UNO_QUERY);
-                    // is the form alive?
-                    // we can see that if the form contains columns
-                    Reference< css::sdbcx::XColumnsSupplier >  xColumnsSupplier(xForm, UNO_QUERY);
-                    if (xColumnsSupplier.is())
+                    if (Reference< XIndexAccess > (xColumnsSupplier->getColumns(),UNO_QUERY_THROW)->getCount())
                     {
-                        if (Reference< XIndexAccess > (xColumnsSupplier->getColumns(),UNO_QUERY_THROW)->getCount())
+                        // we get only a new bookmark if the resultset is not forwardonly
+                        if (::comphelper::getINT32(Reference< XPropertySet > (xForm, UNO_QUERY_THROW)->getPropertyValue(FM_PROP_RESULTSET_TYPE)) != ResultSetType::FORWARD_ONLY)
                         {
-                            // we get only a new bookmark if the resultset is not forwardonly
-                            if (::comphelper::getINT32(Reference< XPropertySet > (xForm, UNO_QUERY_THROW)->getPropertyValue(FM_PROP_RESULTSET_TYPE)) != ResultSetType::FORWARD_ONLY)
+                            // as the FmGridControl touches the data source it is connected to we have to remember the current
+                            // cursor position (and restore afterwards)
+                            // OJ: but only when we stand on a valid row
+                            if ( !xForm->isBeforeFirst() && !xForm->isAfterLast() )
                             {
-                                // as the FmGridControl touches the data source it is connected to we have to remember the current
-                                // cursor position (and restore afterwards)
-                                // OJ: but only when we stand on a valid row
-                                if ( !xForm->isBeforeFirst() && !xForm->isAfterLast() )
+                                try
                                 {
-                                    try
-                                    {
-                                        aOldCursorBookmark = Reference< css::sdbcx::XRowLocate > (xForm, UNO_QUERY_THROW)->getBookmark();
-                                    }
-                                    catch( const Exception& )
-                                    {
-                                        DBG_UNHANDLED_EXCEPTION("svx");
-                                    }
+                                    aOldCursorBookmark = Reference< css::sdbcx::XRowLocate > (xForm, UNO_QUERY_THROW)->getBookmark();
+                                }
+                                catch( const Exception& )
+                                {
+                                    DBG_UNHANDLED_EXCEPTION("svx");
                                 }
                             }
                         }
                     }
-                    pPeer->setRowSet(xForm);
                 }
+                pPeer->setRowSet(xForm);
             }
-            pPeer->setDesignMode(mbDesignMode && !bForceAlivePeer);
-
-            try
-            {
-                if (aOldCursorBookmark.hasValue())
-                {   // we have a valid bookmark, so we have to restore the cursor's position
-                    Reference< XFormComponent >  xComp(getModel(), UNO_QUERY);
-                    Reference< css::sdbcx::XRowLocate >  xLocate(xComp->getParent(), UNO_QUERY);
-                    xLocate->moveToBookmark(aOldCursorBookmark);
-                }
-            }
-            catch( const Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION("svx");
-            }
-
-            Reference< css::awt::XView >  xPeerView(getPeer(), UNO_QUERY);
-            xPeerView->setZoom( maComponentInfos.nZoomX, maComponentInfos.nZoomY );
-            xPeerView->setGraphics( mxGraphics );
         }
-        mbCreatingPeer = false;
+        pPeer->setDesignMode(mbDesignMode && !bForceAlivePeer);
+
+        try
+        {
+            if (aOldCursorBookmark.hasValue())
+            {   // we have a valid bookmark, so we have to restore the cursor's position
+                Reference< XFormComponent >  xComp(getModel(), UNO_QUERY);
+                Reference< css::sdbcx::XRowLocate >  xLocate(xComp->getParent(), UNO_QUERY);
+                xLocate->moveToBookmark(aOldCursorBookmark);
+            }
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION("svx");
+        }
+
+        Reference< css::awt::XView >  xPeerView(getPeer(), UNO_QUERY);
+        xPeerView->setZoom( maComponentInfos.nZoomX, maComponentInfos.nZoomY );
+        xPeerView->setGraphics( mxGraphics );
     }
+    mbCreatingPeer = false;
 }
 
 
@@ -2102,21 +2102,21 @@ void FmXGridPeer::startCursorListening()
 
 void FmXGridPeer::stopCursorListening()
 {
-    if (!--m_nCursorListening)
+    if (--m_nCursorListening)
+        return;
+
+    if (m_xCursor.is())
+        m_xCursor->removeRowSetListener(this);
+
+    Reference< XReset >  xReset(m_xCursor, UNO_QUERY);
+    if (xReset.is())
+        xReset->removeResetListener(this);
+
+    Reference< XPropertySet >  xSet(m_xCursor, UNO_QUERY);
+    if (xSet.is())
     {
-        if (m_xCursor.is())
-            m_xCursor->removeRowSetListener(this);
-
-        Reference< XReset >  xReset(m_xCursor, UNO_QUERY);
-        if (xReset.is())
-            xReset->removeResetListener(this);
-
-        Reference< XPropertySet >  xSet(m_xCursor, UNO_QUERY);
-        if (xSet.is())
-        {
-            xSet->removePropertyChangeListener(FM_PROP_ISMODIFIED, this);
-            xSet->removePropertyChangeListener(FM_PROP_ROWCOUNT, this);
-        }
+        xSet->removePropertyChangeListener(FM_PROP_ISMODIFIED, this);
+        xSet->removePropertyChangeListener(FM_PROP_ROWCOUNT, this);
     }
 }
 
@@ -2154,20 +2154,20 @@ void FmXGridPeer::setRowSet(const Reference< XRowSet >& _rDatabaseCursor)
 
     m_xCursor = _rDatabaseCursor;
 
-    if (pGrid)
-    {
-        Reference< XLoadable >  xLoadable(m_xCursor, UNO_QUERY);
-        // only if the form is loaded we set the rowset
-        if (xLoadable.is() && xLoadable->isLoaded())
-            pGrid->setDataSource(m_xCursor);
-        else
-            pGrid->setDataSource(Reference< XRowSet > ());
+    if (!pGrid)
+        return;
 
-        if (xLoadable.is())
-        {
-            startCursorListening();
-            xLoadable->addLoadListener(this);
-        }
+    Reference< XLoadable >  xLoadable(m_xCursor, UNO_QUERY);
+    // only if the form is loaded we set the rowset
+    if (xLoadable.is() && xLoadable->isLoaded())
+        pGrid->setDataSource(m_xCursor);
+    else
+        pGrid->setDataSource(Reference< XRowSet > ());
+
+    if (xLoadable.is())
+    {
+        startCursorListening();
+        xLoadable->addLoadListener(this);
     }
 }
 
@@ -2204,46 +2204,46 @@ void FmXGridPeer::selectionChanged(const EventObject& evt)
     SolarMutexGuard aGuard;
 
     VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
-    if (pGrid)
-    {
-        Reference< css::view::XSelectionSupplier >  xSelSupplier(evt.Source, UNO_QUERY);
-        Any aSelection = xSelSupplier->getSelection();
-        DBG_ASSERT(aSelection.getValueType().getTypeClass() == TypeClass_INTERFACE, "FmXGridPeer::selectionChanged : invalid selection !");
-        Reference< XPropertySet >  xSelection;
-        aSelection >>= xSelection;
-        if (xSelection.is())
-        {
-            Reference< XPropertySet > xCol;
-            sal_Int32 i = 0;
-            sal_Int32 nColCount = m_xColumns->getCount();
+    if (!pGrid)
+        return;
 
-            for (; i < nColCount; ++i)
+    Reference< css::view::XSelectionSupplier >  xSelSupplier(evt.Source, UNO_QUERY);
+    Any aSelection = xSelSupplier->getSelection();
+    DBG_ASSERT(aSelection.getValueType().getTypeClass() == TypeClass_INTERFACE, "FmXGridPeer::selectionChanged : invalid selection !");
+    Reference< XPropertySet >  xSelection;
+    aSelection >>= xSelection;
+    if (xSelection.is())
+    {
+        Reference< XPropertySet > xCol;
+        sal_Int32 i = 0;
+        sal_Int32 nColCount = m_xColumns->getCount();
+
+        for (; i < nColCount; ++i)
+        {
+            m_xColumns->getByIndex(i) >>= xCol;
+            if ( xCol == xSelection )
             {
-                m_xColumns->getByIndex(i) >>= xCol;
-                if ( xCol == xSelection )
-                {
-                    pGrid->markColumn(pGrid->GetColumnIdFromModelPos(static_cast<sal_uInt16>(i)));
-                    break;
-                }
-            }
-            // The columns have to be 1-based for the VCL control.
-            // If necessary, pass on the selection to the VCL control
-            if ( i != pGrid->GetSelectedColumn() )
-            {   // (if this does not take effect, the selectionChanged was implicitly triggered by the control itself)
-                if ( i < nColCount )
-                {
-                    pGrid->SelectColumnPos(pGrid->GetViewColumnPos(pGrid->GetColumnIdFromModelPos( static_cast<sal_uInt16>(i) )) + 1);
-                    // SelectColumnPos has led to an implicit ActivateCell again
-                    if (pGrid->IsEditing())
-                        pGrid->DeactivateCell();
-                }
-                else
-                    pGrid->SetNoSelection();
+                pGrid->markColumn(pGrid->GetColumnIdFromModelPos(static_cast<sal_uInt16>(i)));
+                break;
             }
         }
-        else
-            pGrid->markColumn(USHRT_MAX);
+        // The columns have to be 1-based for the VCL control.
+        // If necessary, pass on the selection to the VCL control
+        if ( i != pGrid->GetSelectedColumn() )
+        {   // (if this does not take effect, the selectionChanged was implicitly triggered by the control itself)
+            if ( i < nColCount )
+            {
+                pGrid->SelectColumnPos(pGrid->GetViewColumnPos(pGrid->GetColumnIdFromModelPos( static_cast<sal_uInt16>(i) )) + 1);
+                // SelectColumnPos has led to an implicit ActivateCell again
+                if (pGrid->IsEditing())
+                    pGrid->DeactivateCell();
+            }
+            else
+                pGrid->SetNoSelection();
+        }
     }
+    else
+        pGrid->markColumn(USHRT_MAX);
 }
 
 // XElementAccess
@@ -2421,29 +2421,29 @@ Sequence< Reference< css::frame::XDispatch > > FmXGridPeer::queryDispatches(cons
 
 void FmXGridPeer::registerDispatchProviderInterceptor(const Reference< css::frame::XDispatchProviderInterceptor >& _xInterceptor)
 {
-    if (_xInterceptor.is())
+    if (!_xInterceptor.is())
+        return;
+
+    if (m_xFirstDispatchInterceptor.is())
     {
-        if (m_xFirstDispatchInterceptor.is())
-        {
-            // there is already an interceptor; the new one will become its master
-            _xInterceptor->setSlaveDispatchProvider(m_xFirstDispatchInterceptor);
-            m_xFirstDispatchInterceptor->setMasterDispatchProvider(m_xFirstDispatchInterceptor);
-        }
-        else
-        {
-            // it is the first interceptor; set ourself as slave
-            _xInterceptor->setSlaveDispatchProvider(static_cast<css::frame::XDispatchProvider*>(this));
-        }
-
-        // we are the master of the chain's first interceptor
-        m_xFirstDispatchInterceptor = _xInterceptor;
-        m_xFirstDispatchInterceptor->setMasterDispatchProvider(static_cast<css::frame::XDispatchProvider*>(this));
-
-        // we have a new interceptor and we're alive ?
-        if (!isDesignMode())
-            // -> check for new dispatchers
-            UpdateDispatches();
+        // there is already an interceptor; the new one will become its master
+        _xInterceptor->setSlaveDispatchProvider(m_xFirstDispatchInterceptor);
+        m_xFirstDispatchInterceptor->setMasterDispatchProvider(m_xFirstDispatchInterceptor);
     }
+    else
+    {
+        // it is the first interceptor; set ourself as slave
+        _xInterceptor->setSlaveDispatchProvider(static_cast<css::frame::XDispatchProvider*>(this));
+    }
+
+    // we are the master of the chain's first interceptor
+    m_xFirstDispatchInterceptor = _xInterceptor;
+    m_xFirstDispatchInterceptor->setMasterDispatchProvider(static_cast<css::frame::XDispatchProvider*>(this));
+
+    // we have a new interceptor and we're alive ?
+    if (!isDesignMode())
+        // -> check for new dispatchers
+        UpdateDispatches();
 }
 
 

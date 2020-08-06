@@ -85,67 +85,67 @@ void GalleryCodec::Read( SvStream& rStmToRead )
 {
     sal_uInt32 nVersion = 0;
 
-    if( IsCoded( rStm, nVersion ) )
+    if( !IsCoded( rStm, nVersion ) )
+        return;
+
+    sal_uInt32  nCompressedSize, nUnCompressedSize;
+
+    rStm.SeekRel( 6 );
+    rStm.ReadUInt32( nUnCompressedSize ).ReadUInt32( nCompressedSize );
+
+    // decompress
+    if( 1 == nVersion )
     {
-        sal_uInt32  nCompressedSize, nUnCompressedSize;
+        std::unique_ptr<sal_uInt8[]> pCompressedBuffer(new sal_uInt8[ nCompressedSize ]);
+        rStm.ReadBytes(pCompressedBuffer.get(), nCompressedSize);
+        sal_uInt8*  pInBuf = pCompressedBuffer.get();
+        std::unique_ptr<sal_uInt8[]> pOutBuf(new sal_uInt8[ nUnCompressedSize ]);
+        sal_uInt8*  pTmpBuf = pOutBuf.get();
+        sal_uInt8*  pLast = pOutBuf.get() + nUnCompressedSize - 1;
+        sal_uIntPtr   nIndex = 0, nCountByte, nRunByte;
+        bool    bEndDecoding = false;
 
-        rStm.SeekRel( 6 );
-        rStm.ReadUInt32( nUnCompressedSize ).ReadUInt32( nCompressedSize );
-
-        // decompress
-        if( 1 == nVersion )
+        do
         {
-            std::unique_ptr<sal_uInt8[]> pCompressedBuffer(new sal_uInt8[ nCompressedSize ]);
-            rStm.ReadBytes(pCompressedBuffer.get(), nCompressedSize);
-            sal_uInt8*  pInBuf = pCompressedBuffer.get();
-            std::unique_ptr<sal_uInt8[]> pOutBuf(new sal_uInt8[ nUnCompressedSize ]);
-            sal_uInt8*  pTmpBuf = pOutBuf.get();
-            sal_uInt8*  pLast = pOutBuf.get() + nUnCompressedSize - 1;
-            sal_uIntPtr   nIndex = 0, nCountByte, nRunByte;
-            bool    bEndDecoding = false;
+            nCountByte = *pInBuf++;
 
-            do
+            if ( !nCountByte )
             {
-                nCountByte = *pInBuf++;
+                nRunByte = *pInBuf++;
 
-                if ( !nCountByte )
+                if ( nRunByte > 2 )
                 {
-                    nRunByte = *pInBuf++;
+                    // filling absolutely
+                    memcpy( &pTmpBuf[ nIndex ], pInBuf, nRunByte );
+                    pInBuf += nRunByte;
+                    nIndex += nRunByte;
 
-                    if ( nRunByte > 2 )
-                    {
-                        // filling absolutely
-                        memcpy( &pTmpBuf[ nIndex ], pInBuf, nRunByte );
-                        pInBuf += nRunByte;
-                        nIndex += nRunByte;
-
-                        // note WORD alignment
-                        if ( nRunByte & 1 )
-                            pInBuf++;
-                    }
-                    else if ( nRunByte == 1 )   // End of the image
-                        bEndDecoding = true;
+                    // note WORD alignment
+                    if ( nRunByte & 1 )
+                        pInBuf++;
                 }
-                else
-                {
-                    const sal_uInt8 cVal = *pInBuf++;
-
-                    memset( &pTmpBuf[ nIndex ], cVal, nCountByte );
-                    nIndex += nCountByte;
-                }
+                else if ( nRunByte == 1 )   // End of the image
+                    bEndDecoding = true;
             }
-            while ( !bEndDecoding && ( pTmpBuf <= pLast ) );
+            else
+            {
+                const sal_uInt8 cVal = *pInBuf++;
 
-            rStmToRead.WriteBytes(pOutBuf.get(), nUnCompressedSize);
+                memset( &pTmpBuf[ nIndex ], cVal, nCountByte );
+                nIndex += nCountByte;
+            }
         }
-        else if( 2 == nVersion )
-        {
-            ZCodec aCodec;
+        while ( !bEndDecoding && ( pTmpBuf <= pLast ) );
 
-            aCodec.BeginCompression();
-            aCodec.Decompress( rStm, rStmToRead );
-            aCodec.EndCompression();
-        }
+        rStmToRead.WriteBytes(pOutBuf.get(), nUnCompressedSize);
+    }
+    else if( 2 == nVersion )
+    {
+        ZCodec aCodec;
+
+        aCodec.BeginCompression();
+        aCodec.Decompress( rStm, rStmToRead );
+        aCodec.EndCompression();
     }
 }
 

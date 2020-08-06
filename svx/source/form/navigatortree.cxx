@@ -1213,20 +1213,20 @@ namespace svxform
 
     void NavigatorTree::doCut()
     {
-        if ( implPrepareExchange( DND_ACTION_MOVE ) )
-        {
-            m_aControlExchange.setClipboardListener( LINK( this, NavigatorTree, OnClipboardAction ) );
-            m_aControlExchange.copyToClipboard( );
-            m_bKeyboardCut = true;
+        if ( !implPrepareExchange( DND_ACTION_MOVE ) )
+            return;
 
-            // mark all the entries we just "cut" into the clipboard as "nearly moved"
-            for (const auto& rEntry : m_arrCurrentSelection )
-            {
-                if (!rEntry)
-                    continue;
-                m_aCutEntries.emplace(m_xTreeView->make_iterator(rEntry.get()));
-                m_xTreeView->set_sensitive(*rEntry, false);
-            }
+        m_aControlExchange.setClipboardListener( LINK( this, NavigatorTree, OnClipboardAction ) );
+        m_aControlExchange.copyToClipboard( );
+        m_bKeyboardCut = true;
+
+        // mark all the entries we just "cut" into the clipboard as "nearly moved"
+        for (const auto& rEntry : m_arrCurrentSelection )
+        {
+            if (!rEntry)
+                continue;
+            m_aCutEntries.emplace(m_xTreeView->make_iterator(rEntry.get()));
+            m_xTreeView->set_sensitive(*rEntry, false);
         }
     }
 
@@ -1449,22 +1449,22 @@ namespace svxform
 
     IMPL_LINK_NOARG(NavigatorTree, OnClipboardAction, OLocalExchange&, void)
     {
-        if ( !m_aControlExchange.isClipboardOwner() )
-        {
-            if ( doingKeyboardCut() )
-            {
-                for (const auto& rEntry : m_aCutEntries)
-                {
-                    if (!rEntry)
-                        continue;
-                    m_xTreeView->set_sensitive(*rEntry, true);
-                }
-                ListBoxEntrySet aEmpty;
-                m_aCutEntries.swap( aEmpty );
+        if ( m_aControlExchange.isClipboardOwner() )
+            return;
 
-                m_bKeyboardCut = false;
-            }
+        if ( !doingKeyboardCut() )
+            return;
+
+        for (const auto& rEntry : m_aCutEntries)
+        {
+            if (!rEntry)
+                continue;
+            m_xTreeView->set_sensitive(*rEntry, true);
         }
+        ListBoxEntrySet aEmpty;
+        m_aCutEntries.swap( aEmpty );
+
+        m_bKeyboardCut = false;
     }
 
     void NavigatorTree::ShowSelectionProperties(bool bForce)
@@ -1893,20 +1893,20 @@ namespace svxform
         // if exactly one form is selected now, shell should notice it as CurrentForm
         // (if selection handling isn't locked, view cares about it in MarkListHasChanged
         // but mechanism doesn't work, if form is empty for example
-        if ((m_arrCurrentSelection.size() == 1) && (m_nFormsSelected == 1))
+        if ((m_arrCurrentSelection.size() != 1) || (m_nFormsSelected != 1))
+            return;
+
+        std::unique_ptr<weld::TreeIter> xSelected(m_xTreeView->make_iterator());
+        if (!m_xTreeView->get_selected(xSelected.get()))
+            xSelected.reset();
+        FmFormData* pSingleSelectionData = xSelected ? dynamic_cast<FmFormData*>(reinterpret_cast<FmEntryData*>(m_xTreeView->get_id(*xSelected).toInt64()))
+                                                     : nullptr;
+        DBG_ASSERT( pSingleSelectionData, "NavigatorTree::SynchronizeMarkList: invalid selected form!" );
+        if ( pSingleSelectionData )
         {
-            std::unique_ptr<weld::TreeIter> xSelected(m_xTreeView->make_iterator());
-            if (!m_xTreeView->get_selected(xSelected.get()))
-                xSelected.reset();
-            FmFormData* pSingleSelectionData = xSelected ? dynamic_cast<FmFormData*>(reinterpret_cast<FmEntryData*>(m_xTreeView->get_id(*xSelected).toInt64()))
-                                                         : nullptr;
-            DBG_ASSERT( pSingleSelectionData, "NavigatorTree::SynchronizeMarkList: invalid selected form!" );
-            if ( pSingleSelectionData )
-            {
-                InterfaceBag aSelection;
-                aSelection.insert( Reference< XInterface >( pSingleSelectionData->GetFormIface(), UNO_QUERY ) );
-                pFormShell->GetImpl()->setCurrentSelection_Lock(aSelection);
-            }
+            InterfaceBag aSelection;
+            aSelection.insert( Reference< XInterface >( pSingleSelectionData->GetFormIface(), UNO_QUERY ) );
+            pFormShell->GetImpl()->setCurrentSelection_Lock(aSelection);
         }
     }
 
@@ -2030,20 +2030,20 @@ namespace svxform
             bPaint = true;
 
         } // while ( aIter.IsMore() )
-        if ( bPaint )
+        if ( !bPaint )
+            return;
+
+        // make the mark visible
+        ::tools::Rectangle aMarkRect( pFormView->GetAllMarkedRect());
+        for ( sal_uInt32 i = 0; i < pFormView->PaintWindowCount(); ++i )
         {
-            // make the mark visible
-            ::tools::Rectangle aMarkRect( pFormView->GetAllMarkedRect());
-            for ( sal_uInt32 i = 0; i < pFormView->PaintWindowCount(); ++i )
+            SdrPaintWindow* pPaintWindow = pFormView->GetPaintWindow( i );
+            OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
+            if ( OUTDEV_WINDOW == rOutDev.GetOutDevType() )
             {
-                SdrPaintWindow* pPaintWindow = pFormView->GetPaintWindow( i );
-                OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
-                if ( OUTDEV_WINDOW == rOutDev.GetOutDevType() )
-                {
-                    pFormView->MakeVisible( aMarkRect, static_cast<vcl::Window&>(rOutDev) );
-                }
-            } // for ( sal_uInt32 i = 0; i < pFormView->PaintWindowCount(); ++i )
-        }
+                pFormView->MakeVisible( aMarkRect, static_cast<vcl::Window&>(rOutDev) );
+            }
+        } // for ( sal_uInt32 i = 0; i < pFormView->PaintWindowCount(); ++i )
     }
 
 

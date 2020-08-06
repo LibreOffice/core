@@ -133,26 +133,26 @@ SdrObjectUniquePtr E3dLatheObj::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAdd
 
 void E3dLatheObj::SetPolyPoly2D(const basegfx::B2DPolyPolygon& rNew)
 {
-    if(maPolyPoly2D != rNew)
+    if(maPolyPoly2D == rNew)
+        return;
+
+    maPolyPoly2D = rNew;
+    maPolyPoly2D.removeDoublePoints();
+
+    if(maPolyPoly2D.count())
     {
-        maPolyPoly2D = rNew;
-        maPolyPoly2D.removeDoublePoints();
+        const basegfx::B2DPolygon rPoly(maPolyPoly2D.getB2DPolygon(0));
+        sal_uInt32 nSegCnt(rPoly.count());
 
-        if(maPolyPoly2D.count())
+        if(nSegCnt && !rPoly.isClosed())
         {
-            const basegfx::B2DPolygon rPoly(maPolyPoly2D.getB2DPolygon(0));
-            sal_uInt32 nSegCnt(rPoly.count());
-
-            if(nSegCnt && !rPoly.isClosed())
-            {
-                nSegCnt -= 1;
-            }
-
-            GetProperties().SetObjectItemDirect(makeSvx3DVerticalSegmentsItem(nSegCnt));
+            nSegCnt -= 1;
         }
 
-        ActionChanged();
+        GetProperties().SetObjectItemDirect(makeSvx3DVerticalSegmentsItem(nSegCnt));
     }
+
+    ActionChanged();
 }
 
 // Get the name of the object (singular)

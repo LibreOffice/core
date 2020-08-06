@@ -221,7 +221,10 @@ void AccessibleTableShapeImpl::getColumnAndRow( sal_Int32 nChildIndex, sal_Int32
 // XModifyListener
 void SAL_CALL AccessibleTableShapeImpl::modified( const EventObject& /*aEvent*/ )
 {
-    if( mxTable.is() ) try
+    if( !mxTable.is() )
+        return;
+
+    try
     {
         // structural changes may have happened to the table, validate all accessible cell instances
         AccessibleCellMap aTempChildMap;
@@ -706,20 +709,20 @@ void SAL_CALL AccessibleTableShape::selectAccessibleChild( sal_Int32 nChildIndex
 
     // todo, select table shape?!?
     SvxTableController* pController = getTableController();
-    if( pController )
-    {
-        CellPos aFirstPos( aPos ), aLastPos( aPos );
-        if( pController->hasSelectedCells() )
-        {
-            pController->getSelectedCells( aFirstPos, aLastPos );
+    if( !pController )
+        return;
 
-            aFirstPos.mnRow = std::min( aFirstPos.mnRow, aPos.mnRow );
-            aFirstPos.mnCol = std::min( aFirstPos.mnCol, aPos.mnCol );
-            aLastPos.mnRow = std::max( aLastPos.mnRow, aPos.mnRow );
-            aLastPos.mnCol = std::max( aLastPos.mnCol, aPos.mnCol );
-        }
-        pController->setSelectedCells( aFirstPos, aLastPos );
+    CellPos aFirstPos( aPos ), aLastPos( aPos );
+    if( pController->hasSelectedCells() )
+    {
+        pController->getSelectedCells( aFirstPos, aLastPos );
+
+        aFirstPos.mnRow = std::min( aFirstPos.mnRow, aPos.mnRow );
+        aFirstPos.mnCol = std::min( aFirstPos.mnCol, aPos.mnCol );
+        aLastPos.mnRow = std::max( aLastPos.mnRow, aPos.mnRow );
+        aLastPos.mnCol = std::max( aLastPos.mnCol, aPos.mnCol );
     }
+    pController->setSelectedCells( aFirstPos, aLastPos );
 }
 
 
@@ -802,23 +805,23 @@ void SAL_CALL AccessibleTableShape::deselectAccessibleChild( sal_Int32 nChildInd
 
     // todo, select table shape?!?
     SvxTableController* pController = getTableController();
-    if( pController && pController->hasSelectedCells() )
-    {
-        CellPos aFirstPos, aLastPos;
-        pController->getSelectedCells( aFirstPos, aLastPos );
+    if( !(pController && pController->hasSelectedCells()) )
+        return;
 
-        // create a selection where aPos is not part of anymore
-        aFirstPos.mnRow = std::min( aFirstPos.mnRow, aPos.mnRow+1 );
-        aFirstPos.mnCol = std::min( aFirstPos.mnCol, aPos.mnCol+1 );
-        aLastPos.mnRow = std::max( aLastPos.mnRow, aPos.mnRow-1 );
-        aLastPos.mnCol = std::max( aLastPos.mnCol, aPos.mnCol-1 );
+    CellPos aFirstPos, aLastPos;
+    pController->getSelectedCells( aFirstPos, aLastPos );
 
-        // new selection may be invalid (child to deselect is not at a border of the selection but in between)
-        if( (aFirstPos.mnRow > aLastPos.mnRow) || (aFirstPos.mnCol > aLastPos.mnCol) )
-            pController->clearSelection(); // if selection is invalid, clear all
-        else
-            pController->setSelectedCells( aFirstPos, aLastPos );
-    }
+    // create a selection where aPos is not part of anymore
+    aFirstPos.mnRow = std::min( aFirstPos.mnRow, aPos.mnRow+1 );
+    aFirstPos.mnCol = std::min( aFirstPos.mnCol, aPos.mnCol+1 );
+    aLastPos.mnRow = std::max( aLastPos.mnRow, aPos.mnRow-1 );
+    aLastPos.mnCol = std::max( aLastPos.mnCol, aPos.mnCol-1 );
+
+    // new selection may be invalid (child to deselect is not at a border of the selection but in between)
+    if( (aFirstPos.mnRow > aLastPos.mnRow) || (aFirstPos.mnCol > aLastPos.mnCol) )
+        pController->clearSelection(); // if selection is invalid, clear all
+    else
+        pController->setSelectedCells( aFirstPos, aLastPos );
 }
 
 // XAccessibleTableSelection
@@ -896,32 +899,32 @@ void  SAL_CALL AccessibleTableShape::selectionChanged (const EventObject& rEvent
 {
     //sdr::table::CellRef xCellRef = static_cast< sdr::table::CellRef > (rEvent.Source);
     Reference< XCell > xCell(rEvent.Source, UNO_QUERY);
-    if (xCell.is())
+    if (!xCell.is())
+        return;
+
+    rtl::Reference< AccessibleCell > xAccCell = mxImpl->getAccessibleCell( xCell );
+    if (!xAccCell.is())
+        return;
+
+    sal_Int32 nIndex = xAccCell->getAccessibleIndexInParent(),
+        nCount = getSelectedAccessibleChildCount();
+    bool bSelected = isAccessibleChildSelected(nIndex);
+    if (mnPreviousSelectionCount == 0 && nCount > 0 && bSelected)
     {
-        rtl::Reference< AccessibleCell > xAccCell = mxImpl->getAccessibleCell( xCell );
-        if (xAccCell.is())
-        {
-            sal_Int32 nIndex = xAccCell->getAccessibleIndexInParent(),
-                nCount = getSelectedAccessibleChildCount();
-            bool bSelected = isAccessibleChildSelected(nIndex);
-            if (mnPreviousSelectionCount == 0 && nCount > 0 && bSelected)
-            {
-                xAccCell->SetState(AccessibleStateType::SELECTED);
-                xAccCell->CommitChange(AccessibleEventId::SELECTION_CHANGED, Any(), Any());
-            }
-            else if (bSelected)
-            {
-                xAccCell->SetState(AccessibleStateType::SELECTED);
-                xAccCell->CommitChange(AccessibleEventId::SELECTION_CHANGED_ADD, Any(), Any());
-            }
-            else
-            {
-                xAccCell->ResetState(AccessibleStateType::SELECTED);
-                xAccCell->CommitChange(AccessibleEventId::SELECTION_CHANGED_REMOVE, Any(), Any());
-            }
-            mnPreviousSelectionCount = nCount;
-        }
+        xAccCell->SetState(AccessibleStateType::SELECTED);
+        xAccCell->CommitChange(AccessibleEventId::SELECTION_CHANGED, Any(), Any());
     }
+    else if (bSelected)
+    {
+        xAccCell->SetState(AccessibleStateType::SELECTED);
+        xAccCell->CommitChange(AccessibleEventId::SELECTION_CHANGED_ADD, Any(), Any());
+    }
+    else
+    {
+        xAccCell->ResetState(AccessibleStateType::SELECTED);
+        xAccCell->CommitChange(AccessibleEventId::SELECTION_CHANGED_REMOVE, Any(), Any());
+    }
+    mnPreviousSelectionCount = nCount;
 }
 // Get the currently active cell which is text editing
 AccessibleCell* AccessibleTableShape::GetActiveAccessibleCell()

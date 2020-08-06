@@ -67,29 +67,29 @@ static void getAllHit3DObjectWithRelativePoint(
 {
     o_rResult.clear();
 
-    if(!rFront.equal(rBack))
+    if(rFront.equal(rBack))
+        return;
+
+    // rObject is an E3dCompoundObject, so it cannot be a scene (which is an E3dObject)
+    const sdr::contact::ViewContactOfE3d& rVCObject = static_cast< sdr::contact::ViewContactOfE3d& >(rObject.GetViewContact());
+    const drawinglayer::primitive3d::Primitive3DContainer aPrimitives(rVCObject.getViewIndependentPrimitive3DContainer());
+
+    if(aPrimitives.empty())
+        return;
+
+    // make BoundVolume empty and overlapping test for speedup
+    const basegfx::B3DRange aObjectRange(aPrimitives.getB3DRange(rObjectViewInformation3D));
+
+    if(!aObjectRange.isEmpty())
     {
-        // rObject is an E3dCompoundObject, so it cannot be a scene (which is an E3dObject)
-        const sdr::contact::ViewContactOfE3d& rVCObject = static_cast< sdr::contact::ViewContactOfE3d& >(rObject.GetViewContact());
-        const drawinglayer::primitive3d::Primitive3DContainer aPrimitives(rVCObject.getViewIndependentPrimitive3DContainer());
+        const basegfx::B3DRange aFrontBackRange(rFront, rBack);
 
-        if(!aPrimitives.empty())
+        if(aObjectRange.overlaps(aFrontBackRange))
         {
-            // make BoundVolume empty and overlapping test for speedup
-            const basegfx::B3DRange aObjectRange(aPrimitives.getB3DRange(rObjectViewInformation3D));
-
-            if(!aObjectRange.isEmpty())
-            {
-                const basegfx::B3DRange aFrontBackRange(rFront, rBack);
-
-                if(aObjectRange.overlaps(aFrontBackRange))
-                {
-                    // bound volumes hit, geometric cut tests needed
-                    drawinglayer::processor3d::CutFindProcessor aCutFindProcessor(rObjectViewInformation3D, rFront, rBack, bAnyHit);
-                    aCutFindProcessor.process(aPrimitives);
-                    o_rResult = aCutFindProcessor.getCutPoints();
-                }
-            }
+            // bound volumes hit, geometric cut tests needed
+            drawinglayer::processor3d::CutFindProcessor aCutFindProcessor(rObjectViewInformation3D, rFront, rBack, bAnyHit);
+            aCutFindProcessor.process(aPrimitives);
+            o_rResult = aCutFindProcessor.getCutPoints();
         }
     }
 }
@@ -164,67 +164,67 @@ void getAllHit3DObjectsSortedFrontToBack(
     o_rResult.clear();
     SdrObjList* pList = rScene.GetSubList();
 
-    if(nullptr != pList && 0 != pList->GetObjCount())
+    if(nullptr == pList || 0 == pList->GetObjCount())
+        return;
+
+    // prepare relative HitPoint. To do so, get the VC of the 3DScene and from there
+    // the Scene's 2D transformation. Multiplying with the inverse transformation
+    // will create a point relative to the 3D scene as unit-2d-object
+    const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(rScene.GetViewContact());
+    basegfx::B2DHomMatrix aInverseSceneTransform(rVCScene.getObjectTransformation());
+    aInverseSceneTransform.invert();
+    const basegfx::B2DPoint aRelativePoint(aInverseSceneTransform * rPoint);
+
+    // check if test point is inside scene's area at all
+    if(!(aRelativePoint.getX() >= 0.0 && aRelativePoint.getX() <= 1.0 && aRelativePoint.getY() >= 0.0 && aRelativePoint.getY() <= 1.0))
+        return;
+
+    SdrObjListIter aIterator(pList, SdrIterMode::DeepNoGroups);
+    ::std::vector< ImplPairDephAndObject > aDepthAndObjectResults;
+    const uno::Sequence< beans::PropertyValue > aEmptyParameters;
+    drawinglayer::geometry::ViewInformation3D aViewInfo3D(aEmptyParameters);
+
+    while(aIterator.IsMore())
     {
-        // prepare relative HitPoint. To do so, get the VC of the 3DScene and from there
-        // the Scene's 2D transformation. Multiplying with the inverse transformation
-        // will create a point relative to the 3D scene as unit-2d-object
-        const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(rScene.GetViewContact());
-        basegfx::B2DHomMatrix aInverseSceneTransform(rVCScene.getObjectTransformation());
-        aInverseSceneTransform.invert();
-        const basegfx::B2DPoint aRelativePoint(aInverseSceneTransform * rPoint);
+        const E3dCompoundObject* pCandidate = dynamic_cast< const E3dCompoundObject* >(aIterator.Next());
 
-        // check if test point is inside scene's area at all
-        if(aRelativePoint.getX() >= 0.0 && aRelativePoint.getX() <= 1.0 && aRelativePoint.getY() >= 0.0 && aRelativePoint.getY() <= 1.0)
+        if(pCandidate)
         {
-            SdrObjListIter aIterator(pList, SdrIterMode::DeepNoGroups);
-            ::std::vector< ImplPairDephAndObject > aDepthAndObjectResults;
-            const uno::Sequence< beans::PropertyValue > aEmptyParameters;
-            drawinglayer::geometry::ViewInformation3D aViewInfo3D(aEmptyParameters);
+            fillViewInformation3DForCompoundObject(aViewInfo3D, *pCandidate);
 
-            while(aIterator.IsMore())
+            // create HitPoint Front and Back, transform to object coordinates
+            basegfx::B3DHomMatrix aViewToObject(aViewInfo3D.getObjectToView());
+            aViewToObject.invert();
+            const basegfx::B3DPoint aFront(aViewToObject * basegfx::B3DPoint(aRelativePoint.getX(), aRelativePoint.getY(), 0.0));
+            const basegfx::B3DPoint aBack(aViewToObject * basegfx::B3DPoint(aRelativePoint.getX(), aRelativePoint.getY(), 1.0));
+
+            if(!aFront.equal(aBack))
             {
-                const E3dCompoundObject* pCandidate = dynamic_cast< const E3dCompoundObject* >(aIterator.Next());
+                // get all hit points with object
+                ::std::vector< basegfx::B3DPoint > aHitsWithObject;
+                getAllHit3DObjectWithRelativePoint(aFront, aBack, *pCandidate, aViewInfo3D, aHitsWithObject, false);
 
-                if(pCandidate)
+                for(const basegfx::B3DPoint & a : aHitsWithObject)
                 {
-                    fillViewInformation3DForCompoundObject(aViewInfo3D, *pCandidate);
-
-                    // create HitPoint Front and Back, transform to object coordinates
-                    basegfx::B3DHomMatrix aViewToObject(aViewInfo3D.getObjectToView());
-                    aViewToObject.invert();
-                    const basegfx::B3DPoint aFront(aViewToObject * basegfx::B3DPoint(aRelativePoint.getX(), aRelativePoint.getY(), 0.0));
-                    const basegfx::B3DPoint aBack(aViewToObject * basegfx::B3DPoint(aRelativePoint.getX(), aRelativePoint.getY(), 1.0));
-
-                    if(!aFront.equal(aBack))
-                    {
-                        // get all hit points with object
-                        ::std::vector< basegfx::B3DPoint > aHitsWithObject;
-                        getAllHit3DObjectWithRelativePoint(aFront, aBack, *pCandidate, aViewInfo3D, aHitsWithObject, false);
-
-                        for(const basegfx::B3DPoint & a : aHitsWithObject)
-                        {
-                            const basegfx::B3DPoint aPointInViewCoordinates(aViewInfo3D.getObjectToView() * a);
-                            aDepthAndObjectResults.emplace_back(pCandidate, aPointInViewCoordinates.getZ());
-                        }
-                    }
+                    const basegfx::B3DPoint aPointInViewCoordinates(aViewInfo3D.getObjectToView() * a);
+                    aDepthAndObjectResults.emplace_back(pCandidate, aPointInViewCoordinates.getZ());
                 }
             }
+        }
+    }
 
-            // fill nRetval
-            const sal_uInt32 nCount(aDepthAndObjectResults.size());
+    // fill nRetval
+    const sal_uInt32 nCount(aDepthAndObjectResults.size());
 
-            if(nCount)
-            {
-                // sort aDepthAndObjectResults by depth
-                ::std::sort(aDepthAndObjectResults.begin(), aDepthAndObjectResults.end());
+    if(nCount)
+    {
+        // sort aDepthAndObjectResults by depth
+        ::std::sort(aDepthAndObjectResults.begin(), aDepthAndObjectResults.end());
 
-                // copy SdrObject pointers to return result set
-                for(const auto& rResult : aDepthAndObjectResults)
-                {
-                    o_rResult.push_back(rResult.getObject());
-                }
-            }
+        // copy SdrObject pointers to return result set
+        for(const auto& rResult : aDepthAndObjectResults)
+        {
+            o_rResult.push_back(rResult.getObject());
         }
     }
 }

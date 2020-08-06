@@ -738,22 +738,22 @@ void SAL_CALL FmXFormShell::disposing(const lang::EventObject& e)
             m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
     }
 
-    if (e.Source == m_xExternalViewController)
-    {
-        Reference< runtime::XFormController > xFormController( m_xExternalViewController, UNO_QUERY );
-        OSL_ENSURE( xFormController.is(), "FmXFormShell::disposing: invalid external view controller!" );
-        if (xFormController.is())
-            xFormController->removeActivateListener(static_cast<XFormControllerListener*>(this));
+    if (e.Source != m_xExternalViewController)
+        return;
 
-        if (m_xExternalViewController.is())
-            m_xExternalViewController->removeEventListener(static_cast<XEventListener*>(static_cast<XPropertyChangeListener*>(this)));
+    Reference< runtime::XFormController > xFormController( m_xExternalViewController, UNO_QUERY );
+    OSL_ENSURE( xFormController.is(), "FmXFormShell::disposing: invalid external view controller!" );
+    if (xFormController.is())
+        xFormController->removeActivateListener(static_cast<XFormControllerListener*>(this));
 
-        m_xExternalViewController = nullptr;
-        m_xExternalDisplayedForm = nullptr;
-        m_xExtViewTriggerController = nullptr;
+    if (m_xExternalViewController.is())
+        m_xExternalViewController->removeEventListener(static_cast<XEventListener*>(static_cast<XPropertyChangeListener*>(this)));
 
-        InvalidateSlot_Lock( SID_FM_VIEW_AS_GRID, false );
-    }
+    m_xExternalViewController = nullptr;
+    m_xExternalDisplayedForm = nullptr;
+    m_xExtViewTriggerController = nullptr;
+
+    InvalidateSlot_Lock( SID_FM_VIEW_AS_GRID, false );
 }
 
 
@@ -806,20 +806,20 @@ void FmXFormShell::invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatu
 
     OSL_ENSURE( !_rFeatures.empty(), "FmXFormShell::invalidateFeatures: invalid arguments!" );
 
-    if ( m_pShell->GetViewShell() && m_pShell->GetViewShell()->GetViewFrame() )
-    {
-        // unfortunately, SFX requires sal_uInt16
-        ::std::vector< sal_uInt16 > aSlotIds( _rFeatures.begin(), _rFeatures.end() );
+    if ( !(m_pShell->GetViewShell() && m_pShell->GetViewShell()->GetViewFrame()) )
+        return;
 
-        // furthermore, SFX wants a terminating 0
-        aSlotIds.push_back( 0 );
+    // unfortunately, SFX requires sal_uInt16
+    ::std::vector< sal_uInt16 > aSlotIds( _rFeatures.begin(), _rFeatures.end() );
 
-        // and, last but not least, SFX wants the ids to be sorted
-        ::std::sort( aSlotIds.begin(), aSlotIds.end() - 1 );
+    // furthermore, SFX wants a terminating 0
+    aSlotIds.push_back( 0 );
 
-        sal_uInt16 *pSlotIds = aSlotIds.data();
-        m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate( pSlotIds );
-    }
+    // and, last but not least, SFX wants the ids to be sorted
+    ::std::sort( aSlotIds.begin(), aSlotIds.end() - 1 );
+
+    sal_uInt16 *pSlotIds = aSlotIds.data();
+    m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate( pSlotIds );
 }
 
 
@@ -1302,54 +1302,54 @@ void FmXFormShell::LoopGrids_Lock(LoopGridsSync nSync, LoopGridsFlags nFlags)
         return;
 
     Reference< XIndexContainer> xControlModels(m_xActiveForm, UNO_QUERY);
-    if (xControlModels.is())
+    if (!xControlModels.is())
+        return;
+
+    for (sal_Int32 i=0; i<xControlModels->getCount(); ++i)
     {
-        for (sal_Int32 i=0; i<xControlModels->getCount(); ++i)
+        Reference< XPropertySet> xModelSet;
+        xControlModels->getByIndex(i) >>= xModelSet;
+        if (!xModelSet.is())
+            continue;
+
+        if (!::comphelper::hasProperty(FM_PROP_CLASSID, xModelSet))
+            continue;
+        sal_Int16 nClassId = ::comphelper::getINT16(xModelSet->getPropertyValue(FM_PROP_CLASSID));
+        if (FormComponentType::GRIDCONTROL != nClassId)
+            continue;
+
+        if (!::comphelper::hasProperty(FM_PROP_CURSORCOLOR, xModelSet) || !::comphelper::hasProperty(FM_PROP_ALWAYSSHOWCURSOR, xModelSet) || !::comphelper::hasProperty(FM_PROP_DISPLAYSYNCHRON, xModelSet))
+            continue;
+
+        switch (nSync)
         {
-            Reference< XPropertySet> xModelSet;
-            xControlModels->getByIndex(i) >>= xModelSet;
-            if (!xModelSet.is())
-                continue;
-
-            if (!::comphelper::hasProperty(FM_PROP_CLASSID, xModelSet))
-                continue;
-            sal_Int16 nClassId = ::comphelper::getINT16(xModelSet->getPropertyValue(FM_PROP_CLASSID));
-            if (FormComponentType::GRIDCONTROL != nClassId)
-                continue;
-
-            if (!::comphelper::hasProperty(FM_PROP_CURSORCOLOR, xModelSet) || !::comphelper::hasProperty(FM_PROP_ALWAYSSHOWCURSOR, xModelSet) || !::comphelper::hasProperty(FM_PROP_DISPLAYSYNCHRON, xModelSet))
-                continue;
-
-            switch (nSync)
+            case LoopGridsSync::DISABLE_SYNC:
             {
-                case LoopGridsSync::DISABLE_SYNC:
-                {
-                    xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, Any(false));
-                }
-                break;
-                case LoopGridsSync::FORCE_SYNC:
-                {
-                    Any aOldVal( xModelSet->getPropertyValue(FM_PROP_DISPLAYSYNCHRON) );
-                    xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, Any(true));
-                    xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, aOldVal);
-                }
-                break;
-                case LoopGridsSync::ENABLE_SYNC:
-                {
-                    xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, Any(true));
-                }
-                break;
+                xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, Any(false));
             }
-
-            if (nFlags & LoopGridsFlags::DISABLE_ROCTRLR)
+            break;
+            case LoopGridsSync::FORCE_SYNC:
             {
-                xModelSet->setPropertyValue(FM_PROP_ALWAYSSHOWCURSOR, Any(false));
-                Reference< XPropertyState> xModelPropState(xModelSet, UNO_QUERY);
-                if (xModelPropState.is())
-                    xModelPropState->setPropertyToDefault(FM_PROP_CURSORCOLOR);
-                else
-                    xModelSet->setPropertyValue(FM_PROP_CURSORCOLOR, Any());        // this should be the default
+                Any aOldVal( xModelSet->getPropertyValue(FM_PROP_DISPLAYSYNCHRON) );
+                xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, Any(true));
+                xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, aOldVal);
             }
+            break;
+            case LoopGridsSync::ENABLE_SYNC:
+            {
+                xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, Any(true));
+            }
+            break;
+        }
+
+        if (nFlags & LoopGridsFlags::DISABLE_ROCTRLR)
+        {
+            xModelSet->setPropertyValue(FM_PROP_ALWAYSSHOWCURSOR, Any(false));
+            Reference< XPropertyState> xModelPropState(xModelSet, UNO_QUERY);
+            if (xModelPropState.is())
+                xModelPropState->setPropertyToDefault(FM_PROP_CURSORCOLOR);
+            else
+                xModelSet->setPropertyValue(FM_PROP_CURSORCOLOR, Any());        // this should be the default
         }
     }
 }
@@ -1753,27 +1753,27 @@ void FmXFormShell::ExecuteFormSlot_Lock( sal_Int32 _nSlot )
 
     rController->execute( _nSlot );
 
-    if ( _nSlot == SID_FM_RECORD_UNDO )
+    if ( _nSlot != SID_FM_RECORD_UNDO )
+        return;
+
+    // if we're doing an UNDO, *and* if the affected form is the form which we also display
+    // as external view, then we need to reset the controls of the external form, too
+    if (getInternalForm_Lock(getActiveForm_Lock()) != m_xExternalDisplayedForm)
+        return;
+
+    Reference< XIndexAccess > xContainer( m_xExternalDisplayedForm, UNO_QUERY );
+    if ( !xContainer.is() )
+        return;
+
+    Reference< XReset > xReset;
+    for ( sal_Int32 i = 0; i < xContainer->getCount(); ++i )
     {
-        // if we're doing an UNDO, *and* if the affected form is the form which we also display
-        // as external view, then we need to reset the controls of the external form, too
-        if (getInternalForm_Lock(getActiveForm_Lock()) == m_xExternalDisplayedForm)
+        if ( ( xContainer->getByIndex( i ) >>= xReset ) && xReset.is() )
         {
-            Reference< XIndexAccess > xContainer( m_xExternalDisplayedForm, UNO_QUERY );
-            if ( xContainer.is() )
-            {
-                Reference< XReset > xReset;
-                for ( sal_Int32 i = 0; i < xContainer->getCount(); ++i )
-                {
-                    if ( ( xContainer->getByIndex( i ) >>= xReset ) && xReset.is() )
-                    {
-                        // no resets on sub forms
-                        Reference< XForm > xAsForm( xReset, UNO_QUERY );
-                        if ( !xAsForm.is() )
-                            xReset->reset();
-                    }
-                }
-            }
+            // no resets on sub forms
+            Reference< XForm > xAsForm( xReset, UNO_QUERY );
+            if ( !xAsForm.is() )
+                xReset->reset();
         }
     }
 }
@@ -3782,59 +3782,59 @@ void FmXFormShell::loadForms_Lock(FmFormPage* _pPage, const LoadFormsFlags _nBeh
     }
 
     DBG_ASSERT( _pPage, "FmXFormShell::loadForms: invalid page!" );
-    if ( _pPage )
+    if ( !_pPage )
+        return;
+
+    // lock the undo env so the forms can change non-transient properties while loading
+    // (without this my doc's modified flag would be set)
+    FmFormModel& rFmFormModel(dynamic_cast< FmFormModel& >(_pPage->getSdrModelFromSdrPage()));
+    rFmFormModel.GetUndoEnv().Lock();
+
+    // load all forms
+    Reference< XIndexAccess >  xForms = _pPage->GetForms( false );
+
+    if ( xForms.is() )
     {
-        // lock the undo env so the forms can change non-transient properties while loading
-        // (without this my doc's modified flag would be set)
-        FmFormModel& rFmFormModel(dynamic_cast< FmFormModel& >(_pPage->getSdrModelFromSdrPage()));
-        rFmFormModel.GetUndoEnv().Lock();
-
-        // load all forms
-        Reference< XIndexAccess >  xForms = _pPage->GetForms( false );
-
-        if ( xForms.is() )
+        Reference< XLoadable >  xForm;
+        for ( sal_Int32 j = 0, nCount = xForms->getCount(); j < nCount; ++j )
         {
-            Reference< XLoadable >  xForm;
-            for ( sal_Int32 j = 0, nCount = xForms->getCount(); j < nCount; ++j )
+            xForms->getByIndex( j ) >>= xForm;
+            bool bFormWasLoaded = false;
+            // a database form must be loaded for
+            try
             {
-                xForms->getByIndex( j ) >>= xForm;
-                bool bFormWasLoaded = false;
-                // a database form must be loaded for
-                try
+                if ( !( _nBehaviour & LoadFormsFlags::Unload ) )
                 {
-                    if ( !( _nBehaviour & LoadFormsFlags::Unload ) )
-                    {
-                        if ( lcl_isLoadable( xForm ) && !xForm->isLoaded() )
-                            xForm->load();
-                    }
-                    else
-                    {
-                        if ( xForm->isLoaded() )
-                        {
-                            bFormWasLoaded = true;
-                            xForm->unload();
-                        }
-                    }
+                    if ( lcl_isLoadable( xForm ) && !xForm->isLoaded() )
+                        xForm->load();
                 }
-                catch( const Exception& )
+                else
                 {
-                    DBG_UNHANDLED_EXCEPTION("svx");
-                }
-
-                // reset the form if it was loaded
-                if ( bFormWasLoaded )
-                {
-                    Reference< XIndexAccess > xContainer( xForm, UNO_QUERY );
-                    DBG_ASSERT( xContainer.is(), "FmXFormShell::loadForms: the form is no container!" );
-                    if ( xContainer.is() )
-                        smartControlReset( xContainer );
+                    if ( xForm->isLoaded() )
+                    {
+                        bFormWasLoaded = true;
+                        xForm->unload();
+                    }
                 }
             }
-        }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION("svx");
+            }
 
-        // unlock the environment
-        rFmFormModel.GetUndoEnv().UnLock();
+            // reset the form if it was loaded
+            if ( bFormWasLoaded )
+            {
+                Reference< XIndexAccess > xContainer( xForm, UNO_QUERY );
+                DBG_ASSERT( xContainer.is(), "FmXFormShell::loadForms: the form is no container!" );
+                if ( xContainer.is() )
+                    smartControlReset( xContainer );
+            }
+        }
     }
+
+    // unlock the environment
+    rFmFormModel.GetUndoEnv().UnLock();
 }
 
 

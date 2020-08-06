@@ -105,63 +105,63 @@ GraphicInputStream::GraphicInputStream(GraphicObject const & aGraphicObject, con
 {
     maTempFile.EnableKillingFile();
 
-    if (aGraphicObject.GetType() != GraphicType::NONE)
+    if (aGraphicObject.GetType() == GraphicType::NONE)
+        return;
+
+    std::unique_ptr<SvStream> pStream = ::utl::UcbStreamHelper::CreateStream(maTempFile.GetURL(), StreamMode::WRITE | StreamMode::TRUNC);
+
+    if (!pStream)
+        return;
+
+    const Graphic& aGraphic(aGraphicObject.GetGraphic());
+    const GfxLink aGfxLink(aGraphic.GetGfxLink());
+    bool bRet = false;
+
+    if (aGfxLink.GetDataSize() && aGfxLink.GetData())
     {
-        std::unique_ptr<SvStream> pStream = ::utl::UcbStreamHelper::CreateStream(maTempFile.GetURL(), StreamMode::WRITE | StreamMode::TRUNC);
-
-        if (pStream)
+        if (rMimeType.isEmpty())
         {
-            const Graphic& aGraphic(aGraphicObject.GetGraphic());
-            const GfxLink aGfxLink(aGraphic.GetGfxLink());
-            bool bRet = false;
-
-            if (aGfxLink.GetDataSize() && aGfxLink.GetData())
-            {
-                if (rMimeType.isEmpty())
-                {
-                    pStream->WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
-                    bRet = (pStream->GetError() == ERRCODE_NONE);
-                }
-                else
-                {
-                    GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
-                    bRet = (rFilter.ExportGraphic(aGraphic, "", *pStream, rFilter.GetExportFormatNumberForMediaType(rMimeType)) == ERRCODE_NONE);
-                }
-            }
-            else
-            {
-                if (aGraphic.GetType() == GraphicType::Bitmap)
-                {
-                    GraphicFilter & rFilter = GraphicFilter::GetGraphicFilter();
-                    OUString aFormat = rMimeType;
-
-                    if (aGraphic.IsAnimated())
-                        aFormat = "image/gif";
-                    else if (aFormat.isEmpty())
-                        aFormat = "image/png";
-
-                    bRet = (rFilter.ExportGraphic(aGraphic, "", *pStream, rFilter.GetExportFormatNumberForMediaType(aFormat)) == ERRCODE_NONE);
-                }
-                else if (rMimeType.isEmpty() && aGraphic.GetType() == GraphicType::GdiMetafile)
-                {
-                    pStream->SetVersion(SOFFICE_FILEFORMAT_8);
-                    pStream->SetCompressMode(SvStreamCompressFlags::ZBITMAP);
-                    const_cast<GDIMetaFile&>(aGraphic.GetGDIMetaFile()).Write(*pStream);
-                    bRet = (pStream->GetError() == ERRCODE_NONE);
-                }
-                else if (!rMimeType.isEmpty())
-                {
-                    GraphicFilter & rFilter = GraphicFilter::GetGraphicFilter();
-                    bRet = ( rFilter.ExportGraphic( aGraphic, "", *pStream, rFilter.GetExportFormatNumberForMediaType( rMimeType ) ) == ERRCODE_NONE );
-                }
-            }
-
-            if (bRet)
-            {
-                pStream->Seek( 0 );
-                mxStreamWrapper = new ::utl::OInputStreamWrapper(std::move(pStream));
-            }
+            pStream->WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
+            bRet = (pStream->GetError() == ERRCODE_NONE);
         }
+        else
+        {
+            GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
+            bRet = (rFilter.ExportGraphic(aGraphic, "", *pStream, rFilter.GetExportFormatNumberForMediaType(rMimeType)) == ERRCODE_NONE);
+        }
+    }
+    else
+    {
+        if (aGraphic.GetType() == GraphicType::Bitmap)
+        {
+            GraphicFilter & rFilter = GraphicFilter::GetGraphicFilter();
+            OUString aFormat = rMimeType;
+
+            if (aGraphic.IsAnimated())
+                aFormat = "image/gif";
+            else if (aFormat.isEmpty())
+                aFormat = "image/png";
+
+            bRet = (rFilter.ExportGraphic(aGraphic, "", *pStream, rFilter.GetExportFormatNumberForMediaType(aFormat)) == ERRCODE_NONE);
+        }
+        else if (rMimeType.isEmpty() && aGraphic.GetType() == GraphicType::GdiMetafile)
+        {
+            pStream->SetVersion(SOFFICE_FILEFORMAT_8);
+            pStream->SetCompressMode(SvStreamCompressFlags::ZBITMAP);
+            const_cast<GDIMetaFile&>(aGraphic.GetGDIMetaFile()).Write(*pStream);
+            bRet = (pStream->GetError() == ERRCODE_NONE);
+        }
+        else if (!rMimeType.isEmpty())
+        {
+            GraphicFilter & rFilter = GraphicFilter::GetGraphicFilter();
+            bRet = ( rFilter.ExportGraphic( aGraphic, "", *pStream, rFilter.GetExportFormatNumberForMediaType( rMimeType ) ) == ERRCODE_NONE );
+        }
+    }
+
+    if (bRet)
+    {
+        pStream->Seek( 0 );
+        mxStreamWrapper = new ::utl::OInputStreamWrapper(std::move(pStream));
     }
 }
 

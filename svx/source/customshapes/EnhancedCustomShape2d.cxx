@@ -801,24 +801,24 @@ EnhancedCustomShape2d::EnhancedCustomShape2d(SdrObjCustomShape& rSdrObjCustomSha
 
     sal_Int32 nLength = seqEquations.getLength();
 
-    if ( nLength )
+    if ( !nLength )
+        return;
+
+    vNodesSharedPtr.resize( nLength );
+    vEquationResults.resize( nLength );
+    for ( sal_Int32 i = 0; i < nLength; i++ )
     {
-        vNodesSharedPtr.resize( nLength );
-        vEquationResults.resize( nLength );
-        for ( sal_Int32 i = 0; i < nLength; i++ )
+        vEquationResults[ i ].bReady = false;
+        try
         {
-            vEquationResults[ i ].bReady = false;
-            try
-            {
-                vNodesSharedPtr[ i ] = EnhancedCustomShape::FunctionParser::parseFunction( seqEquations[ i ], *this );
-            }
-            catch ( EnhancedCustomShape::ParseError& )
-            {
-                SAL_INFO(
-                    "svx",
-                    "error: equation number: " << i << ", parser failed ("
-                        << seqEquations[i] << ")");
-            }
+            vNodesSharedPtr[ i ] = EnhancedCustomShape::FunctionParser::parseFunction( seqEquations[ i ], *this );
+        }
+        catch ( EnhancedCustomShape::ParseError& )
+        {
+            SAL_INFO(
+                "svx",
+                "error: equation number: " << i << ", parser failed ("
+                    << seqEquations[i] << ")");
         }
     }
 }
@@ -2556,89 +2556,89 @@ void EnhancedCustomShape2d::CreateSubPath(
         aNewB2DPolyPolygon.append(aNewB2DPolygon);
     }
 
-    if(aNewB2DPolyPolygon.count())
+    if(!aNewB2DPolyPolygon.count())
+        return;
+
+    // #i37011#
+    bool bForceCreateTwoObjects(false);
+
+    if(!bSortFilledObjectsToBack && !aNewB2DPolyPolygon.isClosed() && !bNoStroke)
     {
-        // #i37011#
-        bool bForceCreateTwoObjects(false);
+        bForceCreateTwoObjects = true;
+    }
 
-        if(!bSortFilledObjectsToBack && !aNewB2DPolyPolygon.isClosed() && !bNoStroke)
+    if(bLineGeometryNeededOnly)
+    {
+        bForceCreateTwoObjects = true;
+        bNoFill = true;
+        bNoStroke = false;
+    }
+
+    if(bForceCreateTwoObjects || bSortFilledObjectsToBack)
+    {
+        if(bFilled && !bNoFill)
         {
-            bForceCreateTwoObjects = true;
+            basegfx::B2DPolyPolygon aClosedPolyPolygon(aNewB2DPolyPolygon);
+            aClosedPolyPolygon.setClosed(true);
+            SdrPathObj* pFill = new SdrPathObj(
+                mrSdrObjCustomShape.getSdrModelFromSdrObject(),
+                OBJ_POLY,
+                aClosedPolyPolygon);
+            SfxItemSet aTempSet(*this);
+            aTempSet.Put(makeSdrShadowItem(false));
+            aTempSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
+            pFill->SetMergedItemSet(aTempSet);
+            rObjectList.push_back(std::pair< SdrPathObj*, double >(pFill, dBrightness));
         }
 
-        if(bLineGeometryNeededOnly)
+        if(!bNoStroke)
         {
-            bForceCreateTwoObjects = true;
-            bNoFill = true;
-            bNoStroke = false;
+            // there is no reason to use OBJ_PLIN here when the polygon is actually closed,
+            // the non-fill is defined by XFILL_NONE. Since SdrPathObj::ImpForceKind() needs
+            // to correct the polygon (here: open it) using the type, the last edge may get lost.
+            // Thus, use a type that fits the polygon
+            SdrPathObj* pStroke = new SdrPathObj(
+                mrSdrObjCustomShape.getSdrModelFromSdrObject(),
+                aNewB2DPolyPolygon.isClosed() ? OBJ_POLY : OBJ_PLIN,
+                aNewB2DPolyPolygon);
+            SfxItemSet aTempSet(*this);
+            aTempSet.Put(makeSdrShadowItem(false));
+            aTempSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
+            pStroke->SetMergedItemSet(aTempSet);
+            rObjectList.push_back(std::pair< SdrPathObj*, double >(pStroke, dBrightness));
         }
+    }
+    else
+    {
+        SdrPathObj* pObj = nullptr;
+        SfxItemSet aTempSet(*this);
+        aTempSet.Put(makeSdrShadowItem(false));
 
-        if(bForceCreateTwoObjects || bSortFilledObjectsToBack)
+        if(bNoFill)
         {
-            if(bFilled && !bNoFill)
-            {
-                basegfx::B2DPolyPolygon aClosedPolyPolygon(aNewB2DPolyPolygon);
-                aClosedPolyPolygon.setClosed(true);
-                SdrPathObj* pFill = new SdrPathObj(
-                    mrSdrObjCustomShape.getSdrModelFromSdrObject(),
-                    OBJ_POLY,
-                    aClosedPolyPolygon);
-                SfxItemSet aTempSet(*this);
-                aTempSet.Put(makeSdrShadowItem(false));
-                aTempSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
-                pFill->SetMergedItemSet(aTempSet);
-                rObjectList.push_back(std::pair< SdrPathObj*, double >(pFill, dBrightness));
-            }
-
-            if(!bNoStroke)
-            {
-                // there is no reason to use OBJ_PLIN here when the polygon is actually closed,
-                // the non-fill is defined by XFILL_NONE. Since SdrPathObj::ImpForceKind() needs
-                // to correct the polygon (here: open it) using the type, the last edge may get lost.
-                // Thus, use a type that fits the polygon
-                SdrPathObj* pStroke = new SdrPathObj(
-                    mrSdrObjCustomShape.getSdrModelFromSdrObject(),
-                    aNewB2DPolyPolygon.isClosed() ? OBJ_POLY : OBJ_PLIN,
-                    aNewB2DPolyPolygon);
-                SfxItemSet aTempSet(*this);
-                aTempSet.Put(makeSdrShadowItem(false));
-                aTempSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
-                pStroke->SetMergedItemSet(aTempSet);
-                rObjectList.push_back(std::pair< SdrPathObj*, double >(pStroke, dBrightness));
-            }
+            // see comment above about OBJ_PLIN
+            pObj = new SdrPathObj(
+                mrSdrObjCustomShape.getSdrModelFromSdrObject(),
+                aNewB2DPolyPolygon.isClosed() ? OBJ_POLY : OBJ_PLIN,
+                aNewB2DPolyPolygon);
+            aTempSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
         }
         else
         {
-            SdrPathObj* pObj = nullptr;
-            SfxItemSet aTempSet(*this);
-            aTempSet.Put(makeSdrShadowItem(false));
-
-            if(bNoFill)
-            {
-                // see comment above about OBJ_PLIN
-                pObj = new SdrPathObj(
-                    mrSdrObjCustomShape.getSdrModelFromSdrObject(),
-                    aNewB2DPolyPolygon.isClosed() ? OBJ_POLY : OBJ_PLIN,
-                    aNewB2DPolyPolygon);
-                aTempSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
-            }
-            else
-            {
-                aNewB2DPolyPolygon.setClosed(true);
-                pObj = new SdrPathObj(
-                    mrSdrObjCustomShape.getSdrModelFromSdrObject(),
-                    OBJ_POLY,
-                    aNewB2DPolyPolygon);
-            }
-
-            if(bNoStroke)
-            {
-                aTempSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
-            }
-
-            pObj->SetMergedItemSet(aTempSet);
-            rObjectList.push_back(std::pair< SdrPathObj*, double >(pObj, dBrightness));
+            aNewB2DPolyPolygon.setClosed(true);
+            pObj = new SdrPathObj(
+                mrSdrObjCustomShape.getSdrModelFromSdrObject(),
+                OBJ_POLY,
+                aNewB2DPolyPolygon);
         }
+
+        if(bNoStroke)
+        {
+            aTempSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
+        }
+
+        pObj->SetMergedItemSet(aTempSet);
+        rObjectList.push_back(std::pair< SdrPathObj*, double >(pObj, dBrightness));
     }
 }
 
@@ -2748,83 +2748,83 @@ void EnhancedCustomShape2d::AdaptObjColor(
     sal_uInt32& nColorIndex,
     sal_uInt32 nColorCount)
 {
-    if ( !rObj.IsLine() )
+    if ( rObj.IsLine() )
+        return;
+
+    const drawing::FillStyle eFillStyle = rObj.GetMergedItem(XATTR_FILLSTYLE).GetValue();
+    switch( eFillStyle )
     {
-        const drawing::FillStyle eFillStyle = rObj.GetMergedItem(XATTR_FILLSTYLE).GetValue();
-        switch( eFillStyle )
+        default:
+        case drawing::FillStyle_SOLID:
         {
-            default:
-            case drawing::FillStyle_SOLID:
+            Color aFillColor;
+
+            if ( nColorCount || 0.0 != dBrightness )
             {
-                Color aFillColor;
-
-                if ( nColorCount || 0.0 != dBrightness )
-                {
-                    aFillColor = GetColorData(
-                        rCustomShapeSet.Get( XATTR_FILLCOLOR ).GetColorValue(),
-                        std::min(nColorIndex, nColorCount-1),
-                        dBrightness );
-                    rObj.SetMergedItem( XFillColorItem( "", aFillColor ) );
-                }
-                break;
+                aFillColor = GetColorData(
+                    rCustomShapeSet.Get( XATTR_FILLCOLOR ).GetColorValue(),
+                    std::min(nColorIndex, nColorCount-1),
+                    dBrightness );
+                rObj.SetMergedItem( XFillColorItem( "", aFillColor ) );
             }
-            case drawing::FillStyle_GRADIENT:
-            {
-                XGradient aXGradient(rObj.GetMergedItem(XATTR_FILLGRADIENT).GetGradientValue());
-
-                if ( nColorCount || 0.0 != dBrightness )
-                {
-                    aXGradient.SetStartColor(
-                        GetColorData(
-                            aXGradient.GetStartColor(),
-                            std::min(nColorIndex, nColorCount-1),
-                            dBrightness ));
-                    aXGradient.SetEndColor(
-                        GetColorData(
-                            aXGradient.GetEndColor(),
-                            std::min(nColorIndex, nColorCount-1),
-                            dBrightness ));
-                }
-
-                rObj.SetMergedItem( XFillGradientItem( "", aXGradient ) );
-                break;
-            }
-            case drawing::FillStyle_HATCH:
-            {
-                XHatch aXHatch(rObj.GetMergedItem(XATTR_FILLHATCH).GetHatchValue());
-
-                if ( nColorCount || 0.0 != dBrightness )
-                {
-                    aXHatch.SetColor(
-                        GetColorData(
-                            aXHatch.GetColor(),
-                            std::min(nColorIndex, nColorCount-1),
-                            dBrightness ));
-                }
-
-                rObj.SetMergedItem( XFillHatchItem( "", aXHatch ) );
-                break;
-            }
-            case drawing::FillStyle_BITMAP:
-            {
-                if ( nColorCount || 0.0 != dBrightness )
-                {
-                    BitmapEx aBitmap(rObj.GetMergedItem(XATTR_FILLBITMAP).GetGraphicObject().GetGraphic().GetBitmapEx());
-
-                    short nLuminancePercent = static_cast< short > ( GetLuminanceChange(
-                            std::min(nColorIndex, nColorCount-1)));
-                    aBitmap.Adjust( nLuminancePercent, 0, 0, 0, 0 );
-
-                    rObj.SetMergedItem(XFillBitmapItem(OUString(), Graphic(aBitmap)));
-                }
-
-                break;
-            }
+            break;
         }
+        case drawing::FillStyle_GRADIENT:
+        {
+            XGradient aXGradient(rObj.GetMergedItem(XATTR_FILLGRADIENT).GetGradientValue());
 
-        if ( nColorIndex < nColorCount )
-            nColorIndex++;
+            if ( nColorCount || 0.0 != dBrightness )
+            {
+                aXGradient.SetStartColor(
+                    GetColorData(
+                        aXGradient.GetStartColor(),
+                        std::min(nColorIndex, nColorCount-1),
+                        dBrightness ));
+                aXGradient.SetEndColor(
+                    GetColorData(
+                        aXGradient.GetEndColor(),
+                        std::min(nColorIndex, nColorCount-1),
+                        dBrightness ));
+            }
+
+            rObj.SetMergedItem( XFillGradientItem( "", aXGradient ) );
+            break;
+        }
+        case drawing::FillStyle_HATCH:
+        {
+            XHatch aXHatch(rObj.GetMergedItem(XATTR_FILLHATCH).GetHatchValue());
+
+            if ( nColorCount || 0.0 != dBrightness )
+            {
+                aXHatch.SetColor(
+                    GetColorData(
+                        aXHatch.GetColor(),
+                        std::min(nColorIndex, nColorCount-1),
+                        dBrightness ));
+            }
+
+            rObj.SetMergedItem( XFillHatchItem( "", aXHatch ) );
+            break;
+        }
+        case drawing::FillStyle_BITMAP:
+        {
+            if ( nColorCount || 0.0 != dBrightness )
+            {
+                BitmapEx aBitmap(rObj.GetMergedItem(XATTR_FILLBITMAP).GetGraphicObject().GetGraphic().GetBitmapEx());
+
+                short nLuminancePercent = static_cast< short > ( GetLuminanceChange(
+                        std::min(nColorIndex, nColorCount-1)));
+                aBitmap.Adjust( nLuminancePercent, 0, 0, 0, 0 );
+
+                rObj.SetMergedItem(XFillBitmapItem(OUString(), Graphic(aBitmap)));
+            }
+
+            break;
+        }
     }
+
+    if ( nColorIndex < nColorCount )
+        nColorIndex++;
 }
 
 SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
@@ -3014,20 +3014,20 @@ SdrObject* EnhancedCustomShape2d::CreateObject( bool bLineGeometryNeededOnly )
 
 void EnhancedCustomShape2d::ApplyGluePoints( SdrObject* pObj )
 {
-    if ( pObj )
-    {
-        for ( const auto& rGluePoint : std::as_const(seqGluePoints) )
-        {
-            SdrGluePoint aGluePoint;
+    if ( !pObj )
+        return;
 
-            aGluePoint.SetPos( GetPoint( rGluePoint, true, true ) );
-            aGluePoint.SetPercent( false );
-            aGluePoint.SetAlign( SdrAlign::VERT_TOP | SdrAlign::HORZ_LEFT );
-            aGluePoint.SetEscDir( SdrEscapeDirection::SMART );
-            SdrGluePointList* pList = pObj->ForceGluePointList();
-            if( pList )
-                /* sal_uInt16 nId = */ pList->Insert( aGluePoint );
-        }
+    for ( const auto& rGluePoint : std::as_const(seqGluePoints) )
+    {
+        SdrGluePoint aGluePoint;
+
+        aGluePoint.SetPos( GetPoint( rGluePoint, true, true ) );
+        aGluePoint.SetPercent( false );
+        aGluePoint.SetAlign( SdrAlign::VERT_TOP | SdrAlign::HORZ_LEFT );
+        aGluePoint.SetEscDir( SdrEscapeDirection::SMART );
+        SdrGluePointList* pList = pObj->ForceGluePointList();
+        if( pList )
+            /* sal_uInt16 nId = */ pList->Insert( aGluePoint );
     }
 }
 

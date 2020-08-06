@@ -398,19 +398,19 @@ SvxGalleryDrawModel::SvxGalleryDrawModel()
 {
     mxDoc = SfxObjectShell::CreateObjectByFactoryName( "sdraw" );
 
-    if( mxDoc.Is() )
-    {
-        mxDoc->DoInitNew();
+    if( !mxDoc.Is() )
+        return;
 
-        uno::Reference< lang::XUnoTunnel > xTunnel( mxDoc->GetModel(), uno::UNO_QUERY );
-        if( xTunnel.is() )
+    mxDoc->DoInitNew();
+
+    uno::Reference< lang::XUnoTunnel > xTunnel( mxDoc->GetModel(), uno::UNO_QUERY );
+    if( xTunnel.is() )
+    {
+        mpFormModel = dynamic_cast< FmFormModel* >(
+            reinterpret_cast<SdrModel*>(xTunnel->getSomething(SdrModel::getUnoTunnelId())));
+        if( mpFormModel )
         {
-            mpFormModel = dynamic_cast< FmFormModel* >(
-                reinterpret_cast<SdrModel*>(xTunnel->getSomething(SdrModel::getUnoTunnelId())));
-            if( mpFormModel )
-            {
-                mpFormModel->InsertPage( mpFormModel->AllocPage( false ) );
-            }
+            mpFormModel->InsertPage( mpFormModel->AllocPage( false ) );
         }
     }
 }

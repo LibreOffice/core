@@ -621,18 +621,18 @@ void SAL_CALL SvxUnoDrawPagesAccess::remove( const uno::Reference< drawing::XDra
     ::SolarMutexGuard aGuard;
 
     sal_uInt16 nPageCount = mrModel.mpDoc->GetPageCount();
-    if( nPageCount > 1 )
+    if( nPageCount <= 1 )
+        return;
+
+    // get pPage from xPage and get Id (nPos)
+    SvxDrawPage* pSvxPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( xPage );
+    if( pSvxPage )
     {
-        // get pPage from xPage and get Id (nPos)
-        SvxDrawPage* pSvxPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( xPage );
-        if( pSvxPage )
+        SdrPage* pPage = pSvxPage->GetSdrPage();
+        if(pPage)
         {
-            SdrPage* pPage = pSvxPage->GetSdrPage();
-            if(pPage)
-            {
-                sal_uInt16 nPage = pPage->GetPageNum();
-                mrModel.mpDoc->DeletePage( nPage );
-            }
+            sal_uInt16 nPage = pPage->GetPageNum();
+            mrModel.mpDoc->DeletePage( nPage );
         }
     }
 }

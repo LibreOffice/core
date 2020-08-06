@@ -435,18 +435,18 @@ void SvxTextEditSourceImpl::SetupOutliner()
     // only for UAA edit source: setup outliner equivalently as in
     // SdrTextObj::Paint(), such that formatting equals screen
     // layout
-    if( mpObject && mpOutliner )
-    {
-        SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
-        tools::Rectangle aPaintRect;
-        if( pTextObj )
-        {
-            tools::Rectangle aBoundRect( pTextObj->GetCurrentBoundRect() );
-            pTextObj->SetupOutlinerFormatting( *mpOutliner, aPaintRect );
+    if( !(mpObject && mpOutliner) )
+        return;
 
-            // calc text offset from shape anchor
-            maTextOffset = aPaintRect.TopLeft() - aBoundRect.TopLeft();
-        }
+    SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
+    tools::Rectangle aPaintRect;
+    if( pTextObj )
+    {
+        tools::Rectangle aBoundRect( pTextObj->GetCurrentBoundRect() );
+        pTextObj->SetupOutlinerFormatting( *mpOutliner, aPaintRect );
+
+        // calc text offset from shape anchor
+        maTextOffset = aPaintRect.TopLeft() - aBoundRect.TopLeft();
     }
 }
 
@@ -456,18 +456,18 @@ void SvxTextEditSourceImpl::UpdateOutliner()
     // only for UAA edit source: update outliner equivalently as in
     // SdrTextObj::Paint(), such that formatting equals screen
     // layout
-    if( mpObject && mpOutliner )
-    {
-        SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
-        tools::Rectangle aPaintRect;
-        if( pTextObj )
-        {
-            tools::Rectangle aBoundRect( pTextObj->GetCurrentBoundRect() );
-            pTextObj->UpdateOutlinerFormatting( *mpOutliner, aPaintRect );
+    if( !(mpObject && mpOutliner) )
+        return;
 
-            // calc text offset from shape anchor
-            maTextOffset = aPaintRect.TopLeft() - aBoundRect.TopLeft();
-        }
+    SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
+    tools::Rectangle aPaintRect;
+    if( pTextObj )
+    {
+        tools::Rectangle aBoundRect( pTextObj->GetCurrentBoundRect() );
+        pTextObj->UpdateOutlinerFormatting( *mpOutliner, aPaintRect );
+
+        // calc text offset from shape anchor
+        maTextOffset = aPaintRect.TopLeft() - aBoundRect.TopLeft();
     }
 }
 
@@ -761,44 +761,44 @@ void SvxTextEditSourceImpl::UpdateData()
     // DrawOutliner. Thus, all changes made on the text forwarder are
     // reflected on the view and committed to the model on
     // SdrEndTextEdit(). Thus, no need for explicit updates here.
-    if( !HasView() || !IsEditMode() )
+    if( HasView() && IsEditMode() )
+        return;
+
+    if( mbIsLocked  )
     {
-        if( mbIsLocked  )
+        mbNeedsUpdate = true;
+    }
+    else
+    {
+        if( mpOutliner && mpObject && mpText )
         {
-            mbNeedsUpdate = true;
-        }
-        else
-        {
-            if( mpOutliner && mpObject && mpText )
+            SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( mpObject );
+            if( pTextObj )
             {
-                SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( mpObject );
-                if( pTextObj )
+                if( mpOutliner->GetParagraphCount() != 1 || mpOutliner->GetEditEngine().GetTextLen( 0 ) )
                 {
-                    if( mpOutliner->GetParagraphCount() != 1 || mpOutliner->GetEditEngine().GetTextLen( 0 ) )
+                    if( mpOutliner->GetParagraphCount() > 1 )
                     {
-                        if( mpOutliner->GetParagraphCount() > 1 )
+                        if (pTextObj->IsTextFrame() && pTextObj->GetTextKind() == OBJ_TITLETEXT)
                         {
-                            if (pTextObj->IsTextFrame() && pTextObj->GetTextKind() == OBJ_TITLETEXT)
+                            while( mpOutliner->GetParagraphCount() > 1 )
                             {
-                                while( mpOutliner->GetParagraphCount() > 1 )
-                                {
-                                    ESelection aSel( 0,mpOutliner->GetEditEngine().GetTextLen( 0 ), 1,0 );
-                                    mpOutliner->QuickInsertLineBreak( aSel );
-                                }
+                                ESelection aSel( 0,mpOutliner->GetEditEngine().GetTextLen( 0 ), 1,0 );
+                                mpOutliner->QuickInsertLineBreak( aSel );
                             }
                         }
+                    }
 
-                        pTextObj->NbcSetOutlinerParaObjectForText( mpOutliner->CreateParaObject(), mpText );
-                    }
-                    else
-                    {
-                        pTextObj->NbcSetOutlinerParaObjectForText( nullptr,mpText );
-                    }
+                    pTextObj->NbcSetOutlinerParaObjectForText( mpOutliner->CreateParaObject(), mpText );
                 }
-
-                if( mpObject->IsEmptyPresObj() )
-                    mpObject->SetEmptyPresObj(false);
+                else
+                {
+                    pTextObj->NbcSetOutlinerParaObjectForText( nullptr,mpText );
+                }
             }
+
+            if( mpObject->IsEmptyPresObj() )
+                mpObject->SetEmptyPresObj(false);
         }
     }
 }

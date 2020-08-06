@@ -284,24 +284,24 @@ void SvxNumberFormatShell::RemoveFormat(const OUString& rFormat, sal_uInt16& rCa
     DBG_ASSERT(nDelKey != NUMBERFORMAT_ENTRY_NOT_FOUND, "entry not found!");
     DBG_ASSERT(!IsRemoved_Impl(nDelKey), "entry already removed!");
 
-    if ((nDelKey != NUMBERFORMAT_ENTRY_NOT_FOUND) && !IsRemoved_Impl(nDelKey))
+    if ((nDelKey == NUMBERFORMAT_ENTRY_NOT_FOUND) || IsRemoved_Impl(nDelKey))
+        return;
+
+    aDelList.push_back(nDelKey);
+
+    ::std::vector<sal_uInt32>::iterator nAt = GetAdded_Impl(nDelKey);
+    if (nAt != aAddList.end())
     {
-        aDelList.push_back(nDelKey);
-
-        ::std::vector<sal_uInt32>::iterator nAt = GetAdded_Impl(nDelKey);
-        if (nAt != aAddList.end())
-        {
-            aAddList.erase(nAt);
-        }
-
-        nCurCategory = pFormatter->GetType(nDelKey);
-        pCurFmtTable = &(pFormatter->GetEntryTable(nCurCategory, nCurFormatKey, eCurLanguage));
-
-        nCurFormatKey = pFormatter->GetStandardFormat(nCurCategory, eCurLanguage);
-
-        CategoryToPos_Impl(nCurCategory, rCatLbSelPos);
-        rFmtSelPos = FillEntryList_Impl(rFmtEntries);
+        aAddList.erase(nAt);
     }
+
+    nCurCategory = pFormatter->GetType(nDelKey);
+    pCurFmtTable = &(pFormatter->GetEntryTable(nCurCategory, nCurFormatKey, eCurLanguage));
+
+    nCurFormatKey = pFormatter->GetStandardFormat(nCurCategory, eCurLanguage);
+
+    CategoryToPos_Impl(nCurCategory, rCatLbSelPos);
+    rFmtSelPos = FillEntryList_Impl(rFmtEntries);
 }
 
 void SvxNumberFormatShell::MakeFormat(OUString& rFormat, bool bThousand, bool bNegRed,
@@ -1361,30 +1361,30 @@ void SvxNumberFormatShell::GetCurrencySymbols(std::vector<OUString>& rList, sal_
 
     SvxCurrencyToolBoxControl::GetCurrencySymbols(rList, bFlag, aCurCurrencyList);
 
-    if (pPos != nullptr)
+    if (pPos == nullptr)
+        return;
+
+    const NfCurrencyTable& rCurrencyTable = SvNumberFormatter::GetTheCurrencyTable();
+    sal_uInt16 nTableCount = rCurrencyTable.size();
+
+    *pPos = 0;
+    size_t nCount = aCurCurrencyList.size();
+
+    if (bFlag)
     {
-        const NfCurrencyTable& rCurrencyTable = SvNumberFormatter::GetTheCurrencyTable();
-        sal_uInt16 nTableCount = rCurrencyTable.size();
-
-        *pPos = 0;
-        size_t nCount = aCurCurrencyList.size();
-
-        if (bFlag)
+        *pPos = 1;
+        nCurCurrencyEntryPos = 1;
+    }
+    else
+    {
+        for (size_t i = 1; i < nCount; i++)
         {
-            *pPos = 1;
-            nCurCurrencyEntryPos = 1;
-        }
-        else
-        {
-            for (size_t i = 1; i < nCount; i++)
+            const sal_uInt16 j = aCurCurrencyList[i];
+            if (j != sal_uInt16(-1) && j < nTableCount && pTmpCurrencyEntry == &rCurrencyTable[j])
             {
-                const sal_uInt16 j = aCurCurrencyList[i];
-                if (j != sal_uInt16(-1) && j < nTableCount && pTmpCurrencyEntry == &rCurrencyTable[j])
-                {
-                    *pPos = static_cast<sal_uInt16>(i);
-                    nCurCurrencyEntryPos = static_cast<sal_uInt16>(i);
-                    break;
-                }
+                *pPos = static_cast<sal_uInt16>(i);
+                nCurCurrencyEntryPos = static_cast<sal_uInt16>(i);
+                break;
             }
         }
     }
@@ -1397,20 +1397,20 @@ void SvxNumberFormatShell::SetCurrencySymbol(sal_uInt32 nPos)
 
     bBankingSymbol = (nPos >= nCount);
 
-    if (nPos < aCurCurrencyList.size())
+    if (nPos >= aCurCurrencyList.size())
+        return;
+
+    sal_uInt16 nCurrencyPos = aCurCurrencyList[nPos];
+    if (nCurrencyPos != sal_uInt16(-1))
     {
-        sal_uInt16 nCurrencyPos = aCurCurrencyList[nPos];
-        if (nCurrencyPos != sal_uInt16(-1))
-        {
-            pCurCurrencyEntry = const_cast<NfCurrencyEntry*>(&rCurrencyTable[nCurrencyPos]);
-            nCurCurrencyEntryPos = nPos;
-        }
-        else
-        {
-            pCurCurrencyEntry = nullptr;
-            nCurCurrencyEntryPos = 0;
-            nCurFormatKey = pFormatter->GetFormatIndex(NF_CURRENCY_1000DEC2_RED, eCurLanguage);
-        }
+        pCurCurrencyEntry = const_cast<NfCurrencyEntry*>(&rCurrencyTable[nCurrencyPos]);
+        nCurCurrencyEntryPos = nPos;
+    }
+    else
+    {
+        pCurCurrencyEntry = nullptr;
+        nCurCurrencyEntryPos = 0;
+        nCurFormatKey = pFormatter->GetFormatIndex(NF_CURRENCY_1000DEC2_RED, eCurLanguage);
     }
 }
 

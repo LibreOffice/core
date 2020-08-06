@@ -124,35 +124,35 @@ void SvxDrawPage::dispose()
     }
 
     // Do not hold the mutex because we are broadcasting
-    if( bDoDispose )
-    {
-        // Create an event with this as sender
-        try
-        {
-            uno::Reference< uno::XInterface > xSource( uno::Reference< uno::XInterface >::query( static_cast<lang::XComponent *>(this) ) );
-            css::document::EventObject aEvt;
-            aEvt.Source = xSource;
-            // inform all listeners to release this object
-            // The listener container are automatically cleared
-            mrBHelper.aLC.disposeAndClear( aEvt );
-            // notify subclasses to do their dispose
-            disposing();
-        }
-        catch(const css::uno::Exception&)
-        {
-            // catch exception and throw again but signal that
-            // the object was disposed. Dispose should be called
-            // only once.
-            osl::MutexGuard aGuard( mrBHelper.rMutex );
-            mrBHelper.bDisposed = true;
-            mrBHelper.bInDispose = false;
-            throw;
-        }
+    if( !bDoDispose )
+        return;
 
+    // Create an event with this as sender
+    try
+    {
+        uno::Reference< uno::XInterface > xSource( uno::Reference< uno::XInterface >::query( static_cast<lang::XComponent *>(this) ) );
+        css::document::EventObject aEvt;
+        aEvt.Source = xSource;
+        // inform all listeners to release this object
+        // The listener container are automatically cleared
+        mrBHelper.aLC.disposeAndClear( aEvt );
+        // notify subclasses to do their dispose
+        disposing();
+    }
+    catch(const css::uno::Exception&)
+    {
+        // catch exception and throw again but signal that
+        // the object was disposed. Dispose should be called
+        // only once.
         osl::MutexGuard aGuard( mrBHelper.rMutex );
         mrBHelper.bDisposed = true;
         mrBHelper.bInDispose = false;
+        throw;
     }
+
+    osl::MutexGuard aGuard( mrBHelper.rMutex );
+    mrBHelper.bDisposed = true;
+    mrBHelper.bInDispose = false;
 
 }
 
@@ -406,18 +406,18 @@ void SvxDrawPage::SelectObjectsInView( const Reference< drawing::XShapes > & aSh
     SAL_WARN_IF(!pPageView, "svx", "SdrPageView is NULL!");
     SAL_WARN_IF(!mpView, "svx", "SdrView is NULL!");
 
-    if(pPageView!=nullptr && mpView!=nullptr)
-    {
-        mpView->UnmarkAllObj( pPageView );
+    if(pPageView==nullptr || mpView==nullptr)
+        return;
 
-        long nCount = aShapes->getCount();
-        for( long i = 0; i < nCount; i++ )
-        {
-            uno::Any aAny( aShapes->getByIndex(i) );
-            Reference< drawing::XShape > xShape;
-            if( aAny >>= xShape )
-                lcl_markSdrObjectOfShape( xShape, *mpView, *pPageView );
-        }
+    mpView->UnmarkAllObj( pPageView );
+
+    long nCount = aShapes->getCount();
+    for( long i = 0; i < nCount; i++ )
+    {
+        uno::Any aAny( aShapes->getByIndex(i) );
+        Reference< drawing::XShape > xShape;
+        if( aAny >>= xShape )
+            lcl_markSdrObjectOfShape( xShape, *mpView, *pPageView );
     }
 }
 

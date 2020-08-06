@@ -326,67 +326,67 @@ IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeEdgeStyleHdl, weld::ComboBox&, void
 {
     const sal_Int32 nPos(mxLBEdgeStyle->get_active());
 
-    if (nPos != -1 && mxLBEdgeStyle->get_value_changed_from_saved())
+    if (nPos == -1 || !mxLBEdgeStyle->get_value_changed_from_saved())
+        return;
+
+    std::unique_ptr<XLineJointItem> pItem;
+
+    switch(nPos)
     {
-        std::unique_ptr<XLineJointItem> pItem;
-
-        switch(nPos)
+        case 0: // rounded
         {
-            case 0: // rounded
-            {
-                pItem.reset(new XLineJointItem(drawing::LineJoint_ROUND));
-                break;
-            }
-            case 1: // none
-            {
-                pItem.reset(new XLineJointItem(drawing::LineJoint_NONE));
-                break;
-            }
-            case 2: // mitered
-            {
-                pItem.reset(new XLineJointItem(drawing::LineJoint_MITER));
-                break;
-            }
-            case 3: // beveled
-            {
-                pItem.reset(new XLineJointItem(drawing::LineJoint_BEVEL));
-                break;
-            }
+            pItem.reset(new XLineJointItem(drawing::LineJoint_ROUND));
+            break;
         }
-
-        setLineJoint(pItem.get());
+        case 1: // none
+        {
+            pItem.reset(new XLineJointItem(drawing::LineJoint_NONE));
+            break;
+        }
+        case 2: // mitered
+        {
+            pItem.reset(new XLineJointItem(drawing::LineJoint_MITER));
+            break;
+        }
+        case 3: // beveled
+        {
+            pItem.reset(new XLineJointItem(drawing::LineJoint_BEVEL));
+            break;
+        }
     }
+
+    setLineJoint(pItem.get());
 }
 
 IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeCapStyleHdl, weld::ComboBox&, void)
 {
     const sal_Int32 nPos(mxLBCapStyle->get_active());
 
-    if (nPos != -1 && mxLBCapStyle->get_value_changed_from_saved())
+    if (!(nPos != -1 && mxLBCapStyle->get_value_changed_from_saved()))
+        return;
+
+    std::unique_ptr<XLineCapItem> pItem;
+
+    switch(nPos)
     {
-        std::unique_ptr<XLineCapItem> pItem;
-
-        switch(nPos)
+        case 0: // flat
         {
-            case 0: // flat
-            {
-                pItem.reset(new XLineCapItem(drawing::LineCap_BUTT));
-                break;
-            }
-            case 1: // round
-            {
-                pItem.reset(new XLineCapItem(drawing::LineCap_ROUND));
-                break;
-            }
-            case 2: // square
-            {
-                pItem.reset(new XLineCapItem(drawing::LineCap_SQUARE));
-                break;
-            }
+            pItem.reset(new XLineCapItem(drawing::LineCap_BUTT));
+            break;
         }
-
-        setLineCap(pItem.get());
+        case 1: // round
+        {
+            pItem.reset(new XLineCapItem(drawing::LineCap_ROUND));
+            break;
+        }
+        case 2: // square
+        {
+            pItem.reset(new XLineCapItem(drawing::LineCap_SQUARE));
+            break;
+        }
     }
+
+    setLineCap(pItem.get());
 }
 
 IMPL_LINK_NOARG(LinePropertyPanelBase, ToolboxWidthSelectHdl, const OString&, void)

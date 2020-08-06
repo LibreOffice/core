@@ -198,19 +198,19 @@ bool GalleryPreview::StartDrag()
 void GalleryPreview::PreviewMedia( const INetURLObject& rURL )
 {
 #if HAVE_FEATURE_AVMEDIA
-    if (rURL.GetProtocol() != INetProtocol::NotValid)
+    if (rURL.GetProtocol() == INetProtocol::NotValid)
+        return;
+
+    ::avmedia::MediaFloater* pFloater = avmedia::getMediaFloater();
+
+    if (!pFloater)
     {
-        ::avmedia::MediaFloater* pFloater = avmedia::getMediaFloater();
-
-        if (!pFloater)
-        {
-            SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute( SID_AVMEDIA_PLAYER, SfxCallMode::SYNCHRON );
-            pFloater = avmedia::getMediaFloater();
-        }
-
-        if (pFloater)
-            pFloater->setURL( rURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ), "", true );
+        SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute( SID_AVMEDIA_PLAYER, SfxCallMode::SYNCHRON );
+        pFloater = avmedia::getMediaFloater();
     }
+
+    if (pFloater)
+        pFloater->setURL( rURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ), "", true );
 #else
     (void) rURL;
 #endif
