@@ -272,6 +272,15 @@ private:
     VCL_DLLPRIVATE void DrawCustomEntry(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, const SvTreeListEntry& rEntry);
     VCL_DLLPRIVATE Size MeasureCustomEntry(vcl::RenderContext& rRenderContext, const SvTreeListEntry& rEntry);
 
+    /** Handles the given key event.
+
+        At the moment this merely does typeahead if typeahead is enabled.
+
+        @return
+            <TRUE/> if the event has been consumed, <FALSE/> otherwise.
+    */
+    VCL_DLLPRIVATE bool HandleKeyInput(const KeyEvent& rKEvt);
+
     void UnsetDropTarget();
 
 protected:
@@ -389,25 +398,6 @@ public:
     void            Clear();
 
     bool            TextCenterAndClipEnabled() const { return mbCenterAndClipText; }
-
-    /** Handles the given key event.
-
-        At the moment this merely checks for accelerator keys, if entry mnemonics
-        are enabled.
-
-        This method may come in handy if you want to use keyboard acceleration
-        while the control does not have the focus.
-
-        If the key event describes the pressing of a shortcut for an entry,
-        then SelectSearchEntry resp. ExecuteSearchEntry are called.
-
-        @see IMnemonicEntryList
-        @see MnemonicEngine
-
-        @return
-            <TRUE/> if the event has been consumed, <FALSE/> otherwise.
-    */
-    bool            HandleKeyInput( const KeyEvent& rKEvt );
 
     void            SetSelectHdl( const Link<SvTreeListBox*,void>& rNewHdl ) {aSelectHdl=rNewHdl; }
     void            SetDeselectHdl( const Link<SvTreeListBox*,void>& rNewHdl ) {aDeselectHdl=rNewHdl; }
