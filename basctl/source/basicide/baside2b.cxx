@@ -98,7 +98,7 @@ int const nScrollLine = 12;
 int const nScrollPage = 60;
 int const DWBORDER = 3;
 
-OUString const cSuffixes {"%&!#@$"};
+OUStringLiteral const cSuffixes {"%&!#@$"};
 
 } // namespace
 

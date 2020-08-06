@@ -58,7 +58,7 @@ public:
     int get_sort_column() const { return m_xControl->get_sort_column(); }
     void set_sort_column(int nColumn) { m_xControl->set_sort_column(nColumn); }
 
-    static const OUString aForbiddenChars;
+    static const OUStringLiteral aForbiddenChars;
     static const char     cSeparator;
 };
 

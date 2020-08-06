@@ -89,16 +89,15 @@ BibConfig*  BibModul::GetConfig()
 
 
 // PropertyNames
-#define STATIC_USTRING(a,b) const OUString a(b)
-STATIC_USTRING(FM_PROP_LABEL,"Label");
-STATIC_USTRING(FM_PROP_CONTROLSOURCE,"DataField");
-STATIC_USTRING(FM_PROP_NAME,"Name");
-STATIC_USTRING(FM_PROP_FORMATKEY,"FormatKey");
-STATIC_USTRING(FM_PROP_EDITMODE,"RecordMode");
-STATIC_USTRING(FM_PROP_CURSORSOURCETYPE,"DataSelectionType");
-STATIC_USTRING(FM_PROP_CURSORSOURCE,"DataSelection");
-STATIC_USTRING(FM_PROP_DATASOURCE, "DataSource");
-STATIC_USTRING(FM_PROP_VALUE,"Value");
-STATIC_USTRING(FM_PROP_TEXT,"Text");
+const OUStringLiteral FM_PROP_LABEL = "Label";
+const OUStringLiteral FM_PROP_CONTROLSOURCE = "DataField";
+const OUStringLiteral FM_PROP_NAME = "Name";
+const OUStringLiteral FM_PROP_FORMATKEY = "FormatKey";
+const OUStringLiteral FM_PROP_EDITMODE = "RecordMode";
+const OUStringLiteral FM_PROP_CURSORSOURCETYPE = "DataSelectionType";
+const OUStringLiteral FM_PROP_CURSORSOURCE = "DataSelection";
+const OUStringLiteral FM_PROP_DATASOURCE = "DataSource";
+const OUStringLiteral FM_PROP_VALUE = "Value";
+const OUStringLiteral FM_PROP_TEXT = "Text";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

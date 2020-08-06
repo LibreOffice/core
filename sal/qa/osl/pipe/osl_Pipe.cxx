@@ -87,12 +87,11 @@ static void printPipeError( ::osl::Pipe const & aPipe )
 
 // pipe name and transfer contents
 
-const OUString aTestPipeName("testpipe2");
-const OUString aTestPipe1("testpipe1");
-const OUString aTestString("Sun Microsystems");
+const OUStringLiteral aTestPipeName("testpipe2");
+const OUStringLiteral aTestPipe1("testpipe1");
 
-const OString m_pTestString1("Sun Microsystems");
-const OString m_pTestString2("test pipe PASS/OK");
+const OStringLiteral m_pTestString1("Sun Microsystems");
+const OStringLiteral m_pTestString2("test pipe PASS/OK");
 
 // test code start here
 
