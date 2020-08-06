@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONFIGMGR_SOURCE_ADDITIONS_HXX
-#define INCLUDED_CONFIGMGR_SOURCE_ADDITIONS_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -31,7 +30,5 @@ namespace configmgr {
 typedef std::vector< std::vector<OUString> > Additions;
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
