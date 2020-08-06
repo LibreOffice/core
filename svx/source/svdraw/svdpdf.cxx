@@ -146,42 +146,42 @@ void ImpSdrPdfImport::DoObjects(SvdProgressInfo* pProgrInfo, sal_uInt32* pAction
                                 int nPageIndex)
 {
     const int nPageCount = mpPdfDocument->getPageCount();
-    if (nPageCount > 0 && nPageIndex >= 0 && nPageIndex < nPageCount)
+    if (!(nPageCount > 0 && nPageIndex >= 0 && nPageIndex < nPageCount))
+        return;
+
+    // Render next page.
+    auto pPdfPage = mpPdfDocument->openPage(nPageIndex);
+    if (!pPdfPage)
+        return;
+
+    basegfx::B2DSize dPageSize = mpPdfDocument->getPageSize(nPageIndex);
+
+    const double dPageWidth = dPageSize.getX();
+    const double dPageHeight = dPageSize.getY();
+
+    SetupPageScale(dPageWidth, dPageHeight);
+
+    // Load the page text to extract it when we get text elements.
+    auto pTextPage = pPdfPage->getTextPage();
+
+    const int nPageObjectCount = pPdfPage->getObjectCount();
+    if (pProgrInfo)
+        pProgrInfo->SetActionCount(nPageObjectCount);
+
+    for (int nPageObjectIndex = 0; nPageObjectIndex < nPageObjectCount; ++nPageObjectIndex)
     {
-        // Render next page.
-        auto pPdfPage = mpPdfDocument->openPage(nPageIndex);
-        if (!pPdfPage)
-            return;
-
-        basegfx::B2DSize dPageSize = mpPdfDocument->getPageSize(nPageIndex);
-
-        const double dPageWidth = dPageSize.getX();
-        const double dPageHeight = dPageSize.getY();
-
-        SetupPageScale(dPageWidth, dPageHeight);
-
-        // Load the page text to extract it when we get text elements.
-        auto pTextPage = pPdfPage->getTextPage();
-
-        const int nPageObjectCount = pPdfPage->getObjectCount();
-        if (pProgrInfo)
-            pProgrInfo->SetActionCount(nPageObjectCount);
-
-        for (int nPageObjectIndex = 0; nPageObjectIndex < nPageObjectCount; ++nPageObjectIndex)
+        auto pPageObject = pPdfPage->getObject(nPageObjectIndex);
+        ImportPdfObject(pPageObject, pTextPage, nPageObjectIndex);
+        if (pProgrInfo && pActionsToReport)
         {
-            auto pPageObject = pPdfPage->getObject(nPageObjectIndex);
-            ImportPdfObject(pPageObject, pTextPage, nPageObjectIndex);
-            if (pProgrInfo && pActionsToReport)
+            (*pActionsToReport)++;
+
+            if (*pActionsToReport >= 16)
             {
-                (*pActionsToReport)++;
+                if (!pProgrInfo->ReportActions(*pActionsToReport))
+                    break;
 
-                if (*pActionsToReport >= 16)
-                {
-                    if (!pProgrInfo->ReportActions(*pActionsToReport))
-                        break;
-
-                    *pActionsToReport = 0;
-                }
+                *pActionsToReport = 0;
             }
         }
     }
@@ -392,25 +392,25 @@ void ImpSdrPdfImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr)
         mbFntDirty = false;
     }
 
-    if (pObj)
+    if (!pObj)
+        return;
+
+    pObj->SetLayer(mnLayer);
+
+    if (bLine)
     {
-        pObj->SetLayer(mnLayer);
+        pObj->SetMergedItemSet(*mpLineAttr);
+    }
 
-        if (bLine)
-        {
-            pObj->SetMergedItemSet(*mpLineAttr);
-        }
+    if (bFill)
+    {
+        pObj->SetMergedItemSet(*mpFillAttr);
+    }
 
-        if (bFill)
-        {
-            pObj->SetMergedItemSet(*mpFillAttr);
-        }
-
-        if (bText)
-        {
-            pObj->SetMergedItemSet(*mpTextAttr);
-            pObj->SetMergedItem(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_LEFT));
-        }
+    if (bText)
+    {
+        pObj->SetMergedItemSet(*mpTextAttr);
+        pObj->SetMergedItem(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_LEFT));
     }
 }
 
@@ -562,63 +562,63 @@ void ImpSdrPdfImport::InsertObj(SdrObject* pObj, bool bScale)
         }
     }
 
-    if (pObj)
+    if (!pObj)
+        return;
+
+    // #i111954# check object for visibility
+    // used are SdrPathObj, SdrRectObj, SdrCircObj, SdrGrafObj
+    bool bVisible(false);
+
+    if (pObj->HasLineStyle())
     {
-        // #i111954# check object for visibility
-        // used are SdrPathObj, SdrRectObj, SdrCircObj, SdrGrafObj
-        bool bVisible(false);
+        bVisible = true;
+    }
 
-        if (pObj->HasLineStyle())
+    if (!bVisible && pObj->HasFillStyle())
+    {
+        bVisible = true;
+    }
+
+    if (!bVisible)
+    {
+        SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObj);
+
+        if (pTextObj && pTextObj->HasText())
         {
             bVisible = true;
         }
+    }
 
-        if (!bVisible && pObj->HasFillStyle())
+    if (!bVisible)
+    {
+        SdrGrafObj* pGrafObj = dynamic_cast<SdrGrafObj*>(pObj);
+
+        if (pGrafObj)
         {
+            // this may be refined to check if the graphic really is visible. It
+            // is here to ensure that graphic objects without fill, line and text
+            // get created
             bVisible = true;
         }
+    }
 
-        if (!bVisible)
+    if (!bVisible)
+    {
+        SdrObject::Free(pObj);
+    }
+    else
+    {
+        maTmpList.push_back(pObj);
+
+        if (dynamic_cast<SdrPathObj*>(pObj))
         {
-            SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObj);
+            const bool bClosed(pObj->IsClosedObj());
 
-            if (pTextObj && pTextObj->HasText())
-            {
-                bVisible = true;
-            }
-        }
-
-        if (!bVisible)
-        {
-            SdrGrafObj* pGrafObj = dynamic_cast<SdrGrafObj*>(pObj);
-
-            if (pGrafObj)
-            {
-                // this may be refined to check if the graphic really is visible. It
-                // is here to ensure that graphic objects without fill, line and text
-                // get created
-                bVisible = true;
-            }
-        }
-
-        if (!bVisible)
-        {
-            SdrObject::Free(pObj);
+            mbLastObjWasPolyWithoutLine = mbNoLine && bClosed;
         }
         else
         {
-            maTmpList.push_back(pObj);
-
-            if (dynamic_cast<SdrPathObj*>(pObj))
-            {
-                const bool bClosed(pObj->IsClosedObj());
-
-                mbLastObjWasPolyWithoutLine = mbNoLine && bClosed;
-            }
-            else
-            {
-                mbLastObjWasPolyWithoutLine = false;
-            }
+            mbLastObjWasPolyWithoutLine = false;
         }
     }
 }

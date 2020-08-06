@@ -1173,18 +1173,18 @@ void SdrTextObj::ImpSetupDrawOutlinerForPaint( bool             bContourFrame,
     TakeTextRect(rOutliner, rTextRect, false, &rAnchorRect);
     rPaintRect = rTextRect;
 
-    if (!bContourFrame)
+    if (bContourFrame)
+        return;
+
+    // FitToSize can't be used together with ContourFrame for now
+    if (IsFitToSize())
     {
-        // FitToSize can't be used together with ContourFrame for now
-        if (IsFitToSize())
-        {
-            ImpSetCharStretching(rOutliner,rTextRect.GetSize(),rAnchorRect.GetSize(),rFitXCorrection);
-            rPaintRect=rAnchorRect;
-        }
-        else if (IsAutoFit())
-        {
-            ImpAutoFitText(rOutliner);
-        }
+        ImpSetCharStretching(rOutliner,rTextRect.GetSize(),rAnchorRect.GetSize(),rFitXCorrection);
+        rPaintRect=rAnchorRect;
+    }
+    else if (IsAutoFit())
+    {
+        ImpAutoFitText(rOutliner);
     }
 }
 
@@ -1400,28 +1400,28 @@ void SdrTextObj::NbcSetOutlinerParaObjectForText( std::unique_ptr<OutlinerParaOb
 void SdrTextObj::NbcReformatText()
 {
     SdrText* pText = getActiveText();
-    if( pText && pText->GetOutlinerParaObject() )
+    if( !(pText && pText->GetOutlinerParaObject()) )
+        return;
+
+    pText->ReformatText();
+    if (bTextFrame)
     {
-        pText->ReformatText();
-        if (bTextFrame)
-        {
-            NbcAdjustTextFrameWidthAndHeight();
-        }
-        else
-        {
-            // the SnapRect keeps its size
-            SetBoundRectDirty();
-            SetRectsDirty(true);
-        }
-        SetTextSizeDirty();
-        ActionChanged();
-        // i22396
-        // Necessary here since we have no compare operator at the outliner
-        // para object which may detect changes regarding the combination
-        // of outliner para data and configuration (e.g., change of
-        // formatting of text numerals)
-        GetViewContact().flushViewObjectContacts(false);
+        NbcAdjustTextFrameWidthAndHeight();
     }
+    else
+    {
+        // the SnapRect keeps its size
+        SetBoundRectDirty();
+        SetRectsDirty(true);
+    }
+    SetTextSizeDirty();
+    ActionChanged();
+    // i22396
+    // Necessary here since we have no compare operator at the outliner
+    // para object which may detect changes regarding the combination
+    // of outliner para data and configuration (e.g., change of
+    // formatting of text numerals)
+    GetViewContact().flushViewObjectContacts(false);
 }
 
 SdrObjGeoData* SdrTextObj::NewGeoData() const
@@ -1852,23 +1852,23 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
     const EditStatusFlags nStat = pEditStatus->GetStatusWord();
     const bool bGrowX = bool(nStat & EditStatusFlags::TEXTWIDTHCHANGED);
     const bool bGrowY = bool(nStat & EditStatusFlags::TextHeightChanged);
-    if(bTextFrame && (bGrowX || bGrowY))
-    {
-        if ((bGrowX && IsAutoGrowWidth()) || (bGrowY && IsAutoGrowHeight()))
-        {
-            AdjustTextFrameWidthAndHeight();
-        }
-        else if ( (IsAutoFit() || IsFitToSize()) && !mbInDownScale)
-        {
-            assert(pEdtOutl);
-            mbInDownScale = true;
+    if(!(bTextFrame && (bGrowX || bGrowY)))
+        return;
 
-            // sucks that we cannot disable paints via
-            // pEdtOutl->SetUpdateMode(FALSE) - but EditEngine skips
-            // formatting as well, then.
-            ImpAutoFitText(*pEdtOutl);
-            mbInDownScale = false;
-        }
+    if ((bGrowX && IsAutoGrowWidth()) || (bGrowY && IsAutoGrowHeight()))
+    {
+        AdjustTextFrameWidthAndHeight();
+    }
+    else if ( (IsAutoFit() || IsFitToSize()) && !mbInDownScale)
+    {
+        assert(pEdtOutl);
+        mbInDownScale = true;
+
+        // sucks that we cannot disable paints via
+        // pEdtOutl->SetUpdateMode(FALSE) - but EditEngine skips
+        // formatting as well, then.
+        ImpAutoFitText(*pEdtOutl);
+        mbInDownScale = false;
     }
 }
 

@@ -170,22 +170,22 @@ sal_uInt16 SdrRectObj::GetObjIdentifier() const
 void SdrRectObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
 {
     rRect = maRect;
-    if (aGeo.nShearAngle!=0)
+    if (aGeo.nShearAngle==0)
+        return;
+
+    long nDst=FRound((maRect.Bottom()-maRect.Top())*aGeo.nTan);
+    if (aGeo.nShearAngle>0)
     {
-        long nDst=FRound((maRect.Bottom()-maRect.Top())*aGeo.nTan);
-        if (aGeo.nShearAngle>0)
-        {
-            Point aRef(rRect.TopLeft());
-            rRect.AdjustLeft( -nDst );
-            Point aTmpPt(rRect.TopLeft());
-            RotatePoint(aTmpPt,aRef,aGeo.nSin,aGeo.nCos);
-            aTmpPt-=rRect.TopLeft();
-            rRect.Move(aTmpPt.X(),aTmpPt.Y());
-        }
-        else
-        {
-            rRect.AdjustRight( -nDst );
-        }
+        Point aRef(rRect.TopLeft());
+        rRect.AdjustLeft( -nDst );
+        Point aTmpPt(rRect.TopLeft());
+        RotatePoint(aTmpPt,aRef,aGeo.nSin,aGeo.nCos);
+        aTmpPt-=rRect.TopLeft();
+        rRect.Move(aTmpPt.X(),aTmpPt.Y());
+    }
+    else
+    {
+        rRect.AdjustRight( -nDst );
     }
 }
 

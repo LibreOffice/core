@@ -169,23 +169,24 @@ static void ImpGetAlign(SdrGluePoint & rGP, const SdrObject* /*pObj*/, const voi
     SdrAlign& nRet=*const_cast<SdrAlign *>(static_cast<SdrAlign const *>(pnRet));
     bool& bDontCare=*const_cast<bool *>(static_cast<bool const *>(pbDontCare));
     bool bVert=*static_cast<bool const *>(pbVert);
-    if (!bDontCare) {
-        SdrAlign nAlg=SdrAlign::NONE;
+    if (bDontCare)
+        return;
+
+    SdrAlign nAlg=SdrAlign::NONE;
+    if (bVert) {
+        nAlg=rGP.GetVertAlign();
+    } else {
+        nAlg=rGP.GetHorzAlign();
+    }
+    bool& bFirst=*const_cast<bool *>(static_cast<bool const *>(pbFirst));
+    if (bFirst) { nRet=nAlg; bFirst=false; }
+    else if (nRet!=nAlg) {
         if (bVert) {
-            nAlg=rGP.GetVertAlign();
+            nRet=SdrAlign::VERT_DONTCARE;
         } else {
-            nAlg=rGP.GetHorzAlign();
+            nRet=SdrAlign::HORZ_DONTCARE;
         }
-        bool& bFirst=*const_cast<bool *>(static_cast<bool const *>(pbFirst));
-        if (bFirst) { nRet=nAlg; bFirst=false; }
-        else if (nRet!=nAlg) {
-            if (bVert) {
-                nRet=SdrAlign::VERT_DONTCARE;
-            } else {
-                nRet=SdrAlign::HORZ_DONTCARE;
-            }
-            bDontCare=true;
-        }
+        bDontCare=true;
     }
 }
 

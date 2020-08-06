@@ -40,21 +40,21 @@ SdrText::~SdrText()
 
 void SdrText::CheckPortionInfo( SdrOutliner& rOutliner )
 {
-    if(!mbPortionInfoChecked)
+    if(mbPortionInfoChecked)
+        return;
+
+    // #i102062# no action when the Outliner is the HitTestOutliner,
+    // this will remove WrongList info at the OPO
+    if(&rOutliner == &mrObject.getSdrModelFromSdrObject().GetHitTestOutliner())
+        return;
+
+    // TODO: optimization: we could create a BigTextObject
+    mbPortionInfoChecked=true;
+
+    if(mpOutlinerParaObject!=nullptr && rOutliner.ShouldCreateBigTextObject())
     {
-        // #i102062# no action when the Outliner is the HitTestOutliner,
-        // this will remove WrongList info at the OPO
-        if(&rOutliner == &mrObject.getSdrModelFromSdrObject().GetHitTestOutliner())
-            return;
-
-        // TODO: optimization: we could create a BigTextObject
-        mbPortionInfoChecked=true;
-
-        if(mpOutlinerParaObject!=nullptr && rOutliner.ShouldCreateBigTextObject())
-        {
-            // #i102062# MemoryLeak closed
-            mpOutlinerParaObject = rOutliner.CreateParaObject();
-        }
+        // #i102062# MemoryLeak closed
+        mpOutlinerParaObject = rOutliner.CreateParaObject();
     }
 }
 
@@ -109,20 +109,20 @@ std::unique_ptr<OutlinerParaObject> SdrText::RemoveOutlinerParaObject()
 
 void SdrText::ForceOutlinerParaObject( OutlinerMode nOutlMode )
 {
-    if(!mpOutlinerParaObject)
-    {
-        std::unique_ptr<Outliner> pOutliner(
-            SdrMakeOutliner(
-                nOutlMode,
-                mrObject.getSdrModelFromSdrObject()));
+    if(mpOutlinerParaObject)
+        return;
 
-        if(pOutliner)
-        {
-            Outliner& aDrawOutliner(mrObject.getSdrModelFromSdrObject().GetDrawOutliner());
-            pOutliner->SetCalcFieldValueHdl( aDrawOutliner.GetCalcFieldValueHdl() );
-            pOutliner->SetStyleSheet( 0, GetStyleSheet());
-            SetOutlinerParaObject( pOutliner->CreateParaObject() );
-        }
+    std::unique_ptr<Outliner> pOutliner(
+        SdrMakeOutliner(
+            nOutlMode,
+            mrObject.getSdrModelFromSdrObject()));
+
+    if(pOutliner)
+    {
+        Outliner& aDrawOutliner(mrObject.getSdrModelFromSdrObject().GetDrawOutliner());
+        pOutliner->SetCalcFieldValueHdl( aDrawOutliner.GetCalcFieldValueHdl() );
+        pOutliner->SetStyleSheet( 0, GetStyleSheet());
+        SetOutlinerParaObject( pOutliner->CreateParaObject() );
     }
 }
 

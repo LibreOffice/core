@@ -266,19 +266,19 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1, bool bSave
         }
     }
 
-    if(!bIsGroup || bIs3DScene)
+    if(bIsGroup && !bIs3DScene)
+        return;
+
+    pUndoSet.reset( new SfxItemSet(pObj->GetMergedItemSet()) );
+
+    if(bStyleSheet)
+        mxUndoStyleSheet = pObj->GetStyleSheet();
+
+    if(bSaveText)
     {
-        pUndoSet.reset( new SfxItemSet(pObj->GetMergedItemSet()) );
-
-        if(bStyleSheet)
-            mxUndoStyleSheet = pObj->GetStyleSheet();
-
-        if(bSaveText)
-        {
-            auto p = pObj->GetOutlinerParaObject();
-            if(p)
-                pTextUndo.reset( new OutlinerParaObject(*p) );
-        }
+        auto p = pObj->GetOutlinerParaObject();
+        if(p)
+            pTextUndo.reset( new OutlinerParaObject(*p) );
     }
 }
 
@@ -669,26 +669,26 @@ void SdrUndoRemoveObj::Undo()
     ImpShowPageOfThisObject();
 
     DBG_ASSERT(!pObj->IsInserted(),"UndoRemoveObj: pObj has already been inserted.");
-    if (!pObj->IsInserted())
+    if (pObj->IsInserted())
+        return;
+
+    // #i11426#
+    // For UNDOs in Calc/Writer it is necessary to adapt the anchor
+    // position of the target object.
+    Point aOwnerAnchorPos(0, 0);
+
+    if (dynamic_cast< const SdrObjGroup* >(pObjList->getSdrObjectFromSdrObjList()) != nullptr)
     {
-        // #i11426#
-        // For UNDOs in Calc/Writer it is necessary to adapt the anchor
-        // position of the target object.
-        Point aOwnerAnchorPos(0, 0);
+        aOwnerAnchorPos = pObjList->getSdrObjectFromSdrObjList()->GetAnchorPos();
+    }
 
-        if (dynamic_cast< const SdrObjGroup* >(pObjList->getSdrObjectFromSdrObjList()) != nullptr)
-        {
-            aOwnerAnchorPos = pObjList->getSdrObjectFromSdrObjList()->GetAnchorPos();
-        }
+    E3DModifySceneSnapRectUpdater aUpdater(pObjList->getSdrObjectFromSdrObjList());
+    pObjList->InsertObject(pObj,nOrdNum);
 
-        E3DModifySceneSnapRectUpdater aUpdater(pObjList->getSdrObjectFromSdrObjList());
-        pObjList->InsertObject(pObj,nOrdNum);
-
-        // #i11426#
-        if(aOwnerAnchorPos.X() || aOwnerAnchorPos.Y())
-        {
-            pObj->NbcSetAnchorPos(aOwnerAnchorPos);
-        }
+    // #i11426#
+    if(aOwnerAnchorPos.X() || aOwnerAnchorPos.Y())
+    {
+        pObj->NbcSetAnchorPos(aOwnerAnchorPos);
     }
 }
 
@@ -1093,37 +1093,37 @@ OUString SdrUndoObjSetText::GetSdrRepeatComment() const
 
 void SdrUndoObjSetText::SdrRepeat(SdrView& rView)
 {
-    if (bNewTextAvailable && rView.AreObjectsMarked())
+    if (!(bNewTextAvailable && rView.AreObjectsMarked()))
+        return;
+
+    const SdrMarkList& rML=rView.GetMarkedObjectList();
+
+    const bool bUndo = rView.IsUndoEnabled();
+    if( bUndo )
     {
-        const SdrMarkList& rML=rView.GetMarkedObjectList();
-
-        const bool bUndo = rView.IsUndoEnabled();
-        if( bUndo )
-        {
-            OUString aStr = ImpGetDescriptionStr(STR_UndoObjSetText);
-            rView.BegUndo(aStr);
-        }
-
-        const size_t nCount=rML.GetMarkCount();
-        for (size_t nm=0; nm<nCount; ++nm)
-        {
-            SdrObject* pObj2=rML.GetMark(nm)->GetMarkedSdrObj();
-            SdrTextObj* pTextObj=dynamic_cast<SdrTextObj*>( pObj2 );
-            if (pTextObj!=nullptr)
-            {
-                if( bUndo )
-                    rView.AddUndo(std::make_unique<SdrUndoObjSetText>(*pTextObj,0));
-
-                std::unique_ptr<OutlinerParaObject> pText1;
-                if (pNewText)
-                    pText1.reset(new OutlinerParaObject(*pNewText));
-                pTextObj->SetOutlinerParaObject(std::move(pText1));
-            }
-        }
-
-        if( bUndo )
-            rView.EndUndo();
+        OUString aStr = ImpGetDescriptionStr(STR_UndoObjSetText);
+        rView.BegUndo(aStr);
     }
+
+    const size_t nCount=rML.GetMarkCount();
+    for (size_t nm=0; nm<nCount; ++nm)
+    {
+        SdrObject* pObj2=rML.GetMark(nm)->GetMarkedSdrObj();
+        SdrTextObj* pTextObj=dynamic_cast<SdrTextObj*>( pObj2 );
+        if (pTextObj!=nullptr)
+        {
+            if( bUndo )
+                rView.AddUndo(std::make_unique<SdrUndoObjSetText>(*pTextObj,0));
+
+            std::unique_ptr<OutlinerParaObject> pText1;
+            if (pNewText)
+                pText1.reset(new OutlinerParaObject(*pNewText));
+            pTextObj->SetOutlinerParaObject(std::move(pText1));
+        }
+    }
+
+    if( bUndo )
+        rView.EndUndo();
 }
 
 bool SdrUndoObjSetText::CanSdrRepeat(SdrView& rView) const
@@ -1289,19 +1289,19 @@ void SdrUndoPage::ImpInsertPage(sal_uInt16 nNum)
 void SdrUndoPage::ImpRemovePage(sal_uInt16 nNum)
 {
     DBG_ASSERT(mrPage.IsInserted(),"SdrUndoPage::ImpRemovePage(): mrPage is not inserted.");
-    if (mrPage.IsInserted())
+    if (!mrPage.IsInserted())
+        return;
+
+    SdrPage* pChkPg=nullptr;
+    if (mrPage.IsMasterPage())
     {
-        SdrPage* pChkPg=nullptr;
-        if (mrPage.IsMasterPage())
-        {
-            pChkPg=rMod.RemoveMasterPage(nNum);
-        }
-        else
-        {
-            pChkPg=rMod.RemovePage(nNum);
-        }
-        DBG_ASSERT(pChkPg==&mrPage,"SdrUndoPage::ImpRemovePage(): RemovePage!=&mrPage");
+        pChkPg=rMod.RemoveMasterPage(nNum);
     }
+    else
+    {
+        pChkPg=rMod.RemovePage(nNum);
+    }
+    DBG_ASSERT(pChkPg==&mrPage,"SdrUndoPage::ImpRemovePage(): RemovePage!=&mrPage");
 }
 
 void SdrUndoPage::ImpMovePage(sal_uInt16 nOldNum, sal_uInt16 nNewNum)
@@ -1363,27 +1363,27 @@ SdrUndoDelPage::SdrUndoDelPage(SdrPage& rNewPg)
         clearFillBitmap();
 
     // now remember the master page relationships
-    if(mrPage.IsMasterPage())
+    if(!mrPage.IsMasterPage())
+        return;
+
+    sal_uInt16 nPageCnt(rMod.GetPageCount());
+
+    for(sal_uInt16 nPageNum2(0); nPageNum2 < nPageCnt; nPageNum2++)
     {
-        sal_uInt16 nPageCnt(rMod.GetPageCount());
+        SdrPage* pDrawPage = rMod.GetPage(nPageNum2);
 
-        for(sal_uInt16 nPageNum2(0); nPageNum2 < nPageCnt; nPageNum2++)
+        if(pDrawPage->TRG_HasMasterPage())
         {
-            SdrPage* pDrawPage = rMod.GetPage(nPageNum2);
+            SdrPage& rMasterPage = pDrawPage->TRG_GetMasterPage();
 
-            if(pDrawPage->TRG_HasMasterPage())
+            if(&mrPage == &rMasterPage)
             {
-                SdrPage& rMasterPage = pDrawPage->TRG_GetMasterPage();
-
-                if(&mrPage == &rMasterPage)
+                if(!pUndoGroup)
                 {
-                    if(!pUndoGroup)
-                    {
-                        pUndoGroup.reset( new SdrUndoGroup(rMod) );
-                    }
-
-                    pUndoGroup->AddAction(rMod.GetSdrUndoFactory().CreateUndoPageRemoveMasterPage(*pDrawPage));
+                    pUndoGroup.reset( new SdrUndoGroup(rMod) );
                 }
+
+                pUndoGroup->AddAction(rMod.GetSdrUndoFactory().CreateUndoPageRemoveMasterPage(*pDrawPage));
             }
         }
     }

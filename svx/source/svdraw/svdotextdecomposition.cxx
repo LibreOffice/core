@@ -380,63 +380,63 @@ namespace
         maTextPortionPrimitives.push_back(pNewPrimitive);
 
         // support for WrongSpellVector. Create WrongSpellPrimitives as needed
-        if(rInfo.mpWrongSpellVector && !aDXArray.empty())
+        if(!rInfo.mpWrongSpellVector || aDXArray.empty())
+            return;
+
+        const sal_Int32 nSize(rInfo.mpWrongSpellVector->size());
+        const sal_Int32 nDXCount(aDXArray.size());
+        const basegfx::BColor aSpellColor(1.0, 0.0, 0.0); // red, hard coded
+
+        for(sal_Int32 a(0); a < nSize; a++)
         {
-            const sal_Int32 nSize(rInfo.mpWrongSpellVector->size());
-            const sal_Int32 nDXCount(aDXArray.size());
-            const basegfx::BColor aSpellColor(1.0, 0.0, 0.0); // red, hard coded
+            const EEngineData::WrongSpellClass& rCandidate = (*rInfo.mpWrongSpellVector)[a];
 
-            for(sal_Int32 a(0); a < nSize; a++)
+            if(rCandidate.nStart >= rInfo.mnTextStart && rCandidate.nEnd >= rInfo.mnTextStart && rCandidate.nEnd > rCandidate.nStart)
             {
-                const EEngineData::WrongSpellClass& rCandidate = (*rInfo.mpWrongSpellVector)[a];
+                const sal_Int32 nStart(rCandidate.nStart - rInfo.mnTextStart);
+                const sal_Int32 nEnd(rCandidate.nEnd - rInfo.mnTextStart);
+                double fStart(0.0);
+                double fEnd(0.0);
 
-                if(rCandidate.nStart >= rInfo.mnTextStart && rCandidate.nEnd >= rInfo.mnTextStart && rCandidate.nEnd > rCandidate.nStart)
+                if(nStart > 0 && nStart - 1 < nDXCount)
                 {
-                    const sal_Int32 nStart(rCandidate.nStart - rInfo.mnTextStart);
-                    const sal_Int32 nEnd(rCandidate.nEnd - rInfo.mnTextStart);
-                    double fStart(0.0);
-                    double fEnd(0.0);
+                    fStart = aDXArray[nStart - 1];
+                }
 
-                    if(nStart > 0 && nStart - 1 < nDXCount)
+                if(nEnd > 0 && nEnd - 1 < nDXCount)
+                {
+                    fEnd = aDXArray[nEnd - 1];
+                }
+
+                if(!basegfx::fTools::equal(fStart, fEnd))
+                {
+                    if(rInfo.IsRTL())
                     {
-                        fStart = aDXArray[nStart - 1];
+                        // #i98523#
+                        // When the portion is RTL, mirror the redlining using the
+                        // full portion width
+                        const double fTextWidth(aDXArray[aDXArray.size() - 1]);
+
+                        fStart = fTextWidth - fStart;
+                        fEnd = fTextWidth - fEnd;
                     }
 
-                    if(nEnd > 0 && nEnd - 1 < nDXCount)
+                    // need to take FontScaling out of values; it's already part of
+                    // aNewTransform and would be double applied
+                    const double fFontScaleX(aFontScaling.getX());
+
+                    if(!basegfx::fTools::equal(fFontScaleX, 1.0)
+                        && !basegfx::fTools::equalZero(fFontScaleX))
                     {
-                        fEnd = aDXArray[nEnd - 1];
+                        fStart /= fFontScaleX;
+                        fEnd /= fFontScaleX;
                     }
 
-                    if(!basegfx::fTools::equal(fStart, fEnd))
-                    {
-                        if(rInfo.IsRTL())
-                        {
-                            // #i98523#
-                            // When the portion is RTL, mirror the redlining using the
-                            // full portion width
-                            const double fTextWidth(aDXArray[aDXArray.size() - 1]);
-
-                            fStart = fTextWidth - fStart;
-                            fEnd = fTextWidth - fEnd;
-                        }
-
-                        // need to take FontScaling out of values; it's already part of
-                        // aNewTransform and would be double applied
-                        const double fFontScaleX(aFontScaling.getX());
-
-                        if(!basegfx::fTools::equal(fFontScaleX, 1.0)
-                            && !basegfx::fTools::equalZero(fFontScaleX))
-                        {
-                            fStart /= fFontScaleX;
-                            fEnd /= fFontScaleX;
-                        }
-
-                        maTextPortionPrimitives.push_back(new drawinglayer::primitive2d::WrongSpellPrimitive2D(
-                            aNewTransform,
-                            fStart,
-                            fEnd,
-                            aSpellColor));
-                    }
+                    maTextPortionPrimitives.push_back(new drawinglayer::primitive2d::WrongSpellPrimitive2D(
+                        aNewTransform,
+                        fStart,
+                        fEnd,
+                        aSpellColor));
                 }
             }
         }
@@ -573,47 +573,47 @@ namespace
 
     IMPL_LINK(impTextBreakupHandler, decomposeBlockTextPrimitive, DrawPortionInfo*, pInfo, void)
     {
-        if(pInfo)
+        if(!pInfo)
+            return;
+
+        // Is clipping wanted? This is text clipping; only accept a portion
+        // if it's completely in the range
+        if(!maClipRange.isEmpty())
         {
-            // Is clipping wanted? This is text clipping; only accept a portion
-            // if it's completely in the range
-            if(!maClipRange.isEmpty())
+            // Test start position first; this allows to not get the text range at
+            // all if text is far outside
+            const basegfx::B2DPoint aStartPosition(pInfo->mrStartPos.X(), pInfo->mrStartPos.Y());
+
+            if(!maClipRange.isInside(aStartPosition))
             {
-                // Test start position first; this allows to not get the text range at
-                // all if text is far outside
-                const basegfx::B2DPoint aStartPosition(pInfo->mrStartPos.X(), pInfo->mrStartPos.Y());
-
-                if(!maClipRange.isInside(aStartPosition))
-                {
-                    return;
-                }
-
-                // Start position is inside. Get TextBoundRect and TopLeft next
-                drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
-                aTextLayouterDevice.setFont(pInfo->mrFont);
-
-                const basegfx::B2DRange aTextBoundRect(
-                    aTextLayouterDevice.getTextBoundRect(
-                        pInfo->maText, pInfo->mnTextStart, pInfo->mnTextLen));
-                const basegfx::B2DPoint aTopLeft(aTextBoundRect.getMinimum() + aStartPosition);
-
-                if(!maClipRange.isInside(aTopLeft))
-                {
-                    return;
-                }
-
-                // TopLeft is inside. Get BottomRight and check
-                const basegfx::B2DPoint aBottomRight(aTextBoundRect.getMaximum() + aStartPosition);
-
-                if(!maClipRange.isInside(aBottomRight))
-                {
-                    return;
-                }
-
-                // all inside, clip was successful
+                return;
             }
-            impHandleDrawPortionInfo(*pInfo);
+
+            // Start position is inside. Get TextBoundRect and TopLeft next
+            drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
+            aTextLayouterDevice.setFont(pInfo->mrFont);
+
+            const basegfx::B2DRange aTextBoundRect(
+                aTextLayouterDevice.getTextBoundRect(
+                    pInfo->maText, pInfo->mnTextStart, pInfo->mnTextLen));
+            const basegfx::B2DPoint aTopLeft(aTextBoundRect.getMinimum() + aStartPosition);
+
+            if(!maClipRange.isInside(aTopLeft))
+            {
+                return;
+            }
+
+            // TopLeft is inside. Get BottomRight and check
+            const basegfx::B2DPoint aBottomRight(aTextBoundRect.getMaximum() + aStartPosition);
+
+            if(!maClipRange.isInside(aBottomRight))
+            {
+                return;
+            }
+
+            // all inside, clip was successful
         }
+        impHandleDrawPortionInfo(*pInfo);
     }
 
     IMPL_LINK(impTextBreakupHandler, decomposeStretchTextPrimitive, DrawPortionInfo*, pInfo, void)
@@ -1318,21 +1318,21 @@ static void impCreateAlternateTiming(const SfxItemSet& rSet, drawinglayer::anima
         rAnimList.append(aTime1);
     }
 
-    if(0 != nRepeat)
+    if(0 == nRepeat)
+        return;
+
+    bool bVisibleWhenStopped(rSet.Get(SDRATTR_TEXT_ANISTOPINSIDE).GetValue());
+    if(bVisibleWhenStopped)
     {
-        bool bVisibleWhenStopped(rSet.Get(SDRATTR_TEXT_ANISTOPINSIDE).GetValue());
-        if(bVisibleWhenStopped)
-        {
-            // add timing for staying at the end
-            drawinglayer::animation::AnimationEntryFixed aEnd(ENDLESS_TIME, 0.5);
-            rAnimList.append(aEnd);
-        }
-        else
-        {
-            // move from center to outside
-            drawinglayer::animation::AnimationEntryLinear aInOut(fTimeFullPath * 0.5, fFrequency, 0.5, bForward ? 1.0 : 0.0);
-            rAnimList.append(aInOut);
-        }
+        // add timing for staying at the end
+        drawinglayer::animation::AnimationEntryFixed aEnd(ENDLESS_TIME, 0.5);
+        rAnimList.append(aEnd);
+    }
+    else
+    {
+        // move from center to outside
+        drawinglayer::animation::AnimationEntryLinear aInOut(fTimeFullPath * 0.5, fFrequency, 0.5, bForward ? 1.0 : 0.0);
+        rAnimList.append(aInOut);
     }
 }
 

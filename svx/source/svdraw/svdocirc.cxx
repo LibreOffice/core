@@ -672,22 +672,23 @@ void ImpCircUser::SetCreateParams(SdrDragStat const & rStat)
         aP1 = GetAnglePnt(aR,nStart);
         nEnd=nStart;
     } else aP1=aCenter;
-    if (rStat.GetPointCount()>3) {
-        Point aP(rStat.GetPoint(3)-aCenter);
-        if (nWdt>=nHgt) {
-            aP.setY(BigMulDiv(aP.Y(),nWdt,nHgt) );
-        } else {
-            aP.setX(BigMulDiv(aP.X(),nHgt,nWdt) );
-        }
-        nEnd=NormAngle36000(GetAngle(aP));
-        if (rStat.GetView()!=nullptr && rStat.GetView()->IsAngleSnapEnabled()) {
-            long nSA=rStat.GetView()->GetSnapAngle();
-            if (nSA!=0) { // angle snapping
-                nEnd+=nSA/2;
-                nEnd/=nSA;
-                nEnd*=nSA;
-                nEnd=NormAngle36000(nEnd);
-            }
+    if (rStat.GetPointCount()<=3)
+        return;
+
+    Point aP(rStat.GetPoint(3)-aCenter);
+    if (nWdt>=nHgt) {
+        aP.setY(BigMulDiv(aP.Y(),nWdt,nHgt) );
+    } else {
+        aP.setX(BigMulDiv(aP.X(),nHgt,nWdt) );
+    }
+    nEnd=NormAngle36000(GetAngle(aP));
+    if (rStat.GetView()!=nullptr && rStat.GetView()->IsAngleSnapEnabled()) {
+        long nSA=rStat.GetView()->GetSnapAngle();
+        if (nSA!=0) { // angle snapping
+            nEnd+=nSA/2;
+            nEnd/=nSA;
+            nEnd*=nSA;
+            nEnd=NormAngle36000(nEnd);
         }
     }
 }
@@ -1016,18 +1017,19 @@ void SdrCircObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
             rRect.Move(aDst.X(),aDst.Y());
         }
     }
-    if (aGeo.nShearAngle!=0) {
-        long nDst=FRound((rRect.Bottom()-rRect.Top())*aGeo.nTan);
-        if (aGeo.nShearAngle>0) {
-            Point aRef(rRect.TopLeft());
-            rRect.AdjustLeft( -nDst );
-            Point aTmpPt(rRect.TopLeft());
-            RotatePoint(aTmpPt,aRef,aGeo.nSin,aGeo.nCos);
-            aTmpPt-=rRect.TopLeft();
-            rRect.Move(aTmpPt.X(),aTmpPt.Y());
-        } else {
-            rRect.AdjustRight( -nDst );
-        }
+    if (aGeo.nShearAngle==0)
+        return;
+
+    long nDst=FRound((rRect.Bottom()-rRect.Top())*aGeo.nTan);
+    if (aGeo.nShearAngle>0) {
+        Point aRef(rRect.TopLeft());
+        rRect.AdjustLeft( -nDst );
+        Point aTmpPt(rRect.TopLeft());
+        RotatePoint(aTmpPt,aRef,aGeo.nSin,aGeo.nCos);
+        aTmpPt-=rRect.TopLeft();
+        rRect.Move(aTmpPt.X(),aTmpPt.Y());
+    } else {
+        rRect.AdjustRight( -nDst );
     }
 }
 
@@ -1118,28 +1120,28 @@ void SdrCircObj::ImpSetCircInfoToAttr()
     sal_Int32 nOldStartAngle = rSet.Get(SDRATTR_CIRCSTARTANGLE).GetValue();
     sal_Int32 nOldEndAngle = rSet.Get(SDRATTR_CIRCENDANGLE).GetValue();
 
-    if(meCircleKind != eOldKindA || nStartAngle != nOldStartAngle || nEndAngle != nOldEndAngle)
+    if(meCircleKind == eOldKindA && nStartAngle == nOldStartAngle && nEndAngle == nOldEndAngle)
+        return;
+
+    // since SetItem() implicitly calls ImpSetAttrToCircInfo()
+    // setting the item directly is necessary here.
+    if(meCircleKind != eOldKindA)
     {
-        // since SetItem() implicitly calls ImpSetAttrToCircInfo()
-        // setting the item directly is necessary here.
-        if(meCircleKind != eOldKindA)
-        {
-            GetProperties().SetObjectItemDirect(SdrCircKindItem(meCircleKind));
-        }
-
-        if(nStartAngle != nOldStartAngle)
-        {
-            GetProperties().SetObjectItemDirect(makeSdrCircStartAngleItem(nStartAngle));
-        }
-
-        if(nEndAngle != nOldEndAngle)
-        {
-            GetProperties().SetObjectItemDirect(makeSdrCircEndAngleItem(nEndAngle));
-        }
-
-        SetXPolyDirty();
-        ImpSetAttrToCircInfo();
+        GetProperties().SetObjectItemDirect(SdrCircKindItem(meCircleKind));
     }
+
+    if(nStartAngle != nOldStartAngle)
+    {
+        GetProperties().SetObjectItemDirect(makeSdrCircStartAngleItem(nStartAngle));
+    }
+
+    if(nEndAngle != nOldEndAngle)
+    {
+        GetProperties().SetObjectItemDirect(makeSdrCircEndAngleItem(nEndAngle));
+    }
+
+    SetXPolyDirty();
+    ImpSetAttrToCircInfo();
 }
 
 SdrObjectUniquePtr SdrCircObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const

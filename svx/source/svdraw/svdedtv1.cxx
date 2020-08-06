@@ -547,34 +547,34 @@ void SdrEditView::ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRa
         bDone = true;
     }
 
-    if(!bDone)
+    if(bDone)
+        return;
+
+    // for all others or if bNoContortion
+    Point aCtr0(pO->GetSnapRect().Center());
+    Point aCtr1(aCtr0);
+    bool bRotOk(false);
+    double nSin(0.0), nCos(1.0);
+    double nAngle(0.0);
+
+    if(0 != rRad.X() && 0 != rRad.Y())
     {
-        // for all others or if bNoContortion
-        Point aCtr0(pO->GetSnapRect().Center());
-        Point aCtr1(aCtr0);
-        bool bRotOk(false);
-        double nSin(0.0), nCos(1.0);
-        double nAngle(0.0);
+        bRotOk = bRotate;
 
-        if(0 != rRad.X() && 0 != rRad.Y())
+        switch (eMode)
         {
-            bRotOk = bRotate;
-
-            switch (eMode)
-            {
-                case SdrCrookMode::Rotate : nAngle=CrookRotateXPoint (aCtr1,nullptr,nullptr,rRef,rRad,nSin,nCos,bVertical); bRotOk=bRotate; break;
-                case SdrCrookMode::Slant  : nAngle=CrookSlantXPoint  (aCtr1,nullptr,nullptr,rRef,rRad,nSin,nCos,bVertical);           break;
-                case SdrCrookMode::Stretch: nAngle=CrookStretchXPoint(aCtr1,nullptr,nullptr,rRef,rRad,nSin,nCos,bVertical,rMarkRect); break;
-            }
+            case SdrCrookMode::Rotate : nAngle=CrookRotateXPoint (aCtr1,nullptr,nullptr,rRef,rRad,nSin,nCos,bVertical); bRotOk=bRotate; break;
+            case SdrCrookMode::Slant  : nAngle=CrookSlantXPoint  (aCtr1,nullptr,nullptr,rRef,rRad,nSin,nCos,bVertical);           break;
+            case SdrCrookMode::Stretch: nAngle=CrookStretchXPoint(aCtr1,nullptr,nullptr,rRef,rRad,nSin,nCos,bVertical,rMarkRect); break;
         }
-
-        aCtr1 -= aCtr0;
-
-        if(bRotOk)
-            pO->Rotate(aCtr0, FRound(nAngle / F_PI18000), nSin, nCos);
-
-        pO->Move(Size(aCtr1.X(),aCtr1.Y()));
     }
+
+    aCtr1 -= aCtr0;
+
+    if(bRotOk)
+        pO->Rotate(aCtr0, FRound(nAngle / F_PI18000), nSin, nCos);
+
+    pO->Move(Size(aCtr1.X(),aCtr1.Y()));
 }
 
 void SdrEditView::CrookMarkedObj(const Point& rRef, const Point& rRad, SdrCrookMode eMode,
@@ -1279,36 +1279,36 @@ SfxStyleSheet* SdrEditView::GetStyleSheetFromMarked() const
 
 void SdrEditView::SetStyleSheetToMarked(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr)
 {
-    if (AreObjectsMarked())
+    if (!AreObjectsMarked())
+        return;
+
+    const bool bUndo = IsUndoEnabled();
+
+    if( bUndo )
     {
-        const bool bUndo = IsUndoEnabled();
-
-        if( bUndo )
-        {
-            EndTextEditAllViews();
-            OUString aStr;
-            if (pStyleSheet!=nullptr)
-                aStr = ImpGetDescriptionString(STR_EditSetStylesheet);
-            else
-                aStr = ImpGetDescriptionString(STR_EditDelStylesheet);
-            BegUndo(aStr);
-        }
-
-        const size_t nMarkCount=GetMarkedObjectCount();
-        for (size_t nm=0; nm<nMarkCount; ++nm)
-        {
-            SdrMark* pM=GetSdrMarkByIndex(nm);
-            if( bUndo )
-            {
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pM->GetMarkedSdrObj()));
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pM->GetMarkedSdrObj(),true,true));
-            }
-            pM->GetMarkedSdrObj()->SetStyleSheet(pStyleSheet,bDontRemoveHardAttr);
-        }
-
-        if( bUndo )
-            EndUndo();
+        EndTextEditAllViews();
+        OUString aStr;
+        if (pStyleSheet!=nullptr)
+            aStr = ImpGetDescriptionString(STR_EditSetStylesheet);
+        else
+            aStr = ImpGetDescriptionString(STR_EditDelStylesheet);
+        BegUndo(aStr);
     }
+
+    const size_t nMarkCount=GetMarkedObjectCount();
+    for (size_t nm=0; nm<nMarkCount; ++nm)
+    {
+        SdrMark* pM=GetSdrMarkByIndex(nm);
+        if( bUndo )
+        {
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pM->GetMarkedSdrObj()));
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pM->GetMarkedSdrObj(),true,true));
+        }
+        pM->GetMarkedSdrObj()->SetStyleSheet(pStyleSheet,bDontRemoveHardAttr);
+    }
+
+    if( bUndo )
+        EndUndo();
 }
 
 

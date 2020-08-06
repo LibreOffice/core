@@ -112,27 +112,27 @@ drawinglayer::primitive2d::Primitive2DContainer ChartHelper::tryToGetChartConten
 void ChartHelper::AdaptDefaultsForChart(
     const uno::Reference < embed::XEmbeddedObject > & xEmbObj)
 {
-    if( xEmbObj.is())
-    {
-        uno::Reference< chart2::XChartDocument > xChartDoc( xEmbObj->getComponent(), uno::UNO_QUERY );
-        OSL_ENSURE( xChartDoc.is(), "Trying to set chart property to non-chart OLE" );
-        if( !xChartDoc.is())
-            return;
+    if( !xEmbObj.is())
+        return;
 
-        try
+    uno::Reference< chart2::XChartDocument > xChartDoc( xEmbObj->getComponent(), uno::UNO_QUERY );
+    OSL_ENSURE( xChartDoc.is(), "Trying to set chart property to non-chart OLE" );
+    if( !xChartDoc.is())
+        return;
+
+    try
+    {
+        if (uno::Reference< beans::XPropertySet > xPageProp = xChartDoc->getPageBackground())
         {
-            if (uno::Reference< beans::XPropertySet > xPageProp = xChartDoc->getPageBackground())
-            {
-                // set background to transparent (none)
-                xPageProp->setPropertyValue("FillStyle", uno::makeAny(drawing::FillStyle_NONE));
-                // set no border
-                xPageProp->setPropertyValue("LineStyle", uno::makeAny(drawing::LineStyle_NONE));
-            }
+            // set background to transparent (none)
+            xPageProp->setPropertyValue("FillStyle", uno::makeAny(drawing::FillStyle_NONE));
+            // set no border
+            xPageProp->setPropertyValue("LineStyle", uno::makeAny(drawing::LineStyle_NONE));
         }
-        catch( const uno::Exception & )
-        {
-            OSL_FAIL( "Exception caught in AdaptDefaultsForChart" );
-        }
+    }
+    catch( const uno::Exception & )
+    {
+        OSL_FAIL( "Exception caught in AdaptDefaultsForChart" );
     }
 }
 

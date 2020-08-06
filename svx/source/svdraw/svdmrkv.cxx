@@ -236,47 +236,47 @@ void SdrMarkView::ModelHasChanged()
         AdjustMarkHdl();
     }
 
-    if (comphelper::LibreOfficeKit::isActive() && GetMarkedObjectCount() > 0)
+    if (!(comphelper::LibreOfficeKit::isActive() && GetMarkedObjectCount() > 0))
+        return;
+
+    //TODO: Is MarkedObjRect valid at this point?
+    tools::Rectangle aSelection(GetMarkedObjRect());
+    OString sSelection;
+    if (aSelection.IsEmpty())
+        sSelection = "EMPTY";
+    else
     {
-        //TODO: Is MarkedObjRect valid at this point?
-        tools::Rectangle aSelection(GetMarkedObjRect());
-        OString sSelection;
-        if (aSelection.IsEmpty())
-            sSelection = "EMPTY";
-        else
+        sal_uInt32 nTotalPaintWindows = this->PaintWindowCount();
+        if (nTotalPaintWindows == 1)
         {
-            sal_uInt32 nTotalPaintWindows = this->PaintWindowCount();
-            if (nTotalPaintWindows == 1)
+            const vcl::Window* pWin = dynamic_cast<const vcl::Window*>(this->GetFirstOutputDevice());
+            if (pWin && pWin->IsChart())
             {
-                const vcl::Window* pWin = dynamic_cast<const vcl::Window*>(this->GetFirstOutputDevice());
-                if (pWin && pWin->IsChart())
+                const vcl::Window* pViewShellWindow = GetSfxViewShell()->GetEditWindowForActiveOLEObj();
+                if (pViewShellWindow && pViewShellWindow->IsAncestorOf(*pWin))
                 {
-                    const vcl::Window* pViewShellWindow = GetSfxViewShell()->GetEditWindowForActiveOLEObj();
-                    if (pViewShellWindow && pViewShellWindow->IsAncestorOf(*pWin))
-                    {
-                        Point aOffsetPx = pWin->GetOffsetPixelFrom(*pViewShellWindow);
-                        Point aLogicOffset = pWin->PixelToLogic(aOffsetPx);
-                        aSelection.Move(aLogicOffset.getX(), aLogicOffset.getY());
-                    }
+                    Point aOffsetPx = pWin->GetOffsetPixelFrom(*pViewShellWindow);
+                    Point aLogicOffset = pWin->PixelToLogic(aOffsetPx);
+                    aSelection.Move(aLogicOffset.getX(), aLogicOffset.getY());
                 }
             }
-
-            // In case the map mode is in 100th MM, then need to convert the coordinates over to twips for LOK.
-            if (mpMarkedPV)
-            {
-                if (OutputDevice* pOutputDevice = mpMarkedPV->GetView().GetFirstOutputDevice())
-                {
-                    if (pOutputDevice->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
-                        aSelection = OutputDevice::LogicToLogic(aSelection, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
-                }
-            }
-
-            sSelection = aSelection.toString();
         }
 
-        if(SfxViewShell* pViewShell = GetSfxViewShell())
-            SfxLokHelper::notifyInvalidation(pViewShell, sSelection);
+        // In case the map mode is in 100th MM, then need to convert the coordinates over to twips for LOK.
+        if (mpMarkedPV)
+        {
+            if (OutputDevice* pOutputDevice = mpMarkedPV->GetView().GetFirstOutputDevice())
+            {
+                if (pOutputDevice->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
+                    aSelection = OutputDevice::LogicToLogic(aSelection, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+            }
+        }
+
+        sSelection = aSelection.toString();
     }
+
+    if(SfxViewShell* pViewShell = GetSfxViewShell())
+        SfxLokHelper::notifyInvalidation(pViewShell, sSelection);
 }
 
 
@@ -1257,21 +1257,21 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
     AddCustomHdl();
 
     // try to restore focus handle index from remembered values
-    if(bSaveOldFocus)
-    {
-        for(size_t a = 0; a < maHdlList.GetHdlCount(); ++a)
-        {
-            SdrHdl* pCandidate = maHdlList.GetHdl(a);
+    if(!bSaveOldFocus)
+        return;
 
-            if(pCandidate->GetObj()
-                && pCandidate->GetObj() == pSaveObj
-                && pCandidate->GetKind() == eSaveKind
-                && pCandidate->GetPolyNum() == nSavePolyNum
-                && pCandidate->GetPointNum() == nSavePointNum)
-            {
-                maHdlList.SetFocusHdl(pCandidate);
-                break;
-            }
+    for(size_t a = 0; a < maHdlList.GetHdlCount(); ++a)
+    {
+        SdrHdl* pCandidate = maHdlList.GetHdl(a);
+
+        if(pCandidate->GetObj()
+            && pCandidate->GetObj() == pSaveObj
+            && pCandidate->GetKind() == eSaveKind
+            && pCandidate->GetPolyNum() == nSavePolyNum
+            && pCandidate->GetPointNum() == nSavePointNum)
+        {
+            maHdlList.SetFocusHdl(pCandidate);
+            break;
         }
     }
 }
@@ -1661,19 +1661,19 @@ void SdrMarkView::SetFrameHandles(bool bOn)
 
 void SdrMarkView::SetEditMode(SdrViewEditMode eMode)
 {
-    if (eMode!=meEditMode) {
-        bool bGlue0=meEditMode==SdrViewEditMode::GluePointEdit;
-        bool bEdge0=static_cast<SdrCreateView*>(this)->IsEdgeTool();
-        meEditMode0=meEditMode;
-        meEditMode=eMode;
-        bool bGlue1=meEditMode==SdrViewEditMode::GluePointEdit;
-        bool bEdge1=static_cast<SdrCreateView*>(this)->IsEdgeTool();
-        // avoid flickering when switching between GlueEdit and EdgeTool
-        if (bGlue1 && !bGlue0) ImpSetGlueVisible2(bGlue1);
-        if (bEdge1!=bEdge0) ImpSetGlueVisible3(bEdge1);
-        if (!bGlue1 && bGlue0) ImpSetGlueVisible2(bGlue1);
-        if (bGlue0 && !bGlue1) UnmarkAllGluePoints();
-    }
+    if (eMode==meEditMode)        return;
+
+    bool bGlue0=meEditMode==SdrViewEditMode::GluePointEdit;
+    bool bEdge0=static_cast<SdrCreateView*>(this)->IsEdgeTool();
+    meEditMode0=meEditMode;
+    meEditMode=eMode;
+    bool bGlue1=meEditMode==SdrViewEditMode::GluePointEdit;
+    bool bEdge1=static_cast<SdrCreateView*>(this)->IsEdgeTool();
+    // avoid flickering when switching between GlueEdit and EdgeTool
+    if (bGlue1 && !bGlue0) ImpSetGlueVisible2(bGlue1);
+    if (bEdge1!=bEdge0) ImpSetGlueVisible3(bEdge1);
+    if (!bGlue1 && bGlue0) ImpSetGlueVisible2(bGlue1);
+    if (bGlue0 && !bGlue1) UnmarkAllGluePoints();
 }
 
 
@@ -1949,31 +1949,32 @@ void collectUIInformation(const SdrObject* pObj)
 
 }
 
-void SdrMarkView::MarkObj(SdrObject* pObj, SdrPageView* pPV, bool bUnmark, bool bDoNoSetMarkHdl,
+ void SdrMarkView::MarkObj(SdrObject* pObj, SdrPageView* pPV, bool bUnmark, bool bDoNoSetMarkHdl,
                           std::vector<basegfx::B2DRectangle> const & rSubSelections)
 {
-    if (pObj!=nullptr && pPV!=nullptr && IsObjMarkable(pObj, pPV)) {
-        BrkAction();
-        if (!bUnmark)
-        {
-            GetMarkedObjectListWriteAccess().InsertEntry(SdrMark(pObj,pPV));
-            collectUIInformation(pObj);
-        }
-        else
-        {
-            const size_t nPos=TryToFindMarkedObject(pObj);
-            if (nPos!=SAL_MAX_SIZE)
-            {
-                GetMarkedObjectListWriteAccess().DeleteMark(nPos);
-            }
-        }
+    if (!(pObj!=nullptr && pPV!=nullptr && IsObjMarkable(pObj, pPV)))
+        return;
 
-        maSubSelectionList = rSubSelections;
-
-        if (!bDoNoSetMarkHdl) {
-            MarkListHasChanged();
-            AdjustMarkHdl();
+    BrkAction();
+    if (!bUnmark)
+    {
+        GetMarkedObjectListWriteAccess().InsertEntry(SdrMark(pObj,pPV));
+        collectUIInformation(pObj);
+    }
+    else
+    {
+        const size_t nPos=TryToFindMarkedObject(pObj);
+        if (nPos!=SAL_MAX_SIZE)
+        {
+            GetMarkedObjectListWriteAccess().DeleteMark(nPos);
         }
+    }
+
+    maSubSelectionList = rSubSelections;
+
+    if (!bDoNoSetMarkHdl) {
+        MarkListHasChanged();
+        AdjustMarkHdl();
     }
 }
 
@@ -2341,21 +2342,22 @@ bool SdrMarkView::PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageVie
 
 void SdrMarkView::UnmarkAllObj(SdrPageView const * pPV)
 {
-    if (GetMarkedObjectCount()!=0) {
-        BrkAction();
-        if (pPV!=nullptr)
-        {
-            GetMarkedObjectListWriteAccess().DeletePageView(*pPV);
-        }
-        else
-        {
-            GetMarkedObjectListWriteAccess().Clear();
-        }
-        mpMarkedObj=nullptr;
-        mpMarkedPV=nullptr;
-        MarkListHasChanged();
-        AdjustMarkHdl();
+    if (GetMarkedObjectCount()==0)
+        return;
+
+    BrkAction();
+    if (pPV!=nullptr)
+    {
+        GetMarkedObjectListWriteAccess().DeletePageView(*pPV);
     }
+    else
+    {
+        GetMarkedObjectListWriteAccess().Clear();
+    }
+    mpMarkedObj=nullptr;
+    mpMarkedPV=nullptr;
+    MarkListHasChanged();
+    AdjustMarkHdl();
 }
 
 void SdrMarkView::MarkAllObj(SdrPageView* pPV)
@@ -2459,19 +2461,19 @@ void SdrMarkView::EnterMarkedGroup()
     // TODO: I'll have to prevent that via a flag.
     SdrPageView* pPV = GetSdrPageView();
 
-    if(pPV)
+    if(!pPV)
+        return;
+
+    bool bEnter=false;
+    for (size_t nm = GetMarkedObjectCount(); nm > 0 && !bEnter;)
     {
-        bool bEnter=false;
-        for (size_t nm = GetMarkedObjectCount(); nm > 0 && !bEnter;)
-        {
-            --nm;
-            SdrMark* pM=GetSdrMarkByIndex(nm);
-            if (pM->GetPageView()==pPV) {
-                SdrObject* pObj=pM->GetMarkedSdrObj();
-                if (pObj->IsGroupObject()) {
-                    if (pPV->EnterGroup(pObj)) {
-                        bEnter=true;
-                    }
+        --nm;
+        SdrMark* pM=GetSdrMarkByIndex(nm);
+        if (pM->GetPageView()==pPV) {
+            SdrObject* pObj=pM->GetMarkedSdrObj();
+            if (pObj->IsGroupObject()) {
+                if (pPV->EnterGroup(pObj)) {
+                    bEnter=true;
                 }
             }
         }

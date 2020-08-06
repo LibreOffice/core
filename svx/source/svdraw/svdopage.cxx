@@ -97,23 +97,23 @@ SdrPageObj::~SdrPageObj()
 
 void SdrPageObj::SetReferencedPage(SdrPage* pNewPage)
 {
-    if(mpShownPage != pNewPage)
+    if(mpShownPage == pNewPage)
+        return;
+
+    if(mpShownPage)
     {
-        if(mpShownPage)
-        {
-            mpShownPage->RemovePageUser(*this);
-        }
-
-        mpShownPage = pNewPage;
-
-        if(mpShownPage)
-        {
-            mpShownPage->AddPageUser(*this);
-        }
-
-        SetChanged();
-        BroadcastObjectChange();
+        mpShownPage->RemovePageUser(*this);
     }
+
+    mpShownPage = pNewPage;
+
+    if(mpShownPage)
+    {
+        mpShownPage->AddPageUser(*this);
+    }
+
+    SetChanged();
+    BroadcastObjectChange();
 }
 
 // #i96598#
