@@ -92,33 +92,33 @@ void XMLImageMapExport::Export(
 void XMLImageMapExport::Export(
     const Reference<XIndexContainer> & rContainer)
 {
-    if (rContainer.is())
+    if (!rContainer.is())
+        return;
+
+    if (!rContainer->hasElements())
+        return;
+
+    // image map container element
+    SvXMLElementExport aImageMapElement(
+        mrExport, XML_NAMESPACE_DRAW, XML_IMAGE_MAP,
+        true/*bWhiteSpace*/, true/*bWhiteSpace*/);
+
+    // iterate over image map elements and call ExportMapEntry(...)
+    // for each
+    sal_Int32 nLength = rContainer->getCount();
+    for(sal_Int32 i = 0; i < nLength; i++)
     {
-        if (rContainer->hasElements())
+        Any aAny = rContainer->getByIndex(i);
+        Reference<XPropertySet> rElement;
+        aAny >>= rElement;
+
+        DBG_ASSERT(rElement.is(), "Image map element is empty!");
+        if (rElement.is())
         {
-            // image map container element
-            SvXMLElementExport aImageMapElement(
-                mrExport, XML_NAMESPACE_DRAW, XML_IMAGE_MAP,
-                true/*bWhiteSpace*/, true/*bWhiteSpace*/);
-
-            // iterate over image map elements and call ExportMapEntry(...)
-            // for each
-            sal_Int32 nLength = rContainer->getCount();
-            for(sal_Int32 i = 0; i < nLength; i++)
-            {
-                Any aAny = rContainer->getByIndex(i);
-                Reference<XPropertySet> rElement;
-                aAny >>= rElement;
-
-                DBG_ASSERT(rElement.is(), "Image map element is empty!");
-                if (rElement.is())
-                {
-                    ExportMapEntry(rElement);
-                }
-            }
+            ExportMapEntry(rElement);
         }
-        // else: container is empty -> nothing to do
     }
+    // else: container is empty -> nothing to do
     // else: no container -> nothing to do
 }
 

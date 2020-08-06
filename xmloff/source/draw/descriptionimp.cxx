@@ -47,7 +47,10 @@ SdXMLDescriptionContext::~SdXMLDescriptionContext()
 
 void SdXMLDescriptionContext::EndElement()
 {
-    if( !msText.isEmpty() ) try
+    if( msText.isEmpty() )
+        return;
+
+    try
     {
         uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY_THROW);
         if(IsXMLToken(GetLocalName(),XML_TITLE))

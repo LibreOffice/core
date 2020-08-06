@@ -160,19 +160,19 @@ XMLImageMapObjectContext::XMLImageMapObjectContext(
                "Please supply the image map object service name");
 
     Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),UNO_QUERY);
-    if( xFactory.is() )
-    {
-        Reference<XInterface> xIfc = xFactory->createInstance(
-            OUString::createFromAscii(pServiceName));
-        DBG_ASSERT(xIfc.is(), "can't create image map object!");
-        if( xIfc.is() )
-        {
-            Reference<XPropertySet> xPropertySet( xIfc, UNO_QUERY );
+    if( !xFactory.is() )
+        return;
 
-            xMapEntry = xPropertySet;
-        }
-        // else: can't create service -> ignore
+    Reference<XInterface> xIfc = xFactory->createInstance(
+        OUString::createFromAscii(pServiceName));
+    DBG_ASSERT(xIfc.is(), "can't create image map object!");
+    if( xIfc.is() )
+    {
+        Reference<XPropertySet> xPropertySet( xIfc, UNO_QUERY );
+
+        xMapEntry = xPropertySet;
     }
+    // else: can't create service -> ignore
     // else: can't even get factory -> ignore
 }
 

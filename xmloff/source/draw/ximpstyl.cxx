@@ -479,205 +479,205 @@ void SdXMLPresentationPageLayoutContext::EndElement()
     // build presentation page layout type here
     // calc mnTpeId due to content of maList
     // at the moment only use number of types used there
-    if( !maList.empty() )
+    if( maList.empty() )
+        return;
+
+    SdXMLPresentationPlaceholderContext* pObj0 = maList[ 0 ].get();
+    if( pObj0->GetName() == "handout" )
     {
-        SdXMLPresentationPlaceholderContext* pObj0 = maList[ 0 ].get();
-        if( pObj0->GetName() == "handout" )
+        switch( maList.size() )
         {
-            switch( maList.size() )
-            {
-            case 1:
-                mnTypeId = AUTOLAYOUT_HANDOUT1;
-                break;
-            case 2:
-                mnTypeId = AUTOLAYOUT_HANDOUT2;
-                break;
-            case 3:
-                mnTypeId = AUTOLAYOUT_HANDOUT3;
-                break;
-            case 4:
-                mnTypeId = AUTOLAYOUT_HANDOUT4;
-                break;
-            case 9:
-                mnTypeId = AUTOLAYOUT_HANDOUT9;
-                break;
-            default:
-                mnTypeId = AUTOLAYOUT_HANDOUT6;
-            }
+        case 1:
+            mnTypeId = AUTOLAYOUT_HANDOUT1;
+            break;
+        case 2:
+            mnTypeId = AUTOLAYOUT_HANDOUT2;
+            break;
+        case 3:
+            mnTypeId = AUTOLAYOUT_HANDOUT3;
+            break;
+        case 4:
+            mnTypeId = AUTOLAYOUT_HANDOUT4;
+            break;
+        case 9:
+            mnTypeId = AUTOLAYOUT_HANDOUT9;
+            break;
+        default:
+            mnTypeId = AUTOLAYOUT_HANDOUT6;
         }
-        else
-        {
-            switch( maList.size() )
-            {
-                case 1:
-                {
-                    if( pObj0->GetName() == "title" )
-                    {
-                        mnTypeId = AUTOLAYOUT_TITLE_ONLY;
-                    }
-                    else
-                    {
-                        mnTypeId = AUTOLAYOUT_ONLY_TEXT;
-                    }
-                    break;
-                }
-                case 2:
-                {
-                    SdXMLPresentationPlaceholderContext* pObj1 = maList[ 1 ].get();
-
-                    if( pObj1->GetName() == "subtitle" )
-                    {
-                        mnTypeId = AUTOLAYOUT_TITLE;
-                    }
-                    else if( pObj1->GetName() == "outline" )
-                    {
-                        mnTypeId = AUTOLAYOUT_TITLE_CONTENT;
-                    }
-                    else if( pObj1->GetName() == "chart" )
-                    {
-                        mnTypeId = AUTOLAYOUT_CHART;
-                    }
-                    else if( pObj1->GetName() == "table" )
-                    {
-                        mnTypeId = AUTOLAYOUT_TAB;
-                    }
-                    else if( pObj1->GetName() == "object" )
-                    {
-                        mnTypeId = AUTOLAYOUT_OBJ;
-                    }
-                    else if( pObj1->GetName() == "vertical_outline" )
-                    {
-                        if( pObj0->GetName() == "vertical_title" )
-                        {
-                            mnTypeId = AUTOLAYOUT_VTITLE_VCONTENT;
-                        }
-                        else
-                        {
-                            mnTypeId = AUTOLAYOUT_TITLE_VCONTENT;
-                        }
-                    }
-                    else
-                    {
-                        mnTypeId = AUTOLAYOUT_NOTES;
-                    }
-                    break;
-                }
-                case 3:
-                {
-                    SdXMLPresentationPlaceholderContext* pObj1 = maList[ 1 ].get();
-                    SdXMLPresentationPlaceholderContext* pObj2 = maList[ 2 ].get();
-
-                    if( pObj1->GetName() == "outline" )
-                    {
-                        if( pObj2->GetName() == "outline" )
-                        {
-                            mnTypeId = AUTOLAYOUT_TITLE_2CONTENT;
-                        }
-                        else if( pObj2->GetName() == "chart" )
-                        {
-                            mnTypeId = AUTOLAYOUT_TEXTCHART;
-                        }
-                        else if( pObj2->GetName() == "graphic" )
-                        {
-                            mnTypeId = AUTOLAYOUT_TEXTCLIP;
-                        }
-                        else
-                        {
-                            if(pObj1->GetX() < pObj2->GetX())
-                            {
-                                mnTypeId = AUTOLAYOUT_TEXTOBJ; // outline left, object right
-                            }
-                            else
-                            {
-                                mnTypeId = AUTOLAYOUT_TEXTOVEROBJ; // outline top, object right
-                            }
-                        }
-                    }
-                    else if( pObj1->GetName() == "chart" )
-                    {
-                        mnTypeId = AUTOLAYOUT_CHARTTEXT;
-                    }
-                    else if( pObj1->GetName() == "graphic" )
-                    {
-                        if( pObj2->GetName() == "vertical_outline" )
-                        {
-                            mnTypeId = AUTOLAYOUT_TITLE_2VTEXT;
-                        }
-                        else
-                        {
-                            mnTypeId = AUTOLAYOUT_CLIPTEXT;
-                        }
-                    }
-                    else if( pObj1->GetName() == "vertical_outline" )
-                    {
-                        mnTypeId = AUTOLAYOUT_VTITLE_VCONTENT_OVER_VCONTENT;
-                    }
-                    else
-                    {
-                        if(pObj1->GetX() < pObj2->GetX())
-                        {
-                            mnTypeId = AUTOLAYOUT_OBJTEXT; // left, right
-                        }
-                        else
-                        {
-                            mnTypeId = AUTOLAYOUT_TITLE_CONTENT_OVER_CONTENT; // top, bottom
-                        }
-                    }
-                    break;
-                }
-                case 4:
-                {
-                    SdXMLPresentationPlaceholderContext* pObj1 = maList[ 1 ].get();
-                    SdXMLPresentationPlaceholderContext* pObj2 = maList[ 2 ].get();
-
-                    if( pObj1->GetName() == "object" )
-                    {
-                        if(pObj1->GetX() < pObj2->GetX())
-                        {
-                            mnTypeId = AUTOLAYOUT_TITLE_2CONTENT_OVER_CONTENT;
-                        }
-                        else
-                        {
-                            mnTypeId = AUTOLAYOUT_TITLE_2CONTENT_CONTENT;
-                        }
-                    }
-                    else
-                    {
-                        mnTypeId = AUTOLAYOUT_TITLE_CONTENT_2CONTENT;
-                    }
-                    break;
-                }
-                case 5:
-                {
-                    SdXMLPresentationPlaceholderContext* pObj1 = maList[ 1 ].get();
-
-                    if( pObj1->GetName() == "object" )
-                    {
-                        mnTypeId = AUTOLAYOUT_TITLE_4CONTENT;
-                    }
-                    else
-                    {
-                        mnTypeId = AUTOLAYOUT_4CLIPART;
-                    }
-                    break;
-
-                }
-                case 7:
-                {
-                    mnTypeId = AUTOLAYOUT_4CLIPART; // FIXME: not AUTOLAYOUT_TITLE_6CONTENT?
-                    break;
-                }
-                default:
-                {
-                    mnTypeId = AUTOLAYOUT_NONE;
-                    break;
-                }
-            }
-        }
-
-        // release remembered contexts, they are no longer needed
-        maList.clear();
     }
+    else
+    {
+        switch( maList.size() )
+        {
+            case 1:
+            {
+                if( pObj0->GetName() == "title" )
+                {
+                    mnTypeId = AUTOLAYOUT_TITLE_ONLY;
+                }
+                else
+                {
+                    mnTypeId = AUTOLAYOUT_ONLY_TEXT;
+                }
+                break;
+            }
+            case 2:
+            {
+                SdXMLPresentationPlaceholderContext* pObj1 = maList[ 1 ].get();
+
+                if( pObj1->GetName() == "subtitle" )
+                {
+                    mnTypeId = AUTOLAYOUT_TITLE;
+                }
+                else if( pObj1->GetName() == "outline" )
+                {
+                    mnTypeId = AUTOLAYOUT_TITLE_CONTENT;
+                }
+                else if( pObj1->GetName() == "chart" )
+                {
+                    mnTypeId = AUTOLAYOUT_CHART;
+                }
+                else if( pObj1->GetName() == "table" )
+                {
+                    mnTypeId = AUTOLAYOUT_TAB;
+                }
+                else if( pObj1->GetName() == "object" )
+                {
+                    mnTypeId = AUTOLAYOUT_OBJ;
+                }
+                else if( pObj1->GetName() == "vertical_outline" )
+                {
+                    if( pObj0->GetName() == "vertical_title" )
+                    {
+                        mnTypeId = AUTOLAYOUT_VTITLE_VCONTENT;
+                    }
+                    else
+                    {
+                        mnTypeId = AUTOLAYOUT_TITLE_VCONTENT;
+                    }
+                }
+                else
+                {
+                    mnTypeId = AUTOLAYOUT_NOTES;
+                }
+                break;
+            }
+            case 3:
+            {
+                SdXMLPresentationPlaceholderContext* pObj1 = maList[ 1 ].get();
+                SdXMLPresentationPlaceholderContext* pObj2 = maList[ 2 ].get();
+
+                if( pObj1->GetName() == "outline" )
+                {
+                    if( pObj2->GetName() == "outline" )
+                    {
+                        mnTypeId = AUTOLAYOUT_TITLE_2CONTENT;
+                    }
+                    else if( pObj2->GetName() == "chart" )
+                    {
+                        mnTypeId = AUTOLAYOUT_TEXTCHART;
+                    }
+                    else if( pObj2->GetName() == "graphic" )
+                    {
+                        mnTypeId = AUTOLAYOUT_TEXTCLIP;
+                    }
+                    else
+                    {
+                        if(pObj1->GetX() < pObj2->GetX())
+                        {
+                            mnTypeId = AUTOLAYOUT_TEXTOBJ; // outline left, object right
+                        }
+                        else
+                        {
+                            mnTypeId = AUTOLAYOUT_TEXTOVEROBJ; // outline top, object right
+                        }
+                    }
+                }
+                else if( pObj1->GetName() == "chart" )
+                {
+                    mnTypeId = AUTOLAYOUT_CHARTTEXT;
+                }
+                else if( pObj1->GetName() == "graphic" )
+                {
+                    if( pObj2->GetName() == "vertical_outline" )
+                    {
+                        mnTypeId = AUTOLAYOUT_TITLE_2VTEXT;
+                    }
+                    else
+                    {
+                        mnTypeId = AUTOLAYOUT_CLIPTEXT;
+                    }
+                }
+                else if( pObj1->GetName() == "vertical_outline" )
+                {
+                    mnTypeId = AUTOLAYOUT_VTITLE_VCONTENT_OVER_VCONTENT;
+                }
+                else
+                {
+                    if(pObj1->GetX() < pObj2->GetX())
+                    {
+                        mnTypeId = AUTOLAYOUT_OBJTEXT; // left, right
+                    }
+                    else
+                    {
+                        mnTypeId = AUTOLAYOUT_TITLE_CONTENT_OVER_CONTENT; // top, bottom
+                    }
+                }
+                break;
+            }
+            case 4:
+            {
+                SdXMLPresentationPlaceholderContext* pObj1 = maList[ 1 ].get();
+                SdXMLPresentationPlaceholderContext* pObj2 = maList[ 2 ].get();
+
+                if( pObj1->GetName() == "object" )
+                {
+                    if(pObj1->GetX() < pObj2->GetX())
+                    {
+                        mnTypeId = AUTOLAYOUT_TITLE_2CONTENT_OVER_CONTENT;
+                    }
+                    else
+                    {
+                        mnTypeId = AUTOLAYOUT_TITLE_2CONTENT_CONTENT;
+                    }
+                }
+                else
+                {
+                    mnTypeId = AUTOLAYOUT_TITLE_CONTENT_2CONTENT;
+                }
+                break;
+            }
+            case 5:
+            {
+                SdXMLPresentationPlaceholderContext* pObj1 = maList[ 1 ].get();
+
+                if( pObj1->GetName() == "object" )
+                {
+                    mnTypeId = AUTOLAYOUT_TITLE_4CONTENT;
+                }
+                else
+                {
+                    mnTypeId = AUTOLAYOUT_4CLIPART;
+                }
+                break;
+
+            }
+            case 7:
+            {
+                mnTypeId = AUTOLAYOUT_4CLIPART; // FIXME: not AUTOLAYOUT_TITLE_6CONTENT?
+                break;
+            }
+            default:
+            {
+                mnTypeId = AUTOLAYOUT_NONE;
+                break;
+            }
+        }
+    }
+
+    // release remembered contexts, they are no longer needed
+    maList.clear();
 }
 
 SdXMLPresentationPlaceholderContext::SdXMLPresentationPlaceholderContext(
