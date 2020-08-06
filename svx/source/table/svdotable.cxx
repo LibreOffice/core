@@ -585,7 +585,10 @@ void SdrTableObjImpl::dispose()
 
 void SdrTableObjImpl::DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset )
 {
-    if( (nEdge >= 0) && mxTable.is()) try
+    if( !((nEdge >= 0) && mxTable.is()))
+        return;
+
+    try
     {
         const OUString sSize( "Size" );
         if( mbHorizontal )
@@ -670,28 +673,28 @@ void SdrTableObjImpl::update()
 {
     // source can be the table model itself or the assigned table template
     TableModelNotifyGuard aGuard( mxTable.get() );
-    if( mpTableObj )
+    if( !mpTableObj )
+        return;
+
+    if( (maEditPos.mnRow >= getRowCount()) || (maEditPos.mnCol >= getColumnCount()) || (getCell( maEditPos ) != mxActiveCell) )
     {
-        if( (maEditPos.mnRow >= getRowCount()) || (maEditPos.mnCol >= getColumnCount()) || (getCell( maEditPos ) != mxActiveCell) )
-        {
-            if(maEditPos.mnRow >= getRowCount())
-                maEditPos.mnRow = getRowCount()-1;
+        if(maEditPos.mnRow >= getRowCount())
+            maEditPos.mnRow = getRowCount()-1;
 
-            if(maEditPos.mnCol >= getColumnCount())
-                maEditPos.mnCol = getColumnCount()-1;
+        if(maEditPos.mnCol >= getColumnCount())
+            maEditPos.mnCol = getColumnCount()-1;
 
-            mpTableObj->setActiveCell( maEditPos );
-        }
-
-        ApplyCellStyles();
-
-        mpTableObj->maRect = mpTableObj->maLogicRect;
-        LayoutTable( mpTableObj->maRect, false, false );
-
-        mpTableObj->SetRectsDirty();
-        mpTableObj->ActionChanged();
-        mpTableObj->BroadcastObjectChange();
+        mpTableObj->setActiveCell( maEditPos );
     }
+
+    ApplyCellStyles();
+
+    mpTableObj->maRect = mpTableObj->maLogicRect;
+    LayoutTable( mpTableObj->maRect, false, false );
+
+    mpTableObj->SetRectsDirty();
+    mpTableObj->ActionChanged();
+    mpTableObj->BroadcastObjectChange();
 }
 
 
@@ -789,40 +792,40 @@ void SdrTableObjImpl::LayoutTable( tools::Rectangle& rArea, bool bFitWidth, bool
 {
     if (utl::ConfigManager::IsFuzzing())
         return;
-    if(mpLayouter)
+    if(!mpLayouter)
+        return;
+
+    // Optimization: SdrTableObj::SetChanged() can call this very often, repeatedly
+    // with the same settings, noticeably increasing load time. Skip if already done.
+    bool bInteractiveMightGrowBecauseTextChanged =
+        mpTableObj->IsReallyEdited() && (mpTableObj->IsAutoGrowHeight() || mpTableObj->IsAutoGrowWidth());
+    WritingMode writingMode = mpTableObj->GetWritingMode();
+    if( bInteractiveMightGrowBecauseTextChanged
+        || lastLayoutTable != this || lastLayoutInputRectangle != rArea
+        || lastLayoutFitWidth != bFitWidth || lastLayoutFitHeight != bFitHeight
+        || lastLayoutMode != writingMode
+        || lastRowCount != getRowCount()
+        || lastColCount != getColumnCount()
+        || lastColWidths != getColumnWidths() )
     {
-        // Optimization: SdrTableObj::SetChanged() can call this very often, repeatedly
-        // with the same settings, noticeably increasing load time. Skip if already done.
-        bool bInteractiveMightGrowBecauseTextChanged =
-            mpTableObj->IsReallyEdited() && (mpTableObj->IsAutoGrowHeight() || mpTableObj->IsAutoGrowWidth());
-        WritingMode writingMode = mpTableObj->GetWritingMode();
-        if( bInteractiveMightGrowBecauseTextChanged
-            || lastLayoutTable != this || lastLayoutInputRectangle != rArea
-            || lastLayoutFitWidth != bFitWidth || lastLayoutFitHeight != bFitHeight
-            || lastLayoutMode != writingMode
-            || lastRowCount != getRowCount()
-            || lastColCount != getColumnCount()
-            || lastColWidths != getColumnWidths() )
-        {
-            lastLayoutTable = this;
-            lastLayoutInputRectangle = rArea;
-            lastLayoutFitWidth = bFitWidth;
-            lastLayoutFitHeight = bFitHeight;
-            lastLayoutMode = writingMode;
-            lastRowCount = getRowCount();
-            lastColCount = getColumnCount();
-            // Column resize, when the total width and column count of the
-            // table is unchanged, but re-layout is still needed.
-            lastColWidths = getColumnWidths();
-            TableModelNotifyGuard aGuard( mxTable.get() );
-            mpLayouter->LayoutTable( rArea, bFitWidth, bFitHeight );
-            lastLayoutResultRectangle = rArea;
-        }
-        else
-        {
-            rArea = lastLayoutResultRectangle;
-            mpLayouter->UpdateBorderLayout();
-        }
+        lastLayoutTable = this;
+        lastLayoutInputRectangle = rArea;
+        lastLayoutFitWidth = bFitWidth;
+        lastLayoutFitHeight = bFitHeight;
+        lastLayoutMode = writingMode;
+        lastRowCount = getRowCount();
+        lastColCount = getColumnCount();
+        // Column resize, when the total width and column count of the
+        // table is unchanged, but re-layout is still needed.
+        lastColWidths = getColumnWidths();
+        TableModelNotifyGuard aGuard( mxTable.get() );
+        mpLayouter->LayoutTable( rArea, bFitWidth, bFitHeight );
+        lastLayoutResultRectangle = rArea;
+    }
+    else
+    {
+        rArea = lastLayoutResultRectangle;
+        mpLayouter->UpdateBorderLayout();
     }
 }
 
@@ -1577,7 +1580,10 @@ void SdrTableObj::changeEdge(bool bHorizontal, int nEdge, sal_Int32 nOffset)
 
 void SdrTableObj::setActiveCell( const CellPos& rPos )
 {
-    if( mpImpl.is() && mpImpl->mxTable.is() ) try
+    if( !(mpImpl.is() && mpImpl->mxTable.is()) )
+        return;
+
+    try
     {
         mpImpl->mxActiveCell.set( dynamic_cast< Cell* >( mpImpl->mxTable->getCellByPosition( rPos.mnCol, rPos.mnRow ).get() ) );
         if( mpImpl->mxActiveCell.is() && mpImpl->mxActiveCell->isMerged() )
@@ -1905,20 +1911,20 @@ OutlinerParaObject* SdrTableObj::GetOutlinerParaObject() const
 void SdrTableObj::NbcSetOutlinerParaObject( std::unique_ptr<OutlinerParaObject> pTextObject)
 {
     CellRef xCell( getActiveCell() );
-    if( xCell.is() )
+    if( !xCell.is() )
+        return;
+
+    // Update HitTestOutliner
+    const SdrTextObj* pTestObj(getSdrModelFromSdrObject().GetHitTestOutliner().GetTextObj());
+
+    if(pTestObj && pTestObj->GetOutlinerParaObject() == xCell->GetOutlinerParaObject())
     {
-        // Update HitTestOutliner
-        const SdrTextObj* pTestObj(getSdrModelFromSdrObject().GetHitTestOutliner().GetTextObj());
-
-        if(pTestObj && pTestObj->GetOutlinerParaObject() == xCell->GetOutlinerParaObject())
-        {
-            getSdrModelFromSdrObject().GetHitTestOutliner().SetTextObj(nullptr);
-        }
-
-        xCell->SetOutlinerParaObject( std::move(pTextObject) );
-        SetTextSizeDirty();
-        NbcAdjustTextFrameWidthAndHeight();
+        getSdrModelFromSdrObject().GetHitTestOutliner().SetTextObj(nullptr);
     }
+
+    xCell->SetOutlinerParaObject( std::move(pTextObject) );
+    SetTextSizeDirty();
+    NbcAdjustTextFrameWidthAndHeight();
 }
 
 

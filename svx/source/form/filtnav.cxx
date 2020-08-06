@@ -1088,20 +1088,20 @@ void FmFilterNavigator::UpdateContent(const Reference< XIndexAccess > & xControl
 
     // expand the filters for the current controller
     std::unique_ptr<weld::TreeIter> xEntry = FindEntry(m_pModel->GetCurrentForm());
-    if (xEntry && !m_xTreeView->get_row_expanded(*xEntry))
+    if (!xEntry || m_xTreeView->get_row_expanded(*xEntry))
+        return;
+
+    m_xTreeView->unselect_all();
+
+    m_xTreeView->expand_row(*xEntry);
+
+    xEntry = FindEntry(m_pModel->GetCurrentItems());
+    if (xEntry)
     {
-        m_xTreeView->unselect_all();
-
-        m_xTreeView->expand_row(*xEntry);
-
-        xEntry = FindEntry(m_pModel->GetCurrentItems());
-        if (xEntry)
-        {
-            if (!m_xTreeView->get_row_expanded(*xEntry))
-                m_xTreeView->expand_row(*xEntry);
-            m_xTreeView->select(*xEntry);
-            SelectHdl(*m_xTreeView);
-        }
+        if (!m_xTreeView->get_row_expanded(*xEntry))
+            m_xTreeView->expand_row(*xEntry);
+        m_xTreeView->select(*xEntry);
+        SelectHdl(*m_xTreeView);
     }
 }
 

@@ -369,22 +369,22 @@ void SAL_CALL TableDesignStyle::replaceByName( const OUString& rName, const Any&
 
     Reference< XStyle > xOldStyle( maCellStyles[nIndex] );
 
-    if( xNewStyle != xOldStyle )
-    {
-        Reference< XModifyListener > xListener( this );
+    if( xNewStyle == xOldStyle )
+        return;
 
-        // end listening to old style, if possible
-        Reference< XModifyBroadcaster > xOldBroadcaster( xOldStyle, UNO_QUERY );
-        if( xOldBroadcaster.is() )
-            xOldBroadcaster->removeModifyListener( xListener );
+    Reference< XModifyListener > xListener( this );
 
-        // start listening to new style, if possible
-        Reference< XModifyBroadcaster > xNewBroadcaster( xNewStyle, UNO_QUERY );
-        if( xNewBroadcaster.is() )
-            xNewBroadcaster->addModifyListener( xListener );
+    // end listening to old style, if possible
+    Reference< XModifyBroadcaster > xOldBroadcaster( xOldStyle, UNO_QUERY );
+    if( xOldBroadcaster.is() )
+        xOldBroadcaster->removeModifyListener( xListener );
 
-        maCellStyles[nIndex] = xNewStyle;
-    }
+    // start listening to new style, if possible
+    Reference< XModifyBroadcaster > xNewBroadcaster( xNewStyle, UNO_QUERY );
+    if( xNewBroadcaster.is() )
+        xNewBroadcaster->addModifyListener( xListener );
+
+    maCellStyles[nIndex] = xNewStyle;
 }
 
 

@@ -36,25 +36,25 @@ void ContextChangeEventMultiplexer::NotifyContextChange (
     const css::uno::Reference<css::frame::XController>& rxController,
     const vcl::EnumContext::Context eContext)
 {
-    if (rxController.is() && rxController->getFrame().is())
+    if (!(rxController.is() && rxController->getFrame().is()))
+        return;
+
+    const css::ui::ContextChangeEventObject aEvent(
+        rxController,
+        GetModuleName(rxController->getFrame()),
+        vcl::EnumContext::GetContextName(eContext));
+
+    css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
+        css::ui::ContextChangeEventMultiplexer::get(
+            ::comphelper::getProcessComponentContext()));
+    if (xMultiplexer.is())
+        xMultiplexer->broadcastContextChangeEvent(aEvent, rxController);
+
+    // notify the LOK too after all the change have taken effect.
+    if (comphelper::LibreOfficeKit::isActive())
     {
-        const css::ui::ContextChangeEventObject aEvent(
-            rxController,
-            GetModuleName(rxController->getFrame()),
-            vcl::EnumContext::GetContextName(eContext));
-
-        css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
-            css::ui::ContextChangeEventMultiplexer::get(
-                ::comphelper::getProcessComponentContext()));
-        if (xMultiplexer.is())
-            xMultiplexer->broadcastContextChangeEvent(aEvent, rxController);
-
-        // notify the LOK too after all the change have taken effect.
-        if (comphelper::LibreOfficeKit::isActive())
-        {
-            if (SfxViewShell* pViewShell = SfxViewShell::Get(rxController))
-                SfxLokHelper::notifyContextChange(pViewShell, GetModuleName(rxController->getFrame()), vcl::EnumContext::GetContextName(eContext));
-        }
+        if (SfxViewShell* pViewShell = SfxViewShell::Get(rxController))
+            SfxLokHelper::notifyContextChange(pViewShell, GetModuleName(rxController->getFrame()), vcl::EnumContext::GetContextName(eContext));
     }
 }
 

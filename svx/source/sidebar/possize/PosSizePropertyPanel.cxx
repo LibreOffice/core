@@ -1066,20 +1066,20 @@ void PosSizePropertyPanel::SetPosSizeMinMax()
 void PosSizePropertyPanel::UpdateUIScale()
 {
     const Fraction aUIScale (mpView->GetModel()->GetUIScale());
-    if (maUIScale != aUIScale)
-    {
-        // UI scale has changed.
+    if (maUIScale == aUIScale)
+        return;
 
-        // Remember the new UI scale.
-        maUIScale = aUIScale;
+    // UI scale has changed.
 
-        // The content of the position and size boxes is only updated when item changes are notified.
-        // Request such notifications without changing the actual item values.
-        GetBindings()->Invalidate(SID_ATTR_TRANSFORM_POS_X, true);
-        GetBindings()->Invalidate(SID_ATTR_TRANSFORM_POS_Y, true);
-        GetBindings()->Invalidate(SID_ATTR_TRANSFORM_WIDTH, true);
-        GetBindings()->Invalidate(SID_ATTR_TRANSFORM_HEIGHT, true);
-    }
+    // Remember the new UI scale.
+    maUIScale = aUIScale;
+
+    // The content of the position and size boxes is only updated when item changes are notified.
+    // Request such notifications without changing the actual item values.
+    GetBindings()->Invalidate(SID_ATTR_TRANSFORM_POS_X, true);
+    GetBindings()->Invalidate(SID_ATTR_TRANSFORM_POS_Y, true);
+    GetBindings()->Invalidate(SID_ATTR_TRANSFORM_WIDTH, true);
+    GetBindings()->Invalidate(SID_ATTR_TRANSFORM_HEIGHT, true);
 }
 
 

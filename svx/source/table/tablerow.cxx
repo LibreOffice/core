@@ -103,18 +103,18 @@ TableRow& TableRow::operator=( const TableRow& r )
 void TableRow::insertColumns( sal_Int32 nIndex, sal_Int32 nCount, CellVector::iterator const * pIter /* = 0 */  )
 {
     throwIfDisposed();
-    if( nCount )
+    if( !nCount )
+        return;
+
+    if( nIndex >= static_cast< sal_Int32 >( maCells.size() ) )
+        nIndex = static_cast< sal_Int32 >( maCells.size() );
+    if ( pIter )
+        maCells.insert( maCells.begin() + nIndex, *pIter, (*pIter) + nCount );
+    else
     {
-        if( nIndex >= static_cast< sal_Int32 >( maCells.size() ) )
-            nIndex = static_cast< sal_Int32 >( maCells.size() );
-        if ( pIter )
-            maCells.insert( maCells.begin() + nIndex, *pIter, (*pIter) + nCount );
-        else
-        {
-            maCells.reserve( maCells.size() + nCount );
-            for ( sal_Int32 i = 0; i < nCount; i++ )
-                maCells.insert( maCells.begin() + nIndex + i, mxTableModel->createCell() );
-        }
+        maCells.reserve( maCells.size() + nCount );
+        for ( sal_Int32 i = 0; i < nCount; i++ )
+            maCells.insert( maCells.begin() + nIndex + i, mxTableModel->createCell() );
     }
 }
 
@@ -122,29 +122,29 @@ void TableRow::insertColumns( sal_Int32 nIndex, sal_Int32 nCount, CellVector::it
 void TableRow::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
 {
     throwIfDisposed();
-    if( (nCount >= 0) && ( nIndex >= 0) )
-    {
-        if( (nIndex + nCount) < static_cast< sal_Int32 >( maCells.size() ) )
-        {
-            CellVector::iterator aBegin( maCells.begin() );
-            std::advance(aBegin, nIndex);
+    if( (nCount < 0) || ( nIndex < 0))
+        return;
 
-            if( nCount > 1 )
-            {
-                CellVector::iterator aEnd( aBegin );
-                while( nCount-- && (aEnd != maCells.end()) )
-                    ++aEnd;
-                maCells.erase( aBegin, aEnd );
-            }
-            else
-            {
-                maCells.erase( aBegin );
-            }
+    if( (nIndex + nCount) < static_cast< sal_Int32 >( maCells.size() ) )
+    {
+        CellVector::iterator aBegin( maCells.begin() );
+        std::advance(aBegin, nIndex);
+
+        if( nCount > 1 )
+        {
+            CellVector::iterator aEnd( aBegin );
+            while( nCount-- && (aEnd != maCells.end()) )
+                ++aEnd;
+            maCells.erase( aBegin, aEnd );
         }
         else
         {
-            maCells.resize( nIndex );
+            maCells.erase( aBegin );
         }
+    }
+    else
+    {
+        maCells.resize( nIndex );
     }
 }
 

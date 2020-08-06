@@ -212,41 +212,41 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, ClickImportBitmapHdl, weld::Button&, void
 {
     SvxOpenGraphicDialog aDlg("Import", GetFrameWeld());
     aDlg.EnableLink(false);
-    if( aDlg.Execute() == ERRCODE_NONE )
-    {
-        Graphic aGraphic;
-        EnterWait();
-        ErrCode nError = aDlg.GetGraphic( aGraphic );
-        LeaveWait();
-        if( nError == ERRCODE_NONE )
-        {
-            XBitmapListRef pList = SfxObjectShell::Current()->GetItem(SID_BITMAP_LIST)->GetBitmapList();
-            INetURLObject   aURL( aDlg.GetPath() );
-            OUString aFileName = aURL.GetLastName().getToken(0, '.');
-            OUString aName = aFileName;
-            long j = 1;
-            bool bValidBitmapName = false;
-            while( !bValidBitmapName )
-            {
-                bValidBitmapName = true;
-                for( long i = 0; i < pList->Count() && bValidBitmapName; i++ )
-                {
-                    if( aName == pList->GetBitmap(i)->GetName() )
-                    {
-                        bValidBitmapName = false;
-                        aName = aFileName + OUString::number(j++);
-                    }
-                }
-            }
+    if( aDlg.Execute() != ERRCODE_NONE )
+        return;
 
-            pList->Insert(std::make_unique<XBitmapEntry>(aGraphic, aName));
-            pList->Save();
-            mxLbFillAttr->clear();
-            SvxFillAttrBox::Fill(*mxLbFillAttr, pList);
-            mxLbFillAttr->set_active_text(aName);
-            SelectFillAttrHdl(*mxLbFillAttr);
+    Graphic aGraphic;
+    EnterWait();
+    ErrCode nError = aDlg.GetGraphic( aGraphic );
+    LeaveWait();
+    if( nError != ERRCODE_NONE )
+        return;
+
+    XBitmapListRef pList = SfxObjectShell::Current()->GetItem(SID_BITMAP_LIST)->GetBitmapList();
+    INetURLObject   aURL( aDlg.GetPath() );
+    OUString aFileName = aURL.GetLastName().getToken(0, '.');
+    OUString aName = aFileName;
+    long j = 1;
+    bool bValidBitmapName = false;
+    while( !bValidBitmapName )
+    {
+        bValidBitmapName = true;
+        for( long i = 0; i < pList->Count() && bValidBitmapName; i++ )
+        {
+            if( aName == pList->GetBitmap(i)->GetName() )
+            {
+                bValidBitmapName = false;
+                aName = aFileName + OUString::number(j++);
+            }
         }
     }
+
+    pList->Insert(std::make_unique<XBitmapEntry>(aGraphic, aName));
+    pList->Save();
+    mxLbFillAttr->clear();
+    SvxFillAttrBox::Fill(*mxLbFillAttr, pList);
+    mxLbFillAttr->set_active_text(aName);
+    SelectFillAttrHdl(*mxLbFillAttr);
 }
 
 IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, weld::ComboBox&, void)

@@ -263,35 +263,35 @@ void SAL_CALL SvxUnoGluePointAccess::removeByIdentifier( sal_Int32 Identifier )
 // XIdentifierReplace
 void SAL_CALL SvxUnoGluePointAccess::replaceByIdentifer( sal_Int32 Identifier, const uno::Any& aElement )
 {
-    if( mpObject.is() )
+    if( !mpObject.is() )
+        return;
+
+    struct drawing::GluePoint2 aGluePoint;
+    if( (Identifier < NON_USER_DEFINED_GLUE_POINTS) || !(aElement >>= aGluePoint))
+        throw lang::IllegalArgumentException();
+
+    const sal_uInt16 nId = static_cast<sal_uInt16>( Identifier - NON_USER_DEFINED_GLUE_POINTS ) + 1;
+
+    SdrGluePointList* pList = const_cast< SdrGluePointList* >( mpObject->GetGluePointList() );
+    const sal_uInt16 nCount = pList ? pList->GetCount() : 0;
+    sal_uInt16 i;
+    for( i = 0; i < nCount; i++ )
     {
-        struct drawing::GluePoint2 aGluePoint;
-        if( (Identifier < NON_USER_DEFINED_GLUE_POINTS) || !(aElement >>= aGluePoint))
-            throw lang::IllegalArgumentException();
-
-        const sal_uInt16 nId = static_cast<sal_uInt16>( Identifier - NON_USER_DEFINED_GLUE_POINTS ) + 1;
-
-        SdrGluePointList* pList = const_cast< SdrGluePointList* >( mpObject->GetGluePointList() );
-        const sal_uInt16 nCount = pList ? pList->GetCount() : 0;
-        sal_uInt16 i;
-        for( i = 0; i < nCount; i++ )
+        if( (*pList)[i].GetId() == nId )
         {
-            if( (*pList)[i].GetId() == nId )
-            {
-                // change the glue point
-                SdrGluePoint& rTempPoint = (*pList)[i];
-                convert( aGluePoint, rTempPoint );
+            // change the glue point
+            SdrGluePoint& rTempPoint = (*pList)[i];
+            convert( aGluePoint, rTempPoint );
 
-                // only repaint, no objectchange
-                mpObject->ActionChanged();
-                // mpObject->BroadcastObjectChange();
+            // only repaint, no objectchange
+            mpObject->ActionChanged();
+            // mpObject->BroadcastObjectChange();
 
-                return;
-            }
+            return;
         }
-
-        throw container::NoSuchElementException();
     }
+
+    throw container::NoSuchElementException();
 }
 
 // XIdentifierAccess

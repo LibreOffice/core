@@ -753,22 +753,21 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
     bAllowHide = bAllowHide && (xCols->getCount()-nHiddenCols > 1);     // AND there are at least two visible columns
     rMenu.EnableItem(rMenu.GetItemId("hide"), bAllowHide);
 
-    if (bMarked)
+    if (!bMarked)
+        return;
+
+    SfxViewFrame* pCurrentFrame = SfxViewFrame::Current();
+    SfxItemState eState = SfxItemState::UNKNOWN;
+    // ask the bindings of the current view frame (which should be the one we're residing in) for the state
+    if (pCurrentFrame)
     {
+        std::unique_ptr<SfxPoolItem> pItem;
+        eState = pCurrentFrame->GetBindings().QueryState(SID_FM_CTL_PROPERTIES, pItem);
 
-        SfxViewFrame* pCurrentFrame = SfxViewFrame::Current();
-        SfxItemState eState = SfxItemState::UNKNOWN;
-        // ask the bindings of the current view frame (which should be the one we're residing in) for the state
-        if (pCurrentFrame)
+        if (eState >= SfxItemState::DEFAULT && pItem != nullptr)
         {
-            std::unique_ptr<SfxPoolItem> pItem;
-            eState = pCurrentFrame->GetBindings().QueryState(SID_FM_CTL_PROPERTIES, pItem);
-
-            if (eState >= SfxItemState::DEFAULT && pItem != nullptr)
-            {
-                bool bChecked = dynamic_cast<const SfxBoolItem*>( pItem.get()) != nullptr && static_cast<SfxBoolItem*>(pItem.get())->GetValue();
-                rMenu.CheckItem("column", bChecked);
-            }
+            bool bChecked = dynamic_cast<const SfxBoolItem*>( pItem.get()) != nullptr && static_cast<SfxBoolItem*>(pItem.get())->GetValue();
+            rMenu.CheckItem("column", bChecked);
         }
     }
 }
@@ -962,22 +961,22 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
 
     SfxViewFrame* pCurrentFrame = SfxViewFrame::Current();
     OSL_ENSURE( pCurrentFrame, "FmGridHeader::PostExecuteColumnContextMenu: no view frame -> no bindings -> no property browser!" );
-    if ( pCurrentFrame )
+    if ( !pCurrentFrame )
+        return;
+
+    if ( eInspectorAction == eUpdateInspector )
     {
-        if ( eInspectorAction == eUpdateInspector )
-        {
-            if ( !pCurrentFrame->HasChildWindow( SID_FM_SHOW_PROPERTIES ) )
-                eInspectorAction = eNone;
-        }
+        if ( !pCurrentFrame->HasChildWindow( SID_FM_SHOW_PROPERTIES ) )
+            eInspectorAction = eNone;
+    }
 
-        if ( eInspectorAction != eNone )
-        {
-            SfxBoolItem aShowItem( SID_FM_SHOW_PROPERTIES, eInspectorAction != eCloseInspector );
+    if ( eInspectorAction != eNone )
+    {
+        SfxBoolItem aShowItem( SID_FM_SHOW_PROPERTIES, eInspectorAction != eCloseInspector );
 
-            pCurrentFrame->GetBindings().GetDispatcher()->ExecuteList(
-                    SID_FM_SHOW_PROPERTY_BROWSER, SfxCallMode::ASYNCHRON,
-                    { &aShowItem });
-        }
+        pCurrentFrame->GetBindings().GetDispatcher()->ExecuteList(
+                SID_FM_SHOW_PROPERTY_BROWSER, SfxCallMode::ASYNCHRON,
+                { &aShowItem });
     }
 }
 
@@ -1071,18 +1070,18 @@ void FmGridControl::propertyChange(const css::beans::PropertyChangeEvent& evt)
     const DbGridRowRef& xRow = GetCurrentRow();
     // no adjustment of the properties is carried out during positioning
     Reference<XPropertySet> xSet(evt.Source,UNO_QUERY);
-    if (xRow.is() && (::cppu::any2bool(xSet->getPropertyValue(FM_PROP_ISNEW))|| CompareBookmark(getDataSource()->getBookmark(), xRow->GetBookmark())))
+    if (!(xRow.is() && (::cppu::any2bool(xSet->getPropertyValue(FM_PROP_ISNEW))|| CompareBookmark(getDataSource()->getBookmark(), xRow->GetBookmark()))))
+        return;
+
+    if (evt.PropertyName == FM_PROP_ISMODIFIED)
     {
-        if (evt.PropertyName == FM_PROP_ISMODIFIED)
+        // modified or clean ?
+        GridRowStatus eStatus = ::comphelper::getBOOL(evt.NewValue) ? GridRowStatus::Modified : GridRowStatus::Clean;
+        if (eStatus != xRow->GetStatus())
         {
-            // modified or clean ?
-            GridRowStatus eStatus = ::comphelper::getBOOL(evt.NewValue) ? GridRowStatus::Modified : GridRowStatus::Clean;
-            if (eStatus != xRow->GetStatus())
-            {
-                xRow->SetStatus(eStatus);
-                SolarMutexGuard aGuard;
-                RowModified(GetCurrentPos());
-            }
+            xRow->SetStatus(eStatus);
+            SolarMutexGuard aGuard;
+            RowModified(GetCurrentPos());
         }
     }
 }
@@ -1091,32 +1090,32 @@ void FmGridControl::SetDesignMode(bool bMode)
 {
     bool bOldMode = IsDesignMode();
     DbGridControl::SetDesignMode(bMode);
-    if (bOldMode != bMode)
+    if (bOldMode == bMode)
+        return;
+
+    if (!bMode)
     {
-        if (!bMode)
+        // cancel selection
+        markColumn(USHRT_MAX);
+    }
+    else
+    {
+        Reference< css::container::XIndexContainer >  xColumns(GetPeer()->getColumns());
+        Reference< css::view::XSelectionSupplier >  xSelSupplier(xColumns, UNO_QUERY);
+        if (xSelSupplier.is())
         {
-            // cancel selection
-            markColumn(USHRT_MAX);
-        }
-        else
-        {
-            Reference< css::container::XIndexContainer >  xColumns(GetPeer()->getColumns());
-            Reference< css::view::XSelectionSupplier >  xSelSupplier(xColumns, UNO_QUERY);
-            if (xSelSupplier.is())
+            Any aSelection = xSelSupplier->getSelection();
+            Reference< css::beans::XPropertySet >  xColumn;
+            if (aSelection.getValueType().getTypeClass() == TypeClass_INTERFACE)
+                xColumn.set(aSelection, css::uno::UNO_QUERY);
+            Reference< XInterface >  xCurrent;
+            for (sal_Int32 i=0; i<xColumns->getCount(); ++i)
             {
-                Any aSelection = xSelSupplier->getSelection();
-                Reference< css::beans::XPropertySet >  xColumn;
-                if (aSelection.getValueType().getTypeClass() == TypeClass_INTERFACE)
-                    xColumn.set(aSelection, css::uno::UNO_QUERY);
-                Reference< XInterface >  xCurrent;
-                for (sal_Int32 i=0; i<xColumns->getCount(); ++i)
+                xCurrent.set(xColumns->getByIndex(i), css::uno::UNO_QUERY);
+                if (xCurrent == xColumn)
                 {
-                    xCurrent.set(xColumns->getByIndex(i), css::uno::UNO_QUERY);
-                    if (xCurrent == xColumn)
-                    {
-                        markColumn(GetColumnIdFromModelPos(i));
-                        break;
-                    }
+                    markColumn(GetColumnIdFromModelPos(i));
+                    break;
                 }
             }
         }
@@ -1431,23 +1430,23 @@ VclPtr<BrowserHeader> FmGridControl::imp_CreateHeaderBar(BrowseBox* pParent)
 
 void FmGridControl::markColumn(sal_uInt16 nId)
 {
-    if (GetHeaderBar() && m_nMarkedColumnId != nId)
+    if (!(GetHeaderBar() && m_nMarkedColumnId != nId))
+        return;
+
+    // deselect
+    if (m_nMarkedColumnId != BROWSER_INVALIDID)
     {
-        // deselect
-        if (m_nMarkedColumnId != BROWSER_INVALIDID)
-        {
-            HeaderBarItemBits aBits = GetHeaderBar()->GetItemBits(m_nMarkedColumnId) & ~HeaderBarItemBits::FLAT;
-            GetHeaderBar()->SetItemBits(m_nMarkedColumnId, aBits);
-        }
-
-
-        if (nId != BROWSER_INVALIDID)
-        {
-            HeaderBarItemBits aBits = GetHeaderBar()->GetItemBits(nId) | HeaderBarItemBits::FLAT;
-            GetHeaderBar()->SetItemBits(nId, aBits);
-        }
-        m_nMarkedColumnId = nId;
+        HeaderBarItemBits aBits = GetHeaderBar()->GetItemBits(m_nMarkedColumnId) & ~HeaderBarItemBits::FLAT;
+        GetHeaderBar()->SetItemBits(m_nMarkedColumnId, aBits);
     }
+
+
+    if (nId != BROWSER_INVALIDID)
+    {
+        HeaderBarItemBits aBits = GetHeaderBar()->GetItemBits(nId) | HeaderBarItemBits::FLAT;
+        GetHeaderBar()->SetItemBits(nId, aBits);
+    }
+    m_nMarkedColumnId = nId;
 }
 
 bool FmGridControl::isColumnMarked(sal_uInt16 nId) const
@@ -1468,18 +1467,18 @@ void FmGridControl::RowHeightChanged()
 
     Reference< XPropertySet > xModel( GetPeer()->getColumns(), UNO_QUERY );
     DBG_ASSERT( xModel.is(), "FmGridControl::RowHeightChanged: no model!" );
-    if ( xModel.is() )
+    if ( !xModel.is() )
+        return;
+
+    try
     {
-        try
-        {
-            sal_Int32 nUnzoomedPixelHeight = CalcReverseZoom( GetDataRowHeight() );
-            Any aProperty = makeAny( static_cast<sal_Int32>(PixelToLogic( Point(0, nUnzoomedPixelHeight), MapMode(MapUnit::Map10thMM)).Y()) );
-            xModel->setPropertyValue( FM_PROP_ROWHEIGHT, aProperty );
-        }
-        catch( const Exception& )
-        {
-            TOOLS_WARN_EXCEPTION( "svx", "FmGridControl::RowHeightChanged" );
-        }
+        sal_Int32 nUnzoomedPixelHeight = CalcReverseZoom( GetDataRowHeight() );
+        Any aProperty = makeAny( static_cast<sal_Int32>(PixelToLogic( Point(0, nUnzoomedPixelHeight), MapMode(MapUnit::Map10thMM)).Y()) );
+        xModel->setPropertyValue( FM_PROP_ROWHEIGHT, aProperty );
+    }
+    catch( const Exception& )
+    {
+        TOOLS_WARN_EXCEPTION( "svx", "FmGridControl::RowHeightChanged" );
     }
 }
 
@@ -1973,42 +1972,42 @@ void FmGridControl::Select()
             break;
     }
 
-    if (nSelectedColumn != m_nCurrentSelectedColumn)
+    if (nSelectedColumn == m_nCurrentSelectedColumn)
+        return;
+
+    // BEFORE calling the select at the SelectionSupplier!
+    m_nCurrentSelectedColumn = nSelectedColumn;
+
+    if (m_bSelecting)
+        return;
+
+    m_bSelecting = true;
+
+    try
     {
-        // BEFORE calling the select at the SelectionSupplier!
-        m_nCurrentSelectedColumn = nSelectedColumn;
-
-        if (!m_bSelecting)
+        Reference< XIndexAccess >  xColumns = GetPeer()->getColumns();
+        Reference< XSelectionSupplier >  xSelSupplier(xColumns, UNO_QUERY);
+        if (xSelSupplier.is())
         {
-            m_bSelecting = true;
-
-            try
+            if (nSelectedColumn != SAL_MAX_UINT16)
             {
-                Reference< XIndexAccess >  xColumns = GetPeer()->getColumns();
-                Reference< XSelectionSupplier >  xSelSupplier(xColumns, UNO_QUERY);
-                if (xSelSupplier.is())
-                {
-                    if (nSelectedColumn != SAL_MAX_UINT16)
-                    {
-                        Reference< XPropertySet >  xColumn(
-                            xColumns->getByIndex(nSelectedColumn),
-                            css::uno::UNO_QUERY);
-                        xSelSupplier->select(makeAny(xColumn));
-                    }
-                    else
-                    {
-                        xSelSupplier->select(Any());
-                    }
-                }
+                Reference< XPropertySet >  xColumn(
+                    xColumns->getByIndex(nSelectedColumn),
+                    css::uno::UNO_QUERY);
+                xSelSupplier->select(makeAny(xColumn));
             }
-            catch(Exception&)
+            else
             {
+                xSelSupplier->select(Any());
             }
-
-
-            m_bSelecting = false;
         }
     }
+    catch(Exception&)
+    {
+    }
+
+
+    m_bSelecting = false;
 }
 
 

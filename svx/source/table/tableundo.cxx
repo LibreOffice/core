@@ -129,23 +129,23 @@ void CellUndo::setDataToCell( const Data& rData )
 
 void CellUndo::getDataFromCell( Data& rData )
 {
-    if( mxObjRef.is() && mxCell.is() )
-    {
-        if( mxCell->mpProperties )
-            rData.mpProperties = mxCell->CloneProperties( *mxObjRef, *mxCell);
+    if( !(mxObjRef.is() && mxCell.is()) )
+        return;
 
-        if( mxCell->GetOutlinerParaObject() )
-            rData.mpOutlinerParaObject = new OutlinerParaObject(*mxCell->GetOutlinerParaObject());
-        else
-            rData.mpOutlinerParaObject =  nullptr;
+    if( mxCell->mpProperties )
+        rData.mpProperties = mxCell->CloneProperties( *mxObjRef, *mxCell);
 
-        rData.msFormula = mxCell->msFormula;
-        rData.mfValue = mxCell->mfValue;
-        rData.mnError = mxCell->mnError;
-        rData.mbMerged = mxCell->mbMerged;
-        rData.mnRowSpan = mxCell->mnRowSpan;
-        rData.mnColSpan = mxCell->mnColSpan;
-    }
+    if( mxCell->GetOutlinerParaObject() )
+        rData.mpOutlinerParaObject = new OutlinerParaObject(*mxCell->GetOutlinerParaObject());
+    else
+        rData.mpOutlinerParaObject =  nullptr;
+
+    rData.msFormula = mxCell->msFormula;
+    rData.mfValue = mxCell->mfValue;
+    rData.mnError = mxCell->mnError;
+    rData.mbMerged = mxCell->mbMerged;
+    rData.mnRowSpan = mxCell->mnRowSpan;
+    rData.mnColSpan = mxCell->mnColSpan;
 }
 
 

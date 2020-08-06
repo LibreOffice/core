@@ -202,49 +202,49 @@ bool SmartTagMgr::IsSmartTagTypeEnabled( const OUString& rSmartTagType ) const
 void SmartTagMgr::WriteConfiguration( const bool* pIsLabelTextWithSmartTags,
                                       const std::vector< OUString >* pDisabledTypes ) const
 {
-    if ( mxConfigurationSettings.is() )
+    if ( !mxConfigurationSettings.is() )
+        return;
+
+    bool bCommit = false;
+
+    if ( pIsLabelTextWithSmartTags )
     {
-        bool bCommit = false;
+        const Any aEnabled = makeAny( *pIsLabelTextWithSmartTags );
 
-        if ( pIsLabelTextWithSmartTags )
+        try
         {
-            const Any aEnabled = makeAny( *pIsLabelTextWithSmartTags );
-
-            try
-            {
-                mxConfigurationSettings->setPropertyValue( "RecognizeSmartTags", aEnabled );
-                bCommit = true;
-            }
-            catch ( css::uno::Exception& )
-            {
-            }
+            mxConfigurationSettings->setPropertyValue( "RecognizeSmartTags", aEnabled );
+            bCommit = true;
         }
-
-        if ( pDisabledTypes )
+        catch ( css::uno::Exception& )
         {
-            Sequence< OUString > aTypes = comphelper::containerToSequence(*pDisabledTypes);
-
-            const Any aNewTypes = makeAny( aTypes );
-
-            try
-            {
-                mxConfigurationSettings->setPropertyValue( "ExcludedSmartTagTypes", aNewTypes );
-                bCommit = true;
-            }
-            catch ( css::uno::Exception& )
-            {
-            }
         }
+    }
 
-        if ( bCommit )
+    if ( pDisabledTypes )
+    {
+        Sequence< OUString > aTypes = comphelper::containerToSequence(*pDisabledTypes);
+
+        const Any aNewTypes = makeAny( aTypes );
+
+        try
         {
-            try
-            {
-                Reference< util::XChangesBatch >( mxConfigurationSettings, UNO_QUERY_THROW )->commitChanges();
-            }
-            catch ( css::uno::Exception& )
-            {
-            }
+            mxConfigurationSettings->setPropertyValue( "ExcludedSmartTagTypes", aNewTypes );
+            bCommit = true;
+        }
+        catch ( css::uno::Exception& )
+        {
+        }
+    }
+
+    if ( bCommit )
+    {
+        try
+        {
+            Reference< util::XChangesBatch >( mxConfigurationSettings, UNO_QUERY_THROW )->commitChanges();
+        }
+        catch ( css::uno::Exception& )
+        {
         }
     }
 }
@@ -415,28 +415,28 @@ void SmartTagMgr::PrepareConfiguration( const OUString& rConfigurationGroupName 
 
 void SmartTagMgr::ReadConfiguration( bool bExcludedTypes, bool bRecognize )
 {
-    if ( mxConfigurationSettings.is() )
+    if ( !mxConfigurationSettings.is() )
+        return;
+
+    if ( bExcludedTypes )
     {
-        if ( bExcludedTypes )
-        {
-            maDisabledSmartTagTypes.clear();
+        maDisabledSmartTagTypes.clear();
 
-            Any aAny = mxConfigurationSettings->getPropertyValue( "ExcludedSmartTagTypes" );
-            Sequence< OUString > aValues;
-            aAny >>= aValues;
+        Any aAny = mxConfigurationSettings->getPropertyValue( "ExcludedSmartTagTypes" );
+        Sequence< OUString > aValues;
+        aAny >>= aValues;
 
-            for ( const auto& rValue : std::as_const(aValues) )
-                maDisabledSmartTagTypes.insert( rValue );
-        }
+        for ( const auto& rValue : std::as_const(aValues) )
+            maDisabledSmartTagTypes.insert( rValue );
+    }
 
-        if ( bRecognize )
-        {
-            Any aAny = mxConfigurationSettings->getPropertyValue( "RecognizeSmartTags" );
-            bool bValue = true;
-            aAny >>= bValue;
+    if ( bRecognize )
+    {
+        Any aAny = mxConfigurationSettings->getPropertyValue( "RecognizeSmartTags" );
+        bool bValue = true;
+        aAny >>= bValue;
 
-            mbLabelTextWithSmartTags = bValue;
-        }
+        mbLabelTextWithSmartTags = bValue;
     }
 }
 

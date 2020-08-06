@@ -583,21 +583,21 @@ void Gallery::RenameTheme( const OUString& rOldName, const OUString& rNewName )
     GalleryThemeEntry*      pThemeEntry = ImplGetThemeEntry( rOldName );
 
     // check if the new theme name is already present
-    if( pThemeEntry && !HasTheme( rNewName ) && !pThemeEntry->IsReadOnly() )
+    if( !pThemeEntry || HasTheme( rNewName ) || pThemeEntry->IsReadOnly() )
+        return;
+
+    SfxListener   aListener;
+    GalleryTheme* pThm = AcquireTheme( rOldName, aListener );
+
+    if( pThm )
     {
-        SfxListener   aListener;
-        GalleryTheme* pThm = AcquireTheme( rOldName, aListener );
+        pThemeEntry->SetName( rNewName );
+        if (pThm->pThm->IsModified())
+            if (!pThm->mpGalleryBinaryEngine->implWrite(*pThm))
+                pThm->ImplSetModified(false);
 
-        if( pThm )
-        {
-            pThemeEntry->SetName( rNewName );
-            if (pThm->pThm->IsModified())
-                if (!pThm->mpGalleryBinaryEngine->implWrite(*pThm))
-                    pThm->ImplSetModified(false);
-
-            Broadcast( GalleryHint( GalleryHintType::THEME_RENAMED, rOldName, pThm->GetName() ) );
-            ReleaseTheme( pThm, aListener );
-        }
+        Broadcast( GalleryHint( GalleryHintType::THEME_RENAMED, rOldName, pThm->GetName() ) );
+        ReleaseTheme( pThm, aListener );
     }
 }
 

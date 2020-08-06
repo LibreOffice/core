@@ -132,23 +132,23 @@ void FmFormView::MarkListHasChanged()
 {
     E3dView::MarkListHasChanged();
 
-    if ( pFormShell && IsDesignMode() )
-    {
-        FmFormObj* pObj = getMarkedGrid();
-        if ( pImpl->m_pMarkedGrid && pImpl->m_pMarkedGrid != pObj )
-        {
-            pImpl->m_pMarkedGrid = nullptr;
-            if ( pImpl->m_xWindow.is() )
-            {
-                pImpl->m_xWindow->removeFocusListener(pImpl.get());
-                pImpl->m_xWindow = nullptr;
-            }
-            SetMoveOutside(false);
-            //OLMRefreshAllIAOManagers();
-        }
+    if ( !(pFormShell && IsDesignMode()) )
+        return;
 
-        pFormShell->GetImpl()->SetSelectionDelayed_Lock();
+    FmFormObj* pObj = getMarkedGrid();
+    if ( pImpl->m_pMarkedGrid && pImpl->m_pMarkedGrid != pObj )
+    {
+        pImpl->m_pMarkedGrid = nullptr;
+        if ( pImpl->m_xWindow.is() )
+        {
+            pImpl->m_xWindow->removeFocusListener(pImpl.get());
+            pImpl->m_xWindow = nullptr;
+        }
+        SetMoveOutside(false);
+        //OLMRefreshAllIAOManagers();
     }
+
+    pFormShell->GetImpl()->SetSelectionDelayed_Lock();
 }
 
 namespace
@@ -404,21 +404,21 @@ SdrObjectUniquePtr FmFormView::CreateFieldControl(const OUString& rFieldDesc) co
 
 void FmFormView::InsertControlContainer(const Reference< css::awt::XControlContainer > & xCC)
 {
-    if( !IsDesignMode() )
-    {
-        SdrPageView* pPageView = GetSdrPageView();
-        if( pPageView )
-        {
-            for( sal_uInt32 i = 0; i < pPageView->PageWindowCount(); i++ )
-            {
-                const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(i);
+    if( IsDesignMode() )
+        return;
 
-                if( rPageWindow.GetControlContainer( false ) == xCC )
-                {
-                    pImpl->addWindow(rPageWindow);
-                    break;
-                }
-            }
+    SdrPageView* pPageView = GetSdrPageView();
+    if( !pPageView )
+        return;
+
+    for( sal_uInt32 i = 0; i < pPageView->PageWindowCount(); i++ )
+    {
+        const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(i);
+
+        if( rPageWindow.GetControlContainer( false ) == xCC )
+        {
+            pImpl->addWindow(rPageWindow);
+            break;
         }
     }
 }

@@ -554,40 +554,40 @@ void E3dCompoundObject::RecalcSnapRect()
     E3dScene* pRootScene = fillViewInformation3DForCompoundObject(aViewInfo3D, *this);
     maSnapRect = tools::Rectangle();
 
-    if(pRootScene)
-    {
-        // get VC of 3D candidate
-        const sdr::contact::ViewContactOfE3d* pVCOfE3D = dynamic_cast< const sdr::contact::ViewContactOfE3d* >(&GetViewContact());
+    if(!pRootScene)
+        return;
 
-        if(pVCOfE3D)
-        {
-            // get 3D primitive sequence
-            const drawinglayer::primitive3d::Primitive3DContainer xLocalSequence(pVCOfE3D->getViewIndependentPrimitive3DContainer());
+    // get VC of 3D candidate
+    const sdr::contact::ViewContactOfE3d* pVCOfE3D = dynamic_cast< const sdr::contact::ViewContactOfE3d* >(&GetViewContact());
 
-            if(!xLocalSequence.empty())
-            {
-                // get BoundVolume
-                basegfx::B3DRange aBoundVolume(xLocalSequence.getB3DRange(aViewInfo3D));
+    if(!pVCOfE3D)
+        return;
 
-                // transform bound volume to relative scene coordinates
-                aBoundVolume.transform(aViewInfo3D.getObjectToView());
+    // get 3D primitive sequence
+    const drawinglayer::primitive3d::Primitive3DContainer xLocalSequence(pVCOfE3D->getViewIndependentPrimitive3DContainer());
 
-                // build 2d relative scene range
-                basegfx::B2DRange aSnapRange(
-                    aBoundVolume.getMinX(), aBoundVolume.getMinY(),
-                    aBoundVolume.getMaxX(), aBoundVolume.getMaxY());
+    if(xLocalSequence.empty())
+        return;
 
-                // transform to 2D world coordinates
-                const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(pRootScene->GetViewContact());
-                aSnapRange.transform(rVCScene.getObjectTransformation());
+    // get BoundVolume
+    basegfx::B3DRange aBoundVolume(xLocalSequence.getB3DRange(aViewInfo3D));
 
-                // snap to integer
-                maSnapRect = tools::Rectangle(
-                    sal_Int32(floor(aSnapRange.getMinX())), sal_Int32(floor(aSnapRange.getMinY())),
-                    sal_Int32(ceil(aSnapRange.getMaxX())), sal_Int32(ceil(aSnapRange.getMaxY())));
-            }
-        }
-    }
+    // transform bound volume to relative scene coordinates
+    aBoundVolume.transform(aViewInfo3D.getObjectToView());
+
+    // build 2d relative scene range
+    basegfx::B2DRange aSnapRange(
+        aBoundVolume.getMinX(), aBoundVolume.getMinY(),
+        aBoundVolume.getMaxX(), aBoundVolume.getMaxY());
+
+    // transform to 2D world coordinates
+    const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(pRootScene->GetViewContact());
+    aSnapRange.transform(rVCScene.getObjectTransformation());
+
+    // snap to integer
+    maSnapRect = tools::Rectangle(
+        sal_Int32(floor(aSnapRange.getMinX())), sal_Int32(floor(aSnapRange.getMinY())),
+        sal_Int32(ceil(aSnapRange.getMaxX())), sal_Int32(ceil(aSnapRange.getMaxY())));
 }
 
 E3dCompoundObject* E3dCompoundObject::CloneSdrObject(SdrModel& rTargetModel) const

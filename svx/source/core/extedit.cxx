@@ -184,21 +184,21 @@ void SdrExternalToolEdit::Update(Graphic & rGraphic)
 {
     assert(m_pObj && m_pView); // timer should be deleted by Notify() too
     SdrPageView *const pPageView = m_pView->GetSdrPageView();
-    if (pPageView)
-    {
-        SdrGrafObj *const pNewObj(static_cast<SdrGrafObj*>(m_pObj->CloneSdrObject(m_pObj->getSdrModelFromSdrObject())));
-        assert(pNewObj);
-        OUString const description =
-            m_pView->GetDescriptionOfMarkedObjects() + " External Edit";
-        m_pView->BegUndo(description);
-        pNewObj->SetGraphicObject(rGraphic);
-        // set to new object before ReplaceObjectAtView() so that Notify() will
-        // not delete the running timer and crash
-        SdrObject *const pOldObj = m_pObj;
-        m_pObj = pNewObj;
-        m_pView->ReplaceObjectAtView(pOldObj, *pPageView, pNewObj);
-        m_pView->EndUndo();
-    }
+    if (!pPageView)
+        return;
+
+    SdrGrafObj *const pNewObj(static_cast<SdrGrafObj*>(m_pObj->CloneSdrObject(m_pObj->getSdrModelFromSdrObject())));
+    assert(pNewObj);
+    OUString const description =
+        m_pView->GetDescriptionOfMarkedObjects() + " External Edit";
+    m_pView->BegUndo(description);
+    pNewObj->SetGraphicObject(rGraphic);
+    // set to new object before ReplaceObjectAtView() so that Notify() will
+    // not delete the running timer and crash
+    SdrObject *const pOldObj = m_pObj;
+    m_pObj = pNewObj;
+    m_pView->ReplaceObjectAtView(pOldObj, *pPageView, pNewObj);
+    m_pView->EndUndo();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

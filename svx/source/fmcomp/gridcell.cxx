@@ -753,44 +753,44 @@ void DbCellControl::ImplInitWindow( vcl::Window const & rParent, const InitWindo
         }
     }
 
-    if (_eInitWhat & InitWindowFacet::Background)
+    if (!(_eInitWhat & InitWindowFacet::Background))
+        return;
+
+    if (rParent.IsControlBackground())
     {
-        if (rParent.IsControlBackground())
+        Color aColor(rParent.GetControlBackground());
+        for (vcl::Window* pWindow : pWindows)
         {
-            Color aColor(rParent.GetControlBackground());
-            for (vcl::Window* pWindow : pWindows)
+            if (pWindow)
             {
-                if (pWindow)
+                if (isTransparent())
+                    pWindow->SetBackground();
+                else
                 {
-                    if (isTransparent())
-                        pWindow->SetBackground();
-                    else
-                    {
-                        pWindow->SetBackground(aColor);
-                        pWindow->SetControlBackground(aColor);
-                    }
-                    pWindow->SetFillColor(aColor);
+                    pWindow->SetBackground(aColor);
+                    pWindow->SetControlBackground(aColor);
                 }
+                pWindow->SetFillColor(aColor);
             }
         }
-        else
+    }
+    else
+    {
+        if (m_pPainter)
         {
-            if (m_pPainter)
-            {
-                if (isTransparent())
-                    m_pPainter->SetBackground();
-                else
-                    m_pPainter->SetBackground(rParent.GetBackground());
-                m_pPainter->SetFillColor(rParent.GetFillColor());
-            }
+            if (isTransparent())
+                m_pPainter->SetBackground();
+            else
+                m_pPainter->SetBackground(rParent.GetBackground());
+            m_pPainter->SetFillColor(rParent.GetFillColor());
+        }
 
-            if (m_pWindow)
-            {
-                if (isTransparent())
-                    m_pWindow->SetBackground(rParent.GetBackground());
-                else
-                    m_pWindow->SetFillColor(rParent.GetFillColor());
-            }
+        if (m_pWindow)
+        {
+            if (isTransparent())
+                m_pWindow->SetBackground(rParent.GetBackground());
+            else
+                m_pWindow->SetFillColor(rParent.GetFillColor());
         }
     }
 }
@@ -799,18 +799,18 @@ void DbCellControl::implAdjustReadOnly( const Reference< XPropertySet >& _rxMode
 {
     DBG_ASSERT( m_pWindow, "DbCellControl::implAdjustReadOnly: not to be called without window!" );
     DBG_ASSERT( _rxModel.is(), "DbCellControl::implAdjustReadOnly: invalid model!" );
-    if ( m_pWindow && _rxModel.is() )
+    if ( !(m_pWindow && _rxModel.is()) )
+        return;
+
+    ControlBase* pEditWindow = dynamic_cast<ControlBase*>(m_pWindow.get());
+    if ( pEditWindow )
     {
-        ControlBase* pEditWindow = dynamic_cast<ControlBase*>(m_pWindow.get());
-        if ( pEditWindow )
+        bool bReadOnly = m_rColumn.IsReadOnly();
+        if ( !bReadOnly )
         {
-            bool bReadOnly = m_rColumn.IsReadOnly();
-            if ( !bReadOnly )
-            {
-                _rxModel->getPropertyValue( i_bReadOnly ? OUString(FM_PROP_READONLY) : OUString(FM_PROP_ISREADONLY)) >>= bReadOnly;
-            }
-            pEditWindow->SetEditableReadOnly(bReadOnly);
+            _rxModel->getPropertyValue( i_bReadOnly ? OUString(FM_PROP_READONLY) : OUString(FM_PROP_ISREADONLY)) >>= bReadOnly;
         }
+        pEditWindow->SetEditableReadOnly(bReadOnly);
     }
 }
 
@@ -2492,19 +2492,19 @@ void DbListBox::SetList(const Any& rItems)
     m_bBound = false;
 
     css::uno::Sequence<OUString> aTest;
-    if (rItems >>= aTest)
+    if (!(rItems >>= aTest))
+        return;
+
+    if (aTest.hasElements())
     {
-        if (aTest.hasElements())
-        {
-            for (const OUString& rString : std::as_const(aTest))
-                 rFieldList.append_text(rString);
+        for (const OUString& rString : std::as_const(aTest))
+             rFieldList.append_text(rString);
 
-            m_rColumn.getModel()->getPropertyValue(FM_PROP_VALUE_SEQ) >>= m_aValueList;
-            m_bBound = m_aValueList.hasElements();
+        m_rColumn.getModel()->getPropertyValue(FM_PROP_VALUE_SEQ) >>= m_aValueList;
+        m_bBound = m_aValueList.hasElements();
 
-            // tell the grid control that this controller is invalid and has to be re-initialized
-            invalidatedController();
-        }
+        // tell the grid control that this controller is invalid and has to be re-initialized
+        invalidatedController();
     }
 }
 
@@ -2649,24 +2649,24 @@ void DbFilterField::SetList(const Any& rItems, bool bComboBox)
 {
     css::uno::Sequence<OUString> aTest;
     rItems >>= aTest;
-    if (aTest.hasElements())
-    {
-        if (bComboBox)
-        {
-            ComboBoxControl* pField = static_cast<ComboBoxControl*>(m_pWindow.get());
-            weld::ComboBox& rComboBox = pField->get_widget();
-            for (const OUString& rString : std::as_const(aTest))
-                rComboBox.append_text(rString);
-        }
-        else
-        {
-            ListBoxControl* pField = static_cast<ListBoxControl*>(m_pWindow.get());
-            weld::ComboBox& rFieldBox = pField->get_widget();
-            for (const OUString& rString : std::as_const(aTest))
-                rFieldBox.append_text(rString);
+    if (!aTest.hasElements())
+        return;
 
-            m_rColumn.getModel()->getPropertyValue(FM_PROP_VALUE_SEQ) >>= m_aValueList;
-        }
+    if (bComboBox)
+    {
+        ComboBoxControl* pField = static_cast<ComboBoxControl*>(m_pWindow.get());
+        weld::ComboBox& rComboBox = pField->get_widget();
+        for (const OUString& rString : std::as_const(aTest))
+            rComboBox.append_text(rString);
+    }
+    else
+    {
+        ListBoxControl* pField = static_cast<ListBoxControl*>(m_pWindow.get());
+        weld::ComboBox& rFieldBox = pField->get_widget();
+        for (const OUString& rString : std::as_const(aTest))
+            rFieldBox.append_text(rString);
+
+        m_rColumn.getModel()->getPropertyValue(FM_PROP_VALUE_SEQ) >>= m_aValueList;
     }
 }
 

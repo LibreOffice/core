@@ -92,38 +92,38 @@ Impl3DMirrorConstructOverlay::Impl3DMirrorConstructOverlay(const E3dView& rView)
     mpPolygons(nullptr),
     maFullOverlay()
 {
-    if(mnCount)
+    if(!mnCount)
+        return;
+
+    if(mrView.IsSolidDragging())
     {
-        if(mrView.IsSolidDragging())
+        SdrPageView* pPV = rView.GetSdrPageView();
+
+        if(pPV && pPV->PageWindowCount())
         {
-            SdrPageView* pPV = rView.GetSdrPageView();
-
-            if(pPV && pPV->PageWindowCount())
-            {
-                for(size_t a = 0; a < mnCount; ++a)
-                {
-                    SdrObject* pObject = mrView.GetMarkedObjectByIndex(a);
-
-                    if(pObject)
-                    {
-                        // use the view-independent primitive representation (without
-                        // evtl. GridOffset, that may be applied to the DragEntry individually)
-                        const drawinglayer::primitive2d::Primitive2DContainer& aNewSequence(
-                            pObject->GetViewContact().getViewIndependentPrimitive2DContainer());
-                        maFullOverlay.append(aNewSequence);
-                    }
-                }
-            }
-        }
-        else
-        {
-            mpPolygons = new basegfx::B2DPolyPolygon[mnCount];
-
             for(size_t a = 0; a < mnCount; ++a)
             {
                 SdrObject* pObject = mrView.GetMarkedObjectByIndex(a);
-                mpPolygons[mnCount - (a + 1)] = pObject->TakeXorPoly();
+
+                if(pObject)
+                {
+                    // use the view-independent primitive representation (without
+                    // evtl. GridOffset, that may be applied to the DragEntry individually)
+                    const drawinglayer::primitive2d::Primitive2DContainer& aNewSequence(
+                        pObject->GetViewContact().getViewIndependentPrimitive2DContainer());
+                    maFullOverlay.append(aNewSequence);
+                }
             }
+        }
+    }
+    else
+    {
+        mpPolygons = new basegfx::B2DPolyPolygon[mnCount];
+
+        for(size_t a = 0; a < mnCount; ++a)
+        {
+            SdrObject* pObject = mrView.GetMarkedObjectByIndex(a);
+            mpPolygons[mnCount - (a + 1)] = pObject->TakeXorPoly();
         }
     }
 }
@@ -613,75 +613,75 @@ bool E3dView::IsConvertTo3DObjPossible() const
 void E3dView::ImpIsConvertTo3DPossible(SdrObject const * pObj, bool& rAny3D,
     bool& rGroupSelected) const
 {
-    if(pObj)
+    if(!pObj)
+        return;
+
+    if(dynamic_cast< const E3dObject* >(pObj) !=  nullptr)
     {
-        if(dynamic_cast< const E3dObject* >(pObj) !=  nullptr)
+        rAny3D = true;
+    }
+    else
+    {
+        if(pObj->IsGroupObject())
         {
-            rAny3D = true;
-        }
-        else
-        {
-            if(pObj->IsGroupObject())
+            SdrObjListIter aIter(*pObj, SdrIterMode::DeepNoGroups);
+            while(aIter.IsMore())
             {
-                SdrObjListIter aIter(*pObj, SdrIterMode::DeepNoGroups);
-                while(aIter.IsMore())
-                {
-                    SdrObject* pNewObj = aIter.Next();
-                    ImpIsConvertTo3DPossible(pNewObj, rAny3D, rGroupSelected);
-                }
-                rGroupSelected = true;
+                SdrObject* pNewObj = aIter.Next();
+                ImpIsConvertTo3DPossible(pNewObj, rAny3D, rGroupSelected);
             }
+            rGroupSelected = true;
         }
     }
 }
 
 void E3dView::ImpChangeSomeAttributesFor3DConversion(SdrObject* pObj)
 {
-    if(dynamic_cast<const SdrTextObj*>( pObj) !=  nullptr)
+    if(dynamic_cast<const SdrTextObj*>( pObj) ==  nullptr)
+        return;
+
+    const SfxItemSet& rSet = pObj->GetMergedItemSet();
+    const SvxColorItem& rTextColorItem = rSet.Get(EE_CHAR_COLOR);
+    if(rTextColorItem.GetValue() != COL_BLACK)
+        return;
+
+    //For black text objects, the color set to gray
+    if(pObj->getSdrPageFromSdrObject())
     {
-        const SfxItemSet& rSet = pObj->GetMergedItemSet();
-        const SvxColorItem& rTextColorItem = rSet.Get(EE_CHAR_COLOR);
-        if(rTextColorItem.GetValue() == COL_BLACK)
-        {
-            //For black text objects, the color set to gray
-            if(pObj->getSdrPageFromSdrObject())
-            {
-                // if black is only default attribute from
-                // pattern set it hard so that it is used in undo.
-                pObj->SetMergedItem(SvxColorItem(COL_BLACK, EE_CHAR_COLOR));
+        // if black is only default attribute from
+        // pattern set it hard so that it is used in undo.
+        pObj->SetMergedItem(SvxColorItem(COL_BLACK, EE_CHAR_COLOR));
 
-                // add undo now
-                if( GetModel()->IsUndoEnabled() )
-                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
-            }
-
-            pObj->SetMergedItem(SvxColorItem(COL_GRAY, EE_CHAR_COLOR));
-        }
+        // add undo now
+        if( GetModel()->IsUndoEnabled() )
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
     }
+
+    pObj->SetMergedItem(SvxColorItem(COL_GRAY, EE_CHAR_COLOR));
 }
 
 void E3dView::ImpChangeSomeAttributesFor3DConversion2(SdrObject* pObj)
 {
-    if(dynamic_cast<const SdrPathObj*>( pObj) !=  nullptr)
+    if(dynamic_cast<const SdrPathObj*>( pObj) ==  nullptr)
+        return;
+
+    const SfxItemSet& rSet = pObj->GetMergedItemSet();
+    sal_Int32 nLineWidth = rSet.Get(XATTR_LINEWIDTH).GetValue();
+    drawing::LineStyle eLineStyle = rSet.Get(XATTR_LINESTYLE).GetValue();
+    drawing::FillStyle eFillStyle = rSet.Get(XATTR_FILLSTYLE).GetValue();
+
+    if(static_cast<SdrPathObj*>(pObj)->IsClosed()
+        && eLineStyle == drawing::LineStyle_SOLID
+        && !nLineWidth
+        && eFillStyle != drawing::FillStyle_NONE)
     {
-        const SfxItemSet& rSet = pObj->GetMergedItemSet();
-        sal_Int32 nLineWidth = rSet.Get(XATTR_LINEWIDTH).GetValue();
-        drawing::LineStyle eLineStyle = rSet.Get(XATTR_LINESTYLE).GetValue();
-        drawing::FillStyle eFillStyle = rSet.Get(XATTR_FILLSTYLE).GetValue();
-
-        if(static_cast<SdrPathObj*>(pObj)->IsClosed()
-            && eLineStyle == drawing::LineStyle_SOLID
-            && !nLineWidth
-            && eFillStyle != drawing::FillStyle_NONE)
+        if(pObj->getSdrPageFromSdrObject() && GetModel()->IsUndoEnabled() )
         {
-            if(pObj->getSdrPageFromSdrObject() && GetModel()->IsUndoEnabled() )
-            {
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
-            }
-
-            pObj->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
-            pObj->SetMergedItem(XLineWidthItem(0));
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
         }
+
+        pObj->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
+        pObj->SetMergedItem(XLineWidthItem(0));
     }
 }
 
@@ -690,139 +690,139 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, boo
     // Single PathObject, transform this
     SdrPathObj* pPath = dynamic_cast<SdrPathObj*>( pObj );
 
-    if(pPath)
+    if(!pPath)
+        return;
+
+    E3dDefaultAttributes aDefault = Get3DDefaultAttributes();
+
+    if(bExtrude)
     {
-        E3dDefaultAttributes aDefault = Get3DDefaultAttributes();
-
-        if(bExtrude)
-        {
-            aDefault.SetDefaultExtrudeCharacterMode(true);
-        }
-        else
-        {
-            aDefault.SetDefaultLatheCharacterMode(true);
-        }
-
-        // Get Itemset of the original object
-        SfxItemSet aSet(pObj->GetMergedItemSet());
-
-        drawing::FillStyle eFillStyle = aSet.Get(XATTR_FILLSTYLE).GetValue();
-
-        // line style turned off
-        aSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
-
-        //Determining if FILL_Attribut is set.
-        if(!pPath->IsClosed() || eFillStyle == drawing::FillStyle_NONE)
-        {
-            // This SdrPathObj is not filled, leave the front and rear face out.
-            // Moreover, a two-sided representation necessary.
-            aDefault.SetDefaultExtrudeCloseFront(false);
-            aDefault.SetDefaultExtrudeCloseBack(false);
-
-            aSet.Put(makeSvx3DDoubleSidedItem(true));
-
-            // Set fill attribute
-            aSet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
-
-            // Fill color must be the color line, because the object was
-            // previously just a line
-            Color aColorLine = aSet.Get(XATTR_LINECOLOR).GetColorValue();
-            aSet.Put(XFillColorItem(OUString(), aColorLine));
-        }
-
-        // Create a new extrude object
-        E3dObject* p3DObj = nullptr;
-        if(bExtrude)
-        {
-            p3DObj = new E3dExtrudeObj(pObj->getSdrModelFromSdrObject(), aDefault, pPath->GetPathPoly(), fDepth);
-        }
-        else
-        {
-            // rLatheMat expects coordinates with y-axis up, pPath uses y-axis down
-            basegfx::B2DHomMatrix aFlipVerticalMat(1.0, 0.0, 0.0, 0.0, -1.0, 0.0);
-            basegfx::B2DPolyPolygon aPolyPoly2D(pPath->GetPathPoly());
-            aPolyPoly2D.transform(aFlipVerticalMat);
-            aPolyPoly2D.transform(rLatheMat);
-            // ctor E3dLatheObj expects coordinates with y-axis down
-            aPolyPoly2D.transform(aFlipVerticalMat);
-            p3DObj = new E3dLatheObj(pObj->getSdrModelFromSdrObject(), aDefault, aPolyPoly2D);
-        }
-
-        // Set attribute
-        p3DObj->NbcSetLayer(pObj->GetLayer());
-
-        p3DObj->SetMergedItemSet(aSet);
-
-        p3DObj->NbcSetStyleSheet(pObj->GetStyleSheet(), true);
-
-        // Insert a new extrude object
-        pScene->InsertObject(p3DObj);
+        aDefault.SetDefaultExtrudeCharacterMode(true);
     }
+    else
+    {
+        aDefault.SetDefaultLatheCharacterMode(true);
+    }
+
+    // Get Itemset of the original object
+    SfxItemSet aSet(pObj->GetMergedItemSet());
+
+    drawing::FillStyle eFillStyle = aSet.Get(XATTR_FILLSTYLE).GetValue();
+
+    // line style turned off
+    aSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
+
+    //Determining if FILL_Attribut is set.
+    if(!pPath->IsClosed() || eFillStyle == drawing::FillStyle_NONE)
+    {
+        // This SdrPathObj is not filled, leave the front and rear face out.
+        // Moreover, a two-sided representation necessary.
+        aDefault.SetDefaultExtrudeCloseFront(false);
+        aDefault.SetDefaultExtrudeCloseBack(false);
+
+        aSet.Put(makeSvx3DDoubleSidedItem(true));
+
+        // Set fill attribute
+        aSet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
+
+        // Fill color must be the color line, because the object was
+        // previously just a line
+        Color aColorLine = aSet.Get(XATTR_LINECOLOR).GetColorValue();
+        aSet.Put(XFillColorItem(OUString(), aColorLine));
+    }
+
+    // Create a new extrude object
+    E3dObject* p3DObj = nullptr;
+    if(bExtrude)
+    {
+        p3DObj = new E3dExtrudeObj(pObj->getSdrModelFromSdrObject(), aDefault, pPath->GetPathPoly(), fDepth);
+    }
+    else
+    {
+        // rLatheMat expects coordinates with y-axis up, pPath uses y-axis down
+        basegfx::B2DHomMatrix aFlipVerticalMat(1.0, 0.0, 0.0, 0.0, -1.0, 0.0);
+        basegfx::B2DPolyPolygon aPolyPoly2D(pPath->GetPathPoly());
+        aPolyPoly2D.transform(aFlipVerticalMat);
+        aPolyPoly2D.transform(rLatheMat);
+        // ctor E3dLatheObj expects coordinates with y-axis down
+        aPolyPoly2D.transform(aFlipVerticalMat);
+        p3DObj = new E3dLatheObj(pObj->getSdrModelFromSdrObject(), aDefault, aPolyPoly2D);
+    }
+
+    // Set attribute
+    p3DObj->NbcSetLayer(pObj->GetLayer());
+
+    p3DObj->SetMergedItemSet(aSet);
+
+    p3DObj->NbcSetStyleSheet(pObj->GetStyleSheet(), true);
+
+    // Insert a new extrude object
+    pScene->InsertObject(p3DObj);
 }
 
 void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, bool bExtrude, double fDepth, basegfx::B2DHomMatrix const & rLatheMat)
 {
-    if(pObj)
+    if(!pObj)
+        return;
+
+    // change text color attribute for not so dark colors
+    if(pObj->IsGroupObject())
     {
-        // change text color attribute for not so dark colors
-        if(pObj->IsGroupObject())
+        SdrObjListIter aIter(*pObj, SdrIterMode::DeepWithGroups);
+        while(aIter.IsMore())
         {
-            SdrObjListIter aIter(*pObj, SdrIterMode::DeepWithGroups);
+            SdrObject* pGroupMember = aIter.Next();
+            ImpChangeSomeAttributesFor3DConversion(pGroupMember);
+        }
+    }
+    else
+        ImpChangeSomeAttributesFor3DConversion(pObj);
+
+    // convert completely to path objects
+    SdrObject* pNewObj1 = pObj->ConvertToPolyObj(false, false).release();
+
+    if(!pNewObj1)
+        return;
+
+    // change text color attribute for not so dark colors
+    if(pNewObj1->IsGroupObject())
+    {
+        SdrObjListIter aIter(*pNewObj1, SdrIterMode::DeepWithGroups);
+        while(aIter.IsMore())
+        {
+            SdrObject* pGroupMember = aIter.Next();
+            ImpChangeSomeAttributesFor3DConversion2(pGroupMember);
+        }
+    }
+    else
+        ImpChangeSomeAttributesFor3DConversion2(pNewObj1);
+
+    // convert completely to path objects
+    SdrObject* pNewObj2 = pObj->ConvertToContourObj(pNewObj1, true);
+
+    if(pNewObj2)
+    {
+        // add all to flat scene
+        if(pNewObj2->IsGroupObject())
+        {
+            SdrObjListIter aIter(*pNewObj2, SdrIterMode::DeepWithGroups);
             while(aIter.IsMore())
             {
                 SdrObject* pGroupMember = aIter.Next();
-                ImpChangeSomeAttributesFor3DConversion(pGroupMember);
+                ImpCreateSingle3DObjectFlat(pScene, pGroupMember, bExtrude, fDepth, rLatheMat);
             }
         }
         else
-            ImpChangeSomeAttributesFor3DConversion(pObj);
+            ImpCreateSingle3DObjectFlat(pScene, pNewObj2, bExtrude, fDepth, rLatheMat);
 
-        // convert completely to path objects
-        SdrObject* pNewObj1 = pObj->ConvertToPolyObj(false, false).release();
-
-        if(pNewObj1)
-        {
-            // change text color attribute for not so dark colors
-            if(pNewObj1->IsGroupObject())
-            {
-                SdrObjListIter aIter(*pNewObj1, SdrIterMode::DeepWithGroups);
-                while(aIter.IsMore())
-                {
-                    SdrObject* pGroupMember = aIter.Next();
-                    ImpChangeSomeAttributesFor3DConversion2(pGroupMember);
-                }
-            }
-            else
-                ImpChangeSomeAttributesFor3DConversion2(pNewObj1);
-
-            // convert completely to path objects
-            SdrObject* pNewObj2 = pObj->ConvertToContourObj(pNewObj1, true);
-
-            if(pNewObj2)
-            {
-                // add all to flat scene
-                if(pNewObj2->IsGroupObject())
-                {
-                    SdrObjListIter aIter(*pNewObj2, SdrIterMode::DeepWithGroups);
-                    while(aIter.IsMore())
-                    {
-                        SdrObject* pGroupMember = aIter.Next();
-                        ImpCreateSingle3DObjectFlat(pScene, pGroupMember, bExtrude, fDepth, rLatheMat);
-                    }
-                }
-                else
-                    ImpCreateSingle3DObjectFlat(pScene, pNewObj2, bExtrude, fDepth, rLatheMat);
-
-                // delete object in between
-                if (pNewObj2 != pObj && pNewObj2 != pNewObj1)
-                    SdrObject::Free( pNewObj2 );
-            }
-
-            // delete object in between
-            if (pNewObj1 != pObj)
-                SdrObject::Free( pNewObj1 );
-        }
+        // delete object in between
+        if (pNewObj2 != pObj && pNewObj2 != pNewObj1)
+            SdrObject::Free( pNewObj2 );
     }
+
+    // delete object in between
+    if (pNewObj1 != pObj)
+        SdrObject::Free( pNewObj1 );
 }
 
 void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1, const basegfx::B2DPoint& rPnt2)
@@ -1029,125 +1029,125 @@ struct E3dDepthLayer
 
 void E3dView::DoDepthArrange(E3dScene const * pScene, double fDepth)
 {
-    if(pScene && pScene->GetSubList() && pScene->GetSubList()->GetObjCount() > 1)
+    if(!(pScene && pScene->GetSubList() && pScene->GetSubList()->GetObjCount() > 1))
+        return;
+
+    SdrObjList* pSubList = pScene->GetSubList();
+    SdrObjListIter aIter(pSubList, SdrIterMode::Flat);
+    E3dDepthLayer* pBaseLayer = nullptr;
+    E3dDepthLayer* pLayer = nullptr;
+    sal_Int32 nNumLayers = 0;
+
+    while(aIter.IsMore())
     {
-        SdrObjList* pSubList = pScene->GetSubList();
-        SdrObjListIter aIter(pSubList, SdrIterMode::Flat);
-        E3dDepthLayer* pBaseLayer = nullptr;
-        E3dDepthLayer* pLayer = nullptr;
-        sal_Int32 nNumLayers = 0;
+        E3dExtrudeObj* pExtrudeObj = dynamic_cast< E3dExtrudeObj* >(aIter.Next());
 
-        while(aIter.IsMore())
+        if(pExtrudeObj)
         {
-            E3dExtrudeObj* pExtrudeObj = dynamic_cast< E3dExtrudeObj* >(aIter.Next());
+            const basegfx::B2DPolyPolygon aExtrudePoly(
+                basegfx::utils::prepareForPolygonOperation(pExtrudeObj->GetExtrudePolygon()));
+            const SfxItemSet& rLocalSet = pExtrudeObj->GetMergedItemSet();
+            const drawing::FillStyle eLocalFillStyle = rLocalSet.Get(XATTR_FILLSTYLE).GetValue();
+            const Color aLocalColor = rLocalSet.Get(XATTR_FILLCOLOR).GetColorValue();
 
-            if(pExtrudeObj)
+            // sort in ExtrudeObj
+            if(pLayer)
             {
-                const basegfx::B2DPolyPolygon aExtrudePoly(
-                    basegfx::utils::prepareForPolygonOperation(pExtrudeObj->GetExtrudePolygon()));
-                const SfxItemSet& rLocalSet = pExtrudeObj->GetMergedItemSet();
-                const drawing::FillStyle eLocalFillStyle = rLocalSet.Get(XATTR_FILLSTYLE).GetValue();
-                const Color aLocalColor = rLocalSet.Get(XATTR_FILLCOLOR).GetColorValue();
+                // do we have overlap with an object of this layer?
+                bool bOverlap(false);
 
-                // sort in ExtrudeObj
-                if(pLayer)
+                for(const auto& rAct : pLayer->mvNeighbours)
                 {
-                    // do we have overlap with an object of this layer?
-                    bool bOverlap(false);
+                    // do rAct.mpObj and pExtrudeObj overlap? Check by
+                    // using logical AND clipping
+                    const basegfx::B2DPolyPolygon aAndPolyPolygon(
+                        basegfx::utils::solvePolygonOperationAnd(
+                            aExtrudePoly,
+                            rAct.maPreparedPolyPolygon));
 
-                    for(const auto& rAct : pLayer->mvNeighbours)
+                    if(aAndPolyPolygon.count() != 0)
                     {
-                        // do rAct.mpObj and pExtrudeObj overlap? Check by
-                        // using logical AND clipping
-                        const basegfx::B2DPolyPolygon aAndPolyPolygon(
-                            basegfx::utils::solvePolygonOperationAnd(
-                                aExtrudePoly,
-                                rAct.maPreparedPolyPolygon));
+                        // second criteria: is another fillstyle or color used?
+                        const SfxItemSet& rCompareSet = rAct.mpObj->GetMergedItemSet();
 
-                        if(aAndPolyPolygon.count() != 0)
+                        drawing::FillStyle eCompareFillStyle = rCompareSet.Get(XATTR_FILLSTYLE).GetValue();
+
+                        if(eLocalFillStyle == eCompareFillStyle)
                         {
-                            // second criteria: is another fillstyle or color used?
-                            const SfxItemSet& rCompareSet = rAct.mpObj->GetMergedItemSet();
-
-                            drawing::FillStyle eCompareFillStyle = rCompareSet.Get(XATTR_FILLSTYLE).GetValue();
-
-                            if(eLocalFillStyle == eCompareFillStyle)
+                            if(eLocalFillStyle == drawing::FillStyle_SOLID)
                             {
-                                if(eLocalFillStyle == drawing::FillStyle_SOLID)
-                                {
-                                    Color aCompareColor = rCompareSet.Get(XATTR_FILLCOLOR).GetColorValue();
+                                Color aCompareColor = rCompareSet.Get(XATTR_FILLCOLOR).GetColorValue();
 
-                                    if(aCompareColor == aLocalColor)
-                                    {
-                                        continue;
-                                    }
-                                }
-                                else if(eLocalFillStyle == drawing::FillStyle_NONE)
+                                if(aCompareColor == aLocalColor)
                                 {
                                     continue;
                                 }
                             }
-
-                            bOverlap = true;
-                            break;
+                            else if(eLocalFillStyle == drawing::FillStyle_NONE)
+                            {
+                                continue;
+                            }
                         }
-                    }
 
-                    if(bOverlap)
-                    {
-                        // yes, start a new layer
-                        pLayer->mpDown = new E3dDepthLayer;
-                        pLayer = pLayer->mpDown;
-                        nNumLayers++;
-                        pLayer->mvNeighbours.emplace_back(pExtrudeObj, aExtrudePoly);
-                    }
-                    else
-                    {
-                        // no, add to current layer
-                        pLayer->mvNeighbours.emplace(pLayer->mvNeighbours.begin(), pExtrudeObj, aExtrudePoly);
+                        bOverlap = true;
+                        break;
                     }
                 }
-                else
+
+                if(bOverlap)
                 {
-                    // first layer ever
-                    pBaseLayer = new E3dDepthLayer;
-                    pLayer = pBaseLayer;
+                    // yes, start a new layer
+                    pLayer->mpDown = new E3dDepthLayer;
+                    pLayer = pLayer->mpDown;
                     nNumLayers++;
                     pLayer->mvNeighbours.emplace_back(pExtrudeObj, aExtrudePoly);
                 }
-            }
-        }
-
-        // number of layers is done
-        if(nNumLayers > 1)
-        {
-            // need to be arranged
-            double fMinDepth = fDepth * 0.8;
-            double fStep = (fDepth - fMinDepth) / static_cast<double>(nNumLayers);
-            pLayer = pBaseLayer;
-
-            while(pLayer)
-            {
-                // move along layer
-                for(auto& rAct : pLayer->mvNeighbours)
+                else
                 {
-                    // adapt extrude value
-                    rAct.mpObj->SetMergedItem(SfxUInt32Item(SDRATTR_3DOBJ_DEPTH, sal_uInt32(fMinDepth + 0.5)));
+                    // no, add to current layer
+                    pLayer->mvNeighbours.emplace(pLayer->mvNeighbours.begin(), pExtrudeObj, aExtrudePoly);
                 }
-
-                // next layer
-                pLayer = pLayer->mpDown;
-                fMinDepth += fStep;
+            }
+            else
+            {
+                // first layer ever
+                pBaseLayer = new E3dDepthLayer;
+                pLayer = pBaseLayer;
+                nNumLayers++;
+                pLayer->mvNeighbours.emplace_back(pExtrudeObj, aExtrudePoly);
             }
         }
+    }
 
-        // cleanup
-        while(pBaseLayer)
+    // number of layers is done
+    if(nNumLayers > 1)
+    {
+        // need to be arranged
+        double fMinDepth = fDepth * 0.8;
+        double fStep = (fDepth - fMinDepth) / static_cast<double>(nNumLayers);
+        pLayer = pBaseLayer;
+
+        while(pLayer)
         {
-            pLayer = pBaseLayer->mpDown;
-            delete pBaseLayer;
-            pBaseLayer = pLayer;
+            // move along layer
+            for(auto& rAct : pLayer->mvNeighbours)
+            {
+                // adapt extrude value
+                rAct.mpObj->SetMergedItem(SfxUInt32Item(SDRATTR_3DOBJ_DEPTH, sal_uInt32(fMinDepth + 0.5)));
+            }
+
+            // next layer
+            pLayer = pLayer->mpDown;
+            fMinDepth += fStep;
         }
+    }
+
+    // cleanup
+    while(pBaseLayer)
+    {
+        pLayer = pBaseLayer->mpDown;
+        delete pBaseLayer;
+        pBaseLayer = pLayer;
     }
 }
 
@@ -1443,35 +1443,35 @@ void E3dView::End3DCreation(bool bUseDefaultValuesForMirrorAxes)
 {
     ResetCreationActive();
 
-    if(AreObjectsMarked())
+    if(!AreObjectsMarked())
+        return;
+
+    if(bUseDefaultValuesForMirrorAxes)
     {
-        if(bUseDefaultValuesForMirrorAxes)
-        {
-            tools::Rectangle aRect = GetAllMarkedRect();
-            if(aRect.GetWidth() <= 1)
-                aRect.SetSize(Size(500, aRect.GetHeight()));
-            if(aRect.GetHeight() <= 1)
-                aRect.SetSize(Size(aRect.GetWidth(), 500));
+        tools::Rectangle aRect = GetAllMarkedRect();
+        if(aRect.GetWidth() <= 1)
+            aRect.SetSize(Size(500, aRect.GetHeight()));
+        if(aRect.GetHeight() <= 1)
+            aRect.SetSize(Size(aRect.GetWidth(), 500));
 
-            basegfx::B2DPoint aPnt1(aRect.Left(), -aRect.Top());
-            basegfx::B2DPoint aPnt2(aRect.Left(), -aRect.Bottom());
+        basegfx::B2DPoint aPnt1(aRect.Left(), -aRect.Top());
+        basegfx::B2DPoint aPnt2(aRect.Left(), -aRect.Bottom());
 
-            ConvertMarkedObjTo3D(false, aPnt1, aPnt2);
-        }
-        else
-        {
-            // Turn off helper overlay
-            // Determine from the handle positions and the displacement of
-            // the points
-            const SdrHdlList &aHdlList = GetHdlList();
-            Point aMirrorRef1 = aHdlList.GetHdl(SdrHdlKind::Ref1)->GetPos();
-            Point aMirrorRef2 = aHdlList.GetHdl(SdrHdlKind::Ref2)->GetPos();
+        ConvertMarkedObjTo3D(false, aPnt1, aPnt2);
+    }
+    else
+    {
+        // Turn off helper overlay
+        // Determine from the handle positions and the displacement of
+        // the points
+        const SdrHdlList &aHdlList = GetHdlList();
+        Point aMirrorRef1 = aHdlList.GetHdl(SdrHdlKind::Ref1)->GetPos();
+        Point aMirrorRef2 = aHdlList.GetHdl(SdrHdlKind::Ref2)->GetPos();
 
-            basegfx::B2DPoint aPnt1(aMirrorRef1.X(), -aMirrorRef1.Y());
-            basegfx::B2DPoint aPnt2(aMirrorRef2.X(), -aMirrorRef2.Y());
+        basegfx::B2DPoint aPnt1(aMirrorRef1.X(), -aMirrorRef1.Y());
+        basegfx::B2DPoint aPnt2(aMirrorRef2.X(), -aMirrorRef2.Y());
 
-            ConvertMarkedObjTo3D(false, aPnt1, aPnt2);
-        }
+        ConvertMarkedObjTo3D(false, aPnt1, aPnt2);
     }
 }
 
@@ -1520,20 +1520,20 @@ bool E3dView::IsBreak3DObjPossible() const
 
 void E3dView::Break3DObj()
 {
-    if(IsBreak3DObjPossible())
-    {
-        // ALL selected objects are changed
-        const size_t nCount = GetMarkedObjectCount();
+    if(!IsBreak3DObjPossible())
+        return;
 
-        BegUndo(SvxResId(RID_SVX_3D_UNDO_BREAK_LATHE));
-        for(size_t a=0; a<nCount; ++a)
-        {
-            E3dObject* pObj = static_cast<E3dObject*>(GetMarkedObjectByIndex(a));
-            BreakSingle3DObj(pObj);
-        }
-        DeleteMarked();
-        EndUndo();
+    // ALL selected objects are changed
+    const size_t nCount = GetMarkedObjectCount();
+
+    BegUndo(SvxResId(RID_SVX_3D_UNDO_BREAK_LATHE));
+    for(size_t a=0; a<nCount; ++a)
+    {
+        E3dObject* pObj = static_cast<E3dObject*>(GetMarkedObjectByIndex(a));
+        BreakSingle3DObj(pObj);
     }
+    DeleteMarked();
+    EndUndo();
 }
 
 void E3dView::BreakSingle3DObj(E3dObject* pObj)
@@ -1569,31 +1569,31 @@ void E3dView::CheckPossibilities()
     SdrView::CheckPossibilities();
 
     // Set other flags
-    if(m_bGroupPossible || m_bUnGroupPossible || m_bGrpEnterPossible)
+    if(!(m_bGroupPossible || m_bUnGroupPossible || m_bGrpEnterPossible))
+        return;
+
+    const size_t nMarkCnt = GetMarkedObjectCount();
+    bool bCoumpound = false;
+    bool b3DObject = false;
+    for(size_t nObjs = 0; (nObjs < nMarkCnt) && !bCoumpound; ++nObjs)
     {
-        const size_t nMarkCnt = GetMarkedObjectCount();
-        bool bCoumpound = false;
-        bool b3DObject = false;
-        for(size_t nObjs = 0; (nObjs < nMarkCnt) && !bCoumpound; ++nObjs)
-        {
-            SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
-            if(dynamic_cast< const E3dCompoundObject* >(pObj))
-                bCoumpound = true;
-            if(dynamic_cast< const E3dObject* >(pObj))
-                b3DObject = true;
-        }
-
-        // So far: there are two or more of any objects selected. See if
-        // compound objects are involved. If yes, ban grouping.
-        if(m_bGroupPossible && bCoumpound)
-            m_bGroupPossible = false;
-
-        if(m_bUnGroupPossible && b3DObject)
-            m_bUnGroupPossible = false;
-
-        if(m_bGrpEnterPossible && bCoumpound)
-            m_bGrpEnterPossible = false;
+        SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
+        if(dynamic_cast< const E3dCompoundObject* >(pObj))
+            bCoumpound = true;
+        if(dynamic_cast< const E3dObject* >(pObj))
+            b3DObject = true;
     }
+
+    // So far: there are two or more of any objects selected. See if
+    // compound objects are involved. If yes, ban grouping.
+    if(m_bGroupPossible && bCoumpound)
+        m_bGroupPossible = false;
+
+    if(m_bUnGroupPossible && b3DObject)
+        m_bUnGroupPossible = false;
+
+    if(m_bGrpEnterPossible && bCoumpound)
+        m_bGrpEnterPossible = false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

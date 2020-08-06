@@ -460,37 +460,37 @@ void SvxOle2Shape::createLink( const OUString& aLinkURL )
     uno::Reference< embed::XEmbeddedObject > xObj =
             pPersist->getEmbeddedObjectContainer().InsertEmbeddedLink( aMediaDescr , aPersistName );
 
-    if( xObj.is() )
+    if( !xObj.is() )
+        return;
+
+    tools::Rectangle aRect = pOle2Obj->GetLogicRect();
+    if ( aRect.GetWidth() == 101 && aRect.GetHeight() == 101 )
     {
-        tools::Rectangle aRect = pOle2Obj->GetLogicRect();
-        if ( aRect.GetWidth() == 101 && aRect.GetHeight() == 101 )
+        // default size
+        try
         {
-            // default size
-            try
-            {
-                awt::Size aSz = xObj->getVisualAreaSize( pOle2Obj->GetAspect() );
-                aRect.SetSize( Size( aSz.Width, aSz.Height ) );
-            }
-            catch( embed::NoVisualAreaSizeException& )
-            {}
-            pOle2Obj->SetLogicRect( aRect );
+            awt::Size aSz = xObj->getVisualAreaSize( pOle2Obj->GetAspect() );
+            aRect.SetSize( Size( aSz.Width, aSz.Height ) );
         }
-        else
-        {
-            awt::Size aSz;
-            Size aSize = pOle2Obj->GetLogicRect().GetSize();
-            aSz.Width = aSize.Width();
-            aSz.Height = aSize.Height();
-            xObj->setVisualAreaSize(  pOle2Obj->GetAspect(), aSz );
-        }
-
-        // connect the object after the visual area is set
-        SvxShape::setPropertyValue( UNO_NAME_OLE2_PERSISTNAME, uno::makeAny( aPersistName ) );
-
-        // the object is inserted during setting of PersistName property usually
-        if ( pOle2Obj->IsEmpty() )
-            pOle2Obj->SetObjRef( xObj );
+        catch( embed::NoVisualAreaSizeException& )
+        {}
+        pOle2Obj->SetLogicRect( aRect );
     }
+    else
+    {
+        awt::Size aSz;
+        Size aSize = pOle2Obj->GetLogicRect().GetSize();
+        aSz.Width = aSize.Width();
+        aSz.Height = aSize.Height();
+        xObj->setVisualAreaSize(  pOle2Obj->GetAspect(), aSz );
+    }
+
+    // connect the object after the visual area is set
+    SvxShape::setPropertyValue( UNO_NAME_OLE2_PERSISTNAME, uno::makeAny( aPersistName ) );
+
+    // the object is inserted during setting of PersistName property usually
+    if ( pOle2Obj->IsEmpty() )
+        pOle2Obj->SetObjRef( xObj );
 }
 
 void SvxOle2Shape::resetModifiedState()

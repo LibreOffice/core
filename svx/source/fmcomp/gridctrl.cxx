@@ -104,20 +104,20 @@ private:
     }
     virtual void SAL_CALL rowsChanged(const css::sdb::RowsChangeEvent& i_aEvt) override
     {
-        if ( i_aEvt.Action == RowChangeAction::UPDATE )
+        if ( i_aEvt.Action != RowChangeAction::UPDATE )
+            return;
+
+        ::DbGridControl::GrantControlAccess aAccess;
+        CursorWrapper* pSeek = m_pControl->GetSeekCursor(aAccess);
+        const DbGridRowRef& rSeekRow = m_pControl->GetSeekRow(aAccess);
+        for(const Any& rBookmark : i_aEvt.Bookmarks)
         {
-            ::DbGridControl::GrantControlAccess aAccess;
-            CursorWrapper* pSeek = m_pControl->GetSeekCursor(aAccess);
-            const DbGridRowRef& rSeekRow = m_pControl->GetSeekRow(aAccess);
-            for(const Any& rBookmark : i_aEvt.Bookmarks)
-            {
-                pSeek->moveToBookmark(rBookmark);
-                // get the data
-                rSeekRow->SetState(pSeek, true);
-                sal_Int32 nSeekPos = pSeek->getRow() - 1;
-                m_pControl->SetSeekPos(nSeekPos,aAccess);
-                m_pControl->RowModified(nSeekPos);
-            }
+            pSeek->moveToBookmark(rBookmark);
+            // get the data
+            rSeekRow->SetState(pSeek, true);
+            sal_Int32 nSeekPos = pSeek->getRow() - 1;
+            m_pControl->SetSeekPos(nSeekPos,aAccess);
+            m_pControl->RowModified(nSeekPos);
         }
     }
 };
@@ -467,31 +467,31 @@ IMPL_LINK(NavigationBar, OnClick, weld::Button&, rButton, void)
 
 void NavigationBar::InvalidateAll(sal_Int32 nCurrentPos, bool bAll)
 {
-    if (m_nCurrentPos != nCurrentPos || nCurrentPos < 0 || bAll)
+    if (!(m_nCurrentPos != nCurrentPos || nCurrentPos < 0 || bAll))
+        return;
+
+    DbGridControl* pParent = static_cast<DbGridControl*>(GetParent());
+
+    sal_Int32 nAdjustedRowCount = pParent->GetRowCount() - ((pParent->GetOptions() & DbGridControlOptions::Insert) ? 2 : 1);
+
+    // check if everything needs to be invalidated
+    bAll = bAll || m_nCurrentPos <= 0;
+    bAll = bAll || nCurrentPos <= 0;
+    bAll = bAll || m_nCurrentPos >= nAdjustedRowCount;
+    bAll = bAll || nCurrentPos >= nAdjustedRowCount;
+
+    if ( bAll )
     {
-        DbGridControl* pParent = static_cast<DbGridControl*>(GetParent());
-
-        sal_Int32 nAdjustedRowCount = pParent->GetRowCount() - ((pParent->GetOptions() & DbGridControlOptions::Insert) ? 2 : 1);
-
-        // check if everything needs to be invalidated
-        bAll = bAll || m_nCurrentPos <= 0;
-        bAll = bAll || nCurrentPos <= 0;
-        bAll = bAll || m_nCurrentPos >= nAdjustedRowCount;
-        bAll = bAll || nCurrentPos >= nAdjustedRowCount;
-
-        if ( bAll )
-        {
-            m_nCurrentPos = nCurrentPos;
-            int i = 0;
-            while (ControlMap[i] != DbGridControlNavigationBarState::NONE)
-                SetState(ControlMap[i++]);
-        }
-        else    // is in the center
-        {
-            m_nCurrentPos = nCurrentPos;
-            SetState(DbGridControlNavigationBarState::Count);
-            SetState(DbGridControlNavigationBarState::Absolute);
-        }
+        m_nCurrentPos = nCurrentPos;
+        int i = 0;
+        while (ControlMap[i] != DbGridControlNavigationBarState::NONE)
+            SetState(ControlMap[i++]);
+    }
+    else    // is in the center
+    {
+        m_nCurrentPos = nCurrentPos;
+        SetState(DbGridControlNavigationBarState::Count);
+        SetState(DbGridControlNavigationBarState::Absolute);
     }
 }
 
@@ -621,20 +621,20 @@ void NavigationBar::SetState(DbGridControlNavigationBarState nWhich)
         default: break;
     }
     DBG_ASSERT(pWnd, "no window");
-    if (pWnd && (pWnd->get_sensitive() != bAvailable))
+    if (!(pWnd && (pWnd->get_sensitive() != bAvailable)))
+        return;
+
+    // this "pWnd->IsEnabled() != bAvailable" is a little hack : Window::Enable always generates a user
+    // event (ImplGenerateMouseMove) even if nothing happened. This may lead to some unwanted effects, so we
+    // do this check.
+    // For further explanation see Bug 69900.
+    pWnd->set_sensitive(bAvailable);
+    if (!bAvailable)
     {
-        // this "pWnd->IsEnabled() != bAvailable" is a little hack : Window::Enable always generates a user
-        // event (ImplGenerateMouseMove) even if nothing happened. This may lead to some unwanted effects, so we
-        // do this check.
-        // For further explanation see Bug 69900.
-        pWnd->set_sensitive(bAvailable);
-        if (!bAvailable)
-        {
-            if (pWnd == m_xNextBtn.get())
-                m_aNextRepeat.Stop();
-            else if (pWnd == m_xPrevBtn.get())
-                m_aPrevRepeat.Stop();
-        }
+        if (pWnd == m_xNextBtn.get())
+            m_aNextRepeat.Stop();
+        else if (pWnd == m_xPrevBtn.get())
+            m_aPrevRepeat.Stop();
     }
 }
 
@@ -925,19 +925,19 @@ void DbGridControl::ImplInitWindow( const InitWindowFacet _eInitWhat )
         }
     }
 
-    if ( _eInitWhat & InitWindowFacet::Background )
+    if ( !(_eInitWhat & InitWindowFacet::Background) )
+        return;
+
+    if (IsControlBackground())
     {
-        if (IsControlBackground())
-        {
-            GetDataWindow().SetBackground(GetControlBackground());
-            GetDataWindow().SetControlBackground(GetControlBackground());
-            GetDataWindow().SetFillColor(GetControlBackground());
-        }
-        else
-        {
-            GetDataWindow().SetControlBackground();
-            GetDataWindow().SetFillColor(GetFillColor());
-        }
+        GetDataWindow().SetBackground(GetControlBackground());
+        GetDataWindow().SetControlBackground(GetControlBackground());
+        GetDataWindow().SetFillColor(GetControlBackground());
+    }
+    else
+    {
+        GetDataWindow().SetControlBackground();
+        GetDataWindow().SetFillColor(GetFillColor());
     }
 }
 
@@ -1686,41 +1686,41 @@ void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, bool 
 
 void DbGridControl::RowInserted(long nRow, long nNumRows, bool bDoPaint)
 {
-    if (nNumRows)
-    {
-        if (m_bRecordCountFinal && m_nTotalCount < 0)
-        {
-            // if we have an insert row we have to reduce to count by 1
-            // as the total count reflects only the existing rows in database
-            m_nTotalCount = GetRowCount() + nNumRows;
-            if (m_xEmptyRow.is())
-                --m_nTotalCount;
-        }
-        else if (m_nTotalCount >= 0)
-            m_nTotalCount += nNumRows;
+    if (!nNumRows)
+        return;
 
-        EditBrowseBox::RowInserted(nRow, nNumRows, bDoPaint);
-        m_aBar->InvalidateState(DbGridControlNavigationBarState::Count);
+    if (m_bRecordCountFinal && m_nTotalCount < 0)
+    {
+        // if we have an insert row we have to reduce to count by 1
+        // as the total count reflects only the existing rows in database
+        m_nTotalCount = GetRowCount() + nNumRows;
+        if (m_xEmptyRow.is())
+            --m_nTotalCount;
     }
+    else if (m_nTotalCount >= 0)
+        m_nTotalCount += nNumRows;
+
+    EditBrowseBox::RowInserted(nRow, nNumRows, bDoPaint);
+    m_aBar->InvalidateState(DbGridControlNavigationBarState::Count);
 }
 
 void DbGridControl::RowRemoved(long nRow, long nNumRows, bool bDoPaint)
 {
-    if (nNumRows)
-    {
-        if (m_bRecordCountFinal && m_nTotalCount < 0)
-        {
-            m_nTotalCount = GetRowCount() - nNumRows;
-            // if we have an insert row reduce by 1
-            if (m_xEmptyRow.is())
-                --m_nTotalCount;
-        }
-        else if (m_nTotalCount >= 0)
-            m_nTotalCount -= nNumRows;
+    if (!nNumRows)
+        return;
 
-        EditBrowseBox::RowRemoved(nRow, nNumRows, bDoPaint);
-        m_aBar->InvalidateState(DbGridControlNavigationBarState::Count);
+    if (m_bRecordCountFinal && m_nTotalCount < 0)
+    {
+        m_nTotalCount = GetRowCount() - nNumRows;
+        // if we have an insert row reduce by 1
+        if (m_xEmptyRow.is())
+            --m_nTotalCount;
     }
+    else if (m_nTotalCount >= 0)
+        m_nTotalCount -= nNumRows;
+
+    EditBrowseBox::RowRemoved(nRow, nNumRows, bDoPaint);
+    m_aBar->InvalidateState(DbGridControlNavigationBarState::Count);
 }
 
 void DbGridControl::AdjustRows()
@@ -2373,63 +2373,63 @@ void DbGridControl::AppendNew()
 
 void DbGridControl::SetDesignMode(bool bMode)
 {
-    if (IsDesignMode() != bMode)
+    if (IsDesignMode() == bMode)
+        return;
+
+    // adjust Enable/Disable for design mode so that the headerbar remains configurable
+    if (bMode)
     {
-        // adjust Enable/Disable for design mode so that the headerbar remains configurable
-        if (bMode)
+        if (!IsEnabled())
         {
-            if (!IsEnabled())
-            {
-                Enable();
-                GetDataWindow().Disable();
-            }
+            Enable();
+            GetDataWindow().Disable();
         }
-        else
-        {
-            // disable completely
-            if (!GetDataWindow().IsEnabled())
-                Disable();
-        }
-
-        m_bDesignMode = bMode;
-        GetDataWindow().SetMouseTransparent(bMode);
-        SetMouseTransparent(bMode);
-
-        m_aBar->InvalidateAll(m_nCurrentPos, true);
     }
+    else
+    {
+        // disable completely
+        if (!GetDataWindow().IsEnabled())
+            Disable();
+    }
+
+    m_bDesignMode = bMode;
+    GetDataWindow().SetMouseTransparent(bMode);
+    SetMouseTransparent(bMode);
+
+    m_aBar->InvalidateAll(m_nCurrentPos, true);
 }
 
 void DbGridControl::SetFilterMode(bool bMode)
 {
-    if (IsFilterMode() != bMode)
+    if (IsFilterMode() == bMode)
+        return;
+
+    m_bFilterMode = bMode;
+
+    if (bMode)
     {
-        m_bFilterMode = bMode;
+        SetUpdateMode(false);
 
-        if (bMode)
+        // there is no cursor anymore
+        if (IsEditing())
+            DeactivateCell();
+        RemoveRows(false);
+
+        m_xEmptyRow = new DbGridRow();
+
+        // setting the new filter controls
+        for (auto const & pCurCol : m_aColumns)
         {
-            SetUpdateMode(false);
-
-            // there is no cursor anymore
-            if (IsEditing())
-                DeactivateCell();
-            RemoveRows(false);
-
-            m_xEmptyRow = new DbGridRow();
-
-            // setting the new filter controls
-            for (auto const & pCurCol : m_aColumns)
-            {
-                if (!pCurCol->IsHidden())
-                    pCurCol->UpdateControl();
-            }
-
-            // one row for filtering
-            RowInserted(0);
-            SetUpdateMode(true);
+            if (!pCurCol->IsHidden())
+                pCurCol->UpdateControl();
         }
-        else
-            setDataSource(Reference< XRowSet > ());
+
+        // one row for filtering
+        RowInserted(0);
+        SetUpdateMode(true);
     }
+    else
+        setDataSource(Reference< XRowSet > ());
 }
 
 OUString DbGridControl::GetCellText(long _nRow, sal_uInt16 _nColId) const
@@ -2503,49 +2503,49 @@ void DbGridControl::DataSourcePropertyChanged(const PropertyChangeEvent& evt)
     SolarMutexGuard aGuard;
     // prop "IsModified" changed ?
     // during update don't care about the modified state
-    if (!IsUpdating() && evt.PropertyName == FM_PROP_ISMODIFIED )
-    {
-        Reference< XPropertySet > xSource(evt.Source, UNO_QUERY);
-        DBG_ASSERT( xSource.is(), "DbGridControl::DataSourcePropertyChanged: invalid event source!" );
-        bool bIsNew = false;
-        if (xSource.is())
-            bIsNew = ::comphelper::getBOOL(xSource->getPropertyValue(FM_PROP_ISNEW));
+    if (IsUpdating() || evt.PropertyName != FM_PROP_ISMODIFIED)
+        return;
 
-        if (bIsNew && m_xCurrentRow.is())
-        {
-            DBG_ASSERT(::comphelper::getBOOL(xSource->getPropertyValue(FM_PROP_ROWCOUNTFINAL)), "DbGridControl::DataSourcePropertyChanged : somebody moved the form to a new record before the row count was final !");
-            sal_Int32 nRecordCount = 0;
-            xSource->getPropertyValue(FM_PROP_ROWCOUNT) >>= nRecordCount;
-            if (::comphelper::getBOOL(evt.NewValue))
-            {   // modified state changed from sal_False to sal_True and we're on an insert row
-                // -> we've to add a new grid row
-                if ((nRecordCount == GetRowCount() - 1)  && m_xCurrentRow->IsNew())
-                {
-                    RowInserted(GetRowCount());
-                    InvalidateStatusCell(m_nCurrentPos);
-                    m_aBar->InvalidateAll(m_nCurrentPos);
-                }
-            }
-            else
-            {   // modified state changed from sal_True to sal_False and we're on an insert row
-                // we have two "new row"s at the moment : the one we're editing currently (where the current
-                // column is the only dirty element) and a "new new" row which is completely clean. As the first
-                // one is about to be cleaned, too, the second one is obsolete now.
-                if (m_xCurrentRow->IsNew() && nRecordCount == (GetRowCount() - 2))
-                {
-                    RowRemoved(GetRowCount() - 1);
-                    InvalidateStatusCell(m_nCurrentPos);
-                    m_aBar->InvalidateAll(m_nCurrentPos);
-                }
+    Reference< XPropertySet > xSource(evt.Source, UNO_QUERY);
+    DBG_ASSERT( xSource.is(), "DbGridControl::DataSourcePropertyChanged: invalid event source!" );
+    bool bIsNew = false;
+    if (xSource.is())
+        bIsNew = ::comphelper::getBOOL(xSource->getPropertyValue(FM_PROP_ISNEW));
+
+    if (bIsNew && m_xCurrentRow.is())
+    {
+        DBG_ASSERT(::comphelper::getBOOL(xSource->getPropertyValue(FM_PROP_ROWCOUNTFINAL)), "DbGridControl::DataSourcePropertyChanged : somebody moved the form to a new record before the row count was final !");
+        sal_Int32 nRecordCount = 0;
+        xSource->getPropertyValue(FM_PROP_ROWCOUNT) >>= nRecordCount;
+        if (::comphelper::getBOOL(evt.NewValue))
+        {   // modified state changed from sal_False to sal_True and we're on an insert row
+            // -> we've to add a new grid row
+            if ((nRecordCount == GetRowCount() - 1)  && m_xCurrentRow->IsNew())
+            {
+                RowInserted(GetRowCount());
+                InvalidateStatusCell(m_nCurrentPos);
+                m_aBar->InvalidateAll(m_nCurrentPos);
             }
         }
-        if (m_xCurrentRow.is())
-        {
-            m_xCurrentRow->SetStatus(::comphelper::getBOOL(evt.NewValue) ? GridRowStatus::Modified : GridRowStatus::Clean);
-            m_xCurrentRow->SetNew( bIsNew );
-            InvalidateStatusCell(m_nCurrentPos);
-            SAL_INFO("svx.fmcomp", "modified flag changed, new state: " << ROWSTATUS(m_xCurrentRow));
+        else
+        {   // modified state changed from sal_True to sal_False and we're on an insert row
+            // we have two "new row"s at the moment : the one we're editing currently (where the current
+            // column is the only dirty element) and a "new new" row which is completely clean. As the first
+            // one is about to be cleaned, too, the second one is obsolete now.
+            if (m_xCurrentRow->IsNew() && nRecordCount == (GetRowCount() - 2))
+            {
+                RowRemoved(GetRowCount() - 1);
+                InvalidateStatusCell(m_nCurrentPos);
+                m_aBar->InvalidateAll(m_nCurrentPos);
+            }
         }
+    }
+    if (m_xCurrentRow.is())
+    {
+        m_xCurrentRow->SetStatus(::comphelper::getBOOL(evt.NewValue) ? GridRowStatus::Modified : GridRowStatus::Clean);
+        m_xCurrentRow->SetNew( bIsNew );
+        InvalidateStatusCell(m_nCurrentPos);
+        SAL_INFO("svx.fmcomp", "modified flag changed, new state: " << ROWSTATUS(m_xCurrentRow));
     }
 }
 
@@ -2714,31 +2714,31 @@ void DbGridControl::CellModified()
         }
     }
 
-    if (!IsFilterMode() && IsValid(m_xCurrentRow) && !m_xCurrentRow->IsModified())
+    if (!(!IsFilterMode() && IsValid(m_xCurrentRow) && !m_xCurrentRow->IsModified()))
+        return;
+
+    // enable edit mode
+    // a data set should be inserted
+    if (m_xCurrentRow->IsNew())
     {
-        // enable edit mode
-        // a data set should be inserted
-        if (m_xCurrentRow->IsNew())
+        m_xCurrentRow->SetStatus(GridRowStatus::Modified);
+        SAL_INFO("svx.fmcomp", "current row is new, new state: MODIFIED");
+        // if no row was added yet, do it now
+        if (m_nCurrentPos == GetRowCount() - 1)
         {
-            m_xCurrentRow->SetStatus(GridRowStatus::Modified);
-            SAL_INFO("svx.fmcomp", "current row is new, new state: MODIFIED");
-            // if no row was added yet, do it now
-            if (m_nCurrentPos == GetRowCount() - 1)
-            {
-                // increment RowCount
-                RowInserted(GetRowCount());
-                InvalidateStatusCell(m_nCurrentPos);
-                m_aBar->InvalidateAll(m_nCurrentPos);
-            }
-        }
-        else if (m_xCurrentRow->GetStatus() != GridRowStatus::Modified)
-        {
-            m_xCurrentRow->SetState(m_pDataCursor.get(), false);
-            SAL_INFO("svx.fmcomp", "current row is not new, after SetState, new state: " << ROWSTATUS(m_xCurrentRow));
-            m_xCurrentRow->SetStatus(GridRowStatus::Modified);
-            SAL_INFO("svx.fmcomp", "current row is not new, new state: MODIFIED");
+            // increment RowCount
+            RowInserted(GetRowCount());
             InvalidateStatusCell(m_nCurrentPos);
+            m_aBar->InvalidateAll(m_nCurrentPos);
         }
+    }
+    else if (m_xCurrentRow->GetStatus() != GridRowStatus::Modified)
+    {
+        m_xCurrentRow->SetState(m_pDataCursor.get(), false);
+        SAL_INFO("svx.fmcomp", "current row is not new, after SetState, new state: " << ROWSTATUS(m_xCurrentRow));
+        m_xCurrentRow->SetStatus(GridRowStatus::Modified);
+        SAL_INFO("svx.fmcomp", "current row is not new, new state: MODIFIED");
+        InvalidateStatusCell(m_nCurrentPos);
     }
 }
 
@@ -3346,23 +3346,23 @@ void DbGridControl::FieldValueChanged(sal_uInt16 _nId)
 
     size_t Location = GetModelColumnPos( _nId );
     DbGridColumn* pColumn = ( Location < m_aColumns.size() ) ? m_aColumns[ Location ].get() : nullptr;
-    if (pColumn)
-    {
-        std::unique_ptr<vcl::SolarMutexTryAndBuyGuard> pGuard;
-        while (!m_bWantDestruction && (!pGuard || !pGuard->isAcquired()))
-            pGuard.reset(new vcl::SolarMutexTryAndBuyGuard);
+    if (!pColumn)
+        return;
 
-        if (m_bWantDestruction)
-        {   // at this moment, within another thread, our destructor tries to destroy the listener which called this method
-            // => don't do anything
-            // 73365 - 23.02.00 - FS
-            return;
-        }
+    std::unique_ptr<vcl::SolarMutexTryAndBuyGuard> pGuard;
+    while (!m_bWantDestruction && (!pGuard || !pGuard->isAcquired()))
+        pGuard.reset(new vcl::SolarMutexTryAndBuyGuard);
 
-        // and finally do the update ...
-        pColumn->UpdateFromField(m_xCurrentRow.get(), m_xFormatter);
-        RowModified(GetCurRow());
+    if (m_bWantDestruction)
+    {   // at this moment, within another thread, our destructor tries to destroy the listener which called this method
+        // => don't do anything
+        // 73365 - 23.02.00 - FS
+        return;
     }
+
+    // and finally do the update ...
+    pColumn->UpdateFromField(m_xCurrentRow.get(), m_xFormatter);
+    RowModified(GetCurRow());
 }
 
 void DbGridControl::FieldListenerDisposing(sal_uInt16 _nId)

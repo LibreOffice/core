@@ -586,28 +586,28 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest const & rReq, SfxBindi
             break;
     }
 
-    if( nSID == SID_EXTRUSION_TOGGLE )
-    {
-        static const sal_uInt16 SidArray[] = {
-                SID_EXTRUSION_TILT_DOWN,
-                SID_EXTRUSION_TILT_UP,
-                SID_EXTRUSION_TILT_LEFT,
-                SID_EXTRUSION_TILT_RIGHT,
-                SID_EXTRUSION_DEPTH_FLOATER,
-                SID_EXTRUSION_DIRECTION_FLOATER,
-                SID_EXTRUSION_LIGHTING_FLOATER,
-                SID_EXTRUSION_SURFACE_FLOATER,
-                SID_EXTRUSION_3D_COLOR,
-                SID_EXTRUSION_DEPTH,
-                SID_EXTRUSION_DIRECTION,
-                SID_EXTRUSION_PROJECTION,
-                SID_EXTRUSION_LIGHTING_DIRECTION,
-                SID_EXTRUSION_LIGHTING_INTENSITY,
-                SID_EXTRUSION_SURFACE,
-                0 };
+    if( nSID != SID_EXTRUSION_TOGGLE )
+        return;
 
-        rBindings.Invalidate( SidArray );
-    }
+    static const sal_uInt16 SidArray[] = {
+            SID_EXTRUSION_TILT_DOWN,
+            SID_EXTRUSION_TILT_UP,
+            SID_EXTRUSION_TILT_LEFT,
+            SID_EXTRUSION_TILT_RIGHT,
+            SID_EXTRUSION_DEPTH_FLOATER,
+            SID_EXTRUSION_DIRECTION_FLOATER,
+            SID_EXTRUSION_LIGHTING_FLOATER,
+            SID_EXTRUSION_SURFACE_FLOATER,
+            SID_EXTRUSION_3D_COLOR,
+            SID_EXTRUSION_DEPTH,
+            SID_EXTRUSION_DIRECTION,
+            SID_EXTRUSION_PROJECTION,
+            SID_EXTRUSION_LIGHTING_DIRECTION,
+            SID_EXTRUSION_LIGHTING_INTENSITY,
+            SID_EXTRUSION_SURFACE,
+            0 };
+
+    rBindings.Invalidate( SidArray );
 }
 
 static void getExtrusionDirectionState( SdrView const * pSdrView, SfxItemSet& rSet )

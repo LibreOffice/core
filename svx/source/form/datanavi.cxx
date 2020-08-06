@@ -783,72 +783,72 @@ namespace svxform
     {
         OUString sTemp;
 
-        if ( DGTSubmission == m_eGroup )
+        if ( DGTSubmission != m_eGroup )
+            return;
+
+        try
         {
-            try
+            std::unique_ptr<weld::TreeIter> xEntry(m_xItemList->make_iterator());
+            if (!m_xItemList->get_selected(xEntry.get()))
             {
-                std::unique_ptr<weld::TreeIter> xEntry(m_xItemList->make_iterator());
-                if (!m_xItemList->get_selected(xEntry.get()))
-                {
-                    SAL_WARN( "svx.form", "corrupt tree" );
-                    return;
-                }
-
-                // #i36262# may be called for submission entry *or* for
-                // submission children. If we don't have any children, we
-                // assume the latter case and use the parent
-                if (!m_xItemList->iter_has_child(*xEntry))
-                    m_xItemList->iter_parent(*xEntry);
-
-                _rEntry->getPropertyValue( PN_SUBMISSION_ID ) >>= sTemp;
-                m_xItemList->set_text(*xEntry, sTemp);
-
-                _rEntry->getPropertyValue( PN_SUBMISSION_BIND ) >>= sTemp;
-                OUString sEntry = SvxResId( RID_STR_DATANAV_SUBM_BIND ) + sTemp;
-                if (!m_xItemList->iter_children(*xEntry))
-                {
-                    SAL_WARN( "svx.form", "corrupt tree" );
-                    return;
-                }
-                m_xItemList->set_text(*xEntry, sEntry);
-                _rEntry->getPropertyValue( PN_SUBMISSION_REF ) >>= sTemp;
-                sEntry = SvxResId( RID_STR_DATANAV_SUBM_REF ) + sTemp;
-                if (!m_xItemList->iter_next_sibling(*xEntry))
-                {
-                    SAL_WARN( "svx.form", "corrupt tree" );
-                    return;
-                }
-                m_xItemList->set_text(*xEntry, sEntry);
-                _rEntry->getPropertyValue( PN_SUBMISSION_ACTION ) >>= sTemp;
-                sEntry = SvxResId( RID_STR_DATANAV_SUBM_ACTION ) + sTemp;
-                if (!m_xItemList->iter_next_sibling(*xEntry))
-                {
-                    SAL_WARN( "svx.form", "corrupt tree" );
-                    return;
-                }
-                _rEntry->getPropertyValue( PN_SUBMISSION_METHOD ) >>= sTemp;
-                sEntry = SvxResId( RID_STR_DATANAV_SUBM_METHOD ) +
-                    m_aMethodString.toUI( sTemp );
-                if (!m_xItemList->iter_next_sibling(*xEntry))
-                {
-                    SAL_WARN( "svx.form", "corrupt tree" );
-                    return;
-                }
-                m_xItemList->set_text(*xEntry, sEntry);
-                _rEntry->getPropertyValue( PN_SUBMISSION_REPLACE ) >>= sTemp;
-                sEntry = SvxResId( RID_STR_DATANAV_SUBM_REPLACE ) +
-                    m_aReplaceString.toUI( sTemp );
-                if (!m_xItemList->iter_next_sibling(*xEntry))
-                {
-                    SAL_WARN( "svx.form", "corrupt tree" );
-                    return;
-                }
-                m_xItemList->set_text(*xEntry, sEntry);
+                SAL_WARN( "svx.form", "corrupt tree" );
+                return;
             }
-            catch ( Exception const & )
+
+            // #i36262# may be called for submission entry *or* for
+            // submission children. If we don't have any children, we
+            // assume the latter case and use the parent
+            if (!m_xItemList->iter_has_child(*xEntry))
+                m_xItemList->iter_parent(*xEntry);
+
+            _rEntry->getPropertyValue( PN_SUBMISSION_ID ) >>= sTemp;
+            m_xItemList->set_text(*xEntry, sTemp);
+
+            _rEntry->getPropertyValue( PN_SUBMISSION_BIND ) >>= sTemp;
+            OUString sEntry = SvxResId( RID_STR_DATANAV_SUBM_BIND ) + sTemp;
+            if (!m_xItemList->iter_children(*xEntry))
             {
-                TOOLS_WARN_EXCEPTION( "svx.form", "XFormsPage::EditEntry()" );
+                SAL_WARN( "svx.form", "corrupt tree" );
+                return;
             }
+            m_xItemList->set_text(*xEntry, sEntry);
+            _rEntry->getPropertyValue( PN_SUBMISSION_REF ) >>= sTemp;
+            sEntry = SvxResId( RID_STR_DATANAV_SUBM_REF ) + sTemp;
+            if (!m_xItemList->iter_next_sibling(*xEntry))
+            {
+                SAL_WARN( "svx.form", "corrupt tree" );
+                return;
+            }
+            m_xItemList->set_text(*xEntry, sEntry);
+            _rEntry->getPropertyValue( PN_SUBMISSION_ACTION ) >>= sTemp;
+            sEntry = SvxResId( RID_STR_DATANAV_SUBM_ACTION ) + sTemp;
+            if (!m_xItemList->iter_next_sibling(*xEntry))
+            {
+                SAL_WARN( "svx.form", "corrupt tree" );
+                return;
+            }
+            _rEntry->getPropertyValue( PN_SUBMISSION_METHOD ) >>= sTemp;
+            sEntry = SvxResId( RID_STR_DATANAV_SUBM_METHOD ) +
+                m_aMethodString.toUI( sTemp );
+            if (!m_xItemList->iter_next_sibling(*xEntry))
+            {
+                SAL_WARN( "svx.form", "corrupt tree" );
+                return;
+            }
+            m_xItemList->set_text(*xEntry, sEntry);
+            _rEntry->getPropertyValue( PN_SUBMISSION_REPLACE ) >>= sTemp;
+            sEntry = SvxResId( RID_STR_DATANAV_SUBM_REPLACE ) +
+                m_aReplaceString.toUI( sTemp );
+            if (!m_xItemList->iter_next_sibling(*xEntry))
+            {
+                SAL_WARN( "svx.form", "corrupt tree" );
+                return;
+            }
+            m_xItemList->set_text(*xEntry, sEntry);
+        }
+        catch ( Exception const & )
+        {
+            TOOLS_WARN_EXCEPTION( "svx.form", "XFormsPage::EditEntry()" );
         }
     }
 
@@ -1220,37 +1220,37 @@ namespace svxform
             pMenu->set_sensitive("edit", bEnableEdit);
             pMenu->set_sensitive("delete", bEnableRemove);
         }
-        if ( DGTInstance == m_eGroup )
+        if ( DGTInstance != m_eGroup )
+            return;
+
+        const char* pResId1 = RID_STR_DATANAV_EDIT_ELEMENT;
+        const char* pResId2 = RID_STR_DATANAV_REMOVE_ELEMENT;
+        if (bEntry)
         {
-            const char* pResId1 = RID_STR_DATANAV_EDIT_ELEMENT;
-            const char* pResId2 = RID_STR_DATANAV_REMOVE_ELEMENT;
-            if (bEntry)
+            ItemNode* pNode = reinterpret_cast<ItemNode*>(m_xItemList->get_id(*xEntry).toInt64());
+            if ( pNode && pNode->m_xNode.is() )
             {
-                ItemNode* pNode = reinterpret_cast<ItemNode*>(m_xItemList->get_id(*xEntry).toInt64());
-                if ( pNode && pNode->m_xNode.is() )
+                try
                 {
-                    try
+                    css::xml::dom::NodeType eChildType = pNode->m_xNode->getNodeType();
+                    if ( eChildType == css::xml::dom::NodeType_ATTRIBUTE_NODE )
                     {
-                        css::xml::dom::NodeType eChildType = pNode->m_xNode->getNodeType();
-                        if ( eChildType == css::xml::dom::NodeType_ATTRIBUTE_NODE )
-                        {
-                            pResId1 = RID_STR_DATANAV_EDIT_ATTRIBUTE;
-                            pResId2 = RID_STR_DATANAV_REMOVE_ATTRIBUTE;
-                        }
-                    }
-                    catch ( Exception const & )
-                    {
-                       TOOLS_WARN_EXCEPTION( "svx.form", "XFormsPage::EnableMenuItems()" );
+                        pResId1 = RID_STR_DATANAV_EDIT_ATTRIBUTE;
+                        pResId2 = RID_STR_DATANAV_REMOVE_ATTRIBUTE;
                     }
                 }
+                catch ( Exception const & )
+                {
+                   TOOLS_WARN_EXCEPTION( "svx.form", "XFormsPage::EnableMenuItems()" );
+                }
             }
-            m_xToolBox->set_item_label("edit", SvxResId(pResId1));
-            m_xToolBox->set_item_label("delete", SvxResId(pResId2));
-            if (pMenu)
-            {
-                pMenu->set_label("edit", SvxResId( pResId1 ) );
-                pMenu->set_label("delete", SvxResId( pResId2 ) );
-            }
+        }
+        m_xToolBox->set_item_label("edit", SvxResId(pResId1));
+        m_xToolBox->set_item_label("delete", SvxResId(pResId2));
+        if (pMenu)
+        {
+            pMenu->set_label("edit", SvxResId( pResId1 ) );
+            pMenu->set_label("delete", SvxResId( pResId2 ) );
         }
     }
 
@@ -1932,22 +1932,22 @@ namespace svxform
 
     void DataNavigatorWindow::NotifyChanges( bool _bLoadAll )
     {
-        if ( !m_bIsNotifyDisabled )
+        if ( m_bIsNotifyDisabled )
+            return;
+
+        if ( _bLoadAll )
         {
-            if ( _bLoadAll )
-            {
-                // reset all members
-                RemoveBroadcaster();
-                m_xDataContainer.clear();
-                m_xFrameModel.clear();
-                m_xModelsBox->clear();
-                m_nLastSelectedPos = -1;
-                // for a reload
-                LoadModels();
-            }
-            else
-                m_aUpdateTimer.Start();
+            // reset all members
+            RemoveBroadcaster();
+            m_xDataContainer.clear();
+            m_xFrameModel.clear();
+            m_xModelsBox->clear();
+            m_nLastSelectedPos = -1;
+            // for a reload
+            LoadModels();
         }
+        else
+            m_aUpdateTimer.Start();
     }
 
     void DataNavigatorWindow::AddContainerBroadcaster( const css::uno::Reference< css::container::XContainer >& xContainer )
@@ -2130,27 +2130,27 @@ namespace svxform
         m_xConstraintBtn->set_sensitive( m_xConstraintCB->get_active() );
         m_xCalculateBtn->set_sensitive( m_xCalculateCB->get_active() );
 
-        if ( pBox && m_xTempBinding.is() )
-        {
-            OUString sTemp, sPropName;
-            if ( m_xRequiredCB.get() == pBox )
-                sPropName = PN_REQUIRED_EXPR;
-            else if ( m_xRelevantCB.get() == pBox )
-                sPropName = PN_RELEVANT_EXPR;
-            else if ( m_xConstraintCB.get() == pBox )
-                sPropName = PN_CONSTRAINT_EXPR;
-            else if ( m_xReadonlyCB.get() == pBox )
-                sPropName = PN_READONLY_EXPR;
-            else if ( m_xCalculateCB.get() == pBox )
-                sPropName = PN_CALCULATE_EXPR;
-            bool bIsChecked = pBox->get_active();
-            m_xTempBinding->getPropertyValue( sPropName ) >>= sTemp;
-            if ( bIsChecked && sTemp.isEmpty() )
-                sTemp = TRUE_VALUE;
-            else if ( !bIsChecked && !sTemp.isEmpty() )
-                sTemp.clear();
-            m_xTempBinding->setPropertyValue( sPropName, makeAny( sTemp ) );
-        }
+        if ( !(pBox && m_xTempBinding.is()) )
+            return;
+
+        OUString sTemp, sPropName;
+        if ( m_xRequiredCB.get() == pBox )
+            sPropName = PN_REQUIRED_EXPR;
+        else if ( m_xRelevantCB.get() == pBox )
+            sPropName = PN_RELEVANT_EXPR;
+        else if ( m_xConstraintCB.get() == pBox )
+            sPropName = PN_CONSTRAINT_EXPR;
+        else if ( m_xReadonlyCB.get() == pBox )
+            sPropName = PN_READONLY_EXPR;
+        else if ( m_xCalculateCB.get() == pBox )
+            sPropName = PN_CALCULATE_EXPR;
+        bool bIsChecked = pBox->get_active();
+        m_xTempBinding->getPropertyValue( sPropName ) >>= sTemp;
+        if ( bIsChecked && sTemp.isEmpty() )
+            sTemp = TRUE_VALUE;
+        else if ( !bIsChecked && !sTemp.isEmpty() )
+            sTemp.clear();
+        m_xTempBinding->setPropertyValue( sPropName, makeAny( sTemp ) );
     }
 
     IMPL_LINK(AddDataItemDialog, ConditionHdl, weld::Button&, rBtn, void)
@@ -2450,42 +2450,42 @@ namespace svxform
 
     void AddDataItemDialog::InitDataTypeBox()
     {
-        if ( m_eItemType != DITText )
-        {
-            Reference< css::xforms::XModel > xModel( m_xUIHelper, UNO_QUERY );
-            if ( xModel.is() )
-            {
-                try
-                {
-                    Reference< css::xforms::XDataTypeRepository > xDataTypes =
-                        xModel->getDataTypeRepository();
-                    if ( xDataTypes.is() )
-                    {
-                        const Sequence< OUString > aNameList = xDataTypes->getElementNames();
-                        for ( const OUString& rName : aNameList )
-                            m_xDataTypeLB->append_text(rName);
-                    }
+        if ( m_eItemType == DITText )
+            return;
 
-                    if ( m_xTempBinding.is() )
-                    {
-                        OUString sTemp;
-                        if ( m_xTempBinding->getPropertyValue( PN_BINDING_TYPE ) >>= sTemp )
-                        {
-                            int nPos = m_xDataTypeLB->find_text(sTemp);
-                            if (nPos == -1)
-                            {
-                                m_xDataTypeLB->append_text(sTemp);
-                                nPos = m_xDataTypeLB->get_count() - 1;
-                            }
-                            m_xDataTypeLB->set_active(nPos);
-                        }
-                    }
-                }
-                catch ( Exception const & )
+        Reference< css::xforms::XModel > xModel( m_xUIHelper, UNO_QUERY );
+        if ( !xModel.is() )
+            return;
+
+        try
+        {
+            Reference< css::xforms::XDataTypeRepository > xDataTypes =
+                xModel->getDataTypeRepository();
+            if ( xDataTypes.is() )
+            {
+                const Sequence< OUString > aNameList = xDataTypes->getElementNames();
+                for ( const OUString& rName : aNameList )
+                    m_xDataTypeLB->append_text(rName);
+            }
+
+            if ( m_xTempBinding.is() )
+            {
+                OUString sTemp;
+                if ( m_xTempBinding->getPropertyValue( PN_BINDING_TYPE ) >>= sTemp )
                 {
-                    TOOLS_WARN_EXCEPTION( "svx.form", "AddDataItemDialog::InitDataTypeBox()" );
+                    int nPos = m_xDataTypeLB->find_text(sTemp);
+                    if (nPos == -1)
+                    {
+                        m_xDataTypeLB->append_text(sTemp);
+                        nPos = m_xDataTypeLB->get_count() - 1;
+                    }
+                    m_xDataTypeLB->set_active(nPos);
                 }
             }
+        }
+        catch ( Exception const & )
+        {
+            TOOLS_WARN_EXCEPTION( "svx.form", "AddDataItemDialog::InitDataTypeBox()" );
         }
     }
 

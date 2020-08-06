@@ -107,23 +107,23 @@ static void FillBox_Impl(weld::TreeView& rListBoxStyles, const TreeNode& rCurren
     const OUString& rName = rCurrent.sNodeName;
     OUString sPairValue;
 
-    if (rCurrent.NodeType != TreeNode::SimpleProperty
-        || GetPropertyValues(rName, rCurrent.aValue, sPairValue))
+    if (!(rCurrent.NodeType != TreeNode::SimpleProperty
+          || GetPropertyValues(rName, rCurrent.aValue, sPairValue)))
+        return;
+
+    rListBoxStyles.insert(pParent, -1, &rName, nullptr, nullptr, nullptr, false, pResult.get());
+    rListBoxStyles.set_sensitive(*pResult, !rCurrent.isGrey, 0);
+    rListBoxStyles.set_text_emphasis(*pResult, rCurrent.NodeType == TreeNode::Category, 0);
+
+    if (rCurrent.NodeType == TreeNode::SimpleProperty)
     {
-        rListBoxStyles.insert(pParent, -1, &rName, nullptr, nullptr, nullptr, false, pResult.get());
-        rListBoxStyles.set_sensitive(*pResult, !rCurrent.isGrey, 0);
-        rListBoxStyles.set_text_emphasis(*pResult, rCurrent.NodeType == TreeNode::Category, 0);
-
-        if (rCurrent.NodeType == TreeNode::SimpleProperty)
-        {
-            rListBoxStyles.set_text(*pResult, sPairValue, 1);
-            rListBoxStyles.set_sensitive(*pResult, !rCurrent.isGrey, 1);
-            rListBoxStyles.set_text_emphasis(*pResult, false, 1);
-        }
-
-        for (const TreeNode& rChildNode : rCurrent.children)
-            FillBox_Impl(rListBoxStyles, rChildNode, pResult.get());
+        rListBoxStyles.set_text(*pResult, sPairValue, 1);
+        rListBoxStyles.set_sensitive(*pResult, !rCurrent.isGrey, 1);
+        rListBoxStyles.set_text_emphasis(*pResult, false, 1);
     }
+
+    for (const TreeNode& rChildNode : rCurrent.children)
+        FillBox_Impl(rListBoxStyles, rChildNode, pResult.get());
 }
 
 void InspectorTextPanel::updateEntries(const std::vector<TreeNode>& rStore)
