@@ -93,6 +93,35 @@ struct SAL_WARN_UNUSED OUStringLiteral
 
     // So we can use this struct in some places interchangeably with OUString
     constexpr sal_Int32 getLength() const { return size; }
+
+    /** So we can this in places interchangably with OUString.
+        @since LibreOffice 7.1
+    */
+    constexpr const char* getStr() const { return data; }
+
+    // So we can use this struct in some places interchangeably with OUString
+    /**
+      Returns the index within this string of the first occurrence of the
+      specified character, starting the search at the specified index.
+
+      @param    ch          character to be located.
+      @param    fromIndex   the index to start the search from.
+                            The index must be greater than or equal to 0
+                            and less than or equal to the string length.
+      @return   the index of the first occurrence of the character in the
+                character sequence represented by this string that is
+                greater than or equal to fromIndex, or
+                -1 if the character does not occur.
+      @since LibreOffice 7.1
+    */
+    sal_Int32 indexOf( sal_Unicode ch, sal_Int32 fromIndex = 0 ) const
+    {
+        for (auto it = data + fromIndex; it != data + size; ++it)
+            if (*it == ch)
+                return it - data;
+        return -1;
+    }
+
 };
 
 /// @endcond

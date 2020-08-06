@@ -218,7 +218,7 @@ void SbxVariable::SetName( const OUString& rName )
 
 const OUString& SbxVariable::GetName( SbxNameType t ) const
 {
-    static const OUString cSuffixes { "  %&!#@ $" };
+    static const char cSuffixes[] = "  %&!#@ $";
     if( t == SbxNameType::NONE )
     {
         return maName;

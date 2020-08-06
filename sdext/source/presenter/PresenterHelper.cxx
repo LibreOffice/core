@@ -28,19 +28,19 @@ using namespace ::com::sun::star::presentation;
 
 namespace sdext::presenter {
 
-const OUString PresenterHelper::msPaneURLPrefix( "private:resource/pane/");
+const OUStringLiteral PresenterHelper::msPaneURLPrefix( "private:resource/pane/");
 const OUString PresenterHelper::msCenterPaneURL( msPaneURLPrefix + "CenterPane");
 const OUString PresenterHelper::msFullScreenPaneURL( msPaneURLPrefix + "FullScreenPane");
 
-const OUString PresenterHelper::msViewURLPrefix( "private:resource/view/");
+const OUStringLiteral PresenterHelper::msViewURLPrefix( "private:resource/view/");
 const OUString PresenterHelper::msPresenterScreenURL( msViewURLPrefix + "PresenterScreen");
 const OUString PresenterHelper::msSlideSorterURL( msViewURLPrefix + "SlideSorter");
 
-const OUString PresenterHelper::msResourceActivationEvent( "ResourceActivation");
-const OUString PresenterHelper::msResourceDeactivationEvent( "ResourceDeactivation");
+const OUStringLiteral PresenterHelper::msResourceActivationEvent( "ResourceActivation");
+const OUStringLiteral PresenterHelper::msResourceDeactivationEvent( "ResourceDeactivation");
 
-const OUString PresenterHelper::msDefaultPaneStyle ( "DefaultPaneStyle");
-const OUString PresenterHelper::msDefaultViewStyle ( "DefaultViewStyle");
+const OUStringLiteral PresenterHelper::msDefaultPaneStyle ( "DefaultPaneStyle");
+const OUStringLiteral PresenterHelper::msDefaultViewStyle ( "DefaultViewStyle");
 
 Reference<presentation::XSlideShowController> PresenterHelper::GetSlideShowController (
     const Reference<frame::XController>& rxController)
