@@ -574,7 +574,7 @@ void BibGeneralPage::InitFixedTexts()
 
     // ... then get all strings
     for( i = 0 ; i < FIELD_COUNT ; ++i )
-        aMnemonicGenerator.CreateMnemonic( aFixedStrings[ i ] );
+        aFixedStrings[i] = aMnemonicGenerator.CreateMnemonic(aFixedStrings[i]);
 
     // set texts
     for( i = 0 ; i < FIELD_COUNT ; ++i )
