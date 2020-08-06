@@ -38,6 +38,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <textboxhelper.hxx>
 #include <fmtsrnd.hxx>
+#include <svx/sdtagitm.hxx>
 
 using namespace ::com::sun::star;
 using namespace objectpositioning;
@@ -417,9 +418,10 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
                                                          const bool bCheckBottom ) const
 {
     SwTwips nAdjustedRelPosY = nProposedRelPosY;
+    if (SwAnchoredObject::IsDraggingOffPageAllowed(FindFrameFormat(&mrDrawObj)))
+        return nAdjustedRelPosY;
 
-    const Size aObjSize( GetAnchoredObj().GetObjRect().SSize() );
-
+    const Size aObjSize(GetAnchoredObj().GetObjRect().SSize());
     // determine the area of 'page' alignment frame, to which the vertical
     // position is restricted.
     // #i28701# - Extend restricted area for the vertical
@@ -468,8 +470,7 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
             // tdf#112443 if position is completely off-page
             // return the proposed position and do not adjust it...
             // tdf#120839 .. unless anchored to char (anchor can jump on other page)
-            bool bDisablePositioning = mpFrameFormat->getIDocumentSettingAccess().get(DocumentSettingId::DISABLE_OFF_PAGE_POSITIONING);
-
+            const bool bDisablePositioning =  mpFrameFormat->getIDocumentSettingAccess().get(DocumentSettingId::DISABLE_OFF_PAGE_POSITIONING);
             if ( bDisablePositioning && !IsAnchoredToChar() && nTopOfAnch + nAdjustedRelPosY > aPgAlignArea.Right() )
             {
                 return nProposedRelPosY;
@@ -518,30 +519,6 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
         {
             nAdjustedRelPosY = aPgAlignArea.Top() - nTopOfAnch;
         }
-
-        // tdf#91260  - allow textboxes extending beyond the page bottom
-        // tdf#101627 - the patch a4dee94afed9ade6ac50237c8d99a6e49d3bebc1
-        //              for tdf#91260 causes problems if the textbox
-        //              is anchored in the footer, so exclude this case
-        if ( !( GetAnchorFrame().GetUpper() && GetAnchorFrame().GetUpper()->IsFooterFrame() )
-             && nAdjustedRelPosY < nProposedRelPosY )
-        {
-            const SwFrameFormat* pFormat = &(GetFrameFormat());
-            if ( GetObject().IsTextBox() )
-            {
-                // shrink textboxes to extend beyond the page bottom
-                SwFrameFormat* pFrameFormat = ::FindFrameFormat(&GetObject());
-                SwFormatFrameSize aSize(pFormat->GetFrameSize());
-                SwTwips nShrinked = aSize.GetHeight() - (nProposedRelPosY - nAdjustedRelPosY);
-                if (nShrinked >= 0) {
-                    aSize.SetHeight( nShrinked );
-                    pFrameFormat->SetFormatAttr(aSize);
-                }
-                nAdjustedRelPosY = nProposedRelPosY;
-            } else if ( SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT) )
-                // when the shape has a textbox, use only the proposed vertical position
-                nAdjustedRelPosY = nProposedRelPosY;
-        }
     }
     return nAdjustedRelPosY;
 }
@@ -556,6 +533,9 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustHoriRelPos(
                                         const SwTwips _nProposedRelPosX ) const
 {
     SwTwips nAdjustedRelPosX = _nProposedRelPosX;
+
+    if (SwAnchoredObject::IsDraggingOffPageAllowed(FindFrameFormat(&mrDrawObj)))
+        return nAdjustedRelPosX;
 
     const SwFrame& rAnchorFrame = GetAnchorFrame();
     const bool bVert = rAnchorFrame.IsVertical();

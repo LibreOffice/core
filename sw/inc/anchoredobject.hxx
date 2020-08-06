@@ -408,6 +408,12 @@ class SW_DLLPUBLIC SwAnchoredObject
         */
         virtual bool IsFormatPossible() const;
 
+        /** method to determine if dragging objects off page is allowed
+
+            Returns true if editor objects can be dragged off page, false otherwise
+        */
+        static bool IsDraggingOffPageAllowed(const SwFrameFormat*);
+
         // accessors to member <mbTmpConsiderWrapInfluence>
         void SetTmpConsiderWrapInfluence( const bool _bTmpConsiderWrapInfluence );
         bool IsTmpConsiderWrapInfluence() const { return mbTmpConsiderWrapInfluence;}
