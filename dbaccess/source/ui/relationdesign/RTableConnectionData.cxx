@@ -77,7 +77,7 @@ void ORelationTableConnectionData::DropRelation()
     ::osl::MutexGuard aGuard( m_aMutex );
     // delete relation
     Reference< XIndexAccess> xKeys = getReferencingTable()->getKeys();
-    if( !(!m_aConnName.isEmpty() && xKeys.is()) )
+    if( m_aConnName.isEmpty() || !xKeys.is() )
         return;
 
     const sal_Int32 nCount = xKeys->getCount();

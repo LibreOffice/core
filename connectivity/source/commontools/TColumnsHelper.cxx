@@ -186,7 +186,7 @@ sdbcx::ObjectType OColumnsHelper::appendObject( const OUString& _rForName, const
 void OColumnsHelper::dropObject(sal_Int32 /*_nPos*/, const OUString& _sElementName)
 {
     OSL_ENSURE(m_pTable,"OColumnsHelper::dropByName: Table is null!");
-    if ( !(m_pTable && !m_pTable->isNew()) )
+    if ( !m_pTable || m_pTable->isNew() )
         return;
 
     Reference<XDatabaseMetaData> xMetaData = m_pTable->getConnection()->getMetaData();

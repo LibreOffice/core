@@ -2008,7 +2008,7 @@ void SvxTableController::EditCell(const CellPos& rPos, vcl::Window* pWindow, Tbl
     CellPos aPos( rPos );
     findMergeOrigin( aPos );
 
-    if( !(&rTableObj != mrView.GetTextEditObject() || bEmptyOutliner || !rTableObj.IsTextEditActive( aPos )) )
+    if( &rTableObj == mrView.GetTextEditObject() && !bEmptyOutliner && rTableObj.IsTextEditActive( aPos ) )
         return;
 
     if( rTableObj.IsTextEditActive() )

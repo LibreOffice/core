@@ -146,7 +146,7 @@ SbxArray* SbxVariable::GetParameters() const
 
 void SbxVariable::Broadcast( SfxHintId nHintId )
 {
-    if( !(mpBroadcaster && !IsSet( SbxFlagBits::NoBroadcast )) )
+    if( !mpBroadcaster || IsSet( SbxFlagBits::NoBroadcast ) )
         return;
 
     // Because the method could be called from outside, check the

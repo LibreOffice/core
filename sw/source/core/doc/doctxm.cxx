@@ -1840,7 +1840,7 @@ void SwTOXBaseSection::UpdatePageNum_( SwTextNode* pNd,
     }
 
     // The main entries should get their character style
-    if (!(xCharStyleIdx && !xCharStyleIdx->empty() && !GetMainEntryCharStyle().isEmpty()))
+    if (!xCharStyleIdx || xCharStyleIdx->empty() || GetMainEntryCharStyle().isEmpty())
         return;
 
     // eventually the last index must me appended

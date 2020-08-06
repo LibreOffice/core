@@ -1049,8 +1049,8 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
     }
 
     // In case of collapsed subparagraphs paint a line before the text.
-    if( !(pParaList->HasChildren(pPara) && !pParaList->HasVisibleChildren(pPara) &&
-            !bStrippingPortions && !nOrientation) )
+    if( !pParaList->HasChildren(pPara) || pParaList->HasVisibleChildren(pPara) ||
+            bStrippingPortions || nOrientation )
         return;
 
     long nWidth = pOutDev->PixelToLogic( Size( 10, 0 ) ).Width();

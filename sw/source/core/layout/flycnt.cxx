@@ -329,7 +329,7 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
         return;
     }
 
-    if ( !(!SwOszControl::IsInProgress( this ) && !IsLocked() && !IsColLocked()) )
+    if ( SwOszControl::IsInProgress( this ) || IsLocked() || IsColLocked() )
         return;
 
     // #i28701# - use new method <GetPageFrame()>

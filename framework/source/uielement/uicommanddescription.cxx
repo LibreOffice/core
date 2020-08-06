@@ -349,7 +349,7 @@ void ConfigurationAccess_UICommand::fillCache()
 
 void ConfigurationAccess_UICommand::addGenericInfoToCache()
 {
-    if ( !(m_xGenericUICommands.is() && !m_bGenericDataRetrieved) )
+    if ( !m_xGenericUICommands.is() || m_bGenericDataRetrieved )
         return;
 
     Sequence< OUString > aCommandNameSeq;

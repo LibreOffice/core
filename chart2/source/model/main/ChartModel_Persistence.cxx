@@ -362,7 +362,7 @@ void ChartModel::impl_store(
     //notify parent data provider after saving thus the parent document can store
     //the ranges for which a load and update of the chart will be necessary
     Reference< beans::XPropertySet > xPropSet( m_xParent, uno::UNO_QUERY );
-    if ( !(!hasInternalDataProvider() && xPropSet.is()) )
+    if ( hasInternalDataProvider() || !xPropSet.is() )
         return;
 
     apphelper::MediaDescriptorHelper aMDHelper(rMediaDescriptor);

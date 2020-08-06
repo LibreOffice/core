@@ -451,7 +451,7 @@ static void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
     else if ( bRefreshHidden )
         ::lcl_RefreshHidden( rToFill, nPos );
 
-    if ( !(bHidden && !bRefreshHidden) )
+    if ( !bHidden || bRefreshHidden )
         return;
 
     // calculate minimum/maximum values for the existing entries:

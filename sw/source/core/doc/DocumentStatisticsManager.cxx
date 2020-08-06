@@ -86,7 +86,7 @@ void DocumentStatisticsManager::SetDocStat( const SwDocStat& rStat )
 
 void DocumentStatisticsManager::UpdateDocStat( bool bCompleteAsync, bool bFields )
 {
-    if( !(mpDocStat->bModified || !mbInitialized))
+    if( !mpDocStat->bModified && mbInitialized)
         return;
 
     if (!bCompleteAsync)

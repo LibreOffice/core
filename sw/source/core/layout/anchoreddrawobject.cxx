@@ -523,7 +523,7 @@ void SwAnchoredDrawObject::SetDrawObjAnchor()
 */
 void SwAnchoredDrawObject::InvalidatePage_( SwPageFrame* _pPageFrame )
 {
-    if ( !(_pPageFrame && !_pPageFrame->GetFormat()->GetDoc()->IsInDtor()) )
+    if ( !_pPageFrame || _pPageFrame->GetFormat()->GetDoc()->IsInDtor() )
         return;
 
     if ( !_pPageFrame->GetUpper() )

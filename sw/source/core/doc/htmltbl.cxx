@@ -1455,8 +1455,8 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
     // left or right. Here we calculate their width.
     m_nInhAbsLeftSpace = 0;
     m_nInhAbsRightSpace = 0;
-    if( !(!IsTopTable() && (m_nRelLeftFill>0 || m_nRelRightFill>0 ||
-                          nAbsTabWidth<nAbsAvail)) )
+    if( IsTopTable() ||
+        !(m_nRelLeftFill>0 || m_nRelRightFill>0 || nAbsTabWidth<nAbsAvail) )
         return;
 
     // Calculate the width of additional cells we use for

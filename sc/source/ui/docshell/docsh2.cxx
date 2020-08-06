@@ -114,8 +114,8 @@ void ScDocShell::InitItems()
         PutItem( SvxColorListItem( XColorList::GetStdColorList(), SID_COLOR_TABLE ) );
     }
 
-    if (!(!utl::ConfigManager::IsFuzzing() &&
-        (!m_aDocument.GetForbiddenCharacters() || !m_aDocument.IsValidAsianCompression() || !m_aDocument.IsValidAsianKerning())))
+    if (utl::ConfigManager::IsFuzzing() ||
+        (m_aDocument.GetForbiddenCharacters() && m_aDocument.IsValidAsianCompression() && m_aDocument.IsValidAsianKerning()))
         return;
 
     //  get settings from SvxAsianConfig

@@ -3254,7 +3254,7 @@ IMPL_LINK(SwTokenWindow, NextItemBtnHdl, SwTOXButton&, rBtn, void )
     auto itTest = it;
     ++itTest;
 
-    if (!(!rBtn.IsNextControl() || (itTest != m_aControlList.end() && rBtn.IsNextControl())))
+    if (rBtn.IsNextControl() && (itTest == m_aControlList.end() || !rBtn.IsNextControl()))
         return;
 
     bool isNext = rBtn.IsNextControl();

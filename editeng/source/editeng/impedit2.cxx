@@ -4141,7 +4141,7 @@ void ImpEditEngine::CalcHeight( ParaPortion* pPortion )
     }
 
 
-    if ( !(nPortion && !aStatus.ULSpaceSummation()) )
+    if ( !nPortion || aStatus.ULSpaceSummation() )
         return;
 
     ParaPortion* pPrev = GetParaPortions().SafeGetObject( nPortion-1 );

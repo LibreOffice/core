@@ -1335,7 +1335,7 @@ void XclExpPivotTable::SetFieldPropertiesFromDim( const ScDPSaveDimension& rSave
     bool bDataLayout = nFieldIdx == EXC_SXIVD_DATA;
     bool bMultiData = maDataFields.size() > 1;
 
-    if( !(!bDataLayout || bMultiData) )
+    if( bDataLayout && !bMultiData )
         return;
 
     switch( eOrient )

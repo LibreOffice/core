@@ -1297,7 +1297,7 @@ void XMLTextFrameContext_Impl::SetHyperlink( const OUString& rHRef,
 void XMLTextFrameContext_Impl::SetName()
 {
     Reference<XNamed> xNamed(xPropSet, UNO_QUERY);
-    if (!(!m_sOrigName.isEmpty() && xNamed.is()))
+    if (m_sOrigName.isEmpty() || !xNamed.is())
         return;
 
     OUString const name(xNamed->getName());

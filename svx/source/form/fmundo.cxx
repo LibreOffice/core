@@ -976,7 +976,7 @@ void FmUndoPropertyAction::Undo()
 {
     FmXUndoEnvironment& rEnv = static_cast<FmFormModel&>(rMod).GetUndoEnv();
 
-    if (!(xObj.is() && !rEnv.IsLocked()))
+    if (!xObj.is() || rEnv.IsLocked())
         return;
 
     rEnv.Lock();
@@ -996,7 +996,7 @@ void FmUndoPropertyAction::Redo()
 {
     FmXUndoEnvironment& rEnv = static_cast<FmFormModel&>(rMod).GetUndoEnv();
 
-    if (!(xObj.is() && !rEnv.IsLocked()))
+    if (!xObj.is() || rEnv.IsLocked())
         return;
 
     rEnv.Lock();

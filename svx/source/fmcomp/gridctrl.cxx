@@ -2714,7 +2714,7 @@ void DbGridControl::CellModified()
         }
     }
 
-    if (!(!IsFilterMode() && IsValid(m_xCurrentRow) && !m_xCurrentRow->IsModified()))
+    if (IsFilterMode() || !IsValid(m_xCurrentRow) || m_xCurrentRow->IsModified())
         return;
 
     // enable edit mode

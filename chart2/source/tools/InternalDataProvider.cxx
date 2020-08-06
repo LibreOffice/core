@@ -1360,7 +1360,7 @@ Sequence< double > SAL_CALL InternalDataProvider::getDateCategories()
     sal_Int32 nN=0;
     for (auto const& category : aCategories)
     {
-        if( !( !category.empty() && (category[0]>>=fValue) ) )
+        if( category.empty() || !(category[0]>>=fValue) )
             fValue = fNan;
         aDoubles[nN++]=fValue;
     }

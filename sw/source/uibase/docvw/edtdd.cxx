@@ -77,7 +77,7 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
         }
     }
 
-    if ( !(!m_pApplyTempl && !rSh.IsDrawCreate() && !IsDrawAction()))
+    if ( m_pApplyTempl || rSh.IsDrawCreate() || IsDrawAction())
         return;
 
     bool bStart = false, bDelSelect = false;
@@ -116,7 +116,7 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
                     aSwContentAtPos );
     }
 
-    if ( !(bStart && !m_bIsInDrag) )
+    if ( !bStart || m_bIsInDrag )
         return;
 
     m_bMBPressed = false;

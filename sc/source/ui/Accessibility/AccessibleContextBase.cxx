@@ -384,7 +384,7 @@ void SAL_CALL
         return;
 
     SolarMutexGuard aGuard;
-    if (!(!IsDefunc() && mnClientId))
+    if (IsDefunc() || !mnClientId)
         return;
 
     sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, xListener );

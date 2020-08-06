@@ -655,7 +655,7 @@ void java_sql_PreparedStatement::createStatement(JNIEnv* _pEnv)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
 
-    if( !(!object && _pEnv) )
+    if( object || !_pEnv )
         return;
 
     // initialize temporary variable

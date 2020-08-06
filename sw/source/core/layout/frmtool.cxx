@@ -388,7 +388,7 @@ SwFrameNotify::~SwFrameNotify() COVERITY_NOEXCEPT_FALSE
     // #i61999#
     // no invalidation of columned Writer fly frames, because automatic
     // width doesn't make sense for such Writer fly frames.
-    if ( !(pFly->Lower() && !pFly->Lower()->IsColumnFrame()) )
+    if ( !pFly->Lower() || pFly->Lower()->IsColumnFrame() )
         return;
 
     const SwFormatFrameSize &rFrameSz = pFly->GetFormat()->GetFrameSize();

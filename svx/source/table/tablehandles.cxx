@@ -142,7 +142,7 @@ void TableEdgeHdl::CreateB2dIAObject()
 {
     GetRidOfIAObject();
 
-    if(!(pHdlList && pHdlList->GetView() && !pHdlList->GetView()->areMarkHandlesHidden()))
+    if(!pHdlList || !pHdlList->GetView() || pHdlList->GetView()->areMarkHandlesHidden())
         return;
 
     SdrMarkView* pView = pHdlList->GetView();
@@ -259,7 +259,7 @@ void TableBorderHdl::CreateB2dIAObject()
 {
     GetRidOfIAObject();
 
-    if (!(pHdlList && pHdlList->GetView() && !pHdlList->GetView()->areMarkHandlesHidden()))
+    if (!pHdlList || !pHdlList->GetView() || pHdlList->GetView()->areMarkHandlesHidden())
         return;
 
     SdrMarkView* pView = pHdlList->GetView();

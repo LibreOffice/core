@@ -140,7 +140,7 @@ namespace svgio::svgreader
             // try to access link to content
             const SvgNode* pXLink = getDocument().findSvgNodeById(maXLink);
 
-            if (!(pXLink && Display_none != pXLink->getDisplay() && !mbDecomposingSvgNode))
+            if (!pXLink || Display_none == pXLink->getDisplay() || mbDecomposingSvgNode)
                 return;
 
             // decompose children

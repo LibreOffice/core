@@ -190,7 +190,7 @@ void StorageBase::copyToStorage( StorageBase& rDestStrg, const OUString& rElemen
 {
     OSL_ENSURE( rDestStrg.isStorage() && !rDestStrg.isReadOnly(), "StorageBase::copyToStorage - invalid destination" );
     OSL_ENSURE( !rElementName.isEmpty(), "StorageBase::copyToStorage - invalid element name" );
-    if( !(rDestStrg.isStorage() && !rDestStrg.isReadOnly() && !rElementName.isEmpty()) )
+    if( !rDestStrg.isStorage() || rDestStrg.isReadOnly() || rElementName.isEmpty() )
         return;
 
     StorageRef xSubStrg = openSubStorage( rElementName, false );

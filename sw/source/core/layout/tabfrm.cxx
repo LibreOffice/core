@@ -1360,7 +1360,7 @@ void SwTabFrame::Join()
 
     SwTabFrame *pFoll = GetFollow();
 
-    if (!(pFoll && !pFoll->IsJoinLocked()))
+    if (!pFoll || pFoll->IsJoinLocked())
         return;
 
     SwRectFnSet aRectFnSet(this);
@@ -3747,7 +3747,7 @@ void SwTabFrame::Paste( SwFrame* pParent, SwFrame* pSibling )
         // b) The new follower was previously the first in a chain
         GetNext()->InvalidatePrt_();
 
-    if ( !(pPage && !IsFollow()) )
+    if ( !pPage || IsFollow() )
         return;
 
     if ( pPage->GetUpper() )

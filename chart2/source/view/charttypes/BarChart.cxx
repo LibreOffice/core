@@ -415,7 +415,7 @@ void BarChart::adaptOverlapAndGapwidthForGroupBarsPerAxis()
     //thus the different series use the same settings
 
     VDataSeries* pFirstSeries = getFirstSeries();
-    if(!(pFirstSeries && !pFirstSeries->getGroupBarsPerAxis()) )
+    if(!pFirstSeries || pFirstSeries->getGroupBarsPerAxis())
         return;
 
     sal_Int32 nAxisIndex = pFirstSeries->getAttachedAxisIndex();

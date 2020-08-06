@@ -677,7 +677,7 @@ void OutlinerView::PasteSpecial()
 
 void OutlinerView::Paste( bool bUseSpecial )
 {
-    if ( !(!ImpCalcSelectedPages( false ) || pOwner->ImpCanDeleteSelectedPages( this )) )
+    if ( ImpCalcSelectedPages( false ) && !pOwner->ImpCanDeleteSelectedPages( this ) )
         return;
 
     pOwner->UndoActionStart( OLUNDO_INSERT );

@@ -220,7 +220,7 @@ void vcl::Cursor::ImplDoShow( bool bDrawDirect, bool bRestore )
     if ( bDrawDirect || bRestore )
         ImplDraw();
 
-    if ( !mpWindow && ! ( ! bDrawDirect && mpData->maTimer.IsActive()) )
+    if ( !mpWindow && (bDrawDirect || !mpData->maTimer.IsActive()) )
     {
         mpData->maTimer.SetTimeout( pWindow->GetSettings().GetStyleSettings().GetCursorBlinkTime() );
         if ( mpData->maTimer.GetTimeout() != STYLE_CURSOR_NOBLINKTIME )

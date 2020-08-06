@@ -684,7 +684,7 @@ void ScChildrenShapes::Select(sal_Int32 nIndex)
         return;
 
     uno::Reference<drawing::XShape> xShape;
-    if (!(!IsSelected(nIndex, xShape) && maZOrderedShapes[nIndex]->bSelectable))
+    if (IsSelected(nIndex, xShape) || !maZOrderedShapes[nIndex]->bSelectable)
         return;
 
     uno::Reference<drawing::XShapes> xShapes(mpViewShell->getSelectedXShapes());

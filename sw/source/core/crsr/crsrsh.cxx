@@ -3702,7 +3702,7 @@ void SwCursorShell::GetSmartTagTerm( std::vector< OUString >& rSmartTagTypes,
     SwPaM* pCursor = GetCursor();
     SwPosition aPos( *pCursor->GetPoint() );
     SwTextNode *pNode = aPos.nNode.GetNode().GetTextNode();
-    if ( !(pNode && !pNode->IsInProtectSect()) )
+    if ( !pNode || pNode->IsInProtectSect() )
         return;
 
     const SwWrongList *pSmartTagList = pNode->GetSmartTags();
@@ -3713,7 +3713,7 @@ void SwCursorShell::GetSmartTagTerm( std::vector< OUString >& rSmartTagTypes,
     sal_Int32 nBegin = nCurrent;
     sal_Int32 nLen = 1;
 
-    if (!(pSmartTagList->InWrongWord(nBegin, nLen) && !pNode->IsSymbolAt(nBegin)))
+    if (!pSmartTagList->InWrongWord(nBegin, nLen) || pNode->IsSymbolAt(nBegin))
         return;
 
     const sal_uInt16 nIndex = pSmartTagList->GetWrongPos( nBegin );
@@ -3754,7 +3754,7 @@ void SwCursorShell::GetSmartTagRect( const Point& rPt, SwRect& rSelectRect )
     sal_Int32 nBegin = aPos.nContent.GetIndex();
     sal_Int32 nLen = 1;
 
-    if (!(pSmartTagList->InWrongWord(nBegin, nLen) && !pNode->IsSymbolAt(nBegin)))
+    if (!pSmartTagList->InWrongWord(nBegin, nLen) || pNode->IsSymbolAt(nBegin))
         return;
 
     // get smarttag word

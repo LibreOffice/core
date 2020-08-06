@@ -363,7 +363,7 @@ void BibToolBar::SendDispatch(sal_uInt16 nId, const Sequence< PropertyValue >& r
 
     uno::Reference< frame::XDispatchProvider >  xDSP( xController, UNO_QUERY );
 
-    if( !(xDSP.is() && !aCommand.isEmpty()))
+    if( !xDSP.is() || aCommand.isEmpty() )
         return;
 
     uno::Reference< util::XURLTransformer >  xTrans( util::URLTransformer::create(comphelper::getProcessComponentContext()) );

@@ -2068,8 +2068,7 @@ void ImpEditEngine::ApplyChangedSentence(EditView const & rEditView,
     // sentence got removed in the dialog
 
     DBG_ASSERT(pSpellInfo, "pSpellInfo not initialized");
-    if (!(pSpellInfo &&
-        !pSpellInfo->aLastSpellPortions.empty()))  // no portions -> no text to be changed
+    if (!pSpellInfo || pSpellInfo->aLastSpellPortions.empty())  // no portions -> no text to be changed
         return;
 
     // get current paragraph length to calculate later on how the sentence length changed,

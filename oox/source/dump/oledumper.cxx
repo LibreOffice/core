@@ -1115,7 +1115,7 @@ void AxPropertyObjectBase::dumpLargeProperties()
     }
     dumpToPosition( mnPropertiesEnd );
 
-    if( !(ensureValid() && !maStreamProps.empty()) )
+    if( !ensureValid() || maStreamProps.empty() )
         return;
 
     writeEmptyItem( "stream-properties" );
