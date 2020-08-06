@@ -2,6 +2,142 @@
   "comments": [
     {
       "key": {
+        "uuid": "e968ce6d_a93a0f64",
+        "filename": "offapi/com/sun/star/animations/AnimationNodeType.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-08-06T22:56:24Z",
+      "side": 1,
+      "message": "Let\u0027s call this ANIMATEPHYSICS (or something)",
+      "revId": "da1b52474149eff00b223b0a95129bb3223f97c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92a31a0f_313a5ee9",
+        "filename": "slideshow/Library_slideshow.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-08-06T22:56:24Z",
+      "side": 1,
+      "message": "Proposal: rename \u0027simulate\u0027/\u0027simulated\u0027 to physics across the board (I\u0027ll not comment on every instance of that name)\n\nRationale: simulation is a very generic term; what Box2D actually does is simulating rigid body dynamics (but that\u0027s a mouthfull...)\n\nLet\u0027s discuss naming things tomorrow, perhaps there\u0027s an even better, short expression",
+      "revId": "da1b52474149eff00b223b0a95129bb3223f97c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "572ffff7_2e1f5e5f",
+        "filename": "slideshow/source/engine/animationfactory.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-08-06T22:56:24Z",
+      "side": 1,
+      "message": "..naming.. ;)",
+      "revId": "da1b52474149eff00b223b0a95129bb3223f97c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2dc01f30_0129d448",
+        "filename": "slideshow/source/engine/animationfactory.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-08-06T22:56:24Z",
+      "side": 1,
+      "message": "can this be passed down already mapped? otherwise you repeat string comparisons in inner loops ..\n\nor pass in a function object, that does the mapping all the way from attributelayer to value to change in Box2D?",
+      "revId": "da1b52474149eff00b223b0a95129bb3223f97c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "506cf845_1f844580",
+        "filename": "slideshow/source/engine/animationfactory.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-08-06T22:56:24Z",
+      "side": 1,
+      "message": "can you push this type switching down into the Box2D wrapper?",
+      "revId": "da1b52474149eff00b223b0a95129bb3223f97c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af9c18e9_790c75c7",
+        "filename": "slideshow/source/engine/animationfactory.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 709,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-08-06T22:56:24Z",
+      "side": 1,
+      "message": "same here - just pass down mpAttrLayer too?",
+      "revId": "da1b52474149eff00b223b0a95129bb3223f97c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "109165db_0b946001",
+        "filename": "slideshow/source/engine/animationfactory.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1485,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-08-06T22:56:24Z",
+      "side": 1,
+      "message": "..naming.. ;)",
+      "revId": "da1b52474149eff00b223b0a95129bb3223f97c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b8f6c9d_1ec05d15",
+        "filename": "slideshow/source/engine/animationnodes/animationsimulatednode.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-08-06T22:56:24Z",
+      "side": 1,
+      "message": "..naming.. ;)",
+      "revId": "da1b52474149eff00b223b0a95129bb3223f97c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e9e39f3e_397d647b",
         "filename": "slideshow/source/inc/box2dtools.hxx",
         "patchSetId": 5
