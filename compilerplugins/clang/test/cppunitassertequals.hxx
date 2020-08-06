@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COMPILERPLUGINS_CLANG_TEST_CPPUNITASSERTEQUALS_HXX
-#define INCLUDED_COMPILERPLUGINS_CLANG_TEST_CPPUNITASSERTEQUALS_HXX
+#pragma once
 
 #include "sal/config.h"
 
@@ -20,7 +19,5 @@ struct T { bool operator ==(T); };
 
 void test(
     bool b1, bool b2, OUString const & s1, OUString const & s2, T t, void * p, std::nullptr_t n);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
