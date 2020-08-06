@@ -406,6 +406,16 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument& rRefDoc )
         RefInputStart(GetActiveEdit());
     }
 
+    // Pointer-selected => absolute range references for the non-single
+    // dimensions, so in the other dimension (if any) it's still
+    // copy-adjustable.
+    constexpr ScRefFlags eColFlags = ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS;
+    constexpr ScRefFlags eRowFlags = ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS;
+    ScRefFlags eRangeFlags = ScRefFlags::ZERO;
+    if (rRef.aStart.Col() != rRef.aEnd.Col())
+        eRangeFlags |= eColFlags;
+    if (rRef.aStart.Row() != rRef.aEnd.Row())
+        eRangeFlags |= eRowFlags;
     OUString      aRefStr;
     bool bOtherDoc = (&rRefDoc != m_pDoc && rRefDoc.GetDocumentShell()->HasName());
     if ( bOtherDoc )
@@ -414,8 +424,8 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument& rRefDoc )
 
         OSL_ENSURE(rRef.aStart.Tab()==rRef.aEnd.Tab(), "nStartTab!=nEndTab");
 
-        // Always 3D and absolute.
-        OUString aTmp( rRef.Format(rRefDoc, ScRefFlags::VALID | ScRefFlags::TAB_ABS_3D));
+        // Sheet always 3D and absolute.
+        OUString aTmp( rRef.Format(rRefDoc, ScRefFlags::VALID | ScRefFlags::TAB_ABS_3D | eRangeFlags));
 
         SfxObjectShell* pObjSh = rRefDoc.GetDocumentShell();
 
@@ -433,6 +443,16 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument& rRefDoc )
         ScTokenArray aArray(&rRefDoc);
         ScComplexRefData aRefData;
         aRefData.InitRangeRel(&rRefDoc, rRef, m_CursorPos);
+        if ((eRangeFlags & eColFlags) == eColFlags)
+        {
+            aRefData.Ref1.SetAbsCol( rRef.aStart.Col() );
+            aRefData.Ref2.SetAbsCol( rRef.aEnd.Col() );
+        }
+        if ((eRangeFlags & eRowFlags) == eRowFlags)
+        {
+            aRefData.Ref1.SetAbsRow( rRef.aStart.Row() );
+            aRefData.Ref2.SetAbsRow( rRef.aEnd.Row() );
+        }
         bool bSingle = aRefData.Ref1 == aRefData.Ref2;
         if (m_CursorPos.Tab() != rRef.aStart.Tab())
         {
