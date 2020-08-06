@@ -50,6 +50,8 @@ namespace slideshow::internal
             {
                 for( const auto& pActivity : maCurrentActivitiesWaiting )
                     pActivity->dispose();
+                for( const auto& pActivity : maCurrentActivitiesToBeProcessedLast )
+                    pActivity->dispose();
                 for( const auto& pActivity : maCurrentActivitiesReinsert )
                     pActivity->dispose();
             }
@@ -59,7 +61,7 @@ namespace slideshow::internal
             }
         }
 
-        bool ActivitiesQueue::addActivity( const ActivitySharedPtr& pActivity )
+        bool ActivitiesQueue::addActivity( const ActivitySharedPtr& pActivity, const bool bProcessLast )
         {
             OSL_ENSURE( pActivity, "ActivitiesQueue::addActivity: activity ptr NULL" );
 
@@ -67,7 +69,17 @@ namespace slideshow::internal
                 return false;
 
             // add entry to waiting list
-            maCurrentActivitiesWaiting.push_back( pActivity );
+            if( !bProcessLast )
+            {
+                maCurrentActivitiesWaiting.push_back( pActivity );
+            }
+            else
+            {
+                // Activities that should be processed last are kept in a different
+                // ActivityQueue, and later appended to the end of the maCurrentActivitiesWaiting
+                // on the beginning of ActivitiesQueue::process()
+                maCurrentActivitiesToBeProcessedLast.push_back( pActivity );
+            }
 
             return true;
         }
@@ -75,6 +87,12 @@ namespace slideshow::internal
         void ActivitiesQueue::process()
         {
             SAL_INFO("slideshow.verbose", "ActivitiesQueue: outer loop heartbeat" );
+
+            // If there are activities to be processed last append them to the end of the ActivitiesQueue
+            maCurrentActivitiesWaiting.insert( maCurrentActivitiesWaiting.end(),
+                                               maCurrentActivitiesToBeProcessedLast.begin(),
+                                               maCurrentActivitiesToBeProcessedLast.end() );
+            maCurrentActivitiesToBeProcessedLast.clear();
 
             // accumulate time lag for all activities, and lag time
             // base if necessary:

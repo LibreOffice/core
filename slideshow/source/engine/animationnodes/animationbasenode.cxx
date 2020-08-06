@@ -23,6 +23,7 @@
 #include <com/sun/star/animations/Timing.hpp>
 #include <com/sun/star/animations/AnimationAdditiveMode.hpp>
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
+#include <com/sun/star/animations/AnimationNodeType.hpp>
 
 #include "nodetools.hxx"
 #include <doctreenode.hxx>
@@ -294,7 +295,10 @@ void AnimationBaseNode::activate_st()
         mpActivity->setTargets( getShape(), maAttributeLayerHolder.get() );
 
         // add to activities queue
-        getContext().mrActivitiesQueue.addActivity( mpActivity );
+        if( mxAnimateNode->getType() == css::animations::AnimationNodeType::ANIMATEPHYSICS )
+            getContext().mrActivitiesQueue.addActivity(mpActivity, true);
+        else
+            getContext().mrActivitiesQueue.addActivity( mpActivity );
     }
     else {
         // Actually, DO generate the event for empty activity,
