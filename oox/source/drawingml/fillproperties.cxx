@@ -512,21 +512,51 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     // convert DrawingML angle (in 1/60000 degrees) to API angle (in 1/10 degrees)
                     aGradient.Angle = static_cast< sal_Int16 >( (8100 - (nDmlAngle / (PER_DEGREE / 10))) % 3600 );
                     Color aStartColor, aEndColor;
+
+                    // Try to grow the widest segment backwards: if a previous segment has the same
+                    // color, just different transparency, include it.
+                    while (aWidestSegmentStart != aGradientStops.begin())
+                    {
+                        auto it = std::prev(aWidestSegmentStart);
+                        if (it->second.getColor(rGraphicHelper, nPhClr)
+                            != aWidestSegmentStart->second.getColor(rGraphicHelper, nPhClr))
+                        {
+                            break;
+                        }
+
+                        aWidestSegmentStart = it;
+                    }
+
+                    auto aWidestSegmentEnd = std::next(aWidestSegmentStart);
+                    // Try to grow the widest segment forward: if a neext segment has the same
+                    // color, just different transparency, include it.
+                    while (aWidestSegmentEnd != std::prev(aGradientStops.end()))
+                    {
+                        auto it = std::next(aWidestSegmentEnd);
+                        if (it->second.getColor(rGraphicHelper, nPhClr)
+                            != aWidestSegmentEnd->second.getColor(rGraphicHelper, nPhClr))
+                        {
+                            break;
+                        }
+
+                        aWidestSegmentEnd = it;
+                    }
+
                     if( bSymmetric )
                     {
-                        aStartColor = std::next(aWidestSegmentStart)->second;
+                        aStartColor = aWidestSegmentEnd->second;
                         aEndColor = aWidestSegmentStart->second;
                         nBorder *= 2;
                     }
                     else if( bSwap )
                     {
-                        aStartColor = std::next(aWidestSegmentStart)->second;
+                        aStartColor = aWidestSegmentEnd->second;
                         aEndColor = aWidestSegmentStart->second;
                     }
                     else
                     {
                         aStartColor = aWidestSegmentStart->second;
-                        aEndColor = std::next(aWidestSegmentStart)->second;
+                        aEndColor = aWidestSegmentEnd->second;
                     }
 
                     SAL_INFO("oox.drawingml.gradient", "start color: " << std::hex << sal_Int32(aStartColor.getColor( rGraphicHelper, nPhClr )) << std::dec <<
