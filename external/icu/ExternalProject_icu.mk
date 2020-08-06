@@ -27,7 +27,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 			./runConfigureICU \
 			$(if $(MSVC_USE_DEBUG_RUNTIME),--enable-debug --disable-release) \
 			Cygwin/MSVC --disable-extras \
-		&& $(MAKE) \
+		&& $(MAKE) PYTHONWARNINGS="default" \
 	,source)
 	$(call gb_Trace_EndRange,icu,EXTERNAL)
 
@@ -65,6 +65,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 	$(call gb_ExternalProject_run,build,\
 		CPPFLAGS=$(icu_CPPFLAGS) CFLAGS=$(icu_CFLAGS) \
 		CXXFLAGS=$(icu_CXXFLAGS) LDFLAGS=$(icu_LDFLAGS) \
+		PYTHONWARNINGS="default" \
 		./configure \
 			--disable-layout --disable-samples \
 			$(if $(filter FUZZERS,$(BUILD_TYPE)),--disable-release) \
