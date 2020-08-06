@@ -1144,7 +1144,7 @@ void SbiRuntime::PushForEach()
     pForStk = p;
 
     SbxVariableRef xObjVar = PopVar();
-    SbxBase* pObj = xObjVar.is() && xObjVar->IsObject() ? xObjVar->GetObject() : nullptr;
+    SbxBase* pObj = xObjVar.is() ? xObjVar->GetObject() : nullptr;
 
     if (SbxDimArray* pArray = dynamic_cast<SbxDimArray*>(pObj))
     {
