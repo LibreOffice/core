@@ -59,6 +59,7 @@ protected:
 
 private:
     virtual bool hasPendingAnimation() const override;
+    virtual bool enqueueActivity() const;
 
 private: // state transition callbacks
     virtual bool init_st() override;
@@ -79,7 +80,6 @@ private:
     css::uno::Reference<css::animations::XAnimate>  mxAnimateNode;
     ShapeAttributeLayerHolder                       maAttributeLayerHolder;
     ::basegfx::B2DVector                            maSlideSize;
-    AnimationActivitySharedPtr                      mpActivity;
 
     /// When valid, this node has a plain target shape
     AttributableShapeSharedPtr                      mpShape;
@@ -88,6 +88,9 @@ private:
     SubsettableShapeManagerSharedPtr                mpSubsetManager;
     bool                                            mbPreservedVisibility;
     bool                                            mbIsIndependentSubset;
+
+protected:
+    AnimationActivitySharedPtr                      mpActivity;
 };
 
 } // namespace presentation::internal

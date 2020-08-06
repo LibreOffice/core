@@ -50,6 +50,8 @@ namespace slideshow::internal
             {
                 for( const auto& pActivity : maCurrentActivitiesWaiting )
                     pActivity->dispose();
+                for( const auto& pActivity : maCurrentTailActivitiesWaiting )
+                    pActivity->dispose();
                 for( const auto& pActivity : maCurrentActivitiesReinsert )
                     pActivity->dispose();
             }
@@ -72,9 +74,30 @@ namespace slideshow::internal
             return true;
         }
 
+        bool ActivitiesQueue::addTailActivity(const ActivitySharedPtr &pActivity)
+        {
+            OSL_ENSURE( pActivity, "ActivitiesQueue::addTailActivity: activity ptr NULL" );
+
+            if( !pActivity )
+                return false;
+
+            // Activities that should be processed last are kept in a different
+            // ActivityQueue, and later appended to the end of the maCurrentActivitiesWaiting
+            // on the beginning of ActivitiesQueue::process()
+            maCurrentTailActivitiesWaiting.push_back( pActivity );
+
+            return true;
+        }
+
         void ActivitiesQueue::process()
         {
             SAL_INFO("slideshow.verbose", "ActivitiesQueue: outer loop heartbeat" );
+
+            // If there are activities to be processed last append them to the end of the ActivitiesQueue
+            maCurrentActivitiesWaiting.insert( maCurrentActivitiesWaiting.end(),
+                                               maCurrentTailActivitiesWaiting.begin(),
+                                               maCurrentTailActivitiesWaiting.end() );
+            maCurrentTailActivitiesWaiting.clear();
 
             // accumulate time lag for all activities, and lag time
             // base if necessary:
