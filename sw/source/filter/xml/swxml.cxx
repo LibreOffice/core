@@ -834,10 +834,10 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
                     : "com.sun.star.comp.Writer.XMLContentImporter"),
            aFilterArgs, rName, true );
 
-    if( !(IsOrganizerMode() || IsBlockMode() || m_bInsertMode ||
-          m_aOption.IsFormatsOnly() ||
+    if( !IsOrganizerMode() && !IsBlockMode() && !m_bInsertMode &&
+          !m_aOption.IsFormatsOnly() &&
             // sw_redlinehide: disable layout cache for now
-          !*o3tl::doAccess<bool>(xInfoSet->getPropertyValue(sShowChanges))))
+          *o3tl::doAccess<bool>(xInfoSet->getPropertyValue(sShowChanges)))
     {
         try
         {

@@ -448,7 +448,7 @@ void SdXMLGenericPageContext::SetStyle( OUString const & rStyleName )
 void SdXMLGenericPageContext::SetLayout()
 {
     // set PresentationPageLayout?
-    if(!(GetSdImport().IsImpress() && !maPageLayoutName.isEmpty()))
+    if(!GetSdImport().IsImpress() || maPageLayoutName.isEmpty())
         return;
 
     sal_Int32 nType = -1;

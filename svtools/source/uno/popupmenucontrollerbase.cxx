@@ -336,7 +336,7 @@ void SAL_CALL PopupMenuControllerBase::setPopupMenu( const Reference< awt::XPopu
     osl::MutexGuard aLock( m_aMutex );
     throwIfDisposed();
 
-    if ( !(m_xFrame.is() && !m_xPopupMenu.is()) )
+    if ( !m_xFrame.is() || m_xPopupMenu.is() )
         return;
 
     // Create popup menu on demand

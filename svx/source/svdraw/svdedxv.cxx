@@ -783,7 +783,7 @@ void SdrObjEditView::ImpInvalidateOutlinerView(OutlinerView const& rOutlView) co
     bool bTextFrame(pText && pText->IsTextFrame());
     bool bFitToSize(pText && pText->IsFitToSize());
 
-    if (!(bTextFrame && !bFitToSize))
+    if (!bTextFrame || bFitToSize)
         return;
 
     tools::Rectangle aBlankRect(rOutlView.GetOutputArea());

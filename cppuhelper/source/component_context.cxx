@@ -492,7 +492,7 @@ ComponentContext::ComponentContext(
         }
     }
 
-    if (!(!m_xSMgr.is() && m_xDelegate.is()))
+    if (m_xSMgr.is() || !m_xDelegate.is())
         return;
 
     // wrap delegate's smgr XPropertySet into new smgr

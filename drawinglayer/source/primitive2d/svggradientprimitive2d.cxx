@@ -377,7 +377,7 @@ namespace drawinglayer::primitive2d
 
         void SvgGradientHelper::createMirroredGradientEntries()
         {
-            if(!(maMirroredGradientEntries.empty() && !getGradientEntries().empty()))
+            if(!maMirroredGradientEntries.empty() || getGradientEntries().empty())
                 return;
 
             const sal_uInt32 nCount(getGradientEntries().size());

@@ -640,7 +640,7 @@ namespace
             aUrl >>= aTempURL;
 
             // copy back file
-            if (!(!aTempURL.isEmpty() && DirectoryHelper::fileExists(aTempURL)))
+            if (aTempURL.isEmpty() || !DirectoryHelper::fileExists(aTempURL))
                 return;
 
             if (DirectoryHelper::fileExists(rUnoPackagReg))
@@ -1643,7 +1643,7 @@ namespace comphelper
         // no push when SafeModeDir exists, it may be Office's exit after SafeMode
         // where SafeMode flag is already deleted, but SafeModeDir cleanup is not
         // done yet (is done at next startup)
-        if (!(mbActive && !mbSafeModeDirExists))
+        if (!mbActive || mbSafeModeDirExists)
             return;
 
         const OUString aPackURL(getPackURL());

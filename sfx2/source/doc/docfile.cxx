@@ -793,10 +793,12 @@ void SfxMedium::StorageBackup_Impl()
     ::ucbhelper::Content aOriginalContent;
     Reference< css::ucb::XCommandEnvironment > xDummyEnv;
 
-    bool bBasedOnOriginalFile = ( !pImpl->pTempFile && !( !pImpl->m_aLogicName.isEmpty() && pImpl->m_bSalvageMode )
+    bool bBasedOnOriginalFile =
+        !pImpl->pTempFile
+        && ( pImpl->m_aLogicName.isEmpty() || !pImpl->m_bSalvageMode )
         && !GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ).isEmpty()
         && GetURLObject().GetProtocol() == INetProtocol::File
-        && ::utl::UCBContentHelper::IsDocument( GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) );
+        && ::utl::UCBContentHelper::IsDocument( GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
     if ( bBasedOnOriginalFile && pImpl->m_aBackupURL.isEmpty()
       && ::ucbhelper::Content::create( GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ), xDummyEnv, comphelper::getProcessComponentContext(), aOriginalContent ) )

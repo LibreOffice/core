@@ -35,7 +35,7 @@ namespace drawinglayer::primitive2d
             const std::vector< basegfx::B2DPoint >& rPositions = getPositions();
             const sal_uInt32 nMarkerCount(rPositions.size());
 
-            if(!(nMarkerCount && !getMarker().IsEmpty()))
+            if(!nMarkerCount || getMarker().IsEmpty())
                 return;
 
             // get pixel size
