@@ -444,6 +444,9 @@ ThemePanel::ThemePanel(vcl::Window* pParent,
     }
 
     mxValueSetColors->SetOptimalSize();
+
+    if (!aColorSets.empty())
+        mxValueSetColors->SelectItem(1); // ItemId 1, position 0
 }
 
 ThemePanel::~ThemePanel()
@@ -480,17 +483,19 @@ IMPL_LINK_NOARG(ThemePanel, DoubleClickHdl, weld::TreeView&, bool)
 void ThemePanel::DoubleClickHdl()
 {
     SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
-    if (pDocSh)
-    {
-        OUString sEntryFonts = mxListBoxFonts->get_selected_text();
-        sal_uInt32 nItemId = mxValueSetColors->GetSelectedItemId();
-        sal_uInt32 nIndex = nItemId - 1;
-        OUString sEntryColors = maColorSets.getColorSet(nIndex).getName();
+    if (!pDocSh)
+        return;
 
-        StyleSet aStyleSet = setupThemes();
+    sal_uInt32 nItemId = mxValueSetColors->GetSelectedItemId();
+    if (!nItemId)
+        return;
+    OUString sEntryFonts = mxListBoxFonts->get_selected_text();
+    sal_uInt32 nIndex = nItemId - 1;
+    OUString sEntryColors = maColorSets.getColorSet(nIndex).getName();
 
-        applyTheme(pDocSh->GetStyleSheetPool(), sEntryFonts, sEntryColors, aStyleSet, maColorSets);
-    }
+    StyleSet aStyleSet = setupThemes();
+
+    applyTheme(pDocSh->GetStyleSheetPool(), sEntryFonts, sEntryColors, aStyleSet, maColorSets);
 }
 
 void ThemePanel::NotifyItemUpdate(const sal_uInt16 /*nSId*/,
