@@ -855,7 +855,7 @@ void SAL_CALL ODatabaseDocument::disconnectController( const Reference< XControl
     if ( bNotifyViewClosed )
         m_aEventNotifier.notifyDocumentEvent( "OnViewClosed", Reference< XController2 >( _xController, UNO_QUERY ) );
 
-    if ( !(bLastControllerGone && !bIsClosing) )
+    if ( !bLastControllerGone || bIsClosing )
         return;
 
     // if this was the last view, close the document as a whole

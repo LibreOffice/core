@@ -1104,9 +1104,9 @@ void NetWMAdaptor::setNetWMState( X11SalFrame* pFrame ) const
         XDeleteProperty( m_pDisplay,
                          pFrame->GetShellWindow(),
                          m_aWMAtoms[ NET_WM_STATE ] );
-    if( !(pFrame->mbMaximizedHorz
-       && pFrame->mbMaximizedVert
-       && ! ( pFrame->nStyle_ & SalFrameStyleFlags::SIZEABLE )) )
+    if( !pFrame->mbMaximizedHorz
+       || !pFrame->mbMaximizedVert
+       || ( pFrame->nStyle_ & SalFrameStyleFlags::SIZEABLE ) )
         return;
 
     /*
@@ -1194,9 +1194,9 @@ void GnomeWMAdaptor::setGnomeWMState( X11SalFrame* pFrame ) const
                      reinterpret_cast<unsigned char*>(&nWinWMState),
                      1
                      );
-    if( !(pFrame->mbMaximizedHorz
-       && pFrame->mbMaximizedVert
-       && ! ( pFrame->nStyle_ & SalFrameStyleFlags::SIZEABLE )) )
+    if( !pFrame->mbMaximizedHorz
+       || !pFrame->mbMaximizedVert
+       || ( pFrame->nStyle_ & SalFrameStyleFlags::SIZEABLE ) )
         return;
 
     /*
@@ -1738,9 +1738,9 @@ void GnomeWMAdaptor::enableAlwaysOnTop( X11SalFrame* pFrame, bool bEnable ) cons
  */
 void WMAdaptor::changeReferenceFrame( X11SalFrame* pFrame, X11SalFrame const * pReferenceFrame ) const
 {
-    if( !(! ( pFrame->nStyle_ & SalFrameStyleFlags::PLUG )
-        && ! pFrame->IsOverrideRedirect()
-        && ! pFrame->IsFloatGrabWindow())
+    if(  ( pFrame->nStyle_ & SalFrameStyleFlags::PLUG )
+        || pFrame->IsOverrideRedirect()
+        || pFrame->IsFloatGrabWindow()
         )
         return;
 

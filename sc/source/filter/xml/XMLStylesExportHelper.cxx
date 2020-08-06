@@ -114,8 +114,8 @@ void ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
     bool bShowInputMessage = ::cppu::any2bool(xPropertySet->getPropertyValue(gsSHOWINP));
     sheet::ValidationType aValidationType;
     xPropertySet->getPropertyValue(gsTYPE) >>= aValidationType;
-    if (!(bShowErrorMessage || bShowInputMessage || aValidationType != sheet::ValidationType_ANY ||
-        !sErrorMessage.isEmpty() || !sErrorTitle.isEmpty() || !sInputMessage.isEmpty() || !sInputTitle.isEmpty()))
+    if (!bShowErrorMessage && !bShowInputMessage && aValidationType == sheet::ValidationType_ANY &&
+        sErrorMessage.isEmpty() && sErrorTitle.isEmpty() && sInputMessage.isEmpty() && sInputTitle.isEmpty())
         return;
 
     ScMyValidation aValidation;

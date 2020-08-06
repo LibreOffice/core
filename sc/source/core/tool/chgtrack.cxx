@@ -3217,7 +3217,7 @@ void ScChangeTrack::MergePrepare( const ScChangeAction* pFirstMerge, bool bShare
 void ScChangeTrack::MergeOwn( ScChangeAction* pAct, sal_uLong nFirstMerge, bool bShared )
 {
     // #i94841# [Collaboration] When deleting rows is rejected, the content is sometimes wrong
-    if ( !(bShared || !ScChangeTrack::MergeIgnore( *pAct, nFirstMerge )) )
+    if ( !bShared && ScChangeTrack::MergeIgnore( *pAct, nFirstMerge ) )
         return;
 
     SetMergeState( SC_CTMS_OWN );

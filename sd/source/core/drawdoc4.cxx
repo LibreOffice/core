@@ -819,8 +819,8 @@ void SdDrawDocument::StopOnlineSpelling()
 // Start OnlineSpelling in the background
 void SdDrawDocument::StartOnlineSpelling(bool bForceSpelling)
 {
-    if (!(mbOnlineSpell && (bForceSpelling || mbInitialOnlineSpellingEnabled) &&
-        mpDocSh && !mpDocSh->IsReadOnly()) )
+    if ( !mbOnlineSpell || !(bForceSpelling || mbInitialOnlineSpellingEnabled) ||
+         !mpDocSh || mpDocSh->IsReadOnly() )
         return;
 
     StopOnlineSpelling();

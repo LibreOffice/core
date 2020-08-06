@@ -371,7 +371,7 @@ void ScDocument::RestoreChartListener( const OUString& rName )
     uno::Reference< util::XCloseable > xComponent = xObject->getComponent();
     uno::Reference< chart2::XChartDocument > xChartDoc( xComponent, uno::UNO_QUERY );
     uno::Reference< chart2::data::XDataReceiver > xReceiver( xComponent, uno::UNO_QUERY );
-    if ( !(xChartDoc.is() && xReceiver.is() && !xChartDoc->hasInternalDataProvider()))
+    if ( !xChartDoc.is() || !xReceiver.is() || xChartDoc->hasInternalDataProvider() )
         return;
 
     const uno::Sequence<OUString> aRepresentations( xReceiver->getUsedRangeRepresentations() );

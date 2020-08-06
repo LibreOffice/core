@@ -1516,7 +1516,7 @@ static void ParseCSS1_background( const CSS1Expression *pExpr,
     if( GPOS_NONE == eRepeat )
         eRepeat = ePos;
 
-    if( !(bTransparent || bColor || !aURL.isEmpty()) )
+    if( !bTransparent && !bColor && aURL.isEmpty() )
         return;
 
     SvxBrushItem aBrushItem( aItemIds.nBrush );

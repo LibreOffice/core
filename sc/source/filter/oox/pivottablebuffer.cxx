@@ -1208,7 +1208,7 @@ void PivotTable::finalizeImport()
         return;
 
     mpPivotCache = getPivotCaches().importPivotCacheFragment( maDefModel.mnCacheId );
-    if( !(mpPivotCache && mpPivotCache->isValidDataSource() && !maDefModel.maName.isEmpty()) )
+    if( !mpPivotCache || !mpPivotCache->isValidDataSource() || maDefModel.maName.isEmpty() )
         return;
 
     // clear destination area of the original pivot table

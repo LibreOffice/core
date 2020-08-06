@@ -51,8 +51,8 @@ namespace TextFormatCollFunc
         }
 
         // #i73790#
-        if ( !(!pTextFormatColl->StayAssignedToListLevelOfOutlineStyle() &&
-             pTextFormatColl->IsAssignedToListLevelOfOutlineStyle()) )
+        if ( pTextFormatColl->StayAssignedToListLevelOfOutlineStyle() ||
+             !pTextFormatColl->IsAssignedToListLevelOfOutlineStyle() )
             return;
 
         if (!pNewNumRuleItem)

@@ -870,7 +870,7 @@ void LngSvcMgr::GetSpellCheckerDsp_Impl( bool bSetSvcList )
 
 void LngSvcMgr::GetGrammarCheckerDsp_Impl( bool bSetSvcList  )
 {
-    if (!(!mxGrammarDsp.is() && SvtLinguConfig().HasGrammarChecker()))
+    if (mxGrammarDsp.is() || !SvtLinguConfig().HasGrammarChecker())
         return;
 
     //! since the grammar checking iterator needs to be a one instance service

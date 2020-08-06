@@ -3510,7 +3510,7 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
 void ScXMLExport::WriteTableShapes()
 {
     ScMyTableShapes* pTableShapes(pSharedData->GetTableShapes());
-    if (!(pTableShapes && !(*pTableShapes)[nCurrentTable].empty()))
+    if (!pTableShapes || (*pTableShapes)[nCurrentTable].empty())
         return;
 
     OSL_ENSURE(pTableShapes->size() > static_cast<size_t>(nCurrentTable), "wrong Table");

@@ -219,7 +219,7 @@ void QueryTable::finalizeImport()
 
     // check that valid web query properties exist
     const WebPrModel* pWebPr = xConnection->getModel().mxWebPr.get();
-    if( !(pWebPr && !pWebPr->mbXml) )
+    if( !pWebPr || pWebPr->mbXml )
         return;
 
     OUString aFileUrl = getBaseFilter().getAbsoluteUrl( pWebPr->maUrl );

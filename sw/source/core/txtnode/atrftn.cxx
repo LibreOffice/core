@@ -490,7 +490,7 @@ void SwTextFootnote::DelFrames(SwRootFrame const*const pRoot)
     }
     //JP 13.05.97: if the layout is deleted before the footnotes are deleted,
     //             try to delete the footnote's frames by another way
-    if ( !(!bFrameFnd && m_pStartNode) )
+    if ( bFrameFnd || !m_pStartNode )
         return;
 
     SwNodeIndex aIdx( *m_pStartNode );

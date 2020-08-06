@@ -52,7 +52,7 @@ ScAttrArray::ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc, ScAttr
     nTab( nNewTab ),
     pDocument( pDoc )
 {
-    if ( !(nCol != -1 && pDefaultColAttrArray && !pDefaultColAttrArray->mvData.empty()))
+    if ( nCol == -1 || !pDefaultColAttrArray || pDefaultColAttrArray->mvData.empty() )
         return;
 
     ScAddress aAdrStart( nCol, 0, nTab );

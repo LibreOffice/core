@@ -375,7 +375,7 @@ static bool lcl_HasOnlyOneTable( SdrModel* pModel )
 
 void SdTransferable::AddSupportedFormats()
 {
-    if( !(!mbPageTransferable || mbPageTransferablePersistent) )
+    if( mbPageTransferable && !mbPageTransferablePersistent )
         return;
 
     if( !mbLateInit )

@@ -603,7 +603,7 @@ void AnnotationWindow::Paint(vcl::RenderContext& rRenderContext, const ::tools::
 {
     FloatingWindow::Paint(rRenderContext, rRect);
 
-    if(!(mpMeta->IsVisible() && !mbReadonly))
+    if(!mpMeta->IsVisible() || mbReadonly)
         return;
 
     const bool bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();

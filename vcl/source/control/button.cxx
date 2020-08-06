@@ -1186,8 +1186,7 @@ void PushButton::Tracking( const TrackingEvent& rTEvt )
             // do not call Click handler if aborted
             if ( !rTEvt.IsTrackingCanceled() )
             {
-                if ( ! ( ( GetStyle() & WB_REPEAT ) &&
-                         ! ( GetStyle() & WB_TOGGLE ) ) )
+                if ( ! ( GetStyle() & WB_REPEAT ) || ( GetStyle() & WB_TOGGLE ) )
                     Click();
             }
         }
@@ -1269,8 +1268,7 @@ void PushButton::KeyUp( const KeyEvent& rKEvt )
 
         Invalidate();
 
-        if ( !( ( GetStyle() & WB_REPEAT )  &&
-                ! ( GetStyle() & WB_TOGGLE ) ) )
+        if ( !( GetStyle() & WB_REPEAT ) || ( GetStyle() & WB_TOGGLE ) )
             Click();
     }
     else

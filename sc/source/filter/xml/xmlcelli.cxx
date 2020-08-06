@@ -947,7 +947,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
 void ScXMLTableRowCellContext::SetDetectiveObj( const ScAddress& rPosition )
 {
     ScDocument* pDoc = rXMLImport.GetDocument();
-    if( !(pDoc && cellExists(*pDoc, rPosition) && pDetectiveObjVec && !pDetectiveObjVec->empty()) )
+    if( !pDoc || !cellExists(*pDoc, rPosition) || !pDetectiveObjVec || pDetectiveObjVec->empty() )
         return;
 
     LockSolarMutex();
@@ -969,8 +969,8 @@ void ScXMLTableRowCellContext::SetDetectiveObj( const ScAddress& rPosition )
 void ScXMLTableRowCellContext::SetCellRangeSource( const ScAddress& rPosition )
 {
     ScDocument* pDoc = rXMLImport.GetDocument();
-    if( !(pDoc && cellExists(*pDoc, rPosition) && pCellRangeSource  && !pCellRangeSource->sSourceStr.isEmpty() &&
-        !pCellRangeSource->sFilterName.isEmpty() && !pCellRangeSource->sURL.isEmpty()) )
+    if( !pDoc || !cellExists(*pDoc, rPosition) || !pCellRangeSource || pCellRangeSource->sSourceStr.isEmpty() ||
+        pCellRangeSource->sFilterName.isEmpty() || pCellRangeSource->sURL.isEmpty() )
         return;
 
     LockSolarMutex();

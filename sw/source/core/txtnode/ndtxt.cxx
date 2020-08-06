@@ -1535,7 +1535,7 @@ void SwTextNode::Update(
     // Inform LOK clients about change in position of redlines (if any)
     // Don't emit notifications during save: redline flags are temporarily changed during save, but
     // it's not useful to let clients know about such changes.
-    if (!(comphelper::LibreOfficeKit::isActive() && !GetDoc()->IsInWriting()))
+    if (!comphelper::LibreOfficeKit::isActive() || GetDoc()->IsInWriting())
         return;
 
     const SwRedlineTable& rTable = GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
@@ -4163,7 +4163,7 @@ void SwTextNode::SetAttrListRestartValue( SwNumberTree::tSwNumTreeNumber nNumber
                          ? GetAttrListRestartValue() != nNumber
                          : nNumber != USHRT_MAX );
 
-    if ( !(bChanged || !HasAttrListRestartValue()) )
+    if ( !bChanged && HasAttrListRestartValue() )
         return;
 
     if ( nNumber == USHRT_MAX )

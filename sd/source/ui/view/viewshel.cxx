@@ -762,7 +762,7 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
 
 void ViewShell::SetupRulers()
 {
-    if(!(mbHasRulers && mpContentWindow && !SlideShow::IsRunning(GetViewShellBase())))
+    if(!mbHasRulers || !mpContentWindow || SlideShow::IsRunning(GetViewShellBase()))
         return;
 
     long nHRulerOfs = 0;

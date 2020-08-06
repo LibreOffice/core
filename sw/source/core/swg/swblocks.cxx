@@ -309,7 +309,7 @@ bool SwTextBlocks::Delete( sal_uInt16 n )
 
 void SwTextBlocks::Rename( sal_uInt16 n, const OUString* s, const OUString* l )
 {
-    if( !(m_pImp && !m_pImp->m_bInPutMuchBlocks) )
+    if( !m_pImp || m_pImp->m_bInPutMuchBlocks )
         return;
 
     m_pImp->m_nCurrentIndex = USHRT_MAX;

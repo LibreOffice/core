@@ -1178,11 +1178,11 @@ void FuText::DeleteDefaultText()
 
     PresObjKind ePresObjKind = pPage->GetPresObjKind(mxTextObj.get());
 
-    if ( !((ePresObjKind == PresObjKind::Title   ||
-          ePresObjKind == PresObjKind::Outline ||
-          ePresObjKind == PresObjKind::Notes   ||
-          ePresObjKind == PresObjKind::Text) &&
-          !pPage->IsMasterPage()) )
+    if ( !(ePresObjKind == PresObjKind::Title   ||
+           ePresObjKind == PresObjKind::Outline ||
+           ePresObjKind == PresObjKind::Notes   ||
+           ePresObjKind == PresObjKind::Text      ) ||
+          pPage->IsMasterPage() )
         return;
 
     ::Outliner* pOutliner = mpView->GetTextEditOutliner();

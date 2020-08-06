@@ -59,7 +59,7 @@ OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
                 SAL_WARN("dbaccess", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
         }
     }
-    if ( !(!sName.isEmpty() && _xParentContainer.is()) )
+    if ( sName.isEmpty() || !_xParentContainer.is() )
         return;
 
     try

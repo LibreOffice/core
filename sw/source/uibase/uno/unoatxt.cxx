@@ -988,7 +988,7 @@ void SwAutoTextEventDescriptor::replaceByName(
     OSL_ENSURE( pBlocks,
                 "can't get autotext group; SwAutoTextEntry has illegal name?");
 
-    if( !(pBlocks && !pBlocks->GetError()))
+    if( !pBlocks || pBlocks->GetError())
         return;
 
     sal_uInt16 nIndex = pBlocks->GetIndex( rAutoTextEntry.GetEntryName() );
@@ -1025,7 +1025,7 @@ void SwAutoTextEventDescriptor::getByName(
     SvxMacro aEmptyMacro(sEmptyStr, sEmptyStr);
     rMacro = aEmptyMacro;
 
-    if ( !(pBlocks &&  !pBlocks->GetError()))
+    if ( !pBlocks || pBlocks->GetError())
         return;
 
     sal_uInt16 nIndex = pBlocks->GetIndex( rAutoTextEntry.GetEntryName() );

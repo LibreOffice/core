@@ -62,7 +62,7 @@ void SdrPolyEditView::ImpCheckPolyPossibilities()
     ImpResetPolyPossibilityFlags();
     const size_t nMarkCount(GetMarkedObjectCount());
 
-    if(!(nMarkCount && !ImpIsFrameHandles()))
+    if(!nMarkCount || ImpIsFrameHandles())
         return;
 
     bool b1stSmooth(true);

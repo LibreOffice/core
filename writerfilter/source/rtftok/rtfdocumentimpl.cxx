@@ -653,7 +653,7 @@ void RTFDocumentImpl::sectBreak(bool bFinal)
     // If there is no paragraph in this section, then insert a dummy one, as required by Writer,
     // unless this is the end of the doc, we had nothing since the last section break and this is not a continuous one.
     // Also, when pasting, it's fine to not have any paragraph inside the document at all.
-    if (m_bNeedPar && !(bFinal && !m_bNeedSect && !bContinuous) && !isSubstream() && m_bIsNewDoc)
+    if (m_bNeedPar && (!bFinal || m_bNeedSect || bContinuous) && !isSubstream() && m_bIsNewDoc)
         dispatchSymbol(RTF_PAR);
     // It's allowed to not have a non-table paragraph at the end of an RTF doc, add it now if required.
     if (m_bNeedFinalPar && bFinal)
@@ -2358,7 +2358,7 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                 // Do not resolve shape if shape instruction destination is inside other shape instruction
             }
             else if (!m_bObject && !rState.getInListpicture() && !rState.getHadShapeText()
-                     && !(rState.getInShapeGroup() && !rState.getInShape()))
+                     && (!rState.getInShapeGroup() || rState.getInShape()))
             {
                 // Don't trigger a shape import in case we're only leaving the \shpinst of the groupshape itself.
                 RTFSdrImport::ShapeOrPict eType

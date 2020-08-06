@@ -1729,7 +1729,7 @@ namespace sdr::contact {
         ViewObjectContactOfSdrObj::ActionChanged();
         const ControlHolder& rControl(m_pImpl->getExistentControl());
 
-        if(!(rControl.is() && !rControl.isDesignMode()))
+        if(!rControl.is() || rControl.isDesignMode())
             return;
 
         // #i93180# if layer visibility has changed and control is in live mode, it is necessary

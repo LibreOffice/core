@@ -134,9 +134,9 @@ void AtkListener::updateChildList(
     m_aChildList.clear();
 
     uno::Reference< accessibility::XAccessibleStateSet > xStateSet = pContext->getAccessibleStateSet();
-    if( !(xStateSet.is()
-        && !xStateSet->contains(accessibility::AccessibleStateType::DEFUNC)
-        && !xStateSet->contains(accessibility::AccessibleStateType::MANAGES_DESCENDANTS)) )
+    if( !xStateSet.is()
+        || xStateSet->contains(accessibility::AccessibleStateType::DEFUNC)
+        || xStateSet->contains(accessibility::AccessibleStateType::MANAGES_DESCENDANTS) )
         return;
 
     css::uno::Reference<css::accessibility::XAccessibleContext3> xContext3(pContext, css::uno::UNO_QUERY);

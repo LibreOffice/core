@@ -208,11 +208,11 @@ namespace basegfx
         mfBlueOff(0.0),
         mbUseIt(false)
     {
-        if(!(!basegfx::fTools::equalZero(mfRed)
-            || !basegfx::fTools::equalZero(mfGreen)
-            || !basegfx::fTools::equalZero(mfBlue)
-            || !basegfx::fTools::equalZero(mfLuminance)
-            || !basegfx::fTools::equalZero(mfContrast)))
+        if(basegfx::fTools::equalZero(mfRed)
+            && basegfx::fTools::equalZero(mfGreen)
+            && basegfx::fTools::equalZero(mfBlue)
+            && basegfx::fTools::equalZero(mfLuminance)
+            && basegfx::fTools::equalZero(mfContrast))
             return;
 
         // calculate slope

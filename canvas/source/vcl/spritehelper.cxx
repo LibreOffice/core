@@ -98,8 +98,7 @@ namespace vclcanvas
 
         const double fAlpha( getAlpha() );
 
-        if( !(isActive() &&
-            !::basegfx::fTools::equalZero( fAlpha )) )
+        if( !isActive() || ::basegfx::fTools::equalZero( fAlpha ) )
             return;
 
         const Point                 aEmptyPoint;

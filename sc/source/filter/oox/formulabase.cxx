@@ -1687,7 +1687,7 @@ void FormulaProcessorBase::convertStringToStringList(
         ApiTokenSequence& orTokens, sal_Unicode cStringSep, bool bTrimLeadingSpaces ) const
 {
     OUString aString;
-    if( !(extractString( aString, orTokens ) && !aString.isEmpty()) )
+    if( !extractString( aString, orTokens ) || aString.isEmpty() )
         return;
 
     ::std::vector< ApiToken > aNewTokens;

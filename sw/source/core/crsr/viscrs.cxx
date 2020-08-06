@@ -300,7 +300,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
         }
     }
 
-    if ( !(!m_pCursorShell->IsCursorReadonly()  || m_pCursorShell->GetViewOptions()->IsSelectionInReadonly()) )
+    if ( m_pCursorShell->IsCursorReadonly() && !m_pCursorShell->GetViewOptions()->IsSelectionInReadonly() )
         return;
 
     if ( m_pCursorShell->GetDrawView() )
@@ -450,7 +450,7 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
     // talks about "the" cursor at the moment. As long as that's true,
     // don't say anything about the Writer cursor till a draw object is
     // being edited.
-    if (!(comphelper::LibreOfficeKit::isActive() && !pView->GetTextEditObject()))
+    if (!comphelper::LibreOfficeKit::isActive() || pView->GetTextEditObject())
         return;
 
     // If pSelectionRectangles is set, we're just collecting the text selections -> don't emit start/end.

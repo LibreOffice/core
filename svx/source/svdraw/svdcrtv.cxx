@@ -742,7 +742,7 @@ void SdrCreateView::BrkCreateObj()
 
 void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
 {
-    if(!(IsCreateObj() && !maDragStat.IsShown()))
+    if(!IsCreateObj() || maDragStat.IsShown())
         return;
 
     if(pCurrentCreate)

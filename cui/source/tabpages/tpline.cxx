@@ -1428,7 +1428,7 @@ IMPL_LINK_NOARG(SvxLineTabPage, MenuCreateHdl_Impl, weld::ToggleButton&, void)
             m_xSymbolMB->set_item_sensitive("gallery", false);
     }
 
-    if (!(!m_xSymbolsMenu && m_pSymbolList))
+    if (m_xSymbolsMenu || !m_pSymbolList)
         return;
 
     m_xSymbolsMenu = m_xBuilder->weld_menu("symbolssubmenu");

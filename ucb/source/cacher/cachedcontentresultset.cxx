@@ -821,7 +821,7 @@ void CachedContentResultSet
     ::impl_changeIsRowCountFinal( bool bOld, bool bNew )
 {
     OSL_ENSURE( !bOld && bNew, "This change is not allowed for IsRowCountFinal" );
-    if( ! (!bOld && bNew ) )
+    if( bOld || !bNew )
         return;
 
     //create PropertyChangeEvent and set value

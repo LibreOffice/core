@@ -115,11 +115,11 @@ static void addFile_( Reference< XInterface > const & xRootFolder, Reference< XS
 
 void XMLFilterJarHelper::addFile( Reference< XInterface > const & xRootFolder, Reference< XSingleServiceFactory > const & xFactory, const OUString& rSourceFile )
 {
-    if( !(!rSourceFile.isEmpty() &&
-        !rSourceFile.startsWith("http:") &&
-        !rSourceFile.startsWith("https:") &&
-        !rSourceFile.startsWith("jar:") &&
-        !rSourceFile.startsWith("ftp:")) )
+    if( rSourceFile.isEmpty() ||
+        rSourceFile.startsWith("http:") ||
+        rSourceFile.startsWith("https:") ||
+        rSourceFile.startsWith("jar:") ||
+        rSourceFile.startsWith("ftp:") )
         return;
 
     OUString aFileURL( rSourceFile );

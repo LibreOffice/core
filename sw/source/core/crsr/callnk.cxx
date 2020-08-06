@@ -203,7 +203,7 @@ SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE
     if (!pFrame)
         return;
     pFlyFrame = pFrame->FindFlyFrame();
-    if ( !(pFlyFrame && !m_rShell.IsTableMode()) )
+    if ( !pFlyFrame || m_rShell.IsTableMode() )
         return;
 
     const SwNodeIndex* pIndex = pFlyFrame->GetFormat()->GetContent().GetContentIdx();

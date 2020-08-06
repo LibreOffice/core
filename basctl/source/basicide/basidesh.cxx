@@ -900,7 +900,7 @@ void Shell::EnableScrollbars( bool bEnable )
 
 void Shell::SetCurLib( const ScriptDocument& rDocument, const OUString& aLibName, bool bUpdateWindows, bool bCheck )
 {
-    if ( !(!bCheck || ( rDocument != m_aCurDocument || aLibName != m_aCurLibName )) )
+    if ( bCheck && rDocument == m_aCurDocument && aLibName == m_aCurLibName )
         return;
 
     ContainerListenerImpl* pListener = static_cast< ContainerListenerImpl* >( m_xLibListener.get() );

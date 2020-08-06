@@ -278,7 +278,7 @@ void ModulWindow::CheckCompileBasic()
     bool const bModified = ( !m_xModule->IsCompiled() ||
         ( GetEditEngine() && GetEditEngine()->IsModified() ) );
 
-    if ( !(!bRunning && bModified) )
+    if ( bRunning || !bModified )
         return;
 
     bool bDone = false;
@@ -325,7 +325,7 @@ void ModulWindow::BasicExecute()
 
     CheckCompileBasic();
 
-    if ( !(XModule().is() && m_xModule->IsCompiled() && !m_aStatus.bError) )
+    if ( !XModule().is() || !m_xModule->IsCompiled() || m_aStatus.bError )
         return;
 
     if ( GetBreakPoints().size() )

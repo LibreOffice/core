@@ -45,7 +45,7 @@ namespace drawinglayer::primitive2d
 {
         void ControlPrimitive2D::createXControl()
         {
-            if(!(!mxXControl.is() && getControlModel().is()))
+            if(mxXControl.is() || !getControlModel().is())
                 return;
 
             uno::Reference< beans::XPropertySet > xSet(getControlModel(), uno::UNO_QUERY);

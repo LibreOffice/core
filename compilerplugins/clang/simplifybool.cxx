@@ -293,11 +293,17 @@ bool SimplifyBool::VisitUnaryOperator(UnaryOperator const * expr) {
         }
         else if (binaryOp->isLogicalOp())
         {
-            auto containsNegationOrComparison = [](Expr const * expr) {
+            // if we find a negation condition inside, it is definitely better
+            // to expand it out
+            bool foundLNot = false;
+            auto containsNegationOrComparison = [&](Expr const * expr) {
                 expr = ignoreParenImpCastAndComma(expr);
                 if (auto unaryOp = dyn_cast<UnaryOperator>(expr))
                     if (unaryOp->getOpcode() == UO_LNot)
+                    {
+                        foundLNot = true;
                         return expr;
+                    }
                 if (auto binaryOp = dyn_cast<BinaryOperator>(expr))
                     if (binaryOp->isComparisonOp())
                         return expr;
@@ -308,9 +314,7 @@ bool SimplifyBool::VisitUnaryOperator(UnaryOperator const * expr) {
             };
             auto lhs = containsNegationOrComparison(binaryOp->getLHS());
             auto rhs = containsNegationOrComparison(binaryOp->getRHS());
-            if (!lhs || !rhs)
-                return true;
-            if (lhs || rhs)
+            if (foundLNot || (lhs && rhs))
                 report(
                     DiagnosticsEngine::Warning,
                     ("logical negation of logical op containing negation, can be simplified"),

@@ -411,7 +411,7 @@ void ScTabView::DoneBlockMode( bool bContinue )
     // because the other engine does not have any anchor.
     // bMoveIsShift prevents the selection to be canceled.
 
-    if (!(IsBlockMode() && !bMoveIsShift))
+    if (!IsBlockMode() || bMoveIsShift)
         return;
 
     ScMarkData& rMark = aViewData.GetMarkData();

@@ -1801,7 +1801,7 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl()
     }
 
     // if there are no used styles selected or the user approved the changes
-    if ( !(!bUsedStyle || aApproved) )
+    if ( bUsedStyle && !aApproved )
         return;
 
     for (auto const& elem : aList)
