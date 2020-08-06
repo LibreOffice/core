@@ -43,6 +43,11 @@ AnimationActivitySharedPtr AnimationPhysicsNode::createActivity() const
         true);
 }
 
+bool AnimationPhysicsNode::enqueueActivity() const
+{
+    return getContext().mrActivitiesQueue.tailActivity(mpActivity);
+}
+
 } // namespace slideshow::internal
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

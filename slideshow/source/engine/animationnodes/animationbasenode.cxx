@@ -294,7 +294,7 @@ void AnimationBaseNode::activate_st()
         mpActivity->setTargets( getShape(), maAttributeLayerHolder.get() );
 
         // add to activities queue
-        getContext().mrActivitiesQueue.addActivity( mpActivity );
+        enqueueActivity();
     }
     else {
         // Actually, DO generate the event for empty activity,
@@ -370,6 +370,11 @@ bool AnimationBaseNode::hasPendingAnimation() const
     // TODO(F1): This might not always be true. Are there 'inactive'
     // animation nodes?
     return true;
+}
+
+bool AnimationBaseNode::enqueueActivity() const
+{
+    return getContext().mrActivitiesQueue.addActivity( mpActivity );
 }
 
 #if defined(DBG_UTIL)
