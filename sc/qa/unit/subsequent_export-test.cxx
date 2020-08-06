@@ -255,6 +255,7 @@ public:
     void testTdf121716_ExportEvenHeaderFooterXLSX();
     void testTdf134459_HeaderFooterColorXLSX();
     void testTdf134817_HeaderFooterTextWith2SectionXLSX();
+    void testTdf121718_UseFirstPageNumberXLSX();
     void testHeaderFontStyleXLSX();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
@@ -409,6 +410,7 @@ public:
     CPPUNIT_TEST(testTdf121716_ExportEvenHeaderFooterXLSX);
     CPPUNIT_TEST(testTdf134459_HeaderFooterColorXLSX);
     CPPUNIT_TEST(testTdf134817_HeaderFooterTextWith2SectionXLSX);
+    CPPUNIT_TEST(testTdf121718_UseFirstPageNumberXLSX);
     CPPUNIT_TEST(testHeaderFontStyleXLSX);
 
     CPPUNIT_TEST_SUITE_END();
@@ -5216,6 +5218,31 @@ void ScExportTest::testTdf134817_HeaderFooterTextWith2SectionXLSX()
 
     assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:oddHeader", "&L&\"Abadi,Regular\"&11aaa&\"Bembo,Regular\"&20bbb");
     assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:oddFooter", "&R&\"Cambria,Regular\"&14camb&\"Dante,Regular\"&18dant");
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf121718_UseFirstPageNumberXLSX()
+{
+    // If "First page number" is not checked then useFirstPageNumb, and firstPageNumber should not be exported.
+    ScDocShellRef xShell = loadDoc("tdf121718_UseFirstPageNumber.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/x:worksheet/x:pageSetup", "useFirstPageNumber", "true");
+    assertXPath(pDoc, "/x:worksheet/x:pageSetup", "firstPageNumber", "10");
+
+    pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet2.xml");
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPathNoAttribute(pDoc, "/x:worksheet/x:pageSetup", "useFirstPageNumber");
+    assertXPathNoAttribute(pDoc, "/x:worksheet/x:pageSetup", "firstPageNumber");
 
     xDocSh->DoClose();
 }
