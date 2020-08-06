@@ -42,7 +42,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecuta
 	$(call gb_ExternalProject_run,build,\
 		$(if $(filter ANDROID FREEBSD LINUX MACOSX,$(OS)),$(if $(filter X86_64,$(CPUNAME)),USE_64=1)) \
 		$(if $(filter ANDROID,$(OS)),$(if $(filter AARCH64,$(CPUNAME)),USE_64=1)) \
-		$(if $(filter ARM64,$(CPUNAME)),USE_64=1) \
+		$(if $(filter AARCH64 ARM64,$(CPUNAME)),USE_64=1 CPU_ARCH=aarch64) \
 		$(if $(filter MACOSX,$(OS)),\
 			MACOS_SDK_DIR=$(MACOSX_SDK_PATH) \
 			NSS_USE_SYSTEM_SQLITE=1) \
@@ -50,7 +50,6 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecuta
 		$(if $(filter SOLARIS,$(OS)),NS_USE_GCC=1) \
 		$(if $(CROSS_COMPILING),\
 			CROSS_COMPILE=1 \
-			$(if $(filter ARM64,$(CPUNAME)),CPU_ARCH=aarch64) \
 			NSPR_CONFIGURE_OPTS="--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)") \
 		NSDISTMODE=copy \
 		$(MAKE) AR="$(AR)" \
