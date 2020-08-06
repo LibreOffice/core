@@ -467,6 +467,15 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf134272)
     assertXPath(pXmlDoc, "/root/page[1]/header/txt[2]/infos/bounds", "bottom", "2819");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf88496)
+{
+    SwDoc* pDoc = createDoc("tdf88496.docx");
+    CPPUNIT_ASSERT(pDoc);
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // This was 4, table fallback "switch off repeating header" started on a new page
+    assertXPath(pXmlDoc, "/root/page", 3);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
 {
     loadURL("private:factory/swriter", nullptr);
