@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0cd7953b_22fd55f7",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 4
+      },
+      "lineNbr": 2878,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-08-06T05:44:08Z",
+      "side": 1,
+      "message": "I was going to remove these when I read that the ContextLabel \"is used for sub-menu entries located on level two or greater depth.\" but was unsure why seeing it included in so many other commands.",
+      "parentUuid": "52d93013_8554ea99",
+      "revId": "a16a86ae655802ca137fb9288dc135c74cf87c77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "01de8c0a_c3c45d93",
         "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2020-08-05T20:17:16Z",
       "side": 1,
       "message": "Don\u0027t see a point in defining these either, unless we actually plan to add this as a button to some toolbar.",
+      "revId": "a16a86ae655802ca137fb9288dc135c74cf87c77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f21649c5_1099a2dd",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 4
+      },
+      "lineNbr": 2881,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-08-06T05:44:08Z",
+      "side": 1,
+      "message": "I may be misunderstanding but isn\u0027t the point of this patch so that the user can place these deck commands in toolbars and menus and assign shortcuts to them?",
+      "parentUuid": "01de8c0a_c3c45d93",
       "revId": "a16a86ae655802ca137fb9288dc135c74cf87c77",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
