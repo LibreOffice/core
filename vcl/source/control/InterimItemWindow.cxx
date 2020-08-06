@@ -12,7 +12,7 @@
 
 InterimItemWindow::InterimItemWindow(vcl::Window* pParent, const OUString& rUIXMLDescription,
                                      const OString& rID, sal_uInt64 nLOKWindowId)
-    : Control(pParent, WB_TABSTOP | WB_DIALOGCONTROL)
+    : Control(pParent, WB_TABSTOP)
     , m_pWidget(nullptr) // inheritors are expected to call InitControlBase
 {
     m_aLayoutIdle.SetPriority(TaskPriority::RESIZE);
