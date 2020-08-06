@@ -736,6 +736,15 @@ bool SwAnchoredObject::IsFormatPossible() const
     return GetFrameFormat().GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( GetDrawObj()->GetLayer() );
 }
 
+static bool SwAnchoredObject::IsDraggingOffPageAllowed(const SwFrameFormat* pFrameFormat) const
+{
+    OSL_ASSERT(pFrameFormat);
+    const bool bDisablePositioning = pFrameFormat->getIDocumentSettingAccess().get(DocumentSettingId::DISABLE_OFF_PAGE_POSITIONING);
+    const bool bIsWrapThrough = pFrameFormat->GetSurround().GetSurround() == text::WrapTextMode::WrapTextMode_THROUGH;
+
+    return bDisablePositioning && bIsWrapThrough;
+}
+
 // --> #i3317#
 void SwAnchoredObject::SetTmpConsiderWrapInfluence( const bool _bTmpConsiderWrapInfluence )
 {
