@@ -577,16 +577,6 @@ void OApplicationDetailView::setTaskExternalMnemonics( MnemonicGenerator const &
     m_aExternalMnemonics = _rMnemonics;
 }
 
-bool OApplicationDetailView::interceptKeyInput( const KeyEvent& _rEvent )
-{
-    const vcl::KeyCode& rKeyCode = _rEvent.GetKeyCode();
-    if ( rKeyCode.GetModifier() == KEY_MOD2 )
-        return getTasksWindow().HandleKeyInput( _rEvent );
-
-    // not handled
-    return false;
-}
-
 void OApplicationDetailView::createTablesPage(const Reference< XConnection >& _xConnection )
 {
     impl_createPage( E_TABLE, _xConnection, nullptr );

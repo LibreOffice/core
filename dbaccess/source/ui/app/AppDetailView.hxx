@@ -129,11 +129,6 @@ namespace dbaui
         /// fills the Creation listbox with the necessary strings and images
         void fillTaskEntryList( const TaskEntryList& _rList );
 
-        bool HandleKeyInput( const KeyEvent& _rKEvt )
-        {
-            return m_aCreation->HandleKeyInput( _rKEvt );
-        }
-
         void Clear();
         void setHelpText(const char* pId);
     };
@@ -174,14 +169,6 @@ namespace dbaui
         void createPage(ElementType _eType,const css::uno::Reference< css::container::XNameAccess >& _xContainer);
 
         void setTaskExternalMnemonics( MnemonicGenerator const & _rMnemonics );
-
-        /** called to give the window the chance to intercept key events, while it has not
-            the focus
-
-            @return <TRUE/> if and only if the event has been handled, and should not
-                not be further processed
-        */
-        bool    interceptKeyInput( const KeyEvent& _rEvent );
 
         OAppBorderWindow& getBorderWin() const { return m_rBorderWin; }
         OTasksWindow& getTasksWindow() const { return *static_cast< OTasksWindow* >( m_aTasks->getChildWindow() ); }
