@@ -3140,7 +3140,8 @@ void SvxStyleToolBoxControl::FillStyleBox()
                 pBox->InsertEntry( pImpl->aClearForm, 0 );
                 pBox->SetSeparatorPos( 0 );
 
-                pBox->InsertEntry( pImpl->aMore );
+                if (!comphelper::LibreOfficeKit::isActive())
+                    pBox->InsertEntry( pImpl->aMore );
 
                 // enable sort again
                 nWinBits |= WB_SORT;
