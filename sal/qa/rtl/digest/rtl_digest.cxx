@@ -38,8 +38,8 @@ using namespace rtl;
 namespace
 {
 
-const OString sSampleString               = "This is a sample sentence, which we use to check some crypto functions in sal.";
-const OString sSampleString_only_one_diff = "This is a sample sentence. which we use to check some crypto functions in sal.";
+const OStringLiteral sSampleString               = "This is a sample sentence, which we use to check some crypto functions in sal.";
+const OStringLiteral sSampleString_only_one_diff = "This is a sample sentence. which we use to check some crypto functions in sal.";
 
 const rtlDigestAlgorithm constDigestAlgorithms[] =
 {
@@ -61,7 +61,7 @@ const sal_uInt32 constDigestAlgorithmLengths[] =
     RTL_DIGEST_LENGTH_HMAC_SHA1,
 };
 
-const OString constSampleStringSums[] =
+const OStringLiteral constSampleStringSums[] =
 {
     "647ee6c9d4aa5fdd374ed9d7a156acbf",
     "b16b903e6fc0b62ae389013ed93fe531",
@@ -220,7 +220,7 @@ public:
         for (size_t i = 0; i < SAL_N_ELEMENTS(constDigestAlgorithms); i++)
         {
             OString aSum = getDigest(sSampleString, constDigestAlgorithms[i]);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("Checksum of sample string is wrong.", constSampleStringSums[i], aSum);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Checksum of sample string is wrong.", OString(constSampleStringSums[i]), aSum);
         }
     }
 

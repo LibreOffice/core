@@ -217,9 +217,9 @@ void PresenterNotesView::CreateToolBar (
 
 void PresenterNotesView::SetSlide (const Reference<drawing::XDrawPage>& rxNotesPage)
 {
-    static const OUString sNotesShapeName (
+    static const OUStringLiteral sNotesShapeName (
         "com.sun.star.presentation.NotesShape");
-    static const OUString sTextShapeName (
+    static const OUStringLiteral sTextShapeName (
         "com.sun.star.drawing.TextShape");
 
     if (!rxNotesPage.is())

@@ -32,7 +32,7 @@ namespace
 {
 
 int const nPropertyIconId = 1;
-OUString const sPropertyIconId("IconId");
+OUStringLiteral const sPropertyIconId("IconId");
 
 }
 

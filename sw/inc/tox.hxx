@@ -75,7 +75,7 @@ namespace sw {
 
 extern const sal_Unicode C_NUM_REPL;
 extern const sal_Unicode C_END_PAGE_NUM;
-extern const OUString S_PAGE_DELI;
+extern const OUStringLiteral S_PAGE_DELI;
 
 class SW_DLLPUBLIC SwTOXMark final
     : public SfxPoolItem
