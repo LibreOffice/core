@@ -2452,7 +2452,7 @@ AC_ARG_WITH(macosx-version-min-required,
     AS_HELP_STRING([--with-macosx-version-min-required=<version>],
         [set the minimum OS version needed to run the built LibreOffice])
     [
-                          e. g.: --with-macos-version-min-required=10.10
+                          e. g.: --with-macosx-version-min-required=10.10
                           see --with-macosx-sdk for more info
     ],
 ,)
@@ -2461,7 +2461,7 @@ AC_ARG_WITH(macosx-version-max-allowed,
     AS_HELP_STRING([--with-macosx-version-max-allowed=<version>],
         [set the maximum allowed OS version the LibreOffice compilation can use APIs from])
     [
-                          e. g.: --with-macos-version-max-allowed=10.10
+                          e. g.: --with-macosx-version-max-allowed=10.10
                           see --with-macosx-sdk for more info
     ],
 ,)
