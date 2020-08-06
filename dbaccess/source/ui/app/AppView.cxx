@@ -238,10 +238,6 @@ bool OApplicationView::PreNotify( NotifyEvent& rNEvt )
             // #i34790#
             if ( getPanel() && getPanel()->interceptKeyInput( *pKeyEvent ) )
                 return true;
-            // and ditto the detail view
-            // #i72799#
-            if ( getDetailView() && getDetailView()->interceptKeyInput( *pKeyEvent ) )
-                return true;
         }
         break;
         default:
