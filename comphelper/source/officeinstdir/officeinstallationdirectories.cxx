@@ -75,8 +75,8 @@ static bool makeCanonicalFileURL( OUString & rURL )
 
 namespace comphelper {
 
-OUString const g_aOfficeBrandDirMacro("$(brandbaseurl)");
-OUString const g_aUserDirMacro("$(userdataurl)");
+OUStringLiteral const g_aOfficeBrandDirMacro("$(brandbaseurl)");
+OUStringLiteral const g_aUserDirMacro("$(userdataurl)");
 
 OfficeInstallationDirectories::OfficeInstallationDirectories(
         const uno::Reference< uno::XComponentContext > & xCtx )

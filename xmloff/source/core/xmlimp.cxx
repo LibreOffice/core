@@ -85,8 +85,8 @@ using namespace ::xmloff::token;
 rtl::Reference< FastTokenHandler > SvXMLImport::xTokenHandler( new FastTokenHandler() );
 std::unordered_map< sal_Int32, std::pair< OUString, OUString > > SvXMLImport::aNamespaceMap;
 std::unordered_map< OUString, OUString > SvXMLImport::aNamespaceURIPrefixMap;
-const OUString SvXMLImport::aDefaultNamespace = OUString("");
-const OUString SvXMLImport::aNamespaceSeparator = OUString(":");
+const OUStringLiteral SvXMLImport::aDefaultNamespace = "";
+const OUStringLiteral SvXMLImport::aNamespaceSeparator = ":";
 bool SvXMLImport::bIsNSMapsInitialized = false;
 
 namespace {

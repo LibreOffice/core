@@ -468,7 +468,7 @@ SdrObjectUniquePtr XclImpDrawObjBase::CreateSdrObject( XclImpDffConverter& rDffC
             {
                 const Reference< XControlModel >& xCtrlModel = pSdrUnoObj->GetUnoControlModel();
                 Reference< XPropertySet > xPropSet(xCtrlModel,UNO_QUERY);
-                const static OUString sPropertyName("ControlTypeinMSO");
+                const static OUStringLiteral sPropertyName("ControlTypeinMSO");
 
                 enum { eCreateFromOffice = 0, eCreateFromMSTBXControl, eCreateFromMSOCXControl };
 
@@ -488,7 +488,7 @@ SdrObjectUniquePtr XclImpDrawObjBase::CreateSdrObject( XclImpDffConverter& rDffC
                 if( mnObjType == 8 )//OCX
                 {
                     //Need summary type for export
-                    const static OUString sObjIdPropertyName("ObjIDinMSO");
+                    const static OUStringLiteral sObjIdPropertyName("ObjIDinMSO");
                     const XclImpPictureObj* const pObj = dynamic_cast< const XclImpPictureObj* const >(this);
                     if( pObj != nullptr && pObj->IsOcxControl() )
                     {

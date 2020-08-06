@@ -263,8 +263,8 @@ bool lclProcessCharacters( OStringBuffer& rBuffer, const OString& rChars )
 
 } // namespace
 
-const OString gaOpeningCData( "<![CDATA[" );
-const OString gaClosingCData( "]]>" );
+const OStringLiteral gaOpeningCData( "<![CDATA[" );
+const OStringLiteral gaClosingCData( "]]>" );
 
 InputStream::InputStream( const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& rxInStrm ) :
     // use single-byte ISO-8859-1 encoding which maps all byte characters to the first 256 Unicode characters

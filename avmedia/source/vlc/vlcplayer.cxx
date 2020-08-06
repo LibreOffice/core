@@ -32,8 +32,8 @@ namespace avmedia::vlc {
 
 namespace
 {
-    const OUString AVMEDIA_VLC_PLAYER_IMPLEMENTATIONNAME = "com.sun.star.comp.avmedia.Player_VLC";
-    const OUString AVMEDIA_VLC_PLAYER_SERVICENAME = "com.sun.star.media.Player_VLC";
+    const OUStringLiteral AVMEDIA_VLC_PLAYER_IMPLEMENTATIONNAME = "com.sun.star.comp.avmedia.Player_VLC";
+    const OUStringLiteral AVMEDIA_VLC_PLAYER_SERVICENAME = "com.sun.star.media.Player_VLC";
 
     const int MS_IN_SEC = 1000; // Millisec in sec
 }

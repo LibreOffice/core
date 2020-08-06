@@ -38,7 +38,7 @@ SwAbstractDialogFactory* SwAbstractDialogFactory::Create()
     SwFuncPtrCreateDialogFactory fp = nullptr;
 #ifndef DISABLE_DYNLOADING
     static ::osl::Module aDialogLibrary;
-    static const OUString sLibName(SWUI_DLL_NAME);
+    static const OUStringLiteral sLibName(SWUI_DLL_NAME);
     if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, sLibName,
                                                              SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY ) )
         fp = reinterpret_cast<SwAbstractDialogFactory* (SAL_CALL*)()>(

@@ -112,7 +112,7 @@ bool ImpSvNumberformatScan::bStandardColorNeedInitialization = true;
 // This vector will hold *only* the color names in German language.
 ::std::vector<OUString> ImpSvNumberformatScan::sGermanColorNames;
 
-const OUString ImpSvNumberformatScan::sErrStr =  "#FMT";
+const OUStringLiteral ImpSvNumberformatScan::sErrStr =  "#FMT";
 
 ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
     : maNullDate( 30, 12, 1899)

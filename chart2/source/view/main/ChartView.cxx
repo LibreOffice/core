@@ -1108,9 +1108,9 @@ void ChartView::impl_deleteCoordinateSystems()
 // datatransfer::XTransferable
 namespace
 {
-const OUString lcl_aGDIMetaFileMIMEType(
+const OUStringLiteral lcl_aGDIMetaFileMIMEType(
     "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" );
-const OUString lcl_aGDIMetaFileMIMETypeHighContrast(
+const OUStringLiteral lcl_aGDIMetaFileMIMETypeHighContrast(
     "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"" );
 } // anonymous namespace
 

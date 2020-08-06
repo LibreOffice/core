@@ -28,15 +28,13 @@ using namespace css::uno;
 
 namespace apitest {
 
-const OUString colLevel1 = "OutlineSheet.A1:Z1";
-const OUString colLevel2 = "OutlineSheet.C1:W1";
-const OUString colLevel3 = "OutlineSheet.E1:U1";
-const OUString colLevel4 = "OutlineSheet.G1:S1";
+const OUStringLiteral colLevel1 = "OutlineSheet.A1:Z1";
+const OUStringLiteral colLevel2 = "OutlineSheet.C1:W1";
+const OUStringLiteral colLevel3 = "OutlineSheet.E1:U1";
+const OUStringLiteral colLevel4 = "OutlineSheet.G1:S1";
 
-const OUString rowLevel1 = "OutlineSheet.A1:A30";
-const OUString rowLevel2 = "OutlineSheet.A3:A27";
-const OUString rowLevel3 = "OutlineSheet.A5:A24";
-const OUString rowLevel4 = "OutlineSheet.A7:A21";
+const OUStringLiteral rowLevel1 = "OutlineSheet.A1:A30";
+const OUStringLiteral rowLevel2 = "OutlineSheet.A3:A27";
 
 static OUString getVisibleAdress(
     uno::Reference<sheet::XSpreadsheet> const& xSheet,
@@ -104,14 +102,14 @@ void XSheetOutline::testShowDetail()
     aSheetOutline->showDetail(aLevelRangeAddress);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Row level 2 still hidden",
-            getVisibleAdress(aSheet, rowLevel2), rowLevel2);
+            getVisibleAdress(aSheet, rowLevel2), OUString(rowLevel2));
 
     // Column Level 2
     aLevelRangeAddress = getAddressFromRangeString(aSheet, colLevel2);
     aSheetOutline->showDetail(aLevelRangeAddress);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Column level 2 still hidden",
-            getVisibleAdress(aSheet, colLevel2), colLevel2);
+            getVisibleAdress(aSheet, colLevel2), OUString(colLevel2));
 
 }
 
@@ -256,8 +254,8 @@ void XSheetOutline::testClearOutline()
     aLevelRangeAddress = getAddressFromRangeString(aSheet, rowLevel1);
     aSheetOutline->hideDetail(aLevelRangeAddress);
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("testClearOutline Columns are hidden after clear", getVisibleAdress(aSheet, colLevel1), colLevel1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("testClearOutline Rows are hidden after clear", getVisibleAdress(aSheet, rowLevel1), rowLevel1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("testClearOutline Columns are hidden after clear", getVisibleAdress(aSheet, colLevel1), OUString(colLevel1));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("testClearOutline Rows are hidden after clear", getVisibleAdress(aSheet, rowLevel1), OUString(rowLevel1));
 
 }
 

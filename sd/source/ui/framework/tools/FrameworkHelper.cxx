@@ -175,7 +175,7 @@ namespace {
 
 // Pane URLS.
 
-const OUString FrameworkHelper::msPaneURLPrefix("private:resource/pane/");
+const OUStringLiteral FrameworkHelper::msPaneURLPrefix("private:resource/pane/");
 const OUString FrameworkHelper::msCenterPaneURL( msPaneURLPrefix + "CenterPane");
 const OUString FrameworkHelper::msFullScreenPaneURL( msPaneURLPrefix + "FullScreenPane");
 const OUString FrameworkHelper::msLeftImpressPaneURL( msPaneURLPrefix + "LeftImpressPane");
@@ -184,7 +184,7 @@ const OUString FrameworkHelper::msSidebarPaneURL( msPaneURLPrefix + "SidebarPane
 
 // View URLs.
 
-const OUString FrameworkHelper::msViewURLPrefix("private:resource/view/");
+const OUStringLiteral FrameworkHelper::msViewURLPrefix("private:resource/view/");
 const OUString FrameworkHelper::msImpressViewURL( msViewURLPrefix + "ImpressView");
 const OUString FrameworkHelper::msDrawViewURL( msViewURLPrefix + "GraphicView");
 const OUString FrameworkHelper::msOutlineViewURL( msViewURLPrefix + "OutlineView");
@@ -196,11 +196,11 @@ const OUString FrameworkHelper::msSidebarViewURL( msViewURLPrefix + "SidebarView
 
 // Tool bar URLs.
 
-const OUString FrameworkHelper::msToolBarURLPrefix("private:resource/toolbar/");
+const OUStringLiteral FrameworkHelper::msToolBarURLPrefix("private:resource/toolbar/");
 const OUString FrameworkHelper::msViewTabBarURL( msToolBarURLPrefix + "ViewTabBar");
 
 // Task panel URLs.
-const OUString FrameworkHelper::msTaskPanelURLPrefix( "private:resource/toolpanel/" );
+const OUStringLiteral FrameworkHelper::msTaskPanelURLPrefix( "private:resource/toolpanel/" );
 const OUString FrameworkHelper::msAllMasterPagesTaskPanelURL( msTaskPanelURLPrefix + "AllMasterPages" );
 const OUString FrameworkHelper::msRecentMasterPagesTaskPanelURL( msTaskPanelURLPrefix + "RecentMasterPages" );
 const OUString FrameworkHelper::msUsedMasterPagesTaskPanelURL( msTaskPanelURLPrefix + "UsedMasterPages" );
@@ -210,17 +210,17 @@ const OUString FrameworkHelper::msCustomAnimationTaskPanelURL( msTaskPanelURLPre
 const OUString FrameworkHelper::msSlideTransitionTaskPanelURL( msTaskPanelURLPrefix + "SlideTransitions" );
 
 // Event URLs.
-const OUString FrameworkHelper::msResourceActivationRequestEvent( "ResourceActivationRequested" );
-const OUString FrameworkHelper::msResourceDeactivationRequestEvent( "ResourceDeactivationRequest" );
-const OUString FrameworkHelper::msResourceActivationEvent( "ResourceActivation" );
-const OUString FrameworkHelper::msResourceDeactivationEvent( "ResourceDeactivation" );
-const OUString FrameworkHelper::msResourceDeactivationEndEvent( "ResourceDeactivationEnd" );
-const OUString FrameworkHelper::msConfigurationUpdateStartEvent( "ConfigurationUpdateStart" );
-const OUString FrameworkHelper::msConfigurationUpdateEndEvent( "ConfigurationUpdateEnd" );
+const OUStringLiteral FrameworkHelper::msResourceActivationRequestEvent( "ResourceActivationRequested" );
+const OUStringLiteral FrameworkHelper::msResourceDeactivationRequestEvent( "ResourceDeactivationRequest" );
+const OUStringLiteral FrameworkHelper::msResourceActivationEvent( "ResourceActivation" );
+const OUStringLiteral FrameworkHelper::msResourceDeactivationEvent( "ResourceDeactivation" );
+const OUStringLiteral FrameworkHelper::msResourceDeactivationEndEvent( "ResourceDeactivationEnd" );
+const OUStringLiteral FrameworkHelper::msConfigurationUpdateStartEvent( "ConfigurationUpdateStart" );
+const OUStringLiteral FrameworkHelper::msConfigurationUpdateEndEvent( "ConfigurationUpdateEnd" );
 
 // Service names of controllers.
-const OUString FrameworkHelper::msModuleControllerService("com.sun.star.drawing.framework.ModuleController");
-const OUString FrameworkHelper::msConfigurationControllerService("com.sun.star.drawing.framework.ConfigurationController");
+const OUStringLiteral FrameworkHelper::msModuleControllerService("com.sun.star.drawing.framework.ModuleController");
+const OUStringLiteral FrameworkHelper::msConfigurationControllerService("com.sun.star.drawing.framework.ConfigurationController");
 
 //----- helper ----------------------------------------------------------------
 namespace

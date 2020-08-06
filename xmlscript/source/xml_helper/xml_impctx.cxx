@@ -160,8 +160,8 @@ public:
 
 }
 
-OUString const g_sXMLNS_PREFIX_UNKNOWN( "<<< unknown prefix >>>" );
-OUString const g_sXMLNS( "xmlns" );
+OUStringLiteral const g_sXMLNS_PREFIX_UNKNOWN( "<<< unknown prefix >>>" );
+OUStringLiteral const g_sXMLNS( "xmlns" );
 
 
 DocumentHandlerImpl::DocumentHandlerImpl(

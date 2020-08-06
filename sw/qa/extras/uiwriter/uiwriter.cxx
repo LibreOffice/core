@@ -653,8 +653,8 @@ static void lcl_selectCharacters(SwPaM& rPaM, sal_Int32 first, sal_Int32 end)
     rPaM.GetPoint()->nContent.Assign(rPaM.GetContentNode(), end);
 }
 
-const OUString ORIGINAL_REPLACE_CONTENT("toto titi tutu");
-const OUString EXPECTED_REPLACE_CONTENT("toto toto tutu");
+const OUStringLiteral ORIGINAL_REPLACE_CONTENT("toto titi tutu");
+const OUStringLiteral EXPECTED_REPLACE_CONTENT("toto toto tutu");
 
 void SwUiWriterTest::testReplaceForward()
 {
@@ -671,11 +671,11 @@ void SwUiWriterTest::testReplaceForward()
     lcl_selectCharacters(aPaM, 5, 9);
     pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, "toto", false);
 
-    CPPUNIT_ASSERT_EQUAL(EXPECTED_REPLACE_CONTENT, pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString(EXPECTED_REPLACE_CONTENT), pTextNode->GetText());
 
     rUndoManager.Undo();
 
-    CPPUNIT_ASSERT_EQUAL(ORIGINAL_REPLACE_CONTENT, pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString(ORIGINAL_REPLACE_CONTENT), pTextNode->GetText());
 }
 
 void SwUiWriterTest::testRedlineFrame(char const*const file)
@@ -941,11 +941,11 @@ void SwUiWriterTest::testReplaceBackward()
 
     pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, "toto", false);
 
-    CPPUNIT_ASSERT_EQUAL(EXPECTED_REPLACE_CONTENT, pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString(EXPECTED_REPLACE_CONTENT), pTextNode->GetText());
 
     rUndoManager.Undo();
 
-    CPPUNIT_ASSERT_EQUAL(ORIGINAL_REPLACE_CONTENT, pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString(ORIGINAL_REPLACE_CONTENT), pTextNode->GetText());
 }
 
 void SwUiWriterTest::testFdo69893()

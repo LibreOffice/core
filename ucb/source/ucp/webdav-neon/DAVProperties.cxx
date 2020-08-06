@@ -32,19 +32,18 @@
 
 using namespace webdav_ucp;
 
-const OUString DAVProperties::CREATIONDATE("DAV:creationdate");
-const OUString DAVProperties::DISPLAYNAME("DAV:displayname");
-const OUString DAVProperties::GETCONTENTLANGUAGE("DAV:getcontentlanguage");
-const OUString DAVProperties::GETCONTENTLENGTH("DAV:getcontentlength");
-const OUString DAVProperties::GETCONTENTTYPE("DAV:getcontenttype");
-const OUString DAVProperties::GETETAG("DAV:getetag");
-const OUString DAVProperties::GETLASTMODIFIED("DAV:getlastmodified");
-const OUString DAVProperties::LOCKDISCOVERY("DAV:lockdiscovery");
-const OUString DAVProperties::RESOURCETYPE("DAV:resourcetype");
-const OUString DAVProperties::SOURCE("DAV:source");
-const OUString DAVProperties::SUPPORTEDLOCK("DAV:supportedlock");
-
-const OUString DAVProperties::EXECUTABLE("http://apache.org/dav/props/executable");
+const OUStringLiteral DAVProperties::CREATIONDATE("DAV:creationdate");
+const OUStringLiteral DAVProperties::DISPLAYNAME("DAV:displayname");
+const OUStringLiteral DAVProperties::GETCONTENTLANGUAGE("DAV:getcontentlanguage");
+const OUStringLiteral DAVProperties::GETCONTENTLENGTH("DAV:getcontentlength");
+const OUStringLiteral DAVProperties::GETCONTENTTYPE("DAV:getcontenttype");
+const OUStringLiteral DAVProperties::GETETAG("DAV:getetag");
+const OUStringLiteral DAVProperties::GETLASTMODIFIED("DAV:getlastmodified");
+const OUStringLiteral DAVProperties::LOCKDISCOVERY("DAV:lockdiscovery");
+const OUStringLiteral DAVProperties::RESOURCETYPE("DAV:resourcetype");
+const OUStringLiteral DAVProperties::SOURCE("DAV:source");
+const OUStringLiteral DAVProperties::SUPPORTEDLOCK("DAV:supportedlock");
+const OUStringLiteral DAVProperties::EXECUTABLE("http://apache.org/dav/props/executable");
 
 void DAVProperties::createNeonPropName( const OUString & rFullName,
                                         NeonPropName & rName )
@@ -118,18 +117,18 @@ void DAVProperties::createUCBPropName( const char * nspace,
         // Some servers send XML without proper namespaces. Assume "DAV:"
         // in this case, if name is a well-known dav property name.
         // Although this is not 100% correct, it solves many problems.
-
-        if ( DAVProperties::RESOURCETYPE.matchIgnoreAsciiCase( aName, 4 )  ||
-             DAVProperties::SUPPORTEDLOCK.matchIgnoreAsciiCase( aName, 4 ) ||
-             DAVProperties::LOCKDISCOVERY.matchIgnoreAsciiCase( aName, 4 ) ||
-             DAVProperties::CREATIONDATE.matchIgnoreAsciiCase( aName, 4 ) ||
-             DAVProperties::DISPLAYNAME.matchIgnoreAsciiCase( aName, 4 ) ||
-             DAVProperties::GETCONTENTLANGUAGE.matchIgnoreAsciiCase( aName, 4 ) ||
-             DAVProperties::GETCONTENTLENGTH.matchIgnoreAsciiCase( aName, 4 ) ||
-             DAVProperties::GETCONTENTTYPE.matchIgnoreAsciiCase( aName, 4 ) ||
-             DAVProperties::GETETAG.matchIgnoreAsciiCase( aName, 4 ) ||
-             DAVProperties::GETLASTMODIFIED.matchIgnoreAsciiCase( aName, 4 ) ||
-             DAVProperties::SOURCE.matchIgnoreAsciiCase( aName, 4 ) )
+        if ( aName.equalsIgnoreAsciiCaseAscii(DAVProperties::RESOURCETYPE.data + 4) ||
+             aName.equalsIgnoreAsciiCaseAscii(DAVProperties::RESOURCETYPE.data + 4)  ||
+             aName.equalsIgnoreAsciiCaseAscii(DAVProperties::SUPPORTEDLOCK.data + 4) ||
+             aName.equalsIgnoreAsciiCaseAscii(DAVProperties::LOCKDISCOVERY.data + 4) ||
+             aName.equalsIgnoreAsciiCaseAscii(DAVProperties::CREATIONDATE.data + 4) ||
+             aName.equalsIgnoreAsciiCaseAscii(DAVProperties::DISPLAYNAME.data + 4) ||
+             aName.equalsIgnoreAsciiCaseAscii(DAVProperties::GETCONTENTLANGUAGE.data + 4) ||
+             aName.equalsIgnoreAsciiCaseAscii(DAVProperties::GETCONTENTLENGTH.data + 4) ||
+             aName.equalsIgnoreAsciiCaseAscii(DAVProperties::GETCONTENTTYPE.data + 4) ||
+             aName.equalsIgnoreAsciiCaseAscii(DAVProperties::GETETAG.data + 4) ||
+             aName.equalsIgnoreAsciiCaseAscii(DAVProperties::GETLASTMODIFIED.data + 4) ||
+             aName.equalsIgnoreAsciiCaseAscii(DAVProperties::SOURCE.data + 4) )
             aNameSpace = "DAV:";
     }
 

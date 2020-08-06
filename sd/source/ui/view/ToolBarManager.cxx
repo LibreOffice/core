@@ -328,21 +328,21 @@ private:
 
 //===== ToolBarManager ========================================================
 
-const OUString ToolBarManager::msToolBar("toolbar");
-const OUString ToolBarManager::msOptionsToolBar("optionsbar");
-const OUString ToolBarManager::msCommonTaskToolBar("commontaskbar");
-const OUString ToolBarManager::msViewerToolBar("viewerbar");
-const OUString ToolBarManager::msSlideSorterToolBar("slideviewtoolbar");
-const OUString ToolBarManager::msSlideSorterObjectBar("slideviewobjectbar");
-const OUString ToolBarManager::msOutlineToolBar("outlinetoolbar");
-const OUString ToolBarManager::msMasterViewToolBar("masterviewtoolbar");
-const OUString ToolBarManager::msDrawingObjectToolBar("drawingobjectbar");
-const OUString ToolBarManager::msGluePointsToolBar("gluepointsobjectbar");
-const OUString ToolBarManager::msTextObjectBar("textobjectbar");
-const OUString ToolBarManager::msBezierObjectBar("bezierobjectbar");
-const OUString ToolBarManager::msGraphicObjectBar("graphicobjectbar");
-const OUString ToolBarManager::msMediaObjectBar("mediaobjectbar");
-const OUString ToolBarManager::msTableObjectBar("tableobjectbar");
+const OUStringLiteral ToolBarManager::msToolBar("toolbar");
+const OUStringLiteral ToolBarManager::msOptionsToolBar("optionsbar");
+const OUStringLiteral ToolBarManager::msCommonTaskToolBar("commontaskbar");
+const OUStringLiteral ToolBarManager::msViewerToolBar("viewerbar");
+const OUStringLiteral ToolBarManager::msSlideSorterToolBar("slideviewtoolbar");
+const OUStringLiteral ToolBarManager::msSlideSorterObjectBar("slideviewobjectbar");
+const OUStringLiteral ToolBarManager::msOutlineToolBar("outlinetoolbar");
+const OUStringLiteral ToolBarManager::msMasterViewToolBar("masterviewtoolbar");
+const OUStringLiteral ToolBarManager::msDrawingObjectToolBar("drawingobjectbar");
+const OUStringLiteral ToolBarManager::msGluePointsToolBar("gluepointsobjectbar");
+const OUStringLiteral ToolBarManager::msTextObjectBar("textobjectbar");
+const OUStringLiteral ToolBarManager::msBezierObjectBar("bezierobjectbar");
+const OUStringLiteral ToolBarManager::msGraphicObjectBar("graphicobjectbar");
+const OUStringLiteral ToolBarManager::msMediaObjectBar("mediaobjectbar");
+const OUStringLiteral ToolBarManager::msTableObjectBar("tableobjectbar");
 
 std::shared_ptr<ToolBarManager> ToolBarManager::Create (
     ViewShellBase& rBase,

@@ -254,9 +254,9 @@ void SAL_CALL NSDocumentHandler::startElement( const OUString& aName, const Refe
 class DummyTokenHandler : public sax_fastparser::FastTokenHandlerBase
 {
 public:
-    const static OString tokens[];
+    const static OStringLiteral tokens[];
     const static OUStringLiteral namespaceURIs[];
-    const static OString namespacePrefixes[];
+    const static OStringLiteral namespacePrefixes[];
 
     // XFastTokenHandler
     virtual Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 nToken ) override;
@@ -265,15 +265,22 @@ public:
     virtual sal_Int32 getTokenDirect( const char *pToken, sal_Int32 nLength ) const override;
 };
 
-const OString DummyTokenHandler::tokens[] = { "Signature", "CanonicalizationMethod", "Algorithm", "Type",
-                                              "DigestMethod", "Reference", "document",
-                                              "spacing", "Player", "Height" };
+const OStringLiteral DummyTokenHandler::tokens[] = {
+    OStringLiteral("Signature"), OStringLiteral("CanonicalizationMethod"),
+    OStringLiteral("Algorithm"), OStringLiteral("Type"),
+    OStringLiteral("DigestMethod"), OStringLiteral("Reference"),
+    OStringLiteral("document"), OStringLiteral("spacing"),
+    OStringLiteral("Player"), OStringLiteral("Height") };
 
-const OUStringLiteral DummyTokenHandler::namespaceURIs[] = { "http://www.w3.org/2000/09/xmldsig#",
-                                                  "http://schemas.openxmlformats.org/wordprocessingml/2006/main/",
-                                                  "xyzsports.com/players/football/" };
+const OUStringLiteral DummyTokenHandler::namespaceURIs[] = {
+    "http://www.w3.org/2000/09/xmldsig#",
+    "http://schemas.openxmlformats.org/wordprocessingml/2006/main/",
+    "xyzsports.com/players/football/" };
 
-const OString DummyTokenHandler::namespacePrefixes[] = { "", "w", "Player" };
+const OStringLiteral DummyTokenHandler::namespacePrefixes[] = {
+    OStringLiteral(""),
+    OStringLiteral("w"),
+    OStringLiteral("Player") };
 
 Sequence< sal_Int8 > DummyTokenHandler::getUTF8Identifier( sal_Int32 nToken )
 {

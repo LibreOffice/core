@@ -91,7 +91,7 @@ public:
     const OUString& GetFalseString() const    { return GetSpecialKeyword( NF_KEY_FALSE ); }
     const OUString& GetRedString() const      { return GetKeywords()[NF_KEY_RED]; }
     const OUString& GetBooleanString() const  { return GetKeywords()[NF_KEY_BOOLEAN]; }
-    static const OUString& GetErrorString()   { return sErrStr; }
+    static const OUStringLiteral& GetErrorString()   { return sErrStr; }
     static const ::std::vector<Color> & GetStandardColors()
         {
             return StandardColor;
@@ -211,7 +211,7 @@ private: // Private section
     OUString sCurAbbrev;                        // Currency abbreviation
     OUString sBooleanEquivalent1;               // "TRUE";"TRUE";"FALSE"
     OUString sBooleanEquivalent2;               // [>0]"TRUE";[<0]"TRUE";"FALSE"
-    static const OUString sErrStr;              // String for error output
+    static const OUStringLiteral sErrStr;       // String for error output
 
     bool bConvertMode;                          // Set in the convert mode
     bool mbConvertDateOrder;                    // Set in the convert mode whether to convert date particles order

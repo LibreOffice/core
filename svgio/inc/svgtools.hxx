@@ -36,10 +36,10 @@ namespace svgio::svgreader
         // common non-token strings
         struct commonStrings
         {
-            static const OUString aStrUserSpaceOnUse;
-            static const OUString aStrObjectBoundingBox;
-            static const OUString aStrNonzero;
-            static const OUString aStrEvenOdd;
+            static const OUStringLiteral aStrUserSpaceOnUse;
+            static const OUStringLiteral aStrObjectBoundingBox;
+            static const OUStringLiteral aStrNonzero;
+            static const OUStringLiteral aStrEvenOdd;
         };
 
         enum SvgUnits

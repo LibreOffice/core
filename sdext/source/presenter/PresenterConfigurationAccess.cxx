@@ -33,7 +33,7 @@ using namespace ::com::sun::star::uno;
 
 namespace sdext::presenter {
 
-const OUString PresenterConfigurationAccess::msPresenterScreenRootName =
+const OUStringLiteral PresenterConfigurationAccess::msPresenterScreenRootName =
     "/org.openoffice.Office.PresenterScreen/";
 
 PresenterConfigurationAccess::PresenterConfigurationAccess (

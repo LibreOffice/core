@@ -38,8 +38,8 @@ using namespace rtl;
 namespace
 {
 
-const OString sSampleString               = "This is a sample sentence, which we use to check some crypto functions in sal.";
-const OString sSampleString_only_one_diff = "This is a sample sentence. which we use to check some crypto functions in sal.";
+const OStringLiteral sSampleString               ("This is a sample sentence, which we use to check some crypto functions in sal.");
+const OStringLiteral sSampleString_only_one_diff ("This is a sample sentence. which we use to check some crypto functions in sal.");
 
 const rtlDigestAlgorithm constDigestAlgorithms[] =
 {
@@ -61,14 +61,14 @@ const sal_uInt32 constDigestAlgorithmLengths[] =
     RTL_DIGEST_LENGTH_HMAC_SHA1,
 };
 
-const OString constSampleStringSums[] =
+const OStringLiteral constSampleStringSums[] =
 {
-    "647ee6c9d4aa5fdd374ed9d7a156acbf",
-    "b16b903e6fc0b62ae389013ed93fe531",
-    "eab2814429b2613301c8a077b806af3680548914",
-    "2bc5bdb7506a2cdc2fd27fc8b9889343012d5008",
-    "0b1b0e1a6f2e4420326354b031063605",
-    "1998c6a556915be76451bfb587fa7c34d849936e"
+    OStringLiteral("647ee6c9d4aa5fdd374ed9d7a156acbf"),
+    OStringLiteral("b16b903e6fc0b62ae389013ed93fe531"),
+    OStringLiteral("eab2814429b2613301c8a077b806af3680548914"),
+    OStringLiteral("2bc5bdb7506a2cdc2fd27fc8b9889343012d5008"),
+    OStringLiteral("0b1b0e1a6f2e4420326354b031063605"),
+    OStringLiteral("1998c6a556915be76451bfb587fa7c34d849936e")
 };
 
 // Create hex-value string from the digest value to keep the string size minimal
@@ -220,7 +220,7 @@ public:
         for (size_t i = 0; i < SAL_N_ELEMENTS(constDigestAlgorithms); i++)
         {
             OString aSum = getDigest(sSampleString, constDigestAlgorithms[i]);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("Checksum of sample string is wrong.", constSampleStringSums[i], aSum);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Checksum of sample string is wrong.", OString(constSampleStringSums[i]), aSum);
         }
     }
 

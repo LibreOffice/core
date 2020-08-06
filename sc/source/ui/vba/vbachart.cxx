@@ -48,23 +48,23 @@ using namespace ::ooo::vba::excel::XlRowCol;
 using namespace ::ooo::vba::excel::XlAxisType;
 using namespace ::ooo::vba::excel::XlAxisGroup;
 
-const OUString CHART_NAME("Name");
+const OUStringLiteral CHART_NAME("Name");
 // #TODO move this constant to vbaseries.[ch]xx ( when it exists )
-const OUString DEFAULTSERIESPREFIX("Series");
-const OUString DATAROWSOURCE("DataRowSource");
-const OUString UPDOWN("UpDown");
-const OUString VOLUME("Volume");
-const OUString LINES("Lines");
-const OUString SPLINETYPE("SplineType");
-const OUString SYMBOLTYPE("SymbolType");
-const OUString DEEP("Deep");
-const OUString SOLIDTYPE("SolidType");
-const OUString VERTICAL("Vertical");
-const OUString PERCENT("Percent");
-const OUString STACKED("Stacked");
-const OUString DIM3D("Dim3D");
-const OUString HASMAINTITLE("HasMainTitle");
-const OUString HASLEGEND("HasLegend");
+const OUStringLiteral DEFAULTSERIESPREFIX("Series");
+const OUStringLiteral DATAROWSOURCE("DataRowSource");
+const OUStringLiteral UPDOWN("UpDown");
+const OUStringLiteral VOLUME("Volume");
+const OUStringLiteral LINES("Lines");
+const OUStringLiteral SPLINETYPE("SplineType");
+const OUStringLiteral SYMBOLTYPE("SymbolType");
+const OUStringLiteral DEEP("Deep");
+const OUStringLiteral SOLIDTYPE("SolidType");
+const OUStringLiteral VERTICAL("Vertical");
+const OUStringLiteral PERCENT("Percent");
+const OUStringLiteral STACKED("Stacked");
+const OUStringLiteral DIM3D("Dim3D");
+const OUStringLiteral HASMAINTITLE("HasMainTitle");
+const OUStringLiteral HASLEGEND("HasLegend");
 
 ScVbaChart::ScVbaChart( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::lang::XComponent >& _xChartComponent, const css::uno::Reference< css::table::XTableChart >& _xTableChart ) : ChartImpl_BASE( _xParent, _xContext ), mxTableChart( _xTableChart )
 {

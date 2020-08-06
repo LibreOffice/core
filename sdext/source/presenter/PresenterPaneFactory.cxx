@@ -33,20 +33,20 @@ using namespace ::com::sun::star::drawing::framework;
 
 namespace sdext::presenter {
 
-const OUString PresenterPaneFactory::msCurrentSlidePreviewPaneURL(
+const OUStringLiteral PresenterPaneFactory::msCurrentSlidePreviewPaneURL(
     "private:resource/pane/Presenter/Pane1");
-const OUString PresenterPaneFactory::msNextSlidePreviewPaneURL(
+const OUStringLiteral PresenterPaneFactory::msNextSlidePreviewPaneURL(
     "private:resource/pane/Presenter/Pane2");
-const OUString PresenterPaneFactory::msNotesPaneURL(
+const OUStringLiteral PresenterPaneFactory::msNotesPaneURL(
     "private:resource/pane/Presenter/Pane3");
-const OUString PresenterPaneFactory::msToolBarPaneURL(
+const OUStringLiteral PresenterPaneFactory::msToolBarPaneURL(
     "private:resource/pane/Presenter/Pane4");
-const OUString PresenterPaneFactory::msSlideSorterPaneURL(
+const OUStringLiteral PresenterPaneFactory::msSlideSorterPaneURL(
     "private:resource/pane/Presenter/Pane5");
-const OUString PresenterPaneFactory::msHelpPaneURL(
+const OUStringLiteral PresenterPaneFactory::msHelpPaneURL(
     "private:resource/pane/Presenter/Pane6");
 
-const OUString PresenterPaneFactory::msOverlayPaneURL(
+const OUStringLiteral PresenterPaneFactory::msOverlayPaneURL(
     "private:resource/pane/Presenter/Overlay");
 
 //===== PresenterPaneFactory ==================================================

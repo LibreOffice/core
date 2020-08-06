@@ -30,19 +30,19 @@ namespace sdext::presenter {
 */
 namespace PresenterHelper
 {
-    extern const OUString msPaneURLPrefix;
+    extern const OUStringLiteral msPaneURLPrefix;
     extern const OUString msCenterPaneURL;
     extern const OUString msFullScreenPaneURL;
 
-    extern const OUString msViewURLPrefix;
+    extern const OUStringLiteral msViewURLPrefix;
     extern const OUString msPresenterScreenURL;
     extern const OUString msSlideSorterURL;
 
-    extern const OUString msResourceActivationEvent;
-    extern const OUString msResourceDeactivationEvent;
+    extern const OUStringLiteral msResourceActivationEvent;
+    extern const OUStringLiteral msResourceDeactivationEvent;
 
-    extern const OUString msDefaultPaneStyle;
-    extern const OUString msDefaultViewStyle;
+    extern const OUStringLiteral msDefaultPaneStyle;
+    extern const OUStringLiteral msDefaultViewStyle;
 
     /** Return the slide show controller of a running presentation that has
         the same document as the given framework controller.

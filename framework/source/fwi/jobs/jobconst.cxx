@@ -21,11 +21,11 @@
 
 namespace framework {
 
-const OUString JobConst::ANSWER_DEACTIVATE_JOB = "Deactivate";
+const OUStringLiteral JobConst::ANSWER_DEACTIVATE_JOB = "Deactivate";
 
-const OUString JobConst::ANSWER_SAVE_ARGUMENTS = "SaveArguments";
+const OUStringLiteral JobConst::ANSWER_SAVE_ARGUMENTS = "SaveArguments";
 
-const OUString JobConst::ANSWER_SEND_DISPATCHRESULT = "SendDispatchResult";
+const OUStringLiteral JobConst::ANSWER_SEND_DISPATCHRESULT = "SendDispatchResult";
 
 } // namespace framework
 

@@ -77,9 +77,9 @@ const ::std::vector<OUString> CSVImportOptionNames =
     "Language",
     "SkipEmptyCells"
 };
-const OUString aSep_Path =           "Office.Calc/Dialogs/CSVImport";
-const OUString aSep_Path_Clpbrd =    "Office.Calc/Dialogs/ClipboardTextImport";
-const OUString aSep_Path_Text2Col =  "Office.Calc/Dialogs/TextToColumnsImport";
+const OUStringLiteral aSep_Path =           "Office.Calc/Dialogs/CSVImport";
+const OUStringLiteral aSep_Path_Clpbrd =    "Office.Calc/Dialogs/ClipboardTextImport";
+const OUStringLiteral aSep_Path_Text2Col =  "Office.Calc/Dialogs/TextToColumnsImport";
 
 namespace {
 CSVImportOptionsIndex getSkipEmptyCellsIndex( ScImportAsciiCall eCall )

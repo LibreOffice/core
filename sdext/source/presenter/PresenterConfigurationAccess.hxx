@@ -52,7 +52,7 @@ public:
     typedef ::std::function<bool (
         const OUString&,
         const css::uno::Reference<css::beans::XPropertySet>&)> Predicate;
-    static const OUString msPresenterScreenRootName;
+    static const OUStringLiteral msPresenterScreenRootName;
 
     /** Create a new object to access the configuration entries below the
         given root.

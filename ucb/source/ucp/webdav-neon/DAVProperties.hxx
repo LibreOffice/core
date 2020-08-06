@@ -37,18 +37,18 @@ namespace webdav_ucp
 
 struct DAVProperties
 {
-    static const OUString CREATIONDATE;
-    static const OUString DISPLAYNAME;
-    static const OUString GETCONTENTLANGUAGE;
-    static const OUString GETCONTENTLENGTH;
-    static const OUString GETCONTENTTYPE;
-    static const OUString GETETAG;
-    static const OUString GETLASTMODIFIED;
-    static const OUString LOCKDISCOVERY;
-    static const OUString RESOURCETYPE;
-    static const OUString SOURCE;
-    static const OUString SUPPORTEDLOCK;
-    static const OUString EXECUTABLE;
+    static const OUStringLiteral CREATIONDATE;
+    static const OUStringLiteral DISPLAYNAME;
+    static const OUStringLiteral GETCONTENTLANGUAGE;
+    static const OUStringLiteral GETCONTENTLENGTH;
+    static const OUStringLiteral GETCONTENTTYPE;
+    static const OUStringLiteral GETETAG;
+    static const OUStringLiteral GETLASTMODIFIED;
+    static const OUStringLiteral LOCKDISCOVERY;
+    static const OUStringLiteral RESOURCETYPE;
+    static const OUStringLiteral SOURCE;
+    static const OUStringLiteral SUPPORTEDLOCK;
+    static const OUStringLiteral EXECUTABLE;
 
     static void createNeonPropName( const OUString & rFullName,
                                     NeonPropName & rName );

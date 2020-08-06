@@ -68,6 +68,39 @@ namespace rtl
 #endif
 /// @endcond
 
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
+/**
+A simple wrapper around string literal. It is usually not necessary to use, can
+be mostly used to force OString operator+ working with operands that otherwise would
+not trigger it.
+
+This class is not part of public API and is meant to be used only in LibreOffice code.
+@since LibreOffice 4.0
+*/
+struct SAL_WARN_UNUSED OStringLiteral
+{
+    template< int N >
+    explicit OStringLiteral( const char (&str)[ N ] ) : size( N - 1 ), data( str ) { assert( strlen( str ) == N - 1 ); }
+#if defined __cpp_char8_t
+    template< int N >
+    explicit OStringLiteral( const char8_t (&str)[ N ] ) : size( N - 1 ), data( reinterpret_cast<char const *>(str) ) { assert( strlen( data ) == N - 1 ); }
+#endif
+
+    int size;
+    const char* data;
+
+    /** So we can use this in some places interchangeably with OUString.
+     * @since LibreOffice 7.1
+     */
+    constexpr sal_Int32 getLength() const { return size; }
+
+    /** So we can use this in some places interchangeably with OString.
+     * @since LibreOffice 7.1
+     */
+    constexpr const char* getStr() const { return data; }
+};
+#endif
+
 /* ======================================================================= */
 
 /**
@@ -235,6 +268,29 @@ public:
         pData = NULL;
         rtl_string_newFromStr_WithLength( &pData, value, length );
     }
+
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
+    /// @cond INTERNAL
+    /**
+      New string from an 8-Bit string literal.
+
+      This constructor is similar to the "direct template" one, but can be
+      useful in cases where the latter does not work, like in
+
+        OString(flag ? "a" : "bb")
+
+      written as
+
+        OString(flag ? OStringLiteral("a") : OStringLiteral("bb"))
+
+      @since LibreOffice 7.1
+    */
+    OString(OStringLiteral literal): pData(NULL) {
+        rtl_string_newFromLiteral(&pData, literal.data, literal.size, 0);
+    }
+    /// @endcond
+#endif
+
 
     /**
       New string from a Unicode character buffer array.
@@ -1849,25 +1905,6 @@ public:
 /* ======================================================================= */
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
-/**
-A simple wrapper around string literal. It is usually not necessary to use, can
-be mostly used to force OString operator+ working with operands that otherwise would
-not trigger it.
-
-This class is not part of public API and is meant to be used only in LibreOffice code.
-@since LibreOffice 4.0
-*/
-struct SAL_WARN_UNUSED OStringLiteral
-{
-    template< int N >
-    explicit OStringLiteral( const char (&str)[ N ] ) : size( N - 1 ), data( str ) { assert( strlen( str ) == N - 1 ); }
-#if defined __cpp_char8_t
-    template< int N >
-    explicit OStringLiteral( const char8_t (&str)[ N ] ) : size( N - 1 ), data( reinterpret_cast<char const *>(str) ) { assert( strlen( data ) == N - 1 ); }
-#endif
-    int size;
-    const char* data;
-};
 
 /**
  @internal

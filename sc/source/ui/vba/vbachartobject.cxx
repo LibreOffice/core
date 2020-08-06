@@ -29,7 +29,7 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-const OUString PERSIST_NAME("PersistName");
+const OUStringLiteral PERSIST_NAME("PersistName");
 
 ScVbaChartObject::ScVbaChartObject( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::table::XTableChart >& _xTableChart, const css::uno::Reference< css::drawing::XDrawPageSupplier >& _xDrawPageSupplier ) : ChartObjectImpl_BASE( _xParent, _xContext ), xTableChart( _xTableChart ), xDrawPageSupplier( _xDrawPageSupplier )
 {

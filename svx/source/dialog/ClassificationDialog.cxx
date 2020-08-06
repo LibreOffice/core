@@ -71,7 +71,7 @@ namespace {
 
 constexpr size_t RECENTLY_USED_LIMIT = 5;
 
-const OUString constRecentlyUsedFileName("recentlyUsed.xml");
+const OUStringLiteral constRecentlyUsedFileName("recentlyUsed.xml");
 
 OUString lcl_getClassificationUserPath()
 {

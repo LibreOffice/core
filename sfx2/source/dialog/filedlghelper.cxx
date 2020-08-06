@@ -121,13 +121,13 @@ namespace
     }
 }
 
-static const OUString* GetLastFilterConfigId( FileDialogHelper::Context _eContext )
+static const OUStringLiteral* GetLastFilterConfigId( FileDialogHelper::Context _eContext )
 {
-    static const OUString aSD_EXPORT_IDENTIFIER("SdExportLastFilter");
-    static const OUString aSI_EXPORT_IDENTIFIER("SiExportLastFilter");
-    static const OUString aSW_EXPORT_IDENTIFIER("SwExportLastFilter");
+    static const OUStringLiteral aSD_EXPORT_IDENTIFIER("SdExportLastFilter");
+    static const OUStringLiteral aSI_EXPORT_IDENTIFIER("SiExportLastFilter");
+    static const OUStringLiteral aSW_EXPORT_IDENTIFIER("SwExportLastFilter");
 
-    const OUString* pRet = nullptr;
+    const OUStringLiteral* pRet = nullptr;
 
     switch( _eContext )
     {
@@ -344,7 +344,7 @@ void FileDialogHelper_Impl::LoadLastUsedFilter( const OUString& _rContextIdentif
 
 void FileDialogHelper_Impl::SaveLastUsedFilter()
 {
-    const OUString* pConfigId = GetLastFilterConfigId( meContext );
+    const OUStringLiteral* pConfigId = GetLastFilterConfigId( meContext );
     if( pConfigId )
         SvtViewOptions( EViewType::Dialog, IODLG_CONFIGNAME ).SetUserItem( *pConfigId,
                             makeAny( getFilterWithExtension( getFilter() ) ) );
@@ -2255,7 +2255,7 @@ void FileDialogHelper_Impl::SetContext( FileDialogHelper::Context _eNewContext )
 {
     meContext = _eNewContext;
 
-    const OUString* pConfigId = GetLastFilterConfigId( _eNewContext );
+    const OUStringLiteral* pConfigId = GetLastFilterConfigId( _eNewContext );
     if( pConfigId )
         LoadLastUsedFilter( *pConfigId );
 }
