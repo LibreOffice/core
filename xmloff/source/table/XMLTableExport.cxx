@@ -686,21 +686,21 @@ void XMLCellStyleExport::exportStyleContent(const Reference<XStyle>& /*rStyle*/)
 void XMLCellStyleExport::exportStyleAttributes(const Reference<XStyle>& rStyle)
 {
     Reference<XPropertySet> xPropSet(rStyle, UNO_QUERY);
-    if (xPropSet.is())
+    if (!xPropSet.is())
+        return;
+
+    Reference<XPropertySetInfo> xPropSetInfo(xPropSet->getPropertySetInfo());
+    const OUString sNumberFormat("NumberFormat");
+    if (xPropSetInfo->hasPropertyByName(sNumberFormat))
     {
-        Reference<XPropertySetInfo> xPropSetInfo(xPropSet->getPropertySetInfo());
-        const OUString sNumberFormat("NumberFormat");
-        if (xPropSetInfo->hasPropertyByName(sNumberFormat))
+        Reference<XPropertyState> xPropState(xPropSet, UNO_QUERY);
+        if (xPropState.is() && (PropertyState_DIRECT_VALUE ==
+            xPropState->getPropertyState(sNumberFormat)))
         {
-            Reference<XPropertyState> xPropState(xPropSet, UNO_QUERY);
-            if (xPropState.is() && (PropertyState_DIRECT_VALUE ==
-                xPropState->getPropertyState(sNumberFormat)))
-            {
-                sal_Int32 nNumberFormat = 0;
-                if (xPropSet->getPropertyValue(sNumberFormat) >>= nNumberFormat)
-                    GetExport().AddAttribute(XML_NAMESPACE_STYLE, XML_DATA_STYLE_NAME,
-                                             GetExport().getDataStyleName(nNumberFormat));
-            }
+            sal_Int32 nNumberFormat = 0;
+            if (xPropSet->getPropertyValue(sNumberFormat) >>= nNumberFormat)
+                GetExport().AddAttribute(XML_NAMESPACE_STYLE, XML_DATA_STYLE_NAME,
+                                         GetExport().getDataStyleName(nNumberFormat));
         }
     }
 }

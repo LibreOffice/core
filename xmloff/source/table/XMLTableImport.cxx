@@ -307,7 +307,10 @@ void XMLTableImport::insertTabletemplate(const OUString& rsStyleName, bool bOver
 
 void XMLTableImport::finishStyles()
 {
-    if( !maTableTemplates.empty() ) try
+    if( maTableTemplates.empty() )
+        return;
+
+    try
     {
         Reference< XStyleFamiliesSupplier > xFamiliesSupp( mrImport.GetModel(), UNO_QUERY_THROW );
         Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
@@ -424,7 +427,10 @@ SvXMLImportContextRef XMLTableImportContext::ImportColumn( sal_uInt16 /*nPrefix*
 
 void XMLTableImportContext::InitColumns()
 {
-    if( mxColumns.is() ) try
+    if( !mxColumns.is() )
+        return;
+
+    try
     {
         const sal_Int32 nCount1 = mxColumns->getCount();
         const sal_Int32 nCount2 = sal::static_int_cast< sal_Int32 >( maColumnInfos.size() );
@@ -665,22 +671,22 @@ XMLCellImportContext::XMLCellImportContext( SvXMLImport& rImport, const Referenc
     if( sStyleName.isEmpty() )
         sStyleName = sDefaultCellStyleName;
 
-    if( !sStyleName.isEmpty() )
-    {
-        SvXMLStylesContext * pAutoStyles = GetImport().GetShapeImport()->GetAutoStylesContext();
-        if( pAutoStyles )
-        {
-            const XMLPropStyleContext* pStyle =
-                dynamic_cast< const XMLPropStyleContext* >(
-                    pAutoStyles->FindStyleChildContext(XmlStyleFamily::TABLE_CELL, sStyleName) );
+    if( sStyleName.isEmpty() )
+        return;
 
-            if( pStyle )
-            {
-                Reference< XPropertySet > xCellSet( mxCell, UNO_QUERY );
-                if( xCellSet.is() )
-                    const_cast< XMLPropStyleContext* >( pStyle )->FillPropertySet( xCellSet );
-            }
-        }
+    SvXMLStylesContext * pAutoStyles = GetImport().GetShapeImport()->GetAutoStylesContext();
+    if( !pAutoStyles )
+        return;
+
+    const XMLPropStyleContext* pStyle =
+        dynamic_cast< const XMLPropStyleContext* >(
+            pAutoStyles->FindStyleChildContext(XmlStyleFamily::TABLE_CELL, sStyleName) );
+
+    if( pStyle )
+    {
+        Reference< XPropertySet > xCellSet( mxCell, UNO_QUERY );
+        if( xCellSet.is() )
+            const_cast< XMLPropStyleContext* >( pStyle )->FillPropertySet( xCellSet );
     }
 }
 

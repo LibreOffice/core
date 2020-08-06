@@ -211,46 +211,46 @@ public:
             }
         }
         sal_Int32 nUPD, nBuild;
-        if ( rImport.getBuildIds( nUPD, nBuild ) )
+        if ( !rImport.getBuildIds( nUPD, nBuild ) )
+            return;
+
+        if ( nUPD >= 640 && nUPD <= 645 )
         {
-            if ( nUPD >= 640 && nUPD <= 645 )
-            {
-                mnGeneratorVersion = SvXMLImport::OOo_1x;
-            }
-            else if ( nUPD == 680 )
-            {
-                mnGeneratorVersion = SvXMLImport::OOo_2x;
-            }
-            else if ( nUPD == 300 && nBuild <= 9379 )
-            {
-                mnGeneratorVersion = SvXMLImport::OOo_30x;
-            }
-            else if ( nUPD == 310 )
-            {
-                mnGeneratorVersion = SvXMLImport::OOo_31x;
-            }
-            else if ( nUPD == 320 )
-            {
-                mnGeneratorVersion = SvXMLImport::OOo_32x;
-            }
-            else if ( nUPD == 330 )
-            {
-                mnGeneratorVersion = SvXMLImport::OOo_33x;
-            }
-            else if ( nUPD == 340 )
-            {
-                mnGeneratorVersion = SvXMLImport::OOo_34x;
-            }
-            else if (nUPD == 400 || nUPD == 401)
-            {
-                mnGeneratorVersion = SvXMLImport::AOO_40x;
-            }
-            else if (nUPD >= 410)
-            {
-                // effectively this means "latest", see use
-                // in XMLGraphicsDefaultStyle::SetDefaults()!
-                mnGeneratorVersion = SvXMLImport::AOO_4x;
-            }
+            mnGeneratorVersion = SvXMLImport::OOo_1x;
+        }
+        else if ( nUPD == 680 )
+        {
+            mnGeneratorVersion = SvXMLImport::OOo_2x;
+        }
+        else if ( nUPD == 300 && nBuild <= 9379 )
+        {
+            mnGeneratorVersion = SvXMLImport::OOo_30x;
+        }
+        else if ( nUPD == 310 )
+        {
+            mnGeneratorVersion = SvXMLImport::OOo_31x;
+        }
+        else if ( nUPD == 320 )
+        {
+            mnGeneratorVersion = SvXMLImport::OOo_32x;
+        }
+        else if ( nUPD == 330 )
+        {
+            mnGeneratorVersion = SvXMLImport::OOo_33x;
+        }
+        else if ( nUPD == 340 )
+        {
+            mnGeneratorVersion = SvXMLImport::OOo_34x;
+        }
+        else if (nUPD == 400 || nUPD == 401)
+        {
+            mnGeneratorVersion = SvXMLImport::AOO_40x;
+        }
+        else if (nUPD >= 410)
+        {
+            // effectively this means "latest", see use
+            // in XMLGraphicsDefaultStyle::SetDefaults()!
+            mnGeneratorVersion = SvXMLImport::AOO_4x;
         }
     }
 
@@ -545,35 +545,35 @@ void SAL_CALL SvXMLImport::setNamespaceHandler( const uno::Reference< xml::sax::
 void SAL_CALL SvXMLImport::startDocument()
 {
     SAL_INFO( "xmloff.core", "{ SvXMLImport::startDocument" );
-    if (!mxGraphicStorageHandler.is() || !mxEmbeddedResolver.is())
-    {
-        Reference< lang::XMultiServiceFactory > xFactory( mxModel,  UNO_QUERY );
-        if( xFactory.is() )
-        {
-            try
-            {
-                if (!mxGraphicStorageHandler.is())
-                {
-                    // #99870# Import... instead of Export...
-                    mxGraphicStorageHandler.set(
-                        xFactory->createInstance("com.sun.star.document.ImportGraphicStorageHandler"),
-                        UNO_QUERY);
-                    mpImpl->mbOwnGraphicResolver = mxGraphicStorageHandler.is();
-                }
+    if (mxGraphicStorageHandler.is() && mxEmbeddedResolver.is())
+        return;
 
-                if( !mxEmbeddedResolver.is() )
-                {
-                    // #99870# Import... instead of Export...
-                    mxEmbeddedResolver.set(
-                        xFactory->createInstance("com.sun.star.document.ImportEmbeddedObjectResolver"),
-                        UNO_QUERY);
-                    mpImpl->mbOwnEmbeddedResolver = mxEmbeddedResolver.is();
-                }
-            }
-            catch( css::uno::Exception& )
-            {
-            }
+    Reference< lang::XMultiServiceFactory > xFactory( mxModel,  UNO_QUERY );
+    if( !xFactory.is() )
+        return;
+
+    try
+    {
+        if (!mxGraphicStorageHandler.is())
+        {
+            // #99870# Import... instead of Export...
+            mxGraphicStorageHandler.set(
+                xFactory->createInstance("com.sun.star.document.ImportGraphicStorageHandler"),
+                UNO_QUERY);
+            mpImpl->mbOwnGraphicResolver = mxGraphicStorageHandler.is();
         }
+
+        if( !mxEmbeddedResolver.is() )
+        {
+            // #99870# Import... instead of Export...
+            mxEmbeddedResolver.set(
+                xFactory->createInstance("com.sun.star.document.ImportEmbeddedObjectResolver"),
+                UNO_QUERY);
+            mpImpl->mbOwnEmbeddedResolver = mxEmbeddedResolver.is();
+        }
+    }
+    catch( css::uno::Exception& )
+    {
     }
 }
 
@@ -1975,23 +1975,24 @@ bool SvXMLImport::IsOOoXML() const
 void SvXMLImport::SetXmlId(uno::Reference<uno::XInterface> const & i_xIfc,
     OUString const & i_rXmlId)
 {
-    if (!i_rXmlId.isEmpty()) {
-        try {
-            const uno::Reference<rdf::XMetadatable> xMeta(i_xIfc,
-                uno::UNO_QUERY);
+    if (i_rXmlId.isEmpty())
+        return;
+
+    try {
+        const uno::Reference<rdf::XMetadatable> xMeta(i_xIfc,
+            uno::UNO_QUERY);
 //FIXME: not yet
-            if (xMeta.is()) {
-                const beans::StringPair mdref( mpImpl->mStreamName, i_rXmlId );
-                try {
-                    xMeta->setMetadataReference(mdref);
-                } catch (lang::IllegalArgumentException &) {
-                    // probably duplicate; ignore
-                    SAL_INFO("xmloff.core", "SvXMLImport::SetXmlId: cannot set xml:id");
-                }
+        if (xMeta.is()) {
+            const beans::StringPair mdref( mpImpl->mStreamName, i_rXmlId );
+            try {
+                xMeta->setMetadataReference(mdref);
+            } catch (lang::IllegalArgumentException &) {
+                // probably duplicate; ignore
+                SAL_INFO("xmloff.core", "SvXMLImport::SetXmlId: cannot set xml:id");
             }
-        } catch (uno::Exception &) {
-            TOOLS_WARN_EXCEPTION("xmloff.core","SvXMLImport::SetXmlId");
         }
+    } catch (uno::Exception &) {
+        TOOLS_WARN_EXCEPTION("xmloff.core","SvXMLImport::SetXmlId");
     }
 }
 

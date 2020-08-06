@@ -1096,20 +1096,20 @@ void SvXMLExport::ImplExportStyles()
     }
 
     // transfer style names (+ families) TO other components (if appropriate)
-    if( ( !( mnExportFlags & SvXMLExportFlags::CONTENT ) ) && mxExportInfo.is() )
+    if( ( mnExportFlags & SvXMLExportFlags::CONTENT ) || !mxExportInfo.is() )
+        return;
+
+    static OUString sStyleNames( "StyleNames" );
+    static OUString sStyleFamilies( "StyleFamilies" );
+    uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = mxExportInfo->getPropertySetInfo();
+    if ( xPropertySetInfo->hasPropertyByName( sStyleNames ) && xPropertySetInfo->hasPropertyByName( sStyleFamilies ) )
     {
-        static OUString sStyleNames( "StyleNames" );
-        static OUString sStyleFamilies( "StyleFamilies" );
-        uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = mxExportInfo->getPropertySetInfo();
-        if ( xPropertySetInfo->hasPropertyByName( sStyleNames ) && xPropertySetInfo->hasPropertyByName( sStyleFamilies ) )
-        {
-            Sequence<sal_Int32> aStyleFamilies;
-            Sequence<OUString> aStyleNames;
-            mxAutoStylePool->GetRegisteredNames( aStyleFamilies, aStyleNames );
-            mxExportInfo->setPropertyValue( sStyleNames, makeAny( aStyleNames ) );
-            mxExportInfo->setPropertyValue( sStyleFamilies,
-                                           makeAny( aStyleFamilies ) );
-        }
+        Sequence<sal_Int32> aStyleFamilies;
+        Sequence<OUString> aStyleNames;
+        mxAutoStylePool->GetRegisteredNames( aStyleFamilies, aStyleNames );
+        mxExportInfo->setPropertyValue( sStyleNames, makeAny( aStyleNames ) );
+        mxExportInfo->setPropertyValue( sStyleFamilies,
+                                       makeAny( aStyleFamilies ) );
     }
 }
 
@@ -1507,184 +1507,184 @@ void SvXMLExport::ExportFontDecls_()
 void SvXMLExport::ExportStyles_( bool )
 {
     uno::Reference< lang::XMultiServiceFactory > xFact( GetModel(), uno::UNO_QUERY );
-    if( xFact.is())
+    if( !xFact.is())
+        return;
+
+    // export (fill-)gradient-styles
+    try
     {
-        // export (fill-)gradient-styles
-        try
+        uno::Reference< container::XNameAccess > xGradient( xFact->createInstance("com.sun.star.drawing.GradientTable"), uno::UNO_QUERY );
+        if( xGradient.is() )
         {
-            uno::Reference< container::XNameAccess > xGradient( xFact->createInstance("com.sun.star.drawing.GradientTable"), uno::UNO_QUERY );
-            if( xGradient.is() )
+            XMLGradientStyleExport aGradientStyle( *this );
+
+            if( xGradient->hasElements() )
             {
-                XMLGradientStyleExport aGradientStyle( *this );
-
-                if( xGradient->hasElements() )
+                const uno::Sequence< OUString > aNamesSeq ( xGradient->getElementNames() );
+                for( const OUString& rStrName : aNamesSeq )
                 {
-                    const uno::Sequence< OUString > aNamesSeq ( xGradient->getElementNames() );
-                    for( const OUString& rStrName : aNamesSeq )
+                    try
                     {
-                        try
-                        {
-                            uno::Any aValue = xGradient->getByName( rStrName );
+                        uno::Any aValue = xGradient->getByName( rStrName );
 
-                            aGradientStyle.exportXML( rStrName, aValue );
-                        }
-                        catch(const container::NoSuchElementException&)
-                        {
-                        }
+                        aGradientStyle.exportXML( rStrName, aValue );
+                    }
+                    catch(const container::NoSuchElementException&)
+                    {
                     }
                 }
             }
         }
-        catch(const lang::ServiceNotRegisteredException&)
-        {
-        }
+    }
+    catch(const lang::ServiceNotRegisteredException&)
+    {
+    }
 
-        // export (fill-)hatch-styles
-        try
+    // export (fill-)hatch-styles
+    try
+    {
+        uno::Reference< container::XNameAccess > xHatch( xFact->createInstance("com.sun.star.drawing.HatchTable"), uno::UNO_QUERY );
+        if( xHatch.is() )
         {
-            uno::Reference< container::XNameAccess > xHatch( xFact->createInstance("com.sun.star.drawing.HatchTable"), uno::UNO_QUERY );
-            if( xHatch.is() )
+            XMLHatchStyleExport aHatchStyle( *this );
+
+            if( xHatch->hasElements() )
             {
-                XMLHatchStyleExport aHatchStyle( *this );
-
-                if( xHatch->hasElements() )
+                const uno::Sequence< OUString > aNamesSeq ( xHatch->getElementNames() );
+                for( const OUString& rStrName : aNamesSeq )
                 {
-                    const uno::Sequence< OUString > aNamesSeq ( xHatch->getElementNames() );
-                    for( const OUString& rStrName : aNamesSeq )
+                    try
                     {
-                        try
-                        {
-                            uno::Any aValue = xHatch->getByName( rStrName );
+                        uno::Any aValue = xHatch->getByName( rStrName );
 
-                            aHatchStyle.exportXML( rStrName, aValue );
-                        }
-                        catch(const container::NoSuchElementException&)
-                        {}
+                        aHatchStyle.exportXML( rStrName, aValue );
+                    }
+                    catch(const container::NoSuchElementException&)
+                    {}
+                }
+            }
+        }
+    }
+    catch(const lang::ServiceNotRegisteredException&)
+    {
+    }
+
+    // export (fill-)bitmap-styles
+    try
+    {
+        uno::Reference< container::XNameAccess > xBitmap( xFact->createInstance("com.sun.star.drawing.BitmapTable"), uno::UNO_QUERY );
+        if( xBitmap.is() )
+        {
+            if( xBitmap->hasElements() )
+            {
+                const uno::Sequence< OUString > aNamesSeq ( xBitmap->getElementNames() );
+                for( const OUString& rStrName : aNamesSeq )
+                {
+                    try
+                    {
+                        uno::Any aValue = xBitmap->getByName( rStrName );
+
+                        XMLImageStyle::exportXML( rStrName, aValue, *this );
+                    }
+                    catch(const container::NoSuchElementException&)
+                    {
                     }
                 }
             }
         }
-        catch(const lang::ServiceNotRegisteredException&)
-        {
-        }
+    }
+    catch(const lang::ServiceNotRegisteredException&)
+    {
+    }
 
-        // export (fill-)bitmap-styles
-        try
+    // export transparency-gradient -styles
+    try
+    {
+        uno::Reference< container::XNameAccess > xTransGradient( xFact->createInstance("com.sun.star.drawing.TransparencyGradientTable"), uno::UNO_QUERY );
+        if( xTransGradient.is() )
         {
-            uno::Reference< container::XNameAccess > xBitmap( xFact->createInstance("com.sun.star.drawing.BitmapTable"), uno::UNO_QUERY );
-            if( xBitmap.is() )
+            XMLTransGradientStyleExport aTransGradientstyle( *this );
+
+            if( xTransGradient->hasElements() )
             {
-                if( xBitmap->hasElements() )
+                const uno::Sequence< OUString > aNamesSeq ( xTransGradient->getElementNames() );
+                for( const OUString& rStrName : aNamesSeq )
                 {
-                    const uno::Sequence< OUString > aNamesSeq ( xBitmap->getElementNames() );
-                    for( const OUString& rStrName : aNamesSeq )
+                    try
                     {
-                        try
-                        {
-                            uno::Any aValue = xBitmap->getByName( rStrName );
+                        uno::Any aValue = xTransGradient->getByName( rStrName );
 
-                            XMLImageStyle::exportXML( rStrName, aValue, *this );
-                        }
-                        catch(const container::NoSuchElementException&)
-                        {
-                        }
+                        aTransGradientstyle.exportXML( rStrName, aValue );
+                    }
+                    catch(const container::NoSuchElementException&)
+                    {
                     }
                 }
             }
         }
-        catch(const lang::ServiceNotRegisteredException&)
-        {
-        }
+    }
+    catch(const lang::ServiceNotRegisteredException&)
+    {
+    }
 
-        // export transparency-gradient -styles
-        try
+    // export marker-styles
+    try
+    {
+        uno::Reference< container::XNameAccess > xMarker( xFact->createInstance("com.sun.star.drawing.MarkerTable"), uno::UNO_QUERY );
+        if( xMarker.is() )
         {
-            uno::Reference< container::XNameAccess > xTransGradient( xFact->createInstance("com.sun.star.drawing.TransparencyGradientTable"), uno::UNO_QUERY );
-            if( xTransGradient.is() )
+            XMLMarkerStyleExport aMarkerStyle( *this );
+
+            if( xMarker->hasElements() )
             {
-                XMLTransGradientStyleExport aTransGradientstyle( *this );
-
-                if( xTransGradient->hasElements() )
+                const uno::Sequence< OUString > aNamesSeq ( xMarker->getElementNames() );
+                for( const OUString& rStrName : aNamesSeq )
                 {
-                    const uno::Sequence< OUString > aNamesSeq ( xTransGradient->getElementNames() );
-                    for( const OUString& rStrName : aNamesSeq )
+                    try
                     {
-                        try
-                        {
-                            uno::Any aValue = xTransGradient->getByName( rStrName );
+                        uno::Any aValue = xMarker->getByName( rStrName );
 
-                            aTransGradientstyle.exportXML( rStrName, aValue );
-                        }
-                        catch(const container::NoSuchElementException&)
-                        {
-                        }
+                        aMarkerStyle.exportXML( rStrName, aValue );
+                    }
+                    catch(const container::NoSuchElementException&)
+                    {
                     }
                 }
             }
         }
-        catch(const lang::ServiceNotRegisteredException&)
-        {
-        }
+    }
+    catch(const lang::ServiceNotRegisteredException&)
+    {
+    }
 
-        // export marker-styles
-        try
+    // export dash-styles
+    try
+    {
+        uno::Reference< container::XNameAccess > xDashes( xFact->createInstance("com.sun.star.drawing.DashTable"), uno::UNO_QUERY );
+        if( xDashes.is() )
         {
-            uno::Reference< container::XNameAccess > xMarker( xFact->createInstance("com.sun.star.drawing.MarkerTable"), uno::UNO_QUERY );
-            if( xMarker.is() )
+            XMLDashStyleExport aDashStyle( *this );
+
+            if( xDashes->hasElements() )
             {
-                XMLMarkerStyleExport aMarkerStyle( *this );
-
-                if( xMarker->hasElements() )
+                const uno::Sequence< OUString > aNamesSeq ( xDashes->getElementNames() );
+                for( const OUString& rStrName : aNamesSeq )
                 {
-                    const uno::Sequence< OUString > aNamesSeq ( xMarker->getElementNames() );
-                    for( const OUString& rStrName : aNamesSeq )
+                    try
                     {
-                        try
-                        {
-                            uno::Any aValue = xMarker->getByName( rStrName );
+                        uno::Any aValue = xDashes->getByName( rStrName );
 
-                            aMarkerStyle.exportXML( rStrName, aValue );
-                        }
-                        catch(const container::NoSuchElementException&)
-                        {
-                        }
+                        aDashStyle.exportXML( rStrName, aValue );
+                    }
+                    catch(const container::NoSuchElementException&)
+                    {
                     }
                 }
             }
         }
-        catch(const lang::ServiceNotRegisteredException&)
-        {
-        }
-
-        // export dash-styles
-        try
-        {
-            uno::Reference< container::XNameAccess > xDashes( xFact->createInstance("com.sun.star.drawing.DashTable"), uno::UNO_QUERY );
-            if( xDashes.is() )
-            {
-                XMLDashStyleExport aDashStyle( *this );
-
-                if( xDashes->hasElements() )
-                {
-                    const uno::Sequence< OUString > aNamesSeq ( xDashes->getElementNames() );
-                    for( const OUString& rStrName : aNamesSeq )
-                    {
-                        try
-                        {
-                            uno::Any aValue = xDashes->getByName( rStrName );
-
-                            aDashStyle.exportXML( rStrName, aValue );
-                        }
-                        catch(const container::NoSuchElementException&)
-                        {
-                        }
-                    }
-                }
-            }
-        }
-        catch(const lang::ServiceNotRegisteredException&)
-        {
-        }
+    }
+    catch(const lang::ServiceNotRegisteredException&)
+    {
     }
 }
 
@@ -1731,44 +1731,44 @@ void SvXMLExport::GetViewSettingsAndViews(uno::Sequence<beans::PropertyValue>& r
 {
     GetViewSettings(rProps);
     uno::Reference<document::XViewDataSupplier> xViewDataSupplier(GetModel(), uno::UNO_QUERY);
-    if(xViewDataSupplier.is())
+    if(!xViewDataSupplier.is())
+        return;
+
+    uno::Reference<container::XIndexAccess> xIndexAccess;
+    xViewDataSupplier->setViewData( xIndexAccess ); // make sure we get a newly created sequence
     {
-        uno::Reference<container::XIndexAccess> xIndexAccess;
-        xViewDataSupplier->setViewData( xIndexAccess ); // make sure we get a newly created sequence
+        // tdf#130559: don't export preview view data if active
+        css::uno::ContextLayer layer(comphelper::NewFlagContext("NoPreviewData"));
+        xIndexAccess = xViewDataSupplier->getViewData();
+    }
+    bool bAdd = false;
+    uno::Any aAny;
+    if(xIndexAccess.is() && xIndexAccess->hasElements() )
+    {
+        sal_Int32 nCount = xIndexAccess->getCount();
+        for (sal_Int32 i = 0; i < nCount; i++)
         {
-            // tdf#130559: don't export preview view data if active
-            css::uno::ContextLayer layer(comphelper::NewFlagContext("NoPreviewData"));
-            xIndexAccess = xViewDataSupplier->getViewData();
-        }
-        bool bAdd = false;
-        uno::Any aAny;
-        if(xIndexAccess.is() && xIndexAccess->hasElements() )
-        {
-            sal_Int32 nCount = xIndexAccess->getCount();
-            for (sal_Int32 i = 0; i < nCount; i++)
+            aAny = xIndexAccess->getByIndex(i);
+            uno::Sequence<beans::PropertyValue> aProps;
+            if( aAny >>= aProps )
             {
-                aAny = xIndexAccess->getByIndex(i);
-                uno::Sequence<beans::PropertyValue> aProps;
-                if( aAny >>= aProps )
+                if( aProps.hasElements() )
                 {
-                    if( aProps.hasElements() )
-                    {
-                        bAdd = true;
-                        break;
-                    }
+                    bAdd = true;
+                    break;
                 }
             }
         }
+    }
 
-        if( bAdd )
-        {
-            sal_Int32 nOldLength(rProps.getLength());
-            rProps.realloc(nOldLength + 1);
-            beans::PropertyValue aProp;
-            aProp.Name = "Views";
-            aProp.Value <<= xIndexAccess;
-            rProps[nOldLength] = aProp;
-        }
+    if( bAdd )
+    {
+        sal_Int32 nOldLength(rProps.getLength());
+        rProps.realloc(nOldLength + 1);
+        beans::PropertyValue aProp;
+        aProp.Name = "Views";
+        aProp.Value <<= xIndexAccess;
+        rProps[nOldLength] = aProp;
     }
 }
 
@@ -2157,23 +2157,23 @@ void SvXMLExport::StartElement(const OUString& rName,
 
 void SvXMLExport::Characters(const OUString& rChars)
 {
-    if ((mnErrorFlags & SvXMLErrorFlags::DO_NOTHING) != SvXMLErrorFlags::DO_NOTHING)
+    if ((mnErrorFlags & SvXMLErrorFlags::DO_NOTHING) == SvXMLErrorFlags::DO_NOTHING)
+        return;
+
+    try
     {
-        try
-        {
-            mxHandler->characters(rChars);
-        }
-        catch (const SAXInvalidCharacterException& e)
-        {
-            Sequence<OUString> aPars { rChars };
-            SetError( XMLERROR_SAX|XMLERROR_FLAG_WARNING, aPars, e.Message, nullptr );
-        }
-        catch (const SAXException& e)
-        {
-            Sequence<OUString> aPars { rChars };
-            SetError( XMLERROR_SAX|XMLERROR_FLAG_ERROR|XMLERROR_FLAG_SEVERE,
-                      aPars, e.Message, nullptr );
-        }
+        mxHandler->characters(rChars);
+    }
+    catch (const SAXInvalidCharacterException& e)
+    {
+        Sequence<OUString> aPars { rChars };
+        SetError( XMLERROR_SAX|XMLERROR_FLAG_WARNING, aPars, e.Message, nullptr );
+    }
+    catch (const SAXException& e)
+    {
+        Sequence<OUString> aPars { rChars };
+        SetError( XMLERROR_SAX|XMLERROR_FLAG_ERROR|XMLERROR_FLAG_SEVERE,
+                  aPars, e.Message, nullptr );
     }
 }
 
@@ -2199,20 +2199,20 @@ void SvXMLExport::EndElement(const OUString& rName,
     SAL_WARN_IF(!mpImpl->mNamespaceMaps.empty() &&
         (mpImpl->mNamespaceMaps.top().second >= mpImpl->mDepth), "xmloff.core", "SvXMLExport: NamespaceMaps corrupted");
 
-    if ((mnErrorFlags & SvXMLErrorFlags::DO_NOTHING) != SvXMLErrorFlags::DO_NOTHING)
+    if ((mnErrorFlags & SvXMLErrorFlags::DO_NOTHING) == SvXMLErrorFlags::DO_NOTHING)
+        return;
+
+    try
     {
-        try
-        {
-            if( bIgnWSInside && ((mnExportFlags & SvXMLExportFlags::PRETTY) == SvXMLExportFlags::PRETTY))
-                mxHandler->ignorableWhitespace( msWS );
-            mxHandler->endElement( rName );
-        }
-        catch (const SAXException& e)
-        {
-            Sequence<OUString> aPars { rName };
-            SetError( XMLERROR_SAX|XMLERROR_FLAG_ERROR|XMLERROR_FLAG_SEVERE,
-                      aPars, e.Message, nullptr );
-        }
+        if( bIgnWSInside && ((mnExportFlags & SvXMLExportFlags::PRETTY) == SvXMLExportFlags::PRETTY))
+            mxHandler->ignorableWhitespace( msWS );
+        mxHandler->endElement( rName );
+    }
+    catch (const SAXException& e)
+    {
+        Sequence<OUString> aPars { rName };
+        SetError( XMLERROR_SAX|XMLERROR_FLAG_ERROR|XMLERROR_FLAG_SEVERE,
+                  aPars, e.Message, nullptr );
     }
 }
 
@@ -2221,18 +2221,18 @@ void SvXMLExport::IgnorableWhitespace()
     if ((mnExportFlags & SvXMLExportFlags::PRETTY) != SvXMLExportFlags::PRETTY)
         return;
 
-    if ((mnErrorFlags & SvXMLErrorFlags::DO_NOTHING) != SvXMLErrorFlags::DO_NOTHING)
+    if ((mnErrorFlags & SvXMLErrorFlags::DO_NOTHING) == SvXMLErrorFlags::DO_NOTHING)
+        return;
+
+    try
     {
-        try
-        {
-            mxHandler->ignorableWhitespace( msWS );
-        }
-        catch (const SAXException& e)
-        {
-            Sequence<OUString> aPars(0);
-            SetError( XMLERROR_SAX|XMLERROR_FLAG_ERROR|XMLERROR_FLAG_SEVERE,
-                      aPars, e.Message, nullptr );
-        }
+        mxHandler->ignorableWhitespace( msWS );
+    }
+    catch (const SAXException& e)
+    {
+        Sequence<OUString> aPars(0);
+        SetError( XMLERROR_SAX|XMLERROR_FLAG_ERROR|XMLERROR_FLAG_SEVERE,
+                  aPars, e.Message, nullptr );
     }
 }
 
@@ -2331,40 +2331,40 @@ SvXMLExport::AddAttributeXmlId(uno::Reference<uno::XInterface> const & i_xIfc)
     const uno::Reference<rdf::XMetadatable> xMeta(i_xIfc,
         uno::UNO_QUERY);
 //FIXME not yet...
-    if ( xMeta.is() )
+    if ( !xMeta.is() )
+        return;
+
+    const beans::StringPair mdref( xMeta->getMetadataReference() );
+    if ( mdref.Second.isEmpty() )
+        return;
+
+    const OUString streamName = mpImpl->mStreamName;
+    if ( !streamName.isEmpty() )
     {
-        const beans::StringPair mdref( xMeta->getMetadataReference() );
-        if ( !mdref.Second.isEmpty() )
+        if ( streamName == mdref.First )
         {
-            const OUString streamName = mpImpl->mStreamName;
-            if ( !streamName.isEmpty() )
-            {
-                if ( streamName == mdref.First )
-                {
-                    AddAttribute( XML_NAMESPACE_XML, XML_ID, mdref.Second );
-                }
-                else
-                {
-                    SAL_WARN("xmloff.core","SvXMLExport::AddAttributeXmlId: invalid stream name");
-                }
-            }
-            else
-            {
-                // FIXME: this is ugly
-                // there is no stream name (e.g. XSLT, flat-xml format)!
-                // but how do we ensure uniqueness in this case?
-                // a) just omit styles.xml ids -- they are unlikely anyway...
-                // b) somehow find out whether we are currently exporting styles
-                //    or content, and prefix "s" or "c" => unique
-                if ( mdref.First == "content.xml" )
-                {
-                    AddAttribute( XML_NAMESPACE_XML, XML_ID, mdref.Second );
-                }
-                else
-                {
-                    SAL_INFO("xmloff.core", "SvXMLExport::AddAttributeXmlId: no stream name given: dropping styles.xml xml:id");
-                }
-            }
+            AddAttribute( XML_NAMESPACE_XML, XML_ID, mdref.Second );
+        }
+        else
+        {
+            SAL_WARN("xmloff.core","SvXMLExport::AddAttributeXmlId: invalid stream name");
+        }
+    }
+    else
+    {
+        // FIXME: this is ugly
+        // there is no stream name (e.g. XSLT, flat-xml format)!
+        // but how do we ensure uniqueness in this case?
+        // a) just omit styles.xml ids -- they are unlikely anyway...
+        // b) somehow find out whether we are currently exporting styles
+        //    or content, and prefix "s" or "c" => unique
+        if ( mdref.First == "content.xml" )
+        {
+            AddAttribute( XML_NAMESPACE_XML, XML_ID, mdref.Second );
+        }
+        else
+        {
+            SAL_INFO("xmloff.core", "SvXMLExport::AddAttributeXmlId: no stream name given: dropping styles.xml xml:id");
         }
     }
 }

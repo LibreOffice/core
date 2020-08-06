@@ -307,7 +307,10 @@ void SvXMLMetaDocumentContext::setBuildId(OUString const& i_rBuildId, const uno:
         }
     }
 
-    if ( !sBuildId.isEmpty() ) try
+    if ( sBuildId.isEmpty() )
+        return;
+
+    try
     {
         if( xImportInfo.is() )
         {

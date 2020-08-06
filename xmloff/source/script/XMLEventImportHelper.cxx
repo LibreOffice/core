@@ -56,23 +56,23 @@ void XMLEventImportHelper::RegisterFactory(
 void XMLEventImportHelper::AddTranslationTable(
     const XMLEventNameTranslation* pTransTable )
 {
-    if (nullptr != pTransTable)
+    if (nullptr == pTransTable)
+        return;
+
+    // put translation table into map
+    for(const XMLEventNameTranslation* pTrans = pTransTable;
+        pTrans->sAPIName != nullptr;
+        pTrans++)
     {
-        // put translation table into map
-        for(const XMLEventNameTranslation* pTrans = pTransTable;
-            pTrans->sAPIName != nullptr;
-            pTrans++)
-        {
-            XMLEventName aName( pTrans->nPrefix, pTrans->sXMLName );
+        XMLEventName aName( pTrans->nPrefix, pTrans->sXMLName );
 
-            // check for conflicting entries
-            DBG_ASSERT(pEventNameMap->find(aName) == pEventNameMap->end(),
-                       "conflicting event translations");
+        // check for conflicting entries
+        DBG_ASSERT(pEventNameMap->find(aName) == pEventNameMap->end(),
+                   "conflicting event translations");
 
-            // assign new translation
-            (*pEventNameMap)[aName] =
-                OUString::createFromAscii(pTrans->sAPIName);
-        }
+        // assign new translation
+        (*pEventNameMap)[aName] =
+            OUString::createFromAscii(pTrans->sAPIName);
     }
     // else? ignore!
 }
