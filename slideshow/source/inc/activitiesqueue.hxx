@@ -57,7 +57,7 @@ namespace slideshow
 
             /** Add the given activity to the queue.
              */
-            bool addActivity( const ActivitySharedPtr& pActivity );
+            bool addActivity( const ActivitySharedPtr& pActivity, const bool bProcessLast = false );
 
             /** Process the activities queue.
 
@@ -95,6 +95,9 @@ namespace slideshow
                                                                  // activities, that still
                                                                  // await processing for this
                                                                  // round
+
+            ActivityQueue           maCurrentActivitiesToBeProcessedLast; // activities that will be
+                                                                          // processed last in the queue
 
             ActivityQueue           maCurrentActivitiesReinsert;    // currently running
                                                                       // activities, that are
