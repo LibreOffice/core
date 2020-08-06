@@ -21,7 +21,7 @@
 #include <svdata.hxx>
 #include <salinst.hxx>
 
-OUString const gaDataUrl = "/vcl/qa/cppunit/bitmaprender/data/";
+OUStringLiteral const gaDataUrl = "/vcl/qa/cppunit/bitmaprender/data/";
 
 class BitmapRenderTest : public test::BootstrapFixture
 {

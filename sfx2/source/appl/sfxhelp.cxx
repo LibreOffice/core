@@ -703,7 +703,7 @@ bool SfxHelp::Start(const OUString& rURL, weld::Widget* pWidget)
 /// Redirect the vnd.sun.star.help:// urls to http://help.libreoffice.org
 static bool impl_showOnlineHelp( const OUString& rURL )
 {
-    static const OUString aInternal("vnd.sun.star.help://");
+    static const OUStringLiteral aInternal("vnd.sun.star.help://");
     if ( rURL.getLength() <= aInternal.getLength() || !rURL.startsWith(aInternal) )
         return false;
 

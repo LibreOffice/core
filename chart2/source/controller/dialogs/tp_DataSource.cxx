@@ -46,7 +46,7 @@ using ::com::sun::star::uno::Sequence;
 namespace
 {
 
-const OUString lcl_aLabelRole( "label" );
+const OUStringLiteral lcl_aLabelRole( "label" );
 
 void lcl_UpdateCurrentRange(weld::TreeView& rOutListBox, const OUString & rRole,
                             const OUString& rRange)
@@ -840,7 +840,7 @@ bool DataSourceTabPage::updateModelFromControl(const weld::Entry* pField)
                                     // "$Sheet1.$A$1"
                                     aRange = xNewSeq->getSourceRangeRepresentation();
                                     Reference< beans::XPropertySet > xProp( xNewSeq, uno::UNO_QUERY_THROW );
-                                    xProp->setPropertyValue( "Role" , uno::Any( lcl_aLabelRole ));
+                                    xProp->setPropertyValue( "Role" , uno::Any( OUString(lcl_aLabelRole) ));
                                     xLabeledSeq->setLabel( xNewSeq );
                                 }
                             }

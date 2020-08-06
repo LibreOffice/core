@@ -21,16 +21,16 @@
 
 #include <rtl/ustring.hxx>
 
-extern const OUString FM_PROP_LABEL;
-extern const OUString FM_PROP_NAME;
-extern const OUString FM_PROP_CONTROLSOURCE;
-extern const OUString FM_PROP_FORMATKEY;
-extern const OUString FM_PROP_VALUE;
-extern const OUString FM_PROP_EDITMODE;
-extern const OUString FM_PROP_DATASOURCE;
-extern const OUString FM_PROP_CURSORSOURCE;
-extern const OUString FM_PROP_CURSORSOURCETYPE;
-extern const OUString FM_PROP_TEXT;
+extern const OUStringLiteral FM_PROP_LABEL;
+extern const OUStringLiteral FM_PROP_NAME;
+extern const OUStringLiteral FM_PROP_CONTROLSOURCE;
+extern const OUStringLiteral FM_PROP_FORMATKEY;
+extern const OUStringLiteral FM_PROP_VALUE;
+extern const OUStringLiteral FM_PROP_EDITMODE;
+extern const OUStringLiteral FM_PROP_DATASOURCE;
+extern const OUStringLiteral FM_PROP_CURSORSOURCE;
+extern const OUStringLiteral FM_PROP_CURSORSOURCETYPE;
+extern const OUStringLiteral FM_PROP_TEXT;
 
 #endif
 
