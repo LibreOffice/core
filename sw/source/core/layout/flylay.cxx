@@ -493,7 +493,7 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
 
     const bool bBot = nBot > nClipBot;
     const bool bRig = nRig > nClipRig;
-    if ( bBot || bRig )
+    if (( bBot || bRig ) && !IsDraggingOffPageAllowed(FindFrameFormat(GetDrawObj())))
     {
         bool bAgain = false;
         // #i37068# - no move, if it's requested
