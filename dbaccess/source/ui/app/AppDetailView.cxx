@@ -76,7 +76,6 @@ OCreationList::OCreationList( OTasksWindow& _rParent )
     SetSelectionMode( SelectionMode::NONE );
     SetNoAutoCurEntry( true );
     SetNodeDefaultImages( );
-    EnableEntryMnemonics();
 }
 
 void OCreationList::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& _rRect )
