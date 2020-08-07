@@ -99,6 +99,7 @@
 #include <unotools/mediadescriptor.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
+#include <unicode/regex.h>
 
 using namespace ::com::sun::star;
 using namespace oox;
@@ -230,6 +231,26 @@ uno::Any FloatingTableInfo::getPropertyValue(const OUString &propertyName)
         if( propVal.Name == propertyName )
             return propVal.Value ;
     return uno::Any() ;
+}
+
+/// regex replaceAll
+OUString lcl_replace(const OUString& rPattern, const OUString& rReplacement, const OUString& rInput)
+{
+    UErrorCode nIcuError(U_ZERO_ERROR);
+    icu::UnicodeString sIcuPattern(reinterpret_cast<const UChar*>(rPattern.getStr()), rPattern.getLength());
+    icu::UnicodeString sIcuReplacement(reinterpret_cast<const UChar*>(rReplacement.getStr()), rReplacement.getLength());
+    icu::UnicodeString sIcuInput(reinterpret_cast<const UChar*>(rInput.getStr()), rInput.getLength());
+    icu::RegexMatcher aMatcher(sIcuPattern, sIcuInput, 0, nIcuError);
+    if (nIcuError == U_ZERO_ERROR)
+    {
+        icu::UnicodeString sIcuOutput = aMatcher.replaceAll(sIcuReplacement, nIcuError);
+        if (nIcuError == U_ZERO_ERROR)
+        {
+            OUString sResult(reinterpret_cast<const sal_Unicode*>(sIcuOutput.getBuffer()), sIcuOutput.length());
+            return sResult;
+        }
+    }
+    return OUString();
 }
 
 DomainMapper_Impl::DomainMapper_Impl(
@@ -4216,6 +4237,9 @@ void DomainMapper_Impl::handleFieldFormula
 
     // we don't copy the = symbol from the command
     OUString formula = command.copy(1);
+
+    // convert cell references, for example A1 -> <A1>
+    formula = lcl_replace("\\b([A-Z][A-Z]?[0-9]+)\\b", "<$1>", formula);
 
     xFieldProperties->setPropertyValue(getPropertyName(PROP_CONTENT), uno::makeAny(formula));
     xFieldProperties->setPropertyValue(getPropertyName(PROP_NUMBER_FORMAT), uno::makeAny(sal_Int32(0)));

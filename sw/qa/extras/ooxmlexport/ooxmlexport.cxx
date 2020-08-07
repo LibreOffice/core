@@ -982,6 +982,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf44986, "tdf44986.docx")
     CPPUNIT_ASSERT_EQUAL(OUString(""), uno::Reference<text::XTextRange>(xTable->getCellByName("B1"), uno::UNO_QUERY_THROW)->getString());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf118682, "tdf118682.docx")
+{
+    // Support cell references in table formulas
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+
+    // check only import yet
+    if (!mbExported)
+    {
+        // This was 0 instead of A1 * A2
+        CPPUNIT_ASSERT_EQUAL(OUString("544.39"), uno::Reference<text::XTextRange>(xTable->getCellByName("C1"), uno::UNO_QUERY_THROW)->getString());
+    }
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf106953, "tdf106953.docx")
 {
     uno::Reference<container::XIndexAccess> xRules = getProperty< uno::Reference<container::XIndexAccess> >(getStyles("NumberingStyles")->getByName("WWNum1"), "NumberingRules");
