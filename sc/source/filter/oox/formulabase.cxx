@@ -1149,7 +1149,10 @@ private:
 OpCodeProviderImpl::OpCodeProviderImpl( const FunctionInfoVector& rFuncInfos,
         const Reference< XMultiServiceFactory >& rxModelFactory )
 {
-    if( rxModelFactory.is() ) try
+    if( !rxModelFactory.is() )
+        return;
+
+    try
     {
         Reference< XFormulaOpCodeMapper > xMapper( rxModelFactory->createInstance(
             "com.sun.star.sheet.FormulaOpCodeMapper" ), UNO_QUERY_THROW );
@@ -1684,24 +1687,24 @@ void FormulaProcessorBase::convertStringToStringList(
         ApiTokenSequence& orTokens, sal_Unicode cStringSep, bool bTrimLeadingSpaces ) const
 {
     OUString aString;
-    if( extractString( aString, orTokens ) && !aString.isEmpty() )
+    if( !(extractString( aString, orTokens ) && !aString.isEmpty()) )
+        return;
+
+    ::std::vector< ApiToken > aNewTokens;
+    for( sal_Int32 nPos{ 0 }; nPos>=0; )
     {
-        ::std::vector< ApiToken > aNewTokens;
-        for( sal_Int32 nPos{ 0 }; nPos>=0; )
+        OUString aEntry = aString.getToken( 0, cStringSep, nPos );
+        if( bTrimLeadingSpaces )
         {
-            OUString aEntry = aString.getToken( 0, cStringSep, nPos );
-            if( bTrimLeadingSpaces )
-            {
-                sal_Int32 nStart = 0;
-                while( (nStart < aEntry.getLength()) && (aEntry[ nStart ] == ' ') ) ++nStart;
-                aEntry = aEntry.copy( nStart );
-            }
-            if( !aNewTokens.empty() )
-                aNewTokens.emplace_back( OPCODE_SEP, Any() );
-            aNewTokens.emplace_back( OPCODE_PUSH, Any( aEntry ) );
+            sal_Int32 nStart = 0;
+            while( (nStart < aEntry.getLength()) && (aEntry[ nStart ] == ' ') ) ++nStart;
+            aEntry = aEntry.copy( nStart );
         }
-        orTokens = ContainerHelper::vectorToSequence( aNewTokens );
+        if( !aNewTokens.empty() )
+            aNewTokens.emplace_back( OPCODE_SEP, Any() );
+        aNewTokens.emplace_back( OPCODE_PUSH, Any( aEntry ) );
     }
+    orTokens = ContainerHelper::vectorToSequence( aNewTokens );
 }
 
 } // namespace oox

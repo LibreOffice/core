@@ -1012,26 +1012,26 @@ void PageSettingsConverter::convertHeaderFooterData(
     orHFData.mbShareOddEven = !bUseEvenContent;
     orHFData.mbDynamicHeight = true;
 
-    if( orHFData.mbHasContent )
-    {
-        // use maximum height of odd/even header/footer
-        orHFData.mnHeight = ::std::max( nOddHeight, nEvenHeight );
-        /*  Calc contains distance between bottom of header and top of page
-            body in "HeaderBodyDistance" property, and distance between bottom
-            of page body and top of footer in "FooterBodyDistance" property */
-        orHFData.mnBodyDist = getUnitConverter().scaleToMm100( fPageMargin - fContentMargin, Unit::Inch ) - orHFData.mnHeight;
-        /*  #i23296# Distance less than 0 means, header or footer overlays page
-            body. As this is not possible in Calc, set fixed header or footer
-            height (crop header/footer) to get correct top position of page body. */
-        orHFData.mbDynamicHeight = orHFData.mnBodyDist >= 0;
-        /*  "HeaderHeight" property is in fact distance from top of header to
-            top of page body (including "HeaderBodyDistance").
-            "FooterHeight" property is in fact distance from bottom of page
-            body to bottom of footer (including "FooterBodyDistance"). */
-        orHFData.mnHeight += orHFData.mnBodyDist;
-        // negative body distance not allowed
-        orHFData.mnBodyDist = ::std::max< sal_Int32 >( orHFData.mnBodyDist, 0 );
-    }
+    if( !orHFData.mbHasContent )
+        return;
+
+    // use maximum height of odd/even header/footer
+    orHFData.mnHeight = ::std::max( nOddHeight, nEvenHeight );
+    /*  Calc contains distance between bottom of header and top of page
+        body in "HeaderBodyDistance" property, and distance between bottom
+        of page body and top of footer in "FooterBodyDistance" property */
+    orHFData.mnBodyDist = getUnitConverter().scaleToMm100( fPageMargin - fContentMargin, Unit::Inch ) - orHFData.mnHeight;
+    /*  #i23296# Distance less than 0 means, header or footer overlays page
+        body. As this is not possible in Calc, set fixed header or footer
+        height (crop header/footer) to get correct top position of page body. */
+    orHFData.mbDynamicHeight = orHFData.mnBodyDist >= 0;
+    /*  "HeaderHeight" property is in fact distance from top of header to
+        top of page body (including "HeaderBodyDistance").
+        "FooterHeight" property is in fact distance from bottom of page
+        body to bottom of footer (including "FooterBodyDistance"). */
+    orHFData.mnHeight += orHFData.mnBodyDist;
+    // negative body distance not allowed
+    orHFData.mnBodyDist = ::std::max< sal_Int32 >( orHFData.mnBodyDist, 0 );
 }
 
 sal_Int32 PageSettingsConverter::writeHeaderFooter(
