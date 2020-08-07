@@ -311,6 +311,24 @@
       "revId": "3e73731b97d0782f0d4ea2db3112977adc352810",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "672e5453_7de7dd60",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-08-07T13:31:57Z",
+      "side": 1,
+      "message": "and now, of course, this particular version works with constexpr. \n\nI swear I tried about 3 different variants and all I got was incomprehensible errors.\n\nAnyhow, I am doing a build without it, to confirm the final list of places that need it, and those can get converted to string_view.",
+      "parentUuid": "68605397_87377f65",
+      "revId": "3e73731b97d0782f0d4ea2db3112977adc352810",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
