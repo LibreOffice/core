@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-07-09 17:06:22 using:
+ Generated on 2020-08-07 11:35:01 using:
  ./bin/update_pch dbaccess dbu --cutoff=12 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -78,6 +78,7 @@
 #include <vcl/font.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
+#include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/metaactiontypes.hxx>
@@ -202,6 +203,7 @@
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #include <FieldDescriptions.hxx>
+#include <IClipBoardTest.hxx>
 #include <QEnumTypes.hxx>
 #include <TableConnectionData.hxx>
 #include <TableFieldDescription.hxx>

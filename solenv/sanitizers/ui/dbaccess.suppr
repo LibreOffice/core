@@ -84,6 +84,7 @@ dbaccess/uiconfig/ui/sortdialog.ui://GtkComboBoxText[@id='value3'] no-labelled-b
 dbaccess/uiconfig/ui/tablesfilterpage.ui://GtkLabel[@id='label2'] orphan-label
 dbaccess/uiconfig/ui/tablesjoindialog.ui://GtkLabel[@id='title'] orphan-label
 dbaccess/uiconfig/ui/tablesjoindialog.ui://GtkLabel[@id='alttitle'] orphan-label
+dbaccess/uiconfig/ui/taskwindow.ui://GtkTreeView[@id='treeview'] no-labelled-by
 dbaccess/uiconfig/ui/textpage.ui://GtkEntry[@id='extension'] no-labelled-by
 dbaccess/uiconfig/ui/textpage.ui://GtkLabel[@id='example'] orphan-label
 dbaccess/uiconfig/ui/useradminpage.ui://GtkLabel[@id='label3'] orphan-label
