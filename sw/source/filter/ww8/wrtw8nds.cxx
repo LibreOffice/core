@@ -623,7 +623,7 @@ bool SwWW8AttrIter::IsAnchorLinkedToThisNode( sal_uLong nNodePos )
 
     while ( aTmpFlyIter != maFlyFrames.end() )
     {
-        const SwPosition &rAnchor  = maFlyIter->GetPosition();
+        const SwPosition &rAnchor  = aTmpFlyIter->GetPosition();
         sal_uLong nAnchorPos = rAnchor.nNode.GetIndex();
         /* if current node position and the anchor position are the same
            then the frame anchor is linked to this node
