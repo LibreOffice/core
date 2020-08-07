@@ -3136,7 +3136,6 @@ dbaccess/source/ui/control/charsetlistbox.cxx
 dbaccess/source/ui/control/curledit.cxx
 dbaccess/source/ui/control/dbtreelistbox.cxx
 dbaccess/source/ui/control/listviewitems.cxx
-dbaccess/source/ui/control/marktree.cxx
 dbaccess/source/ui/control/opendoccontrols.cxx
 dbaccess/source/ui/control/sqledit.cxx
 dbaccess/source/ui/control/tabletree.cxx
@@ -3299,7 +3298,6 @@ dbaccess/source/ui/inc/indexes.hxx
 dbaccess/source/ui/inc/indexfieldscontrol.hxx
 dbaccess/source/ui/inc/linkeddocuments.hxx
 dbaccess/source/ui/inc/listviewitems.hxx
-dbaccess/source/ui/inc/marktree.hxx
 dbaccess/source/ui/inc/objectnamecheck.hxx
 dbaccess/source/ui/inc/opendoccontrols.hxx
 dbaccess/source/ui/inc/paramdialog.hxx

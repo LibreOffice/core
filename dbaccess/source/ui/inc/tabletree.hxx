@@ -21,7 +21,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_TABLETREE_HXX
 
 #include "imageprovider.hxx"
-#include "marktree.hxx"
+#include "dbtreelistbox.hxx"
 
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -33,8 +33,9 @@ namespace dbaui
 {
 
 // OTableTreeListBox
-class OTableTreeListBox final : public OMarkableTreeListBox
+class OTableTreeListBox final : public DBTreeListBox
 {
+    std::unique_ptr<SvLBoxButtonData> m_pCheckButton;
     css::uno::Reference< css::sdbc::XConnection >
                     m_xConnection;      // the connection we're working for, set in implOnNewConnection, called by UpdateTableList
     std::unique_ptr< ImageProvider >
@@ -42,6 +43,7 @@ class OTableTreeListBox final : public OMarkableTreeListBox
 
 public:
     OTableTreeListBox(vcl::Window* pParent, WinBits nWinStyle);
+    virtual void dispose() override;
 
     typedef std::pair< OUString, bool > TTableViewName;
     typedef std::vector< TTableViewName >         TNames;
@@ -101,7 +103,8 @@ public:
 private:
     virtual void InitEntry(SvTreeListEntry* _pEntry, const OUString& _rString, const Image& _rCollapsedBitmap, const Image& _rExpandedBitmap) override;
 
-    virtual void checkedButton_noBroadcast(SvTreeListEntry* _pEntry) override;
+    virtual void    CheckButtonHdl() override;
+    void checkedButton_noBroadcast(SvTreeListEntry* _pEntry);
 
     void implEmphasize(SvTreeListEntry* _pEntry, bool _bChecked, bool _bUpdateDescendants = true, bool _bUpdateAncestors = true);
 
@@ -132,6 +135,15 @@ private:
                 const TNames& _rTables
             );
 
+    void InitButtonData();
+
+    SvButtonState   implDetermineState(SvTreeListEntry* _pEntry);
+        // determines the check state of the given entry, by analyzing the states of all descendants
+
+    void            CheckButtons();     // make the button states consistent (bottom-up)
+
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& _rRect) override;
+    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
 };
 
 class TableTreeListBox
