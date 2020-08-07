@@ -225,6 +225,24 @@
     },
     {
       "key": {
+        "uuid": "e3fc54c8_89de06fa",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-08-07T12:23:02Z",
+      "side": 1,
+      "message": "https://gerrit.libreoffice.org/c/core/+/100270/1/extensions/source/logging/csvformatter.cxx\n \nhttps://gerrit.libreoffice.org/c/core/+/100270/1/sw/source/core/fields/reffld.cxx\n\nhttps://gerrit.libreoffice.org/c/core/+/100270/1/sw/source/ui/misc/bookmark.cxx",
+      "parentUuid": "2fde1cbb_2d5d9f41",
+      "revId": "3e73731b97d0782f0d4ea2db3112977adc352810",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "64d8110d_f1d4e2ed",
         "filename": "include/rtl/ustring.hxx",
         "patchSetId": 1
