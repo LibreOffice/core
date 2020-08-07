@@ -1937,26 +1937,23 @@ XMLParaContext::XMLParaContext(
             break;
         case XML_TOK_TEXT_P_OUTLINE_CONTENT_VISIBLE:
             {
-                mbOutlineContentVisible = true;
-                ::sax::Converter::convertBool(mbOutlineContentVisible, rValue);
+                bool bBool(false);
+                if (::sax::Converter::convertBool(bBool, rValue))
+                    mbOutlineContentVisible = bBool;
             }
             break;
         case XML_TOK_TEXT_P_IS_LIST_HEADER:
             {
                 bool bBool(false);
-                if( ::sax::Converter::convertBool( bBool, rValue ) )
-                {
+                if (::sax::Converter::convertBool(bBool, rValue))
                     bIsListHeader = bBool;
-                }
             }
             break;
         case XML_TOK_TEXT_P_RESTART_NUMBERING:
             {
                 bool bBool(false);
                 if (::sax::Converter::convertBool(bBool, rValue))
-                {
                     bIsRestart = bBool;
-                }
             }
             break;
         case XML_TOK_TEXT_P_START_VALUE:
