@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8ebca6b4_ac01628b",
+        "filename": "sc/source/ui/dbgui/filtdlg.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1286,
+      "author": {
+        "id": 1001825
+      },
+      "writtenOn": "2020-08-07T04:31:35Z",
+      "side": 1,
+      "message": "I\u0027ve factored the code out as suggested, into a separate function \"SetValString\".",
+      "parentUuid": "34a44341_236f38fe",
+      "revId": "7eb87f5a63674f66bd41a275e787c1b1ec1ce279",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7715dd69_ec8e61bf",
         "filename": "sc/uiconfig/scalc/ui/standardfilterdialog.ui",
         "patchSetId": 6
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "c5817afc_4333f87b",
+        "filename": "sc/uiconfig/scalc/ui/standardfilterdialog.ui",
+        "patchSetId": 6
+      },
+      "lineNbr": 655,
+      "author": {
+        "id": 1001825
+      },
+      "writtenOn": "2020-08-07T04:31:35Z",
+      "side": 1,
+      "message": "I removed the label entirely. Since it is empty, it is not required.",
+      "parentUuid": "7715dd69_ec8e61bf",
+      "range": {
+        "startLine": 655,
+        "startChar": 63,
+        "endLine": 655,
+        "endChar": 69
+      },
+      "revId": "7eb87f5a63674f66bd41a275e787c1b1ec1ce279",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dfd897c1_be3ebef6",
         "filename": "sc/uiconfig/scalc/ui/standardfilterdialog.ui",
         "patchSetId": 6
@@ -62,6 +104,30 @@
       "revId": "7eb87f5a63674f66bd41a275e787c1b1ec1ce279",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46c27e81_a870f3bb",
+        "filename": "sc/uiconfig/scalc/ui/standardfilterdialog.ui",
+        "patchSetId": 6
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1001825
+      },
+      "writtenOn": "2020-08-07T04:31:35Z",
+      "side": 1,
+      "message": "As above, I have removed the label entirely.",
+      "parentUuid": "dfd897c1_be3ebef6",
+      "range": {
+        "startLine": 658,
+        "startChar": 108,
+        "endLine": 658,
+        "endChar": 114
+      },
+      "revId": "7eb87f5a63674f66bd41a275e787c1b1ec1ce279",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
