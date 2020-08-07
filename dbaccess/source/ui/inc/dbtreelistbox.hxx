@@ -25,6 +25,7 @@
 
 #include <vcl/treelistbox.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/weld.hxx>
 
 #include <memory>
 #include <set>
@@ -132,6 +133,18 @@ namespace dbaui
 
     protected:
         using SvTreeListBox::ExecuteDrop;
+    };
+
+    class TreeListBox
+    {
+    protected:
+        std::unique_ptr<weld::TreeView> m_xTreeView;
+    public:
+        TreeListBox(std::unique_ptr<weld::TreeView> xTreeView);
+        virtual ~TreeListBox();
+
+        weld::TreeView& GetWidget() { return *m_xTreeView; }
+        const weld::TreeView& GetWidget() const { return *m_xTreeView; }
     };
 }
 

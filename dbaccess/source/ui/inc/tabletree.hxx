@@ -26,7 +26,6 @@
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
-#include <vcl/weld.hxx>
 #include <memory>
 
 namespace dbaui
@@ -146,7 +145,7 @@ private:
     virtual void    KeyInput( const KeyEvent& rKEvt ) override;
 };
 
-class TableTreeListBox
+class TableTreeListBox : public TreeListBox
 {
     css::uno::Reference< css::sdbc::XConnection >
                     m_xConnection;      // the connection we're working for, set in implOnNewConnection, called by UpdateTableList
@@ -155,12 +154,9 @@ class TableTreeListBox
     bool            m_bVirtualRoot;     // should the first entry be visible
     bool            m_bNoEmptyFolders;  // should empty catalogs/schematas be prevented from being displayed?
     bool            m_bShowToggles;     // show toggle buttons
-    std::unique_ptr<weld::TreeView> m_xTreeView;
 
 public:
     TableTreeListBox(std::unique_ptr<weld::TreeView> xTreeView);
-
-    weld::TreeView& GetWidget() { return *m_xTreeView; }
 
     void init() { m_bVirtualRoot = true; }
 

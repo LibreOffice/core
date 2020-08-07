@@ -61,6 +61,15 @@ DBTreeListBox::DBTreeListBox( vcl::Window* pParent, WinBits nWinStyle )
     init();
 }
 
+TreeListBox::TreeListBox(std::unique_ptr<weld::TreeView> xTreeView)
+    : m_xTreeView(std::move(xTreeView))
+{
+}
+
+TreeListBox::~TreeListBox()
+{
+}
+
 void DBTreeListBox::init()
 {
     SetSpaceBetweenEntries(SPACEBETWEENENTRIES);

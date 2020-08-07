@@ -81,11 +81,11 @@ void OTableTreeListBox::dispose()
 }
 
 TableTreeListBox::TableTreeListBox(std::unique_ptr<weld::TreeView> xTreeView)
-    : m_xImageProvider(new ImageProvider)
+    : TreeListBox(std::move(xTreeView))
+    , m_xImageProvider(new ImageProvider)
     , m_bVirtualRoot(false)
     , m_bNoEmptyFolders(false)
     , m_bShowToggles(true)
-    , m_xTreeView(std::move(xTreeView))
 {
     m_xTreeView->enable_toggle_buttons(weld::ColumnToggleType::Check);
 }
