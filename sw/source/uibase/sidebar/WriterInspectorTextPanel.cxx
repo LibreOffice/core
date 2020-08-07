@@ -30,6 +30,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <unotextrange.hxx>
@@ -296,12 +297,81 @@ static OUString PropertyNametoRID(const OUString& rName)
         { "UnvisitedCharStyleName", RID_UNVISITED_CHAR_STYLE_NAME },
         { "VisitedCharStyleName", RID_VISITED_CHAR_STYLE_NAME },
         { "WritingMode", RID_WRITING_MODE },
+        { "BorderColor", RID_BORDER_COLOR },
+        { "BorderInnerLineWidth", RID_BORDER_INNER_LINE_WIDTH },
+        { "BorderLineDistance", RID_BORDER_LINE_DISTANCE },
+        { "BorderLineStyle", RID_BORDER_LINE_STYLE },
+        { "BorderLineWidth", RID_BORDER_LINE_WIDTH },
+        { "BorderOuterLineWidth", RID_BORDER_OUTER_LINE_WIDTH },
     };
 
     auto itr = aNameToRID.find(rName);
     if (itr != aNameToRID.end())
         return SwResId(itr->second);
     return rName;
+}
+
+static svx::sidebar::TreeNode SimplePropToTreeNode(const OUString& rName, const css::uno::Any& rVal)
+{
+    svx::sidebar::TreeNode aCurNode;
+    aCurNode.sNodeName = PropertyNametoRID(rName);
+    aCurNode.aValue = rVal;
+
+    return aCurNode;
+}
+
+static svx::sidebar::TreeNode BorderToTreeNode(const OUString& rName, const css::uno::Any& rVal)
+{
+    table::BorderLine2 aBorder;
+    rVal >>= aBorder;
+    svx::sidebar::TreeNode aChild;
+    svx::sidebar::TreeNode aCurNode;
+    aCurNode.sNodeName = PropertyNametoRID(rName);
+    aCurNode.NodeType = svx::sidebar::TreeNode::ComplexProperty;
+
+    aCurNode.children.push_back(SimplePropToTreeNode("BorderColor", css::uno::Any(aBorder.Color)));
+    aCurNode.children.push_back(
+        SimplePropToTreeNode("BorderLineWidth", css::uno::Any(aBorder.LineWidth)));
+    aCurNode.children.push_back(
+        SimplePropToTreeNode("BorderLineStyle", css::uno::Any(aBorder.LineStyle)));
+    aCurNode.children.push_back(
+        SimplePropToTreeNode("BorderLineDistance", css::uno::Any(aBorder.LineDistance)));
+    aCurNode.children.push_back(
+        SimplePropToTreeNode("BorderInnerLineWidth", css::uno::Any(aBorder.InnerLineWidth)));
+    aCurNode.children.push_back(
+        SimplePropToTreeNode("BorderOuterLineWidth", css::uno::Any(aBorder.OuterLineWidth)));
+
+    return aCurNode;
+}
+
+static svx::sidebar::TreeNode
+PropertyToTreeNode(const css::beans::Property& rProperty,
+                   const uno::Reference<beans::XPropertySet>& xPropertiesSet, const bool& rIsGrey)
+{
+    const OUString& rPropName = rProperty.Name;
+    svx::sidebar::TreeNode aCurNode;
+    const uno::Any aAny = xPropertiesSet->getPropertyValue(rPropName);
+    aCurNode.sNodeName = PropertyNametoRID(rPropName);
+
+    // These properties are handled separately as they are stored in STRUCT and not in single data members
+    if (rPropName == "CharTopBorder" || rPropName == "CharBottomBorder"
+        || rPropName == "CharLeftBorder" || rPropName == "CharRightBorder"
+        || rPropName == "TopBorder" || rPropName == "BottomBorder" || rPropName == "LeftBorder"
+        || rPropName == "RightBorder")
+    {
+        aCurNode = BorderToTreeNode(rPropName, aAny);
+    }
+    else
+        aCurNode = SimplePropToTreeNode(rPropName, aAny);
+
+    if (rIsGrey)
+    {
+        aCurNode.isGrey = true;
+        for (svx::sidebar::TreeNode& rChildNode : aCurNode.children)
+            rChildNode.isGrey = true; // grey out all the children nodes
+    }
+
+    return aCurNode;
 }
 
 static void InsertValues(const css::uno::Reference<css::uno::XInterface>& rSource,
@@ -316,21 +386,18 @@ static void InsertValues(const css::uno::Reference<css::uno::XInterface>& rSourc
 
     for (const beans::Property& rProperty : aProperties)
     {
-        if (std::find(rHiddenProperty.begin(), rHiddenProperty.end(), rProperty.Name)
+        const OUString& rPropName = rProperty.Name;
+        if (std::find(rHiddenProperty.begin(), rHiddenProperty.end(), rPropName)
             != rHiddenProperty.end())
             continue;
+
         if (isRoot
-            || xPropertiesState->getPropertyState(rProperty.Name)
-                   == beans::PropertyState_DIRECT_VALUE)
+            || xPropertiesState->getPropertyState(rPropName) == beans::PropertyState_DIRECT_VALUE)
         {
-            const uno::Any aAny = xPropertiesSet->getPropertyValue(rProperty.Name);
-            svx::sidebar::TreeNode aTemp;
-            if (rIsDefined[rProperty.Name])
-                aTemp.isGrey = true;
-            rIsDefined[rProperty.Name] = true;
-            aTemp.sNodeName = PropertyNametoRID(rProperty.Name);
-            aTemp.aValue = aAny;
-            rNode.children.push_back(aTemp);
+            svx::sidebar::TreeNode aCurNode
+                = PropertyToTreeNode(rProperty, xPropertiesSet, rIsDefined[rPropName]);
+            rIsDefined[rPropName] = true;
+            rNode.children.push_back(aCurNode);
         }
     }
 
