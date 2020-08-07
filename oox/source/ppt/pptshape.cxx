@@ -235,6 +235,8 @@ void PPTShape::addShape(
                     // This shape is not a table, but has multiple columns,
                     // represent that as a table.
                     sServiceName = "com.sun.star.drawing.TableShape";
+                    if(meShapeLocation == Layout)
+                        bClearText = true;
                     oox::drawingml::table::TablePropertiesPtr pTableProperties = getTableProperties();
                     pTableProperties->pullFromTextBody(pTextBody, maSize.Width, bhasSameSubTypeIndex);
                     setTextBody(nullptr);

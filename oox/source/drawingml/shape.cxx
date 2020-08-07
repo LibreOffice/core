@@ -926,6 +926,9 @@ Reference< XShape > const & Shape::createAndInsert(
             {
                 xText->setString( "" );
             }
+
+            if(aServiceName == "com.sun.star.drawing.TableShape")
+                mpTablePropertiesPtr->clearTableText();
         }
 
         if (pMathXml)

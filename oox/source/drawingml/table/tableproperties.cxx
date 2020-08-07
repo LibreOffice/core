@@ -207,6 +207,28 @@ void TableProperties::pushToPropSet(const ::oox::core::XmlFilterBase& rFilterBas
     xTableStyleToDelete.reset();
 }
 
+void TableProperties::clearTableText()
+{
+    std::vector<sal_Int32>& rTableGrid(getTableGrid());
+    std::vector<drawingml::table::TableRow>& rTableRows(getTableRows());
+
+    sal_Int32 nNumCol = rTableGrid.size();
+    sal_Int32 nNumRow = rTableRows.size();
+
+    for (sal_Int32 nRow = 0; nRow < nNumRow; ++nRow)
+    {
+        oox::drawingml::table::TableRow& rTableRow = rTableRows.at(nRow);
+        std::vector<oox::drawingml::table::TableCell>& rTableCells = rTableRow.getTableCells();
+
+        for (sal_Int32 nCol = 0; nCol < nNumCol; ++nCol)
+        {
+            oox::drawingml::table::TableCell& rTableCell = rTableCells.at(nCol);
+            TextBodyPtr pCellTextBody = std::make_shared<TextBody>();
+            rTableCell.setTextBody(pCellTextBody);
+        }
+    }
+}
+
 void TableProperties::pullFromTextBody(oox::drawingml::TextBodyPtr pTextBody, sal_Int32 nShapeWidth, bool bhasSameSubTypeIndex)
 {
     // Create table grid and a single row.

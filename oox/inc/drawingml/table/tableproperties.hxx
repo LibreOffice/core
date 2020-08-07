@@ -61,6 +61,7 @@ public:
     /// Distributes text body with multiple columns in table cells.
     void pullFromTextBody(oox::drawingml::TextBodyPtr pTextBody, sal_Int32 nShapeWidth, bool bhasSameSubTypeIndex);
 
+    void clearTableText();
 private:
 
     const TableStyle&                   getUsedTableStyle(const ::oox::core::XmlFilterBase& rFilterBase, std::unique_ptr<TableStyle>& rTableStyleToDelete);
