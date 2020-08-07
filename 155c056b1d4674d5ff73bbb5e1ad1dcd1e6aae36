@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "038b815d_85c8b1ae",
+        "filename": "i18npool/util/i18npool.component",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-08-07T20:14:16Z",
+      "side": 1,
+      "message": "should these constructors get listed in solenv/bin/native-code.py like https://gerrit.libreoffice.org/c/core/+/98708 did for i18npool_TextSearch_get_implementation ?",
+      "revId": "155c056b1d4674d5ff73bbb5e1ad1dcd1e6aae36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
