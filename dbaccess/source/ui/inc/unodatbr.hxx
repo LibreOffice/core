@@ -214,12 +214,14 @@ namespace dbaui
 
         // IControlActionListener overridables
         virtual bool        requestQuickHelp( const SvTreeListEntry* _pEntry, OUString& _rText ) const override;
+        virtual bool        requestQuickHelp(const void* pUserData, OUString& rText) const override;
         virtual bool        requestDrag( const Point& _rPosPixel ) override;
+        virtual bool        requestDrag(const weld::TreeIter& rEntry) override;
         virtual sal_Int8    queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors ) override;
         virtual sal_Int8    executeDrop( const ExecuteDropEvent& _rEvt ) override;
 
         // IContextMenuProvider
-        virtual OUString          getContextMenuResourceName( Control& _rControl ) const override;
+        virtual OUString          getContextMenuResourceName() const override;
         virtual IController&      getCommandController() override;
         virtual ::comphelper::OInterfaceContainerHelper2*
                                   getContextMenuInterceptors() override;
