@@ -430,6 +430,28 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                 bAlreadyWritten[ ESCHER_Prop_WrapText ] = true;
                 break;
 
+            case ESCHER_Prop_txflTextFlow: // 136
+                {
+                    // at least "bottom-to-top" only has an effect when it's on the v:textbox element, not on v:shape
+                    assert(m_TextboxStyle.isEmpty());
+                    switch (opt.nPropValue)
+                    {
+                        case ESCHER_txflHorzN:
+                            m_TextboxStyle.append("layout-flow:horizontal");
+                        break;
+                        case ESCHER_txflTtoBA:
+                            m_TextboxStyle.append("layout-flow:vertical");
+                        break;
+                        case ESCHER_txflBtoT:
+                            m_TextboxStyle.append("mso-layout-flow-alt:bottom-to-top");
+                        break;
+                        default:
+                            assert(false); // unimplemented in escher export
+                        break;
+                    }
+                }
+                break;
+
             // coordorigin
             case ESCHER_Prop_geoLeft: // 320
             case ESCHER_Prop_geoTop: // 321
@@ -1345,6 +1367,8 @@ sal_Int32 VMLExport::StartShape()
     // start of the shape
     m_pSerializer->startElementNS( XML_v, nShapeElement, XFastAttributeListRef( m_pShapeAttrList ) );
 
+    OString const textboxStyle(m_TextboxStyle.makeStringAndClear());
+
     // now check if we have some editeng text (not associated textbox) and we have a text exporter registered
     const SdrTextObj* pTxtObj = dynamic_cast<const SdrTextObj*>( m_pSdrObject );
     if (pTxtObj && m_pTextExport && msfilter::util::HasTextBoxContent(m_nShapeType) && !IsWaterMarkShape(m_pSdrObject->GetName()) && !lcl_isTextBox(m_pSdrObject))
@@ -1369,19 +1393,11 @@ sal_Int32 VMLExport::StartShape()
 
         if( pParaObj )
         {
-            uno::Reference<beans::XPropertySet> xPropertySet(const_cast<SdrObject*>(m_pSdrObject)->getUnoShape(), uno::UNO_QUERY);
             sax_fastparser::FastAttributeList* pTextboxAttrList = FastSerializerHelper::createAttrList();
             sax_fastparser::XFastAttributeListRef xTextboxAttrList(pTextboxAttrList);
-            if (xPropertySet->getPropertySetInfo()->hasPropertyByName("RotateAngle"))
+            if (!textboxStyle.isEmpty())
             {
-                sal_Int32 nTextRotateAngle = sal_Int32();
-                if (xPropertySet->getPropertyValue("RotateAngle") >>= nTextRotateAngle)
-                {
-                    if (nTextRotateAngle == 9000)
-                    {
-                        pTextboxAttrList->add(XML_style, "mso-layout-flow-alt:bottom-to-top");
-                    }
-                }
+                pTextboxAttrList->add(XML_style, textboxStyle);
             }
 
             // this is reached only in case some text is attached to the shape
