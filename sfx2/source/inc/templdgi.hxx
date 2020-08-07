@@ -44,7 +44,6 @@ class SfxTemplateItem;
 class SfxBindings;
 class SfxStyleSheetBase;
 class SfxStyleSheetBasePool;
-class SvTreeListBox ;
 class StyleTreeListBox_Impl;
 class SfxTemplateDialog_Impl;
 class SfxCommonTemplateDialog_Impl;

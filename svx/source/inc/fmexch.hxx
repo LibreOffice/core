@@ -34,9 +34,6 @@
 #include <vcl/window.hxx>
 #include <svx/svxdllapi.h>
 
-class SvTreeListEntry;
-class SvTreeListBox;
-
 namespace svxform
 {
     typedef ::std::set<std::unique_ptr<weld::TreeIter>> ListBoxEntrySet;
