@@ -926,37 +926,69 @@
 #define RID_SVXSTR_DASH20                                   NC_("RID_SVXSTR_DASH20", "Dashed")
 #define RID_SVXSTR_DASH21                                   NC_("RID_SVXSTR_DASH21", "Line Style")
 #define RID_SVXSTR_IMAP_ALL_FILTER                          NC_("RID_SVXSTR_IMAP_ALL_FILTER", "All formats")
+// To translators: this is an arrow head style
 #define RID_SVXSTR_LEND0                                    NC_("RID_SVXSTR_LEND0", "Concave short")
+// To translators: this is an arrow head style
 #define RID_SVXSTR_LEND1                                    NC_("RID_SVXSTR_LEND1", "Square 45")
+// To translators: this is an arrow head style
 #define RID_SVXSTR_LEND2                                    NC_("RID_SVXSTR_LEND2", "Arrow short")
+// To translators: this is an arrow head style
 #define RID_SVXSTR_LEND3                                    NC_("RID_SVXSTR_LEND3", "Dimension Lines")
+// To translators: this is an arrow head style
 #define RID_SVXSTR_LEND4                                    NC_("RID_SVXSTR_LEND4", "Double Arrow")
+// To translators: this is an arrow head style
 #define RID_SVXSTR_LEND5                                    NC_("RID_SVXSTR_LEND5", "Triangle")
+// To translators: this is an arrow head style
 #define RID_SVXSTR_LEND6                                    NC_("RID_SVXSTR_LEND6", "Concave")
+// To translators: this is an arrow head style
 #define RID_SVXSTR_LEND7                                    NC_("RID_SVXSTR_LEND7", "Arrow large")
+// To translators: this is an arrow head style
 #define RID_SVXSTR_LEND8                                    NC_("RID_SVXSTR_LEND8", "Dimension Line")
+// To translators: this is an arrow head style
 #define RID_SVXSTR_LEND9                                    NC_("RID_SVXSTR_LEND9", "Circle")
+// To translators: this is an arrow head style
 #define RID_SVXSTR_LEND10                                   NC_("RID_SVXSTR_LEND10", "Square")
+// To translators: this is an arrow head style
 #define RID_SVXSTR_LEND11                                   NC_("RID_SVXSTR_LEND11", "Arrow")
+// To translators: this is an arrow head style
 #define RID_SVXSTR_LEND12                                   NC_("RID_SVXSTR_LEND12", "Half Circle")
+// To translators: this is an arrow head style
 #define RID_SVXSTR_LEND13                                   NC_("RID_SVXSTR_LEND13", "Triangle unfilled")
+// To translators: this is an arrow head style
 #define RID_SVXSTR_LEND14                                   NC_("RID_SVXSTR_LEND14", "Diamond unfilled")
+// To translators: this is an arrow head style
 #define RID_SVXSTR_LEND15                                   NC_("RID_SVXSTR_LEND15", "Diamond")
+// To translators: this is an arrow head style
 #define RID_SVXSTR_LEND16                                   NC_("RID_SVXSTR_LEND16", "Circle unfilled")
+// To translators: this is an arrow head style
 #define RID_SVXSTR_LEND17                                   NC_("RID_SVXSTR_LEND17", "Square 45 unfilled")
+// To translators: this is an arrow head style
 #define RID_SVXSTR_LEND18                                   NC_("RID_SVXSTR_LEND18", "Square unfilled")
+// To translators: this is an arrow head style
 #define RID_SVXSTR_LEND19                                   NC_("RID_SVXSTR_LEND19", "Half Circle unfilled")
+// To translators: this is an arrow head style
 #define RID_SVXSTR_LEND20                                   NC_("RID_SVXSTR_LEND20", "Dimension Line Arrow")
+// To translators: this is an arrow head style
 #define RID_SVXSTR_LEND21                                   NC_("RID_SVXSTR_LEND21", "Line short")
+// To translators: this is an arrow head style
 #define RID_SVXSTR_LEND22                                   NC_("RID_SVXSTR_LEND22", "Line")
+// To translators: this is an arrow head style
 #define RID_SVXSTR_LEND23                                   NC_("RID_SVXSTR_LEND23", "Half Arrow left")
+// To translators: this is an arrow head style
 #define RID_SVXSTR_LEND24                                   NC_("RID_SVXSTR_LEND24", "Half Arrow right")
+// To translators: this is an arrow head style
 #define RID_SVXSTR_LEND25                                   NC_("RID_SVXSTR_LEND25", "Reversed Arrow")
+// To translators: this is an arrow head style, CF is Crow's Foot, of Crow's Foot Notation
 #define RID_SVXSTR_LEND26                                   NC_("RID_SVXSTR_LEND26", "CF One")
+// To translators: this is an arrow head style, CF is Crow's Foot, of Crow's Foot Notation
 #define RID_SVXSTR_LEND27                                   NC_("RID_SVXSTR_LEND27", "CF Only One")
+// To translators: this is an arrow head style, CF is Crow's Foot, of Crow's Foot Notation
 #define RID_SVXSTR_LEND28                                   NC_("RID_SVXSTR_LEND28", "CF Many")
+// To translators: this is an arrow head style, CF is Crow's Foot, of Crow's Foot Notation
 #define RID_SVXSTR_LEND29                                   NC_("RID_SVXSTR_LEND29", "CF Many One")
+// To translators: this is an arrow head style, CF is Crow's Foot, of Crow's Foot Notation
 #define RID_SVXSTR_LEND30                                   NC_("RID_SVXSTR_LEND30", "CF Zero One")
+// To translators: this is an arrow head style, CF is Crow's Foot, of Crow's Foot Notation
 #define RID_SVXSTR_LEND31                                   NC_("RID_SVXSTR_LEND31", "CF Zero Many")
 #define RID_SVXSTR_TRASNGR0                                 NC_("RID_SVXSTR_TRASNGR0", "Transparency")
 #define RID_SVXSTR_COLOR_LIBRE_GREEN_1                      NC_("RID_SVXSTR_COLOR_LIBRE_GREEN_1", "Green 1 (%PRODUCTNAME Main Color)")
