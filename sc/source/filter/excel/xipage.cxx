@@ -141,23 +141,23 @@ void XclImpPageSettings::ReadPageBreaks( XclImpStream& rStrm )
         default:    OSL_FAIL( "XclImpPageSettings::ReadPageBreaks - unknown record" );
     }
 
-    if( pVec )
+    if( !pVec )
+        return;
+
+    bool bIgnore = GetBiff() == EXC_BIFF8;  // ignore start/end columns or rows in BIFF8
+
+    sal_uInt16 nCount, nBreak;
+    nCount = rStrm.ReaduInt16();
+    pVec->clear();
+    pVec->reserve( nCount );
+
+    while( nCount-- )
     {
-        bool bIgnore = GetBiff() == EXC_BIFF8;  // ignore start/end columns or rows in BIFF8
-
-        sal_uInt16 nCount, nBreak;
-        nCount = rStrm.ReaduInt16();
-        pVec->clear();
-        pVec->reserve( nCount );
-
-        while( nCount-- )
-        {
-            nBreak = rStrm.ReaduInt16();
-            if( nBreak )
-                pVec->push_back( nBreak );
-            if( bIgnore )
-                rStrm.Ignore( 4 );
-        }
+        nBreak = rStrm.ReaduInt16();
+        if( nBreak )
+            pVec->push_back( nBreak );
+        if( bIgnore )
+            rStrm.Ignore( 4 );
     }
 }
 

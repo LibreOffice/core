@@ -285,21 +285,21 @@ sal_uInt32 XclExpMergedcells::GetBaseXFId( const ScAddress& rPos ) const
 
 void XclExpMergedcells::Save( XclExpStream& rStrm )
 {
-    if( GetBiff() == EXC_BIFF8 )
+    if( GetBiff() != EXC_BIFF8 )
+        return;
+
+    XclRangeList aXclRanges;
+    GetAddressConverter().ConvertRangeList( aXclRanges, maMergedRanges, true );
+    size_t nFirstRange = 0;
+    size_t nRemainingRanges = aXclRanges.size();
+    while( nRemainingRanges > 0 )
     {
-        XclRangeList aXclRanges;
-        GetAddressConverter().ConvertRangeList( aXclRanges, maMergedRanges, true );
-        size_t nFirstRange = 0;
-        size_t nRemainingRanges = aXclRanges.size();
-        while( nRemainingRanges > 0 )
-        {
-            size_t nRangeCount = ::std::min< size_t >( nRemainingRanges, EXC_MERGEDCELLS_MAXCOUNT );
-            rStrm.StartRecord( EXC_ID_MERGEDCELLS, 2 + 8 * nRangeCount );
-            aXclRanges.WriteSubList( rStrm, nFirstRange, nRangeCount );
-            rStrm.EndRecord();
-            nFirstRange += nRangeCount;
-            nRemainingRanges -= nRangeCount;
-        }
+        size_t nRangeCount = ::std::min< size_t >( nRemainingRanges, EXC_MERGEDCELLS_MAXCOUNT );
+        rStrm.StartRecord( EXC_ID_MERGEDCELLS, 2 + 8 * nRangeCount );
+        aXclRanges.WriteSubList( rStrm, nFirstRange, nRangeCount );
+        rStrm.EndRecord();
+        nFirstRange += nRangeCount;
+        nRemainingRanges -= nRangeCount;
     }
 }
 
@@ -1293,86 +1293,86 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
 {
     const ScRangeList& aScRanges = rCondFormat.GetRange();
     GetAddressConverter().ConvertRangeList( maXclRanges, aScRanges, true );
-    if( !maXclRanges.empty() )
-    {
-        std::vector<XclExpExtCondFormatData> aExtEntries;
-        ScAddress aOrigin = aScRanges.Combine().aStart;
-        for( size_t nIndex = 0, nCount = rCondFormat.size(); nIndex < nCount; ++nIndex )
-            if( const ScFormatEntry* pFormatEntry = rCondFormat.GetEntry( nIndex ) )
+    if( maXclRanges.empty() )
+        return;
+
+    std::vector<XclExpExtCondFormatData> aExtEntries;
+    ScAddress aOrigin = aScRanges.Combine().aStart;
+    for( size_t nIndex = 0, nCount = rCondFormat.size(); nIndex < nCount; ++nIndex )
+        if( const ScFormatEntry* pFormatEntry = rCondFormat.GetEntry( nIndex ) )
+        {
+            if(pFormatEntry->GetType() == ScFormatEntry::Type::Condition)
+                maCFList.AppendNewRecord( new XclExpCF( GetRoot(), static_cast<const ScCondFormatEntry&>(*pFormatEntry), ++rIndex, aOrigin ) );
+            else if(pFormatEntry->GetType() == ScFormatEntry::Type::ExtCondition)
             {
-                if(pFormatEntry->GetType() == ScFormatEntry::Type::Condition)
-                    maCFList.AppendNewRecord( new XclExpCF( GetRoot(), static_cast<const ScCondFormatEntry&>(*pFormatEntry), ++rIndex, aOrigin ) );
-                else if(pFormatEntry->GetType() == ScFormatEntry::Type::ExtCondition)
+                const ScCondFormatEntry& rFormat = static_cast<const ScCondFormatEntry&>(*pFormatEntry);
+                XclExpExtCondFormatData aExtEntry;
+                aExtEntry.nPriority = ++rIndex;
+                aExtEntry.aGUID = generateGUIDString();
+                aExtEntry.pEntry = &rFormat;
+                aExtEntries.push_back(aExtEntry);
+            }
+            else if(pFormatEntry->GetType() == ScFormatEntry::Type::Colorscale)
+                maCFList.AppendNewRecord( new XclExpColorScale( GetRoot(), static_cast<const ScColorScaleFormat&>(*pFormatEntry), ++rIndex ) );
+            else if(pFormatEntry->GetType() == ScFormatEntry::Type::Databar)
+            {
+                const ScDataBarFormat& rFormat = static_cast<const ScDataBarFormat&>(*pFormatEntry);
+                XclExpExtCondFormatData aExtEntry;
+                aExtEntry.nPriority = -1;
+                aExtEntry.aGUID = generateGUIDString();
+                aExtEntry.pEntry = &rFormat;
+                aExtEntries.push_back(aExtEntry);
+
+                maCFList.AppendNewRecord( new XclExpDataBar( GetRoot(), rFormat, ++rIndex, aExtEntry.aGUID));
+            }
+            else if(pFormatEntry->GetType() == ScFormatEntry::Type::Iconset)
+            {
+                // don't export iconSet entries that are not in OOXML
+                const ScIconSetFormat& rIconSet = static_cast<const ScIconSetFormat&>(*pFormatEntry);
+                bool bNeedsExt = false;
+                switch (rIconSet.GetIconSetData()->eIconSetType)
                 {
-                    const ScCondFormatEntry& rFormat = static_cast<const ScCondFormatEntry&>(*pFormatEntry);
+                    case IconSet_3Smilies:
+                    case IconSet_3ColorSmilies:
+                    case IconSet_3Stars:
+                    case IconSet_3Triangles:
+                    case IconSet_5Boxes:
+                    {
+                        bNeedsExt = true;
+                    }
+                    break;
+                    default:
+                        break;
+                }
+
+                bNeedsExt |= rIconSet.GetIconSetData()->mbCustom;
+
+                if (bNeedsExt)
+                {
                     XclExpExtCondFormatData aExtEntry;
                     aExtEntry.nPriority = ++rIndex;
                     aExtEntry.aGUID = generateGUIDString();
-                    aExtEntry.pEntry = &rFormat;
+                    aExtEntry.pEntry = &rIconSet;
                     aExtEntries.push_back(aExtEntry);
                 }
-                else if(pFormatEntry->GetType() == ScFormatEntry::Type::Colorscale)
-                    maCFList.AppendNewRecord( new XclExpColorScale( GetRoot(), static_cast<const ScColorScaleFormat&>(*pFormatEntry), ++rIndex ) );
-                else if(pFormatEntry->GetType() == ScFormatEntry::Type::Databar)
-                {
-                    const ScDataBarFormat& rFormat = static_cast<const ScDataBarFormat&>(*pFormatEntry);
-                    XclExpExtCondFormatData aExtEntry;
-                    aExtEntry.nPriority = -1;
-                    aExtEntry.aGUID = generateGUIDString();
-                    aExtEntry.pEntry = &rFormat;
-                    aExtEntries.push_back(aExtEntry);
-
-                    maCFList.AppendNewRecord( new XclExpDataBar( GetRoot(), rFormat, ++rIndex, aExtEntry.aGUID));
-                }
-                else if(pFormatEntry->GetType() == ScFormatEntry::Type::Iconset)
-                {
-                    // don't export iconSet entries that are not in OOXML
-                    const ScIconSetFormat& rIconSet = static_cast<const ScIconSetFormat&>(*pFormatEntry);
-                    bool bNeedsExt = false;
-                    switch (rIconSet.GetIconSetData()->eIconSetType)
-                    {
-                        case IconSet_3Smilies:
-                        case IconSet_3ColorSmilies:
-                        case IconSet_3Stars:
-                        case IconSet_3Triangles:
-                        case IconSet_5Boxes:
-                        {
-                            bNeedsExt = true;
-                        }
-                        break;
-                        default:
-                            break;
-                    }
-
-                    bNeedsExt |= rIconSet.GetIconSetData()->mbCustom;
-
-                    if (bNeedsExt)
-                    {
-                        XclExpExtCondFormatData aExtEntry;
-                        aExtEntry.nPriority = ++rIndex;
-                        aExtEntry.aGUID = generateGUIDString();
-                        aExtEntry.pEntry = &rIconSet;
-                        aExtEntries.push_back(aExtEntry);
-                    }
-                    else
-                        maCFList.AppendNewRecord( new XclExpIconSet( GetRoot(), rIconSet, ++rIndex ) );
-                }
-                else if(pFormatEntry->GetType() == ScFormatEntry::Type::Date)
-                    maCFList.AppendNewRecord( new XclExpDateFormat( GetRoot(), static_cast<const ScCondDateFormatEntry&>(*pFormatEntry), ++rIndex ) );
+                else
+                    maCFList.AppendNewRecord( new XclExpIconSet( GetRoot(), rIconSet, ++rIndex ) );
             }
-        aScRanges.Format( msSeqRef, ScRefFlags::VALID, GetDoc(), formula::FormulaGrammar::CONV_XL_OOX, ' ', true );
-
-        if(!aExtEntries.empty() && xExtLst)
-        {
-            XclExpExt* pParent = xExtLst->GetItem( XclExpExtDataBarType );
-            if( !pParent )
-            {
-                xExtLst->AddRecord( new XclExpExtCondFormat( *xExtLst ) );
-                pParent = xExtLst->GetItem( XclExpExtDataBarType );
-            }
-            static_cast<XclExpExtCondFormat*>(xExtLst->GetItem( XclExpExtDataBarType ))->AddRecord(
-                    new XclExpExtConditionalFormatting( *pParent, aExtEntries, aScRanges));
+            else if(pFormatEntry->GetType() == ScFormatEntry::Type::Date)
+                maCFList.AppendNewRecord( new XclExpDateFormat( GetRoot(), static_cast<const ScCondDateFormatEntry&>(*pFormatEntry), ++rIndex ) );
         }
+    aScRanges.Format( msSeqRef, ScRefFlags::VALID, GetDoc(), formula::FormulaGrammar::CONV_XL_OOX, ' ', true );
+
+    if(!aExtEntries.empty() && xExtLst)
+    {
+        XclExpExt* pParent = xExtLst->GetItem( XclExpExtDataBarType );
+        if( !pParent )
+        {
+            xExtLst->AddRecord( new XclExpExtCondFormat( *xExtLst ) );
+            pParent = xExtLst->GetItem( XclExpExtDataBarType );
+        }
+        static_cast<XclExpExtCondFormat*>(xExtLst->GetItem( XclExpExtDataBarType ))->AddRecord(
+                new XclExpExtConditionalFormatting( *pParent, aExtEntries, aScRanges));
     }
 }
 

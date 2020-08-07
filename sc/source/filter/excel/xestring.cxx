@@ -311,26 +311,26 @@ void XclExpString::WriteBuffer( XclExpStream& rStrm ) const
 
 void XclExpString::WriteFormats( XclExpStream& rStrm, bool bWriteSize ) const
 {
-    if( IsRich() )
+    if( !IsRich() )
+        return;
+
+    if( mbIsBiff8 )
     {
-        if( mbIsBiff8 )
-        {
-            if( bWriteSize )
-                rStrm << GetFormatsCount();
-            rStrm.SetSliceSize( 4 );
-            for( const auto& rFormat : maFormats )
-                rStrm << rFormat.mnChar << rFormat.mnFontIdx;
-        }
-        else
-        {
-            if( bWriteSize )
-                rStrm << static_cast< sal_uInt8 >( GetFormatsCount() );
-            rStrm.SetSliceSize( 2 );
-            for( const auto& rFormat : maFormats )
-                rStrm << static_cast< sal_uInt8 >( rFormat.mnChar ) << static_cast< sal_uInt8 >( rFormat.mnFontIdx );
-        }
-        rStrm.SetSliceSize( 0 );
+        if( bWriteSize )
+            rStrm << GetFormatsCount();
+        rStrm.SetSliceSize( 4 );
+        for( const auto& rFormat : maFormats )
+            rStrm << rFormat.mnChar << rFormat.mnFontIdx;
     }
+    else
+    {
+        if( bWriteSize )
+            rStrm << static_cast< sal_uInt8 >( GetFormatsCount() );
+        rStrm.SetSliceSize( 2 );
+        for( const auto& rFormat : maFormats )
+            rStrm << static_cast< sal_uInt8 >( rFormat.mnChar ) << static_cast< sal_uInt8 >( rFormat.mnFontIdx );
+    }
+    rStrm.SetSliceSize( 0 );
 }
 
 void XclExpString::Write( XclExpStream& rStrm ) const
@@ -366,24 +366,24 @@ void XclExpString::WriteHeaderToMem( sal_uInt8* pnMem ) const
 void XclExpString::WriteBufferToMem( sal_uInt8* pnMem ) const
 {
     assert(pnMem);
-    if( !IsEmpty() )
+    if( IsEmpty() )
+        return;
+
+    if( mbIsBiff8 )
     {
-        if( mbIsBiff8 )
+        for( const sal_uInt16 nChar : maUniBuffer )
         {
-            for( const sal_uInt16 nChar : maUniBuffer )
+            *pnMem = static_cast< sal_uInt8 >( nChar );
+            ++pnMem;
+            if( mbIsUnicode )
             {
-                *pnMem = static_cast< sal_uInt8 >( nChar );
+                *pnMem = static_cast< sal_uInt8 >( nChar >> 8 );
                 ++pnMem;
-                if( mbIsUnicode )
-                {
-                    *pnMem = static_cast< sal_uInt8 >( nChar >> 8 );
-                    ++pnMem;
-                }
             }
         }
-        else
-            memcpy( pnMem, maCharBuffer.data(), mnLen );
     }
+    else
+        memcpy( pnMem, maCharBuffer.data(), mnLen );
 }
 
 void XclExpString::WriteToMem( sal_uInt8* pnMem ) const
