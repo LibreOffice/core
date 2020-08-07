@@ -25,37 +25,37 @@ canvas/inc/base/graphicdevicebase.hxx:305
 canvas/inc/base/graphicdevicebase.hxx:318
     void canvas::GraphicDeviceBase::removeVetoableChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XVetoableChangeListener> &,)
     empty
-desktop/source/deployment/registry/inc/dp_backenddb.hxx:120
+desktop/source/deployment/registry/inc/dp_backenddb.hxx:119
     class rtl::OUString dp_registry::backend::BackendDb::getDbNSName()
     "http://openoffi
 include/basegfx/utils/unopolypolygon.hxx:94
     void basegfx::unotools::UnoPolyPolygon::modifying()const
     empty
-include/connectivity/sdbcx/IRefreshable.hxx:31
+include/connectivity/sdbcx/IRefreshable.hxx:29
     void connectivity::sdbcx::IRefreshableGroups::refreshGroups()
     empty
 include/filter/msfilter/msdffimp.hxx:545
     _Bool SvxMSDffManager::ShapeHasText(unsigned long,unsigned long,)const
     1
-include/svl/svdde.hxx:237
+include/svl/svdde.hxx:235
     class DdeData * DdeTopic::Get(enum SotClipboardFormatId,)
     0
-include/svl/svdde.hxx:238
+include/svl/svdde.hxx:236
     _Bool DdeTopic::Put(const class DdeData *,)
     0
-include/svl/svdde.hxx:239
+include/svl/svdde.hxx:237
     _Bool DdeTopic::Execute(const class rtl::OUString *,)
     0
-include/svl/svdde.hxx:241
+include/svl/svdde.hxx:239
     _Bool DdeTopic::MakeItem(const class rtl::OUString &,)
     0
-include/svl/svdde.hxx:244
+include/svl/svdde.hxx:242
     _Bool DdeTopic::StartAdviseLoop()
     0
 include/svtools/unoevent.hxx:199
     unsigned short SvEventDescriptor::getMacroItemWhich()const
     108
-include/ucbhelper/resultset.hxx:411
+include/ucbhelper/resultset.hxx:410
     void ucbhelper::ResultSetDataSupplier::close()
     empty
 include/unotools/desktopterminationobserver.hxx:36
@@ -64,26 +64,8 @@ include/unotools/desktopterminationobserver.hxx:36
 include/vbahelper/vbahelperinterface.hxx:74
     int InheritedHelperInterfaceImpl::getCreator()
     1400204879
-QtGui/qaccessible.h:466
-    class QObject * QAccessibleInterface::object()const
-    0
-QtGui/qaccessible.h:467
-    class QWindow * QAccessibleInterface::window()const
-    0
-QtGui/qaccessible.h:479
-    int QAccessibleInterface::indexOfChild(const class QAccessibleInterface *,)const
-    0
-QtGui/qaccessible.h:483
-    void QAccessibleInterface::setText(enum QAccessible::Text,const class QString &,)
-    empty
-QtGui/qaccessible.h:613
-    _Bool QAccessibleTableInterface::isColumnSelected(int,)const
-    1
-QtGui/qaccessible.h:614
-    _Bool QAccessibleTableInterface::isRowSelected(int,)const
-    1
-QtGui/qaccessible.h:620
-    void QAccessibleTableInterface::modelChange(class QAccessibleTableModelChangeEvent *,)
+include/vcl/treelistbox.hxx:502
+    void SvTreeListBox::NotifyEndScroll()
     empty
 sc/source/core/opencl/formulagroupcl.cxx:1069
     void sc::opencl::(anonymous namespace)::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class std::__cxx11::basic_stringstream<char> &,)
@@ -124,10 +106,10 @@ vcl/inc/salgdiimpl.hxx:129
 vcl/inc/salgdiimpl.hxx:170
     _Bool SalGraphicsImpl::drawEPS(long,long,long,long,void *,unsigned int,)
     0
-vcl/inc/salinst.hxx:93
+vcl/inc/salinst.hxx:89
     _Bool SalInstance::SVMainHook(int *,)
     0
-vcl/inc/salinst.hxx:203
+vcl/inc/salinst.hxx:199
     void SalInstance::releaseMainThread()
     empty
 vcl/inc/salmenu.hxx:77
@@ -148,15 +130,15 @@ vcl/inc/salprn.hxx:85
 vcl/inc/salprn.hxx:116
     enum SalPrinterError SalPrinter::GetErrorCode()
     0
-writerfilter/source/ooxml/OOXMLFactory.hxx:67
+writerfilter/source/ooxml/OOXMLFactory.hxx:66
     void writerfilter::ooxml::OOXMLFactory_ns::startAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
     empty
-writerfilter/source/ooxml/OOXMLFactory.hxx:68
+writerfilter/source/ooxml/OOXMLFactory.hxx:67
     void writerfilter::ooxml::OOXMLFactory_ns::charactersAction(class writerfilter::ooxml::OOXMLFastContextHandler *,const class rtl::OUString &,)
     empty
-writerfilter/source/ooxml/OOXMLFactory.hxx:69
+writerfilter/source/ooxml/OOXMLFactory.hxx:68
     void writerfilter::ooxml::OOXMLFactory_ns::endAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
     empty
-writerfilter/source/ooxml/OOXMLFactory.hxx:70
+writerfilter/source/ooxml/OOXMLFactory.hxx:69
     void writerfilter::ooxml::OOXMLFactory_ns::attributeAction(class writerfilter::ooxml::OOXMLFastContextHandler *,int,const class tools::SvRef<class writerfilter::ooxml::OOXMLValue> &,)
     empty

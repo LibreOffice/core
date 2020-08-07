@@ -52,7 +52,7 @@ canvas/inc/base/integerbitmapbase.hxx:58
 canvas/inc/base/integerbitmapbase.hxx:72
     void canvas::IntegerBitmapBase::setPixel(const class com::sun::star::uno::Sequence<signed char> &,const struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerPoint2D &,)
     011
-desktop/source/deployment/registry/inc/dp_backend.h:80
+desktop/source/deployment/registry/inc/dp_backend.h:79
     void dp_registry::backend::Package::processPackage_(class osl::ResettableGuard<class osl::Mutex> &,_Bool,_Bool,const class rtl::Reference<class dp_misc::AbortChannel> &,const class com::sun::star::uno::Reference<class com::sun::star::ucb::XCommandEnvironment> &,)
     01111
 extensions/source/bibliography/loadlisteneradapter.hxx:110
@@ -67,22 +67,22 @@ include/cppuhelper/propshlp.hxx:326
 include/drawinglayer/primitive2d/textbreakuphelper.hxx:58
     _Bool drawinglayer::primitive2d::TextBreakupHelper::allowChange(unsigned int,class basegfx::B2DHomMatrix &,unsigned int,unsigned int,)
     0111
-include/editeng/editeng.hxx:484
+include/editeng/editeng.hxx:483
     void EditEngine::PaintingFirstLine(int,const class Point &,long,const class Point &,short,class OutputDevice *,)
     110111
-include/editeng/editeng.hxx:487
+include/editeng/editeng.hxx:486
     void EditEngine::ParagraphConnected(int,int,)
     01
 include/filter/msfilter/msdffimp.hxx:545
     _Bool SvxMSDffManager::ShapeHasText(unsigned long,unsigned long,)const
     00
-include/oox/dump/dumperbase.hxx:473
+include/oox/dump/dumperbase.hxx:472
     void oox::dump::ConfigItemBase::implProcessConfigItemInt(class oox::TextInputStream &,long,const class rtl::OUString &,)
     011
-include/oox/dump/dumperbase.hxx:564
+include/oox/dump/dumperbase.hxx:563
     class rtl::OUString oox::dump::NameListBase::implGetNameDbl(const class oox::dump::Config &,double,)const
     01
-include/oox/dump/oledumper.hxx:166
+include/oox/dump/oledumper.hxx:165
     void oox::dump::ComCtlObjectBase::implDumpCommonExtra(long,)
     0
 include/oox/export/shapes.hxx:136
@@ -91,25 +91,28 @@ include/oox/export/shapes.hxx:136
 include/sfx2/stbitem.hxx:100
     _Bool SfxStatusBarControl::MouseButtonUp(const class MouseEvent &,)
     0
-include/svl/svdde.hxx:228
+include/svl/svdde.hxx:226
     _Bool DdeGetPutItem::Put(const class DdeData *,)
     0
-include/svl/svdde.hxx:237
+include/svl/svdde.hxx:235
     class DdeData * DdeTopic::Get(enum SotClipboardFormatId,)
     0
-include/svl/svdde.hxx:238
+include/svl/svdde.hxx:236
     _Bool DdeTopic::Put(const class DdeData *,)
     0
-include/svl/svdde.hxx:239
+include/svl/svdde.hxx:237
     _Bool DdeTopic::Execute(const class rtl::OUString *,)
     0
-include/svl/svdde.hxx:241
+include/svl/svdde.hxx:239
     _Bool DdeTopic::MakeItem(const class rtl::OUString &,)
     0
+include/svtools/editbrowsebox.hxx:102
+    void svt::CellController::ActivatingMouseEvent(const class BrowserMouseEvent &,_Bool,)
+    10
 include/svx/IAccessibleParent.hxx:80
     _Bool accessibility::IAccessibleParent::ReplaceChild(class accessibility::AccessibleShape *,const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,const long,const class accessibility::AccessibleShapeTreeInfo &,)
     1101
-include/svx/selectioncontroller.hxx:48
+include/svx/selectioncontroller.hxx:47
     _Bool sdr::SelectionController::onMouseButtonUp(const class MouseEvent &,class vcl::Window *,)
     10
 include/vcl/accessibletable.hxx:91
@@ -121,72 +124,18 @@ include/vcl/accessibletable.hxx:92
 include/vcl/accessibletable.hxx:93
     void vcl::table::IAccessibleTable::FillAccessibleStateSetForCell(class utl::AccessibleStateSetHelper &,int,unsigned short,)const
     110
-include/vcl/dndhelp.hxx:72
+include/vcl/dndhelp.hxx:62
     void vcl::unohelper::DragAndDropClient::dragExit(const struct com::sun::star::datatransfer::dnd::DropTargetEvent &,)
     0
 include/vcl/opengl/OpenGLContext.hxx:141
     struct SystemWindowData OpenGLContext::generateWinData(class vcl::Window *,_Bool,)
     10
-include/vcl/treelistbox.hxx:466
+include/vcl/treelistbox.hxx:428
     enum DragDropMode SvTreeListBox::NotifyStartDrag(class TransferDataContainer &,class SvTreeListEntry *,)
     00
-include/vcl/treelistbox.hxx:715
-    void SvTreeListBox::ExecuteContextMenuAction(unsigned short,)
-    0
-QtCore/qmimedata.h:88
-    class QVariant QMimeData::retrieveData(const class QString &,enum QVariant::Type,)const
+include/vcl/treelistbox.hxx:589
+    _Bool SvTreeListBox::EditingEntry(class SvTreeListEntry *,class Selection &,)
     10
-QtGui/qaccessible.h:479
-    int QAccessibleInterface::indexOfChild(const class QAccessibleInterface *,)const
-    0
-QtGui/qaccessible.h:483
-    void QAccessibleInterface::setText(enum QAccessible::Text,const class QString &,)
-    00
-QtGui/qaccessible.h:528
-    void QAccessibleTextInterface::addSelection(int,int,)
-    00
-QtGui/qaccessible.h:529
-    void QAccessibleTextInterface::removeSelection(int,)
-    0
-QtGui/qaccessible.h:530
-    void QAccessibleTextInterface::setSelection(int,int,int,)
-    011
-QtGui/qaccessible.h:538
-    class QString QAccessibleTextInterface::textBeforeOffset(int,enum QAccessible::TextBoundaryType,int *,int *,)const
-    0000
-QtGui/qaccessible.h:540
-    class QString QAccessibleTextInterface::textAfterOffset(int,enum QAccessible::TextBoundaryType,int *,int *,)const
-    0000
-QtGui/qaccessible.h:542
-    class QString QAccessibleTextInterface::textAtOffset(int,enum QAccessible::TextBoundaryType,int *,int *,)const
-    0000
-QtGui/qaccessible.h:547
-    class QRect QAccessibleTextInterface::characterRect(int,)const
-    0
-QtGui/qaccessible.h:548
-    int QAccessibleTextInterface::offsetAtPoint(const class QPoint &,)const
-    0
-QtGui/qaccessible.h:613
-    _Bool QAccessibleTableInterface::isColumnSelected(int,)const
-    0
-QtGui/qaccessible.h:614
-    _Bool QAccessibleTableInterface::isRowSelected(int,)const
-    0
-QtGui/qaccessible.h:620
-    void QAccessibleTableInterface::modelChange(class QAccessibleTableModelChangeEvent *,)
-    0
-QtWidgets/qwidget.h:629
-    void QWidget::focusInEvent(class QFocusEvent *,)
-    0
-QtWidgets/qwidget.h:630
-    void QWidget::focusOutEvent(class QFocusEvent *,)
-    0
-QtWidgets/qwidget.h:650
-    void QWidget::dragLeaveEvent(class QDragLeaveEvent *,)
-    0
-QtWidgets/qwidget.h:654
-    void QWidget::showEvent(class QShowEvent *,)
-    0
 sc/inc/filter.hxx:82
     void ScFormatFilterPlugin::ScExportHTML(class SvStream &,const class rtl::OUString &,class ScDocument *,const class ScRange &,const unsigned short,_Bool,const class rtl::OUString &,class rtl::OUString &,const class rtl::OUString &,)
     111101111
@@ -247,10 +196,10 @@ sw/source/core/access/acccontext.hxx:352
 sw/source/core/inc/txmsrt.hxx:145
     void SwTOXSortTabBase::FillText(class SwTextNode &,const class SwIndex &,unsigned short,const class SwRootFrame *const,)const
     1100
-sw/source/filter/ww8/wrtww8.hxx:797
+sw/source/filter/ww8/wrtww8.hxx:796
     void MSWordExportBase::WriteHyperlinkData(const class sw::mark::IFieldmark &,)
     0
-sw/source/filter/ww8/wrtww8.hxx:862
+sw/source/filter/ww8/wrtww8.hxx:861
     void MSWordExportBase::OutputGrfNode(const class SwGrfNode &,)
     0
 vcl/inc/outdev.h:122
@@ -286,13 +235,16 @@ vcl/inc/salgdiimpl.hxx:136
 vcl/inc/salgdiimpl.hxx:170
     _Bool SalGraphicsImpl::drawEPS(long,long,long,long,void *,unsigned int,)
     000000
-vcl/inc/salinst.hxx:93
+vcl/inc/salinst.hxx:89
     _Bool SalInstance::SVMainHook(int *,)
     0
-vcl/inc/salinst.hxx:126
+vcl/inc/salinst.hxx:122
     void SalInstance::GetPrinterQueueState(struct SalPrinterQueueInfo *,)
     0
-vcl/inc/salinst.hxx:186
+vcl/inc/salinst.hxx:164
+    class weld::Builder * SalInstance::CreateInterimBuilder(class vcl::Window *,const class rtl::OUString &,const class rtl::OUString &,unsigned long,)
+    1110
+vcl/inc/salinst.hxx:182
     void SalInstance::AddToRecentDocumentList(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,)
     100
 vcl/inc/salmenu.hxx:71

@@ -59,7 +59,6 @@ public:
 // Flags for nFlag
 enum class LBoxFlags {
     NONE                        = 0x0000,
-    InScrolling                 = 0x0001,
     DeselectAll                 = 0x0002,
     StartEditTimer              = 0x0004,  // MAC only
     IgnoreSelect                = 0x0008,
@@ -73,7 +72,7 @@ enum class LBoxFlags {
 };
 namespace o3tl
 {
-    template<> struct typed_flags<LBoxFlags> : is_typed_flags<LBoxFlags, 0x07ff> {};
+    template<> struct typed_flags<LBoxFlags> : is_typed_flags<LBoxFlags, 0x07fe> {};
 }
 
 #define NODE_BMP_TABDIST_NOTVALID   -2000000
@@ -215,8 +214,6 @@ protected:
 
     tools::Rectangle           GetVisibleArea() const;
     void                SetCursor( SvTreeListEntry* pEntry, bool bForceNoSelect = false );
-    void                BeginScroll();
-    void                EndScroll();
     void                PositionScrollBars( Size& rOSize, sal_uInt16 nMask );
     void                FindMostRight();
     void                FillView();

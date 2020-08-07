@@ -499,7 +499,6 @@ protected:
 
     virtual void    InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&);
 
-    virtual void    NotifyEndScroll();
     virtual void    NotifyScrolled();
     void            SetScrolledHdl( const Link<SvTreeListBox*,void>& rLink ) { aScrolledHdl = rLink; }
     long            GetXOffset() const { return GetMapMode().GetOrigin().X(); }

@@ -165,15 +165,12 @@ void IconViewImpl::KeyDown( bool bPageDown )
         return;
 
     m_nFlags &= ~LBoxFlags::Filling;
-    BeginScroll();
 
     m_aVerSBar->SetThumbPos( nThumbPos+nDelta );
     if( bPageDown )
         PageDown( static_cast<short>(nDelta) );
     else
         CursorDown();
-
-    EndScroll();
 }
 
 void IconViewImpl::KeyUp( bool bPageUp )
@@ -196,15 +193,12 @@ void IconViewImpl::KeyUp( bool bPageUp )
         return;
 
     m_nFlags &= ~LBoxFlags::Filling;
-    BeginScroll();
 
     m_aVerSBar->SetThumbPos( nThumbPos - nDelta );
     if( bPageUp )
         PageUp( static_cast<short>(nDelta) );
     else
         CursorUp();
-
-    EndScroll();
 }
 
 long IconViewImpl::GetEntryLine(const SvTreeListEntry* pEntry) const
