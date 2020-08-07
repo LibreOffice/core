@@ -28,7 +28,13 @@
  --------------------------------------------------------------------*/
 
 // Format names
+#define RID_BORDER_COLOR                                    NC_("RID_ATTRIBUTE_NAMES_MAP", "Color")
 #define RID_BORDER_DISTANCE                                 NC_("RID_ATTRIBUTE_NAMES_MAP", "Border Distance")
+#define RID_BORDER_INNER_LINE_WIDTH                         NC_("RID_ATTRIBUTE_NAMES_MAP", "Inner Line Width")
+#define RID_BORDER_LINE_DISTANCE                            NC_("RID_ATTRIBUTE_NAMES_MAP", "Line Distance")
+#define RID_BORDER_LINE_STYLE                               NC_("RID_ATTRIBUTE_NAMES_MAP", "Line Style")
+#define RID_BORDER_LINE_WIDTH                               NC_("RID_ATTRIBUTE_NAMES_MAP", "Line Width")
+#define RID_BORDER_OUTER_LINE_WIDTH                         NC_("RID_ATTRIBUTE_NAMES_MAP", "Outer Line Width")
 #define RID_BOTTOM_BORDER                                   NC_("RID_ATTRIBUTE_NAMES_MAP", "Bottom Border")
 #define RID_BOTTOM_BORDER_DISTANCE                          NC_("RID_ATTRIBUTE_NAMES_MAP", "Bottom Border Distance")
 #define RID_BREAK_TYPE                                      NC_("RID_ATTRIBUTE_NAMES_MAP", "Break Type")
