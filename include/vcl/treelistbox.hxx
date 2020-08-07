@@ -499,7 +499,7 @@ protected:
 
     virtual void    InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&);
 
-    virtual void    NotifyScrolled();
+    void            NotifyScrolled();
     void            SetScrolledHdl( const Link<SvTreeListBox*,void>& rLink ) { aScrolledHdl = rLink; }
     long            GetXOffset() const { return GetMapMode().GetOrigin().X(); }
 
@@ -644,7 +644,7 @@ public:
 
     bool            Expand( SvTreeListEntry* pParent );
     bool            Collapse( SvTreeListEntry* pParent );
-    virtual bool    Select( SvTreeListEntry* pEntry, bool bSelect=true );
+    bool            Select( SvTreeListEntry* pEntry, bool bSelect=true );
     sal_uLong       SelectChildren( SvTreeListEntry* pParent, bool bSelect );
     void            SelectAll( bool bSelect );
 
