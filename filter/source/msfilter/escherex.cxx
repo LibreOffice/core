@@ -66,6 +66,7 @@
 #include <com/sun/star/drawing/FlagSequence.hpp>
 #include <com/sun/star/drawing/PolygonFlags.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
@@ -699,6 +700,10 @@ void EscherPropertyContainer::CreateTextProperties(
     bool bWordWrap          ( false );
     bool bAutoGrowSize      ( false );
 
+    uno::Any aTextWrap;
+
+    EscherPropertyValueHelper::GetPropertyValue(aTextWrap, rXPropSet, "TextWrap", true);
+
     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "TextWritingMode", true ) )
         aAny >>= eWM;
     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "TextVerticalAdjust", true ) )
@@ -837,6 +842,21 @@ void EscherPropertyContainer::CreateTextProperties(
                 nTextAttr |= 0x20002;
         }
     }
+
+    if (aTextWrap.hasValue())
+    {   // explicit text wrap overrides whatever was inferred previously
+        switch (aTextWrap.get<text::WrapTextMode>())
+        {
+            case text::WrapTextMode_THROUGH:
+                eWrapMode = ESCHER_WrapNone;
+                break;
+            // in theory there are 3 more Escher_Wrap, but [MS-ODRAW] says they are useless
+            default:
+                eWrapMode = ESCHER_WrapSquare;
+                break;
+        }
+    }
+
     AddOpt( ESCHER_Prop_dxTextLeft, nLeft * 360 );
     AddOpt( ESCHER_Prop_dxTextRight, nRight * 360 );
     AddOpt( ESCHER_Prop_dyTextTop, nTop * 360 );
