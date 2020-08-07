@@ -22,6 +22,9 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
 		external/nss/nss.vs2015.patch) \
     external/nss/ubsan.patch.0 \
     external/nss/clang-cl.patch.0 \
+    external/nss/nss.vs2015.patch \
+    external/nss/nss.vs2015.pdb.patch \
+    external/nss/macos-dlopen.patch.0 \
     $(if $(filter iOS,$(OS)), \
         external/nss/nss-ios.patch) \
 	$(if $(filter MSC-INTEL,$(COM)-$(CPUNAME)), \
