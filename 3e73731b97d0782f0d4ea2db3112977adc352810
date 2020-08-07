@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "744b2547_90cdd68c",
+        "filename": "compilerplugins/clang/stringstatic.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-07T11:45:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e36dc9e0_fced7a1a",
+      "range": {
+        "startLine": 18,
+        "startChar": 20,
+        "endLine": 18,
+        "endChar": 43
+      },
+      "revId": "3e73731b97d0782f0d4ea2db3112977adc352810",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ecd43100_ba37fccc",
         "filename": "compilerplugins/clang/stringstatic.cxx",
         "patchSetId": 1
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "15c0c5c8_6029c856",
+        "filename": "compilerplugins/clang/stringstatic.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-07T11:45:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ecd43100_ba37fccc",
+      "revId": "3e73731b97d0782f0d4ea2db3112977adc352810",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8d08c524_fff021eb",
         "filename": "include/rtl/string.hxx",
         "patchSetId": 1
@@ -56,6 +98,24 @@
       "revId": "3e73731b97d0782f0d4ea2db3112977adc352810",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69105f62_f9005487",
+        "filename": "include/rtl/string.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-07T11:45:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d08c524_fff021eb",
+      "revId": "3e73731b97d0782f0d4ea2db3112977adc352810",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -94,6 +154,24 @@
     },
     {
       "key": {
+        "uuid": "3e16b3b1_2ca2dfe4",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-07T11:45:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ea3cc47_e12477ed",
+      "revId": "3e73731b97d0782f0d4ea2db3112977adc352810",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d79ea56b_aee96a64",
         "filename": "include/rtl/ustring.hxx",
         "patchSetId": 1
@@ -129,6 +207,24 @@
     },
     {
       "key": {
+        "uuid": "2fde1cbb_2d5d9f41",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-07T11:45:46Z",
+      "side": 1,
+      "message": "do you have a link to those uses?",
+      "parentUuid": "99b8c399_864727ae",
+      "revId": "3e73731b97d0782f0d4ea2db3112977adc352810",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "64d8110d_f1d4e2ed",
         "filename": "include/rtl/ustring.hxx",
         "patchSetId": 1
@@ -158,6 +254,24 @@
       "side": 1,
       "message": "I could not find a formulation that allowed me to do that",
       "parentUuid": "64d8110d_f1d4e2ed",
+      "revId": "3e73731b97d0782f0d4ea2db3112977adc352810",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68605397_87377f65",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-07T11:45:46Z",
+      "side": 1,
+      "message": "what\u0027s the failure (with what compiler) when just adding \"constexpr\" there?",
+      "parentUuid": "e8bd6d09_f7038103",
       "revId": "3e73731b97d0782f0d4ea2db3112977adc352810",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
