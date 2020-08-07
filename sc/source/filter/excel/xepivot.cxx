@@ -508,34 +508,35 @@ sal_uInt16 XclExpPCField::InsertGroupItem( XclExpPCItem* pNewItem )
 void XclExpPCField::InsertNumDateGroupItems( const ScDPObject& rDPObj, const ScDPNumGroupInfo& rNumInfo, sal_Int32 nDatePart )
 {
     OSL_ENSURE( rDPObj.GetSheetDesc(), "XclExpPCField::InsertNumDateGroupItems - cannot generate element list" );
-    if( const ScSheetSourceDesc* pSrcDesc = rDPObj.GetSheetDesc() )
+    const ScSheetSourceDesc* pSrcDesc = rDPObj.GetSheetDesc();
+    if(!pSrcDesc)
+        return;
+
+    // get the string collection with original source elements
+    const ScDPSaveData* pSaveData = rDPObj.GetSaveData();
+    const ScDPDimensionSaveData* pDimData = nullptr;
+    if (pSaveData)
+        pDimData = pSaveData->GetExistingDimensionData();
+
+    const ScDPCache* pCache = pSrcDesc->CreateCache(pDimData);
+    if (!pCache)
+        return;
+
+    ScSheetDPData aDPData(&GetDoc(), *pSrcDesc, *pCache);
+    long nDim = GetFieldIndex();
+    // get the string collection with generated grouping elements
+    ScDPNumGroupDimension aTmpDim( rNumInfo );
+    if( nDatePart != 0 )
+        aTmpDim.SetDateDimension();
+    const std::vector<SCROW>& aMemberIds = aTmpDim.GetNumEntries(
+        static_cast<SCCOL>(nDim), pCache);
+    for (SCROW nMemberId : aMemberIds)
     {
-        // get the string collection with original source elements
-        const ScDPSaveData* pSaveData = rDPObj.GetSaveData();
-        const ScDPDimensionSaveData* pDimData = nullptr;
-        if (pSaveData)
-            pDimData = pSaveData->GetExistingDimensionData();
-
-        const ScDPCache* pCache = pSrcDesc->CreateCache(pDimData);
-        if (!pCache)
-            return;
-
-        ScSheetDPData aDPData(&GetDoc(), *pSrcDesc, *pCache);
-        long nDim = GetFieldIndex();
-        // get the string collection with generated grouping elements
-        ScDPNumGroupDimension aTmpDim( rNumInfo );
-        if( nDatePart != 0 )
-            aTmpDim.SetDateDimension();
-        const std::vector<SCROW>& aMemberIds = aTmpDim.GetNumEntries(
-            static_cast<SCCOL>(nDim), pCache);
-        for (SCROW nMemberId : aMemberIds)
+        const ScDPItemData* pData = aDPData.GetMemberById(nDim, nMemberId);
+        if ( pData )
         {
-            const ScDPItemData* pData = aDPData.GetMemberById(nDim, nMemberId);
-            if ( pData )
-            {
-                OUString aStr = pCache->GetFormattedString(nDim, *pData, false);
-                InsertGroupItem(new XclExpPCItem(aStr));
-            }
+            OUString aStr = pCache->GetFormattedString(nDim, *pData, false);
+            InsertGroupItem(new XclExpPCItem(aStr));
         }
     }
 }
@@ -617,59 +618,60 @@ XclExpPivotCache::XclExpPivotCache( const XclExpRoot& rRoot, const ScDPObject& r
     mbValid( false )
 {
     // source from sheet only
-    if( const ScSheetSourceDesc* pSrcDesc = rDPObj.GetSheetDesc() )
-    {
-        /*  maOrigSrcRange: Range received from the DataPilot object.
-            maExpSrcRange: Range written to the DCONREF record.
-            maDocSrcRange: Range used to get source data from Calc document.
-                This range may be shorter than maExpSrcRange to improve export
-                performance (#i22541#). */
-        maOrigSrcRange = maExpSrcRange = maDocSrcRange = pSrcDesc->GetSourceRange();
-        maSrcRangeName = pSrcDesc->GetRangeName();
+    const ScSheetSourceDesc* pSrcDesc = rDPObj.GetSheetDesc();
+    if(!pSrcDesc)
+        return;
 
-        // internal sheet data only
-        SCTAB nScTab = maExpSrcRange.aStart.Tab();
-        if( (nScTab == maExpSrcRange.aEnd.Tab()) && GetTabInfo().IsExportTab( nScTab ) )
-        {
-            // ValidateRange() restricts source range to valid Excel limits
-            if( GetAddressConverter().ValidateRange( maExpSrcRange, true ) )
-            {
-                // #i22541# skip empty cell areas (performance)
-                SCCOL nDocCol1, nDocCol2;
-                SCROW nDocRow1, nDocRow2;
-                GetDoc().GetDataStart( nScTab, nDocCol1, nDocRow1 );
-                GetDoc().GetPrintArea( nScTab, nDocCol2, nDocRow2, false );
-                SCCOL nSrcCol1 = maExpSrcRange.aStart.Col();
-                SCROW nSrcRow1 = maExpSrcRange.aStart.Row();
-                SCCOL nSrcCol2 = maExpSrcRange.aEnd.Col();
-                SCROW nSrcRow2 = maExpSrcRange.aEnd.Row();
+    /*  maOrigSrcRange: Range received from the DataPilot object.
+        maExpSrcRange: Range written to the DCONREF record.
+        maDocSrcRange: Range used to get source data from Calc document.
+            This range may be shorter than maExpSrcRange to improve export
+            performance (#i22541#). */
+    maOrigSrcRange = maExpSrcRange = maDocSrcRange = pSrcDesc->GetSourceRange();
+    maSrcRangeName = pSrcDesc->GetRangeName();
 
-                // #i22541# do not store index list for too big ranges
-                if( 2 * (nDocRow2 - nDocRow1) < (nSrcRow2 - nSrcRow1) )
-                    ::set_flag( maPCInfo.mnFlags, EXC_SXDB_SAVEDATA, false );
+    // internal sheet data only
+    SCTAB nScTab = maExpSrcRange.aStart.Tab();
+    if( !((nScTab == maExpSrcRange.aEnd.Tab()) && GetTabInfo().IsExportTab( nScTab )) )
+        return;
 
-                // adjust row indexes, keep one row of empty area to surely have the empty cache item
-                if( nSrcRow1 < nDocRow1 )
-                    nSrcRow1 = nDocRow1 - 1;
-                if( nSrcRow2 > nDocRow2 )
-                    nSrcRow2 = nDocRow2 + 1;
+    // ValidateRange() restricts source range to valid Excel limits
+    if( !GetAddressConverter().ValidateRange( maExpSrcRange, true ) )
+        return;
 
-                maDocSrcRange.aStart.SetCol( ::std::max( nDocCol1, nSrcCol1 ) );
-                maDocSrcRange.aStart.SetRow( nSrcRow1 );
-                maDocSrcRange.aEnd.SetCol( ::std::min( nDocCol2, nSrcCol2 ) );
-                maDocSrcRange.aEnd.SetRow( nSrcRow2 );
+    // #i22541# skip empty cell areas (performance)
+    SCCOL nDocCol1, nDocCol2;
+    SCROW nDocRow1, nDocRow2;
+    GetDoc().GetDataStart( nScTab, nDocCol1, nDocRow1 );
+    GetDoc().GetPrintArea( nScTab, nDocCol2, nDocRow2, false );
+    SCCOL nSrcCol1 = maExpSrcRange.aStart.Col();
+    SCROW nSrcRow1 = maExpSrcRange.aStart.Row();
+    SCCOL nSrcCol2 = maExpSrcRange.aEnd.Col();
+    SCROW nSrcRow2 = maExpSrcRange.aEnd.Row();
 
-                GetDoc().GetName( nScTab, maTabName );
-                maPCInfo.mnSrcRecs = static_cast< sal_uInt32 >( maExpSrcRange.aEnd.Row() - maExpSrcRange.aStart.Row() );
-                maPCInfo.mnStrmId = nListIdx + 1;
-                maPCInfo.mnSrcType = EXC_SXDB_SRC_SHEET;
+    // #i22541# do not store index list for too big ranges
+    if( 2 * (nDocRow2 - nDocRow1) < (nSrcRow2 - nSrcRow1) )
+        ::set_flag( maPCInfo.mnFlags, EXC_SXDB_SAVEDATA, false );
 
-                AddFields( rDPObj );
+    // adjust row indexes, keep one row of empty area to surely have the empty cache item
+    if( nSrcRow1 < nDocRow1 )
+        nSrcRow1 = nDocRow1 - 1;
+    if( nSrcRow2 > nDocRow2 )
+        nSrcRow2 = nDocRow2 + 1;
 
-                mbValid = true;
-            }
-        }
-    }
+    maDocSrcRange.aStart.SetCol( ::std::max( nDocCol1, nSrcCol1 ) );
+    maDocSrcRange.aStart.SetRow( nSrcRow1 );
+    maDocSrcRange.aEnd.SetCol( ::std::min( nDocCol2, nSrcCol2 ) );
+    maDocSrcRange.aEnd.SetRow( nSrcRow2 );
+
+    GetDoc().GetName( nScTab, maTabName );
+    maPCInfo.mnSrcRecs = static_cast< sal_uInt32 >( maExpSrcRange.aEnd.Row() - maExpSrcRange.aStart.Row() );
+    maPCInfo.mnStrmId = nListIdx + 1;
+    maPCInfo.mnSrcType = EXC_SXDB_SRC_SHEET;
+
+    AddFields( rDPObj );
+
+    mbValid = true;
 }
 
 bool XclExpPivotCache::HasItemIndexList() const
@@ -751,32 +753,33 @@ void XclExpPivotCache::AddStdFields( const ScDPObject& rDPObj )
 
 void XclExpPivotCache::AddGroupFields( const ScDPObject& rDPObj )
 {
-    if( const ScDPSaveData* pSaveData = rDPObj.GetSaveData() )
+    const ScDPSaveData* pSaveData = rDPObj.GetSaveData();
+    if(!pSaveData)
+        return;
+    const ScDPDimensionSaveData* pSaveDimData = pSaveData->GetExistingDimensionData();
+    if( !pSaveDimData )
+        return;
+
+    // loop over all existing standard fields to find their group fields
+    for( sal_uInt16 nFieldIdx = 0; nFieldIdx < maPCInfo.mnStdFields; ++nFieldIdx )
     {
-        if( const ScDPDimensionSaveData* pSaveDimData = pSaveData->GetExistingDimensionData() )
+        if( XclExpPCField* pCurrStdField = maFieldList.GetRecord( nFieldIdx ) )
         {
-            // loop over all existing standard fields to find their group fields
-            for( sal_uInt16 nFieldIdx = 0; nFieldIdx < maPCInfo.mnStdFields; ++nFieldIdx )
+            const ScDPSaveGroupDimension* pGroupDim = pSaveDimData->GetGroupDimForBase( pCurrStdField->GetFieldName() );
+            XclExpPCField* pLastGroupField = pCurrStdField;
+            while( pGroupDim )
             {
-                if( XclExpPCField* pCurrStdField = maFieldList.GetRecord( nFieldIdx ) )
-                {
-                    const ScDPSaveGroupDimension* pGroupDim = pSaveDimData->GetGroupDimForBase( pCurrStdField->GetFieldName() );
-                    XclExpPCField* pLastGroupField = pCurrStdField;
-                    while( pGroupDim )
-                    {
-                        // insert the new grouping field
-                        XclExpPCFieldRef xNewGroupField = new XclExpPCField(
-                            GetRoot(), GetFieldCount(), rDPObj, *pGroupDim, *pCurrStdField );
-                        maFieldList.AppendRecord( xNewGroupField );
+                // insert the new grouping field
+                XclExpPCFieldRef xNewGroupField = new XclExpPCField(
+                    GetRoot(), GetFieldCount(), rDPObj, *pGroupDim, *pCurrStdField );
+                maFieldList.AppendRecord( xNewGroupField );
 
-                        // register new grouping field at current grouping field, building a chain
-                        pLastGroupField->SetGroupChildField( *xNewGroupField );
+                // register new grouping field at current grouping field, building a chain
+                pLastGroupField->SetGroupChildField( *xNewGroupField );
 
-                        // next grouping dimension
-                        pGroupDim = pSaveDimData->GetGroupDimForBase( pGroupDim->GetGroupDimName() );
-                        pLastGroupField = xNewGroupField.get();
-                    }
-                }
+                // next grouping dimension
+                pGroupDim = pSaveDimData->GetGroupDimForBase( pGroupDim->GetGroupDimName() );
+                pLastGroupField = xNewGroupField.get();
             }
         }
     }
@@ -807,20 +810,20 @@ void XclExpPivotCache::WriteCacheStream()
 {
     tools::SvRef<SotStorage> xSvStrg = OpenStorage( EXC_STORAGE_PTCACHE );
     tools::SvRef<SotStorageStream> xSvStrm = OpenStream( xSvStrg, ScfTools::GetHexStr( maPCInfo.mnStrmId ) );
-    if( xSvStrm.is() )
-    {
-        XclExpStream aStrm( *xSvStrm, GetRoot() );
-        // SXDB
-        WriteSxdb( aStrm );
-        // SXDBEX
-        WriteSxdbex( aStrm );
-        // field list (SXFIELD and items)
-        maFieldList.Save( aStrm );
-        // index table (list of SXINDEXLIST)
-        WriteSxindexlistList( aStrm );
-        // EOF
-        XclExpEmptyRecord( EXC_ID_EOF ).Save( aStrm );
-    }
+    if( !xSvStrm.is() )
+        return;
+
+    XclExpStream aStrm( *xSvStrm, GetRoot() );
+    // SXDB
+    WriteSxdb( aStrm );
+    // SXDBEX
+    WriteSxdbex( aStrm );
+    // field list (SXFIELD and items)
+    maFieldList.Save( aStrm );
+    // index table (list of SXINDEXLIST)
+    WriteSxindexlistList( aStrm );
+    // EOF
+    XclExpEmptyRecord( EXC_ID_EOF ).Save( aStrm );
 }
 
 void XclExpPivotCache::WriteSxdb( XclExpStream& rStrm ) const
@@ -840,20 +843,20 @@ void XclExpPivotCache::WriteSxdbex( XclExpStream& rStrm )
 
 void XclExpPivotCache::WriteSxindexlistList( XclExpStream& rStrm ) const
 {
-    if( HasItemIndexList() )
-    {
-        std::size_t nRecSize = 0;
-        size_t nPos, nSize = maFieldList.GetSize();
-        for( nPos = 0; nPos < nSize; ++nPos )
-            nRecSize += maFieldList.GetRecord( nPos )->GetIndexSize();
+    if( !HasItemIndexList() )
+        return;
 
-        for( sal_uInt32 nSrcRow = 0; nSrcRow < maPCInfo.mnSrcRecs; ++nSrcRow )
-        {
-            rStrm.StartRecord( EXC_ID_SXINDEXLIST, nRecSize );
-            for( nPos = 0; nPos < nSize; ++nPos )
-                maFieldList.GetRecord( nPos )->WriteIndex( rStrm, nSrcRow );
-            rStrm.EndRecord();
-        }
+    std::size_t nRecSize = 0;
+    size_t nPos, nSize = maFieldList.GetSize();
+    for( nPos = 0; nPos < nSize; ++nPos )
+        nRecSize += maFieldList.GetRecord( nPos )->GetIndexSize();
+
+    for( sal_uInt32 nSrcRow = 0; nSrcRow < maPCInfo.mnSrcRecs; ++nSrcRow )
+    {
+        rStrm.StartRecord( EXC_ID_SXINDEXLIST, nRecSize );
+        for( nPos = 0; nPos < nSize; ++nPos )
+            maFieldList.GetRecord( nPos )->WriteIndex( rStrm, nSrcRow );
+        rStrm.EndRecord();
     }
 }
 
@@ -1179,51 +1182,52 @@ XclExpPivotTable::XclExpPivotTable( const XclExpRoot& rRoot, const ScDPObject& r
     mbFilterBtn( false )
 {
     const ScRange& rOutScRange = rDPObj.GetOutRange();
-    if( GetAddressConverter().ConvertRange( maPTInfo.maOutXclRange, rOutScRange, true ) )
+    if( !GetAddressConverter().ConvertRange( maPTInfo.maOutXclRange, rOutScRange, true ) )
+        return;
+
+    // DataPilot properties -----------------------------------------------
+
+    // pivot table properties from DP object
+    mnOutScTab = rOutScRange.aStart.Tab();
+    maPTInfo.maTableName = rDPObj.GetName();
+    maPTInfo.mnCacheIdx = mrPCache.GetCacheIndex();
+
+    maPTViewEx9Info.Init( rDPObj );
+
+    const ScDPSaveData* pSaveData = rDPObj.GetSaveData();
+    if( !pSaveData )
+        return;
+
+    // additional properties from ScDPSaveData
+    SetPropertiesFromDP( *pSaveData );
+
+    // loop over all dimensions ---------------------------------------
+
+    /*  1)  Default-construct all pivot table fields for all pivot cache fields. */
+    for( sal_uInt16 nFieldIdx = 0, nFieldCount = mrPCache.GetFieldCount(); nFieldIdx < nFieldCount; ++nFieldIdx )
+        maFieldList.AppendNewRecord( new XclExpPTField( *this, nFieldIdx ) );
+
+    const ScDPSaveData::DimsType& rDimList = pSaveData->GetDimensions();
+
+    /*  2)  First process all data dimensions, they are needed for extended
+            settings of row/column/page fields (sorting/auto show). */
+    for (auto const& iter : rDimList)
     {
-        // DataPilot properties -----------------------------------------------
-
-        // pivot table properties from DP object
-        mnOutScTab = rOutScRange.aStart.Tab();
-        maPTInfo.maTableName = rDPObj.GetName();
-        maPTInfo.mnCacheIdx = mrPCache.GetCacheIndex();
-
-        maPTViewEx9Info.Init( rDPObj );
-
-        if( const ScDPSaveData* pSaveData = rDPObj.GetSaveData() )
-        {
-            // additional properties from ScDPSaveData
-            SetPropertiesFromDP( *pSaveData );
-
-            // loop over all dimensions ---------------------------------------
-
-            /*  1)  Default-construct all pivot table fields for all pivot cache fields. */
-            for( sal_uInt16 nFieldIdx = 0, nFieldCount = mrPCache.GetFieldCount(); nFieldIdx < nFieldCount; ++nFieldIdx )
-                maFieldList.AppendNewRecord( new XclExpPTField( *this, nFieldIdx ) );
-
-            const ScDPSaveData::DimsType& rDimList = pSaveData->GetDimensions();
-
-            /*  2)  First process all data dimensions, they are needed for extended
-                    settings of row/column/page fields (sorting/auto show). */
-            for (auto const& iter : rDimList)
-            {
-                if (iter->GetOrientation() == DataPilotFieldOrientation_DATA)
-                    SetDataFieldPropertiesFromDim(*iter);
-            }
-
-            /*  3)  Row/column/page/hidden fields. */
-            for (auto const& iter : rDimList)
-            {
-                if (iter->GetOrientation() != DataPilotFieldOrientation_DATA)
-                    SetFieldPropertiesFromDim(*iter);
-            }
-
-            // Finalize -------------------------------------------------------
-
-            Finalize();
-            mbValid = true;
-        }
+        if (iter->GetOrientation() == DataPilotFieldOrientation_DATA)
+            SetDataFieldPropertiesFromDim(*iter);
     }
+
+    /*  3)  Row/column/page/hidden fields. */
+    for (auto const& iter : rDimList)
+    {
+        if (iter->GetOrientation() != DataPilotFieldOrientation_DATA)
+            SetFieldPropertiesFromDim(*iter);
+    }
+
+    // Finalize -------------------------------------------------------
+
+    Finalize();
+    mbValid = true;
 }
 
 const XclExpPCField* XclExpPivotTable::GetCacheField( sal_uInt16 nCacheIdx ) const
@@ -1255,29 +1259,29 @@ sal_uInt16 XclExpPivotTable::GetDataFieldIndex( const OUString& rName, sal_uInt1
 
 void XclExpPivotTable::Save( XclExpStream& rStrm )
 {
-    if( mbValid )
-    {
-        // SXVIEW
-        WriteSxview( rStrm );
-        // pivot table fields (SXVD, SXVDEX, and item records)
-        maFieldList.Save( rStrm );
-        // SXIVD records for row and column fields
-        WriteSxivd( rStrm, maRowFields );
-        WriteSxivd( rStrm, maColFields );
-        // SXPI
-        WriteSxpi( rStrm );
-        // list of SXDI records containing data field info
-        WriteSxdiList( rStrm );
-        // SXLI records
-        WriteSxli( rStrm, maPTInfo.mnDataRows, maPTInfo.mnRowFields );
-        WriteSxli( rStrm, maPTInfo.mnDataCols, maPTInfo.mnColFields );
-        // SXEX
-        WriteSxex( rStrm );
-        // QSISXTAG
-        WriteQsiSxTag( rStrm );
-        // SXVIEWEX9
-        WriteSxViewEx9( rStrm );
-    }
+    if( !mbValid )
+        return;
+
+    // SXVIEW
+    WriteSxview( rStrm );
+    // pivot table fields (SXVD, SXVDEX, and item records)
+    maFieldList.Save( rStrm );
+    // SXIVD records for row and column fields
+    WriteSxivd( rStrm, maRowFields );
+    WriteSxivd( rStrm, maColFields );
+    // SXPI
+    WriteSxpi( rStrm );
+    // list of SXDI records containing data field info
+    WriteSxdiList( rStrm );
+    // SXLI records
+    WriteSxli( rStrm, maPTInfo.mnDataRows, maPTInfo.mnRowFields );
+    WriteSxli( rStrm, maPTInfo.mnDataCols, maPTInfo.mnColFields );
+    // SXEX
+    WriteSxex( rStrm );
+    // QSISXTAG
+    WriteQsiSxTag( rStrm );
+    // SXVIEWEX9
+    WriteSxViewEx9( rStrm );
 }
 
 XclExpPTField* XclExpPivotTable::GetFieldAcc( const OUString& rName )
@@ -1318,38 +1322,42 @@ void XclExpPivotTable::SetPropertiesFromDP( const ScDPSaveData& rSaveData )
 
 void XclExpPivotTable::SetFieldPropertiesFromDim( const ScDPSaveDimension& rSaveDim )
 {
-    if( XclExpPTField* pField = GetFieldAcc( rSaveDim ) )
+    XclExpPTField* pField = GetFieldAcc( rSaveDim );
+    if(!pField)
+        return;
+
+    // field properties
+    pField->SetPropertiesFromDim( rSaveDim );
+
+    // update the corresponding field position list
+    DataPilotFieldOrientation eOrient = rSaveDim.GetOrientation();
+    sal_uInt16 nFieldIdx = pField->GetFieldIndex();
+    bool bDataLayout = nFieldIdx == EXC_SXIVD_DATA;
+    bool bMultiData = maDataFields.size() > 1;
+
+    if( !(!bDataLayout || bMultiData) )
+        return;
+
+    switch( eOrient )
     {
-        // field properties
-        pField->SetPropertiesFromDim( rSaveDim );
-
-        // update the corresponding field position list
-        DataPilotFieldOrientation eOrient = rSaveDim.GetOrientation();
-        sal_uInt16 nFieldIdx = pField->GetFieldIndex();
-        bool bDataLayout = nFieldIdx == EXC_SXIVD_DATA;
-        bool bMultiData = maDataFields.size() > 1;
-
-        if( !bDataLayout || bMultiData ) switch( eOrient )
-        {
-            case DataPilotFieldOrientation_ROW:
-                maRowFields.push_back( nFieldIdx );
-                if( bDataLayout )
-                    maPTInfo.mnDataAxis = EXC_SXVD_AXIS_ROW;
-            break;
-            case DataPilotFieldOrientation_COLUMN:
-                maColFields.push_back( nFieldIdx );
-                if( bDataLayout )
-                    maPTInfo.mnDataAxis = EXC_SXVD_AXIS_COL;
-            break;
-            case DataPilotFieldOrientation_PAGE:
-                maPageFields.push_back( nFieldIdx );
-                OSL_ENSURE( !bDataLayout, "XclExpPivotTable::SetFieldPropertiesFromDim - wrong orientation for data fields" );
-            break;
-            case DataPilotFieldOrientation_DATA:
-                OSL_FAIL( "XclExpPivotTable::SetFieldPropertiesFromDim - called for data field" );
-            break;
-            default:;
-        }
+        case DataPilotFieldOrientation_ROW:
+            maRowFields.push_back( nFieldIdx );
+            if( bDataLayout )
+                maPTInfo.mnDataAxis = EXC_SXVD_AXIS_ROW;
+        break;
+        case DataPilotFieldOrientation_COLUMN:
+            maColFields.push_back( nFieldIdx );
+            if( bDataLayout )
+                maPTInfo.mnDataAxis = EXC_SXVD_AXIS_COL;
+        break;
+        case DataPilotFieldOrientation_PAGE:
+            maPageFields.push_back( nFieldIdx );
+            OSL_ENSURE( !bDataLayout, "XclExpPivotTable::SetFieldPropertiesFromDim - wrong orientation for data fields" );
+        break;
+        case DataPilotFieldOrientation_DATA:
+            OSL_FAIL( "XclExpPivotTable::SetFieldPropertiesFromDim - called for data field" );
+        break;
+        default:;
     }
 }
 
@@ -1486,26 +1494,26 @@ void XclExpPivotTable::WriteSxdiList( XclExpStream& rStrm ) const
 
 void XclExpPivotTable::WriteSxli( XclExpStream& rStrm, sal_uInt16 nLineCount, sal_uInt16 nIndexCount )
 {
-    if( nLineCount > 0 )
-    {
-        std::size_t nLineSize = 8 + 2 * nIndexCount;
-        rStrm.StartRecord( EXC_ID_SXLI, nLineSize * nLineCount );
+    if( nLineCount <= 0 )
+        return;
 
-        /*  Excel expects the records to be filled completely, do not
-            set a segment size... */
+    std::size_t nLineSize = 8 + 2 * nIndexCount;
+    rStrm.StartRecord( EXC_ID_SXLI, nLineSize * nLineCount );
+
+    /*  Excel expects the records to be filled completely, do not
+        set a segment size... */
 //        rStrm.SetSliceSize( nLineSize );
 
-        for( sal_uInt16 nLine = 0; nLine < nLineCount; ++nLine )
-        {
-            // Excel XP needs a partly initialized SXLI record
-            rStrm   << sal_uInt16( 0 )      // number of equal index entries
-                    << EXC_SXVI_TYPE_DATA
-                    << nIndexCount
-                    << EXC_SXLI_DEFAULTFLAGS;
-            rStrm.WriteZeroBytes( 2 * nIndexCount );
-        }
-        rStrm.EndRecord();
+    for( sal_uInt16 nLine = 0; nLine < nLineCount; ++nLine )
+    {
+        // Excel XP needs a partly initialized SXLI record
+        rStrm   << sal_uInt16( 0 )      // number of equal index entries
+                << EXC_SXVI_TYPE_DATA
+                << nIndexCount
+                << EXC_SXLI_DEFAULTFLAGS;
+        rStrm.WriteZeroBytes( 2 * nIndexCount );
     }
+    rStrm.EndRecord();
 }
 
 void XclExpPivotTable::WriteSxex( XclExpStream& rStrm ) const

@@ -954,18 +954,18 @@ void XclImpWebQuery::ReadParamqry( XclImpStream& rStrm )
 {
     sal_uInt16 nFlags = rStrm.ReaduInt16();
     sal_uInt16 nType = ::extract_value< sal_uInt16 >( nFlags, 0, 3 );
-    if( (nType == EXC_PQRYTYPE_WEBQUERY) && ::get_flag( nFlags, EXC_PQRY_WEBQUERY ) )
+    if( !((nType == EXC_PQRYTYPE_WEBQUERY) && ::get_flag( nFlags, EXC_PQRY_WEBQUERY )) )
+        return;
+
+    if( ::get_flag( nFlags, EXC_PQRY_TABLES ) )
     {
-        if( ::get_flag( nFlags, EXC_PQRY_TABLES ) )
-        {
-            meMode = xlWQAllTables;
-            maTables = ScfTools::GetHTMLTablesName();
-        }
-        else
-        {
-            meMode = xlWQDocument;
-            maTables = ScfTools::GetHTMLDocName();
-        }
+        meMode = xlWQAllTables;
+        maTables = ScfTools::GetHTMLTablesName();
+    }
+    else
+    {
+        meMode = xlWQDocument;
+        maTables = ScfTools::GetHTMLDocName();
     }
 }
 
@@ -987,26 +987,26 @@ void XclImpWebQuery::ReadWqsettings( XclImpStream& rStrm )
 
 void XclImpWebQuery::ReadWqtables( XclImpStream& rStrm )
 {
-    if( meMode == xlWQSpecTables )
-    {
-        rStrm.Ignore( 4 );
-        OUString aTables( rStrm.ReadUniString() );
+    if( meMode != xlWQSpecTables )
+        return;
 
-        const sal_Unicode cSep = ';';
-        const OUString aQuotedPairs( "\"\"" );
-        maTables.clear();
-        for ( sal_Int32 nStringIx {aTables.isEmpty() ? -1 : 0}; nStringIx>=0; )
+    rStrm.Ignore( 4 );
+    OUString aTables( rStrm.ReadUniString() );
+
+    const sal_Unicode cSep = ';';
+    const OUString aQuotedPairs( "\"\"" );
+    maTables.clear();
+    for ( sal_Int32 nStringIx {aTables.isEmpty() ? -1 : 0}; nStringIx>=0; )
+    {
+        OUString aToken( ScStringUtil::GetQuotedToken( aTables, 0, aQuotedPairs, ',', nStringIx ) );
+        sal_Int32 nTabNum = CharClass::isAsciiNumeric( aToken ) ? aToken.toInt32() : 0;
+        if( nTabNum > 0 )
+            maTables = ScGlobal::addToken( maTables, ScfTools::GetNameFromHTMLIndex( static_cast< sal_uInt32 >( nTabNum ) ), cSep );
+        else
         {
-            OUString aToken( ScStringUtil::GetQuotedToken( aTables, 0, aQuotedPairs, ',', nStringIx ) );
-            sal_Int32 nTabNum = CharClass::isAsciiNumeric( aToken ) ? aToken.toInt32() : 0;
-            if( nTabNum > 0 )
-                maTables = ScGlobal::addToken( maTables, ScfTools::GetNameFromHTMLIndex( static_cast< sal_uInt32 >( nTabNum ) ), cSep );
-            else
-            {
-                ScGlobal::EraseQuotes( aToken, '"', false );
-                if( !aToken.isEmpty() )
-                    maTables = ScGlobal::addToken( maTables, ScfTools::GetNameFromHTMLName( aToken ), cSep );
-            }
+            ScGlobal::EraseQuotes( aToken, '"', false );
+            if( !aToken.isEmpty() )
+                maTables = ScGlobal::addToken( maTables, ScfTools::GetNameFromHTMLName( aToken ), cSep );
         }
     }
 }

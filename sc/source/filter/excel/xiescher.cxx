@@ -605,25 +605,25 @@ void XclImpDrawObjBase::ReadMacro5( XclImpStream& rStrm, sal_uInt16 nMacroSize )
 void XclImpDrawObjBase::ReadMacro8( XclImpStream& rStrm )
 {
     maMacroName.clear();
-    if( rStrm.GetRecLeft() > 6 )
+    if( rStrm.GetRecLeft() <= 6 )
+        return;
+
+    // macro is stored in a tNameXR token containing a link to a defined name
+    sal_uInt16 nFmlaSize;
+    nFmlaSize = rStrm.ReaduInt16();
+    rStrm.Ignore( 4 );
+    OSL_ENSURE( nFmlaSize == 7, "XclImpDrawObjBase::ReadMacro - unexpected formula size" );
+    if( nFmlaSize == 7 )
     {
-        // macro is stored in a tNameXR token containing a link to a defined name
-        sal_uInt16 nFmlaSize;
-        nFmlaSize = rStrm.ReaduInt16();
-        rStrm.Ignore( 4 );
-        OSL_ENSURE( nFmlaSize == 7, "XclImpDrawObjBase::ReadMacro - unexpected formula size" );
-        if( nFmlaSize == 7 )
-        {
-            sal_uInt8 nTokenId;
-            sal_uInt16 nExtSheet, nExtName;
-            nTokenId = rStrm.ReaduInt8();
-            nExtSheet = rStrm.ReaduInt16();
-            nExtName = rStrm.ReaduInt16();
-            OSL_ENSURE( nTokenId == XclTokenArrayHelper::GetTokenId( EXC_TOKID_NAMEX, EXC_TOKCLASS_REF ),
-                "XclImpDrawObjBase::ReadMacro - tNameXR token expected" );
-            if( nTokenId == XclTokenArrayHelper::GetTokenId( EXC_TOKID_NAMEX, EXC_TOKCLASS_REF ) )
-                maMacroName = GetLinkManager().GetMacroName( nExtSheet, nExtName );
-        }
+        sal_uInt8 nTokenId;
+        sal_uInt16 nExtSheet, nExtName;
+        nTokenId = rStrm.ReaduInt8();
+        nExtSheet = rStrm.ReaduInt16();
+        nExtName = rStrm.ReaduInt16();
+        OSL_ENSURE( nTokenId == XclTokenArrayHelper::GetTokenId( EXC_TOKID_NAMEX, EXC_TOKCLASS_REF ),
+            "XclImpDrawObjBase::ReadMacro - tNameXR token expected" );
+        if( nTokenId == XclTokenArrayHelper::GetTokenId( EXC_TOKID_NAMEX, EXC_TOKCLASS_REF ) )
+            maMacroName = GetLinkManager().GetMacroName( nExtSheet, nExtName );
     }
 }
 
@@ -954,21 +954,21 @@ void XclImpDrawObjBase::ImplReadObj8( XclImpStream& rStrm )
         record that contains the DFF data of the next drawing object! So we
         have to skip just enough CONTINUE records to look at the next
         MSODRAWING/CONTINUE record. */
-    if( (rStrm.GetNextRecId() == EXC_ID3_IMGDATA) && rStrm.StartNextRecord() )
+    if( !((rStrm.GetNextRecId() == EXC_ID3_IMGDATA) && rStrm.StartNextRecord()) )
+        return;
+
+    sal_uInt32 nDataSize;
+    rStrm.Ignore( 4 );
+    nDataSize = rStrm.ReaduInt32();
+    nDataSize -= rStrm.GetRecLeft();
+    // skip following CONTINUE records until IMGDATA ends
+    while( (nDataSize > 0) && (rStrm.GetNextRecId() == EXC_ID_CONT) && rStrm.StartNextRecord() )
     {
-        sal_uInt32 nDataSize;
-        rStrm.Ignore( 4 );
-        nDataSize = rStrm.ReaduInt32();
-        nDataSize -= rStrm.GetRecLeft();
-        // skip following CONTINUE records until IMGDATA ends
-        while( (nDataSize > 0) && (rStrm.GetNextRecId() == EXC_ID_CONT) && rStrm.StartNextRecord() )
-        {
-            OSL_ENSURE( nDataSize >= rStrm.GetRecLeft(), "XclImpDrawObjBase::ImplReadObj8 - CONTINUE too long" );
-            nDataSize -= ::std::min< sal_uInt32 >( rStrm.GetRecLeft(), nDataSize );
-        }
-        OSL_ENSURE( nDataSize == 0, "XclImpDrawObjBase::ImplReadObj8 - missing CONTINUE records" );
-        // next record may be MSODRAWING or CONTINUE or anything else
+        OSL_ENSURE( nDataSize >= rStrm.GetRecLeft(), "XclImpDrawObjBase::ImplReadObj8 - CONTINUE too long" );
+        nDataSize -= ::std::min< sal_uInt32 >( rStrm.GetRecLeft(), nDataSize );
     }
+    OSL_ENSURE( nDataSize == 0, "XclImpDrawObjBase::ImplReadObj8 - missing CONTINUE records" );
+    // next record may be MSODRAWING or CONTINUE or anything else
 }
 
 void XclImpDrawObjVector::InsertGrouped( XclImpDrawObjRef const & xDrawObj )
@@ -1775,18 +1775,18 @@ SdrObjectUniquePtr XclImpChartObj::DoCreateSdrObj( XclImpDffConverter& rDffConv,
 void XclImpChartObj::DoPostProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const
 {
     const SdrOle2Obj* pSdrOleObj = dynamic_cast< const SdrOle2Obj* >( &rSdrObj );
-    if( mxChart && pSdrOleObj )
+    if( !(mxChart && pSdrOleObj) )
+        return;
+
+    const Reference< XEmbeddedObject >& xEmbObj = pSdrOleObj->GetObjRef();
+    if( xEmbObj.is() && ::svt::EmbeddedObjectRef::TryRunningState( xEmbObj ) ) try
     {
-        const Reference< XEmbeddedObject >& xEmbObj = pSdrOleObj->GetObjRef();
-        if( xEmbObj.is() && ::svt::EmbeddedObjectRef::TryRunningState( xEmbObj ) ) try
-        {
-            Reference< XEmbedPersist > xPersist( xEmbObj, UNO_QUERY_THROW );
-            Reference< XModel > xModel( xEmbObj->getComponent(), UNO_QUERY_THROW );
-            mxChart->Convert( xModel, rDffConv, xPersist->getEntryName(), rSdrObj.GetLogicRect() );
-        }
-        catch( const Exception& )
-        {
-        }
+        Reference< XEmbedPersist > xPersist( xEmbObj, UNO_QUERY_THROW );
+        Reference< XModel > xModel( xEmbObj->getComponent(), UNO_QUERY_THROW );
+        mxChart->Convert( xModel, rDffConv, xPersist->getEntryName(), rSdrObj.GetLogicRect() );
+    }
+    catch( const Exception& )
+    {
     }
 }
 
@@ -1889,67 +1889,71 @@ void XclImpControlHelper::ApplySheetLinkProps() const
         return;
 
    // sheet links
-    if( SfxObjectShell* pDocShell = mrRoot.GetDocShell() )
+    SfxObjectShell* pDocShell = mrRoot.GetDocShell();
+    if(!pDocShell)
+        return;
+
+    Reference< XMultiServiceFactory > xFactory( pDocShell->GetModel(), UNO_QUERY );
+    if( !xFactory.is() )
+        return;
+
+    // cell link
+    if( mxCellLink ) try
     {
-        Reference< XMultiServiceFactory > xFactory( pDocShell->GetModel(), UNO_QUERY );
-        if( xFactory.is() )
+        Reference< XBindableValue > xBindable( xCtrlModel, UNO_QUERY_THROW );
+
+        // create argument sequence for createInstanceWithArguments()
+        CellAddress aApiAddress;
+        ScUnoConversion::FillApiAddress( aApiAddress, *mxCellLink );
+
+        NamedValue aValue;
+        aValue.Name = SC_UNONAME_BOUNDCELL;
+        aValue.Value <<= aApiAddress;
+
+        Sequence< Any > aArgs( 1 );
+        aArgs[ 0 ] <<= aValue;
+
+        // create the CellValueBinding instance and set at the control model
+        OUString aServiceName;
+        switch( meBindMode )
         {
-            // cell link
-            if( mxCellLink ) try
-            {
-                Reference< XBindableValue > xBindable( xCtrlModel, UNO_QUERY_THROW );
-
-                // create argument sequence for createInstanceWithArguments()
-                CellAddress aApiAddress;
-                ScUnoConversion::FillApiAddress( aApiAddress, *mxCellLink );
-
-                NamedValue aValue;
-                aValue.Name = SC_UNONAME_BOUNDCELL;
-                aValue.Value <<= aApiAddress;
-
-                Sequence< Any > aArgs( 1 );
-                aArgs[ 0 ] <<= aValue;
-
-                // create the CellValueBinding instance and set at the control model
-                OUString aServiceName;
-                switch( meBindMode )
-                {
-                    case EXC_CTRL_BINDCONTENT:  aServiceName = SC_SERVICENAME_VALBIND;       break;
-                    case EXC_CTRL_BINDPOSITION: aServiceName = SC_SERVICENAME_LISTCELLBIND;  break;
-                }
-                Reference< XValueBinding > xBinding(
-                    xFactory->createInstanceWithArguments( aServiceName, aArgs ), UNO_QUERY_THROW );
-                xBindable->setValueBinding( xBinding );
-            }
-            catch( const Exception& )
-            {
-            }
-
-            // source range
-            if( mxSrcRange ) try
-            {
-                Reference< XListEntrySink > xEntrySink( xCtrlModel, UNO_QUERY_THROW );
-
-                // create argument sequence for createInstanceWithArguments()
-                CellRangeAddress aApiRange;
-                ScUnoConversion::FillApiRange( aApiRange, *mxSrcRange );
-
-                NamedValue aValue;
-                aValue.Name = SC_UNONAME_CELLRANGE;
-                aValue.Value <<= aApiRange;
-
-                Sequence< Any > aArgs( 1 );
-                aArgs[ 0 ] <<= aValue;
-
-                // create the EntrySource instance and set at the control model
-                Reference< XListEntrySource > xEntrySource( xFactory->createInstanceWithArguments(
-                    SC_SERVICENAME_LISTSOURCE, aArgs ), UNO_QUERY_THROW );
-                xEntrySink->setListEntrySource( xEntrySource );
-            }
-            catch( const Exception& )
-            {
-            }
+            case EXC_CTRL_BINDCONTENT:  aServiceName = SC_SERVICENAME_VALBIND;       break;
+            case EXC_CTRL_BINDPOSITION: aServiceName = SC_SERVICENAME_LISTCELLBIND;  break;
         }
+        Reference< XValueBinding > xBinding(
+            xFactory->createInstanceWithArguments( aServiceName, aArgs ), UNO_QUERY_THROW );
+        xBindable->setValueBinding( xBinding );
+    }
+    catch( const Exception& )
+    {
+    }
+
+    // source range
+    if( !mxSrcRange )
+        return;
+
+    try
+    {
+        Reference< XListEntrySink > xEntrySink( xCtrlModel, UNO_QUERY_THROW );
+
+        // create argument sequence for createInstanceWithArguments()
+        CellRangeAddress aApiRange;
+        ScUnoConversion::FillApiRange( aApiRange, *mxSrcRange );
+
+        NamedValue aValue;
+        aValue.Name = SC_UNONAME_CELLRANGE;
+        aValue.Value <<= aApiRange;
+
+        Sequence< Any > aArgs( 1 );
+        aArgs[ 0 ] <<= aValue;
+
+        // create the EntrySource instance and set at the control model
+        Reference< XListEntrySource > xEntrySource( xFactory->createInstanceWithArguments(
+            SC_SERVICENAME_LISTSOURCE, aArgs ), UNO_QUERY_THROW );
+        xEntrySink->setListEntrySource( xEntrySource );
+    }
+    catch( const Exception& )
+    {
     }
 }
 
@@ -2755,30 +2759,30 @@ void XclImpListBoxObj::DoProcessControl( ScfPropertySet& rPropSet ) const
     rPropSet.SetBoolProperty( "MultiSelection", bMultiSel );
 
     // selection (do not set, if listbox is linked to a cell)
-    if( !HasCellLink() )
+    if( HasCellLink() )
+        return;
+
+    ScfInt16Vec aSelVec;
+
+    // multi selection: API expects sequence of list entry indexes
+    if( bMultiSel )
     {
-        ScfInt16Vec aSelVec;
-
-        // multi selection: API expects sequence of list entry indexes
-        if( bMultiSel )
+        sal_Int16 nIndex = 0;
+        for( const auto& rItem : maSelection )
         {
-            sal_Int16 nIndex = 0;
-            for( const auto& rItem : maSelection )
-            {
-                if( rItem != 0 )
-                    aSelVec.push_back( nIndex );
-                ++nIndex;
-            }
+            if( rItem != 0 )
+                aSelVec.push_back( nIndex );
+            ++nIndex;
         }
-        // single selection: mnSelEntry is one-based, API expects zero-based
-        else if( mnSelEntry > 0 )
-            aSelVec.push_back( static_cast< sal_Int16 >( mnSelEntry - 1 ) );
+    }
+    // single selection: mnSelEntry is one-based, API expects zero-based
+    else if( mnSelEntry > 0 )
+        aSelVec.push_back( static_cast< sal_Int16 >( mnSelEntry - 1 ) );
 
-        if( !aSelVec.empty() )
-        {
-            Sequence<sal_Int16> aSelSeq(aSelVec.data(), static_cast<sal_Int32>(aSelVec.size()));
-            rPropSet.SetProperty( "DefaultSelection", aSelSeq );
-        }
+    if( !aSelVec.empty() )
+    {
+        Sequence<sal_Int16> aSelSeq(aSelVec.data(), static_cast<sal_Int32>(aSelVec.size()));
+        rPropSet.SetProperty( "DefaultSelection", aSelSeq );
     }
 }
 
@@ -3360,21 +3364,22 @@ void XclImpDffConverter::InitializeDrawing( XclImpDrawing& rDrawing, SdrModel& r
 
 void XclImpDffConverter::ProcessObject( SdrObjList& rObjList, XclImpDrawObjBase& rDrawObj )
 {
-    if( rDrawObj.IsProcessSdrObj() )
+    if( !rDrawObj.IsProcessSdrObj() )
+        return;
+
+    const XclObjAnchor* pAnchor = rDrawObj.GetAnchor();
+    if(!pAnchor)
+        return;
+
+    tools::Rectangle aAnchorRect = GetConvData().mrDrawing.CalcAnchorRect( *pAnchor, false );
+    if( rDrawObj.IsValidSize( aAnchorRect ) )
     {
-        if( const XclObjAnchor* pAnchor = rDrawObj.GetAnchor() )
-        {
-            tools::Rectangle aAnchorRect = GetConvData().mrDrawing.CalcAnchorRect( *pAnchor, false );
-            if( rDrawObj.IsValidSize( aAnchorRect ) )
-            {
-                // CreateSdrObject() recursively creates embedded child objects
-                SdrObjectUniquePtr xSdrObj( rDrawObj.CreateSdrObject( *this, aAnchorRect, false ) );
-                if( xSdrObj )
-                    rDrawObj.PreProcessSdrObject( *this, *xSdrObj );
-                // call InsertSdrObject() also, if SdrObject is missing
-                InsertSdrObject( rObjList, rDrawObj, xSdrObj.release() );
-            }
-        }
+        // CreateSdrObject() recursively creates embedded child objects
+        SdrObjectUniquePtr xSdrObj( rDrawObj.CreateSdrObject( *this, aAnchorRect, false ) );
+        if( xSdrObj )
+            rDrawObj.PreProcessSdrObject( *this, *xSdrObj );
+        // call InsertSdrObject() also, if SdrObject is missing
+        InsertSdrObject( rObjList, rDrawObj, xSdrObj.release() );
     }
 }
 
@@ -3539,23 +3544,24 @@ void XclImpDffConverter::ProcessClientAnchor2( SvStream& rDffStrm,
 {
     // find the OBJ record data related to the processed shape
     XclImpDffConvData& rConvData = GetConvData();
-    if( XclImpDrawObjBase* pDrawObj = rConvData.mrDrawing.FindDrawObj( rObjData.rSpHd ).get() )
-    {
-        OSL_ENSURE( rHeader.nRecType == DFF_msofbtClientAnchor, "XclImpDffConverter::ProcessClientAnchor2 - no client anchor record" );
-        XclObjAnchor aAnchor;
-        rHeader.SeekToContent( rDffStrm );
-        sal_uInt8 nFlags(0);
-        rDffStrm.ReadUChar( nFlags );
-        rDffStrm.SeekRel( 1 );  // flags
-        rDffStrm >> aAnchor;    // anchor format equal to BIFF5 OBJ records
+    XclImpDrawObjBase* pDrawObj = rConvData.mrDrawing.FindDrawObj( rObjData.rSpHd ).get();
+    if(!pDrawObj)
+        return;
 
-        pDrawObj->SetAnchor( aAnchor );
-        rObjData.aChildAnchor = rConvData.mrDrawing.CalcAnchorRect( aAnchor, true );
-        rObjData.bChildAnchor = true;
-        // page anchoring is the best approximation we have if mbMove
-        // is set
-        rObjData.bPageAnchor = ( nFlags & 0x1 );
-    }
+    OSL_ENSURE( rHeader.nRecType == DFF_msofbtClientAnchor, "XclImpDffConverter::ProcessClientAnchor2 - no client anchor record" );
+    XclObjAnchor aAnchor;
+    rHeader.SeekToContent( rDffStrm );
+    sal_uInt8 nFlags(0);
+    rDffStrm.ReadUChar( nFlags );
+    rDffStrm.SeekRel( 1 );  // flags
+    rDffStrm >> aAnchor;    // anchor format equal to BIFF5 OBJ records
+
+    pDrawObj->SetAnchor( aAnchor );
+    rObjData.aChildAnchor = rConvData.mrDrawing.CalcAnchorRect( aAnchor, true );
+    rObjData.bChildAnchor = true;
+    // page anchoring is the best approximation we have if mbMove
+    // is set
+    rObjData.bPageAnchor = ( nFlags & 0x1 );
 }
 
 namespace {
@@ -3880,7 +3886,10 @@ void XclImpDffConverter::InitControlForm()
         return;
 
     rConvData.mbHasCtrlForm = true;
-    if( SupportsOleObjects() ) try
+    if( !SupportsOleObjects() )
+        return;
+
+    try
     {
         Reference< XFormsSupplier > xFormsSupplier( rConvData.mrSdrPage.getUnoPage(), UNO_QUERY_THROW );
         Reference< XNameContainer > xFormsNC( xFormsSupplier->getForms(), UNO_SET_THROW );
@@ -4238,32 +4247,32 @@ void XclImpSheetDrawing::ReadNote3( XclImpStream& rStrm )
     nTotalLen = rStrm.ReaduInt16();
 
     ScAddress aScNotePos( ScAddress::UNINITIALIZED );
-    if( GetAddressConverter().ConvertAddress( aScNotePos, aXclPos, maScUsedArea.aStart.Tab(), true ) )
+    if( !GetAddressConverter().ConvertAddress( aScNotePos, aXclPos, maScUsedArea.aStart.Tab(), true ) )
+        return;
+
+    sal_uInt16 nPartLen = ::std::min( nTotalLen, static_cast< sal_uInt16 >( rStrm.GetRecLeft() ) );
+    OUStringBuffer aNoteText = rStrm.ReadRawByteString( nPartLen );
+    nTotalLen = nTotalLen - nPartLen;
+    while( (nTotalLen > 0) && (rStrm.GetNextRecId() == EXC_ID_NOTE) && rStrm.StartNextRecord() )
     {
-        sal_uInt16 nPartLen = ::std::min( nTotalLen, static_cast< sal_uInt16 >( rStrm.GetRecLeft() ) );
-        OUStringBuffer aNoteText = rStrm.ReadRawByteString( nPartLen );
-        nTotalLen = nTotalLen - nPartLen;
-        while( (nTotalLen > 0) && (rStrm.GetNextRecId() == EXC_ID_NOTE) && rStrm.StartNextRecord() )
+        rStrm >> aXclPos;
+        nPartLen = rStrm.ReaduInt16();
+        OSL_ENSURE( aXclPos.mnRow == 0xFFFF, "XclImpObjectManager::ReadNote3 - missing continuation NOTE record" );
+        if( aXclPos.mnRow == 0xFFFF )
         {
-            rStrm >> aXclPos;
-            nPartLen = rStrm.ReaduInt16();
-            OSL_ENSURE( aXclPos.mnRow == 0xFFFF, "XclImpObjectManager::ReadNote3 - missing continuation NOTE record" );
-            if( aXclPos.mnRow == 0xFFFF )
-            {
-                OSL_ENSURE( nPartLen <= nTotalLen, "XclImpObjectManager::ReadNote3 - string too long" );
-                aNoteText.append(rStrm.ReadRawByteString( nPartLen ));
-                nTotalLen = nTotalLen - ::std::min( nTotalLen, nPartLen );
-            }
-            else
-            {
-                // seems to be a new note, record already started -> load the note
-                rStrm.Seek( EXC_REC_SEEK_TO_BEGIN );
-                ReadNote( rStrm );
-                nTotalLen = 0;
-            }
+            OSL_ENSURE( nPartLen <= nTotalLen, "XclImpObjectManager::ReadNote3 - string too long" );
+            aNoteText.append(rStrm.ReadRawByteString( nPartLen ));
+            nTotalLen = nTotalLen - ::std::min( nTotalLen, nPartLen );
         }
-        ScNoteUtil::CreateNoteFromString( GetDoc(), aScNotePos, aNoteText.makeStringAndClear(), false, false );
+        else
+        {
+            // seems to be a new note, record already started -> load the note
+            rStrm.Seek( EXC_REC_SEEK_TO_BEGIN );
+            ReadNote( rStrm );
+            nTotalLen = 0;
+        }
     }
+    ScNoteUtil::CreateNoteFromString( GetDoc(), aScNotePos, aNoteText.makeStringAndClear(), false, false );
 }
 
 void XclImpSheetDrawing::ReadNote8( XclImpStream& rStrm )
