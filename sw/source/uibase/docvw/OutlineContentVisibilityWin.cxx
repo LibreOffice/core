@@ -65,8 +65,8 @@ void SwOutlineContentVisibilityWin::Set()
     const SwTextNode* pTextNode = pTextFrame->GetTextNodeFirst();
     SwWrtShell& rSh = GetEditWin()->GetView().GetWrtShell();
     const SwOutlineNodes& rOutlineNodes = rSh.GetNodes().GetOutLineNds();
-    rOutlineNodes.Seek_Entry(static_cast<SwNode*>(const_cast<SwTextNode*>(pTextNode)),
-                             &m_nOutlinePos);
+    (void)rOutlineNodes.Seek_Entry(static_cast<SwNode*>(const_cast<SwTextNode*>(pTextNode)),
+                                   &m_nOutlinePos);
     assert(m_nOutlinePos != SwOutlineNodes::npos);
 
     // don't set if no content and no subs with content
