@@ -5,9 +5,9 @@ avmedia/source/vlc/wrapper/Types.hxx:43
 avmedia/source/vlc/wrapper/Types.hxx:44
     libvlc_event_t::(anonymous union)::(anonymous) dummy2 const char *
 avmedia/source/vlc/wrapper/Types.hxx:45
-    libvlc_event_t::(anonymous) padding struct (anonymous struct at /home/noel/libo2/avmedia/source/vlc/wrapper/Types.hxx:42:7)
+    libvlc_event_t::(anonymous) padding struct (anonymous struct at /home/noel/libo/avmedia/source/vlc/wrapper/Types.hxx:42:7)
 avmedia/source/vlc/wrapper/Types.hxx:46
-    libvlc_event_t u union (anonymous union at /home/noel/libo2/avmedia/source/vlc/wrapper/Types.hxx:40:5)
+    libvlc_event_t u union (anonymous union at /home/noel/libo/avmedia/source/vlc/wrapper/Types.hxx:40:5)
 avmedia/source/vlc/wrapper/Types.hxx:52
     libvlc_track_description_t psz_name char *
 basctl/source/inc/dlged.hxx:122
@@ -36,18 +36,16 @@ cppu/source/threadpool/threadpool.cxx:365
     _uno_ThreadPool dummy sal_Int32
 cppu/source/typelib/typelib.cxx:60
     (anonymous namespace)::AlignSize_Impl nInt16 sal_Int16
-cui/source/inc/AdditionsDialog.hxx:74
-    AdditionInfo sDescription class rtl::OUString
-cui/source/inc/AdditionsDialog.hxx:76
+cui/source/inc/AdditionsDialog.hxx:89
     AdditionInfo sReleaseVersion class rtl::OUString
-cui/source/inc/AdditionsDialog.hxx:80
+cui/source/inc/AdditionsDialog.hxx:93
     AdditionInfo sRating class rtl::OUString
-cui/source/inc/AdditionsDialog.hxx:82
-    AdditionInfo sDownloadURL class rtl::OUString
 dbaccess/source/core/inc/databasecontext.hxx:85
     dbaccess::ODatabaseContext m_aBasicDLL class BasicDLL
 dbaccess/source/sdbtools/inc/connectiondependent.hxx:115
     sdbtools::ConnectionDependentComponent::EntryGuard m_aMutexGuard ::osl::MutexGuard
+dbaccess/source/ui/app/AppDetailView.hxx:90
+    dbaui::TaskEntry bHideWhenDisabled _Bool
 emfio/source/emfuno/xemfparser.cxx:48
     emfio::emfreader::(anonymous namespace)::XEmfParser context_ uno::Reference<uno::XComponentContext>
 extensions/source/scanner/scanner.hxx:43
@@ -115,9 +113,9 @@ include/sfx2/msg.hxx:136
 include/sfx2/msg.hxx:137
     SfxType6 nAttribs sal_uInt16
 include/sfx2/msg.hxx:137
-    SfxType6 aAttrib struct SfxTypeAttrib [6]
-include/sfx2/msg.hxx:137
     SfxType6 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:137
+    SfxType6 aAttrib struct SfxTypeAttrib [6]
 include/sfx2/msg.hxx:137
     SfxType6 pType const std::type_info *
 include/sfx2/msg.hxx:138
@@ -133,9 +131,9 @@ include/sfx2/msg.hxx:139
 include/sfx2/msg.hxx:139
     SfxType8 nAttribs sal_uInt16
 include/sfx2/msg.hxx:139
-    SfxType8 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:139
     SfxType8 pType const std::type_info *
+include/sfx2/msg.hxx:139
+    SfxType8 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:140
     SfxType10 pType const std::type_info *
 include/sfx2/msg.hxx:140
@@ -192,13 +190,13 @@ include/sfx2/msg.hxx:147
     SfxType23 pType const std::type_info *
 include/sfx2/msg.hxx:147
     SfxType23 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/svtools/genericunodialog.hxx:156
+include/svtools/genericunodialog.hxx:155
     svt::UnoDialogEntryGuard m_aGuard ::osl::MutexGuard
 include/svtools/unoevent.hxx:163
     SvEventDescriptor xParentRef css::uno::Reference<css::uno::XInterface>
 include/svx/imapdlg.hxx:91
     SvxIMapDlg aIMapItem class SvxIMapDlgItem
-include/unotest/macros_test.hxx:59
+include/unotest/macros_test.hxx:84
     unotest::MacrosTest mpDll std::unique_ptr<BasicDLL>
 include/vcl/commandevent.hxx:310
     CommandGestureData mfX const double
@@ -210,15 +208,15 @@ include/vcl/filter/PngImageReader.hxx:31
     vcl::PngImageReader mxStatusIndicator css::uno::Reference<css::task::XStatusIndicator>
 include/vcl/font/Feature.hxx:100
     vcl::font::Feature m_eType enum vcl::font::FeatureType
-include/vcl/NotebookBarAddonsMerger.hxx:37
+include/vcl/NotebookBarAddonsMerger.hxx:36
     NotebookBarAddonsItem aImage class Image
-include/vcl/NotebookBarAddonsMerger.hxx:44
+include/vcl/NotebookBarAddonsMerger.hxx:43
     AddonsParams sImageId class rtl::OUString
-include/vcl/NotebookBarAddonsMerger.hxx:45
+include/vcl/NotebookBarAddonsMerger.hxx:44
     AddonsParams sControlType class rtl::OUString
-include/vcl/NotebookBarAddonsMerger.hxx:46
+include/vcl/NotebookBarAddonsMerger.hxx:45
     AddonsParams nWidth sal_uInt16
-include/vcl/uitest/uiobject.hxx:278
+include/vcl/uitest/uiobject.hxx:280
     TabPageUIObject mxTabPage VclPtr<class TabPage>
 include/xmloff/formlayerexport.hxx:172
     xmloff::OOfficeFormsExport m_pImpl std::unique_ptr<OFormsRootExport>
@@ -280,7 +278,7 @@ sal/qa/osl/file/osl_File.cxx:1589
     osl_FileStatus::getFileType m_aLinkItem class osl::DirectoryItem
 sal/qa/osl/file/osl_File.cxx:1589
     osl_FileStatus::getFileType m_aSocketItem class osl::DirectoryItem
-sal/qa/osl/file/osl_File.cxx:3418
+sal/qa/osl/file/osl_File.cxx:3417
     osl_File::setAttributes rItem_hidden class osl::DirectoryItem
 sal/qa/osl/module/osl_Module.cxx:70
     osl_Module::ctors bRes1 _Bool
@@ -314,13 +312,13 @@ sal/qa/osl/security/osl_Security.cxx:154
     osl_Security::getUserName bRes1 _Bool
 sal/qa/osl/security/osl_Security.cxx:188
     osl_Security::getConfigDir bRes1 _Bool
-sc/source/core/data/document.cxx:1241
-    (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aSwitch sc::AutoCalcSwitch
 sc/source/core/data/document.cxx:1242
+    (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aSwitch sc::AutoCalcSwitch
+sc/source/core/data/document.cxx:1243
     (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aBulk class ScBulkBroadcast
-sc/source/filter/html/htmlpars.cxx:3017
+sc/source/filter/html/htmlpars.cxx:3019
     (anonymous namespace)::CSSHandler::MemStr mp const char *
-sc/source/filter/html/htmlpars.cxx:3018
+sc/source/filter/html/htmlpars.cxx:3020
     (anonymous namespace)::CSSHandler::MemStr mn size_t
 sc/source/filter/inc/sheetdatacontext.hxx:51
     oox::xls::SheetDataContext aReleaser class SolarMutexReleaser
@@ -390,7 +388,7 @@ svx/source/inc/datanavi.hxx:189
     svxform::XFormsPage m_aDropHelper class svxform::DataTreeDropTarget
 svx/source/tbxctrls/layctrl.cxx:434
     (anonymous namespace)::ColumnsWindow mxControl rtl::Reference<SvxColumnsToolBoxControl>
-sw/inc/tox.hxx:57
+sw/inc/tox.hxx:59
     sw::FindContentFrameHint m_isReadOnlyAvailable const _Bool
 sw/source/core/crsr/crbm.cxx:64
     (anonymous namespace)::CursorStateHelper m_aSaveState class SwCursorSaveState
@@ -402,7 +400,7 @@ sw/source/uibase/inc/condedit.hxx:43
     ConditionEdit m_aDropTargetHelper class ConditionEditDropTarget
 sw/source/uibase/inc/conttree.hxx:293
     SwGlobalTree m_aDropTargetHelper class SwGlobalTreeDropTarget
-sw/source/uibase/inc/swuicnttab.hxx:239
+sw/source/uibase/inc/swuicnttab.hxx:240
     SwTokenWindow m_aAdjustPositionsIdle class Idle
 sw/source/uibase/inc/uivwimp.hxx:93
     SwView_Impl xTmpSelDocSh class SfxObjectShellLock
@@ -450,7 +448,7 @@ vcl/source/gdi/pdfbuildin_fonts.hxx:33
     vcl::pdf::BuildinFont m_nDescent const int
 vcl/source/gdi/pdfbuildin_fonts.hxx:40
     vcl::pdf::BuildinFont m_aWidths const int [256]
-vcl/source/graphic/VectorGraphicSearch.cxx:204
+vcl/source/graphic/VectorGraphicSearch.cxx:205
     VectorGraphicSearch::Implementation mpPDFium std::shared_ptr<vcl::pdf::PDFium>
 vcl/source/uitest/uno/uitest_uno.cxx:34
     (anonymous namespace)::UITestUnoObj mpUITest std::unique_ptr<UITest>
@@ -458,11 +456,11 @@ vcl/unx/gtk3/a11y/gtk3atkhypertext.cxx:31
     (anonymous namespace)::HyperLink atk_hyper_link const AtkHyperlink
 vcl/unx/gtk3/gtk3gloactiongroup.cxx:27
     (anonymous namespace)::GLOAction parent_instance GObject
-vcl/unx/gtk3/gtk3gtkinst.cxx:5181
+vcl/unx/gtk3/gtk3gtkinst.cxx:5192
     (anonymous namespace)::CrippledViewport viewport GtkViewport
-vcl/unx/gtk3/gtk3gtkinst.cxx:5324
+vcl/unx/gtk3/gtk3gtkinst.cxx:5335
     (anonymous namespace)::CustomCellRendererSurface parent GtkCellRendererText
-vcl/unx/gtk3/gtk3gtkinst.cxx:5332
+vcl/unx/gtk3/gtk3gtkinst.cxx:5343
     (anonymous namespace)::CustomCellRendererSurfaceClass parent_class GtkCellRendererTextClass
 writerfilter/source/ooxml/OOXMLStreamImpl.hxx:42
     writerfilter::ooxml::OOXMLStreamImpl mxFastParser css::uno::Reference<css::xml::sax::XFastParser>
