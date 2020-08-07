@@ -1281,7 +1281,7 @@ esac
 if [ x$basic_os != x ]
 then
 
-# First recognize some ad-hoc caes, or perhaps split kernel-os, or else just
+# First recognize some ad-hoc case, or perhaps split kernel-os, or else just
 # set os.
 case $basic_os in
 	gnu/linux*)
