@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SAL_ALLOCA_H
 #define INCLUDED_SAL_ALLOCA_H
 
-#if defined (__sun) || defined (LINUX) || defined(AIX) || defined(ANDROID) || defined(HAIKU)
+#if defined (__sun) || defined (LINUX) || defined(AIX) || defined(ANDROID) || defined(HAIKU) || defined(MACOSX) || defined(IOS)
 
 #ifndef INCLUDED_ALLOCA_H
 #include <alloca.h>
@@ -32,20 +32,6 @@
 #ifndef INCLUDED_STDLIB_H
 #include <stdlib.h>
 #define INCLUDED_STDLIB_H
-#endif
-
-#elif defined (MACOSX)
-
-#ifndef INCLUDED_SYS_TYPES_H
-#include <sys/types.h>
-#define INCLUDED_SYS_TYPES_H
-#endif
-
-#elif defined (IOS)
-
-#ifndef INCLUDED_SYS_TYPES_H
-#include <sys/types.h>
-#define INCLUDED_SYS_TYPES_H
 #endif
 
 #elif defined (_WIN32)
