@@ -261,7 +261,6 @@ merge dbahsql::CreateStmtParser with dbahsql::FbCreateStmtParser
 merge dbaui::IController with dbaui::OGenericUnoController
 merge dbaui::IEntryFilter with dbaui::(anonymous namespace)::FilterByEntryDataId
 merge dbaui::IUpdateHelper with dbaui::OParameterUpdateHelper
-merge dbaui::OMarkableTreeListBox with dbaui::OTableTreeListBox
 merge dbaui::OSQLNameEntry with dbaui::OPropColumnEditCtrl
 merge dbaui::OSplitterView with dbaui::OApplicationDetailView
 merge dbaui::OTableRowView with dbaui::OTableEditorCtrl

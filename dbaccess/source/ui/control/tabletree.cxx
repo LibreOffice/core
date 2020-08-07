@@ -33,6 +33,9 @@
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <connectivity/dbmetadata.hxx>
+#include <vcl/event.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/treelistentry.hxx>
 
 #include <algorithm>
@@ -57,10 +60,24 @@ namespace DatabaseObjectContainer = ::com::sun::star::sdb::application::Database
 
 // OTableTreeListBox
 OTableTreeListBox::OTableTreeListBox(vcl::Window* pParent, WinBits nWinStyle)
-    :OMarkableTreeListBox(pParent, nWinStyle)
-    ,m_xImageProvider( new ImageProvider )
+    : DBTreeListBox(pParent, nWinStyle)
+    , m_xImageProvider( new ImageProvider )
 {
+    InitButtonData();
+
     implSetDefaultImages();
+}
+
+void OTableTreeListBox::InitButtonData()
+{
+    m_pCheckButton.reset( new SvLBoxButtonData( this ) );
+    EnableCheckButton( m_pCheckButton.get() );
+}
+
+void OTableTreeListBox::dispose()
+{
+    m_pCheckButton.reset();
+    DBTreeListBox::dispose();
 }
 
 TableTreeListBox::TableTreeListBox(std::unique_ptr<weld::TreeView> xTreeView)
@@ -475,15 +492,155 @@ std::unique_ptr<weld::TreeIter> TableTreeListBox::getAllObjectsEntry() const
 
 void OTableTreeListBox::checkedButton_noBroadcast(SvTreeListEntry* _pEntry)
 {
-    OMarkableTreeListBox::checkedButton_noBroadcast(_pEntry);
+    SvButtonState eState = GetCheckButtonState( _pEntry);
+    if (GetModel()->HasChildren(_pEntry)) // if it has children, check those too
+    {
+        SvTreeListEntry* pChildEntry = GetModel()->Next(_pEntry);
+        SvTreeListEntry* pSiblingEntry = _pEntry->NextSibling();
+        while(pChildEntry && pChildEntry != pSiblingEntry)
+        {
+            SetCheckButtonState(pChildEntry, eState);
+            pChildEntry = GetModel()->Next(pChildEntry);
+        }
+    }
+
+    SvTreeListEntry* pEntry = IsSelected(_pEntry) ? FirstSelected() : nullptr;
+    while(pEntry)
+    {
+        SetCheckButtonState(pEntry,eState);
+        if(GetModel()->HasChildren(pEntry))   // if it has children, check those too
+        {
+            SvTreeListEntry* pChildEntry = GetModel()->Next(pEntry);
+            SvTreeListEntry* pSiblingEntry = pEntry->NextSibling();
+            while(pChildEntry && pChildEntry != pSiblingEntry)
+            {
+                SetCheckButtonState(pChildEntry,eState);
+                pChildEntry = GetModel()->Next(pChildEntry);
+            }
+        }
+        pEntry = NextSelected(pEntry);
+    }
+    CheckButtons();
 
     // if an entry has children, it makes a difference if the entry is checked
     // because all children are checked or if the user checked it explicitly.
     // So we track explicit (un)checking
-
-    SvButtonState eState = GetCheckButtonState(_pEntry);
-    OSL_ENSURE(SvButtonState::Tristate != eState, "OTableTreeListBox::CheckButtonHdl: user action which lead to TRISTATE?");
     implEmphasize(_pEntry, SvButtonState::Checked == eState);
+}
+
+SvButtonState OTableTreeListBox::implDetermineState(SvTreeListEntry* _pEntry)
+{
+    SvButtonState eState = GetCheckButtonState(_pEntry);
+    if (!GetModel()->HasChildren(_pEntry))
+        // nothing to do in this bottom-up routine if there are no children ...
+        return eState;
+
+    // loop through the children and check their states
+    sal_uInt16 nCheckedChildren = 0;
+    sal_uInt16 nChildrenOverall = 0;
+
+    SvTreeListEntry* pChildLoop = GetModel()->FirstChild(_pEntry);
+    while (pChildLoop)
+    {
+        SvButtonState eChildState = implDetermineState(pChildLoop);
+        if (SvButtonState::Tristate == eChildState)
+            break;
+
+        if (SvButtonState::Checked == eChildState)
+            ++nCheckedChildren;
+        ++nChildrenOverall;
+
+        pChildLoop = pChildLoop->NextSibling();
+    }
+
+    if (pChildLoop)
+    {
+        // we did not finish the loop because at least one of the children is in tristate
+        eState = SvButtonState::Tristate;
+
+        // but this means that we did not finish all the siblings of pChildLoop,
+        // so their checking may be incorrect at the moment
+        // -> correct this
+        while (pChildLoop)
+        {
+            implDetermineState(pChildLoop);
+            pChildLoop = pChildLoop->NextSibling();
+        }
+    }
+    else
+        // none if the children are in tristate
+        if (nCheckedChildren)
+            // we have at least one child checked
+            if (nCheckedChildren != nChildrenOverall)
+                // not all children are checked
+                eState = SvButtonState::Tristate;
+            else
+                // all children are checked
+                eState = SvButtonState::Checked;
+        else
+            // no children are checked
+            eState = SvButtonState::Unchecked;
+
+    // finally set the entry to the state we just determined
+    SetCheckButtonState(_pEntry, eState);
+
+    return eState;
+}
+
+void OTableTreeListBox::CheckButtons()
+{
+    SvTreeListEntry* pEntry = GetModel()->First();
+    while (pEntry)
+    {
+        implDetermineState(pEntry);
+        pEntry = pEntry->NextSibling();
+    }
+}
+
+void OTableTreeListBox::CheckButtonHdl()
+{
+    checkedButton_noBroadcast(GetHdlEntry());
+}
+
+void OTableTreeListBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& _rRect)
+{
+    if (!IsEnabled())
+    {
+        vcl::Font aOldFont = rRenderContext.GetFont();
+        vcl::Font aNewFont(aOldFont);
+
+        StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
+        aNewFont.SetColor(aSystemStyle.GetDisableColor());
+
+        rRenderContext.SetFont(aNewFont);
+        DBTreeListBox::Paint(rRenderContext, _rRect);
+        rRenderContext.SetFont(aOldFont);
+    }
+    else
+        DBTreeListBox::Paint(rRenderContext, _rRect);
+}
+
+void OTableTreeListBox::KeyInput( const KeyEvent& rKEvt )
+{
+    // only if there are spaces
+    if (rKEvt.GetKeyCode().GetCode() == KEY_SPACE && !rKEvt.GetKeyCode().IsShift() && !rKEvt.GetKeyCode().IsMod1())
+    {
+        SvTreeListEntry* pCurrentHandlerEntry = GetHdlEntry();
+        if(pCurrentHandlerEntry)
+        {
+            SvButtonState eState = GetCheckButtonState( pCurrentHandlerEntry);
+            if(eState == SvButtonState::Checked)
+                SetCheckButtonState( pCurrentHandlerEntry, SvButtonState::Unchecked);
+            else
+                SetCheckButtonState( pCurrentHandlerEntry, SvButtonState::Checked);
+
+            CheckButtonHdl();
+        }
+        else
+            DBTreeListBox::KeyInput(rKEvt);
+    }
+    else
+        DBTreeListBox::KeyInput(rKEvt);
 }
 
 void TableTreeListBox::checkedButton_noBroadcast(const weld::TreeIter& rEntry)
@@ -600,7 +757,7 @@ void TableTreeListBox::implEmphasize(const weld::TreeIter& rEntry, bool _bChecke
 
 void OTableTreeListBox::InitEntry(SvTreeListEntry* _pEntry, const OUString& _rString, const Image& _rCollapsedBitmap, const Image& _rExpandedBitmap)
 {
-    OMarkableTreeListBox::InitEntry(_pEntry, _rString, _rCollapsedBitmap, _rExpandedBitmap);
+    DBTreeListBox::InitEntry(_pEntry, _rString, _rCollapsedBitmap, _rExpandedBitmap);
 
     // replace the text item with our own one
     SvLBoxItem* pTextItem = _pEntry->GetFirstItem(SvLBoxItemType::String);
