@@ -126,6 +126,7 @@ public:
     void testMarkData();
     void testInput();
     void testColumnIterator();
+    void testTdf135249();
     void testDocStatistics();
     void testRowForHeight();
 
@@ -581,6 +582,7 @@ public:
     CPPUNIT_TEST(testMarkData);
     CPPUNIT_TEST(testInput);
     CPPUNIT_TEST(testColumnIterator);
+    CPPUNIT_TEST(testTdf135249);
     CPPUNIT_TEST(testDocStatistics);
     CPPUNIT_TEST(testRowForHeight);
     CPPUNIT_TEST(testDataEntries);
