@@ -11,7 +11,7 @@ try:
     myopts, args = getopt.getopt(sys.argv[1:], "i:o:")
 except getopt.GetoptError as e:
     print(" Syntax: hrcex -i FileIn -o FileOut")
-    print(" FileIn:   Source files (*.ui)")
+    print(" FileIn:   Source files (*.hrc)")
     print(" FileOut:  Destination file (*.*)")
     sys.exit(2)
 
