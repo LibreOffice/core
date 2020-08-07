@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e36dc9e0_fced7a1a",
+        "filename": "compilerplugins/clang/stringstatic.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-07T06:53:22Z",
+      "side": 1,
+      "message": "this needs to be extended to OString now",
+      "range": {
+        "startLine": 18,
+        "startChar": 20,
+        "endLine": 18,
+        "endChar": 43
+      },
+      "revId": "3e73731b97d0782f0d4ea2db3112977adc352810",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ecd43100_ba37fccc",
+        "filename": "compilerplugins/clang/stringstatic.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-07T06:53:22Z",
+      "side": 1,
+      "message": "isn\u0027t there a way to detect use of those macros, rather than using a brittle filename check?",
+      "revId": "3e73731b97d0782f0d4ea2db3112977adc352810",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d08c524_fff021eb",
+        "filename": "include/rtl/string.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-07T06:53:22Z",
+      "side": 1,
+      "message": "unlike with the OUString ctors from ConstCharArrayDetector or OUStringLiteral, there should be no assumptions of ASCII-only for the OString ctor from ConstCharArrayDetector or for this new one",
+      "revId": "3e73731b97d0782f0d4ea2db3112977adc352810",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f63d6e60_3cc590f8",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-07T06:53:22Z",
+      "side": 1,
+      "message": "* can *use*\n\n* but OUString::getStr returns sal_Unicode*, not char*",
+      "revId": "3e73731b97d0782f0d4ea2db3112977adc352810",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d79ea56b_aee96a64",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-07T06:53:22Z",
+      "side": 1,
+      "message": "* why is there a // vs. /** inconsistency with the \"So we can...\" comment above?\n\n* I\u0027d say use std::string_view::find instead, were it not for the sal_Unicode ch parameter; where is this function used now, does it use arbitrary sal_Unicode args or just ASCII anyway?",
+      "revId": "3e73731b97d0782f0d4ea2db3112977adc352810",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64d8110d_f1d4e2ed",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-07T06:53:22Z",
+      "side": 1,
+      "message": "shouldn\u0027t this be constexpr?",
+      "revId": "3e73731b97d0782f0d4ea2db3112977adc352810",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
