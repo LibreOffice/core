@@ -61,6 +61,99 @@ DBTreeListBox::DBTreeListBox( vcl::Window* pParent, WinBits nWinStyle )
     init();
 }
 
+InterimDBTreeListBox::InterimDBTreeListBox(vcl::Window* pParent)
+    : InterimItemWindow(pParent, "dbaccess/ui/dbtreelist.ui", "DBTreeList")
+    , TreeListBox(m_xBuilder->weld_tree_view("treeview"))
+{
+}
+
+InterimDBTreeListBox::~InterimDBTreeListBox()
+{
+    disposeOnce();
+}
+
+void InterimDBTreeListBox::dispose()
+{
+    m_xTreeView.reset();
+    InterimItemWindow::dispose();
+}
+
+TreeListBox::TreeListBox(std::unique_ptr<weld::TreeView> xTreeView)
+    : m_xTreeView(std::move(xTreeView))
+{
+    m_xTreeView->connect_key_press(LINK(this, TreeListBox, KeyInputHdl));
+}
+
+IMPL_LINK(TreeListBox, KeyInputHdl, const KeyEvent&, rKEvt, bool)
+{
+    KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction();
+    bool bHandled = false;
+
+    switch (eFunc)
+    {
+        case KeyFuncType::COPY:
+            bHandled = m_aCopyHandler.IsSet() && !m_xTreeView->get_selected(nullptr);
+            if (bHandled)
+                m_aCopyHandler.Call(nullptr);
+            break;
+        case KeyFuncType::PASTE:
+            bHandled = m_aPasteHandler.IsSet() && !m_xTreeView->get_selected(nullptr);
+            if (bHandled)
+                m_aPasteHandler.Call(nullptr);
+            break;
+        case KeyFuncType::DELETE:
+            bHandled = m_aDeleteHandler.IsSet() && !m_xTreeView->get_selected(nullptr);
+            if (bHandled)
+                m_aDeleteHandler.Call(nullptr);
+            break;
+        default:
+            break;
+    }
+
+#if 0
+    if ( KEY_RETURN == nCode )
+    {
+        bHandled = false;
+        m_aEnterKeyHdl.Call(this);
+        // this is a HACK. If the data source browser is opened in the "beamer", while the main frame
+        //
+        // contains a writer document, then pressing enter in the DSB would be rerouted to the writer
+        //
+        // document if we would not do this hack here.
+        // The problem is that the Writer uses RETURN as _accelerator_ (which is quite weird itself),
+        //
+        // so the SFX framework is _obligated_ to pass it to the Writer if nobody else handled it. There
+        //
+        // is no chance to distinguish between
+        //   "accelerators which are to be executed if the main document has the focus"
+        // and
+        //   "accelerators which are always to be executed"
+        //
+        // Thus we cannot prevent the handling of this key in the writer without declaring the key event
+        // as "handled" herein.
+        //
+        // The bad thing about this approach is that it does not scale. Every other accelerator which
+        // is used by the document will raise a similar bug once somebody discovers it.
+        // If this is the case, we should discuss a real solution with the framework (SFX) and the
+        // applications.
+    }
+
+    if ( !bHandled )
+        SvTreeListBox::KeyInput(rKEvt);
+#endif
+
+    return bHandled;
+}
+
+TreeListBox::~TreeListBox()
+{
+}
+
+void TreeListBox::DisableCheckButtons()
+{
+    // nothing to do by default
+}
+
 void DBTreeListBox::init()
 {
     SetSpaceBetweenEntries(SPACEBETWEENENTRIES);
@@ -119,6 +212,27 @@ SvTreeListEntry* DBTreeListBox::GetEntryPosByName( const OUString& aName, SvTree
     }
 
     return pEntry;
+}
+
+std::unique_ptr<weld::TreeIter> TreeListBox::GetEntryPosByName(const OUString& aName, const weld::TreeIter* pStart, const IEntryFilter* _pFilter) const
+{
+    auto xEntry(m_xTreeView->make_iterator(pStart));
+    if (!pStart && !m_xTreeView->get_iter_first(*xEntry))
+        return nullptr;
+
+    do
+    {
+        if (m_xTreeView->get_text(*xEntry) == aName)
+        {
+            if (!_pFilter || _pFilter->includeEntry(reinterpret_cast<void*>(m_xTreeView->get_id(*xEntry).toUInt64())))
+            {
+                // found
+                return xEntry;
+            }
+        }
+    } while (m_xTreeView->iter_next(*xEntry));
+
+    return nullptr;
 }
 
 void DBTreeListBox::RequestingChildren( SvTreeListEntry* pParent )

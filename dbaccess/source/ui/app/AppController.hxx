@@ -57,8 +57,14 @@ namespace com::sun::star {
     }
 }
 
+namespace weld
+{
+    class TreeView;
+}
+
 namespace dbaui
 {
+    class TreeListBox;
     class SubComponentManager;
     class OApplicationController;
     class OApplicationView;
@@ -442,7 +448,8 @@ namespace dbaui
                 <TRUE/> if the double click event has been handled by the called, and should not
                 be processed further.
         */
-        bool onEntryDoubleClick(SvTreeListBox const & _rTree);
+        bool onEntryDoubleClick(const weld::TreeView& rTree);
+
         /** called when a container (category) in the application view has been selected
             @param  _pTree
                 The tree list box.
@@ -450,22 +457,28 @@ namespace dbaui
                 <TRUE/> if the container could be changed otherwise <FALSE/>
         */
         bool onContainerSelect(ElementType _eType);
+
         /** called when an entry in a tree view has been selected
             @param  _pEntry
                 the selected entry
         */
         void onSelectionChanged();
+
         /** called when a "Copy" command is executed in a tree view
         */
         void onCopyEntry();
+
         /** called when a "Paste" command is executed in a tree view
         */
         void onPasteEntry();
+
         /** called when a "Delete" command is executed in a tree view
         */
         void onDeleteEntry();
+
         /// called when the preview mode was changed
         void previewChanged( sal_Int32 _nMode);
+
         /// called when an object container of any kind was found during enumerating tree view elements
         void containerFound( const css::uno::Reference< css::container::XContainer >& _xContainer);
 
