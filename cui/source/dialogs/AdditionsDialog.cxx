@@ -651,4 +651,9 @@ IMPL_LINK_NOARG(AdditionsItem, ShowMoreHdl, weld::Button&, void)
     m_pParentDialog->m_pSearchThread->launch();
 }
 
+IMPL_LINK_NOARG(AdditionsItem, InstallExtensionHdl, weld::Button&, void)
+{
+    this->m_xButtonInstall->set_label("Success");
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
