@@ -96,6 +96,9 @@ class OOX_DLLPUBLIC VMLExport : public EscherEx
     /// Remember style, the most important shape attribute ;-)
     OStringBuffer m_ShapeStyle;
 
+    /// style for textbox
+    OStringBuffer m_TextboxStyle;
+
     /// Remember the generated shape id.
     OString m_sShapeId;
 
