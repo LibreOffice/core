@@ -16,6 +16,24 @@
       "revId": "d8ec719cdc27d04f7cd853798dfa78cd0fa24253",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1d90e85_10b1c312",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 4404,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2020-08-07T07:38:35Z",
+      "side": 1,
+      "message": "At least for iOS that is irrelevant as there is no 3rd-party code involved. For macOS it\u0027s just a choice, and whichever one chooses, somebody would have preferred the other. Or some third option...",
+      "parentUuid": "6b35179b_13b196a9",
+      "revId": "d8ec719cdc27d04f7cd853798dfa78cd0fa24253",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
