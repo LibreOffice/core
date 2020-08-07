@@ -240,6 +240,7 @@ void RenderList::addDrawRectangle(long nX, long nY, long nWidth, long nHeight, d
     if (nFillColor == SALCOLOR_NONE)
         return;
 
+    // coverity[copy_paste_error : FALSE] - this is correct nLineColor not nFillColor
     if (nLineColor == SALCOLOR_NONE)
     {
         appendRectangle(rRenderParameter.maVertices, rRenderParameter.maIndices,
