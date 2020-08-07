@@ -331,10 +331,6 @@ void ScCheckListMenuControl::selectMenuItem(size_t nPos, bool bSubMenuTimer)
         return;
     }
 
-
-    if (nPos == MENU_NOT_SELECTED)
-        return;
-
     ScCheckListMenuWindow* pParentMenu = mxFrame->GetParentMenu();
     if (pParentMenu)
         pParentMenu->get_widget().setSubMenuFocused(this);
