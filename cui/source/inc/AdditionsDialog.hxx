@@ -52,9 +52,11 @@ struct AdditionsItem
         , m_sDownloadURL("")
     {
         m_xButtonShowMore->connect_clicked(LINK(this, AdditionsItem, ShowMoreHdl));
+        m_xButtonInstall->connect_clicked(LINK(this, AdditionsItem, InstallExtensionHdl));
     }
 
     DECL_LINK(ShowMoreHdl, weld::Button&, void);
+    DECL_LINK(InstallExtensionHdl, weld::Button&, void);
 
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Widget> m_xContainer;
