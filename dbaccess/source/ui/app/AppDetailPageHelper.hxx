@@ -27,12 +27,12 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <AppElementType.hxx>
-#include <vcl/treelistbox.hxx>
 #include <svtools/DocumentInfoPreview.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/GraphicObject.hxx>
+#include <vcl/weld.hxx>
 
 namespace com::sun::star::awt   { class XWindow; }
 namespace com::sun::star::frame { class XFrame2; }
@@ -43,6 +43,8 @@ namespace com::sun::star::io    { class XPersist; }
 namespace dbaui
 {
     class OAppBorderWindow;
+    class InterimDBTreeListBox;
+    class TreeListBox;
     class DBTreeListBox;
 
     class OPreviewWindow : public vcl::Window
@@ -71,11 +73,12 @@ namespace dbaui
 
         void setGraphic(const Graphic& _rGraphic ) { m_aGraphicObj.SetGraphic(_rGraphic); }
     };
+
     // A helper class for the controls in the detail page.
     // Combines general functionality.
     class OAppDetailPageHelper : public vcl::Window
     {
-        VclPtr<DBTreeListBox>     m_pLists[ELEMENT_COUNT];
+        VclPtr<InterimDBTreeListBox> m_pLists[ELEMENT_COUNT];
         OAppBorderWindow&         m_rBorderWin;
         VclPtr<FixedLine>         m_aFL;
         VclPtr<ToolBox>           m_aTBPreview;
@@ -94,12 +97,12 @@ namespace dbaui
         int getVisibleControlIndex() const;
 
         /** sorts the entries in the tree list box.
-            @param  _nPos
+            @param  nPos
                 Which list should be sorted.
-            @param  _eSortMode
-                How should be sorted.
+            @param  bAscending
+                If sort should be Ascending of Descending
         */
-        void sort(int _nPos,SvSortMode _eSortMode );
+        void sort(int nPos, bool bAscending);
 
         /** retrieves the resource ids of the images representing elements of the given type
         */
@@ -118,7 +121,7 @@ namespace dbaui
         void fillNames( const css::uno::Reference< css::container::XNameAccess >& _xContainer,
                         const ElementType _eType,
                         const OUString& rImageId,
-                        SvTreeListEntry* _pParent );
+                        weld::TreeIter* _pParent );
 
         /** sets the detail page
             @param  _pWindow
@@ -129,25 +132,20 @@ namespace dbaui
         /** sets all HandleCallbacks
             @param  _pTreeView
                 The newly created DBTreeListBox
-            @param  _rImage
-                the resource id of the default icon
             @return
                 The new tree.
         */
-        DBTreeListBox* createTree( DBTreeListBox* _pTreeView, const Image& _rImage );
+        InterimDBTreeListBox* createTree(InterimDBTreeListBox* pTreeView);
 
         /** creates the tree and sets all HandleCallbacks
             @param  _nHelpId
                 The help id of the control
-            @param  _nCollapsedBitmap
-                The image to use in high contrast mode.
             @return
                 The new tree.
         */
-        DBTreeListBox* createSimpleTree( const OString& _sHelpId, const Image& _rImage);
+        InterimDBTreeListBox* createSimpleTree(const OString& rHelpId);
 
-        DECL_LINK( OnEntryDoubleClick,    SvTreeListBox*, bool );
-        DECL_LINK( OnEntryEnterKey,       DBTreeListBox*, void );
+        DECL_LINK( OnEntryDoubleClick,    weld::TreeView&, bool );
         DECL_LINK( OnEntrySelChange,      LinkParamNone*, void );
 
         DECL_LINK( OnCopyEntry,           LinkParamNone*, void );
@@ -185,7 +183,7 @@ namespace dbaui
 
         /** returns the current visible tree list box
         */
-        DBTreeListBox* getCurrentView() const
+        InterimDBTreeListBox* getCurrentView() const
         {
             ElementType eType = getElementType();
             return (eType != E_NONE ) ? m_pLists[static_cast<sal_Int32>(eType)].get() : nullptr;
@@ -236,7 +234,7 @@ namespace dbaui
             @return
                 the qualified name
         */
-        OUString getQualifiedName( SvTreeListEntry* _pEntry ) const;
+        OUString getQualifiedName( weld::TreeIter* _pEntry ) const;
 
         /// return the element of currently select entry
         ElementType getElementType() const;
@@ -248,12 +246,14 @@ namespace dbaui
         sal_Int32 getElementCount() const;
 
         /** returns if an entry is a leaf
-            @param _pEntry
+            @param rTreeView
+                The TreeView rEntry belongs to
+            @param rEntry
                 The entry to check
             @return
                 <TRUE/> if the entry is a leaf, otherwise <FALSE/>
         */
-        static bool isLeaf(SvTreeListEntry const * _pEntry);
+        static bool isLeaf(const weld::TreeView& rTreeView, const weld::TreeIter& rEntry);
 
         /** returns if one of the selected entries is a leaf
             @return
@@ -261,7 +261,7 @@ namespace dbaui
         */
         bool isALeafSelected() const;
 
-        SvTreeListEntry* getEntry( const Point& _aPosPixel ) const;
+        std::unique_ptr<weld::TreeIter> getEntry(const Point& rPosPixel) const;
 
         /// clears the detail pages
         void clearPages();
@@ -279,9 +279,9 @@ namespace dbaui
             @param  _rxConn
                 If we insert a table, the connection must be set.
         */
-        SvTreeListEntry*  elementAdded(ElementType eType
-                        ,const OUString& _rName
-                        ,const css::uno::Any& _rObject );
+        std::unique_ptr<weld::TreeIter> elementAdded(ElementType eType,
+                                                     const OUString& rName,
+                                                     const css::uno::Any& rObject);
 
         /** replaces an objects name with a new one
             @param  _eType

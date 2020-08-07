@@ -335,7 +335,8 @@ OAddTableDlg::OAddTableDlg(weld::Window* pParent, IAddTableDialogContext& _rCont
    , m_rContext(_rContext)
    , m_xCaseTables(m_xBuilder->weld_radio_button("tables"))
    , m_xCaseQueries(m_xBuilder->weld_radio_button("queries"))
-   , m_xTableList(new TableTreeListBox(m_xBuilder->weld_tree_view("tablelist")))
+   // false means: do not show any buttons
+   , m_xTableList(new TableTreeListBox(m_xBuilder->weld_tree_view("tablelist"), false))
    , m_xQueryList(m_xBuilder->weld_tree_view("querylist"))
    , m_xAddButton(m_xBuilder->weld_button("add"))
    , m_xCloseButton(m_xBuilder->weld_button("close"))
@@ -356,7 +357,6 @@ OAddTableDlg::OAddTableDlg(weld::Window* pParent, IAddTableDialogContext& _rCont
     m_xQueryList->connect_changed( LINK( this, OAddTableDlg, TableListSelectHdl ) );
 
     rTableList.set_selection_mode(SelectionMode::Single);
-    m_xTableList->DisableCheckButtons(); // do not show any buttons
     m_xTableList->SuppressEmptyFolders();
 
     m_xQueryList->set_selection_mode(SelectionMode::Single);
