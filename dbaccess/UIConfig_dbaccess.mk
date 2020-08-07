@@ -21,7 +21,6 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/colwidthdialog \
     dbaccess/uiconfig/ui/connectionpage \
     dbaccess/uiconfig/ui/copytablepage \
-    dbaccess/uiconfig/ui/creationlistbox \
     dbaccess/uiconfig/ui/dbaseindexdialog \
     dbaccess/uiconfig/ui/dbasepage \
     dbaccess/uiconfig/ui/dbwizconnectionpage \
@@ -75,6 +74,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/tablesfilterdialog \
     dbaccess/uiconfig/ui/tablesfilterpage \
     dbaccess/uiconfig/ui/tablesjoindialog \
+    dbaccess/uiconfig/ui/taskwindow \
     dbaccess/uiconfig/ui/textconnectionsettings \
     dbaccess/uiconfig/ui/textpage \
     dbaccess/uiconfig/ui/typeselectpage \
