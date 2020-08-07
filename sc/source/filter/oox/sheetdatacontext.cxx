@@ -122,92 +122,92 @@ void SheetDataContext::onCharacters( const OUString& rChars )
 
 void SheetDataContext::onEndElement()
 {
-    if( getCurrentElement() == XLS_TOKEN( c ) )
+    if( getCurrentElement() != XLS_TOKEN( c ) )
+        return;
+
+    // try to create a formula cell
+    if( mbHasFormula ) switch( maFmlaData.mnFormulaType )
     {
-        // try to create a formula cell
-        if( mbHasFormula ) switch( maFmlaData.mnFormulaType )
-        {
-            // will buffer formulas but need to
-            // a) need to set format first
-            // :/
-            case XML_normal:
-                setCellFormula( maCellData.maCellAddr, maFormulaStr );
+        // will buffer formulas but need to
+        // a) need to set format first
+        // :/
+        case XML_normal:
+            setCellFormula( maCellData.maCellAddr, maFormulaStr );
+            mrSheetData.setCellFormat( maCellData );
+
+            // If a number cell has some preloaded value, stick it into the buffer
+            // but do this only for real cell formulas (not array, shared etc.)
+            if (!maCellValue.isEmpty())
+                setCellFormulaValue(maCellData.maCellAddr, maCellValue, maCellData.mnCellType);
+            break;
+
+        case XML_shared:
+            if( maFmlaData.mnSharedId >= 0 )
+            {
+                if( mbValidRange && maFmlaData.isValidSharedRef( maCellData.maCellAddr ) )
+                    createSharedFormulaMapEntry(maCellData.maCellAddr, maFmlaData.mnSharedId, maFormulaStr);
+
+                setCellFormula(maCellData.maCellAddr, maFmlaData.mnSharedId, maCellValue, maCellData.mnCellType);
                 mrSheetData.setCellFormat( maCellData );
-
-                // If a number cell has some preloaded value, stick it into the buffer
-                // but do this only for real cell formulas (not array, shared etc.)
-                if (!maCellValue.isEmpty())
-                    setCellFormulaValue(maCellData.maCellAddr, maCellValue, maCellData.mnCellType);
-                break;
-
-            case XML_shared:
-                if( maFmlaData.mnSharedId >= 0 )
-                {
-                    if( mbValidRange && maFmlaData.isValidSharedRef( maCellData.maCellAddr ) )
-                        createSharedFormulaMapEntry(maCellData.maCellAddr, maFmlaData.mnSharedId, maFormulaStr);
-
-                    setCellFormula(maCellData.maCellAddr, maFmlaData.mnSharedId, maCellValue, maCellData.mnCellType);
-                    mrSheetData.setCellFormat( maCellData );
-                }
-                else
-                    // no success, set plain cell value and formatting below
-                    mbHasFormula = false;
-            break;
-            case XML_array:
-                if( mbValidRange && maFmlaData.isValidArrayRef( maCellData.maCellAddr ) )
-                {
-                    setCellArrayFormula( maFmlaData.maFormulaRef, maCellData.maCellAddr, maFormulaStr );
-                }
-                // set cell formatting, but do not set result as cell value
-                mrSheetData.setBlankCell( maCellData );
-            break;
-            case XML_dataTable:
-                if( mbValidRange )
-                    mrSheetData.createTableOperation( maFmlaData.maFormulaRef, maTableData );
-                // set cell formatting, but do not set result as cell value
-                mrSheetData.setBlankCell( maCellData );
-            break;
-            default:
-                OSL_ENSURE( maFmlaData.mnFormulaType == XML_TOKEN_INVALID, "SheetDataContext::onEndElement - unknown formula type" );
-                mbHasFormula = false;
-        }
-
-        if( !mbHasFormula )
-        {
-            // no formula created: try to set the cell value
-            if( !maCellValue.isEmpty() ) switch( maCellData.mnCellType )
-            {
-                case XML_n:
-                    mrSheetData.setValueCell( maCellData, maCellValue.toDouble() );
-                break;
-                case XML_b:
-                    mrSheetData.setBooleanCell( maCellData, maCellValue.toDouble() != 0.0 );
-                break;
-                case XML_e:
-                    mrSheetData.setErrorCell( maCellData, maCellValue );
-                break;
-                case XML_str:
-                    mrSheetData.setStringCell( maCellData, maCellValue );
-                break;
-                case XML_s:
-                    mrSheetData.setStringCell( maCellData, maCellValue.toInt32() );
-                break;
-                case XML_d:
-                    mrSheetData.setDateCell( maCellData, maCellValue );
-                break;
-            }
-            else if( (maCellData.mnCellType == XML_inlineStr) && mxInlineStr )
-            {
-                mxInlineStr->finalizeImport();
-                mrSheetData.setStringCell( maCellData, mxInlineStr );
             }
             else
+                // no success, set plain cell value and formatting below
+                mbHasFormula = false;
+        break;
+        case XML_array:
+            if( mbValidRange && maFmlaData.isValidArrayRef( maCellData.maCellAddr ) )
             {
-                // empty cell, update cell type
-                maCellData.mnCellType = XML_TOKEN_INVALID;
-                mrSheetData.setBlankCell( maCellData );
+                setCellArrayFormula( maFmlaData.maFormulaRef, maCellData.maCellAddr, maFormulaStr );
             }
-        }
+            // set cell formatting, but do not set result as cell value
+            mrSheetData.setBlankCell( maCellData );
+        break;
+        case XML_dataTable:
+            if( mbValidRange )
+                mrSheetData.createTableOperation( maFmlaData.maFormulaRef, maTableData );
+            // set cell formatting, but do not set result as cell value
+            mrSheetData.setBlankCell( maCellData );
+        break;
+        default:
+            OSL_ENSURE( maFmlaData.mnFormulaType == XML_TOKEN_INVALID, "SheetDataContext::onEndElement - unknown formula type" );
+            mbHasFormula = false;
+    }
+
+    if( mbHasFormula )
+        return;
+
+    // no formula created: try to set the cell value
+    if( !maCellValue.isEmpty() ) switch( maCellData.mnCellType )
+    {
+        case XML_n:
+            mrSheetData.setValueCell( maCellData, maCellValue.toDouble() );
+        break;
+        case XML_b:
+            mrSheetData.setBooleanCell( maCellData, maCellValue.toDouble() != 0.0 );
+        break;
+        case XML_e:
+            mrSheetData.setErrorCell( maCellData, maCellValue );
+        break;
+        case XML_str:
+            mrSheetData.setStringCell( maCellData, maCellValue );
+        break;
+        case XML_s:
+            mrSheetData.setStringCell( maCellData, maCellValue.toInt32() );
+        break;
+        case XML_d:
+            mrSheetData.setDateCell( maCellData, maCellValue );
+        break;
+    }
+    else if( (maCellData.mnCellType == XML_inlineStr) && mxInlineStr )
+    {
+        mxInlineStr->finalizeImport();
+        mrSheetData.setStringCell( maCellData, mxInlineStr );
+    }
+    else
+    {
+        // empty cell, update cell type
+        maCellData.mnCellType = XML_TOKEN_INVALID;
+        mrSheetData.setBlankCell( maCellData );
     }
 }
 
@@ -546,20 +546,20 @@ void SheetDataContext::importArray( SequenceInputStream& rStrm )
 
 void SheetDataContext::importDataTable( SequenceInputStream& rStrm )
 {
-    if( readFormulaRef( rStrm ) )
-    {
-        BinAddress aRef1, aRef2;
-        sal_uInt8 nFlags;
-        rStrm >> aRef1 >> aRef2;
-        nFlags = rStrm.readuChar();
-        maTableData.maRef1        = FormulaProcessorBase::generateAddress2dString( aRef1, false );
-        maTableData.maRef2        = FormulaProcessorBase::generateAddress2dString( aRef2, false );
-        maTableData.mbRowTable    = getFlag( nFlags, BIFF12_DATATABLE_ROW );
-        maTableData.mb2dTable     = getFlag( nFlags, BIFF12_DATATABLE_2D );
-        maTableData.mbRef1Deleted = getFlag( nFlags, BIFF12_DATATABLE_REF1DEL );
-        maTableData.mbRef2Deleted = getFlag( nFlags, BIFF12_DATATABLE_REF2DEL );
-        mrSheetData.createTableOperation( maFmlaData.maFormulaRef, maTableData );
-    }
+    if( !readFormulaRef( rStrm ) )
+        return;
+
+    BinAddress aRef1, aRef2;
+    sal_uInt8 nFlags;
+    rStrm >> aRef1 >> aRef2;
+    nFlags = rStrm.readuChar();
+    maTableData.maRef1        = FormulaProcessorBase::generateAddress2dString( aRef1, false );
+    maTableData.maRef2        = FormulaProcessorBase::generateAddress2dString( aRef2, false );
+    maTableData.mbRowTable    = getFlag( nFlags, BIFF12_DATATABLE_ROW );
+    maTableData.mb2dTable     = getFlag( nFlags, BIFF12_DATATABLE_2D );
+    maTableData.mbRef1Deleted = getFlag( nFlags, BIFF12_DATATABLE_REF1DEL );
+    maTableData.mbRef2Deleted = getFlag( nFlags, BIFF12_DATATABLE_REF2DEL );
+    mrSheetData.createTableOperation( maFmlaData.maFormulaRef, maTableData );
 }
 
 void SheetDataContext::importSharedFmla( SequenceInputStream& rStrm )
