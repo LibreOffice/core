@@ -236,7 +236,7 @@ void PPTShape::addShape(
                     // represent that as a table.
                     sServiceName = "com.sun.star.drawing.TableShape";
                     oox::drawingml::table::TablePropertiesPtr pTableProperties = getTableProperties();
-                    pTableProperties->pullFromTextBody(pTextBody, maSize.Width, bhasSameSubTypeIndex);
+                    pTableProperties->pullFromTextBody(pTextBody, maSize.Width, bhasSameSubTypeIndex, meShapeLocation == Layout);
                     setTextBody(nullptr);
                 }
             }
