@@ -33,6 +33,8 @@
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <connectivity/dbmetadata.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/treelistentry.hxx>
 
 #include <algorithm>
@@ -475,15 +477,63 @@ std::unique_ptr<weld::TreeIter> TableTreeListBox::getAllObjectsEntry() const
 
 void OTableTreeListBox::checkedButton_noBroadcast(SvTreeListEntry* _pEntry)
 {
-    OMarkableTreeListBox::checkedButton_noBroadcast(_pEntry);
+    SvButtonState eState = GetCheckButtonState( _pEntry);
+    if (GetModel()->HasChildren(_pEntry)) // if it has children, check those too
+    {
+        SvTreeListEntry* pChildEntry = GetModel()->Next(_pEntry);
+        SvTreeListEntry* pSiblingEntry = _pEntry->NextSibling();
+        while(pChildEntry && pChildEntry != pSiblingEntry)
+        {
+            SetCheckButtonState(pChildEntry, eState);
+            pChildEntry = GetModel()->Next(pChildEntry);
+        }
+    }
+
+    SvTreeListEntry* pEntry = IsSelected(_pEntry) ? FirstSelected() : nullptr;
+    while(pEntry)
+    {
+        SetCheckButtonState(pEntry,eState);
+        if(GetModel()->HasChildren(pEntry))   // if it has children, check those too
+        {
+            SvTreeListEntry* pChildEntry = GetModel()->Next(pEntry);
+            SvTreeListEntry* pSiblingEntry = pEntry->NextSibling();
+            while(pChildEntry && pChildEntry != pSiblingEntry)
+            {
+                SetCheckButtonState(pChildEntry,eState);
+                pChildEntry = GetModel()->Next(pChildEntry);
+            }
+        }
+        pEntry = NextSelected(pEntry);
+    }
+    CheckButtons();
 
     // if an entry has children, it makes a difference if the entry is checked
     // because all children are checked or if the user checked it explicitly.
     // So we track explicit (un)checking
-
-    SvButtonState eState = GetCheckButtonState(_pEntry);
-    OSL_ENSURE(SvButtonState::Tristate != eState, "OTableTreeListBox::CheckButtonHdl: user action which lead to TRISTATE?");
     implEmphasize(_pEntry, SvButtonState::Checked == eState);
+}
+
+void OTableTreeListBox::CheckButtonHdl()
+{
+    checkedButton_noBroadcast(GetHdlEntry());
+}
+
+void OTableTreeListBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& _rRect)
+{
+    if (!IsEnabled())
+    {
+        vcl::Font aOldFont = rRenderContext.GetFont();
+        vcl::Font aNewFont(aOldFont);
+
+        StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
+        aNewFont.SetColor(aSystemStyle.GetDisableColor());
+
+        rRenderContext.SetFont(aNewFont);
+        DBTreeListBox::Paint(rRenderContext, _rRect);
+        rRenderContext.SetFont(aOldFont);
+    }
+    else
+        DBTreeListBox::Paint(rRenderContext, _rRect);
 }
 
 void TableTreeListBox::checkedButton_noBroadcast(const weld::TreeIter& rEntry)

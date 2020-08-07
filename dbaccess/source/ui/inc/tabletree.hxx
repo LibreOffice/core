@@ -101,7 +101,8 @@ public:
 private:
     virtual void InitEntry(SvTreeListEntry* _pEntry, const OUString& _rString, const Image& _rCollapsedBitmap, const Image& _rExpandedBitmap) override;
 
-    virtual void checkedButton_noBroadcast(SvTreeListEntry* _pEntry) override;
+    virtual void    CheckButtonHdl() override;
+    void checkedButton_noBroadcast(SvTreeListEntry* _pEntry);
 
     void implEmphasize(SvTreeListEntry* _pEntry, bool _bChecked, bool _bUpdateDescendants = true, bool _bUpdateAncestors = true);
 
@@ -132,6 +133,7 @@ private:
                 const TNames& _rTables
             );
 
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& _rRect) override;
 };
 
 class TableTreeListBox

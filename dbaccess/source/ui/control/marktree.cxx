@@ -47,24 +47,6 @@ void OMarkableTreeListBox::dispose()
     DBTreeListBox::dispose();
 }
 
-void OMarkableTreeListBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& _rRect)
-{
-    if (!IsEnabled())
-    {
-        vcl::Font aOldFont = rRenderContext.GetFont();
-        vcl::Font aNewFont(aOldFont);
-
-        StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
-        aNewFont.SetColor(aSystemStyle.GetDisableColor());
-
-        rRenderContext.SetFont(aNewFont);
-        DBTreeListBox::Paint(rRenderContext, _rRect);
-        rRenderContext.SetFont(aOldFont);
-    }
-    else
-        DBTreeListBox::Paint(rRenderContext, _rRect);
-}
-
 void OMarkableTreeListBox::InitButtonData()
 {
     m_pCheckButton.reset( new SvLBoxButtonData( this ) );
@@ -161,44 +143,6 @@ void OMarkableTreeListBox::CheckButtons()
         implDetermineState(pEntry);
         pEntry = pEntry->NextSibling();
     }
-}
-
-void OMarkableTreeListBox::CheckButtonHdl()
-{
-    checkedButton_noBroadcast(GetHdlEntry());
-}
-
-void OMarkableTreeListBox::checkedButton_noBroadcast(SvTreeListEntry* _pEntry)
-{
-    SvButtonState eState = GetCheckButtonState( _pEntry);
-    if (GetModel()->HasChildren(_pEntry)) // if it has children, check those too
-    {
-        SvTreeListEntry* pChildEntry = GetModel()->Next(_pEntry);
-        SvTreeListEntry* pSiblingEntry = _pEntry->NextSibling();
-        while(pChildEntry && pChildEntry != pSiblingEntry)
-        {
-            SetCheckButtonState(pChildEntry, eState);
-            pChildEntry = GetModel()->Next(pChildEntry);
-        }
-    }
-
-    SvTreeListEntry* pEntry = IsSelected(_pEntry) ? FirstSelected() : nullptr;
-    while(pEntry)
-    {
-        SetCheckButtonState(pEntry,eState);
-        if(GetModel()->HasChildren(pEntry))   // if it has children, check those too
-        {
-            SvTreeListEntry* pChildEntry = GetModel()->Next(pEntry);
-            SvTreeListEntry* pSiblingEntry = pEntry->NextSibling();
-            while(pChildEntry && pChildEntry != pSiblingEntry)
-            {
-                SetCheckButtonState(pChildEntry,eState);
-                pChildEntry = GetModel()->Next(pChildEntry);
-            }
-        }
-        pEntry = NextSelected(pEntry);
-    }
-    CheckButtons();
 }
 
 } // namespace

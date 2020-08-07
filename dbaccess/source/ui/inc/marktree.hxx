@@ -42,13 +42,9 @@ public:
     virtual void dispose() override;
 
     virtual void    KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void    CheckButtonHdl() override;
     void            CheckButtons();     // make the button states consistent (bottom-up)
 
 protected:
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& _rRect) override;
-    virtual void checkedButton_noBroadcast(SvTreeListEntry* _pEntry);
-
     SvButtonState   implDetermineState(SvTreeListEntry* _pEntry);
         // determines the check state of the given entry, by analyzing the states of all descendants
 
