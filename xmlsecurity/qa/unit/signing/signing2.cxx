@@ -81,8 +81,6 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPreserveMacroSignatureODB)
     const OUString sLoadMessage = "loading failed: " + aURL;
 
     // load the file
-    if (mxComponent.is())
-        mxComponent->dispose();
     mxComponent = loadFromDesktop(aURL, "com.sun.star.sdb.OfficeDatabaseDocument");
     CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sLoadMessage, RTL_TEXTENCODING_UTF8).getStr(),
                            mxComponent.is());
