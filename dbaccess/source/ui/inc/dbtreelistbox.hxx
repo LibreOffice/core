@@ -23,8 +23,10 @@
 
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 
+#include <vcl/InterimItemWindow.hxx>
 #include <vcl/treelistbox.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/weld.hxx>
 
 #include <memory>
 #include <set>
@@ -132,6 +134,35 @@ namespace dbaui
 
     protected:
         using SvTreeListBox::ExecuteDrop;
+    };
+
+    class TreeListBox
+    {
+    protected:
+        std::unique_ptr<weld::TreeView> m_xTreeView;
+    public:
+        TreeListBox(std::unique_ptr<weld::TreeView> xTreeView);
+        virtual ~TreeListBox();
+
+        std::unique_ptr<weld::TreeIter> GetEntryPosByName(const OUString& rName,
+                                                          const weld::TreeIter* pStart = nullptr,
+                                                          const IEntryFilter* pFilter = nullptr) const;
+
+        weld::TreeView& GetWidget() { return *m_xTreeView; }
+        const weld::TreeView& GetWidget() const { return *m_xTreeView; }
+
+        virtual void DisableCheckButtons();
+
+        void clearCurrentSelection();
+    };
+
+    class InterimDBTreeListBox : public InterimItemWindow
+                               , public TreeListBox
+    {
+    public:
+        InterimDBTreeListBox(vcl::Window* pParent);
+        virtual void dispose() override;
+        virtual ~InterimDBTreeListBox() override;
     };
 }
 
