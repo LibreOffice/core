@@ -398,35 +398,35 @@ void ScHTMLExport::WriteHeader()
 
 void ScHTMLExport::WriteOverview()
 {
-    if ( nUsedTables > 1 )
+    if ( nUsedTables <= 1 )
+        return;
+
+    IncIndent(1);
+    OUT_HR();
+    IncIndent(1); TAG_ON( OOO_STRING_SVTOOLS_HTML_parabreak ); TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_center );
+    TAG_ON( OOO_STRING_SVTOOLS_HTML_head1 );
+    OUT_STR( ScResId( STR_OVERVIEW ) );
+    TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_head1 );
+
+    OUString aStr;
+
+    const SCTAB nCount = pDoc->GetTableCount();
+    for ( SCTAB nTab = 0; nTab < nCount; nTab++ )
     {
-        IncIndent(1);
-        OUT_HR();
-        IncIndent(1); TAG_ON( OOO_STRING_SVTOOLS_HTML_parabreak ); TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_center );
-        TAG_ON( OOO_STRING_SVTOOLS_HTML_head1 );
-        OUT_STR( ScResId( STR_OVERVIEW ) );
-        TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_head1 );
-
-        OUString aStr;
-
-        const SCTAB nCount = pDoc->GetTableCount();
-        for ( SCTAB nTab = 0; nTab < nCount; nTab++ )
+        if ( !IsEmptyTable( nTab ) )
         {
-            if ( !IsEmptyTable( nTab ) )
-            {
-                pDoc->GetName( nTab, aStr );
-                rStrm.WriteCharPtr( "<A HREF=\"#table" )
-                   .WriteOString( OString::number(nTab) )
-                   .WriteCharPtr( "\">" );
-                OUT_STR( aStr );
-                rStrm.WriteCharPtr( "</A>" );
-                TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_linebreak );
-            }
+            pDoc->GetName( nTab, aStr );
+            rStrm.WriteCharPtr( "<A HREF=\"#table" )
+               .WriteOString( OString::number(nTab) )
+               .WriteCharPtr( "\">" );
+            OUT_STR( aStr );
+            rStrm.WriteCharPtr( "</A>" );
+            TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_linebreak );
         }
-
-        IncIndent(-1); OUT_LF();
-        IncIndent(-1); TAG_OFF( OOO_STRING_SVTOOLS_HTML_center ); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_parabreak );
     }
+
+    IncIndent(-1); OUT_LF();
+    IncIndent(-1); TAG_OFF( OOO_STRING_SVTOOLS_HTML_center ); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_parabreak );
 }
 
 const SfxItemSet& ScHTMLExport::PageDefaults( SCTAB nTab )
@@ -1248,50 +1248,50 @@ void ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
     INetURLObject aFileUrl, aTargetUrl;
     aFileUrl.SetSmartURL( rFileNm );
     aTargetUrl.SetSmartURL( rTargetNm );
-    if( INetProtocol::File == aFileUrl.GetProtocol() &&
+    if( !(INetProtocol::File == aFileUrl.GetProtocol() &&
         ( INetProtocol::File != aTargetUrl.GetProtocol() &&
           INetProtocol::Ftp <= aTargetUrl.GetProtocol() &&
-          INetProtocol::Javascript >= aTargetUrl.GetProtocol())  )
+          INetProtocol::Javascript >= aTargetUrl.GetProtocol()))  )
+        return;
+
+    if( pFileNameMap )
     {
-        if( pFileNameMap )
+        // Did we already move the file?
+        std::map<OUString, OUString>::iterator it = pFileNameMap->find( rFileNm );
+        if( it != pFileNameMap->end() )
         {
-            // Did we already move the file?
-            std::map<OUString, OUString>::iterator it = pFileNameMap->find( rFileNm );
-            if( it != pFileNameMap->end() )
-            {
-                rFileNm = it->second;
-                return;
-            }
+            rFileNm = it->second;
+            return;
         }
-        else
-        {
-            pFileNameMap.reset( new std::map<OUString, OUString> );
-        }
+    }
+    else
+    {
+        pFileNameMap.reset( new std::map<OUString, OUString> );
+    }
 
-        bool bRet = false;
-        SvFileStream aTmp( aFileUrl.PathToFileName(), StreamMode::READ );
+    bool bRet = false;
+    SvFileStream aTmp( aFileUrl.PathToFileName(), StreamMode::READ );
 
-        OUString aSrc = rFileNm;
-        OUString aDest = aTargetUrl.GetPartBeforeLastName() + aFileUrl.GetLastName();
+    OUString aSrc = rFileNm;
+    OUString aDest = aTargetUrl.GetPartBeforeLastName() + aFileUrl.GetLastName();
 
-        SfxMedium aMedium( aDest, StreamMode::WRITE | StreamMode::SHARE_DENYNONE );
+    SfxMedium aMedium( aDest, StreamMode::WRITE | StreamMode::SHARE_DENYNONE );
 
-        {
-            SvFileStream aCpy( aMedium.GetPhysicalName(), StreamMode::WRITE );
-            aCpy.WriteStream( aTmp );
-        }
+    {
+        SvFileStream aCpy( aMedium.GetPhysicalName(), StreamMode::WRITE );
+        aCpy.WriteStream( aTmp );
+    }
 
-        // Take over
-        aMedium.Close();
-        aMedium.Commit();
+    // Take over
+    aMedium.Close();
+    aMedium.Commit();
 
-        bRet = ERRCODE_NONE == aMedium.GetError();
+    bRet = ERRCODE_NONE == aMedium.GetError();
 
-        if( bRet )
-        {
-            pFileNameMap->insert( std::make_pair( aSrc, aDest ) );
-            rFileNm = aDest;
-        }
+    if( bRet )
+    {
+        pFileNameMap->insert( std::make_pair( aSrc, aDest ) );
+        rFileNm = aDest;
     }
 }
 
