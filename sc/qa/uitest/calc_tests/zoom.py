@@ -7,7 +7,6 @@
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict
-import importlib
 #uitest sc / View-Zoom
 
 class calcZoom(UITestCase):

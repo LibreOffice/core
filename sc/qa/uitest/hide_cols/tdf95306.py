@@ -10,7 +10,6 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.framework import UITestCase
 from libreoffice.calc.document import get_column
 
-import time
 
 def get_column_hidden(doc, index):
     column = get_column(doc, index)
