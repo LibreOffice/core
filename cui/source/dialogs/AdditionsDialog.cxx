@@ -14,7 +14,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <unordered_set>
 #include <sal/log.hxx>
-#include <strings.hrc>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
@@ -29,8 +28,6 @@
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
-#include <dialmgr.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -293,7 +290,7 @@ bool getPreviewFile(const AdditionInfo& aAdditionInfo, OUString& sPreviewFile)
     return true;
 }
 
-void LoadImage(const OUString& rPreviewFile, const AdditionsItem& rCurrentItem)
+void LoadImage(const OUString& rPreviewFile, std::shared_ptr<AdditionsItem> pCurrentItem)
 {
     SolarMutexGuard aGuard;
 
@@ -306,11 +303,11 @@ void LoadImage(const OUString& rPreviewFile, const AdditionsItem& rCurrentItem)
     aFilter.ImportGraphic(aGraphic, aURLObj);
     BitmapEx aBmp = aGraphic.GetBitmapEx();
 
-    ScopedVclPtr<VirtualDevice> xVirDev = rCurrentItem.m_xImageScreenshot->create_virtual_device();
+    ScopedVclPtr<VirtualDevice> xVirDev = pCurrentItem->m_xImageScreenshot->create_virtual_device();
     xVirDev->SetOutputSizePixel(aBmp.GetSizePixel());
     xVirDev->DrawBitmapEx(Point(0, 0), aBmp);
 
-    rCurrentItem.m_xImageScreenshot->set_image(xVirDev.get());
+    pCurrentItem->m_xImageScreenshot->set_image(xVirDev.get());
     xVirDev.disposeAndClear();
 }
 
@@ -326,32 +323,7 @@ SearchAndParseThread::SearchAndParseThread(AdditionsDialog* pDialog, const bool&
 
 SearchAndParseThread::~SearchAndParseThread() {}
 
-void SearchAndParseThread::LoadInfo(const AdditionInfo& additionInfo, AdditionsItem& rCurrentItem)
-{
-    SolarMutexGuard aGuard;
-
-    rCurrentItem.m_xContainer->set_grid_left_attach(0);
-    rCurrentItem.m_xContainer->set_grid_top_attach(m_pAdditionsDialog->m_aAdditionsItems.size()
-                                                   - 1);
-
-    rCurrentItem.m_xLinkButtonName->set_label(additionInfo.sName);
-    rCurrentItem.m_xLinkButtonName->set_uri(additionInfo.sExtensionURL);
-    rCurrentItem.m_xLabelDescription->set_label(additionInfo.sIntroduction);
-    rCurrentItem.m_xLabelAuthor->set_label(additionInfo.sAuthorName);
-    rCurrentItem.m_xButtonInstall->set_label(CuiResId(RID_SVXSTR_ADDITIONS_INSTALLBUTTON));
-    OUString sLicenseString = CuiResId(RID_SVXSTR_ADDITIONS_LICENCE) + additionInfo.sLicense;
-    rCurrentItem.m_xLabelLicense->set_label(sLicenseString);
-    OUString sVersionString
-        = CuiResId(RID_SVXSTR_ADDITIONS_REQUIREDVERSION) + additionInfo.sCompatibleVersion;
-    rCurrentItem.m_xLabelVersion->set_label(sVersionString);
-    rCurrentItem.m_xLinkButtonComments->set_label(additionInfo.sCommentNumber);
-    rCurrentItem.m_xLinkButtonComments->set_uri(additionInfo.sCommentURL);
-    rCurrentItem.m_xLabelDownloadNumber->set_label(additionInfo.sDownloadNumber);
-    rCurrentItem.m_pParentDialog = m_pAdditionsDialog;
-    rCurrentItem.m_sDownloadURL = additionInfo.sDownloadURL;
-}
-
-void SearchAndParseThread::Append(const AdditionInfo& additionInfo)
+void SearchAndParseThread::Append(AdditionInfo& additionInfo)
 {
     if (!m_bExecute)
         return;
@@ -366,10 +338,11 @@ void SearchAndParseThread::Append(const AdditionInfo& additionInfo)
 
     SolarMutexGuard aGuard;
 
-    m_pAdditionsDialog->m_aAdditionsItems.emplace_back(m_pAdditionsDialog->m_xContentGrid.get());
-    AdditionsItem& aCurrentItem = m_pAdditionsDialog->m_aAdditionsItems.back();
+    auto newItem = std::make_shared<AdditionsItem>(m_pAdditionsDialog->m_xContentGrid.get(),
+                                                   m_pAdditionsDialog, additionInfo);
+    m_pAdditionsDialog->m_aAdditionsItems.push_back(newItem);
+    std::shared_ptr<AdditionsItem> aCurrentItem = m_pAdditionsDialog->m_aAdditionsItems.back();
 
-    LoadInfo(additionInfo, aCurrentItem);
     LoadImage(aPreviewFile, aCurrentItem);
     m_pAdditionsDialog->m_nCurrentListItemCount++;
 
@@ -377,15 +350,7 @@ void SearchAndParseThread::Append(const AdditionInfo& additionInfo)
     {
         if (m_pAdditionsDialog->m_nCurrentListItemCount
             != m_pAdditionsDialog->m_aAllExtensionsVector.size())
-            aCurrentItem.m_xButtonShowMore->set_visible(true);
-    }
-}
-
-void SearchAndParseThread::AppendAllExtensions()
-{
-    for (auto& additionInfo : m_pAdditionsDialog->m_aAllExtensionsVector)
-    {
-        Append(additionInfo);
+            aCurrentItem->m_xButtonShowMore->set_visible(true);
     }
 }
 
@@ -445,7 +410,7 @@ void SearchAndParseThread::CheckInstalledExtensions()
 
                 for (auto& rInfo : m_pAdditionsDialog->m_aAdditionsItems)
                 {
-                    OUString sExtensionDownloadURL = rInfo.m_sDownloadURL;
+                    OUString sExtensionDownloadURL = rInfo->m_sDownloadURL;
 
                     if (!textSearch.searchForward(sExtensionDownloadURL))
                     {
@@ -453,7 +418,7 @@ void SearchAndParseThread::CheckInstalledExtensions()
                     }
                     else
                     {
-                        rInfo.m_xButtonInstall->set_sensitive(false);
+                        rInfo->m_xButtonInstall->set_sensitive(false);
                     }
                 }
             }
@@ -604,9 +569,55 @@ void AdditionsDialog::ClearList()
 
     for (auto& item : this->m_aAdditionsItems)
     {
-        item.m_xContainer->hide();
+        item->m_xContainer->hide();
     }
     this->m_aAdditionsItems.clear();
+}
+
+AdditionsItem::AdditionsItem(weld::Widget* pParent, AdditionsDialog* pParentDialog,
+                             AdditionInfo& additionInfo)
+    : m_xBuilder(Application::CreateBuilder(pParent, "cui/ui/additionsfragment.ui"))
+    , m_xContainer(m_xBuilder->weld_widget("additionsEntry"))
+    , m_xImageScreenshot(m_xBuilder->weld_image("imageScreenshot"))
+    , m_xButtonInstall(m_xBuilder->weld_button("buttonInstall"))
+    , m_xLinkButtonName(m_xBuilder->weld_link_button("linkButtonName"))
+    , m_xLabelAuthor(m_xBuilder->weld_label("labelAuthor"))
+    , m_xLabelDesc(m_xBuilder->weld_label("labelDesc")) // no change (print description)
+    , m_xLabelDescription(m_xBuilder->weld_label("labelDescription"))
+    , m_xLabelLicense(m_xBuilder->weld_label("labelLicense"))
+    , m_xLabelVersion(m_xBuilder->weld_label("labelVersion"))
+    , m_xLabelComments(m_xBuilder->weld_label("labelComments")) // no change
+    , m_xLinkButtonComments(m_xBuilder->weld_link_button("linkButtonComments"))
+    , m_xImageVoting(m_xBuilder->weld_image("imageVoting"))
+    , m_xImageDownloadNumber(m_xBuilder->weld_image("imageDownloadNumber"))
+    , m_xLabelDownloadNumber(m_xBuilder->weld_label("labelDownloadNumber"))
+    , m_xButtonShowMore(m_xBuilder->weld_button("buttonShowMore"))
+    , m_pParentDialog(pParentDialog)
+    , m_sDownloadURL("")
+{
+    SolarMutexGuard aGuard;
+
+    m_xContainer->set_grid_left_attach(0);
+    m_xContainer->set_grid_top_attach(pParentDialog->m_aAdditionsItems.size() - 1);
+
+    m_xLinkButtonName->set_label(additionInfo.sName);
+    m_xLinkButtonName->set_uri(additionInfo.sExtensionURL);
+    m_xLabelDescription->set_label(additionInfo.sIntroduction);
+    m_xLabelAuthor->set_label(additionInfo.sAuthorName);
+    m_xButtonInstall->set_label(CuiResId(RID_SVXSTR_ADDITIONS_INSTALLBUTTON));
+    OUString sLicenseString = CuiResId(RID_SVXSTR_ADDITIONS_LICENCE) + additionInfo.sLicense;
+    m_xLabelLicense->set_label(sLicenseString);
+    OUString sVersionString
+        = CuiResId(RID_SVXSTR_ADDITIONS_REQUIREDVERSION) + additionInfo.sCompatibleVersion;
+    m_xLabelVersion->set_label(sVersionString);
+    m_xLinkButtonComments->set_label(additionInfo.sCommentNumber);
+    m_xLinkButtonComments->set_uri(additionInfo.sCommentURL);
+    m_xLabelDownloadNumber->set_label(additionInfo.sDownloadNumber);
+    m_pParentDialog = pParentDialog;
+    m_sDownloadURL = additionInfo.sDownloadURL;
+
+    m_xButtonShowMore->connect_clicked(LINK(this, AdditionsItem, ShowMoreHdl));
+    m_xButtonInstall->connect_clicked(LINK(this, AdditionsItem, InstallHdl));
 }
 
 IMPL_LINK_NOARG(AdditionsDialog, ImplUpdateDataHdl, Timer*, void)
@@ -649,6 +660,11 @@ IMPL_LINK_NOARG(AdditionsItem, ShowMoreHdl, weld::Button&, void)
         m_pParentDialog->m_pSearchThread->StopExecution();
     m_pParentDialog->m_pSearchThread = new SearchAndParseThread(m_pParentDialog, false);
     m_pParentDialog->m_pSearchThread->launch();
+}
+
+IMPL_LINK_NOARG(AdditionsItem, InstallHdl, weld::Button&, void)
+{
+    m_xButtonInstall->set_label("Success");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
