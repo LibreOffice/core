@@ -243,6 +243,24 @@
     },
     {
       "key": {
+        "uuid": "fd7c2eb6_b58e8652",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-07T12:49:29Z",
+      "side": 1,
+      "message": "\u003e https://gerrit.libreoffice.org/c/core/+/100270/1/extensions/source/logging/csvformatter.cxx\n\n\u003chttps://gerrit.libreoffice.org/c/core/+/100313\u003e \"Make use of std string_view\"\n\n\u003e https://gerrit.libreoffice.org/c/core/+/100270/1/sw/source/core/fields/reffld.cxx\n\n\u003chttps://gerrit.libreoffice.org/c/core/+/100315\u003e \"Make use of std string_view\"\n\n\u003e https://gerrit.libreoffice.org/c/core/+/100270/1/sw/source/ui/misc/bookmark.cxx\n\nI find no use of OUStringLiteral::indexOf there?",
+      "parentUuid": "e3fc54c8_89de06fa",
+      "revId": "3e73731b97d0782f0d4ea2db3112977adc352810",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "64d8110d_f1d4e2ed",
         "filename": "include/rtl/ustring.hxx",
         "patchSetId": 1
