@@ -82,13 +82,20 @@ namespace
     {
         const OTableWindowListBox* pListBox = _pWin->GetListBox();
         _rNewConPos.setY( _pWin->GetPosPixel().Y() );
+
+        std::unique_ptr<weld::TreeIter> xEntry;
+        const weld::TreeView& rTreeView = pListBox->get_widget();
+
         if (_nEntry != -1)
         {
             _rNewConPos.AdjustY(pListBox->GetPosPixel().Y() );
-            const weld::TreeView& rTreeView = pListBox->get_widget();
-            std::unique_ptr<weld::TreeIter> xEntry = rTreeView.make_iterator();
-            rTreeView.get_iter_first(*xEntry);
-            rTreeView.iter_nth_sibling(*xEntry, _nEntry);
+            xEntry = rTreeView.make_iterator();
+            if (!rTreeView.get_iter_first(*xEntry) || !rTreeView.iter_nth_sibling(*xEntry, _nEntry))
+                xEntry.reset();
+        }
+
+        if (xEntry)
+        {
             auto nEntryPos = rTreeView.get_row_area(*xEntry).Center().Y();
 
             if( nEntryPos >= 0 )
