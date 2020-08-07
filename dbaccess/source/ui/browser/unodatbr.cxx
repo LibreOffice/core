@@ -3380,13 +3380,19 @@ bool SbaTableQueryBrowser::requestQuickHelp( const SvTreeListEntry* _pEntry, OUS
     return false;
 }
 
-OUString SbaTableQueryBrowser::getContextMenuResourceName( Control& _rControl ) const
+bool SbaTableQueryBrowser::requestQuickHelp(const void* pUserData, OUString& rText) const
 {
-    OSL_PRECOND( &m_pTreeView->getListBox() == &_rControl,
-        "SbaTableQueryBrowser::getContextMenuResourceName: where does this come from?" );
-    if ( &m_pTreeView->getListBox() != &_rControl )
-        return OUString();
+    const DBTreeListUserData* pData = static_cast<const DBTreeListUserData*>(pUserData);
+    if (pData->eType == etDatasource && !pData->sAccessor.isEmpty())
+    {
+        rText = ::svt::OFileNotation(pData->sAccessor).get( ::svt::OFileNotation::N_SYSTEM);
+        return true;
+    }
+    return false;
+}
 
+OUString SbaTableQueryBrowser::getContextMenuResourceName() const
+{
     return "explorer";
 }
 
