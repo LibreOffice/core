@@ -76,6 +76,24 @@
     },
     {
       "key": {
+        "uuid": "4ea3cc47_e12477ed",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-08-07T11:30:59Z",
+      "side": 1,
+      "message": "turns out I don\u0027t actually need this in the final patch",
+      "parentUuid": "f63d6e60_3cc590f8",
+      "revId": "3e73731b97d0782f0d4ea2db3112977adc352810",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d79ea56b_aee96a64",
         "filename": "include/rtl/ustring.hxx",
         "patchSetId": 1
@@ -93,6 +111,24 @@
     },
     {
       "key": {
+        "uuid": "99b8c399_864727ae",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-08-07T11:30:59Z",
+      "side": 1,
+      "message": "just ascii, mostly used to check if a string contains something that needs to be escaped, or some illegal (ascii) character",
+      "parentUuid": "d79ea56b_aee96a64",
+      "revId": "3e73731b97d0782f0d4ea2db3112977adc352810",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "64d8110d_f1d4e2ed",
         "filename": "include/rtl/ustring.hxx",
         "patchSetId": 1
@@ -104,6 +140,24 @@
       "writtenOn": "2020-08-07T06:53:22Z",
       "side": 1,
       "message": "shouldn\u0027t this be constexpr?",
+      "revId": "3e73731b97d0782f0d4ea2db3112977adc352810",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8bd6d09_f7038103",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-08-07T11:30:59Z",
+      "side": 1,
+      "message": "I could not find a formulation that allowed me to do that",
+      "parentUuid": "64d8110d_f1d4e2ed",
       "revId": "3e73731b97d0782f0d4ea2db3112977adc352810",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
