@@ -3857,52 +3857,52 @@ void ScXMLExport::WriteTableSource()
         return;
 
     sal_Int32 nCount(xIndex->getCount());
-    if (nCount)
+    if (!nCount)
+        return;
+
+    bool bFound(false);
+    uno::Reference <beans::XPropertySet> xLinkProps;
+    for (sal_Int32 i = 0; (i < nCount) && !bFound; ++i)
     {
-        bool bFound(false);
-        uno::Reference <beans::XPropertySet> xLinkProps;
-        for (sal_Int32 i = 0; (i < nCount) && !bFound; ++i)
+        xLinkProps.set(xIndex->getByIndex(i), uno::UNO_QUERY);
+        if (xLinkProps.is())
         {
-            xLinkProps.set(xIndex->getByIndex(i), uno::UNO_QUERY);
-            if (xLinkProps.is())
-            {
-                OUString sNewLink;
-                if (xLinkProps->getPropertyValue(SC_UNONAME_LINKURL) >>= sNewLink)
-                    bFound = sLink == sNewLink;
-            }
-        }
-        if (bFound && xLinkProps.is())
-        {
-            OUString sFilter;
-            OUString sFilterOptions;
-            OUString sTableName (xLinkable->getLinkSheetName());
-            sal_Int32 nRefresh(0);
-            xLinkProps->getPropertyValue(SC_UNONAME_FILTER) >>= sFilter;
-            xLinkProps->getPropertyValue(SC_UNONAME_FILTOPT) >>= sFilterOptions;
-            xLinkProps->getPropertyValue(SC_UNONAME_REFDELAY) >>= nRefresh;
-            if (!sLink.isEmpty())
-            {
-                AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE);
-                AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, GetRelativeReference(sLink));
-                if (!sTableName.isEmpty())
-                    AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE_NAME, sTableName);
-                if (!sFilter.isEmpty())
-                    AddAttribute(XML_NAMESPACE_TABLE, XML_FILTER_NAME, sFilter);
-                if (!sFilterOptions.isEmpty())
-                    AddAttribute(XML_NAMESPACE_TABLE, XML_FILTER_OPTIONS, sFilterOptions);
-                if (nMode != sheet::SheetLinkMode_NORMAL)
-                    AddAttribute(XML_NAMESPACE_TABLE, XML_MODE, XML_COPY_RESULTS_ONLY);
-                if( nRefresh )
-                {
-                    OUStringBuffer sBuffer;
-                    ::sax::Converter::convertDuration( sBuffer,
-                            static_cast<double>(nRefresh) / 86400 );
-                    AddAttribute( XML_NAMESPACE_TABLE, XML_REFRESH_DELAY, sBuffer.makeStringAndClear() );
-                }
-                SvXMLElementExport aSourceElem(*this, XML_NAMESPACE_TABLE, XML_TABLE_SOURCE, true, true);
-            }
+            OUString sNewLink;
+            if (xLinkProps->getPropertyValue(SC_UNONAME_LINKURL) >>= sNewLink)
+                bFound = sLink == sNewLink;
         }
     }
+    if (!(bFound && xLinkProps.is()))
+        return;
+
+    OUString sFilter;
+    OUString sFilterOptions;
+    OUString sTableName (xLinkable->getLinkSheetName());
+    sal_Int32 nRefresh(0);
+    xLinkProps->getPropertyValue(SC_UNONAME_FILTER) >>= sFilter;
+    xLinkProps->getPropertyValue(SC_UNONAME_FILTOPT) >>= sFilterOptions;
+    xLinkProps->getPropertyValue(SC_UNONAME_REFDELAY) >>= nRefresh;
+    if (sLink.isEmpty())
+        return;
+
+    AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE);
+    AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, GetRelativeReference(sLink));
+    if (!sTableName.isEmpty())
+        AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE_NAME, sTableName);
+    if (!sFilter.isEmpty())
+        AddAttribute(XML_NAMESPACE_TABLE, XML_FILTER_NAME, sFilter);
+    if (!sFilterOptions.isEmpty())
+        AddAttribute(XML_NAMESPACE_TABLE, XML_FILTER_OPTIONS, sFilterOptions);
+    if (nMode != sheet::SheetLinkMode_NORMAL)
+        AddAttribute(XML_NAMESPACE_TABLE, XML_MODE, XML_COPY_RESULTS_ONLY);
+    if( nRefresh )
+    {
+        OUStringBuffer sBuffer;
+        ::sax::Converter::convertDuration( sBuffer,
+                static_cast<double>(nRefresh) / 86400 );
+        AddAttribute( XML_NAMESPACE_TABLE, XML_REFRESH_DELAY, sBuffer.makeStringAndClear() );
+    }
+    SvXMLElementExport aSourceElem(*this, XML_NAMESPACE_TABLE, XML_TABLE_SOURCE, true, true);
 }
 
 // core implementation

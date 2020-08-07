@@ -461,19 +461,19 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
             }
         }
     }
-    if ( bHasGraphics )
+    if ( !bHasGraphics )
+        return;
+
+    // Insert graphics
+    for ( size_t i = 0, nListSize = mpParser->ListSize(); i < nListSize; ++i )
     {
-        // Insert graphics
-        for ( size_t i = 0, nListSize = mpParser->ListSize(); i < nListSize; ++i )
+        pE = mpParser->ListEntry( i );
+        if ( !pE->maImageList.empty() )
         {
-            pE = mpParser->ListEntry( i );
-            if ( !pE->maImageList.empty() )
-            {
-                SCCOL nCol = pE->nCol;
-                SCROW nRow = pE->nRow;
-                if ( mpDoc->ValidCol(nCol) && mpDoc->ValidRow(nRow) )
-                    InsertGraphic( nCol, nRow, nTab, pE );
-            }
+            SCCOL nCol = pE->nCol;
+            SCROW nRow = pE->nRow;
+            if ( mpDoc->ValidCol(nCol) && mpDoc->ValidRow(nRow) )
+                InsertGraphic( nCol, nRow, nTab, pE );
         }
     }
 }
