@@ -1,0 +1,12 @@
+diff -ru a/nspr/configure b/nspr/configure
+--- a/a/nspr/configure	2019-01-26 12:23:06.589389910 +0100
++++ b/b/nspr/configure	2019-01-26 12:26:56.566222293 +0100
+@@ -7127,7 +7127,7 @@
+ 
+         # Determine compiler version
+ 
+-        _MSVC_VER_FILTER='s|.* \([0-9]\+\.[0-9]\+\.[0-9]\+\(\.[0-9]\+\)\?\).*|\1|p'
++        _MSVC_VER_FILTER='s|.*[^!-~]\([0-9]\+\.[0-9]\+\.[0-9]\+\(\.[0-9]\+\)\?\).*|\1|p'
+ 
+         CC_VERSION=`${CC} -v 2>&1 | sed -ne "$_MSVC_VER_FILTER"`
+         if test -z "$CC_VERSION"; then
