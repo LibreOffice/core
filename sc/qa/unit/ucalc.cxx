@@ -456,6 +456,33 @@ void Test::testColumnIterator() // tdf#118620
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testTdf135249()
+{
+    CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
+
+    m_pDoc->SetString(ScAddress(0,0,0), "1:60");
+    m_pDoc->SetString(ScAddress(0,1,0), "1:123");
+    m_pDoc->SetString(ScAddress(0,2,0), "1:1:123");
+    m_pDoc->SetString(ScAddress(0,3,0), "0:123");
+    m_pDoc->SetString(ScAddress(0,4,0), "0:0:123");
+    m_pDoc->SetString(ScAddress(0,5,0), "0:123:59");
+
+    // These are not valid duration inputs
+    CPPUNIT_ASSERT_EQUAL(OUString("1:60"), m_pDoc->GetString(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("1:123"), m_pDoc->GetString(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("1:1:123"), m_pDoc->GetString(ScAddress(0,2,0)));
+
+    // These are valid duration inputs
+    // Without the fix in place, this test would have failed with
+    // - Expected: 02:03:00 AM
+    // - Actual  : 0:123
+    CPPUNIT_ASSERT_EQUAL(OUString("02:03:00 AM"), m_pDoc->GetString(ScAddress(0,3,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("12:02:03 AM"), m_pDoc->GetString(ScAddress(0,4,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("02:03:59 AM"), m_pDoc->GetString(ScAddress(0,5,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testDocStatistics()
 {
     SCTAB nStartTabs = m_pDoc->GetTableCount();
