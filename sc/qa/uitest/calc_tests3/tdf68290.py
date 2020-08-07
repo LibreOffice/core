@@ -7,10 +7,6 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
 from uitest.path import get_srcdir_url
-from libreoffice.calc.document import get_sheet_from_doc
-from libreoffice.calc.conditional_format import get_conditional_format_from_sheet
-from uitest.debug import sleep
-from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
 #Enhancement: EDITING: cursor moves with Enter key
 def get_url_for_data_file(file_name):
