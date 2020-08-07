@@ -191,6 +191,12 @@ namespace dbaui
 
         return pTransfer.is();
     }
+
+    bool SbaTableQueryBrowser::requestDrag(const weld::TreeIter& /*rEntry*/)
+    {
+        return false;
+    }
+
     IMPL_LINK_NOARG(SbaTableQueryBrowser, OnCopyEntry, LinkParamNone*, void)
     {
         SvTreeListEntry* pSelected = m_pTreeView->getListBox().FirstSelected();
