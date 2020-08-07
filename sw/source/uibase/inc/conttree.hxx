@@ -246,6 +246,7 @@ public:
     void grab_focus()
     {
         m_xTreeView->grab_focus();
+        FocusHdl(*m_xTreeView);
     }
 
     OUString get_selected_text() const
@@ -341,6 +342,7 @@ public:
     void grab_focus()
     {
         m_xTreeView->grab_focus();
+        FocusInHdl(*m_xTreeView);
     }
 
     int count_selected_rows() const
