@@ -216,7 +216,8 @@ public:
 
     SvXMLStyleIndex_Impl( XmlStyleFamily nFam, const OUString& rName ) :
         sName( rName ),
-        nFamily( nFam )
+        nFamily( nFam ),
+        mpStyle(nullptr)
     {
     }
 
