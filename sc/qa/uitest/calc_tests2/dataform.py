@@ -6,7 +6,6 @@
 #
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-import org.libreoffice.unotest
 
 #dataformdialog.ui
 class dataform(UITestCase):

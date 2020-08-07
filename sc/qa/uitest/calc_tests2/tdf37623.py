@@ -5,9 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict
 from libreoffice.calc.document import get_cell_by_position
-from uitest.path import get_srcdir_url
 from libreoffice.uno.propertyvalue import mkPropertyValues
 import org.libreoffice.unotest
 import pathlib

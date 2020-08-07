@@ -6,7 +6,6 @@
 # tests for tracked changes ; tdf912270
 
 from uitest.framework import UITestCase
-from uitest.debug import sleep
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.calc import enter_text_to_cell
