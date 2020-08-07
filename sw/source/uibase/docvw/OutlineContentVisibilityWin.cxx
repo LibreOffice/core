@@ -33,6 +33,7 @@ SwOutlineContentVisibilityWin::SwOutlineContentVisibilityWin(SwEditWin* pEditWin
     , m_pFrame(pFrame)
     , m_nDelayAppearing(0)
     , m_bDestroyed(false)
+    , m_nOutlinePos(SwOutlineNodes::npos)
 {
     SetSizePixel(Size(BUTTON_WIDTH, BUTTON_HEIGHT));
 
