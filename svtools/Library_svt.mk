@@ -182,6 +182,7 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/uno/wizard/unowizard \
     svtools/source/uno/wizard/wizardpagecontroller \
     svtools/source/uno/wizard/wizardshell \
+    svtools/source/uitest/uiobject \
 ))
 
 ifeq ($(OS),WNT)
