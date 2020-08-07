@@ -300,23 +300,23 @@ void PivotCacheRecordsFragment::importPCRecord( SequenceInputStream& rStrm )
 
 void PivotCacheRecordsFragment::importPCRecordItem( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
-    if( mbInRecord )
+    if( !mbInRecord )
+        return;
+
+    PivotCacheItem aItem;
+    switch( nRecId )
     {
-        PivotCacheItem aItem;
-        switch( nRecId )
-        {
-            case BIFF12_ID_PCITEM_MISSING:                              break;
-            case BIFF12_ID_PCITEM_STRING:   aItem.readString( rStrm );  break;
-            case BIFF12_ID_PCITEM_DOUBLE:   aItem.readDouble( rStrm );  break;
-            case BIFF12_ID_PCITEM_DATE:     aItem.readDate( rStrm );    break;
-            case BIFF12_ID_PCITEM_BOOL:     aItem.readBool( rStrm );    break;
-            case BIFF12_ID_PCITEM_ERROR:    aItem.readError( rStrm );   break;
-            case BIFF12_ID_PCITEM_INDEX:    aItem.readIndex( rStrm );   break;
-            default:    OSL_FAIL( "OoxPivotCacheRecordsFragment::importPCRecordItem - unexpected record" );
-        }
-        mrPivotCache.writeSourceDataCell( *this, mnColIdx, mnRowIdx, aItem );
-        ++mnColIdx;
+        case BIFF12_ID_PCITEM_MISSING:                              break;
+        case BIFF12_ID_PCITEM_STRING:   aItem.readString( rStrm );  break;
+        case BIFF12_ID_PCITEM_DOUBLE:   aItem.readDouble( rStrm );  break;
+        case BIFF12_ID_PCITEM_DATE:     aItem.readDate( rStrm );    break;
+        case BIFF12_ID_PCITEM_BOOL:     aItem.readBool( rStrm );    break;
+        case BIFF12_ID_PCITEM_ERROR:    aItem.readError( rStrm );   break;
+        case BIFF12_ID_PCITEM_INDEX:    aItem.readIndex( rStrm );   break;
+        default:    OSL_FAIL( "OoxPivotCacheRecordsFragment::importPCRecordItem - unexpected record" );
     }
+    mrPivotCache.writeSourceDataCell( *this, mnColIdx, mnRowIdx, aItem );
+    ++mnColIdx;
 }
 
 

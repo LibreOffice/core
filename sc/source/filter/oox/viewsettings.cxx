@@ -271,44 +271,44 @@ void SheetViewSettings::importSheetView( SequenceInputStream& rStrm )
 void SheetViewSettings::importPane( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( !maSheetViews.empty(), "SheetViewSettings::importPane - missing sheet view model" );
-    if( !maSheetViews.empty() )
-    {
-        SheetViewModel& rModel = *maSheetViews.back();
+    if( maSheetViews.empty() )
+        return;
 
-        BinAddress aSecondPos;
-        sal_Int32 nActivePaneId;
-        sal_uInt8 nFlags;
-        rModel.mfSplitX = rStrm.readDouble();
-        rModel.mfSplitY = rStrm.readDouble();
-        rStrm >> aSecondPos;
-        nActivePaneId = rStrm.readInt32();
-        nFlags = rStrm.readuChar();
+    SheetViewModel& rModel = *maSheetViews.back();
 
-        rModel.maSecondPos    = getAddressConverter().createValidCellAddress( aSecondPos, getSheetIndex(), false );
-        rModel.mnActivePaneId = lclGetOoxPaneId( nActivePaneId, XML_topLeft );
-        rModel.mnPaneState    = getFlagValue( nFlags, BIFF12_PANE_FROZEN, getFlagValue( nFlags, BIFF12_PANE_FROZENNOSPLIT, XML_frozen, XML_frozenSplit ), XML_split );
-    }
+    BinAddress aSecondPos;
+    sal_Int32 nActivePaneId;
+    sal_uInt8 nFlags;
+    rModel.mfSplitX = rStrm.readDouble();
+    rModel.mfSplitY = rStrm.readDouble();
+    rStrm >> aSecondPos;
+    nActivePaneId = rStrm.readInt32();
+    nFlags = rStrm.readuChar();
+
+    rModel.maSecondPos    = getAddressConverter().createValidCellAddress( aSecondPos, getSheetIndex(), false );
+    rModel.mnActivePaneId = lclGetOoxPaneId( nActivePaneId, XML_topLeft );
+    rModel.mnPaneState    = getFlagValue( nFlags, BIFF12_PANE_FROZEN, getFlagValue( nFlags, BIFF12_PANE_FROZENNOSPLIT, XML_frozen, XML_frozenSplit ), XML_split );
 }
 
 void SheetViewSettings::importSelection( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( !maSheetViews.empty(), "SheetViewSettings::importSelection - missing sheet view model" );
-    if( !maSheetViews.empty() )
-    {
-        // pane this selection belongs to
-        sal_Int32 nPaneId = rStrm.readInt32();
-        PaneSelectionModel& rPaneSel = maSheetViews.back()->createPaneSelection( lclGetOoxPaneId( nPaneId, -1 ) );
-        // cursor position
-        BinAddress aActiveCell;
-        rStrm >> aActiveCell;
-        rPaneSel.mnActiveCellId = rStrm.readInt32();
-        rPaneSel.maActiveCell = getAddressConverter().createValidCellAddress( aActiveCell, getSheetIndex(), false );
-        // selection
-        BinRangeList aSelection;
-        rStrm >> aSelection;
-        rPaneSel.maSelection.RemoveAll();
-        getAddressConverter().convertToCellRangeList( rPaneSel.maSelection, aSelection, getSheetIndex(), false );
-    }
+    if( maSheetViews.empty() )
+        return;
+
+    // pane this selection belongs to
+    sal_Int32 nPaneId = rStrm.readInt32();
+    PaneSelectionModel& rPaneSel = maSheetViews.back()->createPaneSelection( lclGetOoxPaneId( nPaneId, -1 ) );
+    // cursor position
+    BinAddress aActiveCell;
+    rStrm >> aActiveCell;
+    rPaneSel.mnActiveCellId = rStrm.readInt32();
+    rPaneSel.maActiveCell = getAddressConverter().createValidCellAddress( aActiveCell, getSheetIndex(), false );
+    // selection
+    BinRangeList aSelection;
+    rStrm >> aSelection;
+    rPaneSel.maSelection.RemoveAll();
+    getAddressConverter().convertToCellRangeList( rPaneSel.maSelection, aSelection, getSheetIndex(), false );
 }
 
 void SheetViewSettings::importChartSheetView( SequenceInputStream& rStrm )
@@ -601,22 +601,22 @@ void ViewSettings::finalizeImport()
     maOleSize.aEnd.SetTab( nActiveSheet );
     const ScRange* pVisibleArea = mbValidOleSize ?
         &maOleSize : ContainerHelper::getMapElement( maSheetUsedAreas, nActiveSheet );
-    if( pVisibleArea )
+    if( !pVisibleArea )
+        return;
+
+    // calculate the visible area in units of 1/100 mm
+    PropertySet aRangeProp( getCellRangeFromDoc( *pVisibleArea ) );
+    css::awt::Point aPos;
+    css::awt::Size aSize;
+    if( aRangeProp.getProperty( aPos, PROP_Position ) && aRangeProp.getProperty( aSize, PROP_Size ) )
     {
-        // calculate the visible area in units of 1/100 mm
-        PropertySet aRangeProp( getCellRangeFromDoc( *pVisibleArea ) );
-        css::awt::Point aPos;
-        css::awt::Size aSize;
-        if( aRangeProp.getProperty( aPos, PROP_Position ) && aRangeProp.getProperty( aSize, PROP_Size ) )
-        {
-            // set the visible area as sequence of long at the media descriptor
-            Sequence< sal_Int32 > aWinExtent( 4 );
-            aWinExtent[ 0 ] = aPos.X;
-            aWinExtent[ 1 ] = aPos.Y;
-            aWinExtent[ 2 ] = aPos.X + aSize.Width;
-            aWinExtent[ 3 ] = aPos.Y + aSize.Height;
-            getBaseFilter().getMediaDescriptor()[ "WinExtent" ] <<= aWinExtent;
-        }
+        // set the visible area as sequence of long at the media descriptor
+        Sequence< sal_Int32 > aWinExtent( 4 );
+        aWinExtent[ 0 ] = aPos.X;
+        aWinExtent[ 1 ] = aPos.Y;
+        aWinExtent[ 2 ] = aPos.X + aSize.Width;
+        aWinExtent[ 3 ] = aPos.Y + aSize.Height;
+        getBaseFilter().getMediaDescriptor()[ "WinExtent" ] <<= aWinExtent;
     }
 }
 

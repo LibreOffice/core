@@ -118,29 +118,30 @@ void UnitConverter::finalizeImport()
 {
     PropertySet aDocProps( getDocument() );
     Reference< XDevice > xDevice( aDocProps.getAnyProperty( PROP_ReferenceDevice ), UNO_QUERY );
-    if( xDevice.is() )
-    {
-        // get character widths from default font
-        if( const oox::xls::Font* pDefFont = getStyles().getDefaultFont().get() )
-        {
-            // XDevice expects pixels in font descriptor, but font contains twips
-            const FontDescriptor& aDesc = pDefFont->getFontDescriptor();
-            Reference< XFont > xFont = xDevice->getFont( aDesc );
-            if( xFont.is() )
-            {
-                // get maximum width of all digits
-                sal_Int32 nDigitWidth = 0;
-                for( sal_Unicode cChar = '0'; cChar <= '9'; ++cChar )
-                    nDigitWidth = ::std::max( nDigitWidth, scaleToMm100( xFont->getCharWidth( cChar ), Unit::Twip ) );
-                if( nDigitWidth > 0 )
-                    maCoeffs[ Unit::Digit ] = nDigitWidth;
-                // get width of space character
-                sal_Int32 nSpaceWidth = scaleToMm100( xFont->getCharWidth( ' ' ), Unit::Twip );
-                if( nSpaceWidth > 0 )
-                    maCoeffs[ Unit::Space ] = nSpaceWidth;
-            }
-        }
-    }
+    if( !xDevice.is() )
+        return;
+
+    // get character widths from default font
+    const oox::xls::Font* pDefFont = getStyles().getDefaultFont().get();
+    if( !pDefFont )
+        return;
+
+    // XDevice expects pixels in font descriptor, but font contains twips
+    const FontDescriptor& aDesc = pDefFont->getFontDescriptor();
+    Reference< XFont > xFont = xDevice->getFont( aDesc );
+    if( !xFont.is() )
+        return;
+
+    // get maximum width of all digits
+    sal_Int32 nDigitWidth = 0;
+    for( sal_Unicode cChar = '0'; cChar <= '9'; ++cChar )
+        nDigitWidth = ::std::max( nDigitWidth, scaleToMm100( xFont->getCharWidth( cChar ), Unit::Twip ) );
+    if( nDigitWidth > 0 )
+        maCoeffs[ Unit::Digit ] = nDigitWidth;
+    // get width of space character
+    sal_Int32 nSpaceWidth = scaleToMm100( xFont->getCharWidth( ' ' ), Unit::Twip );
+    if( nSpaceWidth > 0 )
+        maCoeffs[ Unit::Space ] = nSpaceWidth;
 }
 
 void UnitConverter::finalizeNullDate( const util::Date& rNullDate )

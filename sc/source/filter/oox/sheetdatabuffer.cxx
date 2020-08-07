@@ -325,25 +325,25 @@ typedef std::pair<sal_Int32, sal_Int32> FormatKeyPair;
 static void addIfNotInMyMap( const StylesBuffer& rStyles, std::map< FormatKeyPair, ScRangeList >& rMap, sal_Int32 nXfId, sal_Int32 nFormatId, const ScRangeList& rRangeList )
 {
     Xf* pXf1 = rStyles.getCellXf( nXfId ).get();
-    if ( pXf1 )
+    if ( !pXf1 )
+        return;
+
+    auto it = std::find_if(rMap.begin(), rMap.end(),
+        [&nFormatId, &rStyles, &pXf1](const std::pair<FormatKeyPair, ScRangeList>& rEntry) {
+            if (rEntry.first.second != nFormatId)
+                return false;
+            Xf* pXf2 = rStyles.getCellXf( rEntry.first.first ).get();
+            return *pXf1 == *pXf2;
+        });
+    if (it != rMap.end()) // already exists
     {
-        auto it = std::find_if(rMap.begin(), rMap.end(),
-            [&nFormatId, &rStyles, &pXf1](const std::pair<FormatKeyPair, ScRangeList>& rEntry) {
-                if (rEntry.first.second != nFormatId)
-                    return false;
-                Xf* pXf2 = rStyles.getCellXf( rEntry.first.first ).get();
-                return *pXf1 == *pXf2;
-            });
-        if (it != rMap.end()) // already exists
-        {
-            // add ranges from the rangelist to the existing rangelist for the
-            // matching style ( should we check if they overlap ? )
-            for (size_t i = 0, nSize = rRangeList.size(); i < nSize; ++i)
-                it->second.push_back(rRangeList[i]);
-            return;
-        }
-        rMap[ FormatKeyPair( nXfId, nFormatId ) ] = rRangeList;
+        // add ranges from the rangelist to the existing rangelist for the
+        // matching style ( should we check if they overlap ? )
+        for (size_t i = 0, nSize = rRangeList.size(); i < nSize; ++i)
+            it->second.push_back(rRangeList[i]);
+        return;
     }
+    rMap[ FormatKeyPair( nXfId, nFormatId ) ] = rRangeList;
 }
 
 void SheetDataBuffer::addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const ScRange& rAddress, bool bProcessRowRange )
@@ -657,65 +657,66 @@ void SheetDataBuffer::finalizeTableOperation( const ScRange& rRange, const DataT
 
 void SheetDataBuffer::setCellFormat( const CellModel& rModel )
 {
-    if( rModel.mnXfId >= 0 )
+    if( rModel.mnXfId < 0 )
+        return;
+
+    ScRangeList& rRangeList = maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, -1 ) ];
+    ScRange* pLastRange = rRangeList.empty() ? nullptr : &rRangeList.back();
+    /* The xlsx sheet data contains row wise information.
+     * It is sufficient to check if the row range size is one
+     */
+    if (!rRangeList.empty() &&
+        *pLastRange == rModel.maCellAddr)
+        ; // do nothing - this probably bad data
+    else if (!rRangeList.empty() &&
+        pLastRange->aStart.Tab() == rModel.maCellAddr.Tab() &&
+        pLastRange->aStart.Row() == pLastRange->aEnd.Row() &&
+        pLastRange->aStart.Row() == rModel.maCellAddr.Row() &&
+        pLastRange->aEnd.Col() + 1 == rModel.maCellAddr.Col())
     {
-        ScRangeList& rRangeList = maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, -1 ) ];
-        ScRange* pLastRange = rRangeList.empty() ? nullptr : &rRangeList.back();
-        /* The xlsx sheet data contains row wise information.
-         * It is sufficient to check if the row range size is one
-         */
-        if (!rRangeList.empty() &&
-            *pLastRange == rModel.maCellAddr)
-            ; // do nothing - this probably bad data
-        else if (!rRangeList.empty() &&
-            pLastRange->aStart.Tab() == rModel.maCellAddr.Tab() &&
-            pLastRange->aStart.Row() == pLastRange->aEnd.Row() &&
-            pLastRange->aStart.Row() == rModel.maCellAddr.Row() &&
-            pLastRange->aEnd.Col() + 1 == rModel.maCellAddr.Col())
-        {
-            pLastRange->aEnd.IncCol();       // Expand Column
-        }
-        else
-        {
-            rRangeList.push_back(ScRange(rModel.maCellAddr));
-            pLastRange = &rRangeList.back();
-        }
+        pLastRange->aEnd.IncCol();       // Expand Column
+    }
+    else
+    {
+        rRangeList.push_back(ScRange(rModel.maCellAddr));
+        pLastRange = &rRangeList.back();
+    }
 
-        if (rRangeList.size() > 1)
+    if (rRangeList.size() > 1)
+    {
+        for (size_t i = rRangeList.size() - 1; i != 0; --i)
         {
-            for (size_t i = rRangeList.size() - 1; i != 0; --i)
-            {
-                ScRange& rMergeRange = rRangeList[i - 1];
-                if (pLastRange->aStart.Tab() != rMergeRange.aStart.Tab())
-                    break;
+            ScRange& rMergeRange = rRangeList[i - 1];
+            if (pLastRange->aStart.Tab() != rMergeRange.aStart.Tab())
+                break;
 
-                /* Try to merge this with the previous range */
-                if (pLastRange->aStart.Row() == (rMergeRange.aEnd.Row() + 1) &&
-                    pLastRange->aStart.Col() == rMergeRange.aStart.Col() &&
-                    pLastRange->aEnd.Col() == rMergeRange.aEnd.Col())
-                {
-                    rMergeRange.aEnd.SetRow(pLastRange->aEnd.Row());
-                    rRangeList.Remove(rRangeList.size() - 1);
-                    break;
-                }
-                else if (pLastRange->aStart.Row() > (rMergeRange.aEnd.Row() + 1))
-                    break; // Un-necessary to check with any other rows
-            }
-        }
-        // update merged ranges for 'center across selection' and 'fill'
-        if( const Xf* pXf = getStyles().getCellXf( rModel.mnXfId ).get() )
-        {
-            sal_Int32 nHorAlign = pXf->getAlignment().getModel().mnHorAlign;
-            if( (nHorAlign == XML_centerContinuous) || (nHorAlign == XML_fill) )
+            /* Try to merge this with the previous range */
+            if (pLastRange->aStart.Row() == (rMergeRange.aEnd.Row() + 1) &&
+                pLastRange->aStart.Col() == rMergeRange.aStart.Col() &&
+                pLastRange->aEnd.Col() == rMergeRange.aEnd.Col())
             {
-                /*  start new merged range, if cell is not empty (#108781#),
-                    or try to expand last range with empty cell */
-                if( rModel.mnCellType != XML_TOKEN_INVALID )
-                    maCenterFillRanges.emplace_back( rModel.maCellAddr, nHorAlign );
-                else if( !maCenterFillRanges.empty() )
-                    maCenterFillRanges.rbegin()->tryExpand( rModel.maCellAddr, nHorAlign );
+                rMergeRange.aEnd.SetRow(pLastRange->aEnd.Row());
+                rRangeList.Remove(rRangeList.size() - 1);
+                break;
             }
+            else if (pLastRange->aStart.Row() > (rMergeRange.aEnd.Row() + 1))
+                break; // Un-necessary to check with any other rows
         }
+    }
+    // update merged ranges for 'center across selection' and 'fill'
+    const Xf* pXf = getStyles().getCellXf( rModel.mnXfId ).get();
+    if( !pXf )
+        return;
+
+    sal_Int32 nHorAlign = pXf->getAlignment().getModel().mnHorAlign;
+    if( (nHorAlign == XML_centerContinuous) || (nHorAlign == XML_fill) )
+    {
+        /*  start new merged range, if cell is not empty (#108781#),
+            or try to expand last range with empty cell */
+        if( rModel.mnCellType != XML_TOKEN_INVALID )
+            maCenterFillRanges.emplace_back( rModel.maCellAddr, nHorAlign );
+        else if( !maCenterFillRanges.empty() )
+            maCenterFillRanges.rbegin()->tryExpand( rModel.maCellAddr, nHorAlign );
     }
 }
 
