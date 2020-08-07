@@ -59,6 +59,7 @@ namespace com::sun::star {
 
 namespace dbaui
 {
+    class TreeListBox;
     class SubComponentManager;
     class OApplicationController;
     class OApplicationView;
@@ -442,7 +443,7 @@ namespace dbaui
                 <TRUE/> if the double click event has been handled by the called, and should not
                 be processed further.
         */
-        bool onEntryDoubleClick(SvTreeListBox const & _rTree);
+        bool onEntryDoubleClick(const TreeListBox& rTree);
         /** called when a container (category) in the application view has been selected
             @param  _pTree
                 The tree list box.

@@ -26,35 +26,36 @@
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
-#include <vcl/weld.hxx>
 #include <memory>
 
 namespace dbaui
 {
 
 // OTableTreeListBox
-class OTableTreeListBox final : public DBTreeListBox
+class OTableTreeListBox final : public InterimDBTreeListBox
 {
-    std::unique_ptr<SvLBoxButtonData> m_pCheckButton;
     css::uno::Reference< css::sdbc::XConnection >
                     m_xConnection;      // the connection we're working for, set in implOnNewConnection, called by UpdateTableList
     std::unique_ptr< ImageProvider >
                     m_xImageProvider;   // provider for our images
+    bool            m_bVirtualRoot;     // should the first entry be visible
+    bool            m_bNoEmptyFolders;  // should empty catalogs/schematas be prevented from being displayed?
+    bool            m_bShowToggles;     // show toggle buttons
 
 public:
-    OTableTreeListBox(vcl::Window* pParent, WinBits nWinStyle);
-    virtual void dispose() override;
+    OTableTreeListBox(vcl::Window* pParent);
+
+    void init() { m_bVirtualRoot = true; }
 
     typedef std::pair< OUString, bool > TTableViewName;
     typedef std::vector< TTableViewName >         TNames;
 
-    /** call when HiContrast change.
-    */
-    void notifyHiContrastChanged();
+    void    SuppressEmptyFolders() { m_bNoEmptyFolders = true; }
+    void    DisableCheckButtons();
 
     /** determines whether the given entry denotes a tables folder
     */
-    static bool isFolderEntry( const SvTreeListEntry* _pEntry );
+    bool isFolderEntry(const weld::TreeIter& rEntry) const;
 
     /** fill the table list with the tables belonging to the connection described by the parameters
         @param _rxConnection
@@ -79,52 +80,45 @@ public:
                 const css::uno::Sequence< OUString>& _rViews
             );
 
-    /** returns a NamedDatabaseObject record which describes the given entry
+    std::unique_ptr<weld::TreeIter>    getAllObjectsEntry() const;
+
+    /** does a wildcard check of the given entry
+        <p>There are two different 'checked' states: If the user checks all children of an entry, this is different
+        from checking the entry itself. The second is called 'wildcard' checking, 'cause in the resulting
+        table filter it's represented by a wildcard.</p>
     */
-    css::sdb::application::NamedDatabaseObject
-            describeObject( SvTreeListEntry* _pEntry );
+    void            checkWildcard(weld::TreeIter& rEntry);
 
-    /** to be used if a foreign instance added a table
+    /** determine if the given entry is 'wildcard checked'
+        @see checkWildcard
     */
-    SvTreeListEntry* addedTable( const OUString& _rName );
+    bool            isWildcardChecked(const weld::TreeIter& rEntry);
 
-    /** to be used if a foreign instance removed a table
-    */
-    void    removedTable( const OUString& _rName );
+    void            CheckButtons();     // make the button states consistent (bottom-up)
 
-    /** returns the fully qualified name of a table entry
-        @param _pEntry
-            the entry whose name is to be obtained. Must not denote a folder entry.
-    */
-    OUString getQualifiedTableName( SvTreeListEntry* _pEntry ) const;
-
-    SvTreeListEntry*    getEntryByQualifiedName( const OUString& _rName );
-
+    void            checkedButton_noBroadcast(const weld::TreeIter& rEntry);
 private:
-    virtual void InitEntry(SvTreeListEntry* _pEntry, const OUString& _rString, const Image& _rCollapsedBitmap, const Image& _rExpandedBitmap) override;
+    TriState implDetermineState(weld::TreeIter& rEntry);
 
-    virtual void    CheckButtonHdl() override;
-    void checkedButton_noBroadcast(SvTreeListEntry* _pEntry);
-
-    void implEmphasize(SvTreeListEntry* _pEntry, bool _bChecked, bool _bUpdateDescendants = true, bool _bUpdateAncestors = true);
+    void implEmphasize(const weld::TreeIter& rEntry, bool _bChecked, bool _bUpdateDescendants = true, bool _bUpdateAncestors = true);
 
     /** adds the given entry to our list
         @precond
             our image provider must already have been reset to the connection to which the meta data
             belong.
     */
-    SvTreeListEntry* implAddEntry(
+    std::unique_ptr<weld::TreeIter> implAddEntry(
             const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxMeta,
-            const OUString& _rTableName,
-            bool _bCheckName = true
+            const OUString& _rTableName
         );
-
-    void    implSetDefaultImages();
 
     void    implOnNewConnection( const css::uno::Reference< css::sdbc::XConnection >& _rxConnection );
 
     bool    impl_getAndAssertMetaData( css::uno::Reference< css::sdbc::XDatabaseMetaData >& _out_rMetaData ) const;
 
+    bool haveVirtualRoot() const { return m_bVirtualRoot; }
+
+public:
     /** fill the table list with the tables and views determined by the two given containers
         @param      _rxConnection   the connection where you got the object names from. Must not be NULL.
                                     Used to split the full qualified names into its parts.
@@ -135,18 +129,29 @@ private:
                 const TNames& _rTables
             );
 
-    void InitButtonData();
+    /** returns a NamedDatabaseObject record which describes the given entry
+    */
+    css::sdb::application::NamedDatabaseObject
+            describeObject(weld::TreeIter& rEntry);
 
-    SvButtonState   implDetermineState(SvTreeListEntry* _pEntry);
-        // determines the check state of the given entry, by analyzing the states of all descendants
+    /** to be used if a foreign instance added a table
+    */
+    std::unique_ptr<weld::TreeIter> addedTable(const OUString& rName);
 
-    void            CheckButtons();     // make the button states consistent (bottom-up)
+    /** to be used if a foreign instance removed a table
+    */
+    void    removedTable( const OUString& _rName );
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& _rRect) override;
-    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
+    /** returns the fully qualified name of a table entry
+        @param _pEntry
+            the entry whose name is to be obtained. Must not denote a folder entry.
+    */
+    OUString getQualifiedTableName(weld::TreeIter& rEntry) const;
+
+    std::unique_ptr<weld::TreeIter> getEntryByQualifiedName(const OUString& rName);
 };
 
-class TableTreeListBox
+class TableTreeListBox : public TreeListBox
 {
     css::uno::Reference< css::sdbc::XConnection >
                     m_xConnection;      // the connection we're working for, set in implOnNewConnection, called by UpdateTableList
@@ -155,12 +160,9 @@ class TableTreeListBox
     bool            m_bVirtualRoot;     // should the first entry be visible
     bool            m_bNoEmptyFolders;  // should empty catalogs/schematas be prevented from being displayed?
     bool            m_bShowToggles;     // show toggle buttons
-    std::unique_ptr<weld::TreeView> m_xTreeView;
 
 public:
     TableTreeListBox(std::unique_ptr<weld::TreeView> xTreeView);
-
-    weld::TreeView& GetWidget() { return *m_xTreeView; }
 
     void init() { m_bVirtualRoot = true; }
 
@@ -207,8 +209,6 @@ public:
     */
     bool            isWildcardChecked(const weld::TreeIter& rEntry);
 
-    std::unique_ptr<weld::TreeIter> GetEntryPosByName(const OUString& aName, const weld::TreeIter* pStart = nullptr, const IEntryFilter* _pFilter = nullptr) const;
-
     void            CheckButtons();     // make the button states consistent (bottom-up)
 
     void            checkedButton_noBroadcast(const weld::TreeIter& rEntry);
@@ -231,6 +231,7 @@ private:
 
     bool haveVirtualRoot() const { return m_bVirtualRoot; }
 
+public:
     /** fill the table list with the tables and views determined by the two given containers
         @param      _rxConnection   the connection where you got the object names from. Must not be NULL.
                                     Used to split the full qualified names into its parts.
@@ -240,6 +241,17 @@ private:
                 const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
                 const TNames& _rTables
             );
+
+    /** returns a NamedDatabaseObject record which describes the given entry
+    */
+    css::sdb::application::NamedDatabaseObject
+            describeObject(weld::TreeIter& rEntry);
+
+    /** returns the fully qualified name of a table entry
+        @param _pEntry
+            the entry whose name is to be obtained. Must not denote a folder entry.
+    */
+    OUString getQualifiedTableName(weld::TreeIter& rEntry) const;
 };
 
 }   // namespace dbaui

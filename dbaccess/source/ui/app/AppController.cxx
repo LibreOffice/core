@@ -97,6 +97,7 @@
 #include <strings.hrc>
 #include <defaultobjectnamecheck.hxx>
 #include <databaseobjectview.hxx>
+#include <dbtreelistbox.hxx>
 #include "AppDetailView.hxx"
 #include <linkeddocuments.hxx>
 #include <UITools.hxx>
@@ -1683,15 +1684,24 @@ bool OApplicationController::onContainerSelect(ElementType _eType)
     return true;
 }
 
-bool OApplicationController::onEntryDoubleClick( SvTreeListBox const & _rTree )
+bool OApplicationController::onEntryDoubleClick(const TreeListBox& rTree)
 {
-    if ( getContainer() && getContainer()->isLeaf( _rTree.GetHdlEntry() ) )
+    OApplicationView* pContainer = getContainer();
+    if (!pContainer)
+        return false;   // not handled
+
+    const weld::TreeView& rTreeView = rTree.GetWidget();
+    std::unique_ptr<weld::TreeIter> xHdlEntry = rTreeView.make_iterator();
+    if (!rTreeView.get_cursor(xHdlEntry.get()))
+        return false;
+
+    if (pContainer->isLeaf(xHdlEntry.get()))
     {
         try
         {
             // opens a new frame with either the table or the query or report or form or view
             openElementWithArguments(
-                getContainer()->getQualifiedName( _rTree.GetHdlEntry() ),
+                getContainer()->getQualifiedName(xHdlEntry.get()),
                 getContainer()->getElementType(),
                 E_OPEN_NORMAL,
                 0,
@@ -1703,6 +1713,7 @@ bool OApplicationController::onEntryDoubleClick( SvTreeListBox const & _rTree )
             DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
+
     return false;   // not handled
 }
 
@@ -2306,11 +2317,11 @@ sal_Int8 OApplicationController::queryDrop( const AcceptDropEvent& _rEvt, const 
                 sal_Int8 nAction = OComponentTransferable::canExtractComponentDescriptor(_rFlavors,eType == E_FORM) ? DND_ACTION_COPY : DND_ACTION_NONE;
                 if ( nAction != DND_ACTION_NONE )
                 {
-                    SvTreeListEntry* pHitEntry = pView->getEntry(_rEvt.maPosPixel);
+                    auto xHitEntry = pView->getEntry(_rEvt.maPosPixel);
                     OUString sName;
-                    if ( pHitEntry )
+                    if (xHitEntry)
                     {
-                        sName = pView->getQualifiedName( pHitEntry );
+                        sName = pView->getQualifiedName(xHitEntry.get());
                         if ( !sName.isEmpty() )
                         {
                             Reference< XHierarchicalNameAccess > xContainer(getElements(pView->getElementType()),UNO_QUERY);
@@ -2371,9 +2382,9 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
     else if ( OComponentTransferable::canExtractComponentDescriptor(aDroppedData.GetDataFlavorExVector(),m_aAsyncDrop.nType == E_FORM) )
     {
         m_aAsyncDrop.aDroppedData = OComponentTransferable::extractComponentDescriptor(aDroppedData);
-        SvTreeListEntry* pHitEntry = pView->getEntry(_rEvt.maPosPixel);
-        if ( pHitEntry )
-            m_aAsyncDrop.aUrl = pView->getQualifiedName( pHitEntry );
+        auto xHitEntry = pView->getEntry(_rEvt.maPosPixel);
+        if ( xHitEntry )
+            m_aAsyncDrop.aUrl = pView->getQualifiedName(xHitEntry.get());
 
         sal_Int8 nAction = _rEvt.mnAction;
         Reference<XContent> xContent;
