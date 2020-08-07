@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="border_value">
@@ -16,9 +16,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox">
         <property name="can_focus">False</property>
@@ -171,6 +168,12 @@
                                 <property name="label" translatable="yes" context="qrcodegen|label_ecc" comments="Error Correction Level of QR code">Error Correction:</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
+                                <accessibility>
+                                  <relation type="label-for" target="button_low"/>
+                                  <relation type="label-for" target="button_medium"/>
+                                  <relation type="label-for" target="button_quartile"/>
+                                  <relation type="label-for" target="button_high"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -217,6 +220,9 @@
                                 <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
+                                <accessibility>
+                                  <relation type="labelled-by" target="label_ecc"/>
+                                </accessibility>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="button_low-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="button_low">7% of codewords can be restored.</property>
@@ -239,6 +245,9 @@
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">button_low</property>
+                                <accessibility>
+                                  <relation type="labelled-by" target="label_ecc"/>
+                                </accessibility>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="button_medium-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="button_medium">15% of codewords can be restored.</property>
@@ -261,6 +270,9 @@
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">button_low</property>
+                                <accessibility>
+                                  <relation type="labelled-by" target="label_ecc"/>
+                                </accessibility>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="button_quartile-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="button_quartile">25% of codewords can be restored.</property>
@@ -283,6 +295,9 @@
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">button_low</property>
+                                <accessibility>
+                                  <relation type="labelled-by" target="label_ecc"/>
+                                </accessibility>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="button_high-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="button_high">30% of codewords can be restored.</property>
@@ -334,6 +349,9 @@
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="QrCodeGenDialog-atkobject">
         <property name="AtkObject::accessible-description" translatable="yes" context="qr code dialog title">Generate QR Code for any text or URL.</property>
