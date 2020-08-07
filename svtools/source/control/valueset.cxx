@@ -43,6 +43,8 @@
 #include <svtools/valueset.hxx>
 #include <boost/property_tree/ptree.hpp>
 
+#include <uiobject.hxx>
+
 using namespace css::uno;
 using namespace css::lang;
 using namespace css::accessibility;
@@ -1907,6 +1909,11 @@ void ValueSet::Hide()
     CustomWidgetController::Hide();
     if (mxScrolledWindow)
         mxScrolledWindow->hide();
+}
+
+FactoryFunction ValueSet::GetUITestFactory() const
+{
+    return ValueSetUIObject::create;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
