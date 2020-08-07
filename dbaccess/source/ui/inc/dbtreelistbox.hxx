@@ -23,8 +23,10 @@
 
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 
+#include <vcl/InterimItemWindow.hxx>
 #include <vcl/treelistbox.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/weld.hxx>
 
 #include <memory>
 #include <set>
@@ -132,6 +134,88 @@ namespace dbaui
 
     protected:
         using SvTreeListBox::ExecuteDrop;
+    };
+
+    class TreeListBox;
+
+    class TreeListBoxDropTarget : public DropTargetHelper
+    {
+    private:
+        TreeListBox& m_rTreeView;
+
+        virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
+        virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
+
+    public:
+        TreeListBoxDropTarget(TreeListBox& rTreeView);
+    };
+
+    class TreeListBox
+    {
+    protected:
+        std::unique_ptr<weld::TreeView> m_xTreeView;
+        TreeListBoxDropTarget m_aDropTargetHelper;
+
+        std::unique_ptr<weld::TreeIter> m_xDragedEntry;
+        IControlActionListener*     m_pActionListener;
+        IContextMenuProvider*       m_pContextMenuProvider;
+
+        DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+        DECL_LINK(SelectHdl, weld::TreeView&, void);
+        DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
+        DECL_LINK(CommandHdl, const CommandEvent&, bool);
+        DECL_LINK(DragBeginHdl, bool&, bool);
+
+    private:
+        Timer                       m_aTimer; // is needed for table updates
+
+        Link<LinkParamNone*,void>   m_aSelChangeHdl;        // handler to be called (asynchronously) when the selection changes in any way
+        Link<LinkParamNone*,void>   m_aCopyHandler;         // called when someone press CTRL+C
+        Link<LinkParamNone*,void>   m_aPasteHandler;        // called when someone press CTRL+V
+        Link<LinkParamNone*,void>   m_aDeleteHandler;       // called when someone press DELETE Key
+
+        DECL_LINK(OnTimeOut, Timer*, void);
+
+    protected:
+        void implStopSelectionTimer();
+        void implStartSelectionTimer();
+
+        virtual bool DoChildKeyInput(const KeyEvent& rKEvt);
+        virtual bool DoContextMenu(const CommandEvent& rCEvt);
+
+    public:
+        TreeListBox(std::unique_ptr<weld::TreeView> xTreeView);
+        virtual ~TreeListBox();
+
+        std::unique_ptr<weld::TreeIter> GetEntryPosByName(const OUString& rName,
+                                                          const weld::TreeIter* pStart = nullptr,
+                                                          const IEntryFilter* pFilter = nullptr) const;
+
+        void setControlActionListener(IControlActionListener* pListener) { m_pActionListener = pListener; }
+        void setContextMenuProvider(IContextMenuProvider* pContextMenuProvider) { m_pContextMenuProvider = pContextMenuProvider; }
+
+        weld::TreeView& GetWidget() { return *m_xTreeView; }
+        const weld::TreeView& GetWidget() const { return *m_xTreeView; }
+
+        sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt);
+        sal_Int8 ExecuteDrop(const ExecuteDropEvent& rEvt);
+
+        void    SetSelChangeHdl( const Link<LinkParamNone*,void>& _rHdl )      { m_aSelChangeHdl = _rHdl; }
+        void    setCopyHandler(const Link<LinkParamNone*,void>& _rHdl)         { m_aCopyHandler = _rHdl; }
+        void    setPasteHandler(const Link<LinkParamNone*,void>& _rHdl)        { m_aPasteHandler = _rHdl; }
+        void    setDeleteHandler(const Link<LinkParamNone*,void>& _rHdl)       { m_aDeleteHandler = _rHdl; }
+    };
+
+    class InterimDBTreeListBox : public InterimItemWindow
+                               , public TreeListBox
+    {
+    public:
+        InterimDBTreeListBox(vcl::Window* pParent);
+        virtual void dispose() override;
+        virtual ~InterimDBTreeListBox() override;
+    protected:
+        virtual bool DoChildKeyInput(const KeyEvent& rKEvt) override;
+        virtual bool DoContextMenu(const CommandEvent& rCEvt) override;
     };
 }
 
