@@ -57,6 +57,17 @@ diff -ur nss.org/nss/Makefile nss/nss/Makefile
 
  install_nspr: build_nspr
  	$(MAKE) -C $(CORE_DEPTH)/../nspr/$(OBJDIR_NAME) install
+--- nss/nss/lib/ckfw/builtins/manifest.mn	2019-11-26 15:18:22.185985193 +0100
++++ nss/nss/lib/ckfw/builtins/manifest.mn	2020-08-18 18:04:29.151889733 +0300
+@@ -5,7 +5,7 @@
+ 
+ CORE_DEPTH = ../../..
+ 
+-DIRS = . testlib
++DIRS =
+ 
+ testlib: .
+ 
 diff -ur nss/nss/coreconf/arch.mk nss/nss/coreconf/arch.mk
 --- nss/nss/coreconf/arch.mk	2019-11-01 10:29:44.933245745 +0100
 +++ nss/nss/coreconf/arch.mk	2019-11-01 10:32:04.347181076 +0100
@@ -77,14 +88,3 @@ diff -ur nss/nss/coreconf/arch.mk nss/nss/coreconf/arch.mk
     OS_ARCH = Android
     ifndef OS_TARGET_RELEASE
  	OS_TARGET_RELEASE := 8
---- nss-3.47.1/nss/lib/ckfw/builtins/manifest.mn	2019-11-19 20:55:30.000000000 +0100
-+++ nss-3.45/nss/lib/ckfw/builtins/manifest.mn	2019-07-05 18:02:31.000000000 +0200
-@@ -5,8 +5,6 @@
- 
- CORE_DEPTH = ../../..
- 
--DIRS = testlib
--
- MODULE = nss
- MAPFILE = $(OBJDIR)/nssckbi.def
- 
