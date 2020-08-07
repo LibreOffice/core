@@ -10386,7 +10386,7 @@ if test "$enable_libnumbertext" = "no"; then
 else
     AC_MSG_RESULT([yes])
     ENABLE_LIBNUMBERTEXT=TRUE
-    libo_CHECK_SYSTEM_MODULE([libnumbertext],[LIBNUMBERTEXT],[libnumbertext >= 1.0.0])
+    libo_CHECK_SYSTEM_MODULE([libnumbertext],[LIBNUMBERTEXT],[libnumbertext >= 1.0.6])
     if test "$with_system_libnumbertext" = "yes"; then
         SYSTEM_LIBNUMBERTEXT_DATA=file://`$PKG_CONFIG --variable=pkgdatadir libnumbertext`
         SYSTEM_LIBNUMBERTEXT=YES
