@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "45a2d374_c3e91f7d",
+        "filename": "xmloff/source/text/txtparai.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1942,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-08-07T09:06:45Z",
+      "side": 1,
+      "message": "that will always set the member to false",
+      "revId": "e4c80adb1738ff6b928988fc10da2b56f1cd635e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
