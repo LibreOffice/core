@@ -528,7 +528,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     }
 
                     auto aWidestSegmentEnd = std::next(aWidestSegmentStart);
-                    // Try to grow the widest segment forward: if a neext segment has the same
+                    // Try to grow the widest segment forward: if a next segment has the same
                     // color, just different transparency, include it.
                     while (aWidestSegmentEnd != std::prev(aGradientStops.end()))
                     {

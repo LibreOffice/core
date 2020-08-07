@@ -712,7 +712,7 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, boo
     // line style turned off
     aSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
 
-    //Determining if FILL_Attribut is set.
+    //Determining if FILL_Attribute is set.
     if(!pPath->IsClosed() || eFillStyle == drawing::FillStyle_NONE)
     {
         // This SdrPathObj is not filled, leave the front and rear face out.
