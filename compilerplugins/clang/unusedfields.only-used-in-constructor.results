@@ -9,9 +9,9 @@ avmedia/source/vlc/wrapper/Types.hxx:43
 avmedia/source/vlc/wrapper/Types.hxx:44
     libvlc_event_t::(anonymous union)::(anonymous) dummy2 const char *
 avmedia/source/vlc/wrapper/Types.hxx:45
-    libvlc_event_t::(anonymous) padding struct (anonymous struct at /home/noel/libo2/avmedia/source/vlc/wrapper/Types.hxx:42:7)
+    libvlc_event_t::(anonymous) padding struct (anonymous struct at /home/noel/libo/avmedia/source/vlc/wrapper/Types.hxx:42:7)
 avmedia/source/vlc/wrapper/Types.hxx:46
-    libvlc_event_t u union (anonymous union at /home/noel/libo2/avmedia/source/vlc/wrapper/Types.hxx:40:5)
+    libvlc_event_t u union (anonymous union at /home/noel/libo/avmedia/source/vlc/wrapper/Types.hxx:40:5)
 avmedia/source/vlc/wrapper/Types.hxx:52
     libvlc_track_description_t psz_name char *
 basegfx/source/polygon/b2dpolygontriangulator.cxx:112
@@ -126,21 +126,17 @@ cppu/source/uno/check.cxx:130
     (anonymous namespace)::Char2 c2 char
 cppu/source/uno/check.cxx:134
     (anonymous namespace)::Char3 c3 char
-cppu/source/uno/check.cxx:138
+cppu/source/uno/check.cxx:258
     (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
 cui/source/dialogs/colorpicker.cxx:736
     cui::(anonymous namespace)::ColorPickerDialog m_aColorPrevious class cui::(anonymous namespace)::ColorPreviewControl
 cui/source/factory/dlgfact.cxx:1410
     (anonymous namespace)::SvxMacroAssignDialog m_aItems class SfxItemSet
-cui/source/inc/AdditionsDialog.hxx:74
-    AdditionInfo sDescription class rtl::OUString
-cui/source/inc/AdditionsDialog.hxx:76
+cui/source/inc/AdditionsDialog.hxx:89
     AdditionInfo sReleaseVersion class rtl::OUString
-cui/source/inc/AdditionsDialog.hxx:80
+cui/source/inc/AdditionsDialog.hxx:93
     AdditionInfo sRating class rtl::OUString
-cui/source/inc/AdditionsDialog.hxx:82
-    AdditionInfo sDownloadURL class rtl::OUString
-cui/source/inc/AdditionsDialog.hxx:109
+cui/source/inc/AdditionsDialog.hxx:124
     AdditionsDialog m_sTag class rtl::OString
 cui/source/inc/cfgutil.hxx:241
     SvxScriptSelectorDialog m_aStylesInfo struct SfxStylesInfo_Impl
@@ -180,6 +176,8 @@ dbaccess/source/core/dataaccess/connection.hxx:102
     dbaccess::OConnection m_nInAppend std::atomic<std::size_t>
 dbaccess/source/core/inc/databasecontext.hxx:85
     dbaccess::ODatabaseContext m_aBasicDLL class BasicDLL
+dbaccess/source/ui/app/AppDetailView.hxx:90
+    dbaui::TaskEntry bHideWhenDisabled _Bool
 drawinglayer/inc/texture/texture3d.hxx:57
     drawinglayer::texture::GeoTexSvxBitmapEx maBitmap class Bitmap
 drawinglayer/inc/texture/texture3d.hxx:59
@@ -362,13 +360,13 @@ include/vcl/commandevent.hxx:315
     CommandGestureData meOrientation const enum PanningOrientation
 include/vcl/font/Feature.hxx:100
     vcl::font::Feature m_eType enum vcl::font::FeatureType
-include/vcl/NotebookBarAddonsMerger.hxx:37
+include/vcl/NotebookBarAddonsMerger.hxx:36
     NotebookBarAddonsItem aImage class Image
-include/vcl/NotebookBarAddonsMerger.hxx:44
+include/vcl/NotebookBarAddonsMerger.hxx:43
     AddonsParams sImageId class rtl::OUString
-include/vcl/NotebookBarAddonsMerger.hxx:45
+include/vcl/NotebookBarAddonsMerger.hxx:44
     AddonsParams sControlType class rtl::OUString
-include/vcl/NotebookBarAddonsMerger.hxx:46
+include/vcl/NotebookBarAddonsMerger.hxx:45
     AddonsParams nWidth sal_uInt16
 include/xmloff/shapeimport.hxx:140
     SdXML3DLightContext mbSpecular _Bool
@@ -406,9 +404,9 @@ lotuswordpro/source/filter/bento.hxx:351
     OpenStormBento::CBenNamedObject cNameListElmt class OpenStormBento::CBenNamedObjectListElmt
 lotuswordpro/source/filter/clone.hxx:23
     detail::has_clone::(anonymous) a char [2]
-oox/source/drawingml/diagram/layoutnodecontext.cxx:92
+oox/source/drawingml/diagram/layoutnodecontext.cxx:93
     oox::drawingml::(anonymous namespace)::AlgorithmContext mnRevision sal_Int32
-oox/source/drawingml/diagram/layoutnodecontext.cxx:134
+oox/source/drawingml/diagram/layoutnodecontext.cxx:135
     oox::drawingml::(anonymous namespace)::ChooseContext msName class rtl::OUString
 oox/source/drawingml/hyperlinkcontext.hxx:41
     oox::drawingml::HyperLinkContext maProperties class oox::PropertyMap &
@@ -458,7 +456,7 @@ sal/qa/osl/file/osl_File.cxx:1589
     osl_FileStatus::getFileType m_aSpecialItem class osl::DirectoryItem
 sal/qa/osl/file/osl_File.cxx:1589
     osl_FileStatus::getFileType m_aLinkItem class osl::DirectoryItem
-sal/qa/osl/file/osl_File.cxx:3418
+sal/qa/osl/file/osl_File.cxx:3417
     osl_File::setAttributes rItem_hidden class osl::DirectoryItem
 sal/qa/osl/module/osl_Module.cxx:70
     osl_Module::ctors bRes1 _Bool
@@ -506,13 +504,13 @@ sc/inc/compiler.hxx:265
     ScCompiler::AddInMap pUpper const char *
 sc/inc/token.hxx:403
     SingleDoubleRefModifier aDub struct ScComplexRefData
-sc/source/core/data/document.cxx:1241
-    (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aSwitch sc::AutoCalcSwitch
 sc/source/core/data/document.cxx:1242
+    (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aSwitch sc::AutoCalcSwitch
+sc/source/core/data/document.cxx:1243
     (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aBulk class ScBulkBroadcast
-sc/source/filter/html/htmlpars.cxx:3017
+sc/source/filter/html/htmlpars.cxx:3019
     (anonymous namespace)::CSSHandler::MemStr mp const char *
-sc/source/filter/html/htmlpars.cxx:3018
+sc/source/filter/html/htmlpars.cxx:3020
     (anonymous namespace)::CSSHandler::MemStr mn size_t
 sc/source/filter/inc/htmlpars.hxx:613
     ScHTMLQueryParser mnUnusedId ScHTMLTableId
@@ -736,13 +734,13 @@ svx/source/xml/xmleohlp.cxx:68
     OutputStorageWrapper_Impl aTempFile class utl::TempFile
 svx/source/xml/xmlgrhlp.cxx:87
     (anonymous namespace)::GraphicInputStream maTempFile utl::TempFile
-sw/inc/tox.hxx:57
+sw/inc/tox.hxx:59
     sw::FindContentFrameHint m_isReadOnlyAvailable const _Bool
 sw/inc/unosett.hxx:145
     SwXNumberingRules m_pImpl ::sw::UnoImplPtr<Impl>
 sw/qa/core/test_ToxTextGenerator.cxx:140
     (anonymous namespace)::ToxTextGeneratorWithMockedChapterField mChapterFieldType class SwChapterFieldType
-sw/qa/extras/uiwriter/uiwriter.cxx:4224
+sw/qa/extras/uiwriter/uiwriter.cxx:4372
     (anonymous namespace)::IdleTask maIdle class Idle
 sw/source/core/crsr/crbm.cxx:64
     (anonymous namespace)::CursorStateHelper m_aSaveState class SwCursorSaveState
@@ -768,7 +766,7 @@ sw/source/uibase/inc/conttree.hxx:293
     SwGlobalTree m_aDropTargetHelper class SwGlobalTreeDropTarget
 sw/source/uibase/inc/olmenu.hxx:78
     SwSpellPopup m_aBuilder class VclBuilder
-sw/source/uibase/inc/swuicnttab.hxx:239
+sw/source/uibase/inc/swuicnttab.hxx:240
     SwTokenWindow m_aAdjustPositionsIdle class Idle
 sw/source/uibase/inc/uivwimp.hxx:93
     SwView_Impl xTmpSelDocSh class SfxObjectShellLock
@@ -856,17 +854,17 @@ vcl/unx/gtk3/gtk3gloactiongroup.cxx:27
     (anonymous namespace)::GLOAction parent_instance GObject
 vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtk3gtkinst.cxx:4808
+vcl/unx/gtk3/gtk3gtkinst.cxx:4819
     (anonymous namespace)::GtkInstanceAssistant m_pButtonBox GtkButtonBox *
-vcl/unx/gtk3/gtk3gtkinst.cxx:5181
+vcl/unx/gtk3/gtk3gtkinst.cxx:5192
     (anonymous namespace)::CrippledViewport viewport GtkViewport
-vcl/unx/gtk3/gtk3gtkinst.cxx:5324
+vcl/unx/gtk3/gtk3gtkinst.cxx:5335
     (anonymous namespace)::CustomCellRendererSurface parent GtkCellRendererText
-vcl/unx/gtk3/gtk3gtkinst.cxx:5332
+vcl/unx/gtk3/gtk3gtkinst.cxx:5343
     (anonymous namespace)::CustomCellRendererSurfaceClass parent_class GtkCellRendererTextClass
-vcl/unx/gtk3/gtk3gtkinst.cxx:13068
+vcl/unx/gtk3/gtk3gtkinst.cxx:13181
     (anonymous namespace)::GtkInstanceComboBox m_pOverlay GtkOverlay *
-vcl/unx/gtk3/gtk3gtkinst.cxx:13074
+vcl/unx/gtk3/gtk3gtkinst.cxx:13187
     (anonymous namespace)::GtkInstanceComboBox m_pMenuTextRenderer GtkCellRenderer *
 writerfilter/source/dmapper/PropertyMap.hxx:219
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32

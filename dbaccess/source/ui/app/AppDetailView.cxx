@@ -58,11 +58,10 @@ using ::com::sun::star::sdb::application::NamedDatabaseObject;
 
 #define SPACEBETWEENENTRIES     4
 
-TaskEntry::TaskEntry( const char* _pAsciiUNOCommand, const char* _pHelpID, const char* pTitleResourceID, bool _bHideWhenDisabled )
+TaskEntry::TaskEntry( const char* _pAsciiUNOCommand, const char* _pHelpID, const char* pTitleResourceID )
     :sUNOCommand( OUString::createFromAscii( _pAsciiUNOCommand ) )
     ,pHelpID( _pHelpID )
     ,sTitle( DBA_RES(pTitleResourceID) )
-    ,bHideWhenDisabled( _bHideWhenDisabled )
 {
 }
 
@@ -623,7 +622,7 @@ void impl_fillTaskPaneData(ElementType _eType, TaskPaneData& _rData)
     case E_TABLE:
         rList.emplace_back( ".uno:DBNewTable", RID_STR_TABLES_HELP_TEXT_DESIGN, RID_STR_NEW_TABLE );
         rList.emplace_back( ".uno:DBNewTableAutoPilot", RID_STR_TABLES_HELP_TEXT_WIZARD, RID_STR_NEW_TABLE_AUTO );
-        rList.emplace_back( ".uno:DBNewView", RID_STR_VIEWS_HELP_TEXT_DESIGN, RID_STR_NEW_VIEW, true );
+        rList.emplace_back( ".uno:DBNewView", RID_STR_VIEWS_HELP_TEXT_DESIGN, RID_STR_NEW_VIEW );
         _rData.pTitleId = RID_STR_TABLES_CONTAINER;
         break;
 
@@ -634,7 +633,7 @@ void impl_fillTaskPaneData(ElementType _eType, TaskPaneData& _rData)
         break;
 
     case E_REPORT:
-        rList.emplace_back( ".uno:DBNewReport", RID_STR_REPORT_HELP_TEXT, RID_STR_NEW_REPORT, true );
+        rList.emplace_back( ".uno:DBNewReport", RID_STR_REPORT_HELP_TEXT, RID_STR_NEW_REPORT );
         rList.emplace_back( ".uno:DBNewReportAutoPilot", RID_STR_REPORTS_HELP_TEXT_WIZARD, RID_STR_NEW_REPORT_AUTO );
         _rData.pTitleId = RID_STR_REPORTS_CONTAINER;
         break;

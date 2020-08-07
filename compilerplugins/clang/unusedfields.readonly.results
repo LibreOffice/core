@@ -14,33 +14,33 @@ bridges/source/cpp_uno/gcc3_linux_x86-64/callvirtualmethod.cxx:64
     Data xmm0 double
 bridges/source/cpp_uno/gcc3_linux_x86-64/callvirtualmethod.cxx:65
     Data xmm1 double
-bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:114
+bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:128
     __cxxabiv1::__cxa_exception exceptionType std::type_info *
-bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:115
+bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:129
     __cxxabiv1::__cxa_exception exceptionDestructor void (*)(void *)
-bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:116
+bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:130
     __cxxabiv1::__cxa_exception unexpectedHandler void (*)(void)
-bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:117
+bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:131
     __cxxabiv1::__cxa_exception terminateHandler std::terminate_handler
-bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:118
+bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:132
     __cxxabiv1::__cxa_exception nextException struct __cxxabiv1::__cxa_exception *
-bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:119
+bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:133
     __cxxabiv1::__cxa_exception handlerCount int
-bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:120
-    __cxxabiv1::__cxa_exception handlerSwitchValue int
-bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:121
-    __cxxabiv1::__cxa_exception actionRecord const char *
-bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:122
-    __cxxabiv1::__cxa_exception languageSpecificData const char *
-bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:123
-    __cxxabiv1::__cxa_exception catchTemp void *
-bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:124
-    __cxxabiv1::__cxa_exception adjustedPtr void *
-bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:125
-    __cxxabiv1::__cxa_exception unwindHeader _Unwind_Exception
 bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:134
-    __cxxabiv1::__cxa_eh_globals caughtExceptions struct __cxxabiv1::__cxa_exception *
+    __cxxabiv1::__cxa_exception handlerSwitchValue int
 bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:135
+    __cxxabiv1::__cxa_exception actionRecord const char *
+bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:136
+    __cxxabiv1::__cxa_exception languageSpecificData const char *
+bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:137
+    __cxxabiv1::__cxa_exception catchTemp void *
+bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:138
+    __cxxabiv1::__cxa_exception adjustedPtr void *
+bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:139
+    __cxxabiv1::__cxa_exception unwindHeader _Unwind_Exception
+bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:148
+    __cxxabiv1::__cxa_eh_globals caughtExceptions struct __cxxabiv1::__cxa_exception *
+bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:149
     __cxxabiv1::__cxa_eh_globals uncaughtExceptions unsigned int
 bridges/source/jni_uno/jni_info.h:68
     jni_uno::JNI_type_info m_td ::com::sun::star::uno::TypeDescription
@@ -162,7 +162,7 @@ cppu/source/uno/check.cxx:130
     (anonymous namespace)::Char2 c2 char
 cppu/source/uno/check.cxx:134
     (anonymous namespace)::Char3 c3 char
-cppu/source/uno/check.cxx:138
+cppu/source/uno/check.cxx:258
     (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
 cui/source/options/optcolor.cxx:255
     (anonymous namespace)::ColorConfigWindow_Impl aModuleOptions class SvtModuleOptions
@@ -218,8 +218,6 @@ extensions/source/propctrlr/eformshelper.hxx:61
     pcr::EFormsHelper m_aSubmissionUINames pcr::MapStringToPropertySet
 extensions/source/propctrlr/eformshelper.hxx:63
     pcr::EFormsHelper m_aBindingUINames pcr::MapStringToPropertySet
-extensions/source/update/check/updatehdl.hxx:86
-    UpdateHandler mbStringsLoaded _Bool
 filter/source/graphicfilter/eps/eps.cxx:114
     (anonymous namespace)::PSWriter pVDev ScopedVclPtrInstance<class VirtualDevice>
 filter/source/graphicfilter/icgm/cgm.hxx:58
@@ -268,6 +266,12 @@ include/comphelper/interfacecontainer3.hxx:222
     comphelper::OInterfaceContainerHelper3::NotifySingleListener m_pMethod const comphelper::OInterfaceContainerHelper3::NotifySingleListener::NotificationMethod
 include/comphelper/parallelsort.hxx:163
     comphelper::(anonymous namespace)::Binner maLabels uint8_t [mnMaxStaticSize]
+include/comphelper/servicedecl.hxx:131
+    comphelper::service_decl::ServiceDecl m_createFunc const detail::CreateFuncF
+include/comphelper/servicedecl.hxx:132
+    comphelper::service_decl::ServiceDecl m_pImplName const char *const
+include/comphelper/servicedecl.hxx:133
+    comphelper::service_decl::ServiceDecl m_pServiceNames const char *const
 include/connectivity/DriversConfig.hxx:75
     connectivity::DriversConfig m_aNode connectivity::DriversConfig::OSharedConfigNode
 include/connectivity/sdbcx/VDescriptor.hxx:51
@@ -337,7 +341,7 @@ include/svx/svdoedge.hxx:160
 include/svx/svdpntv.hxx:154
     SdrPaintView maDrawinglayerOpt class SvtOptionsDrawinglayer
 include/unoidl/unoidl.hxx:443
-    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /home/noel/libo2/include/unoidl/unoidl.hxx:443:5)
+    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /home/noel/libo/include/unoidl/unoidl.hxx:443:5)
 include/unoidl/unoidl.hxx:444
     unoidl::ConstantValue::(anonymous) booleanValue _Bool
 include/unoidl/unoidl.hxx:445
@@ -364,10 +368,6 @@ include/vcl/opengl/OpenGLContext.hxx:48
     OpenGLCapabilitySwitch mbLimitedShaderRegisters _Bool
 include/vcl/opengl/OpenGLContext.hxx:167
     OpenGLContext mpLastFramebuffer class OpenGLFramebuffer *
-include/vcl/toolkit/field.hxx:129
-    NumericFormatter mbWrapOnLimits _Bool
-include/vcl/toolkit/longcurr.hxx:61
-    LongCurrencyFormatter maCurrencySymbol class rtl::OUString
 io/source/stm/odata.cxx:558
     io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(anonymous) n1 sal_uInt32
 io/source/stm/odata.cxx:558
@@ -419,7 +419,7 @@ sc/inc/attarray.hxx:68
 sc/inc/compiler.hxx:129
     ScRawToken::(anonymous union)::(anonymous) eItem class ScTableRefToken::Item
 sc/inc/compiler.hxx:130
-    ScRawToken::(anonymous) table struct (anonymous struct at /home/noel/libo2/sc/inc/compiler.hxx:127:9)
+    ScRawToken::(anonymous) table struct (anonymous struct at /home/noel/libo/sc/inc/compiler.hxx:127:9)
 sc/inc/compiler.hxx:135
     ScRawToken::(anonymous) pMat class ScMatrix *
 sc/inc/formulagroup.hxx:39
@@ -570,9 +570,9 @@ svx/source/inc/datanavi.hxx:488
     svxform::AddSubmissionDialog m_aMethodString class svxform::MethodString
 svx/source/inc/datanavi.hxx:489
     svxform::AddSubmissionDialog m_aReplaceString class svxform::ReplaceString
-svx/source/inc/gridcell.hxx:528
+svx/source/inc/gridcell.hxx:527
     DbPatternField m_pValueFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
-svx/source/inc/gridcell.hxx:529
+svx/source/inc/gridcell.hxx:528
     DbPatternField m_pPaintFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
 svx/source/inc/svdpdf.hxx:71
     ImpSdrPdfImport maDash class XDash
@@ -603,9 +603,9 @@ sw/source/core/access/accmap.cxx:647
 sw/source/core/access/accmap.cxx:691
     SwAccessibleSelectedParas_Impl maMap std::map<key_type, mapped_type, key_compare>
 sw/source/core/doc/swstylemanager.cxx:60
-    (anonymous namespace)::SwStyleManager aAutoCharPool class StylePool
+    (anonymous namespace)::SwStyleManager m_aAutoCharPool class StylePool
 sw/source/core/doc/swstylemanager.cxx:61
-    (anonymous namespace)::SwStyleManager aAutoParaPool class StylePool
+    (anonymous namespace)::SwStyleManager m_aAutoParaPool class StylePool
 sw/source/core/inc/swblocks.hxx:69
     SwImpBlocks m_bInPutMuchBlocks _Bool
 sw/source/core/text/atrhndl.hxx:50
