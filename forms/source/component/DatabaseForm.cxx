@@ -1222,7 +1222,7 @@ void ODatabaseForm::disposing()
     m_aErrorListeners.disposeAndClear(aEvt);
 
     m_aParameterManager.dispose();   // To free any references it may have to be me
-    m_aFilterManager.dispose();      // (dito)
+    m_aFilterManager.dispose();      // (ditto)
 
     OFormComponents::disposing();
     OPropertySetAggregationHelper::disposing();

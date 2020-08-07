@@ -455,7 +455,7 @@ void ScRangeData::MakeValidName( const ScDocument* pDoc, OUString& rName )
                 aAddr.Parse(rName, pDoc, details) != ScRefFlags::ZERO)
         {
             // Range Parse is partially valid also with invalid sheet name,
-            // Address Parse dito, during compile name would generate a #REF!
+            // Address Parse ditto, during compile name would generate a #REF!
             if ( rName.indexOf( '.' ) != -1 )
                 rName = rName.replaceFirst( ".", "_" );
             else

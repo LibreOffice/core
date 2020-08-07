@@ -80,7 +80,7 @@ DatabaseDataProvider::DatabaseDataProvider(uno::Reference< uno::XComponentContex
 void SAL_CALL DatabaseDataProvider::disposing()
 {
     m_aParameterManager.dispose();   // (to free any references it may have to me)
-    m_aFilterManager.dispose();      // (dito)
+    m_aFilterManager.dispose();      // (ditto)
 
     m_xParent.clear();
     m_xAggregateSet.clear();
