@@ -61,6 +61,7 @@
 #include <memory>
 #include <vector>
 #include <set>
+#include <string_view>
 #include <map>
 #include <algorithm>
 
@@ -274,8 +275,8 @@ static void lcl_formatReferenceLanguage( OUString& rRefText,
         // ASCII 1-letter numbering
         // az a), e), f) ... x)
         // az i., v. (but, a x.)
-        static const OUString sLettersStartingWithVowels = "aefilmnorsuxyAEFILMNORSUXY";
-        if (sLettersStartingWithVowels.indexOf(sNumbering[0]) != -1)
+        static const std::u16string_view sLettersStartingWithVowels = u"aefilmnorsuxyAEFILMNORSUXY";
+        if (sLettersStartingWithVowels.find(sNumbering[0]) != std::u16string_view::npos)
         {
             // x),  X) are letters, but x. and X. etc. are Roman numbers
             if (bClosingParenthesis ||
