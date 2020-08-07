@@ -407,6 +407,8 @@ public:
         int nItemId = IsNoSelection() ? -1 : GetSelectedItemId();
         return mnSavedItemId != nItemId;
     }
+
+    virtual FactoryFunction GetUITestFactory() const override;
 };
 
 
