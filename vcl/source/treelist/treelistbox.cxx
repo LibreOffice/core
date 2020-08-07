@@ -1985,7 +1985,6 @@ void SvTreeListBox::ScrollOutputArea( short nDeltaEntries )
         pImpl->PageUp( static_cast<sal_uInt16>(nDeltaEntries) );
     }
     pImpl->SyncVerThumb();
-    NotifyEndScroll();
 }
 
 void SvTreeListBox::ScrollToAbsPos( long nPos )
@@ -3182,10 +3181,6 @@ Size SvTreeListBox::GetOutputSizePixel() const
 {
     Size aSize = pImpl->GetOutputSize();
     return aSize;
-}
-
-void SvTreeListBox::NotifyEndScroll()
-{
 }
 
 void SvTreeListBox::NotifyScrolled()

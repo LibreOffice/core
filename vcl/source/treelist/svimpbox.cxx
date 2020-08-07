@@ -278,7 +278,6 @@ IMPL_LINK_NOARG(SvImpLBox, EndScrollHdl, ScrollBar*, void)
         m_aVerSBar->SetVisibleSize( m_nNextVerVisSize );
         m_nFlags &= ~LBoxFlags::EndScrollSetVisSize;
     }
-    EndScroll();
 }
 
 // handler for vertical scrollbar
@@ -299,7 +298,6 @@ IMPL_LINK( SvImpLBox, ScrollUpDownHdl, ScrollBar *, pScrollBar, void )
         m_pView->EndEditing( true ); // Cancel
         m_pView->PaintImmediately();
     }
-    BeginScroll();
 
     if( nDelta > 0 )
     {
@@ -455,15 +453,12 @@ void SvImpLBox::KeyUp( bool bPageUp )
         return;
 
     m_nFlags &= ~LBoxFlags::Filling;
-    BeginScroll();
 
     m_aVerSBar->SetThumbPos( nThumbPos - nDelta );
     if( bPageUp )
         PageUp( static_cast<short>(nDelta) );
     else
         CursorUp();
-
-    EndScroll();
 }
 
 
@@ -490,15 +485,12 @@ void SvImpLBox::KeyDown( bool bPageDown )
         return;
 
     m_nFlags &= ~LBoxFlags::Filling;
-    BeginScroll();
 
     m_aVerSBar->SetThumbPos( nThumbPos+nDelta );
     if( bPageDown )
         PageDown( static_cast<short>(nDelta) );
     else
         CursorDown();
-
-    EndScroll();
 }
 
 
@@ -700,7 +692,6 @@ void SvImpLBox::KeyLeftRight( long nDelta )
 {
     if( !(m_nFlags & LBoxFlags::InResize) )
         m_pView->PaintImmediately();
-    BeginScroll();
     m_nFlags &= ~LBoxFlags::Filling;
     ShowCursor( false );
 
@@ -2045,7 +2036,6 @@ void SvImpLBox::MouseButtonUp( const MouseEvent& rMEvt)
 {
     if ( !ButtonUpCheckCtrl( rMEvt ) && ( m_aSelEng.GetSelectionMode() != SelectionMode::NONE ) )
         m_aSelEng.SelMouseButtonUp( rMEvt );
-    EndScroll();
     if( m_nFlags & LBoxFlags::StartEditTimer )
     {
         m_nFlags &= ~LBoxFlags::StartEditTimer;
@@ -2228,7 +2218,6 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                 if( nThumb )
                 {
                     KeyLeftRight( nThumb );
-                    EndScroll();
                 }
             }
             else
@@ -2249,7 +2238,6 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                 if( nThumb )
                 {
                     KeyLeftRight( -nThumb );
-                    EndScroll();
                 }
                 else if( m_bSubLstOpLR )
                 {
@@ -2590,9 +2578,6 @@ void ImpLBSelEng::DestroyAnchor()
 void ImpLBSelEng::SetCursorAtPoint(const Point& rPoint, bool bDontSelectAtCursor)
 {
     SvTreeListEntry* pNewCursor = pImp->MakePointVisible( rPoint );
-    if( pNewCursor != pImp->m_pCursor  )
-        pImp->BeginScroll();
-
     if( pNewCursor )
     {
         // at SimpleTravel, the SetCursor is selected and the select handler is
@@ -2833,9 +2818,7 @@ void SvImpLBox::SetDragDropMode( DragDropMode eDDMode )
 void SvImpLBox::BeginDrag()
 {
     m_nFlags &= ~LBoxFlags::Filling;
-    BeginScroll();
     m_pView->StartDrag( 0, m_aSelEng.GetMousePosPixel() );
-    EndScroll();
 }
 
 void SvImpLBox::PaintDDCursor(SvTreeListEntry* pEntry, bool bShow)
@@ -2985,24 +2968,6 @@ void SvImpLBox::Command( const CommandEvent& rCEvt )
             m_aSelEng.Command( rCEvt );
     }
 }
-
-void SvImpLBox::BeginScroll()
-{
-    if( !(m_nFlags & LBoxFlags::InScrolling))
-    {
-        m_nFlags |= LBoxFlags::InScrolling;
-    }
-}
-
-void SvImpLBox::EndScroll()
-{
-    if( m_nFlags & LBoxFlags::InScrolling)
-    {
-        m_pView->NotifyEndScroll();
-        m_nFlags &= ~LBoxFlags::InScrolling;
-    }
-}
-
 
 tools::Rectangle SvImpLBox::GetVisibleArea() const
 {
