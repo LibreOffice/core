@@ -262,6 +262,34 @@ DECLARE_OOXMLIMPORT_TEST(testTdf129237, "tdf129237.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Title New"), xEnumerationAccess4->getPresentation(false).trim());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf134572, "tdf134572.docx")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    if( !xFields->hasMoreElements() ) {
+        CPPUNIT_ASSERT(false);
+        return;
+    }
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: RK - Risk / EH&S
+    // - Actual  : [Responsible Office]
+    uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("RK - Risk / EH&S"), xEnumerationAccess1->getPresentation(false).trim());
+
+    if( !xFields->hasMoreElements() ) {
+        CPPUNIT_ASSERT(false);
+        return;
+    }
+
+    // - Expected: Choose an item.
+    // - Actual  : A.M.
+    uno::Reference<text::XTextField> xEnumerationAccess2(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Choose an item."), xEnumerationAccess2->getPresentation(false).trim());
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf128076, "tdf128076.docx")
 {
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
