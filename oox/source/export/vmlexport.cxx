@@ -430,6 +430,47 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                 bAlreadyWritten[ ESCHER_Prop_WrapText ] = true;
                 break;
 
+            case ESCHER_Prop_AnchorText: // 135
+                {
+                    char const* pValue(nullptr);
+                    switch (opt.nPropValue)
+                    {
+                        case ESCHER_AnchorTop:
+                            pValue = "top";
+                        break;
+                        case ESCHER_AnchorMiddle:
+                            pValue = "middle";
+                        break;
+                        case ESCHER_AnchorBottom:
+                            pValue = "bottom";
+                        break;
+                        case ESCHER_AnchorTopCentered:
+                            pValue = "top-center";
+                        break;
+                        case ESCHER_AnchorMiddleCentered:
+                            pValue = "middle-center";
+                        break;
+                        case ESCHER_AnchorBottomCentered:
+                            pValue = "bottom-center";
+                        break;
+                        case ESCHER_AnchorTopBaseline:
+                            pValue = "top-baseline";
+                        break;
+                        case ESCHER_AnchorBottomBaseline:
+                            pValue = "bottom-baseline";
+                        break;
+                        case ESCHER_AnchorTopCenteredBaseline:
+                            pValue = "top-center-baseline";
+                        break;
+                        case ESCHER_AnchorBottomCenteredBaseline:
+                            pValue = "bottom-center-baseline";
+                        break;
+                    }
+                    m_ShapeStyle.append(";v-text-anchor:");
+                    m_ShapeStyle.append(pValue);
+                }
+                break;
+
             case ESCHER_Prop_txflTextFlow: // 136
                 {
                     // at least "bottom-to-top" only has an effect when it's on the v:textbox element, not on v:shape
