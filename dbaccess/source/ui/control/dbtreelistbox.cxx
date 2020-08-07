@@ -29,13 +29,14 @@
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <vcl/help.hxx>
 #include <dbaccess/IController.hxx>
 #include <framework/actiontriggerhelper.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/treelistentry.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
+#include <vcl/help.hxx>
+#include <vcl/treelistentry.hxx>
 
 #include <memory>
 
@@ -59,6 +60,115 @@ DBTreeListBox::DBTreeListBox( vcl::Window* pParent, WinBits nWinStyle )
     ,m_pResetEvent(nullptr)
 {
     init();
+}
+
+InterimDBTreeListBox::InterimDBTreeListBox(vcl::Window* pParent)
+    : InterimItemWindow(pParent, "dbaccess/ui/dbtreelist.ui", "DBTreeList")
+    , TreeListBox(m_xBuilder->weld_tree_view("treeview"))
+{
+    InitControlBase(&GetWidget());
+}
+
+InterimDBTreeListBox::~InterimDBTreeListBox()
+{
+    disposeOnce();
+}
+
+void InterimDBTreeListBox::dispose()
+{
+    implStopSelectionTimer();
+    m_xTreeView.reset();
+    InterimItemWindow::dispose();
+}
+
+bool InterimDBTreeListBox::DoChildKeyInput(const KeyEvent& rKEvt)
+{
+    return ChildKeyInput(rKEvt);
+}
+
+TreeListBox::TreeListBox(std::unique_ptr<weld::TreeView> xTreeView)
+    : m_xTreeView(std::move(xTreeView))
+    , m_pActionListener(nullptr)
+    , m_pContextMenuProvider(nullptr)
+{
+    m_xTreeView->connect_key_press(LINK(this, TreeListBox, KeyInputHdl));
+    m_xTreeView->connect_changed(LINK(this, TreeListBox, SelectHdl));
+    m_xTreeView->connect_query_tooltip(LINK(this, TreeListBox, QueryTooltipHdl));
+    m_xTreeView->connect_popup_menu(LINK(this, TreeListBox, CommandHdl));
+
+    m_aTimer.SetTimeout(900);
+    m_aTimer.SetInvokeHandler(LINK(this, TreeListBox, OnTimeOut));
+}
+
+bool TreeListBox::DoChildKeyInput(const KeyEvent& /*rKEvt*/)
+{
+    // nothing by default
+    return false;
+}
+
+bool TreeListBox::DoContextMenu(const CommandEvent& /*rCEvt*/)
+{
+    return false;
+}
+
+IMPL_LINK(TreeListBox, CommandHdl, const CommandEvent&, rCEvt, bool)
+{
+    return DoContextMenu(rCEvt);
+}
+
+IMPL_LINK(TreeListBox, KeyInputHdl, const KeyEvent&, rKEvt, bool)
+{
+    KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction();
+    bool bHandled = false;
+
+    switch (eFunc)
+    {
+        case KeyFuncType::COPY:
+            bHandled = m_aCopyHandler.IsSet() && !m_xTreeView->get_selected(nullptr);
+            if (bHandled)
+                m_aCopyHandler.Call(nullptr);
+            break;
+        case KeyFuncType::PASTE:
+            bHandled = m_aPasteHandler.IsSet() && !m_xTreeView->get_selected(nullptr);
+            if (bHandled)
+                m_aPasteHandler.Call(nullptr);
+            break;
+        case KeyFuncType::DELETE:
+            bHandled = m_aDeleteHandler.IsSet() && !m_xTreeView->get_selected(nullptr);
+            if (bHandled)
+                m_aDeleteHandler.Call(nullptr);
+            break;
+        default:
+            break;
+    }
+
+    return bHandled || DoChildKeyInput(rKEvt);
+}
+
+void TreeListBox::implStopSelectionTimer()
+{
+    if ( m_aTimer.IsActive() )
+        m_aTimer.Stop();
+}
+
+void TreeListBox::implStartSelectionTimer()
+{
+    implStopSelectionTimer();
+    m_aTimer.Start();
+}
+
+IMPL_LINK_NOARG(TreeListBox, SelectHdl, weld::TreeView&, void)
+{
+    implStartSelectionTimer();
+}
+
+TreeListBox::~TreeListBox()
+{
+}
+
+void TreeListBox::DisableCheckButtons()
+{
+    // nothing to do by default
 }
 
 void DBTreeListBox::init()
@@ -119,6 +229,27 @@ SvTreeListEntry* DBTreeListBox::GetEntryPosByName( const OUString& aName, SvTree
     }
 
     return pEntry;
+}
+
+std::unique_ptr<weld::TreeIter> TreeListBox::GetEntryPosByName(const OUString& aName, const weld::TreeIter* pStart, const IEntryFilter* _pFilter) const
+{
+    auto xEntry(m_xTreeView->make_iterator(pStart));
+    if (!pStart && !m_xTreeView->get_iter_first(*xEntry))
+        return nullptr;
+
+    do
+    {
+        if (m_xTreeView->get_text(*xEntry) == aName)
+        {
+            if (!_pFilter || _pFilter->includeEntry(reinterpret_cast<void*>(m_xTreeView->get_id(*xEntry).toUInt64())))
+            {
+                // found
+                return xEntry;
+            }
+        }
+    } while (m_xTreeView->iter_next(*xEntry));
+
+    return nullptr;
 }
 
 void DBTreeListBox::RequestingChildren( SvTreeListEntry* pParent )
@@ -307,6 +438,17 @@ void DBTreeListBox::RequestHelp( const HelpEvent& rHEvt )
     SvTreeListBox::RequestHelp( rHEvt );
 }
 
+IMPL_LINK(TreeListBox, QueryTooltipHdl, const weld::TreeIter&, rIter, OUString)
+{
+    OUString sQuickHelpText;
+    if (m_pActionListener &&
+        m_pActionListener->requestQuickHelp(reinterpret_cast<void*>(m_xTreeView->get_id(rIter).toUInt64()), sQuickHelpText))
+    {
+        return sQuickHelpText;
+    }
+    return m_xTreeView->get_tooltip_text();
+}
+
 void DBTreeListBox::KeyInput( const KeyEvent& rKEvt )
 {
     KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction();
@@ -458,12 +600,117 @@ namespace
     }
 }
 
+bool InterimDBTreeListBox::DoContextMenu(const CommandEvent& rCEvt)
+{
+    if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
+        return false;
+
+    if (!m_pContextMenuProvider)
+        return false;
+
+    OUString aResourceName(m_pContextMenuProvider->getContextMenuResourceName());
+    if (aResourceName.isEmpty())
+        return false;
+
+    css::uno::Sequence< css::uno::Any > aArgs( 3 );
+    aArgs[0] <<= comphelper::makePropertyValue( "Value", aResourceName );
+    aArgs[1] <<= comphelper::makePropertyValue( "Frame", m_pContextMenuProvider->getCommandController().getXController()->getFrame() );
+    aArgs[2] <<= comphelper::makePropertyValue( "IsContextMenu", true );
+
+    css::uno::Reference< css::uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+    css::uno::Reference<css::frame::XPopupMenuController> xMenuController
+        (xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+            "com.sun.star.comp.framework.ResourceMenuController", aArgs, xContext), css::uno::UNO_QUERY);
+
+    if (!xMenuController.is())
+        return false;
+
+    rtl::Reference xPopupMenu( new VCLXPopupMenu );
+    xMenuController->setPopupMenu( xPopupMenu.get() );
+    VclPtr<PopupMenu> pContextMenu( static_cast< PopupMenu* >( xPopupMenu->GetMenu() ) );
+
+    // allow context menu interception
+    ::comphelper::OInterfaceContainerHelper2* pInterceptors = m_pContextMenuProvider->getContextMenuInterceptors();
+    if (pInterceptors && pInterceptors->getLength())
+    {
+        OUString aMenuIdentifier( "private:resource/popupmenu/" + aResourceName );
+
+        ContextMenuExecuteEvent aEvent;
+        aEvent.SourceWindow = VCLUnoHelper::GetInterface( this );
+        aEvent.ExecutePosition.X = -1;
+        aEvent.ExecutePosition.Y = -1;
+        aEvent.ActionTriggerContainer = ::framework::ActionTriggerHelper::CreateActionTriggerContainerFromMenu(
+            pContextMenu.get(), &aMenuIdentifier );
+        aEvent.Selection = new SelectionSupplier( m_pContextMenuProvider->getCurrentSelection( *this ) );
+
+        ::comphelper::OInterfaceIteratorHelper2 aIter( *pInterceptors );
+        bool bModifiedMenu = false;
+        bool bAskInterceptors = true;
+        while ( aIter.hasMoreElements() && bAskInterceptors )
+        {
+            Reference< XContextMenuInterceptor > xInterceptor( aIter.next(), UNO_QUERY );
+            if ( !xInterceptor.is() )
+                continue;
+
+            try
+            {
+                ContextMenuInterceptorAction eAction = xInterceptor->notifyContextMenuExecute( aEvent );
+                switch ( eAction )
+                {
+                    case ContextMenuInterceptorAction_CANCELLED:
+                        return false;
+
+                    case ContextMenuInterceptorAction_EXECUTE_MODIFIED:
+                        bModifiedMenu = true;
+                        bAskInterceptors = false;
+                        break;
+
+                    case ContextMenuInterceptorAction_CONTINUE_MODIFIED:
+                        bModifiedMenu = true;
+                        bAskInterceptors = true;
+                        break;
+
+                    default:
+                        OSL_FAIL( "DBTreeListBox::CreateContextMenu: unexpected return value of the interceptor call!" );
+                        [[fallthrough]];
+                    case ContextMenuInterceptorAction_IGNORED:
+                        break;
+                }
+            }
+            catch( const DisposedException& e )
+            {
+                if ( e.Context == xInterceptor )
+                    aIter.remove();
+            }
+        }
+
+        if ( bModifiedMenu )
+        {
+            pContextMenu->Clear();
+            ::framework::ActionTriggerHelper::CreateMenuFromActionTriggerContainer(
+                pContextMenu, aEvent.ActionTriggerContainer );
+            aEvent.ActionTriggerContainer.clear();
+        }
+    }
+
+    // do action for selected entry in popup menu
+    pContextMenu->Execute(this, rCEvt.GetMousePosPixel());
+    pContextMenu.disposeAndClear();
+
+    css::uno::Reference<css::lang::XComponent> xComponent(xMenuController, css::uno::UNO_QUERY);
+    if (xComponent.is())
+        xComponent->dispose();
+    xMenuController.clear();
+
+    return true;
+}
+
 VclPtr<PopupMenu> DBTreeListBox::CreateContextMenu()
 {
     if ( !m_pContextMenuProvider )
         return nullptr;
 
-    OUString aResourceName( m_pContextMenuProvider->getContextMenuResourceName( *this ) );
+    OUString aResourceName( m_pContextMenuProvider->getContextMenuResourceName() );
     if ( aResourceName.isEmpty() )
         return nullptr;
 
@@ -563,6 +810,13 @@ IMPL_LINK( DBTreeListBox, MenuEventListener, VclMenuEvent&, rMenuEvent, void )
 }
 
 IMPL_LINK_NOARG(DBTreeListBox, OnTimeOut, Timer*, void)
+{
+    implStopSelectionTimer();
+
+    m_aSelChangeHdl.Call( nullptr );
+}
+
+IMPL_LINK_NOARG(TreeListBox, OnTimeOut, Timer*, void)
 {
     implStopSelectionTimer();
 

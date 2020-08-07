@@ -30,7 +30,6 @@
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include "TableFieldInfo.hxx"
 #include <comphelper/stl_types.hxx>
-#include <vcl/treelistentry.hxx>
 #include <comphelper/types.hxx>
 
 using namespace ::com::sun::star::sdbc;

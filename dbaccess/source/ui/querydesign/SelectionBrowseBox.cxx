@@ -42,7 +42,6 @@
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <i18nlangtag/languagetag.hxx>
-#include <vcl/treelistentry.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
 
