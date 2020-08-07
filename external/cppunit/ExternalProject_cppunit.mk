@@ -36,7 +36,7 @@ cppunit_CXXFLAGS+=-D_GLIBCXX_DEBUG
 endif
 endif
 
-ifneq (,$(debug))
+ifneq (,$(call gb_LinkTarget__symbols_enabled,cppunit))
 cppunit_CXXFLAGS+=-g
 endif
 
