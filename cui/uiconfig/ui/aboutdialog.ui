@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkImage" id="imCopy">
@@ -15,9 +15,6 @@
     <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox">
         <property name="can_focus">False</property>
@@ -109,6 +106,9 @@
                     <property name="label" translatable="yes" context="aboutdialog|lbVersion">Version:</property>
                     <property name="wrap">True</property>
                     <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="lbVersionString"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -122,6 +122,9 @@
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes" context="aboutdialog|lbBuild">Build:</property>
                     <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="lbBuildString"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -135,6 +138,9 @@
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes" context="aboutdialog|lbEnvironment">Environment:</property>
                     <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="lbEnvString"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -148,6 +154,9 @@
                     <property name="xpad">6</property>
                     <property name="label">7.0</property>
                     <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbVersion"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -161,6 +170,9 @@
                     <property name="xpad">6</property>
                     <property name="label">8 cores</property>
                     <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbEnvironment"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -175,6 +187,9 @@
                     <property name="receives_default">True</property>
                     <property name="relief">none</property>
                     <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbBuild"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -189,6 +204,9 @@
                     <property name="label" translatable="yes" context="aboutdialog|lbExtra">Misc:</property>
                     <property name="xalign">0</property>
                     <property name="yalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="lbMiscString"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -204,6 +222,9 @@
                     <property name="wrap">True</property>
                     <property name="max_width_chars">25</property>
                     <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbMisc"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -217,6 +238,9 @@
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes" context="aboutdialog|lbLocale">Locale:</property>
                     <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="lbLocaleString"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -230,6 +254,9 @@
                     <property name="xpad">6</property>
                     <property name="label">English</property>
                     <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbLocale"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -242,6 +269,9 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="aboutdialog|lbUI">User Interface:</property>
                     <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="lbUIString"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -255,6 +285,9 @@
                     <property name="xpad">6</property>
                     <property name="label">VCL: gtk</property>
                     <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbUI"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -374,6 +407,8 @@ LibreOffice was based on OpenOffice.org</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="aboutdialog|lbVersionInfo">Version Information</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">btnCopyVersion</property>
                     <property name="xalign">0</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -418,5 +453,8 @@ LibreOffice was based on OpenOffice.org</property>
     <action-widgets>
       <action-widget response="-7">btnClose</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

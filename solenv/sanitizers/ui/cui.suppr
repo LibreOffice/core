@@ -1,8 +1,3 @@
-cui/uiconfig/ui/aboutdialog.ui://GtkImage[@id='imAbout'] no-labelled-by
-cui/uiconfig/ui/aboutdialog.ui://GtkImage[@id='imBrand'] no-labelled-by
-cui/uiconfig/ui/aboutdialog.ui://GtkLabel[@id='lbCopyright'] orphan-label
-cui/uiconfig/ui/aboutdialog.ui://GtkLabel[@id='lbAbout'] orphan-label
-cui/uiconfig/ui/aboutdialog.ui://GtkLabel[@id='lbVersion'] orphan-label
 cui/uiconfig/ui/applyautofmtpage.ui://GtkLabel[@id='label1'] orphan-label
 cui/uiconfig/ui/applyautofmtpage.ui://GtkLabel[@id='label2'] orphan-label
 cui/uiconfig/ui/applylocalizedpage.ui://GtkLabel[@id='singlestartex'] orphan-label
