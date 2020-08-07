@@ -16,6 +16,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 
 #include <comphelper/propertysequence.hxx>
@@ -61,7 +62,14 @@ void SigningTest2::setUp()
 void SigningTest2::tearDown()
 {
     if (mxComponent.is())
+    {
+        css::uno::Reference<css::util::XCloseable> closer(mxComponent, css::uno::UNO_QUERY);
+        if (closer.is())
+        {
+            closer->close(true);
+        }
         mxComponent->dispose();
+    }
 
     test::BootstrapFixture::tearDown();
 }
