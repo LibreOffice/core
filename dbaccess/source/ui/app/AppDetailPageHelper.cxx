@@ -54,7 +54,6 @@
 #include <toolkit/awt/vclxmenu.hxx>
 #include <tools/stream.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <vcl/treelistentry.hxx>
 #include "AppController.hxx"
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -82,39 +81,44 @@ namespace dbaui
 
 namespace
 {
-    SvTreeListEntry* lcl_findEntry_impl(DBTreeListBox const & rTree, const OUString& _rName, SvTreeListEntry* _pFirst)
+    bool lcl_findEntry_impl(const TreeListBox& rTree, const OUString& rName, weld::TreeIter& rIter)
     {
-        SvTreeListEntry* pReturn = nullptr;
+        bool bReturn = false;
         sal_Int32 nIndex = 0;
-        OUString sName( _rName.getToken(0,'/',nIndex) );
+        OUString sName( rName.getToken(0,'/',nIndex) );
 
-        SvTreeListEntry* pEntry = _pFirst;
-        while( pEntry )
+        const weld::TreeView& rTreeView = rTree.GetWidget();
+        bool bEntry = true;
+        do
         {
-            if ( rTree.GetEntryText(pEntry) == sName )
+            if (rTreeView.get_text(rIter) == sName)
             {
                 if ( nIndex != -1 )
                 {
-                    sName = _rName.getToken(0,'/',nIndex);
-                    pEntry = rTree.FirstChild(pEntry);
+                    sName = rName.getToken(0,'/',nIndex);
+                    bEntry = rTreeView.iter_children(rIter);
                 }
                 else
                 {
-                    pReturn = pEntry;
+                    bReturn = true;
                     break;
                 }
             }
             else
-                pEntry = pEntry->NextSibling();
+                bEntry = rTreeView.iter_next_sibling(rIter);
         }
-        return pReturn;
+        while (bEntry);
+
+        return bReturn;
     }
-    SvTreeListEntry* lcl_findEntry(DBTreeListBox const & rTree, const OUString& _rName,SvTreeListEntry* _pFirst)
+
+    bool lcl_findEntry(const TreeListBox& rTree, const OUString& rName, weld::TreeIter& rIter)
     {
         sal_Int32 nIndex = 0;
-        OUString sErase = _rName.getToken(0,'/',nIndex); // we don't want to have the "private:forms" part
-        return (nIndex != -1 ? lcl_findEntry_impl(rTree,_rName.copy(sErase.getLength() + 1),_pFirst) : nullptr);
+        OUString sErase = rName.getToken(0,'/',nIndex); // we don't want to have the "private:forms" part
+        return nIndex != -1 && lcl_findEntry_impl(rTree, rName.copy(sErase.getLength() + 1), rIter);
     }
+
     class OTablePreviewWindow : public vcl::Window
     {
         DECL_LINK(OnDisableInput, void*, void);
@@ -197,7 +201,7 @@ OAppDetailPageHelper::OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindo
 
     m_xWindow = VCLUnoHelper::GetInterface( m_pTablePreview );
 
-    for (VclPtr<DBTreeListBox> & rpBox : m_pLists)
+    for (VclPtr<InterimDBTreeListBox> & rpBox : m_pLists)
         rpBox = nullptr;
     ImplInitSettings();
 }
@@ -221,13 +225,11 @@ void OAppDetailPageHelper::dispose()
         OSL_FAIL("Exception thrown while disposing preview frame!");
     }
 
-    for (VclPtr<DBTreeListBox> & rpBox : m_pLists)
+    for (VclPtr<InterimDBTreeListBox> & rpBox : m_pLists)
     {
         if ( rpBox )
         {
-            rpBox->clearCurrentSelection();
             rpBox->Hide();
-            rpBox->clearCurrentSelection();   // why a second time?
             rpBox.disposeAndClear();
         }
     }
@@ -257,77 +259,74 @@ void OAppDetailPageHelper::selectAll()
     int nPos = getVisibleControlIndex();
     if ( nPos < E_ELEMENT_TYPE_COUNT )
     {
-        m_pLists[nPos]->SelectAll(true);
+        m_pLists[nPos]->GetWidget().select_all();
     }
 }
 
-void OAppDetailPageHelper::sort(int _nPos,SvSortMode _eSortMode )
+void OAppDetailPageHelper::sort(int nPos, bool bAscending)
 {
-    OSL_ENSURE(m_pLists[_nPos],"List can not be NULL! ->GPF");
-    SvTreeList* pModel = m_pLists[_nPos]->GetModel();
-    SvSortMode eOldSortMode = pModel->GetSortMode();
-    pModel->SetSortMode(_eSortMode);
-    if ( eOldSortMode != _eSortMode )
-        pModel->Resort();
+    assert(m_pLists[nPos] && "List can not be NULL! ->GPF");
+    m_pLists[nPos]->GetWidget().set_sort_order(bAscending);
 }
 
 bool OAppDetailPageHelper::isSortUp() const
 {
-    SvSortMode eSortMode = SortNone;
+    bool bAscending = false;
+
     int nPos = getVisibleControlIndex();
-    if ( nPos < E_ELEMENT_TYPE_COUNT )
-    {
-        SvTreeList* pModel = m_pLists[nPos]->GetModel();
-        eSortMode = pModel->GetSortMode();
-    }
-    return eSortMode == SortAscending;
+    if (nPos < E_ELEMENT_TYPE_COUNT)
+        bAscending = m_pLists[nPos]->GetWidget().get_sort_order();
+
+    return bAscending;
 }
 
 void OAppDetailPageHelper::sortDown()
 {
     int nPos = getVisibleControlIndex();
     if ( nPos < E_ELEMENT_TYPE_COUNT )
-        sort(nPos,SortDescending);
+        sort(nPos, false);
 }
 
 void OAppDetailPageHelper::sortUp()
 {
     int nPos = getVisibleControlIndex();
     if ( nPos < E_ELEMENT_TYPE_COUNT )
-        sort(nPos,SortAscending);
+        sort(nPos, true);
 }
 
-void OAppDetailPageHelper::getSelectionElementNames( std::vector< OUString>& _rNames ) const
+void OAppDetailPageHelper::getSelectionElementNames(std::vector<OUString>& rNames) const
 {
     int nPos = getVisibleControlIndex();
     if ( nPos >= E_ELEMENT_TYPE_COUNT )
         return;
 
-    DBTreeListBox& rTree = *m_pLists[nPos];
-    sal_Int32 nCount = rTree.GetEntryCount();
-    _rNames.reserve(nCount);
-    SvTreeListEntry* pEntry = rTree.FirstSelected();
+    InterimDBTreeListBox& rTree = *m_pLists[nPos];
+    weld::TreeView& rTreeView = rTree.GetWidget();
+    sal_Int32 nCount = rTreeView.n_children();
+    rNames.reserve(nCount);
     ElementType eType = getElementType();
-    while( pEntry )
-    {
+
+    rTreeView.selected_foreach([this, eType, &rTreeView, &rNames](weld::TreeIter& rEntry){
         if ( eType == E_TABLE )
         {
-            if( rTree.GetChildCount(pEntry) == 0 )
-                _rNames.push_back( getQualifiedName( pEntry ) );
+            if (!rTreeView.iter_has_child(rEntry))
+                rNames.push_back(getQualifiedName(&rEntry));
         }
         else
         {
-            OUString sName = rTree.GetEntryText(pEntry);
-            SvTreeListEntry* pParent = rTree.GetParent(pEntry);
-            while(pParent)
+            OUString sName = rTreeView.get_text(rEntry);
+            std::unique_ptr<weld::TreeIter> xParent(rTreeView.make_iterator(&rEntry));
+            bool bParent = rTreeView.iter_parent(*xParent);
+            while (bParent)
             {
-                sName = rTree.GetEntryText(pParent) + "/" + sName;
-                pParent = rTree.GetParent(pParent);
+                sName = rTreeView.get_text(*xParent) + "/" + sName;
+                bParent = rTreeView.iter_parent(*xParent);
             }
-            _rNames.push_back(sName);
+            rNames.push_back(sName);
         }
-        pEntry = rTree.NextSelected(pEntry);
-    }
+
+        return false;
+    });
 }
 
 void OAppDetailPageHelper::describeCurrentSelectionForControl( const Control& _rControl, Sequence< NamedDatabaseObject >& _out_rSelectedObjects )
@@ -343,10 +342,10 @@ void OAppDetailPageHelper::describeCurrentSelectionForControl( const Control& _r
     OSL_FAIL( "OAppDetailPageHelper::describeCurrentSelectionForControl: invalid control!" );
 }
 
-void OAppDetailPageHelper::describeCurrentSelectionForType( const ElementType _eType, Sequence< NamedDatabaseObject >& _out_rSelectedObjects )
+void OAppDetailPageHelper::describeCurrentSelectionForType(const ElementType eType, Sequence< NamedDatabaseObject >& _out_rSelectedObjects)
 {
-    OSL_ENSURE( _eType < E_ELEMENT_TYPE_COUNT, "OAppDetailPageHelper::describeCurrentSelectionForType: invalid type!" );
-    DBTreeListBox* pList = ( _eType < E_ELEMENT_TYPE_COUNT ) ? m_pLists[ _eType ].get() : nullptr;
+    OSL_ENSURE( eType < E_ELEMENT_TYPE_COUNT, "OAppDetailPageHelper::describeCurrentSelectionForType: invalid type!" );
+    InterimDBTreeListBox* pList = ( eType < E_ELEMENT_TYPE_COUNT ) ? m_pLists[ eType ].get() : nullptr;
     OSL_ENSURE( pList, "OAppDetailPageHelper::describeCurrentSelectionForType: "
                        "You really should ensure this type has already been viewed before!" );
     if ( !pList )
@@ -354,60 +353,57 @@ void OAppDetailPageHelper::describeCurrentSelectionForType( const ElementType _e
 
     std::vector< NamedDatabaseObject > aSelected;
 
-    SvTreeListEntry* pEntry = pList->FirstSelected();
-    while( pEntry )
-    {
+    weld::TreeView& rTreeView = pList->GetWidget();
+    rTreeView.selected_foreach([pList, eType, &rTreeView, &aSelected](weld::TreeIter& rEntry){
         NamedDatabaseObject aObject;
-        switch ( _eType )
+        switch (eType)
         {
-        case E_TABLE:
-        {
-            OTableTreeListBox& rTableTree = dynamic_cast< OTableTreeListBox& >( *pList );
-            aObject = rTableTree.describeObject( pEntry );
-        }
-        break;
-        case E_QUERY:
-            aObject.Type = DatabaseObject::QUERY;
-            aObject.Name = pList->GetEntryText( pEntry );
-            break;
-
-        case E_FORM:
-        case E_REPORT:
-        {
-            OUString sName = pList->GetEntryText(pEntry);
-            SvTreeListEntry* pParent = pList->GetParent(pEntry);
-            while ( pParent )
+            case E_TABLE:
             {
-                OUStringBuffer buffer;
-                buffer.append( pList->GetEntryText( pParent ) );
-                buffer.append( '/' );
-                buffer.append( sName );
-                sName = buffer.makeStringAndClear();
-
-                pParent = pList->GetParent( pParent );
+                OTableTreeListBox& rTableTree = dynamic_cast<OTableTreeListBox&>(*pList);
+                aObject = rTableTree.describeObject(rEntry);
+                break;
             }
+            case E_QUERY:
+                aObject.Type = DatabaseObject::QUERY;
+                aObject.Name = rTreeView.get_text(rEntry);
+                break;
+            case E_FORM:
+            case E_REPORT:
+            {
+                OUString sName = rTreeView.get_text(rEntry);
+                std::unique_ptr<weld::TreeIter> xParent(rTreeView.make_iterator(&rEntry));
+                bool bParent = rTreeView.iter_parent(*xParent);
+                while (bParent)
+                {
+                    OUStringBuffer buffer;
+                    buffer.append(rTreeView.get_text(*xParent));
+                    buffer.append('/');
+                    buffer.append(sName);
+                    sName = buffer.makeStringAndClear();
 
-            if ( isLeaf( pEntry ) )
-                aObject.Type = ( _eType == E_FORM ) ? DatabaseObject::FORM : DatabaseObject::REPORT;
-            else
-                aObject.Type = ( _eType == E_FORM ) ? DatabaseObjectContainer::FORMS_FOLDER : DatabaseObjectContainer::REPORTS_FOLDER;
-            aObject.Name = sName;
+                    bParent = rTreeView.iter_parent(*xParent);
+                }
+
+                if (isLeaf(rTreeView, rEntry))
+                    aObject.Type = (eType == E_FORM) ? DatabaseObject::FORM : DatabaseObject::REPORT;
+                else
+                    aObject.Type = (eType == E_FORM) ? DatabaseObjectContainer::FORMS_FOLDER : DatabaseObjectContainer::REPORTS_FOLDER;
+                aObject.Name = sName;
+                break;
+            }
+            default:
+                OSL_FAIL( "OAppDetailPageHelper::describeCurrentSelectionForType: unexpected type!" );
+                break;
         }
-        break;
-        default:
-            OSL_FAIL( "OAppDetailPageHelper::describeCurrentSelectionForType: unexpected type!" );
-            break;
-        }
 
-        if ( !aObject.Name.isEmpty() )
-        {
-            aSelected.push_back( aObject );
-        }
+        if (!aObject.Name.isEmpty())
+            aSelected.push_back(aObject);
 
-        pEntry = pList->NextSelected(pEntry);
-    }
+        return false;
+    });
 
-    _out_rSelectedObjects = comphelper::containerToSequence( aSelected );
+    _out_rSelectedObjects = comphelper::containerToSequence(aSelected);
 }
 
 void OAppDetailPageHelper::selectElements(const Sequence< OUString>& _aNames)
@@ -416,19 +412,21 @@ void OAppDetailPageHelper::selectElements(const Sequence< OUString>& _aNames)
     if ( nPos >= E_ELEMENT_TYPE_COUNT )
         return;
 
-    DBTreeListBox& rTree = *m_pLists[nPos];
-    rTree.SelectAll(false);
+    InterimDBTreeListBox& rTree = *m_pLists[nPos];
+    weld::TreeView& rTreeView = rTree.GetWidget();
+    rTreeView.unselect_all();
     const OUString* pIter = _aNames.getConstArray();
     const OUString* pEnd  = pIter + _aNames.getLength();
     for(;pIter != pEnd;++pIter)
     {
-        SvTreeListEntry* pEntry = rTree.GetEntryPosByName(*pIter);
-        if ( pEntry )
-            rTree.Select(pEntry);
+        auto xEntry = rTree.GetEntryPosByName(*pIter);
+        if (!xEntry)
+            continue;
+        rTreeView.select(*xEntry);
     }
 }
 
-OUString OAppDetailPageHelper::getQualifiedName( SvTreeListEntry* _pEntry ) const
+OUString OAppDetailPageHelper::getQualifiedName(weld::TreeIter* _pEntry) const
 {
     int nPos = getVisibleControlIndex();
     OUString sComposedName;
@@ -437,28 +435,32 @@ OUString OAppDetailPageHelper::getQualifiedName( SvTreeListEntry* _pEntry ) cons
         return sComposedName;
 
     OSL_ENSURE(m_pLists[nPos],"Tables tree view is NULL! -> GPF");
-    DBTreeListBox& rTree = *m_pLists[nPos];
+    InterimDBTreeListBox& rTree = *m_pLists[nPos];
+    weld::TreeView& rTreeView = rTree.GetWidget();
 
-    SvTreeListEntry* pEntry = _pEntry;
-    if ( !pEntry )
-        pEntry = rTree.FirstSelected();
+    std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator(_pEntry));
+    if (!_pEntry)
+    {
+        if (!rTreeView.get_selected(xEntry.get()))
+            xEntry.reset();
+    }
 
-    if ( !pEntry )
+    if (!xEntry)
         return sComposedName;
 
     if ( getElementType() == E_TABLE )
     {
-        const OTableTreeListBox& rTreeView = dynamic_cast< const OTableTreeListBox& >( *m_pLists[nPos] );
-        sComposedName = rTreeView.getQualifiedTableName( pEntry );
+        const OTableTreeListBox& rTableTreeListBox = dynamic_cast<const OTableTreeListBox&>(*m_pLists[nPos]);
+        sComposedName = rTableTreeListBox.getQualifiedTableName(*xEntry);
     }
     else
     {
-        sComposedName = rTree.GetEntryText(pEntry);
-        SvTreeListEntry* pParent = rTree.GetParent(pEntry);
-        while(pParent)
+        sComposedName = rTreeView.get_text(*xEntry);
+        bool bParent = rTreeView.iter_parent(*xEntry);
+        while (bParent)
         {
-            sComposedName = rTree.GetEntryText(pParent) + "/" + sComposedName;
-            pParent = rTree.GetParent(pParent);
+            sComposedName = rTreeView.get_text(*xEntry) + "/" + sComposedName;
+            bParent = rTreeView.iter_parent(*xEntry);
         }
     }
 
@@ -477,13 +479,9 @@ sal_Int32 OAppDetailPageHelper::getSelectionCount()
     int nPos = getVisibleControlIndex();
     if ( nPos < E_ELEMENT_TYPE_COUNT )
     {
-        DBTreeListBox& rTree = *m_pLists[nPos];
-        SvTreeListEntry* pEntry = rTree.FirstSelected();
-        while( pEntry )
-        {
-            ++nCount;
-            pEntry = rTree.NextSelected(pEntry);
-        }
+        InterimDBTreeListBox& rTree = *m_pLists[nPos];
+        weld::TreeView& rTreeView = rTree.GetWidget();
+        nCount = rTreeView.count_selected_rows();
     }
     return nCount;
 }
@@ -494,16 +492,16 @@ sal_Int32 OAppDetailPageHelper::getElementCount() const
     int nPos = getVisibleControlIndex();
     if ( nPos < E_ELEMENT_TYPE_COUNT )
     {
-        nCount = m_pLists[nPos]->GetEntryCount();
+        InterimDBTreeListBox& rTree = *m_pLists[nPos];
+        weld::TreeView& rTreeView = rTree.GetWidget();
+        nCount = rTreeView.n_children();
     }
     return nCount;
 }
 
-bool OAppDetailPageHelper::isLeaf(SvTreeListEntry const * _pEntry)
+bool OAppDetailPageHelper::isLeaf(const weld::TreeView& rTreeView, const weld::TreeIter& rEntry)
 {
-    if ( !_pEntry )
-        return false;
-    sal_Int32 nEntryType = reinterpret_cast< sal_IntPtr >( _pEntry->GetUserData() );
+    sal_Int32 nEntryType = rTreeView.get_id(rEntry).toInt32();
     return !(   ( nEntryType == DatabaseObjectContainer::TABLES )
              || ( nEntryType == DatabaseObjectContainer::CATALOG )
              || ( nEntryType == DatabaseObjectContainer::SCHEMA )
@@ -517,24 +515,29 @@ bool OAppDetailPageHelper::isALeafSelected() const
     bool bLeafSelected = false;
     if ( nPos < E_ELEMENT_TYPE_COUNT )
     {
-        DBTreeListBox& rTree = *m_pLists[nPos];
-        SvTreeListEntry* pEntry = rTree.FirstSelected( );
-        while( !bLeafSelected && pEntry )
-        {
-            bLeafSelected = isLeaf( pEntry );
-            pEntry = rTree.NextSelected(pEntry);
-        }
+        InterimDBTreeListBox& rTree = *m_pLists[nPos];
+        weld::TreeView& rTreeView = rTree.GetWidget();
+        rTreeView.selected_foreach([&rTreeView, &bLeafSelected](weld::TreeIter& rEntry){
+            bLeafSelected = isLeaf(rTreeView, rEntry);
+            return bLeafSelected;
+        });
     }
     return bLeafSelected;
 }
 
-SvTreeListEntry* OAppDetailPageHelper::getEntry( const Point& _aPosPixel) const
+std::unique_ptr<weld::TreeIter> OAppDetailPageHelper::getEntry( const Point& _aPosPixel) const
 {
-    SvTreeListEntry* pReturn = nullptr;
+    std::unique_ptr<weld::TreeIter> xReturn;
     int nPos = getVisibleControlIndex();
     if ( nPos < E_ELEMENT_TYPE_COUNT )
-        pReturn = m_pLists[nPos]->GetEntry( _aPosPixel, true );
-    return pReturn;
+    {
+        InterimDBTreeListBox& rTree = *m_pLists[nPos];
+        weld::TreeView& rTreeView = rTree.GetWidget();
+        xReturn = rTreeView.make_iterator();
+        if (!rTreeView.get_dest_row_at_pos(_aPosPixel, xReturn.get(), false))
+            xReturn.reset();
+    }
+    return xReturn;
 }
 
 void OAppDetailPageHelper::createTablesPage(const Reference< XConnection>& _xConnection)
@@ -543,26 +546,22 @@ void OAppDetailPageHelper::createTablesPage(const Reference< XConnection>& _xCon
 
     if ( !m_pLists[E_TABLE] )
     {
-        VclPtrInstance<OTableTreeListBox> pTreeView(this,
-            WB_HASLINES | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT | WB_TABSTOP);
+        VclPtrInstance<OTableTreeListBox> pTreeView(this, false); // false means: do not show any buttons
         pTreeView->SetHelpId(HID_APP_TABLE_TREE);
-        m_pLists[E_TABLE] = pTreeView;
+        m_pLists[E_TABLE] = createTree(pTreeView);
 
-        createTree( pTreeView,
-            ImageProvider::getDefaultImage( DatabaseObject::TABLE )
-        );
-
-        pTreeView->notifyHiContrastChanged();
         m_aBorder->SetZOrder(pTreeView, ZOrderFlags::Behind);
     }
-    if ( !m_pLists[E_TABLE]->GetEntryCount() )
+
+    weld::TreeView& rTreeView = m_pLists[E_TABLE]->GetWidget();
+    if (!rTreeView.n_children())
     {
         static_cast<OTableTreeListBox*>(m_pLists[E_TABLE].get())->UpdateTableList(_xConnection);
 
-        SvTreeListEntry* pEntry = m_pLists[E_TABLE]->First();
-        if ( pEntry )
-            m_pLists[E_TABLE]->Expand(pEntry);
-        m_pLists[E_TABLE]->SelectAll(false);
+        std::unique_ptr<weld::TreeIter> xFirst(rTreeView.make_iterator());
+        if (rTreeView.get_iter_first(*xFirst))
+            rTreeView.expand_row(*xFirst);
+        rTreeView.unselect_all();
     }
 
     setDetailPage(m_pLists[E_TABLE]);
@@ -589,20 +588,16 @@ void OAppDetailPageHelper::createPage(ElementType _eType,const Reference< XNameA
     OSL_ENSURE(E_TABLE != _eType,"E_TABLE isn't allowed.");
 
     OString sHelpId;
-    Image aFolderImage;
     switch( _eType )
     {
         case E_FORM:
             sHelpId = HID_APP_FORM_TREE;
-            aFolderImage = ImageProvider::getFolderImage( DatabaseObject::FORM );
             break;
         case E_REPORT:
             sHelpId = HID_APP_REPORT_TREE;
-            aFolderImage = ImageProvider::getFolderImage( DatabaseObject::REPORT );
             break;
         case E_QUERY:
             sHelpId = HID_APP_QUERY_TREE;
-            aFolderImage = ImageProvider::getFolderImage( DatabaseObject::QUERY );
             break;
         default:
             OSL_FAIL("Illegal call!");
@@ -611,16 +606,19 @@ void OAppDetailPageHelper::createPage(ElementType _eType,const Reference< XNameA
 
     if ( !m_pLists[_eType] )
     {
-        m_pLists[_eType] = createSimpleTree( sHelpId, aFolderImage );
+        m_pLists[_eType] = createSimpleTree(sHelpId);
     }
 
     if ( m_pLists[_eType] )
     {
-        if ( !m_pLists[_eType]->GetEntryCount() && _xContainer.is() )
+        weld::TreeView& rTreeView = m_pLists[_eType]->GetWidget();
+        if (!rTreeView.n_children() && _xContainer.is())
         {
+            rTreeView.make_unsorted();
             fillNames( _xContainer, _eType, sImageId, nullptr );
+            rTreeView.make_sorted();
 
-            m_pLists[_eType]->SelectAll(false);
+            rTreeView.unselect_all();
         }
         setDetailPage(m_pLists[_eType]);
     }
@@ -663,12 +661,12 @@ namespace
 }
 
 void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContainer, const ElementType _eType,
-                                      const OUString& rImageId, SvTreeListEntry* _pParent )
+                                      const OUString& rImageId, weld::TreeIter* _pParent )
 {
     OSL_ENSURE(_xContainer.is(),"Data source is NULL! -> GPF");
     OSL_ENSURE( ( _eType >= E_TABLE ) && ( _eType < E_ELEMENT_TYPE_COUNT ), "OAppDetailPageHelper::fillNames: invalid type!" );
 
-    DBTreeListBox* pList = m_pLists[ _eType ].get();
+    InterimDBTreeListBox* pList = m_pLists[ _eType ].get();
     OSL_ENSURE( pList, "OAppDetailPageHelper::fillNames: you really should create the list before calling this!" );
     if ( !pList )
         return;
@@ -676,6 +674,9 @@ void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContaine
     if ( !(_xContainer.is() && _xContainer->hasElements()) )
         return;
 
+    weld::TreeView& rTreeView = pList->GetWidget();
+
+    std::unique_ptr<weld::TreeIter> xRet = rTreeView.make_iterator();
     const sal_Int32 nFolderIndicator = lcl_getFolderIndicatorForType( _eType );
 
     Sequence< OUString> aSeq = _xContainer->getElementNames();
@@ -683,66 +684,63 @@ void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContaine
     const OUString* pEnd  = pIter + aSeq.getLength();
     for(;pIter != pEnd;++pIter)
     {
-        SvTreeListEntry* pEntry = nullptr;
         Reference<XNameAccess> xSubElements(_xContainer->getByName(*pIter),UNO_QUERY);
         if ( xSubElements.is() )
         {
-            pEntry = pList->InsertEntry( *pIter, _pParent, false, TREELIST_APPEND, reinterpret_cast< void* >( nFolderIndicator ) );
+            OUString sId(OUString::number(nFolderIndicator));
+
+            rTreeView.insert(_pParent, -1, nullptr, &sId, nullptr, nullptr, false, xRet.get());
+            rTreeView.set_text(*xRet, *pIter, 0);
+            rTreeView.set_text_emphasis(*xRet, false, 0);
             getBorderWin().getView()->getAppController().containerFound( Reference< XContainer >( xSubElements, UNO_QUERY ) );
-            fillNames( xSubElements, _eType, rImageId, pEntry );
+            fillNames( xSubElements, _eType, rImageId, xRet.get());
         }
         else
         {
-            pEntry = pList->InsertEntry( *pIter, _pParent );
-
-            Image aImage(StockImage::Yes, rImageId);
-            pList->SetExpandedEntryBmp(pEntry, aImage);
-            pList->SetCollapsedEntryBmp(pEntry, aImage);
+            rTreeView.insert(_pParent, -1, nullptr, nullptr, nullptr, nullptr, false, xRet.get());
+            rTreeView.set_text(*xRet, *pIter, 0);
+            rTreeView.set_text_emphasis(*xRet, false, 0);
+            rTreeView.set_image(*xRet, rImageId);
         }
     }
 }
 
-DBTreeListBox* OAppDetailPageHelper::createSimpleTree( const OString& _sHelpId, const Image& _rImage)
+InterimDBTreeListBox* OAppDetailPageHelper::createSimpleTree(const OString& rHelpId)
 {
-    VclPtrInstance<DBTreeListBox> pTreeView(this,
-                       WB_HASLINES | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT | WB_TABSTOP);
-    pTreeView->SetHelpId( _sHelpId );
-    return createTree( pTreeView, _rImage );
+    VclPtrInstance<InterimDBTreeListBox> pTreeView(this);
+    pTreeView->SetHelpId(rHelpId);
+    return createTree(pTreeView);
 }
 
-DBTreeListBox* OAppDetailPageHelper::createTree( DBTreeListBox* _pTreeView, const Image& _rImage )
+InterimDBTreeListBox* OAppDetailPageHelper::createTree(InterimDBTreeListBox* pTreeView)
 {
     weld::WaitObject aWaitCursor(GetFrameWeld());
 
-    _pTreeView->SetStyle(_pTreeView->GetStyle() | WB_HASLINES | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT | WB_TABSTOP);
-    _pTreeView->GetModel()->SetSortMode(SortAscending);
-    _pTreeView->EnableCheckButton( nullptr ); // do not show any buttons
-    _pTreeView->SetSelectionMode(SelectionMode::Multiple);
+    pTreeView->setCopyHandler(LINK(this, OAppDetailPageHelper, OnCopyEntry));
+    pTreeView->setPasteHandler(LINK(this, OAppDetailPageHelper, OnPasteEntry));
+    pTreeView->setDeleteHandler(LINK(this, OAppDetailPageHelper, OnDeleteEntry));
 
-    _pTreeView->SetDefaultCollapsedEntryBmp( _rImage );
-    _pTreeView->SetDefaultExpandedEntryBmp( _rImage );
+    weld::TreeView& rTreeView = pTreeView->GetWidget();
+    rTreeView.make_sorted();
+    rTreeView.set_selection_mode(SelectionMode::Multiple);
 
-    _pTreeView->SetDoubleClickHdl(LINK(this, OAppDetailPageHelper, OnEntryDoubleClick));
-    _pTreeView->SetEnterKeyHdl(LINK(this, OAppDetailPageHelper, OnEntryEnterKey));
-    _pTreeView->SetSelChangeHdl(LINK(this, OAppDetailPageHelper, OnEntrySelChange));
+    rTreeView.connect_row_activated(LINK(this, OAppDetailPageHelper, OnEntryDoubleClick));
 
-    _pTreeView->setCopyHandler(LINK(this, OAppDetailPageHelper, OnCopyEntry));
-    _pTreeView->setPasteHandler(LINK(this, OAppDetailPageHelper, OnPasteEntry));
-    _pTreeView->setDeleteHandler(LINK(this, OAppDetailPageHelper, OnDeleteEntry));
+    pTreeView->SetSelChangeHdl(LINK(this, OAppDetailPageHelper, OnEntrySelChange));
 
-    _pTreeView->setControlActionListener( &getBorderWin().getView()->getAppController() );
-    _pTreeView->setContextMenuProvider( &getBorderWin().getView()->getAppController() );
+    pTreeView->setControlActionListener(&getBorderWin().getView()->getAppController());
+    pTreeView->setContextMenuProvider(&getBorderWin().getView()->getAppController());
 
-    return _pTreeView;
+    return pTreeView;
 }
 
 void OAppDetailPageHelper::clearPages()
 {
     showPreview(nullptr);
-    for (VclPtr<DBTreeListBox> & rpBox : m_pLists)
+    for (VclPtr<InterimDBTreeListBox> & rpBox : m_pLists)
     {
         if ( rpBox )
-            rpBox->Clear();
+            rpBox->GetWidget().clear();
     }
 }
 
@@ -754,51 +752,58 @@ bool OAppDetailPageHelper::isFilled() const
     return i != E_ELEMENT_TYPE_COUNT;
 }
 
-void OAppDetailPageHelper::elementReplaced(ElementType _eType
-                                                    ,const OUString& _rOldName
-                                                    ,const OUString& _rNewName )
+void OAppDetailPageHelper::elementReplaced(ElementType eType,
+                                           const OUString& rOldName,
+                                           const OUString& rNewName)
 {
-    DBTreeListBox* pTreeView = getCurrentView();
-    if ( !pTreeView )
+    InterimDBTreeListBox* pTreeView = getCurrentView();
+    if (!pTreeView)
         return;
 
-    SvTreeListEntry* pEntry = nullptr;
-    switch( _eType )
+    weld::TreeView& rTreeView = pTreeView->GetWidget();
+    rTreeView.make_unsorted();
+
+    switch (eType)
     {
         case E_TABLE:
-            static_cast<OTableTreeListBox*>(pTreeView)->removedTable( _rOldName );
-            static_cast<OTableTreeListBox*>(pTreeView)->addedTable( _rNewName );
-            return;
-
-        case E_QUERY:
-            pEntry = lcl_findEntry_impl(*pTreeView,_rOldName,pTreeView->First());
+            static_cast<OTableTreeListBox*>(pTreeView)->removedTable(rOldName);
+            static_cast<OTableTreeListBox*>(pTreeView)->addedTable(rNewName);
             break;
+        case E_QUERY:
+        {
+            std::unique_ptr<weld::TreeIter> xIter(rTreeView.make_iterator());
+            if (rTreeView.get_iter_first(*xIter) && lcl_findEntry_impl(*pTreeView, rOldName, *xIter))
+                rTreeView.set_text(*xIter, rNewName);
+            break;
+        }
         case E_FORM:
         case E_REPORT:
-            pEntry = lcl_findEntry(*pTreeView,_rOldName,pTreeView->First());
+        {
+            std::unique_ptr<weld::TreeIter> xIter(rTreeView.make_iterator());
+            if (rTreeView.get_iter_first(*xIter) && lcl_findEntry(*pTreeView, rOldName, *xIter))
+                rTreeView.set_text(*xIter, rNewName);
             break;
+        }
         default:
             OSL_FAIL("Invalid element type");
     }
-    OSL_ENSURE(pEntry,"Do you know that the name isn't existence!");
-    if ( pEntry )
-    {
-        pTreeView->SetEntryText(pEntry,_rNewName);
-    }
+
+    rTreeView.make_sorted();
 }
 
-SvTreeListEntry* OAppDetailPageHelper::elementAdded(ElementType _eType,const OUString& _rName, const Any& _rObject )
+std::unique_ptr<weld::TreeIter> OAppDetailPageHelper::elementAdded(ElementType _eType,const OUString& _rName, const Any& _rObject )
 {
-    SvTreeListEntry* pRet = nullptr;
-    DBTreeListBox* pTreeView = m_pLists[_eType].get();
+    std::unique_ptr<weld::TreeIter> xRet;
+    InterimDBTreeListBox* pTreeView = m_pLists[_eType].get();
+    weld::TreeView& rTreeView = pTreeView->GetWidget();
+    rTreeView.make_unsorted();
     if( _eType == E_TABLE && pTreeView )
     {
-        pRet = static_cast<OTableTreeListBox*>(pTreeView)->addedTable( _rName );
+        xRet = static_cast<OTableTreeListBox*>(pTreeView)->addedTable( _rName );
     }
     else if ( pTreeView )
     {
-
-        SvTreeListEntry* pEntry = nullptr;
+        std::unique_ptr<weld::TreeIter> xEntry;
         Reference<XChild> xChild(_rObject,UNO_QUERY);
         if ( xChild.is() && E_QUERY != _eType )
         {
@@ -806,7 +811,9 @@ SvTreeListEntry* OAppDetailPageHelper::elementAdded(ElementType _eType,const OUS
             if ( xContent.is() )
             {
                 OUString sName = xContent->getIdentifier()->getContentIdentifier();
-                pEntry = lcl_findEntry(*pTreeView,sName,pTreeView->First());
+                std::unique_ptr<weld::TreeIter> xIter(rTreeView.make_iterator());
+                if (rTreeView.get_iter_first(*xIter) && lcl_findEntry(*pTreeView, sName, *xIter))
+                    xEntry = std::move(xIter);
             }
         }
 
@@ -815,58 +822,66 @@ SvTreeListEntry* OAppDetailPageHelper::elementAdded(ElementType _eType,const OUS
         if ( xContainer.is() )
         {
             const sal_Int32 nFolderIndicator = lcl_getFolderIndicatorForType( _eType );
-            pRet = pTreeView->InsertEntry( _rName, pEntry, false, TREELIST_APPEND, reinterpret_cast< void* >( nFolderIndicator ) );
-            fillNames( xContainer, _eType, sImageId, pRet );
+            OUString sId(OUString::number(nFolderIndicator));
+
+            xRet = rTreeView.make_iterator();
+            rTreeView.insert(xEntry.get(), -1, nullptr, &sId, nullptr, nullptr, false, xRet.get());
+            rTreeView.set_text(*xRet, _rName, 0);
+            rTreeView.set_text_emphasis(*xRet, false, 0);
+            fillNames(xContainer, _eType, sImageId, xRet.get());
         }
         else
         {
-            pRet = pTreeView->InsertEntry( _rName, pEntry );
-
-            Image aImage(StockImage::Yes, sImageId);
-            pTreeView->SetExpandedEntryBmp(  pRet, aImage );
-            pTreeView->SetCollapsedEntryBmp( pRet, aImage );
+            xRet = rTreeView.make_iterator();
+            rTreeView.insert(xEntry.get(), -1, nullptr, nullptr, nullptr, nullptr, false, xRet.get());
+            rTreeView.set_text(*xRet, _rName, 0);
+            rTreeView.set_text_emphasis(*xRet, false, 0);
+            rTreeView.set_image(*xRet, sImageId);
         }
     }
-    return pRet;
+    rTreeView.make_sorted();
+    return xRet;
 }
 
 void OAppDetailPageHelper::elementRemoved( ElementType _eType,const OUString& _rName )
 {
-    DBTreeListBox* pTreeView = getCurrentView();
+    InterimDBTreeListBox* pTreeView = getCurrentView();
     if ( !pTreeView )
         return;
+
+    weld::TreeView& rTreeView = pTreeView->GetWidget();
 
     switch( _eType )
     {
         case E_TABLE:
             // we don't need to clear the table here, it is already done by the dispose listener
-            static_cast< OTableTreeListBox* >( pTreeView )->removedTable( _rName );
+            static_cast<OTableTreeListBox*>(pTreeView)->removedTable(_rName);
             break;
         case E_QUERY:
-            if (auto pEntry = lcl_findEntry_impl(*pTreeView, _rName, pTreeView->First()))
-                pTreeView->GetModel()->Remove(pEntry);
+        {
+            std::unique_ptr<weld::TreeIter> xIter(rTreeView.make_iterator());
+            if (rTreeView.get_iter_first(*xIter) && lcl_findEntry_impl(*pTreeView, _rName, *xIter))
+                rTreeView.remove(*xIter);
             break;
+        }
         case E_FORM:
         case E_REPORT:
-            if (auto pEntry = lcl_findEntry(*pTreeView, _rName, pTreeView->First()))
-                pTreeView->GetModel()->Remove(pEntry);
+        {
+            std::unique_ptr<weld::TreeIter> xIter(rTreeView.make_iterator());
+            if (rTreeView.get_iter_first(*xIter) && lcl_findEntry(*pTreeView, _rName, *xIter))
+                rTreeView.remove(*xIter);
             break;
+        }
         default:
             OSL_FAIL("Invalid element type");
     }
-    if ( !pTreeView->GetEntryCount() )
+    if (!rTreeView.n_children())
         showPreview(nullptr);
 }
 
-IMPL_LINK(OAppDetailPageHelper, OnEntryEnterKey, DBTreeListBox*, _pTree, void )
+IMPL_LINK(OAppDetailPageHelper, OnEntryDoubleClick, weld::TreeView&, rTreeView, bool)
 {
-    OnEntryDoubleClick(_pTree);
-}
-IMPL_LINK(OAppDetailPageHelper, OnEntryDoubleClick, SvTreeListBox*, _pTree, bool)
-{
-    OSL_ENSURE( _pTree, "OAppDetailPageHelper, OnEntryDoubleClick: invalid callback!" );
-    bool bHandled = ( _pTree != nullptr ) && getBorderWin().getView()->getAppController().onEntryDoubleClick( *_pTree );
-    return bHandled;
+    return getBorderWin().getView()->getAppController().onEntryDoubleClick(rTreeView);
 }
 
 IMPL_LINK_NOARG(OAppDetailPageHelper, OnEntrySelChange, LinkParamNone*, void)
@@ -970,7 +985,8 @@ void OAppDetailPageHelper::switchPreview(PreviewMode _eMode,bool _bForce)
     // simulate a selectionChanged event at the controller, to force the preview to be updated
     if ( isPreviewEnabled() )
     {
-        if ( getCurrentView() && getCurrentView()->FirstSelected() )
+        InterimDBTreeListBox* pCurrent = getCurrentView();
+        if (pCurrent && pCurrent->GetWidget().get_selected(nullptr))
         {
             getBorderWin().getView()->getAppController().onSelectionChanged();
         }
@@ -1163,14 +1179,14 @@ IMPL_LINK_NOARG(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, void)
 
 void OAppDetailPageHelper::KeyInput( const KeyEvent& rKEvt )
 {
-    SvTreeListBox* pCurrentView = getCurrentView();
+    InterimDBTreeListBox* pCurrentView = getCurrentView();
     OSL_PRECOND( pCurrentView, "OAppDetailPageHelper::KeyInput: how this?" );
 
     sal_uInt16      nCode = rKEvt.GetKeyCode().GetCode();
 
     if ( ( KEY_RETURN == nCode ) && pCurrentView )
     {
-        getBorderWin().getView()->getAppController().onEntryDoubleClick( *pCurrentView );
+        getBorderWin().getView()->getAppController().onEntryDoubleClick(pCurrentView->GetWidget());
     }
     else
         Window::KeyInput(rKEvt);
@@ -1185,16 +1201,8 @@ void OAppDetailPageHelper::DataChanged( const DataChangedEvent& rDCEvt )
         (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
         ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
-
     {
         ImplInitSettings();
-        if ( m_pLists[ E_TABLE ] )
-        {
-            OTableTreeListBox* pTableTree = dynamic_cast< OTableTreeListBox* >( m_pLists[ E_TABLE ].get() );
-            OSL_ENSURE( pTableTree != nullptr, "OAppDetailPageHelper::DataChanged: a tree list for tables which is no TableTreeList?" );
-            if ( pTableTree )
-                pTableTree->notifyHiContrastChanged();
-        }
     }
 }
 
