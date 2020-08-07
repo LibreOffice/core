@@ -294,16 +294,16 @@ void OApplicationView::paste()
         pTest->paste();
 }
 
-OUString OApplicationView::getQualifiedName( SvTreeListEntry* _pEntry ) const
+OUString OApplicationView::getQualifiedName(weld::TreeIter* _pEntry) const
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
     return getDetailView()->getQualifiedName( _pEntry );
 }
 
-bool OApplicationView::isLeaf(SvTreeListEntry const * _pEntry) const
+bool OApplicationView::isLeaf(const weld::TreeView& rTreeView, const weld::TreeIter& rEntry) const
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
-    return OApplicationDetailView::isLeaf(_pEntry);
+    return OApplicationDetailView::isLeaf(rTreeView, rEntry);
 }
 
 bool OApplicationView::isALeafSelected() const
@@ -384,7 +384,7 @@ void OApplicationView::selectElements(const Sequence< OUString>& _aNames)
     getDetailView()->selectElements( _aNames );
 }
 
-SvTreeListEntry* OApplicationView::elementAdded(ElementType eType,const OUString& _rName, const Any& _rObject )
+std::unique_ptr<weld::TreeIter> OApplicationView::elementAdded(ElementType eType,const OUString& _rName, const Any& _rObject )
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
     return getDetailView()->elementAdded(eType,_rName,_rObject);
@@ -418,10 +418,10 @@ void OApplicationView::selectContainer(ElementType _eType)
     getPanel()->selectContainer(_eType);
 }
 
-SvTreeListEntry* OApplicationView::getEntry( const Point& _aPosPixel ) const
+std::unique_ptr<weld::TreeIter> OApplicationView::getEntry(const Point& rPosPixel) const
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
-    return getDetailView()->getEntry(_aPosPixel);
+    return getDetailView()->getEntry(rPosPixel);
 }
 
 PreviewMode OApplicationView::getPreviewMode() const

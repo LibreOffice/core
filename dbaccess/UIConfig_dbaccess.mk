@@ -23,6 +23,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/copytablepage \
     dbaccess/uiconfig/ui/dbaseindexdialog \
     dbaccess/uiconfig/ui/dbasepage \
+    dbaccess/uiconfig/ui/dbtreelist \
     dbaccess/uiconfig/ui/dbwizconnectionpage \
     dbaccess/uiconfig/ui/dbwizmysqlintropage \
     dbaccess/uiconfig/ui/dbwizmysqlnativepage \

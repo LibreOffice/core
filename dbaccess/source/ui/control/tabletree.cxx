@@ -36,7 +36,6 @@
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/treelistentry.hxx>
 
 #include <algorithm>
 
@@ -59,86 +58,38 @@ namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
 namespace DatabaseObjectContainer = ::com::sun::star::sdb::application::DatabaseObjectContainer;
 
 // OTableTreeListBox
-OTableTreeListBox::OTableTreeListBox(vcl::Window* pParent, WinBits nWinStyle)
-    : DBTreeListBox(pParent, nWinStyle)
-    , m_xImageProvider( new ImageProvider )
-    , m_bVirtualRoot(false)
-    , m_bNoEmptyFolders( false )
-{
-    InitButtonData();
-
-    implSetDefaultImages();
-}
-
-void OTableTreeListBox::InitButtonData()
-{
-    m_pCheckButton.reset( new SvLBoxButtonData( this ) );
-    EnableCheckButton( m_pCheckButton.get() );
-}
-
-void OTableTreeListBox::dispose()
-{
-    m_pCheckButton.reset();
-    DBTreeListBox::dispose();
-}
-
-TableTreeListBox::TableTreeListBox(std::unique_ptr<weld::TreeView> xTreeView)
-    : m_xImageProvider(new ImageProvider)
+OTableTreeListBox::OTableTreeListBox(vcl::Window* pParent, bool bShowToggles)
+    : InterimDBTreeListBox(pParent)
+    , m_xImageProvider(new ImageProvider)
     , m_bVirtualRoot(false)
     , m_bNoEmptyFolders(false)
-    , m_bShowToggles(true)
-    , m_xTreeView(std::move(xTreeView))
+    , m_bShowToggles(bShowToggles)
 {
-    m_xTreeView->enable_toggle_buttons(weld::ColumnToggleType::Check);
+    if (m_bShowToggles)
+        m_xTreeView->enable_toggle_buttons(weld::ColumnToggleType::Check);
 }
 
-void OTableTreeListBox::implSetDefaultImages()
+OTableTreeListBox::~OTableTreeListBox()
 {
-    SetDefaultExpandedEntryBmp(  ImageProvider::getFolderImage( DatabaseObject::TABLE ) );
-    SetDefaultCollapsedEntryBmp( ImageProvider::getFolderImage( DatabaseObject::TABLE ) );
 }
 
-bool  OTableTreeListBox::isFolderEntry( const SvTreeListEntry* _pEntry )
+TableTreeListBox::TableTreeListBox(std::unique_ptr<weld::TreeView> xTreeView, bool bShowToggles)
+    : TreeListBox(std::move(xTreeView))
+    , m_xImageProvider(new ImageProvider)
+    , m_bVirtualRoot(false)
+    , m_bNoEmptyFolders(false)
+    , m_bShowToggles(bShowToggles)
 {
-    sal_Int32 nEntryType = reinterpret_cast< sal_IntPtr >( _pEntry->GetUserData() );
+    if (m_bShowToggles)
+        m_xTreeView->enable_toggle_buttons(weld::ColumnToggleType::Check);
+}
+
+bool OTableTreeListBox::isFolderEntry(const weld::TreeIter& rEntry) const
+{
+    sal_Int32 nEntryType = m_xTreeView->get_id(rEntry).toInt32();
     return ( nEntryType == DatabaseObjectContainer::TABLES )
         ||  ( nEntryType == DatabaseObjectContainer::CATALOG )
         ||  ( nEntryType == DatabaseObjectContainer::SCHEMA );
-}
-
-void OTableTreeListBox::notifyHiContrastChanged()
-{
-    implSetDefaultImages();
-
-    SvTreeListEntry* pEntryLoop = First();
-    while (pEntryLoop)
-    {
-        size_t nCount = pEntryLoop->ItemCount();
-        for (size_t i=0;i<nCount;++i)
-        {
-            SvLBoxItem& rItem = pEntryLoop->GetItem(i);
-            if (rItem.GetType() == SvLBoxItemType::ContextBmp)
-            {
-                SvLBoxContextBmp& rContextBitmapItem = static_cast< SvLBoxContextBmp& >( rItem );
-
-                Image aImage;
-                if ( isFolderEntry( pEntryLoop ) )
-                {
-                    aImage = ImageProvider::getFolderImage( DatabaseObject::TABLE );
-                }
-                else
-                {
-                    OUString sCompleteName( getQualifiedTableName( pEntryLoop ) );
-                    m_xImageProvider->getImages( sCompleteName, DatabaseObject::TABLE, aImage );
-                }
-
-                rContextBitmapItem.SetBitmap1( aImage );
-                rContextBitmapItem.SetBitmap2( aImage );
-                break;
-            }
-        }
-        pEntryLoop = Next(pEntryLoop);
-    }
 }
 
 void OTableTreeListBox::implOnNewConnection( const Reference< XConnection >& _rxConnection )
@@ -153,7 +104,7 @@ void TableTreeListBox::implOnNewConnection( const Reference< XConnection >& _rxC
     m_xImageProvider.reset( new ImageProvider( m_xConnection  ) );
 }
 
-void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConnection )
+void OTableTreeListBox::UpdateTableList(const Reference<XConnection>& _rxConnection)
 {
     Sequence< OUString > sTables, sViews;
 
@@ -324,7 +275,8 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
     implOnNewConnection( _rxConnection );
 
     // throw away all the old stuff
-    Clear();
+    m_xTreeView->clear();
+    m_xTreeView->make_unsorted();
 
     try
     {
@@ -339,7 +291,15 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
                 sRootEntryText  = DBA_RES(STR_ALL_VIEWS);
             else
                 sRootEntryText  = DBA_RES(STR_ALL_TABLES_AND_VIEWS);
-            InsertEntry( sRootEntryText, nullptr, false, TREELIST_APPEND, reinterpret_cast< void* >( DatabaseObjectContainer::TABLES ) );
+            OUString sId(OUString::number(DatabaseObjectContainer::TABLES));
+            OUString sImageId = ImageProvider::getFolderImageId(DatabaseObject::TABLE);
+            std::unique_ptr<weld::TreeIter> xRet(m_xTreeView->make_iterator());
+            m_xTreeView->insert(nullptr, -1, nullptr, &sId, nullptr, nullptr, false, xRet.get());
+            m_xTreeView->set_image(*xRet, sImageId, -1);
+            if (m_bShowToggles)
+                m_xTreeView->set_toggle(*xRet, TRISTATE_FALSE);
+            m_xTreeView->set_text(*xRet, sRootEntryText, 0);
+            m_xTreeView->set_text_emphasis(*xRet, false, 0);
         }
 
         if ( _rTables.empty() )
@@ -370,12 +330,23 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
                     bCatalogs ? xMeta->getCatalogs() : xMeta->getSchemas(), 1 ) );
                 sal_Int32 nFolderType = bCatalogs ? DatabaseObjectContainer::CATALOG : DatabaseObjectContainer::SCHEMA;
 
-                SvTreeListEntry* pRootEntry = getAllObjectsEntry();
+                OUString sImageId = ImageProvider::getFolderImageId(DatabaseObject::TABLE);
+
+                std::unique_ptr<weld::TreeIter> xRootEntry(getAllObjectsEntry());
+                std::unique_ptr<weld::TreeIter> xRet(m_xTreeView->make_iterator());
                 for (auto const& folderName : aFolderNames)
                 {
-                    SvTreeListEntry* pFolder = GetEntryPosByName( folderName, pRootEntry );
-                    if ( !pFolder )
-                        InsertEntry( folderName, pRootEntry, false, TREELIST_APPEND, reinterpret_cast< void* >( nFolderType ) );
+                    std::unique_ptr<weld::TreeIter> xFolder(GetEntryPosByName(folderName, xRootEntry.get()));
+                    if (!xFolder)
+                    {
+                        OUString sId(OUString::number(nFolderType));
+                        m_xTreeView->insert(xRootEntry.get(), -1, nullptr, &sId, nullptr, nullptr, false, xRet.get());
+                        m_xTreeView->set_image(*xRet, sImageId, -1);
+                        if (m_bShowToggles)
+                            m_xTreeView->set_toggle(*xRet, TRISTATE_FALSE);
+                        m_xTreeView->set_text(*xRet, folderName, 0);
+                        m_xTreeView->set_text_emphasis(*xRet, false, 0);
+                    }
                 }
             }
         }
@@ -384,11 +355,8 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
     {
         DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
-}
 
-void TableTreeListBox::DisableCheckButtons()
-{
-    m_bShowToggles = false;
+    m_xTreeView->make_sorted();
 }
 
 void TableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConnection, const TNames& _rTables )
@@ -480,15 +448,9 @@ void TableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConne
     m_xTreeView->make_sorted();
 }
 
-bool OTableTreeListBox::isWildcardChecked(SvTreeListEntry* _pEntry)
+bool OTableTreeListBox::isWildcardChecked(const weld::TreeIter& rEntry)
 {
-    if (_pEntry)
-    {
-        OBoldListboxString* pTextItem = static_cast<OBoldListboxString*>(_pEntry->GetFirstItem(SvLBoxItemType::String));
-        if (pTextItem)
-            return pTextItem->isEmphasized();
-    }
-    return false;
+    return m_xTreeView->get_text_emphasis(rEntry, 0);
 }
 
 bool TableTreeListBox::isWildcardChecked(const weld::TreeIter& rEntry)
@@ -496,10 +458,12 @@ bool TableTreeListBox::isWildcardChecked(const weld::TreeIter& rEntry)
     return m_xTreeView->get_text_emphasis(rEntry, 0);
 }
 
-void OTableTreeListBox::checkWildcard(SvTreeListEntry* _pEntry)
+void OTableTreeListBox::checkWildcard(weld::TreeIter& rEntry)
 {
-    SetCheckButtonState(_pEntry, SvButtonState::Checked);
-    checkedButton_noBroadcast(_pEntry);
+    if (!m_bShowToggles)
+        return;
+    m_xTreeView->set_toggle(rEntry, TRISTATE_TRUE);
+    checkedButton_noBroadcast(rEntry);
 }
 
 void TableTreeListBox::checkWildcard(weld::TreeIter& rEntry)
@@ -510,9 +474,14 @@ void TableTreeListBox::checkWildcard(weld::TreeIter& rEntry)
     checkedButton_noBroadcast(rEntry);
 }
 
-SvTreeListEntry* OTableTreeListBox::getAllObjectsEntry() const
+std::unique_ptr<weld::TreeIter> OTableTreeListBox::getAllObjectsEntry() const
 {
-    return haveVirtualRoot() ? First() : nullptr;
+    if (!haveVirtualRoot())
+        return nullptr;
+    auto xRet = m_xTreeView->make_iterator();
+    if (!m_xTreeView->get_iter_first(*xRet))
+        return nullptr;
+    return xRet;
 }
 
 std::unique_ptr<weld::TreeIter> TableTreeListBox::getAllObjectsEntry() const
@@ -525,48 +494,61 @@ std::unique_ptr<weld::TreeIter> TableTreeListBox::getAllObjectsEntry() const
     return xRet;
 }
 
-void OTableTreeListBox::checkedButton_noBroadcast(SvTreeListEntry* _pEntry)
+void OTableTreeListBox::checkedButton_noBroadcast(const weld::TreeIter& rEntry)
 {
-    SvButtonState eState = GetCheckButtonState( _pEntry);
-    if (GetModel()->HasChildren(_pEntry)) // if it has children, check those too
+    if (!m_bShowToggles)
+        return;
+    TriState eState = m_xTreeView->get_toggle(rEntry);
+    OSL_ENSURE(TRISTATE_INDET != eState, "OTableTreeListBox::CheckButtonHdl: user action which lead to TRISTATE?");
+
+    if (m_xTreeView->iter_has_child(rEntry)) // if it has children, check those too
     {
-        SvTreeListEntry* pChildEntry = GetModel()->Next(_pEntry);
-        SvTreeListEntry* pSiblingEntry = _pEntry->NextSibling();
-        while(pChildEntry && pChildEntry != pSiblingEntry)
+        std::unique_ptr<weld::TreeIter> xChildEntry(m_xTreeView->make_iterator(&rEntry));
+        std::unique_ptr<weld::TreeIter> xSiblingEntry(m_xTreeView->make_iterator(&rEntry));
+        bool bChildEntry = m_xTreeView->iter_next(*xChildEntry);
+        bool bSiblingEntry = m_xTreeView->iter_next_sibling(*xSiblingEntry);
+        while (bChildEntry && (!bSiblingEntry || !xChildEntry->equal(*xSiblingEntry)))
         {
-            SetCheckButtonState(pChildEntry, eState);
-            pChildEntry = GetModel()->Next(pChildEntry);
+            m_xTreeView->set_toggle(*xChildEntry, eState);
+            bChildEntry = m_xTreeView->iter_next(*xChildEntry);
         }
     }
 
-    SvTreeListEntry* pEntry = IsSelected(_pEntry) ? FirstSelected() : nullptr;
-    while(pEntry)
+    if (m_xTreeView->is_selected(rEntry))
     {
-        SetCheckButtonState(pEntry,eState);
-        if(GetModel()->HasChildren(pEntry))   // if it has children, check those too
-        {
-            SvTreeListEntry* pChildEntry = GetModel()->Next(pEntry);
-            SvTreeListEntry* pSiblingEntry = pEntry->NextSibling();
-            while(pChildEntry && pChildEntry != pSiblingEntry)
+        m_xTreeView->selected_foreach([this, eState](weld::TreeIter& rSelected){
+            m_xTreeView->set_toggle(rSelected, eState);
+            if (m_xTreeView->iter_has_child(rSelected)) // if it has children, check those too
             {
-                SetCheckButtonState(pChildEntry,eState);
-                pChildEntry = GetModel()->Next(pChildEntry);
+                std::unique_ptr<weld::TreeIter> xChildEntry(m_xTreeView->make_iterator(&rSelected));
+                std::unique_ptr<weld::TreeIter> xSiblingEntry(m_xTreeView->make_iterator(&rSelected));
+                bool bChildEntry = m_xTreeView->iter_next(*xChildEntry);
+                bool bSiblingEntry = m_xTreeView->iter_next_sibling(*xSiblingEntry);
+                while (bChildEntry && (!bSiblingEntry || !xChildEntry->equal(*xSiblingEntry)))
+                {
+                    m_xTreeView->set_toggle(*xChildEntry, eState);
+                    bChildEntry = m_xTreeView->iter_next(*xChildEntry);
+                }
             }
-        }
-        pEntry = NextSelected(pEntry);
+            return false;
+        });
     }
+
     CheckButtons();
 
     // if an entry has children, it makes a difference if the entry is checked
     // because all children are checked or if the user checked it explicitly.
     // So we track explicit (un)checking
-    implEmphasize(_pEntry, SvButtonState::Checked == eState);
+    implEmphasize(rEntry, eState == TRISTATE_TRUE);
 }
 
-SvButtonState OTableTreeListBox::implDetermineState(SvTreeListEntry* _pEntry)
+TriState OTableTreeListBox::implDetermineState(weld::TreeIter& rEntry)
 {
-    SvButtonState eState = GetCheckButtonState(_pEntry);
-    if (!GetModel()->HasChildren(_pEntry))
+    if (!m_bShowToggles)
+        return TRISTATE_FALSE;
+
+    TriState eState = m_xTreeView->get_toggle(rEntry);
+    if (!m_xTreeView->iter_has_child(rEntry))
         // nothing to do in this bottom-up routine if there are no children ...
         return eState;
 
@@ -574,109 +556,76 @@ SvButtonState OTableTreeListBox::implDetermineState(SvTreeListEntry* _pEntry)
     sal_uInt16 nCheckedChildren = 0;
     sal_uInt16 nChildrenOverall = 0;
 
-    SvTreeListEntry* pChildLoop = GetModel()->FirstChild(_pEntry);
-    while (pChildLoop)
+    std::unique_ptr<weld::TreeIter> xChild(m_xTreeView->make_iterator(&rEntry));
+    bool bChildLoop = m_xTreeView->iter_children(*xChild);
+    while (bChildLoop)
     {
-        SvButtonState eChildState = implDetermineState(pChildLoop);
-        if (SvButtonState::Tristate == eChildState)
+        TriState eChildState = implDetermineState(*xChild);
+        if (eChildState == TRISTATE_INDET)
             break;
-
-        if (SvButtonState::Checked == eChildState)
+        if (eChildState == TRISTATE_TRUE)
             ++nCheckedChildren;
         ++nChildrenOverall;
-
-        pChildLoop = pChildLoop->NextSibling();
+        bChildLoop = m_xTreeView->iter_next_sibling(*xChild);
     }
 
-    if (pChildLoop)
+    if (bChildLoop)
     {
         // we did not finish the loop because at least one of the children is in tristate
-        eState = SvButtonState::Tristate;
+        eState = TRISTATE_INDET;
 
         // but this means that we did not finish all the siblings of pChildLoop,
         // so their checking may be incorrect at the moment
         // -> correct this
-        while (pChildLoop)
+        while (bChildLoop)
         {
-            implDetermineState(pChildLoop);
-            pChildLoop = pChildLoop->NextSibling();
+            implDetermineState(*xChild);
+            bChildLoop = m_xTreeView->iter_next_sibling(*xChild);
         }
     }
     else
+    {
         // none if the children are in tristate
         if (nCheckedChildren)
+        {
             // we have at least one child checked
             if (nCheckedChildren != nChildrenOverall)
+            {
                 // not all children are checked
-                eState = SvButtonState::Tristate;
+                eState = TRISTATE_INDET;
+            }
             else
+            {
                 // all children are checked
-                eState = SvButtonState::Checked;
+                eState = TRISTATE_TRUE;
+            }
+        }
         else
+        {
             // no children are checked
-            eState = SvButtonState::Unchecked;
+            eState = TRISTATE_FALSE;
+        }
+    }
 
     // finally set the entry to the state we just determined
-    SetCheckButtonState(_pEntry, eState);
+    m_xTreeView->set_toggle(rEntry, eState);
 
     return eState;
 }
 
 void OTableTreeListBox::CheckButtons()
 {
-    SvTreeListEntry* pEntry = GetModel()->First();
-    while (pEntry)
+    if (!m_bShowToggles)
+        return;
+
+    auto xEntry(m_xTreeView->make_iterator());
+    if (!m_xTreeView->get_iter_first(*xEntry))
+        return;
+
+    do
     {
-        implDetermineState(pEntry);
-        pEntry = pEntry->NextSibling();
-    }
-}
-
-void OTableTreeListBox::CheckButtonHdl()
-{
-    checkedButton_noBroadcast(GetHdlEntry());
-    m_aCheckButtonHandler.Call(this);
-}
-
-void OTableTreeListBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& _rRect)
-{
-    if (!IsEnabled())
-    {
-        vcl::Font aOldFont = rRenderContext.GetFont();
-        vcl::Font aNewFont(aOldFont);
-
-        StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
-        aNewFont.SetColor(aSystemStyle.GetDisableColor());
-
-        rRenderContext.SetFont(aNewFont);
-        DBTreeListBox::Paint(rRenderContext, _rRect);
-        rRenderContext.SetFont(aOldFont);
-    }
-    else
-        DBTreeListBox::Paint(rRenderContext, _rRect);
-}
-
-void OTableTreeListBox::KeyInput( const KeyEvent& rKEvt )
-{
-    // only if there are spaces
-    if (rKEvt.GetKeyCode().GetCode() == KEY_SPACE && !rKEvt.GetKeyCode().IsShift() && !rKEvt.GetKeyCode().IsMod1())
-    {
-        SvTreeListEntry* pCurrentHandlerEntry = GetHdlEntry();
-        if(pCurrentHandlerEntry)
-        {
-            SvButtonState eState = GetCheckButtonState( pCurrentHandlerEntry);
-            if(eState == SvButtonState::Checked)
-                SetCheckButtonState( pCurrentHandlerEntry, SvButtonState::Unchecked);
-            else
-                SetCheckButtonState( pCurrentHandlerEntry, SvButtonState::Checked);
-
-            CheckButtonHdl();
-        }
-        else
-            DBTreeListBox::KeyInput(rKEvt);
-    }
-    else
-        DBTreeListBox::KeyInput(rKEvt);
+        implDetermineState(*xEntry);
+    } while (m_xTreeView->iter_next_sibling(*xEntry));
 }
 
 void TableTreeListBox::checkedButton_noBroadcast(const weld::TreeIter& rEntry)
@@ -727,41 +676,36 @@ void TableTreeListBox::checkedButton_noBroadcast(const weld::TreeIter& rEntry)
     implEmphasize(rEntry, eState == TRISTATE_TRUE);
 }
 
-void OTableTreeListBox::implEmphasize(SvTreeListEntry* _pEntry, bool _bChecked, bool _bUpdateDescendants, bool _bUpdateAncestors)
+void OTableTreeListBox::implEmphasize(const weld::TreeIter& rEntry, bool _bChecked, bool _bUpdateDescendants, bool _bUpdateAncestors)
 {
-    OSL_ENSURE(_pEntry, "OTableTreeListBox::implEmphasize: invalid entry (NULL)!");
-
     // special emphasizing handling for the "all objects" entry
-    bool bAllObjectsEntryAffected = haveVirtualRoot() && (getAllObjectsEntry() == _pEntry);
-    if  (   GetModel()->HasChildren(_pEntry)              // the entry has children
-        ||  bAllObjectsEntryAffected                    // or it is the "all objects" entry
+    bool bAllObjectsEntryAffected = haveVirtualRoot() && (getAllObjectsEntry()->equal(rEntry));
+    if  (   m_xTreeView->iter_has_child(rEntry) // the entry has children
+        ||  bAllObjectsEntryAffected            // or it is the "all objects" entry
         )
     {
-        OBoldListboxString* pTextItem = static_cast<OBoldListboxString*>(_pEntry->GetFirstItem(SvLBoxItemType::String));
-        if (pTextItem)
-            pTextItem->emphasize(_bChecked);
-
-        if (bAllObjectsEntryAffected)
-            InvalidateEntry(_pEntry);
+        m_xTreeView->set_text_emphasis(rEntry, _bChecked, 0);
     }
 
     if (_bUpdateDescendants)
     {
+        std::unique_ptr<weld::TreeIter> xChild(m_xTreeView->make_iterator(&rEntry));
         // remove the mark for all children of the checked entry
-        SvTreeListEntry* pChildLoop = FirstChild(_pEntry);
-        while (pChildLoop)
+        bool bChildLoop = m_xTreeView->iter_children(*xChild);
+        while (bChildLoop)
         {
-            if (GetModel()->HasChildren(pChildLoop))
-                implEmphasize(pChildLoop, false, true, false);
-            pChildLoop = pChildLoop->NextSibling();
+            if (m_xTreeView->iter_has_child(*xChild))
+                implEmphasize(*xChild, false, true, false);
+            bChildLoop = m_xTreeView->iter_next_sibling(*xChild);
         }
     }
 
     if (_bUpdateAncestors)
     {
+        std::unique_ptr<weld::TreeIter> xParent(m_xTreeView->make_iterator(&rEntry));
         // remove the mark for all ancestors of the entry
-        if (GetModel()->HasParent(_pEntry))
-            implEmphasize(GetParent(_pEntry), false, false);
+        if (m_xTreeView->iter_parent(*xParent))
+            implEmphasize(*xParent, false, false);
     }
 }
 
@@ -798,20 +742,7 @@ void TableTreeListBox::implEmphasize(const weld::TreeIter& rEntry, bool _bChecke
     }
 }
 
-void OTableTreeListBox::InitEntry(SvTreeListEntry* _pEntry, const OUString& _rString, const Image& _rCollapsedBitmap, const Image& _rExpandedBitmap)
-{
-    DBTreeListBox::InitEntry(_pEntry, _rString, _rCollapsedBitmap, _rExpandedBitmap);
-
-    // replace the text item with our own one
-    SvLBoxItem* pTextItem = _pEntry->GetFirstItem(SvLBoxItemType::String);
-    OSL_ENSURE(pTextItem, "OTableTreeListBox::InitEntry: no text item!?");
-    size_t nTextPos = _pEntry->GetPos(pTextItem);
-    OSL_ENSURE(SvTreeListEntry::ITEM_NOT_FOUND != nTextPos, "OTableTreeListBox::InitEntry: no text item pos!");
-
-    _pEntry->ReplaceItem(std::make_unique<OBoldListboxString>(_rString), nTextPos);
-}
-
-SvTreeListEntry* OTableTreeListBox::implAddEntry(
+std::unique_ptr<weld::TreeIter> OTableTreeListBox::implAddEntry(
         const Reference< XDatabaseMetaData >& _rxMeta,
         const OUString& _rTableName,
         bool _bCheckName
@@ -825,7 +756,7 @@ SvTreeListEntry* OTableTreeListBox::implAddEntry(
     OUString sCatalog, sSchema, sName;
     qualifiedNameComponents( _rxMeta, _rTableName, sCatalog, sSchema, sName, ::dbtools::EComposeRule::InDataManipulation );
 
-    SvTreeListEntry* pParentEntry = getAllObjectsEntry();
+    std::unique_ptr<weld::TreeIter> xParentEntry(getAllObjectsEntry());
 
     // if the DB uses catalog at the start of identifiers, then our hierarchy is
     //   catalog
@@ -843,32 +774,62 @@ SvTreeListEntry* OTableTreeListBox::implAddEntry(
 
     if ( !rFirstName.isEmpty() )
     {
-        SvTreeListEntry* pFolder = GetEntryPosByName( rFirstName, pParentEntry );
-        if ( !pFolder )
-            pFolder = InsertEntry( rFirstName, pParentEntry, false, TREELIST_APPEND, reinterpret_cast< void* >( nFirstFolderType ) );
-        pParentEntry = pFolder;
+        std::unique_ptr<weld::TreeIter> xFolder(GetEntryPosByName(rFirstName, xParentEntry.get()));
+        if (!xFolder)
+        {
+            xFolder = m_xTreeView->make_iterator();
+            OUString sId(OUString::number(nFirstFolderType));
+            OUString sImageId = ImageProvider::getFolderImageId(DatabaseObject::TABLE);
+            m_xTreeView->insert(xParentEntry.get(), -1, nullptr, &sId, nullptr, nullptr, false, xFolder.get());
+            m_xTreeView->set_image(*xFolder, sImageId, -1);
+            if (m_bShowToggles)
+                m_xTreeView->set_toggle(*xFolder, TRISTATE_FALSE);
+            m_xTreeView->set_text(*xFolder, rFirstName, 0);
+            m_xTreeView->set_text_emphasis(*xFolder, false, 0);
+        }
+        xParentEntry = std::move(xFolder);
     }
 
     if ( !rSecondName.isEmpty() )
     {
-        SvTreeListEntry* pFolder = GetEntryPosByName( rSecondName, pParentEntry );
-        if ( !pFolder )
-            pFolder = InsertEntry( rSecondName, pParentEntry, false, TREELIST_APPEND, reinterpret_cast< void* >( nSecondFolderType ) );
-        pParentEntry = pFolder;
+        std::unique_ptr<weld::TreeIter> xFolder(GetEntryPosByName(rSecondName, xParentEntry.get()));
+        if (!xFolder)
+        {
+            xFolder = m_xTreeView->make_iterator();
+            OUString sId(OUString::number(nSecondFolderType));
+            OUString sImageId = ImageProvider::getFolderImageId(DatabaseObject::TABLE);
+            m_xTreeView->insert(xParentEntry.get(), -1, nullptr, &sId, nullptr, nullptr, false, xFolder.get());
+            m_xTreeView->set_image(*xFolder, sImageId, -1);
+            if (m_bShowToggles)
+                m_xTreeView->set_toggle(*xFolder, TRISTATE_FALSE);
+            m_xTreeView->set_text(*xFolder, rSecondName, 0);
+            m_xTreeView->set_text_emphasis(*xFolder, false, 0);
+        }
+        xParentEntry = std::move(xFolder);
     }
 
-    SvTreeListEntry* pRet = nullptr;
-    if ( !_bCheckName || !GetEntryPosByName( sName, pParentEntry ) )
+    if (!_bCheckName || !GetEntryPosByName(sName, xParentEntry.get()))
     {
-        pRet = InsertEntry( sName, pParentEntry );
+        std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->make_iterator();
+        m_xTreeView->insert(xParentEntry.get(), -1, nullptr, nullptr, nullptr, nullptr, false, xEntry.get());
 
-        Image aImage;
-        m_xImageProvider->getImages( _rTableName, DatabaseObject::TABLE, aImage );
+        auto xGraphic = m_xImageProvider->getXGraphic(_rTableName, DatabaseObject::TABLE);
+        if (xGraphic.is())
+            m_xTreeView->set_image(*xEntry, xGraphic, -1);
+        else
+        {
+            OUString sImageId(m_xImageProvider->getImageId(_rTableName, DatabaseObject::TABLE));
+            m_xTreeView->set_image(*xEntry, sImageId, -1);
+        }
+        if (m_bShowToggles)
+            m_xTreeView->set_toggle(*xEntry, TRISTATE_FALSE);
+        m_xTreeView->set_text(*xEntry, sName, 0);
+        m_xTreeView->set_text_emphasis(*xEntry, false, 0);
 
-        SetExpandedEntryBmp( pRet, aImage );
-        SetCollapsedEntryBmp( pRet, aImage );
+        return xEntry;
     }
-    return pRet;
+
+    return nullptr;
 }
 
 void TableTreeListBox::implAddEntry(
@@ -957,11 +918,11 @@ void TableTreeListBox::implAddEntry(
     }
 }
 
-NamedDatabaseObject OTableTreeListBox::describeObject( SvTreeListEntry* _pEntry )
+NamedDatabaseObject OTableTreeListBox::describeObject(weld::TreeIter& rEntry)
 {
     NamedDatabaseObject aObject;
 
-    sal_Int32 nEntryType = reinterpret_cast< sal_IntPtr >( _pEntry->GetUserData() );
+    sal_Int32 nEntryType = m_xTreeView->get_id(rEntry).toInt32();
 
     if  ( nEntryType == DatabaseObjectContainer::TABLES )
     {
@@ -976,19 +937,19 @@ NamedDatabaseObject OTableTreeListBox::describeObject( SvTreeListEntry* _pEntry 
     else
     {
         aObject.Type = DatabaseObject::TABLE;
-        aObject.Name = getQualifiedTableName( _pEntry );
+        aObject.Name = getQualifiedTableName(rEntry);
     }
 
     return aObject;
 }
 
-SvTreeListEntry* OTableTreeListBox::addedTable( const OUString& _rName )
+std::unique_ptr<weld::TreeIter> OTableTreeListBox::addedTable(const OUString& rName)
 {
     try
     {
         Reference< XDatabaseMetaData > xMeta;
         if ( impl_getAndAssertMetaData( xMeta ) )
-            return implAddEntry( xMeta, _rName );
+            return implAddEntry( xMeta, rName );
     }
     catch( const Exception& )
     {
@@ -1005,9 +966,9 @@ bool OTableTreeListBox::impl_getAndAssertMetaData( Reference< XDatabaseMetaData 
     return _out_rMetaData.is();
 }
 
-OUString OTableTreeListBox::getQualifiedTableName( SvTreeListEntry* _pEntry ) const
+OUString OTableTreeListBox::getQualifiedTableName(weld::TreeIter& rEntry) const
 {
-    OSL_PRECOND( !isFolderEntry( _pEntry ), "OTableTreeListBox::getQualifiedTableName: folder entries not allowed here!" );
+    OSL_PRECOND( !isFolderEntry(rEntry), "OTableTreeListBox::getQualifiedTableName: folder entries not allowed here!" );
 
     try
     {
@@ -1019,27 +980,29 @@ OUString OTableTreeListBox::getQualifiedTableName( SvTreeListEntry* _pEntry ) co
         OUString sSchema;
         OUString sTable;
 
-        SvTreeListEntry* pSchema = GetParent( _pEntry );
-        if ( pSchema )
+        std::unique_ptr<weld::TreeIter> xSchema(m_xTreeView->make_iterator(&rEntry));
+        bool bSchema = m_xTreeView->iter_parent(*xSchema);
+        if (bSchema)
         {
-            SvTreeListEntry* pCatalog = GetParent( pSchema );
-            if  (   pCatalog
+            std::unique_ptr<weld::TreeIter> xCatalog(m_xTreeView->make_iterator(xSchema.get()));
+            bool bCatalog = m_xTreeView->iter_parent(*xCatalog);
+            if  (   bCatalog
                 ||  (   xMeta->supportsCatalogsInDataManipulation()
                     &&  !xMeta->supportsSchemasInDataManipulation()
                     )   // here we support catalog but no schema
                 )
             {
-                if ( pCatalog == nullptr )
+                if (!bCatalog)
                 {
-                    pCatalog = pSchema;
-                    pSchema = nullptr;
+                    xCatalog = std::move(xSchema);
+                    bSchema = false;
                 }
-                sCatalog = GetEntryText( pCatalog );
+                sCatalog = m_xTreeView->get_text(*xCatalog);
             }
-            if ( pSchema )
-                sSchema = GetEntryText(pSchema);
+            if (bSchema)
+                sSchema = m_xTreeView->get_text(*xSchema);
         }
-        sTable = GetEntryText( _pEntry );
+        sTable = m_xTreeView->get_text(rEntry);
 
         return ::dbtools::composeTableName( xMeta, sCatalog, sSchema, sTable, false, ::dbtools::EComposeRule::InDataManipulation );
     }
@@ -1050,7 +1013,7 @@ OUString OTableTreeListBox::getQualifiedTableName( SvTreeListEntry* _pEntry ) co
     return OUString();
 }
 
-SvTreeListEntry* OTableTreeListBox::getEntryByQualifiedName( const OUString& _rName )
+std::unique_ptr<weld::TreeIter> OTableTreeListBox::getEntryByQualifiedName(const OUString& rName)
 {
     try
     {
@@ -1060,26 +1023,26 @@ SvTreeListEntry* OTableTreeListBox::getEntryByQualifiedName( const OUString& _rN
 
         // split the complete name into its components
         OUString sCatalog, sSchema, sName;
-        qualifiedNameComponents(xMeta, _rName, sCatalog, sSchema, sName,::dbtools::EComposeRule::InDataManipulation);
+        qualifiedNameComponents(xMeta, rName, sCatalog, sSchema, sName,::dbtools::EComposeRule::InDataManipulation);
 
-        SvTreeListEntry* pParent = getAllObjectsEntry();
-        SvTreeListEntry* pCat = nullptr;
-        SvTreeListEntry* pSchema = nullptr;
-        if ( !sCatalog.isEmpty() )
+        std::unique_ptr<weld::TreeIter> xParent(getAllObjectsEntry());
+        std::unique_ptr<weld::TreeIter> xCat;
+        std::unique_ptr<weld::TreeIter> xSchema;
+        if (!sCatalog.isEmpty())
         {
-            pCat = GetEntryPosByName(sCatalog, pParent);
-            if ( pCat )
-                pParent = pCat;
+            xCat = GetEntryPosByName(sCatalog);
+            if (xCat)
+                xParent = std::move(xCat);
         }
 
-        if ( !sSchema.isEmpty() )
+        if (!sSchema.isEmpty())
         {
-            pSchema = GetEntryPosByName(sSchema, pParent);
-            if ( pSchema )
-                pParent = pSchema;
+            xSchema = GetEntryPosByName(sSchema, xParent.get());
+            if (xSchema)
+                xParent = std::move(xSchema);
         }
 
-        return GetEntryPosByName(sName, pParent);
+        return GetEntryPosByName(sName, xParent.get());
     }
     catch( const Exception& )
     {
@@ -1088,39 +1051,18 @@ SvTreeListEntry* OTableTreeListBox::getEntryByQualifiedName( const OUString& _rN
     return nullptr;
 }
 
-void OTableTreeListBox::removedTable( const OUString& _rName )
+void OTableTreeListBox::removedTable(const OUString& rName)
 {
     try
     {
-        SvTreeListEntry* pEntry = getEntryByQualifiedName( _rName );
-        if ( pEntry )
-            GetModel()->Remove( pEntry );
+        std::unique_ptr<weld::TreeIter> xEntry = getEntryByQualifiedName(rName);
+        if (xEntry)
+            m_xTreeView->remove(*xEntry);
     }
     catch( const Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
-}
-
-std::unique_ptr<weld::TreeIter> TableTreeListBox::GetEntryPosByName(const OUString& aName, const weld::TreeIter* pStart, const IEntryFilter* _pFilter) const
-{
-    auto xEntry(m_xTreeView->make_iterator(pStart));
-    if (!pStart && !m_xTreeView->get_iter_first(*xEntry))
-        return nullptr;
-
-    do
-    {
-        if (m_xTreeView->get_text(*xEntry) == aName)
-        {
-            if (!_pFilter || _pFilter->includeEntry(reinterpret_cast<void*>(m_xTreeView->get_id(*xEntry).toUInt64())))
-            {
-                // found
-                return xEntry;
-            }
-        }
-    } while (m_xTreeView->iter_next(*xEntry));
-
-    return nullptr;
 }
 
 void TableTreeListBox::CheckButtons()
