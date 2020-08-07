@@ -229,6 +229,19 @@ void PPTShape::addShape(
         {
             if (TextBodyPtr pTextBody = getTextBody())
             {
+                // If slide shape has not numCol but placeholder has we should inherit from placeholder.
+                if (pTextBody->getTextProperties().mnNumCol == 1 &&
+                    mnSubType &&
+                    getSubTypeIndex().has() &&
+                    rSlidePersist.getMasterPersist())
+                {
+                    oox::drawingml::ShapePtr pPlaceholder = PPTShape::findPlaceholderByIndex(
+                                                                            getSubTypeIndex().get(),
+                                                                            rSlidePersist.getMasterPersist()->getShapes()->getChildren());
+                    if (pPlaceholder && pPlaceholder->getTableProperties())
+                        pTextBody->getTextProperties().mnNumCol = pPlaceholder->getTableProperties()->getTableGrid().size();
+                }
+
                 sal_Int32 nNumCol = pTextBody->getTextProperties().mnNumCol;
                 if (nNumCol > 1)
                 {
