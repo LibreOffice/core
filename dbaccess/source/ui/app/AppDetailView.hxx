@@ -24,13 +24,11 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
 #include <vcl/split.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/mnemonic.hxx>
 #include <IClipBoardTest.hxx>
 #include "AppTitleWindow.hxx"
 #include <AppElementType.hxx>
-#include <vcl/treelistbox.hxx>
 #include <VertSplitView.hxx>
 
 #include <vector>
@@ -43,36 +41,6 @@ namespace dbaui
     class OApplicationDetailView;
     class OAppDetailPageHelper;
     class OTasksWindow;
-
-    class OCreationList final : public InterimItemWindow
-    {
-        std::unique_ptr<weld::TreeView> m_xTreeView;
-        OTasksWindow& m_rTaskWindow;
-        int m_nCursorIndex;
-
-    public:
-        explicit OCreationList( OTasksWindow& _rParent );
-        virtual void dispose() override;
-
-        weld::TreeView& get_widget() { return *m_xTreeView; }
-        const weld::TreeView& get_widget() const { return *m_xTreeView; }
-
-        virtual void GetFocus() override;
-
-        void updateHelpText();
-
-    private:
-        DECL_LINK(onSelected, weld::TreeView&, bool);
-        DECL_LINK(OnEntrySelectHdl, weld::TreeView&, void);
-        DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
-        DECL_LINK(FocusInHdl, weld::Widget&, void);
-        DECL_LINK(FocusOutHdl, weld::Widget&, void);
-
-        /** sets a new current entry, and invalidates the old and the new one, if necessary
-            @return <TRUE/> if and only if the "current entry" changed
-        */
-        bool    setCurrentEntryInvalidate( SvTreeListEntry* _pEntry );
-    };
 
     struct TaskEntry
     {
@@ -95,24 +63,35 @@ namespace dbaui
         const char*     pTitleId;
     };
 
-    class OTasksWindow : public vcl::Window
+    class OTasksWindow final : public InterimItemWindow
     {
-        VclPtr<OCreationList>               m_aCreation;
-        VclPtr<FixedText>                   m_aDescription;
-        VclPtr<FixedLine>                   m_aFL;
-        VclPtr<FixedText>                   m_aHelpText;
-        VclPtr<OApplicationDetailView>      m_pDetailView;
+        std::unique_ptr<weld::TreeView> m_xTreeView;
+        std::unique_ptr<weld::Label> m_xDescription;
+        std::unique_ptr<weld::Label> m_xHelpText;
+        VclPtr<OApplicationDetailView> m_pDetailView;
 
-        void ImplInitSettings();
-    protected:
+        int m_nCursorIndex;
+
+        DECL_LINK(onSelected, weld::TreeView&, bool);
+        DECL_LINK(OnEntrySelectHdl, weld::TreeView&, void);
+        DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+        DECL_LINK(FocusInHdl, weld::Widget&, void);
+        DECL_LINK(FocusOutHdl, weld::Widget&, void);
+
+        /** sets a new current entry, and invalidates the old and the new one, if necessary
+            @return <TRUE/> if and only if the "current entry" changed
+        */
+        bool    setCurrentEntryInvalidate( SvTreeListEntry* _pEntry );
+
+        void updateHelpText();
+
         virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
     public:
         OTasksWindow(vcl::Window* _pParent,OApplicationDetailView* _pDetailView);
         virtual ~OTasksWindow() override;
         virtual void dispose() override;
 
-        // Window overrides
-        virtual void Resize() override;
+        virtual void GetFocus() override;
 
         OApplicationDetailView* getDetailView() const { return m_pDetailView; }
 
@@ -122,6 +101,7 @@ namespace dbaui
         void Clear();
         void setHelpText(const char* pId);
     };
+
     class OApplicationDetailView : public OSplitterView
                                  , public IClipboardTest
     {

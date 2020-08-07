@@ -31,13 +31,8 @@
 #include <com/sun/star/util/URL.hpp>
 #include <core_resource.hxx>
 #include <vcl/event.hxx>
-#include <vcl/image.hxx>
-#include <vcl/mnemonic.hxx>
-#include <vcl/settings.hxx>
 #include "AppDetailPageHelper.hxx"
 #include <dbaccess/IController.hxx>
-#include <vcl/treelistentry.hxx>
-#include <vcl/viewdataentry.hxx>
 #include <algorithm>
 #include <dbtreelistbox.hxx>
 #include <imageprovider.hxx>
@@ -63,54 +58,32 @@ TaskEntry::TaskEntry( const char* _pAsciiUNOCommand, const char* _pHelpID, const
 {
 }
 
-OCreationList::OCreationList( OTasksWindow& _rParent )
-    : InterimItemWindow(&_rParent, "dbaccess/ui/creationlistbox.ui", "CreationListBox")
-    , m_xTreeView(m_xBuilder->weld_tree_view("treeview"))
-    , m_rTaskWindow( _rParent )
-    , m_nCursorIndex(-1)
-{
-    InitControlBase(m_xTreeView.get());
-
-    m_xTreeView->set_help_id(HID_APP_CREATION_LIST);
-    m_xTreeView->connect_row_activated(LINK(this, OCreationList, onSelected));
-    m_xTreeView->connect_changed(LINK(this, OCreationList, OnEntrySelectHdl));
-    m_xTreeView->connect_key_press(LINK(this, OCreationList, KeyInputHdl));
-    m_xTreeView->connect_focus_in(LINK(this, OCreationList, FocusInHdl));
-    m_xTreeView->connect_focus_out(LINK(this, OCreationList, FocusOutHdl));
-}
-
-IMPL_LINK(OCreationList, KeyInputHdl, const KeyEvent&, rKEvt, bool)
+IMPL_LINK(OTasksWindow, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
     return ChildKeyInput(rKEvt);
 }
 
-void OCreationList::dispose()
-{
-    m_xTreeView.reset();
-    InterimItemWindow::dispose();
-}
-
-void OCreationList::updateHelpText()
+void OTasksWindow::updateHelpText()
 {
     const char* pHelpTextId = nullptr;
     int nCurEntry = m_xTreeView->get_selected_index();
     if (nCurEntry != -1)
         pHelpTextId = reinterpret_cast<TaskEntry*>(m_xTreeView->get_id(nCurEntry).toUInt64())->pHelpID;
-    m_rTaskWindow.setHelpText(pHelpTextId);
+    setHelpText(pHelpTextId);
 }
 
-IMPL_LINK(OCreationList, onSelected, weld::TreeView&, rTreeView, bool)
+IMPL_LINK(OTasksWindow, onSelected, weld::TreeView&, rTreeView, bool)
 {
     int nCurEntry = rTreeView.get_cursor_index();
-    assert(nCurEntry != -1 && "OCreationList::onSelected: invalid entry!");
+    assert(nCurEntry != -1 && "OTasksWindow::onSelected: invalid entry!");
     URL aCommand;
     aCommand.Complete = reinterpret_cast<TaskEntry*>(rTreeView.get_id(nCurEntry).toUInt64())->sUNOCommand;
-    m_rTaskWindow.getDetailView()->getBorderWin().getView()->getAppController().executeChecked( aCommand, Sequence< PropertyValue >() );
+    getDetailView()->getBorderWin().getView()->getAppController().executeChecked( aCommand, Sequence< PropertyValue >() );
 
     return true;
 }
 
-void OCreationList::GetFocus()
+void OTasksWindow::GetFocus()
 {
     InterimItemWindow::GetFocus();
     if (!m_xTreeView)
@@ -118,33 +91,43 @@ void OCreationList::GetFocus()
     FocusInHdl(*m_xTreeView);
 }
 
-IMPL_LINK_NOARG(OCreationList, FocusInHdl, weld::Widget&, void)
+IMPL_LINK_NOARG(OTasksWindow, FocusInHdl, weld::Widget&, void)
 {
     m_xTreeView->select(m_nCursorIndex != -1 ? m_nCursorIndex : 0);
 }
 
-IMPL_LINK_NOARG(OCreationList, FocusOutHdl, weld::Widget&, void)
+IMPL_LINK_NOARG(OTasksWindow, FocusOutHdl, weld::Widget&, void)
 {
     m_nCursorIndex = m_xTreeView->get_cursor_index();
     m_xTreeView->unselect_all();
 }
 
-IMPL_LINK_NOARG(OCreationList, OnEntrySelectHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(OTasksWindow, OnEntrySelectHdl, weld::TreeView&, void)
 {
     updateHelpText();
 }
 
-OTasksWindow::OTasksWindow(vcl::Window* _pParent,OApplicationDetailView* _pDetailView)
-    : Window(_pParent,WB_DIALOGCONTROL )
-    ,m_aCreation(VclPtr<OCreationList>::Create(*this))
-    ,m_aDescription(VclPtr<FixedText>::Create(this))
-    ,m_aFL(VclPtr<FixedLine>::Create(this,WB_VERT))
-    ,m_aHelpText(VclPtr<FixedText>::Create(this,WB_WORDBREAK))
-    ,m_pDetailView(_pDetailView)
+OTasksWindow::OTasksWindow(vcl::Window* pParent,OApplicationDetailView* _pDetailView)
+    : InterimItemWindow(pParent, "dbaccess/ui/taskwindow.ui", "TaskWindow")
+    , m_xTreeView(m_xBuilder->weld_tree_view("treeview"))
+    , m_xDescription(m_xBuilder->weld_label("description"))
+    , m_xHelpText(m_xBuilder->weld_label("helptext"))
+    , m_pDetailView(_pDetailView)
+    , m_nCursorIndex(-1)
 {
-    m_aHelpText->SetHelpId(HID_APP_HELP_TEXT);
-    m_aDescription->SetHelpId(HID_APP_DESCRIPTION_TEXT);
-    m_aDescription->SetText(DBA_RES(STR_DESCRIPTION));
+    m_xContainer->set_stack_background();
+
+    InitControlBase(m_xTreeView.get());
+
+    m_xTreeView->set_help_id(HID_APP_CREATION_LIST);
+    m_xTreeView->connect_row_activated(LINK(this, OTasksWindow, onSelected));
+    m_xTreeView->connect_changed(LINK(this, OTasksWindow, OnEntrySelectHdl));
+    m_xTreeView->connect_key_press(LINK(this, OTasksWindow, KeyInputHdl));
+    m_xTreeView->connect_focus_in(LINK(this, OTasksWindow, FocusInHdl));
+    m_xTreeView->connect_focus_out(LINK(this, OTasksWindow, FocusOutHdl));
+
+    m_xHelpText->set_help_id(HID_APP_HELP_TEXT);
+    m_xDescription->set_help_id(HID_APP_DESCRIPTION_TEXT);
 
     ImplInitSettings();
 }
@@ -157,12 +140,11 @@ OTasksWindow::~OTasksWindow()
 void OTasksWindow::dispose()
 {
     Clear();
-    m_aCreation.disposeAndClear();
-    m_aDescription.disposeAndClear();
-    m_aHelpText.disposeAndClear();
-    m_aFL.disposeAndClear();
+    m_xTreeView.reset();
+    m_xDescription.reset();
+    m_xHelpText.reset();
     m_pDetailView.clear();
-    vcl::Window::dispose();
+    InterimItemWindow::dispose();
 }
 
 void OTasksWindow::DataChanged( const DataChangedEvent& rDCEvt )
@@ -177,58 +159,12 @@ void OTasksWindow::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-void OTasksWindow::ImplInitSettings()
-{
-    // FIXME RenderContext
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    vcl::Font aFont = rStyleSettings.GetFieldFont();
-    aFont.SetColor( rStyleSettings.GetWindowTextColor() );
-    SetPointFont(*this, aFont);
-
-    SetTextColor( rStyleSettings.GetFieldTextColor() );
-    SetTextFillColor();
-    m_aHelpText->SetTextColor( rStyleSettings.GetFieldTextColor() );
-    m_aHelpText->SetTextFillColor();
-    m_aDescription->SetTextColor( rStyleSettings.GetFieldTextColor() );
-    m_aDescription->SetTextFillColor();
-
-    SetBackground( rStyleSettings.GetFieldColor() );
-    m_aHelpText->SetBackground( rStyleSettings.GetFieldColor() );
-    m_aDescription->SetBackground( rStyleSettings.GetFieldColor() );
-    m_aFL->SetBackground( rStyleSettings.GetFieldColor() );
-
-    aFont = m_aDescription->GetControlFont();
-    aFont.SetWeight(WEIGHT_BOLD);
-    m_aDescription->SetControlFont(aFont);
-}
-
 void OTasksWindow::setHelpText(const char* pId)
 {
     if (pId)
-        m_aHelpText->SetText(DBA_RES(pId));
+        m_xHelpText->set_label(DBA_RES(pId));
     else
-        m_aHelpText->SetText(OUString());
-}
-
-void OTasksWindow::Resize()
-{
-    // parent window dimension
-    Size aOutputSize( GetOutputSize() );
-    long nOutputWidth   = aOutputSize.Width();
-    long nOutputHeight  = aOutputSize.Height();
-
-    Size aFLSize = LogicToPixel(Size(2, 6), MapMode(MapUnit::MapAppFont));
-    sal_Int32 n6PPT = aFLSize.Height();
-    long nHalfOutputWidth = static_cast<long>(nOutputWidth * 0.5);
-
-    m_aCreation->SetPosSizePixel( Point(0, 0), Size(nHalfOutputWidth - n6PPT, nOutputHeight) );
-    // i77897 make the m_aHelpText a little bit smaller. (-5)
-    sal_Int32 nNewWidth = nOutputWidth - nHalfOutputWidth - aFLSize.Width() - 5;
-    m_aDescription->SetPosSizePixel( Point(nHalfOutputWidth + n6PPT, 0), Size(nNewWidth, nOutputHeight) );
-    Size aDesc = m_aDescription->CalcMinimumSize();
-    m_aHelpText->SetPosSizePixel( Point(nHalfOutputWidth + n6PPT, aDesc.Height() ), Size(nNewWidth, nOutputHeight - aDesc.Height() - n6PPT) );
-
-    m_aFL->SetPosSizePixel( Point(nHalfOutputWidth , 0), Size(aFLSize.Width(), nOutputHeight ) );
+        m_xHelpText->set_label(OUString());
 }
 
 void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
@@ -260,38 +196,32 @@ void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
 
         const Reference< XGraphic >* pImages( aImages.getConstArray() );
 
-        weld::TreeView& rTreeView = m_aCreation->get_widget();
         size_t nIndex = 0;
         for (auto const& task : _rList)
         {
             OUString sId = OUString::number(reinterpret_cast<sal_uInt64>(new TaskEntry(task)));
-            rTreeView.append(sId, task.sTitle);
-            rTreeView.set_image(nIndex++, *pImages++);
+            m_xTreeView->append(sId, task.sTitle);
+            m_xTreeView->set_image(nIndex++, *pImages++);
         }
     }
     catch(Exception&)
     {
     }
 
-    m_aCreation->Show();
-    m_aCreation->get_widget().unselect_all();
-    m_aHelpText->Show();
-    m_aDescription->Show();
-    m_aFL->Show();
-    m_aCreation->updateHelpText();
+    m_xTreeView->unselect_all();
+    updateHelpText();
     Enable(!_rList.empty());
 }
 
 void OTasksWindow::Clear()
 {
-    weld::TreeView& rTreeView = m_aCreation->get_widget();
-    rTreeView.all_foreach([&rTreeView](weld::TreeIter& rEntry){
-        TaskEntry* pUserData = reinterpret_cast<TaskEntry*>(rTreeView.get_id(rEntry).toUInt64());
+    m_xTreeView->all_foreach([this](weld::TreeIter& rEntry){
+        TaskEntry* pUserData = reinterpret_cast<TaskEntry*>(m_xTreeView->get_id(rEntry).toUInt64());
         delete pUserData;
         return false;
     });
 
-    rTreeView.clear();
+    m_xTreeView->clear();
 }
 
 OApplicationDetailView::OApplicationDetailView(OAppBorderWindow& _rParent,PreviewMode _ePreviewMode) : OSplitterView(&_rParent )

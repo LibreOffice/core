@@ -180,7 +180,6 @@
 #define RID_STR_VIEWS_HELP_TEXT_DESIGN              NC_("RID_STR_VIEWS_HELP_TEXT_DESIGN", "Create a view by specifying the tables and field names you would like to have visible." )
 #define STR_DATABASE                                NC_("STR_DATABASE", "Database" )
 #define STR_TASKS                                   NC_("STR_TASKS", "Tasks" )
-#define STR_DESCRIPTION                             NC_("STR_DESCRIPTION", "Description" )
 #define STR_PREVIEW                                 NC_("STR_PREVIEW", "Preview" )
 #define STR_QUERY_CLOSEDOCUMENTS                    NC_("STR_QUERY_CLOSEDOCUMENTS", "The connection type has been altered.\n" \
                                                        "For the changes to take effect, all forms, reports, queries and tables must be closed.\n\n" \
