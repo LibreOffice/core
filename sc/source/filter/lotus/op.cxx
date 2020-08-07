@@ -170,22 +170,22 @@ void OP_ColumnWidth(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
     r.ReadUInt16(nTmpCol).ReadUChar(nWidthSpaces);
     SCCOL nCol(static_cast<SCCOL>(nTmpCol));
 
-    if (rContext.pDoc->ValidCol(nCol))
+    if (!rContext.pDoc->ValidCol(nCol))
+        return;
+
+    nCol = rContext.pDoc->SanitizeCol(nCol);
+
+    sal_uInt16 nBreite;
+    if( nWidthSpaces )
+        // assuming 10cpi character set
+        nBreite = static_cast<sal_uInt16>( TWIPS_PER_CHAR * nWidthSpaces );
+    else
     {
-        nCol = rContext.pDoc->SanitizeCol(nCol);
-
-        sal_uInt16 nBreite;
-        if( nWidthSpaces )
-            // assuming 10cpi character set
-            nBreite = static_cast<sal_uInt16>( TWIPS_PER_CHAR * nWidthSpaces );
-        else
-        {
-            rContext.pDoc->SetColHidden(nCol, nCol, 0, true);
-            nBreite = nDefWidth;
-        }
-
-        rContext.pDoc->SetColWidth(nCol, 0, nBreite);
+        rContext.pDoc->SetColHidden(nCol, nCol, 0, true);
+        nBreite = nDefWidth;
     }
+
+    rContext.pDoc->SetColWidth(nCol, 0, nBreite);
 }
 
 void OP_NamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
@@ -199,31 +199,31 @@ void OP_NamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
 
     r.ReadUInt16( nColSt ).ReadUInt16( nRowSt ).ReadUInt16( nColEnd ).ReadUInt16( nRowEnd );
 
-    if (rContext.pDoc->ValidColRow( static_cast<SCCOL>(nColSt), nRowSt) && rContext.pDoc->ValidColRow( static_cast<SCCOL>(nColEnd), nRowEnd))
-    {
-        std::unique_ptr<LotusRange> pRange;
+    if (!(rContext.pDoc->ValidColRow( static_cast<SCCOL>(nColSt), nRowSt) && rContext.pDoc->ValidColRow( static_cast<SCCOL>(nColEnd), nRowEnd)))
+        return;
 
-        if( nColSt == nColEnd && nRowSt == nRowEnd )
-            pRange.reset(new LotusRange( static_cast<SCCOL> (nColSt), static_cast<SCROW> (nRowSt) ));
-        else
-            pRange.reset(new LotusRange( static_cast<SCCOL> (nColSt), static_cast<SCROW> (nRowSt),
-                    static_cast<SCCOL> (nColEnd), static_cast<SCROW> (nRowEnd) ));
+    std::unique_ptr<LotusRange> pRange;
 
-        char cBuf[sizeof(cBuffer)+1];
-        if( rtl::isAsciiDigit( static_cast<unsigned char>(*cBuffer) ) )
-        {  // first char in name is a number -> prepend 'A'
-            cBuf[0] = 'A';
-            strcpy( cBuf + 1, cBuffer );       // #100211# - checked
-        }
-        else
-            strcpy( cBuf, cBuffer );           // #100211# - checked
+    if( nColSt == nColEnd && nRowSt == nRowEnd )
+        pRange.reset(new LotusRange( static_cast<SCCOL> (nColSt), static_cast<SCROW> (nRowSt) ));
+    else
+        pRange.reset(new LotusRange( static_cast<SCCOL> (nColSt), static_cast<SCROW> (nRowSt),
+                static_cast<SCCOL> (nColEnd), static_cast<SCROW> (nRowEnd) ));
 
-        OUString      aTmp( cBuf, strlen(cBuf), rContext.eCharset );
-
-        aTmp = ScfTools::ConvertToScDefinedName( aTmp );
-
-        rContext.maRangeNames.Append( rContext.pDoc, std::move(pRange) );
+    char cBuf[sizeof(cBuffer)+1];
+    if( rtl::isAsciiDigit( static_cast<unsigned char>(*cBuffer) ) )
+    {  // first char in name is a number -> prepend 'A'
+        cBuf[0] = 'A';
+        strcpy( cBuf + 1, cBuffer );       // #100211# - checked
     }
+    else
+        strcpy( cBuf, cBuffer );           // #100211# - checked
+
+    OUString      aTmp( cBuf, strlen(cBuf), rContext.eCharset );
+
+    aTmp = ScfTools::ConvertToScDefinedName( aTmp );
+
+    rContext.maRangeNames.Append( rContext.pDoc, std::move(pRange) );
 }
 
 void OP_SymphNamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
@@ -238,30 +238,30 @@ void OP_SymphNamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
 
     r.ReadUInt16( nColSt ).ReadUInt16( nRowSt ).ReadUInt16( nColEnd ).ReadUInt16( nRowEnd ).ReadUChar( nType );
 
-    if (rContext.pDoc->ValidColRow( static_cast<SCCOL>(nColSt), nRowSt) && rContext.pDoc->ValidColRow( static_cast<SCCOL>(nColEnd), nRowEnd))
-    {
-        std::unique_ptr<LotusRange> pRange;
+    if (!(rContext.pDoc->ValidColRow( static_cast<SCCOL>(nColSt), nRowSt) && rContext.pDoc->ValidColRow( static_cast<SCCOL>(nColEnd), nRowEnd)))
+        return;
 
-        if( nType )
-            pRange.reset(new LotusRange( static_cast<SCCOL> (nColSt), static_cast<SCROW> (nRowSt) ));
-        else
-            pRange.reset(new LotusRange( static_cast<SCCOL> (nColSt), static_cast<SCROW> (nRowSt),
-                    static_cast<SCCOL> (nColEnd), static_cast<SCROW> (nRowEnd) ));
+    std::unique_ptr<LotusRange> pRange;
 
-        char cBuf[sizeof(cBuffer)+1];
-        if( rtl::isAsciiDigit( static_cast<unsigned char>(*cBuffer) ) )
-        {  // first char in name is a number -> prepend 'A'
-            cBuf[0] = 'A';
-            strcpy( cBuf + 1, cBuffer );       // #100211# - checked
-        }
-        else
-            strcpy( cBuf, cBuffer );           // #100211# - checked
+    if( nType )
+        pRange.reset(new LotusRange( static_cast<SCCOL> (nColSt), static_cast<SCROW> (nRowSt) ));
+    else
+        pRange.reset(new LotusRange( static_cast<SCCOL> (nColSt), static_cast<SCROW> (nRowSt),
+                static_cast<SCCOL> (nColEnd), static_cast<SCROW> (nRowEnd) ));
 
-        OUString  aTmp( cBuf, strlen(cBuf), rContext.eCharset );
-        aTmp = ScfTools::ConvertToScDefinedName( aTmp );
-
-        rContext.maRangeNames.Append( rContext.pDoc, std::move(pRange) );
+    char cBuf[sizeof(cBuffer)+1];
+    if( rtl::isAsciiDigit( static_cast<unsigned char>(*cBuffer) ) )
+    {  // first char in name is a number -> prepend 'A'
+        cBuf[0] = 'A';
+        strcpy( cBuf + 1, cBuffer );       // #100211# - checked
     }
+    else
+        strcpy( cBuf, cBuffer );           // #100211# - checked
+
+    OUString  aTmp( cBuf, strlen(cBuf), rContext.eCharset );
+    aTmp = ScfTools::ConvertToScDefinedName( aTmp );
+
+    rContext.maRangeNames.Append( rContext.pDoc, std::move(pRange) );
 }
 
 void OP_Footer(LotusContext& /*rContext*/, SvStream& r, sal_uInt16 n)

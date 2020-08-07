@@ -108,21 +108,21 @@ void ImportLotus::Columnwidth( sal_uInt16 nRecLen )
     if( !pD->HasTable( static_cast<SCTAB> (nLTab) ) )
         pD->MakeTable( static_cast<SCTAB> (nLTab) );
 
-    if( !nWindow2 )
+    if( nWindow2 )
+        return;
+
+    Skip( 2 );
+
+    sal_uInt8   nCol, nSpaces;
+
+    while( nCnt )
     {
-        Skip( 2 );
+        Read( nCol );
+        Read( nSpaces );
+        // Attention: ambiguous Correction factor!
+        pD->SetColWidth( static_cast<SCCOL> (nCol), static_cast<SCTAB> (nLTab), static_cast<sal_uInt16>( TWIPS_PER_CHAR * 1.28 * nSpaces ) );
 
-        sal_uInt8   nCol, nSpaces;
-
-        while( nCnt )
-        {
-            Read( nCol );
-            Read( nSpaces );
-            // Attention: ambiguous Correction factor!
-            pD->SetColWidth( static_cast<SCCOL> (nCol), static_cast<SCTAB> (nLTab), static_cast<sal_uInt16>( TWIPS_PER_CHAR * 1.28 * nSpaces ) );
-
-            nCnt--;
-        }
+        nCnt--;
     }
 }
 
@@ -136,19 +136,19 @@ void ImportLotus::Hiddencolumn( sal_uInt16 nRecLen )
     Read( nLTab );
     Read( nWindow2 );
 
-    if( !nWindow2 )
+    if( nWindow2 )
+        return;
+
+    Skip( 2 );
+
+    sal_uInt8   nCol;
+
+    while( nCnt )
     {
-        Skip( 2 );
+        Read( nCol );
 
-        sal_uInt8   nCol;
-
-        while( nCnt )
-        {
-            Read( nCol );
-
-            pD->SetColHidden(static_cast<SCCOL>(nCol), static_cast<SCCOL>(nCol), static_cast<SCTAB>(nLTab), true);
-            nCnt--;
-        }
+        pD->SetColHidden(static_cast<SCCOL>(nCol), static_cast<SCCOL>(nCol), static_cast<SCTAB>(nLTab), true);
+        nCnt--;
     }
 }
 

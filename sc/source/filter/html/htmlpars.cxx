@@ -432,37 +432,38 @@ void ScHTMLLayoutParser::ModifyOffset( ScHTMLColOffset* pOffset, sal_uInt16& nOl
 
 void ScHTMLLayoutParser::SkipLocked( ScEEParseEntry* pE, bool bJoin )
 {
-    if ( mpDoc->ValidCol(pE->nCol) )
-    {   // Or else this would create a wrong value at ScAddress (chance for an infinite loop)!
-        bool bBadCol = false;
-        bool bAgain;
-        ScRange aRange( pE->nCol, pE->nRow, 0,
-            pE->nCol + pE->nColOverlap - 1, pE->nRow + pE->nRowOverlap - 1, 0 );
-        do
+    if ( !mpDoc->ValidCol(pE->nCol) )
+        return;
+
+// Or else this would create a wrong value at ScAddress (chance for an infinite loop)!
+    bool bBadCol = false;
+    bool bAgain;
+    ScRange aRange( pE->nCol, pE->nRow, 0,
+        pE->nCol + pE->nColOverlap - 1, pE->nRow + pE->nRowOverlap - 1, 0 );
+    do
+    {
+        bAgain = false;
+        for ( size_t i =  0, nRanges = xLockedList->size(); i < nRanges; ++i )
         {
-            bAgain = false;
-            for ( size_t i =  0, nRanges = xLockedList->size(); i < nRanges; ++i )
+            ScRange & rR = (*xLockedList)[i];
+            if ( rR.Intersects( aRange ) )
             {
-                ScRange & rR = (*xLockedList)[i];
-                if ( rR.Intersects( aRange ) )
+                pE->nCol = rR.aEnd.Col() + 1;
+                SCCOL nTmp = pE->nCol + pE->nColOverlap - 1;
+                if ( pE->nCol > mpDoc->MaxCol() || nTmp > mpDoc->MaxCol() )
+                    bBadCol = true;
+                else
                 {
-                    pE->nCol = rR.aEnd.Col() + 1;
-                    SCCOL nTmp = pE->nCol + pE->nColOverlap - 1;
-                    if ( pE->nCol > mpDoc->MaxCol() || nTmp > mpDoc->MaxCol() )
-                        bBadCol = true;
-                    else
-                    {
-                        bAgain = true;
-                        aRange.aStart.SetCol( pE->nCol );
-                        aRange.aEnd.SetCol( nTmp );
-                    }
-                    break;
+                    bAgain = true;
+                    aRange.aStart.SetCol( pE->nCol );
+                    aRange.aEnd.SetCol( nTmp );
                 }
+                break;
             }
-        } while ( bAgain );
-        if ( bJoin && !bBadCol )
-            xLockedList->Join( aRange );
-    }
+        }
+    } while ( bAgain );
+    if ( bJoin && !bBadCol )
+        xLockedList->Join( aRange );
 }
 
 void ScHTMLLayoutParser::Adjust()
@@ -1346,21 +1347,21 @@ void ScHTMLLayoutParser::Image( HtmlImportInfo* pInfo )
         pImage->aSize = pDefaultDev->LogicToPixel( pImage->pGraphic->GetPrefSize(),
             pImage->pGraphic->GetPrefMapMode() );
     }
-    if (!mxActEntry->maImageList.empty())
+    if (mxActEntry->maImageList.empty())
+        return;
+
+    long nWidth = 0;
+    for (const std::unique_ptr<ScHTMLImage> & pI : mxActEntry->maImageList)
     {
-        long nWidth = 0;
-        for (const std::unique_ptr<ScHTMLImage> & pI : mxActEntry->maImageList)
-        {
-            if ( pI->nDir & nHorizontal )
-                nWidth += pI->aSize.Width() + 2 * pI->aSpace.X();
-            else
-                nWidth = 0;
-        }
-        if ( mxActEntry->nWidth
-          && (nWidth + pImage->aSize.Width() + 2 * pImage->aSpace.X()
-                >= mxActEntry->nWidth) )
-            mxActEntry->maImageList.back()->nDir = nVertical;
+        if ( pI->nDir & nHorizontal )
+            nWidth += pI->aSize.Width() + 2 * pI->aSpace.X();
+        else
+            nWidth = 0;
     }
+    if ( mxActEntry->nWidth
+      && (nWidth + pImage->aSize.Width() + 2 * pImage->aSpace.X()
+            >= mxActEntry->nWidth) )
+        mxActEntry->maImageList.back()->nDir = nVertical;
 }
 
 void ScHTMLLayoutParser::ColOn( HtmlImportInfo* pInfo )
@@ -1417,54 +1418,55 @@ bool ScHTMLLayoutParser::IsAtBeginningOfText( const HtmlImportInfo* pInfo )
 
 void ScHTMLLayoutParser::FontOn( HtmlImportInfo* pInfo )
 {
-    if ( IsAtBeginningOfText( pInfo ) )
-    {   // Only at the start of the text; applies to whole line
-        const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
-        for (const auto & rOption : rOptions)
+    if ( !IsAtBeginningOfText( pInfo ) )
+        return;
+
+// Only at the start of the text; applies to whole line
+    const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
+    for (const auto & rOption : rOptions)
+    {
+        switch( rOption.GetToken() )
         {
-            switch( rOption.GetToken() )
+            case HtmlOptionId::FACE :
             {
-                case HtmlOptionId::FACE :
+                const OUString& rFace = rOption.GetString();
+                OUStringBuffer aFontName;
+                sal_Int32 nPos = 0;
+                while( nPos != -1 )
                 {
-                    const OUString& rFace = rOption.GetString();
-                    OUStringBuffer aFontName;
-                    sal_Int32 nPos = 0;
-                    while( nPos != -1 )
-                    {
-                        // Font list, VCL uses the semicolon as separator
-                        // HTML uses the comma
-                        OUString aFName = rFace.getToken( 0, ',', nPos );
-                        aFName = comphelper::string::strip(aFName, ' ');
-                        if( !aFontName.isEmpty() )
-                            aFontName.append(";");
-                        aFontName.append(aFName);
-                    }
-                    if ( !aFontName.isEmpty() )
-                        mxActEntry->aItemSet.Put( SvxFontItem( FAMILY_DONTKNOW,
-                            aFontName.makeStringAndClear(), EMPTY_OUSTRING, PITCH_DONTKNOW,
-                            RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ) );
+                    // Font list, VCL uses the semicolon as separator
+                    // HTML uses the comma
+                    OUString aFName = rFace.getToken( 0, ',', nPos );
+                    aFName = comphelper::string::strip(aFName, ' ');
+                    if( !aFontName.isEmpty() )
+                        aFontName.append(";");
+                    aFontName.append(aFName);
                 }
-                break;
-                case HtmlOptionId::SIZE :
-                {
-                    sal_uInt16 nSize = static_cast<sal_uInt16>(rOption.GetNumber());
-                    if ( nSize == 0 )
-                        nSize = 1;
-                    else if ( nSize > SC_HTML_FONTSIZES )
-                        nSize = SC_HTML_FONTSIZES;
-                    mxActEntry->aItemSet.Put( SvxFontHeightItem(
-                        maFontHeights[nSize-1], 100, ATTR_FONT_HEIGHT ) );
-                }
-                break;
-                case HtmlOptionId::COLOR :
-                {
-                    Color aColor;
-                    rOption.GetColor( aColor );
-                    mxActEntry->aItemSet.Put( SvxColorItem( aColor, ATTR_FONT_COLOR ) );
-                }
-                break;
-                default: break;
+                if ( !aFontName.isEmpty() )
+                    mxActEntry->aItemSet.Put( SvxFontItem( FAMILY_DONTKNOW,
+                        aFontName.makeStringAndClear(), EMPTY_OUSTRING, PITCH_DONTKNOW,
+                        RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ) );
             }
+            break;
+            case HtmlOptionId::SIZE :
+            {
+                sal_uInt16 nSize = static_cast<sal_uInt16>(rOption.GetNumber());
+                if ( nSize == 0 )
+                    nSize = 1;
+                else if ( nSize > SC_HTML_FONTSIZES )
+                    nSize = SC_HTML_FONTSIZES;
+                mxActEntry->aItemSet.Put( SvxFontHeightItem(
+                    maFontHeights[nSize-1], 100, ATTR_FONT_HEIGHT ) );
+            }
+            break;
+            case HtmlOptionId::COLOR :
+            {
+                Color aColor;
+                rOption.GetColor( aColor );
+                mxActEntry->aItemSet.Put( SvxColorItem( aColor, ATTR_FONT_COLOR ) );
+            }
+            break;
+            default: break;
         }
     }
 }
@@ -2965,19 +2967,19 @@ void ScHTMLQueryParser::TitleOn()
 
 void ScHTMLQueryParser::TitleOff( const HtmlImportInfo& rInfo )
 {
-    if( mbTitleOn )
-    {
-        OUString aTitle = maTitle.makeStringAndClear().trim();
-        if (!aTitle.isEmpty() && mpDoc->GetDocumentShell())
-        {
-            uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-                mpDoc->GetDocumentShell()->GetModel(), uno::UNO_QUERY_THROW);
+    if( !mbTitleOn )
+        return;
 
-            xDPS->getDocumentProperties()->setTitle(aTitle);
-        }
-        InsertText( rInfo );
-        mbTitleOn = false;
+    OUString aTitle = maTitle.makeStringAndClear().trim();
+    if (!aTitle.isEmpty() && mpDoc->GetDocumentShell())
+    {
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+            mpDoc->GetDocumentShell()->GetModel(), uno::UNO_QUERY_THROW);
+
+        xDPS->getDocumentProperties()->setTitle(aTitle);
     }
+    InsertText( rInfo );
+    mbTitleOn = false;
 }
 
 void ScHTMLQueryParser::TableOn( const HtmlImportInfo& rInfo )
