@@ -242,7 +242,7 @@ namespace dbaui
         css::uno::Reference< css::uno::XComponentContext >        m_xContext;
         ControllerFrame                                                                     m_aCurrentFrame;
         css::uno::Reference< css::frame::XDispatchProvider >      m_xSlaveDispatcher;     // for intercepting dispatches
-        css::uno::Reference< css::frame::XDispatchProvider >      m_xMasterDispatcher;    // dito
+        css::uno::Reference< css::frame::XDispatchProvider >      m_xMasterDispatcher;    // ditto
         css::uno::Reference< css::sdb::XDatabaseContext >         m_xDatabaseContext;
         css::uno::Reference< css::frame::XTitle >                 m_xTitleHelper;
 

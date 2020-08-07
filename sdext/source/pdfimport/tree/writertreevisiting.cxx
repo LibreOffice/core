@@ -453,7 +453,7 @@ void WriterXmlOptimizer::visit( ParagraphElement& elem, const std::list< std::un
                     else
                     {
                         // check whether text of pPrevPara is bold (at least first text element)
-                        // and this para is not bold (dito)
+                        // and this para is not bold (ditto)
                         TextElement* pPrevText = pPrevPara->getFirstTextChild();
                         TextElement* pThisText = elem.getFirstTextChild();
                         if( pPrevText && pThisText )
