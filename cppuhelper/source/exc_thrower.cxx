@@ -173,7 +173,7 @@ ExceptionThrower::ExceptionThrower()
 
 class theExceptionThrower : public rtl::Static<ExceptionThrower, theExceptionThrower> {};
 
-#if defined(IOS) || (defined(__aarch64__) && defined(ANDROID))
+#if defined(IOS) || (defined(__aarch64__) && (defined(ANDROID) || defined(MACOSX)))
 // In the native iOS / Android app, where we don't have any Java, Python,
 // BASIC, or other scripting, the only thing that would use the C++/UNO bridge
 // functionality that invokes codeSnippet() was cppu::throwException().
@@ -211,7 +211,7 @@ void lo_mobile_throwException(css::uno::Any const& aException)
 
     assert(false);
 }
-#endif // defined(IOS) || (defined(__aarch64__) && defined(ANDROID))
+#endif // defined(IOS) || (defined(__aarch64__) && (defined(ANDROID) || defined(MACOSX)))
 
 } // anonymous namespace
 
@@ -229,7 +229,7 @@ void SAL_CALL throwException( Any const & exc )
             "(must be derived from com::sun::star::uno::Exception)!" );
     }
 
-#if defined(IOS) || (defined(__aarch64__) && defined(ANDROID))
+#if defined(IOS) || (defined(__aarch64__) && (defined(ANDROID) || defined(MACOSX)))
     lo_mobile_throwException(exc);
 #else
     Mapping uno2cpp(Environment(UNO_LB_UNO), Environment::getCurrent());
