@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6b35179b_13b196a9",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 4404,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-07T07:35:50Z",
+      "side": 1,
+      "message": "just a heads-up that the RTL_ARCH value set here becomes visible to (3rd-party) code as the _ARCH bootstrap variable (via sal/rtl/bootstrap.cxx)",
+      "revId": "d8ec719cdc27d04f7cd853798dfa78cd0fa24253",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
