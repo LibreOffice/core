@@ -30,6 +30,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <stdio.h>
+#include <string_view>
 
 namespace logging
 {
@@ -91,12 +92,7 @@ namespace
 
     bool needsQuoting(const OUString& str)
     {
-        static const OUString quote_trigger_chars = "\",\n\r";
-        sal_Int32 len = str.getLength();
-        for(sal_Int32 i=0; i<len; i++)
-            if(quote_trigger_chars.indexOf(str[i])!=-1)
-                return true;
-        return false;
+        return std::u16string_view(str).find_first_of(u"\",\n\r") != std::u16string_view::npos;
     };
 
     void appendEncodedString(OUStringBuffer& buf, const OUString& str)
