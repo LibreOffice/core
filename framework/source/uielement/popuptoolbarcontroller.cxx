@@ -794,7 +794,7 @@ void NewToolbarController::setItemImage( const OUString &rCommand )
 
     INetURLObject aURLObj( aURL );
     Size aPreferredSize(bBig ? pToolBox->GetDefaultImageSize() : Size());
-    Image aImage = SvFileInformationManager::GetImageNoDefault(aURLObj, bBig, aPreferredSize);
+    Image aImage = SvFileInformationManager::GetImageNoDefault(aURLObj, pToolBox->GetImageSize());
     if (!aImage)
     {
         aImage = !!aMenuImage ? aMenuImage : SvFileInformationManager::GetImage(aURLObj, bBig, aPreferredSize);
