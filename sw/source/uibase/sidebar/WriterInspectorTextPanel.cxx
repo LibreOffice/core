@@ -30,6 +30,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <unotextrange.hxx>
@@ -296,6 +297,12 @@ static OUString PropertyNametoRID(const OUString& rName)
         { "UnvisitedCharStyleName", RID_UNVISITED_CHAR_STYLE_NAME },
         { "VisitedCharStyleName", RID_VISITED_CHAR_STYLE_NAME },
         { "WritingMode", RID_WRITING_MODE },
+        { "BorderColor", RID_BORDER_COLOR },
+        { "BorderInnerLineWidth", RID_BORDER_INNER_LINE_WIDTH },
+        { "BorderLineDistance", RID_BORDER_LINE_DISTANCE },
+        { "BorderLineStyle", RID_BORDER_LINE_STYLE },
+        { "BorderLineWidth", RID_BORDER_LINE_WIDTH },
+        { "BorderOuterLineWidth", RID_BORDER_OUTER_LINE_WIDTH },
     };
 
     auto itr = aNameToRID.find(rName);
@@ -319,17 +326,50 @@ static void InsertValues(const css::uno::Reference<css::uno::XInterface>& rSourc
         if (std::find(rHiddenProperty.begin(), rHiddenProperty.end(), rProperty.Name)
             != rHiddenProperty.end())
             continue;
+
+        OUString sPropName = rProperty.Name;
         if (isRoot
-            || xPropertiesState->getPropertyState(rProperty.Name)
-                   == beans::PropertyState_DIRECT_VALUE)
+            || xPropertiesState->getPropertyState(sPropName) == beans::PropertyState_DIRECT_VALUE)
         {
-            const uno::Any aAny = xPropertiesSet->getPropertyValue(rProperty.Name);
             svx::sidebar::TreeNode aTemp;
-            if (rIsDefined[rProperty.Name])
+            const uno::Any aAny = xPropertiesSet->getPropertyValue(sPropName);
+            if (rIsDefined[sPropName])
                 aTemp.isGrey = true;
-            rIsDefined[rProperty.Name] = true;
-            aTemp.sNodeName = PropertyNametoRID(rProperty.Name);
-            aTemp.aValue = aAny;
+            rIsDefined[sPropName] = true;
+            aTemp.sNodeName = PropertyNametoRID(sPropName);
+
+            // These properties are handled separetly as they are stored in STRUCT and not in single data members
+            if (sPropName == "CharTopBorder" || sPropName == "CharBottomBorder"
+                || sPropName == "CharLeftBorder" || sPropName == "CharRightBorder"
+                || sPropName == "TopBorder" || sPropName == "BottomBorder"
+                || sPropName == "LeftBorder" || sPropName == "RightBorder")
+            {
+                aTemp.NodeType = svx::sidebar::TreeNode::ComplexProperty;
+                table::BorderLine2 aBorder;
+                aAny >>= aBorder;
+                svx::sidebar::TreeNode aChild;
+                aChild.sNodeName = PropertyNametoRID("BorderColor");
+                aChild.aValue = uno::makeAny(aBorder.Color);
+                aTemp.children.push_back(aChild);
+                aChild.sNodeName = PropertyNametoRID("BorderInnerLineWidth");
+                aChild.aValue = uno::makeAny(aBorder.InnerLineWidth);
+                aTemp.children.push_back(aChild);
+                aChild.sNodeName = PropertyNametoRID("BorderLineDistance");
+                aChild.aValue = uno::makeAny(aBorder.LineDistance);
+                aTemp.children.push_back(aChild);
+                aChild.sNodeName = PropertyNametoRID("BorderLineStyle");
+                aChild.aValue = uno::makeAny(aBorder.LineStyle);
+                aTemp.children.push_back(aChild);
+                aChild.sNodeName = PropertyNametoRID("BorderLineWidth");
+                aChild.aValue = uno::makeAny(aBorder.LineWidth);
+                aTemp.children.push_back(aChild);
+                aChild.sNodeName = PropertyNametoRID("BorderOuterLineWidth");
+                aChild.aValue = uno::makeAny(aBorder.OuterLineWidth);
+                aTemp.children.push_back(aChild);
+            }
+            else
+                aTemp.aValue = aAny;
+
             rNode.children.push_back(aTemp);
         }
     }
