@@ -258,7 +258,12 @@ void SalInstanceWidget::set_can_focus(bool bCanFocus)
     m_xWidget->SetStyle(nStyle);
 }
 
-void SalInstanceWidget::grab_focus() { m_xWidget->GrabFocus(); }
+void SalInstanceWidget::grab_focus()
+{
+    disable_notify_events();
+    m_xWidget->GrabFocus();
+    enable_notify_events();
+}
 
 bool SalInstanceWidget::has_focus() const { return m_xWidget->HasFocus(); }
 
@@ -529,6 +534,8 @@ SystemWindow* SalInstanceWidget::getSystemWindow() { return m_xWidget->GetSystem
 
 void SalInstanceWidget::HandleEventListener(VclWindowEvent& rEvent)
 {
+    if (notify_events_disabled())
+        return;
     if (rEvent.GetId() == VclEventId::WindowGetFocus)
         m_aFocusInHdl.Call(*this);
     else if (rEvent.GetId() == VclEventId::WindowLoseFocus)
