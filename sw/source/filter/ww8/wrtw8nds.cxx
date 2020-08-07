@@ -610,21 +610,13 @@ bool SwWW8AttrIter::IsWatermarkFrame()
 
 bool SwWW8AttrIter::IsAnchorLinkedToThisNode( sal_uLong nNodePos )
 {
-    ww8::FrameIter aTmpFlyIter = maFlyIter ;
+    if ( maFlyIter == maFlyFrames.end() )
+        return false;
 
-    while ( aTmpFlyIter != maFlyFrames.end() )
-    {
-        const SwPosition &rAnchor  = maFlyIter->GetPosition();
-        sal_uLong nAnchorPos = rAnchor.nNode.GetIndex();
-        /* if current node position and the anchor position are the same
-           then the frame anchor is linked to this node
-        */
-        if ( nAnchorPos == nNodePos )
-            return true ;
-
-        ++aTmpFlyIter;
-    }
-    return false ;
+    /* if current node position and the anchor position are the same
+        then the frame anchor is linked to this node
+    */
+    return nNodePos == maFlyIter->GetPosition().nNode.GetIndex();
 }
 
 bool SwWW8AttrIter::HasFlysAt(sal_Int32 nSwPos) const
