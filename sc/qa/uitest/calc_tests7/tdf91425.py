@@ -6,10 +6,7 @@
 
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, type_text
 from libreoffice.calc.document import get_cell_by_position
-import time
-from uitest.debug import sleep
 import org.libreoffice.unotest
 import pathlib
 

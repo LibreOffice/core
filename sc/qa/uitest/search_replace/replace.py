@@ -9,11 +9,9 @@ from uitest.framework import UITestCase
 from uitest.path import get_srcdir_url
 
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from libreoffice.calc.document import get_row
 
 from uitest.uihelper.common import get_state_as_dict
 
-import time
 
 def get_url_for_data_file(file_name):
     return get_srcdir_url() + "/sc/qa/uitest/search_replace/data/" + file_name
