@@ -2290,21 +2290,21 @@ sal_uInt16 XclExpLinkManagerImpl5::AppendInternal( XclExpExtSheetRef const & xEx
 
 void XclExpLinkManagerImpl5::CreateInternal()
 {
-    if( maIntTabMap.empty() )
+    if( !maIntTabMap.empty() )
+        return;
+
+    // create EXTERNSHEET records for all internal exported sheets
+    XclExpTabInfo& rTabInfo = GetTabInfo();
+    for( SCTAB nScTab = 0, nScCnt = rTabInfo.GetScTabCount(); nScTab < nScCnt; ++nScTab )
     {
-        // create EXTERNSHEET records for all internal exported sheets
-        XclExpTabInfo& rTabInfo = GetTabInfo();
-        for( SCTAB nScTab = 0, nScCnt = rTabInfo.GetScTabCount(); nScTab < nScCnt; ++nScTab )
+        if( rTabInfo.IsExportTab( nScTab ) )
         {
-            if( rTabInfo.IsExportTab( nScTab ) )
-            {
-                XclExpExtSheetRef xRec;
-                if( nScTab == GetCurrScTab() )
-                    xRec = new XclExpExternSheet( GetRoot(), EXC_EXTSH_OWNTAB );
-                else
-                    xRec = new XclExpExternSheet( GetRoot(), rTabInfo.GetScTabName( nScTab ) );
-                maIntTabMap[ nScTab ] = AppendInternal( xRec );
-            }
+            XclExpExtSheetRef xRec;
+            if( nScTab == GetCurrScTab() )
+                xRec = new XclExpExternSheet( GetRoot(), EXC_EXTSH_OWNTAB );
+            else
+                xRec = new XclExpExternSheet( GetRoot(), rTabInfo.GetScTabName( nScTab ) );
+            maIntTabMap[ nScTab ] = AppendInternal( xRec );
         }
     }
 }
@@ -2393,20 +2393,20 @@ void XclExpLinkManagerImpl8::StoreCellRange( const ScSingleRefData& rRef1, const
 {
     ScAddress aAbs1 = rRef1.toAbs(&GetRoot().GetDoc(), rPos);
     ScAddress aAbs2 = rRef2.toAbs(&GetRoot().GetDoc(), rPos);
-    if (!rRef1.IsDeleted() && !rRef2.IsDeleted() && (aAbs1.Tab() >= 0) && (aAbs2.Tab() >= 0))
+    if (!(!rRef1.IsDeleted() && !rRef2.IsDeleted() && (aAbs1.Tab() >= 0) && (aAbs2.Tab() >= 0)))
+        return;
+
+    const XclExpTabInfo& rTabInfo = GetTabInfo();
+    SCTAB nFirstScTab = aAbs1.Tab();
+    SCTAB nLastScTab = aAbs2.Tab();
+    ScRange aRange(aAbs1.Col(), aAbs1.Row(), 0, aAbs2.Col(), aAbs2.Row(), 0);
+    for (SCTAB nScTab = nFirstScTab; nScTab <= nLastScTab; ++nScTab)
     {
-        const XclExpTabInfo& rTabInfo = GetTabInfo();
-        SCTAB nFirstScTab = aAbs1.Tab();
-        SCTAB nLastScTab = aAbs2.Tab();
-        ScRange aRange(aAbs1.Col(), aAbs1.Row(), 0, aAbs2.Col(), aAbs2.Row(), 0);
-        for (SCTAB nScTab = nFirstScTab; nScTab <= nLastScTab; ++nScTab)
+        if( rTabInfo.IsExternalTab( nScTab ) )
         {
-            if( rTabInfo.IsExternalTab( nScTab ) )
-            {
-                aRange.aStart.SetTab( nScTab );
-                aRange.aEnd.SetTab( nScTab );
-                maSBBuffer.StoreCellRange( aRange );
-            }
+            aRange.aStart.SetTab( nScTab );
+            aRange.aEnd.SetTab( nScTab );
+            maSBBuffer.StoreCellRange( aRange );
         }
     }
 }
@@ -2472,20 +2472,20 @@ bool XclExpLinkManagerImpl8::InsertExtName( sal_uInt16& rnExtSheet, sal_uInt16& 
 
 void XclExpLinkManagerImpl8::Save( XclExpStream& rStrm )
 {
-    if( !maXtiVec.empty() )
-    {
-        // SUPBOOKs, XCTs, CRNs, EXTERNNAMEs
-        maSBBuffer.Save( rStrm );
+    if( maXtiVec.empty() )
+        return;
 
-        // EXTERNSHEET
-        sal_uInt16 nCount = ulimit_cast< sal_uInt16 >( maXtiVec.size() );
-        rStrm.StartRecord( EXC_ID_EXTERNSHEET, 2 + 6 * nCount );
-        rStrm << nCount;
-        rStrm.SetSliceSize( 6 );
-        for( const auto& rXti : maXtiVec )
-            rXti.Save( rStrm );
-        rStrm.EndRecord();
-    }
+    // SUPBOOKs, XCTs, CRNs, EXTERNNAMEs
+    maSBBuffer.Save( rStrm );
+
+    // EXTERNSHEET
+    sal_uInt16 nCount = ulimit_cast< sal_uInt16 >( maXtiVec.size() );
+    rStrm.StartRecord( EXC_ID_EXTERNSHEET, 2 + 6 * nCount );
+    rStrm << nCount;
+    rStrm.SetSliceSize( 6 );
+    for( const auto& rXti : maXtiVec )
+        rXti.Save( rStrm );
+    rStrm.EndRecord();
 }
 
 void XclExpLinkManagerImpl8::SaveXml( XclExpXmlStream& rStrm )

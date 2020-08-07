@@ -421,74 +421,74 @@ XclExpSheetProtection::XclExpSheetProtection(bool bValue, SCTAB nTab ) :
 
 void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
 {
-   ScDocument& rDoc = rStrm.GetRoot().GetDoc();
-   const ScTableProtection* pTabProtect = rDoc.GetTabProtection(mnTab);
-   if ( pTabProtect )
-   {
-        const ScOoxPasswordHash& rPH = pTabProtect->getPasswordHash();
-        // Do not write any hash attributes if there is no password.
-        ScOoxPasswordHash aPH;
-        if (rPH.hasPassword())
-            aPH = rPH;
+    ScDocument& rDoc = rStrm.GetRoot().GetDoc();
+    const ScTableProtection* pTabProtect = rDoc.GetTabProtection(mnTab);
+    if ( !pTabProtect )
+        return;
 
-        Sequence<sal_Int8> aHash = pTabProtect->getPasswordHash(PASSHASH_XL);
-        OString sHash;
-        if (aHash.getLength() >= 2)
-        {
-            sHash = OString::number(
-                ( static_cast<sal_uInt8>(aHash[0]) << 8
-                  | static_cast<sal_uInt8>(aHash[1]) ),
-                16 );
-        }
-        sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
-        rWorksheet->singleElement( XML_sheetProtection,
-            XML_algorithmName, aPH.maAlgorithmName.isEmpty() ? nullptr : aPH.maAlgorithmName.toUtf8().getStr(),
-            XML_hashValue, aPH.maHashValue.isEmpty() ? nullptr : aPH.maHashValue.toUtf8().getStr(),
-            XML_saltValue, aPH.maSaltValue.isEmpty() ? nullptr : aPH.maSaltValue.toUtf8().getStr(),
-            XML_spinCount, aPH.mnSpinCount ? OString::number( aPH.mnSpinCount).getStr() : nullptr,
-            XML_sheet,  ToPsz( true ),
-            XML_password, sHash.isEmpty()? nullptr : sHash.getStr(),
-            XML_objects, pTabProtect->isOptionEnabled( ScTableProtection::OBJECTS ) ? nullptr : ToPsz( true ),
-            XML_scenarios, pTabProtect->isOptionEnabled( ScTableProtection::SCENARIOS ) ? nullptr : ToPsz( true ),
-            XML_formatCells, pTabProtect->isOptionEnabled( ScTableProtection::FORMAT_CELLS ) ? ToPsz( false ) : nullptr,
-            XML_formatColumns, pTabProtect->isOptionEnabled( ScTableProtection::FORMAT_COLUMNS ) ? ToPsz( false ) : nullptr,
-            XML_formatRows, pTabProtect->isOptionEnabled( ScTableProtection::FORMAT_ROWS ) ? ToPsz( false ) : nullptr,
-            XML_insertColumns, pTabProtect->isOptionEnabled( ScTableProtection::INSERT_COLUMNS ) ? ToPsz( false ) : nullptr,
-            XML_insertRows, pTabProtect->isOptionEnabled( ScTableProtection::INSERT_ROWS ) ? ToPsz( false ) : nullptr,
-            XML_insertHyperlinks, pTabProtect->isOptionEnabled( ScTableProtection::INSERT_HYPERLINKS ) ? ToPsz( false ) : nullptr,
-            XML_deleteColumns, pTabProtect->isOptionEnabled( ScTableProtection::DELETE_COLUMNS ) ? ToPsz( false ) : nullptr,
-            XML_deleteRows, pTabProtect->isOptionEnabled( ScTableProtection::DELETE_ROWS ) ? ToPsz( false ) : nullptr,
-            XML_selectLockedCells, pTabProtect->isOptionEnabled( ScTableProtection::SELECT_LOCKED_CELLS ) ? nullptr : ToPsz( true ),
-            XML_sort, pTabProtect->isOptionEnabled( ScTableProtection::SORT ) ? ToPsz( false ) : nullptr,
-            XML_autoFilter, pTabProtect->isOptionEnabled( ScTableProtection::AUTOFILTER ) ? ToPsz( false ) : nullptr,
-            XML_pivotTables, pTabProtect->isOptionEnabled( ScTableProtection::PIVOT_TABLES ) ? ToPsz( false ) : nullptr,
-            XML_selectUnlockedCells, pTabProtect->isOptionEnabled( ScTableProtection::SELECT_UNLOCKED_CELLS ) ? nullptr : ToPsz( true ) );
+    const ScOoxPasswordHash& rPH = pTabProtect->getPasswordHash();
+    // Do not write any hash attributes if there is no password.
+    ScOoxPasswordHash aPH;
+    if (rPH.hasPassword())
+        aPH = rPH;
 
-        const ::std::vector<ScEnhancedProtection>& rProts( pTabProtect->getEnhancedProtection());
-        if (!rProts.empty())
-        {
-            rWorksheet->startElement(XML_protectedRanges);
-            for (const auto& rProt : rProts)
-            {
-                SAL_WARN_IF( rProt.maSecurityDescriptorXML.isEmpty() && !rProt.maSecurityDescriptor.empty(),
-                        "sc.filter", "XclExpSheetProtection::SaveXml: losing BIFF security descriptor");
-                rWorksheet->singleElement( XML_protectedRange,
-                        XML_name, rProt.maTitle.isEmpty() ? nullptr : rProt.maTitle.toUtf8().getStr(),
-                        XML_securityDescriptor, rProt.maSecurityDescriptorXML.isEmpty() ? nullptr : rProt.maSecurityDescriptorXML.toUtf8().getStr(),
-                        /* XXX 'password' is not part of OOXML, but Excel2013
-                         * writes it if loaded from BIFF, in which case
-                         * 'algorithmName', 'hashValue', 'saltValue' and
-                         * 'spinCount' are absent; so do we if it was present. */
-                        XML_password, rProt.mnPasswordVerifier ? OString::number( rProt.mnPasswordVerifier, 16).getStr() : nullptr,
-                        XML_algorithmName, rProt.maPasswordHash.maAlgorithmName.isEmpty() ? nullptr : rProt.maPasswordHash.maAlgorithmName.toUtf8().getStr(),
-                        XML_hashValue, rProt.maPasswordHash.maHashValue.isEmpty() ? nullptr : rProt.maPasswordHash.maHashValue.toUtf8().getStr(),
-                        XML_saltValue, rProt.maPasswordHash.maSaltValue.isEmpty() ? nullptr : rProt.maPasswordHash.maSaltValue.toUtf8().getStr(),
-                        XML_spinCount, rProt.maPasswordHash.mnSpinCount ? OString::number( rProt.maPasswordHash.mnSpinCount).getStr() : nullptr,
-                        XML_sqref, rProt.maRangeList.is() ? XclXmlUtils::ToOString( rStrm.GetRoot().GetDoc(), *rProt.maRangeList).getStr() : nullptr);
-            }
-            rWorksheet->endElement( XML_protectedRanges);
-        }
+    Sequence<sal_Int8> aHash = pTabProtect->getPasswordHash(PASSHASH_XL);
+    OString sHash;
+    if (aHash.getLength() >= 2)
+    {
+        sHash = OString::number(
+            ( static_cast<sal_uInt8>(aHash[0]) << 8
+              | static_cast<sal_uInt8>(aHash[1]) ),
+            16 );
     }
+    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+    rWorksheet->singleElement( XML_sheetProtection,
+        XML_algorithmName, aPH.maAlgorithmName.isEmpty() ? nullptr : aPH.maAlgorithmName.toUtf8().getStr(),
+        XML_hashValue, aPH.maHashValue.isEmpty() ? nullptr : aPH.maHashValue.toUtf8().getStr(),
+        XML_saltValue, aPH.maSaltValue.isEmpty() ? nullptr : aPH.maSaltValue.toUtf8().getStr(),
+        XML_spinCount, aPH.mnSpinCount ? OString::number( aPH.mnSpinCount).getStr() : nullptr,
+        XML_sheet,  ToPsz( true ),
+        XML_password, sHash.isEmpty()? nullptr : sHash.getStr(),
+        XML_objects, pTabProtect->isOptionEnabled( ScTableProtection::OBJECTS ) ? nullptr : ToPsz( true ),
+        XML_scenarios, pTabProtect->isOptionEnabled( ScTableProtection::SCENARIOS ) ? nullptr : ToPsz( true ),
+        XML_formatCells, pTabProtect->isOptionEnabled( ScTableProtection::FORMAT_CELLS ) ? ToPsz( false ) : nullptr,
+        XML_formatColumns, pTabProtect->isOptionEnabled( ScTableProtection::FORMAT_COLUMNS ) ? ToPsz( false ) : nullptr,
+        XML_formatRows, pTabProtect->isOptionEnabled( ScTableProtection::FORMAT_ROWS ) ? ToPsz( false ) : nullptr,
+        XML_insertColumns, pTabProtect->isOptionEnabled( ScTableProtection::INSERT_COLUMNS ) ? ToPsz( false ) : nullptr,
+        XML_insertRows, pTabProtect->isOptionEnabled( ScTableProtection::INSERT_ROWS ) ? ToPsz( false ) : nullptr,
+        XML_insertHyperlinks, pTabProtect->isOptionEnabled( ScTableProtection::INSERT_HYPERLINKS ) ? ToPsz( false ) : nullptr,
+        XML_deleteColumns, pTabProtect->isOptionEnabled( ScTableProtection::DELETE_COLUMNS ) ? ToPsz( false ) : nullptr,
+        XML_deleteRows, pTabProtect->isOptionEnabled( ScTableProtection::DELETE_ROWS ) ? ToPsz( false ) : nullptr,
+        XML_selectLockedCells, pTabProtect->isOptionEnabled( ScTableProtection::SELECT_LOCKED_CELLS ) ? nullptr : ToPsz( true ),
+        XML_sort, pTabProtect->isOptionEnabled( ScTableProtection::SORT ) ? ToPsz( false ) : nullptr,
+        XML_autoFilter, pTabProtect->isOptionEnabled( ScTableProtection::AUTOFILTER ) ? ToPsz( false ) : nullptr,
+        XML_pivotTables, pTabProtect->isOptionEnabled( ScTableProtection::PIVOT_TABLES ) ? ToPsz( false ) : nullptr,
+        XML_selectUnlockedCells, pTabProtect->isOptionEnabled( ScTableProtection::SELECT_UNLOCKED_CELLS ) ? nullptr : ToPsz( true ) );
+
+    const ::std::vector<ScEnhancedProtection>& rProts( pTabProtect->getEnhancedProtection());
+    if (rProts.empty())
+        return;
+
+    rWorksheet->startElement(XML_protectedRanges);
+    for (const auto& rProt : rProts)
+    {
+        SAL_WARN_IF( rProt.maSecurityDescriptorXML.isEmpty() && !rProt.maSecurityDescriptor.empty(),
+                "sc.filter", "XclExpSheetProtection::SaveXml: losing BIFF security descriptor");
+        rWorksheet->singleElement( XML_protectedRange,
+                XML_name, rProt.maTitle.isEmpty() ? nullptr : rProt.maTitle.toUtf8().getStr(),
+                XML_securityDescriptor, rProt.maSecurityDescriptorXML.isEmpty() ? nullptr : rProt.maSecurityDescriptorXML.toUtf8().getStr(),
+                /* XXX 'password' is not part of OOXML, but Excel2013
+                 * writes it if loaded from BIFF, in which case
+                 * 'algorithmName', 'hashValue', 'saltValue' and
+                 * 'spinCount' are absent; so do we if it was present. */
+                XML_password, rProt.mnPasswordVerifier ? OString::number( rProt.mnPasswordVerifier, 16).getStr() : nullptr,
+                XML_algorithmName, rProt.maPasswordHash.maAlgorithmName.isEmpty() ? nullptr : rProt.maPasswordHash.maAlgorithmName.toUtf8().getStr(),
+                XML_hashValue, rProt.maPasswordHash.maHashValue.isEmpty() ? nullptr : rProt.maPasswordHash.maHashValue.toUtf8().getStr(),
+                XML_saltValue, rProt.maPasswordHash.maSaltValue.isEmpty() ? nullptr : rProt.maPasswordHash.maSaltValue.toUtf8().getStr(),
+                XML_spinCount, rProt.maPasswordHash.mnSpinCount ? OString::number( rProt.maPasswordHash.mnSpinCount).getStr() : nullptr,
+                XML_sqref, rProt.maRangeList.is() ? XclXmlUtils::ToOString( rStrm.GetRoot().GetDoc(), *rProt.maRangeList).getStr() : nullptr);
+    }
+    rWorksheet->endElement( XML_protectedRanges);
 }
 
 XclExpPassHash::XclExpPassHash(const Sequence<sal_Int8>& aHash) :
@@ -848,86 +848,86 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab, const
         bAdvanced = pData->GetAdvancedQuerySource( aAdvRange );
         bFound = (pData->HasQueryParam() || pData->HasAutoFilter() || bAdvanced);
     }
-    if( bFound )
+    if( !bFound )
+        return;
+
+    ScQueryParam    aParam;
+    pData->GetQueryParam( aParam );
+
+    ScRange aRange( aParam.nCol1, aParam.nRow1, aParam.nTab,
+                    aParam.nCol2, aParam.nRow2, aParam.nTab );
+    SCCOL   nColCnt = aParam.nCol2 - aParam.nCol1 + 1;
+
+    maRef = aRange;
+
+    // #i2394# built-in defined names must be sorted by containing sheet name
+    if (!pDefinedData)
+        rNameMgr.InsertBuiltInName( EXC_BUILTIN_FILTERDATABASE, aRange );
+
+    // advanced filter
+    if( bAdvanced )
     {
-        ScQueryParam    aParam;
-        pData->GetQueryParam( aParam );
+        // filter criteria, excel allows only same table
+        if( !pDefinedData && aAdvRange.aStart.Tab() == nTab )
+            rNameMgr.InsertBuiltInName( EXC_BUILTIN_CRITERIA, aAdvRange );
 
-        ScRange aRange( aParam.nCol1, aParam.nRow1, aParam.nTab,
-                        aParam.nCol2, aParam.nRow2, aParam.nTab );
-        SCCOL   nColCnt = aParam.nCol2 - aParam.nCol1 + 1;
-
-        maRef = aRange;
-
-        // #i2394# built-in defined names must be sorted by containing sheet name
-        if (!pDefinedData)
-            rNameMgr.InsertBuiltInName( EXC_BUILTIN_FILTERDATABASE, aRange );
-
-        // advanced filter
-        if( bAdvanced )
+        // filter destination range, excel allows only same table
+        if( !aParam.bInplace )
         {
-            // filter criteria, excel allows only same table
-            if( !pDefinedData && aAdvRange.aStart.Tab() == nTab )
-                rNameMgr.InsertBuiltInName( EXC_BUILTIN_CRITERIA, aAdvRange );
+            ScRange aDestRange( aParam.nDestCol, aParam.nDestRow, aParam.nDestTab );
+            aDestRange.aEnd.IncCol( nColCnt - 1 );
+            if( !pDefinedData && aDestRange.aStart.Tab() == nTab )
+                rNameMgr.InsertBuiltInName( EXC_BUILTIN_EXTRACT, aDestRange );
+        }
 
-            // filter destination range, excel allows only same table
-            if( !aParam.bInplace )
+        m_pFilterMode = new XclExpFiltermode;
+    }
+    // AutoFilter
+    else
+    {
+        bool    bConflict   = false;
+        bool    bContLoop   = true;
+        bool        bHasOr      = false;
+        SCCOLROW nFirstField = aParam.GetEntry( 0 ).nField;
+
+        // create AUTOFILTER records for filtered columns
+        for( SCSIZE nEntry = 0; !bConflict && bContLoop && (nEntry < aParam.GetEntryCount()); nEntry++ )
+        {
+            const ScQueryEntry& rEntry  = aParam.GetEntry( nEntry );
+
+            bContLoop = rEntry.bDoQuery;
+            if( bContLoop )
             {
-                ScRange aDestRange( aParam.nDestCol, aParam.nDestRow, aParam.nDestTab );
-                aDestRange.aEnd.IncCol( nColCnt - 1 );
-                if( !pDefinedData && aDestRange.aStart.Tab() == nTab )
-                    rNameMgr.InsertBuiltInName( EXC_BUILTIN_EXTRACT, aDestRange );
-            }
+                XclExpAutofilter* pFilter = GetByCol( static_cast<SCCOL>(rEntry.nField) - aRange.aStart.Col() );
 
+                if( nEntry > 0 )
+                    bHasOr |= (rEntry.eConnect == SC_OR);
+
+                bConflict = (nEntry > 1) && bHasOr;
+                if( !bConflict )
+                    bConflict = (nEntry == 1) && (rEntry.eConnect == SC_OR) &&
+                                (nFirstField != rEntry.nField);
+                if( !bConflict )
+                    bConflict = pFilter->AddEntry( rEntry );
+            }
+        }
+
+        // additional tests for conflicts
+        for( size_t nPos = 0, nSize = maFilterList.GetSize(); !bConflict && (nPos < nSize); ++nPos )
+        {
+            XclExpAutofilterRef xFilter = maFilterList.GetRecord( nPos );
+            bConflict = xFilter->HasCondition() && xFilter->HasTop10();
+        }
+
+        if( bConflict )
+            maFilterList.RemoveAllRecords();
+
+        if( !maFilterList.IsEmpty() )
             m_pFilterMode = new XclExpFiltermode;
-        }
-        // AutoFilter
-        else
-        {
-            bool    bConflict   = false;
-            bool    bContLoop   = true;
-            bool        bHasOr      = false;
-            SCCOLROW nFirstField = aParam.GetEntry( 0 ).nField;
+        m_pFilterInfo = new XclExpAutofilterinfo( aRange.aStart, nColCnt );
 
-            // create AUTOFILTER records for filtered columns
-            for( SCSIZE nEntry = 0; !bConflict && bContLoop && (nEntry < aParam.GetEntryCount()); nEntry++ )
-            {
-                const ScQueryEntry& rEntry  = aParam.GetEntry( nEntry );
-
-                bContLoop = rEntry.bDoQuery;
-                if( bContLoop )
-                {
-                    XclExpAutofilter* pFilter = GetByCol( static_cast<SCCOL>(rEntry.nField) - aRange.aStart.Col() );
-
-                    if( nEntry > 0 )
-                        bHasOr |= (rEntry.eConnect == SC_OR);
-
-                    bConflict = (nEntry > 1) && bHasOr;
-                    if( !bConflict )
-                        bConflict = (nEntry == 1) && (rEntry.eConnect == SC_OR) &&
-                                    (nFirstField != rEntry.nField);
-                    if( !bConflict )
-                        bConflict = pFilter->AddEntry( rEntry );
-                }
-            }
-
-            // additional tests for conflicts
-            for( size_t nPos = 0, nSize = maFilterList.GetSize(); !bConflict && (nPos < nSize); ++nPos )
-            {
-                XclExpAutofilterRef xFilter = maFilterList.GetRecord( nPos );
-                bConflict = xFilter->HasCondition() && xFilter->HasTop10();
-            }
-
-            if( bConflict )
-                maFilterList.RemoveAllRecords();
-
-            if( !maFilterList.IsEmpty() )
-                m_pFilterMode = new XclExpFiltermode;
-            m_pFilterInfo = new XclExpAutofilterinfo( aRange.aStart, nColCnt );
-
-            if (maFilterList.IsEmpty () && !bConflict)
-                mbAutoFilter = true;
-        }
+        if (maFilterList.IsEmpty () && !bConflict)
+            mbAutoFilter = true;
     }
 }
 

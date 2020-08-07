@@ -842,52 +842,52 @@ void XclChPropSetHelper::ReadMarkerProperties(
         XclChMarkerFormat& rMarkerFmt, const ScfPropertySet& rPropSet, sal_uInt16 nFormatIdx )
 {
     chart2::Symbol aApiSymbol;
-    if( rPropSet.GetProperty( aApiSymbol, EXC_CHPROP_SYMBOL ) )
+    if( !rPropSet.GetProperty( aApiSymbol, EXC_CHPROP_SYMBOL ) )
+        return;
+
+    // clear automatic flag
+    ::set_flag( rMarkerFmt.mnFlags, EXC_CHMARKERFORMAT_AUTO, false );
+
+    // symbol style
+    switch( aApiSymbol.Style )
     {
-        // clear automatic flag
-        ::set_flag( rMarkerFmt.mnFlags, EXC_CHMARKERFORMAT_AUTO, false );
-
-        // symbol style
-        switch( aApiSymbol.Style )
-        {
-            case chart2::SymbolStyle_NONE:
-                rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_NOSYMBOL;
-            break;
-            case chart2::SymbolStyle_STANDARD:
-                switch( aApiSymbol.StandardSymbol )
-                {
-                    case 0:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_SQUARE;    break;  // square
-                    case 1:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_DIAMOND;   break;  // diamond
-                    case 2:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_STDDEV;    break;  // arrow down
-                    case 3:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_TRIANGLE;  break;  // arrow up
-                    case 4:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_DOWJ;      break;  // arrow right, same as import
-                    case 5:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_PLUS;      break;  // arrow left
-                    case 6:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_CROSS;     break;  // bow tie
-                    case 7:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_STAR;      break;  // sand glass
-                    case 8:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_CIRCLE;    break;  // circle new in LibO3.5
-                    case 9:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_DIAMOND;   break;  // star new in LibO3.5
-                    case 10:    rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_CROSS;     break;  // X new in LibO3.5
-                    case 11:    rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_PLUS;      break;  // plus new in LibO3.5
-                    case 12:    rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_STAR;      break;  // asterisk new in LibO3.5
-                    case 13:    rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_STDDEV;    break;  // horizontal bar new in LibO3.5
-                    case 14:    rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_STAR;      break;  // vertical bar new in LibO3.5
-                    default:    rMarkerFmt.mnMarkerType = XclChartHelper::GetAutoMarkerType( nFormatIdx );
-                }
-            break;
-            default:
-                rMarkerFmt.mnMarkerType = XclChartHelper::GetAutoMarkerType( nFormatIdx );
-        }
-        bool bHasFillColor = XclChartHelper::HasMarkerFillColor( rMarkerFmt.mnMarkerType );
-        ::set_flag( rMarkerFmt.mnFlags, EXC_CHMARKERFORMAT_NOFILL, !bHasFillColor );
-
-        // symbol size
-        sal_Int32 nApiSize = (aApiSymbol.Size.Width + aApiSymbol.Size.Height + 1) / 2;
-        rMarkerFmt.mnMarkerSize = XclTools::GetTwipsFromHmm( nApiSize );
-
-        // symbol colors
-        rMarkerFmt.maLineColor = Color( aApiSymbol.BorderColor );
-        rMarkerFmt.maFillColor = Color( aApiSymbol.FillColor );
+        case chart2::SymbolStyle_NONE:
+            rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_NOSYMBOL;
+        break;
+        case chart2::SymbolStyle_STANDARD:
+            switch( aApiSymbol.StandardSymbol )
+            {
+                case 0:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_SQUARE;    break;  // square
+                case 1:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_DIAMOND;   break;  // diamond
+                case 2:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_STDDEV;    break;  // arrow down
+                case 3:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_TRIANGLE;  break;  // arrow up
+                case 4:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_DOWJ;      break;  // arrow right, same as import
+                case 5:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_PLUS;      break;  // arrow left
+                case 6:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_CROSS;     break;  // bow tie
+                case 7:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_STAR;      break;  // sand glass
+                case 8:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_CIRCLE;    break;  // circle new in LibO3.5
+                case 9:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_DIAMOND;   break;  // star new in LibO3.5
+                case 10:    rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_CROSS;     break;  // X new in LibO3.5
+                case 11:    rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_PLUS;      break;  // plus new in LibO3.5
+                case 12:    rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_STAR;      break;  // asterisk new in LibO3.5
+                case 13:    rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_STDDEV;    break;  // horizontal bar new in LibO3.5
+                case 14:    rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_STAR;      break;  // vertical bar new in LibO3.5
+                default:    rMarkerFmt.mnMarkerType = XclChartHelper::GetAutoMarkerType( nFormatIdx );
+            }
+        break;
+        default:
+            rMarkerFmt.mnMarkerType = XclChartHelper::GetAutoMarkerType( nFormatIdx );
     }
+    bool bHasFillColor = XclChartHelper::HasMarkerFillColor( rMarkerFmt.mnMarkerType );
+    ::set_flag( rMarkerFmt.mnFlags, EXC_CHMARKERFORMAT_NOFILL, !bHasFillColor );
+
+    // symbol size
+    sal_Int32 nApiSize = (aApiSymbol.Size.Width + aApiSymbol.Size.Height + 1) / 2;
+    rMarkerFmt.mnMarkerSize = XclTools::GetTwipsFromHmm( nApiSize );
+
+    // symbol colors
+    rMarkerFmt.maLineColor = Color( aApiSymbol.BorderColor );
+    rMarkerFmt.maFillColor = Color( aApiSymbol.FillColor );
 }
 
 sal_uInt16 XclChPropSetHelper::ReadRotationProperties( const ScfPropertySet& rPropSet, bool bSupportsStacked )
@@ -993,66 +993,67 @@ void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
         const XclChEscherFormat& rEscherFmt, const XclChPicFormat* pPicFmt,
         sal_uInt32 nDffFillType, XclChPropertyMode ePropMode )
 {
-    if( rEscherFmt.mxItemSet )
+    if( !rEscherFmt.mxItemSet )
+        return;
+
+    const XFillStyleItem* pStyleItem = rEscherFmt.mxItemSet->GetItem<XFillStyleItem>( XATTR_FILLSTYLE, false );
+    if( !pStyleItem )
+        return;
+
+    switch( pStyleItem->GetValue() )
     {
-        if( const XFillStyleItem* pStyleItem = rEscherFmt.mxItemSet->GetItem<XFillStyleItem>( XATTR_FILLSTYLE, false ) )
-        {
-            switch( pStyleItem->GetValue() )
+        case drawing::FillStyle_SOLID:
+            // #i84812# Excel 2007 writes Escher properties for solid fill
+            if( const XFillColorItem* pColorItem = rEscherFmt.mxItemSet->GetItem<XFillColorItem>( XATTR_FILLCOLOR, false ) )
             {
-                case drawing::FillStyle_SOLID:
-                    // #i84812# Excel 2007 writes Escher properties for solid fill
-                    if( const XFillColorItem* pColorItem = rEscherFmt.mxItemSet->GetItem<XFillColorItem>( XATTR_FILLCOLOR, false ) )
-                    {
-                        // get solid transparence too
-                        const XFillTransparenceItem* pTranspItem = rEscherFmt.mxItemSet->GetItem<XFillTransparenceItem>( XATTR_FILLTRANSPARENCE, false );
-                        sal_uInt16 nTransp = pTranspItem ? pTranspItem->GetValue() : 0;
-                        ScfPropSetHelper& rAreaHlp = GetAreaHelper( ePropMode );
-                        rAreaHlp.InitializeWrite();
-                        rAreaHlp << drawing::FillStyle_SOLID << pColorItem->GetColorValue() << static_cast< sal_Int16 >( nTransp );
-                        rAreaHlp.WriteToPropertySet( rPropSet );
-                    }
-                break;
-                case drawing::FillStyle_GRADIENT:
-                    if( const XFillGradientItem* pGradItem = rEscherFmt.mxItemSet->GetItem<XFillGradientItem>( XATTR_FILLGRADIENT, false ) )
-                    {
-                        uno::Any aGradientAny;
-                        if( pGradItem->QueryValue( aGradientAny, MID_FILLGRADIENT ) )
-                        {
-                            OUString aGradName = rGradientTable.InsertObject( aGradientAny );
-                            if( !aGradName.isEmpty() )
-                            {
-                                ScfPropSetHelper& rGradHlp = GetGradientHelper( ePropMode );
-                                rGradHlp.InitializeWrite();
-                                rGradHlp << drawing::FillStyle_GRADIENT << aGradName;
-                                rGradHlp.WriteToPropertySet( rPropSet );
-                            }
-                        }
-                    }
-                break;
-                case drawing::FillStyle_BITMAP:
-                    if( const XFillBitmapItem* pBmpItem = rEscherFmt.mxItemSet->GetItem<XFillBitmapItem>( XATTR_FILLBITMAP, false ) )
-                    {
-                        uno::Any aBitmapAny;
-                        if (pBmpItem->QueryValue(aBitmapAny, MID_BITMAP))
-                        {
-                            OUString aBmpName = rBitmapTable.InsertObject( aBitmapAny );
-                            if( !aBmpName.isEmpty() )
-                            {
-                                /*  #i71810# Caller decides whether to use a CHPICFORMAT record for bitmap mode.
-                                    If not passed, detect fill mode from the DFF property 'fill-type'. */
-                                bool bStretch = pPicFmt ? (pPicFmt->mnBmpMode == EXC_CHPICFORMAT_STRETCH) : (nDffFillType == mso_fillPicture);
-                                drawing::BitmapMode eApiBmpMode = bStretch ? drawing::BitmapMode_STRETCH : drawing::BitmapMode_REPEAT;
-                                maBitmapHlp.InitializeWrite();
-                                maBitmapHlp << drawing::FillStyle_BITMAP << aBmpName << eApiBmpMode;
-                                maBitmapHlp.WriteToPropertySet( rPropSet );
-                            }
-                        }
-                    }
-                break;
-                default:
-                    OSL_FAIL( "XclChPropSetHelper::WriteEscherProperties - unknown fill mode" );
+                // get solid transparence too
+                const XFillTransparenceItem* pTranspItem = rEscherFmt.mxItemSet->GetItem<XFillTransparenceItem>( XATTR_FILLTRANSPARENCE, false );
+                sal_uInt16 nTransp = pTranspItem ? pTranspItem->GetValue() : 0;
+                ScfPropSetHelper& rAreaHlp = GetAreaHelper( ePropMode );
+                rAreaHlp.InitializeWrite();
+                rAreaHlp << drawing::FillStyle_SOLID << pColorItem->GetColorValue() << static_cast< sal_Int16 >( nTransp );
+                rAreaHlp.WriteToPropertySet( rPropSet );
             }
-        }
+        break;
+        case drawing::FillStyle_GRADIENT:
+            if( const XFillGradientItem* pGradItem = rEscherFmt.mxItemSet->GetItem<XFillGradientItem>( XATTR_FILLGRADIENT, false ) )
+            {
+                uno::Any aGradientAny;
+                if( pGradItem->QueryValue( aGradientAny, MID_FILLGRADIENT ) )
+                {
+                    OUString aGradName = rGradientTable.InsertObject( aGradientAny );
+                    if( !aGradName.isEmpty() )
+                    {
+                        ScfPropSetHelper& rGradHlp = GetGradientHelper( ePropMode );
+                        rGradHlp.InitializeWrite();
+                        rGradHlp << drawing::FillStyle_GRADIENT << aGradName;
+                        rGradHlp.WriteToPropertySet( rPropSet );
+                    }
+                }
+            }
+        break;
+        case drawing::FillStyle_BITMAP:
+            if( const XFillBitmapItem* pBmpItem = rEscherFmt.mxItemSet->GetItem<XFillBitmapItem>( XATTR_FILLBITMAP, false ) )
+            {
+                uno::Any aBitmapAny;
+                if (pBmpItem->QueryValue(aBitmapAny, MID_BITMAP))
+                {
+                    OUString aBmpName = rBitmapTable.InsertObject( aBitmapAny );
+                    if( !aBmpName.isEmpty() )
+                    {
+                        /*  #i71810# Caller decides whether to use a CHPICFORMAT record for bitmap mode.
+                            If not passed, detect fill mode from the DFF property 'fill-type'. */
+                        bool bStretch = pPicFmt ? (pPicFmt->mnBmpMode == EXC_CHPICFORMAT_STRETCH) : (nDffFillType == mso_fillPicture);
+                        drawing::BitmapMode eApiBmpMode = bStretch ? drawing::BitmapMode_STRETCH : drawing::BitmapMode_REPEAT;
+                        maBitmapHlp.InitializeWrite();
+                        maBitmapHlp << drawing::FillStyle_BITMAP << aBmpName << eApiBmpMode;
+                        maBitmapHlp.WriteToPropertySet( rPropSet );
+                    }
+                }
+            }
+        break;
+        default:
+            OSL_FAIL( "XclChPropSetHelper::WriteEscherProperties - unknown fill mode" );
     }
 }
 

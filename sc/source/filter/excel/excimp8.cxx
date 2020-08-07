@@ -320,7 +320,10 @@ void ImportExcel8::ReadBasic()
     SfxObjectShell* pShell = GetDocShell();
     tools::SvRef<SotStorage> xRootStrg = GetRootStorage();
     const SvtFilterOptions& rFilterOpt = SvtFilterOptions::Get();
-    if( pShell && xRootStrg.is() ) try
+    if( !pShell || !xRootStrg.is() )
+        return;
+
+    try
     {
         // #FIXME need to get rid of this, we can also do this from within oox
         // via the "ooo.vba.VBAGlobals" service
@@ -357,7 +360,7 @@ void ImportExcel8::ReadBasic()
                 aVbaPrj.setOleOverridesSink( xOleNameOverrideSink );
                 aVbaPrj.importVbaProject( *vbaStg );
                 GetObjectManager().SetOleNameOverrideInfo( xOleNameOverrideSink );
-            }
+             }
         }
         catch( uno::Exception& )
         {
@@ -401,19 +404,20 @@ void ImportExcel8::PostDocLoad()
     }
 
     // read doc info (no docshell while pasting from clipboard)
-    if( SfxObjectShell* pShell = GetDocShell() )
+    SfxObjectShell* pShell = GetDocShell();
+    if(!pShell)
+        return;
+
+    // BIFF5+ without storage is possible
+    tools::SvRef<SotStorage> xRootStrg = GetRootStorage();
+    if( xRootStrg.is() ) try
     {
-        // BIFF5+ without storage is possible
-        tools::SvRef<SotStorage> xRootStrg = GetRootStorage();
-        if( xRootStrg.is() ) try
-        {
-            uno::Reference< document::XDocumentPropertiesSupplier > xDPS( pShell->GetModel(), uno::UNO_QUERY_THROW );
-            uno::Reference< document::XDocumentProperties > xDocProps( xDPS->getDocumentProperties(), uno::UNO_SET_THROW );
-            sfx2::LoadOlePropertySet( xDocProps, xRootStrg.get() );
-        }
-        catch( uno::Exception& )
-        {
-        }
+        uno::Reference< document::XDocumentPropertiesSupplier > xDPS( pShell->GetModel(), uno::UNO_QUERY_THROW );
+        uno::Reference< document::XDocumentProperties > xDocProps( xDPS->getDocumentProperties(), uno::UNO_SET_THROW );
+        sfx2::LoadOlePropertySet( xDocProps, xRootStrg.get() );
+    }
+    catch( uno::Exception& )
+    {
     }
 
     // #i45843# Pivot tables are now handled outside of PostDocLoad, so they are available
@@ -496,21 +500,21 @@ void XclImpAutoFilterData::SetCellAttribs()
 
 void XclImpAutoFilterData::InsertQueryParam()
 {
-    if (pCurrDBData)
-    {
-        ScRange aAdvRange;
-        bool    bHasAdv = pCurrDBData->GetAdvancedQuerySource( aAdvRange );
-        if( bHasAdv )
-            pExcRoot->pIR->GetDoc().CreateQueryParam(aAdvRange, aParam);
+    if (!pCurrDBData)
+        return;
 
-        pCurrDBData->SetQueryParam( aParam );
-        if( bHasAdv )
-            pCurrDBData->SetAdvancedQuerySource( &aAdvRange );
-        else
-        {
-            pCurrDBData->SetAutoFilter( true );
-            SetCellAttribs();
-        }
+    ScRange aAdvRange;
+    bool    bHasAdv = pCurrDBData->GetAdvancedQuerySource( aAdvRange );
+    if( bHasAdv )
+        pExcRoot->pIR->GetDoc().CreateQueryParam(aAdvRange, aParam);
+
+    pCurrDBData->SetQueryParam( aParam );
+    if( bHasAdv )
+        pCurrDBData->SetAdvancedQuerySource( &aAdvRange );
+    else
+    {
+        pCurrDBData->SetAutoFilter( true );
+        SetCellAttribs();
     }
 }
 

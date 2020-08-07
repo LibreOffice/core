@@ -164,18 +164,18 @@ void ImportExcel::ReadFileSharing()
     nRecommendReadOnly = maStrm.ReaduInt16();
     nPasswordHash = maStrm.ReaduInt16();
 
-    if( (nRecommendReadOnly != 0) || (nPasswordHash != 0) )
-    {
-        if( SfxItemSet* pItemSet = GetMedium().GetItemSet() )
-            pItemSet->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
+    if((nRecommendReadOnly == 0) && (nPasswordHash == 0))
+        return;
 
-        if( SfxObjectShell* pShell = GetDocShell() )
-        {
-            if( nRecommendReadOnly != 0 )
-                pShell->SetLoadReadonly( true );
-            if( nPasswordHash != 0 )
-                pShell->SetModifyPasswordHash( nPasswordHash );
-        }
+    if( SfxItemSet* pItemSet = GetMedium().GetItemSet() )
+        pItemSet->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
+
+    if( SfxObjectShell* pShell = GetDocShell() )
+    {
+        if( nRecommendReadOnly != 0 )
+            pShell->SetLoadReadonly( true );
+        if( nPasswordHash != 0 )
+            pShell->SetModifyPasswordHash( nPasswordHash );
     }
 }
 
@@ -318,28 +318,28 @@ void ImportExcel::ReadLabel()
     maStrm >> aXclPos;
 
     ScAddress aScPos( ScAddress::UNINITIALIZED );
-    if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
-    {
-        /*  Record ID   BIFF    XF type     String type
-            0x0004      2-7     3 byte      8-bit length, byte string
-            0x0004      8       3 byte      16-bit length, unicode string
-            0x0204      2-7     2 byte      16-bit length, byte string
-            0x0204      8       2 byte      16-bit length, unicode string */
-        bool bBiff2 = maStrm.GetRecId() == EXC_ID2_LABEL;
-        sal_uInt16 nXFIdx = ReadXFIndex( aScPos, bBiff2 );
-        XclStrFlags nFlags = (bBiff2 && (GetBiff() <= EXC_BIFF5)) ? XclStrFlags::EightBitLength : XclStrFlags::NONE;
-        XclImpString aString;
+    if( !GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
+        return;
 
-        // #i63105# use text encoding from FONT record
-        rtl_TextEncoding eOldTextEnc = GetTextEncoding();
-        if( const XclImpFont* pFont = GetXFBuffer().GetFont( nXFIdx ) )
-            SetTextEncoding( pFont->GetFontEncoding() );
-        aString.Read( maStrm, nFlags );
-        SetTextEncoding( eOldTextEnc );
+    /*  Record ID   BIFF    XF type     String type
+        0x0004      2-7     3 byte      8-bit length, byte string
+        0x0004      8       3 byte      16-bit length, unicode string
+        0x0204      2-7     2 byte      16-bit length, byte string
+        0x0204      8       2 byte      16-bit length, unicode string */
+    bool bBiff2 = maStrm.GetRecId() == EXC_ID2_LABEL;
+    sal_uInt16 nXFIdx = ReadXFIndex( aScPos, bBiff2 );
+    XclStrFlags nFlags = (bBiff2 && (GetBiff() <= EXC_BIFF5)) ? XclStrFlags::EightBitLength : XclStrFlags::NONE;
+    XclImpString aString;
 
-        GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
-        XclImpStringHelper::SetToDocument(GetDocImport(), aScPos, GetRoot(), aString, nXFIdx);
-    }
+    // #i63105# use text encoding from FONT record
+    rtl_TextEncoding eOldTextEnc = GetTextEncoding();
+    if( const XclImpFont* pFont = GetXFBuffer().GetFont( nXFIdx ) )
+        SetTextEncoding( pFont->GetFontEncoding() );
+    aString.Read( maStrm, nFlags );
+    SetTextEncoding( eOldTextEnc );
+
+    GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
+    XclImpStringHelper::SetToDocument(GetDocImport(), aScPos, GetRoot(), aString, nXFIdx);
 }
 
 void ImportExcel::ReadBoolErr()
@@ -348,26 +348,26 @@ void ImportExcel::ReadBoolErr()
     maStrm >> aXclPos;
 
     ScAddress aScPos( ScAddress::UNINITIALIZED );
-    if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
-    {
-        sal_uInt16 nXFIdx = ReadXFIndex( aScPos, maStrm.GetRecId() == EXC_ID2_BOOLERR );
-        sal_uInt8 nValue, nType;
-        nValue = maStrm.ReaduInt8();
-        nType = maStrm.ReaduInt8();
+    if( !GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
+        return;
 
-        if( nType == EXC_BOOLERR_BOOL )
-            GetXFRangeBuffer().SetBoolXF( aScPos, nXFIdx );
-        else
-            GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
+    sal_uInt16 nXFIdx = ReadXFIndex( aScPos, maStrm.GetRecId() == EXC_ID2_BOOLERR );
+    sal_uInt8 nValue, nType;
+    nValue = maStrm.ReaduInt8();
+    nType = maStrm.ReaduInt8();
 
-        double fValue;
-        std::unique_ptr<ScTokenArray> pScTokArr = ErrorToFormula( nType != EXC_BOOLERR_BOOL, nValue, fValue );
-        ScFormulaCell* pCell = pScTokArr
-            ? new ScFormulaCell(pD, aScPos, std::move(pScTokArr))
-            : new ScFormulaCell(pD, aScPos);
-        pCell->SetHybridDouble( fValue );
-        GetDocImport().setFormulaCell(aScPos, pCell);
-    }
+    if( nType == EXC_BOOLERR_BOOL )
+        GetXFRangeBuffer().SetBoolXF( aScPos, nXFIdx );
+    else
+        GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
+
+    double fValue;
+    std::unique_ptr<ScTokenArray> pScTokArr = ErrorToFormula( nType != EXC_BOOLERR_BOOL, nValue, fValue );
+    ScFormulaCell* pCell = pScTokArr
+        ? new ScFormulaCell(pD, aScPos, std::move(pScTokArr))
+        : new ScFormulaCell(pD, aScPos);
+    pCell->SetHybridDouble( fValue );
+    GetDocImport().setFormulaCell(aScPos, pCell);
 }
 
 void ImportExcel::ReadRk()
@@ -399,26 +399,26 @@ void ImportExcel::Row25()
     nRow = aIn.ReaduInt16();
     aIn.Ignore( 4 );
 
-    if( GetRoot().GetDoc().ValidRow( nRow ) )
-    {
-        nRowHeight = aIn.ReaduInt16();  // specify direct in Twips
-        aIn.Ignore( 2 );
+    if( !GetRoot().GetDoc().ValidRow( nRow ) )
+        return;
 
-        if( GetBiff() == EXC_BIFF2 )
-        {// -------------------- BIFF2
-            pColRowBuff->SetHeight( nRow, nRowHeight );
-        }
-        else
-        {// -------------------- BIFF5
-            sal_uInt16  nGrbit;
+    nRowHeight = aIn.ReaduInt16();  // specify direct in Twips
+    aIn.Ignore( 2 );
 
-            aIn.Ignore( 2 );   // reserved
-            nGrbit = aIn.ReaduInt16();
+    if( GetBiff() == EXC_BIFF2 )
+    {// -------------------- BIFF2
+        pColRowBuff->SetHeight( nRow, nRowHeight );
+    }
+    else
+    {// -------------------- BIFF5
+        sal_uInt16  nGrbit;
 
-            sal_uInt8 nLevel = ::extract_value< sal_uInt8 >( nGrbit, 0, 3 );
-            pRowOutlineBuff->SetLevel( nRow, nLevel, ::get_flag( nGrbit, EXC_ROW_COLLAPSED ) );
-            pColRowBuff->SetRowSettings( nRow, nRowHeight, nGrbit );
-        }
+        aIn.Ignore( 2 );   // reserved
+        nGrbit = aIn.ReaduInt16();
+
+        sal_uInt8 nLevel = ::extract_value< sal_uInt8 >( nGrbit, 0, 3 );
+        pRowOutlineBuff->SetLevel( nRow, nLevel, ::get_flag( nGrbit, EXC_ROW_COLLAPSED ) );
+        pColRowBuff->SetRowSettings( nRow, nRowHeight, nGrbit );
     }
 }
 
@@ -904,19 +904,19 @@ void ImportExcel::Rstring()
     nXFIdx = aIn.ReaduInt16();
 
     ScAddress aScPos( ScAddress::UNINITIALIZED );
-    if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
-    {
-        // unformatted Unicode string with separate formatting information
-        XclImpString aString;
-        aString.Read( maStrm );
+    if( !GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
+        return;
 
-        // character formatting runs
-        if( !aString.IsRich() )
-            aString.ReadFormats( maStrm );
+    // unformatted Unicode string with separate formatting information
+    XclImpString aString;
+    aString.Read( maStrm );
 
-        GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
-        XclImpStringHelper::SetToDocument(GetDocImport(), aScPos, *this, aString, nXFIdx);
-    }
+    // character formatting runs
+    if( !aString.IsRich() )
+        aString.ReadFormats( maStrm );
+
+    GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
+    XclImpStringHelper::SetToDocument(GetDocImport(), aScPos, *this, aString, nXFIdx);
 }
 
 void ImportExcel::Cellmerging()
@@ -955,25 +955,25 @@ void ImportExcel::Row34()
 
     SCROW nScRow = static_cast< SCROW >( nRow );
 
-    if( GetRoot().GetDoc().ValidRow( nScRow ) )
-    {
-        nRowHeight = aIn.ReaduInt16();  // specify direct in Twips
-        aIn.Ignore( 4 );
+    if( !GetRoot().GetDoc().ValidRow( nScRow ) )
+        return;
 
-        nRowHeight = nRowHeight & 0x7FFF; // Bit 15: Row Height not changed manually
-        if( !nRowHeight )
-            nRowHeight = (GetBiff() == EXC_BIFF2) ? 0x25 : 0x225;
+    nRowHeight = aIn.ReaduInt16();  // specify direct in Twips
+    aIn.Ignore( 4 );
 
-        nGrbit = aIn.ReaduInt16();
-        nXF = aIn.ReaduInt16();
+    nRowHeight = nRowHeight & 0x7FFF; // Bit 15: Row Height not changed manually
+    if( !nRowHeight )
+        nRowHeight = (GetBiff() == EXC_BIFF2) ? 0x25 : 0x225;
 
-        sal_uInt8 nLevel = ::extract_value< sal_uInt8 >( nGrbit, 0, 3 );
-        pRowOutlineBuff->SetLevel( nScRow, nLevel, ::get_flag( nGrbit, EXC_ROW_COLLAPSED ) );
-        pColRowBuff->SetRowSettings( nScRow, nRowHeight, nGrbit );
+    nGrbit = aIn.ReaduInt16();
+    nXF = aIn.ReaduInt16();
 
-        if( nGrbit & EXC_ROW_USEDEFXF )
-            GetXFRangeBuffer().SetRowDefXF( nScRow, nXF & EXC_ROW_XFMASK );
-    }
+    sal_uInt8 nLevel = ::extract_value< sal_uInt8 >( nGrbit, 0, 3 );
+    pRowOutlineBuff->SetLevel( nScRow, nLevel, ::get_flag( nGrbit, EXC_ROW_COLLAPSED ) );
+    pColRowBuff->SetRowSettings( nScRow, nRowHeight, nGrbit );
+
+    if( nGrbit & EXC_ROW_USEDEFXF )
+        GetXFRangeBuffer().SetRowDefXF( nScRow, nXF & EXC_ROW_XFMASK );
 }
 
 void ImportExcel::Bof3()
@@ -1315,32 +1315,32 @@ void ImportExcel::PostDocLoad()
         GetTracer().TracePrintRange();
     }
 
-    if( pExcRoot->pPrintTitles->HasRanges() )
+    if( !pExcRoot->pPrintTitles->HasRanges() )
+        return;
+
+    for( SCTAB n = 0 ; n < nLast ; n++ )
     {
-        for( SCTAB n = 0 ; n < nLast ; n++ )
+        p = pExcRoot->pPrintTitles->First(n);
+        if( p )
         {
-            p = pExcRoot->pPrintTitles->First(n);
-            if( p )
+            bool    bRowVirgin = true;
+            bool    bColVirgin = true;
+
+            while( p )
             {
-                bool    bRowVirgin = true;
-                bool    bColVirgin = true;
-
-                while( p )
+                if( p->aStart.Col() == 0 && p->aEnd.Col() == pD->MaxCol() && bRowVirgin )
                 {
-                    if( p->aStart.Col() == 0 && p->aEnd.Col() == pD->MaxCol() && bRowVirgin )
-                    {
-                        pD->SetRepeatRowRange( n, std::unique_ptr<ScRange>(new ScRange(*p)) );
-                        bRowVirgin = false;
-                    }
-
-                    if( p->aStart.Row() == 0 && p->aEnd.Row() == pD->MaxRow() && bColVirgin )
-                    {
-                        pD->SetRepeatColRange( n, std::unique_ptr<ScRange>(new ScRange(*p)) );
-                        bColVirgin = false;
-                    }
-
-                    p = pExcRoot->pPrintTitles->Next();
+                    pD->SetRepeatRowRange( n, std::unique_ptr<ScRange>(new ScRange(*p)) );
+                    bRowVirgin = false;
                 }
+
+                if( p->aStart.Row() == 0 && p->aEnd.Row() == pD->MaxRow() && bColVirgin )
+                {
+                    pD->SetRepeatColRange( n, std::unique_ptr<ScRange>(new ScRange(*p)) );
+                    bColVirgin = false;
+                }
+
+                p = pExcRoot->pPrintTitles->Next();
             }
         }
     }

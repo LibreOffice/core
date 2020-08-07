@@ -287,25 +287,25 @@ bool XclImpBiff8Decrypter::OnVerifyEncryptionData( const uno::Sequence< beans::N
 
 void XclImpBiff8Decrypter::OnUpdate( std::size_t nOldStrmPos, std::size_t nNewStrmPos, sal_uInt16 /*nRecSize*/ )
 {
-    if( nNewStrmPos != nOldStrmPos )
+    if( nNewStrmPos == nOldStrmPos )
+        return;
+
+    sal_uInt32 nOldBlock = GetBlock( nOldStrmPos );
+    sal_uInt16 nOldOffset = GetOffset( nOldStrmPos );
+
+    sal_uInt32 nNewBlock = GetBlock( nNewStrmPos );
+    sal_uInt16 nNewOffset = GetOffset( nNewStrmPos );
+
+    /*  Rekey cipher, if block changed or if previous offset in same block. */
+    if( (nNewBlock != nOldBlock) || (nNewOffset < nOldOffset) )
     {
-        sal_uInt32 nOldBlock = GetBlock( nOldStrmPos );
-        sal_uInt16 nOldOffset = GetOffset( nOldStrmPos );
-
-        sal_uInt32 nNewBlock = GetBlock( nNewStrmPos );
-        sal_uInt16 nNewOffset = GetOffset( nNewStrmPos );
-
-        /*  Rekey cipher, if block changed or if previous offset in same block. */
-        if( (nNewBlock != nOldBlock) || (nNewOffset < nOldOffset) )
-        {
-            mpCodec->InitCipher( nNewBlock );
-            nOldOffset = 0;     // reset nOldOffset for next if() statement
-        }
-
-        /*  Seek to correct offset. */
-        if( nNewOffset > nOldOffset )
-            mpCodec->Skip( nNewOffset - nOldOffset );
+        mpCodec->InitCipher( nNewBlock );
+        nOldOffset = 0;     // reset nOldOffset for next if() statement
     }
+
+    /*  Seek to correct offset. */
+    if( nNewOffset > nOldOffset )
+        mpCodec->Skip( nNewOffset - nOldOffset );
 }
 
 sal_uInt16 XclImpBiff8Decrypter::OnRead( SvStream& rStrm, sal_uInt8* pnData, sal_uInt16 nBytes )
@@ -777,18 +777,18 @@ void XclImpStream::CopyRecordToStream( SvStream& rOutStrm )
 
 void XclImpStream::Seek( std::size_t nPos )
 {
-    if( mbValidRec )
+    if( !mbValidRec )
+        return;
+
+    std::size_t nCurrPos = GetRecPos();
+    if( !mbValid || (nPos < nCurrPos) ) // from invalid state or backward
     {
-        std::size_t nCurrPos = GetRecPos();
-        if( !mbValid || (nPos < nCurrPos) ) // from invalid state or backward
-        {
-            RestorePosition( maFirstRec );
-            Ignore( nPos );
-        }
-        else if( nPos > nCurrPos )          // forward
-        {
-            Ignore( nPos - nCurrPos );
-        }
+        RestorePosition( maFirstRec );
+        Ignore( nPos );
+    }
+    else if( nPos > nCurrPos )          // forward
+    {
+        Ignore( nPos - nCurrPos );
     }
 }
 

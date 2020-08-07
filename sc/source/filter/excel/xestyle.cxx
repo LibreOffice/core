@@ -627,24 +627,24 @@ void XclExpPaletteImpl::ReduceLeastUsedColor()
     // merge both colors to one color, remove one color from list
     XclListColor* pKeepEntry = mxColorList->at(nKeep).get();
     XclListColor* pRemoveEntry = mxColorList->at(nRemove).get();
-    if( pKeepEntry && pRemoveEntry )
-    {
-        // merge both colors (if pKeepEntry is a base color, it will not change)
-        pKeepEntry->Merge( *pRemoveEntry );
-        // remove the less used color, adjust nKeep index if kept color follows removed color
-        XclListColorList::iterator itr = mxColorList->begin();
-        ::std::advance(itr, nRemove);
-        mxColorList->erase(itr);
-        if( nKeep > nRemove ) --nKeep;
+    if( !(pKeepEntry && pRemoveEntry) )
+        return;
 
-        // recalculate color ID data map (maps color IDs to color list indexes)
-        for( auto& rColorIdData : maColorIdDataVec )
-        {
-            if( rColorIdData.mnIndex > nRemove )
-                --rColorIdData.mnIndex;
-            else if( rColorIdData.mnIndex == nRemove )
-                rColorIdData.mnIndex = nKeep;
-        }
+    // merge both colors (if pKeepEntry is a base color, it will not change)
+    pKeepEntry->Merge( *pRemoveEntry );
+    // remove the less used color, adjust nKeep index if kept color follows removed color
+    XclListColorList::iterator itr = mxColorList->begin();
+    ::std::advance(itr, nRemove);
+    mxColorList->erase(itr);
+    if( nKeep > nRemove ) --nKeep;
+
+    // recalculate color ID data map (maps color IDs to color list indexes)
+    for( auto& rColorIdData : maColorIdDataVec )
+    {
+        if( rColorIdData.mnIndex > nRemove )
+            --rColorIdData.mnIndex;
+        else if( rColorIdData.mnIndex == nRemove )
+            rColorIdData.mnIndex = nKeep;
     }
 }
 

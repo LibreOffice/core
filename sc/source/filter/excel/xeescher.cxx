@@ -406,40 +406,40 @@ void XclExpImgData::Save( XclExpStream& rStrm )
         aBmp.Convert( BmpConversion::N24Bit );
 
     Bitmap::ScopedReadAccess pAccess(aBmp);
-    if( pAccess )
+    if( !pAccess )
+        return;
+
+    sal_Int32 nWidth = ::std::min< sal_Int32 >( pAccess->Width(), 0xFFFF );
+    sal_Int32 nHeight = ::std::min< sal_Int32 >( pAccess->Height(), 0xFFFF );
+    if( (nWidth <= 0) || (nHeight <= 0) )
+        return;
+
+    sal_uInt8 nPadding = static_cast< sal_uInt8 >( nWidth & 0x03 );
+    sal_uInt32 nTmpSize = static_cast< sal_uInt32 >( (nWidth * 3 + nPadding) * nHeight + 12 );
+
+    rStrm.StartRecord( mnRecId, nTmpSize + 4 );
+
+    rStrm   << EXC_IMGDATA_BMP                      // BMP format
+            << EXC_IMGDATA_WIN                      // Windows
+            << nTmpSize                             // size after _this_ field
+            << sal_uInt32( 12 )                     // BITMAPCOREHEADER size
+            << static_cast< sal_uInt16 >( nWidth )  // width
+            << static_cast< sal_uInt16 >( nHeight ) // height
+            << sal_uInt16( 1 )                      // planes
+            << sal_uInt16( 24 );                    // bits per pixel
+
+    for( sal_Int32 nY = nHeight - 1; nY >= 0; --nY )
     {
-        sal_Int32 nWidth = ::std::min< sal_Int32 >( pAccess->Width(), 0xFFFF );
-        sal_Int32 nHeight = ::std::min< sal_Int32 >( pAccess->Height(), 0xFFFF );
-        if( (nWidth > 0) && (nHeight > 0) )
+        Scanline pScanline = pAccess->GetScanline( nY );
+        for( sal_Int32 nX = 0; nX < nWidth; ++nX )
         {
-            sal_uInt8 nPadding = static_cast< sal_uInt8 >( nWidth & 0x03 );
-            sal_uInt32 nTmpSize = static_cast< sal_uInt32 >( (nWidth * 3 + nPadding) * nHeight + 12 );
-
-            rStrm.StartRecord( mnRecId, nTmpSize + 4 );
-
-            rStrm   << EXC_IMGDATA_BMP                      // BMP format
-                    << EXC_IMGDATA_WIN                      // Windows
-                    << nTmpSize                             // size after _this_ field
-                    << sal_uInt32( 12 )                     // BITMAPCOREHEADER size
-                    << static_cast< sal_uInt16 >( nWidth )  // width
-                    << static_cast< sal_uInt16 >( nHeight ) // height
-                    << sal_uInt16( 1 )                      // planes
-                    << sal_uInt16( 24 );                    // bits per pixel
-
-            for( sal_Int32 nY = nHeight - 1; nY >= 0; --nY )
-            {
-                Scanline pScanline = pAccess->GetScanline( nY );
-                for( sal_Int32 nX = 0; nX < nWidth; ++nX )
-                {
-                    const BitmapColor& rBmpColor = pAccess->GetPixelFromData( pScanline, nX );
-                    rStrm << rBmpColor.GetBlue() << rBmpColor.GetGreen() << rBmpColor.GetRed();
-                }
-                rStrm.WriteZeroBytes( nPadding );
-            }
-
-            rStrm.EndRecord();
+            const BitmapColor& rBmpColor = pAccess->GetPixelFromData( pScanline, nX );
+            rStrm << rBmpColor.GetBlue() << rBmpColor.GetGreen() << rBmpColor.GetRed();
         }
+        rStrm.WriteZeroBytes( nPadding );
     }
+
+    rStrm.EndRecord();
 }
 
 void XclExpImgData::SaveXml( XclExpXmlStream& rStrm )
@@ -495,22 +495,22 @@ void XclExpControlHelper::ConvertSheetLinks( Reference< XShape > const & xShape 
     // *** source range *** ---------------------------------------------------
 
     Reference< XListEntrySink > xEntrySink( xCtrlModel, UNO_QUERY );
-    if( xEntrySink.is() )
+    if( !xEntrySink.is() )
+        return;
+
+    Reference< XServiceInfo > xServInfo( xEntrySink->getListEntrySource(), UNO_QUERY );
+    if( !(xServInfo.is() && xServInfo->supportsService( SC_SERVICENAME_LISTSOURCE )) )
+        return;
+
+    ScfPropertySet aSinkProp( xServInfo );
+    CellRangeAddress aApiRange;
+    if( aSinkProp.GetProperty( aApiRange, SC_UNONAME_CELLRANGE ) )
     {
-        Reference< XServiceInfo > xServInfo( xEntrySink->getListEntrySource(), UNO_QUERY );
-        if( xServInfo.is() && xServInfo->supportsService( SC_SERVICENAME_LISTSOURCE ) )
-        {
-            ScfPropertySet aSinkProp( xServInfo );
-            CellRangeAddress aApiRange;
-            if( aSinkProp.GetProperty( aApiRange, SC_UNONAME_CELLRANGE ) )
-            {
-                ScRange aSrcRange;
-                ScUnoConversion::FillScRange( aSrcRange, aApiRange );
-                if( (aSrcRange.aStart.Tab() == aSrcRange.aEnd.Tab()) && GetTabInfo().IsExportTab( aSrcRange.aStart.Tab() ) )
-                    mxSrcRange = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_CONTROL, aSrcRange );
-                mnEntryCount = static_cast< sal_uInt16 >( aSrcRange.aEnd.Col() - aSrcRange.aStart.Col() + 1 );
-            }
-        }
+        ScRange aSrcRange;
+        ScUnoConversion::FillScRange( aSrcRange, aApiRange );
+        if( (aSrcRange.aStart.Tab() == aSrcRange.aEnd.Tab()) && GetTabInfo().IsExportTab( aSrcRange.aStart.Tab() ) )
+            mxSrcRange = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_CONTROL, aSrcRange );
+        mnEntryCount = static_cast< sal_uInt16 >( aSrcRange.aEnd.Col() - aSrcRange.aStart.Col() + 1 );
     }
 }
 

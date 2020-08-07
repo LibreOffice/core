@@ -712,33 +712,34 @@ sal_Int32 GetSubtotalAttrToken(ScGeneralFunction eFunc)
 // An item is expected to contain sequences of css::xml::FastAttribute and css::xml::Attribute
 void WriteGrabBagItemToStream(XclExpXmlStream& rStrm, sal_Int32 tokenId, const css::uno::Any& rItem)
 {
-    if (css::uno::Sequence<css::uno::Any> aSeqs; rItem >>= aSeqs)
+    css::uno::Sequence<css::uno::Any> aSeqs;
+    if(!(rItem >>= aSeqs))
+        return;
+
+    auto& pStrm = rStrm.GetCurrentStream();
+    pStrm->write("<")->writeId(tokenId);
+
+    css::uno::Sequence<css::xml::FastAttribute> aFastSeq;
+    css::uno::Sequence<css::xml::Attribute> aUnkSeq;
+    for (const auto& a : std::as_const(aSeqs))
     {
-        auto& pStrm = rStrm.GetCurrentStream();
-        pStrm->write("<")->writeId(tokenId);
-
-        css::uno::Sequence<css::xml::FastAttribute> aFastSeq;
-        css::uno::Sequence<css::xml::Attribute> aUnkSeq;
-        for (const auto& a : std::as_const(aSeqs))
+        if (a >>= aFastSeq)
         {
-            if (a >>= aFastSeq)
-            {
-                for (const auto& rAttr : std::as_const(aFastSeq))
-                    rStrm.WriteAttributes(rAttr.Token, rAttr.Value);
-            }
-            else if (a >>= aUnkSeq)
-            {
-                for (const auto& rAttr : std::as_const(aUnkSeq))
-                    pStrm->write(" ")
-                        ->write(rAttr.Name)
-                        ->write("=\"")
-                        ->writeEscaped(rAttr.Value)
-                        ->write("\"");
-            }
+            for (const auto& rAttr : std::as_const(aFastSeq))
+                rStrm.WriteAttributes(rAttr.Token, rAttr.Value);
         }
-
-        pStrm->write("/>");
+        else if (a >>= aUnkSeq)
+        {
+            for (const auto& rAttr : std::as_const(aUnkSeq))
+                pStrm->write(" ")
+                    ->write(rAttr.Name)
+                    ->write("=\"")
+                    ->writeEscaped(rAttr.Value)
+                    ->write("\"");
+        }
     }
+
+    pStrm->write("/>");
 }
 }
 
