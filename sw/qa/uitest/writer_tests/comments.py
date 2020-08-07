@@ -8,11 +8,7 @@
 #
 
 from uitest.framework import UITestCase
-import time
-from uitest.uihelper.common import get_state_as_dict, type_text
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.debug import sleep
-from uitest.config import DEFAULT_SLEEP
 #test comments
 
 class Comments(UITestCase):

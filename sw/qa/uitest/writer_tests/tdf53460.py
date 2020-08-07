@@ -7,7 +7,6 @@
 
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.debug import sleep
 
 class tdf53460(UITestCase):
 

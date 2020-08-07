@@ -6,10 +6,6 @@
 
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, type_text
-from uitest.uihelper.common import select_pos
-import time
-from uitest.debug import sleep
 #Bug 126168 - Crash in: rtl_uString_acquire: frame style undo redo
 
 class tdf126168(UITestCase):

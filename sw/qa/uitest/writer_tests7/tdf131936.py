@@ -4,7 +4,6 @@
 
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
-from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.path import get_srcdir_url
 from uitest.config import DEFAULT_SLEEP
 import time

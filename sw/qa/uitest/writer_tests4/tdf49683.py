@@ -8,11 +8,8 @@
 #
 
 from uitest.framework import UITestCase
-from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.path import get_srcdir_url
 from uitest.uihelper.common import get_state_as_dict
-import time
-from uitest.debug import sleep
 from uitest.uihelper.common import select_pos
 
 def get_url_for_data_file(file_name):
