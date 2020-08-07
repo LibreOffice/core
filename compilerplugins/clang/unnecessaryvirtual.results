@@ -214,7 +214,7 @@ canvas/inc/rendering/isurface.hxx:34
     void canvas::ISurface::~ISurface()
 chart2/source/inc/WeakListenerAdapter.hxx:57
     void chart::WeakListenerAdapter::disposing(const struct com::sun::star::lang::EventObject &,)
-extensions/source/dbpilots/unoautopilot.hxx:98
+extensions/source/dbpilots/unoautopilot.hxx:81
     class cppu::IPropertyArrayHelper * dbp::OUnoAutoPilot::createArrayHelper()const
 extensions/source/propctrlr/commoncontrol.hxx:130
     short pcr::CommonBehaviourControl::getControlType()
@@ -252,29 +252,23 @@ include/comphelper/interaction.hxx:53
     void comphelper::OInteraction::select()
 include/comphelper/proparrhlp.hxx:83
     class cppu::IPropertyArrayHelper * comphelper::OAggregationArrayUsageHelper::createArrayHelper()const
-include/comphelper/servicedecl.hxx:163
-    class rtl::OUString comphelper::service_decl::detail::OwnServiceImpl::getImplementationName()
-include/comphelper/servicedecl.hxx:166
-    unsigned char comphelper::service_decl::detail::OwnServiceImpl::supportsService(const class rtl::OUString &,)
-include/comphelper/servicedecl.hxx:170
-    class com::sun::star::uno::Sequence<class rtl::OUString> comphelper::service_decl::detail::OwnServiceImpl::getSupportedServiceNames()
 include/comphelper/solarmutex.hxx:59
     _Bool comphelper::SolarMutex::tryToAcquire()
 include/comphelper/unique_disposing_ptr.hxx:169
     void comphelper::unique_disposing_solar_mutex_reset_ptr::reset(type-parameter-0-0 *,)
 include/comphelper/weakeventlistener.hxx:120
     void comphelper::OWeakListenerAdapter::disposing(const struct com::sun::star::lang::EventObject &,)
-include/svl/svdde.hxx:237
+include/svl/svdde.hxx:235
     class DdeData * DdeTopic::Get(enum SotClipboardFormatId,)
-include/svl/svdde.hxx:238
+include/svl/svdde.hxx:236
     _Bool DdeTopic::Put(const class DdeData *,)
-include/svl/svdde.hxx:239
+include/svl/svdde.hxx:237
     _Bool DdeTopic::Execute(const class rtl::OUString *,)
-include/svl/svdde.hxx:241
+include/svl/svdde.hxx:239
     _Bool DdeTopic::MakeItem(const class rtl::OUString &,)
-include/svl/svdde.hxx:244
+include/svl/svdde.hxx:242
     _Bool DdeTopic::StartAdviseLoop()
-include/svl/svdde.hxx:300
+include/svl/svdde.hxx:299
     void DdeService::~DdeService()
 include/vbahelper/vbacollectionimpl.hxx:289
     int ScVbaCollectionBase::getCount()
@@ -302,7 +296,13 @@ include/vcl/customweld.hxx:42
     class rtl::OUString weld::CustomWidgetController::GetHelpText()const
 include/vcl/toolkit/dialog.hxx:96
     void Dialog::set_content_area(class VclBox *,)
-include/vcl/weld.hxx:96
+include/vcl/treelistbox.hxx:502
+    void SvTreeListBox::NotifyEndScroll()
+include/vcl/treelistbox.hxx:503
+    void SvTreeListBox::NotifyScrolled()
+include/vcl/treelistbox.hxx:648
+    _Bool SvTreeListBox::Select(class SvTreeListEntry *,_Bool,)
+include/vcl/weld.hxx:95
     void weld::Widget::set_visible(_Bool,)
 sc/source/core/opencl/formulagroupcl.cxx:1061
     _Bool sc::opencl::(anonymous namespace)::DynamicKernelSlidingArgument::NeedParallelReduction()const
@@ -378,10 +378,6 @@ sc/source/ui/vba/vbapagebreak.hxx:48
     void ScVbaPageBreak::Delete()
 sc/source/ui/vba/vbapagebreak.hxx:49
     class com::sun::star::uno::Reference<class ooo::vba::excel::XRange> ScVbaPageBreak::Location()
-sdext/source/presenter/PresenterToolBar.cxx:308
-    struct TimeValue sdext::presenter::(anonymous namespace)::PresentationTimeLabel::getPauseTimeValue()
-sdext/source/presenter/PresenterToolBar.cxx:309
-    void sdext::presenter::(anonymous namespace)::PresentationTimeLabel::setPauseTimeValue(const struct TimeValue,)
 shell/inc/i_xml_parser_event_handler.hxx:41
     void i_xml_parser_event_handler::~i_xml_parser_event_handler()
 slideshow/source/engine/activities/activitiesfactory.cxx:172
@@ -404,8 +400,6 @@ slideshow/source/engine/animationfactory.cxx:437
     void slideshow::internal::(anonymous namespace)::GenericAnimation::start(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
 slideshow/source/inc/shape.hxx:221
     void slideshow::internal::Shape::setIsForeground(const _Bool,)
-svx/source/inc/gridcell.hxx:784
-    void FmXGridCell::onWindowEvent(const enum VclEventId,const class vcl::Window &,const void *,)
 sw/inc/flypos.hxx:37
     void SwPosFlyFrame::~SwPosFlyFrame()
 toolkit/inc/controls/geometrycontrolmodel.hxx:182
