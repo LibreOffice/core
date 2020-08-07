@@ -61,6 +61,21 @@ DBTreeListBox::DBTreeListBox( vcl::Window* pParent, WinBits nWinStyle )
     init();
 }
 
+InterimDBTreeListBox::InterimDBTreeListBox(vcl::Window* pParent)
+    : InterimItemWindow(pParent, "", "")
+    , TreeListBox(m_xBuilder->weld_tree_view("treeview"))
+{
+}
+
+TreeListBox::TreeListBox(std::unique_ptr<weld::TreeView> xTreeView)
+    : m_xTreeView(std::move(xTreeView))
+{
+}
+
+TreeListBox::~TreeListBox()
+{
+}
+
 void DBTreeListBox::init()
 {
     SetSpaceBetweenEntries(SPACEBETWEENENTRIES);
@@ -119,6 +134,27 @@ SvTreeListEntry* DBTreeListBox::GetEntryPosByName( const OUString& aName, SvTree
     }
 
     return pEntry;
+}
+
+std::unique_ptr<weld::TreeIter> TreeListBox::GetEntryPosByName(const OUString& aName, const weld::TreeIter* pStart, const IEntryFilter* _pFilter) const
+{
+    auto xEntry(m_xTreeView->make_iterator(pStart));
+    if (!pStart && !m_xTreeView->get_iter_first(*xEntry))
+        return nullptr;
+
+    do
+    {
+        if (m_xTreeView->get_text(*xEntry) == aName)
+        {
+            if (!_pFilter || _pFilter->includeEntry(reinterpret_cast<void*>(m_xTreeView->get_id(*xEntry).toUInt64())))
+            {
+                // found
+                return xEntry;
+            }
+        }
+    } while (m_xTreeView->iter_next(*xEntry));
+
+    return nullptr;
 }
 
 void DBTreeListBox::RequestingChildren( SvTreeListEntry* pParent )

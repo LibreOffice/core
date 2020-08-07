@@ -31,6 +31,10 @@ namespace com::sun::star::beans    { class XPropertySet; }
 
 class Control;
 class SvTreeListEntry;
+namespace weld
+{
+    class TreeIter;
+}
 class MnemonicGenerator;
 
 namespace dbaui
@@ -136,7 +140,7 @@ namespace dbaui
             @return
                 the qualified name
         */
-        OUString getQualifiedName( SvTreeListEntry* _pEntry ) const;
+        OUString getQualifiedName(weld::TreeIter* _pEntry) const;
 
         /** returns if an entry is a leaf
             @param _pEntry
@@ -144,7 +148,7 @@ namespace dbaui
             @return
                 <TRUE/> if the entry is a leaf, otherwise <FALSE/>
         */
-        bool isLeaf(SvTreeListEntry const * _pEntry) const;
+        bool isLeaf(const weld::TreeIter* _pEntry) const;
 
         /** returns if one of the selected entries is a leaf
             @return
@@ -218,9 +222,9 @@ namespace dbaui
             @param  _rxConn
                 If we insert a table, the connection must be set.
         */
-        SvTreeListEntry* elementAdded(ElementType _eType
-                        ,const OUString& _rName
-                        ,const css::uno::Any& _rObject );
+        std::unique_ptr<weld::TreeIter> elementAdded(ElementType eType,
+                                                     const OUString& rName,
+                                                     const css::uno::Any& rObject);
 
         /** replaces an objects name with a new one
             @param  _eType
@@ -289,7 +293,7 @@ namespace dbaui
                             const OUString& _sName,
                             bool _bTable);
 
-        SvTreeListEntry* getEntry( const Point& _aPosPixel ) const;
+        std::unique_ptr<weld::TreeIter> getEntry(const Point& rPosPixel) const;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_APP_APPVIEW_HXX

@@ -396,12 +396,12 @@ const TaskPaneData& OApplicationDetailView::impl_getTaskPaneData( ElementType _e
     return rData;
 }
 
-OUString OApplicationDetailView::getQualifiedName( SvTreeListEntry* _pEntry ) const
+OUString OApplicationDetailView::getQualifiedName(weld::TreeIter* _pEntry) const
 {
     return m_pControlHelper->getQualifiedName( _pEntry );
 }
 
-bool OApplicationDetailView::isLeaf(SvTreeListEntry const * _pEntry)
+bool OApplicationDetailView::isLeaf(const weld::TreeIter* _pEntry)
 {
     return OAppDetailPageHelper::isLeaf(_pEntry);
 }
@@ -473,9 +473,9 @@ void OApplicationDetailView::selectElements(const Sequence< OUString>& _aNames)
     m_pControlHelper->selectElements( _aNames );
 }
 
-SvTreeListEntry* OApplicationDetailView::getEntry( const Point& _aPoint ) const
+std::unique_ptr<weld::TreeIter> OApplicationDetailView::getEntry(const Point& rPoint) const
 {
-    return m_pControlHelper->getEntry(_aPoint);
+    return m_pControlHelper->getEntry(rPoint);
 }
 
 bool OApplicationDetailView::isCutAllowed()
@@ -496,9 +496,9 @@ void OApplicationDetailView::cut()  { }
 
 void OApplicationDetailView::paste() { }
 
-SvTreeListEntry*  OApplicationDetailView::elementAdded(ElementType _eType,const OUString& _rName, const Any& _rObject )
+std::unique_ptr<weld::TreeIter> OApplicationDetailView::elementAdded(ElementType _eType,const OUString& _rName, const Any& _rObject )
 {
-    return m_pControlHelper->elementAdded(_eType,_rName, _rObject );
+    return m_pControlHelper->elementAdded(_eType, _rName, _rObject);
 }
 
 void OApplicationDetailView::elementRemoved(ElementType _eType,const OUString& _rName )
