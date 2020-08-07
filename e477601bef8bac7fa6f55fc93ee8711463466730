@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc393309_afc51adc",
+        "filename": "sw/inc/inspectorproperties.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-07T09:13:46Z",
+      "side": 1,
+      "message": "I totally agree with the way how you chose the names for these parts of the complex property: \"BorderInnerLineWidth\" etc - please keep them; this will allow to provide different translations for different properties that might have similar names in English, but need different naming in other languages (? I imagine that\u0027s possible). However, for the user-visible English string, we may omit the \"Border\" word, because they will be under the parent node, which *needs own name*, and will help understand border of what is meant:\n\n    ...\n    Border\n        Color\n        Inner Line Width\n        ...\n\ninstead of\n\n    ...\n    Border\n        Border Color\n        Border Inner Line Width\n        ...",
+      "range": {
+        "startLine": 31,
+        "startChar": 92,
+        "endLine": 31,
+        "endChar": 104
+      },
+      "revId": "e477601bef8bac7fa6f55fc93ee8711463466730",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "511b5ec0_5f0c046d",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-07T09:13:46Z",
+      "side": 1,
+      "message": "I see why you want to use a separate variable, to make code shorter. However, in this case, the ctor overhead is unreasonable. Make it a reference:\n\n    const OUString\u0026 rName \u003d rProperty.Name;",
+      "range": {
+        "startLine": 330,
+        "startChar": 8,
+        "endLine": 330,
+        "endChar": 26
+      },
+      "revId": "e477601bef8bac7fa6f55fc93ee8711463466730",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
