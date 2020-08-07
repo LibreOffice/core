@@ -207,7 +207,7 @@ void TableProperties::pushToPropSet(const ::oox::core::XmlFilterBase& rFilterBas
     xTableStyleToDelete.reset();
 }
 
-void TableProperties::pullFromTextBody(oox::drawingml::TextBodyPtr pTextBody, sal_Int32 nShapeWidth, bool bhasSameSubTypeIndex)
+void TableProperties::pullFromTextBody(oox::drawingml::TextBodyPtr pTextBody, sal_Int32 nShapeWidth, bool bhasSameSubTypeIndex, bool bMaster)
 {
     // Create table grid and a single row.
     sal_Int32 nNumCol = pTextBody->getTextProperties().mnNumCol;
@@ -244,6 +244,9 @@ void TableProperties::pullFromTextBody(oox::drawingml::TextBodyPtr pTextBody, sa
 
         // Copy properties provided by <a:lstStyle>.
         pCellTextBody->getTextListStyle() = pTextBody->getTextListStyle();
+
+        if (bMaster)
+            continue;
 
         for (sal_Int32 nParaInCol = 0; nParaInCol < nParaPerCol; ++nParaInCol)
         {
