@@ -532,12 +532,12 @@ typedef ::cppu::ImplHelper4 <   css::form::XLoadListener
 typedef ::cppu::ImplHelper1 <   css::form::XBoundComponent
                             >   OBoundControlModel_COMMITTING;
 
-// dito
+// ditto
 typedef ::cppu::ImplHelper2 <   css::form::binding::XBindableValue
                             ,   css::util::XModifyListener
                             >   OBoundControlModel_BINDING;
 
-// dito
+// ditto
 typedef ::cppu::ImplHelper2 <   css::form::validation::XValidityConstraintListener
                             ,   css::form::validation::XValidatableFormComponent
                             >   OBoundControlModel_VALIDATION;
