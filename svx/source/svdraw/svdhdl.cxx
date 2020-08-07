@@ -369,7 +369,7 @@ void SdrHdl::SetHdlList(SdrHdlList* pList)
         // remember list
         pHdlList = pList;
 
-        // now its possible to create graphic representation
+        // now it's possible to create graphic representation
         Touch();
     }
 }

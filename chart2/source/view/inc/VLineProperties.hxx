@@ -35,7 +35,7 @@ struct VLineProperties
     css::uno::Any Transparence;//type sal_Int16 for property UNO_NAME_LINETRANSPARENCE
     css::uno::Any Width;//type sal_Int32 for property UNO_NAME_LINEWIDTH
     css::uno::Any DashName;//type OUString for property "LineDashName"
-    css::uno::Any LineCap; //type drawing::LineCap for propertey UNO_NAME_LINECAP
+    css::uno::Any LineCap; //type drawing::LineCap for property UNO_NAME_LINECAP
 
     VLineProperties();
     void initFromPropertySet( const css::uno::Reference< css::beans::XPropertySet >& xProp );
