@@ -47,11 +47,12 @@ namespace dbaui
         OUString        sUNOCommand;
         const char*     pHelpID;
         OUString        sTitle;
+        bool            bHideWhenDisabled;
             // TODO: we should be consistent in the task pane and the menus/toolbars:
             // If an entry is disabled in the latter, it should also be disabled in the former.
             // If an entry is *hidden* in the former, it should also be hidden in the latter.
 
-        TaskEntry( const char* _pAsciiUNOCommand, const char* pHelpID, const char* pTitleResourceID );
+        TaskEntry( const char* _pAsciiUNOCommand, const char* pHelpID, const char* pTitleResourceID, bool _bHideWhenDisabled = false );
     };
     typedef std::vector< TaskEntry >  TaskEntryList;
 
@@ -313,6 +314,7 @@ namespace dbaui
                             );
 
         const TaskPaneData& impl_getTaskPaneData( ElementType _eType );
+        void                impl_fillTaskPaneData( ElementType _eType, TaskPaneData& _rData ) const;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_APP_APPDETAILVIEW_HXX
