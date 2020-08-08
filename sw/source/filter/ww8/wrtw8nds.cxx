@@ -725,7 +725,7 @@ FlyProcessingState SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
         const SwPosition &rAnchor = maFlyIter->GetPosition();
         const sal_Int32 nPos = rAnchor.nContent.GetIndex();
 
-        if ( nPos != nSwPos )
+        if ( nPos > nSwPos )
             return FLY_NOT_PROCESSED ; // We haven't processed the fly
 
         const SdrObject* pSdrObj = maFlyIter->GetFrameFormat().FindRealSdrObject();
