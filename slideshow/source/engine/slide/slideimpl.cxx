@@ -385,7 +385,7 @@ void SlideImpl::prefetch()
     applyInitialShapeAttributes(mxRootNode);
 }
 
-void SlideImpl::show( bool bSlideBackgoundPainted )
+void SlideImpl::show( bool bSlideBackgroundPainted )
 {
     if( mbActive )
         return; // already active
@@ -410,7 +410,7 @@ void SlideImpl::show( bool bSlideBackgoundPainted )
 
 
     // render slide to screen, if requested
-    if( !bSlideBackgoundPainted )
+    if( !bSlideBackgroundPainted )
     {
         for( const auto& rContext : maContext.mrViewContainer )
             slideRenderer( this, rContext );
