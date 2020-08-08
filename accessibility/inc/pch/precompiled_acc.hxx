@@ -124,7 +124,6 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/metaactiontypes.hxx>
-#include <vcl/mnemonicengine.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/outdevmap.hxx>
 #include <vcl/outdevstate.hxx>
