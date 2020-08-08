@@ -307,23 +307,21 @@ bool SwTOXIndex::equivalent(const SwTOXSortTabBase& rCmpBase)
 
 bool SwTOXIndex::sort_lt(const SwTOXSortTabBase& rCmpBase)
 {
-    const SwTOXIndex& rCmp = static_cast<const SwTOXIndex&>(rCmpBase);
-
     OSL_ENSURE(pTextMark, "pTextMark == 0, No keyword");
 
     const TextAndReading aMyTaR(GetText());
-    const TextAndReading aOtherTaR(rCmp.GetText());
+    const TextAndReading aOtherTaR(rCmpBase.GetText());
 
-    bool bRet = GetLevel() == rCmp.GetLevel() &&
+    bool bRet = GetLevel() == rCmpBase.GetLevel() &&
                 pTOXIntl->IsLess( aMyTaR, GetLocale(),
-                                  aOtherTaR, rCmp.GetLocale() );
+                                  aOtherTaR, rCmpBase.GetLocale() );
 
     // If we don't summarize we need to evaluate the Pos
     if( !bRet && !(GetOptions() & SwTOIOptions::SameEntry) )
     {
         bRet = pTOXIntl->IsEqual( aMyTaR, GetLocale(),
-                                  aOtherTaR, rCmp.GetLocale() ) &&
-               nPos < rCmp.nPos;
+                                  aOtherTaR, rCmpBase.GetLocale() ) &&
+               nPos < rCmpBase.nPos;
     }
 
     return bRet;
