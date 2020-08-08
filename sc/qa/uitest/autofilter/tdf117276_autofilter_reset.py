@@ -6,8 +6,6 @@
 #
 from uitest.framework import UITestCase
 from uitest.uihelper.calc import enter_text_to_cell
-from libreoffice.calc.document import get_sheet_from_doc
-from uitest.debug import sleep
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import get_row
 from uitest.path import get_srcdir_url

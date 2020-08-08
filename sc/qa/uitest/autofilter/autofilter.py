@@ -12,7 +12,6 @@ from uitest.path import get_srcdir_url
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import get_row
 
-import time
 
 def get_url_for_data_file(file_name):
     return get_srcdir_url() + "/sc/qa/uitest/autofilter/data/" + file_name
