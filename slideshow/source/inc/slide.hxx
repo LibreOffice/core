@@ -71,13 +71,13 @@ namespace slideshow::internal
                 After this call, the slide will render itself to the
                 views, and start its animations.
 
-                @param bSlideBackgoundPainted
+                @param bSlideBackgroundPainted
                 When true, the initial slide content on the background
                 layer is already rendered (e.g. from a previous slide
                 transition). When false, Slide renders initial content of
                 slide.
              */
-            virtual void show( bool bSlideBackgoundPainted ) = 0;
+            virtual void show( bool bSlideBackgroundPainted ) = 0;
 
             /** Force-ends the slide
 
