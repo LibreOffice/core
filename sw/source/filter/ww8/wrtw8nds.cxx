@@ -356,14 +356,17 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
     }
 
     // #i2916# Check to see if there are any graphics anchored to characters in this paragraph's text.
-    if (maFlyIter != maFlyFrames.end())
+    sal_Int32 nNextFlyPos = 0;
+    ww8::FrameIter aTmpFlyIter = maFlyIter;
+    while (aTmpFlyIter != maFlyFrames.end() && nNextFlyPos < nStartPos)
     {
-        const SwPosition &rAnchor = maFlyIter->GetPosition();
+        const SwPosition &rAnchor = aTmpFlyIter->GetPosition();
+        nNextFlyPos = rAnchor.nContent.GetIndex();
 
-        sal_Int32 nPos = rAnchor.nContent.GetIndex();
-        if (nPos >= nStartPos && nPos <= nMinPos)
-            nMinPos = nPos;
+        ++aTmpFlyIter;
     }
+    if (nNextFlyPos >= nStartPos && nNextFlyPos < nMinPos)
+        nMinPos = nNextFlyPos;
 
     //nMinPos found and not going to change at this point
 
