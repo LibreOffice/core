@@ -98,7 +98,7 @@ namespace slideshow::internal
             for( const auto& pLayer : maLayers )
                 pLayer->clearUpdateRanges();
 
-            updateShapeLayers( true/*bSlideBackgoundPainted*/ );
+            updateShapeLayers( true/*bSlideBackgroundPainted*/ );
         }
 
         void LayerManager::deactivate()
