@@ -163,6 +163,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf134609_gridAfter, "tdf134609_gridAfter.docx")
     CPPUNIT_ASSERT_MESSAGE("Top border is not an edge border", aBorder.LineWidth < 100);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf131729_lostImage, "tdf131729_lostImage.odt")
+{
+    // the character-anchored image was being skipped, since searchNext didn't notice it.
+    uno::Reference<beans::XPropertySet> xImageProps(getShape(2), uno::UNO_QUERY_THROW);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf134063, "tdf134063.docx")
 {
     CPPUNIT_ASSERT_EQUAL(2, getPages());
