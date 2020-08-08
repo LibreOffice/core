@@ -354,13 +354,7 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
         IterToCurrent();
     }
 
-    /*
-     #i2916#
-     Check to see if there are any graphics anchored to characters in this
-     paragraph's text. Set nMinPos to 1 past the placement for anchored to
-     character because anchors in Word appear after the character they are
-     anchored to.
-    */
+    // #i2916# Check to see if there are any graphics anchored to characters in this paragraph's text.
     if (maFlyIter != maFlyFrames.end())
     {
         const SwPosition &rAnchor = maFlyIter->GetPosition();
@@ -368,13 +362,6 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
         sal_Int32 nPos = rAnchor.nContent.GetIndex();
         if (nPos >= nStartPos && nPos <= nMinPos)
             nMinPos = nPos;
-
-        if (maFlyIter->GetFrameFormat().GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_CHAR)
-        {
-            ++nPos;
-            if (nPos >= nStartPos && nPos <= nMinPos)
-                nMinPos = nPos;
-        }
     }
 
     //nMinPos found and not going to change at this point
