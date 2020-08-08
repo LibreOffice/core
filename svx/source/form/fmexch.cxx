@@ -71,12 +71,6 @@ namespace svxform
         m_aClipboardListener.Call( *this );
     }
 
-    void OLocalExchange::startDrag( vcl::Window* _pWindow, sal_Int8 _nDragSourceActions, const GrantAccess& )
-    {
-        setDragging(true);
-        StartDrag( _pWindow, _nDragSourceActions );
-    }
-
     void OLocalExchange::setDragging(bool bDragging)
     {
         m_bDragging = bDragging;

@@ -59,7 +59,6 @@ namespace svxform
         bool        isClipboardOwner() const { return m_bClipboardOwner; }
 
         void        setDragging(bool bDragging);
-        void        startDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions, const GrantAccess& );
         void        copyToClipboard(const GrantAccess&);
 
         void        setClipboardListener( const Link<OLocalExchange&,void>& _rListener ) { m_aClipboardListener = _rListener; }

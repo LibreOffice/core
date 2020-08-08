@@ -2625,34 +2625,6 @@ bool Menu::HandleMenuCommandEvent( Menu *pMenu, sal_uInt16 nCommandEventId ) con
         return false;
 }
 
-sal_uInt16 MenuBar::AddMenuBarButton( const Image& i_rImage, const Link<MenuBar::MenuBarButtonCallbackArg&,bool>& i_rLink, const OUString& i_rToolTip )
-{
-    MenuBarWindow* pMenuWin = getMenuBarWindow();
-    return pMenuWin ? pMenuWin->AddMenuBarButton(i_rImage, i_rLink, i_rToolTip) : 0;
-}
-
-void MenuBar::SetMenuBarButtonHighlightHdl( sal_uInt16 nId, const Link<MenuBar::MenuBarButtonCallbackArg&,bool>& rLink )
-{
-    MenuBarWindow* pMenuWin = getMenuBarWindow();
-    if (!pMenuWin)
-        return;
-    pMenuWin->SetMenuBarButtonHighlightHdl(nId, rLink);
-}
-
-void MenuBar::RemoveMenuBarButton( sal_uInt16 nId )
-{
-    MenuBarWindow* pMenuWin = getMenuBarWindow();
-    if (!pMenuWin)
-        return;
-    pMenuWin->RemoveMenuBarButton(nId);
-}
-
-tools::Rectangle MenuBar::GetMenuBarButtonRectPixel( sal_uInt16 nId )
-{
-    MenuBarWindow* pMenuWin = getMenuBarWindow();
-    return pMenuWin ? pMenuWin->GetMenuBarButtonRectPixel(nId) : tools::Rectangle();
-}
-
 bool MenuBar::HandleMenuButtonEvent( sal_uInt16 i_nButtonId )
 {
     MenuBarWindow* pMenuWin = getMenuBarWindow();
