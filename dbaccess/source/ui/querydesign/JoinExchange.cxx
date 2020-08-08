@@ -44,12 +44,6 @@ namespace dbaui
     {
     }
 
-    void OJoinExchObj::StartDrag( vcl::Window* _pWindow, sal_Int8 _nDragSourceActions, IDragTransferableListener* _pListener )
-    {
-        m_pDragListener = _pListener;
-        TransferDataContainer::StartDrag(_pWindow, _nDragSourceActions);
-    }
-
     void OJoinExchObj::DragFinished( sal_Int8 /*nDropAction*/ )
     {
         if (m_pDragListener)

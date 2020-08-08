@@ -93,14 +93,6 @@ namespace dbaui
         virtual void OnEntryDoubleClicked(weld::TreeIter& /*rEntry*/) { }
             // called from the DoubleClickHdl of the ListBox
 
-        /** HandleKeyInput tries to handle the KeyEvent. Movement or deletion
-            @param  rEvt
-                The KeyEvent
-            @return
-                <TRUE/> when the table could handle the KeyEvent.
-        */
-        bool            HandleKeyInput( const KeyEvent& rEvt );
-
         /** delete the user data with the equal type as created within createUserData
             @param  _pUserData
                 The user data store in the listbox entries. Created with a call to createUserData.

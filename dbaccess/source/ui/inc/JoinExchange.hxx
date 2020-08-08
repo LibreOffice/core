@@ -52,8 +52,6 @@ namespace dbaui
         static css::uno::Sequence< sal_Int8 > getUnoTunnelId();
         virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& _rIdentifier ) override;
 
-        void StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions, IDragTransferableListener* _pListener );
-
         static OJoinExchangeData    GetSourceDescription(const css::uno::Reference< css::datatransfer::XTransferable >& _rxObject);
         static bool             isFormatAvailable( const DataFlavorExVector& _rFormats ,SotClipboardFormatId _nSlotID=SotClipboardFormatId::SBA_JOIN);
 

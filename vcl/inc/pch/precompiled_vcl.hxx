@@ -303,7 +303,6 @@
 #include <vcl/menu.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/mnemonic.hxx>
-#include <vcl/mnemonicengine.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/quickselectionengine.hxx>
