@@ -20,9 +20,9 @@ basic/source/inc/buffer.hxx:42
     void SbiBuffer::operator+=(short)
 basic/source/inc/buffer.hxx:46
     void SbiBuffer::operator+=(int)
-bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:171
+bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:185
     void CPPU_CURRENT_NAMESPACE::raiseException(struct _uno_Any *,struct _uno_Mapping *)
-bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:174
+bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:188
     void CPPU_CURRENT_NAMESPACE::fillUnoException(struct _uno_Any *,struct _uno_Mapping *)
 canvas/inc/rendering/icolorbuffer.hxx:48
     unsigned char * canvas::IColorBuffer::lock() const
@@ -104,7 +104,7 @@ connectivity/source/inc/OTypeInfo.hxx:47
     _Bool connectivity::OTypeInfo::operator!=(const struct connectivity::OTypeInfo &) const
 cui/source/dialogs/SpellAttrib.hxx:72
     _Bool svx::SpellErrorDescription::operator==(const struct svx::SpellErrorDescription &) const
-cui/source/inc/AdditionsDialog.hxx:141
+cui/source/inc/AdditionsDialog.hxx:150
     void SearchAndParseThread::AppendAllExtensions()
 cui/source/inc/cfg.hxx:336
     class rtl::OUString SvxMenuEntriesListBox::get_text(int)
@@ -154,6 +154,8 @@ dbaccess/source/ui/inc/indexcollection.hxx:62
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const struct dbaui::OIndex *, class std::__cxx1998::vector<struct dbaui::OIndex, class std::allocator<struct dbaui::OIndex> > >, class std::__debug::vector<struct dbaui::OIndex, class std::allocator<struct dbaui::OIndex> >, struct std::random_access_iterator_tag> dbaui::OIndexCollection::find(const class rtl::OUString &) const
 dbaccess/source/ui/inc/indexcollection.hxx:64
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const struct dbaui::OIndex *, class std::__cxx1998::vector<struct dbaui::OIndex, class std::allocator<struct dbaui::OIndex> > >, class std::__debug::vector<struct dbaui::OIndex, class std::allocator<struct dbaui::OIndex> >, struct std::random_access_iterator_tag> dbaui::OIndexCollection::findOriginal(const class rtl::OUString &) const
+dbaccess/source/ui/inc/JoinExchange.hxx:55
+    void dbaui::OJoinExchObj::StartDrag(class vcl::Window *,signed char,class dbaui::IDragTransferableListener *)
 dbaccess/source/ui/inc/opendoccontrols.hxx:45
     _Bool dbaui::OpenDocumentButton::get_sensitive() const
 dbaccess/source/ui/inc/opendoccontrols.hxx:68
@@ -164,6 +166,8 @@ dbaccess/source/ui/inc/sbamultiplex.hxx:385
     class cppu::OInterfaceContainerHelper * dbaui::SbaXVetoableChangeMultiplexer::getContainer(const class rtl::OUString &)
 dbaccess/source/ui/inc/SqlNameEdit.hxx:113
     void dbaui::OSQLNameEntry::set_sensitive(_Bool)
+dbaccess/source/ui/inc/TableWindow.hxx:102
+    _Bool dbaui::OTableWindow::HandleKeyInput(const class KeyEvent &)
 dbaccess/source/ui/inc/WTypeSelect.hxx:76
     void dbaui::OWizTypeSelectList::show()
 desktop/source/lib/lokclipboard.hxx:96
@@ -686,7 +690,7 @@ include/svx/dlgctrl.hxx:245
     _Bool SvxLineLB::get_sensitive() const
 include/svx/dlgctrl.hxx:267
     void SvxLineEndLB::set_active_text(const class rtl::OUString &)
-include/svx/framelink.hxx:198
+include/svx/framelink.hxx:170
     _Bool svx::frame::operator>(const class svx::frame::Style &,const class svx::frame::Style &)
 include/svx/gallery1.hxx:58
     const class std::unique_ptr<class GalleryBinaryEngineEntry, struct std::default_delete<class GalleryBinaryEngineEntry> > & GalleryThemeEntry::getGalleryBinaryEngineEntry() const
@@ -866,8 +870,18 @@ include/vcl/ITiledRenderable.hxx:214
     enum PointerStyle vcl::ITiledRenderable::getPointer()
 include/vcl/lok.hxx:22
     void vcl::lok::unregisterPollCallbacks()
-include/vcl/menu.hxx:517
-    void PopupMenu::SetSelectedEntry(unsigned short)
+include/vcl/menu.hxx:456
+    unsigned short MenuBar::AddMenuBarButton(const class Image &,const class Link<struct MenuBar::MenuBarButtonCallbackArg &, _Bool> &,const class rtl::OUString &)
+include/vcl/menu.hxx:460
+    void MenuBar::SetMenuBarButtonHighlightHdl(unsigned short,const class Link<struct MenuBar::MenuBarButtonCallbackArg &, _Bool> &)
+include/vcl/menu.hxx:464
+    class tools::Rectangle MenuBar::GetMenuBarButtonRectPixel(unsigned short)
+include/vcl/menu.hxx:465
+    void MenuBar::RemoveMenuBarButton(unsigned short)
+include/vcl/mnemonicengine.hxx:126
+     vcl::MnemonicEngine::MnemonicEngine(class vcl::IMnemonicEntryList &)
+include/vcl/mnemonicengine.hxx:144
+    _Bool vcl::MnemonicEngine::HandleKeyEvent(const class KeyEvent &)
 include/vcl/NotebookBarAddonsMerger.hxx:63
      NotebookBarAddonsMerger::NotebookBarAddonsMerger()
 include/vcl/opengl/OpenGLHelper.hxx:67
@@ -920,19 +934,19 @@ include/vcl/toolkit/longcurr.hxx:49
     class BigInt LongCurrencyFormatter::GetValue() const
 include/vcl/treelist.hxx:170
     const class SvTreeListEntry * SvTreeList::GetParent(const class SvTreeListEntry *) const
-include/vcl/treelistbox.hxx:298
-    _Bool SvTreeListBox::EditingCanceled() const
 include/vcl/treelistbox.hxx:366
     void SvTreeListBox::RemoveSelection()
+include/vcl/treelistbox.hxx:673
+    void SvTreeListBox::ShowFocusRect(const class SvTreeListEntry *)
 include/vcl/txtattr.hxx:56
     _Bool TextAttrib::operator!=(const class TextAttrib &) const
-include/vcl/uitest/uiobject.hxx:281
+include/vcl/uitest/uiobject.hxx:282
      TabPageUIObject::TabPageUIObject(const class VclPtr<class TabPage> &)
-include/vcl/uitest/uiobject.hxx:289
+include/vcl/uitest/uiobject.hxx:290
     class std::unique_ptr<class UIObject, struct std::default_delete<class UIObject> > TabPageUIObject::create(class vcl::Window *)
-include/vcl/uitest/uiobject.hxx:352
+include/vcl/uitest/uiobject.hxx:353
      SpinUIObject::SpinUIObject(const class VclPtr<class SpinButton> &)
-include/vcl/uitest/uiobject.hxx:360
+include/vcl/uitest/uiobject.hxx:361
     class std::unique_ptr<class UIObject, struct std::default_delete<class UIObject> > SpinUIObject::create(class vcl::Window *)
 include/vcl/weld.hxx:127
     _Bool weld::Widget::get_hexpand() const
@@ -1088,9 +1102,9 @@ oox/inc/drawingml/textliststyle.hxx:49
     void oox::drawingml::TextListStyle::dump() const
 oox/inc/drawingml/textparagraphproperties.hxx:98
     void oox::drawingml::TextParagraphProperties::setLineSpacing(const class oox::drawingml::TextSpacing &)
-oox/source/drawingml/diagram/diagramlayoutatoms.hxx:278
+oox/source/drawingml/diagram/diagramlayoutatoms.hxx:279
     const class std::__debug::vector<class std::shared_ptr<class oox::drawingml::Shape>, class std::allocator<class std::shared_ptr<class oox::drawingml::Shape> > > & oox::drawingml::LayoutNode::getNodeShapes() const
-oox/source/drawingml/diagram/diagramlayoutatoms.hxx:287
+oox/source/drawingml/diagram/diagramlayoutatoms.hxx:288
     const class oox::drawingml::LayoutNode * oox::drawingml::LayoutNode::getParentLayoutNode() const
 sal/osl/unx/uunxapi.hxx:35
     int mkdir_c(const class rtl::OString &,unsigned int)
@@ -1396,6 +1410,34 @@ slideshow/source/engine/animationfactory.cxx:538
     typename type-parameter-?-?::ValueType slideshow::internal::(anonymous namespace)::GenericAnimation::getUnderlyingValue() const
 slideshow/source/engine/opengl/TransitionImpl.hxx:184
     void OGLTransitionImpl::cleanup()
+slideshow/source/inc/box2dtools.hxx:159
+     box2d::utils::box2DWorld::box2DWorld(const class basegfx::B2DVector &)
+slideshow/source/inc/box2dtools.hxx:162
+    _Bool box2d::utils::box2DWorld::initiateWorld(const class basegfx::B2DVector &)
+slideshow/source/inc/box2dtools.hxx:172
+    double box2d::utils::box2DWorld::stepAmount(const double,const float,const int,const int)
+slideshow/source/inc/box2dtools.hxx:176
+    _Bool box2d::utils::box2DWorld::shapesInitialized()
+slideshow/source/inc/box2dtools.hxx:178
+    _Bool box2d::utils::box2DWorld::isInitialized()
+slideshow/source/inc/box2dtools.hxx:187
+    class std::shared_ptr<class box2d::utils::box2DBody> box2d::utils::box2DWorld::makeShapeDynamic(const class std::shared_ptr<class slideshow::internal::Shape>)
+slideshow/source/inc/box2dtools.hxx:205
+    class std::shared_ptr<class box2d::utils::box2DBody> box2d::utils::box2DWorld::makeShapeStatic(const class std::shared_ptr<class slideshow::internal::Shape>)
+slideshow/source/inc/box2dtools.hxx:223
+    void box2d::utils::box2DWorld::initateAllShapesAsStaticBodies(const class std::shared_ptr<class slideshow::internal::ShapeManager>)
+slideshow/source/inc/box2dtools.hxx:226
+    _Bool box2d::utils::box2DWorld::hasWorldStepper()
+slideshow/source/inc/box2dtools.hxx:229
+    void box2d::utils::box2DWorld::setHasWorldStepper(const _Bool)
+slideshow/source/inc/box2dtools.hxx:232
+    void box2d::utils::box2DWorld::queuePositionUpdate(class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape>,const class basegfx::B2DPoint &)
+slideshow/source/inc/box2dtools.hxx:237
+    void box2d::utils::box2DWorld::queueLinearVelocityUpdate(class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape>,const class basegfx::B2DVector &)
+slideshow/source/inc/box2dtools.hxx:241
+    void box2d::utils::box2DWorld::queueRotationUpdate(class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape>,const double)
+slideshow/source/inc/box2dtools.hxx:246
+    void box2d::utils::box2DWorld::queueAngularVelocityUpdate(class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape>,const double)
 slideshow/source/inc/listenercontainer.hxx:44
     _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::AnimationEventHandler> &)
 slideshow/source/inc/listenercontainer.hxx:44
@@ -1414,10 +1456,6 @@ slideshow/source/inc/listenercontainer.hxx:54
     _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::ViewRepaintHandler> &)
 slideshow/source/inc/listenercontainer.hxx:54
     _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::ViewEventHandler> &)
-slideshow/source/inc/shape.hxx:212
-    _Bool slideshow::internal::Shape::isForeground() const
-slideshow/source/inc/shapemanager.hxx:105
-    const class std::__debug::unordered_map<class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape>, class std::shared_ptr<class slideshow::internal::Shape>, struct slideshow::internal::hash<class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> >, struct std::equal_to<class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> >, class std::allocator<struct std::pair<const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape>, class std::shared_ptr<class slideshow::internal::Shape> > > > & slideshow::internal::ShapeManager::getXShapeToShapeMap() const
 starmath/inc/format.hxx:138
     _Bool SmFormat::operator!=(const class SmFormat &) const
 svgio/inc/svgstyleattributes.hxx:346
@@ -1442,8 +1480,8 @@ svl/source/misc/gridprinter.cxx:47
     void rtl::mdds_mtv_append_values(struct mdds::mtv::base_element_block &,const class rtl::OUString &,const type-parameter-?-? &,const type-parameter-?-? &)
 svx/inc/sdr/contact/viewcontactofgraphic.hxx:52
     class SdrGrafObj & sdr::contact::ViewContactOfGraphic::GetGrafObject()
-svx/source/inc/fmexch.hxx:102
-    void svxform::OLocalExchangeHelper::startDrag(class vcl::Window *,signed char)
+svx/source/inc/fmexch.hxx:65
+    void svxform::OLocalExchange::startDrag(class vcl::Window *,signed char,const class svxform::OLocalExchange::GrantAccess &)
 svx/source/tbxctrls/tbcontrl.cxx:151
     void (anonymous namespace)::SvxStyleBox_Base::set_sensitive(_Bool)
 sw/inc/calbck.hxx:307
@@ -1598,7 +1636,7 @@ sw/inc/viscrs.hxx:206
     class SwShellTableCursor * SwShellTableCursor::GetPrev()
 sw/inc/viscrs.hxx:207
     const class SwShellTableCursor * SwShellTableCursor::GetPrev() const
-sw/qa/inc/swmodeltestbase.hxx:341
+sw/qa/inc/swmodeltestbase.hxx:317
     class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> SwModelTestBase::getParagraphAnchoredObject(const int,const class com::sun::star::uno::Reference<class com::sun::star::text::XTextRange> &) const
 sw/source/core/access/accportions.cxx:56
     unsigned long FindBreak(const vector<type-parameter-?-?, allocator<type-parameter-?-?> > &,type-parameter-?-?)

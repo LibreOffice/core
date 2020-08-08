@@ -493,23 +493,6 @@ void OTableWindow::Remove()
     pTabWinCont->Invalidate();
 }
 
-bool OTableWindow::HandleKeyInput( const KeyEvent& rEvt )
-{
-    const vcl::KeyCode& rCode = rEvt.GetKeyCode();
-    sal_uInt16 nCode = rCode.GetCode();
-    bool   bShift = rCode.IsShift();
-    bool   bCtrl = rCode.IsMod1();
-
-    bool bHandle = false;
-
-    if( !bCtrl && !bShift && (nCode==KEY_DELETE) )
-    {
-        Remove();
-        bHandle = true;
-    }
-    return bHandle;
-}
-
 bool OTableWindow::ExistsAConn() const
 {
     return getTableView()->ExistsAConn(this);
