@@ -98,7 +98,7 @@ int const nScrollLine = 12;
 int const nScrollPage = 60;
 int const DWBORDER = 3;
 
-OUString const cSuffixes {"%&!#@$"};
+std::u16string_view const cSuffixes = u"%&!#@$";
 
 } // namespace
 
@@ -172,13 +172,13 @@ void lcl_SeparateNameAndIndex( const OUString& rVName, OUString& rVar, OUString&
     if ( !rVar.isEmpty() )
     {
         sal_uInt16 nLastChar = rVar.getLength()-1;
-        if ( cSuffixes.indexOf(rVar[ nLastChar ] ) >= 0 )
+        if ( cSuffixes.find(rVar[ nLastChar ] ) != std::u16string_view::npos )
             rVar = rVar.replaceAt( nLastChar, 1, "" );
     }
     if ( !rIndex.isEmpty() )
     {
         sal_uInt16 nLastChar = rIndex.getLength()-1;
-        if ( cSuffixes.indexOf(rIndex[ nLastChar ] ) >=0 )
+        if ( cSuffixes.find(rIndex[ nLastChar ] ) != std::u16string_view::npos )
             rIndex = rIndex.replaceAt( nLastChar, 1, "" );
     }
 }
@@ -369,7 +369,7 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
                 if ( !aWord.isEmpty() && !comphelper::string::isdigitAsciiString(aWord) )
                 {
                     sal_uInt16 nLastChar = aWord.getLength() - 1;
-                    if ( cSuffixes.indexOf(aWord[ nLastChar ] ) >= 0 )
+                    if ( cSuffixes.find(aWord[ nLastChar ] ) != std::u16string_view::npos )
                         aWord = aWord.replaceAt( nLastChar, 1, "" );
                     SbxBase* pSBX = StarBASIC::FindSBXInCurrentScope( aWord );
                     if (SbxVariable const* pVar = IsSbxVariable(pSBX))
