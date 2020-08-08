@@ -51,6 +51,24 @@
       "revId": "4cfc75a79a4b370bda01751257de74cccc6d150e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c09713a_4105a34e",
+        "filename": "cppuhelper/source/servicemanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1500,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-08-08T14:06:06Z",
+      "side": 1,
+      "message": "Basically, the exception involved here is caught and ignored, the higher level code then tries to read the file as the binary format, which fails, and it then reports the SECOND exception, which is rather unhelpful",
+      "parentUuid": "5dcc930f_53255d8c",
+      "revId": "4cfc75a79a4b370bda01751257de74cccc6d150e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
