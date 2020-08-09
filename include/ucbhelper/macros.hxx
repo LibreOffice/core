@@ -144,7 +144,7 @@ GETTYPES_IMPL_END
 // XServiceInfo impl. internals
 
 
-#define XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                         \
+#define XSERVICEINFO_COMMON_IMPL( Class, ImplName )                         \
 OUString SAL_CALL Class::getImplementationName()                       \
 {                                                                           \
     return getImplementationName_Static();                                  \

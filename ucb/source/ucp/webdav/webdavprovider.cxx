@@ -83,7 +83,7 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 
 // XServiceInfo methods.
 
-XSERVICEINFO_COMMOM_IMPL( ContentProvider,
+XSERVICEINFO_COMMON_IMPL( ContentProvider,
                           "com.sun.star.comp.WebDAVContentProvider" )
 /// @throws css::uno::Exception
 static css::uno::Reference< css::uno::XInterface >
