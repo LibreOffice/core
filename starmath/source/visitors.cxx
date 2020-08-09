@@ -16,6 +16,9 @@
 #include <cursor.hxx>
 #include <cassert>
 #include "mathtype.hxx"
+#include "mathtype2.hxx"
+
+using namespace MathType2Namespace;
 
 // SmDefaultingVisitor
 
@@ -2446,6 +2449,7 @@ void SmNodeToTextVisitor::Visit( SmGlyphSpecialNode* pNode )
     Append( pNode->GetToken( ).aText );
 }
 
+/*
 //TODO to improve this it is requiered to improve mathmlimport.
 void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
 {
@@ -2534,16 +2538,16 @@ void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
         case MS_CDOT:
             Append("cdot");
             break;
-        case MS_SETC:
+        case MS_USETC:
             Append("setC");
             break;
-        case MS_HBAR:
+        case MS_PLANKBAR:
             Append("hbar");
             break;
         case MS_IM:
             Append("Im");
             break;
-        case MS_SETN:
+        case MS_USETN:
             Append("setN");
             break;
         case MS_WP:
@@ -2552,16 +2556,16 @@ void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
         case MS_LAPLACE:
             Append("laplace");
             break;
-        case MS_SETQ:
+        case MS_USETQ:
             Append("setQ");
             break;
         case MS_RE:
             Append("Re");
             break;
-        case MS_SETR:
+        case MS_USETR:
             Append("setR");
             break;
-        case MS_SETZ:
+        case MS_USETZ:
             Append("setZ");
             break;
         case MS_ALEPH:
@@ -2600,13 +2604,13 @@ void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
         case MS_IN:
             Append("in");
             break;
-        case MS_NI:
+        case MS_OWNS:
             Append("owns");
             break;
         case MS_NOTIN:
             Append("notin");
             break;
-        case MS_BACKEPSILON:
+        case MS_UBEPSILON:
             Append("backepsilon");
             break;
         case MS_PROD:
@@ -2627,7 +2631,7 @@ void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
         case MS_MULTIPLY:
             Append("*");
             break;
-        case MS_CIRC:
+        case MS_COMPOSITION:
             Append("circ");
             break;
         case MS_PROP:
@@ -2648,7 +2652,7 @@ void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
         case MS_UNION:
             Append("union");
             break;
-        case MS_LINE:
+        case MS_DIVIDES:
             Append("divides");
             break;
         case MS_INT:
@@ -2832,6 +2836,34 @@ void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
             Append(OUStringChar(cChar));
             break;
     }
+}*/
+
+//TODO to improve this it is requiered to improve mathmlimport.
+//TODO this shall replace last
+
+void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
+{
+    Separate( );
+    switch( pNode->GetToken().eType )
+    {
+        case TLLINE:      Append("lline");         break;
+        case TRLINE:      Append("rline");         break;
+        case TMLINE:      Append("mline");         break;
+        case TLDLINE:     Append("ldline");        break;
+        case TRDLINE:     Append("rdline");        break;
+        case TTOWARD:     Append("toward");        break;
+        case TRIGHTARROW: Append("rightarrow");    break;
+        case TINT:
+        [[fallthrough]];
+        case TINTD:
+            if (pNode->GetScaleMode() == SmScaleMode::Height) Append("intd");
+            else Append("int");
+            break;
+        default:
+            Append( identifyCharCommand(pNode->GetToken().cMathChar) );
+            break;
+    }
+    Separate( );
 }
 
 void SmNodeToTextVisitor::Visit( SmBlankNode* pNode )

@@ -3367,6 +3367,20 @@ public:
         return aTarget;
     }
 
+    /**
+     * New string from a single Unicode character.
+     * @param    value       a Unicode character.
+     */
+    static OUString unicode32( sal_Unicode32 value )
+    {
+        if( value > 0xFFFF )
+        {
+            sal_uInt32 uvalue = static_cast<sal_uInt32>(value);
+            return OUString( &uvalue, 1 );
+        }
+        else return OUString( static_cast<sal_Unicode>(value) );
+    }
+
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 
     static OUStringNumber< int > number( int i, sal_Int16 radix = 10 )
