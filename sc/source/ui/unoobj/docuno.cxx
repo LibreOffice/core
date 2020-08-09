@@ -2207,89 +2207,89 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
 
     //  resolve the hyperlinks for PDF export
 
-    if ( pPDFData && !pPDFData->GetBookmarks().empty() )
+    if ( !pPDFData || pPDFData->GetBookmarks().empty() )
+        return;
+
+    //  iterate over the hyperlinks that were output for this page
+
+    std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks = pPDFData->GetBookmarks();
+    for ( const auto& rBookmark : rBookmarks )
     {
-        //  iterate over the hyperlinks that were output for this page
-
-        std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks = pPDFData->GetBookmarks();
-        for ( const auto& rBookmark : rBookmarks )
+        OUString aBookmark = rBookmark.aBookmark;
+        if ( aBookmark.toChar() == '#' )
         {
-            OUString aBookmark = rBookmark.aBookmark;
-            if ( aBookmark.toChar() == '#' )
+            //  try to resolve internal link
+
+            OUString aTarget( aBookmark.copy( 1 ) );
+
+            ScRange aTargetRange;
+            tools::Rectangle aTargetRect;      // 1/100th mm
+            bool bIsSheet = false;
+            bool bValid = lcl_ParseTarget( aTarget, aTargetRange, aTargetRect, bIsSheet, &rDoc, nTab );
+
+            if ( bValid )
             {
-                //  try to resolve internal link
-
-                OUString aTarget( aBookmark.copy( 1 ) );
-
-                ScRange aTargetRange;
-                tools::Rectangle aTargetRect;      // 1/100th mm
-                bool bIsSheet = false;
-                bool bValid = lcl_ParseTarget( aTarget, aTargetRange, aTargetRect, bIsSheet, &rDoc, nTab );
-
-                if ( bValid )
+                sal_Int32 nPage = -1;
+                tools::Rectangle aArea;
+                if ( bIsSheet )
                 {
-                    sal_Int32 nPage = -1;
-                    tools::Rectangle aArea;
-                    if ( bIsSheet )
-                    {
-                        //  Get first page for sheet (if nothing from that sheet is printed,
-                        //  this page can show a different sheet)
-                        nPage = pPrintFuncCache->GetTabStart( aTargetRange.aStart.Tab() );
-                        aArea = pDev->PixelToLogic( tools::Rectangle( 0,0,0,0 ) );
-                    }
-                    else
-                    {
-                        pPrintFuncCache->InitLocations( aMark, pDev );      // does nothing if already initialized
-
-                        ScPrintPageLocation aLocation;
-                        if ( pPrintFuncCache->FindLocation( aTargetRange.aStart, aLocation ) )
-                        {
-                            nPage = aLocation.nPage;
-
-                            // get the rectangle of the page's cell range in 1/100th mm
-                            ScRange aLocRange = aLocation.aCellRange;
-                            tools::Rectangle aLocationMM = rDoc.GetMMRect(
-                                       aLocRange.aStart.Col(), aLocRange.aStart.Row(),
-                                       aLocRange.aEnd.Col(),   aLocRange.aEnd.Row(),
-                                       aLocRange.aStart.Tab() );
-                            tools::Rectangle aLocationPixel = aLocation.aRectangle;
-
-                            // Scale and move the target rectangle from aLocationMM to aLocationPixel,
-                            // to get the target rectangle in pixels.
-                            assert(aLocationPixel.GetWidth() != 0 && aLocationPixel.GetHeight() != 0);
-
-                            Fraction aScaleX( aLocationPixel.GetWidth(), aLocationMM.GetWidth() );
-                            Fraction aScaleY( aLocationPixel.GetHeight(), aLocationMM.GetHeight() );
-
-                            long nX1 = aLocationPixel.Left() + static_cast<long>( Fraction( aTargetRect.Left() - aLocationMM.Left(), 1 ) * aScaleX );
-                            long nX2 = aLocationPixel.Left() + static_cast<long>( Fraction( aTargetRect.Right() - aLocationMM.Left(), 1 ) * aScaleX );
-                            long nY1 = aLocationPixel.Top() + static_cast<long>( Fraction( aTargetRect.Top() - aLocationMM.Top(), 1 ) * aScaleY );
-                            long nY2 = aLocationPixel.Top() + static_cast<long>( Fraction( aTargetRect.Bottom() - aLocationMM.Top(), 1 ) * aScaleY );
-
-                            if ( nX1 > aLocationPixel.Right() ) nX1 = aLocationPixel.Right();
-                            if ( nX2 > aLocationPixel.Right() ) nX2 = aLocationPixel.Right();
-                            if ( nY1 > aLocationPixel.Bottom() ) nY1 = aLocationPixel.Bottom();
-                            if ( nY2 > aLocationPixel.Bottom() ) nY2 = aLocationPixel.Bottom();
-
-                            // The link target area is interpreted using the device's MapMode at
-                            // the time of the CreateDest call, so PixelToLogic can be used here,
-                            // regardless of the MapMode that is actually selected.
-                            aArea = pDev->PixelToLogic( tools::Rectangle( nX1, nY1, nX2, nY2 ) );
-                        }
-                    }
-
-                    if ( nPage >= 0 )
-                        pPDFData->SetLinkDest( rBookmark.nLinkId, pPDFData->CreateDest( aArea, nPage ) );
+                    //  Get first page for sheet (if nothing from that sheet is printed,
+                    //  this page can show a different sheet)
+                    nPage = pPrintFuncCache->GetTabStart( aTargetRange.aStart.Tab() );
+                    aArea = pDev->PixelToLogic( tools::Rectangle( 0,0,0,0 ) );
                 }
-            }
-            else
-            {
-                //  external link, use as-is
-                pPDFData->SetLinkURL( rBookmark.nLinkId, aBookmark );
+                else
+                {
+                    pPrintFuncCache->InitLocations( aMark, pDev );      // does nothing if already initialized
+
+                    ScPrintPageLocation aLocation;
+                    if ( pPrintFuncCache->FindLocation( aTargetRange.aStart, aLocation ) )
+                    {
+                        nPage = aLocation.nPage;
+
+                        // get the rectangle of the page's cell range in 1/100th mm
+                        ScRange aLocRange = aLocation.aCellRange;
+                        tools::Rectangle aLocationMM = rDoc.GetMMRect(
+                                   aLocRange.aStart.Col(), aLocRange.aStart.Row(),
+                                   aLocRange.aEnd.Col(),   aLocRange.aEnd.Row(),
+                                   aLocRange.aStart.Tab() );
+                        tools::Rectangle aLocationPixel = aLocation.aRectangle;
+
+                        // Scale and move the target rectangle from aLocationMM to aLocationPixel,
+                        // to get the target rectangle in pixels.
+                        assert(aLocationPixel.GetWidth() != 0 && aLocationPixel.GetHeight() != 0);
+
+                        Fraction aScaleX( aLocationPixel.GetWidth(), aLocationMM.GetWidth() );
+                        Fraction aScaleY( aLocationPixel.GetHeight(), aLocationMM.GetHeight() );
+
+                        long nX1 = aLocationPixel.Left() + static_cast<long>( Fraction( aTargetRect.Left() - aLocationMM.Left(), 1 ) * aScaleX );
+                        long nX2 = aLocationPixel.Left() + static_cast<long>( Fraction( aTargetRect.Right() - aLocationMM.Left(), 1 ) * aScaleX );
+                        long nY1 = aLocationPixel.Top() + static_cast<long>( Fraction( aTargetRect.Top() - aLocationMM.Top(), 1 ) * aScaleY );
+                        long nY2 = aLocationPixel.Top() + static_cast<long>( Fraction( aTargetRect.Bottom() - aLocationMM.Top(), 1 ) * aScaleY );
+
+                        if ( nX1 > aLocationPixel.Right() ) nX1 = aLocationPixel.Right();
+                        if ( nX2 > aLocationPixel.Right() ) nX2 = aLocationPixel.Right();
+                        if ( nY1 > aLocationPixel.Bottom() ) nY1 = aLocationPixel.Bottom();
+                        if ( nY2 > aLocationPixel.Bottom() ) nY2 = aLocationPixel.Bottom();
+
+                        // The link target area is interpreted using the device's MapMode at
+                        // the time of the CreateDest call, so PixelToLogic can be used here,
+                        // regardless of the MapMode that is actually selected.
+                        aArea = pDev->PixelToLogic( tools::Rectangle( nX1, nY1, nX2, nY2 ) );
+                    }
+                }
+
+                if ( nPage >= 0 )
+                    pPDFData->SetLinkDest( rBookmark.nLinkId, pPDFData->CreateDest( aArea, nPage ) );
             }
         }
-        rBookmarks.clear();
+        else
+        {
+            //  external link, use as-is
+            pPDFData->SetLinkURL( rBookmark.nLinkId, aBookmark );
+        }
     }
+    rBookmarks.clear();
 }
 
 // XLinkTargetSupplier
@@ -2595,146 +2595,146 @@ void SAL_CALL ScModelObj::setPropertyValue(
 {
     SolarMutexGuard aGuard;
 
-    if (pDocShell)
+    if (!pDocShell)
+        return;
+
+    ScDocument& rDoc = pDocShell->GetDocument();
+    const ScDocOptions& rOldOpt = rDoc.GetDocOptions();
+    ScDocOptions aNewOpt = rOldOpt;
+    //  Don't recalculate while loading XML, when the formula text is stored
+    //  Recalculation after loading is handled separately.
+    bool bHardRecalc = !rDoc.IsImportingXML();
+
+    bool bOpt = ScDocOptionsHelper::setPropertyValue( aNewOpt, aPropSet.getPropertyMap(), aPropertyName, aValue );
+    if (bOpt)
     {
-        ScDocument& rDoc = pDocShell->GetDocument();
-        const ScDocOptions& rOldOpt = rDoc.GetDocOptions();
-        ScDocOptions aNewOpt = rOldOpt;
-        //  Don't recalculate while loading XML, when the formula text is stored
-        //  Recalculation after loading is handled separately.
-        bool bHardRecalc = !rDoc.IsImportingXML();
+        // done...
+        if ( aPropertyName == SC_UNO_IGNORECASE ||
+             aPropertyName == SC_UNONAME_REGEXP ||
+             aPropertyName == SC_UNONAME_WILDCARDS ||
+             aPropertyName == SC_UNO_LOOKUPLABELS )
+            bHardRecalc = false;
+    }
+    else if ( aPropertyName == SC_UNONAME_CLOCAL )
+    {
+        lang::Locale aLocale;
+        if ( aValue >>= aLocale )
+        {
+            LanguageType eLatin, eCjk, eCtl;
+            rDoc.GetLanguage( eLatin, eCjk, eCtl );
+            eLatin = ScUnoConversion::GetLanguage(aLocale);
+            rDoc.SetLanguage( eLatin, eCjk, eCtl );
+        }
+    }
+    else if ( aPropertyName == SC_UNO_CODENAME )
+    {
+        OUString sCodeName;
+        if ( aValue >>= sCodeName )
+            rDoc.SetCodeName( sCodeName );
+    }
+    else if ( aPropertyName == SC_UNO_CJK_CLOCAL )
+    {
+        lang::Locale aLocale;
+        if ( aValue >>= aLocale )
+        {
+            LanguageType eLatin, eCjk, eCtl;
+            rDoc.GetLanguage( eLatin, eCjk, eCtl );
+            eCjk = ScUnoConversion::GetLanguage(aLocale);
+            rDoc.SetLanguage( eLatin, eCjk, eCtl );
+        }
+    }
+    else if ( aPropertyName == SC_UNO_CTL_CLOCAL )
+    {
+        lang::Locale aLocale;
+        if ( aValue >>= aLocale )
+        {
+            LanguageType eLatin, eCjk, eCtl;
+            rDoc.GetLanguage( eLatin, eCjk, eCtl );
+            eCtl = ScUnoConversion::GetLanguage(aLocale);
+            rDoc.SetLanguage( eLatin, eCjk, eCtl );
+        }
+    }
+    else if ( aPropertyName == SC_UNO_APPLYFMDES )
+    {
+        //  model is created if not there
+        ScDrawLayer* pModel = pDocShell->MakeDrawLayer();
+        pModel->SetOpenInDesignMode( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
 
-        bool bOpt = ScDocOptionsHelper::setPropertyValue( aNewOpt, aPropSet.getPropertyMap(), aPropertyName, aValue );
-        if (bOpt)
-        {
-            // done...
-            if ( aPropertyName == SC_UNO_IGNORECASE ||
-                 aPropertyName == SC_UNONAME_REGEXP ||
-                 aPropertyName == SC_UNONAME_WILDCARDS ||
-                 aPropertyName == SC_UNO_LOOKUPLABELS )
-                bHardRecalc = false;
-        }
-        else if ( aPropertyName == SC_UNONAME_CLOCAL )
-        {
-            lang::Locale aLocale;
-            if ( aValue >>= aLocale )
-            {
-                LanguageType eLatin, eCjk, eCtl;
-                rDoc.GetLanguage( eLatin, eCjk, eCtl );
-                eLatin = ScUnoConversion::GetLanguage(aLocale);
-                rDoc.SetLanguage( eLatin, eCjk, eCtl );
-            }
-        }
-        else if ( aPropertyName == SC_UNO_CODENAME )
-        {
-            OUString sCodeName;
-            if ( aValue >>= sCodeName )
-                rDoc.SetCodeName( sCodeName );
-        }
-        else if ( aPropertyName == SC_UNO_CJK_CLOCAL )
-        {
-            lang::Locale aLocale;
-            if ( aValue >>= aLocale )
-            {
-                LanguageType eLatin, eCjk, eCtl;
-                rDoc.GetLanguage( eLatin, eCjk, eCtl );
-                eCjk = ScUnoConversion::GetLanguage(aLocale);
-                rDoc.SetLanguage( eLatin, eCjk, eCtl );
-            }
-        }
-        else if ( aPropertyName == SC_UNO_CTL_CLOCAL )
-        {
-            lang::Locale aLocale;
-            if ( aValue >>= aLocale )
-            {
-                LanguageType eLatin, eCjk, eCtl;
-                rDoc.GetLanguage( eLatin, eCjk, eCtl );
-                eCtl = ScUnoConversion::GetLanguage(aLocale);
-                rDoc.SetLanguage( eLatin, eCjk, eCtl );
-            }
-        }
-        else if ( aPropertyName == SC_UNO_APPLYFMDES )
-        {
-            //  model is created if not there
-            ScDrawLayer* pModel = pDocShell->MakeDrawLayer();
-            pModel->SetOpenInDesignMode( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        SfxBindings* pBindings = pDocShell->GetViewBindings();
+        if (pBindings)
+            pBindings->Invalidate( SID_FM_OPEN_READONLY );
+    }
+    else if ( aPropertyName == SC_UNO_AUTOCONTFOC )
+    {
+        //  model is created if not there
+        ScDrawLayer* pModel = pDocShell->MakeDrawLayer();
+        pModel->SetAutoControlFocus( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
 
-            SfxBindings* pBindings = pDocShell->GetViewBindings();
-            if (pBindings)
-                pBindings->Invalidate( SID_FM_OPEN_READONLY );
-        }
-        else if ( aPropertyName == SC_UNO_AUTOCONTFOC )
-        {
-            //  model is created if not there
-            ScDrawLayer* pModel = pDocShell->MakeDrawLayer();
-            pModel->SetAutoControlFocus( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        SfxBindings* pBindings = pDocShell->GetViewBindings();
+        if (pBindings)
+            pBindings->Invalidate( SID_FM_AUTOCONTROLFOCUS );
+    }
+    else if ( aPropertyName == SC_UNO_ISLOADED )
+    {
+        pDocShell->SetEmpty( !ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    }
+    else if ( aPropertyName == SC_UNO_ISUNDOENABLED )
+    {
+        bool bUndoEnabled = ScUnoHelpFunctions::GetBoolFromAny( aValue );
+        rDoc.EnableUndo( bUndoEnabled );
+        pDocShell->GetUndoManager()->SetMaxUndoActionCount(
+            bUndoEnabled
+            ? officecfg::Office::Common::Undo::Steps::get() : 0);
+    }
+    else if ( aPropertyName == SC_UNO_RECORDCHANGES )
+    {
+        bool bRecordChangesEnabled = ScUnoHelpFunctions::GetBoolFromAny( aValue );
 
-            SfxBindings* pBindings = pDocShell->GetViewBindings();
-            if (pBindings)
-                pBindings->Invalidate( SID_FM_AUTOCONTROLFOCUS );
-        }
-        else if ( aPropertyName == SC_UNO_ISLOADED )
-        {
-            pDocShell->SetEmpty( !ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        }
-        else if ( aPropertyName == SC_UNO_ISUNDOENABLED )
-        {
-            bool bUndoEnabled = ScUnoHelpFunctions::GetBoolFromAny( aValue );
-            rDoc.EnableUndo( bUndoEnabled );
-            pDocShell->GetUndoManager()->SetMaxUndoActionCount(
-                bUndoEnabled
-                ? officecfg::Office::Common::Undo::Steps::get() : 0);
-        }
-        else if ( aPropertyName == SC_UNO_RECORDCHANGES )
-        {
-            bool bRecordChangesEnabled = ScUnoHelpFunctions::GetBoolFromAny( aValue );
+        bool bChangeAllowed = true;
+        if (!bRecordChangesEnabled)
+            bChangeAllowed = !pDocShell->HasChangeRecordProtection();
 
-            bool bChangeAllowed = true;
-            if (!bRecordChangesEnabled)
-                bChangeAllowed = !pDocShell->HasChangeRecordProtection();
+        if (bChangeAllowed)
+            pDocShell->SetChangeRecording(bRecordChangesEnabled);
+    }
+    else if ( aPropertyName == SC_UNO_ISADJUSTHEIGHTENABLED )
+    {
+        if( ScUnoHelpFunctions::GetBoolFromAny( aValue ) )
+            rDoc.UnlockAdjustHeight();
+        else
+            rDoc.LockAdjustHeight();
+    }
+    else if ( aPropertyName == SC_UNO_ISEXECUTELINKENABLED )
+    {
+        rDoc.EnableExecuteLink( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    }
+    else if ( aPropertyName == SC_UNO_ISCHANGEREADONLYENABLED )
+    {
+        rDoc.EnableChangeReadOnly( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    }
+    else if ( aPropertyName == "BuildId" )
+    {
+        aValue >>= maBuildId;
+    }
+    else if ( aPropertyName == "SavedObject" )    // set from chart after saving
+    {
+        OUString aObjName;
+        aValue >>= aObjName;
+        if ( !aObjName.isEmpty() )
+            rDoc.RestoreChartListener( aObjName );
+    }
+    else if ( aPropertyName == SC_UNO_INTEROPGRABBAG )
+    {
+        setGrabBagItem(aValue);
+    }
 
-            if (bChangeAllowed)
-                pDocShell->SetChangeRecording(bRecordChangesEnabled);
-        }
-        else if ( aPropertyName == SC_UNO_ISADJUSTHEIGHTENABLED )
-        {
-            if( ScUnoHelpFunctions::GetBoolFromAny( aValue ) )
-                rDoc.UnlockAdjustHeight();
-            else
-                rDoc.LockAdjustHeight();
-        }
-        else if ( aPropertyName == SC_UNO_ISEXECUTELINKENABLED )
-        {
-            rDoc.EnableExecuteLink( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        }
-        else if ( aPropertyName == SC_UNO_ISCHANGEREADONLYENABLED )
-        {
-            rDoc.EnableChangeReadOnly( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        }
-        else if ( aPropertyName == "BuildId" )
-        {
-            aValue >>= maBuildId;
-        }
-        else if ( aPropertyName == "SavedObject" )    // set from chart after saving
-        {
-            OUString aObjName;
-            aValue >>= aObjName;
-            if ( !aObjName.isEmpty() )
-                rDoc.RestoreChartListener( aObjName );
-        }
-        else if ( aPropertyName == SC_UNO_INTEROPGRABBAG )
-        {
-            setGrabBagItem(aValue);
-        }
-
-        if ( aNewOpt != rOldOpt )
-        {
-            rDoc.SetDocOptions( aNewOpt );
-            //! Recalc only for options that need it?
-            if ( bHardRecalc )
-                pDocShell->DoHardRecalc();
-            pDocShell->SetDocumentModified();
-        }
+    if ( aNewOpt != rOldOpt )
+    {
+        rDoc.SetDocOptions( aNewOpt );
+        //! Recalc only for options that need it?
+        if ( bHardRecalc )
+            pDocShell->DoHardRecalc();
+        pDocShell->SetDocumentModified();
     }
 }
 
@@ -3176,54 +3176,54 @@ void ScModelObj::NotifyChanges( const OUString& rOperation, const ScRangeList& r
 
     // handle sheet events
     //! separate method with ScMarkData? Then change HasChangesListeners back.
-    if ( rOperation == "cell-change" && pDocShell )
+    if ( !(rOperation == "cell-change" && pDocShell) )
+        return;
+
+    ScMarkData aMarkData(pDocShell->GetDocument().GetSheetLimits());
+    aMarkData.MarkFromRangeList( rRanges, false );
+    ScDocument& rDoc = pDocShell->GetDocument();
+    SCTAB nTabCount = rDoc.GetTableCount();
+    for (const SCTAB& nTab : aMarkData)
     {
-        ScMarkData aMarkData(pDocShell->GetDocument().GetSheetLimits());
-        aMarkData.MarkFromRangeList( rRanges, false );
-        ScDocument& rDoc = pDocShell->GetDocument();
-        SCTAB nTabCount = rDoc.GetTableCount();
-        for (const SCTAB& nTab : aMarkData)
+        if (nTab >= nTabCount)
+            break;
+        const ScSheetEvents* pEvents = rDoc.GetSheetEvents(nTab);
+        if (pEvents)
         {
-            if (nTab >= nTabCount)
-                break;
-            const ScSheetEvents* pEvents = rDoc.GetSheetEvents(nTab);
-            if (pEvents)
+            const OUString* pScript = pEvents->GetScript(ScSheetEventId::CHANGE);
+            if (pScript)
             {
-                const OUString* pScript = pEvents->GetScript(ScSheetEventId::CHANGE);
-                if (pScript)
+                ScRangeList aTabRanges;     // collect ranges on this sheet
+                size_t nRangeCount = rRanges.size();
+                for ( size_t nIndex = 0; nIndex < nRangeCount; ++nIndex )
                 {
-                    ScRangeList aTabRanges;     // collect ranges on this sheet
-                    size_t nRangeCount = rRanges.size();
-                    for ( size_t nIndex = 0; nIndex < nRangeCount; ++nIndex )
+                    ScRange const & rRange = rRanges[ nIndex ];
+                    if ( rRange.aStart.Tab() == nTab )
+                        aTabRanges.push_back( rRange );
+                }
+                size_t nTabRangeCount = aTabRanges.size();
+                if ( nTabRangeCount > 0 )
+                {
+                    uno::Reference<uno::XInterface> xTarget;
+                    if ( nTabRangeCount == 1 )
                     {
-                        ScRange const & rRange = rRanges[ nIndex ];
-                        if ( rRange.aStart.Tab() == nTab )
-                            aTabRanges.push_back( rRange );
-                    }
-                    size_t nTabRangeCount = aTabRanges.size();
-                    if ( nTabRangeCount > 0 )
-                    {
-                        uno::Reference<uno::XInterface> xTarget;
-                        if ( nTabRangeCount == 1 )
-                        {
-                            ScRange const & rRange = aTabRanges[ 0 ];
-                            if ( rRange.aStart == rRange.aEnd )
-                                xTarget.set( static_cast<cppu::OWeakObject*>( new ScCellObj( pDocShell, rRange.aStart ) ) );
-                            else
-                                xTarget.set( static_cast<cppu::OWeakObject*>( new ScCellRangeObj( pDocShell, rRange ) ) );
-                        }
+                        ScRange const & rRange = aTabRanges[ 0 ];
+                        if ( rRange.aStart == rRange.aEnd )
+                            xTarget.set( static_cast<cppu::OWeakObject*>( new ScCellObj( pDocShell, rRange.aStart ) ) );
                         else
-                            xTarget.set( static_cast<cppu::OWeakObject*>( new ScCellRangesObj( pDocShell, aTabRanges ) ) );
-
-                        uno::Sequence<uno::Any> aParams(1);
-                        aParams[0] <<= xTarget;
-
-                        uno::Any aRet;
-                        uno::Sequence<sal_Int16> aOutArgsIndex;
-                        uno::Sequence<uno::Any> aOutArgs;
-
-                        /*ErrCode eRet =*/ pDocShell->CallXScript( *pScript, aParams, aRet, aOutArgsIndex, aOutArgs );
+                            xTarget.set( static_cast<cppu::OWeakObject*>( new ScCellRangeObj( pDocShell, rRange ) ) );
                     }
+                    else
+                        xTarget.set( static_cast<cppu::OWeakObject*>( new ScCellRangesObj( pDocShell, aTabRanges ) ) );
+
+                    uno::Sequence<uno::Any> aParams(1);
+                    aParams[0] <<= xTarget;
+
+                    uno::Any aRet;
+                    uno::Sequence<sal_Int16> aOutArgsIndex;
+                    uno::Sequence<uno::Any> aOutArgs;
+
+                    /*ErrCode eRet =*/ pDocShell->CallXScript( *pScript, aParams, aRet, aOutArgsIndex, aOutArgs );
                 }
             }
         }
@@ -3232,45 +3232,45 @@ void ScModelObj::NotifyChanges( const OUString& rOperation, const ScRangeList& r
 
 void ScModelObj::HandleCalculateEvents()
 {
-    if (pDocShell)
-    {
-        ScDocument& rDoc = pDocShell->GetDocument();
-        // don't call events before the document is visible
-        // (might also set a flag on SfxEventHintId::LoadFinished and only disable while loading)
-        if ( rDoc.IsDocVisible() )
-        {
-            SCTAB nTabCount = rDoc.GetTableCount();
-            for (SCTAB nTab = 0; nTab < nTabCount; nTab++)
-            {
-                if (rDoc.HasCalcNotification(nTab))
-                {
-                    if (const ScSheetEvents* pEvents = rDoc.GetSheetEvents( nTab ))
-                    {
-                        if (const OUString* pScript = pEvents->GetScript(ScSheetEventId::CALCULATE))
-                        {
-                            uno::Any aRet;
-                            uno::Sequence<uno::Any> aParams;
-                            uno::Sequence<sal_Int16> aOutArgsIndex;
-                            uno::Sequence<uno::Any> aOutArgs;
-                            pDocShell->CallXScript( *pScript, aParams, aRet, aOutArgsIndex, aOutArgs );
-                        }
-                    }
+    if (!pDocShell)
+        return;
 
-                    try
+    ScDocument& rDoc = pDocShell->GetDocument();
+    // don't call events before the document is visible
+    // (might also set a flag on SfxEventHintId::LoadFinished and only disable while loading)
+    if ( rDoc.IsDocVisible() )
+    {
+        SCTAB nTabCount = rDoc.GetTableCount();
+        for (SCTAB nTab = 0; nTab < nTabCount; nTab++)
+        {
+            if (rDoc.HasCalcNotification(nTab))
+            {
+                if (const ScSheetEvents* pEvents = rDoc.GetSheetEvents( nTab ))
+                {
+                    if (const OUString* pScript = pEvents->GetScript(ScSheetEventId::CALCULATE))
                     {
-                        uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( rDoc.GetVbaEventProcessor(), uno::UNO_SET_THROW );
-                        uno::Sequence< uno::Any > aArgs( 1 );
-                        aArgs[ 0 ] <<= nTab;
-                        xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( ScSheetEventId::CALCULATE ), aArgs );
+                        uno::Any aRet;
+                        uno::Sequence<uno::Any> aParams;
+                        uno::Sequence<sal_Int16> aOutArgsIndex;
+                        uno::Sequence<uno::Any> aOutArgs;
+                        pDocShell->CallXScript( *pScript, aParams, aRet, aOutArgsIndex, aOutArgs );
                     }
-                    catch( uno::Exception& )
-                    {
-                    }
+                }
+
+                try
+                {
+                    uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( rDoc.GetVbaEventProcessor(), uno::UNO_SET_THROW );
+                    uno::Sequence< uno::Any > aArgs( 1 );
+                    aArgs[ 0 ] <<= nTab;
+                    xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( ScSheetEventId::CALCULATE ), aArgs );
+                }
+                catch( uno::Exception& )
+                {
                 }
             }
         }
-        rDoc.ResetCalcNotifications();
     }
+    rDoc.ResetCalcNotifications();
 }
 
 // XOpenCLSelection
@@ -4675,25 +4675,25 @@ void SAL_CALL ScScenariosObj::addNewByName( const OUString& aName,
                                 const OUString& aComment )
 {
     SolarMutexGuard aGuard;
-    if ( pDocShell )
+    if ( !pDocShell )
+        return;
+
+    ScMarkData aMarkData(pDocShell->GetDocument().GetSheetLimits());
+    aMarkData.SelectTable( nTab, true );
+
+    for (const table::CellRangeAddress& rRange : aRanges)
     {
-        ScMarkData aMarkData(pDocShell->GetDocument().GetSheetLimits());
-        aMarkData.SelectTable( nTab, true );
+        OSL_ENSURE( rRange.Sheet == nTab, "addScenario with a wrong Tab" );
+        ScRange aRange( static_cast<SCCOL>(rRange.StartColumn), static_cast<SCROW>(rRange.StartRow), nTab,
+                        static_cast<SCCOL>(rRange.EndColumn),   static_cast<SCROW>(rRange.EndRow),   nTab );
 
-        for (const table::CellRangeAddress& rRange : aRanges)
-        {
-            OSL_ENSURE( rRange.Sheet == nTab, "addScenario with a wrong Tab" );
-            ScRange aRange( static_cast<SCCOL>(rRange.StartColumn), static_cast<SCROW>(rRange.StartRow), nTab,
-                            static_cast<SCCOL>(rRange.EndColumn),   static_cast<SCROW>(rRange.EndRow),   nTab );
-
-            aMarkData.SetMultiMarkArea( aRange );
-        }
-
-        ScScenarioFlags const nFlags = ScScenarioFlags::ShowFrame | ScScenarioFlags::PrintFrame
-                                     | ScScenarioFlags::TwoWay    | ScScenarioFlags::Protected;
-
-        pDocShell->MakeScenario( nTab, aName, aComment, COL_LIGHTGRAY, nFlags, aMarkData );
+        aMarkData.SetMultiMarkArea( aRange );
     }
+
+    ScScenarioFlags const nFlags = ScScenarioFlags::ShowFrame | ScScenarioFlags::PrintFrame
+                                 | ScScenarioFlags::TwoWay    | ScScenarioFlags::Protected;
+
+    pDocShell->MakeScenario( nTab, aName, aComment, COL_LIGHTGRAY, nFlags, aMarkData );
 }
 
 void SAL_CALL ScScenariosObj::removeByName( const OUString& aName )

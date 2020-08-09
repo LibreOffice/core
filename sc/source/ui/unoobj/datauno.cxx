@@ -1506,18 +1506,18 @@ void ScDataPilotFilterDescriptor::GetData( ScQueryParam& rParam ) const
 
 void ScDataPilotFilterDescriptor::PutData( const ScQueryParam& rParam )
 {
-    if (mxParent.is())
+    if (!mxParent.is())
+        return;
+
+    ScDPObject* pDPObj = mxParent->GetDPObject();
+    if (pDPObj)
     {
-        ScDPObject* pDPObj = mxParent->GetDPObject();
-        if (pDPObj)
-        {
-            ScSheetSourceDesc aSheetDesc(&mxParent->GetDocShell()->GetDocument());
-            if (pDPObj->IsSheetData())
-                aSheetDesc = *pDPObj->GetSheetDesc();
-            aSheetDesc.SetQueryParam(rParam);
-            pDPObj->SetSheetDesc(aSheetDesc);
-            mxParent->SetDPObject(pDPObj);
-        }
+        ScSheetSourceDesc aSheetDesc(&mxParent->GetDocShell()->GetDocument());
+        if (pDPObj->IsSheetData())
+            aSheetDesc = *pDPObj->GetSheetDesc();
+        aSheetDesc.SetQueryParam(rParam);
+        pDPObj->SetSheetDesc(aSheetDesc);
+        mxParent->SetDPObject(pDPObj);
     }
 }
 
@@ -1671,49 +1671,49 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScDatabaseRangeObj::getSortDescript
 void ScDatabaseRangeObj::GetQueryParam(ScQueryParam& rQueryParam) const
 {
     const ScDBData* pData = GetDBData_Impl();
-    if (pData)
-    {
-        pData->GetQueryParam(rQueryParam);
+    if (!pData)
+        return;
 
-        //  FilterDescriptor contains the counted fields inside the area
-        ScRange aDBRange;
-        pData->GetArea(aDBRange);
-        SCCOLROW nFieldStart = rQueryParam.bByRow ? static_cast<SCCOLROW>(aDBRange.aStart.Col()) : static_cast<SCCOLROW>(aDBRange.aStart.Row());
-        SCSIZE nCount = rQueryParam.GetEntryCount();
-        for (SCSIZE i=0; i<nCount; i++)
-        {
-            ScQueryEntry& rEntry = rQueryParam.GetEntry(i);
-            if (rEntry.bDoQuery && rEntry.nField >= nFieldStart)
-                rEntry.nField -= nFieldStart;
-        }
+    pData->GetQueryParam(rQueryParam);
+
+    //  FilterDescriptor contains the counted fields inside the area
+    ScRange aDBRange;
+    pData->GetArea(aDBRange);
+    SCCOLROW nFieldStart = rQueryParam.bByRow ? static_cast<SCCOLROW>(aDBRange.aStart.Col()) : static_cast<SCCOLROW>(aDBRange.aStart.Row());
+    SCSIZE nCount = rQueryParam.GetEntryCount();
+    for (SCSIZE i=0; i<nCount; i++)
+    {
+        ScQueryEntry& rEntry = rQueryParam.GetEntry(i);
+        if (rEntry.bDoQuery && rEntry.nField >= nFieldStart)
+            rEntry.nField -= nFieldStart;
     }
 }
 
 void ScDatabaseRangeObj::SetQueryParam(const ScQueryParam& rQueryParam)
 {
     const ScDBData* pData = GetDBData_Impl();
-    if (pData)
+    if (!pData)
+        return;
+
+    //  FilterDescriptor contains the counted fields inside the area
+    ScQueryParam aParam(rQueryParam);
+    ScRange aDBRange;
+    pData->GetArea(aDBRange);
+    SCCOLROW nFieldStart = aParam.bByRow ? static_cast<SCCOLROW>(aDBRange.aStart.Col()) : static_cast<SCCOLROW>(aDBRange.aStart.Row());
+
+    SCSIZE nCount = aParam.GetEntryCount();
+    for (SCSIZE i=0; i<nCount; i++)
     {
-        //  FilterDescriptor contains the counted fields inside the area
-        ScQueryParam aParam(rQueryParam);
-        ScRange aDBRange;
-        pData->GetArea(aDBRange);
-        SCCOLROW nFieldStart = aParam.bByRow ? static_cast<SCCOLROW>(aDBRange.aStart.Col()) : static_cast<SCCOLROW>(aDBRange.aStart.Row());
-
-        SCSIZE nCount = aParam.GetEntryCount();
-        for (SCSIZE i=0; i<nCount; i++)
-        {
-               ScQueryEntry& rEntry = aParam.GetEntry(i);
-               if (rEntry.bDoQuery)
-                       rEntry.nField += nFieldStart;
-        }
-
-        ScDBData aNewData( *pData );
-        aNewData.SetQueryParam(aParam);
-        aNewData.SetHeader(aParam.bHasHeader);      // not in ScDBData::SetQueryParam
-        ScDBDocFunc aFunc(*pDocShell);
-        aFunc.ModifyDBData(aNewData);
+           ScQueryEntry& rEntry = aParam.GetEntry(i);
+           if (rEntry.bDoQuery)
+                   rEntry.nField += nFieldStart;
     }
+
+    ScDBData aNewData( *pData );
+    aNewData.SetQueryParam(aParam);
+    aNewData.SetHeader(aParam.bHasHeader);      // not in ScDBData::SetQueryParam
+    ScDBDocFunc aFunc(*pDocShell);
+    aFunc.ModifyDBData(aNewData);
 }
 
 uno::Reference<sheet::XSheetFilterDescriptor> SAL_CALL ScDatabaseRangeObj::getFilterDescriptor()
@@ -1725,25 +1725,25 @@ uno::Reference<sheet::XSheetFilterDescriptor> SAL_CALL ScDatabaseRangeObj::getFi
 void ScDatabaseRangeObj::GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const
 {
     const ScDBData* pData = GetDBData_Impl();
-    if (pData)
-    {
-        pData->GetSubTotalParam(rSubTotalParam);
+    if (!pData)
+        return;
 
-        //  FilterDescriptor contains the counted fields inside the area
-        ScRange aDBRange;
-        pData->GetArea(aDBRange);
-        SCCOL nFieldStart = aDBRange.aStart.Col();
-        for (sal_uInt16 i=0; i<MAXSUBTOTAL; i++)
+    pData->GetSubTotalParam(rSubTotalParam);
+
+    //  FilterDescriptor contains the counted fields inside the area
+    ScRange aDBRange;
+    pData->GetArea(aDBRange);
+    SCCOL nFieldStart = aDBRange.aStart.Col();
+    for (sal_uInt16 i=0; i<MAXSUBTOTAL; i++)
+    {
+        if ( rSubTotalParam.bGroupActive[i] )
         {
-            if ( rSubTotalParam.bGroupActive[i] )
-            {
-                if ( rSubTotalParam.nField[i] >= nFieldStart )
-                    rSubTotalParam.nField[i] = sal::static_int_cast<SCCOL>( rSubTotalParam.nField[i] - nFieldStart );
-                for (SCCOL j=0; j<rSubTotalParam.nSubTotals[i]; j++)
-                    if ( rSubTotalParam.pSubTotals[i][j] >= nFieldStart )
-                        rSubTotalParam.pSubTotals[i][j] =
-                            sal::static_int_cast<SCCOL>( rSubTotalParam.pSubTotals[i][j] - nFieldStart );
-            }
+            if ( rSubTotalParam.nField[i] >= nFieldStart )
+                rSubTotalParam.nField[i] = sal::static_int_cast<SCCOL>( rSubTotalParam.nField[i] - nFieldStart );
+            for (SCCOL j=0; j<rSubTotalParam.nSubTotals[i]; j++)
+                if ( rSubTotalParam.pSubTotals[i][j] >= nFieldStart )
+                    rSubTotalParam.pSubTotals[i][j] =
+                        sal::static_int_cast<SCCOL>( rSubTotalParam.pSubTotals[i][j] - nFieldStart );
         }
     }
 }
@@ -1751,28 +1751,28 @@ void ScDatabaseRangeObj::GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const
 void ScDatabaseRangeObj::SetSubTotalParam(const ScSubTotalParam& rSubTotalParam)
 {
     const ScDBData* pData = GetDBData_Impl();
-    if (pData)
-    {
-        //  FilterDescriptor contains the counted fields inside the area
-        ScSubTotalParam aParam(rSubTotalParam);
-        ScRange aDBRange;
-        pData->GetArea(aDBRange);
-        SCCOL nFieldStart = aDBRange.aStart.Col();
-        for (sal_uInt16 i=0; i<MAXSUBTOTAL; i++)
-        {
-            if ( aParam.bGroupActive[i] )
-            {
-                aParam.nField[i] = sal::static_int_cast<SCCOL>( aParam.nField[i] + nFieldStart );
-                for (SCCOL j=0; j<aParam.nSubTotals[i]; j++)
-                    aParam.pSubTotals[i][j] = sal::static_int_cast<SCCOL>( aParam.pSubTotals[i][j] + nFieldStart );
-            }
-        }
+    if (!pData)
+        return;
 
-        ScDBData aNewData( *pData );
-        aNewData.SetSubTotalParam(aParam);
-        ScDBDocFunc aFunc(*pDocShell);
-        aFunc.ModifyDBData(aNewData);
+    //  FilterDescriptor contains the counted fields inside the area
+    ScSubTotalParam aParam(rSubTotalParam);
+    ScRange aDBRange;
+    pData->GetArea(aDBRange);
+    SCCOL nFieldStart = aDBRange.aStart.Col();
+    for (sal_uInt16 i=0; i<MAXSUBTOTAL; i++)
+    {
+        if ( aParam.bGroupActive[i] )
+        {
+            aParam.nField[i] = sal::static_int_cast<SCCOL>( aParam.nField[i] + nFieldStart );
+            for (SCCOL j=0; j<aParam.nSubTotals[i]; j++)
+                aParam.pSubTotals[i][j] = sal::static_int_cast<SCCOL>( aParam.pSubTotals[i][j] + nFieldStart );
+        }
     }
+
+    ScDBData aNewData( *pData );
+    aNewData.SetSubTotalParam(aParam);
+    ScDBDocFunc aFunc(*pDocShell);
+    aFunc.ModifyDBData(aNewData);
 }
 
 uno::Reference<sheet::XSubTotalDescriptor> SAL_CALL ScDatabaseRangeObj::getSubTotalDescriptor()
@@ -1800,27 +1800,27 @@ void SAL_CALL ScDatabaseRangeObj::refresh()
 {
     SolarMutexGuard aGuard;
     ScDBData* pData = GetDBData_Impl();
-    if ( pDocShell && pData )
+    if ( !(pDocShell && pData) )
+        return;
+
+    ScDBDocFunc aFunc(*pDocShell);
+
+    // repeat import?
+    bool bContinue = true;
+    ScImportParam aImportParam;
+    pData->GetImportParam( aImportParam );
+    if (aImportParam.bImport && !pData->HasImportSelection())
     {
-        ScDBDocFunc aFunc(*pDocShell);
-
-        // repeat import?
-        bool bContinue = true;
-        ScImportParam aImportParam;
-        pData->GetImportParam( aImportParam );
-        if (aImportParam.bImport && !pData->HasImportSelection())
-        {
-            SCTAB nTab;
-            SCCOL nDummyCol;
-            SCROW nDummyRow;
-            pData->GetArea( nTab, nDummyCol,nDummyRow,nDummyCol,nDummyRow );
-            bContinue = aFunc.DoImport( nTab, aImportParam, nullptr );   //! Api-Flag as parameter
-        }
-
-        // if no error then internal operations (sort, query, subtotal)
-        if (bContinue)
-            aFunc.RepeatDB( pData->GetName(), true, bIsUnnamed, aTab );
+        SCTAB nTab;
+        SCCOL nDummyCol;
+        SCROW nDummyRow;
+        pData->GetArea( nTab, nDummyCol,nDummyRow,nDummyCol,nDummyRow );
+        bContinue = aFunc.DoImport( nTab, aImportParam, nullptr );   //! Api-Flag as parameter
     }
+
+    // if no error then internal operations (sort, query, subtotal)
+    if (bContinue)
+        aFunc.RepeatDB( pData->GetName(), true, bIsUnnamed, aTab );
 }
 
 void SAL_CALL ScDatabaseRangeObj::addRefreshListener(
@@ -1895,92 +1895,92 @@ void SAL_CALL ScDatabaseRangeObj::setPropertyValue(
 {
     SolarMutexGuard aGuard;
     ScDBData* pData = GetDBData_Impl();
-    if ( pDocShell && pData )
+    if ( !(pDocShell && pData) )
+        return;
+
+    ScDBData aNewData( *pData );
+    bool bDo = true;
+
+    if ( aPropertyName == SC_UNONAME_KEEPFORM )
+        aNewData.SetKeepFmt( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if ( aPropertyName == SC_UNONAME_MOVCELLS )
+        aNewData.SetDoSize( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if ( aPropertyName == SC_UNONAME_STRIPDAT )
+        aNewData.SetStripData( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if (aPropertyName == SC_UNONAME_AUTOFLT )
     {
-        ScDBData aNewData( *pData );
-        bool bDo = true;
-
-        if ( aPropertyName == SC_UNONAME_KEEPFORM )
-            aNewData.SetKeepFmt( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName == SC_UNONAME_MOVCELLS )
-            aNewData.SetDoSize( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName == SC_UNONAME_STRIPDAT )
-            aNewData.SetStripData( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if (aPropertyName == SC_UNONAME_AUTOFLT )
+        bool bAutoFilter(ScUnoHelpFunctions::GetBoolFromAny( aValue ));
+        aNewData.SetAutoFilter(bAutoFilter);
+        ScRange aRange;
+        aNewData.GetArea(aRange);
+        ScDocument& rDoc = pDocShell->GetDocument();
+        if (bAutoFilter)
+            rDoc.ApplyFlagsTab( aRange.aStart.Col(), aRange.aStart.Row(),
+                                 aRange.aEnd.Col(), aRange.aStart.Row(),
+                                 aRange.aStart.Tab(), ScMF::Auto );
+        else if (!bAutoFilter)
+            rDoc.RemoveFlagsTab(aRange.aStart.Col(), aRange.aStart.Row(),
+                                 aRange.aEnd.Col(), aRange.aStart.Row(),
+                                 aRange.aStart.Tab(), ScMF::Auto );
+        ScRange aPaintRange(aRange.aStart, aRange.aEnd);
+        aPaintRange.aEnd.SetRow(aPaintRange.aStart.Row());
+        pDocShell->PostPaint(aPaintRange, PaintPartFlags::Grid);
+    }
+    else if (aPropertyName == SC_UNONAME_USEFLTCRT )
+    {
+        if (ScUnoHelpFunctions::GetBoolFromAny( aValue ))
         {
-            bool bAutoFilter(ScUnoHelpFunctions::GetBoolFromAny( aValue ));
-            aNewData.SetAutoFilter(bAutoFilter);
+            // only here to set bIsAdvanced in ScDBData
             ScRange aRange;
-            aNewData.GetArea(aRange);
-            ScDocument& rDoc = pDocShell->GetDocument();
-            if (bAutoFilter)
-                rDoc.ApplyFlagsTab( aRange.aStart.Col(), aRange.aStart.Row(),
-                                     aRange.aEnd.Col(), aRange.aStart.Row(),
-                                     aRange.aStart.Tab(), ScMF::Auto );
-            else if (!bAutoFilter)
-                rDoc.RemoveFlagsTab(aRange.aStart.Col(), aRange.aStart.Row(),
-                                     aRange.aEnd.Col(), aRange.aStart.Row(),
-                                     aRange.aStart.Tab(), ScMF::Auto );
-            ScRange aPaintRange(aRange.aStart, aRange.aEnd);
-            aPaintRange.aEnd.SetRow(aPaintRange.aStart.Row());
-            pDocShell->PostPaint(aPaintRange, PaintPartFlags::Grid);
+            (void)aNewData.GetAdvancedQuerySource(aRange);
+            aNewData.SetAdvancedQuerySource(&aRange);
         }
-        else if (aPropertyName == SC_UNONAME_USEFLTCRT )
-        {
-            if (ScUnoHelpFunctions::GetBoolFromAny( aValue ))
-            {
-                // only here to set bIsAdvanced in ScDBData
-                ScRange aRange;
-                (void)aNewData.GetAdvancedQuerySource(aRange);
-                aNewData.SetAdvancedQuerySource(&aRange);
-            }
-            else
-                aNewData.SetAdvancedQuerySource(nullptr);
-        }
-        else if (aPropertyName == SC_UNONAME_FLTCRT )
-        {
-            table::CellRangeAddress aRange;
-            if (aValue >>= aRange)
-            {
-                ScRange aCoreRange;
-                ScUnoConversion::FillScRange(aCoreRange, aRange);
-
-                aNewData.SetAdvancedQuerySource(&aCoreRange);
-            }
-        }
-        else if (aPropertyName == SC_UNONAME_FROMSELECT )
-        {
-            aNewData.SetImportSelection(::cppu::any2bool(aValue));
-        }
-        else if (aPropertyName == SC_UNONAME_REFPERIOD )
-        {
-            sal_Int32 nRefresh = 0;
-            if (aValue >>= nRefresh)
-            {
-                ScDocument& rDoc = pDocShell->GetDocument();
-                aNewData.SetRefreshDelay(nRefresh);
-                if (rDoc.GetDBCollection())
-                {
-                    aNewData.SetRefreshHandler( rDoc.GetDBCollection()->GetRefreshHandler() );
-                    aNewData.SetRefreshControl( &rDoc.GetRefreshTimerControlAddress() );
-                }
-            }
-        }
-        else if (aPropertyName == SC_UNONAME_CONRES )
-        {
-        }
-        else if ( aPropertyName == SC_UNONAME_TOTALSROW )
-            aNewData.SetTotals( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName == SC_UNONAME_CONTHDR )
-            aNewData.SetHeader( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         else
-            bDo = false;
-
-        if (bDo)
+            aNewData.SetAdvancedQuerySource(nullptr);
+    }
+    else if (aPropertyName == SC_UNONAME_FLTCRT )
+    {
+        table::CellRangeAddress aRange;
+        if (aValue >>= aRange)
         {
-            ScDBDocFunc aFunc(*pDocShell);
-            aFunc.ModifyDBData(aNewData);
+            ScRange aCoreRange;
+            ScUnoConversion::FillScRange(aCoreRange, aRange);
+
+            aNewData.SetAdvancedQuerySource(&aCoreRange);
         }
+    }
+    else if (aPropertyName == SC_UNONAME_FROMSELECT )
+    {
+        aNewData.SetImportSelection(::cppu::any2bool(aValue));
+    }
+    else if (aPropertyName == SC_UNONAME_REFPERIOD )
+    {
+        sal_Int32 nRefresh = 0;
+        if (aValue >>= nRefresh)
+        {
+            ScDocument& rDoc = pDocShell->GetDocument();
+            aNewData.SetRefreshDelay(nRefresh);
+            if (rDoc.GetDBCollection())
+            {
+                aNewData.SetRefreshHandler( rDoc.GetDBCollection()->GetRefreshHandler() );
+                aNewData.SetRefreshControl( &rDoc.GetRefreshTimerControlAddress() );
+            }
+        }
+    }
+    else if (aPropertyName == SC_UNONAME_CONRES )
+    {
+    }
+    else if ( aPropertyName == SC_UNONAME_TOTALSROW )
+        aNewData.SetTotals( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if ( aPropertyName == SC_UNONAME_CONTHDR )
+        aNewData.SetHeader( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else
+        bDo = false;
+
+    if (bDo)
+    {
+        ScDBDocFunc aFunc(*pDocShell);
+        aFunc.ModifyDBData(aNewData);
     }
 }
 

@@ -97,70 +97,70 @@ void SAL_CALL TablePivotCharts::addNewByName(OUString const & rName,
     if (SvtModuleOptions().IsChart())
         xObject = m_pDocShell->GetEmbeddedObjectContainer().CreateEmbeddedObject(SvGlobalName(SO3_SCH_CLASSID).GetByteSequence(), aName);
 
+    if (!xObject.is())
+            return;
+
+    Point aRectPos(aRect.X, aRect.Y);
+    bool bLayoutRTL = rDoc.IsLayoutRTL(m_nTab);
+    if ((aRectPos.X() < 0 && !bLayoutRTL) || (aRectPos.X() > 0 && bLayoutRTL))
+        aRectPos.setX( 0 );
+
+    if (aRectPos.Y() < 0)
+         aRectPos.setY( 0 );
+
+    Size aRectSize(aRect.Width, aRect.Height);
+    if (aRectSize.Width() <= 0)
+        aRectSize.setWidth( 5000 ); // default size
+
+    if (aRectSize.Height() <= 0)
+        aRectSize.setHeight( 5000 );
+
+    ::tools::Rectangle aInsRect(aRectPos, aRectSize);
+
+    sal_Int64 nAspect(embed::Aspects::MSOLE_CONTENT);
+    MapUnit aMapUnit(VCLUnoHelper::UnoEmbed2VCLMapUnit(xObject->getMapUnit(nAspect)));
+    Size aSize(aInsRect.GetSize());
+    aSize = OutputDevice::LogicToLogic(aSize, MapMode(MapUnit::Map100thMM), MapMode(aMapUnit));
+    awt::Size aAwtSize;
+    aAwtSize.Width = aSize.Width();
+    aAwtSize.Height = aSize.Height();
+
+    std::unique_ptr<sc::PivotTableDataProvider> pPivotTableDataProvider(new sc::PivotTableDataProvider(&rDoc));
+    pPivotTableDataProvider->setPivotTableName(rDataPilotName);
+
+    uno::Reference<chart2::data::XDataProvider> xDataProvider(pPivotTableDataProvider.release());
+
+    uno::Reference<chart2::data::XDataReceiver> xReceiver;
+
     if (xObject.is())
+        xReceiver.set(xObject->getComponent(), uno::UNO_QUERY);
+
+    if (xReceiver.is())
     {
-            Point aRectPos(aRect.X, aRect.Y);
-            bool bLayoutRTL = rDoc.IsLayoutRTL(m_nTab);
-            if ((aRectPos.X() < 0 && !bLayoutRTL) || (aRectPos.X() > 0 && bLayoutRTL))
-                aRectPos.setX( 0 );
+        xReceiver->attachDataProvider(xDataProvider);
 
-            if (aRectPos.Y() < 0)
-                aRectPos.setY( 0 );
+        uno::Reference<util::XNumberFormatsSupplier> xNumberFormatsSupplier(m_pDocShell->GetModel(), uno::UNO_QUERY);
+        xReceiver->attachNumberFormatsSupplier(xNumberFormatsSupplier);
 
-            Size aRectSize(aRect.Width, aRect.Height);
-            if (aRectSize.Width() <= 0)
-                aRectSize.setWidth( 5000 ); // default size
-
-            if (aRectSize.Height() <= 0)
-                aRectSize.setHeight( 5000 );
-
-            ::tools::Rectangle aInsRect(aRectPos, aRectSize);
-
-            sal_Int64 nAspect(embed::Aspects::MSOLE_CONTENT);
-            MapUnit aMapUnit(VCLUnoHelper::UnoEmbed2VCLMapUnit(xObject->getMapUnit(nAspect)));
-            Size aSize(aInsRect.GetSize());
-            aSize = OutputDevice::LogicToLogic(aSize, MapMode(MapUnit::Map100thMM), MapMode(aMapUnit));
-            awt::Size aAwtSize;
-            aAwtSize.Width = aSize.Width();
-            aAwtSize.Height = aSize.Height();
-
-            std::unique_ptr<sc::PivotTableDataProvider> pPivotTableDataProvider(new sc::PivotTableDataProvider(&rDoc));
-            pPivotTableDataProvider->setPivotTableName(rDataPilotName);
-
-            uno::Reference<chart2::data::XDataProvider> xDataProvider(pPivotTableDataProvider.release());
-
-            uno::Reference<chart2::data::XDataReceiver> xReceiver;
-
-            if (xObject.is())
-                xReceiver.set(xObject->getComponent(), uno::UNO_QUERY);
-
-            if (xReceiver.is())
-            {
-                xReceiver->attachDataProvider(xDataProvider);
-
-                uno::Reference<util::XNumberFormatsSupplier> xNumberFormatsSupplier(m_pDocShell->GetModel(), uno::UNO_QUERY);
-                xReceiver->attachNumberFormatsSupplier(xNumberFormatsSupplier);
-
-                uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
-                        { "CellRangeRepresentation", uno::makeAny(rDataPilotName) },
-                        { "HasCategories", uno::makeAny(true) },
-                        { "DataRowSource", uno::makeAny(chart::ChartDataRowSource_COLUMNS) }
-                    }));
-                xReceiver->setArguments(aArgs);
-            }
-
-            SdrOle2Obj* pObject = new SdrOle2Obj(
-                *pModel,
-                svt::EmbeddedObjectRef(xObject, embed::Aspects::MSOLE_CONTENT),
-                aName,
-                aInsRect);
-
-            if (xObject.is())
-                xObject->setVisualAreaSize(nAspect, aAwtSize);
-
-            pPage->InsertObject(pObject);
-            pModel->AddUndo(std::make_unique<SdrUndoInsertObj>(*pObject));
+        uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
+                    { "CellRangeRepresentation", uno::makeAny(rDataPilotName) },
+                    { "HasCategories", uno::makeAny(true) },
+                    { "DataRowSource", uno::makeAny(chart::ChartDataRowSource_COLUMNS) }
+                }));
+        xReceiver->setArguments(aArgs);
     }
+
+    SdrOle2Obj* pObject = new SdrOle2Obj(
+            *pModel,
+            svt::EmbeddedObjectRef(xObject, embed::Aspects::MSOLE_CONTENT),
+            aName,
+            aInsRect);
+
+    if (xObject.is())
+        xObject->setVisualAreaSize(nAspect, aAwtSize);
+
+    pPage->InsertObject(pObject);
+    pModel->AddUndo(std::make_unique<SdrUndoInsertObj>(*pObject));
 }
 
 void SAL_CALL TablePivotCharts::removeByName(const OUString& rName)
