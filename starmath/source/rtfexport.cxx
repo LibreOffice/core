@@ -61,7 +61,7 @@ void SmRtfExport::HandleText(const SmNode* pNode, int /*nLevel*/)
     for (sal_Int32 i = 0; i < pTemp->GetText().getLength(); i++)
     {
         sal_uInt16 nChar = pTemp->GetText()[i];
-        OUString aValue(SmTextNode::ConvertSymbolToUnicode(nChar));
+        OUString aValue = OUString::unicode32(SmTextNode::ConvertSymbolToUnicode(nChar));
         m_pBuffer->append(msfilter::rtfutil::OutString(aValue, m_nEncoding));
     }
 
@@ -113,7 +113,7 @@ void SmRtfExport::HandleAttribute(const SmAttributNode* pNode, int nLevel)
             m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MACC " ");
             m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MACCPR " ");
             m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MCHR " ");
-            OUString aValue(pNode->Attribute()->GetToken().cMathChar);
+            OUString aValue = OUString::unicode32(pNode->Attribute()->GetToken().cMathChar);
             m_pBuffer->append(msfilter::rtfutil::OutString(aValue, m_nEncoding));
             m_pBuffer->append("}"); // mchr
             m_pBuffer->append("}"); // maccPr
@@ -187,8 +187,8 @@ OString mathSymbolToString(const SmNode* node, rtl_TextEncoding nEncoding)
     if (txtnode->GetText().isEmpty())
         return OString();
     assert(txtnode->GetText().getLength() == 1);
-    sal_Unicode chr = SmTextNode::ConvertSymbolToUnicode(txtnode->GetText()[0]);
-    OUString aValue(chr);
+    sal_Unicode32 chr = SmTextNode::ConvertSymbolToUnicode(txtnode->GetText()[0]);
+    OUString aValue = OUString::unicode32(chr);
     return msfilter::rtfutil::OutString(aValue, nEncoding);
 }
 }

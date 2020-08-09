@@ -16,6 +16,9 @@
 #include <cursor.hxx>
 #include <cassert>
 #include "mathtype.hxx"
+#include "mathtype2.hxx"
+
+using namespace MathType2Namespace;
 
 // SmDefaultingVisitor
 
@@ -2833,6 +2836,34 @@ void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
             break;
     }
 }
+
+//TODO to improve this it is requiered to improve mathmlimport.
+//TODO this shall replace last
+/*
+void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
+{
+    Separate( );
+    switch( pNode->GetToken().eType )
+    {
+        case TLLINE:      Append("lline");         break;
+        case TRLINE:      Append("rline");         break;
+        case TMLINE:      Append("mline");         break;
+        case TLDLINE:     Append("ldline");        break;
+        case TRDLINE:     Append("rdline");        break;
+        case TTOWARD:     Append("toward");        break;
+        case TRIGHTARROW: Append("rightarrow");    break;
+        case TINT:
+        [[fallthrough]];
+        case TINTD:
+            if (pNode->GetScaleMode() == SmScaleMode::Height) Append("intd");
+            else Append("int");
+            break;
+        default:
+            Append( identifyCharCommand(pNode->GetToken().cMathChar) );
+            break;
+    }
+    Separate( );
+}*/
 
 void SmNodeToTextVisitor::Visit( SmBlankNode* pNode )
 {
