@@ -36,20 +36,20 @@ static const SfxItemPropertyMapEntry* lcl_GetSearchPropertyMap()
 {
     static const SfxItemPropertyMapEntry aSearchPropertyMap_Impl[] =
     {
-        {OUString(SC_UNO_SRCHBACK),     0,      cppu::UnoType<bool>::get(),       0, 0},
-        {OUString(SC_UNO_SRCHBYROW),    0,      cppu::UnoType<bool>::get(),       0, 0},
-        {OUString(SC_UNO_SRCHCASE),     0,      cppu::UnoType<bool>::get(),       0, 0},
-        {OUString(SC_UNO_SRCHREGEXP),   0,      cppu::UnoType<bool>::get(),       0, 0},
-        {OUString(SC_UNO_SRCHWILDCARD), 0,      cppu::UnoType<bool>::get(),       0, 0},
-        {OUString(SC_UNO_SRCHSIM),      0,      cppu::UnoType<bool>::get(),       0, 0},
-        {OUString(SC_UNO_SRCHSIMADD),   0,      cppu::UnoType<sal_Int16>::get(), 0, 0},
-        {OUString(SC_UNO_SRCHSIMEX),    0,      cppu::UnoType<sal_Int16>::get(), 0, 0},
-        {OUString(SC_UNO_SRCHSIMREL),   0,      cppu::UnoType<bool>::get(),       0, 0},
-        {OUString(SC_UNO_SRCHSIMREM),   0,      cppu::UnoType<sal_Int16>::get(), 0, 0},
-        {OUString(SC_UNO_SRCHSTYLES),   0,      cppu::UnoType<bool>::get(),       0, 0},
-        {OUString(SC_UNO_SRCHTYPE),     0,      cppu::UnoType<sal_Int16>::get(), 0, 0}, // enum TableSearch is gone
-        {OUString(SC_UNO_SRCHWORDS),    0,      cppu::UnoType<bool>::get(),       0, 0},
-        { OUString(), 0, css::uno::Type(), 0, 0 }
+        {SC_UNO_SRCHBACK,     0,      cppu::UnoType<bool>::get(),       0, 0},
+        {SC_UNO_SRCHBYROW,    0,      cppu::UnoType<bool>::get(),       0, 0},
+        {SC_UNO_SRCHCASE,     0,      cppu::UnoType<bool>::get(),       0, 0},
+        {SC_UNO_SRCHREGEXP,   0,      cppu::UnoType<bool>::get(),       0, 0},
+        {SC_UNO_SRCHWILDCARD, 0,      cppu::UnoType<bool>::get(),       0, 0},
+        {SC_UNO_SRCHSIM,      0,      cppu::UnoType<bool>::get(),       0, 0},
+        {SC_UNO_SRCHSIMADD,   0,      cppu::UnoType<sal_Int16>::get(), 0, 0},
+        {SC_UNO_SRCHSIMEX,    0,      cppu::UnoType<sal_Int16>::get(), 0, 0},
+        {SC_UNO_SRCHSIMREL,   0,      cppu::UnoType<bool>::get(),       0, 0},
+        {SC_UNO_SRCHSIMREM,   0,      cppu::UnoType<sal_Int16>::get(), 0, 0},
+        {SC_UNO_SRCHSTYLES,   0,      cppu::UnoType<bool>::get(),       0, 0},
+        {SC_UNO_SRCHTYPE,     0,      cppu::UnoType<sal_Int16>::get(), 0, 0}, // enum TableSearch is gone
+        {SC_UNO_SRCHWORDS,    0,      cppu::UnoType<bool>::get(),       0, 0},
+        { "", 0, css::uno::Type(), 0, 0 }
     };
     return aSearchPropertyMap_Impl;
 }

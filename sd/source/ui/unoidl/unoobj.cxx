@@ -105,38 +105,38 @@ using ::com::sun::star::drawing::XShape;
 #define WID_PLACEHOLDERTEXT 24
 #define WID_LEGACYFRAGMENT  25
 
-        #define IMPRESS_MAP_ENTRIES \
-        { OUString(UNO_NAME_OBJ_LEGACYFRAGMENT),WID_LEGACYFRAGMENT,  cppu::UnoType<drawing::XShape>::get(),                 0, 0},\
-        { OUString(UNO_NAME_OBJ_ANIMATIONPATH), WID_ANIMPATH,        cppu::UnoType<drawing::XShape>::get(),                 0, 0},\
-        { OUString(UNO_NAME_OBJ_BOOKMARK),      WID_BOOKMARK,        cppu::UnoType<OUString>::get(),                        0, 0},\
-        { OUString(UNO_NAME_OBJ_DIMCOLOR),      WID_DIMCOLOR,        cppu::UnoType<sal_Int32>::get(),                       0, 0},\
-        { OUString(UNO_NAME_OBJ_DIMHIDE),       WID_DIMHIDE,         cppu::UnoType<bool>::get(),                            0, 0},\
-        { OUString(UNO_NAME_OBJ_DIMPREV),       WID_DIMPREV,         cppu::UnoType<bool>::get(),                            0, 0},\
-        { OUString(UNO_NAME_OBJ_EFFECT),        WID_EFFECT,          cppu::UnoType<presentation::AnimationEffect>::get(),   0, 0},\
-        { OUString(UNO_NAME_OBJ_ISEMPTYPRESOBJ),WID_ISEMPTYPRESOBJ,  cppu::UnoType<bool>::get(),                            0, 0},\
-        { OUString(UNO_NAME_OBJ_ISPRESOBJ),     WID_ISPRESOBJ,       cppu::UnoType<bool>::get(),                            css::beans::PropertyAttribute::READONLY, 0},\
-        { OUString(UNO_NAME_OBJ_MASTERDEPENDENT),WID_MASTERDEPEND,   cppu::UnoType<bool>::get(),                            0, 0},\
-        { OUString(UNO_NAME_OBJ_CLICKACTION),   WID_CLICKACTION,     cppu::UnoType<presentation::ClickAction>::get(),       0, 0},\
-        { OUString(UNO_NAME_OBJ_PLAYFULL),      WID_PLAYFULL,        cppu::UnoType<bool>::get(),                            0, 0},\
-        { OUString(UNO_NAME_OBJ_PRESORDER),     WID_PRESORDER,       cppu::UnoType<sal_Int32>::get(),                       0, 0},\
-        { OUString(UNO_NAME_OBJ_STYLE),         WID_STYLE,           cppu::UnoType<style::XStyle>::get(),                   css::beans::PropertyAttribute::MAYBEVOID, 0},\
-        { OUString(UNO_NAME_OBJ_SOUNDFILE),     WID_SOUNDFILE,       cppu::UnoType<OUString>::get(),                        0, 0},\
-        { OUString(UNO_NAME_OBJ_SOUNDON),       WID_SOUNDON,         cppu::UnoType<bool>::get(),                            0, 0},\
-        { OUString(UNO_NAME_OBJ_SPEED),         WID_SPEED,           cppu::UnoType<presentation::AnimationSpeed>::get(),    0, 0},\
-        { OUString(UNO_NAME_OBJ_TEXTEFFECT),    WID_TEXTEFFECT,      cppu::UnoType<presentation::AnimationEffect>::get(),   0, 0},\
-        { OUString(UNO_NAME_OBJ_BLUESCREEN),    WID_BLUESCREEN,      cppu::UnoType<sal_Int32>::get(),                       0, 0},\
-        { OUString(UNO_NAME_OBJ_VERB),          WID_VERB,            cppu::UnoType<sal_Int32>::get(),                       0, 0},\
-        { OUString("IsAnimation"),              WID_ISANIMATION,     cppu::UnoType<bool>::get(),                            0, 0},\
-        { OUString("NavigationOrder"),          WID_NAVORDER,        cppu::UnoType<sal_Int32>::get(),                       0, 0},\
-        { OUString("PlaceholderText"),          WID_PLACEHOLDERTEXT, cppu::UnoType<OUString>::get(),                        0, 0},\
-        { OUString(), 0, css::uno::Type(), 0, 0 }
+#define IMPRESS_MAP_ENTRIES \
+        { UNO_NAME_OBJ_LEGACYFRAGMENT,WID_LEGACYFRAGMENT,  cppu::UnoType<drawing::XShape>::get(),                 0, 0},\
+        { UNO_NAME_OBJ_ANIMATIONPATH, WID_ANIMPATH,        cppu::UnoType<drawing::XShape>::get(),                 0, 0},\
+        { UNO_NAME_OBJ_BOOKMARK,      WID_BOOKMARK,        cppu::UnoType<OUString>::get(),                        0, 0},\
+        { UNO_NAME_OBJ_DIMCOLOR,      WID_DIMCOLOR,        cppu::UnoType<sal_Int32>::get(),                       0, 0},\
+        { UNO_NAME_OBJ_DIMHIDE,       WID_DIMHIDE,         cppu::UnoType<bool>::get(),                            0, 0},\
+        { UNO_NAME_OBJ_DIMPREV,       WID_DIMPREV,         cppu::UnoType<bool>::get(),                            0, 0},\
+        { UNO_NAME_OBJ_EFFECT,        WID_EFFECT,          cppu::UnoType<presentation::AnimationEffect>::get(),   0, 0},\
+        { UNO_NAME_OBJ_ISEMPTYPRESOBJ,WID_ISEMPTYPRESOBJ,  cppu::UnoType<bool>::get(),                            0, 0},\
+        { UNO_NAME_OBJ_ISPRESOBJ,     WID_ISPRESOBJ,       cppu::UnoType<bool>::get(),                            css::beans::PropertyAttribute::READONLY, 0},\
+        { UNO_NAME_OBJ_MASTERDEPENDENT,WID_MASTERDEPEND,   cppu::UnoType<bool>::get(),                            0, 0},\
+        { UNO_NAME_OBJ_CLICKACTION,   WID_CLICKACTION,     cppu::UnoType<presentation::ClickAction>::get(),       0, 0},\
+        { UNO_NAME_OBJ_PLAYFULL,      WID_PLAYFULL,        cppu::UnoType<bool>::get(),                            0, 0},\
+        { UNO_NAME_OBJ_PRESORDER,     WID_PRESORDER,       cppu::UnoType<sal_Int32>::get(),                       0, 0},\
+        { UNO_NAME_OBJ_STYLE,         WID_STYLE,           cppu::UnoType<style::XStyle>::get(),                   css::beans::PropertyAttribute::MAYBEVOID, 0},\
+        { UNO_NAME_OBJ_SOUNDFILE,     WID_SOUNDFILE,       cppu::UnoType<OUString>::get(),                        0, 0},\
+        { UNO_NAME_OBJ_SOUNDON,       WID_SOUNDON,         cppu::UnoType<bool>::get(),                            0, 0},\
+        { UNO_NAME_OBJ_SPEED,         WID_SPEED,           cppu::UnoType<presentation::AnimationSpeed>::get(),    0, 0},\
+        { UNO_NAME_OBJ_TEXTEFFECT,    WID_TEXTEFFECT,      cppu::UnoType<presentation::AnimationEffect>::get(),   0, 0},\
+        { UNO_NAME_OBJ_BLUESCREEN,    WID_BLUESCREEN,      cppu::UnoType<sal_Int32>::get(),                       0, 0},\
+        { UNO_NAME_OBJ_VERB,          WID_VERB,            cppu::UnoType<sal_Int32>::get(),                       0, 0},\
+        { "IsAnimation",              WID_ISANIMATION,     cppu::UnoType<bool>::get(),                            0, 0},\
+        { "NavigationOrder",          WID_NAVORDER,        cppu::UnoType<sal_Int32>::get(),                       0, 0},\
+        { "PlaceholderText",          WID_PLACEHOLDERTEXT, cppu::UnoType<OUString>::get(),                        0, 0},\
+        { "", 0, css::uno::Type(), 0, 0 }
 
     static const SfxItemPropertyMapEntry* lcl_GetImpress_SdXShapePropertyGraphicMap_Impl()
     {
 
         static const SfxItemPropertyMapEntry aImpress_SdXShapePropertyGraphicMap_Impl[] =
         {
-            { OUString("ImageMap"),             WID_IMAGEMAP,        cppu::UnoType<container::XIndexContainer>::get(),    0, 0 },
+            { "ImageMap",             WID_IMAGEMAP,        cppu::UnoType<container::XIndexContainer>::get(),    0, 0 },
             IMPRESS_MAP_ENTRIES
         };
         return aImpress_SdXShapePropertyGraphicMap_Impl;
@@ -153,11 +153,11 @@ using ::com::sun::star::drawing::XShape;
     }
 
     #define DRAW_MAP_ENTRIES\
-        { OUString(UNO_NAME_OBJ_BOOKMARK),      WID_BOOKMARK,       cppu::UnoType<OUString>::get(),                 0, 0},\
-        { OUString(UNO_NAME_OBJ_CLICKACTION),   WID_CLICKACTION,    cppu::UnoType<presentation::ClickAction>::get(),0, 0},\
-        { OUString(UNO_NAME_OBJ_STYLE),         WID_STYLE,          cppu::UnoType<style::XStyle>::get(),            css::beans::PropertyAttribute::MAYBEVOID, 0},\
-        { OUString("NavigationOrder"),          WID_NAVORDER,       cppu::UnoType<sal_Int32>::get(),                0, 0},\
-        { OUString(), 0, css::uno::Type(), 0, 0 }
+        { UNO_NAME_OBJ_BOOKMARK,      WID_BOOKMARK,       cppu::UnoType<OUString>::get(),                 0, 0},\
+        { UNO_NAME_OBJ_CLICKACTION,   WID_CLICKACTION,    cppu::UnoType<presentation::ClickAction>::get(),0, 0},\
+        { UNO_NAME_OBJ_STYLE,         WID_STYLE,          cppu::UnoType<style::XStyle>::get(),            css::beans::PropertyAttribute::MAYBEVOID, 0},\
+        { "NavigationOrder",          WID_NAVORDER,       cppu::UnoType<sal_Int32>::get(),                0, 0},\
+        { "", 0, css::uno::Type(), 0, 0 }
 
     static const SfxItemPropertyMapEntry* lcl_GetDraw_SdXShapePropertySimpleMap_Impl()
     {
@@ -171,7 +171,7 @@ using ::com::sun::star::drawing::XShape;
     {
         static const SfxItemPropertyMapEntry aDraw_SdXShapePropertyGraphicMap_Impl[] =
         {
-            { OUString("ImageMap"),             WID_IMAGEMAP,        cppu::UnoType<container::XIndexContainer>::get(),    0, 0 },
+            { "ImageMap",             WID_IMAGEMAP,        cppu::UnoType<container::XIndexContainer>::get(),    0, 0 },
             DRAW_MAP_ENTRIES
         };
         return aDraw_SdXShapePropertyGraphicMap_Impl;
@@ -231,7 +231,7 @@ using ::com::sun::star::drawing::XShape;
     {
         static const SfxItemPropertyMapEntry aEmpty_SdXShapePropertyMap_Impl[] =
         {
-            { OUString(), 0, css::uno::Type(), 0, 0 }
+            { "", 0, css::uno::Type(), 0, 0 }
         };
         return aEmpty_SdXShapePropertyMap_Impl;
     }

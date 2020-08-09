@@ -46,17 +46,17 @@ static const SfxItemPropertyMapEntry* lcl_GetValidatePropertyMap()
 {
     static const SfxItemPropertyMapEntry aValidatePropertyMap_Impl[] =
     {
-        {OUString(SC_UNONAME_ERRALSTY), 0,  cppu::UnoType<sheet::ValidationAlertStyle>::get(),  0, 0},
-        {OUString(SC_UNONAME_ERRMESS),  0,  cppu::UnoType<OUString>::get(),                0, 0},
-        {OUString(SC_UNONAME_ERRTITLE), 0,  cppu::UnoType<OUString>::get(),                0, 0},
-        {OUString(SC_UNONAME_IGNOREBL), 0,  cppu::UnoType<bool>::get(),                          0, 0},
-        {OUString(SC_UNONAME_INPMESS),  0,  cppu::UnoType<OUString>::get(),                0, 0},
-        {OUString(SC_UNONAME_INPTITLE), 0,  cppu::UnoType<OUString>::get(),                0, 0},
-        {OUString(SC_UNONAME_SHOWERR),  0,  cppu::UnoType<bool>::get(),                          0, 0},
-        {OUString(SC_UNONAME_SHOWINP),  0,  cppu::UnoType<bool>::get(),                          0, 0},
-        {OUString(SC_UNONAME_SHOWLIST), 0,  cppu::UnoType<sal_Int16>::get(),                    0, 0},
-        {OUString(SC_UNONAME_TYPE),     0,  cppu::UnoType<sheet::ValidationType>::get(),        0, 0},
-        { OUString(), 0, css::uno::Type(), 0, 0 }
+        {SC_UNONAME_ERRALSTY, 0,  cppu::UnoType<sheet::ValidationAlertStyle>::get(),  0, 0},
+        {SC_UNONAME_ERRMESS,  0,  cppu::UnoType<OUString>::get(),                0, 0},
+        {SC_UNONAME_ERRTITLE, 0,  cppu::UnoType<OUString>::get(),                0, 0},
+        {SC_UNONAME_IGNOREBL, 0,  cppu::UnoType<bool>::get(),                          0, 0},
+        {SC_UNONAME_INPMESS,  0,  cppu::UnoType<OUString>::get(),                0, 0},
+        {SC_UNONAME_INPTITLE, 0,  cppu::UnoType<OUString>::get(),                0, 0},
+        {SC_UNONAME_SHOWERR,  0,  cppu::UnoType<bool>::get(),                          0, 0},
+        {SC_UNONAME_SHOWINP,  0,  cppu::UnoType<bool>::get(),                          0, 0},
+        {SC_UNONAME_SHOWLIST, 0,  cppu::UnoType<sal_Int16>::get(),                    0, 0},
+        {SC_UNONAME_TYPE,     0,  cppu::UnoType<sheet::ValidationType>::get(),        0, 0},
+        { "", 0, css::uno::Type(), 0, 0 }
     };
     return aValidatePropertyMap_Impl;
 }
