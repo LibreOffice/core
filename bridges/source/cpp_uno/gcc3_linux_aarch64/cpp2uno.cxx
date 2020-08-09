@@ -357,10 +357,16 @@ bridges::cpp_uno::shared::VtableFactory::initializeBlock(
 }
 
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
-    Slot ** slots, unsigned char * code, sal_PtrDiff writetoexecdiff,
+    Slot ** slots, unsigned char * code,
+#ifdef USE_DOUBLE_MMAP
+    sal_PtrDiff writetoexecdiff,
+#endif
     typelib_InterfaceTypeDescription const * type, sal_Int32 functionOffset,
     sal_Int32 functionCount, sal_Int32 vtableOffset)
 {
+#ifndef USE_DOUBLE_MMAP
+    constexpr sal_PtrDiff writetoexecdiff = 0;
+#endif
     (*slots) -= functionCount;
     Slot * s = *slots;
     for (sal_Int32 i = 0; i != type->nMembers; ++i) {
@@ -400,7 +406,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
 void bridges::cpp_uno::shared::VtableFactory::flushCode(
     unsigned char const * begin, unsigned char const * end)
 {
-#ifndef ANDROID
+#if !defined ANDROID && !defined MACOSX
    static void (*clear_cache)(unsigned char const *, unsigned char const *)
        = (void (*)(unsigned char const *, unsigned char const *)) dlsym(
            RTLD_DEFAULT, "__clear_cache");
