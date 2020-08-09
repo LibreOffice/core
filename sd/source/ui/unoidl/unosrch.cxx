@@ -44,10 +44,10 @@ static const SfxItemPropertyMapEntry* ImplGetSearchPropertyMap()
 {
     static const SfxItemPropertyMapEntry aSearchPropertyMap_Impl[] =
     {
-        { OUString(UNO_NAME_SEARCH_BACKWARDS),  WID_SEARCH_BACKWARDS,   cppu::UnoType<bool>::get(),    0,  0 },
-        { OUString(UNO_NAME_SEARCH_CASE),       WID_SEARCH_CASE,        cppu::UnoType<bool>::get(),    0,  0 },
-        { OUString(UNO_NAME_SEARCH_WORDS),      WID_SEARCH_WORDS,       cppu::UnoType<bool>::get(),    0,  0 },
-        { OUString(), 0, css::uno::Type(), 0, 0 }
+        { UNO_NAME_SEARCH_BACKWARDS,  WID_SEARCH_BACKWARDS,   cppu::UnoType<bool>::get(),    0,  0 },
+        { UNO_NAME_SEARCH_CASE,       WID_SEARCH_CASE,        cppu::UnoType<bool>::get(),    0,  0 },
+        { UNO_NAME_SEARCH_WORDS,      WID_SEARCH_WORDS,       cppu::UnoType<bool>::get(),    0,  0 },
+        { "", 0, css::uno::Type(), 0, 0 }
     };
 
     return aSearchPropertyMap_Impl;

@@ -141,51 +141,51 @@ static const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
 {
     static const SfxItemPropertyMapEntry aDocOptPropertyMap_Impl[] =
     {
-        {OUString(SC_UNO_APPLYFMDES),              0, cppu::UnoType<bool>::get(),                                             0, 0},
-        {OUString(SC_UNO_AREALINKS),               0, cppu::UnoType<sheet::XAreaLinks>::get(),               0, 0},
-        {OUString(SC_UNO_AUTOCONTFOC),             0, cppu::UnoType<bool>::get(),                                             0, 0},
-        {OUString(SC_UNO_BASICLIBRARIES),          0, cppu::UnoType<script::XLibraryContainer>::get(),     beans::PropertyAttribute::READONLY, 0},
-        {OUString(SC_UNO_DIALOGLIBRARIES),         0, cppu::UnoType<script::XLibraryContainer>::get(),     beans::PropertyAttribute::READONLY, 0},
-        {OUString(SC_UNO_VBAGLOBNAME),             0, cppu::UnoType<OUString>::get(),                  beans::PropertyAttribute::READONLY, 0},
-        {OUString(SC_UNO_CALCASSHOWN),             PROP_UNO_CALCASSHOWN, cppu::UnoType<bool>::get(),                          0, 0},
-        {OUString(SC_UNONAME_CLOCAL),              0, cppu::UnoType<lang::Locale>::get(),                                    0, 0},
-        {OUString(SC_UNO_CJK_CLOCAL),              0, cppu::UnoType<lang::Locale>::get(),                                    0, 0},
-        {OUString(SC_UNO_CTL_CLOCAL),              0, cppu::UnoType<lang::Locale>::get(),                                    0, 0},
-        {OUString(SC_UNO_COLLABELRNG),             0, cppu::UnoType<sheet::XLabelRanges>::get(),             0, 0},
-        {OUString(SC_UNO_DDELINKS),                0, cppu::UnoType<container::XNameAccess>::get(),          0, 0},
-        {OUString(SC_UNO_DEFTABSTOP),              PROP_UNO_DEFTABSTOP, cppu::UnoType<sal_Int16>::get(),                     0, 0},
-        {OUString(SC_UNO_EXTERNALDOCLINKS),        0, cppu::UnoType<sheet::XExternalDocLinks>::get(),        0, 0},
-        {OUString(SC_UNO_FORBIDDEN),               0, cppu::UnoType<i18n::XForbiddenCharacters>::get(),      beans::PropertyAttribute::READONLY, 0},
-        {OUString(SC_UNO_HASDRAWPAGES),            0, cppu::UnoType<bool>::get(),                                             beans::PropertyAttribute::READONLY, 0},
-        {OUString(SC_UNO_IGNORECASE),              PROP_UNO_IGNORECASE, cppu::UnoType<bool>::get(),                           0, 0},
-        {OUString(SC_UNO_ITERENABLED),             PROP_UNO_ITERENABLED, cppu::UnoType<bool>::get(),                          0, 0},
-        {OUString(SC_UNO_ITERCOUNT),               PROP_UNO_ITERCOUNT, cppu::UnoType<sal_Int32>::get(),                      0, 0},
-        {OUString(SC_UNO_ITEREPSILON),             PROP_UNO_ITEREPSILON, cppu::UnoType<double>::get(),                       0, 0},
-        {OUString(SC_UNO_LOOKUPLABELS),            PROP_UNO_LOOKUPLABELS, cppu::UnoType<bool>::get(),                         0, 0},
-        {OUString(SC_UNO_MATCHWHOLE),              PROP_UNO_MATCHWHOLE, cppu::UnoType<bool>::get(),                           0, 0},
-        {OUString(SC_UNO_NAMEDRANGES),             0, cppu::UnoType<sheet::XNamedRanges>::get(),             0, 0},
-        {OUString(SC_UNO_DATABASERNG),             0, cppu::UnoType<sheet::XDatabaseRanges>::get(),          0, 0},
-        {OUString(SC_UNO_NULLDATE),                PROP_UNO_NULLDATE, cppu::UnoType<util::Date>::get(),                      0, 0},
-        {OUString(SC_UNO_ROWLABELRNG),             0, cppu::UnoType<sheet::XLabelRanges>::get(),             0, 0},
-        {OUString(SC_UNO_SHEETLINKS),              0, cppu::UnoType<container::XNameAccess>::get(),          0, 0},
-        {OUString(SC_UNO_SPELLONLINE),             PROP_UNO_SPELLONLINE, cppu::UnoType<bool>::get(),                          0, 0},
-        {OUString(SC_UNO_STANDARDDEC),             PROP_UNO_STANDARDDEC, cppu::UnoType<sal_Int16>::get(),                    0, 0},
-        {OUString(SC_UNO_REGEXENABLED),            PROP_UNO_REGEXENABLED, cppu::UnoType<bool>::get(),                         0, 0},
-        {OUString(SC_UNO_WILDCARDSENABLED),        PROP_UNO_WILDCARDSENABLED, cppu::UnoType<bool>::get(),                         0, 0},
-        {OUString(SC_UNO_RUNTIMEUID),              0, cppu::UnoType<OUString>::get(),                  beans::PropertyAttribute::READONLY, 0},
-        {OUString(SC_UNO_HASVALIDSIGNATURES),      0, cppu::UnoType<bool>::get(),                                             beans::PropertyAttribute::READONLY, 0},
-        {OUString(SC_UNO_ISLOADED),                0, cppu::UnoType<bool>::get(),                                             0, 0},
-        {OUString(SC_UNO_ISUNDOENABLED),           0, cppu::UnoType<bool>::get(),                                             0, 0},
-        {OUString(SC_UNO_RECORDCHANGES),           0, cppu::UnoType<bool>::get(),                                             0, 0},
-        {OUString(SC_UNO_ISRECORDCHANGESPROTECTED),0, cppu::UnoType<bool>::get(),            beans::PropertyAttribute::READONLY, 0},
-        {OUString(SC_UNO_ISADJUSTHEIGHTENABLED),   0, cppu::UnoType<bool>::get(),                                             0, 0},
-        {OUString(SC_UNO_ISEXECUTELINKENABLED),    0, cppu::UnoType<bool>::get(),                                             0, 0},
-        {OUString(SC_UNO_ISCHANGEREADONLYENABLED), 0, cppu::UnoType<bool>::get(),                                             0, 0},
-        {OUString(SC_UNO_REFERENCEDEVICE),         0, cppu::UnoType<awt::XDevice>::get(),                    beans::PropertyAttribute::READONLY, 0},
-        {OUString("BuildId"),                      0, ::cppu::UnoType<OUString>::get(),                0, 0},
-        {OUString(SC_UNO_CODENAME),                0, cppu::UnoType<OUString>::get(),                  0, 0},
-        {OUString(SC_UNO_INTEROPGRABBAG),          0, cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(), 0, 0},
-        { OUString(), 0, css::uno::Type(), 0, 0 }
+        {SC_UNO_APPLYFMDES,              0, cppu::UnoType<bool>::get(),                                             0, 0},
+        {SC_UNO_AREALINKS,               0, cppu::UnoType<sheet::XAreaLinks>::get(),               0, 0},
+        {SC_UNO_AUTOCONTFOC,             0, cppu::UnoType<bool>::get(),                                             0, 0},
+        {SC_UNO_BASICLIBRARIES,          0, cppu::UnoType<script::XLibraryContainer>::get(),     beans::PropertyAttribute::READONLY, 0},
+        {SC_UNO_DIALOGLIBRARIES,         0, cppu::UnoType<script::XLibraryContainer>::get(),     beans::PropertyAttribute::READONLY, 0},
+        {SC_UNO_VBAGLOBNAME,             0, cppu::UnoType<OUString>::get(),                  beans::PropertyAttribute::READONLY, 0},
+        {SC_UNO_CALCASSHOWN,             PROP_UNO_CALCASSHOWN, cppu::UnoType<bool>::get(),                          0, 0},
+        {SC_UNONAME_CLOCAL,              0, cppu::UnoType<lang::Locale>::get(),                                    0, 0},
+        {SC_UNO_CJK_CLOCAL,              0, cppu::UnoType<lang::Locale>::get(),                                    0, 0},
+        {SC_UNO_CTL_CLOCAL,              0, cppu::UnoType<lang::Locale>::get(),                                    0, 0},
+        {SC_UNO_COLLABELRNG,             0, cppu::UnoType<sheet::XLabelRanges>::get(),             0, 0},
+        {SC_UNO_DDELINKS,                0, cppu::UnoType<container::XNameAccess>::get(),          0, 0},
+        {SC_UNO_DEFTABSTOP,              PROP_UNO_DEFTABSTOP, cppu::UnoType<sal_Int16>::get(),                     0, 0},
+        {SC_UNO_EXTERNALDOCLINKS,        0, cppu::UnoType<sheet::XExternalDocLinks>::get(),        0, 0},
+        {SC_UNO_FORBIDDEN,               0, cppu::UnoType<i18n::XForbiddenCharacters>::get(),      beans::PropertyAttribute::READONLY, 0},
+        {SC_UNO_HASDRAWPAGES,            0, cppu::UnoType<bool>::get(),                                             beans::PropertyAttribute::READONLY, 0},
+        {SC_UNO_IGNORECASE,              PROP_UNO_IGNORECASE, cppu::UnoType<bool>::get(),                           0, 0},
+        {SC_UNO_ITERENABLED,             PROP_UNO_ITERENABLED, cppu::UnoType<bool>::get(),                          0, 0},
+        {SC_UNO_ITERCOUNT,               PROP_UNO_ITERCOUNT, cppu::UnoType<sal_Int32>::get(),                      0, 0},
+        {SC_UNO_ITEREPSILON,             PROP_UNO_ITEREPSILON, cppu::UnoType<double>::get(),                       0, 0},
+        {SC_UNO_LOOKUPLABELS,            PROP_UNO_LOOKUPLABELS, cppu::UnoType<bool>::get(),                         0, 0},
+        {SC_UNO_MATCHWHOLE,              PROP_UNO_MATCHWHOLE, cppu::UnoType<bool>::get(),                           0, 0},
+        {SC_UNO_NAMEDRANGES,             0, cppu::UnoType<sheet::XNamedRanges>::get(),             0, 0},
+        {SC_UNO_DATABASERNG,             0, cppu::UnoType<sheet::XDatabaseRanges>::get(),          0, 0},
+        {SC_UNO_NULLDATE,                PROP_UNO_NULLDATE, cppu::UnoType<util::Date>::get(),                      0, 0},
+        {SC_UNO_ROWLABELRNG,             0, cppu::UnoType<sheet::XLabelRanges>::get(),             0, 0},
+        {SC_UNO_SHEETLINKS,              0, cppu::UnoType<container::XNameAccess>::get(),          0, 0},
+        {SC_UNO_SPELLONLINE,             PROP_UNO_SPELLONLINE, cppu::UnoType<bool>::get(),                          0, 0},
+        {SC_UNO_STANDARDDEC,             PROP_UNO_STANDARDDEC, cppu::UnoType<sal_Int16>::get(),                    0, 0},
+        {SC_UNO_REGEXENABLED,            PROP_UNO_REGEXENABLED, cppu::UnoType<bool>::get(),                         0, 0},
+        {SC_UNO_WILDCARDSENABLED,        PROP_UNO_WILDCARDSENABLED, cppu::UnoType<bool>::get(),                         0, 0},
+        {SC_UNO_RUNTIMEUID,              0, cppu::UnoType<OUString>::get(),                  beans::PropertyAttribute::READONLY, 0},
+        {SC_UNO_HASVALIDSIGNATURES,      0, cppu::UnoType<bool>::get(),                                             beans::PropertyAttribute::READONLY, 0},
+        {SC_UNO_ISLOADED,                0, cppu::UnoType<bool>::get(),                                             0, 0},
+        {SC_UNO_ISUNDOENABLED,           0, cppu::UnoType<bool>::get(),                                             0, 0},
+        {SC_UNO_RECORDCHANGES,           0, cppu::UnoType<bool>::get(),                                             0, 0},
+        {SC_UNO_ISRECORDCHANGESPROTECTED,0, cppu::UnoType<bool>::get(),            beans::PropertyAttribute::READONLY, 0},
+        {SC_UNO_ISADJUSTHEIGHTENABLED,   0, cppu::UnoType<bool>::get(),                                             0, 0},
+        {SC_UNO_ISEXECUTELINKENABLED,    0, cppu::UnoType<bool>::get(),                                             0, 0},
+        {SC_UNO_ISCHANGEREADONLYENABLED, 0, cppu::UnoType<bool>::get(),                                             0, 0},
+        {SC_UNO_REFERENCEDEVICE,         0, cppu::UnoType<awt::XDevice>::get(),                    beans::PropertyAttribute::READONLY, 0},
+        {"BuildId",                      0, ::cppu::UnoType<OUString>::get(),                0, 0},
+        {SC_UNO_CODENAME,                0, cppu::UnoType<OUString>::get(),                  0, 0},
+        {SC_UNO_INTEROPGRABBAG,          0, cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(), 0, 0},
+        { "", 0, css::uno::Type(), 0, 0 }
     };
     return aDocOptPropertyMap_Impl;
 }
@@ -196,12 +196,12 @@ static const SfxItemPropertyMapEntry* lcl_GetColumnsPropertyMap()
 {
     static const SfxItemPropertyMapEntry aColumnsPropertyMap_Impl[] =
     {
-        {OUString(SC_UNONAME_MANPAGE),  0,  cppu::UnoType<bool>::get(),          0, 0 },
-        {OUString(SC_UNONAME_NEWPAGE),  0,  cppu::UnoType<bool>::get(),          0, 0 },
-        {OUString(SC_UNONAME_CELLVIS),  0,  cppu::UnoType<bool>::get(),          0, 0 },
-        {OUString(SC_UNONAME_OWIDTH),   0,  cppu::UnoType<bool>::get(),          0, 0 },
-        {OUString(SC_UNONAME_CELLWID),  0,  cppu::UnoType<sal_Int32>::get(),    0, 0 },
-        { OUString(), 0, css::uno::Type(), 0, 0 }
+        {SC_UNONAME_MANPAGE,  0,  cppu::UnoType<bool>::get(),          0, 0 },
+        {SC_UNONAME_NEWPAGE,  0,  cppu::UnoType<bool>::get(),          0, 0 },
+        {SC_UNONAME_CELLVIS,  0,  cppu::UnoType<bool>::get(),          0, 0 },
+        {SC_UNONAME_OWIDTH,   0,  cppu::UnoType<bool>::get(),          0, 0 },
+        {SC_UNONAME_CELLWID,  0,  cppu::UnoType<sal_Int32>::get(),    0, 0 },
+        { "", 0, css::uno::Type(), 0, 0 }
     };
     return aColumnsPropertyMap_Impl;
 }
@@ -210,16 +210,16 @@ static const SfxItemPropertyMapEntry* lcl_GetRowsPropertyMap()
 {
     static const SfxItemPropertyMapEntry aRowsPropertyMap_Impl[] =
     {
-        {OUString(SC_UNONAME_CELLHGT),  0,  cppu::UnoType<sal_Int32>::get(),    0, 0 },
-        {OUString(SC_UNONAME_CELLFILT), 0,  cppu::UnoType<bool>::get(),          0, 0 },
-        {OUString(SC_UNONAME_OHEIGHT),  0,  cppu::UnoType<bool>::get(),          0, 0 },
-        {OUString(SC_UNONAME_MANPAGE),  0,  cppu::UnoType<bool>::get(),          0, 0 },
-        {OUString(SC_UNONAME_NEWPAGE),  0,  cppu::UnoType<bool>::get(),          0, 0 },
-        {OUString(SC_UNONAME_CELLVIS),  0,  cppu::UnoType<bool>::get(),          0, 0 },
-        {OUString(SC_UNONAME_CELLBACK), ATTR_BACKGROUND, ::cppu::UnoType<sal_Int32>::get(), 0, MID_BACK_COLOR },
-        {OUString(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND, cppu::UnoType<bool>::get(), 0, MID_GRAPHIC_TRANSPARENT },
+        {SC_UNONAME_CELLHGT,  0,  cppu::UnoType<sal_Int32>::get(),    0, 0 },
+        {SC_UNONAME_CELLFILT, 0,  cppu::UnoType<bool>::get(),          0, 0 },
+        {SC_UNONAME_OHEIGHT,  0,  cppu::UnoType<bool>::get(),          0, 0 },
+        {SC_UNONAME_MANPAGE,  0,  cppu::UnoType<bool>::get(),          0, 0 },
+        {SC_UNONAME_NEWPAGE,  0,  cppu::UnoType<bool>::get(),          0, 0 },
+        {SC_UNONAME_CELLVIS,  0,  cppu::UnoType<bool>::get(),          0, 0 },
+        {SC_UNONAME_CELLBACK, ATTR_BACKGROUND, ::cppu::UnoType<sal_Int32>::get(), 0, MID_BACK_COLOR },
+        {SC_UNONAME_CELLTRAN, ATTR_BACKGROUND, cppu::UnoType<bool>::get(), 0, MID_GRAPHIC_TRANSPARENT },
         // not sorted, not used with SfxItemPropertyMapEntry::GetByName
-        { OUString(), 0, css::uno::Type(), 0, 0 }
+        { "", 0, css::uno::Type(), 0, 0 }
     };
     return aRowsPropertyMap_Impl;
 }

@@ -100,13 +100,13 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAddressConversionObj::getProp
     {
         static const SfxItemPropertyMapEntry aPropertyMap[] =
         {
-            { OUString(SC_UNONAME_ADDRESS),  0,  cppu::UnoType<table::CellRangeAddress>::get(), 0, 0 },
-            { OUString(SC_UNONAME_PERSREPR), 0,  cppu::UnoType<OUString>::get(),    0, 0 },
-            { OUString(SC_UNONAME_XLA1REPR), 0,  cppu::UnoType<OUString>::get(),    0, 0 },
-            { OUString(SC_UNONAME_REFSHEET), 0,  cppu::UnoType<sal_Int32>::get(),        0, 0 },
-            { OUString(SC_UNONAME_UIREPR),   0,  cppu::UnoType<OUString>::get(),    0, 0 },
-            { OUString(SC_UNONAME_XLA1REPR), 0,  cppu::UnoType<OUString>::get(),    0, 0 },
-            { OUString(), 0, css::uno::Type(), 0, 0 }
+            { SC_UNONAME_ADDRESS,  0,  cppu::UnoType<table::CellRangeAddress>::get(), 0, 0 },
+            { SC_UNONAME_PERSREPR, 0,  cppu::UnoType<OUString>::get(),    0, 0 },
+            { SC_UNONAME_XLA1REPR, 0,  cppu::UnoType<OUString>::get(),    0, 0 },
+            { SC_UNONAME_REFSHEET, 0,  cppu::UnoType<sal_Int32>::get(),        0, 0 },
+            { SC_UNONAME_UIREPR,   0,  cppu::UnoType<OUString>::get(),    0, 0 },
+            { SC_UNONAME_XLA1REPR, 0,  cppu::UnoType<OUString>::get(),    0, 0 },
+            { "", 0, css::uno::Type(), 0, 0 }
         };
         static uno::Reference<beans::XPropertySetInfo> aRef(new SfxItemPropertySetInfo( aPropertyMap ));
         return aRef;
@@ -115,13 +115,13 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAddressConversionObj::getProp
     {
         static const SfxItemPropertyMapEntry aPropertyMap[] =
         {
-            { OUString(SC_UNONAME_ADDRESS),  0,  cppu::UnoType<table::CellAddress>::get(), 0, 0 },
-            { OUString(SC_UNONAME_PERSREPR), 0,  cppu::UnoType<OUString>::get(),    0, 0 },
-            { OUString(SC_UNONAME_XLA1REPR), 0,  cppu::UnoType<OUString>::get(),    0, 0 },
-            { OUString(SC_UNONAME_REFSHEET), 0,  cppu::UnoType<sal_Int32>::get(),        0, 0 },
-            { OUString(SC_UNONAME_UIREPR),   0,  cppu::UnoType<OUString>::get(),    0, 0 },
-            { OUString(SC_UNONAME_XLA1REPR), 0,  cppu::UnoType<OUString>::get(),    0, 0 },
-            { OUString(), 0, css::uno::Type(), 0, 0 }
+            { SC_UNONAME_ADDRESS,  0,  cppu::UnoType<table::CellAddress>::get(), 0, 0 },
+            { SC_UNONAME_PERSREPR, 0,  cppu::UnoType<OUString>::get(),    0, 0 },
+            { SC_UNONAME_XLA1REPR, 0,  cppu::UnoType<OUString>::get(),    0, 0 },
+            { SC_UNONAME_REFSHEET, 0,  cppu::UnoType<sal_Int32>::get(),        0, 0 },
+            { SC_UNONAME_UIREPR,   0,  cppu::UnoType<OUString>::get(),    0, 0 },
+            { SC_UNONAME_XLA1REPR, 0,  cppu::UnoType<OUString>::get(),    0, 0 },
+            { "", 0, css::uno::Type(), 0, 0 }
         };
         static uno::Reference<beans::XPropertySetInfo> aRef(new SfxItemPropertySetInfo( aPropertyMap ));
         return aRef;
