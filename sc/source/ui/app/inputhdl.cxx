@@ -1944,49 +1944,49 @@ void ScInputHandler::UseColData() // When typing
     OUString aNew;
     miAutoPosColumn = pColumnData->end();
     miAutoPosColumn = findText(*pColumnData, miAutoPosColumn, aText, aNew, false);
-    if (miAutoPosColumn != pColumnData->end())
+    if (miAutoPosColumn == pColumnData->end())
+        return;
+
+    // Strings can contain line endings (e.g. due to dBase import),
+    // which would result in multiple paragraphs here, which is not desirable.
+    //! Then GetExactMatch doesn't work either
+    lcl_RemoveLineEnd( aNew );
+
+    // Keep paragraph, just append the rest
+    //! Exact replacement in EnterHandler !!!
+    // One Space between paragraphs:
+    sal_Int32 nEdLen = mpEditEngine->GetTextLen() + nParCnt - 1;
+    OUString aIns = aNew.copy(nEdLen);
+
+    // Selection must be "backwards", so the cursor stays behind the last
+    // typed character
+    ESelection aSelection( aSel.nEndPara, aSel.nEndPos + aIns.getLength(),
+                           aSel.nEndPara, aSel.nEndPos );
+
+    // When editing in input line, apply to both edit views
+    if ( pTableView )
     {
-        // Strings can contain line endings (e.g. due to dBase import),
-        // which would result in multiple paragraphs here, which is not desirable.
-        //! Then GetExactMatch doesn't work either
-        lcl_RemoveLineEnd( aNew );
-
-        // Keep paragraph, just append the rest
-        //! Exact replacement in EnterHandler !!!
-        // One Space between paragraphs:
-        sal_Int32 nEdLen = mpEditEngine->GetTextLen() + nParCnt - 1;
-        OUString aIns = aNew.copy(nEdLen);
-
-        // Selection must be "backwards", so the cursor stays behind the last
-        // typed character
-        ESelection aSelection( aSel.nEndPara, aSel.nEndPos + aIns.getLength(),
-                               aSel.nEndPara, aSel.nEndPos );
-
-        // When editing in input line, apply to both edit views
-        if ( pTableView )
-        {
-            pTableView->InsertText( aIns );
-            pTableView->SetSelection( aSelection );
-        }
-        if ( pTopView )
-        {
-            pTopView->InsertText( aIns );
-            pTopView->SetSelection( aSelection );
-        }
-
-        aAutoSearch = aText; // To keep searching - nAutoPos is set
-
-        if (aText.getLength() == aNew.getLength())
-        {
-            // If the inserted text is found, consume TAB only if there's more coming
-            OUString aDummy;
-            ScTypedCaseStrSet::const_iterator itNextPos =
-                findText(*pColumnData, miAutoPosColumn, aText, aDummy, false);
-            bUseTab = itNextPos != pColumnData->end();
-        }
-        else
-            bUseTab = true;
+        pTableView->InsertText( aIns );
+        pTableView->SetSelection( aSelection );
     }
+    if ( pTopView )
+    {
+        pTopView->InsertText( aIns );
+        pTopView->SetSelection( aSelection );
+    }
+
+    aAutoSearch = aText; // To keep searching - nAutoPos is set
+
+    if (aText.getLength() == aNew.getLength())
+    {
+        // If the inserted text is found, consume TAB only if there's more coming
+        OUString aDummy;
+        ScTypedCaseStrSet::const_iterator itNextPos =
+            findText(*pColumnData, miAutoPosColumn, aText, aDummy, false);
+        bUseTab = itNextPos != pColumnData->end();
+    }
+    else
+        bUseTab = true;
 }
 
 void ScInputHandler::NextAutoEntry( bool bBack )

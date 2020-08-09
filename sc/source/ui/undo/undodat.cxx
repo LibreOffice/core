@@ -929,24 +929,24 @@ void ScUndoAutoFilter::DoChange( bool bUndo )
         pDBData = pColl->getNamedDBs().findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aDBName));
     }
 
-    if ( pDBData )
-    {
-        pDBData->SetAutoFilter( bNewFilter );
+    if ( !pDBData )
+        return;
 
-        SCCOL nRangeX1;
-        SCROW nRangeY1;
-        SCCOL nRangeX2;
-        SCROW nRangeY2;
-        SCTAB nRangeTab;
-        pDBData->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
+    pDBData->SetAutoFilter( bNewFilter );
 
-        if ( bNewFilter )
-            rDoc.ApplyFlagsTab( nRangeX1, nRangeY1, nRangeX2, nRangeY1, nRangeTab, ScMF::Auto );
-        else
-            rDoc.RemoveFlagsTab( nRangeX1, nRangeY1, nRangeX2, nRangeY1, nRangeTab, ScMF::Auto );
+    SCCOL nRangeX1;
+    SCROW nRangeY1;
+    SCCOL nRangeX2;
+    SCROW nRangeY2;
+    SCTAB nRangeTab;
+    pDBData->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
 
-        pDocShell->PostPaint( nRangeX1, nRangeY1, nRangeTab, nRangeX2, nRangeY1, nRangeTab, PaintPartFlags::Grid );
-    }
+    if ( bNewFilter )
+        rDoc.ApplyFlagsTab( nRangeX1, nRangeY1, nRangeX2, nRangeY1, nRangeTab, ScMF::Auto );
+    else
+        rDoc.RemoveFlagsTab( nRangeX1, nRangeY1, nRangeX2, nRangeY1, nRangeTab, ScMF::Auto );
+
+    pDocShell->PostPaint( nRangeX1, nRangeY1, nRangeTab, nRangeX2, nRangeY1, nRangeTab, PaintPartFlags::Grid );
 }
 
 void ScUndoAutoFilter::Undo()

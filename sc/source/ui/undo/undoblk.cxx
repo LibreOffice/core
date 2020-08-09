@@ -267,29 +267,29 @@ void ScUndoInsertCells::DoChange( const bool bUndo )
             aWorkRange.aEnd.Col(), aWorkRange.aEnd.Row(), pTabs[i]+pScenarios[i], nPaint );
     }
     pDocShell->PostDataChanged();
-    if (pViewShell)
-    {
-        pViewShell->CellContentChanged();
+    if (!pViewShell)
+        return;
 
-        if (comphelper::LibreOfficeKit::isActive())
-        {
-            SCTAB nTab = pViewShell->GetViewData().GetTabNo();
-            bool bColsAffected = (eCmd == INS_INSCOLS_BEFORE || eCmd == INS_INSCOLS_AFTER || eCmd == INS_CELLSRIGHT);
-            bool bRowsAffected = (eCmd == INS_INSROWS_BEFORE || eCmd == INS_INSROWS_AFTER || eCmd == INS_CELLSDOWN);
+    pViewShell->CellContentChanged();
 
-            if (bColsAffected)
-                ScTabViewShell::notifyAllViewsHeaderInvalidation(pViewShell, COLUMN_HEADER, nTab);
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
 
-            if (bRowsAffected)
-                ScTabViewShell::notifyAllViewsHeaderInvalidation(pViewShell, ROW_HEADER, nTab);
+    SCTAB nTab = pViewShell->GetViewData().GetTabNo();
+    bool bColsAffected = (eCmd == INS_INSCOLS_BEFORE || eCmd == INS_INSCOLS_AFTER || eCmd == INS_CELLSRIGHT);
+    bool bRowsAffected = (eCmd == INS_INSROWS_BEFORE || eCmd == INS_INSROWS_AFTER || eCmd == INS_CELLSDOWN);
 
-            ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
-                    pViewShell,
-                    bColsAffected, bRowsAffected,
-                    true /* bSizes*/, true /* bHidden */, true /* bFiltered */,
-                    true /* bGroups */, nTab);
-        }
-    }
+    if (bColsAffected)
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(pViewShell, COLUMN_HEADER, nTab);
+
+    if (bRowsAffected)
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(pViewShell, ROW_HEADER, nTab);
+
+    ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+            pViewShell,
+            bColsAffected, bRowsAffected,
+            true /* bSizes*/, true /* bHidden */, true /* bFiltered */,
+            true /* bGroups */, nTab);
 }
 
 void ScUndoInsertCells::Undo()
@@ -540,28 +540,27 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
     pDocShell->PostDataChanged();
     //  CellContentChanged comes with the selection
 
-    if (pViewShell)
-    {
-        if (comphelper::LibreOfficeKit::isActive())
-        {
-            SCTAB nTab = pViewShell->GetViewData().GetTabNo();
-            bool bColsAffected = (eCmd == DelCellCmd::Cols || eCmd == DelCellCmd::CellsLeft);
-            bool bRowsAffected = (eCmd == DelCellCmd::Rows || eCmd == DelCellCmd::CellsUp);
+    if (!pViewShell)
+        return;
 
-            if (bColsAffected)
-                ScTabViewShell::notifyAllViewsHeaderInvalidation(pViewShell, COLUMN_HEADER, nTab);
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
 
-            if (bRowsAffected)
-                ScTabViewShell::notifyAllViewsHeaderInvalidation(pViewShell, ROW_HEADER, nTab);
+    SCTAB nTab = pViewShell->GetViewData().GetTabNo();
+    bool bColsAffected = (eCmd == DelCellCmd::Cols || eCmd == DelCellCmd::CellsLeft);
+    bool bRowsAffected = (eCmd == DelCellCmd::Rows || eCmd == DelCellCmd::CellsUp);
 
-            ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
-                    pViewShell,
-                    bColsAffected, bRowsAffected,
-                    true /* bSizes*/, true /* bHidden */, true /* bFiltered */,
-                    true /* bGroups */, nTab);
-        }
+    if (bColsAffected)
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(pViewShell, COLUMN_HEADER, nTab);
 
-    }
+    if (bRowsAffected)
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(pViewShell, ROW_HEADER, nTab);
+
+    ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+            pViewShell,
+            bColsAffected, bRowsAffected,
+            true /* bSizes*/, true /* bHidden */, true /* bFiltered */,
+            true /* bGroups */, nTab);
 
 }
 
@@ -1170,18 +1169,18 @@ void ScUndoPaste::Redo()
 
 void ScUndoPaste::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) ==  nullptr)
+        return;
+
+    ScTabViewShell* pViewSh = static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
+    // keep a reference in case the clipboard is changed during PasteFromClip
+    const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(pViewSh->GetViewData().GetActiveWin()));
+    if (pOwnClip)
     {
-        ScTabViewShell* pViewSh = static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
-        // keep a reference in case the clipboard is changed during PasteFromClip
-        const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(pViewSh->GetViewData().GetActiveWin()));
-        if (pOwnClip)
-        {
-            pViewSh->PasteFromClip( nFlags, pOwnClip->GetDocument(),
-                                    aPasteOptions.nFunction, aPasteOptions.bSkipEmpty, aPasteOptions.bTranspose,
-                                    aPasteOptions.bAsLink, aPasteOptions.eMoveMode, InsertDeleteFlags::NONE,
-                                    true );     // allow warning dialog
-        }
+        pViewSh->PasteFromClip( nFlags, pOwnClip->GetDocument(),
+                                aPasteOptions.nFunction, aPasteOptions.bSkipEmpty, aPasteOptions.bTranspose,
+                                aPasteOptions.bAsLink, aPasteOptions.eMoveMode, InsertDeleteFlags::NONE,
+                                true );     // allow warning dialog
     }
 }
 
@@ -1858,21 +1857,21 @@ void ScUndoSelectionStyle::Redo()
 
 void ScUndoSelectionStyle::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
-    {
-        ScDocument& rDoc = pDocShell->GetDocument();
-        ScStyleSheetPool* pStlPool = rDoc.GetStyleSheetPool();
-        ScStyleSheet* pStyleSheet = static_cast<ScStyleSheet*>( pStlPool->
-                                            Find( aStyleName, SfxStyleFamily::Para ));
-        if (!pStyleSheet)
-        {
-            OSL_FAIL("StyleSheet not found");
-            return;
-        }
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) ==  nullptr)
+        return;
 
-        ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
-        rViewShell.SetStyleSheetToMarked( pStyleSheet );
+    ScDocument& rDoc = pDocShell->GetDocument();
+    ScStyleSheetPool* pStlPool = rDoc.GetStyleSheetPool();
+    ScStyleSheet* pStyleSheet = static_cast<ScStyleSheet*>( pStlPool->
+                                        Find( aStyleName, SfxStyleFamily::Para ));
+    if (!pStyleSheet)
+    {
+        OSL_FAIL("StyleSheet not found");
+        return;
     }
+
+    ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
+    rViewShell.SetStyleSheetToMarked( pStyleSheet );
 }
 
 bool ScUndoSelectionStyle::CanRepeat(SfxRepeatTarget& rTarget) const

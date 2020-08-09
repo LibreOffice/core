@@ -372,34 +372,34 @@ void ScNameDlg::NameModified()
     ScRangeName* pNewRangeName = GetRangeName( aNewScope );
     OSL_ENSURE(pData, "model and table should be in sync");
     // be safe and check for range data
-    if (pData)
-    {
-        // Assign new index (0) only if the scope is changed, else keep the
-        // existing index.
-        sal_uInt16 nIndex = (aNewScope != aOldScope ? 0 : pData->GetIndex());
+    if (!pData)
+        return;
 
-        pOldRangeName->erase(*pData);
-        m_xRangeManagerTable->BlockUpdate();
-        m_xRangeManagerTable->DeleteSelectedEntries();
-        ScRangeData::Type nType = ScRangeData::Type::Name;
-        if ( m_xBtnRowHeader->get_active() ) nType |= ScRangeData::Type::RowHeader;
-        if ( m_xBtnColHeader->get_active() ) nType |= ScRangeData::Type::ColHeader;
-        if ( m_xBtnPrintArea->get_active() ) nType |= ScRangeData::Type::PrintArea;
-        if ( m_xBtnCriteria->get_active()  ) nType |= ScRangeData::Type::Criteria;
+    // Assign new index (0) only if the scope is changed, else keep the
+    // existing index.
+    sal_uInt16 nIndex = (aNewScope != aOldScope ? 0 : pData->GetIndex());
 
-        ScRangeData* pNewEntry = new ScRangeData( mpDoc, aNewName, aExpr,
-                maCursorPos, nType);
-        pNewEntry->SetIndex( nIndex);
-        pNewRangeName->insert(pNewEntry, false /*bReuseFreeIndex*/);
-        aLine.aName = aNewName;
-        aLine.aExpression = aExpr;
-        aLine.aScope = aNewScope;
-        m_xRangeManagerTable->addEntry(aLine, true);
-        // tdf#128137 process pending async row change events while UpdatesBlocked in place
-        Application::Reschedule(true);
-        m_xRangeManagerTable->UnblockUpdate();
-        mbDataChanged = true;
-    }
+    pOldRangeName->erase(*pData);
+    m_xRangeManagerTable->BlockUpdate();
+    m_xRangeManagerTable->DeleteSelectedEntries();
+    ScRangeData::Type nType = ScRangeData::Type::Name;
+    if ( m_xBtnRowHeader->get_active() ) nType |= ScRangeData::Type::RowHeader;
+    if ( m_xBtnColHeader->get_active() ) nType |= ScRangeData::Type::ColHeader;
+    if ( m_xBtnPrintArea->get_active() ) nType |= ScRangeData::Type::PrintArea;
+    if ( m_xBtnCriteria->get_active()  ) nType |= ScRangeData::Type::Criteria;
+
+    ScRangeData* pNewEntry = new ScRangeData( mpDoc, aNewName, aExpr,
+            maCursorPos, nType);
+    pNewEntry->SetIndex( nIndex);
+    pNewRangeName->insert(pNewEntry, false /*bReuseFreeIndex*/);
+    aLine.aName = aNewName;
+    aLine.aExpression = aExpr;
+    aLine.aScope = aNewScope;
+    m_xRangeManagerTable->addEntry(aLine, true);
+    // tdf#128137 process pending async row change events while UpdatesBlocked in place
+    Application::Reschedule(true);
+    m_xRangeManagerTable->UnblockUpdate();
+    mbDataChanged = true;
 }
 
 void ScNameDlg::SelectionChanged()

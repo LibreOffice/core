@@ -130,19 +130,19 @@ void ScAreaLinkSaveCollection::Restore( ScDocument* pDoc )
     // of links changes if deleted entries are re-added to the link manager (always at the end).
 
     sfx2::LinkManager* pLinkManager = pDoc->GetDocLinkManager().getLinkManager(false);
-    if (pLinkManager)
+    if (!pLinkManager)
+        return;
+
+    const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+    size_t nSaveCount = size();
+    for (size_t nPos=0; nPos<nSaveCount; ++nPos)
     {
-        const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        size_t nSaveCount = size();
-        for (size_t nPos=0; nPos<nSaveCount; ++nPos)
-        {
-            ScAreaLinkSaver& rSaver = (*this)[nPos];
-            ScAreaLink* pLink = lcl_FindLink( rLinks, rSaver );
-            if ( pLink )
-                rSaver.WriteToLink( *pLink );          // restore output position
-            else
-                rSaver.InsertNewLink( pDoc );          // re-insert deleted link
-        }
+        ScAreaLinkSaver& rSaver = (*this)[nPos];
+        ScAreaLink* pLink = lcl_FindLink( rLinks, rSaver );
+        if ( pLink )
+            rSaver.WriteToLink( *pLink );          // restore output position
+        else
+            rSaver.InsertNewLink( pDoc );          // re-insert deleted link
     }
 }
 
