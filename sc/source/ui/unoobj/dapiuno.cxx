@@ -694,141 +694,141 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
 {
     SolarMutexGuard aGuard;
     ScDPObject* pDPObject = GetDPObject();
-    if (pDPObject)
+    if (!pDPObject)
+        return;
+
+    ScDPSaveData* pOldData = pDPObject->GetSaveData();
+    OSL_ENSURE(pOldData, "Here should be a SaveData");
+    if ( pOldData )
     {
-        ScDPSaveData* pOldData = pDPObject->GetSaveData();
-        OSL_ENSURE(pOldData, "Here should be a SaveData");
-        if ( pOldData )
+        ScDPSaveData aNewData( *pOldData );
+
+        if ( aPropertyName == SC_UNO_DP_COLGRAND )
         {
-            ScDPSaveData aNewData( *pOldData );
-
-            if ( aPropertyName == SC_UNO_DP_COLGRAND )
-            {
-                aNewData.SetColumnGrand(::cppu::any2bool( aValue ));
-            }
-            else if ( aPropertyName == SC_UNO_DP_IGNORE_EMPTYROWS )
-            {
-                aNewData.SetIgnoreEmptyRows(::cppu::any2bool( aValue ));
-            }
-            else if ( aPropertyName == SC_UNO_DP_REPEATEMPTY )
-            {
-                aNewData.SetRepeatIfEmpty(::cppu::any2bool( aValue ));
-            }
-            else if ( aPropertyName == SC_UNO_DP_ROWGRAND )
-            {
-                aNewData.SetRowGrand(::cppu::any2bool( aValue ));
-            }
-            else if ( aPropertyName == SC_UNO_DP_SHOWFILTER )
-            {
-                aNewData.SetFilterButton(::cppu::any2bool( aValue ));
-            }
-            else if ( aPropertyName == SC_UNO_DP_DRILLDOWN )
-            {
-                aNewData.SetDrillDown(::cppu::any2bool( aValue ));
-            }
-            else if ( aPropertyName == SC_UNO_DP_GRANDTOTAL_NAME )
-            {
-                OUString aStrVal;
-                if ( aValue >>= aStrVal )
-                    aNewData.SetGrandTotalName(aStrVal);
-            }
-            else if ( aPropertyName == SC_UNO_DP_IMPORTDESC )
-            {
-                uno::Sequence<beans::PropertyValue> aArgSeq;
-                if ( aValue >>= aArgSeq )
-                {
-                    ScImportSourceDesc aImportDesc(&pDocShell->GetDocument());
-
-                    const ScImportSourceDesc* pOldDesc = pDPObject->GetImportSourceDesc();
-                    if (pOldDesc)
-                        aImportDesc = *pOldDesc;
-
-                    ScImportParam aParam;
-                    ScImportDescriptor::FillImportParam( aParam, aArgSeq );
-
-                    sheet::DataImportMode nNewType = sheet::DataImportMode_NONE;
-                    if ( aParam.bImport )
-                    {
-                        if ( aParam.bSql )
-                            nNewType = sheet::DataImportMode_SQL;
-                        else if ( aParam.nType == ScDbQuery )
-                            nNewType = sheet::DataImportMode_QUERY;
-                        else
-                            nNewType = sheet::DataImportMode_TABLE;
-                    }
-                    aImportDesc.nType   = nNewType;
-                    aImportDesc.aDBName = aParam.aDBName;
-                    aImportDesc.aObject = aParam.aStatement;
-                    aImportDesc.bNative = aParam.bNative;
-
-                    pDPObject->SetImportDesc( aImportDesc );
-                }
-            }
-            else if ( aPropertyName == SC_UNO_DP_SOURCESERVICE )
-            {
-                OUString aStrVal;
-                if ( aValue >>= aStrVal )
-                {
-                    ScDPServiceDesc aServiceDesc("", "", "", "", "");
-
-                    const ScDPServiceDesc* pOldDesc = pDPObject->GetDPServiceDesc();
-                    if (pOldDesc)
-                        aServiceDesc = *pOldDesc;
-
-                    aServiceDesc.aServiceName = aStrVal;
-
-                    pDPObject->SetServiceData( aServiceDesc );
-                }
-            }
-            else if ( aPropertyName == SC_UNO_DP_SERVICEARG )
-            {
-                uno::Sequence<beans::PropertyValue> aArgSeq;
-                if ( aValue >>= aArgSeq )
-                {
-                    ScDPServiceDesc aServiceDesc("", "", "", "", "");
-
-                    const ScDPServiceDesc* pOldDesc = pDPObject->GetDPServiceDesc();
-                    if (pOldDesc)
-                        aServiceDesc = *pOldDesc;
-
-                    OUString aStrVal;
-                    for (const beans::PropertyValue& rProp : std::as_const(aArgSeq))
-                    {
-                        OUString aPropName(rProp.Name);
-
-                        if (aPropName == SC_UNO_DP_SOURCENAME)
-                        {
-                            if ( rProp.Value >>= aStrVal )
-                                aServiceDesc.aParSource = aStrVal;
-                        }
-                        else if (aPropName == SC_UNO_DP_OBJECTNAME)
-                        {
-                            if ( rProp.Value >>= aStrVal )
-                                aServiceDesc.aParName = aStrVal;
-                        }
-                        else if (aPropName == SC_UNO_DP_USERNAME)
-                        {
-                            if ( rProp.Value >>= aStrVal )
-                                aServiceDesc.aParUser = aStrVal;
-                        }
-                        else if (aPropName == SC_UNO_DP_PASSWORD)
-                        {
-                            if ( rProp.Value >>= aStrVal )
-                                aServiceDesc.aParPass = aStrVal;
-                        }
-                    }
-
-                    pDPObject->SetServiceData( aServiceDesc );
-                }
-            }
-            else
-                throw UnknownPropertyException(aPropertyName);
-
-            pDPObject->SetSaveData( aNewData );
+            aNewData.SetColumnGrand(::cppu::any2bool( aValue ));
         }
+        else if ( aPropertyName == SC_UNO_DP_IGNORE_EMPTYROWS )
+        {
+            aNewData.SetIgnoreEmptyRows(::cppu::any2bool( aValue ));
+        }
+        else if ( aPropertyName == SC_UNO_DP_REPEATEMPTY )
+        {
+            aNewData.SetRepeatIfEmpty(::cppu::any2bool( aValue ));
+        }
+        else if ( aPropertyName == SC_UNO_DP_ROWGRAND )
+        {
+            aNewData.SetRowGrand(::cppu::any2bool( aValue ));
+        }
+        else if ( aPropertyName == SC_UNO_DP_SHOWFILTER )
+        {
+            aNewData.SetFilterButton(::cppu::any2bool( aValue ));
+        }
+        else if ( aPropertyName == SC_UNO_DP_DRILLDOWN )
+        {
+            aNewData.SetDrillDown(::cppu::any2bool( aValue ));
+        }
+        else if ( aPropertyName == SC_UNO_DP_GRANDTOTAL_NAME )
+        {
+            OUString aStrVal;
+            if ( aValue >>= aStrVal )
+                aNewData.SetGrandTotalName(aStrVal);
+        }
+        else if ( aPropertyName == SC_UNO_DP_IMPORTDESC )
+        {
+            uno::Sequence<beans::PropertyValue> aArgSeq;
+            if ( aValue >>= aArgSeq )
+            {
+                ScImportSourceDesc aImportDesc(&pDocShell->GetDocument());
 
-        SetDPObject(pDPObject);
+                const ScImportSourceDesc* pOldDesc = pDPObject->GetImportSourceDesc();
+                if (pOldDesc)
+                    aImportDesc = *pOldDesc;
+
+                ScImportParam aParam;
+                ScImportDescriptor::FillImportParam( aParam, aArgSeq );
+
+                sheet::DataImportMode nNewType = sheet::DataImportMode_NONE;
+                if ( aParam.bImport )
+                {
+                    if ( aParam.bSql )
+                        nNewType = sheet::DataImportMode_SQL;
+                    else if ( aParam.nType == ScDbQuery )
+                        nNewType = sheet::DataImportMode_QUERY;
+                    else
+                        nNewType = sheet::DataImportMode_TABLE;
+                }
+                aImportDesc.nType   = nNewType;
+                aImportDesc.aDBName = aParam.aDBName;
+                aImportDesc.aObject = aParam.aStatement;
+                aImportDesc.bNative = aParam.bNative;
+
+                pDPObject->SetImportDesc( aImportDesc );
+            }
+        }
+        else if ( aPropertyName == SC_UNO_DP_SOURCESERVICE )
+        {
+            OUString aStrVal;
+            if ( aValue >>= aStrVal )
+            {
+                ScDPServiceDesc aServiceDesc("", "", "", "", "");
+
+                const ScDPServiceDesc* pOldDesc = pDPObject->GetDPServiceDesc();
+                if (pOldDesc)
+                    aServiceDesc = *pOldDesc;
+
+                aServiceDesc.aServiceName = aStrVal;
+
+                pDPObject->SetServiceData( aServiceDesc );
+            }
+        }
+        else if ( aPropertyName == SC_UNO_DP_SERVICEARG )
+        {
+            uno::Sequence<beans::PropertyValue> aArgSeq;
+            if ( aValue >>= aArgSeq )
+            {
+                ScDPServiceDesc aServiceDesc("", "", "", "", "");
+
+                const ScDPServiceDesc* pOldDesc = pDPObject->GetDPServiceDesc();
+                if (pOldDesc)
+                    aServiceDesc = *pOldDesc;
+
+                OUString aStrVal;
+                for (const beans::PropertyValue& rProp : std::as_const(aArgSeq))
+                {
+                    OUString aPropName(rProp.Name);
+
+                    if (aPropName == SC_UNO_DP_SOURCENAME)
+                    {
+                        if ( rProp.Value >>= aStrVal )
+                            aServiceDesc.aParSource = aStrVal;
+                    }
+                    else if (aPropName == SC_UNO_DP_OBJECTNAME)
+                    {
+                        if ( rProp.Value >>= aStrVal )
+                            aServiceDesc.aParName = aStrVal;
+                    }
+                    else if (aPropName == SC_UNO_DP_USERNAME)
+                    {
+                        if ( rProp.Value >>= aStrVal )
+                            aServiceDesc.aParUser = aStrVal;
+                    }
+                    else if (aPropName == SC_UNO_DP_PASSWORD)
+                    {
+                        if ( rProp.Value >>= aStrVal )
+                            aServiceDesc.aParPass = aStrVal;
+                    }
+                }
+
+                pDPObject->SetServiceData( aServiceDesc );
+            }
+        }
+        else
+            throw UnknownPropertyException(aPropertyName);
+
+        pDPObject->SetSaveData( aNewData );
     }
+
+    SetDPObject(pDPObject);
 }
 
 Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPropertyName )
@@ -1945,54 +1945,55 @@ void ScDataPilotFieldObj::setOrientation(DataPilotFieldOrientation eNew)
         return;
 
     ScDPObject* pDPObj = nullptr;
-    if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
+    ScDPSaveDimension* pDim = GetDPDimension( &pDPObj );
+    if(!pDim)
+        return;
+
+    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+
+    /*  If the field was taken from getDataPilotFields(), don't reset the
+        orientation for an existing use, but create a duplicated field
+        instead (for "Data" orientation only). */
+    if ( !maOrient.hasValue() && !maFieldId.mbDataLayout &&
+         (pDim->GetOrientation() != DataPilotFieldOrientation_HIDDEN) &&
+         (eNew == DataPilotFieldOrientation_DATA) )
     {
-        ScDPSaveData* pSaveData = pDPObj->GetSaveData();
 
-        /*  If the field was taken from getDataPilotFields(), don't reset the
-            orientation for an existing use, but create a duplicated field
-            instead (for "Data" orientation only). */
-        if ( !maOrient.hasValue() && !maFieldId.mbDataLayout &&
-             (pDim->GetOrientation() != DataPilotFieldOrientation_HIDDEN) &&
-             (eNew == DataPilotFieldOrientation_DATA) )
+        ScDPSaveDimension* pNewDim = nullptr;
+
+        // look for existing duplicate with orientation "hidden"
+
+        sal_Int32 nFound = 0;
+        const ScDPSaveData::DimsType& rDimensions = pSaveData->GetDimensions();
+        for (auto const& it : rDimensions)
         {
-
-            ScDPSaveDimension* pNewDim = nullptr;
-
-            // look for existing duplicate with orientation "hidden"
-
-            sal_Int32 nFound = 0;
-            const ScDPSaveData::DimsType& rDimensions = pSaveData->GetDimensions();
-            for (auto const& it : rDimensions)
+            if ( !it->IsDataLayout() && (it->GetName() == maFieldId.maFieldName) )
             {
-                if ( !it->IsDataLayout() && (it->GetName() == maFieldId.maFieldName) )
+                if ( it->GetOrientation() == DataPilotFieldOrientation_HIDDEN )
                 {
-                    if ( it->GetOrientation() == DataPilotFieldOrientation_HIDDEN )
-                    {
-                        pNewDim = it.get();     // use this one
-                        break;
-                    }
-                    else
-                        ++nFound;               // count existing non-hidden occurrences
+                    pNewDim = it.get();     // use this one
+                    break;
                 }
+                else
+                    ++nFound;               // count existing non-hidden occurrences
             }
-
-            if ( !pNewDim )     // if none found, create a new duplicated dimension
-                pNewDim = &pSaveData->DuplicateDimension( *pDim );
-
-            maFieldId.mnFieldIdx = nFound;      // keep accessing the new one
-            pDim = pNewDim;
         }
 
-        pDim->SetOrientation(eNew);
+        if ( !pNewDim )     // if none found, create a new duplicated dimension
+            pNewDim = &pSaveData->DuplicateDimension( *pDim );
 
-        // move changed field behind all other fields (make it the last field in dimension)
-        pSaveData->SetPosition( pDim, pSaveData->GetDimensions().size() );
-
-        SetDPObject( pDPObj );
-
-        maOrient <<= eNew;   // modifying the same object's orientation again doesn't create another duplicate
+        maFieldId.mnFieldIdx = nFound;      // keep accessing the new one
+        pDim = pNewDim;
     }
+
+    pDim->SetOrientation(eNew);
+
+    // move changed field behind all other fields (make it the last field in dimension)
+    pSaveData->SetPosition( pDim, pSaveData->GetDimensions().size() );
+
+    SetDPObject( pDPObj );
+
+    maOrient <<= eNew;   // modifying the same object's orientation again doesn't create another duplicate
 }
 
 sal_Int16 ScDataPilotFieldObj::getFunction() const
@@ -2019,22 +2020,23 @@ void ScDataPilotFieldObj::setFunction(ScGeneralFunction eNewFunc)
 {
     SolarMutexGuard aGuard;
     ScDPObject* pDPObj = nullptr;
-    if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
+    ScDPSaveDimension* pDim = GetDPDimension( &pDPObj );
+    if(!pDim)
+        return;
+
+    if( pDim->GetOrientation() != DataPilotFieldOrientation_DATA )
     {
-        if( pDim->GetOrientation() != DataPilotFieldOrientation_DATA )
+        // for non-data fields, property Function is the subtotals
+        std::vector<ScGeneralFunction> nSubTotalFuncs;
+        if ( eNewFunc != ScGeneralFunction::NONE )
         {
-            // for non-data fields, property Function is the subtotals
-            std::vector<ScGeneralFunction> nSubTotalFuncs;
-            if ( eNewFunc != ScGeneralFunction::NONE )
-            {
-                nSubTotalFuncs.push_back( eNewFunc );
-            }
-            pDim->SetSubTotals( nSubTotalFuncs );
+            nSubTotalFuncs.push_back( eNewFunc );
         }
-        else
-            pDim->SetFunction( eNewFunc );
-        SetDPObject( pDPObj );
+        pDim->SetSubTotals( nSubTotalFuncs );
     }
+    else
+        pDim->SetFunction( eNewFunc );
+    SetDPObject( pDPObj );
 }
 
 Sequence< sal_Int16 > ScDataPilotFieldObj::getSubtotals() const
@@ -2062,41 +2064,42 @@ void ScDataPilotFieldObj::setSubtotals( const std::vector< ScGeneralFunction >& 
 {
     SolarMutexGuard aGuard;
     ScDPObject* pDPObj = nullptr;
-    if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
+    ScDPSaveDimension* pDim = GetDPDimension( &pDPObj );
+    if(!pDim)
+        return;
+
+    if( pDim->GetOrientation() != DataPilotFieldOrientation_DATA )
     {
-        if( pDim->GetOrientation() != DataPilotFieldOrientation_DATA )
+        sal_Int32 nCount = rSubtotals.size();
+        if( nCount == 1 )
         {
-            sal_Int32 nCount = rSubtotals.size();
-            if( nCount == 1 )
+            // count 1: all values are allowed (including NONE and AUTO)
+            std::vector<ScGeneralFunction> nTmpFuncs;
+            if( rSubtotals[ 0 ] != ScGeneralFunction::NONE )
             {
-                // count 1: all values are allowed (including NONE and AUTO)
-                std::vector<ScGeneralFunction> nTmpFuncs;
-                if( rSubtotals[ 0 ] != ScGeneralFunction::NONE )
-                {
-                    nTmpFuncs.push_back( rSubtotals[ 0 ] );
-                }
-                pDim->SetSubTotals( nTmpFuncs );
+                nTmpFuncs.push_back( rSubtotals[ 0 ] );
             }
-            else if( nCount > 1 )
-            {
-                // set multiple functions, ignore NONE and AUTO in this case
-                ::std::vector< ScGeneralFunction > aSubt;
-                for( sal_Int32 nIdx = 0; nIdx < nCount; ++nIdx )
-                {
-                    ScGeneralFunction eFunc = rSubtotals[ nIdx ];
-                    if( (eFunc != ScGeneralFunction::NONE) && (eFunc != ScGeneralFunction::AUTO) )
-                    {
-                        // do not insert functions twice
-                        if( ::std::find( aSubt.begin(), aSubt.end(), eFunc ) == aSubt.end() )
-                            aSubt.push_back( eFunc );
-                    }
-                }
-                // set values from vector to ScDPSaveDimension
-                pDim->SetSubTotals( aSubt );
-            }
+            pDim->SetSubTotals( nTmpFuncs );
         }
-        SetDPObject( pDPObj );
+        else if( nCount > 1 )
+        {
+            // set multiple functions, ignore NONE and AUTO in this case
+            ::std::vector< ScGeneralFunction > aSubt;
+            for( sal_Int32 nIdx = 0; nIdx < nCount; ++nIdx )
+            {
+                ScGeneralFunction eFunc = rSubtotals[ nIdx ];
+                if( (eFunc != ScGeneralFunction::NONE) && (eFunc != ScGeneralFunction::AUTO) )
+                {
+                    // do not insert functions twice
+                    if( ::std::find( aSubt.begin(), aSubt.end(), eFunc ) == aSubt.end() )
+                        aSubt.push_back( eFunc );
+                }
+            }
+            // set values from vector to ScDPSaveDimension
+            pDim->SetSubTotals( aSubt );
+        }
     }
+    SetDPObject( pDPObj );
 }
 
 void ScDataPilotFieldObj::setCurrentPage( const OUString& rPage )
@@ -2114,19 +2117,20 @@ void ScDataPilotFieldObj::setUseCurrentPage( bool bUse )
 {
     SolarMutexGuard aGuard;
     ScDPObject* pDPObj = nullptr;
-    if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
+    ScDPSaveDimension* pDim = GetDPDimension( &pDPObj );
+    if(!pDim)
+        return;
+
+    if( bUse )
     {
-        if( bUse )
-        {
-            /*  It is somehow useless to set the property "HasSelectedPage" to
-                true, because it is still needed to set an explicit page name. */
-            const OUString aPage;
-            pDim->SetCurrentPage( &aPage );
-        }
-        else
-            pDim->SetCurrentPage( nullptr );
-        SetDPObject( pDPObj );
+        /*  It is somehow useless to set the property "HasSelectedPage" to
+            true, because it is still needed to set an explicit page name. */
+        const OUString aPage;
+        pDim->SetCurrentPage( &aPage );
     }
+    else
+        pDim->SetCurrentPage( nullptr );
+    SetDPObject( pDPObj );
 }
 
 const DataPilotFieldAutoShowInfo* ScDataPilotFieldObj::getAutoShowInfo() const
@@ -2310,92 +2314,92 @@ void ScDataPilotFieldObj::setGroupInfo( const DataPilotFieldGroupInfo* pInfo )
 {
     SolarMutexGuard aGuard;
     ScDPObject* pDPObj = nullptr;
-    if( /*ScDPSaveDimension* pDim =*/ GetDPDimension( &pDPObj ) )
+    if( /*ScDPSaveDimension* pDim =*/ !GetDPDimension( &pDPObj ) )
+        return;
+
+    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    if( pInfo && lclCheckMinMaxStep( *pInfo ) )
     {
-        ScDPSaveData* pSaveData = pDPObj->GetSaveData();
-        if( pInfo && lclCheckMinMaxStep( *pInfo ) )
+        ScDPNumGroupInfo aInfo;
+        aInfo.mbEnable = true;
+        aInfo.mbDateValues = pInfo->HasDateValues;
+        aInfo.mbAutoStart = pInfo->HasAutoStart;
+        aInfo.mbAutoEnd = pInfo->HasAutoEnd;
+        aInfo.mfStart = pInfo->Start;
+        aInfo.mfEnd = pInfo->End;
+        aInfo.mfStep = pInfo->Step;
+        Reference< XNamed > xNamed( pInfo->SourceField, UNO_QUERY );
+        if( xNamed.is() )
         {
-            ScDPNumGroupInfo aInfo;
-            aInfo.mbEnable = true;
-            aInfo.mbDateValues = pInfo->HasDateValues;
-            aInfo.mbAutoStart = pInfo->HasAutoStart;
-            aInfo.mbAutoEnd = pInfo->HasAutoEnd;
-            aInfo.mfStart = pInfo->Start;
-            aInfo.mfEnd = pInfo->End;
-            aInfo.mfStep = pInfo->Step;
-            Reference< XNamed > xNamed( pInfo->SourceField, UNO_QUERY );
-            if( xNamed.is() )
+            ScDPSaveGroupDimension aGroupDim( xNamed->getName(), getName() );
+            if( pInfo->GroupBy )
+                aGroupDim.SetDateInfo(aInfo, pInfo->GroupBy);
+            else
             {
-                ScDPSaveGroupDimension aGroupDim( xNamed->getName(), getName() );
-                if( pInfo->GroupBy )
-                    aGroupDim.SetDateInfo(aInfo, pInfo->GroupBy);
-                else
+                Reference<XIndexAccess> xIndex(pInfo->Groups, UNO_QUERY);
+                if (xIndex.is())
                 {
-                    Reference<XIndexAccess> xIndex(pInfo->Groups, UNO_QUERY);
-                    if (xIndex.is())
+                    sal_Int32 nCount(xIndex->getCount());
+                    for(sal_Int32 i = 0; i < nCount; i++)
                     {
-                        sal_Int32 nCount(xIndex->getCount());
-                        for(sal_Int32 i = 0; i < nCount; i++)
+                        Reference<XNamed> xGroupNamed(xIndex->getByIndex(i), UNO_QUERY);
+                        if (xGroupNamed.is())
                         {
-                            Reference<XNamed> xGroupNamed(xIndex->getByIndex(i), UNO_QUERY);
-                            if (xGroupNamed.is())
+                            ScDPSaveGroupItem aItem(xGroupNamed->getName());
+                            Reference<XIndexAccess> xGroupIndex(xGroupNamed, UNO_QUERY);
+                            if (xGroupIndex.is())
                             {
-                                ScDPSaveGroupItem aItem(xGroupNamed->getName());
-                                Reference<XIndexAccess> xGroupIndex(xGroupNamed, UNO_QUERY);
-                                if (xGroupIndex.is())
+                                sal_Int32 nItemCount(xGroupIndex->getCount());
+                                for (sal_Int32 j = 0; j < nItemCount; ++j)
                                 {
-                                    sal_Int32 nItemCount(xGroupIndex->getCount());
-                                    for (sal_Int32 j = 0; j < nItemCount; ++j)
-                                    {
-                                        Reference<XNamed> xItemNamed(xGroupIndex->getByIndex(j), UNO_QUERY);
-                                        if (xItemNamed.is())
-                                            aItem.AddElement(xItemNamed->getName());
-                                    }
+                                    Reference<XNamed> xItemNamed(xGroupIndex->getByIndex(j), UNO_QUERY);
+                                    if (xItemNamed.is())
+                                        aItem.AddElement(xItemNamed->getName());
                                 }
-                                aGroupDim.AddGroupItem(aItem);
                             }
+                            aGroupDim.AddGroupItem(aItem);
                         }
                     }
                 }
-
-                // get dimension savedata or create new if none
-                ScDPDimensionSaveData& rDimSaveData = *pSaveData->GetDimensionData();
-                rDimSaveData.ReplaceGroupDimension( aGroupDim );
             }
-            else    // no source field in group info -> numeric group
-            {
-                ScDPDimensionSaveData* pDimData = pSaveData->GetDimensionData();     // created if not there
 
-                ScDPSaveNumGroupDimension* pExisting = pDimData->GetNumGroupDimAcc( getName() );
-                if ( pExisting )
-                {
-                    if (pInfo->GroupBy)
-                        pExisting->SetDateInfo(aInfo, pInfo->GroupBy);
-                    // modify existing group dimension
-                    pExisting->SetGroupInfo( aInfo );
-                }
-                else if (pInfo->GroupBy)
-                {
-                    // create new group dimension
-                    ScDPSaveNumGroupDimension aNumGroupDim( getName(), aInfo, pInfo->GroupBy );
-                    pDimData->AddNumGroupDimension( aNumGroupDim );
-                }
-                else
-                {
-                    // create new group dimension
-                    ScDPSaveNumGroupDimension aNumGroupDim( getName(), aInfo );
-                    pDimData->AddNumGroupDimension( aNumGroupDim );
-                }
-            }
+            // get dimension savedata or create new if none
+            ScDPDimensionSaveData& rDimSaveData = *pSaveData->GetDimensionData();
+            rDimSaveData.ReplaceGroupDimension( aGroupDim );
         }
-        else    // null passed as argument
+        else    // no source field in group info -> numeric group
         {
-            pSaveData->SetDimensionData( nullptr );
-        }
+            ScDPDimensionSaveData* pDimData = pSaveData->GetDimensionData();     // created if not there
 
-        pDPObj->SetSaveData( *pSaveData );
-        SetDPObject( pDPObj );
+            ScDPSaveNumGroupDimension* pExisting = pDimData->GetNumGroupDimAcc( getName() );
+            if ( pExisting )
+            {
+                if (pInfo->GroupBy)
+                    pExisting->SetDateInfo(aInfo, pInfo->GroupBy);
+                // modify existing group dimension
+                pExisting->SetGroupInfo( aInfo );
+            }
+            else if (pInfo->GroupBy)
+            {
+                // create new group dimension
+                ScDPSaveNumGroupDimension aNumGroupDim( getName(), aInfo, pInfo->GroupBy );
+                pDimData->AddNumGroupDimension( aNumGroupDim );
+            }
+            else
+            {
+                // create new group dimension
+                ScDPSaveNumGroupDimension aNumGroupDim( getName(), aInfo );
+                pDimData->AddNumGroupDimension( aNumGroupDim );
+            }
+        }
     }
+    else    // null passed as argument
+    {
+        pSaveData->SetDimensionData( nullptr );
+    }
+
+    pDPObj->SetSaveData( *pSaveData );
+    SetDPObject( pDPObj );
 }
 
 // XDataPilotFieldGrouping
@@ -3238,49 +3242,50 @@ void SAL_CALL ScDataPilotItemObj::setPropertyValue( const OUString& aPropertyNam
 {
     SolarMutexGuard aGuard;
     ScDPObject* pDPObj = nullptr;
-    if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
+    ScDPSaveDimension* pDim = GetDPDimension( &pDPObj );
+    if(!pDim)
+        return;
+
+    Reference<XNameAccess> xMembers = GetMembers();
+    if( !xMembers.is() )
+        return;
+
+    Reference<XIndexAccess> xMembersIndex( new ScNameToIndexAccess( xMembers ) );
+    sal_Int32 nCount = xMembersIndex->getCount();
+    if( mnIndex >= nCount )
+        return;
+
+    Reference<XNamed> xMember(xMembersIndex->getByIndex(mnIndex), UNO_QUERY);
+    OUString sName(xMember->getName());
+    ScDPSaveMember* pMember = pDim->GetMemberByName(sName);
+    if (!pMember)
+        return;
+
+    bool bGetNewIndex = false;
+    if ( aPropertyName == SC_UNONAME_SHOWDETAIL )
+        pMember->SetShowDetails(cppu::any2bool(aValue));
+    else if ( aPropertyName == SC_UNONAME_ISHIDDEN )
+        pMember->SetIsVisible(!cppu::any2bool(aValue));
+    else if ( aPropertyName == SC_UNONAME_POS )
     {
-        Reference<XNameAccess> xMembers = GetMembers();
-        if( xMembers.is() )
-        {
-            Reference<XIndexAccess> xMembersIndex( new ScNameToIndexAccess( xMembers ) );
-            sal_Int32 nCount = xMembersIndex->getCount();
-            if( mnIndex < nCount )
-            {
-                Reference<XNamed> xMember(xMembersIndex->getByIndex(mnIndex), UNO_QUERY);
-                OUString sName(xMember->getName());
-                ScDPSaveMember* pMember = pDim->GetMemberByName(sName);
-                if (pMember)
-                {
-                    bool bGetNewIndex = false;
-                    if ( aPropertyName == SC_UNONAME_SHOWDETAIL )
-                        pMember->SetShowDetails(cppu::any2bool(aValue));
-                    else if ( aPropertyName == SC_UNONAME_ISHIDDEN )
-                        pMember->SetIsVisible(!cppu::any2bool(aValue));
-                    else if ( aPropertyName == SC_UNONAME_POS )
-                    {
-                        sal_Int32 nNewPos = 0;
-                        if ( !( aValue >>= nNewPos ) || nNewPos < 0 || nNewPos >= nCount )
-                            throw IllegalArgumentException();
+        sal_Int32 nNewPos = 0;
+        if ( !( aValue >>= nNewPos ) || nNewPos < 0 || nNewPos >= nCount )
+            throw IllegalArgumentException();
 
-                        pDim->SetMemberPosition( sName, nNewPos );
-                        // get new effective index (depends on sorting mode, which isn't modified)
-                        bGetNewIndex = true;
+        pDim->SetMemberPosition( sName, nNewPos );
+        // get new effective index (depends on sorting mode, which isn't modified)
+        bGetNewIndex = true;
 
-                    }
-                    SetDPObject( pDPObj );
+    }
+    SetDPObject( pDPObj );
 
-                    if ( bGetNewIndex )     // after SetDPObject, get the new index
-                    {
-                        Sequence< OUString > aItemNames = xMembers->getElementNames();
-                        sal_Int32 nItemCount = aItemNames.getLength();
-                        for (sal_Int32 nItem=0; nItem<nItemCount; ++nItem)
-                            if (aItemNames[nItem] == sName)
-                                mnIndex = nItem;
-                    }
-                }
-            }
-        }
+    if ( bGetNewIndex )     // after SetDPObject, get the new index
+    {
+        Sequence< OUString > aItemNames = xMembers->getElementNames();
+        sal_Int32 nItemCount = aItemNames.getLength();
+        for (sal_Int32 nItem=0; nItem<nItemCount; ++nItem)
+            if (aItemNames[nItem] == sName)
+                mnIndex = nItem;
     }
 }
 

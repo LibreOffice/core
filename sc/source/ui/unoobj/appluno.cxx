@@ -448,34 +448,34 @@ static void lcl_FillSequence( uno::Sequence<beans::PropertyValue>& rSequence, co
         pArray[3].Value <<= *rDesc.mxFuncDesc;
 
     pArray[4].Name = SC_UNONAME_ARGUMENTS;
-    if (!rDesc.maDefArgNames.empty() && !rDesc.maDefArgDescs.empty() && rDesc.pDefArgFlags )
-    {
-        sal_uInt16 nCount = rDesc.nArgCount;
-        if (nCount >= PAIRED_VAR_ARGS)
-            nCount -= PAIRED_VAR_ARGS - 2;
-        else if (nCount >= VAR_ARGS)
-            nCount -= VAR_ARGS - 1;
-        sal_uInt16 nSeqCount = rDesc.GetSuppressedArgCount();
-        if (nSeqCount >= PAIRED_VAR_ARGS)
-            nSeqCount -= PAIRED_VAR_ARGS - 2;
-        else if (nSeqCount >= VAR_ARGS)
-            nSeqCount -= VAR_ARGS - 1;
+    if (rDesc.maDefArgNames.empty() || rDesc.maDefArgDescs.empty() || !rDesc.pDefArgFlags)
+        return;
 
-        if (nSeqCount)
-        {
-            uno::Sequence<sheet::FunctionArgument> aArgSeq(nSeqCount);
-            sheet::FunctionArgument* pArgAry = aArgSeq.getArray();
-            for (sal_uInt16 i=0, j=0; i<nCount; i++)
-            {
-                sheet::FunctionArgument aArgument;
-                aArgument.Name        = rDesc.maDefArgNames[i];
-                aArgument.Description = rDesc.maDefArgDescs[i];
-                aArgument.IsOptional  = rDesc.pDefArgFlags[i].bOptional;
-                pArgAry[j++] = aArgument;
-            }
-            pArray[4].Value <<= aArgSeq;
-        }
+    sal_uInt16 nCount = rDesc.nArgCount;
+    if (nCount >= PAIRED_VAR_ARGS)
+        nCount -= PAIRED_VAR_ARGS - 2;
+    else if (nCount >= VAR_ARGS)
+        nCount -= VAR_ARGS - 1;
+    sal_uInt16 nSeqCount = rDesc.GetSuppressedArgCount();
+    if (nSeqCount >= PAIRED_VAR_ARGS)
+        nSeqCount -= PAIRED_VAR_ARGS - 2;
+    else if (nSeqCount >= VAR_ARGS)
+        nSeqCount -= VAR_ARGS - 1;
+
+    if (!nSeqCount)
+        return;
+
+    uno::Sequence<sheet::FunctionArgument> aArgSeq(nSeqCount);
+    sheet::FunctionArgument* pArgAry = aArgSeq.getArray();
+    for (sal_uInt16 i=0, j=0; i<nCount; i++)
+    {
+        sheet::FunctionArgument aArgument;
+        aArgument.Name        = rDesc.maDefArgNames[i];
+        aArgument.Description = rDesc.maDefArgDescs[i];
+        aArgument.IsOptional  = rDesc.pDefArgFlags[i].bOptional;
+        pArgAry[j++] = aArgument;
     }
+    pArray[4].Value <<= aArgSeq;
 }
 
 // XFunctionDescriptions

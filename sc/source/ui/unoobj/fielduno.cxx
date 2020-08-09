@@ -740,29 +740,29 @@ void ScEditFieldObj::setPropertyValueFile(const OUString& rName, const uno::Any&
         throw beans::UnknownPropertyException(rName);
 
     sal_Int16 nIntVal = 0;
-    if (rVal >>= nIntVal)
+    if (!(rVal >>= nIntVal))
+        return;
+
+    SvxFileFormat eFormat = lcl_UnoToSvxFileFormat(nIntVal);
+    if (mpEditSource)
     {
-        SvxFileFormat eFormat = lcl_UnoToSvxFileFormat(nIntVal);
-        if (mpEditSource)
+        ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
+        ScUnoEditEngine aTempEngine(pEditEngine);
+        SvxFieldData* pField = aTempEngine.FindByPos(
+                aSelection.nStartPara, aSelection.nStartPos, text::textfield::Type::EXTENDED_FILE);
+        OSL_ENSURE(pField, "setPropertyValueFile: Field not found");
+        if (pField)
         {
-            ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
-            ScUnoEditEngine aTempEngine(pEditEngine);
-            SvxFieldData* pField = aTempEngine.FindByPos(
-                    aSelection.nStartPara, aSelection.nStartPos, text::textfield::Type::EXTENDED_FILE);
-            OSL_ENSURE(pField, "setPropertyValueFile: Field not found");
-            if (pField)
-            {
-                SvxExtFileField* pExtFile = static_cast<SvxExtFileField*>(pField);   // local to the ScUnoEditEngine
-                pExtFile->SetFormat(eFormat);
-                pEditEngine->QuickInsertField(SvxFieldItem(*pField, EE_FEATURE_FIELD), aSelection);
-                mpEditSource->UpdateData();
-            }
+            SvxExtFileField* pExtFile = static_cast<SvxExtFileField*>(pField);   // local to the ScUnoEditEngine
+            pExtFile->SetFormat(eFormat);
+            pEditEngine->QuickInsertField(SvxFieldItem(*pField, EE_FEATURE_FIELD), aSelection);
+            mpEditSource->UpdateData();
         }
-        else
-        {
-            SvxExtFileField& rExtFile = static_cast<SvxExtFileField&>(getData());
-            rExtFile.SetFormat(eFormat);
-        }
+    }
+    else
+    {
+        SvxExtFileField& rExtFile = static_cast<SvxExtFileField&>(getData());
+        rExtFile.SetFormat(eFormat);
     }
 
 }
