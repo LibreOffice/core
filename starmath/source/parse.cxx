@@ -35,34 +35,10 @@
 #include "cfgitem.hxx"
 #include <cassert>
 #include <stack>
+#include "mathtype2.hxx"
 
 using namespace ::com::sun::star::i18n;
-
-
-SmToken::SmToken()
-    : eType(TUNKNOWN)
-    , cMathChar('\0')
-    , nGroup(TG::NONE)
-    , nLevel(0)
-    , nRow(0)
-    , nCol(0)
-{
-}
-
-SmToken::SmToken(SmTokenType eTokenType,
-                 sal_Unicode cMath,
-                 const char* pText,
-                 TG nTokenGroup,
-                 sal_uInt16 nTokenLevel)
-    : aText(OUString::createFromAscii(pText))
-    , eType(eTokenType)
-    , cMathChar(cMath)
-    , nGroup(nTokenGroup)
-    , nLevel(nTokenLevel)
-    , nRow(0)
-    , nCol(0)
-{
-}
+using namespace MathType2Namespace;
 
 //Definition of math keywords
 const SmTokenTableEntry aTokenTable[] =
@@ -86,7 +62,7 @@ const SmTokenTableEntry aTokenTable[] =
     { "arctan", TATAN, '\0', TG::Function, 5},
     { "arsinh", TASINH, '\0', TG::Function, 5},
     { "artanh", TATANH, '\0', TG::Function, 5},
-    { "backepsilon" , TBACKEPSILON, MS_BACKEPSILON, TG::Standalone, 5},
+    { "backepsilon" , TBACKEPSILON, MS_UBEPSILON, TG::Standalone, 5},
     { "bar", TBAR, MS_BAR, TG::Attribute, 5},
     { "binom", TBINOM, '\0', TG::NONE, 5 },
     { "bold", TBOLD, '\0', TG::FontAttr, 5},
@@ -94,10 +70,12 @@ const SmTokenTableEntry aTokenTable[] =
     { "breve", TBREVE, MS_BREVE, TG::Attribute, 5},
     { "bslash", TBACKSLASH, MS_BACKSLASH, TG::Product, 0 },
     { "cdot", TCDOT, MS_CDOT, TG::Product, 0},
+    { "char", TCHAR, MS_NONE, TG::NONE, 0},
     { "check", TCHECK, MS_CHECK, TG::Attribute, 5},
-    { "circ" , TCIRC, MS_CIRC, TG::Standalone, 5},
+    { "circ" , TCIRC, MS_COMPOSITION, TG::Standalone, 5},
     { "circle", TCIRCLE, MS_CIRCLE, TG::Attribute, 5},
     { "color", TCOLOR, '\0', TG::FontAttr, 5},
+    { "comp" , TCOMPOSITION, MS_COMPOSITION, TG::UnOper, 5},
     { "coprod", TCOPROD, MS_COPROD, TG::Oper, 5},
     { "cos", TCOS, '\0', TG::Function, 5},
     { "cosh", TCOSH, '\0', TG::Function, 5},
@@ -109,7 +87,7 @@ const SmTokenTableEntry aTokenTable[] =
     { "ddot", TDDOT, MS_DDOT, TG::Attribute, 5},
     { "def", TDEF, MS_DEF, TG::Relation, 0},
     { "div", TDIV, MS_DIV, TG::Product, 0},
-    { "divides", TDIVIDES, MS_LINE, TG::Relation, 0},
+    { "divides", TDIVIDES, MS_DIVIDES, TG::Relation, 0},
     { "dlarrow" , TDLARROW, MS_DLARROW, TG::Standalone, 5},
     { "dlrarrow" , TDLRARROW, MS_DLRARROW, TG::Standalone, 5},
     { "dot", TDOT, MS_DOT, TG::Attribute, 5},
@@ -139,7 +117,7 @@ const SmTokenTableEntry aTokenTable[] =
     { "gt", TGT, MS_GT, TG::Relation, 0},
     { "harpoon", THARPOON, MS_HARPOON, TG::Attribute, 5},
     { "hat", THAT, MS_HAT, TG::Attribute, 5},
-    { "hbar" , THBAR, MS_HBAR, TG::Standalone, 5},
+    { "hbar" , THBAR, MS_PLANKBAR, TG::Standalone, 5},
     { "hex" , THEX, '\0', TG::NONE, 5},
     { "iiint", TIIINT, MS_IIINT, TG::Oper, 5},
     { "iint", TIINT, MS_IINT, TG::Oper, 5},
@@ -153,7 +131,7 @@ const SmTokenTableEntry aTokenTable[] =
     { "ital", TITALIC, '\0', TG::FontAttr, 5},
     { "italic", TITALIC, '\0', TG::FontAttr, 5},
     { "lambdabar" , TLAMBDABAR, MS_LAMBDABAR, TG::Standalone, 5},
-    { "langle", TLANGLE, MS_LMATHANGLE, TG::LBrace, 5},
+    { "langle", TLANGLE, MS_LDANGLE, TG::LBrace, 5},
     { "laplace", TLAPLACE, MS_LAPLACE, TG::Standalone, 5},
     { "lbrace", TLBRACE, MS_LBRACE, TG::LBrace, 5},
     { "lceil", TLCEIL, MS_LCEIL, TG::LBrace, 5},
@@ -186,7 +164,7 @@ const SmTokenTableEntry aTokenTable[] =
     { "neg", TNEG, MS_NEG, TG::UnOper, 5 },
     { "neq", TNEQ, MS_NEQ, TG::Relation, 0},
     { "newline", TNEWLINE, '\0', TG::NONE, 0},
-    { "ni", TNI, MS_NI, TG::Relation, 0},
+    { "ni", TNI, MS_OWNS, TG::Relation, 0},
     { "nitalic", TNITALIC, '\0', TG::FontAttr, 5},
     { "none", TNONE, '\0', TG::LBrace | TG::RBrace, 0},
     { "nospace", TNOSPACE, '\0', TG::Standalone, 5},
@@ -211,7 +189,7 @@ const SmTokenTableEntry aTokenTable[] =
     { "overbrace", TOVERBRACE, MS_OVERBRACE, TG::Product, 5},
     { "overline", TOVERLINE, '\0', TG::Attribute, 5},
     { "overstrike", TOVERSTRIKE, '\0', TG::Attribute, 5},
-    { "owns", TNI, MS_NI, TG::Relation, 0},
+    { "owns", TOWNS, MS_OWNS, TG::Relation, 0},
     { "parallel", TPARALLEL, MS_DLINE, TG::Relation, 0},
     { "partial", TPARTIAL, MS_PARTIAL, TG::Standalone, 5 },
     { "phantom", TPHANTOM, '\0', TG::FontAttr, 5},
@@ -221,7 +199,7 @@ const SmTokenTableEntry aTokenTable[] =
     { "precsim", TPRECEDESEQUIV, MS_PRECEDESEQUIV, TG::Relation, 0 },
     { "prod", TPROD, MS_PROD, TG::Oper, 5},
     { "prop", TPROP, MS_PROP, TG::Relation, 0},
-    { "rangle", TRANGLE, MS_RMATHANGLE, TG::RBrace, 0},  //! 0 to terminate expression
+    { "rangle", TRANGLE, MS_RANGLE, TG::RBrace, 0},  //! 0 to terminate expression
     { "rbrace", TRBRACE, MS_RBRACE, TG::RBrace, 0},
     { "rceil", TRCEIL, MS_RCEIL, TG::RBrace, 0},
     { "rdbracket", TRDBRACKET, MS_RDBRACKET, TG::RBrace, 0},
@@ -235,12 +213,12 @@ const SmTokenTableEntry aTokenTable[] =
     { "rsup", TRSUP, '\0', TG::Power, 0},
     { "sans", TSANS, '\0', TG::Font, 0},
     { "serif", TSERIF, '\0', TG::Font, 0},
-    { "setC" , TSETC, MS_SETC, TG::Standalone, 5},
+    { "setC" , TSETC, MS_USETC, TG::Standalone, 5},
     { "setminus", TBACKSLASH, MS_BACKSLASH, TG::Product, 0 },
-    { "setN" , TSETN, MS_SETN, TG::Standalone, 5},
-    { "setQ" , TSETQ, MS_SETQ, TG::Standalone, 5},
-    { "setR" , TSETR, MS_SETR, TG::Standalone, 5},
-    { "setZ" , TSETZ, MS_SETZ, TG::Standalone, 5},
+    { "setN" , TSETN, MS_USETN, TG::Standalone, 5},
+    { "setQ" , TSETQ, MS_USETQ, TG::Standalone, 5},
+    { "setR" , TSETR, MS_USETR, TG::Standalone, 5},
+    { "setZ" , TSETZ, MS_USETZ, TG::Standalone, 5},
     { "sim", TSIM, MS_SIM, TG::Relation, 0},
     { "simeq", TSIMEQ, MS_SIMEQ, TG::Relation, 0},
     { "sin", TSIN, '\0', TG::Function, 5},
@@ -333,6 +311,14 @@ const sal_Int32 coNum16StartFlags = KParseTokens::ASC_DIGIT | KParseTokens::ASC_
 
 // Continuing characters for numbers hexadecimal
 const sal_Int32 coNum16ContFlags = (coNum16StartFlags & ~KParseTokens::IGNORE_LEADING_WS);
+
+// First character for characters
+const sal_Int32 coCharStartFlags = KParseTokens::ASC_DIGIT | KParseTokens::ASC_ALPHA
+                                    | KParseTokens::IGNORE_LEADING_WS;
+
+// Continuing characters for characters
+const sal_Int32 coCharContFlags = (coCharStartFlags & ~KParseTokens::IGNORE_LEADING_WS);
+
 
 // user-defined char continuing characters may be any alphanumeric or dot.
 const sal_Int32 coUserDefinedCharContFlags = KParseTokens::ANY_LETTER_OR_NUMBER
@@ -978,9 +964,9 @@ void SmParser::NextToken() //Central part of the parser
                     break;
                 case '=':
                     {
-                        m_aCurToken.eType    = TASSIGN;
-                        m_aCurToken.cMathChar = MS_ASSIGN;
-                        m_aCurToken.nGroup       = TG::Relation;
+                        m_aCurToken.eType    = TEQUAL;
+                        m_aCurToken.cMathChar = MS_EQUAL;
+                        m_aCurToken.nGroup       = TG::Relation | TG::UnOper;
                         m_aCurToken.nLevel       = 0;
                         m_aCurToken.aText = "=";
                     }
@@ -1204,6 +1190,76 @@ void SmParser::NextTokenFontSize()
     if (TEND != m_aCurToken.eType) m_nBufferIndex = aRes.EndPos;
 }
 
+void SmParser::NextTokenChar()
+{
+    sal_Int32   nBufLen = m_aBufferString.getLength();
+    ParseResult aRes;
+    sal_Int32   nRealStart;
+    bool        bCont;
+    do
+    {
+        // skip white spaces
+        while (UnicodeType::SPACE_SEPARATOR ==
+                        m_pSysCC->getType( m_aBufferString, m_nBufferIndex ))
+           ++m_nBufferIndex;
+
+        //parse, there are few options, so less strict.
+        aRes = m_pSysCC->parseAnyToken(m_aBufferString, m_nBufferIndex,
+                                       coCharStartFlags, "", coCharContFlags, "");
+
+        nRealStart = m_nBufferIndex + aRes.LeadingWhiteSpace;
+        m_nBufferIndex = nRealStart;
+
+        bCont = false;
+        if ( aRes.TokenType == 0 && nRealStart < nBufLen && '\n' == m_aBufferString[nRealStart] )
+        {
+            // keep data needed for tokens row and col entry up to date
+            ++m_nRow;
+            m_nBufferIndex = m_nColOff = nRealStart + 1;
+            bCont = true;
+        }
+        else if (aRes.TokenType & KParseType::ONE_SINGLE_CHAR)
+        {
+            if (nRealStart + 2 <= nBufLen && m_aBufferString.match("%%", nRealStart))
+            {
+                //SkipComment
+                m_nBufferIndex = nRealStart + 2;
+                while (m_nBufferIndex < nBufLen  && '\n' != m_aBufferString[ m_nBufferIndex ])
+                    ++m_nBufferIndex;
+                bCont = true;
+            }
+        }
+
+    } while (bCont);
+
+    if (nRealStart >= nBufLen) m_aCurToken.eType    = TEND;
+    else
+    {
+        sal_Int32 n = aRes.EndPos - nRealStart;
+        assert(n >= 0);
+        OUString aChar (m_aBufferString.copy( nRealStart, n ));
+        const MathType2* data = identifyAndDataCharFromName(aChar);
+
+        m_aCurToken.eType      = data->eType;
+        m_aCurToken.cMathChar  = data->nSymbol;
+        m_aCurToken.nGroup     = TG::Character;
+        m_aCurToken.nLevel     = 5;
+
+        if( data->eType != TCHAR )
+        {
+            m_nTokenIndex      = m_nBufferIndex;
+            m_aCurToken.nRow   = m_nRow;
+            m_aCurToken.nCol   = nRealStart - m_nColOff + 1;
+            m_aCurToken.aText  = aChar;
+        }
+        else
+        {
+            m_aCurToken.aText  = OUString::createFromAscii(data->pName);
+        }
+    }
+    if (TEND != m_aCurToken.eType) m_nBufferIndex = aRes.EndPos;
+}
+
 namespace
 {
     SmNodeArray buildNodeArray(std::vector<std::unique_ptr<SmNode>>& rSubNodes)
@@ -1280,6 +1336,13 @@ std::unique_ptr<SmNode> SmParser::DoTerm(bool bGroupNumberIdent)
                 NextToken();
                 return std::unique_ptr<SmNode>(pNode.release());
             }
+        case TCHAR:
+        {
+            NextTokenChar();
+            auto pNode = std::make_unique<SmMathSymbolNode>(m_aCurToken);
+            NextToken();
+            return std::unique_ptr<SmNode>(pNode.release());
+        }
         case TIDENT :
         case TNUMBER :
         {
@@ -1827,6 +1890,8 @@ std::unique_ptr<SmNode> SmParser::DoEscape()
         case TRGROUP :
         case TLANGLE :
         case TRANGLE :
+        case TLDANGLE :
+        case TRDANGLE :
         case TLCEIL :
         case TRCEIL :
         case TLFLOOR :
@@ -2648,8 +2713,8 @@ std::unique_ptr<SmTableNode> SmParser::Parse(const OUString &rBuffer)
     m_nRow          = 1;
     m_nColOff       = 0;
     m_nCurError     = -1;
-
     m_aErrDescList.clear();
+
     NextToken();
     return DoTable();
 }
