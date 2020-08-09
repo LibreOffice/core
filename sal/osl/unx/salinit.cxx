@@ -1,3 +1,4 @@
+#include <sal/log.hxx>
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
@@ -22,6 +23,7 @@
 #include <sal/config.h>
 
 #if defined MACOSX
+#include <algorithm>
 #include <cassert>
 #include <limits>
 #include <unistd.h>
@@ -71,8 +73,10 @@ void sal_detail_initialize(int argc, char ** argv) {
         // Some random value, but hopefully sysconf never returns -1 anyway:
         openMax = 1024;
     }
-    assert(openMax >= 0 && openMax <= std::numeric_limits< int >::max());
-    for (int fd = 3; fd < int(openMax); ++fd) {
+    // When LibreOffice restarts itself on macOS 11 beta on arm64, for
+    // some reason sysconf(_SC_OPEN_MAX) returns 0x7FFFFFFFFFFFFFFF,
+    // so use a sanity limit here.
+    for (int fd = 3; fd < std::min(100000l, openMax); ++fd) {
         struct stat s;
         if (fstat(fd, &s) != -1 && S_ISREG(s.st_mode))
             close(fd);
