@@ -392,35 +392,35 @@ FuInsertMedia::FuInsertMedia( ScTabViewShell&   rViewSh,
     }
 
     bool bLink(true);
-    if (bAPI
+    if (!bAPI
 #if HAVE_FEATURE_AVMEDIA
-        || ::avmedia::MediaWindow::executeMediaURLDialog(pWin ? pWin->GetFrameWeld() : nullptr, aURL, &bLink)
+        || !::avmedia::MediaWindow::executeMediaURLDialog(pWin ? pWin->GetFrameWeld() : nullptr, aURL, &bLink)
 #endif
        )
-    {
-        Size aPrefSize;
+        return;
 
-        if( pWin )
-            pWin->EnterWait();
+    Size aPrefSize;
+
+    if( pWin )
+        pWin->EnterWait();
 
 #if HAVE_FEATURE_AVMEDIA
-        if( !::avmedia::MediaWindow::isMediaURL( aURL, ""/*TODO?*/, true, &aPrefSize ) )
-        {
-            if( pWin )
-                pWin->LeaveWait();
+    if( !::avmedia::MediaWindow::isMediaURL( aURL, ""/*TODO?*/, true, &aPrefSize ) )
+    {
+        if( pWin )
+            pWin->LeaveWait();
 
-            if( !bAPI )
-                ::avmedia::MediaWindow::executeFormatErrorBox(pWindow ? pWindow->GetFrameWeld() : nullptr);
-        }
-        else
+        if( !bAPI )
+            ::avmedia::MediaWindow::executeFormatErrorBox(pWindow ? pWindow->GetFrameWeld() : nullptr);
+    }
+    else
 #endif
-        {
-            lcl_InsertMedia( aURL, bAPI, &rViewSh, pWindow, pView, aPrefSize,
-                    bLink );
+    {
+        lcl_InsertMedia( aURL, bAPI, &rViewSh, pWindow, pView, aPrefSize,
+                bLink );
 
-            if( pWin )
-                pWin->LeaveWait();
-        }
+        if( pWin )
+            pWin->LeaveWait();
     }
 }
 

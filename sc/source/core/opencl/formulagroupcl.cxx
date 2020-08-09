@@ -2737,11 +2737,12 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                     // explicitly claims it will handle this situation properly.
                     if( pDVR->GetArrays().size() > 1 )
                     {
-                        if( pCodeGen->canHandleMultiVector())
-                            SAL_INFO("sc.opencl", "multi-column DoubleRef");
-                        else
+                        if( !pCodeGen->canHandleMultiVector())
                             throw UnhandledToken(("Function '" + pCodeGen->BinFuncName()
                                 + "' cannot handle multi-column DoubleRef").c_str(), __FILE__, __LINE__);
+
+                        SAL_INFO("sc.opencl", "multi-column DoubleRef");
+
                     }
 
                     // FIXME: The Right Thing to do would be to compare the accumulated kernel

@@ -325,19 +325,19 @@ void ScBlockUndo::ShowBlock()
         return;
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-    if (pViewShell)
-    {
-        ShowTable( aBlockRange );       // with multiple sheets in range each of them is good
-        pViewShell->MoveCursorAbs( aBlockRange.aStart.Col(), aBlockRange.aStart.Row(),
-                                   SC_FOLLOW_JUMP, false, false );
-        SCTAB nTab = pViewShell->GetViewData().GetTabNo();
-        ScRange aRange = aBlockRange;
-        aRange.aStart.SetTab( nTab );
-        aRange.aEnd.SetTab( nTab );
-        pViewShell->MarkRange( aRange );
+    if (!pViewShell)
+        return;
 
-        // not through SetMarkArea to MarkData, due to possibly lacking paint
-    }
+    ShowTable( aBlockRange );       // with multiple sheets in range each of them is good
+    pViewShell->MoveCursorAbs( aBlockRange.aStart.Col(), aBlockRange.aStart.Row(),
+                               SC_FOLLOW_JUMP, false, false );
+    SCTAB nTab = pViewShell->GetViewData().GetTabNo();
+    ScRange aRange = aBlockRange;
+    aRange.aStart.SetTab( nTab );
+    aRange.aEnd.SetTab( nTab );
+    pViewShell->MarkRange( aRange );
+
+    // not through SetMarkArea to MarkData, due to possibly lacking paint
 }
 
 ScMultiBlockUndo::ScMultiBlockUndo(
@@ -473,31 +473,31 @@ void ScDBFuncUndo::EndUndo()
 {
     ScSimpleUndo::EndUndo();
 
-    if ( pAutoDBRange )
+    if ( !pAutoDBRange )
+        return;
+
+    ScDocument& rDoc = pDocShell->GetDocument();
+    SCTAB nTab = rDoc.GetVisibleTab();
+    ScDBData* pNoNameData = rDoc.GetAnonymousDBData(nTab);
+    if (!pNoNameData )
+        return;
+
+    SCCOL nRangeX1;
+    SCROW nRangeY1;
+    SCCOL nRangeX2;
+    SCROW nRangeY2;
+    SCTAB nRangeTab;
+    pNoNameData->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
+    pDocShell->DBAreaDeleted( nRangeTab, nRangeX1, nRangeY1, nRangeX2 );
+
+    *pNoNameData = *pAutoDBRange;
+
+    if ( pAutoDBRange->HasAutoFilter() )
     {
-        ScDocument& rDoc = pDocShell->GetDocument();
-        SCTAB nTab = rDoc.GetVisibleTab();
-        ScDBData* pNoNameData = rDoc.GetAnonymousDBData(nTab);
-        if (pNoNameData )
-        {
-            SCCOL nRangeX1;
-            SCROW nRangeY1;
-            SCCOL nRangeX2;
-            SCROW nRangeY2;
-            SCTAB nRangeTab;
-            pNoNameData->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
-            pDocShell->DBAreaDeleted( nRangeTab, nRangeX1, nRangeY1, nRangeX2 );
-
-            *pNoNameData = *pAutoDBRange;
-
-            if ( pAutoDBRange->HasAutoFilter() )
-            {
-                // restore AutoFilter buttons
-                pAutoDBRange->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
-                rDoc.ApplyFlagsTab( nRangeX1, nRangeY1, nRangeX2, nRangeY1, nRangeTab, ScMF::Auto );
-                pDocShell->PostPaint( nRangeX1, nRangeY1, nRangeTab, nRangeX2, nRangeY1, nRangeTab, PaintPartFlags::Grid );
-            }
-        }
+        // restore AutoFilter buttons
+        pAutoDBRange->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
+        rDoc.ApplyFlagsTab( nRangeX1, nRangeY1, nRangeX2, nRangeY1, nRangeTab, ScMF::Auto );
+        pDocShell->PostPaint( nRangeX1, nRangeY1, nRangeTab, nRangeX2, nRangeY1, nRangeTab, PaintPartFlags::Grid );
     }
 }
 
