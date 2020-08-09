@@ -2,3 +2,46 @@ Formula editor code for writer ([[sw]]).
 
 Good overview from the original developer:
 http://www.mail-archive.com/dev@sw.openoffice.org/msg00200.html
+
+This file contains a list of things to do for the formula editor.
+The formula editor hack was started by Jonas during GSoC...
+
+Here is the list of things to be done. They are organized by complexity and necessity, note that
+some of the items are wishful thinking...
+
+If you're new with this module and need help with it, feel free of contacting me.
+You can find my contact on here: https://bugs.documentfoundation.org/buglist.cgi?email1=dante19031999%40gmail.com&emailassigned_to1=1&emailreporter1=1&emailtype1=exact&list_id=1178070&resolution=---
+
+Medium
+------
+1. Update rtf export
+2. Update ooxml export
+
+Easy and non essential
+----------------------
+1.  Japanese numerals: https://en.wikipedia.org/wiki/Japanese_numerals
+2.  Korean numerals: https://en.wikipedia.org/wiki/Korean_numerals
+3.  Attic numerals: https://en.wikipedia.org/wiki/Attic_numerals
+4.  Greek numbers: https://en.wikipedia.org/wiki/Numerals_in_Unicode
+5.  Numerals: https://en.wikipedia.org/wiki/Numerals_in_Unicode
+6.  Add remaining currency symbols https://en.wikipedia.org/wiki/Currency_symbol
+7.  Finish hebrew support https://en.wikipedia.org/wiki/Unicode_and_HTML_for_the_Hebrew_alphabet
+8.  Finish greek support https://en.wikipedia.org/wiki/Greek_alphabet#Greek_in_Unicode
+9.  Finish coptic support https://en.wikipedia.org/wiki/Coptic_alphabet
+10. Add serif and sans support https://en.wikipedia.org/wiki/Mathematical_Alphanumeric_Symbols
+11. Greek numerals: https://wiki.kidzsearch.com/wiki/Greek_numerals
+
+Medium and non essential
+------------------------
+3. Add "num" command to export to other numerals: dec, hex, crod, greek, attic, japanese, korean,...
+   Note that may depend on other changes
+
+Kill your self:
+---------------
+1. complete unicode sections ( cirilic, arabic, ghotic, ... )
+2. Add python scripting support: script "python code"
+   This should be able to return text to use as starmath code.
+
+
+
+

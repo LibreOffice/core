@@ -803,7 +803,7 @@ public:
      * @param nIn
      * @return unicode char
      */
-    static sal_Unicode ConvertSymbolToUnicode(sal_Unicode nIn);
+    static sal_Unicode32 ConvertSymbolToUnicode(sal_Unicode32 nIn);
 };
 
 
@@ -897,8 +897,8 @@ protected:
     SmMathSymbolNode(SmNodeType eNodeType, const SmToken &rNodeToken)
     :   SmSpecialNode(eNodeType, rNodeToken, FNT_MATH)
     {
-        sal_Unicode cChar = GetToken().cMathChar;
-        if (u'\0' != cChar) SetText(OUString(cChar));
+        sal_Unicode32 cChar = GetToken().cMathChar;
+        if ( MS_NONE != cChar) SetText(OUString::unicode32(cChar));
     }
 
 public:
@@ -964,7 +964,10 @@ class SmRootSymbolNode final : public SmMathSymbolNode
 public:
     explicit SmRootSymbolNode(const SmToken &rNodeToken)
         : SmMathSymbolNode(SmNodeType::RootSymbol, rNodeToken)
-        , mnBodyWidth(0) { }
+        , mnBodyWidth(0)
+    {
+        mnFontDesc = FNT_DEFAULT_MATH;
+    }
 
     /**
      * Gets the body width.
@@ -1968,7 +1971,7 @@ public:
      * @return
      */
     void SetRowCol(sal_uInt16 nMatrixRows, sal_uInt16 nMatrixCols)
-                     { mnNumRows = nMatrixRows; mnNumCols = nMatrixCols; }
+        { mnNumRows = nMatrixRows; mnNumCols = nMatrixCols; }
 
     virtual const SmNode * GetLeftMost() const override;
 
