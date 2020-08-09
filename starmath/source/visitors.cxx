@@ -16,6 +16,9 @@
 #include <cursor.hxx>
 #include <cassert>
 #include "mathtype.hxx"
+#include "mathtype2.hxx"
+
+using namespace MathType2Namespace;
 
 // SmDefaultingVisitor
 
