@@ -877,20 +877,20 @@ void drawDataBars(vcl::RenderContext& rRenderContext, const ScDataBarInfo* pOldD
     }
 
     //draw axis
-    if(pOldDataBarInfo->mnZero && pOldDataBarInfo->mnZero != 100)
-    {
-        Point aPoint1(nPosZero, rRect.Top());
-        Point aPoint2(nPosZero, rRect.Bottom());
-        LineInfo aLineInfo(LineStyle::Dash, 1);
-        aLineInfo.SetDashCount( 4 );
-        aLineInfo.SetDistance( 3 );
-        aLineInfo.SetDashLen( 3 );
-        rRenderContext.SetFillColor(pOldDataBarInfo->maAxisColor);
-        rRenderContext.SetLineColor(pOldDataBarInfo->maAxisColor);
-        rRenderContext.DrawLine(aPoint1, aPoint2, aLineInfo);
-        rRenderContext.SetLineColor();
-        rRenderContext.SetFillColor();
-    }
+    if(!(pOldDataBarInfo->mnZero && pOldDataBarInfo->mnZero != 100))
+        return;
+
+    Point aPoint1(nPosZero, rRect.Top());
+    Point aPoint2(nPosZero, rRect.Bottom());
+    LineInfo aLineInfo(LineStyle::Dash, 1);
+    aLineInfo.SetDashCount( 4 );
+    aLineInfo.SetDistance( 3 );
+    aLineInfo.SetDashLen( 3 );
+    rRenderContext.SetFillColor(pOldDataBarInfo->maAxisColor);
+    rRenderContext.SetLineColor(pOldDataBarInfo->maAxisColor);
+    rRenderContext.DrawLine(aPoint1, aPoint2, aLineInfo);
+    rRenderContext.SetLineColor();
+    rRenderContext.SetFillColor();
 }
 
 const BitmapEx& getIcon(sc::IconSetBitmapMap & rIconSetBitmapMap, ScIconSetType eType, sal_Int32 nIndex)
@@ -1981,122 +1981,121 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
     if ( nRefStartX == nRefEndX && nRefStartY == nRefEndY )
         mpDoc->ExtendMerge( nRefStartX, nRefStartY, nRefEndX, nRefEndY, nTab );
 
-    if ( nRefStartX <= nVisX2 && nRefEndX >= nVisX1 &&
-         nRefStartY <= nVisY2 && nRefEndY >= nVisY1 )
+    if ( !(nRefStartX <= nVisX2 && nRefEndX >= nVisX1 &&
+         nRefStartY <= nVisY2 && nRefEndY >= nVisY1) )
+        return;
+
+    long nMinX = nScrX;
+    long nMinY = nScrY;
+    long nMaxX = nScrX + nScrW - 1;
+    long nMaxY = nScrY + nScrH - 1;
+    if ( bLayoutRTL )
     {
-        long nMinX = nScrX;
-        long nMinY = nScrY;
-        long nMaxX = nScrX + nScrW - 1;
-        long nMaxY = nScrY + nScrH - 1;
-        if ( bLayoutRTL )
-        {
-            long nTemp = nMinX;
-            nMinX = nMaxX;
-            nMaxX = nTemp;
-        }
-        long nLayoutSign = bLayoutRTL ? -1 : 1;
-
-        bool bTop    = false;
-        bool bBottom = false;
-        bool bLeft   = false;
-        bool bRight  = false;
-
-        long nPosY = nScrY;
-        bool bNoStartY = ( nY1 < nRefStartY );
-        bool bNoEndY   = false;
-        for (SCSIZE nArrY=1; nArrY<nArrCount; nArrY++)      // loop to end for bNoEndY check
-        {
-            SCROW nY = pRowInfo[nArrY].nRowNo;
-
-            if ( nY==nRefStartY || (nY>nRefStartY && bNoStartY) )
-            {
-                nMinY = nPosY;
-                bTop = true;
-            }
-            if ( nY==nRefEndY )
-            {
-                nMaxY = nPosY + pRowInfo[nArrY].nHeight - 2;
-                bBottom = true;
-            }
-            if ( nY>nRefEndY && bNoEndY )
-            {
-                nMaxY = nPosY-2;
-                bBottom = true;
-            }
-            bNoStartY = ( nY < nRefStartY );
-            bNoEndY   = ( nY < nRefEndY );
-            nPosY += pRowInfo[nArrY].nHeight;
-        }
-
-        long nPosX = nScrX;
-        if ( bLayoutRTL )
-            nPosX += nMirrorW - 1;      // always in pixels
-
-        for (SCCOL nX=nX1; nX<=nX2; nX++)
-        {
-            if ( nX==nRefStartX )
-            {
-                nMinX = nPosX;
-                bLeft = true;
-            }
-            if ( nX==nRefEndX )
-            {
-                nMaxX = nPosX + ( pRowInfo[0].pCellInfo[nX+1].nWidth - 2 ) * nLayoutSign;
-                bRight = true;
-            }
-            nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
-        }
-
-        if ( nMaxX * nLayoutSign >= nMinX * nLayoutSign &&
-             nMaxY >= nMinY )
-        {
-            mpDev->SetLineColor( rColor );
-            if (bTop && bBottom && bLeft && bRight && !comphelper::LibreOfficeKit::isActive() )
-            {
-                    mpDev->SetFillColor();
-                    mpDev->DrawRect( tools::Rectangle( nMinX, nMinY, nMaxX, nMaxY ) );
-            }
-            else if ( !comphelper::LibreOfficeKit::isActive() )
-            {
-                if (bTop)
-                    mpDev->DrawLine( Point( nMinX, nMinY ), Point( nMaxX, nMinY ) );
-                if (bBottom)
-                    mpDev->DrawLine( Point( nMinX, nMaxY ), Point( nMaxX, nMaxY ) );
-                if (bLeft)
-                    mpDev->DrawLine( Point( nMinX, nMinY ), Point( nMinX, nMaxY ) );
-                if (bRight)
-                    mpDev->DrawLine( Point( nMaxX, nMinY ), Point( nMaxX, nMaxY ) );
-            }
-            if ( bHandle && bRight && bBottom && !comphelper::LibreOfficeKit::isActive() )
-            {
-                mpDev->SetLineColor( rColor );
-                mpDev->SetFillColor( rColor );
-
-                const sal_Int32 aRadius = 4;
-
-                sal_Int32 aRectMaxX1 = nMaxX - nLayoutSign * aRadius;
-                sal_Int32 aRectMaxX2 = nMaxX + nLayoutSign;
-                sal_Int32 aRectMinX1 = nMinX - nLayoutSign;
-                sal_Int32 aRectMinX2 = nMinX + nLayoutSign * aRadius;
-
-                sal_Int32 aRectMaxY1 = nMaxY - aRadius;
-                sal_Int32 aRectMaxY2 = nMaxY + 1;
-                sal_Int32 aRectMinY1 = nMinY - 1;
-                sal_Int32 aRectMinY2 = nMinY + aRadius;
-
-                // Draw corner rectangles
-                tools::Rectangle aLowerRight( aRectMaxX1, aRectMaxY1, aRectMaxX2, aRectMaxY2 );
-                tools::Rectangle aUpperLeft ( aRectMinX1, aRectMinY1, aRectMinX2, aRectMinY2 );
-                tools::Rectangle aLowerLeft ( aRectMinX1, aRectMaxY1, aRectMinX2, aRectMaxY2 );
-                tools::Rectangle aUpperRight( aRectMaxX1, aRectMinY1, aRectMaxX2, aRectMinY2 );
-
-                mpDev->DrawTransparent( tools::PolyPolygon( tools::Polygon( aLowerRight ) ), lclCornerRectTransparency );
-                mpDev->DrawTransparent( tools::PolyPolygon( tools::Polygon( aUpperLeft  ) ), lclCornerRectTransparency );
-                mpDev->DrawTransparent( tools::PolyPolygon( tools::Polygon( aLowerLeft  ) ), lclCornerRectTransparency );
-                mpDev->DrawTransparent( tools::PolyPolygon( tools::Polygon( aUpperRight ) ), lclCornerRectTransparency );
-            }
-        }
+        long nTemp = nMinX;
+        nMinX = nMaxX;
+        nMaxX = nTemp;
     }
+    long nLayoutSign = bLayoutRTL ? -1 : 1;
+
+    bool bTop    = false;
+    bool bBottom = false;
+    bool bLeft   = false;
+    bool bRight  = false;
+
+    long nPosY = nScrY;
+    bool bNoStartY = ( nY1 < nRefStartY );
+    bool bNoEndY   = false;
+    for (SCSIZE nArrY=1; nArrY<nArrCount; nArrY++)      // loop to end for bNoEndY check
+    {
+        SCROW nY = pRowInfo[nArrY].nRowNo;
+
+        if ( nY==nRefStartY || (nY>nRefStartY && bNoStartY) )
+        {
+            nMinY = nPosY;
+            bTop = true;
+        }
+        if ( nY==nRefEndY )
+        {
+            nMaxY = nPosY + pRowInfo[nArrY].nHeight - 2;
+            bBottom = true;
+        }
+        if ( nY>nRefEndY && bNoEndY )
+        {
+            nMaxY = nPosY-2;
+            bBottom = true;
+        }
+        bNoStartY = ( nY < nRefStartY );
+        bNoEndY   = ( nY < nRefEndY );
+        nPosY += pRowInfo[nArrY].nHeight;
+    }
+
+    long nPosX = nScrX;
+    if ( bLayoutRTL )
+        nPosX += nMirrorW - 1;      // always in pixels
+
+    for (SCCOL nX=nX1; nX<=nX2; nX++)
+    {
+        if ( nX==nRefStartX )
+        {
+            nMinX = nPosX;
+            bLeft = true;
+        }
+        if ( nX==nRefEndX )
+        {
+            nMaxX = nPosX + ( pRowInfo[0].pCellInfo[nX+1].nWidth - 2 ) * nLayoutSign;
+            bRight = true;
+        }
+        nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
+    }
+
+    if ( nMaxX * nLayoutSign < nMinX * nLayoutSign || nMaxY < nMinY )
+        return;
+
+    mpDev->SetLineColor( rColor );
+    if (bTop && bBottom && bLeft && bRight && !comphelper::LibreOfficeKit::isActive() )
+    {
+            mpDev->SetFillColor();
+            mpDev->DrawRect( tools::Rectangle( nMinX, nMinY, nMaxX, nMaxY ) );
+    }
+    else if ( !comphelper::LibreOfficeKit::isActive() )
+    {
+        if (bTop)
+            mpDev->DrawLine( Point( nMinX, nMinY ), Point( nMaxX, nMinY ) );
+        if (bBottom)
+            mpDev->DrawLine( Point( nMinX, nMaxY ), Point( nMaxX, nMaxY ) );
+        if (bLeft)
+            mpDev->DrawLine( Point( nMinX, nMinY ), Point( nMinX, nMaxY ) );
+        if (bRight)
+            mpDev->DrawLine( Point( nMaxX, nMinY ), Point( nMaxX, nMaxY ) );
+    }
+    if ( !(bHandle && bRight && bBottom && !comphelper::LibreOfficeKit::isActive()) )
+        return;
+
+    mpDev->SetLineColor( rColor );
+    mpDev->SetFillColor( rColor );
+
+    const sal_Int32 aRadius = 4;
+
+    sal_Int32 aRectMaxX1 = nMaxX - nLayoutSign * aRadius;
+    sal_Int32 aRectMaxX2 = nMaxX + nLayoutSign;
+    sal_Int32 aRectMinX1 = nMinX - nLayoutSign;
+    sal_Int32 aRectMinX2 = nMinX + nLayoutSign * aRadius;
+
+    sal_Int32 aRectMaxY1 = nMaxY - aRadius;
+    sal_Int32 aRectMaxY2 = nMaxY + 1;
+    sal_Int32 aRectMinY1 = nMinY - 1;
+    sal_Int32 aRectMinY2 = nMinY + aRadius;
+
+    // Draw corner rectangles
+    tools::Rectangle aLowerRight( aRectMaxX1, aRectMaxY1, aRectMaxX2, aRectMaxY2 );
+    tools::Rectangle aUpperLeft ( aRectMinX1, aRectMinY1, aRectMinX2, aRectMinY2 );
+    tools::Rectangle aLowerLeft ( aRectMinX1, aRectMaxY1, aRectMinX2, aRectMaxY2 );
+    tools::Rectangle aUpperRight( aRectMaxX1, aRectMinY1, aRectMaxX2, aRectMinY2 );
+
+    mpDev->DrawTransparent( tools::PolyPolygon( tools::Polygon( aLowerRight ) ), lclCornerRectTransparency );
+    mpDev->DrawTransparent( tools::PolyPolygon( tools::Polygon( aUpperLeft  ) ), lclCornerRectTransparency );
+    mpDev->DrawTransparent( tools::PolyPolygon( tools::Polygon( aLowerLeft  ) ), lclCornerRectTransparency );
+    mpDev->DrawTransparent( tools::PolyPolygon( tools::Polygon( aUpperRight ) ), lclCornerRectTransparency );
 }
 
 void ScOutputData::DrawOneChange( SCCOL nRefStartX, SCROW nRefStartY,
@@ -2109,112 +2108,111 @@ void ScOutputData::DrawOneChange( SCCOL nRefStartX, SCROW nRefStartY,
     if ( nRefStartX == nRefEndX && nRefStartY == nRefEndY )
         mpDoc->ExtendMerge( nRefStartX, nRefStartY, nRefEndX, nRefEndY, nTab );
 
-    if ( nRefStartX <= nVisX2 + 1 && nRefEndX >= nVisX1 &&
-         nRefStartY <= nVisY2 + 1 && nRefEndY >= nVisY1 )       // +1 because it touches next cells left/top
+    if ( !(nRefStartX <= nVisX2 + 1 && nRefEndX >= nVisX1 &&
+         nRefStartY <= nVisY2 + 1 && nRefEndY >= nVisY1) )       // +1 because it touches next cells left/top
+        return;
+
+    long nMinX = nScrX;
+    long nMinY = nScrY;
+    long nMaxX = nScrX+nScrW-1;
+    long nMaxY = nScrY+nScrH-1;
+    if ( bLayoutRTL )
     {
-        long nMinX = nScrX;
-        long nMinY = nScrY;
-        long nMaxX = nScrX+nScrW-1;
-        long nMaxY = nScrY+nScrH-1;
-        if ( bLayoutRTL )
+        long nTemp = nMinX;
+        nMinX = nMaxX;
+        nMaxX = nTemp;
+    }
+    long nLayoutSign = bLayoutRTL ? -1 : 1;
+
+    bool bTop    = false;
+    bool bBottom = false;
+    bool bLeft   = false;
+    bool bRight  = false;
+
+    long nPosY = nScrY;
+    bool bNoStartY = ( nY1 < nRefStartY );
+    bool bNoEndY   = false;
+    for (SCSIZE nArrY=1; nArrY<nArrCount; nArrY++)      // loop to end for bNoEndY check
+    {
+        SCROW nY = pRowInfo[nArrY].nRowNo;
+
+        if ( nY==nRefStartY || (nY>nRefStartY && bNoStartY) )
         {
-            long nTemp = nMinX;
-            nMinX = nMaxX;
-            nMaxX = nTemp;
+            nMinY = nPosY - 1;
+            bTop = true;
         }
-        long nLayoutSign = bLayoutRTL ? -1 : 1;
-
-        bool bTop    = false;
-        bool bBottom = false;
-        bool bLeft   = false;
-        bool bRight  = false;
-
-        long nPosY = nScrY;
-        bool bNoStartY = ( nY1 < nRefStartY );
-        bool bNoEndY   = false;
-        for (SCSIZE nArrY=1; nArrY<nArrCount; nArrY++)      // loop to end for bNoEndY check
+        if ( nY==nRefEndY )
         {
-            SCROW nY = pRowInfo[nArrY].nRowNo;
-
-            if ( nY==nRefStartY || (nY>nRefStartY && bNoStartY) )
-            {
-                nMinY = nPosY - 1;
-                bTop = true;
-            }
-            if ( nY==nRefEndY )
-            {
-                nMaxY = nPosY + pRowInfo[nArrY].nHeight - 1;
-                bBottom = true;
-            }
-            if ( nY>nRefEndY && bNoEndY )
-            {
-                nMaxY = nPosY - 1;
-                bBottom = true;
-            }
-            bNoStartY = ( nY < nRefStartY );
-            bNoEndY   = ( nY < nRefEndY );
-            nPosY += pRowInfo[nArrY].nHeight;
+            nMaxY = nPosY + pRowInfo[nArrY].nHeight - 1;
+            bBottom = true;
         }
-
-        long nPosX = nScrX;
-        if ( bLayoutRTL )
-            nPosX += nMirrorW - 1;      // always in pixels
-
-        for (SCCOL nX=nX1; nX<=nX2+1; nX++)
+        if ( nY>nRefEndY && bNoEndY )
         {
-            if ( nX==nRefStartX )
-            {
-                nMinX = nPosX - nLayoutSign;
-                bLeft = true;
-            }
-            if ( nX==nRefEndX )
-            {
-                nMaxX = nPosX + ( pRowInfo[0].pCellInfo[nX+1].nWidth - 1 ) * nLayoutSign;
-                bRight = true;
-            }
-            nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
+            nMaxY = nPosY - 1;
+            bBottom = true;
         }
+        bNoStartY = ( nY < nRefStartY );
+        bNoEndY   = ( nY < nRefEndY );
+        nPosY += pRowInfo[nArrY].nHeight;
+    }
 
-        if ( nMaxX * nLayoutSign >= nMinX * nLayoutSign &&
-             nMaxY >= nMinY )
+    long nPosX = nScrX;
+    if ( bLayoutRTL )
+        nPosX += nMirrorW - 1;      // always in pixels
+
+    for (SCCOL nX=nX1; nX<=nX2+1; nX++)
+    {
+        if ( nX==nRefStartX )
         {
+            nMinX = nPosX - nLayoutSign;
+            bLeft = true;
+        }
+        if ( nX==nRefEndX )
+        {
+            nMaxX = nPosX + ( pRowInfo[0].pCellInfo[nX+1].nWidth - 1 ) * nLayoutSign;
+            bRight = true;
+        }
+        nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
+    }
+
+    if ( nMaxX * nLayoutSign < nMinX * nLayoutSign || nMaxY < nMinY )
+        return;
+
+    if ( nType == SC_CAT_DELETE_ROWS )
+        bLeft = bRight = bBottom = false;       //! thick lines???
+    else if ( nType == SC_CAT_DELETE_COLS )
+        bTop = bBottom = bRight = false;        //! thick lines???
+
+    mpDev->SetLineColor( rColor );
+    if (bTop && bBottom && bLeft && bRight)
+    {
+        mpDev->SetFillColor();
+        mpDev->DrawRect( tools::Rectangle( nMinX, nMinY, nMaxX, nMaxY ) );
+    }
+    else
+    {
+        if (bTop)
+        {
+            mpDev->DrawLine( Point( nMinX,nMinY ), Point( nMaxX,nMinY ) );
             if ( nType == SC_CAT_DELETE_ROWS )
-                bLeft = bRight = bBottom = false;       //! thick lines???
-            else if ( nType == SC_CAT_DELETE_COLS )
-                bTop = bBottom = bRight = false;        //! thick lines???
-
-            mpDev->SetLineColor( rColor );
-            if (bTop && bBottom && bLeft && bRight)
-            {
-                mpDev->SetFillColor();
-                mpDev->DrawRect( tools::Rectangle( nMinX, nMinY, nMaxX, nMaxY ) );
-            }
-            else
-            {
-                if (bTop)
-                {
-                    mpDev->DrawLine( Point( nMinX,nMinY ), Point( nMaxX,nMinY ) );
-                    if ( nType == SC_CAT_DELETE_ROWS )
-                        mpDev->DrawLine( Point( nMinX,nMinY+1 ), Point( nMaxX,nMinY+1 ) );
-                }
-                if (bBottom)
-                    mpDev->DrawLine( Point( nMinX,nMaxY ), Point( nMaxX,nMaxY ) );
-                if (bLeft)
-                {
-                    mpDev->DrawLine( Point( nMinX,nMinY ), Point( nMinX,nMaxY ) );
-                    if ( nType == SC_CAT_DELETE_COLS )
-                        mpDev->DrawLine( Point( nMinX+nLayoutSign,nMinY ), Point( nMinX+nLayoutSign,nMaxY ) );
-                }
-                if (bRight)
-                    mpDev->DrawLine( Point( nMaxX,nMinY ), Point( nMaxX,nMaxY ) );
-            }
-            if ( bLeft && bTop )
-            {
-                mpDev->SetLineColor();
-                mpDev->SetFillColor( rColor );
-                mpDev->DrawRect( tools::Rectangle( nMinX+nLayoutSign, nMinY+1, nMinX+3*nLayoutSign, nMinY+3 ) );
-            }
+                mpDev->DrawLine( Point( nMinX,nMinY+1 ), Point( nMaxX,nMinY+1 ) );
         }
+        if (bBottom)
+            mpDev->DrawLine( Point( nMinX,nMaxY ), Point( nMaxX,nMaxY ) );
+        if (bLeft)
+        {
+            mpDev->DrawLine( Point( nMinX,nMinY ), Point( nMinX,nMaxY ) );
+            if ( nType == SC_CAT_DELETE_COLS )
+                mpDev->DrawLine( Point( nMinX+nLayoutSign,nMinY ), Point( nMinX+nLayoutSign,nMaxY ) );
+        }
+        if (bRight)
+            mpDev->DrawLine( Point( nMaxX,nMinY ), Point( nMaxX,nMaxY ) );
+    }
+    if ( bLeft && bTop )
+    {
+        mpDev->SetLineColor();
+        mpDev->SetFillColor( rColor );
+        mpDev->DrawRect( tools::Rectangle( nMinX+nLayoutSign, nMinY+1, nMinX+3*nLayoutSign, nMinY+3 ) );
     }
 }
 

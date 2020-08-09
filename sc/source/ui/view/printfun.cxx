@@ -362,38 +362,38 @@ bool ScPrintFunc::GetLastSourceRange( ScRange& rRange ) const
 
 void ScPrintFunc::FillPageData()
 {
-    if (pPageData)
+    if (!pPageData)
+        return;
+
+    sal_uInt16 nCount = sal::static_int_cast<sal_uInt16>( pPageData->GetCount() );
+    ScPrintRangeData& rData = pPageData->GetData(nCount);       // count up
+
+    assert( bPrintAreaValid );
+    rData.SetPrintRange( ScRange( nStartCol, nStartRow, nPrintTab,
+                                    nEndCol, nEndRow, nPrintTab ) );
+    // #i123672#
+    if(m_aRanges.m_aPageEndX.empty())
     {
-        sal_uInt16 nCount = sal::static_int_cast<sal_uInt16>( pPageData->GetCount() );
-        ScPrintRangeData& rData = pPageData->GetData(nCount);       // count up
-
-        assert( bPrintAreaValid );
-        rData.SetPrintRange( ScRange( nStartCol, nStartRow, nPrintTab,
-                                        nEndCol, nEndRow, nPrintTab ) );
-        // #i123672#
-        if(m_aRanges.m_aPageEndX.empty())
-        {
-            OSL_ENSURE(false, "vector access error for maPageEndX (!)");
-        }
-        else
-        {
-            rData.SetPagesX( m_aRanges.m_nPagesX, m_aRanges.m_aPageEndX.data());
-        }
-
-        // #i123672#
-        if(m_aRanges.m_aPageEndY.empty())
-        {
-            OSL_ENSURE(false, "vector access error for maPageEndY (!)");
-        }
-        else
-        {
-            rData.SetPagesY( m_aRanges.m_nTotalY, m_aRanges.m_aPageEndY.data());
-        }
-
-        //  Settings
-        rData.SetTopDown( aTableParam.bTopDown );
-        rData.SetAutomatic( !aAreaParam.bPrintArea );
+        OSL_ENSURE(false, "vector access error for maPageEndX (!)");
     }
+    else
+    {
+        rData.SetPagesX( m_aRanges.m_nPagesX, m_aRanges.m_aPageEndX.data());
+    }
+
+    // #i123672#
+    if(m_aRanges.m_aPageEndY.empty())
+    {
+        OSL_ENSURE(false, "vector access error for maPageEndY (!)");
+    }
+    else
+    {
+        rData.SetPagesY( m_aRanges.m_nTotalY, m_aRanges.m_aPageEndY.data());
+    }
+
+    //  Settings
+    rData.SetTopDown( aTableParam.bTopDown );
+    rData.SetAutomatic( !aAreaParam.bPrintArea );
 }
 
 ScPrintFunc::~ScPrintFunc()
@@ -777,52 +777,52 @@ void ScPrintFunc::UpdateHFHeight( ScPrintHFParam& rParam )
 {
     OSL_ENSURE( aPageSize.Width(), "UpdateHFHeight without aPageSize");
 
-    if (rParam.bEnable && rParam.bDynamic)
+    if (!(rParam.bEnable && rParam.bDynamic))
+        return;
+
+    //  calculate nHeight from content
+
+    MakeEditEngine();
+    long nPaperWidth = ( aPageSize.Width() - nLeftMargin - nRightMargin -
+                            rParam.nLeft - rParam.nRight ) * 100 / nZoom;
+    if (rParam.pBorder)
+        nPaperWidth -= ( rParam.pBorder->GetDistance(SvxBoxItemLine::LEFT) +
+                         rParam.pBorder->GetDistance(SvxBoxItemLine::RIGHT) +
+                         lcl_LineTotal(rParam.pBorder->GetLeft()) +
+                         lcl_LineTotal(rParam.pBorder->GetRight()) ) * 100 / nZoom;
+
+    if (rParam.pShadow && rParam.pShadow->GetLocation() != SvxShadowLocation::NONE)
+        nPaperWidth -= ( rParam.pShadow->CalcShadowSpace(SvxShadowItemSide::LEFT) +
+                         rParam.pShadow->CalcShadowSpace(SvxShadowItemSide::RIGHT) ) * 100 / nZoom;
+
+    pEditEngine->SetPaperSize( Size( nPaperWidth, 10000 ) );
+
+    long nMaxHeight = 0;
+    if ( rParam.pLeft )
     {
-        //  calculate nHeight from content
-
-        MakeEditEngine();
-        long nPaperWidth = ( aPageSize.Width() - nLeftMargin - nRightMargin -
-                                rParam.nLeft - rParam.nRight ) * 100 / nZoom;
-        if (rParam.pBorder)
-            nPaperWidth -= ( rParam.pBorder->GetDistance(SvxBoxItemLine::LEFT) +
-                             rParam.pBorder->GetDistance(SvxBoxItemLine::RIGHT) +
-                             lcl_LineTotal(rParam.pBorder->GetLeft()) +
-                             lcl_LineTotal(rParam.pBorder->GetRight()) ) * 100 / nZoom;
-
-        if (rParam.pShadow && rParam.pShadow->GetLocation() != SvxShadowLocation::NONE)
-            nPaperWidth -= ( rParam.pShadow->CalcShadowSpace(SvxShadowItemSide::LEFT) +
-                             rParam.pShadow->CalcShadowSpace(SvxShadowItemSide::RIGHT) ) * 100 / nZoom;
-
-        pEditEngine->SetPaperSize( Size( nPaperWidth, 10000 ) );
-
-        long nMaxHeight = 0;
-        if ( rParam.pLeft )
-        {
-            nMaxHeight = std::max( nMaxHeight, TextHeight( rParam.pLeft->GetLeftArea() ) );
-            nMaxHeight = std::max( nMaxHeight, TextHeight( rParam.pLeft->GetCenterArea() ) );
-            nMaxHeight = std::max( nMaxHeight, TextHeight( rParam.pLeft->GetRightArea() ) );
-        }
-        if ( rParam.pRight )
-        {
-            nMaxHeight = std::max( nMaxHeight, TextHeight( rParam.pRight->GetLeftArea() ) );
-            nMaxHeight = std::max( nMaxHeight, TextHeight( rParam.pRight->GetCenterArea() ) );
-            nMaxHeight = std::max( nMaxHeight, TextHeight( rParam.pRight->GetRightArea() ) );
-        }
-
-        rParam.nHeight = nMaxHeight + rParam.nDistance;
-        if (rParam.pBorder)
-            rParam.nHeight += rParam.pBorder->GetDistance(SvxBoxItemLine::TOP) +
-                              rParam.pBorder->GetDistance(SvxBoxItemLine::BOTTOM) +
-                              lcl_LineTotal( rParam.pBorder->GetTop() ) +
-                              lcl_LineTotal( rParam.pBorder->GetBottom() );
-        if (rParam.pShadow && rParam.pShadow->GetLocation() != SvxShadowLocation::NONE)
-            rParam.nHeight += rParam.pShadow->CalcShadowSpace(SvxShadowItemSide::TOP) +
-                              rParam.pShadow->CalcShadowSpace(SvxShadowItemSide::BOTTOM);
-
-        if (rParam.nHeight < rParam.nManHeight)
-            rParam.nHeight = rParam.nManHeight;         // configured minimum
+        nMaxHeight = std::max( nMaxHeight, TextHeight( rParam.pLeft->GetLeftArea() ) );
+        nMaxHeight = std::max( nMaxHeight, TextHeight( rParam.pLeft->GetCenterArea() ) );
+        nMaxHeight = std::max( nMaxHeight, TextHeight( rParam.pLeft->GetRightArea() ) );
     }
+    if ( rParam.pRight )
+    {
+        nMaxHeight = std::max( nMaxHeight, TextHeight( rParam.pRight->GetLeftArea() ) );
+        nMaxHeight = std::max( nMaxHeight, TextHeight( rParam.pRight->GetCenterArea() ) );
+        nMaxHeight = std::max( nMaxHeight, TextHeight( rParam.pRight->GetRightArea() ) );
+    }
+
+    rParam.nHeight = nMaxHeight + rParam.nDistance;
+    if (rParam.pBorder)
+        rParam.nHeight += rParam.pBorder->GetDistance(SvxBoxItemLine::TOP) +
+                          rParam.pBorder->GetDistance(SvxBoxItemLine::BOTTOM) +
+                          lcl_LineTotal( rParam.pBorder->GetTop() ) +
+                          lcl_LineTotal( rParam.pBorder->GetBottom() );
+    if (rParam.pShadow && rParam.pShadow->GetLocation() != SvxShadowLocation::NONE)
+        rParam.nHeight += rParam.pShadow->CalcShadowSpace(SvxShadowItemSide::TOP) +
+                          rParam.pShadow->CalcShadowSpace(SvxShadowItemSide::BOTTOM);
+
+    if (rParam.nHeight < rParam.nManHeight)
+        rParam.nHeight = rParam.nManHeight;         // configured minimum
 }
 
 void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
@@ -1363,27 +1363,27 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
         }
     }
 
-    if (pBorderData)
-    {
-        ScDocumentUniquePtr pBorderDoc(new ScDocument( SCDOCMODE_UNDO ));
-        pBorderDoc->InitUndo( pDoc, 0,0, true,true );
-        pBorderDoc->ApplyAttr( 0,0,0, *pBorderData );
+    if (!pBorderData)
+        return;
 
-        ScTableInfo aTabInfo;
-        pBorderDoc->FillInfo( aTabInfo, 0,0, 0,0, 0,
-                                            nScaleX, nScaleY, false, false );
-        OSL_ENSURE(aTabInfo.mnArrCount,"nArrCount == 0");
+    ScDocumentUniquePtr pBorderDoc(new ScDocument( SCDOCMODE_UNDO ));
+    pBorderDoc->InitUndo( pDoc, 0,0, true,true );
+    pBorderDoc->ApplyAttr( 0,0,0, *pBorderData );
 
-        aTabInfo.mpRowInfo[1].nHeight = static_cast<sal_uInt16>(nEffHeight);
-        aTabInfo.mpRowInfo[0].pCellInfo[1].nWidth =
-            aTabInfo.mpRowInfo[1].pCellInfo[1].nWidth = static_cast<sal_uInt16>(nEffWidth);
+    ScTableInfo aTabInfo;
+    pBorderDoc->FillInfo( aTabInfo, 0,0, 0,0, 0,
+                                        nScaleX, nScaleY, false, false );
+    OSL_ENSURE(aTabInfo.mnArrCount,"nArrCount == 0");
 
-        ScOutputData aOutputData( pDev, OUTTYPE_PRINTER, aTabInfo, pBorderDoc.get(), 0,
-                                    nScrX+nLeft, nScrY+nTop, 0,0, 0,0, nScaleX, nScaleY );
-        aOutputData.SetUseStyleColor( bUseStyleColor );
+    aTabInfo.mpRowInfo[1].nHeight = static_cast<sal_uInt16>(nEffHeight);
+    aTabInfo.mpRowInfo[0].pCellInfo[1].nWidth =
+        aTabInfo.mpRowInfo[1].pCellInfo[1].nWidth = static_cast<sal_uInt16>(nEffWidth);
 
-        aOutputData.DrawFrame(*pDev);
-    }
+    ScOutputData aOutputData( pDev, OUTTYPE_PRINTER, aTabInfo, pBorderDoc.get(), 0,
+                                nScrX+nLeft, nScrY+nTop, 0,0, 0,0, nScaleX, nScaleY );
+    aOutputData.SetUseStyleColor( bUseStyleColor );
+
+    aOutputData.DrawFrame(*pDev);
 }
 
 void ScPrintFunc::PrintColHdr( SCCOL nX1, SCCOL nX2, long nScrX, long nScrY )
@@ -2593,38 +2593,37 @@ void ScPrintFunc::InitModes()               // set MapModes from  nZoom etc.
 
 void ScPrintFunc::ApplyPrintSettings()
 {
-    if ( pPrinter )
+    if ( !pPrinter )
+        return;
+
+    //  Configure Printer to Printing
+
+    Size aEnumSize = aPageSize;
+
+    pPrinter->SetOrientation( bLandscape ? Orientation::Landscape : Orientation::Portrait );
+    if ( bLandscape )
     {
-
-        //  Configure Printer to Printing
-
-        Size aEnumSize = aPageSize;
-
-        pPrinter->SetOrientation( bLandscape ? Orientation::Landscape : Orientation::Portrait );
-        if ( bLandscape )
-        {
-                // landscape is always interpreted as a rotation by 90 degrees !
-                // this leads to non WYSIWIG but at least it prints!
-                // #i21775#
-                long nTemp = aEnumSize.Width();
-                aEnumSize.setWidth( aEnumSize.Height() );
-                aEnumSize.setHeight( nTemp );
-        }
-        Paper ePaper = SvxPaperInfo::GetSvxPaper( aEnumSize, MapUnit::MapTwip );
-        sal_uInt16 nPaperBin = pParamSet->Get(ATTR_PAGE_PAPERBIN).GetValue();
-
-        pPrinter->SetPaper( ePaper );
-        if ( PAPER_USER == ePaper )
-        {
-            MapMode aPrinterMode = pPrinter->GetMapMode();
-            MapMode aLocalMode( MapUnit::MapTwip );
-            pPrinter->SetMapMode( aLocalMode );
-            pPrinter->SetPaperSizeUser( aEnumSize );
-            pPrinter->SetMapMode( aPrinterMode );
-        }
-
-        pPrinter->SetPaperBin( nPaperBin );
+            // landscape is always interpreted as a rotation by 90 degrees !
+            // this leads to non WYSIWIG but at least it prints!
+            // #i21775#
+            long nTemp = aEnumSize.Width();
+            aEnumSize.setWidth( aEnumSize.Height() );
+            aEnumSize.setHeight( nTemp );
     }
+    Paper ePaper = SvxPaperInfo::GetSvxPaper( aEnumSize, MapUnit::MapTwip );
+    sal_uInt16 nPaperBin = pParamSet->Get(ATTR_PAGE_PAPERBIN).GetValue();
+
+    pPrinter->SetPaper( ePaper );
+    if ( PAPER_USER == ePaper )
+    {
+        MapMode aPrinterMode = pPrinter->GetMapMode();
+        MapMode aLocalMode( MapUnit::MapTwip );
+        pPrinter->SetMapMode( aLocalMode );
+        pPrinter->SetPaperSizeUser( aEnumSize );
+        pPrinter->SetMapMode( aPrinterMode );
+    }
+
+    pPrinter->SetPaperBin( nPaperBin );
 }
 
 //  rPageRanges   = range for all tables
@@ -3181,22 +3180,22 @@ void PrintPageRanges::calculate(ScDocument* pDoc,
             nRow = nLastRow;
     }
 
-    if (bVisRow)
-    {
-        OSL_ENSURE(m_nTotalY < m_aPageEndY.size(), "vector access error for maPageEndY");
-        m_aPageEndY[m_nTotalY] = nEndRow;
-        ++m_nTotalY;
+    if (!bVisRow)
+        return;
 
-        if (!bSkipEmpty || !pDoc->IsPrintEmpty(nPrintTab, nStartCol, nPageStartRow, nEndCol, nEndRow))
-        {
-            OSL_ENSURE(m_nPagesY < m_aPageRows.size(), "vector access error for maPageRows");
-            m_aPageRows[m_nPagesY].SetStartRow(nPageStartRow);
-            m_aPageRows[m_nPagesY].SetEndRow(nEndRow);
-            m_aPageRows[m_nPagesY].SetPagesX(m_nPagesX);
-            if (bSkipEmpty)
-                lcl_SetHidden(pDoc, nPrintTab, m_aPageRows[m_nPagesY], nStartCol, m_aPageEndX);
-            ++m_nPagesY;
-        }
+    OSL_ENSURE(m_nTotalY < m_aPageEndY.size(), "vector access error for maPageEndY");
+    m_aPageEndY[m_nTotalY] = nEndRow;
+    ++m_nTotalY;
+
+    if (!bSkipEmpty || !pDoc->IsPrintEmpty(nPrintTab, nStartCol, nPageStartRow, nEndCol, nEndRow))
+    {
+        OSL_ENSURE(m_nPagesY < m_aPageRows.size(), "vector access error for maPageRows");
+        m_aPageRows[m_nPagesY].SetStartRow(nPageStartRow);
+        m_aPageRows[m_nPagesY].SetEndRow(nEndRow);
+        m_aPageRows[m_nPagesY].SetPagesX(m_nPagesX);
+        if (bSkipEmpty)
+            lcl_SetHidden(pDoc, nPrintTab, m_aPageRows[m_nPagesY], nStartCol, m_aPageEndX);
+        ++m_nPagesY;
     }
 }
 

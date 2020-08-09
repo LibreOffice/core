@@ -116,32 +116,32 @@ void ScPreviewTableInfo::LimitToArea( const tools::Rectangle& rPixelArea )
         }
     }
 
-    if ( pRowInfo )
+    if ( !pRowInfo )
+        return;
+
+    //  cells completely above the visible area
+    SCROW nStart = 0;
+    while ( nStart < nRows && pRowInfo[nStart].nPixelEnd < rPixelArea.Top() )
+        ++nStart;
+
+    //  cells completely below the visible area
+    SCROW nEnd = nRows;
+    while ( nEnd > 0 && pRowInfo[nEnd-1].nPixelStart > rPixelArea.Bottom() )
+        --nEnd;
+
+    if ( nStart <= 0 && nEnd >= nRows )
+        return;
+
+    if ( nEnd > nStart )
     {
-        //  cells completely above the visible area
-        SCROW nStart = 0;
-        while ( nStart < nRows && pRowInfo[nStart].nPixelEnd < rPixelArea.Top() )
-            ++nStart;
-
-        //  cells completely below the visible area
-        SCROW nEnd = nRows;
-        while ( nEnd > 0 && pRowInfo[nEnd-1].nPixelStart > rPixelArea.Bottom() )
-            --nEnd;
-
-        if ( nStart > 0 || nEnd < nRows )
-        {
-            if ( nEnd > nStart )
-            {
-                SCROW nNewCount = nEnd - nStart;
-                ScPreviewColRowInfo* pNewInfo = new ScPreviewColRowInfo[nNewCount];
-                for (SCROW i=0; i<nNewCount; i++)
-                    pNewInfo[i] = pRowInfo[nStart + i];
-                SetRowInfo( nNewCount, pNewInfo );
-            }
-            else
-                SetRowInfo( 0, nullptr );      // all invisible
-        }
+        SCROW nNewCount = nEnd - nStart;
+        ScPreviewColRowInfo* pNewInfo = new ScPreviewColRowInfo[nNewCount];
+        for (SCROW i=0; i<nNewCount; i++)
+            pNewInfo[i] = pRowInfo[nStart + i];
+        SetRowInfo( nNewCount, pNewInfo );
     }
+    else
+        SetRowInfo( 0, nullptr );      // all invisible
 }
 
 ScPreviewLocationData::ScPreviewLocationData( ScDocument* pDocument, OutputDevice* pWin ) :
@@ -182,28 +182,28 @@ void ScPreviewLocationData::AddCellRange( const tools::Rectangle& rRect, const S
 
     OSL_ENSURE( nDrawRanges < SC_PREVIEW_MAXRANGES, "too many ranges" );
 
-    if ( nDrawRanges < SC_PREVIEW_MAXRANGES )
+    if ( nDrawRanges >= SC_PREVIEW_MAXRANGES )
+        return;
+
+    aDrawRectangle[nDrawRanges] = aPixelRect;
+    aDrawMapMode[nDrawRanges] = rDrawMap;
+
+    if (bRepCol)
     {
-        aDrawRectangle[nDrawRanges] = aPixelRect;
-        aDrawMapMode[nDrawRanges] = rDrawMap;
-
-        if (bRepCol)
-        {
-            if (bRepRow)
-                aDrawRangeId[nDrawRanges] = SC_PREVIEW_RANGE_EDGE;
-            else
-                aDrawRangeId[nDrawRanges] = SC_PREVIEW_RANGE_REPCOL;
-        }
+        if (bRepRow)
+            aDrawRangeId[nDrawRanges] = SC_PREVIEW_RANGE_EDGE;
         else
-        {
-            if (bRepRow)
-                aDrawRangeId[nDrawRanges] = SC_PREVIEW_RANGE_REPROW;
-            else
-                aDrawRangeId[nDrawRanges] = SC_PREVIEW_RANGE_TAB;
-        }
-
-        ++nDrawRanges;
+            aDrawRangeId[nDrawRanges] = SC_PREVIEW_RANGE_REPCOL;
     }
+    else
+    {
+        if (bRepRow)
+            aDrawRangeId[nDrawRanges] = SC_PREVIEW_RANGE_REPROW;
+        else
+            aDrawRangeId[nDrawRanges] = SC_PREVIEW_RANGE_TAB;
+    }
+
+    ++nDrawRanges;
 }
 
 void ScPreviewLocationData::AddColHeaders( const tools::Rectangle& rRect, SCCOL nStartCol, SCCOL nEndCol, bool bRepCol )
