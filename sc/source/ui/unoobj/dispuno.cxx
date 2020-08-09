@@ -52,26 +52,26 @@ static uno::Reference<view::XSelectionSupplier> lcl_GetSelectionSupplier( const 
 ScDispatchProviderInterceptor::ScDispatchProviderInterceptor(ScTabViewShell* pViewSh) :
     pViewShell( pViewSh )
 {
-    if ( pViewShell )
+    if ( !pViewShell )
+        return;
+
+    m_xIntercepted.set(uno::Reference<frame::XDispatchProviderInterception>(pViewShell->GetViewFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY));
+    if (m_xIntercepted.is())
     {
-        m_xIntercepted.set(uno::Reference<frame::XDispatchProviderInterception>(pViewShell->GetViewFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY));
-        if (m_xIntercepted.is())
-        {
-            osl_atomic_increment( &m_refCount );
+        osl_atomic_increment( &m_refCount );
 
-            m_xIntercepted->registerDispatchProviderInterceptor(
-                        static_cast<frame::XDispatchProviderInterceptor*>(this));
-            // this should make us the top-level dispatch-provider for the component, via a call to our
-            // setDispatchProvider we should have got a fallback for requests we (i.e. our master) cannot fulfill
-            uno::Reference<lang::XComponent> xInterceptedComponent(m_xIntercepted, uno::UNO_QUERY);
-            if (xInterceptedComponent.is())
-                xInterceptedComponent->addEventListener(static_cast<lang::XEventListener*>(this));
+        m_xIntercepted->registerDispatchProviderInterceptor(
+                    static_cast<frame::XDispatchProviderInterceptor*>(this));
+        // this should make us the top-level dispatch-provider for the component, via a call to our
+        // setDispatchProvider we should have got a fallback for requests we (i.e. our master) cannot fulfill
+        uno::Reference<lang::XComponent> xInterceptedComponent(m_xIntercepted, uno::UNO_QUERY);
+        if (xInterceptedComponent.is())
+            xInterceptedComponent->addEventListener(static_cast<lang::XEventListener*>(this));
 
-            osl_atomic_decrement( &m_refCount );
-        }
-
-        StartListening(*pViewShell);
+        osl_atomic_decrement( &m_refCount );
     }
+
+    StartListening(*pViewShell);
 }
 
 ScDispatchProviderInterceptor::~ScDispatchProviderInterceptor()
@@ -293,26 +293,26 @@ void SAL_CALL ScDispatch::removeStatusListener(
 {
     SolarMutexGuard aGuard;
 
-    if ( aURL.Complete == cURLDocDataSource )
-    {
-        sal_uInt16 nCount = aDataSourceListeners.size();
-        for ( sal_uInt16 n=nCount; n--; )
-        {
-            uno::Reference<frame::XStatusListener>& rObj = aDataSourceListeners[n];
-            if ( rObj == xListener )
-            {
-                aDataSourceListeners.erase( aDataSourceListeners.begin() + n );
-                break;
-            }
-        }
+    if ( aURL.Complete != cURLDocDataSource )
+        return;
 
-        if ( aDataSourceListeners.empty() && pViewShell )
+    sal_uInt16 nCount = aDataSourceListeners.size();
+    for ( sal_uInt16 n=nCount; n--; )
+    {
+        uno::Reference<frame::XStatusListener>& rObj = aDataSourceListeners[n];
+        if ( rObj == xListener )
         {
-            uno::Reference<view::XSelectionSupplier> xSupplier(lcl_GetSelectionSupplier( pViewShell ));
-            if ( xSupplier.is() )
-                xSupplier->removeSelectionChangeListener(this);
-            bListeningToView = false;
+            aDataSourceListeners.erase( aDataSourceListeners.begin() + n );
+            break;
         }
+    }
+
+    if ( aDataSourceListeners.empty() && pViewShell )
+    {
+        uno::Reference<view::XSelectionSupplier> xSupplier(lcl_GetSelectionSupplier( pViewShell ));
+        if ( xSupplier.is() )
+            xSupplier->removeSelectionChangeListener(this);
+        bListeningToView = false;
     }
 }
 
@@ -322,32 +322,32 @@ void SAL_CALL ScDispatch::selectionChanged( const css::lang::EventObject& /* aEv
 {
     //  currently only called for URL cURLDocDataSource
 
-    if ( pViewShell )
-    {
-        ScImportParam aNewImport;
-        ScDBData* pDBData = pViewShell->GetDBData(false,SC_DB_OLD);
-        if ( pDBData )
-            pDBData->GetImportParam( aNewImport );
+    if ( !pViewShell )
+        return;
 
-        //  notify listeners only if data source has changed
-        if ( aNewImport.bImport    != aLastImport.bImport ||
-             aNewImport.aDBName    != aLastImport.aDBName ||
-             aNewImport.aStatement != aLastImport.aStatement ||
-             aNewImport.bSql       != aLastImport.bSql ||
-             aNewImport.nType      != aLastImport.nType )
-        {
-            frame::FeatureStateEvent aEvent;
-            aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-            aEvent.FeatureURL.Complete = cURLDocDataSource;
+    ScImportParam aNewImport;
+    ScDBData* pDBData = pViewShell->GetDBData(false,SC_DB_OLD);
+    if ( pDBData )
+        pDBData->GetImportParam( aNewImport );
 
-            lcl_FillDataSource( aEvent, aNewImport );       // modifies State, IsEnabled
+    //  notify listeners only if data source has changed
+    if ( !(aNewImport.bImport    != aLastImport.bImport ||
+         aNewImport.aDBName    != aLastImport.aDBName ||
+         aNewImport.aStatement != aLastImport.aStatement ||
+         aNewImport.bSql       != aLastImport.bSql ||
+         aNewImport.nType      != aLastImport.nType) )
+        return;
 
-            for (uno::Reference<frame::XStatusListener> & xDataSourceListener : aDataSourceListeners)
-                xDataSourceListener->statusChanged( aEvent );
+    frame::FeatureStateEvent aEvent;
+    aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
+    aEvent.FeatureURL.Complete = cURLDocDataSource;
 
-            aLastImport = aNewImport;
-        }
-    }
+    lcl_FillDataSource( aEvent, aNewImport );       // modifies State, IsEnabled
+
+    for (uno::Reference<frame::XStatusListener> & xDataSourceListener : aDataSourceListeners)
+        xDataSourceListener->statusChanged( aEvent );
+
+    aLastImport = aNewImport;
 }
 
 // XEventListener

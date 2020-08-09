@@ -2395,31 +2395,31 @@ ScChart2DataSequence::~ScChart2DataSequence()
 
 void ScChart2DataSequence::RefChanged()
 {
-    if( m_pValueListener && !m_aValueListeners.empty() )
+    if( !m_pValueListener || m_aValueListeners.empty() )
+        return;
+
+    m_pValueListener->EndListeningAll();
+
+    if( !m_pDocument )
+        return;
+
+    ScChartListenerCollection* pCLC = nullptr;
+    if (m_pHiddenListener)
     {
-        m_pValueListener->EndListeningAll();
+        pCLC = m_pDocument->GetChartListenerCollection();
+        if (pCLC)
+            pCLC->EndListeningHiddenRange(m_pHiddenListener.get());
+    }
 
-        if( m_pDocument )
-        {
-            ScChartListenerCollection* pCLC = nullptr;
-            if (m_pHiddenListener)
-            {
-                pCLC = m_pDocument->GetChartListenerCollection();
-                if (pCLC)
-                    pCLC->EndListeningHiddenRange(m_pHiddenListener.get());
-            }
+    for (const auto& rxToken : m_aTokens)
+    {
+        ScRange aRange;
+        if (!ScRefTokenHelper::getRangeFromToken(m_pDocument, aRange, rxToken, ScAddress()))
+            continue;
 
-            for (const auto& rxToken : m_aTokens)
-            {
-                ScRange aRange;
-                if (!ScRefTokenHelper::getRangeFromToken(m_pDocument, aRange, rxToken, ScAddress()))
-                    continue;
-
-                m_pDocument->StartListeningArea(aRange, false, m_pValueListener.get());
-                if (pCLC)
-                    pCLC->StartListeningHiddenRange(aRange, m_pHiddenListener.get());
-            }
-        }
+        m_pDocument->StartListeningArea(aRange, false, m_pValueListener.get());
+        if (pCLC)
+            pCLC->StartListeningHiddenRange(aRange, m_pHiddenListener.get());
     }
 }
 
@@ -2676,19 +2676,19 @@ void ScChart2DataSequence::CopyData(const ScChart2DataSequence& r)
     if (r.m_pRangeIndices)
         m_pRangeIndices.reset(new vector<sal_uInt32>(*r.m_pRangeIndices));
 
-    if (r.m_pExtRefListener)
-    {
-        // Re-register all external files that the old instance was
-        // listening to.
+    if (!r.m_pExtRefListener)
+        return;
 
-        ScExternalRefManager* pRefMgr = m_pDocument->GetExternalRefManager();
-        m_pExtRefListener.reset(new ExternalRefListener(*this, m_pDocument));
-        const std::unordered_set<sal_uInt16>& rFileIds = r.m_pExtRefListener->getAllFileIds();
-        for (const auto& rFileId : rFileIds)
-        {
-            pRefMgr->addLinkListener(rFileId, m_pExtRefListener.get());
-            m_pExtRefListener->addFileId(rFileId);
-        }
+    // Re-register all external files that the old instance was
+    // listening to.
+
+    ScExternalRefManager* pRefMgr = m_pDocument->GetExternalRefManager();
+    m_pExtRefListener.reset(new ExternalRefListener(*this, m_pDocument));
+    const std::unordered_set<sal_uInt16>& rFileIds = r.m_pExtRefListener->getAllFileIds();
+    for (const auto& rFileId : rFileIds)
+    {
+        pRefMgr->addLinkListener(rFileId, m_pExtRefListener.get());
+        m_pExtRefListener->addFileId(rFileId);
     }
 }
 
@@ -3177,31 +3177,31 @@ void SAL_CALL ScChart2DataSequence::addModifyListener( const uno::Reference< uti
     ScRefTokenHelper::getRangeListFromTokens(m_pDocument, aRanges, m_aTokens, ScAddress());
     m_aValueListeners.emplace_back( aListener );
 
-    if ( m_aValueListeners.size() == 1 )
+    if ( m_aValueListeners.size() != 1 )
+        return;
+
+    if (!m_pValueListener)
+        m_pValueListener.reset(new ScLinkListener( LINK( this, ScChart2DataSequence, ValueListenerHdl ) ));
+
+    if (!m_pHiddenListener)
+        m_pHiddenListener.reset(new HiddenRangeListener(*this));
+
+    if( m_pDocument )
     {
-        if (!m_pValueListener)
-            m_pValueListener.reset(new ScLinkListener( LINK( this, ScChart2DataSequence, ValueListenerHdl ) ));
-
-        if (!m_pHiddenListener)
-            m_pHiddenListener.reset(new HiddenRangeListener(*this));
-
-        if( m_pDocument )
+        ScChartListenerCollection* pCLC = m_pDocument->GetChartListenerCollection();
+        for (const auto& rxToken : m_aTokens)
         {
-            ScChartListenerCollection* pCLC = m_pDocument->GetChartListenerCollection();
-            for (const auto& rxToken : m_aTokens)
-            {
-                ScRange aRange;
-                if (!ScRefTokenHelper::getRangeFromToken(m_pDocument, aRange, rxToken, ScAddress()))
-                    continue;
+            ScRange aRange;
+            if (!ScRefTokenHelper::getRangeFromToken(m_pDocument, aRange, rxToken, ScAddress()))
+                continue;
 
-                m_pDocument->StartListeningArea( aRange, false, m_pValueListener.get() );
-                if (pCLC)
-                    pCLC->StartListeningHiddenRange(aRange, m_pHiddenListener.get());
-            }
+            m_pDocument->StartListeningArea( aRange, false, m_pValueListener.get() );
+            if (pCLC)
+                pCLC->StartListeningHiddenRange(aRange, m_pHiddenListener.get());
         }
-
-        acquire();  // don't lose this object (one ref for all listeners)
     }
+
+    acquire();  // don't lose this object (one ref for all listeners)
 }
 
 void SAL_CALL ScChart2DataSequence::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )

@@ -162,26 +162,26 @@ SvxTextForwarder* ScAnnotationEditSource::GetTextForwarder()
 
 void ScAnnotationEditSource::UpdateData()
 {
-    if ( pDocShell && pEditEngine )
+    if ( !(pDocShell && pEditEngine) )
+        return;
+
+    ScDocShellModificator aModificator( *pDocShell );
+
+    if( SdrObject* pObj = GetCaptionObj() )
     {
-        ScDocShellModificator aModificator( *pDocShell );
-
-        if( SdrObject* pObj = GetCaptionObj() )
-        {
-            std::unique_ptr<EditTextObject> pEditObj = pEditEngine->CreateTextObject();
-            std::unique_ptr<OutlinerParaObject> pOPO( new OutlinerParaObject( *pEditObj ) );
-            pEditObj.reset();
-            pOPO->SetOutlinerMode( OutlinerMode::TextObject );
-            pObj->NbcSetOutlinerParaObject( std::move(pOPO) );
-            pObj->ActionChanged();
-        }
-
-        //! Undo !!!
-
-        aModificator.SetDocumentModified();
-
-        // SetDocumentModified will reset bDataValid
+        std::unique_ptr<EditTextObject> pEditObj = pEditEngine->CreateTextObject();
+        std::unique_ptr<OutlinerParaObject> pOPO( new OutlinerParaObject( *pEditObj ) );
+        pEditObj.reset();
+        pOPO->SetOutlinerMode( OutlinerMode::TextObject );
+        pObj->NbcSetOutlinerParaObject( std::move(pOPO) );
+        pObj->ActionChanged();
     }
+
+    //! Undo !!!
+
+    aModificator.SetDocumentModified();
+
+    // SetDocumentModified will reset bDataValid
 }
 
 void ScAnnotationEditSource::Notify( SfxBroadcaster&, const SfxHint& rHint )
