@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ed6deb17_cf725438",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-09T18:04:49Z",
+      "side": 1,
+      "message": "I am sorry for not being explicit. My fault.\n\nI meant that PropertyToTreeNode should not manage rIsDefined. But setting node properties (isGrey) is very much the duty of PropertyToTreeNode. So I wanted that you pass a boolean value to PropertyToTreeNode (i.e., the value of rIsDefined[rPropName]), which would be used there to make it grey; but setting the map value to true should be done here, as now. Does it make sense?",
+      "range": {
+        "startLine": 391,
+        "startChar": 12,
+        "endLine": 396,
+        "endChar": 13
+      },
+      "revId": "222cda6c78cbd47675cf791abedbe68a3a7ad877",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
