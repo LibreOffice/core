@@ -60,38 +60,38 @@ void ScMediaShell::GetMediaState( SfxItemSet& rSet )
 {
     ScDrawView* pView = GetViewData()->GetScDrawView();
 
-    if( pView )
+    if( !pView )
+        return;
+
+    SfxWhichIter aIter( rSet );
+    sal_uInt16   nWhich = aIter.FirstWhich();
+
+    while( nWhich )
     {
-        SfxWhichIter    aIter( rSet );
-        sal_uInt16          nWhich = aIter.FirstWhich();
-
-        while( nWhich )
+        if( SID_AVMEDIA_TOOLBOX == nWhich )
         {
-            if( SID_AVMEDIA_TOOLBOX == nWhich )
+            std::unique_ptr<SdrMarkList> pMarkList(new SdrMarkList( pView->GetMarkedObjectList() ));
+            bool            bDisable = true;
+
+            if( 1 == pMarkList->GetMarkCount() )
             {
-                std::unique_ptr<SdrMarkList> pMarkList(new SdrMarkList( pView->GetMarkedObjectList() ));
-                bool            bDisable = true;
+                SdrObject* pObj = pMarkList->GetMark( 0 )->GetMarkedSdrObj();
 
-                if( 1 == pMarkList->GetMarkCount() )
+                if( dynamic_cast<const SdrMediaObj*>( pObj) )
                 {
-                    SdrObject* pObj = pMarkList->GetMark( 0 )->GetMarkedSdrObj();
+                    ::avmedia::MediaItem aItem( SID_AVMEDIA_TOOLBOX );
 
-                    if( dynamic_cast<const SdrMediaObj*>( pObj) )
-                    {
-                        ::avmedia::MediaItem aItem( SID_AVMEDIA_TOOLBOX );
-
-                        static_cast< sdr::contact::ViewContactOfSdrMediaObj& >( pObj->GetViewContact() ).updateMediaItem( aItem );
-                        rSet.Put( aItem );
-                        bDisable = false;
-                    }
+                    static_cast< sdr::contact::ViewContactOfSdrMediaObj& >( pObj->GetViewContact() ).updateMediaItem( aItem );
+                    rSet.Put( aItem );
+                    bDisable = false;
                 }
-
-                if( bDisable )
-                    rSet.DisableItem( SID_AVMEDIA_TOOLBOX );
             }
 
-            nWhich = aIter.NextWhich();
+            if( bDisable )
+                rSet.DisableItem( SID_AVMEDIA_TOOLBOX );
         }
+
+        nWhich = aIter.NextWhich();
     }
 }
 

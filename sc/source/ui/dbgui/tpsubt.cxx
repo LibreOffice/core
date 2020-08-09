@@ -235,38 +235,38 @@ void ScTpSubTotalGroup::FillListBoxes()
 {
     OSL_ENSURE( pViewData && pDoc, "ViewData or Document not found :-/" );
 
-    if ( pViewData && pDoc )
+    if ( !(pViewData && pDoc) )
+        return;
+
+    SCCOL   nFirstCol   = rSubTotalData.nCol1;
+    SCROW   nFirstRow   = rSubTotalData.nRow1;
+    SCTAB   nTab        = pViewData->GetTabNo();
+    SCCOL   nMaxCol     = rSubTotalData.nCol2;
+    SCCOL   col;
+    OUString  aFieldName;
+
+    mxLbGroup->clear();
+    mxLbColumns->clear();
+    mxLbGroup->insert_text(0, aStrNone );
+
+    sal_uInt16 i=0;
+    for ( col=nFirstCol; col<=nMaxCol && i<SC_MAXFIELDS; col++ )
     {
-        SCCOL   nFirstCol   = rSubTotalData.nCol1;
-        SCROW   nFirstRow   = rSubTotalData.nRow1;
-        SCTAB   nTab        = pViewData->GetTabNo();
-        SCCOL   nMaxCol     = rSubTotalData.nCol2;
-        SCCOL   col;
-        OUString  aFieldName;
-
-        mxLbGroup->clear();
-        mxLbColumns->clear();
-        mxLbGroup->insert_text(0, aStrNone );
-
-        sal_uInt16 i=0;
-        for ( col=nFirstCol; col<=nMaxCol && i<SC_MAXFIELDS; col++ )
+        aFieldName = pDoc->GetString(col, nFirstRow, nTab);
+        if ( aFieldName.isEmpty() )
         {
-            aFieldName = pDoc->GetString(col, nFirstRow, nTab);
-            if ( aFieldName.isEmpty() )
-            {
-                aFieldName = ScGlobal::ReplaceOrAppend( aStrColumn, "%1", ScColToAlpha( col ));
-            }
-            nFieldArr[i] = col;
-            mxLbGroup->insert_text(i+1, aFieldName);
-            mxLbColumns->insert(i);
-            mxLbColumns->set_toggle(i, TRISTATE_FALSE);
-            mxLbColumns->set_text(i, aFieldName, 0);
-            mxLbColumns->set_id(i, "0");
-            i++;
+            aFieldName = ScGlobal::ReplaceOrAppend( aStrColumn, "%1", ScColToAlpha( col ));
         }
-        // subsequent initialization of the constant:
-        nFieldCount = i;
+        nFieldArr[i] = col;
+        mxLbGroup->insert_text(i+1, aFieldName);
+        mxLbColumns->insert(i);
+        mxLbColumns->set_toggle(i, TRISTATE_FALSE);
+        mxLbColumns->set_text(i, aFieldName, 0);
+        mxLbColumns->set_id(i, "0");
+        i++;
     }
+    // subsequent initialization of the constant:
+    nFieldCount = i;
 }
 
 sal_uInt16 ScTpSubTotalGroup::GetFieldSelPos( SCCOL nField )
@@ -345,20 +345,20 @@ IMPL_LINK(ScTpSubTotalGroup, SelectListBoxHdl, weld::ComboBox&, rLb, void)
 void ScTpSubTotalGroup::SelectHdl(const weld::Widget *pLb)
 {
     const sal_Int32 nColumn = mxLbColumns->get_selected_index();
-    if (nColumn != -1)
-    {
-        const sal_Int32 nFunction   = mxLbFunctions->get_selected_index();
-        sal_uInt16      nOldFunction  = mxLbColumns->get_id(nColumn).toUInt32();
+    if (nColumn == -1)
+        return;
 
-        if ( pLb == mxLbColumns.get() )
-        {
-            mxLbFunctions->select(nOldFunction);
-        }
-        else if ( pLb == mxLbFunctions.get() )
-        {
-            mxLbColumns->set_id(nColumn, OUString::number(nFunction));
-            mxLbColumns->set_toggle(nColumn, TRISTATE_TRUE);
-        }
+    const sal_Int32 nFunction   = mxLbFunctions->get_selected_index();
+    sal_uInt16      nOldFunction  = mxLbColumns->get_id(nColumn).toUInt32();
+
+    if ( pLb == mxLbColumns.get() )
+    {
+        mxLbFunctions->select(nOldFunction);
+    }
+    else if ( pLb == mxLbFunctions.get() )
+    {
+        mxLbColumns->set_id(nColumn, OUString::number(nFunction));
+        mxLbColumns->set_toggle(nColumn, TRISTATE_TRUE);
     }
 }
 

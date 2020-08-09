@@ -648,59 +648,59 @@ static bool lcl_UrlHit( const SdrView* pView, const Point& rPosPixel, const vcl:
 
 void FuDraw::ForcePointer(const MouseEvent* pMEvt)
 {
-    if ( !pView->IsAction() )
+    if ( pView->IsAction() )
+        return;
+
+    Point aPosPixel = pWindow->GetPointerPosPixel();
+    bool bAlt       = pMEvt && pMEvt->IsMod2();
+    Point aPnt      = pWindow->PixelToLogic( aPosPixel );
+    SdrHdl* pHdl    = pView->PickHandle(aPnt);
+    SdrPageView* pPV;
+
+    ScMacroInfo* pInfo = nullptr;
+    SdrObject* pObj = pView->PickObj(aPnt, pView->getHitTolLog(), pPV, SdrSearchOptions::ALSOONMASTER);
+    if (pObj)
     {
-        Point aPosPixel = pWindow->GetPointerPosPixel();
-        bool bAlt       = pMEvt && pMEvt->IsMod2();
-        Point aPnt      = pWindow->PixelToLogic( aPosPixel );
-        SdrHdl* pHdl    = pView->PickHandle(aPnt);
-        SdrPageView* pPV;
-
-        ScMacroInfo* pInfo = nullptr;
-        SdrObject* pObj = pView->PickObj(aPnt, pView->getHitTolLog(), pPV, SdrSearchOptions::ALSOONMASTER);
-        if (pObj)
+        if ( pObj->IsGroupObject() )
         {
-            if ( pObj->IsGroupObject() )
-            {
-                SdrObject* pHit = pView->PickObj(aMDPos, pView->getHitTolLog(), pPV, SdrSearchOptions::DEEP);
-                if (pHit)
-                    pObj = pHit;
-            }
-            pInfo = ScDrawLayer::GetMacroInfo( pObj );
+            SdrObject* pHit = pView->PickObj(aMDPos, pView->getHitTolLog(), pPV, SdrSearchOptions::DEEP);
+            if (pHit)
+                pObj = pHit;
         }
-
-        if ( pView->IsTextEdit() )
-        {
-            rViewShell.SetActivePointer(PointerStyle::Text);        // can't be ?
-        }
-        else if ( pHdl )
-        {
-            rViewShell.SetActivePointer(
-                pView->GetPreferredPointer( aPnt, pWindow ) );
-        }
-        else if ( pView->IsMarkedHit(aPnt) )
-        {
-            rViewShell.SetActivePointer( PointerStyle::Move );
-        }
-        else if ( !bAlt && ( !pMEvt || !pMEvt->GetButtons() )
-                        && lcl_UrlHit( pView, aPosPixel, pWindow ) )
-        {
-            //  could be suppressed with ALT
-            pWindow->SetPointer( PointerStyle::RefHand );          // Text-URL / ImageMap
-        }
-        else if ( !bAlt && (pObj = pView->PickObj(aPnt, pView->getHitTolLog(), pPV, SdrSearchOptions::PICKMACRO)) )
-        {
-            //  could be suppressed with ALT
-            SdrObjMacroHitRec aHitRec;  //! something missing ????
-            rViewShell.SetActivePointer( pObj->GetMacroPointer(aHitRec) );
-        }
-        else if ( !bAlt && pInfo && (!pInfo->GetMacro().isEmpty() || !pInfo->GetHlink().isEmpty()) )
-            pWindow->SetPointer( PointerStyle::RefHand );
-        else if ( IsDetectiveHit( aPnt ) )
-            rViewShell.SetActivePointer( PointerStyle::Detective );
-        else
-            rViewShell.SetActivePointer( aNewPointer );            //! in Gridwin?
+        pInfo = ScDrawLayer::GetMacroInfo( pObj );
     }
+
+    if ( pView->IsTextEdit() )
+    {
+        rViewShell.SetActivePointer(PointerStyle::Text);        // can't be ?
+    }
+    else if ( pHdl )
+    {
+        rViewShell.SetActivePointer(
+            pView->GetPreferredPointer( aPnt, pWindow ) );
+    }
+    else if ( pView->IsMarkedHit(aPnt) )
+    {
+        rViewShell.SetActivePointer( PointerStyle::Move );
+    }
+    else if ( !bAlt && ( !pMEvt || !pMEvt->GetButtons() )
+                    && lcl_UrlHit( pView, aPosPixel, pWindow ) )
+    {
+        //  could be suppressed with ALT
+        pWindow->SetPointer( PointerStyle::RefHand );          // Text-URL / ImageMap
+    }
+    else if ( !bAlt && (pObj = pView->PickObj(aPnt, pView->getHitTolLog(), pPV, SdrSearchOptions::PICKMACRO)) )
+    {
+        //  could be suppressed with ALT
+        SdrObjMacroHitRec aHitRec;  //! something missing ????
+        rViewShell.SetActivePointer( pObj->GetMacroPointer(aHitRec) );
+    }
+    else if ( !bAlt && pInfo && (!pInfo->GetMacro().isEmpty() || !pInfo->GetHlink().isEmpty()) )
+        pWindow->SetPointer( PointerStyle::RefHand );
+    else if ( IsDetectiveHit( aPnt ) )
+        rViewShell.SetActivePointer( PointerStyle::Detective );
+    else
+        rViewShell.SetActivePointer( aNewPointer );            //! in Gridwin?
 }
 
 bool FuDraw::IsEditingANote() const

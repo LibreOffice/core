@@ -276,23 +276,23 @@ void ScTabPageSortFields::ActivatePage( const SfxItemSet& rSet )
 {
     // Refresh local copy with shared data
     aSortData = static_cast<const ScSortItem&>(rSet.Get( SCITEM_SORTDATA )).GetSortData();
-    if (ScSortDlg* pDlg = static_cast<ScSortDlg*>(GetDialogController()))
-    {
-        if ( bHasHeader  != pDlg->GetHeaders()
-             || bSortByRows != pDlg->GetByRows() )
-        {
-            std::vector<sal_uInt16> nCurSel;
-            for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
-                nCurSel.push_back( m_aSortWin.m_aSortKeyItems[i]->m_xLbSort->get_active() );
+    ScSortDlg* pDlg = static_cast<ScSortDlg*>(GetDialogController());
+    if (!pDlg)
+        return;
 
-            bHasHeader  = pDlg->GetHeaders();
-            bSortByRows = pDlg->GetByRows();
-            FillFieldLists(0);
+    if ( bHasHeader == pDlg->GetHeaders() && bSortByRows == pDlg->GetByRows() )
+        return;
 
-            for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
-                m_aSortWin.m_aSortKeyItems[i]->m_xLbSort->set_active(nCurSel[i]);
-        }
-    }
+    std::vector<sal_uInt16> nCurSel;
+    for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
+        nCurSel.push_back( m_aSortWin.m_aSortKeyItems[i]->m_xLbSort->get_active() );
+
+    bHasHeader  = pDlg->GetHeaders();
+    bSortByRows = pDlg->GetByRows();
+    FillFieldLists(0);
+
+    for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
+        m_aSortWin.m_aSortKeyItems[i]->m_xLbSort->set_active(nCurSel[i]);
 }
 
 DeactivateRC ScTabPageSortFields::DeactivatePage( SfxItemSet* pSetP )
@@ -314,77 +314,77 @@ DeactivateRC ScTabPageSortFields::DeactivatePage( SfxItemSet* pSetP )
 
 void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
 {
-    if ( pViewData )
+    if ( !pViewData )
+        return;
+
+    ScDocument* pDoc = pViewData->GetDocument();
+
+    if ( !pDoc )
+        return;
+
+    for (sal_uInt16 j = nStartField; j < nSortKeyCount; ++j)
     {
-        ScDocument* pDoc = pViewData->GetDocument();
+        m_aSortWin.m_aSortKeyItems[j]->m_xLbSort->clear();
+        m_aSortWin.m_aSortKeyItems[j]->m_xLbSort->freeze();
+        m_aSortWin.m_aSortKeyItems[j]->m_xLbSort->append_text(aStrUndefined);
+    }
 
-        if ( pDoc )
+    SCCOL   nFirstSortCol   = aSortData.nCol1;
+    SCROW   nFirstSortRow   = aSortData.nRow1;
+    SCTAB   nTab        = pViewData->GetTabNo();
+    sal_uInt16  i           = 1;
+    nFieldArr.clear();
+    nFieldArr.push_back(0);
+
+    if ( bSortByRows )
+    {
+        OUString  aFieldName;
+        SCCOL   nMaxCol = pDoc->ClampToAllocatedColumns(nTab, aSortData.nCol2);
+        SCCOL   col;
+
+        for ( col=nFirstSortCol; col<=nMaxCol && i<SC_MAXFIELDS; col++ )
         {
-            for (sal_uInt16 j = nStartField; j < nSortKeyCount; ++j)
+            aFieldName = pDoc->GetString(col, nFirstSortRow, nTab);
+            if ( !bHasHeader || aFieldName.isEmpty() )
             {
-                m_aSortWin.m_aSortKeyItems[j]->m_xLbSort->clear();
-                m_aSortWin.m_aSortKeyItems[j]->m_xLbSort->freeze();
-                m_aSortWin.m_aSortKeyItems[j]->m_xLbSort->append_text(aStrUndefined);
+                aFieldName = ScGlobal::ReplaceOrAppend( aStrColumn, "%1", ScColToAlpha( col ));
             }
+            nFieldArr.push_back( col );
 
-            SCCOL   nFirstSortCol   = aSortData.nCol1;
-            SCROW   nFirstSortRow   = aSortData.nRow1;
-            SCTAB   nTab        = pViewData->GetTabNo();
-            sal_uInt16  i           = 1;
-            nFieldArr.clear();
-            nFieldArr.push_back(0);
+            for ( sal_uInt16 j=nStartField; j<nSortKeyCount; j++ )
+                m_aSortWin.m_aSortKeyItems[j]->m_xLbSort->insert_text(i, aFieldName);
 
-            if ( bSortByRows )
-            {
-                OUString  aFieldName;
-                SCCOL   nMaxCol = pDoc->ClampToAllocatedColumns(nTab, aSortData.nCol2);
-                SCCOL   col;
-
-                for ( col=nFirstSortCol; col<=nMaxCol && i<SC_MAXFIELDS; col++ )
-                {
-                    aFieldName = pDoc->GetString(col, nFirstSortRow, nTab);
-                    if ( !bHasHeader || aFieldName.isEmpty() )
-                    {
-                        aFieldName = ScGlobal::ReplaceOrAppend( aStrColumn, "%1", ScColToAlpha( col ));
-                    }
-                    nFieldArr.push_back( col );
-
-                    for ( sal_uInt16 j=nStartField; j<nSortKeyCount; j++ )
-                        m_aSortWin.m_aSortKeyItems[j]->m_xLbSort->insert_text(i, aFieldName);
-
-                    i++;
-                }
-            }
-            else
-            {
-                OUString  aFieldName;
-                SCROW   nMaxRow = aSortData.nRow2;
-                SCROW   row;
-
-                for ( row=nFirstSortRow; row<=nMaxRow && i<SC_MAXFIELDS; row++ )
-                {
-                    aFieldName = pDoc->GetString(nFirstSortCol, row, nTab);
-                    if ( !bHasHeader || aFieldName.isEmpty() )
-                    {
-                        aFieldName = ScGlobal::ReplaceOrAppend( aStrRow, "%1", OUString::number( row+1));
-                    }
-                    nFieldArr.push_back( row );
-
-                    for ( sal_uInt16 j=nStartField; j<nSortKeyCount; j++ )
-                        m_aSortWin.m_aSortKeyItems[j]->m_xLbSort->insert_text(i, aFieldName);
-
-                    i++;
-                }
-            }
-
-            for (sal_uInt16 j=nStartField; j < nSortKeyCount; ++j)
-            {
-                m_aSortWin.m_aSortKeyItems[j]->m_xLbSort->thaw();
-            }
-
-            nFieldCount = i;
+            i++;
         }
     }
+    else
+    {
+        OUString  aFieldName;
+        SCROW   nMaxRow = aSortData.nRow2;
+        SCROW   row;
+
+        for ( row=nFirstSortRow; row<=nMaxRow && i<SC_MAXFIELDS; row++ )
+        {
+            aFieldName = pDoc->GetString(nFirstSortCol, row, nTab);
+            if ( !bHasHeader || aFieldName.isEmpty() )
+            {
+                aFieldName = ScGlobal::ReplaceOrAppend( aStrRow, "%1", OUString::number( row+1));
+            }
+            nFieldArr.push_back( row );
+
+            for ( sal_uInt16 j=nStartField; j<nSortKeyCount; j++ )
+                m_aSortWin.m_aSortKeyItems[j]->m_xLbSort->insert_text(i, aFieldName);
+
+            i++;
+        }
+    }
+
+    for (sal_uInt16 j=nStartField; j < nSortKeyCount; ++j)
+    {
+        m_aSortWin.m_aSortKeyItems[j]->m_xLbSort->thaw();
+    }
+
+    nFieldCount = i;
 }
 
 sal_uInt16 ScTabPageSortFields::GetFieldSelPos( SCCOLROW nField )
@@ -449,22 +449,22 @@ IMPL_LINK( ScTabPageSortFields, SelectHdl, weld::ComboBox&, rLb, void )
 
     // If not selecting the last Listbox, modify the succeeding ones
     ++pIter;
-    if ( std::distance(m_aSortWin.m_aSortKeyItems.begin(), pIter) < nSortKeyCount )
-    {
-        if ( aSelEntry == aStrUndefined )
-        {
-            for ( ; pIter != m_aSortWin.m_aSortKeyItems.end(); ++pIter )
-            {
-                (*pIter)->m_xLbSort->set_active(0);
+    if ( std::distance(m_aSortWin.m_aSortKeyItems.begin(), pIter) >= nSortKeyCount )
+        return;
 
-                (*pIter)->DisableField();
-            }
-        }
-        else
+    if ( aSelEntry == aStrUndefined )
+    {
+        for ( ; pIter != m_aSortWin.m_aSortKeyItems.end(); ++pIter )
         {
-            (*pIter)->EnableField();
+            (*pIter)->m_xLbSort->set_active(0);
+
+            (*pIter)->DisableField();
         }
-     }
+    }
+    else
+    {
+        (*pIter)->EnableField();
+    }
 }
 
 IMPL_LINK_NOARG(ScTabPageSortFields, ScrollToEndHdl, Timer*, void)
@@ -709,23 +709,24 @@ void ScTabPageSortOptions::ActivatePage( const SfxItemSet& rSet )
 {
     // Refresh local copy with shared data
     aSortData = static_cast<const ScSortItem&>(rSet.Get( SCITEM_SORTDATA )).GetSortData();
-    if (ScSortDlg* pDlg = static_cast<ScSortDlg*>(GetDialogController()))
+    ScSortDlg* pDlg = static_cast<ScSortDlg*>(GetDialogController());
+    if (!pDlg)
+        return;
+
+    if ( m_xBtnHeader->get_active() != pDlg->GetHeaders() )
     {
-        if ( m_xBtnHeader->get_active() != pDlg->GetHeaders() )
-        {
-            m_xBtnHeader->set_active( pDlg->GetHeaders() );
-        }
-
-        if ( m_xBtnTopDown->get_active() != pDlg->GetByRows() )
-        {
-            m_xBtnTopDown->set_active( pDlg->GetByRows() );
-            m_xBtnLeftRight->set_active( !pDlg->GetByRows() );
-        }
-
-        m_xBtnHeader->set_label( (pDlg->GetByRows())
-                            ? aStrColLabel
-                            : aStrRowLabel );
+        m_xBtnHeader->set_active( pDlg->GetHeaders() );
     }
+
+    if ( m_xBtnTopDown->get_active() != pDlg->GetByRows() )
+    {
+        m_xBtnTopDown->set_active( pDlg->GetByRows() );
+        m_xBtnLeftRight->set_active( !pDlg->GetByRows() );
+    }
+
+    m_xBtnHeader->set_label( (pDlg->GetByRows())
+                        ? aStrColLabel
+                        : aStrRowLabel );
 }
 
 DeactivateRC ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
@@ -852,23 +853,23 @@ void ScTabPageSortOptions::EdOutPosModHdl()
     OUString  theCurPosStr = m_xEdOutPos->get_text();
     ScRefFlags  nResult = ScAddress().Parse( theCurPosStr, pDoc, pDoc->GetAddressConvention() );
 
-    if ( (nResult & ScRefFlags::VALID) == ScRefFlags::VALID )
+    if ( (nResult & ScRefFlags::VALID) != ScRefFlags::VALID )
+        return;
+
+    bool    bFound  = false;
+    sal_Int32 i = 0;
+    const int nCount = m_xLbOutPos->get_count();
+
+    for ( i=2; i<nCount && !bFound; i++ )
     {
-        bool    bFound  = false;
-        sal_Int32 i = 0;
-        const int nCount = m_xLbOutPos->get_count();
-
-        for ( i=2; i<nCount && !bFound; i++ )
-        {
-            OUString aStr = m_xLbOutPos->get_id(i);
-            bFound = (theCurPosStr == aStr);
-        }
-
-        if ( bFound )
-            m_xLbOutPos->set_active(--i);
-        else
-            m_xLbOutPos->set_active(0);
+        OUString aStr = m_xLbOutPos->get_id(i);
+        bFound = (theCurPosStr == aStr);
     }
+
+    if ( bFound )
+        m_xLbOutPos->set_active(--i);
+    else
+        m_xLbOutPos->set_active(0);
 }
 
 void ScTabPageSortOptions::FillAlgor()

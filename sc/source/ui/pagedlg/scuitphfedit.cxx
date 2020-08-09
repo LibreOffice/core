@@ -148,19 +148,19 @@ void ScHFEditPage::SetNumType(SvxNumType eNumType)
 void ScHFEditPage::Reset( const SfxItemSet* rCoreSet )
 {
     const SfxPoolItem* pItem = nullptr;
-    if ( rCoreSet->HasItem(nWhich, &pItem) )
-    {
-        const ScPageHFItem& rItem = static_cast<const ScPageHFItem&>(*pItem);
+    if ( !rCoreSet->HasItem(nWhich, &pItem) )
+        return;
 
-        if( const EditTextObject* pLeft = rItem.GetLeftArea() )
-            m_xWndLeft->SetText( *pLeft );
-        if( const EditTextObject* pCenter = rItem.GetCenterArea() )
-            m_xWndCenter->SetText( *pCenter );
-        if( const EditTextObject* pRight = rItem.GetRightArea() )
-            m_xWndRight->SetText( *pRight );
+    const ScPageHFItem& rItem = static_cast<const ScPageHFItem&>(*pItem);
 
-        SetSelectDefinedList();
-    }
+    if( const EditTextObject* pLeft = rItem.GetLeftArea() )
+        m_xWndLeft->SetText( *pLeft );
+    if( const EditTextObject* pCenter = rItem.GetCenterArea() )
+        m_xWndCenter->SetText( *pCenter );
+    if( const EditTextObject* pRight = rItem.GetRightArea() )
+        m_xWndRight->SetText( *pRight );
+
+    SetSelectDefinedList();
 }
 
 bool ScHFEditPage::FillItemSet( SfxItemSet* rCoreSet )

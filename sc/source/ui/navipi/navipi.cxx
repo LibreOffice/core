@@ -233,20 +233,20 @@ IMPL_LINK(ScNavigatorDlg, ToolBoxDropdownClickHdl, const OString&, rCommand, voi
 
     // the popup menu of the drop mode has to be called in the
     // click (button down) and not in the select (button up)
-    if (rCommand == "dragmode")
+    if (rCommand != "dragmode")
+        return;
+
+    switch (GetDropMode())
     {
-        switch (GetDropMode())
-        {
-            case 0:
-                m_xDragModeMenu->set_active("hyperlink", true);
-                break;
-            case 1:
-                m_xDragModeMenu->set_active("link", true);
-                break;
-            case 2:
-                m_xDragModeMenu->set_active("copy", true);
-                break;
-        }
+        case 0:
+            m_xDragModeMenu->set_active("hyperlink", true);
+            break;
+        case 1:
+            m_xDragModeMenu->set_active("link", true);
+            break;
+        case 2:
+            m_xDragModeMenu->set_active("copy", true);
+            break;
     }
 }
 
@@ -550,26 +550,26 @@ void ScNavigatorDlg::SetDropMode(sal_uInt16 nNew)
 
 void ScNavigatorDlg::SetCurrentCell( SCCOL nColNo, SCROW nRowNo )
 {
-    if ( (nColNo+1 != nCurCol) || (nRowNo+1 != nCurRow) )
-    {
-        // SID_CURRENTCELL == Item #0 clear cache, so it's possible
-        // setting the current cell even in combined areas
-        mvBoundItems[0]->ClearCache();
+    if ((nColNo+1 == nCurCol) && (nRowNo+1 == nCurRow))
+        return;
 
-        ScAddress aScAddress( nColNo, nRowNo, 0 );
-        OUString aAddr(aScAddress.Format(ScRefFlags::ADDR_ABS));
+    // SID_CURRENTCELL == Item #0 clear cache, so it's possible
+    // setting the current cell even in combined areas
+    mvBoundItems[0]->ClearCache();
 
-        bool bUnmark = false;
-        if ( GetViewData() )
-            bUnmark = !pViewData->GetMarkData().IsCellMarked( nColNo, nRowNo );
+    ScAddress aScAddress( nColNo, nRowNo, 0 );
+    OUString aAddr(aScAddress.Format(ScRefFlags::ADDR_ABS));
 
-        SfxStringItem   aPosItem( SID_CURRENTCELL, aAddr );
-        SfxBoolItem     aUnmarkItem( FN_PARAM_1, bUnmark );     // cancel selection
+    bool bUnmark = false;
+    if ( GetViewData() )
+        bUnmark = !pViewData->GetMarkData().IsCellMarked( nColNo, nRowNo );
 
-        rBindings.GetDispatcher()->ExecuteList(SID_CURRENTCELL,
-                                  SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
-                                  { &aPosItem, &aUnmarkItem });
-    }
+    SfxStringItem   aPosItem( SID_CURRENTCELL, aAddr );
+    SfxBoolItem     aUnmarkItem( FN_PARAM_1, bUnmark );     // cancel selection
+
+    rBindings.GetDispatcher()->ExecuteList(SID_CURRENTCELL,
+                              SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
+                              { &aPosItem, &aUnmarkItem });
 }
 
 void ScNavigatorDlg::SetCurrentCellStr( const OUString& rName )
@@ -652,21 +652,21 @@ void ScNavigatorDlg::UpdateSelection()
         return;
 
     uno::Reference< drawing::XShapes > xShapes = pViewSh->getSelectedXShapes();
-    if( xShapes )
+    if( !xShapes )
+        return;
+
+    uno::Reference< container::XIndexAccess > xIndexAccess(
+            xShapes, uno::UNO_QUERY_THROW );
+    if( xIndexAccess->getCount() > 1 )
+        return;
+    uno::Reference< drawing::XShape > xShape;
+    if( xIndexAccess->getByIndex(0) >>= xShape )
     {
-        uno::Reference< container::XIndexAccess > xIndexAccess(
-                xShapes, uno::UNO_QUERY_THROW );
-        if( xIndexAccess->getCount() > 1 )
-            return;
-        uno::Reference< drawing::XShape > xShape;
-        if( xIndexAccess->getByIndex(0) >>= xShape )
+        uno::Reference< container::XNamed > xNamed( xShape, uno::UNO_QUERY_THROW );
+        OUString sName = xNamed->getName();
+        if (!sName.isEmpty())
         {
-            uno::Reference< container::XNamed > xNamed( xShape, uno::UNO_QUERY_THROW );
-            OUString sName = xNamed->getName();
-            if (!sName.isEmpty())
-            {
-                m_xLbEntries->SelectEntryByName( ScContentId::DRAWING, sName );
-            }
+            m_xLbEntries->SelectEntryByName( ScContentId::DRAWING, sName );
         }
     }
 }
@@ -863,20 +863,20 @@ void ScNavigatorDlg::MarkDataArea()
 {
     ScTabViewShell* pViewSh = GetTabViewShell();
 
-    if ( pViewSh )
-    {
-        if ( !pMarkArea )
-            pMarkArea.reset( new ScArea );
+    if ( !pViewSh )
+        return;
 
-        pViewSh->MarkDataArea();
-        ScRange aMarkRange;
-        pViewSh->GetViewData().GetMarkData().GetMarkArea(aMarkRange);
-        pMarkArea->nColStart = aMarkRange.aStart.Col();
-        pMarkArea->nRowStart = aMarkRange.aStart.Row();
-        pMarkArea->nColEnd = aMarkRange.aEnd.Col();
-        pMarkArea->nRowEnd = aMarkRange.aEnd.Row();
-        pMarkArea->nTab = aMarkRange.aStart.Tab();
-    }
+    if ( !pMarkArea )
+        pMarkArea.reset( new ScArea );
+
+    pViewSh->MarkDataArea();
+    ScRange aMarkRange;
+    pViewSh->GetViewData().GetMarkData().GetMarkArea(aMarkRange);
+    pMarkArea->nColStart = aMarkRange.aStart.Col();
+    pMarkArea->nRowStart = aMarkRange.aStart.Row();
+    pMarkArea->nColEnd = aMarkRange.aEnd.Col();
+    pMarkArea->nRowEnd = aMarkRange.aEnd.Row();
+    pMarkArea->nTab = aMarkRange.aStart.Tab();
 }
 
 void ScNavigatorDlg::UnmarkDataArea()

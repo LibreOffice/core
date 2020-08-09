@@ -109,71 +109,71 @@ ScFormulaDlg::ScFormulaDlg(SfxBindings* pB, SfxChildWindow* pCW,
     fill();
 
     ScFormEditData* pData = m_pViewShell->GetFormEditData();
-    if (!pData)
+    if (pData)
+        return;
+
+    pScMod->SetRefInputHdl(pInputHdl);
+
+    m_pDoc = pViewData->GetDocument();
+    SCCOL nCol = pViewData->GetCurX();
+    SCROW nRow = pViewData->GetCurY();
+    SCTAB nTab = pViewData->GetTabNo();
+    m_CursorPos = ScAddress( nCol, nRow, nTab );
+
+    m_pViewShell->InitFormEditData();                             // create new
+    pData = m_pViewShell->GetFormEditData();
+    pData->SetInputHandler(pInputHdl);
+    pData->SetDocShell(pViewData->GetDocShell());
+
+    OSL_ENSURE(pData,"FormEditData not available");
+
+    formula::FormulaDlgMode eMode = FormulaDlgMode::Formula;            // default...
+
+    // edit if formula exists
+
+    OUString aFormula;
+    m_pDoc->GetFormula( nCol, nRow, nTab, aFormula );
+    bool bEdit   = ( aFormula.getLength() > 1 );
+    bool bMatrix = false;
+    if ( bEdit )
     {
-        pScMod->SetRefInputHdl(pInputHdl);
+        bMatrix = CheckMatrix(aFormula);
 
-        m_pDoc = pViewData->GetDocument();
-        SCCOL nCol = pViewData->GetCurX();
-        SCROW nRow = pViewData->GetCurY();
-        SCTAB nTab = pViewData->GetTabNo();
-        m_CursorPos = ScAddress( nCol, nRow, nTab );
-
-        m_pViewShell->InitFormEditData();                             // create new
-        pData = m_pViewShell->GetFormEditData();
-        pData->SetInputHandler(pInputHdl);
-        pData->SetDocShell(pViewData->GetDocShell());
-
-        OSL_ENSURE(pData,"FormEditData not available");
-
-        formula::FormulaDlgMode eMode = FormulaDlgMode::Formula;            // default...
-
-        // edit if formula exists
-
-        OUString aFormula;
-        m_pDoc->GetFormula( nCol, nRow, nTab, aFormula );
-        bool bEdit   = ( aFormula.getLength() > 1 );
-        bool bMatrix = false;
-        if ( bEdit )
+        sal_Int32 nFStart = 0;
+        sal_Int32 nFEnd   = 0;
+        if ( GetFormulaHelper().GetNextFunc( aFormula, false, nFStart, &nFEnd) )
         {
-            bMatrix = CheckMatrix(aFormula);
-
-            sal_Int32 nFStart = 0;
-            sal_Int32 nFEnd   = 0;
-            if ( GetFormulaHelper().GetNextFunc( aFormula, false, nFStart, &nFEnd) )
-            {
-                pInputHdl->InputReplaceSelection( aFormula );
-                pInputHdl->InputSetSelection( nFStart, nFEnd );
-                sal_Int32 PrivStart, PrivEnd;
-                pInputHdl->InputGetSelection( PrivStart, PrivEnd);
-
-                eMode = SetMeText(pInputHdl->GetFormString(),PrivStart, PrivEnd, bMatrix, true, true);
-                pData->SetFStart( nFStart );
-            }
-            else
-                bEdit = false;
-        }
-
-        if ( !bEdit )
-        {
-            OUString aNewFormula('=');
-            if ( aFormula.startsWith("=") )
-                aNewFormula = aFormula;
-
-            pInputHdl->InputReplaceSelection( aNewFormula );
-            pInputHdl->InputSetSelection( 1, aNewFormula.getLength()+1 );
+            pInputHdl->InputReplaceSelection( aFormula );
+            pInputHdl->InputSetSelection( nFStart, nFEnd );
             sal_Int32 PrivStart, PrivEnd;
             pInputHdl->InputGetSelection( PrivStart, PrivEnd);
-            SetMeText(pInputHdl->GetFormString(),PrivStart, PrivEnd,bMatrix,false,false);
 
-            pData->SetFStart( 1 );      // after "="
+            eMode = SetMeText(pInputHdl->GetFormString(),PrivStart, PrivEnd, bMatrix, true, true);
+            pData->SetFStart( nFStart );
         }
-
-        pData->SetMode( eMode );
-        OUString rStrExp = GetMeText();
-
-        Update(rStrExp);
+        else
+            bEdit = false;
     }
+
+    if ( !bEdit )
+    {
+        OUString aNewFormula('=');
+        if ( aFormula.startsWith("=") )
+            aNewFormula = aFormula;
+
+        pInputHdl->InputReplaceSelection( aNewFormula );
+        pInputHdl->InputSetSelection( 1, aNewFormula.getLength()+1 );
+        sal_Int32 PrivStart, PrivEnd;
+        pInputHdl->InputGetSelection( PrivStart, PrivEnd);
+        SetMeText(pInputHdl->GetFormString(),PrivStart, PrivEnd,bMatrix,false,false);
+
+        pData->SetFStart( 1 );      // after "="
+    }
+
+    pData->SetMode( eMode );
+    OUString rStrExp = GetMeText();
+
+    Update(rStrExp);
 
 }
 
@@ -190,45 +190,45 @@ void ScFormulaDlg::fill()
     ScFormEditData* pData = static_cast<ScFormEditData*>(getFormEditData());
     notifyChange();
     OUString rStrExp;
-    if (pData)
+    if (!pData)
+        return;
+
+    //  data exists -> restore state (after switch)
+    //  don't reinitialise m_pDoc and m_CursorPos
+    //pDoc = pViewData->GetDocument();
+    if(IsInputHdl(pData->GetInputHandler()))
     {
-        //  data exists -> restore state (after switch)
-        //  don't reinitialise m_pDoc and m_CursorPos
-        //pDoc = pViewData->GetDocument();
-        if(IsInputHdl(pData->GetInputHandler()))
+        pScMod->SetRefInputHdl(pData->GetInputHandler());
+    }
+    else
+    {
+        ScTabViewShell* pTabViewShell;
+        ScInputHandler* pInputHdl = GetNextInputHandler(pData->GetDocShell(),&pTabViewShell);
+
+        if ( pInputHdl == nullptr ) //no more InputHandler for DocShell
         {
-            pScMod->SetRefInputHdl(pData->GetInputHandler());
+            disableOk();
+            pInputHdl = pScMod->GetInputHdl();
         }
         else
         {
-            ScTabViewShell* pTabViewShell;
-            ScInputHandler* pInputHdl = GetNextInputHandler(pData->GetDocShell(),&pTabViewShell);
-
-            if ( pInputHdl == nullptr ) //no more InputHandler for DocShell
-            {
-                disableOk();
-                pInputHdl = pScMod->GetInputHdl();
-            }
-            else
-            {
-                pInputHdl->SetRefViewShell(pTabViewShell);
-            }
-            pScMod->SetRefInputHdl(pInputHdl);
-            pData->SetInputHandler(pInputHdl);
+            pInputHdl->SetRefViewShell(pTabViewShell);
         }
-
-        OUString aOldFormulaTmp(pData->GetInputHandler()->GetFormString());
-        pData->GetInputHandler()->InputSetSelection( 0, aOldFormulaTmp.getLength());
-
-        rStrExp=pData->GetUndoStr();
-        pData->GetInputHandler()->InputReplaceSelection(rStrExp);
-
-        SetMeText(rStrExp);
-
-        Update();
-        // switch back, maybe new Doc has been opened
-        pScMod->SetRefInputHdl(nullptr);
+        pScMod->SetRefInputHdl(pInputHdl);
+        pData->SetInputHandler(pInputHdl);
     }
+
+    OUString aOldFormulaTmp(pData->GetInputHandler()->GetFormString());
+    pData->GetInputHandler()->InputSetSelection( 0, aOldFormulaTmp.getLength());
+
+    rStrExp=pData->GetUndoStr();
+    pData->GetInputHandler()->InputReplaceSelection(rStrExp);
+
+    SetMeText(rStrExp);
+
+    Update();
+    // switch back, maybe new Doc has been opened
+    pScMod->SetRefInputHdl(nullptr);
 }
 
 ScFormulaDlg::~ScFormulaDlg() COVERITY_NOEXCEPT_FALSE
@@ -395,62 +395,62 @@ void ScFormulaDlg::RefInputDone( bool bForced )
 void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument& rRefDoc )
 {
     const IFunctionDescription* pFunc = getCurrentFunctionDescription();
-    if ( pFunc && pFunc->getSuppressedArgumentCount() > 0 )
+    if ( !(pFunc && pFunc->getSuppressedArgumentCount() > 0) )
+        return;
+
+    Selection theSel;
+    bool bRefNull = UpdateParaWin(theSel);
+
+    if ( rRef.aStart != rRef.aEnd && bRefNull )
     {
-        Selection theSel;
-        bool bRefNull = UpdateParaWin(theSel);
-
-        if ( rRef.aStart != rRef.aEnd && bRefNull )
-        {
-            RefInputStart(GetActiveEdit());
-        }
-
-        OUString      aRefStr;
-        bool bOtherDoc = (&rRefDoc != m_pDoc && rRefDoc.GetDocumentShell()->HasName());
-        if ( bOtherDoc )
-        {
-            //  reference to other document - like inputhdl.cxx
-
-            OSL_ENSURE(rRef.aStart.Tab()==rRef.aEnd.Tab(), "nStartTab!=nEndTab");
-
-            // Always 3D and absolute.
-            OUString aTmp( rRef.Format(rRefDoc, ScRefFlags::VALID | ScRefFlags::TAB_ABS_3D));
-
-            SfxObjectShell* pObjSh = rRefDoc.GetDocumentShell();
-
-            // #i75893# convert escaped URL of the document to something user friendly
-//           OUString aFileName = pObjSh->GetMedium()->GetName();
-            OUString aFileName = pObjSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::Unambiguous );
-
-            aRefStr = "'" + aFileName + "'#" + aTmp;
-        }
-        else
-        {
-            // We can't use ScRange::Format here because in R1C1 mode we need
-            // to display the reference position relative to the cursor
-            // position.
-            ScTokenArray aArray(&rRefDoc);
-            ScComplexRefData aRefData;
-            aRefData.InitRangeRel(&rRefDoc, rRef, m_CursorPos);
-            bool bSingle = aRefData.Ref1 == aRefData.Ref2;
-            if (m_CursorPos.Tab() != rRef.aStart.Tab())
-            {
-                // pointer-selected => absolute sheet reference
-                aRefData.Ref1.SetAbsTab( rRef.aStart.Tab() );
-                aRefData.Ref1.SetFlag3D(true);
-            }
-            if (bSingle)
-                aArray.AddSingleReference(aRefData.Ref1);
-            else
-                aArray.AddDoubleReference(aRefData);
-            ScCompiler aComp(m_pDoc, m_CursorPos, aArray, m_pDoc->GetGrammar());
-            OUStringBuffer aBuf;
-            aComp.CreateStringFromTokenArray(aBuf);
-            aRefStr = aBuf.makeStringAndClear();
-        }
-
-        UpdateParaWin(theSel,aRefStr);
+        RefInputStart(GetActiveEdit());
     }
+
+    OUString      aRefStr;
+    bool bOtherDoc = (&rRefDoc != m_pDoc && rRefDoc.GetDocumentShell()->HasName());
+    if ( bOtherDoc )
+    {
+        //  reference to other document - like inputhdl.cxx
+
+        OSL_ENSURE(rRef.aStart.Tab()==rRef.aEnd.Tab(), "nStartTab!=nEndTab");
+
+        // Always 3D and absolute.
+        OUString aTmp( rRef.Format(rRefDoc, ScRefFlags::VALID | ScRefFlags::TAB_ABS_3D));
+
+        SfxObjectShell* pObjSh = rRefDoc.GetDocumentShell();
+
+        // #i75893# convert escaped URL of the document to something user friendly
+//           OUString aFileName = pObjSh->GetMedium()->GetName();
+        OUString aFileName = pObjSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::Unambiguous );
+
+        aRefStr = "'" + aFileName + "'#" + aTmp;
+    }
+    else
+    {
+        // We can't use ScRange::Format here because in R1C1 mode we need
+        // to display the reference position relative to the cursor
+        // position.
+        ScTokenArray aArray(&rRefDoc);
+        ScComplexRefData aRefData;
+        aRefData.InitRangeRel(&rRefDoc, rRef, m_CursorPos);
+        bool bSingle = aRefData.Ref1 == aRefData.Ref2;
+        if (m_CursorPos.Tab() != rRef.aStart.Tab())
+        {
+            // pointer-selected => absolute sheet reference
+            aRefData.Ref1.SetAbsTab( rRef.aStart.Tab() );
+            aRefData.Ref1.SetFlag3D(true);
+        }
+        if (bSingle)
+            aArray.AddSingleReference(aRefData.Ref1);
+        else
+            aArray.AddDoubleReference(aRefData);
+        ScCompiler aComp(m_pDoc, m_CursorPos, aArray, m_pDoc->GetGrammar());
+        OUStringBuffer aBuf;
+        aComp.CreateStringFromTokenArray(aBuf);
+        aRefStr = aBuf.makeStringAndClear();
+    }
+
+    UpdateParaWin(theSel,aRefStr);
 }
 
 bool ScFormulaDlg::IsRefInputMode() const
@@ -585,19 +585,19 @@ void ScFormulaDlg::switchBack()
 
     // restore current chart (cause mouse-RefInput)
     ScTabViewShell* pScViewShell = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current() );
-    if ( pScViewShell )
-    {
-        ScViewData& rVD=pScViewShell->GetViewData();
-        SCTAB nExecTab = m_CursorPos.Tab();
-        if ( nExecTab != rVD.GetTabNo() )
-            pScViewShell->SetTabNo( nExecTab );
+    if ( !pScViewShell )
+        return;
 
-        SCROW nRow = m_CursorPos.Row();
-        SCCOL nCol = m_CursorPos.Col();
+    ScViewData& rVD=pScViewShell->GetViewData();
+    SCTAB nExecTab = m_CursorPos.Tab();
+    if ( nExecTab != rVD.GetTabNo() )
+        pScViewShell->SetTabNo( nExecTab );
 
-        if(rVD.GetCurX()!=nCol || rVD.GetCurY()!=nRow)
-            pScViewShell->SetCursor(nCol,nRow);
-    }
+    SCROW nRow = m_CursorPos.Row();
+    SCCOL nCol = m_CursorPos.Col();
+
+    if(rVD.GetCurX()!=nCol || rVD.GetCurY()!=nRow)
+        pScViewShell->SetCursor(nCol,nRow);
 }
 formula::FormEditData* ScFormulaDlg::getFormEditData() const
 {

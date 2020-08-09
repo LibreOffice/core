@@ -116,100 +116,100 @@ void lcl_ChartInit(const uno::Reference <embed::XEmbeddedObject>& xObj, ScViewDa
         }
     }
 
-    if (!aRangeString.isEmpty())
+    if (aRangeString.isEmpty())
+        return;
+
+    // connect to Calc data (if no range string, leave chart alone, with its own data)
+
+    uno::Reference< css::chart2::data::XDataReceiver > xReceiver;
+    if( xObj.is())
+        xReceiver.set( xObj->getComponent(), uno::UNO_QUERY );
+    OSL_ASSERT( xReceiver.is());
+    if( !xReceiver.is() )
+        return;
+
+    uno::Reference<chart2::data::XDataProvider> xDataProvider;
+    if (bRangeIsPivotTable)
     {
-        // connect to Calc data (if no range string, leave chart alone, with its own data)
+        std::unique_ptr<sc::PivotTableDataProvider> pPivotTableDataProvider(new sc::PivotTableDataProvider(&rScDoc));
+        pPivotTableDataProvider->setPivotTableName(aRangeString);
+        xDataProvider.set(pPivotTableDataProvider.release());
+    }
+    else
+    {
+        xDataProvider.set(new ScChart2DataProvider(&rScDoc));
+    }
 
-        uno::Reference< css::chart2::data::XDataReceiver > xReceiver;
-        if( xObj.is())
-            xReceiver.set( xObj->getComponent(), uno::UNO_QUERY );
-        OSL_ASSERT( xReceiver.is());
-        if( xReceiver.is() )
+    xReceiver->attachDataProvider(xDataProvider);
+
+    uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( pDocShell->GetModel(), uno::UNO_QUERY );
+    xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
+
+    // Same behavior as with old chart: Always assume data series in columns
+    chart::ChartDataRowSource eDataRowSource = chart::ChartDataRowSource_COLUMNS;
+    bool bHasCategories = false;
+    bool bFirstCellAsLabel = false;
+
+    // use ScChartPositioner to auto-detect column/row headers (like ScChartArray in old version)
+    ScRangeListRef aRangeListRef( new ScRangeList );
+    aRangeListRef->Parse( aRangeString, &rScDoc, rScDoc.GetAddressConvention() );
+    if ( !aRangeListRef->empty() )
+    {
+        rScDoc.LimitChartIfAll( aRangeListRef );               // limit whole columns/rows to used area
+
+        // update string from modified ranges.  The ranges must be in the current formula syntax.
+        OUString aTmpStr;
+        aRangeListRef->Format( aTmpStr, ScRefFlags::RANGE_ABS_3D, rScDoc, rScDoc.GetAddressConvention() );
+        aRangeString = aTmpStr;
+
+        ScChartPositioner aChartPositioner( &rScDoc, aRangeListRef );
+        const ScChartPositionMap* pPositionMap( aChartPositioner.GetPositionMap() );
+        if( pPositionMap )
         {
-            uno::Reference<chart2::data::XDataProvider> xDataProvider;
-            if (bRangeIsPivotTable)
-            {
-                std::unique_ptr<sc::PivotTableDataProvider> pPivotTableDataProvider(new sc::PivotTableDataProvider(&rScDoc));
-                pPivotTableDataProvider->setPivotTableName(aRangeString);
-                xDataProvider.set(pPivotTableDataProvider.release());
-            }
-            else
-            {
-                xDataProvider.set(new ScChart2DataProvider(&rScDoc));
-            }
-
-            xReceiver->attachDataProvider(xDataProvider);
-
-            uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( pDocShell->GetModel(), uno::UNO_QUERY );
-            xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
-
-            // Same behavior as with old chart: Always assume data series in columns
-            chart::ChartDataRowSource eDataRowSource = chart::ChartDataRowSource_COLUMNS;
-            bool bHasCategories = false;
-            bool bFirstCellAsLabel = false;
-
-            // use ScChartPositioner to auto-detect column/row headers (like ScChartArray in old version)
-            ScRangeListRef aRangeListRef( new ScRangeList );
-            aRangeListRef->Parse( aRangeString, &rScDoc, rScDoc.GetAddressConvention() );
-            if ( !aRangeListRef->empty() )
-            {
-                rScDoc.LimitChartIfAll( aRangeListRef );               // limit whole columns/rows to used area
-
-                // update string from modified ranges.  The ranges must be in the current formula syntax.
-                OUString aTmpStr;
-                aRangeListRef->Format( aTmpStr, ScRefFlags::RANGE_ABS_3D, rScDoc, rScDoc.GetAddressConvention() );
-                aRangeString = aTmpStr;
-
-                ScChartPositioner aChartPositioner( &rScDoc, aRangeListRef );
-                const ScChartPositionMap* pPositionMap( aChartPositioner.GetPositionMap() );
-                if( pPositionMap )
-                {
-                    SCSIZE nRowCount = pPositionMap->GetRowCount();
-                    if( 1==nRowCount )
-                        eDataRowSource = chart::ChartDataRowSource_ROWS;
-                }
-                if ( eDataRowSource == chart::ChartDataRowSource_COLUMNS )
-                {
-                    bHasCategories = aChartPositioner.HasRowHeaders();
-                    bFirstCellAsLabel = aChartPositioner.HasColHeaders();
-                }
-                else    // in case the default is changed
-                {
-                    bHasCategories = aChartPositioner.HasColHeaders();
-                    bFirstCellAsLabel = aChartPositioner.HasRowHeaders();
-                }
-            }
-
-            uno::Sequence< beans::PropertyValue > aArgs( 4 );
-            aArgs[0] = beans::PropertyValue(
-                "CellRangeRepresentation", -1,
-                uno::makeAny( aRangeString ), beans::PropertyState_DIRECT_VALUE );
-            aArgs[1] = beans::PropertyValue(
-                "HasCategories", -1,
-                uno::makeAny( bHasCategories ), beans::PropertyState_DIRECT_VALUE );
-            aArgs[2] = beans::PropertyValue(
-                "FirstCellAsLabel", -1,
-                uno::makeAny( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE );
-            aArgs[3] = beans::PropertyValue(
-                "DataRowSource", -1,
-                uno::makeAny( eDataRowSource ), beans::PropertyState_DIRECT_VALUE );
-
-            try
-            {
-                xReceiver->setArguments( aArgs );
-            }
-            catch (const lang::IllegalArgumentException&)
-            {
-                // Can happen for invalid aRangeString, in which case a Chart
-                // will be created nevertheless and the range string can be
-                // edited.
-                TOOLS_WARN_EXCEPTION("sc.ui",
-                        "lcl_ChartInit - caught IllegalArgumentException might be due to aRangeString: " << aRangeString);
-            }
-
-            // don't create chart listener here (range may be modified in chart dialog)
+            SCSIZE nRowCount = pPositionMap->GetRowCount();
+            if( 1==nRowCount )
+                eDataRowSource = chart::ChartDataRowSource_ROWS;
+        }
+        if ( eDataRowSource == chart::ChartDataRowSource_COLUMNS )
+        {
+            bHasCategories = aChartPositioner.HasRowHeaders();
+            bFirstCellAsLabel = aChartPositioner.HasColHeaders();
+        }
+        else    // in case the default is changed
+        {
+            bHasCategories = aChartPositioner.HasColHeaders();
+            bFirstCellAsLabel = aChartPositioner.HasRowHeaders();
         }
     }
+
+    uno::Sequence< beans::PropertyValue > aArgs( 4 );
+    aArgs[0] = beans::PropertyValue(
+        "CellRangeRepresentation", -1,
+        uno::makeAny( aRangeString ), beans::PropertyState_DIRECT_VALUE );
+    aArgs[1] = beans::PropertyValue(
+        "HasCategories", -1,
+        uno::makeAny( bHasCategories ), beans::PropertyState_DIRECT_VALUE );
+    aArgs[2] = beans::PropertyValue(
+        "FirstCellAsLabel", -1,
+        uno::makeAny( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE );
+    aArgs[3] = beans::PropertyValue(
+        "DataRowSource", -1,
+        uno::makeAny( eDataRowSource ), beans::PropertyState_DIRECT_VALUE );
+
+    try
+    {
+        xReceiver->setArguments( aArgs );
+    }
+    catch (const lang::IllegalArgumentException&)
+    {
+        // Can happen for invalid aRangeString, in which case a Chart
+        // will be created nevertheless and the range string can be
+        // edited.
+        TOOLS_WARN_EXCEPTION("sc.ui",
+                "lcl_ChartInit - caught IllegalArgumentException might be due to aRangeString: " << aRangeString);
+    }
+
+    // don't create chart listener here (range may be modified in chart dialog)
 }
 
 }

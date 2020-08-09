@@ -108,74 +108,74 @@ void FuText::StopEditMode()
     if( pCur && pCur->IsVisible() )
         pCur->Hide();
 
-    if( pNote )
+    if( !pNote )
+        return;
+
+    ScTabView::OnLOKNoteStateChanged( pNote );
+
+    // hide the caption object if it is in hidden state
+    pNote->ShowCaptionTemp( aNotePos, false );
+
+    // update author and date
+    pNote->AutoStamp();
+
+    /*  If the entire text has been cleared, the cell note and its caption
+        object have to be removed. */
+    SdrTextObj* pTextObject = dynamic_cast< SdrTextObj* >( pObject );
+    bool bDeleteNote = !pTextObject || !pTextObject->HasText();
+    if( bDeleteNote )
     {
-        ScTabView::OnLOKNoteStateChanged( pNote );
-
-        // hide the caption object if it is in hidden state
-        pNote->ShowCaptionTemp( aNotePos, false );
-
-        // update author and date
-        pNote->AutoStamp();
-
-        /*  If the entire text has been cleared, the cell note and its caption
-            object have to be removed. */
-        SdrTextObj* pTextObject = dynamic_cast< SdrTextObj* >( pObject );
-        bool bDeleteNote = !pTextObject || !pTextObject->HasText();
-        if( bDeleteNote )
-        {
-            if( pUndoMgr )
-            {
-                // collect the "remove object" drawing undo action created by DeleteNote()
-                pDrawLayer->BeginCalcUndo(false);
-                // rescue note data before deletion
-                ScNoteData aNoteData( pNote->GetNoteData() );
-                // delete note from document (removes caption, but does not delete it)
-                rDoc.ReleaseNote(aNotePos);
-                // create undo action for removed note
-                pUndoMgr->AddUndoAction( std::make_unique<ScUndoReplaceNote>( *pDocShell, aNotePos, aNoteData, false, pDrawLayer->GetCalcUndo() ) );
-            }
-            else
-            {
-                rDoc.ReleaseNote(aNotePos);
-            }
-            // ScDocument::DeleteNote has deleted the note that pNote points to
-            pNote = nullptr;
-        }
-
-        // finalize the undo list action
         if( pUndoMgr )
         {
-            pUndoMgr->LeaveListAction();
-
-            /*  #i94039# Update the default name "Edit Note" of the undo action
-                if the note has been created before editing or is deleted due
-                to deleted text. If the note has been created *and* is deleted,
-                the last undo action can be removed completely. Note: The
-                function LeaveListAction() removes the last action by itself,
-                if it is empty (when result is SdrEndTextEditKind::Unchanged). */
-            if( bNewNote && bDeleteNote )
-            {
-                pUndoMgr->RemoveLastUndoAction();
-
-                // Make sure the former area of the note anchor is invalidated.
-                ScRangeList aRangeList(aNotePos);
-                ScMarkData aMarkData(rDoc.GetSheetLimits(), aRangeList);
-                rViewShell.UpdateSelectionArea(aMarkData);
-            }
-            else if( bNewNote || bDeleteNote )
-            {
-                SfxListUndoAction* pAction = dynamic_cast< SfxListUndoAction* >( pUndoMgr->GetUndoAction() );
-                OSL_ENSURE( pAction, "FuText::StopEditMode - list undo action expected" );
-                if( pAction )
-                    pAction->SetComment( ScResId( bNewNote ? STR_UNDO_INSERTNOTE : STR_UNDO_DELETENOTE ) );
-            }
+            // collect the "remove object" drawing undo action created by DeleteNote()
+            pDrawLayer->BeginCalcUndo(false);
+            // rescue note data before deletion
+            ScNoteData aNoteData( pNote->GetNoteData() );
+            // delete note from document (removes caption, but does not delete it)
+            rDoc.ReleaseNote(aNotePos);
+            // create undo action for removed note
+            pUndoMgr->AddUndoAction( std::make_unique<ScUndoReplaceNote>( *pDocShell, aNotePos, aNoteData, false, pDrawLayer->GetCalcUndo() ) );
         }
-
-        // invalidate stream positions only for the affected sheet
-        rDoc.LockStreamValid(false);
-        rDoc.SetStreamValid(aNotePos.Tab(), false);
+        else
+        {
+            rDoc.ReleaseNote(aNotePos);
+        }
+        // ScDocument::DeleteNote has deleted the note that pNote points to
+        pNote = nullptr;
     }
+
+    // finalize the undo list action
+    if( pUndoMgr )
+    {
+        pUndoMgr->LeaveListAction();
+
+        /*  #i94039# Update the default name "Edit Note" of the undo action
+            if the note has been created before editing or is deleted due
+            to deleted text. If the note has been created *and* is deleted,
+            the last undo action can be removed completely. Note: The
+            function LeaveListAction() removes the last action by itself,
+            if it is empty (when result is SdrEndTextEditKind::Unchanged). */
+        if( bNewNote && bDeleteNote )
+        {
+            pUndoMgr->RemoveLastUndoAction();
+
+            // Make sure the former area of the note anchor is invalidated.
+            ScRangeList aRangeList(aNotePos);
+            ScMarkData aMarkData(rDoc.GetSheetLimits(), aRangeList);
+            rViewShell.UpdateSelectionArea(aMarkData);
+        }
+        else if( bNewNote || bDeleteNote )
+        {
+            SfxListUndoAction* pAction = dynamic_cast< SfxListUndoAction* >( pUndoMgr->GetUndoAction() );
+            OSL_ENSURE( pAction, "FuText::StopEditMode - list undo action expected" );
+            if( pAction )
+                pAction->SetComment( ScResId( bNewNote ? STR_UNDO_INSERTNOTE : STR_UNDO_DELETENOTE ) );
+        }
+    }
+
+    // invalidate stream positions only for the affected sheet
+    rDoc.LockStreamValid(false);
+    rDoc.SetStreamValid(aNotePos.Tab(), false);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

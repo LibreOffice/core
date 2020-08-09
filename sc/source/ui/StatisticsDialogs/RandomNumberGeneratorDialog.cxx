@@ -132,19 +132,19 @@ void ScRandomNumberGeneratorDialog::Close()
 
 void ScRandomNumberGeneratorDialog::SetReference( const ScRange& rReferenceRange, ScDocument& rDoc )
 {
-    if (mxInputRangeEdit->GetWidget()->get_sensitive())
-    {
-        if ( rReferenceRange.aStart != rReferenceRange.aEnd )
-            RefInputStart(mxInputRangeEdit.get());
+    if (!mxInputRangeEdit->GetWidget()->get_sensitive())
+        return;
 
-        maInputRange = rReferenceRange;
+    if ( rReferenceRange.aStart != rReferenceRange.aEnd )
+        RefInputStart(mxInputRangeEdit.get());
 
-        OUString aReferenceString(maInputRange.Format(rDoc, ScRefFlags::RANGE_ABS_3D, rDoc.GetAddressConvention()));
-        mxInputRangeEdit->SetRefString( aReferenceString );
+    maInputRange = rReferenceRange;
 
-        mxButtonApply->set_sensitive(true);
-        mxButtonOk->set_sensitive(true);
-    }
+    OUString aReferenceString(maInputRange.Format(rDoc, ScRefFlags::RANGE_ABS_3D, rDoc.GetAddressConvention()));
+    mxInputRangeEdit->SetRefString( aReferenceString );
+
+    mxButtonApply->set_sensitive(true);
+    mxButtonOk->set_sensitive(true);
 }
 
 void ScRandomNumberGeneratorDialog::SelectGeneratorAndGenerateNumbers()
