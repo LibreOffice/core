@@ -20,10 +20,15 @@
     .arch armv8-a
     .text
     .align 2
+#ifndef __APPLE__
     .global vtableSlotCall
     .hidden vtableSlotCall
     .type vtableSlotCall, %function
 vtableSlotCall:
+#else
+	.global _vtableSlotCall
+_vtableSlotCall:
+#endif
     .cfi_startproc
     stp x29, x30, [sp, -192]!
     .cfi_def_cfa_offset 192
@@ -53,7 +58,11 @@ vtableSlotCall:
     stp d2, d3, [sp, 144]
     stp d4, d5, [sp, 160]
     stp d6, d7, [sp, 176]
+#ifndef __APPLE__
     bl vtableCall
+#else
+	bl _vtableCall
+#endif
     ldp x0, x1, [x19]
     ldp d0, d1, [x20]
     ldp d2, d3, [x20, #16]
@@ -66,7 +75,9 @@ vtableSlotCall:
     .cfi_def_cfa_offset 0
     ret
     .cfi_endproc
+#ifndef __APPLE__
     .size vtableSlotCall, .-vtableSlotCall
     .section .note.GNU-stack, "", @progbits
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab */
