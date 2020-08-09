@@ -429,6 +429,7 @@ namespace svt
         , m_xCalendarBuilder(Application::CreateBuilder(m_xMenuButton.get(), "svt/ui/datewindow.ui"))
         , m_xTopLevel(m_xCalendarBuilder->weld_widget("date_popup_window"))
         , m_xCalendar(m_xCalendarBuilder->weld_calendar("date"))
+        , m_xExtras(m_xCalendarBuilder->weld_widget("extras"))
         , m_xTodayBtn(m_xCalendarBuilder->weld_button("today"))
         , m_xNoneBtn(m_xCalendarBuilder->weld_button("none"))
     {
@@ -438,6 +439,8 @@ namespace svt
         m_xMenuButton->set_popover(m_xTopLevel.get());
         m_xMenuButton->set_visible(bDropDown);
         m_xMenuButton->connect_toggled(LINK(this, DateControl, ToggleHdl));
+
+        m_xExtras->show();
 
         m_xTodayBtn->connect_clicked(LINK(this, DateControl, ImplClickHdl));
         m_xNoneBtn->connect_clicked(LINK(this, DateControl, ImplClickHdl));
@@ -484,6 +487,7 @@ namespace svt
     {
         m_xTodayBtn.reset();
         m_xNoneBtn.reset();
+        m_xExtras.reset();
         m_xCalendar.reset();
         m_xTopLevel.reset();
         m_xCalendarBuilder.reset();
