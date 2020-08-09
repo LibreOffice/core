@@ -46,10 +46,82 @@
 namespace {
 
 void pushArgument(
-    unsigned long value, unsigned long * stack, sal_Int32 * sp,
-    unsigned long * regs, sal_Int32 * nregs)
+#ifdef MACOSX
+    typelib_TypeClass typeclass,
+    sal_Int32 * const subsp,
+#endif
+    unsigned long value, unsigned long * const stack, sal_Int32 * const sp,
+    unsigned long * const regs, sal_Int32 * const nregs)
 {
+#ifdef MACOSX
+    if (*nregs != 8)
+    {
+        regs[(*nregs)++] = value;
+    }
+    else
+    {
+        switch (typeclass) {
+        case typelib_TypeClass_BOOLEAN:
+        case typelib_TypeClass_BYTE:
+            *reinterpret_cast<uint8_t*>(reinterpret_cast<uintptr_t>(stack + *sp) + *subsp) = value;
+            (*subsp) += 1;
+            if (*subsp == 8)
+            {
+                (*sp)++;
+                *subsp = 0;
+            }
+            break;
+        case typelib_TypeClass_SHORT:
+        case typelib_TypeClass_UNSIGNED_SHORT:
+        case typelib_TypeClass_CHAR:
+            *subsp = (*subsp + 1) & ~0x1;
+            if (*subsp == 8)
+            {
+                (*sp)++;
+                *subsp = 0;
+            }
+            *reinterpret_cast<uint16_t*>(reinterpret_cast<uintptr_t>(stack + *sp) + *subsp) = value;
+            (*subsp) += 2;
+            if (*subsp == 8)
+            {
+                (*sp)++;
+                *subsp = 0;
+            }
+            break;
+        case typelib_TypeClass_LONG:
+        case typelib_TypeClass_UNSIGNED_LONG:
+        case typelib_TypeClass_ENUM:
+        case typelib_TypeClass_FLOAT:
+            *subsp = (*subsp + 3) & ~0x3;
+            if (*subsp == 8)
+            {
+                (*sp)++;
+                *subsp = 0;
+            }
+            *reinterpret_cast<uint32_t*>(reinterpret_cast<uintptr_t>(stack + *sp) + *subsp) = value;
+            (*subsp) += 4;
+            if (*subsp == 8)
+            {
+                (*sp)++;
+                *subsp = 0;
+            }
+            break;
+        case typelib_TypeClass_HYPER:
+        case typelib_TypeClass_UNSIGNED_HYPER:
+        default:
+            if (*subsp > 0)
+            {
+                (*sp)++;
+                *subsp = 0;
+            }
+            stack[*sp] = value;
+            (*sp)++;
+            break;
+        }
+    }
+#else
     (*nregs != 8 ? regs[(*nregs)++] : stack[(*sp)++]) = value;
+#endif
 }
 
 void call(
@@ -69,6 +141,9 @@ void call(
     unsigned long * stack = static_cast<unsigned long *>(
         alloca(count * sizeof (unsigned long)));
     sal_Int32 sp = 0;
+#ifdef MACOSX
+    sal_Int32 subsp = 0;
+#endif
     unsigned long gpr[8];
     sal_Int32 ngpr = 0;
     unsigned long fpr[8];
@@ -86,57 +161,90 @@ void call(
             switch (parameters[i].pTypeRef->eTypeClass) {
             case typelib_TypeClass_BOOLEAN:
                 pushArgument(
+#ifdef MACOSX
+                    parameters[i].pTypeRef->eTypeClass, &subsp,
+#endif
                     *static_cast<sal_Bool *>(arguments[i]), stack, &sp, gpr,
                     &ngpr);
                 break;
             case typelib_TypeClass_BYTE:
                 pushArgument(
+#ifdef MACOSX
+                    parameters[i].pTypeRef->eTypeClass, &subsp,
+#endif
                     *static_cast<sal_Int8 *>(arguments[i]), stack, &sp, gpr,
                     &ngpr);
                 break;
             case typelib_TypeClass_SHORT:
                 pushArgument(
+#ifdef MACOSX
+                    parameters[i].pTypeRef->eTypeClass, &subsp,
+#endif
                     *static_cast<sal_Int16 *>(arguments[i]), stack, &sp, gpr,
                     &ngpr);
                 break;
             case typelib_TypeClass_UNSIGNED_SHORT:
                 pushArgument(
+#ifdef MACOSX
+                    parameters[i].pTypeRef->eTypeClass, &subsp,
+#endif
                     *static_cast<sal_uInt16 *>(arguments[i]), stack, &sp, gpr,
                     &ngpr);
                 break;
             case typelib_TypeClass_LONG:
             case typelib_TypeClass_ENUM:
                 pushArgument(
+#ifdef MACOSX
+                    parameters[i].pTypeRef->eTypeClass, &subsp,
+#endif
                     *static_cast<sal_Int32 *>(arguments[i]), stack, &sp, gpr,
                     &ngpr);
                 break;
             case typelib_TypeClass_UNSIGNED_LONG:
                 pushArgument(
+#ifdef MACOSX
+                    parameters[i].pTypeRef->eTypeClass, &subsp,
+#endif
                     *static_cast<sal_uInt32 *>(arguments[i]), stack, &sp, gpr,
                     &ngpr);
                 break;
             case typelib_TypeClass_HYPER:
                 pushArgument(
+#ifdef MACOSX
+                    parameters[i].pTypeRef->eTypeClass, &subsp,
+#endif
                     *static_cast<sal_Int64 *>(arguments[i]), stack, &sp, gpr,
                     &ngpr);
                 break;
             case typelib_TypeClass_UNSIGNED_HYPER:
                 pushArgument(
+#ifdef MACOSX
+                    parameters[i].pTypeRef->eTypeClass, &subsp,
+#endif
                     *static_cast<sal_uInt64 *>(arguments[i]), stack, &sp, gpr,
                     &ngpr);
                 break;
             case typelib_TypeClass_FLOAT:
                 pushArgument(
+#ifdef MACOSX
+                    parameters[i].pTypeRef->eTypeClass, &subsp,
+#endif
                     *static_cast<unsigned int *>(arguments[i]), stack, &sp, fpr,
                     &nfpr);
                 break;
             case typelib_TypeClass_DOUBLE:
                 pushArgument(
+#ifdef MACOSX
+                    parameters[i].pTypeRef->eTypeClass, &subsp,
+#endif
                     *static_cast<unsigned long *>(arguments[i]), stack, &sp,
                     fpr, &nfpr);
                 break;
             case typelib_TypeClass_CHAR:
                 pushArgument(
+#ifdef MACOSX
+                    parameters[i].pTypeRef->eTypeClass, &subsp,
+#endif
                     *static_cast<sal_Unicode *>(arguments[i]), stack, &sp, gpr,
                     &ngpr);
                 break;
@@ -151,6 +259,9 @@ void call(
                 uno_constructData(cppArgs[i], ptd);
                 ptds[i] = ptd;
                 pushArgument(
+#ifdef MACOSX
+                    typelib_TypeClass_HYPER, &subsp,
+#endif
                     reinterpret_cast<unsigned long>(cppArgs[i]), stack, &sp,
                     gpr, &ngpr);
             } else if (bridges::cpp_uno::shared::relatesToInterfaceType(ptd)) {
@@ -160,11 +271,17 @@ void call(
                     proxy->getBridge()->getUno2Cpp());
                 ptds[i] = ptd;
                 pushArgument(
+#ifdef MACOSX
+                    typelib_TypeClass_HYPER, &subsp,
+#endif
                     reinterpret_cast<unsigned long>(cppArgs[i]), stack, &sp,
                     gpr, &ngpr);
             } else {
                 cppArgs[i] = 0;
                 pushArgument(
+#ifdef MACOSX
+                    typelib_TypeClass_HYPER, &subsp,
+#endif
                     reinterpret_cast<unsigned long>(arguments[i]), stack, &sp,
                     gpr, &ngpr);
                 TYPELIB_DANGER_RELEASE(ptd);

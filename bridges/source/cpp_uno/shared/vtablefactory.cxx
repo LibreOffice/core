@@ -53,6 +53,10 @@
 #include <fcntl.h>
 #endif
 
+#if defined MACOSX && defined __aarch64__
+#include <pthread.h>
+#endif
+
 using bridges::cpp_uno::shared::VtableFactory;
 
 namespace {
@@ -322,6 +326,10 @@ sal_Int32 VtableFactory::createVtables(
     typelib_InterfaceTypeDescription * type, sal_Int32 vtableNumber,
     typelib_InterfaceTypeDescription * mostDerived, bool includePrimary) const
 {
+#if defined MACOSX && defined __aarch64__
+    // TODO: Should we handle resetting this in a exception-throwing-safe way?
+    pthread_jit_write_protect_np(0);
+#endif
     if (includePrimary) {
         sal_Int32 slotCount
             = bridges::cpp_uno::shared::getPrimaryFunctions(type);
@@ -361,6 +369,9 @@ sal_Int32 VtableFactory::createVtables(
             throw;
         }
     }
+#if defined MACOSX && defined __aarch64__
+    pthread_jit_write_protect_np(1);
+#endif
     for (sal_Int32 i = 0; i < type->nBaseTypes; ++i) {
         vtableNumber = createVtables(
             blocks, baseOffset, type->ppBaseTypes[i],

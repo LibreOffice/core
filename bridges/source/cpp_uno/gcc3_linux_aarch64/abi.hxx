@@ -71,6 +71,9 @@ namespace __cxxabiv1 {
 struct __cxa_exception {
 #if defined _LIBCPPABI_VERSION // detect libc++abi
 #if defined __LP64__ || LIBCXXABI_ARM_EHABI
+#ifdef MACOSX // on arm64
+    void *reserve;
+#endif
     std::size_t referenceCount;
 #endif
 #endif

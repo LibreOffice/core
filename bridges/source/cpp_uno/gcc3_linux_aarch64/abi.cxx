@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -31,6 +31,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <sal/types.h>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
@@ -106,6 +107,31 @@ std::type_info * Rtti::getRtti(typelib_TypeDescription const & type) {
         OString sym(b.makeStringAndClear());
         std::type_info * rtti = static_cast<std::type_info *>(
             dlsym(app_, sym.getStr()));
+#if defined MACOSX
+
+        // Horrible but hopefully temporary hack.
+
+        // For some reason, with the Xcode 12 betas, when compiling for arm64-apple-macos, the
+        // symbols for the typeinfos for the UNO exception types
+        // (_ZTIN3com3sun4star3uno16RuntimeExceptionE etc) end up as "weak private external" in the
+        // object file, as displayed by "nm -f darwin". We try to look them up with dlsym() above,
+        // but that then fails. So use a hackaround... introduce separate real variables (see end of
+        // this file) that point to these typeinfos.
+
+        // When compiling for x86_64-apple-macos, the typeinfo symbols end up as "weak external"
+        // which is fine.
+
+        if (rtti == nullptr)
+        {
+            const OString ptrSym = "ptr" + sym;
+            auto ptr = static_cast<std::type_info **>(dlsym(app_, ptrSym.getStr()));
+            if (ptr != nullptr)
+                rtti = *ptr;
+            else
+                SAL_WARN("bridges.osx", dlerror());
+        }
+#endif
+
         if (rtti == 0) {
             char const * rttiName = sym.getStr() + std::strlen("_ZTI");
             assert(type.eTypeClass == typelib_TypeClass_EXCEPTION);
@@ -152,6 +178,12 @@ extern "C" void _GLIBCXX_CDTOR_CALLABI deleteException(void * exception) {
     // point to this function (the use of __cxa_exception in fillUnoException is
     // unaffected, as it only accesses members towards the start of the struct,
     // through a pointer known to actually point at the start):
+
+    // Later, libcxxabi, as used at least on macOS on arm64, added a
+    // void *reserve at the start of the __cxa_exception in front of
+    // the referenceCount. See
+    // https://github.com/llvm/llvm-project/commit/f2a436058fcbc11291e73badb44e243f61046183#diff-ba9cda1ceca630ba040b154fe198adbd
+
     if (header->exceptionDestructor != &deleteException) {
         header = reinterpret_cast<__cxxabiv1::__cxa_exception *>(
             reinterpret_cast<char *>(header) - 8);
@@ -283,7 +315,9 @@ ReturnKind getReturnKind(typelib_TypeDescription const * type) {
     switch (type->eTypeClass) {
     default:
         assert(false);
+#ifdef NDEBUG
         [[fallthrough]];
+#endif
     case typelib_TypeClass_VOID:
     case typelib_TypeClass_BOOLEAN:
     case typelib_TypeClass_BYTE:
@@ -326,5 +360,31 @@ ReturnKind getReturnKind(typelib_TypeDescription const * type) {
 }
 
 }
+
+#ifdef MACOSX
+
+// See the comment about the horrible hack above.
+
+// This set of types are compiled based on what 'make check' needs, but I haven't been able to run
+// it completely yet. And of course as such this hack isn't a viable long-term solution.
+
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/task/ClassifiedInteractionRequest.hpp>
+#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
+#include <com/sun/star/ucb/InteractiveIOException.hpp>
+#include <com/sun/star/ucb/NameClashException.hpp>
+#include <com/sun/star/uno/Exception.hpp>
+
+extern "C" {
+    const std::type_info* __attribute((visibility("default"),used)) ptr_ZTIN3com3sun4star4lang24IllegalArgumentExceptionE = &typeid(css::lang::IllegalArgumentException);
+    const std::type_info* __attribute((visibility("default"),used)) ptr_ZTIN3com3sun4star3uno9ExceptionE = &typeid(css::uno::Exception);
+    const std::type_info* __attribute((visibility("default"),used)) ptr_ZTIN3com3sun4star3uno16RuntimeExceptionE = &typeid(css::uno::RuntimeException);
+    const std::type_info* __attribute((visibility("default"),used)) ptr_ZTIN3com3sun4star3ucb31InteractiveAugmentedIOExceptionE = &typeid(css::ucb::InteractiveAugmentedIOException);
+    const std::type_info* __attribute((visibility("default"),used)) ptr_ZTIN3com3sun4star3ucb22InteractiveIOExceptionE = &typeid(css::ucb::InteractiveIOException);
+    const std::type_info* __attribute((visibility("default"),used)) ptr_ZTIN3com3sun4star3ucb18NameClashExceptionE = &typeid(css::ucb::NameClashException);
+    const std::type_info* __attribute((visibility("default"),used)) ptr_ZTIN3com3sun4star4task28ClassifiedInteractionRequestE = &typeid(css::task::ClassifiedInteractionRequest);
+}
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
