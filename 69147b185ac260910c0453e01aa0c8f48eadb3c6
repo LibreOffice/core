@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "78710421_a4f498d2",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-08-09T10:34:48Z",
+      "side": 1,
+      "message": "TODO: Don\u0027t forget to remove this! ;-)",
+      "range": {
+        "startLine": 182,
+        "startChar": 16,
+        "endLine": 182,
+        "endChar": 22
+      },
+      "revId": "69147b185ac260910c0453e01aa0c8f48eadb3c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b948d206_69182c2d",
         "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
         "patchSetId": 8
