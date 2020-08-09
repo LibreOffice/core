@@ -55,12 +55,12 @@ static const SfxItemPropertyMapEntry* lcl_GetSheetLinkMap()
 {
     static const SfxItemPropertyMapEntry aSheetLinkMap_Impl[] =
     {
-        {OUString(SC_UNONAME_FILTER),   0,  cppu::UnoType<OUString>::get(),    0, 0 },
-        {OUString(SC_UNONAME_FILTOPT),  0,  cppu::UnoType<OUString>::get(),    0, 0 },
-        {OUString(SC_UNONAME_LINKURL),  0,  cppu::UnoType<OUString>::get(),    0, 0 },
-        {OUString(SC_UNONAME_REFDELAY), 0,  cppu::UnoType<sal_Int32>::get(),        0, 0 },
-        {OUString(SC_UNONAME_REFPERIOD),    0,  cppu::UnoType<sal_Int32>::get(),        0, 0 },
-        { OUString(), 0, css::uno::Type(), 0, 0 }
+        {SC_UNONAME_FILTER,   0,  cppu::UnoType<OUString>::get(),    0, 0 },
+        {SC_UNONAME_FILTOPT,  0,  cppu::UnoType<OUString>::get(),    0, 0 },
+        {SC_UNONAME_LINKURL,  0,  cppu::UnoType<OUString>::get(),    0, 0 },
+        {SC_UNONAME_REFDELAY, 0,  cppu::UnoType<sal_Int32>::get(),        0, 0 },
+        {SC_UNONAME_REFPERIOD,    0,  cppu::UnoType<sal_Int32>::get(),        0, 0 },
+        { "", 0, css::uno::Type(), 0, 0 }
     };
     return aSheetLinkMap_Impl;
 }

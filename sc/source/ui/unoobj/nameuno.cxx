@@ -50,11 +50,11 @@ static const SfxItemPropertyMapEntry* lcl_GetNamedRangeMap()
 {
     static const SfxItemPropertyMapEntry aNamedRangeMap_Impl[] =
     {
-        {OUString(SC_UNO_LINKDISPBIT),      0,  cppu::UnoType<awt::XBitmap>::get(), beans::PropertyAttribute::READONLY, 0 },
-        {OUString(SC_UNO_LINKDISPNAME),     0,  cppu::UnoType<OUString>::get(),                beans::PropertyAttribute::READONLY, 0 },
-        {OUString(SC_UNONAME_TOKENINDEX),   0,  cppu::UnoType<sal_Int32>::get(),                    beans::PropertyAttribute::READONLY, 0 },
-        {OUString(SC_UNONAME_ISSHAREDFMLA), 0,  cppu::UnoType<bool>::get(),                          0, 0 },
-        { OUString(), 0, css::uno::Type(), 0, 0 }
+        {SC_UNO_LINKDISPBIT,      0,  cppu::UnoType<awt::XBitmap>::get(), beans::PropertyAttribute::READONLY, 0 },
+        {SC_UNO_LINKDISPNAME,     0,  cppu::UnoType<OUString>::get(),                beans::PropertyAttribute::READONLY, 0 },
+        {SC_UNONAME_TOKENINDEX,   0,  cppu::UnoType<sal_Int32>::get(),                    beans::PropertyAttribute::READONLY, 0 },
+        {SC_UNONAME_ISSHAREDFMLA, 0,  cppu::UnoType<bool>::get(),                          0, 0 },
+        { "", 0, css::uno::Type(), 0, 0 }
     };
     return aNamedRangeMap_Impl;
 }
@@ -63,8 +63,8 @@ static const SfxItemPropertyMapEntry* lcl_GetNamedRangesMap()
 {
     static const SfxItemPropertyMapEntry aNamedRangesMap_Impl[] =
     {
-        {OUString(SC_UNO_MODIFY_BROADCAST), 0,  cppu::UnoType<bool>::get(), 0, 0 },
-        { OUString(), 0, css::uno::Type(), 0, 0 }
+        {SC_UNO_MODIFY_BROADCAST, 0,  cppu::UnoType<bool>::get(), 0, 0 },
+        { "", 0, css::uno::Type(), 0, 0 }
     };
     return aNamedRangesMap_Impl;
 }
