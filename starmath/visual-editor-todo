@@ -25,10 +25,13 @@ Medium
 2. SmCursor` should support deletion of lines, rows, cols and sub-/superscripts.
 3. SmCursor::InsertSubSup() should wrap the body in a SmBraceNode if the body is an SmOperNode, SmBinVerNode, etc.
 4. When OpenOffice Math runs in standalone mode it centers the current formula, this is not nice for visual editing.
+5. Autoformatting code
+6. Syntax hightlight
 
 Complex
 -------
 1. SmAlignNode and SmFontNode are ignored by visual editor, figure out how these should work.
+   For example add a show hidden nodes feature and use pilcrow char to represent them.
 2. Solve the flickering issue when drawing formulas (See dev@gsl.OpenOffice.org)
 3. Make " a shortcut for creating an SmTextNode with FNT_TEXT, also check that SmNodeToTextVisitor supports this.
 4. parse.cxx merges multiple blanks into one SmBlankNode, the visual editor doesn't...
@@ -41,3 +44,6 @@ Complex and non-essential
 * Optimize things, for instance SmCursor::AnnotateSelection() is called way too many places...
 * Improve handling of MoveUp and MoveDown in SmCursor::Move, SmCaretPos2LineVisitor might need improvement.
 * Synchronized command text caret and visual editor caret.
+
+
+
