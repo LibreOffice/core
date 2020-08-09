@@ -120,15 +120,14 @@ bool SmIsMathAlpha(const OUString &rText)
         MS_ALEPH,               MS_IM,                  MS_RE,
         MS_WP,                  u'\xE070',              MS_EMPTYSET,
         u'\x2113',              u'\xE0D6',              u'\x2107',
-        u'\x2127',              u'\x210A',              MS_HBAR,
-        MS_LAMBDABAR,           MS_SETN,                MS_SETZ,
-        MS_SETQ,                MS_SETR,                MS_SETC,
+        u'\x2127',              u'\x210A',              MS_PLANKBAR,
+        MS_LAMBDABAR,           MS_USETN,               MS_USETZ,
+        MS_USETQ,               MS_USETR,               MS_USETC,
         u'\x2373',              u'\xE0A5',              u'\x2112',
         u'\x2130',              u'\x2131'
     });
 
-    if (rText.isEmpty())
-        return false;
+    if (rText.isEmpty()) return false;
 
     OSL_ENSURE(rText.getLength() == 1, "Sm : string must be exactly one character long");
     sal_Unicode cChar = rText[0];
@@ -184,7 +183,7 @@ SmRect::SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
     , aSize(rDev.GetTextWidth(rText), rDev.GetTextHeight())
 {
     const FontMetric  aFM (rDev.GetFontMetric());
-    bool              bIsMath  = aFM.GetFamilyName().equalsIgnoreAsciiCase( FONTNAME_MATH );
+    bool              bIsMath  = aFM.GetFamilyName().equalsIgnoreAsciiCase( FNTNAME_MATH );
     bool              bAllowSmaller = bIsMath && !SmIsMathAlpha(rText);
     const long        nFontHeight = rDev.GetFont().GetFontSize().Height();
 
@@ -206,7 +205,6 @@ SmRect::SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
         OutputDevice    *pWindow = Application::GetDefaultDevice();
 
         pWindow->Push(PushFlags::MAPMODE | PushFlags::FONT);
-
         pWindow->SetMapMode(rDev.GetMapMode());
         pWindow->SetFont(rDev.GetFontMetric());
 

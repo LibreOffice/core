@@ -34,6 +34,7 @@
 #include "rtl/ustrbuf.h"
 #include "rtl/ustring.hxx"
 #include "rtl/stringutils.hxx"
+#include "rtl/character.hxx"
 #include "sal/types.h"
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
@@ -810,7 +811,8 @@ public:
     OUStringBuffer & append(char c)
     {
         assert(static_cast< unsigned char >(c) <= 0x7F);
-        return append(sal_Unicode(c));
+        sal_Unicode c2 = c;
+        return append( &c2, 1 );
     }
 
     /**
@@ -826,6 +828,32 @@ public:
     OUStringBuffer & append(sal_Unicode c)
     {
         return append( &c, 1 );
+    }
+
+    /**
+        Appends the string representation of the <code>char</code>
+        argument to this string buffer.
+
+        The argument is appended to the contents of this string buffer.
+        The length of this string buffer increases by <code>1</code>.
+
+        @param   c   a <code>char</code>.
+        @return  this string buffer.
+     */
+    OUStringBuffer & append( sal_Unicode32 c )
+    {
+        if ( c > 0x0000FFFF )
+        {
+            sal_Unicode c2[2];
+            c2[0] = rtl::getHighSurrogate(c);
+            c2[1] = rtl::getLowSurrogate(c);
+            return append( c2, 2 );
+        }
+        else
+        {
+            sal_Unicode c2;
+            return append( &c2, 1 );
+        }
     }
 
 #if defined LIBO_INTERNAL_ONLY
