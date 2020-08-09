@@ -113,19 +113,19 @@ typedef unsigned char       sal_uInt8;
 
     @deprecated use plain `char` instead.
 */
-typedef char sal_Char;
+//typedef char sal_Char;
 
 /** A legacy synonym for `signed char`.
 
     @deprecated use plain `signed char` instead.
 */
-typedef signed char sal_sChar;
+//typedef signed char sal_sChar;
 
 /** A legacy synonym for `unsigned char`.
 
     @deprecated use plain `unsigned char` instead.
 */
-typedef unsigned char sal_uChar;
+//typedef unsigned char sal_uChar;
 
 #if defined LIBO_INTERNAL_ONLY && defined __cplusplus
     #define SAL_UNICODE_NOTEQUAL_WCHAR_T
