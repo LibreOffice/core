@@ -457,7 +457,7 @@ SwXText::insertControlCharacter(
     if (cIns)
     {
         m_pImpl->m_pDoc->getIDocumentContentOperations().InsertString(
-                aPam, OUString(cIns), nInsertFlags);
+                aPam, cIns, nInsertFlags);
     }
 
     if (!bAbsorb)

@@ -33,20 +33,20 @@ const SfxItemPropertyMapEntry* ScDocOptionsHelper::GetPropertyMap()
 {
     static const SfxItemPropertyMapEntry aMap[] =
     {
-        {OUString(SC_UNO_CALCASSHOWN),  PROP_UNO_CALCASSHOWN ,  cppu::UnoType<bool>::get(),          0, 0},
-        {OUString(SC_UNO_DEFTABSTOP),   PROP_UNO_DEFTABSTOP  ,  cppu::UnoType<sal_Int16>::get(),    0, 0},
-        {OUString(SC_UNO_IGNORECASE),   PROP_UNO_IGNORECASE  ,  cppu::UnoType<bool>::get(),          0, 0},
-        {OUString(SC_UNO_ITERENABLED),  PROP_UNO_ITERENABLED ,  cppu::UnoType<bool>::get(),          0, 0},
-        {OUString(SC_UNO_ITERCOUNT),    PROP_UNO_ITERCOUNT   ,  cppu::UnoType<sal_Int32>::get(),    0, 0},
-        {OUString(SC_UNO_ITEREPSILON),  PROP_UNO_ITEREPSILON ,  cppu::UnoType<double>::get(),       0, 0},
-        {OUString(SC_UNO_LOOKUPLABELS), PROP_UNO_LOOKUPLABELS,  cppu::UnoType<bool>::get(),          0, 0},
-        {OUString(SC_UNO_MATCHWHOLE),   PROP_UNO_MATCHWHOLE  ,  cppu::UnoType<bool>::get(),          0, 0},
-        {OUString(SC_UNO_NULLDATE),     PROP_UNO_NULLDATE    ,  cppu::UnoType<util::Date>::get(),   0, 0},
-        {OUString(SC_UNO_SPELLONLINE),  PROP_UNO_SPELLONLINE ,  cppu::UnoType<bool>::get(),          0, 0},
-        {OUString(SC_UNO_STANDARDDEC),  PROP_UNO_STANDARDDEC ,  cppu::UnoType<sal_Int16>::get(),    0, 0},
-        {OUString(SC_UNO_REGEXENABLED), PROP_UNO_REGEXENABLED,  cppu::UnoType<bool>::get(),          0, 0},
-        {OUString(SC_UNO_WILDCARDSENABLED), PROP_UNO_WILDCARDSENABLED, cppu::UnoType<bool>::get(),  0, 0},
-        { OUString(), 0, css::uno::Type(), 0, 0 }
+        {SC_UNO_CALCASSHOWN,  PROP_UNO_CALCASSHOWN ,  cppu::UnoType<bool>::get(),          0, 0},
+        {SC_UNO_DEFTABSTOP,   PROP_UNO_DEFTABSTOP  ,  cppu::UnoType<sal_Int16>::get(),    0, 0},
+        {SC_UNO_IGNORECASE,   PROP_UNO_IGNORECASE  ,  cppu::UnoType<bool>::get(),          0, 0},
+        {SC_UNO_ITERENABLED,  PROP_UNO_ITERENABLED ,  cppu::UnoType<bool>::get(),          0, 0},
+        {SC_UNO_ITERCOUNT,    PROP_UNO_ITERCOUNT   ,  cppu::UnoType<sal_Int32>::get(),    0, 0},
+        {SC_UNO_ITEREPSILON,  PROP_UNO_ITEREPSILON ,  cppu::UnoType<double>::get(),       0, 0},
+        {SC_UNO_LOOKUPLABELS, PROP_UNO_LOOKUPLABELS,  cppu::UnoType<bool>::get(),          0, 0},
+        {SC_UNO_MATCHWHOLE,   PROP_UNO_MATCHWHOLE  ,  cppu::UnoType<bool>::get(),          0, 0},
+        {SC_UNO_NULLDATE,     PROP_UNO_NULLDATE    ,  cppu::UnoType<util::Date>::get(),   0, 0},
+        {SC_UNO_SPELLONLINE,  PROP_UNO_SPELLONLINE ,  cppu::UnoType<bool>::get(),          0, 0},
+        {SC_UNO_STANDARDDEC,  PROP_UNO_STANDARDDEC ,  cppu::UnoType<sal_Int16>::get(),    0, 0},
+        {SC_UNO_REGEXENABLED, PROP_UNO_REGEXENABLED,  cppu::UnoType<bool>::get(),          0, 0},
+        {SC_UNO_WILDCARDSENABLED, PROP_UNO_WILDCARDSENABLED, cppu::UnoType<bool>::get(),  0, 0},
+        { "", 0, css::uno::Type(), 0, 0 }
     };
     return aMap;
 }
