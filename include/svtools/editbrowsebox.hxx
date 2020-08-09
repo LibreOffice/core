@@ -687,6 +687,7 @@ namespace svt
         std::unique_ptr<weld::Builder> m_xCalendarBuilder;
         std::unique_ptr<weld::Widget> m_xTopLevel;
         std::unique_ptr<weld::Calendar> m_xCalendar;
+        std::unique_ptr<weld::Widget> m_xExtras;
         std::unique_ptr<weld::Button> m_xTodayBtn;
         std::unique_ptr<weld::Button> m_xNoneBtn;
 
