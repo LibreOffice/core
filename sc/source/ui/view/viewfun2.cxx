@@ -917,22 +917,22 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
 
     pInsDoc->SetClipArea( ScRange(aPos) );
     // insert Block, with Undo etc.
-    if ( PasteFromClip( InsertDeleteFlags::CONTENTS, pInsDoc.get(), ScPasteFunc::NONE, false, false,
+    if ( !PasteFromClip( InsertDeleteFlags::CONTENTS, pInsDoc.get(), ScPasteFunc::NONE, false, false,
             false, INS_NONE, InsertDeleteFlags::ATTRIB ) )
-    {
-        const SfxUInt32Item* pItem = pInsDoc->GetAttr(
-            nCol, nRow, nTab, ATTR_VALUE_FORMAT );
-        if ( pItem )
-        {   // set number format if incompatible
-            // MarkData was already MarkToSimple'ed in PasteFromClip
-            ScRange aRange;
-            rMark.GetMarkArea( aRange );
-            std::unique_ptr<ScPatternAttr> pPattern(new ScPatternAttr( pDoc->GetPool() ));
-            pPattern->GetItemSet().Put( *pItem );
-            SvNumFormatType nNewType = pDoc->GetFormatTable()->GetType( pItem->GetValue() );
-            pDoc->ApplyPatternIfNumberformatIncompatible( aRange, rMark,
-                *pPattern, nNewType );
-        }
+        return;
+
+    const SfxUInt32Item* pItem = pInsDoc->GetAttr(
+        nCol, nRow, nTab, ATTR_VALUE_FORMAT );
+    if ( pItem )
+    {   // set number format if incompatible
+        // MarkData was already MarkToSimple'ed in PasteFromClip
+        ScRange aRange;
+        rMark.GetMarkArea( aRange );
+        std::unique_ptr<ScPatternAttr> pPattern(new ScPatternAttr( pDoc->GetPool() ));
+        pPattern->GetItemSet().Put( *pItem );
+        SvNumFormatType nNewType = pDoc->GetFormatTable()->GetType( pItem->GetValue() );
+        pDoc->ApplyPatternIfNumberformatIncompatible( aRange, rMark,
+            *pPattern, nNewType );
     }
 }
 
@@ -1436,41 +1436,42 @@ void ScViewFunc::FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
     const ScMarkData& rMark = GetViewData().GetMarkData();
     bool bSuccess = pDocSh->GetDocFunc().
                     FillAuto( aRange, &rMark, eDir, nCount, false );
-    if (bSuccess)
+    if (!bSuccess)
+        return;
+
+    MarkRange( aRange, false );         // aRange was modified in FillAuto
+    pDocSh->UpdateOle(&GetViewData());
+    UpdateScrollBars();
+
+    bool bDoAutoSpell = pDocSh->GetDocument().GetDocOptions().IsAutoSpell();
+    if ( bDoAutoSpell )
+        CopyAutoSpellData(eDir, nStartCol, nStartRow, nEndCol, nEndRow, nCount);
+
+    ScModelObj* pModelObj = HelperNotifyChanges::getMustPropagateChangesModel(*pDocSh);
+    if (!pModelObj)
+        return;
+
+    ScRangeList aChangeRanges;
+    ScRange aChangeRange( aRange );
+    switch (eDir)
     {
-        MarkRange( aRange, false );         // aRange was modified in FillAuto
-        pDocSh->UpdateOle(&GetViewData());
-        UpdateScrollBars();
-
-        bool bDoAutoSpell = pDocSh->GetDocument().GetDocOptions().IsAutoSpell();
-        if ( bDoAutoSpell )
-            CopyAutoSpellData(eDir, nStartCol, nStartRow, nEndCol, nEndRow, nCount);
-
-        if (ScModelObj* pModelObj = HelperNotifyChanges::getMustPropagateChangesModel(*pDocSh))
-        {
-            ScRangeList aChangeRanges;
-            ScRange aChangeRange( aRange );
-            switch (eDir)
-            {
-                case FILL_TO_BOTTOM:
-                    aChangeRange.aStart.SetRow( aSourceRange.aEnd.Row() + 1 );
-                    break;
-                case FILL_TO_TOP:
-                    aChangeRange.aEnd.SetRow( aSourceRange.aStart.Row() - 1 );
-                    break;
-                case FILL_TO_RIGHT:
-                    aChangeRange.aStart.SetCol( aSourceRange.aEnd.Col() + 1 );
-                    break;
-                case FILL_TO_LEFT:
-                    aChangeRange.aEnd.SetCol( aSourceRange.aStart.Col() - 1 );
-                    break;
-                default:
-                    break;
-            }
-            aChangeRanges.push_back( aChangeRange );
-            HelperNotifyChanges::Notify(*pModelObj, aChangeRanges);
-        }
+        case FILL_TO_BOTTOM:
+            aChangeRange.aStart.SetRow( aSourceRange.aEnd.Row() + 1 );
+            break;
+        case FILL_TO_TOP:
+            aChangeRange.aEnd.SetRow( aSourceRange.aStart.Row() - 1 );
+            break;
+        case FILL_TO_RIGHT:
+            aChangeRange.aStart.SetCol( aSourceRange.aEnd.Col() + 1 );
+            break;
+        case FILL_TO_LEFT:
+            aChangeRange.aEnd.SetCol( aSourceRange.aStart.Col() - 1 );
+            break;
+        default:
+            break;
     }
+    aChangeRanges.push_back( aChangeRange );
+    HelperNotifyChanges::Notify(*pModelObj, aChangeRanges);
 }
 
 void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
@@ -1766,34 +1767,34 @@ void ScViewFunc::FillCrossDblClick()
         bDataFound = (pDoc->HasData( nMovX, nStartY, nTab) && pDoc->HasData( nMovX, nStartY + 1, nTab));
     }
 
-    if (bDataFound && pDoc->IsBlockEmpty( nTab, nStartX, nEndY + 1, nEndX, nEndY + 1, true))
-    {
-        // Get end of data left or right.
-        pDoc->FindAreaPos( nMovX, nMovY, nTab, SC_MOVE_DOWN);
-        // Find minimum end row of below empty area and data right.
-        for (SCCOL nX = nStartX; nX <= nEndX; ++nX)
-        {
-            SCROW nY = nEndY + 1;
-            // Get next row with data in this column.
-            pDoc->FindAreaPos( nX, nY, nTab, SC_MOVE_DOWN);
-            if (nMovY == pDoc->MaxRow() && nY == pDoc->MaxRow())
-            {
-                // FindAreaPos() returns MAXROW also if there is no data at all
-                // from the start, so check if that contains data if the nearby
-                // (left or right) data ends there and increment if no data
-                // here, pretending the next data would be thereafter so nMovY
-                // will not be decremented.
-                if (!pDoc->HasData( nX, nY, nTab))
-                    ++nY;
-            }
-            if (nMovY > nY - 1)
-                nMovY = nY - 1;
-        }
+    if (!(bDataFound && pDoc->IsBlockEmpty( nTab, nStartX, nEndY + 1, nEndX, nEndY + 1, true)))
+        return;
 
-        if (nMovY > nEndY)
+    // Get end of data left or right.
+    pDoc->FindAreaPos( nMovX, nMovY, nTab, SC_MOVE_DOWN);
+    // Find minimum end row of below empty area and data right.
+    for (SCCOL nX = nStartX; nX <= nEndX; ++nX)
+    {
+        SCROW nY = nEndY + 1;
+        // Get next row with data in this column.
+        pDoc->FindAreaPos( nX, nY, nTab, SC_MOVE_DOWN);
+        if (nMovY == pDoc->MaxRow() && nY == pDoc->MaxRow())
         {
-            FillAuto( FILL_TO_BOTTOM, nStartX, nStartY, nEndX, nEndY, nMovY - nEndY);
+            // FindAreaPos() returns MAXROW also if there is no data at all
+            // from the start, so check if that contains data if the nearby
+            // (left or right) data ends there and increment if no data
+            // here, pretending the next data would be thereafter so nMovY
+            // will not be decremented.
+            if (!pDoc->HasData( nX, nY, nTab))
+                ++nY;
         }
+        if (nMovY > nY - 1)
+            nMovY = nY - 1;
+    }
+
+    if (nMovY > nEndY)
+    {
+        FillAuto( FILL_TO_BOTTOM, nStartX, nStartY, nEndX, nEndY, nMovY - nEndY);
     }
 }
 
@@ -2166,71 +2167,71 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
 {
     ScDocument* pDoc = GetViewData().GetDocument();
 
-    if ( pDoc )
+    if ( !pDoc )
+        return;
+
+    SCCOL nDestCol = rParam.aRefVariableCell.Col();
+    SCROW nDestRow = rParam.aRefVariableCell.Row();
+    SCTAB nDestTab = rParam.aRefVariableCell.Tab();
+
+    ScEditableTester aTester( pDoc, nDestTab, nDestCol,nDestRow, nDestCol,nDestRow );
+    if (!aTester.IsEditable())
     {
-        SCCOL nDestCol = rParam.aRefVariableCell.Col();
-        SCROW nDestRow = rParam.aRefVariableCell.Row();
-        SCTAB nDestTab = rParam.aRefVariableCell.Tab();
-
-        ScEditableTester aTester( pDoc, nDestTab, nDestCol,nDestRow, nDestCol,nDestRow );
-        if (!aTester.IsEditable())
-        {
-            ErrorMessage(aTester.GetMessageId());
-            return;
-        }
-
-        OUString  aTargetValStr;
-        if ( rParam.pStrTargetVal )
-            aTargetValStr = *rParam.pStrTargetVal;
-
-        OUString  aMsgStr;
-        OUString  aResStr;
-        double  nSolveResult;
-
-        GetFrameWin()->EnterWait();
-
-        bool    bExact =
-                    pDoc->Solver(
-                        rParam.aRefFormulaCell.Col(),
-                        rParam.aRefFormulaCell.Row(),
-                        rParam.aRefFormulaCell.Tab(),
-                        nDestCol, nDestRow, nDestTab,
-                        aTargetValStr,
-                        nSolveResult );
-
-        GetFrameWin()->LeaveWait();
-
-        SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-        sal_uLong nFormat = 0;
-        const ScPatternAttr* pPattern = pDoc->GetPattern( nDestCol, nDestRow, nDestTab );
-        if ( pPattern )
-            nFormat = pPattern->GetNumberFormat( pFormatter );
-        Color* p;
-        pFormatter->GetOutputString( nSolveResult, nFormat, aResStr, &p );
-
-        if ( bExact )
-        {
-            aMsgStr += ScResId( STR_MSSG_SOLVE_0 ) +
-                aResStr +
-                ScResId( STR_MSSG_SOLVE_1 );
-        }
-        else
-        {
-            aMsgStr  = ScResId( STR_MSSG_SOLVE_2 ) +
-                ScResId( STR_MSSG_SOLVE_3 ) +
-                aResStr +
-                ScResId( STR_MSSG_SOLVE_4 );
-        }
-
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetViewData().GetDialogParent(),
-                                                  VclMessageType::Question, VclButtonsType::YesNo, aMsgStr));
-        xBox->set_title(ScResId(STR_MSSG_DOSUBTOTALS_0));
-        xBox->set_default_response(RET_NO);
-        if (xBox->run() == RET_YES)
-            EnterValue( nDestCol, nDestRow, nDestTab, nSolveResult );
-
-        GetViewData().GetViewShell()->UpdateInputHandler( true );
+        ErrorMessage(aTester.GetMessageId());
+        return;
     }
+
+    OUString  aTargetValStr;
+    if ( rParam.pStrTargetVal )
+        aTargetValStr = *rParam.pStrTargetVal;
+
+    OUString  aMsgStr;
+    OUString  aResStr;
+    double  nSolveResult;
+
+    GetFrameWin()->EnterWait();
+
+    bool    bExact =
+                pDoc->Solver(
+                    rParam.aRefFormulaCell.Col(),
+                    rParam.aRefFormulaCell.Row(),
+                    rParam.aRefFormulaCell.Tab(),
+                    nDestCol, nDestRow, nDestTab,
+                    aTargetValStr,
+                    nSolveResult );
+
+    GetFrameWin()->LeaveWait();
+
+    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+    sal_uLong nFormat = 0;
+    const ScPatternAttr* pPattern = pDoc->GetPattern( nDestCol, nDestRow, nDestTab );
+    if ( pPattern )
+        nFormat = pPattern->GetNumberFormat( pFormatter );
+    Color* p;
+    pFormatter->GetOutputString( nSolveResult, nFormat, aResStr, &p );
+
+    if ( bExact )
+    {
+        aMsgStr += ScResId( STR_MSSG_SOLVE_0 ) +
+            aResStr +
+            ScResId( STR_MSSG_SOLVE_1 );
+    }
+    else
+    {
+        aMsgStr  = ScResId( STR_MSSG_SOLVE_2 ) +
+            ScResId( STR_MSSG_SOLVE_3 ) +
+            aResStr +
+            ScResId( STR_MSSG_SOLVE_4 );
+    }
+
+    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetViewData().GetDialogParent(),
+                                              VclMessageType::Question, VclButtonsType::YesNo, aMsgStr));
+    xBox->set_title(ScResId(STR_MSSG_DOSUBTOTALS_0));
+    xBox->set_default_response(RET_NO);
+    if (xBox->run() == RET_YES)
+        EnterValue( nDestCol, nDestRow, nDestTab, nSolveResult );
+
+    GetViewData().GetViewShell()->UpdateInputHandler( true );
 }
 
 //  multi operation
@@ -2339,19 +2340,19 @@ void ScViewFunc::InsertTables(std::vector<OUString>& aNames, SCTAB nTab,
         bFlag = true;
     }
 
-    if (bFlag)
-    {
-        if (bRecord)
-            pDocSh->GetUndoManager()->AddUndoAction(
-                        std::make_unique<ScUndoInsertTables>( pDocSh, nTab, aNames));
+    if (!bFlag)
+        return;
 
-        //    Update views
+    if (bRecord)
+        pDocSh->GetUndoManager()->AddUndoAction(
+                    std::make_unique<ScUndoInsertTables>( pDocSh, nTab, aNames));
 
-        SetTabNo( nTab, true );
-        pDocSh->PostPaintExtras();
-        pDocSh->SetDocumentModified();
-        SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );
-    }
+    //    Update views
+
+    SetTabNo( nTab, true );
+    pDocSh->PostPaintExtras();
+    pDocSh->SetDocumentModified();
+    SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );
 }
 
 bool ScViewFunc::AppendTable( const OUString& rName, bool bRecord )
@@ -2413,32 +2414,32 @@ void ScViewFunc::DeleteTables( const SCTAB nTab, SCTAB nSheets )
     while ( nNewTab > 0 && !rDoc.IsVisible( nNewTab ) )
         --nNewTab;
 
-    if (rDoc.DeleteTabs(nTab, nSheets))
+    if (!rDoc.DeleteTabs(nTab, nSheets))
+        return;
+
+    if( bVbaEnabled )
     {
-        if( bVbaEnabled )
+        for (SCTAB aTab = 0; aTab < nSheets; ++aTab)
         {
-            for (SCTAB aTab = 0; aTab < nSheets; ++aTab)
-            {
-                OUString sCodeName;
-                bool bHasCodeName = rDoc.GetCodeName( nTab + aTab, sCodeName );
-                if ( bHasCodeName )
-                    VBA_DeleteModule( *pDocSh, sCodeName );
-            }
+            OUString sCodeName;
+            bool bHasCodeName = rDoc.GetCodeName( nTab + aTab, sCodeName );
+            if ( bHasCodeName )
+                VBA_DeleteModule( *pDocSh, sCodeName );
         }
-
-        pDocSh->Broadcast( ScTablesHint( SC_TABS_DELETED, nTab, nSheets ) );
-        if ( nNewTab >= rDoc.GetTableCount() )
-            nNewTab = rDoc.GetTableCount() - 1;
-        SetTabNo( nNewTab, true );
-
-        pDocSh->PostPaintExtras();
-        pDocSh->SetDocumentModified();
-
-        SfxApplication* pSfxApp = SfxGetpApp();                                // Navigator
-        pSfxApp->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );
-        pSfxApp->Broadcast( SfxHint( SfxHintId::ScDbAreasChanged ) );
-        pSfxApp->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );
     }
+
+    pDocSh->Broadcast( ScTablesHint( SC_TABS_DELETED, nTab, nSheets ) );
+    if ( nNewTab >= rDoc.GetTableCount() )
+        nNewTab = rDoc.GetTableCount() - 1;
+    SetTabNo( nNewTab, true );
+
+    pDocSh->PostPaintExtras();
+    pDocSh->SetDocumentModified();
+
+    SfxApplication* pSfxApp = SfxGetpApp();                                // Navigator
+    pSfxApp->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );
+    pSfxApp->Broadcast( SfxHint( SfxHintId::ScDbAreasChanged ) );
+    pSfxApp->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );
 }
 
 bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
@@ -2615,29 +2616,29 @@ void ScViewFunc::InsertTableLink( const OUString& rFile,
     OUString aFilterName = rFilter;
     OUString aOpt = rOptions;
     ScDocumentLoader aLoader( rFile, aFilterName, aOpt );
-    if (!aLoader.IsError())
-    {
-        ScDocShell* pSrcSh = aLoader.GetDocShell();
-        ScDocument& rSrcDoc = pSrcSh->GetDocument();
-        SCTAB nTab = MAXTAB+1;
-        if (rTabName.isEmpty())                // no name given -> first table
-            nTab = 0;
-        else
-        {
-            OUString aTemp;
-            SCTAB nCount = rSrcDoc.GetTableCount();
-            for (SCTAB i=0; i<nCount; i++)
-            {
-                rSrcDoc.GetName( i, aTemp );
-                if ( aTemp == rTabName )
-                    nTab = i;
-            }
-        }
+    if (aLoader.IsError())
+        return;
 
-        if ( nTab <= MAXTAB )
-            ImportTables( pSrcSh, 1, &nTab, true,
-                        GetViewData().GetTabNo() );
+    ScDocShell* pSrcSh = aLoader.GetDocShell();
+    ScDocument& rSrcDoc = pSrcSh->GetDocument();
+    SCTAB nTab = MAXTAB+1;
+    if (rTabName.isEmpty())                // no name given -> first table
+        nTab = 0;
+    else
+    {
+        OUString aTemp;
+        SCTAB nCount = rSrcDoc.GetTableCount();
+        for (SCTAB i=0; i<nCount; i++)
+        {
+            rSrcDoc.GetName( i, aTemp );
+            if ( aTemp == rTabName )
+                nTab = i;
+        }
     }
+
+    if ( nTab <= MAXTAB )
+        ImportTables( pSrcSh, 1, &nTab, true,
+                    GetViewData().GetTabNo() );
 }
 
 //  Copy/link tables from another document
@@ -3164,35 +3165,35 @@ void ScViewFunc::HideTable( const ScMarkData& rMark )
         if (rDoc.IsVisible(i))
             ++nVisible;
 
-    if (nVisible > nTabSelCount)
+    if (nVisible <= nTabSelCount)
+        return;
+
+    std::vector<SCTAB> undoTabs;
+
+    // need to take a copy of selectedtabs since it is modified in the loop
+    const ScMarkData::MarkedTabsType selectedTabs = rMark.GetSelectedTabs();
+    for (const SCTAB& nTab : selectedTabs)
     {
-        std::vector<SCTAB> undoTabs;
-
-        // need to take a copy of selectedtabs since it is modified in the loop
-        const ScMarkData::MarkedTabsType selectedTabs = rMark.GetSelectedTabs();
-        for (const SCTAB& nTab : selectedTabs)
+        if (rDoc.IsVisible( nTab ))
         {
-            if (rDoc.IsVisible( nTab ))
-            {
-                rDoc.SetVisible( nTab, false );
-                // Update views
-                pDocSh->Broadcast( ScTablesHint( SC_TAB_HIDDEN, nTab ) );
-                SetTabNo( nTab, true );
-                // Store for undo
-                if (bUndo)
-                    undoTabs.push_back(nTab);
-            }
+            rDoc.SetVisible( nTab, false );
+            // Update views
+            pDocSh->Broadcast( ScTablesHint( SC_TAB_HIDDEN, nTab ) );
+            SetTabNo( nTab, true );
+            // Store for undo
+            if (bUndo)
+                undoTabs.push_back(nTab);
         }
-        if (bUndo)
-        {
-            pDocSh->GetUndoManager()->AddUndoAction( std::make_unique<ScUndoShowHideTab>( pDocSh, undoTabs, false ) );
-        }
-
-        //  Update views
-        SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );
-        pDocSh->PostPaint(0,0,0,rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::Extras);
-        pDocSh->SetDocumentModified();
     }
+    if (bUndo)
+    {
+        pDocSh->GetUndoManager()->AddUndoAction( std::make_unique<ScUndoShowHideTab>( pDocSh, undoTabs, false ) );
+    }
+
+    //  Update views
+    SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );
+    pDocSh->PostPaint(0,0,0,rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::Extras);
+    pDocSh->SetDocumentModified();
 }
 
 void ScViewFunc::InsertSpecialChar( const OUString& rStr, const vcl::Font& rFont )
@@ -3234,20 +3235,20 @@ void ScViewFunc::UpdateLineAttrs( SvxBorderLine&       rLine,
                                   const SvxBorderLine* pSrcLine,
                                   bool                 bColor )
 {
-    if ( pSrcLine && pDestLine )
+    if ( !(pSrcLine && pDestLine) )
+        return;
+
+    if ( bColor )
     {
-        if ( bColor )
-        {
-            rLine.SetColor      ( pSrcLine->GetColor() );
-            rLine.SetBorderLineStyle(pDestLine->GetBorderLineStyle());
-            rLine.SetWidth      ( pDestLine->GetWidth() );
-        }
-        else
-        {
-            rLine.SetColor      ( pDestLine->GetColor() );
-            rLine.SetBorderLineStyle(pSrcLine->GetBorderLineStyle());
-            rLine.SetWidth      ( pSrcLine->GetWidth() );
-        }
+        rLine.SetColor      ( pSrcLine->GetColor() );
+        rLine.SetBorderLineStyle(pDestLine->GetBorderLineStyle());
+        rLine.SetWidth      ( pDestLine->GetWidth() );
+    }
+    else
+    {
+        rLine.SetColor      ( pDestLine->GetColor() );
+        rLine.SetBorderLineStyle(pSrcLine->GetBorderLineStyle());
+        rLine.SetWidth      ( pSrcLine->GetWidth() );
     }
 }
 
@@ -3292,84 +3293,84 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
     SfxItemState            eBLTRState = rSelItemSet.GetItemState( ATTR_BORDER_BLTR, true, &pBLTRItem );
 
     // any of the lines visible?
-    if( (eItemState != SfxItemState::DEFAULT) || (eTLBRState != SfxItemState::DEFAULT) || (eBLTRState != SfxItemState::DEFAULT) )
+    if( !((eItemState != SfxItemState::DEFAULT) || (eTLBRState != SfxItemState::DEFAULT) || (eBLTRState != SfxItemState::DEFAULT)) )
+        return;
+
+    // none of the lines don't care?
+    if( (eItemState != SfxItemState::DONTCARE) && (eTLBRState != SfxItemState::DONTCARE) && (eBLTRState != SfxItemState::DONTCARE) )
     {
-        // none of the lines don't care?
-        if( (eItemState != SfxItemState::DONTCARE) && (eTLBRState != SfxItemState::DONTCARE) && (eBLTRState != SfxItemState::DONTCARE) )
+        std::unique_ptr<SfxItemSet> pOldSet(new SfxItemSet(
+                                        *(pDoc->GetPool()),
+                                        svl::Items<ATTR_PATTERN_START,
+                                        ATTR_PATTERN_END>{} ));
+        std::unique_ptr<SfxItemSet> pNewSet(new SfxItemSet(
+                                        *(pDoc->GetPool()),
+                                        svl::Items<ATTR_PATTERN_START,
+                                        ATTR_PATTERN_END>{} ));
+
+        SvxBorderLine           aLine;
+
+        if( pBorderAttr )
         {
-            std::unique_ptr<SfxItemSet> pOldSet(new SfxItemSet(
-                                            *(pDoc->GetPool()),
-                                            svl::Items<ATTR_PATTERN_START,
-                                            ATTR_PATTERN_END>{} ));
-            std::unique_ptr<SfxItemSet> pNewSet(new SfxItemSet(
-                                            *(pDoc->GetPool()),
-                                            svl::Items<ATTR_PATTERN_START,
-                                            ATTR_PATTERN_END>{} ));
+            const SvxBorderLine*    pBoxLine = nullptr;
+            SvxBoxItem      aBoxItem( *static_cast<const SvxBoxItem*>(pBorderAttr) );
+            SvxBoxInfoItem  aBoxInfoItem( ATTR_BORDER_INNER );
 
-            SvxBorderLine           aLine;
+            // here pBoxLine is used
+            SET_LINE_ATTRIBUTES(Top,SvxBoxItemLine::TOP)
+            SET_LINE_ATTRIBUTES(Bottom,SvxBoxItemLine::BOTTOM)
+            SET_LINE_ATTRIBUTES(Left,SvxBoxItemLine::LEFT)
+            SET_LINE_ATTRIBUTES(Right,SvxBoxItemLine::RIGHT)
 
-            if( pBorderAttr )
-            {
-                const SvxBorderLine*    pBoxLine = nullptr;
-                SvxBoxItem      aBoxItem( *static_cast<const SvxBoxItem*>(pBorderAttr) );
-                SvxBoxInfoItem  aBoxInfoItem( ATTR_BORDER_INNER );
+            aBoxInfoItem.SetLine( aBoxItem.GetTop(), SvxBoxInfoItemLine::HORI );
+            aBoxInfoItem.SetLine( aBoxItem.GetLeft(), SvxBoxInfoItemLine::VERT );
+            aBoxInfoItem.ResetFlags(); // set Lines to Valid
 
-                // here pBoxLine is used
-                SET_LINE_ATTRIBUTES(Top,SvxBoxItemLine::TOP)
-                SET_LINE_ATTRIBUTES(Bottom,SvxBoxItemLine::BOTTOM)
-                SET_LINE_ATTRIBUTES(Left,SvxBoxItemLine::LEFT)
-                SET_LINE_ATTRIBUTES(Right,SvxBoxItemLine::RIGHT)
-
-                aBoxInfoItem.SetLine( aBoxItem.GetTop(), SvxBoxInfoItemLine::HORI );
-                aBoxInfoItem.SetLine( aBoxItem.GetLeft(), SvxBoxInfoItemLine::VERT );
-                aBoxInfoItem.ResetFlags(); // set Lines to Valid
-
-                pOldSet->Put( *pBorderAttr );
-                pNewSet->Put( aBoxItem );
-                pNewSet->Put( aBoxInfoItem );
-            }
-
-            if( pTLBRItem && static_cast<const SvxLineItem*>(pTLBRItem)->GetLine() )
-            {
-                SvxLineItem aTLBRItem( *static_cast<const SvxLineItem*>(pTLBRItem) );
-                UpdateLineAttrs( aLine, aTLBRItem.GetLine(), pLine, bColorOnly );
-                aTLBRItem.SetLine( &aLine );
-                pOldSet->Put( *pTLBRItem );
-                pNewSet->Put( aTLBRItem );
-            }
-
-            if( pBLTRItem && static_cast<const SvxLineItem*>(pBLTRItem)->GetLine() )
-            {
-                SvxLineItem aBLTRItem( *static_cast<const SvxLineItem*>(pBLTRItem) );
-                UpdateLineAttrs( aLine, aBLTRItem.GetLine(), pLine, bColorOnly );
-                aBLTRItem.SetLine( &aLine );
-                pOldSet->Put( *pBLTRItem );
-                pNewSet->Put( aBLTRItem );
-            }
-
-            ApplyAttributes( pNewSet.get(), pOldSet.get() );
-        }
-        else // if ( eItemState == SfxItemState::DONTCARE )
-        {
-            aFuncMark.MarkToMulti();
-            pDoc->ApplySelectionLineStyle( aFuncMark, pLine, bColorOnly );
+            pOldSet->Put( *pBorderAttr );
+            pNewSet->Put( aBoxItem );
+            pNewSet->Put( aBoxInfoItem );
         }
 
-        ScRange aMarkRange;
-        aFuncMark.GetMultiMarkArea( aMarkRange );
-        SCCOL nStartCol = aMarkRange.aStart.Col();
-        SCROW nStartRow = aMarkRange.aStart.Row();
-        SCTAB nStartTab = aMarkRange.aStart.Tab();
-        SCCOL nEndCol = aMarkRange.aEnd.Col();
-        SCROW nEndRow = aMarkRange.aEnd.Row();
-        SCTAB nEndTab = aMarkRange.aEnd.Tab();
-        pDocSh->PostPaint( nStartCol, nStartRow, nStartTab,
-                           nEndCol, nEndRow, nEndTab,
-                           PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE );
+        if( pTLBRItem && static_cast<const SvxLineItem*>(pTLBRItem)->GetLine() )
+        {
+            SvxLineItem aTLBRItem( *static_cast<const SvxLineItem*>(pTLBRItem) );
+            UpdateLineAttrs( aLine, aTLBRItem.GetLine(), pLine, bColorOnly );
+            aTLBRItem.SetLine( &aLine );
+            pOldSet->Put( *pTLBRItem );
+            pNewSet->Put( aTLBRItem );
+        }
 
-        pDocSh->UpdateOle( &GetViewData() );
-        pDocSh->SetDocumentModified();
+        if( pBLTRItem && static_cast<const SvxLineItem*>(pBLTRItem)->GetLine() )
+        {
+            SvxLineItem aBLTRItem( *static_cast<const SvxLineItem*>(pBLTRItem) );
+            UpdateLineAttrs( aLine, aBLTRItem.GetLine(), pLine, bColorOnly );
+            aBLTRItem.SetLine( &aLine );
+            pOldSet->Put( *pBLTRItem );
+            pNewSet->Put( aBLTRItem );
+        }
+
+        ApplyAttributes( pNewSet.get(), pOldSet.get() );
     }
+    else // if ( eItemState == SfxItemState::DONTCARE )
+    {
+        aFuncMark.MarkToMulti();
+        pDoc->ApplySelectionLineStyle( aFuncMark, pLine, bColorOnly );
+    }
+
+    ScRange aMarkRange;
+    aFuncMark.GetMultiMarkArea( aMarkRange );
+    SCCOL nStartCol = aMarkRange.aStart.Col();
+    SCROW nStartRow = aMarkRange.aStart.Row();
+    SCTAB nStartTab = aMarkRange.aStart.Tab();
+    SCCOL nEndCol = aMarkRange.aEnd.Col();
+    SCROW nEndRow = aMarkRange.aEnd.Row();
+    SCTAB nEndTab = aMarkRange.aEnd.Tab();
+    pDocSh->PostPaint( nStartCol, nStartRow, nStartTab,
+                       nEndCol, nEndRow, nEndTab,
+                       PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE );
+
+    pDocSh->UpdateOle( &GetViewData() );
+    pDocSh->SetDocumentModified();
 }
 
 #undef SET_LINE_ATTRIBUTES

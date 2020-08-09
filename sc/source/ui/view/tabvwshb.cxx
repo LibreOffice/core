@@ -75,25 +75,25 @@ void ScTabViewShell::ConnectObject( const SdrOle2Obj* pObj )
     // when already connected do not execute SetObjArea/SetSizeScale again
 
     SfxInPlaceClient* pClient = FindIPClient( xObj, pWin );
-    if ( !pClient )
-    {
-        pClient = new ScClient( this, pWin, GetScDrawView()->GetModel(), pObj );
-        tools::Rectangle aRect = pObj->GetLogicRect();
-        Size aDrawSize = aRect.GetSize();
+    if ( pClient )
+        return;
 
-        Size aOleSize = pObj->GetOrigObjSize();
+    pClient = new ScClient( this, pWin, GetScDrawView()->GetModel(), pObj );
+    tools::Rectangle aRect = pObj->GetLogicRect();
+    Size aDrawSize = aRect.GetSize();
 
-        Fraction aScaleWidth (aDrawSize.Width(),  aOleSize.Width() );
-        Fraction aScaleHeight(aDrawSize.Height(), aOleSize.Height() );
-        aScaleWidth.ReduceInaccurate(10);       // compatible with SdrOle2Obj
-        aScaleHeight.ReduceInaccurate(10);
-        pClient->SetSizeScale(aScaleWidth,aScaleHeight);
+    Size aOleSize = pObj->GetOrigObjSize();
 
-        // visible section is only changed inplace!
-        // the object area must be set after the scaling since it triggers the resizing
-        aRect.SetSize( aOleSize );
-        pClient->SetObjArea( aRect );
-    }
+    Fraction aScaleWidth (aDrawSize.Width(),  aOleSize.Width() );
+    Fraction aScaleHeight(aDrawSize.Height(), aOleSize.Height() );
+    aScaleWidth.ReduceInaccurate(10);       // compatible with SdrOle2Obj
+    aScaleHeight.ReduceInaccurate(10);
+    pClient->SetSizeScale(aScaleWidth,aScaleHeight);
+
+    // visible section is only changed inplace!
+    // the object area must be set after the scaling since it triggers the resizing
+    aRect.SetSize( aOleSize );
+    pClient->SetObjArea( aRect );
 }
 
 namespace {
@@ -113,29 +113,29 @@ public:
     virtual void SAL_CALL notify(const css::uno::Any& aData) override
     {
         uno::Sequence<beans::PropertyValue> aProperties;
-        if (aData >>= aProperties)
+        if (!(aData >>= aProperties))
+            return;
+
+        awt::Rectangle xRectangle;
+        sal_Int32 dimensionIndex = 0;
+        OUString sPivotTableName("DataPilot1");
+
+        for (beans::PropertyValue const & rProperty : std::as_const(aProperties))
         {
-            awt::Rectangle xRectangle;
-            sal_Int32 dimensionIndex = 0;
-            OUString sPivotTableName("DataPilot1");
-
-            for (beans::PropertyValue const & rProperty : std::as_const(aProperties))
-            {
-                if (rProperty.Name == "Rectangle")
-                    rProperty.Value >>= xRectangle;
-                if (rProperty.Name == "DimensionIndex")
-                    rProperty.Value >>= dimensionIndex;
-                if (rProperty.Name == "PivotTableName")
-                    rProperty.Value >>= sPivotTableName;
-            }
-
-            tools::Rectangle aChartRect = m_pObject->GetLogicRect();
-
-            Point aPoint(xRectangle.X  + aChartRect.Left(), xRectangle.Y + aChartRect.Top());
-            Size aSize(xRectangle.Width, xRectangle.Height);
-
-            m_pViewShell->DoDPFieldPopup(sPivotTableName, dimensionIndex, aPoint, aSize);
+            if (rProperty.Name == "Rectangle")
+                rProperty.Value >>= xRectangle;
+            if (rProperty.Name == "DimensionIndex")
+                rProperty.Value >>= dimensionIndex;
+            if (rProperty.Name == "PivotTableName")
+                rProperty.Value >>= sPivotTableName;
         }
+
+        tools::Rectangle aChartRect = m_pObject->GetLogicRect();
+
+        Point aPoint(xRectangle.X  + aChartRect.Left(), xRectangle.Y + aChartRect.Top());
+        Size aSize(xRectangle.Width, xRectangle.Height);
+
+        m_pViewShell->DoDPFieldPopup(sPivotTableName, dimensionIndex, aPoint, aSize);
     }
 };
 
