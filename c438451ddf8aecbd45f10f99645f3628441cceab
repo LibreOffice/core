@@ -1,0 +1,307 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6f2c29fe_924e0741",
+        "filename": "include/com/sun/star/uno/Type.h",
+        "patchSetId": 42
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-09T07:51:46Z",
+      "side": 1,
+      "message": "Here and elsewhere:  Please keep Gerrit changes focused.  There may be merit in replacing all occurrences of redundant typedef `sal_Char` with the underlying `char`, but if you such a change, please do it in a Gerrit change of its own, and also not included in a chain of multiple Gerrit changes.  (And same for sal_uChar elsewhere.)",
+      "range": {
+        "startLine": 89,
+        "startChar": 45,
+        "endLine": 89,
+        "endChar": 49
+      },
+      "revId": "c438451ddf8aecbd45f10f99645f3628441cceab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74558a72_8cad2b46",
+        "filename": "include/rtl/character.hxx",
+        "patchSetId": 42
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-09T07:51:46Z",
+      "side": 1,
+      "message": "Here and elsewhere:  Do not make random formatting changes.",
+      "revId": "c438451ddf8aecbd45f10f99645f3628441cceab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "082f6ec1_d769824e",
+        "filename": "include/rtl/character.hxx",
+        "patchSetId": 42
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-09T07:51:46Z",
+      "side": 1,
+      "message": "Here and elsewhere:  What is the benefit of this and similar changes, manually inlining a function call?",
+      "range": {
+        "startLine": 52,
+        "startChar": 12,
+        "endLine": 52,
+        "endChar": 28
+      },
+      "revId": "c438451ddf8aecbd45f10f99645f3628441cceab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b24033a_f550bea5",
+        "filename": "include/rtl/character.hxx",
+        "patchSetId": 42
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-09T07:51:46Z",
+      "side": 1,
+      "message": "Here and elsewhere:  Is it useful to spell these details out in a comment?  The curious can look those details in the source code and/or the Unicode standard.",
+      "range": {
+        "startLine": 369,
+        "startChar": 4,
+        "endLine": 369,
+        "endChar": 49
+      },
+      "revId": "c438451ddf8aecbd45f10f99645f3628441cceab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fde0d5f_ae5d2335",
+        "filename": "include/rtl/ustrbuf.hxx",
+        "patchSetId": 42
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-09T07:51:46Z",
+      "side": 1,
+      "message": "OUStringBuffer is part of the stable URE interface.  You cannot remove member functions charAt and setCharAt, for compatiblity reasons.",
+      "revId": "c438451ddf8aecbd45f10f99645f3628441cceab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c90e93c_48d8a3dc",
+        "filename": "include/rtl/ustrbuf.hxx",
+        "patchSetId": 42
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-09T07:51:46Z",
+      "side": 1,
+      "message": "* Here and elsewhere:  To avoid future maintenance issues, new functionality added to parts of the stable URE interface is best guarded as LIBO_INTERNAL_ONLY, at lease for a first shot.\n\n* If we really need such a function for OUStringBuffer, I would expect to model it after the existing OUString::iterateCodePoints?",
+      "revId": "c438451ddf8aecbd45f10f99645f3628441cceab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b245a2ef_7b49e834",
+        "filename": "include/rtl/ustrbuf.hxx",
+        "patchSetId": 42
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-09T07:51:46Z",
+      "side": 1,
+      "message": "Here and elsewhere:  Is a precondition for this function to only be called with an index that points at a leading (high) surrogate, never at a trailing (low) surrogate of a surrogate pair?  If yes, the doc comment should probably mention that.",
+      "range": {
+        "startLine": 451,
+        "startChar": 8,
+        "endLine": 451,
+        "endChar": 52
+      },
+      "revId": "c438451ddf8aecbd45f10f99645f3628441cceab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d30df513_079560fb",
+        "filename": "include/rtl/ustrbuf.hxx",
+        "patchSetId": 42
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-09T07:51:46Z",
+      "side": 1,
+      "message": "Here and elsewhere:  OUString and OUStringBuffer are a bit odd, in that it is left vaguely unspecified whether their content is a sequence of UTF-16 code units, or a sequence of Unicode code points encoded in UTF-16.  Therefore, the assert here may be wrong and the rtl::combineSurrogates precondition not be met unless this function has a corresponding precondition (which should probably be mentioned in the doc comment).",
+      "range": {
+        "startLine": 453,
+        "startChar": 12,
+        "endLine": 454,
+        "endChar": 90
+      },
+      "revId": "c438451ddf8aecbd45f10f99645f3628441cceab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06e4e4d5_41c702b6",
+        "filename": "include/rtl/ustrbuf.hxx",
+        "patchSetId": 42
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-09T07:51:46Z",
+      "side": 1,
+      "message": "Here and elsewhere:  Lifecycle management of rtl_uString instances is done with rtl_uString_acquire/release, never with delete or free.",
+      "range": {
+        "startLine": 490,
+        "startChar": 36,
+        "endLine": 490,
+        "endChar": 49
+      },
+      "revId": "c438451ddf8aecbd45f10f99645f3628441cceab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbd978c7_335e41ca",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 42
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-09T07:51:46Z",
+      "side": 1,
+      "message": "What is this include needed for?",
+      "revId": "c438451ddf8aecbd45f10f99645f3628441cceab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "630efe29_f0c5be2d",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 42
+      },
+      "lineNbr": 3374,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-09T07:51:46Z",
+      "side": 1,
+      "message": "If the existing\n\n  explicit OUString(sal_uInt32 const * codePoints, sal_Int32 codePointCount)\n\nis not sufficient, I would suggest a ctor taking a std::char32_t.",
+      "revId": "c438451ddf8aecbd45f10f99645f3628441cceab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d2d5c42_13c7e9bc",
+        "filename": "include/sal/types.h",
+        "patchSetId": 42
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-09T07:51:46Z",
+      "side": 1,
+      "message": "LIBO_INTERNAL_ONLY code can unconditionally use std::char32_t.  Instead of adding a sal_Unicode32 typedef here, I would strongly suggest to design any changes using that sal_Unicode32 in a way so that they meet these requirements (i.e., are not exposed to !LIBO_INTERNAL_ONLY code) and can thus use std::char32_t directly.",
+      "revId": "c438451ddf8aecbd45f10f99645f3628441cceab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff946164_69dfcc51",
+        "filename": "sal/rtl/ustring.cxx",
+        "patchSetId": 42
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-09T07:51:46Z",
+      "side": 1,
+      "message": "What is the benefit of this change?",
+      "range": {
+        "startLine": 525,
+        "startChar": 20,
+        "endLine": 525,
+        "endChar": 60
+      },
+      "revId": "c438451ddf8aecbd45f10f99645f3628441cceab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66bd4a65_527be2f9",
+        "filename": "sal/rtl/ustring.cxx",
+        "patchSetId": 42
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-09T07:51:46Z",
+      "side": 1,
+      "message": "What is the benefit of this change?",
+      "range": {
+        "startLine": 572,
+        "startChar": 28,
+        "endLine": 572,
+        "endChar": 38
+      },
+      "revId": "c438451ddf8aecbd45f10f99645f3628441cceab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4246ff55_91bb1361",
+        "filename": "tools/source/inet/inetmime.cxx",
+        "patchSetId": 42
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-09T07:51:46Z",
+      "side": 1,
+      "message": "If that cast is really unnecessary, it should go into a dedicated Gerrit change.",
+      "revId": "c438451ddf8aecbd45f10f99645f3628441cceab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
