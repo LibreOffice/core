@@ -119,3 +119,6 @@ excludelist:
     svx/qa/unit/xoutdev.cxx:
     # Needed for system-cppunit
     - unotest/bootstrapfixturebase.hxx
+    svx/qa/unit/XTableImportExportTest.cxx:
+    # Needed for --with-system-cppunit
+    - unotest/bootstrapfixturebase.hxx
