@@ -101,20 +101,20 @@ static void removeAllSheets( const uno::Reference <sheet::XSpreadsheetDocument>&
     uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
     uno::Reference <container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
 
-    if ( xIndex.is() )
-    {
-        uno::Reference<container::XNameContainer> xNameContainer(xSheets,uno::UNO_QUERY_THROW);
-        for (sal_Int32 i = xIndex->getCount() -1; i>= 1; i--)
-        {
-            uno::Reference< sheet::XSpreadsheet > xSheet(xIndex->getByIndex(i), uno::UNO_QUERY);
-            uno::Reference< container::XNamed > xNamed( xSheet, uno::UNO_QUERY_THROW );
-            xNameContainer->removeByName(xNamed->getName());
-        }
+    if ( !xIndex.is() )
+        return;
 
-        uno::Reference< sheet::XSpreadsheet > xSheet(xIndex->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<container::XNameContainer> xNameContainer(xSheets,uno::UNO_QUERY_THROW);
+    for (sal_Int32 i = xIndex->getCount() -1; i>= 1; i--)
+    {
+        uno::Reference< sheet::XSpreadsheet > xSheet(xIndex->getByIndex(i), uno::UNO_QUERY);
         uno::Reference< container::XNamed > xNamed( xSheet, uno::UNO_QUERY_THROW );
-        xNamed->setName(aSheetName);
+        xNameContainer->removeByName(xNamed->getName());
     }
+
+    uno::Reference< sheet::XSpreadsheet > xSheet(xIndex->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference< container::XNamed > xNamed( xSheet, uno::UNO_QUERY_THROW );
+    xNamed->setName(aSheetName);
 }
 
 static uno::Reference<frame::XModel>
@@ -381,23 +381,23 @@ void SAL_CALL ScVbaWorksheet::setAutoFilterMode( sal_Bool bAutoFilterMode )
     ScDocShell* pDocShell = excel::getDocShell( xModel );
     ScDocument& rDoc = pDocShell->GetDocument();
     ScDBData* pDBData = rDoc.GetAnonymousDBData(getSheetID());
-    if (pDBData)
-    {
-        pDBData->SetAutoFilter(bAutoFilterMode);
-        ScRange aRange;
-        pDBData->GetArea(aRange);
-        if (bAutoFilterMode)
-            rDoc.ApplyFlagsTab( aRange.aStart.Col(), aRange.aStart.Row(),
-                                    aRange.aEnd.Col(), aRange.aStart.Row(),
-                                    aRange.aStart.Tab(), ScMF::Auto );
-        else if (!bAutoFilterMode)
-            rDoc.RemoveFlagsTab(aRange.aStart.Col(), aRange.aStart.Row(),
-                                    aRange.aEnd.Col(), aRange.aStart.Row(),
-                                    aRange.aStart.Tab(), ScMF::Auto );
-        ScRange aPaintRange(aRange.aStart, aRange.aEnd);
-        aPaintRange.aEnd.SetRow(aPaintRange.aStart.Row());
-        pDocShell->PostPaint(aPaintRange, PaintPartFlags::Grid);
-    }
+    if (!pDBData)
+        return;
+
+    pDBData->SetAutoFilter(bAutoFilterMode);
+    ScRange aRange;
+    pDBData->GetArea(aRange);
+    if (bAutoFilterMode)
+        rDoc.ApplyFlagsTab( aRange.aStart.Col(), aRange.aStart.Row(),
+                                aRange.aEnd.Col(), aRange.aStart.Row(),
+                                aRange.aStart.Tab(), ScMF::Auto );
+    else if (!bAutoFilterMode)
+        rDoc.RemoveFlagsTab(aRange.aStart.Col(), aRange.aStart.Row(),
+                                aRange.aEnd.Col(), aRange.aStart.Row(),
+                                aRange.aStart.Tab(), ScMF::Auto );
+    ScRange aPaintRange(aRange.aStart, aRange.aEnd);
+    aPaintRange.aEnd.SetRow(aPaintRange.aStart.Row());
+    pDocShell->PostPaint(aPaintRange, PaintPartFlags::Grid);
 }
 
 uno::Reference< excel::XRange >
