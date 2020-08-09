@@ -56,48 +56,48 @@ Point aDragStartDiff;
 
 void ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
 {
-    if ( AreObjectsMarked() )
+    if ( !AreObjectsMarked() )
+        return;
+
+    BrkAction();
+
+    tools::Rectangle aMarkedRect = GetAllMarkedRect();
+
+    aDragStartDiff = rStartPos - aMarkedRect.TopLeft();
+
+    bool bAnyOle, bOneOle;
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    CheckOle( rMarkList, bAnyOle, bOneOle );
+
+    ScDocShellRef aDragShellRef;
+    if (bAnyOle)
     {
-        BrkAction();
-
-        tools::Rectangle aMarkedRect = GetAllMarkedRect();
-
-        aDragStartDiff = rStartPos - aMarkedRect.TopLeft();
-
-        bool bAnyOle, bOneOle;
-        const SdrMarkList& rMarkList = GetMarkedObjectList();
-        CheckOle( rMarkList, bAnyOle, bOneOle );
-
-        ScDocShellRef aDragShellRef;
-        if (bAnyOle)
-        {
-            aDragShellRef = new ScDocShell;     // DocShell needs a Ref immediately
-            aDragShellRef->DoInitNew();
-        }
-        ScDrawLayer::SetGlobalDrawPersist( aDragShellRef.get() );
-        std::unique_ptr<SdrModel> pModel(CreateMarkedObjModel());
-        ScDrawLayer::SetGlobalDrawPersist(nullptr);
-
-        //  Charts now always copy their data in addition to the source reference, so
-        //  there's no need to call SchDLL::Update for the charts in the clipboard doc.
-        //  Update with the data (including NumberFormatter) from the live document would
-        //  also store the NumberFormatter in the clipboard chart (#88749#)
-
-        ScDocShell* pDocSh = pViewData->GetDocShell();
-
-        TransferableObjectDescriptor aObjDesc;
-        pDocSh->FillTransferableObjectDescriptor( aObjDesc );
-        aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
-        // maSize is set in ScDrawTransferObj ctor
-
-        rtl::Reference<ScDrawTransferObj> pTransferObj = new ScDrawTransferObj( std::move(pModel), pDocSh, aObjDesc );
-
-        pTransferObj->SetDrawPersist( aDragShellRef.get() );    // keep persist for ole objects alive
-        pTransferObj->SetDragSource( this );               // copies selection
-
-        SC_MOD()->SetDragObject( nullptr, pTransferObj.get() );     // for internal D&D
-        pTransferObj->StartDrag( pWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
+        aDragShellRef = new ScDocShell;     // DocShell needs a Ref immediately
+        aDragShellRef->DoInitNew();
     }
+    ScDrawLayer::SetGlobalDrawPersist( aDragShellRef.get() );
+    std::unique_ptr<SdrModel> pModel(CreateMarkedObjModel());
+    ScDrawLayer::SetGlobalDrawPersist(nullptr);
+
+    //  Charts now always copy their data in addition to the source reference, so
+    //  there's no need to call SchDLL::Update for the charts in the clipboard doc.
+    //  Update with the data (including NumberFormatter) from the live document would
+    //  also store the NumberFormatter in the clipboard chart (#88749#)
+
+    ScDocShell* pDocSh = pViewData->GetDocShell();
+
+    TransferableObjectDescriptor aObjDesc;
+    pDocSh->FillTransferableObjectDescriptor( aObjDesc );
+    aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
+    // maSize is set in ScDrawTransferObj ctor
+
+    rtl::Reference<ScDrawTransferObj> pTransferObj = new ScDrawTransferObj( std::move(pModel), pDocSh, aObjDesc );
+
+    pTransferObj->SetDrawPersist( aDragShellRef.get() );    // keep persist for ole objects alive
+    pTransferObj->SetDragSource( this );               // copies selection
+
+    SC_MOD()->SetDragObject( nullptr, pTransferObj.get() );     // for internal D&D
+    pTransferObj->StartDrag( pWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
 }
 
 namespace {
