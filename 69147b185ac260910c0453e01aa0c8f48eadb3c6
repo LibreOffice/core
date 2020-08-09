@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b948d206_69182c2d",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-08-09T10:30:09Z",
+      "side": 1,
+      "message": "Works for the standard toolbars but not in case of notebookbars.",
+      "range": {
+        "startLine": 211,
+        "startChar": 4,
+        "endLine": 211,
+        "endChar": 86
+      },
+      "revId": "69147b185ac260910c0453e01aa0c8f48eadb3c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
