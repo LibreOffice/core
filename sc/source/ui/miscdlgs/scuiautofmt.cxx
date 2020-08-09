@@ -180,62 +180,62 @@ IMPL_LINK(ScAutoFormatDlg, CheckHdl, weld::ToggleButton&, rBtn, void)
 
 IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl, weld::Button&, void)
 {
-    if ( !bFmtInserted && pSelFmtData )
+    if ( bFmtInserted || !pSelFmtData )
+        return;
+
+    OUString aStrStandard( SfxResId(STR_STANDARD) );
+    OUString aFormatName;
+    bool bOk = false;
+
+    while ( !bOk )
     {
-        OUString aStrStandard( SfxResId(STR_STANDARD) );
-        OUString aFormatName;
-        bool bOk = false;
+        ScStringInputDlg aDlg(m_xDialog.get(), aStrTitle, aStrLabel, aFormatName,
+                              HID_SC_ADD_AUTOFMT, HID_SC_AUTOFMT_NAME);
 
-        while ( !bOk )
+        if (aDlg.run() == RET_OK)
         {
-            ScStringInputDlg aDlg(m_xDialog.get(), aStrTitle, aStrLabel, aFormatName,
-                                  HID_SC_ADD_AUTOFMT, HID_SC_AUTOFMT_NAME);
+            aFormatName = aDlg.GetInputString();
 
-            if (aDlg.run() == RET_OK)
+            if ( !aFormatName.isEmpty() && aFormatName != aStrStandard && pFormat->find(aFormatName) == pFormat->end() )
             {
-                aFormatName = aDlg.GetInputString();
+                std::unique_ptr<ScAutoFormatData> pNewData(
+                    new ScAutoFormatData( *pSelFmtData ));
 
-                if ( !aFormatName.isEmpty() && aFormatName != aStrStandard && pFormat->find(aFormatName) == pFormat->end() )
+                pNewData->SetName( aFormatName );
+                ScAutoFormat::iterator it = pFormat->insert(std::move(pNewData));
+                bFmtInserted = it != pFormat->end();
+
+                if ( bFmtInserted )
                 {
-                    std::unique_ptr<ScAutoFormatData> pNewData(
-                        new ScAutoFormatData( *pSelFmtData ));
+                    size_t nPos = std::distance(pFormat->begin(), it);
+                    m_xLbFormat->insert_text(nPos, aFormatName);
+                    m_xLbFormat->select_text( aFormatName );
+                    m_xBtnAdd->set_sensitive(false);
 
-                    pNewData->SetName( aFormatName );
-                    ScAutoFormat::iterator it = pFormat->insert(std::move(pNewData));
-                    bFmtInserted = it != pFormat->end();
-
-                    if ( bFmtInserted )
+                    if ( !bCoreDataChanged )
                     {
-                        size_t nPos = std::distance(pFormat->begin(), it);
-                        m_xLbFormat->insert_text(nPos, aFormatName);
-                        m_xLbFormat->select_text( aFormatName );
-                        m_xBtnAdd->set_sensitive(false);
-
-                        if ( !bCoreDataChanged )
-                        {
-                            m_xBtnCancel->set_label( aStrClose );
-                            bCoreDataChanged = true;
-                        }
-
-                        SelFmtHdl( *m_xLbFormat );
-                        bOk = true;
+                        m_xBtnCancel->set_label( aStrClose );
+                        bCoreDataChanged = true;
                     }
-                }
 
-                if ( !bFmtInserted )
-                {
-                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
-                                VclMessageType::Error, VclButtonsType::OkCancel,
-                                ScResId(STR_INVALID_AFNAME)));
-
-                    sal_uInt16 nRet = xBox->run();
-
-                    bOk = ( nRet == RET_CANCEL );
+                    SelFmtHdl( *m_xLbFormat );
+                    bOk = true;
                 }
             }
-            else
-                bOk = true;
+
+            if ( !bFmtInserted )
+            {
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
+                            VclMessageType::Error, VclButtonsType::OkCancel,
+                            ScResId(STR_INVALID_AFNAME)));
+
+                sal_uInt16 nRet = xBox->run();
+
+                bOk = ( nRet == RET_CANCEL );
+            }
         }
+        else
+            bOk = true;
     }
 }
 

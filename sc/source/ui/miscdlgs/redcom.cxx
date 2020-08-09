@@ -95,26 +95,26 @@ ScChangeAction *ScRedComDialog::FindNext(ScChangeAction *pAction)
 void ScRedComDialog::ReInit(ScChangeAction *pAction)
 {
     pChangeAction=pAction;
-    if(pChangeAction!=nullptr && pDocShell !=nullptr)
-    {
-        OUString aTitle;
-        pChangeAction->GetDescription( aTitle, &pDocShell->GetDocument());
-        pDlg->SetText(aTitle);
-        aComment=pChangeAction->GetComment();
+    if(pChangeAction==nullptr || pDocShell ==nullptr)
+        return;
 
-        bool bNext=FindNext(pChangeAction)!=nullptr;
-        bool bPrev=FindPrev(pChangeAction)!=nullptr;
-        pDlg->EnableTravel(bNext,bPrev);
+    OUString aTitle;
+    pChangeAction->GetDescription( aTitle, &pDocShell->GetDocument());
+    pDlg->SetText(aTitle);
+    aComment=pChangeAction->GetComment();
 
-        OUString aAuthor = pChangeAction->GetUser();
+    bool bNext=FindNext(pChangeAction)!=nullptr;
+    bool bPrev=FindPrev(pChangeAction)!=nullptr;
+    pDlg->EnableTravel(bNext,bPrev);
 
-        DateTime aDT = pChangeAction->GetDateTime();
-        OUString aDate = ScGlobal::getLocaleDataPtr()->getDate( aDT ) + " " +
-            ScGlobal::getLocaleDataPtr()->getTime( aDT, false );
+    OUString aAuthor = pChangeAction->GetUser();
 
-        pDlg->ShowLastAuthor(aAuthor, aDate);
-        pDlg->SetNote(aComment);
-    }
+    DateTime aDT = pChangeAction->GetDateTime();
+    OUString aDate = ScGlobal::getLocaleDataPtr()->getDate( aDT ) + " " +
+        ScGlobal::getLocaleDataPtr()->getTime( aDT, false );
+
+    pDlg->ShowLastAuthor(aAuthor, aDate);
+    pDlg->SetNote(aComment);
 }
 
 void ScRedComDialog::Execute()
@@ -130,18 +130,18 @@ void ScRedComDialog::Execute()
 
 void ScRedComDialog::SelectCell()
 {
-    if(pChangeAction!=nullptr)
-    {
-        const ScChangeAction* pAction=pChangeAction;
-        const ScBigRange& rRange = pAction->GetBigRange();
+    if(pChangeAction==nullptr)
+        return;
 
-        if(rRange.IsValid(&pDocShell->GetDocument()))
-        {
-            ScViewData* pViewData=ScDocShell::GetViewData();
-            ScRange aRef=rRange.MakeRange();
-            ScTabView* pTabView=pViewData->GetView();
-            pTabView->MarkRange(aRef);
-        }
+    const ScChangeAction* pAction=pChangeAction;
+    const ScBigRange& rRange = pAction->GetBigRange();
+
+    if(rRange.IsValid(&pDocShell->GetDocument()))
+    {
+        ScViewData* pViewData=ScDocShell::GetViewData();
+        ScRange aRef=rRange.MakeRange();
+        ScTabView* pTabView=pViewData->GetView();
+        pTabView->MarkRange(aRef);
     }
 }
 

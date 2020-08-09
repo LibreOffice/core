@@ -109,30 +109,30 @@ void ScFormulaReferenceHelper::enableInput( bool bEnable )
 
 void ScFormulaReferenceHelper::ShowSimpleReference(const OUString& rStr)
 {
-    if (m_bEnableColorRef)
+    if (!m_bEnableColorRef)
+        return;
+
+    m_bHighlightRef = true;
+    ScViewData* pViewData=ScDocShell::GetViewData();
+    if ( !pViewData )
+        return;
+
+    ScDocument* pDoc=pViewData->GetDocument();
+    ScTabViewShell* pTabViewShell=pViewData->GetViewShell();
+
+    ScRangeList aRangeList;
+
+    pTabViewShell->DoneRefMode();
+    pTabViewShell->ClearHighlightRanges();
+
+    if( ParseWithNames( aRangeList, rStr, *pDoc ) )
     {
-        m_bHighlightRef = true;
-        ScViewData* pViewData=ScDocShell::GetViewData();
-        if ( pViewData )
+        for ( size_t i = 0, nRanges = aRangeList.size(); i < nRanges; ++i )
         {
-            ScDocument* pDoc=pViewData->GetDocument();
-            ScTabViewShell* pTabViewShell=pViewData->GetViewShell();
-
-            ScRangeList aRangeList;
-
-            pTabViewShell->DoneRefMode();
-            pTabViewShell->ClearHighlightRanges();
-
-            if( ParseWithNames( aRangeList, rStr, *pDoc ) )
-            {
-                for ( size_t i = 0, nRanges = aRangeList.size(); i < nRanges; ++i )
-                {
-                    ScRange const & rRangeEntry = aRangeList[ i ];
-                    Color aColName = ScRangeFindList::GetColorName( i );
-                    pTabViewShell->AddHighlightRange( rRangeEntry, aColName );
-               }
-            }
-        }
+            ScRange const & rRangeEntry = aRangeList[ i ];
+            Color aColName = ScRangeFindList::GetColorName( i );
+            pTabViewShell->AddHighlightRange( rRangeEntry, aColName );
+       }
     }
 }
 
@@ -173,58 +173,58 @@ bool ScFormulaReferenceHelper::ParseWithNames( ScRangeList& rRanges, const OUStr
 
 void ScFormulaReferenceHelper::ShowFormulaReference(const OUString& rStr)
 {
-    if( m_bEnableColorRef)
+    if( !m_bEnableColorRef)
+        return;
+
+    m_bHighlightRef=true;
+    ScViewData* pViewData=ScDocShell::GetViewData();
+    if ( !(pViewData && m_pRefComp) )
+        return;
+
+    ScTabViewShell* pTabViewShell=pViewData->GetViewShell();
+    SCCOL nCol = pViewData->GetCurX();
+    SCROW nRow = pViewData->GetCurY();
+    SCTAB nTab = pViewData->GetTabNo();
+    ScAddress aPos( nCol, nRow, nTab );
+
+    std::unique_ptr<ScTokenArray> pScTokA(m_pRefComp->CompileString(rStr));
+
+    if (!(pTabViewShell && pScTokA))
+        return;
+
+    const ScViewData& rViewData = pTabViewShell->GetViewData();
+    ScDocument* pDoc = rViewData.GetDocument();
+    pTabViewShell->DoneRefMode();
+    pTabViewShell->ClearHighlightRanges();
+
+    formula::FormulaTokenArrayPlainIterator aIter(*pScTokA);
+    const formula::FormulaToken* pToken = aIter.GetNextReference();
+
+    sal_uInt16 nIndex=0;
+
+    while(pToken!=nullptr)
     {
-        m_bHighlightRef=true;
-        ScViewData* pViewData=ScDocShell::GetViewData();
-        if ( pViewData && m_pRefComp )
+        bool bDoubleRef=(pToken->GetType()==formula::svDoubleRef);
+
+        if(pToken->GetType()==formula::svSingleRef || bDoubleRef)
         {
-            ScTabViewShell* pTabViewShell=pViewData->GetViewShell();
-            SCCOL nCol = pViewData->GetCurX();
-            SCROW nRow = pViewData->GetCurY();
-            SCTAB nTab = pViewData->GetTabNo();
-            ScAddress aPos( nCol, nRow, nTab );
-
-            std::unique_ptr<ScTokenArray> pScTokA(m_pRefComp->CompileString(rStr));
-
-            if (pTabViewShell && pScTokA)
+            ScRange aRange;
+            if(bDoubleRef)
             {
-                const ScViewData& rViewData = pTabViewShell->GetViewData();
-                ScDocument* pDoc = rViewData.GetDocument();
-                pTabViewShell->DoneRefMode();
-                pTabViewShell->ClearHighlightRanges();
-
-                formula::FormulaTokenArrayPlainIterator aIter(*pScTokA);
-                const formula::FormulaToken* pToken = aIter.GetNextReference();
-
-                sal_uInt16 nIndex=0;
-
-                while(pToken!=nullptr)
-                {
-                    bool bDoubleRef=(pToken->GetType()==formula::svDoubleRef);
-
-                    if(pToken->GetType()==formula::svSingleRef || bDoubleRef)
-                    {
-                        ScRange aRange;
-                        if(bDoubleRef)
-                        {
-                            ScComplexRefData aRef( *pToken->GetDoubleRef() );
-                            aRange = aRef.toAbs(pDoc, aPos);
-                        }
-                        else
-                        {
-                            ScSingleRefData aRef( *pToken->GetSingleRef() );
-                            aRange.aStart = aRef.toAbs(pDoc, aPos);
-                            aRange.aEnd = aRange.aStart;
-                        }
-                        Color aColName=ScRangeFindList::GetColorName(nIndex++);
-                        pTabViewShell->AddHighlightRange(aRange, aColName);
-                    }
-
-                    pToken = aIter.GetNextReference();
-                }
+                ScComplexRefData aRef( *pToken->GetDoubleRef() );
+                aRange = aRef.toAbs(pDoc, aPos);
             }
+            else
+            {
+                ScSingleRefData aRef( *pToken->GetSingleRef() );
+                aRange.aStart = aRef.toAbs(pDoc, aPos);
+                aRange.aEnd = aRange.aStart;
+            }
+            Color aColName=ScRangeFindList::GetColorName(nIndex++);
+            pTabViewShell->AddHighlightRange(aRange, aColName);
         }
+
+        pToken = aIter.GetNextReference();
     }
 }
 
@@ -232,51 +232,51 @@ void ScFormulaReferenceHelper::HideReference( bool bDoneRefMode )
 {
     ScViewData* pViewData=ScDocShell::GetViewData();
 
-    if( pViewData && m_bHighlightRef && m_bEnableColorRef)
+    if( !(pViewData && m_bHighlightRef && m_bEnableColorRef))
+        return;
+
+    ScTabViewShell* pTabViewShell=pViewData->GetViewShell();
+
+    if(pTabViewShell!=nullptr)
     {
-        ScTabViewShell* pTabViewShell=pViewData->GetViewShell();
+        //  bDoneRefMode is sal_False when called from before SetReference.
+        //  In that case, RefMode was just started and must not be ended now.
 
-        if(pTabViewShell!=nullptr)
+        if ( bDoneRefMode )
+            pTabViewShell->DoneRefMode();
+        pTabViewShell->ClearHighlightRanges();
+
+        if( comphelper::LibreOfficeKit::isActive() )
         {
-            //  bDoneRefMode is sal_False when called from before SetReference.
-            //  In that case, RefMode was just started and must not be ended now.
-
-            if ( bDoneRefMode )
-                pTabViewShell->DoneRefMode();
-            pTabViewShell->ClearHighlightRanges();
-
-            if( comphelper::LibreOfficeKit::isActive() )
-            {
-                // Clear
-                std::vector<ReferenceMark> aReferenceMarks;
-                ScInputHandler::SendReferenceMarks( pTabViewShell, aReferenceMarks );
-            }
+            // Clear
+            std::vector<ReferenceMark> aReferenceMarks;
+            ScInputHandler::SendReferenceMarks( pTabViewShell, aReferenceMarks );
         }
-        m_bHighlightRef=false;
     }
+    m_bHighlightRef=false;
 }
 
 void ScFormulaReferenceHelper::ShowReference(const OUString& rStr)
 {
-    if( m_bEnableColorRef )
+    if( !m_bEnableColorRef )
+        return;
+
+    if( rStr.indexOf('(') != -1 ||
+        rStr.indexOf('+') != -1 ||
+        rStr.indexOf('*') != -1 ||
+        rStr.indexOf('-') != -1 ||
+        rStr.indexOf('/') != -1 ||
+        rStr.indexOf('&') != -1 ||
+        rStr.indexOf('<') != -1 ||
+        rStr.indexOf('>') != -1 ||
+        rStr.indexOf('=') != -1 ||
+        rStr.indexOf('^') != -1 )
     {
-        if( rStr.indexOf('(') != -1 ||
-            rStr.indexOf('+') != -1 ||
-            rStr.indexOf('*') != -1 ||
-            rStr.indexOf('-') != -1 ||
-            rStr.indexOf('/') != -1 ||
-            rStr.indexOf('&') != -1 ||
-            rStr.indexOf('<') != -1 ||
-            rStr.indexOf('>') != -1 ||
-            rStr.indexOf('=') != -1 ||
-            rStr.indexOf('^') != -1 )
-        {
-            ShowFormulaReference(rStr);
-        }
-        else
-        {
-            ShowSimpleReference(rStr);
-        }
+        ShowFormulaReference(rStr);
+    }
+    else
+    {
+        ShowSimpleReference(rStr);
     }
 }
 
@@ -288,48 +288,48 @@ void ScFormulaReferenceHelper::ReleaseFocus( formula::RefEdit* pEdit )
     }
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-    if( pViewShell )
+    if( !pViewShell )
+        return;
+
+    pViewShell->ActiveGrabFocus();
+    if( !m_pRefEdit )
+        return;
+
+    const ScViewData& rViewData = pViewShell->GetViewData();
+    ScDocument* pDoc = rViewData.GetDocument();
+    ScRangeList aRangeList;
+    if( !ParseWithNames( aRangeList, m_pRefEdit->GetText(), *pDoc ) )
+        return;
+
+    if ( !aRangeList.empty() )
     {
-        pViewShell->ActiveGrabFocus();
-        if( m_pRefEdit )
-        {
-            const ScViewData& rViewData = pViewShell->GetViewData();
-            ScDocument* pDoc = rViewData.GetDocument();
-            ScRangeList aRangeList;
-            if( ParseWithNames( aRangeList, m_pRefEdit->GetText(), *pDoc ) )
-            {
-                if ( !aRangeList.empty() )
-                {
-                    const ScRange & rRange = aRangeList.front();
-                    pViewShell->SetTabNo( rRange.aStart.Tab() );
-                    pViewShell->MoveCursorAbs(  rRange.aStart.Col(),
-                        rRange.aStart.Row(), SC_FOLLOW_JUMP, false, false );
-                    pViewShell->MoveCursorAbs( rRange.aEnd.Col(),
-                        rRange.aEnd.Row(), SC_FOLLOW_JUMP, true, false );
-                    m_pDlg->SetReference( rRange, *pDoc );
-                }
-            }
-        }
+        const ScRange & rRange = aRangeList.front();
+        pViewShell->SetTabNo( rRange.aStart.Tab() );
+        pViewShell->MoveCursorAbs(  rRange.aStart.Col(),
+            rRange.aStart.Row(), SC_FOLLOW_JUMP, false, false );
+        pViewShell->MoveCursorAbs( rRange.aEnd.Col(),
+            rRange.aEnd.Row(), SC_FOLLOW_JUMP, true, false );
+        m_pDlg->SetReference( rRange, *pDoc );
     }
 }
 
 void ScFormulaReferenceHelper::Init()
 {
     ScViewData* pViewData=ScDocShell::GetViewData();    //! use pScViewShell?
-    if ( pViewData )
-    {
-        ScDocument* pDoc = pViewData->GetDocument();
-        SCCOL nCol = pViewData->GetCurX();
-        SCROW nRow = pViewData->GetCurY();
-        SCTAB nTab = pViewData->GetTabNo();
-        ScAddress aCursorPos( nCol, nRow, nTab );
+    if ( !pViewData )
+        return;
 
-        m_pRefComp.reset( new ScCompiler( pDoc, aCursorPos, pDoc->GetGrammar()) );
-        m_pRefComp->EnableJumpCommandReorder(false);
-        m_pRefComp->EnableStopOnError(false);
+    ScDocument* pDoc = pViewData->GetDocument();
+    SCCOL nCol = pViewData->GetCurX();
+    SCROW nRow = pViewData->GetCurY();
+    SCTAB nTab = pViewData->GetTabNo();
+    ScAddress aCursorPos( nCol, nRow, nTab );
 
-        m_nRefTab = nTab;
-    }
+    m_pRefComp.reset( new ScCompiler( pDoc, aCursorPos, pDoc->GetGrammar()) );
+    m_pRefComp->EnableJumpCommandReorder(false);
+    m_pRefComp->EnableStopOnError(false);
+
+    m_nRefTab = nTab;
 }
 
 IMPL_LINK_NOARG(ScFormulaReferenceHelper, ActivateHdl, weld::Widget&, bool)
@@ -342,79 +342,79 @@ IMPL_LINK_NOARG(ScFormulaReferenceHelper, ActivateHdl, weld::Widget&, bool)
 
 void ScFormulaReferenceHelper::RefInputDone( bool bForced )
 {
-    if ( CanInputDone( bForced ) )
+    if ( !CanInputDone( bForced ) )
+        return;
+
+    if (!m_pDialog)
+        return;
+
+    // Adjust window title
+    m_pDialog->set_title(m_sOldDialogText);
+
+    if (m_pRefEdit)
+        m_pRefEdit->SetActivateHdl(Link<weld::Widget&, bool>());
+
+    // set button image
+    if (m_pRefBtn)
     {
-        if (m_pDialog)
-        {
-            // Adjust window title
-            m_pDialog->set_title(m_sOldDialogText);
-
-            if (m_pRefEdit)
-                m_pRefEdit->SetActivateHdl(Link<weld::Widget&, bool>());
-
-            // set button image
-            if (m_pRefBtn)
-            {
-                m_pRefBtn->SetActivateHdl(Link<weld::Widget&, bool>());
-                m_pRefBtn->SetStartImage();
-            }
-
-            m_pDialog->undo_collapse();
-
-            m_pRefEdit = nullptr;
-            m_pRefBtn = nullptr;
-        }
+        m_pRefBtn->SetActivateHdl(Link<weld::Widget&, bool>());
+        m_pRefBtn->SetStartImage();
     }
+
+    m_pDialog->undo_collapse();
+
+    m_pRefEdit = nullptr;
+    m_pRefBtn = nullptr;
 }
 
 void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton )
 {
-    if (!m_pRefEdit)
+    if (m_pRefEdit)
+        return;
+
+    m_pRefEdit = pEdit;
+    m_pRefBtn  = pButton;
+
+    // Save and adjust window title
+    m_sOldDialogText = m_pDialog->get_title();
+    if (weld::Label *pLabel = m_pRefEdit->GetLabelWidgetForShrinkMode())
     {
-        m_pRefEdit = pEdit;
-        m_pRefBtn  = pButton;
-
-        // Save and adjust window title
-        m_sOldDialogText = m_pDialog->get_title();
-        if (weld::Label *pLabel = m_pRefEdit->GetLabelWidgetForShrinkMode())
+        const OUString sLabel = pLabel->get_label();
+        if (!sLabel.isEmpty())
         {
-            const OUString sLabel = pLabel->get_label();
-            if (!sLabel.isEmpty())
-            {
-                const OUString sNewDialogText = m_sOldDialogText + ": " + comphelper::string::stripEnd(sLabel, ':');
-                m_pDialog->set_title(pLabel->strip_mnemonic(sNewDialogText));
-            }
+            const OUString sNewDialogText = m_sOldDialogText + ": " + comphelper::string::stripEnd(sLabel, ':');
+            m_pDialog->set_title(pLabel->strip_mnemonic(sNewDialogText));
         }
-
-        m_pDialog->collapse(pEdit->GetWidget(), pButton ? pButton->GetWidget() : nullptr);
-
-        // set button image
-        if (pButton)
-            pButton->SetEndImage();
-
-        m_pRefEdit->SetActivateHdl(LINK(this, ScFormulaReferenceHelper, ActivateHdl));
-        if (m_pRefBtn)
-            m_pRefBtn->SetActivateHdl(LINK(this, ScFormulaReferenceHelper, ActivateHdl));
     }
+
+    m_pDialog->collapse(pEdit->GetWidget(), pButton ? pButton->GetWidget() : nullptr);
+
+    // set button image
+    if (pButton)
+        pButton->SetEndImage();
+
+    m_pRefEdit->SetActivateHdl(LINK(this, ScFormulaReferenceHelper, ActivateHdl));
+    if (m_pRefBtn)
+        m_pRefBtn->SetActivateHdl(LINK(this, ScFormulaReferenceHelper, ActivateHdl));
 }
 
 void ScFormulaReferenceHelper::ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton )
 {
-    if( pEdit )
+    if( !pEdit )
+        return;
+
+    if( m_pRefEdit == pEdit )                 // is this the active ref edit field?
     {
-        if( m_pRefEdit == pEdit )                 // is this the active ref edit field?
-        {
-            m_pRefEdit->GrabFocus();              // before RefInputDone()
-            m_pDlg->RefInputDone( true );               // finish ref input
-        }
-        else
-        {
-            m_pDlg->RefInputDone( true );               // another active ref edit?
-            m_pDlg->RefInputStart( pEdit, pButton );    // start ref input
-            // pRefEdit might differ from pEdit after RefInputStart() (i.e. ScFormulaDlg)
-            if( m_pRefEdit )
-                m_pRefEdit->GrabFocus();
-        }
+        m_pRefEdit->GrabFocus();              // before RefInputDone()
+        m_pDlg->RefInputDone( true );               // finish ref input
+    }
+    else
+    {
+        m_pDlg->RefInputDone( true );               // another active ref edit?
+        m_pDlg->RefInputStart( pEdit, pButton );    // start ref input
+        // pRefEdit might differ from pEdit after RefInputStart() (i.e. ScFormulaDlg)
+        if( m_pRefEdit )
+            m_pRefEdit->GrabFocus();
     }
 }
 

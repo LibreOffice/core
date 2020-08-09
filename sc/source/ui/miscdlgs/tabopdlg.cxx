@@ -125,37 +125,37 @@ void ScTabOpDlg::SetActive()
 
 void ScTabOpDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
 {
-    if (m_pEdActive)
+    if (!m_pEdActive)
+        return;
+
+    ScAddress::Details aDetails(rDocP.GetAddressConvention(), 0, 0);
+
+    if ( rRef.aStart != rRef.aEnd )
+        RefInputStart(m_pEdActive);
+
+    OUString      aStr;
+    ScRefFlags      nFmt = ( rRef.aStart.Tab() == nCurTab )
+                            ? ScRefFlags::RANGE_ABS
+                            : ScRefFlags::RANGE_ABS_3D;
+
+    if (m_pEdActive == m_xEdFormulaRange.get())
     {
-        ScAddress::Details aDetails(rDocP.GetAddressConvention(), 0, 0);
-
-        if ( rRef.aStart != rRef.aEnd )
-            RefInputStart(m_pEdActive);
-
-        OUString      aStr;
-        ScRefFlags      nFmt = ( rRef.aStart.Tab() == nCurTab )
-                                ? ScRefFlags::RANGE_ABS
-                                : ScRefFlags::RANGE_ABS_3D;
-
-        if (m_pEdActive == m_xEdFormulaRange.get())
-        {
-            theFormulaCell.Set( rRef.aStart, false, false, false);
-            theFormulaEnd.Set( rRef.aEnd, false, false, false);
-            aStr = rRef.Format(rDocP, nFmt, aDetails);
-        }
-        else if (m_pEdActive == m_xEdRowCell.get())
-        {
-            theRowCell.Set( rRef.aStart, false, false, false);
-            aStr = rRef.aStart.Format(nFmt, &rDocP, aDetails);
-        }
-        else if (m_pEdActive == m_xEdColCell.get())
-        {
-            theColCell.Set( rRef.aStart, false, false, false);
-            aStr = rRef.aStart.Format(nFmt, &rDocP, aDetails);
-        }
-
-        m_pEdActive->SetRefString( aStr );
+        theFormulaCell.Set( rRef.aStart, false, false, false);
+        theFormulaEnd.Set( rRef.aEnd, false, false, false);
+        aStr = rRef.Format(rDocP, nFmt, aDetails);
     }
+    else if (m_pEdActive == m_xEdRowCell.get())
+    {
+        theRowCell.Set( rRef.aStart, false, false, false);
+        aStr = rRef.aStart.Format(nFmt, &rDocP, aDetails);
+    }
+    else if (m_pEdActive == m_xEdColCell.get())
+    {
+        theColCell.Set( rRef.aStart, false, false, false);
+        aStr = rRef.aStart.Format(nFmt, &rDocP, aDetails);
+    }
+
+    m_pEdActive->SetRefString( aStr );
 }
 
 void ScTabOpDlg::RaiseError( ScTabOpErr eError )
