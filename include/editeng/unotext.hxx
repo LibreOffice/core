@@ -66,88 +66,88 @@ struct SfxItemPropertySimpleEntry;
 #define WID_PARAISNUMBERINGRESTART  OWN_ATTR_VALUE_START+4
 
 #define SVX_UNOEDIT_NUMBERING_PROPERTIE \
-    {OUString(UNO_NAME_NUMBERING_RULES),        EE_PARA_NUMBULLET,  cppu::UnoType<css::container::XIndexReplace>::get(), 0, 0 }, \
-    {OUString(UNO_NAME_NUMBERING),              EE_PARA_BULLETSTATE,cppu::UnoType<bool>::get(), 0, 0 }
+    {UNO_NAME_NUMBERING_RULES,        EE_PARA_NUMBULLET,  cppu::UnoType<css::container::XIndexReplace>::get(), 0, 0 }, \
+    {UNO_NAME_NUMBERING,              EE_PARA_BULLETSTATE,cppu::UnoType<bool>::get(), 0, 0 }
 
 #define SVX_UNOEDIT_OUTLINER_PROPERTIES \
     SVX_UNOEDIT_NUMBERING_PROPERTIE, \
-    {OUString(UNO_NAME_NUMBERING_LEVEL),        WID_NUMLEVEL,       ::cppu::UnoType<sal_Int16>::get(), 0, 0 }, \
-    {OUString("NumberingStartValue"),           WID_NUMBERINGSTARTVALUE, ::cppu::UnoType<sal_Int16>::get(), 0, 0 }, \
-    {OUString("ParaIsNumberingRestart"),        WID_PARAISNUMBERINGRESTART, cppu::UnoType<bool>::get(), 0, 0 }
+    {UNO_NAME_NUMBERING_LEVEL,        WID_NUMLEVEL,       ::cppu::UnoType<sal_Int16>::get(), 0, 0 }, \
+    {"NumberingStartValue",           WID_NUMBERINGSTARTVALUE, ::cppu::UnoType<sal_Int16>::get(), 0, 0 }, \
+    {"ParaIsNumberingRestart",        WID_PARAISNUMBERINGRESTART, cppu::UnoType<bool>::get(), 0, 0 }
 
 #define SVX_UNOEDIT_CHAR_PROPERTIES \
-    { OUString(UNO_NAME_EDIT_CHAR_HEIGHT),      EE_CHAR_FONTHEIGHT, cppu::UnoType<float>::get(),            0, MID_FONTHEIGHT|CONVERT_TWIPS }, \
-    { OUString("CharScaleWidth"),               EE_CHAR_FONTWIDTH,  ::cppu::UnoType<sal_Int16>::get(),    0, 0 }, \
-    { OUString(UNO_NAME_EDIT_CHAR_FONTNAME),    EE_CHAR_FONTINFO,   ::cppu::UnoType<OUString>::get(),  0, MID_FONT_FAMILY_NAME },\
-    { OUString(UNO_NAME_EDIT_CHAR_FONTSTYLENAME),EE_CHAR_FONTINFO,  ::cppu::UnoType<OUString>::get(),  0, MID_FONT_STYLE_NAME }, \
-    { OUString(UNO_NAME_EDIT_CHAR_FONTFAMILY),  EE_CHAR_FONTINFO,   ::cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_FAMILY }, \
-    { OUString(UNO_NAME_EDIT_CHAR_FONTCHARSET), EE_CHAR_FONTINFO,   ::cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_CHAR_SET }, \
-    { OUString(UNO_NAME_EDIT_CHAR_FONTPITCH),   EE_CHAR_FONTINFO,   ::cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_PITCH }, \
-    { OUString(UNO_NAME_EDIT_CHAR_POSTURE),     EE_CHAR_ITALIC,     ::cppu::UnoType<css::awt::FontSlant>::get(),0, MID_POSTURE }, \
-    { OUString(UNO_NAME_EDIT_CHAR_WEIGHT),      EE_CHAR_WEIGHT,     cppu::UnoType<float>::get(),            0, MID_WEIGHT }, \
-    { OUString(UNO_NAME_EDIT_CHAR_LOCALE),      EE_CHAR_LANGUAGE,   ::cppu::UnoType<css::lang::Locale>::get(),0, MID_LANG_LOCALE }, \
-    { OUString(UNO_NAME_EDIT_CHAR_COLOR),       EE_CHAR_COLOR,      ::cppu::UnoType<sal_Int32>::get(),        0, 0 }, \
-    { OUString(UNO_NAME_EDIT_CHAR_TRANSPARENCE),EE_CHAR_COLOR,      ::cppu::UnoType<sal_Int16>::get(),        0, MID_COLOR_ALPHA }, \
-    { OUString("CharBackColor"),                EE_CHAR_BKGCOLOR,   ::cppu::UnoType<sal_Int32>::get(),        0, 0 }, \
-    { OUString("CharBackTransparent"),          EE_CHAR_BKGCOLOR,   ::cppu::UnoType<bool>::get(),             0, MID_GRAPHIC_TRANSPARENT }, \
-    { OUString(UNO_NAME_EDIT_CHAR_ESCAPEMENT),  EE_CHAR_ESCAPEMENT, ::cppu::UnoType<sal_Int16>::get(),        0, MID_ESC }, \
-    { OUString(UNO_NAME_EDIT_CHAR_UNDERLINE),   EE_CHAR_UNDERLINE,  ::cppu::UnoType<sal_Int16>::get(),        0, MID_TL_STYLE }, \
-    { OUString("CharUnderlineColor"),           EE_CHAR_UNDERLINE,  ::cppu::UnoType<sal_Int32>::get(),        0, MID_TL_COLOR }, \
-    { OUString("CharUnderlineHasColor"),        EE_CHAR_UNDERLINE,  cppu::UnoType<bool>::get(),                    0, MID_TL_HASCOLOR } , \
-    { OUString(UNO_NAME_EDIT_CHAR_OVERLINE),    EE_CHAR_OVERLINE,   ::cppu::UnoType<sal_Int16>::get(),        0, MID_TL_STYLE }, \
-    { OUString("CharOverlineColor"),            EE_CHAR_OVERLINE,   ::cppu::UnoType<sal_Int32>::get(),        0, MID_TL_COLOR }, \
-    { OUString("CharOverlineHasColor"),         EE_CHAR_OVERLINE,   cppu::UnoType<bool>::get(),                    0, MID_TL_HASCOLOR } , \
-    { OUString(UNO_NAME_EDIT_CHAR_CROSSEDOUT),  EE_CHAR_STRIKEOUT,  cppu::UnoType<bool>::get(),                    0, MID_CROSSED_OUT }, \
-    { OUString(UNO_NAME_EDIT_CHAR_STRIKEOUT),   EE_CHAR_STRIKEOUT,  ::cppu::UnoType<sal_Int16>::get(),        0, MID_CROSS_OUT}, \
-    { OUString(UNO_NAME_EDIT_CHAR_CASEMAP),     EE_CHAR_CASEMAP,    ::cppu::UnoType<sal_Int16>::get(),        0, 0 }, \
-    { OUString(UNO_NAME_EDIT_CHAR_SHADOWED),    EE_CHAR_SHADOW,     cppu::UnoType<bool>::get(),                    0, 0 }, \
-    { OUString("CharContoured"),                EE_CHAR_OUTLINE,    cppu::UnoType<bool>::get(),                    0, 0 }, \
-    { OUString("CharEscapementHeight"),         EE_CHAR_ESCAPEMENT, cppu::UnoType<sal_Int8>::get(),         0, MID_ESC_HEIGHT },\
-    { OUString("CharAutoKerning"),              EE_CHAR_PAIRKERNING,cppu::UnoType<bool>::get(),                    0, 0 } , \
-    { OUString("CharKerning"),                  EE_CHAR_KERNING,    ::cppu::UnoType<sal_Int16>::get()  ,      0, 0 }, \
-    { OUString("CharWordMode"),                 EE_CHAR_WLM,        cppu::UnoType<bool>::get(),                    0, 0 }, \
-    { OUString("CharEmphasis"),                 EE_CHAR_EMPHASISMARK, ::cppu::UnoType<sal_Int16>::get(),       0, MID_EMPHASIS},\
-    { OUString(UNO_NAME_EDIT_CHAR_HEIGHT_ASIAN),        EE_CHAR_FONTHEIGHT_CJK, cppu::UnoType<float>::get(),            0, MID_FONTHEIGHT|CONVERT_TWIPS }, \
-    { OUString(UNO_NAME_EDIT_CHAR_FONTNAME_ASIAN),      EE_CHAR_FONTINFO_CJK,   ::cppu::UnoType<OUString>::get(),  0, MID_FONT_FAMILY_NAME },\
-    { OUString(UNO_NAME_EDIT_CHAR_FONTSTYLENAME_ASIAN), EE_CHAR_FONTINFO_CJK,   ::cppu::UnoType<OUString>::get(),  0, MID_FONT_STYLE_NAME }, \
-    { OUString(UNO_NAME_EDIT_CHAR_FONTFAMILY_ASIAN),    EE_CHAR_FONTINFO_CJK,   ::cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_FAMILY }, \
-    { OUString(UNO_NAME_EDIT_CHAR_FONTCHARSET_ASIAN),   EE_CHAR_FONTINFO_CJK,   ::cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_CHAR_SET }, \
-    { OUString(UNO_NAME_EDIT_CHAR_FONTPITCH_ASIAN),     EE_CHAR_FONTINFO_CJK,   ::cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_PITCH }, \
-    { OUString(UNO_NAME_EDIT_CHAR_POSTURE_ASIAN),       EE_CHAR_ITALIC_CJK,     ::cppu::UnoType<css::awt::FontSlant>::get(),0, MID_POSTURE }, \
-    { OUString(UNO_NAME_EDIT_CHAR_WEIGHT_ASIAN),        EE_CHAR_WEIGHT_CJK,     cppu::UnoType<float>::get(),            0, MID_WEIGHT }, \
-    { OUString(UNO_NAME_EDIT_CHAR_LOCALE_ASIAN),        EE_CHAR_LANGUAGE_CJK,   ::cppu::UnoType<css::lang::Locale>::get(),0, MID_LANG_LOCALE }, \
-    { OUString(UNO_NAME_EDIT_CHAR_HEIGHT_COMPLEX),      EE_CHAR_FONTHEIGHT_CTL, cppu::UnoType<float>::get(),            0, MID_FONTHEIGHT|CONVERT_TWIPS }, \
-    { OUString(UNO_NAME_EDIT_CHAR_FONTNAME_COMPLEX),    EE_CHAR_FONTINFO_CTL,   ::cppu::UnoType<OUString>::get(),  0, MID_FONT_FAMILY_NAME },\
-    { OUString(UNO_NAME_EDIT_CHAR_FONTSTYLENAME_COMPLEX),EE_CHAR_FONTINFO_CTL,  ::cppu::UnoType<OUString>::get(),  0, MID_FONT_STYLE_NAME }, \
-    { OUString(UNO_NAME_EDIT_CHAR_FONTFAMILY_COMPLEX),  EE_CHAR_FONTINFO_CTL,   ::cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_FAMILY }, \
-    { OUString(UNO_NAME_EDIT_CHAR_FONTCHARSET_COMPLEX), EE_CHAR_FONTINFO_CTL,   ::cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_CHAR_SET }, \
-    { OUString(UNO_NAME_EDIT_CHAR_FONTPITCH_COMPLEX),   EE_CHAR_FONTINFO_CTL,   ::cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_PITCH }, \
-    { OUString(UNO_NAME_EDIT_CHAR_POSTURE_COMPLEX),     EE_CHAR_ITALIC_CTL,     ::cppu::UnoType<css::awt::FontSlant>::get(),0, MID_POSTURE }, \
-    { OUString(UNO_NAME_EDIT_CHAR_WEIGHT_COMPLEX),      EE_CHAR_WEIGHT_CTL,     cppu::UnoType<float>::get(),            0, MID_WEIGHT }, \
-    { OUString(UNO_NAME_EDIT_CHAR_LOCALE_COMPLEX),      EE_CHAR_LANGUAGE_CTL,   ::cppu::UnoType<css::lang::Locale>::get(),0, MID_LANG_LOCALE }, \
-    { OUString("CharRelief"),                           EE_CHAR_RELIEF,         ::cppu::UnoType<sal_Int16>::get(),    0, MID_RELIEF }, \
-    { OUString("CharInteropGrabBag"),                   EE_CHAR_GRABBAG,        cppu::UnoType<css::uno::Sequence<css::beans::PropertyValue >>::get(), 0, 0}
+    { UNO_NAME_EDIT_CHAR_HEIGHT,      EE_CHAR_FONTHEIGHT, cppu::UnoType<float>::get(),            0, MID_FONTHEIGHT|CONVERT_TWIPS }, \
+    { "CharScaleWidth",               EE_CHAR_FONTWIDTH,  ::cppu::UnoType<sal_Int16>::get(),    0, 0 }, \
+    { UNO_NAME_EDIT_CHAR_FONTNAME,    EE_CHAR_FONTINFO,   ::cppu::UnoType<OUString>::get(),  0, MID_FONT_FAMILY_NAME },\
+    { UNO_NAME_EDIT_CHAR_FONTSTYLENAME,EE_CHAR_FONTINFO,  ::cppu::UnoType<OUString>::get(),  0, MID_FONT_STYLE_NAME }, \
+    { UNO_NAME_EDIT_CHAR_FONTFAMILY,  EE_CHAR_FONTINFO,   ::cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_FAMILY }, \
+    { UNO_NAME_EDIT_CHAR_FONTCHARSET, EE_CHAR_FONTINFO,   ::cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_CHAR_SET }, \
+    { UNO_NAME_EDIT_CHAR_FONTPITCH,   EE_CHAR_FONTINFO,   ::cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_PITCH }, \
+    { UNO_NAME_EDIT_CHAR_POSTURE,     EE_CHAR_ITALIC,     ::cppu::UnoType<css::awt::FontSlant>::get(),0, MID_POSTURE }, \
+    { UNO_NAME_EDIT_CHAR_WEIGHT,      EE_CHAR_WEIGHT,     cppu::UnoType<float>::get(),            0, MID_WEIGHT }, \
+    { UNO_NAME_EDIT_CHAR_LOCALE,      EE_CHAR_LANGUAGE,   ::cppu::UnoType<css::lang::Locale>::get(),0, MID_LANG_LOCALE }, \
+    { UNO_NAME_EDIT_CHAR_COLOR,       EE_CHAR_COLOR,      ::cppu::UnoType<sal_Int32>::get(),        0, 0 }, \
+    { UNO_NAME_EDIT_CHAR_TRANSPARENCE,EE_CHAR_COLOR,      ::cppu::UnoType<sal_Int16>::get(),        0, MID_COLOR_ALPHA }, \
+    { "CharBackColor",                EE_CHAR_BKGCOLOR,   ::cppu::UnoType<sal_Int32>::get(),        0, 0 }, \
+    { "CharBackTransparent",          EE_CHAR_BKGCOLOR,   ::cppu::UnoType<bool>::get(),             0, MID_GRAPHIC_TRANSPARENT }, \
+    { UNO_NAME_EDIT_CHAR_ESCAPEMENT,  EE_CHAR_ESCAPEMENT, ::cppu::UnoType<sal_Int16>::get(),        0, MID_ESC }, \
+    { UNO_NAME_EDIT_CHAR_UNDERLINE,   EE_CHAR_UNDERLINE,  ::cppu::UnoType<sal_Int16>::get(),        0, MID_TL_STYLE }, \
+    { "CharUnderlineColor",           EE_CHAR_UNDERLINE,  ::cppu::UnoType<sal_Int32>::get(),        0, MID_TL_COLOR }, \
+    { "CharUnderlineHasColor",        EE_CHAR_UNDERLINE,  cppu::UnoType<bool>::get(),                    0, MID_TL_HASCOLOR } , \
+    { UNO_NAME_EDIT_CHAR_OVERLINE,    EE_CHAR_OVERLINE,   ::cppu::UnoType<sal_Int16>::get(),        0, MID_TL_STYLE }, \
+    { "CharOverlineColor",            EE_CHAR_OVERLINE,   ::cppu::UnoType<sal_Int32>::get(),        0, MID_TL_COLOR }, \
+    { "CharOverlineHasColor",         EE_CHAR_OVERLINE,   cppu::UnoType<bool>::get(),                    0, MID_TL_HASCOLOR } , \
+    { UNO_NAME_EDIT_CHAR_CROSSEDOUT,  EE_CHAR_STRIKEOUT,  cppu::UnoType<bool>::get(),                    0, MID_CROSSED_OUT }, \
+    { UNO_NAME_EDIT_CHAR_STRIKEOUT,   EE_CHAR_STRIKEOUT,  ::cppu::UnoType<sal_Int16>::get(),        0, MID_CROSS_OUT}, \
+    { UNO_NAME_EDIT_CHAR_CASEMAP,     EE_CHAR_CASEMAP,    ::cppu::UnoType<sal_Int16>::get(),        0, 0 }, \
+    { UNO_NAME_EDIT_CHAR_SHADOWED,    EE_CHAR_SHADOW,     cppu::UnoType<bool>::get(),                    0, 0 }, \
+    { "CharContoured",                EE_CHAR_OUTLINE,    cppu::UnoType<bool>::get(),                    0, 0 }, \
+    { "CharEscapementHeight",         EE_CHAR_ESCAPEMENT, cppu::UnoType<sal_Int8>::get(),         0, MID_ESC_HEIGHT },\
+    { "CharAutoKerning",              EE_CHAR_PAIRKERNING,cppu::UnoType<bool>::get(),                    0, 0 } , \
+    { "CharKerning",                  EE_CHAR_KERNING,    ::cppu::UnoType<sal_Int16>::get()  ,      0, 0 }, \
+    { "CharWordMode",                 EE_CHAR_WLM,        cppu::UnoType<bool>::get(),                    0, 0 }, \
+    { "CharEmphasis",                 EE_CHAR_EMPHASISMARK, ::cppu::UnoType<sal_Int16>::get(),       0, MID_EMPHASIS},\
+    { UNO_NAME_EDIT_CHAR_HEIGHT_ASIAN,        EE_CHAR_FONTHEIGHT_CJK, cppu::UnoType<float>::get(),            0, MID_FONTHEIGHT|CONVERT_TWIPS }, \
+    { UNO_NAME_EDIT_CHAR_FONTNAME_ASIAN,      EE_CHAR_FONTINFO_CJK,   ::cppu::UnoType<OUString>::get(),  0, MID_FONT_FAMILY_NAME },\
+    { UNO_NAME_EDIT_CHAR_FONTSTYLENAME_ASIAN, EE_CHAR_FONTINFO_CJK,   ::cppu::UnoType<OUString>::get(),  0, MID_FONT_STYLE_NAME }, \
+    { UNO_NAME_EDIT_CHAR_FONTFAMILY_ASIAN,    EE_CHAR_FONTINFO_CJK,   ::cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_FAMILY }, \
+    { UNO_NAME_EDIT_CHAR_FONTCHARSET_ASIAN,   EE_CHAR_FONTINFO_CJK,   ::cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_CHAR_SET }, \
+    { UNO_NAME_EDIT_CHAR_FONTPITCH_ASIAN,     EE_CHAR_FONTINFO_CJK,   ::cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_PITCH }, \
+    { UNO_NAME_EDIT_CHAR_POSTURE_ASIAN,       EE_CHAR_ITALIC_CJK,     ::cppu::UnoType<css::awt::FontSlant>::get(),0, MID_POSTURE }, \
+    { UNO_NAME_EDIT_CHAR_WEIGHT_ASIAN,        EE_CHAR_WEIGHT_CJK,     cppu::UnoType<float>::get(),            0, MID_WEIGHT }, \
+    { UNO_NAME_EDIT_CHAR_LOCALE_ASIAN,        EE_CHAR_LANGUAGE_CJK,   ::cppu::UnoType<css::lang::Locale>::get(),0, MID_LANG_LOCALE }, \
+    { UNO_NAME_EDIT_CHAR_HEIGHT_COMPLEX,      EE_CHAR_FONTHEIGHT_CTL, cppu::UnoType<float>::get(),            0, MID_FONTHEIGHT|CONVERT_TWIPS }, \
+    { UNO_NAME_EDIT_CHAR_FONTNAME_COMPLEX,    EE_CHAR_FONTINFO_CTL,   ::cppu::UnoType<OUString>::get(),  0, MID_FONT_FAMILY_NAME },\
+    { UNO_NAME_EDIT_CHAR_FONTSTYLENAME_COMPLEX,EE_CHAR_FONTINFO_CTL,  ::cppu::UnoType<OUString>::get(),  0, MID_FONT_STYLE_NAME }, \
+    { UNO_NAME_EDIT_CHAR_FONTFAMILY_COMPLEX,  EE_CHAR_FONTINFO_CTL,   ::cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_FAMILY }, \
+    { UNO_NAME_EDIT_CHAR_FONTCHARSET_COMPLEX, EE_CHAR_FONTINFO_CTL,   ::cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_CHAR_SET }, \
+    { UNO_NAME_EDIT_CHAR_FONTPITCH_COMPLEX,   EE_CHAR_FONTINFO_CTL,   ::cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_PITCH }, \
+    { UNO_NAME_EDIT_CHAR_POSTURE_COMPLEX,     EE_CHAR_ITALIC_CTL,     ::cppu::UnoType<css::awt::FontSlant>::get(),0, MID_POSTURE }, \
+    { UNO_NAME_EDIT_CHAR_WEIGHT_COMPLEX,      EE_CHAR_WEIGHT_CTL,     cppu::UnoType<float>::get(),            0, MID_WEIGHT }, \
+    { UNO_NAME_EDIT_CHAR_LOCALE_COMPLEX,      EE_CHAR_LANGUAGE_CTL,   ::cppu::UnoType<css::lang::Locale>::get(),0, MID_LANG_LOCALE }, \
+    { "CharRelief",                           EE_CHAR_RELIEF,         ::cppu::UnoType<sal_Int16>::get(),    0, MID_RELIEF }, \
+    { "CharInteropGrabBag",                   EE_CHAR_GRABBAG,        cppu::UnoType<css::uno::Sequence<css::beans::PropertyValue >>::get(), 0, 0}
 
 
 #define SVX_UNOEDIT_FONT_PROPERTIES \
-    {OUString(UNO_NAME_EDIT_FONT_DESCRIPTOR),   WID_FONTDESC,       cppu::UnoType<css::awt::FontDescriptor>::get(),    0, MID_FONT_FAMILY_NAME }
+    {UNO_NAME_EDIT_FONT_DESCRIPTOR,   WID_FONTDESC,       cppu::UnoType<css::awt::FontDescriptor>::get(),    0, MID_FONT_FAMILY_NAME }
 
 #define SVX_UNOEDIT_PARA_PROPERTIES \
-    {OUString(UNO_NAME_EDIT_PARA_ADJUST),       EE_PARA_JUST,               ::cppu::UnoType<sal_Int16>::get(),            0, MID_PARA_ADJUST }, \
-    {OUString(UNO_NAME_EDIT_PARA_BMARGIN),      EE_PARA_ULSPACE,            ::cppu::UnoType<sal_Int32>::get(),            0, MID_LO_MARGIN, PropertyMoreFlags::METRIC_ITEM }, \
-    {OUString(UNO_NAME_EDIT_PARA_IS_HYPHEN),    EE_PARA_HYPHENATE,  ::cppu::UnoType<bool>::get(),                0, 0 }, \
-    {OUString("ParaHyphenationNoCaps"),         EE_PARA_HYPHENATE_NO_CAPS, ::cppu::UnoType<bool>::get(),       0, 0 }, \
-    {OUString(UNO_NAME_EDIT_PARA_LASTLINEADJ),  EE_PARA_JUST,               ::cppu::UnoType<sal_Int16>::get(),            0, MID_LAST_LINE_ADJUST }, \
-    {OUString(UNO_NAME_EDIT_PARA_LMARGIN),      EE_PARA_LRSPACE,    ::cppu::UnoType<sal_Int32>::get(),            0, MID_TXT_LMARGIN, PropertyMoreFlags::METRIC_ITEM }, \
-    {OUString(UNO_NAME_EDIT_PARA_LINESPACING),  EE_PARA_SBL,                cppu::UnoType<css::style::LineSpacing>::get(),     0, CONVERT_TWIPS}, \
-    {OUString(UNO_NAME_EDIT_PARA_RMARGIN),      EE_PARA_LRSPACE,    ::cppu::UnoType<sal_Int32>::get(),            0, MID_R_MARGIN, PropertyMoreFlags::METRIC_ITEM }, \
-    {OUString(UNO_NAME_EDIT_PARA_TAPSTOPS),     EE_PARA_TABS,               cppu::UnoType<css::uno::Sequence< css::style::TabStop >>::get(), 0, 0 }, \
-    {OUString(UNO_NAME_EDIT_PARA_TMARGIN),      EE_PARA_ULSPACE,            ::cppu::UnoType<sal_Int32>::get(),            0, MID_UP_MARGIN, PropertyMoreFlags::METRIC_ITEM },\
-    {OUString(UNO_NAME_EDIT_PARA_FIRST_LINE_INDENT),     EE_PARA_LRSPACE,   ::cppu::UnoType<sal_Int32>::get(),            0, MID_FIRST_LINE_INDENT, PropertyMoreFlags::METRIC_ITEM}, \
-    {OUString(UNO_NAME_EDIT_PARA_IS_HANGING_PUNCTUATION),EE_PARA_HANGINGPUNCTUATION,  cppu::UnoType<bool>::get(),                0 ,0 }, \
-    {OUString(UNO_NAME_EDIT_PARA_IS_CHARACTER_DISTANCE), EE_PARA_ASIANCJKSPACING,   cppu::UnoType<bool>::get(),                0 ,0 }, \
-    {OUString(UNO_NAME_EDIT_PARA_IS_FORBIDDEN_RULES),    EE_PARA_FORBIDDENRULES,     cppu::UnoType<bool>::get(),                0 ,0 },\
-    {OUString("WritingMode"),                   EE_PARA_WRITINGDIR, ::cppu::UnoType<sal_Int16>::get(),            0, 0 }
+    {UNO_NAME_EDIT_PARA_ADJUST,       EE_PARA_JUST,               ::cppu::UnoType<sal_Int16>::get(),            0, MID_PARA_ADJUST }, \
+    {UNO_NAME_EDIT_PARA_BMARGIN,      EE_PARA_ULSPACE,            ::cppu::UnoType<sal_Int32>::get(),            0, MID_LO_MARGIN, PropertyMoreFlags::METRIC_ITEM }, \
+    {UNO_NAME_EDIT_PARA_IS_HYPHEN,    EE_PARA_HYPHENATE,  ::cppu::UnoType<bool>::get(),                0, 0 }, \
+    {"ParaHyphenationNoCaps",         EE_PARA_HYPHENATE_NO_CAPS, ::cppu::UnoType<bool>::get(),       0, 0 }, \
+    {UNO_NAME_EDIT_PARA_LASTLINEADJ,  EE_PARA_JUST,               ::cppu::UnoType<sal_Int16>::get(),            0, MID_LAST_LINE_ADJUST }, \
+    {UNO_NAME_EDIT_PARA_LMARGIN,      EE_PARA_LRSPACE,    ::cppu::UnoType<sal_Int32>::get(),            0, MID_TXT_LMARGIN, PropertyMoreFlags::METRIC_ITEM }, \
+    {UNO_NAME_EDIT_PARA_LINESPACING,  EE_PARA_SBL,                cppu::UnoType<css::style::LineSpacing>::get(),     0, CONVERT_TWIPS}, \
+    {UNO_NAME_EDIT_PARA_RMARGIN,      EE_PARA_LRSPACE,    ::cppu::UnoType<sal_Int32>::get(),            0, MID_R_MARGIN, PropertyMoreFlags::METRIC_ITEM }, \
+    {UNO_NAME_EDIT_PARA_TAPSTOPS,     EE_PARA_TABS,               cppu::UnoType<css::uno::Sequence< css::style::TabStop >>::get(), 0, 0 }, \
+    {UNO_NAME_EDIT_PARA_TMARGIN,      EE_PARA_ULSPACE,            ::cppu::UnoType<sal_Int32>::get(),            0, MID_UP_MARGIN, PropertyMoreFlags::METRIC_ITEM },\
+    {UNO_NAME_EDIT_PARA_FIRST_LINE_INDENT,     EE_PARA_LRSPACE,   ::cppu::UnoType<sal_Int32>::get(),            0, MID_FIRST_LINE_INDENT, PropertyMoreFlags::METRIC_ITEM}, \
+    {UNO_NAME_EDIT_PARA_IS_HANGING_PUNCTUATION,EE_PARA_HANGINGPUNCTUATION,  cppu::UnoType<bool>::get(),                0 ,0 }, \
+    {UNO_NAME_EDIT_PARA_IS_CHARACTER_DISTANCE, EE_PARA_ASIANCJKSPACING,   cppu::UnoType<bool>::get(),                0 ,0 }, \
+    {UNO_NAME_EDIT_PARA_IS_FORBIDDEN_RULES,    EE_PARA_FORBIDDENRULES,     cppu::UnoType<bool>::get(),                0 ,0 },\
+    {"WritingMode",                   EE_PARA_WRITINGDIR, ::cppu::UnoType<sal_Int16>::get(),            0, 0 }
 
 class SvxFieldItem;
 class SvxFieldData;
