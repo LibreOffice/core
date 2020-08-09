@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a6ed197e_f332f401",
+        "filename": "include/com/sun/star/uno/Type.h",
+        "patchSetId": 42
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-08-09T17:50:36Z",
+      "side": 1,
+      "message": "There\u0027s a new commit wich witch has merge cnflicts.\nIt is no essential and has to be made on one single shot.\nSo discarted.",
+      "parentUuid": "6f2c29fe_924e0741",
+      "range": {
+        "startLine": 89,
+        "startChar": 45,
+        "endLine": 89,
+        "endChar": 49
+      },
+      "revId": "c438451ddf8aecbd45f10f99645f3628441cceab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "74558a72_8cad2b46",
         "filename": "include/rtl/character.hxx",
         "patchSetId": 42
@@ -36,6 +60,24 @@
       "writtenOn": "2020-08-09T07:51:46Z",
       "side": 1,
       "message": "Here and elsewhere:  Do not make random formatting changes.",
+      "revId": "c438451ddf8aecbd45f10f99645f3628441cceab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ccd37f9f_aa5a1411",
+        "filename": "include/rtl/character.hxx",
+        "patchSetId": 42
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-08-09T17:50:36Z",
+      "side": 1,
+      "message": "Undone most of them.",
+      "parentUuid": "74558a72_8cad2b46",
       "revId": "c438451ddf8aecbd45f10f99645f3628441cceab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
