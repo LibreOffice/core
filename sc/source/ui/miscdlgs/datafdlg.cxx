@@ -235,26 +235,26 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_NewHdl, weld::Button&, void)
 {
     ScViewData& rViewData = pTabViewShell->GetViewData();
     ScDocShell* pDocSh = rViewData.GetDocShell();
-    if ( pDoc )
-    {
-        bool bHasData = std::any_of(m_aEntries.begin(), m_aEntries.end(),
-            [](const std::unique_ptr<ScDataFormFragment>& rElem) { return (rElem != nullptr) && (!rElem->m_xEdit->get_text().isEmpty()); });
+    if ( !pDoc )
+        return;
 
-        if ( bHasData )
-        {
-            pTabViewShell->DataFormPutData(nCurrentRow, nStartRow, nStartCol, nEndRow, nEndCol, m_aEntries, aColLength);
-            nCurrentRow++;
-            if (nCurrentRow >= nEndRow + 2)
-            {
-                nEndRow++;
-                m_xSlider->vadjustment_set_upper(nEndRow - nStartRow + 1);
-            }
-            SetButtonState();
-            FillCtrls();
-            pDocSh->SetDocumentModified();
-            pDocSh->PostPaintGridAll();
-        }
+    bool bHasData = std::any_of(m_aEntries.begin(), m_aEntries.end(),
+        [](const std::unique_ptr<ScDataFormFragment>& rElem) { return (rElem != nullptr) && (!rElem->m_xEdit->get_text().isEmpty()); });
+
+    if ( !bHasData )
+        return;
+
+    pTabViewShell->DataFormPutData(nCurrentRow, nStartRow, nStartCol, nEndRow, nEndCol, m_aEntries, aColLength);
+    nCurrentRow++;
+    if (nCurrentRow >= nEndRow + 2)
+    {
+        nEndRow++;
+        m_xSlider->vadjustment_set_upper(nEndRow - nStartRow + 1);
     }
+    SetButtonState();
+    FillCtrls();
+    pDocSh->SetDocumentModified();
+    pDocSh->PostPaintGridAll();
 }
 
 IMPL_LINK_NOARG(ScDataFormDlg, Impl_PrevHdl, weld::Button&, void)
@@ -293,19 +293,19 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_DeleteHdl, weld::Button&, void)
 {
     ScViewData& rViewData = pTabViewShell->GetViewData();
     ScDocShell* pDocSh = rViewData.GetDocShell();
-    if (pDoc)
-    {
-        ScRange aRange(nStartCol, nCurrentRow, nTab, nEndCol, nCurrentRow, nTab);
-        pDoc->DeleteRow(aRange);
-        nEndRow--;
+    if (!pDoc)
+        return;
 
-        SetButtonState();
-        pDocSh->GetUndoManager()->Clear();
+    ScRange aRange(nStartCol, nCurrentRow, nTab, nEndCol, nCurrentRow, nTab);
+    pDoc->DeleteRow(aRange);
+    nEndRow--;
 
-        FillCtrls();
-        pDocSh->SetDocumentModified();
-        pDocSh->PostPaintGridAll();
-    }
+    SetButtonState();
+    pDocSh->GetUndoManager()->Clear();
+
+    FillCtrls();
+    pDocSh->SetDocumentModified();
+    pDocSh->PostPaintGridAll();
 }
 
 IMPL_LINK_NOARG(ScDataFormDlg, Impl_CloseHdl, weld::Button&, void)

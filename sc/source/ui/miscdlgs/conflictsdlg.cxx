@@ -402,25 +402,25 @@ void ScConflictsDlg::SetActionString(const ScChangeAction* pAction, ScDocument* 
 {
     OSL_ENSURE( pAction, "ScConflictsDlg::GetActionString(): pAction is null!" );
     OSL_ENSURE( pDoc, "ScConflictsDlg::GetActionString(): pDoc is null!" );
-    if (pAction && pDoc)
+    if (!(pAction && pDoc))
+        return;
+
+    weld::TreeView& rTreeView = m_xLbConflicts->GetWidget();
+    OUString aDesc;
+    pAction->GetDescription(aDesc, pDoc, true, false);
+    rTreeView.set_text(rEntry, aDesc, 0);
+
+    OUString aUser = comphelper::string::strip(pAction->GetUser(), ' ');
+    if ( aUser.isEmpty() )
     {
-        weld::TreeView& rTreeView = m_xLbConflicts->GetWidget();
-        OUString aDesc;
-        pAction->GetDescription(aDesc, pDoc, true, false);
-        rTreeView.set_text(rEntry, aDesc, 0);
-
-        OUString aUser = comphelper::string::strip(pAction->GetUser(), ' ');
-        if ( aUser.isEmpty() )
-        {
-            aUser = maStrUnknownUser;
-        }
-        rTreeView.set_text(rEntry, aUser, 1);
-
-        DateTime aDateTime = pAction->GetDateTime();
-        OUString aString = ScGlobal::getLocaleDataPtr()->getDate( aDateTime ) + " " +
-            ScGlobal::getLocaleDataPtr()->getTime( aDateTime, false );
-        rTreeView.set_text(rEntry, aString, 2);
+        aUser = maStrUnknownUser;
     }
+    rTreeView.set_text(rEntry, aUser, 1);
+
+    DateTime aDateTime = pAction->GetDateTime();
+    OUString aString = ScGlobal::getLocaleDataPtr()->getDate( aDateTime ) + " " +
+        ScGlobal::getLocaleDataPtr()->getTime( aDateTime, false );
+    rTreeView.set_text(rEntry, aString, 2);
 }
 
 void ScConflictsDlg::HandleListBoxSelection()

@@ -251,27 +251,27 @@ void ScAcceptChgDlg::Init()
     }
 
     // init filter
-    if(pTPFilter->IsDate()||pTPFilter->IsRange()||
-        pTPFilter->IsAuthor()||pTPFilter->IsComment())
-    {
-        pTheView->SetFilterDate(pTPFilter->IsDate());
-        pTheView->SetDateTimeMode(pTPFilter->GetDateMode());
-        pTheView->SetFirstDate(pTPFilter->GetFirstDate());
-        pTheView->SetLastDate(pTPFilter->GetLastDate());
-        pTheView->SetFirstTime(pTPFilter->GetFirstTime());
-        pTheView->SetLastTime(pTPFilter->GetLastTime());
-        pTheView->SetFilterAuthor(pTPFilter->IsAuthor());
-        pTheView->SetAuthor(pTPFilter->GetSelectedAuthor());
+    if(!(pTPFilter->IsDate()||pTPFilter->IsRange()||
+        pTPFilter->IsAuthor()||pTPFilter->IsComment()))
+        return;
 
-        pTheView->SetFilterComment(pTPFilter->IsComment());
+    pTheView->SetFilterDate(pTPFilter->IsDate());
+    pTheView->SetDateTimeMode(pTPFilter->GetDateMode());
+    pTheView->SetFirstDate(pTPFilter->GetFirstDate());
+    pTheView->SetLastDate(pTPFilter->GetLastDate());
+    pTheView->SetFirstTime(pTPFilter->GetFirstTime());
+    pTheView->SetLastTime(pTPFilter->GetLastTime());
+    pTheView->SetFilterAuthor(pTPFilter->IsAuthor());
+    pTheView->SetAuthor(pTPFilter->GetSelectedAuthor());
 
-        utl::SearchParam aSearchParam( pTPFilter->GetComment(),
-                utl::SearchParam::SearchType::Regexp,false );
+    pTheView->SetFilterComment(pTPFilter->IsComment());
 
-        pTheView->SetCommentParams(&aSearchParam);
+    utl::SearchParam aSearchParam( pTPFilter->GetComment(),
+            utl::SearchParam::SearchType::Regexp,false );
 
-        pTheView->UpdateFilterTest();
-    }
+    pTheView->SetCommentParams(&aSearchParam);
+
+    pTheView->UpdateFilterTest();
 }
 
 void ScAcceptChgDlg::ClearView()
@@ -1329,74 +1329,74 @@ IMPL_LINK(ScAcceptChgDlg, ExpandingHandle, const weld::TreeIter&, rEntry, bool)
 void ScAcceptChgDlg::AppendChanges(const ScChangeTrack* pChanges,sal_uLong nStartAction,
                                    sal_uLong nEndAction)
 {
-    if(pChanges!=nullptr)
+    if(pChanges==nullptr)
+        return;
+
+    std::unique_ptr<weld::TreeIter> xParent;
+    m_xDialog->set_busy_cursor(true);
+    weld::TreeView& rTreeView = pTheView->GetWidget();
+    rTreeView.freeze();
+
+    bool bTheFlag = false;
+
+    bool bFilterFlag = pTPFilter->IsDate() || pTPFilter->IsRange() ||
+        pTPFilter->IsAuthor() || pTPFilter->IsComment();
+
+    bUseColor = bFilterFlag;
+
+    for(sal_uLong i=nStartAction;i<=nEndAction;i++)
     {
-        std::unique_ptr<weld::TreeIter> xParent;
-        m_xDialog->set_busy_cursor(true);
-        weld::TreeView& rTreeView = pTheView->GetWidget();
-        rTreeView.freeze();
+        const ScChangeAction* pScChangeAction=pChanges->GetAction(i);
+        if(pScChangeAction==nullptr) continue;
 
-        bool bTheFlag = false;
-
-        bool bFilterFlag = pTPFilter->IsDate() || pTPFilter->IsRange() ||
-            pTPFilter->IsAuthor() || pTPFilter->IsComment();
-
-        bUseColor = bFilterFlag;
-
-        for(sal_uLong i=nStartAction;i<=nEndAction;i++)
+        switch (pScChangeAction->GetState())
         {
-            const ScChangeAction* pScChangeAction=pChanges->GetAction(i);
-            if(pScChangeAction==nullptr) continue;
+            case SC_CAS_VIRGIN:
 
-            switch (pScChangeAction->GetState())
-            {
-                case SC_CAS_VIRGIN:
-
-                    if (pScChangeAction->IsDialogRoot())
-                    {
-                        bool bOnDemandChildren = !bFilterFlag && pScChangeAction->IsDialogParent();
-                        if (pScChangeAction->IsDialogParent())
-                            xParent = AppendChangeAction(pScChangeAction, bOnDemandChildren);
-                        else
-                            xParent = AppendFilteredAction(pScChangeAction, SC_CAS_VIRGIN, bOnDemandChildren);
-                    }
+                if (pScChangeAction->IsDialogRoot())
+                {
+                    bool bOnDemandChildren = !bFilterFlag && pScChangeAction->IsDialogParent();
+                    if (pScChangeAction->IsDialogParent())
+                        xParent = AppendChangeAction(pScChangeAction, bOnDemandChildren);
                     else
-                        xParent.reset();
-
-                    bTheFlag=true;
-                    break;
-
-                case SC_CAS_ACCEPTED:
+                        xParent = AppendFilteredAction(pScChangeAction, SC_CAS_VIRGIN, bOnDemandChildren);
+                }
+                else
                     xParent.reset();
-                    nAcceptCount++;
-                    break;
 
-                case SC_CAS_REJECTED:
-                    xParent.reset();
-                    nRejectCount++;
-                    break;
-            }
+                bTheFlag=true;
+                break;
 
-            if (xParent && pScChangeAction->IsDialogParent() && bFilterFlag)
-            {
-                bool bTestFlag = bHasFilterEntry;
-                bHasFilterEntry = false;
-                if (Expand(pChanges,pScChangeAction,*xParent,!bTestFlag)&&!bTestFlag)
-                    rTreeView.remove(*xParent);
-            }
+            case SC_CAS_ACCEPTED:
+                xParent.reset();
+                nAcceptCount++;
+                break;
+
+            case SC_CAS_REJECTED:
+                xParent.reset();
+                nRejectCount++;
+                break;
         }
 
-        if( bTheFlag && (!pDoc->IsDocEditable() || pChanges->IsProtected()) )
-            bTheFlag=false;
-
-        pTPView->EnableAccept(bTheFlag);
-        pTPView->EnableAcceptAll(bTheFlag);
-        pTPView->EnableReject(bTheFlag);
-        pTPView->EnableRejectAll(bTheFlag);
-
-        rTreeView.thaw();
-        m_xDialog->set_busy_cursor(false);
+        if (xParent && pScChangeAction->IsDialogParent() && bFilterFlag)
+        {
+            bool bTestFlag = bHasFilterEntry;
+            bHasFilterEntry = false;
+            if (Expand(pChanges,pScChangeAction,*xParent,!bTestFlag)&&!bTestFlag)
+                rTreeView.remove(*xParent);
+        }
     }
+
+    if( bTheFlag && (!pDoc->IsDocEditable() || pChanges->IsProtected()) )
+        bTheFlag=false;
+
+    pTPView->EnableAccept(bTheFlag);
+    pTPView->EnableAcceptAll(bTheFlag);
+    pTPView->EnableReject(bTheFlag);
+    pTPView->EnableRejectAll(bTheFlag);
+
+    rTreeView.thaw();
+    m_xDialog->set_busy_cursor(false);
 }
 
 void ScAcceptChgDlg::RemoveEntries(sal_uLong nStartAction,sal_uLong nEndAction)
@@ -1692,30 +1692,30 @@ void ScAcceptChgDlg::Initialize(SfxChildWinInfo* pInfo)
 
     SfxModelessDialogController::Initialize(pInfo);
 
-    if (!aStr.isEmpty())
+    if (aStr.isEmpty())
+        return;
+
+    int nCount = aStr.toInt32();
+    if (nCount <= 2)
+        return;
+
+    std::vector<int> aEndPos;
+
+    for (int i = 0; i < nCount; ++i)
     {
-        int nCount = aStr.toInt32();
-        if (nCount > 2)
-        {
-            std::vector<int> aEndPos;
-
-            for (int i = 0; i < nCount; ++i)
-            {
-                sal_Int32 n1 = aStr.indexOf(';');
-                aStr = aStr.copy( n1+1 );
-                aEndPos.push_back(aStr.toInt32());
-            }
-
-            std::vector<int> aWidths;
-            for (int i = 1; i < nCount; ++i)
-                aWidths.push_back(aEndPos[i] - aEndPos[i - 1]);
-
-            // turn column end points back to column widths, ignoring the small
-            // value used for the expander column
-            weld::TreeView& rTreeView = pTheView->GetWidget();
-            rTreeView.set_column_fixed_widths(aWidths);
-        }
+        sal_Int32 n1 = aStr.indexOf(';');
+        aStr = aStr.copy( n1+1 );
+        aEndPos.push_back(aStr.toInt32());
     }
+
+    std::vector<int> aWidths;
+    for (int i = 1; i < nCount; ++i)
+        aWidths.push_back(aEndPos[i] - aEndPos[i - 1]);
+
+    // turn column end points back to column widths, ignoring the small
+    // value used for the expander column
+    weld::TreeView& rTreeView = pTheView->GetWidget();
+    rTreeView.set_column_fixed_widths(aWidths);
 }
 
 void ScAcceptChgDlg::FillInfo(SfxChildWinInfo& rInfo) const

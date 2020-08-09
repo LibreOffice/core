@@ -122,24 +122,24 @@ void ScSolverDlg::SetActive()
 
 void ScSolverDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
 {
-    if( m_pEdActive )
-    {
-        if ( rRef.aStart != rRef.aEnd )
-            RefInputStart(m_pEdActive);
+    if( !m_pEdActive )
+        return;
 
-        ScAddress   aAdr = rRef.aStart;
-        ScRefFlags      nFmt = ( aAdr.Tab() == nCurTab )
-                                ? ScRefFlags::ADDR_ABS
-                                : ScRefFlags::ADDR_ABS_3D;
+    if ( rRef.aStart != rRef.aEnd )
+        RefInputStart(m_pEdActive);
 
-        OUString aStr(aAdr.Format(nFmt, &rDocP, rDocP.GetAddressConvention()));
-        m_pEdActive->SetRefString( aStr );
+    ScAddress   aAdr = rRef.aStart;
+    ScRefFlags      nFmt = ( aAdr.Tab() == nCurTab )
+                            ? ScRefFlags::ADDR_ABS
+                            : ScRefFlags::ADDR_ABS_3D;
 
-        if (m_pEdActive == m_xEdFormulaCell.get())
-            theFormulaCell = aAdr;
-        else if (m_pEdActive == m_xEdVariableCell.get())
-            theVariableCell = aAdr;
-    }
+    OUString aStr(aAdr.Format(nFmt, &rDocP, rDocP.GetAddressConvention()));
+    m_pEdActive->SetRefString( aStr );
+
+    if (m_pEdActive == m_xEdFormulaCell.get())
+        theFormulaCell = aAdr;
+    else if (m_pEdActive == m_xEdVariableCell.get())
+        theVariableCell = aAdr;
 }
 
 void ScSolverDlg::RaiseError( ScSolverErr eError )

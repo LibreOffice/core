@@ -304,20 +304,20 @@ void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange, bool bR
 // the selection form element
 void ScColRowNameRangesDlg::SetReference( const ScRange& rRef, ScDocument& /* rDoc */ )
 {
-    if ( m_pEdActive )
-    {
-        if ( rRef.aStart != rRef.aEnd )
-            RefInputStart( m_pEdActive );
+    if ( !m_pEdActive )
+        return;
 
-        if (m_pEdActive == m_xEdAssign.get())
-            SetColRowData( rRef, true );
-        else
-            AdjustColRowData( rRef, true );
-        m_xBtnColHead->set_sensitive(true);
-        m_xBtnRowHead->set_sensitive(true);
-        m_xBtnAdd->set_sensitive(true);
-        m_xBtnRemove->set_sensitive(false);
-    }
+    if ( rRef.aStart != rRef.aEnd )
+        RefInputStart( m_pEdActive );
+
+    if (m_pEdActive == m_xEdAssign.get())
+        SetColRowData( rRef, true );
+    else
+        AdjustColRowData( rRef, true );
+    m_xBtnColHead->set_sensitive(true);
+    m_xBtnRowHead->set_sensitive(true);
+    m_xBtnAdd->set_sensitive(true);
+    m_xBtnRemove->set_sensitive(false);
 }
 
 void ScColRowNameRangesDlg::Close()
@@ -514,50 +514,50 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, AddBtnHdl, weld::Button&, void)
     OUString aNewArea( m_xEdAssign->GetText() );
     OUString aNewData( m_xEdAssign2->GetText() );
 
-    if ( !aNewArea.isEmpty() && !aNewData.isEmpty() )
+    if (aNewArea.isEmpty() || aNewData.isEmpty())
+        return;
+
+    const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
+    ScRange aRange1, aRange2;
+    bool bOk1 = (aRange1.ParseAny( aNewArea, pDoc, eConv ) & ScRefFlags::VALID) == ScRefFlags::VALID;
+    if ( bOk1 && (aRange2.ParseAny( aNewData, pDoc, eConv ) & ScRefFlags::VALID) == ScRefFlags::VALID)
     {
-        const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-        ScRange aRange1, aRange2;
-        bool bOk1 = (aRange1.ParseAny( aNewArea, pDoc, eConv ) & ScRefFlags::VALID) == ScRefFlags::VALID;
-        if ( bOk1 && (aRange2.ParseAny( aNewData, pDoc, eConv ) & ScRefFlags::VALID) == ScRefFlags::VALID)
+        theCurArea = aRange1;
+        AdjustColRowData( aRange2 );
+        ScRangePair* pPair;
+        if ( ( pPair = xColNameRanges->Find( theCurArea ) ) != nullptr )
         {
-            theCurArea = aRange1;
-            AdjustColRowData( aRange2 );
-            ScRangePair* pPair;
-            if ( ( pPair = xColNameRanges->Find( theCurArea ) ) != nullptr )
-            {
-                xColNameRanges->Remove( *pPair );
-            }
-            if ( ( pPair = xRowNameRanges->Find( theCurArea ) ) != nullptr )
-            {
-                xRowNameRanges->Remove( *pPair );
-            }
-            if ( m_xBtnColHead->get_active() )
-                xColNameRanges->Join( ScRangePair( theCurArea, theCurData ) );
-            else
-                xRowNameRanges->Join( ScRangePair( theCurArea, theCurData ) );
-
-            UpdateNames();
-
-            m_xEdAssign->GrabFocus();
-            m_xBtnAdd->set_sensitive(false);
-            m_xBtnRemove->set_sensitive(false);
-            m_xEdAssign->SetText( EMPTY_OUSTRING );
-            m_xBtnColHead->set_active(true);
-            m_xBtnRowHead->set_active(false);
-            m_xEdAssign2->SetText( EMPTY_OUSTRING );
-            theCurArea = ScRange();
-            theCurData = theCurArea;
-            Range1SelectHdl( *m_xLbRange );
+            xColNameRanges->Remove( *pPair );
         }
+        if ( ( pPair = xRowNameRanges->Find( theCurArea ) ) != nullptr )
+        {
+            xRowNameRanges->Remove( *pPair );
+        }
+        if ( m_xBtnColHead->get_active() )
+            xColNameRanges->Join( ScRangePair( theCurArea, theCurData ) );
         else
-        {
-            ERRORBOX(m_xDialog.get(), ScResId(STR_INVALIDTABNAME));
-            if ( !bOk1 )
-                m_xEdAssign->GrabFocus();
-            else
-                m_xEdAssign2->GrabFocus();
-        }
+            xRowNameRanges->Join( ScRangePair( theCurArea, theCurData ) );
+
+        UpdateNames();
+
+        m_xEdAssign->GrabFocus();
+        m_xBtnAdd->set_sensitive(false);
+        m_xBtnRemove->set_sensitive(false);
+        m_xEdAssign->SetText( EMPTY_OUSTRING );
+        m_xBtnColHead->set_active(true);
+        m_xBtnRowHead->set_active(false);
+        m_xEdAssign2->SetText( EMPTY_OUSTRING );
+        theCurArea = ScRange();
+        theCurData = theCurArea;
+        Range1SelectHdl( *m_xLbRange );
+    }
+    else
+    {
+        ERRORBOX(m_xDialog.get(), ScResId(STR_INVALIDTABNAME));
+        if ( !bOk1 )
+            m_xEdAssign->GrabFocus();
+        else
+            m_xEdAssign2->GrabFocus();
     }
 }
 
@@ -577,44 +577,44 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RemoveBtnHdl, weld::Button&, void)
         bFound = true;
     else if ( !bColName && (pPair = xRowNameRanges->Find( rRange )) != nullptr )
         bFound = true;
-    if ( bFound )
+    if ( !bFound )
+        return;
+
+    OUString aStrDelMsg = ScResId( STR_QUERY_DELENTRY );
+    OUString aMsg       = aStrDelMsg.getToken( 0, '#' )
+                        + aRangeStr
+                        + aStrDelMsg.getToken( 1, '#' );
+
+    if (RET_YES != QUERYBOX(m_xDialog.get(), aMsg))
+        return;
+
+    if ( bColName )
+        xColNameRanges->Remove( *pPair );
+    else
+        xRowNameRanges->Remove( *pPair );
+
+    UpdateNames();
+    const sal_Int32 nCnt = m_xLbRange->n_children();
+    if ( nSelectPos >= nCnt )
     {
-        OUString aStrDelMsg = ScResId( STR_QUERY_DELENTRY );
-        OUString aMsg       = aStrDelMsg.getToken( 0, '#' )
-                            + aRangeStr
-                            + aStrDelMsg.getToken( 1, '#' );
-
-        if (RET_YES == QUERYBOX(m_xDialog.get(), aMsg))
-        {
-            if ( bColName )
-                xColNameRanges->Remove( *pPair );
-            else
-                xRowNameRanges->Remove( *pPair );
-
-            UpdateNames();
-            const sal_Int32 nCnt = m_xLbRange->n_children();
-            if ( nSelectPos >= nCnt )
-            {
-                if ( nCnt )
-                    nSelectPos = nCnt - 1;
-                else
-                    nSelectPos = 0;
-            }
-            m_xLbRange->select(nSelectPos);
-            if (nSelectPos && m_xLbRange->get_id(nSelectPos).toInt32() == nEntryDataDelim)
-                m_xLbRange->select( --nSelectPos );    // ---Row---
-
-            m_xLbRange->grab_focus();
-            m_xBtnAdd->set_sensitive(false);
-            m_xBtnRemove->set_sensitive(false);
-            m_xEdAssign->SetText( EMPTY_OUSTRING );
-            theCurArea = theCurData = ScRange();
-            m_xBtnColHead->set_active(true);
-            m_xBtnRowHead->set_active(false);
-            m_xEdAssign2->SetText( EMPTY_OUSTRING );
-            Range1SelectHdl( *m_xLbRange );
-        }
+        if ( nCnt )
+            nSelectPos = nCnt - 1;
+        else
+            nSelectPos = 0;
     }
+    m_xLbRange->select(nSelectPos);
+    if (nSelectPos && m_xLbRange->get_id(nSelectPos).toInt32() == nEntryDataDelim)
+        m_xLbRange->select( --nSelectPos );    // ---Row---
+
+    m_xLbRange->grab_focus();
+    m_xBtnAdd->set_sensitive(false);
+    m_xBtnRemove->set_sensitive(false);
+    m_xEdAssign->SetText( EMPTY_OUSTRING );
+    theCurArea = theCurData = ScRange();
+    m_xBtnColHead->set_active(true);
+    m_xBtnRowHead->set_active(false);
+    m_xEdAssign2->SetText( EMPTY_OUSTRING );
+    Range1SelectHdl( *m_xLbRange );
 }
 
 // handler called when a row in the listbox is selected, updates form input fields
@@ -742,37 +742,37 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range2DataModifyHdl, formula::RefEdit&, v
 // handler for the radio button for columns, adjust ranges
 IMPL_LINK_NOARG(ScColRowNameRangesDlg, ColClickHdl, weld::Button&, void)
 {
-    if (m_xBtnColHead->get_active())
+    if (!m_xBtnColHead->get_active())
+        return;
+
+    if ( theCurArea.aStart.Row() == 0 && theCurArea.aEnd.Row() == pDoc->MaxRow() )
     {
-        if ( theCurArea.aStart.Row() == 0 && theCurArea.aEnd.Row() == pDoc->MaxRow() )
-        {
-            theCurArea.aEnd.SetRow( pDoc->MaxRow() - 1 );
-            OUString aStr(theCurArea.Format(*pDoc, ScRefFlags::RANGE_ABS_3D, pDoc->GetAddressConvention()));
-            m_xEdAssign->SetText( aStr );
-        }
-        ScRange aRange( theCurData );
-        aRange.aStart.SetRow( std::min( static_cast<long>(theCurArea.aEnd.Row() + 1), static_cast<long>(pDoc->MaxRow()) ) );
-        aRange.aEnd.SetRow( pDoc->MaxRow() );
-        AdjustColRowData( aRange );
+        theCurArea.aEnd.SetRow( pDoc->MaxRow() - 1 );
+        OUString aStr(theCurArea.Format(*pDoc, ScRefFlags::RANGE_ABS_3D, pDoc->GetAddressConvention()));
+        m_xEdAssign->SetText( aStr );
     }
+    ScRange aRange( theCurData );
+    aRange.aStart.SetRow( std::min( static_cast<long>(theCurArea.aEnd.Row() + 1), static_cast<long>(pDoc->MaxRow()) ) );
+    aRange.aEnd.SetRow( pDoc->MaxRow() );
+    AdjustColRowData( aRange );
 }
 
 // handler for the radio button for columns, adjust range
 IMPL_LINK_NOARG(ScColRowNameRangesDlg, RowClickHdl, weld::Button&, void)
 {
-    if (m_xBtnRowHead->get_active())
+    if (!m_xBtnRowHead->get_active())
+        return;
+
+    if ( theCurArea.aStart.Col() == 0 && theCurArea.aEnd.Col() == pDoc->MaxCol() )
     {
-        if ( theCurArea.aStart.Col() == 0 && theCurArea.aEnd.Col() == pDoc->MaxCol() )
-        {
-            theCurArea.aEnd.SetCol( pDoc->MaxCol() - 1 );
-            OUString aStr(theCurArea.Format(*pDoc, ScRefFlags::RANGE_ABS_3D, pDoc->GetAddressConvention()));
-            m_xEdAssign->SetText( aStr );
-        }
-        ScRange aRange( theCurData );
-        aRange.aStart.SetCol( static_cast<SCCOL>(std::min( static_cast<long>(theCurArea.aEnd.Col() + 1), static_cast<long>(pDoc->MaxCol()) )) );
-        aRange.aEnd.SetCol( pDoc->MaxCol() );
-        AdjustColRowData( aRange );
+        theCurArea.aEnd.SetCol( pDoc->MaxCol() - 1 );
+        OUString aStr(theCurArea.Format(*pDoc, ScRefFlags::RANGE_ABS_3D, pDoc->GetAddressConvention()));
+        m_xEdAssign->SetText( aStr );
     }
+    ScRange aRange( theCurData );
+    aRange.aStart.SetCol( static_cast<SCCOL>(std::min( static_cast<long>(theCurArea.aEnd.Col() + 1), static_cast<long>(pDoc->MaxCol()) )) );
+    aRange.aEnd.SetCol( pDoc->MaxCol() );
+    AdjustColRowData( aRange );
 }
 
 IMPL_LINK( ScColRowNameRangesDlg, GetEditFocusHdl, formula::RefEdit&, rCtrl, void )
