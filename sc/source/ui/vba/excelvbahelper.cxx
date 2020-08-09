@@ -173,18 +173,18 @@ implnCopy( const uno::Reference< frame::XModel>& xModel )
 {
     ScTabViewShell* pViewShell = getBestViewShell( xModel );
     ScDocShell* pDocShell = getDocShell( xModel );
-    if ( pViewShell && pDocShell )
-    {
-        pViewShell->CopyToClip(nullptr,false,false,true);
+    if ( !(pViewShell && pDocShell) )
+        return;
 
-        // mark the copied transfer object so it is used in ScVbaRange::Insert
-        uno::Reference<datatransfer::XTransferable2> xTransferable(ScTabViewShell::GetClipData(pViewShell->GetViewData().GetActiveWin()));
-        ScTransferObj* pClipObj = ScTransferObj::GetOwnClipboard(xTransferable);
-        if (pClipObj)
-        {
-            pClipObj->SetUseInApi( true );
-            pDocShell->SetClipData(xTransferable);
-        }
+    pViewShell->CopyToClip(nullptr,false,false,true);
+
+    // mark the copied transfer object so it is used in ScVbaRange::Insert
+    uno::Reference<datatransfer::XTransferable2> xTransferable(ScTabViewShell::GetClipData(pViewShell->GetViewData().GetActiveWin()));
+    ScTransferObj* pClipObj = ScTransferObj::GetOwnClipboard(xTransferable);
+    if (pClipObj)
+    {
+        pClipObj->SetUseInApi( true );
+        pDocShell->SetClipData(xTransferable);
     }
 }
 
@@ -193,18 +193,18 @@ implnCut( const uno::Reference< frame::XModel>& xModel )
 {
     ScTabViewShell* pViewShell =  getBestViewShell( xModel );
     ScDocShell* pDocShell = getDocShell( xModel );
-    if ( pViewShell && pDocShell )
-    {
-        pViewShell->CutToClip();
+    if ( !(pViewShell && pDocShell) )
+        return;
 
-        // mark the copied transfer object so it is used in ScVbaRange::Insert
-        uno::Reference<datatransfer::XTransferable2> xTransferable(ScTabViewShell::GetClipData(pViewShell->GetViewData().GetActiveWin()));
-        ScTransferObj* pClipObj = ScTransferObj::GetOwnClipboard(xTransferable);
-        if (pClipObj)
-        {
-            pClipObj->SetUseInApi( true );
-            pDocShell->SetClipData(xTransferable);
-        }
+    pViewShell->CutToClip();
+
+    // mark the copied transfer object so it is used in ScVbaRange::Insert
+    uno::Reference<datatransfer::XTransferable2> xTransferable(ScTabViewShell::GetClipData(pViewShell->GetViewData().GetActiveWin()));
+    ScTransferObj* pClipObj = ScTransferObj::GetOwnClipboard(xTransferable);
+    if (pClipObj)
+    {
+        pClipObj->SetUseInApi( true );
+        pDocShell->SetClipData(xTransferable);
     }
 }
 
@@ -214,21 +214,21 @@ void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, InsertDele
 
     ScTabViewShell* pTabViewShell = getBestViewShell( xModel );
     ScDocShell* pDocShell = getDocShell( xModel );
-    if ( pTabViewShell && pDocShell )
+    if ( !(pTabViewShell && pDocShell) )
+        return;
+
+    ScViewData& rView = pTabViewShell->GetViewData();
+    vcl::Window* pWin = rView.GetActiveWin();
+    if (pWin)
     {
-        ScViewData& rView = pTabViewShell->GetViewData();
-        vcl::Window* pWin = rView.GetActiveWin();
-        if (pWin)
-        {
-            const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(pDocShell->GetClipData());
-            ScDocument* pDoc = nullptr;
-            if ( pOwnClip )
-                pDoc = pOwnClip->GetDocument();
-            pTabViewShell->PasteFromClip( nFlags, pDoc,
-                nFunction, bSkipEmpty, bTranspose, false,
-                INS_NONE, InsertDeleteFlags::NONE, true );
-            pTabViewShell->CellContentChanged();
-        }
+        const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(pDocShell->GetClipData());
+        ScDocument* pDoc = nullptr;
+        if ( pOwnClip )
+            pDoc = pOwnClip->GetDocument();
+        pTabViewShell->PasteFromClip( nFlags, pDoc,
+            nFunction, bSkipEmpty, bTranspose, false,
+            INS_NONE, InsertDeleteFlags::NONE, true );
+        pTabViewShell->CellContentChanged();
     }
 
 }
@@ -314,77 +314,77 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
 {
     uno::Reference< frame::XModel > xModel( xDoc, uno::UNO_QUERY );
     ScDocShell* pShell = excel::getDocShell( xModel );
-    if ( pShell )
+    if ( !pShell )
+        return;
+
+    OUString aPrjName( "Standard" );
+    pShell->GetBasicManager()->SetName( aPrjName );
+
+    /*  Set library container to VBA compatibility mode. This will create
+        the VBA Globals object and store it in the Basic manager of the
+        document. */
+    uno::Reference<script::XLibraryContainer> xLibContainer = pShell->GetBasicContainer();
+    uno::Reference<script::vba::XVBACompatibility> xVBACompat( xLibContainer, uno::UNO_QUERY_THROW );
+    xVBACompat->setVBACompatibilityMode( true );
+
+    if( xLibContainer.is() )
     {
-        OUString aPrjName( "Standard" );
-        pShell->GetBasicManager()->SetName( aPrjName );
-
-        /*  Set library container to VBA compatibility mode. This will create
-            the VBA Globals object and store it in the Basic manager of the
-            document. */
-        uno::Reference<script::XLibraryContainer> xLibContainer = pShell->GetBasicContainer();
-        uno::Reference<script::vba::XVBACompatibility> xVBACompat( xLibContainer, uno::UNO_QUERY_THROW );
-        xVBACompat->setVBACompatibilityMode( true );
-
-        if( xLibContainer.is() )
+        if( !xLibContainer->hasByName( aPrjName ) )
+            xLibContainer->createLibrary( aPrjName );
+        uno::Any aLibAny = xLibContainer->getByName( aPrjName );
+        uno::Reference< container::XNameContainer > xLib;
+        aLibAny >>= xLib;
+        if( xLib.is()  )
         {
-            if( !xLibContainer->hasByName( aPrjName ) )
-                xLibContainer->createLibrary( aPrjName );
-            uno::Any aLibAny = xLibContainer->getByName( aPrjName );
-            uno::Reference< container::XNameContainer > xLib;
-            aLibAny >>= xLib;
-            if( xLib.is()  )
+            uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY_THROW );
+            uno::Reference< lang::XMultiServiceFactory> xSF( pShell->GetModel(), uno::UNO_QUERY_THROW);
+            uno::Reference< container::XNameAccess > xVBACodeNamedObjectAccess( xSF->createInstance("ooo.vba.VBAObjectModuleObjectProvider"), uno::UNO_QUERY_THROW );
+            // set up the module info for the workbook and sheets in the newly created
+            // spreadsheet
+            ScDocument& rDoc = pShell->GetDocument();
+            OUString sCodeName = rDoc.GetCodeName();
+            if ( sCodeName.isEmpty() )
             {
-                uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY_THROW );
-                uno::Reference< lang::XMultiServiceFactory> xSF( pShell->GetModel(), uno::UNO_QUERY_THROW);
-                uno::Reference< container::XNameAccess > xVBACodeNamedObjectAccess( xSF->createInstance("ooo.vba.VBAObjectModuleObjectProvider"), uno::UNO_QUERY_THROW );
-                // set up the module info for the workbook and sheets in the newly created
-                // spreadsheet
-                ScDocument& rDoc = pShell->GetDocument();
-                OUString sCodeName = rDoc.GetCodeName();
-                if ( sCodeName.isEmpty() )
-                {
-                    sCodeName = "ThisWorkbook";
-                    rDoc.SetCodeName( sCodeName );
-                }
+                sCodeName = "ThisWorkbook";
+                rDoc.SetCodeName( sCodeName );
+            }
 
-                std::vector< OUString > sDocModuleNames;
-                sDocModuleNames.push_back( sCodeName );
+            std::vector< OUString > sDocModuleNames;
+            sDocModuleNames.push_back( sCodeName );
 
-                for ( SCTAB index = 0; index < rDoc.GetTableCount(); index++)
-                {
-                    OUString aName;
-                    rDoc.GetCodeName( index, aName );
-                    sDocModuleNames.push_back( aName );
-                }
+            for ( SCTAB index = 0; index < rDoc.GetTableCount(); index++)
+            {
+                OUString aName;
+                rDoc.GetCodeName( index, aName );
+                sDocModuleNames.push_back( aName );
+            }
 
-                for ( const auto& rName : sDocModuleNames )
-                {
-                    script::ModuleInfo sModuleInfo;
+            for ( const auto& rName : sDocModuleNames )
+            {
+                script::ModuleInfo sModuleInfo;
 
-                    uno::Any aName= xVBACodeNamedObjectAccess->getByName( rName );
-                    sModuleInfo.ModuleObject.set( aName, uno::UNO_QUERY );
-                    sModuleInfo.ModuleType = script::ModuleType::DOCUMENT;
-                    xVBAModuleInfo->insertModuleInfo( rName, sModuleInfo );
-                    if( xLib->hasByName( rName ) )
-                        xLib->replaceByName( rName, uno::makeAny( OUString( "Option VBASupport 1\n") ) );
-                    else
-                        xLib->insertByName( rName, uno::makeAny( OUString( "Option VBASupport 1\n" ) ) );
-                }
+                uno::Any aName= xVBACodeNamedObjectAccess->getByName( rName );
+                sModuleInfo.ModuleObject.set( aName, uno::UNO_QUERY );
+                sModuleInfo.ModuleType = script::ModuleType::DOCUMENT;
+                xVBAModuleInfo->insertModuleInfo( rName, sModuleInfo );
+                if( xLib->hasByName( rName ) )
+                    xLib->replaceByName( rName, uno::makeAny( OUString( "Option VBASupport 1\n") ) );
+                else
+                    xLib->insertByName( rName, uno::makeAny( OUString( "Option VBASupport 1\n" ) ) );
             }
         }
+    }
 
-        /*  Trigger the Workbook_Open event, event processor will register
-            itself as listener for specific events. */
-        try
-        {
-            uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( pShell->GetDocument().GetVbaEventProcessor(), uno::UNO_SET_THROW );
-            uno::Sequence< uno::Any > aArgs;
-            xVbaEvents->processVbaEvent( script::vba::VBAEventId::WORKBOOK_OPEN, aArgs );
-        }
-        catch( uno::Exception& )
-        {
-        }
+    /*  Trigger the Workbook_Open event, event processor will register
+        itself as listener for specific events. */
+    try
+    {
+        uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( pShell->GetDocument().GetVbaEventProcessor(), uno::UNO_SET_THROW );
+        uno::Sequence< uno::Any > aArgs;
+        xVbaEvents->processVbaEvent( script::vba::VBAEventId::WORKBOOK_OPEN, aArgs );
+    }
+    catch( uno::Exception& )
+    {
     }
 }
 

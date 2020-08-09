@@ -250,19 +250,19 @@ SfxItemSet*  ScVbaRange::getCurrentDataSet( )
 
 void ScVbaRange::fireChangeEvent()
 {
-    if( ScVbaApplication::getDocumentEventsEnabled() )
+    if( !ScVbaApplication::getDocumentEventsEnabled() )
+        return;
+
+    ScDocument& rDoc = getScDocument();
+    const uno::Reference< script::vba::XVBAEventProcessor >& xVBAEvents = rDoc.GetVbaEventProcessor();
+    if( xVBAEvents.is() ) try
     {
-        ScDocument& rDoc = getScDocument();
-        const uno::Reference< script::vba::XVBAEventProcessor >& xVBAEvents = rDoc.GetVbaEventProcessor();
-        if( xVBAEvents.is() ) try
-        {
-            uno::Sequence< uno::Any > aArgs( 1 );
-            aArgs[ 0 ] <<= uno::Reference< excel::XRange >( this );
-            xVBAEvents->processVbaEvent( script::vba::VBAEventId::WORKSHEET_CHANGE, aArgs );
-        }
-        catch( uno::Exception& )
-        {
-        }
+        uno::Sequence< uno::Any > aArgs( 1 );
+        aArgs[ 0 ] <<= uno::Reference< excel::XRange >( this );
+        xVBAEvents->processVbaEvent( script::vba::VBAEventId::WORKSHEET_CHANGE, aArgs );
+    }
+    catch( uno::Exception& )
+    {
     }
 }
 
@@ -1313,21 +1313,21 @@ void lclExpandAndMerge( const uno::Reference< table::XCellRange >& rxCellRange, 
     uno::Reference< util::XMergeable > xMerge( lclExpandToMerged( rxCellRange, true ), uno::UNO_QUERY_THROW );
     // Calc cannot merge over merged ranges, always unmerge first
     xMerge->merge( false );
-    if( bMerge )
-    {
-        // clear all contents of the covered cells (not the top-left cell)
-        table::CellRangeAddress aRangeAddr = lclGetRangeAddress( rxCellRange );
-        sal_Int32 nLastColIdx = aRangeAddr.EndColumn - aRangeAddr.StartColumn;
-        sal_Int32 nLastRowIdx = aRangeAddr.EndRow - aRangeAddr.StartRow;
-        // clear cells of top row, right of top-left cell
-        if( nLastColIdx > 0 )
-            lclClearRange( rxCellRange->getCellRangeByPosition( 1, 0, nLastColIdx, 0 ) );
-        // clear all rows below top row
-        if( nLastRowIdx > 0 )
-            lclClearRange( rxCellRange->getCellRangeByPosition( 0, 1, nLastColIdx, nLastRowIdx ) );
-        // merge the range
-        xMerge->merge( true );
-    }
+    if( !bMerge )
+        return;
+
+    // clear all contents of the covered cells (not the top-left cell)
+    table::CellRangeAddress aRangeAddr = lclGetRangeAddress( rxCellRange );
+    sal_Int32 nLastColIdx = aRangeAddr.EndColumn - aRangeAddr.StartColumn;
+    sal_Int32 nLastRowIdx = aRangeAddr.EndRow - aRangeAddr.StartRow;
+    // clear cells of top row, right of top-left cell
+    if( nLastColIdx > 0 )
+        lclClearRange( rxCellRange->getCellRangeByPosition( 1, 0, nLastColIdx, 0 ) );
+    // clear all rows below top row
+    if( nLastRowIdx > 0 )
+        lclClearRange( rxCellRange->getCellRangeByPosition( 0, 1, nLastColIdx, nLastRowIdx ) );
+    // merge the range
+    xMerge->merge( true );
 }
 
 /// @throws uno::RuntimeException
@@ -2239,26 +2239,26 @@ ScVbaRange::Select()
     if ( !pUnoRangesBase )
         throw uno::RuntimeException("Failed to access underlying uno range object"  );
     ScDocShell* pShell = pUnoRangesBase->GetDocShell();
-    if ( pShell )
+    if ( !pShell )
+        return;
+
+    uno::Reference< frame::XModel > xModel( pShell->GetModel(), uno::UNO_SET_THROW );
+    uno::Reference< view::XSelectionSupplier > xSelection( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
+    if ( mxRanges.is() )
+        xSelection->select( uno::Any( lclExpandToMerged( mxRanges ) ) );
+    else
+        xSelection->select( uno::Any( lclExpandToMerged( mxRange, true ) ) );
+    // set focus on document e.g.
+    // ThisComponent.CurrentController.Frame.getContainerWindow.SetFocus
+    try
     {
-        uno::Reference< frame::XModel > xModel( pShell->GetModel(), uno::UNO_SET_THROW );
-        uno::Reference< view::XSelectionSupplier > xSelection( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
-        if ( mxRanges.is() )
-            xSelection->select( uno::Any( lclExpandToMerged( mxRanges ) ) );
-        else
-            xSelection->select( uno::Any( lclExpandToMerged( mxRange, true ) ) );
-        // set focus on document e.g.
-        // ThisComponent.CurrentController.Frame.getContainerWindow.SetFocus
-        try
-        {
-            uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
-            uno::Reference< frame::XFrame > xFrame( xController->getFrame(), uno::UNO_SET_THROW );
-            uno::Reference< awt::XWindow > xWin( xFrame->getContainerWindow(), uno::UNO_SET_THROW );
-            xWin->setFocus();
-        }
-        catch( uno::Exception& )
-        {
-        }
+        uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
+        uno::Reference< frame::XFrame > xFrame( xController->getFrame(), uno::UNO_SET_THROW );
+        uno::Reference< awt::XWindow > xWin( xFrame->getContainerWindow(), uno::UNO_SET_THROW );
+        xWin->setFocus();
+    }
+    catch( uno::Exception& )
+    {
     }
 }
 
@@ -3806,19 +3806,19 @@ ScVbaRange::setColumnWidth( const uno::Any& _columnwidth )
     _columnwidth >>= nColWidth;
     nColWidth = lcl_Round2DecPlaces( nColWidth );
     ScDocShell* pDocShell = getScDocShell();
-    if ( pDocShell )
-    {
-        if ( nColWidth != 0.0 )
-            nColWidth = ( nColWidth + fExtraWidth ) * getDefaultCharWidth( pDocShell );
-        RangeHelper thisRange( mxRange );
-        table::CellRangeAddress thisAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
-        sal_uInt16 nTwips = lcl_pointsToTwips( nColWidth );
+    if ( !pDocShell )
+        return;
 
-        std::vector<sc::ColRowSpan> aColArr(1, sc::ColRowSpan(thisAddress.StartColumn, thisAddress.EndColumn));
-        // #163561# use mode SC_SIZE_DIRECT: hide for width 0, show for other values
-        pDocShell->GetDocFunc().SetWidthOrHeight(
-            true, aColArr, thisAddress.Sheet, SC_SIZE_DIRECT, nTwips, true, true);
-    }
+    if ( nColWidth != 0.0 )
+        nColWidth = ( nColWidth + fExtraWidth ) * getDefaultCharWidth( pDocShell );
+    RangeHelper thisRange( mxRange );
+    table::CellRangeAddress thisAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
+    sal_uInt16 nTwips = lcl_pointsToTwips( nColWidth );
+
+    std::vector<sc::ColRowSpan> aColArr(1, sc::ColRowSpan(thisAddress.StartColumn, thisAddress.EndColumn));
+    // #163561# use mode SC_SIZE_DIRECT: hide for width 0, show for other values
+    pDocShell->GetDocFunc().SetWidthOrHeight(
+        true, aColArr, thisAddress.Sheet, SC_SIZE_DIRECT, nTwips, true, true);
 }
 
 uno::Any SAL_CALL
@@ -4022,27 +4022,27 @@ ScVbaRange::setPageBreak( const uno::Any& _pagebreak)
     _pagebreak >>= nPageBreak;
 
     ScDocShell* pShell = getDocShellFromRange( mxRange );
-    if ( pShell )
+    if ( !pShell )
+        return;
+
+    RangeHelper thisRange( mxRange );
+    table::CellRangeAddress thisAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
+    if ((thisAddress.StartColumn==0) && (thisAddress.StartRow==0))
+        return;
+    bool bColumn = false;
+
+    if (thisAddress.StartRow==0)
+        bColumn = true;
+
+    ScAddress aAddr( static_cast<SCCOL>(thisAddress.StartColumn), thisAddress.StartRow, thisAddress.Sheet );
+    uno::Reference< frame::XModel > xModel = pShell->GetModel();
+    if ( xModel.is() )
     {
-        RangeHelper thisRange( mxRange );
-        table::CellRangeAddress thisAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
-        if ((thisAddress.StartColumn==0) && (thisAddress.StartRow==0))
-            return;
-        bool bColumn = false;
-
-        if (thisAddress.StartRow==0)
-            bColumn = true;
-
-        ScAddress aAddr( static_cast<SCCOL>(thisAddress.StartColumn), thisAddress.StartRow, thisAddress.Sheet );
-        uno::Reference< frame::XModel > xModel = pShell->GetModel();
-        if ( xModel.is() )
-        {
-            ScTabViewShell* pViewShell = excel::getBestViewShell( xModel );
-            if ( nPageBreak == excel::XlPageBreak::xlPageBreakManual )
-                pViewShell->InsertPageBreak( bColumn, true, &aAddr);
-            else if ( nPageBreak == excel::XlPageBreak::xlPageBreakNone )
-                pViewShell->DeletePageBreak( bColumn, true, &aAddr);
-        }
+        ScTabViewShell* pViewShell = excel::getBestViewShell( xModel );
+        if ( nPageBreak == excel::XlPageBreak::xlPageBreakManual )
+            pViewShell->InsertPageBreak( bColumn, true, &aAddr);
+        else if ( nPageBreak == excel::XlPageBreak::xlPageBreakNone )
+            pViewShell->DeletePageBreak( bColumn, true, &aAddr);
     }
 }
 
@@ -4250,19 +4250,19 @@ static ScDBData* lcl_GetDBData_Impl( ScDocShell* pDocShell, sal_Int16 nSheet )
 
 static void lcl_SelectAll( ScDocShell* pDocShell, const ScQueryParam& aParam )
 {
-    if ( pDocShell )
-    {
-        ScViewData* pViewData = ScDocShell::GetViewData();
-        if ( !pViewData )
-        {
-            ScTabViewShell* pViewSh = pDocShell->GetBestViewShell( true );
-            pViewData = pViewSh ? &pViewSh->GetViewData() : nullptr;
-        }
+    if ( !pDocShell )
+        return;
 
-        if ( pViewData )
-        {
-            pViewData->GetView()->Query( aParam, nullptr, true );
-        }
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    if ( !pViewData )
+    {
+        ScTabViewShell* pViewSh = pDocShell->GetBestViewShell( true );
+        pViewData = pViewSh ? &pViewSh->GetViewData() : nullptr;
+    }
+
+    if ( pViewData )
+    {
+        pViewData->GetView()->Query( aParam, nullptr, true );
     }
 }
 
@@ -4721,28 +4721,28 @@ ScVbaRange::Autofit()
         }
         return;
     }
-        // if the range is a not a row or column range autofit will
-        // throw an error
 
+    // if the range is a not a row or column range autofit will
+    // throw an error
     if ( !( mbIsColumns || mbIsRows ) )
             DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
     ScDocShell* pDocShell = getDocShellFromRange( mxRange );
-    if ( pDocShell )
-    {
-            RangeHelper thisRange( mxRange );
-            table::CellRangeAddress thisAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
+    if ( !pDocShell )
+        return;
 
-            std::vector<sc::ColRowSpan> aColArr(1, sc::ColRowSpan(thisAddress.StartColumn,thisAddress.EndColumn));
-            bool bDirection = true;
-            if ( mbIsRows )
-            {
-                bDirection = false;
-                aColArr[0].mnStart = thisAddress.StartRow;
-                aColArr[0].mnEnd = thisAddress.EndRow;
-            }
-            pDocShell->GetDocFunc().SetWidthOrHeight(
-                bDirection, aColArr, thisAddress.Sheet, SC_SIZE_OPTIMAL, 0, true, true);
+    RangeHelper thisRange( mxRange );
+    table::CellRangeAddress thisAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
+
+    std::vector<sc::ColRowSpan> aColArr(1, sc::ColRowSpan(thisAddress.StartColumn,thisAddress.EndColumn));
+    bool bDirection = true;
+    if ( mbIsRows )
+    {
+        bDirection = false;
+        aColArr[0].mnStart = thisAddress.StartRow;
+        aColArr[0].mnEnd = thisAddress.EndRow;
     }
+    pDocShell->GetDocFunc().SetWidthOrHeight(
+        bDirection, aColArr, thisAddress.Sheet, SC_SIZE_OPTIMAL, 0, true, true);
 }
 
 uno::Any SAL_CALL

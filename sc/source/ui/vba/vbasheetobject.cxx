@@ -353,19 +353,19 @@ void SAL_CALL ScVbaControlObjectBase::setOnAction( const OUString& rMacroName )
     try { xEventMgr->revokeScriptEvent( nIndex, gaListenerType, gaEventMethod, OUString() ); } catch( uno::Exception& ) {}
 
     // if a macro name has been passed, try to attach it to the event
-    if( !rMacroName.isEmpty() )
-    {
-        MacroResolvedInfo aResolvedMacro = resolveVBAMacro( getSfxObjShell( mxModel ), rMacroName );
-        if( !aResolvedMacro.mbFound )
-            throw uno::RuntimeException();
-        script::ScriptEventDescriptor aDescriptor;
-        aDescriptor.ListenerType = gaListenerType;
-        aDescriptor.EventMethod = gaEventMethod;
-        aDescriptor.ScriptType = "Script";
-        aDescriptor.ScriptCode = makeMacroURL( aResolvedMacro.msResolvedMacro );
-        NotifyMacroEventRead();
-        xEventMgr->registerScriptEvent( nIndex, aDescriptor );
-    }
+    if( rMacroName.isEmpty() )
+        return;
+
+    MacroResolvedInfo aResolvedMacro = resolveVBAMacro( getSfxObjShell( mxModel ), rMacroName );
+    if( !aResolvedMacro.mbFound )
+        throw uno::RuntimeException();
+    script::ScriptEventDescriptor aDescriptor;
+    aDescriptor.ListenerType = gaListenerType;
+    aDescriptor.EventMethod = gaEventMethod;
+    aDescriptor.ScriptType = "Script";
+    aDescriptor.ScriptCode = makeMacroURL( aResolvedMacro.msResolvedMacro );
+    NotifyMacroEventRead();
+    xEventMgr->registerScriptEvent( nIndex, aDescriptor );
 }
 
 sal_Bool SAL_CALL ScVbaControlObjectBase::getPrintObject()
