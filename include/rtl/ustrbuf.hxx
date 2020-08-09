@@ -823,6 +823,32 @@ public:
         @param   c   a <code>char</code>.
         @return  this string buffer.
      */
+    OUStringBuffer & append( sal_Unicode32 c )
+    {
+        if ( c > 0x0000FFFF )
+        {
+            sal_Unicode c2[2];
+            c2[0] = rtl::getHighSurrogate(c);
+            c2[1] = rtl::getLowSurrogate(c);
+            return append( c2, 2 );
+        }
+        else
+        {
+            sal_Unicode c2;
+            return append( &c2, 1 );
+        }
+    }
+
+    /**
+        Appends the string representation of the <code>char</code>
+        argument to this string buffer.
+
+        The argument is appended to the contents of this string buffer.
+        The length of this string buffer increases by <code>1</code>.
+
+        @param   c   a <code>char</code>.
+        @return  this string buffer.
+     */
     OUStringBuffer & append(sal_Unicode c)
     {
         return append( &c, 1 );
