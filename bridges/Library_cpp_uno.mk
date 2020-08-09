@@ -32,13 +32,21 @@ $(eval $(call gb_Library_add_exception_objects,$(gb_CPPU_ENV)_uno, \
     bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/callvirtualfunction, \
     $(if $(HAVE_GCC_STACK_CLASH_PROTECTION),-fno-stack-clash-protection) \
 ))
-else ifneq ($(filter iOS MACOSX,$(OS)),)
-# For now, use the same bridge for macOS on arm64 as for iOS. But we
-# will eventually obviously want one that does generate code
-# dynamically on macOS.
+
+else ifeq ($(OS),iOS)
 bridges_SELECTED_BRIDGE := gcc3_ios
 bridge_noopt_objects := cpp2uno except uno2cpp
 bridge_asm_objects := ios64_helper
+
+else ifeq ($(OS),MACOSX)
+bridges_SELECTED_BRIDGE := gcc3_macosx_arm64
+bridge_asm_objects := vtableslotcall
+bridge_exception_objects := abi cpp2uno uno2cpp
+
+$(eval $(call gb_Library_add_exception_objects,$(gb_CPPU_ENV)_uno, \
+    bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/callvirtualfunction, \
+    $(if $(HAVE_GCC_STACK_CLASH_PROTECTION),-fno-stack-clash-protection) \
+))
 
 endif
 
@@ -183,6 +191,14 @@ endif
 $(eval $(call gb_Library_use_internal_comprehensive_api,$(gb_CPPU_ENV)_uno,\
 	udkapi \
 ))
+
+ifeq ($(OS),MACOSX)
+ifeq ($(CPUNAME),AARCH64)
+$(eval $(call gb_Library_use_internal_comprehensive_api,$(gb_CPPU_ENV)_uno,\
+	offapi \
+))
+endif
+endif
 
 $(eval $(call gb_Library_set_include,$(gb_CPPU_ENV)_uno,\
 	-I$(SRCDIR)/bridges/inc \
