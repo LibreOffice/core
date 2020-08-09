@@ -560,26 +560,26 @@ void ScOutlineWindow::DrawBorderRel( size_t nLevel, size_t nEntry, bool bPressed
 
 void ScOutlineWindow::ShowFocus()
 {
-    if ( HasFocus() )
-    {
-        // first move to a visible position
-        ImplMoveFocusToVisible( true );
+    if ( !HasFocus() )
+        return;
 
-        if ( IsFocusButtonVisible() )
-        {
-            Point aPos;
-            if ( GetImagePos( mnFocusLevel, mnFocusEntry, aPos ) )
-            {
-                aPos += Point( 1, 1 );
-                maFocusRect = tools::Rectangle( aPos, Size( SC_OL_BITMAPSIZE - 2, SC_OL_BITMAPSIZE - 2 ) );
-                bool bClip = (mnFocusEntry != SC_OL_HEADERENTRY);
-                if ( bClip )
-                    SetEntryAreaClipRegion();
-                InvertTracking( maFocusRect, ShowTrackFlags::Small | ShowTrackFlags::TrackWindow );
-                if ( bClip )
-                    SetClipRegion();
-            }
-        }
+    // first move to a visible position
+    ImplMoveFocusToVisible( true );
+
+    if ( !IsFocusButtonVisible() )
+        return;
+
+    Point aPos;
+    if ( GetImagePos( mnFocusLevel, mnFocusEntry, aPos ) )
+    {
+        aPos += Point( 1, 1 );
+        maFocusRect = tools::Rectangle( aPos, Size( SC_OL_BITMAPSIZE - 2, SC_OL_BITMAPSIZE - 2 ) );
+        bool bClip = (mnFocusEntry != SC_OL_HEADERENTRY);
+        if ( bClip )
+            SetEntryAreaClipRegion();
+        InvertTracking( maFocusRect, ShowTrackFlags::Small | ShowTrackFlags::TrackWindow );
+        if ( bClip )
+            SetClipRegion();
     }
 }
 

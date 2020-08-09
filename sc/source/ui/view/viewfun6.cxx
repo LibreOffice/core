@@ -487,36 +487,38 @@ void ScViewFunc::EditNote()
     // generated undo action is processed in FuText::StopEditMode
 
     // get existing note or create a new note (including caption drawing object)
-    if( ScPostIt* pNote = rDoc.GetOrCreateNote( aPos ) )
+    ScPostIt* pNote = rDoc.GetOrCreateNote( aPos );
+    if(!pNote)
+        return;
+
+    // hide temporary note caption
+    HideNoteMarker();
+    // show caption object without changing internal visibility state
+    pNote->ShowCaptionTemp( aPos );
+
+    /*  Drawing object has been created in ScDocument::GetOrCreateNote() or
+        in ScPostIt::ShowCaptionTemp(), so ScPostIt::GetCaption() should
+        return a caption object. */
+    SdrCaptionObj* pCaption = pNote->GetCaption();
+    if( !pCaption )
+        return;
+
+    if ( ScDrawView* pScDrawView = GetScDrawView() )
+       pScDrawView->SyncForGrid( pCaption );
+    // #i33764# enable the resize handles before starting edit mode
+    if( FuPoor* pDraw = GetDrawFuncPtr() )
+        static_cast< FuSelection* >( pDraw )->ActivateNoteHandles( pCaption );
+
+    // activate object (as in FuSelection::TestComment)
+    GetViewData().GetDispatcher().Execute( SID_DRAW_NOTEEDIT, SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
+    // now get the created FuText and set into EditMode
+    FuText* pFuText = dynamic_cast<FuText*>(GetDrawFuncPtr());
+    if (pFuText)
     {
-        // hide temporary note caption
-        HideNoteMarker();
-        // show caption object without changing internal visibility state
-        pNote->ShowCaptionTemp( aPos );
+        ScrollToObject( pCaption );         // make object fully visible
+        pFuText->SetInEditMode( pCaption );
 
-        /*  Drawing object has been created in ScDocument::GetOrCreateNote() or
-            in ScPostIt::ShowCaptionTemp(), so ScPostIt::GetCaption() should
-            return a caption object. */
-        if( SdrCaptionObj* pCaption = pNote->GetCaption() )
-        {
-            if ( ScDrawView* pScDrawView = GetScDrawView() )
-               pScDrawView->SyncForGrid( pCaption );
-            // #i33764# enable the resize handles before starting edit mode
-            if( FuPoor* pDraw = GetDrawFuncPtr() )
-                static_cast< FuSelection* >( pDraw )->ActivateNoteHandles( pCaption );
-
-            // activate object (as in FuSelection::TestComment)
-            GetViewData().GetDispatcher().Execute( SID_DRAW_NOTEEDIT, SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
-            // now get the created FuText and set into EditMode
-            FuText* pFuText = dynamic_cast<FuText*>(GetDrawFuncPtr());
-            if (pFuText)
-            {
-                ScrollToObject( pCaption );         // make object fully visible
-                pFuText->SetInEditMode( pCaption );
-
-                ScTabView::OnLOKNoteStateChanged( pNote );
-            }
-        }
+        ScTabView::OnLOKNoteStateChanged( pNote );
     }
 }
 

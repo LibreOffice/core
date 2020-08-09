@@ -658,21 +658,21 @@ void ScTabViewShell::SetPivotShell( bool bActive )
     //  SetPivotShell is called from CursorPosChanged every time
     //  -> don't change anything except switching between cell and pivot shell
 
-    if ( eCurOST == OST_Pivot || eCurOST == OST_Cell )
+    if (eCurOST != OST_Pivot && eCurOST != OST_Cell)
+        return;
+
+    if ( bActive )
     {
-        if ( bActive )
-        {
-            bActiveDrawTextSh = bActiveDrawSh = false;
-            bActiveDrawFormSh=false;
-            bActiveGraphicSh=false;
-            bActiveMediaSh=false;
-            bActiveOleObjectSh=false;
-            bActiveChartSh=false;
-            SetCurSubShell(OST_Pivot);
-        }
-        else
-            SetCurSubShell(OST_Cell);
+        bActiveDrawTextSh = bActiveDrawSh = false;
+        bActiveDrawFormSh=false;
+        bActiveGraphicSh=false;
+        bActiveMediaSh=false;
+        bActiveOleObjectSh=false;
+        bActiveChartSh=false;
+        SetCurSubShell(OST_Pivot);
     }
+    else
+        SetCurSubShell(OST_Cell);
 }
 
 void ScTabViewShell::SetAuditShell( bool bActive )
@@ -771,181 +771,181 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, bool bForce)
         pPageBreakShell->SetRepeatTarget( &aTarget );
     }
 
-    if ( eOST!=eCurOST || bForce )
+    if ( !(eOST!=eCurOST || bForce) )
+        return;
+
+    bool bCellBrush = false;    // "format paint brush" allowed for cells
+    bool bDrawBrush = false;    // "format paint brush" allowed for drawing objects
+
+    if(eCurOST!=OST_NONE) RemoveSubShell();
+
+    if (pFormShell && !bFormShellAtTop)
+        AddSubShell(*pFormShell);               // add below own subshells
+
+    switch(eOST)
     {
-        bool bCellBrush = false;    // "format paint brush" allowed for cells
-        bool bDrawBrush = false;    // "format paint brush" allowed for drawing objects
-
-        if(eCurOST!=OST_NONE) RemoveSubShell();
-
-        if (pFormShell && !bFormShellAtTop)
-            AddSubShell(*pFormShell);               // add below own subshells
-
-        switch(eOST)
+        case    OST_Cell:
         {
-            case    OST_Cell:
-            {
-                AddSubShell(*pCellShell);
-                if(bPgBrk) AddSubShell(*pPageBreakShell);
-                bCellBrush = true;
-            }
-            break;
-            case    OST_Editing:
-            {
-                AddSubShell(*pCellShell);
-                if(bPgBrk) AddSubShell(*pPageBreakShell);
-
-                if(pEditShell)
-                {
-                    AddSubShell(*pEditShell);
-                }
-            }
-            break;
-            case    OST_DrawText:
-            {
-                if ( !pDrawTextShell )
-                {
-                    pDocSh->MakeDrawLayer();
-                    pDrawTextShell.reset( new ScDrawTextObjectBar( &GetViewData() ) );
-                }
-                AddSubShell(*pDrawTextShell);
-            }
-            break;
-            case    OST_Drawing:
-            {
-                if (svx::checkForSelectedCustomShapes(
-                            GetScDrawView(), true /* bOnlyExtruded */ )) {
-                    if (pExtrusionBarShell == nullptr)
-                        pExtrusionBarShell.reset( new svx::ExtrusionBar(this) );
-                    AddSubShell( *pExtrusionBarShell );
-                }
-                sal_uInt32 nCheckStatus = 0;
-                if (svx::checkForSelectedFontWork(
-                            GetScDrawView(), nCheckStatus )) {
-                    if (pFontworkBarShell == nullptr)
-                        pFontworkBarShell.reset( new svx::FontworkBar(this) );
-                    AddSubShell( *pFontworkBarShell );
-                }
-
-                if ( !pDrawShell )
-                {
-                    pDocSh->MakeDrawLayer();
-                    pDrawShell.reset( new ScDrawShell( &GetViewData() ) );
-                    pDrawShell->SetRepeatTarget( &aTarget );
-                }
-                AddSubShell(*pDrawShell);
-                bDrawBrush = true;
-            }
-            break;
-
-            case    OST_DrawForm:
-            {
-                if ( !pDrawFormShell )
-                {
-                    pDocSh->MakeDrawLayer();
-                    pDrawFormShell.reset( new ScDrawFormShell( &GetViewData() ) );
-                    pDrawFormShell->SetRepeatTarget( &aTarget );
-                }
-                AddSubShell(*pDrawFormShell);
-                bDrawBrush = true;
-            }
-            break;
-
-            case    OST_Chart:
-            {
-                if ( !pChartShell )
-                {
-                    pDocSh->MakeDrawLayer();
-                    pChartShell.reset( new ScChartShell( &GetViewData() ) );
-                    pChartShell->SetRepeatTarget( &aTarget );
-                }
-                AddSubShell(*pChartShell);
-                bDrawBrush = true;
-            }
-            break;
-
-            case    OST_OleObject:
-            {
-                if ( !pOleObjectShell )
-                {
-                    pDocSh->MakeDrawLayer();
-                    pOleObjectShell.reset( new ScOleObjectShell( &GetViewData() ) );
-                    pOleObjectShell->SetRepeatTarget( &aTarget );
-                }
-                AddSubShell(*pOleObjectShell);
-                bDrawBrush = true;
-            }
-            break;
-
-            case    OST_Graphic:
-            {
-                if ( !pGraphicShell)
-                {
-                    pDocSh->MakeDrawLayer();
-                    pGraphicShell.reset( new ScGraphicShell( &GetViewData() ) );
-                    pGraphicShell->SetRepeatTarget( &aTarget );
-                }
-                AddSubShell(*pGraphicShell);
-                bDrawBrush = true;
-            }
-            break;
-
-            case    OST_Media:
-            {
-                if ( !pMediaShell)
-                {
-                    pDocSh->MakeDrawLayer();
-                    pMediaShell.reset( new ScMediaShell( &GetViewData() ) );
-                    pMediaShell->SetRepeatTarget( &aTarget );
-                }
-                AddSubShell(*pMediaShell);
-            }
-            break;
-
-            case    OST_Pivot:
-            {
-                AddSubShell(*pCellShell);
-                if(bPgBrk) AddSubShell(*pPageBreakShell);
-
-                if ( !pPivotShell )
-                {
-                    pPivotShell.reset( new ScPivotShell( this ) );
-                    pPivotShell->SetRepeatTarget( &aTarget );
-                }
-                AddSubShell(*pPivotShell);
-                bCellBrush = true;
-            }
-            break;
-            case    OST_Auditing:
-            {
-                AddSubShell(*pCellShell);
-                if(bPgBrk) AddSubShell(*pPageBreakShell);
-
-                if ( !pAuditingShell )
-                {
-                    pDocSh->MakeDrawLayer();    // the waiting time rather now as on the click
-
-                    pAuditingShell.reset( new ScAuditingShell( &GetViewData() ) );
-                    pAuditingShell->SetRepeatTarget( &aTarget );
-                }
-                AddSubShell(*pAuditingShell);
-                bCellBrush = true;
-            }
-            break;
-            default:
-            OSL_FAIL("wrong shell requested");
-            break;
+            AddSubShell(*pCellShell);
+            if(bPgBrk) AddSubShell(*pPageBreakShell);
+            bCellBrush = true;
         }
+        break;
+        case    OST_Editing:
+        {
+            AddSubShell(*pCellShell);
+            if(bPgBrk) AddSubShell(*pPageBreakShell);
 
-        if (pFormShell && bFormShellAtTop)
-            AddSubShell(*pFormShell);               // add on top of own subshells
+            if(pEditShell)
+            {
+                AddSubShell(*pEditShell);
+            }
+        }
+        break;
+        case    OST_DrawText:
+        {
+            if ( !pDrawTextShell )
+            {
+                pDocSh->MakeDrawLayer();
+                pDrawTextShell.reset( new ScDrawTextObjectBar( &GetViewData() ) );
+            }
+            AddSubShell(*pDrawTextShell);
+        }
+        break;
+        case    OST_Drawing:
+        {
+            if (svx::checkForSelectedCustomShapes(
+                        GetScDrawView(), true /* bOnlyExtruded */ )) {
+                if (pExtrusionBarShell == nullptr)
+                    pExtrusionBarShell.reset( new svx::ExtrusionBar(this) );
+                AddSubShell( *pExtrusionBarShell );
+            }
+            sal_uInt32 nCheckStatus = 0;
+            if (svx::checkForSelectedFontWork(
+                        GetScDrawView(), nCheckStatus )) {
+                if (pFontworkBarShell == nullptr)
+                    pFontworkBarShell.reset( new svx::FontworkBar(this) );
+                AddSubShell( *pFontworkBarShell );
+            }
 
-        eCurOST=eOST;
+            if ( !pDrawShell )
+            {
+                pDocSh->MakeDrawLayer();
+                pDrawShell.reset( new ScDrawShell( &GetViewData() ) );
+                pDrawShell->SetRepeatTarget( &aTarget );
+            }
+            AddSubShell(*pDrawShell);
+            bDrawBrush = true;
+        }
+        break;
 
-        // abort "format paint brush" when switching to an incompatible shell
-        if ( ( GetBrushDocument() && !bCellBrush ) || ( GetDrawBrushSet() && !bDrawBrush ) )
-            ResetBrushDocument();
+        case    OST_DrawForm:
+        {
+            if ( !pDrawFormShell )
+            {
+                pDocSh->MakeDrawLayer();
+                pDrawFormShell.reset( new ScDrawFormShell( &GetViewData() ) );
+                pDrawFormShell->SetRepeatTarget( &aTarget );
+            }
+            AddSubShell(*pDrawFormShell);
+            bDrawBrush = true;
+        }
+        break;
+
+        case    OST_Chart:
+        {
+            if ( !pChartShell )
+            {
+                pDocSh->MakeDrawLayer();
+                pChartShell.reset( new ScChartShell( &GetViewData() ) );
+                pChartShell->SetRepeatTarget( &aTarget );
+            }
+            AddSubShell(*pChartShell);
+            bDrawBrush = true;
+        }
+        break;
+
+        case    OST_OleObject:
+        {
+            if ( !pOleObjectShell )
+            {
+                pDocSh->MakeDrawLayer();
+                pOleObjectShell.reset( new ScOleObjectShell( &GetViewData() ) );
+                pOleObjectShell->SetRepeatTarget( &aTarget );
+            }
+            AddSubShell(*pOleObjectShell);
+            bDrawBrush = true;
+        }
+        break;
+
+        case    OST_Graphic:
+        {
+            if ( !pGraphicShell)
+            {
+                pDocSh->MakeDrawLayer();
+                pGraphicShell.reset( new ScGraphicShell( &GetViewData() ) );
+                pGraphicShell->SetRepeatTarget( &aTarget );
+            }
+            AddSubShell(*pGraphicShell);
+            bDrawBrush = true;
+        }
+        break;
+
+        case    OST_Media:
+        {
+            if ( !pMediaShell)
+            {
+                pDocSh->MakeDrawLayer();
+                pMediaShell.reset( new ScMediaShell( &GetViewData() ) );
+                pMediaShell->SetRepeatTarget( &aTarget );
+            }
+            AddSubShell(*pMediaShell);
+        }
+        break;
+
+        case    OST_Pivot:
+        {
+            AddSubShell(*pCellShell);
+            if(bPgBrk) AddSubShell(*pPageBreakShell);
+
+            if ( !pPivotShell )
+            {
+                pPivotShell.reset( new ScPivotShell( this ) );
+                pPivotShell->SetRepeatTarget( &aTarget );
+            }
+            AddSubShell(*pPivotShell);
+            bCellBrush = true;
+        }
+        break;
+        case    OST_Auditing:
+        {
+            AddSubShell(*pCellShell);
+            if(bPgBrk) AddSubShell(*pPageBreakShell);
+
+            if ( !pAuditingShell )
+            {
+                pDocSh->MakeDrawLayer();    // the waiting time rather now as on the click
+
+                pAuditingShell.reset( new ScAuditingShell( &GetViewData() ) );
+                pAuditingShell->SetRepeatTarget( &aTarget );
+            }
+            AddSubShell(*pAuditingShell);
+            bCellBrush = true;
+        }
+        break;
+        default:
+        OSL_FAIL("wrong shell requested");
+        break;
     }
+
+    if (pFormShell && bFormShellAtTop)
+        AddSubShell(*pFormShell);               // add on top of own subshells
+
+    eCurOST=eOST;
+
+    // abort "format paint brush" when switching to an incompatible shell
+    if ( ( GetBrushDocument() && !bCellBrush ) || ( GetDrawBrushSet() && !bDrawBrush ) )
+        ResetBrushDocument();
 }
 
 void ScTabViewShell::SetFormShellAtTop( bool bSet )
@@ -1129,19 +1129,19 @@ void ScTabViewShell::StartSimpleRefDialog(
     SC_MOD()->SetRefDialog( nId, true, pViewFrm );
 
     ScSimpleRefDlgWrapper* pWnd = static_cast<ScSimpleRefDlgWrapper*>(pViewFrm->GetChildWindow( nId ));
-    if (pWnd)
-    {
-        pWnd->SetCloseHdl( LINK( this, ScTabViewShell, SimpleRefClose ) );
-        pWnd->SetUnoLinks( LINK( this, ScTabViewShell, SimpleRefDone ),
-                           LINK( this, ScTabViewShell, SimpleRefAborted ),
-                           LINK( this, ScTabViewShell, SimpleRefChange ) );
-        pWnd->SetRefString( rInitVal );
-        pWnd->SetFlags( bCloseOnButtonUp, bSingleCell, bMultiSelection );
-        ScSimpleRefDlgWrapper::SetAutoReOpen( false );
-        if (auto xWin = pWnd->GetController())
-            xWin->set_title(rTitle);
-        pWnd->StartRefInput();
-    }
+    if (!pWnd)
+        return;
+
+    pWnd->SetCloseHdl( LINK( this, ScTabViewShell, SimpleRefClose ) );
+    pWnd->SetUnoLinks( LINK( this, ScTabViewShell, SimpleRefDone ),
+                       LINK( this, ScTabViewShell, SimpleRefAborted ),
+                       LINK( this, ScTabViewShell, SimpleRefChange ) );
+    pWnd->SetRefString( rInitVal );
+    pWnd->SetFlags( bCloseOnButtonUp, bSingleCell, bMultiSelection );
+    ScSimpleRefDlgWrapper::SetAutoReOpen( false );
+    if (auto xWin = pWnd->GetController())
+        xWin->set_title(rTitle);
+    pWnd->StartRefInput();
 }
 
 void ScTabViewShell::StopSimpleRefDialog()
@@ -1711,31 +1711,31 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     // formula mode in online is not usable in collaborative mode,
     // this is a workaround for disabling formula mode in online
     // when there is more than a single view
-    if (comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    // have we already one view ?
+    if (!pViewShell)
+        return;
+
+    // this view is not yet visible at this stage, so we look for not visible views, too, for this same document
+    SfxViewShell* pViewShell2 = pViewShell;
+    do
     {
-        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-        // have we already one view ?
-        if (pViewShell)
+        pViewShell2 = SfxViewShell::GetNext(*pViewShell2, /*only visible shells*/ false);
+    } while (pViewShell2 && pViewShell2->GetDocId() != pViewShell->GetDocId());
+    // if the second view is not this one, it means that there is
+    // already more than one active view and so the formula mode
+    // has already been disabled
+    if (pViewShell2 && pViewShell2 == this)
+    {
+        ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+        assert(pTabViewShell);
+        ScInputHandler* pInputHdl = pTabViewShell->GetInputHandler();
+        if (pInputHdl && pInputHdl->IsFormulaMode())
         {
-            // this view is not yet visible at this stage, so we look for not visible views, too, for this same document
-            SfxViewShell* pViewShell2 = pViewShell;
-            do
-            {
-                pViewShell2 = SfxViewShell::GetNext(*pViewShell2, /*only visible shells*/ false);
-            } while (pViewShell2 && pViewShell2->GetDocId() != pViewShell->GetDocId());
-            // if the second view is not this one, it means that there is
-            // already more than one active view and so the formula mode
-            // has already been disabled
-            if (pViewShell2 && pViewShell2 == this)
-            {
-                ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
-                assert(pTabViewShell);
-                ScInputHandler* pInputHdl = pTabViewShell->GetInputHandler();
-                if (pInputHdl && pInputHdl->IsFormulaMode())
-                {
-                    pInputHdl->SetMode(SC_INPUT_NONE);
-                }
-            }
+            pInputHdl->SetMode(SC_INPUT_NONE);
         }
     }
 }
