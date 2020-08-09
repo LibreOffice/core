@@ -159,54 +159,54 @@ void ScViewFunctionSet::BeginDrag()
 
     ScModule* pScMod = SC_MOD();
     bool bRefMode = pScMod->IsFormulaMode();
-    if (!bRefMode)
-    {
-        pViewData->GetView()->FakeButtonUp( GetWhich() );   // ButtonUp is swallowed
+    if (bRefMode)
+        return;
 
-        ScMarkData& rMark = pViewData->GetMarkData();
-        rMark.MarkToSimple();
-        if ( rMark.IsMarked() && !rMark.IsMultiMarked() )
-        {
-            ScDocumentUniquePtr pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
-            // bApi = TRUE -> no error messages
-            bool bCopied = pViewData->GetView()->CopyToClip( pClipDoc.get(), false, true );
-            if ( bCopied )
-            {
-                sal_Int8 nDragActions = pViewData->GetView()->SelectionEditable() ?
-                                        ( DND_ACTION_COPYMOVE | DND_ACTION_LINK ) :
-                                        ( DND_ACTION_COPY | DND_ACTION_LINK );
+    pViewData->GetView()->FakeButtonUp( GetWhich() );   // ButtonUp is swallowed
 
-                ScDocShell* pDocSh = pViewData->GetDocShell();
-                TransferableObjectDescriptor aObjDesc;
-                pDocSh->FillTransferableObjectDescriptor( aObjDesc );
-                aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
-                // maSize is set in ScTransferObj ctor
+    ScMarkData& rMark = pViewData->GetMarkData();
+    rMark.MarkToSimple();
+    if ( !(rMark.IsMarked() && !rMark.IsMultiMarked()) )
+        return;
 
-                rtl::Reference<ScTransferObj> pTransferObj = new ScTransferObj( std::move(pClipDoc), aObjDesc );
+    ScDocumentUniquePtr pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
+    // bApi = TRUE -> no error messages
+    bool bCopied = pViewData->GetView()->CopyToClip( pClipDoc.get(), false, true );
+    if ( !bCopied )
+        return;
 
-                // set position of dragged cell within range
-                ScRange aMarkRange = pTransferObj->GetRange();
-                SCCOL nStartX = aMarkRange.aStart.Col();
-                SCROW nStartY = aMarkRange.aStart.Row();
-                SCCOL nHandleX = (nPosX >= nStartX) ? nPosX - nStartX : 0;
-                SCROW nHandleY = (nPosY >= nStartY) ? nPosY - nStartY : 0;
-                pTransferObj->SetDragHandlePos( nHandleX, nHandleY );
-                pTransferObj->SetSourceCursorPos( pViewData->GetCurX(), pViewData->GetCurY() );
-                pTransferObj->SetVisibleTab( nTab );
+    sal_Int8 nDragActions = pViewData->GetView()->SelectionEditable() ?
+                            ( DND_ACTION_COPYMOVE | DND_ACTION_LINK ) :
+                            ( DND_ACTION_COPY | DND_ACTION_LINK );
 
-                pTransferObj->SetDragSource( pDocSh, rMark );
+    ScDocShell* pDocSh = pViewData->GetDocShell();
+    TransferableObjectDescriptor aObjDesc;
+    pDocSh->FillTransferableObjectDescriptor( aObjDesc );
+    aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
+    // maSize is set in ScTransferObj ctor
 
-                vcl::Window* pWindow = pViewData->GetActiveWin();
-                if ( pWindow->IsTracking() )
-                    pWindow->EndTracking( TrackingEventFlags::Cancel );    // abort selecting
+    rtl::Reference<ScTransferObj> pTransferObj = new ScTransferObj( std::move(pClipDoc), aObjDesc );
 
-                SC_MOD()->SetDragObject( pTransferObj.get(), nullptr );      // for internal D&D
-                pTransferObj->StartDrag( pWindow, nDragActions );
+    // set position of dragged cell within range
+    ScRange aMarkRange = pTransferObj->GetRange();
+    SCCOL nStartX = aMarkRange.aStart.Col();
+    SCROW nStartY = aMarkRange.aStart.Row();
+    SCCOL nHandleX = (nPosX >= nStartX) ? nPosX - nStartX : 0;
+    SCROW nHandleY = (nPosY >= nStartY) ? nPosY - nStartY : 0;
+    pTransferObj->SetDragHandlePos( nHandleX, nHandleY );
+    pTransferObj->SetSourceCursorPos( pViewData->GetCurX(), pViewData->GetCurY() );
+    pTransferObj->SetVisibleTab( nTab );
 
-                return;         // dragging started
-            }
-        }
-    }
+    pTransferObj->SetDragSource( pDocSh, rMark );
+
+    vcl::Window* pWindow = pViewData->GetActiveWin();
+    if ( pWindow->IsTracking() )
+        pWindow->EndTracking( TrackingEventFlags::Cancel );    // abort selecting
+
+    SC_MOD()->SetDragObject( pTransferObj.get(), nullptr );      // for internal D&D
+    pTransferObj->StartDrag( pWindow, nDragActions );
+
+    return;         // dragging started
 
 }
 

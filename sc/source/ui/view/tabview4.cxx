@@ -259,52 +259,52 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
     }
 
     //  autocomplete for Auto-Fill
-    if ( aViewData.GetRefType() == SC_REFTYPE_FILL && Help::IsQuickHelpEnabled() )
-    {
-        vcl::Window* pWin = GetActiveWin();
-        if ( pWin )
-        {
-            OUString aHelpStr;
-            ScRange aMarkRange;
-            aViewData.GetSimpleArea( aMarkRange );
-            SCCOL nEndX = aViewData.GetRefEndX();
-            SCROW nEndY = aViewData.GetRefEndY();
-            ScRange aDelRange;
-            if ( aViewData.GetFillMode() == ScFillMode::MATRIX && !(nScFillModeMouseModifier & KEY_MOD1) )
-            {
-                aHelpStr = ScResId( STR_TIP_RESIZEMATRIX );
-                SCCOL nCols = nEndX + 1 - aViewData.GetRefStartX(); // order is right
-                SCROW nRows = nEndY + 1 - aViewData.GetRefStartY();
-                aHelpStr = aHelpStr.replaceFirst("%1", OUString::number(nRows) );
-                aHelpStr = aHelpStr.replaceFirst("%2", OUString::number(nCols) );
-            }
-            else if ( aViewData.GetDelMark( aDelRange ) )
-                aHelpStr = ScResId( STR_QUICKHELP_DELETE );
-            else if ( nEndX != aMarkRange.aEnd.Col() || nEndY != aMarkRange.aEnd.Row() )
-                aHelpStr = pDoc->GetAutoFillPreview( aMarkRange, nEndX, nEndY );
+    if ( !(aViewData.GetRefType() == SC_REFTYPE_FILL && Help::IsQuickHelpEnabled()) )
+        return;
 
-            if (aHelpStr.getLength())
-            {
-                //  depending on direction the upper or lower corner
-                SCCOL nAddX = ( nEndX >= aMarkRange.aEnd.Col() ) ? 1 : 0;
-                SCROW nAddY = ( nEndY >= aMarkRange.aEnd.Row() ) ? 1 : 0;
-                Point aPos = aViewData.GetScrPos( nEndX+nAddX, nEndY+nAddY, aViewData.GetActivePart() );
-                aPos.AdjustX(8 );
-                aPos.AdjustY(4 );
-                aPos = pWin->OutputToScreenPixel( aPos );
-                tools::Rectangle aRect( aPos, aPos );
-                QuickHelpFlags nAlign = QuickHelpFlags::Left|QuickHelpFlags::Top;
-                if (!nTipVisible || nAlign != nTipAlign || aRect != aTipRectangle || sTipString != aHelpStr || sTopParent != pWin)
-                {
-                    HideTip();
-                    nTipVisible = Help::ShowPopover(pWin, aRect, aHelpStr, nAlign);
-                    aTipRectangle = aRect;
-                    nTipAlign = nAlign;
-                    sTipString = aHelpStr;
-                    sTopParent = pWin;
-                }
-            }
-        }
+    vcl::Window* pWin = GetActiveWin();
+    if ( !pWin )
+        return;
+
+    OUString aHelpStr;
+    ScRange aMarkRange;
+    aViewData.GetSimpleArea( aMarkRange );
+    SCCOL nEndX = aViewData.GetRefEndX();
+    SCROW nEndY = aViewData.GetRefEndY();
+    ScRange aDelRange;
+    if ( aViewData.GetFillMode() == ScFillMode::MATRIX && !(nScFillModeMouseModifier & KEY_MOD1) )
+    {
+        aHelpStr = ScResId( STR_TIP_RESIZEMATRIX );
+        SCCOL nCols = nEndX + 1 - aViewData.GetRefStartX(); // order is right
+        SCROW nRows = nEndY + 1 - aViewData.GetRefStartY();
+        aHelpStr = aHelpStr.replaceFirst("%1", OUString::number(nRows) );
+        aHelpStr = aHelpStr.replaceFirst("%2", OUString::number(nCols) );
+    }
+    else if ( aViewData.GetDelMark( aDelRange ) )
+        aHelpStr = ScResId( STR_QUICKHELP_DELETE );
+    else if ( nEndX != aMarkRange.aEnd.Col() || nEndY != aMarkRange.aEnd.Row() )
+        aHelpStr = pDoc->GetAutoFillPreview( aMarkRange, nEndX, nEndY );
+
+    if (!aHelpStr.getLength())
+        return;
+
+    //  depending on direction the upper or lower corner
+    SCCOL nAddX = ( nEndX >= aMarkRange.aEnd.Col() ) ? 1 : 0;
+    SCROW nAddY = ( nEndY >= aMarkRange.aEnd.Row() ) ? 1 : 0;
+    Point aPos = aViewData.GetScrPos( nEndX+nAddX, nEndY+nAddY, aViewData.GetActivePart() );
+    aPos.AdjustX(8 );
+    aPos.AdjustY(4 );
+    aPos = pWin->OutputToScreenPixel( aPos );
+    tools::Rectangle aRect( aPos, aPos );
+    QuickHelpFlags nAlign = QuickHelpFlags::Left|QuickHelpFlags::Top;
+    if (!nTipVisible || nAlign != nTipAlign || aRect != aTipRectangle || sTipString != aHelpStr || sTopParent != pWin)
+    {
+        HideTip();
+        nTipVisible = Help::ShowPopover(pWin, aRect, aHelpStr, nAlign);
+        aTipRectangle = aRect;
+        nTipAlign = nAlign;
+        sTipString = aHelpStr;
+        sTopParent = pWin;
     }
 }
 
@@ -312,33 +312,33 @@ void ScTabView::InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eT
 {
     ScDocument* pDoc = aViewData.GetDocument();
     ScMarkData& rMark = aViewData.GetMarkData();
-    if (!aViewData.IsRefMode())
+    if (aViewData.IsRefMode())
+        return;
+
+    aViewData.SetRefMode( true, eType );
+    aViewData.SetRefStart( nCurX, nCurY, nCurZ );
+    aViewData.SetRefEnd( nCurX, nCurY, nCurZ );
+
+    if (nCurZ == aViewData.GetTabNo())
     {
-        aViewData.SetRefMode( true, eType );
-        aViewData.SetRefStart( nCurX, nCurY, nCurZ );
-        aViewData.SetRefEnd( nCurX, nCurY, nCurZ );
+        SCCOL nStartX = nCurX;
+        SCROW nStartY = nCurY;
+        SCCOL nEndX = nCurX;
+        SCROW nEndY = nCurY;
+        pDoc->ExtendMerge( nStartX, nStartY, nEndX, nEndY, aViewData.GetTabNo() );
 
-        if (nCurZ == aViewData.GetTabNo())
-        {
-            SCCOL nStartX = nCurX;
-            SCROW nStartY = nCurY;
-            SCCOL nEndX = nCurX;
-            SCROW nEndY = nCurY;
-            pDoc->ExtendMerge( nStartX, nStartY, nEndX, nEndY, aViewData.GetTabNo() );
+        //! draw only markings over content!
+        PaintArea( nStartX,nStartY,nEndX,nEndY, ScUpdateMode::Marks );
 
-            //! draw only markings over content!
-            PaintArea( nStartX,nStartY,nEndX,nEndY, ScUpdateMode::Marks );
+        //  SetReference without Merge-Adjustment
+        ScRange aRef( nCurX,nCurY,nCurZ, nCurX,nCurY,nCurZ );
+        SC_MOD()->SetReference( aRef, *pDoc, &rMark );
+    }
 
-            //  SetReference without Merge-Adjustment
-            ScRange aRef( nCurX,nCurY,nCurZ, nCurX,nCurY,nCurZ );
-            SC_MOD()->SetReference( aRef, *pDoc, &rMark );
-        }
-
-        ScInputHandler* pInputHandler = SC_MOD()->GetInputHdl();
-        if (pInputHandler)
-        {
-            pInputHandler->UpdateLokReferenceMarks();
-        }
+    ScInputHandler* pInputHandler = SC_MOD()->GetInputHdl();
+    if (pInputHandler)
+    {
+        pInputHandler->UpdateLokReferenceMarks();
     }
 }
 

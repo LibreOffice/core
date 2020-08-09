@@ -190,71 +190,71 @@ static void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, S
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
     SCTAB nTabCount = pDoc->GetTableCount();
-    if ( nTab+1<nTabCount && pDoc->IsScenario(nTab+1) && !pDoc->IsScenario(nTab) )
+    if ( nTab+1 >= nTabCount || !pDoc->IsScenario(nTab+1) || pDoc->IsScenario(nTab) )
+        return;
+
+    if ( nX1 > 0 ) --nX1;
+    if ( nY1>=2 ) nY1 -= 2;             // Hack: Header row affects two cells
+    else if ( nY1 > 0 ) --nY1;
+    if ( nX2 < pDoc->MaxCol() ) ++nX2;
+    if ( nY2 < pDoc->MaxRow()-1 ) nY2 += 2;     // Hack: Header row affects two cells
+    else if ( nY2 < pDoc->MaxRow() ) ++nY2;
+    ScRange aViewRange( nX1,nY1,nTab, nX2,nY2,nTab );
+
+    //! cache the ranges in table!!!!
+
+    ScMarkData aMarks(pDoc->GetSheetLimits());
+    for (SCTAB i=nTab+1; i<nTabCount && pDoc->IsScenario(i); i++)
+        pDoc->MarkScenario( i, nTab, aMarks, false, ScScenarioFlags::ShowFrame );
+    ScRangeListRef xRanges = new ScRangeList;
+    aMarks.FillRangeListWithMarks( xRanges.get(), false );
+
+    bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+    long nLayoutSign = bLayoutRTL ? -1 : 1;
+
+    for (size_t j = 0, n = xRanges->size(); j < n; ++j)
     {
-        if ( nX1 > 0 ) --nX1;
-        if ( nY1>=2 ) nY1 -= 2;             // Hack: Header row affects two cells
-        else if ( nY1 > 0 ) --nY1;
-        if ( nX2 < pDoc->MaxCol() ) ++nX2;
-        if ( nY2 < pDoc->MaxRow()-1 ) nY2 += 2;     // Hack: Header row affects two cells
-        else if ( nY2 < pDoc->MaxRow() ) ++nY2;
-        ScRange aViewRange( nX1,nY1,nTab, nX2,nY2,nTab );
+        ScRange aRange = (*xRanges)[j];
+        // Always extend scenario frame to merged cells where no new non-covered cells
+        // are framed
+        pDoc->ExtendTotalMerge( aRange );
 
-        //! cache the ranges in table!!!!
+        //! -> Extend repaint when merging !!!
 
-        ScMarkData aMarks(pDoc->GetSheetLimits());
-        for (SCTAB i=nTab+1; i<nTabCount && pDoc->IsScenario(i); i++)
-            pDoc->MarkScenario( i, nTab, aMarks, false, ScScenarioFlags::ShowFrame );
-        ScRangeListRef xRanges = new ScRangeList;
-        aMarks.FillRangeListWithMarks( xRanges.get(), false );
-
-        bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
-        long nLayoutSign = bLayoutRTL ? -1 : 1;
-
-        for (size_t j = 0, n = xRanges->size(); j < n; ++j)
+        if ( aRange.Intersects( aViewRange ) )          //! Space for Text/Button?
         {
-            ScRange aRange = (*xRanges)[j];
-            // Always extend scenario frame to merged cells where no new non-covered cells
-            // are framed
-            pDoc->ExtendTotalMerge( aRange );
+            Point aStartPos = pViewData->GetScrPos(
+                                aRange.aStart.Col(), aRange.aStart.Row(), eWhich, true );
+            Point aEndPos = pViewData->GetScrPos(
+                                aRange.aEnd.Col()+1, aRange.aEnd.Row()+1, eWhich, true );
+            //  on the grid:
+            aStartPos.AdjustX( -nLayoutSign );
+            aStartPos.AdjustY( -1 );
+            aEndPos.AdjustX( -nLayoutSign );
+            aEndPos.AdjustY( -1 );
 
-            //! -> Extend repaint when merging !!!
+            bool bTextBelow = ( aRange.aStart.Row() == 0 );
 
-            if ( aRange.Intersects( aViewRange ) )          //! Space for Text/Button?
-            {
-                Point aStartPos = pViewData->GetScrPos(
-                                    aRange.aStart.Col(), aRange.aStart.Row(), eWhich, true );
-                Point aEndPos = pViewData->GetScrPos(
-                                    aRange.aEnd.Col()+1, aRange.aEnd.Row()+1, eWhich, true );
-                //  on the grid:
-                aStartPos.AdjustX( -nLayoutSign );
-                aStartPos.AdjustY( -1 );
-                aEndPos.AdjustX( -nLayoutSign );
-                aEndPos.AdjustY( -1 );
+            OUString aCurrent;
+            Color aColor( COL_LIGHTGRAY );
+            for (SCTAB nAct=nTab+1; nAct<nTabCount && pDoc->IsScenario(nAct); nAct++)
+                if ( pDoc->IsActiveScenario(nAct) && pDoc->HasScenarioRange(nAct,aRange) )
+                {
+                    OUString aDummyComment;
+                    ScScenarioFlags nDummyFlags;
+                    pDoc->GetName( nAct, aCurrent );
+                    pDoc->GetScenarioData( nAct, aDummyComment, aColor, nDummyFlags );
+                }
 
-                bool bTextBelow = ( aRange.aStart.Row() == 0 );
+            if (aCurrent.isEmpty())
+                aCurrent = ScResId( STR_EMPTYDATA );
 
-                OUString aCurrent;
-                Color aColor( COL_LIGHTGRAY );
-                for (SCTAB nAct=nTab+1; nAct<nTabCount && pDoc->IsScenario(nAct); nAct++)
-                    if ( pDoc->IsActiveScenario(nAct) && pDoc->HasScenarioRange(nAct,aRange) )
-                    {
-                        OUString aDummyComment;
-                        ScScenarioFlags nDummyFlags;
-                        pDoc->GetName( nAct, aCurrent );
-                        pDoc->GetScenarioData( nAct, aDummyComment, aColor, nDummyFlags );
-                    }
+            //! Own text "(None)" instead of "(Empty)" ???
 
-                if (aCurrent.isEmpty())
-                    aCurrent = ScResId( STR_EMPTYDATA );
-
-                //! Own text "(None)" instead of "(Empty)" ???
-
-                lcl_DrawOneFrame( pDev, tools::Rectangle( aStartPos, aEndPos ),
-                                    aCurrent, aColor, bTextBelow,
-                                    pViewData->GetPPTX(), pViewData->GetPPTY(), pViewData->GetZoomY(),
-                                    pDoc, pViewData, bLayoutRTL );
-            }
+            lcl_DrawOneFrame( pDev, tools::Rectangle( aStartPos, aEndPos ),
+                                aCurrent, aColor, bTextBelow,
+                                pViewData->GetPPTX(), pViewData->GetPPTY(), pViewData->GetZoomY(),
+                                pDoc, pViewData, bLayoutRTL );
         }
     }
 }
@@ -1561,219 +1561,219 @@ void ScGridWindow::CheckNeedsRepaint()
 {
     //  called at the end of painting, and from timer after background text width calculation
 
-    if (bNeedsRepaint)
-    {
-        bNeedsRepaint = false;
-        if (aRepaintPixel.IsEmpty())
-            Invalidate();
-        else
-            Invalidate(PixelToLogic(aRepaintPixel));
-        aRepaintPixel = tools::Rectangle();
+    if (!bNeedsRepaint)
+        return;
 
-        // selection function in status bar might also be invalid
-        SfxBindings& rBindings = pViewData->GetBindings();
-        rBindings.Invalidate( SID_STATUS_SUM );
-        rBindings.Invalidate( SID_ATTR_SIZE );
-        rBindings.Invalidate( SID_TABLE_CELL );
-    }
+    bNeedsRepaint = false;
+    if (aRepaintPixel.IsEmpty())
+        Invalidate();
+    else
+        Invalidate(PixelToLogic(aRepaintPixel));
+    aRepaintPixel = tools::Rectangle();
+
+    // selection function in status bar might also be invalid
+    SfxBindings& rBindings = pViewData->GetBindings();
+    rBindings.Invalidate( SID_STATUS_SUM );
+    rBindings.Invalidate( SID_ATTR_SIZE );
+    rBindings.Invalidate( SID_TABLE_CELL );
 }
 
 void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, vcl::RenderContext& rRenderContext)
 {
     ScPageBreakData* pPageData = pViewData->GetView()->GetPageBreakData();
-    if (pPageData)
+    if (!pPageData)
+        return;
+
+    ScDocument* pDoc = pViewData->GetDocument();
+    SCTAB nTab = pViewData->GetTabNo();
+    Size aWinSize = GetOutputSizePixel();
+    const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
+    Color aManual( rColorCfg.GetColorValue(svtools::CALCPAGEBREAKMANUAL).nColor );
+    Color aAutomatic( rColorCfg.GetColorValue(svtools::CALCPAGEBREAK).nColor );
+
+    OUString aPageStr = ScResId( STR_PGNUM );
+    if ( nPageScript == SvtScriptType::NONE )
     {
-        ScDocument* pDoc = pViewData->GetDocument();
-        SCTAB nTab = pViewData->GetTabNo();
-        Size aWinSize = GetOutputSizePixel();
-        const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
-        Color aManual( rColorCfg.GetColorValue(svtools::CALCPAGEBREAKMANUAL).nColor );
-        Color aAutomatic( rColorCfg.GetColorValue(svtools::CALCPAGEBREAK).nColor );
+        //  get script type of translated "Page" string only once
+        nPageScript = pDoc->GetStringScriptType( aPageStr );
+        if (nPageScript == SvtScriptType::NONE)
+            nPageScript = ScGlobal::GetDefaultScriptType();
+    }
 
-        OUString aPageStr = ScResId( STR_PGNUM );
-        if ( nPageScript == SvtScriptType::NONE )
-        {
-            //  get script type of translated "Page" string only once
-            nPageScript = pDoc->GetStringScriptType( aPageStr );
-            if (nPageScript == SvtScriptType::NONE)
-                nPageScript = ScGlobal::GetDefaultScriptType();
-        }
+    vcl::Font aFont;
+    std::unique_ptr<ScEditEngineDefaulter> pEditEng;
+    const ScPatternAttr& rDefPattern = pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN);
+    if ( nPageScript == SvtScriptType::LATIN )
+    {
+        //  use single font and call DrawText directly
+        rDefPattern.GetFont( aFont, SC_AUTOCOL_BLACK );
+        aFont.SetColor( COL_LIGHTGRAY );
+        //  font size is set as needed
+    }
+    else
+    {
+        //  use EditEngine to draw mixed-script string
+        pEditEng.reset(new ScEditEngineDefaulter( EditEngine::CreatePool(), true ));
+        pEditEng->SetRefMapMode(rRenderContext.GetMapMode());
+        auto pEditDefaults = std::make_unique<SfxItemSet>( pEditEng->GetEmptyItemSet() );
+        rDefPattern.FillEditItemSet( pEditDefaults.get() );
+        pEditDefaults->Put( SvxColorItem( COL_LIGHTGRAY, EE_CHAR_COLOR ) );
+        pEditEng->SetDefaults( std::move(pEditDefaults) );
+    }
 
-        vcl::Font aFont;
-        std::unique_ptr<ScEditEngineDefaulter> pEditEng;
-        const ScPatternAttr& rDefPattern = pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN);
-        if ( nPageScript == SvtScriptType::LATIN )
+    sal_uInt16 nCount = sal::static_int_cast<sal_uInt16>( pPageData->GetCount() );
+    for (sal_uInt16 nPos=0; nPos<nCount; nPos++)
+    {
+        ScPrintRangeData& rData = pPageData->GetData(nPos);
+        ScRange aRange = rData.GetPrintRange();
+        if ( aRange.aStart.Col() <= nX2+1  && aRange.aEnd.Col()+1 >= nX1 &&
+             aRange.aStart.Row() <= nY2+1 && aRange.aEnd.Row()+1 >= nY1 )
         {
-            //  use single font and call DrawText directly
-            rDefPattern.GetFont( aFont, SC_AUTOCOL_BLACK );
-            aFont.SetColor( COL_LIGHTGRAY );
-            //  font size is set as needed
-        }
-        else
-        {
-            //  use EditEngine to draw mixed-script string
-            pEditEng.reset(new ScEditEngineDefaulter( EditEngine::CreatePool(), true ));
-            pEditEng->SetRefMapMode(rRenderContext.GetMapMode());
-            auto pEditDefaults = std::make_unique<SfxItemSet>( pEditEng->GetEmptyItemSet() );
-            rDefPattern.FillEditItemSet( pEditDefaults.get() );
-            pEditDefaults->Put( SvxColorItem( COL_LIGHTGRAY, EE_CHAR_COLOR ) );
-            pEditEng->SetDefaults( std::move(pEditDefaults) );
-        }
+            // 3 pixel frame around the print area
+            //  (middle pixel on the grid lines)
 
-        sal_uInt16 nCount = sal::static_int_cast<sal_uInt16>( pPageData->GetCount() );
-        for (sal_uInt16 nPos=0; nPos<nCount; nPos++)
-        {
-            ScPrintRangeData& rData = pPageData->GetData(nPos);
-            ScRange aRange = rData.GetPrintRange();
-            if ( aRange.aStart.Col() <= nX2+1  && aRange.aEnd.Col()+1 >= nX1 &&
-                 aRange.aStart.Row() <= nY2+1 && aRange.aEnd.Row()+1 >= nY1 )
+            rRenderContext.SetLineColor();
+            if (rData.IsAutomatic())
+                rRenderContext.SetFillColor( aAutomatic );
+            else
+                rRenderContext.SetFillColor( aManual );
+
+            Point aStart = pViewData->GetScrPos(
+                                aRange.aStart.Col(), aRange.aStart.Row(), eWhich, true );
+            Point aEnd = pViewData->GetScrPos(
+                                aRange.aEnd.Col() + 1, aRange.aEnd.Row() + 1, eWhich, true );
+            aStart.AdjustX( -2 );
+            aStart.AdjustY( -2 );
+
+            // Prevent overflows:
+            if ( aStart.X() < -10 ) aStart.setX( -10 );
+            if ( aStart.Y() < -10 ) aStart.setY( -10 );
+            if ( aEnd.X() > aWinSize.Width() + 10 )
+                aEnd.setX( aWinSize.Width() + 10 );
+            if ( aEnd.Y() > aWinSize.Height() + 10 )
+                aEnd.setY( aWinSize.Height() + 10 );
+
+            rRenderContext.DrawRect( tools::Rectangle( aStart, Point(aEnd.X(),aStart.Y()+2) ) );
+            rRenderContext.DrawRect( tools::Rectangle( aStart, Point(aStart.X()+2,aEnd.Y()) ) );
+            rRenderContext.DrawRect( tools::Rectangle( Point(aStart.X(),aEnd.Y()-2), aEnd ) );
+            rRenderContext.DrawRect( tools::Rectangle( Point(aEnd.X()-2,aStart.Y()), aEnd ) );
+
+            // Page breaks
+            //! Display differently (dashed ????)
+
+            size_t nColBreaks = rData.GetPagesX();
+            const SCCOL* pColEnd = rData.GetPageEndX();
+            size_t nColPos;
+            for (nColPos=0; nColPos+1<nColBreaks; nColPos++)
             {
-                // 3 pixel frame around the print area
-                //  (middle pixel on the grid lines)
-
-                rRenderContext.SetLineColor();
-                if (rData.IsAutomatic())
-                    rRenderContext.SetFillColor( aAutomatic );
-                else
-                    rRenderContext.SetFillColor( aManual );
-
-                Point aStart = pViewData->GetScrPos(
-                                    aRange.aStart.Col(), aRange.aStart.Row(), eWhich, true );
-                Point aEnd = pViewData->GetScrPos(
-                                    aRange.aEnd.Col() + 1, aRange.aEnd.Row() + 1, eWhich, true );
-                aStart.AdjustX( -2 );
-                aStart.AdjustY( -2 );
-
-                // Prevent overflows:
-                if ( aStart.X() < -10 ) aStart.setX( -10 );
-                if ( aStart.Y() < -10 ) aStart.setY( -10 );
-                if ( aEnd.X() > aWinSize.Width() + 10 )
-                    aEnd.setX( aWinSize.Width() + 10 );
-                if ( aEnd.Y() > aWinSize.Height() + 10 )
-                    aEnd.setY( aWinSize.Height() + 10 );
-
-                rRenderContext.DrawRect( tools::Rectangle( aStart, Point(aEnd.X(),aStart.Y()+2) ) );
-                rRenderContext.DrawRect( tools::Rectangle( aStart, Point(aStart.X()+2,aEnd.Y()) ) );
-                rRenderContext.DrawRect( tools::Rectangle( Point(aStart.X(),aEnd.Y()-2), aEnd ) );
-                rRenderContext.DrawRect( tools::Rectangle( Point(aEnd.X()-2,aStart.Y()), aEnd ) );
-
-                // Page breaks
-                //! Display differently (dashed ????)
-
-                size_t nColBreaks = rData.GetPagesX();
-                const SCCOL* pColEnd = rData.GetPageEndX();
-                size_t nColPos;
-                for (nColPos=0; nColPos+1<nColBreaks; nColPos++)
+                SCCOL nBreak = pColEnd[nColPos]+1;
+                if ( nBreak >= nX1 && nBreak <= nX2+1 )
                 {
-                    SCCOL nBreak = pColEnd[nColPos]+1;
-                    if ( nBreak >= nX1 && nBreak <= nX2+1 )
-                    {
-                        //! Search for hidden
-                        if (pDoc->HasColBreak(nBreak, nTab) & ScBreakType::Manual)
-                            rRenderContext.SetFillColor( aManual );
-                        else
-                            rRenderContext.SetFillColor( aAutomatic );
-                        Point aBreak = pViewData->GetScrPos(
-                                        nBreak, aRange.aStart.Row(), eWhich, true );
-                        rRenderContext.DrawRect( tools::Rectangle( aBreak.X()-1, aStart.Y(), aBreak.X(), aEnd.Y() ) );
-                    }
+                    //! Search for hidden
+                    if (pDoc->HasColBreak(nBreak, nTab) & ScBreakType::Manual)
+                        rRenderContext.SetFillColor( aManual );
+                    else
+                        rRenderContext.SetFillColor( aAutomatic );
+                    Point aBreak = pViewData->GetScrPos(
+                                    nBreak, aRange.aStart.Row(), eWhich, true );
+                    rRenderContext.DrawRect( tools::Rectangle( aBreak.X()-1, aStart.Y(), aBreak.X(), aEnd.Y() ) );
                 }
+            }
 
-                size_t nRowBreaks = rData.GetPagesY();
-                const SCROW* pRowEnd = rData.GetPageEndY();
-                size_t nRowPos;
-                for (nRowPos=0; nRowPos+1<nRowBreaks; nRowPos++)
+            size_t nRowBreaks = rData.GetPagesY();
+            const SCROW* pRowEnd = rData.GetPageEndY();
+            size_t nRowPos;
+            for (nRowPos=0; nRowPos+1<nRowBreaks; nRowPos++)
+            {
+                SCROW nBreak = pRowEnd[nRowPos]+1;
+                if ( nBreak >= nY1 && nBreak <= nY2+1 )
                 {
-                    SCROW nBreak = pRowEnd[nRowPos]+1;
-                    if ( nBreak >= nY1 && nBreak <= nY2+1 )
-                    {
-                        //! Search for hidden
-                        if (pDoc->HasRowBreak(nBreak, nTab) & ScBreakType::Manual)
-                            rRenderContext.SetFillColor( aManual );
-                        else
-                            rRenderContext.SetFillColor( aAutomatic );
-                        Point aBreak = pViewData->GetScrPos(
-                                        aRange.aStart.Col(), nBreak, eWhich, true );
-                        rRenderContext.DrawRect( tools::Rectangle( aStart.X(), aBreak.Y()-1, aEnd.X(), aBreak.Y() ) );
-                    }
+                    //! Search for hidden
+                    if (pDoc->HasRowBreak(nBreak, nTab) & ScBreakType::Manual)
+                        rRenderContext.SetFillColor( aManual );
+                    else
+                        rRenderContext.SetFillColor( aAutomatic );
+                    Point aBreak = pViewData->GetScrPos(
+                                    aRange.aStart.Col(), nBreak, eWhich, true );
+                    rRenderContext.DrawRect( tools::Rectangle( aStart.X(), aBreak.Y()-1, aEnd.X(), aBreak.Y() ) );
                 }
+            }
 
-                // Page numbers
+            // Page numbers
 
-                SCROW nPrStartY = aRange.aStart.Row();
-                for (nRowPos=0; nRowPos<nRowBreaks; nRowPos++)
+            SCROW nPrStartY = aRange.aStart.Row();
+            for (nRowPos=0; nRowPos<nRowBreaks; nRowPos++)
+            {
+                SCROW nPrEndY = pRowEnd[nRowPos];
+                if ( nPrEndY >= nY1 && nPrStartY <= nY2 )
                 {
-                    SCROW nPrEndY = pRowEnd[nRowPos];
-                    if ( nPrEndY >= nY1 && nPrStartY <= nY2 )
+                    SCCOL nPrStartX = aRange.aStart.Col();
+                    for (nColPos=0; nColPos<nColBreaks; nColPos++)
                     {
-                        SCCOL nPrStartX = aRange.aStart.Col();
-                        for (nColPos=0; nColPos<nColBreaks; nColPos++)
+                        SCCOL nPrEndX = pColEnd[nColPos];
+                        if ( nPrEndX >= nX1 && nPrStartX <= nX2 )
                         {
-                            SCCOL nPrEndX = pColEnd[nColPos];
-                            if ( nPrEndX >= nX1 && nPrStartX <= nX2 )
+                            Point aPageStart = pViewData->GetScrPos(
+                                                    nPrStartX, nPrStartY, eWhich, true );
+                            Point aPageEnd = pViewData->GetScrPos(
+                                                    nPrEndX+1,nPrEndY+1, eWhich, true );
+
+                            long nPageNo = rData.GetFirstPage();
+                            if ( rData.IsTopDown() )
+                                nPageNo += static_cast<long>(nColPos)*nRowBreaks+nRowPos;
+                            else
+                                nPageNo += static_cast<long>(nRowPos)*nColBreaks+nColPos;
+
+                            OUString aThisPageStr = aPageStr.replaceFirst("%1", OUString::number(nPageNo));
+
+                            if ( pEditEng )
                             {
-                                Point aPageStart = pViewData->GetScrPos(
-                                                        nPrStartX, nPrStartY, eWhich, true );
-                                Point aPageEnd = pViewData->GetScrPos(
-                                                        nPrEndX+1,nPrEndY+1, eWhich, true );
+                                //  find right font size with EditEngine
+                                long nHeight = 100;
+                                pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT ) );
+                                pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
+                                pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CTL ) );
+                                pEditEng->SetTextCurrentDefaults( aThisPageStr );
+                                Size aSize100( pEditEng->CalcTextWidth(), pEditEng->GetTextHeight() );
 
-                                long nPageNo = rData.GetFirstPage();
-                                if ( rData.IsTopDown() )
-                                    nPageNo += static_cast<long>(nColPos)*nRowBreaks+nRowPos;
-                                else
-                                    nPageNo += static_cast<long>(nRowPos)*nColBreaks+nColPos;
+                                //  40% of width or 60% of height
+                                long nSizeX = 40 * ( aPageEnd.X() - aPageStart.X() ) / aSize100.Width();
+                                long nSizeY = 60 * ( aPageEnd.Y() - aPageStart.Y() ) / aSize100.Height();
+                                nHeight = std::min(nSizeX,nSizeY);
+                                pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT ) );
+                                pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
+                                pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CTL ) );
 
-                                OUString aThisPageStr = aPageStr.replaceFirst("%1", OUString::number(nPageNo));
-
-                                if ( pEditEng )
-                                {
-                                    //  find right font size with EditEngine
-                                    long nHeight = 100;
-                                    pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT ) );
-                                    pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
-                                    pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CTL ) );
-                                    pEditEng->SetTextCurrentDefaults( aThisPageStr );
-                                    Size aSize100( pEditEng->CalcTextWidth(), pEditEng->GetTextHeight() );
-
-                                    //  40% of width or 60% of height
-                                    long nSizeX = 40 * ( aPageEnd.X() - aPageStart.X() ) / aSize100.Width();
-                                    long nSizeY = 60 * ( aPageEnd.Y() - aPageStart.Y() ) / aSize100.Height();
-                                    nHeight = std::min(nSizeX,nSizeY);
-                                    pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT ) );
-                                    pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
-                                    pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CTL ) );
-
-                                    //  centered output with EditEngine
-                                    Size aTextSize( pEditEng->CalcTextWidth(), pEditEng->GetTextHeight() );
-                                    Point aPos( (aPageStart.X()+aPageEnd.X()-aTextSize.Width())/2,
-                                                (aPageStart.Y()+aPageEnd.Y()-aTextSize.Height())/2 );
-                                    pEditEng->Draw( &rRenderContext, aPos );
-                                }
-                                else
-                                {
-                                    //  find right font size for DrawText
-                                    aFont.SetFontSize( Size( 0,100 ) );
-                                    rRenderContext.SetFont( aFont );
-                                    Size aSize100(rRenderContext.GetTextWidth( aThisPageStr ), rRenderContext.GetTextHeight() );
-
-                                    //  40% of width or 60% of height
-                                    long nSizeX = 40 * ( aPageEnd.X() - aPageStart.X() ) / aSize100.Width();
-                                    long nSizeY = 60 * ( aPageEnd.Y() - aPageStart.Y() ) / aSize100.Height();
-                                    aFont.SetFontSize( Size( 0,std::min(nSizeX,nSizeY) ) );
-                                    rRenderContext.SetFont( aFont );
-
-                                    //  centered output with DrawText
-                                    Size aTextSize(rRenderContext.GetTextWidth( aThisPageStr ), rRenderContext.GetTextHeight() );
-                                    Point aPos( (aPageStart.X()+aPageEnd.X()-aTextSize.Width())/2,
-                                                (aPageStart.Y()+aPageEnd.Y()-aTextSize.Height())/2 );
-                                    rRenderContext.DrawText( aPos, aThisPageStr );
-                                }
+                                //  centered output with EditEngine
+                                Size aTextSize( pEditEng->CalcTextWidth(), pEditEng->GetTextHeight() );
+                                Point aPos( (aPageStart.X()+aPageEnd.X()-aTextSize.Width())/2,
+                                            (aPageStart.Y()+aPageEnd.Y()-aTextSize.Height())/2 );
+                                pEditEng->Draw( &rRenderContext, aPos );
                             }
-                            nPrStartX = nPrEndX + 1;
+                            else
+                            {
+                                //  find right font size for DrawText
+                                aFont.SetFontSize( Size( 0,100 ) );
+                                rRenderContext.SetFont( aFont );
+                                Size aSize100(rRenderContext.GetTextWidth( aThisPageStr ), rRenderContext.GetTextHeight() );
+
+                                //  40% of width or 60% of height
+                                long nSizeX = 40 * ( aPageEnd.X() - aPageStart.X() ) / aSize100.Width();
+                                long nSizeY = 60 * ( aPageEnd.Y() - aPageStart.Y() ) / aSize100.Height();
+                                aFont.SetFontSize( Size( 0,std::min(nSizeX,nSizeY) ) );
+                                rRenderContext.SetFont( aFont );
+
+                                //  centered output with DrawText
+                                Size aTextSize(rRenderContext.GetTextWidth( aThisPageStr ), rRenderContext.GetTextHeight() );
+                                Point aPos( (aPageStart.X()+aPageEnd.X()-aTextSize.Width())/2,
+                                            (aPageStart.Y()+aPageEnd.Y()-aTextSize.Height())/2 );
+                                rRenderContext.DrawText( aPos, aThisPageStr );
+                            }
                         }
+                        nPrStartX = nPrEndX + 1;
                     }
-                    nPrStartY = nPrEndY + 1;
                 }
+                nPrStartY = nPrEndY + 1;
             }
         }
     }
@@ -2229,42 +2229,42 @@ void ScGridWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged(rDCEvt);
 
-    if ( (rDCEvt.GetType() == DataChangedEventType::PRINTER) ||
+    if ( !((rDCEvt.GetType() == DataChangedEventType::PRINTER) ||
          (rDCEvt.GetType() == DataChangedEventType::DISPLAY) ||
          (rDCEvt.GetType() == DataChangedEventType::FONTS) ||
          (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
+          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))) )
+        return;
+
+    if ( rDCEvt.GetType() == DataChangedEventType::FONTS && eWhich == pViewData->GetActivePart() )
+        pViewData->GetDocShell()->UpdateFontList();
+
+    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
+         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
-        if ( rDCEvt.GetType() == DataChangedEventType::FONTS && eWhich == pViewData->GetActivePart() )
-            pViewData->GetDocShell()->UpdateFontList();
-
-        if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-             (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
+        if ( eWhich == pViewData->GetActivePart() )     // only once for the view
         {
-            if ( eWhich == pViewData->GetActivePart() )     // only once for the view
+            ScTabView* pView = pViewData->GetView();
+
+            pView->RecalcPPT();
+
+            //  RepeatResize in case scroll bar sizes have changed
+            pView->RepeatResize();
+            pView->UpdateAllOverlays();
+
+            //  invalidate cell attribs in input handler, in case the
+            //  EditEngine BackgroundColor has to be changed
+            if ( pViewData->IsActive() )
             {
-                ScTabView* pView = pViewData->GetView();
-
-                pView->RecalcPPT();
-
-                //  RepeatResize in case scroll bar sizes have changed
-                pView->RepeatResize();
-                pView->UpdateAllOverlays();
-
-                //  invalidate cell attribs in input handler, in case the
-                //  EditEngine BackgroundColor has to be changed
-                if ( pViewData->IsActive() )
-                {
-                    ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
-                    if (pHdl)
-                        pHdl->ForgetLastPattern();
-                }
+                ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+                if (pHdl)
+                    pHdl->ForgetLastPattern();
             }
         }
-
-        Invalidate();
     }
+
+    Invalidate();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

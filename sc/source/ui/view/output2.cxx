@@ -2550,25 +2550,25 @@ void ScOutputData::DrawEditParam::calcStartPosForVertical(
     if (mbPixelToLogic)
         rLogicStart = pRefDevice->PixelToLogic(rLogicStart);
 
-    if (mbBreak)
-    {
-        // vertical adjustment is within the EditEngine
-        if (mbPixelToLogic)
-            rLogicStart.AdjustY(pRefDevice->PixelToLogic(Size(0,nTopM)).Height() );
-        else
-            rLogicStart.AdjustY(nTopM );
+    if (!mbBreak)
+        return;
 
-        switch (meHorJustResult)
-        {
-            case SvxCellHorJustify::Center:
-                rLogicStart.AdjustX((nCellWidth - nEngineWidth) / 2 );
-            break;
-            case SvxCellHorJustify::Right:
-                rLogicStart.AdjustX(nCellWidth - nEngineWidth );
-            break;
-            default:
-                ; // do nothing
-        }
+    // vertical adjustment is within the EditEngine
+    if (mbPixelToLogic)
+        rLogicStart.AdjustY(pRefDevice->PixelToLogic(Size(0,nTopM)).Height() );
+    else
+        rLogicStart.AdjustY(nTopM );
+
+    switch (meHorJustResult)
+    {
+        case SvxCellHorJustify::Center:
+            rLogicStart.AdjustX((nCellWidth - nEngineWidth) / 2 );
+        break;
+        case SvxCellHorJustify::Right:
+            rLogicStart.AdjustX(nCellWidth - nEngineWidth );
+        break;
+        default:
+            ; // do nothing
     }
 }
 
@@ -2759,20 +2759,20 @@ public:
                         const VclPtr<OutputDevice>& pDev, bool bMetaFile )
         :mbMetaFile(bMetaFile)
     {
-        if (bClip || bSimClip)
+        if (!(bClip || bSimClip))
+            return;
+
+        maRect = rRect;
+        if (bClip)  // for bSimClip only initialize aClipRect
         {
-            maRect = rRect;
-            if (bClip)  // for bSimClip only initialize aClipRect
+            mpDev.reset(pDev);
+            if (mbMetaFile)
             {
-                mpDev.reset(pDev);
-                if (mbMetaFile)
-                {
-                    mpDev->Push();
-                    mpDev->IntersectClipRegion(maRect);
-                }
-                else
-                    mpDev->SetClipRegion(vcl::Region(maRect));
+                mpDev->Push();
+                mpDev->IntersectClipRegion(maRect);
             }
+            else
+                mpDev->SetClipRegion(vcl::Region(maRect));
         }
     }
 
@@ -3165,27 +3165,27 @@ void ScOutputData::ShowClipMarks( DrawEditParam& rParam, long nEngineHeight, con
     //  with the default right position of the text.
     //  Only with automatic line breaks, to avoid having to find
     //  the cells with the horizontal end of the text again.
-    if ( nEngineHeight - aCellSize.Height() > 100 &&
+    if ( !(nEngineHeight - aCellSize.Height() > 100 &&
             rParam.mbBreak && bMarkClipped &&
-            ( rParam.mpEngine->GetParagraphCount() > 1 || rParam.mpEngine->GetLineCount(0) > 1 ) )
+            ( rParam.mpEngine->GetParagraphCount() > 1 || rParam.mpEngine->GetLineCount(0) > 1 )) )
+        return;
+
+    CellInfo* pClipMarkCell = nullptr;
+    if ( bMerged )
     {
-        CellInfo* pClipMarkCell = nullptr;
-        if ( bMerged )
-        {
-            //  anywhere in the merged area...
-            SCCOL nClipX = ( rParam.mnX < nX1 ) ? nX1 : rParam.mnX;
-            pClipMarkCell = &pRowInfo[(rParam.mnArrY != 0) ? rParam.mnArrY : 1].pCellInfo[nClipX+1];
-        }
-        else
-            pClipMarkCell = &rParam.mpThisRowInfo->pCellInfo[rParam.mnX+1];
-
-        pClipMarkCell->nClipMark |= ScClipMark::Right;      //! also allow left?
-        bAnyClipped = true;
-
-        const long nMarkPixel = static_cast<long>( SC_CLIPMARK_SIZE * mnPPTX );
-        if ( aAreaParam.maClipRect.Right() - nMarkPixel > aAreaParam.maClipRect.Left() )
-            aAreaParam.maClipRect.AdjustRight( -nMarkPixel );
+        //  anywhere in the merged area...
+        SCCOL nClipX = ( rParam.mnX < nX1 ) ? nX1 : rParam.mnX;
+        pClipMarkCell = &pRowInfo[(rParam.mnArrY != 0) ? rParam.mnArrY : 1].pCellInfo[nClipX+1];
     }
+    else
+        pClipMarkCell = &rParam.mpThisRowInfo->pCellInfo[rParam.mnX+1];
+
+    pClipMarkCell->nClipMark |= ScClipMark::Right;      //! also allow left?
+    bAnyClipped = true;
+
+    const long nMarkPixel = static_cast<long>( SC_CLIPMARK_SIZE * mnPPTX );
+    if ( aAreaParam.maClipRect.Right() - nMarkPixel > aAreaParam.maClipRect.Left() )
+        aAreaParam.maClipRect.AdjustRight( -nMarkPixel );
 }
 
 ClearableClipRegionPtr ScOutputData::Clip( DrawEditParam& rParam, const Size& aCellSize,
