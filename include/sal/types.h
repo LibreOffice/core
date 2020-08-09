@@ -130,11 +130,14 @@ typedef unsigned char sal_uChar;
 #if defined LIBO_INTERNAL_ONLY && defined __cplusplus
     #define SAL_UNICODE_NOTEQUAL_WCHAR_T
     typedef char16_t sal_Unicode;
+    typedef char32_t sal_Unicode32;
 #elif defined(_WIN32)
     typedef wchar_t sal_Unicode;
+    typedef std::char32 sal_Unicode32;
 #else
     #define SAL_UNICODE_NOTEQUAL_WCHAR_T
     typedef sal_uInt16 sal_Unicode;
+    typedef sal_uInt32 sal_Unicode32;
 #endif
 
 typedef void *                   sal_Handle;
