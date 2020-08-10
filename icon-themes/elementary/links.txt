@@ -1988,7 +1988,6 @@ res/lx03226.png res/odm_32_8.png
 res/lx03227.png res/odg_32_8.png
 res/lx03228.png res/otg_32_8.png
 res/lx03239.png cmd/32/dbrelationdesign.png
-res/lx03242.png res/mainapp_32_8.png
 res/lx03243.png res/lx03123.png
 res/lx03245.png res/odb_24_8.png
 res/lx03245_32.png res/odb_32_8.png
@@ -2081,7 +2080,6 @@ res/sx03226.png res/odm_16_8.png
 res/sx03227.png res/odg_16_8.png
 res/sx03228.png res/otg_16_8.png
 res/sx03239.png cmd/sc_dbrelationdesign.png
-res/sx03242.png res/mainapp_16_8.png
 res/sx03243.png res/sx03123.png
 res/sx03245.png res/odb_16_8.png
 res/sx03246.png res/odg_16_8.png
