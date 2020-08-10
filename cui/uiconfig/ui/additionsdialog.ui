@@ -93,15 +93,11 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkSearchEntry" id="entrySearch">
-                    <property name="width_request">275</property>
+                  <object class="GtkEntry" id="entrySearch">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="margin_bottom">5</property>
-                    <property name="max_length">150</property>
-                    <property name="primary_icon_name">edit-find-symbolic</property>
-                    <property name="primary_icon_activatable">False</property>
-                    <property name="primary_icon_sensitive">False</property>
+                    <property name="max_length">50</property>
+                    <property name="max_width_chars">50</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="entrySearch-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="additionsdialog|searchEntry">searchEntry</property>
