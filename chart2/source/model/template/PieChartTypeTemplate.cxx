@@ -32,6 +32,7 @@
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <officecfg/Office/Compatibility.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <rtl/math.hxx>
@@ -245,7 +246,12 @@ void PieChartTypeTemplate::adaptScales(
             if( xAxis.is() )
             {
                 chart2::ScaleData aScaleData( xAxis->getScaleData() );
-                aScaleData.Orientation = chart2::AxisOrientation_REVERSE;
+
+                //tdf#123218 Don't reverse the orientation in OOXML-heavy environments
+                if( officecfg::Office::Compatibility::View::ReverseXAxisOrientationDoughnutChart::get() )
+                    aScaleData.Orientation = chart2::AxisOrientation_REVERSE;
+                else
+                    aScaleData.Orientation = chart2::AxisOrientation_MATHEMATICAL;
                 xAxis->setScaleData( aScaleData );
             }
         }
@@ -316,15 +322,20 @@ sal_Bool SAL_CALL PieChartTypeTemplate::matchesTemplate(
         {
             double fOffset=0.0;
             bool bAllOffsetsEqual = true;
+            sal_Int32 nOuterSeriesIndex = 0;
 
             std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
                 DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
+
+            //tdf#108067 The outer series is the last series in OOXML-heavy environments
+            if( !officecfg::Office::Compatibility::View::ReverseXAxisOrientationDoughnutChart::get() )
+                nOuterSeriesIndex = aSeriesVec.size() - 1;
 
             //check offset of outer series
             if( !aSeriesVec.empty() )
             {
                 //@todo in future this will depend on Orientation of the radius axis scale
-                Reference< chart2::XDataSeries > xSeries( aSeriesVec[0] );
+                Reference< chart2::XDataSeries > xSeries( aSeriesVec[nOuterSeriesIndex] );
                 Reference< beans::XPropertySet > xProp( xSeries, uno::UNO_QUERY_THROW );
                 xProp->getPropertyValue( "Offset") >>= fOffset;
 
@@ -450,8 +461,14 @@ void SAL_CALL PieChartTypeTemplate::applyStyle(
         uno::Reference< beans::XPropertySet > xProp( xSeries, uno::UNO_QUERY_THROW );
 
         bool bTemplateUsesRings = false;
+        sal_Int32 nOuterSeriesIndex = 0;
         getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS ) >>= bTemplateUsesRings;
-        if( nSeriesIndex == 0 ) //@todo in future this will depend on Orientation of the radius axis scale
+
+        //tdf#108067 The outer series is the last series in OOXML-heavy environments
+        if( !officecfg::Office::Compatibility::View::ReverseXAxisOrientationDoughnutChart::get() )
+            nOuterSeriesIndex = nSeriesCount - 1;
+
+        if( nSeriesIndex == nOuterSeriesIndex ) //@todo in future this will depend on Orientation of the radius axis scale
         {
             const OUString aOffsetPropName( "Offset" );
             // get offset mode
