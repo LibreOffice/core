@@ -294,6 +294,7 @@ sub merge_mergemodules_into_msi_database
                 $onemergemodulehash{'filenumber'} = $filecounter;
                 $onemergemodulehash{'componentnames'} = \%componentnames;
                 $onemergemodulehash{'componentcondition'} = $mergemodule->{'ComponentCondition'};
+                $onemergemodulehash{'attributes_add'} = $mergemodule->{'Attributes_Add'};
                 $onemergemodulehash{'cabfilename'} = $cabfilename;
                 $onemergemodulehash{'feature'} = $mergemodule->{'Feature'};
                 $onemergemodulehash{'rootdir'} = $mergemodule->{'RootDir'};
@@ -405,7 +406,7 @@ sub merge_mergemodules_into_msi_database
             my $workingtables = "File Media Directory FeatureComponents"; # required tables
             # Optional tables can be added now
             if ( $mergemodulehash->{'hasmsiassemblies'} ) { $workingtables = $workingtables . " MsiAssembly"; }
-            if ( $mergemodulehash->{'componentcondition'} ) { $workingtables = $workingtables . " Component"; }
+            if ( ( $mergemodulehash->{'componentcondition'} ) || ( $mergemodulehash->{'attributes_add'} ) ) { $workingtables = $workingtables . " Component"; }
 
             # Table "Feature" has to be exported, but it is not necessary to import it.
             if ( $^O =~ /cygwin/i ) {
@@ -462,7 +463,7 @@ sub merge_mergemodules_into_msi_database
                 change_msiassembly_table($mergemodulehash, $workdir);
             }
 
-            if ( $mergemodulehash->{'componentcondition'} )
+            if ( ( $mergemodulehash->{'componentcondition'} ) || ( $mergemodulehash->{'attributes_add'} ) )
             {
                 installer::logger::include_timestamp_into_logfile("\nPerformance Info: Changing Component table");
                 change_component_table($mergemodulehash, $workdir);
@@ -1368,7 +1369,7 @@ sub change_featurecomponent_table
 }
 
 ###############################################################################
-# In the components table, the conditions of merge modules should be updated
+# In the components table, the conditions or attributes of merge modules should be updated
 ###############################################################################
 
 sub change_component_table
@@ -1388,25 +1389,41 @@ sub change_component_table
         my $component;
         foreach $component ( keys %{$mergemodulehash->{'componentnames'}} )
         {
-            if ( ${$filecontent}[$i] =~ /^\s*$component/)
+            if ( my ( $comp_, $compid_, $dir_, $attr_, $cond_, $keyp_ ) = ${$filecontent}[$i] =~ /^\s*($component)\t(.*?)\t(.+?)\t(.+?)\t(.*?)\t(.*?)\s*$/)
             {
-                if ( ${$filecontent}[$i] =~ /^\s*(.+?)\t(.*?)\t(.+?)\t(.+?)\t(.*?)\t(.*?)\s*$/ )
+                my $newattr_ = ( $attr_ =~ /^\s*0x/ ) ? hex($attr_) : $attr_;
+                if ( $mergemodulehash->{'attributes_add'} )
                 {
-                    $infoline = "Adding condition ($mergemodulehash->{'componentcondition'}) from scp2 to component $1\n";
+                    $infoline = "Adding attribute(s) ($mergemodulehash->{'attributes_add'}) from scp2 to component $comp_\n";
                     push( @installer::globals::logfileinfo, $infoline);
-                    if ($5)
+                    if ( $mergemodulehash->{'attributes_add'} =~ /^\s*0x/ )
                     {
-                        $infoline = "Old condition: $5\nNew condition: ($5) AND ($mergemodulehash->{'componentcondition'})\n";
-                        push( @installer::globals::logfileinfo, $infoline);
-                        ${$filecontent}[$i] = "$1\t$2\t$3\t$4\t($5) AND ($mergemodulehash->{'componentcondition'})\t$6\n";
+                        $newattr_ = $newattr_ | hex($mergemodulehash->{'attributes_add'});
                     }
                     else
                     {
-                        $infoline = "Old condition: <none>\nNew condition: $mergemodulehash->{'componentcondition'}\n";
-                        push( @installer::globals::logfileinfo, $infoline);
-                        ${$filecontent}[$i] = "$1\t$2\t$3\t$4\t$mergemodulehash->{'componentcondition'}\t$6\n";
+                        $newattr_ = $newattr_ | $mergemodulehash->{'attributes_add'};
                     }
+                    $infoline = "Old attribute(s): $attr_\nNew attribute(s): $newattr_\n";
+                    push( @installer::globals::logfileinfo, $infoline);
                 }
+                my $newcond_ = $cond_;
+                if ( $mergemodulehash->{'componentcondition'} )
+                {
+                    $infoline = "Adding condition ($mergemodulehash->{'componentcondition'}) from scp2 to component $comp_\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                    if ($cond_)
+                    {
+                        $newcond_ = "($cond_) AND ($mergemodulehash->{'componentcondition'})";
+                    }
+                    else
+                    {
+                        $newcond_ = "$mergemodulehash->{'componentcondition'}";
+                    }
+                    $infoline = "Old condition: $cond_\nNew condition: $newcond_\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                }
+                ${$filecontent}[$i] = "$comp_\t$compid_\t$dir_\t$newattr_\t$newcond_\t$keyp_\n";
             }
         }
     }
