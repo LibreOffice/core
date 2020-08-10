@@ -25,6 +25,7 @@
 
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/treelistbox.hxx>
+#include <vcl/transfer.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/weld.hxx>
 
@@ -190,6 +191,8 @@ namespace dbaui
         std::unique_ptr<weld::TreeIter> GetEntryPosByName(const OUString& rName,
                                                           const weld::TreeIter* pStart = nullptr,
                                                           const IEntryFilter* pFilter = nullptr) const;
+
+        std::unique_ptr<weld::TreeIter> GetRootLevelParent(const weld::TreeIter* pEntry) const;
 
         void setControlActionListener(IControlActionListener* pListener) { m_pActionListener = pListener; }
         void setContextMenuProvider(IContextMenuProvider* pContextMenuProvider) { m_pContextMenuProvider = pContextMenuProvider; }
