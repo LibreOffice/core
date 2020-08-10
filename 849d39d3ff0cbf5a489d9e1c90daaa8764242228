@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e5e1e739_4899eb01",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2020-08-10T08:15:20Z",
+      "side": 1,
+      "message": "__GNUC__ is defined, as always, for Clang, too. I suspect it is a compiler bug... but it is hard to come up with a minimal reproducer.",
+      "parentUuid": "b98f2b31_e68f6cba",
+      "revId": "849d39d3ff0cbf5a489d9e1c90daaa8764242228",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "914d9734_743cb749",
         "filename": "bridges/source/cpp_uno/gcc3_linux_aarch64/abi.cxx",
         "patchSetId": 7
@@ -33,6 +51,24 @@
       "revId": "849d39d3ff0cbf5a489d9e1c90daaa8764242228",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c0a3344_e0bfb78e",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_aarch64/abi.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2020-08-10T08:15:20Z",
+      "side": 1,
+      "message": "There is a SAL_WARN(\"bridges.osx\", dlerror()) later.",
+      "parentUuid": "914d9734_743cb749",
+      "revId": "849d39d3ff0cbf5a489d9e1c90daaa8764242228",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
