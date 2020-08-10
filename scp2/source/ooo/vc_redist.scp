@@ -32,22 +32,26 @@
 
 #if defined(WINDOWS_X86_MERGEMODULE)
 
+/* Attributes: msidbComponentAttributesPermanent = 0x10 */
 MergeModule WINDOWS_X86_MERGEMODULE
     Feature = gm_Root;
     Name = WINDOWS_X86_MERGEMODULE_FILE;
     RootDir = "TARGETDIR";
     ComponentCondition = "VC_REDIST=1";
+    Attributes_Add = "0x10";
 End
 
 #endif
 
 #if defined(WINDOWS_X64) && defined(WINDOWS_X64_MERGEMODULE)
 
+/* Attributes: msidbComponentAttributesPermanent = 0x10 */
 MergeModule WINDOWS_X64_MERGEMODULE
     Feature = gm_Root;
     Name = WINDOWS_X64_MERGEMODULE_FILE;
     RootDir = "TARGETDIR";
     ComponentCondition = "VC_REDIST=1";
+    Attributes_Add = "0x10";
 End
 
 #endif
