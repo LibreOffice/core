@@ -427,12 +427,6 @@ DECLARE_OOXMLIMPORT_TEST(testTdf114217, "tdf114217.docx")
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf116486, "tdf116486.docx")
-{
-    OUString aTop = parseDump("/root/page/body/txt/Special", "nHeight");
-    CPPUNIT_ASSERT_EQUAL(OUString("4006"), aTop);
-}
-
 DECLARE_OOXMLIMPORT_TEST(testTdf119200, "tdf119200.docx")
 {
     auto xPara = getParagraph(1);
