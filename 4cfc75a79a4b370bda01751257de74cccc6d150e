@@ -105,6 +105,24 @@
       "revId": "4cfc75a79a4b370bda01751257de74cccc6d150e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8baf359e_fc75be9e",
+        "filename": "cppuhelper/source/servicemanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1500,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-10T12:50:03Z",
+      "side": 1,
+      "message": "But where does this place in ServiceManager::insertRdbFiles appear in that scenario you outline?",
+      "parentUuid": "6eea25f0_1ffef14e",
+      "revId": "4cfc75a79a4b370bda01751257de74cccc6d150e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
