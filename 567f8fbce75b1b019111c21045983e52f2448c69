@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "88c37075_2340a834",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 4220,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2020-08-10T13:39:19Z",
+      "side": 1,
+      "message": "Yes, good idea! Thanks.",
+      "parentUuid": "4ed0885a_2c62d5da",
+      "revId": "567f8fbce75b1b019111c21045983e52f2448c69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "54153b03_b9767515",
         "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
         "patchSetId": 6
@@ -30,6 +48,30 @@
       "writtenOn": "2020-08-10T09:10:49Z",
       "side": 1,
       "message": "I suggest to limit cell references to single and double letters:\n\n\\\\b([A-Z][A-Z]?[0-9]+)\\\\b\n\nAlso using negative look-ahead assertion to check the opening parenthesis, which works at the end of the string, too (I haven\u0027t checked the next expression):\n\n\\\\b([A-Z][A-Z]?[0-9]+)\\\\b(?![)])",
+      "range": {
+        "startLine": 4227,
+        "startChar": 5,
+        "endLine": 4228,
+        "endChar": 86
+      },
+      "revId": "567f8fbce75b1b019111c21045983e52f2448c69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9a4cefe_88ee6a75",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 4228,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2020-08-10T13:39:19Z",
+      "side": 1,
+      "message": "Yeah, I thought about limiting the number of columns in a cell reference. Word 365 currently limits to 63 columns in the UI, but if there is a documented limit on this for the OOXML file format that should be what controls it. In either case, I was concerned that they might increase that range in a future update, so I didn\u0027t want to impose an obscure constraint here on what is supported. But, perhaps I am overthinking it.",
+      "parentUuid": "54153b03_b9767515",
       "range": {
         "startLine": 4227,
         "startChar": 5,
