@@ -29,14 +29,13 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
 DBTreeView::DBTreeView( vcl::Window* pParent, WinBits nBits)
-                    :   Window( pParent, nBits )
-                    , m_pTreeListBox(nullptr)
+    : Window(pParent, nBits)
+    , m_pTreeListBox(VclPtr<InterimDBTreeListBox>::Create(this))
 {
-
-    m_pTreeListBox = VclPtr<DBTreeListBox>::Create(this, WB_BORDER | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT);
-    m_pTreeListBox->EnableCheckButton(nullptr);
+#if 0
     m_pTreeListBox->SetDragDropMode( DragDropMode::NONE );
     m_pTreeListBox->EnableInplaceEditing( true );
+#endif
     m_pTreeListBox->SetHelpId(HID_TLB_TREELISTBOX);
     m_pTreeListBox->Show();
 }
@@ -54,12 +53,16 @@ void DBTreeView::dispose()
 
 SvTreeList* DBTreeView::GetTreeModel()
 {
+#if 0
     return m_pTreeListBox->GetModel();
+#else
+    return nullptr;
+#endif
 }
 
-void DBTreeView::SetPreExpandHandler(const Link<SvTreeListEntry*,bool>& _rHdl)
+void DBTreeView::SetPreExpandHandler(const Link<const weld::TreeIter&,bool>& rHdl)
 {
-    m_pTreeListBox->SetPreExpandHandler(_rHdl);
+    m_pTreeListBox->GetWidget().connect_expanding(rHdl);
 }
 
 void    DBTreeView::setCopyHandler(const Link<LinkParamNone*,void>& _rHdl)

@@ -23,7 +23,6 @@
 
 #include <unodatbr.hxx>
 #include <browserids.hxx>
-#include <listviewitems.hxx>
 #include <imageprovider.hxx>
 #include <osl/diagnose.h>
 #include "dbtreeview.hxx"
@@ -37,10 +36,10 @@ using namespace ::svx;
 
 namespace dbaui
 {
-SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getChildType( SvTreeListEntry const * _pEntry ) const
+SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getChildType(const weld::TreeIter& rEntry) const
 {
-    OSL_ENSURE(isContainer(_pEntry), "SbaTableQueryBrowser::getChildType: invalid entry!");
-    switch (getEntryType(_pEntry))
+    OSL_ENSURE(isContainer(rEntry), "SbaTableQueryBrowser::getChildType: invalid entry!");
+    switch (getEntryType(rEntry))
     {
         case etTableContainer:
             return etTableOrView;
@@ -52,13 +51,14 @@ SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getChildType( SvTreeListEn
     return etUnknown;
 }
 
-OUString SbaTableQueryBrowser::GetEntryText( SvTreeListEntry* _pEntry ) const
+OUString SbaTableQueryBrowser::GetEntryText(weld::TreeIter& rEntry) const
 {
-    return m_pTreeView->getListBox().GetEntryText(_pEntry);
+    return m_pTreeView->getListBox().GetWidget().get_text(rEntry);
 }
 
-SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getEntryType( const SvTreeListEntry* _pEntry ) const
+SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getEntryType(const weld::TreeIter& rEntry) const
 {
+#if 0
     if (!_pEntry)
         return etUnknown;
 
@@ -99,6 +99,7 @@ SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getEntryType( const SvTree
         if ( !pEntryParent )
             return etUnknown;
     }
+#endif
 
     return etQueryContainer;
 }
@@ -108,7 +109,9 @@ void SbaTableQueryBrowser::select(SvTreeListEntry* _pEntry, bool _bSelect)
     SvLBoxItem* pTextItem = _pEntry ? _pEntry->GetFirstItem(SvLBoxItemType::String) : nullptr;
     if (pTextItem)
     {
+#if 0
         static_cast<OBoldListboxString*>(pTextItem)->emphasize(_bSelect);
+#endif
         m_pTreeView->GetTreeModel()->InvalidateEntry(_pEntry);
     }
     else {
@@ -116,23 +119,27 @@ void SbaTableQueryBrowser::select(SvTreeListEntry* _pEntry, bool _bSelect)
     }
 }
 
-void SbaTableQueryBrowser::selectPath(SvTreeListEntry* _pEntry, bool _bSelect)
+void SbaTableQueryBrowser::selectPath(weld::TreeIter* pEntry, bool bSelect)
 {
-    while (_pEntry)
+#if 0
+    while (pEntry)
     {
-        select(_pEntry, _bSelect);
-        _pEntry = m_pTreeView->GetTreeModel()->GetParent(_pEntry);
+        select(pEntry, bSelect);
+        pEntry = m_pTreeView->GetTreeModel()->GetParent(pEntry);
     }
+#endif
 }
 
 bool SbaTableQueryBrowser::isSelected(SvTreeListEntry* _pEntry)
 {
+#if 0
     SvLBoxItem* pTextItem = _pEntry ? _pEntry->GetFirstItem(SvLBoxItemType::String) : nullptr;
     if (pTextItem)
         return static_cast<OBoldListboxString*>(pTextItem)->isEmphasized();
     else {
         OSL_FAIL("SbaTableQueryBrowser::isSelected: invalid entry!");
     }
+#endif
     return false;
 }
 
@@ -191,64 +198,6 @@ sal_Int32 SbaTableQueryBrowser::getDatabaseObjectType( EntryType _eType )
     }
     OSL_FAIL( "SbaTableQueryBrowser::getDatabaseObjectType: folder types and 'Unknown' not allowed here!" );
     return css::sdb::application::DatabaseObject::TABLE;
-}
-
-void SbaTableQueryBrowser::notifyHiContrastChanged()
-{
-    if ( !m_pTreeView )
-        return;
-
-    auto pTreeModel = m_pTreeView->GetTreeModel();
-    // change all bitmap entries
-    SvTreeListEntry* pEntryLoop = pTreeModel->First();
-    while ( pEntryLoop )
-    {
-        DBTreeListUserData* pData = static_cast<DBTreeListUserData*>(pEntryLoop->GetUserData());
-        if ( !pData )
-        {
-            pEntryLoop = pTreeModel->Next(pEntryLoop);
-            continue;
-        }
-
-        // the connection to which this entry belongs, if any
-        std::unique_ptr< ImageProvider > pImageProvider( getImageProviderFor( pEntryLoop ) );
-
-        // the images for this entry
-        Image aImage;
-        if ( pData->eType == etDatasource )
-            aImage = ImageProvider::getDatabaseImage();
-        else
-        {
-            bool bIsFolder = !isObject( pData->eType );
-            if ( bIsFolder )
-            {
-                sal_Int32 nObjectType( getDatabaseObjectType( pData->eType ) );
-                aImage = ImageProvider::getFolderImage( nObjectType );
-            }
-            else
-            {
-                sal_Int32 nObjectType( getDatabaseObjectType( pData->eType ) );
-                pImageProvider->getImages( GetEntryText( pEntryLoop ), nObjectType, aImage );
-            }
-        }
-
-        // find the proper item, and set its icons
-        sal_uInt16 nCount = pEntryLoop->ItemCount();
-        for (sal_uInt16 i=0;i<nCount;++i)
-        {
-            SvLBoxItem& rItem = pEntryLoop->GetItem(i);
-            if (rItem.GetType() != SvLBoxItemType::ContextBmp)
-                continue;
-
-            SvLBoxContextBmp& rContextBitmapItem = static_cast< SvLBoxContextBmp& >( rItem );
-
-            rContextBitmapItem.SetBitmap1( aImage );
-            rContextBitmapItem.SetBitmap2( aImage );
-            break;
-        }
-
-        pEntryLoop = pTreeModel->Next(pEntryLoop);
-    }
 }
 
 }   // namespace dbaui
