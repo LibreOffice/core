@@ -38,7 +38,7 @@
 #include <vcl/treelistbox.hxx>
 #include <vcl/treelistentry.hxx>
 #include <vcl/viewdataentry.hxx>
-#include <vcl/svlbitm.hxx>
+#include <vcl/toolkit/svlbitm.hxx>
 
 #include <map>
 

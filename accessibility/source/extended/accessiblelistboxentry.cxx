@@ -21,7 +21,7 @@
 #include <extended/accessiblelistbox.hxx>
 #include <vcl/treelistbox.hxx>
 #include <svtools/stringtransfer.hxx>
-#include <vcl/svlbitm.hxx>
+#include <vcl/toolkit/svlbitm.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>

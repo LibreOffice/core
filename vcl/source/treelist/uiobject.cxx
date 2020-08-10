@@ -8,7 +8,7 @@
  */
 
 #include <memory>
-#include <vcl/svlbitm.hxx>
+#include <vcl/toolkit/svlbitm.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/treelistbox.hxx>
 #include <vcl/treelistentry.hxx>
