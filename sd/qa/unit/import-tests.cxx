@@ -145,6 +145,7 @@ public:
     void testPredefinedTableStyle();
     void testBnc591147();
     void testCreationDate();
+    void testMultiColTexts();
     void testBnc584721_1();
     void testBnc584721_2();
     void testBnc584721_4();
@@ -254,6 +255,7 @@ public:
     CPPUNIT_TEST(testPredefinedTableStyle);
     CPPUNIT_TEST(testBnc591147);
     CPPUNIT_TEST(testCreationDate);
+    CPPUNIT_TEST(testMultiColTexts);
     CPPUNIT_TEST(testBnc584721_1);
     CPPUNIT_TEST(testBnc584721_2);
     CPPUNIT_TEST(testBnc584721_4);
@@ -929,6 +931,33 @@ void SdImportTest::testCreationDate()
     // Metadata wasn't imported, this was 0000-00-00.
     CPPUNIT_ASSERT_EQUAL(OUString("2013-11-09T10:37:56"), aBuffer.makeStringAndClear());
     xDocShRef->DoClose();
+}
+
+void SdImportTest::testMultiColTexts()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/multicol.pptx"), PPTX );
+    const SdrPage *pPage = GetPage( 1, xDocShRef );
+
+    sdr::table::SdrTableObj *pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT( pTableObj );
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pTableObj->getRowCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pTableObj->getColumnCount());
+
+    sdr::table::SdrTableObj *pMasterTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->TRG_GetMasterPage().GetObj(0));
+    CPPUNIT_ASSERT( pMasterTableObj );
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMasterTableObj->getRowCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMasterTableObj->getColumnCount());
+
+    uno::Reference< table::XCellRange > xTable(pMasterTableObj->getTable(), uno::UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xCell;
+    xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(0, xCell));
+    uno::Reference<text::XTextRange> xRun( getRunFromParagraph (0, xParagraph ) );
+    OUString sText = xRun->getString();
+
+    CPPUNIT_ASSERT_EQUAL(OUString(""), sText); //We don't import master table text for multicolumn case.
 }
 
 void SdImportTest::testPredefinedTableStyle()
