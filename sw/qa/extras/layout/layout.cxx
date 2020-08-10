@@ -1178,6 +1178,27 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf134277)
                                  xmlXPathNodeSetGetLength(pXmlNodes));
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf116486)
+{
+    SwDoc* pDoc = createDoc("tdf116486.docx");
+    CPPUNIT_ASSERT(pDoc);
+    OUString aTop = parseDump("/root/page/body/txt/Special", "nHeight");
+    CPPUNIT_ASSERT_EQUAL(OUString("4006"), aTop);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128198)
+{
+    SwDoc* pDoc = createDoc("tdf128198-1.docx");
+    CPPUNIT_ASSERT(pDoc);
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+    // the problem was that line 5 was truncated at "this  "
+    // due to the fly anchored in previous paragraph
+    assertXPath(pLayout, "/root/page/body/txt[2]/LineBreak[5]", "Line",
+                "to access any service, any time, anywhere. From this  perspective, satellite "
+                "boasts some ");
+    assertXPath(pLayout, "/root/page/body/txt[2]/LineBreak[6]", "Line", "significant advantages. ");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testNoLineBreakAtSlash)
 {
     load(DATA_DIRECTORY, "no-line-break-at-slash.fodt");
