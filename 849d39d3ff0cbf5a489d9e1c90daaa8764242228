@@ -69,6 +69,24 @@
       "revId": "849d39d3ff0cbf5a489d9e1c90daaa8764242228",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a53fc833_fdb7768d",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_aarch64/abi.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-10T08:57:35Z",
+      "side": 1,
+      "message": "but you already include sal/log.hxx further down (where it belongs; sal/config.h shall always be the first include, so I usually put it into an include block of its own)",
+      "parentUuid": "9c0a3344_e0bfb78e",
+      "revId": "849d39d3ff0cbf5a489d9e1c90daaa8764242228",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
