@@ -123,6 +123,24 @@
       "revId": "4cfc75a79a4b370bda01751257de74cccc6d150e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9eb5cc20_ac286ef3",
+        "filename": "cppuhelper/source/servicemanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1500,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-08-10T18:42:35Z",
+      "side": 1,
+      "message": "It doesn\u0027t. I presumed that both places in this file would suffer from the same failure mode. Possibly I was wrong on that count.",
+      "parentUuid": "8baf359e_fc75be9e",
+      "revId": "4cfc75a79a4b370bda01751257de74cccc6d150e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
