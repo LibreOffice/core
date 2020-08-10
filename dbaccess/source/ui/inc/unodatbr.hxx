@@ -42,6 +42,7 @@
 class SvTreeListEntry;
 class Splitter;
 struct SvSortData;
+class ODataClipboard;
 
 namespace com::sun::star::container { class XNameContainer; }
 
@@ -97,7 +98,7 @@ namespace dbaui
 
         VclPtr<DBTreeView>      m_pTreeView; // contains the datasources of the registry
         VclPtr<Splitter>        m_pSplitter;
-        SvTreeListEntry*        m_pCurrentlyDisplayed;
+        std::unique_ptr<weld::TreeIter> m_xCurrentlyDisplayed;
         ImplSVEvent *           m_nAsyncDrop;
 
         bool                m_bQueryEscapeProcessing : 1;   // the escape processing flag of the query currently loaded (if any)
@@ -174,9 +175,6 @@ namespace dbaui
         // css::frame::XFrameActionListener
         virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent) override;
 
-        //IController
-        virtual void notifyHiContrastChanged() override;
-
         // XScriptInvocationContext
         virtual css::uno::Reference< css::document::XEmbeddedScripts > SAL_CALL getScriptContainer() override;
 
@@ -242,11 +240,11 @@ namespace dbaui
 
         // methods for handling the 'selection' (painting them bold) of SvLBoxEntries
         // returns <TRUE/> if the entry is selected (which means it's part of the selected path)
-        static bool isSelected(SvTreeListEntry* _pEntry);
+        bool isSelected(const weld::TreeIter& rEntry) const;
         // select the entry (and only the entry, not the whole path)
-        void        select(SvTreeListEntry* _pEntry, bool _bSelect);
+        void        select(weld::TreeIter* pEntry, bool bSelect);
         // select the path of the entry (which must be an entry without children)
-        void        selectPath(SvTreeListEntry* _pEntry, bool _bSelect = true);
+        void        selectPath(weld::TreeIter* pEntry, bool bSelect = true);
 
         virtual void loadMenu(const css::uno::Reference< css::frame::XFrame >& _xFrame) override;
 
@@ -267,9 +265,9 @@ namespace dbaui
             <p>The given names and images may be empty, in this case they're filled with the correct
             values. This way they may be reused for the next call, which saves some resource manager calls.</p>
         */
-        void implAddDatasource(const OUString& _rDbName, Image& _rDbImage,
-                OUString& _rQueryName, Image& _rQueryImage,
-                OUString& _rTableName, Image& _rTableImage,
+        void implAddDatasource(const OUString& _rDbName, OUString& _rDbImage,
+                OUString& _rQueryName, OUString& _rQueryImage,
+                OUString& _rTableName, OUString& _rTableImage,
                 const SharedConnection& _rxConnection
             );
 
@@ -290,63 +288,62 @@ namespace dbaui
         void unloadAndCleanup( bool _bDisposeConnection = true );
 
         // disposes the connection associated with the given entry (which must represent a data source)
-        void        disposeConnection( SvTreeListEntry* _pDSEntry );
+        void        disposeConnection(weld::TreeIter* xpDSEntry);
 
         /// flushes and disposes the given connection, and de-registers as listener
         void        impl_releaseConnection( SharedConnection& _rxConnection );
 
         /** close the connection (and collapse the list entries) of the given list entries
         */
-        void        closeConnection(SvTreeListEntry* _pEntry, bool _bDisposeConnection = true);
+        void        closeConnection(weld::TreeIter& rEntry, bool bDisposeConnection = true);
 
-        void        populateTree(const css::uno::Reference< css::container::XNameAccess>& _xNameAccess, SvTreeListEntry* _pParent, EntryType _eEntryType);
+        void        populateTree(const css::uno::Reference< css::container::XNameAccess>& xNameAccess, const weld::TreeIter& rParent, EntryType eEntryType);
         void        initializeTreeModel();
 
         /** search in the tree for query- or tablecontainer equal to this interface and return
             this container entry
         */
-        SvTreeListEntry* getEntryFromContainer(const css::uno::Reference< css::container::XNameAccess>& _rxNameAccess);
-        // return true when there is connection available
-        bool ensureConnection(SvTreeListEntry* _pDSEntry, void * pDSData, SharedConnection& _rConnection );
-        bool ensureConnection(SvTreeListEntry* _pAnyEntry, SharedConnection& _rConnection );
+        std::unique_ptr<weld::TreeIter> getEntryFromContainer(const css::uno::Reference<css::container::XNameAccess>& rxNameAccess);
 
-        bool getExistentConnectionFor( SvTreeListEntry* _pDSEntry, SharedConnection& _rConnection );
+        // return true when there is connection available
+        bool ensureConnection(const weld::TreeIter* pDSEntry, void * pDSData, SharedConnection& rConnection);
+        bool ensureConnection(const weld::TreeIter* pAnyEntry, SharedConnection& rConnection);
+
+        bool getExistentConnectionFor(const weld::TreeIter* pDSEntry, SharedConnection& rConnection);
         /** returns an image provider which works with the connection belonging to the given entry
         */
-        std::unique_ptr< ImageProvider >
-                getImageProviderFor( SvTreeListEntry* _pAnyEntry );
+        std::unique_ptr<ImageProvider> getImageProviderFor(const weld::TreeIter* pAnyEntry);
 
-        void    implAdministrate( SvTreeListEntry* _pApplyTo );
+        void    implAdministrate(weld::TreeIter& rApplyTo);
 
-        TransferableHelper*
-                implCopyObject( SvTreeListEntry* _pApplyTo, sal_Int32 _nCommandType );
+        bool implCopyObject(ODataClipboard& rExchange, const weld::TreeIter& rApplyTo, sal_Int32 nCommandType);
 
-        EntryType getEntryType( const SvTreeListEntry* _pEntry ) const;
-        EntryType   getChildType( SvTreeListEntry const * _pEntry ) const;
+        EntryType getEntryType(const weld::TreeIter& rEntry) const;
+        EntryType getChildType(const weld::TreeIter& rEntry) const;
         static bool    isObject( EntryType _eType ) { return ( etTableOrView== _eType ) || ( etQuery == _eType ); }
         static bool    isContainer( EntryType _eType ) { return (etTableContainer == _eType) || (etQueryContainer == _eType); }
-        bool isContainer( const SvTreeListEntry* _pEntry ) const { return isContainer( getEntryType( _pEntry ) ); }
+        bool isContainer(const weld::TreeIter& rEntry) const { return isContainer(getEntryType(rEntry)); }
 
         // ensure that the xObject for the given entry is set on the user data
-        bool          ensureEntryObject( SvTreeListEntry* _pEntry );
+        bool          ensureEntryObject(const weld::TreeIter& rEntry);
 
         // get the display text of the entry given
-        OUString      GetEntryText( SvTreeListEntry* _pEntry ) const;
+        OUString      GetEntryText(const weld::TreeIter& rEntry) const;
 
         // is called when a table or a query was selected
         DECL_LINK( OnSelectionChange, LinkParamNone*, void );
-        DECL_LINK( OnExpandEntry, SvTreeListEntry*, bool );
+        DECL_LINK( OnExpandEntry, const weld::TreeIter&, bool );
 
         DECL_LINK( OnCopyEntry, LinkParamNone*, void );
 
-        DECL_LINK( OnTreeEntryCompare, const SvSortData&, sal_Int32 );
+        int OnTreeEntryCompare(const weld::TreeIter& rLHS, const weld::TreeIter& rRHS);
 
         DECL_LINK( OnAsyncDrop, void*, void );
 
         void implRemoveStatusListeners();
 
         bool implSelect(const svx::ODataAccessDescriptor& _rDescriptor, bool _bSelectDirect = false);
-        bool implSelect( SvTreeListEntry* _pEntry );
+        bool implSelect(weld::TreeIter* pEntry);
 
         /// selects the entry given and loads the grid control with the object's data
         bool implSelect(
@@ -358,13 +355,13 @@ namespace dbaui
             bool _bSelectDirect
         );
 
-        SvTreeListEntry* implGetConnectionEntry(SvTreeListEntry* _pEntry) const;
+        std::unique_ptr<weld::TreeIter> implGetConnectionEntry(weld::TreeIter& rEntry) const;
         /// inserts an entry into the tree
-        SvTreeListEntry* implAppendEntry(
-            SvTreeListEntry* _pParent,
-            const OUString& _rName,
-            void* _pUserData,
-            EntryType _eEntryType
+        std::unique_ptr<weld::TreeIter> implAppendEntry(
+            const weld::TreeIter* pParent,
+            const OUString& rName,
+            void* pUserData,
+            EntryType eEntryType
         );
 
         /// loads the grid control with the data object specified (which may be a table, a query or a command)
@@ -372,37 +369,37 @@ namespace dbaui
             const sal_Int32 _nCommandType, const bool _bEscapeProcessing, const SharedConnection& _rxConnection );
 
         /** retrieves the tree entry for the object described by <arg>_rDescriptor</arg>
-            @param _rDescriptor
+            @param rDescriptor
                 the object descriptor
-            @param _ppDataSourceEntry
+            @param ppDataSourceEntry
                 If not <NULL/>, the data source tree entry will be returned here
-            @param _ppContainerEntry
+            @param ppContainerEntry
                 If not <NULL/>, the object container tree entry will be returned here
         */
-        SvTreeListEntry* getObjectEntry(const svx::ODataAccessDescriptor& _rDescriptor,
-            SvTreeListEntry** _ppDataSourceEntry, SvTreeListEntry** _ppContainerEntry
+        std::unique_ptr<weld::TreeIter> getObjectEntry(const svx::ODataAccessDescriptor& rDescriptor,
+            std::unique_ptr<weld::TreeIter>* ppDataSourceEntry, std::unique_ptr<weld::TreeIter>* ppContainerEntry
         );
         /** retrieves the tree entry for the object described by data source name, command and command type
-            @param _rDataSource
+            @param rDataSource
                 the data source name
-            @param _rCommand
+            @param rCommand
                 the command
-            @param _nCommandType
+            @param nCommandType
                 the command type
-            @param _rDescriptor
+            @param rDescriptor
                 the object descriptor
-            @param _ppDataSourceEntry
+            @param ppDataSourceEntry
                 If not <NULL/>, the data source tree entry will be returned here
-            @param _ppContainerEntry
+            @param ppContainerEntry
                 If not <NULL/>, the object container tree entry will be returned here
-            @param _bExpandAncestors
+            @param bExpandAncestors
                 If <TRUE/>, all ancestor on the way to the entry will be expanded
         */
-        SvTreeListEntry* getObjectEntry(
-            const OUString& _rDataSource, const OUString& _rCommand, sal_Int32 _nCommandType,
-            SvTreeListEntry** _ppDataSourceEntry, SvTreeListEntry** _ppContainerEntry,
+        std::unique_ptr<weld::TreeIter> getObjectEntry(
+            const OUString& rDataSource, const OUString& rCommand, sal_Int32 nCommandType,
+            std::unique_ptr<weld::TreeIter>* ppDataSourceEntry, std::unique_ptr<weld::TreeIter>* ppContainerEntry,
             bool _bExpandAncestors = true,
-            const SharedConnection& _rxConnection = SharedConnection()
+            const SharedConnection& rxConnection = SharedConnection()
         );
 
         /// checks if m_aDocumentDataSource describes a known object
@@ -414,32 +411,32 @@ namespace dbaui
         void transferChangedControlProperty(const OUString& _rProperty, const css::uno::Any& _rNewValue);
 
         // checks whether the given tree entry denotes a data source
-        bool impl_isDataSourceEntry( SvTreeListEntry* _pEntry ) const;
+        bool impl_isDataSourceEntry(const weld::TreeIter* pEntry) const;
 
         /// retrieves the data source URL/name for the given entry representing a data source
-        OUString  getDataSourceAccessor( SvTreeListEntry* _pDataSourceEntry ) const;
+        OUString  getDataSourceAccessor(const weld::TreeIter& rDataSourceEntry) const;
 
         /** get the signature (command/escape processing) of the query the form is based on
             <p>If the for is not based on a query or not even loaded, nothing happens and <FALSE/> is returned.</p>
         */
         bool implGetQuerySignature( OUString& _rCommand, bool& _bEscapeProcessing );
 
-        bool isEntryCopyAllowed(SvTreeListEntry const * _pEntry) const;
+        bool isEntryCopyAllowed(const weld::TreeIter& rEntry) const;
 
-        void copyEntry(SvTreeListEntry* _pEntry);
+        void copyEntry(weld::TreeIter& rEntry);
 
         // remove all grid columns and dispose them
         static void clearGridColumns(const css::uno::Reference< css::container::XNameContainer >& _xColContainer);
 
         /** checks if the currently displayed entry changed
-            @param  _sName
+            @param  rName
                     Name of the changed entry
-            @param  _pContainer
+            @param  rContainer
                     The container of the displayed entry
             @return
                     <TRUE/> if it is the currently displayed otherwise <FALSE/>
         */
-        bool isCurrentlyDisplayedChanged(const OUString& _sName, SvTreeListEntry const * _pContainer);
+        bool isCurrentlyDisplayedChanged(const OUString& rName, const weld::TreeIter& rContainer);
 
         /** called whenever the content of the browser is used for preview, as the very last action
             of the load process

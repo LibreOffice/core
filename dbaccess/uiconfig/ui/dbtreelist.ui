@@ -67,11 +67,6 @@
                     <attribute name="inconsistent">5</attribute>
                   </attributes>
                 </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkTreeViewColumn" id="treeviewcolumn9">
-                <property name="spacing">6</property>
                 <child>
                   <object class="GtkCellRendererText" id="cellrenderertext6"/>
                   <attributes>

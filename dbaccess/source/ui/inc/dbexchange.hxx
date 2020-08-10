@@ -43,6 +43,8 @@ namespace dbaui
         ::rtl::Reference< ORTFImportExport >    m_pRtf;
 
     public:
+        ODataClipboard();
+
         ODataClipboard(
             const OUString&  _rDatasource,
             const sal_Int32         _nCommandType,
@@ -65,6 +67,23 @@ namespace dbaui
             const css::uno::Sequence< css::uno::Any >& i_rSelectedRows,
             const bool i_bBookmarkSelection,
             const css::uno::Reference< css::uno::XComponentContext >& i_rORB
+        );
+
+        void Update(
+            const OUString&  _rDatasource,
+            const sal_Int32         _nCommandType,
+            const OUString&  _rCommand,
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+            const css::uno::Reference< css::util::XNumberFormatter >& _rxFormatter,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxORB
+        );
+
+        void Update(
+            const OUString&  _rDatasource,
+            const sal_Int32         _nCommandType,
+            const OUString&  _rCommand,
+            const css::uno::Reference< css::util::XNumberFormatter >& _rxFormatter,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxORB
         );
 
         // XEventListener

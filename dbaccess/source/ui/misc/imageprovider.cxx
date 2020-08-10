@@ -256,9 +256,9 @@ namespace dbaui
         return sImageResourceID;
     }
 
-    Image ImageProvider::getDatabaseImage()
+    OUString ImageProvider::getDatabaseImage()
     {
-        return Image(StockImage::Yes, DATABASE_TREE_ICON);
+        return DATABASE_TREE_ICON;
     }
 
 } // namespace dbaui

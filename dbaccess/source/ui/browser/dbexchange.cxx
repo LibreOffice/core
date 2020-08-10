@@ -58,6 +58,10 @@ namespace dbaui
         }
     }
 
+    ODataClipboard::ODataClipboard()
+    {
+    }
+
     ODataClipboard::ODataClipboard(
                     const OUString&  _rDatasource,
                     const sal_Int32         _nCommandType,
@@ -86,6 +90,43 @@ namespace dbaui
     {
         m_pHtml.set( new OHTMLImportExport( getDescriptor(),_rxORB, _rxFormatter ) );
         m_pRtf.set( new ORTFImportExport( getDescriptor(),_rxORB, _rxFormatter ) );
+    }
+
+    void ODataClipboard::Update(
+                    const OUString&  rDatasource,
+                    const sal_Int32  nCommandType,
+                    const OUString&  rCommand,
+                    const Reference< XConnection >& rxConnection,
+                    const Reference< XNumberFormatter >& rxFormatter,
+                    const Reference< XComponentContext >& rxORB)
+    {
+        ClearFormats();
+
+        ODataAccessObjectTransferable::Update(rDatasource, nCommandType, rCommand, rxConnection);
+
+        lcl_setListener(rxConnection, this, true);
+
+        m_pHtml.set(new OHTMLImportExport(getDescriptor(), rxORB, rxFormatter));
+        m_pRtf.set(new ORTFImportExport(getDescriptor(), rxORB, rxFormatter));
+
+        AddSupportedFormats();
+    }
+
+    void ODataClipboard::Update(
+                    const OUString& rDatasource,
+                    const sal_Int32 nCommandType,
+                    const OUString& rCommand,
+                    const Reference< XNumberFormatter >& rxFormatter,
+                    const Reference< XComponentContext >& rxORB)
+    {
+        ClearFormats();
+
+        ODataAccessObjectTransferable::Update(rDatasource, nCommandType, rCommand);
+
+        m_pHtml.set(new OHTMLImportExport(getDescriptor(), rxORB, rxFormatter));
+        m_pRtf.set(new ORTFImportExport(getDescriptor(), rxORB, rxFormatter));
+
+        AddSupportedFormats();
     }
 
     ODataClipboard::ODataClipboard( const Reference< XPropertySet >& i_rAliveForm,
