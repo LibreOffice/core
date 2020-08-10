@@ -45,6 +45,30 @@
       "revId": "69147b185ac260910c0453e01aa0c8f48eadb3c6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e77c264b_0395f539",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-08-10T12:29:46Z",
+      "side": 1,
+      "message": "It seems that you need to also execute SID_NOTEBOOKBAR with the ui file name.",
+      "parentUuid": "b948d206_69182c2d",
+      "range": {
+        "startLine": 211,
+        "startChar": 4,
+        "endLine": 211,
+        "endChar": 86
+      },
+      "revId": "69147b185ac260910c0453e01aa0c8f48eadb3c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
