@@ -34,7 +34,6 @@ $(eval $(call gb_StaticLibrary_set_include,mariadb-connector-c,\
 endif
 
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,mariadb-connector-c,\
-	UnpackedTarball/mariadb-connector-c/libmariadb/bmove_upp \
 	UnpackedTarball/mariadb-connector-c/libmariadb/get_password \
 	UnpackedTarball/mariadb-connector-c/libmariadb/ma_alloc \
 	UnpackedTarball/mariadb-connector-c/libmariadb/ma_array \
