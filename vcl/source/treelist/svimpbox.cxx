@@ -31,7 +31,7 @@
 #include <stack>
 
 #include <vcl/treelistbox.hxx>
-#include <vcl/svlbitm.hxx>
+#include <vcl/toolkit/svlbitm.hxx>
 #include <tools/wintypes.hxx>
 #include <bitmaps.hlst>
 #include <svimpbox.hxx>
