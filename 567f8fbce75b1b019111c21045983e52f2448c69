@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ed0885a_2c62d5da",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 4220,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-08-10T09:10:49Z",
+      "side": 1,
+      "message": "I suggest to start with word boundary matching \\\\b to avoid of recognizing operators as part of other letter sequences:\n\n\"\\\\b(AND|OR...",
+      "revId": "567f8fbce75b1b019111c21045983e52f2448c69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54153b03_b9767515",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 4228,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-08-10T09:10:49Z",
+      "side": 1,
+      "message": "I suggest to limit cell references to single and double letters:\n\n\\\\b([A-Z][A-Z]?[0-9]+)\\\\b\n\nAlso using negative look-ahead assertion to check the opening parenthesis, which works at the end of the string, too (I haven\u0027t checked the next expression):\n\n\\\\b([A-Z][A-Z]?[0-9]+)\\\\b(?![)])",
+      "range": {
+        "startLine": 4227,
+        "startChar": 5,
+        "endLine": 4228,
+        "endChar": 86
+      },
+      "revId": "567f8fbce75b1b019111c21045983e52f2448c69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
