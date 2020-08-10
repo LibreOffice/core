@@ -40,7 +40,7 @@
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 
-#include <vcl/svlbitm.hxx>
+#include <vcl/toolkit/svlbitm.hxx>
 #include <vcl/treelistentry.hxx>
 #include <vcl/viewdataentry.hxx>
 #include <svimpbox.hxx>
