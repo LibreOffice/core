@@ -35,16 +35,29 @@ public:
         : ChartTest()
     {
     }
+    // Mostly tests for line and fill properties
     void testTdf135184RoundLineCap();
     void testTdf135184RoundLineCap2();
     void testTdf135184RoundLineCap3();
     void testTdf135184RoundLineCap4();
+    void testTdf128345ChartArea_CG_TS_export();
+    void testTdf128345ChartArea_CG_TS_import();
+    void testTdf128345ChartWall_CS_TG_export();
+    void testTdf128345ChartWall_CS_TG_import();
+    void testTdf128345Legend_CS_TG_axial_export();
+    void testTdf128345Legend_CS_TG_axial_import();
 
     CPPUNIT_TEST_SUITE(Chart2GeometryTest);
     CPPUNIT_TEST(testTdf135184RoundLineCap);
     CPPUNIT_TEST(testTdf135184RoundLineCap2);
     CPPUNIT_TEST(testTdf135184RoundLineCap3);
     CPPUNIT_TEST(testTdf135184RoundLineCap4);
+    CPPUNIT_TEST(testTdf128345ChartArea_CG_TS_export);
+    CPPUNIT_TEST(testTdf128345ChartArea_CG_TS_import);
+    CPPUNIT_TEST(testTdf128345ChartWall_CS_TG_export);
+    CPPUNIT_TEST(testTdf128345ChartWall_CS_TG_import);
+    CPPUNIT_TEST(testTdf128345Legend_CS_TG_axial_export);
+    CPPUNIT_TEST(testTdf128345Legend_CS_TG_axial_import);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -58,6 +71,10 @@ protected:
     xmlDocUniquePtr parseExport(const OUString& rDir, const OUString& rFilterFormat);
 };
 
+// This is copied from Chart2ExportTest. It allows to access the chart form a MS Office document
+// without knowing whether the file is a chart1.xml or chart2.xml... As of August 2020, Calc
+// and Impress use a static variable for the number and therefore the number depends on whether
+// there had already been savings before.
 namespace
 {
 struct CheckForChartName
@@ -115,24 +132,27 @@ void Chart2GeometryTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
     {
         char const* pPrefix;
         char const* pURI;
-    } const aNamespaces[]
-        = { { "w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main" },
-            { "v", "urn:schemas-microsoft-com:vml" },
-            { "c", "http://schemas.openxmlformats.org/drawingml/2006/chart" },
-            { "a", "http://schemas.openxmlformats.org/drawingml/2006/main" },
-            { "mc", "http://schemas.openxmlformats.org/markup-compatibility/2006" },
-            { "wps", "http://schemas.microsoft.com/office/word/2010/wordprocessingShape" },
-            { "wpg", "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" },
-            { "wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" },
-            { "c15", "http://schemas.microsoft.com/office/drawing/2012/chart" },
-            { "office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0" },
-            { "chart", "urn:oasis:names:tc:opendocument:xmlns:chart:1.0" },
-            { "style", "urn:oasis:names:tc:opendocument:xmlns:style:1.0" },
-            { "svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" },
-            { "table", "urn:oasis:names:tc:opendocument:xmlns:table:1.0" },
-            { "text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0" },
-            { "xlink", "http://www.w3c.org/1999/xlink" },
-            { "c15", "http://schemas.microsoft.com/office/drawing/2012/chart" } };
+    } const aNamespaces[] = {
+        // OOXML
+        { "w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main" },
+        { "v", "urn:schemas-microsoft-com:vml" },
+        { "c", "http://schemas.openxmlformats.org/drawingml/2006/chart" },
+        { "a", "http://schemas.openxmlformats.org/drawingml/2006/main" },
+        { "mc", "http://schemas.openxmlformats.org/markup-compatibility/2006" },
+        { "wps", "http://schemas.microsoft.com/office/word/2010/wordprocessingShape" },
+        { "wpg", "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" },
+        { "wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" },
+        { "c15", "http://schemas.microsoft.com/office/drawing/2012/chart" },
+        // ODF
+        { "office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0" },
+        { "chart", "urn:oasis:names:tc:opendocument:xmlns:chart:1.0" },
+        { "draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" },
+        { "style", "urn:oasis:names:tc:opendocument:xmlns:style:1.0" },
+        { "svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" },
+        { "table", "urn:oasis:names:tc:opendocument:xmlns:table:1.0" },
+        { "text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0" },
+        { "xlink", "http://www.w3c.org/1999/xlink" },
+    };
     for (size_t i = 0; i < SAL_N_ELEMENTS(aNamespaces); ++i)
     {
         xmlXPathRegisterNs(pXmlXPathCtx, reinterpret_cast<xmlChar const*>(aNamespaces[i].pPrefix),
@@ -233,6 +253,161 @@ void Chart2GeometryTest::testTdf135184RoundLineCap4()
     const OString sSeries(sChartStart + "/c:plotArea/c:pieChart/c:ser/c:dPt[3]");
     assertXPath(pXmlDoc, sSeries + sDash, "val", "dash");
     assertXPath(pXmlDoc, sChartStart + "/c:title" + sDash, "val", "dashDot");
+}
+
+void Chart2GeometryTest::testTdf128345ChartArea_CG_TS_export()
+{
+    // chart area with color gradient and solid transparency
+    // Without the patch the transparency was lost in saved pptx file.
+    load("/chart2/qa/extras/data/odp/", "tdf128345_ChartArea_CG_TS.odp");
+
+    // Make sure the chart area has a transparency in gradient stops in saved pptx file.
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/charts/chart", "Impress MS PowerPoint 2007 XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    OString sPathStart("//c:chartSpace/c:spPr/a:gradFill");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs", 2);
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", "val", "30000");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", "val", "30000");
+}
+
+void Chart2GeometryTest::testTdf128345ChartArea_CG_TS_import()
+{
+    // This works on the file, which was exported from file tdf128345_ChartArea_CG_TS.odp to pptx.
+    // It has gradient stops with identical transparency values.
+    // Make sure chart area has transparency when pptx document is opened and resaved as odp.
+    // As of Aug 2020, the import generates a transparency gradient. When import is changed to
+    // generate solid transparency, the test needs to be adapted.
+    load("/chart2/qa/extras/data/pptx/", "tdf128345_ChartArea_CG_TS.pptx");
+
+    // Find transparency gradient name
+    xmlDocUniquePtr pXmlDoc = parseExport("Object 1/content.xml", "impress8");
+    CPPUNIT_ASSERT(pXmlDoc);
+    const OString sChartPath(
+        "//office:document-content/office:body/office:chart/chart:chart/@chart:style-name");
+    const OUString sOUChartStyleName = getXPathContent(pXmlDoc, sChartPath);
+    const OString sStylePath(
+        "//office:document-content/office:automatic-styles/style:style[@style:name='"
+        + OU2O(sOUChartStyleName) + "']");
+    assertXPath(pXmlDoc, sStylePath, 1);
+    assertXPath(pXmlDoc, sStylePath + "/style:graphic-properties/@draw:opacity-name", 1);
+    const OUString sOUOpacityName
+        = getXPathContent(pXmlDoc, sStylePath + "/style:graphic-properties/@draw:opacity-name");
+
+    // Verify the content of the opacity definition
+    xmlDocUniquePtr pXmlDoc2 = parseExport("Object 1/styles.xml", "impress8");
+    CPPUNIT_ASSERT(pXmlDoc2);
+    const OString sOpacityPath("//office:document-styles/office:styles/draw:opacity");
+    const OString sAttribute("@draw:name='" + OU2O(sOUOpacityName) + "'");
+    const OString sStart(sOpacityPath + "[" + sAttribute);
+    assertXPath(pXmlDoc2, sStart + "]", 1);
+    assertXPath(pXmlDoc2, sStart + " and @draw:style='linear']");
+    assertXPath(pXmlDoc2, sStart + " and @draw:start='30%']");
+    assertXPath(pXmlDoc2, sStart + " and @draw:end='30%']");
+    assertXPath(pXmlDoc2, sStart + " and @draw:angle='30deg']");
+    assertXPath(pXmlDoc2, sStart + " and @draw:border='20%']");
+}
+
+void Chart2GeometryTest::testTdf128345ChartWall_CS_TG_export()
+{
+    // chart wall with solid color and transparency gradient
+    // Without the patch the transparency was lost.
+    load("/chart2/qa/extras/data/odp/", "tdf128345_ChartWall_CS_TG.odp");
+
+    // Make sure the chart has a gradient with transparency in gradient stops in saved pptx file.
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/charts/chart", "Impress MS PowerPoint 2007 XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    OString sPathStart("//c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs", 2); //linear
+    // MS Office has opacity, so 100% transparency is val="0"
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", "val", "0");
+    // no element for 0% transparent
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", 0);
+}
+
+void Chart2GeometryTest::testTdf128345ChartWall_CS_TG_import()
+{
+    // This works on the file, which was exported from file tdf128345_ChartWall_CS_TG.odp to pptx.
+    // Make sure chart wall has transparency when pptx document is resaved as odp.
+    load("/chart2/qa/extras/data/pptx/", "tdf128345_ChartWall_CS_TG.pptx");
+
+    // Find transparency gradient name
+    xmlDocUniquePtr pXmlDoc = parseExport("Object 1/content.xml", "impress8");
+    CPPUNIT_ASSERT(pXmlDoc);
+    const OString sChartPath("//office:document-content/office:body/office:chart/chart:chart/"
+                             "chart:plot-area/chart:wall/@chart:style-name");
+    const OUString sOUChartStyleName = getXPathContent(pXmlDoc, sChartPath);
+    const OString sStylePath(
+        "//office:document-content/office:automatic-styles/style:style[@style:name='"
+        + OU2O(sOUChartStyleName) + "']");
+    assertXPath(pXmlDoc, sStylePath, 1);
+    assertXPath(pXmlDoc, sStylePath + "/style:graphic-properties/@draw:opacity-name", 1);
+    const OUString sOUOpacityName
+        = getXPathContent(pXmlDoc, sStylePath + "/style:graphic-properties/@draw:opacity-name");
+
+    // Verify content of the opacity definition
+    xmlDocUniquePtr pXmlDoc2 = parseExport("Object 1/styles.xml", "impress8");
+    CPPUNIT_ASSERT(pXmlDoc2);
+    const OString sOpacityPath("//office:document-styles/office:styles/draw:opacity");
+    const OString sAttribute("@draw:name='" + OU2O(sOUOpacityName) + "'");
+    const OString sStart(sOpacityPath + "[" + sAttribute);
+    assertXPath(pXmlDoc2, sStart + "]", 1);
+    assertXPath(pXmlDoc2, sStart + " and @draw:style='linear']");
+    assertXPath(pXmlDoc2, sStart + " and @draw:start='0%']");
+    assertXPath(pXmlDoc2, sStart + " and @draw:end='100%']");
+}
+
+void Chart2GeometryTest::testTdf128345Legend_CS_TG_axial_export()
+{
+    // legend with solid color and transparency gradient
+    // Without the patch the transparency was lost.
+    load("/chart2/qa/extras/data/odp/", "tdf128345_Legend_CS_TG_axial.odp");
+
+    // Make sure the chart has a gradient with transparency in gradient stops in saved pptx file.
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/charts/chart", "Impress MS PowerPoint 2007 XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    OString sPathStart("//c:chartSpace/c:chart/c:legend/c:spPr/a:gradFill");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs", 3); // axial
+    // no element for 0% transparent
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", 0);
+    // 100% transparent = opacity 0. It comes from "axial", therefor it is in the middle.
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", "val", "0");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]", "pos", "50000");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[3]/a:srgbClr/a:alpha", 0);
+}
+
+void Chart2GeometryTest::testTdf128345Legend_CS_TG_axial_import()
+{
+    // This works on the file, which was exported from file tdf128345_Legend_CS_TG_axial.odp to pptx.
+    // Error was, that in case of axial not the middle value was taken but start and end value.
+    load("/chart2/qa/extras/data/pptx/", "tdf128345_Legend_CS_TG_axial.pptx");
+
+    // Find transparency gradient name
+    xmlDocUniquePtr pXmlDoc = parseExport("Object 1/content.xml", "impress8");
+    CPPUNIT_ASSERT(pXmlDoc);
+    const OString sChartPath("//office:document-content/office:body/office:chart/chart:chart/"
+                             "chart:legend/@chart:style-name");
+    const OUString sOUChartStyleName = getXPathContent(pXmlDoc, sChartPath);
+    const OString sStylePath(
+        "//office:document-content/office:automatic-styles/style:style[@style:name='"
+        + OU2O(sOUChartStyleName) + "']");
+    assertXPath(pXmlDoc, sStylePath, 1);
+    assertXPath(pXmlDoc, sStylePath + "/style:graphic-properties/@draw:opacity-name", 1);
+    const OUString sOUOpacityName
+        = getXPathContent(pXmlDoc, sStylePath + "/style:graphic-properties/@draw:opacity-name");
+
+    // Verify content of the opacity definition
+    xmlDocUniquePtr pXmlDoc2 = parseExport("Object 1/styles.xml", "impress8");
+    CPPUNIT_ASSERT(pXmlDoc2);
+    const OString sOpacityPath("//office:document-styles/office:styles/draw:opacity");
+    const OString sAttribute("@draw:name='" + OU2O(sOUOpacityName) + "'");
+    const OString sStart(sOpacityPath + "[" + sAttribute);
+    assertXPath(pXmlDoc2, sStart + "]", 1);
+    assertXPath(pXmlDoc2, sStart + " and @draw:style='axial']");
+    assertXPath(pXmlDoc2, sStart + " and @draw:start='0%']");
+    assertXPath(pXmlDoc2, sStart + " and @draw:end='100%']");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2GeometryTest);
