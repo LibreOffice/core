@@ -28,7 +28,6 @@
 #include "dbtreeview.hxx"
 #include <dbtreelistbox.hxx>
 #include "dbtreemodel.hxx"
-#include <vcl/treelistentry.hxx>
 
 using namespace ::com::sun::star::frame;
 using namespace ::dbtools;
