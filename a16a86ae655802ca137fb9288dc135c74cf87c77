@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "537e3e7b_b7017758",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 4
+      },
+      "lineNbr": 2878,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-08-10T07:44:53Z",
+      "side": 1,
+      "message": "Thanks for the pointer to the up to date information.",
+      "parentUuid": "78f5fb06_7952812a",
+      "revId": "a16a86ae655802ca137fb9288dc135c74cf87c77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "01de8c0a_c3c45d93",
         "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
         "patchSetId": 4
