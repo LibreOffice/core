@@ -81,8 +81,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <svl/filenotation.hxx>
-#include <vcl/treelistbox.hxx>
-#include <vcl/treelistentry.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <svx/databaseregistrationui.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

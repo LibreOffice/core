@@ -18,7 +18,6 @@
  */
 
 #include "dbtreeview.hxx"
-#include <vcl/treelistbox.hxx>
 #include <dbtreelistbox.hxx>
 #include <helpids.h>
 
@@ -32,10 +31,6 @@ DBTreeView::DBTreeView( vcl::Window* pParent, WinBits nBits)
     : Window(pParent, nBits)
     , m_pTreeListBox(VclPtr<InterimDBTreeListBox>::Create(this))
 {
-#if 0
-    m_pTreeListBox->SetDragDropMode( DragDropMode::NONE );
-    m_pTreeListBox->EnableInplaceEditing( true );
-#endif
     m_pTreeListBox->SetHelpId(HID_TLB_TREELISTBOX);
     m_pTreeListBox->Show();
 }

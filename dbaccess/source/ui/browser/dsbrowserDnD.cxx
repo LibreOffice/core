@@ -34,7 +34,6 @@
 #include <svx/dataaccessdescriptor.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
-#include <vcl/treelistentry.hxx>
 #include <vcl/svapp.hxx>
 
 #include <algorithm>

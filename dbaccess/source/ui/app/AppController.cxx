@@ -59,7 +59,6 @@
 #include <osl/diagnose.h>
 
 #include <svl/filenotation.hxx>
-#include <vcl/treelistbox.hxx>
 #include <vcl/transfer.hxx>
 #include <svtools/cliplistener.hxx>
 
