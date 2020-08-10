@@ -93,6 +93,30 @@
       "revId": "69147b185ac260910c0453e01aa0c8f48eadb3c6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9def0e70_9fa59e9e",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-08-10T13:08:25Z",
+      "side": 1,
+      "message": "Need another pDispatcher-\u003eExecuteList(SID_NOTEBOOKBAR ...\n\nThat\u0027s how it done in https://opengrok.libreoffice.org/xref/core/framework/source/uielement/toolbarmodemenucontroller.cxx?r\u003d6653107b#251",
+      "parentUuid": "ff4df2cf_9f34f7bb",
+      "range": {
+        "startLine": 211,
+        "startChar": 4,
+        "endLine": 211,
+        "endChar": 86
+      },
+      "revId": "69147b185ac260910c0453e01aa0c8f48eadb3c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
