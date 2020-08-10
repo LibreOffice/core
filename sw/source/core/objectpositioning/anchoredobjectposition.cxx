@@ -38,7 +38,6 @@
 #include <IDocumentSettingAccess.hxx>
 #include <textboxhelper.hxx>
 #include <fmtsrnd.hxx>
-#include <svx/sdtagitm.hxx>
 
 using namespace ::com::sun::star;
 using namespace objectpositioning;
@@ -410,7 +409,9 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
                                                          const bool bCheckBottom ) const
 {
     SwTwips nAdjustedRelPosY = nProposedRelPosY;
-    const Size aObjSize(GetAnchoredObj().GetObjRect().SSize());
+
+    const Size aObjSize( GetAnchoredObj().GetObjRect().SSize() );
+
     // determine the area of 'page' alignment frame, to which the vertical
     // position is restricted.
     // #i28701# - Extend restricted area for the vertical
@@ -514,25 +515,25 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
         // tdf#101627 - the patch a4dee94afed9ade6ac50237c8d99a6e49d3bebc1
         //              for tdf#91260 causes problems if the textbox
         //              is anchored in the footer, so exclude this case
-        //if ( !( GetAnchorFrame().GetUpper() && GetAnchorFrame().GetUpper()->IsFooterFrame() )
-        //     && nAdjustedRelPosY < nProposedRelPosY )
-        //{
-        //    const SwFrameFormat* pFormat = &(GetFrameFormat());
-        //    if ( GetObject().IsTextBox() )
-        //    {
-        //        // shrink textboxes to extend beyond the page bottom
-        //        SwFrameFormat* pFrameFormat = ::FindFrameFormat(&GetObject());
-        //        SwFormatFrameSize aSize(pFormat->GetFrameSize());
-        //        SwTwips nShrinked = aSize.GetHeight() - (nProposedRelPosY - nAdjustedRelPosY);
-        //        if (nShrinked >= 0) {
-        //            aSize.SetHeight( nShrinked );
-        //            pFrameFormat->SetFormatAttr(aSize);
-        //        }
-        //        nAdjustedRelPosY = nProposedRelPosY;
-        //    } else if ( SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT) )
-        //        // when the shape has a textbox, use only the proposed vertical position
-        //        nAdjustedRelPosY = nProposedRelPosY;
-        //}
+        if ( !( GetAnchorFrame().GetUpper() && GetAnchorFrame().GetUpper()->IsFooterFrame() )
+             && nAdjustedRelPosY < nProposedRelPosY )
+        {
+            const SwFrameFormat* pFormat = &(GetFrameFormat());
+            if ( GetObject().IsTextBox() )
+            {
+                // shrink textboxes to extend beyond the page bottom
+                SwFrameFormat* pFrameFormat = ::FindFrameFormat(&GetObject());
+                SwFormatFrameSize aSize(pFormat->GetFrameSize());
+                SwTwips nShrinked = aSize.GetHeight() - (nProposedRelPosY - nAdjustedRelPosY);
+                if (nShrinked >= 0) {
+                    aSize.SetHeight( nShrinked );
+                    pFrameFormat->SetFormatAttr(aSize);
+                }
+                nAdjustedRelPosY = nProposedRelPosY;
+            } else if ( SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT) )
+                // when the shape has a textbox, use only the proposed vertical position
+                nAdjustedRelPosY = nProposedRelPosY;
+        }
     }
 
     if (GetObject().IsTextBox())
@@ -541,23 +542,6 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
 
             nAdjustedRelPosY = nProposedRelPosY;
 
-        //else
-        //{
-        //    const SwFrameFormat* pFormat = &(GetFrameFormat());
-        //    //shrink textboxes to extend beyond the page bottom
-        //    SwFrameFormat* pFrameFormat = ::FindFrameFormat(&GetObject());
-        //    SwFormatFrameSize aSize(pFormat->GetFrameSize());
-        //    SwTwips nShrinked = aSize.GetHeight() - (nProposedRelPosY - nAdjustedRelPosY);
-        //    if (nShrinked >= 0)
-        //    {
-        //        pFrameFormat->SetFormatAttr(makeSdrTextAutoGrowHeightItem(false));
-        //        aSize.SetHeight(nShrinked);
-        //        pFrameFormat->SetFormatAttr(aSize);
-        //        return nProposedRelPosY;
-        //    }
-        //    //nAdjustedRelPosY = nProposedRelPosY;
-        //
-        //}
     }
     return nAdjustedRelPosY;
 }
@@ -611,29 +595,7 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustHoriRelPos(
         }
 
     }
-    if (GetObject().IsTextBox())
-    {
-        if (_nProposedRelPosX < nAdjustedRelPosX)
-        {
-            nAdjustedRelPosX = _nProposedRelPosX;
-        }
-        //else
-        //{
-        //    const SwFrameFormat* pFormat = &(GetFrameFormat());
-        //    // shrink textboxes to extend beyond the page bottom
-        //    SwFrameFormat* pFrameFormat = ::FindFrameFormat(&GetObject());
-        //    SwFormatFrameSize aSize(pFormat->GetFrameSize());
-        //    SwTwips nShrinked = aSize.GetWidth() - (_nProposedRelPosX - nAdjustedRelPosX);
-        //    if (nShrinked >= 0)
-        //    {
-        //        pFrameFormat->SetFormatAttr(makeSdrTextAutoGrowWidthItem(false));
-        //        aSize.SetWidth(nShrinked);
-        //        pFrameFormat->SetFormatAttr(aSize);
-        //        return _nProposedRelPosX;
-        //    }
-        //    //nAdjustedRelPosX = _nProposedRelPosX;
-        //}
-    }
+
     return nAdjustedRelPosX;
 }
 
