@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9fbc66b6_1ed57ad6",
+        "filename": "cui/inc/strings.hrc",
+        "patchSetId": 10
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2020-08-10T12:44:30Z",
+      "side": 1,
+      "message": "Change “are supposed to use this UI” to “are recommended this UI” or “are advised to use this UI”, whichever you prefer (I prefer the former because it’s shorter).",
+      "revId": "83631caba9fa473707caafc473759c4188660f41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e909f7e_d1c85813",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 10
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2020-08-10T12:44:30Z",
+      "side": 1,
+      "message": "Missing preposition/collocation: “to make you feel home” → “to make you feel at home”",
+      "revId": "83631caba9fa473707caafc473759c4188660f41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a611c2cf_67bae253",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 10
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2020-08-10T12:44:30Z",
+      "side": 1,
+      "message": "Can this tooltip have a more explicit wording?",
+      "revId": "83631caba9fa473707caafc473759c4188660f41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69e6af1d_9e9de24b",
+        "filename": "cui/uiconfig/ui/toolbarmodedialog.ui",
+        "patchSetId": 10
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2020-08-10T12:44:30Z",
+      "side": 1,
+      "message": "The right capitalization here according to the GNOME HIG is: “Select Your Preferred User Interface” (because it’s a dialog title)",
+      "revId": "83631caba9fa473707caafc473759c4188660f41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
