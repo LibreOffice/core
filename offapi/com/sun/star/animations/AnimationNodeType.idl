@@ -68,7 +68,10 @@ constants AnimationNodeType
     /** Defines a command effect. */
     const short COMMAND = 11;
 
-    /** Defines a physics animation */
+    /** Defines a physics animation
+
+        @since LibreOffice 7.1
+    */
     const short ANIMATEPHYSICS = 12;
 
 };
