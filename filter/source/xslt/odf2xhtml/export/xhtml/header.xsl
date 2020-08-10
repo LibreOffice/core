@@ -371,11 +371,31 @@
         </xsl:if>
 
         <!-- keywords about the input source (keywords) -->
-        <xsl:call-template name="add-meta-tag">
-            <xsl:with-param name="meta-name" select="'DCTERMS.subject'" />
-            <xsl:with-param name="meta-data" select="normalize-space(concat($globalData/meta-file/*/office:meta/dc:subject,',   ',$keywords))" />
-            <xsl:with-param name="meta-lang" select="$lang" />
-        </xsl:call-template>
+        <xsl:if test="($globalData/meta-file/*/office:meta/dc:subject != '') or ($keywords != '')">
+            <xsl:choose>
+                <xsl:when test="($globalData/meta-file/*/office:meta/dc:subject != '') and ($keywords != '')">
+                    <xsl:call-template name="add-meta-tag">
+                        <xsl:with-param name="meta-name" select="'DCTERMS.subject'" />
+                        <xsl:with-param name="meta-data" select="normalize-space(concat($globalData/meta-file/*/office:meta/dc:subject,', ',$keywords))" />
+                        <xsl:with-param name="meta-lang" select="$lang" />
+                    </xsl:call-template>
+                </xsl:when>
+                <xsl:when test="($globalData/meta-file/*/office:meta/dc:subject != '')">
+                    <xsl:call-template name="add-meta-tag">
+                        <xsl:with-param name="meta-name" select="'DCTERMS.subject'" />
+                        <xsl:with-param name="meta-data" select="normalize-space($globalData/meta-file/*/office:meta/dc:subject)" />
+                        <xsl:with-param name="meta-lang" select="$lang" />
+                    </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:call-template name="add-meta-tag">
+                        <xsl:with-param name="meta-name" select="'DCTERMS.subject'" />
+                        <xsl:with-param name="meta-data" select="normalize-space($keywords)" />
+                        <xsl:with-param name="meta-lang" select="$lang" />
+                    </xsl:call-template>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:if>
 
         <!-- detailed description about the input source (description) -->
         <xsl:call-template name="add-meta-tag">
@@ -401,6 +421,10 @@
             <!-- <xsl:with-param name="meta-lang" select="$lang" /> -->
         </xsl:call-template>
         </xsl:for-each>
+        <xsl:call-template name="add-meta-tag">
+            <xsl:with-param name="meta-name" select="'xsl:vendor'" />
+            <xsl:with-param name="meta-data" select="system-property('xsl:vendor')" />
+        </xsl:call-template>
 
         <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/" hreflang="en" />
         <link rel="schema.DCTERMS" href="http://purl.org/dc/terms/" hreflang="en" />
@@ -430,7 +454,7 @@
         <xsl:param name="meta-enc" />
         <xsl:param name="meta-lang" />
 
-        <xsl:if test="$meta-data">
+        <xsl:if test="$meta-data and $meta-data != ''">
             <xsl:element name="meta">
                 <xsl:attribute name="name">
                     <xsl:value-of select="$meta-name" />
