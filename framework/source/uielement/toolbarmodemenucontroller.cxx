@@ -36,6 +36,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/types.hxx>
 #include <svtools/miscopt.hxx>
 #include <unotools/confignode.hxx>
@@ -226,65 +227,8 @@ void SAL_CALL ToolbarModeMenuController::statusChanged( const FeatureStateEvent&
 // XMenuListener
 void SAL_CALL ToolbarModeMenuController::itemSelected( const css::awt::MenuEvent& rEvent )
 {
-    Reference< css::awt::XPopupMenu >   xPopupMenu;
-    Reference< XURLTransformer >        xURLTransformer;
-    Reference< XFrame >                 xFrame;
-
-    {
-        osl::MutexGuard aLock(m_aMutex);
-        xPopupMenu = m_xPopupMenu;
-        xURLTransformer = m_xURLTransformer;
-        xFrame = m_xFrame;
-    }
-
-    if ( !xPopupMenu.is() )
-        return;
-
-    VCLXPopupMenu* pPopupMenu = static_cast<VCLXPopupMenu *>(comphelper::getUnoTunnelImplementation<VCLXMenu>( xPopupMenu ));
-    if ( !pPopupMenu )
-        return;
-
-    SolarMutexGuard aSolarMutexGuard;
-    PopupMenu* pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
-    OUString aCmd( pVCLPopupMenu->GetItemCommand( rEvent.MenuId ));
-
-    {
-        URL aTargetURL;
-        Sequence<PropertyValue> aArgs;
-
-        aTargetURL.Complete = ".uno:Notebookbar?File:string=" + aCmd;
-        xURLTransformer->parseStrict( aTargetURL );
-        Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-        if ( xDispatchProvider.is() )
-        {
-            Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch(
-                                                aTargetURL, OUString(), 0 );
-
-            ExecuteInfo* pExecuteInfo = new ExecuteInfo;
-            pExecuteInfo->xDispatch     = xDispatch;
-            pExecuteInfo->aTargetURL    = aTargetURL;
-            pExecuteInfo->aArgs         = aArgs;
-            Application::PostUserEvent( LINK(nullptr,ToolbarModeMenuController, ExecuteHdl_Impl), pExecuteInfo );
-        }
-    }
-
-    URL aTargetURL;
-    Sequence<PropertyValue> aArgs;
-
-    aTargetURL.Complete = ".uno:ToolbarMode?Mode:string=" + aCmd;
-    xURLTransformer->parseStrict( aTargetURL );
-    Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-    if ( xDispatchProvider.is() )
-    {
-        Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch(
-                                                aTargetURL, OUString(), 0 );
-
-        ExecuteInfo* pExecuteInfo = new ExecuteInfo;
-        pExecuteInfo->xDispatch     = xDispatch;
-        pExecuteInfo->aTargetURL    = aTargetURL;
-        pExecuteInfo->aArgs         = aArgs;
-        Application::PostUserEvent( LINK(nullptr, ToolbarModeMenuController, ExecuteHdl_Impl), pExecuteInfo );
-    }
+    auto aArgs(comphelper::InitPropertySequence({{"Mode", makeAny(m_xPopupMenu->getCommand(rEvent.MenuId))}}));
+    dispatchCommand(m_aCommandURL, aArgs);
 }
 
 void SAL_CALL ToolbarModeMenuController::itemActivated( const css::awt::MenuEvent& )
@@ -349,26 +293,6 @@ void SAL_CALL ToolbarModeMenuController::setPopupMenu( const Reference< css::awt
         m_xPopupMenu->addMenuListener( Reference< css::awt::XMenuListener >( static_cast<OWeakObject*>(this), UNO_QUERY ));
         fillPopupMenu( m_xPopupMenu );
     }
-}
-
-IMPL_STATIC_LINK( ToolbarModeMenuController, ExecuteHdl_Impl, void*, p, void )
-{
-    ExecuteInfo* pExecuteInfo = static_cast<ExecuteInfo*>(p);
-    try
-    {
-        // Asynchronous execution as this can lead to our own destruction!
-        // Framework can recycle our current frame and the layout manager disposes all user interface
-        // elements if a component gets detached from its frame!
-        if ( pExecuteInfo->xDispatch.is() )
-        {
-            pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
-        }
-    }
-    catch ( const Exception& )
-    {
-    }
-
-    delete pExecuteInfo;
 }
 
 }

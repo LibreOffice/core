@@ -2615,7 +2615,7 @@ SfxVoidItem Notebookbar SID_NOTEBOOKBAR
 (SfxStringItem File SID_NOTEBOOKBAR)
 [
     AutoUpdate = TRUE,
-    FastCall = FALSE,
+    FastCall = TRUE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,

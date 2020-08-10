@@ -892,6 +892,10 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                         }
                     }
 
+                    // Show/Hide the Notebookbar
+                    const SfxStringItem pItem(SID_NOTEBOOKBAR, aNewName);
+                    pViewFrame->GetDispatcher()->ExecuteList(SID_NOTEBOOKBAR, SfxCallMode::SYNCHRON, {&pItem});
+
                     // Show toolbars
                     for ( const OUString& rName : std::as_const(aMandatoryToolbars) )
                     {
@@ -928,10 +932,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                             pSidebar->RequestOpenDeck();
                         }
                     }
-
-                    // Show/Hide the Notebookbar
-                    const SfxPoolItem* pItem;
-                    pViewFrame->GetDispatcher()->QueryState( SID_NOTEBOOKBAR, pItem );
 
                     // Save settings
                     if ( pViewFrame == SfxViewFrame::Current() )
