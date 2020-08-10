@@ -145,18 +145,18 @@ svtools::ColorConfig & SmModule::GetColorConfig()
 
 void SmModule::ConfigurationChanged(utl::ConfigurationBroadcaster* pBrdCst, ConfigurationHints)
 {
-    if (pBrdCst == mpColorConfig.get())
+    if (pBrdCst != mpColorConfig.get())
+        return;
+
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
     {
-        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-        while (pViewShell)
-        {
-            // FIXME: What if pViewShell is for a different document,
-            // but OTOH Math is presumably never used through
-            // LibreOfficeKit, so maybe an irrelevant concern?
-            if (dynamic_cast<const SmViewShell *>(pViewShell) != nullptr)
-                pViewShell->GetWindow()->Invalidate();
-            pViewShell = SfxViewShell::GetNext(*pViewShell);
-        }
+        // FIXME: What if pViewShell is for a different document,
+        // but OTOH Math is presumably never used through
+        // LibreOfficeKit, so maybe an irrelevant concern?
+        if (dynamic_cast<const SmViewShell *>(pViewShell) != nullptr)
+            pViewShell->GetWindow()->Invalidate();
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }
 

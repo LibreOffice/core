@@ -1160,121 +1160,121 @@ static bool lcl_IsOwnDocument( SwView& rView )
 
 void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
 {
-    if ( rUserData.indexOf(';')>=0 && // more than one token
+    if ( !(rUserData.indexOf(';')>=0 && // more than one token
         // For document without layout only in the onlinelayout or
         // while forward/backward
-         (!m_pWrtShell->IsNewLayout() || m_pWrtShell->GetViewOptions()->getBrowseMode() || bBrowse) )
+         (!m_pWrtShell->IsNewLayout() || m_pWrtShell->GetViewOptions()->getBrowseMode() || bBrowse)) )
+        return;
+
+    bool bIsOwnDocument = lcl_IsOwnDocument( *this );
+
+    CurrShell aCurr(m_pWrtShell.get());
+
+    sal_Int32 nPos = 0;
+
+    // No it is *not* a good idea to call GetToken within Point constr. immediately,
+    // because which parameter is evaluated first?
+    long nX = rUserData.getToken( 0, ';', nPos ).toInt32(),
+         nY = rUserData.getToken( 0, ';', nPos ).toInt32();
+    Point aCursorPos( nX, nY );
+
+    sal_uInt16 nZoomFactor =
+        static_cast< sal_uInt16 >( rUserData.getToken(0, ';', nPos ).toInt32() );
+
+    long nLeft  = rUserData.getToken(0, ';', nPos ).toInt32(),
+         nTop   = rUserData.getToken(0, ';', nPos ).toInt32(),
+         nRight = rUserData.getToken(0, ';', nPos ).toInt32(),
+         nBottom= rUserData.getToken(0, ';', nPos ).toInt32();
+
+    const long nAdd = m_pWrtShell->GetViewOptions()->getBrowseMode() ? DOCUMENTBORDER : DOCUMENTBORDER*2;
+    if ( nBottom > (m_pWrtShell->GetDocSize().Height()+nAdd) )
+        return;
+
+    m_pWrtShell->EnableSmooth( false );
+
+    const tools::Rectangle aVis( nLeft, nTop, nRight, nBottom );
+
+    sal_Int32 nOff = 0;
+    SvxZoomType eZoom;
+    if( !m_pWrtShell->GetViewOptions()->getBrowseMode() )
+        eZoom = static_cast<SvxZoomType>(static_cast<sal_uInt16>(rUserData.getToken(nOff, ';', nPos ).toInt32()));
+    else
     {
-        bool bIsOwnDocument = lcl_IsOwnDocument( *this );
+        eZoom = SvxZoomType::PERCENT;
+        ++nOff;
+    }
 
-        CurrShell aCurr(m_pWrtShell.get());
+    bool bSelectObj = (0 != rUserData.getToken( nOff, ';', nPos ).toInt32())
+                        && m_pWrtShell->IsObjSelectable( aCursorPos );
 
-        sal_Int32 nPos = 0;
-
-        // No it is *not* a good idea to call GetToken within Point constr. immediately,
-        // because which parameter is evaluated first?
-        long nX = rUserData.getToken( 0, ';', nPos ).toInt32(),
-             nY = rUserData.getToken( 0, ';', nPos ).toInt32();
-        Point aCursorPos( nX, nY );
-
-        sal_uInt16 nZoomFactor =
-            static_cast< sal_uInt16 >( rUserData.getToken(0, ';', nPos ).toInt32() );
-
-        long nLeft  = rUserData.getToken(0, ';', nPos ).toInt32(),
-             nTop   = rUserData.getToken(0, ';', nPos ).toInt32(),
-             nRight = rUserData.getToken(0, ';', nPos ).toInt32(),
-             nBottom= rUserData.getToken(0, ';', nPos ).toInt32();
-
-        const long nAdd = m_pWrtShell->GetViewOptions()->getBrowseMode() ? DOCUMENTBORDER : DOCUMENTBORDER*2;
-        if ( nBottom <= (m_pWrtShell->GetDocSize().Height()+nAdd) )
+    // restore editing position
+    m_pViewImpl->SetRestorePosition(aCursorPos, bSelectObj);
+    // set flag value to avoid macro execution.
+    bool bSavedFlagValue = m_pWrtShell->IsMacroExecAllowed();
+    m_pWrtShell->SetMacroExecAllowed( false );
+// os: changed: The user data has to be read if the view is switched back from page preview
+// go to the last editing position when opening own files
+    if(m_bOldShellWasPagePreview || bIsOwnDocument)
+    {
+        m_pWrtShell->SwCursorShell::SetCursor( aCursorPos, !bSelectObj );
+        if( bSelectObj )
         {
-            m_pWrtShell->EnableSmooth( false );
-
-            const tools::Rectangle aVis( nLeft, nTop, nRight, nBottom );
-
-            sal_Int32 nOff = 0;
-            SvxZoomType eZoom;
-            if( !m_pWrtShell->GetViewOptions()->getBrowseMode() )
-                eZoom = static_cast<SvxZoomType>(static_cast<sal_uInt16>(rUserData.getToken(nOff, ';', nPos ).toInt32()));
-            else
-            {
-                eZoom = SvxZoomType::PERCENT;
-                ++nOff;
-            }
-
-            bool bSelectObj = (0 != rUserData.getToken( nOff, ';', nPos ).toInt32())
-                                && m_pWrtShell->IsObjSelectable( aCursorPos );
-
-            // restore editing position
-            m_pViewImpl->SetRestorePosition(aCursorPos, bSelectObj);
-            // set flag value to avoid macro execution.
-            bool bSavedFlagValue = m_pWrtShell->IsMacroExecAllowed();
-            m_pWrtShell->SetMacroExecAllowed( false );
-// os: changed: The user data has to be read if the view is switched back from page preview
-// go to the last editing position when opening own files
-            if(m_bOldShellWasPagePreview || bIsOwnDocument)
-            {
-                m_pWrtShell->SwCursorShell::SetCursor( aCursorPos, !bSelectObj );
-                if( bSelectObj )
-                {
-                    m_pWrtShell->SelectObj( aCursorPos );
-                    m_pWrtShell->EnterSelFrameMode( &aCursorPos );
-                }
-            }
-
-            // reset flag value
-            m_pWrtShell->SetMacroExecAllowed( bSavedFlagValue );
-
-            // set visible area before applying
-            // information from print preview. Otherwise, the applied information
-            // is lost.
-// os: changed: The user data has to be read if the view is switched back from page preview
-// go to the last editing position when opening own files
-            if(m_bOldShellWasPagePreview || bIsOwnDocument )
-            {
-                if ( bBrowse )
-                    SetVisArea( aVis.TopLeft() );
-                else
-                    SetVisArea( aVis );
-            }
-
-            //apply information from print preview - if available
-            if( !m_sNewCursorPos.isEmpty() )
-            {
-                sal_Int32 nIdx{ 0 };
-                const long nXTmp = m_sNewCursorPos.getToken( 0, ';', nIdx ).toInt32();
-                const long nYTmp = m_sNewCursorPos.getToken( 0, ';', nIdx ).toInt32();
-                Point aCursorPos2( nXTmp, nYTmp );
-                bSelectObj = m_pWrtShell->IsObjSelectable( aCursorPos2 );
-
-                m_pWrtShell->SwCursorShell::SetCursor( aCursorPos2 );
-                if( bSelectObj )
-                {
-                    m_pWrtShell->SelectObj( aCursorPos2 );
-                    m_pWrtShell->EnterSelFrameMode( &aCursorPos2 );
-                }
-                m_pWrtShell->MakeSelVisible();
-                m_sNewCursorPos.clear();
-            }
-            else if(USHRT_MAX != m_nNewPage)
-            {
-                m_pWrtShell->GotoPage(m_nNewPage, true);
-                m_nNewPage = USHRT_MAX;
-            }
-
-            SelectShell();
-
-            m_pWrtShell->StartAction();
-            const SwViewOption* pVOpt = m_pWrtShell->GetViewOptions();
-            if( pVOpt->GetZoom() != nZoomFactor || pVOpt->GetZoomType() != eZoom )
-                SetZoom( eZoom, nZoomFactor);
-
-            m_pWrtShell->LockView( true );
-            m_pWrtShell->EndAction();
-            m_pWrtShell->LockView( false );
-            m_pWrtShell->EnableSmooth( true );
+            m_pWrtShell->SelectObj( aCursorPos );
+            m_pWrtShell->EnterSelFrameMode( &aCursorPos );
         }
     }
+
+    // reset flag value
+    m_pWrtShell->SetMacroExecAllowed( bSavedFlagValue );
+
+    // set visible area before applying
+    // information from print preview. Otherwise, the applied information
+    // is lost.
+// os: changed: The user data has to be read if the view is switched back from page preview
+// go to the last editing position when opening own files
+    if(m_bOldShellWasPagePreview || bIsOwnDocument )
+    {
+        if ( bBrowse )
+            SetVisArea( aVis.TopLeft() );
+        else
+            SetVisArea( aVis );
+    }
+
+    //apply information from print preview - if available
+    if( !m_sNewCursorPos.isEmpty() )
+    {
+        sal_Int32 nIdx{ 0 };
+        const long nXTmp = m_sNewCursorPos.getToken( 0, ';', nIdx ).toInt32();
+        const long nYTmp = m_sNewCursorPos.getToken( 0, ';', nIdx ).toInt32();
+        Point aCursorPos2( nXTmp, nYTmp );
+        bSelectObj = m_pWrtShell->IsObjSelectable( aCursorPos2 );
+
+        m_pWrtShell->SwCursorShell::SetCursor( aCursorPos2 );
+        if( bSelectObj )
+        {
+            m_pWrtShell->SelectObj( aCursorPos2 );
+            m_pWrtShell->EnterSelFrameMode( &aCursorPos2 );
+        }
+        m_pWrtShell->MakeSelVisible();
+        m_sNewCursorPos.clear();
+    }
+    else if(USHRT_MAX != m_nNewPage)
+    {
+        m_pWrtShell->GotoPage(m_nNewPage, true);
+        m_nNewPage = USHRT_MAX;
+    }
+
+    SelectShell();
+
+    m_pWrtShell->StartAction();
+    const SwViewOption* pVOpt = m_pWrtShell->GetViewOptions();
+    if( pVOpt->GetZoom() != nZoomFactor || pVOpt->GetZoomType() != eZoom )
+        SetZoom( eZoom, nZoomFactor);
+
+    m_pWrtShell->LockView( true );
+    m_pWrtShell->EndAction();
+    m_pWrtShell->LockView( false );
+    m_pWrtShell->EnableSmooth( true );
 }
 
 void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >& rSequence )
@@ -1381,128 +1381,128 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
         // delegate further
         GetViewImpl()->GetUNOObject_Impl()->getViewSettings()->setPropertyValue("ShowOnlineLayout", uno::Any(bBrowseMode));
     }
-    if (bGotVisibleBottom)
-    {
-        Point aCursorPos( nX, nY );
-        const long nAdd = m_pWrtShell->GetViewOptions()->getBrowseMode() ? DOCUMENTBORDER : DOCUMENTBORDER*2;
-        if (nBottom <= (m_pWrtShell->GetDocSize().Height()+nAdd) )
-        {
-            m_pWrtShell->EnableSmooth( false );
-            const tools::Rectangle aVis( nLeft, nTop, nRight, nBottom );
+    if (!bGotVisibleBottom)
+        return;
 
-            SvxZoomType eZoom;
-            if ( !m_pWrtShell->GetViewOptions()->getBrowseMode() )
-                eZoom = static_cast < SvxZoomType > ( nZoomType );
+    Point aCursorPos( nX, nY );
+    const long nAdd = m_pWrtShell->GetViewOptions()->getBrowseMode() ? DOCUMENTBORDER : DOCUMENTBORDER*2;
+    if (nBottom > (m_pWrtShell->GetDocSize().Height()+nAdd) )
+        return;
+
+    m_pWrtShell->EnableSmooth( false );
+    const tools::Rectangle aVis( nLeft, nTop, nRight, nBottom );
+
+    SvxZoomType eZoom;
+    if ( !m_pWrtShell->GetViewOptions()->getBrowseMode() )
+        eZoom = static_cast < SvxZoomType > ( nZoomType );
+    else
+    {
+        eZoom = SvxZoomType::PERCENT;
+    }
+    if (bGotIsSelectedFrame)
+    {
+        bool bSelectObj = bSelectedFrame && m_pWrtShell->IsObjSelectable( aCursorPos );
+
+        // set flag value to avoid macro execution.
+        bool bSavedFlagValue = m_pWrtShell->IsMacroExecAllowed();
+        m_pWrtShell->SetMacroExecAllowed( false );
+// os: changed: The user data has to be read if the view is switched back from page preview
+// go to the last editing position when opening own files
+        m_pViewImpl->SetRestorePosition(aCursorPos, bSelectObj);
+        if(m_bOldShellWasPagePreview|| bIsOwnDocument)
+        {
+            m_pWrtShell->SwCursorShell::SetCursor( aCursorPos, !bSelectObj );
+
+            // Update the shell to toggle Header/Footer edit if needed
+            bool bInHeader = true;
+            if ( m_pWrtShell->IsInHeaderFooter( &bInHeader ) )
+            {
+                if ( !bInHeader )
+                {
+                    m_pWrtShell->SetShowHeaderFooterSeparator( FrameControlType::Footer, true );
+                    m_pWrtShell->SetShowHeaderFooterSeparator( FrameControlType::Header, false );
+                }
+                else
+                {
+                    m_pWrtShell->SetShowHeaderFooterSeparator( FrameControlType::Header, true );
+                    m_pWrtShell->SetShowHeaderFooterSeparator( FrameControlType::Footer, false );
+                }
+
+                // Force repaint
+                m_pWrtShell->GetWin()->Invalidate();
+            }
+            if ( m_pWrtShell->IsInHeaderFooter() != m_pWrtShell->IsHeaderFooterEdit() )
+                m_pWrtShell->ToggleHeaderFooterEdit();
+
+            if( bSelectObj )
+            {
+                m_pWrtShell->SelectObj( aCursorPos );
+                m_pWrtShell->EnterSelFrameMode( &aCursorPos );
+            }
+        }
+
+        // reset flag value
+        m_pWrtShell->SetMacroExecAllowed( bSavedFlagValue );
+    }
+    SelectShell();
+
+    // Set ViewLayoutSettings
+    const bool bSetViewLayoutSettings = bGotViewLayoutColumns && bGotViewLayoutBookMode &&
+                                        ( pVOpt->GetViewLayoutColumns() != nViewLayoutColumns || pVOpt->IsViewLayoutBookMode() != bViewLayoutBookMode );
+
+    const bool bSetViewSettings = bGotZoomType && bGotZoomFactor &&
+                                  ( pVOpt->GetZoom() != nZoomFactor || pVOpt->GetZoomType() != eZoom );
+
+    // In case we have a 'fixed' view layout of 2 or more columns,
+    // we have to apply the view options *before* starting the action.
+    // Otherwise the SetZoom function cannot work correctly, because
+    // the view layout hasn't been calculated.
+    const bool bZoomNeedsViewLayout = bSetViewLayoutSettings &&
+                                      1 < nViewLayoutColumns &&
+                                      bSetViewSettings &&
+                                      eZoom != SvxZoomType::PERCENT;
+
+    if ( !bZoomNeedsViewLayout )
+        m_pWrtShell->StartAction();
+
+    if ( bSetViewLayoutSettings )
+        SetViewLayout( nViewLayoutColumns, bViewLayoutBookMode, true );
+
+    if ( bZoomNeedsViewLayout )
+        m_pWrtShell->StartAction();
+
+    if ( bSetViewSettings )
+        SetZoom( eZoom, nZoomFactor, true );
+
+// os: changed: The user data has to be read if the view is switched back from page preview
+// go to the last editing position when opening own files
+    if(m_bOldShellWasPagePreview||bIsOwnDocument)
+    {
+        if ( bGotVisibleLeft && bGotVisibleTop )
+        {
+            Point aTopLeft(aVis.TopLeft());
+            // make sure the document is still centered
+            const SwTwips lBorder = IsDocumentBorder() ? DOCUMENTBORDER : 2 * DOCUMENTBORDER;
+            SwTwips nEditWidth = GetEditWin().GetOutputSize().Width();
+            if(nEditWidth > (m_aDocSz.Width() + lBorder ))
+                aTopLeft.setX( ( m_aDocSz.Width() + lBorder - nEditWidth  ) / 2 );
             else
             {
-                eZoom = SvxZoomType::PERCENT;
+                //check if the values are possible
+                long nXMax = m_pHScrollbar->GetRangeMax() - m_pHScrollbar->GetVisibleSize();
+                if( aTopLeft.X() > nXMax )
+                    aTopLeft.setX( nXMax < 0 ? 0 : nXMax );
             }
-            if (bGotIsSelectedFrame)
-            {
-                bool bSelectObj = bSelectedFrame && m_pWrtShell->IsObjSelectable( aCursorPos );
-
-                // set flag value to avoid macro execution.
-                bool bSavedFlagValue = m_pWrtShell->IsMacroExecAllowed();
-                m_pWrtShell->SetMacroExecAllowed( false );
-// os: changed: The user data has to be read if the view is switched back from page preview
-// go to the last editing position when opening own files
-                m_pViewImpl->SetRestorePosition(aCursorPos, bSelectObj);
-                if(m_bOldShellWasPagePreview|| bIsOwnDocument)
-                {
-                    m_pWrtShell->SwCursorShell::SetCursor( aCursorPos, !bSelectObj );
-
-                    // Update the shell to toggle Header/Footer edit if needed
-                    bool bInHeader = true;
-                    if ( m_pWrtShell->IsInHeaderFooter( &bInHeader ) )
-                    {
-                        if ( !bInHeader )
-                        {
-                            m_pWrtShell->SetShowHeaderFooterSeparator( FrameControlType::Footer, true );
-                            m_pWrtShell->SetShowHeaderFooterSeparator( FrameControlType::Header, false );
-                        }
-                        else
-                        {
-                            m_pWrtShell->SetShowHeaderFooterSeparator( FrameControlType::Header, true );
-                            m_pWrtShell->SetShowHeaderFooterSeparator( FrameControlType::Footer, false );
-                        }
-
-                        // Force repaint
-                        m_pWrtShell->GetWin()->Invalidate();
-                    }
-                    if ( m_pWrtShell->IsInHeaderFooter() != m_pWrtShell->IsHeaderFooterEdit() )
-                        m_pWrtShell->ToggleHeaderFooterEdit();
-
-                    if( bSelectObj )
-                    {
-                        m_pWrtShell->SelectObj( aCursorPos );
-                        m_pWrtShell->EnterSelFrameMode( &aCursorPos );
-                    }
-                }
-
-                // reset flag value
-                m_pWrtShell->SetMacroExecAllowed( bSavedFlagValue );
-            }
-            SelectShell();
-
-            // Set ViewLayoutSettings
-            const bool bSetViewLayoutSettings = bGotViewLayoutColumns && bGotViewLayoutBookMode &&
-                                                ( pVOpt->GetViewLayoutColumns() != nViewLayoutColumns || pVOpt->IsViewLayoutBookMode() != bViewLayoutBookMode );
-
-            const bool bSetViewSettings = bGotZoomType && bGotZoomFactor &&
-                                          ( pVOpt->GetZoom() != nZoomFactor || pVOpt->GetZoomType() != eZoom );
-
-            // In case we have a 'fixed' view layout of 2 or more columns,
-            // we have to apply the view options *before* starting the action.
-            // Otherwise the SetZoom function cannot work correctly, because
-            // the view layout hasn't been calculated.
-            const bool bZoomNeedsViewLayout = bSetViewLayoutSettings &&
-                                              1 < nViewLayoutColumns &&
-                                              bSetViewSettings &&
-                                              eZoom != SvxZoomType::PERCENT;
-
-            if ( !bZoomNeedsViewLayout )
-                m_pWrtShell->StartAction();
-
-            if ( bSetViewLayoutSettings )
-                SetViewLayout( nViewLayoutColumns, bViewLayoutBookMode, true );
-
-            if ( bZoomNeedsViewLayout )
-                m_pWrtShell->StartAction();
-
-            if ( bSetViewSettings )
-                SetZoom( eZoom, nZoomFactor, true );
-
-// os: changed: The user data has to be read if the view is switched back from page preview
-// go to the last editing position when opening own files
-            if(m_bOldShellWasPagePreview||bIsOwnDocument)
-            {
-                if ( bGotVisibleLeft && bGotVisibleTop )
-                {
-                    Point aTopLeft(aVis.TopLeft());
-                    // make sure the document is still centered
-                    const SwTwips lBorder = IsDocumentBorder() ? DOCUMENTBORDER : 2 * DOCUMENTBORDER;
-                    SwTwips nEditWidth = GetEditWin().GetOutputSize().Width();
-                    if(nEditWidth > (m_aDocSz.Width() + lBorder ))
-                        aTopLeft.setX( ( m_aDocSz.Width() + lBorder - nEditWidth  ) / 2 );
-                    else
-                    {
-                        //check if the values are possible
-                        long nXMax = m_pHScrollbar->GetRangeMax() - m_pHScrollbar->GetVisibleSize();
-                        if( aTopLeft.X() > nXMax )
-                            aTopLeft.setX( nXMax < 0 ? 0 : nXMax );
-                    }
-                    SetVisArea( aTopLeft );
-                }
-                else if (bGotVisibleLeft && bGotVisibleTop && bGotVisibleRight && bGotVisibleBottom )
-                    SetVisArea( aVis );
-            }
-
-            m_pWrtShell->LockView( true );
-            m_pWrtShell->EndAction();
-            m_pWrtShell->LockView( false );
-            m_pWrtShell->EnableSmooth( true );
+            SetVisArea( aTopLeft );
         }
+        else if (bGotVisibleLeft && bGotVisibleTop && bGotVisibleRight && bGotVisibleBottom )
+            SetVisArea( aVis );
     }
+
+    m_pWrtShell->LockView( true );
+    m_pWrtShell->EndAction();
+    m_pWrtShell->LockView( false );
+    m_pWrtShell->EnableSmooth( true );
 
 }
 

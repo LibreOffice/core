@@ -146,20 +146,18 @@ void XNamedRanges::testRemoveByName()
     bool bHasIt = xNamedRanges->hasByName(maNameToRemove);
     CPPUNIT_ASSERT_MESSAGE("NamedRange initial1 does not exist, can't remove it", bHasIt);
 
-    if (bHasIt)
-    {
-        // remove existing
-        sal_Int32 nInitialCount = xIndex->getCount();
-        xNamedRanges->removeByName(maNameToRemove);
-        sal_Int32 nNewCount = xIndex->getCount();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("NamedRange initial1 not removed", nNewCount,
-                                     nInitialCount - 1);
-        CPPUNIT_ASSERT_MESSAGE("Wrong NamedRange removed, initial1 still present",
-                               !xNamedRanges->hasByName(maNameToRemove));
-        // try to remove non existing
-        xNamedRanges->removeByName(
-            "dummyNonExistingNamedRange"); // an exception should be raised here
-    }
+    if (!bHasIt)
+        return;
+
+    // remove existing
+    sal_Int32 nInitialCount = xIndex->getCount();
+    xNamedRanges->removeByName(maNameToRemove);
+    sal_Int32 nNewCount = xIndex->getCount();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("NamedRange initial1 not removed", nNewCount, nInitialCount - 1);
+    CPPUNIT_ASSERT_MESSAGE("Wrong NamedRange removed, initial1 still present",
+                           !xNamedRanges->hasByName(maNameToRemove));
+    // try to remove non existing
+    xNamedRanges->removeByName("dummyNonExistingNamedRange"); // an exception should be raised here
 }
 
 void XNamedRanges::testOutputList()
