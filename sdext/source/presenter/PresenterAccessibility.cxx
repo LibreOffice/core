@@ -594,27 +594,27 @@ void PresenterAccessible::UpdateAccessibilityHierarchy (
         }
     }
 
-    if (mxNotesContentWindow != rxNotesContentWindow)
+    if (mxNotesContentWindow == rxNotesContentWindow)
+        return;
+
+    if (mpAccessibleNotes.is())
     {
-        if (mpAccessibleNotes.is())
-        {
-            mpAccessibleConsole->RemoveChild(mpAccessibleNotes);
-            mpAccessibleNotes = nullptr;
-        }
+        mpAccessibleConsole->RemoveChild(mpAccessibleNotes);
+        mpAccessibleNotes = nullptr;
+    }
 
-        mxNotesContentWindow = rxNotesContentWindow;
-        mxNotesBorderWindow = rxNotesBorderWindow;
+    mxNotesContentWindow = rxNotesContentWindow;
+    mxNotesBorderWindow = rxNotesBorderWindow;
 
-        if (mxNotesContentWindow.is())
-        {
-            mpAccessibleNotes = AccessibleNotes::Create(
-                mxComponentContext,
-                lang::Locale(),
-                mxNotesContentWindow,
-                mxNotesBorderWindow,
-                rpNotesTextView);
-            mpAccessibleConsole->AddChild(mpAccessibleNotes.get());
-        }
+    if (mxNotesContentWindow.is())
+    {
+        mpAccessibleNotes = AccessibleNotes::Create(
+            mxComponentContext,
+            lang::Locale(),
+            mxNotesContentWindow,
+            mxNotesBorderWindow,
+            rpNotesTextView);
+        mpAccessibleConsole->AddChild(mpAccessibleNotes.get());
     }
 }
 
@@ -746,23 +746,23 @@ void PresenterAccessible::AccessibleObject::SetWindow (
 {
     Reference<awt::XWindow2> xContentWindow (rxContentWindow, UNO_QUERY);
 
-    if (mxContentWindow.get() != xContentWindow.get())
+    if (mxContentWindow.get() == xContentWindow.get())
+        return;
+
+    if (mxContentWindow.is())
     {
-        if (mxContentWindow.is())
-        {
-            mxContentWindow->removeWindowListener(this);
-        }
-
-        mxContentWindow = xContentWindow;
-        mxBorderWindow.set(rxBorderWindow, UNO_QUERY);
-
-        if (mxContentWindow.is())
-        {
-            mxContentWindow->addWindowListener(this);
-        }
-
-        UpdateStateSet();
+        mxContentWindow->removeWindowListener(this);
     }
+
+    mxContentWindow = xContentWindow;
+    mxBorderWindow.set(rxBorderWindow, UNO_QUERY);
+
+    if (mxContentWindow.is())
+    {
+        mxContentWindow->addWindowListener(this);
+    }
+
+    UpdateStateSet();
 }
 
 void PresenterAccessible::AccessibleObject::SetAccessibleParent (
@@ -987,19 +987,19 @@ sal_Int32 SAL_CALL PresenterAccessible::AccessibleObject::getBackground()
 void SAL_CALL PresenterAccessible::AccessibleObject::addAccessibleEventListener (
     const Reference<XAccessibleEventListener>& rxListener)
 {
-    if (rxListener.is())
-    {
-        const osl::MutexGuard aGuard(m_aMutex);
+    if (!rxListener.is())
+        return;
 
-        if (rBHelper.bDisposed || rBHelper.bInDispose)
-        {
-            uno::Reference<uno::XInterface> xThis (static_cast<XWeak*>(this), UNO_QUERY);
-            rxListener->disposing (lang::EventObject(xThis));
-        }
-        else
-        {
-            maListeners.push_back(rxListener);
-        }
+    const osl::MutexGuard aGuard(m_aMutex);
+
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    {
+        uno::Reference<uno::XInterface> xThis (static_cast<XWeak*>(this), UNO_QUERY);
+        rxListener->disposing (lang::EventObject(xThis));
+    }
+    else
+    {
+        maListeners.push_back(rxListener);
     }
 }
 
@@ -1700,44 +1700,44 @@ void AccessibleNotes::SetTextView (
 
     mpTextView = rpTextView;
 
-    if (mpTextView)
+    if (!mpTextView)
+        return;
+
+    // Create a new set of children, one for each paragraph.
+    const sal_Int32 nParagraphCount (mpTextView->GetParagraphCount());
+    for (sal_Int32 nIndex=0; nIndex<nParagraphCount; ++nIndex)
     {
-        // Create a new set of children, one for each paragraph.
-        const sal_Int32 nParagraphCount (mpTextView->GetParagraphCount());
-        for (sal_Int32 nIndex=0; nIndex<nParagraphCount; ++nIndex)
-        {
-            rtl::Reference<PresenterAccessible::AccessibleParagraph> pParagraph (
-                new PresenterAccessible::AccessibleParagraph(
-                    css::lang::Locale(),
-                    "Paragraph"+OUString::number(nIndex),
-                    rpTextView->GetParagraph(nIndex),
-                    nIndex));
-            pParagraph->LateInitialization();
-            pParagraph->SetWindow(mxContentWindow, mxBorderWindow);
-            pParagraph->SetAccessibleParent(this);
-            aChildren.emplace_back(pParagraph.get());
-        }
-        maChildren.swap(aChildren);
-        FireAccessibleEvent(AccessibleEventId::INVALIDATE_ALL_CHILDREN, Any(), Any());
-
-        // Dispose the old children. (This will remove them from the focus
-        // manager).
-        for (const auto& rxChild : aChildren)
-        {
-            Reference<lang::XComponent> xComponent (static_cast<XWeak*>(rxChild.get()), UNO_QUERY);
-            if (xComponent.is())
-                xComponent->dispose();
-        }
-
-        // This class acts as a controller of who broadcasts caret motion
-        // events and handles text changes.  Register the corresponding
-        // listeners here.
-        mpTextView->GetCaret()->SetCaretMotionBroadcaster(
-            [this](sal_Int32 a, sal_Int32 b, sal_Int32 c, sal_Int32 d)
-                { return this->NotifyCaretChange(a, b, c, d); });
-        mpTextView->SetTextChangeBroadcaster(
-            [this]() { return SetTextView(mpTextView); });
+        rtl::Reference<PresenterAccessible::AccessibleParagraph> pParagraph (
+            new PresenterAccessible::AccessibleParagraph(
+                css::lang::Locale(),
+                "Paragraph"+OUString::number(nIndex),
+                rpTextView->GetParagraph(nIndex),
+                nIndex));
+        pParagraph->LateInitialization();
+        pParagraph->SetWindow(mxContentWindow, mxBorderWindow);
+        pParagraph->SetAccessibleParent(this);
+        aChildren.emplace_back(pParagraph.get());
     }
+    maChildren.swap(aChildren);
+    FireAccessibleEvent(AccessibleEventId::INVALIDATE_ALL_CHILDREN, Any(), Any());
+
+    // Dispose the old children. (This will remove them from the focus
+    // manager).
+    for (const auto& rxChild : aChildren)
+    {
+        Reference<lang::XComponent> xComponent (static_cast<XWeak*>(rxChild.get()), UNO_QUERY);
+        if (xComponent.is())
+            xComponent->dispose();
+    }
+
+    // This class acts as a controller of who broadcasts caret motion
+    // events and handles text changes.  Register the corresponding
+    // listeners here.
+    mpTextView->GetCaret()->SetCaretMotionBroadcaster(
+        [this](sal_Int32 a, sal_Int32 b, sal_Int32 c, sal_Int32 d)
+            { return this->NotifyCaretChange(a, b, c, d); });
+    mpTextView->SetTextChangeBroadcaster(
+        [this]() { return SetTextView(mpTextView); });
 }
 
 void AccessibleNotes::SetWindow (

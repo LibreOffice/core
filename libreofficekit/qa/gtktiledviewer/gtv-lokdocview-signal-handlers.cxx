@@ -52,44 +52,44 @@ void LOKDocViewSigHandlers::commandChanged(LOKDocView* pDocView, char* pPayload,
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
     std::string aPayload(pPayload);
     size_t nPosition = aPayload.find('=');
-    if (nPosition != std::string::npos)
+    if (nPosition == std::string::npos)
+        return;
+
+    const std::string aKey = aPayload.substr(0, nPosition);
+    const std::string aValue = aPayload.substr(nPosition + 1);
+    GtkToolItem* pItem = gtv_application_window_find_tool_by_unocommand(window, aKey);
+    if (pItem != nullptr)
     {
-        const std::string aKey = aPayload.substr(0, nPosition);
-        const std::string aValue = aPayload.substr(nPosition + 1);
-        GtkToolItem* pItem = gtv_application_window_find_tool_by_unocommand(window, aKey);
-        if (pItem != nullptr)
-        {
-            if (aValue == "true" || aValue == "false") {
-                bool bEdit = aValue == "true";
-                if (bool(gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pItem))) != bEdit)
-                {
-                    // Avoid invoking lok_doc_view_post_command().
-                    // FIXME: maybe block/unblock the signal (see
-                    // g_signal_handlers_block_by_func) ?
-                    gtv_application_window_set_toolbar_broadcast(window, false);
-                    gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(pItem), bEdit);
-                    gtv_application_window_set_toolbar_broadcast(window, true);
+        if (aValue == "true" || aValue == "false") {
+            bool bEdit = aValue == "true";
+            if (bool(gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pItem))) != bEdit)
+            {
+                // Avoid invoking lok_doc_view_post_command().
+                // FIXME: maybe block/unblock the signal (see
+                // g_signal_handlers_block_by_func) ?
+                gtv_application_window_set_toolbar_broadcast(window, false);
+                gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(pItem), bEdit);
+                gtv_application_window_set_toolbar_broadcast(window, true);
 
-                }
-            } else if (aValue == "enabled" || aValue == "disabled") {
-                bool bSensitive = aValue == "enabled";
-                gtk_widget_set_sensitive(GTK_WIDGET(pItem), bSensitive);
-
-                // Remember state, so in case edit is disable and enabled
-                // later, the correct sensitivity can be restored.
-                GtvMainToolbar* pMainToolbar = gtv_application_window_get_main_toolbar(window);
-                gtv_main_toolbar_set_sensitive_internal(pMainToolbar, pItem, bSensitive);
             }
+        } else if (aValue == "enabled" || aValue == "disabled") {
+            bool bSensitive = aValue == "enabled";
+            gtk_widget_set_sensitive(GTK_WIDGET(pItem), bSensitive);
+
+            // Remember state, so in case edit is disable and enabled
+            // later, the correct sensitivity can be restored.
+            GtvMainToolbar* pMainToolbar = gtv_application_window_get_main_toolbar(window);
+            gtv_main_toolbar_set_sensitive_internal(pMainToolbar, pItem, bSensitive);
         }
-        else if (aKey == ".uno:TrackedChangeIndex")
-        {
-            std::string aText("Current redline: ");
-            if (aValue.empty())
-                aText += "none";
-            else
-                aText += aValue;
-            gtk_label_set_text(GTK_LABEL(window->redlinelabel), aText.c_str());
-        }
+    }
+    else if (aKey == ".uno:TrackedChangeIndex")
+    {
+        std::string aText("Current redline: ");
+        if (aValue.empty())
+            aText += "none";
+        else
+            aText += aValue;
+        gtk_label_set_text(GTK_LABEL(window->redlinelabel), aText.c_str());
     }
 }
 

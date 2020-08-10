@@ -190,22 +190,22 @@ void initQApp(std::map<OUString, css::beans::Optional<css::uno::Any>>& rSettings
 Service::Service()
 {
     css::uno::Reference<css::uno::XCurrentContext> context(css::uno::getCurrentContext());
-    if (context.is())
-    {
-        OUString desktop;
-        context->getValueByName("system.desktop-environment") >>= desktop;
+    if (!context.is())
+        return;
 
-        if (desktop == "PLASMA5")
+    OUString desktop;
+    context->getValueByName("system.desktop-environment") >>= desktop;
+
+    if (desktop == "PLASMA5")
+    {
+        if (!qApp) // no qt event loop yet
         {
-            if (!qApp) // no qt event loop yet
-            {
-                // so we start one and read KDE settings
-                initQApp(m_KDESettings);
-            }
-            else // someone else (most likely kde/qt vclplug) has started qt event loop
-                // all that is left to do is to read KDE settings
-                readKDESettings(m_KDESettings);
+            // so we start one and read KDE settings
+            initQApp(m_KDESettings);
         }
+        else // someone else (most likely kde/qt vclplug) has started qt event loop
+            // all that is left to do is to read KDE settings
+            readKDESettings(m_KDESettings);
     }
 }
 

@@ -110,27 +110,28 @@ void OfficeConnection::setUp() {
 }
 
 void OfficeConnection::tearDown() {
-    if (process_ != nullptr) {
-        if (context_.is()) {
-            css::uno::Reference< css::frame::XDesktop2 > desktop = css::frame::Desktop::create( context_ );
-            context_.clear();
-            try {
-                CPPUNIT_ASSERT(desktop->terminate());
-                desktop.clear();
-            } catch (css::lang::DisposedException &) {}
-                // it appears that DisposedExceptions can already happen while
-                // receiving the response of the terminate call
-        }
-        CPPUNIT_ASSERT_EQUAL(osl_Process_E_None, osl_joinProcess(process_));
-        oslProcessInfo info;
-        info.Size = sizeof info;
-        CPPUNIT_ASSERT_EQUAL(
-            osl_Process_E_None,
-            osl_getProcessInfo(process_, osl_Process_EXITCODE, &info));
-        CPPUNIT_ASSERT_EQUAL(oslProcessExitCode(0), info.Code);
-        osl_freeProcessHandle(process_);
-        process_ = nullptr; // guard against subsequent calls to isStillAlive
+    if (process_ == nullptr)
+        return;
+
+    if (context_.is()) {
+        css::uno::Reference< css::frame::XDesktop2 > desktop = css::frame::Desktop::create( context_ );
+        context_.clear();
+        try {
+            CPPUNIT_ASSERT(desktop->terminate());
+            desktop.clear();
+        } catch (css::lang::DisposedException &) {}
+            // it appears that DisposedExceptions can already happen while
+            // receiving the response of the terminate call
     }
+    CPPUNIT_ASSERT_EQUAL(osl_Process_E_None, osl_joinProcess(process_));
+    oslProcessInfo info;
+    info.Size = sizeof info;
+    CPPUNIT_ASSERT_EQUAL(
+        osl_Process_E_None,
+        osl_getProcessInfo(process_, osl_Process_EXITCODE, &info));
+    CPPUNIT_ASSERT_EQUAL(oslProcessExitCode(0), info.Code);
+    osl_freeProcessHandle(process_);
+    process_ = nullptr; // guard against subsequent calls to isStillAlive
 }
 
 

@@ -36,23 +36,23 @@ void XMLBase64ImportContext::characters(const OUString& rChars)
 {
     OUString aTrimmedChars(rChars.trim());
 
-    if (!aTrimmedChars.isEmpty())
-    {
-        OUString aChars;
-        if (!m_aBase64CharsLeft.isEmpty())
-        {
-            aChars = m_aBase64CharsLeft + aTrimmedChars;
-            m_aBase64CharsLeft.clear();
-        }
-        else
-            aChars = aTrimmedChars;
+    if (aTrimmedChars.isEmpty())
+        return;
 
-        uno::Sequence<sal_Int8> aBuffer((aChars.getLength() / 4) * 3);
-        const sal_Int32 nCharsDecoded = comphelper::Base64::decodeSomeChars(aBuffer, aChars);
-        m_aStream.WriteBytes(aBuffer.getArray(), aBuffer.getLength());
-        if (nCharsDecoded != aChars.getLength())
-            m_aBase64CharsLeft = aChars.copy(nCharsDecoded);
+    OUString aChars;
+    if (!m_aBase64CharsLeft.isEmpty())
+    {
+        aChars = m_aBase64CharsLeft + aTrimmedChars;
+        m_aBase64CharsLeft.clear();
     }
+    else
+        aChars = aTrimmedChars;
+
+    uno::Sequence<sal_Int8> aBuffer((aChars.getLength() / 4) * 3);
+    const sal_Int32 nCharsDecoded = comphelper::Base64::decodeSomeChars(aBuffer, aChars);
+    m_aStream.WriteBytes(aBuffer.getArray(), aBuffer.getLength());
+    if (nCharsDecoded != aChars.getLength())
+        m_aBase64CharsLeft = aChars.copy(nCharsDecoded);
 }
 
 const librevenge::RVNGBinaryData& XMLBase64ImportContext::getBinaryData() const

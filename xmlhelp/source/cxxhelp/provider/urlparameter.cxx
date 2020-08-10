@@ -260,20 +260,20 @@ void URLParameter::readHelpDataFile()
         }
     }
 
-    if( bSuccess )
+    if( !bSuccess )
+        return;
+
+    DbtToStringConverter converter( pData );
+    m_aTitle = converter.getTitle();
+    m_pDatabases->replaceName( m_aTitle );
+    m_aPath  = converter.getFile();
+    m_aJar   = converter.getDatabase();
+    if( !aExtensionPath.isEmpty() )
     {
-        DbtToStringConverter converter( pData );
-        m_aTitle = converter.getTitle();
-        m_pDatabases->replaceName( m_aTitle );
-        m_aPath  = converter.getFile();
-        m_aJar   = converter.getDatabase();
-        if( !aExtensionPath.isEmpty() )
-        {
-            m_aJar = "?" + aExtensionPath + "?" + m_aJar;
-            m_aExtensionRegistryPath = aExtensionRegistryPath;
-        }
-        m_aTag   = converter.getHash();
+        m_aJar = "?" + aExtensionPath + "?" + m_aJar;
+        m_aExtensionRegistryPath = aExtensionRegistryPath;
     }
+    m_aTag   = converter.getHash();
 }
 
 
