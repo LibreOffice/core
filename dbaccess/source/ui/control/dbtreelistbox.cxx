@@ -117,8 +117,6 @@ TreeListBox::TreeListBox(std::unique_ptr<weld::TreeView> xTreeView)
     , m_pActionListener(nullptr)
     , m_pContextMenuProvider(nullptr)
 {
-    m_xTreeView->make_sorted();
-
     m_xTreeView->connect_key_press(LINK(this, TreeListBox, KeyInputHdl));
     m_xTreeView->connect_changed(LINK(this, TreeListBox, SelectHdl));
     m_xTreeView->connect_query_tooltip(LINK(this, TreeListBox, QueryTooltipHdl));
