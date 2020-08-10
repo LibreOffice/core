@@ -45,7 +45,6 @@ namespace dbaui
     class OAppBorderWindow;
     class InterimDBTreeListBox;
     class TreeListBox;
-    class DBTreeListBox;
 
     class OPreviewWindow : public vcl::Window
     {
