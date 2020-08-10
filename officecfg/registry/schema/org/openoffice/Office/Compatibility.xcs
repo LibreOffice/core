@@ -179,6 +179,14 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="ReverseXAxisOrientationDoughnutChart" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <!-- See tdf#123218, tdf#108067 for rationale -->
+          <desc>Specifies the X axis orientation of doughnut charts.</desc>
+          <label>Reverse the X axis orientation of doughnut charts. Disable for better OOXML interoperability.</label>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
   </component>
 </oor:component-schema>

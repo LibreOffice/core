@@ -14,12 +14,18 @@
 #include <boost/property_tree/json_parser.hpp>
 
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/AxisOrientation.hpp>
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/table/XTableRows.hpp>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/configuration.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/scheduler.hxx>
@@ -2889,5 +2895,120 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf129655)
     createDoc("tdf129655-vtextbox.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//fly/txt[@WritingMode='Vertical']", 1);
+}
+
+static uno::Reference<text::XTextRange> getAssociatedTextRange(uno::Any object)
+{
+    // possible cases:
+    // 1. a container of other objects - e.g. selection of 0 to n text portions, or 1 to n drawing objects
+    try
+    {
+        uno::Reference<container::XIndexAccess> xIndexAccess(object, uno::UNO_QUERY_THROW);
+        if (xIndexAccess.is() && xIndexAccess->getCount() > 0)
+        {
+            for (int i = 0; i < xIndexAccess->getCount(); ++i)
+            {
+                uno::Reference<text::XTextRange> xRange
+                    = getAssociatedTextRange(xIndexAccess->getByIndex(i));
+                if (xRange.is())
+                    return xRange;
+            }
+        }
+    }
+    catch (const uno::Exception&)
+    {
+    }
+
+    // 2. another TextContent, having an anchor we can use
+    try
+    {
+        uno::Reference<text::XTextContent> xTextContent(object, uno::UNO_QUERY_THROW);
+        if (xTextContent.is())
+        {
+            uno::Reference<text::XTextRange> xRange = xTextContent->getAnchor();
+            if (xRange.is())
+                return xRange;
+        }
+    }
+    catch (const uno::Exception&)
+    {
+    }
+
+    // an object which supports XTextRange directly
+    try
+    {
+        uno::Reference<text::XTextRange> xRange(object, uno::UNO_QUERY_THROW);
+        if (xRange.is())
+            return xRange;
+    }
+    catch (const uno::Exception&)
+    {
+    }
+
+    return nullptr;
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf123218)
+{
+    struct ReverseXAxisOrientationDoughnutChart
+        : public comphelper::ConfigurationProperty<ReverseXAxisOrientationDoughnutChart, bool>
+    {
+        static OUString path()
+        {
+            return "/org.openoffice.Office.Compatibility/View/ReverseXAxisOrientationDoughnutChart";
+        }
+        ~ReverseXAxisOrientationDoughnutChart() = delete;
+    };
+    auto batch = comphelper::ConfigurationChanges::create();
+
+    ReverseXAxisOrientationDoughnutChart::set(false, batch);
+    batch->commit();
+
+    createDoc();
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // create an OLE shape in the document
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xMSF);
+    uno::Reference<beans::XPropertySet> xShapeProps(
+        xMSF->createInstance("com.sun.star.text.TextEmbeddedObject"), uno::UNO_QUERY);
+    xShapeProps->setPropertyValue("CLSID",
+                                  uno::makeAny(OUString("12dcae26-281f-416f-a234-c3086127382e")));
+    uno::Reference<drawing::XShape> xShape(xShapeProps, uno::UNO_QUERY_THROW);
+    xShape->setSize(awt::Size(16000, 9000));
+    uno::Reference<text::XTextContent> chartTextContent(xShapeProps, uno::UNO_QUERY_THROW);
+    uno::Reference<view::XSelectionSupplier> xSelSupplier(pTextDoc->getCurrentController(),
+                                                          uno::UNO_QUERY_THROW);
+    uno::Any aSelection = xSelSupplier->getSelection();
+    uno::Reference<text::XTextRange> xTextRange = getAssociatedTextRange(aSelection);
+    CPPUNIT_ASSERT(xTextRange);
+    xTextRange->getText()->insertTextContent(xTextRange, chartTextContent, false);
+
+    // insert a doughnut chart
+    uno::Reference<frame::XModel> xDocModel;
+    xShapeProps->getPropertyValue("Model") >>= xDocModel;
+    CPPUNIT_ASSERT(xDocModel);
+    uno::Reference<chart::XChartDocument> xChartDoc(xDocModel, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xChartDoc);
+    uno::Reference<lang::XMultiServiceFactory> xChartMSF(xChartDoc, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xChartMSF);
+    uno::Reference<chart::XDiagram> xDiagram(
+        xChartMSF->createInstance("com.sun.star.chart.DonutDiagram"), uno::UNO_QUERY);
+    xChartDoc->setDiagram(xDiagram);
+
+    // test primary X axis Orientation value
+    uno::Reference<chart2::XChartDocument> xChartDoc2(xChartDoc, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xChartDoc2);
+    uno::Reference<chart2::XCoordinateSystemContainer> xCooSysContainer(
+        xChartDoc2->getFirstDiagram(), uno::UNO_QUERY_THROW);
+    uno::Sequence<uno::Reference<chart2::XCoordinateSystem>> xCooSysSequence
+        = xCooSysContainer->getCoordinateSystems();
+    uno::Reference<chart2::XCoordinateSystem> xCoord = xCooSysSequence[0];
+    CPPUNIT_ASSERT(xCoord.is());
+    uno::Reference<chart2::XAxis> xAxis = xCoord->getAxisByDimension(0, 0);
+    CPPUNIT_ASSERT(xAxis.is());
+    chart2::ScaleData aScaleData = xAxis->getScaleData();
+    CPPUNIT_ASSERT_EQUAL(chart2::AxisOrientation_MATHEMATICAL, aScaleData.Orientation);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
