@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-07-23 15:08:45 using:
+ Generated on 2020-08-10 21:11:12 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -205,7 +205,6 @@
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <test/outputdevice.hxx>
-#include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
 #include <tools/contnr.hxx>
 #include <tools/date.hxx>
@@ -309,7 +308,6 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/svlbitm.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
@@ -322,6 +320,7 @@
 #include <vcl/toolkit/fixed.hxx>
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/toolkit/spinfld.hxx>
+#include <vcl/toolkit/svlbitm.hxx>
 #include <vcl/toolkit/unowrap.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/treelist.hxx>
