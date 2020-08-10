@@ -117,6 +117,30 @@
       "revId": "69147b185ac260910c0453e01aa0c8f48eadb3c6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef4b5678_87e2c927",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-08-10T15:54:17Z",
+      "side": 1,
+      "message": "Actually, could you try with your original code, but after applying https://gerrit.libreoffice.org/c/core/+/100439 ? (that patch affects also the main menu actions, so need to be properly tested there too)",
+      "parentUuid": "9def0e70_9fa59e9e",
+      "range": {
+        "startLine": 211,
+        "startChar": 4,
+        "endLine": 211,
+        "endChar": 86
+      },
+      "revId": "69147b185ac260910c0453e01aa0c8f48eadb3c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
