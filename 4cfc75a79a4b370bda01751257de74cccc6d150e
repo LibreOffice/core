@@ -87,6 +87,24 @@
       "revId": "4cfc75a79a4b370bda01751257de74cccc6d150e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6eea25f0_1ffef14e",
+        "filename": "cppuhelper/source/servicemanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1500,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-08-10T12:45:48Z",
+      "side": 1,
+      "message": "Sorry, I misspoke.\n\nThe real problem is up in the other part of this change.\n\nServiceManager::readRdbFile calls Parser, which throws InvalidRegistryException, which is caught in readRdbFile.\nreadRdbFile then calls readLegacyRdbFile, which throws a weird exception from down in stoc/, which is what is reported.\n\nSo the InvalidRegistryException from the .xml file is completed ignored.",
+      "parentUuid": "6427d5f0_76295c68",
+      "revId": "4cfc75a79a4b370bda01751257de74cccc6d150e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
