@@ -18,7 +18,6 @@
  */
 
 #include <dbtreelistbox.hxx>
-#include <listviewitems.hxx>
 #include <callbacks.hxx>
 
 #include <com/sun/star/ui/XContextMenuInterceptor.hpp>
@@ -36,7 +35,6 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/help.hxx>
-#include <vcl/treelistentry.hxx>
 
 #include <memory>
 
@@ -937,6 +935,16 @@ void DBTreeListBox::StateChanged( StateChangedType nStateChange )
 {
     if ( nStateChange == StateChangedType::Visible )
         implStopSelectionTimer();
+}
+
+std::unique_ptr<weld::TreeIter> TreeListBox::GetRootLevelParent(const weld::TreeIter* pEntry) const
+{
+    if (!pEntry)
+        return nullptr;
+    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator(pEntry));
+    while (m_xTreeView->get_iter_depth(*xEntry))
+        m_xTreeView->iter_parent(*xEntry);
+    return xEntry;
 }
 
 }   // namespace dbaui
