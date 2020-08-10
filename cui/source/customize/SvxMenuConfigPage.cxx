@@ -445,7 +445,7 @@ IMPL_LINK(SvxMenuConfigPage, ModifyItemHdl, const OString&, rIdent, void)
             aNewName = aNameDialog.GetName();
 
             pEntry->SetName( aNewName );
-            m_xContentsListBox->set_text(nActEntry, aNewName, 1);
+            m_xContentsListBox->set_text(nActEntry, aNewName, 0);
 
             GetSaveInData()->SetModified();
             GetTopLevelSelection()->SetModified();
