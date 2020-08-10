@@ -2799,7 +2799,9 @@ static void doc_iniUnoCommands ()
         OUString(".uno:Substract"),
         OUString(".uno:DistributeSelection"),
         OUString(".uno:Intersect"),
-        OUString(".uno:FreezePanesRow")
+        OUString(".uno:FreezePanesRow"),
+        OUString(".uno:BorderInner"),
+        OUString(".uno:BorderOuter")
     };
 
     util::URL aCommandURL;
