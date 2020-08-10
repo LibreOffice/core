@@ -53,15 +53,6 @@ namespace framework
             // XEventListener
             virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
-            struct ExecuteInfo
-            {
-                css::uno::Reference< css::frame::XDispatch >     xDispatch;
-                css::util::URL                                   aTargetURL;
-                css::uno::Sequence< css::beans::PropertyValue >  aArgs;
-            };
-
-            DECL_STATIC_LINK( ToolbarModeMenuController, ExecuteHdl_Impl, void*, void );
-
         private:
             void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
 
