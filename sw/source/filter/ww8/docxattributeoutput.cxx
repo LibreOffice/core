@@ -1236,10 +1236,12 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
     if (!m_bWritingHeaderFooter && m_pCurrentFrame)
     {
         const SwFrameFormat& rFrameFormat = m_pCurrentFrame->GetFrameFormat();
+        const SvxBoxItem& rBox = rFrameFormat.GetBox();
         if (TextBoxIsFramePr(rFrameFormat))
         {
             const Size aSize = m_pCurrentFrame->GetSize();
             PopulateFrameProperties(&rFrameFormat, aSize);
+            FormatBox(rBox);
         }
     }
 
