@@ -7410,7 +7410,6 @@ include/vcl/splitwin.hxx
 include/vcl/status.hxx
 include/vcl/stdtext.hxx
 include/vcl/svapp.hxx
-include/vcl/svlbitm.hxx
 include/vcl/svtaccessiblefactory.hxx
 include/vcl/syschild.hxx
 include/vcl/sysdata.hxx
@@ -7444,6 +7443,7 @@ include/vcl/toolkit/prgsbar.hxx
 include/vcl/toolkit/roadmap.hxx
 include/vcl/toolkit/spin.hxx
 include/vcl/toolkit/spinfld.hxx
+include/vcl/toolkit/svlbitm.hxx
 include/vcl/toolkit/svtabbx.hxx
 include/vcl/toolkit/tabdlg.hxx
 include/vcl/toolkit/throbber.hxx
