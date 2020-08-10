@@ -565,8 +565,10 @@ void SAL_CALL osl_setThreadName(char const * name)
     shortname[ LINUX_THREAD_NAME_MAXLEN ] = '\0';
     strncpy( shortname, name, LINUX_THREAD_NAME_MAXLEN );
     int err = pthread_setname_np( pthread_self(), shortname );
-    if ( 0 != err )
-        SAL_WARN("sal.osl", "pthread_setname_np failed with errno " << err);
+    if ( 0 == err )
+        return;
+
+    SAL_WARN("sal.osl", "pthread_setname_np failed with errno " << err);
 #elif defined __FreeBSD_kernel__
     pthread_setname_np( pthread_self(), name );
 #elif defined MACOSX || defined IOS

@@ -163,37 +163,37 @@ void SchXMLEquationContext::StartElement( const uno::Reference< xml::sax::XAttri
         }
     }
 
-    if( sAutoStyleName.isEmpty() && !bShowEquation && !bShowRSquare )
-        return;
-
-    uno::Reference< beans::XPropertySet > xEquationProperties = chart2::RegressionEquation::create( comphelper::getProcessComponentContext() );
-
-    if( !sAutoStyleName.isEmpty() )
+    if( !sAutoStyleName.isEmpty() || bShowEquation || bShowRSquare )
     {
-        const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
-        if( pStylesCtxt )
+        uno::Reference< beans::XPropertySet > xEquationProperties = chart2::RegressionEquation::create( comphelper::getProcessComponentContext() );
+
+        if( !sAutoStyleName.isEmpty() )
         {
-            const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-                SchXMLImportHelper::GetChartFamilyID(), sAutoStyleName );
+            const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
+            if( pStylesCtxt )
+            {
+                const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
+                    SchXMLImportHelper::GetChartFamilyID(), sAutoStyleName );
 
-            XMLPropStyleContext* pPropStyleContext =
-                const_cast< XMLPropStyleContext* >( dynamic_cast< const XMLPropStyleContext* >( pStyle ));
+                XMLPropStyleContext* pPropStyleContext =
+                    const_cast< XMLPropStyleContext* >( dynamic_cast< const XMLPropStyleContext* >( pStyle ));
 
-            if( pPropStyleContext )
-                pPropStyleContext->FillPropertySet( xEquationProperties );
+                if( pPropStyleContext )
+                    pPropStyleContext->FillPropertySet( xEquationProperties );
+            }
         }
-    }
-    xEquationProperties->setPropertyValue( "ShowEquation", uno::makeAny( bShowEquation ));
-    xEquationProperties->setPropertyValue( "ShowCorrelationCoefficient", uno::makeAny( bShowRSquare ));
+        xEquationProperties->setPropertyValue( "ShowEquation", uno::makeAny( bShowEquation ));
+        xEquationProperties->setPropertyValue( "ShowCorrelationCoefficient", uno::makeAny( bShowRSquare ));
 
-    if( bHasXPos && bHasYPos )
-    {
-        chart2::RelativePosition aRelPos;
-        aRelPos.Primary = static_cast< double >( aPosition.X ) / static_cast< double >( maChartSize.Width );
-        aRelPos.Secondary = static_cast< double >( aPosition.Y ) / static_cast< double >( maChartSize.Height );
-        xEquationProperties->setPropertyValue( "RelativePosition", uno::makeAny( aRelPos ));
+        if( bHasXPos && bHasYPos )
+        {
+            chart2::RelativePosition aRelPos;
+            aRelPos.Primary = static_cast< double >( aPosition.X ) / static_cast< double >( maChartSize.Width );
+            aRelPos.Secondary = static_cast< double >( aPosition.Y ) / static_cast< double >( maChartSize.Height );
+            xEquationProperties->setPropertyValue( "RelativePosition", uno::makeAny( aRelPos ));
+        }
+        mrRegressionStyle.m_xEquationProperties.set( xEquationProperties );
     }
-    mrRegressionStyle.m_xEquationProperties.set( xEquationProperties );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

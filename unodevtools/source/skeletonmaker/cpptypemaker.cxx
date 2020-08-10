@@ -695,17 +695,17 @@ static void printServiceMembers(
         o << "\n// supported interface " << rIface.name << "\n";
         generateDocumentation(o, options, manager, u2b(rIface.name), delegate);
     }
-    if (delegate.isEmpty()) {
-        o << "\n// properties of service \""<< name << "\"\n";
-        for (const auto& rProp : entity->getDirectProperties())
-        {
-            o << "// private ";
-            printType(o, options, manager, rProp.type, 1);
-            o << " "
-              << codemaker::cpp::translateUnoToCppIdentifier(
-                  u2b(rProp.name), "property")
-              << ";\n";
-        }
+    if (!delegate.isEmpty())        return;
+
+    o << "\n// properties of service \""<< name << "\"\n";
+    for (const auto& rProp : entity->getDirectProperties())
+    {
+        o << "// private ";
+        printType(o, options, manager, rProp.type, 1);
+        o << " "
+          << codemaker::cpp::translateUnoToCppIdentifier(
+              u2b(rProp.name), "property")
+          << ";\n";
     }
 }
 

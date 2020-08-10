@@ -602,18 +602,19 @@ void PauseResumeCommand::Execute()
     if ( ! pWindowManager.is())
         return;
 
-    if (IPresentationTime* pPresentationTime = mpPresenterController->GetPresentationTime())
+    IPresentationTime* pPresentationTime = mpPresenterController->GetPresentationTime();
+    if (!pPresentationTime)
+        return;
+
+    if(pPresentationTime->isPaused())
     {
-        if(pPresentationTime->isPaused())
-        {
-            pPresentationTime->setPauseStatus(false);
-            pWindowManager->SetPauseState(false);
-        }
-        else
-        {
-            pPresentationTime->setPauseStatus(true);
-            pWindowManager->SetPauseState(true);
-        }
+        pPresentationTime->setPauseStatus(false);
+        pWindowManager->SetPauseState(false);
+    }
+    else
+    {
+        pPresentationTime->setPauseStatus(true);
+        pWindowManager->SetPauseState(true);
     }
 }
 

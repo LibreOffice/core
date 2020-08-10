@@ -27,28 +27,28 @@ void btn_clicked(GtkWidget* pButton, gpointer)
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
     GtkToolButton* pItem = GTK_TOOL_BUTTON(pButton);
     const gchar* label = gtk_tool_button_get_label(pItem);
-    if (gtv_application_window_get_toolbar_broadcast(window) && g_str_has_prefix(label, ".uno:"))
+    if (!(gtv_application_window_get_toolbar_broadcast(window) && g_str_has_prefix(label, ".uno:")))
+        return;
+
+    std::string aArguments;
+    if (g_strcmp0(label, ".uno:InsertAnnotation") == 0)
     {
-        std::string aArguments;
-        if (g_strcmp0(label, ".uno:InsertAnnotation") == 0)
-        {
-            std::map<std::string, std::string> aEntries;
-            aEntries["Text"] = "";
-            GtvHelpers::userPromptDialog(GTK_WINDOW(window), "Insert Comment", aEntries);
+        std::map<std::string, std::string> aEntries;
+        aEntries["Text"] = "";
+        GtvHelpers::userPromptDialog(GTK_WINDOW(window), "Insert Comment", aEntries);
 
-            boost::property_tree::ptree aTree;
-            aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "type", nullptr), '/'), "string");
-            aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "value", nullptr), '/'), aEntries["Text"]);
+        boost::property_tree::ptree aTree;
+        aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "type", nullptr), '/'), "string");
+        aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "value", nullptr), '/'), aEntries["Text"]);
 
-            std::stringstream aStream;
-            boost::property_tree::write_json(aStream, aTree);
-            aArguments = aStream.str();
-        }
-
-        bool bNotify = g_strcmp0(label, ".uno:Save") == 0;
-        if (window->lokdocview)
-            lok_doc_view_post_command(LOK_DOC_VIEW(window->lokdocview), label, aArguments.c_str(), bNotify);
+        std::stringstream aStream;
+        boost::property_tree::write_json(aStream, aTree);
+        aArguments = aStream.str();
     }
+
+    bool bNotify = g_strcmp0(label, ".uno:Save") == 0;
+    if (window->lokdocview)
+        lok_doc_view_post_command(LOK_DOC_VIEW(window->lokdocview), label, aArguments.c_str(), bNotify);
 }
 
 void doCopy(GtkWidget* pButton, gpointer /*pItem*/)

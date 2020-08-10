@@ -85,13 +85,13 @@ void FastAttributeList::add( sal_Int32 nToken, const char* pValue, size_t nValue
     if (maAttributeValues.back() > mnChunkLength)
     {
         const sal_Int32 newLen = std::max(mnChunkLength * 2, maAttributeValues.back());
-        if (auto p = static_cast<char*>(realloc(mpChunk, newLen)))
-        {
-            mnChunkLength = newLen;
-            mpChunk = p;
-        }
-        else
+        auto p = static_cast<char*>(realloc(mpChunk, newLen));
+        if (!p)
             throw std::bad_alloc();
+
+        mnChunkLength = newLen;
+        mpChunk = p;
+
     }
     strncpy(mpChunk + nWritePosition, pValue, nValueLength);
     mpChunk[nWritePosition + nValueLength] = '\0';
