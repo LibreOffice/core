@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b98f2b31_e68f6cba",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-10T07:58:47Z",
+      "side": 1,
+      "message": "cppumaker emits CPPU_GCC_DLLPUBLIC_EXPORT for exception classes, which is\n\n  #define CPPU_GCC_DLLPUBLIC_EXPORT SAL_EXCEPTION_DLLPUBLIC_EXPORT\n\nin include/cppu/macros.hxx, and that in turn is only defined to something in include/sal/types.h if __GNUC__ is defined.  Is __GNUC__ maybe not defined for this new env?",
+      "revId": "849d39d3ff0cbf5a489d9e1c90daaa8764242228",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "914d9734_743cb749",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_aarch64/abi.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-10T07:58:47Z",
+      "side": 1,
+      "message": "this should be removed again?",
+      "revId": "849d39d3ff0cbf5a489d9e1c90daaa8764242228",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
