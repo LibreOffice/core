@@ -277,9 +277,6 @@
         <prop oor:name="TargetName" oor:type="xs:string">
           <value>_self</value>
         </prop>
-        <prop oor:name="ImageIdentifier" oor:type="xs:string">
-          <value>private:image/3242</value>
-        </prop>
       </node>
     </node>
     <node oor:name="Wizard">
@@ -293,9 +290,6 @@
         <prop oor:name="TargetName" oor:type="xs:string">
           <value>_self</value>
         </prop>
-        <prop oor:name="ImageIdentifier" oor:type="xs:string">
-          <value>private:image/3216</value>
-        </prop>
       </node>
       <node oor:name="m1" oor:op="replace" install:module="writer">
         <prop oor:name="URL" oor:type="xs:string">
@@ -307,9 +301,6 @@
         <prop oor:name="TargetName" oor:type="xs:string">
           <value>_self</value>
         </prop>
-        <prop oor:name="ImageIdentifier" oor:type="xs:string">
-          <value>private:image/3216</value>
-        </prop>
       </node>
       <node oor:name="m2" oor:op="replace" install:module="writer">
         <prop oor:name="URL" oor:type="xs:string">
@@ -320,9 +311,6 @@
         </prop>
         <prop oor:name="TargetName" oor:type="xs:string">
           <value>_self</value>
-        </prop>
-        <prop oor:name="ImageIdentifier" oor:type="xs:string">
-          <value>private:image/3216</value>
         </prop>
       </node>
       <node oor:name="m10" oor:op="replace">
@@ -343,9 +331,6 @@
         <prop oor:name="TargetName" oor:type="xs:string">
           <value>_self</value>
         </prop>
-        <prop oor:name="ImageIdentifier" oor:type="xs:string">
-          <value>private:image/3216</value>
-        </prop>
       </node>
       <node oor:name="m12" oor:op="replace" install:module="writer">
         <prop oor:name="URL" oor:type="xs:string">
@@ -356,9 +341,6 @@
         </prop>
         <prop oor:name="TargetName" oor:type="xs:string">
           <value>_self</value>
-        </prop>
-        <prop oor:name="ImageIdentifier" oor:type="xs:string">
-          <value>private:image/3216</value>
         </prop>
       </node>
       <node oor:name="m13" oor:op="replace">
@@ -378,9 +360,6 @@
         </prop>
         <prop oor:name="TargetName" oor:type="xs:string">
           <value>_self</value>
-        </prop>
-        <prop oor:name="ImageIdentifier" oor:type="xs:string">
-          <value>private:image/3216</value>
         </prop>
       </node>
     </node>
