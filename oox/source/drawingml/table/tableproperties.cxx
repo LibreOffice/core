@@ -145,7 +145,7 @@ void TableProperties::pushToPropSet(const ::oox::core::XmlFilterBase& rFilterBas
     for (auto& tableRow : mvTableRows)
     {
         sal_Int32 nColumn = 0;
-        sal_Int32 nColumnSize = tableRow.getTableCells().size();
+        sal_Int32 nColumnSize = mvTableGrid.size();
         sal_Int32 nRemovedColumn = 0; //
 
         for (sal_Int32 nColIndex = 0; nColIndex < nColumnSize; nColIndex++)
