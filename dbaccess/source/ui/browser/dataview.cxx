@@ -131,12 +131,6 @@ namespace dbaui
     {
         Window::StateChanged( nType );
 
-        if ( nType == StateChangedType::ControlBackground )
-        {
-            // Check if we need to get new images for normal/high contrast mode
-            m_xController->notifyHiContrastChanged();
-        }
-
         if ( nType != StateChangedType::InitShow )
             return;
 
@@ -158,20 +152,7 @@ namespace dbaui
             DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
-    void ODataView::DataChanged( const DataChangedEvent& rDCEvt )
-    {
-        Window::DataChanged( rDCEvt );
 
-        if ( (rDCEvt.GetType() == DataChangedEventType::FONTS) ||
-            (rDCEvt.GetType() == DataChangedEventType::DISPLAY) ||
-            (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
-            ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-            (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
-        {
-            // Check if we need to get new images for normal/high contrast mode
-            m_xController->notifyHiContrastChanged();
-        }
-    }
     void ODataView::attachFrame(const Reference< XFrame >& _xFrame)
     {
         m_pAccel->init(m_xContext, _xFrame);

@@ -335,12 +335,23 @@ namespace svx
         return true;
     }
 
+    ODataAccessObjectTransferable::ODataAccessObjectTransferable()
+    {
+    }
 
     ODataAccessObjectTransferable::ODataAccessObjectTransferable(
             const OUString&  _rDatasource
             ,const sal_Int32  _nCommandType
             ,const OUString& _rCommand
         )
+    {
+        construct(_rDatasource,OUString(),_nCommandType,_rCommand,nullptr,(CommandType::COMMAND == _nCommandType),_rCommand);
+    }
+
+    void ODataAccessObjectTransferable::Update(
+            const OUString&  _rDatasource,
+            const sal_Int32  _nCommandType,
+            const OUString& _rCommand)
     {
         construct(_rDatasource,OUString(),_nCommandType,_rCommand,nullptr,(CommandType::COMMAND == _nCommandType),_rCommand);
     }
@@ -355,6 +366,15 @@ namespace svx
         construct(_rDatasource,OUString(),_nCommandType,_rCommand,_rxConnection,(CommandType::COMMAND == _nCommandType),_rCommand);
     }
 
+    void ODataAccessObjectTransferable::Update(
+                    const OUString&  _rDatasource,
+                    const sal_Int32 _nCommandType,
+                    const OUString& _rCommand,
+                    const Reference< XConnection >& _rxConnection)
+    {
+        OSL_ENSURE(_rxConnection.is(), "Wrong Update used.!");
+        construct(_rDatasource,OUString(),_nCommandType,_rCommand,_rxConnection,(CommandType::COMMAND == _nCommandType),_rCommand);
+    }
 
     ODataAccessObjectTransferable::ODataAccessObjectTransferable(const Reference< XPropertySet >& _rxLivingForm)
     {

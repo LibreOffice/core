@@ -136,7 +136,7 @@ namespace dbaui
             @return
                 the image to be used for folders of this type
         */
-        static Image getDatabaseImage();
+        static OUString getDatabaseImage();
     };
 
 } // namespace dbaui

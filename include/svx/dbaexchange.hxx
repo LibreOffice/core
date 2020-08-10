@@ -152,7 +152,7 @@ namespace svx
 
     /** class for transferring data access objects (tables, queries, statements ...)
     */
-    class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC ODataAccessObjectTransferable : public TransferableHelper
+    class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC ODataAccessObjectTransferable : public TransferDataContainer
     {
         ODataAccessDescriptor   m_aDescriptor;
         OUString         m_sCompatibleObjectDescription;
@@ -174,6 +174,13 @@ namespace svx
             ,const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
         );
 
+        void Update(
+            const OUString&  _rDatasourceOrLocation,
+            const sal_Int32 _nCommandType,
+            const OUString& _rCommand,
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
+        );
+
         /** should be used when copying a query object and no connection is available.
             @param  _rDatasource
                 The data source name.
@@ -188,11 +195,19 @@ namespace svx
             ,const OUString& _rCommand
         );
 
+        void Update(
+            const OUString& _rDatasourceOrLocation,
+            const sal_Int32 _nCommandType,
+            const OUString& _rCommand
+        );
+
         /** with this ctor, only the object descriptor format will be provided
         */
         ODataAccessObjectTransferable(
             const css::uno::Reference< css::beans::XPropertySet >& _rxLivingForm
         );
+
+        ODataAccessObjectTransferable();
 
         /** checks whether or not an object descriptor can be extracted from the data flavor vector given
             @param _rFlavors

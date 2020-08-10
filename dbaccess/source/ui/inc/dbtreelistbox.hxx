@@ -25,11 +25,14 @@
 
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/treelistbox.hxx>
+#include <vcl/transfer.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/weld.hxx>
 
 #include <memory>
 #include <set>
+
+#include "dbexchange.hxx"
 
 namespace dbaui
 {
@@ -168,6 +171,7 @@ namespace dbaui
 
     private:
         Timer                       m_aTimer; // is needed for table updates
+        rtl::Reference<ODataClipboard> m_xHelper;
 
         Link<LinkParamNone*,void>   m_aSelChangeHdl;        // handler to be called (asynchronously) when the selection changes in any way
         Link<LinkParamNone*,void>   m_aCopyHandler;         // called when someone press CTRL+C
@@ -191,11 +195,15 @@ namespace dbaui
                                                           const weld::TreeIter* pStart = nullptr,
                                                           const IEntryFilter* pFilter = nullptr) const;
 
+        std::unique_ptr<weld::TreeIter> GetRootLevelParent(const weld::TreeIter* pEntry) const;
+
         void setControlActionListener(IControlActionListener* pListener) { m_pActionListener = pListener; }
         void setContextMenuProvider(IContextMenuProvider* pContextMenuProvider) { m_pContextMenuProvider = pContextMenuProvider; }
 
         weld::TreeView& GetWidget() { return *m_xTreeView; }
         const weld::TreeView& GetWidget() const { return *m_xTreeView; }
+
+        ODataClipboard& GetDataTransfer() { return *m_xHelper; }
 
         sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt);
         sal_Int8 ExecuteDrop(const ExecuteDropEvent& rEvt);

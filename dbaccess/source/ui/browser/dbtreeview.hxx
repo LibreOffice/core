@@ -20,20 +20,17 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_BROWSER_DBTREEVIEW_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_BROWSER_DBTREEVIEW_HXX
 
+#include <vcl/weld.hxx>
 #include <vcl/window.hxx>
-
-class SvTreeList;
-class SvTreeListEntry;
 
 namespace dbaui
 {
-    class DBTreeListBox;
-    // - DBTreeView -
+    class InterimDBTreeListBox;
 
     class DBTreeView : public vcl::Window
     {
     private:
-        VclPtr<DBTreeListBox>  m_pTreeListBox;
+        VclPtr<InterimDBTreeListBox> m_pTreeListBox;
     protected:
         // window overridables
         virtual void Resize() override;
@@ -45,17 +42,16 @@ namespace dbaui
         virtual void dispose() override;
 
         /** sets a handler which is called when a list box entry is to be expanded.
-            <p>When calling the link, the parameter is an SvTreeListEntry marking the entry to be expanded.
+            <p>When calling the link, the parameter is a TreeIter marking the entry to be expanded.
             </p>
         */
-        void                SetPreExpandHandler(const Link<SvTreeListEntry*,bool>& _rHdl);
+        void                SetPreExpandHandler(const Link<const weld::TreeIter&,bool>& rHdl);
 
-        void                setCopyHandler(const Link<LinkParamNone*,void>& _rHdl);
+        void                setCopyHandler(const Link<LinkParamNone*,void>& rHdl);
 
-        SvTreeList*         GetTreeModel();
-        void                setSelChangeHdl(const Link<LinkParamNone*,void>& _rHdl);
+        void                setSelChangeHdl(const Link<LinkParamNone*,void>& rHdl);
 
-        DBTreeListBox&      getListBox() const { return *m_pTreeListBox; }
+        InterimDBTreeListBox& getListBox() const { return *m_pTreeListBox; }
 
         virtual void        GetFocus() override;
     };

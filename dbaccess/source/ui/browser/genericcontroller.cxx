@@ -1146,10 +1146,6 @@ bool OGenericUnoController::isCommandEnabled(sal_uInt16 _nCommandId) const
     return GetState( _nCommandId ).bEnabled;
 }
 
-void OGenericUnoController::notifyHiContrastChanged()
-{
-}
-
 bool OGenericUnoController::isDataSourceReadOnly() const
 {
     return false;

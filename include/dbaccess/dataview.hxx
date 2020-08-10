@@ -38,7 +38,6 @@ namespace svt {
     class AcceleratorExecute;
 }
 
-class DataChangedEvent;
 class FixedLine;
 class NotifyEvent;
 namespace tools { class Rectangle; }
@@ -70,7 +69,6 @@ namespace dbaui
         // window overridables
         virtual bool PreNotify( NotifyEvent& rNEvt ) override;
         virtual void StateChanged( StateChangedType nStateChange ) override;
-        virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 
         IController& getCommandController() const { return *m_xController; }
 
