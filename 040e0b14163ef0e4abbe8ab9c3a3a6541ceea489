@@ -87,6 +87,24 @@
       "revId": "040e0b14163ef0e4abbe8ab9c3a3a6541ceea489",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "990482ac_63fab9d2",
+        "filename": "cui/source/customize/cfgutil.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-08-10T23:01:16Z",
+      "side": 0,
+      "message": "Should we just leave this here as the default? The user can change it then to \"Proper sequence\" in the run macro dialog.",
+      "parentUuid": "5bd743ca_f4a2cd81",
+      "revId": "040e0b14163ef0e4abbe8ab9c3a3a6541ceea489",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
