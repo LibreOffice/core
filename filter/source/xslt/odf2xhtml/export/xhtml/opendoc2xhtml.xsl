@@ -132,6 +132,7 @@
         <xsl:if test="$debugEnabled">
             <xsl:call-template name="debug-check-parameter" />
         </xsl:if>
+        <xsl:message>XSL Vendor: '<xsl:value-of select="system-property('xsl:vendor')"/>'</xsl:message>
         <!-- gathers style properties and
             returns them as globalData parameter to the 'start-main' template            -->
         <xsl:call-template name="collect-global-odf-properties" />
