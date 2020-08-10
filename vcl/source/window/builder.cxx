@@ -1910,8 +1910,9 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             xWindow = xListBox;
         }
     }
-    else if (name == "VclOptionalBox")
+    else if (name == "VclOptionalBox" || name == "sfxlo-OptionalBox")
     {
+        // tdf#135495 fallback sfxlo-OptionalBox to VclOptionalBox as a stopgap
         xWindow = VclPtr<OptionalBox>::Create(pParent);
     }
     else if (name == "GtkIconView")
