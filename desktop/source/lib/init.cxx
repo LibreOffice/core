@@ -2824,7 +2824,9 @@ static void doc_iniUnoCommands ()
         OUString(".uno:AlignMiddle"),
         OUString(".uno:AlignDown"),
         OUString(".uno:TraceChangeMode"),
-        OUString(".uno:FreezePanesRow")
+        OUString(".uno:FreezePanesRow"),
+        OUString(".uno:BorderInner"),
+        OUString(".uno:BorderOuter")
     };
 
     util::URL aCommandURL;
