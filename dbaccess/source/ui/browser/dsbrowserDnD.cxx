@@ -59,11 +59,12 @@ namespace dbaui
     using namespace ::dbtools;
     using namespace ::svx;
 
-    TransferableHelper* SbaTableQueryBrowser::implCopyObject( SvTreeListEntry* _pApplyTo, sal_Int32 _nCommandType )
+    TransferableHelper* SbaTableQueryBrowser::implCopyObject(const weld::TreeIter& rApplyTo, sal_Int32 _nCommandType)
     {
+#if 0
         try
         {
-            OUString aName = GetEntryText( _pApplyTo );
+            OUString aName = GetEntryText( rApplyTo );
             OUString aDSName = getDataSourceAccessor( m_pTreeView->getListBox().GetRootLevelParent( _pApplyTo ) );
 
             ODataClipboard* pData = nullptr;
@@ -88,19 +89,22 @@ namespace dbaui
         {
             DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
+#endif
         return nullptr;
     }
+
     sal_Int8 SbaTableQueryBrowser::queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors )
     {
         // check if we're a table or query container
-        SvTreeListEntry* pHitEntry = m_pTreeView->getListBox().GetEntry( _rEvt.maPosPixel );
-
-        if ( pHitEntry ) // no drop if no entry was hit...
+        weld::TreeView& rTreeView = m_pTreeView->getListBox().GetWidget();
+        std::unique_ptr<weld::TreeIter> xHitEntry(rTreeView.make_iterator());
+        // get_dest_row_at_pos with false cause no drop if no entry was hit exactly
+        if (rTreeView.get_dest_row_at_pos(_rEvt.maPosPixel, xHitEntry.get(), false))
         {
             // it must be a container
-            EntryType eEntryType = getEntryType( pHitEntry );
+            EntryType eEntryType = getEntryType(*xHitEntry);
             SharedConnection xConnection;
-            if ( eEntryType == etTableContainer && ensureConnection( pHitEntry, xConnection ) && xConnection.is() )
+            if ( eEntryType == etTableContainer && ensureConnection(xHitEntry.get(), xConnection ) && xConnection.is())
             {
                 Reference<XChild> xChild(xConnection,UNO_QUERY);
                 Reference<XStorable> xStore;
@@ -116,8 +120,12 @@ namespace dbaui
     }
     sal_Int8 SbaTableQueryBrowser::executeDrop( const ExecuteDropEvent& _rEvt )
     {
-        SvTreeListEntry* pHitEntry = m_pTreeView->getListBox().GetEntry( _rEvt.maPosPixel );
-        EntryType eEntryType = getEntryType( pHitEntry );
+        weld::TreeView& rTreeView = m_pTreeView->getListBox().GetWidget();
+        std::unique_ptr<weld::TreeIter> xHitEntry(rTreeView.make_iterator());
+        // get_dest_row_at_pos with false cause no drop if no entry was hit exactly
+        if (!rTreeView.get_dest_row_at_pos(_rEvt.maPosPixel, xHitEntry.get(), false))
+            return DND_ACTION_NONE;
+        EntryType eEntryType = getEntryType(*xHitEntry);
         if (!isContainer(eEntryType))
         {
             OSL_FAIL("SbaTableQueryBrowser::executeDrop: what the hell did queryDrop do?");
@@ -137,7 +145,7 @@ namespace dbaui
         m_aAsyncDrop.nAction        = _rEvt.mnAction;
         m_aAsyncDrop.bError         = false;
         m_aAsyncDrop.bHtml          = false;
-        m_aAsyncDrop.pDroppedAt     = nullptr;
+        m_aAsyncDrop.xDroppedAt.reset();
         m_aAsyncDrop.aUrl.clear();
 
         // loop through the available formats and see what we can do ...
@@ -145,7 +153,7 @@ namespace dbaui
         if ( ODataAccessObjectTransferable::canExtractObjectDescriptor(aDroppedData.GetDataFlavorExVector()) )
         {
             m_aAsyncDrop.aDroppedData   = ODataAccessObjectTransferable::extractObjectDescriptor(aDroppedData);
-            m_aAsyncDrop.pDroppedAt     = pHitEntry;
+            m_aAsyncDrop.xDroppedAt     = std::move(xHitEntry);
 
             // asynchron because we some dialogs and we aren't allowed to show them while in D&D
             m_nAsyncDrop = Application::PostUserEvent(LINK(this, SbaTableQueryBrowser, OnAsyncDrop));
@@ -154,12 +162,12 @@ namespace dbaui
         else
         {
             SharedConnection xDestConnection;
-            if (  ensureConnection( pHitEntry, xDestConnection )
+            if (  ensureConnection( xHitEntry.get(), xDestConnection )
                && xDestConnection.is()
                && m_aTableCopyHelper.copyTagTable( aDroppedData, m_aAsyncDrop, xDestConnection )
                )
             {
-                m_aAsyncDrop.pDroppedAt = pHitEntry;
+                m_aAsyncDrop.xDroppedAt = std::move(xHitEntry);
 
                 // asynchron because we some dialogs and we aren't allowed to show them while in D&D
                 m_nAsyncDrop = Application::PostUserEvent(LINK(this, SbaTableQueryBrowser, OnAsyncDrop));
@@ -170,21 +178,19 @@ namespace dbaui
         return DND_ACTION_NONE;
     }
 
-    bool SbaTableQueryBrowser::requestDrag( const Point& _rPosPixel )
+    bool SbaTableQueryBrowser::requestDrag( const Point& /*rPosPixel*/ )
     {
-        // get the affected list entry
-        // ensure that the entry which the user clicked at is selected
-        SvTreeListEntry* pHitEntry = m_pTreeView->getListBox().GetEntry( _rPosPixel );
-        if (!pHitEntry)
-            // no drag of no entry was hit...
-            return false;
+        return false;
+    }
 
+    bool SbaTableQueryBrowser::requestDrag(const weld::TreeIter& rEntry)
+    {
         // it must be a query/table
-        EntryType eEntryType = getEntryType( pHitEntry );
+        EntryType eEntryType = getEntryType(rEntry);
         if (!isObject(eEntryType))
             return false;
 
-        rtl::Reference<TransferableHelper> pTransfer = implCopyObject( pHitEntry, ( etTableOrView == eEntryType ) ? CommandType::TABLE : CommandType::QUERY);
+        rtl::Reference<TransferableHelper> pTransfer = implCopyObject(rEntry, ( etTableOrView == eEntryType ) ? CommandType::TABLE : CommandType::QUERY);
 
         if (pTransfer)
             pTransfer->StartDrag( &m_pTreeView->getListBox(), DND_ACTION_COPY );
@@ -192,32 +198,32 @@ namespace dbaui
         return pTransfer.is();
     }
 
-    bool SbaTableQueryBrowser::requestDrag(const weld::TreeIter& /*rEntry*/)
-    {
-        return false;
-    }
-
     IMPL_LINK_NOARG(SbaTableQueryBrowser, OnCopyEntry, LinkParamNone*, void)
     {
+#if 0
         SvTreeListEntry* pSelected = m_pTreeView->getListBox().FirstSelected();
         if( isEntryCopyAllowed( pSelected ) )
             copyEntry( pSelected );
+#endif
     }
-    bool SbaTableQueryBrowser::isEntryCopyAllowed(SvTreeListEntry const * _pEntry) const
+
+    bool SbaTableQueryBrowser::isEntryCopyAllowed(const weld::TreeIter& rEntry) const
     {
-        EntryType eType = getEntryType(_pEntry);
+        EntryType eType = getEntryType(rEntry);
         return  ( eType == etTableOrView || eType == etQuery );
     }
-    void SbaTableQueryBrowser::copyEntry(SvTreeListEntry* _pEntry)
+
+    void SbaTableQueryBrowser::copyEntry(weld::TreeIter& rEntry)
     {
         TransferableHelper* pTransfer = nullptr;
         Reference< XTransferable> aEnsureDelete;
-        EntryType eType = getEntryType(_pEntry);
-        pTransfer       = implCopyObject( _pEntry, eType == etQuery ? CommandType::QUERY : CommandType::TABLE);
+        EntryType eType = getEntryType(rEntry);
+        pTransfer       = implCopyObject(rEntry, eType == etQuery ? CommandType::QUERY : CommandType::TABLE);
         aEnsureDelete   = pTransfer;
         if (pTransfer)
             pTransfer->CopyToClipboard(getView());
     }
+
     IMPL_LINK_NOARG( SbaTableQueryBrowser, OnAsyncDrop, void*, void )
     {
         m_nAsyncDrop = nullptr;
@@ -227,17 +233,21 @@ namespace dbaui
         if ( m_aAsyncDrop.nType == E_TABLE )
         {
             SharedConnection xDestConnection;
-            if ( ensureConnection( m_aAsyncDrop.pDroppedAt, xDestConnection ) && xDestConnection.is() )
+            if ( ensureConnection(m_aAsyncDrop.xDroppedAt.get(), xDestConnection) && xDestConnection.is())
             {
+#if 0
                 SvTreeListEntry* pDataSourceEntry = m_pTreeView->getListBox().GetRootLevelParent(m_aAsyncDrop.pDroppedAt);
                 m_aTableCopyHelper.asyncCopyTagTable( m_aAsyncDrop, getDataSourceAccessor( pDataSourceEntry ), xDestConnection );
+#endif
             }
         }
 
         m_aAsyncDrop.aDroppedData.clear();
     }
+
     void SbaTableQueryBrowser::clearTreeModel()
     {
+#if 0
         if (m_pTreeView)
         {
             auto pTreeModel = m_pTreeView->GetTreeModel();
@@ -265,7 +275,8 @@ namespace dbaui
                 pEntryLoop = pTreeModel->Next(pEntryLoop);
             }
         }
-        m_pCurrentlyDisplayed = nullptr;
+#endif
+        m_xCurrentlyDisplayed.reset();
     }
 }   // namespace dbaui
 

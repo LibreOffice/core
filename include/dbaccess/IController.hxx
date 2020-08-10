@@ -88,12 +88,6 @@ namespace dbaui
         */
         virtual bool isCommandEnabled( const OUString& _rCompleteCommandURL ) const = 0;
 
-        /** notifyHiContrastChanged will be called when the hicontrast mode changed.
-            @param  _bHiContrast
-                <TRUE/> when in hicontrast mode.
-        */
-        virtual void notifyHiContrastChanged() = 0;
-
         /** checks if the selected data source is read only
             @return
                 <TRUE/> if read only, otherwise <FALSE/>

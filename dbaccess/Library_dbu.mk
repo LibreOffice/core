@@ -101,7 +101,6 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/control/dbtreelistbox \
     dbaccess/source/ui/control/FieldControls \
     dbaccess/source/ui/control/FieldDescControl \
-    dbaccess/source/ui/control/listviewitems \
     dbaccess/source/ui/control/opendoccontrols \
     dbaccess/source/ui/control/RelationControl \
     dbaccess/source/ui/control/ScrollHelper \

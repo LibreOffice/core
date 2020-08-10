@@ -24,6 +24,7 @@
 #include <svx/dataaccessdescriptor.hxx>
 #include <sot/storage.hxx>
 #include <vcl/transfer.hxx>
+#include <vcl/weld.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 
@@ -75,14 +76,13 @@ namespace dbaui
             OUString                        aUrl;
             tools::SvRef<SotStorageStream>             aHtmlRtfStorage;
             ElementType                     nType;
-            SvTreeListEntry*                    pDroppedAt;
+            std::unique_ptr<weld::TreeIter> xDroppedAt;
             sal_Int8                        nAction;
             bool                        bHtml;
             bool                        bError;
 
             DropDescriptor()
                 : nType(E_TABLE)
-                , pDroppedAt(nullptr)
                 , nAction(DND_ACTION_NONE)
                 , bHtml(false)
                 , bError(false)
