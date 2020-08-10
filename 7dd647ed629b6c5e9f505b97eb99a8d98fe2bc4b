@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5420cef7_1514ec3b",
+        "filename": "cui/source/customize/cfgutil.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-08-10T22:33:45Z",
+      "side": 1,
+      "message": "Wrong log area.",
+      "range": {
+        "startLine": 324,
+        "startChar": 19,
+        "endLine": 324,
+        "endChar": 34
+      },
+      "revId": "7dd647ed629b6c5e9f505b97eb99a8d98fe2bc4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

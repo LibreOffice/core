@@ -70,6 +70,23 @@
       "revId": "040e0b14163ef0e4abbe8ab9c3a3a6541ceea489",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bd743ca_f4a2cd81",
+        "filename": "cui/source/customize/cfgutil.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-08-10T22:33:45Z",
+      "side": 0,
+      "message": "Note that this class is also used in Tools \u003e Customize.. dialog, where we want the list to be sorted.",
+      "revId": "040e0b14163ef0e4abbe8ab9c3a3a6541ceea489",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
