@@ -2357,7 +2357,8 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
     // tdf#116486: consider also the upper margin from getFramePrintArea because intersections
     //             with this additional space should lead to repositioning of paragraphs
     //             For compatibility we grab a related compat flag:
-    if (GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS))
+    if (GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS)
+        && IsFirstTextLine())
     {
         const long nUpper = m_pFrame->getFramePrintArea().Top();
         // Increase the rectangle
