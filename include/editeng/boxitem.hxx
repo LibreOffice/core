@@ -118,6 +118,8 @@ public:
     static css::table::BorderLine2 SvxLineToLine( const editeng::SvxBorderLine* pLine, bool bConvert );
     static bool LineToSvxLine(const css::table::BorderLine& rLine, editeng::SvxBorderLine& rSvxLine, bool bConvert);
     static bool LineToSvxLine(const css::table::BorderLine2& rLine, editeng::SvxBorderLine& rSvxLine, bool bConvert);
+
+    virtual boost::property_tree::ptree dumpAsJSON() const override;
 };
 
 inline void SvxBoxItem::SetAllDistances(sal_uInt16 const nNew)
@@ -234,6 +236,8 @@ public:
             nValidFlags &= ~nValid;
     }
     void                    ResetFlags();
+
+    virtual boost::property_tree::ptree dumpAsJSON() const override;
 };
 
 namespace editeng

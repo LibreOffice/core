@@ -1440,6 +1440,23 @@ SvxBoxItem& SvxBoxItem::operator=( const SvxBoxItem& rBox )
 }
 
 
+boost::property_tree::ptree SvxBoxItem::dumpAsJSON() const
+{
+    boost::property_tree::ptree aTree;
+
+    boost::property_tree::ptree aState;
+    aState.put("top", GetTop() && !GetTop()->isEmpty());
+    aState.put("bottom", GetBottom() && !GetBottom()->isEmpty());
+    aState.put("left", GetLeft() && !GetLeft()->isEmpty());
+    aState.put("right", GetRight() && !GetRight()->isEmpty());
+
+    aTree.push_back(std::make_pair("state", aState));
+    aTree.put("commandName", ".uno:BorderOuter");
+
+    return aTree;
+}
+
+
 static bool CmpBrdLn( const std::unique_ptr<SvxBorderLine> & pBrd1, const SvxBorderLine* pBrd2 )
 {
     if( pBrd1.get() == pBrd2 )
@@ -2316,6 +2333,20 @@ SvxBoxInfoItem::SvxBoxInfoItem( const SvxBoxInfoItem& rCpy ) :
 
 SvxBoxInfoItem::~SvxBoxInfoItem()
 {
+}
+
+boost::property_tree::ptree SvxBoxInfoItem::dumpAsJSON() const
+{
+    boost::property_tree::ptree aTree;
+
+    boost::property_tree::ptree aState;
+    aState.put("vertical", GetVert() && !GetVert()->isEmpty());
+    aState.put("horizontal", GetHori() && !GetHori()->isEmpty());
+
+    aTree.push_back(std::make_pair("state", aState));
+    aTree.put("commandName", ".uno:BorderInner");
+
+    return aTree;
 }
 
 SvxBoxInfoItem &SvxBoxInfoItem::operator=( const SvxBoxInfoItem& rCpy )

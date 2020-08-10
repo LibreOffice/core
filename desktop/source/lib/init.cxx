@@ -2756,7 +2756,9 @@ static void doc_iniUnoCommands ()
         OUString(".uno:ParaspaceIncrease"),
         OUString(".uno:ParaspaceDecrease"),
         OUString(".uno:AcceptTrackedChange"),
-        OUString(".uno:RejectTrackedChange")
+        OUString(".uno:RejectTrackedChange"),
+        OUString(".uno:BorderInner"),
+        OUString(".uno:BorderOuter")
     };
 
     util::URL aCommandURL;
