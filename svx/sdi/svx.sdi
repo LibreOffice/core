@@ -7671,7 +7671,7 @@ SdrOnOffItem FillShadow SID_ATTR_FILL_SHADOW
 ]
 
 XColorItem FillShadowColor SID_ATTR_SHADOW_COLOR
-
+(SfxStringItem Color SID_ATTR_COLOR_STR)
 [
 
     AutoUpdate = TRUE,
