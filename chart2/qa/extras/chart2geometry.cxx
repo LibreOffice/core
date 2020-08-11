@@ -372,7 +372,7 @@ void Chart2GeometryTest::testTdf128345Legend_CS_TG_axial_export()
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs", 3); // axial
     // no element for 0% transparent
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", 0);
-    // 100% transparent = opacity 0. It comes from "axial", therefor it is in the middle.
+    // 100% transparent = opacity 0. It comes from "axial", therefore it is in the middle.
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", "val", "0");
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]", "pos", "50000");
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[3]/a:srgbClr/a:alpha", 0);
