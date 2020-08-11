@@ -1151,14 +1151,14 @@ void ScDocument::DisposeFieldEditEngine(std::unique_ptr<ScFieldEditEngine>& rpEd
 ScLookupCache & ScDocument::GetLookupCache( const ScRange & rRange, ScInterpreterContext* pContext )
 {
     ScLookupCache* pCache = nullptr;
-    ScLookupCacheMap*& rpCacheMap = pContext->mScLookupCache;
-    if (!rpCacheMap)
-        rpCacheMap = new ScLookupCacheMap;
+    if (!pContext->mxScLookupCache)
+        pContext->mxScLookupCache.reset(new ScLookupCacheMap);
+    ScLookupCacheMap* pCacheMap = pContext->mxScLookupCache.get();
     // insert with temporary value to avoid doing two lookups
-    auto [findIt, bInserted] = rpCacheMap->aCacheMap.emplace(rRange, nullptr);
+    auto [findIt, bInserted] = pCacheMap->aCacheMap.emplace(rRange, nullptr);
     if (bInserted)
     {
-        findIt->second = std::make_unique<ScLookupCache>(this, rRange, *rpCacheMap);
+        findIt->second = std::make_unique<ScLookupCache>(this, rRange, *pCacheMap);
         pCache = findIt->second.get();
         // The StartListeningArea() call is not thread-safe, as all threads
         // would access the same SvtBroadcaster.
@@ -1193,7 +1193,7 @@ void ScDocument::RemoveLookupCache( ScLookupCache & rCache )
 void ScDocument::ClearLookupCaches()
 {
     assert(!IsThreadedGroupCalcInProgress());
-    DELETEZ(GetNonThreadedContext().mScLookupCache);
+    GetNonThreadedContext().mxScLookupCache.reset();
     // Clear lookup cache in all interpreter-contexts in the (threaded/non-threaded) pools.
     ScInterpreterContextPool::ClearLookupCaches();
 }

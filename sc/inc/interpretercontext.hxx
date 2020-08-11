@@ -57,21 +57,13 @@ struct ScInterpreterContext
     size_t mnTokenCachePos;
     std::vector<formula::FormulaToken*> maTokens;
     std::vector<DelayedSetNumberFormat> maDelayedSetNumberFormat;
-    ScLookupCacheMap* mScLookupCache; // cache for lookups like VLOOKUP and MATCH
+    std::unique_ptr<ScLookupCacheMap> mxScLookupCache; // cache for lookups like VLOOKUP and MATCH
     // Allocation cache for "aConditions" array in ScInterpreter::IterateParameterIfs()
     // This is populated/used only when formula-group threading is enabled.
     std::vector<sal_uInt32> maConditions;
     ScInterpreter* pInterpreter;
 
-    ScInterpreterContext(const ScDocument& rDoc, SvNumberFormatter* pFormatter)
-        : mpDoc(&rDoc)
-        , mnTokenCachePos(0)
-        , maTokens(TOKEN_CACHE_SIZE, nullptr)
-        , mScLookupCache(nullptr)
-        , pInterpreter(nullptr)
-        , mpFormatter(pFormatter)
-    {
-    }
+    ScInterpreterContext(const ScDocument& rDoc, SvNumberFormatter* pFormatter);
 
     ScInterpreterContext() = delete;
 

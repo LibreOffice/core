@@ -28,10 +28,19 @@
 ScInterpreterContextPool ScInterpreterContextPool::aThreadedInterpreterPool(true);
 ScInterpreterContextPool ScInterpreterContextPool::aNonThreadedInterpreterPool(false);
 
+ScInterpreterContext::ScInterpreterContext(const ScDocument& rDoc, SvNumberFormatter* pFormatter)
+    : mpDoc(&rDoc)
+    , mnTokenCachePos(0)
+    , maTokens(TOKEN_CACHE_SIZE, nullptr)
+    , pInterpreter(nullptr)
+    , mpFormatter(pFormatter)
+{
+}
+
 ScInterpreterContext::~ScInterpreterContext()
 {
     ResetTokens();
-    delete mScLookupCache;
+    mxScLookupCache.reset();
 }
 
 void ScInterpreterContext::ResetTokens()
@@ -63,11 +72,7 @@ void ScInterpreterContext::Cleanup()
     ResetTokens();
 }
 
-void ScInterpreterContext::ClearLookupCache()
-{
-    delete mScLookupCache;
-    mScLookupCache = nullptr;
-}
+void ScInterpreterContext::ClearLookupCache() { mxScLookupCache.reset(); }
 
 SvNumFormatType ScInterpreterContext::GetNumberFormatType(sal_uInt32 nFIndex) const
 {
