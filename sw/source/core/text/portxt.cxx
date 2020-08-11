@@ -43,6 +43,64 @@ using namespace ::sw::mark;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n::ScriptType;
 
+
+namespace {
+class SwFieldSlot2
+{
+    std::shared_ptr<vcl::TextLayoutCache> m_pOldCachedVclData;
+    const OUString *pOldText;
+    OUString aText;
+    TextFrameIndex nIdx;
+    TextFrameIndex nLen;
+    SwTextFormatInfo *pInf;
+    bool bOn;
+public:
+    SwFieldSlot2( const SwTextFormatInfo* pNew, const SwTextInputFieldPortion *pPor );
+    ~SwFieldSlot2();
+};
+
+}
+
+SwFieldSlot2::SwFieldSlot2( const SwTextFormatInfo* pNew, const SwTextInputFieldPortion *pPor )
+    : pOldText(nullptr)
+    , nIdx(0)
+    , nLen(0)
+    , pInf(nullptr)
+{
+    bOn = pPor->GetExpText( *pNew, aText );
+
+    // The text will be replaced ...
+    if( !bOn )
+        return;
+
+    pInf = const_cast<SwTextFormatInfo*>(pNew);
+    nIdx = pInf->GetIdx();
+    nLen = pInf->GetLen();
+    pOldText = &(pInf->GetText());
+    m_pOldCachedVclData = pInf->GetCachedVclData();
+    pInf->SetLen(TextFrameIndex(aText.getLength()));
+    pInf->SetCachedVclData(nullptr);
+
+    if (nIdx < TextFrameIndex(pOldText->getLength()))
+    {
+        aText = (*pOldText).replaceAt(sal_Int32(nIdx), 1, aText);
+    }
+    pInf->SetText( aText );
+}
+
+SwFieldSlot2::~SwFieldSlot2()
+{
+    if( bOn )
+    {
+        pInf->SetCachedVclData(m_pOldCachedVclData);
+        pInf->SetText( *pOldText );
+        pInf->SetIdx( nIdx );
+        pInf->SetLen( nLen );
+    }
+}
+
+
+
 // Returns for how many characters an extra space has to be added
 // (for justified alignment).
 static TextFrameIndex lcl_AddSpace(const SwTextSizeInfo &rInf,
@@ -671,14 +729,19 @@ void SwTextPortion::HandlePortion( SwPortionHandler& rPH ) const
 }
 
 SwTextInputFieldPortion::SwTextInputFieldPortion()
-    : SwTextPortion()
+    : SwTextPortion(),
+    mbShowFieldName(false)
 {
     SetWhichPor( PortionType::InputField );
 }
 
-bool SwTextInputFieldPortion::Format(SwTextFormatInfo &rTextFormatInfo)
+
+bool SwTextInputFieldPortion::Format(SwTextFormatInfo& rInf)
 {
-    return SwTextPortion::Format(rTextFormatInfo);
+    mbShowFieldName = rInf.GetOpt().IsFieldName();
+
+    SwFieldSlot2 aDiffText( &rInf, this );
+    return SwTextPortion::Format(rInf);
 }
 
 void SwTextInputFieldPortion::Paint( const SwTextPaintInfo &rInf ) const
@@ -715,6 +778,13 @@ void SwTextInputFieldPortion::Paint( const SwTextPaintInfo &rInf ) const
 
 bool SwTextInputFieldPortion::GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const
 {
+    if (mbShowFieldName)
+    {
+        OUString aFieldName = SwFieldType::GetTypeStr(SwFieldTypesEnum::Input);
+        rText = aFieldName.copy(0, aFieldName.getLength());
+        return true;
+    }
+
     sal_Int32 nIdx(rInf.GetIdx());
     sal_Int32 nLen(rInf.GetLen());
     if ( rInf.GetChar( rInf.GetIdx() ) == CH_TXT_ATR_INPUTFIELDSTART )
