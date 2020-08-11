@@ -522,7 +522,7 @@ class ScGlobal
     static  SvNumberFormatter*  pEnglishFormatter;          // for UNO / XML export
 
     static css::uno::Reference< css::i18n::XOrdinalSuffix> xOrdinalSuffix;
-    static CalendarWrapper*     pCalendar;
+    static std::unique_ptr<CalendarWrapper>  xCalendar;
     static std::atomic<CollatorWrapper*>     pCaseCollator;
     static std::atomic<CollatorWrapper*>     pCollator;
     static std::atomic<::utl::TransliterationWrapper*> pTransliteration;
