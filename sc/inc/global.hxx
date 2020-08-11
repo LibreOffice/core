@@ -518,7 +518,7 @@ class ScGlobal
 
     static std::atomic<ScUnitConverter*> pUnitConverter;
 
-    static  SvNumberFormatter*  pEnglishFormatter;          // for UNO / XML export
+    static std::unique_ptr<SvNumberFormatter> xEnglishFormatter;          // for UNO / XML export
 
     static css::uno::Reference< css::i18n::XOrdinalSuffix> xOrdinalSuffix;
     static std::unique_ptr<CalendarWrapper>  xCalendar;
