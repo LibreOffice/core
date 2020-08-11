@@ -28,6 +28,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/sdshcitm.hxx>
+#include <comphelper/lok.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -141,12 +142,27 @@ IMPL_LINK_NOARG(ShadowPropertyPanel, ClickShadowHdl, Button*, void)
         SdrOnOffItem aItem(makeSdrShadowItem(false));
         GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_SHADOW,
                 SfxCallMode::RECORD, { &aItem });
+
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            mpShowShadow->SetState( TRISTATE_FALSE );
+            UpdateControls();
+        }
     }
     else
     {
         SdrOnOffItem aItem(makeSdrShadowItem(true));
         GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_SHADOW,
                 SfxCallMode::RECORD, { &aItem });
+
+        if (mpShadowDistance->GetValue( FieldUnit::POINT ) == 0)
+            mpShadowDistance->SetValue( 8, FieldUnit::POINT );
+
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            mpShowShadow->SetState( TRISTATE_TRUE );
+            UpdateControls();
+        }
     }
 }
 
