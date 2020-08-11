@@ -16,6 +16,24 @@
       "revId": "5ab66d01f27223a1e626544c87ea22f5844f5979",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2cd895f_b9d2f45a",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2269,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2020-08-11T14:39:40Z",
+      "side": 1,
+      "message": "I believe this was a question and I changed it as an assertion statement after validating it. After loading a document it is always the case that the current shell is that of the only view created.\n\nSo this comment is accurate, but I\u0027m not sure if it\u0027s relevant at all anymore, since we don\u0027t rely on the current view, I\u0027m not sure why it\u0027s important, but I left it, since it\u0027s an accurate description of reality.",
+      "parentUuid": "32ded07b_d1031954",
+      "revId": "5ab66d01f27223a1e626544c87ea22f5844f5979",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
