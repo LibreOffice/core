@@ -502,7 +502,7 @@ namespace utl {
 
 class ScGlobal
 {
-    static SvxSearchItem*   pSearchItem;
+    static std::unique_ptr<SvxSearchItem> xSearchItem;
     static ScAutoFormat*    pAutoFormat;
     static std::atomic<LegacyFuncCollection*> pLegacyFuncCollection;
     static std::atomic<ScUnoAddInCollection*> pAddInCollection;
