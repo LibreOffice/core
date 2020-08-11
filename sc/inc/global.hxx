@@ -506,7 +506,7 @@ class ScGlobal
     static ScAutoFormat*    pAutoFormat;
     static std::atomic<LegacyFuncCollection*> pLegacyFuncCollection;
     static std::atomic<ScUnoAddInCollection*> pAddInCollection;
-    static ScUserList*      pUserList;
+    static std::unique_ptr<ScUserList> xUserList;
     static std::map<const char*, OUString>* pRscString;
     static SC_DLLPUBLIC const OUString aEmptyOUString;
     static OUString         aStrClipDocName;
