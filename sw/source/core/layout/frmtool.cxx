@@ -1274,6 +1274,17 @@ bool IsAnchoredObjShown(SwTextFrame const& rFrame, SwFormatAnchor const& rAnchor
         ret = false;
         auto const pAnchor(rAnchor.GetContentAnchor());
         auto iterFirst(pMergedPara->extents.cbegin());
+        if (iterFirst == pMergedPara->extents.end()
+            && (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA
+                || rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR))
+        {
+            ret = (&pAnchor->nNode.GetNode() == pMergedPara->pFirstNode
+                    && (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA
+                        || pAnchor->nContent == 0))
+                || (&pAnchor->nNode.GetNode() == pMergedPara->pLastNode
+                    && (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA
+                        || pAnchor->nContent == pMergedPara->pLastNode->Len()));
+        }
         auto iter(iterFirst);
         SwTextNode const* pNode(pMergedPara->pFirstNode);
         for ( ; ; ++iter)
