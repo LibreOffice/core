@@ -97,7 +97,7 @@ std::unique_ptr<ScFunctionList> ScGlobal::xStarCalcFunctionList;
 std::unique_ptr<ScFunctionMgr> ScGlobal::xStarCalcFunctionMgr;
 
 std::atomic<ScUnitConverter*> ScGlobal::pUnitConverter(nullptr);
-SvNumberFormatter* ScGlobal::pEnglishFormatter = nullptr;
+std::unique_ptr<SvNumberFormatter> ScGlobal::xEnglishFormatter;
 ScFieldEditEngine* ScGlobal::pFieldEditEngine = nullptr;
 
 double          ScGlobal::nScreenPPTX           = 96.0;
@@ -167,13 +167,13 @@ sal_uInt16 ScGlobal::GetStandardRowHeight()
 SvNumberFormatter* ScGlobal::GetEnglishFormatter()
 {
     assert(!bThreadedGroupCalcInProgress);
-    if ( !pEnglishFormatter )
+    if ( !xEnglishFormatter )
     {
-        pEnglishFormatter = new SvNumberFormatter(
-            ::comphelper::getProcessComponentContext(), LANGUAGE_ENGLISH_US );
-        pEnglishFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_INTL_FORMAT );
+        xEnglishFormatter.reset( new SvNumberFormatter(
+            ::comphelper::getProcessComponentContext(), LANGUAGE_ENGLISH_US ) );
+        xEnglishFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_INTL_FORMAT );
     }
-    return pEnglishFormatter;
+    return xEnglishFormatter.get();
 }
 
 bool ScGlobal::CheckWidthInvalidate( bool& bNumFormatChanged,
@@ -540,7 +540,7 @@ void ScGlobal::Clear()
     xEmptyBrushItem.reset();
     xButtonBrushItem.reset();
     xEmbeddedBrushItem.reset();
-    DELETEZ(pEnglishFormatter);
+    xEnglishFormatter.reset();
     delete pCaseTransliteration.load(); pCaseTransliteration = nullptr;
     delete pTransliteration.load(); pTransliteration = nullptr;
     delete pCaseCollator.load(); pCaseCollator = nullptr;
