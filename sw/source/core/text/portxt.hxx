@@ -59,6 +59,8 @@ public:
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
     virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
+private:
+    bool mbShowFieldName; /// Whether field name instead of field value should be displayed
 };
 
 class SwHolePortion : public SwLinePortion
