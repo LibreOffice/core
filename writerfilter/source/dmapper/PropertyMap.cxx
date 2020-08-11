@@ -1536,6 +1536,10 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         try
         {
             InheritOrFinalizePageStyles( rDM_Impl );
+            /*TODO tdf#135343: Just inserting a column break sounds like the right idea, but the implementation is wrong.
+             * Somehow, the previous column section needs to be extended to cover this new text.
+             * Currently, it is completely broken, producing a no-column section that starts on a new page.
+             */
             uno::Reference< beans::XPropertySet > xRangeProperties;
             if ( m_xStartingRange.is() )
             {
