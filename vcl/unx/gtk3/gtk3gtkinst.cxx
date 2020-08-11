@@ -5330,6 +5330,7 @@ GType crippled_viewport_get_type()
 
 #define CUSTOM_TYPE_CELL_RENDERER_SURFACE             (custom_cell_renderer_surface_get_type())
 #define CUSTOM_CELL_RENDERER_SURFACE(obj)             (G_TYPE_CHECK_INSTANCE_CAST((obj),  CUSTOM_TYPE_CELL_RENDERER_SURFACE, CustomCellRendererSurface))
+#define CUSTOM_IS_CELL_RENDERER_SURFACE(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), CUSTOM_TYPE_CELL_RENDERER_SURFACE))
 
 namespace {
 
@@ -11706,11 +11707,26 @@ public:
         g_signal_handler_disconnect(m_pTreeView, m_nRowActivatedSignalId);
         g_signal_handler_disconnect(gtk_tree_view_get_selection(m_pTreeView), m_nChangedSignalId);
 
+        GValue value = G_VALUE_INIT;
+        g_value_init(&value, G_TYPE_POINTER);
+        g_value_set_pointer(&value, static_cast<gpointer>(nullptr));
+
         for (GList* pEntry = g_list_last(m_pColumns); pEntry; pEntry = g_list_previous(pEntry))
         {
             GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(pEntry->data);
             g_signal_handler_disconnect(pColumn, m_aColumnSignalIds.back());
             m_aColumnSignalIds.pop_back();
+
+            // unset "instance" to avoid dangling "instance" points in any CustomCellRenderers
+            GList *pRenderers = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(pColumn));
+            for (GList* pRenderer = g_list_first(pRenderers); pRenderer; pRenderer = g_list_next(pRenderer))
+            {
+                GtkCellRenderer* pCellRenderer = GTK_CELL_RENDERER(pRenderer->data);
+                if (!CUSTOM_IS_CELL_RENDERER_SURFACE(pCellRenderer))
+                    continue;
+                g_object_set_property(G_OBJECT(pCellRenderer), "instance", &value);
+            }
+            g_list_free(pRenderers);
         }
         g_list_free(m_pColumns);
     }
@@ -14931,13 +14947,16 @@ bool custom_cell_renderer_surface_get_preferred_size(GtkCellRenderer *cell,
 
     GtkInstanceWidget* pWidget = static_cast<GtkInstanceWidget*>(g_value_get_pointer(&value));
 
-    ensure_device(cellsurface, pWidget);
-
     Size aSize;
-    if (GtkInstanceTreeView* pTreeView = dynamic_cast<GtkInstanceTreeView*>(pWidget))
-        aSize = pTreeView->call_signal_custom_get_size(*cellsurface->device, sId);
-    else if (GtkInstanceComboBox* pComboBox = dynamic_cast<GtkInstanceComboBox*>(pWidget))
-        aSize = pComboBox->call_signal_custom_get_size(*cellsurface->device);
+
+    if (pWidget)
+    {
+        ensure_device(cellsurface, pWidget);
+        if (GtkInstanceTreeView* pTreeView = dynamic_cast<GtkInstanceTreeView*>(pWidget))
+            aSize = pTreeView->call_signal_custom_get_size(*cellsurface->device, sId);
+        else if (GtkInstanceComboBox* pComboBox = dynamic_cast<GtkInstanceComboBox*>(pWidget))
+            aSize = pComboBox->call_signal_custom_get_size(*cellsurface->device);
+    }
 
     if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -14980,6 +14999,10 @@ void custom_cell_renderer_surface_render(GtkCellRenderer* cell,
     CustomCellRendererSurface *cellsurface = CUSTOM_CELL_RENDERER_SURFACE(cell);
 
     GtkInstanceWidget* pWidget = static_cast<GtkInstanceWidget*>(g_value_get_pointer(&value));
+
+    if (!pWidget)
+        return;
+
     ensure_device(cellsurface, pWidget);
 
     Size aSize(cell_area->width, cell_area->height);
