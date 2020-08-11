@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="chart">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkImage" id="imageIB_RANGE">
@@ -60,6 +60,11 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="ED_RANGE-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="tp_RangeChooser|extended_tip|ED_RANGE">Enter the data range that you want to include in your chart. To minimize this dialog while you select the data range in Calc, click the Select data range button.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -73,6 +78,11 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="tp_RangeChooser|IB_RANGE|tooltip_text">Select data range</property>
                 <property name="image">imageIB_RANGE</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="IB_RANGE-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="tp_RangeChooser|extended_tip|IB_RANGE">Enter the data range that you want to include in your chart. To minimize this dialog while you select the data range in Calc, click the Select data range button.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">2</property>
@@ -95,6 +105,11 @@
             <property name="xalign">0</property>
             <property name="active">True</property>
             <property name="draw_indicator">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="RB_DATAROWS-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="tp_RangeChooser|extended_tip|RB_DATAROWS">Data series get their data from consecutive rows in the selected range. For scatter charts, the first data series will contain x-values for all series. All other data series are used as y-values, one for each series.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -111,6 +126,11 @@
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
             <property name="group">RB_DATAROWS</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="RB_DATACOLS-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="tp_RangeChooser|extended_tip|RB_DATACOLS">Data series get their data from consecutive columns in the selected range. For scatter charts, the first data column will contain x-values for all series. All other data columns are used as y-values, one for each series.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -126,6 +146,11 @@
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="CB_FIRST_ROW_ASLABELS-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="tp_RangeChooser|extended_tip|CB_FIRST_ROW_ASLABELS">For data series in columns: The first row in the range is used as names for data series. For data series in rows: The first row in the range is used as categories. The remaining rows comprise the data series. If this check box is not selected, all rows are data series.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -141,6 +166,11 @@
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="CB_FIRST_COLUMN_ASLABELS-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="tp_RangeChooser|extended_tip|CB_FIRST_COLUMN_ASLABELS">For data series in columns: The first column in the range is used as names for data series. For data series in rows: The first column in the range is used as categories. The remaining columns comprise the data columns. If this check box is not selected, all columns are data columns.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">0</property>

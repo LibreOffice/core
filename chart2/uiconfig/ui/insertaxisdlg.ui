@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="chart">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="InsertAxisDialog">
@@ -10,9 +10,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox3">
         <property name="can_focus">False</property>
@@ -114,6 +111,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="primaryX-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="insertaxisdlg|extended_tip|primaryX">Displays the X axis as a line with subdivisions.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -130,6 +132,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="primaryY-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="insertaxisdlg|extended_tip|primaryY">Displays the Y axis as a line with subdivisions.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -146,6 +153,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="primaryZ-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="insertaxisdlg|extended_tip|primaryZ">Displays the Z axis as a line with subdivisions.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -204,6 +216,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="secondaryX-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="insertaxisdlg|extended_tip|secondaryX">Displays a secondary X axis in the chart.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -220,6 +237,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="secondaryY-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="insertaxisdlg|extended_tip|secondaryY">The major axis and the secondary axis can have different scaling. For example, you can scale one axis to 2 in. and the other to 1.5 in. </property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -279,5 +301,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="InsertAxisDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="insertaxisdlg|extended_tip|InsertAxisDialog">Specifies the axes to be displayed in the chart.</property>
+      </object>
+    </child>
   </object>
 </interface>

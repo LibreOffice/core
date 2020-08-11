@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="chart">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustmentNEG">
@@ -30,9 +30,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -135,6 +132,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="RB_NONE-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="dlg_InsertErrorBars|extended_tip|RB_NONE">Does not show any error bars.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -152,6 +154,11 @@
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">RB_NONE</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="RB_CONST-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="dlg_InsertErrorBars|extended_tip|RB_CONST">Displays constant values that you specify in the Parameters area.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -169,6 +176,11 @@
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">RB_NONE</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="RB_PERCENT-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="dlg_InsertErrorBars|extended_tip|RB_PERCENT">Displays a percentage. The display refers to the corresponding data point. Set the percentage in the Parameters area.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -190,6 +202,11 @@
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
                                     <property name="group">RB_NONE</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="RB_FUNCTION-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="dlg_InsertErrorBars|extended_tip|RB_FUNCTION">Select a function to calculate the error bars.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -207,6 +224,11 @@
                                       <item id="2" translatable="yes" context="dlg_InsertErrorBars|liststoreFUNCTION">Variance</item>
                                       <item id="3" translatable="yes" context="dlg_InsertErrorBars|liststoreFUNCTION">Error Margin</item>
                                     </items>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="LB_FUNCTION-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="dlg_InsertErrorBars|extended_tip|LB_FUNCTION">Select a function to calculate the error bars.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -231,6 +253,11 @@
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">RB_NONE</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="RB_RANGE-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="dlg_InsertErrorBars|extended_tip|RB_RANGE">Click Cell Range and then specify a cell range from which to take the positive and negative error bar values.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -286,6 +313,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="RB_BOTH-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="dlg_InsertErrorBars|extended_tip|RB_BOTH">Shows positive and negative error bars.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -302,6 +334,11 @@
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">RB_BOTH</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="RB_POSITIVE-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="dlg_InsertErrorBars|extended_tip|RB_POSITIVE">Shows only positive error bars.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -318,6 +355,11 @@
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">RB_BOTH</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="RB_NEGATIVE-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="dlg_InsertErrorBars|extended_tip|RB_NEGATIVE">Shows only negative error bars.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -429,6 +471,11 @@
                                 <property name="can_focus">True</property>
                                 <property name="adjustment">adjustmentPOS</property>
                                 <property name="digits">2</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="MF_POSITIVE-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="dlg_InsertErrorBars|extended_tip|MF_POSITIVE">Enter the value to add to the displayed value as the positive error value.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -442,6 +489,11 @@
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
                                 <property name="activates_default">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="ED_RANGE_POSITIVE-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="dlg_InsertErrorBars|extended_tip|ED_RANGE_POSITIVE">Enter the address range from where to get the positive error values. Use the Shrink button to select the range from a sheet.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -456,6 +508,11 @@
                                 <property name="receives_default">True</property>
                                 <property name="tooltip_text" translatable="yes" context="dlg_InsertErrorBars|IB_RANGE_POSITIVE|tooltip_text">Select data range</property>
                                 <property name="image">imageRANGE_SELECT_POSITIVE</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="IB_RANGE_POSITIVE-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="dlg_InsertErrorBars|extended_tip|IB_RANGE_POSITIVE">Click a button to shrink the dialog, then use the mouse to select the cell range in the spreadsheet. Click the button again to restore the dialog to full size.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -495,6 +552,11 @@
                                 <property name="can_focus">True</property>
                                 <property name="adjustment">adjustmentNEG</property>
                                 <property name="digits">2</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="MF_NEGATIVE-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="dlg_InsertErrorBars|extended_tip|MF_NEGATIVE">Enter the value to subtract from the displayed value as the negative error value.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -508,6 +570,11 @@
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
                                 <property name="activates_default">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="ED_RANGE_NEGATIVE-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="dlg_InsertErrorBars|extended_tip|ED_RANGE_NEGATIVE">Enter the address range from where to get the negative error values. Use the Shrink button to select the range from a sheet.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -522,6 +589,11 @@
                                 <property name="receives_default">True</property>
                                 <property name="tooltip_text" translatable="yes" context="dlg_InsertErrorBars|IB_RANGE_NEGATIVE|tooltip_text">Select data range</property>
                                 <property name="image">imageRANGE_SELECT_NEG</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="IB_RANGE_NEGATIVE-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="dlg_InsertErrorBars|extended_tip|IB_RANGE_NEGATIVE">Click a button to shrink the dialog, then use the mouse to select the cell range in the spreadsheet. Click the button again to restore the dialog to full size.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -545,6 +617,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="CB_SYN_POS_NEG-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dlg_InsertErrorBars|extended_tip|CB_SYN_POS_NEG">Enable to use the positive error values also as negative error values. You can only change the value of the "Positive (+)" box. That value gets copied to the "Negative (-)" box automatically.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -621,6 +698,9 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>

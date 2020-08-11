@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="chart">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustmentSpinDegrees">
@@ -24,6 +24,11 @@
         <property name="xalign">0</property>
         <property name="active">True</property>
         <property name="draw_indicator">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="showlabelsCB-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="tp_axisLabel|extended_tip|showlabelsCB">Specifies whether to show or hide the axis labels.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -67,6 +72,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="tile-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_axisLabel|extended_tip|tile">Arranges numbers on the axis side by side.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -84,6 +94,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">tile</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="odd-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_axisLabel|extended_tip|odd">Staggers numbers on the axis, even numbers lower than odd numbers.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -101,6 +116,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">tile</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="even-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_axisLabel|extended_tip|even">Stagger numbers on the axes, odd numbers lower than even numbers.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -118,6 +138,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">tile</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="auto-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_axisLabel|extended_tip|auto">Automatically arranges numbers on the axis.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -175,6 +200,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="overlapCB-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_axisLabel|extended_tip|overlapCB">Specifies that the text in cells may overlap other cells.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -191,6 +221,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="breakCB-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_axisLabel|extended_tip|breakCB">Allows a text break.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -261,6 +296,11 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentSpinDegrees</property>
                         <property name="wrap">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="OrientDegree-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_axisLabel|extended_tip|OrientDegree">Allows you to manually enter the orientation angle.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -314,6 +354,11 @@
                         <property name="xalign">0.019999999552965164</property>
                         <property name="inconsistent">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="stackedCB-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_axisLabel|extended_tip|stackedCB">Assigns vertical text orientation for cell contents.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -352,6 +397,11 @@
                   <object class="GtkComboBoxText" id="textdirLB">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="textdirLB-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_axisLabel|extended_tip|textdirLB">Specify the text direction for a paragraph that uses complex text layout (CTL). This feature is only available if complex text layout support is enabled.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -366,6 +416,11 @@
                     <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="dialCtrl-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_axisLabel|extended_tip|dialCtrl">Clicking anywhere on the wheel defines the variable text orientation.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>

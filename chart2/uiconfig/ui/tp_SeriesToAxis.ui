@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="chart">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustmentGAP">
@@ -47,6 +47,11 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="RBT_OPT_AXIS_1-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_SeriesToAxis|extended_tip|RBT_OPT_AXIS_1">This option is active as default. All data series are aligned to the primary Y axis.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -65,6 +70,11 @@
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">RBT_OPT_AXIS_1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="RBT_OPT_AXIS_2-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_SeriesToAxis|extended_tip|RBT_OPT_AXIS_2">Changes the scaling of the Y axis. This axis is only visible when at least one data series is assigned to it and the axis view is active.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -149,6 +159,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="adjustment">adjustmentGAP</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="MT_GAP-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_SeriesToAxis|extended_tip|MT_GAP">Defines the spacing between the columns in percent.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -160,6 +175,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="adjustment">adjustmentOVERLAP</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="MT_OVERLAP-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_SeriesToAxis|extended_tip|MT_OVERLAP">Defines the necessary settings for overlapping data series.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -182,6 +202,11 @@
                     <property name="halign">start</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="CB_BARS_SIDE_BY_SIDE-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_SeriesToAxis|extended_tip|CB_BARS_SIDE_BY_SIDE">The bars from different data series are shown as if they were attached only to one axis.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -198,6 +223,11 @@
                     <property name="halign">start</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="CB_CONNECTOR-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_SeriesToAxis|extended_tip|CB_CONNECTOR">For "stacked" and "percent" column (vertical bar) charts, mark this check box to connect the column layers that belong together with lines.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -272,6 +302,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="RB_DONT_PAINT-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_SeriesToAxis|extended_tip|RB_DONT_PAINT">For a missing value, no data will be shown. This is the default for chart types Column, Bar, Line, Net.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -289,6 +324,11 @@
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">RB_DONT_PAINT</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="RB_ASSUME_ZERO-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_SeriesToAxis|extended_tip|RB_ASSUME_ZERO">For a missing value, the y-value will be shown as zero. This is the default for chart type Area.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -306,6 +346,11 @@
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">RB_DONT_PAINT</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="RB_CONTINUE_LINE-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_SeriesToAxis|extended_tip|RB_CONTINUE_LINE">For a missing value, the interpolation from the neighbor values will be shown. This is the default for chart type XY.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -334,6 +379,11 @@
                     <property name="halign">start</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="CB_INCLUDE_HIDDEN_CELLS-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_SeriesToAxis|extended_tip|CB_INCLUDE_HIDDEN_CELLS">Check to also show values of currently hidden cells within the source cell range.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -388,6 +438,11 @@
                     <property name="receives_default">False</property>
                     <property name="halign">start</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="CB_LEGEND_ENTRY_HIDDEN-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_SeriesToAxis|extended_tip|CB_LEGEND_ENTRY_HIDDEN">Do not show legend entry for the selected data series or data point.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>

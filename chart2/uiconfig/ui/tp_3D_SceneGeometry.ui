@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="chart">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustmentPERSPECTIVE">
@@ -40,6 +40,11 @@
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="CBX_RIGHT_ANGLED_AXES-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="tp_3D_SceneGeometry|extended_tip|CBX_RIGHT_ANGLED_AXES">If Right-angled axes is enabled, you can rotate the chart contents only in X and Y direction, that is, parallel to the chart borders. Right-angled axes is enabled by default for newly created 3D charts. Pie and Donut charts do not support right-angled axes.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -101,6 +106,11 @@
         <accessibility>
           <relation type="label-for" target="MTR_FLD_PERSPECTIVE"/>
         </accessibility>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="CBX_PERSPECTIVE-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="tp_3D_SceneGeometry|extended_tip|CBX_PERSPECTIVE">Mark the Perspective box to view the chart as through a camera lens. Use the spin button to set the percentage. With a high percentage nearer objects look bigger than more distant objects.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -119,6 +129,7 @@
         <child internal-child="accessible">
           <object class="AtkObject" id="MTR_FLD_PERSPECTIVE-atkobject">
             <property name="AtkObject::accessible-name" translatable="yes" context="tp_3D_SceneGeometry|MTR_FLD_PERSPECTIVE-atkobject">Perspective</property>
+            <property name="AtkObject::accessible-description" translatable="yes" context="tp_3D_SceneGeometry|extended_tip|MTR_FLD_PERSPECTIVE">Mark the Perspective box to view the chart as through a camera lens. Use the spin button to set the percentage. With a high percentage nearer objects look bigger than more distant objects.</property>
           </object>
         </child>
       </object>
@@ -134,6 +145,11 @@
         <property name="activates_default">True</property>
         <property name="input_purpose">alpha</property>
         <property name="adjustment">adjustmentROTATION3</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="MTR_FLD_Z_ROTATION-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="tp_3D_SceneGeometry|extended_tip|MTR_FLD_Z_ROTATION">Sets the rotation of the chart on the z axis. The preview responds to the new settings.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -146,6 +162,11 @@
         <property name="can_focus">True</property>
         <property name="activates_default">True</property>
         <property name="adjustment">adjustmentROTATION2</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="MTR_FLD_Y_ROTATION-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="tp_3D_SceneGeometry|extended_tip|MTR_FLD_Y_ROTATION">Sets the rotation of the chart on the y axis. The preview responds to the new settings.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -158,6 +179,11 @@
         <property name="can_focus">True</property>
         <property name="activates_default">True</property>
         <property name="adjustment">adjustmentROTATION1</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="MTR_FLD_X_ROTATION-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="tp_3D_SceneGeometry|extended_tip|MTR_FLD_X_ROTATION">Sets the rotation of the chart on the x axis. The preview responds to the new settings.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
