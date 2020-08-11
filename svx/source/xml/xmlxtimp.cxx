@@ -43,7 +43,6 @@
 #include <xmloff/MarkerStyle.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <svx/xmlgrhlp.hxx>
-#include <xmloff/attrlist.hxx>
 
 #include <xmlxtimp.hxx>
 #include <tools/diagnose_ex.h>

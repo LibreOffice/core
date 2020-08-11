@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/drawing/Direction3D.hpp>
-#include <rtl/math.hxx>
 #include <libxml/xmlwriter.h>
 
 #include <svx/e3ditem.hxx>

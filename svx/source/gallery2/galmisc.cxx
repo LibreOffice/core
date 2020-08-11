@@ -26,7 +26,6 @@
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <tools/urlobj.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svl/itempool.hxx>
 #include <sfx2/docfile.hxx>

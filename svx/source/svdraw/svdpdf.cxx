@@ -24,7 +24,6 @@
 #if HAVE_FEATURE_PDFIUM
 #include <fpdfview.h>
 #include <fpdf_edit.h>
-#include <fpdf_text.h>
 
 #include <tools/UnitConversion.hxx>
 #include <vcl/graph.hxx>

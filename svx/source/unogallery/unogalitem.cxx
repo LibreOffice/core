@@ -22,7 +22,6 @@
 #include "unogaltheme.hxx"
 #include <svx/galtheme.hxx>
 #include <svx/galmisc.hxx>
-#include <svx/gallery1.hxx>
 #include <svx/fmmodel.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/graph.hxx>
