@@ -1568,7 +1568,7 @@ public:
         rtl::Reference< cppuhelper::TypeManager > const & manager,
         OUString const & name,
         rtl::Reference< unoidl::ServiceBasedSingletonEntity > const & entity):
-        ServiceBasedSingletonDescription_Base(entity_->isPublished()),
+        ServiceBasedSingletonDescription_Base(entity->isPublished()),
         manager_(manager), name_(name), entity_(entity)
     { assert(manager.is()); assert(entity.is()); }
 
