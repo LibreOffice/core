@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b5dd2b9f_a6a54f89",
+        "filename": "include/rtl/ustrbuf.hxx",
+        "patchSetId": 42
+      },
+      "lineNbr": 838,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-11T21:28:15Z",
+      "side": 1,
+      "message": "still appended uninitialized",
+      "range": {
+        "startLine": 838,
+        "startChar": 24,
+        "endLine": 838,
+        "endChar": 26
+      },
+      "revId": "7b2929f884ca0cef49a06a5fa909fe16f3d0a007",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
