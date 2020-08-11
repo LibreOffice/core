@@ -24,7 +24,6 @@
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoashp.hxx>
-#include <svl/poolitem.hxx>
 #include <svl/itemset.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xlineit0.hxx>

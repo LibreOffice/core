@@ -19,14 +19,11 @@
 
 #include <sal/config.h>
 
-#include <comphelper/processfactory.hxx>
 #include <tools/datetime.hxx>
-#include <unotools/datetime.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <ucbhelper/content.hxx>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <sfx2/app.hxx>
 #include <helpids.h>
@@ -34,7 +31,6 @@
 #include <svx/galtheme.hxx>
 #include <svx/galmisc.hxx>
 #include "galbrws1.hxx"
-#include <com/sun/star/util/DateTime.hpp>
 #include <svx/strings.hrc>
 #include <algorithm>
 #include <svx/dialmgr.hxx>

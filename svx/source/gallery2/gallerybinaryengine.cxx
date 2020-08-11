@@ -24,11 +24,10 @@
 #include <svx/galleryobjectcollection.hxx>
 #include <svx/gallery1.hxx>
 #include <svx/galleryobjectbinarystorage.hxx>
-#include <osl/thread.hxx>
+#include <osl/thread.h>
 #include "codec.hxx"
 #include "gallerydrawmodel.hxx"
 #include <vcl/cvtgrf.hxx>
-#include <sot/formats.hxx>
 
 #include <sal/log.hxx>
 

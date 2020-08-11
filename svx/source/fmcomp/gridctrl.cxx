@@ -43,7 +43,6 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
-#include <tools/fract.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>

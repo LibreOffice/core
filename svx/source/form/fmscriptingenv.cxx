@@ -24,21 +24,14 @@
 
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/TerminationVetoException.hpp>
-#include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/XScriptListener.hpp>
 
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/supportsservice.hxx>
-#include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <o3tl/sorted_vector.hxx>
