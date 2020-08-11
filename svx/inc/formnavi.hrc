@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SVX_INC_FRMSEL_HRC
 #define INCLUDED_SVX_INC_FRMSEL_HRC
 
-#include <utility>
-
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
 const char* RID_SVXSW_CONVERTMENU[] =

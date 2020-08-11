@@ -26,10 +26,8 @@
 #include <svx/relfld.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xtable.hxx>
-#include <svx/strings.hrc>
 #include <bitmaps.hlst>
 #include <svx/dlgctrl.hxx>
-#include <svx/dialmgr.hxx>
 #include <tools/debug.hxx>
 #include <svxpixelctlaccessiblecontext.hxx>
 #include <svtools/colorcfg.hxx>

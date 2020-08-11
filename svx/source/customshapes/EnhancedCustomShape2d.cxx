@@ -29,7 +29,6 @@
 #include <svx/svdorect.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/xflclit.hxx>
-#include <rtl/math.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnstit.hxx>
@@ -58,7 +57,6 @@
 #include <sal/log.hxx>
 
 #include <algorithm>
-#include <math.h>
 #include <unordered_set>
 
 using namespace ::com::sun::star;

@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SVX_INC_SVXERR_HRC
 #define INCLUDED_SVX_INC_SVXERR_HRC
 
-#include <utility>
-
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
 #include <svx/svxerr.hxx>

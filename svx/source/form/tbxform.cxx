@@ -20,7 +20,6 @@
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
-#include <vcl/event.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
 

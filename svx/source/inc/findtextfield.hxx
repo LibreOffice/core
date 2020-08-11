@@ -20,6 +20,8 @@
 #pragma once
 
 #include <vcl/InterimItemWindow.hxx>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace svt
 {

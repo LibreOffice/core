@@ -29,6 +29,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <tools/debug.hxx>
 #include <tools/fldunit.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/propertysetinfo.hxx>
@@ -36,7 +37,6 @@
 #include <svx/dialmgr.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unoshprp.hxx>
-#include <svx/svx3ditems.hxx>
 #include <svx/svxids.hrc>
 #include <svx/globl3d.hxx>
 #include <svx/strings.hrc>

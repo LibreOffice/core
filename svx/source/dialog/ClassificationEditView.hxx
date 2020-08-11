@@ -12,10 +12,7 @@
 #define INCLUDED_SVX_CLASSIFICATIONEDITVIEW_HXX
 
 #include <sal/config.h>
-#include <svx/svxdllapi.h>
 #include <svx/weldeditview.hxx>
-#include <editeng/svxenum.hxx>
-#include <vcl/customweld.hxx>
 
 namespace svx {
 
