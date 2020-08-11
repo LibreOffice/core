@@ -44,8 +44,8 @@ ScMyValidation::ScMyValidation()
     : sName(),
     sErrorMessage(),
     sErrorTitle(),
-    sImputMessage(),
-    sImputTitle(),
+    sInputMessage(),
+    sInputTitle(),
     sFormula1(),
     sFormula2(),
     aAlertStyle(sheet::ValidationAlertStyle_STOP),
@@ -53,7 +53,7 @@ ScMyValidation::ScMyValidation()
     aOperator(sheet::ConditionOperator_NONE),
     nShowList(0),
     bShowErrorMessage(false),
-    bShowImputMessage(false),
+    bShowInputMessage(false),
     bIgnoreBlanks(false)
 {
 }
@@ -61,16 +61,16 @@ ScMyValidation::ScMyValidation()
 bool ScMyValidation::IsEqual(const ScMyValidation& aVal) const
 {
     return aVal.bIgnoreBlanks == bIgnoreBlanks &&
-        aVal.bShowImputMessage == bShowImputMessage &&
+        aVal.bShowInputMessage == bShowInputMessage &&
         aVal.bShowErrorMessage == bShowErrorMessage &&
         aVal.aBaseCell == aBaseCell &&
         aVal.aAlertStyle == aAlertStyle &&
         aVal.aValidationType == aValidationType &&
         aVal.aOperator == aOperator &&
         aVal.sErrorTitle == sErrorTitle &&
-        aVal.sImputTitle == sImputTitle &&
+        aVal.sInputTitle == sInputTitle &&
         aVal.sErrorMessage == sErrorMessage &&
-        aVal.sImputMessage == sImputMessage &&
+        aVal.sInputMessage == sInputMessage &&
         aVal.sFormula1 == sFormula1 &&
         aVal.sFormula2 == sFormula2;
 }
@@ -106,25 +106,25 @@ void ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
     xPropertySet->getPropertyValue(gsERRMESS) >>= sErrorMessage;
     OUString sErrorTitle;
     xPropertySet->getPropertyValue(gsERRTITLE) >>= sErrorTitle;
-    OUString sImputMessage;
-    xPropertySet->getPropertyValue(gsINPMESS) >>= sImputMessage;
-    OUString sImputTitle;
-    xPropertySet->getPropertyValue(gsINPTITLE) >>= sImputTitle;
+    OUString sInputMessage;
+    xPropertySet->getPropertyValue(gsINPMESS) >>= sInputMessage;
+    OUString sInputTitle;
+    xPropertySet->getPropertyValue(gsINPTITLE) >>= sInputTitle;
     bool bShowErrorMessage = ::cppu::any2bool(xPropertySet->getPropertyValue(gsSHOWERR));
-    bool bShowImputMessage = ::cppu::any2bool(xPropertySet->getPropertyValue(gsSHOWINP));
+    bool bShowInputMessage = ::cppu::any2bool(xPropertySet->getPropertyValue(gsSHOWINP));
     sheet::ValidationType aValidationType;
     xPropertySet->getPropertyValue(gsTYPE) >>= aValidationType;
-    if (!(bShowErrorMessage || bShowImputMessage || aValidationType != sheet::ValidationType_ANY ||
-        !sErrorMessage.isEmpty() || !sErrorTitle.isEmpty() || !sImputMessage.isEmpty() || !sImputTitle.isEmpty()))
+    if (!(bShowErrorMessage || bShowInputMessage || aValidationType != sheet::ValidationType_ANY ||
+        !sErrorMessage.isEmpty() || !sErrorTitle.isEmpty() || !sInputMessage.isEmpty() || !sInputTitle.isEmpty()))
         return;
 
     ScMyValidation aValidation;
     aValidation.sErrorMessage = sErrorMessage;
     aValidation.sErrorTitle = sErrorTitle;
-    aValidation.sImputMessage = sImputMessage;
-    aValidation.sImputTitle = sImputTitle;
+    aValidation.sInputMessage = sInputMessage;
+    aValidation.sInputTitle = sInputTitle;
     aValidation.bShowErrorMessage = bShowErrorMessage;
-    aValidation.bShowImputMessage = bShowImputMessage;
+    aValidation.bShowInputMessage = bShowInputMessage;
     aValidation.aValidationType = aValidationType;
     aValidation.bIgnoreBlanks = ::cppu::any2bool(xPropertySet->getPropertyValue(gsIGNOREBL));
     xPropertySet->getPropertyValue(gsSHOWLIST) >>= aValidation.nShowList;
@@ -360,9 +360,9 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
         }
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS, GetBaseCellAddress(rExport.GetDocument(), rValidation.aBaseCell));
         SvXMLElementExport aElemV(rExport, XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATION, true, true);
-        if (rValidation.bShowImputMessage || !rValidation.sImputMessage.isEmpty() || !rValidation.sImputTitle.isEmpty())
+        if (rValidation.bShowInputMessage || !rValidation.sInputMessage.isEmpty() || !rValidation.sInputTitle.isEmpty())
         {
-            WriteMessage(rExport, rValidation.sImputTitle, rValidation.sImputMessage, rValidation.bShowImputMessage, true);
+            WriteMessage(rExport, rValidation.sInputTitle, rValidation.sInputMessage, rValidation.bShowInputMessage, true);
         }
         if (rValidation.bShowErrorMessage || !rValidation.sErrorMessage.isEmpty() || !rValidation.sErrorTitle.isEmpty())
         {

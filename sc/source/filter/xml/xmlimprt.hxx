@@ -170,8 +170,8 @@ typedef std::list< std::unique_ptr<const ScMyLabelRange> > ScMyLabelRanges;
 struct ScMyImportValidation
 {
     OUString                                   sName;
-    OUString                                   sImputTitle;
-    OUString                                   sImputMessage;
+    OUString                                   sInputTitle;
+    OUString                                   sInputMessage;
     OUString                                   sErrorTitle;
     OUString                                   sErrorMessage;
     OUString                                   sFormula1;
@@ -186,7 +186,7 @@ struct ScMyImportValidation
     formula::FormulaGrammar::Grammar           eGrammar2;
     sal_Int16                                  nShowList;
     bool                                       bShowErrorMessage;
-    bool                                       bShowImputMessage;
+    bool                                       bShowInputMessage;
     bool                                       bIgnoreBlanks;
 };
 

@@ -374,14 +374,14 @@ void SAL_CALL ScXMLContentValidationContext::endFastElement( sal_Int32 /*nElemen
     aValidation.eGrammar1 = aValidation.eGrammar2 = GetScImport().GetDocument()->GetStorageGrammar();
     aValidation.sName = sName;
     aValidation.sBaseCellAddress = sBaseCellAddress;
-    aValidation.sImputTitle = sHelpTitle;
-    aValidation.sImputMessage = sHelpMessage;
+    aValidation.sInputTitle = sHelpTitle;
+    aValidation.sInputMessage = sHelpMessage;
     aValidation.sErrorTitle = sErrorTitle;
     aValidation.sErrorMessage = sErrorMessage;
     GetCondition( aValidation );
     aValidation.aAlertStyle = GetAlertStyle();
     aValidation.bShowErrorMessage = bDisplayError;
-    aValidation.bShowImputMessage = bDisplayHelp;
+    aValidation.bShowInputMessage = bDisplayHelp;
     aValidation.bIgnoreBlanks = bAllowEmptyCell;
     aValidation.nShowList = nShowList;
     GetScImport().AddValidation(aValidation);
