@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b46406bc_fc059396",
+        "filename": "cui/source/inc/AdditionsDialog.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-08-11T11:34:17Z",
+      "side": 0,
+      "message": "Why deleting this empty line? It might be better to have it between different classes for readability.",
+      "revId": "495a5944a3d442cfe748a3bb0dcef76f6a961d30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
