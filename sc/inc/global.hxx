@@ -526,7 +526,6 @@ class ScGlobal
     static std::atomic<CollatorWrapper*>     pCollator;
     static std::atomic<::utl::TransliterationWrapper*> pTransliteration;
     static std::atomic<::utl::TransliterationWrapper*> pCaseTransliteration;
-    static IntlWrapper*         pScIntlWrapper;
     static std::atomic<css::lang::Locale*>   pLocale;
 
     static ScFieldEditEngine*   pFieldEditEngine;
