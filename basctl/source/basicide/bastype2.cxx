@@ -652,11 +652,12 @@ void SbTreeListBox::AddEntry(
         m_xControl->freeze();
         m_bFreezeOnFirstAddRemove= false;
     }
+    std::unique_ptr<weld::TreeIter> xScratch = pRet ? nullptr : m_xControl->make_iterator();
+    if (!pRet)
+        pRet = xScratch.get();
     OUString sId(OUString::number(reinterpret_cast<sal_uInt64>(rUserData.release())));
-    m_xControl->insert(pParent, -1, &rText, &sId, nullptr, nullptr, bChildrenOnDemand, m_xScratchIter.get());
-    m_xControl->set_image(*m_xScratchIter, rImage);
-    if (pRet)
-        m_xControl->copy_iterator(*m_xScratchIter, *pRet);
+    m_xControl->insert(pParent, -1, &rText, &sId, nullptr, nullptr, bChildrenOnDemand, pRet);
+    m_xControl->set_image(*pRet, rImage);
 }
 
 void SbTreeListBox::SetEntryBitmaps(const weld::TreeIter& rIter, const OUString& rImage)
