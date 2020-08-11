@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="chart">
   <requires lib="gtk+" version="3.18"/>
   <!-- interface-local-resource-path /home/eric/Documents/computers/libreoffice/core/icon-themes/galaxy/chart2 -->
@@ -10,9 +10,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -136,6 +133,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="step_start_rb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="steppedlinesdlg|extended_tip|step_start_rb">Start with horizontal line and step up vertically at the end.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -153,6 +155,11 @@
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">step_start_rb</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="step_center_x_rb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="steppedlinesdlg|extended_tip|step_center_x_rb">Start to step up vertically and end with horizontal line.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -170,6 +177,11 @@
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">step_start_rb</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="step_end_rb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="steppedlinesdlg|extended_tip|step_end_rb">Start with horizontal line, step up vertically in the middle of the X values and end with horizontal line.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -187,6 +199,11 @@
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">step_start_rb</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="step_center_y_rb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="steppedlinesdlg|extended_tip|step_center_y_rb">Start to step up vertically to the middle of the Y values, draw a horizontal line and finish by stepping vertically to the end.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -232,5 +249,8 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

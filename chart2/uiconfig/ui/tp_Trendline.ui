@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="chart">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustmentDegree">
@@ -70,6 +70,11 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="linear-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|linear">A linear trend line is shown.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -87,6 +92,11 @@
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">linear</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="logarithmic-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|logarithmic">A logarithmic trend line is shown.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -104,6 +114,11 @@
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">linear</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="exponential-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|exponential">An exponential trend line is shown.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -121,6 +136,11 @@
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">linear</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="power-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|power">A power trend line is shown.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -138,6 +158,11 @@
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">linear</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="polynomial-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|polynomial">A polynomial trend line is shown with a given degree.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -155,6 +180,11 @@
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">linear</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="movingAverage-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|movingAverage">A moving average trend line is shown with a given period.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -173,6 +203,11 @@
                         <property name="label" translatable="yes" context="tp_Trendline|label3">Degree</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">degree</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="label3-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|label3">Degree of polynomial trend line.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -185,6 +220,11 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentDegree</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="degree-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|degree">Degree of polynomial trend line.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -209,6 +249,11 @@
                         <property name="label" translatable="yes" context="tp_Trendline|label4">Period</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">period</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="label4-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|label4">Number of points to calculate average of moving average trend line.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -221,6 +266,11 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentPeriod</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="period-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|period">Number of points to calculate average of moving average trend line.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -353,6 +403,11 @@
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">extrapolateForward</property>
                     <property name="xalign">0</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="label7-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|label7">Trend line is extrapolated for higher x-values.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -367,6 +422,11 @@
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">extrapolateBackward</property>
                     <property name="xalign">0</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="label8-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|label8">Trend line is extrapolated for lower x-values.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -412,6 +472,11 @@
                     <accessibility>
                       <relation type="label-for" target="interceptValue"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="setIntercept-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|setIntercept">For linear, polynomial and exponential trend lines, intercept value is forced to a given value.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -427,6 +492,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="showEquation-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|showEquation">Shows the trend line equation next to the trend line.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -443,6 +513,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="showCorrelationCoefficient-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|showCorrelationCoefficient">Shows the coefficient of determination next to the trend line.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -458,6 +533,11 @@
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">entry_name</property>
                     <property name="xalign">0</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="label5-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|label5">Name of trend line in legend.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -469,6 +549,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="entry_name-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|entry_name">Name of trend line in legend.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -488,6 +573,11 @@
                     <accessibility>
                       <relation type="labelled-by" target="setIntercept"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="interceptValue-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|interceptValue">Value of intercept if it is forced.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -502,6 +592,11 @@
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">entry_Xname</property>
                     <property name="xalign">0</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="label6-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|label6">Name of X variable in trend line equation.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -513,6 +608,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="entry_Xname-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|entry_Xname">Name of X variable in trend line equation.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -527,6 +627,11 @@
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">entry_Yname</property>
                     <property name="xalign">0</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="label9-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|label9">Name of Y variable in trend line equation.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -538,6 +643,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="entry_Yname-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|entry_Yname">Name of Y variable in trend line equation.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>

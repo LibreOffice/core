@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="chart">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkImage" id="IMG_AMBIENT_COLOR">
@@ -95,6 +95,11 @@
                             <property name="tooltip_text" translatable="yes" context="tp_3D_SceneIllumination|BTN_LIGHT_1|tooltip_text">Light source 1</property>
                             <property name="image">IMG_LIGHT_1</property>
                             <property name="always_show_image">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="BTN_LIGHT_1-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tp_3D_SceneIllumination|extended_tip|BTN_LIGHT_1">Click to enable or disable the specular light source with highlights.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -109,6 +114,11 @@
                             <property name="tooltip_text" translatable="yes" context="tp_3D_SceneIllumination|BTN_LIGHT_2|tooltip_text">Light source 2</property>
                             <property name="image">IMG_LIGHT_2</property>
                             <property name="always_show_image">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="BTN_LIGHT_2-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tp_3D_SceneIllumination|extended_tip|BTN_LIGHT_2">Click to enable or disable the uniform light source.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -123,6 +133,11 @@
                             <property name="tooltip_text" translatable="yes" context="tp_3D_SceneIllumination|BTN_LIGHT_3|tooltip_text">Light source 3</property>
                             <property name="image">IMG_LIGHT_3</property>
                             <property name="always_show_image">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="BTN_LIGHT_3-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tp_3D_SceneIllumination|extended_tip|BTN_LIGHT_3">Click to enable or disable the uniform light source.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -137,6 +152,11 @@
                             <property name="tooltip_text" translatable="yes" context="tp_3D_SceneIllumination|BTN_LIGHT_4|tooltip_text">Light source 4</property>
                             <property name="image">IMG_LIGHT_4</property>
                             <property name="always_show_image">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="BTN_LIGHT_4-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tp_3D_SceneIllumination|extended_tip|BTN_LIGHT_4">Click to enable or disable the uniform light source.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">3</property>
@@ -151,6 +171,11 @@
                             <property name="tooltip_text" translatable="yes" context="tp_3D_SceneIllumination|BTN_LIGHT_5|tooltip_text">Light source 5</property>
                             <property name="image">IMG_LIGHT_5</property>
                             <property name="always_show_image">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="BTN_LIGHT_5-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tp_3D_SceneIllumination|extended_tip|BTN_LIGHT_5">Click to enable or disable the uniform light source.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -165,6 +190,11 @@
                             <property name="tooltip_text" translatable="yes" context="tp_3D_SceneIllumination|BTN_LIGHT_6|tooltip_text">Light source 6</property>
                             <property name="image">IMG_LIGHT_6</property>
                             <property name="always_show_image">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="BTN_LIGHT_6-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tp_3D_SceneIllumination|extended_tip|BTN_LIGHT_6">Click to enable or disable the uniform light source.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -179,6 +209,11 @@
                             <property name="tooltip_text" translatable="yes" context="tp_3D_SceneIllumination|BTN_LIGHT_7|tooltip_text">Light source 7</property>
                             <property name="image">IMG_LIGHT_7</property>
                             <property name="always_show_image">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="BTN_LIGHT_7-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tp_3D_SceneIllumination|extended_tip|BTN_LIGHT_7">Click to enable or disable the uniform light source.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -193,6 +228,11 @@
                             <property name="tooltip_text" translatable="yes" context="tp_3D_SceneIllumination|BTN_LIGHT_8|tooltip_text">Light source 8</property>
                             <property name="image">IMG_LIGHT_8</property>
                             <property name="always_show_image">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="BTN_LIGHT_8-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tp_3D_SceneIllumination|extended_tip|BTN_LIGHT_8">Click to enable or disable the uniform light source.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">3</property>
@@ -218,9 +258,13 @@
                             <property name="receives_default">False</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
-                            <property name="label" translatable="no"></property>
                             <child>
                               <placeholder/>
+                            </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="LB_LIGHTSOURCE-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tp_3D_SceneIllumination|extended_tip|LB_LIGHTSOURCE">Select a color for the selected light source.</property>
+                              </object>
                             </child>
                           </object>
                           <packing>
@@ -236,6 +280,11 @@
                             <property name="receives_default">True</property>
                             <property name="tooltip_text" translatable="yes" context="tp_3D_SceneIllumination|BTN_LIGHTSOURCE_COLOR|tooltip_text">Select a color using the color dialog</property>
                             <property name="image">IMG_LIGHTSOURCE_COLOR</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="BTN_LIGHTSOURCE_COLOR-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tp_3D_SceneIllumination|extended_tip|BTN_LIGHTSOURCE_COLOR">Select a color using the color dialog.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -298,9 +347,13 @@
                         <property name="receives_default">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
-                        <property name="label" translatable="no"></property>
                         <child>
                           <placeholder/>
+                        </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="LB_AMBIENTLIGHT-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_3D_SceneIllumination|extended_tip|LB_AMBIENTLIGHT">Select a color for the ambient light.</property>
+                          </object>
                         </child>
                       </object>
                       <packing>
@@ -316,6 +369,11 @@
                         <property name="receives_default">True</property>
                         <property name="tooltip_text" translatable="yes" context="tp_3D_SceneIllumination|BTN_AMBIENT_COLOR|tooltip_text">Select a color using the color dialog</property>
                         <property name="image">IMG_AMBIENT_COLOR</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="BTN_AMBIENT_COLOR-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_3D_SceneIllumination|extended_tip|BTN_AMBIENT_COLOR">Select a color using the color dialog.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -429,6 +487,11 @@
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="tp_3D_SceneIllumination-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="tp_3D_SceneIllumination|extended_tip|tp_3D_SceneIllumination">Set the light sources for the 3D view.</property>
+      </object>
     </child>
   </object>
 </interface>

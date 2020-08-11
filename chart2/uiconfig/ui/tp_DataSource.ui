@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="chart">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkImage" id="image1">
@@ -27,6 +27,16 @@
   <object class="GtkTreeStore" id="liststore1">
     <columns>
       <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="liststore2">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name text2 -->
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
@@ -98,6 +108,11 @@
                         </child>
                       </object>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="LB_SERIES-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_DataSource|extended_tip|LB_SERIES">Shows a list of all data series in the chart. Click an entry to view and edit that data series. Click Add to insert a new series into the list after the selected entry.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -121,6 +136,11 @@
                     <property name="receives_default">True</property>
                     <property name="hexpand">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="BTN_ADD-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_DataSource|extended_tip|BTN_ADD">Adds a new entry below the current entry in the Data Series list. If an entry is selected, the new data series gets the same chart type.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -137,6 +157,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="BTN_UP-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="tp_DataSource|BTN_UP-atkobject">Up</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_DataSource|extended_tip|BTN_UP">Moves up the selected entry in the Data Series list.</property>
                       </object>
                     </child>
                   </object>
@@ -153,6 +174,11 @@
                     <property name="receives_default">True</property>
                     <property name="hexpand">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="BTN_REMOVE-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_DataSource|extended_tip|BTN_REMOVE">Removes the selected entry from the Data Series list.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -169,6 +195,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="BTN_DOWN-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="tp_DataSource|BTN_DOWN-atkobject">Down</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_DataSource|extended_tip|BTN_DOWN">Moves down the selected entry in the Data Series list.</property>
                       </object>
                     </child>
                   </object>
@@ -259,6 +286,11 @@
                             </child>
                           </object>
                         </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="LB_ROLE-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_DataSource|extended_tip|LB_ROLE">Shows all the data ranges used by the data series that is selected in the Data Series list box. Each data range shows the role name and the source range address.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -293,6 +325,11 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="EDT_RANGE-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_DataSource|extended_tip|EDT_RANGE">Shows the source range address from the second column of the Data Range list box. You can change the range in the text box or by dragging in the document. To minimize this dialog while you select the data range in Calc, click the Select data range button.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -305,6 +342,11 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="image">imageIMB_RANGE_MAIN</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="IMB_RANGE_MAIN-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_DataSource|extended_tip|IMB_RANGE_MAIN">Shows the source range address from the second column of the Data Range list box. You can change the range in the text box or by dragging in the document. To minimize this dialog while you select the data range in Calc, click the Select data range button.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -367,6 +409,11 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="EDT_CATEGORIES-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_DataSource|extended_tip|EDT_CATEGORIES">Shows the source range address of the categories (the texts you can see on the x-axis of a category chart). For an XY-chart, the text box contains the source range of the data labels which are displayed for the data points. To minimize this dialog while you select the data range in Calc, click the Select data range button.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -379,6 +426,11 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="image">imageIMB_RANGE_CAT</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="IMB_RANGE_CAT-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_DataSource|extended_tip|IMB_RANGE_CAT">Shows the source range address of the categories (the texts you can see on the x-axis of a category chart). For an XY-chart, the text box contains the source range of the data labels which are displayed for the data points. To minimize this dialog while you select the data range in Calc, click the Select data range button.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -424,15 +476,5 @@
         <property name="top_attach">1</property>
       </packing>
     </child>
-  </object>
-  <object class="GtkTreeStore" id="liststore2">
-    <columns>
-      <!-- column-name text -->
-      <column type="gchararray"/>
-      <!-- column-name text2 -->
-      <column type="gchararray"/>
-      <!-- column-name id -->
-      <column type="gchararray"/>
-    </columns>
   </object>
 </interface>
