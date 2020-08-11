@@ -72,7 +72,7 @@
 #include <docsh.hxx>
 
 tools::SvRef<ScDocShell>  ScGlobal::xDrawClipDocShellRef;
-SvxSearchItem*  ScGlobal::pSearchItem = nullptr;
+std::unique_ptr<SvxSearchItem> ScGlobal::xSearchItem;
 ScAutoFormat*   ScGlobal::pAutoFormat = nullptr;
 std::atomic<LegacyFuncCollection*> ScGlobal::pLegacyFuncCollection(nullptr);
 std::atomic<ScUnoAddInCollection*> ScGlobal::pAddInCollection(nullptr);
@@ -214,23 +214,22 @@ bool ScGlobal::CheckWidthInvalidate( bool& bNumFormatChanged,
 const SvxSearchItem& ScGlobal::GetSearchItem()
 {
     assert(!bThreadedGroupCalcInProgress);
-    if (!pSearchItem)
+    if (!xSearchItem)
     {
-        pSearchItem = new SvxSearchItem( SID_SEARCH_ITEM );
-        pSearchItem->SetAppFlag( SvxSearchApp::CALC );
+        xSearchItem.reset(new SvxSearchItem( SID_SEARCH_ITEM ));
+        xSearchItem->SetAppFlag( SvxSearchApp::CALC );
     }
-    return *pSearchItem;
+    return *xSearchItem;
 }
 
 void ScGlobal::SetSearchItem( const SvxSearchItem& rNew )
 {
     assert(!bThreadedGroupCalcInProgress);
     // FIXME: An assignment operator would be nice here
-    delete pSearchItem;
-    pSearchItem = rNew.Clone();
+    xSearchItem.reset(rNew.Clone());
 
-    pSearchItem->SetWhich( SID_SEARCH_ITEM );
-    pSearchItem->SetAppFlag( SvxSearchApp::CALC );
+    xSearchItem->SetWhich( SID_SEARCH_ITEM );
+    xSearchItem->SetAppFlag( SvxSearchApp::CALC );
 }
 
 void ScGlobal::ClearAutoFormat()
@@ -529,7 +528,7 @@ void ScGlobal::Clear()
     theAddInAsyncTbl.clear();
     ExitExternalFunc();
     ClearAutoFormat();
-    DELETEZ(pSearchItem);
+    xSearchItem.reset();
     delete pLegacyFuncCollection.load(); pLegacyFuncCollection = nullptr;
     delete pAddInCollection.load(); pAddInCollection = nullptr;
     xUserList.reset();
