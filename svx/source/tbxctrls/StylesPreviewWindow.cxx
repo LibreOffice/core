@@ -45,14 +45,12 @@
 #include <editeng/brushitem.hxx>
 
 #include <svx/xfillit0.hxx>
-#include <svx/svddef.hxx>
+#include <svx/xdef.hxx>
 #include <svx/xflclit.hxx>
 
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/weak.hxx>
-
-#include <sal/log.hxx>
 
 StyleStatusListener::StyleStatusListener(
     StylesPreviewWindow_Base* pPreviewControl,

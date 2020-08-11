@@ -21,7 +21,7 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <comphelper/lok.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/viewsh.hxx>
 
 using namespace css;
 

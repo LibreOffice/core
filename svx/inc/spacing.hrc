@@ -9,8 +9,6 @@
 #ifndef INCLUDED_SVX_INC_SPACING_HRC
 #define INCLUDED_SVX_INC_SPACING_HRC
 
-#include <utility>
-
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
 struct measurement

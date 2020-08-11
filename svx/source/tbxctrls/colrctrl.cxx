@@ -42,7 +42,6 @@
 #include <svx/xtable.hxx>
 #include <svx/dialmgr.hxx>
 #include <helpids.h>
-#include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>

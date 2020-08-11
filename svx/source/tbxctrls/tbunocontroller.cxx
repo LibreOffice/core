@@ -41,7 +41,7 @@
 #include <memory>
 
 #include <vcl/InterimItemWindow.hxx>
-#include <sfx2/sidebar/SidebarToolBox.hxx>
+#include <vcl/toolbox.hxx>
 
 using namespace ::com::sun::star;
 

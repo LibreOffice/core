@@ -43,7 +43,6 @@
 #include <svx/galtheme.hxx>
 #include <svx/gallery1.hxx>
 #include <svx/gallerybinaryengineentry.hxx>
-#include <galobj.hxx>
 #include <vcl/weld.hxx>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
