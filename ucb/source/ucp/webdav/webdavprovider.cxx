@@ -82,9 +82,26 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 
 
 // XServiceInfo methods.
+OUString SAL_CALL ContentProvider::getImplementationName()
+{
+    return getImplementationName_Static();
+}
 
-XSERVICEINFO_COMMOM_IMPL( ContentProvider,
-                          "com.sun.star.comp.WebDAVContentProvider" )
+OUString ContentProvider::getImplementationName_Static()
+{
+    return "com.sun.star.comp.WebDAVContentProvider";
+}
+
+sal_Bool SAL_CALL ContentProvider::supportsService( const OUString& ServiceName )
+{
+    return cppu::supportsService( this, ServiceName );
+}
+
+css::uno::Sequence< OUString > SAL_CALL ContentProvider::getSupportedServiceNames()
+{
+    return getSupportedServiceNames_Static();
+}
+
 /// @throws css::uno::Exception
 static css::uno::Reference< css::uno::XInterface >
 ContentProvider_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
