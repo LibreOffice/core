@@ -1802,7 +1802,7 @@ sc/res/nc04.png cmd/sc_graphic.png
 sc/res/nc05.png cmd/sc_insertobject.png
 sc/res/nc06.png cmd/sc_shownote.png
 sc/res/nc07.png sc/res/droplink.png
-sc/res/nc08.png cmd/sc_graphic.png
+sc/res/nc08.png cmd/sc_insertdraw.png
 sc/res/page.png cmd/sc_insertpagenumberfield.png
 sc/res/pages.png cmd/sc_insertpagecountfield.png
 sc/res/sc26047.png cmd/sc_insertformula.png

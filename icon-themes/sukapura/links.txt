@@ -550,7 +550,7 @@ cmd/ar/lc_redo.png cmd/lc_undo.png
 cmd/ar/lc_undo.png cmd/lc_redo.png
 cmd/ar/sc_bulletliststyle.png cmd/ar/sc_defaultbullet.png
 cmd/ar/sc_numberliststyle.png cmd/ar/sc_defaultnumbering.png
-cmd/ar/sc_outlinebullet.png cmd//ar/sc_bulletsandnumberingdialog.png
+cmd/ar/sc_outlinebullet.png cmd/ar/sc_bulletsandnumberingdialog.png
 cmd/ar/sc_recundo.png cmd/sc_redo.png
 cmd/ar/sc_redo.png cmd/sc_undo.png
 cmd/ar/sc_undo.png cmd/sc_redo.png
@@ -2247,7 +2247,7 @@ sc/res/nc04.png cmd/sc_insertgraphic.png
 sc/res/nc05.png cmd/sc_insertobject.png
 sc/res/nc06.png cmd/sc_shownote.png
 sc/res/nc07.png cmd/sc_insertbookmark.png
-sc/res/nc08.png cmd/sc_insertgraphic.png
+sc/res/nc08.png cmd/sc_insertdraw.png
 sc/res/page.png cmd/sc_insertpagenumberfield.png
 sc/res/pages.png cmd/sc_insertpagecountfield.png
 sc/res/sc26047.png cmd/sc_dbviewfunctions.png

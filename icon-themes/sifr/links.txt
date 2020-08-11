@@ -2153,7 +2153,7 @@ sc/res/nc04.png cmd/sc_insertgraphic.png
 sc/res/nc05.png cmd/sc_objectmenue.png
 sc/res/nc06.png cmd/sc_shownote.png
 sc/res/nc07.png cmd/sc_insertbookmark.png
-sc/res/nc08.png cmd/sc_insertgraphic.png
+sc/res/nc08.png cmd/sc_insertdraw.png
 sc/res/page.png cmd/sc_insertpagenumberfield.png
 sc/res/pages.png cmd/sc_insertpagecountfield.png
 sc/res/paste_transpose.png cmd/lc_datadatapilotrun.png
