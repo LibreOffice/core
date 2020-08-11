@@ -64,6 +64,7 @@
 #include <svx/xlnclit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
+#include <editeng/colritem.hxx>
 
 SFX_IMPL_INTERFACE(ScDrawShell, SfxShell)
 
@@ -107,6 +108,13 @@ namespace
                 {
                     XFillColorItem aFillColorItem(OUString(), aColor);
                     pArgs->Put(aFillColorItem);
+                    break;
+                }
+
+                case SID_ATTR_SHADOW_COLOR:
+                {
+                    XColorItem aItem(SDRATTR_SHADOWCOLOR, aColor);
+                    pArgs->Put(aItem);
                     break;
                 }
             }
