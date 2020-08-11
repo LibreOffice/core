@@ -73,7 +73,7 @@
 
 tools::SvRef<ScDocShell>  ScGlobal::xDrawClipDocShellRef;
 std::unique_ptr<SvxSearchItem> ScGlobal::xSearchItem;
-ScAutoFormat*   ScGlobal::pAutoFormat = nullptr;
+std::unique_ptr<ScAutoFormat> ScGlobal::xAutoFormat;
 std::atomic<LegacyFuncCollection*> ScGlobal::pLegacyFuncCollection(nullptr);
 std::atomic<ScUnoAddInCollection*> ScGlobal::pAddInCollection(nullptr);
 std::unique_ptr<ScUserList> ScGlobal::xUserList;
@@ -235,32 +235,31 @@ void ScGlobal::SetSearchItem( const SvxSearchItem& rNew )
 void ScGlobal::ClearAutoFormat()
 {
     assert(!bThreadedGroupCalcInProgress);
-    if (pAutoFormat)
+    if (xAutoFormat)
     {
         //  When modified via StarOne then only the SaveLater flag is set and no saving is done.
         //  If the flag is set then save now.
-        if (pAutoFormat->IsSaveLater())
-            pAutoFormat->Save();
-        delete pAutoFormat;
-        pAutoFormat = nullptr;
+        if (xAutoFormat->IsSaveLater())
+            xAutoFormat->Save();
+        xAutoFormat.reset();
     }
 }
 
 ScAutoFormat* ScGlobal::GetAutoFormat()
 {
-    return pAutoFormat;
+    return xAutoFormat.get();
 }
 
 ScAutoFormat* ScGlobal::GetOrCreateAutoFormat()
 {
     assert(!bThreadedGroupCalcInProgress);
-    if ( !pAutoFormat )
+    if ( !xAutoFormat )
     {
-        pAutoFormat = new ScAutoFormat;
-        pAutoFormat->Load();
+        xAutoFormat.reset(new ScAutoFormat);
+        xAutoFormat->Load();
     }
 
-    return pAutoFormat;
+    return xAutoFormat.get();
 }
 
 LegacyFuncCollection* ScGlobal::GetLegacyFuncCollection()
