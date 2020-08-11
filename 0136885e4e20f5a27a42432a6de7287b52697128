@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a7b15b5_6226966e",
+        "filename": "include/rtl/ustrbuf.hxx",
+        "patchSetId": 41
+      },
+      "lineNbr": 838,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-11T20:21:27Z",
+      "side": 1,
+      "message": "This is uninitialized - c is not assigned to this.",
+      "range": {
+        "startLine": 838,
+        "startChar": 12,
+        "endLine": 838,
+        "endChar": 27
+      },
+      "revId": "0136885e4e20f5a27a42432a6de7287b52697128",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
