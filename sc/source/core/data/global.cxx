@@ -76,7 +76,7 @@ SvxSearchItem*  ScGlobal::pSearchItem = nullptr;
 ScAutoFormat*   ScGlobal::pAutoFormat = nullptr;
 std::atomic<LegacyFuncCollection*> ScGlobal::pLegacyFuncCollection(nullptr);
 std::atomic<ScUnoAddInCollection*> ScGlobal::pAddInCollection(nullptr);
-ScUserList*     ScGlobal::pUserList = nullptr;
+std::unique_ptr<ScUserList> ScGlobal::xUserList;
 LanguageType    ScGlobal::eLnge = LANGUAGE_SYSTEM;
 std::atomic<css::lang::Locale*> ScGlobal::pLocale(nullptr);
 std::unique_ptr<SvtSysLocale>   ScGlobal::xSysLocale;
@@ -280,9 +280,9 @@ ScUserList* ScGlobal::GetUserList()
     // Hack: Load Cfg item at the App
     global_InitAppOptions();
 
-    if (!pUserList)
-        pUserList = new ScUserList();
-    return pUserList;
+    if (!xUserList)
+        xUserList.reset(new ScUserList());
+    return xUserList.get();
 }
 
 void ScGlobal::SetUserList( const ScUserList* pNewList )
@@ -290,15 +290,14 @@ void ScGlobal::SetUserList( const ScUserList* pNewList )
     assert(!bThreadedGroupCalcInProgress);
     if ( pNewList )
     {
-        if ( !pUserList )
-            pUserList = new ScUserList( *pNewList );
+        if ( !xUserList )
+            xUserList.reset( new ScUserList( *pNewList ) );
         else
-            *pUserList = *pNewList;
+            *xUserList = *pNewList;
     }
     else
     {
-        delete pUserList;
-        pUserList = nullptr;
+        xUserList.reset();
     }
 }
 
@@ -533,7 +532,7 @@ void ScGlobal::Clear()
     DELETEZ(pSearchItem);
     delete pLegacyFuncCollection.load(); pLegacyFuncCollection = nullptr;
     delete pAddInCollection.load(); pAddInCollection = nullptr;
-    DELETEZ(pUserList);
+    xUserList.reset();
     xStarCalcFunctionList.reset(); // Destroy before ResMgr!
     xStarCalcFunctionMgr.reset();
     ScParameterClassification::Exit();
