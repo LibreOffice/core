@@ -31,7 +31,6 @@
 #include <rtl/ref.hxx>
 #include <tools/link.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/window.hxx>
 #include <svx/svxdllapi.h>
 
 namespace svxform

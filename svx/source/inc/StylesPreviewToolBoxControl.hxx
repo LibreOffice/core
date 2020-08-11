@@ -20,11 +20,10 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_STYLES_PREVIEW_TOOLBOX_CONTROL_HXX
 #define INCLUDED_SVX_SOURCE_INC_STYLES_PREVIEW_TOOLBOX_CONTROL_HXX
 
-#include <svx/svxdllapi.h>
-#include <sfx2/tbxctrl.hxx>
+#include <svtools/toolboxcontroller.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include "StylesPreviewWindow.hxx"
-#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 
 class StylesPreviewToolBoxControl final

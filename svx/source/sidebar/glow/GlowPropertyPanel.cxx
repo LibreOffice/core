@@ -14,12 +14,10 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/sdmetitm.hxx>
-#include <svx/sdooitm.hxx>
 #include <svx/sdprcitm.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svxids.hrc>
 #include <svx/xcolit.hxx>
-#include <rtl/math.hxx>
 
 namespace svx::sidebar
 {

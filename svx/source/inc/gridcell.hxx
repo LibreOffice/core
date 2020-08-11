@@ -28,7 +28,6 @@
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/form/XBoundControl.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
-#include <com/sun/star/awt/XListBox.hpp>
 #include <com/sun/star/awt/XComboBox.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>

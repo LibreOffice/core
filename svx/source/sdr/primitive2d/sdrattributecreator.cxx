@@ -82,8 +82,6 @@
 #include <sdr/attribute/sdrfilltextattribute.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
 
-#include <sal/log.hxx>
-
 using namespace com::sun::star;
 
 namespace drawinglayer
