@@ -141,32 +141,6 @@ GETTYPES_IMPL_START( Class )                                                \
     CPPU_TYPE_REF( I11 )                                                    \
 GETTYPES_IMPL_END
 
-// XServiceInfo impl. internals
-
-
-#define XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                         \
-OUString SAL_CALL Class::getImplementationName()                       \
-{                                                                           \
-    return getImplementationName_Static();                                  \
-}                                                                           \
-                                                                            \
-OUString Class::getImplementationName_Static()                         \
-{                                                                           \
-    return ImplName;                                                        \
-}                                                                           \
-                                                                            \
-sal_Bool SAL_CALL                                                           \
-Class::supportsService( const OUString& ServiceName )                  \
-{                                                                           \
-    return cppu::supportsService( this, ServiceName );                      \
-}                                                                           \
-                                                                            \
-css::uno::Sequence< OUString > SAL_CALL                     \
-Class::getSupportedServiceNames()                                           \
-{                                                                           \
-    return getSupportedServiceNames_Static();                               \
-}
-
 #endif /* ! INCLUDED_UCBHELPER_MACROS_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
