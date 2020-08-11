@@ -25,7 +25,6 @@
 
 #include <svl/languageoptions.hxx>
 #include <com/sun/star/awt/FontSlant.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 using namespace css;

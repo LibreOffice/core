@@ -28,13 +28,13 @@
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/form/XBoundControl.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
-#include <com/sun/star/awt/XListBox.hpp>
 #include <com/sun/star/awt/XComboBox.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XCheckBox.hpp>
 #include <com/sun/star/awt/XButton.hpp>
+#include <com/sun/star/awt/XListBox.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/form/XChangeBroadcaster.hpp>
 #include <com/sun/star/awt/XWindow.hpp>

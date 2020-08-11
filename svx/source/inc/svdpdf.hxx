@@ -24,7 +24,6 @@
 
 #if HAVE_FEATURE_PDFIUM
 #include <sal/config.h>
-#include <svx/svxdllapi.h>
 
 #include <memory>
 
@@ -35,12 +34,6 @@
 #include <svx/xdash.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
-
-// Prevent workdir/UnpackedTarball/pdfium/public/fpdfview.h from including windows.h in a way that
-// it will define e.g. Yield as a macro:
-#include <prewin.h>
-#include <postwin.h>
-#include <fpdfview.h>
 
 #include <vcl/filter/PDFiumLibrary.hxx>
 

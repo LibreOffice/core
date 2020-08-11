@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_INC_FRMSEL_HRC
 
 #include <utility>
+#include <sal/types.h>
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 

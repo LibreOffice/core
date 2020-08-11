@@ -41,7 +41,6 @@
 #include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xbtmpit.hxx>
-#include <boost/property_tree/ptree.hpp>
 #include <memory>
 
 using namespace ::com::sun::star;

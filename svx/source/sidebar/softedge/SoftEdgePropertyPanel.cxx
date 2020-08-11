@@ -15,7 +15,8 @@
 #include <svx/sdmetitm.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svxids.hrc>
-#include <svx/xcolit.hxx>
+
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 namespace svx::sidebar
 {
