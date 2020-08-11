@@ -93,7 +93,7 @@ std::unique_ptr<SvxBrushItem> ScGlobal::xEmptyBrushItem;
 std::unique_ptr<SvxBrushItem> ScGlobal::xButtonBrushItem;
 std::unique_ptr<SvxBrushItem> ScGlobal::xEmbeddedBrushItem;
 
-ScFunctionList* ScGlobal::pStarCalcFunctionList = nullptr;
+std::unique_ptr<ScFunctionList> ScGlobal::xStarCalcFunctionList;
 std::unique_ptr<ScFunctionMgr> ScGlobal::xStarCalcFunctionMgr;
 
 std::atomic<ScUnitConverter*> ScGlobal::pUnitConverter(nullptr);
@@ -534,7 +534,7 @@ void ScGlobal::Clear()
     delete pLegacyFuncCollection.load(); pLegacyFuncCollection = nullptr;
     delete pAddInCollection.load(); pAddInCollection = nullptr;
     DELETEZ(pUserList);
-    DELETEZ(pStarCalcFunctionList); // Destroy before ResMgr!
+    xStarCalcFunctionList.reset(); // Destroy before ResMgr!
     xStarCalcFunctionMgr.reset();
     ScParameterClassification::Exit();
     ScCompiler::DeInit();
@@ -611,16 +611,16 @@ OUString ScGlobal::GetCharsetString( rtl_TextEncoding eVal )
 
 bool ScGlobal::HasStarCalcFunctionList()
 {
-    return ( pStarCalcFunctionList != nullptr );
+    return bool(xStarCalcFunctionList);
 }
 
 ScFunctionList* ScGlobal::GetStarCalcFunctionList()
 {
     assert(!bThreadedGroupCalcInProgress);
-    if ( !pStarCalcFunctionList )
-        pStarCalcFunctionList = new ScFunctionList;
+    if ( !xStarCalcFunctionList )
+        xStarCalcFunctionList.reset(new ScFunctionList);
 
-    return pStarCalcFunctionList;
+    return xStarCalcFunctionList.get();
 }
 
 ScFunctionMgr* ScGlobal::GetStarCalcFunctionMgr()
@@ -636,7 +636,7 @@ void ScGlobal::ResetFunctionList()
 {
     // FunctionMgr has pointers into FunctionList, must also be updated
     xStarCalcFunctionMgr.reset();
-    DELETEZ( pStarCalcFunctionList );
+    xStarCalcFunctionList.reset();
 }
 
 ScUnitConverter* ScGlobal::GetUnitConverter()
