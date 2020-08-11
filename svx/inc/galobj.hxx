@@ -25,7 +25,6 @@
 #include <vcl/graph.hxx>
 #include <vcl/gdimtf.hxx>
 #include <svx/galmisc.hxx>
-#include <svx/gallerybinaryengine.hxx>
 
 #define S_THUMB 80
 

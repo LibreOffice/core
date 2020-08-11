@@ -20,6 +20,7 @@
 #pragma once
 
 #include <svl/lstner.hxx>
+#include <vcl/weld.hxx>
 #include <vector>
 
 #include <functional>

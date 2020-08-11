@@ -25,7 +25,6 @@
 #include "codec.hxx"
 #include "gallerydrawmodel.hxx"
 #include <vcl/cvtgrf.hxx>
-#include <sot/formats.hxx>
 
 #include <sal/log.hxx>
 

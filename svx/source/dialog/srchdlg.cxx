@@ -66,7 +66,6 @@
 #include <vcl/toolbox.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <comphelper/lok.hxx>
-#include <sfx2/lokhelper.hxx>
 
 #include <cstdlib>
 #include <memory>

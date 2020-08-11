@@ -41,7 +41,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
 #include <svx/transfrmhelper.hxx>
-#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
 
 #include <svtools/unitconv.hxx>
 

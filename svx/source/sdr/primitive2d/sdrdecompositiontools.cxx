@@ -49,7 +49,6 @@
 #include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
 #include <drawinglayer/attribute/sdrshadowattribute.hxx>
 #include <drawinglayer/attribute/sdrglowattribute.hxx>
-#include <sal/log.hxx>
 
 
 using namespace com::sun::star;

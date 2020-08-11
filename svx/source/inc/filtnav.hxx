@@ -31,7 +31,6 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dockwin.hxx>
 #include <sfx2/ctrlitem.hxx>
-#include <vcl/image.hxx>
 
 #include "fmexch.hxx"
 #include "sqlparserclient.hxx"
