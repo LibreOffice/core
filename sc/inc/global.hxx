@@ -528,7 +528,7 @@ class ScGlobal
     static std::atomic<::utl::TransliterationWrapper*> pCaseTransliteration;
     static std::atomic<css::lang::Locale*>   pLocale;
 
-    static ScFieldEditEngine*   pFieldEditEngine;
+    static std::unique_ptr<ScFieldEditEngine> xFieldEditEngine;
 
     static void                 InitPPT();
 
