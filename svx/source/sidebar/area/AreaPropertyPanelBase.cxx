@@ -30,6 +30,7 @@
 #include <sfx2/weldutils.hxx>
 #include <tools/urlobj.hxx>
 #include <bitmaps.hlst>
+#include <comphelper/lok.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -388,7 +389,8 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, weld::ComboBox&, void)
             GraphicObject aBitmap;
             if(nPos == static_cast< sal_Int32 >(BITMAP))
             {
-                mxBmpImport->show();
+                if (!comphelper::LibreOfficeKit::isActive())
+                    mxBmpImport->show();
                 const SvxBitmapListItem* pItem = pSh->GetItem(SID_BITMAP_LIST);
                 if(pItem)
                 {
@@ -1235,7 +1237,8 @@ void AreaPropertyPanelBase::Update()
                 {
                     if(pSh && pSh->GetItem(SID_BITMAP_LIST) && eXFS == BITMAP)
                     {
-                        mxBmpImport->show();
+                        if (!comphelper::LibreOfficeKit::isActive())
+                            mxBmpImport->show();
                         mxLbFillType->set_active(sal_uInt32(BITMAP));
                         SvxFillAttrBox::Fill(*mxLbFillAttr, pSh->GetItem(SID_BITMAP_LIST)->GetBitmapList());
 
