@@ -40,8 +40,8 @@ struct ScMyValidation
     OUString               sName;
     OUString               sErrorMessage;
     OUString               sErrorTitle;
-    OUString               sImputMessage;
-    OUString               sImputTitle;
+    OUString               sInputMessage;
+    OUString               sInputTitle;
     OUString               sFormula1;
     OUString               sFormula2;
     ScAddress              aBaseCell;
@@ -50,7 +50,7 @@ struct ScMyValidation
     css::sheet::ConditionOperator    aOperator;
     sal_Int16                   nShowList;
     bool                        bShowErrorMessage;
-    bool                        bShowImputMessage;
+    bool                        bShowInputMessage;
     bool                        bIgnoreBlanks;
 
                                 ScMyValidation();

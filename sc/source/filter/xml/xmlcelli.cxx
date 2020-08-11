@@ -801,8 +801,8 @@ void ScXMLTableRowCellContext::SetContentValidation( const ScRange& rScRange )
     aScValidationData.SetListType( aValidation.nShowList );
 
     // set strings for error / input even if disabled (and disable afterwards)
-    aScValidationData.SetInput( aValidation.sImputTitle, aValidation.sImputMessage );
-    if( !aValidation.bShowImputMessage )
+    aScValidationData.SetInput( aValidation.sInputTitle, aValidation.sInputMessage );
+    if( !aValidation.bShowInputMessage )
         aScValidationData.ResetInput();
     aScValidationData.SetError( aValidation.sErrorTitle, aValidation.sErrorMessage, validAlertToValidError(aValidation.aAlertStyle) );
     if( !aValidation.bShowErrorMessage )
