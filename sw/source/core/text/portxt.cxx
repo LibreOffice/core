@@ -32,6 +32,7 @@
 #include <tgrditem.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentMarkAccess.hxx>
+#include "FieldSlot.hxx"
 
 #include <IMark.hxx>
 #include <pam.hxx>
@@ -671,14 +672,20 @@ void SwTextPortion::HandlePortion( SwPortionHandler& rPH ) const
 }
 
 SwTextInputFieldPortion::SwTextInputFieldPortion()
-    : SwTextPortion()
+    : SwTextPortion(),
+    mbShowFieldName(false)
 {
     SetWhichPor( PortionType::InputField );
 }
 
-bool SwTextInputFieldPortion::Format(SwTextFormatInfo &rTextFormatInfo)
+bool SwTextInputFieldPortion::Format(SwTextFormatInfo& rInf)
 {
-    return SwTextPortion::Format(rTextFormatInfo);
+    mbShowFieldName = rInf.GetOpt().IsFieldName();
+    if (!mbShowFieldName)
+        return SwTextPortion::Format(rInf);
+
+    FieldSlot aDiffText(&rInf, this);
+    return SwTextPortion::Format(rInf);
 }
 
 void SwTextInputFieldPortion::Paint( const SwTextPaintInfo &rInf ) const
@@ -715,6 +722,13 @@ void SwTextInputFieldPortion::Paint( const SwTextPaintInfo &rInf ) const
 
 bool SwTextInputFieldPortion::GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const
 {
+    if (mbShowFieldName)
+    {
+        OUString aFieldName = SwFieldType::GetTypeStr(SwFieldTypesEnum::Input);
+        rText = aFieldName.copy(0, aFieldName.getLength());
+        return true;
+    }
+
     sal_Int32 nIdx(rInf.GetIdx());
     sal_Int32 nLen(rInf.GetLen());
     if ( rInf.GetChar( rInf.GetIdx() ) == CH_TXT_ATR_INPUTFIELDSTART )

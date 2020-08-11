@@ -43,6 +43,7 @@
 #include <editeng/lrspitem.hxx>
 #include <unicode/ubidi.h>
 #include <bookmrk.hxx>
+#include "FieldSlot.hxx"
 
 using namespace ::com::sun::star;
 
@@ -126,70 +127,6 @@ sal_uInt16 SwFieldPortion::GetViewWidth( const SwTextSizeInfo &rInf ) const
     else
         pThis->m_nViewWidth = 0;
     return m_nViewWidth;
-}
-
-namespace {
-
-/**
- * Never just use SetLen(0)
- */
-class SwFieldSlot
-{
-    std::shared_ptr<vcl::TextLayoutCache> m_pOldCachedVclData;
-    const OUString *pOldText;
-    OUString aText;
-    TextFrameIndex nIdx;
-    TextFrameIndex nLen;
-    SwTextFormatInfo *pInf;
-    bool bOn;
-public:
-    SwFieldSlot( const SwTextFormatInfo* pNew, const SwFieldPortion *pPor );
-    ~SwFieldSlot();
-};
-
-}
-
-SwFieldSlot::SwFieldSlot( const SwTextFormatInfo* pNew, const SwFieldPortion *pPor )
-    : pOldText(nullptr)
-    , nIdx(0)
-    , nLen(0)
-    , pInf(nullptr)
-{
-    bOn = pPor->GetExpText( *pNew, aText );
-
-    // The text will be replaced ...
-    if( !bOn )
-        return;
-
-    pInf = const_cast<SwTextFormatInfo*>(pNew);
-    nIdx = pInf->GetIdx();
-    nLen = pInf->GetLen();
-    pOldText = &(pInf->GetText());
-    m_pOldCachedVclData = pInf->GetCachedVclData();
-    pInf->SetLen(TextFrameIndex(aText.getLength()));
-    pInf->SetCachedVclData(nullptr);
-    if( pPor->IsFollow() )
-    {
-        pInf->SetFakeLineStart( nIdx > pInf->GetLineStart() );
-        pInf->SetIdx(TextFrameIndex(0));
-    }
-    else if (nIdx < TextFrameIndex(pOldText->getLength()))
-    {
-        aText = (*pOldText).replaceAt(sal_Int32(nIdx), 1, aText);
-    }
-    pInf->SetText( aText );
-}
-
-SwFieldSlot::~SwFieldSlot()
-{
-    if( bOn )
-    {
-        pInf->SetCachedVclData(m_pOldCachedVclData);
-        pInf->SetText( *pOldText );
-        pInf->SetIdx( nIdx );
-        pInf->SetLen( nLen );
-        pInf->SetFakeLineStart( false );
-    }
 }
 
 void SwFieldPortion::CheckScript( const SwTextSizeInfo &rInf )
@@ -297,7 +234,7 @@ bool SwFieldPortion::Format( SwTextFormatInfo &rInf )
     bool bEOL = false;
     TextFrameIndex const nTextRest = TextFrameIndex(rInf.GetText().getLength()) - rInf.GetIdx();
     {
-        SwFieldSlot aDiffText( &rInf, this );
+        FieldSlot aDiffText( &rInf, this );
         SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
         aLayoutModeModifier.SetAuto();
 
