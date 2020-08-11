@@ -4608,7 +4608,10 @@ public:
 
            b) the validity dialog in calc
         */
-        if (m_aDialogRun.loop_is_running())
+        // tdf#135567 we know we are running in the sync case if loop_is_running is true
+        // but for the async case we instead check for m_xDialogController which is set in
+        // runAsync and cleared in asyncresponse
+        if (m_aDialogRun.loop_is_running() || m_xDialogController)
         {
             if (bModal)
                 m_aDialogRun.inc_modal_count();
