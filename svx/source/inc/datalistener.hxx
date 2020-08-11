@@ -23,7 +23,6 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
 #include <com/sun/star/xml/dom/events/XEventListener.hpp>
-#include <vcl/vclptr.hxx>
 
 
 namespace svxform

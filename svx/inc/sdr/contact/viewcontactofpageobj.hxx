@@ -20,7 +20,6 @@
 #pragma once
 
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
-#include <svx/svxdllapi.h>
 #include <svx/svdopage.hxx>
 
 class SdrPage;

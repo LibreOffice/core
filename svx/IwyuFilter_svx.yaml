@@ -1,19 +1,26 @@
 ---
 assumeFilename: svx/source/svdraw/svdobj.cxx
 excludelist:
-    svx/source/svdraw/svdpdf.hxx:
-    # Needed on WIN32
+    svx/source/inc/svdpdf.hxx:
+    # Needed for SdrPdfImportTest in sd to compile on WIN
     - prewin.h
     - postwin.h
+    - fpdfview.h
     svx/source/accessibility/ChildrenManagerImpl.cxx:
     # Actually used
     - com/sun/star/beans/XPropertySet.hpp
+    svx/source/accessibility/DescriptionGenerator.cxx:
+    # Actually used
+    - com/sun/star/drawing/XShape.hpp
     svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:
     # Boost wrapper is needed
     - boost/spirit/include/classic_core.hpp
     svx/source/dialog/ClassificationCommon.cxx:
     # Actually used
     - com/sun/star/beans/XPropertyContainer.hpp
+    svx/source/dialog/svxruler.cxx:
+    # Needed for rtl::math::round
+    - rtl/math.hxx
     svx/source/dialog/srchdlg.cxx:
     # Actually used
     - comphelper/scopeguard.hxx
@@ -24,13 +31,22 @@ excludelist:
     # Actually used
     - com/sun/star/sdbc/XConnection.hpp
     - com/sun/star/beans/XPropertySet.hpp
+    svx/source/gallery2/gallerybinaryengine.cxx:
+    # Don't propose hxx -> h change in URE libs
+    - osl/thread.hxx
     svx/source/gallery2/galtheme.cxx:
     # Don't propose hxx -> h change in URE libs
     - osl/thread.hxx
+    svx/source/gallery2/galobj.cxx:
+    # Actually used
+    - com/sun/star/frame/XModel.hpp
     svx/source/items/galleryitem.cxx:
     # Actually used
     - com/sun/star/graphic/XGraphic.hpp
     - com/sun/star/lang/XComponent.hpp
+    svx/source/form/formcontrolfactory.cxx:
+    # Actually used
+    - com/sun/star/sdbc/XDataSource.hpp
     svx/source/form/dataaccessdescriptor.cxx:
     # Actually used
     - com/sun/star/beans/XPropertySet.hpp
@@ -101,9 +117,15 @@ excludelist:
     svx/source/svdraw/svdorect.cxx:
     # Actually used
     - svx/svdopath.hxx
+    svx/source/svdraw/svdpagv.cxx:
+    # Actually used
+    - comphelper/scopeguard.hxx
     svx/source/table/accessiblecell.cxx:
     # Needed for SvxTextEditSource object instantiation
     - svx/svdotext.hxx
+    svx/source/table/accessibletableshape.cxx:
+    # Actually used
+    - com/sun/star/drawing/XShape.hpp
     svx/source/unodraw/recoveryui.cxx:
     # Needed for LIBO_ETC_FOLDER on WIN32
     - config_folders.h
@@ -122,3 +144,10 @@ excludelist:
     svx/qa/unit/XTableImportExportTest.cxx:
     # Needed for --with-system-cppunit
     - unotest/bootstrapfixturebase.hxx
+    svx/sdi/svxslots.hrc:
+    # Needed for building svx/sdi/svx.sdi
+    - sfx2/sfxsids.hrc
+    - editeng/memberids.h
+    - editeng/editids.hrc
+    - svx/svxids.hrc
+    - svx/unomid.hxx
