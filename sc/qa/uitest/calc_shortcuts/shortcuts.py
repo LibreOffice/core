@@ -8,39 +8,11 @@
 from uitest.framework import UITestCase
 import unittest
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.debug import sleep
 
+# These are shortcuts that are hard to recover from, so closing LibreOffice completely after every test
 shortcuts = [
-    {"command": "F1"},
-    {"command": "F2"},
-    {"command": "F5"},
-    {"command": "F7", "closeButton": "ok"},
-    {"command": "F9"},
-    {"command": "F11"},
-    {"command": "CTRL+k"},
-    {"command": "CTRL+h"},
-    {"command": "CTRL+f"},
-    {"command": "CTRL+b"},
-    {"command": "CTRL+i"},
-    {"command": "CTRL+l"},
-    {"command": "CTRL+e"},
-    {"command": "CTRL+r"},
-    {"command": "CTRL+j"},
-    {"command": "CTRL+m"},
-    {"command": "CTRL+F5"},
-    {"command": "CTRL+F8"},
-    {"command": "CTRL+`"},
-    {"command": "SHIFT+F5"},
-    {"command": "SHIFT+F9"},
-    {"command": "ALT+F12", "closeButton": "cancel", "skipSecondTrigger": True},
     {"command": "CTRL+SHIFT+o", "skipSecondTrigger": True},
-    {"command": "CTRL+SHIFT+F4"},
-    {"command": "CTRL+SHIFT+J"},
     {"command": "CTRL+ALT+c", "skipSecondTrigger": True},
-    {"command": "F12", "skipSecondTrigger": True, "closeButton": "ok"},
-    {"command": "CTRL+F3", "skipSecondTrigger": True, "closeButton": "cancel"},
-    {"command": "CTRL+F2", "skipSecondTrigger": True, "closeButton": "cancel"},
-    {"command": "CTRL+F5"},
 ]
 
 def load_tests(loader, tests, pattern):
