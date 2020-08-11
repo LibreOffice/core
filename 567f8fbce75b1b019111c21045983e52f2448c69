@@ -105,6 +105,30 @@
       "revId": "567f8fbce75b1b019111c21045983e52f2448c69",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "737e63d6_1ba9f300",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 4228,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-08-11T13:44:19Z",
+      "side": 1,
+      "message": "more precisely, check opening parenthesis with negative look-ahead pattern:\n\n\\\\b([A-Z]{1,3}[0-9]+)\\\\b(?![(])",
+      "parentUuid": "dc4cada5_edd136bb",
+      "range": {
+        "startLine": 4227,
+        "startChar": 5,
+        "endLine": 4228,
+        "endChar": 86
+      },
+      "revId": "567f8fbce75b1b019111c21045983e52f2448c69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
