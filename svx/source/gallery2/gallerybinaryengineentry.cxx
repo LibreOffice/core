@@ -19,16 +19,9 @@
 
 #include <svx/gallerybinaryengineentry.hxx>
 #include <svx/galmisc.hxx>
-#include <svx/unomodel.hxx>
-#include <svx/fmmodel.hxx>
 #include <svx/gallery1.hxx>
-#include "codec.hxx"
-#include "gallerydrawmodel.hxx"
-
-#include <sal/log.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>
-#include <unotools/streamwrap.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/vcompat.hxx>
 
