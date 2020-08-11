@@ -21,10 +21,44 @@
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <sfx2/sidebar/ResourceManager.hxx>
 #include <sidebar/PanelDescriptor.hxx>
+#include <sidebar/Tools.hxx>
+#include <sfx2/sidebar/FocusManager.hxx>
+#include <sfx2/childwin.hxx>
+#include <sfx2/sfxsids.hrc>
+#include <com/sun/star/frame/XDispatch.hpp>
 
 using namespace css;
 
 namespace sfx2::sidebar {
+
+void Sidebar::ToggleDeck(const OUString& rsDeckId, SfxViewFrame* pViewFrame)
+{
+    if (!pViewFrame)
+        return;
+
+    SfxChildWindow* pSidebarChildWindow = pViewFrame->GetChildWindow(SID_SIDEBAR);
+    bool bInitiallyVisible = pSidebarChildWindow && pSidebarChildWindow->IsVisible();
+    if (!bInitiallyVisible)
+        pViewFrame->ShowChildWindow(SID_SIDEBAR);
+
+    if (SidebarController* pController =
+            SidebarController::GetSidebarControllerForFrame(pViewFrame->GetFrame().GetFrameInterface()))
+    {
+        if (bInitiallyVisible && pController->IsDeckVisible(rsDeckId))
+        {
+            // close the sidebar if it was already visible and showing this sidebar deck
+            const util::URL aURL(Tools::GetURL(".uno:Sidebar"));
+            css::uno::Reference<frame::XDispatch> xDispatch(Tools::GetDispatch(pViewFrame->GetFrame().GetFrameInterface(), aURL));
+            if (xDispatch.is())
+                xDispatch->dispatch(aURL, css::uno::Sequence<beans::PropertyValue>());
+        }
+        else
+        {
+            pController->OpenThenSwitchToDeck(rsDeckId);
+            pController->GetFocusManager().GrabFocusPanel();
+        }
+    }
+}
 
 void Sidebar::ShowPanel (
     const OUString& rsPanelId,

@@ -323,6 +323,11 @@ class SvxSearchItem;
 // Floating Window Template
 #define SID_STYLE_DESIGNER                  (SID_SFX_START + 539)
 
+#define SID_PROPERTY_DECK                   (SID_SFX_START + 851)
+#define SID_STYLELIST_DECK                  (SID_SFX_START + 852)
+#define SID_GALLERY_DECK                    (SID_SFX_START + 853)
+#define SID_NAVIGATOR_DECK                  (SID_SFX_START + 854)
+
 #define SID_TEMPLATE_ADDRESSBOKSOURCE       (SID_SFX_START + 1655)
 
 // Ruby dialog
