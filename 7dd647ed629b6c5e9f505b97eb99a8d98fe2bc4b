@@ -46,6 +46,30 @@
       "revId": "7dd647ed629b6c5e9f505b97eb99a8d98fe2bc4b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1054ad0a_9371dc28",
+        "filename": "cui/source/customize/cfgutil.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-08-11T08:16:51Z",
+      "side": 1,
+      "message": "cui.customize",
+      "parentUuid": "b920bc29_8bbff6db",
+      "range": {
+        "startLine": 324,
+        "startChar": 19,
+        "endLine": 324,
+        "endChar": 34
+      },
+      "revId": "7dd647ed629b6c5e9f505b97eb99a8d98fe2bc4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
