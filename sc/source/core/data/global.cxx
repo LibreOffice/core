@@ -80,7 +80,7 @@ ScUserList*     ScGlobal::pUserList = nullptr;
 LanguageType    ScGlobal::eLnge = LANGUAGE_SYSTEM;
 std::atomic<css::lang::Locale*> ScGlobal::pLocale(nullptr);
 std::unique_ptr<SvtSysLocale>   ScGlobal::xSysLocale;
-CalendarWrapper* ScGlobal::pCalendar = nullptr;
+std::unique_ptr<CalendarWrapper> ScGlobal::xCalendar;
 std::atomic<CollatorWrapper*> ScGlobal::pCollator(nullptr);
 std::atomic<CollatorWrapper*> ScGlobal::pCaseCollator(nullptr);
 std::atomic<::utl::TransliterationWrapper*> ScGlobal::pTransliteration(nullptr);
@@ -548,7 +548,7 @@ void ScGlobal::Clear()
     delete pTransliteration.load(); pTransliteration = nullptr;
     delete pCaseCollator.load(); pCaseCollator = nullptr;
     delete pCollator.load(); pCollator = nullptr;
-    DELETEZ(pCalendar);
+    xCalendar.reset();
     xSysLocale.reset();
     delete pLocale.load(); pLocale = nullptr;
 
@@ -1025,12 +1025,12 @@ const CharClass* ScGlobal::getCharClassPtr()
 CalendarWrapper*     ScGlobal::GetCalendar()
 {
     assert(!bThreadedGroupCalcInProgress);
-    if ( !pCalendar )
+    if ( !xCalendar )
     {
-        pCalendar = new CalendarWrapper( ::comphelper::getProcessComponentContext() );
-        pCalendar->loadDefaultCalendar( *GetLocale() );
+        xCalendar.reset( new CalendarWrapper( ::comphelper::getProcessComponentContext() ) );
+        xCalendar->loadDefaultCalendar( *GetLocale() );
     }
-    return pCalendar;
+    return xCalendar.get();
 }
 CollatorWrapper*        ScGlobal::GetCollator()
 {
