@@ -37,10 +37,6 @@ endif
 # shell setup (env.vars) for the compiler
 gb_COMPILER_SETUP :=
 
-ifneq ($(USE_LD),)
-gb_LinkTarget_LDFLAGS += $(USE_LD)
-endif
-
 ifeq ($(strip $(gb_COMPILEROPTFLAGS)),)
 gb_COMPILEROPTFLAGS := -O2
 endif

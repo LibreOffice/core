@@ -228,7 +228,7 @@ $(call gb_Helper_abbreviate_dirs,\
 			-LIBPATH:$(WINDOWS_SDK_HOME)/lib/x86 \
 			-LIBPATH:$(UCRTSDKDIR)lib/$(UCRTVERSION)/ucrt/x86 \
 			$(if $(filter 80 81 10,$(WINDOWS_SDK_VERSION)),-LIBPATH:$(WINDOWS_SDK_HOME)/lib/$(WINDOWS_SDK_LIB_SUBDIR)/um/x86)) \
-		$(T_LDFLAGS) \
+		$(T_USE_LD) $(T_LDFLAGS) \
 		$(if $(filter Library CppunitTest Executable,$(TARGETTYPE)),/NATVIS:$(SRCDIR)/solenv/vs/LibreOffice.natvis) \
 		@$${RESPONSEFILE} \
 		$(foreach lib,$(sort $(LINKED_LIBS)),$(call gb_Library_get_ilibfilename,$(lib))) \

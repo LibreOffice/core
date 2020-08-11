@@ -116,7 +116,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(SOVERSIONSCRIPT),-Wl$(COMMA)-soname=$(notdir $(1)) \
 			) \
 		$(subst \d,$$,$(RPATH)) \
-		$(T_LDFLAGS) \
+		$(T_USE_LD) $(T_LDFLAGS) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \

@@ -833,6 +833,7 @@ $(call gb_LinkTarget_get_target,$(1)) : COMPILER_TEST :=
 $(call gb_LinkTarget_get_target,$(1)) : T_SYMBOLS := $(if $(call gb_LinkTarget__symbols_enabled,$(2)),$(true),$(false))
 $(call gb_LinkTarget_get_target,$(1)) : T_CC :=
 $(call gb_LinkTarget_get_target,$(1)) : T_CXX :=
+$(call gb_LinkTarget_get_target,$(1)) : T_USE_LD := $(USE_LD)
 
 ifeq ($(gb_FULLDEPS),$(true))
 ifeq (depcache:,$(filter depcache,$(.FEATURES)):$(gb_PARTIAL_BUILD))
@@ -1784,6 +1785,7 @@ endef
 define gb_LinkTarget_use_clang
 $(call gb_LinkTarget_get_target,$(1)) : T_CC := $(CLANG_CC)
 $(call gb_LinkTarget_get_target,$(1)) : T_CXX := $(CLANG_CXX)
+$(call gb_LinkTarget_get_target,$(1)) : T_USE_LD := $(or $(CLANG_USE_LD),$(USE_LD))
 
 endef
 
