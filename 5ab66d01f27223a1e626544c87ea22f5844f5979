@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32ded07b_d1031954",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2269,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2020-08-11T09:23:11Z",
+      "side": 1,
+      "message": "This comment presumably is misleading now?",
+      "revId": "5ab66d01f27223a1e626544c87ea22f5844f5979",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
