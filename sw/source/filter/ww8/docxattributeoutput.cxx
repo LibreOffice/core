@@ -144,6 +144,7 @@
 #include <stdarg.h>
 
 #include <toolkit/helper/vclunohelper.hxx>
+#include <unicode/regex.h>
 
 using ::editeng::SvxBorderLine;
 
@@ -2144,6 +2145,14 @@ void DocxAttributeOutput::CmdField_Impl( const SwTextNode* pNode, sal_Int32 nPos
             {
                sToken = sToken.replaceAll("NNNN", "dddd");
                sToken = sToken.replaceAll("NN", "ddd");
+            }
+            else if ( rInfos.eType == ww::eEquals )
+            {
+               UErrorCode nErr(U_ZERO_ERROR);
+               icu::UnicodeString sInput(sToken.getStr());
+               // remove < and > around cell references, e.g. <A1> to A1, <A1:B2> to A1:B2
+               icu::RegexMatcher xMatch("<([A-Z]{1,3}[0-9]+(:[A-Z]{1,3}[0-9]+)?)>", sInput, 0, nErr);
+               sToken = xMatch.replaceAll(icu::UnicodeString("$1"), nErr).getTerminatedBuffer();
             }
 
             // Write the Field command

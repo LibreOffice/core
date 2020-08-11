@@ -982,6 +982,20 @@ DECLARE_OOXMLEXPORT_TEST(testTdf44986, "tdf44986.docx")
     CPPUNIT_ASSERT_EQUAL(OUString(""), uno::Reference<text::XTextRange>(xTable->getCellByName("B1"), uno::UNO_QUERY_THROW)->getString());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf118682, "tdf118682.fodt")
+{
+    // Support cell references in table formulas
+    xmlDocUniquePtr pXmlDoc = parseExport();
+
+    // Formula fields were completely missing.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r/w:fldChar", 3);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r/w:fldChar", 3);
+
+    // Cell references were parenthesized: <A1>+<A2> and SUM(<A1:A3>)
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r[2]/w:instrText", " =   A1+A2");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[2]/w:instrText", " =  SUM(A1:A3)");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf106953, "tdf106953.docx")
 {
     uno::Reference<container::XIndexAccess> xRules = getProperty< uno::Reference<container::XIndexAccess> >(getStyles("NumberingStyles")->getByName("WWNum1"), "NumberingRules");
