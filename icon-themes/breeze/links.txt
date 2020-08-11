@@ -1940,7 +1940,7 @@ cmd/sc_browseforward.png cmd/sc_nextrecord.png
 cmd/32/donation.png cmd/32/currencyfield.png
 cmd/lc_donation.png cmd/lc_currencyfield.png
 cmd/sc_donation.png cmd/sc_currencyfield.png
- 
+
 # Math
 cmd/32/symbolcatalogue.png cmd/32/insertsymbol.png
 cmd/lc_symbolcatalogue.png cmd/lc_insertsymbol.png
@@ -2377,7 +2377,7 @@ sc/res/nc04.png cmd/sc_insertgraphic.png
 sc/res/nc05.png cmd/sc_insertobject.png
 sc/res/nc06.png cmd/sc_shownote.png
 sc/res/nc07.png cmd/sc_insertbookmark.png
-sc/res/nc08.png cmd/sc_insertgraphic.png
+sc/res/nc08.png cmd/sc_insertdraw.png
 sc/res/page.png cmd/sc_insertpagenumberfield.png
 sc/res/pages.png cmd/sc_insertpagecountfield.png
 sc/res/paste_transpose.png cmd/lc_datadatapilotrun.png
