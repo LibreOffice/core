@@ -37,6 +37,7 @@
 #include <sfx2/opengrf.hxx>
 #include <o3tl/make_unique.hxx>
 #include <bitmaps.hlst>
+#include <comphelper/lok.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -377,7 +378,8 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
             GraphicObject aBitmap;
             if(nPos == static_cast< sal_Int32 >(BITMAP))
             {
-                mpBmpImport->Show();
+                if (!comphelper::LibreOfficeKit::isActive())
+                    mpBmpImport->Show();
                 const SvxBitmapListItem* pItem = pSh->GetItem(SID_BITMAP_LIST);
                 if(pItem)
                 {
@@ -1219,7 +1221,8 @@ void AreaPropertyPanelBase::Update()
                 {
                     if(pSh && pSh->GetItem(SID_BITMAP_LIST) && eXFS == BITMAP)
                     {
-                        mpBmpImport->Show();
+                        if (!comphelper::LibreOfficeKit::isActive())
+                            mpBmpImport->Show();
                         mpLbFillType->SelectEntryPos(sal_uInt32(BITMAP));
                         mpLbFillAttr->Fill(pSh->GetItem(SID_BITMAP_LIST)->GetBitmapList());
 
