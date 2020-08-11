@@ -36,6 +36,17 @@
     the size and position of those user interface elements.
     </p>
 
+    <p>
+    Available properties:
+    <ul>
+        <li>boolean <code>MenuBarCloser</code>: Whether the small "Close" button in the menubar is displayed</li>
+        <li>boolean <code>AutomaticToolbars</code>: Whether automatic toolbars do appear</li>
+        <li>boolean <code>RefreshContextToolbarVisibility</code>: Set to true to refresh visibility of context toolbars</li>
+        <li>boolean <code>HideCurrentUI</code>: Hide/Show current UI elements (Toolbar, Statusbar, Menubar, etc)</li>
+        <li>boolean <code>PreserveContentSize</code>: When true, the the outer window is resized the content/document size is preserved</li>
+    <ul>
+    </p>
+
     @since OOo 2.0
 */
 
