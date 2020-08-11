@@ -22,6 +22,30 @@
       "revId": "ddc464b28da4511e53589a1db8513b35de5ad099",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "676d6225_e549e64d",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-08-11T13:17:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a588b452_4e93425a",
+      "range": {
+        "startLine": 293,
+        "startChar": 76,
+        "endLine": 293,
+        "endChar": 88
+      },
+      "revId": "ddc464b28da4511e53589a1db8513b35de5ad099",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

@@ -16,6 +16,24 @@
       "revId": "495a5944a3d442cfe748a3bb0dcef76f6a961d30",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27e00ae5_c5c2bbaf",
+        "filename": "cui/source/inc/AdditionsDialog.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-08-11T13:17:59Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "b46406bc_fc059396",
+      "revId": "495a5944a3d442cfe748a3bb0dcef76f6a961d30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
