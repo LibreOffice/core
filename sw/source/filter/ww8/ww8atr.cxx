@@ -3279,6 +3279,13 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
             GetExport().OutputField( pField, ww::eMACROBUTTON, sStr );
         }
         break;
+    case SwFieldIds::Table:
+        {
+            ww::eField eField = ww::eEquals;
+            OUString aExpand = FieldString(eField) + pField->GetFieldName();
+            GetExport().OutputField(pField, eField, aExpand);
+        }
+        break;
     case SwFieldIds::User:
     {
         ww::eField eField = ww::eDOCVARIABLE;
