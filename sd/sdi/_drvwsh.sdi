@@ -18,6 +18,23 @@
 
 interface DrawView
 {
+    SID_SHAPES_DECK
+    [
+        ExecMethod = Execute;
+    ]
+    SID_SLIDETRANSITION_DECK
+    [
+        ExecMethod = Execute;
+    ]
+    SID_CUSTOMANIMATION_DECK
+    [
+        ExecMethod = Execute;
+    ]
+    SID_MASTERPAGES_DECK
+    [
+        ExecMethod = Execute;
+    ]
+
     SID_JUMPTOMARK // ole : no, status : ?
     [
         ExecMethod = ExecCtrl ;

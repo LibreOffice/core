@@ -89,6 +89,7 @@
 #include <fuconcs.hxx>
 #include <fuformatpaintbrush.hxx>
 #include <stlsheet.hxx>
+#include <sfx2/sidebar/Sidebar.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1948,6 +1949,25 @@ void DrawViewShell::Execute (SfxRequest& rReq)
 
     switch (rReq.GetSlot())
     {
+        case SID_SHAPES_DECK:
+        case SID_SLIDETRANSITION_DECK:
+        case SID_CUSTOMANIMATION_DECK:
+        case SID_MASTERPAGES_DECK:
+        {
+            sal_uInt16 nWhich = rReq.GetSlot();
+            OUString deckId;
+            if (nWhich == SID_SHAPES_DECK)
+                deckId = "ShapesDeck";
+            else if (nWhich == SID_SLIDETRANSITION_DECK)
+                deckId = "SdSlideTransitionDeck";
+            else if (nWhich == SID_CUSTOMANIMATION_DECK)
+                deckId = "SdCustomAnimationDeck";
+            else if (nWhich == SID_MASTERPAGES_DECK)
+                deckId = "SdMasterPagesDeck";
+            ::sfx2::sidebar::Sidebar::ToggleDeck(deckId, GetViewFrame());
+        }
+        break;
+
         case SID_SEARCH_ITEM:
             // Forward this request to the common (old) code of the
             // document shell.
