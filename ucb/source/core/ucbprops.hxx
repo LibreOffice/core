@@ -24,15 +24,13 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/implbase.hxx>
 
-
-using UcbPropertiesManager_Base = cppu::WeakComponentImplHelper <
+using UcbPropertiesManager_Base = cppu::WeakImplHelper <
                                         css::lang::XServiceInfo,
                                         css::beans::XPropertySetInfo >;
 
-class UcbPropertiesManager : public cppu::BaseMutex, public UcbPropertiesManager_Base
+class UcbPropertiesManager : public UcbPropertiesManager_Base
 {
     css::uno::Sequence< css::beans::Property > m_pProps;
 
@@ -43,9 +41,6 @@ private:
 public:
     explicit UcbPropertiesManager();
     virtual ~UcbPropertiesManager() override;
-
-    // XComponent
-    virtual void SAL_CALL dispose() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
