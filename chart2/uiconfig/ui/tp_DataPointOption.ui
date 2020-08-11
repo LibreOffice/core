@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="chart">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustmentGAP">
@@ -44,6 +44,11 @@
                     <property name="receives_default">False</property>
                     <property name="halign">start</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="CB_LEGEND_ENTRY_HIDDEN-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_DataPointOption|extended_tip|CB_LEGEND_ENTRY_HIDDEN">Do not show legend entry for the selected data series or data point.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>

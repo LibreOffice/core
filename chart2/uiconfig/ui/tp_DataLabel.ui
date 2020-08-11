@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="chart">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustmentDEGREE">
@@ -41,6 +41,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="CB_VALUE_AS_NUMBER-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_DataLabel|extended_tip|CB_VALUE_AS_NUMBER">Displays the absolute values of the data points.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -56,6 +61,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="CB_VALUE_AS_PERCENTAGE-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_DataLabel|extended_tip|CB_VALUE_AS_PERCENTAGE">Displays the percentage of the data points in each column.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -71,6 +81,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="CB_CATEGORY-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_DataLabel|extended_tip|CB_CATEGORY">Shows the data point text labels.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -86,6 +101,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="CB_SYMBOL-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_DataLabel|extended_tip|CB_SYMBOL">Displays the legend icons next to each data point label.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -115,6 +135,11 @@
                     <property name="receives_default">True</property>
                     <property name="valign">center</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="PB_NUMBERFORMAT-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_DataLabel|extended_tip|PB_NUMBERFORMAT">Opens a dialog to select the number format.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -129,6 +154,11 @@
                     <property name="receives_default">True</property>
                     <property name="valign">center</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="PB_PERCENT_NUMBERFORMAT-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_DataLabel|extended_tip|PB_PERCENT_NUMBERFORMAT">Opens a dialog to select the percentage format.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -181,6 +211,11 @@
                           <item id="3" translatable="yes" context="tp_DataLabel|liststoreSEPARATOR">New line</item>
                           <item id="4" translatable="yes" context="tp_DataLabel|liststoreSEPARATOR">Period</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="LB_TEXT_SEPARATOR-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_DataLabel|extended_tip|LB_TEXT_SEPARATOR">Selects the separator between multiple text strings for the same object.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -235,6 +270,11 @@
                           <item id="11" translatable="yes" context="tp_DataLabel|liststorePLACEMENT">Outside</item>
                           <item id="12" translatable="yes" context="tp_DataLabel|liststorePLACEMENT">Near origin</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="LB_LABEL_PLACEMENT-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_DataLabel|extended_tip|LB_LABEL_PLACEMENT">Selects the placement of data labels relative to the objects.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -312,6 +352,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="CT_DIAL-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_DataLabel|extended_tip|CT_DIAL">Click in the dial to set the text orientation for the data labels.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -327,6 +372,11 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentDEGREE</property>
                         <property name="wrap">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="NF_LABEL_DEGREES-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_DataLabel|extended_tip|NF_LABEL_DEGREES">Enter the counterclockwise rotation angle for the data labels.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -378,6 +428,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="LB_LABEL_TEXTDIR-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_DataLabel|extended_tip|LB_LABEL_TEXTDIR">Specify the text direction for a paragraph that uses complex text layout (CTL). This feature is only available if complex text layout support is enabled.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -413,6 +468,11 @@
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="tp_DataLabel-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="tp_DataLabel|extended_tip|tp_DataLabel">Opens the Data Labels dialog, which enables you to set the data labels.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

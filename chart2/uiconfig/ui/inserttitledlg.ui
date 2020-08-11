@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="chart">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="InsertTitleDialog">
@@ -10,9 +10,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -121,6 +118,11 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="maintitle-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="inserttitledlg|extended_tip|maintitle">Enter the desired title for the chart.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -133,6 +135,11 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="subtitle-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="inserttitledlg|extended_tip|subtitle">Enter the desired subtitle for the chart.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -212,6 +219,11 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="primaryXaxis-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="inserttitledlg|extended_tip|primaryXaxis">Enter the desired title for the X axis of the chart.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -224,6 +236,11 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="primaryYaxis-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="inserttitledlg|extended_tip|primaryYaxis">Enter the desired title for the Y axis of the chart.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -236,6 +253,11 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="primaryZaxis-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="inserttitledlg|extended_tip|primaryZaxis">Enter the desired title for the Z axis of the chart.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -315,6 +337,11 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="secondaryXaxis-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="inserttitledlg|extended_tip|secondaryXaxis">Enter the desired secondary title for the X axis of the chart.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -327,6 +354,11 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="secondaryYaxis-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="inserttitledlg|extended_tip|secondaryYaxis">Enter the desired secondary title for the Y axis of the chart.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -368,5 +400,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="InsertTitleDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="inserttitledlg|extended_tip|InsertTitleDialog">Opens a dialog to enter or modify the titles in a chart.</property>
+      </object>
+    </child>
   </object>
 </interface>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="chart">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="PolynomialsAdjustment">
@@ -24,9 +24,6 @@
     <property name="default_width">-1</property>
     <property name="default_height">-1</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -124,6 +121,11 @@
                       <item translatable="yes" context="smoothlinesdlg|SplineTypeComboBox">Cubic spline</item>
                       <item translatable="yes" context="smoothlinesdlg|SplineTypeComboBox">B-spline</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="SplineTypeComboBox-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="smoothlinesdlg|extended_tip|SplineTypeComboBox">Apply a line curve model.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -185,6 +187,11 @@
                         <property name="halign">start</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">ResolutionAdjustment</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="ResolutionSpinbutton-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="smoothlinesdlg|extended_tip|ResolutionSpinbutton">Set the resolution.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -198,6 +205,11 @@
                         <property name="halign">start</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">PolynomialsAdjustment</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="PolynomialsSpinButton-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="smoothlinesdlg|extended_tip|PolynomialsSpinButton">Set the degree of the polynomials.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -227,5 +239,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="SmoothLinesDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="smoothlinesdlg|extended_tip|SmoothLinesDialog">Apply a line curve model.</property>
+      </object>
+    </child>
   </object>
 </interface>

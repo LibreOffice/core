@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="chart">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -63,6 +63,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="CBX_REVERSE-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_Scale|extended_tip|CBX_REVERSE">Defines where the lower and where the higher values are displayed at the axis. The unchecked state is the mathematical direction.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -79,6 +84,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="CBX_LOGARITHM-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_Scale|extended_tip|CBX_LOGARITHM">Specifies that you want the axis to be subdivided logarithmically.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -115,6 +125,11 @@
                           <item translatable="yes" context="tp_Scale|LB_AXIS_TYPE">Text</item>
                           <item translatable="yes" context="tp_Scale|LB_AXIS_TYPE">Date</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="LB_AXIS_TYPE-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_Scale|extended_tip|LB_AXIS_TYPE">For some types of axes, you can select to format an axis as text or date, or to detect the type automatically.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -207,6 +222,11 @@
                     <property name="activates_default">True</property>
                     <property name="width_chars">10</property>
                     <property name="adjustment">adjustment1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="EDT_MIN-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_Scale|extended_tip|EDT_MIN">Defines the minimum value for the beginning of the axis.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -220,6 +240,11 @@
                     <property name="activates_default">True</property>
                     <property name="width_chars">10</property>
                     <property name="adjustment">adjustment2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="EDT_MAX-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_Scale|extended_tip|EDT_MAX">Defines the maximum value for the end of the axis.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -262,6 +287,11 @@
                       <item id="1" translatable="yes" context="tp_Scale|liststoreDATE">Months</item>
                       <item id="2" translatable="yes" context="tp_Scale|liststoreDATE">Years</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="LB_TIME_RESOLUTION-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_Scale|extended_tip|LB_TIME_RESOLUTION">Resolution can be set to show days, months, or years as interval steps.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -328,6 +358,11 @@
                             <property name="activates_default">True</property>
                             <property name="width_chars">10</property>
                             <property name="adjustment">adjustmentINTERVAL</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="MT_MAIN_DATE_STEP-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tp_Scale|extended_tip|MT_MAIN_DATE_STEP">Major interval can be set to show a certain number of days, months, or years.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -344,6 +379,11 @@
                               <item id="1" translatable="yes" context="tp_Scale|liststoreDATE">Months</item>
                               <item id="2" translatable="yes" context="tp_Scale|liststoreDATE">Years</item>
                             </items>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="LB_MAIN_TIME_UNIT-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tp_Scale|extended_tip|LB_MAIN_TIME_UNIT">Major interval can be set to show a certain number of days, months, or years.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -365,6 +405,11 @@
                         <property name="activates_default">True</property>
                         <property name="width_chars">10</property>
                         <property name="adjustment">adjustment4</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="EDT_STEP_MAIN-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_Scale|extended_tip|EDT_STEP_MAIN">Defines the interval for the main division of the axes.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -454,6 +499,11 @@
                     <property name="activates_default">True</property>
                     <property name="width_chars">10</property>
                     <property name="adjustment">adjustmentINTERVAL1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="MT_STEPHELP-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_Scale|extended_tip|MT_STEPHELP">Defines the interval for the subdivision of the axes.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -470,6 +520,11 @@
                       <item id="1" translatable="yes" context="tp_Scale|liststoreDATE">Months</item>
                       <item id="2" translatable="yes" context="tp_Scale|liststoreDATE">Years</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="LB_HELP_TIME_UNIT-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_Scale|extended_tip|LB_HELP_TIME_UNIT">Minor interval can be set to show a certain number of days, months, or years.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -526,6 +581,11 @@
                     <property name="activates_default">True</property>
                     <property name="width_chars">10</property>
                     <property name="adjustment">adjustment3</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="EDT_ORIGIN-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_Scale|extended_tip|EDT_ORIGIN">Specifies at which position to display the values along the axis.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -542,6 +602,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="CBX_AUTO_ORIGIN-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_Scale|extended_tip|CBX_AUTO_ORIGIN">You must first deselect the Automatic option in order to modify the values.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
