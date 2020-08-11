@@ -672,14 +672,29 @@ void SwTextPortion::HandlePortion( SwPortionHandler& rPH ) const
 }
 
 SwTextInputFieldPortion::SwTextInputFieldPortion()
-    : SwTextPortion()
+    : SwTextPortion(),
+    mbShowFieldName(false)
 {
     SetWhichPor( PortionType::InputField );
 }
 
-bool SwTextInputFieldPortion::Format(SwTextFormatInfo &rTextFormatInfo)
+bool SwTextInputFieldPortion::Format(SwTextFormatInfo& rInf)
 {
-    return SwTextPortion::Format(rTextFormatInfo);
+    mbShowFieldName = rInf.GetOpt().IsFieldName();
+    const SwLinePortion* pLast = rInf.GetLast();
+    Height(pLast->Height());
+    SetAscent(pLast->GetAscent());
+    OUString aText;
+    GetExpText(rInf, aText);
+    PrtWidth(rInf.GetTextSize(aText).Width());
+    const bool bFull = rInf.Width() <= rInf.X() + PrtWidth();
+    if (bFull && !rInf.IsUnderflow())
+    {
+        Truncate();
+        rInf.SetUnderflow(this);
+    }
+
+    return bFull;
 }
 
 void SwTextInputFieldPortion::Paint( const SwTextPaintInfo &rInf ) const
@@ -716,6 +731,12 @@ void SwTextInputFieldPortion::Paint( const SwTextPaintInfo &rInf ) const
 
 bool SwTextInputFieldPortion::GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const
 {
+    if (mbShowFieldName)
+    {
+        rText = SwFieldType::GetTypeStr(SwFieldTypesEnum::Input);
+        return true;
+    }
+
     sal_Int32 nIdx(rInf.GetIdx());
     sal_Int32 nLen(rInf.GetLen());
     if ( rInf.GetChar( rInf.GetIdx() ) == CH_TXT_ATR_INPUTFIELDSTART )
