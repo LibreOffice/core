@@ -98,7 +98,7 @@ std::unique_ptr<ScFunctionMgr> ScGlobal::xStarCalcFunctionMgr;
 
 std::atomic<ScUnitConverter*> ScGlobal::pUnitConverter(nullptr);
 std::unique_ptr<SvNumberFormatter> ScGlobal::xEnglishFormatter;
-ScFieldEditEngine* ScGlobal::pFieldEditEngine = nullptr;
+std::unique_ptr<ScFieldEditEngine> ScGlobal::xFieldEditEngine;
 
 double          ScGlobal::nScreenPPTX           = 96.0;
 double          ScGlobal::nScreenPPTY           = 96.0;
@@ -550,7 +550,7 @@ void ScGlobal::Clear()
     delete pLocale.load(); pLocale = nullptr;
 
     delete pUnitConverter.load(); pUnitConverter = nullptr;
-    DELETEZ(pFieldEditEngine);
+    xFieldEditEngine.reset();
 
     xDrawClipDocShellRef.clear();
 }
@@ -1058,15 +1058,15 @@ css::lang::Locale*     ScGlobal::GetLocale()
 ScFieldEditEngine& ScGlobal::GetStaticFieldEditEngine()
 {
     assert(!bThreadedGroupCalcInProgress);
-    if (!pFieldEditEngine)
+    if (!xFieldEditEngine)
     {
         // Creating a ScFieldEditEngine with pDocument=NULL leads to document
         // specific fields not being resolvable! See
         // ScFieldEditEngine::CalcFieldValue(). pEnginePool=NULL lets
         // EditEngine internally create and delete a default pool.
-        pFieldEditEngine = new ScFieldEditEngine( nullptr, nullptr);
+        xFieldEditEngine.reset(new ScFieldEditEngine( nullptr, nullptr));
     }
-    return *pFieldEditEngine;
+    return *xFieldEditEngine;
 }
 
 OUString ScGlobal::ReplaceOrAppend( const OUString& rString,

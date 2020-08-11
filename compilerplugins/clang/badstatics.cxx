@@ -176,7 +176,7 @@ public:
                 || name == "g_pSpellIter" // SwEditShell::SpellEnd()
                 || name == "g_pConvIter" // SwEditShell::SpellEnd()
                 || name == "g_pHyphIter" // SwEditShell::HyphEnd()
-                || name == "pFieldEditEngine" // ScGlobal::Clear()
+                || name == "xFieldEditEngine" // ScGlobal::Clear()
                 || name == "xDrawClipDocShellRef" // ScGlobal::Clear()
                 || name == "s_ImageTree"
                     // ImageTree::get(), ImageTree::shutDown()
