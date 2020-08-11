@@ -507,7 +507,6 @@ class ScGlobal
     static std::atomic<LegacyFuncCollection*> pLegacyFuncCollection;
     static std::atomic<ScUnoAddInCollection*> pAddInCollection;
     static std::unique_ptr<ScUserList> xUserList;
-    static std::map<const char*, OUString>* pRscString;
     static SC_DLLPUBLIC const OUString aEmptyOUString;
     static OUString         aStrClipDocName;
     static std::unique_ptr<SvxBrushItem> xEmptyBrushItem;
