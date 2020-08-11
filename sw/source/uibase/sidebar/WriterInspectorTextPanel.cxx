@@ -501,7 +501,7 @@ IMPL_LINK(WriterInspectorTextPanel, AttrChangedNotify, LinkParamNone*, pLink, vo
     if (m_oldLink.IsSet())
         m_oldLink.Call(pLink);
 
-    SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
+    SwDocShell* pDocSh = m_pShell->GetDoc()->GetDocShell();
     std::vector<svx::sidebar::TreeNode> aStore;
 
     if (pDocSh && pDocSh->GetDoc()->GetEditShell()->GetCursor()->GetNode().GetTextNode())
