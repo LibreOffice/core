@@ -94,7 +94,7 @@ std::unique_ptr<SvxBrushItem> ScGlobal::xButtonBrushItem;
 std::unique_ptr<SvxBrushItem> ScGlobal::xEmbeddedBrushItem;
 
 ScFunctionList* ScGlobal::pStarCalcFunctionList = nullptr;
-ScFunctionMgr*  ScGlobal::pStarCalcFunctionMgr  = nullptr;
+std::unique_ptr<ScFunctionMgr> ScGlobal::xStarCalcFunctionMgr;
 
 std::atomic<ScUnitConverter*> ScGlobal::pUnitConverter(nullptr);
 SvNumberFormatter* ScGlobal::pEnglishFormatter = nullptr;
@@ -535,7 +535,7 @@ void ScGlobal::Clear()
     delete pAddInCollection.load(); pAddInCollection = nullptr;
     DELETEZ(pUserList);
     DELETEZ(pStarCalcFunctionList); // Destroy before ResMgr!
-    DELETEZ(pStarCalcFunctionMgr);
+    xStarCalcFunctionMgr.reset();
     ScParameterClassification::Exit();
     ScCompiler::DeInit();
     ScInterpreter::GlobalExit(); // Delete static Stack
@@ -626,16 +626,16 @@ ScFunctionList* ScGlobal::GetStarCalcFunctionList()
 ScFunctionMgr* ScGlobal::GetStarCalcFunctionMgr()
 {
     assert(!bThreadedGroupCalcInProgress);
-    if ( !pStarCalcFunctionMgr )
-        pStarCalcFunctionMgr = new ScFunctionMgr;
+    if ( !xStarCalcFunctionMgr )
+        xStarCalcFunctionMgr.reset(new ScFunctionMgr);
 
-    return pStarCalcFunctionMgr;
+    return xStarCalcFunctionMgr.get();
 }
 
 void ScGlobal::ResetFunctionList()
 {
     // FunctionMgr has pointers into FunctionList, must also be updated
-    DELETEZ( pStarCalcFunctionMgr );
+    xStarCalcFunctionMgr.reset();
     DELETEZ( pStarCalcFunctionList );
 }
 

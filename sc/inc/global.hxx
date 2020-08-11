@@ -515,7 +515,7 @@ class ScGlobal
     static std::unique_ptr<SvxBrushItem> xEmbeddedBrushItem;
 
     static ScFunctionList*  pStarCalcFunctionList;
-    static ScFunctionMgr*   pStarCalcFunctionMgr;
+    static std::unique_ptr<ScFunctionMgr> xStarCalcFunctionMgr;
 
     static std::atomic<ScUnitConverter*> pUnitConverter;
 
