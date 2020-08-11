@@ -435,7 +435,17 @@ void CuiConfigGroupListBox::ClearAll()
     for ( sal_uInt16 i=0; i<nCount; ++i )
     {
         SfxGroupInfo_Impl *pData = aArr[i].get();
-        if (pData->nKind == SfxCfgKind::GROUP_SCRIPTCONTAINER)
+        if (pData->nKind == SfxCfgKind::GROUP_STYLES && pData->pObject)
+        {
+            SfxStyleInfo_Impl* pStyle = static_cast<SfxStyleInfo_Impl*>(pData->pObject);
+            delete pStyle;
+        }
+        else if (pData->nKind == SfxCfgKind::FUNCTION_SCRIPT && pData->pObject )
+        {
+            OUString* pScriptURI = static_cast<OUString*>(pData->pObject);
+            delete pScriptURI;
+        }
+        else if (pData->nKind == SfxCfgKind::GROUP_SCRIPTCONTAINER)
         {
             XInterface* xi = static_cast<XInterface *>(pData->pObject);
             if (xi != nullptr)
