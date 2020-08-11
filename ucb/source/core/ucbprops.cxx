@@ -45,12 +45,8 @@ using namespace com::sun::star::uno;
 
 #define ATTR_DEFAULT ( PropertyAttribute::BOUND | PropertyAttribute::MAYBEVOID | PropertyAttribute::MAYBEDEFAULT )
 
-static osl::Mutex g_InstanceGuard;
-static rtl::Reference<UcbPropertiesManager> g_Instance;
-
 UcbPropertiesManager::UcbPropertiesManager()
-: UcbPropertiesManager_Base(m_aMutex),
-  m_pProps({
+: m_pProps({
     { "Account", -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
     { "AutoUpdateInterval", -1, cppu::UnoType<sal_Int32>::get(), ATTR_DEFAULT },
     { "ConfirmEmpty", -1, cppu::UnoType<bool>::get(), ATTR_DEFAULT },
@@ -197,14 +193,6 @@ UcbPropertiesManager::~UcbPropertiesManager()
 {
 }
 
-// XComponent
-void SAL_CALL UcbPropertiesManager::dispose()
-{
-    UcbPropertiesManager_Base::dispose();
-    osl::MutexGuard aGuard(g_InstanceGuard);
-    g_Instance.clear();
-}
-
 // XServiceInfo methods.
 
 OUString SAL_CALL UcbPropertiesManager::getImplementationName()
@@ -228,9 +216,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_UcbPropertiesManager_get_implementation(
     css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    osl::MutexGuard aGuard(g_InstanceGuard);
-    if (!g_Instance)
-        g_Instance.set(new UcbPropertiesManager());
+    static rtl::Reference<UcbPropertiesManager> g_Instance(new UcbPropertiesManager());
     g_Instance->acquire();
     return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
