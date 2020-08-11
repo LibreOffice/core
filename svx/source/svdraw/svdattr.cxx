@@ -33,7 +33,6 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/lineitem.hxx>
 #include <editeng/xmlcnitm.hxx>
-#include <editeng/adjustitem.hxx>
 #include <editeng/writingmodeitem.hxx>
 #include <editeng/charrotateitem.hxx>
 #include <osl/diagnose.h>
@@ -93,6 +92,7 @@
 #include <svx/sxmtpitm.hxx>
 #include <svx/sxmtritm.hxx>
 #include <svx/sxmuitm.hxx>
+#include <svx/xcolit.hxx>
 #include <sxoneitm.hxx>
 #include <sxopitm.hxx>
 #include <sxreaitm.hxx>
@@ -104,9 +104,6 @@
 #include <sxsiitm.hxx>
 #include <sxsoitm.hxx>
 #include <sxtraitm.hxx>
-#include <svx/xfillit0.hxx>
-#include <svx/xflclit.hxx>
-#include <svx/xlineit0.hxx>
 #include <libxml/xmlwriter.h>
 
 using namespace ::com::sun::star;

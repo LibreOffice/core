@@ -24,7 +24,6 @@
 
 #if HAVE_FEATURE_PDFIUM
 #include <sal/config.h>
-#include <svx/svxdllapi.h>
 
 #include <memory>
 

@@ -23,9 +23,9 @@
 #include <vcl/transfer.hxx>
 #include <svl/lstner.hxx>
 #include <svx/galctrl.hxx>
-#include <svtools/miscopt.hxx>
 
 #include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 

@@ -28,8 +28,6 @@
 #include <svl/whiter.hxx>
 #include <svl/hint.hxx>
 
-#include <sal/log.hxx>
-
 
 namespace sdr::properties
 {

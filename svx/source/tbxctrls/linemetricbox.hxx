@@ -19,7 +19,7 @@
 #pragma once
 
 #include <vcl/InterimItemWindow.hxx>
-#include <svx/svxdllapi.h>
+#include <com/sun/star/frame/XFrame.hpp>
 
 class XLineWidthItem;
 

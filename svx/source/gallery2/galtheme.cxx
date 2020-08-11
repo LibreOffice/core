@@ -20,41 +20,26 @@
 #include <config_features.h>
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
 #include <algorithm>
 
-#include <comphelper/fileformat.h>
-#include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
-#include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/datetime.hxx>
-#include <unotools/datetime.hxx>
-#include <unotools/streamwrap.hxx>
-#include <unotools/ucbstreamhelper.hxx>
-#include <unotools/tempfile.hxx>
-#include <ucbhelper/content.hxx>
-#include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <sot/storage.hxx>
 #include <sot/formats.hxx>
 #include <sot/filelist.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/cvtgrf.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <svx/svdograf.hxx>
-#include "codec.hxx"
-#include <svx/unomodel.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/fmview.hxx>
 #include <svx/galmisc.hxx>
 #include <svx/galtheme.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/galleryobjectcollection.hxx>
-#include <com/sun/star/sdbc/XResultSet.hpp>
-#include <com/sun/star/ucb/XContentAccess.hpp>
 #include <galobj.hxx>
 #include <svx/gallery1.hxx>
 #include "gallerydrawmodel.hxx"
