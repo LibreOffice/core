@@ -21,6 +21,7 @@
 #include <svx/sdprcitm.hxx>
 #include <svx/sdsxyitm.hxx>
 #include <svx/sdshcitm.hxx>
+#include <comphelper/lok.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -109,12 +110,27 @@ IMPL_LINK_NOARG(ShadowPropertyPanel, ClickShadowHdl, weld::ToggleButton&, void)
         SdrOnOffItem aItem(makeSdrShadowItem(false));
         GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_SHADOW,
                 SfxCallMode::RECORD, { &aItem });
+
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            mxShowShadow->set_state( TRISTATE_FALSE );
+            UpdateControls();
+        }
     }
     else
     {
         SdrOnOffItem aItem(makeSdrShadowItem(true));
         GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_SHADOW,
                 SfxCallMode::RECORD, { &aItem });
+
+        if (mpShadowDistance->GetValue( FieldUnit::POINT ) == 0)
+            mpShadowDistance->SetValue( 8, FieldUnit::POINT );
+
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            mxShowShadow->set_state( TRISTATE_TRUE );
+            UpdateControls();
+        }
     }
 }
 
