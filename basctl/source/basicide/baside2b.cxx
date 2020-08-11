@@ -2128,43 +2128,46 @@ IMPL_LINK(WatchWindow, RequestingChildrenHdl, const weld::TreeIter&, rParent, bo
         int nParentLevel = bArrayIsRootArray ? pItem->nDimLevel : 0;
         int nThisLevel = nParentLevel + 1;
         sal_Int32 nMin, nMax;
-        pArray->GetDim32( nThisLevel, nMin, nMax );
-        for( sal_Int32 i = nMin ; i <= nMax ; i++ )
+        if (pArray->GetDim32(nThisLevel, nMin, nMax))
         {
-            WatchItem* pChildItem = new WatchItem(pItem->maName);
-
-            // Copy data and create name
-
-            OUStringBuffer aIndexStr = "(";
-            pChildItem->mpArrayParentItem = pItem;
-            pChildItem->nDimLevel = nThisLevel;
-            pChildItem->nDimCount = pItem->nDimCount;
-            pChildItem->vIndices.resize(pChildItem->nDimCount);
-            sal_Int32 j;
-            for( j = 0 ; j < nParentLevel ; j++ )
+            for (sal_Int32 i = nMin; i <= nMax; i++)
             {
-                sal_Int32 n = pChildItem->vIndices[j] = pItem->vIndices[j];
-                aIndexStr.append(OUString::number( n )).append(",");
+                WatchItem* pChildItem = new WatchItem(pItem->maName);
+
+                // Copy data and create name
+
+                OUStringBuffer aIndexStr = "(";
+                pChildItem->mpArrayParentItem = pItem;
+                pChildItem->nDimLevel = nThisLevel;
+                pChildItem->nDimCount = pItem->nDimCount;
+                pChildItem->vIndices.resize(pChildItem->nDimCount);
+                sal_Int32 j;
+                for (j = 0; j < nParentLevel; j++)
+                {
+                    sal_Int32 n = pChildItem->vIndices[j] = pItem->vIndices[j];
+                    aIndexStr.append(OUString::number(n)).append(",");
+                }
+                pChildItem->vIndices[nParentLevel] = i;
+                aIndexStr.append(OUString::number(i)).append(")");
+
+                OUString aDisplayName;
+                WatchItem* pArrayRootItem = pChildItem->GetRootItem();
+                if (pArrayRootItem && pArrayRootItem->mpArrayParentItem)
+                    aDisplayName = pItem->maDisplayName;
+                else
+                    aDisplayName = pItem->maName;
+                aDisplayName += aIndexStr;
+                pChildItem->maDisplayName = aDisplayName;
+
+                OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pChildItem)));
+
+                m_xTreeListBox->insert(&rParent, -1, &aDisplayName, &sId, nullptr, nullptr, false,
+                                       xRet.get());
+                m_xTreeListBox->set_text(*xRet, "", 1);
+                m_xTreeListBox->set_text(*xRet, "", 2);
+
+                nElementCount++;
             }
-            pChildItem->vIndices[nParentLevel] = i;
-            aIndexStr.append(OUString::number( i )).append(")");
-
-            OUString aDisplayName;
-            WatchItem* pArrayRootItem = pChildItem->GetRootItem();
-            if( pArrayRootItem && pArrayRootItem->mpArrayParentItem )
-                aDisplayName = pItem->maDisplayName;
-            else
-                aDisplayName = pItem->maName;
-            aDisplayName += aIndexStr;
-            pChildItem->maDisplayName = aDisplayName;
-
-            OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pChildItem)));
-
-            m_xTreeListBox->insert(&rParent, -1, &aDisplayName, &sId, nullptr, nullptr, false, xRet.get());
-            m_xTreeListBox->set_text(*xRet, "", 1);
-            m_xTreeListBox->set_text(*xRet, "", 2);
-
-            nElementCount++;
         }
         if (nElementCount > 0 && !m_nUpdateWatchesId)
         {
