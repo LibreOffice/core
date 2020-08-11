@@ -40,7 +40,6 @@
 #include <editeng/eeitem.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <svx/svxdlg.hxx>
 #include <svx/strings.hrc>
 #include <svx/svdoashp.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
@@ -51,6 +50,7 @@
 #include <vector>
 #include <vcl/graph.hxx>
 #include <svx/svxids.hrc>
+#include <svx/dstribut_enum.hxx>
 
 using namespace com::sun::star;
 

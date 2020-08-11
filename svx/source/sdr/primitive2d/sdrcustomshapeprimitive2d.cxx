@@ -25,8 +25,6 @@
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 
-#include <sal/log.hxx>
-
 
 using namespace com::sun::star;
 

@@ -18,7 +18,7 @@
  */
 
 
-#include <svx/svdpool.hxx>
+#include <svl/itempool.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svxids.hrc>
 #include <svx/strings.hrc>
