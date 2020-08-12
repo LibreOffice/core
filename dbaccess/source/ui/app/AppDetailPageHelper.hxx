@@ -28,6 +28,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <AppElementType.hxx>
 #include <svtools/DocumentInfoPreview.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/graph.hxx>
@@ -43,7 +44,7 @@ namespace com::sun::star::io    { class XPersist; }
 namespace dbaui
 {
     class OAppBorderWindow;
-    class InterimDBTreeListBox;
+    class DBTreeView;
     class TreeListBox;
 
     class OPreviewWindow : public vcl::Window
@@ -75,17 +76,19 @@ namespace dbaui
 
     // A helper class for the controls in the detail page.
     // Combines general functionality.
-    class OAppDetailPageHelper : public vcl::Window
+    class OAppDetailPageHelper final : public InterimItemWindow
     {
-        VclPtr<InterimDBTreeListBox> m_pLists[ELEMENT_COUNT];
+        std::unique_ptr<DBTreeView> m_aLists[ELEMENT_COUNT];
         OAppBorderWindow&         m_rBorderWin;
-        VclPtr<FixedLine>         m_aFL;
+        std::unique_ptr<weld::Widget> m_xFL;
+#if 0
         VclPtr<ToolBox>           m_aTBPreview;
         VclPtr<Window>            m_aBorder;
         VclPtr<OPreviewWindow>    m_aPreview;
         VclPtr< ::svtools::ODocumentInfoPreview>
                                   m_aDocumentInfo;
         VclPtr<vcl::Window>       m_pTablePreview;
+#endif
         PreviewMode               m_ePreviewMode;
         css::uno::Reference < css::frame::XFrame2 >
                                   m_xFrame;
@@ -126,15 +129,13 @@ namespace dbaui
             @param  _pWindow
                 The control which should be visible.
         */
-        void setDetailPage(vcl::Window* _pWindow);
+        void setDetailPage(weld::Widget& rWidget);
 
         /** sets all HandleCallbacks
             @param  _pTreeView
-                The newly created DBTreeListBox
-            @return
-                The new tree.
+                The newly created DBTreeView
         */
-        InterimDBTreeListBox* createTree(InterimDBTreeListBox* pTreeView);
+        void setupTree(DBTreeView& rTreeView);
 
         /** creates the tree and sets all HandleCallbacks
             @param  _nHelpId
@@ -142,7 +143,7 @@ namespace dbaui
             @return
                 The new tree.
         */
-        InterimDBTreeListBox* createSimpleTree(const OString& rHelpId);
+        std::unique_ptr<DBTreeView> createSimpleTree(const OString& rHelpId);
 
         DECL_LINK( OnEntryDoubleClick,    weld::TreeView&, bool );
         DECL_LINK( OnEntrySelChange,      LinkParamNone*, void );
@@ -163,7 +164,6 @@ namespace dbaui
         virtual void dispose() override;
 
         // Window overrides
-        virtual void Resize() override;
         virtual void KeyInput( const KeyEvent& rKEvt ) override;
 
         /** creates the tables page
@@ -182,10 +182,10 @@ namespace dbaui
 
         /** returns the current visible tree list box
         */
-        InterimDBTreeListBox* getCurrentView() const
+        DBTreeView* getCurrentView() const
         {
             ElementType eType = getElementType();
-            return (eType != E_NONE ) ? m_pLists[static_cast<sal_Int32>(eType)].get() : nullptr;
+            return (eType != E_NONE ) ? m_aLists[static_cast<sal_Int32>(eType)].get() : nullptr;
         }
 
         /// select all entries in the visible control
@@ -339,9 +339,6 @@ namespace dbaui
         void showPreview(   const OUString& _sDataSourceName,
                             const OUString& _sName,
                             bool _bTable);
-
-    protected:
-        void DataChanged( const DataChangedEvent& rDCEvt ) override;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_APP_APPDETAILPAGEHELPER_HXX

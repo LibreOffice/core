@@ -478,6 +478,14 @@ std::unique_ptr<weld::TreeIter> TreeListBox::GetRootLevelParent(const weld::Tree
     return xEntry;
 }
 
+DBTreeView::DBTreeView(weld::Container* pContainer)
+{
+}
+
+DBTreeView::~DBTreeView()
+{
+}
+
 }   // namespace dbaui
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

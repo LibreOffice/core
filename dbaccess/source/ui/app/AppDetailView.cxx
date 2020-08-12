@@ -557,7 +557,8 @@ bool OApplicationDetailView::isSortUp() const
 
 vcl::Window* OApplicationDetailView::getTreeWindow() const
 {
-    return m_pControlHelper->getCurrentView();
+//TODO    return m_pControlHelper->getCurrentView();
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

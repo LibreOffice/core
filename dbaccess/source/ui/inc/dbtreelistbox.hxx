@@ -138,6 +138,25 @@ namespace dbaui
         virtual bool DoChildKeyInput(const KeyEvent& rKEvt) override;
         virtual bool DoContextMenu(const CommandEvent& rCEvt) override;
     };
+
+    class DBTreeView
+    {
+    private:
+        std::unique_ptr<TreeListBox> m_xTreeListBox;
+    public:
+        DBTreeView(weld::Container* pContainer);
+        ~DBTreeView();
+
+        weld::TreeView& GetWidget() { return m_xTreeListBox->GetWidget(); }
+        const weld::TreeView& GetWidget() const { return m_xTreeListBox->GetWidget(); }
+
+        TreeListBox& getListBox() const { return *m_xTreeListBox; }
+#if 0
+    protected:
+        virtual bool DoChildKeyInput(const KeyEvent& rKEvt) override;
+        virtual bool DoContextMenu(const CommandEvent& rCEvt) override;
+#endif
+    };
 }
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_DBTREELISTBOX_HXX
