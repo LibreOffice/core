@@ -476,7 +476,7 @@ SfxWorkWindow::SfxWorkWindow( vcl::Window *pWin, SfxFrame *pFrm, SfxFrame* pMast
 {
     DBG_ASSERT (pBindings, "No Bindings!");
 
-    pBindings->SetWorkWindow_Impl( this );
+    pBindings->SetWorkWindow_Impl( std::unique_ptr<SfxWorkWindow>(this) );
 
     // For the ObjectBars an integral place in the Childlist is reserved,
     // so that they always come in a defined order.
