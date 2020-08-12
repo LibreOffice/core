@@ -97,6 +97,10 @@ sub check_whitespaces($)
             {
                 bad_line("translatable .ui file line without context", $_, "ui");
             }
+            if ((/requires/) and (/lib="gtk+/) and not (/version="3.18/))
+            {
+                bad_line("min supported version of gtk3 is 3.18", $_, "ui");
+            }
             if ((/<interface/) and not(/domain=/))
             {
                 bad_line(".ui file without translation domain", $_, "ui");
