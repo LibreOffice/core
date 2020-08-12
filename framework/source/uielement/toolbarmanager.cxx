@@ -23,7 +23,7 @@
 
 #include <uielement/toolbarmanager.hxx>
 
-#include <uielement/generictoolbarcontroller.hxx>
+#include <framework/generictoolbarcontroller.hxx>
 #include <uielement/styletoolbarcontroller.hxx>
 #include <properties.h>
 #include <framework/sfxhelperfunctions.hxx>

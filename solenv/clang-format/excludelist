@@ -4922,7 +4922,6 @@ framework/inc/uielement/fontmenucontroller.hxx
 framework/inc/uielement/fontsizemenucontroller.hxx
 framework/inc/uielement/footermenucontroller.hxx
 framework/inc/uielement/genericstatusbarcontroller.hxx
-framework/inc/uielement/generictoolbarcontroller.hxx
 framework/inc/uielement/headermenucontroller.hxx
 framework/inc/uielement/imagebuttontoolbarcontroller.hxx
 framework/inc/uielement/itemcontainer.hxx
@@ -6046,6 +6045,7 @@ include/framework/documentundoguard.hxx
 include/framework/framecontainer.hxx
 include/framework/framelistanalyzer.hxx
 include/framework/gate.hxx
+include/framework/generictoolbarcontroller.hxx
 include/framework/imutex.hxx
 include/framework/interaction.hxx
 include/framework/sfxhelperfunctions.hxx
@@ -6571,7 +6571,6 @@ include/svtools/extcolorcfg.hxx
 include/svtools/filechangedchecker.hxx
 include/svtools/fontsubstconfig.hxx
 include/svtools/framestatuslistener.hxx
-include/svtools/generictoolboxcontroller.hxx
 include/svtools/genericunodialog.hxx
 include/svtools/helpids.h
 include/svtools/helpopt.hxx
@@ -13087,7 +13086,6 @@ svtools/source/uno/addrtempuno.cxx
 svtools/source/uno/fpicker.cxx
 svtools/source/uno/fpicker.hxx
 svtools/source/uno/framestatuslistener.cxx
-svtools/source/uno/generictoolboxcontroller.cxx
 svtools/source/uno/genericunodialog.cxx
 svtools/source/uno/miscservices.cxx
 svtools/source/uno/popupmenucontrollerbase.cxx

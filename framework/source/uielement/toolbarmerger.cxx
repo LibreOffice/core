@@ -18,7 +18,7 @@
  */
 
 #include <uielement/toolbarmerger.hxx>
-#include <uielement/generictoolbarcontroller.hxx>
+#include <framework/generictoolbarcontroller.hxx>
 
 #include <uielement/buttontoolbarcontroller.hxx>
 #include <uielement/comboboxtoolbarcontroller.hxx>

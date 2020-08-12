@@ -166,7 +166,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/uno/addrtempuno \
     svtools/source/uno/fpicker \
     svtools/source/uno/framestatuslistener \
-    svtools/source/uno/generictoolboxcontroller \
     svtools/source/uno/genericunodialog \
     svtools/source/uno/miscservices \
     svtools/source/uno/popupmenucontrollerbase \
