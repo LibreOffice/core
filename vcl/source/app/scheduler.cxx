@@ -132,7 +132,8 @@ void Scheduler::ImplDeInitScheduler()
     assert( 1 == rSchedCtx.maMutex.lockDepth() );
 
     if (rSchedCtx.mpSalTimer) rSchedCtx.mpSalTimer->Stop();
-    DELETEZ( rSchedCtx.mpSalTimer );
+    delete rSchedCtx.mpSalTimer;
+    rSchedCtx.mpSalTimer = nullptr;
 
 #if OSL_DEBUG_LEVEL > 0
     sal_uInt32 nActiveTasks = 0, nIgnoredTasks = 0;
