@@ -179,8 +179,7 @@ void SAL_CALL SfxModelListener_Impl::disposing( const css::lang::EventObject& _r
 
 
 SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
-    :mpObjectContainer(nullptr)
-    ,rDocShell( _rDocShell )
+    :rDocShell( _rDocShell )
     ,aMacroMode( *this )
     ,pProgress( nullptr)
     ,nTime( DateTime::SYSTEM )
@@ -308,10 +307,10 @@ SfxObjectShell::~SfxObjectShell()
     if ( pMedium && pMedium->HasStorage_Impl() && pMedium->GetStorage( false ) == pImpl->m_xDocStorage )
         pMedium->CanDisposeStorage_Impl( false );
 
-    if ( pImpl->mpObjectContainer )
+    if ( pImpl->mxObjectContainer )
     {
-        pImpl->mpObjectContainer->CloseEmbeddedObjects();
-        delete pImpl->mpObjectContainer;
+        pImpl->mxObjectContainer->CloseEmbeddedObjects();
+        pImpl->mxObjectContainer.reset();
     }
 
     if ( pImpl->bOwnsStorage && pImpl->m_xDocStorage.is() )

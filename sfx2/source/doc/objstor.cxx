@@ -3160,7 +3160,7 @@ uno::Reference< embed::XStorage > const & SfxObjectShell::GetStorage()
 
 void SfxObjectShell::SaveChildren( bool bObjectsOnly )
 {
-    if ( pImpl->mpObjectContainer )
+    if ( pImpl->mxObjectContainer )
     {
         bool bOasis = ( SotStorage::GetVersion( GetStorage() ) > SOFFICE_FILEFORMAT_60 );
         GetEmbeddedObjectContainer().StoreChildren(bOasis,bObjectsOnly);
@@ -3179,7 +3179,7 @@ bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
         return true;
     }
 
-    if ( pImpl->mpObjectContainer )
+    if ( pImpl->mxObjectContainer )
     {
         bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
         GetEmbeddedObjectContainer().StoreAsChildren(bOasis,SfxObjectCreateMode::EMBEDDED == eCreateMode,xStorage);
@@ -3201,7 +3201,7 @@ bool SfxObjectShell::SaveCompletedChildren()
 {
     bool bResult = true;
 
-    if ( pImpl->mpObjectContainer )
+    if ( pImpl->mxObjectContainer )
     {
         const uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
         for ( const auto& rName : aNames )
@@ -3240,8 +3240,8 @@ bool SfxObjectShell::SwitchChildrenPersistance( const uno::Reference< embed::XSt
         return false;
     }
 
-    if ( pImpl->mpObjectContainer )
-        pImpl->mpObjectContainer->SetPersistentEntries(xStorage,bForceNonModified);
+    if ( pImpl->mxObjectContainer )
+        pImpl->mxObjectContainer->SetPersistentEntries(xStorage,bForceNonModified);
 
     return true;
 }
@@ -3254,7 +3254,7 @@ bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >& xSt
     uno::Reference< embed::XStorage > xOldStorageHolder;
 
     // check for wrong creation of object container
-    bool bHasContainer = ( pImpl->mpObjectContainer != nullptr );
+    bool bHasContainer( pImpl->mxObjectContainer );
 
     if ( !xStorage.is() || xStorage == GetStorage() )
     {
@@ -3263,7 +3263,7 @@ bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >& xSt
     }
     else
     {
-        if ( pImpl->mpObjectContainer )
+        if ( pImpl->mxObjectContainer )
             GetEmbeddedObjectContainer().SwitchPersistence( xStorage );
 
         bResult = SwitchChildrenPersistance( xStorage, true );
@@ -3275,7 +3275,7 @@ bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >& xSt
         {
             // make sure that until the storage is assigned the object
             // container is not created by accident!
-            DBG_ASSERT( bHasContainer == (pImpl->mpObjectContainer != nullptr), "Wrong storage in object container!" );
+            DBG_ASSERT( bHasContainer == (pImpl->mxObjectContainer != nullptr), "Wrong storage in object container!" );
             xOldStorageHolder = pImpl->m_xDocStorage;
             pImpl->m_xDocStorage = xStorage;
             bSendNotification = true;
@@ -3286,7 +3286,7 @@ bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >& xSt
     }
     else
     {
-        if ( pImpl->mpObjectContainer )
+        if ( pImpl->mxObjectContainer )
             GetEmbeddedObjectContainer().SwitchPersistence( pImpl->m_xDocStorage );
 
         // let already successfully connected objects be switched back
@@ -3397,10 +3397,10 @@ bool SfxObjectShell::SwitchPersistance( const uno::Reference< embed::XStorage >&
 {
     bool bResult = false;
     // check for wrong creation of object container
-    bool bHasContainer = ( pImpl->mpObjectContainer != nullptr );
+    bool bHasContainer( pImpl->mxObjectContainer );
     if ( xStorage.is() )
     {
-        if ( pImpl->mpObjectContainer )
+        if ( pImpl->mxObjectContainer )
             GetEmbeddedObjectContainer().SwitchPersistence( xStorage );
         bResult = SwitchChildrenPersistance( xStorage );
 
@@ -3412,7 +3412,7 @@ bool SfxObjectShell::SwitchPersistance( const uno::Reference< embed::XStorage >&
     if ( bResult )
     {
         // make sure that until the storage is assigned the object container is not created by accident!
-        DBG_ASSERT( bHasContainer == (pImpl->mpObjectContainer != nullptr), "Wrong storage in object container!" );
+        DBG_ASSERT( bHasContainer == (pImpl->mxObjectContainer != nullptr), "Wrong storage in object container!" );
         if ( pImpl->m_xDocStorage != xStorage )
             DoSaveCompleted( new SfxMedium( xStorage, GetMedium()->GetBaseURL() ) );
 

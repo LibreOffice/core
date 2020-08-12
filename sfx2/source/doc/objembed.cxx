@@ -231,15 +231,15 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
 
 comphelper::EmbeddedObjectContainer& SfxObjectShell::GetEmbeddedObjectContainer() const
 {
-    if ( !pImpl->mpObjectContainer )
-        pImpl->mpObjectContainer = new comphelper::EmbeddedObjectContainer( const_cast<SfxObjectShell*>(this)->GetStorage(), GetModel() );
-    return *pImpl->mpObjectContainer;
+    if ( !pImpl->mxObjectContainer )
+        pImpl->mxObjectContainer.reset(new comphelper::EmbeddedObjectContainer( const_cast<SfxObjectShell*>(this)->GetStorage(), GetModel() ));
+    return *pImpl->mxObjectContainer;
 }
 
 void SfxObjectShell::ClearEmbeddedObjects()
 {
     // frees all space taken by embedded objects
-    DELETEZ( pImpl->mpObjectContainer );
+    pImpl->mxObjectContainer.reset();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

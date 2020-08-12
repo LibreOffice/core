@@ -50,7 +50,7 @@ public:
 
 struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
 {
-    ::comphelper::EmbeddedObjectContainer* mpObjectContainer;
+    std::unique_ptr<::comphelper::EmbeddedObjectContainer> mxObjectContainer;
     SfxBasicManagerHolder aBasicManager;
     SfxObjectShell&     rDocShell;
     css::uno::Reference< css::script::XLibraryContainer >
