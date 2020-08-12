@@ -152,8 +152,8 @@ void fillUnoException(uno_Any * pUnoExc, uno_Mapping * pCpp2Uno)
 
 #if defined _LIBCPPABI_VERSION // detect libc++abi
     // Very bad HACK to find out whether we run against a libcxxabi that has a new
-    // __cxa_exception::reserved member at the start, introduced with LLVM 11
-    // <https://github.com/llvm/llvm-project/commit/f2a436058fcbc11291e73badb44e243f61046183>
+    // __cxa_exception::reserved member at the start, introduced with LLVM 10
+    // <https://github.com/llvm/llvm-project/commit/674ec1eb16678b8addc02a4b0534ab383d22fa77>
     // "[libcxxabi] Insert padding in __cxa_exception struct for compatibility".  The layout of the
     // start of __cxa_exception is
     //

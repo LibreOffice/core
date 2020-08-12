@@ -69,8 +69,8 @@ struct __cxa_exception
 {
 #if __LP64__
 #if 0
-    // This is a new field added with LLVM 11
-    // <https://github.com/llvm/llvm-project/commit/f2a436058fcbc11291e73badb44e243f61046183>
+    // This is a new field added with LLVM 10
+    // <https://github.com/llvm/llvm-project/commit/674ec1eb16678b8addc02a4b0534ab383d22fa77>
     // "[libcxxabi] Insert padding in __cxa_exception struct for compatibility".  The HACK in
     // fillUnoException (bridges/source/cpp_uno/gcc3_macosx_x86-64/except.cxx) tries to find out at
     // runtime whether a __cxa_exception has this member.  Once we can be sure that we only run
