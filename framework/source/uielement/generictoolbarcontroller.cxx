@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <uielement/generictoolbarcontroller.hxx>
+#include <framework/generictoolbarcontroller.hxx>
 
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -28,6 +28,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/weld.hxx>
 #include <tools/urlobj.hxx>
 #include <strings.hrc>
 #include <classes/fwkresid.hxx>
@@ -92,6 +93,20 @@ GenericToolbarController::GenericToolbarController( const Reference< XComponentC
 {
     if ( m_bEnumCommand )
         addStatusListener( getMasterCommand( aCommand ) );
+
+    addStatusListener( aCommand );
+
+    // Initialization is done through ctor
+    m_bInitialized = true;
+}
+
+GenericToolbarController::GenericToolbarController( const Reference< XComponentContext >&    rxContext,
+                                                    const Reference< XFrame >&               rFrame,
+                                                    weld::Toolbar&                           rToolbar,
+                                                    const OUString&                          aCommand ) :
+    GenericToolbarController( rxContext, rFrame, nullptr, 0, aCommand )
+{
+    m_pToolbar = &rToolbar;
 }
 
 GenericToolbarController::~GenericToolbarController()
@@ -104,6 +119,7 @@ void SAL_CALL GenericToolbarController::dispose()
 
     svt::ToolboxController::dispose();
 
+    m_pToolbar = nullptr;
     m_xToolbar.clear();
     m_nID = 0;
 }
@@ -158,6 +174,30 @@ void GenericToolbarController::statusChanged( const FeatureStateEvent& Event )
 
     if ( m_bDisposed )
         return;
+
+    if ( m_pToolbar )
+    {
+        OString sId = m_aCommandURL.toUtf8();
+
+        m_pToolbar->set_item_sensitive(sId, Event.IsEnabled);
+
+        bool        bValue;
+        OUString    aStrValue;
+
+        if ( Event.State >>= bValue )
+        {
+            // Boolean, treat it as checked/unchecked
+            m_pToolbar->set_item_active(sId, bValue);
+        }
+        else if ( Event.State >>= aStrValue )
+        {
+            m_pToolbar->set_item_label(sId, aStrValue);
+        }
+        else
+            m_pToolbar->set_item_active(sId, false);
+
+        return;
+    }
 
     if ( !m_xToolbar )
         return;

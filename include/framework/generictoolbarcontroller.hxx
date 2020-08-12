@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_GENERICTOOLBARCONTROLLER_HXX
-#define INCLUDED_FRAMEWORK_INC_UIELEMENT_GENERICTOOLBARCONTROLLER_HXX
+#pragma once
 
+#include <framework/fwkdllapi.h>
 #include <svtools/toolboxcontroller.hxx>
 #include <vcl/vclptr.hxx>
 
@@ -28,13 +28,17 @@ class ToolBox;
 namespace framework
 {
 
-class GenericToolbarController final : public svt::ToolboxController
+class FWK_DLLPUBLIC GenericToolbarController final : public svt::ToolboxController
 {
     public:
         GenericToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                   const css::uno::Reference< css::frame::XFrame >& rFrame,
                                   ToolBox* pToolBar,
                                   sal_uInt16 nID,
+                                  const OUString& aCommand );
+        GenericToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                                  const css::uno::Reference< css::frame::XFrame >& rFrame,
+                                  weld::Toolbar& rToolBar,
                                   const OUString& aCommand );
         virtual ~GenericToolbarController() override;
 
@@ -65,7 +69,5 @@ class GenericToolbarController final : public svt::ToolboxController
 };
 
 }
-
-#endif // INCLUDED_FRAMEWORK_INC_UIELEMENT_GENERICTOOLBARCONTROLLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
