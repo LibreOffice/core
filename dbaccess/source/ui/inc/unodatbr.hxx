@@ -46,8 +46,6 @@ namespace com::sun::star::container { class XNameContainer; }
 
 namespace dbaui
 {
-
-    class DBTreeView;
     struct DBTreeEditedEntry;
     class ImageProvider;
 
@@ -218,7 +216,8 @@ namespace dbaui
         virtual IController&      getCommandController() override;
         virtual ::comphelper::OInterfaceContainerHelper2*
                                   getContextMenuInterceptors() override;
-        virtual css::uno::Any     getCurrentSelection( Control& _rControl ) const override;
+        virtual css::uno::Any     getCurrentSelection(weld::TreeView& rControl) const override;
+        virtual vcl::Window* getMenuParent(weld::TreeView& rControl) const override;
 
         virtual void impl_initialize() override;
 

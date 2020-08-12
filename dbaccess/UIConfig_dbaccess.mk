@@ -31,6 +31,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/dbwiztextpage \
     dbaccess/uiconfig/ui/deleteallrowsdialog \
     dbaccess/uiconfig/ui/designsavemodifieddialog \
+    dbaccess/uiconfig/ui/detailwindow \
     dbaccess/uiconfig/ui/directsqldialog  \
     dbaccess/uiconfig/ui/emptypage \
     dbaccess/uiconfig/ui/fielddialog \

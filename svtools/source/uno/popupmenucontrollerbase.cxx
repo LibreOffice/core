@@ -330,6 +330,7 @@ void SAL_CALL PopupMenuControllerBase::initialize( const Sequence< Any >& aArgum
         m_bInitialized  = true;
     }
 }
+
 // XPopupMenuController
 void SAL_CALL PopupMenuControllerBase::setPopupMenu( const Reference< awt::XPopupMenu >& xPopupMenu )
 {
@@ -356,9 +357,11 @@ void SAL_CALL PopupMenuControllerBase::setPopupMenu( const Reference< awt::XPopu
 
     updatePopupMenu();
 }
+
 void PopupMenuControllerBase::impl_setPopupMenu()
 {
 }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
