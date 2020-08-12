@@ -197,7 +197,7 @@ public:
     void clear();
 
     bool getEncodedMP( OUString& aResult );
-    void setEncodedMP( const OUString& aResult, bool bAcceptEnmpty = false );
+    void setEncodedMP( const OUString& aResult, bool bAcceptEmpty = false );
     void setUseStorage( bool bUse );
     bool useStorage();
 
