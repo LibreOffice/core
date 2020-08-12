@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c26a70e5_8e9d119b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-12T07:42:35Z",
+      "side": 1,
+      "message": "The code would be triggered by something like\n\n  GetDefaultContext.getValueByName(\"/singletons/com.sun.star.reflection.theTypeDescriptionManager\").getByHierarchicalName(\"com.sun.star.whatever.ServiceBasedSingleton\")\n\nin Basic, if we still had any such service-based singleton in our type libraries.",
+      "range": {
+        "startLine": 15,
+        "startChar": 10,
+        "endLine": 16,
+        "endChar": 38
+      },
+      "revId": "986bd8b93b35ad7f2760dfe0576860532daa0e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
