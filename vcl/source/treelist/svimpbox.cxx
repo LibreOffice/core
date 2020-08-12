@@ -116,8 +116,10 @@ SvImpLBox::~SvImpLBox()
 
     if ( osl_atomic_decrement(&s_nImageRefCount) == 0 )
     {
-        DELETEZ(s_pDefCollapsed);
-        DELETEZ(s_pDefExpanded);
+        delete s_pDefCollapsed;
+        s_pDefCollapsed = nullptr;
+        delete s_pDefExpanded;
+        s_pDefExpanded = nullptr;
     }
     m_aVerSBar.disposeAndClear();
     m_aHorSBar.disposeAndClear();
