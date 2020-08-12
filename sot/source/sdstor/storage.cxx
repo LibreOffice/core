@@ -306,7 +306,10 @@ void SotStorage::CreateStorage( bool bForceUCBStorage, StreamMode nMode )
         // check the stream
         m_pStorStm = ::utl::UcbStreamHelper::CreateStream( m_aName, nMode ).release();
         if ( m_pStorStm && m_pStorStm->GetError() )
-            DELETEZ( m_pStorStm );
+        {
+            delete m_pStorStm;
+            m_pStorStm = nullptr;
+        }
 
         if ( m_pStorStm )
         {
@@ -319,7 +322,8 @@ void SotStorage::CreateStorage( bool bForceUCBStorage, StreamMode nMode )
             if ( bIsUCBStorage )
             {
                 // UCBStorage always works directly on the UCB content, so discard the stream first
-                DELETEZ( m_pStorStm );
+                delete m_pStorStm;
+                m_pStorStm = nullptr;
                 m_pOwnStg = new UCBStorage( m_aName, nMode, true, true/*bIsRoot*/ );
             }
             else

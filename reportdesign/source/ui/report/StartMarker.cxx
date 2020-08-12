@@ -85,8 +85,10 @@ void OStartMarker::dispose()
 {
     if ( osl_atomic_decrement(&s_nImageRefCount) == 0 )
     {
-        DELETEZ(s_pDefCollapsed);
-        DELETEZ(s_pDefExpanded);
+        delete s_pDefCollapsed;
+        s_pDefCollapsed = nullptr;
+        delete s_pDefExpanded;
+        s_pDefExpanded = nullptr;
     }
     m_aVRuler.disposeAndClear();
     m_aText.disposeAndClear();

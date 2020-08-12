@@ -542,7 +542,8 @@ void SfxItemPool::SetPoolDefaultItem(const SfxPoolItem &rItem)
         if (rOldDefault)
         {
             rOldDefault->SetRefCount(0);
-            DELETEZ(rOldDefault);
+            delete rOldDefault;
+            rOldDefault = nullptr;
         }
         rOldDefault = pNewDefault;
     }
@@ -567,7 +568,8 @@ void SfxItemPool::ResetPoolDefaultItem( sal_uInt16 nWhichId )
         if (rOldDefault)
         {
             rOldDefault->SetRefCount(0);
-            DELETEZ(rOldDefault);
+            delete rOldDefault;
+            rOldDefault = nullptr;
         }
     }
     else if ( pImpl->mpSecondary )
