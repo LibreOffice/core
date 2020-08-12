@@ -324,7 +324,8 @@ SfxObjectShell::~SfxObjectShell()
         if (IsDocShared())
             FreeSharedFile( pMedium->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 #endif
-        DELETEZ( pMedium );
+        delete pMedium;
+        pMedium = nullptr;
     }
 
     // The removing of the temporary file must be done as the latest step in the document destruction

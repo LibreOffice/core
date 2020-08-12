@@ -2932,7 +2932,8 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
             // TODO/LATER: disconnect the new file from the storage for the case when pure saving is done
             //       if storing has corrupted the file, probably it must be restored either here or
             //       by the storage
-            DELETEZ( pNewFile );
+            delete pNewFile;
+            pNewFile = nullptr;
         }
     }
     else
@@ -2942,11 +2943,12 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
         // reconnect to the old storage
         DoSaveCompleted();
 
-        DELETEZ( pNewFile );
+        delete pNewFile;
+        pNewFile = nullptr;
     }
 
     if ( bCopyTo )
-        DELETEZ( pNewFile );
+        delete pNewFile;
     else if( !bOk )
         SetModified();
 

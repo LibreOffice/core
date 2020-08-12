@@ -203,7 +203,8 @@ void SAL_CALL SfxInPlaceClient_Impl::notifyEvent( const document::EventObject& a
 
 void SAL_CALL SfxInPlaceClient_Impl::disposing( const css::lang::EventObject& /*aEvent*/ )
 {
-    DELETEZ( m_pClient );
+    delete m_pClient;
+    m_pClient = nullptr;
 }
 
 // XEmbeddedClient
