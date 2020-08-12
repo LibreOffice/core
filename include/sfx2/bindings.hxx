@@ -170,7 +170,7 @@ public:
     SAL_DLLPRIVATE void RegisterInternal_Impl( SfxControllerItem& rBinding );
     SAL_DLLPRIVATE void Register_Impl( SfxControllerItem& rBinding, bool );
     SAL_DLLPRIVATE SfxWorkWindow* GetWorkWindow_Impl() const;
-    SAL_DLLPRIVATE void SetWorkWindow_Impl( SfxWorkWindow* );
+    SAL_DLLPRIVATE void SetWorkWindow_Impl( std::unique_ptr<SfxWorkWindow> );
     SAL_DLLPRIVATE SfxBindings* GetSubBindings_Impl() const;
     SAL_DLLPRIVATE void SetRecorder_Impl( css::uno::Reference< css::frame::XDispatchRecorder > const & );
     SAL_DLLPRIVATE void InvalidateSlotsInMap_Impl();

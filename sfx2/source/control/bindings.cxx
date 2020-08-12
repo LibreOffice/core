@@ -103,7 +103,7 @@ class SfxBindings_Impl
 public:
     css::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
     css::uno::Reference< css::frame::XDispatchProvider >  xProv;
-    SfxWorkWindow*          pWorkWin;
+    std::unique_ptr<SfxWorkWindow> mxWorkWin;
     SfxBindings*            pSubBindings;
     std::vector<std::unique_ptr<SfxStateCache>> pCaches; // One cache for each binding
     std::size_t             nCachedFunc1;   // index for the last one called
@@ -141,7 +141,6 @@ SfxBindings::SfxBindings()
     pImpl->bInNextJob = false;
     pImpl->bInUpdate = false;
     pImpl->pSubBindings = nullptr;
-    pImpl->pWorkWin = nullptr;
     pImpl->nOwnRegLevel = nRegLevel;
 
     // all caches are valid (no pending invalidate-job)
@@ -177,7 +176,7 @@ SfxBindings::~SfxBindings()
     // Delete Caches
     pImpl->pCaches.clear();
 
-    DELETEZ( pImpl->pWorkWin );
+    pImpl->mxWorkWin.reset();
 }
 
 
@@ -232,8 +231,8 @@ void SfxBindings::HidePopups( bool bHide )
 {
     // Hide SfxChildWindows
     DBG_ASSERT( pDispatcher, "HidePopups not allowed without dispatcher" );
-    if ( pImpl->pWorkWin )
-        pImpl->pWorkWin->HidePopups_Impl( bHide );
+    if ( pImpl->mxWorkWin )
+        pImpl->mxWorkWin->HidePopups_Impl( bHide );
 }
 
 void SfxBindings::Update_Impl(SfxStateCache& rCache /*The up to date SfxStatusCache*/)
@@ -1666,14 +1665,14 @@ SfxBindings* SfxBindings::GetSubBindings_Impl() const
     return pImpl->pSubBindings;
 }
 
-void SfxBindings::SetWorkWindow_Impl( SfxWorkWindow* pWork )
+void SfxBindings::SetWorkWindow_Impl( std::unique_ptr<SfxWorkWindow> xWork )
 {
-    pImpl->pWorkWin = pWork;
+    pImpl->mxWorkWin = std::move(xWork);
 }
 
 SfxWorkWindow* SfxBindings::GetWorkWindow_Impl() const
 {
-    return pImpl->pWorkWin;
+    return pImpl->mxWorkWin.get();
 }
 
 bool SfxBindings::IsInUpdate() const
