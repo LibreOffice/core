@@ -20,17 +20,22 @@
 #pragma once
 
 #include <comphelper/storagehelper.hxx>
-#include <svx/galleryfilestorage.hxx>
 
 using namespace ::com::sun::star;
 
+class GalleryObjectCollection;
+
 class GalleryXMLEngine : public GalleryFileStorage
 {
+private:
+    GalleryObjectCollection& mrGalleryObjectCollection;
+
 public:
     /*void readZIP();
 
     void readXML();
     void writeXML();*/
+    GalleryXMLEngine(GalleryObjectCollection& rGalleryObjectCollection);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18,19 +18,14 @@
  */
 
 #include <svx/galleryxmlengine.hxx>
-
-#include <tools/urlobj.hxx>
-#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
-#include <comphelper/processfactory.hxx>
-#include <unotools/ucbstreamhelper.hxx>
-
-#include <tools/XmlWalker.hxx>
-#include <tools/XmlWriter.hxx>
-
-#include <sal/log.hxx>
+#include <svx/galleryobjectcollection.hxx>
 
 using namespace ::com::sun::star;
+
+GalleryXMLEngine::GalleryXMLEngine(GalleryObjectCollection& rGalleryObjectCollection)
+    : mrGalleryObjectCollection(rGalleryObjectCollection)
+{
+}
 
 /*void GalleryXMLEngine::readZIP()
 {
