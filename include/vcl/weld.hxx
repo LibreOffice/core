@@ -939,7 +939,9 @@ public:
     virtual void swap(int pos1, int pos2) = 0;
     virtual std::vector<int> get_selected_rows() const = 0;
     virtual void set_font_color(int pos, const Color& rColor) = 0;
-    virtual void scroll_to_row(int pos) = 0;
+    // scroll to make 'row' visible, this will also expand all parent rows of 'row' as necessary to
+    // make 'row' visible
+    virtual void scroll_to_row(int row) = 0;
     virtual bool is_selected(int pos) const = 0;
     virtual int get_cursor_index() const = 0;
     virtual void set_cursor(int pos) = 0;
@@ -1043,6 +1045,8 @@ public:
                            const css::uno::Reference<css::graphic::XGraphic>& rImage, int col = -1)
         = 0;
     virtual void set_font_color(const TreeIter& rIter, const Color& rColor) = 0;
+    // scroll to make rIter visible, this will also expand all parent rows of rIter as necessary to
+    // make rIter visible
     virtual void scroll_to_row(const TreeIter& rIter) = 0;
     virtual bool is_selected(const TreeIter& rIter) const = 0;
 
