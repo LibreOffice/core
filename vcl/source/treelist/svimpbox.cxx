@@ -30,7 +30,7 @@
 #include <memory>
 #include <stack>
 
-#include <vcl/treelistbox.hxx>
+#include <vcl/toolkit/treelistbox.hxx>
 #include <vcl/toolkit/svlbitm.hxx>
 #include <tools/wintypes.hxx>
 #include <bitmaps.hlst>
@@ -40,8 +40,8 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/debug.hxx>
 
-#include <vcl/treelistentry.hxx>
-#include <vcl/viewdataentry.hxx>
+#include <vcl/toolkit/treelistentry.hxx>
+#include <vcl/toolkit/viewdataentry.hxx>
 
 // #i27063# (pl), #i32300# (pb) never access VCL after DeInitVCL - also no destructors
 Image*  SvImpLBox::s_pDefCollapsed      = nullptr;

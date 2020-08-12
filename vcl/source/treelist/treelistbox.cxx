@@ -23,7 +23,7 @@
         - SelectAll( false ) => only repaint the deselected entries
 */
 
-#include <vcl/treelistbox.hxx>
+#include <vcl/toolkit/treelistbox.hxx>
 #include <vcl/accessiblefactory.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <vcl/svapp.hxx>
@@ -41,8 +41,8 @@
 #include <tools/debug.hxx>
 
 #include <vcl/toolkit/svlbitm.hxx>
-#include <vcl/treelistentry.hxx>
-#include <vcl/viewdataentry.hxx>
+#include <vcl/toolkit/treelistentry.hxx>
+#include <vcl/toolkit/viewdataentry.hxx>
 #include <svimpbox.hxx>
 
 #include <set>

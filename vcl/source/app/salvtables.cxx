@@ -61,13 +61,13 @@
 #include <vcl/toolkit/svtabbx.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
-#include <vcl/treelistentry.hxx>
+#include <vcl/toolkit/treelistentry.hxx>
 #include <vcl/toolkit/throbber.hxx>
 #include <vcl/toolkit/unowrap.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/weldutils.hxx>
 #include <vcl/vclmedit.hxx>
-#include <vcl/viewdataentry.hxx>
+#include <vcl/toolkit/viewdataentry.hxx>
 #include <vcl/virdev.hxx>
 #include <bitmaps.hlst>
 #include <calendar.hxx>

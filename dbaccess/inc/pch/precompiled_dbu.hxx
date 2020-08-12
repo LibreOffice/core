@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-08-07 11:35:01 using:
+ Generated on 2020-08-12 11:04:38 using:
  ./bin/update_pch dbaccess dbu --cutoff=12 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -68,6 +68,7 @@
 #include <sal/log.hxx>
 #include <sal/types.h>
 #include <vcl/IDialogRenderable.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/cairo.hxx>
@@ -77,8 +78,6 @@
 #include <vcl/event.hxx>
 #include <vcl/font.hxx>
 #include <vcl/idle.hxx>
-#include <vcl/image.hxx>
-#include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/metaactiontypes.hxx>

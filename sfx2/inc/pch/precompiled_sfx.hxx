@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-06-26 20:19:27 using:
+ Generated on 2020-08-12 11:05:48 using:
  ./bin/update_pch sfx2 sfx --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -125,6 +125,7 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/weldutils.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 #endif // PCH_LEVEL >= 2
@@ -290,8 +291,6 @@
 #include <comphelper/types.hxx>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/compbase_ex.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -300,7 +299,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <drawinglayer/attribute/fillgraphicattribute.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonSelectionPrimitive2D.hxx>

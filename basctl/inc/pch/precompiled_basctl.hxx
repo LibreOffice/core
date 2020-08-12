@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-07-09 17:06:13 using:
+ Generated on 2020-08-12 11:04:16 using:
  ./bin/update_pch basctl basctl --cutoff=3 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -57,7 +57,6 @@
 #include <utility>
 #include <vector>
 #include <boost/functional/hash.hpp>
-#include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
@@ -75,8 +74,6 @@
 #include <rtl/instance.hxx>
 #include <rtl/math.h>
 #include <rtl/ref.hxx>
-#include <rtl/strbuf.h>
-#include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/stringconcat.hxx>
@@ -132,12 +129,12 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/metaactiontypes.hxx>
+#include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/outdevmap.hxx>
 #include <vcl/outdevstate.hxx>
 #include <vcl/prntypes.hxx>
 #include <vcl/region.hxx>
-#include <vcl/salctype.hxx>
 #include <vcl/salgtype.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
@@ -265,6 +262,7 @@
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/ui/XContextMenuInterception.hpp>
@@ -295,7 +293,6 @@
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/util/SearchOptions2.hpp>
 #include <com/sun/star/util/Time.hpp>
-#include <com/sun/star/util/XAccounting.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/view/PrintableState.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>
@@ -318,7 +315,6 @@
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/compbase_ex.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
@@ -340,7 +336,7 @@
 #include <drawinglayer/primitive2d/CommonTypes.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <editeng/borderline.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editengdllapi.h>
 #include <editeng/editstat.hxx>
@@ -404,6 +400,7 @@
 #include <svl/undo.hxx>
 #include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
+#include <svtools/borderline.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/statusbarcontroller.hxx>
@@ -459,7 +456,6 @@
 #include <svx/xtable.hxx>
 #include <toolkit/dllapi.h>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
@@ -477,7 +473,6 @@
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
-#include <tools/stream.hxx>
 #include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>

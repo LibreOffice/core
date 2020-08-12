@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-07-09 17:06:24 using:
+ Generated on 2020-08-12 11:04:42 using:
  ./bin/update_pch emfio emfio --cutoff=8 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -21,7 +21,6 @@
 */
 
 #if PCH_LEVEL >= 1
-#include <memory>
 #include <vector>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2

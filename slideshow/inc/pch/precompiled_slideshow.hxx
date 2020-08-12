@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-07-09 17:06:51 using:
+ Generated on 2020-08-12 11:05:49 using:
  ./bin/update_pch slideshow slideshow --cutoff=4 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -154,7 +154,6 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
@@ -230,7 +229,6 @@
 #include <svx/shapeproperty.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/svxdllapi.h>
-#include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fontenum.hxx>

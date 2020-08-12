@@ -27,7 +27,7 @@
 #include <vcl/image.hxx>
 #include <vcl/svtaccessiblefactory.hxx>
 #include <vcl/vclevent.hxx>
-#include <vcl/treelistbox.hxx>
+#include <vcl/toolkit/treelistbox.hxx>
 #include <o3tl/enumarray.hxx>
 #include <memory>
 #include <vector>

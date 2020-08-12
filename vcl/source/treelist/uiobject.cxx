@@ -10,8 +10,8 @@
 #include <memory>
 #include <vcl/toolkit/svlbitm.hxx>
 #include <vcl/uitest/uiobject.hxx>
-#include <vcl/treelistbox.hxx>
-#include <vcl/treelistentry.hxx>
+#include <vcl/toolkit/treelistbox.hxx>
+#include <vcl/toolkit/treelistentry.hxx>
 
 TreeListUIObject::TreeListUIObject(const VclPtr<SvTreeListBox>& xTreeList):
     WindowUIObject(xTreeList),

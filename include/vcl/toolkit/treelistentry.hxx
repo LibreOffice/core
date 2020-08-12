@@ -17,14 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_TREELISTENTRY_HXX
-#define INCLUDED_VCL_TREELISTENTRY_HXX
+#pragma once
+
+#if !defined(VCL_DLLIMPLEMENTATION) && !defined(TOOLKIT_DLLIMPLEMENTATION) && !defined(VCL_INTERNALS)
+#error "don't use this in new code"
+#endif
 
 #include <vcl/dllapi.h>
 #include <tools/solar.h>
 #include <tools/color.hxx>
-#include <vcl/treelistbox.hxx>
-#include <vcl/treelistentries.hxx>
+#include <vcl/toolkit/treelistbox.hxx>
+#include <vcl/toolkit/treelistentries.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <optional>
@@ -125,7 +128,5 @@ public:
     SvTreeListEntry* PrevSibling() const;
     SvTreeListEntry* LastSibling() const;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -33,7 +33,7 @@
 #include <cppuhelper/compbase9.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/accessibletexthelper.hxx>
-#include <vcl/treelistentry.hxx>
+#include <vcl/toolkit/treelistentry.hxx>
 #include <tools/gen.hxx>
 
 // forward ---------------------------------------------------------------

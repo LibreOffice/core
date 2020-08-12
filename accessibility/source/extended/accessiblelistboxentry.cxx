@@ -19,7 +19,7 @@
 
 #include <extended/accessiblelistboxentry.hxx>
 #include <extended/accessiblelistbox.hxx>
-#include <vcl/treelistbox.hxx>
+#include <vcl/toolkit/treelistbox.hxx>
 #include <svtools/stringtransfer.hxx>
 #include <vcl/toolkit/svlbitm.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>

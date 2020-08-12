@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-07-31 16:53:36 using:
+ Generated on 2020-08-12 11:15:33 using:
  ./bin/update_pch svx svxcore --cutoff=7 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -65,6 +65,7 @@
 #include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
+#include <osl/thread.h>
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/character.hxx>
@@ -74,7 +75,6 @@
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.h>
-#include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/stringconcat.hxx>
@@ -93,6 +93,7 @@
 #include <sal/types.h>
 #include <sal/typesizes.h>
 #include <vcl/AccessibleBrowseBoxObjType.hxx>
+#include <vcl/BitmapColor.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/GraphicAttributes.hxx>
 #include <vcl/GraphicExternalLink.hxx>
@@ -376,7 +377,6 @@
 #include <svtools/svtdllapi.h>
 #include <svtools/valueset.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/UnitConversion.hxx>
 #include <tools/bigint.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
@@ -401,6 +401,7 @@
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/uik.h>
+#include <ucbhelper/content.hxx>
 #include <uno/any2.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>

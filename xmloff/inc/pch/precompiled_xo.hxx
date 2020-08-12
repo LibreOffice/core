@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-07-09 17:07:24 using:
+ Generated on 2020-08-12 11:07:14 using:
  ./bin/update_pch xmloff xo --cutoff=7 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -57,6 +57,7 @@
 #include <osl/thread.h>
 #include <rtl/alloc.h>
 #include <rtl/character.hxx>
+#include <rtl/digest.h>
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
 #include <rtl/math.h>
@@ -179,7 +180,6 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <sax/tools/converter.hxx>
 #include <svl/svldllapi.h>
-#include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>

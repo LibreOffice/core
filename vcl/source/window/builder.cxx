@@ -46,7 +46,7 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/toolkit/throbber.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/treelistentry.hxx>
+#include <vcl/toolkit/treelistentry.hxx>
 #include <vcl/vclmedit.hxx>
 #include <vcl/settings.hxx>
 #include <slider.hxx>

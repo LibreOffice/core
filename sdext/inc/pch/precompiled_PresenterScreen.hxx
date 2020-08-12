@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-01 10:58:12 using:
+ Generated on 2020-08-12 11:05:47 using:
  ./bin/update_pch sdext PresenterScreen --cutoff=2 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -50,7 +50,6 @@
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>
-#include <osl/endian.h>
 #include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.h>
@@ -67,7 +66,6 @@
 #include <rtl/stringutils.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
-#include <rtl/unload.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
@@ -115,7 +113,6 @@
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -133,10 +130,10 @@
 #include <cppu/unotype.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/implbase_ex_post.hxx>
 #include <cppuhelper/implbase_ex_pre.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/safeint.hxx>
@@ -146,7 +143,6 @@
 #include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
-#include <tools/solar.h>
 #include <tools/toolsdllapi.h>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
