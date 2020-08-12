@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sm">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -16,9 +16,6 @@
     <property name="title" translatable="yes" context="fontdialog|FontDialog">Fonts</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -155,6 +152,11 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="font-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="fontdialog|extended_tip|font">Select a font from the list.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -212,6 +214,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="bold-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="fontdialog|extended_tip|bold">Check this box to assign the bold attribute to the font.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -227,6 +234,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="italic-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="fontdialog|extended_tip|italic">Check this box to assign the italic attribute to the font.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -296,5 +308,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="FontDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="fontdialog|extended_tip|FontDialog">Use this dialog to select the font for the respective category in the Fonts dialog.</property>
+      </object>
+    </child>
   </object>
 </interface>

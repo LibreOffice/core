@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sm">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="AlignmentDialog">
@@ -25,6 +25,11 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="default-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="alignmentdialog|extended_tip|default">Click here to save your changes as the default settings for new formulas.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -117,6 +122,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="left-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="alignmentdialog|extended_tip|left">Aligns the selected elements of a formula to the left.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -134,6 +144,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">left</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="center-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="alignmentdialog|extended_tip|center">Aligns the elements of a formula to the center.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -151,6 +166,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">left</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="right-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="alignmentdialog|extended_tip|right">Aligns the elements of a formula to the right.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -187,8 +207,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="AlignmentDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="alignmentdialog|extended_tip|AlignmentDialog">You can define the alignment of multi-line formulas as well as formulas with several elements in one line.</property>
+      </object>
     </child>
   </object>
 </interface>
