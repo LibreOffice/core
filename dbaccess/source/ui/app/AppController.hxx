@@ -494,8 +494,8 @@ namespace dbaui
         virtual IController&      getCommandController() override;
         virtual ::comphelper::OInterfaceContainerHelper2*
                                 getContextMenuInterceptors() override;
-        virtual css::uno::Any
-                                getCurrentSelection( Control& _rControl ) const override;
+        virtual css::uno::Any getCurrentSelection(weld::TreeView& rControl) const override;
+        virtual vcl::Window* getMenuParent(weld::TreeView& rControl) const override;
 
         void OnInvalidateClipboard();
         DECL_LINK( OnClipboardChanged, TransferableDataHelper*, void );

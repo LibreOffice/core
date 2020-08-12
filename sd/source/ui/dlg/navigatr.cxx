@@ -229,6 +229,8 @@ IMPL_LINK(SdNavigatorWin, SelectToolboxHdl, const OString&, rCommand, void)
 
 IMPL_LINK(SdNavigatorWin, DropdownClickToolBoxHdl, const OString&, rCommand, void)
 {
+    fprintf(stderr, "DropdownClickToolBoxHdl\n");
+
     if (!mxToolbox->get_menu_item_active(rCommand))
         return;
 
