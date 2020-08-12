@@ -185,20 +185,6 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
 
 SfxInterface::~SfxInterface()
 {
-    SfxModule *pMod = pImplData->pModule;
-    bool bRegistered = pImplData->bRegistered;
-    assert( bRegistered );
-    if ( bRegistered )
-    {
-        if ( pMod )
-        {
-            // can return nullptr if we are called from the SfxSlotPool destructor
-            if (pMod->GetSlotPool())
-                pMod->GetSlotPool()->ReleaseInterface(*this);
-        }
-        else
-            SfxGetpApp()->GetAppSlotPool_Impl().ReleaseInterface(*this);
-    }
 }
 
 

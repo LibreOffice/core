@@ -150,16 +150,6 @@ const std::type_info* SfxSlotPool::GetSlotType( sal_uInt16 nId ) const
 }
 
 
-// unregisters the availability of the Interface of functions
-
-void SfxSlotPool::ReleaseInterface( SfxInterface& rInterface )
-{
-    // remove from the list of SfxInterface instances
-    auto i = std::find(_vInterfaces.begin(), _vInterfaces.end(), &rInterface);
-    if(i != _vInterfaces.end())
-        _vInterfaces.erase(i);
-}
-
 // get the first SfxMessage for a special Id (e.g. for getting check-mode)
 
 const SfxSlot* SfxSlotPool::GetSlot( sal_uInt16 nId ) const
