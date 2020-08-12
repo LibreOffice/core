@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-07-09 17:07:25 using:
+ Generated on 2020-08-12 11:07:16 using:
  ./bin/update_pch xmlsecurity xmlsecurity --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -138,7 +138,6 @@
 #include <com/sun/star/uno/genfunc.hxx>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/SecurityOperationStatus.hpp>
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>
@@ -159,7 +158,6 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <svl/sigstruct.hxx>
-#include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
 #include <tools/fldunit.hxx>
@@ -168,7 +166,6 @@
 #include <tools/link.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/solar.h>
-#include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>

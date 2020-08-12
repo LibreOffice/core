@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-07-09 17:06:50 using:
+ Generated on 2020-08-12 11:05:47 using:
  ./bin/update_pch sdext PresentationMinimizer --cutoff=2 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -65,7 +65,6 @@
 #include <rtl/stringutils.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
-#include <rtl/unload.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
@@ -119,7 +118,6 @@
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -130,7 +128,6 @@
 #include <com/sun/star/uno/genfunc.h>
 #include <com/sun/star/uno/genfunc.hxx>
 #include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -140,7 +137,6 @@
 #include <cppu/unotype.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/factory.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/strong_int.hxx>
@@ -154,8 +150,6 @@
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
-#include <tools/solar.h>
-#include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>

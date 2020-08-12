@@ -27,7 +27,7 @@
 #include <vcl/dllapi.h>
 #include <tools/link.hxx>
 #include <vcl/image.hxx>
-#include <vcl/treelistbox.hxx>
+#include <vcl/toolkit/treelistbox.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 class SvTreeListEntry;

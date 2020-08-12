@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-07-09 17:06:48 using:
+ Generated on 2020-08-12 11:05:42 using:
  ./bin/update_pch sd sd --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -191,7 +191,6 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
 #include <com/sun/star/office/XAnnotation.hpp>
@@ -216,12 +215,14 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/genfunc.hxx>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/classids.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/extract.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -252,7 +253,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <editeng/AccessibleComponentBase.hxx>
 #include <editeng/AccessibleContextBase.hxx>
 #include <editeng/adjustitem.hxx>
@@ -451,6 +451,7 @@
 #include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
+#include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>
 #include <tools/weakbase.h>

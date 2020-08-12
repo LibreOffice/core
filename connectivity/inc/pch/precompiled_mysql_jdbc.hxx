@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-01-22 15:57:36 using:
+ Generated on 2020-08-12 11:04:29 using:
  ./bin/update_pch connectivity mysql_jdbc --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -25,18 +25,15 @@
 #if PCH_LEVEL >= 2
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/sdbc/DriverManager.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbcx/PrivilegeObject.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/namedvaluecollection.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <mysql/YCatalog.hxx>

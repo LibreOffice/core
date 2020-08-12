@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-07-09 17:07:10 using:
+ Generated on 2020-08-12 11:06:39 using:
  ./bin/update_pch sw sw --cutoff=7 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -71,11 +71,11 @@
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
+#include <rtl/string.hxx>
 #include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/textenc.h>
-#include <rtl/unload.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -96,7 +96,6 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/dockwin.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/event.hxx>
@@ -113,7 +112,6 @@
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/toolbox.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
@@ -221,7 +219,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
-#include <drawinglayer/primitive2d/CommonTypes.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
@@ -269,6 +266,7 @@
 #include <editeng/tstpitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/ulspitem.hxx>
+#include <editeng/unoprnms.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/widwitem.hxx>
 #include <editeng/xmlcnitm.hxx>
@@ -284,6 +282,7 @@
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/singletonref.hxx>
@@ -351,7 +350,6 @@
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/htmltokn.h>
-#include <svtools/popupwindowcontroller.hxx>
 #include <svtools/svtdllapi.h>
 #include <svx/dataaccessdescriptor.hxx>
 #include <svx/drawitem.hxx>
@@ -441,6 +439,7 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentMarkAccess.hxx>
+#include <IDocumentOutlineNodes.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentState.hxx>

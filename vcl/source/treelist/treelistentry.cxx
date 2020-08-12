@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include <vcl/treelistentry.hxx>
+#include <vcl/toolkit/treelistentry.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <tools/debug.hxx>

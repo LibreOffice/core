@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/treelistentry.hxx>
-#include <vcl/viewdataentry.hxx>
+#include <vcl/toolkit/treelistentry.hxx>
+#include <vcl/toolkit/viewdataentry.hxx>
 #include <iconview.hxx>
 #include "iconviewimpl.hxx"
 

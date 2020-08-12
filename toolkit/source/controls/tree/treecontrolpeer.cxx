@@ -35,9 +35,9 @@
 #include <rtl/ref.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/treelistbox.hxx>
-#include <vcl/treelistentry.hxx>
-#include <vcl/viewdataentry.hxx>
+#include <vcl/toolkit/treelistbox.hxx>
+#include <vcl/toolkit/treelistentry.hxx>
+#include <vcl/toolkit/viewdataentry.hxx>
 #include <vcl/toolkit/svlbitm.hxx>
 
 #include <map>

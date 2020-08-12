@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-07-09 17:06:27 using:
+ Generated on 2020-08-12 11:04:49 using:
  ./bin/update_pch framework fwk --cutoff=7 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -173,7 +173,6 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
@@ -198,7 +197,6 @@
 #include <com/sun/star/uno/genfunc.h>
 #include <com/sun/star/uno/genfunc.hxx>
 #include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -239,7 +237,6 @@
 #include <svtools/toolboxcontroller.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fldunit.hxx>

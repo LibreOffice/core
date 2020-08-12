@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-21 11:14:30 using:
+ Generated on 2020-08-12 11:04:39 using:
  ./bin/update_pch desktop deploymentgui --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -85,6 +85,7 @@
 #include <cppu/unotype.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <salhelper/thread.hxx>
 #include <tools/gen.hxx>

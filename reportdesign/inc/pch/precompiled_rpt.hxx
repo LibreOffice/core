@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-07-09 17:06:28 using:
+ Generated on 2020-08-12 11:04:52 using:
  ./bin/update_pch reportdesign rpt --cutoff=9 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -61,7 +61,6 @@
 #include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
-#include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
@@ -74,7 +73,6 @@
 #include <rtl/stringutils.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
-#include <rtl/unload.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
@@ -170,7 +168,6 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Time.hpp>
-#include <com/sun/star/util/XAccounting.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/sequence.hxx>
@@ -195,7 +192,6 @@
 #include <drawinglayer/primitive2d/CommonTypes.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <editeng/editengdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
@@ -233,7 +229,6 @@
 #include <svx/svdtypes.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/xdef.hxx>
-#include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>

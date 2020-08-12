@@ -19,8 +19,8 @@
 
 #include <extended/accessiblelistbox.hxx>
 #include <extended/accessiblelistboxentry.hxx>
-#include <vcl/treelistbox.hxx>
-#include <vcl/treelistentry.hxx>
+#include <vcl/toolkit/treelistbox.hxx>
+#include <vcl/toolkit/treelistentry.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>

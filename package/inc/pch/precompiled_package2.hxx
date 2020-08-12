@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-07-09 17:06:27 using:
+ Generated on 2020-08-12 11:04:51 using:
  ./bin/update_pch package package2 --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -48,6 +48,7 @@
 #include <osl/diagnose.hxx>
 #include <osl/doublecheckedlocking.h>
 #include <osl/endian.h>
+#include <osl/file.h>
 #include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.h>
@@ -89,6 +90,7 @@
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -97,9 +99,12 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/uno/Any.h>
@@ -119,6 +124,7 @@
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/refcountedmutex.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -153,6 +159,7 @@
 #include <CRC32.hxx>
 #include <EncryptedDataHeader.hxx>
 #include <EncryptionData.hxx>
+#include <HashMaps.hxx>
 #include <PackageConstants.hxx>
 #include <ThreadedDeflater.hxx>
 #include <ZipEntry.hxx>
@@ -160,7 +167,6 @@
 #include <ZipFile.hxx>
 #include <ZipOutputEntry.hxx>
 #include <ZipOutputStream.hxx>
-#include <ZipPackage.hxx>
 #include <ZipPackageBuffer.hxx>
 #include <ZipPackageFolder.hxx>
 #include <ZipPackageStream.hxx>

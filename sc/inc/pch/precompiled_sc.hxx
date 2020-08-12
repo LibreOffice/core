@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-07-09 17:06:41 using:
+ Generated on 2020-08-12 11:05:25 using:
  ./bin/update_pch sc sc --cutoff=12 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -258,7 +258,6 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Time.hpp>
-#include <com/sun/star/util/XAccounting.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <comphelper/broadcasthelper.hxx>
@@ -302,7 +301,6 @@
 #include <drawinglayer/primitive2d/CommonTypes.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
@@ -432,7 +430,6 @@
 #include <svx/xit.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/xtable.hxx>
-#include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>

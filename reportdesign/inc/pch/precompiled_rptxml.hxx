@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-07-09 17:06:29 using:
+ Generated on 2020-08-12 11:04:54 using:
  ./bin/update_pch reportdesign rptxml --cutoff=2 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -22,7 +22,6 @@
 
 #if PCH_LEVEL >= 1
 #include <cassert>
-#include <cstddef>
 #include <cstring>
 #include <limits>
 #include <memory>
@@ -42,7 +41,6 @@
 #include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textenc.h>
-#include <rtl/unload.h>
 #include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -62,7 +60,6 @@
 #include <com/sun/star/chart2/data/XDatabaseDataProvider.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
 #include <com/sun/star/report/ForceNewPage.hpp>
 #include <com/sun/star/report/GroupOn.hpp>
@@ -74,7 +71,6 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <comphelper/comphelperdllapi.h>
@@ -83,8 +79,6 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <connectivity/dbtools.hxx>
-#include <cppuhelper/cppuhelperdllapi.h>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <salhelper/simplereferenceobject.hxx>

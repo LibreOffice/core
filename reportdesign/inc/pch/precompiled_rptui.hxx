@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-07-09 17:06:28 using:
+ Generated on 2020-08-12 11:04:53 using:
  ./bin/update_pch reportdesign rptui --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -56,7 +56,6 @@
 #include <utility>
 #include <vector>
 #include <boost/intrusive_ptr.hpp>
-#include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
@@ -74,15 +73,12 @@
 #include <rtl/locale.h>
 #include <rtl/math.h>
 #include <rtl/ref.hxx>
-#include <rtl/strbuf.h>
-#include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
-#include <rtl/unload.h>
 #include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
@@ -136,8 +132,6 @@
 #include <vcl/outdevmap.hxx>
 #include <vcl/outdevstate.hxx>
 #include <vcl/region.hxx>
-#include <vcl/salctype.hxx>
-#include <vcl/salgtype.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/settings.hxx>
@@ -152,7 +146,6 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>
 #include <vcl/vectorgraphicdata.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/window.hxx>
@@ -258,7 +251,6 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Time.hpp>
-#include <com/sun/star/util/XAccounting.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/interfacecontainer2.hxx>
@@ -290,7 +282,6 @@
 #include <drawinglayer/primitive2d/CommonTypes.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editengdllapi.h>
@@ -407,7 +398,6 @@
 #include <svx/xtable.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
