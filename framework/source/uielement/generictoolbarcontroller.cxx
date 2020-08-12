@@ -21,30 +21,22 @@
 
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/frame/status/ItemStatus.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
-#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/frame/ControlCommand.hpp>
 
-#include <svtools/toolboxcontroller.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <tools/urlobj.hxx>
 #include <strings.hrc>
 #include <classes/fwkresid.hxx>
-#include <uielement/menubarmanager.hxx>
 
-using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::frame::status;
-using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::container;
 
 namespace framework
 {
@@ -281,93 +273,6 @@ IMPL_STATIC_LINK( GenericToolbarController, ExecuteHdl_Impl, void*, p, void )
    delete pExecuteInfo;
 }
 
-void MenuToolbarController::dispose()
-{
-    try
-    {
-        if ( m_xMenuManager.is() )
-            m_xMenuManager->dispose();
-    }
-    catch( const Exception& ) {}
-
-    m_xMenuManager.clear();
-    m_xMenuDesc.clear();
-    pMenu.disposeAndClear();
-}
-
-void MenuToolbarController::initialize( const css::uno::Sequence< css::uno::Any >& rArgs )
-{
-    ToolboxController::initialize( rArgs );
-
-    css::uno::Reference< css::container::XIndexAccess > xMenuContainer;
-    try
-    {
-        css::uno::Reference< css::frame::XController > xController( m_xFrame->getController() );
-        css::uno::Reference< css::ui::XUIConfigurationManagerSupplier > xSupplier( xController->getModel(), css::uno::UNO_QUERY_THROW );
-        css::uno::Reference< css::ui::XUIConfigurationManager > xConfigManager( xSupplier->getUIConfigurationManager() );
-        xMenuContainer.set( xConfigManager->getSettings( m_aCommandURL, false ) );
-    }
-    catch( const css::uno::Exception& )
-    {}
-
-    if ( !xMenuContainer.is() )
-    {
-        try
-        {
-            css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xSupplier(
-                css::ui::theModuleUIConfigurationManagerSupplier::get( m_xContext ) );
-            css::uno::Reference< css::ui::XUIConfigurationManager > xConfigManager(
-                xSupplier->getUIConfigurationManager( m_sModuleName ) );
-            xMenuContainer.set( xConfigManager->getSettings( m_aCommandURL, false ) );
-        }
-        catch( const css::uno::Exception& )
-        {}
-    }
-
-    if ( !(xMenuContainer.is() && xMenuContainer->getCount()) )
-        return;
-
-    Sequence< PropertyValue > aProps;
-    // drop down menu info is currently the first ( and only ) menu in the menusettings container
-    xMenuContainer->getByIndex(0) >>= aProps;
-    for ( const auto& aProp : std::as_const(aProps) )
-    {
-        if ( aProp.Name == "ItemDescriptorContainer" )
-        {
-            aProp.Value >>= m_xMenuDesc;
-            break;
-        }
-    }
-
-    ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
-    if ( getToolboxId( nId, &pToolBox ) )
-        pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
-}
-
-Reference< XWindow > SAL_CALL
-MenuToolbarController::createPopupWindow()
-{
-    if ( !pMenu )
-    {
-        pMenu = VclPtr<PopupMenu>::Create();
-        css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( m_xFrame, css::uno::UNO_QUERY );
-        sal_uInt16 m_nMenuId = 1;
-        MenuBarManager::FillMenu( m_nMenuId, pMenu, m_sModuleName, m_xMenuDesc, xDispatchProvider );
-        m_xMenuManager.set( new MenuBarManager( m_xContext, m_xFrame, m_xUrlTransformer, xDispatchProvider, m_sModuleName, pMenu, false, false ) );
-    }
-
-    ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
-    if ( !getToolboxId( nId, &pToolBox ) )
-        return nullptr;
-
-    pToolBox->SetItemDown( m_nToolBoxId, true );
-    pMenu->Execute( pToolBox, pToolBox->GetItemRect( nId ), PopupMenuFlags::ExecuteDown );
-    pToolBox->SetItemDown( m_nToolBoxId, false );
-
-    return nullptr;
-}
 } // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

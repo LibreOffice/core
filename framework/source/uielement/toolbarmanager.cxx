@@ -759,7 +759,8 @@ void ToolBarManager::CreateControllers()
                 }
                 else if ( aCommandURL.startsWith( "private:resource/menubar/" ) )
                 {
-                    xController.set( new MenuToolbarController );
+                    xController.set( m_xContext->getServiceManager()->createInstanceWithContext(
+                        "com.sun.star.comp.framework.GenericPopupToolbarController", m_xContext ), UNO_QUERY );
                 }
                 else
                 {

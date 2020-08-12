@@ -21,13 +21,8 @@
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_GENERICTOOLBARCONTROLLER_HXX
 
 #include <svtools/toolboxcontroller.hxx>
-#include <com/sun/star/container/XIndexAccess.hpp>
-
-#include <tools/link.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/vclptr.hxx>
 
-class PopupMenu;
 class ToolBox;
 
 namespace framework
@@ -67,23 +62,6 @@ class GenericToolbarController final : public svt::ToolboxController
         bool                m_bEnumCommand : 1,
                             m_bMadeInvisible : 1;
         OUString            m_aEnumCommand;
-};
-
-class MenuToolbarController final : public svt::ToolboxController
-{
-    css::uno::Reference< css::container::XIndexAccess > m_xMenuDesc;
-    VclPtr<PopupMenu>                                   pMenu;
-    css::uno::Reference< css::lang::XComponent >        m_xMenuManager;
-
-public:
-    // XStatusListener
-    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& ) override {}
-    // XComponent
-    virtual void SAL_CALL dispose() override;
-    // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArgs ) override;
-    // XToolbarController
-    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() override;
 };
 
 }

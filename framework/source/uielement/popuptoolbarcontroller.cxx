@@ -78,6 +78,7 @@ protected:
     void createPopupMenuController();
 
     bool                                                    m_bHasController;
+    bool                                                    m_bResourceURL;
     OUString                                                m_aPopupCommand;
     css::uno::Reference< css::awt::XPopupMenu >             m_xPopupMenu;
 
@@ -91,6 +92,7 @@ PopupMenuToolbarController::PopupMenuToolbarController(
     const OUString &rPopupCommand )
     : ToolBarBase( xContext, css::uno::Reference< css::frame::XFrame >(), /*aCommandURL*/OUString() )
     , m_bHasController( false )
+    , m_bResourceURL( false )
     , m_aPopupCommand( rPopupCommand )
 {
 }
@@ -142,6 +144,12 @@ void SAL_CALL PopupMenuToolbarController::initialize(
         TOOLS_INFO_EXCEPTION( "fwk.uielement", "" );
     }
 
+    if ( !m_bHasController && m_aPopupCommand.startsWith( "private:resource/" ) )
+    {
+        m_bResourceURL = true;
+        m_bHasController = true;
+    }
+
     SolarMutexGuard aSolarLock;
     VclPtr< ToolBox > pToolBox = static_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ).get() );
     if ( pToolBox )
@@ -158,6 +166,9 @@ void SAL_CALL PopupMenuToolbarController::initialize(
 
 void SAL_CALL PopupMenuToolbarController::statusChanged( const css::frame::FeatureStateEvent& rEvent )
 {
+    if ( m_bResourceURL )
+        return;
+
     ToolBox* pToolBox = nullptr;
     sal_uInt16 nItemId = 0;
     if ( getToolboxId( nItemId, &pToolBox ) )
@@ -228,10 +239,12 @@ void PopupMenuToolbarController::createPopupMenuController()
     }
     else
     {
-        css::uno::Sequence< css::uno::Any > aArgs( 3 );
-        aArgs[0] <<= comphelper::makePropertyValue( "Frame", m_xFrame );
-        aArgs[1] <<= comphelper::makePropertyValue( "ModuleIdentifier", getModuleName() );
-        aArgs[2] <<= comphelper::makePropertyValue( "InToolbar", true );
+        css::uno::Sequence<css::uno::Any> aArgs {
+            css::uno::makeAny(comphelper::makePropertyValue("Frame", m_xFrame)),
+            css::uno::makeAny(comphelper::makePropertyValue("ModuleIdentifier", m_sModuleName)),
+            css::uno::makeAny(comphelper::makePropertyValue("InToolbar", true)),
+            css::uno::makeAny(comphelper::makePropertyValue("ResourceURL", m_aPopupCommand))
+        };
 
         try
         {
@@ -239,9 +252,17 @@ void PopupMenuToolbarController::createPopupMenuController()
                 m_xContext->getServiceManager()->createInstanceWithContext(
                     "com.sun.star.awt.PopupMenu", m_xContext ),
                         css::uno::UNO_QUERY_THROW );
-            m_xPopupMenuController.set(
-                m_xPopupMenuFactory->createInstanceWithArgumentsAndContext(
+
+            if (m_bResourceURL)
+            {
+                m_xPopupMenuController.set( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                    "com.sun.star.comp.framework.ResourceMenuController", aArgs, m_xContext), css::uno::UNO_QUERY_THROW );
+            }
+            else
+            {
+                m_xPopupMenuController.set( m_xPopupMenuFactory->createInstanceWithArgumentsAndContext(
                     m_aPopupCommand, aArgs, m_xContext), css::uno::UNO_QUERY_THROW );
+            }
 
             m_xPopupMenuController->setPopupMenu( m_xPopupMenu );
         }
