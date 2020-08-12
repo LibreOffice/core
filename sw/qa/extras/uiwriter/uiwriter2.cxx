@@ -1633,6 +1633,31 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTableWidth)
                          getProperty<sal_Int16>(xTables->getByIndex(0), "RelativeWidth"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTextBoxLoss)
+{
+    // Load a document that has a shape with a textbox in it. Save it to ODF and reload.
+    load(DATA_DIRECTORY, "textbox-loss.docx");
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::TempFile aTempFile;
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer8");
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    mxComponent->dispose();
+    mxComponent = loadFromDesktop(aTempFile.GetURL());
+
+    // Make sure that the shape is still a textbox.
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    bool bTextBox = false;
+    xShape->getPropertyValue("TextBox") >>= bTextBox;
+
+    // Without the accompanying fix in place, this test would have failed, as the shape only had
+    // editeng text, loosing the image part of the shape text.
+    CPPUNIT_ASSERT(bTextBox);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTextFormFieldInsertion)
 {
     SwDoc* pDoc = createDoc();
