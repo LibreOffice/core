@@ -36,9 +36,9 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::accessibility;
 
-namespace svtools {
+namespace {
 
-static vcl::Window* GetTopMostParentSystemWindow( vcl::Window* pWindow )
+vcl::Window* GetTopMostParentSystemWindow( vcl::Window* pWindow )
 {
     OSL_ASSERT( pWindow );
     if ( pWindow )
@@ -65,18 +65,18 @@ class ToolbarPopupStatusListener : public svt::FrameStatusListener
 {
 public:
     ToolbarPopupStatusListener( const css::uno::Reference< css::frame::XFrame >& xFrame,
-                                ToolbarPopupBase& rToolbarPopup );
+                                WeldToolbarPopup& rToolbarPopup );
 
     virtual void SAL_CALL dispose() override;
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
 
-    ToolbarPopupBase* mpPopup;
+    WeldToolbarPopup* mpPopup;
 };
 
 
 ToolbarPopupStatusListener::ToolbarPopupStatusListener(
     const css::uno::Reference< css::frame::XFrame >& xFrame,
-    ToolbarPopupBase& rToolbarPopup )
+    WeldToolbarPopup& rToolbarPopup )
 : svt::FrameStatusListener( ::comphelper::getProcessComponentContext(), xFrame )
 , mpPopup( &rToolbarPopup )
 {
@@ -96,89 +96,40 @@ void SAL_CALL ToolbarPopupStatusListener::statusChanged( const css::frame::Featu
         mpPopup->statusChanged( Event );
 }
 
-ToolbarPopupBase::ToolbarPopupBase(const css::uno::Reference<css::frame::XFrame>& rFrame)
-    : mxFrame(rFrame)
+}
+
+void WeldToolbarPopup::AddStatusListener(const OUString& rCommandURL)
+{
+    if (!m_xStatusListener.is())
+        m_xStatusListener.set(new ToolbarPopupStatusListener(m_xFrame, *this));
+
+    m_xStatusListener->addStatusListener(rCommandURL);
+}
+
+void WeldToolbarPopup::statusChanged(const css::frame::FeatureStateEvent& /*Event*/)
 {
 }
 
-ToolbarPopupBase::~ToolbarPopupBase()
-{
-    if (mxStatusListener.is())
-    {
-        mxStatusListener->dispose();
-        mxStatusListener.clear();
-    }
-}
-
-ToolbarPopup::ToolbarPopup( const css::uno::Reference<css::frame::XFrame>& rFrame, vcl::Window* pParentWindow,
-                            const OString& rID, const OUString& rUIXMLDescription )
-    : DockingWindow(pParentWindow, rID, rUIXMLDescription, rFrame)
-    , ToolbarPopupBase(rFrame)
-{
-    init();
-}
-
-void ToolbarPopup::init()
-{
-    vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
-    if ( pWindow )
-        static_cast<SystemWindow*>(pWindow)->GetTaskPaneList()->AddWindow( this );
-}
-
-ToolbarPopup::~ToolbarPopup()
-{
-    disposeOnce();
-}
-
-void ToolbarPopup::dispose()
-{
-    vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
-    if ( pWindow )
-        static_cast<SystemWindow*>(pWindow)->GetTaskPaneList()->RemoveWindow( this );
-
-    if ( mxStatusListener.is() )
-    {
-        mxStatusListener->dispose();
-        mxStatusListener.clear();
-    }
-
-    mxFrame.clear();
-    DockingWindow::dispose();
-}
-
-void ToolbarPopupBase::AddStatusListener( const OUString& rCommandURL )
-{
-    if( !mxStatusListener.is() )
-        mxStatusListener.set( new ToolbarPopupStatusListener( mxFrame, *this ) );
-
-    mxStatusListener->addStatusListener( rCommandURL );
-}
-
-void ToolbarPopupBase::statusChanged( const css::frame::FeatureStateEvent& /*Event*/ )
-{
-}
-
-void ToolbarPopup::EndPopupMode()
+void InterimToolbarPopup::EndPopupMode()
 {
     GetDockingManager()->EndPopupMode(this);
-}
-
-
 }
 
 WeldToolbarPopup::WeldToolbarPopup(const css::uno::Reference<css::frame::XFrame>& rFrame,
                                    weld::Widget* pParent, const OUString& rUIFile,
                                    const OString& rId)
-    : ToolbarPopupBase(rFrame)
-    , m_xBuilder(Application::CreateBuilder(pParent, rUIFile))
+    : m_xBuilder(Application::CreateBuilder(pParent, rUIFile))
     , m_xTopLevel(m_xBuilder->weld_container(rId))
     , m_xContainer(m_xBuilder->weld_container("container"))
+    , m_xFrame(rFrame)
 {
     m_xTopLevel->connect_focus_in(LINK(this, WeldToolbarPopup, FocusHdl));
 }
 
 WeldToolbarPopup::~WeldToolbarPopup()
 {
+    if (m_xStatusListener.is())
+        m_xStatusListener->dispose();
 }
 
 IMPL_LINK_NOARG(WeldToolbarPopup, FocusHdl, weld::Widget&, void)
@@ -224,19 +175,24 @@ IMPL_LINK_NOARG(ToolbarPopupContainer, FocusHdl, weld::Widget&, void)
 
 InterimToolbarPopup::InterimToolbarPopup(const css::uno::Reference<css::frame::XFrame>& rFrame, vcl::Window* pParent,
                                          std::unique_ptr<WeldToolbarPopup> xPopup)
-    : ToolbarPopup(rFrame, pParent, "InterimDockParent", "svx/ui/interimdockparent.ui")
+    : DockingWindow(pParent, "InterimDockParent", "svx/ui/interimdockparent.ui", rFrame)
     , m_xBox(get("box"))
+    , m_xFrame(rFrame)
     , m_xBuilder(Application::CreateInterimBuilder(m_xBox.get(), "svx/ui/interimparent.ui"))
     , m_xContainer(m_xBuilder->weld_container("container"))
     , m_xPopup(std::move(xPopup))
 {
+    vcl::Window* pWindow = GetTopMostParentSystemWindow(this);
+    if (pWindow)
+        static_cast<SystemWindow*>(pWindow)->GetTaskPaneList()->AddWindow(this);
+
     // move the WeldToolbarPopup contents into this interim toolbar so welded contents can appear as a dropdown in an unwelded toolbar
     m_xPopup->getTopLevel()->move(m_xPopup->getContainer(), m_xContainer.get());
 }
 
 void InterimToolbarPopup::GetFocus()
 {
-    ToolbarPopup::GetFocus();
+    DockingWindow::GetFocus();
     if (!m_xPopup)
         return;
     m_xPopup->GrabFocus();
@@ -244,11 +200,15 @@ void InterimToolbarPopup::GetFocus()
 
 void InterimToolbarPopup::dispose()
 {
+    vcl::Window* pWindow = GetTopMostParentSystemWindow(this);
+    if (pWindow)
+        static_cast<SystemWindow*>(pWindow)->GetTaskPaneList()->RemoveWindow(this);
+
     // if we have focus when disposed, pick the document window as destination
     // for focus rather than let it go to an arbitrary windows
     if (HasFocus())
     {
-        if (auto xWindow = mxFrame->getContainerWindow())
+        if (auto xWindow = m_xFrame->getContainerWindow())
             xWindow->setFocus();
     }
     // move the contents back where it belongs
@@ -256,7 +216,8 @@ void InterimToolbarPopup::dispose()
     m_xPopup.reset();
     m_xContainer.reset();
     m_xBox.clear();
-    ToolbarPopup::dispose();
+    m_xFrame.clear();
+    DockingWindow::dispose();
 }
 
 InterimToolbarPopup::~InterimToolbarPopup()
