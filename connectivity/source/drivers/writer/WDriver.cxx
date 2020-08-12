@@ -36,7 +36,7 @@ OUString SAL_CALL ODriver::getImplementationName()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 connectivity_writer_ODriver(css::uno::XComponentContext* context,
-                            css::uno::Sequence<css::uno::Any> const&)
+                            css::uno::Sequence<css::uno::Any> const& /*rArguments*/)
 {
     rtl::Reference<ODriver> ret;
     try
