@@ -57,14 +57,14 @@
 
 using namespace ::com::sun::star;
 
-sal_uInt16 SwNumRule::mnRefCount = 0;
-SwNumFormat* SwNumRule::maBaseFormats[ RULE_END ][ MAXLEVEL ] = {
+sal_uInt16 SwNumRule::snRefCount = 0;
+SwNumFormat* SwNumRule::saBaseFormats[ RULE_END ][ MAXLEVEL ] = {
     {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr } };
 
-SwNumFormat* SwNumRule::maLabelAlignmentBaseFormats[ RULE_END ][ MAXLEVEL ] = {
+SwNumFormat* SwNumRule::saLabelAlignmentBaseFormats[ RULE_END ][ MAXLEVEL ] = {
     {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr } };
 
-const sal_uInt16 SwNumRule::maDefNumIndents[ MAXLEVEL ] = {
+const sal_uInt16 SwNumRule::saDefNumIndents[ MAXLEVEL ] = {
 //inch:   0,5  1,0  1,5  2,0   2,5   3,0   3,5   4,0   4,5   5,0
         1440/4, 1440/2, 1440*3/4, 1440, 1440*5/4, 1440*3/2, 1440*7/4, 1440*2,
         1440*9/4, 1440*5/2
@@ -81,8 +81,8 @@ const SwNumFormat& SwNumRule::Get( sal_uInt16 i ) const
     return maFormats[ i ]
            ? *maFormats[ i ]
            : ( meDefaultNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION
-               ? *maBaseFormats[ meRuleType ][ i ]
-               : *maLabelAlignmentBaseFormats[ meRuleType ][ i ] );
+               ? *saBaseFormats[ meRuleType ][ i ]
+               : *saLabelAlignmentBaseFormats[ meRuleType ][ i ] );
 }
 
 const SwNumFormat* SwNumRule::GetNumFormat( sal_uInt16 i ) const
@@ -160,13 +160,13 @@ void SwNumRule::SetNumRuleMap(std::unordered_map<OUString, SwNumRule *> *
 sal_uInt16 SwNumRule::GetNumIndent( sal_uInt8 nLvl )
 {
     OSL_ENSURE( MAXLEVEL > nLvl, "NumLevel is out of range" );
-    return maDefNumIndents[ nLvl ];
+    return saDefNumIndents[ nLvl ];
 }
 
 sal_uInt16 SwNumRule::GetBullIndent( sal_uInt8 nLvl )
 {
     OSL_ENSURE( MAXLEVEL > nLvl, "NumLevel is out of range" );
-    return maDefNumIndents[ nLvl ];
+    return saDefNumIndents[ nLvl ];
 }
 
 static void lcl_SetRuleChgd( SwTextNode& rNd, sal_uInt8 nLevel )
@@ -371,7 +371,7 @@ SwNumRule::SwNumRule( const OUString& rNm,
     meDefaultNumberFormatPositionAndSpaceMode( eDefaultNumberFormatPositionAndSpaceMode ),
     msDefaultListId()
 {
-    if( !mnRefCount++ )          // for the first time, initialize
+    if( !snRefCount++ )          // for the first time, initialize
     {
         SwNumFormat* pFormat;
         sal_uInt8 n;
@@ -387,7 +387,7 @@ SwNumRule::SwNumRule( const OUString& rNm,
             pFormat->SetFirstLineOffset( lNumberFirstLineOffset );
             pFormat->SetSuffix( "." );
             pFormat->SetBulletChar( numfunc::GetBulletChar(n));
-            SwNumRule::maBaseFormats[ NUM_RULE ][ n ] = pFormat;
+            SwNumRule::saBaseFormats[ NUM_RULE ][ n ] = pFormat;
         }
         // position-and-space mode LABEL_ALIGNMENT
         // first line indent of general numbering in inch: -0,25 inch
@@ -410,7 +410,7 @@ SwNumRule::SwNumRule( const OUString& rNm,
             pFormat->SetIndentAt( cIndentAt[ n ] );
             pFormat->SetSuffix( "." );
             pFormat->SetBulletChar( numfunc::GetBulletChar(n));
-            SwNumRule::maLabelAlignmentBaseFormats[ NUM_RULE ][ n ] = pFormat;
+            SwNumRule::saLabelAlignmentBaseFormats[ NUM_RULE ][ n ] = pFormat;
         }
 
         // outline:
@@ -423,7 +423,7 @@ SwNumRule::SwNumRule( const OUString& rNm,
             pFormat->SetStart( 1 );
             pFormat->SetCharTextDistance( lOutlineMinTextDistance );
             pFormat->SetBulletChar( numfunc::GetBulletChar(n));
-            SwNumRule::maBaseFormats[ OUTLINE_RULE ][ n ] = pFormat;
+            SwNumRule::saBaseFormats[ OUTLINE_RULE ][ n ] = pFormat;
         }
         // position-and-space mode LABEL_ALIGNMENT:
         for( n = 0; n < MAXLEVEL; ++n )
@@ -434,7 +434,7 @@ SwNumRule::SwNumRule( const OUString& rNm,
             pFormat->SetStart( 1 );
             pFormat->SetPositionAndSpaceMode( SvxNumberFormat::LABEL_ALIGNMENT );
             pFormat->SetBulletChar( numfunc::GetBulletChar(n));
-            SwNumRule::maLabelAlignmentBaseFormats[ OUTLINE_RULE ][ n ] = pFormat;
+            SwNumRule::saLabelAlignmentBaseFormats[ OUTLINE_RULE ][ n ] = pFormat;
         }
     }
     OSL_ENSURE( !msName.isEmpty(), "NumRule without a name!" );
@@ -459,7 +459,7 @@ SwNumRule::SwNumRule( const SwNumRule& rNumRule )
       meDefaultNumberFormatPositionAndSpaceMode( rNumRule.meDefaultNumberFormatPositionAndSpaceMode ),
       msDefaultListId( rNumRule.msDefaultListId )
 {
-    ++mnRefCount;
+    ++snRefCount;
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
         if( rNumRule.maFormats[ n ] )
             Set( n, *rNumRule.maFormats[ n ] );
@@ -475,10 +475,10 @@ SwNumRule::~SwNumRule()
         mpNumRuleMap->erase(GetName());
     }
 
-    if( !--mnRefCount )          // the last one closes the door (?)
+    if( !--snRefCount )          // the last one closes the door (?)
     {
             // Numbering:
-            SwNumFormat** ppFormats = &SwNumRule::maBaseFormats[0][0];
+            SwNumFormat** ppFormats = &SwNumRule::saBaseFormats[0][0];
             int n;
 
             for( n = 0; n < MAXLEVEL; ++n, ++ppFormats )
@@ -494,7 +494,7 @@ SwNumRule::~SwNumRule()
                 *ppFormats = nullptr;
             }
 
-            ppFormats = &SwNumRule::maLabelAlignmentBaseFormats[0][0];
+            ppFormats = &SwNumRule::saLabelAlignmentBaseFormats[0][0];
             for( n = 0; n < MAXLEVEL; ++n, ++ppFormats )
             {
                 delete *ppFormats;

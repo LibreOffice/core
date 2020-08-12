@@ -249,7 +249,7 @@ public:
 };
 
 SwFmDrawPage::SwFmDrawPage( SdrPage* pPage ) :
-    SvxFmDrawPage( pPage ), pPageView(nullptr)
+    SvxFmDrawPage( pPage ), m_pPageView(nullptr)
 {
 }
 
@@ -274,16 +274,16 @@ void SwFmDrawPage::PreUnGroup(const uno::Reference< drawing::XShapeGroup >&  rSh
 
 SdrPageView*    SwFmDrawPage::GetPageView()
 {
-    if(!pPageView)
-        pPageView = mpView->ShowSdrPage( mpPage );
-    return pPageView;
+    if(!m_pPageView)
+        m_pPageView = mpView->ShowSdrPage( mpPage );
+    return m_pPageView;
 }
 
 void    SwFmDrawPage::RemovePageView()
 {
-    if(pPageView && mpView)
+    if(m_pPageView && mpView)
         mpView->HideSdrPage();
-    pPageView = nullptr;
+    m_pPageView = nullptr;
 }
 
 uno::Reference<drawing::XShape> SwFmDrawPage::GetShape(SdrObject* pObj)

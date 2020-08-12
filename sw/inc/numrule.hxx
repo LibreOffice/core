@@ -105,11 +105,11 @@ public:
 private:
     friend void FinitCore();
 
-    static SwNumFormat* maBaseFormats [ RULE_END ][ MAXLEVEL ];
-    static const sal_uInt16 maDefNumIndents[ MAXLEVEL ];
+    static SwNumFormat* saBaseFormats [ RULE_END ][ MAXLEVEL ];
+    static const sal_uInt16 saDefNumIndents[ MAXLEVEL ];
     /// default list level properties for position-and-space mode LABEL_ALIGNMENT
-    static SwNumFormat* maLabelAlignmentBaseFormats [ RULE_END ][ MAXLEVEL ];
-    static sal_uInt16 mnRefCount;
+    static SwNumFormat* saLabelAlignmentBaseFormats [ RULE_END ][ MAXLEVEL ];
+    static sal_uInt16 snRefCount;
 
     std::unique_ptr<SwNumFormat> maFormats[ MAXLEVEL ];
 

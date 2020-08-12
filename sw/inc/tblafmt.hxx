@@ -153,7 +153,7 @@ class SW_DLLPUBLIC SwTableAutoFormat
 {
     friend class SwDocTest;
     friend void FinitCore();       // To destroy default pointer.
-    static SwBoxAutoFormat* pDfltBoxAutoFormat;
+    static SwBoxAutoFormat* s_pDefaultBoxAutoFormat;
 
     css::uno::WeakReference<css::uno::XInterface> m_wXObject;
 
