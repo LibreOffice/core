@@ -37,7 +37,7 @@
 extern "C" {
 #endif
 
-typedef sal_Int32 oslInterlockedCount;
+typedef long int oslInterlockedCount;
 
 /** Increments the count variable addressed by pCount.
     @param pCount Address of count variable
