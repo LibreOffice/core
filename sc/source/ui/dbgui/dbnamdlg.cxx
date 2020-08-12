@@ -42,7 +42,7 @@ class DBSaveData;
 
 }
 
-static DBSaveData* pSaveObj = nullptr;
+static std::unique_ptr<DBSaveData> xSaveObj;
 
 namespace
 {
@@ -167,14 +167,14 @@ ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pPa
     aStrSource      = m_xFTSource->get_label();
     aStrOperations  = m_xFTOperations->get_label();
 
-    pSaveObj = new DBSaveData( *m_xEdAssign, *m_xBtnHeader, *m_xBtnTotals,
-                        *m_xBtnDoSize, *m_xBtnKeepFmt, *m_xBtnStripData, theCurArea );
+    xSaveObj.reset(new DBSaveData( *m_xEdAssign, *m_xBtnHeader, *m_xBtnTotals,
+                        *m_xBtnDoSize, *m_xBtnKeepFmt, *m_xBtnStripData, theCurArea ));
     Init();
 }
 
 ScDbNameDlg::~ScDbNameDlg()
 {
-    DELETEZ( pSaveObj );
+    xSaveObj.reset();
 }
 
 void ScDbNameDlg::Init()
@@ -251,7 +251,7 @@ void ScDbNameDlg::Init()
     m_xEdAssign->SetText( theAreaStr );
     m_xEdName->grab_focus();
     bSaved = true;
-    pSaveObj->Save();
+    xSaveObj->Save();
     NameModifyHdl( *m_xEdName );
 }
 
@@ -293,7 +293,7 @@ void ScDbNameDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
     m_xOptions->set_sensitive(true);
     m_xBtnAdd->set_sensitive(true);
     bSaved = true;
-    pSaveObj->Save();
+    xSaveObj->Save();
 }
 
 void ScDbNameDlg::Close()
@@ -465,7 +465,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl, weld::Button&, void)
             SetInfoStrings( nullptr );     // empty
             theCurArea = ScRange();
             bSaved = true;
-            pSaveObj->Save();
+            xSaveObj->Save();
             NameModifyHdl( *m_xEdName );
         }
         else
@@ -542,7 +542,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl, weld::Button&, void)
     m_xBtnStripData->set_active( false );
     SetInfoStrings( nullptr );     // empty
     bSaved=false;
-    pSaveObj->Restore();
+    xSaveObj->Restore();
     NameModifyHdl( *m_xEdName );
 }
 
@@ -560,7 +560,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl, weld::ComboBox&, void)
         m_xAssignFrame->set_sensitive(false);
         m_xOptions->set_sensitive(false);
         //bSaved=sal_False;
-        //pSaveObj->Restore();
+        //xSaveObj->Restore();
         //@BugID 54702 enable/disable in the base class only
         //SFX_APPWINDOW->Disable(sal_False);        //! general method in ScAnyRefDlg
         bRefInputMode = false;
@@ -575,7 +575,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl, weld::ComboBox&, void)
             if(!bSaved)
             {
                 bSaved = true;
-                pSaveObj->Save();
+                xSaveObj->Save();
             }
             UpdateDBData( theName );
         }
@@ -585,7 +585,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl, weld::ComboBox&, void)
                 m_xBtnAdd->set_label( aStrAdd );
 
             bSaved=false;
-            pSaveObj->Restore();
+            xSaveObj->Restore();
 
             if ( !m_xEdAssign->GetText().isEmpty() )
             {
