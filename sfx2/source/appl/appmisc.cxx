@@ -99,7 +99,7 @@ SfxModule* SfxApplication::GetModule_Impl()
 }
 
 bool  SfxApplication::IsDowning() const { return pImpl->bDowning; }
-SfxDispatcher* SfxApplication::GetAppDispatcher_Impl() { return pImpl->pAppDispat; }
+SfxDispatcher* SfxApplication::GetAppDispatcher_Impl() { return pImpl->pAppDispat.get(); }
 SfxSlotPool& SfxApplication::GetAppSlotPool_Impl() const { return *pImpl->pSlotPool; }
 
 static bool FileExists( const INetURLObject& rURL )

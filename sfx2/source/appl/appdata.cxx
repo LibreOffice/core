@@ -21,12 +21,18 @@
 
 #include <appdata.hxx>
 #include <sfxpicklist.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/doctempl.hxx>
+#include <sfx2/fcontnr.hxx>
 #include <sfx2/module.hxx>
+#include <sfx2/msgpool.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/objsh.hxx>
-#include <unoctitm.hxx>
 #include <appbaslib.hxx>
+#include <childwinimpl.hxx>
+#include <ctrlfactoryimpl.hxx>
+#include <shellimpl.hxx>
+#include <unoctitm.hxx>
 #include <svl/svdde.hxx>
 
 #include <basic/basicmanagerrepository.hxx>
@@ -68,28 +74,13 @@ void SfxBasicManagerCreationListener::onBasicManagerCreated( const Reference< XM
 }
 
 SfxAppData_Impl::SfxAppData_Impl()
-    : pFactArr(nullptr)
-    , pMatcher( nullptr )
-    , m_pToolsErrorHdl(nullptr)
-    , m_pSoErrorHdl(nullptr)
-#if HAVE_FEATURE_SCRIPTING
-    , m_pSbxErrorHdl(nullptr)
-#endif
-    , pTemplates( nullptr )
-    , pPool(nullptr)
+    : pPool(nullptr)
     , pProgress(nullptr)
     , nDocModalMode(0)
     , nRescheduleLocks(0)
-    , pTbxCtrlFac(nullptr)
-    , pStbCtrlFac(nullptr)
-    , pViewFrames(nullptr)
-    , pViewShells(nullptr)
-    , pObjShells(nullptr)
     , pBasicManager( new SfxBasicManagerHolder )
     , pBasMgrListener( new SfxBasicManagerCreationListener( *this ) )
     , pViewFrame( nullptr )
-    , pSlotPool( nullptr )
-    , pAppDispat( nullptr )
     , bDowning( true )
     , bInQuit( false )
 
@@ -117,10 +108,10 @@ SfxAppData_Impl::~SfxAppData_Impl()
 SfxDocumentTemplates* SfxAppData_Impl::GetDocumentTemplates()
 {
     if ( !pTemplates )
-        pTemplates = new SfxDocumentTemplates;
+        pTemplates.reset(new SfxDocumentTemplates);
     else
         pTemplates->ReInitFromComponent();
-    return pTemplates;
+    return pTemplates.get();
 }
 
 void SfxAppData_Impl::OnApplicationBasicManagerCreated( BasicManager& _rBasicManager )

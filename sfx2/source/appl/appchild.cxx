@@ -39,7 +39,7 @@ void SfxApplication::RegisterChildWindow_Impl( SfxModule *pMod, std::unique_ptr<
     }
 
     if (!pImpl->pFactArr)
-        pImpl->pFactArr = new SfxChildWinFactArr_Impl;
+        pImpl->pFactArr.reset(new SfxChildWinFactArr_Impl);
 
     for (size_t nFactory=0; nFactory<pImpl->pFactArr->size(); ++nFactory)
     {
@@ -83,7 +83,7 @@ void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, sal_uInt1
         DBG_ASSERT( pImpl, "No AppData!" );
         DBG_ASSERT( pImpl->pFactArr, "No Factories!" );
 
-        pFactories = pImpl->pFactArr;
+        pFactories = pImpl->pFactArr.get();
         sal_uInt16 nCount = pFactories->size();
         for (sal_uInt16 nFactory=0; nFactory<nCount; ++nFactory)
         {
