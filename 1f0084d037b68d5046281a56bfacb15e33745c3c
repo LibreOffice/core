@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4e616e78_c8389334",
+        "filename": "cui/source/inc/AdditionsDialog.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-08-12T11:49:48Z",
+      "side": 1,
+      "message": "Please move the constructor to the cxx file. It\u0027s much too large for inlining and not performance critical at all.",
+      "revId": "1f0084d037b68d5046281a56bfacb15e33745c3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
