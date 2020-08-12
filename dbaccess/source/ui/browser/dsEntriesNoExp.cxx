@@ -25,7 +25,6 @@
 #include <browserids.hxx>
 #include <imageprovider.hxx>
 #include <osl/diagnose.h>
-#include "dbtreeview.hxx"
 #include <dbtreelistbox.hxx>
 #include "dbtreemodel.hxx"
 
@@ -52,13 +51,13 @@ SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getChildType(const weld::T
 
 OUString SbaTableQueryBrowser::GetEntryText(const weld::TreeIter& rEntry) const
 {
-    return m_pTreeView->getListBox().GetWidget().get_text(rEntry);
+    return m_pTreeView->GetWidget().get_text(rEntry);
 }
 
 SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getEntryType(const weld::TreeIter& rEntry) const
 {
-    std::unique_ptr<weld::TreeIter> xRootEntry = m_pTreeView->getListBox().GetRootLevelParent(&rEntry);
-    weld::TreeView& rTreeView = m_pTreeView->getListBox().GetWidget();
+    std::unique_ptr<weld::TreeIter> xRootEntry = m_pTreeView->GetRootLevelParent(&rEntry);
+    weld::TreeView& rTreeView = m_pTreeView->GetWidget();
 
     if (rTreeView.iter_compare(*xRootEntry, rEntry) == 0)
         return etDatasource;
@@ -116,7 +115,7 @@ void SbaTableQueryBrowser::select(weld::TreeIter* pEntry, bool bSelect)
 {
     if (pEntry)
     {
-        weld::TreeView& rTreeView = m_pTreeView->getListBox().GetWidget();
+        weld::TreeView& rTreeView = m_pTreeView->GetWidget();
         rTreeView.set_text_emphasis(*pEntry, bSelect, 0);
     }
     else
@@ -129,7 +128,7 @@ void SbaTableQueryBrowser::selectPath(weld::TreeIter* pEntry, bool bSelect)
 {
     if (!pEntry)
         return;
-    weld::TreeView& rTreeView = m_pTreeView->getListBox().GetWidget();
+    weld::TreeView& rTreeView = m_pTreeView->GetWidget();
     std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator(pEntry));
     do
     {
@@ -140,7 +139,7 @@ void SbaTableQueryBrowser::selectPath(weld::TreeIter* pEntry, bool bSelect)
 
 bool SbaTableQueryBrowser::isSelected(const weld::TreeIter& rEntry) const
 {
-    weld::TreeView& rTreeView = m_pTreeView->getListBox().GetWidget();
+    weld::TreeView& rTreeView = m_pTreeView->GetWidget();
     return rTreeView.get_text_emphasis(rEntry, 0);
 }
 

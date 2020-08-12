@@ -3114,8 +3114,6 @@ dbaccess/source/ui/browser/dbexchange.cxx
 dbaccess/source/ui/browser/dbloader.cxx
 dbaccess/source/ui/browser/dbtreemodel.cxx
 dbaccess/source/ui/browser/dbtreemodel.hxx
-dbaccess/source/ui/browser/dbtreeview.cxx
-dbaccess/source/ui/browser/dbtreeview.hxx
 dbaccess/source/ui/browser/dsEntriesNoExp.cxx
 dbaccess/source/ui/browser/dsbrowserDnD.cxx
 dbaccess/source/ui/browser/exsrcbrw.cxx

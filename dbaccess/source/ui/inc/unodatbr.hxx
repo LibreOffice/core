@@ -93,7 +93,7 @@ namespace dbaui
         OUString         m_sQueryCommand;    // the command of the query currently loaded (if any)
         //OUString         m_sToBeLoaded;      // contains the element name which should be loaded if any
 
-        VclPtr<DBTreeView>      m_pTreeView; // contains the datasources of the registry
+        VclPtr<InterimDBTreeListBox> m_pTreeView; // contains the datasources of the registry
         VclPtr<Splitter>        m_pSplitter;
         std::unique_ptr<weld::TreeIter> m_xCurrentlyDisplayed;
         ImplSVEvent *           m_nAsyncDrop;
