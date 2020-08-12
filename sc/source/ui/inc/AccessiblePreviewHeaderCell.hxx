@@ -113,7 +113,7 @@ protected:
 
 private:
     ScPreviewShell*     mpViewShell;
-    accessibility::AccessibleTextHelper* mpTextHelper;
+    std::unique_ptr<accessibility::AccessibleTextHelper> mxTextHelper;
     sal_Int32           mnIndex;
     ScAddress           maCellPos;
     bool                mbColumnHeader;
