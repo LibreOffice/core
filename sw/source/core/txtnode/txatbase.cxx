@@ -145,15 +145,18 @@ void SwTextAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
         xmlTextWriterWriteAttribute(pWriter, BAD_CAST("which"), BAD_CAST(pWhich));
     if (oValue)
         xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(oValue->getStr()));
+
     switch (Which())
     {
         case RES_TXTATR_AUTOFMT:
             GetAutoFormat().dumpAsXml(pWriter);
             break;
         case RES_TXTATR_FIELD:
+        case RES_TXTATR_INPUTFIELD:
             GetFormatField().dumpAsXml(pWriter);
             break;
         default:
+            SAL_WARN("Unhandled TXTATR");
             break;
     }
 
