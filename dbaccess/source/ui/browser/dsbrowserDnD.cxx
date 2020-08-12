@@ -175,11 +175,6 @@ namespace dbaui
         return DND_ACTION_NONE;
     }
 
-    bool SbaTableQueryBrowser::requestDrag( const Point& /*rPosPixel*/ )
-    {
-        return false;
-    }
-
     bool SbaTableQueryBrowser::requestDrag(const weld::TreeIter& rEntry)
     {
         // it must be a query/table

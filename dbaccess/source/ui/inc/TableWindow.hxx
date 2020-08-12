@@ -32,8 +32,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-class SvTreeListEntry;
-
 // Flags for the size adjustment of SbaJoinTabWins
 enum class SizingFlags {
     NONE    = 0x0000,

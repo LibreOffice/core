@@ -2268,38 +2268,9 @@ Any OApplicationController::getCurrentSelection( Control& _rControl ) const
     return makeAny( aSelection );
 }
 
-bool OApplicationController::requestQuickHelp( const SvTreeListEntry* /*_pEntry*/, OUString& /*_rText*/ ) const
-{
-    return false;
-}
-
 bool OApplicationController::requestQuickHelp(const void* /*pUserData*/, OUString& /*rText*/) const
 {
     return false;
-}
-
-bool OApplicationController::requestDrag(  const Point& /*_rPosPixel*/ )
-{
-    rtl::Reference<TransferableHelper> pTransfer;
-    if ( getContainer() && getContainer()->getSelectionCount() )
-    {
-        try
-        {
-            pTransfer = copyObject( );
-
-            if ( pTransfer && getContainer()->getDetailView() )
-            {
-                ElementType eType = getContainer()->getElementType();
-                pTransfer->StartDrag( getContainer()->getDetailView()->getTreeWindow(), ((eType == E_FORM || eType == E_REPORT) ? DND_ACTION_COPYMOVE : DND_ACTION_COPY) );
-            }
-        }
-        catch(const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("dbaccess");
-        }
-    }
-
-    return pTransfer.is();
 }
 
 bool OApplicationController::requestDrag(const weld::TreeIter& /*rEntry*/)

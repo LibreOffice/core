@@ -33,8 +33,6 @@
 
 #include <vector>
 
-class SvTreeListEntry;
-
 namespace dbaui
 {
     class OAppBorderWindow;
@@ -78,11 +76,6 @@ namespace dbaui
         DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
         DECL_LINK(FocusInHdl, weld::Widget&, void);
         DECL_LINK(FocusOutHdl, weld::Widget&, void);
-
-        /** sets a new current entry, and invalidates the old and the new one, if necessary
-            @return <TRUE/> if and only if the "current entry" changed
-        */
-        bool    setCurrentEntryInvalidate( SvTreeListEntry* _pEntry );
 
         void updateHelpText();
 

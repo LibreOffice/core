@@ -28,7 +28,6 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 
-class SvTreeListEntry;
 namespace dbaui
 {
     class OGenericUnoController;

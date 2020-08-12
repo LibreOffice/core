@@ -39,14 +39,11 @@
 #include "TableCopyHelper.hxx"
 #include "commontypes.hxx"
 
-class SvTreeListEntry;
 class Splitter;
-struct SvSortData;
 class ODataClipboard;
 
 namespace com::sun::star::container { class XNameContainer; }
 
-class SvTreeList;
 namespace dbaui
 {
 
@@ -211,9 +208,7 @@ namespace dbaui
         virtual void            Execute(sal_uInt16 nId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
 
         // IControlActionListener overridables
-        virtual bool        requestQuickHelp( const SvTreeListEntry* _pEntry, OUString& _rText ) const override;
         virtual bool        requestQuickHelp(const void* pUserData, OUString& rText) const override;
-        virtual bool        requestDrag( const Point& _rPosPixel ) override;
         virtual bool        requestDrag(const weld::TreeIter& rEntry) override;
         virtual sal_Int8    queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors ) override;
         virtual sal_Int8    executeDrop( const ExecuteDropEvent& _rEvt ) override;

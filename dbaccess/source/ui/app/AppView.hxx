@@ -30,7 +30,6 @@
 namespace com::sun::star::beans    { class XPropertySet; }
 
 class Control;
-class SvTreeListEntry;
 namespace weld
 {
     class TreeIter;
