@@ -36,6 +36,7 @@
 #include <vcl/event.hxx>
 #include <vcl/help.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/svapp.hxx>
 
 #include <memory>
 
@@ -123,16 +124,6 @@ bool TreeListBox::DoChildKeyInput(const KeyEvent& /*rKEvt*/)
 {
     // nothing by default
     return false;
-}
-
-bool TreeListBox::DoContextMenu(const CommandEvent& /*rCEvt*/)
-{
-    return false;
-}
-
-IMPL_LINK(TreeListBox, CommandHdl, const CommandEvent&, rCEvt, bool)
-{
-    return DoContextMenu(rCEvt);
 }
 
 IMPL_LINK(TreeListBox, KeyInputHdl, const KeyEvent&, rKEvt, bool)
@@ -345,7 +336,7 @@ namespace
     }
 }
 
-bool InterimDBTreeListBox::DoContextMenu(const CommandEvent& rCEvt)
+IMPL_LINK(TreeListBox, CommandHdl, const CommandEvent&, rCEvt, bool)
 {
     if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
         return false;
@@ -381,6 +372,8 @@ bool InterimDBTreeListBox::DoContextMenu(const CommandEvent& rCEvt)
     if (!xMenuController.is())
         return false;
 
+    VclPtr<vcl::Window> xMenuParent = m_pContextMenuProvider->getMenuParent(*m_xTreeView);
+
     rtl::Reference xPopupMenu( new VCLXPopupMenu );
     xMenuController->setPopupMenu( xPopupMenu.get() );
     VclPtr<PopupMenu> pContextMenu( static_cast< PopupMenu* >( xPopupMenu->GetMenu() ) );
@@ -392,12 +385,12 @@ bool InterimDBTreeListBox::DoContextMenu(const CommandEvent& rCEvt)
         OUString aMenuIdentifier( "private:resource/popupmenu/" + aResourceName );
 
         ContextMenuExecuteEvent aEvent;
-        aEvent.SourceWindow = VCLUnoHelper::GetInterface( this );
+        aEvent.SourceWindow = VCLUnoHelper::GetInterface(xMenuParent);
         aEvent.ExecutePosition.X = -1;
         aEvent.ExecutePosition.Y = -1;
         aEvent.ActionTriggerContainer = ::framework::ActionTriggerHelper::CreateActionTriggerContainerFromMenu(
             pContextMenu.get(), &aMenuIdentifier );
-        aEvent.Selection = new SelectionSupplier( m_pContextMenuProvider->getCurrentSelection( *this ) );
+        aEvent.Selection = new SelectionSupplier(m_pContextMenuProvider->getCurrentSelection(*m_xTreeView));
 
         ::comphelper::OInterfaceIteratorHelper2 aIter( *pInterceptors );
         bool bModifiedMenu = false;
@@ -450,7 +443,7 @@ bool InterimDBTreeListBox::DoContextMenu(const CommandEvent& rCEvt)
     }
 
     // do action for selected entry in popup menu
-    pContextMenu->Execute(this, rPos);
+    pContextMenu->Execute(xMenuParent, rPos);
     pContextMenu.disposeAndClear();
 
     css::uno::Reference<css::lang::XComponent> xComponent(xMenuController, css::uno::UNO_QUERY);
@@ -476,6 +469,23 @@ std::unique_ptr<weld::TreeIter> TreeListBox::GetRootLevelParent(const weld::Tree
     while (m_xTreeView->get_iter_depth(*xEntry))
         m_xTreeView->iter_parent(*xEntry);
     return xEntry;
+}
+
+DBTreeViewBase::DBTreeViewBase(weld::Container* pContainer)
+    : m_xBuilder(Application::CreateBuilder(pContainer, "dbaccess/ui/dbtreelist.ui"))
+    , m_xContainer(m_xBuilder->weld_container("DBTreeList"))
+    , m_xTreeListBox(new TreeListBox(m_xBuilder->weld_tree_view("treeview")))
+{
+}
+
+DBTreeViewBase::~DBTreeViewBase()
+{
+}
+
+DBTreeView::DBTreeView(weld::Container* pContainer)
+    : DBTreeViewBase(pContainer)
+{
+    m_xTreeListBox.reset(new TreeListBox(m_xBuilder->weld_tree_view("treeview")));
 }
 
 }   // namespace dbaui

@@ -2261,11 +2261,16 @@ IController& OApplicationController::getCommandController()
     return &m_aContextMenuInterceptors;
 }
 
-Any OApplicationController::getCurrentSelection( Control& _rControl ) const
+Any OApplicationController::getCurrentSelection(weld::TreeView& rControl) const
 {
     Sequence< NamedDatabaseObject > aSelection;
-    getContainer()->describeCurrentSelectionForControl( _rControl, aSelection );
+    getContainer()->describeCurrentSelectionForControl(rControl, aSelection);
     return makeAny( aSelection );
+}
+
+vcl::Window* OApplicationController::getMenuParent(weld::TreeView& rControl) const
+{
+    return getContainer()->getMenuParent(rControl);
 }
 
 bool OApplicationController::requestQuickHelp(const void* /*pUserData*/, OUString& /*rText*/) const

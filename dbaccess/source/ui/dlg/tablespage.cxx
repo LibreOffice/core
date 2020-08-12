@@ -55,7 +55,7 @@ namespace dbaui
         , m_bCatalogAtStart(true)
         , m_pTablesDlg(pTablesDlg)
         , m_xTables(m_xBuilder->weld_widget("TablesFilterPage"))
-        , m_xTablesList(new TableTreeListBox(m_xBuilder->weld_tree_view("treeview"), true))
+        , m_xTablesList(new OTableTreeListBox(m_xBuilder->weld_tree_view("treeview"), true))
     {
         m_xTablesList->init();
 

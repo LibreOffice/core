@@ -61,7 +61,7 @@ namespace dbaui
         std::unique_ptr<weld::RadioButton> m_xCaseTables;
         std::unique_ptr<weld::RadioButton> m_xCaseQueries;
 
-        std::unique_ptr<TableTreeListBox> m_xTableList;
+        std::unique_ptr<OTableTreeListBox> m_xTableList;
         std::unique_ptr<weld::TreeView> m_xQueryList;
 
         std::unique_ptr<weld::Button> m_xAddButton;
