@@ -170,9 +170,9 @@ LayoutToolbarMenu::LayoutToolbarMenu(SlideLayoutController* pControl, weld::Widg
     DrawViewMode eMode = DrawViewMode_DRAW;
 
     // find out which view is running
-    if( mxFrame.is() ) try
+    if( m_xFrame.is() ) try
     {
-        Reference< XPropertySet > xControllerSet( mxFrame->getController(), UNO_QUERY_THROW );
+        Reference< XPropertySet > xControllerSet( m_xFrame->getController(), UNO_QUERY_THROW );
         xControllerSet->getPropertyValue( "DrawViewMode" ) >>= eMode;
     }
     catch( Exception& )
@@ -220,7 +220,7 @@ LayoutToolbarMenu::LayoutToolbarMenu(SlideLayoutController* pControl, weld::Widg
     if( eMode != DrawViewMode_DRAW )
         return;
 
-    if( !mxFrame.is() )
+    if( !m_xFrame.is() )
         return;
 
     OUString sSlotStr;
@@ -230,7 +230,7 @@ LayoutToolbarMenu::LayoutToolbarMenu(SlideLayoutController* pControl, weld::Widg
     else
         sSlotStr = ".uno:Undo";
 
-    css::uno::Reference<css::graphic::XGraphic> xSlotImage = vcl::CommandInfoProvider::GetXGraphicForCommand(sSlotStr, mxFrame);
+    css::uno::Reference<css::graphic::XGraphic> xSlotImage = vcl::CommandInfoProvider::GetXGraphicForCommand(sSlotStr, m_xFrame);
 
     OUString sSlotTitle;
     if( bInsertPage )
