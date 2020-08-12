@@ -145,8 +145,10 @@ sal_uInt16 CntItemPool::Release()
 
     if ( !nRefs )
     {
-        DELETEZ( _pThePool );
-        DELETEZ( pPoolDefs_Impl );
+        delete _pThePool;
+        _pThePool = nullptr;
+        delete pPoolDefs_Impl;
+        pPoolDefs_Impl = nullptr;
         return 0;
     }
 

@@ -143,7 +143,10 @@ void SfxFrame::DoClose_Impl()
         pImpl->pCurrentViewFrame->Close();
 
     if ( pImpl->bOwnsBindings )
-        DELETEZ( pBindings );
+    {
+        delete pBindings;
+        pBindings = nullptr;
+    }
 
     delete this;
 }
