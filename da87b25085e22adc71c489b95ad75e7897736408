@@ -22,6 +22,30 @@
       "revId": "da87b25085e22adc71c489b95ad75e7897736408",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c6355e9_63793dcc",
+        "filename": "offapi/com/sun/star/chart2/DataSeries.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-08-12T10:05:49Z",
+      "side": 1,
+      "message": "Ah, ok. These are the custom leader lines of the data labels at custom positions.\n\nIn this case, I suggest the name ShowCustomLeaderLines, to avoid the upcoming bubble labels, which are always visible.",
+      "parentUuid": "ff4490fd_7100fc9e",
+      "range": {
+        "startLine": 196,
+        "startChar": 52,
+        "endLine": 196,
+        "endChar": 67
+      },
+      "revId": "da87b25085e22adc71c489b95ad75e7897736408",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
