@@ -88,9 +88,11 @@
 #include <editeng/charhiddenitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/keepitem.hxx>
+#include <svx/xdef.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
+#include <svx/xflclit.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/unobrushitemhelper.hxx>
 #include <svl/grabbagitem.hxx>
@@ -5521,8 +5523,10 @@ void DocxAttributeOutput::WritePostponedOLE()
     m_pPostponedOLEs.reset();
 }
 
-void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* rFlyFrameFormat )
+void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat )
 {
+    OSL_ASSERT(pFlyFrameFormat);
+
     // get interoperability information about embedded objects
     uno::Reference< beans::XPropertySet > xPropSet( m_rExport.m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
     uno::Sequence< beans::PropertyValue > aGrabBag, aObjectsInteropList,aObjectInteropAttributes;
@@ -5563,7 +5567,7 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
     {
         // the embedded file could not be saved
         // fallback: save as an image
-        FlyFrameGraphic( nullptr, rSize, rFlyFrameFormat, &rNode );
+        FlyFrameGraphic( nullptr, rSize, pFlyFrameFormat, &rNode );
         return;
     }
 
@@ -5603,18 +5607,18 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
     //This string will store the relative position for aPos
     OString aAnch;
 
-    if (rFlyFrameFormat && rFlyFrameFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
+    if (pFlyFrameFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
     {
         //Get the horizontal alignment of the OLE via the frame format, to aHAlign
-        OString aHAlign = convertToOOXMLHoriOrient(rFlyFrameFormat->GetHoriOrient().GetHoriOrient(),
-            rFlyFrameFormat->GetHoriOrient().IsPosToggle());
+        OString aHAlign = convertToOOXMLHoriOrient(pFlyFrameFormat->GetHoriOrient().GetHoriOrient(),
+            pFlyFrameFormat->GetHoriOrient().IsPosToggle());
         //Get the vertical alignment of the OLE via the frame format to aVAlign
-        OString aVAlign = convertToOOXMLVertOrient(rFlyFrameFormat->GetVertOrient().GetVertOrient());
+        OString aVAlign = convertToOOXMLVertOrient(pFlyFrameFormat->GetVertOrient().GetVertOrient());
 
         //Get the relative horizontal positions for the anchors
-        OString aHAnch = convertToOOXMLHoriOrientRel(rFlyFrameFormat->GetHoriOrient().GetRelationOrient());
+        OString aHAnch = convertToOOXMLHoriOrientRel(pFlyFrameFormat->GetHoriOrient().GetRelationOrient());
         //Get the relative vertical positions for the anchors
-        OString aVAnch = convertToOOXMLVertOrientRel(rFlyFrameFormat->GetVertOrient().GetRelationOrient());
+        OString aVAnch = convertToOOXMLVertOrientRel(pFlyFrameFormat->GetVertOrient().GetRelationOrient());
 
         //Choice that the horizontal position is relative or not
         if (!aHAlign.isEmpty())
@@ -5631,8 +5635,8 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
 
         //Query the positions to aPos from frameformat
         aPos =
-            "position:absolute;margin-left:" + OString::number(double(rFlyFrameFormat->GetHoriOrient().GetPos()) / 20) +
-            "pt;margin-top:" + OString::number(double(rFlyFrameFormat->GetVertOrient().GetPos()) / 20) + "pt;";
+            "position:absolute;margin-left:" + OString::number(double(pFlyFrameFormat->GetHoriOrient().GetPos()) / 20) +
+            "pt;margin-top:" + OString::number(double(pFlyFrameFormat->GetVertOrient().GetPos()) / 20) + "pt;";
     }
 
     OString sShapeStyle = "width:" + OString::number( double( rSize.Width() ) / 20 ) +
@@ -5645,10 +5649,24 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
         sShapeStyle = aPos + sShapeStyle  + aAnch;
 
     // shape definition
-    m_pSerializer->startElementNS( XML_v, XML_shape,
-                                   XML_id, sShapeId.getStr(),
-                                   XML_style, sShapeStyle.getStr(),
-                                   FSNS( XML_o, XML_ole ), ""); //compulsory, even if it's empty
+    const bool bFilled = pFlyFrameFormat->GetAttrSet().Get(XATTR_FILLSTYLE).GetValue() != FillStyle::FillStyle_NONE;
+    const Color rShapeColor = pFlyFrameFormat->GetAttrSet().Get(XATTR_FILLCOLOR).GetColorValue();
+    if (bFilled)
+    {
+        m_pSerializer->startElementNS( XML_v, XML_shape,
+                                       XML_id, sShapeId.getStr(),
+                                       XML_style, sShapeStyle.getStr(),
+                                       XML_fillcolor, "#" + msfilter::util::ConvertColor( rShapeColor ),
+                                       FSNS( XML_o, XML_ole ), ""); //compulsory, even if it's empty
+    }
+    else
+    {
+        m_pSerializer->startElementNS( XML_v, XML_shape,
+                                       XML_id, sShapeId.getStr(),
+                                       XML_style, sShapeStyle.getStr(),
+                                       XML_filled, "f",
+                                       FSNS( XML_o, XML_ole ), ""); //compulsory, even if it's empty
+    }
 
     // shape filled with the preview image
     m_pSerializer->singleElementNS( XML_v, XML_imagedata,
@@ -5656,10 +5674,10 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
                                     FSNS( XML_o, XML_title ), "" );
 
     //export wrap settings
-    if(rFlyFrameFormat && rFlyFrameFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
+    if(pFlyFrameFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
     {
-        const SwFormatSurround aWrap = rFlyFrameFormat->GetSurround();
-        bool bIsCountur = aWrap.IsContour();
+        const SwFormatSurround aWrap = pFlyFrameFormat->GetSurround();
+        const bool bIsCountur = aWrap.IsContour();
 
         if (aWrap.GetSurround() == text::WrapTextMode::WrapTextMode_NONE)
             m_pSerializer->singleElementNS(XML_w10, XML_wrap, XML_type, "topAndBottom");
