@@ -428,7 +428,10 @@ void SfxStateCache::SetState_Impl
 
         // Remember new value
         if ( !IsInvalidItem(pLastItem) )
-            DELETEZ(pLastItem);
+        {
+            delete pLastItem;
+            pLastItem = nullptr;
+        }
         if ( pState && !IsInvalidItem(pState) )
             pLastItem = pState->Clone();
         else

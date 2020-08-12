@@ -1591,7 +1591,10 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, std::unique_ptr<SfxPoolI
                 xBind->Release();
                 xBind.clear();
                 if ( bDeleteCache )
-                    DELETEZ( pCache );
+                {
+                    delete pCache;
+                    pCache = nullptr;
+                }
                 return eState;
             }
         }
