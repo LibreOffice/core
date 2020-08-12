@@ -151,9 +151,11 @@ void SwTextAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
             GetAutoFormat().dumpAsXml(pWriter);
             break;
         case RES_TXTATR_FIELD:
+        case RES_TXTATR_INPUTFIELD:
             GetFormatField().dumpAsXml(pWriter);
             break;
         default:
+            SAL_WARN("sw.core", "Unhandled TXTATR");
             break;
     }
 
