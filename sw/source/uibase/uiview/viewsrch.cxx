@@ -164,8 +164,8 @@ void SwView::ExecSearch(SfxRequest& rReq)
             delete s_pSrchItem;
             s_pSrchItem = pArgs->Get(SID_SEARCH_ITEM).Clone();
 
-            DELETEZ( s_pSearchList );
-            DELETEZ( s_pReplaceList );
+            s_xSearchList.reset();
+            s_xReplaceList.reset();
 
             SvxSearchDialog *const pSrchDlg(GetSearchDialog());
             if (pSrchDlg)
@@ -173,11 +173,11 @@ void SwView::ExecSearch(SfxRequest& rReq)
                 // We will remember the search-/replace items.
                 const SearchAttrItemList* pList = pSrchDlg->GetSearchItemList();
                 if( nullptr != pList && pList->Count() )
-                    s_pSearchList = new SearchAttrItemList( *pList );
+                    s_xSearchList.reset(new SearchAttrItemList( *pList ));
 
                 pList = pSrchDlg->GetReplaceItemList();
                 if (nullptr != pList && pList->Count())
-                    s_pReplaceList = new SearchAttrItemList( *pList );
+                    s_xReplaceList.reset(new SearchAttrItemList( *pList ));
             }
         }
         break;
@@ -194,16 +194,16 @@ void SwView::ExecSearch(SfxRequest& rReq)
             SvxSearchDialog * pSrchDlg(GetSearchDialog());
             if (pSrchDlg)
             {
-                DELETEZ( s_pSearchList );
-                DELETEZ( s_pReplaceList );
+                s_xSearchList.reset();
+                s_xReplaceList.reset();
 
                 const SearchAttrItemList* pList = pSrchDlg->GetSearchItemList();
                 if( nullptr != pList && pList->Count() )
-                    s_pSearchList = new SearchAttrItemList( *pList );
+                    s_xSearchList.reset(new SearchAttrItemList( *pList ));
 
                 pList = pSrchDlg->GetReplaceItemList();
                 if (nullptr != pList && pList->Count())
-                    s_pReplaceList = new SearchAttrItemList( *pList );
+                    s_xReplaceList.reset(new SearchAttrItemList( *pList ));
             }
 
             if (nSlot == FN_REPEAT_SEARCH)
@@ -269,7 +269,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
 
                     SvxSearchCmd nCmd = SvxSearchCmd::FIND;
                     if( !s_pSrchItem->GetReplaceString().isEmpty() ||
-                        !s_pReplaceList )
+                        !s_xReplaceList )
                     {
                         // Prevent, that the replaced string will be found again
                         // if the replacement string is containing the search string.
@@ -293,7 +293,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
                             m_pWrtShell->SwapPam();
                         }
                     }
-                    else if( s_pReplaceList )
+                    else if( s_xReplaceList )
                         nCmd = SvxSearchCmd::REPLACE;
 
                     // 2) Search further (without replacing!)
@@ -420,16 +420,16 @@ void SwView::ExecSearch(SfxRequest& rReq)
             {
                 nWhich = SID_SEARCH_REPLACESET;
 
-                if ( s_pReplaceList )
+                if ( s_xReplaceList )
                 {
-                    s_pReplaceList->Get( aSet );
-                    DELETEZ( s_pReplaceList );
+                    s_xReplaceList->Get( aSet );
+                    s_xReplaceList.reset();
                 }
             }
-            else if ( s_pSearchList )
+            else if ( s_xSearchList )
             {
-                s_pSearchList->Get( aSet );
-                DELETEZ( s_pSearchList );
+                s_xSearchList->Get( aSet );
+                s_xSearchList.reset();
             }
             rReq.SetReturnValue( SvxSetItem( nWhich, aSet ) );
         }
@@ -685,11 +685,11 @@ void SwView::Replace()
 
             bool bReplaced = m_pWrtShell->SwEditShell::Replace( s_pSrchItem->GetReplaceString(),
                                                                   s_pSrchItem->GetRegExp());
-            if( bReplaced && s_pReplaceList && s_pReplaceList->Count() && m_pWrtShell->HasSelection() )
+            if( bReplaced && s_xReplaceList && s_xReplaceList->Count() && m_pWrtShell->HasSelection() )
             {
                 SfxItemSet aReplSet( m_pWrtShell->GetAttrPool(),
                                      aTextFormatCollSetRange );
-                if( s_pReplaceList->Get( aReplSet ).Count() )
+                if( s_xReplaceList->Get( aReplSet ).Count() )
                 {
                     ::SfxToSwPageDescAttr( *m_pWrtShell, aReplSet );
                     m_pWrtShell->SwEditShell::SetAttrSet( aReplSet );
@@ -742,20 +742,20 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
         0 };
 
     SfxItemSet aSrchSet( m_pWrtShell->GetAttrPool(), aSearchAttrRange);
-    if( s_pSearchList && s_pSearchList->Count() )
+    if( s_xSearchList && s_xSearchList->Count() )
     {
-        s_pSearchList->Get( aSrchSet );
+        s_xSearchList->Get( aSrchSet );
 
         // -- Page break with page template
         ::SfxToSwPageDescAttr( *m_pWrtShell, aSrchSet );
     }
 
     std::unique_ptr<SfxItemSet> pReplSet;
-    if( bDoReplace && s_pReplaceList && s_pReplaceList->Count() )
+    if( bDoReplace && s_xReplaceList && s_xReplaceList->Count() )
     {
         pReplSet.reset( new SfxItemSet( m_pWrtShell->GetAttrPool(),
                                         aSearchAttrRange ) );
-        s_pReplaceList->Get( *pReplSet );
+        s_xReplaceList->Get( *pReplSet );
 
         // -- Page break with page template
         ::SfxToSwPageDescAttr( *m_pWrtShell, *pReplSet );
