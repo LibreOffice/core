@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-07-09 17:06:27 using:
+ Generated on 2020-08-12 11:04:50 using:
  ./bin/update_pch lotuswordpro lwpft --cutoff=2 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -35,7 +35,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <string_view>
-#include <type_traits>
 #include <utility>
 #include <vector>
 #include <boost/cast.hpp>
@@ -72,7 +71,6 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <o3tl/numeric.hxx>
-#include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <tools/color.hxx>

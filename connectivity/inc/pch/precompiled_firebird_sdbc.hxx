@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-01-22 15:57:35 using:
+ Generated on 2020-08-12 11:04:28 using:
  ./bin/update_pch connectivity firebird_sdbc --cutoff=2 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -24,7 +24,6 @@
 #include <cassert>
 #include <cstddef>
 #include <memory>
-#include <stddef.h>
 #include <string_view>
 #include <vector>
 #endif // PCH_LEVEL >= 1
@@ -39,14 +38,11 @@
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
-#include <rtl/unload.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/log.hxx>
-#include <sal/macros.h>
 #include <sal/types.h>
-#include <sal/typesizes.h>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -60,12 +56,9 @@
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/comphelperdllapi.h>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
-#include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <resource/sharedresources.hxx>

@@ -23,7 +23,7 @@
 #endif
 
 #include <vcl/dllapi.h>
-#include <vcl/treelistbox.hxx>
+#include <vcl/toolkit/treelistbox.hxx>
 #include <vcl/accessibletableprovider.hxx>
 
 #include <tools/debug.hxx>

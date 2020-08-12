@@ -17,11 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_TREELIST_HXX
-#define INCLUDED_VCL_TREELIST_HXX
+#pragma once
+
+#if !defined(VCL_DLLIMPLEMENTATION) && !defined(TOOLKIT_DLLIMPLEMENTATION) && !defined(VCL_INTERNALS)
+#error "don't use this in new code"
+#endif
 
 #include <vcl/dllapi.h>
-#include <vcl/treelistentries.hxx>
+#include <vcl/toolkit/treelistentries.hxx>
 
 #include <tools/solar.h>
 #include <tools/link.hxx>
@@ -295,7 +298,5 @@ public:
     virtual void        ModelHasRemoved( SvTreeListEntry* pEntry );
     virtual void        ModelHasEntryInvalidated( SvTreeListEntry* pEntry );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

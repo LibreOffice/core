@@ -7447,11 +7447,12 @@ include/vcl/toolkit/svlbitm.hxx
 include/vcl/toolkit/svtabbx.hxx
 include/vcl/toolkit/tabdlg.hxx
 include/vcl/toolkit/throbber.hxx
+include/vcl/toolkit/treelist.hxx
+include/vcl/toolkit/treelistbox.hxx
+include/vcl/toolkit/treelistentry.hxx
 include/vcl/toolkit/unowrap.hxx
+include/vcl/toolkit/viewdataentry.hxx
 include/vcl/transfer.hxx
-include/vcl/treelist.hxx
-include/vcl/treelistbox.hxx
-include/vcl/treelistentry.hxx
 include/vcl/txtattr.hxx
 include/vcl/uitest/factory.hxx
 include/vcl/uitest/uiobject.hxx
@@ -7466,7 +7467,6 @@ include/vcl/vclmedit.hxx
 include/vcl/vclptr.hxx
 include/vcl/vclreferencebase.hxx
 include/vcl/vectorgraphicdata.hxx
-include/vcl/viewdataentry.hxx
 include/vcl/virdev.hxx
 include/vcl/waitobj.hxx
 include/vcl/wall.hxx

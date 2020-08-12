@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-21 11:14:33 using:
+ Generated on 2020-08-12 11:04:39 using:
  ./bin/update_pch desktop deployment --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -50,6 +50,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
@@ -68,11 +69,11 @@
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/sequence.hxx>
-#include <comphelper/servicedecl.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <svl/inettype.hxx>
 #include <tools/diagnose_ex.h>
 #include <ucbhelper/content.hxx>

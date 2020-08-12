@@ -22,7 +22,7 @@
 #include <vcl/toolkit/svtabbx.hxx>
 #include <vcl/headbar.hxx>
 #include <vcl/toolkit/svlbitm.hxx>
-#include <vcl/treelistentry.hxx>
+#include <vcl/toolkit/treelistentry.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <rtl/ustrbuf.hxx>

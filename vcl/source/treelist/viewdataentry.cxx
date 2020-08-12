@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/viewdataentry.hxx>
+#include <vcl/toolkit/viewdataentry.hxx>
 
 SvViewDataEntry::SvViewDataEntry() :
     nVisPos(0),

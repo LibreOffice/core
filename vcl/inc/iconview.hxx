@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_ICONVIEW_HXX
 #define INCLUDED_SVTOOLS_ICONVIEW_HXX
 
-#include <vcl/treelistbox.hxx>
+#include <vcl/toolkit/treelistbox.hxx>
 
 class IconView final : public SvTreeListBox
 {
