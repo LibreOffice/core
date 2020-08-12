@@ -48,13 +48,14 @@ class insertSignatureLine(UITestCase):
         xOKBtn.executeAction("CLICK", tuple())
 
         #check the signature Line in the document
-        self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineSuggestedSignerName, "Name")
-        self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineSuggestedSignerTitle, "Title")
-        self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineSuggestedSignerEmail, "Email")
-        self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineSuggestedSignerTitle, "Title")
-        self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineCanAddComment, False)
-        self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineShowSignDate, True)
-        self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineSigningInstructions, "Instructions")
+        element = document.DrawPage.getByIndex(0)
+        self.assertEqual(element.SignatureLineSuggestedSignerName, "Name")
+        self.assertEqual(element.SignatureLineSuggestedSignerTitle, "Title")
+        self.assertEqual(element.SignatureLineSuggestedSignerEmail, "Email")
+        self.assertEqual(element.SignatureLineSuggestedSignerTitle, "Title")
+        self.assertEqual(element.SignatureLineCanAddComment, False)
+        self.assertEqual(element.SignatureLineShowSignDate, True)
+        self.assertEqual(element.SignatureLineSigningInstructions, "Instructions")
 
         self.ui_test.close_doc()
 
@@ -83,13 +84,14 @@ class insertSignatureLine(UITestCase):
         xOKBtn.executeAction("CLICK", tuple())
 
         #check the signature Line in the document
-        self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineSuggestedSignerName, "Name")
-        self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineSuggestedSignerTitle, "Title")
-        self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineSuggestedSignerEmail, "Email")
-        self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineSuggestedSignerTitle, "Title")
-        self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineCanAddComment, False)
-        self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineShowSignDate, False)
-        self.assertEqual(document.DrawPage.getByIndex(0).SignatureLineSigningInstructions, "Instructions")
+        element = document.DrawPage.getByIndex(0)
+        self.assertEqual(element.SignatureLineSuggestedSignerName, "Name")
+        self.assertEqual(element.SignatureLineSuggestedSignerTitle, "Title")
+        self.assertEqual(element.SignatureLineSuggestedSignerEmail, "Email")
+        self.assertEqual(element.SignatureLineSuggestedSignerTitle, "Title")
+        self.assertEqual(element.SignatureLineCanAddComment, False)
+        self.assertEqual(element.SignatureLineShowSignDate, False)
+        self.assertEqual(element.SignatureLineSigningInstructions, "Instructions")
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
