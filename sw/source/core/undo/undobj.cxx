@@ -1118,12 +1118,14 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
             if( pBkmk->IsExpanded() &&
                 *pStt <= pBkmk->GetOtherMarkPos() && pBkmk->GetOtherMarkPos() <= *pEnd )
             {
-                if ( bSavePos || bSaveOtherPos
+                assert(!bSaveOtherPos);
+                if (   bSavePos
                     || (*pStt < pBkmk->GetOtherMarkPos() && pBkmk->GetOtherMarkPos() < *pEnd)
-                    || type == IDocumentMarkAccess::MarkType::TEXT_FIELDMARK
-                    || type == IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK
-                    || type == IDocumentMarkAccess::MarkType::DROPDOWN_FIELDMARK
-                    || type == IDocumentMarkAccess::MarkType::DATE_FIELDMARK)
+                    || (bMaybe
+                        && (   type == IDocumentMarkAccess::MarkType::TEXT_FIELDMARK
+                            || type == IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK
+                            || type == IDocumentMarkAccess::MarkType::DROPDOWN_FIELDMARK
+                            || type == IDocumentMarkAccess::MarkType::DATE_FIELDMARK)))
                 {
                     if( bMaybe )
                         bSavePos = true;
