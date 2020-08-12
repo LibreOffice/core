@@ -24,13 +24,19 @@
 
 using namespace ::com::sun::star;
 
+class GalleryObjectCollection;
+
 class GalleryXMLEngine : public GalleryFileStorage
 {
+private:
+    [[maybe_unused]] GalleryObjectCollection& mrGalleryObjectCollection;
+
 public:
     /*void readZIP();
 
     void readXML();
     void writeXML();*/
+    GalleryXMLEngine(GalleryObjectCollection& rGalleryObjectCollection);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
