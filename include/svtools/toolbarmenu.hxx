@@ -33,45 +33,7 @@ namespace com :: sun :: star :: frame { class XFrame; }
 namespace com :: sun :: star :: frame { struct FeatureStateEvent; }
 namespace svt { class FrameStatusListener; }
 
-namespace svtools {
-
-class SVT_DLLPUBLIC ToolbarPopupBase
-{
-    friend class ToolbarPopupStatusListener;
-public:
-    ToolbarPopupBase(const css::uno::Reference<css::frame::XFrame>& rFrame);
-    virtual ~ToolbarPopupBase();
-
-protected:
-    void AddStatusListener( const OUString& rCommandURL );
-
-    // Forwarded from XStatusListener (subclasses must override this one to get the status updates):
-    /// @throws css::uno::RuntimeException
-    virtual void statusChanged(const css::frame::FeatureStateEvent& Event );
-
-    css::uno::Reference<css::frame::XFrame>  mxFrame;
-    rtl::Reference<svt::FrameStatusListener> mxStatusListener;
-};
-
-class UNLESS_MERGELIBS(SVT_DLLPUBLIC) ToolbarPopup : public DockingWindow, public ToolbarPopupBase
-{
-public:
-    ToolbarPopup(const css::uno::Reference<css::frame::XFrame>& rFrame,
-                 vcl::Window* pParentWindow,
-                 const OString& rID, const OUString& rUIXMLDescription );
-    virtual ~ToolbarPopup() override;
-    virtual void dispose() override;
-
-protected:
-    void EndPopupMode();
-
-private:
-    void init();
-};
-
-} // namespace svtools
-
-class SVT_DLLPUBLIC WeldToolbarPopup : public svtools::ToolbarPopupBase
+class SVT_DLLPUBLIC WeldToolbarPopup
 {
 private:
     DECL_LINK(FocusHdl, weld::Widget&, void);
@@ -80,14 +42,20 @@ protected:
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Container> m_xTopLevel;
     std::unique_ptr<weld::Container> m_xContainer;
+    css::uno::Reference<css::frame::XFrame> m_xFrame;
+    rtl::Reference<svt::FrameStatusListener> m_xStatusListener;
 
 public:
     WeldToolbarPopup(const css::uno::Reference<css::frame::XFrame>& rFrame,
                      weld::Widget* pParent, const OUString& rUIFile, const OString& rId);
-    virtual ~WeldToolbarPopup() override;
+    virtual ~WeldToolbarPopup();
     weld::Container* getTopLevel() { return m_xTopLevel.get(); }
     weld::Container* getContainer() { return m_xContainer.get(); }
+    void AddStatusListener(const OUString& rCommandURL);
 
+    // Forwarded from XStatusListener (subclasses must override this one to get the status updates):
+    /// @throws css::uno::RuntimeException
+    virtual void statusChanged(const css::frame::FeatureStateEvent& Event);
     virtual void GrabFocus() = 0;
 };
 
@@ -116,10 +84,11 @@ public:
     void unsetPopover();
 };
 
-class SVT_DLLPUBLIC InterimToolbarPopup final : public svtools::ToolbarPopup
+class SVT_DLLPUBLIC InterimToolbarPopup final : public DockingWindow
 {
 private:
     VclPtr<vcl::Window> m_xBox;
+    css::uno::Reference<css::frame::XFrame> m_xFrame;
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Container> m_xContainer;
     std::unique_ptr<WeldToolbarPopup> m_xPopup;
@@ -132,7 +101,7 @@ public:
 
     virtual void GetFocus() override;
 
-    using ToolbarPopup::EndPopupMode;
+    void EndPopupMode();
 };
 
 #endif
