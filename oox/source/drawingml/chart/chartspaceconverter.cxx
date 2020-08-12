@@ -206,7 +206,17 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
     {
         using namespace ::com::sun::star::chart::MissingValueTreatment;
         sal_Int32 nMissingValues = LEAVE_GAP;
-        switch( mrModel.mnDispBlanksAs )
+
+        /*MSO use "LEAVE_GAP" if the baseTimeUnit is "month",
+        even if the value of dispBlanksAs attribute is "zero".*/
+        bool bMonBaseTimeUnit = false;
+        if( mrModel.mxPlotArea.is() && mrModel.mxPlotArea->maAxes.size() > 0 &&
+            mrModel.mxPlotArea->maAxes[0]->monBaseTimeUnit.has() )
+        {
+            bMonBaseTimeUnit = mrModel.mxPlotArea->maAxes[0]->monBaseTimeUnit.get() == XML_months;
+        }
+
+        if (!bMonBaseTimeUnit) switch( mrModel.mnDispBlanksAs )
         {
             case XML_gap:   nMissingValues = LEAVE_GAP; break;
             case XML_zero:  nMissingValues = USE_ZERO;  break;
