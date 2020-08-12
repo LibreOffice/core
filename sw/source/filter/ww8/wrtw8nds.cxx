@@ -2149,7 +2149,29 @@ bool MSWordExportBase::NeedSectionBreak( const SwNode& rNd ) const
 
 bool MSWordExportBase::NeedTextNodeSplit( const SwTextNode& rNd, SwSoftPageBreakList& pList ) const
 {
-    rNd.fillSoftPageBreakList( pList );
+    SwSoftPageBreakList tmp;
+    rNd.fillSoftPageBreakList(tmp);
+    // hack: move the break behind any field marks; currently we can't hide the
+    // field mark instruction so the layout position is quite meaningless
+    IDocumentMarkAccess const& rIDMA(*rNd.GetDoc()->getIDocumentMarkAccess());
+    sal_Int32 pos(-1);
+    for (auto const& it : tmp)
+    {
+        if (pos < it) // previous one might have skipped over it
+        {
+            pos = it;
+            while (auto const*const pMark = rIDMA.getFieldmarkFor(SwPosition(const_cast<SwTextNode&>(rNd), pos)))
+            {
+                if (pMark->GetMarkEnd().nNode != rNd)
+                {
+                    pos = rNd.Len(); // skip everything
+                    break;
+                }
+                pos = pMark->GetMarkEnd().nContent.GetIndex(); // no +1, it's behind the char
+            }
+            pList.insert(pos);
+        }
+    }
     pList.insert(0);
     pList.insert( rNd.GetText().getLength() );
     return pList.size() > 2 && NeedSectionBreak( rNd );
