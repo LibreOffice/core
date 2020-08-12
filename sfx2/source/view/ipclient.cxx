@@ -113,7 +113,6 @@ public:
     bool                            m_bResizeNoScale;
 
     uno::Reference < embed::XEmbeddedObject > m_xObject;
-    uno::Reference < embed::XEmbeddedClient > m_xClient;
 
 
     SfxInPlaceClient_Impl()
@@ -625,7 +624,6 @@ SfxInPlaceClient::SfxInPlaceClient( SfxViewShell* pViewShell, vcl::Window *pDraw
     m_xImp->m_pClient = this;
     m_xImp->m_nAspect = nAspect;
     m_xImp->m_aScaleWidth = m_xImp->m_aScaleHeight = Fraction(1,1);
-    m_xImp->m_xClient = static_cast< embed::XEmbeddedClient* >( m_xImp.get() );
     pViewShell->NewIPClient_Impl(this);
     m_xImp->m_aTimer.SetDebugName( "sfx::SfxInPlaceClient m_xImpl::m_aTimer" );
     m_xImp->m_aTimer.SetTimeout( SFX_CLIENTACTIVATE_TIMEOUT );
@@ -644,7 +642,7 @@ SfxInPlaceClient::~SfxInPlaceClient()
     m_xImp->m_pClient = nullptr;
 
     // the next call will destroy m_xImp if no other reference to it exists
-    m_xImp->m_xClient.clear();
+    m_xImp.clear();
 
     // TODO/LATER:
     // the class is not intended to be used in multithreaded environment;
@@ -692,13 +690,13 @@ void SfxInPlaceClient::SetObject( const uno::Reference < embed::XEmbeddedObject 
 {
     if ( m_xImp->m_xObject.is() && rObject != m_xImp->m_xObject )
     {
-        DBG_ASSERT( GetObject()->getClientSite() == m_xImp->m_xClient, "Wrong ClientSite!" );
-        if ( GetObject()->getClientSite() == m_xImp->m_xClient )
+        DBG_ASSERT( GetObject()->getClientSite() == static_cast<cppu::OWeakObject*>(m_xImp.get()), "Wrong ClientSite!" );
+        if ( GetObject()->getClientSite() == static_cast<cppu::OWeakObject*>(m_xImp.get()) )
         {
             if ( GetObject()->getCurrentState() != embed::EmbedStates::LOADED )
                 SetObjectState( embed::EmbedStates::RUNNING );
-            m_xImp->m_xObject->removeEventListener( uno::Reference < document::XEventListener >( m_xImp->m_xClient, uno::UNO_QUERY ) );
-            m_xImp->m_xObject->removeStateChangeListener( uno::Reference < embed::XStateChangeListener >( m_xImp->m_xClient, uno::UNO_QUERY ) );
+            m_xImp->m_xObject->removeEventListener( m_xImp.get() );
+            m_xImp->m_xObject->removeStateChangeListener( m_xImp.get() );
             try
             {
                 m_xImp->m_xObject->setClientSite( nullptr );
@@ -720,12 +718,12 @@ void SfxInPlaceClient::SetObject( const uno::Reference < embed::XEmbeddedObject 
     {
         // as soon as an object was connected to a client it has to be checked whether the object wants
         // to be activated
-        rObject->addStateChangeListener( uno::Reference < embed::XStateChangeListener >( m_xImp->m_xClient, uno::UNO_QUERY ) );
-        rObject->addEventListener( uno::Reference < document::XEventListener >( m_xImp->m_xClient, uno::UNO_QUERY ) );
+        rObject->addStateChangeListener( m_xImp.get() );
+        rObject->addEventListener( m_xImp.get() );
 
         try
         {
-            rObject->setClientSite( m_xImp->m_xClient );
+            rObject->setClientSite( m_xImp.get() );
         }
         catch( uno::Exception& )
         {
@@ -949,7 +947,7 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
                 m_pViewSh->GetViewFrame()->GetFrame().LockResize_Impl(true);
                 try
                 {
-                    m_xImp->m_xObject->setClientSite( m_xImp->m_xClient );
+                    m_xImp->m_xObject->setClientSite( m_xImp.get() );
 
                     m_xImp->m_xObject->doVerb( nVerb );
                 }
@@ -1016,8 +1014,7 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
 void SfxInPlaceClient::VisAreaChanged()
 {
     uno::Reference < embed::XInplaceObject > xObj( m_xImp->m_xObject, uno::UNO_QUERY );
-    uno::Reference < embed::XInplaceClient > xClient( m_xImp->m_xClient, uno::UNO_QUERY );
-    if ( xObj.is() && xClient.is() )
+    if ( xObj.is() )
         m_xImp->SizeHasChanged();
 }
 
