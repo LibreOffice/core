@@ -57,7 +57,6 @@ ScAccessiblePreviewHeaderCell::ScAccessiblePreviewHeaderCell( const css::uno::Re
                             sal_Int32 nIndex ) :
     ScAccessibleContextBase( rxParent, AccessibleRole::TABLE_CELL ),
     mpViewShell( pViewShell ),
-    mpTextHelper( nullptr ),
     mnIndex( nIndex ),
     maCellPos( rCellPos ),
     mbColumnHeader( bIsColHdr ),
@@ -94,8 +93,8 @@ void ScAccessiblePreviewHeaderCell::Notify( SfxBroadcaster& rBC, const SfxHint& 
     const SfxHintId nId = rHint.GetId();
     if (nId == SfxHintId::ScAccVisAreaChanged)
     {
-        if (mpTextHelper)
-            mpTextHelper->UpdateChildren();
+        if (mxTextHelper)
+            mxTextHelper->UpdateChildren();
     }
     else if ( nId == SfxHintId::DataChanged )
     {
@@ -178,10 +177,10 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewHeaderCell::getAccessi
         SolarMutexGuard aGuard;
         IsObjectValid();
 
-        if(!mpTextHelper)
+        if(!mxTextHelper)
             CreateTextHelper();
 
-        xRet = mpTextHelper->GetAt(rPoint);
+        xRet = mxTextHelper->GetAt(rPoint);
     }
 
     return xRet;
@@ -205,18 +204,18 @@ sal_Int32 SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    if (!mpTextHelper)
+    if (!mxTextHelper)
         CreateTextHelper();
-    return mpTextHelper->GetChildCount();
+    return mxTextHelper->GetChildCount();
 }
 
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleChild(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    if (!mpTextHelper)
+    if (!mxTextHelper)
         CreateTextHelper();
-    return mpTextHelper->GetChild(nIndex);
+    return mxTextHelper->GetChild(nIndex);
 }
 
 sal_Int32 SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleIndexInParent()
@@ -377,14 +376,14 @@ bool ScAccessiblePreviewHeaderCell::IsDefunc( const uno::Reference<XAccessibleSt
 
 void ScAccessiblePreviewHeaderCell::CreateTextHelper()
 {
-    if (!mpTextHelper)
+    if (!mxTextHelper)
     {
-        mpTextHelper = new ::accessibility::AccessibleTextHelper(
+        mxTextHelper.reset( new ::accessibility::AccessibleTextHelper(
             std::make_unique<ScAccessibilityEditSource>(
                 std::make_unique<ScAccessiblePreviewHeaderCellTextData>(
                     mpViewShell, getAccessibleName(), maCellPos,
-                    mbColumnHeader, mbRowHeader)));
-        mpTextHelper->SetEventSource(this);
+                    mbColumnHeader, mbRowHeader))) );
+        mxTextHelper->SetEventSource(this);
     }
 }
 
