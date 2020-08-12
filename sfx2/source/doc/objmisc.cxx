@@ -263,7 +263,7 @@ bool SfxObjectShell::IsModified() const
         return false;
     }
 
-    if (pImpl->mpObjectContainer)
+    if (pImpl->mxObjectContainer)
     {
         const uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
         for ( const auto& rName : aNames )
