@@ -32,8 +32,6 @@ typedef sal_uIntPtr    sal_uLong; /* Replaces type ULONG */
 
 // misc. macros to leverage platform and compiler differences
 
-#define DELETEZ( p )    ( delete p,p = NULL )
-
 // solar binary types
 
 /* Solar (portable) Binary (exchange) Type; OSI 6 subset
