@@ -466,9 +466,64 @@ IMPL_LINK_NOARG(GalleryBrowser1, SelectThemeHdl, weld::TreeView&, void)
     if (maThemeSlectionHandler)
         maThemeSlectionHandler();
 }
+#include <comphelper/storagehelper.hxx>
+#include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
 
+#include <tools/XmlWriter.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#include <unotools/streamwrap.hxx>
 IMPL_LINK_NOARG(GalleryBrowser1, ClickNewThemeHdl, weld::Button&, void)
 {
+    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream("file:///C:/Users/adith/Desktop/zip testing/sendEmails2.zip", StreamMode::READ | StreamMode::WRITE));
+    uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
+
+    uno::Reference<embed::XStorage> xWriteableZipStore;
+    xWriteableZipStore = comphelper::OStorageHelper::GetStorageOfFormatFromStream(ZIP_STORAGE_FORMAT_STRING, xStream);
+
+    uno::Reference<embed::XStorage> xMyFile;
+    xMyFile = xWriteableZipStore;
+
+    if (xMyFile)
+    {
+        // Write mimetype
+        css::uno::Reference<css::io::XOutputStream> xOutputStream;
+        xOutputStream.set(xMyFile->openStreamElement("mimetype", embed::ElementModes::READWRITE), uno::UNO_QUERY);
+        const OString aMimeType("application/gallery+zip");
+        uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8*>(aMimeType.getStr()), aMimeType.getLength());
+        xOutputStream->writeBytes(aData);
+
+        // Write an XML
+        std::unique_ptr<SvMemoryStream> aMemoryStream = std::make_unique<SvMemoryStream>();
+        tools::XmlWriter aXmlWriter(aMemoryStream.get());
+
+        if (aXmlWriter.startDocument())
+        {
+            aXmlWriter.startElement(".thm file data");
+
+            aXmlWriter.startElement("16-bit-integer");
+            aXmlWriter.content(OString::number(0x0004));
+            aXmlWriter.endElement();
+
+            aXmlWriter.endElement();
+        }
+
+        aMemoryStream->Seek(0);
+        // How to put SvMemoryStream data to XOutputStream - file name: writegallerytheme.xml, file data: aMemoryStream.GetData()
+        css::uno::Reference<css::io::XOutputStream> xOutputStream2;
+        xOutputStream2.set(xMyFile->openStreamElement("writegallerytheme.xml", embed::ElementModes::READWRITE), uno::UNO_QUERY);
+
+        uno::Reference<io::XInputStream> xInputStream = new utl::OInputStreamWrapper(aMemoryStream.get());
+        comphelper::OStorageHelper::CopyInputToOutput(xInputStream, xOutputStream2);
+
+        uno::Reference<embed::XTransactedObject> xTransact(xMyFile, uno::UNO_QUERY_THROW);
+        xTransact->commit();
+        xTransact.set(xWriteableZipStore, uno::UNO_QUERY_THROW);
+        xTransact->commit();
+    }
+
     OUString  aNewTheme( SvxResId(RID_SVXSTR_GALLERY_NEWTHEME) );
     OUString  aName( aNewTheme );
     sal_uInt16 nCount = 0;
