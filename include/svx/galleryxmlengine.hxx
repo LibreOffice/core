@@ -24,13 +24,20 @@
 
 using namespace ::com::sun::star;
 
+class GalleryObjectCollection;
+class GalleryTheme;
+class GalleryThemeEntry;
+class SvStream;
+
 class GalleryXMLEngine : public GalleryFileStorage
 {
+private:
+    GalleryObjectCollection& mrGalleryObjectCollection;
 public:
-    /*void readZIP();
+    GalleryXMLEngine(GalleryObjectCollection& rGalleryObjectCollection);
 
-    void readXML();
-    void writeXML();*/
+    SvStream& writeGalleryTheme(SvStream& rOStm, const GalleryTheme& rTheme,
+                                const GalleryThemeEntry* pThm);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
