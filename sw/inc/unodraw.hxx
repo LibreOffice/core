@@ -43,7 +43,7 @@ class SwXShape;
 
 class SwFmDrawPage final : public SvxFmDrawPage
 {
-    SdrPageView*        pPageView;
+    SdrPageView*        m_pPageView;
     std::vector<SwXShape*> m_vShapes;
 public:
     SwFmDrawPage( SdrPage* pPage );

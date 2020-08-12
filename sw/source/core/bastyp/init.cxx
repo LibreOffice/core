@@ -681,7 +681,7 @@ void FinitCore()
     delete pCaseCollator;
 
     // destroy default TableAutoFormat
-    delete SwTableAutoFormat::pDfltBoxAutoFormat;
+    delete SwTableAutoFormat::s_pDefaultBoxAutoFormat;
 
     delete SwSelPaintRects::s_pMapMode;
     delete SwFntObj::pPixMap;

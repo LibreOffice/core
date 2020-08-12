@@ -95,7 +95,7 @@ const sal_uInt16 AUTOFORMAT_ID          = AUTOFORMAT_ID_31005;
 const sal_uInt16 AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_31005;
 const sal_uInt16 AUTOFORMAT_FILE_VERSION= SOFFICE_FILEFORMAT_50;
 
-SwBoxAutoFormat* SwTableAutoFormat::pDfltBoxAutoFormat = nullptr;
+SwBoxAutoFormat* SwTableAutoFormat::s_pDefaultBoxAutoFormat = nullptr;
 
 #define AUTOTABLE_FORMAT_NAME "autotbl.fmt"
 
@@ -139,21 +139,20 @@ namespace
     class WriterSpecificAutoFormatBlock
     {
     public:
-        explicit WriterSpecificAutoFormatBlock(SvStream &rStream) : _rStream(rStream), _whereToWriteEndOfBlock(BeginSwBlock(rStream))
+        explicit WriterSpecificAutoFormatBlock(SvStream& rStream)
+            : mrStream(rStream)
+            , mnWhereToWriteEndOfBlock(BeginSwBlock(rStream))
         {
         }
 
-        ~WriterSpecificAutoFormatBlock()
-        {
-            EndSwBlock(_rStream, _whereToWriteEndOfBlock);
-        }
+        ~WriterSpecificAutoFormatBlock() { EndSwBlock(mrStream, mnWhereToWriteEndOfBlock); }
 
     private:
         WriterSpecificAutoFormatBlock(WriterSpecificAutoFormatBlock const&) = delete;
         WriterSpecificAutoFormatBlock& operator=(WriterSpecificAutoFormatBlock const&) = delete;
 
-        SvStream &_rStream;
-        sal_uInt64 _whereToWriteEndOfBlock;
+        SvStream& mrStream;
+        sal_uInt64 mnWhereToWriteEndOfBlock;
     };
 
     /// Checks whether a writer-specific block exists (i.e. size is not zero)
@@ -464,9 +463,9 @@ const SwBoxAutoFormat& SwTableAutoFormat::GetBoxFormat( sal_uInt8 nPos ) const
     else            // else return the default
     {
         // If it doesn't exist yet:
-        if( !pDfltBoxAutoFormat )
-            pDfltBoxAutoFormat = new SwBoxAutoFormat;
-        return *pDfltBoxAutoFormat;
+        if( !s_pDefaultBoxAutoFormat )
+            s_pDefaultBoxAutoFormat = new SwBoxAutoFormat;
+        return *s_pDefaultBoxAutoFormat;
     }
 }
 
@@ -478,19 +477,19 @@ SwBoxAutoFormat& SwTableAutoFormat::GetBoxFormat( sal_uInt8 nPos )
     if( !*pFormat )
     {
         // If default doesn't exist yet:
-        if( !pDfltBoxAutoFormat )
-            pDfltBoxAutoFormat = new SwBoxAutoFormat();
-        *pFormat = new SwBoxAutoFormat(*pDfltBoxAutoFormat);
+        if( !s_pDefaultBoxAutoFormat )
+            s_pDefaultBoxAutoFormat = new SwBoxAutoFormat();
+        *pFormat = new SwBoxAutoFormat(*s_pDefaultBoxAutoFormat);
     }
     return **pFormat;
 }
 
 const SwBoxAutoFormat& SwTableAutoFormat::GetDefaultBoxFormat()
 {
-    if(!pDfltBoxAutoFormat)
-        pDfltBoxAutoFormat = new SwBoxAutoFormat();
+    if(!s_pDefaultBoxAutoFormat)
+        s_pDefaultBoxAutoFormat = new SwBoxAutoFormat();
 
-    return *pDfltBoxAutoFormat;
+    return *s_pDefaultBoxAutoFormat;
 }
 
 void SwTableAutoFormat::UpdateFromSet( sal_uInt8 nPos,
@@ -839,9 +838,9 @@ bool SwTableAutoFormat::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
         if( !pFormat )     // if not set -> write default
         {
             // If it doesn't exist yet:
-            if( !pDfltBoxAutoFormat )
-                pDfltBoxAutoFormat = new SwBoxAutoFormat;
-            pFormat = pDfltBoxAutoFormat;
+            if( !s_pDefaultBoxAutoFormat )
+                s_pDefaultBoxAutoFormat = new SwBoxAutoFormat;
+            pFormat = s_pDefaultBoxAutoFormat;
         }
         bRet = pFormat->Save( rStream, fileVersion );
     }
