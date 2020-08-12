@@ -20,7 +20,6 @@
 #include <dbexchange.hxx>
 #include <dbtreelistbox.hxx>
 #include "dbtreemodel.hxx"
-#include "dbtreeview.hxx"
 #include <UITools.hxx>
 #include <unodatbr.hxx>
 
@@ -63,7 +62,7 @@ namespace dbaui
         try
         {
             OUString aName = GetEntryText(rApplyTo);
-            std::unique_ptr<weld::TreeIter> xRootEntry(m_pTreeView->getListBox().GetRootLevelParent(&rApplyTo));
+            std::unique_ptr<weld::TreeIter> xRootEntry(m_pTreeView->GetRootLevelParent(&rApplyTo));
             OUString aDSName = getDataSourceAccessor(*xRootEntry);
 
             SharedConnection xConnection;
@@ -93,7 +92,7 @@ namespace dbaui
     sal_Int8 SbaTableQueryBrowser::queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors )
     {
         // check if we're a table or query container
-        weld::TreeView& rTreeView = m_pTreeView->getListBox().GetWidget();
+        weld::TreeView& rTreeView = m_pTreeView->GetWidget();
         std::unique_ptr<weld::TreeIter> xHitEntry(rTreeView.make_iterator());
         // get_dest_row_at_pos with false cause no drop if no entry was hit exactly
         if (rTreeView.get_dest_row_at_pos(_rEvt.maPosPixel, xHitEntry.get(), false))
@@ -117,7 +116,7 @@ namespace dbaui
     }
     sal_Int8 SbaTableQueryBrowser::executeDrop( const ExecuteDropEvent& _rEvt )
     {
-        weld::TreeView& rTreeView = m_pTreeView->getListBox().GetWidget();
+        weld::TreeView& rTreeView = m_pTreeView->GetWidget();
         std::unique_ptr<weld::TreeIter> xHitEntry(rTreeView.make_iterator());
         // get_dest_row_at_pos with false cause no drop if no entry was hit exactly
         if (!rTreeView.get_dest_row_at_pos(_rEvt.maPosPixel, xHitEntry.get(), false))
@@ -182,13 +181,13 @@ namespace dbaui
         if (!isObject(eEntryType))
             return false;
 
-        ODataClipboard& rExchange = m_pTreeView->getListBox().GetDataTransfer();
+        ODataClipboard& rExchange = m_pTreeView->GetDataTransfer();
         return implCopyObject(rExchange, rEntry, (etTableOrView == eEntryType) ? CommandType::TABLE : CommandType::QUERY);
     }
 
     IMPL_LINK_NOARG(SbaTableQueryBrowser, OnCopyEntry, LinkParamNone*, void)
     {
-        weld::TreeView& rTreeView = m_pTreeView->getListBox().GetWidget();
+        weld::TreeView& rTreeView = m_pTreeView->GetWidget();
         std::unique_ptr<weld::TreeIter> xSelected = rTreeView.make_iterator();
         if (rTreeView.get_selected(xSelected.get()) && isEntryCopyAllowed(*xSelected))
             copyEntry(*xSelected);
@@ -220,7 +219,7 @@ namespace dbaui
             if ( ensureConnection(m_aAsyncDrop.xDroppedAt.get(), xDestConnection) && xDestConnection.is())
             {
                 std::unique_ptr<weld::TreeIter> xDataSourceEntry =
-                    m_pTreeView->getListBox().GetRootLevelParent(m_aAsyncDrop.xDroppedAt.get());
+                    m_pTreeView->GetRootLevelParent(m_aAsyncDrop.xDroppedAt.get());
                 m_aTableCopyHelper.asyncCopyTagTable(m_aAsyncDrop, getDataSourceAccessor(*xDataSourceEntry), xDestConnection);
             }
         }
@@ -230,7 +229,7 @@ namespace dbaui
 
     void SbaTableQueryBrowser::clearTreeModel()
     {
-        weld::TreeView& rTreeView = m_pTreeView->getListBox().GetWidget();
+        weld::TreeView& rTreeView = m_pTreeView->GetWidget();
         rTreeView.all_foreach([this, &rTreeView](weld::TreeIter& rEntryLoop){
             // clear the user data of the tree model
             DBTreeListUserData* pData = reinterpret_cast<DBTreeListUserData*>(rTreeView.get_id(rEntryLoop).toUInt64());

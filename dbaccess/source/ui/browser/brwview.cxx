@@ -23,7 +23,6 @@
 #include <comphelper/types.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/split.hxx>
-#include "dbtreeview.hxx"
 #include <strings.hxx>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
@@ -153,12 +152,12 @@ void UnoDataBrowserView::setSplitter(Splitter* _pSplitter)
     LINK( this, UnoDataBrowserView, SplitHdl ).Call(m_pSplitter);
 }
 
-void UnoDataBrowserView::setTreeView(DBTreeView* _pTreeView)
+void UnoDataBrowserView::setTreeView(InterimDBTreeListBox* pTreeView)
 {
-    if (m_pTreeView.get() != _pTreeView)
+    if (m_pTreeView.get() != pTreeView)
     {
         m_pTreeView.disposeAndClear();
-        m_pTreeView = _pTreeView;
+        m_pTreeView = pTreeView;
     }
 }
 

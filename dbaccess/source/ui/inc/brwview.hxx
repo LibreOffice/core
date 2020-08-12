@@ -24,6 +24,7 @@
 
 #include <dbaccess/dataview.hxx>
 #include <unotools/eventlisteneradapter.hxx>
+#include "dbtreelistbox.hxx"
 
 namespace com::sun::star::awt {
     class XControl;
@@ -35,14 +36,13 @@ class Splitter;
 
 namespace dbaui
 {
-    class DBTreeView;
     class SbaGridControl;
 
     class UnoDataBrowserView final : public ODataView, public ::utl::OEventListenerAdapter
     {
         css::uno::Reference< css::awt::XControl >                 m_xGrid;            // our grid's UNO representation
         css::uno::Reference< css::awt::XControlContainer >        m_xMe;              // our own UNO representation
-        VclPtr<DBTreeView>             m_pTreeView;
+        VclPtr<InterimDBTreeListBox>   m_pTreeView;
         VclPtr<Splitter>               m_pSplitter;
         mutable VclPtr<SbaGridControl> m_pVclControl;  // our grid's VCL representation
         VclPtr<vcl::Window>            m_pStatus;
@@ -68,8 +68,8 @@ namespace dbaui
         sal_uInt16 View2ModelPos(sal_uInt16 nPos) const;
         /// for the same reason the view column count isn't the same as the model column count
 
-        void setSplitter(Splitter* _pSplitter);
-        void setTreeView(DBTreeView* _pTreeView);
+        void setSplitter(Splitter* pSplitter);
+        void setTreeView(InterimDBTreeListBox* pTreeView);
 
         void    showStatus( const OUString& _rStatus );
         void    hideStatus();
