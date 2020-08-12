@@ -16,7 +16,6 @@
 
 extern "C" {
 void * i18npool_component_getFactory( const char* , void* , void* );
-void * ucb_component_getFactory( const char* , void* , void* );
 
 void * com_sun_star_comp_framework_Desktop_get_implementation( void *, void * );
 void * com_sun_star_i18n_LocaleDataImpl_get_implementation( void *, void * );
@@ -42,6 +41,12 @@ void * unoxml_CBlankNode_get_implementation( void *, void * );
 void * unoxml_CXPathAPI_get_implementation( void *, void * );
 void * unoxml_CSAXDocumentBuilder_get_implementation( void *, void * );
 void * unoxml_CDocumentBuilder_get_implementation( void *, void * );
+void * ucb_UcbCommandEnvironment_get_implementation( void *, void * );
+void * ucb_UcbContentProviderProxyFactory_get_implementation( void *, void * );
+void * ucb_UcbPropertiesManager_get_implementation( void *, void * );
+void * ucb_UcbStore_get_implementation( void *, void * );
+void * ucb_UniversalContentBroker_get_implementation( void *, void * );
+void * ucb_OFileAccess_get_implementation( void *, void * );
 }
 
 const lib_to_factory_mapping *
@@ -49,7 +54,6 @@ lo_get_factory_map(void)
 {
     static lib_to_factory_mapping map[] = {
         { "libi18npoollo.a", i18npool_component_getFactory },
-        { "libucb1.a", ucb_component_getFactory },
         { 0, 0 }
     };
 
@@ -84,6 +88,12 @@ lo_get_constructor_map(void)
         { "unoxml_CXPathAPI_get_implementation", unoxml_CXPathAPI_get_implementation },
         { "unoxml_CSAXDocumentBuilder_get_implementation", unoxml_CSAXDocumentBuilder_get_implementation },
         { "unoxml_CDocumentBuilder_get_implementation", unoxml_CDocumentBuilder_get_implementation },
+        { "ucb_UcbCommandEnvironment_get_implementation", ucb_UcbCommandEnvironment_get_implementation, },
+        { "ucb_UcbContentProviderProxyFactory_get_implementation", ucb_UcbContentProviderProxyFactory_get_implementation },
+        { "ucb_UcbPropertiesManager_get_implementation", ucb_UcbPropertiesManager_get_implementation },
+        { "ucb_UcbStore_get_implementation", ucb_UcbStore_get_implementation },
+        { "ucb_UniversalContentBroker_get_implementation", ucb_UniversalContentBroker_get_implementation },
+        { "ucb_OFileAccess_get_implementation", ucb_OFileAccess_get_implementation },
         { 0, 0 }
     };
 
