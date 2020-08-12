@@ -157,6 +157,7 @@ public:
     void testTdf121744();
     void testTdf122031();
     void testTdf115012();
+    void testTdf134118();
     void testTdf123206_customLabelText();
     void testCustomLabelText();
     void testDeletedLegendEntries();
@@ -295,6 +296,7 @@ public:
     CPPUNIT_TEST(testTdf121744);
     CPPUNIT_TEST(testTdf122031);
     CPPUNIT_TEST(testTdf115012);
+    CPPUNIT_TEST(testTdf134118);
     CPPUNIT_TEST(testTdf123206_customLabelText);
     CPPUNIT_TEST(testCustomLabelText);
     CPPUNIT_TEST(testDeletedLegendEntries);
@@ -2569,6 +2571,15 @@ void Chart2ExportTest::testTdf115012()
     CPPUNIT_ASSERT(pXmlDoc);
     // workaround: use-zero instead of leave-gap to show the original line chart
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:dispBlanksAs", "val", "zero");
+}
+
+void Chart2ExportTest::testTdf134118()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf134118.xlsx");
+    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    // workaround: use leave-gap instead of zero to show the original line chart
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:dispBlanksAs", "val", "gap");
 }
 
 void Chart2ExportTest::testTdf123206_customLabelText()
