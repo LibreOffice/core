@@ -158,8 +158,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     static bool             s_bFound;
     static bool             s_bJustOpened;
 
-    static SearchAttrItemList* s_pSearchList;
-    static SearchAttrItemList* s_pReplaceList;
+    static std::unique_ptr<SearchAttrItemList> s_xSearchList;
+    static std::unique_ptr<SearchAttrItemList> s_xReplaceList;
 
     Timer               m_aTimer;         // for delayed ChgLnks during an action
     OUString            m_sSwViewData,

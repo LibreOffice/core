@@ -118,8 +118,8 @@ bool            SwView::s_bExtra      = false;
 bool            SwView::s_bFound      = false;
 bool            SwView::s_bJustOpened = false;
 
-SearchAttrItemList*     SwView::s_pSearchList   = nullptr;
-SearchAttrItemList*     SwView::s_pReplaceList   = nullptr;
+std::unique_ptr<SearchAttrItemList>  SwView::s_xSearchList;
+std::unique_ptr<SearchAttrItemList>  SwView::s_xReplaceList;
 
 SfxDispatcher &SwView::GetDispatcher()
 {
