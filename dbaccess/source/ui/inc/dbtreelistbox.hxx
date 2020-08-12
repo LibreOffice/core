@@ -98,7 +98,6 @@ namespace dbaui
         void implStartSelectionTimer();
 
         virtual bool DoChildKeyInput(const KeyEvent& rKEvt);
-        virtual bool DoContextMenu(const CommandEvent& rCEvt);
 
     public:
         TreeListBox(std::unique_ptr<weld::TreeView> xTreeView);
@@ -136,7 +135,38 @@ namespace dbaui
         virtual ~InterimDBTreeListBox() override;
     protected:
         virtual bool DoChildKeyInput(const KeyEvent& rKEvt) override;
-        virtual bool DoContextMenu(const CommandEvent& rCEvt) override;
+    };
+
+    class DBTreeViewBase
+    {
+    protected:
+        std::unique_ptr<weld::Builder> m_xBuilder;
+        std::unique_ptr<weld::Container> m_xContainer;
+        std::unique_ptr<TreeListBox> m_xTreeListBox;
+    public:
+        DBTreeViewBase(weld::Container* pContainer);
+        virtual ~DBTreeViewBase();
+
+        weld::TreeView& GetWidget() { return m_xTreeListBox->GetWidget(); }
+        const weld::TreeView& GetWidget() const { return m_xTreeListBox->GetWidget(); }
+
+        TreeListBox& getListBox() const { return *m_xTreeListBox; }
+
+        void hide() { m_xContainer->hide(); }
+        void show() { m_xContainer->show(); }
+        bool get_visible() const { return m_xContainer->get_visible(); }
+    };
+
+    class DBTreeView final : public DBTreeViewBase
+    {
+    public:
+        DBTreeView(weld::Container* pContainer);
+    };
+
+    class DBTableTreeView final : public DBTreeViewBase
+    {
+    public:
+        DBTableTreeView(weld::Container* pContainer, bool bShowToggles);
     };
 }
 

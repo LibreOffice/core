@@ -88,3 +88,4 @@ dbaccess/uiconfig/ui/taskwindow.ui://GtkTreeView[@id='treeview'] no-labelled-by
 dbaccess/uiconfig/ui/textpage.ui://GtkEntry[@id='extension'] no-labelled-by
 dbaccess/uiconfig/ui/textpage.ui://GtkLabel[@id='example'] orphan-label
 dbaccess/uiconfig/ui/useradminpage.ui://GtkLabel[@id='label3'] orphan-label
+dbaccess/uiconfig/ui/detailwindow.ui://GtkMenuToolButton[@id='disablepreview'] button-no-label
