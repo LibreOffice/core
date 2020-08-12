@@ -31,6 +31,7 @@ bridge_exception_objects := abi cpp2uno uno2cpp
 $(eval $(call gb_Library_add_exception_objects,$(gb_CPPU_ENV)_uno, \
     bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/callvirtualfunction, \
     $(if $(HAVE_GCC_STACK_CLASH_PROTECTION),-fno-stack-clash-protection) \
+	$(if $(COM_IS_CLANG),-fasynchronous-unwind-tables) \
 ))
 
 else ifeq ($(OS),iOS)
