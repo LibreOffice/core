@@ -525,7 +525,7 @@ namespace svt
     EditCellController::~EditCellController( )
     {
         if ( m_bOwnImplementation )
-            DELETEZ( m_pEditImplementation );
+            delete m_pEditImplementation;
     }
 
     void EditCellController::SaveValue()

@@ -726,8 +726,10 @@ SvxNumRule::~SvxNumRule()
 {
     if(!--nRefCount)
     {
-        DELETEZ(pStdNumFmt);
-        DELETEZ(pStdOutlineNumFmt);
+        delete pStdNumFmt;
+        pStdNumFmt = nullptr;
+        delete pStdOutlineNumFmt;
+        pStdOutlineNumFmt = nullptr;
     }
 }
 

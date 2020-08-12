@@ -379,7 +379,8 @@ SvtAccessibilityOptions::~SvtAccessibilityOptions()
     {
         //if( sm_pSingleImplConfig->IsModified() )
         //  sm_pSingleImplConfig->Commit();
-        DELETEZ( sm_pSingleImplConfig );
+        delete sm_pSingleImplConfig;
+        sm_pSingleImplConfig = nullptr;
     }
 }
 
