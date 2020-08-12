@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sm">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkMenu" id="menu1">
@@ -79,26 +79,6 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkMenuButton" id="modify">
-                <property name="label" translatable="yes" context="fonttypedialog|modify">_Modify</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
-                <property name="popup">menu1</property>
-                <property name="use_popover">False</property>
-                <property name="draw_indicator">True</property>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
                 <property name="visible">True</property>
@@ -114,12 +94,42 @@
               </packing>
             </child>
             <child>
+              <object class="GtkMenuButton" id="modify">
+                <property name="label" translatable="yes" context="fonttypedialog|modify">_Modify</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+                <property name="draw_indicator">True</property>
+                <property name="popup">menu1</property>
+                <property name="use_popover">False</property>
+                <child>
+                  <placeholder/>
+                </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="modify-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="fonttypedialog|extended_tip|modify">Click one of the choices from this pop-up menu to access the Fonts dialog, where you can define the font and attributes for the respective formula and for custom fonts.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkButton" id="default">
                 <property name="label" translatable="yes" context="fonttypedialog|default">_Default</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="default-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="fonttypedialog|extended_tip|default">Click this button to save your changes as the default for all new formulas.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -266,6 +276,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="variableCB-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="fonttypedialog|extended_tip|variableCB">You can select the fonts for the variables in your formula.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -277,6 +292,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="functionCB-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="fonttypedialog|extended_tip|functionCB">Select the fonts for names and properties of functions.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -288,6 +308,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="numberCB-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="fonttypedialog|extended_tip|numberCB">You can select the fonts for the numbers in your formula.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -299,6 +324,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="textCB-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="fonttypedialog|extended_tip|textCB">Define the fonts for the text in your formula here.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -402,6 +432,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="serifCB-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="fonttypedialog|extended_tip|serifCB">You can specify the font to be used for the font serif format.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -413,6 +448,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="sansCB-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="fonttypedialog|extended_tip|sansCB">You can specify the font to be used for sans font formatting.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -424,6 +464,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="fixedCB-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="fonttypedialog|extended_tip|fixedCB">You can specify the font to be used for fixed font formatting.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -465,8 +510,13 @@
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-6">cancel</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="FontsDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="fonttypedialog|extended_tip|FontsDialog">Defines the fonts that can be applied to formula elements.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
