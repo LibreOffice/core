@@ -73,19 +73,20 @@ public:
     std::unique_ptr<DdeService>              pDdeService2;
 
     // single instance classes
-    SfxChildWinFactArr_Impl*            pFactArr;
+    std::unique_ptr<SfxChildWinFactArr_Impl>
+                                        pFactArr;
     std::vector<SfxFrame*>              vTopFrames;
 
     // application members
-    SfxFilterMatcher*                   pMatcher;
-    SfxErrorHandler *m_pToolsErrorHdl;
-    SfxErrorHandler *m_pSoErrorHdl;
+    std::unique_ptr<SfxFilterMatcher>   pMatcher;
+    std::unique_ptr<SfxErrorHandler>    m_pToolsErrorHdl;
+    std::unique_ptr<SfxErrorHandler>    m_pSoErrorHdl;
 #if HAVE_FEATURE_SCRIPTING
-    SfxErrorHandler *m_pSbxErrorHdl;
+    std::unique_ptr<SfxErrorHandler>    m_pSbxErrorHdl;
 #endif
     rtl::Reference<SfxStatusDispatcher> mxAppDispatch;
     std::unique_ptr<SfxPickList>        mxAppPickList;
-    SfxDocumentTemplates*               pTemplates;
+    std::unique_ptr<SfxDocumentTemplates> pTemplates;
 
     // global pointers
     SfxItemPool*                        pPool;
@@ -96,18 +97,25 @@ public:
     sal_uInt16                              nDocModalMode;              // counts documents in modal mode
     sal_uInt16                              nRescheduleLocks;
 
-    SfxTbxCtrlFactArr_Impl*     pTbxCtrlFac;
-    SfxStbCtrlFactArr_Impl*     pStbCtrlFac;
-    SfxViewFrameArr_Impl*       pViewFrames;
-    SfxViewShellArr_Impl*       pViewShells;
-    SfxObjectShellArr_Impl*     pObjShells;
+    std::unique_ptr<SfxTbxCtrlFactArr_Impl>
+                                pTbxCtrlFac;
+    std::unique_ptr<SfxStbCtrlFactArr_Impl>
+                                pStbCtrlFac;
+    std::unique_ptr<SfxViewFrameArr_Impl>
+                                pViewFrames;
+    std::unique_ptr<SfxViewShellArr_Impl>
+                                pViewShells;
+    std::unique_ptr<SfxObjectShellArr_Impl>
+                                pObjShells;
     std::unique_ptr<SfxBasicManagerHolder>
                                 pBasicManager;
     std::unique_ptr<SfxBasicManagerCreationListener>
                                 pBasMgrListener;
     SfxViewFrame*               pViewFrame;
-    SfxSlotPool*                pSlotPool;
-    SfxDispatcher*              pAppDispat;     // Dispatcher if no document
+    std::unique_ptr<SfxSlotPool>
+                                pSlotPool;
+    std::unique_ptr<SfxDispatcher>
+                                pAppDispat;     // Dispatcher if no document
     ::rtl::Reference<sfx2::sidebar::Theme> m_pSidebarTheme;
 
     bool                        bDowning:1;   // sal_True on Exit and afterwards
