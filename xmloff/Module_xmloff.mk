@@ -31,6 +31,7 @@ $(eval $(call gb_Module_add_check_targets,xmloff,\
 		CppunitTest_xmloff_uxmloff) \
 	CppunitTest_xmloff_style \
 	CppunitTest_xmloff_text \
+	CppunitTest_xmloff_draw \
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,xmloff,\
