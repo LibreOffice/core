@@ -190,14 +190,14 @@ void SfxApplication::Initialize_Impl()
     Help::EnableContextHelp();
     Help::EnableExtHelp();
 
-    pImpl->m_pToolsErrorHdl = new SfxErrorHandler(
-        RID_ERRHDL, ErrCodeArea::Io, ErrCodeArea::Vcl);
+    pImpl->m_pToolsErrorHdl.reset(new SfxErrorHandler(
+        RID_ERRHDL, ErrCodeArea::Io, ErrCodeArea::Vcl));
 
-    pImpl->m_pSoErrorHdl = new SfxErrorHandler(
-        RID_SO_ERROR_HANDLER, ErrCodeArea::So, ErrCodeArea::So, SvtResLocale());
+    pImpl->m_pSoErrorHdl.reset(new SfxErrorHandler(
+        RID_SO_ERROR_HANDLER, ErrCodeArea::So, ErrCodeArea::So, SvtResLocale()));
 #if HAVE_FEATURE_SCRIPTING
-    pImpl->m_pSbxErrorHdl = new SfxErrorHandler(
-        RID_BASIC_START, ErrCodeArea::Sbx, ErrCodeArea::Sbx, BasResLocale());
+    pImpl->m_pSbxErrorHdl.reset(new SfxErrorHandler(
+        RID_BASIC_START, ErrCodeArea::Sbx, ErrCodeArea::Sbx, BasResLocale()));
 #endif
 
     if (!utl::ConfigManager::IsFuzzing())
@@ -209,13 +209,13 @@ void SfxApplication::Initialize_Impl()
     }
 
     DBG_ASSERT( !pImpl->pAppDispat, "AppDispatcher already exists" );
-    pImpl->pAppDispat = new SfxDispatcher;
-    pImpl->pSlotPool = new SfxSlotPool;
-    pImpl->pTbxCtrlFac = new SfxTbxCtrlFactArr_Impl;
-    pImpl->pStbCtrlFac = new SfxStbCtrlFactArr_Impl;
-    pImpl->pViewFrames = new SfxViewFrameArr_Impl;
-    pImpl->pViewShells = new SfxViewShellArr_Impl;
-    pImpl->pObjShells = new SfxObjectShellArr_Impl;
+    pImpl->pAppDispat.reset(new SfxDispatcher);
+    pImpl->pSlotPool.reset(new SfxSlotPool);
+    pImpl->pTbxCtrlFac.reset(new SfxTbxCtrlFactArr_Impl);
+    pImpl->pStbCtrlFac.reset(new SfxStbCtrlFactArr_Impl);
+    pImpl->pViewFrames.reset(new SfxViewFrameArr_Impl);
+    pImpl->pViewShells.reset(new SfxViewShellArr_Impl);
+    pImpl->pObjShells.reset(new SfxObjectShellArr_Impl);
 
     Registrations_Impl();
 

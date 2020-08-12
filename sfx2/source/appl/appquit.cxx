@@ -54,7 +54,7 @@ void SfxApplication::Deinitialize()
 
     pImpl->bDowning = true; // due to Timer from DecAliveCount and QueryExit
 
-    DELETEZ( pImpl->pTemplates );
+    pImpl->pTemplates.reset();
 
     // By definition there shouldn't be any open view frames when we reach
     // this method. Therefore this call makes no sense and is the source of
@@ -82,19 +82,19 @@ void SfxApplication::Deinitialize()
     DBG_ASSERT( pImpl->pViewFrame == nullptr, "active foreign ViewFrame" );
 
     // free administration managers
-    DELETEZ(pImpl->pAppDispat);
+    pImpl->pAppDispat.reset();
 
     // from here no SvObjects have to exists
-    DELETEZ(pImpl->pMatcher);
+    pImpl->pMatcher.reset();
 
-    DELETEZ(pImpl->pSlotPool);
-    DELETEZ(pImpl->pFactArr);
+    pImpl->pSlotPool.reset();
+    pImpl->pFactArr.reset();
 
-    DELETEZ(pImpl->pTbxCtrlFac);
-    DELETEZ(pImpl->pStbCtrlFac);
-    DELETEZ(pImpl->pViewFrames);
-    DELETEZ(pImpl->pViewShells);
-    DELETEZ(pImpl->pObjShells);
+    pImpl->pTbxCtrlFac.reset();
+    pImpl->pStbCtrlFac.reset();
+    pImpl->pViewFrames.reset();
+    pImpl->pViewShells.reset();
+    pImpl->pObjShells.reset();
 
     //TODO/CLEANUP
     //ReleaseArgs could be used instead!
@@ -102,10 +102,10 @@ void SfxApplication::Deinitialize()
     NoChaos::ReleaseItemPool();
 
 #if HAVE_FEATURE_SCRIPTING
-    delete pImpl->m_pSbxErrorHdl;
+    pImpl->m_pSbxErrorHdl.reset();
 #endif
-    delete pImpl->m_pSoErrorHdl;
-    delete pImpl->m_pToolsErrorHdl;
+    pImpl->m_pSoErrorHdl.reset();
+    pImpl->m_pToolsErrorHdl.reset();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
