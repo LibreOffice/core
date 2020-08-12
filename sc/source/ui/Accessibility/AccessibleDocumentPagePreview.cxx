@@ -125,23 +125,20 @@ ScNotesChildren::ScNotesChildren(ScPreviewShell* pViewShell, ScAccessibleDocumen
 {
 }
 
-namespace {
-
-struct DeleteAccNote
-{
-    void operator()(ScAccNote& rNote)
-    {
-        if (rNote.mpTextHelper)
-            DELETEZ( rNote.mpTextHelper);
-    }
-};
-
-}
-
 ScNotesChildren::~ScNotesChildren()
 {
-    std::for_each(maNotes.begin(), maNotes.end(), DeleteAccNote());
-    std::for_each(maMarks.begin(), maMarks.end(), DeleteAccNote());
+    for (auto & i : maNotes)
+        if (i.mpTextHelper)
+        {
+            delete i.mpTextHelper;
+            i.mpTextHelper = nullptr;
+        }
+    for (auto & i : maMarks)
+        if (i.mpTextHelper)
+        {
+            delete i.mpTextHelper;
+            i.mpTextHelper = nullptr;
+        }
 }
 
 ::accessibility::AccessibleTextHelper* ScNotesChildren::CreateTextHelper(const OUString& rString, const tools::Rectangle& rVisRect, const ScAddress& aCellPos, bool bMarkNote, sal_Int32 nChildOffset) const
@@ -386,7 +383,8 @@ sal_Int32 ScNotesChildren::CheckChanges(const ScPreviewLocationData& rData,
                             aNote.mnParaCount = aNote.mpTextHelper->GetChildCount();
                         // collect removed children
                         CollectChildren(*aItr, rOldParas);
-                        DELETEZ(aItr->mpTextHelper);
+                        delete aItr->mpTextHelper;
+                        aItr->mpTextHelper = nullptr;;
                         // collect new children
                         CollectChildren(aNote, rNewParas);
                     }
@@ -408,7 +406,8 @@ sal_Int32 ScNotesChildren::CheckChanges(const ScPreviewLocationData& rData,
                 {
                     // collect removed children
                     CollectChildren(*aItr, rOldParas);
-                    DELETEZ(aItr->mpTextHelper);
+                    delete aItr->mpTextHelper;
+                    aItr->mpTextHelper = nullptr;
 
                     // no note to add
                     // not necessary, because this branch should not be reached if it is the end
