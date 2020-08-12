@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9080193a_2e0ca26f",
+        "filename": "cui/inc/strings.hrc",
+        "patchSetId": 9
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-08-12T15:50:46Z",
+      "side": 1,
+      "message": "Apparently not used but a typo anyway.",
+      "range": {
+        "startLine": 400,
+        "startChar": 57,
+        "endLine": 400,
+        "endChar": 60
+      },
+      "revId": "6e50e03262aa12921f108b502d3c76ce983d54f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
