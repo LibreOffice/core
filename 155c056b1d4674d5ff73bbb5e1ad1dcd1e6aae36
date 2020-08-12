@@ -16,6 +16,24 @@
       "revId": "155c056b1d4674d5ff73bbb5e1ad1dcd1e6aae36",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "208d044e_230a37ce",
+        "filename": "i18npool/util/i18npool.component",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-08-12T14:03:27Z",
+      "side": 1,
+      "message": "thanks, should be fixed here\nhttps://gerrit.libreoffice.org/c/core/+/100599",
+      "parentUuid": "038b815d_85c8b1ae",
+      "revId": "155c056b1d4674d5ff73bbb5e1ad1dcd1e6aae36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
