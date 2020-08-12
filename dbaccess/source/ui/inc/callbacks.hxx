@@ -22,7 +22,6 @@
 
 #include <sot/exchange.hxx>
 
-class SvTreeListEntry;
 class Point;
 class PopupMenu;
 class Control;
@@ -47,13 +46,11 @@ namespace dbaui
         /** requests a quick help text to display
             @return <FALSE/> if the default quick help text should be used
         */
-        virtual bool    requestQuickHelp( const SvTreeListEntry* _pEntry, OUString& _rText ) const = 0;
         virtual bool    requestQuickHelp(const void* pUserData, OUString& rText) const = 0;
 
         /** handler for StartDrag requests
             @return <TRUE/> if a drag operation was started
         */
-        virtual bool    requestDrag(const Point& _rPosPixel) = 0;
         virtual bool    requestDrag(const weld::TreeIter& rEntry) = 0;
 
         /** check whether or not a drop request should be accepted

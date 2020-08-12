@@ -35,7 +35,6 @@ namespace com::sun::star{
     }
 }
 
-class SvTreeListEntry;
 class SvxLinguData_Impl;
 
 // define ----------------------------------------------------------------

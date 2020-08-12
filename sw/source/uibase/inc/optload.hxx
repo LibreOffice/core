@@ -30,7 +30,6 @@
 #include <SwCapObjType.hxx>
 
 class SwFieldMgr;
-class SvTreeListEntry;
 class SwWrtShell;
 
 class SwFieldUnitTable

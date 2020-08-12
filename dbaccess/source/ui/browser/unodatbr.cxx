@@ -3485,11 +3485,6 @@ void SbaTableQueryBrowser::implAdministrate(weld::TreeIter& rApplyTo)
     }
 }
 
-bool SbaTableQueryBrowser::requestQuickHelp( const SvTreeListEntry* , OUString& ) const
-{
-    return false;
-}
-
 bool SbaTableQueryBrowser::requestQuickHelp(const void* pUserData, OUString& rText) const
 {
     const DBTreeListUserData* pData = static_cast<const DBTreeListUserData*>(pUserData);
