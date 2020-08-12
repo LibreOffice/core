@@ -275,10 +275,10 @@ static void deleteException( void * pExc )
     // point to this function (the use of __cxa_exception in fillUnoException is
     // unaffected, as it only accesses members towards the start of the struct,
     // through a pointer known to actually point at the start).  The libcxxabi commit
-    // <https://github.com/llvm/llvm-project/commit/f2a436058fcbc11291e73badb44e243f61046183>
-    // "[libcxxabi] Insert padding in __cxa_exception struct for compatibility" towards LLVM 11
+    // <https://github.com/llvm/llvm-project/commit/674ec1eb16678b8addc02a4b0534ab383d22fa77>
+    // "[libcxxabi] Insert padding in __cxa_exception struct for compatibility" in LLVM 10
     // removes the need for this hack, so it can be removed again once we can be sure that we only
-    // run against libcxxabi from LLVM >= 11:
+    // run against libcxxabi from LLVM >= 10:
     if (header->exceptionDestructor != &deleteException) {
         header = reinterpret_cast<__cxa_exception const *>(
             reinterpret_cast<char const *>(header) - 8);
@@ -353,8 +353,8 @@ void fillUnoException(uno_Any * pUnoExc, uno_Mapping * pCpp2Uno)
     }
 
     // Very bad HACK to find out whether we run against a libcxxabi that has a new
-    // __cxa_exception::reserved member at the start, introduced with LLVM 11
-    // <https://github.com/llvm/llvm-project/commit/f2a436058fcbc11291e73badb44e243f61046183>
+    // __cxa_exception::reserved member at the start, introduced with LLVM 10
+    // <https://github.com/llvm/llvm-project/commit/674ec1eb16678b8addc02a4b0534ab383d22fa77>
     // "[libcxxabi] Insert padding in __cxa_exception struct for compatibility".  The layout of the
     // start of __cxa_exception is
     //

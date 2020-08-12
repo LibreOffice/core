@@ -182,7 +182,7 @@ extern "C" void _GLIBCXX_CDTOR_CALLABI deleteException(void * exception) {
     // Later, libcxxabi, as used at least on macOS on arm64, added a
     // void *reserve at the start of the __cxa_exception in front of
     // the referenceCount. See
-    // https://github.com/llvm/llvm-project/commit/f2a436058fcbc11291e73badb44e243f61046183#diff-ba9cda1ceca630ba040b154fe198adbd
+    // https://github.com/llvm/llvm-project/commit/674ec1eb16678b8addc02a4b0534ab383d22fa77
 
     if (header->exceptionDestructor != &deleteException) {
         header = reinterpret_cast<__cxxabiv1::__cxa_exception *>(
