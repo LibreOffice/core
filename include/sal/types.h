@@ -23,6 +23,11 @@
 #include "sal/config.h"
 
 #include <stddef.h>
+#include <stdint.h>
+#include <inttypes.h>
+#ifdef _WIN32
+#include <uchar.h>
+#endif
 
 #include "sal/macros.h"
 #include "sal/typesizes.h"
@@ -32,157 +37,130 @@ extern "C" {
 #endif
 
 typedef unsigned char sal_Bool;
-#   define sal_False ((sal_Bool)0)
-#   define sal_True  ((sal_Bool)1)
+#define sal_False ((sal_Bool)0)
+#define sal_True  ((sal_Bool)1)
 
-/* char is assumed to always be 1 byte long */
-typedef signed char         sal_Int8;
-typedef unsigned char       sal_uInt8;
-
-#if SAL_TYPES_SIZEOFSHORT == 2
-    typedef signed short      sal_Int16;
-    typedef unsigned short    sal_uInt16;
-#else
-     #error "Could not find 16-bit type, add support for your architecture"
+#ifndef INT8_MIN
+#error "Could not find 8-bit type, add support for your architecture"
 #endif
 
-#if SAL_TYPES_SIZEOFLONG == 4
-    typedef signed long       sal_Int32;
-    typedef unsigned long     sal_uInt32;
-    #define SAL_PRIdINT32 "ld"
-    #define SAL_PRIuUINT32 "lu"
-    #define SAL_PRIxUINT32 "lx"
-    #define SAL_PRIXUINT32 "lX"
-#elif SAL_TYPES_SIZEOFINT == 4
-    typedef signed int        sal_Int32;
-    typedef unsigned int      sal_uInt32;
-    #define SAL_PRIdINT32 "d"
-    #define SAL_PRIuUINT32 "u"
-    #define SAL_PRIxUINT32 "x"
-    #define SAL_PRIXUINT32 "X"
-#else
-     #error "Could not find 32-bit type, add support for your architecture"
+#ifndef INT16_MIN
+#error "Could not find 16-bit type, add support for your architecture"
 #endif
 
-#ifdef _MSC_VER
-    typedef __int64                  sal_Int64;
-    typedef unsigned __int64         sal_uInt64;
-
-    /*  The following are macros that will add the 64 bit constant suffix. */
-    #define SAL_CONST_INT64(x)       x##i64
-    #define SAL_CONST_UINT64(x)      x##ui64
-
-    #define SAL_PRIdINT64 "I64d"
-    #define SAL_PRIuUINT64 "I64u"
-    #define SAL_PRIxUINT64 "I64x"
-    #define SAL_PRIXUINT64 "I64X"
-#elif defined (__GNUC__)
-    #if SAL_TYPES_SIZEOFLONG == 8
-        typedef signed long int         sal_Int64;
-        typedef unsigned long int       sal_uInt64;
-
-
-        /*  The following are macros that will add the 64 bit constant suffix. */
-        #define SAL_CONST_INT64(x)       x##l
-        #define SAL_CONST_UINT64(x)      x##ul
-
-        #define SAL_PRIdINT64 "ld"
-        #define SAL_PRIuUINT64 "lu"
-        #define SAL_PRIxUINT64 "lx"
-        #define SAL_PRIXUINT64 "lX"
-    #elif SAL_TYPES_SIZEOFLONGLONG == 8
-        typedef signed long long    sal_Int64;
-        typedef unsigned long long  sal_uInt64;
-
-        /*  The following are macros that will add the 64 bit constant suffix. */
-        #define SAL_CONST_INT64(x)       x##ll
-        #define SAL_CONST_UINT64(x)      x##ull
-
-        #define SAL_PRIdINT64 "lld"
-        #define SAL_PRIuUINT64 "llu"
-        #define SAL_PRIxUINT64 "llx"
-        #define SAL_PRIXUINT64 "llX"
-    #else
-        #error "Could not find 64-bit type, add support for your architecture"
-    #endif
-#else
-    #error "Please define the 64-bit types for your architecture/compiler in include/sal/types.h"
+#ifndef INT32_MIN
+#error "Could not find 32-bit type, add support for your architecture"
 #endif
+
+#ifndef INT64_MIN
+#error "Could not find 64-bit type, add support for your architecture"
+#endif
+
+typedef int8_t   sal_Int8;
+typedef uint8_t  sal_uInt8;
+typedef int16_t  sal_Int16;
+typedef uint16_t sal_uInt16;
+typedef int32_t  sal_Int32;
+typedef uint32_t sal_uInt32;
+typedef int64_t  sal_Int64;
+typedef uint64_t sal_uInt64;
+
+#define SAL_PRIdINT8   PRId8
+#define SAL_PRIuUINT8  PRIu8
+#define SAL_PRIxUINT8  PRIx8
+#define SAL_PRIXUINT8  PRIX8
+#define SAL_PRIdINT16  PRId16
+#define SAL_PRIuUINT16 PRIu16
+#define SAL_PRIxUINT16 PRIx16
+#define SAL_PRIXUINT16 PRIX16
+#define SAL_PRIdINT32  PRId32
+#define SAL_PRIuUINT32 PRIu32
+#define SAL_PRIxUINT32 PRIx32
+#define SAL_PRIXUINT32 PRIX32
+#define SAL_PRIdINT64  PRId64
+#define SAL_PRIuUINT64 PRIu64
+#define SAL_PRIxUINT64 PRIx64
+#define SAL_PRIXUINT64 PRIX64
+
+/*  The following are macros that will add the 64 bit constant suffix. */
+#define SAL_CONST_INT64(x)     INT64_C(x)
+#define SAL_CONST_UINT64(x)    UINT64_C(x)
 
 /** A legacy synonym for `char`.
-
-    @deprecated use plain `char` instead.
-*/
+  * @deprecated use plain `char` instead.
+  */
 typedef char sal_Char;
 
 /** A legacy synonym for `signed char`.
-
-    @deprecated use plain `signed char` instead.
-*/
+  * @deprecated use plain `signed char` instead.
+  */
 typedef signed char sal_sChar;
 
 /** A legacy synonym for `unsigned char`.
-
-    @deprecated use plain `unsigned char` instead.
-*/
+  * @deprecated use plain `unsigned char` instead.
+  */
 typedef unsigned char sal_uChar;
 
 #if defined LIBO_INTERNAL_ONLY && defined __cplusplus
     #define SAL_UNICODE_NOTEQUAL_WCHAR_T
     typedef char16_t sal_Unicode;
+    typedef char16_t sal_Unicode16;
+    typedef char32_t sal_Unicode32;
 #elif defined(_WIN32)
     typedef wchar_t sal_Unicode;
+    typedef char16_t sal_Unicode16;
+    typedef char32_t sal_Unicode32;
 #else
     #define SAL_UNICODE_NOTEQUAL_WCHAR_T
     typedef sal_uInt16 sal_Unicode;
+    typedef sal_uInt16 sal_Unicode16;
+    typedef sal_uInt32 sal_Unicode32;
 #endif
 
-typedef void *                   sal_Handle;
+typedef void * sal_Handle;
 
 /* sal_Size should currently be the native width of the platform */
+typedef size_t sal_Size;
 #if SAL_TYPES_SIZEOFPOINTER == 4
-    typedef sal_uInt32          sal_Size;
-    typedef sal_Int32           sal_sSize;
+    typedef sal_Int32 sal_sSize;
 #elif SAL_TYPES_SIZEOFPOINTER == 8
-    typedef sal_uInt64          sal_Size;
-    typedef sal_Int64           sal_sSize;
+    typedef sal_Int64 sal_sSize;
 #else
     #error "Please make sure SAL_TYPES_SIZEOFPOINTER is defined for your architecture/compiler"
 #endif
 
-/* sal_PtrDiff holds the result of a pointer subtraction */
+/* sal_Size should currently be the native width of the platform */
 #if SAL_TYPES_SIZEOFPOINTER == 4
-    typedef sal_Int32           sal_PtrDiff;
+    typedef sal_Int32 sal_PtrDiff;
 #elif SAL_TYPES_SIZEOFPOINTER == 8
-    typedef sal_Int64           sal_PtrDiff;
+    typedef sal_Int64 sal_PtrDiff;
 #else
     #error "Please make sure SAL_TYPES_SIZEOFPOINTER is defined for your architecture/compiler"
 #endif
 
 /* printf-style conversion specification length modifiers for size_t and
    ptrdiff_t (most platforms support C99, MSC has its own extension) */
-#if defined(_MSC_VER)
+#ifdef _MSC_VER
     #define SAL_PRI_SIZET "I"
     #define SAL_PRI_PTRDIFFT "I"
 #else
-    #define SAL_PRI_SIZET "z"
+    #define SAL_PRI_SIZET "zu"
     #define SAL_PRI_PTRDIFFT "t"
 #endif
 
 /* sal_IntPtr, sal_uIntPtr are integer types designed to hold pointers so that any valid
  * pointer to void can be converted to this type and back to a pointer to void and the
  * result will compare to the original pointer */
+typedef size_t  sal_uIntPtr;
 #if SAL_TYPES_SIZEOFPOINTER == 4
-    typedef sal_Int32           sal_IntPtr;
-    typedef sal_uInt32          sal_uIntPtr;
-    #define SAL_PRIdINTPTR SAL_PRIdINT32
+    typedef sal_Int32 sal_IntPtr;
+    #define SAL_PRIdINTPTR  SAL_PRIdINT32
     #define SAL_PRIuUINTPTR SAL_PRIuUINT32
     #define SAL_PRIxUINTPTR SAL_PRIxUINT32
     #define SAL_PRIXUINTPTR SAL_PRIXUINT32
 #elif SAL_TYPES_SIZEOFPOINTER == 8
-    typedef sal_Int64           sal_IntPtr;
-    typedef sal_uInt64          sal_uIntPtr;
-    #define SAL_PRIdINTPTR SAL_PRIdINT64
+    typedef sal_Int64 sal_IntPtr;
+    #define SAL_PRIdINTPTR  SAL_PRIdINT64
     #define SAL_PRIuUINTPTR SAL_PRIuUINT64
     #define SAL_PRIxUINTPTR SAL_PRIxUINT64
     #define SAL_PRIXUINTPTR SAL_PRIXUINT64
@@ -195,25 +173,25 @@ typedef void *                   sal_Handle;
  * "-0x7F... - 1" instead of as "-0x80..." prevents warnings about applying the
  * unary minus operator to unsigned quantities.
  */
-#define SAL_MIN_INT8          ((sal_Int8)   (-0x7F - 1))
-#define SAL_MAX_INT8          ((sal_Int8)   0x7F)
-#define SAL_MAX_UINT8         ((sal_uInt8)  0xFF)
-#define SAL_MIN_INT16         ((sal_Int16)  (-0x7FFF - 1))
-#define SAL_MAX_INT16         ((sal_Int16)  0x7FFF)
-#define SAL_MAX_UINT16        ((sal_uInt16) 0xFFFF)
-#define SAL_MIN_INT32         ((sal_Int32)  (-0x7FFFFFFF - 1))
-#define SAL_MAX_INT32         ((sal_Int32)  0x7FFFFFFF)
-#define SAL_MAX_UINT32        ((sal_uInt32) 0xFFFFFFFF)
-#define SAL_MIN_INT64         ((sal_Int64)  (SAL_CONST_INT64(-0x7FFFFFFFFFFFFFFF) - 1))
-#define SAL_MAX_INT64         ((sal_Int64)  SAL_CONST_INT64(0x7FFFFFFFFFFFFFFF))
-#define SAL_MAX_UINT64        ((sal_uInt64) SAL_CONST_UINT64(0xFFFFFFFFFFFFFFFF))
+#define SAL_MIN_INT8         INT8_MIN
+#define SAL_MAX_INT8         INT8_MAX
+#define SAL_MAX_UINT8        UINT8_MAX
+#define SAL_MIN_INT16        INT16_MIN
+#define SAL_MAX_INT16        INT16_MAX
+#define SAL_MAX_UINT16       UINT16_MAX
+#define SAL_MIN_INT32        INT32_MIN
+#define SAL_MAX_INT32        INT32_MAX
+#define SAL_MAX_UINT32       UINT32_MAX
+#define SAL_MIN_INT64        INT64_MIN
+#define SAL_MAX_INT64        INT64_MAX
+#define SAL_MAX_UINT64       UINT64_MAX
 
 #if SAL_TYPES_SIZEOFPOINTER == 4
-#define SAL_MAX_SSIZE       SAL_MAX_INT32
-#define SAL_MAX_SIZE        SAL_MAX_UINT32
+#define SAL_MAX_SSIZE       INT32_MAX
+#define SAL_MAX_SIZE        UINT32_MAX
 #elif SAL_TYPES_SIZEOFPOINTER == 8
-#define SAL_MAX_SSIZE       SAL_MAX_INT64
-#define SAL_MAX_SIZE        SAL_MAX_UINT64
+#define SAL_MAX_SSIZE       INT64_MAX
+#define SAL_MAX_SIZE        UINT64_MAX
 #endif
 
 #define SAL_MAX_ENUM 0x7fffffff
