@@ -597,10 +597,16 @@ AdditionsItem::AdditionsItem(weld::Widget* pParent, AdditionsDialog* pParentDial
 {
     SolarMutexGuard aGuard;
 
+    // AdditionsItem set location
     m_xContainer->set_grid_left_attach(0);
     m_xContainer->set_grid_top_attach(pParentDialog->m_aAdditionsItems.size() - 1);
 
-    m_xLinkButtonName->set_label(additionInfo.sName);
+    std::string sTempExtensionName = additionInfo.sName.toUtf8().getStr();
+    // Set maximum length of the extension title
+    sTempExtensionName = sTempExtensionName.substr(0, 30);
+    OUString sExtensionName = OUString::fromUtf8(sTempExtensionName.c_str());
+    m_xLinkButtonName->set_label(sExtensionName);
+
     m_xLinkButtonName->set_uri(additionInfo.sExtensionURL);
     m_xLabelDescription->set_label(additionInfo.sIntroduction);
     m_xLabelAuthor->set_label(additionInfo.sAuthorName);
