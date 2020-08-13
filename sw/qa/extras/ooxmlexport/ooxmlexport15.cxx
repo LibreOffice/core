@@ -18,6 +18,8 @@
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <tools/color.hxx>
 
 char const DATA_DIRECTORY[] = "/sw/qa/extras/ooxmlexport/data/";
 
@@ -278,6 +280,47 @@ DECLARE_OOXMLEXPORT_TEST(testTdf134063, "tdf134063.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(720), getXPath(pDump, "//page[1]/body/txt[1]/Text[1]", "nWidth").toInt32());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(720), getXPath(pDump, "//page[1]/body/txt[1]/Text[2]", "nWidth").toInt32());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(720), getXPath(pDump, "//page[1]/body/txt[1]/Text[3]", "nWidth").toInt32());
+}
+
+DECLARE_OOXMLIMPORT_TEST(TestTdf135653, "tdf135653.docx")
+{
+    uno::Reference<beans::XPropertySet> xOLEProps(getShape(1), uno::UNO_QUERY_THROW);
+    drawing::FillStyle nFillStyle = static_cast<drawing::FillStyle>(-1);
+    xOLEProps->getPropertyValue("FillStyle") >>= nFillStyle;
+    Color aFillColor(COL_AUTO);
+    xOLEProps->getPropertyValue("FillColor") >>= aFillColor;
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fill style setting does not match!",
+                                 drawing::FillStyle::FillStyle_SOLID, nFillStyle);
+    Color aExpectedColor;
+    aExpectedColor.SetRed(255);
+    aExpectedColor.SetGreen(0);
+    aExpectedColor.SetBlue(0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("OLE bg color does not match!", aExpectedColor, aFillColor);
+}
+
+DECLARE_OOXMLIMPORT_TEST(TestTdf135666, "tdf135666.docx")
+{
+    uno::Reference<beans::XPropertySet> xOLEProps(getShape(1), uno::UNO_QUERY_THROW);
+
+    table::BorderLine2 aRightBorder;
+    table::BorderLine2 aTopBorder;
+    table::BorderLine2 aLeftBorder;
+    table::BorderLine2 aBottomBorder;
+    xOLEProps->getPropertyValue("RightBorder") >>= aRightBorder;
+    xOLEProps->getPropertyValue("TopBorder") >>= aTopBorder;
+    xOLEProps->getPropertyValue("LeftBorder") >>= aLeftBorder;
+    xOLEProps->getPropertyValue("BottomBorder") >>= aBottomBorder;
+
+    CPPUNIT_ASSERT_MESSAGE("Right OLE border has no color.", aRightBorder.Color);
+    CPPUNIT_ASSERT_MESSAGE("Top OLE border has no color.", aTopBorder.Color);
+    CPPUNIT_ASSERT_MESSAGE("Left OLE border has no color.", aLeftBorder.Color);
+    CPPUNIT_ASSERT_MESSAGE("Bottom OLE border has no color.", aBottomBorder.Color);
+
+    CPPUNIT_ASSERT_MESSAGE("Right OLE border has no width.", aRightBorder.LineWidth);
+    CPPUNIT_ASSERT_MESSAGE("Top OLE border has no width.", aTopBorder.LineWidth);
+    CPPUNIT_ASSERT_MESSAGE("Left OLE border has no width.", aLeftBorder.LineWidth);
+    CPPUNIT_ASSERT_MESSAGE("Bottom OLE border has no width.", aBottomBorder.LineWidth);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testAtPageShapeRelOrientation, "rotated_shape.fodt")
