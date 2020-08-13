@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6c6bc5e6_8ae7c2c0",
+        "filename": "config_host.mk.in",
+        "patchSetId": 8
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-08-13T07:13:49Z",
+      "side": 1,
+      "message": "If I read correctly, this exports PYTHONWARNINGS only in case it\u0027s empty. Why this condition? it\u0027s not obvious to me. You can do the usual FOO\u003dbar assignment, that still allows overwriting it with \"make FOO\u003dbaz\".",
+      "revId": "40def8afefc07f65212205d319eb3f7b21fdaf79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
