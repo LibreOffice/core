@@ -9,6 +9,8 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <tools/color.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
@@ -367,6 +369,23 @@ DECLARE_OOXMLEXPORT_TEST(testTdf134063, "tdf134063.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(720), getXPath(pDump, "//page[1]/body/txt[1]/Text[1]", "nWidth").toInt32());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(720), getXPath(pDump, "//page[1]/body/txt[1]/Text[2]", "nWidth").toInt32());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(720), getXPath(pDump, "//page[1]/body/txt[1]/Text[3]", "nWidth").toInt32());
+}
+
+DECLARE_OOXMLIMPORT_TEST(TestTdf135653, "tdf135653.docx")
+{
+    uno::Reference<beans::XPropertySet> xOLEProps(getShape(1), uno::UNO_QUERY_THROW);
+    drawing::FillStyle nFillStyle = static_cast<drawing::FillStyle>(-1);
+    xOLEProps->getPropertyValue("FillStyle") >>= nFillStyle;
+    Color aFillColor(COL_AUTO);
+    xOLEProps->getPropertyValue("FillColor") >>= aFillColor;
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fill style setting does not match!",
+                                 drawing::FillStyle::FillStyle_SOLID, nFillStyle);
+    Color aExpectedColor;
+    aExpectedColor.SetRed(255);
+    aExpectedColor.SetGreen(0);
+    aExpectedColor.SetBlue(0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("OLE bg color does not match!", aExpectedColor, aFillColor);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testAtPageShapeRelOrientation, "rotated_shape.fodt")
