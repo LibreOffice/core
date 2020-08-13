@@ -225,7 +225,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testInsertTextContentWithPropertiesNotExpandsH
     CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xProps, "CharPosture"));
 }
 
-CPPUNIT_TEST_FIXTURE(SwUnoWriter, testGraphicDesciptorURL)
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testGraphicDescriptorURL)
 {
     loadURL("private:factory/swriter", nullptr);
 
@@ -252,7 +252,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testGraphicDesciptorURL)
     CPPUNIT_ASSERT(xGraphic.is());
 }
 
-CPPUNIT_TEST_FIXTURE(SwUnoWriter, testGraphicDesciptorURLBitmap)
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testGraphicDescriptorURLBitmap)
 {
     loadURL("private:factory/swriter", nullptr);
 
