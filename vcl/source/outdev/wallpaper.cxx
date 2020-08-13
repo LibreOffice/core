@@ -119,6 +119,19 @@ void OutputDevice::Erase()
         mpAlphaVDev->Erase();
 }
 
+void OutputDevice::Erase(const tools::Rectangle& rRect)
+{
+    const RasterOp eRasterOp = GetRasterOp();
+    if ( eRasterOp != RasterOp::OverPaint )
+        SetRasterOp( RasterOp::OverPaint );
+    DrawWallpaper(rRect, GetBackground());
+    if ( eRasterOp != RasterOp::OverPaint )
+        SetRasterOp( eRasterOp );
+
+    if (mpAlphaVDev)
+        mpAlphaVDev->Erase(rRect);
+}
+
 void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
                                             long nWidth, long nHeight,
                                             const Wallpaper& rWallpaper )
