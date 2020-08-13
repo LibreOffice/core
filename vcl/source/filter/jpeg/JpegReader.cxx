@@ -269,12 +269,12 @@ Graphic JPEGReader::CreateIntermediateGraphic(long nLines)
         }
         else
         {
-            aGraphic = *mpBitmap;
+            aGraphic = BitmapEx(*mpBitmap);
         }
     }
     else
     {
-        aGraphic = *mpBitmap;
+        aGraphic = BitmapEx(*mpBitmap);
     }
 
     mnLastLines = nLines;
@@ -304,7 +304,7 @@ ReadState JPEGReader::Read( Graphic& rGraphic, GraphicFilterImportFlags nImportF
         else
         {
             if (!bUseExistingBitmap)
-                rGraphic = *mpBitmap;
+                rGraphic = BitmapEx(*mpBitmap);
         }
 
         bRet = true;

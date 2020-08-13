@@ -4309,7 +4309,8 @@ void SbRtl_LoadPicture(StarBASIC *, SbxArray & rPar, bool)
     {
         Bitmap aBmp;
         ReadDIB(aBmp, *pStream, true);
-        Graphic aGraphic(aBmp);
+        BitmapEx aBitmapEx(aBmp);
+        Graphic aGraphic(aBitmapEx);
 
         SbxObjectRef xRef = new SbStdPicture;
         static_cast<SbStdPicture*>(xRef.get())->SetGraphic( aGraphic );
