@@ -52,6 +52,24 @@
       "revId": "40def8afefc07f65212205d319eb3f7b21fdaf79",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62384367_3ec63fa5",
+        "filename": "config_host.mk.in",
+        "patchSetId": 8
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-13T07:39:59Z",
+      "side": 1,
+      "message": "Great! So would you advise me to go with foo ?\u003d bar, or with foo \u003d bar? The former seems to do exactly what I did, in a better way; the latter may be deemed more consistent (overriding not from environment, but from MAKE arguments) ... ?",
+      "parentUuid": "4e86156c_be916100",
+      "revId": "40def8afefc07f65212205d319eb3f7b21fdaf79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
