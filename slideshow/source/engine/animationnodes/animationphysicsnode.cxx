@@ -19,6 +19,12 @@
 
 #include "animationphysicsnode.hxx"
 #include <animationfactory.hxx>
+#include <o3tl/any.hxx>
+
+constexpr double fDefaultStartVelocityX(0.0);
+constexpr double fDefaultStartVelocityY(0.0);
+constexpr double fDefaultDensity(1.0);
+constexpr double fDefaultBounciness(0.1);
 
 namespace slideshow::internal
 {
@@ -34,12 +40,47 @@ AnimationActivitySharedPtr AnimationPhysicsNode::createActivity() const
     ENSURE_OR_THROW((mxPhysicsMotionNode->getDuration() >>= fDuration),
                     "Couldn't get the animation duration.");
 
+    ::css::uno::Any aTemp;
+    double fStartVelocityX;
+    aTemp = mxPhysicsMotionNode->getStartVelocityX();
+    if (aTemp.hasValue())
+        aTemp >>= fStartVelocityX;
+    else
+        fStartVelocityX = fDefaultStartVelocityX;
+
+    double fStartVelocityY;
+    aTemp = mxPhysicsMotionNode->getStartVelocityY();
+    if (aTemp.hasValue())
+        aTemp >>= fStartVelocityY;
+    else
+        fStartVelocityY = fDefaultStartVelocityY;
+
+    double fDensity;
+    aTemp = mxPhysicsMotionNode->getDensity();
+    if (aTemp.hasValue())
+    {
+        aTemp >>= fDensity;
+        fDensity = (fDensity < 0.0) ? 0.0 : fDensity;
+    }
+    else
+        fDensity = fDefaultDensity;
+
+    double fBounciness;
+    aTemp = mxPhysicsMotionNode->getBounciness();
+    if (aTemp.hasValue())
+    {
+        aTemp >>= fBounciness;
+        fBounciness = std::clamp(fBounciness, 0.0, 1.0);
+    }
+    else
+        fBounciness = fDefaultBounciness;
+
     ActivitiesFactory::CommonParameters const aParms(fillCommonParameters());
     return ActivitiesFactory::createSimpleActivity(
         aParms,
-        AnimationFactory::createPhysicsAnimation(getContext().mpBox2DWorld, fDuration,
-                                                 getContext().mpSubsettableShapeManager,
-                                                 getSlideSize(), 0),
+        AnimationFactory::createPhysicsAnimation(
+            getContext().mpBox2DWorld, fDuration, getContext().mpSubsettableShapeManager,
+            getSlideSize(), { fStartVelocityX, fStartVelocityY }, fDensity, fBounciness, 0),
         true);
 }
 

@@ -137,6 +137,9 @@ namespace slideshow::internal
                                                                const double                            fDuration,
                                                                const ShapeManagerSharedPtr&            rShapeManager,
                                                                const ::basegfx::B2DVector&             rSlideSize,
+                                                               const ::basegfx::B2DVector&             rStartVelocity,
+                                                               const double                            fDensity,
+                                                               const double                            fBounciness,
                                                                int                                     nFlags );
         }
 
