@@ -293,13 +293,18 @@ void ShapeBase::finalizeFragmentImport()
         aType = aType.copy(1);
     if( const ShapeType* pShapeType = mrDrawing.getShapes().getShapeTypeById( aType ) )
     {
-        // Make sure that the stroke props from maTypeModel have priority over the stroke props from
+        // Make sure that the props from maTypeModel have priority over the props from
         // the shape type.
         StrokeModel aMergedStrokeModel;
         aMergedStrokeModel.assignUsed(pShapeType->getTypeModel().maStrokeModel);
         aMergedStrokeModel.assignUsed(maTypeModel.maStrokeModel);
+        FillModel aMergedFillModel;
+        aMergedFillModel.assignUsed(pShapeType->getTypeModel().maFillModel);
+        aMergedFillModel.assignUsed(maTypeModel.maFillModel);
+
         maTypeModel.assignUsed( pShapeType->getTypeModel() );
         maTypeModel.maStrokeModel = aMergedStrokeModel;
+        maTypeModel.maFillModel = aMergedFillModel;
     }
     else {
         // Temporary fix, shapetype not found if referenced from different substream
@@ -1359,6 +1364,8 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
         oox::drawingml::ShapePropertyMap aPropMap(mrDrawing.getFilter().getModelObjectHelper());
         const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
         maTypeModel.maStrokeModel.pushToPropMap(aPropMap, rGraphicHelper);
+        //And, fill-color properties as well...
+        maTypeModel.maFillModel.pushToPropMap(aPropMap, rGraphicHelper);
         PropertySet(xShape).setProperties(aPropMap);
 
         return xShape;
