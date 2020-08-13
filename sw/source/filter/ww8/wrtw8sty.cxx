@@ -1092,12 +1092,13 @@ const WW8_SepInfo* MSWordSections::CurrentSectionInfo()
 }
 
 void MSWordSections::AppendSection( const SwPageDesc* pPd,
-    const SwSectionFormat* pSectionFormat, sal_uLong nLnNumRestartNo, bool bIsFirstParagraph )
+    const SwSectionFormat*const pSectionFormat, sal_uLong const nLnNumRestartNo,
+    bool const bIsFirstParagraph, bool const bIsContinuous)
 {
     if (HeaderFooterWritten()) {
         return; // #i117955# prevent new sections in endnotes
     }
-    aSects.emplace_back( pPd, pSectionFormat, nLnNumRestartNo, boost::none, nullptr, bIsFirstParagraph );
+    aSects.emplace_back(pPd, pSectionFormat, nLnNumRestartNo, boost::none, nullptr, bIsFirstParagraph, bIsContinuous);
     NeedsDocumentProtected( aSects.back() );
 }
 
@@ -1112,13 +1113,14 @@ void WW8_WrPlcSepx::AppendSep( WW8_CP nStartCp, const SwPageDesc* pPd,
 }
 
 void MSWordSections::AppendSection( const SwFormatPageDesc& rPD,
-    const SwNode& rNd, const SwSectionFormat* pSectionFormat, sal_uLong nLnNumRestartNo )
+    const SwNode& rNd, const SwSectionFormat*const pSectionFormat,
+    sal_uLong const nLnNumRestartNo, bool const bIsContinuous)
 {
     if (HeaderFooterWritten()) {
         return; // #i117955# prevent new sections in endnotes
     }
 
-    WW8_SepInfo aI( rPD.GetPageDesc(), pSectionFormat, nLnNumRestartNo, rPD.GetNumOffset(), &rNd );
+    WW8_SepInfo aI(rPD.GetPageDesc(), pSectionFormat, nLnNumRestartNo, rPD.GetNumOffset(), &rNd, false, bIsContinuous);
 
     aSects.push_back( aI );
     NeedsDocumentProtected( aI );
@@ -1548,9 +1550,9 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
     /*  sprmSBkc, break code:   0 No break, 1 New column
         2 New page, 3 Even page, 4 Odd page
         */
-    sal_uInt8 nBreakCode = 2;            // default start new page
+    sal_uInt8 nBreakCode = rSepInfo.isContinuous ? 0 : 2; // default start new page
     bool bOutPgDscSet = true, bLeftRightPgChain = false, bOutputStyleItemSet = false;
-    bool bEnsureHeaderFooterWritten = rSepInfo.pSectionFormat && rSepInfo.bIsFirstParagraph;
+    bool bEnsureHeaderFooterWritten = (rSepInfo.pSectionFormat && rSepInfo.bIsFirstParagraph) || rSepInfo.isContinuous;
     const SwFrameFormat* pPdFormat = &pPd->GetMaster();
     if ( rSepInfo.pSectionFormat )
     {

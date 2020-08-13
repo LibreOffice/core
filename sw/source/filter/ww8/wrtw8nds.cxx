@@ -2742,7 +2742,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 // too.
                 const SwPageDesc* pNextPageDesc = m_pCurrentPageDesc->GetFollow();
                 assert(pNextPageDesc);
-                PrepareNewPageDesc( rNode.GetpSwAttrSet(), rNode, nullptr , pNextPageDesc);
+                PrepareNewPageDesc( rNode.GetpSwAttrSet(), rNode, nullptr , pNextPageDesc, true);
             }
         }
         else if (!bNeedParaSplit)

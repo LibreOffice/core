@@ -948,7 +948,7 @@ ErrCode RtfExport::ExportDocument_Impl()
 
 void RtfExport::PrepareNewPageDesc(const SfxItemSet* pSet, const SwNode& rNd,
                                    const SwFormatPageDesc* pNewPgDescFormat,
-                                   const SwPageDesc* pNewPgDesc)
+                                   const SwPageDesc* pNewPgDesc, bool const)
 {
     const SwSectionFormat* pFormat = GetSectionFormat(rNd);
     const sal_uLong nLnNm = GetSectionLineNo(pSet, rNd);
