@@ -273,13 +273,11 @@ VDevBuffer& getVDevBuffer()
     return *aVDevBuffer.get();
 }
 
-impBufferDevice::impBufferDevice(OutputDevice& rOutDev, const basegfx::B2DRange& rRange,
-                                 bool bContentTransparent)
+impBufferDevice::impBufferDevice(OutputDevice& rOutDev, const basegfx::B2DRange& rRange)
     : mrOutDev(rOutDev)
     , mpContent(nullptr)
     , mpMask(nullptr)
     , mpAlpha(nullptr)
-    , mbContentTransparent(bContentTransparent)
 {
     basegfx::B2DRange aRangePixel(rRange);
     aRangePixel.transform(mrOutDev.GetViewTransformation());
@@ -293,18 +291,7 @@ impBufferDevice::impBufferDevice(OutputDevice& rOutDev, const basegfx::B2DRange&
 
     if (!isVisible())
         return;
-
-#ifdef IOS
-    // Exact mechanism unknown, but for some reason SmartArt
-    // rendering, especially shadows, is broken on iOS unless
-    // we pass 'true' here. Are virtual devices always de
-    // facto cleared when created on other platforms?
-    mpContent
-        = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, false, bContentTransparent);
-#else
-    mpContent
-        = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), false, false, bContentTransparent);
-#endif
+    mpContent = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, false, true);
 
     // #i93485# assert when copying from window to VDev is used
     SAL_WARN_IF(
@@ -403,8 +390,7 @@ void impBufferDevice::paint(double fTrans)
 #endif
 
         BitmapEx aContent(mpContent->GetBitmapEx(aEmptyPoint, aSizePixel));
-        if (mbContentTransparent)
-            aAlphaMask.BlendWith(aContent.GetAlpha());
+        aAlphaMask.BlendWith(aContent.GetAlpha());
         mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent.GetBitmap(), aAlphaMask));
     }
     else if (mpMask)
@@ -426,26 +412,17 @@ void impBufferDevice::paint(double fTrans)
         }
 #endif
 
-        if (mbContentTransparent)
-        {
-            BitmapEx aContent(mpContent->GetBitmapEx(aEmptyPoint, aSizePixel));
-            AlphaMask aAlpha(aContent.GetAlpha());
-            aAlpha.BlendWith(aMask);
-            mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent.GetBitmap(), aAlpha));
-        }
-        else
-        {
-            Bitmap aContent(mpContent->GetBitmap(aEmptyPoint, aSizePixel));
-            mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aMask));
-        }
+        BitmapEx aContent(mpContent->GetBitmapEx(aEmptyPoint, aSizePixel));
+        AlphaMask aAlpha(aContent.GetAlpha());
+        aAlpha.BlendWith(aMask);
+        mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent.GetBitmap(), aAlpha));
     }
     else if (0.0 != fTrans)
     {
         sal_uInt8 nMaskValue(static_cast<sal_uInt8>(basegfx::fround(fTrans * 255.0)));
         AlphaMask aAlphaMask(aSizePixel, &nMaskValue);
         BitmapEx aContent(mpContent->GetBitmapEx(aEmptyPoint, aSizePixel));
-        if (mbContentTransparent)
-            aAlphaMask.BlendWith(aContent.GetAlpha());
+        aAlphaMask.BlendWith(aContent.GetAlpha());
         mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent.GetBitmap(), aAlphaMask));
     }
     else

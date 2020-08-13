@@ -119,6 +119,13 @@ void OutputDevice::Erase()
         mpAlphaVDev->Erase();
 }
 
+void OutputDevice::Erase(const tools::Rectangle& rRect)
+{
+    DrawWallpaper(rRect, GetBackground());
+    if (mpAlphaVDev)
+        mpAlphaVDev->Erase(rRect);
+}
+
 void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
                                             long nWidth, long nHeight,
                                             const Wallpaper& rWallpaper )

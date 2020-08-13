@@ -964,7 +964,7 @@ public:
     void                        DrawWallpaper( const tools::Rectangle& rRect, const Wallpaper& rWallpaper );
 
     void                        Erase();
-    void                        Erase( const tools::Rectangle& rRect ) { DrawWallpaper( rRect, GetBackground() ); }
+    void                        Erase(const tools::Rectangle& rRect);
 
 protected:
     void                        DrawGradientWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
