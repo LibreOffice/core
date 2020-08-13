@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7d2c7609_472f5a5b",
+        "filename": "cui/inc/toolbarmode.hrc",
+        "patchSetId": 15
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-08-13T14:02:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "94f640fc_b88e09b8",
+      "revId": "c4451ed78bcbe4f800fe411a3ec8b4033cb316eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "75012de2_274c398b",
         "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
         "patchSetId": 15
@@ -30,6 +48,24 @@
       "writtenOn": "2020-08-13T11:44:46Z",
       "side": 1,
       "message": "Maybe put it inside an unnamed namespace.",
+      "revId": "c4451ed78bcbe4f800fe411a3ec8b4033cb316eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12fd1a7f_0d966e35",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-08-13T14:02:39Z",
+      "side": 1,
+      "message": "Reference, frame, vcl:: etc. need the namespace. But static is required.",
+      "parentUuid": "75012de2_274c398b",
       "revId": "c4451ed78bcbe4f800fe411a3ec8b4033cb316eb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "247369ab_8cca06de",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-08-13T14:02:39Z",
+      "side": 1,
+      "message": "Unfortunately not, same behavior as before. Can double check to have your patch applied, of course.\nThis solution is quite unstable, when I quickly apply different NBs it will crash even with the second ProcessToIdle call. Guess it\u0027s a question how ui files are loaded.",
+      "parentUuid": "0baa101e_9efbf3b3",
+      "revId": "c4451ed78bcbe4f800fe411a3ec8b4033cb316eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f3184799_645a0b1f",
         "filename": "cui/source/inc/toolbarmodedlg.hxx",
         "patchSetId": 15
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "27a0d6f2_4458fe19",
+        "filename": "cui/source/inc/toolbarmodedlg.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-08-13T14:02:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3184799_645a0b1f",
+      "revId": "c4451ed78bcbe4f800fe411a3ec8b4033cb316eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9619d10f_50f74517",
         "filename": "cui/source/inc/toolbarmodedlg.hxx",
         "patchSetId": 15
@@ -84,6 +156,24 @@
       "revId": "c4451ed78bcbe4f800fe411a3ec8b4033cb316eb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30437961_58060e80",
+        "filename": "cui/source/inc/toolbarmodedlg.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-08-13T14:02:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9619d10f_50f74517",
+      "revId": "c4451ed78bcbe4f800fe411a3ec8b4033cb316eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
