@@ -111,6 +111,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135595_HFtableWrap, "tdf135595_HFtableWrap.odt")
     CPPUNIT_ASSERT_MESSAGE("Image must be contained inside the table cell", nRowHeight > 2000);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf135595_HFtableWrap_c12, "tdf135595_HFtableWrap_c12.docx")
+{
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // tdf#104596: ignore wrap exception apparently does not apply if it is not "layout in table cell".
+    // Should be only one page. Row height should be two lines at 722, not wrapped to three lines at 998.
+    sal_Int32 nRowHeight = getXPath(pXmlDoc, "//header/tab/row/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_MESSAGE("Text must not wrap around header image", nRowHeight < 800);
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf123622, "tdf123622.docx")
 {
     uno::Reference<beans::XPropertySet> XPropsRight(getShape(1),uno::UNO_QUERY);
