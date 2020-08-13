@@ -984,7 +984,7 @@ void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitiv
     // Consider glow transparency (initial transparency near the object edge)
     const sal_uInt8 nTransparency = rCandidate.getGlowColor().GetTransparency();
 
-    impBufferDevice aBufferDevice(*mpOutputDevice, aRange, true);
+    impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
     if (aBufferDevice.isVisible())
     {
         // remember last OutDev and set to content
@@ -993,7 +993,6 @@ void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitiv
         // We don't need antialiased mask here, which would only make effect thicker
         const auto aPrevAA = mpOutputDevice->GetAntialiasing();
         mpOutputDevice->SetAntialiasing(AntialiasingFlags::NONE);
-        mpOutputDevice->Erase();
         process(rCandidate);
         const tools::Rectangle aRect(static_cast<long>(std::floor(aRange.getMinX())),
                                      static_cast<long>(std::floor(aRange.getMinY())),
@@ -1030,32 +1029,25 @@ void VclPixelProcessor2D::processSoftEdgePrimitive2D(
     aRadiusVector *= maCurrentTransformation;
     // Blur radius is equal to soft edge radius
     const double fBlurRadius = aRadiusVector.getLength();
-
-    impBufferDevice aBufferDevice(*mpOutputDevice, aRange, true);
+    impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
     if (aBufferDevice.isVisible())
     {
         // remember last OutDev and set to content
         OutputDevice* pLastOutputDevice = mpOutputDevice;
         mpOutputDevice = &aBufferDevice.getContent();
-        mpOutputDevice->Erase();
         // Since the effect converts all children to bitmap, we can't disable antialiasing here,
         // because it would result in poor quality in areas not affected by the effect
         process(rCandidate);
-
         const tools::Rectangle aRect(static_cast<long>(std::floor(aRange.getMinX())),
                                      static_cast<long>(std::floor(aRange.getMinY())),
                                      static_cast<long>(std::ceil(aRange.getMaxX())),
                                      static_cast<long>(std::ceil(aRange.getMaxY())));
         BitmapEx bitmap = mpOutputDevice->GetBitmapEx(aRect.TopLeft(), aRect.GetSize());
-
         AlphaMask aMask = bitmap.GetAlpha();
         AlphaMask blurMask = ProcessAndBlurAlphaMask(aMask, -fBlurRadius, fBlurRadius, 0);
-
         aMask.BlendWith(blurMask);
-
         // The end result is the original bitmap with blurred 8-bit alpha mask
         BitmapEx result(bitmap.GetBitmap(), aMask);
-
         // back to old OutDev
         mpOutputDevice = pLastOutputDevice;
         mpOutputDevice->DrawBitmapEx(aRect.TopLeft(), result);
