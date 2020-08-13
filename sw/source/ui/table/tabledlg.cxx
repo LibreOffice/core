@@ -267,7 +267,7 @@ IMPL_LINK( SwFormatTablePage, ValueChangedHdl, weld::MetricSpinButton&, rEdit, v
     ModifyHdl(rEdit);
 }
 
-void  SwFormatTablePage::ModifyHdl(const weld::MetricSpinButton& rEdit)
+void  SwFormatTablePage::ModifyHdl(const weld::MetricSpinButton& rEdit, bool bAllowInconsistencies)
 {
     SwTwips nCurWidth  = static_cast< SwTwips >(m_xWidthMF->DenormalizePercent(m_xWidthMF->get_value(FieldUnit::TWIP)));
     SwTwips nPrevWidth = nCurWidth;
@@ -371,9 +371,10 @@ void  SwFormatTablePage::ModifyHdl(const weld::MetricSpinButton& rEdit)
         // tdf#135021 if the user changed the width spinbutton, and in this
         // ModifyHdl we changed the value of that width spinbutton, then rerun
         // the ModifyHdl on the replaced value so the left/right/width value
-        // relationships are consistent
-        if (&rEdit == m_xWidthMF->get())
-            ModifyHdl(rEdit);
+        // relationships are consistent.
+        // But (tdf#135693) only make one effort of rectifying the inconsistency
+        if (&rEdit == m_xWidthMF->get() && !bAllowInconsistencies)
+            ModifyHdl(rEdit, true);
     }
 
     bModified = true;
