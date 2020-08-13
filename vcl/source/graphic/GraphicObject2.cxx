@@ -308,9 +308,9 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const tools::Rectangle& r
                 GraphicObject aAlphaGraphic;
 
                 if( GetGraphic().IsAlpha() )
-                    aAlphaGraphic.SetGraphic( GetGraphic().GetBitmapEx().GetAlpha().GetBitmap() );
+                    aAlphaGraphic.SetGraphic(BitmapEx(GetGraphic().GetBitmapEx().GetAlpha().GetBitmap()));
                 else
-                    aAlphaGraphic.SetGraphic( GetGraphic().GetBitmapEx().GetMask() );
+                    aAlphaGraphic.SetGraphic(BitmapEx(GetGraphic().GetBitmapEx().GetMask()));
 
                 if( aAlphaGraphic.ImplRenderTempTile( *aVDev, nNumTilesInCacheX,
                                                       nNumTilesInCacheY, rSizePixel, pAttr ) )

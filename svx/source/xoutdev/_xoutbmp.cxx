@@ -284,7 +284,7 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
                         if( pVDev->SetOutputSizePixel( aSize ) )
                         {
                             rGraphic.Draw( pVDev.get(), Point(), aSize );
-                            aGraphic = pVDev->GetBitmap( Point(), aSize );
+                            aGraphic = BitmapEx(pVDev->GetBitmap(Point(), aSize));
                         }
                         else
                             aGraphic = rGraphic.GetBitmapEx();

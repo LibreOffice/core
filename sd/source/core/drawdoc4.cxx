@@ -167,7 +167,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     Size    aNullSize( 32, 32 );
     Bitmap  aNullBmp( aNullSize, 8 );
     aNullBmp.Erase( COL_WHITE );
-    rISet.Put(XFillBitmapItem(Graphic(aNullBmp)));
+    rISet.Put(XFillBitmapItem(Graphic(BitmapEx(aNullBmp))));
 
                     // Shadow attributes (Drawing Engine)
     rISet.Put(makeSdrShadowItem(false));

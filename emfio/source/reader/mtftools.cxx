@@ -1310,7 +1310,7 @@ namespace emfio
                                               Color(),
                                               Color(),
                                               0,
-                                              Graphic (maLatestFillStyle.aBmp) );
+                                              Graphic (BitmapEx(maLatestFillStyle.aBmp)));
 
                         SvMemoryStream  aMemStm;
 

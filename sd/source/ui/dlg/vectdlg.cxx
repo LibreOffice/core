@@ -103,7 +103,7 @@ void SdVectorizeDlg::InitPreviewBmp()
 
     aPreviewBmp = aBmp;
     aPreviewBmp.Scale( aRect.GetSize() );
-    m_aBmpWin.SetGraphic( aPreviewBmp );
+    m_aBmpWin.SetGraphic(BitmapEx(aPreviewBmp));
 }
 
 Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap const & rBmp, Fraction& rScale )
