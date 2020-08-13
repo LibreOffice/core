@@ -21,13 +21,13 @@
      </table:table-cell>
     </table:table-row>
     <table:table-row>
-     <table:table-cell office:value-type="string">
-      <text:p><text:table-formula text:formula="ooow: &lt;A1&gt;+&lt;A2&gt;" style:data-style-name="N0">3</text:table-formula></text:p>
+     <table:table-cell table:formula="ooow:&lt;A1&gt;+&lt;A2&gt;" office:value-type="float" office:value="3">
+      <text:p>3</text:p>
      </table:table-cell>
     </table:table-row>
     <table:table-row>
-     <table:table-cell office:value-type="string">
-      <text:p><text:table-formula text:formula="ooow:SUM(&lt;A1:A3&gt;)" style:data-style-name="N0">6</text:table-formula></text:p>
+     <table:table-cell table:formula="ooow:SUM(&lt;A1:A3&gt;)" office:value-type="float" office:value="6">
+      <text:p>6</text:p>
      </table:table-cell>
     </table:table-row>
    </table:table>
