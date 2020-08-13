@@ -2155,8 +2155,8 @@ void DocxAttributeOutput::CmdField_Impl( const SwTextNode* pNode, sal_Int32 nPos
                UErrorCode nErr(U_ZERO_ERROR);
                icu::UnicodeString sInput(sToken.getStr());
                // remove < and > around cell references, e.g. <A1> to A1, <A1:B2> to A1:B2
-               icu::RegexMatcher xMatch("<([A-Z]{1,3}[0-9]+(:[A-Z]{1,3}[0-9]+)?)>", sInput, 0, nErr);
-               sToken = xMatch.replaceAll(icu::UnicodeString("$1"), nErr).getTerminatedBuffer();
+               icu::RegexMatcher aMatcher("<([A-Z]{1,3}[0-9]+(:[A-Z]{1,3}[0-9]+)?)>", sInput, 0, nErr);
+               sToken = aMatcher.replaceAll(icu::UnicodeString("$1"), nErr).getTerminatedBuffer();
             }
 
             // Write the Field command
