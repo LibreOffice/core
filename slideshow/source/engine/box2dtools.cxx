@@ -20,6 +20,7 @@
 #include <svx/svdoashp.hxx>
 
 #define BOX2D_SLIDE_SIZE_IN_METERS 100.00f
+constexpr double fDefaultStaticBodyBounciness(0.1);
 
 namespace box2d::utils
 {
@@ -551,6 +552,13 @@ void box2DWorld::queueShapeAnimationEndUpdate(
     }
 }
 
+void box2DWorld::alertAnimationEndForShape(const slideshow::internal::ShapeSharedPtr& pShape)
+{
+    Box2DBodySharedPtr pBox2DBody = mpXShapeToBodyMap.find(pShape->getXShape())->second;
+    makeBodyStatic(pBox2DBody);
+    pBox2DBody->setRestitution(fDefaultStaticBodyBounciness);
+}
+
 void box2DWorld::step(const float fTimeStep, const int nVelocityIterations,
                       const int nPositionIterations)
 {
@@ -586,10 +594,15 @@ bool box2DWorld::isInitialized()
         return false;
 }
 
-Box2DBodySharedPtr box2DWorld::makeShapeDynamic(const slideshow::internal::ShapeSharedPtr& pShape)
+Box2DBodySharedPtr
+box2DWorld::makeShapeDynamic(const css::uno::Reference<css::drawing::XShape>& xShape,
+                             const basegfx::B2DVector& rStartVelocity, const double fDensity,
+                             const double fBounciness)
 {
     assert(mpBox2DWorld);
-    Box2DBodySharedPtr pBox2DBody = mpXShapeToBodyMap.find(pShape->getXShape())->second;
+    Box2DBodySharedPtr pBox2DBody = mpXShapeToBodyMap.find(xShape)->second;
+    pBox2DBody->setDensityAndRestitution(fDensity, fBounciness);
+    queueLinearVelocityUpdate(xShape, rStartVelocity, 1);
     return makeBodyDynamic(pBox2DBody);
 }
 
@@ -679,15 +692,17 @@ Box2DBodySharedPtr box2DWorld::createStaticBody(const slideshow::internal::Shape
             }
             else
             {
-                addEdgeShapeToBody(rPolygon, pBody.get(), fDensity, fFriction, 0.1f, mfScaleFactor);
+                addEdgeShapeToBody(rPolygon, pBody.get(), fDensity, fFriction,
+                                   static_cast<float>(fDefaultStaticBodyBounciness), mfScaleFactor);
             }
         }
-        addTriangleVectorToBody(aTriangleVector, pBody.get(), fDensity, fFriction, 0.1f,
-                                mfScaleFactor);
+        addTriangleVectorToBody(aTriangleVector, pBody.get(), fDensity, fFriction,
+                                static_cast<float>(fDefaultStaticBodyBounciness), mfScaleFactor);
     }
     else
     {
-        addEdgeShapeToBody(aPolyPolygon, pBody.get(), fDensity, fFriction, 0.1f, mfScaleFactor);
+        addEdgeShapeToBody(aPolyPolygon, pBody.get(), fDensity, fFriction,
+                           static_cast<float>(fDefaultStaticBodyBounciness), mfScaleFactor);
     }
 
     return std::make_shared<box2DBody>(pBody, mfScaleFactor);
@@ -774,6 +789,26 @@ double box2DBody::getAngle()
 void box2DBody::setAngle(const double fAngle)
 {
     mpBox2DBody->SetTransform(mpBox2DBody->GetPosition(), ::basegfx::deg2rad(-fAngle));
+}
+
+void box2DBody::setDensityAndRestitution(const double fDensity, const double fRestitution)
+{
+    for (b2Fixture* pFixture = mpBox2DBody->GetFixtureList(); pFixture;
+         pFixture = pFixture->GetNext())
+    {
+        pFixture->SetDensity(static_cast<float>(fDensity));
+        pFixture->SetRestitution(static_cast<float>(fRestitution));
+    }
+    mpBox2DBody->ResetMassData();
+}
+
+void box2DBody::setRestitution(const double fRestitution)
+{
+    for (b2Fixture* pFixture = mpBox2DBody->GetFixtureList(); pFixture;
+         pFixture = pFixture->GetNext())
+    {
+        pFixture->SetRestitution(static_cast<float>(fRestitution));
+    }
 }
 
 void box2DBody::setType(box2DBodyType eType)

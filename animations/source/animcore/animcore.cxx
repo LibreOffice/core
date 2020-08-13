@@ -24,6 +24,7 @@
 #include <com/sun/star/animations/XAnimateColor.hpp>
 #include <com/sun/star/animations/XAnimateSet.hpp>
 #include <com/sun/star/animations/XAnimateMotion.hpp>
+#include <com/sun/star/animations/XAnimatePhysics.hpp>
 #include <com/sun/star/animations/XAnimateTransform.hpp>
 #include <com/sun/star/animations/XParallelTimeContainer.hpp>
 #include <com/sun/star/animations/XTransitionFilter.hpp>
@@ -104,6 +105,7 @@ namespace animcore
 namespace {
 
 class AnimationNodeBase :   public XAnimateMotion,
+                            public XAnimatePhysics,
                             public XAnimateColor,
                             public XTransitionFilter,
                             public XAnimateSet,
@@ -224,6 +226,16 @@ public:
     virtual Any SAL_CALL getOrigin() override;
     virtual void SAL_CALL setOrigin( const Any& _origin ) override;
 
+    // XAnimatePhysics
+    virtual Any SAL_CALL getStartVelocityX() override;
+    virtual void SAL_CALL setStartVelocityX( const Any& _startvelocityx ) override;
+    virtual Any SAL_CALL getStartVelocityY() override;
+    virtual void SAL_CALL setStartVelocityY( const Any& _startvelocityy ) override;
+    virtual Any SAL_CALL getDensity() override;
+    virtual void SAL_CALL setDensity( const Any& _density ) override;
+    virtual Any SAL_CALL getBounciness() override;
+    virtual void SAL_CALL setBounciness( const Any& _bounciness ) override;
+
     // XAnimateTransform
     virtual sal_Int16 SAL_CALL getTransformType() override;
     virtual void SAL_CALL setTransformType( sal_Int16 _transformtype ) override;
@@ -321,6 +333,9 @@ private:
 
     // attributes for XAnimateMotion
     Any maPath, maOrigin;
+
+    // attributes for XAnimatePhysics
+    Any maStartVelocityX, maStartVelocityY, maDensity, maBounciness;
 
     // attributes for XAnimateTransform
     sal_Int16 mnTransformType;
@@ -671,8 +686,8 @@ Any SAL_CALL AnimationNode::queryInterface( const Type& aType )
         case AnimationNodeType::ANIMATEPHYSICS:
             aRet = ::cppu::queryInterface(
                 aType,
-                static_cast< XAnimate * >( static_cast< XAnimateMotion * >(this) ),
-                static_cast< XAnimateMotion * >( this ) );
+                static_cast< XAnimate * >( static_cast< XAnimatePhysics * >(this) ),
+                static_cast< XAnimatePhysics * >( this ) );
             break;
         case AnimationNodeType::ANIMATECOLOR:
             aRet = ::cppu::queryInterface(
@@ -767,7 +782,7 @@ void AnimationNode::initTypeProvider( sal_Int16 nNodeType ) throw()
         pTypeAr[nPos++] = cppu::UnoType<XAnimateMotion>::get();
         break;
     case AnimationNodeType::ANIMATEPHYSICS:
-        pTypeAr[nPos++] = cppu::UnoType<XAnimateMotion>::get();
+        pTypeAr[nPos++] = cppu::UnoType<XAnimatePhysics>::get();
         break;
     case AnimationNodeType::ANIMATECOLOR:
         pTypeAr[nPos++] = cppu::UnoType<XAnimateColor>::get();
@@ -1581,6 +1596,72 @@ void SAL_CALL AnimationNode::setOrigin( const Any& _origin )
 {
     Guard< Mutex > aGuard( maMutex );
     maOrigin = _origin;
+    fireChangeListener();
+}
+
+// XAnimatePhysics
+Any SAL_CALL AnimationNode::getStartVelocityX()
+{
+    Guard< Mutex > aGuard( maMutex );
+    return maStartVelocityX;
+}
+
+
+// XAnimatePhysics
+void SAL_CALL AnimationNode::setStartVelocityX( const Any& _startvelocityx )
+{
+    Guard< Mutex > aGuard( maMutex );
+    maStartVelocityX = _startvelocityx;
+    fireChangeListener();
+}
+
+// XAnimatePhysics
+Any SAL_CALL AnimationNode::getStartVelocityY()
+{
+    Guard< Mutex > aGuard( maMutex );
+    return maStartVelocityY;
+}
+
+
+// XAnimatePhysics
+void SAL_CALL AnimationNode::setStartVelocityY( const Any& _startvelocityy )
+{
+    Guard< Mutex > aGuard( maMutex );
+    maStartVelocityY = _startvelocityy;
+    fireChangeListener();
+}
+
+
+// XAnimatePhysics
+Any SAL_CALL AnimationNode::getDensity()
+{
+    Guard< Mutex > aGuard( maMutex );
+    return maDensity;
+}
+
+
+// XAnimatePhysics
+void SAL_CALL AnimationNode::setDensity( const Any& _density )
+{
+    Guard< Mutex > aGuard( maMutex );
+    maDensity = _density;
+    fireChangeListener();
+}
+
+
+// XAnimatePhysics
+Any SAL_CALL AnimationNode::getBounciness()
+{
+    Guard< Mutex > aGuard( maMutex );
+    return maBounciness;
+}
+
+
+// XAnimatePhysics
+void SAL_CALL AnimationNode::setBounciness( const Any& _bounciness )
+{
+    Guard< Mutex > aGuard( maMutex );
+    maBounciness = _bounciness;
     fireChangeListener();
 }
 

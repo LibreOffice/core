@@ -1,0 +1,57 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+#ifndef __com_sun_star_animations_XAnimatePhysics_idl__
+#define __com_sun_star_animations_XAnimatePhysics_idl__
+
+#include <com/sun/star/animations/XAnimate.idl>
+
+
+ module com {  module sun {  module star {  module animations {
+
+
+/** Interface for physics animation.
+
+    @since LibreOffice 7.1
+*/
+interface XAnimatePhysics : XAnimate
+{
+    /** Specifies an optional horizontal starting velocity
+
+        Expressed in 1/100 mm.
+     */
+    [attribute] any StartVelocityX;
+
+    /** Specifies an optional vertical starting velocity
+
+        Expressed in 1/100 mm.
+     */
+    [attribute] any StartVelocityY;
+
+    /** Specifies an optional density value
+
+        Expressed in kg/m^2.
+        Should be non-negative.
+        Has a default value of 1.
+    */
+    [attribute] any Density;
+
+    /** Specifies an optional bounciness value
+
+        Takes a value between [0,1], 1 being no energy loss on collisions
+        Has a default value of 0.1
+    */
+    [attribute] any Bounciness;
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

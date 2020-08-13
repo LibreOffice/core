@@ -362,6 +362,9 @@ namespace slideshow::internal
                                     const double                 fDuration,
                                     const ShapeManagerSharedPtr& rShapeManager,
                                     const ::basegfx::B2DVector&  rSlideSize,
+                                    const ::basegfx::B2DVector&  rStartVelocity,
+                                    const double                 fDensity,
+                                    const double                 fBounciness,
                                     int                          nFlags ) :
                     mpShape(),
                     mpAttrLayer(),
@@ -372,6 +375,9 @@ namespace slideshow::internal
                     mpBox2DBody(),
                     mpBox2DWorld( pBox2DWorld ),
                     mfDuration(fDuration),
+                    maStartVelocity(rStartVelocity),
+                    mfDensity(fDensity),
+                    mfBounciness(fBounciness),
                     mfPreviousElapsedTime(0.00f),
                     mbIsBox2dWorldStepper(false)
                 {
@@ -411,7 +417,7 @@ namespace slideshow::internal
                     ENSURE_OR_THROW( rAttrLayer,
                                      "PhysicsAnimation::start(): Invalid attribute layer" );
 
-                    mpBox2DBody = mpBox2DWorld->makeShapeDynamic( rShape );
+                    mpBox2DBody = mpBox2DWorld->makeShapeDynamic( rShape->getXShape(), maStartVelocity, mfDensity, mfBounciness );
 
                     if( !mbAnimationStarted )
                     {
@@ -495,6 +501,9 @@ namespace slideshow::internal
                 box2d::utils::Box2DBodySharedPtr   mpBox2DBody;
                 box2d::utils::Box2DWorldSharedPtr  mpBox2DWorld;
                 double                             mfDuration;
+                const ::basegfx::B2DVector         maStartVelocity;
+                const double                       mfDensity;
+                const double                       mfBounciness;
                 double                             mfPreviousElapsedTime;
                 bool                               mbIsBox2dWorldStepper;
             };
@@ -1468,11 +1477,17 @@ namespace slideshow::internal
                                                                               const double                      fDuration,
                                                                               const ShapeManagerSharedPtr&      rShapeManager,
                                                                               const ::basegfx::B2DVector&       rSlideSize,
+                                                                              const ::basegfx::B2DVector&       rStartVelocity,
+                                                                              const double                      fDensity,
+                                                                              const double                      fBounciness,
                                                                               int                               nFlags )
         {
             return std::make_shared<PhysicsAnimation>( pBox2DWorld, fDuration,
                                    rShapeManager,
                                    rSlideSize,
+                                   rStartVelocity,
+                                   fDensity,
+                                   fBounciness,
                                    nFlags );
         }
 
