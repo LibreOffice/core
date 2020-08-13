@@ -88,6 +88,24 @@
       "revId": "40def8afefc07f65212205d319eb3f7b21fdaf79",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d972bc51_86288b2c",
+        "filename": "config_host.mk.in",
+        "patchSetId": 8
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-13T07:46:47Z",
+      "side": 1,
+      "message": "\u003e and try to tweak the icu part accordingly\n\nWhy? It might be version-specific (e.g., it doesn\u0027t warn here for me locally); it is unnecessary for this *external* to build correctly - so it\u0027s just \"only care about our own warnings, not try to fix external projects\u0027 warnings\" reasonable approach?",
+      "parentUuid": "6216bd9f_5fb4301b",
+      "revId": "40def8afefc07f65212205d319eb3f7b21fdaf79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
