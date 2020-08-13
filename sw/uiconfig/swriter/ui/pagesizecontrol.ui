@@ -10,7 +10,7 @@
   <object class="GtkImage" id="image_portrait7">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="icon_name">cmd/lc_orientation.png</property>
+    <property name="icon_name">cmd/lc_attributepagesize.png</property>
   </object>
   <object class="GtkPopover" id="PageSizeControl">
     <property name="can_focus">False</property>
