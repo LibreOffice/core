@@ -2178,7 +2178,6 @@ res/sx03226.png res/odm_16_8.png
 res/sx03227.png res/odg_16_8.png
 res/sx03228.png res/otg_16_8.png
 res/sx03239.png cmd/sc_dbrelationdesign.png
-res/sx03242.png res/mainapp_16_8.png
 res/sx03245.png res/odb_16_8.png
 res/sx03246.png res/odg_16_8.png
 res/sx03247.png res/odf_16_8.png
@@ -2503,7 +2502,6 @@ sw/res/sf04.png sc/res/sf02.png
 sw/res/sf06.png cmd/sc_autoformat.png
 sw/res/sidebar/pageproppanel/last_custom_common.png svx/res/symphony/last_custom_common.png
 sw/res/sidebar/pageproppanel/last_custom_common_grey.png svx/res/symphony/last_custom_common_grey.png
-sw/res/sidebar/pageproppanel/portraitcopy_24x24.png cmd/lc_orientation.png
 sw/res/sr20000.png cmd/sc_downsearch.png
 sw/res/sr20001.png cmd/sc_upsearch.png
 sw/res/sr20002.png cmd/sc_inserttable.png

@@ -2100,24 +2100,16 @@ res/lx03227.png res/odg_32_8.png
 res/lx03228.png res/otg_32_8.png
 res/lx03239.png cmd/32/dbrelationdesign.png
 res/lx03243.png res/lx03123.png
-res/lx03245.png res/odb_24_8.png
 res/lx03245_32.png res/odb_32_8.png
-res/lx03246.png res/odg_24_8.png
 res/lx03246_32.png res/odg_32_8.png
-res/lx03247.png res/odf_24_8.png
 res/lx03247_32.png res/odf_32_8.png
-res/lx03248.png res/odm_24_8.png
 res/lx03248_32.png res/odm_32_8.png
-res/lx03249.png res/odp_24_8.png
 res/lx03249_32.png res/odp_32_8.png
-res/lx03250.png res/ods_24_8.png
 res/lx03250_32.png res/ods_32_8.png
-res/lx03251.png res/odt_24_8.png
 res/lx03251_32.png res/odt_32_8.png
 res/lx03252.png res/otg_32_8.png
 res/lx03253.png res/otp_32_8.png
 res/lx03254.png res/ots_32_8.png
-res/lx03255.png res/ott_24_8.png
 res/lx03255_32.png res/ott_32_8.png
 res/lx03256.png cmd/lc_insertplugin.png
 res/mainapp_32.png res/mainapp_32_8.png
@@ -2517,7 +2509,6 @@ sw/res/sf04.png sc/res/sf02.png
 sw/res/sf06.png cmd/sc_autoformat.png
 sw/res/sidebar/pageproppanel/last_custom_common.png svx/res/symphony/last_custom_common.png
 sw/res/sidebar/pageproppanel/last_custom_common_grey.png svx/res/symphony/last_custom_common_grey.png
-sw/res/sidebar/pageproppanel/portraitcopy_24x24.png cmd/lc_orientation.png
 sw/res/sr20000.png cmd/sc_downsearch.png
 sw/res/sr20001.png cmd/sc_upsearch.png
 sw/res/sr20002.png cmd/sc_inserttable.png
@@ -2601,29 +2592,29 @@ cmd/sc_tableevents.png cmd/sc_animationeffects.png
 
 # calc cell style
 # ==============================================
-cmd/32/badcellstyles.png cmd/32/badcellstyle.png
+cmd/32/badcellstyle.png cmd/32/badcellstyles.png
 cmd/32/defaultcellstyles.png cmd/32/defaultcharstyle.png
 cmd/32/footnotecellstyles.png cmd/32/insertfootnote.png
-cmd/32/goodcellstyles.png cmd/32/goodcellstyle.png
+cmd/32/goodcellstyle.png cmd/32/goodcellstyles.png
 cmd/32/heading1cellstyles.png cmd/32/heading1parastyle.png
 cmd/32/heading2cellstyles.png cmd/32/heading2parastyle.png
-cmd/32/neutralcellstyles.png cmd/32/neutralcellstyle.png
+cmd/32/neutralcellstyle.png cmd/32/neutralcellstyles.png
 cmd/32/notecellstyles.png cmd/32/shownote.png
-cmd/lc_badcellstyles.png cmd/lc_badcellstyle.png
+cmd/lc_badcellstyle.png cmd/lc_badcellstyles.png
 cmd/lc_defaultcellstyles.png cmd/lc_defaultcharstyle.png
 cmd/lc_footnotecellstyles.png cmd/lc_insertfootnote.png
-cmd/lc_goodcellstyles.png cmd/lc_goodcellstyle.png
+cmd/lc_goodcellstyle.png cmd/lc_goodcellstyles.png
 cmd/lc_heading1cellstyles.png cmd/lc_heading1parastyle.png
 cmd/lc_heading2cellstyles.png cmd/lc_heading2parastyle.png
-cmd/lc_neutralcellstyles.png cmd/lc_neutralcellstyle.png
+cmd/lc_neutralcellstyle.png cmd/lc_neutralcellstyles.png
 cmd/lc_notecellstyles.png cmd/lc_shownote.png
-cmd/sc_badcellstyles.png cmd/sc_badcellstyle.png
+cmd/sc_badcellstyle.png cmd/sc_badcellstyles.png
 cmd/sc_defaultcellstyles.png cmd/sc_defaultcharstyle.png
 cmd/sc_footnotecellstyles.png cmd/sc_insertfootnote.png
-cmd/sc_goodcellstyles.png cmd/sc_goodcellstyle.png
+cmd/sc_goodcellstyle.png cmd/sc_goodcellstyles.png
 cmd/sc_heading1cellstyles.png cmd/sc_heading1parastyle.png
 cmd/sc_heading2cellstyles.png cmd/sc_heading2parastyle.png
-cmd/sc_neutralcellstyles.png cmd/sc_neutralcellstyle.png
+cmd/sc_neutralcellstyle.png cmd/sc_neutralcellstyles.png
 cmd/sc_notecellstyles.png cmd/sc_shownote.png
 
 # calc context menu rowheader
