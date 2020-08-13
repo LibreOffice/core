@@ -187,9 +187,38 @@ void call(
                 "C++ code threw unknown exception");
         }
     } catch (css::uno::Exception &) {
+        __cxxabiv1::__cxa_exception * header = reinterpret_cast<__cxxabiv1::__cxa_eh_globals *>(
+            __cxxabiv1::__cxa_get_globals())->caughtExceptions;
+#if !defined MACOSX && defined _LIBCPPABI_VERSION // detect libc++abi
+        // Very bad HACK to find out whether we run against a libcxxabi that has a new
+        // __cxa_exception::reserved member at the start, introduced with LLVM 10
+        // <https://github.com/llvm/llvm-project/commit/674ec1eb16678b8addc02a4b0534ab383d22fa77>
+        // "[libcxxabi] Insert padding in __cxa_exception struct for compatibility".  The layout of
+        // the start of __cxa_exception is
+        //
+        //  [8 byte  void *reserve]
+        //   8 byte  size_t referenceCount
+        //
+        // where the (bad, hacky) assumption is that reserve (if present) is null
+        // (__cxa_allocate_exception in at least LLVM 11 zero-fills the object, and nothing actively
+        // sets reserve) while referenceCount is non-null (__cxa_throw sets it to 1, and
+        // __cxa_decrement_exception_refcount destroys the exception as soon as it drops to 0; for a
+        // __cxa_dependent_exception, the referenceCount member is rather
+        //
+        //   8 byte  void* primaryException
+        //
+        // but which also will always be set to a non-null value in
+        // __cxa_rethrow_primary_exception).  As described in the definition of __cxa_exception
+        // (bridges/source/cpp_uno/gcc3_linux_aarch64/abi.hxx), this hack (together with the
+        // "#ifdef MACOSX" there) can be dropped once we can be sure that we only run against new
+        // libcxxabi that has the reserve member:
+        if (*reinterpret_cast<void **>(header) == nullptr) {
+            header = reinterpret_cast<__cxxabiv1::__cxa_exception*>(
+                reinterpret_cast<void **>(header) + 1);
+        }
+#endif
         abi_aarch64::mapException(
-            reinterpret_cast<__cxxabiv1::__cxa_eh_globals *>(
-                __cxxabiv1::__cxa_get_globals())->caughtExceptions,
+            header,
             __cxxabiv1::__cxa_current_exception_type(), *exception,
             proxy->getBridge()->getCpp2Uno());
         for (sal_Int32 i = 0; i != count; ++i) {
