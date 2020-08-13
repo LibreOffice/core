@@ -45,7 +45,7 @@ private:
 void GraphicObjectTest::testTdf88836()
 {
     // Construction with empty bitmap -> type should be GraphicType::NONE
-    Graphic aGraphic = Bitmap();
+    Graphic aGraphic = BitmapEx(Bitmap());
     CPPUNIT_ASSERT_EQUAL(int(GraphicType::NONE), int(aGraphic.GetType()));
     aGraphic = Graphic(BitmapEx());
     CPPUNIT_ASSERT_EQUAL(int(GraphicType::NONE), int(aGraphic.GetType()));

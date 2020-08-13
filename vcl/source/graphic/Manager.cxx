@@ -178,13 +178,6 @@ std::shared_ptr<ImpGraphic> Manager::newInstance()
     return pReturn;
 }
 
-std::shared_ptr<ImpGraphic> Manager::newInstance(const Bitmap& rBitmap)
-{
-    auto pReturn = std::make_shared<ImpGraphic>(rBitmap);
-    registerGraphic(pReturn, "Bitmap");
-    return pReturn;
-}
-
 std::shared_ptr<ImpGraphic> Manager::newInstance(const BitmapEx& rBitmapEx)
 {
     auto pReturn = std::make_shared<ImpGraphic>(rBitmapEx);

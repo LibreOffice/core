@@ -124,7 +124,7 @@ void savePNG(const OUString& sWhere, const Bitmap& rBmp)
 {
     SvFileStream aStream(sWhere, StreamMode::WRITE | StreamMode::TRUNC);
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
-    rFilter.compressAsPNG(rBmp, aStream);
+    rFilter.compressAsPNG(BitmapEx(rBmp), aStream);
 }
 }
 

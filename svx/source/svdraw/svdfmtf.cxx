@@ -1092,7 +1092,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaBmpAction const & rAct)
     aRect.AdjustRight( 1 ); aRect.AdjustBottom( 1 );
     SdrGrafObj* pGraf = new SdrGrafObj(
         *mpModel,
-        Graphic(rAct.GetBitmap()),
+        Graphic(BitmapEx(rAct.GetBitmap())),
         aRect);
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)
@@ -1107,7 +1107,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaBmpScaleAction const & rAct)
     aRect.AdjustRight( 1 ); aRect.AdjustBottom( 1 );
     SdrGrafObj* pGraf = new SdrGrafObj(
         *mpModel,
-        Graphic(rAct.GetBitmap()),
+        Graphic(BitmapEx(rAct.GetBitmap())),
         aRect);
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)
@@ -1319,14 +1319,14 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaTextRectAction const & rAct)
 void ImpSdrGDIMetaFileImport::DoAction(MetaBmpScalePartAction const & rAct)
 {
     tools::Rectangle aRect(rAct.GetDestPoint(), rAct.GetDestSize());
-    Bitmap aBitmap(rAct.GetBitmap());
+    BitmapEx aBitmapEx(rAct.GetBitmap());
 
     aRect.AdjustRight( 1 );
     aRect.AdjustBottom( 1 );
-    aBitmap.Crop(tools::Rectangle(rAct.GetSrcPoint(), rAct.GetSrcSize()));
+    aBitmapEx.Crop(tools::Rectangle(rAct.GetSrcPoint(), rAct.GetSrcSize()));
     SdrGrafObj* pGraf = new SdrGrafObj(
         *mpModel,
-        aBitmap,
+        aBitmapEx,
         aRect);
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)

@@ -254,7 +254,7 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
             }
             else
             {
-                rGraphic = maBmp;
+                rGraphic = BitmapEx(maBmp);
             }
             eReadState = XPMREAD_OK;
         }

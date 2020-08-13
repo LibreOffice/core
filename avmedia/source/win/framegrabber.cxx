@@ -183,7 +183,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
 
                         if( ReadDIB(aBmp, aMemStm, false ) && !aBmp.IsEmpty() )
                         {
-                            const Graphic aGraphic( aBmp );
+                            const Graphic aGraphic(BitmapEx(aBmp));
                             xRet = aGraphic.GetXGraphic();
                         }
                     }

@@ -204,7 +204,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
             else
                 aMask = aBitmapEx.GetMask();
         }
-        Graphic         aGraphic( aBitmapEx.GetBitmap() );
+        Graphic aGraphic(BitmapEx(aBitmapEx.GetBitmap()));
 
         Sequence< PropertyValue > aFilterData( 2 );
         aFilterData[ 0 ].Name = "Quality";
