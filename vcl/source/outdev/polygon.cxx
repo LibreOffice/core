@@ -290,6 +290,8 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
     if( mbInitFillColor )
         InitFillColor();
 
+    bool bSuccess(false);
+
     if((mnAntialiasing & AntialiasingFlags::EnableB2dDraw) &&
        mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
        RasterOp::OverPaint == GetRasterOp() &&
@@ -297,7 +299,7 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
     {
         const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation());
         basegfx::B2DPolyPolygon aB2DPolyPolygon(rB2DPolyPoly);
-        bool bSuccess(true);
+        bSuccess = true;
 
         // ensure closed - maybe assert, hinders buffering
         if(!aB2DPolyPolygon.isClosed())
@@ -335,20 +337,18 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
                     break;
             }
         }
-
-        if(bSuccess)
-        {
-            if (mpAlphaVDev)
-                mpAlphaVDev->ImplDrawPolyPolygonWithB2DPolyPolygon(rB2DPolyPoly);
-
-            return;
-        }
     }
 
-    // fallback to old polygon drawing if needed
-    const tools::PolyPolygon aToolsPolyPolygon( rB2DPolyPoly );
-    const tools::PolyPolygon aPixelPolyPolygon = ImplLogicToDevicePixel( aToolsPolyPolygon );
-    ImplDrawPolyPolygon( aPixelPolyPolygon.Count(), aPixelPolyPolygon );
+    if (!bSuccess)
+    {
+        // fallback to old polygon drawing if needed
+        const tools::PolyPolygon aToolsPolyPolygon(rB2DPolyPoly);
+        const tools::PolyPolygon aPixelPolyPolygon = ImplLogicToDevicePixel(aToolsPolyPolygon);
+        ImplDrawPolyPolygon(aPixelPolyPolygon.Count(), aPixelPolyPolygon);
+    }
+
+    if (mpAlphaVDev)
+        mpAlphaVDev->ImplDrawPolyPolygonWithB2DPolyPolygon(rB2DPolyPoly);
 }
 
 // #100127# Extracted from OutputDevice::DrawPolyPolygon()
