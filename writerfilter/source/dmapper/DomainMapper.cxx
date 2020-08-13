@@ -3901,6 +3901,11 @@ StyleSheetTablePtr const & DomainMapper::GetStyleSheetTable( )
     return m_pImpl->GetStyleSheetTable( );
 }
 
+SettingsTablePtr const & DomainMapper::GetSettingsTable()
+{
+    return m_pImpl->GetSettingsTable();
+}
+
 GraphicZOrderHelper* DomainMapper::graphicZOrderHelper()
 {
     if (zOrderHelper == nullptr)

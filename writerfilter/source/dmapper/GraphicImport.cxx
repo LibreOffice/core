@@ -625,7 +625,9 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
         case NS_ooxml::LN_CT_Anchor_locked: // 90990; - ignored
         break;
         case NS_ooxml::LN_CT_Anchor_layoutInCell: // 90991; - ignored
-            m_pImpl->bLayoutInCell = nIntValue != 0;
+            // Starting in MSO 2013, anchors are ALWAYS considered to be laid out in table cell.
+            m_pImpl->bLayoutInCell = nIntValue != 0 ||
+                (m_pImpl->rDomainMapper.GetSettingsTable()->GetWordCompatibilityMode() > 14 && m_pImpl->rDomainMapper.IsInTable());
         break;
         case NS_ooxml::LN_CT_Anchor_hidden: // 90992; - ignored
         break;
