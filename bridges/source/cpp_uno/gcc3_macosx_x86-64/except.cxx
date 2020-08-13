@@ -270,8 +270,12 @@ static void deleteException( void * pExc )
     // to the final member unwindHeader, on x86-64 effectively adding a hole of
     // size 8 in front of that member (changing its offset from 88 to 96,
     // sizeof(__cxa_exception) from 120 to 128, and alignof(__cxa_exception)
-    // from 8 to 16); a hack to dynamically determine whether we run against a
-    // new libcxxabi is to look at the exceptionDestructor member, which must
+    // from 8 to 16); this was reverted again with libcxxabi commit
+    // <https://github.com/llvm/llvm-project/commit/9ef1daa46edb80c47d0486148c0afc4e0d83ddcf>
+    // "Insert padding before the __cxa_exception header to ensure the thrown" towards LLVM 6.0 (so
+    // the below hack can be removed again once we can be sure that we only run against libcxxabi
+    // from LLVM >= 6); a hack to dynamically determine whether we run against a
+    // LLVM 5 libcxxabi is to look at the exceptionDestructor member, which must
     // point to this function (the use of __cxa_exception in fillUnoException is
     // unaffected, as it only accesses members towards the start of the struct,
     // through a pointer known to actually point at the start).  The libcxxabi commit
