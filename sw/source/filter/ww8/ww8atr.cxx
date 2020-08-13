@@ -457,7 +457,9 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
     //section.
     bool bBreakSet = false;
 
-    const SwPageDesc * pPageDesc = rNd.FindPageDesc();
+    size_t idx(0);
+    const SwPageDesc * pPageDesc = rNd.FindPageDesc(&idx);
+    bool isViaLayout(idx == rNd.GetIndex());
 
     // Even if pAktPageDesc != pPageDesc ,it might be because of the different header & footer types.
     if (m_pCurrentPageDesc != pPageDesc)
@@ -524,6 +526,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
              static_cast<const SwFormatPageDesc*>(pItem)->GetRegisteredIn() != nullptr)
         {
             bBreakSet = true;
+            assert(!isViaLayout);
             bNewPageDesc = true;
             pPgDesc = static_cast<const SwFormatPageDesc*>(pItem);
             m_pCurrentPageDesc = pPgDesc->GetPageDesc();
@@ -551,6 +554,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
                 }
             }
             bBreakSet = true;
+            isViaLayout = false;
 
             if ( !bRemoveHardBreakInsideTable )
             {
@@ -617,7 +621,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
 
     if ( bNewPageDesc && m_pCurrentPageDesc )
     {
-        PrepareNewPageDesc( pSet, rNd, pPgDesc, m_pCurrentPageDesc );
+        PrepareNewPageDesc(pSet, rNd, pPgDesc, m_pCurrentPageDesc, isViaLayout);
     }
     m_bBreakBefore = false;
     m_bPrevTextNodeIsEmpty = isTextNodeEmpty ;
@@ -632,7 +636,7 @@ bool MSWordExportBase::OutputFollowPageDesc( const SfxItemSet* pSet, const SwTex
          m_pCurrentPageDesc &&
          m_pCurrentPageDesc != m_pCurrentPageDesc->GetFollow() )
     {
-        PrepareNewPageDesc( pSet, *pNd, nullptr, m_pCurrentPageDesc->GetFollow() );
+        PrepareNewPageDesc(pSet, *pNd, nullptr, m_pCurrentPageDesc->GetFollow(), true);
         bRet = true;
     }
 
@@ -670,7 +674,8 @@ sal_uLong MSWordExportBase::GetSectionLineNo( const SfxItemSet* pSet, const SwNo
 void WW8Export::PrepareNewPageDesc( const SfxItemSet*pSet,
                                       const SwNode& rNd,
                                       const SwFormatPageDesc* pNewPgDescFormat,
-                                      const SwPageDesc* pNewPgDesc )
+                                      const SwPageDesc* pNewPgDesc,
+                                      bool const )
 {
     // The PageDescs will only be inserted in WW8Writer::pSepx with the corresponding
     // position by the occurrences of PageDesc attributes. The construction and
