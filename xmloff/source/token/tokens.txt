@@ -1361,6 +1361,10 @@ percentage-style
 perspective
 phdthesis
 phong
+velocity-x
+velocity-y
+density
+bounciness
 pie-offset
 placeholder
 placeholder-type

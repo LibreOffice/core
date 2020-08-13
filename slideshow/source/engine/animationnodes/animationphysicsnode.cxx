@@ -19,6 +19,12 @@
 
 #include "animationphysicsnode.hxx"
 #include <animationfactory.hxx>
+#include <o3tl/any.hxx>
+
+#define DEFAULT_START_VELOCITY_X 0.0
+#define DEFAULT_START_VELOCITY_Y 0.0
+#define DEFAULT_DENSITY 1
+#define DEFAULT_BOUNCINESS 0.1
 
 namespace slideshow::internal
 {
@@ -34,12 +40,41 @@ AnimationActivitySharedPtr AnimationPhysicsNode::createActivity() const
     ENSURE_OR_THROW((mxPhysicsMotionNode->getDuration() >>= fDuration),
                     "Couldn't get the animation duration.");
 
+    ::css::uno::Any aTemp;
+    double fStartVelocityX;
+    aTemp = mxPhysicsMotionNode->getStartVelocityX();
+    if (aTemp.hasValue())
+        aTemp >>= fStartVelocityX;
+    else
+        fStartVelocityX = DEFAULT_START_VELOCITY_X;
+
+    double fStartVelocityY;
+    aTemp = mxPhysicsMotionNode->getStartVelocityY();
+    if (aTemp.hasValue())
+        aTemp >>= fStartVelocityY;
+    else
+        fStartVelocityY = DEFAULT_START_VELOCITY_Y;
+
+    double fDensity;
+    aTemp = mxPhysicsMotionNode->getDensity();
+    if (aTemp.hasValue())
+        aTemp >>= fDensity;
+    else
+        fDensity = DEFAULT_DENSITY;
+
+    double fBounciness;
+    aTemp = mxPhysicsMotionNode->getBounciness();
+    if (aTemp.hasValue())
+        aTemp >>= fBounciness;
+    else
+        fBounciness = DEFAULT_BOUNCINESS;
+
     ActivitiesFactory::CommonParameters const aParms(fillCommonParameters());
     return ActivitiesFactory::createSimpleActivity(
         aParms,
-        AnimationFactory::createPhysicsAnimation(getContext().mpBox2DWorld, fDuration,
-                                                 getContext().mpSubsettableShapeManager,
-                                                 getSlideSize(), 0),
+        AnimationFactory::createPhysicsAnimation(
+            getContext().mpBox2DWorld, fDuration, getContext().mpSubsettableShapeManager,
+            getSlideSize(), { fStartVelocityX, fStartVelocityY }, fDensity, fBounciness, 0),
         true);
 }
 

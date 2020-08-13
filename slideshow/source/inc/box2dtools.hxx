@@ -221,7 +221,9 @@ public:
         @param pShape
         Pointer to the shape to alter the corresponding Box2D body of
      */
-    Box2DBodySharedPtr makeShapeDynamic(const slideshow::internal::ShapeSharedPtr& pShape);
+    Box2DBodySharedPtr makeShapeDynamic(const css::uno::Reference<css::drawing::XShape>& xShape,
+                                        const basegfx::B2DVector& rStartVelocity,
+                                        const double fDensity, const double fBounciness);
 
     /** Make the Box2D body a dynamic one
 
@@ -285,6 +287,8 @@ public:
 
     void queueShapeAnimationEndUpdate(const css::uno::Reference<css::drawing::XShape>& xShape,
                                       const slideshow::internal::AttributeType eAttrType);
+
+    void alertAnimationEndForShape(const slideshow::internal::ShapeSharedPtr& pShape);
 };
 
 /// Class that manages a single box2D Body
@@ -344,6 +348,10 @@ public:
     double getAngle();
 
     void setAngle(const double fAngle);
+
+    void setDensityAndRestitution(const double fDensity, const double fRestitution);
+
+    void setRestitution(const double fRestitution);
 
     /// Set type of the body
     void setType(box2DBodyType eType);
