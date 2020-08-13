@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "85105d25_d831573d",
+        "filename": "sw/source/core/text/portxt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-08-13T08:17:40Z",
+      "side": 1,
+      "message": "I need to override the SwTextPortion::Format method to use the text from the GetExpText method.\n@Michael: Any idea how to do that without copy/pasting the whole Format method?\n\nWhat I have currently somehow works, but it changes the layout (no line break inside fields currently).",
+      "range": {
+        "startLine": 688,
+        "startChar": 4,
+        "endLine": 688,
+        "endChar": 28
+      },
+      "revId": "6c022bc6475882fc9a3e6e2363f4589770fbf7a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
