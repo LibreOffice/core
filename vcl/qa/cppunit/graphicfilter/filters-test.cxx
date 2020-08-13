@@ -116,7 +116,7 @@ void VclFiltersTest::checkExportImport(const OUString& aFilterShortName)
     aFilterData[ 2 ].Value <<= sal_Int32(90);
 
     sal_uInt16 aFilterType = mpGraphicFilter->GetExportFormatNumberForShortName(aFilterShortName);
-    mpGraphicFilter->ExportGraphic( aBitmap, OUString(), aStream, aFilterType, &aFilterData );
+    mpGraphicFilter->ExportGraphic(BitmapEx(aBitmap), OUString(), aStream, aFilterType, &aFilterData );
 
     CPPUNIT_ASSERT(aStream.Tell() > 0);
 

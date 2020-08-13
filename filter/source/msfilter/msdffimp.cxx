@@ -6555,7 +6555,7 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, tool
             Bitmap aNew;
             if( ReadDIB(aNew, *pGrStream, false) )
             {
-                rData = Graphic( aNew );
+                rData = Graphic(BitmapEx(aNew));
                 nRes = ERRCODE_NONE;
             }
         }

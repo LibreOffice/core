@@ -186,17 +186,6 @@ ImpGraphic::ImpGraphic(GraphicExternalLink const & rGraphicExternalLink) :
 {
 }
 
-ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
-        maBitmapEx            ( rBitmap ),
-        meType          ( !rBitmap.IsEmpty() ? GraphicType::Bitmap : GraphicType::NONE ),
-        mnSizeBytes     ( 0 ),
-        mbSwapOut       ( false ),
-        mbDummyContext  ( false ),
-        maLastUsed (std::chrono::high_resolution_clock::now()),
-        mbPrepared (false)
-{
-}
-
 ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
         maBitmapEx            ( rBitmapEx ),
         meType          ( !rBitmapEx.IsEmpty() ? GraphicType::Bitmap : GraphicType::NONE ),

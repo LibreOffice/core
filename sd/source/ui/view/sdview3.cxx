@@ -194,21 +194,21 @@ bool View::InsertMetaFile( TransferableDataHelper& rDataHelper, const Point& rPo
                             {
                                 MetaBmpAction* pBmpAction = dynamic_cast< MetaBmpAction* >( pAction );
                                 if( pBmpAction )
-                                    aGraphic = Graphic( pBmpAction->GetBitmap() );
+                                    aGraphic = Graphic(BitmapEx(pBmpAction->GetBitmap()));
                             }
                             break;
                         case MetaActionType::BMPSCALE:
                             {
                                 MetaBmpScaleAction* pBmpScaleAction = dynamic_cast< MetaBmpScaleAction* >( pAction );
                                 if( pBmpScaleAction )
-                                    aGraphic = Graphic( pBmpScaleAction->GetBitmap() );
+                                    aGraphic = Graphic(BitmapEx(pBmpScaleAction->GetBitmap()));
                             }
                             break;
                         case MetaActionType::BMPEX:
                             {
                                 MetaBmpExAction* pBmpExAction = dynamic_cast< MetaBmpExAction* >( pAction );
                                 if( pBmpExAction )
-                                    aGraphic = Graphic( pBmpExAction->GetBitmapEx() );
+                                    aGraphic = Graphic(pBmpExAction->GetBitmapEx() );
                             }
                             break;
                         case MetaActionType::BMPEXSCALE:
