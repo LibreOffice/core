@@ -2448,7 +2448,7 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
       <!-- default value: 0.1 -->
       <rng:attribute name="loext:bounciness">
         <rng:data type="double">
-          <rng:param name="minExclusive">0</rng:param>
+          <rng:param name="minInclusive">0</rng:param>
           <rng:param name="maxInclusive">1</rng:param>
         </rng:data>
       </rng:attribute>

@@ -20,6 +20,7 @@
 
 #include "animationbasenode.hxx"
 #include <com/sun/star/animations/XAnimateMotion.hpp>
+#include <com/sun/star/animations/XAnimatePhysics.hpp>
 
 namespace slideshow
 {
@@ -46,7 +47,7 @@ private:
     virtual AnimationActivitySharedPtr createActivity() const override;
     virtual bool enqueueActivity() const override;
 
-    css::uno::Reference<css::animations::XAnimateMotion> mxPhysicsMotionNode;
+    css::uno::Reference<css::animations::XAnimatePhysics> mxPhysicsMotionNode;
 };
 
 } // namespace internal

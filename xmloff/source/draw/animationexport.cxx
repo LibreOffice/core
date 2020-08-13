@@ -23,6 +23,7 @@
 #include <com/sun/star/animations/Timing.hpp>
 #include <com/sun/star/animations/Event.hpp>
 #include <com/sun/star/animations/XAnimateMotion.hpp>
+#include <com/sun/star/animations/XAnimatePhysics.hpp>
 #include <com/sun/star/animations/XAnimateTransform.hpp>
 #include <com/sun/star/animations/XTransitionFilter.hpp>
 #include <com/sun/star/animations/XIterateContainer.hpp>
@@ -1245,9 +1246,40 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
         case AnimationNodeType::ANIMATEPHYSICS:
         {
             eElementToken = XML_ANIMATEPHYSICS;
+            double fTemp;
 
-            Reference< XAnimateMotion > xAnimateMotion( xAnimate, UNO_QUERY_THROW );
-            aTemp = xAnimateMotion->getOrigin();
+            Reference< XAnimatePhysics > xAnimatePhysics( xAnimate, UNO_QUERY_THROW );
+            aTemp = xAnimatePhysics->getStartVelocityX();
+            if( aTemp.hasValue() )
+            {
+                aTemp >>= fTemp;
+                ::sax::Converter::convertDouble( sTmp, fTemp );
+                mxExport->AddAttribute( XML_NAMESPACE_LO_EXT, XML_PHYSICS_ANIMATION_START_VELOCITY_X, sTmp.makeStringAndClear() );
+            }
+
+            aTemp = xAnimatePhysics->getStartVelocityY();
+            if( aTemp.hasValue() )
+            {
+                aTemp >>= fTemp;
+                ::sax::Converter::convertDouble( sTmp, fTemp );
+                mxExport->AddAttribute( XML_NAMESPACE_LO_EXT, XML_PHYSICS_ANIMATION_START_VELOCITY_Y, sTmp.makeStringAndClear() );
+            }
+
+            aTemp = xAnimatePhysics->getDensity();
+            if( aTemp.hasValue() )
+            {
+                aTemp >>= fTemp;
+                ::sax::Converter::convertDouble( sTmp, fTemp );
+                mxExport->AddAttribute( XML_NAMESPACE_LO_EXT, XML_PHYSICS_ANIMATION_DENSITY, sTmp.makeStringAndClear() );
+            }
+
+            aTemp = xAnimatePhysics->getBounciness();
+            if( aTemp.hasValue() )
+            {
+                aTemp >>= fTemp;
+                ::sax::Converter::convertDouble( sTmp, fTemp );
+                mxExport->AddAttribute( XML_NAMESPACE_LO_EXT, XML_PHYSICS_ANIMATION_BOUNCINESS, sTmp.makeStringAndClear() );
+            }
         }
         break;
 

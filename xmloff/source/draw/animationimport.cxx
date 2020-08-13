@@ -26,6 +26,7 @@
 #include <com/sun/star/animations/SequenceTimeContainer.hpp>
 #include <com/sun/star/animations/XIterateContainer.hpp>
 #include <com/sun/star/animations/XAnimateMotion.hpp>
+#include <com/sun/star/animations/XAnimatePhysics.hpp>
 #include <com/sun/star/animations/XAnimateColor.hpp>
 #include <com/sun/star/animations/XAnimateTransform.hpp>
 #include <com/sun/star/animations/XTransitionFilter.hpp>
@@ -921,6 +922,38 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
                 Reference< XAnimateMotion > xAnimateMotion( mxNode, UNO_QUERY );
                 if( xAnimateMotion.is() )
                     xAnimateMotion->setPath( AnimationsImportHelperImpl::convertPath( rValue ) );
+            }
+            break;
+
+            case XML_ELEMENT(LO_EXT, XML_PHYSICS_ANIMATION_START_VELOCITY_X):
+            {
+                Reference< XAnimatePhysics > xAnimatePhysics( mxNode, UNO_QUERY );
+                if( xAnimatePhysics.is() )
+                    xAnimatePhysics->setStartVelocityX( makeAny(rValue.toDouble()) );
+            }
+            break;
+
+            case XML_ELEMENT(LO_EXT, XML_PHYSICS_ANIMATION_START_VELOCITY_Y):
+            {
+                Reference< XAnimatePhysics > xAnimatePhysics( mxNode, UNO_QUERY );
+                if( xAnimatePhysics.is() )
+                    xAnimatePhysics->setStartVelocityY( makeAny(rValue.toDouble()) );
+            }
+            break;
+
+            case XML_ELEMENT(LO_EXT, XML_PHYSICS_ANIMATION_DENSITY):
+            {
+                Reference< XAnimatePhysics > xAnimatePhysics( mxNode, UNO_QUERY );
+                if( xAnimatePhysics.is() )
+                    xAnimatePhysics->setDensity( makeAny(rValue.toDouble()) );
+            }
+            break;
+
+            case XML_ELEMENT(LO_EXT, XML_PHYSICS_ANIMATION_BOUNCINESS):
+            {
+                Reference< XAnimatePhysics > xAnimatePhysics( mxNode, UNO_QUERY );
+                if( xAnimatePhysics.is() )
+                    xAnimatePhysics->setBounciness( makeAny(rValue.toDouble()) );
             }
             break;
 
