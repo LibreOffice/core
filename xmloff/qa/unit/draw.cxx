@@ -70,7 +70,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextBoxLoss)
     xShape->getPropertyValue("TextBox") >>= bTextBox;
 
     // Without the accompanying fix in place, this test would have failed, as the shape only had
-    // editeng text, loosing the image part of the shape text.
+    // editeng text, losing the image part of the shape text.
     CPPUNIT_ASSERT(bTextBox);
 }
 
