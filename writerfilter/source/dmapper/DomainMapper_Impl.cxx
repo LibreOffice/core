@@ -101,6 +101,7 @@
 #include <unotools/mediadescriptor.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
+#include <com/sun/star/drawing/FillStyle.hpp>
 
 #include <unicode/errorcode.h>
 #include <unicode/regex.h>
@@ -2246,18 +2247,35 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
         uno::Reference<beans::XPropertySet> xReplacementProperties(pOLEHandler->getShape(), uno::UNO_QUERY);
         if (xReplacementProperties.is())
         {
+            table::BorderLine2 aBorderProps;
+            xReplacementProperties->getPropertyValue("LineColor") >>= aBorderProps.Color;
+            xReplacementProperties->getPropertyValue("LineWidth") >>= aBorderProps.LineWidth;
+            xReplacementProperties->getPropertyValue("LineStyle") >>= aBorderProps.LineStyle;
+
+            xOLEProperties->setPropertyValue("RightBorder", uno::Any(aBorderProps));
+            xOLEProperties->setPropertyValue("TopBorder", uno::Any(aBorderProps));
+            xOLEProperties->setPropertyValue("LeftBorder", uno::Any(aBorderProps));
+            xOLEProperties->setPropertyValue("BottomBorder", uno::Any(aBorderProps));
+
             OUString pProperties[] = {
-                OUString("AnchorType"),
-                OUString("Surround"),
-                OUString("HoriOrient"),
-                OUString("HoriOrientPosition"),
-                OUString("VertOrient"),
-                OUString("VertOrientPosition"),
-                OUString("VertOrientRelation"),
-                OUString("HoriOrientRelation")
+                "AnchorType",
+                "Surround",
+                "HoriOrient",
+                "HoriOrientPosition",
+                "VertOrient",
+                "VertOrientPosition",
+                "VertOrientRelation",
+                "HoriOrientRelation",
+                "FillStyle",
+                "FillColor",
+                "FillColor2",
+                "LineStyle",
             };
-            for (const OUString & s : pProperties)
-                xOLEProperties->setPropertyValue(s, xReplacementProperties->getPropertyValue(s));
+            for (const OUString& s : pProperties)
+            {
+                const uno::Any aVal = xReplacementProperties->getPropertyValue(s);
+                xOLEProperties->setPropertyValue(s, aVal);
+            }
         }
         else
             // mimic the treatment of graphics here... it seems anchoring as character
