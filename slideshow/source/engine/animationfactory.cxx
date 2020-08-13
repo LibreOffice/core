@@ -323,7 +323,9 @@ namespace slideshow::internal
                     {
                         mpShapeManager->notifyShapeUpdate( mpShape );
                         if ( mpBox2DWorld->isInitialized() )
-                            mpBox2DWorld->queuePositionUpdate( mpShape->getXShape(), rOutPos );
+                        {
+                            mpBox2DWorld->queueShapePathAnimationUpdate( mpShape->getXShape(), mpAttrLayer );
+                        }
                     }
 
                     return true;
