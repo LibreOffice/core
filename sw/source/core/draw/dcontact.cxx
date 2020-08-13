@@ -1830,7 +1830,7 @@ void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
                 for( SwFrame *pFrame = aIter.First(); pFrame; pFrame = aIter.Next() )
                 {
                     // append drawing object, if
-                    // (1) proposed anchor frame isn't a follow and
+                    // (1) proposed anchor frame isn't a follow and...
                     const bool bFollow = pFrame->IsContentFrame() && static_cast<SwContentFrame*>(pFrame)->IsFollow();
                     if (bFollow)
                         continue;
@@ -1838,7 +1838,9 @@ void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
                     // (2) drawing object isn't a control object to be anchored
                     //     in header/footer.
                     const bool bControlInHF = ::CheckControlLayer(GetMaster()) && pFrame->FindFooterOrHeader();
-                    if (bControlInHF)
+                    // tdf#129542 but make an exception for control objects so they can get added to just the first frame,
+                    // the Master Anchor Frame and not the others
+                    if (bControlInHF && pAnchorFrameOfMaster)
                         continue;
 
                     bool bAdd;
