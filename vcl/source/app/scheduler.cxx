@@ -479,6 +479,7 @@ bool Scheduler::ProcessTaskScheduling()
         * Because otherwise the exception is caught somewhere totally unrelated.
         * TODO Ideally we could capture a proper backtrace and feed this into breakpad,
         *   which is do-able, but requires writing some assembly.
+        * See also SalUserEventList::DispatchUserEvents
         */
         try
         {
