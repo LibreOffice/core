@@ -145,7 +145,6 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_PROTECT_FIELDS,
     HANDLE_HEADER_SPACING_BELOW_LAST_PARA,
     HANDLE_FRAME_AUTOWIDTH_WITH_MORE_PARA,
-    HANDLE_ALLOW_WRAP_WHEN_ANCHORED_IN_TABLE,
 };
 
 }
@@ -238,7 +237,6 @@ static MasterPropertySetInfo * lcl_createSettingsInfo()
         { OUString("ProtectFields"), HANDLE_PROTECT_FIELDS, cppu::UnoType<bool>::get(), 0 },
         { OUString("HeaderSpacingBelowLastPara"), HANDLE_HEADER_SPACING_BELOW_LAST_PARA, cppu::UnoType<bool>::get(), 0 },
         { OUString("FrameAutowidthWithMorePara"), HANDLE_FRAME_AUTOWIDTH_WITH_MORE_PARA, cppu::UnoType<bool>::get(), 0 },
-        { OUString("AllowWrapWhenAnchoredInTable"), HANDLE_ALLOW_WRAP_WHEN_ANCHORED_IN_TABLE, cppu::UnoType<bool>::get(), 0 },
 
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
@@ -994,15 +992,6 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             }
         }
         break;
-        case HANDLE_ALLOW_WRAP_WHEN_ANCHORED_IN_TABLE:
-        {
-            bool bTmp;
-            if (rValue >>= bTmp)
-            {
-                mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::ALLOW_WRAP_WHEN_ANCHORED_IN_TABLE, bTmp);
-            }
-        }
-        break;
         default:
             throw UnknownPropertyException(OUString::number(rInfo.mnHandle));
     }
@@ -1492,12 +1481,6 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(
                 DocumentSettingId::FRAME_AUTOWIDTH_WITH_MORE_PARA);
-        }
-        break;
-        case HANDLE_ALLOW_WRAP_WHEN_ANCHORED_IN_TABLE:
-        {
-            rValue <<= mpDoc->getIDocumentSettingAccess().get(
-                DocumentSettingId::ALLOW_WRAP_WHEN_ANCHORED_IN_TABLE);
         }
         break;
         default:
