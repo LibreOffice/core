@@ -514,6 +514,7 @@ void ScInputWindow::Resize()
     if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
     {
         std::vector<vcl::LOKPayloadItem> aItems;
+        aItems.emplace_back(std::make_pair("position", Point(GetOutOffXPixel(), GetOutOffYPixel()).toString()));
         aItems.emplace_back("size", GetSizePixel().toString());
         aItems.emplace_back("lines", OString::number(aTextWindow.GetNumLines()));
         pNotifier->notifyWindow(GetLOKWindowId(), "size_changed", aItems);
