@@ -162,8 +162,8 @@ std::type_info * getRtti(typelib_TypeDescription const & type) {
 extern "C" void _GLIBCXX_CDTOR_CALLABI deleteException(void * exception) {
     __cxxabiv1::__cxa_exception * header =
         static_cast<__cxxabiv1::__cxa_exception *>(exception) - 1;
-#if defined _LIBCPPABI_VERSION // detect libc++abi
-    // The libcxxabi commit
+#if !defined MACOSX && defined _LIBCPPABI_VERSION // detect libc++abi
+    // First, the libcxxabi commit
     // <http://llvm.org/viewvc/llvm-project?view=revision&revision=303175>
     // "[libcxxabi] Align unwindHeader on a double-word boundary" towards
     // LLVM 5.0 changed the size of __cxa_exception by adding
@@ -173,21 +173,48 @@ extern "C" void _GLIBCXX_CDTOR_CALLABI deleteException(void * exception) {
     // to the final member unwindHeader, on x86-64 effectively adding a hole of
     // size 8 in front of that member (changing its offset from 88 to 96,
     // sizeof(__cxa_exception) from 120 to 128, and alignof(__cxa_exception)
-    // from 8 to 16); a hack to dynamically determine whether we run against a
+    // from 8 to 16); the "header1" hack below to dynamically determine whether we run against a
     // LLVM 5 libcxxabi is to look at the exceptionDestructor member, which must
-    // point to this function (the use of __cxa_exception in fillUnoException is
+    // point to this function (the use of __cxa_exception in mapException is
     // unaffected, as it only accesses members towards the start of the struct,
     // through a pointer known to actually point at the start).  The libcxxabi commit
     // <https://github.com/llvm/llvm-project/commit/9ef1daa46edb80c47d0486148c0afc4e0d83ddcf>
     // "Insert padding before the __cxa_exception header to ensure the thrown" in LLVM 6
-    // removes the need for this hack, so it can be removed again once we can be sure that we only
-    // run against libcxxabi from LLVM >= 6:
+    // removes the need for this hack, so the "header1" hack can be removed again once we can be
+    // sure that we only run against libcxxabi from LLVM >= 6.
+    //
+    // Second, the libcxxabi commit
+    // <https://github.com/llvm/llvm-project/commit/674ec1eb16678b8addc02a4b0534ab383d22fa77>
+    // "[libcxxabi] Insert padding in __cxa_exception struct for compatibility" in LLVM 10 changed
+    // the layout of the start of __cxa_exception to
+    //
+    //  [8 byte  void *reserve]
+    //   8 byte  size_t referenceCount
+    //
+    // so the "header2" hack below to dynamically determine whether we run against a LLVM >= 10
+    // libcxxabi is to look whether the exceptionDestructor (with its known value) has increased its
+    // offset by 8.  As described in the definition of __cxa_exception
+    // (bridges/source/cpp_uno/gcc3_linux_aarch64/abi.hxx), the "header2" hack (together with the
+    // "#ifdef MACOSX" in the definition of __cxa_exception and the corresponding hack in call in
+    // bridges/source/cpp_uno/gcc3_linux_aarch64/uno2cpp.cxx) can be dropped once we can be sure
+    // that we only run against new libcxxabi that has the reserve member.
     if (header->exceptionDestructor != &deleteException) {
-        header = reinterpret_cast<__cxxabiv1::__cxa_exception *>(
+        auto const header1 = reinterpret_cast<__cxxabiv1::__cxa_exception *>(
             reinterpret_cast<char *>(header) - 8);
-        assert(header->exceptionDestructor == &deleteException);
+        if (header1->exceptionDestructor == &deleteException) {
+            header = header1;
+        } else {
+            auto const header2 = reinterpret_cast<__cxxabiv1::__cxa_exception *>(
+                reinterpret_cast<char *>(header) + 8);
+            if (header2->exceptionDestructor == &deleteException) {
+                header = header2;
+            } else {
+                assert(false);
+            }
+        }
     }
 #endif
+    assert(header->exceptionDestructor == &deleteException);
     OUString unoName(toUnoName(header->exceptionType->name()));
     typelib_TypeDescription * td = 0;
     typelib_typedescription_getByName(&td, unoName.pData);
