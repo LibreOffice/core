@@ -41,7 +41,6 @@
 #include <unotools/configmgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
-#include <com/sun/star/ui/ImageType.hpp>
 
 namespace uno = com::sun::star::uno;
 namespace frame = com::sun::star::frame;

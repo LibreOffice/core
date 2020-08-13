@@ -40,7 +40,6 @@
 #include <vcl/scheduler.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/bitmapaccess.hxx>
-#include <svx/svxids.hrc>
 #include <vcl/ITiledRenderable.hxx>
 #include <tools/json_writer.hxx>
 #include <unotools/mediadescriptor.hxx>

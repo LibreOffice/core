@@ -10,8 +10,8 @@
 #include <memory>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
-#include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
 #include <vcl/errcode.hxx>
 #include <tools/gen.hxx>
@@ -49,7 +49,6 @@
 
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
-#include <svx/xfillit0.hxx>
 #include <svl/itemiter.hxx>
 #include <svx/svxids.hrc>
 #include <unotools/localfilehelper.hxx>

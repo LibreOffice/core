@@ -12,8 +12,6 @@
 
 #include <sal/config.h>
 
-#include <cstdlib>
-
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 #include <test/xmltesttools.hxx>

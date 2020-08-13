@@ -19,13 +19,11 @@
 
 #include <SvxConfigPageHelper.hxx>
 
-#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
 
 #include <comphelper/random.hxx>
-#include <comphelper/processfactory.hxx>
 #include <svtools/imgdef.hxx>
 #include <svtools/miscopt.hxx>
 

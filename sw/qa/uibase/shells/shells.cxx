@@ -29,7 +29,6 @@
 #include <wrtsh.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <drawdoc.hxx>
-#include <unotxdoc.hxx>
 #include <docsh.hxx>
 
 char const DATA_DIRECTORY[] = "/sw/qa/uibase/shells/data/";

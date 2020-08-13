@@ -27,7 +27,6 @@
 #include <com/sun/star/logging/LogLevel.hpp>
 
 #include <tools/diagnose_ex.h>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>

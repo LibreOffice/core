@@ -26,7 +26,6 @@
 #include <unoprnms.hxx>
 #include <editeng/unoprnms.hxx>
 #include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -36,7 +35,7 @@
 #include <unotextrange.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/processfactory.hxx>
-#include <unotools/intlwrapper.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <vcl/settings.hxx>
 #include <inspectorproperties.hrc>
 

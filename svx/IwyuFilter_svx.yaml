@@ -116,3 +116,6 @@ excludelist:
     svx/source/unodraw/unoprov.cxx:
     # Needed for UnoType instantiation
     - com/sun/star/lang/Locale.hpp
+    svx/qa/unit/xoutdev.cxx:
+    # Needed for system-cppunit
+    - unotest/bootstrapfixturebase.hxx
