@@ -237,7 +237,7 @@ UInt32 AquaSalGraphics::getState(ControlState nState)
     // To handle these windows correctly, parent frame's key window state is considered here additionally.
 
     const bool bDrawActive = mpFrame == nullptr || [mpFrame->getNSWindow() isKeyWindow]
-                             || (mpFrame->mpParent != nullptr && [mpFrame->mpParent->getNSWindow() isKeyWindow]);
+                             || mpFrame->mpParent == nullptr || [mpFrame->mpParent->getNSWindow() isKeyWindow];
     if (!(nState & ControlState::ENABLED) || !bDrawActive)
     {
         return kThemeStateInactive;
