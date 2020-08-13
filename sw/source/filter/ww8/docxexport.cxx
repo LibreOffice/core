@@ -619,7 +619,8 @@ sal_uLong DocxExport::ReplaceCr( sal_uInt8 )
 
 void DocxExport::PrepareNewPageDesc( const SfxItemSet* pSet,
         const SwNode& rNd, const SwFormatPageDesc* pNewPgDescFormat,
-        const SwPageDesc* pNewPgDesc )
+        const SwPageDesc* pNewPgDesc,
+        bool const bViaLayout)
 {
     // tell the attribute output that we are ready to write the section
     // break [has to be output inside paragraph properties]
@@ -632,13 +633,12 @@ void DocxExport::PrepareNewPageDesc( const SfxItemSet* pSet,
 
     if ( pNewPgDescFormat )
     {
-        m_pSections->AppendSection( *pNewPgDescFormat, rNd, pFormat, nLnNm );
+        m_pSections->AppendSection(*pNewPgDescFormat, rNd, pFormat, nLnNm, bViaLayout);
     }
     else if ( pNewPgDesc )
     {
-        m_pSections->AppendSection( pNewPgDesc, rNd, pFormat, nLnNm );
+        m_pSections->AppendSection(pNewPgDesc, rNd, pFormat, nLnNm, bViaLayout);
     }
-
 }
 
 void DocxExport::InitStyles()

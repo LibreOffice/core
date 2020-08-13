@@ -173,13 +173,16 @@ struct WW8_SepInfo
     sal_uLong  nLnNumRestartNo;
     ::std::optional<sal_uInt16> oPgRestartNo;
     bool bIsFirstParagraph;
+    bool isContinuous;
 
     WW8_SepInfo( const SwPageDesc* pPD, const SwSectionFormat* pFormat,
                  sal_uLong nLnRestart, ::std::optional<sal_uInt16> oPgRestart = std::nullopt,
-                 const SwNode* pNd = nullptr, bool bIsFirstPara = false )
+                 const SwNode* pNd = nullptr, bool bIsFirstPara = false,
+                 bool bIsContinuous = false)
         : pPageDesc( pPD ), pSectionFormat( pFormat ), pPDNd( pNd ),
           nLnNumRestartNo( nLnRestart ), oPgRestartNo( oPgRestart ),
           bIsFirstParagraph( bIsFirstPara )
+        , isContinuous(bIsContinuous)
     {}
 
     bool IsProtected() const;
@@ -208,11 +211,13 @@ public:
     void AppendSection( const SwPageDesc* pPd,
                     const SwSectionFormat* pSectionFormat,
                     sal_uLong nLnNumRestartNo,
-                    bool bIsFirstParagraph = false );
+                    bool bIsFirstParagraph = false,
+                    bool bIsContinuous = false);
     void AppendSection( const SwFormatPageDesc& rPd,
                     const SwNode& rNd,
                     const SwSectionFormat* pSectionFormat,
-                    sal_uLong nLnNumRestartNo );
+                    sal_uLong nLnNumRestartNo,
+                    bool bIsContinuous = false);
 
     /// Number of columns based on the most recent WW8_SepInfo.
     sal_uInt16 CurrentNumberOfColumns( const SwDoc &rDoc ) const;
@@ -846,7 +851,8 @@ protected:
     virtual void PrepareNewPageDesc( const SfxItemSet* pSet,
                                      const SwNode& rNd,
                                      const SwFormatPageDesc* pNewPgDescFormat,
-                                     const SwPageDesc* pNewPgDesc ) = 0;
+                                     const SwPageDesc* pNewPgDesc,
+                                     bool bViaLayout ) = 0;
 
     /// Return value indicates if an inherited outline numbering is suppressed.
     virtual bool DisallowInheritingOutlineNumbering(const SwFormat &rFormat) = 0;
@@ -1111,7 +1117,8 @@ public:
     virtual void PrepareNewPageDesc( const SfxItemSet* pSet,
                                      const SwNode& rNd,
                                      const SwFormatPageDesc* pNewPgDescFormat,
-                                     const SwPageDesc* pNewPgDesc ) override;
+                                     const SwPageDesc* pNewPgDesc,
+                                     bool bViaLayout ) override;
 
     static void Out_BorderLine(ww::bytes& rO, const ::editeng::SvxBorderLine* pLine,
         sal_uInt16 nDist, sal_uInt16 nSprmNo, sal_uInt16 nSprmNoVer9,
