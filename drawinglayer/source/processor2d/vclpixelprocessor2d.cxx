@@ -991,7 +991,7 @@ void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitiv
     // Consider glow transparency (initial transparency near the object edge)
     const sal_uInt8 nTransparency = rCandidate.getGlowColor().GetTransparency();
 
-    impBufferDevice aBufferDevice(*mpOutputDevice, aRange, true);
+    impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
     if (aBufferDevice.isVisible())
     {
         // remember last OutDev and set to content
@@ -1000,7 +1000,6 @@ void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitiv
         // We don't need antialiased mask here, which would only make effect thicker
         const auto aPrevAA = mpOutputDevice->GetAntialiasing();
         mpOutputDevice->SetAntialiasing(AntialiasingFlags::NONE);
-        mpOutputDevice->Erase();
         process(rCandidate);
 
         // Limit the bitmap size to the visible area.
@@ -1054,13 +1053,12 @@ void VclPixelProcessor2D::processSoftEdgePrimitive2D(
     // Blur radius is equal to soft edge radius
     const double fBlurRadius = aRadiusVector.getLength();
 
-    impBufferDevice aBufferDevice(*mpOutputDevice, aRange, true);
+    impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
     if (aBufferDevice.isVisible())
     {
         // remember last OutDev and set to content
         OutputDevice* pLastOutputDevice = mpOutputDevice;
         mpOutputDevice = &aBufferDevice.getContent();
-        mpOutputDevice->Erase();
         // Since the effect converts all children to bitmap, we can't disable antialiasing here,
         // because it would result in poor quality in areas not affected by the effect
         process(rCandidate);
@@ -1112,12 +1110,11 @@ void VclPixelProcessor2D::processShadowPrimitive2D(const primitive2d::ShadowPrim
     aBlurRadiusVector *= maCurrentTransformation;
     const double fBlurRadius = aBlurRadiusVector.getLength();
 
-    impBufferDevice aBufferDevice(*mpOutputDevice, aRange, true);
+    impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
     if (aBufferDevice.isVisible())
     {
         OutputDevice* pLastOutputDevice = mpOutputDevice;
         mpOutputDevice = &aBufferDevice.getContent();
-        mpOutputDevice->Erase();
 
         process(rCandidate);
 
