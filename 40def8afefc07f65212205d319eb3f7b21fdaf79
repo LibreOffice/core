@@ -106,6 +106,24 @@
       "revId": "40def8afefc07f65212205d319eb3f7b21fdaf79",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d64f872b_f362e470",
+        "filename": "config_host.mk.in",
+        "patchSetId": 8
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-08-13T08:23:47Z",
+      "side": 1,
+      "message": "I meant: don\u0027t use the \u0027export FOO\u003d...; make\u0027 form for ICU, rather the \u0027make FOO\u003d...\u0027 form, then you can be consistent (with the rest of the variables) here in config_host.mk.",
+      "parentUuid": "d972bc51_86288b2c",
+      "revId": "40def8afefc07f65212205d319eb3f7b21fdaf79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
