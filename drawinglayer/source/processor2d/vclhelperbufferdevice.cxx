@@ -68,8 +68,8 @@ public:
     VDevBuffer();
     virtual ~VDevBuffer() override;
 
-    VclPtr<VirtualDevice> alloc(OutputDevice& rOutDev, const Size& rSizePixel, bool bClear,
-                                bool bMonoChrome, bool bTransparent);
+    VclPtr<VirtualDevice> alloc(OutputDevice& rOutDev, const Size& rSizePixel, bool bMonoChrome,
+                                bool bTransparent);
     void free(VirtualDevice& rDevice);
 
     // Timer virtuals
@@ -103,7 +103,7 @@ VDevBuffer::~VDevBuffer()
     }
 }
 
-VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSizePixel, bool bClear,
+VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSizePixel,
                                         bool bMonoChrome, bool bTransparent)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -192,15 +192,12 @@ VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSize
         {
             if (bOkay)
             {
-                if (bClear)
-                {
-                    pRetval->Erase(
-                        ::tools::Rectangle(0, 0, rSizePixel.getWidth(), rSizePixel.getHeight()));
-                }
+                pRetval->Erase(pRetval->PixelToLogic(
+                    tools::Rectangle(0, 0, rSizePixel.getWidth(), rSizePixel.getHeight())));
             }
             else
             {
-                pRetval->SetOutputSizePixel(rSizePixel, bClear);
+                pRetval->SetOutputSizePixel(rSizePixel, true);
             }
         }
     }
@@ -212,7 +209,7 @@ VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSize
             rOutDev, bMonoChrome ? DeviceFormat::BITMASK : DeviceFormat::DEFAULT,
             bTransparent ? DeviceFormat::DEFAULT : DeviceFormat::NONE);
         maDeviceTemplates[pRetval] = &rOutDev;
-        pRetval->SetOutputSizePixel(rSizePixel, bClear);
+        pRetval->SetOutputSizePixel(rSizePixel, true);
     }
     else
     {
@@ -273,13 +270,11 @@ VDevBuffer& getVDevBuffer()
     return *aVDevBuffer.get();
 }
 
-impBufferDevice::impBufferDevice(OutputDevice& rOutDev, const basegfx::B2DRange& rRange,
-                                 bool bContentTransparent)
+impBufferDevice::impBufferDevice(OutputDevice& rOutDev, const basegfx::B2DRange& rRange)
     : mrOutDev(rOutDev)
     , mpContent(nullptr)
     , mpMask(nullptr)
     , mpAlpha(nullptr)
-    , mbContentTransparent(bContentTransparent)
 {
     basegfx::B2DRange aRangePixel(rRange);
     aRangePixel.transform(mrOutDev.GetViewTransformation());
@@ -294,28 +289,12 @@ impBufferDevice::impBufferDevice(OutputDevice& rOutDev, const basegfx::B2DRange&
     if (!isVisible())
         return;
 
-#ifdef IOS
-    // Exact mechanism unknown, but for some reason SmartArt
-    // rendering, especially shadows, is broken on iOS unless
-    // we pass 'true' here. Are virtual devices always de
-    // facto cleared when created on other platforms?
-    mpContent
-        = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, false, bContentTransparent);
-#else
-    mpContent
-        = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), false, false, bContentTransparent);
-#endif
+    mpContent = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), false, true);
 
     // #i93485# assert when copying from window to VDev is used
     SAL_WARN_IF(
         mrOutDev.GetOutDevType() == OUTDEV_WINDOW, "drawinglayer",
         "impBufferDevice render helper: Copying from Window to VDev, this should be avoided (!)");
-
-    const bool bWasEnabledSrc(mrOutDev.IsMapModeEnabled());
-    mrOutDev.EnableMapMode(false);
-    mpContent->DrawOutDev(aEmptyPoint, maDestPixel.GetSize(), maDestPixel.TopLeft(),
-                          maDestPixel.GetSize(), mrOutDev);
-    mrOutDev.EnableMapMode(bWasEnabledSrc);
 
     MapMode aNewMapMode(mrOutDev.GetMapMode());
 
@@ -403,8 +382,7 @@ void impBufferDevice::paint(double fTrans)
 #endif
 
         BitmapEx aContent(mpContent->GetBitmapEx(aEmptyPoint, aSizePixel));
-        if (mbContentTransparent)
-            aAlphaMask.BlendWith(aContent.GetAlpha());
+        aAlphaMask.BlendWith(aContent.GetAlpha());
         mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent.GetBitmap(), aAlphaMask));
     }
     else if (mpMask)
@@ -426,26 +404,17 @@ void impBufferDevice::paint(double fTrans)
         }
 #endif
 
-        if (mbContentTransparent)
-        {
-            BitmapEx aContent(mpContent->GetBitmapEx(aEmptyPoint, aSizePixel));
-            AlphaMask aAlpha(aContent.GetAlpha());
-            aAlpha.BlendWith(aMask);
-            mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent.GetBitmap(), aAlpha));
-        }
-        else
-        {
-            Bitmap aContent(mpContent->GetBitmap(aEmptyPoint, aSizePixel));
-            mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aMask));
-        }
+        BitmapEx aContent(mpContent->GetBitmapEx(aEmptyPoint, aSizePixel));
+        AlphaMask aAlpha(aContent.GetAlpha());
+        aAlpha.BlendWith(aMask);
+        mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent.GetBitmap(), aAlpha));
     }
     else if (0.0 != fTrans)
     {
         sal_uInt8 nMaskValue(static_cast<sal_uInt8>(basegfx::fround(fTrans * 255.0)));
         AlphaMask aAlphaMask(aSizePixel, &nMaskValue);
         BitmapEx aContent(mpContent->GetBitmapEx(aEmptyPoint, aSizePixel));
-        if (mbContentTransparent)
-            aAlphaMask.BlendWith(aContent.GetAlpha());
+        aAlphaMask.BlendWith(aContent.GetAlpha());
         mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent.GetBitmap(), aAlphaMask));
     }
     else
@@ -470,7 +439,7 @@ VirtualDevice& impBufferDevice::getMask()
                 "impBufferDevice: No content, check isVisible() before accessing (!)");
     if (!mpMask)
     {
-        mpMask = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, true, false);
+        mpMask = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, false);
         mpMask->SetMapMode(mpContent->GetMapMode());
 
         // do NOT copy AA flag for mask!
@@ -485,7 +454,7 @@ VirtualDevice& impBufferDevice::getTransparence()
                 "impBufferDevice: No content, check isVisible() before accessing (!)");
     if (!mpAlpha)
     {
-        mpAlpha = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, false, false);
+        mpAlpha = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), false, false);
         mpAlpha->SetMapMode(mpContent->GetMapMode());
 
         // copy AA flag for new target; masking needs to be smooth
