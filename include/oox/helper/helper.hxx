@@ -194,6 +194,7 @@ public:
                                  ( mbHasValue == rValue.mbHasValue && maValue == rValue.maValue ) );
                  }
     void         assignIfUsed( const OptValue& rValue ) { if( rValue.mbHasValue ) set( rValue.maValue ); }
+    void         assignIfUsedAndUnassigned( const OptValue& rValue ) { if( rValue.mbHasValue && !mbHasValue ) set( rValue.maValue ); }
 
 private:
     Type                maValue;
