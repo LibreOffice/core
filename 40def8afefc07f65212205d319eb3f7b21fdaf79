@@ -70,6 +70,24 @@
       "revId": "40def8afefc07f65212205d319eb3f7b21fdaf79",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6216bd9f_5fb4301b",
+        "filename": "config_host.mk.in",
+        "patchSetId": 8
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-08-13T07:43:20Z",
+      "side": 1,
+      "message": "I would focus on consistency, use \u0027\u003d\u0027 like the other variables do, and try to tweak the icu part accordingly.",
+      "parentUuid": "62384367_3ec63fa5",
+      "revId": "40def8afefc07f65212205d319eb3f7b21fdaf79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
