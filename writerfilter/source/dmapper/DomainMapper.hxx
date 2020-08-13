@@ -22,6 +22,7 @@
 #include <dmapper/DomainMapperFactory.hxx>
 #include "LoggedResources.hxx"
 #include "PropertyMap.hxx"
+#include "SettingsTable.hxx"
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/style/TabAlign.hpp>
 
@@ -103,6 +104,7 @@ public:
 
     OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties, bool bAlwaysCreate );
     StyleSheetTablePtr const & GetStyleSheetTable( );
+    SettingsTablePtr const & GetSettingsTable();
     GraphicZOrderHelper* graphicZOrderHelper();
     GraphicNamingHelper& GetGraphicNamingHelper();
 

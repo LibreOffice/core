@@ -102,6 +102,15 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128197)
     CPPUNIT_ASSERT_LESS(nHeight15, nHeight14);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf135595_HFtableWrap, "tdf135595_HFtableWrap.odt")
+{
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nRowHeight = getXPath(pXmlDoc, "//page[1]/header/tab/row/infos/bounds", "height").toInt32();
+    // tdf#77794: always force bLayoutInCell from false to true for MSO2013+
+    // The fly is supposed to be inside the cell. Before, height was 998. Now it is 2839.
+    CPPUNIT_ASSERT_MESSAGE("Image must be contained inside the table cell", nRowHeight > 2000);
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf123622, "tdf123622.docx")
 {
     uno::Reference<beans::XPropertySet> XPropsRight(getShape(1),uno::UNO_QUERY);
