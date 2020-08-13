@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e927e1a9_f53db995",
+        "filename": "oox/source/drawingml/chart/chartspaceconverter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-08-13T16:17:55Z",
+      "side": 1,
+      "message": "// tdf#134118 leave gap if the time unit is month",
+      "range": {
+        "startLine": 210,
+        "startChar": 8,
+        "endLine": 211,
+        "endChar": 64
+      },
+      "revId": "db45a54895654e2d18db74ec28748fc2a2dd86a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d8d2f85_872fc325",
+        "filename": "oox/source/drawingml/chart/chartspaceconverter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-08-13T16:17:55Z",
+      "side": 1,
+      "message": "bHasMonthBasedTimeUnit\n\n(Using full words instead of abbreviations you won\u0027t need extra comments to translate hard to read or misleading names (see https://en.wiktionary.org/wiki/mon#Etymology_2).",
+      "range": {
+        "startLine": 212,
+        "startChar": 13,
+        "endLine": 212,
+        "endChar": 29
+      },
+      "revId": "db45a54895654e2d18db74ec28748fc2a2dd86a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
