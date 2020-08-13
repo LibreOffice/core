@@ -17,31 +17,20 @@
 
 #include <comphelper/graphicmimetype.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/xmlsechelper.hxx>
-#include <comphelper/storagehelper.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/docfilt.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/xoutbmp.hxx>
-#include <tools/date.hxx>
-#include <tools/stream.hxx>
-#include <unotools/localedatawrapper.hxx>
-#include <unotools/streamwrap.hxx>
-#include <unotools/syslocale.hxx>
 #include <utility>
 #include <vcl/graph.hxx>
 #include <vcl/weld.hxx>
 #include <svx/signaturelinehelper.hxx>
+#include <tools/urlobj.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/security/CertificateKind.hpp>
-#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
-#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/ui/dialogs/FilePicker.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>

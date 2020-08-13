@@ -761,3 +761,15 @@ excludelist:
     - com/sun/star/frame/XModel.hpp
     sw/source/uibase/uno/dlelstnr.cxx:
     - com/sun/star/linguistic2/XProofreadingIterator.hpp
+    sw/qa/extras/ooxmlimport/ooxmlimport.cxx:
+    # Required in C++20 mode.
+    - o3tl/cppunittraitshelper.hxx
+    sw/qa/extras/ooxmlexport/ooxmlexport.cxx:
+    # Required in C++20 mode.
+    - o3tl/cppunittraitshelper.hxx
+    sw/qa/extras/ooxmlexport/ooxmlexport5.cxx:
+    # Required in C++20 mode.
+    - o3tl/cppunittraitshelper.hxx
+    sw/qa/extras/uiwriter/uiwriter.cxx:
+    # Required in C++20 mode.
+    - o3tl/cppunittraitshelper.hxx

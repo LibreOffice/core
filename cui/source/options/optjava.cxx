@@ -21,7 +21,6 @@
 #include <sal/log.hxx>
 
 #include <memory>
-#include <vector>
 
 #include <config_java.h>
 

@@ -9,10 +9,7 @@
 
 #include <SignatureLineDialog.hxx>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/xmltools.hxx>
-#include <tools/stream.hxx>
-#include <unotools/streamwrap.hxx>
 #include <utility>
 #include <vcl/weld.hxx>
 #include <svx/signaturelinehelper.hxx>
@@ -20,12 +17,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheetView.hpp>
@@ -40,7 +33,6 @@ using namespace css::uno;
 using namespace css::beans;
 using namespace css::container;
 using namespace css::frame;
-using namespace css::io;
 using namespace css::lang;
 using namespace css::frame;
 using namespace css::sheet;

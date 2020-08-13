@@ -33,7 +33,6 @@
 #include <dialmgr.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/ui/ImageType.hpp>
 
 #include <dlgname.hxx>
 

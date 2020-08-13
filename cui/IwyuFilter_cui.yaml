@@ -21,3 +21,6 @@ excludelist:
     # Actually used
     - com/sun/star/linguistic2/XMeaning.hpp
     - com/sun/star/linguistic2/XThesaurus.hpp
+    cui/source/customize/cfg.cxx:
+    # Actually used
+    - com/sun/star/ui/dialogs/XFilePicker3.hpp

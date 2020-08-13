@@ -22,8 +22,6 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/virdev.hxx>
 
-#include <vector>
-
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;

@@ -15,8 +15,6 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
-#include <com/sun/star/frame/XDispatchHelper.hpp>
-#include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
@@ -36,7 +34,6 @@
 #include <svtools/rtftoken.h>
 #include <filter/msfilter/rtfutil.hxx>
 #include <sot/storage.hxx>
-#include <svl/eitem.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <svtools/htmlcfg.hxx>
