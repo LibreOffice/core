@@ -193,7 +193,7 @@ public:
                              return ( ( !mbHasValue && rValue.mbHasValue == false ) ||
                                  ( mbHasValue == rValue.mbHasValue && maValue == rValue.maValue ) );
                  }
-    void         assignIfUsed( const OptValue& rValue ) { if( rValue.mbHasValue ) set( rValue.maValue ); }
+    void         assignIfUsed( const OptValue& rValue ) { if( !mbHasValue && rValue.mbHasValue ) set( rValue.maValue ); }
 
 private:
     Type                maValue;
