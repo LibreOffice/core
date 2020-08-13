@@ -16,6 +16,24 @@
       "revId": "40def8afefc07f65212205d319eb3f7b21fdaf79",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5cf507ed_0e338ef4",
+        "filename": "config_host.mk.in",
+        "patchSetId": 8
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-13T07:16:31Z",
+      "side": 1,
+      "message": "Likely just because of my poor understanding of *nix shells operation. I think I tried `FOO\u003dbar make` and it didn\u0027t work IIRC; so I started doing this. Thank you!",
+      "parentUuid": "6c6bc5e6_8ae7c2c0",
+      "revId": "40def8afefc07f65212205d319eb3f7b21fdaf79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
