@@ -119,7 +119,7 @@ public:
     SwTableFormula & operator =(SwTableFormula &&) = default;
 
     /// create from the internal formula (for CORE) the external formula (for UI)
-    void PtrToBoxNm( const SwTable* pTable );
+    SW_DLLPUBLIC void PtrToBoxNm( const SwTable* pTable );
     /// create from the external formula the internal
     void BoxNmToPtr( const SwTable* pTable );
     /// create from the external/internal formula the relative formula

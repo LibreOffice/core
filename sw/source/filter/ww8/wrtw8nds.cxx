@@ -74,6 +74,7 @@
 #include <fmtruby.hxx>
 #include <breakit.hxx>
 #include <txtatr.hxx>
+#include <cellatr.hxx>
 #include <fmtrowsplt.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>
@@ -2232,6 +2233,18 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
         if ( pTableNode )
         {
             const SwTable& rTable = pTableNode->GetTable();
+            const SwTableBox* pBox = rNode.GetTableBox();
+
+            // export formula cell as formula field instead of only its cell content in DOCX
+            if ( pBox->IsFormulaOrValueBox() == RES_BOXATR_FORMULA &&
+                 GetExportFormat() == MSWordExportBase::ExportFormat::DOCX )
+            {
+                SwTableBoxFormula* pFormula = pBox->GetFrameFormat()->GetTableBoxFormula().Clone();
+                pFormula->PtrToBoxNm( &pTableNode->GetTable() );
+                OutputField( nullptr, ww::eEquals, " = " + pFormula->GetFormula(),
+                    FieldFlags::Start | FieldFlags::CmdStart | FieldFlags::CmdEnd | FieldFlags::Close );
+            }
+
             const bool bKeep = rTable.GetFrameFormat()->GetKeep().GetValue();
             const bool bDontSplit = !rTable.GetFrameFormat()->GetLayoutSplit().GetValue();
             // bKeep handles this a different way later on, so ignore now
@@ -2239,7 +2252,6 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             {
                 // bDontSplit : set don't split once for the row
                 // but only for non-complex tables
-                const SwTableBox* pBox = rNode.GetTableBox();
                 const SwTableLine* pLine = pBox ? pBox->GetUpper() : nullptr;
                 if ( pLine && !pLine->GetUpper() )
                 {
