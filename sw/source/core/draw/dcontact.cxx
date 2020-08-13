@@ -1831,14 +1831,20 @@ void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
                 {
                     // append drawing object, if
                     // (1) proposed anchor frame isn't a follow and
+                    const bool bFollow = pFrame->IsContentFrame() && static_cast<SwContentFrame*>(pFrame)->IsFollow();
+                    if (bFollow)
+                        continue;
+
                     // (2) drawing object isn't a control object to be anchored
                     //     in header/footer.
-                    bool bAdd = ( !pFrame->IsContentFrame() ||
-                                        !static_cast<SwContentFrame*>(pFrame)->IsFollow() ) &&
-                                      ( !::CheckControlLayer( GetMaster() ) ||
-                                        !pFrame->FindFooterOrHeader() );
+                    const bool bControlInHF = ::CheckControlLayer(GetMaster()) && pFrame->FindFooterOrHeader();
+                    if (bControlInHF)
+                        continue;
 
-                    if (bAdd && RndStdIds::FLY_AT_FLY != pAnch->GetAnchorId())
+                    bool bAdd;
+                    if (RndStdIds::FLY_AT_FLY == pAnch->GetAnchorId())
+                        bAdd = true;
+                    else
                     {
                         assert(pFrame->IsTextFrame());
                         bAdd = IsAnchoredObjShown(*static_cast<SwTextFrame*>(pFrame), *pAnch);
