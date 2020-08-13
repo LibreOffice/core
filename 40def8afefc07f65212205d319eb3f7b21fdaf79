@@ -34,6 +34,24 @@
       "revId": "40def8afefc07f65212205d319eb3f7b21fdaf79",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e86156c_be916100",
+        "filename": "config_host.mk.in",
+        "patchSetId": 8
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-08-13T07:35:16Z",
+      "side": 1,
+      "message": "This is more about make, rather than shell. What I remember:\n\nfoo ?\u003d bar -\u003e \u0027foo\u003d... make\u0027 can overwrite it (and make foo\u003d... as well)\n\nfoo \u003d bar -\u003e \u0027make foo\u003d...\u0027 can overwrite it, but not \u0027foo\u003d... make\u0027\n\nfoo :\u003d bar -\u003e no overwrite possible",
+      "parentUuid": "5cf507ed_0e338ef4",
+      "revId": "40def8afefc07f65212205d319eb3f7b21fdaf79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
