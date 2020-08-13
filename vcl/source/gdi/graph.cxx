@@ -182,11 +182,6 @@ Graphic::Graphic(GraphicExternalLink const & rGraphicExternalLink)
 {
 }
 
-Graphic::Graphic(const Bitmap& rBmp)
-    : mxImpGraphic(vcl::graphic::Manager::get().newInstance(rBmp))
-{
-}
-
 Graphic::Graphic(const BitmapEx& rBmpEx)
     : mxImpGraphic(vcl::graphic::Manager::get().newInstance(rBmpEx))
 {

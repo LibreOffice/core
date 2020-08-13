@@ -41,7 +41,7 @@ class BackendTest : public test::BootstrapFixture
             Bitmap aBitmap(rBitmap);
             aBitmap.Scale(Size(128, 128), BmpScaleFlag::Fast);
             SvFileStream aStream(rsFilename, StreamMode::WRITE | StreamMode::TRUNC);
-            GraphicFilter::GetGraphicFilter().compressAsPNG(aBitmap, aStream);
+            GraphicFilter::GetGraphicFilter().compressAsPNG(BitmapEx(aBitmap), aStream);
         }
     }
 
