@@ -473,7 +473,6 @@ core_constructor_list = [
     "com_sun_star_comp_Draw_XMLExporter_get_implementation",
     "com_sun_star_comp_Draw_XMLStylesExporter_get_implementation",
     "com_sun_star_comp_Draw_XMLContentExporter_get_implementation",
-    "com_sun_star_comp_Draw_XMLMetaExporter_get_implementation",
     "com_sun_star_comp_Draw_XMLSettingsExporter_get_implementation",
     "com_sun_star_comp_Draw_XMLOasisSettingsExporter_get_implementation",
     "com_sun_star_comp_Draw_XMLOasisMetaExporter_get_implementation",

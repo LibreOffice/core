@@ -2682,14 +2682,6 @@ com_sun_star_comp_Draw_XMLContentExporter_get_implementation(uno::XComponentCont
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
-com_sun_star_comp_Draw_XMLMetaExporter_get_implementation(uno::XComponentContext* pCtx,
-                                                            uno::Sequence<uno::Any> const& /*rSeq*/)
-{
-    return cppu::acquire(
-        new SdXMLExport(pCtx, "XMLDrawMetaExportOOO", true, SvXMLExportFlags::META));
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Draw_XMLSettingsExporter_get_implementation(
     uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
 {

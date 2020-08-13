@@ -40,7 +40,7 @@ import com.sun.star.xml.sax.XDocumentHandler;
 
 /**
  * Test for object which is represented by service
- * <code>com.sun.star.comp.Draw.XMLMetaExporter</code>. <p>
+ * <code>com.sun.star.comp.Draw.XMLOasisMetaExporter</code>. <p>
  * Object implements the following interfaces :
  * <ul>
  *  <li><code>com::sun::star::lang::XInitialization</code></li>
@@ -88,7 +88,7 @@ public class XMLMetaExporter extends TestCase {
     /**
     * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instance of the service
-    * <code>com.sun.star.comp.Draw.XMLMetaExporter</code> with
+    * <code>com.sun.star.comp.Draw.XMLOasisMetaExporter</code> with
     * argument which is an implementation of <code>XDocumentHandler</code>
     * and which can check if required tags and character data is
     * exported. <p>
@@ -118,7 +118,7 @@ public class XMLMetaExporter extends TestCase {
         Any arg = new Any(new Type(XDocumentHandler.class),filter);
 
         oObj = (XInterface) xMSF.createInstanceWithArguments(
-            "com.sun.star.comp.Draw.XMLMetaExporter", new Object[] {arg});
+            "com.sun.star.comp.Draw.XMLOasisMetaExporter", new Object[] {arg});
         XExporter xEx = UnoRuntime.queryInterface(XExporter.class, oObj);
         xEx.setSourceDocument(xDrawDoc);
 
