@@ -49,6 +49,7 @@ $(eval $(call gb_Library_use_libraries,pdffilter,\
 	cppuhelper \
 	cppu \
 	sal \
+	drawinglayercore \
 	drawinglayer \
 ))
 

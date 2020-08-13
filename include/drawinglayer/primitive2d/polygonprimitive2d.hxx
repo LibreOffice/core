@@ -39,7 +39,7 @@ namespace drawinglayer::primitive2d
     This is one of the non-decomposable primitives, so a renderer
     should process it.
  */
-class DRAWINGLAYER_DLLPUBLIC PolygonHairlinePrimitive2D final : public BasePrimitive2D
+class DRAWINGLAYERCORE_DLLPUBLIC PolygonHairlinePrimitive2D final : public BasePrimitive2D
 {
 private:
     /// the hairline geometry
@@ -76,7 +76,7 @@ public:
     It will be decomposed to the needed PolygonHairlinePrimitive2D if
     not handled directly by a renderer.
  */
-class DRAWINGLAYER_DLLPUBLIC PolygonMarkerPrimitive2D final
+class DRAWINGLAYERCORE_DLLPUBLIC PolygonMarkerPrimitive2D final
     : public BufferedDecompositionPrimitive2D
 {
 private:
@@ -131,7 +131,7 @@ public:
     and stroke attributes. It will be decomposed dependent on the definition
     to the needed primitives, e.g. filled PolyPolygons for fat lines.
  */
-class DRAWINGLAYER_DLLPUBLIC PolygonStrokePrimitive2D : public BufferedDecompositionPrimitive2D
+class DRAWINGLAYERCORE_DLLPUBLIC PolygonStrokePrimitive2D : public BufferedDecompositionPrimitive2D
 {
 private:
     /// the line geometry
@@ -180,7 +180,7 @@ public:
     This primitive defines a waveline based on a PolygonStrokePrimitive2D
     where the wave is defined by wave width and wave length.
  */
-class PolygonWavePrimitive2D final : public PolygonStrokePrimitive2D
+class DRAWINGLAYERCORE_DLLPUBLIC PolygonWavePrimitive2D final : public PolygonStrokePrimitive2D
 {
 private:
     /// wave definition
@@ -225,7 +225,8 @@ public:
     possibly extended by start and end definitions, which are
     normally used for arrows.
  */
-class DRAWINGLAYER_DLLPUBLIC PolygonStrokeArrowPrimitive2D final : public PolygonStrokePrimitive2D
+class DRAWINGLAYERCORE_DLLPUBLIC PolygonStrokeArrowPrimitive2D final
+    : public PolygonStrokePrimitive2D
 {
 private:
     /// geometric definitions for line start and end

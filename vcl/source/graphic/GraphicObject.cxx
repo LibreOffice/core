@@ -168,7 +168,7 @@ void lclImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, GraphicAdjustmen
 
     if( ( nAdjustmentFlags & GraphicAdjustmentFlags::MIRROR ) && aAttr.IsMirrored() )
     {
-        rBmpEx.Mirror( aAttr.GetMirrorFlags() );
+        rBmpEx.Mirror(BmpMirrorFlags(aAttr.GetMirrorFlags()) );
     }
 
     if( ( nAdjustmentFlags & GraphicAdjustmentFlags::ROTATE ) && aAttr.IsRotated() )
@@ -219,7 +219,7 @@ void lclImplAdjust( GDIMetaFile& rMtf, const GraphicAttr& rAttr, GraphicAdjustme
 
     if( ( nAdjustmentFlags & GraphicAdjustmentFlags::MIRROR ) && aAttr.IsMirrored() )
     {
-        rMtf.Mirror( aAttr.GetMirrorFlags() );
+        rMtf.Mirror(BmpMirrorFlags(aAttr.GetMirrorFlags()));
     }
 
     if( ( nAdjustmentFlags & GraphicAdjustmentFlags::ROTATE ) && aAttr.IsRotated() )
@@ -270,7 +270,7 @@ void lclImplAdjust( Animation& rAnimation, const GraphicAttr& rAttr, GraphicAdju
 
     if( ( nAdjustmentFlags & GraphicAdjustmentFlags::MIRROR ) && aAttr.IsMirrored() )
     {
-        rAnimation.Mirror( aAttr.GetMirrorFlags() );
+        rAnimation.Mirror(BmpMirrorFlags(aAttr.GetMirrorFlags()));
     }
 
     if( ( nAdjustmentFlags & GraphicAdjustmentFlags::ROTATE ) && aAttr.IsRotated() )
@@ -383,7 +383,7 @@ bool GraphicObject::ImplGetCropParams(const OutputDevice& rOut, Point& rPt, Size
         if( !aSize100.IsEmpty() && nTotalWidth > 0 && nTotalHeight > 0 )
         {
             double fScale = static_cast<double>(aSize100.Width()) / nTotalWidth;
-            const tools::Long nNewLeft = -FRound( ( ( pAttr->GetMirrorFlags() & BmpMirrorFlags::Horizontal ) ? pAttr->GetRightCrop() : pAttr->GetLeftCrop() ) * fScale );
+            const tools::Long nNewLeft = -FRound( ( ( BmpMirrorFlags(pAttr->GetMirrorFlags()) & BmpMirrorFlags::Horizontal ) ? pAttr->GetRightCrop() : pAttr->GetLeftCrop() ) * fScale );
             const tools::Long nNewRight = nNewLeft + FRound( aSize100.Width() * fScale ) - 1;
 
             fScale = static_cast<double>(rSz.Width()) / aSize100.Width();
@@ -391,7 +391,7 @@ bool GraphicObject::ImplGetCropParams(const OutputDevice& rOut, Point& rPt, Size
             rSz.setWidth( FRound( ( nNewRight - nNewLeft + 1 ) * fScale ) );
 
             fScale = static_cast<double>(aSize100.Height()) / nTotalHeight;
-            const tools::Long nNewTop = -FRound( ( ( pAttr->GetMirrorFlags() & BmpMirrorFlags::Vertical ) ? pAttr->GetBottomCrop() : pAttr->GetTopCrop() ) * fScale );
+            const tools::Long nNewTop = -FRound( ( ( BmpMirrorFlags(pAttr->GetMirrorFlags()) & BmpMirrorFlags::Vertical ) ? pAttr->GetBottomCrop() : pAttr->GetTopCrop() ) * fScale );
             const tools::Long nNewBottom = nNewTop + FRound( aSize100.Height() * fScale ) - 1;
 
             fScale = static_cast<double>(rSz.Height()) / aSize100.Height();
@@ -473,7 +473,8 @@ bool GraphicObject::Draw(OutputDevice& rOut, const Point& rPt, const Size& rSz,
     {
         aPt.AdjustX(aSz.Width() + 1 );
         aSz.setWidth( -aSz.Width() );
-        aAttr.SetMirrorFlags( aAttr.GetMirrorFlags() ^ BmpMirrorFlags::Horizontal );
+        BmpMirrorFlags eFlags = BmpMirrorFlags(aAttr.GetMirrorFlags()) ^ BmpMirrorFlags::Horizontal;
+        aAttr.SetMirrorFlags(basegfx::MirrorDirectionFlags(eFlags));
     }
 
     // mirrored vertically
@@ -481,7 +482,8 @@ bool GraphicObject::Draw(OutputDevice& rOut, const Point& rPt, const Size& rSz,
     {
         aPt.AdjustY(aSz.Height() + 1 );
         aSz.setHeight( -aSz.Height() );
-        aAttr.SetMirrorFlags( aAttr.GetMirrorFlags() ^ BmpMirrorFlags::Vertical );
+        BmpMirrorFlags eFlags = BmpMirrorFlags(aAttr.GetMirrorFlags()) ^ BmpMirrorFlags::Vertical;
+        aAttr.SetMirrorFlags(basegfx::MirrorDirectionFlags(eFlags));
     }
 
     if( bCropped )

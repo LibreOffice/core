@@ -50,11 +50,6 @@ $(eval $(call gb_Library_use_libraries,drawinglayer,\
 $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/animation/animationtiming \
     drawinglayer/source/attribute/fillgraphicattribute \
-    drawinglayer/source/attribute/fillgradientattribute \
-    drawinglayer/source/attribute/fillhatchattribute \
-    drawinglayer/source/attribute/fontattribute \
-    drawinglayer/source/attribute/lineattribute \
-    drawinglayer/source/attribute/linestartendattribute \
     drawinglayer/source/attribute/materialattribute3d \
     drawinglayer/source/attribute/sdrallattribute3d \
     drawinglayer/source/attribute/sdrfillattribute \
@@ -67,11 +62,9 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/attribute/sdrobjectattribute3d \
     drawinglayer/source/attribute/sdrsceneattribute3d \
     drawinglayer/source/attribute/sdrshadowattribute \
-    drawinglayer/source/attribute/strokeattribute \
     drawinglayer/source/geometry/viewinformation3d \
     drawinglayer/source/primitive2d/animatedprimitive2d \
     drawinglayer/source/primitive2d/backgroundcolorprimitive2d \
-    drawinglayer/source/primitive2d/bitmapprimitive2d \
     drawinglayer/source/primitive2d/borderlineprimitive2d \
     drawinglayer/source/primitive2d/BufferedDecompositionPrimitive2D \
     drawinglayer/source/primitive2d/controlprimitive2d \
@@ -81,54 +74,32 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/primitive2d/embedded3dprimitive2d \
     drawinglayer/source/primitive2d/epsprimitive2d \
     drawinglayer/source/primitive2d/fillgraphicprimitive2d \
-    drawinglayer/source/primitive2d/fillgradientprimitive2d \
-    drawinglayer/source/primitive2d/fillhatchprimitive2d \
     drawinglayer/source/primitive2d/glowprimitive2d \
     drawinglayer/source/primitive2d/graphicprimitivehelper2d \
     drawinglayer/source/primitive2d/graphicprimitive2d \
     drawinglayer/source/primitive2d/gridprimitive2d \
-    drawinglayer/source/primitive2d/groupprimitive2d \
     drawinglayer/source/primitive2d/helplineprimitive2d \
     drawinglayer/source/primitive2d/hiddengeometryprimitive2d \
     drawinglayer/source/primitive2d/invertprimitive2d \
     drawinglayer/source/primitive2d/markerarrayprimitive2d \
-    drawinglayer/source/primitive2d/maskprimitive2d \
     drawinglayer/source/primitive2d/mediaprimitive2d \
     drawinglayer/source/primitive2d/metafileprimitive2d \
-    drawinglayer/source/primitive2d/modifiedcolorprimitive2d \
-    drawinglayer/source/primitive2d/objectinfoprimitive2d \
     drawinglayer/source/primitive2d/pagehierarchyprimitive2d \
-    drawinglayer/source/primitive2d/pagepreviewprimitive2d \
     drawinglayer/source/primitive2d/patternfillprimitive2d \
-    drawinglayer/source/primitive2d/pointarrayprimitive2d \
-    drawinglayer/source/primitive2d/polygonprimitive2d \
-    drawinglayer/source/primitive2d/PolyPolygonHairlinePrimitive2D \
-    drawinglayer/source/primitive2d/PolyPolygonMarkerPrimitive2D \
-    drawinglayer/source/primitive2d/PolyPolygonStrokePrimitive2D \
-    drawinglayer/source/primitive2d/PolyPolygonColorPrimitive2D \
-    drawinglayer/source/primitive2d/PolyPolygonGradientPrimitive2D \
-    drawinglayer/source/primitive2d/PolyPolygonHatchPrimitive2D \
     drawinglayer/source/primitive2d/PolyPolygonGraphicPrimitive2D \
-    drawinglayer/source/primitive2d/PolyPolygonSelectionPrimitive2D \
-    drawinglayer/source/primitive2d/primitivetools2d \
     drawinglayer/source/primitive2d/sceneprimitive2d \
     drawinglayer/source/primitive2d/sdrdecompositiontools2d \
     drawinglayer/source/primitive2d/shadowprimitive2d \
     drawinglayer/source/primitive2d/softedgeprimitive2d \
     drawinglayer/source/primitive2d/structuretagprimitive2d \
-    drawinglayer/source/primitive2d/svggradientprimitive2d \
     drawinglayer/source/primitive2d/textbreakuphelper \
     drawinglayer/source/primitive2d/textdecoratedprimitive2d \
     drawinglayer/source/primitive2d/texteffectprimitive2d \
-    drawinglayer/source/primitive2d/textenumsprimitive2d \
     drawinglayer/source/primitive2d/texthierarchyprimitive2d \
     drawinglayer/source/primitive2d/textlayoutdevice \
     drawinglayer/source/primitive2d/textlineprimitive2d \
     drawinglayer/source/primitive2d/textprimitive2d \
     drawinglayer/source/primitive2d/textstrikeoutprimitive2d \
-    drawinglayer/source/primitive2d/transformprimitive2d \
-    drawinglayer/source/primitive2d/transparenceprimitive2d \
-    drawinglayer/source/primitive2d/unifiedtransparenceprimitive2d \
     drawinglayer/source/primitive2d/wallpaperprimitive2d \
     drawinglayer/source/primitive2d/wrongspellprimitive2d \
     drawinglayer/source/primitive3d/baseprimitive3d \
@@ -186,7 +157,6 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/tools/wmfemfhelper \
     drawinglayer/source/tools/primitive2dxmldump \
     drawinglayer/source/drawinglayeruno/xprimitive2drenderer \
-    drawinglayer/source/texture/texture \
     drawinglayer/source/dumper/XShapeDumper \
     drawinglayer/source/dumper/EnhancedShapeDumper \
 ))

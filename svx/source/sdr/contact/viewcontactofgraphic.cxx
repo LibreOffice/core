@@ -336,7 +336,9 @@ namespace sdr::contact
 
             if(bHMirr || bVMirr)
             {
-                aLocalGrafInfo.SetMirrorFlags((bHMirr ? BmpMirrorFlags::Horizontal : BmpMirrorFlags::NONE)|(bVMirr ? BmpMirrorFlags::Vertical : BmpMirrorFlags::NONE));
+                basegfx::MirrorDirectionFlags eVertical = bVMirr ? basegfx::MirrorDirectionFlags::Vertical : basegfx::MirrorDirectionFlags::NONE;
+                basegfx::MirrorDirectionFlags eHorizontal = bHMirr ? basegfx::MirrorDirectionFlags::Horizontal : basegfx::MirrorDirectionFlags::NONE;
+                aLocalGrafInfo.SetMirrorFlags(eVertical | eHorizontal);
             }
 
             // fill object matrix

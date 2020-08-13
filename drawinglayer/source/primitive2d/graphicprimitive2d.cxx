@@ -49,8 +49,10 @@ void GraphicPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer,
     if (getGraphicAttr().IsMirrored())
     {
         // content needs mirroring
-        const bool bHMirr(getGraphicAttr().GetMirrorFlags() & BmpMirrorFlags::Horizontal);
-        const bool bVMirr(getGraphicAttr().GetMirrorFlags() & BmpMirrorFlags::Vertical);
+        const bool bHMirr(getGraphicAttr().GetMirrorFlags()
+                          & basegfx::MirrorDirectionFlags::Horizontal);
+        const bool bVMirr(getGraphicAttr().GetMirrorFlags()
+                          & basegfx::MirrorDirectionFlags::Vertical);
 
         // mirror by applying negative scale to the unit primitive and
         // applying the object transformation on it.
@@ -69,7 +71,7 @@ void GraphicPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer,
 
     aSuppressGraphicAttr.SetCrop(0, 0, 0, 0);
     aSuppressGraphicAttr.SetRotation(0_deg10);
-    aSuppressGraphicAttr.SetMirrorFlags(BmpMirrorFlags::NONE);
+    aSuppressGraphicAttr.SetMirrorFlags(basegfx::MirrorDirectionFlags::NONE);
     aSuppressGraphicAttr.SetAlpha(255);
 
     const GraphicObject& rGraphicObject = getGraphicObject();
