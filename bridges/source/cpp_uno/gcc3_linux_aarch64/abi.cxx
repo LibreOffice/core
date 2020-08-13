@@ -174,16 +174,14 @@ extern "C" void _GLIBCXX_CDTOR_CALLABI deleteException(void * exception) {
     // size 8 in front of that member (changing its offset from 88 to 96,
     // sizeof(__cxa_exception) from 120 to 128, and alignof(__cxa_exception)
     // from 8 to 16); a hack to dynamically determine whether we run against a
-    // new libcxxabi is to look at the exceptionDestructor member, which must
+    // LLVM 5 libcxxabi is to look at the exceptionDestructor member, which must
     // point to this function (the use of __cxa_exception in fillUnoException is
     // unaffected, as it only accesses members towards the start of the struct,
-    // through a pointer known to actually point at the start):
-
-    // Later, libcxxabi, as used at least on macOS on arm64, added a
-    // void *reserve at the start of the __cxa_exception in front of
-    // the referenceCount. See
-    // https://github.com/llvm/llvm-project/commit/674ec1eb16678b8addc02a4b0534ab383d22fa77
-
+    // through a pointer known to actually point at the start).  The libcxxabi commit
+    // <https://github.com/llvm/llvm-project/commit/9ef1daa46edb80c47d0486148c0afc4e0d83ddcf>
+    // "Insert padding before the __cxa_exception header to ensure the thrown" in LLVM 6
+    // removes the need for this hack, so it can be removed again once we can be sure that we only
+    // run against libcxxabi from LLVM >= 6:
     if (header->exceptionDestructor != &deleteException) {
         header = reinterpret_cast<__cxxabiv1::__cxa_exception *>(
             reinterpret_cast<char *>(header) - 8);
