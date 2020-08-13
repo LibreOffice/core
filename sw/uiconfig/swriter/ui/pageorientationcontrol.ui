@@ -61,6 +61,6 @@
   <object class="GtkImage" id="image_portrait">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="icon_name">cmd/lc_orientation.png</property>
+    <property name="icon_name">sw/res/sidebar/pagepropppanel/portraitcopy_24x24.png</property>
   </object>
 </interface>
