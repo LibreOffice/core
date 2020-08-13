@@ -12,6 +12,7 @@
 #include "shape.hxx"
 #include "shapeattributelayer.hxx"
 #include "attributemap.hxx"
+#include <map>
 #include <unordered_map>
 #include <queue>
 
@@ -64,6 +65,13 @@ struct Box2DDynamicUpdateInformation
     int mnDelayForSteps = 0;
 };
 
+union Box2DStaticUpdateInformation {
+    ::basegfx::B2DPoint maPosition;
+    bool mbVisibility;
+    double mfAngle;
+    Box2DStaticUpdateInformation() {}
+};
+
 /** Class that manages the Box2D World
 
     This class is used when there's a simulated animation going on,
@@ -78,15 +86,25 @@ private:
     /// Scale factor for conversions between LO user space coordinates to Box2D World coordinates
     double mfScaleFactor;
     bool mbShapesInitialized;
+    /// Holds whether or not there is a Physics Animation node that
+    /// is stepping the Box2D World
     bool mbHasWorldStepper;
     std::unordered_map<css::uno::Reference<css::drawing::XShape>, Box2DBodySharedPtr>
         mpXShapeToBodyMap;
     /// Holds any information needed to keep LO animations and Box2D world in sync
+    /// if they are going in parallel
     std::queue<Box2DDynamicUpdateInformation> maShapeParallelUpdateQueue;
+    /// Holds necessary information to update a shape's body that was altered by an
+    /// animation effect while there was no Physics Animation going in parallel
+    std::map<std::pair<css::uno::Reference<css::drawing::XShape>, box2DNonsimulatedShapeUpdateType>,
+             Box2DStaticUpdateInformation>
+        maShapeSequentialUpdate;
 
     /// Creates a static frame in Box2D world that corresponds to the slide borders
     void createStaticFrameAroundSlide(const ::basegfx::B2DVector& rSlideSize);
 
+    void setShapePosition(const css::uno::Reference<css::drawing::XShape> xShape,
+                          const ::basegfx::B2DPoint& rOutPos);
     /** Sets shape's corresponding Box2D body to specified position
 
         Sets shape's corresponding Box2D body to specified position as if
@@ -108,6 +126,8 @@ private:
     void setShapeLinearVelocity(const css::uno::Reference<com::sun::star::drawing::XShape> xShape,
                                 const basegfx::B2DVector& rVelocity);
 
+    void setShapeAngle(const css::uno::Reference<com::sun::star::drawing::XShape> xShape,
+                       const double fAngle);
     /** Sets shape's corresponding Box2D body to specified angle
 
         Sets shape's corresponding Box2D body to specified angle as if
@@ -165,7 +185,7 @@ private:
     /// to take place after the next step of the box2DWorld
     void
     queueAngularVelocityUpdate(const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
-                               const double fAngularVelocity);
+                               const double fAngularVelocity, const int nDelayForSteps = 0);
 
     /// Queue an update that changes collision of the corresponding body
     /// on the next step of the box2DWorld, used for animations that change visibility
@@ -233,12 +253,17 @@ public:
     /// Queue a linear velocity update for the corresponding body
     /// to take place after the next step of the box2DWorld
     void queueLinearVelocityUpdate(const css::uno::Reference<css::drawing::XShape>& xShape,
-                                   const ::basegfx::B2DVector& rVelocity);
+                                   const ::basegfx::B2DVector& rVelocity,
+                                   const int nDelayForSteps = 0);
 
     void
     queueShapeAnimationUpdate(const css::uno::Reference<css::drawing::XShape>& xShape,
                               const slideshow::internal::ShapeAttributeLayerSharedPtr& pAttrLayer,
                               const slideshow::internal::AttributeType eAttrType);
+
+    void queueShapePathAnimationUpdate(
+        const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
+        const slideshow::internal::ShapeAttributeLayerSharedPtr& pAttrLayer);
 
     void queueShapeAnimationEndUpdate(const css::uno::Reference<css::drawing::XShape>& xShape,
                                       const slideshow::internal::AttributeType eAttrType);
@@ -258,6 +283,8 @@ public:
 
     /// @return current position in LO user space coordinates
     ::basegfx::B2DPoint getPosition();
+
+    void setPosition(const ::basegfx::B2DPoint& rPos);
 
     /** Sets body to specified position
 
@@ -297,6 +324,8 @@ public:
 
     /// @return current angle of rotation of the body
     double getAngle();
+
+    void setAngle(const double fAngle);
 
     /// Set type of the body
     void setType(box2DBodyType eType);
