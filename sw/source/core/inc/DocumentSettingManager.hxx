@@ -167,8 +167,6 @@ class DocumentSettingManager :
     bool mbProtectFields;
     bool mbHeaderSpacingBelowLastPara;
     bool mbFrameAutowidthWithMorePara; //tdf#124423
-    bool mbAllowWrapWhenAnchoredInTable;
-
 public:
 
     DocumentSettingManager(SwDoc &rDoc);

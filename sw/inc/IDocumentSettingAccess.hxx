@@ -49,7 +49,6 @@ enum class DocumentSettingId
     ADD_PARA_SPACING_TO_TABLE_CELLS,
     USE_FORMER_OBJECT_POS,
     USE_FORMER_TEXT_WRAPPING,
-    ALLOW_WRAP_WHEN_ANCHORED_IN_TABLE, // change LO to match MS allowing wrapping around fly-frames anchored in tables in header & footnote
     CONSIDER_WRAP_ON_OBJECT_POSITION,
 
     IGNORE_FIRST_LINE_INDENT_IN_NUMBERING,

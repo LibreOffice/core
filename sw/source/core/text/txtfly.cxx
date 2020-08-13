@@ -43,6 +43,7 @@
 #include <fmtsrnd.hxx>
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
+#include <fmtfollowtextflow.hxx>
 #include <pagedesc.hxx>
 #include <sortedobjs.hxx>
 #include <IDocumentDrawModelAccess.hxx>
@@ -839,8 +840,9 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
     const bool bFooterHeader = nullptr != m_pCurrFrame->FindFooterOrHeader();
     const IDocumentSettingAccess* pIDSA = &m_pCurrFrame->GetDoc().getIDocumentSettingAccess();
     // #i40155# - check, if frame is marked not to wrap
+    const bool bAllowCompatWrap = m_pCurrFrame->IsInTab() && (bFooterHeader || m_pCurrFrame->IsInFootnote());
     const bool bWrapAllowed = ( pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) ||
-                                    (pIDSA->get(DocumentSettingId::ALLOW_WRAP_WHEN_ANCHORED_IN_TABLE) && m_pCurrFrame->IsInTab()) ||
+                                    bAllowCompatWrap ||
                                     (!m_pCurrFrame->IsInFootnote() && !bFooterHeader));
 
     m_bOn = false;
@@ -887,7 +889,9 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
                  !rIDDMA.IsVisibleLayerId( pAnchoredObj->GetDrawObj()->GetLayer() ) ||
                  !pAnchoredObj->ConsiderForTextWrap() ||
                  ( mbIgnoreObjsInHeaderFooter && !bFooterHeader &&
-                   pAnchoredObj->GetAnchorFrame()->FindFooterOrHeader() ) )
+                   pAnchoredObj->GetAnchorFrame()->FindFooterOrHeader() ) ||
+                 ( bAllowCompatWrap && !pAnchoredObj->GetFrameFormat().GetFollowTextFlow().GetValue() )
+               )
             {
                 continue;
             }
