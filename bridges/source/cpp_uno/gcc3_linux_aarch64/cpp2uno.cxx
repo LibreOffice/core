@@ -27,6 +27,10 @@
 
 #include <dlfcn.h>
 
+#ifdef MACOSX
+#include <libkern/OSCacheControl.h>
+#endif
+
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/genfunc.hxx>
 #include <sal/alloca.h>
@@ -411,6 +415,8 @@ void bridges::cpp_uno::shared::VtableFactory::flushCode(
        = (void (*)(unsigned char const *, unsigned char const *)) dlsym(
            RTLD_DEFAULT, "__clear_cache");
    (*clear_cache)(begin, end);
+#elif defined MACOSX
+    sys_icache_invalidate((char*)(begin), end - begin);
 #else
     __builtin___clear_cache((char*)begin, (char*)end);
 #endif
