@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "94f640fc_b88e09b8",
+        "filename": "cui/inc/toolbarmode.hrc",
+        "patchSetId": 15
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-08-13T11:44:46Z",
+      "side": 1,
+      "message": "It\u0027s unlikely that this file needs the Apache-based license header.",
+      "revId": "c4451ed78bcbe4f800fe411a3ec8b4033cb316eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75012de2_274c398b",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-08-13T11:44:46Z",
+      "side": 1,
+      "message": "Maybe put it inside an unnamed namespace.",
+      "revId": "c4451ed78bcbe4f800fe411a3ec8b4033cb316eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0baa101e_9efbf3b3",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-08-13T11:44:46Z",
+      "side": 1,
+      "message": "This (and ProcessEventsToIdle) should no longer be needed, after my commit (mentioned in the previous comment) was merged.",
+      "revId": "c4451ed78bcbe4f800fe411a3ec8b4033cb316eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3184799_645a0b1f",
+        "filename": "cui/source/inc/toolbarmodedlg.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-08-13T11:44:46Z",
+      "side": 1,
+      "message": "It\u0027s unlikely that this file needs the Apache-based license header.",
+      "revId": "c4451ed78bcbe4f800fe411a3ec8b4033cb316eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9619d10f_50f74517",
+        "filename": "cui/source/inc/toolbarmodedlg.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-08-13T11:44:46Z",
+      "side": 1,
+      "message": "These are unused.",
+      "revId": "c4451ed78bcbe4f800fe411a3ec8b4033cb316eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
