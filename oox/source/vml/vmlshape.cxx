@@ -1347,6 +1347,10 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
         // AS_CHARACTER shape: vertical orientation default is bottom, MSO default is top.
         if ( maTypeModel.maPosition != "absolute" && maTypeModel.maPosition != "relative" )
             PropertySet( xShape ).setAnyProperty( PROP_VertOrient, makeAny(text::VertOrientation::TOP));
+        oox::drawingml::ShapePropertyMap aProps(mrDrawing.getFilter().getModelObjectHelper());
+        maTypeModel.maFillModel.pushToPropMap(aProps, mrDrawing.getFilter().getGraphicHelper());
+        maTypeModel.maStrokeModel.pushToPropMap(aProps, mrDrawing.getFilter().getGraphicHelper());
+        PropertySet(xShape).setProperties(aProps);
         return xShape;
     }
 
