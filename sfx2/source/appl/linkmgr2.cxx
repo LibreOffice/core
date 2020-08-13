@@ -559,7 +559,7 @@ bool LinkManager::GetGraphicFromAny(const OUString& rMimeType,
             {
                 Bitmap aBmp;
                 ReadDIB(aBmp, aMemStm, true);
-                rGraphic = aBmp;
+                rGraphic = BitmapEx(aBmp);
                 bRet = true;
             }
             break;

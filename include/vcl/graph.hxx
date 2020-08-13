@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_GRAPH_HXX
-#define INCLUDED_VCL_GRAPH_HXX
+#pragma once
 
 #include <memory>
 #include <vcl/dllapi.h>
@@ -93,7 +92,6 @@ public:
                     Graphic( const GraphicExternalLink& rGraphicLink );
                     Graphic( const Graphic& rGraphic );
                     Graphic( Graphic&& rGraphic ) noexcept;
-                    Graphic( const Bitmap& rBmp );
                     Graphic( const Image& rImage );
                     Graphic( const BitmapEx& rBmpEx );
                     Graphic( const std::shared_ptr<VectorGraphicData>& rVectorGraphicDataPtr );
@@ -212,7 +210,5 @@ struct hash<Graphic>
 };
 
 } // end namespace std
-
-#endif // INCLUDED_VCL_GRAPH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

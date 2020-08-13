@@ -712,7 +712,7 @@ Graphic GIFReader::GetIntermediateGraphic()
             bStatus = bStatus && pAcc1;
         }
         else
-            aImGraphic = aBmp8;
+            aImGraphic = BitmapEx(aBmp8);
 
         pAcc8 = BitmapScopedWriteAccess(aBmp8);
         bStatus = bStatus && pAcc8;
