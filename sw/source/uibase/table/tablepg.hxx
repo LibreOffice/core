@@ -69,7 +69,7 @@ class SwFormatTablePage : public SfxTabPage
     int m_nOrigRightMax;
 
     void        Init();
-    void        ModifyHdl(const weld::MetricSpinButton& rEdit);
+    void ModifyHdl(const weld::MetricSpinButton& rEdit, bool bAllowInconsistencies = false);
 
     DECL_LINK(AutoClickHdl, weld::ToggleButton&, void);
     DECL_LINK(RelWidthClickHdl, weld::ToggleButton&, void);
