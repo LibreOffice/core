@@ -315,7 +315,7 @@ static void HexFmtBlockWrite(HexFmt *_this, const void *ptr, sal_uInt32 size)
 /* Outline Extraction functions */
 
 /* fills the aw and lsb entries of the TTGlyphMetrics structure from hmtx table -*/
-static void GetMetrics(TrueTypeFont const *ttf, sal_uInt32 glyphID, TTGlyphMetrics *metrics)
+static void GetMetrics(AbstractTrueTypeFont const *ttf, sal_uInt32 glyphID, TTGlyphMetrics *metrics)
 {
     sal_uInt32 nSize;
     const sal_uInt8* table = ttf->table(O_hmtx, nSize);
@@ -345,10 +345,10 @@ static void GetMetrics(TrueTypeFont const *ttf, sal_uInt32 glyphID, TTGlyphMetri
         metrics->ah = GetUInt16(table, 4 * (ttf->vertMetricCount() - 1));
 }
 
-static int GetTTGlyphOutline(TrueTypeFont *, sal_uInt32 , ControlPoint **, TTGlyphMetrics *, std::vector< sal_uInt32 >* );
+static int GetTTGlyphOutline(AbstractTrueTypeFont *, sal_uInt32 , ControlPoint **, TTGlyphMetrics *, std::vector< sal_uInt32 >* );
 
 /* returns the number of control points, allocates the pointArray */
-static int GetSimpleTTOutline(TrueTypeFont const *ttf, sal_uInt32 glyphID, ControlPoint **pointArray, TTGlyphMetrics *metrics)
+static int GetSimpleTTOutline(AbstractTrueTypeFont const *ttf, sal_uInt32 glyphID, ControlPoint **pointArray, TTGlyphMetrics *metrics)
 {
     sal_uInt32 nTableSize;
     const sal_uInt8* table = ttf->table(O_glyf, nTableSize);
@@ -474,7 +474,7 @@ static F16Dot16 fromF2Dot14(sal_Int16 n)
     return sal_uInt32(n) << 2;
 }
 
-static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint **pointArray, TTGlyphMetrics *metrics, std::vector< sal_uInt32 >& glyphlist)
+static int GetCompoundTTOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint **pointArray, TTGlyphMetrics *metrics, std::vector< sal_uInt32 >& glyphlist)
 {
     sal_uInt16 flags, index;
     sal_Int16 e, f;
@@ -643,7 +643,7 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
  * a composite glyph. This is a safeguard against endless recursion
  * in corrupted fonts.
  */
-static int GetTTGlyphOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint **pointArray, TTGlyphMetrics *metrics, std::vector< sal_uInt32 >* glyphlist)
+static int GetTTGlyphOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint **pointArray, TTGlyphMetrics *metrics, std::vector< sal_uInt32 >* glyphlist)
 {
     sal_uInt32 nSize;
     const sal_uInt8 *table = ttf->table(O_glyf, nSize);
@@ -1448,13 +1448,26 @@ bool withinBounds(sal_uInt32 tdoffset, sal_uInt32 moreoffset, sal_uInt32 len, sa
 }
 }
 
-TrueTypeFont::TrueTypeFont(const char* pFileName)
+AbstractTrueTypeFont::AbstractTrueTypeFont(const char* pFileName)
     : m_pFileName(nullptr)
     , m_nGlyphs(0xFFFFFFFF)
     , m_pGlyphOffsets(nullptr)
     , m_nHorzMetrics(0)
     , m_nVertMetrics(0)
     , m_nUnitsPerEm(0)
+{
+    if (pFileName)
+        m_pFileName = strdup(pFileName);
+}
+
+AbstractTrueTypeFont::~AbstractTrueTypeFont()
+{
+    free(m_pFileName);
+    free(m_pGlyphOffsets);
+}
+
+TrueTypeFont::TrueTypeFont(const char* pFileName)
+    : AbstractTrueTypeFont(pFileName)
     , fsize(-1)
     , ptr(nullptr)
     , psname(nullptr)
@@ -1466,18 +1479,14 @@ TrueTypeFont::TrueTypeFont(const char* pFileName)
     , cmap(nullptr)
     , cmapType(0)
 {
-    if (pFileName)
-        m_pFileName = strdup(pFileName);
 }
 
 TrueTypeFont::~TrueTypeFont()
 {
 #if !defined(_WIN32)
-    if (m_pFileName)
+    if (fileName())
         munmap(ptr, fsize);
 #endif
-    free(m_pFileName);
-    free(m_pGlyphOffsets);
     free(psname);
     free(family);
     free(ufamily);
@@ -1487,7 +1496,7 @@ TrueTypeFont::~TrueTypeFont()
 
 void CloseTTFont(TrueTypeFont* ttf) { delete ttf; }
 
-SFErrCodes TrueTypeFont::indexGlyphData()
+SFErrCodes AbstractTrueTypeFont::indexGlyphData()
 {
     if (!(hasTable(O_maxp) && hasTable(O_head) && hasTable(O_name) && hasTable(O_cmap)))
         return SFErrCodes::TtFormat;
@@ -1699,12 +1708,12 @@ SFErrCodes TrueTypeFont::open(sal_uInt32 facenum)
     return SFErrCodes::Ok;
 }
 
-int GetTTGlyphPoints(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint **pointArray)
+int GetTTGlyphPoints(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint **pointArray)
 {
     return GetTTGlyphOutline(ttf, glyphID, pointArray, nullptr, nullptr);
 }
 
-int GetTTGlyphComponents(TrueTypeFont *ttf, sal_uInt32 glyphID, std::vector< sal_uInt32 >& glyphlist)
+int GetTTGlyphComponents(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, std::vector< sal_uInt32 >& glyphlist)
 {
     int n = 1;
 
@@ -1902,7 +1911,7 @@ SFErrCodes CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname
     return SFErrCodes::Ok;
 }
 
-SFErrCodes CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
+SFErrCodes CreateTTFromTTGlyphs(AbstractTrueTypeFont  *ttf,
                           const char    *fname,
                           sal_uInt16 const *glyphArray,
                           sal_uInt8 const *encoding,
@@ -2285,7 +2294,7 @@ sal_uInt16 MapChar(TrueTypeFont const *ttf, sal_uInt16 ch)
 #endif
 
 
-std::unique_ptr<sal_uInt16[]> GetTTSimpleGlyphMetrics(TrueTypeFont const *ttf, const sal_uInt16 *glyphArray, int nGlyphs, bool vertical)
+std::unique_ptr<sal_uInt16[]> GetTTSimpleGlyphMetrics(AbstractTrueTypeFont const *ttf, const sal_uInt16 *glyphArray, int nGlyphs, bool vertical)
 {
     const sal_uInt8* pTable;
     sal_uInt32 n;
@@ -2415,7 +2424,7 @@ void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
     }
 }
 
-GlyphData *GetTTRawGlyphData(TrueTypeFont *ttf, sal_uInt32 glyphID)
+GlyphData *GetTTRawGlyphData(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID)
 {
     sal_uInt32 length;
     const sal_uInt8* hmtx = ttf->table(O_hmtx, length);
@@ -2479,7 +2488,7 @@ GlyphData *GetTTRawGlyphData(TrueTypeFont *ttf, sal_uInt32 glyphID)
     return d;
 }
 
-int GetTTNameRecords(TrueTypeFont const *ttf, NameRecord **nr)
+int GetTTNameRecords(AbstractTrueTypeFont const *ttf, NameRecord **nr)
 {
     sal_uInt32 nTableSize;
     const sal_uInt8* table = ttf->table(O_name, nTableSize);
@@ -2538,14 +2547,12 @@ int GetTTNameRecords(TrueTypeFont const *ttf, NameRecord **nr)
                 continue;
             }
 
-            const sal_uInt8* rec_string = table + nStrBase + nStrOffset;
-            // sanity check
-            const sal_uInt8* end_table = ttf->ptr + ttf->fsize;
-            const size_t available_space = rec_string > end_table ? 0 : (end_table - rec_string);
+            const sal_uInt32 rec_string = nStrBase + nStrOffset;
+            const size_t available_space = rec_string > nTableSize ? 0 : (nTableSize - rec_string);
             if (rec[i].slen <= available_space)
             {
                 rec[i].sptr = static_cast<sal_uInt8 *>(malloc(rec[i].slen)); assert(rec[i].sptr != nullptr);
-                memcpy(rec[i].sptr, rec_string, rec[i].slen);
+                memcpy(rec[i].sptr, table + rec_string, rec[i].slen);
             }
             else
             {
