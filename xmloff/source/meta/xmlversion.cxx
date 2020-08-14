@@ -19,7 +19,7 @@
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <xmlversion.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlmetae.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>

@@ -28,7 +28,7 @@
 #include <TransGradientStyle.hxx>
 #include <xmloff/MarkerStyle.hxx>
 #include <xmloff/DashStyle.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
 
 using namespace ::com::sun::star;

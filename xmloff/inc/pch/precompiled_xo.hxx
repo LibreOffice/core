@@ -219,7 +219,7 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlimppr.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlnumi.hxx>
 #include <xmloff/xmlprhdl.hxx>
 #include <xmloff/xmlprmap.hxx>

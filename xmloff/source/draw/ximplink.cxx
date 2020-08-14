@@ -18,7 +18,7 @@
  */
 
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include "ximplink.hxx"
 #include <xmloff/xmltoken.hxx>
 

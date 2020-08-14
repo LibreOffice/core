@@ -21,7 +21,7 @@
 #include "xmlAutoStyle.hxx"
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>

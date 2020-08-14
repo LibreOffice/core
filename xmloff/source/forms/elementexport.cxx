@@ -20,7 +20,7 @@
 #include "elementexport.hxx"
 
 #include "strings.hxx"
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include "eventexport.hxx"
 #include "formenums.hxx"
 #include "formcellbinding.hxx"

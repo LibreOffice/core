@@ -32,7 +32,7 @@
 #include "xmlfilter.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlscripti.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/namespacemap.hxx>

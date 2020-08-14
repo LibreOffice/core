@@ -37,7 +37,7 @@
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/namespacemap.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltkmap.hxx>
 
 using com::sun::star::uno::Reference;

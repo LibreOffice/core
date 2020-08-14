@@ -23,7 +23,7 @@
 
 #include <xmloff/xmlexp.hxx>
 #include "strings.hxx"
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlexppr.hxx>
 #include <xmloff/xmlprmap.hxx>

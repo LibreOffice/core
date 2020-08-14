@@ -28,7 +28,7 @@
 #include <o3tl/safeint.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 
 using namespace com::sun::star;
 using namespace xmloff::token;

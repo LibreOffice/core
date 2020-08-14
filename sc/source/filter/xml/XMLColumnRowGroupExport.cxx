@@ -21,7 +21,7 @@
 #include "xmlexprt.hxx"
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 
 #include <algorithm>
 

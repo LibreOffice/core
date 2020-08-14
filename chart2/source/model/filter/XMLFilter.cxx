@@ -51,7 +51,7 @@
 #include <com/sun/star/document/GraphicStorageHandler.hpp>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 
 using namespace ::com::sun::star;
 

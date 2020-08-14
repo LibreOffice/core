@@ -26,7 +26,7 @@
 #include <xmloff/prstylei.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlexp.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/maptype.hxx>
 

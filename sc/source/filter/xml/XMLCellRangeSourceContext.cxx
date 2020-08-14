@@ -22,7 +22,7 @@
 #include <sax/tools/converter.hxx>
 
 #include "xmlimprt.hxx"
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 
 using namespace ::com::sun::star;
 using namespace xmloff::token;

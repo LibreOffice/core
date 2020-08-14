@@ -20,7 +20,7 @@
 #include "xmlComponent.hxx"
 #include "xmlfilter.hxx"
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <strings.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <tools/diagnose_ex.h>

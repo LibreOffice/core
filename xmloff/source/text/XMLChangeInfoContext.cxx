@@ -21,7 +21,7 @@
 #include "XMLChangedRegionImportContext.hxx"
 #include <XMLStringBufferImportContext.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
 

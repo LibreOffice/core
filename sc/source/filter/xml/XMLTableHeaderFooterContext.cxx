@@ -21,7 +21,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/sheet/XHeaderFooterContent.hpp>
 #include <xmloff/namespacemap.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlimp.hxx>
 #include "XMLTableHeaderFooterContext.hxx"
 #include <xmloff/xmltoken.hxx>

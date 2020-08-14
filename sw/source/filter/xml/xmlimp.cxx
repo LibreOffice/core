@@ -29,7 +29,7 @@
 #include <com/sun/star/text/XTextRange.hpp>
 
 #include <o3tl/any.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/txtimp.hxx>

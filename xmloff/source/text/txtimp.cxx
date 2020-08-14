@@ -36,7 +36,7 @@
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/style/XStyle.hpp>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/txtstyli.hxx>
 #include <xmloff/xmlnumi.hxx>
 #include <xmloff/maptype.hxx>

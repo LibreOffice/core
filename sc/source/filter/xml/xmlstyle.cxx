@@ -24,7 +24,7 @@
 #include <unonames.hxx>
 
 #include <o3tl/safeint.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/contextid.hxx>

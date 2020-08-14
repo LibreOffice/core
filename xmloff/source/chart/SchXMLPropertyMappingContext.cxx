@@ -9,7 +9,7 @@
 
 #include "SchXMLPropertyMappingContext.hxx"
 #include "SchXMLTools.hxx"
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <SchXMLImport.hxx>

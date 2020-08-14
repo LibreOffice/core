@@ -30,7 +30,7 @@
 #include <sal/log.hxx>
 #include <vcl/embeddedfontshelper.hxx>
 
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "fonthdl.hxx"
 #include <xmloff/xmlimp.hxx>

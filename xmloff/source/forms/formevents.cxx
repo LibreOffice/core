@@ -18,7 +18,7 @@
  */
 
 #include "formevents.hxx"
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlevent.hxx>
 
 namespace xmloff

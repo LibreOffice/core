@@ -470,7 +470,7 @@
 #include <xmloff/dllapi.h>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlictxt.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4

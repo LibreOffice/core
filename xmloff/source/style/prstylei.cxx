@@ -23,7 +23,7 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <set>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlprcon.hxx>
 #include <com/sun/star/frame/XModel.hpp>

@@ -34,7 +34,7 @@
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltkmap.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 
 #include "xmlHelper.hxx"
 #include "xmlEnums.hxx"

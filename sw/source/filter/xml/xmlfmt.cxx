@@ -33,7 +33,7 @@
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmlnumfi.hxx>
 #include <xmloff/xmlprmap.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlstyle.hxx>
 #include <xmloff/txtstyli.hxx>
 #include <xmloff/txtimp.hxx>

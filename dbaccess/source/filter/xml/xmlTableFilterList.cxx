@@ -21,7 +21,7 @@
 #include "xmlTableFilterPattern.hxx"
 #include "xmlEnums.hxx"
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <strings.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

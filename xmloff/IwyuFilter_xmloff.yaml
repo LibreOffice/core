@@ -10,7 +10,7 @@ excludelist:
     xmloff/source/chart/PropertyMap.hxx:
     # Needed for constants used in arrays
     - xmloff/maptype.hxx
-    - xmloff/xmlnmspe.hxx
+    - xmloff/xmlnamespace.hxx
     - xmloff/xmlement.hxx
     - com/sun/star/chart/ChartAxisArrangeOrderType.hpp
     - com/sun/star/chart/ChartAxisLabelPosition.hpp

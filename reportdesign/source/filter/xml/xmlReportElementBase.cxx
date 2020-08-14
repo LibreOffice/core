@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <xmloff/ProgressBarHelper.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include "xmlReportElementBase.hxx"
 #include "xmlfilter.hxx"
 #include "xmlControlProperty.hxx"

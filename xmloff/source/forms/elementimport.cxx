@@ -23,7 +23,7 @@
 #include "strings.hxx"
 #include "callbacks.hxx"
 #include "attriblistmerge.hxx"
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include "eventimport.hxx"
 #include <xmloff/txtstyli.hxx>
 #include "formenums.hxx"

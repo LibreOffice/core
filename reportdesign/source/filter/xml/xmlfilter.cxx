@@ -36,7 +36,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <connectivity/dbtools.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/namespacemap.hxx>

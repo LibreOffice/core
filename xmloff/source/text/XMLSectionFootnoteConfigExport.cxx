@@ -24,7 +24,7 @@
 #include <xmloff/maptype.hxx>
 
 #include <xmloff/txtprmap.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <rtl/ustring.hxx>
