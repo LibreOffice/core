@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c040c07f_88a74a94",
+        "filename": "icon-themes/colibre/links.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 2111,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-14T10:56:33Z",
+      "side": 0,
+      "message": "Possibly this is what causes now breakage of Impress coming from presentation mode (at least in debug builds). It asserts on the line\n\n    assert(maBitmapChecksum \u003d\u003d 0);\n\nin ImplImage::getSizePixel, when tries to load image for res/lx03249.png; and this icon obviously is used as BMP_OO_IMPRESS_DOC_LC in svtools/inc/bitmaps.hlst.",
+      "range": {
+        "startLine": 2111,
+        "startChar": 0,
+        "endLine": 2111,
+        "endChar": 32
+      },
+      "revId": "bda7556020cacc4da16905e4b29bf4e853d5a725",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
