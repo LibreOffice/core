@@ -202,9 +202,11 @@ bool IsValidObject( const XclObj& rObj )
         if (!xCooSysContainer.is())
             return false;
 
-        const uno::Sequence<uno::Reference<chart2::XCoordinateSystem> > xCooSysSeq = xCooSysContainer->getCoordinateSystems();
-        if (!xCooSysSeq.hasElements())
-            return false;
+        const uno::Sequence<uno::Reference<chart2::XCoordinateSystem>> xCooSysSeq = xCooSysContainer->getCoordinateSystems();
+
+        // tdf#123647 Save empty charts too.
+        // if (!xCooSysSeq.hasElements())
+        //     return false;
 
         for (const auto& rCooSys : xCooSysSeq)
         {
@@ -212,7 +214,7 @@ bool IsValidObject( const XclObj& rObj )
             if (!xChartTypeCont.is())
                 return false;
 
-            uno::Sequence<uno::Reference<chart2::XChartType> > xChartTypeSeq = xChartTypeCont->getChartTypes();
+            uno::Sequence<uno::Reference<chart2::XChartType>> xChartTypeSeq = xChartTypeCont->getChartTypes();
             if (!xChartTypeSeq.hasElements())
                 // No chart type.  Not good.
                 return false;

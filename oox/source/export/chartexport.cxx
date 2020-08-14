@@ -1380,6 +1380,11 @@ void ChartExport::exportPlotArea( const Reference< css::chart::XChartDocument >&
     // chart type
     const Sequence< Reference< chart2::XCoordinateSystem > >
         aCooSysSeq( xBCooSysCnt->getCoordinateSystems());
+
+    // tdf#123647 Save empty chart as empty bar chart.
+    if (!aCooSysSeq.hasElements())
+        exportBarChart(nullptr);
+
     for( const auto& rCS : aCooSysSeq )
     {
         Reference< chart2::XChartTypeContainer > xCTCnt( rCS, uno::UNO_QUERY );
