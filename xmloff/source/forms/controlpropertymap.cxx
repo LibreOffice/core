@@ -18,7 +18,7 @@
  */
 
 #include <rtl/ref.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmltypes.hxx>

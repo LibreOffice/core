@@ -40,7 +40,7 @@
 #include "formcellbinding.hxx"
 #include <xmloff/xformsimport.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <rtl/strbuf.hxx>
 #include <algorithm>
 

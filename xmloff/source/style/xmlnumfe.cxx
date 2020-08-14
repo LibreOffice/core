@@ -38,7 +38,7 @@
 #include <com/sun/star/i18n/NativeNumberXmlAttributes2.hpp>
 
 #include <xmloff/xmlnumfe.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlnumfi.hxx>
 
 #include <svl/nfsymbol.hxx>

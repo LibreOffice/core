@@ -29,7 +29,7 @@
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/mediadescriptor.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmluconv.hxx>

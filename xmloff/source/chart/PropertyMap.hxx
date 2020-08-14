@@ -20,7 +20,7 @@
 #define INCLUDED_XMLOFF_SOURCE_CHART_PROPERTYMAP_HXX
 
 #include <xmloff/maptype.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/contextid.hxx>
 #include <xmloff/xmlement.hxx>

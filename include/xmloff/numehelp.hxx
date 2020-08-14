@@ -21,7 +21,7 @@
 #define INCLUDED_XMLOFF_NUMEHELP_HXX
 
 #include <sal/config.h>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
 #include <com/sun/star/uno/Reference.hxx>

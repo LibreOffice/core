@@ -19,7 +19,7 @@
 #include "xmlSection.hxx"
 #include "xmlfilter.hxx"
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "xmlHelper.hxx"
 #include <com/sun/star/report/ReportPrintOption.hpp>

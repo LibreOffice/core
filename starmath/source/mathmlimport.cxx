@@ -54,7 +54,7 @@ one go*/
 #include <unotools/streamwrap.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/DocumentSettingsContext.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmluconv.hxx>

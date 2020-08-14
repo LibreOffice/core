@@ -24,7 +24,7 @@
 
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <DomExport.hxx>
 

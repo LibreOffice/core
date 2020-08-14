@@ -21,7 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_SWXMLBLOCKIMPORT_HXX
 
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <sax/fastattribs.hxx>
 #include <cppuhelper/implbase.hxx>

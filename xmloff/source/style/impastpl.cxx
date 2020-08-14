@@ -28,7 +28,7 @@
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlexppr.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmltoken.hxx>
 

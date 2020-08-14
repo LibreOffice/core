@@ -12,7 +12,7 @@
 #include "xmlcelli.hxx"
 
 #include <comphelper/string.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 
 using namespace com::sun::star;
 using namespace xmloff::token;

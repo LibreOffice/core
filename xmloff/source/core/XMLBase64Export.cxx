@@ -25,7 +25,7 @@
 #include <comphelper/base64.hxx>
 
 #include <xmloff/xmlexp.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <XMLBase64Export.hxx>
 
 using namespace ::com::sun::star::uno;

@@ -24,7 +24,7 @@
 #include <xmloff/xmlmetae.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/namespacemap.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/StringPair.hpp>

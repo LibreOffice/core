@@ -32,7 +32,7 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <comphelper/extract.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <com/sun/star/util/Date.hpp>

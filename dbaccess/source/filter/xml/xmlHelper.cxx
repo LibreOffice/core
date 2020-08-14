@@ -20,7 +20,7 @@
 #include "xmlHelper.hxx"
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
 #include <xmloff/xmlement.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/maptype.hxx>

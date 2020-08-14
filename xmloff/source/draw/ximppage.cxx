@@ -30,7 +30,7 @@
 #include <XMLNumberStylesImport.hxx>
 #include <xmloff/xmlstyle.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include "ximppage.hxx"
 #include <animimp.hxx>
 #include <XMLStringBufferImportContext.hxx>

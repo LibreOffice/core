@@ -22,7 +22,7 @@
 #include <forms/form_handler_factory.hxx>
 #include "strings.hxx"
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 
 #include <boost/functional/hash.hpp>
 #include <tools/debug.hxx>

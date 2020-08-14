@@ -420,7 +420,7 @@
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/odffields.hxx>
 #include <xmloff/xmlictxt.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlstyle.hxx>
 #include <xmloff/xmluconv.hxx>
 #endif // PCH_LEVEL >= 3

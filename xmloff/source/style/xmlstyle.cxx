@@ -29,7 +29,7 @@
 #include <sal/log.hxx>
 #include <svl/style.hxx>
 #include <xmloff/namespacemap.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 
 #include <xmloff/families.hxx>

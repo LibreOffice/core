@@ -20,7 +20,7 @@
 #include "FrameOASISTContext.hxx"
 #include "IgnoreTContext.hxx"
 #include "MutableAttrList.hxx"
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include "ActionMapTypesOASIS.hxx"
 #include "ElemTransformerAction.hxx"
 #include "TransformerActions.hxx"

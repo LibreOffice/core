@@ -41,7 +41,7 @@
 #include <xmloff/xmlstyle.hxx>
 #include <xmloff/prstylei.hxx>
 
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "table.hxx"
 

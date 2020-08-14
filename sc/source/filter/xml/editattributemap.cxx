@@ -11,7 +11,7 @@
 
 #include <editeng/eeitem.hxx>
 #include <editeng/memberids.h>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 
 ScXMLEditAttributeMap::Entry const aEntries[] = {
 

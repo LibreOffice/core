@@ -18,7 +18,7 @@
  */
 
 #include "EventMap.hxx"
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 
 
 XMLTransformerEventMapEntry const aTransformerEventMap[] =

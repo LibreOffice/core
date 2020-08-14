@@ -12,7 +12,7 @@
 #include "xmltransformationi.hxx"
 
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 
 #include <datamapper.hxx>
 #include <document.hxx>

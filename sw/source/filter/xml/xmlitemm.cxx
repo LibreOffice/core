@@ -21,7 +21,7 @@
 #include <editeng/xmlcnitm.hxx>
 #include <hintids.hxx>
 #include <svx/unomid.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include "xmlitmap.hxx"
 #include <xmloff/xmltoken.hxx>
 

@@ -43,7 +43,7 @@
 #include <com/sun/star/text/FootnoteNumbering.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/families.hxx>

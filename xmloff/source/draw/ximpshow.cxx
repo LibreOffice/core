@@ -29,7 +29,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "ximpshow.hxx"

@@ -20,7 +20,7 @@
 #include "xmlConnectionResource.hxx"
 #include "xmlfilter.hxx"
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <strings.hxx>
 #include <tools/diagnose_ex.h>
 

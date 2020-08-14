@@ -25,7 +25,7 @@
 #define INCLUDED_XMLOFF_INC_TXTFLDE_HXX
 
 #include <com/sun/star/uno/Reference.h>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 
 #include <rtl/ustring.hxx>
 #include <xmloff/xmltoken.hxx>

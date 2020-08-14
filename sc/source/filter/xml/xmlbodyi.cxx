@@ -43,7 +43,7 @@
 #include <sax/fastattribs.hxx>
 
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 
 #include <comphelper/base64.hxx>
 #include <comphelper/servicehelper.hxx>

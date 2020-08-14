@@ -19,7 +19,7 @@
 #include "xmlFunction.hxx"
 #include "xmlfilter.hxx"
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 

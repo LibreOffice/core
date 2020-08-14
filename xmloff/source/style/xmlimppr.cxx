@@ -35,7 +35,7 @@
 #include <xmloff/xmlimp.hxx>
 
 #include <xmloff/unoatrcn.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/contextid.hxx>

@@ -25,7 +25,7 @@
 #include <sax/tools/converter.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include "PropType.hxx"
 #include "DeepTContext.hxx"
 #include "TransformerBase.hxx"

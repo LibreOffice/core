@@ -28,7 +28,7 @@
 
 #include <xmloff/xmlmetai.hxx>
 #include "ximpstyl.hxx"
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/DocumentSettingsContext.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>

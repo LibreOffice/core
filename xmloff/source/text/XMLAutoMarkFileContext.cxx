@@ -21,7 +21,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <rtl/ustring.hxx>
 #include <xmloff/namespacemap.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/Reference.hxx>

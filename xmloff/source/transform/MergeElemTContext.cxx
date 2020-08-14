@@ -23,7 +23,7 @@
 #include "TransformerActions.hxx"
 #include "ElemTransformerAction.hxx"
 #include "IgnoreTContext.hxx"
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star::uno;

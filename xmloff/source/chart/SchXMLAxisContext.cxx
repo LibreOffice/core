@@ -23,7 +23,7 @@
 #include "SchXMLChartContext.hxx"
 #include "SchXMLTools.hxx"
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmlstyle.hxx>
 #include <xmloff/prstylei.hxx>

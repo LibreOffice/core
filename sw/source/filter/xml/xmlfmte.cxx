@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/text/XTextDocument.hpp>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/attrlist.hxx>
 #include "xmlexpit.hxx"
 #include <xmloff/namespacemap.hxx>

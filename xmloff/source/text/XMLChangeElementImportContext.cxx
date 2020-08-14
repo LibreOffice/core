@@ -22,7 +22,7 @@
 #include "XMLChangeInfoContext.hxx"
 #include <com/sun/star/uno/Reference.h>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 
 

@@ -24,7 +24,7 @@
 #include <document.hxx>
 #include <rangeutl.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/XMLEventExport.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <com/sun/star/uno/Reference.h>

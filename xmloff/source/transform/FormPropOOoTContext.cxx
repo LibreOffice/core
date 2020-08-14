@@ -18,7 +18,7 @@
  */
 
 #include "MutableAttrList.hxx"
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/namespacemap.hxx>
 #include "IgnoreTContext.hxx"
 #include "ActionMapTypesOOo.hxx"

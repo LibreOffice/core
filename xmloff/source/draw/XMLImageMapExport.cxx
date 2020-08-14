@@ -32,7 +32,7 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <xmloff/xmlexp.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/XMLEventExport.hxx>
 #include <xmloff/xmluconv.hxx>

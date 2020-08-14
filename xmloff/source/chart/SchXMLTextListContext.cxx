@@ -20,7 +20,7 @@
 #include "SchXMLTextListContext.hxx"
 #include "SchXMLParagraphContext.hxx"
 
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 
 using ::com::sun::star::uno::Sequence;

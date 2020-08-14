@@ -27,7 +27,7 @@
 #include <com/sun/star/uno/Type.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 template<typename EnumT>

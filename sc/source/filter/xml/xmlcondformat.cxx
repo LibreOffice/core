@@ -10,7 +10,7 @@
 #include <memory>
 #include "xmlcondformat.hxx"
 #include "xmlimprt.hxx"
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <sal/log.hxx>
 

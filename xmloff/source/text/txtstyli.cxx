@@ -19,7 +19,7 @@
 
 
 #include "XMLTextPropertySetContext.hxx"
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/XMLEventsImportContext.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/txtprmap.hxx>

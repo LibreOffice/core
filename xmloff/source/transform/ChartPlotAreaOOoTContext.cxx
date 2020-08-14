@@ -20,7 +20,7 @@
 #include "ChartPlotAreaOOoTContext.hxx"
 #include "TransformerBase.hxx"
 #include <xmloff/namespacemap.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "DeepTContext.hxx"
 #include "ActionMapTypesOOo.hxx"

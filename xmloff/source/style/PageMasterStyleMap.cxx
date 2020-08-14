@@ -18,7 +18,7 @@
  */
 
 #include <PageMasterStyleMap.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 
 using namespace ::xmloff::token;

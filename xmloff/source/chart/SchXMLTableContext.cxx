@@ -29,7 +29,7 @@
 #include <o3tl/safeint.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <comphelper/sequence.hxx>
