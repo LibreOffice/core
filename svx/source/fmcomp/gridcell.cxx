@@ -3967,9 +3967,9 @@ FmXListBoxCell::FmXListBoxCell(DbGridColumn* pColumn, std::unique_ptr<DbCellCont
   : FmXTextCell(pColumn, std::move(pControl))
   , m_aItemListeners(m_aMutex)
   , m_aActionListeners(m_aMutex)
-  , m_pBox(&static_cast<svt::ListBoxControl&>(m_pCellControl->GetWindow()).get_widget())
+  , m_pBox(&static_cast<svt::ListBoxControl&>(m_pCellControl->GetWindow()))
 {
-    m_pBox->connect_changed(LINK(this, FmXListBoxCell, ChangedHdl));
+    m_pBox->SetAuxModifyHdl(LINK(this, FmXListBoxCell, ChangedHdl));
 }
 
 FmXListBoxCell::~FmXListBoxCell()
@@ -3988,7 +3988,7 @@ void FmXListBoxCell::disposing()
     m_aItemListeners.disposeAndClear(aEvt);
     m_aActionListeners.disposeAndClear(aEvt);
 
-    m_pBox->connect_changed( Link<weld::ComboBox&,void>() );
+    m_pBox->SetAuxModifyHdl(Link<LinkParamNone*,void>());
     m_pBox = nullptr;
 
     FmXTextCell::disposing();
@@ -3996,9 +3996,14 @@ void FmXListBoxCell::disposing()
 
 IMPLEMENT_GET_IMPLEMENTATION_ID( FmXListBoxCell )
 
-IMPL_LINK_NOARG(FmXListBoxCell, ChangedHdl, weld::ComboBox&, void)
+IMPL_LINK_NOARG(FmXListBoxCell, ChangedHdl, LinkParamNone*, void)
 {
-    if (!m_pBox || !m_pBox->changed_by_direct_pick())
+    if (!m_pBox)
+        return;
+
+    weld::ComboBox& rBox = m_pBox->get_widget();
+
+    if (!rBox.changed_by_direct_pick())
         return;
 
     OnDoubleClick();
@@ -4008,11 +4013,10 @@ IMPL_LINK_NOARG(FmXListBoxCell, ChangedHdl, weld::ComboBox&, void)
     aEvent.Highlighted = 0;
 
     // with multiple selection 0xFFFF, otherwise the ID
-    aEvent.Selected = (m_pBox->get_active() != -1 )
-                    ? m_pBox->get_active() : 0xFFFF;
+    aEvent.Selected = (rBox.get_active() != -1 )
+                    ? rBox.get_active() : 0xFFFF;
 
     m_aItemListeners.notifyEach( &awt::XItemListener::itemStateChanged, aEvent );
-    return;
 }
 
 void FmXListBoxCell::OnDoubleClick()
@@ -4021,7 +4025,8 @@ void FmXListBoxCell::OnDoubleClick()
 
     css::awt::ActionEvent aEvent;
     aEvent.Source = *this;
-    aEvent.ActionCommand = m_pBox->get_active_text();
+    weld::ComboBox& rBox = m_pBox->get_widget();
+    aEvent.ActionCommand = rBox.get_active_text();
 
     while( aIt.hasMoreElements() )
         static_cast< css::awt::XActionListener *>(aIt.next())->actionPerformed( aEvent );
