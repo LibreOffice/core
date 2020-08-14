@@ -154,12 +154,9 @@ namespace frm
 
     class ImageModelMethodGuard : public ::osl::MutexGuard
     {
-    private:
-        typedef ::osl::MutexGuard   GuardBase;
-
     public:
         explicit ImageModelMethodGuard( OClickableImageBaseModel& _rModel )
-            :GuardBase( _rModel.getMutex( OClickableImageBaseModel::GuardAccess() ) )
+            : ::osl::MutexGuard( _rModel.getMutex( OClickableImageBaseModel::GuardAccess() ) )
         {
             if ( nullptr == _rModel.getImageProducer( OClickableImageBaseModel::GuardAccess() ) )
                 throw css::lang::DisposedException(
