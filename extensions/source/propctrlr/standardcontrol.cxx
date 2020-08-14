@@ -331,9 +331,13 @@ namespace pcr
         return getTypedControlWindow()->get_digits();
     }
 
-    void SAL_CALL ONumericControl::setDecimalDigits( ::sal_Int16 _decimaldigits )
+    void SAL_CALL ONumericControl::setDecimalDigits( ::sal_Int16 decimaldigits )
     {
-        getTypedControlWindow()->set_digits( _decimaldigits );
+        weld::MetricSpinButton* pControlWindow = getTypedControlWindow();
+        int min, max;
+        pControlWindow->get_range(min, max, FieldUnit::NONE);
+        pControlWindow->set_digits(decimaldigits);
+        pControlWindow->set_range(min, max, FieldUnit::NONE);
     }
 
     Optional< double > SAL_CALL ONumericControl::getMinValue()
