@@ -32,6 +32,7 @@ namespace svt
         , m_xWidget(m_xBuilder->weld_combo_box("combobox"))
     {
         m_xWidget->set_entry_width_chars(1); // so a smaller than default width can be used
+        m_xWidget->connect_changed(LINK(this, ComboBoxControl, SelectHdl));
     }
 
     void ComboBoxControl::dispose()
@@ -40,14 +41,19 @@ namespace svt
         InterimItemWindow::dispose();
     }
 
+    IMPL_LINK_NOARG(ComboBoxControl, SelectHdl, weld::ComboBox&, void)
+    {
+        CallModifyHdls();
+    }
+
     //= ComboBoxCellController
     ComboBoxCellController::ComboBoxCellController(ComboBoxControl* pWin)
                              :CellController(pWin)
     {
-        GetComboBox().connect_changed(LINK(this, ComboBoxCellController, ModifyHdl));
+        static_cast<ComboBoxControl&>(GetWindow()).SetModifyHdl(LINK(this, ComboBoxCellController, ModifyHdl));
     }
 
-    IMPL_LINK_NOARG(ComboBoxCellController, ModifyHdl, weld::ComboBox&, void)
+    IMPL_LINK_NOARG(ComboBoxCellController, ModifyHdl, LinkParamNone*, void)
     {
         callModifyHdl();
     }
