@@ -1177,10 +1177,23 @@ namespace cairocanvas
             cairo_rectangle( mpCairo.get(), 0, 0, aBitmapSize.Width, aBitmapSize.Height );
             cairo_clip( mpCairo.get() );
 
-            if( bModulateColors )
-                cairo_paint_with_alpha( mpCairo.get(), renderState.DeviceColor[3] );
-            else
-                cairo_paint( mpCairo.get() );
+            int nPixelWidth = std::round(rSize.Width * aMatrix.xx);
+            int nPixelHeight = std::round(rSize.Height * aMatrix.yy);
+            if (nPixelWidth > 0 && nPixelHeight > 0)
+            {
+                // Only render the image if it's at least 1x1 px sized.
+                if (bModulateColors)
+                    cairo_paint_with_alpha(mpCairo.get(), renderState.DeviceColor[3]);
+                else
+                {
+                    cairo_paint(mpCairo.get());
+                    if (cairo_status(mpCairo.get()) != CAIRO_STATUS_SUCCESS)
+                    {
+                        SAL_WARN("canvas.cairo", "cairo_paint() failed: " << cairo_status_to_string(
+                                                     cairo_status(mpCairo.get())));
+                    }
+                }
+            }
             cairo_restore( mpCairo.get() );
         }
         else
