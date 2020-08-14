@@ -1011,9 +1011,9 @@ bool PrintFontManager::createFontSubset(
     const OString aToFile( OUStringToOString( aSysPath, aEncoding ) );
 
     // do CFF subsetting if possible
-    int nCffLength = 0;
-    const sal_uInt8* pCffBytes = nullptr;
-    if( GetSfntTable( pTTFont, O_CFF, &pCffBytes, &nCffLength ) )
+    sal_uInt32 nCffLength = 0;
+    const sal_uInt8* pCffBytes = pTTFont->table(vcl::O_CFF, nCffLength);
+    if (pCffBytes)
     {
         rInfo.LoadFont( FontType::CFF_FONT, pCffBytes, nCffLength );
 #if 1 // TODO: remove 16bit->long conversion when related methods handle non-16bit glyphids
@@ -1101,7 +1101,7 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
     OString aFromFile = getFontFile( pFont );
     if( OpenTTFontFile( aFromFile.getStr(), pFont->m_nCollectionEntry, &pTTFont ) != SFErrCodes::Ok )
         return;
-    int nGlyphs = GetTTGlyphCount(pTTFont);
+    int nGlyphs = pTTFont->glyphCount();
     if (nGlyphs > 0)
     {
         rWidths.resize(nGlyphs);
@@ -1122,9 +1122,9 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
 
         // fill the unicode map
         // TODO: isn't this map already available elsewhere in the fontmanager?
-        const sal_uInt8* pCmapData = nullptr;
-        int nCmapSize = 0;
-        if (GetSfntTable(pTTFont, O_cmap, &pCmapData, &nCmapSize))
+        sal_uInt32 nCmapSize = 0;
+        const sal_uInt8* pCmapData = pTTFont->table(O_cmap, nCmapSize);
+        if (pCmapData)
         {
             CmapResult aCmapResult;
             if (ParseCMAP(pCmapData, nCmapSize, aCmapResult))
