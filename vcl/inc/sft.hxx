@@ -183,7 +183,6 @@ namespace vcl
         sal_Int16 y;                  /**< Y coordinate in EmSquare units      */
     } ControlPoint;
 
-    struct TrueTypeFont;
 
 /*
   Some table OS/2 consts
@@ -448,6 +447,7 @@ constexpr sal_uInt32 T_fpgm = 0x6670676D;
 constexpr sal_uInt32 T_gsub = 0x47535542;
 constexpr sal_uInt32 T_CFF  = 0x43464620;
 
+class TrueTypeFont;
 
 /**
  * @defgroup sft Sun Font Tools Exported Functions
@@ -687,17 +687,6 @@ constexpr sal_uInt32 T_CFF  = 0x43464620;
                        const uint8_t *pOs2, size_t nOs2,
                        TTGlobalFontInfo *info);
 
-/**
- * returns the number of glyphs in a font
- */
- VCL_DLLPUBLIC int GetTTGlyphCount( TrueTypeFont const * ttf );
-
-/**
- * provide access to the raw data of a SFNT-container's subtable
- */
- bool GetSfntTable( TrueTypeFont const * ttf, int nSubtableIndex,
-     const sal_uInt8** ppRawBytes, int* pRawLength );
-
 /*- private definitions */
 
 /* indexes into TrueTypeFont::tables[] and TrueTypeFont::tlens[] */
@@ -720,8 +709,26 @@ constexpr int O_gsub = 15;   /* 'GSUB' */
 constexpr int O_CFF = 16;   /* 'CFF' */
 constexpr int NUM_TAGS = 17;
 
-    struct TrueTypeFont {
-        char        *fname;
+class TrueTypeFont final
+{
+    char* m_pFileName;
+    sal_uInt32 m_nGlyphs;
+    sal_uInt32* m_pGlyphOffsets;
+    sal_uInt32 m_nHorzMetrics;
+    sal_uInt32 m_nVertMetrics; /* if not 0 => font has vertical metrics information */
+    sal_uInt32 m_nUnitsPerEm;
+
+    struct TTFontTable_
+    {
+        const sal_uInt8* pData = nullptr; /* pointer to a raw subtable in the SFNT file */
+        sal_uInt32 nSize = 0; /* table size */
+    };
+
+    std::array<struct TTFontTable_, NUM_TAGS> m_aTableList;
+
+    SFErrCodes indexGlyphData();
+
+public:
         sal_Int32   fsize;
         sal_uInt8   *ptr;
 
@@ -732,18 +739,38 @@ constexpr int NUM_TAGS = 17;
         sal_Unicode *usubfamily;
 
         sal_uInt32  ntables;
-        sal_uInt32  *goffsets;
-        sal_uInt32  nglyphs;
-        sal_uInt32  unitsPerEm;
-        sal_uInt32  numberOfHMetrics;
-        sal_uInt32  numOfLongVerMetrics;                   /* if this number is not 0, font has vertical metrics information */
         const sal_uInt8* cmap;
         int         cmapType;
         sal_uInt32 (*mapper)(const sal_uInt8 *, sal_uInt32, sal_uInt32); /* character to glyphID translation function                          */
-        std::array<const sal_uInt8 *, NUM_TAGS> tables;                  /* array of pointers to raw subtables in SFNT file                    */
-        std::array<sal_uInt32, NUM_TAGS>  tlens;                         /* array of table lengths                                             */
-    };
 
+    TrueTypeFont(const char* pFileName = nullptr);
+    ~TrueTypeFont();
+
+    SFErrCodes open(sal_uInt32 facenum);
+
+    const char* fileName() const { return m_pFileName; }
+    sal_uInt32 glyphCount() const { return m_nGlyphs; }
+    sal_uInt32 glyphOffset(sal_uInt32 glyphID) const { return m_pGlyphOffsets[glyphID]; }
+    sal_uInt32 horzMetricCount() const { return m_nHorzMetrics; }
+    sal_uInt32 vertMetricCount() const { return m_nVertMetrics; }
+    sal_uInt32 unitsPerEm() const { return m_nUnitsPerEm; }
+
+    bool hasTable(sal_uInt32 ord) const { return m_aTableList[ord].pData != nullptr; }
+    inline const sal_uInt8* table(sal_uInt32 ord, sal_uInt32& size) const;
+};
+
+const sal_uInt8* TrueTypeFont::table(sal_uInt32 ord, sal_uInt32& size) const
+{
+    if (ord >= NUM_TAGS)
+    {
+        size = 0;
+        return nullptr;
+    }
+
+    auto& rTable = m_aTableList[ord];
+    size = rTable.nSize;
+    return rTable.pData;
+}
 
 } // namespace vcl
 

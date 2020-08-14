@@ -27,7 +27,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/glyphitem.hxx>
 
-namespace vcl { struct TrueTypeFont; }         ///< SFT's idea of a TTF font
+namespace vcl { class TrueTypeFont; } ///< SFT's idea of a TTF font
 
 enum class FontType {
     NO_FONT     = 0,
