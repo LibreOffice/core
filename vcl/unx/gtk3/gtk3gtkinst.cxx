@@ -1700,7 +1700,6 @@ static MouseEventModifiers ImplGetMouseMoveMode(sal_uInt16 nCode)
 
 namespace
 {
-#if GTK_CHECK_VERSION(3,22,0)
     bool SwapForRTL(GtkWidget* pWidget)
     {
         GtkTextDirection eDir = gtk_widget_get_direction(pWidget);
@@ -1710,7 +1709,6 @@ namespace
             return false;
         return AllSettings::GetLayoutRTL();
     }
-#endif
 
     void replaceWidget(GtkWidget* pWidget, GtkWidget* pReplacement)
     {
@@ -1968,12 +1966,7 @@ protected:
 
     bool SwapForRTL() const
     {
-        GtkTextDirection eDir = gtk_widget_get_direction(m_pWidget);
-        if (eDir == GTK_TEXT_DIR_RTL)
-            return true;
-        if (eDir == GTK_TEXT_DIR_LTR)
-            return false;
-        return AllSettings::GetLayoutRTL();
+        return ::SwapForRTL(m_pWidget);
     }
 
     void do_enable_drag_source(rtl::Reference<TransferDataContainer>& rHelper, sal_uInt8 eDNDConstants)
@@ -7028,10 +7021,26 @@ GtkPositionType show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu)
     gtk_window_group_add_window(gtk_window_get_group(GTK_WINDOW(pToplevel)), pMenu);
     gtk_window_set_transient_for(pMenu, GTK_WINDOW(pToplevel));
 
-    GtkRequisition req;
-    gtk_widget_get_preferred_size(GTK_WIDGET(pMenu), nullptr, &req);
-    gint nMenuWidth = req.width;
-    gint nMenuHeight = req.height;
+    gint nMenuWidth, nMenuHeight;
+    gtk_widget_get_size_request(GTK_WIDGET(pMenu), &nMenuWidth, &nMenuHeight);
+
+    if (nMenuWidth == -1 || nMenuHeight == -1)
+    {
+        GtkRequisition req;
+        gtk_widget_get_preferred_size(GTK_WIDGET(pMenu), nullptr, &req);
+        if (nMenuWidth == -1)
+            nMenuWidth = req.width;
+        if (nMenuHeight == -1)
+            nMenuHeight = req.height;
+    }
+
+    bool bSwapForRTL = SwapForRTL(pMenuButton);
+    if (bSwapForRTL)
+    {
+        gint nButtonWidth = gtk_widget_get_allocated_width(pMenuButton);
+        x += nButtonWidth;
+        x -= nMenuWidth;
+    }
 
     tools::Rectangle aWorkArea(::get_monitor_workarea(pMenuButton));
 
@@ -7041,11 +7050,9 @@ GtkPositionType show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu)
     aWorkArea.AdjustBottom(-8);
     gint endx = x + nMenuWidth;
     if (endx > aWorkArea.Right())
-    {
         x -= endx - aWorkArea.Right();
-        if (x < 0)
-            x = 0;
-    }
+    if (x < 0)
+        x = 0;
 
     GtkPositionType ePosUsed = GTK_POS_BOTTOM;
 
@@ -7104,17 +7111,14 @@ bool show_menu_newer_gtk(GtkWidget* pComboBox, GtkWindow* pMenu)
     gtk_window_group_add_window(gtk_window_get_group(GTK_WINDOW(pToplevel)), pMenu);
     gtk_window_set_transient_for(pMenu, GTK_WINDOW(pToplevel));
 
-    GtkRequisition req;
-    gtk_widget_get_preferred_size(GTK_WIDGET(pMenu), nullptr, &req);
-    gint nMenuWidth = req.width;
+    gint nComboWidth = gtk_widget_get_allocated_width(pComboBox);
+    gint nComboHeight = gtk_widget_get_allocated_height(pComboBox);
 
-    gint nButtonHeight = gtk_widget_get_allocated_height(pComboBox);
+    bool bSwapForRTL = SwapForRTL(GTK_WIDGET(pComboBox));
 
-    GdkGravity rect_anchor = GDK_GRAVITY_SOUTH, menu_anchor = GDK_GRAVITY_NORTH;
-    GdkRectangle rect {static_cast<int>(x),
-                       static_cast<int>(y),
-                       static_cast<int>(nMenuWidth),
-                       static_cast<int>(nButtonHeight) };
+    GdkGravity rect_anchor = !bSwapForRTL ? GDK_GRAVITY_SOUTH_WEST : GDK_GRAVITY_SOUTH_EAST;
+    GdkGravity menu_anchor = !bSwapForRTL ? GDK_GRAVITY_NORTH_WEST : GDK_GRAVITY_NORTH_EAST;
+    GdkRectangle rect {x, y, nComboWidth, nComboHeight };
     GdkWindow* toplevel = gtk_widget_get_window(GTK_WIDGET(pMenu));
 
     window_move_to_rect(toplevel, &rect, rect_anchor, menu_anchor,
