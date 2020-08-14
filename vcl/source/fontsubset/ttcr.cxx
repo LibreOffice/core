@@ -1142,7 +1142,7 @@ void cmapAdd(TrueTypeTable *table, sal_uInt32 id, sal_uInt32 c, sal_uInt32 g)
     s[i].n++;
 }
 
-sal_uInt32 glyfAdd(TrueTypeTable *table, GlyphData *glyphdata, TrueTypeFont *fnt)
+sal_uInt32 glyfAdd(TrueTypeTable *table, GlyphData *glyphdata, AbstractTrueTypeFont *fnt)
 {
     list l;
     sal_uInt32 currentID;
