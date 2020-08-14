@@ -1150,7 +1150,7 @@ void Desktop::Exception(ExceptionCategory nCategory)
     {
         case ExceptionCategory::ResourceNotLoaded:
         {
-            Application::Abort( OUString() );
+            Application::Abort( "OS threw signal OSL_SIGNAL_USER_RESOURCEFAILURE" );
             break;
         }
 
@@ -1841,7 +1841,6 @@ class ExitTimer : public Timer
 
 IMPL_LINK_NOARG(Desktop, OpenClients_Impl, void*, void)
 {
-    try {
     // #i114963#
     // Enable IPC thread before OpenClients
     //
@@ -1869,9 +1868,6 @@ IMPL_LINK_NOARG(Desktop, OpenClients_Impl, void*, void)
     const char *pExitPostStartup = getenv ("OOO_EXIT_POST_STARTUP");
     if (pExitPostStartup && *pExitPostStartup)
         new ExitTimer();
-    } catch (const css::uno::Exception &e) {
-        Application::Abort( "UNO exception during client open: " + e.Message );
-    }
 }
 
 void Desktop::OpenClients()
