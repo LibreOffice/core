@@ -268,8 +268,6 @@ private:
     ExternalNameRef     createExternalName();
 
 private:
-    typedef RefVector< ExternalName >   ExternalNameVector;
-
     ExternalLinkType    meLinkType;         /// Type of this link object.
     FunctionLibraryType meFuncLibType;      /// Type of the function library, if link type is ExternalLinkType::Library.
     OUString            maRelId;            /// Relation identifier for the external link fragment.
@@ -278,7 +276,7 @@ private:
     css::uno::Reference< css::sheet::XExternalDocLink >
                         mxDocLink;          /// Interface for an external document.
     std::vector< sal_Int32 > maSheetCaches; /// External sheet cache indexes.
-    ExternalNameVector  maExtNames;         /// Defined names in external document.
+    RefVector< ExternalName >  maExtNames;         /// Defined names in external document.
 };
 
 typedef std::shared_ptr< ExternalLink > ExternalLinkRef;

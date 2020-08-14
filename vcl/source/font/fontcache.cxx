@@ -176,14 +176,14 @@ rtl::Reference<LogicalFontInstance> ImplFontCache::GetFontInstance( PhysicalFont
             struct limit_exception : public std::exception {};
             try
             {
-                maFontInstanceList.remove_if([this] (FontInstanceListPair const& rFontPair)
+                maFontInstanceList.remove_if([this] (FontInstanceList::key_value_pair_t const& rFontPair)
                     {
                         if (maFontInstanceList.size() < FONTCACHE_MAX)
                             throw limit_exception();
                         LogicalFontInstance* pFontEntry = rFontPair.second.get();
                         if (pFontEntry->m_nCount > 1)
                             return false;
-                        m_aBoundRectCache.remove_if([&pFontEntry] (GlyphBoundRectCachePair const& rGlyphPair)
+                        m_aBoundRectCache.remove_if([&pFontEntry] (GlyphBoundRectCache::key_value_pair_t const& rGlyphPair)
                             { return rGlyphPair.first.m_pFont == pFontEntry; });
                         if (mpLastHitCacheEntry == pFontEntry)
                             mpLastHitCacheEntry = nullptr;
