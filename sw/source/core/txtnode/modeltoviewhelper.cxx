@@ -31,7 +31,7 @@
 #include <txtftn.hxx>
 #include <scriptinfo.hxx>
 #include <IDocumentMarkAccess.hxx>
-#include <set>
+#include <o3tl/sorted_vector.hxx>
 #include <vector>
 
 namespace {
@@ -64,7 +64,7 @@ struct block
     sal_Int32 m_nStart;
     sal_Int32 m_nLen;
     bool m_bVisible;
-    std::set<FieldResult, sortfieldresults> m_aAttrs;
+    o3tl::sorted_vector<FieldResult, sortfieldresults> m_aAttrs;
     block(sal_Int32 nStart, sal_Int32 nLen, bool bVisible)
         : m_nStart(nStart), m_nLen(nLen), m_bVisible(bVisible)
     {
