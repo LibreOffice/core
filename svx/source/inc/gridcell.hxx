@@ -951,8 +951,7 @@ protected:
     virtual void onWindowEvent( const VclEventId _nEventId, const vcl::Window& _rWindow, const void* _pEventData ) override;
 };
 
-
-class FmXListBoxCell final :public FmXTextCell
+class FmXListBoxCell final : public FmXTextCell
 {
 public:
     FmXListBoxCell( DbGridColumn* pColumn, std::unique_ptr<DbCellControl> pControl );
@@ -965,13 +964,13 @@ public:
 private:
     virtual ~FmXListBoxCell() override;
 
-    DECL_LINK(ChangedHdl, weld::ComboBox&, void);
+    DECL_LINK(ChangedHdl, LinkParamNone*, void);
 
     void OnDoubleClick();
 
     ::comphelper::OInterfaceContainerHelper2   m_aItemListeners,
                                         m_aActionListeners;
-    weld::ComboBox* m_pBox;
+    VclPtr<::svt::ListBoxControl> m_pBox;
 };
 
 
