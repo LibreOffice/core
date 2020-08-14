@@ -324,6 +324,8 @@ namespace svt
         {
         }
         virtual bool ControlHasFocus() const = 0;
+    protected:
+        DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     };
 
     //= ComboBoxControl
