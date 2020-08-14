@@ -46,7 +46,7 @@
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/attrlist.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/servicehelper.hxx>

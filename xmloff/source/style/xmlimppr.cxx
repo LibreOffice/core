@@ -30,7 +30,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <xmloff/xmlprmap.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlimppr.hxx>
 #include <xmloff/xmlimp.hxx>
 

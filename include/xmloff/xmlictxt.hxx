@@ -26,7 +26,7 @@
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <rtl/ustring.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <memory>
 
 namespace com::sun::star::xml::sax { class XAttributeList; }

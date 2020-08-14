@@ -20,7 +20,7 @@
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
 #include <xmloff/families.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 
 #include <algorithm>
 

@@ -28,7 +28,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <EnhancedCustomShapeToken.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlement.hxx>
 #include <xexptran.hxx>

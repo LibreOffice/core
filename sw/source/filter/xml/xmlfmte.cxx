@@ -21,7 +21,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/attrlist.hxx>
 #include "xmlexpit.hxx"
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/XMLTextListAutoStylePool.hxx>
 #include <xmloff/XMLTextMasterPageExport.hxx>
 #include <xmloff/table/XMLTableExport.hxx>

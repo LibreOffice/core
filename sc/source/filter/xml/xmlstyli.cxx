@@ -18,7 +18,7 @@
  */
 
 #include "xmlstyli.hxx"
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlimppr.hxx>
 #include <xmloff/families.hxx>

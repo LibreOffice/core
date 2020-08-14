@@ -20,7 +20,7 @@
 
 #include <DomBuilderContext.hxx>
 
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlerror.hxx>
 

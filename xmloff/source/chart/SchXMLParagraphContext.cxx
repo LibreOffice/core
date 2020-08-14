@@ -23,7 +23,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 

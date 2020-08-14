@@ -27,7 +27,7 @@
 #include "TransformerActions.hxx"
 #include "FlatTContext.hxx"
 #include "AttrTransformerAction.hxx"
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star::uno;

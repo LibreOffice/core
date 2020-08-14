@@ -19,7 +19,7 @@
 
 #include <SwXMLSectionList.hxx>
 #include <xmloff/xmlictxt.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <vector>
 

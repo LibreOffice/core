@@ -36,7 +36,7 @@
 #include <comphelper/classids.hxx>
 #include <comphelper/sequence.hxx>
 
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/families.hxx>

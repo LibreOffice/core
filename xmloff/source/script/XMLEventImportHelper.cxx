@@ -21,7 +21,7 @@
 #include <XMLEventImportHelper.hxx>
 #include <tools/debug.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlerror.hxx>
 

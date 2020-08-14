@@ -28,7 +28,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>

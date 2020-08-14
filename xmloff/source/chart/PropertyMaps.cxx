@@ -38,7 +38,7 @@
 
 #include <xmloff/EnumPropertyHdl.hxx>
 #include <xmloff/attrlist.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/shapeimport.hxx>
 #include <xmloff/xmlexp.hxx>

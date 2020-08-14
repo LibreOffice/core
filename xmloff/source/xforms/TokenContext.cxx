@@ -23,7 +23,7 @@
 #include "TokenContext.hxx"
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlerror.hxx>
 
 #include <algorithm>

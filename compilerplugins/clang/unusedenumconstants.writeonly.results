@@ -2928,7 +2928,7 @@ include/xmloff/families.hxx:94
     enum XmlStyleFamily SD_MARKER_ID
 include/xmloff/families.hxx:95
     enum XmlStyleFamily SD_STROKE_DASH_ID
-include/xmloff/nmspmap.hxx:107
+include/xmloff/namespacemap.hxx:107
     enum SvXMLNamespaceMap::QNameMode AttrValue
 include/xmloff/shapeexport.hxx:55
     enum XMLShapeExportFlags SIZE

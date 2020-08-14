@@ -32,7 +32,7 @@
 #include <tools/fract.hxx>
 #include <tools/helpers.hxx>
 #include <tools/stream.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <svx/unoshape.hxx>

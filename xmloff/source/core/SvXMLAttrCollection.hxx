@@ -12,7 +12,7 @@
 
 #include "SvXMLAttr.hxx"
 
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <vector>

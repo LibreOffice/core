@@ -20,7 +20,7 @@
 #include <RDFaImportHelper.hxx>
 
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 
 #include <comphelper/sequence.hxx>
 

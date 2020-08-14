@@ -19,7 +19,7 @@
 
 #include "ProcAttrTContext.hxx"
 #include "TransformerBase.hxx"
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 
 
 using namespace ::com::sun::star::uno;

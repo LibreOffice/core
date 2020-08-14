@@ -20,7 +20,7 @@
 
 #include <DomExport.hxx>
 
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlerror.hxx>
 

@@ -37,7 +37,7 @@
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlstyle.hxx>
 #include <xmloff/prstylei.hxx>
 

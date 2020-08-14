@@ -40,7 +40,7 @@
 #include <cellatr.hxx>
 #include <ddefld.hxx>
 #include <swddetbl.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <unotbl.hxx>
 #include "xmltexte.hxx"

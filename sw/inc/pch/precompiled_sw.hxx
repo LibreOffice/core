@@ -417,7 +417,7 @@
 #include <unotools/useroptions.hxx>
 #include <xmloff/dllapi.h>
 #include <xmloff/families.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/odffields.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlnmspe.hxx>

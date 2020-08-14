@@ -25,7 +25,7 @@
 #include <svl/itempool.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/itemset.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <editeng/xmlcnitm.hxx>
 #include <editeng/memberids.h>
 #include <osl/diagnose.h>

@@ -44,7 +44,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlement.hxx>
 #include <txtflde.hxx>

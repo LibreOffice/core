@@ -23,7 +23,7 @@
 
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlnume.hxx>
 #include <xmloff/xmlimp.hxx>

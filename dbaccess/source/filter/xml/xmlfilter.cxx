@@ -35,7 +35,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlscripti.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <xmloff/ProgressBarHelper.hxx>

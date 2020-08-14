@@ -31,7 +31,7 @@
 #include <unotools/mediadescriptor.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlstyle.hxx>
 #include <xmloff/SchXMLSeriesHelper.hxx>

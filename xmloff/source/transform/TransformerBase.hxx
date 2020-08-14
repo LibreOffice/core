@@ -31,7 +31,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <rtl/ref.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 
 #include "Transformer.hxx"
 #include "TransformerActions.hxx"

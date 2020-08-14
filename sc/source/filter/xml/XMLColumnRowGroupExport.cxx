@@ -19,7 +19,7 @@
 
 #include "XMLColumnRowGroupExport.hxx"
 #include "xmlexprt.hxx"
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 

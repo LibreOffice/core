@@ -21,7 +21,7 @@
 #include "IgnoreTContext.hxx"
 #include "TransformerBase.hxx"
 #include "MutableAttrList.hxx"
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include "PersAttrListTContext.hxx"
 
 

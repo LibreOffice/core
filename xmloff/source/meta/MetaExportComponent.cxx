@@ -30,7 +30,7 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <osl/diagnose.h>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlmetae.hxx>
 #include <PropertySetMerger.hxx>

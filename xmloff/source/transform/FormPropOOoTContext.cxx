@@ -19,7 +19,7 @@
 
 #include "MutableAttrList.hxx"
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include "IgnoreTContext.hxx"
 #include "ActionMapTypesOOo.hxx"
 #include "AttrTransformerAction.hxx"

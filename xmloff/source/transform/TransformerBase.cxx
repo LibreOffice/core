@@ -25,7 +25,7 @@
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <sax/tools/converter.hxx>
 #include <comphelper/processfactory.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include "IgnoreTContext.hxx"
 #include "RenameElemTContext.hxx"

@@ -25,7 +25,7 @@
 #include <txtflde.hxx>
 #include <xmloff/XMLEventExport.hxx>
 #include <xmloff/families.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/numehelp.hxx>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmlexp.hxx>

@@ -25,7 +25,7 @@
 #include <utility>
 #include <xmloff/xmluconv.hxx>
 #include "xmlexpit.hxx"
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include "xmlbrshe.hxx"
 #include <editeng/brushitem.hxx>
 #include <fmtornt.hxx>
