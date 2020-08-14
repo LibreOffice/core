@@ -763,7 +763,7 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
     if( nRC != SFErrCodes::Ok )
         return;
 
-    const int nGlyphCount = ::GetTTGlyphCount( pSftFont );
+    const int nGlyphCount = pSftFont->glyphCount();
     if( nGlyphCount > 0 )
     {
         // get glyph metrics
