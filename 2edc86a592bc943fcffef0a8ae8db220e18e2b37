@@ -16,6 +16,24 @@
       "revId": "2edc86a592bc943fcffef0a8ae8db220e18e2b37",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d75a00ee_edb4b46e",
+        "filename": "solenv/gbuild/CppunitTest.mk",
+        "patchSetId": 8
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-08-14T11:15:50Z",
+      "side": 1,
+      "message": "Yeah. Probably not a typo, but that I mixed up the meaning of filter and filter-out; still happens. We want to get rid of svp here in the no_svp case. All interpretations of using filter here don\u0027t make any sense.\n\nOTOH, IMHO we still have too many headless modes ;-)",
+      "parentUuid": "a62682f3_cdee50cc",
+      "revId": "2edc86a592bc943fcffef0a8ae8db220e18e2b37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
