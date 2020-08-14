@@ -166,7 +166,7 @@
         <property name="label" translatable="yes" context="managechangessidebar|writersort">Sort By</property>
         <property name="use_underline">True</property>
         <child type="submenu">
-          <object class="GtkMenu">
+          <object class="GtkMenu" id="writersortmenu">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
