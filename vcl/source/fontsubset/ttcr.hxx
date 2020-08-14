@@ -192,7 +192,7 @@ namespace vcl
  * NOTE: This function does not duplicate GlyphData, so memory will be
  * deallocated in the table destructor
  */
-    sal_uInt32 glyfAdd(TrueTypeTable *, GlyphData *glyphdata, TrueTypeFont *fnt);
+    sal_uInt32 glyfAdd(TrueTypeTable *, GlyphData *glyphdata, AbstractTrueTypeFont *fnt);
 
 /**
  * Query the number of glyphs currently stored in the 'glyf' table

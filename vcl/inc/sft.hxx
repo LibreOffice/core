@@ -447,6 +447,7 @@ constexpr sal_uInt32 T_fpgm = 0x6670676D;
 constexpr sal_uInt32 T_gsub = 0x47535542;
 constexpr sal_uInt32 T_CFF  = 0x43464620;
 
+class AbstractTrueTypeFont;
 class TrueTypeFont;
 
 /**
@@ -512,7 +513,7 @@ class TrueTypeFont;
  * @ingroup sft
  *
  */
-    int GetTTGlyphPoints(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint **pointArray);
+    int GetTTGlyphPoints(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint **pointArray);
 
 /**
  * Extracts raw glyph data from the 'glyf' table and returns it in an allocated
@@ -526,7 +527,7 @@ class TrueTypeFont;
  * @ingroup sft
  *
  */
-    GlyphData *GetTTRawGlyphData(TrueTypeFont *ttf, sal_uInt32 glyphID);
+    GlyphData *GetTTRawGlyphData(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID);
 
 /**
  * For a specified glyph adds all component glyphs IDs to the list and
@@ -543,7 +544,7 @@ class TrueTypeFont;
  * @ingroup sft
  *
  */
-    int GetTTGlyphComponents(TrueTypeFont *ttf, sal_uInt32 glyphID, std::vector< sal_uInt32 >& glyphlist);
+    int GetTTGlyphComponents(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, std::vector< sal_uInt32 >& glyphlist);
 
 /**
  * Extracts all Name Records from the font and stores them in an allocated
@@ -556,7 +557,7 @@ class TrueTypeFont;
  * @ingroup sft
  */
 
-    int GetTTNameRecords(TrueTypeFont const *ttf, NameRecord **nr);
+    int GetTTNameRecords(AbstractTrueTypeFont const *ttf, NameRecord **nr);
 
 /**
  * Deallocates previously allocated array of NameRecords.
@@ -604,7 +605,7 @@ class TrueTypeFont;
  * @ingroup sft
  *
  */
-    VCL_DLLPUBLIC SFErrCodes CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
+    VCL_DLLPUBLIC SFErrCodes CreateTTFromTTGlyphs(AbstractTrueTypeFont  *ttf,
                               const char    *fname,
                               sal_uInt16 const *glyphArray,
                               sal_uInt8 const *encoding,
@@ -647,7 +648,7 @@ class TrueTypeFont;
  * @ingroup sft
  *
  */
-    VCL_DLLPUBLIC std::unique_ptr<sal_uInt16[]> GetTTSimpleGlyphMetrics(TrueTypeFont const *ttf, const sal_uInt16 *glyphArray, int nGlyphs, bool vertical);
+    VCL_DLLPUBLIC std::unique_ptr<sal_uInt16[]> GetTTSimpleGlyphMetrics(AbstractTrueTypeFont const *ttf, const sal_uInt16 *glyphArray, int nGlyphs, bool vertical);
 
 #if defined(_WIN32) || defined(MACOSX) || defined(IOS)
 /**
@@ -709,7 +710,7 @@ constexpr int O_gsub = 15;   /* 'GSUB' */
 constexpr int O_CFF = 16;   /* 'CFF' */
 constexpr int NUM_TAGS = 17;
 
-class TrueTypeFont final
+class VCL_DLLPUBLIC AbstractTrueTypeFont
 {
     char* m_pFileName;
     sal_uInt32 m_nGlyphs;
@@ -718,6 +719,26 @@ class TrueTypeFont final
     sal_uInt32 m_nVertMetrics; /* if not 0 => font has vertical metrics information */
     sal_uInt32 m_nUnitsPerEm;
 
+protected:
+    SFErrCodes indexGlyphData();
+
+public:
+    AbstractTrueTypeFont(const char* fileName = nullptr);
+    virtual ~AbstractTrueTypeFont();
+
+    const char* fileName() const { return m_pFileName; }
+    sal_uInt32 glyphCount() const { return m_nGlyphs; }
+    sal_uInt32 glyphOffset(sal_uInt32 glyphID) const { return m_pGlyphOffsets[glyphID]; }
+    sal_uInt32 horzMetricCount() const { return m_nHorzMetrics; }
+    sal_uInt32 vertMetricCount() const { return m_nVertMetrics; }
+    sal_uInt32 unitsPerEm() const { return m_nUnitsPerEm; }
+
+    virtual bool hasTable(sal_uInt32 ord) const = 0;
+    virtual const sal_uInt8* table(sal_uInt32 ord, sal_uInt32& size) const = 0;
+};
+
+class TrueTypeFont final : public AbstractTrueTypeFont
+{
     struct TTFontTable_
     {
         const sal_uInt8* pData = nullptr; /* pointer to a raw subtable in the SFNT file */
@@ -725,8 +746,6 @@ class TrueTypeFont final
     };
 
     std::array<struct TTFontTable_, NUM_TAGS> m_aTableList;
-
-    SFErrCodes indexGlyphData();
 
 public:
         sal_Int32   fsize;
@@ -744,19 +763,12 @@ public:
         sal_uInt32 (*mapper)(const sal_uInt8 *, sal_uInt32, sal_uInt32); /* character to glyphID translation function                          */
 
     TrueTypeFont(const char* pFileName = nullptr);
-    ~TrueTypeFont();
+    ~TrueTypeFont() override;
 
     SFErrCodes open(sal_uInt32 facenum);
 
-    const char* fileName() const { return m_pFileName; }
-    sal_uInt32 glyphCount() const { return m_nGlyphs; }
-    sal_uInt32 glyphOffset(sal_uInt32 glyphID) const { return m_pGlyphOffsets[glyphID]; }
-    sal_uInt32 horzMetricCount() const { return m_nHorzMetrics; }
-    sal_uInt32 vertMetricCount() const { return m_nVertMetrics; }
-    sal_uInt32 unitsPerEm() const { return m_nUnitsPerEm; }
-
-    bool hasTable(sal_uInt32 ord) const { return m_aTableList[ord].pData != nullptr; }
-    inline const sal_uInt8* table(sal_uInt32 ord, sal_uInt32& size) const;
+    bool hasTable(sal_uInt32 ord) const override { return m_aTableList[ord].pData != nullptr; }
+    inline const sal_uInt8* table(sal_uInt32 ord, sal_uInt32& size) const override;
 };
 
 const sal_uInt8* TrueTypeFont::table(sal_uInt32 ord, sal_uInt32& size) const
