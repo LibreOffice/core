@@ -29,6 +29,17 @@
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <com/sun/star/deployment/XPackageManager.hpp>
 
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/task/XJob.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/ucb/XProgressHandler.hpp>
+#include <cppuhelper/implbase.hxx>
+
 class AdditionsDialog;
 class SearchAndParseThread;
 class AdditionsItem;
@@ -56,7 +67,6 @@ class AdditionsDialog : public weld::GenericDialogController
 {
 private:
     Timer m_aSearchDataTimer;
-    css::uno::Reference<css::deployment::XExtensionManager> m_xExtensionManager;
 
     DECL_LINK(SearchUpdateHdl, weld::Entry&, void);
     DECL_LINK(ImplUpdateDataHdl, Timer*, void);
@@ -64,6 +74,7 @@ private:
     DECL_LINK(CloseButtonHdl, weld::Button&, void);
 
 public:
+    css::uno::Reference<css::deployment::XExtensionManager> m_xExtensionManager;
     std::unique_ptr<weld::Entry> m_xEntrySearch;
     std::unique_ptr<weld::Button> m_xButtonClose;
     std::unique_ptr<weld::MenuButton> m_xMenuButtonSettings;
@@ -98,6 +109,7 @@ class AdditionsItem
 public:
     AdditionsItem(weld::Widget* pParent, AdditionsDialog* pParentDialog,
                   AdditionInfo& additionInfo);
+    bool getExtensionFile(OUString& sExtensionFile);
 
     DECL_LINK(ShowMoreHdl, weld::Button&, void);
     DECL_LINK(InstallHdl, weld::Button&, void);
@@ -120,6 +132,7 @@ public:
     std::unique_ptr<weld::Button> m_xButtonShowMore;
     AdditionsDialog* m_pParentDialog;
     OUString m_sDownloadURL;
+    OUString m_sExtensionID;
 };
 
 class SearchAndParseThread : public salhelper::Thread
@@ -140,6 +153,29 @@ public:
     SearchAndParseThread(AdditionsDialog* pDialog, const bool& bIsFirstLoading);
 
     void StopExecution() { m_bExecute = false; }
+};
+
+class TmpRepositoryCommandEnv
+    : public ::cppu::WeakImplHelper<css::ucb::XCommandEnvironment, css::task::XInteractionHandler,
+                                    css::ucb::XProgressHandler>
+{
+public:
+    virtual ~TmpRepositoryCommandEnv() override;
+    TmpRepositoryCommandEnv();
+
+    // XCommandEnvironment
+    virtual css::uno::Reference<css::task::XInteractionHandler>
+        SAL_CALL getInteractionHandler() override;
+    virtual css::uno::Reference<css::ucb::XProgressHandler> SAL_CALL getProgressHandler() override;
+
+    // XInteractionHandler
+    virtual void SAL_CALL
+    handle(css::uno::Reference<css::task::XInteractionRequest> const& xRequest) override;
+
+    // XProgressHandler
+    virtual void SAL_CALL push(css::uno::Any const& Status) override;
+    virtual void SAL_CALL update(css::uno::Any const& Status) override;
+    virtual void SAL_CALL pop() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
