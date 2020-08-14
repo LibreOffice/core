@@ -551,6 +551,7 @@ void Desktop::DeInit()
     } catch (const RuntimeException&) {
         // someone threw an exception during shutdown
         // this will leave some garbage behind...
+        TOOLS_WARN_EXCEPTION("desktop.app", "exception throwing during shutdown, will leave some garbage behind");
     }
 }
 
@@ -2295,7 +2296,8 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         }
         break;
     case ApplicationEvent::Type::ShowDialog:
-        // ignore all errors here. It's clicking a menu entry only ...
+        // This is only used on macOS, and only for About or Preferences.
+        // Ignore all errors here. It's clicking a menu entry only ...
         // The user will try it again, in case nothing happens .-)
         try
         {
@@ -2319,7 +2321,9 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             }
         }
         catch(const css::uno::Exception&)
-        {}
+        {
+            TOOLS_WARN_EXCEPTION("desktop.app", "exception thrown by dialog");
+        }
         break;
     case ApplicationEvent::Type::Unaccept:
         // try to remove corresponding acceptor
