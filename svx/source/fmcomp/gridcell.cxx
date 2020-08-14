@@ -3895,6 +3895,8 @@ FmXListBoxCell::FmXListBoxCell(DbGridColumn* pColumn, std::unique_ptr<DbCellCont
   , m_aItemListeners(m_aMutex)
   , m_aActionListeners(m_aMutex)
   , m_pBox(&static_cast<svt::ListBoxControl&>(m_pCellControl->GetWindow()))
+  , m_nLines(Application::GetSettings().GetStyleSettings().GetListBoxMaximumLineCount())
+  , m_bMulti(false)
 {
     m_pBox->SetAuxModifyHdl(LINK(this, FmXListBoxCell, ChangedHdl));
 }
@@ -3921,7 +3923,267 @@ void FmXListBoxCell::disposing()
     FmXTextCell::disposing();
 }
 
+Any SAL_CALL FmXListBoxCell::queryAggregation( const css::uno::Type& _rType )
+{
+    Any aReturn = FmXTextCell::queryAggregation(_rType);
+
+    if ( !aReturn.hasValue() )
+        aReturn = FmXListBoxCell_Base::queryInterface( _rType );
+
+    return aReturn;
+}
+
+Sequence< css::uno::Type > SAL_CALL FmXListBoxCell::getTypes(  )
+{
+    return ::comphelper::concatSequences(
+        FmXTextCell::getTypes(),
+        FmXListBoxCell_Base::getTypes()
+    );
+}
+
 IMPLEMENT_GET_IMPLEMENTATION_ID( FmXListBoxCell )
+
+void SAL_CALL FmXListBoxCell::addItemListener(const Reference< css::awt::XItemListener >& l)
+{
+    m_aItemListeners.addInterface( l );
+}
+
+void SAL_CALL FmXListBoxCell::removeItemListener(const Reference< css::awt::XItemListener >& l)
+{
+    m_aItemListeners.removeInterface( l );
+}
+
+void SAL_CALL FmXListBoxCell::addActionListener(const Reference< css::awt::XActionListener >& l)
+{
+    m_aActionListeners.addInterface( l );
+}
+
+void SAL_CALL FmXListBoxCell::removeActionListener(const Reference< css::awt::XActionListener >& l)
+{
+    m_aActionListeners.removeInterface( l );
+}
+
+void SAL_CALL FmXListBoxCell::addItem(const OUString& aItem, sal_Int16 nPos)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if (m_pBox)
+    {
+        weld::ComboBox& rBox = m_pBox->get_widget();
+        rBox.insert_text(nPos, aItem);
+    }
+}
+
+void SAL_CALL FmXListBoxCell::addItems(const css::uno::Sequence<OUString>& aItems, sal_Int16 nPos)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if (m_pBox)
+    {
+        weld::ComboBox& rBox = m_pBox->get_widget();
+        sal_uInt16 nP = nPos;
+        for ( const auto& rItem : aItems )
+        {
+            rBox.insert_text(nP, rItem);
+            if ( nPos != -1 )    // Not if 0xFFFF, because LIST_APPEND
+                nP++;
+        }
+    }
+}
+
+void SAL_CALL FmXListBoxCell::removeItems(sal_Int16 nPos, sal_Int16 nCount)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if ( m_pBox )
+    {
+        weld::ComboBox& rBox = m_pBox->get_widget();
+        for ( sal_uInt16 n = nCount; n; )
+            rBox.remove( nPos + (--n) );
+    }
+}
+
+sal_Int16 SAL_CALL FmXListBoxCell::getItemCount()
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if (!m_pBox)
+        return 0;
+    weld::ComboBox& rBox = m_pBox->get_widget();
+    return rBox.get_count();
+}
+
+OUString SAL_CALL FmXListBoxCell::getItem(sal_Int16 nPos)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if (!m_pBox)
+        return OUString();
+    weld::ComboBox& rBox = m_pBox->get_widget();
+    return rBox.get_text(nPos);
+}
+
+css::uno::Sequence<OUString> SAL_CALL FmXListBoxCell::getItems()
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    css::uno::Sequence<OUString> aSeq;
+    if (m_pBox)
+    {
+        weld::ComboBox& rBox = m_pBox->get_widget();
+        const sal_Int32 nEntries = rBox.get_count();
+        aSeq = css::uno::Sequence<OUString>( nEntries );
+        for ( sal_Int32 n = nEntries; n; )
+        {
+            --n;
+            aSeq.getArray()[n] = rBox.get_text( n );
+        }
+    }
+    return aSeq;
+}
+
+sal_Int16 SAL_CALL FmXListBoxCell::getSelectedItemPos()
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if (m_pBox)
+    {
+        UpdateFromColumn();
+        weld::ComboBox& rBox = m_pBox->get_widget();
+        sal_Int32 nPos = rBox.get_active();
+        if (nPos > SHRT_MAX || nPos < SHRT_MIN)
+            throw std::out_of_range("awt::XListBox::getSelectedItemPos can only return a short");
+        return nPos;
+    }
+    return 0;
+}
+
+Sequence< sal_Int16 > SAL_CALL FmXListBoxCell::getSelectedItemsPos()
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    Sequence<sal_Int16> aSeq;
+
+    if (m_pBox)
+    {
+        UpdateFromColumn();
+        weld::ComboBox& rBox = m_pBox->get_widget();
+        auto nActive = rBox.get_active();
+        if (nActive != -1)
+        {
+            aSeq = Sequence<sal_Int16>(1);
+            aSeq.getArray()[0] = nActive;
+        }
+    }
+    return aSeq;
+}
+
+OUString SAL_CALL FmXListBoxCell::getSelectedItem()
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    OUString aItem;
+
+    if (m_pBox)
+    {
+        UpdateFromColumn();
+        weld::ComboBox& rBox = m_pBox->get_widget();
+        aItem = rBox.get_active_text();
+    }
+
+    return aItem;
+}
+
+css::uno::Sequence<OUString> SAL_CALL FmXListBoxCell::getSelectedItems()
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    css::uno::Sequence<OUString> aSeq;
+
+    if (m_pBox)
+    {
+        UpdateFromColumn();
+        weld::ComboBox& rBox = m_pBox->get_widget();
+        auto nActive = rBox.get_active();
+        if (nActive != -1)
+        {
+            aSeq = css::uno::Sequence<OUString>(1);
+            aSeq.getArray()[0] = rBox.get_text(nActive);
+        }
+    }
+    return aSeq;
+}
+
+void SAL_CALL FmXListBoxCell::selectItemPos(sal_Int16 nPos, sal_Bool bSelect)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    if (m_pBox)
+    {
+        weld::ComboBox& rBox = m_pBox->get_widget();
+        if (bSelect)
+            rBox.set_active(nPos);
+        else if (nPos == rBox.get_active())
+            rBox.set_active(-1);
+    }
+}
+
+void SAL_CALL FmXListBoxCell::selectItemsPos(const Sequence< sal_Int16 >& aPositions, sal_Bool bSelect)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    if (m_pBox)
+    {
+        weld::ComboBox& rBox = m_pBox->get_widget();
+        for ( sal_uInt16 n = static_cast<sal_uInt16>(aPositions.getLength()); n; )
+        {
+            auto nPos = static_cast<sal_uInt16>(aPositions.getConstArray()[--n]);
+            if (bSelect)
+                rBox.set_active(nPos);
+            else if (nPos == rBox.get_active())
+                rBox.set_active(-1);
+        }
+    }
+}
+
+void SAL_CALL FmXListBoxCell::selectItem(const OUString& aItem, sal_Bool bSelect)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    if (m_pBox)
+    {
+        weld::ComboBox& rBox = m_pBox->get_widget();
+        auto nPos = rBox.find_text(aItem);
+        if (bSelect)
+            rBox.set_active(nPos);
+        else if (nPos == rBox.get_active())
+            rBox.set_active(-1);
+    }
+}
+
+sal_Bool SAL_CALL FmXListBoxCell::isMutipleMode()
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    return m_bMulti;
+}
+
+void SAL_CALL FmXListBoxCell::setMultipleMode(sal_Bool bMulti)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    m_bMulti = bMulti;
+}
+
+sal_Int16 SAL_CALL FmXListBoxCell::getDropDownLineCount()
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    return m_nLines;
+}
+
+void SAL_CALL FmXListBoxCell::setDropDownLineCount(sal_Int16 nLines)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    m_nLines = nLines; // just store it to return it
+}
+
+void SAL_CALL FmXListBoxCell::makeVisible(sal_Int16 /*nEntry*/)
+{
+}
 
 IMPL_LINK_NOARG(FmXListBoxCell, ChangedHdl, LinkParamNone*, void)
 {
