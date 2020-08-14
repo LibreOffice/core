@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a62682f3_cdee50cc",
+        "filename": "solenv/gbuild/CppunitTest.mk",
+        "patchSetId": 8
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-08-14T10:43:34Z",
+      "side": 1,
+      "message": "Is this a typo? I would expect you wanted \"filter-out\" not \"filter\" here: i.e. if \"no svp\" is requested, then filter svp out, otherwise use the env vars as-is.",
+      "revId": "2edc86a592bc943fcffef0a8ae8db220e18e2b37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
