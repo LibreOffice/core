@@ -1546,6 +1546,7 @@ public:
     SFErrCodes open(void const * pBuffer, sal_uInt32 nLen, sal_uInt32 nFaceNum);
 
     TrueTypeFont * get() const { return m_pFont; }
+    TrueTypeFont* operator->() { return m_pFont; }
 
 private:
     TrueTypeFont * m_pFont;
@@ -1748,7 +1749,7 @@ void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
     if( nRC != SFErrCodes::Ok )
         return;
 
-    int nGlyphs = GetTTGlyphCount( aSftTTF.get() );
+    int nGlyphs = aSftTTF->glyphCount();
     if( nGlyphs > 0 )
     {
         rWidths.resize(nGlyphs);
