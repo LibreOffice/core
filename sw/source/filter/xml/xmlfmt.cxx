@@ -21,7 +21,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <fmtcol.hxx>
 #include <hints.hxx>
 #include <doc.hxx>

@@ -25,7 +25,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/graph.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>

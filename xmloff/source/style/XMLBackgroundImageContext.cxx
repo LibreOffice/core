@@ -31,7 +31,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
 #include <XMLBackgroundImageContext.hxx>

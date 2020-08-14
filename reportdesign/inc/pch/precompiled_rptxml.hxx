@@ -94,7 +94,7 @@
 #include <xmloff/dllapi.h>
 #include <xmloff/families.hxx>
 #include <xmloff/maptype.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/prstylei.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/xmlement.hxx>

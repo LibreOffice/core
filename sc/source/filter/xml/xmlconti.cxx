@@ -20,7 +20,7 @@
 #include "xmlconti.hxx"
 #include "xmlimprt.hxx"
 
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 

@@ -27,7 +27,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/prstylei.hxx>
 #include <xmloff/xmltoken.hxx>

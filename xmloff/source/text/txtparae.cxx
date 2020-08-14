@@ -77,7 +77,7 @@
 #include "XMLAnchorTypePropHdl.hxx"
 #include <xexptran.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <txtflde.hxx>
 #include <xmloff/txtprmap.hxx>

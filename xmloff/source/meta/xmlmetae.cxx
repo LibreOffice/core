@@ -23,7 +23,7 @@
 
 #include <xmloff/xmlmetae.hxx>
 #include <xmloff/xmlexp.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 
 #include <com/sun/star/beans/XPropertyAccess.hpp>

@@ -20,7 +20,7 @@
 #include "XMLAutoMarkFileContext.hxx"
 #include <xmloff/xmlimp.hxx>
 #include <rtl/ustring.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <com/sun/star/frame/XModel.hpp>

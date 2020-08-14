@@ -27,7 +27,7 @@
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmlstyle.hxx>
 #include <xmloff/prstylei.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmluconv.hxx>
 
 #include <rtl/math.hxx>

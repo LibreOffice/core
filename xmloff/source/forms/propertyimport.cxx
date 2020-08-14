@@ -27,7 +27,7 @@
 
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <o3tl/temporary.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>

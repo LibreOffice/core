@@ -21,7 +21,7 @@
 
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 

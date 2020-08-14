@@ -36,7 +36,7 @@
 #include <xmloff/xmlexppr.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/attrlist.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlprmap.hxx>

@@ -100,7 +100,7 @@
 
 #include <xmloff/contextid.hxx>
 #include <xmloff/families.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/shapeexport.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/xmlexp.hxx>

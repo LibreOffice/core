@@ -22,7 +22,7 @@
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>

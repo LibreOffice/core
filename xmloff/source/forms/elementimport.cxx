@@ -19,7 +19,7 @@
 
 #include "elementimport.hxx"
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include "strings.hxx"
 #include "callbacks.hxx"
 #include "attriblistmerge.hxx"

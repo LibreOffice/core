@@ -27,7 +27,7 @@
 #include <utility>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/attrlist.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/prhdlfac.hxx>
 #include <xmloff/xmltypes.hxx>

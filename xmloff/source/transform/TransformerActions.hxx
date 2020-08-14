@@ -21,7 +21,7 @@
 #define INCLUDED_XMLOFF_SOURCE_TRANSFORM_TRANSFORMERACTIONS_HXX
 
 #include <rtl/ustring.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include "TransformerActionInit.hxx"
 #include "TransformerAction.hxx"
 #include <boost/functional/hash.hpp>

@@ -105,7 +105,7 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/core/XMLEmbeddedObjectImportContext \
     xmloff/source/core/attrlist \
     xmloff/source/core/i18nmap \
-    xmloff/source/core/nmspmap \
+    xmloff/source/core/namespacemap \
     xmloff/source/core/unoatrcn \
     xmloff/source/core/unointerfacetouniqueidentifiermapper \
     xmloff/source/core/xmlcnimp \

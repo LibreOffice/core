@@ -20,7 +20,7 @@
 #include <editeng/memberids.h>
 #include <vcl/graph.hxx>
 
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltkmap.hxx>

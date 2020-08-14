@@ -56,7 +56,7 @@ one go*/
 #include <xmloff/DocumentSettingsContext.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <svx/dialmgr.hxx>

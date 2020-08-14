@@ -19,7 +19,7 @@
 
 #include <com/sun/star/style/TabAlign.hpp>
 #include <xmloff/xmltkmap.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <com/sun/star/style/TabStop.hpp>

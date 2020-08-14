@@ -34,7 +34,7 @@
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/maptype.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include "XMLSectionFootnoteConfigExport.hxx"
 #include <xmlsdtypes.hxx>
 #include <XMLNumberWithAutoForVoidPropHdl.hxx>

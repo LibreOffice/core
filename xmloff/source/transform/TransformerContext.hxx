@@ -24,7 +24,7 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <memory>
 

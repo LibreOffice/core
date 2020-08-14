@@ -260,7 +260,7 @@
 #include <unotools/unotoolsdllapi.h>
 #include <xmloff/dllapi.h>
 #include <xmloff/families.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmltoken.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4

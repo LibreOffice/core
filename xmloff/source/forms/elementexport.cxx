@@ -50,7 +50,7 @@
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
 #include <tools/urlobj.hxx>
 #include <xmloff/xmlexp.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/XMLEventExport.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>

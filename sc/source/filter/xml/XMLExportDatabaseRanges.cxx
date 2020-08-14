@@ -21,7 +21,7 @@
 #include "XMLExportDatabaseRanges.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <sax/tools/converter.hxx>
 #include "xmlexprt.hxx"
 #include "XMLExportIterator.hxx"

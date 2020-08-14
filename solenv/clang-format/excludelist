@@ -7515,7 +7515,7 @@ include/xmloff/formlayerimport.hxx
 include/xmloff/i18nmap.hxx
 include/xmloff/languagetagodf.hxx
 include/xmloff/maptype.hxx
-include/xmloff/nmspmap.hxx
+include/xmloff/namespacemap.hxx
 include/xmloff/numehelp.hxx
 include/xmloff/odffields.hxx
 include/xmloff/prhdlfac.hxx
@@ -17850,7 +17850,7 @@ xmloff/source/core/XMLEmbeddedObjectImportContext.cxx
 xmloff/source/core/attrlist.cxx
 xmloff/source/core/fasttokenhandler.cxx
 xmloff/source/core/i18nmap.cxx
-xmloff/source/core/nmspmap.cxx
+xmloff/source/core/namespacemap.cxx
 xmloff/source/core/unoatrcn.cxx
 xmloff/source/core/unointerfacetouniqueidentifiermapper.cxx
 xmloff/source/core/xmlcnimp.cxx

@@ -21,7 +21,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <sax/tools/converter.hxx>
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>

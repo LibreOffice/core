@@ -23,7 +23,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <sax/tools/converter.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include "PropType.hxx"

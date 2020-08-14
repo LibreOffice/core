@@ -37,7 +37,7 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/languagetagodf.hxx>

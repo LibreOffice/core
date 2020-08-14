@@ -21,7 +21,7 @@
 #include "PropertyMap.hxx"
 #include <SchXMLExport.hxx>
 #include <xmloff/families.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 
 
 SchXMLAutoStylePoolP::SchXMLAutoStylePoolP( SchXMLExport& rSchXMLExport ) :

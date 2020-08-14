@@ -22,7 +22,7 @@
 #include <com/sun/star/text/SectionFileLink.hpp>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <com/sun/star/uno/Reference.h>

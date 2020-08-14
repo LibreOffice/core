@@ -22,7 +22,7 @@
 #include <com/sun/star/util/XModifiable2.hpp>
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>

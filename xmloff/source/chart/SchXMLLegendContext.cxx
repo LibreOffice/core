@@ -22,7 +22,7 @@
 
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmluconv.hxx>
 
 #include <sal/log.hxx>
