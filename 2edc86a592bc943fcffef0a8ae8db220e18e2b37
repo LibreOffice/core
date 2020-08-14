@@ -34,6 +34,24 @@
       "revId": "2edc86a592bc943fcffef0a8ae8db220e18e2b37",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e993296e_1065236a",
+        "filename": "solenv/gbuild/CppunitTest.mk",
+        "patchSetId": 8
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-08-14T14:04:42Z",
+      "side": 1,
+      "message": "https://gerrit.libreoffice.org/c/core/+/100742 is meant to fix this.",
+      "parentUuid": "d75a00ee_edb4b46e",
+      "revId": "2edc86a592bc943fcffef0a8ae8db220e18e2b37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
