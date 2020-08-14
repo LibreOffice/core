@@ -868,6 +868,10 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
 
     SwDoc* pDoc = rMark.nNode.GetNode().GetDoc();
 
+    // if it's not in the doc array, probably missing some invalidation somewhere
+    assert(&rPoint.nNode.GetNodes() == &pDoc->GetNodes());
+    assert(&rMark.nNode.GetNodes() == &pDoc->GetNodes());
+
     ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     // 1. Footnotes
