@@ -61,7 +61,6 @@ struct GlyphBoundRectCacheHash
 
 typedef o3tl::lru_map<GlyphBoundRectCacheKey, tools::Rectangle,
                       GlyphBoundRectCacheHash> GlyphBoundRectCache;
-typedef GlyphBoundRectCache::key_value_pair_t GlyphBoundRectCachePair;
 
 class ImplFontCache
 {
@@ -70,7 +69,6 @@ private:
     struct IFSD_Equal { bool operator()( const FontSelectPattern&, const FontSelectPattern& ) const; };
     struct IFSD_Hash { size_t operator()( const FontSelectPattern& ) const; };
     typedef o3tl::lru_map<FontSelectPattern, rtl::Reference<LogicalFontInstance>, IFSD_Hash, IFSD_Equal> FontInstanceList;
-    typedef FontInstanceList::key_value_pair_t FontInstanceListPair;
 
     LogicalFontInstance* mpLastHitCacheEntry; ///< keeps the last hit cache entry
     FontInstanceList maFontInstanceList;

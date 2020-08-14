@@ -57,8 +57,6 @@ public:
 
 }
 
-typedef std::set<FieldResult, sortfieldresults> FieldResultSet;
-
 namespace {
 
 struct block
@@ -66,7 +64,7 @@ struct block
     sal_Int32 m_nStart;
     sal_Int32 m_nLen;
     bool m_bVisible;
-    FieldResultSet m_aAttrs;
+    std::set<FieldResult, sortfieldresults> m_aAttrs;
     block(sal_Int32 nStart, sal_Int32 nLen, bool bVisible)
         : m_nStart(nStart), m_nLen(nLen), m_bVisible(bVisible)
     {

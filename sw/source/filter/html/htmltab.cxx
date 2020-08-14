@@ -279,14 +279,13 @@ public:
 
 }
 
-// Row of a HTML table
-typedef std::vector<HTMLTableCell> HTMLTableCells;
 
 namespace {
 
+// Row of a HTML table
 class HTMLTableRow
 {
-    HTMLTableCells m_aCells;                ///< cells of the row
+    std::vector<HTMLTableCell> m_aCells;                ///< cells of the row
     std::unique_ptr<SvxBrushItem> xBGBrush; // background of cell from STYLE
 
     SvxAdjust eAdjust;
@@ -378,10 +377,6 @@ public:
 }
 
 // HTML table
-typedef std::vector<HTMLTableRow> HTMLTableRows;
-
-typedef std::vector<HTMLTableColumn> HTMLTableColumns;
-
 typedef std::vector<SdrObject *> SdrObjects;
 
 class HTMLTable
@@ -394,8 +389,8 @@ class HTMLTable
     std::unique_ptr<SdrObjects> m_pResizeDrawObjects;// SDR objects
     std::unique_ptr<std::vector<sal_uInt16>> m_pDrawObjectPercentWidths;   // column of draw object and its rel. width
 
-    HTMLTableRows m_aRows;         ///< table rows
-    HTMLTableColumns m_aColumns;   ///< table columns
+    std::vector<HTMLTableRow> m_aRows;         ///< table rows
+    std::vector<HTMLTableColumn> m_aColumns;   ///< table columns
 
     sal_uInt16 m_nRows;                   // number of rows
     sal_uInt16 m_nCols;                   // number of columns

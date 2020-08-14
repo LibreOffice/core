@@ -367,13 +367,13 @@ private:
 
     // internals
     typedef std::unique_ptr<std::vector<sal_uInt32> >  RangeIndexMapPtr;
-    typedef std::unique_ptr<ExternalRefListener>       ExtRefListenerPtr;
 
     sal_Int64                   m_nObjectId;
     ScDocument*                 m_pDocument;
     std::vector<ScTokenRef>     m_aTokens;
     RangeIndexMapPtr            m_pRangeIndices;
-    ExtRefListenerPtr           m_pExtRefListener;
+    std::unique_ptr<ExternalRefListener>
+                                m_pExtRefListener;
     SfxItemPropertySet          m_aPropSet;
 
     std::unique_ptr<HiddenRangeListener> m_pHiddenListener;

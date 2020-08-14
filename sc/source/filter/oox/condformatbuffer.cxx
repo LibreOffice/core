@@ -1123,7 +1123,6 @@ void CondFormatBuffer::finalizeImport()
 {
     std::unordered_set<size_t> aDoneExtCFs;
     typedef std::unordered_map<ScRangeList, CondFormat*, ScRangeListHasher> RangeMap;
-    typedef std::vector<std::unique_ptr<ScFormatEntry>> FormatEntries;
     RangeMap aRangeMap;
     for (auto& rxCondFormat : maCondFormats)
     {
@@ -1141,7 +1140,7 @@ void CondFormatBuffer::finalizeImport()
         if (it != aRangeMap.end())
         {
             CondFormat& rCondFormat = *it->second;
-            const FormatEntries& rEntries = rxExtCondFormat->getEntries();
+            const std::vector<std::unique_ptr<ScFormatEntry>>& rEntries = rxExtCondFormat->getEntries();
             const std::vector<sal_Int32>& rPriorities = rxExtCondFormat->getPriorities();
             size_t nEntryIdx = 0;
             for (const auto& rxEntry : rEntries)
