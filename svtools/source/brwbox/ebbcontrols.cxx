@@ -30,6 +30,7 @@ namespace svt
         InitControlBase(m_xWidget.get());
         m_xWidget->set_entry_width_chars(1); // so a smaller than default width can be used
         m_xWidget->connect_changed(LINK(this, ComboBoxControl, SelectHdl));
+        m_xWidget->connect_key_press(LINK(this, ControlBase, KeyInputHdl));
     }
 
     void ComboBoxControl::dispose()
@@ -114,6 +115,7 @@ namespace svt
         InitControlBase(m_xWidget.get());
         m_xWidget->set_size_request(42, -1); // so a later narrow size request can stick
         m_xWidget->connect_changed(LINK(this, ListBoxControl, SelectHdl));
+        m_xWidget->connect_key_press(LINK(this, ControlBase, KeyInputHdl));
     }
 
     void ListBoxControl::dispose()
