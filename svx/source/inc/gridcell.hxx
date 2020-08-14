@@ -997,18 +997,17 @@ private:
 
 typedef ::cppu::ImplHelper1 <   css::awt::XComboBox
                             >   FmXComboBoxCell_Base;
-class FmXComboBoxCell   :public FmXTextCell
-                        ,public FmXComboBoxCell_Base
+class FmXComboBoxCell final : public FmXTextCell
+                            , public FmXComboBoxCell_Base
 {
 private:
     ::comphelper::OInterfaceContainerHelper2   m_aItemListeners,
                                         m_aActionListeners;
-    weld::ComboBox* m_pComboBox;
+    VclPtr<::svt::ComboBoxControl> m_pComboBox;
     sal_uInt16 m_nLines;
 
-    DECL_LINK(ChangedHdl, weld::ComboBox&, void);
+    DECL_LINK(ChangedHdl, LinkParamNone*, void);
 
-protected:
     virtual ~FmXComboBoxCell() override;
 
 public:
