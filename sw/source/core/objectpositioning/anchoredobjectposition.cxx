@@ -292,6 +292,23 @@ void SwAnchoredObjectPosition::GetVertAlignmentValues(
             nOffset = aRectFnSet.YDiff(
                       aRectFnSet.GetPrtBottom(_rPageAlignLayFrame),
                       nVertOrientTop);
+
+            if (_rPageAlignLayFrame.IsPageFrame() && !aRectFnSet.IsVert())
+            {
+                const SwFrame* pPrtFrame =
+                    static_cast<const SwPageFrame&>(_rPageAlignLayFrame).Lower();
+
+                while (pPrtFrame)
+                {
+                    if (pPrtFrame->IsFooterFrame())
+                    {
+                        nHeight += pPrtFrame->getFrameArea().Height();
+                        nOffset -= pPrtFrame->getFrameArea().Height();
+                    }
+                    pPrtFrame = pPrtFrame->GetNext();
+                }
+            }
+
         }
         break;
         // #i22341# - vertical alignment at top of line
