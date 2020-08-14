@@ -4225,10 +4225,10 @@ FmXComboBoxCell::FmXComboBoxCell( DbGridColumn* pColumn, std::unique_ptr<DbCellC
     :FmXTextCell( pColumn, std::move(pControl) )
     ,m_aItemListeners( m_aMutex )
     ,m_aActionListeners( m_aMutex )
-    ,m_pComboBox(&static_cast<ComboBoxControl&>(m_pCellControl->GetWindow()).get_widget())
+    ,m_pComboBox(&static_cast<ComboBoxControl&>(m_pCellControl->GetWindow()))
     ,m_nLines(Application::GetSettings().GetStyleSettings().GetListBoxMaximumLineCount())
 {
-    m_pComboBox->connect_changed(LINK(this, FmXComboBoxCell, ChangedHdl));
+    m_pComboBox->SetAuxModifyHdl(LINK(this, FmXComboBoxCell, ChangedHdl));
 }
 
 FmXComboBoxCell::~FmXComboBoxCell()
@@ -4247,7 +4247,7 @@ void FmXComboBoxCell::disposing()
     m_aItemListeners.disposeAndClear(aEvt);
     m_aActionListeners.disposeAndClear(aEvt);
 
-    m_pComboBox->connect_changed( Link<weld::ComboBox&,void>() );
+    m_pComboBox->SetAuxModifyHdl(Link<LinkParamNone*,void>());
     m_pComboBox = nullptr;
 
     FmXTextCell::disposing();
@@ -4299,7 +4299,8 @@ void SAL_CALL FmXComboBoxCell::addItem( const OUString& Item, sal_Int16 Pos )
     ::osl::MutexGuard aGuard( m_aMutex );
     if (!m_pComboBox)
         return;
-    m_pComboBox->insert_text(Pos, Item);
+    weld::ComboBox& rBox = m_pComboBox->get_widget();
+    rBox.insert_text(Pos, Item);
 }
 
 void SAL_CALL FmXComboBoxCell::addItems( const Sequence< OUString >& Items, sal_Int16 Pos )
@@ -4307,10 +4308,11 @@ void SAL_CALL FmXComboBoxCell::addItems( const Sequence< OUString >& Items, sal_
     ::osl::MutexGuard aGuard( m_aMutex );
     if (!m_pComboBox)
         return;
+    weld::ComboBox& rBox = m_pComboBox->get_widget();
     sal_uInt16 nP = Pos;
     for ( const auto& rItem : Items )
     {
-        m_pComboBox->insert_text(nP, rItem);
+        rBox.insert_text(nP, rItem);
         if ( Pos != -1 )
             nP++;
     }
@@ -4321,8 +4323,9 @@ void SAL_CALL FmXComboBoxCell::removeItems( sal_Int16 Pos, sal_Int16 Count )
     ::osl::MutexGuard aGuard( m_aMutex );
     if (!m_pComboBox)
         return;
+    weld::ComboBox& rBox = m_pComboBox->get_widget();
     for ( sal_uInt16 n = Count; n; )
-        m_pComboBox->remove( Pos + (--n) );
+        rBox.remove( Pos + (--n) );
 }
 
 sal_Int16 SAL_CALL FmXComboBoxCell::getItemCount()
@@ -4330,7 +4333,8 @@ sal_Int16 SAL_CALL FmXComboBoxCell::getItemCount()
     ::osl::MutexGuard aGuard( m_aMutex );
     if (!m_pComboBox)
         return 0;
-    return m_pComboBox->get_count();
+    weld::ComboBox& rBox = m_pComboBox->get_widget();
+    return rBox.get_count();
 }
 
 OUString SAL_CALL FmXComboBoxCell::getItem( sal_Int16 Pos )
@@ -4338,7 +4342,8 @@ OUString SAL_CALL FmXComboBoxCell::getItem( sal_Int16 Pos )
     ::osl::MutexGuard aGuard( m_aMutex );
     if (!m_pComboBox)
         return OUString();
-    return m_pComboBox->get_text(Pos);
+    weld::ComboBox& rBox = m_pComboBox->get_widget();
+    return rBox.get_text(Pos);
 }
 
 Sequence< OUString > SAL_CALL FmXComboBoxCell::getItems()
@@ -4348,11 +4353,12 @@ Sequence< OUString > SAL_CALL FmXComboBoxCell::getItems()
     Sequence< OUString > aItems;
     if (m_pComboBox)
     {
-        const sal_Int32 nEntries = m_pComboBox->get_count();
+        weld::ComboBox& rBox = m_pComboBox->get_widget();
+        const sal_Int32 nEntries = rBox.get_count();
         aItems.realloc( nEntries );
         OUString* pItem = aItems.getArray();
         for ( sal_Int32 n=0; n<nEntries; ++n, ++pItem )
-            *pItem = m_pComboBox->get_text(n);
+            *pItem = rBox.get_text(n);
     }
     return aItems;
 }
@@ -4369,9 +4375,14 @@ void SAL_CALL FmXComboBoxCell::setDropDownLineCount(sal_Int16 nLines)
     m_nLines = nLines; // just store it to return it
 }
 
-IMPL_LINK_NOARG(FmXComboBoxCell, ChangedHdl, weld::ComboBox&, void)
+IMPL_LINK_NOARG(FmXComboBoxCell, ChangedHdl, LinkParamNone*, void)
 {
-    if (!m_pComboBox || !m_pComboBox->changed_by_direct_pick())
+    if (!m_pComboBox)
+        return;
+
+    weld::ComboBox& rComboBox = m_pComboBox->get_widget();
+
+    if (!rComboBox.changed_by_direct_pick())
         return;
 
     awt::ItemEvent aEvent;
@@ -4379,8 +4390,8 @@ IMPL_LINK_NOARG(FmXComboBoxCell, ChangedHdl, weld::ComboBox&, void)
     aEvent.Highlighted = 0;
 
     // with invalid selection 0xFFFF, otherwise the position
-    aEvent.Selected =   ( m_pComboBox->get_active() != -1 )
-                    ?   m_pComboBox->get_active()
+    aEvent.Selected =   ( rComboBox.get_active() != -1 )
+                    ?   rComboBox.get_active()
                     :   0xFFFF;
     m_aItemListeners.notifyEach( &awt::XItemListener::itemStateChanged, aEvent );
 }
