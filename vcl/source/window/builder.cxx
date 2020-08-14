@@ -342,7 +342,12 @@ namespace weld
 
     int MetricSpinButton::ConvertValue(int nValue, FieldUnit eInUnit, FieldUnit eOutUnit) const
     {
-        return vcl::ConvertValue(nValue, 0, m_xSpinButton->get_digits(), eInUnit, eOutUnit);
+        auto nRet = vcl::ConvertValue(nValue, 0, m_xSpinButton->get_digits(), eInUnit, eOutUnit);
+        if (nRet > SAL_MAX_INT32)
+            nRet = SAL_MAX_INT32;
+        else if (nRet < SAL_MIN_INT32)
+            nRet = SAL_MIN_INT32;
+        return nRet;
     }
 
     IMPL_LINK(MetricSpinButton, spin_button_input, int*, result, bool)
