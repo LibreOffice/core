@@ -141,6 +141,76 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVertAlignBottomMargin)
     // Verify that the distance between the bottom of body and top of third shape is around 0cm. (align=top)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nThirdShapeTop - nBodyBottom);
 }
+
+CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVertAlignBottomMarginWithFooter)
+{
+    // Load an empty document with footer.
+    load(DATA_DIRECTORY, "bottom-margin-with-footer.docx");
+    uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+
+    // Insert three shapes and align it the bottom,center,top of page print area bottom.
+    // The height of page print area bottom is 2268 ~ 4cm.
+    // The size of shapes are 567 ~ 1cm
+    // Create first shape and align bottom of page print area bottom.
+    uno::Reference<drawing::XShape> xShapeBottom(
+        xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+    xShapeBottom->setSize(awt::Size(1000, 1000));
+    uno::Reference<beans::XPropertySet> xShapePropsBottom(xShapeBottom, uno::UNO_QUERY);
+    xShapePropsBottom->setPropertyValue("AnchorType",
+                                        uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
+    xShapePropsBottom->setPropertyValue("VertOrient", uno::makeAny(text::VertOrientation::BOTTOM));
+    xShapePropsBottom->setPropertyValue("VertOrientRelation",
+                                        uno::makeAny(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplierBottom(mxComponent, uno::UNO_QUERY);
+    xDrawPageSupplierBottom->getDrawPage()->add(xShapeBottom);
+
+    // Create second shape and align center of page print area bottom.
+    uno::Reference<drawing::XShape> xShapeCenter(
+        xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+    xShapeCenter->setSize(awt::Size(1000, 1000));
+    uno::Reference<beans::XPropertySet> xShapePropsCenter(xShapeCenter, uno::UNO_QUERY);
+    xShapePropsCenter->setPropertyValue("AnchorType",
+                                        uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
+    xShapePropsCenter->setPropertyValue("VertOrient", uno::makeAny(text::VertOrientation::CENTER));
+    xShapePropsCenter->setPropertyValue("VertOrientRelation",
+                                        uno::makeAny(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplierCenter(mxComponent, uno::UNO_QUERY);
+    xDrawPageSupplierCenter->getDrawPage()->add(xShapeCenter);
+
+    // Create third shape and align top of page print area bottom.
+    uno::Reference<drawing::XShape> xShapeTop(
+        xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+    xShapeTop->setSize(awt::Size(1000, 1000));
+    uno::Reference<beans::XPropertySet> xShapePropsTop(xShapeTop, uno::UNO_QUERY);
+    xShapePropsTop->setPropertyValue("AnchorType",
+                                     uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
+    xShapePropsTop->setPropertyValue("VertOrient", uno::makeAny(text::VertOrientation::TOP));
+    xShapePropsTop->setPropertyValue("VertOrientRelation",
+                                     uno::makeAny(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplierTop(mxComponent, uno::UNO_QUERY);
+    xDrawPageSupplierTop->getDrawPage()->add(xShapeTop);
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nBodyBottom = getXPath(pXmlDoc, "//body/infos/bounds", "bottom").toInt32(); //14853
+    sal_Int32 nPageBottom = getXPath(pXmlDoc, "//page/infos/bounds", "bottom").toInt32(); //17121
+    sal_Int32 nFirstShapeBottom
+        = getXPath(pXmlDoc, "//SwAnchoredDrawObject[1]/bounds", "bottom").toInt32(); //17122
+    sal_Int32 nSecondShapeTop
+        = getXPath(pXmlDoc, "//SwAnchoredDrawObject[2]/bounds", "top").toInt32(); //15703
+    sal_Int32 nSecondShapeBottom
+        = getXPath(pXmlDoc, "//SwAnchoredDrawObject[2]/bounds", "bottom").toInt32(); //16272
+    sal_Int32 nThirdShapeTop
+        = getXPath(pXmlDoc, "//SwAnchoredDrawObject[3]/bounds", "top").toInt32(); //14853
+
+    // Verify that the distance between the bottom of page and bottom of first shape is around 0cm. (align=bottom)
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nFirstShapeBottom - nPageBottom);
+    // Verify that the distance between the bottom of page and bottom of second shape is around 1.5cm and
+    // verify that the distance between the bottom of body and top of second shape is around 1.5cm.(align=center)
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(849), nPageBottom - nSecondShapeBottom);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(850), nSecondShapeTop - nBodyBottom);
+    // Verify that the distance between the bottom of body and top of third shape is around 0cm. (align=top)
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nThirdShapeTop - nBodyBottom);
+}
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
