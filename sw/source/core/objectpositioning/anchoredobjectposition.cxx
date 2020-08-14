@@ -285,6 +285,34 @@ void SwAnchoredObjectPosition::GetVertAlignmentValues(
             }
         }
         break;
+<<<<<<< HEAD   (19bbd0 tdf#135918 XLSX DrawingML shape import: fix needless displac)
+=======
+        case text::RelOrientation::PAGE_PRINT_AREA_BOTTOM:
+        {
+            nHeight = aRectFnSet.GetBottomMargin(_rPageAlignLayFrame);
+            nOffset = aRectFnSet.YDiff(
+                      aRectFnSet.GetPrtBottom(_rPageAlignLayFrame),
+                      nVertOrientTop);
+
+            if (_rPageAlignLayFrame.IsPageFrame() && !aRectFnSet.IsVert())
+            {
+                const SwFrame* pPrtFrame =
+                    static_cast<const SwPageFrame&>(_rPageAlignLayFrame).Lower();
+
+                while (pPrtFrame)
+                {
+                    if (pPrtFrame->IsFooterFrame())
+                    {
+                        nHeight += pPrtFrame->getFrameArea().Height();
+                        nOffset -= pPrtFrame->getFrameArea().Height();
+                    }
+                    pPrtFrame = pPrtFrame->GetNext();
+                }
+            }
+
+        }
+        break;
+>>>>>>> CHANGE (678813 tdf#135720 sw: fix PAGE_PRINT_AREA_BOTTOM alignment with foo)
         // #i22341# - vertical alignment at top of line
         case text::RelOrientation::TEXT_LINE:
         {
