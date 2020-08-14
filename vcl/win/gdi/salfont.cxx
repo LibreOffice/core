@@ -1748,7 +1748,7 @@ void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
     if( nRC != SFErrCodes::Ok )
         return;
 
-    int nGlyphs = GetTTGlyphCount( aSftTTF.get() );
+    int nGlyphs = aSftTTF->glyphCount();
     if( nGlyphs > 0 )
     {
         rWidths.resize(nGlyphs);
