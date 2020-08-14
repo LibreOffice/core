@@ -50,6 +50,9 @@
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 
+#include <com/sun/star/task/XInteractionApprove.hpp>
+#include <cppuhelper/implbase.hxx>
+
 //cURL
 #include <curl/curl.h>
 #include <orcus/json_document_tree.hpp>
@@ -74,6 +77,7 @@ using ::com::sun::star::graphic::XGraphicProvider;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::graphic::XGraphic;
+
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
@@ -264,7 +268,6 @@ bool getPreviewFile(const AdditionInfo& aAdditionInfo, OUString& sPreviewFile)
 {
     uno::Reference<ucb::XSimpleFileAccess3> xFileAccess
         = ucb::SimpleFileAccess::create(comphelper::getProcessComponentContext());
-    Reference<XComponentContext> xContext(::comphelper::getProcessComponentContext());
 
     // copy the images to the user's additions folder
     OUString userFolder = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER
@@ -595,6 +598,7 @@ AdditionsItem::AdditionsItem(weld::Widget* pParent, AdditionsDialog* pParentDial
     , m_xButtonShowMore(m_xBuilder->weld_button("buttonShowMore"))
     , m_pParentDialog(pParentDialog)
     , m_sDownloadURL("")
+    , m_sExtensionID("")
 {
     SolarMutexGuard aGuard;
 
@@ -632,9 +636,39 @@ AdditionsItem::AdditionsItem(weld::Widget* pParent, AdditionsDialog* pParentDial
     m_xLabelDownloadNumber->set_label(additionInfo.sDownloadNumber);
     m_pParentDialog = pParentDialog;
     m_sDownloadURL = additionInfo.sDownloadURL;
+    m_sExtensionID = additionInfo.sExtensionID;
 
     m_xButtonShowMore->connect_clicked(LINK(this, AdditionsItem, ShowMoreHdl));
     m_xButtonInstall->connect_clicked(LINK(this, AdditionsItem, InstallHdl));
+}
+
+bool AdditionsItem::getExtensionFile(OUString& sExtensionFile)
+{
+    uno::Reference<ucb::XSimpleFileAccess3> xFileAccess
+        = ucb::SimpleFileAccess::create(comphelper::getProcessComponentContext());
+
+    // copy the extensions' files to the user's additions folder
+    OUString userFolder = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER
+                          "/" SAL_CONFIGFILE("bootstrap") "::UserInstallation}";
+    rtl::Bootstrap::expandMacros(userFolder);
+    userFolder += "/user/additions/" + m_sExtensionID + "/";
+
+    OUString aExtesionsFile(INetURLObject(m_sDownloadURL).getName());
+    OString aExtesionsURL = OUStringToOString(m_sDownloadURL, RTL_TEXTENCODING_UTF8);
+
+    try
+    {
+        osl::Directory::createPath(userFolder);
+
+        if (!xFileAccess->exists(userFolder + aExtesionsFile))
+            curlDownload(aExtesionsURL, userFolder + aExtesionsFile);
+    }
+    catch (const uno::Exception&)
+    {
+        return false;
+    }
+    sExtensionFile = userFolder + aExtesionsFile;
+    return true;
 }
 
 IMPL_LINK_NOARG(AdditionsDialog, ImplUpdateDataHdl, Timer*, void)
@@ -681,7 +715,108 @@ IMPL_LINK_NOARG(AdditionsItem, ShowMoreHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(AdditionsItem, InstallHdl, weld::Button&, void)
 {
-    m_xButtonInstall->set_label("Success");
+    m_xButtonInstall->set_label("Installing");
+    m_xButtonInstall->set_sensitive(false);
+    OUString aExtensionFile;
+    bool bResult = getExtensionFile(aExtensionFile); // info vector json data
+
+    if (!bResult)
+    {
+        m_xButtonInstall->set_label("Install");
+        m_xButtonInstall->set_sensitive(true);
+
+        SAL_INFO("cui.dialogs", "Couldn't get the extension file.");
+        return;
+    }
+
+    TmpRepositoryCommandEnv* pCmdEnv = new TmpRepositoryCommandEnv();
+    uno::Reference<ucb::XCommandEnvironment> xCmdEnv(static_cast<cppu::OWeakObject*>(pCmdEnv),
+                                                     uno::UNO_QUERY);
+    uno::Reference<task::XAbortChannel> xAbortChannel;
+    try
+    {
+        m_pParentDialog->m_xExtensionManager->addExtension(
+            aExtensionFile, uno::Sequence<beans::NamedValue>(), "user", xAbortChannel, xCmdEnv);
+        m_xButtonInstall->set_label("Installed");
+    }
+    catch (const ucb::CommandFailedException)
+    {
+        SAL_WARN("cui.dialogs", "Additions: addExtension CommandFailedException occured.");
+        m_xButtonInstall->set_label("Install");
+        m_xButtonInstall->set_sensitive(true);
+    }
+    catch (const ucb::CommandAbortedException)
+    {
+        SAL_WARN("cui.dialogs", "Additions: addExtension CommandAbortedException occured.");
+        m_xButtonInstall->set_label("Install");
+        m_xButtonInstall->set_sensitive(true);
+    }
+    catch (const deployment::DeploymentException)
+    {
+        SAL_WARN("cui.dialogs", "Additions: addExtension DeploymentException occured.");
+        m_xButtonInstall->set_label("Install");
+        m_xButtonInstall->set_sensitive(true);
+    }
+    catch (const lang::IllegalArgumentException)
+    {
+        SAL_WARN("cui.dialogs", "Additions: addExtension IllegalArgumentException occured.");
+        m_xButtonInstall->set_label("Install");
+        m_xButtonInstall->set_sensitive(true);
+    }
+    catch (const css::uno::Exception)
+    {
+        SAL_WARN("cui.dialogs", "Additions: addExtension Exception occured.");
+        m_xButtonInstall->set_label("Install");
+        m_xButtonInstall->set_sensitive(true);
+    }
 }
+
+// TmpRepositoryCommandEnv
+
+TmpRepositoryCommandEnv::TmpRepositoryCommandEnv() {}
+
+TmpRepositoryCommandEnv::~TmpRepositoryCommandEnv() {}
+// XCommandEnvironment
+
+uno::Reference<task::XInteractionHandler> TmpRepositoryCommandEnv::getInteractionHandler()
+{
+    return this;
+}
+
+uno::Reference<ucb::XProgressHandler> TmpRepositoryCommandEnv::getProgressHandler() { return this; }
+
+// XInteractionHandler
+void TmpRepositoryCommandEnv::handle(uno::Reference<task::XInteractionRequest> const& xRequest)
+{
+    OSL_ASSERT(xRequest->getRequest().getValueTypeClass() == uno::TypeClass_EXCEPTION);
+
+    bool approve = true;
+
+    // select:
+    uno::Sequence<Reference<task::XInteractionContinuation>> conts(xRequest->getContinuations());
+    Reference<task::XInteractionContinuation> const* pConts = conts.getConstArray();
+    sal_Int32 len = conts.getLength();
+    for (sal_Int32 pos = 0; pos < len; ++pos)
+    {
+        if (approve)
+        {
+            uno::Reference<task::XInteractionApprove> xInteractionApprove(pConts[pos],
+                                                                          uno::UNO_QUERY);
+            if (xInteractionApprove.is())
+            {
+                xInteractionApprove->select();
+                // don't query again for ongoing continuations:
+                approve = false;
+            }
+        }
+    }
+}
+
+// XProgressHandler
+void TmpRepositoryCommandEnv::push(uno::Any const& /*Status*/) {}
+
+void TmpRepositoryCommandEnv::update(uno::Any const& /*Status */) {}
+
+void TmpRepositoryCommandEnv::pop() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
