@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "953ae29e_2e7a218e",
+        "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1629,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-08-14T12:16:37Z",
+      "side": 1,
+      "message": "here we force headers to be written, this was needed for tdf98000_changePageStyle.odt test",
+      "revId": "6e971610e8de6d08d8609a044f4590e146976ea2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
