@@ -2104,6 +2104,7 @@ res/lx03245_32.png res/odb_32_8.png
 res/lx03246_32.png res/odg_32_8.png
 res/lx03247_32.png res/odf_32_8.png
 res/lx03248_32.png res/odm_32_8.png
+res/lx03249.png res/odp_24_8.png
 res/lx03249_32.png res/odp_32_8.png
 res/lx03250_32.png res/ods_32_8.png
 res/lx03251_32.png res/odt_32_8.png
