@@ -22,6 +22,30 @@
       "revId": "bda7556020cacc4da16905e4b29bf4e853d5a725",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aee2d026_813c8706",
+        "filename": "icon-themes/colibre/links.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 2111,
+      "author": {
+        "id": 1001872
+      },
+      "writtenOn": "2020-08-14T12:16:34Z",
+      "side": 0,
+      "message": "Apologize, this is accidentally carried. Sometime ago I have a discussion with Maxim and he ask me to send a change related to these line then it became unnecessary with Caolan fix, and I forgot to remove them locally.",
+      "parentUuid": "c040c07f_88a74a94",
+      "range": {
+        "startLine": 2111,
+        "startChar": 0,
+        "endLine": 2111,
+        "endChar": 32
+      },
+      "revId": "bda7556020cacc4da16905e4b29bf4e853d5a725",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
