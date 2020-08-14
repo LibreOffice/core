@@ -45,6 +45,7 @@ public:
 
     sal_IntPtr GetFontId() const override;
 
+    QFont CreateFont() const;
     int GetFontTable(const char pTagName[5], unsigned char*) const;
 
     const FontCharMapRef& GetFontCharMap() const;

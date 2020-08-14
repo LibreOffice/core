@@ -22,6 +22,7 @@
 #include <Qt5Font.hxx>
 #include <Qt5Painter.hxx>
 
+#include <fontsubset.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <unx/geninst.h>
 #include <unx/fontmanager.hxx>
@@ -129,12 +130,161 @@ bool Qt5Graphics::AddTempDevFont(PhysicalFontCollection*, const OUString& /*rFil
     return false;
 }
 
-bool Qt5Graphics::CreateFontSubset(const OUString& /*rToFile*/, const PhysicalFontFace* /*pFont*/,
-                                   const sal_GlyphId* /*pGlyphIds*/, const sal_uInt8* /*pEncoding*/,
-                                   sal_Int32* /*pWidths*/, int /*nGlyphs*/,
-                                   FontSubsetInfo& /*rInfo*/)
+namespace
 {
-    return false;
+class Qt5TrueTypeFont : public vcl::AbstractTrueTypeFont
+{
+    const QRawFont& m_aRawFont;
+    mutable QByteArray m_aFontTable[vcl::NUM_TAGS];
+
+public:
+    Qt5TrueTypeFont(const QRawFont& aRawFont);
+
+    bool hasTable(sal_uInt32 ord) const override;
+    const sal_uInt8* table(sal_uInt32 ord, sal_uInt32& size) const override;
+};
+
+Qt5TrueTypeFont::Qt5TrueTypeFont(const QRawFont& aRawFont)
+    : m_aRawFont(aRawFont)
+{
+    indexGlyphData();
+}
+
+const char* vclFontTableAsChar(sal_uInt32 ord)
+{
+    switch (ord)
+    {
+        case vcl::O_maxp:
+            return "maxp";
+        case vcl::O_glyf:
+            return "glyf";
+        case vcl::O_head:
+            return "head";
+        case vcl::O_loca:
+            return "loca";
+        case vcl::O_name:
+            return "name";
+        case vcl::O_hhea:
+            return "hhea";
+        case vcl::O_hmtx:
+            return "hmtx";
+        case vcl::O_cmap:
+            return "cmap";
+        case vcl::O_vhea:
+            return "vhea";
+        case vcl::O_vmtx:
+            return "vmtx";
+        case vcl::O_OS2:
+            return "OS/2";
+        case vcl::O_post:
+            return "post";
+        case vcl::O_cvt:
+            return "cvt ";
+        case vcl::O_prep:
+            return "prep";
+        case vcl::O_fpgm:
+            return "fpgm";
+        case vcl::O_gsub:
+            return "gsub";
+        case vcl::O_CFF:
+            return "CFF ";
+        default:
+            return nullptr;
+    }
+}
+
+bool Qt5TrueTypeFont::hasTable(sal_uInt32 ord) const
+{
+    const char* table_char = vclFontTableAsChar(ord);
+    if (!table_char)
+        return false;
+    if (m_aFontTable[ord].isEmpty())
+        m_aFontTable[ord] = m_aRawFont.fontTable(table_char);
+    return !m_aFontTable[ord].isEmpty();
+}
+
+const sal_uInt8* Qt5TrueTypeFont::table(sal_uInt32 ord, sal_uInt32& size) const
+{
+    const char* table_char = vclFontTableAsChar(ord);
+    if (!table_char)
+        return nullptr;
+    if (m_aFontTable[ord].isEmpty())
+        m_aFontTable[ord] = m_aRawFont.fontTable(table_char);
+    size = m_aFontTable[ord].size();
+    return reinterpret_cast<const sal_uInt8*>(m_aFontTable[ord].data());
+}
+}
+
+bool Qt5Graphics::CreateFontSubset(const OUString& rToFile, const PhysicalFontFace* pFontFace,
+                                   const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
+                                   sal_Int32* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rInfo)
+{
+    // prepare the requested file name for writing the font-subset file
+    OUString aSysPath;
+    if (osl_File_E_None != osl_getSystemPathFromFileURL(rToFile.pData, &aSysPath.pData))
+        return false;
+
+    // get the raw-bytes from the font to be subset
+    const QFont aFont = static_cast<const Qt5FontFace*>(pFontFace)->CreateFont();
+    const QRawFont aRawFont(QRawFont::fromFont(aFont));
+    const QFontInfo aFontInfo(aFont);
+    const OString aToFile(OUStringToOString(aSysPath, osl_getThreadTextEncoding()));
+    const int nOrigGlyphCount = nGlyphCount;
+
+    // get details about the subsetted font
+    rInfo.m_nFontType = FontType::SFNT_TTF;
+    rInfo.m_aPSName = toOUString(aRawFont.familyName());
+    rInfo.m_nCapHeight = aRawFont.capHeight();
+    rInfo.m_nAscent = aRawFont.ascent();
+    rInfo.m_nDescent = aRawFont.descent();
+
+    sal_uInt16 aShortIDs[nGlyphCount + 1];
+    sal_uInt8 aTempEncs[nGlyphCount + 1];
+    quint32 aQtGlyphId[nGlyphCount + 1];
+
+    int nNotDef = -1;
+
+    for (int i = 0; i < nGlyphCount; ++i)
+    {
+        aTempEncs[i] = pEncoding[i];
+
+        sal_GlyphId aGlyphId(pGlyphIds[i]);
+        aShortIDs[i] = static_cast<sal_uInt16>(aGlyphId);
+        aQtGlyphId[i] = aShortIDs[i];
+        if (!aGlyphId && nNotDef < 0)
+            nNotDef = i; // first NotDef glyph found
+    }
+
+    if (nNotDef != 0)
+    {
+        // add fake NotDef glyph if needed
+        if (nNotDef < 0)
+            nNotDef = nGlyphCount++;
+        // NotDef glyph must be in pos 0 => swap glyphids
+        aShortIDs[nNotDef] = aShortIDs[0];
+        aTempEncs[nNotDef] = aTempEncs[0];
+        aQtGlyphId[nNotDef] = aQtGlyphId[0];
+        aShortIDs[0] = 0;
+        aTempEncs[0] = 0;
+        aQtGlyphId[0] = 0;
+    }
+
+    QPointF anAdvanceList[nGlyphCount];
+    if (!aRawFont.advancesForGlyphIndexes(aQtGlyphId, anAdvanceList, nGlyphCount))
+        return false;
+
+    QPointF nNotDefAdv = anAdvanceList[0];
+    anAdvanceList[0] = anAdvanceList[nNotDef];
+    anAdvanceList[nNotDef] = nNotDefAdv;
+
+    for (int i = 0; i < nOrigGlyphCount; ++i)
+        pGlyphWidths[i] = round(anAdvanceList[i].x());
+
+    // write subset into destination file
+    Qt5TrueTypeFont aTTF(aRawFont);
+    vcl::SFErrCodes nRC
+        = vcl::CreateTTFromTTGlyphs(&aTTF, aToFile.getStr(), aShortIDs, aTempEncs, nGlyphCount);
+    return (nRC == vcl::SFErrCodes::Ok);
 }
 
 const void* Qt5Graphics::GetEmbedFontData(const PhysicalFontFace*, long* /*pDataLen*/)
