@@ -601,6 +601,11 @@ namespace svt
     //= ListBoxControl
     class SVT_DLLPUBLIC ListBoxControl final : public ControlBase
     {
+    private:
+        std::unique_ptr<weld::ComboBox> m_xWidget;
+        Link<LinkParamNone*,void> m_aModify1Hdl;
+        Link<LinkParamNone*,void> m_aModify2Hdl;
+
         friend class ListBoxCellController;
 
     public:
@@ -608,9 +613,27 @@ namespace svt
 
         weld::ComboBox& get_widget() { return *m_xWidget; }
 
+        // sets a link to call when the selection is changed by the user
+        void SetModifyHdl(const Link<LinkParamNone*,void>& rHdl)
+        {
+            m_aModify1Hdl = rHdl;
+        }
+
+        // sets an additional link to call when the selection is changed by the user
+        void SetAuxModifyHdl(const Link<LinkParamNone*,void>& rLink)
+        {
+            m_aModify2Hdl = rLink;
+        }
+
         virtual void dispose() override;
     private:
-        std::unique_ptr<weld::ComboBox> m_xWidget;
+        DECL_LINK(SelectHdl, weld::ComboBox&, void);
+
+        void CallModifyHdls()
+        {
+            m_aModify1Hdl.Call(nullptr);
+            m_aModify2Hdl.Call(nullptr);
+        }
     };
 
     //= ListBoxCellController
@@ -627,7 +650,7 @@ namespace svt
     protected:
         virtual bool MoveAllowed(const KeyEvent& rEvt) const override;
     private:
-        DECL_LINK(ListBoxSelectHdl, weld::ComboBox&, void);
+        DECL_LINK(ListBoxSelectHdl, LinkParamNone*, void);
     };
 
     class SVT_DLLPUBLIC FormattedControlBase : public EditControlBase

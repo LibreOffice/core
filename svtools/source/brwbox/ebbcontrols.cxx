@@ -107,6 +107,7 @@ namespace svt
     {
         InitControlBase(m_xWidget.get());
         m_xWidget->set_size_request(42, -1); // so a later narrow size request can stick
+        m_xWidget->connect_changed(LINK(this, ListBoxControl, SelectHdl));
     }
 
     void ListBoxControl::dispose()
@@ -115,11 +116,16 @@ namespace svt
         ControlBase::dispose();
     }
 
+    IMPL_LINK_NOARG(ListBoxControl, SelectHdl, weld::ComboBox&, void)
+    {
+        CallModifyHdls();
+    }
+
     //= ListBoxCellController
     ListBoxCellController::ListBoxCellController(ListBoxControl* pWin)
                              :CellController(pWin)
     {
-        GetListBox().connect_changed(LINK(this, ListBoxCellController, ListBoxSelectHdl));
+        static_cast<ListBoxControl&>(GetWindow()).SetModifyHdl(LINK(this, ListBoxCellController, ListBoxSelectHdl));
     }
 
     bool ListBoxCellController::MoveAllowed(const KeyEvent& rEvt) const
@@ -157,7 +163,7 @@ namespace svt
         GetListBox().save_value();
     }
 
-    IMPL_LINK_NOARG(ListBoxCellController, ListBoxSelectHdl, weld::ComboBox&, void)
+    IMPL_LINK_NOARG(ListBoxCellController, ListBoxSelectHdl, LinkParamNone*, void)
     {
         callModifyHdl();
     }
