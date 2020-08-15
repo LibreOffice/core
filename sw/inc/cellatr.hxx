@@ -49,7 +49,7 @@ public:
     }
 };
 
-class SwTableBoxFormula : public SfxPoolItem, public SwTableFormula
+class SAL_DLLPUBLIC_RTTI SwTableBoxFormula : public SfxPoolItem, public SwTableFormula
 {
     SwModify* m_pDefinedIn;   // Modify object where the formula is located
                             // can only be TableBoxFormat
