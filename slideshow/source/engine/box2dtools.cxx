@@ -18,6 +18,9 @@
 
 #include <svx/svdobj.hxx>
 #include <svx/svdoashp.hxx>
+#include <svx/svdogrp.hxx>
+
+#include <svx/unoapi.hxx>
 
 #define BOX2D_SLIDE_SIZE_IN_METERS 100.00f
 constexpr double fDefaultStaticBodyBounciness(0.1);
@@ -403,11 +406,35 @@ void box2DWorld::initateAllShapesAsStaticBodies(
     mbShapesInitialized = true;
     auto aXShapeToShapeMap = pShapeManager->getXShapeToShapeMap();
 
-    // iterate over shapes in the current slide
+    std::unordered_map<css::uno::Reference<css::drawing::XShape>, bool> aXShapeBelongsToAGroup;
+
+    // iterate over the shapes in the current slide and flag them if they belong to a group
     for (auto aIt = aXShapeToShapeMap.begin(); aIt != aXShapeToShapeMap.end(); aIt++)
     {
         slideshow::internal::ShapeSharedPtr pShape = aIt->second;
         if (pShape->isForeground())
+        {
+            SdrObject* pTemp = SdrObject::getSdrObjectFromXShape(pShape->getXShape());
+            if (pTemp && pTemp->IsGroupObject())
+            {
+                SdrObjList* aObjList = pTemp->GetSubList();
+                const size_t nObjCount(aObjList->GetObjCount());
+
+                for (size_t nObjIndex = 0; nObjIndex < nObjCount; ++nObjIndex)
+                {
+                    SdrObject* pGroupMember(aObjList->GetObj(nObjIndex));
+                    aXShapeBelongsToAGroup.insert(
+                        std::make_pair(GetXShapeForSdrObject(pGroupMember), true));
+                }
+            }
+        }
+    }
+
+    // iterate over shapes in the current slide
+    for (auto aIt = aXShapeToShapeMap.begin(); aIt != aXShapeToShapeMap.end(); aIt++)
+    {
+        slideshow::internal::ShapeSharedPtr pShape = aIt->second;
+        if (pShape->isForeground() && !aXShapeBelongsToAGroup[pShape->getXShape()])
         {
             Box2DBodySharedPtr pBox2DBody = createStaticBody(pShape);
 
