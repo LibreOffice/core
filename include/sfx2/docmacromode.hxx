@@ -260,7 +260,7 @@ namespace sfx2
         */
         static bool storageHasMacros( const css::uno::Reference< css::embed::XStorage >& _rxStorage );
 
-        static bool containerHasBasicMacros( const css::uno::Reference< css::script::XLibraryContainer >& xContainter );
+        static bool containerHasBasicMacros( const css::uno::Reference< css::script::XLibraryContainer >& xContainer );
         /** checks the macro execution mode while loading the document.
 
             This must be called when the loading is effectively finished, but before any macro action
