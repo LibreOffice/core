@@ -159,8 +159,6 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
             Invalidate();
 
-            Invalidate();
-
             // evtl. feed characters to activated textedit
             if(SID_ATTR_CHAR == nSId && GetView() && GetView()->IsTextEdit())
                 ImpAddPrintableCharactersToTextEdit(rReq, GetView());
