@@ -64,6 +64,7 @@ private:
     DECL_LINK(CloseButtonHdl, weld::Button&, void);
 
 public:
+    std::unique_ptr<weld::MenuButton> m_xGearBtn;
     std::unique_ptr<weld::Entry> m_xEntrySearch;
     std::unique_ptr<weld::Button> m_xButtonClose;
     std::unique_ptr<weld::MenuButton> m_xMenuButtonSettings;

@@ -2,6 +2,89 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
+  <object class="GtkMenu" id="additionsmenu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkCheckMenuItem" id="gear_activeVersionOnly">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="customanimationfragment|90">Active version only</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="gear_separator1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="sort">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="bulletandposition|gallery">Sort by</property>
+        <child type="submenu">
+          <object class="GtkMenu" id="sortSubMenu">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkRadioMenuItem" id="gear_sort_voting">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="menuassignpage|gear_textOnly">Voting</property>
+                <property name="draw_as_radio">True</property>
+                <property name="group">gear_sort_downloads</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkRadioMenuItem" id="gear_sort_downloads">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="menuassignpage|gear_textOnly">Downloads</property>
+                <property name="draw_as_radio">True</property>
+                <property name="group">gear_sort_voting</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkRadioMenuItem" id="gear_sort_comments">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="menuassignpage|gear_textOnly">Comments</property>
+                <property name="draw_as_radio">True</property>
+                <property name="group">gear_sort_voting</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="gear_separator2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioMenuItem" id="gear_detailView">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="menuassignpage|gear_iconAndText">Detail view</property>
+        <property name="use_underline">True</property>
+        <property name="active">True</property>
+        <property name="draw_as_radio">True</property>
+        <property name="group">gear_condensedList</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioMenuItem" id="gear_condensedList">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="menuassignpage|gear_iconAndText">Condensed list</property>
+        <property name="draw_as_radio">True</property>
+        <property name="group">gear_detailView</property>
+      </object>
+    </child>
+  </object>
   <object class="GtkDialog" id="AdditionsDialog">
     <property name="width_request">400</property>
     <property name="height_request">500</property>
@@ -118,6 +201,7 @@
                     <property name="receives_default">True</property>
                     <property name="halign">end</property>
                     <property name="margin_left">1</property>
+                    <property name="popup">additionsmenu</property>
                     <property name="use_popover">False</property>
                     <child>
                       <object class="GtkImage" id="imageGear">
