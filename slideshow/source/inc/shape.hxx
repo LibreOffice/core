@@ -269,8 +269,7 @@ namespace slideshow
         private:
             /** Flag to check whether the shape belongs to the foreground.
 
-                For instance, it is false if the shape belongs to the master slide or
-                a group shape.
+                For instance, it is false if the shape belongs to the master slide.
              */
             bool mbIsForeground;
         };
