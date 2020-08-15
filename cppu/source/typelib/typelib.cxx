@@ -170,7 +170,7 @@ namespace {
 
 struct TypeDescriptor_Init_Impl
 {
-    //sal_Bool          bDesctructorCalled;
+    //sal_Bool          bDestructorCalled;
     // all type description references
     std::unique_ptr<WeakMap_Impl> pWeakMap;
     // all type description callbacks
