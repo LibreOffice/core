@@ -173,10 +173,9 @@ public class OfficeProvider implements AppProvider
         XMultiServiceFactory msf = connectOffice(cncstr);
 
         // if the office is running and the office crashes while testing it could
-        // be useful to restart the office if possible and continuing the tests.
+        // be useful to restart the office if possible and continue the tests.
         // Example: the UNO-API-Tests in the projects will be executed by calling
-        // 'damke'. This connects to an existing office. If the office crashes
-        // it is useful to restart the office and continuing the tests.
+        // 'dmake'.
         if ((param.getBool(util.PropertyName.AUTO_RESTART)) && (msf != null))
         {
             makeAppExecCommand(msf, param);
