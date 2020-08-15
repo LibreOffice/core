@@ -465,6 +465,7 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditio
     , m_xContentWindow(m_xBuilder->weld_scrolled_window("contentWindow"))
     , m_xContentGrid(m_xBuilder->weld_container("contentGrid"))
     , m_xLabelProgress(m_xBuilder->weld_label("labelProgress"))
+    , m_xGearBtn(m_xBuilder->weld_menu_button("buttonGear"))
 {
     m_aSearchDataTimer.SetInvokeHandler(LINK(this, AdditionsDialog, ImplUpdateDataHdl));
     m_aSearchDataTimer.SetDebugName("AdditionsDialog SearchDataTimer");

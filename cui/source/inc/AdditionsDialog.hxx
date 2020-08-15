@@ -74,6 +74,8 @@ public:
     std::unique_ptr<weld::Container> m_xContentGrid;
 
     std::unique_ptr<weld::Label> m_xLabelProgress;
+    std::unique_ptr<weld::MenuButton> m_xGearBtn;
+
     ::rtl::Reference<SearchAndParseThread> m_pSearchThread;
 
     OString m_sURL;
