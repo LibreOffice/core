@@ -76,13 +76,9 @@ struct SfxInterface_Impl
                             aChildWindows;  // registered ChildWindows
     OUString                aPopupName;     // registered PopupMenu
     StatusBarId             eStatBarResId;  // registered StatusBar
-    SfxModule*              pModule;
-    bool                    bRegistered;
 
     SfxInterface_Impl()
         : eStatBarResId(StatusBarId::None)
-        , pModule(nullptr)
-        , bRegistered(false)
     {
     }
 };
@@ -106,8 +102,6 @@ SfxInterface::SfxInterface( const char *pClassName,
 
 void SfxInterface::Register( SfxModule* pMod )
 {
-    pImplData->bRegistered = true;
-    pImplData->pModule = pMod;
     if ( pMod )
         pMod->GetSlotPool()->RegisterInterface(*this);
     else
