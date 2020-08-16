@@ -110,6 +110,8 @@ public:
     static void    SetFrameMode( FlyMode eMode, SwWrtShell *pShell );  // with update!
     static void   SetFrameMode_( FlyMode eMode )   { eFrameMode = eMode; }
     static FlyMode  GetFrameMode()                 { return eFrameMode;  }
+
+    void OutlineUpDown(bool bMove, bool bUp, bool bOutlineWithChildren);
 };
 
 #endif
