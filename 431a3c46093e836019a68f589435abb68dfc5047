@@ -70,6 +70,30 @@
       "revId": "431a3c46093e836019a68f589435abb68dfc5047",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35262a51_0a1f049a",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-08-16T13:39:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c3f5adfc_5af7a9ac",
+      "range": {
+        "startLine": 604,
+        "startChar": 4,
+        "endLine": 607,
+        "endChar": 77
+      },
+      "revId": "431a3c46093e836019a68f589435abb68dfc5047",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
