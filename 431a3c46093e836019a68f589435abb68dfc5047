@@ -46,6 +46,30 @@
       "revId": "431a3c46093e836019a68f589435abb68dfc5047",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3f5adfc_5af7a9ac",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-08-16T13:10:39Z",
+      "side": 1,
+      "message": "Please do guess. It is a string type with various constructors and helper methods.\n\nHave you checked its constructors? Have you done a simple \"git grep\" to see how it is initialized and used at other places?\n\nPlease try to put some more effort in (re)search \u0026 comprehension on simple/basic stuff used everywhere in the codebase.\n\n(Hint: No, you don\u0027t need any conversions or any other string types to initialize an OUString object with a simple string literal)",
+      "parentUuid": "eb3a7d36_fed23e43",
+      "range": {
+        "startLine": 604,
+        "startChar": 4,
+        "endLine": 607,
+        "endChar": 77
+      },
+      "revId": "431a3c46093e836019a68f589435abb68dfc5047",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
