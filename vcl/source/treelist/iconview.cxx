@@ -79,8 +79,6 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, long nX, long nY,
 
     tools::Rectangle aRect; // multi purpose
 
-    PreparePaint(rRenderContext, rEntry);
-
     pImpl->UpdateContextBmpWidthMax(&rEntry);
 
     short nTempEntryHeight = GetEntryHeight();

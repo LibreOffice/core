@@ -130,10 +130,13 @@ include/vcl/dndhelp.hxx:62
 include/vcl/opengl/OpenGLContext.hxx:141
     struct SystemWindowData OpenGLContext::generateWinData(class vcl::Window *,_Bool,)
     10
-include/vcl/treelistbox.hxx:428
+include/vcl/toolkit/treelistbox.hxx:431
     enum DragDropMode SvTreeListBox::NotifyStartDrag(class TransferDataContainer &,class SvTreeListEntry *,)
     00
-include/vcl/treelistbox.hxx:589
+include/vcl/toolkit/treelistbox.hxx:512
+    void SvTreeListBox::PreparePaint(class OutputDevice &,class SvTreeListEntry &,)
+    00
+include/vcl/toolkit/treelistbox.hxx:591
     _Bool SvTreeListBox::EditingEntry(class SvTreeListEntry *,class Selection &,)
     10
 sc/inc/filter.hxx:82
@@ -196,10 +199,10 @@ sw/source/core/access/acccontext.hxx:352
 sw/source/core/inc/txmsrt.hxx:145
     void SwTOXSortTabBase::FillText(class SwTextNode &,const class SwIndex &,unsigned short,const class SwRootFrame *const,)const
     1100
-sw/source/filter/ww8/wrtww8.hxx:796
+sw/source/filter/ww8/wrtww8.hxx:793
     void MSWordExportBase::WriteHyperlinkData(const class sw::mark::IFieldmark &,)
     0
-sw/source/filter/ww8/wrtww8.hxx:861
+sw/source/filter/ww8/wrtww8.hxx:858
     void MSWordExportBase::OutputGrfNode(const class SwGrfNode &,)
     0
 vcl/inc/outdev.h:122

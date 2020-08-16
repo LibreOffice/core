@@ -509,7 +509,6 @@ protected:
     virtual void    Command( const CommandEvent& rCEvt ) override;
 
     virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
-    virtual void    PreparePaint(vcl::RenderContext& rRenderContext, SvTreeListEntry& rEntry);
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     void            InitSettings();

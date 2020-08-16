@@ -2558,7 +2558,6 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
     tools::Rectangle aRect; // multi purpose
 
     bool bHorSBar = pImpl->HasHorScrollBar();
-    PreparePaint(rRenderContext, rEntry);
 
     pImpl->UpdateContextBmpWidthMax(&rEntry);
 
@@ -2844,10 +2843,6 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
     {
         rRenderContext.DrawImage(aPos, *pImg ,nStyle);
     }
-}
-
-void SvTreeListBox::PreparePaint(vcl::RenderContext& /*rRenderContext*/, SvTreeListEntry& /*rEntry*/)
-{
 }
 
 void SvTreeListBox::DrawCustomEntry(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, const SvTreeListEntry& rEntry)
