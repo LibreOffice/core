@@ -1282,13 +1282,35 @@ void SwTextShell::Execute(SfxRequest &rReq)
             rReq.Done();
         }
         break;
-
+        case FN_NUM_BULLET_OUTLINE_DOWN:
+            OutlineUpDown(false, false, true);
+        rReq.Done();
+        break;
+        case FN_NUM_BULLET_OUTLINE_UP:
+            OutlineUpDown(false, true, true);
+        rReq.Done();
+        break;
+        case FN_NUM_BULLET_DOWN:
+            OutlineUpDown(false, false, false);
+        rReq.Done();
+        break;
+        case FN_NUM_BULLET_UP:
+            OutlineUpDown(false, true, false);
+        rReq.Done();
+        break;
+        case FN_NUM_BULLET_OUTLINE_MOVEDOWN:
+            OutlineUpDown(true, false, true);
+        rReq.Done();
+        break;
+        case FN_NUM_BULLET_OUTLINE_MOVEUP:
+            OutlineUpDown(true, true, true);
+        rReq.Done();
+        break;
         case FN_NUM_BULLET_MOVEDOWN:
             if (!rWrtSh.IsAddMode())
                 rWrtSh.MoveParagraph();
             rReq.Done();
             break;
-
         case FN_NUM_BULLET_MOVEUP:
             if (!rWrtSh.IsAddMode())
                 rWrtSh.MoveParagraph(-1);

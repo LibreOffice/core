@@ -152,6 +152,36 @@ interface BaseText
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
+    FN_NUM_BULLET_DOWN
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_NUM_BULLET_UP
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_NUM_BULLET_OUTLINE_DOWN
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_NUM_BULLET_OUTLINE_UP
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_NUM_BULLET_OUTLINE_MOVEDOWN
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_NUM_BULLET_OUTLINE_MOVEUP
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
     FN_NUM_BULLET_MOVEDOWN // status(final|play)
     [
         ExecMethod = Execute ;
