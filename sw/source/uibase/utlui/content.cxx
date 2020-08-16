@@ -2794,28 +2794,6 @@ void SwContentTree::ExecCommand(const OString& rCmd, bool bOutlineWithChildren)
         if (!bStartedAction)
         {
             pShell->StartAllAction();
-            if (bUpDown)
-            {
-                if (pShell->GetViewOptions()->IsShowOutlineContentVisibilityButton())
-                {
-                    // unfold all folded outline content
-                    SwOutlineNodes rOutlineNds = pShell->GetDoc()->GetNodes().GetOutLineNds();
-                    for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNds.size(); ++nPos)
-                    {
-                        SwNode* pNd = rOutlineNds[nPos];
-                        if (pNd->IsTextNode()) // should always be true
-                        {
-                            bool bOutlineContentVisibleAttr = true;
-                            pNd->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
-                            if (!bOutlineContentVisibleAttr)
-                            {
-                                aFoldedOutlineNdsArray.push_back(pNd);
-                                pShell->ToggleOutlineContentVisibility(nPos);
-                            }
-                        }
-                    }
-                }
-            }
             pShell->StartUndo(bLeftRight ? SwUndoId::OUTLINE_LR : SwUndoId::OUTLINE_UD);
             bStartedAction = true;
         }
@@ -2987,15 +2965,6 @@ void SwContentTree::ExecCommand(const OString& rCmd, bool bOutlineWithChildren)
     if (bStartedAction)
     {
         pShell->EndUndo();
-        if (bUpDown)
-        {
-            if (pShell->GetViewOptions()->IsShowOutlineContentVisibilityButton())
-            {
-                // fold all outlines that were folded before chapter promote/demote
-                for (SwNode* pNd : aFoldedOutlineNdsArray)
-                    pShell->ToggleOutlineContentVisibility(pNd, true);
-            }
-        }
         pShell->EndAllAction();
         if (m_aActiveContentArr[ContentTypeId::OUTLINE])
             m_aActiveContentArr[ContentTypeId::OUTLINE]->Invalidate();
@@ -3171,27 +3140,6 @@ void SwContentTree::MoveOutline(SwOutlineNodes::size_type nTargetPos)
 {
     SwWrtShell *const pShell = GetWrtShell();
     pShell->StartAllAction();
-    std::vector<SwNode*> aFoldedOutlineNdsArray;
-
-    if (pShell->GetViewOptions()->IsShowOutlineContentVisibilityButton())
-    {
-        // unfold all folded outline content
-        SwOutlineNodes rOutlineNds = pShell->GetDoc()->GetNodes().GetOutLineNds();
-        for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNds.size(); ++nPos)
-        {
-            SwNode* pNd = rOutlineNds[nPos];
-            if (pNd->IsTextNode()) // should always be true
-            {
-                bool bOutlineContentVisibleAttr = true;
-                pNd->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
-                if (!bOutlineContentVisibleAttr)
-                {
-                    aFoldedOutlineNdsArray.push_back(pNd);
-                    pShell->ToggleOutlineContentVisibility(nPos);
-                }
-            }
-        }
-    }
     pShell->StartUndo(SwUndoId::OUTLINE_UD);
 
     SwOutlineNodes::size_type nPrevSourcePos = SwOutlineNodes::npos;
@@ -3242,12 +3190,6 @@ void SwContentTree::MoveOutline(SwOutlineNodes::size_type nTargetPos)
     }
 
     pShell->EndUndo();
-    if (pShell->GetViewOptions()->IsShowOutlineContentVisibilityButton())
-    {
-        // fold all outlines that were folded before chapter promote/demote
-        for (SwNode* pNd : aFoldedOutlineNdsArray)
-            pShell->ToggleOutlineContentVisibility(pNd, true);
-    }
     pShell->EndAllAction();
     m_aActiveContentArr[ContentTypeId::OUTLINE]->Invalidate();
     Display(true);
