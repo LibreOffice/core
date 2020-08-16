@@ -1527,13 +1527,15 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
             nY += m_pParent->maGeometry.nY;
         }
 
-        maGeometry.nX = nX;
-        maGeometry.nY = nY;
+        if (nFlags & SAL_FRAME_POSSIZE_X)
+            maGeometry.nX = nX;
+        if (nFlags & SAL_FRAME_POSSIZE_Y)
+            maGeometry.nY = nY;
         m_bGeometryIsProvisional = true;
 
         m_bDefaultPos = false;
 
-        moveWindow(nX, nY);
+        moveWindow(maGeometry.nX, maGeometry.nY);
 
         updateScreenNumber();
     }
