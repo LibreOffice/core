@@ -296,12 +296,18 @@ include/vcl/customweld.hxx:42
     class rtl::OUString weld::CustomWidgetController::GetHelpText()const
 include/vcl/toolkit/dialog.hxx:96
     void Dialog::set_content_area(class VclBox *,)
-include/vcl/treelistbox.hxx:502
-    void SvTreeListBox::NotifyEndScroll()
-include/vcl/treelistbox.hxx:503
-    void SvTreeListBox::NotifyScrolled()
-include/vcl/treelistbox.hxx:648
-    _Bool SvTreeListBox::Select(class SvTreeListEntry *,_Bool,)
+include/vcl/toolkit/treelistbox.hxx:417
+    void SvTreeListBox::SelectHdl()
+include/vcl/toolkit/treelistbox.hxx:418
+    void SvTreeListBox::DeselectHdl()
+include/vcl/toolkit/treelistbox.hxx:419
+    _Bool SvTreeListBox::DoubleClickHdl()
+include/vcl/toolkit/treelistbox.hxx:512
+    void SvTreeListBox::PreparePaint(class OutputDevice &,class SvTreeListEntry &,)
+include/vcl/toolkit/treelistbox.hxx:584
+    void SvTreeListBox::CheckButtonHdl()
+include/vcl/toolkit/treelistbox.hxx:677
+    class VclPtr<class PopupMenu> SvTreeListBox::CreateContextMenu()
 include/vcl/weld.hxx:95
     void weld::Widget::set_visible(_Bool,)
 sc/source/core/opencl/formulagroupcl.cxx:1061
@@ -394,9 +400,9 @@ slideshow/source/engine/activities/activitiesfactory.cxx:536
     void slideshow::internal::(anonymous namespace)::ValuesActivity::endAnimation()
 slideshow/source/engine/activities/activitiesfactory.cxx:581
     void slideshow::internal::(anonymous namespace)::ValuesActivity::performEnd()
-slideshow/source/engine/animationfactory.cxx:434
+slideshow/source/engine/animationfactory.cxx:593
     void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch()
-slideshow/source/engine/animationfactory.cxx:437
+slideshow/source/engine/animationfactory.cxx:596
     void slideshow::internal::(anonymous namespace)::GenericAnimation::start(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
 slideshow/source/inc/shape.hxx:221
     void slideshow::internal::Shape::setIsForeground(const _Bool,)

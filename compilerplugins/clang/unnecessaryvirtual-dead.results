@@ -8,11 +8,11 @@ canvas/inc/base/graphicdevicebase.hxx:318
     void canvas::GraphicDeviceBase::removeVetoableChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XVetoableChangeListener> &,)
 include/basegfx/utils/unopolypolygon.hxx:94
     void basegfx::unotools::UnoPolyPolygon::modifying()const
-include/vcl/treelistbox.hxx:502
-    void SvTreeListBox::NotifyEndScroll()
+include/vcl/toolkit/treelistbox.hxx:512
+    void SvTreeListBox::PreparePaint(class OutputDevice &,class SvTreeListEntry &,)
 sc/source/core/opencl/formulagroupcl.cxx:1069
     void sc::opencl::(anonymous namespace)::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class std::__cxx11::basic_stringstream<char> &,)
-slideshow/source/engine/animationfactory.cxx:434
+slideshow/source/engine/animationfactory.cxx:593
     void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch()
 vcl/inc/salframe.hxx:145
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)

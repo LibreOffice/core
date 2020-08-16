@@ -2935,7 +2935,7 @@ void SvImpLBox::Command( const CommandEvent& rCEvt )
         }
 
         {
-            VclPtr<PopupMenu> pPopup = m_pView->CreateContextMenu();
+            VclPtr<PopupMenu> pPopup = SvTreeListBox::CreateContextMenu();
             if (pPopup)
             {
                 // do action for selected entry in popup menu
