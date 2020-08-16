@@ -145,11 +145,6 @@ static oslSignalAction VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo* 
 #endif
     }
 
-    // RC
-    if ((pInfo->Signal == osl_Signal_User) &&
-        (pInfo->UserSignal == OSL_SIGNAL_USER_RESOURCEFAILURE) )
-        nVCLException = ExceptionCategory::ResourceNotLoaded;
-
     // DISPLAY-Unix
     if ((pInfo->Signal == osl_Signal_User) &&
         (pInfo->UserSignal == OSL_SIGNAL_USER_X11SUBSYSTEMERROR) )
