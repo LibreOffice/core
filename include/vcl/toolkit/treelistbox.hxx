@@ -414,9 +414,9 @@ public:
 
     void            ExpandedHdl();
     bool            ExpandingHdl();
-    virtual void    SelectHdl();
-    virtual void    DeselectHdl();
-    virtual bool    DoubleClickHdl();
+    void            SelectHdl();
+    void            DeselectHdl();
+    bool            DoubleClickHdl();
     SvTreeListEntry*    GetHdlEntry() const { return pHdlEntry; }
 
     // Is called for an Entry that gets expanded with the Flag
@@ -580,7 +580,7 @@ public:
     static const Image&    GetExpandedEntryBmp(const SvTreeListEntry* _pEntry );
     static const Image&    GetCollapsedEntryBmp(const SvTreeListEntry* _pEntry );
 
-    virtual void    CheckButtonHdl();
+    void            CheckButtonHdl();
 
     void            SetSublistOpenWithLeftRight();   // open/close sublist with cursor left/right
 
@@ -673,7 +673,7 @@ public:
 
     void            ShowFocusRect( const SvTreeListEntry* pEntry );
 
-    virtual VclPtr<PopupMenu> CreateContextMenu();
+    static VclPtr<PopupMenu> CreateContextMenu();
 
     void            EnableContextMenuHandling();
 
