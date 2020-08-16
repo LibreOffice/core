@@ -44,6 +44,8 @@ public:
 
     void logAction(VclPtr<Control> const& xUIElement, VclEventId nEvent);
 
+    void logAction(vcl::Window* const& xUIWin, VclEventId nEvent);
+
     void log(const OUString& rString);
 
     void logKeyInput(VclPtr<vcl::Window> const& xUIElement, const KeyEvent& rEvent);

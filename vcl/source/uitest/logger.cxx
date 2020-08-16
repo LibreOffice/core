@@ -166,6 +166,21 @@ void UITestLogger::logAction(VclPtr<Control> const& xUIElement, VclEventId nEven
         maStream.WriteLine(OUStringToOString(aAction, RTL_TEXTENCODING_UTF8));
 }
 
+void UITestLogger::logAction(vcl::Window* const& xUIWin, VclEventId nEvent)
+{
+    if (!mbValid)
+        return;
+
+    if (xUIWin->get_id().isEmpty())
+        return;
+
+    std::unique_ptr<UIObject> pUIObject = xUIWin->GetUITestFactory()(xUIWin);
+    OUString aAction = pUIObject->get_action(nEvent);
+
+    if (!aAction.isEmpty())
+        maStream.WriteLine(OUStringToOString(aAction, RTL_TEXTENCODING_UTF8));
+}
+
 void UITestLogger::log(const OUString& rString)
 {
     if (!mbValid)

@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <vcl/uitest/logger.hxx>
 #include <sal/log.hxx>
 
 #include <comphelper/processfactory.hxx>
@@ -324,6 +325,7 @@ void ToolBox::Click()
 {
     CallEventListeners( VclEventId::ToolboxClick );
     maClickHdl.Call( this );
+    UITestLogger::getInstance().logAction( this, VclEventId::ToolboxClick);
 }
 
 void ToolBox::DoubleClick()

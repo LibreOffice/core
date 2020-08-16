@@ -499,6 +499,8 @@ public:
 
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
+    virtual OUString get_action(VclEventId nEvent) const override;
+
 private:
 
     virtual OUString get_name() const override;
