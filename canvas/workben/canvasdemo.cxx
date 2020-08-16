@@ -636,16 +636,8 @@ int DemoApp::Main()
     return 0;
 }
 
-void DemoApp::Exception( ExceptionCategory nCategory )
+void DemoApp::Exception( ExceptionCategory )
 {
-    switch( nCategory )
-    {
-        case ExceptionCategory::ResourceNotLoaded:
-            Abort( "Error: could not load language resources.\nPlease check your installation.\n" );
-            break;
-        default:
-            break;
-    }
 }
 
 void DemoApp::Init()

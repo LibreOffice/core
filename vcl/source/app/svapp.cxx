@@ -244,19 +244,9 @@ void Application::Exception( ExceptionCategory nCategory )
         case ExceptionCategory::System:
         case ExceptionCategory::UserInterface:
             break;
-
-#ifdef DBG_UTIL
-        case ExceptionCategory::ResourceNotLoaded:
-            Abort("Resource not loaded");
-            break;
         default:
             Abort("Unknown Error");
             break;
-#else
-        default:
-            Abort(OUString());
-            break;
-#endif
     }
 }
 
