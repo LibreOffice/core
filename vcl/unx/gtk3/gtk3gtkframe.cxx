@@ -2929,13 +2929,16 @@ gboolean GtkSalFrame::signalDraw(GtkWidget*, cairo_t *cr, gpointer frame)
 void GtkSalFrame::sizeAllocated(GtkWidget* pWidget, GdkRectangle *pAllocation, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    // ignore size-allocations that occur during configuring an embedded SalObject
+    if (pThis->m_bSalObjectSetPosSize)
+        return;
     pThis->maGeometry.nWidth = pAllocation->width;
     pThis->maGeometry.nHeight = pAllocation->height;
     bool bRealized = gtk_widget_get_realized(pWidget);
     if (bRealized)
         pThis->AllocateFrame();
     pThis->CallCallbackExc( SalEvent::Resize, nullptr );
-    if (bRealized && !pThis->m_bSalObjectSetPosSize)
+    if (bRealized)
         pThis->TriggerPaintEvent();
 }
 
