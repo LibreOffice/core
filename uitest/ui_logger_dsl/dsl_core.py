@@ -103,6 +103,7 @@ class ul_Compiler:
                 "ListBoxUIObject": self.handle_List_box,
                 "SpinFieldUIObject": self.handle_spin_field,
                 "EditUIObject": self.handle_Edit_uiObject,
+                "ToolBoxUIObject": self.handle_ToolBox_uiObject,
                 "writer_Type_command": self.handle_writer_type,
                 "writer_Select_command": self.handle_writer_select,
                 "writer_GOTO_command": self.handle_writer_goto,
@@ -606,6 +607,25 @@ class ul_Compiler:
             self.write_line_without_parameters(name_of_obj, "CLEAR", "tuple")
 
         self.prev_command = EditUIObject
+
+    def handle_ToolBox_uiObject(self, ToolBoxUIObject):
+        name_of_obj = ""
+        if keyword.iskeyword(ToolBoxUIObject.toolbox_id):
+            name_of_obj = "x" + ToolBoxUIObject.toolbox_id
+        else:
+            name_of_obj = ToolBoxUIObject.toolbox_id
+
+        self.init_Object(
+            name_of_obj,
+            ToolBoxUIObject.toolbox_id,
+            self.last_parent[self.parent_hierarchy_count],
+        )
+
+        self.write_line_with_one_parameters(
+            name_of_obj, "CLICK", "POS", ToolBoxUIObject.POS
+        )
+
+        self.prev_command = ToolBoxUIObject
 
     def handle_writer_type(self, writer_Type_command):
 

@@ -1591,6 +1591,17 @@ void ToolBoxUIObject::execute(const OUString& rAction,
         WindowUIObject::execute(rAction, rParameters);
 }
 
+OUString ToolBoxUIObject::get_action(VclEventId nEvent) const
+{
+    if (nEvent == VclEventId::ToolboxClick)
+    {
+        return "Click on item number " + OUString::number(mxToolBox->GetCurItemId()) +
+                " in " + mxToolBox->get_id();
+    }
+    else
+        return WindowUIObject::get_action(nEvent);
+}
+
 StringMap ToolBoxUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
