@@ -22,6 +22,30 @@
       "revId": "431a3c46093e836019a68f589435abb68dfc5047",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb3a7d36_fed23e43",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-08-16T11:20:17Z",
+      "side": 1,
+      "message": "How can I initialize an OUString with \"...\" without using other types? Should I create std::string or OString and convert to OUString?",
+      "parentUuid": "7a61ec82_0ce4ff1f",
+      "range": {
+        "startLine": 604,
+        "startChar": 4,
+        "endLine": 607,
+        "endChar": 77
+      },
+      "revId": "431a3c46093e836019a68f589435abb68dfc5047",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
