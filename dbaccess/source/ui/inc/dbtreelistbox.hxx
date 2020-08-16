@@ -19,8 +19,6 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_DBTREELISTBOX_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_DBTREELISTBOX_HXX
 
-#include "ScrollHelper.hxx"
-
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 
 #include <vcl/InterimItemWindow.hxx>

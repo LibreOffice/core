@@ -27,7 +27,6 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/factory.hxx>
-#include <ucbhelper/getcomponentcontext.hxx>
 #include "ftpcontentprovider.hxx"
 #include "ftpcontent.hxx"
 #include "ftploaderthread.hxx"

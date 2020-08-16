@@ -19,7 +19,6 @@
 
 #include <sal/log.hxx>
 #include <ucbhelper/contenthelper.hxx>
-#include <ucbhelper/getcomponentcontext.hxx>
 #include <ucbhelper/macros.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <com/sun/star/ucb/ContentCreationException.hpp>

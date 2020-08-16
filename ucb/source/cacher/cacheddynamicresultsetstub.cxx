@@ -23,7 +23,6 @@
 #include <com/sun/star/ucb/ContentResultSetCapability.hpp>
 #include <com/sun/star/ucb/SortedDynamicResultSetFactory.hpp>
 #include <osl/diagnose.h>
-#include <ucbhelper/getcomponentcontext.hxx>
 #include <ucbhelper/macros.hxx>
 #include <cppuhelper/queryinterface.hxx>
 

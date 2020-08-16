@@ -46,12 +46,8 @@ public:
     OTableTreeListBox(vcl::Window* pParent, bool bShowToggles);
     virtual ~OTableTreeListBox();
 
-    void init() { m_bVirtualRoot = true; }
-
     typedef std::pair< OUString, bool > TTableViewName;
     typedef std::vector< TTableViewName >         TNames;
-
-    void    SuppressEmptyFolders() { m_bNoEmptyFolders = true; }
 
     /** determines whether the given entry denotes a tables folder
     */
@@ -82,23 +78,9 @@ public:
 
     std::unique_ptr<weld::TreeIter>    getAllObjectsEntry() const;
 
-    /** does a wildcard check of the given entry
-        <p>There are two different 'checked' states: If the user checks all children of an entry, this is different
-        from checking the entry itself. The second is called 'wildcard' checking, 'cause in the resulting
-        table filter it's represented by a wildcard.</p>
-    */
-    void            checkWildcard(weld::TreeIter& rEntry);
-
-    /** determine if the given entry is 'wildcard checked'
-        @see checkWildcard
-    */
-    bool            isWildcardChecked(const weld::TreeIter& rEntry);
-
     void            CheckButtons();     // make the button states consistent (bottom-up)
 
 private:
-    void CheckButtonHdl();
-
     void checkedButton_noBroadcast(const weld::TreeIter& rEntry);
 
     void implEmphasize(const weld::TreeIter& rEntry, bool _bChecked, bool _bUpdateDescendants = true, bool _bUpdateAncestors = true);
@@ -198,14 +180,6 @@ public:
                 const css::uno::Sequence< OUString>& _rViews
             );
 
-    /** to be used if a foreign instance added a table
-    */
-    std::unique_ptr<weld::TreeIter> addedTable( const OUString& _rName );
-
-    /** to be used if a foreign instance removed a table
-    */
-    void    removedTable( const OUString& _rName );
-
     std::unique_ptr<weld::TreeIter>    getAllObjectsEntry() const;
 
     /** does a wildcard check of the given entry
@@ -253,17 +227,6 @@ public:
                 const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
                 const TNames& _rTables
             );
-
-    /** returns a NamedDatabaseObject record which describes the given entry
-    */
-    css::sdb::application::NamedDatabaseObject
-            describeObject(weld::TreeIter& rEntry);
-
-    /** returns the fully qualified name of a table entry
-        @param _pEntry
-            the entry whose name is to be obtained. Must not denote a folder entry.
-    */
-    OUString getQualifiedTableName(weld::TreeIter& rEntry) const;
 };
 
 }   // namespace dbaui

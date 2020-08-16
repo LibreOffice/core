@@ -8,9 +8,6 @@ excludelist:
     ucbhelper/source/provider/cancelcommandexecution.cxx:
     # Needed for linker visibility
     - ucbhelper/cancelcommandexecution.hxx
-    ucbhelper/source/provider/getcomponentcontext.cxx:
-    # Needed to for ucbhelper::getComponentContext
-    - ucbhelper/getcomponentcontext.hxx
     ucbhelper/source/provider/resultsetmetadata.cxx:
     # Needed for UnoType types
     - com/sun/star/io/XInputStream.hpp

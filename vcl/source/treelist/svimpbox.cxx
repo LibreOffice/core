@@ -3225,26 +3225,6 @@ void SvImpLBox::StopUserEvent()
     }
 }
 
-void SvImpLBox::ShowFocusRect( const SvTreeListEntry* pEntry )
-{
-    if( pEntry )
-    {
-        long nY = GetEntryLine(pEntry);
-        tools::Rectangle aRect = m_pView->GetFocusRect(pEntry, nY);
-        vcl::Region aOldClip( m_pView->GetClipRegion());
-        vcl::Region aClipRegion( GetClipRegionRect() );
-        m_pView->SetClipRegion( aClipRegion );
-        m_pView->ShowFocus( aRect );
-        m_pView->SetClipRegion( aOldClip );
-
-    }
-    else
-    {
-        m_pView->HideFocus();
-    }
-}
-
-
 void SvImpLBox::implInitDefaultNodeImages()
 {
     if ( s_pDefCollapsed )

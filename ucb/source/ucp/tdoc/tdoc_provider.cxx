@@ -32,7 +32,6 @@
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <cppuhelper/queryinterface.hxx>
 #include <ucbhelper/contentidentifier.hxx>
-#include <ucbhelper/getcomponentcontext.hxx>
 #include <ucbhelper/macros.hxx>
 
 #include "tdoc_provider.hxx"

@@ -27,7 +27,6 @@
 #include <com/sun/star/ucb/WelcomeDynamicResultSetStruct.hpp>
 #include <com/sun/star/ucb/CachedDynamicResultSetStubFactory.hpp>
 #include <com/sun/star/ucb/XSourceInitialization.hpp>
-#include <ucbhelper/getcomponentcontext.hxx>
 
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;

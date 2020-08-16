@@ -31,7 +31,6 @@
 #include <osl/diagnose.h>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <ucbhelper/getcomponentcontext.hxx>
 #include <ucbhelper/macros.hxx>
 #include <memory>
 
