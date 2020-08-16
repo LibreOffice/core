@@ -2350,6 +2350,7 @@
   <block-list:block block-list:abbreviated-name="명예홰손" block-list:name="명예훼손"/>
   <block-list:block block-list:abbreviated-name="명외훼손" block-list:name="명예훼손"/>
   <block-list:block block-list:abbreviated-name="명웨훼손" block-list:name="명예훼손"/>
+  <block-list:block block-list:abbreviated-name="명중율" block-list:name="명중률"/>
   <block-list:block block-list:abbreviated-name="명회회손" block-list:name="명예훼손"/>
   <block-list:block block-list:abbreviated-name="미치게싿" block-list:name="미치겠다"/>
   <block-list:block block-list:abbreviated-name="밭사둔" block-list:name="밭사돈"/>
@@ -2377,6 +2378,7 @@
   <block-list:block block-list:abbreviated-name="켸켸묵다" block-list:name="케케묵다"/>
   <block-list:block block-list:abbreviated-name="파괘한다" block-list:name="파괴한다"/>
   <block-list:block block-list:abbreviated-name="핑게" block-list:name="핑계"/>
+  <block-list:block block-list:abbreviated-name="합격율" block-list:name="합격률"/>
   <block-list:block block-list:abbreviated-name="해싿" block-list:name="했다"/>
   <block-list:block block-list:abbreviated-name="햇어" block-list:name="했어"/>
   <block-list:block block-list:abbreviated-name="했써" block-list:name="했어"/>
