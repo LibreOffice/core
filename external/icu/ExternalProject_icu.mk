@@ -27,7 +27,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 			./runConfigureICU \
 			$(if $(MSVC_USE_DEBUG_RUNTIME),--enable-debug --disable-release) \
 			Cygwin/MSVC --disable-extras \
-		&& $(MAKE) \
+		&& $(MAKE) $(if $(verbose),VERBOSE=1) \
 	,source)
 	$(call gb_Trace_EndRange,icu,EXTERNAL)
 
@@ -77,7 +77,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 				--disable-static --enable-shared $(if $(filter ANDROID,$(OS)),--with-library-suffix=lo)) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)\
 				--with-cross-build=$(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source) \
-		&& $(MAKE) $(if $(CROSS_COMPILING),DATASUBDIR=data) \
+		&& $(MAKE) $(if $(CROSS_COMPILING),DATASUBDIR=data) $(if $(verbose),VERBOSE=1) \
 		$(if $(filter MACOSX,$(OS)), \
 			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl \
 				URELIB \
