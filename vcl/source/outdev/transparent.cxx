@@ -750,7 +750,8 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
 
         if( !aDstRect.IsEmpty() )
         {
-            ScopedVclPtrInstance< VirtualDevice > xVDev;
+            // Create transparent buffer
+            ScopedVclPtrInstance<VirtualDevice> xVDev(DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
 
             xVDev->mnDPIX = mnDPIX;
             xVDev->mnDPIY = mnDPIY;
@@ -813,8 +814,6 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                 }
                 else
                 {
-                    Bitmap aPaint, aMask;
-                    AlphaMask aAlpha;
                     MapMode aMap( GetMapMode() );
                     Point aOutPos( PixelToLogic( aDstRect.TopLeft() ) );
                     const bool bOldMap = mbMap;
@@ -828,20 +827,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     const_cast<GDIMetaFile&>(rMtf).Play( xVDev.get(), rPos, rSize );
                     const_cast<GDIMetaFile&>(rMtf).WindStart();
                     xVDev->EnableMapMode( false );
-                    aPaint = xVDev->GetBitmap( Point(), xVDev->GetOutputSizePixel() );
-                    xVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( sal_True ) here!
-
-                    // create mask bitmap
-                    xVDev->SetLineColor( COL_BLACK );
-                    xVDev->SetFillColor( COL_BLACK );
-                    xVDev->DrawRect( tools::Rectangle( xVDev->PixelToLogic( Point() ), xVDev->GetOutputSize() ) );
-                    xVDev->SetDrawMode( DrawModeFlags::WhiteLine | DrawModeFlags::WhiteFill | DrawModeFlags::WhiteText |
-                                        DrawModeFlags::WhiteBitmap | DrawModeFlags::WhiteGradient );
-                    const_cast<GDIMetaFile&>(rMtf).WindStart();
-                    const_cast<GDIMetaFile&>(rMtf).Play( xVDev.get(), rPos, rSize );
-                    const_cast<GDIMetaFile&>(rMtf).WindStart();
-                    xVDev->EnableMapMode( false );
-                    aMask = xVDev->GetBitmap( Point(), xVDev->GetOutputSizePixel() );
+                    BitmapEx aPaint = xVDev->GetBitmapEx(Point(), xVDev->GetOutputSizePixel());
                     xVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( sal_True ) here!
 
                     // create alpha mask from gradient
@@ -849,14 +835,14 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     xVDev->DrawGradient( tools::Rectangle( rPos, rSize ), rTransparenceGradient );
                     xVDev->SetDrawMode( DrawModeFlags::Default );
                     xVDev->EnableMapMode( false );
-                    xVDev->DrawMask( Point(), xVDev->GetOutputSizePixel(), aMask, COL_WHITE );
 
-                    aAlpha = xVDev->GetBitmap( Point(), xVDev->GetOutputSizePixel() );
+                    AlphaMask aAlpha(xVDev->GetBitmap(Point(), xVDev->GetOutputSizePixel()));
+                    aAlpha.BlendWith(aPaint.GetAlpha());
 
                     xVDev.disposeAndClear();
 
                     EnableMapMode( false );
-                    DrawBitmapEx( aDstRect.TopLeft(), BitmapEx( aPaint, aAlpha ) );
+                    DrawBitmapEx(aDstRect.TopLeft(), BitmapEx(aPaint.GetBitmap(), aAlpha));
                     EnableMapMode( bOldMap );
                 }
             }
