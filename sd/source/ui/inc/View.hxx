@@ -27,6 +27,7 @@
 #include <svx/fmview.hxx>
 #include <svx/svdpage.hxx>
 #include <vcl/idle.hxx>
+#include <VectorGraphicSearchContext.hxx>
 
 #include "smarttag.hxx"
 
@@ -217,6 +218,8 @@ public:
     void SetAuthor(const OUString& rAuthor) { m_sAuthor = rAuthor; }
     const OUString& GetAuthor() const { return m_sAuthor; }
 
+    VectorGraphicSearchContext& getVectorGraphicSearchContext() { return aVectorGraphicSearchContext; }
+
 protected:
     DECL_LINK( OnParagraphInsertedHdl, ::Outliner::ParagraphHdlParam, void );
     DECL_LINK( OnParagraphRemovingHdl, ::Outliner::ParagraphHdlParam, void );
@@ -250,6 +253,9 @@ protected:
 private:
     ::std::unique_ptr<ViewClipboard> mpClipboard;
     OutlinerMasterViewFilter maMasterViewFilter;
+
+    VectorGraphicSearchContext aVectorGraphicSearchContext;
+
     OUString m_sAuthor;
 };
 
