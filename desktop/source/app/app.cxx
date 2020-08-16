@@ -1147,37 +1147,23 @@ void Desktop::Exception(ExceptionCategory nCategory)
 
     FlushConfiguration();
 
-    switch( nCategory )
+    m_xLockfile.reset();
+
+    if( bRestart )
     {
-        case ExceptionCategory::ResourceNotLoaded:
-        {
-            Application::Abort( "OS threw signal OSL_SIGNAL_USER_RESOURCEFAILURE" );
-            break;
-        }
+        RequestHandler::Disable();
+        if( pSignalHandler )
+            osl_removeSignalHandler( pSignalHandler );
 
-        default:
-        {
-            m_xLockfile.reset();
+        restartOnMac(false);
+        if ( m_rSplashScreen.is() )
+            m_rSplashScreen->reset();
 
-            if( bRestart )
-            {
-                RequestHandler::Disable();
-                if( pSignalHandler )
-                    osl_removeSignalHandler( pSignalHandler );
-
-                restartOnMac(false);
-                if ( m_rSplashScreen.is() )
-                    m_rSplashScreen->reset();
-
-                _exit( EXITHELPER_CRASH_WITH_RESTART );
-            }
-            else
-            {
-                Application::Abort( OUString() );
-            }
-
-            break;
-        }
+        _exit( EXITHELPER_CRASH_WITH_RESTART );
+    }
+    else
+    {
+        Application::Abort( OUString() );
     }
 
     OSL_ASSERT(false); // unreachable
