@@ -43,86 +43,6 @@ void SwListShell::InitInterface_Impl()
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Num_Toolbox);
 }
 
-
-// #i35572# Functionality of Numbering/Bullet toolbar
-// for outline numbered paragraphs should match the functions for outlines
-// available in the navigator. Therefore the code in the following
-// function is quite similar the code in SwContentTree::ExecCommand.
-static void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bUp )
-{
-    const SwOutlineNodes::size_type nActPos = rSh.GetOutlinePos();
-    if ( !(nActPos < SwOutlineNodes::npos && rSh.IsOutlineMovable( nActPos )) )
-        return;
-
-    rSh.Push();
-    rSh.MakeOutlineSel( nActPos, nActPos, true );
-
-    if ( bMove )
-    {
-        const IDocumentOutlineNodes* pIDoc( rSh.getIDocumentOutlineNodesAccess() );
-        const int nActLevel = pIDoc->getOutlineLevel( nActPos );
-        SwOutlineNodes::difference_type nDir = 0;
-
-        if ( !bUp )
-        {
-            // Move down with subpoints:
-            SwOutlineNodes::size_type nActEndPos = nActPos + 1;
-            while ( nActEndPos < pIDoc->getOutlineNodesCount() &&
-                   (!pIDoc->isOutlineInLayout(nActEndPos, *rSh.GetLayout())
-                    || nActLevel < pIDoc->getOutlineLevel(nActEndPos)))
-            {
-                ++nActEndPos;
-            }
-
-            if ( nActEndPos < pIDoc->getOutlineNodesCount() )
-            {
-                // The current subpoint which should be moved
-                // starts at nActPos and ends at nActEndPos - 1
-                --nActEndPos;
-                SwOutlineNodes::size_type nDest = nActEndPos + 2;
-                while ( nDest < pIDoc->getOutlineNodesCount() &&
-                       (!pIDoc->isOutlineInLayout(nDest, *rSh.GetLayout())
-                        || nActLevel < pIDoc->getOutlineLevel(nDest)))
-                {
-                    ++nDest;
-                }
-
-                nDir = nDest - 1 - nActEndPos;
-            }
-        }
-        else
-        {
-            // Move up with subpoints:
-            if ( nActPos > 0 )
-            {
-                SwOutlineNodes::size_type nDest = nActPos - 1;
-                while (nDest > 0 &&
-                       (!pIDoc->isOutlineInLayout(nDest, *rSh.GetLayout())
-                        || nActLevel < pIDoc->getOutlineLevel(nDest)))
-                {
-                    --nDest;
-                }
-
-                nDir = nDest - nActPos;
-            }
-        }
-
-        if ( nDir )
-        {
-            rSh.MoveOutlinePara( nDir );
-            rSh.GotoOutline( nActPos + nDir );
-        }
-    }
-    else
-    {
-        // Up/down with subpoints:
-        rSh.OutlineUpDown( bUp ? -1 : 1 );
-    }
-
-    rSh.ClearMark();
-    rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
-}
-
 void SwListShell::Execute(SfxRequest &rReq)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
@@ -169,7 +89,7 @@ void SwListShell::Execute(SfxRequest &rReq)
 
         case FN_NUM_BULLET_OUTLINE_DOWN:
             if ( bOutline )
-                lcl_OutlineUpDownWithSubPoints( rSh, false, false );
+                OutlineUpDown(false, false, true);
             else
                 rSh.MoveNumParas(false, false);
             rReq.Done();
@@ -177,7 +97,7 @@ void SwListShell::Execute(SfxRequest &rReq)
 
         case FN_NUM_BULLET_OUTLINE_MOVEDOWN:
             if ( bOutline )
-                lcl_OutlineUpDownWithSubPoints( rSh, true, false );
+                OutlineUpDown(true, false, true);
             else
                 rSh.MoveNumParas(true, false);
             rReq.Done();
@@ -185,7 +105,7 @@ void SwListShell::Execute(SfxRequest &rReq)
 
         case FN_NUM_BULLET_OUTLINE_MOVEUP:
             if ( bOutline )
-                lcl_OutlineUpDownWithSubPoints( rSh, true, true );
+                OutlineUpDown(true, true, true);
             else
                 rSh.MoveNumParas(true, true);
             rReq.Done();
@@ -193,7 +113,7 @@ void SwListShell::Execute(SfxRequest &rReq)
 
         case FN_NUM_BULLET_OUTLINE_UP:
             if ( bOutline )
-                lcl_OutlineUpDownWithSubPoints( rSh, false, true );
+                OutlineUpDown(false, true, true);
             else
                 rSh.MoveNumParas(false, true);
             rReq.Done();
