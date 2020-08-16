@@ -29,6 +29,7 @@
 #include <vcl/idle.hxx>
 
 #include "smarttag.hxx"
+#include "VectorGraphicSearchContext.hxx"
 
 class SdDrawDocument;
 class SdPage;
@@ -217,6 +218,8 @@ public:
     void SetAuthor(const OUString& rAuthor) { m_sAuthor = rAuthor; }
     const OUString& GetAuthor() const { return m_sAuthor; }
 
+    VectorGraphicSearchContext& getVectorGraphicSearchContext() { return aVectorGraphicSearchContext; }
+
 protected:
     DECL_LINK( OnParagraphInsertedHdl, ::Outliner::ParagraphHdlParam, void );
     DECL_LINK( OnParagraphRemovingHdl, ::Outliner::ParagraphHdlParam, void );
@@ -250,6 +253,9 @@ protected:
 private:
     ::std::unique_ptr<ViewClipboard> mpClipboard;
     OutlinerMasterViewFilter maMasterViewFilter;
+
+    VectorGraphicSearchContext aVectorGraphicSearchContext;
+
     OUString m_sAuthor;
 };
 
