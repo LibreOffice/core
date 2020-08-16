@@ -75,6 +75,8 @@ void VclComplexTextTest::testArabic()
     pOutDev->SetFont( aFont );
 
     // absolute character widths AKA text array.
+#if !defined(_WIN32)
+    // FIXME: fails on some windows tinderboxes
     std::vector<long> aRefCharWidths {6,  9,  16, 16, 22, 22, 26, 29, 32, 32,
                                       36, 40, 49, 53, 56, 63, 63, 66, 72, 72};
     std::vector<long> aCharWidths(aOneTwoThree.getLength(), 0);
@@ -93,6 +95,7 @@ void VclComplexTextTest::testArabic()
     tools::Rectangle aBoundRect, aTestRect( 0, 1, 71, 15 );
     pOutDev->GetTextBoundRect(aBoundRect, aOneTwoThree);
     CPPUNIT_ASSERT_EQUAL(aTestRect, aBoundRect);
+#endif
 
 #if 0
     // FIXME: This seems to be wishful thinking, GetTextRect() does not take
