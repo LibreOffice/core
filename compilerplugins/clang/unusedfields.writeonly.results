@@ -26,8 +26,6 @@ bridges/source/cpp_uno/gcc3_linux_x86-64/callvirtualmethod.cxx:60
     Data pFPR double *
 bridges/source/cpp_uno/gcc3_linux_x86-64/cpp2uno.cxx:438
     bridges::cpp_uno::shared::VtableFactory::Slot fn void *
-bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:129
-    __cxxabiv1::__cxa_exception exceptionDestructor void (*)(void *)
 bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:130
     __cxxabiv1::__cxa_exception unexpectedHandler void (*)(void)
 bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:131
@@ -242,15 +240,15 @@ dbaccess/source/core/inc/TableDeco.hxx:66
     dbaccess::ODBTableDecorator m_xColumnMediator css::uno::Reference<css::container::XContainerListener>
 dbaccess/source/filter/xml/dbloader2.cxx:202
     dbaxml::(anonymous namespace)::DBContentLoader m_xMySelf Reference<class com::sun::star::frame::XFrameLoader>
-dbaccess/source/ui/app/AppDetailView.hxx:144
+dbaccess/source/ui/app/AppDetailView.hxx:108
     dbaui::OApplicationDetailView m_aExternalMnemonics class MnemonicGenerator
 dbaccess/source/ui/browser/dbloader.cxx:62
     (anonymous namespace)::DBContentLoader m_xListener Reference<class com::sun::star::frame::XLoadEventListener>
 desktop/qa/desktop_lib/test_desktop_lib.cxx:237
     DesktopLOKTest m_bModified _Bool
-desktop/source/app/app.cxx:1209
+desktop/source/app/app.cxx:1198
     desktop::(anonymous namespace)::ExecuteGlobals pLanguageOptions std::unique_ptr<SvtLanguageOptions>
-desktop/source/app/app.cxx:1210
+desktop/source/app/app.cxx:1199
     desktop::(anonymous namespace)::ExecuteGlobals pPathOptions std::unique_ptr<SvtPathOptions>
 desktop/source/deployment/gui/dp_gui_extlistbox.hxx:138
     dp_gui::ExtensionBox_Impl m_vRemovedEntries std::vector<TEntry_Impl>
@@ -426,8 +424,6 @@ include/test/beans/xpropertyset.hxx:56
     apitest::XPropertySet::PropsToTest constrained std::vector<OUString>
 include/unotools/fontcfg.hxx:159
     utl::FontSubstConfiguration maSubstHash utl::FontSubstConfiguration::UniqueSubstHash
-include/vcl/menu.hxx:451
-    MenuBar::MenuBarButtonCallbackArg bHighlight _Bool
 include/vcl/NotebookBarAddonsMerger.hxx:53
     AddonNotebookBarItem sTarget class rtl::OUString
 include/vcl/NotebookBarAddonsMerger.hxx:54
@@ -694,6 +690,10 @@ sfx2/inc/notebookbar/NotebookbarTabControl.hxx:41
     NotebookbarTabControl m_pListener css::uno::Reference<css::ui::XUIConfigurationListener>
 sfx2/source/appl/fileobj.hxx:40
     SvFileObject mxDelMed tools::SvRef<SfxMedium>
+sfx2/source/control/objface.cxx:79
+    SfxInterface_Impl pModule class SfxModule *
+sfx2/source/control/objface.cxx:80
+    SfxInterface_Impl bRegistered _Bool
 sfx2/source/doc/sfxbasemodel.cxx:448
     (anonymous namespace)::SfxSaveGuard m_pFramesLock std::unique_ptr<SfxOwnFramesLocker>
 sfx2/source/inc/appdata.hxx:71
@@ -702,15 +702,21 @@ sfx2/source/inc/appdata.hxx:72
     SfxAppData_Impl pTriggerTopic std::unique_ptr<SfxDdeTriggerTopic_Impl>
 sfx2/source/inc/appdata.hxx:73
     SfxAppData_Impl pDdeService2 std::unique_ptr<DdeService>
-sfx2/source/inc/appdata.hxx:87
+sfx2/source/inc/appdata.hxx:82
+    SfxAppData_Impl m_pToolsErrorHdl std::unique_ptr<SfxErrorHandler>
+sfx2/source/inc/appdata.hxx:83
+    SfxAppData_Impl m_pSoErrorHdl std::unique_ptr<SfxErrorHandler>
+sfx2/source/inc/appdata.hxx:85
+    SfxAppData_Impl m_pSbxErrorHdl std::unique_ptr<SfxErrorHandler>
+sfx2/source/inc/appdata.hxx:88
     SfxAppData_Impl mxAppPickList std::unique_ptr<SfxPickList>
 sfx2/source/inc/splitwin.hxx:52
     SfxSplitWindow pActive VclPtr<class SfxDockingWindow>
-sfx2/source/inc/templdgi.hxx:104
+sfx2/source/inc/templdgi.hxx:103
     SfxCommonTemplateDialog_Impl m_xTreeView1DropTargetHelper std::unique_ptr<TreeViewDropTarget>
-sfx2/source/inc/templdgi.hxx:105
+sfx2/source/inc/templdgi.hxx:104
     SfxCommonTemplateDialog_Impl m_xTreeView2DropTargetHelper std::unique_ptr<TreeViewDropTarget>
-sfx2/source/inc/templdgi.hxx:277
+sfx2/source/inc/templdgi.hxx:276
     SfxTemplateDialog_Impl m_xToolbarDropTargetHelper std::unique_ptr<ToolbarDropTarget>
 sfx2/source/view/classificationcontroller.cxx:73
     sfx2::(anonymous namespace)::ClassificationCategoriesController m_aPropertyListener class sfx2::(anonymous namespace)::ClassificationPropertyListener
@@ -718,7 +724,7 @@ slideshow/source/engine/opengl/TransitionImpl.hxx:301
     Vertex normal glm::vec3
 slideshow/source/engine/opengl/TransitionImpl.hxx:302
     Vertex texcoord glm::vec2
-slideshow/source/engine/slideshowimpl.cxx:1039
+slideshow/source/engine/slideshowimpl.cxx:1044
     (anonymous namespace)::SlideShowImpl::PrefetchPropertiesFunc mpSlideShowImpl class (anonymous namespace)::SlideShowImpl *const
 slideshow/test/testview.cxx:50
     (anonymous namespace)::ImplTestView maCreatedSprites std::vector<std::pair<basegfx::B2DVector, double> >
@@ -911,7 +917,7 @@ sw/source/filter/inc/rtf.hxx:29
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk sal_uInt8
 sw/source/filter/inc/rtf.hxx:31
-    RTFSurround::(anonymous) Flags struct (anonymous struct at /home/noel/libo/sw/source/filter/inc/rtf.hxx:27:9)
+    RTFSurround::(anonymous) Flags struct (anonymous struct at /home/noel/libo2/sw/source/filter/inc/rtf.hxx:27:9)
 sw/source/uibase/inc/glossary.hxx:63
     SwGlossaryDlg m_xGroupData std::vector<std::unique_ptr<GroupUserData> >
 sw/source/uibase/inc/maildispatcher.hxx:146
@@ -1070,7 +1076,7 @@ vcl/inc/salwtype.hxx:255
     SalSwipeEvent mnVelocityY double
 vcl/inc/scanlinewriter.hxx:36
     vcl::ScanlineWriter mpCurrentScanline sal_uInt8 *
-vcl/inc/sft.hxx:742
+vcl/inc/sft.hxx:763
     vcl::TrueTypeFont mapper sal_uInt32 (*)(const sal_uInt8 *, sal_uInt32, sal_uInt32)
 vcl/inc/svdata.hxx:455
     ImplSVEvent mpInstanceRef VclPtr<vcl::Window>
@@ -1130,7 +1136,7 @@ vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
 vcl/unx/gtk3/gtk3gtkinst.cxx:1613
      in char *
-vcl/unx/gtk3/gtk3gtkinst.cxx:13191
+vcl/unx/gtk3/gtk3gtkinst.cxx:13212
     (anonymous namespace)::GtkInstanceComboBox m_xCustomMenuButtonHelper std::unique_ptr<CustomRenderMenuButtonHelper>
 vcl/unx/gtk3/gtk3hudawareness.cxx:18
     (anonymous namespace)::HudAwarenessHandle connection GDBusConnection *

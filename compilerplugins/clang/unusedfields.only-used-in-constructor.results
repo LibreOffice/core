@@ -9,9 +9,9 @@ avmedia/source/vlc/wrapper/Types.hxx:43
 avmedia/source/vlc/wrapper/Types.hxx:44
     libvlc_event_t::(anonymous union)::(anonymous) dummy2 const char *
 avmedia/source/vlc/wrapper/Types.hxx:45
-    libvlc_event_t::(anonymous) padding struct (anonymous struct at /home/noel/libo/avmedia/source/vlc/wrapper/Types.hxx:42:7)
+    libvlc_event_t::(anonymous) padding struct (anonymous struct at /home/noel/libo2/avmedia/source/vlc/wrapper/Types.hxx:42:7)
 avmedia/source/vlc/wrapper/Types.hxx:46
-    libvlc_event_t u union (anonymous union at /home/noel/libo/avmedia/source/vlc/wrapper/Types.hxx:40:5)
+    libvlc_event_t u union (anonymous union at /home/noel/libo2/avmedia/source/vlc/wrapper/Types.hxx:40:5)
 avmedia/source/vlc/wrapper/Types.hxx:52
     libvlc_track_description_t psz_name char *
 basegfx/source/polygon/b2dpolygontriangulator.cxx:112
@@ -132,11 +132,11 @@ cui/source/dialogs/colorpicker.cxx:736
     cui::(anonymous namespace)::ColorPickerDialog m_aColorPrevious class cui::(anonymous namespace)::ColorPreviewControl
 cui/source/factory/dlgfact.cxx:1410
     (anonymous namespace)::SvxMacroAssignDialog m_aItems class SfxItemSet
-cui/source/inc/AdditionsDialog.hxx:89
+cui/source/inc/AdditionsDialog.hxx:46
     AdditionInfo sReleaseVersion class rtl::OUString
-cui/source/inc/AdditionsDialog.hxx:93
+cui/source/inc/AdditionsDialog.hxx:50
     AdditionInfo sRating class rtl::OUString
-cui/source/inc/AdditionsDialog.hxx:124
+cui/source/inc/AdditionsDialog.hxx:80
     AdditionsDialog m_sTag class rtl::OString
 cui/source/inc/cfgutil.hxx:241
     SvxScriptSelectorDialog m_aStylesInfo struct SfxStylesInfo_Impl
@@ -176,8 +176,10 @@ dbaccess/source/core/dataaccess/connection.hxx:102
     dbaccess::OConnection m_nInAppend std::atomic<std::size_t>
 dbaccess/source/core/inc/databasecontext.hxx:85
     dbaccess::ODatabaseContext m_aBasicDLL class BasicDLL
-dbaccess/source/ui/app/AppDetailView.hxx:90
-    dbaui::TaskEntry bHideWhenDisabled _Bool
+dbaccess/source/ui/inc/dbtreelistbox.hxx:40
+    dbaui::DBTreeEditedEntry aNewText class rtl::OUString
+desktop/qa/desktop_lib/test_desktop_lib.cxx:2832
+      class AllSettings &
 drawinglayer/inc/texture/texture3d.hxx:57
     drawinglayer::texture::GeoTexSvxBitmapEx maBitmap class Bitmap
 drawinglayer/inc/texture/texture3d.hxx:59
@@ -438,8 +440,6 @@ pyuno/source/module/pyuno_impl.hxx:237
     pyuno::stRuntimeImpl ob_base PyObject
 reportdesign/source/core/api/ReportDefinition.cxx:236
     reportdesign::(anonymous namespace)::OStyle m_aSize awt::Size
-reportdesign/source/filter/xml/xmlExport.cxx:1202
-      sal_Int32
 sal/qa/osl/condition/osl_Condition.cxx:72
     osl_Condition::ctors bRes1 _Bool
 sal/qa/osl/condition/osl_Condition.cxx:202
@@ -468,18 +468,18 @@ sal/qa/osl/module/osl_Module.cxx:201
     osl_Module::unload bRes1 _Bool
 sal/qa/osl/module/osl_Module.cxx:342
     osl_Module::getFunctionSymbol bRes1 _Bool
-sal/qa/osl/pipe/osl_Pipe.cxx:359
+sal/qa/osl/pipe/osl_Pipe.cxx:358
     osl_Pipe::clear bRes1 _Bool
-sal/qa/osl/pipe/osl_Pipe.cxx:524
+sal/qa/osl/pipe/osl_Pipe.cxx:523
     osl_Pipe::getError bRes _Bool
-sal/qa/osl/pipe/osl_Pipe.cxx:524
+sal/qa/osl/pipe/osl_Pipe.cxx:523
     osl_Pipe::getError bRes1 _Bool
-sal/qa/osl/pipe/osl_Pipe.cxx:562
+sal/qa/osl/pipe/osl_Pipe.cxx:561
     osl_Pipe::getHandle bRes1 _Bool
-sal/qa/osl/pipe/osl_Pipe.cxx:850
-    osl_StreamPipe::recv bRes _Bool
-sal/qa/osl/pipe/osl_Pipe.cxx:850
+sal/qa/osl/pipe/osl_Pipe.cxx:849
     osl_StreamPipe::recv bRes1 _Bool
+sal/qa/osl/pipe/osl_Pipe.cxx:849
+    osl_StreamPipe::recv bRes _Bool
 sal/qa/osl/process/osl_process.cxx:151
     Test_osl_executeProcess env_param_ const class rtl::OUString
 sal/qa/osl/security/osl_Security.cxx:59
@@ -656,6 +656,8 @@ slideshow/source/engine/opengl/TransitionImpl.hxx:301
     Vertex normal glm::vec3
 slideshow/source/engine/opengl/TransitionImpl.hxx:302
     Vertex texcoord glm::vec2
+slideshow/source/engine/slide/slideimpl.cxx:197
+    slideshow::internal::(anonymous namespace)::SlideImpl mpBox2DWorld box2d::utils::Box2DWorldSharedPtr
 slideshow/source/engine/smilfunctionparser.cxx:491
     slideshow::internal::(anonymous namespace)::ExpressionGrammar::definition multiplicativeExpression ::boost::spirit::classic::rule<ScannerT>
 slideshow/source/engine/smilfunctionparser.cxx:492
@@ -740,7 +742,7 @@ sw/inc/unosett.hxx:145
     SwXNumberingRules m_pImpl ::sw::UnoImplPtr<Impl>
 sw/qa/core/test_ToxTextGenerator.cxx:140
     (anonymous namespace)::ToxTextGeneratorWithMockedChapterField mChapterFieldType class SwChapterFieldType
-sw/qa/extras/uiwriter/uiwriter.cxx:4372
+sw/qa/extras/uiwriter/uiwriter.cxx:4371
     (anonymous namespace)::IdleTask maIdle class Idle
 sw/source/core/crsr/crbm.cxx:64
     (anonymous namespace)::CursorStateHelper m_aSaveState class SwCursorSaveState
@@ -762,7 +764,7 @@ sw/source/uibase/docvw/romenu.hxx:50
     SwReadOnlyPopup m_nReadonlyBackgroundtogallery sal_uInt16
 sw/source/uibase/inc/condedit.hxx:43
     ConditionEdit m_aDropTargetHelper class ConditionEditDropTarget
-sw/source/uibase/inc/conttree.hxx:293
+sw/source/uibase/inc/conttree.hxx:294
     SwGlobalTree m_aDropTargetHelper class SwGlobalTreeDropTarget
 sw/source/uibase/inc/olmenu.hxx:78
     SwSpellPopup m_aBuilder class VclBuilder
@@ -808,7 +810,7 @@ vcl/inc/salvtables.hxx:559
     SalInstanceEntry m_aTextFilter class WeldTextFilter
 vcl/inc/salvtables.hxx:939
     SalInstanceComboBoxWithEdit m_aTextFilter class WeldTextFilter
-vcl/inc/svimpbox.hxx:121
+vcl/inc/svimpbox.hxx:120
     SvImpLBox m_aFctSet class ImpLBSelEng
 vcl/inc/unx/i18n_ic.hxx:40
     SalI18N_InputContext maPreeditStartCallback XIMCallback
@@ -854,17 +856,17 @@ vcl/unx/gtk3/gtk3gloactiongroup.cxx:27
     (anonymous namespace)::GLOAction parent_instance GObject
 vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtk3gtkinst.cxx:4819
+vcl/unx/gtk3/gtk3gtkinst.cxx:4822
     (anonymous namespace)::GtkInstanceAssistant m_pButtonBox GtkButtonBox *
-vcl/unx/gtk3/gtk3gtkinst.cxx:5192
+vcl/unx/gtk3/gtk3gtkinst.cxx:5195
     (anonymous namespace)::CrippledViewport viewport GtkViewport
-vcl/unx/gtk3/gtk3gtkinst.cxx:5335
+vcl/unx/gtk3/gtk3gtkinst.cxx:5339
     (anonymous namespace)::CustomCellRendererSurface parent GtkCellRendererText
-vcl/unx/gtk3/gtk3gtkinst.cxx:5343
+vcl/unx/gtk3/gtk3gtkinst.cxx:5347
     (anonymous namespace)::CustomCellRendererSurfaceClass parent_class GtkCellRendererTextClass
-vcl/unx/gtk3/gtk3gtkinst.cxx:13181
+vcl/unx/gtk3/gtk3gtkinst.cxx:13202
     (anonymous namespace)::GtkInstanceComboBox m_pOverlay GtkOverlay *
-vcl/unx/gtk3/gtk3gtkinst.cxx:13187
+vcl/unx/gtk3/gtk3gtkinst.cxx:13208
     (anonymous namespace)::GtkInstanceComboBox m_pMenuTextRenderer GtkCellRenderer *
 writerfilter/source/dmapper/PropertyMap.hxx:219
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32

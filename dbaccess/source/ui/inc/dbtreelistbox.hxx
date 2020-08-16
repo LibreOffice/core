@@ -35,11 +35,6 @@
 
 namespace dbaui
 {
-    struct DBTreeEditedEntry
-    {
-        OUString       aNewText;
-    };
-
     class IEntryFilter
     {
     public:
